@@ -73,7 +73,7 @@ namespace Content
 
     }
 
-    Curve (const Nocturnal::TUID& id)
+    Curve (const Helium::TUID& id)
       : PivotTransform( id )
       , m_Closed( false )
       , m_Type( CurveTypes::Linear )
@@ -91,5 +91,5 @@ namespace Content
     f32 DistanceToCurve( const Math::Vector3& point ) const;
   };
 
-  typedef Nocturnal::SmartPtr<Curve> CurvePtr;
+  typedef Helium::SmartPtr<Curve> CurvePtr;
 }

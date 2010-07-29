@@ -10,7 +10,7 @@
 namespace Reflect
 {
     class FOUNDATION_API Element;
-    typedef Nocturnal::SmartPtr<Element> ElementPtr;
+    typedef Helium::SmartPtr<Element> ElementPtr;
     typedef std::stack<ElementPtr> S_Element;
     typedef stdext::hash_map<int, S_Element> H_Element;
 

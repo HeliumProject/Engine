@@ -42,7 +42,7 @@ namespace Perforce
     virtual ~WaitInterface();
     virtual bool StopWaiting() = 0;
   };
-  typedef Nocturnal::Signature<bool, WaitInterface*> WaitSignature;
+  typedef Helium::Signature<bool, WaitInterface*> WaitSignature;
   APPLICATION_API extern WaitSignature::Delegate g_ShowWaitDialog;
 
   struct MessageArgs
@@ -57,7 +57,7 @@ namespace Perforce
 
     }
   };
-  typedef Nocturnal::Signature<void, const MessageArgs&> MessageSignature;
+  typedef Helium::Signature<void, const MessageArgs&> MessageSignature;
   APPLICATION_API extern MessageSignature::Delegate g_ShowWarningDialog;
 
 #pragma warning (disable : 4275)
@@ -77,42 +77,42 @@ namespace Perforce
   public:
     void RunCommand( class Command* command );
     bool Connect();
-    virtual int	IsAlive() NOC_OVERRIDE;
-    virtual bool StopWaiting() NOC_OVERRIDE;
+    virtual int	IsAlive() HELIUM_OVERRIDE;
+    virtual bool StopWaiting() HELIUM_OVERRIDE;
 
   public:
     //
     // RCS::Provider
     //
 
-    virtual bool IsEnabled() NOC_OVERRIDE;
-    virtual void SetEnabled( bool online ) NOC_OVERRIDE;
+    virtual bool IsEnabled() HELIUM_OVERRIDE;
+    virtual void SetEnabled( bool online ) HELIUM_OVERRIDE;
 
-    virtual const char* GetName() NOC_OVERRIDE;
+    virtual const char* GetName() HELIUM_OVERRIDE;
 
-    virtual void Sync( RCS::File& file, const u64 timestamp = 0 ) NOC_OVERRIDE;
+    virtual void Sync( RCS::File& file, const u64 timestamp = 0 ) HELIUM_OVERRIDE;
 
-    virtual void GetInfo( RCS::File& file, const RCS::GetInfoFlag flags = RCS::GetInfoFlags::Default ) NOC_OVERRIDE;
-    virtual void GetInfo( const tstring& folder, RCS::V_File& files, bool recursive = false, u32 fileData = RCS::FileData::All, u32 actionData = RCS::ActionData::All ) NOC_OVERRIDE;
+    virtual void GetInfo( RCS::File& file, const RCS::GetInfoFlag flags = RCS::GetInfoFlags::Default ) HELIUM_OVERRIDE;
+    virtual void GetInfo( const tstring& folder, RCS::V_File& files, bool recursive = false, u32 fileData = RCS::FileData::All, u32 actionData = RCS::ActionData::All ) HELIUM_OVERRIDE;
 
-    virtual void Add( RCS::File& file ) NOC_OVERRIDE;
-    virtual void Edit( RCS::File& file ) NOC_OVERRIDE;
-    virtual void Delete( RCS::File& file ) NOC_OVERRIDE;
+    virtual void Add( RCS::File& file ) HELIUM_OVERRIDE;
+    virtual void Edit( RCS::File& file ) HELIUM_OVERRIDE;
+    virtual void Delete( RCS::File& file ) HELIUM_OVERRIDE;
 
-    virtual void GetOpenedFiles( RCS::V_File& file ) NOC_OVERRIDE;
+    virtual void GetOpenedFiles( RCS::V_File& file ) HELIUM_OVERRIDE;
 
-    virtual void Reopen( RCS::File& file ) NOC_OVERRIDE;
+    virtual void Reopen( RCS::File& file ) HELIUM_OVERRIDE;
 
-    virtual void Rename( RCS::File& source, RCS::File& dest ) NOC_OVERRIDE;
-    virtual void Integrate( RCS::File& source, RCS::File& dest ) NOC_OVERRIDE;
+    virtual void Rename( RCS::File& source, RCS::File& dest ) HELIUM_OVERRIDE;
+    virtual void Integrate( RCS::File& source, RCS::File& dest ) HELIUM_OVERRIDE;
 
-    virtual void Revert( RCS::Changeset& changeset, bool revertUnchangedOnly = false ) NOC_OVERRIDE;
-    virtual void Revert( RCS::File& file, bool revertUnchangedOnly = false ) NOC_OVERRIDE;
+    virtual void Revert( RCS::Changeset& changeset, bool revertUnchangedOnly = false ) HELIUM_OVERRIDE;
+    virtual void Revert( RCS::File& file, bool revertUnchangedOnly = false ) HELIUM_OVERRIDE;
 
-    virtual void Commit( RCS::Changeset& changeset ) NOC_OVERRIDE;
+    virtual void Commit( RCS::Changeset& changeset ) HELIUM_OVERRIDE;
 
-    virtual void CreateChangeset( RCS::Changeset& changeset ) NOC_OVERRIDE;
-    virtual void GetChangesets( RCS::V_Changeset& changesets ) NOC_OVERRIDE;
+    virtual void CreateChangeset( RCS::Changeset& changeset ) HELIUM_OVERRIDE;
+    virtual void GetChangesets( RCS::V_Changeset& changesets ) HELIUM_OVERRIDE;
 
   public:
     bool                  m_Enabled;

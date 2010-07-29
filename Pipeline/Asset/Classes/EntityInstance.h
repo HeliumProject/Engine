@@ -15,7 +15,7 @@ namespace Asset
 
     public:
         EntityInstance( const tstring& assetPath = TXT( "" ) );
-        EntityInstance( Nocturnal::TUID id );
+        EntityInstance( Helium::TUID id );
         
         // get the path to the class
         tstring GetEntityPath();
@@ -27,12 +27,12 @@ namespace Asset
         // ComponentCollection overrides
         //
 
-        virtual bool ValidatePersistent( const Component::ComponentPtr& attr ) const NOC_OVERRIDE;
-        virtual const Component::ComponentPtr& GetComponent( i32 typeID ) const NOC_OVERRIDE;
-        virtual void SetComponent( const Component::ComponentPtr& component, bool validate = true ) NOC_OVERRIDE;
+        virtual bool ValidatePersistent( const Component::ComponentPtr& attr ) const HELIUM_OVERRIDE;
+        virtual const Component::ComponentPtr& GetComponent( i32 typeID ) const HELIUM_OVERRIDE;
+        virtual void SetComponent( const Component::ComponentPtr& component, bool validate = true ) HELIUM_OVERRIDE;
 
     private:
-        Nocturnal::Path m_Path;
+        Helium::Path m_Path;
 
     public:
         // draw bound in editor
@@ -45,5 +45,5 @@ namespace Asset
         bool m_ShowGeometry;
     };
 
-    typedef Nocturnal::SmartPtr< EntityInstance > EntityInstancePtr;
+    typedef Helium::SmartPtr< EntityInstance > EntityInstancePtr;
 }

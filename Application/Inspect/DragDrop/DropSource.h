@@ -22,7 +22,7 @@ namespace Inspect
 
     void SetAutoRaise( bool autoRaise );
 
-    virtual wxDragResult DoDragDrop( int flags = wxDrag_CopyOnly ) NOC_OVERRIDE;
+    virtual wxDragResult DoDragDrop( int flags = wxDrag_CopyOnly ) HELIUM_OVERRIDE;
 
   private:
     bool m_AutoRaise;

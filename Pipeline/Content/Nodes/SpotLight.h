@@ -48,7 +48,7 @@ namespace Content
       , m_GodRayClipPlaneOffset(0.0f)
     {}
 
-    SpotLight (Nocturnal::TUID &id)
+    SpotLight (Helium::TUID &id)
       : Light (id)
       , m_InnerRadius( 1.0f )
       , m_OuterRadius( 1.0f )
@@ -89,6 +89,6 @@ namespace Content
     float m_OuterRadius;
   };
 
-  typedef Nocturnal::SmartPtr<SpotLight> SpotLightPtr;
+  typedef Helium::SmartPtr<SpotLight> SpotLightPtr;
   typedef std::vector<SpotLightPtr> V_SpotLight;
 }

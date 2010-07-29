@@ -33,7 +33,7 @@ namespace Reflect
             Hide        = 1 << 3,        // hidden fields are not inherently visible in UI
             ReadOnly    = 1 << 4,        // read-only fields cannot be edited in the UI inherently
             FilePath    = 1 << 5,        // file path fields are strings that are file paths
-            Path        = 1 << 6,        // path fields are Nocturnal::Path objects
+            Path        = 1 << 6,        // path fields are Helium::Path objects
             NodeID      = 1 << 7,        // this field is a container of other things
             RuntimeEnum = 1 << 8,        // this field is a runtime enum
 
@@ -84,8 +84,8 @@ namespace Reflect
         void SetName(const tstring& name);
     };
 
-    typedef Nocturnal::SmartPtr< Field > FieldPtr;
-    typedef Nocturnal::SmartPtr< const Field > ConstFieldPtr;
+    typedef Helium::SmartPtr< Field > FieldPtr;
+    typedef Helium::SmartPtr< const Field > ConstFieldPtr;
     typedef std::map< i32,          ConstFieldPtr > M_FieldIDToInfo;
     typedef std::map< tstring,      ConstFieldPtr > M_FieldNameToInfo;
     typedef std::map< u32,          ConstFieldPtr > M_FieldOffsetToInfo;
@@ -110,7 +110,7 @@ namespace Reflect
         static ElementField* Create( const Composite* type );
 
         // creates a suitable serializer (that has a pointer to the enum info)
-        virtual SerializerPtr CreateSerializer ( Element* instance = NULL ) const NOC_OVERRIDE;
+        virtual SerializerPtr CreateSerializer ( Element* instance = NULL ) const HELIUM_OVERRIDE;
     };
 
     //
@@ -133,6 +133,6 @@ namespace Reflect
         static EnumerationField* Create( const Composite* type, const Enumeration* enumeration );
 
         // creates a suitable serializer (that has a pointer to the enum info)
-        virtual SerializerPtr CreateSerializer ( Element* instance = NULL ) const NOC_OVERRIDE;
+        virtual SerializerPtr CreateSerializer ( Element* instance = NULL ) const HELIUM_OVERRIDE;
     };
 }

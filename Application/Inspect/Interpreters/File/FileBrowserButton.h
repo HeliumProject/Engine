@@ -19,9 +19,9 @@ namespace Inspect
   public:
       FileBrowserButton( const tstring& startPath = TXT( "" ) );
 
-    virtual void  Realize( Inspect::Container* parent ) NOC_OVERRIDE;
-    virtual void  Read() NOC_OVERRIDE;
-    virtual bool  Write() NOC_OVERRIDE;
+    virtual void  Realize( Inspect::Container* parent ) HELIUM_OVERRIDE;
+    virtual void  Read() HELIUM_OVERRIDE;
+    virtual bool  Write() HELIUM_OVERRIDE;
 
     void          SetTitleBar( const tstring& title );
     void          SetPath( const tstring& path );
@@ -35,7 +35,7 @@ namespace Inspect
 
   protected:
     
-    virtual bool  Process( const tstring& key, const tstring& value ) NOC_OVERRIDE;
+    virtual bool  Process( const tstring& key, const tstring& value ) HELIUM_OVERRIDE;
 
     void          ReadPathData( tstring& path ) const;
 
@@ -49,5 +49,5 @@ namespace Inspect
     std::set< tstring >            m_Filters;      // The filter for which file types to show in the file browser dialog (defaults to "All Files (*.*)|*.*")
   };
 
-  typedef Nocturnal::SmartPtr<FileBrowserButton> FileBrowserButtonPtr;
+  typedef Helium::SmartPtr<FileBrowserButton> FileBrowserButtonPtr;
 }

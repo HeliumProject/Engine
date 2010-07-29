@@ -31,11 +31,11 @@ u64           g_SyncTimestamp = 0;
 // 
 static bool _IsSubdir( const tstring& query, std::vector< tstring >& paths )
 {
-  Nocturnal::Path queryPath( query );
+  Helium::Path queryPath( query );
 
   for( std::vector< tstring >::const_iterator it = paths.begin(), end = paths.end(); it != end; ++it )
   {
-    Nocturnal::Path path( (*it) );
+    Helium::Path path( (*it) );
 
     if ( queryPath.Normalized().compare( 0, path.length(), path.Normalized() ) == 0 )
     {

@@ -37,5 +37,5 @@ namespace Inspect
     virtual void SetIcon( const wxArtID& icon );
   };
 
-  typedef Nocturnal::SmartPtr<Button> ButtonPtr;
+  typedef Helium::SmartPtr<Button> ButtonPtr;
 }

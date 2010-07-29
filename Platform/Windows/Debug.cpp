@@ -145,7 +145,7 @@ bool Debug::IsInitialized()
 
 tstring Debug::GetSymbolInfo(uintptr adr, bool enumLoadedModules)
 {
-  NOC_ASSERT( Debug::IsInitialized() );
+  HELIUM_ASSERT( Debug::IsInitialized() );
 
   if ( enumLoadedModules )
   {
@@ -240,9 +240,9 @@ tstring Debug::GetSymbolInfo(uintptr adr, bool enumLoadedModules)
   }
 }
 
-Nocturnal::Exception* Debug::GetNocturnalException(uintptr addr)
+Helium::Exception* Debug::GetHeliumException(uintptr addr)
 {
-  Nocturnal::Exception* cppException = (Nocturnal::Exception*)addr;
+  Helium::Exception* cppException = (Helium::Exception*)addr;
 
   __try
   {
@@ -308,7 +308,7 @@ bool Debug::GetStackTrace(std::vector<uintptr>& trace, unsigned omitFrames)
 
 bool Debug::GetStackTrace(LPCONTEXT context, std::vector<uintptr>& stack, unsigned omitFrames)
 {
-  NOC_ASSERT( Debug::IsInitialized() );
+  HELIUM_ASSERT( Debug::IsInitialized() );
 
   // load debugging information
   EnumerateLoadedModules();
@@ -597,7 +597,7 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
   {
     args.m_Type = ExceptionTypes::CPP;
 
-    Nocturnal::Exception* nocturnalException = GetNocturnalException(info->ExceptionRecord->ExceptionInformation[1]);
+    Helium::Exception* nocturnalException = GetHeliumException(info->ExceptionRecord->ExceptionInformation[1]);
     if (nocturnalException)
     {
       const char* cppClass = NULL;
@@ -755,10 +755,10 @@ tstring Debug::GetExceptionInfo(LPEXCEPTION_POINTERS info)
 
 tstring Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
 {
-  tchar* tempDir = _tgetenv( TXT("NOC_PROJECT_TMP") );
+  tchar* tempDir = _tgetenv( TXT("HELIUM_PROJECT_TMP") );
   if ( tempDir == NULL )
   {
-    _tprintf( TXT("Failed to write crash dump because the temporary directory (%s) to save the file to could not be determined.\n"), TXT("NOC_PROJECT_TMP") );
+    _tprintf( TXT("Failed to write crash dump because the temporary directory (%s) to save the file to could not be determined.\n"), TXT("HELIUM_PROJECT_TMP") );
     return TXT("");
   }
 

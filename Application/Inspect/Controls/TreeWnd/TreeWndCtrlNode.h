@@ -16,7 +16,7 @@
 #include "wx/wx.h"
 #include "wx/treebase.h"
 
-namespace Nocturnal
+namespace Helium
 {
 
     // ----------------------------------------------------------------------------

@@ -40,5 +40,5 @@ namespace Inspect
     float GetUIValue() const;
   };
 
-  typedef Nocturnal::SmartPtr<Slider> SliderPtr;
+  typedef Helium::SmartPtr<Slider> SliderPtr;
 }

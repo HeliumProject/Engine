@@ -22,7 +22,7 @@ namespace InspectReflect
     i32 g_InitCount = 0;
 }
 
-Nocturnal::InitializerStack g_IntializerStack;
+Helium::InitializerStack g_IntializerStack;
 
 void InspectReflect::Initialize()
 {

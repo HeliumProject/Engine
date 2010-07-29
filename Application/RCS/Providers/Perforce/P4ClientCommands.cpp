@@ -48,10 +48,10 @@ void SyncCommand::HandleError( Error* error )
 void SyncCommand::OutputStat( StrDict* dict )
 {
     bool converted = Platform::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), m_File->m_DepotPath );
-    NOC_ASSERT( converted );
+    HELIUM_ASSERT( converted );
 
     converted = Platform::ConvertString( dict->GetVar( g_ClientFileTag )->Text(), m_File->m_LocalPath );
-    NOC_ASSERT( converted );
+    HELIUM_ASSERT( converted );
 
     m_File->m_LocalRevision = dict->GetVar( g_RevisionTag )->Atoi();
     if ( dict->GetVar( g_ChangeTag ) )
@@ -70,7 +70,7 @@ void SyncCommand::OutputStat( StrDict* dict )
 void OpenCommand::OutputStat( StrDict* dict )
 {
     bool converted = Platform::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), m_File->m_DepotPath );
-    NOC_ASSERT( converted );
+    HELIUM_ASSERT( converted );
 
     m_File->m_LocalRevision = dict->GetVar( g_WorkRevTag )->Atoi();
 
@@ -78,7 +78,7 @@ void OpenCommand::OutputStat( StrDict* dict )
     if ( localPath )
     {
         converted = Platform::ConvertString( localPath->Text(), m_File->m_LocalPath );
-        NOC_ASSERT( converted );
+        HELIUM_ASSERT( converted );
     }
 
     StrPtr* action = dict->GetVar( g_ActionTag );
@@ -86,7 +86,7 @@ void OpenCommand::OutputStat( StrDict* dict )
     {
         tstring actionString;
         converted = Platform::ConvertString( action->Text(), actionString );
-        NOC_ASSERT( converted );
+        HELIUM_ASSERT( converted );
 
         m_File->m_Operation = GetOperationEnum( actionString );
     }
@@ -96,7 +96,7 @@ void OpenCommand::OutputStat( StrDict* dict )
     {
         tstring fileType;
         converted = Platform::ConvertString( type->Text(), fileType );
-        NOC_ASSERT( converted );
+        HELIUM_ASSERT( converted );
 
         m_File->m_FileType = GetFileType( fileType );
     }
@@ -133,16 +133,16 @@ void IntegrateCommand::Run()
 void IntegrateCommand::OutputStat( StrDict* dict )
 {
     bool converted = Platform::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), m_Dest->m_DepotPath );
-    NOC_ASSERT( converted );
+    HELIUM_ASSERT( converted );
 
     converted = Platform::ConvertString( dict->GetVar( g_ClientFileTag )->Text(), m_Dest->m_LocalPath );
-    NOC_ASSERT( converted );
+    HELIUM_ASSERT( converted );
 
     m_Dest->m_LocalRevision = dict->GetVar( g_WorkRevTag )->Atoi();
     
     tstring actionString;
     converted = Platform::ConvertString( dict->GetVar( g_ActionTag )->Text(), actionString );
-    NOC_ASSERT( converted );
+    HELIUM_ASSERT( converted );
 
     m_Dest->m_Operation = GetOperationEnum( actionString );
 }

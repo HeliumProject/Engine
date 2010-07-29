@@ -40,6 +40,6 @@ namespace Inspect
     Inspect::List* m_List;
   };
 
-  typedef Nocturnal::SmartPtr<FileContainerInterpreter> FileContainerInterpreterPtr;
+  typedef Helium::SmartPtr<FileContainerInterpreter> FileContainerInterpreterPtr;
   typedef std::vector< FileContainerInterpreterPtr > V_FileContainerInterpreterSmartPtr;
 }

@@ -35,13 +35,13 @@ namespace Reflect
             tstring convertedBase;
             {
                 bool converted = Platform::ConvertString( base, convertedBase );
-                NOC_ASSERT( converted );
+                HELIUM_ASSERT( converted );
             }
 
             tstring convertedRTTIName;
             {
                 bool converted = Platform::ConvertString( typeid(T).name(), convertedRTTIName );
-                NOC_ASSERT( converted );
+                HELIUM_ASSERT( converted );
             }
 
             Class* info = Class::Create();
@@ -67,7 +67,7 @@ namespace Reflect
                 }
                 else
                 {
-                    NOC_BREAK(); // if you hit this break your base class is not registered yet!
+                    HELIUM_BREAK(); // if you hit this break your base class is not registered yet!
                     baseName.clear();
                 }
             }
@@ -81,7 +81,7 @@ namespace Reflect
             if (info->m_Create)
             {
                 // create the default object
-                Nocturnal::SmartPtr<T> temp = (T*)(info->m_Create());
+                Helium::SmartPtr<T> temp = (T*)(info->m_Create());
 
                 // enumerate the fields in the class
                 info->EnumerateInstance<T>(*temp);
@@ -104,8 +104,8 @@ namespace Reflect
         static ElementPtr Clone(Element* element);
     };
 
-    typedef Nocturnal::SmartPtr< Class > ClassPtr;
-    typedef Nocturnal::SmartPtr< const Class > ConstClassPtr;
+    typedef Helium::SmartPtr< Class > ClassPtr;
+    typedef Helium::SmartPtr< const Class > ConstClassPtr;
 
     //
     // AbstractInheritor injects virtual API for all reflection types
@@ -118,19 +118,19 @@ namespace Reflect
         typedef B Base;
         typedef D This;
 
-        virtual i32 GetType() const NOC_OVERRIDE
+        virtual i32 GetType() const HELIUM_OVERRIDE
         {
             // this function caches a static in our translation unit
             return Reflect::GetType<D>();
         }
 
-        virtual bool HasType(i32 id) const NOC_OVERRIDE
+        virtual bool HasType(i32 id) const HELIUM_OVERRIDE
         {
             // this function caches a static in our translation unit
             return id == Reflect::GetType<D>() || B::HasType(id);
         }
 
-        virtual const Reflect::Class* GetClass() const NOC_OVERRIDE
+        virtual const Reflect::Class* GetClass() const HELIUM_OVERRIDE
         {
             // this function caches a static in our translation unit
             return Reflect::GetClass<D>();
@@ -181,17 +181,17 @@ public:                                                                         
 typedef __Base Base;                                                                                                \
 typedef __Class This;                                                                                                \
 \
-virtual i32 GetType() const NOC_OVERRIDE                                                                            \
+virtual i32 GetType() const HELIUM_OVERRIDE                                                                            \
 {                                                                                                                   \
     return Reflect::GetType<__Class>();                                                                             \
 }                                                                                                                   \
 \
-virtual bool HasType(i32 id) const NOC_OVERRIDE                                                                     \
+virtual bool HasType(i32 id) const HELIUM_OVERRIDE                                                                     \
 {                                                                                                                   \
     return Reflect::GetType<__Class>() == id || __Base::HasType(id);                                                \
 }                                                                                                                   \
 \
-virtual const Reflect::Class* GetClass() const NOC_OVERRIDE                                                         \
+virtual const Reflect::Class* GetClass() const HELIUM_OVERRIDE                                                         \
 {                                                                                                                   \
     return Reflect::GetClass<__Class>();                                                                            \
 }                                                                                                                   \
@@ -209,11 +209,11 @@ static Reflect::Class* CreateClass(const tstring& shortName = TXT( "" ) )       
 // User Macros
 //
 
-// declares an NOC_ABSTRACT element (an element that either A: cannot be instantiated or B: is never actually serialized)
+// declares an HELIUM_ABSTRACT element (an element that either A: cannot be instantiated or B: is never actually serialized)
 #define REFLECT_DECLARE_ABSTRACT(__Class, __Base)                                                                   \
     _REFLECT_DECLARE_CLASS(__Class, __Base, NULL)
 
-// defines the NOC_ABSTRACT element class
+// defines the HELIUM_ABSTRACT element class
 #define REFLECT_DEFINE_ABSTRACT(__Class)                                                                            \
     _REFLECT_DEFINE_CLASS(__Class)
 

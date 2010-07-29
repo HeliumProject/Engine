@@ -37,7 +37,7 @@ void ReflectMapInterpreter::InterpretField( const Reflect::Field* field, const s
 
   tstring temp;
   bool converted = Platform::ConvertString( field->m_UIName, temp );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
 
   panel->SetText( temp );
 

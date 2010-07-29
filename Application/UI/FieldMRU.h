@@ -14,12 +14,12 @@
 //
 class wxControlWithItems;
 
-namespace Nocturnal
+namespace Helium
 {
   /////////////////////////////////////////////////////////////////////////////
   // System for managing the global MRU FieldMap 
   //
-  class APPLICATION_API FieldMRU : public Nocturnal::RefCountBase<FieldMRU>
+  class APPLICATION_API FieldMRU : public Helium::RefCountBase<FieldMRU>
   {
   public:
     FieldMRU()
@@ -48,6 +48,6 @@ namespace Nocturnal
 
   };
 
-  typedef APPLICATION_API Nocturnal::SmartPtr< FieldMRU > FieldMRUPtr;
+  typedef APPLICATION_API Helium::SmartPtr< FieldMRU > FieldMRUPtr;
 
 }

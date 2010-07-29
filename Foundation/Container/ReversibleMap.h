@@ -5,7 +5,7 @@
 
 #include <map>
 
-namespace Nocturnal
+namespace Helium
 {
     /////////////////////////////////////////////////////////////////////////////
     // This class is only efficient with register-sized types
@@ -44,10 +44,10 @@ namespace Nocturnal
         {
             bool result = false;
 
-            Nocturnal::Insert<M_AToB>::Result insertedAtoB = m_AToB.insert( M_AToB::value_type( a, NULL ) );
+            Helium::Insert<M_AToB>::Result insertedAtoB = m_AToB.insert( M_AToB::value_type( a, NULL ) );
             if ( insertedAtoB.second )
             {
-                Nocturnal::Insert<M_BToA>::Result insertedBtoA = m_BToA.insert( M_BToA::value_type ( b, &( insertedAtoB.first->first ) ) );
+                Helium::Insert<M_BToA>::Result insertedBtoA = m_BToA.insert( M_BToA::value_type ( b, &( insertedAtoB.first->first ) ) );
                 if ( insertedBtoA.second )
                 {
                     insertedAtoB.first->second = &(insertedBtoA.first->first);

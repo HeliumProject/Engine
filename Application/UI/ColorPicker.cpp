@@ -3,7 +3,7 @@
 #include "Application/UI/RegistryConfig.h"
 
 // Using
-using namespace Nocturnal;
+using namespace Helium;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

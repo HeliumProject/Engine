@@ -14,5 +14,5 @@ namespace MayaContent
 
     Content::Point* GetContentPoint() const;
   };
-  typedef Nocturnal::SmartPtr< ExportPoint > ExportPointPtr;
+  typedef Helium::SmartPtr< ExportPoint > ExportPointPtr;
 }

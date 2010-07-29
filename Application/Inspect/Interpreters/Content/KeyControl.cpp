@@ -13,7 +13,7 @@
 #include <wx/clipbrd.h>
 
 using namespace Inspect;
-using namespace Nocturnal;
+using namespace Helium;
 
 // Event table
 BEGIN_EVENT_TABLE( KeyControl, wxPanel )
@@ -299,7 +299,7 @@ bool KeyControl::ToClipboard( const V_KeyPtr& keys )
   {
     Reflect::ArchiveXML::ToString( clipboardData, xml );
   }
-  catch ( const Nocturnal::Exception& e )
+  catch ( const Helium::Exception& e )
   {
     tstring error = TXT( "Failed to copy keys to clipboard: " ) + e.Get();
     wxMessageBox( error.c_str(), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
@@ -310,7 +310,7 @@ bool KeyControl::ToClipboard( const V_KeyPtr& keys )
   {
       tstring temp;
       bool converted = Platform::ConvertString( xml, temp );
-      NOC_ASSERT( converted );
+      HELIUM_ASSERT( converted );
 
       wxTheClipboard->SetData( new wxTextDataObject( temp ) );
       wxTheClipboard->Close();
@@ -334,7 +334,7 @@ bool KeyControl::FromClipboard( V_KeyPtr& keys )
             wxTheClipboard->GetData( data );
             const wxChar* str = data.GetText().c_str();
             bool converted = Platform::ConvertString( str, xml );
-            NOC_ASSERT( converted );
+            HELIUM_ASSERT( converted );
         }  
         wxTheClipboard->Close();
     }
@@ -350,7 +350,7 @@ bool KeyControl::FromClipboard( V_KeyPtr& keys )
   {
     Reflect::ArchiveXML::FromString( xml, spool );
   }
-  catch ( const Nocturnal::Exception& )
+  catch ( const Helium::Exception& )
   {
     return false;
   }

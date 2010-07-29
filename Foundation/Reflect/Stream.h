@@ -22,31 +22,31 @@ public:
     }
 
 protected:
-    virtual result do_in( _St& _State , const _To* _F1 , const _To* _L1 , const _To*& _Mid1 , _E* F2 , _E* _L2 , _E*& _Mid2 ) const NOC_OVERRIDE
+    virtual result do_in( _St& _State , const _To* _F1 , const _To* _L1 , const _To*& _Mid1 , _E* F2 , _E* _L2 , _E*& _Mid2 ) const HELIUM_OVERRIDE
     {
         return noconv;
     }
-    virtual result do_out( _St& _State , const _E* _F1 , const _E* _L1 , const _E*& _Mid1 , _To* F2, _To* _L2 , _To*& _Mid2 ) const NOC_OVERRIDE
+    virtual result do_out( _St& _State , const _E* _F1 , const _E* _L1 , const _E*& _Mid1 , _To* F2, _To* _L2 , _To*& _Mid2 ) const HELIUM_OVERRIDE
     {
         return noconv;
     }
-    virtual result do_unshift( _St& _State , _To* _F2 , _To* _L2 , _To*& _Mid2 ) const NOC_OVERRIDE
+    virtual result do_unshift( _St& _State , _To* _F2 , _To* _L2 , _To*& _Mid2 ) const HELIUM_OVERRIDE
     {
         return noconv;
      }
-    virtual int do_length( const _St& _State , const _To* _F1 , const _To* _L1 , size_t _N2 ) const throw () NOC_OVERRIDE
+    virtual int do_length( const _St& _State , const _To* _F1 , const _To* _L1 , size_t _N2 ) const throw () HELIUM_OVERRIDE
     {
         return (int)( (_N2 < (size_t)(_L1 - _F1)) ? _N2 : _L1 - _F1 );
     }
-    virtual bool do_always_noconv() const throw () NOC_OVERRIDE
+    virtual bool do_always_noconv() const throw () HELIUM_OVERRIDE
     {
         return true;
     }
-    virtual int do_max_length() const throw () NOC_OVERRIDE
+    virtual int do_max_length() const throw () HELIUM_OVERRIDE
     {
         return 2;
     }
-    virtual int do_encoding() const throw () NOC_OVERRIDE
+    virtual int do_encoding() const throw () HELIUM_OVERRIDE
     {
         return 2;
     }
@@ -64,7 +64,7 @@ namespace Reflect
     //
 
     template< class C >
-    class Stream : public Nocturnal::RefCountBase< Stream< C > >
+    class Stream : public Helium::RefCountBase< Stream< C > >
     {
     public: 
         Stream()
@@ -166,7 +166,7 @@ namespace Reflect
         inline Stream& Read(T* ptr)
         {
             // amount to read must align with stream element size
-            NOC_COMPILE_ASSERT( sizeof(T) % sizeof(C) == 0  );
+            HELIUM_COMPILE_ASSERT( sizeof(T) % sizeof(C) == 0  );
             return ReadBuffer( (C*)ptr, sizeof(T) / sizeof(C) ); 
         }
 
@@ -188,7 +188,7 @@ namespace Reflect
         inline Stream& Write(const T* ptr)
         {
             // amount to write must align with stream element size
-            NOC_COMPILE_ASSERT( sizeof(T) % sizeof(C) == 0  );
+            HELIUM_COMPILE_ASSERT( sizeof(T) % sizeof(C) == 0  );
             return WriteBuffer( (const C*)ptr, sizeof(T) / sizeof(C) ); 
         }
     
@@ -373,9 +373,9 @@ namespace Reflect
     typedef Stream<tchar> TCharStream;
 
     // pointer declaration. 
-    typedef Nocturnal::SmartPtr< Stream<char> >     CharStreamPtr; 
-    typedef Nocturnal::SmartPtr< Stream<wchar_t> >  WCharStreamPtr; 
-    typedef Nocturnal::SmartPtr< Stream<tchar> >    TCharStreamPtr;
+    typedef Helium::SmartPtr< Stream<char> >     CharStreamPtr; 
+    typedef Helium::SmartPtr< Stream<wchar_t> >  WCharStreamPtr; 
+    typedef Helium::SmartPtr< Stream<tchar> >    TCharStreamPtr;
 
     //
     // FileStream, a stream object backed by file data
@@ -397,7 +397,7 @@ namespace Reflect
 
         }
 
-        virtual void Open() NOC_OVERRIDE
+        virtual void Open() HELIUM_OVERRIDE
         {
             // deal with the mode bits.. 
             int fmode = std::ios_base::binary;
@@ -427,7 +427,7 @@ namespace Reflect
             m_OwnStream = true; 
         }
 
-        virtual void Close() NOC_OVERRIDE
+        virtual void Close() HELIUM_OVERRIDE
         {
             std::basic_fstream< C, std::char_traits< C > >* fstream = static_cast< std::basic_fstream< C, std::char_traits< C > > *>( &GetInternal() );
 

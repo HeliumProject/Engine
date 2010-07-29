@@ -26,14 +26,14 @@ static void CopyDump( ExceptionReport& report )
     return;
   }
 
-  if ( report.m_Args.m_Dump.empty() || !Nocturnal::Path( report.m_Args.m_Dump ).Exists() )
+  if ( report.m_Args.m_Dump.empty() || !Helium::Path( report.m_Args.m_Dump ).Exists() )
   {
     return;
   }
 
   Log::Debug( TXT( "Writing dump to network...\n" ) );
 
-  const char* store = getenv( "NOC_TOOLS_CRASH_DUMP_STORE" );
+  const char* store = getenv( "HELIUM_TOOLS_CRASH_DUMP_STORE" );
   if ( store == NULL )
   {
     return;
@@ -57,7 +57,7 @@ static void CopyDump( ExceptionReport& report )
     << TXT( "." ) << std::setfill( TXT( '0' ) ) << std::setw(2) << now->tm_sec
     << TXT( "." ) << std::setfill( TXT( '0' ) ) << std::setw(3) << t % 1000 << TXT( ".dmp" );
 
-  Nocturnal::Path dest( destination.str() );
+  Helium::Path dest( destination.str() );
   dest.MakePath();
 
   if ( FALSE == ::CopyFile( report.m_Args.m_Dump.c_str(), destination.str().c_str(), FALSE ) )
@@ -72,7 +72,7 @@ static void CopyDump( ExceptionReport& report )
 
 static void SendMail( ExceptionReport& report )
 {
-  if ( getenv( "NOC_CRASH_DONT_EMAIL" ) != NULL )
+  if ( getenv( "HELIUM_CRASH_DONT_EMAIL" ) != NULL )
   {
     return;
   }
@@ -91,7 +91,7 @@ static void SendMail( ExceptionReport& report )
   body << "Username: " << report.m_UserName << std::endl;
   body << "Computer: " << report.m_Computer << std::endl;
   body << "Build Config: " << report.m_BuildConfig << std::endl;
-  body << "Command Line: " << Nocturnal::GetCmdLine() << std::endl;
+  body << "Command Line: " << Helium::GetCmdLine() << std::endl;
 
   body << std::endl;
   body << "Memory:" << std::endl;
@@ -185,7 +185,7 @@ static void ProcessException( const Debug::ExceptionArgs& args )
 
 //    UpdateExceptionDB( report );
   }
-  catch ( Nocturnal::Exception& ex )
+  catch ( Helium::Exception& ex )
   {
     Platform::Print(Platform::ConsoleColors::Red, stderr, TXT( "%s\n" ), ex.What() );
   }

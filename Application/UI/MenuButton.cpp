@@ -1,12 +1,12 @@
 #include "MenuButton.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 //-----------------------------------------------------------
 // macros
 //-----------------------------------------------------------
-IMPLEMENT_DYNAMIC_CLASS( Nocturnal::MenuButton, wxButton );
-BEGIN_EVENT_TABLE( Nocturnal::MenuButton, wxButton)
+IMPLEMENT_DYNAMIC_CLASS( Helium::MenuButton, wxButton );
+BEGIN_EVENT_TABLE( Helium::MenuButton, wxButton)
 END_EVENT_TABLE();
 
 MenuButton::MenuButton(wxWindow *parent,

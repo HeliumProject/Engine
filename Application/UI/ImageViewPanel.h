@@ -6,7 +6,7 @@
 #include <wx/panel.h>
 #include <wx/bitmap.h>
 
-namespace Nocturnal
+namespace Helium
 {
   namespace ImageViewPanelFlags
   {

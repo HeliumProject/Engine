@@ -268,7 +268,7 @@ void BoundingVolumeGenerator::CalculateEigenSystem()
 BoundingVolumeGenerator::OBB BoundingVolumeGenerator::GetPrincipleAxisOBB()
 {
     // not supported for bspheres yet
-    NOC_ASSERT(m_BsphereCenters == NULL);
+    HELIUM_ASSERT(m_BsphereCenters == NULL);
 
     OBB result;
 
@@ -461,7 +461,7 @@ BoundingVolumeGenerator::BSphere BoundingVolumeGenerator::GetPrincipleAxisBoundi
 BoundingVolumeGenerator::AABB BoundingVolumeGenerator::GetAABB()
 {
     // not supported for bspheres yet
-    NOC_ASSERT(m_BsphereCenters == NULL);
+    HELIUM_ASSERT(m_BsphereCenters == NULL);
 
     AABB result;
 

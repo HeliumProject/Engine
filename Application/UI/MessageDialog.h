@@ -5,7 +5,7 @@
 
 #include <wx/wx.h>
 
-namespace Nocturnal
+namespace Helium
 {
   //
   // Status messages - wxMessageDialog helper functions
@@ -27,4 +27,4 @@ namespace Nocturnal
   APPLICATION_API void MessageDialog( wxWindow* parent, const MessageDialogIcon status, long style, const tchar* msgFormat, ... );
   APPLICATION_API void MessageDialog( wxWindow* parent, const tchar* msgFormat, va_list statusArgs, const MessageDialogIcon status = MessageDialogIcons::Info, long style = wxOK | wxSTAY_ON_TOP );
 
-} // namespace Nocturnal
+} // namespace Helium

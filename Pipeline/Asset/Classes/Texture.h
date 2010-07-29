@@ -35,9 +35,9 @@ namespace Asset
     {
         enum TextureFilter
         {
-            Point = Nocturnal::FILTER_POINT_SELECT_MIP,
-            Bilinear = Nocturnal::FILTER_LINEAR_SELECT_MIP,
-            Trilinear = Nocturnal::FILTER_LINEAR_LINEAR_MIP,
+            Point = Helium::FILTER_POINT_SELECT_MIP,
+            Bilinear = Helium::FILTER_LINEAR_SELECT_MIP,
+            Trilinear = Helium::FILTER_LINEAR_LINEAR_MIP,
         };
         static void TextureFilterEnumerateEnumeration( Reflect::Enumeration* info )
         {
@@ -122,6 +122,6 @@ namespace Asset
         }
     };
 
-    typedef Nocturnal::SmartPtr< Texture > TexturePtr;
+    typedef Helium::SmartPtr< Texture > TexturePtr;
     typedef std::vector< TexturePtr > V_Texture;
 }

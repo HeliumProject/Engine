@@ -8,7 +8,7 @@
 
 #include "Pipeline/Image/Image.h"
 
-namespace Nocturnal
+namespace Helium
 {
   class IGSerializer;
 }
@@ -28,8 +28,8 @@ namespace TextureProcess
   extern bool                   g_PowerOfTwo;
   extern float                  g_DefaultScaleX;
   extern float                  g_DefaultScaleY;
-  extern Nocturnal::OutputColorFormat  g_DefaultOutputFormat;
-  extern Nocturnal::PostMipImageFilter g_DefaultPostMipFilter;
+  extern Helium::OutputColorFormat  g_DefaultOutputFormat;
+  extern Helium::PostMipImageFilter g_DefaultPostMipFilter;
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   //
@@ -38,7 +38,7 @@ namespace TextureProcess
   //
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
-  class Definition : public Nocturnal::RefCountBase<Definition>
+  class Definition : public Helium::RefCountBase<Definition>
   {
   public:
     Definition()
@@ -57,10 +57,10 @@ namespace TextureProcess
       m_output_format = g_DefaultOutputFormat;
       m_post_filter = g_DefaultPostMipFilter;
 
-      m_runtime.m_wrap_u = Nocturnal::UV_WRAP;
-      m_runtime.m_wrap_v = Nocturnal::UV_WRAP;
-      m_runtime.m_wrap_w = Nocturnal::UV_WRAP;
-      m_runtime.m_filter = Nocturnal::FILTER_LINEAR_LINEAR_MIP;
+      m_runtime.m_wrap_u = Helium::UV_WRAP;
+      m_runtime.m_wrap_v = Helium::UV_WRAP;
+      m_runtime.m_wrap_w = Helium::UV_WRAP;
+      m_runtime.m_filter = Helium::FILTER_LINEAR_LINEAR_MIP;
       m_runtime.m_direct_uvs = false;
       m_runtime.m_expand_range = false;
     }
@@ -74,8 +74,8 @@ namespace TextureProcess
     // input data
     tstring                     m_enum;
     tstring                     m_texture_file;
-    Nocturnal::OutputColorFormat           m_output_format;
-    Nocturnal::PostMipImageFilter          m_post_filter;
+    Helium::OutputColorFormat           m_output_format;
+    Helium::PostMipImageFilter          m_post_filter;
     float                           m_relscale_x;
     float                           m_relscale_y;
     bool                            m_force_power_of_2;
@@ -85,25 +85,25 @@ namespace TextureProcess
     bool                            m_is_detail_map_only;
 
     // output data
-    Nocturnal::Image*                 m_texture;
-    Nocturnal::MipSet*                  m_mips;
-    Nocturnal::MipSet::RuntimeSettings  m_runtime;
+    Helium::Image*                 m_texture;
+    Helium::MipSet*                  m_mips;
+    Helium::MipSet::RuntimeSettings  m_runtime;
     u32                          m_mip_levels;
 
     // user data
     void*                        m_user_data;
   };
 
-  typedef Nocturnal::SmartPtr<Definition> DefinitionPtr;
+  typedef Helium::SmartPtr<Definition> DefinitionPtr;
   typedef std::vector<DefinitionPtr> V_Definition;
 
-  typedef Nocturnal::Signature<void, Definition*> DefinitionSignature;
+  typedef Helium::Signature<void, Definition*> DefinitionSignature;
 
   struct PostLoadArgs
   {
 
   };
-  typedef Nocturnal::Signature<void, const PostLoadArgs&> PostLoadSignature;
+  typedef Helium::Signature<void, const PostLoadArgs&> PostLoadSignature;
 
   //
   // The Bank class builds Defs into a packed bank of textures

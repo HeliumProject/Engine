@@ -19,8 +19,8 @@
 #include <wx/log.h>
 #include <wx/module.h>
 
-using namespace Nocturnal;
-using Nocturnal::Insert; 
+using namespace Helium;
+using Helium::Insert; 
 
 int g_InitCount = 0;
 
@@ -102,7 +102,7 @@ static const char * file_icons_tbl_computer_xpm[] = {
 // FileIconsTable & friends
 // ----------------------------------------------------------------------------
 
-namespace Nocturnal
+namespace Helium
 {
     // global instance of a FileIconsTable
     static FileIconsTable* g_GlobalFileIconsTable = NULL;
@@ -110,7 +110,7 @@ namespace Nocturnal
     {
         if ( !g_GlobalFileIconsTable )
         {
-            throw Nocturnal::Exception( TXT( "GlobalFileIconsTable is not initialized!" ) );
+            throw Helium::Exception( TXT( "GlobalFileIconsTable is not initialized!" ) );
         }
 
         return *g_GlobalFileIconsTable;
@@ -189,7 +189,7 @@ FileIconsTable::~FileIconsTable()
 
 void FileIconsTable::Create()
 {
-    NOC_ASSERT(!m_NormalImageList && !m_SmallImageList && !m_StateImageList && !m_HashTable);
+    HELIUM_ASSERT(!m_NormalImageList && !m_SmallImageList && !m_StateImageList && !m_HashTable);
 
     m_HashTable = new wxHashTable(wxKEY_STRING);
 
@@ -203,11 +203,11 @@ void FileIconsTable::Create()
         tchar module[MAX_PATH];
         ::GetModuleFileName( 0, module, MAX_PATH );
 
-        Nocturnal::Path exePath( module );
-        Nocturnal::Path iconFolder( exePath.Directory() + TXT( "Icons/16x16/" ) );
+        Helium::Path exePath( module );
+        Helium::Path iconFolder( exePath.Directory() + TXT( "Icons/16x16/" ) );
 
-        std::set< Nocturnal::Path > artFiles;
-        Nocturnal::Directory::GetFiles( iconFolder, artFiles, TXT( "*.png" ), true );
+        std::set< Helium::Path > artFiles;
+        Helium::Directory::GetFiles( iconFolder, artFiles, TXT( "*.png" ), true );
 
         int numImages = (int)artFiles.size();
         if ( numImages <= 0 )
@@ -269,11 +269,11 @@ void FileIconsTable::Create()
         (KDE defines application/x-executable for *.exe and has nice icon)
         */
 
-        std::set< Nocturnal::Path >::const_iterator fileItr = artFiles.begin();
-        std::set< Nocturnal::Path >::const_iterator fileEnd = artFiles.end();
+        std::set< Helium::Path >::const_iterator fileItr = artFiles.begin();
+        std::set< Helium::Path >::const_iterator fileEnd = artFiles.end();
         for ( ; fileItr != fileEnd; ++fileItr )
         {
-            const Nocturnal::Path& filePath = (*fileItr);
+            const Helium::Path& filePath = (*fileItr);
 
             if ( !filePath.Exists() || filePath.Size() <= 0 )
             {

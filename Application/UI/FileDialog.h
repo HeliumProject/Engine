@@ -10,7 +10,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-namespace Nocturnal
+namespace Helium
 {
 #define WXFD_STYLEOFFSET 16
 
@@ -43,7 +43,7 @@ namespace Nocturnal
 
   /////////////////////////////////////////////////////////////////////////////
 
-  typedef Nocturnal::OrderedSet< tstring > OS_string;
+  typedef Helium::OrderedSet< tstring > OS_string;
 
   class APPLICATION_API FileDialog: public wxFileDialog
   {
@@ -77,8 +77,8 @@ namespace Nocturnal
     virtual int ShowModal();
     bool IsMultipleSelectionEnabled() const;
 
-    virtual wxString GetPath() const NOC_OVERRIDE;
-    virtual void GetPaths( wxArrayString& paths ) const NOC_OVERRIDE;
+    virtual wxString GetPath() const HELIUM_OVERRIDE;
+    virtual void GetPaths( wxArrayString& paths ) const HELIUM_OVERRIDE;
     virtual const tstring& GetFilePath() const;
     virtual const std::set< tstring >& GetFilePaths() const;
 
@@ -109,4 +109,4 @@ namespace Nocturnal
     void UpdateFilter();
   };
 
-} // namespace Nocturnal
+} // namespace Helium

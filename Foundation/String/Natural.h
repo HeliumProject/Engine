@@ -123,7 +123,7 @@ static int strnatcmp0(nat_char const *a, nat_char const *b, int fold_case)
     nat_char ca, cb;
     int fractional, result;
 
-    NOC_ASSERT(a && b);
+    HELIUM_ASSERT(a && b);
     ai = bi = 0;
     while (1) {
         ca = a[ai]; cb = b[bi];

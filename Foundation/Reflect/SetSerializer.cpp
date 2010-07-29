@@ -35,7 +35,7 @@ void Tokenize( const tstring& str, std::set< T >& tokens, const tstring& delimit
         }
         else
         {
-            NOC_BREAK();
+            HELIUM_BREAK();
         }
     }
 }
@@ -74,11 +74,11 @@ SimpleSetSerializer<DataT, DataSer>::~SimpleSetSerializer()
 }
 
 template < class DataT, class DataSer >
-void SimpleSetSerializer<DataT, DataSer>::ConnectData(Nocturnal::HybridPtr<void> data)
+void SimpleSetSerializer<DataT, DataSer>::ConnectData(Helium::HybridPtr<void> data)
 {
     __super::ConnectData( data );
 
-    m_Data.Connect( Nocturnal::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
 template < class DataT, class DataSer >
@@ -270,9 +270,9 @@ template SimpleSetSerializer< tstring, StringSerializer >;
 template SimpleSetSerializer< u32, U32Serializer >;
 template SimpleSetSerializer< u64, U64Serializer >;
 template SimpleSetSerializer< f32, F32Serializer >;
-template SimpleSetSerializer< Nocturnal::GUID, GUIDSerializer >;
-template SimpleSetSerializer< Nocturnal::TUID, TUIDSerializer >;
-template SimpleSetSerializer< Nocturnal::Path, PathSerializer >;
+template SimpleSetSerializer< Helium::GUID, GUIDSerializer >;
+template SimpleSetSerializer< Helium::TUID, TUIDSerializer >;
+template SimpleSetSerializer< Helium::Path, PathSerializer >;
 
 REFLECT_DEFINE_CLASS( StringSetSerializer );
 REFLECT_DEFINE_CLASS( U32SetSerializer );

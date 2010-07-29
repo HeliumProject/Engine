@@ -4,7 +4,7 @@
 #include <time.h>
 #include <sys/timeb.h>
 
-using namespace Nocturnal::ES;
+using namespace Helium::ES;
 
 tstring Event::Dump() const
 {

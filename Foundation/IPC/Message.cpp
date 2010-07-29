@@ -55,11 +55,11 @@ void MessageQueue::Add(Message* msg)
             // header must also be zero and count must be zero
             if(m_Count !=0)
             {
-                NOC_BREAK();
+                HELIUM_BREAK();
             }
             if (m_Head != 0)
             {
-                NOC_BREAK();
+                HELIUM_BREAK();
             }
 
             msg->m_Next = 0;

@@ -15,11 +15,11 @@ using namespace Maya;
 const char* s_GUIDAttributeName = "GUID";
 const char* s_TUIDAttributeName = "TUID";
 
-Nocturnal::TUID Maya::GetNodeID( const MObject& node, bool create )
+Helium::TUID Maya::GetNodeID( const MObject& node, bool create )
 {
   if (node == MObject::kNullObj)
   {
-    return Nocturnal::TUID::Null;
+    return Helium::TUID::Null;
   }
 
   MObject attr = MObject::kNullObj;
@@ -42,18 +42,18 @@ Nocturnal::TUID Maya::GetNodeID( const MObject& node, bool create )
       MString str;
       MPlug plug (node, attr);
       status = plug.getValue(str);
-      NOC_ASSERT( status != MS::kFailure );
+      HELIUM_ASSERT( status != MS::kFailure );
 
       // parse it
-      Nocturnal::GUID id;
+      Helium::GUID id;
       bool parsed = id.FromString(str.asTChar());
-      NOC_ASSERT( parsed );
+      HELIUM_ASSERT( parsed );
 
       // convert it to a TUID and set the new attribute
-      Nocturnal::TUID tuid;
+      Helium::TUID tuid;
       tuid.FromGUID( id );
       status = SetNodeID( node, tuid );
-      NOC_ASSERT( status != MS::kFailure );
+      HELIUM_ASSERT( status != MS::kFailure );
 
       // check to see if we are a locked node
       bool nodeWasLocked = nodeFn.isLocked();
@@ -65,11 +65,11 @@ Nocturnal::TUID Maya::GetNodeID( const MObject& node, bool create )
 
       // unlock the attribute
       status = plug.setLocked( false );
-      NOC_ASSERT( status != MS::kFailure );
+      HELIUM_ASSERT( status != MS::kFailure );
 
       // remove the attribute
       status = nodeFn.removeAttribute( attr );
-      NOC_ASSERT( status != MS::kFailure );
+      HELIUM_ASSERT( status != MS::kFailure );
 
       // reset to the prior state of wasLocked
       if ( nodeWasLocked )
@@ -91,7 +91,7 @@ Nocturnal::TUID Maya::GetNodeID( const MObject& node, bool create )
   if ( str.length() == 0 && create )
   {
     // generate a new ID
-    Nocturnal::TUID id( Nocturnal::TUID::Generate() );
+    Helium::TUID id( Helium::TUID::Generate() );
 
     // set the new ID value on the node
     if( SetNodeID( node, id ) )
@@ -100,17 +100,17 @@ Nocturnal::TUID Maya::GetNodeID( const MObject& node, bool create )
     }
     else
     {
-      return Nocturnal::TUID::Null;
+      return Helium::TUID::Null;
     }
   }
 
   // parse the value (this may be null if we did not create the attribute)
-  Nocturnal::TUID id;
+  Helium::TUID id;
   id.FromString(str.asTChar());
   return id;
 }
 
-MStatus Maya::SetNodeID( const MObject& node, const Nocturnal::TUID& id )
+MStatus Maya::SetNodeID( const MObject& node, const Helium::TUID& id )
 {
   MStatus status;
   MFnDependencyNode nodeFn (node);

@@ -3,9 +3,9 @@
 
 #include <wx/ctrlsub.h>
 
-using Nocturnal::Insert; 
+using Helium::Insert; 
 
-using namespace Nocturnal;
+using namespace Helium;
 
 
 //////////////////////////////////////////////////////////////////////////////

@@ -22,7 +22,7 @@
 
 #define WXTWC_DEFAULT_ITEM_SPACING     5
 
-namespace Nocturnal
+namespace Helium
 {
 
     // ----------------------------------------------------------------------------

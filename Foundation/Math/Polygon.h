@@ -35,7 +35,7 @@ namespace Math
       }
       else
       {
-        NOC_BREAK();
+        HELIUM_BREAK();
       }
     }
 
@@ -62,7 +62,7 @@ namespace Math
       }
       else
       {
-        NOC_BREAK();
+        HELIUM_BREAK();
       }
     }
 
@@ -84,7 +84,7 @@ namespace Math
       }
       else
       {
-        NOC_BREAK();
+        HELIUM_BREAK();
       }
     }
 

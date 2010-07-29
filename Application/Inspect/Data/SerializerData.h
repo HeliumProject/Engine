@@ -26,10 +26,10 @@ namespace Inspect
   class SerializerPropertyFormatter : public SerializerData< T >
   {
   protected:
-    Nocturnal::SmartPtr< Nocturnal::Property< T > > m_Property;
+    Helium::SmartPtr< Helium::Property< T > > m_Property;
 
   public:
-    SerializerPropertyFormatter(const Nocturnal::SmartPtr< Nocturnal::Property< T > >& property)
+    SerializerPropertyFormatter(const Helium::SmartPtr< Helium::Property< T > >& property)
       : m_Property(property)
     {
 
@@ -40,7 +40,7 @@ namespace Inspect
 
     }
 
-    virtual bool Set(const T& value, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
+    virtual bool Set(const T& value, const DataChangedSignature::Delegate& emitter = NULL) HELIUM_OVERRIDE
     {
       bool result = false;
 
@@ -57,7 +57,7 @@ namespace Inspect
       return result;
     }
 
-    virtual void Get(T& value) const NOC_OVERRIDE
+    virtual void Get(T& value) const HELIUM_OVERRIDE
     {
       value = m_Property->Get();
     }
@@ -93,7 +93,7 @@ namespace Inspect
       return m_Field;
     }
 
-    virtual bool Set(const T& value, const DataChangedSignature::Delegate& emitter = DataChangedSignature::Delegate ()) NOC_OVERRIDE
+    virtual bool Set(const T& value, const DataChangedSignature::Delegate& emitter = DataChangedSignature::Delegate ()) HELIUM_OVERRIDE
     {
       bool result = false;
 
@@ -116,7 +116,7 @@ namespace Inspect
       return result;
     }
 
-    virtual bool SetAll(std::vector< T >& values, const DataChangedSignature::Delegate& emitter = DataChangedSignature::Delegate ()) NOC_OVERRIDE
+    virtual bool SetAll(std::vector< T >& values, const DataChangedSignature::Delegate& emitter = DataChangedSignature::Delegate ()) HELIUM_OVERRIDE
     {
       bool result = false;
 
@@ -140,7 +140,7 @@ namespace Inspect
       }
       else
       {
-        NOC_BREAK();
+        HELIUM_BREAK();
       }
 
       return result;
@@ -154,7 +154,7 @@ namespace Inspect
       }
     }
 
-    virtual void GetAll(std::vector< T >& values) const NOC_OVERRIDE
+    virtual void GetAll(std::vector< T >& values) const HELIUM_OVERRIDE
     {
       values.resize( m_Serializers.size() );
       std::vector< Reflect::SerializerPtr >::const_iterator itr = m_Serializers.begin();

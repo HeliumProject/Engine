@@ -8,8 +8,8 @@
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Checksum/CRC32.h"
 
-using Nocturnal::Insert;
-using namespace Nocturnal;
+using Helium::Insert;
+using namespace Helium;
 using namespace Reflect; 
 
 //#define REFLECT_DEBUG_BINARY_CRC
@@ -23,7 +23,7 @@ const u32 ArchiveBinary::FIRST_VERSION_WITH_POINTER_SERIALIZER      = 5;
 const u32 ArchiveBinary::FIRST_VERSION_WITH_UNICODE_SUPPORT         = 6; 
 
 // our ORIGINAL version id was '!', don't ever re-use that byte
-NOC_COMPILE_ASSERT( (ArchiveBinary::CURRENT_VERSION & 0xff) != 33 );
+HELIUM_COMPILE_ASSERT( (ArchiveBinary::CURRENT_VERSION & 0xff) != 33 );
 
 // CRC
 const u32 CRC_DEFAULT = 0x10101010;
@@ -182,7 +182,7 @@ void ArchiveBinary::Read()
         u32 count = 0;
         u8 block[CRC_BLOCK_SIZE];
         memset(block, 0, CRC_BLOCK_SIZE);
-        NOC_ASSERT(current_crc == CRC_DEFAULT);
+        HELIUM_ASSERT(current_crc == CRC_DEFAULT);
 
         // snapshot our starting location
         u32 start = (u32)m_Stream->TellRead();
@@ -197,7 +197,7 @@ void ArchiveBinary::Read()
             u32 got = (u32) m_Stream->ElementsRead();
 
             // crc block
-            current_crc = Nocturnal::Crc32(current_crc, block, got);
+            current_crc = Helium::Crc32(current_crc, block, got);
 
 #ifdef REFLECT_DEBUG_BINARY_CRC
             Log::Print("CRC %d (length %d) for datum 0x%08x is 0x%08x\n", count++, got, *(u32*)block, current_crc);
@@ -249,7 +249,7 @@ void ArchiveBinary::Read()
 
         i32 type_count = -1;
         m_Stream->Read(&type_count); 
-        NOC_ASSERT(type_count >= 0);
+        HELIUM_ASSERT(type_count >= 0);
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
         Debug(TXT("Deserializing %d types\n"), type_count);
@@ -348,10 +348,10 @@ void ArchiveBinary::Write()
     CharacterEncoding encoding;
 #ifdef UNICODE
     encoding = CharacterEncodings::UTF_16;
-    NOC_COMPILE_ASSERT( sizeof(wchar_t) == 2 );
+    HELIUM_COMPILE_ASSERT( sizeof(wchar_t) == 2 );
 #else
     encoding = CharacterEncodings::ASCII;
-    NOC_COMPILE_ASSERT( sizeof(char) == 1 );
+    HELIUM_COMPILE_ASSERT( sizeof(char) == 1 );
 #endif
     u8 encodingByte = (u8)encoding;
     m_Stream->Write(&encodingByte);
@@ -444,7 +444,7 @@ void ArchiveBinary::Write()
         memset(&block, 0, CRC_BLOCK_SIZE);
 
         // make damn sure this didn't change
-        NOC_ASSERT(crc == CRC_INVALID);
+        HELIUM_ASSERT(crc == CRC_INVALID);
 
         // reset this local back to default for computation
         crc = CRC_DEFAULT;
@@ -462,7 +462,7 @@ void ArchiveBinary::Write()
             u32 got = (u32) m_Stream->ElementsRead();
 
             // crc block
-            crc = Nocturnal::Crc32(crc, block, got);
+            crc = Helium::Crc32(crc, block, got);
 
 #ifdef REFLECT_DEBUG_BINARY_CRC
             Log::Print("CRC %d (length %d) for datum 0x%08x is 0x%08x\n", count++, got, *(u32*)block, crc);
@@ -480,7 +480,7 @@ void ArchiveBinary::Write()
 
         // seek back and write our crc data
         m_Stream->SeekWrite(crc_offset, std::ios_base::beg);
-        NOC_ASSERT(!m_Stream->Fail());
+        HELIUM_ASSERT(!m_Stream->Fail());
         m_Stream->Write(&crc); 
 
     }
@@ -562,7 +562,7 @@ void ArchiveBinary::Serialize(const ElementPtr& element)
         m_Stream->Write(&terminator); 
 
         // seek back and write our count
-        NOC_ASSERT(m_FieldStack.size() > 0);
+        HELIUM_ASSERT(m_FieldStack.size() > 0);
         m_Stream->SeekWrite(m_FieldStack.top().m_CountOffset, std::ios_base::beg);
         m_Stream->Write(&m_FieldStack.top().m_Count); 
         m_FieldStack.pop();
@@ -646,7 +646,7 @@ void ArchiveBinary::SerializeFields(const ElementPtr& element)
     //
 
     const Class* type = element->GetClass();
-    NOC_ASSERT(type != NULL);
+    HELIUM_ASSERT(type != NULL);
 
     REFLECT_SCOPE_TIMER_INST( "" );
 
@@ -655,7 +655,7 @@ void ArchiveBinary::SerializeFields(const ElementPtr& element)
     for ( ; iter != end; ++iter )
     {
         const Field* field = iter->second;
-        NOC_ASSERT(field != NULL);
+        HELIUM_ASSERT(field != NULL);
 
         SerializeField(element, field);
     }
@@ -675,7 +675,7 @@ void ArchiveBinary::SerializeField(const ElementPtr& element, const Field* field
     ElementPtr e;
     m_Cache.Create( field->m_SerializerID, e );
 
-    NOC_ASSERT( e != NULL );
+    HELIUM_ASSERT( e != NULL );
 
     // downcast serializer
     SerializerPtr serializer = ObjectCast<Serializer>(e);
@@ -735,7 +735,7 @@ void ArchiveBinary::SerializeField(const ElementPtr& element, const Field* field
 #endif
 
         // we wrote a field, so increment our count
-        NOC_ASSERT(m_FieldStack.size() > 0);
+        HELIUM_ASSERT(m_FieldStack.size() > 0);
         m_FieldStack.top().m_Count++;
     }
 
@@ -773,7 +773,7 @@ ElementPtr ArchiveBinary::Allocate()
     if (found == m_ClassesByShortName.end())
     {
         // we failed to find a type in the latent RTTI data, that is bad
-        NOC_BREAK();
+        HELIUM_BREAK();
         throw Reflect::TypeInformationException( TXT( "Unable to locate type '%s'" ), str.c_str());
     }
 
@@ -808,7 +808,7 @@ ElementPtr ArchiveBinary::Allocate()
         }
         else
         {
-            NOC_BREAK();
+            HELIUM_BREAK();
             throw Reflect::DataFormatException( TXT( "Unable to create object, unknown type '%s'" ), str.c_str());
         }
     }
@@ -997,7 +997,7 @@ void ArchiveBinary::DeserializeFields(const ElementPtr& element)
                 if (type != NULL)
                 {
                     M_FieldIDToInfo::const_iterator field_found = type->m_FieldIDToInfo.find(field_id);
-                    NOC_ASSERT(field_found != type->m_FieldIDToInfo.end());
+                    HELIUM_ASSERT(field_found != type->m_FieldIDToInfo.end());
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
                     m_Indent.Get(stdout);

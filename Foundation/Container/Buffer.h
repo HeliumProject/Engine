@@ -2,7 +2,7 @@
 
 #include "Array.h"
 
-namespace Nocturnal
+namespace Helium
 {
   //
   // An array of bytes that holds objects of various sizes
@@ -49,7 +49,7 @@ namespace Nocturnal
       T* data = (T*)(m_Data.GetData() + size);
       
       // init the data
-      Nocturnal::ConstructObject<T>( data );
+      Helium::ConstructObject<T>( data );
       
       return data;
     }

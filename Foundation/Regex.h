@@ -32,7 +32,7 @@ typedef std::tr1::regex_token_iterator< tstring::const_iterator> tsregex_token_i
 typedef std::tr1::regex_iterator< const tchar* > tcregex_iterator;
 typedef std::tr1::regex_iterator< tstring::const_iterator > tsregex_iterator;
 
-namespace Nocturnal
+namespace Helium
 {
     template <class MatchT>
     inline tstring MatchResultAsString( const std::tr1::match_results<MatchT>& results, int i )
@@ -47,7 +47,7 @@ namespace Nocturnal
 
         T result;
         str >> result;
-        NOC_ASSERT( !str.fail() );
+        HELIUM_ASSERT( !str.fail() );
 
         return result;
     }

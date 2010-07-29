@@ -18,7 +18,7 @@ using namespace Reflect;
 using namespace Content;
 using namespace Symbol;
 using namespace MayaContent;
-using namespace Nocturnal;
+using namespace Helium;
 
 static const char* ExportSelectionFlag = "-es";
 static const char* ExportSelectionFlagLong  = "-exportSelection";
@@ -91,7 +91,7 @@ MStatus MayaContentCmd::doIt(const MArgList &args)
             }
         }
     }
-    catch ( Nocturnal::Exception& ex )
+    catch ( Helium::Exception& ex )
     {
         if( MGlobal::mayaState() == MGlobal::kInteractive )
         {
@@ -141,7 +141,7 @@ MStatus MayaContentCmd::doIt()
 
         m_QueuedNodes.clear();
     }
-    catch ( Nocturnal::Exception& ex )
+    catch ( Helium::Exception& ex )
     {
         if( MGlobal::mayaState() == MGlobal::kInteractive )
         {
@@ -233,7 +233,7 @@ bool MayaContentCmd::WriteExportedData()
             Reflect::ArchiveXML::ToString(m_ExportScene.m_Spool, xml);
             success = true;
         }
-        catch ( Nocturnal::Exception& ex )
+        catch ( Helium::Exception& ex )
         {
             Log::Error( TXT("%s\n"), ex.What() );
             success = false;
@@ -273,7 +273,7 @@ bool MayaContentCmd::WriteExportedData()
         {
             Reflect::Archive::ToFile(m_ExportScene.m_Spool, m_ContentFileName, v);
         }
-        catch ( Nocturnal::Exception& ex )
+        catch ( Helium::Exception& ex )
         {
             MString str ("Unable to save content file to: ");
             str += m_ContentFileName.c_str();
@@ -551,7 +551,7 @@ void MayaContentCmd::SetQueued(const MObject node)
     // insert it into the map of exported ids
     bool result = m_QueuedNodes.insert(node).second;
 
-    NOC_ASSERT(result);
+    HELIUM_ASSERT(result);
 }
 
 void MayaContentCmd::ExportCurrentScene(CommandData data)
@@ -565,8 +565,8 @@ void MayaContentCmd::ExportCurrentScene(CommandData data)
     tstring currentFile = MFileIO::currentFile().asTChar();
 
     // clean path returned by maya
-    Nocturnal::Path currentPath( currentFile );
-    Nocturnal::Path contentFileDir( currentPath.Directory() );
+    Helium::Path currentPath( currentFile );
+    Helium::Path contentFileDir( currentPath.Directory() );
     contentFileDir.MakePath();
 
     tstring contentFile = currentFile;
@@ -637,7 +637,7 @@ MStatus MayaContentCmd::UnloadProxyFileReferences()
 
         // clean path returned by maya 
         tstring curFilePath = refFileName.asTChar();
-        Nocturnal::Path::Normalize( curFilePath );
+        Helium::Path::Normalize( curFilePath );
 
         tstring::size_type findProxyPos = curFilePath.rfind( s_ProxyRigSuffix );
         if ( findProxyPos != tstring::npos )
@@ -646,7 +646,7 @@ MStatus MayaContentCmd::UnloadProxyFileReferences()
             masterFilePath.erase( findProxyPos, _tcslen( s_ProxyRigSuffix ) );
             masterFilePath.insert( findProxyPos, s_MasterRigSuffix );
 
-            if ( Nocturnal::Path( masterFilePath ).Exists() )
+            if ( Helium::Path( masterFilePath ).Exists() )
             {
                 //file -loadReference "yourReferenceNodeHere" -type "mayaBinary" -options "v=0" "pathToNewReferenceFileHere";
                 tstringstream command;
@@ -895,7 +895,7 @@ void MayaContentCmd::ConvertAttributeToComponent( const MFnDependencyNode &nodeF
     case MFn::kUnitAttribute:
         {
             // we should catch all of these below, I think UnitAttribute is just a utility class FnSet
-            NOC_ASSERT(false);
+            HELIUM_ASSERT(false);
             break;
         }
 

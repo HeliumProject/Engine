@@ -2,7 +2,7 @@
 
 #include "Platform/Types.h"
 
-namespace Nocturnal
+namespace Helium
 {
   #pragma pack(push,1)
   struct TGAHeader

@@ -8,7 +8,7 @@
 
 #include "Platform/Types.h"
 
-namespace Nocturnal
+namespace Helium
 {
     //
     // Command line access

@@ -145,7 +145,7 @@ Archive::~Archive()
 
 bool Archive::GetFileType( const tstring& file, ArchiveType& type )
 {
-    Nocturnal::Path filePath( file );
+    Helium::Path filePath( file );
     tstring ext = filePath.Extension();
 
     if ( ext == Archive::GetExtension( ArchiveTypes::XML ) )
@@ -379,7 +379,7 @@ bool Archive::TryElementCallback( Element* element, ElementCallback callback )
         {
             (element->*callback)();
         }
-        catch ( const Nocturnal::Exception& exception )
+        catch ( const Helium::Exception& exception )
         {
             if ( m_Status )
             {
@@ -471,7 +471,7 @@ ElementPtr Archive::FromFile(const tstring& file, int searchType, StatusHandler*
 
             archive->Close(); 
         }
-        catch (Nocturnal::Exception& ex)
+        catch (Helium::Exception& ex)
         {
             tstringstream str;
             str << "While reading '" << file << "': " << ex.Get();
@@ -513,7 +513,7 @@ void Archive::ToFile(const V_Element& elements, const tstring& file, VersionPtr 
     archive->Debug( TXT( "%s\n" ), print);
 
     s_FileAccess.Raise( FileAccessArgs( file, FileOperations::PreWrite ) );
-    Nocturnal::Path outputPath( file );
+    Helium::Path outputPath( file );
     outputPath.MakePath();
 
     // alloc a version object if we don't have one
@@ -538,7 +538,7 @@ void Archive::ToFile(const V_Element& elements, const tstring& file, VersionPtr 
     }
 
     // build a path to a unique file for this process
-    Nocturnal::Path safetyPath( outputPath.Directory() + Platform::GetProcessString() );
+    Helium::Path safetyPath( outputPath.Directory() + Platform::GetProcessString() );
     safetyPath.ReplaceExtension( outputPath.Extension() );
 
     // generate the file to the safety location
@@ -559,7 +559,7 @@ void Archive::ToFile(const V_Element& elements, const tstring& file, VersionPtr 
             archive->Write();
             archive->Close(); 
         }
-        catch ( Nocturnal::Exception& ex )
+        catch ( Helium::Exception& ex )
         {
             tstringstream str;
             str << "While writing '" << file << "': " << ex.Get();
@@ -600,7 +600,7 @@ void Archive::ToFile(const V_Element& elements, const tstring& file, VersionPtr 
         // move the written file to the destination location
         safetyPath.Move( outputPath );
     }
-    catch ( Nocturnal::Exception& ex )
+    catch ( Helium::Exception& ex )
     {
         tstringstream str;
         str << "While moving '" << safetyPath.c_str() << "' to '" << file << "': " << ex.Get();
@@ -652,7 +652,7 @@ void Archive::FromFile(const tstring& file, V_Element& elements, StatusHandler* 
 
             archive->Close(); 
         }
-        catch (Nocturnal::Exception& ex)
+        catch (Helium::Exception& ex)
         {
             tstringstream str;
             str << "While reading '" << file << "': " << ex.Get();

@@ -11,7 +11,7 @@
 #include "Pipeline/Image/Image.h"
 #include "JPEG.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 //-----------------------------------------------------------------------------
 static const u8 JPGZig1[64] =

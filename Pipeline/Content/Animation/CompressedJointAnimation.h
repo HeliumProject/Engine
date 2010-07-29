@@ -61,7 +61,7 @@ namespace Content
     std::vector< i16 > m_AvgRotate;
     std::vector< u8 >  m_DiffTypeRotate;
 
-    Nocturnal::TUID m_JointID;
+    Helium::TUID m_JointID;
 
     REFLECT_DECLARE_CLASS( CompressedJointAnimation, Reflect::Element );
 
@@ -88,7 +88,7 @@ namespace Content
     static void ComputeAverageAndDiffType( i16& average, u8& diffType, const i16& min, const i16& max );
   };
 
-  typedef Nocturnal::SmartPtr< CompressedJointAnimation > CompressedJointAnimationPtr;
+  typedef Helium::SmartPtr< CompressedJointAnimation > CompressedJointAnimationPtr;
   typedef std::vector< CompressedJointAnimationPtr > V_CompressedJointAnimation;
-  typedef std::map< Nocturnal::TUID, CompressedJointAnimationPtr > M_CompressedJointAnimation;
+  typedef std::map< Helium::TUID, CompressedJointAnimationPtr > M_CompressedJointAnimation;
 }

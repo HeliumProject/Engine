@@ -57,7 +57,7 @@ namespace Content
             Reflect::Field* fieldNormalVector = comp.AddField( &MorphTargetDelta::m_NormalVector, "m_NormalVector" );
         }
     };
-    typedef Nocturnal::SmartPtr< MorphTargetDelta > MorphTargetDeltaPtr;
+    typedef Helium::SmartPtr< MorphTargetDelta > MorphTargetDeltaPtr;
     typedef std::vector< MorphTargetDeltaPtr > V_MorphTargetDelta;
 
 
@@ -66,14 +66,14 @@ namespace Content
     {
     public:
         tstring          m_Name;
-        Nocturnal::TUID m_Id;
+        Helium::TUID m_Id;
         V_MorphTargetDelta   m_Deltas;
 
         MorphTarget()
         {
         }
 
-        MorphTarget( const tstring& name, const Nocturnal::TUID& id )
+        MorphTarget( const tstring& name, const Helium::TUID& id )
             : m_Name( name )
             , m_Id( id )
         {
@@ -93,7 +93,7 @@ namespace Content
             Reflect::Field* fieldDeltas = comp.AddField( &MorphTarget::m_Deltas, "m_Deltas" );
         }
     };
-    typedef Nocturnal::SmartPtr<MorphTarget> MorphTargetPtr;
+    typedef Helium::SmartPtr<MorphTarget> MorphTargetPtr;
     typedef std::vector<MorphTargetPtr> V_MorphTargetPtr;
 
     /////////////////////////////////////////////////////////////////////////////
@@ -130,7 +130,7 @@ namespace Content
         public:
             Edge( u32 vertIndex1, u32 vertIndex2 )
             {
-                NOC_ASSERT( vertIndex1 != vertIndex2 );
+                HELIUM_ASSERT( vertIndex1 != vertIndex2 );
 
                 if( vertIndex1 > vertIndex2 )
                 {
@@ -226,7 +226,7 @@ namespace Content
         //
 
         // The shaders referenced by all of the polygons of this mesh
-        Nocturnal::V_TUID m_ShaderIDs;
+        Helium::V_TUID m_ShaderIDs;
 
         // The counts of the number of triangles for each shader used
         std::vector< u32 > m_ShaderTriangleCounts;
@@ -239,7 +239,7 @@ namespace Content
 
         }
 
-        Mesh (const Nocturnal::TUID& id)
+        Mesh (const Helium::TUID& id)
             : PivotTransform (id)
         {
             m_MeshOriginType = Maya;
@@ -327,7 +327,7 @@ namespace Content
     };
 
 
-    typedef Nocturnal::SmartPtr<Mesh> MeshPtr;
+    typedef Helium::SmartPtr<Mesh> MeshPtr;
     typedef std::vector<MeshPtr> V_Mesh;
 
     struct CompareMeshes

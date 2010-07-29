@@ -78,7 +78,7 @@ public:
         }
         else
         {
-            NOC_BREAK();
+            HELIUM_BREAK();
         }
     }
 };
@@ -219,12 +219,12 @@ bool AddFile( M_OutputFile& files, const tstring& fileName, Stream stream, u32 t
     {
         if ( found->second.m_StreamType != stream )
         {
-            NOC_BREAK(); // trying to add the same file, but with a different stream type
+            HELIUM_BREAK(); // trying to add the same file, but with a different stream type
         }
 
         if ( found->second.m_ThreadId != threadId )
         {
-            NOC_BREAK(); // trying to add the same file with a different thread id
+            HELIUM_BREAK(); // trying to add the same file with a different thread id
         }
 
         found->second.m_RefCount++; // another reference
@@ -349,7 +349,7 @@ Log::Color Log::GetStreamColor( Log::Stream stream )
         return Log::Colors::Red;
 
     default:
-        NOC_BREAK();
+        HELIUM_BREAK();
         break;
     }
 
@@ -513,7 +513,7 @@ void Log::PrintColor(Log::Color color, const tchar* fmt, ...)
     static tchar string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
-    NOC_ASSERT(size >= 0);
+    HELIUM_ASSERT(size >= 0);
     PrintString(string, Streams::Normal, Levels::Default, color); 
     va_end(args); 
 }
@@ -527,7 +527,7 @@ void Log::Print(const tchar *fmt,...)
     static tchar string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
-    NOC_ASSERT(size >= 0);
+    HELIUM_ASSERT(size >= 0);
 
     PrintString(string, Streams::Normal, Levels::Default, Log::GetStreamColor( Streams::Normal ));
     va_end(args);      
@@ -542,7 +542,7 @@ void Log::Print(Level level, const tchar *fmt,...)
     static tchar string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
-    NOC_ASSERT(size >= 0);
+    HELIUM_ASSERT(size >= 0);
 
     PrintString(string, Streams::Normal, level, Log::GetStreamColor( Streams::Normal ));
     va_end(args);       
@@ -557,7 +557,7 @@ void Log::Debug(const tchar *fmt,...)
     static tchar string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
-    NOC_ASSERT(size >= 0);
+    HELIUM_ASSERT(size >= 0);
 
     PrintString(string, Streams::Debug, Levels::Default, Log::GetStreamColor( Streams::Debug ), 0);
     va_end(args);
@@ -572,7 +572,7 @@ void Log::Debug(Level level, const tchar *fmt,...)
     static tchar string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
-    NOC_ASSERT(size >= 0);
+    HELIUM_ASSERT(size >= 0);
 
     PrintString(string, Streams::Debug, level, Log::GetStreamColor( Streams::Debug ), 0);
     va_end(args);
@@ -587,7 +587,7 @@ void Log::Profile(const tchar *fmt,...)
     static tchar string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
-    NOC_ASSERT(size >= 0);
+    HELIUM_ASSERT(size >= 0);
 
     PrintString(string, Streams::Profile, Levels::Default, Log::GetStreamColor( Streams::Profile ), 0);
     va_end(args);
@@ -602,7 +602,7 @@ void Log::Profile(Level level, const tchar *fmt,...)
     static tchar string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
-    NOC_ASSERT(size >= 0);
+    HELIUM_ASSERT(size >= 0);
 
     PrintString(string, Streams::Profile, level, Log::GetStreamColor( Streams::Profile ), 0);
     va_end(args);
@@ -621,7 +621,7 @@ void Log::Warning(const tchar *fmt,...)
     static tchar string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), format, args);
     string[ sizeof(string) - 1] = 0; 
-    NOC_ASSERT(size >= 0);
+    HELIUM_ASSERT(size >= 0);
 
     PrintString(string, Streams::Warning, Levels::Default, Log::GetStreamColor( Streams::Warning ), 0);
     va_end(args);      
@@ -647,7 +647,7 @@ void Log::Warning(Level level, const tchar *fmt,...)
     static tchar string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), format, args);
     string[ sizeof(string) - 1] = 0; 
-    NOC_ASSERT(size >= 0);
+    HELIUM_ASSERT(size >= 0);
 
     PrintString(string, Streams::Warning, level, Log::GetStreamColor( Streams::Warning ), 0);
     va_end(args);      
@@ -666,7 +666,7 @@ void Log::Error(const tchar *fmt,...)
     static tchar string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), format, args);
     string[ sizeof(string) - 1] = 0; 
-    NOC_ASSERT(size >= 0);
+    HELIUM_ASSERT(size >= 0);
 
     PrintString(string, Streams::Error, Levels::Default, Log::GetStreamColor( Streams::Error ), 0);
     va_end(args);
@@ -692,7 +692,7 @@ void Log::Error(Level level, const tchar *fmt,...)
     static tchar string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), format, args);
     string[ sizeof(string) - 1] = 0; 
-    NOC_ASSERT(size >= 0);
+    HELIUM_ASSERT(size >= 0);
 
     PrintString(string, Streams::Error, level, Log::GetStreamColor( Streams::Error ), 0);
     va_end(args);
@@ -708,7 +708,7 @@ Log::Heading::Heading(const tchar *fmt, ...)
     static tchar string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
-    NOC_ASSERT(size >= 0);
+    HELIUM_ASSERT(size >= 0);
 
     PrintString(string, Streams::Normal, Levels::Default, Log::GetStreamColor( Streams::Normal ));
     va_end(args);      
@@ -826,7 +826,7 @@ void Log::Bullet::CreateBullet(const tchar *fmt, va_list args)
     static tchar string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), format, args);
     string[ sizeof(string) - 1] = 0; 
-    NOC_ASSERT(size >= 0);
+    HELIUM_ASSERT(size >= 0);
 
     // do the print and capture the output
     static tchar output[MAX_PRINT_SIZE];

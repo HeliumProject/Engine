@@ -121,7 +121,7 @@ void ArchiveXML::Read()
         m_Progress = (int)(((float)(step++ * bufferSizeInBytes) / (float)size) * 100.0f);
 
         tchar* pszBuffer = (tchar*)XML_GetBuffer(m_Parser, bufferSizeInBytes); // REQUEST
-        NOC_ASSERT(pszBuffer != NULL);
+        HELIUM_ASSERT(pszBuffer != NULL);
 
         // divide by the character size so wide char builds don't override the allocation
         //  stream objects read characters, not byte-by-byte
@@ -272,7 +272,7 @@ void ArchiveXML::SerializeFields(const ElementPtr& element)
     //
 
     const Class* type = element->GetClass();
-    NOC_ASSERT(type != NULL);
+    HELIUM_ASSERT(type != NULL);
 
     M_FieldIDToInfo::const_iterator iter = type->m_FieldIDToInfo.begin();
     M_FieldIDToInfo::const_iterator end  = type->m_FieldIDToInfo.end();
@@ -297,7 +297,7 @@ void ArchiveXML::SerializeField(const ElementPtr& element, const Field* field)
     ElementPtr e;
     m_Cache.Create( field->m_SerializerID, e );
 
-    NOC_ASSERT( e != NULL );
+    HELIUM_ASSERT( e != NULL );
 
     // downcast serializer
     SerializerPtr serializer = ObjectCast<Serializer>(e);
@@ -408,7 +408,7 @@ void ArchiveXML::Deserialize(ElementPtr& element)
     else
     {
         // xml doesn't work this way
-        NOC_BREAK();
+        HELIUM_BREAK();
         throw Reflect::LogisticException( TXT( "Internal Error: Missing element" ) );
     }
 }
@@ -469,7 +469,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     if ( m_Version < FIRST_VERSION_WITH_NAMESPACE_SUPPORT )
     {
         bool converted = Platform::ConvertString( pszName, elementType );
-        NOC_ASSERT( converted );
+        HELIUM_ASSERT( converted );
     }
 
     if ( elementType.empty() )
@@ -479,14 +479,14 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
             if ( !_tcscmp( papszAttrs[i], TXT( "Type" ) ) )
             {
                 bool converted = Platform::ConvertString( papszAttrs[ i + 1 ], elementType );
-                NOC_ASSERT( converted );
+                HELIUM_ASSERT( converted );
             }
         }
     }
 
     if ( elementType.empty() )
     {
-        NOC_BREAK();
+        HELIUM_BREAK();
         throw Reflect::DataFormatException( TXT( "Unable to find element type attribute" ) );
     }
 
@@ -630,7 +630,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
     }
 
     // this should never happen, an element just ended
-    NOC_ASSERT( !m_StateStack.empty() );
+    HELIUM_ASSERT( !m_StateStack.empty() );
     ParsingStatePtr topState = m_StateStack.top();
 
     // we own this state, do pop it off the stack

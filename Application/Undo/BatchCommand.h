@@ -22,11 +22,11 @@ namespace Undo
     virtual ~BatchCommand();
     void Set(const V_CommandSmartPtr& commands);
     void Push(const CommandPtr& command);
-    virtual void Undo() NOC_OVERRIDE;
-    virtual void Redo() NOC_OVERRIDE;
-    virtual bool IsSignificant() const NOC_OVERRIDE;
+    virtual void Undo() HELIUM_OVERRIDE;
+    virtual void Redo() HELIUM_OVERRIDE;
+    virtual bool IsSignificant() const HELIUM_OVERRIDE;
     virtual bool IsEmpty() const;
   };
 
-  typedef Nocturnal::SmartPtr<BatchCommand> BatchCommandPtr;
+  typedef Helium::SmartPtr<BatchCommand> BatchCommandPtr;
 }

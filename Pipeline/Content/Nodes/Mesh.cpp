@@ -241,7 +241,7 @@ void Mesh::GetBoundingSphere( Math::BoundingVolumeGenerator::BSphere& bsphere ) 
 
 f32 Mesh::SurfaceArea( Math::Scale* scale ) const
 {
-    NOC_ASSERT( m_TriangleVertexIndices.size()%3 == 0 );
+    HELIUM_ASSERT( m_TriangleVertexIndices.size()%3 == 0 );
 
     f32 area = 0.0f;
 
@@ -392,8 +392,8 @@ f32 Mesh::SurfaceAreaComponents( Math::Vector3& areaVec ) const
 
 void Mesh::GetTriangle( u32 triIndex, Math::Vector3& v0, Math::Vector3& v1, Math::Vector3& v2, Math::Matrix4* transform )
 {
-    NOC_ASSERT( m_TriangleVertexIndices.size()%3 == 0 );
-    NOC_ASSERT( triIndex < GetTriangleCount() );
+    HELIUM_ASSERT( m_TriangleVertexIndices.size()%3 == 0 );
+    HELIUM_ASSERT( triIndex < GetTriangleCount() );
 
     triIndex *= 3;
 
@@ -626,7 +626,7 @@ void Mesh::NopTrisByTriList(const std::vector< u32 >& ip_tris)
 {
     for (std::vector< u32 >::const_iterator it=ip_tris.begin(); it!=ip_tris.end(); ++it)
     {
-        NOC_ASSERT(*it <= (m_TriangleVertexIndices.size()/3));
+        HELIUM_ASSERT(*it <= (m_TriangleVertexIndices.size()/3));
         m_TriangleVertexIndices[(*it)*3] = 0xFFFFFFFF;
         m_TriangleVertexIndices[(*it)*3+1] = 0xFFFFFFFF;
         m_TriangleVertexIndices[(*it)*3+2] = 0xFFFFFFFF;
@@ -737,7 +737,7 @@ void Mesh::PruneVertsNotInTris()
         {
             continue;
         }
-        NOC_ASSERT(tr_vert_ids[1] != 0xFFFFFFFF && tr_vert_ids[2] != 0xFFFFFFFF);
+        HELIUM_ASSERT(tr_vert_ids[1] != 0xFFFFFFFF && tr_vert_ids[2] != 0xFFFFFFFF);
         new_tri_vert_ids.push_back(vert_remap[tr_vert_ids[0]]);
         new_tri_vert_ids.push_back(vert_remap[tr_vert_ids[1]]);
         new_tri_vert_ids.push_back(vert_remap[tr_vert_ids[2]]);

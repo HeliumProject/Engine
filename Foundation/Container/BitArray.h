@@ -62,13 +62,13 @@ public:
 
     BitProxy operator[](unsigned pos)
     {
-        NOC_ASSERT(pos < mNumBits);
+        HELIUM_ASSERT(pos < mNumBits);
         return BitProxy(*this, pos);
     }
 
     const BitProxy operator[](unsigned pos) const
     {
-        NOC_ASSERT(pos < mNumBits);
+        HELIUM_ASSERT(pos < mNumBits);
         return BitProxy(const_cast<BitArray &>(*this), pos);
     }
 
@@ -90,7 +90,7 @@ public:
 
     BitArray &operator&=(const BitArray &that)
     {
-        NOC_ASSERT(mNumBits == that.mNumBits);
+        HELIUM_ASSERT(mNumBits == that.mNumBits);
         for (unsigned i = 0; i < mLength; i++)
             mpStore[i] &= that.mpStore[i];
         return *this;
@@ -98,7 +98,7 @@ public:
 
     BitArray operator|=(const BitArray &that)
     {
-        NOC_ASSERT(mNumBits == that.mNumBits);
+        HELIUM_ASSERT(mNumBits == that.mNumBits);
         for (unsigned i = 0; i < mLength; i++)
             mpStore[i] |= that.mpStore[i];
         return *this;
@@ -106,7 +106,7 @@ public:
 
     BitArray operator^=(const BitArray &that)
     {
-        NOC_ASSERT(mNumBits == that.mNumBits);
+        HELIUM_ASSERT(mNumBits == that.mNumBits);
         for (unsigned i = 0; i < mLength; i++)
             mpStore[i] ^= that.mpStore[i];
         return *this;
@@ -145,21 +145,21 @@ public:
     // Set the bit at position pos to true.
     void SetBit(unsigned pos)
     {
-        NOC_ASSERT(pos < mNumBits);
+        HELIUM_ASSERT(pos < mNumBits);
         mpStore[GetIndex(pos)] |= 1 << GetOffset(pos); 
     }
 
     // Set the bit at position pos to false.
     void ClearBit(unsigned pos)
     { 
-        NOC_ASSERT(pos < mNumBits);
+        HELIUM_ASSERT(pos < mNumBits);
         mpStore[GetIndex(pos)] &= ~(1 << GetOffset(pos)); 
     }
 
     // Toggle the bit at position pos.
     void FlipBit(unsigned pos) 
     { 
-        NOC_ASSERT(pos < mNumBits);
+        HELIUM_ASSERT(pos < mNumBits);
         mpStore[GetIndex(pos)] ^= 1 << GetOffset(pos); 
     }
 
@@ -172,7 +172,7 @@ public:
     // Returns true iff the bit at position pos is true.
     bool IsBitSet(unsigned pos) const
     {
-        NOC_ASSERT(pos < mNumBits);
+        HELIUM_ASSERT(pos < mNumBits);
         return (mpStore[GetIndex(pos)] & (1 << GetOffset(pos))) != 0;
     }
 

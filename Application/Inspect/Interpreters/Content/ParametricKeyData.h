@@ -26,8 +26,8 @@ namespace Inspect
     }
   };
 
-  typedef Nocturnal::Property< Content::V_ParametricKeyPtr > ParametricKeyArrayProperty;
-  typedef Nocturnal::SmartPtr< ParametricKeyArrayProperty > ParametricKeyArrayPropertyPtr;
+  typedef Helium::Property< Content::V_ParametricKeyPtr > ParametricKeyArrayProperty;
+  typedef Helium::SmartPtr< ParametricKeyArrayProperty > ParametricKeyArrayPropertyPtr;
 
   ///////////////////////////////////////////////////////////////////////////
   // Manipulates an array of parametric keys through a property getter/setter.
@@ -50,7 +50,7 @@ namespace Inspect
 
     }
 
-    virtual bool Set( const Content::V_ParametricKeyPtr& value, const DataChangedSignature::Delegate& emitter = NULL ) NOC_OVERRIDE
+    virtual bool Set( const Content::V_ParametricKeyPtr& value, const DataChangedSignature::Delegate& emitter = NULL ) HELIUM_OVERRIDE
     {
       bool result = false;
 
@@ -67,7 +67,7 @@ namespace Inspect
       return result;
     }
 
-    virtual void Get( Content::V_ParametricKeyPtr& value ) const NOC_OVERRIDE
+    virtual void Get( Content::V_ParametricKeyPtr& value ) const HELIUM_OVERRIDE
     {
       value = m_Property->Get();
     }
@@ -96,7 +96,7 @@ namespace Inspect
     {
     }
 
-    virtual bool Set( const Content::V_ParametricKeyPtr& value, const DataChangedSignature::Delegate& emitter = NULL ) NOC_OVERRIDE
+    virtual bool Set( const Content::V_ParametricKeyPtr& value, const DataChangedSignature::Delegate& emitter = NULL ) HELIUM_OVERRIDE
     {
       bool result = false;
 
@@ -119,7 +119,7 @@ namespace Inspect
       return result;
     }
 
-    virtual bool SetAll( const std::vector< Content::V_ParametricKeyPtr >& values, const DataChangedSignature::Delegate& emitter = NULL ) NOC_OVERRIDE
+    virtual bool SetAll( const std::vector< Content::V_ParametricKeyPtr >& values, const DataChangedSignature::Delegate& emitter = NULL ) HELIUM_OVERRIDE
     {
       bool result = false;
 
@@ -143,13 +143,13 @@ namespace Inspect
       }
       else
       {
-        NOC_BREAK();
+        HELIUM_BREAK();
       }
 
       return result;
     }
 
-    virtual void Get( Content::V_ParametricKeyPtr& value ) const NOC_OVERRIDE
+    virtual void Get( Content::V_ParametricKeyPtr& value ) const HELIUM_OVERRIDE
     {
       if ( m_Properties.size() > 0 )
       {
@@ -157,7 +157,7 @@ namespace Inspect
       }
     }
 
-    virtual void GetAll( std::vector< Content::V_ParametricKeyPtr >& values ) const NOC_OVERRIDE
+    virtual void GetAll( std::vector< Content::V_ParametricKeyPtr >& values ) const HELIUM_OVERRIDE
     {
       values.resize( m_Properties.size() );
       V_ParametricKeyArrayPropertyPtr::const_iterator itr = m_Properties.begin();
@@ -190,7 +190,7 @@ namespace Inspect
 
     }
 
-    virtual bool Set( const Content::V_ParametricKeyPtr& value, const DataChangedSignature::Delegate& emitter = NULL ) NOC_OVERRIDE
+    virtual bool Set( const Content::V_ParametricKeyPtr& value, const DataChangedSignature::Delegate& emitter = NULL ) HELIUM_OVERRIDE
     {
       bool result = false;
 
@@ -213,7 +213,7 @@ namespace Inspect
       return result;
     }
 
-    virtual bool SetAll( const std::vector< Content::V_ParametricKeyPtr >& values, const DataChangedSignature::Delegate& emitter = NULL ) NOC_OVERRIDE
+    virtual bool SetAll( const std::vector< Content::V_ParametricKeyPtr >& values, const DataChangedSignature::Delegate& emitter = NULL ) HELIUM_OVERRIDE
     {
       bool result = false;
 
@@ -237,7 +237,7 @@ namespace Inspect
       }
       else
       {
-        NOC_BREAK();
+        HELIUM_BREAK();
       }
 
       return result;
@@ -253,7 +253,7 @@ namespace Inspect
     }
 
     // Get all values
-    virtual void GetAll( std::vector< Content::V_ParametricKeyPtr >& values ) const NOC_OVERRIDE
+    virtual void GetAll( std::vector< Content::V_ParametricKeyPtr >& values ) const HELIUM_OVERRIDE
     {
       values.resize( m_Serializers.size() );
       std::vector< Reflect::SerializerPtr >::const_iterator itr = m_Serializers.begin();

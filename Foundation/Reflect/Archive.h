@@ -87,11 +87,11 @@ namespace Reflect
 
         Element* m_Element;
         ElementCallback m_Callback;
-        const Nocturnal::Exception& m_Exception;
+        const Helium::Exception& m_Exception;
 
         ExceptionAction m_Action;
 
-        ExceptionInfo( const Archive& archive, Element* element, ElementCallback callback, const Nocturnal::Exception& exception )
+        ExceptionInfo( const Archive& archive, Element* element, ElementCallback callback, const Helium::Exception& exception )
             : m_Archive ( archive )
             , m_Element ( element )
             , m_Callback ( callback )
@@ -128,9 +128,9 @@ namespace Reflect
 
         }
 
-        virtual void ArchiveStatus(StatusInfo& info) NOC_OVERRIDE;
-        virtual void ArchiveWarning(const tstring& warning) NOC_OVERRIDE;
-        virtual void ArchiveDebug(const tstring& debug) NOC_OVERRIDE;
+        virtual void ArchiveStatus(StatusInfo& info) HELIUM_OVERRIDE;
+        virtual void ArchiveWarning(const tstring& warning) HELIUM_OVERRIDE;
+        virtual void ArchiveDebug(const tstring& debug) HELIUM_OVERRIDE;
     };
 
 
@@ -201,7 +201,7 @@ namespace Reflect
             // Called after the append spool is deserialized and is a call to the visitor to process the meta data
         }
     };
-    typedef Nocturnal::SmartPtr<ArchiveVisitor> ArchiveVisitorPtr;
+    typedef Helium::SmartPtr<ArchiveVisitor> ArchiveVisitorPtr;
     typedef std::vector<ArchiveVisitorPtr> V_ArchiveVisitor;
 
     namespace FileOperations
@@ -228,7 +228,7 @@ namespace Reflect
 
         }
     };
-    typedef Nocturnal::Signature<void, const FileAccessArgs&, Foundation::AtomicRefCountBase> FileAccessSignature;
+    typedef Helium::Signature<void, const FileAccessArgs&, Foundation::AtomicRefCountBase> FileAccessSignature;
 
     struct SerializeArgs
     {
@@ -240,7 +240,7 @@ namespace Reflect
 
         }
     };
-    typedef Nocturnal::Signature<void, SerializeArgs&, Foundation::AtomicRefCountBase> SerializeSignature;
+    typedef Helium::Signature<void, SerializeArgs&, Foundation::AtomicRefCountBase> SerializeSignature;
 
     struct DeserializeArgs
     {
@@ -252,7 +252,7 @@ namespace Reflect
 
         }
     };
-    typedef Nocturnal::Signature<void, DeserializeArgs&, Foundation::AtomicRefCountBase> DeserializeSignature;
+    typedef Helium::Signature<void, DeserializeArgs&, Foundation::AtomicRefCountBase> DeserializeSignature;
 
 
     //
@@ -278,7 +278,7 @@ namespace Reflect
         StatusHandler* m_Status;
 
         // The file we are working with
-        Nocturnal::Path m_Path;
+        Helium::Path m_Path;
 
         // The array of elements that we've found
         V_Element m_Spool;
@@ -309,7 +309,7 @@ namespace Reflect
 
     public:
         // File access
-        const Nocturnal::Path& GetPath() const
+        const Helium::Path& GetPath() const
         {
             return m_Path;
         }
@@ -376,7 +376,7 @@ namespace Reflect
     public:
         static const tchar* GetExtension( ArchiveType t )
         {
-            NOC_ASSERT( t < sizeof( s_ArchiveExtensions ) / sizeof( tchar* ) );
+            HELIUM_ASSERT( t < sizeof( s_ArchiveExtensions ) / sizeof( tchar* ) );
             return s_ArchiveExtensions[ t ];
         }
 
@@ -469,7 +469,7 @@ namespace Reflect
 
         // Get all elements of the specified type in the archive ( not optimal if you need to get lots of different types at once )
         template< class T >
-        static void FromFile( const tstring& file, std::vector< Nocturnal::SmartPtr<T> >& elements, StatusHandler* status = NULL )
+        static void FromFile( const tstring& file, std::vector< Helium::SmartPtr<T> >& elements, StatusHandler* status = NULL )
         {
             V_Element archiveElements;
             FromFile( file, archiveElements, status );
@@ -491,7 +491,7 @@ namespace Reflect
 
         // Fancy template version
         template <class T>
-        static Nocturnal::SmartPtr<T> FromFile(const tstring& file, StatusHandler* status = NULL)
+        static Helium::SmartPtr<T> FromFile(const tstring& file, StatusHandler* status = NULL)
         {
             ElementPtr found = FromFile(file, Reflect::GetType<T>(), status);
 

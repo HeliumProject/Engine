@@ -18,7 +18,7 @@ namespace Content
     {
     }
 
-    PointLight (Nocturnal::TUID &id)
+    PointLight (Helium::TUID &id)
       : m_InnerRadius( 0.0f )
       , m_OuterRadius( 1.0f )
     {
@@ -41,6 +41,6 @@ namespace Content
     float m_OuterRadius;
   };
 
-  typedef Nocturnal::SmartPtr<PointLight> PointLightPtr;
+  typedef Helium::SmartPtr<PointLight> PointLightPtr;
   typedef std::vector<PointLightPtr> V_PointLight;
 }

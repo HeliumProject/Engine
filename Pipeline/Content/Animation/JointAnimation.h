@@ -30,15 +30,15 @@ namespace Content
     };
 
     class JointAnimation;
-    typedef Nocturnal::SmartPtr< JointAnimation > JointAnimationPtr;
+    typedef Helium::SmartPtr< JointAnimation > JointAnimationPtr;
     typedef std::vector< JointAnimationPtr > V_JointAnimation;
-    typedef std::map< Nocturnal::TUID, JointAnimationPtr > M_JointAnimation;
+    typedef std::map< Helium::TUID, JointAnimationPtr > M_JointAnimation;
 
     class PIPELINE_API JointAnimation : public Reflect::Element
     {
     public:
 
-        Nocturnal::TUID    m_JointID;
+        Helium::TUID    m_JointID;
         f32                m_BlendFactor;
 
         // number of samples specified by the animator

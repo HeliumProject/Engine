@@ -23,7 +23,7 @@ void MayaExitingCallback( void *clientData );
 
 MCallbackId g_AfterSaveCallbackID;
 MCallbackId g_MayaExitingCallbackID;
-Nocturnal::InitializerStack g_InitializerStack;
+Helium::InitializerStack g_InitializerStack;
 
 MAYA_API MStatus initializePlugin( MObject obj )
 {

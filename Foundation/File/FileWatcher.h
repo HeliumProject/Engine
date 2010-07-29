@@ -7,7 +7,7 @@
 
 #include "Path.h"
 
-namespace Nocturnal
+namespace Helium
 {
     namespace FileOperations
     {
@@ -37,7 +37,7 @@ namespace Nocturnal
         {
         }
     };
-    typedef Nocturnal::Signature< void, const FileChangedArgs& > FileChangedSignature;
+    typedef Helium::Signature< void, const FileChangedArgs& > FileChangedSignature;
 
     typedef void* HANDLE;
     struct FOUNDATION_API FileWatch

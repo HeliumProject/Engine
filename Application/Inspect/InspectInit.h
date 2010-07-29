@@ -20,7 +20,7 @@ namespace Inspect
 
     }
   };
-  typedef Nocturnal::Signature<void, const EditFilePathArgs&> EditFilePathSignature;
+  typedef Helium::Signature<void, const EditFilePathArgs&> EditFilePathSignature;
 
   extern APPLICATION_API EditFilePathSignature::Event g_EditFilePath;
 }

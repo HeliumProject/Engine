@@ -16,7 +16,7 @@
 #include <algorithm>
 #include <omp.h>
 
-using Nocturnal::Insert; 
+using Helium::Insert; 
 using namespace Reflect;
 using namespace Math;
 using namespace Content;
@@ -81,9 +81,9 @@ void Scene::Remove( const SceneNodePtr &node )
 
 void Scene::Add( const SceneNodePtr &node )
 {
-    NOC_ASSERT( node.ReferencesObject() );
+    HELIUM_ASSERT( node.ReferencesObject() );
 
-    Insert<std::map< Nocturnal::TUID, SceneNodePtr >>::Result result = m_DependencyNodes.insert( std::pair<Nocturnal::TUID, SceneNodePtr>( node->m_ID, node ) );
+    Insert<std::map< Helium::TUID, SceneNodePtr >>::Result result = m_DependencyNodes.insert( std::pair<Helium::TUID, SceneNodePtr>( node->m_ID, node ) );
 
     //if it already exists in the scene, bail out early
     if( !result.second )
@@ -175,8 +175,8 @@ void Scene::PostLoad( Reflect::V_Element& elements )
 
     // Additional post-processing after all nodes have been created.
     Reflect::V_Element newElements;
-    std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator nodeItr = m_DependencyNodes.begin();
-    std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator nodeEnd = m_DependencyNodes.end();
+    std::map< Helium::TUID, SceneNodePtr >::const_iterator nodeItr = m_DependencyNodes.begin();
+    std::map< Helium::TUID, SceneNodePtr >::const_iterator nodeEnd = m_DependencyNodes.end();
     for ( ; nodeItr != nodeEnd; ++nodeItr )
     {
         nodeItr->second->PostLoad( newElements );
@@ -198,7 +198,7 @@ void Scene::PostLoad( Reflect::V_Element& elements )
 
 void Scene::Serialize()
 {
-    NOC_ASSERT( !m_FilePath.empty() );
+    HELIUM_ASSERT( !m_FilePath.empty() );
     Serialize( m_FilePath );
 }
 
@@ -206,8 +206,8 @@ void Scene::Serialize( const tstring& filePath )
 {
     V_Element elements;
 
-    std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator itr = m_DependencyNodes.begin();
-    std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator end = m_DependencyNodes.end();
+    std::map< Helium::TUID, SceneNodePtr >::const_iterator itr = m_DependencyNodes.begin();
+    std::map< Helium::TUID, SceneNodePtr >::const_iterator end = m_DependencyNodes.end();
     for ( ; itr != end; ++itr )
     {
         elements.push_back( itr->second );
@@ -233,12 +233,12 @@ ShaderPtr Scene::GetShader( const MeshPtr &mesh, u32 triIndex )
 
 void Scene::GetChildren( V_HierarchyNode& children, const HierarchyNodePtr &node ) const
 {
-    std::map< Nocturnal::TUID, Nocturnal::OrderedSet< Nocturnal::TUID > >::const_iterator found = m_Hierarchy.find( node->m_ID );
+    std::map< Helium::TUID, Helium::OrderedSet< Helium::TUID > >::const_iterator found = m_Hierarchy.find( node->m_ID );
     if ( found != m_Hierarchy.end() )
     {
-        for ( Nocturnal::OrderedSet< Nocturnal::TUID >::Iterator itr = found->second.Begin(), end = found->second.End(); itr != end; itr++ )
+        for ( Helium::OrderedSet< Helium::TUID >::Iterator itr = found->second.Begin(), end = found->second.End(); itr != end; itr++ )
         {
-            std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator found = m_DependencyNodes.find( *itr );
+            std::map< Helium::TUID, SceneNodePtr >::const_iterator found = m_DependencyNodes.find( *itr );
             if ( found != m_DependencyNodes.end() )
             {
                 children.push_back( Reflect::TryCast< Content::HierarchyNode >( found->second ) );
@@ -249,7 +249,7 @@ void Scene::GetChildren( V_HierarchyNode& children, const HierarchyNodePtr &node
 
 bool Scene::IsChildOf( const HierarchyNodePtr &potentialChild, const HierarchyNodePtr &potentialParent ) const
 {
-    std::map< Nocturnal::TUID, Nocturnal::OrderedSet< Nocturnal::TUID > >::const_iterator found = m_Hierarchy.find( potentialParent->m_ID );
+    std::map< Helium::TUID, Helium::OrderedSet< Helium::TUID > >::const_iterator found = m_Hierarchy.find( potentialParent->m_ID );
     if ( found != m_Hierarchy.end() )
     {
         return found->second.Contains( potentialChild->m_ID );
@@ -260,10 +260,10 @@ bool Scene::IsChildOf( const HierarchyNodePtr &potentialChild, const HierarchyNo
 
 void Scene::RemoveFromParent( const HierarchyNodePtr& node )
 {
-    std::map< Nocturnal::TUID, Nocturnal::OrderedSet< Nocturnal::TUID > >::iterator found = m_Hierarchy.find( node->m_ParentID );
+    std::map< Helium::TUID, Helium::OrderedSet< Helium::TUID > >::iterator found = m_Hierarchy.find( node->m_ParentID );
     if ( found != m_Hierarchy.end() )
     {
-        node->m_ParentID = Nocturnal::TUID::Null;
+        node->m_ParentID = Helium::TUID::Null;
 
         found->second.Remove( node->m_ID );
 
@@ -285,7 +285,7 @@ void Scene::AddChild( const HierarchyNodePtr& child, const HierarchyNodePtr& par
     AddChild( child, parent->m_ID );
 }
 
-void Scene::AddChild( const HierarchyNodePtr& child, const Nocturnal::TUID& parentID )
+void Scene::AddChild( const HierarchyNodePtr& child, const Helium::TUID& parentID )
 {
     RemoveFromParent( child );
     child->m_ParentID = parentID;
@@ -305,9 +305,9 @@ void Scene::UpdateHierarchy()
     m_AddedHierarchyNodes.clear();
 }
 
-bool Scene::Exists( const Nocturnal::TUID& id )
+bool Scene::Exists( const Helium::TUID& id )
 {
-    std::map< Nocturnal::TUID, SceneNodePtr >::iterator findItor = m_DependencyNodes.find( id );
+    std::map< Helium::TUID, SceneNodePtr >::iterator findItor = m_DependencyNodes.find( id );
     return ( findItor != m_DependencyNodes.end() );
 }
 
@@ -352,10 +352,10 @@ void Scene::UpdateGlobalTransforms()
 
 void Scene::Optimize()
 {
-    std::map< Nocturnal::TUID, SceneNodePtr > dependencyNodes = m_DependencyNodes;
+    std::map< Helium::TUID, SceneNodePtr > dependencyNodes = m_DependencyNodes;
 
-    std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator itr = dependencyNodes.begin();
-    std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator end = dependencyNodes.end();
+    std::map< Helium::TUID, SceneNodePtr >::const_iterator itr = dependencyNodes.begin();
+    std::map< Helium::TUID, SceneNodePtr >::const_iterator end = dependencyNodes.end();
     for ( ; itr != end; ++itr )
     {
         HierarchyNodePtr node = ObjectCast<HierarchyNode>( itr->second );
@@ -365,7 +365,7 @@ void Scene::Optimize()
             continue;
         }
 
-        if (node->m_ParentID == Nocturnal::TUID::Null || m_DependencyNodes.find( node->m_ParentID ) == m_DependencyNodes.end() )
+        if (node->m_ParentID == Helium::TUID::Null || m_DependencyNodes.find( node->m_ParentID ) == m_DependencyNodes.end() )
         {
             // node is a root node, he has not parent whether that be by null id or just missing
             Optimize( node );          
@@ -407,7 +407,7 @@ void Scene::Optimize(const HierarchyNodePtr& object)
                 Math::Matrix4 normalTransform = globalTransform.Inverted().Transposed();
 
                 size_t len = mesh->m_Positions.size();
-                NOC_ASSERT( len == mesh->m_Normals.size() );
+                HELIUM_ASSERT( len == mesh->m_Normals.size() );
 
                 for( u32 i = 0; i < len; ++i )
                 {
@@ -428,7 +428,7 @@ void Scene::Optimize(const HierarchyNodePtr& object)
             //  global and local transform will become equal)
             //
 
-            std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator found = m_DependencyNodes.find( object->m_ParentID );
+            std::map< Helium::TUID, SceneNodePtr >::const_iterator found = m_DependencyNodes.find( object->m_ParentID );
 
             if (found != m_DependencyNodes.end())
             {
@@ -455,7 +455,7 @@ void Scene::Optimize(const HierarchyNodePtr& object)
             // It must be exactly a pivot transform, remove it from the hierarchy (its a group node)
             //
 
-            NOC_ASSERT( object->GetType() == Reflect::GetType<PivotTransform>() );
+            HELIUM_ASSERT( object->GetType() == Reflect::GetType<PivotTransform>() );
 
             removed = true;
         }
@@ -478,10 +478,10 @@ void Scene::Optimize(const HierarchyNodePtr& object)
 
 void Scene::GetJointsFromAnimation( const AnimationPtr& clip, V_JointTransform& joints )
 {
-    Nocturnal::V_TUID jointIDs;
+    Helium::V_TUID jointIDs;
     clip->GetJointIDs( jointIDs );
 
-    for each ( const Nocturnal::TUID& uid in jointIDs )
+    for each ( const Helium::TUID& uid in jointIDs )
     {
         joints.push_back( Get<JointTransform>( uid ) );
     }
@@ -495,7 +495,7 @@ const JointOrderingPtr& Scene::GetJointOrdering() const
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Scene::CalculateJointBoundingVolumes()
 {
-    std::map<Nocturnal::TUID, Math::V_Vector3>      joint_verts_map;
+    std::map<Helium::TUID, Math::V_Vector3>      joint_verts_map;
     Math::V_Vector3                                 verts_map;
 
     // 
@@ -527,7 +527,7 @@ void Scene::CalculateJointBoundingVolumes()
                     continue;
                 }
 
-                const Nocturnal::TUID&  joint_id  = skin->m_InfluenceObjectIDs[influence->m_Objects[inf]];
+                const Helium::TUID&  joint_id  = skin->m_InfluenceObjectIDs[influence->m_Objects[inf]];
 
                 joint_verts_map[joint_id].push_back(pos);
             }
@@ -540,12 +540,12 @@ void Scene::CalculateJointBoundingVolumes()
     // 
     // joints
     // 
-    std::map<Nocturnal::TUID, Math::V_Vector3>::iterator start = joint_verts_map.begin();
-    std::map<Nocturnal::TUID, Math::V_Vector3>::iterator end   = joint_verts_map.end();
+    std::map<Helium::TUID, Math::V_Vector3>::iterator start = joint_verts_map.begin();
+    std::map<Helium::TUID, Math::V_Vector3>::iterator end   = joint_verts_map.end();
 
-    for(std::map<Nocturnal::TUID, Math::V_Vector3>::iterator i = start; i != end; ++i)
+    for(std::map<Helium::TUID, Math::V_Vector3>::iterator i = start; i != end; ++i)
     {
-        const Nocturnal::TUID&  joint_id = i->first;
+        const Helium::TUID&  joint_id = i->first;
         Math::V_Vector3&        joint_verts = i->second;
 
         Math::BoundingVolumeGenerator           bvg(&joint_verts[0], (int)joint_verts.size(), Math::BoundingVolumeGenerator::BSPHERE_OPTIMIZED);
@@ -571,9 +571,9 @@ void Scene::CalculateJointBoundingVolumes()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool Scene::GetBSpheresForJoint( std::vector< Math::BoundingVolumeGenerator::BSphere >& bspheres, const Nocturnal::TUID& jointID ) const
+bool Scene::GetBSpheresForJoint( std::vector< Math::BoundingVolumeGenerator::BSphere >& bspheres, const Helium::TUID& jointID ) const
 {
-    std::map< Nocturnal::TUID, std::vector< Math::BoundingVolumeGenerator::BSphere > >::const_iterator findItor = m_JointBspheres.find( jointID );
+    std::map< Helium::TUID, std::vector< Math::BoundingVolumeGenerator::BSphere > >::const_iterator findItor = m_JointBspheres.find( jointID );
     if( findItor == m_JointBspheres.end() )
     {
         return false;
@@ -596,7 +596,7 @@ bool Scene::GetBSpheres( std::vector< Math::BoundingVolumeGenerator::BSphere > &
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool Scene::GetSkinVerts(const std::map<Nocturnal::TUID, u32>& jointUidToId, const Nocturnal::TUID& rootUid, std::vector< std::vector<SkinVertex> >& skinVerts) const
+bool Scene::GetSkinVerts(const std::map<Helium::TUID, u32>& jointUidToId, const Helium::TUID& rootUid, std::vector< std::vector<SkinVertex> >& skinVerts) const
 {
     u32                     root_id = jointUidToId.find(rootUid)->second;
     std::vector<SkinVertex> new_verts;
@@ -643,13 +643,13 @@ bool Scene::GetSkinVerts(const std::map<Nocturnal::TUID, u32>& jointUidToId, con
 
                 for(size_t inf = 0; inf < num_weights; inf++)
                 {
-                    const Nocturnal::TUID& joint_id = skin->m_InfluenceObjectIDs[influence->m_Objects[inf]];
+                    const Helium::TUID& joint_id = skin->m_InfluenceObjectIDs[influence->m_Objects[inf]];
 
                     i32 joint_index = -1;
 
                     TransformPtr transform = Get< Transform >( joint_id );
 
-                    std::map< Nocturnal::TUID, u32 >::const_iterator indexIt = jointUidToId.find(joint_id);
+                    std::map< Helium::TUID, u32 >::const_iterator indexIt = jointUidToId.find(joint_id);
 
                     if ( indexIt == jointUidToId.end() )
                     {
@@ -699,7 +699,7 @@ void Scene::GetInfluentialJoints( S_JointTransform& joints )
 {
     for each (const SkinPtr& skin in m_Skins )
     {
-        for each ( const Nocturnal::TUID& influenceObject in skin->m_InfluenceObjectIDs )
+        for each ( const Helium::TUID& influenceObject in skin->m_InfluenceObjectIDs )
         {
             JointTransformPtr joint = Get< JointTransform >( influenceObject );
             if ( joint.ReferencesObject() )
@@ -714,8 +714,8 @@ u32 Scene::GetHierarchyNodeDepth( const HierarchyNodePtr& node ) const
 {
     u32 depth = 0;
 
-    Nocturnal::TUID parentId = node->m_ParentID;
-    while ( parentId != Nocturnal::TUID::Null )
+    Helium::TUID parentId = node->m_ParentID;
+    while ( parentId != Helium::TUID::Null )
     {
         HierarchyNodePtr parentNode = Get< HierarchyNode >( parentId );
 
@@ -727,7 +727,7 @@ u32 Scene::GetHierarchyNodeDepth( const HierarchyNodePtr& node ) const
         }
         else
         {
-            parentId = Nocturnal::TUID::Null;
+            parentId = Helium::TUID::Null;
         }
     }
 
@@ -754,8 +754,8 @@ void Scene::CalculateJointOrdering()
         // add the parent hierarchy of any joint that is required
         if ( requiredJoints.find( joint ) != requiredJoints.end() )
         {
-            Nocturnal::TUID parentId = joint->m_ParentID;
-            while ( parentId != Nocturnal::TUID::Null )
+            Helium::TUID parentId = joint->m_ParentID;
+            while ( parentId != Helium::TUID::Null )
             {
                 JointTransformPtr parentJoint = Get< JointTransform >( parentId );
 
@@ -767,7 +767,7 @@ void Scene::CalculateJointOrdering()
                 }
                 else
                 {
-                    parentId = Nocturnal::TUID::Null;
+                    parentId = Helium::TUID::Null;
                 }
             }
         }
@@ -803,7 +803,7 @@ void Scene::GetAlignedBoundingBox( Math::AlignedBox& box ) const
     }
 }
 
-typedef std::multimap< Nocturnal::TUID, MeshPtr > M_ShaderMesh;
+typedef std::multimap< Helium::TUID, MeshPtr > M_ShaderMesh;
 
 void Scene::MergeMeshes()
 {
@@ -811,7 +811,7 @@ void Scene::MergeMeshes()
 
     for each( const MeshPtr& mesh in m_Meshes )
     { 
-        for each( const Nocturnal::TUID& shaderID in mesh->m_ShaderIDs )
+        for each( const Helium::TUID& shaderID in mesh->m_ShaderIDs )
         {
             M_ShaderMesh::iterator itr = meshesByShader.lower_bound( shaderID );
             M_ShaderMesh::iterator upper = meshesByShader.upper_bound( shaderID );

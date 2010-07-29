@@ -8,7 +8,7 @@ namespace Inspect
   /////////////////////////////////////////////////////////////////////////////
   // Base class for any data that can be stored on the clipboard.
   // 
-  class APPLICATION_API ReflectClipboardData NOC_ABSTRACT : public Reflect::Element
+  class APPLICATION_API ReflectClipboardData HELIUM_ABSTRACT : public Reflect::Element
   {
   public:
     // Runtime Type Info
@@ -26,5 +26,5 @@ namespace Inspect
 
     static void EnumerateClass( Reflect::Compositor<ReflectClipboardData>& comp );
   };
-  typedef Nocturnal::SmartPtr< ReflectClipboardData > ReflectClipboardDataPtr;
+  typedef Helium::SmartPtr< ReflectClipboardData > ReflectClipboardDataPtr;
 }

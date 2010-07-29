@@ -25,8 +25,8 @@ ContextMenu::~ContextMenu()
 
 void ContextMenu::ControlRealized( Control* control )
 {
-  NOC_ASSERT( control == m_Control );
-  NOC_ASSERT( control->IsRealized() );
+  HELIUM_ASSERT( control == m_Control );
+  HELIUM_ASSERT( control->IsRealized() );
   control->GetContextWindow()->Connect( control->GetContextWindow()->GetId(), wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( ContextMenu::OnShow ), NULL, this );
 }
 

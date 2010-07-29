@@ -91,7 +91,7 @@ void Accumulator::Init(const char* name)
     }
     else
     {
-        NOC_ASSERT(m_Name[0] != '\0');
+        HELIUM_ASSERT(m_Name[0] != '\0');
     }
 
     if (m_Index < 0 && g_AccumulatorCount < PROFILE_ACCUMULATOR_MAX)
@@ -175,7 +175,7 @@ Platform::ThreadLocalPointer g_ProfileContext;
 
 ScopeTimer::ScopeTimer(Accumulator* accum, const char* func, u32 line, const char* desc)
 {
-    NOC_ASSERT(func); 
+    HELIUM_ASSERT(func); 
     m_Description[0] = '\0'; 
     if(desc)
     {
@@ -244,7 +244,7 @@ ScopeTimer::~ScopeTimer()
 #if defined(PROFILE_INSTRUMENTATION)
 
     Context* context = (Context*)g_ProfileContext.GetPointer(); 
-    NOC_ASSERT(context); 
+    HELIUM_ASSERT(context); 
 
     ScopeExitPacket* packet = context->AllocPacket<ScopeExitPacket>(PROFILE_CMD_SCOPE_EXIT); 
 

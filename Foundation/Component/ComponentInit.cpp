@@ -9,9 +9,9 @@
 using namespace Component;
 
 i32 g_ComponentInitCount = 0; 
-Nocturnal::InitializerStack g_ComponentRegisteredTypes;
+Helium::InitializerStack g_ComponentRegisteredTypes;
 
-Nocturnal::InitializerStack g_ComponentInitializerStack;
+Helium::InitializerStack g_ComponentInitializerStack;
 
 void Component::Initialize()
 {

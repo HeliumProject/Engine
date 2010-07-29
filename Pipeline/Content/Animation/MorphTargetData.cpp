@@ -42,7 +42,7 @@ namespace Content
       for ( u32 targetIndex = 0; targetIndex < numMorphTargets ; ++targetIndex )
       {
         const MorphTarget* oldMorphTarget = mesh->m_MorphTargets[targetIndex];
-        const Nocturnal::TUID& targetId = oldMorphTarget->m_Id;
+        const Helium::TUID& targetId = oldMorphTarget->m_Id;
 
         if ( m_TargetIdToTargetIndex.find( targetId ) != m_TargetIdToTargetIndex.end() )
         {
@@ -80,12 +80,12 @@ namespace Content
       }
     }
 
-    NOC_ASSERT( m_TargetIndexToTargetSetId.size() == m_Targets.size() );
+    HELIUM_ASSERT( m_TargetIndexToTargetSetId.size() == m_Targets.size() );
   }
 
-  u32 MorphTargetData::GetMorphTargetIndex( const Nocturnal::TUID& targetId ) const 
+  u32 MorphTargetData::GetMorphTargetIndex( const Helium::TUID& targetId ) const 
   {
-    Nocturnal::HM_TUIDU32::const_iterator findTargetId = m_TargetIdToTargetIndex.find( targetId ) ;
+    Helium::HM_TUIDU32::const_iterator findTargetId = m_TargetIdToTargetIndex.find( targetId ) ;
     if ( findTargetId != m_TargetIdToTargetIndex.end() )
     {
       return findTargetId->second;  
@@ -132,7 +132,7 @@ namespace Content
   //    const u32 numSourceTargetIndicies = (u32) sourceTargetIndicies.size();
   //    
   //    const u32 newTargetSetId = newTargetSetIds[sourceTargetSetId];
-  //    Nocturnal::Insert<M_TargetSetIdToTargetIndex>::Result insert = 
+  //    Helium::Insert<M_TargetSetIdToTargetIndex>::Result insert = 
   //      m_TargetSetIdToTargetIndiciesMap.insert( M_TargetSetIdToTargetIndex::value_type( newTargetSetId, std::vector< u32 >() ) );
 
   //    std::vector< u32 >& newTargetIndicies = insert.first->second;
@@ -149,15 +149,15 @@ namespace Content
   //  }
 
   //  // fix-up the mapping of each target's TUID to its location in the new list of targets
-  //  Nocturnal::HM_TUIDU32::const_iterator sourceTargetIdItr = source.m_TargetIdToTargetIndex.begin();
-  //  Nocturnal::HM_TUIDU32::const_iterator sourceTargetIdEnd = source.m_TargetIdToTargetIndex.end();
+  //  Helium::HM_TUIDU32::const_iterator sourceTargetIdItr = source.m_TargetIdToTargetIndex.begin();
+  //  Helium::HM_TUIDU32::const_iterator sourceTargetIdEnd = source.m_TargetIdToTargetIndex.end();
   //  for ( ; sourceTargetIdItr != sourceTargetIdEnd; ++sourceTargetIdItr )
   //  {
-  //    const Nocturnal::TUID& sourceTargetId = sourceTargetIdItr->first;
+  //    const Helium::TUID& sourceTargetId = sourceTargetIdItr->first;
   //    const u32 sourceTargetIndex = sourceTargetIdItr->second;
   //    const u32 newTargetIndex = sourceTargetIndex + newTargetIndexOffset;
 
-  //    NOC_ASSERT( m_TargetIdToTargetIndex.find( sourceTargetId ) == m_TargetIdToTargetIndex.end() );
+  //    HELIUM_ASSERT( m_TargetIdToTargetIndex.find( sourceTargetId ) == m_TargetIdToTargetIndex.end() );
   //    m_TargetIdToTargetIndex[sourceTargetId] = newTargetIndex;
   //  }
   //}

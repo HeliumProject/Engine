@@ -10,11 +10,11 @@
 
 #include "Foundation/TUID.h"
 
-namespace Nocturnal
+namespace Helium
 {
     namespace ES
     { 
-        class PIPELINE_API Event : public Nocturnal::RefCountBase< Event >
+        class PIPELINE_API Event : public Helium::RefCountBase< Event >
         {
         public:
             Event
@@ -45,7 +45,7 @@ namespace Nocturnal
             tstring   m_Data;           
         };
 
-        typedef Nocturnal::SmartPtr< Event > EventPtr;
+        typedef Helium::SmartPtr< Event > EventPtr;
         typedef std::vector< EventPtr > V_EventPtr;
     }
 }

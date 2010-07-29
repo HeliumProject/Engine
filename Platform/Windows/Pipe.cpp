@@ -7,7 +7,7 @@
 
 using namespace Platform;
 
-NOC_COMPILE_ASSERT( sizeof( Pipe::Overlapped ) == sizeof( OVERLAPPED ) );
+HELIUM_COMPILE_ASSERT( sizeof( Pipe::Overlapped ) == sizeof( OVERLAPPED ) );
 
 Pipe::Pipe(int)
 : m_Handle (0)
@@ -147,7 +147,7 @@ bool Platform::ConnectPipe(Pipe& pipe, Event& terminate)
             HANDLE events[] = { terminate.GetHandle(), connect.hEvent };
             DWORD result = ::WaitForMultipleObjects(2, events, FALSE, INFINITE);
 
-            NOC_ASSERT( result != WAIT_FAILED );
+            HELIUM_ASSERT( result != WAIT_FAILED );
             if ( result )
             {
                 if ( (result - WAIT_OBJECT_0) == 0 )
@@ -212,7 +212,7 @@ bool Platform::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& t
             HANDLE events[] = { terminate.GetHandle(), pipe.m_Overlapped.hEvent };
             DWORD result = ::WaitForMultipleObjects(2, events, FALSE, INFINITE);
 
-            NOC_ASSERT( result != WAIT_FAILED );
+            HELIUM_ASSERT( result != WAIT_FAILED );
             if ( result )
             {
                 if ( (result - WAIT_OBJECT_0) == 0 )
@@ -262,7 +262,7 @@ bool Platform::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Event&
             HANDLE events[] = { terminate.GetHandle(), pipe.m_Overlapped.hEvent };
             DWORD result = ::WaitForMultipleObjects(2, events, FALSE, INFINITE);
 
-            NOC_ASSERT( result != WAIT_FAILED );
+            HELIUM_ASSERT( result != WAIT_FAILED );
             if ( result )
             {
                 if ( (result - WAIT_OBJECT_0) == 0 )

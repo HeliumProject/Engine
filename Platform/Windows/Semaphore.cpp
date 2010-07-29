@@ -12,7 +12,7 @@ Semaphore::Semaphore()
     if ( m_Handle == NULL )
     {
         Platform::Print(TXT("Failed to create semaphore (%s)\n"), Platform::GetErrorString().c_str());
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 }
 
@@ -22,7 +22,7 @@ Semaphore::~Semaphore()
     if ( result != TRUE )
     {
         Platform::Print(TXT("Failed to close semaphore (%s)\n"), Platform::GetErrorString().c_str());
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 }
 
@@ -33,7 +33,7 @@ void Semaphore::Increment()
     if ( result != TRUE )
     {
         Platform::Print(TXT("Failed to inrement semaphore from %d (%s)\n"), count, Platform::GetErrorString().c_str());
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 }
 
@@ -43,7 +43,7 @@ void Semaphore::Decrement()
     if ( result != WAIT_OBJECT_0 )
     {
         Platform::Print(TXT("Failed to decrement semaphore (%s)\n"), Platform::GetErrorString().c_str());
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 }
 
@@ -53,13 +53,13 @@ void Semaphore::Reset()
     if ( result != TRUE )
     {
         Platform::Print(TXT("Failed to close semaphore (%s)\n"), Platform::GetErrorString().c_str());
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 
     m_Handle = ::CreateSemaphore(NULL, 0, 0x7fffffff, NULL);
     if ( m_Handle == NULL )
     {
         Platform::Print(TXT("Failed to create semaphore (%s)\n"), Platform::GetErrorString().c_str());
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 }

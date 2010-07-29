@@ -20,7 +20,7 @@ namespace Inspect
         {
         }
     };
-    typedef Nocturnal::Signature<void, const FilteredDropTargetArgs&, Foundation::AtomicRefCountBase> FilteredDropTargetSignature;
+    typedef Helium::Signature<void, const FilteredDropTargetArgs&, Foundation::AtomicRefCountBase> FilteredDropTargetSignature;
 
     class APPLICATION_API FilteredDropTarget : public DropTarget
     {

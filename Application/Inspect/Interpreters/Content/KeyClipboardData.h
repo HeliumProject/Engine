@@ -19,5 +19,5 @@ namespace Inspect
   public:
     KeyClipboardData();
   };
-  typedef Nocturnal::SmartPtr< KeyClipboardData > KeyClipboardDataPtr;
+  typedef Helium::SmartPtr< KeyClipboardData > KeyClipboardDataPtr;
 }

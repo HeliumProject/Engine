@@ -14,7 +14,7 @@ FileBrowserButton::FileBrowserButton( const tstring& startPath )
 {
     SetIcon( TXT( "actions/system-search" ) );
 
-    Nocturnal::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( TXT( "All files (*.*)|*.*" ) ) );
+    Helium::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( TXT( "All files (*.*)|*.*" ) ) );
 
     SetPath( startPath );
 }
@@ -53,7 +53,7 @@ void FileBrowserButton::ReadPathData( tstring& path ) const
     ReadData( path );
     if ( !path.empty() )
     {
-        Nocturnal::Path::Normalize( path );
+        Helium::Path::Normalize( path );
     }
 }
 
@@ -85,7 +85,7 @@ bool FileBrowserButton::Write()
 
         wxWindow* parent = GetCanvas() ? GetCanvas()->GetControl() : NULL;
 
-        NOC_BREAK();
+        HELIUM_BREAK();
 #pragma TODO( "Reimplement to use the Vault" )
         //File::FileBrowser fileBrowser( parent, wxID_ANY, m_Title.c_str() );
         //fileBrowser.SetFilter( filterStr.c_str() );
@@ -114,7 +114,7 @@ void FileBrowserButton::SetTitleBar( const tstring& title )
 void FileBrowserButton::SetFilter( const tstring& filter )
 {
     m_Filters.clear();
-    Nocturnal::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( filter ) );
+    Helium::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( filter ) );
 }
 
 
@@ -129,7 +129,7 @@ void FileBrowserButton::SetFilter( const std::vector< tstring >& filter )
     std::vector< tstring >::const_iterator itEnd = filter.end();
     for ( ; it != itEnd ; ++it )
     {
-        Nocturnal::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( *it ) );
+        Helium::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( *it ) );
     }
 }
 
@@ -138,7 +138,7 @@ void FileBrowserButton::SetFilter( const std::vector< tstring >& filter )
 // 
 void FileBrowserButton::AddFilter( const tstring& filter )
 {
-    Nocturnal::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( filter ) );
+    Helium::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( filter ) );
 }
 
 
@@ -162,7 +162,7 @@ tstring FileBrowserButton::GetPath()
 void FileBrowserButton::SetPath( const tstring& path )
 {
     m_Path = path;
-    Nocturnal::Path::Normalize( m_Path );
+    Helium::Path::Normalize( m_Path );
     if ( IsBound() )
     {
         WriteData( m_Path );

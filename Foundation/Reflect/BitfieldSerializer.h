@@ -12,12 +12,12 @@ namespace Reflect
         BitfieldSerializer ();
         virtual ~BitfieldSerializer();
 
-        virtual void Serialize(Archive& archive) const NOC_OVERRIDE;
-        virtual void Deserialize(Archive& archive) NOC_OVERRIDE;
+        virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;
+        virtual void Deserialize(Archive& archive) HELIUM_OVERRIDE;
 
         virtual tostream& operator>> (tostream& stream) const;
         virtual tistream& operator<< (tistream& stream);
     };
 
-    typedef Nocturnal::SmartPtr<BitfieldSerializer> BitfieldSerializerPtr;
+    typedef Helium::SmartPtr<BitfieldSerializer> BitfieldSerializerPtr;
 }

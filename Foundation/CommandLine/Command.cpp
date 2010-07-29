@@ -3,7 +3,7 @@
 #include "Foundation/Log.h"
 #include "Foundation/String/Tokenize.h"
 
-using namespace Nocturnal::CommandLine;
+using namespace Helium::CommandLine;
 
 Command::Command( const tchar* token, const tchar* usage, const tchar* shortHelp )
 : m_Token( token )

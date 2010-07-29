@@ -5,9 +5,9 @@
 #include <wx/event.h>
 #include <wx/frame.h>
 
-using namespace Nocturnal;
+using namespace Helium;
 
-namespace Nocturnal
+namespace Helium
 {
   /////////////////////////////////////////////////////////////////////////////
   /// DummyWindow
@@ -102,7 +102,7 @@ namespace Nocturnal
   /////////////////////////////////////////////////////////////////////////////
   /// DummyThread
   /////////////////////////////////////////////////////////////////////////////
-  class Nocturnal::DummyThread : public wxThread
+  class Helium::DummyThread : public wxThread
   {
   private:
     ThreadMechanism* m_ThreadMechanism;
@@ -182,15 +182,15 @@ bool ThreadMechanism::StartThread()
   // increment the m_CurrentThreadID for the next thread
   ++m_CurrentThreadID;
 
-  NOC_ASSERT( !m_DummyWindow );
+  HELIUM_ASSERT( !m_DummyWindow );
   m_DummyWindow = new DummyWindow( TXT( "ThreadMechanism" ) );
   m_DummyWindow->Connect( m_DummyWindow->GetId(), nocEVT_BEGIN_THREAD, wxCommandEventHandler( DummyWindow::OnBeginThread ), NULL, m_DummyWindow );
   m_DummyWindow->Connect( m_DummyWindow->GetId(), nocEVT_UPDATE_THREAD, wxCommandEventHandler( DummyWindow::OnThreadUpdate ), NULL, m_DummyWindow );
   m_DummyWindow->Connect( m_DummyWindow->GetId(), nocEVT_END_THREAD, wxCommandEventHandler( DummyWindow::OnEndThread ), NULL, m_DummyWindow );
 
-  m_DummyWindow->AddBeginListener( Nocturnal::ThreadProcSignature::Delegate( this, &ThreadMechanism::OnBeginThread ) );
-  m_DummyWindow->AddUpdateListener( Nocturnal::ThreadProcSignature::Delegate( this, &ThreadMechanism::OnUpdateThread ) );
-  m_DummyWindow->AddEndListener( Nocturnal::ThreadProcSignature::Delegate( this, &ThreadMechanism::OnEndThread ) );
+  m_DummyWindow->AddBeginListener( Helium::ThreadProcSignature::Delegate( this, &ThreadMechanism::OnBeginThread ) );
+  m_DummyWindow->AddUpdateListener( Helium::ThreadProcSignature::Delegate( this, &ThreadMechanism::OnUpdateThread ) );
+  m_DummyWindow->AddEndListener( Helium::ThreadProcSignature::Delegate( this, &ThreadMechanism::OnEndThread ) );
 
   // start the thread
   DummyThread* dummyThread = new DummyThread( this, GetCurrentThreadID() );
@@ -292,21 +292,21 @@ void ThreadMechanism::ThreadLeave( i32 threadID )
 ///////////////////////////////////////////////////////////////////////////////
 // Main thread callbacks to notify listeners when the thread has started,
 // when results are available for use and when the thread has completed
-void ThreadMechanism::OnBeginThread( const Nocturnal::ThreadProcArgs& args )
+void ThreadMechanism::OnBeginThread( const Helium::ThreadProcArgs& args )
 {
   if ( !IsCurrentThread( args.m_ThreadID ) )
     return;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void ThreadMechanism::OnUpdateThread( const Nocturnal::ThreadProcArgs& args )
+void ThreadMechanism::OnUpdateThread( const Helium::ThreadProcArgs& args )
 {
   if ( !IsCurrentThread( args.m_ThreadID ) )
     return;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void ThreadMechanism::OnEndThread( const Nocturnal::ThreadProcArgs& args )
+void ThreadMechanism::OnEndThread( const Helium::ThreadProcArgs& args )
 {
   if ( !IsCurrentThread( args.m_ThreadID ) )
     return;

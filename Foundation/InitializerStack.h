@@ -5,7 +5,7 @@
 #include "Foundation/API.h"
 #include "Platform/Compiler.h"
 
-namespace Nocturnal
+namespace Helium
 {
     // Callbacks for external APIs
     typedef void (*InitializeFunc)();

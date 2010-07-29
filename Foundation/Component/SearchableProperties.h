@@ -4,7 +4,7 @@
 
 #include "Foundation/Reflect/Serializers.h"
 
-namespace Nocturnal
+namespace Helium
 {
     class FOUNDATION_API SearchableProperties : public Reflect::Element
     {

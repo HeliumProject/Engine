@@ -1,6 +1,6 @@
 #include "DilationFilter.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -39,14 +39,14 @@ const double g_GaussianWeights[] =
 
 #endif
 
-NOC_COMPILE_ASSERT( sizeof(g_GaussianWeights)/sizeof(g_GaussianWeights[0]) == FILTER_RADIUS_PER_PASS + 1 );
+HELIUM_COMPILE_ASSERT( sizeof(g_GaussianWeights)/sizeof(g_GaussianWeights[0]) == FILTER_RADIUS_PER_PASS + 1 );
 
 DilationFilter::DilationFilter(const tchar* inputfile, const tchar* outputfile, unsigned int xres, unsigned int yres, unsigned int flags, bool smoothSeams) : ImageFilter(1, flags), m_smoothSeams(smoothSeams)
 {
   ImageFilter::outputPath = outputfile;
 
   bool convert_to_linear = true;
-  input = Nocturnal::Image::LoadFile(inputfile, convert_to_linear, NULL);
+  input = Helium::Image::LoadFile(inputfile, convert_to_linear, NULL);
   if (!input)
   {
     std::cerr << "Unable to open input file: " << inputfile << std::endl;
@@ -60,14 +60,14 @@ DilationFilter::DilationFilter(const tchar* inputfile, const tchar* outputfile, 
   if (yres == 0)
     yres = input->m_Height;
 
-  Nocturnal::Image *scaled_input = input->ScaleImage(xres, yres, Nocturnal::CF_RGBAFLOATMAP, Nocturnal::MIP_FILTER_GAUSSIAN);
+  Helium::Image *scaled_input = input->ScaleImage(xres, yres, Helium::CF_RGBAFLOATMAP, Helium::MIP_FILTER_GAUSSIAN);
   delete input;
   input = scaled_input;
 
   if(opFlags & NORMAL_NORMALIZE)
     Normalize(input);
 
-  output = new Nocturnal::Image(xres, yres, Nocturnal::CF_RGBAFLOATMAP);
+  output = new Helium::Image(xres, yres, Helium::CF_RGBAFLOATMAP);
 }
 
 
@@ -128,7 +128,7 @@ void DilationFilter::filter(void)
   output->m_NativeFormat = outputFormat;
 }
 
-bool DilationFilter::DilateHorizontal(Nocturnal::Image *dst, Nocturnal::Image *src)
+bool DilationFilter::DilateHorizontal(Helium::Image *dst, Helium::Image *src)
 {
   bool finished = true;
 
@@ -185,7 +185,7 @@ bool DilationFilter::DilateHorizontal(Nocturnal::Image *dst, Nocturnal::Image *s
   return finished;
 }
 
-bool DilationFilter::DilateVertical(Nocturnal::Image *dst, Nocturnal::Image *src)
+bool DilationFilter::DilateVertical(Helium::Image *dst, Helium::Image *src)
 {
   bool finished = true;
 
@@ -242,9 +242,9 @@ bool DilationFilter::DilateVertical(Nocturnal::Image *dst, Nocturnal::Image *src
   return finished;
 }
 
-void DilationFilter::Normalize(Nocturnal::Image *tex)
+void DilationFilter::Normalize(Helium::Image *tex)
 {
-  NOC_ASSERT(tex)
+  HELIUM_ASSERT(tex)
 
   for( u32 y = 0; y < tex->m_Height; ++y )
   {

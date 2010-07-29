@@ -100,7 +100,7 @@ void JointAnimation::SetAllTSRSamples( const Math::Vector3& translate, const Mat
 void JointAnimation::ApplyTranslateAdjustment( const Math::Vector3& adjustment, u32 frame )
 {
     u32 totalSamples = TotalSamples();
-    NOC_ASSERT( frame < totalSamples );
+    HELIUM_ASSERT( frame < totalSamples );
     m_Translate[ frame ] += adjustment;
 }
 

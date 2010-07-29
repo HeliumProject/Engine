@@ -11,16 +11,16 @@ void OpenedCommand::OutputStat( StrDict* dict )
   RCS::File file;
 
   bool converted = Platform::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), file.m_DepotPath );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
 
   converted = Platform::ConvertString( dict->GetVar( g_ClientFileTag )->Text(), file.m_LocalPath );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
 
   file.m_LocalRevision = dict->GetVar( g_RevisionTag )->Atoi();
   
   tstring actionString;
   converted = Platform::ConvertString( dict->GetVar( g_ActionTag )->Text(), actionString );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
 
   file.m_Operation = GetOperationEnum( actionString );
 
@@ -28,15 +28,15 @@ void OpenedCommand::OutputStat( StrDict* dict )
   
   tstring fileType;
   converted = Platform::ConvertString( dict->GetVar( g_TypeTag )->Text(), fileType );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
 
   file.m_FileType = GetFileType( fileType );
 
   converted = Platform::ConvertString( dict->GetVar( g_UserTag )->Text(), file.m_Username );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
 
   converted = Platform::ConvertString( dict->GetVar( g_ClientTag )->Text(), file.m_Client );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
 
   m_FileList->push_back( file );
 }
@@ -69,7 +69,7 @@ void SubmitCommand::OutputStat( StrDict* dict )
     if ( depotFile )
     {
         bool converted = Platform::ConvertString( depotFile->Text(), file->m_DepotPath );
-        NOC_ASSERT( converted );
+        HELIUM_ASSERT( converted );
     }
 
     StrPtr* revision = dict->GetVar( g_RevisionTag );
@@ -83,7 +83,7 @@ void SubmitCommand::OutputStat( StrDict* dict )
     {
         tstring actionString;
         bool converted = Platform::ConvertString( action->Text(), actionString );
-        NOC_ASSERT( converted );
+        HELIUM_ASSERT( converted );
 
         file->m_Operation = GetOperationEnum( actionString );
     }
@@ -98,16 +98,16 @@ void RevertCommand::OutputStat( StrDict* dict )
   }
 
   bool converted = Platform::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), m_File->m_DepotPath );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
 
   converted = Platform::ConvertString( dict->GetVar( g_ClientFileTag )->Text(), m_File->m_LocalPath );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
 
   m_File->m_LocalRevision = dict->GetVar( g_HaveRevTag )->Atoi();
   
   tstring actionString;
   converted = Platform::ConvertString( dict->GetVar( g_OldActionTag )->Text(), actionString );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
 
   m_File->m_Operation = GetOperationEnum( actionString );
 }
@@ -125,7 +125,7 @@ void CreateChangelistCommand::InputData( StrBuf *buf, Error *e )
 
   std::string narrowSpec;
   bool converted = Platform::ConvertString( spec, narrowSpec );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
   buf->Set( narrowSpec.c_str() );
 }
 
@@ -162,7 +162,7 @@ void GetChangelistsCommand::OutputStat( StrDict* dict )
   changeset.m_Id = dict->GetVar( g_ChangeTag )->Atoi();
   
   bool converted = Platform::ConvertString( dict->GetVar( g_DescriptionTag )->Text(), changeset.m_Description );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
 
   m_Changesets->push_back( changeset );
 }

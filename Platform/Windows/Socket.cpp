@@ -8,8 +8,8 @@
 
 using namespace Platform;
 
-NOC_COMPILE_ASSERT( sizeof( u32* ) == sizeof( SOCKET ) );
-NOC_COMPILE_ASSERT( sizeof( Socket::Overlapped ) == sizeof( OVERLAPPED ) );
+HELIUM_COMPILE_ASSERT( sizeof( u32* ) == sizeof( SOCKET ) );
+HELIUM_COMPILE_ASSERT( sizeof( Socket::Overlapped ) == sizeof( OVERLAPPED ) );
 
 // in milliseconds
 #define KEEPALIVE_TIMEOUT 10000
@@ -174,7 +174,7 @@ bool Platform::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Ev
             HANDLE events[] = { terminate.GetHandle(), socket.m_Overlapped.hEvent };
             DWORD result = ::WSAWaitForMultipleEvents(2, events, FALSE, INFINITE, FALSE);
 
-            NOC_ASSERT( result != WAIT_FAILED );
+            HELIUM_ASSERT( result != WAIT_FAILED );
 
             if ( (result - WAIT_OBJECT_0) == 0 )
             {
@@ -231,7 +231,7 @@ bool Platform::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, 
             HANDLE events[] = { terminate.GetHandle(), socket.m_Overlapped.hEvent };
             DWORD result = ::WSAWaitForMultipleEvents(2, events, FALSE, INFINITE, FALSE);
 
-            NOC_ASSERT( result != WAIT_FAILED );
+            HELIUM_ASSERT( result != WAIT_FAILED );
 
             if ( (result - WAIT_OBJECT_0) == 0 )
             {

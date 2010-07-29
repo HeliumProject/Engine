@@ -9,7 +9,7 @@
 #include <string>
 #include <exception>
 
-namespace Nocturnal
+namespace Helium
 {
     //
     // Constants
@@ -97,7 +97,7 @@ namespace Nocturnal
     // PlatformException class
     //
 
-    class PlatformException : public Nocturnal::Exception
+    class PlatformException : public Helium::Exception
     {
     protected:
         u32 m_ErrorCode;

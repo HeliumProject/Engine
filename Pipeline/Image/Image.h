@@ -10,7 +10,7 @@
 #include "Pipeline/API.h"
 #include "Pipeline/Image/MipSet.h"
 
-namespace Nocturnal
+namespace Helium
 {
   ////////////////////////////////////////////////////////////////////////////////////////////////
   //
@@ -482,7 +482,7 @@ namespace Nocturnal
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void Read(u32 x,u32 y, float& r, float& g, float& b, float& a, u32 face=0) const
     {
-      NOC_ASSERT(m_Channels[face][R]);
+      HELIUM_ASSERT(m_Channels[face][R]);
       u32 pixel_idx = y*m_Width + x;
       r = m_Channels[face][R][pixel_idx];
       g = m_Channels[face][G][pixel_idx];
@@ -501,7 +501,7 @@ namespace Nocturnal
     ////////////////////////////////////////////////////////////////////////////////////////////////
     bool Write(u32 x,u32 y, float r, float g, float b, float a, u32 face=0)
     {
-      NOC_ASSERT(m_Channels[face][R]);
+      HELIUM_ASSERT(m_Channels[face][R]);
       u32 pixel_idx = y*m_Width + x;
       m_Channels[face][R][pixel_idx] = r;
       m_Channels[face][G][pixel_idx] = g;
@@ -665,7 +665,7 @@ namespace Nocturnal
     {
       if(m_Depth == 0)
       {
-        NOC_ASSERT(face < CUBE_NUM_FACES);
+        HELIUM_ASSERT(face < CUBE_NUM_FACES);
         if(m_Channels[face][R])
         {
           u32 channel_f32_size  = m_Width*m_Height;
@@ -682,7 +682,7 @@ namespace Nocturnal
       }
       else
       {
-        NOC_ASSERT(m_Channels[0][R]);
+        HELIUM_ASSERT(m_Channels[0][R]);
 
         u32 channel_f32_size    = m_Width*m_Height*m_Depth;
         m_Channels[0][G]        = m_Channels[0][R] + channel_f32_size;

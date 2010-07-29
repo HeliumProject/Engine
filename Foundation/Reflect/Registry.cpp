@@ -17,7 +17,7 @@
 // Prints the callstack for every init and cleanup call
 // #define REFLECT_DEBUG_INIT_AND_CLEANUP
 
-using Nocturnal::Insert; 
+using Helium::Insert; 
 using namespace Reflect;
 
 // globals
@@ -67,7 +67,7 @@ void Reflect::Initialize()
     if (++g_InitCount == 1)
     {
         g_Instance = new Registry();
-        NOC_ASSERT(g_Instance != NULL);
+        HELIUM_ASSERT(g_Instance != NULL);
 
         //
         // Serializers
@@ -269,7 +269,7 @@ Registry::~Registry()
 
 Registry* Registry::GetInstance()
 {
-    NOC_ASSERT(g_Instance != NULL);
+    HELIUM_ASSERT(g_Instance != NULL);
     return g_Instance;
 }
 
@@ -280,7 +280,7 @@ bool Registry::IsInitThread()
 
 bool Registry::RegisterType(Type* type)
 {
-    NOC_ASSERT( IsInitThread() );
+    HELIUM_ASSERT( IsInitThread() );
 
     switch (type->GetReflectionType())
     {
@@ -301,7 +301,7 @@ bool Registry::RegisterType(Type* type)
                     if (!shortNameResult.second && classType != shortNameResult.first->second)
                     {
                         Log::Error( TXT( "Re-registration of short name '%s' was attempted with different classType information\n" ), classType->m_ShortName.c_str());
-                        NOC_BREAK();
+                        HELIUM_BREAK();
                         return false;
                     }
                 }
@@ -319,7 +319,7 @@ bool Registry::RegisterType(Type* type)
                         else
                         {
                             Log::Error( TXT( "Base class of '%s' is not a valid type\n" ), classType->m_ShortName.c_str());
-                            NOC_BREAK();
+                            HELIUM_BREAK();
                             return false;
                         }
                     }
@@ -330,7 +330,7 @@ bool Registry::RegisterType(Type* type)
             else if (classType != idResult.first->second)
             {
                 Log::Error( TXT( "Re-registration of classType '%s' was attempted with different classType information\n" ), classType->m_FullName.c_str());
-                NOC_BREAK();
+                HELIUM_BREAK();
                 return false;
             }
             break;
@@ -349,7 +349,7 @@ bool Registry::RegisterType(Type* type)
                 if (!enumResult.second && enumeration != enumResult.first->second)
                 {
                     Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_ShortName.c_str());
-                    NOC_BREAK();
+                    HELIUM_BREAK();
                     return false;
                 }
 
@@ -358,14 +358,14 @@ bool Registry::RegisterType(Type* type)
                 if (!enumResult.second && enumeration != enumResult.first->second)
                 {
                     Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_ShortName.c_str());
-                    NOC_BREAK();
+                    HELIUM_BREAK();
                     return false;
                 }
             }
             else if (enumeration != idResult.first->second)
             {
                 Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_FullName.c_str());
-                NOC_BREAK();
+                HELIUM_BREAK();
                 return false;
             }
 
@@ -378,7 +378,7 @@ bool Registry::RegisterType(Type* type)
 
 void Registry::UnregisterType(const Type* type)
 {
-    NOC_ASSERT( IsInitThread() );
+    HELIUM_ASSERT( IsInitThread() );
 
     switch (type->GetReflectionType())
     {
@@ -403,7 +403,7 @@ void Registry::UnregisterType(const Type* type)
                     else
                     {
                         Log::Error( TXT( "Base class of '%s' is not a valid type\n" ), classType->m_ShortName.c_str());
-                        NOC_BREAK();
+                        HELIUM_BREAK();
                     }
                 }
             }
@@ -426,14 +426,14 @@ void Registry::UnregisterType(const Type* type)
 
 void Registry::AliasType(const Type* type, const tstring& alias)
 {
-    NOC_ASSERT( IsInitThread() );
+    HELIUM_ASSERT( IsInitThread() );
 
     m_TypesByAlias.insert(M_StrToType::value_type (alias, type));
 }
 
 void Registry::UnAliasType(const Type* type, const tstring& alias)
 {
-    NOC_ASSERT( IsInitThread() );
+    HELIUM_ASSERT( IsInitThread() );
 
     M_StrToType::iterator found = m_TypesByAlias.find( alias );
     if (found != m_TypesByAlias.end() && found->second == type)
@@ -678,7 +678,7 @@ void Tracker::Create(uintptr ptr)
 
         // insert into the map of objects that are currently created
         create_iter = m_CreatedObjects.insert( M_CreationRecord::value_type( ptr, cr ) ).first;
-        NOC_ASSERT( create_iter != m_CreatedObjects.end() );
+        HELIUM_ASSERT( create_iter != m_CreatedObjects.end() );
 
         // potentially cleanup an old deletion for this pointer
         M_CreationRecord::iterator delete_iter = m_DeletedObjects.find( ptr );
@@ -690,7 +690,7 @@ void Tracker::Create(uintptr ptr)
     else
     {
         // why are we getting two creates w/o a delete?
-        NOC_BREAK();
+        HELIUM_BREAK();
         (*create_iter).second.Dump( stderr );
     }
 }
@@ -723,7 +723,7 @@ void Tracker::Delete(uintptr ptr)
         // insert into the map of objects which are currently deleted
         M_CreationRecord::iterator delete_iter = 
             m_DeletedObjects.insert( M_CreationRecord::value_type( ptr, cr ) ).first;
-        NOC_ASSERT( delete_iter != m_DeletedObjects.end() );
+        HELIUM_ASSERT( delete_iter != m_DeletedObjects.end() );
 
         // erase the entry from objects which are currently created
         m_CreatedObjects.erase(iter);
@@ -731,7 +731,7 @@ void Tracker::Delete(uintptr ptr)
     else
     {
         // we should have a creation record for everything that gets deleted
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 }
 
@@ -767,7 +767,7 @@ void Tracker::Check(uintptr ptr)
         }
 
         // why are we checking something that isn't created???
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 }
 

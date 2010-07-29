@@ -45,6 +45,6 @@ namespace Asset
         }
     };
 
-    typedef Nocturnal::SmartPtr< AnimationClip > AnimationClipPtr;
+    typedef Helium::SmartPtr< AnimationClip > AnimationClipPtr;
     typedef std::vector< AnimationClipPtr > V_AnimationClip;
 }

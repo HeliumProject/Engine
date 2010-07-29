@@ -1,7 +1,7 @@
 #include "FailTest.h"
 
-using namespace Nocturnal;
-using namespace Nocturnal::CommandLine;
+using namespace Helium;
+using namespace Helium::CommandLine;
 
 FailTest::FailTest()
 : Command( TXT( "fail" ), TXT( "" ), TXT( "This command causes the application to fail. This is strictly for testing purposes." ) )

@@ -24,11 +24,11 @@
 #include <map>
 #include <set>
 
-namespace Nocturnal
+namespace Helium
 {
-    typedef Nocturnal::SmartPtr<class Fixup> FixupPtr;
-    typedef Nocturnal::SmartPtr<class SmartBuffer> SmartBufferPtr;
-    typedef Nocturnal::OrderedSet< SmartBufferPtr > S_SmartBufferPtr;
+    typedef Helium::SmartPtr<class Fixup> FixupPtr;
+    typedef Helium::SmartPtr<class SmartBuffer> SmartBufferPtr;
+    typedef Helium::OrderedSet< SmartBufferPtr > S_SmartBufferPtr;
     typedef std::vector< SmartBufferPtr > V_SmartBufferPtr;
 
     namespace ByteOrders
@@ -44,14 +44,14 @@ namespace Nocturnal
 
     const ByteOrder DEFAULT_BYTE_ORDER = ByteOrders::LittleEndian;
 
-    class FOUNDATION_API SmartBuffer : public Nocturnal::RefCountBase<SmartBuffer>
+    class FOUNDATION_API SmartBuffer : public Helium::RefCountBase<SmartBuffer>
     {
     public:
         typedef std::pair< u32, SmartBufferPtr >          Location;
         typedef std::vector< Location >                   V_Location;
 
         typedef std::pair< u32, SmartBuffer* >            DumbLocation;
-        typedef Nocturnal::OrderedSet< DumbLocation >     S_DumbLocation;
+        typedef Helium::OrderedSet< DumbLocation >     S_DumbLocation;
 
         typedef std::map< u32, FixupPtr >                 M_OffsetToFixup;
 
@@ -96,7 +96,7 @@ namespace Nocturnal
         }
         void SetByteOrder(ByteOrder platform)
         {
-            NOC_ASSERT( m_ByteOrder >= 0 && m_ByteOrder < ByteOrders::Count );
+            HELIUM_ASSERT( m_ByteOrder >= 0 && m_ByteOrder < ByteOrders::Count );
             m_ByteOrder = platform;
         }
 
@@ -124,14 +124,14 @@ namespace Nocturnal
         // Returns a Location object at the specified offset
         SmartBuffer::Location GetOffsetLocation( u32 offset )
         {
-            NOC_ASSERT( offset <= m_Size );
+            HELIUM_ASSERT( offset <= m_Size );
             return Location( offset, this );
         }
 
         // Return a Location object based on the specified address
         SmartBuffer::Location GetAddressLocation( void* address )
         {
-            NOC_ASSERT( (u8*)address >= m_Data && (u8*)address < ( m_Data + m_Size ) );
+            HELIUM_ASSERT( (u8*)address >= m_Data && (u8*)address < ( m_Data + m_Size ) );
             return Location( (u32)(uintptr)((u8*)address - m_Data), this );
         }
 

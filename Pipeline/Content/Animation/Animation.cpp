@@ -18,7 +18,7 @@ JointAnimationPtr Animation::GetAnimationForJoint( const JointTransformPtr& join
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-JointAnimationPtr Animation::GetAnimationForJoint( const Nocturnal::TUID& jointID )
+JointAnimationPtr Animation::GetAnimationForJoint( const Helium::TUID& jointID )
 {
   M_JointAnimation::iterator findItor = m_JointAnimationMap.find( jointID );
   if( findItor != m_JointAnimationMap.end() )
@@ -35,7 +35,7 @@ CompressedJointAnimationPtr Animation::GetCompressedAnimationForJoint( const Joi
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-CompressedJointAnimationPtr Animation::GetCompressedAnimationForJoint( const Nocturnal::TUID& jointID )
+CompressedJointAnimationPtr Animation::GetCompressedAnimationForJoint( const Helium::TUID& jointID )
 {
   M_CompressedJointAnimation::iterator findItor = m_CompressedJointAnimationMap.find( jointID );
   if( findItor != m_CompressedJointAnimationMap.end() )
@@ -46,10 +46,10 @@ CompressedJointAnimationPtr Animation::GetCompressedAnimationForJoint( const Noc
 }
 
 // note: setting overWrite = true will stomp any existing association of the specified joint to an animation
-void Animation::Associate( const Nocturnal::TUID& jointID, const JointAnimationPtr& animation, bool overWrite )
+void Animation::Associate( const Helium::TUID& jointID, const JointAnimationPtr& animation, bool overWrite )
 {
   if ( m_JointAnimationMap.size() && animation->TotalSamples() != m_JointAnimationMap.begin()->second->TotalSamples() )
-    throw Nocturnal::Exception( TXT( "Cannot add an animation to an animation clip that has a different number of samples!" ) );
+    throw Helium::Exception( TXT( "Cannot add an animation to an animation clip that has a different number of samples!" ) );
 
   M_JointAnimation::iterator findItor = m_JointAnimationMap.find( jointID );
   if( findItor != m_JointAnimationMap.end() )
@@ -68,7 +68,7 @@ void Animation::Associate( const JointTransformPtr& joint, const JointAnimationP
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Animation::GetJointIDs( Nocturnal::V_TUID& jointIDs )
+void Animation::GetJointIDs( Helium::V_TUID& jointIDs )
 {
   M_JointAnimation::iterator itor = m_JointAnimationMap.begin();
   M_JointAnimation::iterator end = m_JointAnimationMap.end();
@@ -90,7 +90,7 @@ void Animation::GetJointAnimations( V_JointAnimation& anims )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Animation::ApplyParentTransforms( const Content::Scene& scene, const Nocturnal::TUID& targetJointId, bool zeroParents )
+void Animation::ApplyParentTransforms( const Content::Scene& scene, const Helium::TUID& targetJointId, bool zeroParents )
 {
   Content::JointTransformPtr targetJoint = scene.Get< Content::JointTransform >( targetJointId );
 
@@ -131,7 +131,7 @@ void Animation::ApplyParentTransforms( const Content::Scene& scene, const Noctur
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Animation::ApplyInverseParentTransforms( const Content::Scene& scene, const Nocturnal::TUID& targetJointId )
+void Animation::ApplyInverseParentTransforms( const Content::Scene& scene, const Helium::TUID& targetJointId )
 {
   Content::JointTransformPtr targetJoint = scene.Get< Content::JointTransform >( targetJointId );
 
@@ -179,8 +179,8 @@ void Animation::ConvertToWorldSpace(const Content::Scene& scene, JointOrderingPt
 {
 /*
   //assumes with joint_ordering we will see parent before child
-  Nocturnal::V_TUID::iterator jt_tuid = joint_ordering->m_JointOrdering.begin();
-  Nocturnal::V_TUID::iterator end_jt_tuid = joint_ordering->m_JointOrdering.end();
+  Helium::V_TUID::iterator jt_tuid = joint_ordering->m_JointOrdering.begin();
+  Helium::V_TUID::iterator end_jt_tuid = joint_ordering->m_JointOrdering.end();
   for (; jt_tuid!=end_jt_tuid; ++jt_tuid)
   {
     Content::JointTransformPtr targetJoint = scene.Get< Content::JointTransform >( *jt_tuid );
@@ -266,7 +266,7 @@ void Animation::ConvertToWorldSpace(const Content::Scene& scene, JointOrderingPt
 
   Math::V_Vector3 stashed_scales(joint_ordering->m_JointOrdering.size());
 
-  Nocturnal::TUID rootId = joint_ordering->GetMasterJoint( joint_ordering->m_JointOrdering[ 0 ] );
+  Helium::TUID rootId = joint_ordering->GetMasterJoint( joint_ordering->m_JointOrdering[ 0 ] );
 
   Content::JointAnimationPtr jointAnimation = m_JointAnimationMap[ rootId ];
   if (!jointAnimation.ReferencesObject())
@@ -281,14 +281,14 @@ void Animation::ConvertToWorldSpace(const Content::Scene& scene, JointOrderingPt
   for(u32 frameIndex = 0; frameIndex < numSamples; ++frameIndex)
   {
     //note: assumes with joint_ordering we will see parent before child
-    Nocturnal::V_TUID::iterator it_tuid_start = joint_ordering->m_JointOrdering.begin();
-    Nocturnal::V_TUID::iterator it_tuid_end   = joint_ordering->m_JointOrdering.end();
+    Helium::V_TUID::iterator it_tuid_start = joint_ordering->m_JointOrdering.begin();
+    Helium::V_TUID::iterator it_tuid_end   = joint_ordering->m_JointOrdering.end();
 
     // 
     // stash scales
     //
     u32 i = 0;
-    for(Nocturnal::V_TUID::iterator it = it_tuid_start; it != it_tuid_end; ++it)
+    for(Helium::V_TUID::iterator it = it_tuid_start; it != it_tuid_end; ++it)
     {
       Content::JointTransformPtr targetJoint = scene.Get< Content::JointTransform >( *it );
 
@@ -299,7 +299,7 @@ void Animation::ConvertToWorldSpace(const Content::Scene& scene, JointOrderingPt
         throw MissingJointException( targetJointGuid, TXT( "Content Scene" ) );
       }
 
-      Nocturnal::TUID masterId = joint_ordering->GetMasterJoint( *it );
+      Helium::TUID masterId = joint_ordering->GetMasterJoint( *it );
 
       Content::JointAnimationPtr jointAnimation = m_JointAnimationMap[ masterId ];
       if ( !jointAnimation.ReferencesObject() )
@@ -322,7 +322,7 @@ continue;
     // 
     // transform by parent
     // 
-    for(Nocturnal::V_TUID::iterator it = it_tuid_start; it != it_tuid_end; ++it)
+    for(Helium::V_TUID::iterator it = it_tuid_start; it != it_tuid_end; ++it)
     {
       Content::JointTransformPtr targetJoint = scene.Get< Content::JointTransform >( *it );
       Content::JointTransformPtr parentJoint = scene.Get< Content::JointTransform >( targetJoint->m_ParentID );
@@ -332,7 +332,7 @@ continue;
         continue;
       }
 
-      Nocturnal::TUID masterId = joint_ordering->GetMasterJoint( *it );
+      Helium::TUID masterId = joint_ordering->GetMasterJoint( *it );
       Content::JointAnimationPtr jointAnimation  = m_JointAnimationMap[ masterId ];
 
 //@@@ bad_bad_bad_bad_bad_bad_bad_bad
@@ -342,10 +342,10 @@ if ( !jointAnimation.ReferencesObject() )
 }
 //@@@ bad_bad_bad_bad_bad_bad_bad_bad
 
-      Nocturnal::TUID parentMasterId = joint_ordering->GetMasterJoint( parentJoint->m_ID  );
+      Helium::TUID parentMasterId = joint_ordering->GetMasterJoint( parentJoint->m_ID  );
       Content::JointAnimationPtr parentAnimation = m_JointAnimationMap[ parentMasterId ];
 
-      NOC_ASSERT(jointAnimation->TotalSamples() == numSamples);
+      HELIUM_ASSERT(jointAnimation->TotalSamples() == numSamples);
 
 
       Math::Vector4 unit_scale(1.0f, 1.0f, 1.0f, 1.0f);
@@ -379,11 +379,11 @@ if ( !jointAnimation.ReferencesObject() )
     // apply scales
     // 
     i = 0;
-    for(Nocturnal::V_TUID::iterator it = it_tuid_start; it != it_tuid_end; ++it)
+    for(Helium::V_TUID::iterator it = it_tuid_start; it != it_tuid_end; ++it)
     {
       Content::JointTransformPtr  targetJoint     = scene.Get< Content::JointTransform >( *it );
 
-      Nocturnal::TUID masterId = joint_ordering->GetMasterJoint( *it );
+      Helium::TUID masterId = joint_ordering->GetMasterJoint( *it );
       Content::JointAnimationPtr       jointAnimation  = m_JointAnimationMap[ masterId ];
 
 //@@@ bad_bad_bad_bad_bad_bad_bad_bad
@@ -399,7 +399,7 @@ if ( !jointAnimation.ReferencesObject() )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Animation::RemoveTransform( const Nocturnal::TUID& targetJointId, const Nocturnal::TUID& referenceJointId )
+void Animation::RemoveTransform( const Helium::TUID& targetJointId, const Helium::TUID& referenceJointId )
 {
   if ( m_JointAnimationMap.find( referenceJointId ) == m_JointAnimationMap.end() )
   {
@@ -437,7 +437,7 @@ void Animation::RemoveTransform( const Nocturnal::TUID& targetJointId, const Noc
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Animation::CalculateLinearDistancePerFrame( const Nocturnal::TUID &referenceJointId )
+void Animation::CalculateLinearDistancePerFrame( const Helium::TUID &referenceJointId )
 {
   if ( m_JointAnimationMap.find( referenceJointId ) == m_JointAnimationMap.end() )
   {
@@ -452,7 +452,7 @@ void Animation::CalculateLinearDistancePerFrame( const Nocturnal::TUID &referenc
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Animation::RemoveFirstFrameTransform( const Nocturnal::TUID &targetJointId )
+void Animation::RemoveFirstFrameTransform( const Helium::TUID &targetJointId )
 {
   if ( m_JointAnimationMap.find( targetJointId ) == m_JointAnimationMap.end() )
   {
@@ -466,7 +466,7 @@ void Animation::RemoveFirstFrameTransform( const Nocturnal::TUID &targetJointId 
   RemoveRotTrans( targetJointId, targetAnim->m_Translate[ 0 ], targetAnim->m_Rotate[ 0 ] );
 }
 
-void Animation::RemoveRotTrans( const Nocturnal::TUID& targetJointId, Math::Vector3 translation, Math::Quaternion rotation )
+void Animation::RemoveRotTrans( const Helium::TUID& targetJointId, Math::Vector3 translation, Math::Quaternion rotation )
 {
   if ( m_JointAnimationMap.find( targetJointId ) == m_JointAnimationMap.end() )
   {
@@ -505,11 +505,11 @@ void Animation::DumpAnims( const JointOrderingPtr& jointOrdering )
     Log::Print( TXT( "Frame %d:\n" ), frame );
 
     u32 jointIndex = 0;
-    Nocturnal::V_TUID::iterator it = jointOrdering->m_JointOrdering.begin();
-    Nocturnal::V_TUID::iterator end = jointOrdering->m_JointOrdering.end();
+    Helium::V_TUID::iterator it = jointOrdering->m_JointOrdering.begin();
+    Helium::V_TUID::iterator end = jointOrdering->m_JointOrdering.end();
     for ( ; it != end; ++it, ++jointIndex )
     {
-      Nocturnal::TUID& id = *it;
+      Helium::TUID& id = *it;
       
       JointAnimation* anim = m_JointAnimationMap[ id ];
 
@@ -550,7 +550,7 @@ void Animation::ConvertToAdditiveBlend( const Content::Scene& scene, const Joint
     {
       tstring jointGuid;
       (*itor).first.ToString( jointGuid );
-      throw Nocturnal::Exception( TXT( "Joint [%s (%s)] not present in bind scene!\n" ), GetName().c_str(), jointGuid.c_str() );
+      throw Helium::Exception( TXT( "Joint [%s (%s)] not present in bind scene!\n" ), GetName().c_str(), jointGuid.c_str() );
     }
 
     Content::JointAnimation* anim = itor->second;
@@ -609,7 +609,7 @@ void Animation::ConvertToAdditiveBlend( const Content::Scene& scene, const Joint
 u32 Animation::CompressAnimations( const Content::Scene& scene, const AnimationCompressionControl& compressionControl, const JointOrderingPtr& jointOrdering, bool looping )
 {
   u32 missingJoints = 0;
-  Nocturnal::S_TUID handledJoints;
+  Helium::S_TUID handledJoints;
 
   M_JointAnimation::iterator itor = m_JointAnimationMap.begin();
   M_JointAnimation::iterator end = m_JointAnimationMap.end();
@@ -634,12 +634,12 @@ u32 Animation::CompressAnimations( const Content::Scene& scene, const AnimationC
     CompressedJointAnimationPtr compressed = new CompressedJointAnimation( compressionControl, looping );
     compressed->Compress( joint->GetName(), (*itor).second, joint->m_Translate );
 
-    m_CompressedJointAnimationMap.insert( std::make_pair< Nocturnal::TUID, CompressedJointAnimationPtr >( (*itor).first, compressed ) );
+    m_CompressedJointAnimationMap.insert( std::make_pair< Helium::TUID, CompressedJointAnimationPtr >( (*itor).first, compressed ) );
     if ( !handledJoints.insert( (*itor).first ).second )
     {
       tstring jointGuid;
       (*itor).first.ToString( jointGuid );
-      throw Nocturnal::Exception( TXT( "Already compressed data for joint [%s]!" ), jointGuid );
+      throw Helium::Exception( TXT( "Already compressed data for joint [%s]!" ), jointGuid );
     }
   }
 
@@ -660,8 +660,8 @@ void Animation::SmoothRotations()
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void Animation::ExtractCinematicRootOffset( const Content::Scene  & scene,
                                                       Math::V_Vector3 & cinematicTranslationChannel,
-                                                const Nocturnal::TUID    & abodyJointId,
-                                                const Nocturnal::TUID    & motionJointId)
+                                                const Helium::TUID    & abodyJointId,
+                                                const Helium::TUID    & motionJointId)
 {
   JointTransformPtr cineRoot = scene.Get< JointTransform >( abodyJointId );
   JointTransformPtr cineMotion = scene.Get< JointTransform >( motionJointId );
@@ -687,7 +687,7 @@ void Animation::ExtractCinematicRootOffset( const Content::Scene  & scene,
     M_JointAnimation::const_iterator animIt = m_JointAnimationMap.find( cineRoot->m_ID );
     if ( animIt == m_JointAnimationMap.end() )
     {
-      throw Nocturnal::Exception( TXT( "Could not find animation for joint %s!" ), cineRoot->GetName().c_str() );
+      throw Helium::Exception( TXT( "Could not find animation for joint %s!" ), cineRoot->GetName().c_str() );
     }
 
     Content::JointAnimation & rootAnimation = *animIt->second;
@@ -775,7 +775,7 @@ void Animation::ConvertToParentLocalSpace(const Content::Scene& scene, const Con
     {
       tstring jointGuid;
       joint->m_ID.ToString( jointGuid );
-      throw Nocturnal::Exception( TXT( "Could not find animation for joint [%s] [%s]!\n" ), GetName().c_str(), jointGuid.c_str() );
+      throw Helium::Exception( TXT( "Could not find animation for joint [%s] [%s]!\n" ), GetName().c_str(), jointGuid.c_str() );
     }
 
     M_JointAnimation::iterator parentAnimIt = m_JointAnimationMap.find( joint->m_ParentID );
@@ -783,7 +783,7 @@ void Animation::ConvertToParentLocalSpace(const Content::Scene& scene, const Con
     {
       tstring jointGuid;
       joint->m_ParentID.ToString( jointGuid );
-      throw Nocturnal::Exception( TXT( "Could not find animation for joint [%s] [%s]!\n" ), GetName().c_str(), jointGuid.c_str() );
+      throw Helium::Exception( TXT( "Could not find animation for joint [%s] [%s]!\n" ), GetName().c_str(), jointGuid.c_str() );
     }
 
     JointAnimation* anim = animIt->second;

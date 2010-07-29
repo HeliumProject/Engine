@@ -414,7 +414,7 @@ namespace Inspect
         }
       }
 
-      NOC_BREAK(); // you should not call this, your control is using custom data
+      HELIUM_BREAK(); // you should not call this, your control is using custom data
       return false;
     }
 
@@ -432,14 +432,14 @@ namespace Inspect
     template<class T>
     static T* Cast(Control* control)
     {
-      NOC_ASSERT( control->GetWindow() );
+      HELIUM_ASSERT( control->GetWindow() );
       return static_cast<T*>(control->GetWindow());
     }
 
     template<class T>
     static const T* Cast( const Control* control )
     {
-      NOC_ASSERT( control->GetWindow() );
+      HELIUM_ASSERT( control->GetWindow() );
       return static_cast< const T* >( control->GetWindow() );
     }
 
@@ -501,6 +501,6 @@ namespace Inspect
 #endif
   };
 
-  typedef Nocturnal::SmartPtr<Control> ControlPtr;
+  typedef Helium::SmartPtr<Control> ControlPtr;
   typedef std::vector<ControlPtr> V_Control;
 }

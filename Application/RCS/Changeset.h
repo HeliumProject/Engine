@@ -7,7 +7,7 @@
 
 namespace RCS
 {
-  class APPLICATION_API Changeset : public Nocturnal::RefCountBase< Changeset >
+  class APPLICATION_API Changeset : public Helium::RefCountBase< Changeset >
   {
   public:
     u64                m_Id;
@@ -47,6 +47,6 @@ namespace RCS
   }; 
 
   typedef std::vector< Changeset > V_Changeset;
-  typedef Nocturnal::SmartPtr< Changeset > ChangesetPtr;
+  typedef Helium::SmartPtr< Changeset > ChangesetPtr;
   typedef std::vector< ChangesetPtr > V_ChangesetPtr;
 }

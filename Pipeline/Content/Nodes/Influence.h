@@ -20,6 +20,6 @@ namespace Content
     static void EnumerateClass( Reflect::Compositor<Influence>& comp );
   };
 
-  typedef Nocturnal::SmartPtr<Influence> InfluencePtr;
+  typedef Helium::SmartPtr<Influence> InfluencePtr;
   typedef std::vector<InfluencePtr> V_Influence;
 }

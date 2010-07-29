@@ -7,11 +7,11 @@
 //
 
 #ifdef _MSC_VER
-# define NOC_OVERRIDE override
-# define NOC_ABSTRACT abstract
+# define HELIUM_OVERRIDE override
+# define HELIUM_ABSTRACT abstract
 #else
-# define NOC_OVERRIDE
-# define NOC_ABSTRACT
+# define HELIUM_OVERRIDE
+# define HELIUM_ABSTRACT
 #endif
 
 //

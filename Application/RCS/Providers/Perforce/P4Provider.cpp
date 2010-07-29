@@ -83,7 +83,7 @@ void Provider::ThreadEntry()
         {
             std::string cmd;
             bool converted = Platform::ConvertString( m_Command->m_Command, cmd );
-            NOC_ASSERT( converted );
+            HELIUM_ASSERT( converted );
 
             std::vector< const char* > args;
 
@@ -232,7 +232,7 @@ void Provider::RunCommand( Command* command )
 
     if ( command->m_ErrorCount )
     {
-        NOC_ASSERT_MSG( !command->m_ErrorString.empty(), ("No error string was captured from a failed perforce command, this indicates a command object is not properly interpreting the server's output") );
+        HELIUM_ASSERT_MSG( !command->m_ErrorString.empty(), ("No error string was captured from a failed perforce command, this indicates a command object is not properly interpreting the server's output") );
         throw Perforce::Exception( TXT( "%d error%s for command '%s':\n%s" ), command->m_ErrorCount, command->m_ErrorCount > 1 ? "s" : "", command->AsString().c_str(), command->m_ErrorString.c_str() );
     }
 }
@@ -294,10 +294,10 @@ bool Provider::Connect()
         m_Client.SetProg( buf );
 
         bool converted = Platform::ConvertString( m_Client.GetUser().Text(), m_UserName );
-        NOC_ASSERT( converted );
+        HELIUM_ASSERT( converted );
 
         converted = Platform::ConvertString( m_Client.GetClient().Text(), m_ClientName );
-        NOC_ASSERT( converted );
+        HELIUM_ASSERT( converted );
 
         m_Connected = e.Test() == 0;
     }
@@ -323,7 +323,7 @@ int	Provider::IsAlive()
     default:
         {
             // this would not make any sense... why would we be complete in the Alive callback?
-            NOC_ASSERT( m_Phase != CommandPhases::Complete );
+            HELIUM_ASSERT( m_Phase != CommandPhases::Complete );
             return true;
         }
     }
@@ -347,7 +347,7 @@ bool Provider::StopWaiting()
     default:
         {
             // this is the natural closing of the dialog if the server comes back online and completes successfully
-            NOC_ASSERT( m_Phase == CommandPhases::Complete );
+            HELIUM_ASSERT( m_Phase == CommandPhases::Complete );
             return true;
         }
     }
@@ -486,7 +486,7 @@ void Provider::Revert( RCS::File& file, bool revertUnchangedOnly )
 
     std::string narrowPath;
     bool converted = Platform::ConvertString( file.m_LocalPath, narrowPath );
-    NOC_ASSERT( converted );
+    HELIUM_ASSERT( converted );
 
     command.AddArg( narrowPath.c_str() );
 

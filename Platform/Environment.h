@@ -9,7 +9,7 @@
 #include "Platform/Types.h"
 #include "Platform/Exception.h"
 
-namespace Nocturnal
+namespace Helium
 {
     //
     // Environment variable access
@@ -31,7 +31,7 @@ namespace Nocturnal
         stringValue = (tchar*) malloc( requiredSize * sizeof( tchar ) );
         if ( !stringValue )
         {
-            throw Nocturnal::Exception( TXT( "Out of memory" ) );
+            throw Helium::Exception( TXT( "Out of memory" ) );
         }
 
         _tgetenv_s( &requiredSize, stringValue, requiredSize, variableName.c_str() );

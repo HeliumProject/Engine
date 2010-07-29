@@ -3,7 +3,7 @@
 #include "Platform/Types.h"
 #include "Platform/Assert.h"
 
-namespace Nocturnal
+namespace Helium
 {
     //
     // This is a simple manager for a C-style array allocated with new [].

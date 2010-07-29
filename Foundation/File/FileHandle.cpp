@@ -2,7 +2,7 @@
 
 #include "Platform/Windows/Windows.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 u32 GetWin32MoveMethod( FileOffset offsetType )
 {

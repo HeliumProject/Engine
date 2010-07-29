@@ -1,6 +1,6 @@
 #include "MessageDialog.h"
 
-namespace Nocturnal
+namespace Helium
 {
 
 #define STATUSSTRING_SIZE 2048
@@ -75,4 +75,4 @@ namespace Nocturnal
         msgDlg.ShowModal();
     }
 
-} // namespace Nocturnal
+} // namespace Helium

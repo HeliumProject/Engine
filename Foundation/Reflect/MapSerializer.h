@@ -44,28 +44,28 @@ namespace Reflect
         SimpleMapSerializer();
         virtual ~SimpleMapSerializer();
 
-        virtual void ConnectData(Nocturnal::HybridPtr<void> data) NOC_OVERRIDE;
+        virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
 
-        virtual size_t GetSize() const NOC_OVERRIDE;
-        virtual void Clear() NOC_OVERRIDE;
+        virtual size_t GetSize() const HELIUM_OVERRIDE;
+        virtual void Clear() HELIUM_OVERRIDE;
 
-        virtual i32 GetKeyType() const NOC_OVERRIDE;
-        virtual i32 GetValueType() const NOC_OVERRIDE;
-        virtual void GetItems(V_ValueType& items) NOC_OVERRIDE;
-        virtual void GetItems(V_ConstValueType& items) const NOC_OVERRIDE;
-        virtual SerializerPtr GetItem(const Serializer* key) NOC_OVERRIDE;
-        virtual ConstSerializerPtr GetItem(const Serializer* key) const NOC_OVERRIDE;
-        virtual void SetItem(const Serializer* key, const Serializer* value) NOC_OVERRIDE;
-        virtual void RemoveItem(const Serializer* key) NOC_OVERRIDE;
+        virtual i32 GetKeyType() const HELIUM_OVERRIDE;
+        virtual i32 GetValueType() const HELIUM_OVERRIDE;
+        virtual void GetItems(V_ValueType& items) HELIUM_OVERRIDE;
+        virtual void GetItems(V_ConstValueType& items) const HELIUM_OVERRIDE;
+        virtual SerializerPtr GetItem(const Serializer* key) HELIUM_OVERRIDE;
+        virtual ConstSerializerPtr GetItem(const Serializer* key) const HELIUM_OVERRIDE;
+        virtual void SetItem(const Serializer* key, const Serializer* value) HELIUM_OVERRIDE;
+        virtual void RemoveItem(const Serializer* key) HELIUM_OVERRIDE;
 
-        virtual bool Set(const Serializer* src, u32 flags = 0) NOC_OVERRIDE;
-        virtual bool Equals(const Serializer* s) const NOC_OVERRIDE;
+        virtual bool Set(const Serializer* src, u32 flags = 0) HELIUM_OVERRIDE;
+        virtual bool Equals(const Serializer* s) const HELIUM_OVERRIDE;
 
-        virtual void Serialize(Archive& archive) const NOC_OVERRIDE;
-        virtual void Deserialize(Archive& archive) NOC_OVERRIDE;
+        virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;
+        virtual void Deserialize(Archive& archive) HELIUM_OVERRIDE;
 
-        virtual tostream& operator>> (tostream& stream) const NOC_OVERRIDE;
-        virtual tistream& operator<< (tistream& stream) NOC_OVERRIDE;
+        virtual tostream& operator>> (tostream& stream) const HELIUM_OVERRIDE;
+        virtual tistream& operator<< (tistream& stream) HELIUM_OVERRIDE;
     };
 
     typedef SimpleMapSerializer<tstring, StringSerializer, tstring, StringSerializer> StringStringMapSerializer;                REFLECT_SPECIALIZE_SERIALIZER(StringStringMapSerializer);
@@ -88,8 +88,8 @@ namespace Reflect
     typedef SimpleMapSerializer<u64, U64Serializer, u64, U64Serializer> U64U64MapSerializer;                                    REFLECT_SPECIALIZE_SERIALIZER(U64U64MapSerializer);
     typedef SimpleMapSerializer<u64, U64Serializer, Math::Matrix4, Matrix4Serializer> U64Matrix4MapSerializer;                  REFLECT_SPECIALIZE_SERIALIZER(U64Matrix4MapSerializer);
 
-    typedef SimpleMapSerializer<Nocturnal::GUID, GUIDSerializer, u32, U32Serializer> GUIDU32MapSerializer;                      REFLECT_SPECIALIZE_SERIALIZER(GUIDU32MapSerializer);
-    typedef SimpleMapSerializer<Nocturnal::GUID, GUIDSerializer, Math::Matrix4, Matrix4Serializer> GUIDMatrix4MapSerializer;    REFLECT_SPECIALIZE_SERIALIZER(GUIDMatrix4MapSerializer);
-    typedef SimpleMapSerializer<Nocturnal::TUID, TUIDSerializer, u32, U32Serializer> TUIDU32MapSerializer;                      REFLECT_SPECIALIZE_SERIALIZER(TUIDU32MapSerializer);
-    typedef SimpleMapSerializer<Nocturnal::TUID, TUIDSerializer, Math::Matrix4, Matrix4Serializer> TUIDMatrix4MapSerializer;    REFLECT_SPECIALIZE_SERIALIZER(TUIDMatrix4MapSerializer);
+    typedef SimpleMapSerializer<Helium::GUID, GUIDSerializer, u32, U32Serializer> GUIDU32MapSerializer;                      REFLECT_SPECIALIZE_SERIALIZER(GUIDU32MapSerializer);
+    typedef SimpleMapSerializer<Helium::GUID, GUIDSerializer, Math::Matrix4, Matrix4Serializer> GUIDMatrix4MapSerializer;    REFLECT_SPECIALIZE_SERIALIZER(GUIDMatrix4MapSerializer);
+    typedef SimpleMapSerializer<Helium::TUID, TUIDSerializer, u32, U32Serializer> TUIDU32MapSerializer;                      REFLECT_SPECIALIZE_SERIALIZER(TUIDU32MapSerializer);
+    typedef SimpleMapSerializer<Helium::TUID, TUIDSerializer, Math::Matrix4, Matrix4Serializer> TUIDMatrix4MapSerializer;    REFLECT_SPECIALIZE_SERIALIZER(TUIDMatrix4MapSerializer);
 }

@@ -41,7 +41,7 @@ public:
   static bool                 s_DoRemoveNodeCallback;
 
 private:
-    Nocturnal::Path m_AssetPath;
+    Helium::Path m_AssetPath;
 
   // client data for each instance of this art class
   M_EntityNode m_Instances;
@@ -82,7 +82,7 @@ public:
   static void FlattenInstances();
 
   // get a reference to the specified EntityAssetNode, create it if it doesn't exist
-  static EntityAssetNode& Get( const Nocturnal::Path& path, bool createIfNotExisting = true );
+  static EntityAssetNode& Get( const Helium::Path& path, bool createIfNotExisting = true );
 
   // get/create an EntityAssetNode, and an EntityNode for the given content Entity
   static std::pair< EntityAssetNode*, EntityNode* > CreateInstance( const Asset::EntityInstancePtr& entity );

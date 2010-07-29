@@ -141,13 +141,13 @@ namespace Inspect
   //
 
   template<>
-  inline void Extract(tistream& stream, Nocturnal::Void* val)
+  inline void Extract(tistream& stream, Helium::Void* val)
   {
 
   }
 
   template<>
-  inline void Insert(tostream& stream, const Nocturnal::Void* val)
+  inline void Insert(tostream& stream, const Helium::Void* val)
   {
 
   }
@@ -171,7 +171,7 @@ namespace Inspect
 
     }
   };
-  typedef Nocturnal::Signature<bool, DataChangingArgs&> DataChangingSignature;
+  typedef Helium::Signature<bool, DataChangingArgs&> DataChangingSignature;
 
   struct DataChangedArgs
   {
@@ -183,7 +183,7 @@ namespace Inspect
 
     }
   };
-  typedef Nocturnal::Signature<void, const DataChangedArgs&> DataChangedSignature;
+  typedef Helium::Signature<void, const DataChangedArgs&> DataChangedSignature;
 
   namespace DataTypes
   {
@@ -201,7 +201,7 @@ namespace Inspect
     return data ? (data->HasType( type ) ? static_cast<T*>( data ) : NULL) : NULL;
   }
 
-  class Data : public Nocturnal::RefCountBase< Data >
+  class Data : public Helium::RefCountBase< Data >
   {
   public:
       INSPECT_BASE( DataTypes::Custom );
@@ -258,7 +258,7 @@ namespace Inspect
     }
   };
 
-  typedef Nocturnal::SmartPtr<Data> DataPtr;
+  typedef Helium::SmartPtr<Data> DataPtr;
 
 
   //
@@ -273,17 +273,17 @@ namespace Inspect
   class DataTemplate : public Data
   {
   public:
-    typedef Nocturnal::SmartPtr< DataTemplate > Ptr;
+    typedef Helium::SmartPtr< DataTemplate > Ptr;
 
   public:
-    virtual void Refresh() NOC_OVERRIDE
+    virtual void Refresh() HELIUM_OVERRIDE
     {
       T temp;
       Get( temp );
       Set( temp );
     }
 
-    virtual Undo::CommandPtr GetUndoCommand() const NOC_OVERRIDE
+    virtual Undo::CommandPtr GetUndoCommand() const HELIUM_OVERRIDE
     {
       return new DataCommand<T>( this );
     }
@@ -294,7 +294,7 @@ namespace Inspect
     virtual bool SetAll(const std::vector<T>& s, const DataChangedSignature::Delegate& emitter = DataChangedSignature::Delegate ())
     {
       bool result = false;
-      NOC_ASSERT( s.size() == 1 ); // this means you did not NOC_OVERRIDE this function for data objects that support multi
+      HELIUM_ASSERT( s.size() == 1 ); // this means you did not HELIUM_OVERRIDE this function for data objects that support multi
       if ( s.size() > 0 )
       {
         result = Set( s.back(), emitter );
@@ -340,12 +340,12 @@ namespace Inspect
       }
     }
 
-    void Undo() NOC_OVERRIDE
+    void Undo() HELIUM_OVERRIDE
     {
       Swap();
     }
 
-    void Redo() NOC_OVERRIDE
+    void Redo() HELIUM_OVERRIDE
     {
       Swap();
     }

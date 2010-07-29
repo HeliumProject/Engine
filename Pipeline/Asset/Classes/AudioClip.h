@@ -40,9 +40,9 @@ namespace Asset
         {
         }
 
-        virtual void GatherSearchableProperties( Nocturnal::SearchableProperties* properties ) const NOC_OVERRIDE;
+        virtual void GatherSearchableProperties( Helium::SearchableProperties* properties ) const HELIUM_OVERRIDE;
     };
 
-    typedef Nocturnal::SmartPtr< AudioClip > AudioClipPtr;
+    typedef Helium::SmartPtr< AudioClip > AudioClipPtr;
     typedef std::vector< AudioClipPtr > V_AudioClip;
 }

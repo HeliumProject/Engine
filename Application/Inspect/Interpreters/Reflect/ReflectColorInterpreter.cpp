@@ -25,7 +25,7 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
 
   tstring temp;
   bool converted = Platform::ConvertString( field->m_UIName, temp );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
 
   label->SetText( temp );
 
@@ -33,7 +33,7 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
 
   bool color3 = field->m_SerializerID == Reflect::GetType<Color3Serializer>() || field->m_SerializerID == Reflect::GetType<HDRColor3Serializer>();
   bool color4 = field->m_SerializerID == Reflect::GetType<Color4Serializer>() || field->m_SerializerID == Reflect::GetType<HDRColor4Serializer>();
-  NOC_ASSERT( !(color3 && color4) ); // we shouldn't ever have both!
+  HELIUM_ASSERT( !(color3 && color4) ); // we shouldn't ever have both!
 
   if ( color3 || color4 )
   {

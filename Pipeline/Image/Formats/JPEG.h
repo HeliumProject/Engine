@@ -2,7 +2,7 @@
 
 #include "Platform/Types.h"
 
-namespace Nocturnal
+namespace Helium
 {
   static const i32 FIX_1_082392200=277;     // .8 fixed (1.082392200)
   static const i32 FIX_1_414213562=362;     // .8 fixed (1.414213562)

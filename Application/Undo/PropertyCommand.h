@@ -15,7 +15,7 @@ namespace Undo
   {
   private:
     // the property object we will get/set through
-    Nocturnal::SmartPtr< Nocturnal::Property<V> > m_Property;
+    Helium::SmartPtr< Helium::Property<V> > m_Property;
 
     // the latent data value
     V m_Value;
@@ -23,14 +23,14 @@ namespace Undo
     bool m_Significant; 
 
   public:
-    PropertyCommand(const Nocturnal::SmartPtr< Nocturnal::Property<V> >& property)
+    PropertyCommand(const Helium::SmartPtr< Helium::Property<V> >& property)
       : m_Property (property)
       , m_Significant( true )
     {
       m_Value = m_Property->Get();
     }
 
-    PropertyCommand(const Nocturnal::SmartPtr< Nocturnal::Property<V> >& property, const V& val)
+    PropertyCommand(const Helium::SmartPtr< Helium::Property<V> >& property, const V& val)
       : m_Property (property)
       , m_Value (val)
       , m_Significant( true )
@@ -48,12 +48,12 @@ namespace Undo
       return m_Significant; 
     }
     
-    virtual void Undo() NOC_OVERRIDE
+    virtual void Undo() HELIUM_OVERRIDE
     {
       Swap();
     }
 
-    virtual void Redo() NOC_OVERRIDE
+    virtual void Redo() HELIUM_OVERRIDE
     {
       Swap();
     }

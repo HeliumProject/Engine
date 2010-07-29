@@ -151,7 +151,7 @@ tostream& BitfieldSerializer::operator>> (tostream& stream) const
     if (!m_Enumeration->GetBitfieldString(m_Data.Get(), str))
     {
         // something is amiss, we should be guaranteed serialization of enum elements
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 
     stream << str;

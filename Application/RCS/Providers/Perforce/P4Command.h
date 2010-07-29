@@ -36,7 +36,7 @@ namespace Perforce
 #ifdef UNICODE
         std::string narrowArg;
         bool converted = Platform::ConvertString( arg, narrowArg );
-        NOC_ASSERT( converted );
+        HELIUM_ASSERT( converted );
         AddArg( narrowArg.c_str() );
 #else
         m_Arguments.push_back( arg.c_str() );
@@ -102,7 +102,7 @@ namespace Perforce
   template <class ResultType>
   inline RCS::Operation ResultAsOperation( ResultType& results, int i )
   {
-    return GetOperationEnum( Nocturnal::MatchResultAsString( results, i ) );
+    return GetOperationEnum( Helium::MatchResultAsString( results, i ) );
   }
 
   inline void SetFlags( const tstring& flags, RCS::File* info )

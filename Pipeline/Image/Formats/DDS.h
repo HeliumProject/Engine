@@ -5,7 +5,7 @@
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
 
-namespace Nocturnal
+namespace Helium
 {
   const u32 DDS_MAGIC                   =0x20534444;
 

@@ -26,7 +26,7 @@ namespace MayaContent
 
     }
 
-    ExportShader( const MObject& mayaShader, Nocturnal::TUID& id ) 
+    ExportShader( const MObject& mayaShader, Helium::TUID& id ) 
       : ExportBase( mayaShader )
       , m_OffsetU( 0.0f )
       , m_OffsetV( 0.0f )
@@ -35,7 +35,7 @@ namespace MayaContent
       m_ContentObject = new Content::Shader( id );
     }
 
-    virtual void GatherMayaData( V_ExportBase &newExportObjects ) NOC_OVERRIDE;
+    virtual void GatherMayaData( V_ExportBase &newExportObjects ) HELIUM_OVERRIDE;
 
     virtual void ProcessMayaData();
 
@@ -45,7 +45,7 @@ namespace MayaContent
     }
   };
 
-  typedef Nocturnal::SmartPtr< ExportShader > ExportShaderPtr;
+  typedef Helium::SmartPtr< ExportShader > ExportShaderPtr;
   typedef std::vector< ExportShaderPtr > V_ExportShader;
-  typedef stdext::hash_map< Nocturnal::TUID, ExportShaderPtr, Nocturnal::TUIDHasher > M_UIDExportShader;
+  typedef stdext::hash_map< Helium::TUID, ExportShaderPtr, Helium::TUIDHasher > M_UIDExportShader;
 }

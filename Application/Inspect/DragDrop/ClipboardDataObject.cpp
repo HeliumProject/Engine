@@ -6,7 +6,7 @@
 using namespace Inspect;
 
 // Unique identifier for this type of clipboard data.
-static const tchar* s_Format = TXT( "Luna/ClipboardData" );
+static const tchar* s_Format = TXT( "Editor/ClipboardData" );
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
@@ -24,8 +24,8 @@ ClipboardDataObject::~ClipboardDataObject()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// All data is converted in the Luna clipboard format.  This class can also
-// convert file name lists into Luna's format.
+// All data is converted in the Editor clipboard format.  This class can also
+// convert file name lists into Editor's format.
 // 
 void ClipboardDataObject::GetAllFormats( wxDataFormat* formats, wxDataObjectBase::Direction dir ) const
 {
@@ -47,7 +47,7 @@ size_t ClipboardDataObject::GetFormatCount( wxDataObjectBase::Direction dir ) co
 {
     if ( dir ==  wxDataObjectBase::Get )
     {
-        // We only provide data in the Luna format
+        // We only provide data in the Editor format
         return 1;
     }
 
@@ -56,7 +56,7 @@ size_t ClipboardDataObject::GetFormatCount( wxDataObjectBase::Direction dir ) co
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// The Luna clipboard format is preferred.
+// The Editor clipboard format is preferred.
 // 
 wxDataFormat ClipboardDataObject::GetPreferredFormat( wxDataObjectBase::Direction dir ) const
 {
@@ -64,7 +64,7 @@ wxDataFormat ClipboardDataObject::GetPreferredFormat( wxDataObjectBase::Directio
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Required NOC_OVERRIDE to prevent function hiding.
+// Required HELIUM_OVERRIDE to prevent function hiding.
 // 
 bool ClipboardDataObject::SetData( size_t size, const void* buf ) 
 { 
@@ -80,7 +80,7 @@ bool ClipboardDataObject::SetData( const wxDataFormat& format, size_t len, const
 
     if ( format == GetFormat() )
     {
-        // Luna clipboard format
+        // Editor clipboard format
         result = __super::SetData( format, len, buf );
     }
     else if ( format.IsStandard() && format.GetFormatId() == wxDF_FILENAME )

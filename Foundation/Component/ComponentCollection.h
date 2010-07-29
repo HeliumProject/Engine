@@ -26,7 +26,7 @@ namespace Component
         const ComponentBase*        m_Component;
     };
 
-    typedef Nocturnal::Signature<void, const ComponentCollectionChanged&> ComponentCollectionChangedSignature;
+    typedef Helium::Signature<void, const ComponentCollectionChanged&> ComponentCollectionChangedSignature;
 
 
     class FOUNDATION_API ComponentCollection : public Reflect::Element
@@ -39,7 +39,7 @@ namespace Component
         ComponentCollection( const ComponentPtr& attr );
         virtual ~ComponentCollection(); 
 
-        virtual void GatherSearchableProperties( Nocturnal::SearchableProperties* properties ) const;
+        virtual void GatherSearchableProperties( Helium::SearchableProperties* properties ) const;
 
         //
         // Component Management
@@ -56,7 +56,7 @@ namespace Component
 
         // casting helper will get you what you need, baby ;)
         template <class T>
-        Nocturnal::SmartPtr<T> GetComponent() const
+        Helium::SmartPtr<T> GetComponent() const
         {
             return Reflect::ObjectCast<T>( GetComponent( Reflect::GetType<T>() ) );
         }
@@ -83,15 +83,15 @@ namespace Component
         // not valid, the return value will be false and "error" will have additional info about
         // the problem.  The steps carried out by this function are:
         // 1. Makes sure the attribute is not already in this collection.
-        // 2. Gives derived classes the chance to NOC_OVERRIDE ValidateCompatible.
+        // 2. Gives derived classes the chance to HELIUM_OVERRIDE ValidateCompatible.
         // 3. Iterates over each attribute already in the collection and calls ValidateSibling.
         virtual bool ValidateComponent( const ComponentPtr &attr, tstring& error ) const;
 
-        // Basic implementation just checks the behavior of the attribute, but you can NOC_OVERRIDE
+        // Basic implementation just checks the behavior of the attribute, but you can HELIUM_OVERRIDE
         // this to allow exclusive attributes, or prohibit inclusive attributes
         virtual bool ValidateCompatible( const ComponentPtr& attr, tstring& error ) const;
 
-        // Basic implementation just allows the attribute to be persisted, but you can NOC_OVERRIDE
+        // Basic implementation just allows the attribute to be persisted, but you can HELIUM_OVERRIDE
         // this to avoid persisting attributes that are at a redundant state (as an example)
         virtual bool ValidatePersistent( const ComponentPtr& attr ) const;
 
@@ -108,7 +108,7 @@ namespace Component
         virtual void ComponentChanged( const ComponentBase* attr = NULL );
 
     protected:
-        // this is a callback called by elements being changed by procedurally generated UI (LunaProperties)
+        // this is a callback called by elements being changed by procedurally generated UI (EditorProperties)
         void ComponentChanged( const Reflect::ElementChangeArgs& args )
         {
             // call into the virtual prototype in case it gets overridden in a derived class
@@ -165,14 +165,14 @@ namespace Component
 
     public:
         // migrate legacy attributes
-        virtual bool ProcessComponent(Reflect::ElementPtr element, const tstring& fieldName) NOC_OVERRIDE;
+        virtual bool ProcessComponent(Reflect::ElementPtr element, const tstring& fieldName) HELIUM_OVERRIDE;
 
         // setup changed callback
-        virtual void PreSerialize() NOC_OVERRIDE;
-        virtual void PostDeserialize() NOC_OVERRIDE;
+        virtual void PreSerialize() HELIUM_OVERRIDE;
+        virtual void PostDeserialize() HELIUM_OVERRIDE;
 
         // copy all attributes from one collection to another
-        virtual void CopyTo(const Reflect::ElementPtr& destination) NOC_OVERRIDE;
+        virtual void CopyTo(const Reflect::ElementPtr& destination) HELIUM_OVERRIDE;
 
         // helper function for CopyTo
         bool CopyComponentTo( ComponentCollection& destCollection, const ComponentPtr& destAttrib, const ComponentPtr& srcAttrib );
@@ -190,5 +190,5 @@ namespace Component
         M_Component m_Components;
     };
 
-    typedef Nocturnal::SmartPtr<ComponentCollection> ComponentCollectionPtr;
+    typedef Helium::SmartPtr<ComponentCollection> ComponentCollectionPtr;
 }

@@ -20,13 +20,13 @@ namespace Inspect
     {
     }
   };
-  typedef Nocturnal::Signature< void, const KeyArgs& > KeySignature;
+  typedef Helium::Signature< void, const KeyArgs& > KeySignature;
 
 
   /////////////////////////////////////////////////////////////////////////////
   // Manages a list of keys.  Events are fired when keys are changed.
   // 
-  class APPLICATION_API KeyArray : public Nocturnal::RefCountBase< KeyArray >
+  class APPLICATION_API KeyArray : public Helium::RefCountBase< KeyArray >
   {
   private:
     V_KeyPtr m_Keys;
@@ -157,5 +157,5 @@ namespace Inspect
       m_KeyColorChanged.Remove( listener );
     }
   };
-  typedef Nocturnal::SmartPtr< KeyArray > KeyArrayPtr;
+  typedef Helium::SmartPtr< KeyArray > KeyArrayPtr;
 }

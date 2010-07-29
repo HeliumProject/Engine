@@ -12,7 +12,7 @@
 #include <algorithm>
 #include <sstream>
 
-using namespace Nocturnal;
+using namespace Helium;
 
 void Path::Init( const tchar* path )
 {
@@ -52,39 +52,39 @@ bool Path::operator<( const Path& rhs ) const
     return m_Path < rhs.m_Path;
 }
 
-Nocturnal::Path Path::operator+( const tchar* rhs ) const
+Helium::Path Path::operator+( const tchar* rhs ) const
 {
-    return Nocturnal::Path( Get() + rhs );
+    return Helium::Path( Get() + rhs );
 }
 
-Nocturnal::Path Path::operator+( const tstring& rhs ) const
+Helium::Path Path::operator+( const tstring& rhs ) const
 {
-    return Nocturnal::Path( Get() + rhs );
+    return Helium::Path( Get() + rhs );
 }
 
-Nocturnal::Path Path::operator+( const Nocturnal::Path& rhs ) const
+Helium::Path Path::operator+( const Helium::Path& rhs ) const
 {
     // you shouldn't use this on an absolute path
-    NOC_ASSERT( !rhs.IsAbsolute() );
+    HELIUM_ASSERT( !rhs.IsAbsolute() );
     return rhs.GetAbsolutePath( *this );
 }
 
-Nocturnal::Path& Path::operator+=( const tchar* rhs )
+Helium::Path& Path::operator+=( const tchar* rhs )
 {
     Set( Get() + rhs );
     return *this;
 }
 
-Nocturnal::Path& Path::operator+=( const tstring& rhs )
+Helium::Path& Path::operator+=( const tstring& rhs )
 {
     Set( Get() + rhs );
     return *this;
 }
 
-Nocturnal::Path& Path::operator+=( const Nocturnal::Path& rhs )
+Helium::Path& Path::operator+=( const Helium::Path& rhs )
 {
     // you shouldn't use this on an absolute path
-    NOC_ASSERT( !rhs.IsAbsolute() );
+    HELIUM_ASSERT( !rhs.IsAbsolute() );
     *this = rhs.GetAbsolutePath( *this );
     return *this;
 }
@@ -263,12 +263,12 @@ bool Path::Create() const
     return true;
 }
 
-bool Path::Copy( const Nocturnal::Path& target, bool overwrite ) const
+bool Path::Copy( const Helium::Path& target, bool overwrite ) const
 {
     return Platform::Copy( Native().c_str(), target.Native().c_str(), overwrite );
 }
 
-bool Path::Move( const Nocturnal::Path& target ) const 
+bool Path::Move( const Helium::Path& target ) const 
 {
     return Platform::Move( Native().c_str(), target.Native().c_str() );
 }
@@ -467,24 +467,24 @@ tstring Path::Normalized() const
 
 u64 Path::Hash() const
 {
-    return Nocturnal::MurmurHash2( m_Path );
+    return Helium::MurmurHash2( m_Path );
 }
 
 tstring Path::Signature()
 {
-    return Nocturnal::MD5( m_Path );
+    return Helium::MD5( m_Path );
 }
 
-Nocturnal::Path Path::GetAbsolutePath( const Nocturnal::Path& basisPath ) const
+Helium::Path Path::GetAbsolutePath( const Helium::Path& basisPath ) const
 {
-    NOC_ASSERT( !IsAbsolute() ); // shouldn't call this on an already-absolute path
+    HELIUM_ASSERT( !IsAbsolute() ); // shouldn't call this on an already-absolute path
 
     tstring newPathString;
     Platform::GetFullPath( tstring( basisPath.Directory() + m_Path ).c_str(), newPathString );
-    return Nocturnal::Path( newPathString );
+    return Helium::Path( newPathString );
 }
 
-Nocturnal::Path Path::GetRelativePath( const Nocturnal::Path& basisPath ) const
+Helium::Path Path::GetRelativePath( const Helium::Path& basisPath ) const
 {
     std::vector< tstring > targetDirectories = this->DirectoryAsVector();
     std::vector< tstring > baseDirectories = basisPath.DirectoryAsVector();
@@ -512,7 +512,7 @@ Nocturnal::Path Path::GetRelativePath( const Nocturnal::Path& basisPath ) const
     }
 
     newPathString += Filename();
-    return Nocturnal::Path( newPathString );
+    return Helium::Path( newPathString );
 }
 
 bool Path::Exists() const
@@ -549,7 +549,7 @@ const tchar* Path::c_str() const
 
 tstring Path::FileCRC() const
 {
-    u32 crc = Nocturnal::FileCrc32( m_Path.c_str() );
+    u32 crc = Helium::FileCrc32( m_Path.c_str() );
 
     tstringstream str;
     str << std::hex << std::uppercase << crc;
@@ -563,7 +563,7 @@ bool Path::VerifyFileCRC( const tstring& hash ) const
 
 tstring Path::FileMD5() const
 {
-    return Nocturnal::FileMD5( m_Path.c_str() );
+    return Helium::FileMD5( m_Path.c_str() );
 }
 
 bool Path::VerifyFileMD5( const tstring& hash ) const

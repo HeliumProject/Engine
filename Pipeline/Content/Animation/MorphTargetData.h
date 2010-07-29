@@ -15,7 +15,7 @@ namespace Content
   typedef std::map< tstring, u32 > M_TargetSetNameToId; // map target-set-name to target-set-id
   typedef std::map< u32, std::vector< u32 > > M_TargetSetIdToTargetIndex;   // map target-set-id to target-ids
 
-  class PIPELINE_API MorphTargetData : public Nocturnal::RefCountBase<MorphTargetData>
+  class PIPELINE_API MorphTargetData : public Helium::RefCountBase<MorphTargetData>
   {
   public:
     V_MorphTargetPtr            m_Targets;
@@ -25,7 +25,7 @@ namespace Content
     std::map< u32, u32 >                       m_TargetIndexToTargetSetId;
 
     // mapping of each target's TUID to its location in the list of targets
-    Nocturnal::HM_TUIDU32        m_TargetIdToTargetIndex;
+    Helium::HM_TUIDU32        m_TargetIdToTargetIndex;
 
 
     MorphTargetData()
@@ -33,11 +33,11 @@ namespace Content
     }
 
     void CollateMorphTargets( const V_Mesh& meshes );
-    u32 GetMorphTargetIndex( const Nocturnal::TUID& targetId ) const;
+    u32 GetMorphTargetIndex( const Helium::TUID& targetId ) const;
     u32 FindSetIDFromTargetIndex( const u32 targetIndex ) const;
     //void CopyMorphData( const MorphTargetData& source );
 
   };
-  typedef Nocturnal::SmartPtr< MorphTargetData > MorphTargetDataPtr;
+  typedef Helium::SmartPtr< MorphTargetData > MorphTargetDataPtr;
 
 }

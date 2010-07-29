@@ -29,8 +29,8 @@ using namespace TextureProcess;
 bool                    TextureProcess::g_PowerOfTwo            = false;
 float                   TextureProcess::g_DefaultScaleX         = 1.0f;
 float                   TextureProcess::g_DefaultScaleY         = 1.0f;
-Nocturnal::OutputColorFormat   TextureProcess::g_DefaultOutputFormat   = Nocturnal::OUTPUT_CF_DXT5;
-Nocturnal::PostMipImageFilter  TextureProcess::g_DefaultPostMipFilter  = Nocturnal::IMAGE_FILTER_NONE;
+Helium::OutputColorFormat   TextureProcess::g_DefaultOutputFormat   = Helium::OUTPUT_CF_DXT5;
+Helium::PostMipImageFilter  TextureProcess::g_DefaultPostMipFilter  = Helium::IMAGE_FILTER_NONE;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,21 +55,21 @@ bool TextureProcess::Bank::LoadImages()
     Log::Print( Log::Levels::Verbose, TXT( "[%d] : %s" ), c, filename.c_str());
 
     bool convert_to_linear = (*i)->m_is_normal_map ? false : true;
-    Nocturnal::Image* tex = Nocturnal::Image::LoadFile((*i)->m_texture_file.c_str(), convert_to_linear, NULL);
+    Helium::Image* tex = Helium::Image::LoadFile((*i)->m_texture_file.c_str(), convert_to_linear, NULL);
     if (tex)
     {
       // convert all input images to either RGBA 8 bit or RGBA floating point
       if (ColorFormatHDR( (*i)->m_output_format))
       {
-        tex->m_NativeFormat = Nocturnal::CF_RGBAFLOATMAP;
+        tex->m_NativeFormat = Helium::CF_RGBAFLOATMAP;
       }
       else
       {
-        tex->m_NativeFormat = Nocturnal::CF_ARGB8888;
+        tex->m_NativeFormat = Helium::CF_ARGB8888;
       }
 
       tchar* type[] = { TXT( "2D TEXTURE" ), TXT( "CUBE MAP") , TXT( "VOLUME TEXTURE" ) };
-      if (tex->Type()==Nocturnal::Image::VOLUME)
+      if (tex->Type()==Helium::Image::VOLUME)
       {
         Log::Print( Log::Levels::Verbose, TXT( "%s %d x %d x %d\n" ),type[tex->Type()],tex->m_Width,tex->m_Height,tex->m_Depth);
       }
@@ -120,10 +120,10 @@ bool TextureProcess::Bank::AdjustImages()
 
       if ( !IsOne( (*i)->m_relscale_x ) || !IsOne( (*i)->m_relscale_y ) )
       {
-        Nocturnal::Image* new_tex = (*i)->m_texture->RelativeScaleImage((*i)->m_relscale_x, (*i)->m_relscale_y, (*i)->m_texture->m_NativeFormat, Nocturnal::MIP_FILTER_CUBIC);
+        Helium::Image* new_tex = (*i)->m_texture->RelativeScaleImage((*i)->m_relscale_x, (*i)->m_relscale_y, (*i)->m_texture->m_NativeFormat, Helium::MIP_FILTER_CUBIC);
         if (new_tex)
         {
-          throw Nocturnal::Exception( TXT( "Failed to rescale, aborting" ) );
+          throw Helium::Exception( TXT( "Failed to rescale, aborting" ) );
         }
         delete (*i)->m_texture;
         (*i)->m_texture = new_tex;
@@ -142,10 +142,10 @@ bool TextureProcess::Bank::AdjustImages()
         // this texture is not a power of 2 so rescale it to fix it
         Log::Warning( TXT( "Rescaling texture '%s', it is not a power of 2 (%d x %d)\n" ),(*i)->m_texture_file.c_str(),(*i)->m_texture->m_Width,(*i)->m_texture->m_Height);
 
-        Nocturnal::Image* new_tex = (*i)->m_texture->ScaleUpNextPowerOfTwo((*i)->m_texture->m_NativeFormat,Nocturnal::MIP_FILTER_CUBIC);
+        Helium::Image* new_tex = (*i)->m_texture->ScaleUpNextPowerOfTwo((*i)->m_texture->m_NativeFormat,Helium::MIP_FILTER_CUBIC);
         if (!new_tex)
         {
-          throw Nocturnal::Exception( TXT( "Failed to rescale, aborting" ) );
+          throw Helium::Exception( TXT( "Failed to rescale, aborting" ) );
         }
         delete (*i)->m_texture;
         (*i)->m_texture = new_tex;
@@ -156,7 +156,7 @@ bool TextureProcess::Bank::AdjustImages()
     {
       tchar buf[120];
       _stprintf(buf, TXT( "Image %s has no pixel data, file may be missing or corrupted" ), (*i)->m_texture_file.c_str());
-      throw Nocturnal::Exception(buf);
+      throw Helium::Exception(buf);
     }
   }
 
@@ -180,7 +180,7 @@ bool TextureProcess::Bank::CompressImages()
   {
     if ((*i)->m_texture)
     {
-      Nocturnal::MipGenOptions m;
+      Helium::MipGenOptions m;
       if ( (*i)->m_force_single_mip_level || !Math::IsPowerOfTwo((*i)->m_texture->m_Width) || !Math::IsPowerOfTwo((*i)->m_texture->m_Height) )
       {
         // NP2 textures get only 1 mip level
@@ -192,11 +192,11 @@ bool TextureProcess::Bank::CompressImages()
       m.m_PostFilter    = (*i)->m_post_filter;
 
       // generate mipset
-      Nocturnal::MipSet* mips = NULL;
+      Helium::MipSet* mips = NULL;
       if ( (*i)->m_is_normal_map )
       {
         // does a clone if sizes are the same
-        Nocturnal::Image* nt = (*i)->m_texture->ScaleImage((*i)->m_texture->m_Width, (*i)->m_texture->m_Height, (*i)->m_texture->m_NativeFormat, m.m_Filter);
+        Helium::Image* nt = (*i)->m_texture->ScaleImage((*i)->m_texture->m_Width, (*i)->m_texture->m_Height, (*i)->m_texture->m_NativeFormat, m.m_Filter);
 
         nt->PrepareFor2ChannelNormalMap((*i)->m_is_detail_normal_map, (*i)->m_is_detail_map_only);
 
@@ -215,7 +215,7 @@ bool TextureProcess::Bank::CompressImages()
 
       if (!mips)
       {
-        throw Nocturnal::Exception( TXT( "Failed to generate mips, aborting" ) );
+        throw Helium::Exception( TXT( "Failed to generate mips, aborting" ) );
       }
 
       u32 size = 0;

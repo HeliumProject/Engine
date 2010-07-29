@@ -78,19 +78,19 @@ namespace Inspect
     virtual bool Process(const tstring& key, const tstring& value);
 
   public:
-    virtual wxWindow* GetContextWindow() NOC_OVERRIDE;
+    virtual wxWindow* GetContextWindow() HELIUM_OVERRIDE;
 
-    virtual const wxWindow* GetContextWindow() const NOC_OVERRIDE;
+    virtual const wxWindow* GetContextWindow() const HELIUM_OVERRIDE;
 
     // cleanup
-    virtual void Clear() NOC_OVERRIDE;
+    virtual void Clear() HELIUM_OVERRIDE;
     
     // init
-    virtual void Realize(Container* parent) NOC_OVERRIDE;
+    virtual void Realize(Container* parent) HELIUM_OVERRIDE;
     
-    virtual void UnRealize() NOC_OVERRIDE;
+    virtual void UnRealize() HELIUM_OVERRIDE;
 
-    virtual void SetEnabled(bool enabled) NOC_OVERRIDE;
+    virtual void SetEnabled(bool enabled) HELIUM_OVERRIDE;
     
     void RefreshControls();
 
@@ -153,6 +153,6 @@ namespace Inspect
     friend class APPLICATION_API Canvas;
   };
 
-  typedef Nocturnal::SmartPtr<Panel> PanelPtr;
+  typedef Helium::SmartPtr<Panel> PanelPtr;
   typedef std::vector<Panel*> V_Panel;
 }

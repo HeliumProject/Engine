@@ -13,7 +13,7 @@
 #include "Foundation/File/Path.h"
 
 
-namespace Nocturnal
+namespace Helium
 {
 
 #if wxUSE_DIRDLG || wxUSE_FILEDLG

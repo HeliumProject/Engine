@@ -25,11 +25,11 @@ bool SimpleSerializer<T>::IsCompact() const
 }
 
 template <class T>
-void SimpleSerializer<T>::ConnectData(Nocturnal::HybridPtr<void> data)
+void SimpleSerializer<T>::ConnectData(Helium::HybridPtr<void> data)
 {
     __super::ConnectData( data );
 
-    m_Data.Connect( Nocturnal::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
 template <class T>
@@ -82,11 +82,11 @@ void SimpleSerializer<T>::Serialize(Archive& archive) const
 }
 
 template <class T>
-void SimpleSerializer<T>::Serialize(const Nocturnal::BasicBufferPtr& buffer, const tchar* debugStr) const
+void SimpleSerializer<T>::Serialize(const Helium::BasicBufferPtr& buffer, const tchar* debugStr) const
 {
     T val = m_Data.Get();
 
-    Nocturnal::Swizzle( val, buffer->GetByteOrder() != Nocturnal::ByteOrders::LittleEndian );
+    Helium::Swizzle( val, buffer->GetByteOrder() != Helium::ByteOrders::LittleEndian );
 
     buffer->AddBuffer( (const u8*)&val, sizeof(T), debugStr );
 }
@@ -377,8 +377,8 @@ template SimpleSerializer<u64>;
 template SimpleSerializer<i64>;
 template SimpleSerializer<f32>;
 template SimpleSerializer<f64>;
-template SimpleSerializer<Nocturnal::GUID>;
-template SimpleSerializer<Nocturnal::TUID>;
+template SimpleSerializer<Helium::GUID>;
+template SimpleSerializer<Helium::TUID>;
 
 template SimpleSerializer<Math::Vector2>;
 template SimpleSerializer<Math::Vector3>;

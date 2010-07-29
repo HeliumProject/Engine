@@ -73,8 +73,8 @@ void Enumeration::AddElement(u32 value, const tstring& name, tstring label)
         label = name;
     }
 
-    NOC_ASSERT(m_ElementsByName.find(name) == m_ElementsByName.end());
-    NOC_ASSERT(m_ElementsByLabel.find(label) == m_ElementsByLabel.end());
+    HELIUM_ASSERT(m_ElementsByName.find(name) == m_ElementsByName.end());
+    HELIUM_ASSERT(m_ElementsByLabel.find(label) == m_ElementsByLabel.end());
 
     EnumerationElementPtr elem = EnumerationElement::Create(value, name, label);
 
@@ -122,7 +122,7 @@ bool Enumeration::GetBitfieldValue(const tstring& str, u32& value) const
 {
     if ( str.length() >= 1024 )
     {
-        NOC_BREAK();
+        HELIUM_BREAK();
         return false;
     }
 

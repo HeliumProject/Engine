@@ -14,7 +14,7 @@
 #include "TreeWndCtrlItem.h"
 #include "TreeWndCtrl.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 // ----------------------------------------------------------------------------
 // TreeWndCtrlItem

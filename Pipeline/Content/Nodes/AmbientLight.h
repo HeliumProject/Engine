@@ -32,7 +32,7 @@ namespace Content
       Light::m_CastShadows = false;
     }
 
-    AmbientLight (Nocturnal::TUID &id)
+    AmbientLight (Helium::TUID &id)
       : Light (id)
       , m_Samples( 16 )
       , m_SampleDistance( 500.0f )
@@ -49,6 +49,6 @@ namespace Content
 
   };
 
-  typedef Nocturnal::SmartPtr<AmbientLight> AmbientLightPtr;
+  typedef Helium::SmartPtr<AmbientLight> AmbientLightPtr;
   typedef std::vector<AmbientLightPtr> V_AmbientLight;
 }

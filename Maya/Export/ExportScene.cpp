@@ -10,7 +10,7 @@
 
 using namespace MayaContent;
 using namespace Maya;
-using namespace Nocturnal;
+using namespace Helium;
 
 static void AddChildrenToSet( MObjectSet& objectSet, MObject object )
 {
@@ -56,8 +56,8 @@ void ExportScene::ExportData()
 
     m_Spool.reserve( m_ContentScene.m_DependencyNodes.size() );
 
-    std::map< Nocturnal::TUID, Content::SceneNodePtr >::iterator itr = m_ContentScene.m_DependencyNodes.begin();
-    std::map< Nocturnal::TUID, Content::SceneNodePtr >::iterator end = m_ContentScene.m_DependencyNodes.end();
+    std::map< Helium::TUID, Content::SceneNodePtr >::iterator itr = m_ContentScene.m_DependencyNodes.begin();
+    std::map< Helium::TUID, Content::SceneNodePtr >::iterator end = m_ContentScene.m_DependencyNodes.end();
     for( ; itr != end; ++itr )
     {
         Content::SceneNode* sceneNode = itr->second;
@@ -76,7 +76,7 @@ void ExportScene::ExportNode( Content::SceneNode* node, S_ElementDumbPtr& duplic
 
     if ( hierarchyNode && hierarchyNode->m_ParentID != TUID::Null )
     {
-        std::map< Nocturnal::TUID, Content::SceneNodePtr >::const_iterator parentItr = m_ContentScene.m_DependencyNodes.find( hierarchyNode->m_ParentID );
+        std::map< Helium::TUID, Content::SceneNodePtr >::const_iterator parentItr = m_ContentScene.m_DependencyNodes.find( hierarchyNode->m_ParentID );
         if ( parentItr != m_ContentScene.m_DependencyNodes.end() )
         {
             ExportNode( parentItr->second, duplicateCheck );

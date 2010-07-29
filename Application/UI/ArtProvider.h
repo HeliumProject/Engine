@@ -13,7 +13,7 @@
 #include "Platform/Compiler.h"
 #include "Platform/Types.h"
 
-namespace Nocturnal
+namespace Helium
 {
     namespace ArtIDs
     {
@@ -58,7 +58,7 @@ namespace Nocturnal
         virtual ~ArtProvider();
 
     protected:
-        virtual wxBitmap CreateBitmap( const wxArtID& artId, const wxArtClient& artClient, const wxSize& size ) NOC_OVERRIDE;
+        virtual wxBitmap CreateBitmap( const wxArtID& artId, const wxArtClient& artClient, const wxSize& size ) HELIUM_OVERRIDE;
     
     protected:
         // delayed initialization

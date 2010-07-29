@@ -7,7 +7,7 @@
 
 #include <wx/cmndata.h>
 
-namespace Nocturnal
+namespace Helium
 {
   /////////////////////////////////////////////////////////////////////////////
   // Helper functions for saving/loading custom colors that are shown in

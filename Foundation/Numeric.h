@@ -5,7 +5,7 @@
 
 #include "API.h"
 
-namespace Nocturnal
+namespace Helium
 {
     template< class T >
     struct NumericLimits
@@ -101,7 +101,7 @@ namespace Nocturnal
     template< class S, class D >
     inline bool RangeCast( const S source, D& dest, bool clamp = false )
     {
-        NOC_COMPILE_ASSERT( false );
+        HELIUM_COMPILE_ASSERT( false );
         return false;
     }
 

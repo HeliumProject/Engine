@@ -36,8 +36,8 @@ namespace Inspect
   // Events
   //
 
-  typedef Nocturnal::Signature< void, class Button* > ActionSignature;
-  typedef Nocturnal::Signature< void, class Control* > ControlSignature;
+  typedef Helium::Signature< void, class Button* > ActionSignature;
+  typedef Helium::Signature< void, class Control* > ControlSignature;
 
   struct ChangeArgs
   {
@@ -49,7 +49,7 @@ namespace Inspect
 
     }
   };
-  typedef Nocturnal::Signature<void, const ChangeArgs&> ChangedSignature;
+  typedef Helium::Signature<void, const ChangeArgs&> ChangedSignature;
 
   struct ChangingArgs : public ChangeArgs
   {
@@ -64,7 +64,7 @@ namespace Inspect
 
     }
   };
-  typedef Nocturnal::Signature<bool, const ChangingArgs&> ChangingSignature;
+  typedef Helium::Signature<bool, const ChangingArgs&> ChangingSignature;
 
 
   //
@@ -72,20 +72,20 @@ namespace Inspect
   //
 
   class Control;
-  typedef Nocturnal::SmartPtr<Control> ControlPtr;
+  typedef Helium::SmartPtr<Control> ControlPtr;
 
   class Container;
-  typedef Nocturnal::SmartPtr<Container> ContainerPtr;
+  typedef Helium::SmartPtr<Container> ContainerPtr;
 
   class Group;
-  typedef Nocturnal::SmartPtr<Group> GroupPtr;
+  typedef Helium::SmartPtr<Group> GroupPtr;
 
   class Panel;
-  typedef Nocturnal::SmartPtr<Panel> PanelPtr;
+  typedef Helium::SmartPtr<Panel> PanelPtr;
 
   class Canvas;
-  typedef Nocturnal::SmartPtr<Canvas> CanvasPtr;
+  typedef Helium::SmartPtr<Canvas> CanvasPtr;
 
   class Interpreter;
-  typedef Nocturnal::SmartPtr<Interpreter> InterpreterPtr;
+  typedef Helium::SmartPtr<Interpreter> InterpreterPtr;
 }

@@ -10,7 +10,7 @@
 #include <wx/menu.h>
 #include <wx/button.h>
 
-namespace Nocturnal
+namespace Helium
 {
     /// @class MenuButton
     /// @brief adds on to the Button class to add menu functionality through mouse interaction
@@ -104,4 +104,4 @@ namespace Nocturnal
 
     };
 
-} // namespace Nocturnal
+} // namespace Helium

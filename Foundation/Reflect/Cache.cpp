@@ -5,7 +5,7 @@
 
 #include <memory>
 
-using Nocturnal::Insert; 
+using Helium::Insert; 
 using namespace Reflect;
 
 // uncomment to disable caching completely
@@ -22,7 +22,7 @@ static int g_MissCount = 0;
 static void GetTypeName(int type, tstring& name)
 {
     const Class* typeInfo = Registry::GetInstance()->GetClass( type );
-    NOC_ASSERT( typeInfo );
+    HELIUM_ASSERT( typeInfo );
 
     name = typeInfo->m_ShortName;
 }
@@ -31,7 +31,7 @@ static void CreateInstance(int type, ElementPtr& element)
 {
     ObjectPtr object = Registry::GetInstance()->CreateInstance(type);
 
-    NOC_ASSERT( object.ReferencesObject() );
+    HELIUM_ASSERT( object.ReferencesObject() );
 
     element = AssertCast<Element>( object );
 
@@ -114,7 +114,7 @@ void Cache::Free(ElementPtr element)
 
         Insert<H_Element>::Result result = m_Elements.insert(H_Element::value_type (element->GetType(), stack));
 
-        NOC_ASSERT( result.second );
+        HELIUM_ASSERT( result.second );
     }
     else
     {

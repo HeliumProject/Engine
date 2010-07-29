@@ -3,7 +3,7 @@
 #include "Platform/Exception.h"
 #include "Foundation/Memory/SmartPtr.h"
 
-namespace Nocturnal
+namespace Helium
 {
     //
     // Property API types
@@ -31,7 +31,7 @@ namespace Nocturnal
     }
 
     // exception class used for bad situations
-    class PropertyException : public Nocturnal::Exception
+    class PropertyException : public Helium::Exception
     {
     public:
         PropertyException( const tchar *msgFormat, ... )
@@ -48,11 +48,11 @@ namespace Nocturnal
 
 
     //
-    // Property NOC_ABSTRACT base class exposes the ability to read/write data of a type
+    // Property HELIUM_ABSTRACT base class exposes the ability to read/write data of a type
     //
 
     template <class V>
-    class Property NOC_ABSTRACT : public Nocturnal::RefCountBase< Property<V> >
+    class Property HELIUM_ABSTRACT : public Helium::RefCountBase< Property<V> >
     {
     public:
         virtual V Get() const = 0;

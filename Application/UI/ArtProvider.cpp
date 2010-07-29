@@ -12,8 +12,8 @@
 #include <wx/image.h>
 #include <wx/stdpaths.h>
 
-using namespace Nocturnal;
-using Nocturnal::Insert; 
+using namespace Helium;
+using Helium::Insert; 
 
 wxSize ArtProvider::DefaultImageSize( 16, 16 );
 
@@ -23,7 +23,7 @@ wxSize ArtProvider::DefaultImageSize( 16, 16 );
 //
 // Copied from wxWidgets src\common\artprov.cpp
 ///////////////////////////////////////////////////////////////////////////////
-namespace Nocturnal
+namespace Helium
 {
     WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxBitmap, ArtProviderBitmapsHash, class );
 
@@ -89,7 +89,7 @@ ArtProvider::~ArtProvider()
 
 void ArtProvider::Create()
 {
-    NOC_ASSERT(!m_ArtProviderCache);
+    HELIUM_ASSERT(!m_ArtProviderCache);
 
     m_ArtProviderCache = new ArtProviderCache();
     m_ArtProviderCache->Clear();
@@ -145,32 +145,32 @@ void ArtProvider::Create()
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_UNDO, TXT( "actions/undo.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_WARNING, TXT( "actions/messagebox_warning.png" ) ) );
 
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Unknown, TXT( "nocturnal/unknown.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Null, TXT( "" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::Unknown, TXT( "nocturnal/unknown.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::Null, TXT( "" ) ) );
 
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Open, TXT( "filesystems/folder_open.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Save, TXT( "actions/filesave.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::SaveAs, TXT( "actions/filesaveas.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::SaveAll, TXT( "actions/save_all.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::Open, TXT( "filesystems/folder_open.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::Save, TXT( "actions/filesave.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::SaveAs, TXT( "actions/filesaveas.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::SaveAll, TXT( "actions/save_all.png" ) ) );
 
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Cut, TXT( "actions/editcut.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Copy, TXT( "actions/editcopy.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Paste, TXT( "actions/editpaste.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::Cut, TXT( "actions/editcut.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::Copy, TXT( "actions/editcopy.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::Paste, TXT( "actions/editpaste.png" ) ) );
 
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::SelectAll, TXT( "nocturnal/unknown.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::SelectAll, TXT( "nocturnal/unknown.png" ) ) );
 
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Undo, TXT( "actions/undo.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Redo, TXT( "actions/redo.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::Undo, TXT( "actions/undo.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::Redo, TXT( "actions/redo.png" ) ) );
 
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Back, TXT( "actions/previous.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Forward, TXT( "actions/forward.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::Back, TXT( "actions/previous.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::Forward, TXT( "actions/forward.png" ) ) );
 
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Options, TXT( "actions/messagebox_info.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::Options, TXT( "actions/messagebox_info.png" ) ) );
 
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::RCSCheckedOutByMe, TXT( "actions/apply.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::RCSCheckedOutBySomeoneElse, TXT( "actions/lock.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::RCSOutOfDate, TXT( "actions/messagebox_warning.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::RCSUnknown, TXT( "nocturnal/unknown.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::RCSCheckedOutByMe, TXT( "actions/apply.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::RCSCheckedOutBySomeoneElse, TXT( "actions/lock.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::RCSOutOfDate, TXT( "actions/messagebox_warning.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::RCSUnknown, TXT( "nocturnal/unknown.png" ) ) );
 }
 
 wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& artClient, const wxSize& size )
@@ -188,7 +188,7 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
         M_ArtIDToFilename::iterator findFilename = m_ArtIDToFilename.find( artId );
         if ( findFilename == m_ArtIDToFilename.end() || findFilename->second.empty() )
         {
-            findFilename = m_ArtIDToFilename.find( Nocturnal::ArtIDs::Unknown );
+            findFilename = m_ArtIDToFilename.find( Helium::ArtIDs::Unknown );
         }
 
         if ( findFilename != m_ArtIDToFilename.end() && !findFilename->second.empty() )
@@ -198,15 +198,15 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
             int width = size.GetWidth() > 0 ? size.GetWidth() : DefaultImageSize.GetWidth();
             int height = size.GetHeight() > 0 ? size.GetHeight() : DefaultImageSize.GetHeight();
 
-            Nocturnal::Path exePath( wxStandardPaths::Get().GetExecutablePath().c_str() );
+            Helium::Path exePath( wxStandardPaths::Get().GetExecutablePath().c_str() );
 
             tstringstream strm;
             strm << exePath.Directory() << TXT( "Icons/" ) << width << TXT( 'x' ) << height << TXT( '/' ) << icon;
-            Nocturnal::Path imageFile( strm.str() );
+            Helium::Path imageFile( strm.str() );
 
             if ( !imageFile.Exists() || imageFile.Size() <= 0 )
             {
-                NOC_BREAK();
+                HELIUM_BREAK();
             }
 
             wxImage image( imageFile.Get().c_str(), wxBITMAP_TYPE_PNG );

@@ -3,8 +3,8 @@
 #include "Foundation/CommandLine/Processor.h"
 #include "Foundation/Log.h"
 
-using namespace Nocturnal;
-using namespace Nocturnal::CommandLine;
+using namespace Helium;
+using namespace Helium::CommandLine;
 
 Help::Help( Processor* owner )
 : Command( TXT( "help" ), TXT( "<COMMAND>" ), TXT( "Displays the help for the command (or application)" ) )
@@ -19,11 +19,11 @@ Help::~Help()
 
 bool Help::Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error )
 {
-	NOC_ASSERT( m_Owner );
+	HELIUM_ASSERT( m_Owner );
 
 	if ( argsBegin == argsEnd )
 	{
-        Log::Print( TXT( "\nPrinting help for Luna...\n" ) );
+        Log::Print( TXT( "\nPrinting help for Editor...\n" ) );
         Log::Print( m_Owner->Help().c_str() );
         Log::Print( TXT( "\n" ) );
 		return true;

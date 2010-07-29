@@ -16,7 +16,7 @@ void Entity::EnumerateClass( Reflect::Compositor<Entity>& comp )
     comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.entity.*" );
 }
 
-void Entity::GatherSearchableProperties( Nocturnal::SearchableProperties* properties ) const
+void Entity::GatherSearchableProperties( Helium::SearchableProperties* properties ) const
 {
     __super::GatherSearchableProperties( properties );
 }

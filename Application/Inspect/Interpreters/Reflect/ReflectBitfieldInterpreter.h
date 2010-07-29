@@ -10,9 +10,9 @@ namespace Inspect
   public:
     ReflectBitfieldInterpreter( Container* container );
 
-    virtual void InterpretField( const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent ) NOC_OVERRIDE;
+    virtual void InterpretField( const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent ) HELIUM_OVERRIDE;
   };
 
-  typedef Nocturnal::SmartPtr<ReflectBitfieldInterpreter> ReflectBitfieldInterpreterPtr;
+  typedef Helium::SmartPtr<ReflectBitfieldInterpreter> ReflectBitfieldInterpreterPtr;
   typedef std::vector< ReflectBitfieldInterpreterPtr > V_ReflectBitfieldInterpreterSmartPtr;
 }

@@ -14,11 +14,11 @@ ElementArraySerializer::~ElementArraySerializer()
 
 }
 
-void ElementArraySerializer::ConnectData(Nocturnal::HybridPtr<void> data)
+void ElementArraySerializer::ConnectData(Helium::HybridPtr<void> data)
 {
     __super::ConnectData( data );
 
-    m_Data.Connect( Nocturnal::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
 size_t ElementArraySerializer::GetSize() const 

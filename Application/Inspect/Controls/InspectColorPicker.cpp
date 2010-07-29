@@ -14,14 +14,14 @@ using namespace Inspect;
 ///////////////////////////////////////////////////////////////////////////////
 // Class wrapping up the wxColourPickerCtrl.
 // 
-class StdColorPicker : public Nocturnal::ColorPicker
+class StdColorPicker : public Helium::ColorPicker
 {
 public:
   Inspect::ColorPicker* m_ColorPicker;
 
   // Constructor
   StdColorPicker( wxWindow* parent, Inspect::ColorPicker* colorPicker )
-    : Nocturnal::ColorPicker( parent, wxID_ANY )
+    : Helium::ColorPicker( parent, wxID_ANY )
     , m_ColorPicker( colorPicker )
   {
     EnableAutoSaveCustomColors();
@@ -38,7 +38,7 @@ private:
 };
 
 // Event table for ColorPicker
-BEGIN_EVENT_TABLE( StdColorPicker, Nocturnal::ColorPicker )
+BEGIN_EVENT_TABLE( StdColorPicker, Helium::ColorPicker )
 EVT_COLOURPICKER_CHANGED( wxID_ANY, StdColorPicker::OnChanged )
 END_EVENT_TABLE()
 
@@ -166,7 +166,7 @@ void ColorPicker::UseAlpha( bool alpha )
   }
   else
   {
-    NOC_BREAK();
+    HELIUM_BREAK();
   }
 }
 
@@ -187,7 +187,7 @@ void ColorPicker::SetColor3( const Math::Color3& color )
   }
   else
   {
-    NOC_BREAK();
+    HELIUM_BREAK();
   }
 }
 
@@ -205,7 +205,7 @@ const Math::Color3& ColorPicker::GetColor3() const
   }
   else
   {
-    NOC_BREAK();
+    HELIUM_BREAK();
   }
 
   return m_Color3;
@@ -228,7 +228,7 @@ void ColorPicker::SetColor4( const Math::Color4& color )
   }
   else
   {
-    NOC_BREAK();
+    HELIUM_BREAK();
   }
 }
 
@@ -246,7 +246,7 @@ const Math::Color4& ColorPicker::GetColor4() const
   }
   else
   {
-    NOC_BREAK();
+    HELIUM_BREAK();
   }
 
   return m_Color4;

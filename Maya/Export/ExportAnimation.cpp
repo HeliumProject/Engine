@@ -7,7 +7,7 @@
 
 using namespace Content;
 using namespace MayaContent;
-using namespace Nocturnal;
+using namespace Helium;
 
 #define g_kMinTargetWeight  0.01f // min target contribution
 
@@ -102,7 +102,7 @@ void ExportAnimationClip::GatherBlendShapeDeformers()
   {
     MObject& blendShapeObj = blendShapeItr.item();
 
-    NOC_ASSERT( blendShapeObj.apiType() == MFn::kBlendShape );
+    HELIUM_ASSERT( blendShapeObj.apiType() == MFn::kBlendShape );
 
     morpherFn.setObject( blendShapeObj );
     tstring morpherFnName = morpherFn.name().asTChar();
@@ -111,7 +111,7 @@ void ExportAnimationClip::GatherBlendShapeDeformers()
     MObjectArray baseObjects;
 
     status = morpherFn.getBaseObjects( baseObjects );
-    NOC_ASSERT( status );
+    HELIUM_ASSERT( status );
 
     if ( baseObjects.length() == 0 )
     {
@@ -153,7 +153,7 @@ void ExportAnimationClip::GatherBlendShapeDeformers()
       MObjectArray targets;
 
       status = morpherFn.getTargets( exportBlendShapeDeformer.m_BaseObject, exportDeformationWeight.m_WeightId, targets);
-      NOC_ASSERT(status);
+      HELIUM_ASSERT(status);
 
       if ( targets.length() < 1 )
       {
@@ -263,7 +263,7 @@ void ExportAnimationClip::SampleOneFramesMorphTargetWeights( const MTime& curren
       u32 weightId = exportDeformationWeight.m_WeightId;
 
       f32 weight   = morpherFn.weight( weightId, &status );
-      NOC_ASSERT(status);
+      HELIUM_ASSERT(status);
 
       if ( ABS(weight) <= g_kMinTargetWeight )
       {

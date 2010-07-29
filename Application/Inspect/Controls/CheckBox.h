@@ -22,9 +22,9 @@ namespace Inspect
     virtual void SetChecked(bool checked);
 
   private:
-    virtual void SetDefaultAppearance( bool def ) NOC_OVERRIDE;
+    virtual void SetDefaultAppearance( bool def ) HELIUM_OVERRIDE;
     void UpdateUI( bool state );
   };
 
-  typedef Nocturnal::SmartPtr<CheckBox> CheckBoxPtr;
+  typedef Helium::SmartPtr<CheckBox> CheckBoxPtr;
 }

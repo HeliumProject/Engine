@@ -58,8 +58,8 @@ namespace Reflect
     // Binary Archive Class
     //
 
-    typedef std::map< int, Nocturnal::SmartPtr<const Class> > M_IDToClass;
-    typedef std::map< tstring, Nocturnal::SmartPtr<const Class> > M_StrToClass;
+    typedef std::map< int, Helium::SmartPtr<const Class> > M_IDToClass;
+    typedef std::map< tstring, Helium::SmartPtr<const Class> > M_StrToClass;
 
     class FOUNDATION_API ArchiveBinary : public Archive
     {

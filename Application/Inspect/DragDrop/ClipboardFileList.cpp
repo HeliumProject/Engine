@@ -50,8 +50,8 @@ ClipboardFileList::~ClipboardFileList()
 bool ClipboardFileList::AddFilePath( const tstring& file )
 {
   tstring clean = file;
-  Nocturnal::Path::Normalize( clean );
-  Nocturnal::Insert< std::set< tstring > >::Result inserted = m_Files.insert( clean );
+  Helium::Path::Normalize( clean );
+  Helium::Insert< std::set< tstring > >::Result inserted = m_Files.insert( clean );
   m_IsDirty = inserted.second;
   return m_IsDirty;
 }
@@ -77,6 +77,6 @@ bool ClipboardFileList::Merge( const ReflectClipboardData* source )
   //ClipboardFileList* src = Reflect::AssertCast< ClipboardFileList >( source );
 
   // Finish this function
-  NOC_BREAK();
+  HELIUM_BREAK();
   return false;
 }

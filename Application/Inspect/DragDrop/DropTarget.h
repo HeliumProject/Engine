@@ -30,10 +30,10 @@ namespace Inspect
     }
   };
 
-  typedef Nocturnal::Signature< void, const DragArgs& > DragEnterCallback;
-  typedef Nocturnal::Signature< wxDragResult, const DragArgs& > DragOverCallback;
-  typedef Nocturnal::Signature< void, Nocturnal::Void > DragLeaveCallback;
-  typedef Nocturnal::Signature< wxDragResult, const DragArgs& > DropCallback;
+  typedef Helium::Signature< void, const DragArgs& > DragEnterCallback;
+  typedef Helium::Signature< wxDragResult, const DragArgs& > DragOverCallback;
+  typedef Helium::Signature< void, Helium::Void > DragLeaveCallback;
+  typedef Helium::Signature< wxDragResult, const DragArgs& > DropCallback;
 
   /////////////////////////////////////////////////////////////////////////////
   // Class managing callbacks for when drag/drop operations occur.
@@ -55,9 +55,9 @@ namespace Inspect
     void SetDragLeaveCallback( const DragLeaveCallback::Delegate& func );
     void SetDropCallback( const DropCallback::Delegate& func );
 
-    virtual wxDragResult OnEnter( wxCoord x, wxCoord y, wxDragResult def ) NOC_OVERRIDE;
-    virtual wxDragResult OnDragOver( wxCoord x, wxCoord y, wxDragResult def ) NOC_OVERRIDE;
-    virtual void OnLeave() NOC_OVERRIDE;
-    virtual wxDragResult OnData( wxCoord x, wxCoord y, wxDragResult def ) NOC_OVERRIDE;
+    virtual wxDragResult OnEnter( wxCoord x, wxCoord y, wxDragResult def ) HELIUM_OVERRIDE;
+    virtual wxDragResult OnDragOver( wxCoord x, wxCoord y, wxDragResult def ) HELIUM_OVERRIDE;
+    virtual void OnLeave() HELIUM_OVERRIDE;
+    virtual wxDragResult OnData( wxCoord x, wxCoord y, wxDragResult def ) HELIUM_OVERRIDE;
   };
 }

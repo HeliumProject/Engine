@@ -15,7 +15,7 @@ namespace Content
 
     }
 
-    Point( const Nocturnal::TUID& id, const Math::Vector3& pos = Math::Vector3() )
+    Point( const Helium::TUID& id, const Math::Vector3& pos = Math::Vector3() )
       : HierarchyNode( id )
       , m_Position( pos )
     {
@@ -27,5 +27,5 @@ namespace Content
     static void EnumerateClass( Reflect::Compositor<Point>& comp );
   };
 
-  typedef Nocturnal::SmartPtr<Point> PointPtr;
+  typedef Helium::SmartPtr<Point> PointPtr;
 }

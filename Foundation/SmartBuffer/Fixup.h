@@ -8,9 +8,9 @@
 
 #include "SmartBuffer.h"
 
-namespace Nocturnal
+namespace Helium
 {
-    typedef Nocturnal::SmartPtr<class Fixup> FixupPtr;
+    typedef Helium::SmartPtr<class Fixup> FixupPtr;
 
     namespace FixupTypes
     {
@@ -25,7 +25,7 @@ namespace Nocturnal
     }
     typedef FixupTypes::FixupType FixupType;
 
-    class Fixup : public Nocturnal::RefCountBase<Fixup>
+    class Fixup : public Helium::RefCountBase<Fixup>
     {
     protected:
         Fixup();

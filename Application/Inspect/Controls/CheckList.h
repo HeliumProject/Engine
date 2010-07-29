@@ -22,13 +22,13 @@ namespace Inspect
   public:
     CheckList();
 
-    virtual void Realize( Container* parent ) NOC_OVERRIDE;
-    virtual void Read() NOC_OVERRIDE;
-    virtual bool Write() NOC_OVERRIDE;
+    virtual void Realize( Container* parent ) HELIUM_OVERRIDE;
+    virtual void Read() HELIUM_OVERRIDE;
+    virtual bool Write() HELIUM_OVERRIDE;
     virtual bool IsDefault() const;
 
   protected:
   };
 
-  typedef Nocturnal::SmartPtr<CheckList> CheckListPtr;
+  typedef Helium::SmartPtr<CheckList> CheckListPtr;
 }

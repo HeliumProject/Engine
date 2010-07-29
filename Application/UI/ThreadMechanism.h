@@ -8,7 +8,7 @@
 #include "Platform/Thread.h"
 
 
-namespace Nocturnal
+namespace Helium
 {
   //
   // Forwards
@@ -27,7 +27,7 @@ namespace Nocturnal
     {
     }
   };
-  typedef APPLICATION_API Nocturnal::Signature< void, const ThreadProcArgs& > ThreadProcSignature;
+  typedef APPLICATION_API Helium::Signature< void, const ThreadProcArgs& > ThreadProcSignature;
 
 
   /////////////////////////////////////////////////////////////////////////////
@@ -63,9 +63,9 @@ namespace Nocturnal
 
     // Uses wx events to callback to the main thread
     // Implement these callbaks to take special actions in the main thread
-    virtual void OnBeginThread( const Nocturnal::ThreadProcArgs& args );
-    virtual void OnUpdateThread( const Nocturnal::ThreadProcArgs& args );
-    virtual void OnEndThread( const Nocturnal::ThreadProcArgs& args );
+    virtual void OnBeginThread( const Helium::ThreadProcArgs& args );
+    virtual void OnUpdateThread( const Helium::ThreadProcArgs& args );
+    virtual void OnEndThread( const Helium::ThreadProcArgs& args );
 
   protected:
     bool             m_StopThread;
@@ -80,4 +80,4 @@ namespace Nocturnal
     friend class DummyThread;
   };
 
-} // namespace Nocturnal
+} // namespace Helium

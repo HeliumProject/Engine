@@ -20,7 +20,7 @@ SceneVisibility::SceneVisibility()
 
 NodeVisibilityPtr SceneVisibility::GetVisibility(tuid nodeId,tuid fallbackId)
 {
-  NOC_ASSERT(m_NodeDefaults); 
+  HELIUM_ASSERT(m_NodeDefaults); 
 
   M_TuidVisibility::iterator itr = m_NodeVisibility.find(nodeId); 
 
@@ -39,7 +39,7 @@ NodeVisibilityPtr SceneVisibility::GetVisibility(tuid nodeId,tuid fallbackId)
   }
 
   // check for a fallback
-  if(fallbackId != Nocturnal::TUID::Null)
+  if(fallbackId != Helium::TUID::Null)
   {
     itr = m_NodeVisibility.find(fallbackId); 
 

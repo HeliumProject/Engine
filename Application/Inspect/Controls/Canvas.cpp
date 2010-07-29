@@ -13,7 +13,7 @@ EVT_SIZE( CanvasStrip::OnSize )
 EVT_LEFT_DOWN( CanvasStrip::OnClick )
 END_EVENT_TABLE();
 
-BEGIN_EVENT_TABLE(CanvasWindow, Nocturnal::TreeWndCtrl)
+BEGIN_EVENT_TABLE(CanvasWindow, Helium::TreeWndCtrl)
 EVT_SHOW(CanvasWindow::OnShow)
 EVT_SIZE(CanvasWindow::OnSize)
 EVT_LEFT_DOWN(CanvasWindow::OnClick)
@@ -70,7 +70,7 @@ CanvasWindow::CanvasWindow(wxWindow *parent,
                            wxBitmap collapsedBitmap,
                            wxPen pen,
                            unsigned int clickTolerance)
-: Nocturnal::TreeWndCtrl(parent, winid, pos, size, wxALWAYS_SHOW_SB | style, name, treeStyle, columnSize, expandedBitmap, collapsedBitmap, pen, clickTolerance)
+: Helium::TreeWndCtrl(parent, winid, pos, size, wxALWAYS_SHOW_SB | style, name, treeStyle, columnSize, expandedBitmap, collapsedBitmap, pen, clickTolerance)
 , m_Canvas(NULL)
 {
   SetScrollRate(SCROLL_INCREMENT, SCROLL_INCREMENT);
@@ -230,7 +230,7 @@ void Canvas::RemoveControl(Control* control)
 {
   CanvasWindow* treeWndCtrl = GetControl();
   wxTreeItemId item = treeWndCtrl->FindItem( control->GetWindow() );
-  if ( item != Nocturnal::TreeWndCtrlItemIdInvalid )
+  if ( item != Helium::TreeWndCtrlItemIdInvalid )
   {
     treeWndCtrl->Delete( item );
   }
@@ -265,18 +265,18 @@ void Canvas::Realize(Container* parent)
 
     
   // the canvas must already be realized - this just realizes its children
-  NOC_ASSERT( m_Window != NULL );
+  HELIUM_ASSERT( m_Window != NULL );
   
   CanvasWindow* treeWndCtrl = GetControl();
   treeWndCtrl->SetColumnSize( 15 );
   if ( ( treeWndCtrl->GetStateImageList() == NULL ) && ( treeWndCtrl->GetImageList() == NULL ) )
   {
-    treeWndCtrl->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
-    treeWndCtrl->SetStateImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
+    treeWndCtrl->SetImageList( Helium::GlobalFileIconsTable().GetSmallImageList() );
+    treeWndCtrl->SetStateImageList( Helium::GlobalFileIconsTable().GetSmallImageList() );
   }
 
   wxTreeItemId root = treeWndCtrl->GetRootItem();
-  if ( root == Nocturnal::TreeWndCtrlItemIdInvalid )
+  if ( root == Helium::TreeWndCtrlItemIdInvalid )
   {
     root = treeWndCtrl->AddRoot( TXT( "Canvas Root" ) );
   }

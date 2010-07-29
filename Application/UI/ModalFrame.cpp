@@ -6,7 +6,7 @@
 #include <wx/settings.h>
 #include <wx/msw/private.h>
 
-namespace Nocturnal
+namespace Helium
 {
 
   /////////////////////////////////////////////////////////////////////////////
@@ -302,4 +302,4 @@ namespace Nocturnal
     return m_returnCode; 
   }
 
-} // namespace Nocturnal
+} // namespace Helium

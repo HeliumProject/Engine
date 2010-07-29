@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE database SYSTEM "litesql.dtd"> 
+<database name="TrackerDBGenerated" namespace="Editor">
+	
+	<object name="TrackedFile">
+		<field name="mPath" type="string" />
+        <field name="mSize" type="integer" />
+        <field name="mLastModified" type="datetime" />
+    </object>
+	
+	<object name="TrackedProperty">
+		<field name="mName" type="string" />
+	</object>
+	
+	<relation name="TrackedFileProperties">
+		<relate object="TrackedProperty" />
+		<relate object="TrackedFile" limit="many" handle="properties"/>
+		<field name="mValue" type="string" />
+	</relation>
+	
+	<relation name="FileReferences" unidir="true">
+		<relate object="TrackedFile" />
+		<relate object="TrackedFile" handle="fileReferences"/>
+	</relation>
+	
+</database>

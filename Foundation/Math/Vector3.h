@@ -52,8 +52,8 @@ namespace Math
         Vector3           operator/ (const Vector3& v) const { return Vector3 (x / v.x, y / v.y, z / v.z); }
         Vector3           operator/ (const f32 v) const { return Vector3 (x / v, y / v, z / v); }
 
-        f32&              operator[] (const u32 i) {  NOC_ASSERT(i < 3); return (&x)[i]; }
-        const f32&        operator[] (const u32 i) const {  NOC_ASSERT(i < 3); return (&x)[i]; }
+        f32&              operator[] (const u32 i) {  HELIUM_ASSERT(i < 3); return (&x)[i]; }
+        const f32&        operator[] (const u32 i) const {  HELIUM_ASSERT(i < 3); return (&x)[i]; }
 
         bool              operator== (const Vector3& v) const { return (x == v.x && y == v.y && z == v.z); }
         bool              operator!= (const Vector3& v) const { return !(x == v.x && y == v.y && z == v.z); }

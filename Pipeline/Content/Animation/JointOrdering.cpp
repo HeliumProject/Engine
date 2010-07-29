@@ -29,7 +29,7 @@ void JointOrdering::EnumerateClass( Reflect::Compositor<JointOrdering>& comp )
     return (u32)m_JointOrdering.size();
   }
 
-  void JointOrdering::AddJoint( const Nocturnal::TUID& jointId )
+  void JointOrdering::AddJoint( const Helium::TUID& jointId )
   {
     m_JointOrdering.push_back( jointId );
   }
@@ -39,14 +39,14 @@ void JointOrdering::EnumerateClass( Reflect::Compositor<JointOrdering>& comp )
     m_JointOrdering.clear();
   }
 
-  bool JointOrdering::IsRequired( const Nocturnal::TUID& jointId )
+  bool JointOrdering::IsRequired( const Helium::TUID& jointId )
   {
     return std::find( m_JointOrdering.begin(), m_JointOrdering.end(), jointId ) != m_JointOrdering.end();
   }
 
-  Nocturnal::TUID JointOrdering::GetMasterJoint( const Nocturnal::TUID& localJoint )
+  Helium::TUID JointOrdering::GetMasterJoint( const Helium::TUID& localJoint )
   {
-    Nocturnal::HM_TUID::iterator jointIt = m_LocalToMasterMap.find( localJoint );
+    Helium::HM_TUID::iterator jointIt = m_LocalToMasterMap.find( localJoint );
 
     if ( jointIt == m_LocalToMasterMap.end() )
     {
@@ -58,9 +58,9 @@ void JointOrdering::EnumerateClass( Reflect::Compositor<JointOrdering>& comp )
     return jointIt->second;
   }
 
-  Nocturnal::TUID JointOrdering::GetLocalJoint( const Nocturnal::TUID& masterJoint )
+  Helium::TUID JointOrdering::GetLocalJoint( const Helium::TUID& masterJoint )
   {
-    Nocturnal::HM_TUID::iterator jointIt = m_MasterToLocalMap.find( masterJoint );
+    Helium::HM_TUID::iterator jointIt = m_MasterToLocalMap.find( masterJoint );
 
     if ( jointIt == m_MasterToLocalMap.end() )
     {

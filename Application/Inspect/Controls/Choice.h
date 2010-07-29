@@ -23,7 +23,7 @@ namespace Inspect
 
     }
   };
-  typedef Nocturnal::Signature<void, const ChoiceArgs&> ChoiceSignature;
+  typedef Helium::Signature<void, const ChoiceArgs&> ChoiceSignature;
 
   // the delegate for connecting an enumerated type's values
   struct ChoiceEnumerateArgs : public ChoiceArgs
@@ -37,7 +37,7 @@ namespace Inspect
 
     }
   };
-  typedef Nocturnal::Signature<void, const ChoiceEnumerateArgs&> ChoiceEnumerateSignature;
+  typedef Helium::Signature<void, const ChoiceEnumerateArgs&> ChoiceEnumerateSignature;
 
 
   //
@@ -60,11 +60,11 @@ namespace Inspect
     Choice();
 
   protected:
-    virtual bool Process(const tstring& key, const tstring& value) NOC_OVERRIDE;
+    virtual bool Process(const tstring& key, const tstring& value) HELIUM_OVERRIDE;
 
     virtual void SetOverride(bool isOverride);
 
-    virtual void SetDefaultAppearance(bool def) NOC_OVERRIDE;
+    virtual void SetDefaultAppearance(bool def) HELIUM_OVERRIDE;
 
     void SetToDefault(const ContextMenuEventArgs& event);
 
@@ -73,16 +73,16 @@ namespace Inspect
     virtual void SetDropDown(bool dropDown);
     virtual void SetEnableAdds(bool enabled); 
 
-    virtual tstring GetValue() NOC_OVERRIDE;
-    virtual void SetValue(const tstring& data) NOC_OVERRIDE;
+    virtual tstring GetValue() HELIUM_OVERRIDE;
+    virtual void SetValue(const tstring& data) HELIUM_OVERRIDE;
 
-    virtual void Realize(Container* parent) NOC_OVERRIDE;
+    virtual void Realize(Container* parent) HELIUM_OVERRIDE;
       
-    virtual void Populate() NOC_OVERRIDE;
+    virtual void Populate() HELIUM_OVERRIDE;
 
-    virtual void Read() NOC_OVERRIDE;
+    virtual void Read() HELIUM_OVERRIDE;
 
-    virtual bool Write() NOC_OVERRIDE;
+    virtual bool Write() HELIUM_OVERRIDE;
 
   protected:
     ChoiceSignature::Event m_Populate;
@@ -109,5 +109,5 @@ namespace Inspect
     }
   };
 
-  typedef Nocturnal::SmartPtr<Choice> ChoicePtr;
+  typedef Helium::SmartPtr<Choice> ChoicePtr;
 }

@@ -18,7 +18,7 @@ const tchar* Worker::Args::Debug   = TXT( "worker_debug" );
 const tchar* Worker::Args::Wait    = TXT( "worker_wait" );
 
 // the worker processes for a master application
-std::set< Nocturnal::SmartPtr< Worker::Process > > g_Workers;
+std::set< Helium::SmartPtr< Worker::Process > > g_Workers;
 
 // Called from Debug if an exception occurs
 static void TerminateListener(const Debug::TerminateArgs& args)
@@ -83,14 +83,14 @@ bool Process::Start( int timeout )
 {
     tstring str = m_Executable;
     str += TXT( " " );
-    str += Nocturnal::CmdLineDelimiters[0];
+    str += Helium::CmdLineDelimiters[0];
     str += Worker::Args::Worker;
 
     // make our worker wait forever is we were asked to
     if ( m_Wait )
     {
         str += TXT( " " );
-        str += Nocturnal::CmdLineDelimiters[0];
+        str += Helium::CmdLineDelimiters[0];
         str += Worker::Args::Wait;
         timeout = -1;
     }
@@ -113,7 +113,7 @@ bool Process::Start( int timeout )
     // Start the child process.
     if( !m_Debug && !::CreateProcess( NULL, (LPTSTR) str.c_str(), NULL, NULL, FALSE, flags, NULL, NULL, &startupInfo, &procInfo ) )
     {
-        throw Nocturnal::Exception( TXT( "Failed to run '%s' (%s)\n" ), str.c_str(), Platform::GetErrorString().c_str() );
+        throw Helium::Exception( TXT( "Failed to run '%s' (%s)\n" ), str.c_str(), Platform::GetErrorString().c_str() );
     }
     else
     {

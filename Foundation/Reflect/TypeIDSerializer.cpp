@@ -21,11 +21,11 @@ bool TypeIDSerializer::IsCompact() const
     return true; 
 }
 
-void TypeIDSerializer::ConnectData(Nocturnal::HybridPtr<void> data)
+void TypeIDSerializer::ConnectData(Helium::HybridPtr<void> data)
 {
     __super::ConnectData( data );
 
-    m_Data.Connect( Nocturnal::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
 bool TypeIDSerializer::Set(const Reflect::Serializer* s, u32 flags)

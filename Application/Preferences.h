@@ -6,5 +6,5 @@
 
 namespace Application
 {
-    APPLICATION_API bool GetPreferencesDirectory( Nocturnal::Path& preferencesDirectory );
+    APPLICATION_API bool GetPreferencesDirectory( Helium::Path& preferencesDirectory );
 }

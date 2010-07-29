@@ -17,14 +17,14 @@ namespace Inspect
   public:
     ParametricKeyControl();
 
-    virtual void Realize( Inspect::Container* parent ) NOC_OVERRIDE;
+    virtual void Realize( Inspect::Container* parent ) HELIUM_OVERRIDE;
 
-    virtual void Read() NOC_OVERRIDE;
-    virtual bool Write() NOC_OVERRIDE;
+    virtual void Read() HELIUM_OVERRIDE;
+    virtual bool Write() HELIUM_OVERRIDE;
 
   protected:
-    virtual void Create() NOC_OVERRIDE;
+    virtual void Create() HELIUM_OVERRIDE;
   };
 
-  typedef Nocturnal::SmartPtr<ParametricKeyControl> ParametricKeyControlPtr;
+  typedef Helium::SmartPtr<ParametricKeyControl> ParametricKeyControlPtr;
 }

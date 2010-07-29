@@ -32,25 +32,25 @@ namespace Reflect
             SimpleArraySerializer();
         virtual ~SimpleArraySerializer();
 
-        virtual void ConnectData(Nocturnal::HybridPtr<void> data) NOC_OVERRIDE;
+        virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
 
-        virtual size_t GetSize() const NOC_OVERRIDE;
-        virtual void SetSize(size_t size) NOC_OVERRIDE;
-        virtual void Clear() NOC_OVERRIDE;
+        virtual size_t GetSize() const HELIUM_OVERRIDE;
+        virtual void SetSize(size_t size) HELIUM_OVERRIDE;
+        virtual void Clear() HELIUM_OVERRIDE;
 
-        virtual i32 GetItemType() const NOC_OVERRIDE;
-        virtual SerializerPtr GetItem(size_t at) NOC_OVERRIDE;
-        virtual ConstSerializerPtr GetItem(size_t at) const NOC_OVERRIDE;
-        virtual void SetItem(size_t at, const Serializer* value) NOC_OVERRIDE;
+        virtual i32 GetItemType() const HELIUM_OVERRIDE;
+        virtual SerializerPtr GetItem(size_t at) HELIUM_OVERRIDE;
+        virtual ConstSerializerPtr GetItem(size_t at) const HELIUM_OVERRIDE;
+        virtual void SetItem(size_t at, const Serializer* value) HELIUM_OVERRIDE;
 
-        virtual bool Set(const Serializer* src, u32 flags = 0) NOC_OVERRIDE;
-        virtual bool Equals(const Serializer* s) const NOC_OVERRIDE;
+        virtual bool Set(const Serializer* src, u32 flags = 0) HELIUM_OVERRIDE;
+        virtual bool Equals(const Serializer* s) const HELIUM_OVERRIDE;
 
-        virtual void Serialize(Archive& archive) const NOC_OVERRIDE;
-        virtual void Deserialize(Archive& archive) NOC_OVERRIDE;
+        virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;
+        virtual void Deserialize(Archive& archive) HELIUM_OVERRIDE;
 
-        virtual tostream& operator>> (tostream& stream) const NOC_OVERRIDE;
-        virtual tistream& operator<< (tistream& stream) NOC_OVERRIDE;
+        virtual tostream& operator>> (tostream& stream) const HELIUM_OVERRIDE;
+        virtual tistream& operator<< (tistream& stream) HELIUM_OVERRIDE;
     };
 
     typedef SimpleArraySerializer<tstring> StringArraySerializer;                   REFLECT_SPECIALIZE_SERIALIZER( StringArraySerializer );
@@ -65,9 +65,9 @@ namespace Reflect
     typedef SimpleArraySerializer<i64> I64ArraySerializer;                          REFLECT_SPECIALIZE_SERIALIZER( I64ArraySerializer );
     typedef SimpleArraySerializer<f32> F32ArraySerializer;                          REFLECT_SPECIALIZE_SERIALIZER( F32ArraySerializer );
     typedef SimpleArraySerializer<f64> F64ArraySerializer;                          REFLECT_SPECIALIZE_SERIALIZER( F64ArraySerializer );
-    typedef SimpleArraySerializer<Nocturnal::GUID> GUIDArraySerializer;             REFLECT_SPECIALIZE_SERIALIZER( GUIDArraySerializer );
-    typedef SimpleArraySerializer<Nocturnal::TUID> TUIDArraySerializer;             REFLECT_SPECIALIZE_SERIALIZER( TUIDArraySerializer );
-    typedef SimpleArraySerializer<Nocturnal::Path> PathArraySerializer;             REFLECT_SPECIALIZE_SERIALIZER( PathArraySerializer );
+    typedef SimpleArraySerializer<Helium::GUID> GUIDArraySerializer;             REFLECT_SPECIALIZE_SERIALIZER( GUIDArraySerializer );
+    typedef SimpleArraySerializer<Helium::TUID> TUIDArraySerializer;             REFLECT_SPECIALIZE_SERIALIZER( TUIDArraySerializer );
+    typedef SimpleArraySerializer<Helium::Path> PathArraySerializer;             REFLECT_SPECIALIZE_SERIALIZER( PathArraySerializer );
 
     typedef SimpleArraySerializer<Math::Vector2> Vector2ArraySerializer;            REFLECT_SPECIALIZE_SERIALIZER( Vector2ArraySerializer );
     typedef SimpleArraySerializer<Math::Vector3> Vector3ArraySerializer;            REFLECT_SPECIALIZE_SERIALIZER( Vector3ArraySerializer );

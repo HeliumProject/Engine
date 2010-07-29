@@ -16,7 +16,7 @@
 #include "TreeWndCtrlSpacer.h"
 #include "wx/arrimpl.cpp"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 // ----------------------------------------------------------------------------
 // TreeWndCtrlNode

@@ -12,7 +12,7 @@ namespace MayaContent
 
     }
 
-    ExportJoint( const MObject& mayaObject, Nocturnal::TUID& id )
+    ExportJoint( const MObject& mayaObject, Helium::TUID& id )
       : ExportBase( mayaObject )
     {
       m_ContentObject = new Content::JointTransform( id );
@@ -22,5 +22,5 @@ namespace MayaContent
     virtual void GatherMayaData( V_ExportBase &newExportObjects );
   };
 
-  typedef Nocturnal::SmartPtr<ExportJoint> ExportJointPtr;
+  typedef Helium::SmartPtr<ExportJoint> ExportJointPtr;
 }

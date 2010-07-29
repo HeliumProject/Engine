@@ -11,12 +11,12 @@
 
 #include "Pipeline/Image/Formats/DDS.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Nocturnal::MipSet::MipSet()
+Helium::MipSet::MipSet()
 {
   m_levels_used = 0;
   for (int i=0;i<MAX_TEXTURE_MIPS;i++)
@@ -37,7 +37,7 @@ Nocturnal::MipSet::MipSet()
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Nocturnal::MipSet::~MipSet()
+Helium::MipSet::~MipSet()
 {
   for (u32 i=0;i<MAX_TEXTURE_MIPS;i++)
   {
@@ -138,7 +138,7 @@ bool MipSet::RuntimeSettings::operator == (const RuntimeSettings& rhs)
 // Removes the specified number of mips from the tail of the mip set (removes the N smallest mips).
 // There has to be at least a single mip level remaining after levels have been removed.
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool Nocturnal::MipSet::RemoveFromTail(u32 levels)
+bool Helium::MipSet::RemoveFromTail(u32 levels)
 {
   if (levels>=m_levels_used)
   {
@@ -168,7 +168,7 @@ bool Nocturnal::MipSet::RemoveFromTail(u32 levels)
 // Removes the specified number of mips from the head of the mip set (removes the N biggest mips).
 // There has to be at least a single mip level remaining after levels have been removed.
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool Nocturnal::MipSet::RemoveFromHead(u32 levels)
+bool Helium::MipSet::RemoveFromHead(u32 levels)
 {
   if (levels>=m_levels_used)
   {
@@ -217,7 +217,7 @@ bool Nocturnal::MipSet::RemoveFromHead(u32 levels)
 //
 // DO NOT CALL THIS FOR PC TEXTURES
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool Nocturnal::MipSet::Swizzle()
+bool Helium::MipSet::Swizzle()
 {
   // do not attempt to swizzle if it already is swizzled
   if (m_swizzled)
@@ -232,9 +232,9 @@ bool Nocturnal::MipSet::Swizzle()
       m_swizzled = false;
     }
     // Do VTC swizzling for DXT compressed volume textures
-    else if(  (m_format == Nocturnal::OUTPUT_CF_DXT1) ||
-              (m_format == Nocturnal::OUTPUT_CF_DXT3) ||
-              (m_format == Nocturnal::OUTPUT_CF_DXT5) )
+    else if(  (m_format == Helium::OUTPUT_CF_DXT1) ||
+              (m_format == Helium::OUTPUT_CF_DXT3) ||
+              (m_format == Helium::OUTPUT_CF_DXT5) )
     {
       VTCSwizzle();
       m_swizzled = true;
@@ -285,13 +285,13 @@ bool Nocturnal::MipSet::Swizzle()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool Nocturnal::MipSet::VTCSwizzle()
+bool Helium::MipSet::VTCSwizzle()
 {
   // Some assumptions made since we should only be called from Swizzle()
-  NOC_ASSERT(!m_swizzled);
-  NOC_ASSERT( (m_format == Nocturnal::OUTPUT_CF_DXT1) || (m_format == Nocturnal::OUTPUT_CF_DXT3) || (m_format == Nocturnal::OUTPUT_CF_DXT5) );
-  NOC_ASSERT(m_depth > 1);
-  NOC_ASSERT_MSG(m_levels_used == 1, ("Mipmap support not yet implimented for volume textures"));
+  HELIUM_ASSERT(!m_swizzled);
+  HELIUM_ASSERT( (m_format == Helium::OUTPUT_CF_DXT1) || (m_format == Helium::OUTPUT_CF_DXT3) || (m_format == Helium::OUTPUT_CF_DXT5) );
+  HELIUM_ASSERT(m_depth > 1);
+  HELIUM_ASSERT_MSG(m_levels_used == 1, ("Mipmap support not yet implimented for volume textures"));
 
   u8* p_data = m_levels[0][0].m_data;
   if(!p_data)
@@ -303,13 +303,13 @@ bool Nocturnal::MipSet::VTCSwizzle()
   u32 block_height = m_height / 4;
   u32 num_layer_blocks = block_width * block_height;
 
-  u32 block_size = (m_format == Nocturnal::OUTPUT_CF_DXT1) ? 8 : 16;
+  u32 block_size = (m_format == Helium::OUTPUT_CF_DXT1) ? 8 : 16;
   u32 layer_size = num_layer_blocks * block_size;
 
   u32 num_layer_sets = m_depth / 4;
 
   u8* p_vtc = new u8[m_datasize[0]];
-  NOC_ASSERT(p_vtc);
+  HELIUM_ASSERT(p_vtc);
   u8* p_dest = p_vtc;
   for(u32 layer_set = 0; layer_set < num_layer_sets; layer_set++)
   {
@@ -336,7 +336,7 @@ bool Nocturnal::MipSet::VTCSwizzle()
   // Copy over leftover layers unswizzled
   //if( (num_layer_sets*4) < m_depth )
   u32 swizzled_size = (u32)(p_dest - p_vtc);
-  NOC_ASSERT( swizzled_size == (num_layer_sets * 4 * layer_size) );
+  HELIUM_ASSERT( swizzled_size == (num_layer_sets * 4 * layer_size) );
   if( swizzled_size < m_datasize[0] )
   {
     u32 unswizzled_size = m_datasize[0] - swizzled_size;
@@ -351,10 +351,10 @@ bool Nocturnal::MipSet::VTCSwizzle()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool Nocturnal::MipSet::ExtractNonePowerOfTwo(u32 width, u32 height, u32 depth)
+bool Helium::MipSet::ExtractNonePowerOfTwo(u32 width, u32 height, u32 depth)
 {
   // we do not currently support extracting volume data
-  if (m_texture_type==Nocturnal::Image::VOLUME)
+  if (m_texture_type==Helium::Image::VOLUME)
     return false;
 
   // we only support compressed

@@ -84,7 +84,7 @@ if( MS::kSuccess != stat )                                                      
 #include "Platform/Windows/Debug.h"
 
 # if 0
-inline void ProcessMayaPluginException( Nocturnal::Exception& ex, bool exit = true )
+inline void ProcessMayaPluginException( Helium::Exception& ex, bool exit = true )
 {
   Debug::ProcessException( ex, true );
 
@@ -106,4 +106,4 @@ inline void ProcessMayaPluginException( Nocturnal::Exception& ex, bool exit = tr
 
 #define MAYA_START_EXCEPTION_HANDLING() /*Debug::EnableTranslator<Debug::TranslateException> translator; try { */
 
-#define MAYA_FINISH_EXCEPTION_HANDLING(...) /* } catch ( Nocturnal::Exception& ex ) { ProcessMayaPluginException( ex, __VA_ARGS__ ); } */
+#define MAYA_FINISH_EXCEPTION_HANDLING(...) /* } catch ( Helium::Exception& ex ) { ProcessMayaPluginException( ex, __VA_ARGS__ ); } */

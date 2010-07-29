@@ -40,5 +40,5 @@ namespace MayaContent
     void ExportNode( Content::SceneNode* node, S_ElementDumbPtr& duplicateCheck ); 
   };
 
-  typedef Nocturnal::SmartPtr<ExportScene> ExportScenePtr;
+  typedef Helium::SmartPtr<ExportScene> ExportScenePtr;
 }

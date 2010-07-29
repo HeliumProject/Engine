@@ -71,39 +71,39 @@ void TestFunc()
 
   Queue queue;
 
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::StaticProperty<int> (&Test::GetParamStatic,      &Test::SetReferenceStatic) ) );
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::StaticProperty<int> (&Test::GetParamStatic,      &Test::SetReferenceStatic), v ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::StaticProperty<int> (&Test::GetParamStatic,      &Test::SetReferenceStatic) ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::StaticProperty<int> (&Test::GetParamStatic,      &Test::SetReferenceStatic), v ) );
 
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::StaticProperty<int> (&Test::GetReferenceStatic,  &Test::SetValueStatic) ) );
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::StaticProperty<int> (&Test::GetReferenceStatic,  &Test::SetValueStatic), v ));
+  queue.Push( new PropertyCommand<int> ( new Helium::StaticProperty<int> (&Test::GetReferenceStatic,  &Test::SetValueStatic) ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::StaticProperty<int> (&Test::GetReferenceStatic,  &Test::SetValueStatic), v ));
 
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::StaticProperty<int> (&Test::GetValueStatic,      &Test::SetReferenceStatic) ) );
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::StaticProperty<int> (&Test::GetValueStatic,      &Test::SetReferenceStatic), v ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::StaticProperty<int> (&Test::GetValueStatic,      &Test::SetReferenceStatic) ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::StaticProperty<int> (&Test::GetValueStatic,      &Test::SetReferenceStatic), v ) );
 
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::StaticProperty<int> (&Test::GetParamStatic,      &Test::SetValueStatic) ) );
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::StaticProperty<int> (&Test::GetParamStatic,      &Test::SetValueStatic), v ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::StaticProperty<int> (&Test::GetParamStatic,      &Test::SetValueStatic) ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::StaticProperty<int> (&Test::GetParamStatic,      &Test::SetValueStatic), v ) );
 
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::StaticProperty<int> (&Test::GetReferenceStatic,  &Test::SetReferenceStatic) ) );
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::StaticProperty<int> (&Test::GetReferenceStatic,  &Test::SetReferenceStatic), v ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::StaticProperty<int> (&Test::GetReferenceStatic,  &Test::SetReferenceStatic) ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::StaticProperty<int> (&Test::GetReferenceStatic,  &Test::SetReferenceStatic), v ) );
 
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::StaticProperty<int> (&Test::GetValueStatic,      &Test::SetValueStatic) ) );
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::StaticProperty<int> (&Test::GetValueStatic,      &Test::SetValueStatic), v ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::StaticProperty<int> (&Test::GetValueStatic,      &Test::SetValueStatic) ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::StaticProperty<int> (&Test::GetValueStatic,      &Test::SetValueStatic), v ) );
 
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::MemberProperty<Test, int> (&test,   &Test::GetParam,      &Test::SetReference) ) );
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::MemberProperty<Test, int> (&test,   &Test::GetParam,      &Test::SetReference), v ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::MemberProperty<Test, int> (&test,   &Test::GetParam,      &Test::SetReference) ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::MemberProperty<Test, int> (&test,   &Test::GetParam,      &Test::SetReference), v ) );
 
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::MemberProperty<Test, int> (&test,   &Test::GetReference,  &Test::SetValue) ) );
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::MemberProperty<Test, int> (&test,   &Test::GetReference,  &Test::SetValue), v ));
+  queue.Push( new PropertyCommand<int> ( new Helium::MemberProperty<Test, int> (&test,   &Test::GetReference,  &Test::SetValue) ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::MemberProperty<Test, int> (&test,   &Test::GetReference,  &Test::SetValue), v ));
 
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::MemberProperty<Test, int> (&test,   &Test::GetValue,      &Test::SetReference) ) );
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::MemberProperty<Test, int> (&test,   &Test::GetValue,      &Test::SetReference), v ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::MemberProperty<Test, int> (&test,   &Test::GetValue,      &Test::SetReference) ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::MemberProperty<Test, int> (&test,   &Test::GetValue,      &Test::SetReference), v ) );
 
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::MemberProperty<Test, int> (&test,   &Test::GetParam,      &Test::SetValue) ) );
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::MemberProperty<Test, int> (&test,   &Test::GetParam,      &Test::SetValue), v ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::MemberProperty<Test, int> (&test,   &Test::GetParam,      &Test::SetValue) ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::MemberProperty<Test, int> (&test,   &Test::GetParam,      &Test::SetValue), v ) );
 
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::MemberProperty<Test, int> (&test,   &Test::GetReference,  &Test::SetReference) ) );
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::MemberProperty<Test, int> (&test,   &Test::GetReference,  &Test::SetReference), v ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::MemberProperty<Test, int> (&test,   &Test::GetReference,  &Test::SetReference) ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::MemberProperty<Test, int> (&test,   &Test::GetReference,  &Test::SetReference), v ) );
 
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::MemberProperty<Test, int> (&test,   &Test::GetValue,      &Test::SetValue) ) );
-  queue.Push( new PropertyCommand<int> ( new Nocturnal::MemberProperty<Test, int> (&test,   &Test::GetValue,      &Test::SetValue), v ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::MemberProperty<Test, int> (&test,   &Test::GetValue,      &Test::SetValue) ) );
+  queue.Push( new PropertyCommand<int> ( new Helium::MemberProperty<Test, int> (&test,   &Test::GetValue,      &Test::SetValue), v ) );
 }

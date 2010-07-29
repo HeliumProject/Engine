@@ -30,7 +30,7 @@
 using namespace Reflect;
 
 #define ASSET_BEGIN_REGISTER_ENGINE_TYPES                                       \
-  Nocturnal::Insert<M_AssetTypeInfo>::Result et_inserted;
+  Helium::Insert<M_AssetTypeInfo>::Result et_inserted;
 
 #define ASSET_REGISTER_ENGINETYPE( __AssetTypeName )                           \
   et_inserted = g_AssetTypeInfos.insert( M_AssetTypeInfo::value_type( AssetTypes::__AssetTypeName, AssetTypeInfo( #__AssetTypeName, #__AssetTypeName"Builder.dll" ) ) ) );
@@ -62,7 +62,7 @@ std::vector< i32 > Asset::g_AssetClassTypes;
 
 i32 g_AssetInitCount = 0;
 
-Nocturnal::InitializerStack g_AssetInitializerStack;
+Helium::InitializerStack g_AssetInitializerStack;
 
 void Asset::Initialize()
 {

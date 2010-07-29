@@ -11,7 +11,7 @@
 #define NULL (0)
 #endif
 
-namespace Nocturnal
+namespace Helium
 {
     //
     // The reference count interface
@@ -77,7 +77,7 @@ namespace Nocturnal
         {
             m_RefCount--;
 
-            NOC_ASSERT( m_RefCount >= 0 );
+            HELIUM_ASSERT( m_RefCount >= 0 );
 
             if (m_RefCount == 0)
             {
@@ -284,7 +284,7 @@ namespace Nocturnal
         {
         }
 
-        SmartPtrComparator( const Nocturnal::SmartPtr<T>& smartPtr )
+        SmartPtrComparator( const Helium::SmartPtr<T>& smartPtr )
             : m_SmartPtr( smartPtr )
         {
         }
@@ -324,17 +324,17 @@ namespace Nocturnal
             return m_SmartPtr.operator T *();
         }
 
-        operator const Nocturnal::SmartPtr<T> () const
+        operator const Helium::SmartPtr<T> () const
         {
             return m_SmartPtr;
         }
 
-        operator Nocturnal::SmartPtr<T> ()
+        operator Helium::SmartPtr<T> ()
         {
             return m_SmartPtr;
         }
 
     private:
-        Nocturnal::SmartPtr<T> m_SmartPtr;
+        Helium::SmartPtr<T> m_SmartPtr;
     };
 }

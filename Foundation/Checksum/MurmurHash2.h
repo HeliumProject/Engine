@@ -2,7 +2,7 @@
 
 #include "Platform/Types.h"
 
-namespace Nocturnal
+namespace Helium
 {
 
     // 64-bit hash for 64-bit platforms

@@ -11,18 +11,18 @@
 
 #include "Foundation/TUID.h"
 
-namespace Nocturnal
+namespace Helium
 {
     namespace ES
     {
         class EventSystem;
-        typedef PIPELINE_API Nocturnal::SmartPtr< EventSystem > EventSystemPtr;
+        typedef PIPELINE_API Helium::SmartPtr< EventSystem > EventSystemPtr;
 
         /////////////////////////////////////////////////////////////////////////////
         // This distributed event system manages the creation and handling of unique events.
         // Assigns each event a TUID and maintains a list of already handled events.
         //
-        class PIPELINE_API EventSystem : public Nocturnal::RefCountBase< EventSystem >
+        class PIPELINE_API EventSystem : public Helium::RefCountBase< EventSystem >
         {
         public:
             EventSystem( const tstring& rootDirPath, bool writeBinaryFormat );
@@ -46,8 +46,8 @@ namespace Nocturnal
             void StompEventsFile( const tstring& eventsFile, const V_EventPtr& listOfEvents );
 
         private:
-            Nocturnal::Path m_RootDirPath;
-            Nocturnal::Path m_HandledEventsFile;
+            Helium::Path m_RootDirPath;
+            Helium::Path m_HandledEventsFile;
             bool m_WriteBinaryFormat;
 
             void GetEvents( V_EventPtr& listOfEvents, bool sorted = false );

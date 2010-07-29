@@ -6,7 +6,7 @@
 namespace MayaContent
 {
   class ExportAnimationBase;
-  typedef Nocturnal::SmartPtr<ExportAnimationBase> ExportAnimationBasePtr;
+  typedef Helium::SmartPtr<ExportAnimationBase> ExportAnimationBasePtr;
   typedef std::vector<ExportAnimationBasePtr> V_ExportAnimationBasePtr;
 
   class MAYA_API ExportAnimationBase : public ExportBase

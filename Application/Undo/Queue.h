@@ -18,8 +18,8 @@ namespace Undo
 
     }
   };
-  typedef Nocturnal::Signature< void, const QueueChangeArgs& > QueueChangeSignature;
-  typedef Nocturnal::Signature< bool, const QueueChangeArgs& > QueueChangingSignature;
+  typedef Helium::Signature< void, const QueueChangeArgs& > QueueChangeSignature;
+  typedef Helium::Signature< bool, const QueueChangeArgs& > QueueChangingSignature;
 
   class APPLICATION_API Queue
   {

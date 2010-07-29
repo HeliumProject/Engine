@@ -11,7 +11,7 @@
 #include <algorithm>
 #include <cctype>
 
-using namespace Nocturnal;
+using namespace Helium;
 
 #pragma comment ( lib, "iphlpapi.lib" )
 
@@ -39,7 +39,7 @@ bool isAlpha( int c )
     return ( std::isalpha( c ) != 0 );
 }
 
-void TUID::ToGUID( Nocturnal::GUID& id ) const
+void TUID::ToGUID( Helium::GUID& id ) const
 {
     static guid null;
     if ( m_ID == 0x0 )
@@ -65,7 +65,7 @@ void TUID::ToString(tstring& id) const
     id = str.str();
 }
 
-void TUID::FromGUID( const Nocturnal::GUID& id )
+void TUID::FromGUID( const Helium::GUID& id )
 {
     static guid null;
 
@@ -146,7 +146,7 @@ void TUID::Generate( tuid& uid )
         DWORD status = GetAdaptersInfo( adapterInfo, &bufLength );
         if ( status != ERROR_SUCCESS )
         {
-            throw Nocturnal::Exception( TXT( "Could not get network adapter info to seed TUID generation." ) );
+            throw Helium::Exception( TXT( "Could not get network adapter info to seed TUID generation." ) );
         }
 
         // cache the appropriate bits
@@ -170,7 +170,7 @@ void TUID::Generate( tuid& uid )
     BOOL result = QueryPerformanceCounter( &ticks );
     if ( !result )
     {
-        throw Nocturnal::Exception( TXT( "Could not obtain performance counter ticks to generate TUID." ) );
+        throw Helium::Exception( TXT( "Could not obtain performance counter ticks to generate TUID." ) );
     }
     timeBits = ticks.LowPart;
     timeBits = timeBits << 32; // shift left

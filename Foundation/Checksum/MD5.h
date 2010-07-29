@@ -484,11 +484,11 @@ inline void md5_finish(md5_state_t *pms, md5_byte_t digest[16])
 
 #undef BYTE_ORDER
 
-/* End Copyright (C) 1999, 2002 Aladdin Enterprises, begin Nocturnal open source */
+/* End Copyright (C) 1999, 2002 Aladdin Enterprises, begin Helium open source */
 
 #include "Platform/Exception.h"
 
-namespace Nocturnal
+namespace Helium
 {
     inline tstring MD5(const void* data, u32 count)
     {
@@ -519,7 +519,7 @@ namespace Nocturnal
         FILE* f = _tfopen(filePath.c_str(), TXT( "rb" ) );
         if (f==0)
         {
-            throw Nocturnal::Exception( TXT( "Unable to open %s for read" ), filePath.c_str());
+            throw Helium::Exception( TXT( "Unable to open %s for read" ), filePath.c_str());
         }
 
         fseek(f,0,SEEK_END);

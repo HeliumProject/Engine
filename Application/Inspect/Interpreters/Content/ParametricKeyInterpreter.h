@@ -14,6 +14,6 @@ namespace Inspect
     virtual void InterpretField( const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent );
   };
 
-  typedef Nocturnal::SmartPtr<ParametricKeyInterpreter> ParametricKeyInterpreterPtr;
+  typedef Helium::SmartPtr<ParametricKeyInterpreter> ParametricKeyInterpreterPtr;
   typedef std::vector< ParametricKeyInterpreterPtr > V_ParametricKeyInterpreter;
 }

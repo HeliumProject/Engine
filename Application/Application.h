@@ -64,7 +64,7 @@ namespace Application
   {
     int m_Code;
   };
-  typedef Nocturnal::Signature<void, const ShutdownArgs&> ShutdownSignature;
+  typedef Helium::Signature<void, const ShutdownArgs&> ShutdownSignature;
   extern APPLICATION_API ShutdownSignature::Event g_ShuttingDown;
 
   //
@@ -88,7 +88,7 @@ namespace Application
   // Use StandardMain for:
   //  * Breakpoint instruction handling - GUI handler makes breakpoints outside the debugger continuable/disableable
   //  * SEH Exception (crash) handling - email reports for illegal instructions or unhandled c++ exceptions
-  //  * Top level C++ exception handler that catches Nocturnal::Exceptions and reports them as errors to the user
+  //  * Top level C++ exception handler that catches Helium::Exceptions and reports them as errors to the user
   //  * Automatic calling of Application::Startup and Application::Shutdown
   //  * Automatic trace file output
   //

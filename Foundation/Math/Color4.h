@@ -38,8 +38,8 @@ namespace Math
 
         Color4            operator- () const { return Color4( -r, -g, -b, -a ); }
 
-        u8&               operator[] (const u32 i) {  NOC_ASSERT(i < 4); return (&r)[i]; }
-        const u8&         operator[] (const u32 i) const {  NOC_ASSERT(i < 4); return (&r)[i]; }
+        u8&               operator[] (const u32 i) {  HELIUM_ASSERT(i < 4); return (&r)[i]; }
+        const u8&         operator[] (const u32 i) const {  HELIUM_ASSERT(i < 4); return (&r)[i]; }
 
         bool              operator== (const Color4& v) const { return (r == v.r && g == v.g && b == v.b && a == v.a); }
         bool              operator!= (const Color4& v) const { return !(r == v.r && g == v.g && b == v.b && a == v.a); }

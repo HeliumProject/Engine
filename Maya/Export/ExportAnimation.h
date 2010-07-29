@@ -9,7 +9,7 @@ namespace MayaContent
   struct ExportDeformationWeight
   {
     u32               m_WeightId;
-    Nocturnal::V_TUID  m_TargetIds;
+    Helium::V_TUID  m_TargetIds;
   };
   typedef std::vector<ExportDeformationWeight> V_ExportDeformationWeight;
 
@@ -53,5 +53,5 @@ namespace MayaContent
     void SampleOneFramesMorphTargetWeights( const MTime& currentTime, const Content::AnimationPtr& animClip );
   };
 
-  typedef Nocturnal::SmartPtr<ExportAnimationClip> ExportAnimationClipPtr;
+  typedef Helium::SmartPtr<ExportAnimationClip> ExportAnimationClipPtr;
 }

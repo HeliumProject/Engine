@@ -8,10 +8,10 @@ namespace Math
     class Vector4; 
 }
 
-namespace Nocturnal
+namespace Helium
 {
     class BasicBuffer;
-    typedef Nocturnal::SmartPtr<BasicBuffer> BasicBufferPtr;
+    typedef Helium::SmartPtr<BasicBuffer> BasicBufferPtr;
 
     //////////////////////////////////////////////////////////////////////////
     //
@@ -178,6 +178,6 @@ namespace Nocturnal
     template <class T>
     void AssertComplete(BasicBufferPtr& buffer)
     {
-        NOC_ASSERT(buffer->GetCurrentLocation().first - buffer->GetHeadLocation().first == sizeof(T)); 
+        HELIUM_ASSERT(buffer->GetCurrentLocation().first - buffer->GetHeadLocation().first == sizeof(T)); 
     }
 }

@@ -6,7 +6,7 @@
 
 namespace Content
 {
-  class PIPELINE_API ParametricKey NOC_ABSTRACT : public Reflect::Element
+  class PIPELINE_API ParametricKey HELIUM_ABSTRACT : public Reflect::Element
   {
   public:
     f32 m_Param;
@@ -15,8 +15,8 @@ namespace Content
     ParametricKey();
     virtual ~ParametricKey();
 
-    virtual void PostDeserialize() NOC_OVERRIDE;
-    virtual void PreSerialize() NOC_OVERRIDE;
+    virtual void PostDeserialize() HELIUM_OVERRIDE;
+    virtual void PreSerialize() HELIUM_OVERRIDE;
 
     virtual Math::Color3 GetColor() const = 0;
     virtual void SetColor( const Math::Color3& color ) = 0;
@@ -25,6 +25,6 @@ namespace Content
 
     static void EnumerateClass( Reflect::Compositor<ParametricKey>& comp );
   };
-  typedef Nocturnal::SmartPtr< ParametricKey > ParametricKeyPtr;
+  typedef Helium::SmartPtr< ParametricKey > ParametricKeyPtr;
   typedef std::vector< ParametricKeyPtr > V_ParametricKeyPtr;
 }

@@ -74,7 +74,7 @@ namespace MayaContent
   static const float ACCURACY_FOR_VECTOR_COMP = 0.0001f;
   static const float ACCURACY_FOR_NORMAL_COMP = 0.99f;
 
-  class MAYA_API ExportVertex : public Nocturnal::RefCountBase<ExportVertex>
+  class MAYA_API ExportVertex : public Helium::RefCountBase<ExportVertex>
   {
   public:
     u32 m_ShaderIndex;
@@ -123,7 +123,7 @@ namespace MayaContent
     }
   };
 
-  typedef Nocturnal::SmartPtr< ExportVertex > ExportVertexPtr;
+  typedef Helium::SmartPtr< ExportVertex > ExportVertexPtr;
   typedef std::vector< ExportVertexPtr > V_ExportVertex;
 
 
@@ -203,7 +203,7 @@ namespace MayaContent
   struct MAYA_API ExportMorphTarget
   {
     tstring                  m_Name;
-    Nocturnal::TUID                 m_Id;
+    Helium::TUID                 m_Id;
     V_ExportMorphTargetDelta     m_PosDeltas;
     Math::V_Vector3              m_NormalDeltaVectors;
   };
@@ -307,7 +307,7 @@ namespace MayaContent
     SceneIndicesTracker     m_SceneIndicesTracker;
 
   public:
-    ExportMesh( const MObject& mayaMesh, const Nocturnal::TUID& id ) 
+    ExportMesh( const MObject& mayaMesh, const Helium::TUID& id ) 
       : ExportBase( mayaMesh )
       , m_HasVertexColors ( false )
       , m_HasLightMap ( false )
@@ -324,17 +324,17 @@ namespace MayaContent
 
     inline Math::Vector3 GetPosition( const VertexIndex &indexData ) const
     {
-      NOC_ASSERT( indexData.m_Index < m_VertexList.length() );
+      HELIUM_ASSERT( indexData.m_Index < m_VertexList.length() );
       u32 idx = (u32)m_VertexList[ indexData.m_Index ];
-      NOC_ASSERT( idx < m_Points.length() );
+      HELIUM_ASSERT( idx < m_Points.length() );
       return Math::Vector3( m_Points[ idx ].x * 0.01f, m_Points[ idx ].y * 0.01f, m_Points[idx].z * 0.01f );
     }
 
     inline Math::Vector3 GetNormal( const VertexIndex &indexData ) const
     {
-      NOC_ASSERT( indexData.m_Index < m_NormalIds.length() );
+      HELIUM_ASSERT( indexData.m_Index < m_NormalIds.length() );
       u32 idx = (u32)m_NormalIds[ indexData.m_Index ];
-      NOC_ASSERT( idx < m_Normals.length() );
+      HELIUM_ASSERT( idx < m_Normals.length() );
       return Math::Vector3( m_Normals[ idx ].x, m_Normals[ idx ].y, m_Normals[ idx ].z );
     }
 
@@ -346,33 +346,33 @@ namespace MayaContent
 
     inline Math::Vector2 GetBaseUV( const VertexIndex &indexData ) const
     {
-      NOC_ASSERT( indexData.m_Index < m_BaseUVIds.length() );
+      HELIUM_ASSERT( indexData.m_Index < m_BaseUVIds.length() );
       u32 idx = (u32)m_BaseUVIds[ indexData.m_Index ];
-      NOC_ASSERT( idx < m_BaseUArray.length() );
+      HELIUM_ASSERT( idx < m_BaseUArray.length() );
       return Math::Vector2( m_BaseUArray[ idx ], m_BaseVArray[ idx ] );
     }
 
     inline Math::Vector2 GetLightMapUV( u32 index ) const
     {
-       NOC_ASSERT( index < m_LightMapUVIds.length() );
+       HELIUM_ASSERT( index < m_LightMapUVIds.length() );
        u32 idx = (u32)m_LightMapUVIds[ index ];
-       NOC_ASSERT( idx < m_LightMapUArray.length() );
+       HELIUM_ASSERT( idx < m_LightMapUArray.length() );
        return Math::Vector2( m_LightMapUArray[ idx ], m_LightMapVArray[ idx ] );
     }
 
     inline Math::Vector2 GetLightMapUV( const VertexIndex &indexData ) const
     {
-      NOC_ASSERT( indexData.m_Index < m_LightMapUVIds.length() );
+      HELIUM_ASSERT( indexData.m_Index < m_LightMapUVIds.length() );
       u32 idx = (u32)m_LightMapUVIds[ indexData.m_Index ];
-      NOC_ASSERT( idx < m_LightMapUArray.length() );
+      HELIUM_ASSERT( idx < m_LightMapUArray.length() );
       return Math::Vector2( m_LightMapUArray[ idx ], m_LightMapVArray[ idx ] );
     }
 
     inline Math::Vector2 GetBlendMapUV( const VertexIndex &indexData ) const
     {
-      NOC_ASSERT( indexData.m_Index < m_BlendMapUVIds.length() );
+      HELIUM_ASSERT( indexData.m_Index < m_BlendMapUVIds.length() );
       u32 idx = (u32)m_BlendMapUVIds[ indexData.m_Index ];
-      NOC_ASSERT( idx < m_BlendMapUArray.length() );
+      HELIUM_ASSERT( idx < m_BlendMapUArray.length() );
       return Math::Vector2( m_BlendMapUArray[ idx ], m_BlendMapVArray[ idx ] );
     }
 
@@ -396,6 +396,6 @@ namespace MayaContent
     u32 ProcessVertex( const ExportTriangle &exportTri, u32 vert );
   };
 
-  typedef Nocturnal::SmartPtr< ExportMesh > ExportMeshPtr;
+  typedef Helium::SmartPtr< ExportMesh > ExportMeshPtr;
   typedef std::vector< ExportMeshPtr > V_ExportMesh;
 }

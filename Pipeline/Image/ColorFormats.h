@@ -7,7 +7,7 @@
 #include "Foundation/Math/Half.h"
 #include "Foundation/Math/Vector3.h"
 
-namespace Nocturnal
+namespace Helium
 {
   const u32 RGBE_EXPONENT_BIAS=128;
 
@@ -537,7 +537,7 @@ namespace Nocturnal
           CONV_TO_SRGB(fl_r,fl_g,fl_b);
           u32  alpha = (u32)(fl_a*255.0f + 0.5f);
           u32 gray = (u32)((0.212671f * fl_r + 0.715160f * fl_g + 0.072169f * fl_b)*255.0f + 0.5f);
-          NOC_ASSERT(gray <= 255);
+          HELIUM_ASSERT(gray <= 255);
           *((u16*)dst + p) = ((u16)(alpha<<8))|(u8)gray;
         END_BATCH_LOOP
         return true;
@@ -552,7 +552,7 @@ namespace Nocturnal
           ClampColor(fl_r,fl_g,fl_b,fl_a);
           CONV_TO_SRGB(fl_r,fl_g,fl_b);
           i32 gray = (i32)((0.212671f * fl_r + 0.715160f * fl_g + 0.072169f * fl_b)*255.0f + 0.5f);
-          NOC_ASSERT(gray <= 255);
+          HELIUM_ASSERT(gray <= 255);
           *((u8*)dst + p) = (u8)gray;
         END_BATCH_LOOP
         return true;
@@ -566,7 +566,7 @@ namespace Nocturnal
           float fl_a = a[p];
           ClampColor(fl_r,fl_g,fl_b,fl_a);
           i32 gray = (i32)((0.212671f * fl_r + 0.715160f * fl_g + 0.072169f * fl_b)*65535.0f + 0.5f);
-          NOC_ASSERT(gray <= 65535);
+          HELIUM_ASSERT(gray <= 65535);
           *((u16*)dst + p) = (u16)gray;
         END_BATCH_LOOP
         return true;
@@ -779,7 +779,7 @@ namespace Nocturnal
       }
     }
 
-    NOC_BREAK();
+    HELIUM_BREAK();
 
     return true;
   }

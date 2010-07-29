@@ -77,7 +77,7 @@ namespace Content
   };
   typedef LightRenderTypes::LightRenderType LightRenderType;
 
-  class PIPELINE_API Light NOC_ABSTRACT : public Instance
+  class PIPELINE_API Light HELIUM_ABSTRACT : public Instance
   {
   public:
     virtual void Host(ContentVisitor* visitor);
@@ -115,7 +115,7 @@ namespace Content
     bool m_RandomAnimOffset;
     bool m_DoVisibilityRayTest;    //Collision detection to determine visibility (Directional lights only)
 
-    Light ( const Nocturnal::TUID& id = Nocturnal::TUID::Generate() )
+    Light ( const Helium::TUID& id = Helium::TUID::Generate() )
       : Instance( id )
       , m_Attenuate( true )
       , m_CastShadows( true )
@@ -158,6 +158,6 @@ namespace Content
 
   };
 
-  typedef Nocturnal::SmartPtr<Light> LightPtr;
+  typedef Helium::SmartPtr<Light> LightPtr;
   typedef std::vector<LightPtr> V_Light;
 }

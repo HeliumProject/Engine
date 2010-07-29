@@ -2,7 +2,7 @@
 #include "Platform/Environment.h"
 #include "Platform/Assert.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 // 8192 is conservative here, its xp's max command line, most other OSes are higher
 #define ARG_MAX (8192)
@@ -11,9 +11,9 @@ using namespace Nocturnal;
 int            g_Argc = 0;
 const tchar**   g_Argv = NULL;
 tchar           g_CmdLine[ ARG_MAX ] = { '\0' };
-const tchar*    Nocturnal::CmdLineDelimiters = TXT( "-/" );
+const tchar*    Helium::CmdLineDelimiters = TXT( "-/" );
 
-void Nocturnal::SetCmdLine( int argc, const tchar** argv )
+void Helium::SetCmdLine( int argc, const tchar** argv )
 {
     for ( int i=0; i<argc; i++ )
     {
@@ -40,19 +40,19 @@ void Nocturnal::SetCmdLine( int argc, const tchar** argv )
     ProcessCmdLine( g_CmdLine, g_Argc, g_Argv );
 }
 
-const tchar* Nocturnal::GetCmdLine()
+const tchar* Helium::GetCmdLine()
 {
     return g_CmdLine;
 }
 
-void Nocturnal::ReleaseCmdLine()
+void Helium::ReleaseCmdLine()
 {
     delete[] g_Argv;
     g_Argv = NULL;
     g_Argc = 0;
 }
 
-void Nocturnal::ProcessCmdLine(const tchar* command, int& argc, const tchar**& argv)
+void Helium::ProcessCmdLine(const tchar* command, int& argc, const tchar**& argv)
 {
     tchar* _argv;
 
@@ -141,15 +141,15 @@ void Nocturnal::ProcessCmdLine(const tchar* command, int& argc, const tchar**& a
     argv[argc] = NULL;
 }
 
-const tchar** Nocturnal::GetCmdLine( int& argc )
+const tchar** Helium::GetCmdLine( int& argc )
 {
     argc = g_Argc;
     return g_Argv;
 }
 
-const tchar* Nocturnal::GetCmdLineArg( const tchar* arg )
+const tchar* Helium::GetCmdLineArg( const tchar* arg )
 {
-    int delims = (int)_tcslen( Nocturnal::CmdLineDelimiters );
+    int delims = (int)_tcslen( Helium::CmdLineDelimiters );
 
     // for each arg
     for ( int i=0; i<g_Argc; ++i )
@@ -161,13 +161,13 @@ const tchar* Nocturnal::GetCmdLineArg( const tchar* arg )
         for ( int j=0; j<delims; j++ )
         {
             // if this arg has that delimiter
-            if ( g_Argv[i][0] == Nocturnal::CmdLineDelimiters[j] )
+            if ( g_Argv[i][0] == Helium::CmdLineDelimiters[j] )
             {
                 // we have a delimited arg, set it
                 name = g_Argv[i];
 
                 // skip all the delims
-                while ( *name == Nocturnal::CmdLineDelimiters[j] )
+                while ( *name == Helium::CmdLineDelimiters[j] )
                 {
                     name++;
                 }
@@ -193,8 +193,8 @@ const tchar* Nocturnal::GetCmdLineArg( const tchar* arg )
     return NULL;
 }
 
-#pragma TODO ( "Deprecate Nocturnal::GetCmdLineFlag. All commandline options should be defined and parsed once in the application, we shouldn't be parsing the entire commandline everytime!" )
-bool Nocturnal::GetCmdLineFlag( const tchar* arg )
+#pragma TODO ( "Deprecate Helium::GetCmdLineFlag. All commandline options should be defined and parsed once in the application, we shouldn't be parsing the entire commandline everytime!" )
+bool Helium::GetCmdLineFlag( const tchar* arg )
 {
     bool explicitValue;
     if ( GetCmdLineArg( arg, explicitValue ) )

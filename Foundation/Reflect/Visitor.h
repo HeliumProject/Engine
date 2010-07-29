@@ -29,7 +29,7 @@ namespace Reflect
         }
     };
 
-    typedef Nocturnal::SmartPtr<Visitor> VisitorPtr;
+    typedef Helium::SmartPtr<Visitor> VisitorPtr;
 
     class FOUNDATION_API FindByTypeVisitor : public Visitor
     {
@@ -40,7 +40,7 @@ namespace Reflect
 
         FindByTypeVisitor(i32 type, V_Element& found);
 
-        virtual bool VisitElement(Element* element) NOC_OVERRIDE;
+        virtual bool VisitElement(Element* element) HELIUM_OVERRIDE;
     };
 
     class FOUNDATION_API FindByTypeSetVisitor : public Visitor
@@ -52,6 +52,6 @@ namespace Reflect
 
         FindByTypeSetVisitor(const std::set< i32 >& types, V_Element& found);
 
-        virtual bool VisitElement(Element* element) NOC_OVERRIDE;
+        virtual bool VisitElement(Element* element) HELIUM_OVERRIDE;
     };
 }

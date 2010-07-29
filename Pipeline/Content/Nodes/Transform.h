@@ -8,7 +8,7 @@ namespace Content
   // A general affine transformation node
   //
 
-  class PIPELINE_API Transform NOC_ABSTRACT : public HierarchyNode
+  class PIPELINE_API Transform HELIUM_ABSTRACT : public HierarchyNode
   {
   public:
     // Scale factors
@@ -36,7 +36,7 @@ namespace Content
 
     }
 
-    Transform (const Nocturnal::TUID& id)
+    Transform (const Helium::TUID& id)
       : HierarchyNode (id)
       , m_Scale (1.0f, 1.0f, 1.0f)
       , m_InheritTransform (true)
@@ -51,5 +51,5 @@ namespace Content
     virtual void ResetTransform();
   };
 
-  typedef Nocturnal::SmartPtr<Transform> TransformPtr;
+  typedef Helium::SmartPtr<Transform> TransformPtr;
 }

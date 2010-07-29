@@ -13,7 +13,7 @@
 // Insert<M_strToInt>::Result result = m_Map.insert( M_StrToInt::valueType("test", 1)); 
 //
 
-namespace Nocturnal
+namespace Helium
 {
     template <typename Container>
     struct Insert

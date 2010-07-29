@@ -50,7 +50,7 @@ private:
   // private non-static members
   MPlug                 m_Plug;
   Asset::EntityInstancePtr      m_Entity;
-  Nocturnal::TUID        m_UID; // cache the TUID here so we don't have to look it up on the backing entityPtr each time we do a comparison
+  Helium::TUID        m_UID; // cache the TUID here so we don't have to look it up on the backing entityPtr each time we do a comparison
   MCallbackId           m_AttributeChangedCB;
   MCallbackId           m_ChildAddedCB;
 
@@ -70,7 +70,7 @@ public:
   virtual MStatus   		  compute( const MPlug& plug, MDataBlock& data );
   virtual void            draw( M3dView& view, const MDagPath& path, M3dView::DisplayStyle style, M3dView::DisplayStatus status );
 
-  const Nocturnal::TUID& GetUID() const
+  const Helium::TUID& GetUID() const
   {
     return m_UID;
   }
@@ -114,4 +114,4 @@ public:
   static void AllDagChangesCallback( MDagMessage::DagMessage dagMsg, MDagPath& child, MDagPath &parent, void* clientData );
 };
 
-typedef std::map< Nocturnal::TUID, EntityNode* > M_EntityNode;
+typedef std::map< Helium::TUID, EntityNode* > M_EntityNode;

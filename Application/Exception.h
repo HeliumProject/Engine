@@ -35,14 +35,14 @@ namespace Debug
 
     }
   };
-  typedef Nocturnal::Signature<int, const BreakpointArgs&> BreakpointSignature;
+  typedef Helium::Signature<int, const BreakpointArgs&> BreakpointSignature;
   FOUNDATION_API extern BreakpointSignature::Delegate g_BreakpointOccurred;
 
   //
   // Exception Event (raised when an exception occurs)
   //
 
-  typedef Nocturnal::Signature<void, const ExceptionArgs&> ExceptionSignature;
+  typedef Helium::Signature<void, const ExceptionArgs&> ExceptionSignature;
   extern FOUNDATION_API ExceptionSignature::Delegate g_ExceptionOccurred;
 
   //
@@ -52,7 +52,7 @@ namespace Debug
   struct FOUNDATION_API TerminateArgs
   {
   };
-  typedef Nocturnal::Signature<void, const TerminateArgs&> TerminateSignature;
+  typedef Helium::Signature<void, const TerminateArgs&> TerminateSignature;
   extern FOUNDATION_API TerminateSignature::Event g_Terminating;
 
   //
@@ -68,7 +68,7 @@ namespace Debug
   FOUNDATION_API int GetExceptionBehavior();
 
   // prepare and dispatch a report for a C++ exception
-  FOUNDATION_API void ProcessException( const Nocturnal::Exception& ex,
+  FOUNDATION_API void ProcessException( const Helium::Exception& ex,
                                    bool print = false,
                                    bool fatal = false );
 

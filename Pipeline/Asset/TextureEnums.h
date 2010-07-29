@@ -10,14 +10,14 @@ namespace Asset
   {
     enum TextureWrapMode
     {
-      Wrap    = Nocturnal::UV_WRAP,
-      Mirror  = Nocturnal::UV_MIRROR,
-      Clamp   = Nocturnal::UV_CLAMP,
-      Border  = Nocturnal::UV_BORDER,
+      Wrap    = Helium::UV_WRAP,
+      Mirror  = Helium::UV_MIRROR,
+      Clamp   = Helium::UV_CLAMP,
+      Border  = Helium::UV_BORDER,
       Count
     };
 
-    NOC_COMPILE_ASSERT(Count == Nocturnal::UV_COUNT);
+    HELIUM_COMPILE_ASSERT(Count == Helium::UV_COUNT);
 
     static void TextureWrapModeEnumerateEnumeration( Reflect::Enumeration* info )
     {
@@ -34,29 +34,29 @@ namespace Asset
   {
     enum TextureColorFormat
     {
-      UNKNOWN  = Nocturnal::OUTPUT_CF_UNKNOWN,
-      ARGB8888 = Nocturnal::OUTPUT_CF_ARGB8888,
-      ARGB4444 = Nocturnal::OUTPUT_CF_ARGB4444,
-      ARGB1555 = Nocturnal::OUTPUT_CF_ARGB1555,
-      RGB565   = Nocturnal::OUTPUT_CF_RGB565,
-      A8       = Nocturnal::OUTPUT_CF_A8,
-      L8       = Nocturnal::OUTPUT_CF_L8,
-      AL88     = Nocturnal::OUTPUT_CF_AL88,
-      DXT1     = Nocturnal::OUTPUT_CF_DXT1,
-      DXT3     = Nocturnal::OUTPUT_CF_DXT3,
-      DXT5     = Nocturnal::OUTPUT_CF_DXT5,
-      DUDV     = Nocturnal::OUTPUT_CF_DUDV,
-      F32      = Nocturnal::OUTPUT_CF_F32,
-      F32F32   = Nocturnal::OUTPUT_CF_F32F32,
-      FLOATMAP = Nocturnal::OUTPUT_CF_FLOATMAP,
-      F16      = Nocturnal::OUTPUT_CF_F16,
-      F16F16   = Nocturnal::OUTPUT_CF_F16F16,
-      HALFMAP  = Nocturnal::OUTPUT_CF_HALFMAP,
-      RGBE     = Nocturnal::OUTPUT_CF_RGBE,
+      UNKNOWN  = Helium::OUTPUT_CF_UNKNOWN,
+      ARGB8888 = Helium::OUTPUT_CF_ARGB8888,
+      ARGB4444 = Helium::OUTPUT_CF_ARGB4444,
+      ARGB1555 = Helium::OUTPUT_CF_ARGB1555,
+      RGB565   = Helium::OUTPUT_CF_RGB565,
+      A8       = Helium::OUTPUT_CF_A8,
+      L8       = Helium::OUTPUT_CF_L8,
+      AL88     = Helium::OUTPUT_CF_AL88,
+      DXT1     = Helium::OUTPUT_CF_DXT1,
+      DXT3     = Helium::OUTPUT_CF_DXT3,
+      DXT5     = Helium::OUTPUT_CF_DXT5,
+      DUDV     = Helium::OUTPUT_CF_DUDV,
+      F32      = Helium::OUTPUT_CF_F32,
+      F32F32   = Helium::OUTPUT_CF_F32F32,
+      FLOATMAP = Helium::OUTPUT_CF_FLOATMAP,
+      F16      = Helium::OUTPUT_CF_F16,
+      F16F16   = Helium::OUTPUT_CF_F16F16,
+      HALFMAP  = Helium::OUTPUT_CF_HALFMAP,
+      RGBE     = Helium::OUTPUT_CF_RGBE,
       COUNT
     };
 
-    NOC_COMPILE_ASSERT(COUNT == Nocturnal::OUTPUT_CF_COUNT);
+    HELIUM_COMPILE_ASSERT(COUNT == Helium::OUTPUT_CF_COUNT);
 
     static void TextureColorFormatEnumerateEnumeration( Reflect::Enumeration* info )
     {
@@ -88,16 +88,16 @@ namespace Asset
   {
     enum RunTimeFilter
     {
-      RTF_POINT = Nocturnal::FILTER_POINT_SELECT_MIP,
-      RTF_BILINEAR = Nocturnal::FILTER_LINEAR_SELECT_MIP,
-      RTF_TRILINEAR = Nocturnal::FILTER_LINEAR_LINEAR_MIP,
-      RTF_ANISO2_BI = Nocturnal::FILTER_ANISO_2_SELECT_MIP,
-      RTF_ANISO2_TRI = Nocturnal::FILTER_ANISO_2_LINEAR_MIP,
-      RTF_ANISO4_BI = Nocturnal::FILTER_ANISO_4_SELECT_MIP,
-      RTF_ANISO4_TRI = Nocturnal::FILTER_ANISO_4_LINEAR_MIP,
+      RTF_POINT = Helium::FILTER_POINT_SELECT_MIP,
+      RTF_BILINEAR = Helium::FILTER_LINEAR_SELECT_MIP,
+      RTF_TRILINEAR = Helium::FILTER_LINEAR_LINEAR_MIP,
+      RTF_ANISO2_BI = Helium::FILTER_ANISO_2_SELECT_MIP,
+      RTF_ANISO2_TRI = Helium::FILTER_ANISO_2_LINEAR_MIP,
+      RTF_ANISO4_BI = Helium::FILTER_ANISO_4_SELECT_MIP,
+      RTF_ANISO4_TRI = Helium::FILTER_ANISO_4_LINEAR_MIP,
       RTF_COUNT
     };
-    NOC_COMPILE_ASSERT( RTF_COUNT == Nocturnal::FILTER_COUNT );
+    HELIUM_COMPILE_ASSERT( RTF_COUNT == Helium::FILTER_COUNT );
     static void RunTimeFilterEnumerateEnumeration( Reflect::Enumeration* info )
     {
       info->AddElement(RTF_POINT, TXT( "RTF_POINT" ), TXT( "POINT" ) );
@@ -134,20 +134,20 @@ namespace Asset
   {
     enum MipGenFilterType
     {
-      MIP_NONE            = Nocturnal::MIP_FILTER_NONE,
-      MIP_POINT           = Nocturnal::MIP_FILTER_POINT,
-      MIP_BOX             = Nocturnal::MIP_FILTER_BOX,
-      MIP_TRIANGLE        = Nocturnal::MIP_FILTER_TRIANGLE,
-      MIP_QUADRATIC       = Nocturnal::MIP_FILTER_QUADRATIC,
-      MIP_CUBIC           = Nocturnal::MIP_FILTER_CUBIC,
-      MIP_MITCHELL        = Nocturnal::MIP_FILTER_MITCHELL,
-      MIP_GAUSSIAN        = Nocturnal::MIP_FILTER_GAUSSIAN,
-      MIP_SINC            = Nocturnal::MIP_FILTER_SINC,
-      MIP_KAISER          = Nocturnal::MIP_FILTER_KAISER,
-      MIP_POINT_COMPOSITE = Nocturnal::MIP_FILTER_POINT_COMPOSITE,
+      MIP_NONE            = Helium::MIP_FILTER_NONE,
+      MIP_POINT           = Helium::MIP_FILTER_POINT,
+      MIP_BOX             = Helium::MIP_FILTER_BOX,
+      MIP_TRIANGLE        = Helium::MIP_FILTER_TRIANGLE,
+      MIP_QUADRATIC       = Helium::MIP_FILTER_QUADRATIC,
+      MIP_CUBIC           = Helium::MIP_FILTER_CUBIC,
+      MIP_MITCHELL        = Helium::MIP_FILTER_MITCHELL,
+      MIP_GAUSSIAN        = Helium::MIP_FILTER_GAUSSIAN,
+      MIP_SINC            = Helium::MIP_FILTER_SINC,
+      MIP_KAISER          = Helium::MIP_FILTER_KAISER,
+      MIP_POINT_COMPOSITE = Helium::MIP_FILTER_POINT_COMPOSITE,
       MIP_COUNT
     };
-    NOC_COMPILE_ASSERT( MIP_COUNT == Nocturnal::MIP_FILTER_COUNT );
+    HELIUM_COMPILE_ASSERT( MIP_COUNT == Helium::MIP_FILTER_COUNT );
 
     static void MipGenFilterTypeEnumerateEnumeration( Reflect::Enumeration* info )
     {
@@ -171,20 +171,20 @@ namespace Asset
   {
     enum PostMipFilterType
     {
-      POST_NOCHANGE        = Nocturnal::IMAGE_FILTER_NONE,
-      POST_LIGHTER         = Nocturnal::IMAGE_FILTER_LIGHTER,
-      POST_DARKER          = Nocturnal::IMAGE_FILTER_DARKER,
-      POST_MORE_CONTRAST   = Nocturnal::IMAGE_FILTER_MORE_CONTRAST,
-      POST_LESS_CONTRAST   = Nocturnal::IMAGE_FILTER_LESS_CONTRAST,
-      POST_SMOOTH          = Nocturnal::IMAGE_FILTER_SMOOTH,
-      POST_SHARPEN_GRADUAL = Nocturnal::IMAGE_FILTER_SHARPEN_GRADUAL,
-      POST_SHARPEN1X       = Nocturnal::IMAGE_FILTER_SHARPEN1X,
-      POST_SHARPEN2X       = Nocturnal::IMAGE_FILTER_SHARPEN2X,
-      POST_SHARPEN3X       = Nocturnal::IMAGE_FILTER_SHARPEN3X,
-      POST_HIGH_PASS       = Nocturnal::IMAGE_FILTER_HIGH_PASS,
+      POST_NOCHANGE        = Helium::IMAGE_FILTER_NONE,
+      POST_LIGHTER         = Helium::IMAGE_FILTER_LIGHTER,
+      POST_DARKER          = Helium::IMAGE_FILTER_DARKER,
+      POST_MORE_CONTRAST   = Helium::IMAGE_FILTER_MORE_CONTRAST,
+      POST_LESS_CONTRAST   = Helium::IMAGE_FILTER_LESS_CONTRAST,
+      POST_SMOOTH          = Helium::IMAGE_FILTER_SMOOTH,
+      POST_SHARPEN_GRADUAL = Helium::IMAGE_FILTER_SHARPEN_GRADUAL,
+      POST_SHARPEN1X       = Helium::IMAGE_FILTER_SHARPEN1X,
+      POST_SHARPEN2X       = Helium::IMAGE_FILTER_SHARPEN2X,
+      POST_SHARPEN3X       = Helium::IMAGE_FILTER_SHARPEN3X,
+      POST_HIGH_PASS       = Helium::IMAGE_FILTER_HIGH_PASS,
       POST_COUNT
     };
-    NOC_COMPILE_ASSERT( POST_COUNT == Nocturnal::IMAGE_FILTER_COUNT );
+    HELIUM_COMPILE_ASSERT( POST_COUNT == Helium::IMAGE_FILTER_COUNT );
 
     static void PostMipFilterTypeEnumerateEnumeration( Reflect::Enumeration* info )
     {

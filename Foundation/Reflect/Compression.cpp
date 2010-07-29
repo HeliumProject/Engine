@@ -21,7 +21,7 @@ struct zlibOutputStream : public z_stream
 
         if( ok != Z_OK )
         {
-            throw Nocturnal::Exception( TXT( "zlib deflateInit error" ) ); 
+            throw Helium::Exception( TXT( "zlib deflateInit error" ) ); 
         }
     }
 
@@ -45,7 +45,7 @@ struct zlibInputStream : public z_stream
 
         if( ok != Z_OK )
         {
-            throw Nocturnal::Exception( TXT( "zlib inflateInit error" ) ); 
+            throw Helium::Exception( TXT( "zlib inflateInit error" ) ); 
         }
     }
 
@@ -85,7 +85,7 @@ int Reflect::CompressToStream(CharStream& reflectStream, const char* data, u32 s
 
         if( ret == Z_STREAM_ERROR )
         {
-            throw Nocturnal::Exception( TXT( "zlib error while compressing" ) ); 
+            throw Helium::Exception( TXT( "zlib error while compressing" ) ); 
         }
 
         int outputSize = compressBufferSize - zStream.avail_out; 
@@ -143,12 +143,12 @@ int Reflect::DecompressFromStream(CharStream& reflectStream, int inputBytes, cha
         // happens when we get to the end of the input or output
         if(ret == Z_BUF_ERROR && zStream.avail_out == 0)
         {
-            throw Nocturnal::Exception( TXT( "zlib decompression overflow" ) ); 
+            throw Helium::Exception( TXT( "zlib decompression overflow" ) ); 
         }
 
         if( ret != Z_OK )
         {
-            throw Nocturnal::Exception( TXT( "zlib error while decompressing" ) ); 
+            throw Helium::Exception( TXT( "zlib error while decompressing" ) ); 
         }
     }
 

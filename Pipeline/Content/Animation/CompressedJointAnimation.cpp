@@ -96,10 +96,10 @@ CompressedJointAnimation::CompressedJointAnimation(
 
 u32 CompressedJointAnimation::NumSamples() const
 {
-    NOC_ASSERT( m_TranslateX.size() == m_TranslateY.size() == m_TranslateX.size() );
-    NOC_ASSERT( m_RotateX.size() == m_RotateY.size() == m_RotateZ.size() == m_RotateW.size() );
-    NOC_ASSERT( m_ScaleX.size() == m_ScaleY.size() == m_ScaleZ.size() );
-    NOC_ASSERT( m_TranslateX.size() == m_RotateX.size() == m_ScaleX.size() );
+    HELIUM_ASSERT( m_TranslateX.size() == m_TranslateY.size() == m_TranslateX.size() );
+    HELIUM_ASSERT( m_RotateX.size() == m_RotateY.size() == m_RotateZ.size() == m_RotateW.size() );
+    HELIUM_ASSERT( m_ScaleX.size() == m_ScaleY.size() == m_ScaleZ.size() );
+    HELIUM_ASSERT( m_TranslateX.size() == m_RotateX.size() == m_ScaleX.size() );
 
     return (u32) m_TranslateX.size();
 }

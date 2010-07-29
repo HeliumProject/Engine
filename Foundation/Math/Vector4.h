@@ -51,8 +51,8 @@ namespace Math
         // unary negation
         Vector4           operator- () const { return Vector4( -x, -y, -z, -w ); }
 
-        f32&              operator[] (const u32 i) {  NOC_ASSERT(i < 4); return (&x)[i]; }
-        const f32&        operator[] (const u32 i) const {  NOC_ASSERT(i < 4); return (&x)[i]; }
+        f32&              operator[] (const u32 i) {  HELIUM_ASSERT(i < 4); return (&x)[i]; }
+        const f32&        operator[] (const u32 i) const {  HELIUM_ASSERT(i < 4); return (&x)[i]; }
 
         bool              operator== (const Vector4& v) const { return (x == v.x && y == v.y && z == v.z && w == v.w); }
         bool              operator!= (const Vector4& v) const { return !(x == v.x && y == v.y && z == v.z && w == v.w); }

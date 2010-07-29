@@ -27,6 +27,6 @@ namespace Content
     virtual bool IsCurrent();
   };
 
-  typedef Nocturnal::SmartPtr<ContentVersion> ContentVersionPtr;
+  typedef Helium::SmartPtr<ContentVersion> ContentVersionPtr;
   typedef std::vector<ContentVersionPtr> V_ContentVersion;
 }

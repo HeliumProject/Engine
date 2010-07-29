@@ -8,9 +8,9 @@
 
 #include "Path.h"
 
-namespace Nocturnal
+namespace Helium
 {
-    class FileOperationException : public Nocturnal::Exception
+    class FileOperationException : public Helium::Exception
     {
     public:
         FileOperationException( const tchar *msgFormat, ... ) : Exception()
@@ -35,7 +35,7 @@ namespace Nocturnal
 
     typedef i64 FileLocation;
 
-    class FOUNDATION_API FileHandle : public Nocturnal::RefCountBase< FileHandle >
+    class FOUNDATION_API FileHandle : public Helium::RefCountBase< FileHandle >
     {
     public:
         FileHandle( const tstring& path, const tchar* mode = TXT( "r" ) );
@@ -82,5 +82,5 @@ namespace Nocturnal
         FILE* m_FileHandle;
     };
 
-    typedef Nocturnal::SmartPtr< FileHandle > FileHandlePtr;
+    typedef Helium::SmartPtr< FileHandle > FileHandlePtr;
 }

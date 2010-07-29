@@ -22,7 +22,7 @@ namespace Reflect
     private:
         friend class Archive;
 
-        class ParsingState : public Nocturnal::RefCountBase<ParsingState>
+        class ParsingState : public Helium::RefCountBase<ParsingState>
         {
         public:
             // the name of the short name being processed
@@ -70,7 +70,7 @@ namespace Reflect
             }
         };
 
-        typedef Nocturnal::SmartPtr<ParsingState> ParsingStatePtr;
+        typedef Helium::SmartPtr<ParsingState> ParsingStatePtr;
 
         // The expat parser object
         XML_Parser m_Parser;

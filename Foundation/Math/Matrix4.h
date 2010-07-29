@@ -144,13 +144,13 @@ namespace Math
 
         Vector4&              operator[] (const u32 i)
         {
-            NOC_ASSERT(i < 4);
+            HELIUM_ASSERT(i < 4);
             return (&x)[i];
         }
 
         const Vector4&        operator[] (const u32 i) const
         {
-            NOC_ASSERT(i < 4); return (&x)[i];
+            HELIUM_ASSERT(i < 4); return (&x)[i];
         }
 
         f32&                  operator()(const u32 i, const u32 j)
@@ -477,9 +477,9 @@ namespace Math
 
     inline Matrix4& Matrix4::Orthogonalize(Axis first, Axis second, Axis third)
     {
-        NOC_ASSERT(first != second && second != third);
+        HELIUM_ASSERT(first != second && second != third);
 
-#ifdef NOC_ASSERT_ENABLED
+#ifdef HELIUM_ASSERT_ENABLED
         Vector4 oldFirst = GetBasis(first);
 #endif
 
@@ -505,7 +505,7 @@ namespace Math
             SetBasis(second, GetBasis(second) * -1.0f);
         }
 
-        NOC_ASSERT( oldFirst == GetBasis(first) );
+        HELIUM_ASSERT( oldFirst == GetBasis(first) );
 
         return *this;
     }

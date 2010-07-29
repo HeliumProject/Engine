@@ -55,14 +55,14 @@ namespace Reflect
 
         }
     };
-    typedef Nocturnal::Signature<void, const ElementChangeArgs&, Foundation::AtomicRefCountBase> ElementChangeSignature;
+    typedef Helium::Signature<void, const ElementChangeArgs&, Foundation::AtomicRefCountBase> ElementChangeSignature;
 
 
     //
-    // Reflect::Element is the NOC_ABSTRACT base class of a serializable unit
+    // Reflect::Element is the HELIUM_ABSTRACT base class of a serializable unit
     //
 
-    class FOUNDATION_API Element NOC_ABSTRACT : public AbstractInheritor<Element, Object>
+    class FOUNDATION_API Element HELIUM_ABSTRACT : public AbstractInheritor<Element, Object>
     {
     protected:
         Element ();

@@ -16,13 +16,13 @@ namespace Content
     {
     public:
         // The mesh we are skinning
-        Nocturnal::TUID m_Mesh;
+        Helium::TUID m_Mesh;
 
         // The influence data for each vertex of the mesh
         V_Influence m_Influences;
 
         // The influence objects required to deform this mesh, indexed by each influence item above
-        Nocturnal::V_TUID m_InfluenceObjectIDs;
+        Helium::V_TUID m_InfluenceObjectIDs;
 
         // The influence to use for each vertex (CORRESPONDS TO m_Positions Indices in the referenced mesh)
         std::vector< u32 > m_InfluenceIndices;
@@ -32,7 +32,7 @@ namespace Content
 
         }
 
-        Skin (const Nocturnal::TUID& id)
+        Skin (const Helium::TUID& id)
             : SceneNode (id)
         {
 
@@ -43,6 +43,6 @@ namespace Content
         static void EnumerateClass( Reflect::Compositor<Skin>& comp );
     };
 
-    typedef Nocturnal::SmartPtr<Skin> SkinPtr;
+    typedef Helium::SmartPtr<Skin> SkinPtr;
     typedef std::vector<SkinPtr> V_Skin;
 }

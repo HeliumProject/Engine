@@ -50,7 +50,7 @@ public:
 
   void OnThaw( const KeyArgs& args )
   {
-    NOC_ASSERT( m_Override > 0 );
+    HELIUM_ASSERT( m_Override > 0 );
     m_Override--;
     OnChanged( args );
   }

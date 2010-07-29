@@ -13,7 +13,7 @@ using namespace Inspect;
 FileDialogButton::FileDialogButton( const tstring& path )
 : m_Title( TXT( "Open" ) )
 {
-    Nocturnal::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( TXT( "All files (*.*)|*.*" ) ) );
+    Helium::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( TXT( "All files (*.*)|*.*" ) ) );
 
     SetPath( path );
 }
@@ -52,7 +52,7 @@ void FileDialogButton::ReadPathData( tstring& path ) const
     ReadData( path );
     if ( !path.empty() )
     {
-        Nocturnal::Path::Normalize( path );
+        Helium::Path::Normalize( path );
     }
 }
 
@@ -83,7 +83,7 @@ bool FileDialogButton::Write()
 
         wxWindow* parent = GetCanvas() ? GetCanvas()->GetControl() : NULL;
 
-        Nocturnal::FileDialog fileDialog( parent, m_Title.c_str(), GetPath().c_str(), TXT( "" ), filterStr.c_str(), Nocturnal::FileDialogStyles::DefaultOpen );
+        Helium::FileDialog fileDialog( parent, m_Title.c_str(), GetPath().c_str(), TXT( "" ), filterStr.c_str(), Helium::FileDialogStyles::DefaultOpen );
 
         if ( fileDialog.ShowModal() == wxID_OK )
         {
@@ -109,7 +109,7 @@ void FileDialogButton::SetTitleBar( const tstring& title )
 void FileDialogButton::SetFilter( const tstring& filter )
 {
     m_Filters.clear();
-    Nocturnal::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( filter ) );
+    Helium::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( filter ) );
 }
 
 
@@ -124,7 +124,7 @@ void FileDialogButton::SetFilter( const std::vector< tstring >& filter )
     std::vector< tstring >::const_iterator itEnd = filter.end();
     for ( ; it != itEnd ; ++it )
     {
-        Nocturnal::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( *it ) );
+        Helium::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( *it ) );
     }
 }
 
@@ -133,7 +133,7 @@ void FileDialogButton::SetFilter( const std::vector< tstring >& filter )
 // 
 void FileDialogButton::AddFilter( const tstring& filter )
 {
-    Nocturnal::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( filter ) );
+    Helium::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( filter ) );
 }
 
 
@@ -157,7 +157,7 @@ tstring FileDialogButton::GetPath()
 void FileDialogButton::SetPath( const tstring& path )
 {
     m_Path = path;
-    Nocturnal::Path::Normalize( m_Path );
+    Helium::Path::Normalize( m_Path );
     if ( IsBound() )
     {
         WriteData( m_Path );

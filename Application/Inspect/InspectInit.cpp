@@ -21,7 +21,7 @@ EditFilePathSignature::Event Inspect::g_EditFilePath;
 namespace Inspect
 {
     i32 g_InitCount = 0;
-    Nocturnal::InitializerStack g_InitializerStack;
+    Helium::InitializerStack g_InitializerStack;
 }
 
 void Inspect::Initialize()

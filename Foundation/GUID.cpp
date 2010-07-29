@@ -14,21 +14,21 @@
 # define RPC_TSTR RPC_CSTR
 #endif
 
-using namespace Nocturnal;
+using namespace Helium;
 
-const Nocturnal::GUID Nocturnal::GUID::Null;
+const Helium::GUID Helium::GUID::Null;
 
-Nocturnal::GUID::GUID()
+Helium::GUID::GUID()
 {
     Reset();
 }
 
-Nocturnal::GUID::GUID(const GUID &id)
+Helium::GUID::GUID(const GUID &id)
 {
     (*this)=id;
 }
 
-Nocturnal::GUID& Nocturnal::GUID::operator=(const Nocturnal::GUID &rhs)
+Helium::GUID& Helium::GUID::operator=(const Helium::GUID &rhs)
 {
     Data1 = rhs.Data1;
     Data2 = rhs.Data2;
@@ -46,7 +46,7 @@ Nocturnal::GUID& Nocturnal::GUID::operator=(const Nocturnal::GUID &rhs)
     return (*this);
 }
 
-bool Nocturnal::GUID::operator==(const Nocturnal::GUID &rhs) const
+bool Helium::GUID::operator==(const Helium::GUID &rhs) const
 {
     if (Data1 == rhs.Data1 &&
         Data2 == rhs.Data2 &&
@@ -64,12 +64,12 @@ bool Nocturnal::GUID::operator==(const Nocturnal::GUID &rhs) const
     return false;
 }
 
-bool Nocturnal::GUID::operator!=(const Nocturnal::GUID &rhs) const
+bool Helium::GUID::operator!=(const Helium::GUID &rhs) const
 {
     return !((*this)==rhs);
 }
 
-bool Nocturnal::GUID::operator<(const Nocturnal::GUID &rhs) const
+bool Helium::GUID::operator<(const Helium::GUID &rhs) const
 {
     if ( Data1 != rhs.Data1 )
         return Data1 < rhs.Data1;
@@ -107,14 +107,14 @@ bool Nocturnal::GUID::operator<(const Nocturnal::GUID &rhs) const
     return false;
 }
 
-void Nocturnal::GUID::ToTUID( tuid& id ) const
+void Helium::GUID::ToTUID( tuid& id ) const
 {
     TUID t;
     t.FromGUID( *this );
     id = (tuid)t;
 }
 
-void Nocturnal::GUID::ToString(tstring& id) const
+void Helium::GUID::ToString(tstring& id) const
 {
     tchar* l_pszString;
 
@@ -125,13 +125,13 @@ void Nocturnal::GUID::ToString(tstring& id) const
     RpcStringFree((RPC_TSTR*)&l_pszString);
 }
 
-void Nocturnal::GUID::FromTUID( tuid id )
+void Helium::GUID::FromTUID( tuid id )
 {
     TUID t( id );
     t.ToGUID( *this );
 }
 
-bool Nocturnal::GUID::FromString(const tstring& id)
+bool Helium::GUID::FromString(const tstring& id)
 {
     GUID uid;
 
@@ -144,7 +144,7 @@ bool Nocturnal::GUID::FromString(const tstring& id)
     return false;
 }
 
-void Nocturnal::GUID::Reset()
+void Helium::GUID::Reset()
 {
     Data1 = 0;
     Data2 = 0;
@@ -159,14 +159,14 @@ void Nocturnal::GUID::Reset()
     Data4[7] = 0;
 }
 
-Nocturnal::GUID Nocturnal::GUID::Generate()
+Helium::GUID Helium::GUID::Generate()
 {
     GUID uid;
     UuidCreate(reinterpret_cast<UUID*>(&uid));
     return uid;
 }
 
-void Nocturnal::GUID::Generate (GUID& uid)
+void Helium::GUID::Generate (GUID& uid)
 {
     UuidCreate(reinterpret_cast<UUID*>(&uid));
 }

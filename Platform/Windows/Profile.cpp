@@ -42,14 +42,14 @@ const tchar* Platform::TraceFile::GetFilePath()
     _tsplitpath(buf, NULL, NULL, modulename, NULL);
 
     static tchar file[MAX_PATH];
-    const tchar* root = _tgetenv( TXT("NOC_Root") );
+    const tchar* root = _tgetenv( TXT("HELIUM_Root") );
     if ( root )
     {
         _stprintf(file, TXT("%s\\log\\profile_%s_%.5X_%.5X.bin"), root, modulename, GetCurrentProcessId(), GetCurrentThreadId() );
     }
     else
     {
-        _stprintf( TXT("%s is not defined in the environment, cannot open profile output\n"), TXT("NOC_Root") );
+        _stprintf( TXT("%s is not defined in the environment, cannot open profile output\n"), TXT("HELIUM_Root") );
     }
 
     return file;

@@ -24,7 +24,7 @@ namespace Platform
             TXT("PlayStation3"),
         };
 
-        NOC_COMPILE_ASSERT( Platform::Types::Count == sizeof(Strings) / sizeof(const tchar*) );
+        HELIUM_COMPILE_ASSERT( Platform::Types::Count == sizeof(Strings) / sizeof(const tchar*) );
     }
     typedef Types::Type Type;
 

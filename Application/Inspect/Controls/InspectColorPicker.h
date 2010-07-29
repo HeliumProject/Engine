@@ -26,9 +26,9 @@ namespace Inspect
     {
     }
 
-    virtual void Realize( Container* parent ) NOC_OVERRIDE;
-    virtual void Read() NOC_OVERRIDE;
-    virtual bool Write() NOC_OVERRIDE;
+    virtual void Realize( Container* parent ) HELIUM_OVERRIDE;
+    virtual void Read() HELIUM_OVERRIDE;
+    virtual bool Write() HELIUM_OVERRIDE;
 
     void UseAlpha( bool alpha );
 
@@ -39,5 +39,5 @@ namespace Inspect
     const Math::Color4& GetColor4() const;
   };
 
-  typedef Nocturnal::SmartPtr<ColorPicker> ColorPickerPtr;
+  typedef Helium::SmartPtr<ColorPicker> ColorPickerPtr;
 }

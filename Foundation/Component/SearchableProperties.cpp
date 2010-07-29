@@ -1,6 +1,6 @@
 #include "SearchableProperties.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 REFLECT_DEFINE_CLASS( SearchableProperties );
 void SearchableProperties::EnumerateClass( Reflect::Compositor< SearchableProperties >& comp )

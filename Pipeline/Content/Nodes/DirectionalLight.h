@@ -18,7 +18,7 @@ namespace Content
     {
     }
 
-    DirectionalLight (Nocturnal::TUID &id)
+    DirectionalLight (Helium::TUID &id)
       : Light (id),
         m_GlobalSun( false ),
         m_ShadowSoftness( 0.0f ),
@@ -39,6 +39,6 @@ namespace Content
     static void EnumerateClass( Reflect::Compositor<DirectionalLight>& comp );
   };
 
-  typedef Nocturnal::SmartPtr<DirectionalLight> DirectionalLightPtr;
+  typedef Helium::SmartPtr<DirectionalLight> DirectionalLightPtr;
   typedef std::vector<DirectionalLightPtr> V_DirectionalLight;
 }

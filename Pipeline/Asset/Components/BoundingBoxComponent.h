@@ -29,7 +29,7 @@ namespace Asset
         }
 
     public:
-        virtual Component::ComponentUsage GetComponentUsage() const NOC_OVERRIDE;
+        virtual Component::ComponentUsage GetComponentUsage() const HELIUM_OVERRIDE;
 
     public:
 
@@ -70,5 +70,5 @@ namespace Asset
         }
     };
 
-    typedef Nocturnal::SmartPtr< BoundingBoxComponent > BoundingBoxComponentPtr;
+    typedef Helium::SmartPtr< BoundingBoxComponent > BoundingBoxComponentPtr;
 }

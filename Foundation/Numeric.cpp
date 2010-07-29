@@ -22,7 +22,7 @@
 #define F64_MIN     2.2250738585072014e-308
 #define F64_MAX     1.7976931348623158e+308
 
-using namespace Nocturnal;
+using namespace Helium;
 
 FOUNDATION_API const i8 NumericLimits<i8>::Minimum = I8_MIN;
 FOUNDATION_API const i8 NumericLimits<i8>::Maximum = I8_MAX;
@@ -61,7 +61,7 @@ static void Test( bool clamp )
         i32 source = NumericLimits<i32>::Maximum;
         u32 dest = 0;
         RangeCast( source, dest, clamp );
-        NOC_ASSERT( dest == NumericLimits<i32>::Maximum );
+        HELIUM_ASSERT( dest == NumericLimits<i32>::Maximum );
     }
 
     // 32->32 int
@@ -69,7 +69,7 @@ static void Test( bool clamp )
         u32 source = NumericLimits<u32>::Maximum;
         i32 dest = 0;
         RangeCast( source, dest, clamp );
-        NOC_ASSERT( clamp ? dest == NumericLimits<i32>::Maximum : dest == 0 );
+        HELIUM_ASSERT( clamp ? dest == NumericLimits<i32>::Maximum : dest == 0 );
     }
 
     // 32->64 int
@@ -77,7 +77,7 @@ static void Test( bool clamp )
         i32 source = NumericLimits<i32>::Maximum;
         i64 dest = 0;
         RangeCast( source, dest, clamp );
-        NOC_ASSERT( dest == NumericLimits<i32>::Maximum );
+        HELIUM_ASSERT( dest == NumericLimits<i32>::Maximum );
     }
 
     // 32->64 float
@@ -85,7 +85,7 @@ static void Test( bool clamp )
         f32 source = NumericLimits<f32>::Maximum;
         f64 dest = 0;
         RangeCast( source, dest, clamp );
-        NOC_ASSERT( dest == NumericLimits<f32>::Maximum );
+        HELIUM_ASSERT( dest == NumericLimits<f32>::Maximum );
     }
 
     // 64->32 int
@@ -93,7 +93,7 @@ static void Test( bool clamp )
         i64 source = NumericLimits<i64>::Maximum;
         i32 dest = 0;
         RangeCast( source, dest, clamp );
-        NOC_ASSERT( clamp ? dest == NumericLimits<i32>::Maximum : dest == 0 );
+        HELIUM_ASSERT( clamp ? dest == NumericLimits<i32>::Maximum : dest == 0 );
     }
 
     // 64->32 float
@@ -101,7 +101,7 @@ static void Test( bool clamp )
         f64 source = NumericLimits<f64>::Maximum;
         f32 dest = 0;
         RangeCast( source, dest, clamp );
-        NOC_ASSERT( clamp ? dest == NumericLimits<f32>::Maximum : dest == 0 );
+        HELIUM_ASSERT( clamp ? dest == NumericLimits<f32>::Maximum : dest == 0 );
     }
 
     // i64->f32
@@ -110,7 +110,7 @@ static void Test( bool clamp )
         f32 dest = 0;
         RangeCast( source, dest, clamp );
         f32 test = (f32)NumericLimits<i64>::Maximum;
-        NOC_ASSERT( dest == test );
+        HELIUM_ASSERT( dest == test );
     }
 
     // f64->i32
@@ -118,7 +118,7 @@ static void Test( bool clamp )
         f64 source = NumericLimits<f64>::Maximum;
         i32 dest = 0;
         RangeCast( source, dest, clamp );
-        NOC_ASSERT( clamp ? dest == NumericLimits<i32>::Maximum : dest == 0 );
+        HELIUM_ASSERT( clamp ? dest == NumericLimits<i32>::Maximum : dest == 0 );
     }
 }
 

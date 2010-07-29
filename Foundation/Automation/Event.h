@@ -6,7 +6,7 @@
 
 #include <vector>
 
-namespace Nocturnal
+namespace Helium
 {
     //////////////////////////////////////////////////////////////////////////
     //
@@ -46,7 +46,7 @@ namespace Nocturnal
     //  };
     //
     //  // this explicitly instantiates all the classes required for a signature
-    //  typedef Nocturnal::Signature<void, Args> ExampleSignature;
+    //  typedef Helium::Signature<void, Args> ExampleSignature;
     //
     //  ExampleSignature::Event g_Event;
     //  Foo                     g_Foo;
@@ -59,7 +59,7 @@ namespace Nocturnal
     //
     // To Do:
     //
-    //  * Add support for stl or 'Nocturnal' allocators in place of C++ heap
+    //  * Add support for stl or 'Helium' allocators in place of C++ heap
     //  * Elminate heap usage in Delegate with some horrific unions:
     //     http://www.codeproject.com/cpp/fastdelegate2.asp
     //
@@ -92,7 +92,7 @@ namespace Nocturnal
     // Signature defines all the template classes necessary for working with a particular signature
     //
 
-    template<typename ReturnType, typename ParameterType, class RefCountBaseType = class Nocturnal::RefCountBase< Void > >
+    template<typename ReturnType, typename ParameterType, class RefCountBaseType = class Helium::RefCountBase< Void > >
     class Signature
     {
     public:
@@ -141,7 +141,7 @@ namespace Nocturnal
                 Function(FunctionType function)
                     : m_Function(function)
                 {
-                    NOC_ASSERT(function);
+                    HELIUM_ASSERT(function);
                 }
 
                 virtual DelegateType GetType() const
@@ -188,8 +188,8 @@ namespace Nocturnal
                     : m_Instance (instance)
                     , m_Method (method)
                 {
-                    NOC_ASSERT(instance);
-                    NOC_ASSERT(method);
+                    HELIUM_ASSERT(instance);
+                    HELIUM_ASSERT(method);
                 }
 
                 virtual DelegateType GetType() const
@@ -215,7 +215,7 @@ namespace Nocturnal
                 }
             };
 
-            Nocturnal::SmartPtr<DelegateImpl> m_Impl;
+            Helium::SmartPtr<DelegateImpl> m_Impl;
 
         public:
             Delegate()
@@ -624,7 +624,7 @@ namespace Nocturnal
                 }
             };
 
-            Nocturnal::SmartPtr< EventImpl > m_Impl;
+            Helium::SmartPtr< EventImpl > m_Impl;
 
         public:
             u32 Count() const
@@ -711,7 +711,7 @@ namespace Nocturnal
                 {
                     // hold a pointer on the stack in case the object we are aggregated into deletes inside this function
                     // use impl and not m_Impl in case _we_ are deleted and m_Impl is trashed
-                    Nocturnal::SmartPtr<EventImpl> impl = m_Impl;
+                    Helium::SmartPtr<EventImpl> impl = m_Impl;
 
                     impl->Raise( parameter, emitter );
                 }
@@ -725,7 +725,7 @@ namespace Nocturnal
                 {
                     // hold a pointer on the stack in case the object we are aggregated into deletes inside this function
                     // use impl and not m_Impl in case _we_ are deleted and m_Impl is trashed
-                    Nocturnal::SmartPtr<EventImpl> impl = m_Impl;
+                    Helium::SmartPtr<EventImpl> impl = m_Impl;
 
                     ret_val = impl->RaiseWithReturn( parameter, emitter );
                 }
@@ -739,7 +739,7 @@ namespace Nocturnal
                 {
                     // hold a pointer on the stack in case the object we are aggregated into deletes inside this function
                     // use impl and not m_Impl in case _we_ are deleted and m_Impl is trashed
-                    Nocturnal::SmartPtr<EventImpl> impl = m_Impl;
+                    Helium::SmartPtr<EventImpl> impl = m_Impl;
 
                     impl->RaiseWithResult( parameter, results, count, emitter );
                 }

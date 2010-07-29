@@ -12,7 +12,7 @@ void AudioClip::EnumerateClass( Reflect::Compositor< AudioClip >& comp )
     comp.AddEnumerationField( &AudioClip::m_Mode, "m_Mode" );
 }
 
-void AudioClip::GatherSearchableProperties( Nocturnal::SearchableProperties* properties ) const
+void AudioClip::GatherSearchableProperties( Helium::SearchableProperties* properties ) const
 {
     const Reflect::Enumeration* modeEnum = Reflect::GetEnumeration< AudioClipMode >();
     if ( modeEnum )

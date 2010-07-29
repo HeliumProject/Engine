@@ -4,7 +4,7 @@
 
 namespace Undo
 {
-  class Exception : public Nocturnal::Exception
+  class Exception : public Helium::Exception
   {
   public:
     Exception( const tchar *msgFormat, ... )

@@ -34,7 +34,7 @@ void ReflectArrayInterpreter::InterpretField(const Field* field, const std::vect
   labelContainer->AddControl( label );
   tstring temp;
   bool converted = Platform::ConvertString( field->m_UIName, temp );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
   label->SetText( temp );
 
   // create the list view
@@ -91,7 +91,7 @@ void ReflectArrayInterpreter::InterpretField(const Field* field, const std::vect
   }
 
   // bind the ui to the serializers
-  Nocturnal::SmartPtr< MultiStringFormatter<Serializer> > data = new MultiStringFormatter<Reflect::Serializer>( (std::vector<Reflect::Serializer*>&)m_Serializers );
+  Helium::SmartPtr< MultiStringFormatter<Serializer> > data = new MultiStringFormatter<Reflect::Serializer>( (std::vector<Reflect::Serializer*>&)m_Serializers );
   list->Bind( data );
 
   // setup the default value

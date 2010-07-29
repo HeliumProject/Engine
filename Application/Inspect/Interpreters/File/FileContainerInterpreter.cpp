@@ -20,7 +20,7 @@
 
 using namespace Reflect;
 using namespace Inspect;
-using namespace Nocturnal;
+using namespace Helium;
 
 FileContainerInterpreter::FileContainerInterpreter (Container* labelContainer)
 : ReflectFieldInterpreter (labelContainer)
@@ -40,7 +40,7 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
   }
 
   return;
-#pragma TODO( "support std::set< Nocturnal::Path > and File::V_Reference" )
+#pragma TODO( "support std::set< Helium::Path > and File::V_Reference" )
 /*
   bool isfileidarray = ( field->m_serializerid == reflect::gettype<u64arrayserializer>() ) && ( field->m_flags & fieldflags::fileid ) != 0;
   bool isfileidset = ( field->m_serializerid == reflect::gettype<u64setserializer>() ) && ( field->m_flags & fieldflags::fileid ) != 0;
@@ -176,7 +176,7 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
   }
 
   // bind the ui to the serializers
-  Nocturnal::SmartPtr< MultiStringFormatter<Serializer> > data = new MultiStringFormatter<Serializer>( (std::vector<Reflect::Serializer*>&)m_Serializers );
+  Helium::SmartPtr< MultiStringFormatter<Serializer> > data = new MultiStringFormatter<Serializer>( (std::vector<Reflect::Serializer*>&)m_Serializers );
   list->Bind( data );
   if ( addButton && ( isFileIdContainer || ( field->m_Flags & FieldFlags::FilePath ) ) )
   {
@@ -251,7 +251,7 @@ void FileContainerInterpreter::OnFindFile( Button* button )
   {
     ClientDataFilter* data = static_cast< ClientDataFilter* >( clientData.Ptr() );
 
-      NOC_BREAK();
+      HELIUM_BREAK();
 #pragma TODO( "Reimplement to use the Vault" )
     //File::FileBrowser browserDlg( button->GetCanvas()->GetControl(), wxID_ANY, "Add Asset to List" );
 

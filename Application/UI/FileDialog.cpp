@@ -10,7 +10,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 
-namespace Nocturnal
+namespace Helium
 {  
 
     /////////////////////////////////////////////////////////////////////////////
@@ -122,7 +122,7 @@ namespace Nocturnal
     wxString FileDialog::GetPath() const
     {
         tstring path( __super::GetPath().c_str() );
-        Nocturnal::Path::Normalize( path );
+        Helium::Path::Normalize( path );
         return path.c_str();
     }
 
@@ -138,7 +138,7 @@ namespace Nocturnal
         for ( size_t n = 0; n < count; n++ )
         {
             tstring file = paths[ n ].c_str();
-            Nocturnal::Path::Normalize( file );
+            Helium::Path::Normalize( file );
             paths[n] = file.c_str();
         }
     }
@@ -154,7 +154,7 @@ namespace Nocturnal
     const tstring& FileDialog::GetFilePath() const
     {
         // Only call this function when working with a dialog in single-select mode
-        NOC_ASSERT( !IsMultipleSelectionEnabled() );
+        HELIUM_ASSERT( !IsMultipleSelectionEnabled() );
 
         static const tstring empty;
         if ( !m_Files.empty() )
@@ -175,7 +175,7 @@ namespace Nocturnal
     const std::set< tstring >& FileDialog::GetFilePaths() const
     {
         // Only call this function when working with a dialog in multi-select mode
-        NOC_ASSERT( IsMultipleSelectionEnabled() );
+        HELIUM_ASSERT( IsMultipleSelectionEnabled() );
 
         return m_Files;
     }
@@ -287,6 +287,6 @@ namespace Nocturnal
         // - if the location exists but there is no file, go to that location in the view and reset the full path
     }
 
-} // namespace Nocturnal
+} // namespace Helium
 
 

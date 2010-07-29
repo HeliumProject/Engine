@@ -20,7 +20,7 @@ namespace Asset
     float       m_OcclVisDistAdjust;
     float       m_DecalGeomMem;
 
-    std::set< Nocturnal::Path > m_Zones;
+    std::set< Helium::Path > m_Zones;
 
     SceneAsset()
       : m_NearClipDist( 0.06f )
@@ -33,15 +33,15 @@ namespace Asset
     {
     }
 
-    virtual bool ProcessComponent(Reflect::ElementPtr element, const tstring& fieldName) NOC_OVERRIDE;
+    virtual bool ProcessComponent(Reflect::ElementPtr element, const tstring& fieldName) HELIUM_OVERRIDE;
 
-    virtual bool ValidateCompatible( const Component::ComponentPtr& attr, tstring& error ) const NOC_OVERRIDE;
+    virtual bool ValidateCompatible( const Component::ComponentPtr& attr, tstring& error ) const HELIUM_OVERRIDE;
 
     REFLECT_DECLARE_CLASS( SceneAsset, AssetClass );
 
     static void EnumerateClass( Reflect::Compositor<SceneAsset>& comp );
   };
 
-  typedef Nocturnal::SmartPtr< SceneAsset > SceneAssetPtr;
+  typedef Helium::SmartPtr< SceneAsset > SceneAssetPtr;
   typedef std::vector< SceneAsset > V_SceneAsset;
 }

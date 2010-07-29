@@ -7,14 +7,14 @@
 
 struct FileDroppedArgs
 {
-  Nocturnal::Path m_Path;
+  Helium::Path m_Path;
 
   FileDroppedArgs( const tstring& path = TXT( "" ) )
     : m_Path( path )
   {
   }
 };
-typedef Nocturnal::Signature< void, const FileDroppedArgs& > FileDroppedSignature;
+typedef Helium::Signature< void, const FileDroppedArgs& > FileDroppedSignature;
 typedef std::set< FileDroppedSignature::Delegate > S_FileDroppedSignature;
 
 class FileDropTarget : public wxFileDropTarget

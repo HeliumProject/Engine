@@ -40,7 +40,7 @@ namespace Worker
     const static u32 ConsoleOutputMessage = 0;
 #pragma warning ( default: 4200 )
 
-    class APPLICATION_API Process : public Nocturnal::RefCountBase<Process>
+    class APPLICATION_API Process : public Helium::RefCountBase<Process>
     {
     private:
         // the file to execute

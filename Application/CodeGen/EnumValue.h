@@ -9,7 +9,7 @@ namespace CodeGen
 {
   // Forwards
   class Enum;
-  typedef Nocturnal::SmartPtr< Enum > EnumPtr;
+  typedef Helium::SmartPtr< Enum > EnumPtr;
 
   /////////////////////////////////////////////////////////////////////////////
   // Class representing a C++ enumeration value.
@@ -26,7 +26,7 @@ namespace CodeGen
     i32 GetValue() const;
   };
 
-  typedef Nocturnal::SmartPtr< EnumValue > EnumValuePtr;
+  typedef Helium::SmartPtr< EnumValue > EnumValuePtr;
   typedef std::vector< EnumValuePtr > V_EnumValueSmartPtr;
-  typedef Nocturnal::OrderedSet< EnumValuePtr > OS_EnumValueSmartPtr;
+  typedef Helium::OrderedSet< EnumValuePtr > OS_EnumValueSmartPtr;
 }

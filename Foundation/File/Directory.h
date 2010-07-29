@@ -6,7 +6,7 @@
 #include "Foundation/Automation/Event.h"
 #include "Foundation/File/Path.h"
 
-namespace Nocturnal
+namespace Helium
 {
     namespace DirectoryFlags
     {
@@ -72,8 +72,8 @@ namespace Nocturnal
         void Reset();
         bool Open(const tstring &path, const tstring &spec = TXT( "*.*" ), u32 flags = DirectoryFlags::Default);
 
-        static void GetFiles( const tstring& path, std::set< Nocturnal::Path >& paths, const tstring& spec = TXT( "*.*" ), bool recursive = false );
-        void GetFiles( std::set< Nocturnal::Path >& paths, const tstring& spec = TXT( "*.*" ), bool recursive = false );
+        static void GetFiles( const tstring& path, std::set< Helium::Path >& paths, const tstring& spec = TXT( "*.*" ), bool recursive = false );
+        void GetFiles( std::set< Helium::Path >& paths, const tstring& spec = TXT( "*.*" ), bool recursive = false );
 
     private:
         bool Find(const tstring& query = TXT( "" ));
@@ -87,7 +87,7 @@ namespace Nocturnal
         bool                m_Done;
     };
 
-    typedef Nocturnal::Signature<void, const DirectoryItem&> DirectoryItemSignature;
+    typedef Helium::Signature<void, const DirectoryItem&> DirectoryItemSignature;
 
     FOUNDATION_API void RecurseDirectories( DirectoryItemSignature::Delegate delegate, const tstring &path, const tstring &spec = TXT( "*.*" ), u32 flags = DirectoryFlags::Default);
 }

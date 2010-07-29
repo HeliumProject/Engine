@@ -5,7 +5,7 @@
 
 #include "Platform/Assert.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 Directory::Directory()
 : m_Done( true )
@@ -35,7 +35,7 @@ bool Directory::Next()
 {
     if ( m_Done )
     {
-        throw Nocturnal::Exception( TXT( "The file iterator is invalid!" ) );
+        throw Helium::Exception( TXT( "The file iterator is invalid!" ) );
     }
 
     return Find();
@@ -45,7 +45,7 @@ const DirectoryItem& Directory::GetItem()
 {
     if ( m_Done )
     {
-        throw Nocturnal::Exception( TXT( "The file iterator is invalid!" ) );
+        throw Helium::Exception( TXT( "The file iterator is invalid!" ) );
     }
 
     return m_Item;
@@ -72,18 +72,18 @@ bool Directory::Open(const tstring &path, const tstring &spec /* = TXT( "" ) */,
     // check that the input is not larger than allowed
     if ( query.size() > MAX_PATH )
     {
-        throw Nocturnal::Exception( TXT( "Query string is too long (max buffer length is %d): %s" ), ( int ) MAX_PATH, query.c_str() );
+        throw Helium::Exception( TXT( "Query string is too long (max buffer length is %d): %s" ), ( int ) MAX_PATH, query.c_str() );
     }
 
     return Find(query);
 }
 
-void Directory::GetFiles( const tstring& path, std::set< Nocturnal::Path >& paths, const tstring& spec, bool recursive )
+void Directory::GetFiles( const tstring& path, std::set< Helium::Path >& paths, const tstring& spec, bool recursive )
 {
     for ( Directory dir( path, spec, DirectoryFlags::SkipDirectories ); !dir.IsDone(); dir.Next() )
     {
         const DirectoryItem& item = dir.GetItem();
-        paths.insert( Nocturnal::Path( item.m_Path ) );
+        paths.insert( Helium::Path( item.m_Path ) );
     }
 
     if ( recursive )
@@ -95,7 +95,7 @@ void Directory::GetFiles( const tstring& path, std::set< Nocturnal::Path >& path
     }
 }
 
-void Directory::GetFiles( std::set< Nocturnal::Path >& paths, const tstring& spec, bool recursive )
+void Directory::GetFiles( std::set< Helium::Path >& paths, const tstring& spec, bool recursive )
 {
     GetFiles( m_Path, paths, spec, recursive );
 }
@@ -229,14 +229,14 @@ void Directory::Close()
     {
         BOOL result = ::FindClose( m_Handle );
         m_Handle = INVALID_HANDLE_VALUE;
-        NOC_ASSERT(result);
+        HELIUM_ASSERT(result);
     }
 
     m_Done = true;
     m_Item.Clear(); 
 }
 
-void Nocturnal::RecurseDirectories( DirectoryItemSignature::Delegate delegate, const tstring &path, const tstring &spec, u32 flags )
+void Helium::RecurseDirectories( DirectoryItemSignature::Delegate delegate, const tstring &path, const tstring &spec, u32 flags )
 {
     // contents
     for ( Directory dir ( path, spec, flags ); !dir.IsDone(); dir.Next() )

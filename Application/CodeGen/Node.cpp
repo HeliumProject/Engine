@@ -14,7 +14,7 @@ Node::Node( const std::string& name )
 {
   // Never specify a full name.  The full name is calculated based upon the
   // node's parents.
-  NOC_ASSERT( GetNameType( name ) == NameTypes::ShortName );
+  HELIUM_ASSERT( GetNameType( name ) == NameTypes::ShortName );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

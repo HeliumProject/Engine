@@ -26,14 +26,14 @@ bool Cast(const Serializer* src, Serializer* dest)
     const SimpleSerializer<srcT>* source = static_cast<const SimpleSerializer<srcT>*>(src);
     SimpleSerializer<destT>* destination = static_cast<SimpleSerializer<destT>*>(dest);
 
-    return Nocturnal::RangeCast( source->m_Data.Get(), destination->m_Data.Ref() );
+    return Helium::RangeCast( source->m_Data.Get(), destination->m_Data.Ref() );
 }
 
 template<>
-bool Cast<u64, Nocturnal::TUID>(const Serializer* src, Serializer* dest)
+bool Cast<u64, Helium::TUID>(const Serializer* src, Serializer* dest)
 {
     const SimpleSerializer<u64>* source = static_cast<const SimpleSerializer<u64>*>(src);
-    SimpleSerializer<Nocturnal::TUID>* destination = static_cast<SimpleSerializer<Nocturnal::TUID>*>(dest);
+    SimpleSerializer<Helium::TUID>* destination = static_cast<SimpleSerializer<Helium::TUID>*>(dest);
 
     destination->m_Data.Set( source->m_Data.Get() );
 
@@ -41,9 +41,9 @@ bool Cast<u64, Nocturnal::TUID>(const Serializer* src, Serializer* dest)
 }
 
 template<>
-bool Cast<Nocturnal::TUID, u64>(const Serializer* src, Serializer* dest)
+bool Cast<Helium::TUID, u64>(const Serializer* src, Serializer* dest)
 {
-    const SimpleSerializer<Nocturnal::TUID>* source = static_cast<const SimpleSerializer<Nocturnal::TUID>*>(src);
+    const SimpleSerializer<Helium::TUID>* source = static_cast<const SimpleSerializer<Helium::TUID>*>(src);
     SimpleSerializer<u64>* destination = static_cast<SimpleSerializer<u64>*>(dest);
 
     destination->m_Data.Set( source->m_Data.Get() );
@@ -52,10 +52,10 @@ bool Cast<Nocturnal::TUID, u64>(const Serializer* src, Serializer* dest)
 }
 
 template<>
-bool Cast<Nocturnal::TUID, Nocturnal::GUID>(const Serializer* src, Serializer* dest)
+bool Cast<Helium::TUID, Helium::GUID>(const Serializer* src, Serializer* dest)
 {
-    const SimpleSerializer<Nocturnal::TUID>* source = static_cast<const SimpleSerializer<Nocturnal::TUID>*>(src);
-    SimpleSerializer<Nocturnal::GUID>* destination = static_cast<SimpleSerializer<Nocturnal::GUID>*>(dest);
+    const SimpleSerializer<Helium::TUID>* source = static_cast<const SimpleSerializer<Helium::TUID>*>(src);
+    SimpleSerializer<Helium::GUID>* destination = static_cast<SimpleSerializer<Helium::GUID>*>(dest);
 
     destination->m_Data.Ref().FromTUID( source->m_Data.Get() );
 
@@ -63,10 +63,10 @@ bool Cast<Nocturnal::TUID, Nocturnal::GUID>(const Serializer* src, Serializer* d
 }
 
 template<>
-bool Cast<Nocturnal::GUID, Nocturnal::TUID>(const Serializer* src, Serializer* dest)
+bool Cast<Helium::GUID, Helium::TUID>(const Serializer* src, Serializer* dest)
 {
-    const SimpleSerializer<Nocturnal::GUID>* source = static_cast<const SimpleSerializer<Nocturnal::GUID>*>(src);
-    SimpleSerializer<Nocturnal::TUID>* destination = static_cast<SimpleSerializer<Nocturnal::TUID>*>(dest);
+    const SimpleSerializer<Helium::GUID>* source = static_cast<const SimpleSerializer<Helium::GUID>*>(src);
+    SimpleSerializer<Helium::TUID>* destination = static_cast<SimpleSerializer<Helium::TUID>*>(dest);
 
     destination->m_Data.Ref().FromGUID( source->m_Data.Get() );
 
@@ -84,7 +84,7 @@ void MapCast()
     P_i32 key (Reflect::GetType<S>(), Reflect::GetType<D>());
     M_CastingFuncs::value_type val (key , &Cast<S, D>);
     bool ins = g_CastingFuncs.insert( val ).second;
-    NOC_ASSERT(ins);
+    HELIUM_ASSERT(ins);
 }
 
 template<class A, class B>
@@ -132,7 +132,7 @@ void Serializer::Initialize()
     MapCasts<u32, i64>(); MapCasts<u32, u64>();
 
     // 8^2 - 8 (don't cant to ourself)
-    NOC_ASSERT(g_CastingFuncs.size() == 56);
+    HELIUM_ASSERT(g_CastingFuncs.size() == 56);
 
     // float to double
     MapCasts<f32, f64>();
@@ -150,13 +150,13 @@ void Serializer::Initialize()
     MapCasts<f64, i64>(); MapCasts<f64, u64>();
 
     // 8 * 4 (to and from f32 and f64 across 8 integer type)
-    NOC_ASSERT(g_CastingFuncs.size() == 90);
+    HELIUM_ASSERT(g_CastingFuncs.size() == 90);
 
     // u64 to TUID and back
-    MapCasts<u64, Nocturnal::TUID>();
+    MapCasts<u64, Helium::TUID>();
 
     // GUID to TUID and back
-    MapCasts<Nocturnal::GUID, Nocturnal::TUID>();
+    MapCasts<Helium::GUID, Helium::TUID>();
 }
 
 void Serializer::Cleanup()

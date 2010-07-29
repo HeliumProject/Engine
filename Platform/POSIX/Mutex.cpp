@@ -18,11 +18,11 @@ Mutex::~Mutex()
 void Mutex::Lock()
 {
     int result = pthread_mutex_lock(&m_Handle);
-    NOC_ASSERT( result == 0 );
+    HELIUM_ASSERT( result == 0 );
 }
 
 void Mutex::Unlock()
 {
     int result = pthread_mutex_unlock(&m_Handle);
-    NOC_ASSERT( result == 0 );
+    HELIUM_ASSERT( result == 0 );
 }

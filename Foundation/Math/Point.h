@@ -89,13 +89,13 @@ namespace Math
 
         i32&              operator[] (const unsigned i)
         {
-            NOC_ASSERT(i < 2);
+            HELIUM_ASSERT(i < 2);
             return (&x)[i];
         }
 
         const i32&        operator[] (const unsigned i) const
         {
-            NOC_ASSERT(i < 2);
+            HELIUM_ASSERT(i < 2);
             return (&x)[i];
         }
 

@@ -35,10 +35,10 @@ int Platform::Execute( const tstring& command, bool showWindow, bool block )
     if (block)
     {
         DWORD waitResult = ::WaitForSingleObject( pi.hProcess, INFINITE );
-        NOC_ASSERT( waitResult != WAIT_FAILED );
+        HELIUM_ASSERT( waitResult != WAIT_FAILED );
 
         BOOL codeResult = ::GetExitCodeProcess( pi.hProcess, &result );
-        NOC_ASSERT( codeResult );
+        HELIUM_ASSERT( codeResult );
     }
 
     ::CloseHandle( pi.hProcess );
@@ -127,7 +127,7 @@ int Platform::Execute( const tstring& command, tstring& output, bool showWindow 
     // get exit code
     DWORD result = 0;
     BOOL codeResult = ::GetExitCodeProcess( pi.hProcess, &result );
-    NOC_ASSERT( codeResult );
+    HELIUM_ASSERT( codeResult );
 
     // close the process handle
     ::CloseHandle( pi.hProcess );

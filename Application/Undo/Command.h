@@ -9,7 +9,7 @@
 
 namespace Undo
 {
-  class APPLICATION_API Command : public Nocturnal::RefCountBase<Command>
+  class APPLICATION_API Command : public Helium::RefCountBase<Command>
   {
   public:
     //
@@ -51,6 +51,6 @@ namespace Undo
     }
   };
 
-  typedef Nocturnal::SmartPtr<Command> CommandPtr;
+  typedef Helium::SmartPtr<Command> CommandPtr;
   typedef std::vector<CommandPtr> V_CommandSmartPtr;
 }

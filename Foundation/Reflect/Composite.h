@@ -93,7 +93,7 @@ namespace Reflect
                     }
                     else
                     {
-                        NOC_BREAK();
+                        HELIUM_BREAK();
                         baseName.clear();
                     }
                 }
@@ -112,7 +112,7 @@ namespace Reflect
                     base->m_Enumerator(&compositor);
                 }
 
-                // handle NOC_ABSTRACT base classes by enumerating their type info with our derived instance
+                // handle HELIUM_ABSTRACT base classes by enumerating their type info with our derived instance
                 if (!base->m_Enumerated)
                 {
                     const_cast<Composite*>(base)->EnumerateInstance<T>(instance);
@@ -271,7 +271,7 @@ namespace Reflect
         }
 
         template <class ElementT>
-        inline Reflect::ElementField* AddField( Nocturnal::SmartPtr<ElementT> T::* field, const std::string& name, i32 flags = 0 )
+        inline Reflect::ElementField* AddField( Helium::SmartPtr<ElementT> T::* field, const std::string& name, i32 flags = 0 )
         {
             return m_Composite.AddElementField(
                 m_Instance,
@@ -284,39 +284,39 @@ namespace Reflect
         }
 
         template <class ElementT>
-        inline Reflect::ElementField* AddField( std::vector< Nocturnal::SmartPtr< ElementT > >T::* field, const std::string& name, i32 flags = 0 )
+        inline Reflect::ElementField* AddField( std::vector< Helium::SmartPtr< ElementT > >T::* field, const std::string& name, i32 flags = 0 )
         {
             return m_Composite.AddElementField(
                 m_Instance,
                 GetName(name),
                 GetOffset(field),
-                sizeof(std::vector< Nocturnal::SmartPtr< ElementT > >),
+                sizeof(std::vector< Helium::SmartPtr< ElementT > >),
                 Reflect::GetType<Reflect::ElementArraySerializer>(),
                 Reflect::GetType<ElementT>(),
                 flags );
         }
 
         template <class ElementT>
-        inline Reflect::ElementField* AddField( std::set< Nocturnal::SmartPtr< ElementT > >T::* field, const std::string& name, i32 flags = 0 )
+        inline Reflect::ElementField* AddField( std::set< Helium::SmartPtr< ElementT > >T::* field, const std::string& name, i32 flags = 0 )
         {
             return m_Composite.AddElementField(
                 m_Instance,
                 GetName(name),
                 GetOffset(field),
-                sizeof(std::set< Nocturnal::SmartPtr< ElementT > >),
+                sizeof(std::set< Helium::SmartPtr< ElementT > >),
                 Reflect::GetType<Reflect::ElementSetSerializer>(),
                 Reflect::GetType<ElementT>(),
                 flags );
         }
 
         template <class KeyT, class ElementT>
-        inline Reflect::ElementField* AddField( std::map< KeyT, Nocturnal::SmartPtr< ElementT > >T::* field, const std::string& name, i32 flags = 0 )
+        inline Reflect::ElementField* AddField( std::map< KeyT, Helium::SmartPtr< ElementT > >T::* field, const std::string& name, i32 flags = 0 )
         {
             return m_Composite.AddElementField( 
                 m_Instance, 
                 GetName(name), 
                 GetOffset(field), 
-                sizeof(std::map< KeyT, Nocturnal::SmartPtr< ElementT > >), 
+                sizeof(std::map< KeyT, Helium::SmartPtr< ElementT > >), 
                 Reflect::GetType<Reflect::SimpleElementMapSerializer< KeyT > >(), 
                 Reflect::GetType<ElementT>(), 
                 flags );

@@ -20,7 +20,7 @@
 
 using namespace Asset;
 using namespace Component;
-using namespace Nocturnal;
+using namespace Helium;
 
 // enable this to watch all dag changes, just for debugging
 //#define WATCH_ALL_DAG_CHANGES

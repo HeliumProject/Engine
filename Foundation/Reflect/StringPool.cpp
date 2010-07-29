@@ -9,15 +9,15 @@
 #include "Foundation/Memory/ArrayPtr.h" 
 #include "Foundation/Log.h"
 
-using Nocturnal::ArrayPtr; 
+using Helium::ArrayPtr; 
 
 #include <strstream>
 #include <sstream>
 
 using namespace Reflect;
 
-NOC_COMPILE_ASSERT( Reflect::CharacterEncodings::ASCII == 0 );
-NOC_COMPILE_ASSERT( Reflect::CharacterEncodings::UTF_16 == 1 );
+HELIUM_COMPILE_ASSERT( Reflect::CharacterEncodings::ASCII == 0 );
+HELIUM_COMPILE_ASSERT( Reflect::CharacterEncodings::UTF_16 == 1 );
 
 Profile::Accumulator g_StringPoolSerialize( "Reflect String Pool Serialize"); 
 Profile::Accumulator g_StringPoolDeserialize( "Reflect String Pool Deserialize"); 
@@ -140,7 +140,7 @@ void StringPool::DeserializeDirect(CharStream& stream, CharacterEncoding encodin
     }
 
     stream.Read(&stringCount); 
-    NOC_ASSERT(stringCount == -1);
+    HELIUM_ASSERT(stringCount == -1);
 }
 
 void StringPool::SerializeCompressed(CharStream& stream)
@@ -189,7 +189,7 @@ void StringPool::DeserializeCompressed(CharStream& stream, CharacterEncoding enc
 
     std::stringstream memoryStream;
     std::streamsize copied = memoryStream.rdbuf()->sputn( originalData, originalSize );
-    NOC_ASSERT( copied == originalSize );
+    HELIUM_ASSERT( copied == originalSize );
 
     Reflect::CharStream tempStream(&memoryStream, false); 
     DeserializeDirect(tempStream, encoding); 
@@ -201,7 +201,7 @@ void StringPool::Serialize(ArchiveBinary* archive)
 
     Reflect::CharStream& stream = archive->GetStream(); 
 
-    NOC_ASSERT(m_Strings.size() == m_Indices.size());
+    HELIUM_ASSERT(m_Strings.size() == m_Indices.size());
     return SerializeCompressed(stream); 
 }
 
@@ -220,5 +220,5 @@ void StringPool::Deserialize(ArchiveBinary* archive, CharacterEncoding encoding)
         return DeserializeDirect(stream, encoding); 
     }
 
-    NOC_ASSERT(m_Strings.size() == m_Indices.size());
+    HELIUM_ASSERT(m_Strings.size() == m_Indices.size());
 }

@@ -13,8 +13,8 @@ namespace Perforce
     {
     }
 
-    virtual void OutputStat( StrDict* dict ) NOC_OVERRIDE;
-    virtual void Run() NOC_OVERRIDE;
+    virtual void OutputStat( StrDict* dict ) HELIUM_OVERRIDE;
+    virtual void Run() HELIUM_OVERRIDE;
 
   protected:
     RCS::V_Changeset* m_Changesets;
@@ -29,9 +29,9 @@ namespace Perforce
     {
     }
 
-    virtual void Run() NOC_OVERRIDE;
+    virtual void Run() HELIUM_OVERRIDE;
     virtual void InputData( StrBuf *buf, Error *e );
-    virtual void OutputInfo( char level, const char* data ) NOC_OVERRIDE;
+    virtual void OutputInfo( char level, const char* data ) HELIUM_OVERRIDE;
 
   protected:
     RCS::Changeset* m_Changeset;
@@ -64,7 +64,7 @@ namespace Perforce
     {
     }
 
-    virtual void OutputStat( StrDict* dict ) NOC_OVERRIDE;
+    virtual void OutputStat( StrDict* dict ) HELIUM_OVERRIDE;
 
     RCS::V_File* m_FileList;
   };

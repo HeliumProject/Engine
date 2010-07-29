@@ -29,7 +29,7 @@ static const tchar* ConnectionStateNames[] =
     TXT( "Failed" ),
 };
 
-NOC_COMPILE_ASSERT( ConnectionStates::Count == (sizeof(ConnectionStateNames) / sizeof(const tchar*)) );
+HELIUM_COMPILE_ASSERT( ConnectionStates::Count == (sizeof(ConnectionStateNames) / sizeof(const tchar*)) );
 
 Connection::Connection()
 : m_Server (false)
@@ -129,7 +129,7 @@ void Connection::SetState(ConnectionState state)
 
 Message* Connection::CreateMessage(u32 id, u32 size, i32 trans, u32 type)
 {
-    NOC_ASSERT(m_NextTransaction != 0);
+    HELIUM_ASSERT(m_NextTransaction != 0);
 
     if (trans == 0)
     {
@@ -355,14 +355,14 @@ void Connection::ConnectThread()
     // start read thread
     if (!m_ReadThread.Create(&Platform::Thread::EntryHelper<Connection, &Connection::ReadThread>, this, TXT( "IPC Read Thread" )))
     {
-        NOC_BREAK();
+        HELIUM_BREAK();
         return;
     }
 
     // start write thread
     if (!m_WriteThread.Create(&Platform::Thread::EntryHelper<Connection, &Connection::WriteThread>, this, TXT( "IPC Write Thread" )))
     {
-        NOC_BREAK();
+        HELIUM_BREAK();
         return;
     }
 

@@ -2,16 +2,16 @@
 
 #include "Platform/Environment.h"
 
-bool Application::GetPreferencesDirectory( Nocturnal::Path& preferencesDirectory )
+bool Application::GetPreferencesDirectory( Helium::Path& preferencesDirectory )
 {
     tstring prefDirectory;
 
-    if ( !Nocturnal::GetPreferencesDirectory( prefDirectory ) )
+    if ( !Helium::GetPreferencesDirectory( prefDirectory ) )
     {
         return false;
     }
 
-    prefDirectory += TXT( "/Nocturnal/" );
+    prefDirectory += TXT( "/Helium/" );
     
     preferencesDirectory.Set( prefDirectory );
     return true;

@@ -23,10 +23,10 @@ namespace Asset
     {
     }
 
-    virtual void GatherSearchableProperties( Nocturnal::SearchableProperties* properties ) const NOC_OVERRIDE;
+    virtual void GatherSearchableProperties( Helium::SearchableProperties* properties ) const HELIUM_OVERRIDE;
   }; 
 
-  typedef Nocturnal::SmartPtr< Entity > EntityPtr;
+  typedef Helium::SmartPtr< Entity > EntityPtr;
   typedef std::vector< EntityPtr > V_Entity;
 
 };

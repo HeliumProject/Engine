@@ -12,7 +12,7 @@ namespace Inspect
   class Button;
   class Action;
   class List;
-  typedef Nocturnal::SmartPtr<Action> ActionPtr;
+  typedef Helium::SmartPtr<Action> ActionPtr;
 
   class APPLICATION_API ReflectArrayInterpreter : public ReflectFieldInterpreter
   {
@@ -36,6 +36,6 @@ namespace Inspect
     virtual void OnCreateFieldSerializer( Reflect::SerializerPtr & s ){ }
   };
 
-  typedef Nocturnal::SmartPtr<ReflectArrayInterpreter> ReflectArrayInterpreterPtr;
+  typedef Helium::SmartPtr<ReflectArrayInterpreter> ReflectArrayInterpreterPtr;
   typedef std::vector< ReflectArrayInterpreterPtr > V_ReflectArrayInterpreterSmartPtr;
 }

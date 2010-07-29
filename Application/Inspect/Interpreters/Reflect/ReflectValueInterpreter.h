@@ -14,6 +14,6 @@ namespace Inspect
     virtual void InterpretField(const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent);
   };
 
-  typedef Nocturnal::SmartPtr<ReflectValueInterpreter> ReflectValueInterpreterPtr;
+  typedef Helium::SmartPtr<ReflectValueInterpreter> ReflectValueInterpreterPtr;
   typedef std::vector< ReflectValueInterpreterPtr > V_ReflectValueInterpreter;
 }

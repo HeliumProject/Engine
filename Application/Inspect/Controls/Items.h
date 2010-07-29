@@ -31,14 +31,14 @@ namespace Inspect
     Items();
 
   protected:
-    virtual bool Process(const tstring& key, const tstring& value) NOC_OVERRIDE;
+    virtual bool Process(const tstring& key, const tstring& value) HELIUM_OVERRIDE;
 
-    virtual void SetDefaultAppearance(bool def) NOC_OVERRIDE;
+    virtual void SetDefaultAppearance(bool def) HELIUM_OVERRIDE;
 
     void SetToDefault(const ContextMenuEventArgs& event);
 
   public:
-    virtual void Realize(Container* parent) NOC_OVERRIDE;
+    virtual void Realize(Container* parent) HELIUM_OVERRIDE;
 
     // clear all the items
     virtual void Clear();

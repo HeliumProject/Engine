@@ -104,7 +104,7 @@ bool List::Write()
 
 tstring temp;
 bool converted = Platform::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
-NOC_ASSERT( converted );
+HELIUM_ASSERT( converted );
 
     for ( i32 index = 0; index < total; ++index )
     {
@@ -120,7 +120,7 @@ NOC_ASSERT( converted );
         tstring::size_type pos = val.find( s_MapKeyValDelim );
 
         // This is suppose to be a map, there better be a key-value pair
-        NOC_ASSERT( pos != tstring::npos );
+        HELIUM_ASSERT( pos != tstring::npos );
         if ( tstring::npos != pos )
         {
           delimited += val.substr( 0, pos ) + temp;
@@ -154,7 +154,7 @@ NOC_ASSERT( converted );
 // 
 void List::SetSorted( bool sort )
 {
-  NOC_ASSERT( !IsRealized() );
+  HELIUM_ASSERT( !IsRealized() );
   m_Sorted = sort;
 }
 
@@ -163,7 +163,7 @@ void List::SetSorted( bool sort )
 // 
 void List::SetMap( bool isMap )
 {
-  NOC_ASSERT( !IsRealized() );
+  HELIUM_ASSERT( !IsRealized() );
   m_IsMap = isMap;
 }
 
@@ -180,14 +180,14 @@ const std::vector< tstring >& List::GetItems()
 
 tstring temp;
 bool converted = Platform::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
-NOC_ASSERT( converted );
+HELIUM_ASSERT( converted );
 
     ::Tokenize( str, m_Items, temp );
 
     if ( m_IsMap )
     {
       // This list is a map representation so it better have an even number of elemnts
-      NOC_ASSERT( m_Items.size() % 2 == 0 );
+      HELIUM_ASSERT( m_Items.size() % 2 == 0 );
 
       std::vector< tstring >::iterator itr = m_Items.begin();
       std::vector< tstring >::iterator previous = itr;
@@ -220,7 +220,7 @@ void List::AddItems( const std::vector< tstring >& items )
   {
 tstring temp;
 bool converted = Platform::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
-NOC_ASSERT( converted );
+HELIUM_ASSERT( converted );
 
     tstring str = GetDelimitedList( items, temp );
     WriteData( str );
@@ -248,7 +248,7 @@ void List::AddItem( const tstring& item )
 
 tstring temp;
 bool converted = Platform::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
-NOC_ASSERT( converted );
+HELIUM_ASSERT( converted );
 
     if ( !str.empty() )
     {
@@ -283,7 +283,7 @@ void List::RemoveItem( const tstring& item )
 
 tstring temp;
 bool converted = Platform::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
-NOC_ASSERT( converted );
+HELIUM_ASSERT( converted );
 
     // Search for item + delimiter
     tstring search = item + temp;
@@ -524,7 +524,7 @@ tstring List::GetDelimitedList( const std::vector< tstring >& items, const tstri
 
 tstring temp;
 bool converted = Platform::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
-NOC_ASSERT( converted );
+HELIUM_ASSERT( converted );
 
   std::vector< tstring >::const_iterator itr = items.begin();
   std::vector< tstring >::const_iterator end = items.end();

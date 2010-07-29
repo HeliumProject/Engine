@@ -27,7 +27,7 @@ const tchar* Platform::TraceFile::GetFilePath()
 u64 Platform::TimerGetClock()
 {
     u64 time = 0;
-    NOC_BREAK();
+    HELIUM_BREAK();
     return time;
 }
 

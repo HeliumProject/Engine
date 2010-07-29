@@ -132,7 +132,7 @@ namespace Log
         }
     };
 
-    typedef Nocturnal::Signature<void, PrintingArgs&, Foundation::AtomicRefCountBase> PrintingSignature;
+    typedef Helium::Signature<void, PrintingArgs&, Foundation::AtomicRefCountBase> PrintingSignature;
 
     FOUNDATION_API void AddPrintingListener(const PrintingSignature::Delegate& listener);
     FOUNDATION_API void RemovePrintingListener(const PrintingSignature::Delegate& listener);
@@ -153,7 +153,7 @@ namespace Log
         }
     };
 
-    typedef Nocturnal::Signature<void, PrintedArgs&, Foundation::AtomicRefCountBase> PrintedSignature;
+    typedef Helium::Signature<void, PrintedArgs&, Foundation::AtomicRefCountBase> PrintedSignature;
 
     FOUNDATION_API void AddPrintedListener(const PrintedSignature::Delegate& listener);
     FOUNDATION_API void RemovePrintedListener(const PrintedSignature::Delegate& listener);

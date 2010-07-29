@@ -13,11 +13,11 @@ namespace Platform
     struct Stat;
 }
 
-namespace Nocturnal
+namespace Helium
 {
     const static tchar s_InternalPathSeparator = '/';
 
-    class FOUNDATION_API Path : public Nocturnal::RefCountBase< Path >
+    class FOUNDATION_API Path : public Helium::RefCountBase< Path >
     {
     private:
         tstring m_Path;
@@ -49,7 +49,7 @@ namespace Nocturnal
 
         Path& operator+=( const tchar* rhs );
         Path& operator+=( const tstring& rhs );
-        Path& operator+=( const Nocturnal::Path& rhs );
+        Path& operator+=( const Helium::Path& rhs );
 
         const tstring& Get() const;
         const tstring& Set( const tstring& path );
@@ -92,8 +92,8 @@ namespace Nocturnal
 
         bool MakePath() const;
         bool Create() const;
-        bool Copy( const Nocturnal::Path& target, bool overwrite = true ) const;
-        bool Move( const Nocturnal::Path& target ) const;
+        bool Copy( const Helium::Path& target, bool overwrite = true ) const;
+        bool Move( const Helium::Path& target ) const;
         bool Delete() const;
 
         tstring FileCRC() const;
@@ -104,8 +104,8 @@ namespace Nocturnal
 
     public:
 
-        Nocturnal::Path GetAbsolutePath( const Nocturnal::Path& basisPath ) const;
-        Nocturnal::Path GetRelativePath( const Nocturnal::Path& basisPath ) const;
+        Helium::Path GetAbsolutePath( const Helium::Path& basisPath ) const;
+        Helium::Path GetRelativePath( const Helium::Path& basisPath ) const;
 
     public:
 

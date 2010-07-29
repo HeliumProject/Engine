@@ -14,7 +14,7 @@ namespace Inspect
   {
   public:
     ReflectMapInterpreter( Container* container );
-    virtual void InterpretField( const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent ) NOC_OVERRIDE;
+    virtual void InterpretField( const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent ) HELIUM_OVERRIDE;
 
   protected:
 
@@ -23,6 +23,6 @@ namespace Inspect
     void OnEdit( Button* button );
   };
 
-  typedef Nocturnal::SmartPtr<ReflectMapInterpreter> ReflectMapInterpreterPtr;
+  typedef Helium::SmartPtr<ReflectMapInterpreter> ReflectMapInterpreterPtr;
   typedef std::vector< ReflectMapInterpreterPtr > V_ReflectMapInterpreterSmartPtr;
 }

@@ -4,10 +4,10 @@
 #include "SmartBuffer.h"
 
 #define OB_TYPEDEF( T ) \
-  typedef Nocturnal::SmartPtr< Nocturnal::ObjectBuffer< T > >      T##Buffer; \
-  typedef Nocturnal::SmartPtr< Nocturnal::ObjectArrayBuffer< T > > T##ArrayBuffer; \
+  typedef Helium::SmartPtr< Helium::ObjectBuffer< T > >      T##Buffer; \
+  typedef Helium::SmartPtr< Helium::ObjectArrayBuffer< T > > T##ArrayBuffer; \
 
-namespace Nocturnal
+namespace Helium
 {
   //
   // The ObjectBuffer classes are a more complex implementation of a SmartBuffer.  

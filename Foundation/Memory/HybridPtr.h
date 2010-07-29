@@ -11,7 +11,7 @@
 #define NULL (0)
 #endif
 
-namespace Nocturnal
+namespace Helium
 {
     //
     // HybridPtr safely handles either a mutable OR a const pointer interchangably.
@@ -161,7 +161,7 @@ namespace Nocturnal
 
         T* operator->()
         {
-            NOC_ASSERT(m_State == PointerStates::Mutable);
+            HELIUM_ASSERT(m_State == PointerStates::Mutable);
             return m_Mutable;
         }
 
@@ -172,7 +172,7 @@ namespace Nocturnal
 
         operator T*()
         {
-            NOC_ASSERT(m_State == PointerStates::Mutable);
+            HELIUM_ASSERT(m_State == PointerStates::Mutable);
             return m_Mutable;
         }
 
@@ -183,7 +183,7 @@ namespace Nocturnal
 
         T* Mutable()
         {
-            NOC_ASSERT(m_State == PointerStates::Mutable);
+            HELIUM_ASSERT(m_State == PointerStates::Mutable);
             return m_Mutable;
         }
 

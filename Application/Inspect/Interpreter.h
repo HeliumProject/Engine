@@ -47,7 +47,7 @@ namespace Inspect
 
     }
   };
-  typedef Nocturnal::Signature<void, PopulateLinkArgs&> PopulateLinkSignature;
+  typedef Helium::Signature<void, PopulateLinkArgs&> PopulateLinkSignature;
 
   struct SelectLinkArgs
   {
@@ -59,7 +59,7 @@ namespace Inspect
 
     }
   };
-  typedef Nocturnal::Signature<void, const SelectLinkArgs&> SelectLinkSignature;
+  typedef Helium::Signature<void, const SelectLinkArgs&> SelectLinkSignature;
 
   struct PickLinkArgs
   {
@@ -71,7 +71,7 @@ namespace Inspect
 
     }
   };
-  typedef Nocturnal::Signature<void, const PickLinkArgs&> PickLinkSignature;
+  typedef Helium::Signature<void, const PickLinkArgs&> PickLinkSignature;
 
 
   //
@@ -80,14 +80,14 @@ namespace Inspect
   //  can extend.  Those derived classes can be intimate with the format
   //  of the data that is being analyzed to generate the GUI widgets.
   //
-  // This class is NOC_ABSTRACT and lightweight, and pretty much only here
+  // This class is HELIUM_ABSTRACT and lightweight, and pretty much only here
   //  to provide very basic API at a later date.
   //
   
   typedef std::stack< ContainerPtr > ST_Container;
   typedef std::map< u32, ST_Container > M_U32ContainerStack;
 
-  class APPLICATION_API Interpreter NOC_ABSTRACT : public Reflect::Object
+  class APPLICATION_API Interpreter HELIUM_ABSTRACT : public Reflect::Object
   {
   protected:
     // the container to inject into (these are not long lived hard references)
@@ -105,7 +105,7 @@ namespace Inspect
     Interpreter (Container* container)
       : m_Container (container) 
     {
-      NOC_ASSERT(container);
+      HELIUM_ASSERT(container);
     }
 
     virtual ~Interpreter()
@@ -120,9 +120,9 @@ namespace Inspect
     //
 
     template <class T>
-    Nocturnal::SmartPtr<T> CreateInterpreter(Container* container = NULL)
+    Helium::SmartPtr<T> CreateInterpreter(Container* container = NULL)
     {
-      Nocturnal::SmartPtr<T> interpreter = new T (container ? container : m_Container);
+      Helium::SmartPtr<T> interpreter = new T (container ? container : m_Container);
       ConnectInterpreterEvents( this, interpreter );
       return interpreter;
     }
@@ -176,7 +176,7 @@ namespace Inspect
     //
 
     template <class T>
-    CheckBox* AddCheckBox( const Nocturnal::SmartPtr< Nocturnal::Property<T> >& property )
+    CheckBox* AddCheckBox( const Helium::SmartPtr< Helium::Property<T> >& property )
     {
       CheckBoxPtr control = m_Container->GetCanvas()->Create<CheckBox>(this);
       control->Bind( new PropertyStringFormatter<T> ( property ) );
@@ -191,7 +191,7 @@ namespace Inspect
     //
 
     template <class T>
-    Value* AddValue( const Nocturnal::SmartPtr< Nocturnal::Property<T> >& property )
+    Value* AddValue( const Helium::SmartPtr< Helium::Property<T> >& property )
     {
       ValuePtr control = m_Container->GetCanvas()->Create<Value>(this);
       control->Bind( new PropertyStringFormatter<T> ( property ) );
@@ -206,7 +206,7 @@ namespace Inspect
     //
 
     template <class T>
-    Choice* AddChoice( const Nocturnal::SmartPtr< Nocturnal::Property<T> >& property )
+    Choice* AddChoice( const Helium::SmartPtr< Helium::Property<T> >& property )
     {
       ChoicePtr control = m_Container->GetCanvas()->Create<Choice>(this);
       control->Bind( new PropertyStringFormatter<T> ( property ) );
@@ -216,7 +216,7 @@ namespace Inspect
     }
 
     template <class T>
-    Choice* AddChoice( const Reflect::Enumeration* enumInfo, const Nocturnal::SmartPtr< Nocturnal::Property<T> >& property )
+    Choice* AddChoice( const Reflect::Enumeration* enumInfo, const Helium::SmartPtr< Helium::Property<T> >& property )
     {
       Choice* control = AddChoice<T>( property );
 
@@ -241,7 +241,7 @@ namespace Inspect
     //
 
     template <class T>
-    List* AddList( const Nocturnal::SmartPtr< Nocturnal::Property<T> >& property )
+    List* AddList( const Helium::SmartPtr< Helium::Property<T> >& property )
     {
       ListPtr control = m_Container->GetCanvas()->Create<List>(this);
       control->Bind( new PropertyStringFormatter<T> ( property ) );
@@ -256,7 +256,7 @@ namespace Inspect
     //
 
     template <class T>
-    CheckList* AddCheckList( const Nocturnal::SmartPtr< Nocturnal::Property<T> >& property )
+    CheckList* AddCheckList( const Helium::SmartPtr< Helium::Property<T> >& property )
     {
       CheckListPtr control = m_Container->GetCanvas()->Create<CheckList>(this);
       control->Bind( new SerializerPropertyFormatter< T >( property ) );
@@ -271,7 +271,7 @@ namespace Inspect
     //
 
     template <class T>
-    Slider* AddSlider( const Nocturnal::SmartPtr< Nocturnal::Property<T> >& property )
+    Slider* AddSlider( const Helium::SmartPtr< Helium::Property<T> >& property )
     {
       SliderPtr control = m_Container->GetCanvas()->Create<Slider>(this);
       control->Bind( new PropertyStringFormatter<T> ( property ) );
@@ -286,7 +286,7 @@ namespace Inspect
     //
 
     template <class T>
-    ColorPicker* AddColorPicker( const Nocturnal::SmartPtr< Nocturnal::Property<T> >& property )
+    ColorPicker* AddColorPicker( const Helium::SmartPtr< Helium::Property<T> >& property )
     {
       ColorPickerPtr control = m_Container->GetCanvas()->Create<ColorPicker>(this);
       control->Bind( new PropertyStringFormatter<T> ( property ) );
@@ -386,5 +386,5 @@ namespace Inspect
     }
   };
 
-  typedef Nocturnal::SmartPtr<Interpreter> InterpreterPtr;
+  typedef Helium::SmartPtr<Interpreter> InterpreterPtr;
 }

@@ -5,7 +5,7 @@
 
 #include <wx/clrpicker.h>
 
-namespace Nocturnal
+namespace Helium
 {
   /////////////////////////////////////////////////////////////////////////////
   // A color picker is a control that consists of a colored button.  Clicking
@@ -25,7 +25,7 @@ namespace Nocturnal
     tstring m_Key;
 
   public:
-    ColorPicker( wxWindow* parent, wxWindowID id, const wxColour& col = *wxBLACK, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCLRP_DEFAULT_STYLE, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxT( "Luna::ColorPicker" ) );
+    ColorPicker( wxWindow* parent, wxWindowID id, const wxColour& col = *wxBLACK, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCLRP_DEFAULT_STYLE, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxT( "Editor::ColorPicker" ) );
     virtual ~ColorPicker();
 
     bool SaveCustomColors( tstring& colors );

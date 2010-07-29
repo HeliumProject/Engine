@@ -27,7 +27,7 @@ void Platform::CleanupSocketThread()
     }
 #endif
 
-    NOC_BREAK();
+    HELIUM_BREAK();
 }
 
 int Platform::GetSocketError()
@@ -36,7 +36,7 @@ int Platform::GetSocketError()
     return sys_net_errno;
 #endif
 
-    NOC_BREAK();
+    HELIUM_BREAK();
     return -1;
 }
 
@@ -54,7 +54,7 @@ bool Platform::CreateSocket(Socket& socket)
     return true;
 #endif
 
-    NOC_BREAK();
+    HELIUM_BREAK();
     return false;
 }
 
@@ -73,7 +73,7 @@ bool Platform::CloseSocket(Socket& socket)
     return true;
 #endif
 
-    NOC_BREAK();
+    HELIUM_BREAK();
     return false;
 }
 
@@ -90,10 +90,10 @@ bool Platform::BindSocket(Socket& socket, u16 port)
 
         if (shutdown(socket, SHUT_RDWR) < 0)
         {
-            NOC_BREAK();
+            HELIUM_BREAK();
         }
         if (socketclose(socket) < 0) {
-            NOC_BREAK();
+            HELIUM_BREAK();
         }
 
         return false;
@@ -102,7 +102,7 @@ bool Platform::BindSocket(Socket& socket, u16 port)
     return true;
 #endif
 
-    NOC_BREAK();
+    HELIUM_BREAK();
     return false;
 }
 
@@ -115,11 +115,11 @@ bool Platform::ListenSocket(Socket& socket)
 
         if (shutdown(socket, SHUT_RDWR) < 0)
         {
-            NOC_BREAK();
+            HELIUM_BREAK();
         }
         if (socketclose(socket) < 0)
         {
-            NOC_BREAK();
+            HELIUM_BREAK();
         }
 
         return false;
@@ -128,7 +128,7 @@ bool Platform::ListenSocket(Socket& socket)
     return true;
 #endif
 
-    NOC_BREAK();
+    HELIUM_BREAK();
     return false;
 }
 
@@ -138,7 +138,7 @@ bool Platform::ConnectSocket(Socket& socket, sockaddr_in* service)
     return ::connect(socket, (struct sockaddr *)service, sizeof(sockaddr_in)) >= 0;
 #endif
 
-    NOC_BREAK();
+    HELIUM_BREAK();
     return false;
 }
 
@@ -152,7 +152,7 @@ bool Platform::AcceptSocket(Socket& socket, Socket& server_socket, sockaddr_in* 
     return socket > 0;
 #endif
 
-    NOC_BREAK();
+    HELIUM_BREAK();
     return false;
 }
 
@@ -162,7 +162,7 @@ int Platform::SelectSocket(int range, fd_set* read_set, fd_set* write_set, struc
     return ::socketselect(range, read_set, write_set, 0, timeout);
 #endif
 
-    NOC_BREAK();
+    HELIUM_BREAK();
     return -1;
 }
 
@@ -181,7 +181,7 @@ bool Platform::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Ev
     return true;
 #endif
 
-    NOC_BREAK();
+    HELIUM_BREAK();
     return false;
 }
 
@@ -200,6 +200,6 @@ bool Platform::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, 
     return true;
 #endif
 
-    NOC_BREAK();
+    HELIUM_BREAK();
     return false;
 }

@@ -103,7 +103,7 @@ namespace Component
         // string with a meaningful explanation that will be shown to the user.
         virtual bool ValidateSibling( const ComponentBase* attribute, tstring& error ) const;
         
-        virtual void GatherSearchableProperties( Nocturnal::SearchableProperties* properties ) const
+        virtual void GatherSearchableProperties( Helium::SearchableProperties* properties ) const
         {
         }
 
@@ -116,7 +116,7 @@ namespace Component
         bool m_Enabled;
     };
 
-    typedef Nocturnal::SmartPtr< ComponentBase > ComponentPtr;
+    typedef Helium::SmartPtr< ComponentBase > ComponentPtr;
     typedef std::vector< ComponentPtr > V_Component;
     typedef std::map< Reflect::TypeID, ComponentPtr > M_Component;
 }

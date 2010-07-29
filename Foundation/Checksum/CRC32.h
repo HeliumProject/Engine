@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 
-namespace Nocturnal
+namespace Helium
 {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -121,7 +121,7 @@ namespace Nocturnal
         FILE* f = _tfopen(filePath.c_str(), TXT( "rb" ) );
         if (f==0)
         {
-            throw Nocturnal::Exception( TXT( "Unable to open %s for read" ), filePath.c_str());
+            throw Helium::Exception( TXT( "Unable to open %s for read" ), filePath.c_str());
         }
 
         fseek(f,0,SEEK_END);

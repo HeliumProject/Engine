@@ -15,7 +15,7 @@
 
 typedef u64 tuid;
 
-namespace Nocturnal
+namespace Helium
 {
     //
     // Wrapper for Microsoft GUID/Uuid - requires RPCRT4.LIB

@@ -145,7 +145,7 @@ void Event::Reset()
 
 bool Event::Wait(u32 timeout)
 {
-    NOC_ASSERT( timeout == 0xffffffff ); // not supported
+    HELIUM_ASSERT( timeout == 0xffffffff ); // not supported
     event_wait(&m_Handle);
     return true;
 }

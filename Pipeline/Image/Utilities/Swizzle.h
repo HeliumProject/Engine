@@ -16,7 +16,7 @@
 #include "Pipeline/API.h"
 #include "Pipeline/Image/ColorFormats.h"
 
-namespace Nocturnal
+namespace Helium
 {
   ////////////////////////////////////////////////////////////////////////////////////////////////
   //   Most of the time when messing with a texture, you will be incrementing

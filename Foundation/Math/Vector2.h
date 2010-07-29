@@ -39,8 +39,8 @@ namespace Math
         // unary negation
         Vector2           operator- () const { return Vector2( -x, -y ); }
 
-        f32&              operator[] (const u32 i) { NOC_ASSERT(i < 2); return (&x)[i]; }
-        const f32&        operator[] (const u32 i) const { NOC_ASSERT(i < 2); return (&x)[i]; }
+        f32&              operator[] (const u32 i) { HELIUM_ASSERT(i < 2); return (&x)[i]; }
+        const f32&        operator[] (const u32 i) const { HELIUM_ASSERT(i < 2); return (&x)[i]; }
 
         bool              operator== (const Vector2& v) const { return (x == v.x && y == v.y); }
         bool              operator!= (const Vector2& v) const { return !(x == v.x && y == v.y); }

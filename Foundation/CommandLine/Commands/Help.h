@@ -5,7 +5,7 @@
 
 #include "Platform/Compiler.h"
 
-namespace Nocturnal
+namespace Helium
 {
     namespace CommandLine
     {
@@ -26,7 +26,7 @@ namespace Nocturnal
 				m_Owner = owner;
 			}
 
-			virtual bool Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) NOC_OVERRIDE;
+			virtual bool Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) HELIUM_OVERRIDE;
         };
     }
 }

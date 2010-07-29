@@ -7,7 +7,7 @@
 #include "Pipeline/Image/MipSet.h"
 #include "Pipeline/Image/Image.h"
 
-namespace Nocturnal
+namespace Helium
 {
   struct DXTOptions
   {

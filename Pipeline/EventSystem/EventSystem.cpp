@@ -20,7 +20,7 @@
 #include "Foundation/String/Utilities.h"
 #include "Foundation/Log.h"
 
-using namespace Nocturnal::ES;
+using namespace Helium::ES;
 
 
 #define TIME_SIZE 32
@@ -56,7 +56,7 @@ void EventSystem::CreateEventsFilePath( tstring& eventsFilePath )
     tstring fileName = tstring( _tgetenv( TXT( "USERNAME" ) ) ) + TXT( '-' ) + _tgetenv( TXT( "COMPUTERNAME" ) ) + TXT( ".event." ) + ( m_WriteBinaryFormat ? TXT( "dat" ) : TXT( "txt" ) );
 
     eventsFilePath = m_RootDirPath.Get() + fileName;
-    Nocturnal::Path::Normalize( eventsFilePath );
+    Helium::Path::Normalize( eventsFilePath );
 }
 
 
@@ -151,27 +151,27 @@ void EventSystem::GetUnhandledEvents( V_EventPtr& listOfEvents, S_tuid& handledE
 void EventSystem::GetEvents( V_EventPtr& listOfEvents, bool sorted )
 {
     // Binary events
-    std::set< Nocturnal::Path > datEventFiles;
-    Nocturnal::Directory::GetFiles( m_RootDirPath, datEventFiles, TXT( "*.event.dat" ), true );
+    std::set< Helium::Path > datEventFiles;
+    Helium::Directory::GetFiles( m_RootDirPath, datEventFiles, TXT( "*.event.dat" ), true );
 
-    std::set< Nocturnal::Path >::iterator itr = datEventFiles.begin();
-    std::set< Nocturnal::Path >::iterator end = datEventFiles.end();
+    std::set< Helium::Path >::iterator itr = datEventFiles.begin();
+    std::set< Helium::Path >::iterator end = datEventFiles.end();
     for( ; itr != end; ++itr )
     {
-        const Nocturnal::Path& filePath = (*itr);
+        const Helium::Path& filePath = (*itr);
         if ( filePath.IsFile() )
             ReadBinaryEventsFile( filePath.Get(), listOfEvents, false );
     }
 
     // Text events
-    std::set< Nocturnal::Path > txtEventFiles;
-    Nocturnal::Directory::GetFiles( m_RootDirPath, txtEventFiles, TXT( "*.event.txt" ), true );
+    std::set< Helium::Path > txtEventFiles;
+    Helium::Directory::GetFiles( m_RootDirPath, txtEventFiles, TXT( "*.event.txt" ), true );
 
     itr = txtEventFiles.begin();
     end = txtEventFiles.end();
     for( ; itr != end; ++itr )
     {
-        const Nocturnal::Path& filePath = (*itr);
+        const Helium::Path& filePath = (*itr);
         if ( filePath.IsFile() )
             ReadTextEventsFile( filePath.Get(), listOfEvents, false );
     }
@@ -185,7 +185,7 @@ void EventSystem::GetEvents( V_EventPtr& listOfEvents, bool sorted )
 
 void EventSystem::ReadEventsFile( const tstring& eventsFile, V_EventPtr& listOfEvents, bool sorted )
 {
-    Nocturnal::Path path( eventsFile );
+    Helium::Path path( eventsFile );
     if ( path.Extension() == TXT( "dat" ) )
     {
         ReadBinaryEventsFile( eventsFile, listOfEvents, sorted );
@@ -325,10 +325,10 @@ void EventSystem::ReadTextEventsFile( const tstring& eventsFile, V_EventPtr& lis
             throw Exception( TXT( "Could not parse text event: %s" ), line.c_str() );
         }
 
-        tuid id = ( tuid ) Nocturnal::MatchResult<tuid>(eventResultAttr, 1); 
-        u64 created = ( u64 ) Nocturnal::MatchResult<u64>(eventResultAttr, 2); 
-        tstring username = Nocturnal::MatchResultAsString(eventResultAttr, 3); 
-        i32 eventLength = ( i32 ) Nocturnal::MatchResult<i32>(eventResultAttr, 4); 
+        tuid id = ( tuid ) Helium::MatchResult<tuid>(eventResultAttr, 1); 
+        u64 created = ( u64 ) Helium::MatchResult<u64>(eventResultAttr, 2); 
+        tstring username = Helium::MatchResultAsString(eventResultAttr, 3); 
+        i32 eventLength = ( i32 ) Helium::MatchResult<i32>(eventResultAttr, 4); 
 
         /////////////////////////////////////////////
         // parse the event data
@@ -380,7 +380,7 @@ void EventSystem::ReadTextEventsFile( const tstring& eventsFile, V_EventPtr& lis
 //
 void EventSystem::WriteEventsFile( const tstring& eventsFile, const V_EventPtr& listOfEvents )
 {
-    Nocturnal::Path path( eventsFile );
+    Helium::Path path( eventsFile );
     if ( path.Extension() == TXT( "dat" ) )
     {
         WriteBinaryEventsFile( eventsFile, listOfEvents );
@@ -403,7 +403,7 @@ void EventSystem::WriteBinaryEventsFile( const tstring& eventsFile, const V_Even
         return;
     }
 
-    Nocturnal::Path path( eventsFile );
+    Helium::Path path( eventsFile );
     // make sure it's not read only
     if ( path.Exists() && !path.Writable() )
     {
@@ -472,7 +472,7 @@ void EventSystem::WriteTextEventsFile( const tstring& eventsFile, const V_EventP
         return;
     }
 
-    Nocturnal::Path path( eventsFile );
+    Helium::Path path( eventsFile );
     if ( path.Exists() && !path.Writable() )
     {
         throw Exception( TXT( "[%s] is read-only!" ), eventsFile.c_str() );
@@ -617,7 +617,7 @@ bool EventSystem::HandleEventsFileExists()
 // 
 void EventSystem::DumpEventsToTextFile( const tstring& datFile, const tstring& txtFile )
 {
-    Nocturnal::Path path( datFile );
+    Helium::Path path( datFile );
     // setup the input file
     if ( !path.Exists() )
     {
@@ -625,7 +625,7 @@ void EventSystem::DumpEventsToTextFile( const tstring& datFile, const tstring& t
     }
 
     // set up the output file
-    Nocturnal::Path outputPath( txtFile );
+    Helium::Path outputPath( txtFile );
     if ( outputPath.empty() )
     {
         outputPath.Set( datFile );
@@ -646,7 +646,7 @@ void EventSystem::DumpEventsToTextFile( const tstring& datFile, const tstring& t
 //
 void EventSystem::LoadEventsFromTextFile( const tstring& txtFile, const tstring& datFile )
 {
-    Nocturnal::Path path( txtFile );
+    Helium::Path path( txtFile );
     // setup the input file
     if ( !path.Exists() )
     {
@@ -654,7 +654,7 @@ void EventSystem::LoadEventsFromTextFile( const tstring& txtFile, const tstring&
     }
 
     // setup the output file
-    Nocturnal::Path cleanEventsFile( datFile );
+    Helium::Path cleanEventsFile( datFile );
     if ( cleanEventsFile.Get().empty() )
     {
         cleanEventsFile.Set( txtFile );
@@ -681,7 +681,7 @@ void EventSystem::LoadEventsFromTextFile( const tstring& txtFile, const tstring&
 //
 void EventSystem::StompEventsFile( const tstring& eventsFile, const V_EventPtr& listOfEvents )
 {
-    Nocturnal::Path path( eventsFile );
+    Helium::Path path( eventsFile );
     // make sure it's not read only
     if ( !path.Writable() )
     {

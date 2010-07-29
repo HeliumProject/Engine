@@ -20,7 +20,7 @@ ReflectBitfieldInterpreter::ReflectBitfieldInterpreter (Container* container)
 void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Element*>& instances, Container* parent)
 {
   // If you hit this, you are misusing this interpreter
-  NOC_ASSERT( field->m_SerializerID == Reflect::GetType<Reflect::BitfieldSerializer>() );
+  HELIUM_ASSERT( field->m_SerializerID == Reflect::GetType<Reflect::BitfieldSerializer>() );
 
   if ( field->m_SerializerID != Reflect::GetType<Reflect::BitfieldSerializer>() )
   {
@@ -58,14 +58,14 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
 
     tstring temp;
     bool converted = Platform::ConvertString( enumItr->first, temp );
-    NOC_ASSERT( converted );
+    HELIUM_ASSERT( converted );
     label->SetText( temp );
 
     BitfieldCheckBoxPtr checkbox = m_Container->GetCanvas()->Create<ReflectBitfieldCheckBox>( this );
     row->AddControl( checkbox );
 
     converted = Platform::ConvertString( enumItr->first, temp );
-    NOC_ASSERT( converted );
+    HELIUM_ASSERT( converted );
     checkbox->SetBitfieldString( temp );
     checkbox->SetReadOnly( readOnly );
   }

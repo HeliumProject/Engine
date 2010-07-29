@@ -15,11 +15,11 @@ namespace Content
     return GetNumValidJointAnimations( m_JointIds, clipIndex );
   }
 
-  u32 Scene::GetNumValidJointAnimations( const Nocturnal::S_TUID& jointList, u32 clipIndex ) const
+  u32 Scene::GetNumValidJointAnimations( const Helium::S_TUID& jointList, u32 clipIndex ) const
   {
     u32 validJointAnimations = 0;
 
-    for each ( Nocturnal::TUID jointId in jointList )
+    for each ( Helium::TUID jointId in jointList )
     {
       if ( m_Animations[ clipIndex ]->m_JointAnimationMap.find( jointId ) != m_Animations[ clipIndex ]->m_JointAnimationMap.end() )
         ++validJointAnimations;
@@ -30,7 +30,7 @@ namespace Content
 
   void Scene::GetJointMismatchReport( std::vector< tstring > &mismatchMessages, u32 clipIndex ) const
   {
-    std::set< Nocturnal::TUID > animatedJoints;
+    std::set< Helium::TUID > animatedJoints;
 
     M_JointAnimation::iterator itr = m_Animations[ clipIndex ]->m_JointAnimationMap.begin();
     M_JointAnimation::iterator end = m_Animations[ clipIndex ]->m_JointAnimationMap.end();
@@ -54,7 +54,7 @@ namespace Content
       animatedJoints.insert( (*itr).first );
     }
 
-    for each( Nocturnal::TUID jointId in m_JointIds )
+    for each( Helium::TUID jointId in m_JointIds )
     {
       if ( animatedJoints.find( jointId ) == animatedJoints.end() )
       {

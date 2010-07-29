@@ -8,7 +8,7 @@
 // Forwards
 class wxConfigBase;
 
-namespace Nocturnal
+namespace Helium
 {
   /////////////////////////////////////////////////////////////////////////////
   // Class the wraps up interaction with the Windows Registry.  You can read

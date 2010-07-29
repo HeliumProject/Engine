@@ -22,7 +22,7 @@ namespace Content
     virtual void Host(ContentVisitor* visitor); 
 
     // The ID of the node
-    Nocturnal::TUID m_ID;
+    Helium::TUID m_ID;
 
     // A generated name of the node
     tstring m_DefaultName;
@@ -37,14 +37,14 @@ namespace Content
     bool m_Selected;
 
     SceneNode ()
-      : m_ID (Nocturnal::TUID::Generate())
+      : m_ID (Helium::TUID::Generate())
       , m_Selected( false )
       , m_UseGivenName( false )
     {
 
     }
 
-    SceneNode (const Nocturnal::TUID& id)
+    SceneNode (const Helium::TUID& id)
       : m_ID (id)
       , m_Selected( false )
       , m_UseGivenName( false )
@@ -60,10 +60,10 @@ namespace Content
     virtual void PostLoad( Reflect::V_Element& elements );
 
     // migrate m_Name
-    virtual bool ProcessComponent( Reflect::ElementPtr element, const tstring& fieldName ) NOC_OVERRIDE;
+    virtual bool ProcessComponent( Reflect::ElementPtr element, const tstring& fieldName ) HELIUM_OVERRIDE;
 
     // invalidates class attributes
-    virtual bool ValidateCompatible( const Component::ComponentPtr& attr, tstring& error ) const NOC_OVERRIDE;
+    virtual bool ValidateCompatible( const Component::ComponentPtr& attr, tstring& error ) const HELIUM_OVERRIDE;
 
     const tstring& GetName() const
     {
@@ -71,6 +71,6 @@ namespace Content
     }
   };
 
-  typedef Nocturnal::SmartPtr<SceneNode> SceneNodePtr;
+  typedef Helium::SmartPtr<SceneNode> SceneNodePtr;
   typedef std::vector<SceneNodePtr> V_SceneNode;
 }

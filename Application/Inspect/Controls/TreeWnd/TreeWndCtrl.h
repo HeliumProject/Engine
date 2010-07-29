@@ -57,7 +57,7 @@ enum TreeWndCtrlToggleMode
     wxTWC_TOGGLE_ENABLED,
 };
 
-namespace Nocturnal
+namespace Helium
 {
 
     // ----------------------------------------------------------------------------

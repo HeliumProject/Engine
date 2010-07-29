@@ -85,7 +85,7 @@ namespace Perforce
     }
 
     virtual void Run();
-    virtual void OutputStat( StrDict *dict ) NOC_OVERRIDE;
+    virtual void OutputStat( StrDict *dict ) HELIUM_OVERRIDE;
   };
 
   class MultiFStatCommand : public FStatCommand
@@ -103,7 +103,7 @@ namespace Perforce
     }
 
     virtual void Run();
-    virtual void OutputStat( StrDict *dict ) NOC_OVERRIDE;
+    virtual void OutputStat( StrDict *dict ) HELIUM_OVERRIDE;
 
   protected:
     tstring m_Folder;

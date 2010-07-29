@@ -5,7 +5,7 @@
 #include <sstream>
 
 // Using
-using namespace Nocturnal;
+using namespace Helium;
 
 // Statics
 // Delimiter between each color

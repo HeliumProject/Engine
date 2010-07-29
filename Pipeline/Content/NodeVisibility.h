@@ -46,6 +46,6 @@ namespace Content
     static void EnumerateClass( Reflect::Compositor<NodeVisibility>& comp );
   }; 
 
-  typedef Nocturnal::SmartPtr<NodeVisibility> NodeVisibilityPtr; 
+  typedef Helium::SmartPtr<NodeVisibility> NodeVisibilityPtr; 
 
 }

@@ -17,7 +17,7 @@ void Platform::CleanupPipes()
 bool Platform::CreatePipe(const tchar* name, Pipe& pipe)
 {
     // not supported
-    NOC_BREAK(); return false;
+    HELIUM_BREAK(); return false;
 }
 
 bool Platform::OpenPipe(const tchar* name, Pipe& pipe)
@@ -38,13 +38,13 @@ void Platform::ClosePipe(Pipe& pipe)
 bool Platform::ConnectPipe(Pipe& pipe, Event& terminate)
 {
     // not supported
-    NOC_BREAK(); return false;
+    HELIUM_BREAK(); return false;
 }
 
 void Platform::DisconnectPipe(Pipe& pipe)
 {
     // not supported
-    NOC_BREAK();
+    HELIUM_BREAK();
 }
 
 bool Platform::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& terminate)

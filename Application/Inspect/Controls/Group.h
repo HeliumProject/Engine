@@ -48,6 +48,6 @@ namespace Inspect
     friend class APPLICATION_API Canvas;
   };
 
-  typedef Nocturnal::SmartPtr<Group> GroupPtr;
+  typedef Helium::SmartPtr<Group> GroupPtr;
   typedef std::vector<GroupPtr> V_Group;
 }

@@ -286,7 +286,7 @@ namespace Maya
     MStatus status( MStatus::kSuccess );
 
     tstringstream idStr;
-    idStr << Nocturnal::TUID::HexFormat << id;
+    idStr << Helium::TUID::HexFormat << id;
 
     MString idMStr( idStr.str().c_str() );
     return SetStringAttribute( object, idAttributeName, idStr.str(), hidden );
@@ -302,7 +302,7 @@ namespace Maya
     tstring idStr;
     status = GetStringAttribute( object, idAttributeName, idStr );
 
-    tuid id = Nocturnal::TUID::Null;
+    tuid id = Helium::TUID::Null;
 
     if ( !idStr.empty() )
     {
@@ -415,7 +415,7 @@ namespace Maya
     if ( nodeFn.hasAttribute( attributeName, &status ) )
     {
       MObject attrObj = nodeFn.attribute( attributeName, &status );
-      NOC_ASSERT( status != MS::kFailure );
+      HELIUM_ASSERT( status != MS::kFailure );
 
       MPlug attrObjPlug( object, attrObj );
 
@@ -429,11 +429,11 @@ namespace Maya
 
       // unlock the attribute
       status = attrObjPlug.setLocked( false );
-      NOC_ASSERT( status != MS::kFailure );
+      HELIUM_ASSERT( status != MS::kFailure );
 
       // remove the attribute
       status = nodeFn.removeAttribute( attrObj );
-      NOC_ASSERT( status != MS::kFailure );
+      HELIUM_ASSERT( status != MS::kFailure );
 
       // reset to the prior state of wasLocked
       if ( nodeWasLocked )

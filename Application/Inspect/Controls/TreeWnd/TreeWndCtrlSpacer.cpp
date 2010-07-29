@@ -14,7 +14,7 @@
 #include "TreeWndCtrlSpacer.h"
 #include "TreeWndCtrl.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 // ----------------------------------------------------------------------------
 // TreeWndCtrlSpacer

@@ -79,7 +79,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
       if (label)
       {
           bool converted = Platform::ConvertString( label->GetText(), labelText );
-          NOC_ASSERT( converted );
+          HELIUM_ASSERT( converted );
             
         if ( !labelText.empty() )
         {
@@ -119,7 +119,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
 
   tstring temp;
   bool converted = Platform::ConvertString( labelText, temp );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
 
   panel->SetText( temp );
 
@@ -312,7 +312,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
 
                tstring temp;
               bool converted = Platform::ConvertString( field->m_UIName, temp );
-              NOC_ASSERT( converted );
+              HELIUM_ASSERT( converted );
 
               childPanel->SetText( temp );
 

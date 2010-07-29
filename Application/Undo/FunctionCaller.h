@@ -5,10 +5,10 @@
 namespace Undo
 {
   /////////////////////////////////////////////////////////////////////////////
-  // Pure NOC_ABSTRACT base class for calling an arbitrary function.  This is used
+  // Pure HELIUM_ABSTRACT base class for calling an arbitrary function.  This is used
   // by the ExistenceCommand to call arbitrary add and remove functions.
   // 
-  class FunctionCaller : public Nocturnal::RefCountBase<FunctionCaller>
+  class FunctionCaller : public Helium::RefCountBase<FunctionCaller>
   {
   public:
     FunctionCaller()
@@ -21,7 +21,7 @@ namespace Undo
 
     virtual void operator()() = 0;
   };
-  typedef Nocturnal::SmartPtr< FunctionCaller > FunctionCallerPtr;
+  typedef Helium::SmartPtr< FunctionCaller > FunctionCallerPtr;
 
 
   /////////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ namespace Undo
     {
     }
 
-    virtual void operator()() NOC_OVERRIDE
+    virtual void operator()() HELIUM_OVERRIDE
     {
       ( m_Container->*m_Function )( m_Item );
     }
@@ -75,7 +75,7 @@ namespace Undo
     {
     }
 
-    virtual void operator()() NOC_OVERRIDE
+    virtual void operator()() HELIUM_OVERRIDE
     {
       ( m_Container->*m_Function )( m_Item );
     }

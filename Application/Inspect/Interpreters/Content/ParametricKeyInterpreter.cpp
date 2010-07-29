@@ -31,7 +31,7 @@ void ParametricKeyInterpreter::InterpretField( const Reflect::Field* field, cons
   parent->AddControl( panel );
   tstring temp;
   bool converted = Platform::ConvertString( field->m_UIName, temp );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
   panel->SetText( temp );
 
   // get the field field for this data
@@ -40,7 +40,7 @@ void ParametricKeyInterpreter::InterpretField( const Reflect::Field* field, cons
   {
     field = foundField->second;
   }
-  NOC_ASSERT( field );
+  HELIUM_ASSERT( field );
 
   // create the serializers
   std::vector< Reflect::Element* >::const_iterator itr = instances.begin();

@@ -33,7 +33,7 @@ void Tokenize( const tstring& str, std::vector< T >& tokens, const tstring& deli
         }
         else
         {
-            NOC_BREAK();
+            HELIUM_BREAK();
         }
         // Skip delimiters.  Note the "not_of"
         lastPos = str.find_first_not_of( delimiters, pos );
@@ -76,11 +76,11 @@ SimpleArraySerializer<T>::~SimpleArraySerializer()
 }
 
 template < class T >
-void SimpleArraySerializer<T>::ConnectData(Nocturnal::HybridPtr<void> data)
+void SimpleArraySerializer<T>::ConnectData(Helium::HybridPtr<void> data)
 {
     __super::ConnectData( data );
 
-    m_Data.Connect( Nocturnal::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
 template < class T >
@@ -482,9 +482,9 @@ template SimpleArraySerializer<u64>;
 template SimpleArraySerializer<i64>;
 template SimpleArraySerializer<f32>;
 template SimpleArraySerializer<f64>;
-template SimpleArraySerializer<Nocturnal::GUID>;
-template SimpleArraySerializer<Nocturnal::TUID>;
-template SimpleArraySerializer< Nocturnal::Path >;
+template SimpleArraySerializer<Helium::GUID>;
+template SimpleArraySerializer<Helium::TUID>;
+template SimpleArraySerializer< Helium::Path >;
 
 template SimpleArraySerializer<Math::Vector2>;
 template SimpleArraySerializer<Math::Vector3>;

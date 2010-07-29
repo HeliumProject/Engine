@@ -20,7 +20,7 @@ void Curve::ProjectPointOnCurve( const Math::Vector3& point, Math::Vector3& proj
   Math::Vector3 closestPoint;
 
   u32 size = (u32)m_Points.size();
-  NOC_ASSERT( size >= 2 );
+  HELIUM_ASSERT( size >= 2 );
 
   Math::Line segment( m_Points[0], m_Points[1] );
   segment.Transform( m_GlobalTransform );

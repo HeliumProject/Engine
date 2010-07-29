@@ -8,7 +8,7 @@ namespace MayaContent
   class MAYA_API ExportEntity : public ExportBase
   {
   public:
-    ExportEntity( const MObject& mayaObject, Nocturnal::TUID id )
+    ExportEntity( const MObject& mayaObject, Helium::TUID id )
       : ExportBase( mayaObject )
     {
       m_ContentObject = new Asset::EntityInstance( id );
@@ -18,5 +18,5 @@ namespace MayaContent
     virtual void GatherMayaData( V_ExportBase &newExportObjects );
    };
 
-  typedef Nocturnal::SmartPtr<ExportEntity> ExportEntityPtr;
+  typedef Helium::SmartPtr<ExportEntity> ExportEntityPtr;
 }

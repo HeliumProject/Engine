@@ -37,9 +37,9 @@ bool Parser::Parse( const std::string& file )
 
   tstring filename;
   bool converted = Platform::ConvertString( m_File, filename );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
 
-  Nocturnal::Path path( filename );
+  Helium::Path path( filename );
   if ( !path.Exists() )
   {
     m_LastError = std::string( "File does not exist: " ) + m_File;

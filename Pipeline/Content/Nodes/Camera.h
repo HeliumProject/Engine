@@ -31,5 +31,5 @@ namespace Content
     static void EnumerateClass( Reflect::Compositor<Camera>& comp );
   };
 
-  typedef Nocturnal::SmartPtr<Camera> CameraPtr;
+  typedef Helium::SmartPtr<Camera> CameraPtr;
 }

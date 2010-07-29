@@ -8,7 +8,7 @@
 namespace CodeGen
 {
   class Enum;
-  typedef Nocturnal::SmartPtr< Enum > EnumPtr;
+  typedef Helium::SmartPtr< Enum > EnumPtr;
 
   /////////////////////////////////////////////////////////////////////////////
   // Class representing a C++ enumeration.
@@ -38,5 +38,5 @@ namespace CodeGen
   };
 
   typedef std::vector< EnumPtr > V_EnumSmartPtr;
-  typedef Nocturnal::OrderedSet< EnumPtr > OS_EnumSmartPtr;
+  typedef Helium::OrderedSet< EnumPtr > OS_EnumSmartPtr;
 }

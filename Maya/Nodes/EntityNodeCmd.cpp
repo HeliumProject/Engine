@@ -103,7 +103,7 @@ MStatus EntityNodeCmd::doIt( const MArgList & args )
   }
   else if( argParser.isFlagSet( CreateInstanceFlag ) )
   {
-      NOC_BREAK();
+      HELIUM_BREAK();
 #pragma TODO( "Reimplement to use the Vault" )
     //File::FileBrowser browserDlg( NULL, -1, "Create Instance" );
     //browserDlg.AddFilter( FinderSpecs::Asset::ENTITY_DECORATION );

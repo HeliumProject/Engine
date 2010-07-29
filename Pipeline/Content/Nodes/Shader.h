@@ -35,7 +35,7 @@ namespace Content
     {
     }
 
-    Shader (const Nocturnal::TUID& id)
+    Shader (const Helium::TUID& id)
       : SceneNode (id)
       , m_WrapU (true)
       , m_WrapV (true)
@@ -53,7 +53,7 @@ namespace Content
     static void EnumerateClass( Reflect::Compositor<Shader>& comp );
   };
 
-  typedef Nocturnal::SmartPtr<Shader> ShaderPtr;
+  typedef Helium::SmartPtr<Shader> ShaderPtr;
   typedef std::vector<ShaderPtr> V_Shader;
 
   struct CompareShaders

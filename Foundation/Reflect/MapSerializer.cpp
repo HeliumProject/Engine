@@ -48,7 +48,7 @@ inline void Tokenize( const tstring& str, std::map< TKey, TVal >& tokens, const 
         {
             // Delimited map is messed up. It should alternate key-value pairs, but there is
             // a key without a value.
-            NOC_BREAK();
+            HELIUM_BREAK();
         }
     }
 }
@@ -89,7 +89,7 @@ inline void Tokenize( const tstring& str, std::map< TKey, tstring >& tokens, con
         {
             // Delimited map is messed up. It should alternate key-value pairs, but there is
             // a key without a value.
-            NOC_BREAK();
+            HELIUM_BREAK();
         }
     }
 }
@@ -132,7 +132,7 @@ inline void Tokenize( const tstring& str, std::map< tstring, TVal >& tokens, con
         {
             // Delimited map is messed up. It should alternate key-value pairs, but there is
             // a key without a value.
-            NOC_BREAK();
+            HELIUM_BREAK();
         }
     }
 }
@@ -171,7 +171,7 @@ inline void Tokenize( const tstring& str, std::map< tstring, tstring >& tokens, 
         {
             // Delimited map is messed up. It should alternate key-value pairs, but there is
             // a key without a value.
-            NOC_BREAK();
+            HELIUM_BREAK();
         }
     }
 }
@@ -201,11 +201,11 @@ void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Clear()
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
-void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::ConnectData(Nocturnal::HybridPtr<void> data)
+void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::ConnectData(Helium::HybridPtr<void> data)
 {
     __super::ConnectData( data );
 
-    m_Data.Connect( Nocturnal::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
@@ -461,10 +461,10 @@ template SimpleMapSerializer<u64, U64Serializer, u32, U32Serializer>;
 template SimpleMapSerializer<u64, U64Serializer, u64, U64Serializer>;
 template SimpleMapSerializer<u64, U64Serializer, Math::Matrix4, Matrix4Serializer>;
 
-template SimpleMapSerializer<Nocturnal::GUID, GUIDSerializer, u32, U32Serializer>;
-template SimpleMapSerializer<Nocturnal::GUID, GUIDSerializer, Math::Matrix4, Matrix4Serializer>;
-template SimpleMapSerializer<Nocturnal::TUID, TUIDSerializer, u32, U32Serializer>;
-template SimpleMapSerializer<Nocturnal::TUID, TUIDSerializer, Math::Matrix4, Matrix4Serializer>;
+template SimpleMapSerializer<Helium::GUID, GUIDSerializer, u32, U32Serializer>;
+template SimpleMapSerializer<Helium::GUID, GUIDSerializer, Math::Matrix4, Matrix4Serializer>;
+template SimpleMapSerializer<Helium::TUID, TUIDSerializer, u32, U32Serializer>;
+template SimpleMapSerializer<Helium::TUID, TUIDSerializer, Math::Matrix4, Matrix4Serializer>;
 
 REFLECT_DEFINE_CLASS(StringStringMapSerializer);
 REFLECT_DEFINE_CLASS(StringBoolMapSerializer);

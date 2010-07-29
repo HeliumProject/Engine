@@ -112,13 +112,13 @@ namespace Math
 
         Vector3&              operator[] (const u32 i)
         {
-            NOC_ASSERT(i < 3);
+            HELIUM_ASSERT(i < 3);
             return (&x)[i];
         }
 
         const Vector3&        operator[] (const u32 i) const
         {
-            NOC_ASSERT(i < 3);
+            HELIUM_ASSERT(i < 3);
             return (&x)[i];
         }
 
@@ -360,9 +360,9 @@ namespace Math
 
     inline Matrix3& Matrix3::Orthogonalize(Axis first, Axis second, Axis third)
     {
-        NOC_ASSERT(first != second && second != third);
+        HELIUM_ASSERT(first != second && second != third);
 
-#ifdef NOC_ASSERT_ENABLED
+#ifdef HELIUM_ASSERT_ENABLED
         Vector3 oldFirst = GetBasis(first);
 #endif
 
@@ -388,7 +388,7 @@ namespace Math
             SetBasis(second, GetBasis(second) * -1.0f);
         }
 
-        NOC_ASSERT( oldFirst == GetBasis(first) );
+        HELIUM_ASSERT( oldFirst == GetBasis(first) );
 
         return *this;
     }

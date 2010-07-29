@@ -23,7 +23,7 @@ typedef std::map< tuid, u32 > M_tuidu32;
 #define TUID_HEX_FORMAT TXT( "0x%016I64X" )
 #define TUID_INT_FORMAT TXT( "%I64u" )
 
-namespace Nocturnal
+namespace Helium
 {
     class GUID;
 

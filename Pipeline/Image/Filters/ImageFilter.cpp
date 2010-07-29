@@ -9,7 +9,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 #include "ImageFilter.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 ImageFilter::ImageFilter(unsigned int width, unsigned int flags)
 : input(NULL)
@@ -31,7 +31,7 @@ ImageFilter::ImageFilter(const tchar* inputfile, const tchar* outputfile, unsign
 , opFlags(flags)
 , outputPath(outputfile)
 {
-  input = Nocturnal::Image::LoadFile(inputfile, false, NULL);    // gamma correction????
+  input = Helium::Image::LoadFile(inputfile, false, NULL);    // gamma correction????
 
   if (!input)
   {
@@ -55,7 +55,7 @@ ImageFilter::ImageFilter(const tchar* inputfile, const tchar* outputfile, unsign
     yres = input->m_Height;
   }
 
-  output = new Nocturnal::Image(xres, yres, input->m_NativeFormat);
+  output = new Helium::Image(xres, yres, input->m_NativeFormat);
 }
 
 ImageFilter::~ImageFilter(void)

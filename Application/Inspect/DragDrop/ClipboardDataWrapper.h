@@ -25,5 +25,5 @@ namespace Inspect
 
     static void EnumerateClass( Reflect::Compositor<ClipboardDataWrapper>& comp );
   };
-  typedef Nocturnal::SmartPtr< ClipboardDataWrapper > ClipboardDataWrapperPtr;
+  typedef Helium::SmartPtr< ClipboardDataWrapper > ClipboardDataWrapperPtr;
 }

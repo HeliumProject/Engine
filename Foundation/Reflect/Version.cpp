@@ -87,6 +87,6 @@ void Reflect::Version::DetectVersion()
     {
         Platform::GetVersionInfo( m_Source.c_str(), m_SourceVersion );
 
-        m_Source = Nocturnal::Path( m_Source ).Filename();
+        m_Source = Helium::Path( m_Source ).Filename();
     }
 }

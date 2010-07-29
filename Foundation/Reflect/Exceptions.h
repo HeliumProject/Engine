@@ -9,7 +9,7 @@ namespace Reflect
     // Basic exception for all reflect exceptions classes
     //
 
-    class Exception NOC_ABSTRACT : public Nocturnal::Exception
+    class Exception HELIUM_ABSTRACT : public Helium::Exception
     {
 
     };

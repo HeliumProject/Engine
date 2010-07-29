@@ -16,15 +16,15 @@ namespace Reflect
         PointerSerializer ();
         virtual ~PointerSerializer();
 
-        virtual void ConnectData(Nocturnal::HybridPtr<void> data) NOC_OVERRIDE;
+        virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
 
-        virtual bool Set(const Reflect::Serializer* s, u32 flags = 0) NOC_OVERRIDE;
-        virtual bool Equals(const Reflect::Serializer* s) const NOC_OVERRIDE;
-        virtual void Host(Reflect::Visitor& visitor) NOC_OVERRIDE;
+        virtual bool Set(const Reflect::Serializer* s, u32 flags = 0) HELIUM_OVERRIDE;
+        virtual bool Equals(const Reflect::Serializer* s) const HELIUM_OVERRIDE;
+        virtual void Host(Reflect::Visitor& visitor) HELIUM_OVERRIDE;
 
-        virtual void Serialize (Reflect::Archive& archive) const NOC_OVERRIDE;
-        virtual void Deserialize (Reflect::Archive& archive) NOC_OVERRIDE;
+        virtual void Serialize (Reflect::Archive& archive) const HELIUM_OVERRIDE;
+        virtual void Deserialize (Reflect::Archive& archive) HELIUM_OVERRIDE;
     };
 
-    typedef Nocturnal::SmartPtr<PointerSerializer> PointerSerializerPtr;
+    typedef Helium::SmartPtr<PointerSerializer> PointerSerializerPtr;
 }

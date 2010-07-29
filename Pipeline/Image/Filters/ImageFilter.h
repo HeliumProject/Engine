@@ -20,7 +20,7 @@
 
 #define NORMAL_NORMALIZE (0x1)
 
-namespace Nocturnal
+namespace Helium
 {
   //
   // Base class for image filtering that handles basic file and pixel operations and pixel iteration.
@@ -49,8 +49,8 @@ namespace Nocturnal
     // Checks if the pixel specified by color is considered an undefined pixel
     bool isNullPixel(const Math::Vector4& color) const;
 
-    Nocturnal::Image*       input;            // input image
-    Nocturnal::Image*       output;           // output image
+    Helium::Image*       input;            // input image
+    Helium::Image*       output;           // output image
 
     unsigned int        filterWidth;        // filter width
     unsigned int        opFlags;              // flags for normalizing, etc.

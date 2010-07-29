@@ -40,7 +40,7 @@ void Debug::EnableExceptionFilter(bool enable)
 
 int Debug::GetExceptionBehavior()
 {
-  if (getenv( "NOC_CRASH_DONT_BLOCK" ) != NULL)
+  if (getenv( "HELIUM_CRASH_DONT_BLOCK" ) != NULL)
   {
     // do not propagate the exception up to the system (avoid dialog)
     return EXCEPTION_EXECUTE_HANDLER;
@@ -50,7 +50,7 @@ int Debug::GetExceptionBehavior()
   return EXCEPTION_CONTINUE_SEARCH;
 }
 
-void Debug::ProcessException(const Nocturnal::Exception& exception, bool print, bool fatal)
+void Debug::ProcessException(const Helium::Exception& exception, bool print, bool fatal)
 {
   SetUnhandledExceptionFilter( NULL );
 
@@ -67,10 +67,10 @@ void Debug::ProcessException(const Nocturnal::Exception& exception, bool print, 
   }
 
   bool converted = Platform::ConvertString( exception.What(), args.m_Message );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
 
   converted = Platform::ConvertString( cppClass, args.m_CPPClass );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
 
   args.m_State = Log::GetOutlineState();
 
@@ -116,10 +116,10 @@ void Debug::ProcessException(const std::exception& exception, bool print, bool f
   }
 
   bool converted = Platform::ConvertString( exception.what(), args.m_Message );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
 
   converted = Platform::ConvertString( cppClass, args.m_CPPClass );
-  NOC_ASSERT( converted );
+  HELIUM_ASSERT( converted );
 
   args.m_State = Log::GetOutlineState();
 
@@ -155,7 +155,7 @@ u32 Debug::ProcessException(LPEXCEPTION_POINTERS info, u32 ret_code, bool print,
   // handle breakpoint exceptions outside the debugger
   if ( !::IsDebuggerPresent()
     && info->ExceptionRecord->ExceptionCode == EXCEPTION_BREAKPOINT
-    && getenv( "NOC_CRASH_DONT_BLOCK" ) == NULL
+    && getenv( "HELIUM_CRASH_DONT_BLOCK" ) == NULL
     && g_BreakpointOccurred.Valid() )
   {
     ret_code = g_BreakpointOccurred.Invoke( BreakpointArgs (info, fatal) );
@@ -173,7 +173,7 @@ u32 Debug::ProcessException(LPEXCEPTION_POINTERS info, u32 ret_code, bool print,
       Platform::Print( Platform::ConsoleColors::Red, stderr, TXT( "%s" ), GetExceptionInfo( info ).c_str() );
     }
 
-    bool full = getenv( "NOC_CRASH_FULL_DUMP" ) != NULL;
+    bool full = getenv( "HELIUM_CRASH_FULL_DUMP" ) != NULL;
     
     args.m_Dump = Debug::WriteDump(info, full);
 

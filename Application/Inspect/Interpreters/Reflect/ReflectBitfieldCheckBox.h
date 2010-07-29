@@ -25,21 +25,21 @@ namespace Inspect
   public:
     ReflectBitfieldCheckBox();
 
-    virtual void Realize( Container* parent ) NOC_OVERRIDE;
-    virtual void Read() NOC_OVERRIDE;
-    virtual bool Write() NOC_OVERRIDE;
+    virtual void Realize( Container* parent ) HELIUM_OVERRIDE;
+    virtual void Read() HELIUM_OVERRIDE;
+    virtual bool Write() HELIUM_OVERRIDE;
     virtual CheckBoxState GetChecked();
     virtual void SetChecked( CheckBoxState checked );
     void SetBitfieldString( const tstring& value );
-    virtual bool IsDefault() const NOC_OVERRIDE;
+    virtual bool IsDefault() const HELIUM_OVERRIDE;
 
   protected:
-    virtual void SetDefaultAppearance( bool def ) NOC_OVERRIDE;
+    virtual void SetDefaultAppearance( bool def ) HELIUM_OVERRIDE;
     bool WriteBitfield();
     tstring BuildBitfieldString( std::vector< tstring > tokens, const tstring& delimiter );
     void UpdateUI( CheckBoxStates::CheckBoxState state );
     CheckBoxState GetUIState() const;
   };
 
-  typedef Nocturnal::SmartPtr<ReflectBitfieldCheckBox> BitfieldCheckBoxPtr;
+  typedef Helium::SmartPtr<ReflectBitfieldCheckBox> BitfieldCheckBoxPtr;
 }

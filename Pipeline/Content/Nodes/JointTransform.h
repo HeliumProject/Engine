@@ -15,7 +15,7 @@ namespace Content
 
     }
 
-    JointTransform (const Nocturnal::TUID& id)
+    JointTransform (const Helium::TUID& id)
       : Transform (id)
       , m_SegmentScaleCompensate( false )
     {
@@ -26,10 +26,10 @@ namespace Content
 
     static void EnumerateClass( Reflect::Compositor<JointTransform>& comp );
 
-    virtual void ResetTransform() NOC_OVERRIDE;
+    virtual void ResetTransform() HELIUM_OVERRIDE;
   };
 
-  typedef Nocturnal::SmartPtr<JointTransform> JointTransformPtr;
+  typedef Helium::SmartPtr<JointTransform> JointTransformPtr;
   typedef std::vector<JointTransformPtr> V_JointTransform;
   typedef std::vector<V_JointTransform> VV_JointTransform;
   typedef std::set<JointTransformPtr> S_JointTransform;

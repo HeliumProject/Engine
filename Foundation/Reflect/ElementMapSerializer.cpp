@@ -15,11 +15,11 @@ SimpleElementMapSerializer<KeyT>::~SimpleElementMapSerializer()
 }
 
 template < class KeyT >
-void SimpleElementMapSerializer<KeyT>::ConnectData(Nocturnal::HybridPtr<void> data)
+void SimpleElementMapSerializer<KeyT>::ConnectData(Helium::HybridPtr<void> data)
 {
     __super::ConnectData( data );
 
-    m_Data.Connect( Nocturnal::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
 template < class KeyT >
@@ -274,8 +274,8 @@ template SimpleElementMapSerializer<u32>;
 template SimpleElementMapSerializer<i32>;
 template SimpleElementMapSerializer<u64>;
 template SimpleElementMapSerializer<i64>;
-template SimpleElementMapSerializer<Nocturnal::GUID>;
-template SimpleElementMapSerializer<Nocturnal::TUID>;
+template SimpleElementMapSerializer<Helium::GUID>;
+template SimpleElementMapSerializer<Helium::TUID>;
 
 REFLECT_DEFINE_CLASS(TypeIDElementMapSerializer);
 REFLECT_DEFINE_CLASS(StringElementMapSerializer);

@@ -13,7 +13,7 @@ public:
   {
   }
 
-  virtual void Notify() NOC_OVERRIDE
+  virtual void Notify() HELIUM_OVERRIDE
   {
     wxPoint point;
     wxWindow* window = ::wxFindWindowAtPointer( point );

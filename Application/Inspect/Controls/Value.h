@@ -24,18 +24,18 @@ namespace Inspect
     Value();
 
   protected:
-    virtual bool Process(const tstring& key, const tstring& value) NOC_OVERRIDE;
+    virtual bool Process(const tstring& key, const tstring& value) HELIUM_OVERRIDE;
 
-    virtual void SetDefaultAppearance(bool def) NOC_OVERRIDE;
+    virtual void SetDefaultAppearance(bool def) HELIUM_OVERRIDE;
 
     void SetToDefault(const ContextMenuEventArgs& event);
 
   public:
-    virtual void Realize(Container* parent) NOC_OVERRIDE;
+    virtual void Realize(Container* parent) HELIUM_OVERRIDE;
 
-    virtual void Read() NOC_OVERRIDE;
+    virtual void Read() HELIUM_OVERRIDE;
 
-    virtual bool Write() NOC_OVERRIDE;
+    virtual bool Write() HELIUM_OVERRIDE;
 
     void GetText(tstring& text);
     void SetText(const tstring& text);
@@ -44,7 +44,7 @@ namespace Inspect
     void SetJustification( Justify justification );
 
     void SetHighlight(bool highlighted);
-    virtual void SetReadOnly(bool readOnly) NOC_OVERRIDE;
+    virtual void SetReadOnly(bool readOnly) HELIUM_OVERRIDE;
 
   private:
     void UpdateUI( const tstring& text );
@@ -56,5 +56,5 @@ namespace Inspect
     bool m_Highlight;
   };
 
-  typedef Nocturnal::SmartPtr<Value> ValuePtr;
+  typedef Helium::SmartPtr<Value> ValuePtr;
 }

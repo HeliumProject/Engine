@@ -20,7 +20,7 @@ namespace Reflect
         virtual void Clear() = 0;
     };
 
-    typedef Nocturnal::SmartPtr<ContainerSerializer> ContainerSerializerPtr;
+    typedef Helium::SmartPtr<ContainerSerializer> ContainerSerializerPtr;
 
     class FOUNDATION_API ElementContainerSerializer : public ContainerSerializer
     {
@@ -32,5 +32,5 @@ namespace Reflect
         ElementContainerSerializer();
     };
 
-    typedef Nocturnal::SmartPtr<ContainerSerializer> ContainerSerializerPtr;
+    typedef Helium::SmartPtr<ContainerSerializer> ContainerSerializerPtr;
 }

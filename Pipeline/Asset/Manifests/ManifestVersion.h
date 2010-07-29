@@ -28,6 +28,6 @@ namespace Asset
     virtual bool IsCurrent();
   };
 
-  typedef Nocturnal::SmartPtr<ManifestVersion> ManifestVersionPtr;
+  typedef Helium::SmartPtr<ManifestVersion> ManifestVersionPtr;
   typedef std::vector<ManifestVersionPtr> V_ManifestVersion;
 }

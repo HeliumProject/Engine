@@ -45,26 +45,26 @@
 namespace Reflect
 {
     class Object;
-    typedef Nocturnal::SmartPtr<Object> ObjectPtr;
+    typedef Helium::SmartPtr<Object> ObjectPtr;
     typedef std::vector<ObjectPtr> V_Object;
-    typedef Nocturnal::SmartPtr<const Object> ConstObjectPtr;
+    typedef Helium::SmartPtr<const Object> ConstObjectPtr;
     typedef std::vector<ConstObjectPtr> V_ConstObject;
 
     class Element;
-    typedef Nocturnal::SmartPtr<Element> ElementPtr;
+    typedef Helium::SmartPtr<Element> ElementPtr;
     typedef std::vector<ElementPtr> V_Element;
-    typedef Nocturnal::SmartPtr<const Element> ConstElementPtr;
+    typedef Helium::SmartPtr<const Element> ConstElementPtr;
     typedef std::vector<ConstElementPtr> V_ConstElement;
 
     class Serializer;
-    typedef Nocturnal::SmartPtr<Serializer> SerializerPtr;
+    typedef Helium::SmartPtr<Serializer> SerializerPtr;
     typedef std::vector<SerializerPtr> V_Serializer;
-    typedef Nocturnal::SmartPtr<const Serializer> ConstSerializerPtr;
+    typedef Helium::SmartPtr<const Serializer> ConstSerializerPtr;
     typedef std::vector<ConstSerializerPtr> V_ConstSerializer;
 
     class Version;
-    typedef Nocturnal::SmartPtr<Version> VersionPtr;
-    typedef Nocturnal::SmartPtr<const Version> ConstVersionPtr;
+    typedef Helium::SmartPtr<Version> VersionPtr;
+    typedef Helium::SmartPtr<const Version> ConstVersionPtr;
 
     // function type for creating object instances
     typedef Object* (*CreateObjectFunc)();

@@ -10,16 +10,16 @@ namespace Content
   public:
     bool                m_Visible;
     bool                m_Selectable;
-    Nocturnal::V_TUID   m_Members;
+    Helium::V_TUID   m_Members;
     Math::Color3        m_Color;
 
     Layer();
-    Layer( Nocturnal::TUID& id );
+    Layer( Helium::TUID& id );
 
     REFLECT_DECLARE_CLASS( Layer, SceneNode );
     static void EnumerateClass( Reflect::Compositor<Layer>& comp );
   };
 
-  typedef Nocturnal::SmartPtr< Layer > LayerPtr;
+  typedef Helium::SmartPtr< Layer > LayerPtr;
   typedef std::vector< LayerPtr > V_Layer;
 }

@@ -168,7 +168,7 @@ namespace Math
         return result;
 # endif
 #else
-        NOC_COMPILE_ASSERT(false);
+        HELIUM_COMPILE_ASSERT(false);
 #endif
     }
 

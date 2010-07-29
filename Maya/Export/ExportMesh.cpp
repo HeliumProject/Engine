@@ -17,8 +17,8 @@
 using namespace Reflect;
 using namespace Content;
 using namespace MayaContent;
-using namespace Nocturnal;
-using Nocturnal::Insert;
+using namespace Helium;
+using Helium::Insert;
 
 #define g_kMinDeltaTol  0.0001f  // .1mm
 
@@ -93,10 +93,10 @@ void ExportMesh::GatherMayaData( V_ExportBase &newExportObjects )
     // later.
     MIntArray unusedTriangleVertices;
     status = meshFn.getTriangles( m_TriangleCounts, unusedTriangleVertices );
-    NOC_ASSERT( status );
+    HELIUM_ASSERT( status );
 
-    NOC_ASSERT( m_VertexCount.length() == m_NormalIdCounts.length() );
-    NOC_ASSERT( m_VertexList.length() == m_NormalIds.length() );
+    HELIUM_ASSERT( m_VertexCount.length() == m_NormalIdCounts.length() );
+    HELIUM_ASSERT( m_VertexList.length() == m_NormalIds.length() );
 
     status = meshFn.getUVs( m_BaseUArray, m_BaseVArray, &baseMapUVName );
     status = meshFn.getAssignedUVs( m_BaseUVCounts, m_BaseUVIds, &baseMapUVName );
@@ -159,12 +159,12 @@ void ExportMesh::GatherMayaData( V_ExportBase &newExportObjects )
     //
     // some basic tests for data validity
     //
-    NOC_ASSERT( numberOfPolys == m_ShaderIndices.length() );
-    NOC_ASSERT( numberOfPolys == m_NormalIdCounts.length() );
-    NOC_ASSERT( numberOfPolys == m_BaseUVCounts.length() );
-    NOC_ASSERT( m_LightMapUArray.length() == m_LightMapVArray.length() );
-    NOC_ASSERT( m_BaseUArray.length() == m_BaseVArray.length() );
-    NOC_ASSERT( m_BlendMapUArray.length() == m_BlendMapVArray.length() );
+    HELIUM_ASSERT( numberOfPolys == m_ShaderIndices.length() );
+    HELIUM_ASSERT( numberOfPolys == m_NormalIdCounts.length() );
+    HELIUM_ASSERT( numberOfPolys == m_BaseUVCounts.length() );
+    HELIUM_ASSERT( m_LightMapUArray.length() == m_LightMapVArray.length() );
+    HELIUM_ASSERT( m_BaseUArray.length() == m_BaseVArray.length() );
+    HELIUM_ASSERT( m_BlendMapUArray.length() == m_BlendMapVArray.length() );
 
 
     //
@@ -233,9 +233,9 @@ void ExportMesh::GatherMayaData( V_ExportBase &newExportObjects )
 
             /*
             // a few sanity checks
-            NOC_ASSERT( influenceCount1 == influenceCount2 );
-            NOC_ASSERT( influenceCount1 == m_SkinClusters[j].m_influences.length() );
-            NOC_ASSERT( numberOfVerts * influenceCount1 == m_SkinClusters[j].m_weights.length() );
+            HELIUM_ASSERT( influenceCount1 == influenceCount2 );
+            HELIUM_ASSERT( influenceCount1 == m_SkinClusters[j].m_influences.length() );
+            HELIUM_ASSERT( numberOfVerts * influenceCount1 == m_SkinClusters[j].m_weights.length() );
             */
 
             m_InfluenceCount += influenceCount1;
@@ -397,7 +397,7 @@ bool ExportMesh::GetBlendShapeDeformer( const MFnMesh& meshFn, MFnBlendShapeDefo
             MObjectArray baseObjects;
 
             status = morpherFn.getBaseObjects( baseObjects );
-            NOC_ASSERT( status );
+            HELIUM_ASSERT( status );
 
             if ( baseObjects.length() == 0 )
             {
@@ -443,7 +443,7 @@ void ExportMesh::GatherMorphTargets( MFnBlendShapeDeformer& morpherFn )
     MIntArray weightIndices;
     status = morpherFn.weightIndexList(weightIndices);
 
-    NOC_ASSERT(weightIndices.length() == numWeights);
+    HELIUM_ASSERT(weightIndices.length() == numWeights);
     Log::Debug( TXT("NumWeights: %d\n"), numWeights );
 
     for( u32 weightIndex = 0; weightIndex < numWeights; ++weightIndex )
@@ -453,7 +453,7 @@ void ExportMesh::GatherMorphTargets( MFnBlendShapeDeformer& morpherFn )
         // get the targets
         MObjectArray  targets;
         status = morpherFn.getTargets(m_MayaObject, weightId, targets);
-        NOC_ASSERT(status);
+        HELIUM_ASSERT(status);
 
         u32 numTargets = targets.length();
         Log::Debug( TXT("WeightIndex: %d, NumTargets: %d\n"), weightIndex, numTargets );
@@ -462,12 +462,12 @@ void ExportMesh::GatherMorphTargets( MFnBlendShapeDeformer& morpherFn )
         {
             MObject targetObject = targets[targetIndex];
 
-            NOC_ASSERT( targetObject.hasFn( MFn::kMesh ) );
-            NOC_ASSERT( targetObject.hasFn( MFn::kTransform ) == false );
+            HELIUM_ASSERT( targetObject.hasFn( MFn::kMesh ) );
+            HELIUM_ASSERT( targetObject.hasFn( MFn::kTransform ) == false );
 
             // this will give you the mesh of the blend shape
             MFnMesh targetMeshFn( targetObject, &status );
-            NOC_ASSERT( status );
+            HELIUM_ASSERT( status );
 
             ExportMorphTarget exportMorphTarget;
 
@@ -481,7 +481,7 @@ void ExportMesh::GatherMorphTargets( MFnBlendShapeDeformer& morpherFn )
 
             MFloatVectorArray normalDeltas;
             status = targetMeshFn.getNormals(normalDeltas, MSpace::kObject);
-            NOC_ASSERT(status);
+            HELIUM_ASSERT(status);
             u32 numNormalDeltas = normalDeltas.length();
             exportMorphTarget.m_NormalDeltaVectors.resize(numNormalDeltas);
 
@@ -489,7 +489,7 @@ void ExportMesh::GatherMorphTargets( MFnBlendShapeDeformer& morpherFn )
             // meshes in the same order.
             if ( m_Normals.length() != numNormalDeltas )
             {
-                throw Nocturnal::Exception( 
+                throw Helium::Exception( 
                     TXT("Morph target %s does not have the same number of normals ") \
                     TXT("as the base mesh from which it was created (%s). ") \
                     TXT("This can cause strange display artifacts in the animations."),
@@ -512,7 +512,7 @@ void ExportMesh::GatherMorphTargets( MFnBlendShapeDeformer& morpherFn )
             //
             MFloatPointArray  pointDeltas;
             status = targetMeshFn.getPoints(pointDeltas, MSpace::kObject);
-            NOC_ASSERT(status);
+            HELIUM_ASSERT(status);
             u32 numPointDeltas = pointDeltas.length();
             exportMorphTarget.m_PosDeltas.reserve(numPointDeltas);
 
@@ -520,7 +520,7 @@ void ExportMesh::GatherMorphTargets( MFnBlendShapeDeformer& morpherFn )
             // meshes in the same order.
             if ( m_Points.length() != numPointDeltas )
             {
-                throw Nocturnal::Exception( 
+                throw Helium::Exception( 
                     TXT("Morph target %s does not have the same number of verticies ") \
                     TXT("as the base mesh from which it was created (%s). ") \
                     TXT("This can cause strange display artifacts in the animations."),
@@ -869,13 +869,13 @@ void ExportMesh::ProcessMorphTargets( const Content::MeshPtr contentMesh )
                 {          
                     const u32& newVectorIndex = lowerBound->second;
 
-                    NOC_ASSERT( newVectorIndex < (u32) m_SceneIndicesTracker.m_NormalIndices.size() );
+                    HELIUM_ASSERT( newVectorIndex < (u32) m_SceneIndicesTracker.m_NormalIndices.size() );
 
                     u32 normalDeltaIndex = m_SceneIndicesTracker.m_NormalIndices[newVectorIndex];
 
                     if ( normalDeltaIndex >= (u32) exportMorphTarget.m_NormalDeltaVectors.size() )
                     {
-                        throw Nocturnal::Exception(
+                        throw Helium::Exception(
                             TXT("Morph target %s does not have the same vertex count/order/normals ") \
                             TXT("as the base mesh from which it was created (%s)."),
                             exportMorphTarget.m_Name.c_str(), contentMesh->GetName().c_str() );
@@ -900,10 +900,10 @@ void ExportMesh::ProcessPolygon( unsigned int & triangleIndex, const ExportPolyg
     MIntArray polyVertIndices; 
     MStatus status;
     MFnMesh meshFn( m_MayaObject, &status );
-    NOC_ASSERT( status );
+    HELIUM_ASSERT( status );
     meshFn.getPolygonVertices( poly.m_PolygonNumber, polyVertIndices );
     const u32 numPolyVertIndices = polyVertIndices.length();
-    NOC_ASSERT( numPolyVertIndices == poly.m_Count );
+    HELIUM_ASSERT( numPolyVertIndices == poly.m_Count );
     for ( int i = 0; i < poly.m_Count; i++ )
     {
         // We are going to make a new set of vertices in the export data for every
@@ -921,7 +921,7 @@ void ExportMesh::ProcessPolygon( unsigned int & triangleIndex, const ExportPolyg
         if ( !status )
         {
             Log::Error( TXT("Unable to fetch triangle vertices for poly #%d, tri #%d on mesh %s\n"), poly.m_PolygonNumber, triIndex, meshFn.partialPathName().asTChar() );
-            NOC_BREAK();
+            HELIUM_BREAK();
         }
 
         i32 v0 = vertexList[0];
@@ -931,7 +931,7 @@ void ExportMesh::ProcessPolygon( unsigned int & triangleIndex, const ExportPolyg
         if ( v0 < 0 || v1 < 0 || v2 < 0 )
         {
             Log::Error( TXT("Invalid vertex index detected during polygon triangulation (poly #%d, tri #%d, mesh %s)\n"), poly.m_PolygonNumber, triIndex, meshFn.partialPathName().asTChar() );
-            NOC_BREAK();
+            HELIUM_BREAK();
         }
 
         // Convert these Maya vertex indices into our own export indices
@@ -1032,7 +1032,7 @@ u32 ExportMesh::ProcessVertex( const ExportTriangle &tri, u32 vertNum )
     // we are pushing back an index into m_Normals
     unsigned int vertIndex = tri.m_Vertices[vertNum].m_Index;
     unsigned int normalIdsLength = m_NormalIds.length();
-    NOC_ASSERT( tri.m_Vertices[vertNum].m_Index < m_NormalIds.length() );
+    HELIUM_ASSERT( tri.m_Vertices[vertNum].m_Index < m_NormalIds.length() );
     m_SceneIndicesTracker.m_NormalIndices.push_back( (u32)m_NormalIds[tri.m_Vertices[vertNum].m_Index] );
 
     if( newVert )  
@@ -1247,18 +1247,18 @@ void ExportMesh::ProcessTriangle( unsigned int& triangleIndex, unsigned int poly
     u32 v1 = (u32)m_VertexList[exportTri.m_Vertices[1].m_Index];
     u32 v2 = (u32)m_VertexList[exportTri.m_Vertices[2].m_Index];
 
-    NOC_ASSERT( v0 != v1 );
-    NOC_ASSERT( v0 != v2 );
-    NOC_ASSERT( v1 != v2 );
+    HELIUM_ASSERT( v0 != v1 );
+    HELIUM_ASSERT( v0 != v2 );
+    HELIUM_ASSERT( v1 != v2 );
 
     // here we are getting the (unique) Content::Scene vert index
     u32 triVertIdx0 = ProcessVertex( exportTri, 0 );
     u32 triVertIdx1 = ProcessVertex( exportTri, 1 );
     u32 triVertIdx2 = ProcessVertex( exportTri, 2 );
 
-    NOC_ASSERT( triVertIdx0 != triVertIdx1 );
-    NOC_ASSERT( triVertIdx0 != triVertIdx2 );
-    NOC_ASSERT( triVertIdx1 != triVertIdx2 );
+    HELIUM_ASSERT( triVertIdx0 != triVertIdx1 );
+    HELIUM_ASSERT( triVertIdx0 != triVertIdx2 );
+    HELIUM_ASSERT( triVertIdx1 != triVertIdx2 );
 
     contentMesh->m_TriangleVertexIndices.push_back( triVertIdx0 );
     contentMesh->m_TriangleVertexIndices.push_back( triVertIdx1 );

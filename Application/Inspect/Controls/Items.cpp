@@ -164,7 +164,7 @@ void Items::SetValue(const tstring& data)
       {
         if (!Control::Cast<wxControlWithItems>(this)->SetStringSelection(itr->m_Key.c_str()))
         {
-          NOC_BREAK();
+          HELIUM_BREAK();
         }
         break;
       }

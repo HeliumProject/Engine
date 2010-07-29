@@ -64,7 +64,7 @@ namespace Asset
         }
 
     public:
-        virtual Component::ComponentUsage GetComponentUsage() const NOC_OVERRIDE;
+        virtual Component::ComponentUsage GetComponentUsage() const HELIUM_OVERRIDE;
 
     public:
 

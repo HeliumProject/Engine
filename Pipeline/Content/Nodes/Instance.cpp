@@ -26,7 +26,7 @@ Instance::Instance()
 
 }
 
-Instance::Instance(const Nocturnal::TUID& id)
+Instance::Instance(const Helium::TUID& id)
 : PivotTransform (id)
 , m_Solid (false)
 , m_SolidOverride (false)

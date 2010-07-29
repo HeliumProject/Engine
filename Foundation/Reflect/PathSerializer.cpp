@@ -21,11 +21,11 @@ bool PathSerializer::IsCompact() const
     return true;
 }
 
-void PathSerializer::ConnectData( Nocturnal::HybridPtr< void > data )
+void PathSerializer::ConnectData( Helium::HybridPtr< void > data )
 {
     __super::ConnectData( data );
 
-    m_Data.Connect( Nocturnal::HybridPtr< Nocturnal::Path >( data.Address(), data.State() ) );
+    m_Data.Connect( Helium::HybridPtr< Helium::Path >( data.Address(), data.State() ) );
 }
 
 bool PathSerializer::Set( const Serializer* src, u32 flags )
@@ -122,7 +122,7 @@ tostream& PathSerializer::operator>>( tostream& stream ) const
     tstring path = m_Data.Get().Get();
     tstring temp;
     bool converted = Platform::ConvertString( path, temp );
-    NOC_ASSERT( converted );
+    HELIUM_ASSERT( converted );
 
     stream << temp;
     return stream;

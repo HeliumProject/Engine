@@ -6,7 +6,7 @@
 #include "Foundation/CommandLine/Commands/Help.h"
 #include "Foundation/Container/Insert.h"
 
-using namespace Nocturnal::CommandLine;
+using namespace Helium::CommandLine;
 
 Processor::Processor( const tchar* token, const tchar* usage, const tchar* shortHelp )
 : m_Token( token )
@@ -64,7 +64,7 @@ bool Processor::ParseOptions( std::vector< tstring >::const_iterator& argsBegin,
 
 bool Processor::RegisterCommand( Command* command, tstring& error )
 {
-	Nocturnal::Insert< M_StringToCommandDumbPtr >::Result inserted = m_Commands.insert( M_StringToCommandDumbPtr::value_type( command->Token(), command ) );
+	Helium::Insert< M_StringToCommandDumbPtr >::Result inserted = m_Commands.insert( M_StringToCommandDumbPtr::value_type( command->Token(), command ) );
 	if ( !inserted.second )
 	{
 		error = tstring( TXT( "Failed to add command, token is not unique: " ) ) + command->Token();

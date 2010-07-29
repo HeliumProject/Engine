@@ -21,7 +21,7 @@ namespace Content
     /// @param nodeId the id of the node who's visibility settings we want
     /// @param fallbackId the id of a fallback set of visibility settings we want
     /// @return return a pointer to visibility settings if they exist in the preference order Node>Fallback>Default
-    NodeVisibilityPtr GetVisibility(tuid nodeId, tuid fallbackId = Nocturnal::TUID::Null); 
+    NodeVisibilityPtr GetVisibility(tuid nodeId, tuid fallbackId = Helium::TUID::Null); 
 
     void ActivateNode(tuid nodeId); 
     void DeactivateNode(tuid nodeId); 
@@ -39,5 +39,5 @@ namespace Content
 
   }; 
 
-  typedef Nocturnal::SmartPtr<SceneVisibility> SceneVisibilityPtr; 
+  typedef Helium::SmartPtr<SceneVisibility> SceneVisibilityPtr; 
 }

@@ -6,7 +6,7 @@
 #include "Foundation/Container/Insert.h"
 #include "Foundation/String/Tokenize.h"
 
-using namespace Nocturnal::CommandLine;
+using namespace Helium::CommandLine;
 
 OptionsMap::OptionsMap()
 {
@@ -65,7 +65,7 @@ bool OptionsMap::AddOption( const OptionPtr& option, tstring& error )
 	Tokenize( option->Token(), tokens, TXT( "\\|" ) );
 	for ( std::set< tstring >::const_iterator tokensItr = tokens.begin(), tokensEnd = tokens.end(); tokensItr != tokensEnd; ++tokensItr )
 	{
-		Nocturnal::Insert< M_StringToOptionPtr >::Result inserted = m_OptionsMap.insert( M_StringToOptionPtr::value_type( (*tokensItr), option ) );
+		Helium::Insert< M_StringToOptionPtr >::Result inserted = m_OptionsMap.insert( M_StringToOptionPtr::value_type( (*tokensItr), option ) );
 		if ( !inserted.second )
 		{
 			error = tstring( TXT( "Failed to add option, token is not unique: " ) ) + (*tokensItr);

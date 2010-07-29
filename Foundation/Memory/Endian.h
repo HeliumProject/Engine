@@ -29,7 +29,7 @@ inline u64 ConvertEndian(u64 val, bool endian = true)
         _asm mov DWORD PTR [val+4],eax;
         _asm mov DWORD PTR [val],ebx;
 #else
-        NOC_BREAK();
+        HELIUM_BREAK();
 #endif
     }
 
@@ -80,7 +80,7 @@ inline u32 ConvertEndian(u32 val, bool endian = true)
         _asm bswap eax;
         _asm mov val,eax;
 #else
-        NOC_BREAK();
+        HELIUM_BREAK();
 #endif
     }
 
@@ -131,7 +131,7 @@ inline u16 ConvertEndian(u16 val, bool endian = true)
         _asm xchg al,ah;
         _asm mov val,ax;
 #else
-        NOC_BREAK();
+        HELIUM_BREAK();
 #endif
     }
 
@@ -158,12 +158,12 @@ inline i8 ConvertEndian(i8 val, bool endian = true)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace Nocturnal
+namespace Helium
 {
     template<class T>
     inline void Swizzle(T& val, bool swizzle = true)
     {
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 
     template<> inline void Swizzle<bool>(bool& val, bool swizzle)

@@ -5,7 +5,7 @@
 #include "Platform/Windows/Windows.h"
 #include "Path.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 void EmitLastError()
 {

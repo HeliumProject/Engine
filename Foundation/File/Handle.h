@@ -7,9 +7,9 @@
 #include "Foundation/API.h"
 #include "Foundation/Memory/SmartPtr.h"
 
-namespace Nocturnal
+namespace Helium
 { 
-    class FOUNDATION_API Handle : public Nocturnal::RefCountBase< Handle >
+    class FOUNDATION_API Handle : public Helium::RefCountBase< Handle >
     {
     public:
         Handle( const tstring& path, const tchar* mode = TXT( "r" ) );
@@ -50,5 +50,5 @@ namespace Nocturnal
         FILE* m_FileHandle;
     };
 
-    typedef Nocturnal::SmartPtr< Handle > HandlePtr;
+    typedef Helium::SmartPtr< Handle > HandlePtr;
 }

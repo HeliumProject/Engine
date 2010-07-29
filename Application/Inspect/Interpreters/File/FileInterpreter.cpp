@@ -143,7 +143,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
         label = group->GetCanvas()->Create<Label>(this);
         tstring temp;
         bool converted = Platform::ConvertString( field->m_UIName, temp );
-        NOC_ASSERT( converted );
+        HELIUM_ASSERT( converted );
 
         label->SetText( temp );
 
@@ -180,7 +180,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
     // Create data and bind
     //
 
-    Nocturnal::SmartPtr< MultiStringFormatter<Serializer> > data = new MultiStringFormatter<Serializer>( ser );
+    Helium::SmartPtr< MultiStringFormatter<Serializer> > data = new MultiStringFormatter<Serializer>( ser );
 
     if (changingDelegate.Valid())
     {
@@ -207,7 +207,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
         tstring temp;
         bool converted = Platform::ConvertString( outStream.str().c_str(), temp );
-        NOC_ASSERT( converted );
+        HELIUM_ASSERT( converted );
         group->SetDefault( temp );
     }
 
@@ -232,7 +232,7 @@ bool FileInterpreter::DataChanging( DataChangingArgs& args )
 
     if ( !text.empty() )
     {
-        Nocturnal::Path path( text );
+        Helium::Path path( text );
 
         if ( path.IsFile() )
         {
@@ -252,7 +252,7 @@ bool FileInterpreter::DataChanging( DataChangingArgs& args )
             _tsplitpath(text.c_str(), drive, folder, file, ext);
             tostringstream directory;
             directory << drive << folder;
-            if ( Nocturnal::Path( directory.str() ).Exists() )
+            if ( Helium::Path( directory.str() ).Exists() )
             {
                 dir = directory.str();
             }
@@ -266,7 +266,7 @@ bool FileInterpreter::DataChanging( DataChangingArgs& args )
             while (token)
             {
                 temp = temp + token + TXT( "/" );
-                if ((_tcslen(token) == 2 && token[1] == ':') || Nocturnal::Path( temp ).Exists() )
+                if ((_tcslen(token) == 2 && token[1] == ':') || Helium::Path( temp ).Exists() )
                 {
                     dir = dir + token + TXT( "/" );
                     token = _tcstok(NULL, TXT( "/" ) );
@@ -283,7 +283,7 @@ bool FileInterpreter::DataChanging( DataChangingArgs& args )
             text = dir;
         }
 
-        Nocturnal::FileDialog dialog ( m_Container->GetWindow(), wxFileSelectorPromptStr, text.c_str() );
+        Helium::FileDialog dialog ( m_Container->GetWindow(), wxFileSelectorPromptStr, text.c_str() );
 
         if ( !m_FileFilter.empty() )
         {

@@ -5,7 +5,7 @@
 
 #include <squish.h>
 
-using namespace Nocturnal;
+using namespace Helium;
 
 DecodeMips::DecodeMips(MipSet* mips)
 {
@@ -46,10 +46,10 @@ void DecodeMips::Decode(MipSet* mips)
         {
           // we need to convert DUDV back into a 3 byte vector
           i8*   src_data  = (i8*)mips->m_levels[0][i].m_data;
-          f32*  r_ptr     = m_images[i]->m_Channels[0][Nocturnal::Image::R];
-          f32*  g_ptr     = m_images[i]->m_Channels[0][Nocturnal::Image::G];
-          f32*  b_ptr     = m_images[i]->m_Channels[0][Nocturnal::Image::B];
-          f32*  a_ptr     = m_images[i]->m_Channels[0][Nocturnal::Image::A];
+          f32*  r_ptr     = m_images[i]->m_Channels[0][Helium::Image::R];
+          f32*  g_ptr     = m_images[i]->m_Channels[0][Helium::Image::G];
+          f32*  b_ptr     = m_images[i]->m_Channels[0][Helium::Image::B];
+          f32*  a_ptr     = m_images[i]->m_Channels[0][Helium::Image::A];
 
           for (u32 p=0;p<width*height;p++)
           {

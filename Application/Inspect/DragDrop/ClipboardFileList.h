@@ -30,11 +30,11 @@ namespace Inspect
     bool AddFilePath( const tstring& file );
     const std::set< tstring >& GetFilePaths() const;
 
-    virtual bool Merge( const ReflectClipboardData* source ) NOC_OVERRIDE;
+    virtual bool Merge( const ReflectClipboardData* source ) HELIUM_OVERRIDE;
 
   public:
     static void EnumerateClass( Reflect::Compositor<ClipboardFileList>& comp );
   };
 
-  typedef Nocturnal::SmartPtr< ClipboardFileList > ClipboardFileListPtr;
+  typedef Helium::SmartPtr< ClipboardFileList > ClipboardFileListPtr;
 }

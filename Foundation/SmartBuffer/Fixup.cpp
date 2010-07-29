@@ -1,6 +1,6 @@
 #include "Fixup.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 Fixup::Fixup()
 {
@@ -9,7 +9,7 @@ Fixup::Fixup()
 
 Fixup::~Fixup()
 {
-    NOC_ASSERT( m_RefCount == 0 );
+    HELIUM_ASSERT( m_RefCount == 0 );
 }
 
 PointerFixup::PointerFixup(u32 size)
@@ -25,7 +25,7 @@ PointerFixup::~PointerFixup()
 {
     if ( m_HasReference )
     {
-        NOC_ASSERT( m_Destination.second != NULL );
+        HELIUM_ASSERT( m_Destination.second != NULL );
         m_Destination.second->DecrRefCount();
 
         m_HasReference = false;
@@ -66,8 +66,8 @@ void PointerFixup::EraseIncoming( const SmartBuffer::DumbLocation& source_locati
 
 bool PointerFixup::DoFixup( const SmartBuffer::DumbLocation& source_location )
 {
-    NOC_ASSERT( source_location.second != NULL );
-    NOC_ASSERT( source_location.first <= source_location.second->GetSize() );
+    HELIUM_ASSERT( source_location.second != NULL );
+    HELIUM_ASSERT( source_location.first <= source_location.second->GetSize() );
 
     u32          source_offset = source_location.first;
     SmartBuffer* source_buffer = source_location.second;
@@ -76,8 +76,8 @@ bool PointerFixup::DoFixup( const SmartBuffer::DumbLocation& source_location )
     if ( m_Destination.second != NULL )
     {
         // check the destination data
-        NOC_ASSERT( m_Destination.second != NULL );
-        NOC_ASSERT( m_Destination.first <= m_Destination.second->GetSize() );
+        HELIUM_ASSERT( m_Destination.second != NULL );
+        HELIUM_ASSERT( m_Destination.first <= m_Destination.second->GetSize() );
 
         // get the destination offset & buffer
         u32          destination_offset = m_Destination.first;
@@ -130,7 +130,7 @@ OffsetFixup::~OffsetFixup()
 {
     if ( m_HasReference )
     {
-        NOC_ASSERT( m_Destination.second != NULL );
+        HELIUM_ASSERT( m_Destination.second != NULL );
         m_Destination.second->DecrRefCount();
 
         m_HasReference = false;
@@ -171,8 +171,8 @@ void OffsetFixup::EraseIncoming( const SmartBuffer::DumbLocation& source_locatio
 
 bool OffsetFixup::DoFixup( const SmartBuffer::DumbLocation& source_location )
 {
-    NOC_ASSERT( source_location.second != NULL );
-    NOC_ASSERT( source_location.first <= source_location.second->GetSize() );
+    HELIUM_ASSERT( source_location.second != NULL );
+    HELIUM_ASSERT( source_location.first <= source_location.second->GetSize() );
 
     u32          source_offset = source_location.first;
     SmartBuffer* source_buffer = source_location.second;
@@ -184,8 +184,8 @@ bool OffsetFixup::DoFixup( const SmartBuffer::DumbLocation& source_location )
     if ( m_Destination.second != NULL )
     {
         // check the destination data
-        NOC_ASSERT( m_Destination.second != NULL );
-        NOC_ASSERT( m_Destination.first <= m_Destination.second->GetSize() );
+        HELIUM_ASSERT( m_Destination.second != NULL );
+        HELIUM_ASSERT( m_Destination.first <= m_Destination.second->GetSize() );
 
         // get the destination offset & buffer
         u32          destination_offset = m_Destination.first;
@@ -234,8 +234,8 @@ VTableFixup::VTableFixup( u32 class_index, u32 size )
 
 bool VTableFixup::DoFixup( const SmartBuffer::DumbLocation& source_location )
 {
-    NOC_ASSERT( source_location.second != NULL );
-    NOC_ASSERT( source_location.first <= source_location.second->GetSize() );
+    HELIUM_ASSERT( source_location.second != NULL );
+    HELIUM_ASSERT( source_location.first <= source_location.second->GetSize() );
 
     u32          source_offset = source_location.first;
     SmartBuffer* source_buffer = source_location.second;

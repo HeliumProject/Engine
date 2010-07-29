@@ -10,7 +10,7 @@
 #include "Pipeline/API.h"
 #include "ColorFormats.h"
 
-namespace Nocturnal
+namespace Helium
 {
   enum
   {
@@ -49,7 +49,7 @@ namespace Nocturnal
   const TexelType D_MAP_DEFAULT_BLUE    = 0.5f;
   const TexelType D_MAP_DEFAULT_ALPHA   = 1.0f;
 
-  const Nocturnal::ColorFormat TEXTURE_PROCESS_FORMAT = Nocturnal::CF_RGBAFLOATMAP;
+  const Helium::ColorFormat TEXTURE_PROCESS_FORMAT = Helium::CF_RGBAFLOATMAP;
   const TexelType BLACK_TEXEL = 0.0f;
   const TexelType WHITE_TEXEL = 1.0f;
   const TexelType COLOR_MAP_ALPHA_THRESHOLD = 0.95f;
@@ -161,16 +161,16 @@ namespace Nocturnal
     }
 
     // The Filter to use when generating the mip maps (for now 2 are used since separate for color+alpha, AG and IP)
-    Nocturnal::FilterType           m_mip_filter[TEXTURE_CHANNEL_NUM];
+    Helium::FilterType           m_mip_filter[TEXTURE_CHANNEL_NUM];
 
     // The image filter to apply after the mips have been generated (for now 2 are used since sepearate for color+alpha, AG and IP)
-    Nocturnal::PostMipImageFilter   m_image_filter[TEXTURE_CHANNEL_NUM];
+    Helium::PostMipImageFilter   m_image_filter[TEXTURE_CHANNEL_NUM];
 
     // The number of times to apply the image filter to each mip level (for now 2 are used since sepearate for color+alpha, AG and IP)
     u32                      m_ifilter_cnt[TEXTURE_CHANNEL_NUM][MAX_TEXTURE_MIPS];
 
     // Output format for this texture
-    Nocturnal::OutputColorFormat    m_output_format;
+    Helium::OutputColorFormat    m_output_format;
 
     // Tool time scale factor
     float                    m_scale;

@@ -4,7 +4,7 @@
 
 #include <wx/frame.h>
 
-namespace Nocturnal
+namespace Helium
 {
   // Forwards
   class ModalFrameData;
@@ -44,7 +44,7 @@ namespace Nocturnal
     virtual void SetReturnCode( int returnCode );
     virtual int GetReturnCode() const;
 
-    // NOC_OVERRIDE some base class virtuals
+    // HELIUM_OVERRIDE some base class virtuals
     virtual bool Show( bool show = true );
     virtual void Raise();
 
@@ -89,4 +89,4 @@ namespace Nocturnal
 
   };
 
-} // namespace Nocturnal
+} // namespace Helium

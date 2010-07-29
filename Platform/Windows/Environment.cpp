@@ -1,16 +1,16 @@
 #include "Platform/Environment.h"
 
-bool Nocturnal::GetUsername( tstring& username )
+bool Helium::GetUsername( tstring& username )
 {
     return GetEnvironmentVariable( TXT( "USERNAME" ), username );
 }
 
-bool Nocturnal::GetComputer( tstring& computername )
+bool Helium::GetComputer( tstring& computername )
 {
     return GetEnvironmentVariable( TXT( "COMPUTERNAME" ), computername );
 }
 
-bool Nocturnal::GetPreferencesDirectory( tstring& preferencesDirectory )
+bool Helium::GetPreferencesDirectory( tstring& preferencesDirectory )
 {
-    return Nocturnal::GetEnvironmentVariable( TXT( "APPDATA" ), preferencesDirectory );
+    return Helium::GetEnvironmentVariable( TXT( "APPDATA" ), preferencesDirectory );
 }

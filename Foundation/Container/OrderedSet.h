@@ -6,7 +6,7 @@
 #include <set>
 #include <vector>
 
-namespace Nocturnal
+namespace Helium
 {
     //
     // Ordered set of data
@@ -117,7 +117,7 @@ namespace Nocturnal
         // Inserts an item at the end of the list
         bool Append(const T& value)
         {
-            Nocturnal::Insert<S_Element>::Result inserted = m_Elements.insert( Element (value) );
+            Helium::Insert<S_Element>::Result inserted = m_Elements.insert( Element (value) );
 
             // if we succeeded
             if (inserted.second)
@@ -153,7 +153,7 @@ namespace Nocturnal
         // Inserts an item at the front of the list
         bool Prepend(const T& value)
         {
-            Nocturnal::Insert<S_Element>::Result inserted = m_Elements.insert( Element (value) );
+            Helium::Insert<S_Element>::Result inserted = m_Elements.insert( Element (value) );
 
             // if we succeeded
             if (inserted.second)
@@ -188,7 +188,7 @@ namespace Nocturnal
         // Inserts 'value' into the set before 'before'.
         bool Insert( const T& value, const T& before )
         {
-            Nocturnal::Insert<S_Element>::Result inserted = m_Elements.insert( Element (value) );
+            Helium::Insert<S_Element>::Result inserted = m_Elements.insert( Element (value) );
 
             // if we succeeded
             if (inserted.second)
@@ -206,7 +206,7 @@ namespace Nocturnal
                 {
                     // The element that you want to insert before is not in the list. 
                     // This is probably a programming error.
-                    NOC_BREAK();
+                    HELIUM_BREAK();
                     m_Elements.erase( inserted.first );
                     return false;
                 }
@@ -413,37 +413,37 @@ namespace Nocturnal
 
         T& Front()
         {
-            NOC_ASSERT( m_Front );
+            HELIUM_ASSERT( m_Front );
             return m_Front->m_Value;
         }
 
         const T& Front() const
         {
-            NOC_ASSERT( m_Front );
+            HELIUM_ASSERT( m_Front );
             return m_Front->m_Value;
         }
 
         T& Back()
         {
-            NOC_ASSERT( m_Back );
+            HELIUM_ASSERT( m_Back );
             return m_Back->m_Value;
         }
 
         const T& Back() const
         {
-            NOC_ASSERT( m_Back );
+            HELIUM_ASSERT( m_Back );
             return m_Back->m_Value;
         }
 
         void PopFront()
         {
-            NOC_ASSERT( m_Front );
+            HELIUM_ASSERT( m_Front );
             Remove( m_Front->m_Value ); // its ok to remove by value here, since remove by Element* would have to traverse the map anyway
         }
 
         void PopBack()
         {
-            NOC_ASSERT( m_Back );
+            HELIUM_ASSERT( m_Back );
             Remove( m_Back->m_Value ); // its ok to remove by value here, since remove by Element* would have to traverse the map anyway
         }
 
@@ -460,14 +460,14 @@ namespace Nocturnal
         Iterator FindNextSibling( const T& value ) const
         {
             S_Element::const_iterator found = m_Elements.find( Element(value) );
-            NOC_ASSERT( found != m_Elements.end() );
+            HELIUM_ASSERT( found != m_Elements.end() );
             return Iterator( ( *found ).m_Next );
         }
 
         Iterator FindPrevSibling( const T& value ) const
         {
             S_Element::const_iterator found = m_Elements.find( Element(value) );
-            NOC_ASSERT( found != m_Elements.end() );
+            HELIUM_ASSERT( found != m_Elements.end() );
             return Iterator( ( *found ).m_Prev );
         }
     };

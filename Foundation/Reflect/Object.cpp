@@ -20,7 +20,7 @@ Object::Object()
 
 Object::Object(const Object& rhs)
 {
-    NOC_BREAK();
+    HELIUM_BREAK();
 }
 
 Object::~Object()

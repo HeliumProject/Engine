@@ -20,7 +20,7 @@ namespace Reflect
     // Stack record captures stack addresses
     //
 
-    class StackRecord : public Nocturnal::RefCountBase<StackRecord>
+    class StackRecord : public Helium::RefCountBase<StackRecord>
     {
     public:
         std::vector<uintptr>    m_Stack;
@@ -36,7 +36,7 @@ namespace Reflect
         const tstring& Convert();  
     };
 
-    typedef Nocturnal::SmartPtr< StackRecord > StackRecordPtr;
+    typedef Helium::SmartPtr< StackRecord > StackRecordPtr;
     typedef std::vector< StackRecordPtr > V_StackRecordPtr;
     typedef std::map< std::vector<uintptr>, StackRecordPtr > M_StackRecord;
 
@@ -101,8 +101,8 @@ namespace Reflect
     typedef void (*DestroyedFunc)(Object* object);
 
     // Registry containers
-    typedef std::map< int, Nocturnal::SmartPtr<Type> > M_IDToType;
-    typedef std::map< tstring, Nocturnal::SmartPtr<Type> > M_StrToType;
+    typedef std::map< int, Helium::SmartPtr<Type> > M_IDToType;
+    typedef std::map< tstring, Helium::SmartPtr<Type> > M_StrToType;
 
     // Profile interface
 #ifdef PROFILE_ACCUMULATION
@@ -194,7 +194,7 @@ namespace Reflect
         ObjectPtr CreateInstance(const tstring& str) const;
 
         template<class T>
-        Nocturnal::SmartPtr< T > CreateInstance()
+        Helium::SmartPtr< T > CreateInstance()
         {
             return Reflect::AssertCast< T >( CreateInstance( Reflect::GetType< T >() ) );
         }
@@ -234,10 +234,10 @@ namespace Reflect
         
         tstring temp;
         bool converted = Platform::ConvertString( typeid( T ).name(), temp );
-        NOC_ASSERT( converted ); // if you hit this, for some reason we couldn't convert your typename
+        HELIUM_ASSERT( converted ); // if you hit this, for some reason we couldn't convert your typename
 
         Registry::GetInstance()->AtomicGetType( temp, &type );
-        NOC_ASSERT(type); // if you hit this then your type is not registered
+        HELIUM_ASSERT(type); // if you hit this then your type is not registered
 
         if ( type )
         {
@@ -266,11 +266,11 @@ namespace Reflect
         tstring convertedName;
         {
             bool converted = Platform::ConvertString( typeid( T ).name(), convertedName );
-            NOC_ASSERT( converted );
+            HELIUM_ASSERT( converted );
         }
 
         Registry::GetInstance()->AtomicGetType( convertedName, &type );
-        NOC_ASSERT(type); // if you hit this then your type is not registered
+        HELIUM_ASSERT(type); // if you hit this then your type is not registered
 
         if ( type )
         {
@@ -297,9 +297,9 @@ namespace Reflect
         const Type* type = NULL;
         tstring name;
         bool converted = Platform::ConvertString( typeid( T ).name(), name );
-        NOC_ASSERT( converted );
+        HELIUM_ASSERT( converted );
         Registry::GetInstance()->AtomicGetType( name, &type );
-        NOC_ASSERT(type); // if you hit this then your type is not registered
+        HELIUM_ASSERT(type); // if you hit this then your type is not registered
 
         if ( type )
         {

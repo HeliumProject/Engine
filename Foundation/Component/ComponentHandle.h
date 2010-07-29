@@ -16,7 +16,7 @@ namespace Component
   {
   protected:
     CollectionType* m_Collection;
-    Nocturnal::SmartPtr<ComponentType> m_Component;
+    Helium::SmartPtr<ComponentType> m_Component;
 
   public:
     ComponentHandle( CollectionType* collection )
@@ -25,7 +25,7 @@ namespace Component
 
     }
 
-    ComponentHandle( CollectionType* collection, const Nocturnal::SmartPtr<ComponentType>& attribute )
+    ComponentHandle( CollectionType* collection, const Helium::SmartPtr<ComponentType>& attribute )
       : m_Collection ( collection )
       , m_Component ( attribute )
     {
@@ -75,7 +75,7 @@ namespace Component
       : ComponentHandle ( collection )
     {
       // downcast attribute from the collection, if it exists
-      Nocturnal::SmartPtr<ComponentType> attr = Reflect::ObjectCast<ComponentType>( m_Collection->GetComponent( Reflect::GetType<ComponentType>() ) );
+      Helium::SmartPtr<ComponentType> attr = Reflect::ObjectCast<ComponentType>( m_Collection->GetComponent( Reflect::GetType<ComponentType>() ) );
 
       // if it exists
       if (attr.ReferencesObject())
@@ -102,7 +102,7 @@ namespace Component
       m_Collection->SetComponent( m_Component );
     }
 
-    ComponentEditor( ComponentCollection* collection, const Nocturnal::SmartPtr<ComponentType>& attribute )
+    ComponentEditor( ComponentCollection* collection, const Helium::SmartPtr<ComponentType>& attribute )
       : ComponentHandle ( collection, attribute )
     {
 

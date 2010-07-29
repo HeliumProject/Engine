@@ -11,13 +11,13 @@ namespace Asset
   class PIPELINE_API SceneManifest : public AssetManifest
   {
   public:
-      std::set< Nocturnal::Path > m_Assets;
+      std::set< Helium::Path > m_Assets;
 
     REFLECT_DECLARE_CLASS(SceneManifest, AssetManifest);
 
     static void EnumerateClass( Reflect::Compositor<SceneManifest>& comp );
   };
 
-  typedef Nocturnal::SmartPtr<SceneManifest> SceneManifestPtr;
+  typedef Helium::SmartPtr<SceneManifest> SceneManifestPtr;
   typedef std::vector<SceneManifestPtr> V_SceneManifest;
 }

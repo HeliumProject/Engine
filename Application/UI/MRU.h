@@ -7,20 +7,20 @@
 
 #include "Application/API.h"
 
-namespace Nocturnal
+namespace Helium
 {
     static const int DefaultMaxCount = 20;
 
-    typedef Nocturnal::OrderedSet< tstring > OS_string;
+    typedef Helium::OrderedSet< tstring > OS_string;
 
     /////////////////////////////////////////////////////////////////////////////
     // Ordered set of strings used by MRU to store resently searched strings
     //
     template<class T>
-    class APPLICATION_API MRU : public Nocturnal::RefCountBase< MRU<T> >
+    class APPLICATION_API MRU : public Helium::RefCountBase< MRU<T> >
     {
     public:
-        typedef Nocturnal::OrderedSet< T > OS_OrderedTypeSet;
+        typedef Helium::OrderedSet< T > OS_OrderedTypeSet;
 
     protected:
         int                 m_MaxCount;
@@ -91,5 +91,5 @@ namespace Nocturnal
 
     // A set of Ordered strings
     typedef MRU< tstring > ManagedStringSet;
-    typedef Nocturnal::SmartPtr< ManagedStringSet > ManagedStringSetPtr;
+    typedef Helium::SmartPtr< ManagedStringSet > ManagedStringSetPtr;
 }

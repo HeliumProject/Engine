@@ -13,7 +13,7 @@
 // 
 class MenuMRUEvtHandler;
 
-namespace Nocturnal
+namespace Helium
 {
   // Arguements and events for changes to the MRU.
   struct MRUArgs
@@ -25,7 +25,7 @@ namespace Nocturnal
     {
     }
   };
-  typedef Nocturnal::Signature< void, const MRUArgs& > MRUSignature;
+  typedef Helium::Signature< void, const MRUArgs& > MRUSignature;
 
   /////////////////////////////////////////////////////////////////////////////
   // Class for managing a list of "most recently used" items.  The items are
@@ -50,5 +50,5 @@ namespace Nocturnal
     MenuMRUEvtHandler* m_MenuMRUEvtHandler;
   };
 
-  typedef Nocturnal::SmartPtr< MenuMRU > MenuMRUPtr;
+  typedef Helium::SmartPtr< MenuMRU > MenuMRUPtr;
 }

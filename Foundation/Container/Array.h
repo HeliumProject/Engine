@@ -2,7 +2,7 @@
 
 #include "Allocator.h"
 
-namespace Nocturnal
+namespace Helium
 {
   //
   // A resizable array

@@ -33,6 +33,6 @@ namespace Inspect
     Inspect::Value* m_Value;
   };
 
-  typedef Nocturnal::SmartPtr<FileInterpreter> FileInterpreterPtr;
+  typedef Helium::SmartPtr<FileInterpreter> FileInterpreterPtr;
   typedef std::vector< FileInterpreterPtr > V_FileInterpreter;
 }

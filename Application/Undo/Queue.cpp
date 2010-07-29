@@ -92,7 +92,7 @@ void Queue::Push( const CommandPtr& c )
   }
 
   // we should always have a command here
-  NOC_ASSERT( c.ReferencesObject() );
+  HELIUM_ASSERT( c.ReferencesObject() );
 
   // we have a new command, so delete all subsequent commands from our current position
   m_Redo.clear();

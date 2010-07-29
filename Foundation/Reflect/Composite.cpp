@@ -28,13 +28,13 @@ Reflect::Field* Composite::AddField(Element& instance, const std::string& name, 
     tstring convertedName;
     {
         bool converted = Platform::ConvertString( name, convertedName );
-        NOC_ASSERT( converted );
+        HELIUM_ASSERT( converted );
     }
 
-    NOC_ASSERT(m_FieldIDToInfo.find( m_NextFieldID ) == m_FieldIDToInfo.end()); 
+    HELIUM_ASSERT(m_FieldIDToInfo.find( m_NextFieldID ) == m_FieldIDToInfo.end()); 
 
     // if you are here, maybe you repeated a field variable name twice in the class or its inheritance hierarchy?
-    NOC_ASSERT(m_FieldNameToInfo.find( convertedName ) == m_FieldNameToInfo.end());
+    HELIUM_ASSERT(m_FieldNameToInfo.find( convertedName ) == m_FieldNameToInfo.end());
 
     Field* fieldInfo = Field::Create( this );
 
@@ -74,13 +74,13 @@ Reflect::ElementField* Composite::AddElementField(Element& instance, const std::
     tstring convertedName;
     {
         bool converted = Platform::ConvertString( name, convertedName );
-        NOC_ASSERT( converted );
+        HELIUM_ASSERT( converted );
     }
 
-    NOC_ASSERT(m_FieldIDToInfo.find( m_NextFieldID ) == m_FieldIDToInfo.end());
+    HELIUM_ASSERT(m_FieldIDToInfo.find( m_NextFieldID ) == m_FieldIDToInfo.end());
 
     // if you are here, maybe you repeated a field variable name twice in the class or its inheritance hierarchy?
-    NOC_ASSERT(m_FieldNameToInfo.find( convertedName ) == m_FieldNameToInfo.end());
+    HELIUM_ASSERT(m_FieldNameToInfo.find( convertedName ) == m_FieldNameToInfo.end());
 
     ElementField* fieldInfo = ElementField::Create( this );
 
@@ -121,25 +121,25 @@ Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, con
     tstring convertedName;
     {
         bool converted = Platform::ConvertString( name, convertedName );
-        NOC_ASSERT( converted );
+        HELIUM_ASSERT( converted );
     }
 
     tstring convertedEnumName;
     {
         bool converted = Platform::ConvertString( enumName, convertedEnumName );
-        NOC_ASSERT( converted );
+        HELIUM_ASSERT( converted );
     }
 
-    NOC_ASSERT(m_FieldIDToInfo.find( m_NextFieldID ) == m_FieldIDToInfo.end());
+    HELIUM_ASSERT(m_FieldIDToInfo.find( m_NextFieldID ) == m_FieldIDToInfo.end());
 
     // if you are here, maybe you repeated a field variable name twice in the class or its inheritance hierarchy?
-    NOC_ASSERT(m_FieldNameToInfo.find( convertedName ) == m_FieldNameToInfo.end());
+    HELIUM_ASSERT(m_FieldNameToInfo.find( convertedName ) == m_FieldNameToInfo.end());
 
     // fetch the enumeration from the registry, it should already be registered by now
     const Enumeration* enumField = Reflect::Registry::GetInstance()->GetEnumeration(convertedEnumName);
 
     // if you hit this, then you need to make sure you register your enums before you register elements that use them
-    NOC_ASSERT(enumField != NULL);
+    HELIUM_ASSERT(enumField != NULL);
 
     EnumerationField* fieldInfo = EnumerationField::Create (this, enumField);
 
@@ -219,7 +219,7 @@ tstring Composite::ShortenName(const tstring& fullName)
 {
     if (fullName.find( TXT("<") ) != tstring::npos)
     {
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
     else
     {
@@ -423,7 +423,7 @@ void Composite::Copy( const Element* src, Element* dest )
             // for reference container types, this deep copies containers (which is bad for 
             //  non-cloneable (FieldFlags::Share) reference containers)
             bool result = lhs->Set(rhs, field->m_Flags & FieldFlags::Share ? SerializerFlags::Shallow : 0);
-            NOC_ASSERT(result);
+            HELIUM_ASSERT(result);
 
             // disconnect
             lhs->Disconnect();

@@ -53,7 +53,7 @@ void Thread::Close()
     if ( result != TRUE )
     {
         Platform::Print(TXT("Failed to close thread (%s)\n"), Platform::GetErrorString().c_str());
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
     m_Handle = NULL;
 }
@@ -75,14 +75,14 @@ Thread::Return Thread::Wait(u32 timeout)
     if ( timeout == 0xffffffff && result != WAIT_OBJECT_0 )
     {
         Platform::Print(TXT("Failed to wait for thread (%s)\n"), Platform::GetErrorString().c_str());
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 
     DWORD code;
     if ( !::GetExitCodeThread(m_Handle, &code) )
     {
         Platform::Print(TXT("Failed to get thread exit code (%s)\n"), Platform::GetErrorString().c_str());
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 
     return code;
@@ -103,7 +103,7 @@ bool Thread::Valid()
 ThreadLocalPointer::ThreadLocalPointer()
 {
     m_Key = TlsAlloc(); 
-    NOC_ASSERT(m_Key != TLS_OUT_OF_INDEXES); 
+    HELIUM_ASSERT(m_Key != TLS_OUT_OF_INDEXES); 
     SetPointer(NULL); 
 }
 

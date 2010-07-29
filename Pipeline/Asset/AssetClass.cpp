@@ -48,13 +48,13 @@ AssetClassPtr AssetClass::LoadAssetClass( const tchar* path )
     AssetClassPtr assetClass = NULL;
     try
     {
-        Nocturnal::Path filePath( path );
+        Helium::Path filePath( path );
 
         assetClass = Reflect::Archive::FromFile< AssetClass >( filePath );
         assetClass->SetPath( filePath );
         assetClass->LoadFinished();
     }
-    catch ( const Nocturnal::Exception& exception )
+    catch ( const Helium::Exception& exception )
     {
         Log::Warning( TXT( "%s\n" ), exception.What() );
     }
@@ -63,12 +63,12 @@ AssetClassPtr AssetClass::LoadAssetClass( const tchar* path )
     return assetClass;
 }
 
-Nocturnal::Path AssetClass::GetBuiltDirectory()
+Helium::Path AssetClass::GetBuiltDirectory()
 {
 #pragma TODO( "make human-readable built directories" )
     tstringstream str;
     str << TUID_HEX_FORMAT << m_Path.Hash();
-    Nocturnal::Path builtDirectory( s_BaseBuiltDirectory + TXT( "/" ) + str.str() );
+    Helium::Path builtDirectory( s_BaseBuiltDirectory + TXT( "/" ) + str.str() );
     return builtDirectory;
 }
 
@@ -82,7 +82,7 @@ tstring AssetClass::GetShortName() const
     return m_Path.Basename();
 }
 
-void AssetClass::GatherSearchableProperties( Nocturnal::SearchableProperties* properties ) const
+void AssetClass::GatherSearchableProperties( Helium::SearchableProperties* properties ) const
 {
     properties->Insert( TXT( "AssetDescription" ), m_Description );
     
@@ -99,9 +99,9 @@ namespace Asset
     class AssetDependencyVisitor : public Reflect::Visitor
     {   
     public:
-        std::set< Nocturnal::Path >& m_Dependencies;
+        std::set< Helium::Path >& m_Dependencies;
 
-        AssetDependencyVisitor(std::set< Nocturnal::Path >& dependencies)
+        AssetDependencyVisitor(std::set< Helium::Path >& dependencies)
             : m_Dependencies( dependencies )
         {
         }
@@ -110,11 +110,11 @@ namespace Asset
         {
         }
 
-        virtual bool VisitField(Element* element, const Field* field) NOC_OVERRIDE
+        virtual bool VisitField(Element* element, const Field* field) HELIUM_OVERRIDE
         {
             if ( field->m_SerializerID == Reflect::GetType< Reflect::PathSerializer >() )
             {
-                Nocturnal::Path path;
+                Helium::Path path;
                 if ( Reflect::Serializer::GetValue( field->CreateSerializer( element ), path ) )
                 {
                     m_Dependencies.insert( path );
@@ -135,7 +135,7 @@ namespace Asset
 
                     for ( size_t index = 0; index < arraySerializer->GetSize(); ++index )
                     {
-                        Nocturnal::Path path;
+                        Helium::Path path;
                         if ( Reflect::Serializer::GetValue( arraySerializer->GetItem( index ), path ) )
                         {
                             m_Dependencies.insert( path );
@@ -163,7 +163,7 @@ namespace Asset
                     Reflect::MapSerializer::V_ConstValueType::const_iterator end = data.end();
                     for ( ; itr != end; ++itr )
                     {
-                        Nocturnal::Path path;
+                        Helium::Path path;
                         if ( Reflect::Serializer::GetValue( itr->second, path ) )
                         {
                             m_Dependencies.insert( path );
@@ -191,7 +191,7 @@ namespace Asset
                     Reflect::V_ConstSerializer::const_iterator end = data.end();
                     for ( ; itr != end; ++itr )
                     {
-                        Nocturnal::Path path;
+                        Helium::Path path;
                         if ( Reflect::Serializer::GetValue( (*itr), path ) )
                         {
                             m_Dependencies.insert( path );
@@ -266,7 +266,7 @@ namespace Asset
     };
 }
 
-void AssetClass::GetFileReferences( std::set< Nocturnal::Path >& fileReferences )
+void AssetClass::GetFileReferences( std::set< Helium::Path >& fileReferences )
 {
     AssetDependencyVisitor assetDepVisitor( fileReferences );
     this->Host( assetDepVisitor );

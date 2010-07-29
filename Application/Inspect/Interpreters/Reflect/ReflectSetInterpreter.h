@@ -15,7 +15,7 @@ namespace Inspect
   public:
     ReflectSetInterpreter( Container* container );
 
-    virtual void InterpretField( const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent ) NOC_OVERRIDE;
+    virtual void InterpretField( const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent ) HELIUM_OVERRIDE;
 
   private:
     // callbacks
@@ -23,6 +23,6 @@ namespace Inspect
     void OnRemove( Button* button );
   };
 
-  typedef Nocturnal::SmartPtr<ReflectSetInterpreter> ReflectSetInterpreterPtr;
+  typedef Helium::SmartPtr<ReflectSetInterpreter> ReflectSetInterpreterPtr;
   typedef std::vector< ReflectSetInterpreterPtr > V_ReflectSetInterpreterSmartPtr;
 }

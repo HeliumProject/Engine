@@ -22,5 +22,5 @@ namespace Reflect
         void DetectVersion();
     };
 
-    typedef Nocturnal::SmartPtr<Version> VersionPtr;
+    typedef Helium::SmartPtr<Version> VersionPtr;
 }

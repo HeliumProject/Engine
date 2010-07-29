@@ -44,11 +44,11 @@ namespace Content
         }
     };
 
-    typedef Nocturnal::Signature<void, NodeAddedArgs&> NodeAddedSignature;
+    typedef Helium::Signature<void, NodeAddedArgs&> NodeAddedSignature;
 
     struct TUIDBSphere
     {
-        Nocturnal::TUID                         m_JointID;
+        Helium::TUID                         m_JointID;
         Math::BoundingVolumeGenerator::BSphere  m_BSphere;
     };
     typedef std::vector<TUIDBSphere> V_TUIDBSphere;
@@ -96,12 +96,12 @@ namespace Content
     //  as well as per-type shortcuts for optimal iteration by APIs that only need access to specific data
     //  (eg. joints, or meshes, or other data).
     //
-    class PIPELINE_API Scene : public Nocturnal::RefCountBase<Scene>
+    class PIPELINE_API Scene : public Helium::RefCountBase<Scene>
     {
     private:
         V_HierarchyNode m_AddedHierarchyNodes;
 
-        std::map< Nocturnal::TUID, std::vector< Math::BoundingVolumeGenerator::BSphere > >       m_JointBspheres;    // joint uid <-> bsphere map
+        std::map< Helium::TUID, std::vector< Math::BoundingVolumeGenerator::BSphere > >       m_JointBspheres;    // joint uid <-> bsphere map
         std::vector< Math::BoundingVolumeGenerator::BSphere >                                    m_Bspheres;         // bspheres surrounding each bangle for each content type
 
     public:
@@ -113,7 +113,7 @@ namespace Content
         struct SkinVertex
         {
             Math::Vector3               m_Position;
-            Nocturnal::V_TUID           m_JointIDs;  // joint uids
+            Helium::V_TUID           m_JointIDs;  // joint uids
             std::vector< u32 >          m_Joints;     // joint uids as runtime indices
             std::vector< f32 >          m_Weights;
         };
@@ -122,12 +122,12 @@ namespace Content
         tstring          m_FilePath;
 
         // stores hierarchy info for the scene
-        std::map< Nocturnal::TUID, Nocturnal::OrderedSet< Nocturnal::TUID > > m_Hierarchy;
+        std::map< Helium::TUID, Helium::OrderedSet< Helium::TUID > > m_Hierarchy;
 
         // all the nodes in the scene
-        std::map< Nocturnal::TUID, SceneNodePtr > m_DependencyNodes;
+        std::map< Helium::TUID, SceneNodePtr > m_DependencyNodes;
 
-        Nocturnal::S_TUID    m_JointIds;
+        Helium::S_TUID    m_JointIds;
 
         // shortcuts to each node by type
         // should probably have made this a map keyed by reflect type.
@@ -175,7 +175,7 @@ namespace Content
         // Get all the objects of type T in the scene
         //
         template< class T >
-        void GetAll( std::vector< Nocturnal::SmartPtr<T> >& objects, i32 attributeType = -1, bool clear = false ) const;
+        void GetAll( std::vector< Helium::SmartPtr<T> >& objects, i32 attributeType = -1, bool clear = false ) const;
 
         //
         // Animation API
@@ -184,13 +184,13 @@ namespace Content
         u32  GetNumAnimations() const;
         void GetJointsFromAnimation( const AnimationPtr& clip, V_JointTransform& joints );
         u32  GetNumValidJointAnimations( u32 clipIndex = 0 ) const;
-        u32  GetNumValidJointAnimations( const Nocturnal::S_TUID& jointList, u32 clipIndex = 0 ) const;
+        u32  GetNumValidJointAnimations( const Helium::S_TUID& jointList, u32 clipIndex = 0 ) const;
         void GetJointMismatchReport( std::vector< tstring > &mismatchMessages, u32 clipIndex = 0 ) const;
 
         void CalculateJointBoundingVolumes();
-        bool GetBSpheresForJoint          (std::vector< Math::BoundingVolumeGenerator::BSphere >& bspheres, const Nocturnal::TUID& jointID ) const;
+        bool GetBSpheresForJoint          (std::vector< Math::BoundingVolumeGenerator::BSphere >& bspheres, const Helium::TUID& jointID ) const;
         bool GetBSpheres                  (std::vector< Math::BoundingVolumeGenerator::BSphere >& bspheres ) const;
-        bool GetSkinVerts                 (const std::map<Nocturnal::TUID, u32>& jointUidToId, const Nocturnal::TUID& rootUid, std::vector< std::vector<SkinVertex> >& skinVerts) const;
+        bool GetSkinVerts                 (const std::map<Helium::TUID, u32>& jointUidToId, const Helium::TUID& rootUid, std::vector< std::vector<SkinVertex> >& skinVerts) const;
 
         void GetInfluentialJoints( S_JointTransform& joints );
         u32  GetHierarchyNodeDepth( const HierarchyNodePtr& node ) const;
@@ -203,9 +203,9 @@ namespace Content
         //
 
         template< class T >
-        Nocturnal::SmartPtr< T > Get( const Nocturnal::TUID &uid ) const
+        Helium::SmartPtr< T > Get( const Helium::TUID &uid ) const
         {
-            std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator itr = m_DependencyNodes.find( uid );
+            std::map< Helium::TUID, SceneNodePtr >::const_iterator itr = m_DependencyNodes.find( uid );
             if( itr != m_DependencyNodes.end() )
             {
                 return Reflect::ObjectCast< T >( itr->second );
@@ -218,7 +218,7 @@ namespace Content
         //
 
         template <class T>
-        Nocturnal::SmartPtr<T> GetParent(const HierarchyNodePtr& node) const
+        Helium::SmartPtr<T> GetParent(const HierarchyNodePtr& node) const
         {
             return Get<T>(node->m_ParentID); 
         }
@@ -242,7 +242,7 @@ namespace Content
         void GetChildren( V_HierarchyNode& children, const HierarchyNodePtr& node ) const;
         bool IsChildOf( const HierarchyNodePtr& potentialChild, const HierarchyNodePtr &potentialParent ) const;
 
-        void AddChild( const HierarchyNodePtr& child, const Nocturnal::TUID& parentID );
+        void AddChild( const HierarchyNodePtr& child, const Helium::TUID& parentID );
         void AddChild( const HierarchyNodePtr& child, const HierarchyNodePtr& parent );
 
         void RemoveFromHierarchy( const HierarchyNodePtr& child );
@@ -264,7 +264,7 @@ namespace Content
         //
         // Internal utilities 
         //
-        bool Exists( const Nocturnal::TUID& id );
+        bool Exists( const Helium::TUID& id );
 
         void UpdateGlobalTransforms( const TransformPtr& transform );
         void UpdateHierarchy();
@@ -277,10 +277,10 @@ namespace Content
         void CollateMorphTargets();
     };
 
-    typedef Nocturnal::SmartPtr< Scene > ScenePtr;
+    typedef Helium::SmartPtr< Scene > ScenePtr;
 
     template< class T >
-    void Scene::GetAll( std::vector< Nocturnal::SmartPtr<T> >& objects, i32 attributeType, bool clear) const
+    void Scene::GetAll( std::vector< Helium::SmartPtr<T> >& objects, i32 attributeType, bool clear) const
     {
         // clear
         if (clear)
@@ -290,8 +290,8 @@ namespace Content
 
         // for now do a complete iteration, if we end up nesting dudes
         //  in other classes, we can use reflect's C++ member intospection to find them
-        std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator itr = m_DependencyNodes.begin();
-        std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator end = m_DependencyNodes.end();
+        std::map< Helium::TUID, SceneNodePtr >::const_iterator itr = m_DependencyNodes.begin();
+        std::map< Helium::TUID, SceneNodePtr >::const_iterator end = m_DependencyNodes.end();
         for ( ; itr != end; ++itr )
         {
             T* node = Reflect::ObjectCast<T>( itr->second );

@@ -11,15 +11,15 @@ namespace Asset
   {
   public:
 
-      std::set< Nocturnal::Path > m_Paths;
+      std::set< Helium::Path > m_Paths;
 
   public:
     REFLECT_DECLARE_CLASS( DependenciesComponent, ComponentBase );
 
     static void EnumerateClass( Reflect::Compositor<DependenciesComponent>& comp );
 
-    virtual Component::ComponentUsage GetComponentUsage() const NOC_OVERRIDE { return Component::ComponentUsages::Class; }
+    virtual Component::ComponentUsage GetComponentUsage() const HELIUM_OVERRIDE { return Component::ComponentUsages::Class; }
   };
 
-  typedef Nocturnal::SmartPtr< DependenciesComponent > DependenciesComponentPtr;
+  typedef Helium::SmartPtr< DependenciesComponent > DependenciesComponentPtr;
 }

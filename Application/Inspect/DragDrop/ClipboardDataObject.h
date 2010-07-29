@@ -17,11 +17,11 @@ namespace Inspect
     virtual ~ClipboardDataObject();
     
     // Base class overrides
-    virtual void GetAllFormats( wxDataFormat* formats, wxDataObjectBase::Direction dir = wxDataObjectBase::Get ) const NOC_OVERRIDE;
-    virtual size_t GetFormatCount( wxDataObjectBase::Direction dir = wxDataObjectBase::Get ) const NOC_OVERRIDE;
-    virtual wxDataFormat GetPreferredFormat( wxDataObjectBase::Direction dir = wxDataObjectBase::Get ) const NOC_OVERRIDE;
-    virtual bool SetData( size_t size, const void* buf ) NOC_OVERRIDE;
-    virtual bool SetData( const wxDataFormat& format, size_t len, const void* buf ) NOC_OVERRIDE;
+    virtual void GetAllFormats( wxDataFormat* formats, wxDataObjectBase::Direction dir = wxDataObjectBase::Get ) const HELIUM_OVERRIDE;
+    virtual size_t GetFormatCount( wxDataObjectBase::Direction dir = wxDataObjectBase::Get ) const HELIUM_OVERRIDE;
+    virtual wxDataFormat GetPreferredFormat( wxDataObjectBase::Direction dir = wxDataObjectBase::Get ) const HELIUM_OVERRIDE;
+    virtual bool SetData( size_t size, const void* buf ) HELIUM_OVERRIDE;
+    virtual bool SetData( const wxDataFormat& format, size_t len, const void* buf ) HELIUM_OVERRIDE;
 
     // Member functions
     ReflectClipboardDataPtr FromBuffer();

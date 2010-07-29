@@ -38,7 +38,7 @@ Processor
 
 ******************************************************************************/
 
-namespace Nocturnal
+namespace Helium
 {
     namespace CommandLine
     {

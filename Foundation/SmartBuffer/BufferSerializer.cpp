@@ -11,7 +11,7 @@
 #include <sstream>
 #include <fstream>
 
-using namespace Nocturnal;
+using namespace Helium;
 
 #ifdef PROFILE_ACCUMULATION
 Profile::Accumulator BufferSerializer::s_ReadAccum ( "BufferSerializer Data Read" );
@@ -254,12 +254,12 @@ bool BufferSerializer::WriteToStream( tostream& strm ) const
         for ( u32 chunk_index = 0; itr != end; ++itr, ++chunk_index )
         {
             // a little sanity check
-            NOC_ASSERT( (*itr)->GetByteOrder() == m_ByteOrder );
-            NOC_ASSERT( (*itr)->GetSize() > 0 );
+            HELIUM_ASSERT( (*itr)->GetByteOrder() == m_ByteOrder );
+            HELIUM_ASSERT( (*itr)->GetSize() > 0 );
 
             // better not have a map for this id already
             bool inserted = buffer_to_offset_map.insert( M_BuffU32::value_type( (*itr), buffer_offset ) ).second;
-            NOC_ASSERT( inserted );
+            HELIUM_ASSERT( inserted );
 
             ChunkHeader chunk_header;
             memset( &chunk_header, 0, sizeof( ChunkHeader ) );
@@ -351,7 +351,7 @@ bool BufferSerializer::WriteToStream( tostream& strm ) const
         for( ; itr != end; ++itr )
         {
             M_BuffU32::const_iterator target_chunk_offset = buffer_to_offset_map.find( (*itr).target_chunk_buffer );
-            NOC_ASSERT( target_chunk_offset != buffer_to_offset_map.end() );
+            HELIUM_ASSERT( target_chunk_offset != buffer_to_offset_map.end() );
 
             u32 curr_offset   = (u32)strm.tellp();
             u32 target_offset = ( (*target_chunk_offset).second + (*itr).target_offset );
@@ -383,7 +383,7 @@ bool BufferSerializer::WriteToStream( tostream& strm ) const
         for( ; itr != end; ++itr )
         {
             M_BuffU32::const_iterator target_chunk_offset = buffer_to_offset_map.find( (*itr).target_chunk_buffer );
-            NOC_ASSERT( target_chunk_offset != buffer_to_offset_map.end() );
+            HELIUM_ASSERT( target_chunk_offset != buffer_to_offset_map.end() );
 
             u32 curr_offset   = (u32)strm.tellp();
             u32 target_offset = ( (*target_chunk_offset).second + (*itr).target_offset );
@@ -494,14 +494,14 @@ bool BufferSerializer::ReadFromStream( tistream& strm )
         SmartBufferPtr buffer = new SmartBuffer();
         buffer->SetByteOrder( swizzle ? ByteOrders::BigEndian : ByteOrders::LittleEndian );
 
-        //NOC_ASSERT( header.m_Offset == ( strm.tellp() - starting_offset ) );
+        //HELIUM_ASSERT( header.m_Offset == ( strm.tellp() - starting_offset ) );
         chunks[ chunk_index ] = buffer;
 
         buffer->Resize( header.m_Size );
         buffer->SetType( header.m_Type );
         strm.read( (tchar*)buffer->GetData(), buffer->GetSize() );
 
-        NOC_ASSERT( chunk_map.find( header.m_Offset ) == chunk_map.end() );
+        HELIUM_ASSERT( chunk_map.find( header.m_Offset ) == chunk_map.end() );
         chunk_map[ header.m_Offset ] = chunk_index;
 
         //  is the buffer aligned?
@@ -527,7 +527,7 @@ bool BufferSerializer::ReadFromStream( tistream& strm )
 
         // figure out which buffer this fixup starts in
         std::map< u32, u32, std::greater<u32> >::iterator source_itr = chunk_map.lower_bound( source_offset );
-        NOC_ASSERT( source_itr != chunk_map.end() );
+        HELIUM_ASSERT( source_itr != chunk_map.end() );
 
         // get the necessary source data
         const ChunkHeader& source_header = chunk_headers[ (*source_itr).second ];
@@ -539,7 +539,7 @@ bool BufferSerializer::ReadFromStream( tistream& strm )
 
         // figure out which buffer this fixup ends in
         std::map< u32, u32, std::greater<u32> >::iterator dest_itr = chunk_map.lower_bound( dest_offset );
-        NOC_ASSERT( dest_itr != chunk_map.end() );
+        HELIUM_ASSERT( dest_itr != chunk_map.end() );
 
         // get the necessary dest data
         const ChunkHeader& dest_header = chunk_headers[ (*dest_itr).second ];
@@ -565,7 +565,7 @@ bool BufferSerializer::ReadFromStream( tistream& strm )
 
             // figure out which buffer this fixup starts in
             std::map< u32, u32, std::greater<u32> >::iterator source_itr = chunk_map.lower_bound( source_offset );
-            NOC_ASSERT( source_itr != chunk_map.end() );
+            HELIUM_ASSERT( source_itr != chunk_map.end() );
 
             // get the necessary source data
             const ChunkHeader& source_header = chunk_headers[ (*source_itr).second ];
@@ -577,7 +577,7 @@ bool BufferSerializer::ReadFromStream( tistream& strm )
 
             // figure out which buffer this fixup ends in
             std::map< u32, u32, std::greater<u32> >::iterator dest_itr = chunk_map.lower_bound( dest_offset );
-            NOC_ASSERT( dest_itr != chunk_map.end() );
+            HELIUM_ASSERT( dest_itr != chunk_map.end() );
 
             // get the necessary dest data
             const ChunkHeader& dest_header = chunk_headers[ (*dest_itr).second ];

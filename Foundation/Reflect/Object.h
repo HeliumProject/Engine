@@ -11,10 +11,10 @@
 namespace Reflect
 {
     //
-    // Reflect::Object is a reference counted and type checked NOC_ABSTRACT base class
+    // Reflect::Object is a reference counted and type checked HELIUM_ABSTRACT base class
     //
 
-    class FOUNDATION_API Object NOC_ABSTRACT
+    class FOUNDATION_API Object HELIUM_ABSTRACT
     {
     private:
         mutable i32 m_RefCount;
@@ -90,7 +90,7 @@ namespace Reflect
     {
         if ( base != NULL )
         {
-            NOC_ASSERT( base->HasType(GetClass<__Derived>()->m_TypeID) );
+            HELIUM_ASSERT( base->HasType(GetClass<__Derived>()->m_TypeID) );
         }
 
         return DangerousCast<__Derived>(base);
@@ -101,7 +101,7 @@ namespace Reflect
     {
         if ( base != NULL )
         {
-            NOC_ASSERT( base->HasType(GetClass<__Derived>()->m_TypeID) );
+            HELIUM_ASSERT( base->HasType(GetClass<__Derived>()->m_TypeID) );
         }
 
         return ConstDangerousCast<__Derived>(base);

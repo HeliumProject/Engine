@@ -12,7 +12,7 @@ Event::Event()
     if ( !m_Handle )
     {
         Platform::Print(TXT("Failed to create event (%s)\n"), Platform::GetErrorString().c_str());
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 }
 
@@ -22,7 +22,7 @@ Event::~Event()
     if ( result != TRUE )
     {
         Platform::Print(TXT("Failed to close event (%s)\n"), Platform::GetErrorString().c_str());
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 }
 
@@ -32,7 +32,7 @@ void Event::Signal()
     if ( result != TRUE )
     {
         Platform::Print(TXT("Failed to signal event (%s)\n"), Platform::GetErrorString().c_str());
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 }
 
@@ -42,7 +42,7 @@ void Event::Reset()
     if ( result != TRUE )
     {
         Platform::Print(TXT("Failed to reset event (%s)\n"), Platform::GetErrorString().c_str());
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 }
 
@@ -58,7 +58,7 @@ bool Event::Wait(u32 timeout)
     if ( result != WAIT_OBJECT_0 )
     {
         Platform::Print(TXT("Failed to wait for event (%s)\n"), Platform::GetErrorString().c_str());
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 
     return true;

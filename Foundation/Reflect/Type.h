@@ -28,7 +28,7 @@ namespace Reflect
     }
     typedef ReservedTypes::ReservedType ReservedType;
 
-    class FOUNDATION_API Type NOC_ABSTRACT : public Base
+    class FOUNDATION_API Type HELIUM_ABSTRACT : public Base
     {
     public:
         REFLECTION_BASE( ReflectionTypes::Type );

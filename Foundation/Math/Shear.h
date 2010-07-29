@@ -56,15 +56,15 @@ namespace Math
 
         f32&				    operator[] (const u32 i)
         {
-            NOC_ASSERT( i >= 0 );
-            NOC_ASSERT( i <= 2 );
+            HELIUM_ASSERT( i >= 0 );
+            HELIUM_ASSERT( i <= 2 );
             return (&yz)[i];
         }
 
         const f32&	    operator[] (const u32 i) const
         {
-            NOC_ASSERT( i >= 0 );
-            NOC_ASSERT( i <= 2 );
+            HELIUM_ASSERT( i >= 0 );
+            HELIUM_ASSERT( i <= 2 );
             return (&yz)[i];
         }
 

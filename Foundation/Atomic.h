@@ -8,7 +8,7 @@
 
 namespace Foundation
 {
-    class FOUNDATION_API AtomicRefCountBase NOC_ABSTRACT : public Nocturnal::IRefCount<AtomicRefCountBase>
+    class FOUNDATION_API AtomicRefCountBase HELIUM_ABSTRACT : public Helium::IRefCount<AtomicRefCountBase>
     {
     private:
         mutable i32 m_RefCount;
@@ -18,8 +18,8 @@ namespace Foundation
         virtual ~AtomicRefCountBase();
 
     public:
-        virtual int GetRefCount() const NOC_OVERRIDE;
-        virtual void IncrRefCount() const NOC_OVERRIDE;
-        virtual void DecrRefCount() const NOC_OVERRIDE;
+        virtual int GetRefCount() const HELIUM_OVERRIDE;
+        virtual void IncrRefCount() const HELIUM_OVERRIDE;
+        virtual void DecrRefCount() const HELIUM_OVERRIDE;
     };
 }

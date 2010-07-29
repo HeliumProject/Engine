@@ -29,7 +29,7 @@ namespace Content
   class PIPELINE_API MorphTargetWeight : public Reflect::Element
   {
   public: 
-    Nocturnal::TUID  m_TargetId;
+    Helium::TUID  m_TargetId;
     f32           m_Weight;
 
     MorphTargetWeight()
@@ -38,7 +38,7 @@ namespace Content
     {
     }
 
-    MorphTargetWeight( const Nocturnal::TUID& targetId, const f32 weight )
+    MorphTargetWeight( const Helium::TUID& targetId, const f32 weight )
       : m_TargetId( targetId )
       , m_Weight( weight )
     {
@@ -52,7 +52,7 @@ namespace Content
       Reflect::Field* fieldWeight = comp.AddField( &MorphTargetWeight::m_Weight, "m_Weight" );
     }
   };
-  typedef Nocturnal::SmartPtr< MorphTargetWeight > MorphTargetWeightPtr;
+  typedef Helium::SmartPtr< MorphTargetWeight > MorphTargetWeightPtr;
   typedef std::vector< MorphTargetWeightPtr > V_MorphTargetWeight;
 
 
@@ -73,7 +73,7 @@ namespace Content
     {
     }
 
-    void AddTargetWeight( const Nocturnal::TUID& targetId, const f32 weight )
+    void AddTargetWeight( const Helium::TUID& targetId, const f32 weight )
     {
       m_MorphTargetWeights.push_back( new MorphTargetWeight( targetId, weight ) );
     }
@@ -86,7 +86,7 @@ namespace Content
       Reflect::Field* fieldMorphTargetWeights = comp.AddField( &FrameMorphTargets::m_MorphTargetWeights, "m_MorphTargetWeights" );
     }
   };
-  typedef Nocturnal::SmartPtr<FrameMorphTargets> FrameMorphTargetsPtr;
+  typedef Helium::SmartPtr<FrameMorphTargets> FrameMorphTargetsPtr;
   typedef std::vector< FrameMorphTargetsPtr > V_FrameMorphTargets;
 
 
@@ -114,7 +114,7 @@ namespace Content
 
     void AddRegionWeight( const f32 weight )
     {
-      NOC_ASSERT( m_RegionWeights.size() < MaxCountWrinkleMapRegions );
+      HELIUM_ASSERT( m_RegionWeights.size() < MaxCountWrinkleMapRegions );
       m_RegionWeights.push_back( weight );
     }
 
@@ -126,7 +126,7 @@ namespace Content
       Reflect::Field* fieldRegionWeights = comp.AddField( &FrameWrinkleMap::m_RegionWeights, "m_RegionWeights" );
     }
   };
-  typedef Nocturnal::SmartPtr< FrameWrinkleMap > FrameWrinkleMapPtr;
+  typedef Helium::SmartPtr< FrameWrinkleMap > FrameWrinkleMapPtr;
   typedef std::vector< FrameWrinkleMapPtr > V_FrameWrinkleMaps;
 
   /////////////////////////////////////////////////////////////////////////////
@@ -136,7 +136,7 @@ namespace Content
   {
   public:
 
-    Nocturnal::TUID       m_SkeletonID;
+    Helium::TUID       m_SkeletonID;
     tstring               m_ActorName;
     M_JointAnimation      m_JointAnimationMap;
     M_CompressedJointAnimation m_CompressedJointAnimationMap;
@@ -190,18 +190,18 @@ namespace Content
     }
 
     JointAnimationPtr GetAnimationForJoint( const JointTransformPtr& joint );
-    JointAnimationPtr GetAnimationForJoint( const Nocturnal::TUID& jointID );
+    JointAnimationPtr GetAnimationForJoint( const Helium::TUID& jointID );
 
     CompressedJointAnimationPtr GetCompressedAnimationForJoint( const JointTransformPtr& joint );
-    CompressedJointAnimationPtr GetCompressedAnimationForJoint( const Nocturnal::TUID& jointID );
+    CompressedJointAnimationPtr GetCompressedAnimationForJoint( const Helium::TUID& jointID );
 
     // associate an animation with a joint
     // note: setting overWrite = true will stomp any existing association of the specified joint to an animation
     void Associate( const JointTransformPtr& joint, const JointAnimationPtr& animation, bool overWrite = false );
 
-    void Associate( const Nocturnal::TUID& jointID, const JointAnimationPtr& animation, bool overWrite = false );
+    void Associate( const Helium::TUID& jointID, const JointAnimationPtr& animation, bool overWrite = false );
 
-    void GetJointIDs( Nocturnal::V_TUID& jointIDs );
+    void GetJointIDs( Helium::V_TUID& jointIDs );
 
     u32 NumAnimations()
     {
@@ -225,13 +225,13 @@ namespace Content
 
     void ConvertToWorldSpace(const Content::Scene& scene, JointOrderingPtr& joint_ordering);
     void ConvertToParentLocalSpace(const Content::Scene& scene, const Content::JointTransformPtr& rootJoint, JointOrderingPtr& joint_ordering);
-    void ApplyParentTransforms( const Content::Scene& scene, const Nocturnal::TUID& targetJointId, bool zeroParents );
-    void ApplyInverseParentTransforms( const Content::Scene& scene, const Nocturnal::TUID& targetJointId );
+    void ApplyParentTransforms( const Content::Scene& scene, const Helium::TUID& targetJointId, bool zeroParents );
+    void ApplyInverseParentTransforms( const Content::Scene& scene, const Helium::TUID& targetJointId );
     void DumpAnims( const JointOrderingPtr& jointOrdering );
-    void RemoveTransform( const Nocturnal::TUID& targetJointId, const Nocturnal::TUID& referenceJointId );
-    void RemoveFirstFrameTransform( const Nocturnal::TUID& targetJointId );
-    void RemoveRotTrans( const Nocturnal::TUID& targetJointId, Math::Vector3 translation, Math::Quaternion rotation );
-    void CalculateLinearDistancePerFrame( const Nocturnal::TUID& referenceJointId );
+    void RemoveTransform( const Helium::TUID& targetJointId, const Helium::TUID& referenceJointId );
+    void RemoveFirstFrameTransform( const Helium::TUID& targetJointId );
+    void RemoveRotTrans( const Helium::TUID& targetJointId, Math::Vector3 translation, Math::Quaternion rotation );
+    void CalculateLinearDistancePerFrame( const Helium::TUID& referenceJointId );
     void ConvertToAdditiveBlend( const Content::Scene& scene, const JointOrderingPtr& jointOrdering, i32 reference_frame );
 
     u32  CompressAnimations( const Content::Scene& scene,
@@ -243,10 +243,10 @@ namespace Content
 
     void ExtractCinematicRootOffset( const Content::Scene  & scene,
       Math::V_Vector3 & cinematicTranslationChannel,
-      const Nocturnal::TUID    & abodyJointId,
-      const Nocturnal::TUID    & motionJointId);
+      const Helium::TUID    & abodyJointId,
+      const Helium::TUID    & motionJointId);
   };
 
-  typedef Nocturnal::SmartPtr<Animation> AnimationPtr;
+  typedef Helium::SmartPtr<Animation> AnimationPtr;
   typedef std::vector<AnimationPtr> V_Animation;
 }

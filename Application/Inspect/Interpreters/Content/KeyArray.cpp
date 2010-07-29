@@ -61,7 +61,7 @@ void KeyArray::Freeze()
 // 
 void KeyArray::Thaw()
 {
-  NOC_ASSERT( m_FreezeCount > 0 );
+  HELIUM_ASSERT( m_FreezeCount > 0 );
   if ( --m_FreezeCount == 0 )
   {
     m_Thaw.Raise( KeyArgs( this, NULL ) );

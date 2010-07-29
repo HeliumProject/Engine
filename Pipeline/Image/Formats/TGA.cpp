@@ -1,7 +1,7 @@
 #include "Pipeline/Image/Image.h"
 #include "TGA.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 //
 // see http://astronomy.swin.edu.au/~pbourke/dataformats/tga/

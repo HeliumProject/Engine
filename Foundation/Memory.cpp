@@ -130,7 +130,7 @@ bool Memory::Initialize()
 
         if (!g_MemoryReportThread.Create( &MemoryReportThread, NULL, TXT( "Profile Memory Report Thread" ) ))
         {
-            NOC_BREAK();
+            HELIUM_BREAK();
         }
     }
 
@@ -161,7 +161,7 @@ MemoryPoolHandle Memory::CreatePool(const tchar* name)
     }
     else
     {
-        NOC_BREAK(); // out of pools, increase global pool maximum
+        HELIUM_BREAK(); // out of pools, increase global pool maximum
     }
 
     return pool;

@@ -9,12 +9,12 @@
 #include "Platform/Compiler.h"
 #include "Foundation/Memory/SmartPtr.h"
 
-namespace Nocturnal
+namespace Helium
 {
     namespace CommandLine
     {
 		///////////////////////////////////////////////////////////////////////
-        class FOUNDATION_API Option : public Nocturnal::RefCountBase< Option >
+        class FOUNDATION_API Option : public Helium::RefCountBase< Option >
         {
 		protected:
 			tstring m_Token;
@@ -50,7 +50,7 @@ namespace Nocturnal
 	
 			virtual bool Parse( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) = 0;
 		};
-		typedef Nocturnal::SmartPtr< Option > OptionPtr;
+		typedef Helium::SmartPtr< Option > OptionPtr;
 		typedef std::vector< OptionPtr > V_OptionPtr;
 		typedef std::map< tstring, OptionPtr > M_StringToOptionPtr;
 
@@ -72,7 +72,7 @@ namespace Nocturnal
 			{
 			}
 
-			virtual bool Parse( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) NOC_OVERRIDE
+			virtual bool Parse( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) HELIUM_OVERRIDE
 			{
 				if ( argsBegin != argsEnd )
 				{
@@ -99,7 +99,7 @@ namespace Nocturnal
 				*m_Data = (*argsBegin);
 				++argsBegin;
 
-				//NOC_ASSERT( !(*m_Data).empty() );
+				//HELIUM_ASSERT( !(*m_Data).empty() );
 
 				return true;
 			}
@@ -134,7 +134,7 @@ namespace Nocturnal
 		}
 
 		template <>
-		bool SimpleOption<std::vector< tstring >>::Parse( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) NOC_OVERRIDE
+		bool SimpleOption<std::vector< tstring >>::Parse( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) HELIUM_OVERRIDE
 		{
 			// tokenize and push_back via m_Data
 			bool result = false;
@@ -190,7 +190,7 @@ namespace Nocturnal
             {
             }
 
-			virtual bool Parse( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) NOC_OVERRIDE
+			virtual bool Parse( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) HELIUM_OVERRIDE
 			{
 				*m_Data = true;
 				return true;
@@ -216,7 +216,7 @@ namespace Nocturnal
 		//	{
 		//	}
 
-		//	virtual bool Parse( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) NOC_OVERRIDE
+		//	virtual bool Parse( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) HELIUM_OVERRIDE
 		//	{
 		//		// tokenize and push_back via m_Data
 		//		bool result = false;

@@ -56,7 +56,7 @@ namespace Content
 
     }
 
-    Volume (const Nocturnal::TUID& id)
+    Volume (const Helium::TUID& id)
       : Instance (id)
       , m_Shape (VolumeShapes::Cube)
     {
@@ -65,6 +65,6 @@ namespace Content
 
   };
 
-  typedef Nocturnal::SmartPtr<Volume> VolumePtr;
+  typedef Helium::SmartPtr<Volume> VolumePtr;
   typedef std::vector<VolumePtr> V_Volume;
 }

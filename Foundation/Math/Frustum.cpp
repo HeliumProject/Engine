@@ -298,7 +298,7 @@ bool Frustum::IntersectsTriangle(const Vector3& v0, const Vector3& v1, const Vec
                 {
                     Vector3 i;
                     bool intersects = Line (p, s).IntersectsPlane( clipPlane, &i );
-                    NOC_ASSERT(intersects);
+                    HELIUM_ASSERT(intersects);
 
                     // since our previous one (s) is outside, appen it first
                     clipped.Append( i );
@@ -315,7 +315,7 @@ bool Frustum::IntersectsTriangle(const Vector3& v0, const Vector3& v1, const Vec
                 {
                     Vector3 i;
                     bool intersects = Line (p, s).IntersectsPlane( clipPlane, &i );
-                    NOC_ASSERT(intersects);
+                    HELIUM_ASSERT(intersects);
 
                     // p is not above the plane, it will be clipped, so just append the intersection
                     //  because since s is the previous one, it will have been added in the previous iteration

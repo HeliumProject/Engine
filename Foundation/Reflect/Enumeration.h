@@ -25,13 +25,13 @@ namespace Reflect
         static EnumerationElement* Create( u32 value, const tstring& name, const tstring& label );
     };
 
-    typedef Nocturnal::SmartPtr<EnumerationElement> EnumerationElementPtr;
+    typedef Helium::SmartPtr<EnumerationElement> EnumerationElementPtr;
     typedef std::vector<EnumerationElementPtr>                    V_EnumerationElement; // order of declaration
     typedef stdext::hash_map<tstring, EnumerationElementPtr>      M_StrEnumerationElement; // sorted by name
     typedef stdext::hash_map<i32, EnumerationElementPtr>          M_ValueEnumerationElement; // sorted by value
 
     class FOUNDATION_API Enumeration;
-    typedef Nocturnal::SmartPtr<Enumeration> EnumerationPtr;
+    typedef Helium::SmartPtr<Enumeration> EnumerationPtr;
 
     class FOUNDATION_API Enumeration : public Type
     {
@@ -60,7 +60,7 @@ namespace Reflect
             info->m_Size = sizeof(T);
             info->m_ShortName = name;
             bool converted = Platform::ConvertString( typeid(T).name(), info->m_FullName );
-            NOC_ASSERT( converted );
+            HELIUM_ASSERT( converted );
             info->m_UIName = info->m_ShortName;
 
             return info;

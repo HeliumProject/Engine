@@ -51,7 +51,7 @@ namespace Inspect
   // Defines the base wx-derived window used by the canvas
   //
 
-  class APPLICATION_API CanvasWindow : public Nocturnal::TreeWndCtrl
+  class APPLICATION_API CanvasWindow : public Helium::TreeWndCtrl
   {
   public:
     Canvas* m_Canvas;
@@ -64,9 +64,9 @@ namespace Inspect
                  const wxString& name = wxT( "CanvasWindow" ),
                  int treeStyle = ( wxTR_ALL_LINES | wxTR_HIDE_ROOT ),
                  unsigned int columnSize = WXTWC_DEFAULT_COLUMN_SIZE,
-                 wxBitmap expandedBitmap = Nocturnal::TreeWndCtrlDefaultExpand,
-                 wxBitmap collapsedBitmap = Nocturnal::TreeWndCtrlDefaultCollapse,
-                 wxPen pen = Nocturnal::TreeWndCtrlDefaultPen,
+                 wxBitmap expandedBitmap = Helium::TreeWndCtrlDefaultExpand,
+                 wxBitmap collapsedBitmap = Helium::TreeWndCtrlDefaultCollapse,
+                 wxPen pen = Helium::TreeWndCtrlDefaultPen,
                  unsigned int clickTolerance = WXTWC_DEFAULT_CLICK_TOLERANCE);
                  
     Canvas* GetCanvas();
@@ -99,7 +99,7 @@ namespace Inspect
 
     }
   };
-  typedef Nocturnal::Signature<void, const CanvasShowArgs&> CanvasShowSignature;
+  typedef Helium::Signature<void, const CanvasShowArgs&> CanvasShowSignature;
 
   class APPLICATION_API Canvas : public Reflect::ConcreteInheritor<Canvas, Container>
   {
@@ -162,7 +162,7 @@ namespace Inspect
 
     // creation factory for child controls
     template<class T>
-    Nocturnal::SmartPtr<T> Create(Interpreter* interpreter = NULL)
+    Helium::SmartPtr<T> Create(Interpreter* interpreter = NULL)
     {
       return Reflect::ObjectCast<T>( Canvas::Create( Reflect::GetType<T>(), interpreter ) );
     }
@@ -175,14 +175,14 @@ namespace Inspect
     // Children
     //
 
-    // NOC_OVERRIDE
-    virtual void RemoveControl(Control* control) NOC_OVERRIDE;
+    // HELIUM_OVERRIDE
+    virtual void RemoveControl(Control* control) HELIUM_OVERRIDE;
 
-    // NOC_OVERRIDE
-    virtual void Clear() NOC_OVERRIDE;
+    // HELIUM_OVERRIDE
+    virtual void Clear() HELIUM_OVERRIDE;
 
-    // NOC_OVERRIDE
-    virtual void Realize(Container* parent) NOC_OVERRIDE;
+    // HELIUM_OVERRIDE
+    virtual void Realize(Container* parent) HELIUM_OVERRIDE;
 
     //
     // Expansion State
@@ -263,5 +263,5 @@ namespace Inspect
     }
   };
 
-  typedef Nocturnal::SmartPtr<Canvas> CanvasPtr;
+  typedef Helium::SmartPtr<Canvas> CanvasPtr;
 }

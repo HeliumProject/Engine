@@ -28,7 +28,7 @@ MString ExportContentCmd::CommandName( "exportContent" );
 void AfterSaveCallback( void *clientData )
 {
     tstring currentFile = MFileIO::currentFile().asTChar();
-    Nocturnal::Path::Normalize( currentFile );
+    Helium::Path::Normalize( currentFile );
 
     // i hate mel
     int exportOnSave = 0;
@@ -76,7 +76,7 @@ MStatus ExportContentCmd::doIt( const MArgList & args )
     MArgDatabase argParser( syntax(), args, &stat );
 
     tstring currentFile = MFileIO::currentFile().asTChar();
-    Nocturnal::Path::Normalize( currentFile );
+    Helium::Path::Normalize( currentFile );
 
     // make sure we save before we export, the artists asked us to do this for a variety of reasons
     // including fear that maya would crash during export and lose work
@@ -133,7 +133,7 @@ MStatus ExportContentCmd::ExportContent( MArgDatabase& argParser )
 #pragma TODO("Set data type")
         MayaContentCmd::ExportCurrentScene( MayaContentCmd::kScene );
     }
-    catch (Nocturnal::Exception& e)
+    catch (Helium::Exception& e)
     {
         MGlobal::displayError( MString("Failed to export: ") + e.What() );
         if ( MGlobal::mayaState() == MGlobal::kInteractive )

@@ -21,10 +21,10 @@ ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
 , m_MemLargestFree( 0 )
 {
     m_UserName.clear();
-    Nocturnal::GetUsername( m_UserName );
+    Helium::GetUsername( m_UserName );
 
     m_Computer.clear();
-    Nocturnal::GetComputer( m_Computer );
+    Helium::GetComputer( m_Computer );
 
     m_ApplicationPath = Platform::GetProcessPath();
     m_ApplicationName = Platform::GetProcessName();
@@ -35,7 +35,7 @@ ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
     m_CmdLineArgs.clear();
     {
         int cmdArgc;
-        const tchar** cmdArgv = Nocturnal::GetCmdLine( cmdArgc );
+        const tchar** cmdArgv = Helium::GetCmdLine( cmdArgc );
         if ( cmdArgc > 1 )
         {
             for ( int i = 1; i < cmdArgc; ++i )

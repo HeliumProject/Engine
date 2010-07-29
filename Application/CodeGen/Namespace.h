@@ -9,7 +9,7 @@ namespace CodeGen
 {
   // Forwards
   class Namespace;
-  typedef Nocturnal::SmartPtr< Namespace > NamespacePtr;
+  typedef Helium::SmartPtr< Namespace > NamespacePtr;
   typedef std::vector< NamespacePtr > V_NamespaceSmartPtr;
 
   /////////////////////////////////////////////////////////////////////////////

@@ -18,16 +18,16 @@
 #include "TreeWndCtrlCollapsed.xpm"
 #include "TreeWndCtrlExpanded.xpm"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
 
-const wxTreeItemId Nocturnal::TreeWndCtrlItemIdInvalid(NULL);
-wxBitmap Nocturnal::TreeWndCtrlDefaultExpand( s_treeWndCtrlExpandedXpm );
-wxBitmap Nocturnal::TreeWndCtrlDefaultCollapse( s_treeWndCtrlCollapsedXpm );
-wxPen Nocturnal::TreeWndCtrlDefaultPen( wxColour( 0x80, 0x80, 0x80 ), 1, wxSOLID );
+const wxTreeItemId Helium::TreeWndCtrlItemIdInvalid(NULL);
+wxBitmap Helium::TreeWndCtrlDefaultExpand( s_treeWndCtrlExpandedXpm );
+wxBitmap Helium::TreeWndCtrlDefaultCollapse( s_treeWndCtrlCollapsedXpm );
+wxPen Helium::TreeWndCtrlDefaultPen( wxColour( 0x80, 0x80, 0x80 ), 1, wxSOLID );
 
 // ----------------------------------------------------------------------------
 // TreeWndCtrl

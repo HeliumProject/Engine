@@ -20,7 +20,7 @@ Layer::Layer()
 {
 }
 
-Layer::Layer( Nocturnal::TUID& id )
+Layer::Layer( Helium::TUID& id )
 : SceneNode( id )
 , m_Visible( true )
 , m_Selectable( true )

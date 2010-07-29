@@ -42,7 +42,7 @@ namespace Content
 
     }
 
-    PivotTransform (const Nocturnal::TUID& id)
+    PivotTransform (const Helium::TUID& id)
       : Transform (id)
       , m_SnapPivots (true)
     {
@@ -53,10 +53,10 @@ namespace Content
 
     static void EnumerateClass( Reflect::Compositor<PivotTransform>& comp );
 
-    virtual bool ProcessComponent(Reflect::ElementPtr element, const tstring& memberName) NOC_OVERRIDE;
-    virtual void ResetTransform() NOC_OVERRIDE;
+    virtual bool ProcessComponent(Reflect::ElementPtr element, const tstring& memberName) HELIUM_OVERRIDE;
+    virtual void ResetTransform() HELIUM_OVERRIDE;
   };
 
-  typedef Nocturnal::SmartPtr<PivotTransform> PivotTransformPtr;
+  typedef Helium::SmartPtr<PivotTransform> PivotTransformPtr;
   typedef std::vector<PivotTransformPtr> V_PivotTransform;
 }

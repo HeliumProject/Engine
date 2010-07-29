@@ -16,7 +16,7 @@ namespace Inspect
   public:
     INSPECT_TYPE( DataTypes::String );
   };
-  typedef Nocturnal::SmartPtr< StringData > StringDataPtr;
+  typedef Helium::SmartPtr< StringData > StringDataPtr;
 
 
   //
@@ -27,7 +27,7 @@ namespace Inspect
   class StringFormatter : public StringData
   {
   public:
-    typedef Nocturnal::SmartPtr< StringFormatter<T> > Ptr;
+    typedef Helium::SmartPtr< StringFormatter<T> > Ptr;
 
   protected:
     // the data we are manipulating
@@ -52,7 +52,7 @@ namespace Inspect
       }
     }
 
-    virtual bool Set(const tstring& s, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
+    virtual bool Set(const tstring& s, const DataChangedSignature::Delegate& emitter = NULL) HELIUM_OVERRIDE
     {
       bool result = false;
 
@@ -69,7 +69,7 @@ namespace Inspect
       return result;
     }
 
-    virtual void Get(tstring& s) const NOC_OVERRIDE
+    virtual void Get(tstring& s) const HELIUM_OVERRIDE
     {
       tstringstream stream;
       Insert<T>(stream, m_Data);
@@ -86,7 +86,7 @@ namespace Inspect
   class MultiStringFormatter : public StringData
   {
   public:
-    typedef Nocturnal::SmartPtr< MultiStringFormatter<T> > Ptr;
+    typedef Helium::SmartPtr< MultiStringFormatter<T> > Ptr;
 
   protected:
     // a link to each data we are manipulating
@@ -116,7 +116,7 @@ namespace Inspect
       }
     }
 
-    virtual bool Set(const tstring& s, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
+    virtual bool Set(const tstring& s, const DataChangedSignature::Delegate& emitter = NULL) HELIUM_OVERRIDE
     {
       bool result = false;
 
@@ -139,7 +139,7 @@ namespace Inspect
       return result;
     }
 
-    virtual bool SetAll(const std::vector< tstring >& values, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
+    virtual bool SetAll(const std::vector< tstring >& values, const DataChangedSignature::Delegate& emitter = NULL) HELIUM_OVERRIDE
     {
       bool result = false;
 
@@ -163,13 +163,13 @@ namespace Inspect
       }
       else
       {
-        NOC_BREAK();
+        HELIUM_BREAK();
       }
 
       return result;
     }
 
-    virtual void Get(tstring& s) const NOC_OVERRIDE
+    virtual void Get(tstring& s) const HELIUM_OVERRIDE
     {
       T* value = NULL;
       tstringstream stream;
@@ -225,7 +225,7 @@ namespace Inspect
       s = stream.str();
     }
 
-    virtual void GetAll(std::vector< tstring >& s) const NOC_OVERRIDE
+    virtual void GetAll(std::vector< tstring >& s) const HELIUM_OVERRIDE
     {
       s.resize( m_Data.size() );
       std::vector<T*>::const_iterator itr = m_Data.begin();
@@ -249,13 +249,13 @@ namespace Inspect
   class PropertyStringFormatter : public StringData
   {
   public:
-    typedef Nocturnal::SmartPtr< PropertyStringFormatter<T> > Ptr;
+    typedef Helium::SmartPtr< PropertyStringFormatter<T> > Ptr;
 
   protected:
-    Nocturnal::SmartPtr< Nocturnal::Property<T> > m_Property;
+    Helium::SmartPtr< Helium::Property<T> > m_Property;
 
   public:
-    PropertyStringFormatter(const Nocturnal::SmartPtr< Nocturnal::Property<T> >& property)
+    PropertyStringFormatter(const Helium::SmartPtr< Helium::Property<T> >& property)
       : m_Property(property)
     {
 
@@ -266,7 +266,7 @@ namespace Inspect
 
     }
 
-    virtual bool Set(const tstring& s, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
+    virtual bool Set(const tstring& s, const DataChangedSignature::Delegate& emitter = NULL) HELIUM_OVERRIDE
     {
       bool result = false;
 
@@ -285,7 +285,7 @@ namespace Inspect
       return result;
     }
 
-    virtual void Get(tstring& s) const NOC_OVERRIDE
+    virtual void Get(tstring& s) const HELIUM_OVERRIDE
     {
       tstringstream stream;
       T val = m_Property->Get();
@@ -303,13 +303,13 @@ namespace Inspect
   class MultiPropertyStringFormatter : public StringData
   {
   public:
-    typedef Nocturnal::SmartPtr< MultiPropertyStringFormatter<T> > Ptr;
+    typedef Helium::SmartPtr< MultiPropertyStringFormatter<T> > Ptr;
 
   protected:
-    std::vector< Nocturnal::SmartPtr< Nocturnal::Property<T> > > m_Properties;
+    std::vector< Helium::SmartPtr< Helium::Property<T> > > m_Properties;
 
   public:
-    MultiPropertyStringFormatter(const std::vector< Nocturnal::SmartPtr< Nocturnal::Property<T> > >& properties)
+    MultiPropertyStringFormatter(const std::vector< Helium::SmartPtr< Helium::Property<T> > >& properties)
       : m_Properties (properties)
     {
 
@@ -320,7 +320,7 @@ namespace Inspect
 
     }
 
-    virtual bool Set(const tstring& s, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
+    virtual bool Set(const tstring& s, const DataChangedSignature::Delegate& emitter = NULL) HELIUM_OVERRIDE
     {
       bool result = false;
 
@@ -330,8 +330,8 @@ namespace Inspect
         tstring newValue;
         Reflect::Serializer::GetValue< tstring >( serializer, newValue );
         T value;
-        std::vector< Nocturnal::SmartPtr< Nocturnal::Property<T> > >::iterator itr = m_Properties.begin();
-        std::vector< Nocturnal::SmartPtr< Nocturnal::Property<T> > >::iterator end = m_Properties.end();
+        std::vector< Helium::SmartPtr< Helium::Property<T> > >::iterator itr = m_Properties.begin();
+        std::vector< Helium::SmartPtr< Helium::Property<T> > >::iterator end = m_Properties.end();
         for ( ; itr != end; ++itr )
         {
           Extract<T>( tstringstream ( newValue ), &value );
@@ -345,7 +345,7 @@ namespace Inspect
       return result;
     }
 
-    virtual bool SetAll(const std::vector< tstring >& s, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
+    virtual bool SetAll(const std::vector< tstring >& s, const DataChangedSignature::Delegate& emitter = NULL) HELIUM_OVERRIDE
     {
       bool result = false;
 
@@ -371,13 +371,13 @@ namespace Inspect
       }
       else
       {
-        NOC_BREAK();
+        HELIUM_BREAK();
       }
 
       return result;
     }
 
-    virtual void Get(tstring& s) const NOC_OVERRIDE
+    virtual void Get(tstring& s) const HELIUM_OVERRIDE
     {
       tstringstream stream;
 
@@ -385,8 +385,8 @@ namespace Inspect
       // Scan for equality
       //
 
-      std::vector< Nocturnal::SmartPtr< Nocturnal::Property<T> > >::const_iterator itr = m_Properties.begin();
-      std::vector< Nocturnal::SmartPtr< Nocturnal::Property<T> > >::const_iterator end = m_Properties.end();
+      std::vector< Helium::SmartPtr< Helium::Property<T> > >::const_iterator itr = m_Properties.begin();
+      std::vector< Helium::SmartPtr< Helium::Property<T> > >::const_iterator end = m_Properties.end();
       for ( ; itr != end; ++itr )
       {
         // grab the first one if we don't have a value yet
@@ -431,11 +431,11 @@ namespace Inspect
       }
     }
 
-    virtual void GetAll(std::vector< tstring >& s) const NOC_OVERRIDE
+    virtual void GetAll(std::vector< tstring >& s) const HELIUM_OVERRIDE
     {
       s.resize( m_Properties.size() );
-      std::vector< Nocturnal::SmartPtr< Nocturnal::Property<T> > >::const_iterator itr = m_Properties.begin();
-      std::vector< Nocturnal::SmartPtr< Nocturnal::Property<T> > >::const_iterator end = m_Properties.end();
+      std::vector< Helium::SmartPtr< Helium::Property<T> > >::const_iterator itr = m_Properties.begin();
+      std::vector< Helium::SmartPtr< Helium::Property<T> > >::const_iterator end = m_Properties.end();
       for ( size_t index = 0 ; itr != end; ++itr, ++index )
       {
         T val = (*itr)->Get();

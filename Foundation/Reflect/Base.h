@@ -20,8 +20,8 @@
 
 #define REFLECTION_TYPE(__Type) \
     const static int ReflectionTypeID = __Type; \
-    virtual int GetReflectionType () const NOC_OVERRIDE { return __Type; } \
-    virtual bool HasReflectionType (int id) const NOC_OVERRIDE { return __Type == id || __super::HasReflectionType(id); }
+    virtual int GetReflectionType () const HELIUM_OVERRIDE { return __Type; } \
+    virtual bool HasReflectionType (int id) const HELIUM_OVERRIDE { return __Type == id || __super::HasReflectionType(id); }
 
 namespace Reflect
 {

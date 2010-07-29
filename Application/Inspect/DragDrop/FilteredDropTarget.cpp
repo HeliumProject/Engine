@@ -41,7 +41,7 @@ bool FilteredDropTarget::ValidateDrag( const Inspect::DragArgs& args )
 
     for ( std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
     {
-        Nocturnal::Path path( *fileItr );
+        Helium::Path path( *fileItr );
         if ( path.Get().empty() )
         {
             continue;
@@ -98,7 +98,7 @@ wxDragResult FilteredDropTarget::Drop( const Inspect::DragArgs& args )
 
     for ( std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
     {
-        Nocturnal::Path path( *fileItr );
+        Helium::Path path( *fileItr );
         if ( path.Get().empty() )
         {
             continue;

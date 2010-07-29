@@ -29,7 +29,7 @@ namespace Inspect
     i32 GetCommonBaseTypeID() const;
     void SetCommonBaseTypeID( i32 typeID );
     bool Add( const Reflect::ElementPtr& item );
-    virtual bool Merge( const ReflectClipboardData* source ) NOC_OVERRIDE;
+    virtual bool Merge( const ReflectClipboardData* source ) HELIUM_OVERRIDE;
 
   protected:
     bool CanAdd( const Reflect::ElementPtr& item ) const;
@@ -37,5 +37,5 @@ namespace Inspect
   public:
     static void EnumerateClass( Reflect::Compositor<ClipboardElementArray>& comp );
   };
-  typedef Nocturnal::SmartPtr< ClipboardElementArray > ClipboardElementArrayPtr;
+  typedef Helium::SmartPtr< ClipboardElementArray > ClipboardElementArrayPtr;
 }

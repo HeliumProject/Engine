@@ -28,7 +28,7 @@ EntityInstance::EntityInstance( const tstring& assetPath )
 {
 }
 
-EntityInstance::EntityInstance( Nocturnal::TUID id )
+EntityInstance::EntityInstance( Helium::TUID id )
 : Content::Instance ( id )
 , m_ShowPointer (true)
 , m_ShowBounds (true)

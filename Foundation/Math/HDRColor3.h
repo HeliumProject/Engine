@@ -41,8 +41,8 @@ namespace Math
         HDRColor3           operator/ (const HDRColor3& v) const { return HDRColor3 (r / v.r, g / v.g, b / v.b, s); }
         HDRColor3           operator/ (const u8 v) const { return HDRColor3 (r / v, g / v, b / v, s); }
 
-        u8&                 operator[] (const u32 i) {  NOC_ASSERT(i < 3); return (&r)[i]; }
-        const u8&           operator[] (const u32 i) const {  NOC_ASSERT(i < 3); return (&r)[i]; }
+        u8&                 operator[] (const u32 i) {  HELIUM_ASSERT(i < 3); return (&r)[i]; }
+        const u8&           operator[] (const u32 i) const {  HELIUM_ASSERT(i < 3); return (&r)[i]; }
 
         bool                operator== (const HDRColor3& v) const { return (r == v.r && g == v.g && b == v.b && s == v.s); }
         bool                operator!= (const HDRColor3& v) const { return !(r == v.r && g == v.g && b == v.b && s == v.s); }

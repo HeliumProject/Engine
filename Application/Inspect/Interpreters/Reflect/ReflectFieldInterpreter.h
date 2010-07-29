@@ -19,6 +19,6 @@ namespace Inspect
     std::vector<Reflect::SerializerPtr> m_Serializers;
   };
 
-  typedef Nocturnal::SmartPtr<ReflectFieldInterpreter> ReflectFieldInterpreterPtr;
+  typedef Helium::SmartPtr<ReflectFieldInterpreter> ReflectFieldInterpreterPtr;
   typedef std::vector< ReflectFieldInterpreterPtr > V_ReflectFieldInterpreter;
 }

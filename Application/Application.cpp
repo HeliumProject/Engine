@@ -87,10 +87,10 @@ void Application::Startup( int argc, const tchar** argv )
 
         if ( argc )
         {
-            Nocturnal::SetCmdLine( argc, argv );
+            Helium::SetCmdLine( argc, argv );
         }
 
-        if ( Nocturnal::GetCmdLineFlag( Application::Args::Attach ) )
+        if ( Helium::GetCmdLineFlag( Application::Args::Attach ) )
         {
             i32 timeout = 300; // 5min
 
@@ -104,7 +104,7 @@ void Application::Startup( int argc, const tchar** argv )
             if ( Platform::IsDebuggerPresent() )
             {
                 Log::Print( TXT( "Debugger attached\n" ) );
-                NOC_ISSUE_BREAK();
+                HELIUM_ISSUE_BREAK();
             }
         }
 
@@ -115,11 +115,11 @@ void Application::Startup( int argc, const tchar** argv )
 
 #ifdef _DEBUG
         int flags = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
-        if (Nocturnal::GetCmdLineFlag( Application::Args::DisableDebugHeap ))
+        if (Helium::GetCmdLineFlag( Application::Args::DisableDebugHeap ))
         {
             flags = 0x0;
         }
-        else if (Nocturnal::GetCmdLineFlag( Application::Args::CheckHeap ))
+        else if (Helium::GetCmdLineFlag( Application::Args::CheckHeap ))
         {
             flags |= (flags & 0x0000FFFF) | _CRTDBG_CHECK_ALWAYS_DF; // clear the upper 16 bits and OR in the desired freqency (always)
         }
@@ -131,7 +131,7 @@ void Application::Startup( int argc, const tchar** argv )
         // Only print startup summary if we are not in script mode
         //
 
-        if ( !Nocturnal::GetCmdLineFlag( Application::Args::Script ) )
+        if ( !Helium::GetCmdLineFlag( Application::Args::Script ) )
         {
             //
             // Print project and version info
@@ -144,7 +144,7 @@ void Application::Startup( int argc, const tchar** argv )
 
             Log::Print( TXT( "Running %s\n" ), name );
             Log::Print( TXT( "Current Time: %s" ), _tctime64( &g_StartTime.time ) );
-            Log::Print( TXT( "Command Line: %s\n" ), Nocturnal::GetCmdLine() );
+            Log::Print( TXT( "Command Line: %s\n" ), Helium::GetCmdLine() );
         }
 
 
@@ -152,25 +152,25 @@ void Application::Startup( int argc, const tchar** argv )
         // Setup Console
         //
 
-        if ( Nocturnal::GetCmdLineFlag( Application::Args::Extreme ) )
+        if ( Helium::GetCmdLineFlag( Application::Args::Extreme ) )
         {
             Log::SetLevel( Log::Levels::Extreme );
         }
-        else if ( Nocturnal::GetCmdLineFlag( Application::Args::Verbose ) )
+        else if ( Helium::GetCmdLineFlag( Application::Args::Verbose ) )
         {
             Log::SetLevel( Log::Levels::Verbose );
         }
 
-        Log::EnableStream( Log::Streams::Debug, Nocturnal::GetCmdLineFlag( Application::Args::Debug ) );
-        Log::EnableStream( Log::Streams::Profile, Nocturnal::GetCmdLineFlag( Application::Args::Profile ) );
+        Log::EnableStream( Log::Streams::Debug, Helium::GetCmdLineFlag( Application::Args::Debug ) );
+        Log::EnableStream( Log::Streams::Profile, Helium::GetCmdLineFlag( Application::Args::Profile ) );
 
-        if( Nocturnal::GetCmdLineFlag( Application::Args::Debug ) )
+        if( Helium::GetCmdLineFlag( Application::Args::Debug ) )
         {
             // add the debug stream to the trace
             g_TraceStreams |= Log::Streams::Debug; 
 
             // dump env
-            if ( Nocturnal::GetCmdLineFlag( Application::Args::Verbose ) )
+            if ( Helium::GetCmdLineFlag( Application::Args::Verbose ) )
             {
                 // get a pointer to the environment block. 
                 const char* env = (const char*)GetEnvironmentStrings();
@@ -200,7 +200,7 @@ void Application::Startup( int argc, const tchar** argv )
             }
         }
 
-        if( Nocturnal::GetCmdLineFlag( Application::Args::Profile ) )
+        if( Helium::GetCmdLineFlag( Application::Args::Profile ) )
         {
             // init profiling
             Profile::Initialize(); 
@@ -209,7 +209,7 @@ void Application::Startup( int argc, const tchar** argv )
             g_TraceStreams |= Log::Streams::Profile; 
 
             // enable memory reports
-            if ( Nocturnal::GetCmdLineFlag( Application::Args::Memory ) )
+            if ( Helium::GetCmdLineFlag( Application::Args::Memory ) )
             {
                 Profile::Memory::Initialize();
             }
@@ -249,7 +249,7 @@ int Application::Shutdown( int code )
         //  don't cause breakage in profile
         //
 
-        if (Nocturnal::GetCmdLineFlag( Application::Args::Profile ))
+        if (Helium::GetCmdLineFlag( Application::Args::Profile ))
         {
             Profile::Memory::Cleanup();
             Profile::Accumulator::ReportAll();
@@ -260,7 +260,7 @@ int Application::Shutdown( int code )
         // Only print shutdown summary if we are not in script mode
         //
 
-        if ( !Nocturnal::GetCmdLineFlag( Application::Args::Script ) )
+        if ( !Helium::GetCmdLineFlag( Application::Args::Script ) )
         {
             //
             // Print time usage
@@ -361,7 +361,7 @@ int Application::Shutdown( int code )
         //
 
 #ifdef _DEBUG
-        if ( !Nocturnal::GetCmdLineFlag( Application::Args::DisableDebugHeap ) && !Nocturnal::GetCmdLineFlag( Application::Args::DisableLeakCheck ) )
+        if ( !Helium::GetCmdLineFlag( Application::Args::DisableDebugHeap ) && !Helium::GetCmdLineFlag( Application::Args::DisableLeakCheck ) )
         {
             int flags = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
             _CrtSetDbgFlag( flags | _CRTDBG_LEAK_CHECK_DF );
@@ -381,14 +381,14 @@ int Application::Shutdown( int code )
 
         CleanupExceptionListener();
 
-        if (Nocturnal::GetCmdLineFlag( Application::Args::Profile ))
+        if (Helium::GetCmdLineFlag( Application::Args::Profile ))
         {
             Profile::Cleanup(); 
         }
 
         CleanupStandardTraceFiles();
 
-        Nocturnal::ReleaseCmdLine();
+        Helium::ReleaseCmdLine();
 
         g_ShutdownComplete = true;
     }
@@ -439,7 +439,7 @@ static DWORD ProcessUnhandledCxxException( LPEXCEPTION_POINTERS info )
 {
     if ( info->ExceptionRecord->ExceptionCode == 0xE06D7363 )
     {
-        Nocturnal::Exception* nocturnalException = Debug::GetNocturnalException( info->ExceptionRecord->ExceptionInformation[1] );
+        Helium::Exception* nocturnalException = Debug::GetHeliumException( info->ExceptionRecord->ExceptionInformation[1] );
 
         if ( nocturnalException )
         {
@@ -487,7 +487,7 @@ static Platform::Thread::Return StandardThreadTryCatch( Platform::Thread::Entry 
         {
             return StandardThreadTryExcept( entry, param );
         }
-        catch ( const Nocturnal::Exception& ex )
+        catch ( const Helium::Exception& ex )
         {
             Log::Error( TXT( "%s\n" ), ex.What() );
 
@@ -564,7 +564,7 @@ static int StandardMainTryCatch( int (*main)(int argc, const tchar** argv), int 
         {
             result = StandardMainTryExcept( main, argc, argv );
         }
-        catch ( const Nocturnal::Exception& ex )
+        catch ( const Helium::Exception& ex )
         {
             Log::Error( TXT( "%s\n" ), ex.What() );
 
@@ -659,7 +659,7 @@ static int StandardWinMainTryCatch( int (*winMain)( HINSTANCE hInstance, HINSTAN
         {
             result = StandardWinMainTryExcept( winMain, hInstance, hPrevInstance, lpCmdLine, nShowCmd );
         }
-        catch ( const Nocturnal::Exception& ex )
+        catch ( const Helium::Exception& ex )
         {
             Log::Error( TXT( "%s\n" ) , ex.What() );
             MessageBox(NULL, ex.What(), TXT( "Error" ), MB_OK|MB_ICONEXCLAMATION);
@@ -675,7 +675,7 @@ static int StandardWinMainEntry( int (*winMain)( HINSTANCE hInstance, HINSTANCE 
 {
     int argc = 0;
     const tchar** argv = NULL;
-    Nocturnal::ProcessCmdLine( lpCmdLine, argc, argv );
+    Helium::ProcessCmdLine( lpCmdLine, argc, argv );
 
     int result = 0;
 

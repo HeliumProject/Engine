@@ -25,7 +25,7 @@ namespace CodeGen
   /////////////////////////////////////////////////////////////////////////////
   // Class representing a C++ node (namespace, enum, struct, class).
   // 
-  class APPLICATION_API Node : public Nocturnal::RefCountBase<Node>
+  class APPLICATION_API Node : public Helium::RefCountBase<Node>
   {
   private:
     Node* m_Parent;
@@ -45,7 +45,7 @@ namespace CodeGen
     const Node* GetParent() const;
   };
 
-  typedef Nocturnal::SmartPtr< Node > NodePtr;
+  typedef Helium::SmartPtr< Node > NodePtr;
   typedef std::vector< NodePtr > V_NodeSmartPtr;
 
   /////////////////////////////////////////////////////////////////////////////

@@ -123,8 +123,8 @@ void TCPConnection::ServerThread()
 
             if (readSelectResult > 0 && writeSelectResult > 0)
             {
-                NOC_ASSERT( FD_ISSET(server_read_socket, &read_fd_sock_set) );
-                NOC_ASSERT( FD_ISSET(server_write_socket, &write_fd_sock_set) );
+                HELIUM_ASSERT( FD_ISSET(server_read_socket, &read_fd_sock_set) );
+                HELIUM_ASSERT( FD_ISSET(server_write_socket, &write_fd_sock_set) );
                 break;
             }
             else
@@ -196,7 +196,7 @@ void TCPConnection::ClientThread()
 
     std::string ip;
     bool converted = Platform::ConvertString( m_IP, ip );
-    NOC_ASSERT( converted );
+    HELIUM_ASSERT( converted );
 
     Platform::Print( TXT( "%s: Resolving '%s'\n" ), m_Name, ip.c_str());
     hostent* hostInfo = gethostbyname(ip.c_str());

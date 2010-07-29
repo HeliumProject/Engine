@@ -59,10 +59,10 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
       {
         Item& item = items[index];
         bool converted = Platform::ConvertString( (*itr)->m_Label.c_str(), item.m_Key );
-        NOC_ASSERT( converted );
+        HELIUM_ASSERT( converted );
 
         converted = Platform::ConvertString( (*itr)->m_Label.c_str(), item.m_Data );
-        NOC_ASSERT( converted );
+        HELIUM_ASSERT( converted );
       }
 
       choice->SetItems( items );
@@ -113,7 +113,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
 
     tstring temp;
     bool converted = Platform::ConvertString( field->m_UIName, temp );
-    NOC_ASSERT( converted );
+    HELIUM_ASSERT( converted );
 
    label->SetText( temp );
 
@@ -144,7 +144,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
     }
   }
 
-  Nocturnal::SmartPtr< MultiStringFormatter<Serializer> > data = new MultiStringFormatter<Serializer>( ser );
+  Helium::SmartPtr< MultiStringFormatter<Serializer> > data = new MultiStringFormatter<Serializer>( ser );
 
   group->Bind( data );
 

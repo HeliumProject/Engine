@@ -120,7 +120,7 @@ namespace Math
             break;
 
         default:
-            NOC_ASSERT(false);
+            HELIUM_ASSERT(false);
         }
 
         return Vector4::Zero;
@@ -142,7 +142,7 @@ namespace Math
             break;
 
         default:
-            NOC_ASSERT(false);
+            HELIUM_ASSERT(false);
         }
 
         return Matrix4::Zero;

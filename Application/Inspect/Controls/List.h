@@ -38,9 +38,9 @@ namespace Inspect
   public:
     List();
 
-    virtual void Realize( Container* parent ) NOC_OVERRIDE;
-    virtual void Read() NOC_OVERRIDE;
-    virtual bool Write() NOC_OVERRIDE;
+    virtual void Realize( Container* parent ) HELIUM_OVERRIDE;
+    virtual void Read() HELIUM_OVERRIDE;
+    virtual bool Write() HELIUM_OVERRIDE;
 
     void SetSorted( bool sort );
 
@@ -64,8 +64,8 @@ namespace Inspect
   protected:
     tstring GetDelimitedList( const std::vector< tstring >& items, const tstring& delimiter );
     void UpdateUI( const std::vector< tstring >& items );
-    virtual bool Process(const tstring& key, const tstring& value) NOC_OVERRIDE;
+    virtual bool Process(const tstring& key, const tstring& value) HELIUM_OVERRIDE;
   };
 
-  typedef Nocturnal::SmartPtr<List> ListPtr;
+  typedef Helium::SmartPtr<List> ListPtr;
 }

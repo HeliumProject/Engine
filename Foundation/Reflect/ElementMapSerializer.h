@@ -42,26 +42,26 @@ namespace Reflect
             SimpleElementMapSerializer();
         virtual ~SimpleElementMapSerializer();
 
-        virtual void ConnectData(Nocturnal::HybridPtr<void> data) NOC_OVERRIDE;
+        virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
 
-        virtual size_t GetSize() const NOC_OVERRIDE;
-        virtual void Clear() NOC_OVERRIDE;
+        virtual size_t GetSize() const HELIUM_OVERRIDE;
+        virtual void Clear() HELIUM_OVERRIDE;
 
-        virtual i32 GetKeyType() const NOC_OVERRIDE;
-        virtual void GetItems(V_ValueType& items) NOC_OVERRIDE;
-        virtual void GetItems(V_ConstValueType& items) const NOC_OVERRIDE;
-        virtual ElementPtr* GetItem(const Serializer* key) NOC_OVERRIDE;
-        virtual const ElementPtr* GetItem(const Serializer* key) const NOC_OVERRIDE;
-        virtual void SetItem(const Serializer* key, const Element* value) NOC_OVERRIDE;
-        virtual void RemoveItem(const Serializer* key) NOC_OVERRIDE;
+        virtual i32 GetKeyType() const HELIUM_OVERRIDE;
+        virtual void GetItems(V_ValueType& items) HELIUM_OVERRIDE;
+        virtual void GetItems(V_ConstValueType& items) const HELIUM_OVERRIDE;
+        virtual ElementPtr* GetItem(const Serializer* key) HELIUM_OVERRIDE;
+        virtual const ElementPtr* GetItem(const Serializer* key) const HELIUM_OVERRIDE;
+        virtual void SetItem(const Serializer* key, const Element* value) HELIUM_OVERRIDE;
+        virtual void RemoveItem(const Serializer* key) HELIUM_OVERRIDE;
 
-        virtual bool Set(const Serializer* src, u32 flags = 0) NOC_OVERRIDE;
-        virtual bool Equals(const Serializer* s) const NOC_OVERRIDE;
+        virtual bool Set(const Serializer* src, u32 flags = 0) HELIUM_OVERRIDE;
+        virtual bool Equals(const Serializer* s) const HELIUM_OVERRIDE;
 
-        virtual void Serialize(Archive& archive) const NOC_OVERRIDE;
-        virtual void Deserialize(Archive& archive) NOC_OVERRIDE;
+        virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;
+        virtual void Deserialize(Archive& archive) HELIUM_OVERRIDE;
 
-        virtual void Host(Visitor& visitor) NOC_OVERRIDE;
+        virtual void Host(Visitor& visitor) HELIUM_OVERRIDE;
     };
 
     typedef SimpleElementMapSerializer<TypeID> TypeIDElementMapSerializer;              REFLECT_SPECIALIZE_SERIALIZER(TypeIDElementMapSerializer);
@@ -70,6 +70,6 @@ namespace Reflect
     typedef SimpleElementMapSerializer<i32> I32ElementMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(I32ElementMapSerializer);
     typedef SimpleElementMapSerializer<u64> U64ElementMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(U64ElementMapSerializer);
     typedef SimpleElementMapSerializer<i64> I64ElementMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(I64ElementMapSerializer);
-    typedef SimpleElementMapSerializer<Nocturnal::GUID> GUIDElementMapSerializer;  REFLECT_SPECIALIZE_SERIALIZER(GUIDElementMapSerializer);
-    typedef SimpleElementMapSerializer<Nocturnal::TUID> TUIDElementMapSerializer;  REFLECT_SPECIALIZE_SERIALIZER(TUIDElementMapSerializer);
+    typedef SimpleElementMapSerializer<Helium::GUID> GUIDElementMapSerializer;  REFLECT_SPECIALIZE_SERIALIZER(GUIDElementMapSerializer);
+    typedef SimpleElementMapSerializer<Helium::TUID> TUIDElementMapSerializer;  REFLECT_SPECIALIZE_SERIALIZER(TUIDElementMapSerializer);
 }

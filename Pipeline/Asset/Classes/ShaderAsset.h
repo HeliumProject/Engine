@@ -72,9 +72,9 @@ namespace Asset
     class PIPELINE_API ShaderAsset : public AssetClass
     {
     public:
-        Nocturnal::Path m_ColorMapPath;
-        Nocturnal::Path m_NormalMapPath;
-        Nocturnal::Path m_GPIMapPath;
+        Helium::Path m_ColorMapPath;
+        Helium::Path m_NormalMapPath;
+        Helium::Path m_GPIMapPath;
 
         bool          m_EnableColorMapTint;
         Math::Color3  m_ColorMapTint;
@@ -123,6 +123,6 @@ namespace Asset
         static void EnumerateClass( Reflect::Compositor<ShaderAsset>& comp );
     };
 
-    typedef Nocturnal::SmartPtr< ShaderAsset > ShaderAssetPtr;
+    typedef Helium::SmartPtr< ShaderAsset > ShaderAssetPtr;
     typedef std::vector< ShaderAssetPtr > V_ShaderAsset;
 }

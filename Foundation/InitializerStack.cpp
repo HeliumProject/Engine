@@ -1,6 +1,6 @@
 #include "InitializerStack.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 InitializerStack::InitializerStack( bool autoCleanup )
 : m_AutoCleanup( autoCleanup )

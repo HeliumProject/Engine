@@ -1,7 +1,7 @@
 #include "Pipeline/Image/Image.h"
 #include "BMP.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 Image* Image::LoadBMP(const void* filedata, bool convert_to_linear)
 {

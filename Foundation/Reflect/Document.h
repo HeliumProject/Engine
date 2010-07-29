@@ -13,13 +13,13 @@ namespace Reflect
     class Document;
 
     class DocumentNode;
-    typedef Nocturnal::SmartPtr< DocumentNode > DocumentNodePtr;
+    typedef Helium::SmartPtr< DocumentNode > DocumentNodePtr;
 
     class DocumentAttribute;
-    typedef Nocturnal::SmartPtr< DocumentAttribute > DocumentAttributePtr;
+    typedef Helium::SmartPtr< DocumentAttribute > DocumentAttributePtr;
 
     class DocumentElement;
-    typedef Nocturnal::SmartPtr< DocumentElement > DocumentElementPtr;
+    typedef Helium::SmartPtr< DocumentElement > DocumentElementPtr;
 
     class FOUNDATION_API DocumentNode : public Reflect::AbstractInheritor< DocumentNode, Reflect::Element >
     {
@@ -108,8 +108,8 @@ namespace Reflect
         }
     };
 
-    typedef Nocturnal::Signature< bool, DocumentElement* > DocumentHierarchyChangingSignature;
-    typedef Nocturnal::Signature< void, DocumentElement* > DocumentHierarchyChangedSignature;
+    typedef Helium::Signature< bool, DocumentElement* > DocumentHierarchyChangingSignature;
+    typedef Helium::Signature< void, DocumentElement* > DocumentHierarchyChangedSignature;
 
     class FOUNDATION_API DocumentElement : public Reflect::ConcreteInheritor< DocumentElement, DocumentNode >
     {
@@ -152,7 +152,7 @@ namespace Reflect
         }
 
         template< class T >
-        void FindChildren( std::vector< Nocturnal::SmartPtr< T > >& children )
+        void FindChildren( std::vector< Helium::SmartPtr< T > >& children )
         {
             for ( std::vector< DocumentElementPtr >::const_iterator itr = m_Children.begin()
                 , end = m_Children.end()
@@ -212,7 +212,7 @@ namespace Reflect
     class FOUNDATION_API Document : public Reflect::ConcreteInheritor< Document, DocumentElement >
     {
     public:
-        virtual void PostDeserialize() NOC_OVERRIDE
+        virtual void PostDeserialize() HELIUM_OVERRIDE
         {
             Base::PostDeserialize();
 
@@ -226,5 +226,5 @@ namespace Reflect
         }
     };
 
-    typedef Nocturnal::SmartPtr<Document> DocumentPtr;
+    typedef Helium::SmartPtr<Document> DocumentPtr;
 }

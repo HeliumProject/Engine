@@ -47,40 +47,40 @@ namespace Inspect
     virtual int GetIndent();
 
     // recusively binds contained controls to data
-    virtual void Bind(const DataPtr& data) NOC_OVERRIDE;
+    virtual void Bind(const DataPtr& data) HELIUM_OVERRIDE;
 
     // sets default data
-    virtual void SetDefault(const tstring& def) NOC_OVERRIDE;
+    virtual void SetDefault(const tstring& def) HELIUM_OVERRIDE;
 
     // realize control
-    virtual void Realize(Container* parent) NOC_OVERRIDE;
+    virtual void Realize(Container* parent) HELIUM_OVERRIDE;
 
     // populate
-    virtual void Populate() NOC_OVERRIDE;
+    virtual void Populate() HELIUM_OVERRIDE;
 
     // refreshes the UI state from data
-    virtual void Read() NOC_OVERRIDE;
+    virtual void Read() HELIUM_OVERRIDE;
 
     // updates the data based on the state of the UI
-    virtual bool Write() NOC_OVERRIDE;
+    virtual bool Write() HELIUM_OVERRIDE;
 
     // freeze the display of the controls
-    virtual void Freeze() NOC_OVERRIDE;
+    virtual void Freeze() HELIUM_OVERRIDE;
 
     // thaw the display of the controls
-    virtual void Thaw() NOC_OVERRIDE;
+    virtual void Thaw() HELIUM_OVERRIDE;
 
     // toggle whether the controls are shown
-    virtual void Show() NOC_OVERRIDE;
+    virtual void Show() HELIUM_OVERRIDE;
 
     // toggle whether the controls are shown
-    virtual void Hide() NOC_OVERRIDE;
+    virtual void Hide() HELIUM_OVERRIDE;
 
     // enable/disable child controls
-    virtual void SetEnabled(bool enabled) NOC_OVERRIDE;
+    virtual void SetEnabled(bool enabled) HELIUM_OVERRIDE;
 
     // set read only state on child controls
-    virtual void SetReadOnly(bool readOnly) NOC_OVERRIDE;
+    virtual void SetReadOnly(bool readOnly) HELIUM_OVERRIDE;
     
 #ifdef INSPECT_DEBUG_LAYOUT_LOGIC
     // print recursively to the console
@@ -88,6 +88,6 @@ namespace Inspect
 #endif
   };
 
-  typedef Nocturnal::SmartPtr<Container> ContainerPtr;
+  typedef Helium::SmartPtr<Container> ContainerPtr;
   typedef std::vector<ContainerPtr> V_Container;
 }

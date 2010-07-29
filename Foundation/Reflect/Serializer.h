@@ -48,7 +48,7 @@ namespace Reflect
 
         }
     };
-    typedef Nocturnal::Signature< void, TranslateInputEventArgs&, Foundation::AtomicRefCountBase > TranslateInputSignature;
+    typedef Helium::Signature< void, TranslateInputEventArgs&, Foundation::AtomicRefCountBase > TranslateInputSignature;
 
     struct TranslateOutputEventArgs : TranslateEventArgs
     {
@@ -62,7 +62,7 @@ namespace Reflect
 
         }
     };
-    typedef Nocturnal::Signature< void, TranslateOutputEventArgs&, Foundation::AtomicRefCountBase > TranslateOutputSignature;
+    typedef Helium::Signature< void, TranslateOutputEventArgs&, Foundation::AtomicRefCountBase > TranslateOutputSignature;
 
 
     //
@@ -80,7 +80,7 @@ namespace Reflect
         {
         private:
             // owned or borrowed data
-            Nocturnal::HybridPtr<T> m_Target;
+            Helium::HybridPtr<T> m_Target;
 
             // owned data
             T m_Primitive;
@@ -91,7 +91,7 @@ namespace Reflect
                 m_Target = &m_Primitive;
             }
 
-            void Connect(Nocturnal::HybridPtr<T> pointer)
+            void Connect(Helium::HybridPtr<T> pointer)
             {
                 if (pointer.Address())
                 {
@@ -155,7 +155,7 @@ namespace Reflect
         };
 
         // the instance we are processing, if any
-        Nocturnal::HybridPtr<Element> m_Instance;
+        Helium::HybridPtr<Element> m_Instance;
 
         // the field we are processing, if any
         const Field* m_Field;
@@ -177,16 +177,16 @@ namespace Reflect
         //
 
         // connect to some address
-        virtual void ConnectData(Nocturnal::HybridPtr<void> data)
+        virtual void ConnectData(Helium::HybridPtr<void> data)
         {
             m_Instance = (Element*)NULL;
             m_Field = NULL;
         }
 
         // connect to a field of an object
-        virtual void ConnectField(Nocturnal::HybridPtr<Element> instance, const Field* field, uintptr offsetInField = 0)
+        virtual void ConnectField(Helium::HybridPtr<Element> instance, const Field* field, uintptr offsetInField = 0)
         {
-            ConnectData( Nocturnal::HybridPtr<void>( instance.Address() + field->m_Offset + offsetInField, instance.State())); 
+            ConnectData( Helium::HybridPtr<void>( instance.Address() + field->m_Offset + offsetInField, instance.State())); 
 
             m_Instance = instance; 
             m_Field = field; 
@@ -195,7 +195,7 @@ namespace Reflect
         // disconnect everything
         void Disconnect()
         {
-            ConnectData( Nocturnal::HybridPtr<void> () );
+            ConnectData( Helium::HybridPtr<void> () );
         }
 
 
@@ -225,7 +225,7 @@ namespace Reflect
         {
             i32 type = Reflect::GetType<T>();
 
-            NOC_ASSERT( type != Reflect::ReservedTypes::Invalid );
+            HELIUM_ASSERT( type != Reflect::ReservedTypes::Invalid );
 
             return AssertCast<Serializer>( Registry::GetInstance()->CreateInstance(type) );
         }
@@ -339,9 +339,9 @@ namespace Reflect
         //
 
         // data serialization (extract to smart buffer)
-        virtual void Serialize (const Nocturnal::BasicBufferPtr& buffer, const tchar* debugStr) const
+        virtual void Serialize (const Helium::BasicBufferPtr& buffer, const tchar* debugStr) const
         {
-            NOC_BREAK();
+            HELIUM_BREAK();
         }
 
         // data serialization (extract to archive)
@@ -353,14 +353,14 @@ namespace Reflect
         // text serialization (extract to text stream)
         virtual tostream& operator>> (tostream& stream) const
         { 
-            NOC_BREAK(); 
+            HELIUM_BREAK(); 
             return stream; 
         }
 
         // text deserialization (insert from text stream)
         virtual tistream& operator<< (tistream& stream)
         { 
-            NOC_BREAK(); 
+            HELIUM_BREAK(); 
             return stream; 
         }
 
@@ -369,7 +369,7 @@ namespace Reflect
         // Visit
         //
 
-        virtual void Host (Visitor& visitor) NOC_OVERRIDE
+        virtual void Host (Visitor& visitor) HELIUM_OVERRIDE
         {
             // by default, don't do anything as it will all have to be special cased in derived classes
         }
@@ -431,14 +431,14 @@ namespace Reflect
 
         // if you die here, then you are not using serializers that
         //  fully implement the type deduction functions above
-        NOC_ASSERT( type != Reflect::ReservedTypes::Invalid );
+        HELIUM_ASSERT( type != Reflect::ReservedTypes::Invalid );
 
         // sanity check our element type
         if ( ser->HasType(type) )
         {
             // get internal data pointer
             const T* data = GetData<T>( ser );
-            NOC_ASSERT( data != NULL );
+            HELIUM_ASSERT( data != NULL );
 
             // make the copy
             value = *data;
@@ -461,7 +461,7 @@ namespace Reflect
             }
         }
 
-        NOC_ASSERT(result);
+        HELIUM_ASSERT(result);
         return result;
     }
 
@@ -478,14 +478,14 @@ namespace Reflect
 
         // if you die here, then you are not using serializers that
         //  fully implement the type deduction functions above
-        NOC_ASSERT( type != Reflect::ReservedTypes::Invalid );
+        HELIUM_ASSERT( type != Reflect::ReservedTypes::Invalid );
 
         // sanity check our element type
         if ( ser->HasType(type) )
         {
             // get internal data pointer
             T* data = GetData<T>( ser );
-            NOC_ASSERT( data != NULL );
+            HELIUM_ASSERT( data != NULL );
 
             // if you die here, then you are probably in release and this should crash
             (*data) = value;
@@ -516,13 +516,13 @@ namespace Reflect
             }
         }
 
-        NOC_ASSERT(result);
+        HELIUM_ASSERT(result);
         return result;
     }
 }
 
 #define REFLECT_SPECIALIZE_SERIALIZER(Name) \
-typedef Nocturnal::SmartPtr< Name > ##Name##Ptr; \
+typedef Helium::SmartPtr< Name > ##Name##Ptr; \
 template<> static inline i32 Reflect::GetType<Name::DataType>() \
 { \
     return Reflect::GetType<Name>(); \

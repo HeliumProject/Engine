@@ -194,7 +194,7 @@ void EntityAssetNode::FlattenInstances()
     EntityNode::s_EntityNodeGroup = MObject::kNullObj;
 }
 
-EntityAssetNode& EntityAssetNode::Get( const Nocturnal::Path& path, bool createIfNotExisting )
+EntityAssetNode& EntityAssetNode::Get( const Helium::Path& path, bool createIfNotExisting )
 {
     MFnDagNode dagFn;
 
@@ -229,7 +229,7 @@ EntityAssetNode& EntityAssetNode::Get( const Nocturnal::Path& path, bool createI
             }
         }
     }
-    catch (Nocturnal::Exception& )
+    catch (Helium::Exception& )
     {
         if ( createIfNotExisting )
         {
@@ -512,7 +512,7 @@ void EntityAssetNode::GetImportNodes( MObjectArray& objects )
             elementPlug.connectedTo( plugs, true, false );
 
             //should be one and only one
-            NOC_ASSERT( plugs.length() == 1 );
+            HELIUM_ASSERT( plugs.length() == 1 );
             objects.append ( plugs[0].node() );
         }
     }

@@ -58,14 +58,14 @@ namespace Content
 
     }
 
-    Locator (const Nocturnal::TUID& id)
+    Locator (const Helium::TUID& id)
       : Instance (id)
       , m_Shape (LocatorShapes::Cross)
     {
 
     }
 
-    Locator (const Nocturnal::TUID& id, LocatorShape shape)
+    Locator (const Helium::TUID& id, LocatorShape shape)
       : Instance (id)
       , m_Shape (shape)
     {
@@ -73,6 +73,6 @@ namespace Content
     }
   };
 
-  typedef Nocturnal::SmartPtr<Locator> LocatorPtr;
+  typedef Helium::SmartPtr<Locator> LocatorPtr;
   typedef std::vector<LocatorPtr> V_Locator;
 }

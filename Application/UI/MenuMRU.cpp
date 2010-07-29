@@ -5,7 +5,7 @@
 #include <map>
 #include <wx/menu.h>
 
-using namespace Nocturnal;
+using namespace Helium;
 
 typedef std::map< i32, tstring> M_MenuItemIDToString;
 
@@ -36,7 +36,7 @@ public:
     // protect the MRU so that it is only tied to one menu
     if ( m_Menu != NULL )
     {
-      NOC_ASSERT( !m_Menu || m_Menu == menu );
+      HELIUM_ASSERT( !m_Menu || m_Menu == menu );
     }
 
     m_Menu = menu;
@@ -120,7 +120,7 @@ void MenuMRU::RemoveInvalidItems( bool tuidRequired )
     }
 
     // Check to make sure the file exists on disk
-    bool exists = Nocturnal::Path( current ).Exists();
+    bool exists = Helium::Path( current ).Exists();
 
     if ( !exists )
     {

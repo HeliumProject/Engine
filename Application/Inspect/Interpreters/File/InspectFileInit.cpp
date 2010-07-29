@@ -18,7 +18,7 @@ using namespace Inspect;
 #undef RegisterClass
 
 static i32 g_InitCount = 0;
-static Nocturnal::InitializerStack g_RegisteredTypes;
+static Helium::InitializerStack g_RegisteredTypes;
 
 void InspectFile::Initialize()
 {

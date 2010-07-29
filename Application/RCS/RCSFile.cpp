@@ -210,7 +210,7 @@ void File::Revert( const OpenFlag flags )
 //
 static void _EnsureExistence( const tstring &path )
 {
-  Nocturnal::Path file( path );
+  Helium::Path file( path );
 
   // if the file doesn't exist, create a zero length 
   if( !file.Exists() )

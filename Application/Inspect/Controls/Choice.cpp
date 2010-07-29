@@ -152,19 +152,19 @@ void Choice::SetToDefault(const ContextMenuEventArgs& event)
 
 void Choice::SetSorted(bool sorted)
 {
-  NOC_ASSERT(!IsRealized());
+  HELIUM_ASSERT(!IsRealized());
   m_Sorted = sorted;
 }
 
 void Choice::SetDropDown(bool dropDown)
 {
-  NOC_ASSERT(!IsRealized());
+  HELIUM_ASSERT(!IsRealized());
   m_DropDown = dropDown;
 }
 
 void Choice::SetEnableAdds(bool enabled)
 {
-  NOC_ASSERT(!IsRealized()); 
+  HELIUM_ASSERT(!IsRealized()); 
   m_EnableAdds = enabled; 
 }
 

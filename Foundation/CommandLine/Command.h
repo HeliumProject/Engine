@@ -9,7 +9,7 @@
 #include "Foundation/CommandLine/Option.h"
 #include "Platform/Compiler.h"
 
-namespace Nocturnal
+namespace Helium
 {
     namespace CommandLine
     {

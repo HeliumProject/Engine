@@ -11,10 +11,10 @@ namespace MayaContent
 {
   class ExportBase;
 
-  typedef Nocturnal::SmartPtr<ExportBase> ExportBasePtr;
+  typedef Helium::SmartPtr<ExportBase> ExportBasePtr;
   typedef std::vector<ExportBasePtr> V_ExportBase;
 
-  class MAYA_API ExportBase : public Nocturnal::RefCountBase<ExportBase>
+  class MAYA_API ExportBase : public Helium::RefCountBase<ExportBase>
   {
   protected:
     // Maya representation of what we are exporting

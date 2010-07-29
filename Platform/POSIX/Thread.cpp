@@ -21,13 +21,13 @@ Thread::~Thread()
 
 bool Thread::Create(Entry entry, void* obj, const tchar* name, int priority)
 {
-    NOC_ASSERT( false );
+    HELIUM_ASSERT( false );
     return true;
 }
 
 Thread::Return Thread::Exit()
 {
-    NOC_ASSERT( false );
+    HELIUM_ASSERT( false );
 }
 
 void Thread::Close()
@@ -37,12 +37,12 @@ void Thread::Close()
 
 Thread::Return Thread::Wait(u32 timeout)
 {
-    NOC_ASSERT( false );
+    HELIUM_ASSERT( false );
 }
 
 bool Thread::Running()
 {
-    NOC_ASSERT( false );
+    HELIUM_ASSERT( false );
 }
 
 bool Thread::Valid()
@@ -54,12 +54,12 @@ ThreadLocalPointer::ThreadLocalPointer()
 {
 #if 0
     int status = pthread_key_create(&m_Key, NULL);
-    NOC_ASSERT( status == 0 && "Profile library could not create pthread_key");
+    HELIUM_ASSERT( status == 0 && "Profile library could not create pthread_key");
 #endif
 
     SetPointer(NULL);
 
-    NOC_BREAK();
+    HELIUM_BREAK();
 }
 
 ThreadLocalPointer::~ThreadLocalPointer()
@@ -68,7 +68,7 @@ ThreadLocalPointer::~ThreadLocalPointer()
     pthread_key_delete(m_Key);
 #endif
 
-    NOC_BREAK();
+    HELIUM_BREAK();
 }
 
 void* ThreadLocalPointer::GetPointer()
@@ -77,7 +77,7 @@ void* ThreadLocalPointer::GetPointer()
     return pthread_getspecific(m_Key);
 #endif
 
-    NOC_BREAK();
+    HELIUM_BREAK();
     return NULL;
 }
 
@@ -87,5 +87,5 @@ void ThreadLocalPointer::SetPointer(void* pointer)
     pthread_setspecific(m_Key, pointer);
 #endif
 
-    NOC_BREAK();
+    HELIUM_BREAK();
 }

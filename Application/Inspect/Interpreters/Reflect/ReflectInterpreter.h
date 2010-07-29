@@ -24,7 +24,7 @@ namespace Inspect
     V_ReflectFieldInterpreter m_Interpreters;
   };
 
-  typedef Nocturnal::SmartPtr<ReflectInterpreter> ReflectInterpreterPtr;
+  typedef Helium::SmartPtr<ReflectInterpreter> ReflectInterpreterPtr;
 
   class APPLICATION_API ReflectFieldInterpreterFactory
   {

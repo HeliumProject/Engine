@@ -6,7 +6,7 @@
 #include "Foundation/Log.h"
 #include "Platform/Windows/Windows.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 // These are project specific, and in the order of PC, PS3
 const u32 SmartBuffer::s_PointerSizes[ ByteOrders::Count ] = { 4, 4 };
@@ -27,12 +27,12 @@ SmartBuffer::SmartBuffer()
 , m_Virtual( false )
 , m_Data ( NULL )
 {
-    NOC_ASSERT( m_ByteOrder >= 0 && m_ByteOrder < ByteOrders::Count );
+    HELIUM_ASSERT( m_ByteOrder >= 0 && m_ByteOrder < ByteOrders::Count );
 }
 
 SmartBuffer::~SmartBuffer()
 {
-    NOC_ASSERT( m_RefCount == 0 );
+    HELIUM_ASSERT( m_RefCount == 0 );
     if ( m_OwnsData && m_Data != NULL )
     {
         if (m_Virtual)
@@ -57,7 +57,7 @@ SmartBuffer::~SmartBuffer()
             AddFixup( ptr, NULL );
         }
 
-        NOC_ASSERT( m_IncomingFixups.Empty() );
+        HELIUM_ASSERT( m_IncomingFixups.Empty() );
     }
 }
 
@@ -85,7 +85,7 @@ void SmartBuffer::operator delete (void *ptr, size_t bytes)
 
 void SmartBuffer::Reset()
 {
-    NOC_ASSERT( m_OwnsData );
+    HELIUM_ASSERT( m_OwnsData );
 
     // erase the incoming and outgoing fixups
     DumbLocation ptr;
@@ -126,7 +126,7 @@ void SmartBuffer::Reset()
 
 void SmartBuffer::TakeData( u32& size, u8*& data )
 {
-    NOC_ASSERT( m_OwnsData );
+    HELIUM_ASSERT( m_OwnsData );
     if ( m_OwnsData )
     {
         m_OwnsData = false;
@@ -145,9 +145,9 @@ void SmartBuffer::TakeData( u32& size, u8*& data )
 
 void SmartBuffer::SetMaxSize(u32 max)
 {
-    NOC_ASSERT( m_OwnsData );
-    NOC_ASSERT( m_Size == 0 );
-    NOC_ASSERT( m_Capacity == 0 );
+    HELIUM_ASSERT( m_OwnsData );
+    HELIUM_ASSERT( m_Size == 0 );
+    HELIUM_ASSERT( m_Capacity == 0 );
 
     m_MaxSize = max;
 }
@@ -155,10 +155,10 @@ void SmartBuffer::SetMaxSize(u32 max)
 void SmartBuffer::SetVirtual(u32 size)
 {
     // cannot set virtual on a buffer which is not owned or has been used
-    NOC_ASSERT( m_OwnsData );
-    NOC_ASSERT( m_Size == 0 );
-    NOC_ASSERT( m_Capacity == 0 );
-    NOC_ASSERT( m_Virtual == false );
+    HELIUM_ASSERT( m_OwnsData );
+    HELIUM_ASSERT( m_Size == 0 );
+    HELIUM_ASSERT( m_Capacity == 0 );
+    HELIUM_ASSERT( m_Virtual == false );
 
     Reset();
 
@@ -169,7 +169,7 @@ void SmartBuffer::SetVirtual(u32 size)
     m_Data = (u8*)::VirtualAlloc(0,size,MEM_RESERVE,PAGE_READWRITE);
     if (m_Data==0)
     {
-        throw Nocturnal::Exception( TXT( "Out of virtual memory." ) );
+        throw Helium::Exception( TXT( "Out of virtual memory." ) );
     }
 
     Profile::Memory::Allocate( s_DataPool, size );
@@ -182,7 +182,7 @@ void SmartBuffer::SetVirtual(u32 size)
 
 void SmartBuffer::GrowBy(u32 size)
 {
-    NOC_ASSERT( m_OwnsData );
+    HELIUM_ASSERT( m_OwnsData );
 
     // only grow the buffer if necessary
     if ( m_Size + size > m_Capacity )
@@ -191,7 +191,7 @@ void SmartBuffer::GrowBy(u32 size)
         {
             if ( m_Size + size > m_MaxSize )
             {
-                throw Nocturnal::Exception( TXT( "Too much memory in virtual SmartBuffer" ) );
+                throw Helium::Exception( TXT( "Too much memory in virtual SmartBuffer" ) );
             }
 
             // calculate how may new bytes we need to allocate and align that to a page boundary
@@ -210,7 +210,7 @@ void SmartBuffer::GrowBy(u32 size)
         {
             if ( m_MaxSize && m_Size + size > m_MaxSize )
             {
-                throw Nocturnal::Exception( TXT( "Exceeded max size of SmartBuffer (id 0x%x)" ), m_Type);
+                throw Helium::Exception( TXT( "Exceeded max size of SmartBuffer (id 0x%x)" ), m_Type);
             }
 
             u32 difference = m_Size + size - m_Capacity;
@@ -224,11 +224,11 @@ void SmartBuffer::GrowBy(u32 size)
             {
                 if (!m_Name.empty())
                 {
-                    throw Nocturnal::Exception( TXT( "Could not allocate %d bytes for '%s' (id 0x%x)." ), difference, m_Name.c_str(), m_Type);
+                    throw Helium::Exception( TXT( "Could not allocate %d bytes for '%s' (id 0x%x)." ), difference, m_Name.c_str(), m_Type);
                 }
                 else
                 {
-                    throw Nocturnal::Exception( TXT( "Could not allocate %d bytes (id 0x%x)." ), difference, m_Type);
+                    throw Helium::Exception( TXT( "Could not allocate %d bytes (id 0x%x)." ), difference, m_Type);
                 }
             }
 
@@ -255,7 +255,7 @@ void SmartBuffer::GrowBy(u32 size)
 
                         // get the target location from the source buffer
                         M_OffsetToFixup::iterator found = source.second->m_OutgoingFixups.find( source.first );
-                        NOC_ASSERT( found != source.second->m_OutgoingFixups.end() );
+                        HELIUM_ASSERT( found != source.second->m_OutgoingFixups.end() );
 
                         // "do" fixup
                         (*found).second->DoFixup( source );
@@ -276,7 +276,7 @@ void SmartBuffer::Resize(u32 size)
     }
     else
     {
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 }
 
@@ -288,13 +288,13 @@ void SmartBuffer::Reserve(u32 size)
     }
     else
     {
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 }
 
 bool SmartBuffer::AdoptBuffer( const SmartBufferPtr& buffer )
 {
-    NOC_ASSERT( buffer->m_OwnsData == true );
+    HELIUM_ASSERT( buffer->m_OwnsData == true );
 
     bool return_val = false;
 
@@ -366,7 +366,7 @@ void SmartBuffer::InheritFixups( const SmartBufferPtr& buffer, u32 offset )
 
             // get the target location from the source buffer
             M_OffsetToFixup::iterator i = source_location.second->m_OutgoingFixups.find( source_location.first );
-            NOC_ASSERT( i != source_location.second->m_OutgoingFixups.end() );
+            HELIUM_ASSERT( i != source_location.second->m_OutgoingFixups.end() );
 
             // get a pointer to the fixup
             FixupPtr fixup = (*i).second;
@@ -375,12 +375,12 @@ void SmartBuffer::InheritFixups( const SmartBufferPtr& buffer, u32 offset )
             // wouldn't be an incoming entry for it
             Location old_destination;
             bool found_destination = fixup->GetDestination( old_destination );
-            NOC_ASSERT( found_destination && old_destination.second == buffer );
+            HELIUM_ASSERT( found_destination && old_destination.second == buffer );
 
             // null out the old fixup
             AddFixup( source_location, NULL );
 
-            // now change the fixup to have the right Nocturnal::SmartPtr
+            // now change the fixup to have the right Helium::SmartPtr
             Location new_destination (old_destination.first + offset, this);
             fixup->ChangeDestination( new_destination );
 
@@ -469,8 +469,8 @@ void SmartBuffer::Dump()
 bool SmartBuffer::AddFixup( const DumbLocation& source, const FixupPtr& fixup )
 {
     // validate some of the parameters
-    NOC_ASSERT( source.second != NULL );
-    NOC_ASSERT( source.second->m_OwnsData );
+    HELIUM_ASSERT( source.second != NULL );
+    HELIUM_ASSERT( source.second->m_OwnsData );
 
     // remove any previous fixup
     M_OffsetToFixup::iterator found = source.second->m_OutgoingFixups.find( source.first );
@@ -495,8 +495,8 @@ bool SmartBuffer::AddFixup( const DumbLocation& source, const FixupPtr& fixup )
 bool SmartBuffer::AddOffsetFixup( const Location& source, const Location& destination,bool absolute)
 {
     // double check the source data
-    NOC_ASSERT( source.second != NULL );
-    NOC_ASSERT( source.first <= source.second->m_Size );
+    HELIUM_ASSERT( source.second != NULL );
+    HELIUM_ASSERT( source.first <= source.second->m_Size );
 
     // get the source offset, buffer, & address
     u32          source_offset = source.first;
@@ -514,8 +514,8 @@ bool SmartBuffer::AddOffsetFixup( const Location& source, const Location& destin
 bool SmartBuffer::AddPointerFixup( const Location& source, const Location& destination, u32 size )
 {
     // double check the source data
-    NOC_ASSERT( source.second != NULL );
-    NOC_ASSERT( source.first <= source.second->m_Size );
+    HELIUM_ASSERT( source.second != NULL );
+    HELIUM_ASSERT( source.first <= source.second->m_Size );
 
     // get the source offset, buffer, & address
     u32          source_offset = source.first;
@@ -538,8 +538,8 @@ bool SmartBuffer::AddPointerFixup( const Location& source, const Location& desti
 bool SmartBuffer::AddVTableFixup( const Location& source, u32 class_index, u32 size )
 {  
     // double check the source data
-    NOC_ASSERT( source.second != NULL );
-    NOC_ASSERT( source.first <= source.second->m_Size );
+    HELIUM_ASSERT( source.second != NULL );
+    HELIUM_ASSERT( source.first <= source.second->m_Size );
 
     // get the source offset, buffer, & address
     u32          source_offset = source.first;
@@ -560,15 +560,15 @@ bool SmartBuffer::AddVTableFixup( const Location& source, u32 class_index, u32 s
 
 void SmartBuffer::Write(const Location& pointer,const void* src,u32 size)
 {
-    NOC_ASSERT( pointer.second != NULL );
-    NOC_ASSERT( pointer.first <= pointer.second->m_Size );
+    HELIUM_ASSERT( pointer.second != NULL );
+    HELIUM_ASSERT( pointer.first <= pointer.second->m_Size );
 
     u32          p_offset = pointer.first;
     SmartBuffer* p_buffer = pointer.second.Ptr();
 
     // the new data cannot go outside the existing buffer
-    NOC_ASSERT( p_buffer->m_OwnsData );
-    NOC_ASSERT( p_buffer->GetSize() >= p_offset + size );
+    HELIUM_ASSERT( p_buffer->m_OwnsData );
+    HELIUM_ASSERT( p_buffer->GetSize() >= p_offset + size );
 
     u8* dst = p_buffer->m_Data+p_offset;
     memcpy(dst,src,size);

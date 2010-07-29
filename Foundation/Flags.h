@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Nocturnal
+namespace Helium
 {
     template< class T >
     inline bool HasFlags( const T& bitMap, const T flag )

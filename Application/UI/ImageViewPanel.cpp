@@ -5,7 +5,7 @@
 #include <wx/dcclient.h>
 #include <wx/dcmemory.h>
 
-using namespace Nocturnal;
+using namespace Helium;
 
 void DrawBitmap( wxDC& dc, const wxBitmap& bitmap );
 

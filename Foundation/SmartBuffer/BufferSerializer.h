@@ -2,7 +2,7 @@
 
 #include "BasicBuffer.h"
 
-namespace Nocturnal
+namespace Helium
 {
     template< typename T > class ObjectBuffer;
     template< typename T > class ObjectArrayBuffer;
@@ -49,15 +49,15 @@ namespace Nocturnal
         }
 
         template< typename T >
-        Nocturnal::SmartPtr< ObjectBuffer<T> > CreateObject()
+        Helium::SmartPtr< ObjectBuffer<T> > CreateObject()
         {
             return CreateObject<T>( -1 );
         }
 
         template< typename T >
-        Nocturnal::SmartPtr< ObjectBuffer<T> > CreateObject( u32 type )
+        Helium::SmartPtr< ObjectBuffer<T> > CreateObject( u32 type )
         {
-            Nocturnal::SmartPtr< ObjectBuffer<T> > return_val = new ObjectBuffer<T>;
+            Helium::SmartPtr< ObjectBuffer<T> > return_val = new ObjectBuffer<T>;
             return_val->SetType( type );
             return_val->SetByteOrder( m_ByteOrder );
             m_Buffers.Append( return_val );
@@ -65,15 +65,15 @@ namespace Nocturnal
         }
 
         template< typename T >
-        Nocturnal::SmartPtr< ObjectArrayBuffer<T> > CreateObjectArray(u32 size)
+        Helium::SmartPtr< ObjectArrayBuffer<T> > CreateObjectArray(u32 size)
         {
             return CreateObjectArray<T>( size, -1 );
         }
 
         template< typename T >
-        Nocturnal::SmartPtr< ObjectArrayBuffer<T> > CreateObjectArray( u32 size, u32 type )
+        Helium::SmartPtr< ObjectArrayBuffer<T> > CreateObjectArray( u32 size, u32 type )
         {
-            Nocturnal::SmartPtr< ObjectArrayBuffer<T> > return_val = new ObjectArrayBuffer<T>( size );
+            Helium::SmartPtr< ObjectArrayBuffer<T> > return_val = new ObjectArrayBuffer<T>( size );
             return_val->SetType( type );
             return_val->SetByteOrder( m_ByteOrder );
             m_Buffers.Append( return_val );

@@ -37,6 +37,6 @@ namespace Inspect
 
     float GetLocation() const;
   };
-  typedef Nocturnal::SmartPtr< Key > KeyPtr;
+  typedef Helium::SmartPtr< Key > KeyPtr;
   typedef std::vector< KeyPtr > V_KeyPtr;
 }

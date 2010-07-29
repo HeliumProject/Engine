@@ -14,10 +14,10 @@ namespace RCS
   //
 
   class File;
-  typedef Nocturnal::SmartPtr< File > FilePtr;
+  typedef Helium::SmartPtr< File > FilePtr;
   typedef std::vector< FilePtr > V_FilePtr;
 
-  class Revision : public Nocturnal::RefCountBase< Revision >
+  class Revision : public Helium::RefCountBase< Revision >
   {
   public:
     i32          m_Revision;
@@ -51,7 +51,7 @@ namespace RCS
   };
 
   typedef std::vector< Revision > V_Revision;
-  typedef Nocturnal::SmartPtr< Revision > RevisionPtr;
+  typedef Helium::SmartPtr< Revision > RevisionPtr;
   typedef std::vector< RevisionPtr > V_RevisionPtr;
 
   //
@@ -74,7 +74,7 @@ namespace RCS
   }
   typedef ActionData::ActionDatum ActionDatum;
 
-  class APPLICATION_API Action : public Nocturnal::RefCountBase< Action >
+  class APPLICATION_API Action : public Helium::RefCountBase< Action >
   {
   public:
     // this gates which of the fields below are populated when info is gathered explicitly
@@ -96,7 +96,7 @@ namespace RCS
   };
 
   typedef std::vector< Action > V_Action;
-  typedef Nocturnal::SmartPtr< Action > ActionPtr;
+  typedef Helium::SmartPtr< Action > ActionPtr;
   typedef std::vector< ActionPtr > V_ActionPtr;
 
   //
@@ -133,7 +133,7 @@ namespace RCS
   }
   typedef FileData::FileDatum FileDatum;
 
-  class APPLICATION_API File : public Nocturnal::RefCountBase< File >
+  class APPLICATION_API File : public Helium::RefCountBase< File >
   {
   public:
     // this gates which of the fields below are populated when info is gathered explicitly
@@ -284,6 +284,6 @@ namespace RCS
   };
 
   typedef std::vector< File > V_File;
-  typedef Nocturnal::SmartPtr< File > FilePtr;
+  typedef Helium::SmartPtr< File > FilePtr;
   typedef std::vector< FilePtr > V_FilePtr;
 }

@@ -15,7 +15,7 @@ Profile::Accumulator g_DecompressAccum ("DXT Decompress");
 // disabled -- doesn't seem to improve things
 #define DO_PERCEPTUAL_WEIGHTING    0
 
-using namespace Nocturnal;
+using namespace Helium;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -24,16 +24,16 @@ using namespace Nocturnal;
 ////////////////////////////////////////////////////////////////////////////////////////////////
 u32 FinalizeMips_HDR( void *data, int mip_level, int width, int height, int depth, u32 mip_size, DXTOptions* dxt_options )
 {
-  NOC_ASSERT(dxt_options->m_mips);
+  HELIUM_ASSERT(dxt_options->m_mips);
   MipSet* p_mips  = dxt_options->m_mips;
   u32 face        = dxt_options->m_face;
   MipSet::MipInfo* p_curr_mip = &p_mips->m_levels[face][mip_level];
 
-  NOC_ASSERT_MSG(depth <= 1, ("Support for HDR volume textures not fully implimented"));
+  HELIUM_ASSERT_MSG(depth <= 1, ("Support for HDR volume textures not fully implimented"));
 
   OutputColorFormat output_format = dxt_options->m_mip_gen_options[Image::R]->m_OutputFormat;
 
-  if (output_format == Nocturnal::OUTPUT_CF_FLOATMAP)
+  if (output_format == Helium::OUTPUT_CF_FLOATMAP)
   {
     // input is RGBA in floating point
     p_curr_mip->m_data = new u8[width*height*sizeof(float)*4];
@@ -52,7 +52,7 @@ u32 FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dept
       src+=4;
     }
   }
-  else if (output_format == Nocturnal::OUTPUT_CF_HALFMAP)
+  else if (output_format == Helium::OUTPUT_CF_HALFMAP)
   {
     // input is RGBA in floating point
     p_curr_mip->m_data = new u8[width*height*sizeof(i16)*4];
@@ -70,7 +70,7 @@ u32 FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dept
       src+=4;
     }
   }
-  else if (output_format == Nocturnal::OUTPUT_CF_F32F32)
+  else if (output_format == Helium::OUTPUT_CF_F32F32)
   {
     // input is RGBA in floating point
     p_curr_mip->m_data = new u8[width*height*sizeof(float)*2];
@@ -87,7 +87,7 @@ u32 FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dept
       src+=4;
     }
   }
-  else if (output_format == Nocturnal::OUTPUT_CF_F32)
+  else if (output_format == Helium::OUTPUT_CF_F32)
   {
     // input is RGBA in floating point
     p_curr_mip->m_data = new u8[width*height*sizeof(float)];
@@ -103,7 +103,7 @@ u32 FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dept
       src+=4;
     }
   }
-  else if (output_format == Nocturnal::OUTPUT_CF_RGBE)
+  else if (output_format == Helium::OUTPUT_CF_RGBE)
   {
     // input is RGBA in floating point
     p_curr_mip->m_data = new u8[width*height*sizeof(u32)];
@@ -119,7 +119,7 @@ u32 FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dept
       dst+=1;
     }
   }
-  else if (output_format == Nocturnal::OUTPUT_CF_F16)
+  else if (output_format == Helium::OUTPUT_CF_F16)
   {
     // input is RGBA in floating point
     p_curr_mip->m_data = new u8[width*height*sizeof(i16)];
@@ -136,7 +136,7 @@ u32 FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dept
       src+=4;
     }
   }
-  else if (output_format == Nocturnal::OUTPUT_CF_F16F16)
+  else if (output_format == Helium::OUTPUT_CF_F16F16)
   {
     // input is RGBA in floating point
     p_curr_mip->m_data = new u8[width*height*sizeof(i16)*2];
@@ -155,7 +155,7 @@ u32 FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dept
   }
   else
   {
-    NOC_ASSERT(0);
+    HELIUM_ASSERT(0);
     return E_FAIL;
   }
 
@@ -179,7 +179,7 @@ u32 FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dept
 ////////////////////////////////////////////////////////////////////////////////////////////////
 u32 FinalizeMips_LDR( void *data, int mip_level, int width, int height, int depth, u32 mip_size, DXTOptions* dxt_options )
 {
-  NOC_ASSERT(dxt_options->m_mips);
+  HELIUM_ASSERT(dxt_options->m_mips);
   MipSet* p_mips  = dxt_options->m_mips;
   u32 face        = dxt_options->m_face;
   MipSet::MipInfo* p_curr_mip = &p_mips->m_levels[face][mip_level];
@@ -218,28 +218,28 @@ inline u32 ImageByteSize(OutputColorFormat format, u32 width, u32 height)
   switch(format)
   {
     //Fixed point
-    case Nocturnal::OUTPUT_CF_ARGB8888:    multiplier = 1.0f;    break;
-    case Nocturnal::OUTPUT_CF_ARGB4444:    multiplier = 0.5f;    break;
-    case Nocturnal::OUTPUT_CF_ARGB1555:    multiplier = 0.5f;    break;
-    case Nocturnal::OUTPUT_CF_RGB565:      multiplier = 0.5f;    break;
-    case Nocturnal::OUTPUT_CF_A8:          multiplier = 0.25f;   break;
-    case Nocturnal::OUTPUT_CF_L8:          multiplier = 0.25f;   break;
-    case Nocturnal::OUTPUT_CF_AL88:        multiplier = 0.5f;    break;
-    case Nocturnal::OUTPUT_CF_DXT1:        multiplier = 0.125f;  break;
-    case Nocturnal::OUTPUT_CF_DXT3:        multiplier = 0.25f;   break;
-    case Nocturnal::OUTPUT_CF_DXT5:        multiplier = 0.25f;   break;
-    case Nocturnal::OUTPUT_CF_DUDV:        multiplier = 0.5f;    break;
+    case Helium::OUTPUT_CF_ARGB8888:    multiplier = 1.0f;    break;
+    case Helium::OUTPUT_CF_ARGB4444:    multiplier = 0.5f;    break;
+    case Helium::OUTPUT_CF_ARGB1555:    multiplier = 0.5f;    break;
+    case Helium::OUTPUT_CF_RGB565:      multiplier = 0.5f;    break;
+    case Helium::OUTPUT_CF_A8:          multiplier = 0.25f;   break;
+    case Helium::OUTPUT_CF_L8:          multiplier = 0.25f;   break;
+    case Helium::OUTPUT_CF_AL88:        multiplier = 0.5f;    break;
+    case Helium::OUTPUT_CF_DXT1:        multiplier = 0.125f;  break;
+    case Helium::OUTPUT_CF_DXT3:        multiplier = 0.25f;   break;
+    case Helium::OUTPUT_CF_DXT5:        multiplier = 0.25f;   break;
+    case Helium::OUTPUT_CF_DUDV:        multiplier = 0.5f;    break;
 
     //Floating point
-    case Nocturnal::OUTPUT_CF_F32:         multiplier = 1.0f;    break;
-    case Nocturnal::OUTPUT_CF_F32F32:      multiplier = 2.0f;    break;
-    case Nocturnal::OUTPUT_CF_FLOATMAP:    multiplier = 4.0f;    break;
-    case Nocturnal::OUTPUT_CF_F16:         multiplier = 0.5f;    break;
-    case Nocturnal::OUTPUT_CF_F16F16:      multiplier = 1.0f;    break;
-    case Nocturnal::OUTPUT_CF_HALFMAP:     multiplier = 2.0f;    break;
-    case Nocturnal::OUTPUT_CF_RGBE:        multiplier = 1.0f;    break;
+    case Helium::OUTPUT_CF_F32:         multiplier = 1.0f;    break;
+    case Helium::OUTPUT_CF_F32F32:      multiplier = 2.0f;    break;
+    case Helium::OUTPUT_CF_FLOATMAP:    multiplier = 4.0f;    break;
+    case Helium::OUTPUT_CF_F16:         multiplier = 0.5f;    break;
+    case Helium::OUTPUT_CF_F16F16:      multiplier = 1.0f;    break;
+    case Helium::OUTPUT_CF_HALFMAP:     multiplier = 2.0f;    break;
+    case Helium::OUTPUT_CF_RGBE:        multiplier = 1.0f;    break;
     default:
-      NOC_ASSERT(!"WTF");
+      HELIUM_ASSERT(!"WTF");
   }
 
   return u32(total_size*multiplier);
@@ -253,9 +253,9 @@ inline bool ShouldAllocateWorkBuffer(OutputColorFormat format)
 {
   switch(format)
   {
-    case Nocturnal::OUTPUT_CF_DXT1:
-    case Nocturnal::OUTPUT_CF_DXT3:
-    case Nocturnal::OUTPUT_CF_DXT5:
+    case Helium::OUTPUT_CF_DXT1:
+    case Helium::OUTPUT_CF_DXT3:
+    case Helium::OUTPUT_CF_DXT5:
       return true;
   }
 
@@ -275,28 +275,28 @@ void ProcessMip(const Image* mip, u32 mip_level, u32 face, OutputColorFormat for
   switch(format)
   {
     //Fixed point
-    case Nocturnal::OUTPUT_CF_ARGB4444:  conversion_format = CF_ARGB4444;    break;
-    case Nocturnal::OUTPUT_CF_ARGB1555:  conversion_format = CF_ARGB1555;    break;
-    case Nocturnal::OUTPUT_CF_RGB565:    conversion_format = CF_RGB565;      break;
-    case Nocturnal::OUTPUT_CF_A8:        conversion_format = CF_A8;          break;
-    case Nocturnal::OUTPUT_CF_L8:        conversion_format = CF_L8;          break;
-    case Nocturnal::OUTPUT_CF_AL88:      conversion_format = CF_AL88;        break;
-    case Nocturnal::OUTPUT_CF_DXT1:      dxt_compress      = true;           break;
-    case Nocturnal::OUTPUT_CF_DXT3:      dxt_compress      = true;           break;
-    case Nocturnal::OUTPUT_CF_DXT5:      dxt_compress      = true;           break;
-    case Nocturnal::OUTPUT_CF_DUDV:
-      NOC_ASSERT("We don't use this format! Converting to A8L8");
+    case Helium::OUTPUT_CF_ARGB4444:  conversion_format = CF_ARGB4444;    break;
+    case Helium::OUTPUT_CF_ARGB1555:  conversion_format = CF_ARGB1555;    break;
+    case Helium::OUTPUT_CF_RGB565:    conversion_format = CF_RGB565;      break;
+    case Helium::OUTPUT_CF_A8:        conversion_format = CF_A8;          break;
+    case Helium::OUTPUT_CF_L8:        conversion_format = CF_L8;          break;
+    case Helium::OUTPUT_CF_AL88:      conversion_format = CF_AL88;        break;
+    case Helium::OUTPUT_CF_DXT1:      dxt_compress      = true;           break;
+    case Helium::OUTPUT_CF_DXT3:      dxt_compress      = true;           break;
+    case Helium::OUTPUT_CF_DXT5:      dxt_compress      = true;           break;
+    case Helium::OUTPUT_CF_DUDV:
+      HELIUM_ASSERT("We don't use this format! Converting to A8L8");
       conversion_format = CF_AL88;
       break;
 
     //Floating point
-    case Nocturnal::OUTPUT_CF_F32:
-    case Nocturnal::OUTPUT_CF_F32F32:
-    case Nocturnal::OUTPUT_CF_FLOATMAP:
-    case Nocturnal::OUTPUT_CF_F16:
-    case Nocturnal::OUTPUT_CF_F16F16:
-    case Nocturnal::OUTPUT_CF_HALFMAP:
-    case Nocturnal::OUTPUT_CF_RGBE:
+    case Helium::OUTPUT_CF_F32:
+    case Helium::OUTPUT_CF_F32F32:
+    case Helium::OUTPUT_CF_FLOATMAP:
+    case Helium::OUTPUT_CF_F16:
+    case Helium::OUTPUT_CF_F16F16:
+    case Helium::OUTPUT_CF_HALFMAP:
+    case Helium::OUTPUT_CF_RGBE:
     {
       conversion_format = CF_RGBAFLOATMAP;
       hdr               = true;
@@ -304,7 +304,7 @@ void ProcessMip(const Image* mip, u32 mip_level, u32 face, OutputColorFormat for
     break;
   }
 
-  NOC_ASSERT( (face == 0) || (mip->m_Depth == 0) ); // Make sure we're not both a cube and volume texture somehow
+  HELIUM_ASSERT( (face == 0) || (mip->m_Depth == 0) ); // Make sure we're not both a cube and volume texture somehow
   u8* native_data = Image::GenerateFormatData(mip, conversion_format, face, convert_to_srgb);
 
   u32 depth = MAX(1, mip->m_Depth);
@@ -314,7 +314,7 @@ void ProcessMip(const Image* mip, u32 mip_level, u32 face, OutputColorFormat for
   if (dxt_compress)
   {
     // force alpha to 1 in the source buffer before doing dxt1 compression
-    if (format == Nocturnal::OUTPUT_CF_DXT1)
+    if (format == Helium::OUTPUT_CF_DXT1)
     {
       for (u32 a_idx = 0; a_idx < mip->m_Width*mip->m_Height*depth; ++a_idx)
       {
@@ -327,8 +327,8 @@ void ProcessMip(const Image* mip, u32 mip_level, u32 face, OutputColorFormat for
 
     switch (format)
     {
-      case Nocturnal::OUTPUT_CF_DXT3:      squish_flags |= squish::kDxt3;  break;
-      case Nocturnal::OUTPUT_CF_DXT5:      squish_flags |= squish::kDxt5;  break;
+      case Helium::OUTPUT_CF_DXT3:      squish_flags |= squish::kDxt3;  break;
+      case Helium::OUTPUT_CF_DXT5:      squish_flags |= squish::kDxt5;  break;
       default:                      squish_flags |= squish::kDxt1;  break;
     }
 
@@ -339,7 +339,7 @@ void ProcessMip(const Image* mip, u32 mip_level, u32 face, OutputColorFormat for
 #endif
       squish_flags |= squish::kColourMetricUniform;       // assume we are working with linear data
 
-    if ((format != Nocturnal::OUTPUT_CF_DXT1) && convert_to_srgb)
+    if ((format != Helium::OUTPUT_CF_DXT1) && convert_to_srgb)
     {
       squish_flags |= squish::kWeightColourByAlpha;
     }
@@ -383,7 +383,7 @@ void ProcessMip(const Image* mip, u32 mip_level, u32 face, OutputColorFormat for
 }
 
 
-bool Nocturnal::DXTGenerateMipSet(const Image* top_mip, DXTOptions* dxt_options)
+bool Helium::DXTGenerateMipSet(const Image* top_mip, DXTOptions* dxt_options)
 {
   //Shorter dereferencing names
   const MipGenOptions*    c_mip_gen_opts[4] = { dxt_options->m_mip_gen_options[Image::R],
@@ -394,13 +394,13 @@ bool Nocturnal::DXTGenerateMipSet(const Image* top_mip, DXTOptions* dxt_options)
   if ((c_mip_gen_opts[Image::R] == NULL)  || (c_mip_gen_opts[Image::G] == NULL)  ||
       (c_mip_gen_opts[Image::B] == NULL)  || (c_mip_gen_opts[Image::A] == NULL))
   {
-    throw Nocturnal::Exception( TXT( "MipGenOptions missing during MipSet generation (DXTGenerateMipSet)" ) );
+    throw Helium::Exception( TXT( "MipGenOptions missing during MipSet generation (DXTGenerateMipSet)" ) );
   }
 
   PROFILE_SCOPE_ACCUM(g_MipGenAccum);
 
   //Output format
-  NOC_ASSERT(dxt_options->m_mips);
+  HELIUM_ASSERT(dxt_options->m_mips);
   //Output format
   OutputColorFormat       output_format     = dxt_options->m_mips->m_format;
   //Should convert to SRGB
@@ -411,9 +411,9 @@ bool Nocturnal::DXTGenerateMipSet(const Image* top_mip, DXTOptions* dxt_options)
   u32                     pixel_size_limit  = 1;
 
   //Since DXT compression works on 4 x 4 pixel blocks, don't go below size 4 for those formats
-  if((output_format  == Nocturnal::OUTPUT_CF_DXT1) ||
-     (output_format  == Nocturnal::OUTPUT_CF_DXT3) ||
-     (output_format  == Nocturnal::OUTPUT_CF_DXT5))
+  if((output_format  == Helium::OUTPUT_CF_DXT1) ||
+     (output_format  == Helium::OUTPUT_CF_DXT3) ||
+     (output_format  == Helium::OUTPUT_CF_DXT5))
   {
     pixel_size_limit = 4;
 
@@ -423,14 +423,14 @@ bool Nocturnal::DXTGenerateMipSet(const Image* top_mip, DXTOptions* dxt_options)
       //Choose uncompressed ARGB8888
 
       //We don't support alpha with DXT1 textures
-      if(output_format == Nocturnal::OUTPUT_CF_DXT1)
+      if(output_format == Helium::OUTPUT_CF_DXT1)
       {
-        dxt_options->m_mips->m_runtime.m_alpha_channel = Nocturnal::COLOR_CHANNEL_FORCE_ONE;
+        dxt_options->m_mips->m_runtime.m_alpha_channel = Helium::COLOR_CHANNEL_FORCE_ONE;
       }     
 
       //Change the format
-      output_format                 = Nocturnal::OUTPUT_CF_ARGB8888;
-      dxt_options->m_mips->m_format = Nocturnal::OUTPUT_CF_ARGB8888;
+      output_format                 = Helium::OUTPUT_CF_ARGB8888;
+      dxt_options->m_mips->m_format = Helium::OUTPUT_CF_ARGB8888;
     }
   }
 
@@ -521,15 +521,15 @@ bool Nocturnal::DXTGenerateMipSet(const Image* top_mip, DXTOptions* dxt_options)
     // point composite filtering works by blending 50% of a point-sample mip into the generated mip
     //
     bool point_comp_mask[4];
-    point_comp_mask[Image::R] = (c_mip_gen_filters[Image::R] == Nocturnal::MIP_FILTER_POINT_COMPOSITE);
-    point_comp_mask[Image::G] = (c_mip_gen_filters[Image::G] == Nocturnal::MIP_FILTER_POINT_COMPOSITE);
-    point_comp_mask[Image::B] = (c_mip_gen_filters[Image::B] == Nocturnal::MIP_FILTER_POINT_COMPOSITE);
-    point_comp_mask[Image::A] = (c_mip_gen_filters[Image::A] == Nocturnal::MIP_FILTER_POINT_COMPOSITE);
+    point_comp_mask[Image::R] = (c_mip_gen_filters[Image::R] == Helium::MIP_FILTER_POINT_COMPOSITE);
+    point_comp_mask[Image::G] = (c_mip_gen_filters[Image::G] == Helium::MIP_FILTER_POINT_COMPOSITE);
+    point_comp_mask[Image::B] = (c_mip_gen_filters[Image::B] == Helium::MIP_FILTER_POINT_COMPOSITE);
+    point_comp_mask[Image::A] = (c_mip_gen_filters[Image::A] == Helium::MIP_FILTER_POINT_COMPOSITE);
 
     if (point_comp_mask[Image::R] || point_comp_mask[Image::G] || point_comp_mask[Image::B] || point_comp_mask[Image::A])
     {
       // generate a point sampled mip from the higher res image
-      const FilterType point_sampled_filters[] = { Nocturnal::MIP_FILTER_POINT, Nocturnal::MIP_FILTER_POINT, Nocturnal::MIP_FILTER_POINT, Nocturnal::MIP_FILTER_POINT };
+      const FilterType point_sampled_filters[] = { Helium::MIP_FILTER_POINT, Helium::MIP_FILTER_POINT, Helium::MIP_FILTER_POINT, Helium::MIP_FILTER_POINT };
       Image* point_sampled_mip = prev_mip->ScaleImageFace( curr_mip_width, 
                                                              curr_mip_height, 
                                                              curr_face, 
@@ -554,10 +554,10 @@ bool Nocturnal::DXTGenerateMipSet(const Image* top_mip, DXTOptions* dxt_options)
     if((use_mip_post_filters != 0) && (pass_sum != 0))
     {
       //Determine the final post filters
-      PostMipImageFilter  post_filters[]  = { c_mip_gen_opts[Image::R]->m_ApplyPostFilter[i] ? c_mip_post_filters[Image::R] : Nocturnal::IMAGE_FILTER_NONE,
-                                              c_mip_gen_opts[Image::G]->m_ApplyPostFilter[i] ? c_mip_post_filters[Image::G] : Nocturnal::IMAGE_FILTER_NONE,
-                                              c_mip_gen_opts[Image::B]->m_ApplyPostFilter[i] ? c_mip_post_filters[Image::B] : Nocturnal::IMAGE_FILTER_NONE,
-                                              c_mip_gen_opts[Image::A]->m_ApplyPostFilter[i] ? c_mip_post_filters[Image::A] : Nocturnal::IMAGE_FILTER_NONE};
+      PostMipImageFilter  post_filters[]  = { c_mip_gen_opts[Image::R]->m_ApplyPostFilter[i] ? c_mip_post_filters[Image::R] : Helium::IMAGE_FILTER_NONE,
+                                              c_mip_gen_opts[Image::G]->m_ApplyPostFilter[i] ? c_mip_post_filters[Image::G] : Helium::IMAGE_FILTER_NONE,
+                                              c_mip_gen_opts[Image::B]->m_ApplyPostFilter[i] ? c_mip_post_filters[Image::B] : Helium::IMAGE_FILTER_NONE,
+                                              c_mip_gen_opts[Image::A]->m_ApplyPostFilter[i] ? c_mip_post_filters[Image::A] : Helium::IMAGE_FILTER_NONE};
 
       //Filter the mip
       Image*            filtered_mip    = curr_mip->FilterImageFace(post_filters, 0, i);
@@ -566,10 +566,10 @@ bool Nocturnal::DXTGenerateMipSet(const Image* top_mip, DXTOptions* dxt_options)
       // high pass filtering is handled separately because it is more complex than the other post-mip filters
       //
       bool high_pass_mask[4];
-      high_pass_mask[Image::R] = (post_filters[Image::R] == Nocturnal::IMAGE_FILTER_HIGH_PASS);
-      high_pass_mask[Image::G] = (post_filters[Image::G] == Nocturnal::IMAGE_FILTER_HIGH_PASS);
-      high_pass_mask[Image::B] = (post_filters[Image::B] == Nocturnal::IMAGE_FILTER_HIGH_PASS);
-      high_pass_mask[Image::A] = (post_filters[Image::A] == Nocturnal::IMAGE_FILTER_HIGH_PASS);
+      high_pass_mask[Image::R] = (post_filters[Image::R] == Helium::IMAGE_FILTER_HIGH_PASS);
+      high_pass_mask[Image::G] = (post_filters[Image::G] == Helium::IMAGE_FILTER_HIGH_PASS);
+      high_pass_mask[Image::B] = (post_filters[Image::B] == Helium::IMAGE_FILTER_HIGH_PASS);
+      high_pass_mask[Image::A] = (post_filters[Image::A] == Helium::IMAGE_FILTER_HIGH_PASS);
 
       if (high_pass_mask[Image::R] || high_pass_mask[Image::G] || high_pass_mask[Image::B] || high_pass_mask[Image::A])
       {

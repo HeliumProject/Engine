@@ -7,7 +7,7 @@ namespace MayaContent
   class MAYA_API ExportPivotTransform : public ExportBase
   {
   public:
-    ExportPivotTransform( const MObject& mayaObject, const Nocturnal::TUID& id )
+    ExportPivotTransform( const MObject& mayaObject, const Helium::TUID& id )
       : ExportBase( mayaObject )
     {
       m_ContentObject = new Content::PivotTransform( id );
@@ -17,5 +17,5 @@ namespace MayaContent
     void GatherMayaData( V_ExportBase &newExportObjects );
   };
 
-  typedef Nocturnal::SmartPtr<ExportPivotTransform> ExportPivotTransformPtr;
+  typedef Helium::SmartPtr<ExportPivotTransform> ExportPivotTransformPtr;
 }

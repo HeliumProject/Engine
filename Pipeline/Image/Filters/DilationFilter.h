@@ -2,7 +2,7 @@
 
 #include "ImageFilter.h"
 
-namespace Nocturnal
+namespace Helium
 {
   class PIPELINE_API DilationFilter : public ImageFilter
   {
@@ -14,14 +14,14 @@ namespace Nocturnal
     virtual void filter(void);
 
   private:
-    bool DilateHorizontal(Nocturnal::Image *dst, Nocturnal::Image *src);
-    bool DilateVertical(Nocturnal::Image *dst, Nocturnal::Image *src);
-    void Normalize(Nocturnal::Image *input);
+    bool DilateHorizontal(Helium::Image *dst, Helium::Image *src);
+    bool DilateVertical(Helium::Image *dst, Helium::Image *src);
+    void Normalize(Helium::Image *input);
 
     // was pure virtual in base class...
     virtual Math::Vector4 generateFilteredPixel(unsigned int x, unsigned int y) { return Math::Vector4::Zero; };
 
-    Nocturnal::ColorFormat outputFormat;
+    Helium::ColorFormat outputFormat;
     bool m_smoothSeams;
   };
 }

@@ -18,7 +18,7 @@
 
 #include "tiffio.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 //-----------------------------------------------------------------------------
 tchar* Image::p_volume_identifier_strings[VOLUME_NUM_IDENTIFIERS] =
@@ -127,8 +127,8 @@ Image::~Image()
 
 void  Image::FillFaceData(u32 face, ColorFormat fmt, const void* in_data)
 {
-  NOC_ASSERT(face < CUBE_NUM_FACES);
-  NOC_ASSERT(m_Channels[face][R] != NULL);
+  HELIUM_ASSERT(face < CUBE_NUM_FACES);
+  HELIUM_ASSERT(m_Channels[face][R] != NULL);
 
   u32       color_fmt_bits  = ColorFormatBits(fmt);
   const u8* native_data     = (const u8*)in_data;
@@ -181,7 +181,7 @@ void Image::ConvertGrayScale()
 bool Image::WriteRAW(const tchar* fname, void* data, u32 size, u32 face, bool convert_to_srgb) const
 {
   // size must be a multiple of 4
-  NOC_ASSERT( (size&3)==0 );
+  HELIUM_ASSERT( (size&3)==0 );
 
   f32* red_data = GetFacePtr(face, R);
 
@@ -794,7 +794,7 @@ Image* Image::CloneFace(u32 face) const
 ////////////////////////////////////////////////////////////////////////////////////////////////
 bool Image::InsertFace(Image* tex,u32 face)
 {
-  NOC_ASSERT(tex);
+  HELIUM_ASSERT(tex);
 
   if ((tex->m_Depth!=TWO_D_DEPTH) ||    // input texture has to be a 2D texture
     (tex->m_Width != m_Width) || (tex->m_Height != m_Height) || (tex->m_NativeFormat != m_NativeFormat)) // and has to have the same dimensions
@@ -804,7 +804,7 @@ bool Image::InsertFace(Image* tex,u32 face)
 
   if(IsVolumeImage())
   {
-    NOC_ASSERT(face < m_Depth);
+    HELIUM_ASSERT(face < m_Depth);
 
     f32* channel_data[NUM_TEXTURE_CHANNELS];
     for(u32 channel_index = 0; channel_index < NUM_TEXTURE_CHANNELS; channel_index++)
@@ -889,7 +889,7 @@ void Image::FlipVertical(u32 face)
   for(u32 c = 0; c < 4; ++c)
   {
     u8* texture_data = (u8*)GetFacePtr(face, c);
-    NOC_ASSERT(texture_data);
+    HELIUM_ASSERT(texture_data);
 
     u32 line_bytes = (m_Width*4);
     u8* top = texture_data;
@@ -916,7 +916,7 @@ void Image::FlipHorizontal(u32 face)
   {
     u8* texture_data = (u8*)GetFacePtr(face, c);
 
-    NOC_ASSERT(texture_data);
+    HELIUM_ASSERT(texture_data);
 
     u32 pixel_bytes = 4;
     u32 line_bytes  = (m_Width*4);
@@ -1300,7 +1300,7 @@ Image* Image::LoadHDR(const void* data)
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-static inline nv::FloatImage::WrapMode ConvertIGWrapModeToNV(Nocturnal::UVAddressMode mode)
+static inline nv::FloatImage::WrapMode ConvertIGWrapModeToNV(Helium::UVAddressMode mode)
 {
   switch(mode)
   {
@@ -1904,7 +1904,7 @@ void Image::PrepareFor2ChannelNormalMap(bool is_detail_map, bool is_detail_map_o
             a = 0.00001f;
 
         	float discriminant = b*b - 4.f*a*c;
-        	NOC_ASSERT(discriminant >= 0.f);
+        	HELIUM_ASSERT(discriminant >= 0.f);
         	float t = (-b + sqrtf(discriminant)) / (2.f * a);
 
           float para_x = (normal.x * t) * 0.5f + 0.5f;
@@ -1933,7 +1933,7 @@ void Image::PrepareFor2ChannelNormalMap(bool is_detail_map, bool is_detail_map_o
 ////////////////////////////////////////////////////////////////////////////////////////////////
 bool Image::IsChannelDataSet( u32 face, u32 channel, f32 threshold_value, bool valid_if_greater ) const
 {
-  NOC_ASSERT( (m_Depth == 0) || (face == 0) ); // either we're a cube map, or we're checking from the first depth layer
+  HELIUM_ASSERT( (m_Depth == 0) || (face == 0) ); // either we're a cube map, or we're checking from the first depth layer
   f32* color_channel = GetFacePtr(face, channel);
   u32 depth = (m_Depth == 0) ? 1 : m_Depth;
   u32 image_size = m_Width * m_Height * depth;
@@ -2019,11 +2019,11 @@ MipSet* Image::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet::R
   u32             o_height;
 
   // if the output format is compressed
-  if( (outputFormat == Nocturnal::OUTPUT_CF_DXT1) ||
-      (outputFormat == Nocturnal::OUTPUT_CF_DXT3) ||
-      (outputFormat == Nocturnal::OUTPUT_CF_DXT5))
+  if( (outputFormat == Helium::OUTPUT_CF_DXT1) ||
+      (outputFormat == Helium::OUTPUT_CF_DXT3) ||
+      (outputFormat == Helium::OUTPUT_CF_DXT5))
   {
-    if( (outputFormat == Nocturnal::OUTPUT_CF_DXT3) || (outputFormat == Nocturnal::OUTPUT_CF_DXT5) )
+    if( (outputFormat == Helium::OUTPUT_CF_DXT3) || (outputFormat == Helium::OUTPUT_CF_DXT5) )
     {
       // Check if the texture actually has alpha. If not, force to DXT1
       const f32 upper_alpha_threshold = 0.99f;
@@ -2072,22 +2072,22 @@ MipSet* Image::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet::R
 
       if(force_to_dxt1)
       {
-        NOC_ASSERT(force_to_dxt1 <= 2);
+        HELIUM_ASSERT(force_to_dxt1 <= 2);
 
-        outputFormat                = Nocturnal::OUTPUT_CF_DXT1;
-        dxtOptions.m_mips->m_format = Nocturnal::OUTPUT_CF_DXT1;
+        outputFormat                = Helium::OUTPUT_CF_DXT1;
+        dxtOptions.m_mips->m_format = Helium::OUTPUT_CF_DXT1;
 
         if(force_to_dxt1 == 1)
         {
           Log::Bullet bullet ( Log::Streams::Normal, Log::Levels::Verbose, TXT( "Forced DXT5 to DXT1 - setting alpha channel to 1.\n" ) );
 
-          dxtOptions.m_mips->m_runtime.m_alpha_channel = Nocturnal::COLOR_CHANNEL_FORCE_ONE;
+          dxtOptions.m_mips->m_runtime.m_alpha_channel = Helium::COLOR_CHANNEL_FORCE_ONE;
         }
         if(force_to_dxt1 == 2)
         {
           Log::Bullet bullet ( Log::Streams::Normal, Log::Levels::Verbose, TXT( "Forced DXT5 to DXT1 - setting alpha channel to 0.\n" ) );
 
-          dxtOptions.m_mips->m_runtime.m_alpha_channel = Nocturnal::COLOR_CHANNEL_FORCE_ZERO;
+          dxtOptions.m_mips->m_runtime.m_alpha_channel = Helium::COLOR_CHANNEL_FORCE_ZERO;
         }
       }
       else
@@ -2145,12 +2145,12 @@ MipSet* Image::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet::R
             }
           }
 
-          outputFormat                = Nocturnal::OUTPUT_CF_DXT1;
-          dxtOptions.m_mips->m_format = Nocturnal::OUTPUT_CF_DXT1;
-          dxtOptions.m_mips->m_runtime.m_alpha_channel = Nocturnal::COLOR_CHANNEL_GET_FROM_G; // DXT stores packed colors as 5:6:5, so green has one more bit of accuracy in it
-          dxtOptions.m_mips->m_runtime.m_red_channel = Nocturnal::COLOR_CHANNEL_FORCE_ONE;
-          dxtOptions.m_mips->m_runtime.m_green_channel = Nocturnal::COLOR_CHANNEL_FORCE_ONE;
-          dxtOptions.m_mips->m_runtime.m_blue_channel = Nocturnal::COLOR_CHANNEL_FORCE_ONE;
+          outputFormat                = Helium::OUTPUT_CF_DXT1;
+          dxtOptions.m_mips->m_format = Helium::OUTPUT_CF_DXT1;
+          dxtOptions.m_mips->m_runtime.m_alpha_channel = Helium::COLOR_CHANNEL_GET_FROM_G; // DXT stores packed colors as 5:6:5, so green has one more bit of accuracy in it
+          dxtOptions.m_mips->m_runtime.m_red_channel = Helium::COLOR_CHANNEL_FORCE_ONE;
+          dxtOptions.m_mips->m_runtime.m_green_channel = Helium::COLOR_CHANNEL_FORCE_ONE;
+          dxtOptions.m_mips->m_runtime.m_blue_channel = Helium::COLOR_CHANNEL_FORCE_ONE;
 
           // Because we're getting alpha from a color channel, don't do sRGB
           {
@@ -2410,7 +2410,7 @@ Image*  Image::FilterImageFace(const PostMipImageFilter *filters, u32 face, u32 
 {
   if(m_Channels[face][R] == NULL)
   {
-    NOC_ASSERT(!"NULL face.");
+    HELIUM_ASSERT(!"NULL face.");
     return NULL;
   }
 
@@ -2430,7 +2430,7 @@ Image*  Image::FilterImageFace(const PostMipImageFilter *filters, u32 face, u32 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 u8* Image::GenerateFormatData(const Image* src_tex, ColorFormat dest_fmt, u32 face, bool convert_to_srgb)
 {
-  NOC_ASSERT(src_tex != NULL );
+  HELIUM_ASSERT(src_tex != NULL );
 
   f32*  r =   src_tex->GetFacePtr(face, R);
 
@@ -2452,7 +2452,7 @@ u8* Image::GenerateFormatData(const Image* src_tex, ColorFormat dest_fmt, u32 fa
   u32 dest_fmt_pixel_byte_size  = (ColorFormatBits(dest_fmt) >> 3);
   u32 space_required            = dest_fmt_pixel_byte_size * d * src_tex->m_Width * src_tex->m_Height;
   u8* new_surface               = new u8[space_required];
-  NOC_ASSERT(new_surface != NULL );
+  HELIUM_ASSERT(new_surface != NULL );
 
   MakeColorFormatBatch(new_surface, src_tex->m_Width*src_tex->m_Height*d, dest_fmt, r, g, b, a, convert_to_srgb);
 
@@ -2580,7 +2580,7 @@ void  Image::HighPassFilterImage(const bool*                channel_mask,
   // here we're trying to approximate the photoshop Gaussian blur with radius 0.7 by running the cubic filter twice
   //
   for (u32 ic = 0; ic < 4; ic++)
-    nv_filters[ic] = GetImageFilter(Nocturnal::MIP_FILTER_QUADRATIC);
+    nv_filters[ic] = GetImageFilter(Helium::MIP_FILTER_QUADRATIC);
 
   Image* blur_tex = new Image(m_Width, m_Height, m_NativeFormat);
 
@@ -2597,7 +2597,7 @@ void  Image::HighPassFilterImage(const bool*                channel_mask,
   for (u32 ic = 0; ic < 4; ic++)
   {
     delete nv_filters[ic];
-    nv_filters[ic] = GetImageFilter(Nocturnal::MIP_FILTER_CUBIC);
+    nv_filters[ic] = GetImageFilter(Helium::MIP_FILTER_CUBIC);
   }
 
   Image* overlay_tex = new Image(m_Width, m_Height, m_NativeFormat);

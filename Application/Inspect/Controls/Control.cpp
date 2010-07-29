@@ -125,7 +125,7 @@ bool Control::IsDefault() const
     return m_Default == val;
   }
 
-  NOC_BREAK(); // you need to NOC_OVERRIDE this, your control is using custom data
+  HELIUM_BREAK(); // you need to HELIUM_OVERRIDE this, your control is using custom data
   return false;
 }
 
@@ -292,7 +292,7 @@ void Control::Realize(Container* parent)
   PROFILE_SCOPE_ACCUM( g_RealizeAccumulator );
 
   // allocate your window first, and call up to the base class AST
-  NOC_ASSERT( m_Window != NULL );
+  HELIUM_ASSERT( m_Window != NULL );
 
   SetForeColor(m_ForeColor);
   SetBackColor(m_BackColor);
@@ -335,7 +335,7 @@ void Control::UnRealize()
   {
     // If you hit this, you are trying to UnRealize a control that still belongs to
     // its parent.  Remove the control from its parent first, before calling this function.
-    NOC_ASSERT( std::find( m_Parent->GetControls().begin(), m_Parent->GetControls().end(), ControlPtr(this) ) == m_Parent->GetControls().end() );
+    HELIUM_ASSERT( std::find( m_Parent->GetControls().begin(), m_Parent->GetControls().end(), ControlPtr(this) ) == m_Parent->GetControls().end() );
   }
 
   delete m_Window;
@@ -409,7 +409,7 @@ bool Control::ReadData(tstring& str) const
     return true;
   }
 
-  NOC_BREAK(); // you should not call this, your control is using custom data
+  HELIUM_BREAK(); // you should not call this, your control is using custom data
   return false;
 }
 
@@ -423,7 +423,7 @@ bool Control::ReadAll(std::vector< tstring >& strs) const
     return true;
   }
 
-  NOC_BREAK(); // you should not call this, your control is using custom data
+  HELIUM_BREAK(); // you should not call this, your control is using custom data
   return false;
 }
 
@@ -489,7 +489,7 @@ bool Control::WriteAll(const std::vector< tstring >& strs, bool preview)
     }
   }
 
-  NOC_BREAK(); // you should not call this, your control is using custom data
+  HELIUM_BREAK(); // you should not call this, your control is using custom data
   return false;
 }
 

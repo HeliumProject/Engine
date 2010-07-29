@@ -8,6 +8,6 @@
 
 namespace Maya
 {
-  MAYA_API Nocturnal::TUID GetNodeID (const MObject& node, bool create = true);
-  MAYA_API MStatus SetNodeID (const MObject& node, const Nocturnal::TUID& id);
+  MAYA_API Helium::TUID GetNodeID (const MObject& node, bool create = true);
+  MAYA_API MStatus SetNodeID (const MObject& node, const Helium::TUID& id);
 }

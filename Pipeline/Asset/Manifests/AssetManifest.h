@@ -18,6 +18,6 @@ namespace Asset
     static void EnumerateClass( Reflect::Compositor<AssetManifest>& comp );
   };
 
-  typedef Nocturnal::SmartPtr<AssetManifest> AssetManifestPtr;
+  typedef Helium::SmartPtr<AssetManifest> AssetManifestPtr;
   typedef std::vector<AssetManifestPtr> V_AssetManifest;
 }

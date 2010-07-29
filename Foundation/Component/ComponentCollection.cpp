@@ -3,7 +3,7 @@
 
 #include "Foundation/Container/Insert.h" 
 
-using Nocturnal::Insert; 
+using Helium::Insert; 
 
 using namespace Reflect;
 using namespace Component;
@@ -22,7 +22,7 @@ ComponentCollection::ComponentCollection()
 
 ComponentCollection::ComponentCollection( const ComponentPtr& component )
 {
-    NOC_ASSERT( component->GetSlot() != Reflect::ReservedTypes::Invalid );
+    HELIUM_ASSERT( component->GetSlot() != Reflect::ReservedTypes::Invalid );
 
     m_Components.insert( M_Component::value_type( component->GetSlot(), component ) );
     component->AddChangedListener( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
@@ -46,7 +46,7 @@ ComponentCollection::~ComponentCollection()
     }
 }
 
-void ComponentCollection::GatherSearchableProperties( Nocturnal::SearchableProperties* properties ) const
+void ComponentCollection::GatherSearchableProperties( Helium::SearchableProperties* properties ) const
 {
     for( M_Component::const_iterator attrItr = m_Components.begin(), attrEnd = m_Components.end(); attrItr != attrEnd; ++attrItr )
     {
@@ -112,7 +112,7 @@ const ComponentPtr& ComponentCollection::GetComponent(i32 slotID) const
 
 void ComponentCollection::SetComponent(const ComponentPtr& component, bool validate)
 {
-    NOC_ASSERT( component->GetSlot() != Reflect::ReservedTypes::Invalid );
+    HELIUM_ASSERT( component->GetSlot() != Reflect::ReservedTypes::Invalid );
 
     M_Component::const_iterator found = m_Components.find( component->GetSlot() );
     if (found != m_Components.end() && found->second == component)
@@ -126,11 +126,11 @@ void ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
     {
         if ( error.empty() )
         {
-            throw Nocturnal::Exception( TXT( "Component '%s' is not valid for collection '%s'" ), component->GetClass()->m_ShortName.c_str(), GetClass()->m_ShortName.c_str() );
+            throw Helium::Exception( TXT( "Component '%s' is not valid for collection '%s'" ), component->GetClass()->m_ShortName.c_str(), GetClass()->m_ShortName.c_str() );
         }
         else
         {
-            throw Nocturnal::Exception( TXT( "Component '%s' is not valid for collection '%s': %s" ), component->GetClass()->m_ShortName.c_str(), GetClass()->m_ShortName.c_str(), error.c_str() );
+            throw Helium::Exception( TXT( "Component '%s' is not valid for collection '%s': %s" ), component->GetClass()->m_ShortName.c_str(), GetClass()->m_ShortName.c_str(), error.c_str() );
         }
     }
 
@@ -151,7 +151,7 @@ void ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
 
 void ComponentCollection::RemoveComponent(i32 slotID)
 {
-    NOC_ASSERT( slotID != Reflect::ReservedTypes::Invalid );
+    HELIUM_ASSERT( slotID != Reflect::ReservedTypes::Invalid );
 
     M_Component::iterator found = m_Components.find(slotID);
     if (found == m_Components.end())
@@ -181,14 +181,14 @@ void ComponentCollection::RemoveComponent(i32 slotID)
 
 bool ComponentCollection::ContainsComponent( i32 slotID ) const
 {
-    NOC_ASSERT( slotID != Reflect::ReservedTypes::Invalid );
+    HELIUM_ASSERT( slotID != Reflect::ReservedTypes::Invalid );
 
     return ComponentCollection::GetComponent( slotID ).ReferencesObject();
 }
 
 bool ComponentCollection::ValidateComponent( const ComponentPtr &component, tstring& error ) const
 {
-    NOC_ASSERT( component->GetSlot() != Reflect::ReservedTypes::Invalid );
+    HELIUM_ASSERT( component->GetSlot() != Reflect::ReservedTypes::Invalid );
 
     // Check for duplicates.
     if ( ContainsComponent( component->GetSlot() ) )
@@ -220,7 +220,7 @@ bool ComponentCollection::ValidateComponent( const ComponentPtr &component, tstr
 
 bool ComponentCollection::ValidateCompatible( const ComponentPtr& component, tstring& error ) const
 {
-    NOC_ASSERT( component->GetSlot() != Reflect::ReservedTypes::Invalid );
+    HELIUM_ASSERT( component->GetSlot() != Reflect::ReservedTypes::Invalid );
 
     if ( component->GetComponentBehavior() == ComponentBehaviors::Exclusive )
     {
@@ -233,7 +233,7 @@ bool ComponentCollection::ValidateCompatible( const ComponentPtr& component, tst
 
 bool ComponentCollection::ValidatePersistent( const ComponentPtr& component ) const
 {
-    NOC_ASSERT( component->GetSlot() != Reflect::ReservedTypes::Invalid );
+    HELIUM_ASSERT( component->GetSlot() != Reflect::ReservedTypes::Invalid );
 
     // by default, all attributes are persistent
     return true;
@@ -260,7 +260,7 @@ void ComponentCollection::ComponentChanged( const ComponentBase* component )
     m_SingleComponentChanged.Raise(changed);
 
     // For now, changing an component will fire that the collection itself has changed.
-    // This is because the Luna Scene UI exposes component members as part of the collection,
+    // This is because the Editor Scene UI exposes component members as part of the collection,
     // an there is not a persistent object wrapping the component.  Therefore, changes to the
     // component can only be detected on the collection itself.
     RaiseChanged( GetClass()->FindField( &ComponentCollection::m_Components ) );
@@ -277,7 +277,7 @@ bool ComponentCollection::ProcessComponent(ElementPtr element, const tstring& fi
             itr != end;
             ++itr )
         {
-            NOC_ASSERT( (*itr)->GetSlot() != Reflect::ReservedTypes::Invalid );
+            HELIUM_ASSERT( (*itr)->GetSlot() != Reflect::ReservedTypes::Invalid );
 
             if ( (*itr)->GetSlot() != Reflect::ReservedTypes::Invalid )
             {
@@ -296,7 +296,7 @@ void ComponentCollection::PreSerialize()
     __super::PreSerialize();
 
     // if you hit this somehow we inserted something into the component collection with the invalid type id, there is a bug somewhere
-    NOC_ASSERT( m_Components.find( Reflect::ReservedTypes::Invalid ) == m_Components.end() ); 
+    HELIUM_ASSERT( m_Components.find( Reflect::ReservedTypes::Invalid ) == m_Components.end() ); 
 
     // this *must* be junk
     m_Components.erase( Reflect::ReservedTypes::Invalid );

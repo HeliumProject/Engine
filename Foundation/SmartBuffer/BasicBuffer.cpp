@@ -8,7 +8,7 @@
 #include "Foundation/Math/Vector4.h"
 #include "Foundation/Math/Half.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 //
 // To turn on debug tracking/logging capability, set this to "1".
@@ -222,7 +222,7 @@ u32 BasicBuffer::AddBuffer( const u8* buffer, u32 size, const tchar* dbgStr, ...
 u32 BasicBuffer::AddBuffer( const SmartBufferPtr& buffer, bool add_fixups )
 {
     // platform types have to match
-    NOC_ASSERT(buffer->GetByteOrder() == m_ByteOrder);
+    HELIUM_ASSERT(buffer->GetByteOrder() == m_ByteOrder);
 
     // first bring in all the data from the incoming buffer
     u32 return_val = AddBuffer( buffer->GetData(), buffer->GetSize() );
@@ -246,7 +246,7 @@ u32 BasicBuffer::AddFile( const tchar* filename )
     FILE *pfile = _tfopen( filename, TXT( "rb" ) );
     if ( pfile == NULL )
     {
-        throw Nocturnal::Exception( TXT( "Could not open file '%s' to add to membuf '%s'." ), filename, m_Name.c_str() );
+        throw Helium::Exception( TXT( "Could not open file '%s' to add to membuf '%s'." ), filename, m_Name.c_str() );
     }
 
     fseek(pfile,0,SEEK_END);
@@ -255,7 +255,7 @@ u32 BasicBuffer::AddFile( const tchar* filename )
 
     if(filesize == -1)
     {
-        throw Nocturnal::Exception( TXT( "Could not get file size for file '%s' to add to membuf '%s'." ), filename, m_Name.c_str() );
+        throw Helium::Exception( TXT( "Could not get file size for file '%s' to add to membuf '%s'." ), filename, m_Name.c_str() );
     }
 
     if ( (filesize + m_Size) > m_Capacity )
@@ -521,7 +521,7 @@ void BasicBuffer::PadToArb( u32 align_size )
     i32 pad_length = (i32)align_size - ( m_Size % align_size );
     if ( pad_length != align_size )
     {
-        NOC_ASSERT( pad_length > 0 );
+        HELIUM_ASSERT( pad_length > 0 );
         AddPad( (u32)pad_length );
     }
 }

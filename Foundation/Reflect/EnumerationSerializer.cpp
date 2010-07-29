@@ -24,11 +24,11 @@ bool EnumerationSerializer::IsCompact () const
     return true; 
 }
 
-void EnumerationSerializer::ConnectData(Nocturnal::HybridPtr<void> data)
+void EnumerationSerializer::ConnectData(Helium::HybridPtr<void> data)
 {
     __super::ConnectData( data );
 
-    m_Data.Connect( Nocturnal::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 
     if ( data.Address() == NULL )
     {
@@ -37,12 +37,12 @@ void EnumerationSerializer::ConnectData(Nocturnal::HybridPtr<void> data)
     }
 }
 
-void EnumerationSerializer::ConnectField(Nocturnal::HybridPtr<Element> instance, const Field* field, uintptr offsetInField)
+void EnumerationSerializer::ConnectField(Helium::HybridPtr<Element> instance, const Field* field, uintptr offsetInField)
 {
     __super::ConnectField(instance, field, offsetInField);
 
     const EnumerationField* enumField = ReflectionCast<EnumerationField>(field);
-    NOC_ASSERT( enumField );
+    HELIUM_ASSERT( enumField );
 
     m_Enumeration = enumField->m_Enumeration;
 }
@@ -188,7 +188,7 @@ tostream& EnumerationSerializer::operator>> (tostream& stream) const
     if (!m_Enumeration->GetElementLabel(m_Data.Get(), label))
     {
         // something is amiss, we should be guaranteed serialization of enum elements
-        NOC_BREAK();
+        HELIUM_BREAK();
     }
 
     stream << label;

@@ -31,5 +31,5 @@ namespace Inspect
     }
   };
 
-  typedef Nocturnal::SmartPtr<Action> ActionPtr;
+  typedef Helium::SmartPtr<Action> ActionPtr;
 }

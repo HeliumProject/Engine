@@ -34,8 +34,8 @@ namespace Undo
     // Constructor
     ExistenceCommand( ExistenceAction action, FunctionCallerPtr add, FunctionCallerPtr remove, bool redo = true );
     virtual ~ExistenceCommand();
-    virtual void Undo() NOC_OVERRIDE;
-    virtual void Redo() NOC_OVERRIDE;
+    virtual void Undo() HELIUM_OVERRIDE;
+    virtual void Redo() HELIUM_OVERRIDE;
   };
-  typedef Nocturnal::SmartPtr< ExistenceCommand > ExistenceCommandPtr;
+  typedef Helium::SmartPtr< ExistenceCommand > ExistenceCommandPtr;
 }

@@ -4,7 +4,7 @@
 #include <string.h>
 #include <new>
 
-namespace Nocturnal
+namespace Helium
 {
   //
   // Basic allocator interface: alloc, realloc, and free

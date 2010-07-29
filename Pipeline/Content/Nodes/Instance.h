@@ -6,12 +6,12 @@
 namespace Symbol
 {
   class UDTInstance; 
-  typedef Nocturnal::SmartPtr<UDTInstance> UDTInstancePtr; 
+  typedef Helium::SmartPtr<UDTInstance> UDTInstancePtr; 
 }
 
 namespace Content
 {
-  class PIPELINE_API Instance NOC_ABSTRACT : public PivotTransform
+  class PIPELINE_API Instance HELIUM_ABSTRACT : public PivotTransform
   {
   private:
     REFLECT_DECLARE_ABSTRACT(Instance, PivotTransform);
@@ -19,7 +19,7 @@ namespace Content
 
   public:
     Instance ();
-    Instance (const Nocturnal::TUID& id);
+    Instance (const Helium::TUID& id);
 
   public:
     // Visibility preferences for this instance
@@ -29,6 +29,6 @@ namespace Content
     bool  m_TransparentOverride;
   };
 
-  typedef Nocturnal::SmartPtr<Instance> InstancePtr;
+  typedef Helium::SmartPtr<Instance> InstancePtr;
   typedef std::vector<InstancePtr> V_Instance;
 }

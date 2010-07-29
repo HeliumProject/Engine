@@ -5,7 +5,7 @@
 #include <string>
 #include <stdio.h>
 
-namespace Nocturnal
+namespace Helium
 {
     inline tstring BytesToString( u64 bytes )
     {

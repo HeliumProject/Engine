@@ -16,7 +16,7 @@ namespace Content
     {
     public:
         // The ID of the parent node
-        Nocturnal::TUID m_ParentID;
+        Helium::TUID m_ParentID;
 
         // The hidden state
         bool m_Hidden;
@@ -25,16 +25,16 @@ namespace Content
         bool m_Live;
 
         HierarchyNode()
-            : m_ParentID( Nocturnal::TUID::Null )
+            : m_ParentID( Helium::TUID::Null )
             , m_Hidden( false )
             , m_Live( false )
        {
 
         }
 
-        HierarchyNode( const Nocturnal::TUID& id )
+        HierarchyNode( const Helium::TUID& id )
             : SceneNode( id )
-            , m_ParentID( Nocturnal::TUID::Null )
+            , m_ParentID( Helium::TUID::Null )
             , m_Hidden( false )
             , m_Live( false )
         {
@@ -45,9 +45,9 @@ namespace Content
 
         static void EnumerateClass( Reflect::Compositor<HierarchyNode>& comp );
 
-        virtual bool ProcessComponent(Reflect::ElementPtr element, const tstring& memberName) NOC_OVERRIDE;
+        virtual bool ProcessComponent(Reflect::ElementPtr element, const tstring& memberName) HELIUM_OVERRIDE;
     };
 
-    typedef Nocturnal::SmartPtr<HierarchyNode> HierarchyNodePtr;
+    typedef Helium::SmartPtr<HierarchyNode> HierarchyNodePtr;
     typedef std::vector<HierarchyNodePtr> V_HierarchyNode;
 }

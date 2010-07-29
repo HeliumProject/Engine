@@ -1,6 +1,6 @@
 #include "Handle.h"
 
-using namespace Nocturnal;
+using namespace Helium;
 
 Handle::Handle( const tstring& path, const tchar* mode )
 : m_Path( path )

@@ -32,7 +32,7 @@ namespace Inspect
   };
 
   // the delegate for a per-item callback to be called upon activation
-  typedef Nocturnal::Signature<void, const ContextMenuEventArgs&> ContextMenuSignature;
+  typedef Helium::Signature<void, const ContextMenuEventArgs&> ContextMenuSignature;
 
   // container for each delegate of each context menu item
   typedef std::map<tstring, ContextMenuSignature::Delegate> M_ContextMenuDelegate;
@@ -43,17 +43,17 @@ namespace Inspect
   //
 
   class APPLICATION_API ContextMenu;
-  typedef Nocturnal::SmartPtr<ContextMenu> ContextMenuPtr;
+  typedef Helium::SmartPtr<ContextMenu> ContextMenuPtr;
 
   // popup-time context menu setup delegate
-  typedef Nocturnal::Signature<void, ContextMenuPtr> LSetupContextMenuSignature;
+  typedef Helium::Signature<void, ContextMenuPtr> LSetupContextMenuSignature;
 
 
   //
   // The menu class
   //
 
-  class APPLICATION_API ContextMenu : public wxEvtHandler, public Nocturnal::RefCountBase<ContextMenu>
+  class APPLICATION_API ContextMenu : public wxEvtHandler, public Helium::RefCountBase<ContextMenu>
   {
   protected:
     Control* m_Control;
@@ -93,5 +93,5 @@ namespace Inspect
     virtual void AddSeperator();
   };
 
-  typedef Nocturnal::SmartPtr<ContextMenu> ContextMenuPtr;
+  typedef Helium::SmartPtr<ContextMenu> ContextMenuPtr;
 }

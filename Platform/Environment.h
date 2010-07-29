@@ -38,7 +38,11 @@ namespace Nocturnal
 
         tstringstream str ( stringValue, (std::streamsize)_tcslen( stringValue ) );
         str >> value;
-        return !str.fail();
+        bool result = !str.fail();
+
+        free( stringValue );
+        
+        return result;
     }
 
     template<>

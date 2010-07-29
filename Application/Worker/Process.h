@@ -57,16 +57,18 @@ namespace Worker
 
         // this process was killed
         bool m_Killed;
+        bool m_Debug; // we're debugging?
+        bool m_Wait;
 
     public:
         // process tracking support
-        static Process* Create( const tstring& executable );
+        static Process* Create( const tstring& executable, bool debug, bool wait );
         static void Release( Process*& worker );
         static void ReleaseAll();
 
     private:
         // protect constructor so all worker processes are tracked
-        Process(const tstring& executable);
+        Process( const tstring& executable, bool debug, bool wait );
 
     public:
         // will destroy process if its not over or killed

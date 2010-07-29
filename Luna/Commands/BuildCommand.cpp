@@ -442,11 +442,11 @@ bool BuildCommand::Build( Dependencies::DependencyGraph& depGraph, std::set< Noc
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool BuildCommand::RunAsBuildWorker( Dependencies::DependencyGraph& depGraph )
+bool BuildCommand::RunAsBuildWorker( Dependencies::DependencyGraph& depGraph, bool debug, bool wait )
 {
     bool success = true;
 
-    if (!Worker::Client::Initialize())
+    if (!Worker::Client::Initialize( debug, wait ))
     {
         return false;
     }

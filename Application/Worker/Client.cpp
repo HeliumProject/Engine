@@ -53,14 +53,14 @@ static void TerminateListener(const Debug::TerminateArgs& args)
     Client::Cleanup();
 }
 
-bool Client::Initialize()
+bool Client::Initialize( bool debug, bool wait )
 {
     IPC::PipeConnection* connection = new IPC::PipeConnection ();
 
   // init pipe connection with this process' process id (hex)
   tostringstream stream;
 
-  if (Nocturnal::GetCmdLineFlag( Worker::Args::Debug ))
+  if ( debug )
   {
     stream << TXT( "worker_debug" );
   }
@@ -79,7 +79,7 @@ bool Client::Initialize()
 
     // wait forever is we are asked to
 #pragma TODO( "All command line options should be defined and parsed once in the application, we shouldn't be parsing the commandline every time! " )
-    if (Nocturnal::GetCmdLineFlag( Worker::Args::Wait ))
+    if ( wait )
     {
         timeout = -1;
     }

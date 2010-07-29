@@ -2,7 +2,7 @@
 // C++ code generated with wxFormBuilder (version Apr 16 2008)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO  LiteSQL_L( "NOT" ) EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __ui__

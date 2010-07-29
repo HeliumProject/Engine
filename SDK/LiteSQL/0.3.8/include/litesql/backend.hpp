@@ -9,10 +9,10 @@
 */
 #ifndef litesql_backend_hpp
 #define litesql_backend_hpp
+#include "litesql_char.hpp"
 #include <memory>
 #include "litesql/types.hpp"
 namespace litesql {
-    using namespace std;
 
 
     /** An abstract base class for interfacing with relational databases */
@@ -56,12 +56,12 @@ namespace litesql {
             }
             /** backend may want to set an AUTO_INCREMENT-attribute for table's primary 
               key field. this method is to deliver the details to database schema */
-            virtual string getRowIDType() const {
-                return "INTEGER PRIMARY KEY";
+            virtual LITESQL_String getRowIDType() const {
+                return  LITESQL_L("INTEGER PRIMARY KEY");
             }
             /** if backend supports this, new primary key of the last insert 
               is returned */
-            virtual string getInsertID() const { return ""; }
+            virtual LITESQL_String getInsertID() const { return  LITESQL_L(""); }
             /** begin SQL transaction, may or may not have an effect */
             virtual void begin() const {}
             /** commit SQL transaction */
@@ -71,12 +71,12 @@ namespace litesql {
             /** executes SQL-query 
               \param query SQL-query to execute 
               \return Result-object which holds result set of query */
-            virtual Result* execute(const string& query) const = 0;
+            virtual Result* execute(const LITESQL_String& query) const = 0;
             /** executes SQL-query
               \param query SQL-query to execute 
               \return Cursor-object which can be used to iterate result set 
               row by row without loading everything to memory */
-            virtual Cursor* cursor(const string& query) const = 0;
+            virtual Cursor* cursor(const LITESQL_String& query) const = 0;
             /** executes multiple INSERT-statements and assigns same 'row id'
               for first field of every record
               \param tables destination tables for insert operation
@@ -84,14 +84,14 @@ namespace litesql {
               \param values record of values per table
               \param sequence sequence where row id-numbers are pulled
               \return new row id */
-            virtual string groupInsert(Record tables, Records fields, Records values,
-                    const string& sequence) const;
+            virtual LITESQL_String groupInsert(Record tables, Records fields, Records values,
+                    const LITESQL_String& sequence) const;
     /** returns a backend according to Backendtype in type, parameters are specific to backend and are separated by semicolon.
-      \param type type of the database backend (supported are : "mysql","postgresql","sqlite3","odbc"
+      \param type type of the database backend (supported are :  LITESQL_L("mysql"), LITESQL_L("postgresql"), LITESQL_L("sqlite3"), LITESQL_L("odbc")
       \param connInfo database connection specific parameters (parameters are separated by semicolon)
        @throw DatabaseError if no backend is found
       */
-    static Backend* getBackend(const string& type,const string& connInfo);
+    static Backend* getBackend(const LITESQL_String& type,const LITESQL_String& connInfo);
       
     };
 }

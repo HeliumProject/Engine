@@ -39,6 +39,7 @@
 #include "Document.h"
 
 #include "Scene/SceneInit.h"
+#include "Tracker/Tracker.h"
 #include "Task/TaskInit.h"
 #include "UI/PerforceWaitDialog.h"
 #include "Vault/Vault.h"
@@ -182,51 +183,51 @@ bool App::OnInit()
     Nocturnal::Path exePath( module );
     Nocturnal::Path iconFolder( exePath.Directory() + TXT( "Icons/" ) );
 
-    Luna::WaitDialog::Enable( true );
+        Luna::WaitDialog::Enable( true );
 
-    wxInitAllImageHandlers();
+                wxInitAllImageHandlers();
 
-    wxImageHandler* curHandler = wxImage::FindHandler( wxBITMAP_TYPE_CUR );
-    if ( curHandler )
-    {
-        // Force the cursor handler to the end of the list so that it doesn't try to
-        // open TGA files.
-        wxImage::RemoveHandler( curHandler->GetName() );
-        curHandler = NULL;
-        wxImage::AddHandler( new wxCURHandler );
-    }
+                wxImageHandler* curHandler = wxImage::FindHandler( wxBITMAP_TYPE_CUR );
+                if ( curHandler )
+                {
+                    // Force the cursor handler to the end of the list so that it doesn't try to
+                    // open TGA files.
+                    wxImage::RemoveHandler( curHandler->GetName() );
+                    curHandler = NULL;
+                    wxImage::AddHandler( new wxCURHandler );
+                }
 
-    Nocturnal::ArtProvider* artProvider = new Nocturnal::ArtProvider();
-    wxArtProvider::Push( artProvider );
+                Nocturnal::ArtProvider* artProvider = new Nocturnal::ArtProvider();
+                wxArtProvider::Push( artProvider );
 
-    wxSimpleHelpProvider* helpProvider = new wxSimpleHelpProvider();
-    wxHelpProvider::Set( helpProvider );
+                wxSimpleHelpProvider* helpProvider = new wxSimpleHelpProvider();
+                wxHelpProvider::Set( helpProvider );
 
     // libs
-    m_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
-    m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
-    m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
-    m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
-    m_InitializerStack.Push( InspectContent::Initialize, InspectContent::Cleanup );
-    m_InitializerStack.Push( InspectFile::Initialize, InspectFile::Cleanup );
+                m_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
+                m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
+                m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
+                m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
+                m_InitializerStack.Push( InspectContent::Initialize, InspectContent::Cleanup );
+                m_InitializerStack.Push( InspectFile::Initialize, InspectFile::Cleanup );
 
     // core
-    m_InitializerStack.Push( Object::InitializeType, Object::CleanupType );
-    m_InitializerStack.Push( Selectable::InitializeType, Selectable::CleanupType );
-    m_InitializerStack.Push( Persistent::InitializeType, Persistent::CleanupType );
-    m_InitializerStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
+                m_InitializerStack.Push( Object::InitializeType, Object::CleanupType );
+                m_InitializerStack.Push( Selectable::InitializeType, Selectable::CleanupType );
+                m_InitializerStack.Push( Persistent::InitializeType, Persistent::CleanupType );
+                m_InitializerStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
     m_InitializerStack.Push( Reflect::RegisterEnumeration<FilePathOptions::FilePathOption>( &FilePathOptions::FilePathOptionEnumerateEnumeration, TXT( "FilePathOption" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterEnumeration<EditorTypes::EditorType>( &EditorTypes::EditorTypeEnumerateEnumeration, TXT( "EditorType" ) ) );
-    m_InitializerStack.Push( Document::InitializeType, Document::CleanupType );
+                m_InitializerStack.Push( Reflect::RegisterEnumeration<EditorTypes::EditorType>( &EditorTypes::EditorTypeEnumerateEnumeration, TXT( "EditorType" ) ) );
+                m_InitializerStack.Push( Document::InitializeType, Document::CleanupType );
     m_InitializerStack.Push( Reflect::RegisterClass<MRUData>( TXT( "MRUData" ) ) );
 
     // task
 #pragma TODO("Move init into here")
-    m_InitializerStack.Push( TaskInitialize, TaskCleanup );
+                m_InitializerStack.Push( TaskInitialize, TaskCleanup );
 
     // scene
 #pragma TODO("Move init into here")
-    m_InitializerStack.Push( SceneInitialize, SceneCleanup );
+                m_InitializerStack.Push( SceneInitialize, SceneCleanup );
 
     // vault
     m_InitializerStack.Push( Reflect::RegisterClass<AssetCollection>( TXT( "AssetCollection" ) ) );
@@ -255,7 +256,6 @@ bool App::OnInit()
     //GetSceneEditor()->Show();
     GetFrame()->Show();
 
-    //return __super::OnCmdLineParsed( parser );
     return true;
 }
 
@@ -264,6 +264,8 @@ bool App::OnInit()
 // 
 int App::OnExit()
 {
+    m_TrackerThread.Wait();
+
     SavePreferences();
 
     m_InitializerStack.Cleanup();
@@ -304,7 +306,7 @@ void App::SavePreferences()
     if ( Platform::IsDebuggerPresent() )
     {
         m_Preferences->SaveToFile( path, error );
-    }
+}
     else
     {
         try
@@ -332,7 +334,7 @@ void App::LoadPreferences()
     if ( Platform::IsDebuggerPresent() )
     {
         m_Preferences->LoadFromFile( path );
-    }
+}
     else
     {
         tstring error;
@@ -402,11 +404,14 @@ int Main ( int argc, const tchar** argv )
     success &= processor.RegisterCommand( &helpCommand, error );
 
     //success &= processor.AddOption( new FlagOption(  , "pipe", "use pipe for console connection" ), error ); 
-    //success &= processor.AddOption( new FlagOption(  , "disable_tracker", "disable Asset Tracker" ), error );
-    //
+    
+    bool disableTracker = false;
+    success &= processor.AddOption( new FlagOption( &disableTracker, TXT( "disable_tracker" ), TXT( "disable Asset Tracker" ) ), error );
+    //GetAppPreferences()->UseTracker( disableTracker );
+
     //success &= processor.AddOption( new FlagOption(  , WindowSettings::s_Reset, "reset all window positions" ), error );
     //success &= processor.AddOption( new FlagOption(  , Preferences::s_ResetPreferences, "resets all preferences for all of Luna" ), error );
-    //
+    
     //success &= processor.AddOption( new FlagOption(  , Worker::Args::Debug, "debug use of background processes" ), error );
     //success &= processor.AddOption( new FlagOption(  , Worker::Args::Wait, "wait forever for background processes" ), error );
 

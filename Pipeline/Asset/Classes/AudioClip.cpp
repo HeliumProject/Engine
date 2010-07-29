@@ -12,7 +12,7 @@ void AudioClip::EnumerateClass( Reflect::Compositor< AudioClip >& comp )
     comp.AddEnumerationField( &AudioClip::m_Mode, "m_Mode" );
 }
 
-void AudioClip::GatherIndexData( AssetIndexData& indexData )
+void AudioClip::GatherSearchableProperties( Nocturnal::SearchableProperties* properties ) const
 {
     const Reflect::Enumeration* modeEnum = Reflect::GetEnumeration< AudioClipMode >();
     if ( modeEnum )
@@ -20,7 +20,9 @@ void AudioClip::GatherIndexData( AssetIndexData& indexData )
         tstring mode;
         if ( modeEnum->GetElementLabel( m_Mode, mode ) )
         {
-            indexData.AddDataItem( TXT( "mode" ), mode );
+            properties->Insert( modeEnum->m_FullName, mode );
         }
     }
+
+    __super::GatherSearchableProperties( properties );
 }

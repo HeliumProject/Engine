@@ -40,7 +40,7 @@ namespace Asset
         {
         }
 
-        void GatherIndexData( AssetIndexData& indexData );
+        virtual void GatherSearchableProperties( Nocturnal::SearchableProperties* properties ) const NOC_OVERRIDE;
     };
 
     typedef Nocturnal::SmartPtr< AudioClip > AudioClipPtr;

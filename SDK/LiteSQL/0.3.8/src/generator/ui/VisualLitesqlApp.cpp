@@ -31,33 +31,33 @@ bool VisualLitesqlApp::OnInit(void)
   m_docManager = new wxDocManager;
 
   //// Create a template relating drawing documents to their views
-  (void) new wxDocTemplate((wxDocManager *) m_docManager, _T("Litesql-Model"), 
-                                                          _T("*.xml"), 
-                                                          _T(""), 
-                                                          _T  ("xml"), 
-                                                          _T("Litesql Model"), 
-                                                          _T("Litesql Model View"),
+  (void) new wxDocTemplate((wxDocManager *) m_docManager, _T( LiteSQL_L( "Litesql-Model" )), 
+                                                          _T( LiteSQL_L( "*.xml" )), 
+                                                          _T( LiteSQL_L( "" )), 
+                                                          _T  ( LiteSQL_L( "xml" )), 
+                                                          _T( LiteSQL_L( "Litesql Model" )), 
+                                                          _T( LiteSQL_L( "Litesql Model View" )),
           CLASSINFO(LitesqlDocument), CLASSINFO(LitesqlView));
-  m_pGenerateViewTemplate = new wxDocTemplate((wxDocManager *) m_docManager, _T("Litesql-Model (generate)"), 
-                                                          _T("*.xml"), 
-                                                          _T(""), 
-                                                          _T  ("xml"), 
-                                                          _T("Litesql Model"), 
-                                                          _T("Litesql Generate View"),
+  m_pGenerateViewTemplate = new wxDocTemplate((wxDocManager *) m_docManager, _T( LiteSQL_L( "Litesql-Model (generate)" )), 
+                                                          _T( LiteSQL_L( "*.xml" )), 
+                                                          _T( LiteSQL_L( "" )), 
+                                                          _T  ( LiteSQL_L( "xml" )), 
+                                                          _T( LiteSQL_L( "Litesql Model" )), 
+                                                          _T( LiteSQL_L( "Litesql Generate View" )),
           CLASSINFO(LitesqlDocument), CLASSINFO(GenerateView));
 
   //// Create the main frame window
   pMainframe = new MainFrame((wxDocManager *) m_docManager, (wxFrame *) NULL,
-                      _T("Visual Litesql"), wxPoint(0, 0), wxSize(800, 600),
+                      _T( LiteSQL_L( "Visual Litesql" )), wxPoint(0, 0), wxSize(800, 600),
                       wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE);
 
 	// start transaction
   //// Give it an icon (this is ignored in MDI mode: uses resources)
 #ifdef __WXMSW__
-  pMainframe->SetIcon(wxIcon(_T("doc")));
+  pMainframe->SetIcon(wxIcon(_T( LiteSQL_L( "doc" ))));
 #endif
 #ifdef __X__
-  pMainframe->SetIcon(wxIcon(_T("doc.xbm")));
+  pMainframe->SetIcon(wxIcon(_T( LiteSQL_L( "doc.xbm" ))));
 #endif
 
 #ifdef __WXMAC__
@@ -88,60 +88,60 @@ wxMDIChildFrame *VisualLitesqlApp::CreateChildFrame(wxDocument *doc, wxView *vie
 {
   //// Make a child frame
   wxDocMDIChildFrame *subframe =
-      new wxDocMDIChildFrame(doc, view, pMainframe, wxID_ANY, _T("Child Frame"),
+      new wxDocMDIChildFrame(doc, view, pMainframe, wxID_ANY, _T( LiteSQL_L( "Child Frame" )),
                              wxPoint(10, 10), wxSize(500, 500),
                              wxDEFAULT_FRAME_STYLE |
                              wxNO_FULL_REPAINT_ON_RESIZE);
 
 #ifdef __WXMSW__
-  subframe->SetIcon(wxString( _T("notepad")));
+  subframe->SetIcon(wxString( _T( LiteSQL_L( "notepad" ))));
 #endif
 #ifdef __X__
-  subframe->SetIcon(wxIcon(_T("doc.xbm")));
+  subframe->SetIcon(wxIcon(_T( LiteSQL_L( "doc.xbm" ))));
 #endif
 
   //// Make a menubar
   wxMenu *file_menu = new wxMenu;
 
-  file_menu->Append(wxID_NEW, _T("&New..."));
-  file_menu->Append(wxID_OPEN, _T("&Open..."));
-  file_menu->Append(wxID_CLOSE, _T("&Close"));
-  file_menu->Append(wxID_SAVE, _T("&Save"));
-  file_menu->Append(wxID_SAVEAS, _T("Save &As..."));
+  file_menu->Append(wxID_NEW, _T( LiteSQL_L( "&New..." )));
+  file_menu->Append(wxID_OPEN, _T( LiteSQL_L( "&Open..." )));
+  file_menu->Append(wxID_CLOSE, _T( LiteSQL_L( "&Close" )));
+  file_menu->Append(wxID_SAVE, _T( LiteSQL_L( "&Save" )));
+  file_menu->Append(wxID_SAVEAS, _T( LiteSQL_L( "Save &As..." )));
   file_menu->AppendSeparator();
-  file_menu->Append(ID_GENERATE, _T("Generate ..."));
+  file_menu->Append(ID_GENERATE, _T( LiteSQL_L( "Generate ..." )));
 
   
   if (false /*isCanvas*/)
   {
     file_menu->AppendSeparator();
-    file_menu->Append(wxID_PRINT, _T("&Print..."));
-    file_menu->Append(wxID_PRINT_SETUP, _T("Print &Setup..."));
-    file_menu->Append(wxID_PREVIEW, _T("Print Pre&view"));
+    file_menu->Append(wxID_PRINT, _T( LiteSQL_L( "&Print..." )));
+    file_menu->Append(wxID_PRINT_SETUP, _T( LiteSQL_L( "Print &Setup..." )));
+    file_menu->Append(wxID_PREVIEW, _T( LiteSQL_L( "Print Pre&view" )));
   }
 
   file_menu->AppendSeparator();
-  file_menu->Append(wxID_EXIT, _T("E&xit"));
+  file_menu->Append(wxID_EXIT, _T( LiteSQL_L( "E&xit" )));
 
   wxMenu *edit_menu = (wxMenu *) NULL;
 
     edit_menu = new wxMenu;
-  //  edit_menu->Append(wxID_UNDO, _T("&Undo"));
-  //  edit_menu->Append(wxID_REDO, _T("&Redo"));
+  //  edit_menu->Append(wxID_UNDO, _T( LiteSQL_L( "&Undo" )));
+  //  edit_menu->Append(wxID_REDO, _T( LiteSQL_L( "&Redo" )));
   //  edit_menu->AppendSeparator();
-  //  edit_menu->Append(ID_GENERATE, _T("Generate ..."));
+  //  edit_menu->Append(ID_GENERATE, _T( LiteSQL_L( "Generate ..." )));
 
     doc->GetCommandProcessor()->SetEditMenu(edit_menu);
 
   wxMenu *help_menu = new wxMenu;
-  help_menu->Append(ID_ABOUT, _T("&About"));
+  help_menu->Append(ID_ABOUT, _T( LiteSQL_L( "&About" )));
 
   wxMenuBar *menu_bar = new wxMenuBar;
 
-  menu_bar->Append(file_menu, _T("&File"));
+  menu_bar->Append(file_menu, _T( LiteSQL_L( "&File" )));
   if (false /* isCanvas */ )
-    menu_bar->Append(edit_menu, _T("&Edit"));
-  menu_bar->Append(help_menu, _T("&Help"));
+    menu_bar->Append(edit_menu, _T( LiteSQL_L( "&Edit" )));
+  menu_bar->Append(help_menu, _T( LiteSQL_L( "&Help" )));
 
   //// Associate the menu bar with the frame
   subframe->SetMenuBar(menu_bar);

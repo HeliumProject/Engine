@@ -3,13 +3,13 @@
  * The list of contributors at http://litesql.sf.net/
  *
  * See LICENSE for copyright information. */
+#include "litesql_char.hpp"
 #include "litesql/datetime.hpp"
 #include "litesql/split.hpp"
 #include "compatibility.hpp"
 #include <time.h>
 #include <cstdio>
 
-using namespace std;
 
 namespace litesql {
 
@@ -116,17 +116,17 @@ Date& Date::setTimeStamp(time_t t) {
     value = t;
     return *this;
 }
-string Date::asString(string format) const {
-    if (format == "%u") {
-        char buf[32];
-        snprintf(buf, 32, "%lu", value);
+LITESQL_String Date::asString(LITESQL_String format) const {
+    if (format ==  LITESQL_L("%u")) {
+        LITESQL_Char buf[32];
+        snprintf(buf, 32,  LITESQL_L("%lu"), value);
         return buf;
     }
-    Split data(format, "%");
+    Split data(format,  LITESQL_L("%"));
     TimeStruct ts(value);
-    string res = data[0];
+    LITESQL_String res = data[0];
     for (size_t i = 1; i < data.size(); i++) {
-        string rest = data[i].substr(1, data[i].size());
+        LITESQL_String rest = data[i].substr(1, data[i].size());
         switch(data[i][0]) {
         case 'd':
             res += toString(ts.day()) + rest;
@@ -173,28 +173,28 @@ Time& Time::setSecs(int secs) {
     value = secs;
     return *this;
 }
-string Time::asString(string format) const {
-    if (format == "%u") {
-        char buf[32];
-        snprintf(buf, 32, "%d", value);
+LITESQL_String Time::asString(LITESQL_String format) const {
+    if (format ==  LITESQL_L("%u")) {
+        LITESQL_Char buf[32];
+        snprintf(buf, 32,  LITESQL_L("%d"), value);
         return buf;
     }
-    Split data(format, "%");
-    string res = data[0];
+    Split data(format,  LITESQL_L("%"));
+    LITESQL_String res = data[0];
     for (size_t i = 1; i < data.size(); i++) {
-        string rest = data[i].substr(1, data[i].size());
+        LITESQL_String rest = data[i].substr(1, data[i].size());
         switch(data[i][0]) {
         case 'h':
             res += toString(hour()) + rest;
             break;
         case 'M':
             if (min() < 10)
-                res += "0";
+                res +=  LITESQL_L("0");
             res += toString(min()) + rest;
             break;
         case 's':
             if (sec() < 10)
-                res += "0";
+                res +=  LITESQL_L("0");
             res += toString(sec()) + rest;
         }
     }
@@ -244,17 +244,17 @@ DateTime& DateTime::setSec(int s) {
     value = TimeStruct(value).setSec(s).timeStamp();
     return *this;
 }
-string DateTime::asString(string format) const {
-    if (format == "%u") {
-        char buf[32];
-        snprintf(buf, 32, "%lu", value);
+LITESQL_String DateTime::asString(LITESQL_String format) const {
+    if (format ==  LITESQL_L("%u")) {
+        LITESQL_Char buf[32];
+        snprintf(buf, 32,  LITESQL_L("%lu"), value);
         return buf;
     }
-    Split data(format, "%");
+    Split data(format,  LITESQL_L("%"));
     TimeStruct ts(value);
-    string res = data[0];
+    LITESQL_String res = data[0];
     for (size_t i = 1; i < data.size(); i++) {
-        string rest = data[i].substr(1, data[i].size());
+        LITESQL_String rest = data[i].substr(1, data[i].size());
         switch(data[i][0]) {
         case 'd':
             res += toString(ts.day()) + rest;
@@ -270,12 +270,12 @@ string DateTime::asString(string format) const {
             break;
         case 'M':
             if (ts.min() < 10)
-                res += "0";
+                res +=  LITESQL_L("0");
             res += toString(ts.min()) + rest;
             break;
         case 's':
             if (ts.sec() < 10)
-                res += "0";
+                res +=  LITESQL_L("0");
             res += toString(ts.sec()) + rest;
             break;
         }
@@ -283,15 +283,15 @@ string DateTime::asString(string format) const {
     return res;
 }
 template <>
-Date convert<const string&, Date>(const string& value) {
+Date convert<const LITESQL_String&, Date>(const LITESQL_String& value) {
     return Date(atoi(value));
 }
 template <>
-Time convert<const string&, Time>(const string& value) {
+Time convert<const LITESQL_String&, Time>(const LITESQL_String& value) {
     return Time(atoi(value));
 }
 template <>
-DateTime convert<const string&, DateTime>(const string& value) {
+DateTime convert<const LITESQL_String&, DateTime>(const LITESQL_String& value) {
     return DateTime(atoi(value));
 }
 template <>
@@ -308,25 +308,25 @@ DateTime convert<int, DateTime>(int value) {
 }
 
 template <>
-std::string convert<const Date&, std::string>(const Date& value) {
+LITESQL_String convert<const Date&, LITESQL_String>(const Date& value) {
     return toString(value.timeStamp());
 }
 template <>
-std::string convert<const Time&, std::string>(const Time& value) {
+LITESQL_String convert<const Time&, LITESQL_String>(const Time& value) {
     return toString(value.secs());
 }
 template <>
-std::string convert<const DateTime&, std::string>(const DateTime& value) {
+LITESQL_String convert<const DateTime&, LITESQL_String>(const DateTime& value) {
     return toString(value.timeStamp());
 }
 
-ostream& operator << (ostream& os, const Date& d) {
+LITESQL_oStream& operator << (LITESQL_oStream& os, const Date& d) {
     return os << d.asString();
 }
-ostream& operator << (ostream& os, const Time& d) {
+LITESQL_oStream& operator << (LITESQL_oStream& os, const Time& d) {
     return os << d.asString();
 }
-ostream& operator << (ostream& os, const DateTime& d) {
+LITESQL_oStream& operator << (LITESQL_oStream& os, const DateTime& d) {
     return os << d.asString();
 }
 }

@@ -29,4 +29,3 @@ protected:
 };
 
 #endif  //MAINMDIFRM_H
-

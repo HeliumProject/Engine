@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -133,7 +133,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -220,7 +220,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="1"
@@ -306,7 +306,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -390,7 +390,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -479,7 +479,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -566,7 +566,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="1"
@@ -652,7 +652,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -736,6 +736,10 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{1EBDB40D-9808-463B-AA43-04D65586485F}"
 			RelativePathToProject=".\SDK\MySQL\6.0.2\MySQL.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{05ED8488-418B-499C-895B-5654C64209F6}"
+			RelativePathToProject=".\SDK\LiteSQL\0.3.8\LiteSQL.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{CFCA9C73-C321-48BA-8F29-097FD061EBB1}"
@@ -1630,7 +1634,7 @@
 					>
 				</File>
 			</Filter>
-		</Filter>
+			</Filter>
 		<Filter
 			Name="Vault"
 			>
@@ -3407,7 +3411,7 @@
 					RelativePath=".\Render\XMLShaderLoader.h"
 					>
 				</File>
-			</Filter>
+		</Filter>
 		</Filter>
 		<Filter
 			Name="Commands"
@@ -3815,7 +3819,7 @@
 					RelativePath=".\Graph\expr.h"
 					>
 				</File>
-			</Filter>
+		</Filter>
 		</Filter>
 		<Filter
 			Name="UI"
@@ -4132,6 +4136,94 @@
 					</File>
 				</Filter>
 			</Filter>
+		</Filter>
+		<Filter
+			Name="Tracker"
+			>
+			<File
+				RelativePath=".\Tracker\Tracker.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Tracker\Tracker.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Tracker\TrackerDBGenerated.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Tracker\TrackerDBGenerated.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Tracker\TrackerDBGenerated.xml"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug Unicode|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug Unicode|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release Unicode|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release Unicode|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\API.h"

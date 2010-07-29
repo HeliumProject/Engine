@@ -548,6 +548,54 @@
 	</References>
 	<Files>
 		<File
+			RelativePath=".\amigaconfig.h"
+			>
+		</File>
+		<File
+			RelativePath=".\ascii.h"
+			>
+		</File>
+		<File
+			RelativePath=".\asciitab.h"
+			>
+		</File>
+		<File
+			RelativePath=".\expat.h"
+			>
+		</File>
+		<File
+			RelativePath=".\expat_external.h"
+			>
+		</File>
+		<File
+			RelativePath=".\iasciitab.h"
+			>
+		</File>
+		<File
+			RelativePath=".\internal.h"
+			>
+		</File>
+		<File
+			RelativePath=".\latin1tab.h"
+			>
+		</File>
+		<File
+			RelativePath=".\macconfig.h"
+			>
+		</File>
+		<File
+			RelativePath=".\nametab.h"
+			>
+		</File>
+		<File
+			RelativePath=".\utf8tab.h"
+			>
+		</File>
+		<File
+			RelativePath=".\winconfig.h"
+			>
+		</File>
+		<File
 			RelativePath=".\xmlparse.c"
 			>
 		</File>
@@ -556,7 +604,27 @@
 			>
 		</File>
 		<File
+			RelativePath=".\xmlrole.h"
+			>
+		</File>
+		<File
 			RelativePath=".\xmltok.c"
+			>
+		</File>
+		<File
+			RelativePath=".\xmltok.h"
+			>
+		</File>
+		<File
+			RelativePath=".\xmltok_impl.c"
+			>
+		</File>
+		<File
+			RelativePath=".\xmltok_impl.h"
+			>
+		</File>
+		<File
+			RelativePath=".\xmltok_ns.c"
 			>
 		</File>
 	</Files>

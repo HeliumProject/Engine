@@ -3,6 +3,8 @@
 *.user
 Build/*
 Built/*
+SDK/LiteSQL/0.3.8/build/*
 BASE.*
 LOCAL.*
 REMOTE.*
+*.db

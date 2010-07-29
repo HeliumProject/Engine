@@ -4,6 +4,8 @@
 #include "Foundation/InitializerStack.h"
 
 #include "UI/MainFrame.h"
+#include "Platform/Thread.h"
+#include "Tracker/Tracker.h"
 #include "Vault/Vault.h"
 
 #include "Preferences.h"
@@ -58,6 +60,9 @@ namespace Luna
     protected:
         Nocturnal::InitializerStack m_InitializerStack;
         DocumentManager m_DocumentManager;
+        Tracker m_Tracker;
+        Platform::Thread m_TrackerThread;
+
         PreferencesPtr m_Preferences;
         Vault* m_Vault;
         MainFrame* m_Frame;

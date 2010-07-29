@@ -39,6 +39,7 @@ namespace Component
         ComponentCollection( const ComponentPtr& attr );
         virtual ~ComponentCollection(); 
 
+        virtual void GatherSearchableProperties( Nocturnal::SearchableProperties* properties ) const;
 
         //
         // Component Management

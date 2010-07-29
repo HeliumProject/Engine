@@ -4,6 +4,7 @@
  * 
  * See LICENSE for copyright information. */
 //#include "compatibility.hpp"
+#include "litesql_char.hpp"
 #include "litesql/split.hpp"
 #include <string>
 #include <string.h>
@@ -11,23 +12,22 @@
 #include <cstdlib>
 
 using namespace litesql;    
-using namespace std;
 
-Split::Split(const string& s, const string& delim) {
-  char * buf = strdup((char*) s.c_str());
-    char * ptr = buf;
+Split::Split(const LITESQL_String& s, const LITESQL_String& delim) {
+  LITESQL_Char * buf = _tcsdup((LITESQL_Char*) s.c_str());
+    LITESQL_Char * ptr = buf;
     int len = delim.size();
-    vector<char*> pointers;
+    std::vector<LITESQL_Char*> pointers;
     pointers.push_back(ptr);
-    while((ptr = strstr(ptr, delim.c_str()))) {
+    while((ptr = _tcsstr(ptr, delim.c_str()))) {
         *ptr = '\0';
         ptr += len;
         pointers.push_back(ptr);
     }
-    for (vector<char*>::iterator i = pointers.begin();
+    for (std::vector<LITESQL_Char*>::iterator i = pointers.begin();
          i != pointers.end();
          ++i)
-        push_back(string(*i));
+        push_back(LITESQL_String(*i));
 
     free(buf);
 }
@@ -48,8 +48,8 @@ Split Split::slice(int start, int end) const {
     return data;
 }
 
-string Split::join(const vector<string>& strings,const string& delim){
-    string res;
+LITESQL_String Split::join(const std::vector<LITESQL_String>& strings,const LITESQL_String& delim){
+    LITESQL_String res;
     for (const_iterator it = strings.begin(); it != strings.end(); it++) {
         if (it != strings.begin())
           res.append(delim);
@@ -58,14 +58,13 @@ string Split::join(const vector<string>& strings,const string& delim){
     return res;
 }
 
-string Split::join(const string& delim) const {
+LITESQL_String Split::join(const LITESQL_String& delim) const {
   return join(*this,delim);  
 }
 
-Split & Split::extend(const vector<string> & s) {
+Split & Split::extend(const std::vector<LITESQL_String> & s) {
   reserve(size()+s.size());
-  for (vector<string>::const_iterator it = s.begin();it != s.end(); it++)
+  for (std::vector<LITESQL_String>::const_iterator it = s.begin();it != s.end(); it++)
         push_back(*it);
     return *this;
 }
-

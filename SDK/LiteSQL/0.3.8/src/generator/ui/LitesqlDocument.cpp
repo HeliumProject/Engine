@@ -1,5 +1,5 @@
 
-// For compilers that support precompilation, includes "wx/wx.h".
+// For compilers that support precompilation, includes  LiteSQL_L( "wx/wx.h" ).
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
@@ -26,7 +26,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(LitesqlDocument, wxDocument)
 
-using namespace std;
 using namespace litesql;
 
 LitesqlDocument::LitesqlDocument(void)
@@ -59,14 +58,14 @@ void LitesqlDocument::RemoveField(xml::Field* pField)
 }
 
 #if wxUSE_STD_IOSTREAM
-wxSTD ostream& LitesqlDocument::SaveObject(wxSTD ostream& stream)
+wxSTD LiteSQL_oStream& LitesqlDocument::SaveObject(wxSTD LiteSQL_oStream& stream)
 #else
 wxOutputStream& LitesqlDocument::SaveObject(wxOutputStream& stream)
 #endif
 {
   XmlGenerator xml_generator;
   
-  string fname (GetFilename().mb_str());
+  LiteSQL_String fname (GetFilename().mb_str());
   xml_generator.setOutputFilename(fname);
 
   xml_generator.generateCode(m_pModel);
@@ -75,12 +74,12 @@ wxOutputStream& LitesqlDocument::SaveObject(wxOutputStream& stream)
 }
 
 #if wxUSE_STD_IOSTREAM
-wxSTD istream& LitesqlDocument::LoadObject(wxSTD istream& stream)
+wxSTD LiteSQL_iStream& LitesqlDocument::LoadObject(wxSTD LiteSQL_iStream& stream)
 #else
 wxInputStream& LitesqlDocument::LoadObject(wxInputStream& stream)
 #endif
 {
-  string fname (GetFilename().mb_str());
+  LiteSQL_String fname (GetFilename().mb_str());
   m_pModel->loadFromFile(fname);
   return stream;
 }

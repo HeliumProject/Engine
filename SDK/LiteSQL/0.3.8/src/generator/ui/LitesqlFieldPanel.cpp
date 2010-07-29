@@ -36,7 +36,7 @@ m_pField(pField)
 
 void LitesqlFieldPanel::OnAddValue( wxCommandEvent& event )
 {
-  m_listValues->AppendString(_("newValue"));
+  m_listValues->AppendString(_( LiteSQL_L( "newValue" )));
 }
 
 void LitesqlFieldPanel::OnRemoveValue( wxCommandEvent& event )
@@ -45,16 +45,16 @@ void LitesqlFieldPanel::OnRemoveValue( wxCommandEvent& event )
 // FieldTypeValidator implementation
 /****************************************************************************/
 const wxString FTSTRING[] = { 
-               _(""),
-               _("boolean"),
-               _("integer"),
-               _("string"),
-               _("float"),
-               _("double"),
-               _("time"),
-               _("date"),
-               _("datetime"),
-               _("blob") 
+               _( LiteSQL_L( "" )),
+               _( LiteSQL_L( "boolean" )),
+               _( LiteSQL_L( "integer" )),
+               _( LiteSQL_L( "LiteSQL_String" )),
+               _( LiteSQL_L( "float" )),
+               _( LiteSQL_L( "double" )),
+               _( LiteSQL_L( "time" )),
+               _( LiteSQL_L( "date" )),
+               _( LiteSQL_L( "datetime" )),
+               _( LiteSQL_L( "blob" )) 
 };  
 
 const wxArrayString FieldTypeValidator::FIELDTYPES(sizeof(FTSTRING)/sizeof(FTSTRING[0]),FTSTRING);
@@ -207,7 +207,7 @@ bool FieldValuesValidator::TransferToWindow()
     wxListBox* pList = (wxListBox*)pWin; 
     pList->Clear();
     size_t pos = 0;
-    for (vector<Value>::const_iterator it = m_pField->values.begin(); it != m_pField->values.end();it++)
+    for (std::vector<Value>::const_iterator it = m_pField->values.begin(); it != m_pField->values.end();it++)
     {
       pList->Insert(wxString::FromUTF8(it->name.c_str()),pos++);
     }
@@ -231,7 +231,7 @@ bool FieldValuesValidator::TransferFromWindow()
     size_t i = 0;
     for (wxArrayString::const_iterator it = values.begin(); it != values.end();it++)
     {
-      string name = (*it).ToUTF8();
+      LiteSQL_String name = (*it).ToUTF8();
       xml::Value v(name,toString<int>(i++));
       m_pField->values.push_back( v );
     }

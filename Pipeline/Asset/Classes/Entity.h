@@ -9,31 +9,21 @@
 
 namespace Asset
 {
-  //
-  // The Definition of an Entity Class
-  //
   class PIPELINE_API Entity : public AssetClass
   {
   private:
 
   public:
-    //
-    // RTTI
-    //
-
     REFLECT_DECLARE_CLASS(Entity, AssetClass);
 
     static void EnumerateClass( Reflect::Compositor<Entity>& comp );
 
-
   public:
-
     Entity()
     {
     }
 
-    void GatherIndexData( AssetIndexData& indexData );
-
+    virtual void GatherSearchableProperties( Nocturnal::SearchableProperties* properties ) const NOC_OVERRIDE;
   }; 
 
   typedef Nocturnal::SmartPtr< Entity > EntityPtr;

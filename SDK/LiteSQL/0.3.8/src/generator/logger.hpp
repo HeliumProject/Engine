@@ -1,6 +1,6 @@
 #ifndef LOGGER_HPP
 #define LOGGER_HPP
-
+#include "litesql_char.hpp"
 #include <string>
 #include "litesql/except.hpp"
 
@@ -8,10 +8,10 @@ namespace litesql
 {
   class Logger {
   public:
-    static void report(const std::string& msg,const std::string& msg2);
-    static void report(const std::string& msg);
-    static void error(const std::string& msg,const std::string& msg2);
-    static void error(const std::string& msg2);
+    static void report(const LITESQL_String& msg,const LITESQL_String& msg2);
+    static void report(const LITESQL_String& msg);
+    static void error(const LITESQL_String& msg,const LITESQL_String& msg2);
+    static void error(const LITESQL_String& msg2);
     static void error(const Except& ex);
     static void verbose(bool verbose);
   };

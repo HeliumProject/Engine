@@ -1,6 +1,6 @@
 #ifndef objectmodel_hpp
 #define objectmodel_hpp
-
+#include "litesql_char.hpp"
 #include <string>
 #include <vector>
 
@@ -12,7 +12,7 @@ class ObjectModel {
 public:
    virtual ~ObjectModel();
    /** load model from xml-file (uses a  specialized XmlParser) */
-   bool loadFromFile(const std::string& filename);
+   bool loadFromFile(const LITESQL_String& filename);
 
    bool remove(xml::Field* field);
    bool remove(xml::Object* object);
@@ -24,9 +24,8 @@ public:
    std::vector<xml::Relation* > relations;
 };
 
-const char* toString(AT_field_type t);
-AT_field_type field_type(const char* value);
+const LITESQL_Char* toString(AT_field_type t);
+AT_field_type field_type(const LITESQL_Char* value);
 
 }
 #endif //#ifndef objectmodel_hpp
-

@@ -8,21 +8,22 @@
     contains class Split */
 #ifndef litesql_split_hpp
 #define litesql_split_hpp
+#include "litesql_char.hpp"
 #include <string>
 #include <vector>
 namespace litesql {
 /** splits and joins strings. Modelled with Python's strings in mind. */
-class Split : public std::vector<std::string> {
+class Split : public std::vector<LITESQL_String> {
 public:
     /** empty split */
     Split() {}
     /** init with reserved size (only reserved)  */
     Split(size_t initial_size) { reserve(initial_size);}
-    /** from string vector */
-    Split(std::vector<std::string> data) 
-        : std::vector<std::string>(data) {}
-    /** from string. Split to parts using delimeter */
-    Split(const std::string& s, const std::string& delim=" ");
+    /** from LITESQL_String vector */
+    Split(std::vector<LITESQL_String> data) 
+        : std::vector<LITESQL_String>(data) {}
+    /** from LITESQL_String. Split to parts using delimeter */
+    Split(const LITESQL_String& s, const LITESQL_String& delim= LITESQL_L(" "));
 
     /** returns a part of strings 
      \param start starting index
@@ -31,11 +32,11 @@ public:
      Split then.*/
     Split slice(int start, int end) const;
     /** returns strings joined with delimiter */
-    std::string join(const std::string& delim) const;
+    LITESQL_String join(const LITESQL_String& delim) const;
 
-    static std::string join(const std::vector<std::string>& strings,const std::string& delim=" ");
+    static LITESQL_String join(const std::vector<LITESQL_String>& strings,const LITESQL_String& delim= LITESQL_L(" "));
     /** adds contents of another split to the end */
-    Split & extend(const std::vector<std::string> & s);
+    Split & extend(const std::vector<LITESQL_String> & s);
 };
 }
 #endif

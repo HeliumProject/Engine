@@ -1,6 +1,6 @@
 #ifndef litesql_xmlparser_hpp
 #define litesql_xmlparser_hpp
-
+#include "litesql_char.hpp"
 #include <string>
 
 #include "expat.h"
@@ -11,7 +11,7 @@ class XmlParser {
 
 public:
    virtual ~XmlParser();
-   bool parseFile(const std::string& filename);
+   bool parseFile(const LITESQL_String& filename);
    
    static const XML_Char* xmlGetAttrValue(const XML_Char** attrs,const XML_Char* key);
 
@@ -31,4 +31,3 @@ private:
 };
 }
 #endif
-

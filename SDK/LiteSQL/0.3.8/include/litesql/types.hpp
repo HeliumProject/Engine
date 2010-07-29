@@ -5,7 +5,7 @@
  * See LICENSE for copyright information. */
 #ifndef _litesql_types_hpp
 #define _litesql_types_hpp
-#include <string>
+#include "litesql_char.hpp"
 #include <vector>
 #include "litesql/utils.hpp"
 #include "litesql/except.hpp"
@@ -16,10 +16,10 @@ namespace litesql
 {
 class Database;
 /** SQL data row wrapper. */
-class Record : public std::vector<std::string>
+class Record : public std::vector<LITESQL_String>
 {
 public: 
-    Record() : std::vector<std::string>() {}
+    Record() : std::vector<LITESQL_String>() {}
     Record(size_t reserved) { reserve(reserved); }
 };
 /** shortcut */

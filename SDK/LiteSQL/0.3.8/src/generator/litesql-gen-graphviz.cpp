@@ -1,36 +1,36 @@
+#include "litesql_char.hpp"
 #include "litesql-gen-graphviz.hpp"
 #include <fstream>
 
-using namespace std;
 using namespace xml;
 
-bool GraphvizGenerator::generate(Object* const object    ,ostream& os, size_t indent)
+bool GraphvizGenerator::generate(Object* const object    ,LITESQL_oStream& os, size_t indent)
 {
-  string indents(indent,' ');
+  LITESQL_String indents(indent,' ');
   os << indents << '"' << object->name << '"';
   
   if (object->parentObject)
-    os << " -> \"" << object->inherits << "\"";
+    os <<  LITESQL_L(" -> \"") << object->inherits <<  LITESQL_L("\"");
   
-  os << ';' << endl;
+  os << ';' << std::endl;
   return true;
 }
 
-bool GraphvizGenerator::generate(Relation* const relation,ostream& os,size_t indent)
+bool GraphvizGenerator::generate(Relation* const relation,LITESQL_oStream& os,size_t indent)
 {
-  string indents(indent,' ');
+  LITESQL_String indents(indent,' ');
   Relation& r = *relation;
   for (size_t i2 = 0; i2 < r.related.size(); i2++) {
     Relate& rel = *r.related[i2];
-    string extra;
+    LITESQL_String extra;
     for (size_t i3 = 0; i3 < r.related.size(); i3++) {
       if (i3 == i2) 
         continue;
 
       Relate& destRel = *r.related[i3];
       if (rel.handle.size() > 0) {
-        extra = " [label=\"" + rel.handle + "\"]";
-        os << indents << "\"" << rel.objectName << "\" -> \""<< destRel.objectName <<"\""<< " [label=\"" << rel.handle << "\"]" <<";" <<endl; 
+        extra =  LITESQL_L(" [label=\"") + rel.handle +  LITESQL_L("\"]");
+        os << indents <<  LITESQL_L("\"") << rel.objectName <<  LITESQL_L("\" -> \"")<< destRel.objectName << LITESQL_L("\"")<<  LITESQL_L(" [label=\"") << rel.handle <<  LITESQL_L("\"]") << LITESQL_L(";") <<std::endl; 
       }
     }
   }
@@ -40,27 +40,26 @@ bool GraphvizGenerator::generate(Relation* const relation,ostream& os,size_t ind
 bool GraphvizGenerator::generateCode(const ObjectModel* model)
 {
 
-  string fname = getOutputFilename(toLower(model->db.name + ".dot"));
+  LITESQL_String fname = getOutputFilename(toLower(model->db.name +  LITESQL_L(".dot")));
 
-  ofstream os(fname.c_str());
-  os << "digraph database {" << endl
-     << "  node[shape=box,color=black];" << endl
-     << "  subgraph inheritance {" << endl
-     << "    edge[style=dashed,dir=forward,arrowhead=normal];" << endl;
+  LITESQL_ofSstream os(fname.c_str());
+  os <<  LITESQL_L("digraph database {") << std::endl
+     <<  LITESQL_L("  node[shape=box,color=black];") << std::endl
+     <<  LITESQL_L("  subgraph inheritance {") << std::endl
+     <<  LITESQL_L("    edge[style=dashed,dir=forward,arrowhead=normal];") << std::endl;
     
   CodeGenerator::generate(model->objects,os,4);
 
-  os << "  }" << endl
-     << "  subgraph relations {" << endl
-     << "    edge[dir=forward,arrowhead=vee];" << endl;
+  os <<  LITESQL_L("  }") << std::endl
+     <<  LITESQL_L("  subgraph relations {") << std::endl
+     <<  LITESQL_L("    edge[dir=forward,arrowhead=vee];") << std::endl;
   
   CodeGenerator::generate(model->relations,os,4);
   
-  os << "  }" << endl
-     << "}" << endl;
+  os <<  LITESQL_L("  }") << std::endl
+     <<  LITESQL_L("}") << std::endl;
 
   os.close();
   return true;
 }
-
 

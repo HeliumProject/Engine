@@ -91,7 +91,6 @@ void Asset::Initialize()
     //
 
     g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetClass>( TXT( "AssetClass" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass< AssetIndexData >( TXT( "AssetIndexData" ) ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<ManifestVersion>( TXT( "ManifestVersion" ) ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetManifest>( TXT( "AssetManifest" ) ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<EntityManifest>( TXT( "EntityManifest" ) ) ); Reflect::Registry::GetInstance()->AliasType( Reflect::GetClass< EntityManifest >(), TXT( "AssetManifest" ) );

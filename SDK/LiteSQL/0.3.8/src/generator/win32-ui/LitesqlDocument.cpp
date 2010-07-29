@@ -1,7 +1,6 @@
 #include "LitesqlMDIChild.h"
 #include "litesql-gen-xml.hpp"
 
-using namespace std;
 using namespace litesql;
 
 LitesqlDocument::LitesqlDocument(LPCTSTR pszFilename)
@@ -15,10 +14,10 @@ void LitesqlDocument::setModified(bool bModified)
 bool LitesqlDocument::isModified() 
 { return m_bModified; }
 
-const string& LitesqlDocument::getFilename()
+const LiteSQL_String& LitesqlDocument::getFilename()
 { return m_filename; }
 
-void LitesqlDocument::setFilename(const string& filename)
+void LitesqlDocument::setFilename(const LiteSQL_String& filename)
 { m_filename = filename; }
 
 ObjectModel& LitesqlDocument::getModel()
@@ -34,7 +33,7 @@ bool LitesqlDocument::Load(LPCTSTR pszFilename)
     }
     else
     {
-      m_filename = "Unbekannt.lsl";
+      m_filename =  LiteSQL_L( "Unbekannt.lsl" );
     }
     setModified(false);
     return m_model.loadFromFile(m_filename);

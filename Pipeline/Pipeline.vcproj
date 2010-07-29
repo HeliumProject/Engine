@@ -907,14 +907,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Asset\AssetIndexData.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Asset\AssetIndexData.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Asset\AssetInit.cpp"
 				>
 			</File>

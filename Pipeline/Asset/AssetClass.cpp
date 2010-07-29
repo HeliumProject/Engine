@@ -12,6 +12,15 @@
 #include "Foundation/Reflect/Version.h"
 #include "Foundation/Reflect/Object.h"
 
+#include "Foundation/Reflect/Visitor.h"
+#include "Foundation/Reflect/PathSerializer.h"
+#include "Foundation/Reflect/ArraySerializer.h"
+#include "Foundation/Reflect/MapSerializer.h"
+#include "Foundation/Reflect/SetSerializer.h"
+#include "Foundation/Reflect/ElementArraySerializer.h"
+#include "Foundation/Reflect/ElementMapSerializer.h"
+#include "Foundation/Reflect/ElementSetSerializer.h"
+
 #include <memory>
 
 using namespace Reflect;
@@ -22,7 +31,6 @@ const tchar* ASSET_VERSION = TXT( "1" );
 tstring AssetClass::s_BaseBuiltDirectory = TXT( "" );
 
 REFLECT_DEFINE_ABSTRACT( AssetClass );
-
 void AssetClass::EnumerateClass( Reflect::Compositor<AssetClass>& comp )
 {
     comp.AddField( &AssetClass::m_Description, "m_Description" );
@@ -74,9 +82,198 @@ tstring AssetClass::GetShortName() const
     return m_Path.Basename();
 }
 
-void AssetClass::GetDependencies( std::set< Nocturnal::Path >& dependencies )
+void AssetClass::GatherSearchableProperties( Nocturnal::SearchableProperties* properties ) const
 {
-    return;
+    properties->Insert( TXT( "AssetDescription" ), m_Description );
+    
+    for ( std::set< tstring >::const_iterator itr = m_Tags.begin(), end = m_Tags.end(); itr != end; ++itr )
+    {
+        properties->Insert( TXT( "AssetTag" ), (*itr) );
+    }
+
+    __super::GatherSearchableProperties( properties );
+}
+
+namespace Asset
+{
+    class AssetDependencyVisitor : public Reflect::Visitor
+    {   
+    public:
+        std::set< Nocturnal::Path >& m_Dependencies;
+
+        AssetDependencyVisitor(std::set< Nocturnal::Path >& dependencies)
+            : m_Dependencies( dependencies )
+        {
+        }
+
+        virtual ~AssetDependencyVisitor()
+        {
+        }
+
+        virtual bool VisitField(Element* element, const Field* field) NOC_OVERRIDE
+        {
+            if ( field->m_SerializerID == Reflect::GetType< Reflect::PathSerializer >() )
+            {
+                Nocturnal::Path path;
+                if ( Reflect::Serializer::GetValue( field->CreateSerializer( element ), path ) )
+                {
+                    m_Dependencies.insert( path );
+
+                    return false;
+                }
+            }
+            //-----------------------------------------------
+            else if ( field->m_SerializerID == Reflect::GetType< Reflect::ArraySerializer >() )
+            {
+                const Reflect::ArraySerializer* arraySerializer = Reflect::ConstDangerousCast<Reflect::ArraySerializer>( field->CreateSerializer( element ) );
+                if ( arraySerializer->GetItemType() == Reflect::GetType< Reflect::PathSerializer >() )
+                {
+                    if ( (int)arraySerializer->GetSize() < 1 )
+                    {
+                        return true;
+                    }
+
+                    for ( size_t index = 0; index < arraySerializer->GetSize(); ++index )
+                    {
+                        Nocturnal::Path path;
+                        if ( Reflect::Serializer::GetValue( arraySerializer->GetItem( index ), path ) )
+                        {
+                            m_Dependencies.insert( path );
+                        }
+                    }
+
+                    return false;
+                }
+            }
+            //-----------------------------------------------
+            else if ( field->m_SerializerID == Reflect::GetType< Reflect::MapSerializer >() )
+            {
+                const Reflect::MapSerializer* mapSerializer = Reflect::ConstDangerousCast<Reflect::MapSerializer>( field->CreateSerializer( element ) );
+                if ( mapSerializer->GetValueType() == Reflect::GetType< Reflect::PathSerializer >() )
+                {
+                    if ( (int)mapSerializer->GetSize() < 1 )
+                    {
+                        return true;
+                    }
+
+                    Reflect::MapSerializer::V_ConstValueType data;
+                    mapSerializer->GetItems( data );
+
+                    Reflect::MapSerializer::V_ConstValueType::const_iterator itr = data.begin();
+                    Reflect::MapSerializer::V_ConstValueType::const_iterator end = data.end();
+                    for ( ; itr != end; ++itr )
+                    {
+                        Nocturnal::Path path;
+                        if ( Reflect::Serializer::GetValue( itr->second, path ) )
+                        {
+                            m_Dependencies.insert( path );
+                        }
+                    }
+
+                    return false;
+                }
+            }
+            //-----------------------------------------------
+            else if ( field->m_SerializerID == Reflect::GetType< Reflect::SetSerializer >() )
+            {
+                const Reflect::SetSerializer* setSerializer = Reflect::ConstDangerousCast<Reflect::SetSerializer>( field->CreateSerializer( element ) );
+                if ( setSerializer->GetItemType() == Reflect::GetType< Reflect::PathSerializer >() )
+                {
+                    if ( (int)setSerializer->GetSize() < 1 )
+                    {
+                        return true;
+                    }
+
+                    Reflect::V_ConstSerializer data;
+                    setSerializer->GetItems( data );
+
+                    Reflect::V_ConstSerializer::const_iterator itr = data.begin();
+                    Reflect::V_ConstSerializer::const_iterator end = data.end();
+                    for ( ; itr != end; ++itr )
+                    {
+                        Nocturnal::Path path;
+                        if ( Reflect::Serializer::GetValue( (*itr), path ) )
+                        {
+                            m_Dependencies.insert( path );
+                        }
+                    }
+
+                    return false;
+                }
+            }
+            //-----------------------------------------------
+            else if ( field->m_SerializerID == Reflect::GetType< Reflect::ElementArraySerializer >() )
+            {
+                const Reflect::ElementArraySerializer* arraySerializer = Reflect::ConstDangerousCast< Reflect::ElementArraySerializer >( field->CreateSerializer( element ) );
+                
+                if ( (int)arraySerializer->GetSize() < 1 )
+                {
+                    return true;
+                }
+
+                const Reflect::V_Element& vals = arraySerializer->m_Data.Ref();
+                for ( Reflect::V_Element::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
+                {
+                    (*itr)->Host( *this );
+                }
+
+                return false;
+            }
+            //-----------------------------------------------
+            else if ( field->m_SerializerID == Reflect::GetType< Reflect::ElementMapSerializer >() )
+            {
+                const Reflect::ElementMapSerializer* mapSerializer = Reflect::ConstDangerousCast< Reflect::ElementMapSerializer >( field->CreateSerializer( element ) );
+
+                if ( (int)mapSerializer->GetSize() < 1 )
+                {
+                    return true;
+                }
+
+                Reflect::ElementMapSerializer::V_ConstValueType data;
+                mapSerializer->GetItems( data );
+
+                Reflect::ElementMapSerializer::V_ConstValueType::const_iterator itr = data.begin();
+                Reflect::ElementMapSerializer::V_ConstValueType::const_iterator end = data.end();
+                for ( ; itr != end; ++itr )
+                {
+                    (*itr->second)->Host( *this );
+                }
+
+                return false;
+            }
+            //-----------------------------------------------
+            else if ( field->m_SerializerID == Reflect::GetType< Reflect::ElementSetSerializer >() )
+            {
+                const Reflect::ElementSetSerializer* setSerializer = Reflect::ConstDangerousCast< Reflect::ElementSetSerializer >( field->CreateSerializer( element ) );
+                
+                if ( (int)setSerializer->GetSize() < 1 )
+                {
+                    return true;
+                }
+
+                const Reflect::ElementSetSerializer::DataType& vals = setSerializer->m_Data.Ref();
+                for ( Reflect::ElementSetSerializer::DataType::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
+                {
+                    (*itr)->Host( *this );
+                }
+
+                return false;
+            }
+
+            // continue search
+            return true;
+        }
+    };
+}
+
+void AssetClass::GetFileReferences( std::set< Nocturnal::Path >& fileReferences )
+{
+    AssetDependencyVisitor assetDepVisitor( fileReferences );
+    this->Host( assetDepVisitor );
+
+    //__super::GetFileReferences( fileReferences );
+
+    fileReferences.erase( m_Path );
 }
 
 void AssetClass::ComponentChanged( const Component::ComponentBase* attr )

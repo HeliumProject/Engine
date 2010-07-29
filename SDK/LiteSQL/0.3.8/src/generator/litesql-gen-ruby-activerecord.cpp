@@ -1,26 +1,26 @@
+#include "litesql_char.hpp"
 #include "litesql-gen-ruby-activerecord.hpp"
 #include <fstream>
 
-using namespace std;
 using namespace xml;
 
-string toActiveRecordType(AT_field_type field_type) {
+LITESQL_String toActiveRecordType(AT_field_type field_type) {
   switch(field_type) {
-       case A_field_type_integer:  return "int";
-       case A_field_type_float:    return "float";
-       case A_field_type_double:    return "double";
-       case A_field_type_boolean:  return "bool";
-       case A_field_type_date:     return "date";
-       case A_field_type_time:     return "timestamp";
-       case A_field_type_datetime: return "datetime";
-       case A_field_type_blob:     return "blob";
-       case A_field_type_string:   return "string";
+       case A_field_type_integer:  return  LITESQL_L("int");
+       case A_field_type_float:    return  LITESQL_L("float");
+       case A_field_type_double:    return  LITESQL_L("double");
+       case A_field_type_boolean:  return  LITESQL_L("bool");
+       case A_field_type_date:     return  LITESQL_L("date");
+       case A_field_type_time:     return  LITESQL_L("timestamp");
+       case A_field_type_datetime: return  LITESQL_L("datetime");
+       case A_field_type_blob:     return  LITESQL_L("blob");
+       case A_field_type_string:   return  LITESQL_L("LITESQL_String");
        default:
-         return "unknown";
+         return  LITESQL_L("unknown");
   }
 }
 
-RubyActiveRecordGenerator::RubyActiveRecordGenerator(): CompositeGenerator("ruby-activerecord") 
+RubyActiveRecordGenerator::RubyActiveRecordGenerator(): CompositeGenerator(LITESQL_L("ruby-activerecord")) 
 { 
   add(new ActiveRecordClassGenerator());
   add(new RubyMigrationsGenerator());
@@ -28,27 +28,27 @@ RubyActiveRecordGenerator::RubyActiveRecordGenerator(): CompositeGenerator("ruby
 
 bool ActiveRecordClassGenerator::generate(xml::Object* const object)
 {
-  string fname = getOutputFilename(toLower(object->name + ".rb"));
+  LITESQL_String fname = getOutputFilename(toLower(object->name +  LITESQL_L(".rb")));
 
-  ofstream os(fname.c_str());
+  LITESQL_ofSstream os(fname.c_str());
   
   
-  string baseClass = object->parentObject ? object->inherits : "ActiveRecord::Base"; 
-  os << "class " << object->name << " < " << baseClass << endl;
+  LITESQL_String baseClass = object->parentObject ? object->inherits :  LITESQL_L("ActiveRecord::Base"); 
+  os <<  LITESQL_L("class ") << object->name <<  LITESQL_L(" < ") << baseClass << std::endl;
   
-  for (vector<RelationHandle*>::const_iterator it = object->handles.begin(); it!= object->handles.end(); it++) {
-    os  << ((*it)->relate->hasLimit() ? "has_one" : "has_many") 
-        << " :" << (*it)->name;
+  for (std::vector<RelationHandle*>::const_iterator it = object->handles.begin(); it!= object->handles.end(); it++) {
+    os  << ((*it)->relate->hasLimit() ?  LITESQL_L("has_one") :  LITESQL_L("has_many")) 
+        <<  LITESQL_L(" :") << (*it)->name;
     
     if (!(*it)->name.empty())
-      os << ", :through => :" << (*it)->name;
+      os <<  LITESQL_L(", :through => :") << (*it)->name;
       
       
-    os  << endl;
+    os  << std::endl;
     
   }
   
-  os << "end" << endl;
+  os <<  LITESQL_L("end") << std::endl;
   os.close();
   return true;
 }
@@ -59,56 +59,55 @@ bool ActiveRecordClassGenerator::generateCode(const ObjectModel* model)
   return true;
 }
 
-void generateSelfUp(const ObjectModel* model,ostream& os)
+void generateSelfUp(const ObjectModel* model,LITESQL_oStream& os)
 {
-  string indent("  ");
-  os << "def self.up" << endl;
-  for (vector<Object*>::const_iterator it = model->objects.begin(); it !=model->objects.end();it++)
+  LITESQL_String indent(LITESQL_L("  "));
+  os <<  LITESQL_L("def self.up") << std::endl;
+  for (std::vector<Object*>::const_iterator it = model->objects.begin(); it !=model->objects.end();it++)
   {
-    os << indent << "create_table :" << (*it)->getTable() <<  " do |t|" << endl;
+    os << indent <<  LITESQL_L("create_table :") << (*it)->getTable() <<   LITESQL_L(" do |t|") << std::endl;
   
-    for (vector<Field*>::const_iterator fit = (*it)->fields.begin(); fit !=(*it)->fields.end();fit++)
+    for (std::vector<Field*>::const_iterator fit = (*it)->fields.begin(); fit !=(*it)->fields.end();fit++)
     {
       os  << indent << indent 
-          << "t." << toActiveRecordType((*fit)->type) << " :" << (*fit)->name     
-          << endl;
+          <<  LITESQL_L("t.") << toActiveRecordType((*fit)->type) <<  LITESQL_L(" :") << (*fit)->name     
+          << std::endl;
     }
-    os  << endl;
+    os  << std::endl;
     
-    os  << indent << indent << "t.timestamps" << endl;
-    os  << indent << "end" << endl
-        << endl;
+    os  << indent << indent <<  LITESQL_L("t.timestamps") << std::endl;
+    os  << indent <<  LITESQL_L("end") << std::endl
+        << std::endl;
 
 
   }
-  os << "end" << endl;
+  os <<  LITESQL_L("end") << std::endl;
 }
 
-void generateSelfDown(const ObjectModel* model,ostream& os)
+void generateSelfDown(const ObjectModel* model,LITESQL_oStream& os)
 {
-  string indent("  ");
-  os << "def self.down" << endl;
-  for (vector<Object*>::const_iterator it = model->objects.begin(); it !=model->objects.end();it++)
+  LITESQL_String indent(LITESQL_L("  "));
+  os <<  LITESQL_L("def self.down") << std::endl;
+  for (std::vector<Object*>::const_iterator it = model->objects.begin(); it !=model->objects.end();it++)
   {
-    os << indent << "drop_table :" << (*it)->getTable() << endl;
+    os << indent <<  LITESQL_L("drop_table :") << (*it)->getTable() << std::endl;
   
   }
-  os << "end" << endl;
+  os <<  LITESQL_L("end") << std::endl;
 }
 
 bool RubyMigrationsGenerator::generateCode(const ObjectModel* model)
 {
-  ofstream os(getOutputFilename(toLower(model->db.name + "_migration.rb")).c_str());
+  LITESQL_ofSstream os(getOutputFilename(toLower(model->db.name +  LITESQL_L("_migration.rb"))).c_str());
   
-  os << "class " << "Create" << model->db.name << "  < ActiveRecord::Migration" << endl;
-  os << endl;
+  os <<  LITESQL_L("class ") <<  LITESQL_L("Create") << model->db.name <<  LITESQL_L("  < ActiveRecord::Migration") << std::endl;
+  os << std::endl;
   generateSelfUp(model,os);
-  os << endl;
+  os << std::endl;
   generateSelfDown(model,os);
-  os << endl;
-  os << "end" << endl;
+  os << std::endl;
+  os <<  LITESQL_L("end") << std::endl;
 
   os.close();
   return true;
 }
-

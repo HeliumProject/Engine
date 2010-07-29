@@ -1,6 +1,6 @@
 #ifndef generator_hpp
 #define generator_hpp
-
+#include "litesql_char.hpp"
 #include <vector>
 #include <ostream>
 
@@ -14,15 +14,15 @@ namespace litesql {
     
     virtual ~CodeGenerator();
     
-    virtual void setOutputDirectory(const std::string& directory);
-    virtual const std::string& getOutputDirectory() const;
+    virtual void setOutputDirectory(const LITESQL_String& directory);
+    virtual const LITESQL_String& getOutputDirectory() const;
     
     void setGenerationMode(generation_mode_t mode) { m_generationMode = mode; };
     generation_mode_t getGenerationMode() const { return m_generationMode; };
     
-    std::string getOutputFilename(const std::string& name) const;
+    LITESQL_String getOutputFilename(const LITESQL_String& name) const;
     
-    virtual const char* getTarget() const;
+    virtual const LITESQL_Char* getTarget() const;
     virtual bool generateCode(const ObjectModel* model)=0;
     
     CodeGenerator* const getParentGenerator() const { return m_pParentGenerator; };
@@ -33,36 +33,36 @@ namespace litesql {
     virtual bool generate(xml::Object* const object) {return true;};
     virtual bool generate(xml::Relation* const relation){return true;};
     
-    bool generate(const std::vector<xml::Object* >& objects,std::ostream& os,size_t indent=2);
-    bool generate(const std::vector<xml::Relation* >& relations,std::ostream& os,size_t indent=2);
-    //virtual void generate(std::ostream& os,const ObjectModel* model,size_t indent=0);
+    bool generate(const std::vector<xml::Object* >& objects,LITESQL_oStream& os,size_t indent=2);
+    bool generate(const std::vector<xml::Relation* >& relations,LITESQL_oStream& os,size_t indent=2);
+    //virtual void generate(LITESQL_oStream& os,const ObjectModel* model,size_t indent=0);
     
-    virtual bool generate(xml::Object* const object    ,std::ostream& os, size_t indent=2) {return true;};
-    //virtual void generate(std::ostream& os,xml::Field* field     , size_t indent=4){};
-    //virtual void generate(std::ostream& os,xml::Method* pMethod  , size_t indent=4){};
+    virtual bool generate(xml::Object* const object    ,LITESQL_oStream& os, size_t indent=2) {return true;};
+    //virtual void generate(LITESQL_oStream& os,xml::Field* field     , size_t indent=4){};
+    //virtual void generate(LITESQL_oStream& os,xml::Method* pMethod  , size_t indent=4){};
     
-    virtual bool generate(xml::Relation* const relation,std::ostream& os,size_t indent=4){return true;};
+    virtual bool generate(xml::Relation* const relation,LITESQL_oStream& os,size_t indent=4){return true;};
     
-    //  static CodeGenerator* create(const char* target);
+    //  static CodeGenerator* create(const LITESQL_Char* target);
     
   protected:
-    CodeGenerator(const char* target)
+    CodeGenerator(const LITESQL_Char* target)
     : m_target(target),m_generationMode(REFRESH) {};
     
   private:
-    const char* m_target;
+    const LITESQL_Char* m_target;
     generation_mode_t m_generationMode;
-    std::string m_directory;
+    LITESQL_String m_directory;
     CodeGenerator* m_pParentGenerator;
   };
   
   class CompositeGenerator : public CodeGenerator {
   public:
-    CompositeGenerator(): CodeGenerator("composite") { };
-    CompositeGenerator(const char* target) : CodeGenerator(target) {};
+    CompositeGenerator(): CodeGenerator(LITESQL_L("composite")) { };
+    CompositeGenerator(const LITESQL_Char* target) : CodeGenerator(target) {};
         
-    void setOutputDirectory(const std::string& directory);
-    const std::string& getOutputDirectory() const;
+    void setOutputDirectory(const LITESQL_String& directory);
+    const LITESQL_String& getOutputDirectory() const;
     void add(CodeGenerator* g);
     bool generateCode(const ObjectModel* model);
   private:
@@ -72,4 +72,3 @@ namespace litesql {
 }
 
 #endif //#ifndef generator_hpp
-

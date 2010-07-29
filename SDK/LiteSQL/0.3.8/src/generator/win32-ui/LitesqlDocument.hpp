@@ -19,8 +19,8 @@ public:
   void setModified(bool bModified=true);
   bool isModified();
 
-  const std::string& getFilename();
-  void setFilename(const std::string& filename);
+  const LiteSQL_String& getFilename();
+  void setFilename(const LiteSQL_String& filename);
   litesql::ObjectModel& getModel();
 
   virtual bool Load(LPCTSTR pszFilename);  
@@ -30,9 +30,8 @@ public:
   
 private:
   bool m_bModified;
-  std::string m_filename;
+  LiteSQL_String m_filename;
   litesql::ObjectModel m_model;
 };
 
 #endif  //#ifndef LITESQLDOCUMENT_H
-

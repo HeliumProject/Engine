@@ -11,7 +11,7 @@
 
 #ifdef HAVE_LIBMYSQLCLIENT
 
-
+#include "litesql_char.hpp"
 #include "litesql/except.hpp"
 #include "litesql/types.hpp"
 #include "litesql/string.hpp"
@@ -21,27 +21,26 @@ typedef struct st_mysql MYSQL;
 
 namespace litesql {
 
-  using namespace std;
 /** MySQL - backend */
 class MySQL : public Backend {
     MYSQL* conn;
-    string host, user, passwd, database;
+    LITESQL_String host, user, passwd, database;
     int port;
 public:
   class Cursor;
   class Result;
 
-    MySQL(const string& connInfo);
+    MySQL(const LITESQL_String& connInfo);
     virtual ~MySQL();
 
     virtual bool supportsSequences() const;
-    virtual string getRowIDType() const;
-    virtual string getInsertID() const;
+    virtual LITESQL_String getRowIDType() const;
+    virtual LITESQL_String getInsertID() const;
     virtual void begin() const;
     virtual void commit() const;
     virtual void rollback() const;
-    Backend::Result* execute(const string& query) const;
-    Backend::Cursor* cursor(const string& query) const;
+    Backend::Result* execute(const LITESQL_String& query) const;
+    Backend::Cursor* cursor(const LITESQL_String& query) const;
 };
 }
 #endif

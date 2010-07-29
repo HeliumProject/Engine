@@ -9,6 +9,7 @@
 #ifndef _litesql_postgresql_hpp
 #define _litesql_postgresql_hpp
 #ifdef HAVE_LIBPQ
+#include "litesql_char.hpp"
 #include "libpq-fe.h"
 #include "litesql/except.hpp"
 #include "litesql/types.hpp"
@@ -17,7 +18,6 @@
 
 #include <string>
 namespace litesql {
-using namespace std;
 /** PostgreSQL - backend */
 class PostgreSQL : public Backend {
     PGconn *conn;
@@ -41,22 +41,22 @@ public:
         const PostgreSQL& pq;
         static int sid;
         static size_t cacheSize;
-        string name;
+        LITESQL_String name;
         Records cache;
         size_t cachePos;
     public:
         virtual void setCacheSize(int v);
-        Cursor(const PostgreSQL& p, string q);
+        Cursor(const PostgreSQL& p, LITESQL_String q);
         virtual Record fetchOne();
         virtual ~Cursor();
     };
-    PostgreSQL(const string& connInfo);
+    PostgreSQL(const LITESQL_String& connInfo);
     virtual bool supportsSequences() const;
     virtual void begin() const;
     virtual void commit() const;
     virtual void rollback() const;
-    Backend::Result* execute(string query) const;
-    Backend::Cursor* cursor(string query) const;
+    Backend::Result* execute(LITESQL_String query) const;
+    Backend::Cursor* cursor(LITESQL_String query) const;
     virtual ~PostgreSQL();
 };
 }

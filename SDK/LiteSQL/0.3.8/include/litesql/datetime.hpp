@@ -6,11 +6,11 @@
 
 #ifndef litesql_datetime_hpp
 #define litesql_datetime_hpp
+#include "litesql_char.hpp"
 /** \file datetime.hpp
     constains Date, Time and DateTime - classes */
 #include "field.hpp"
 namespace litesql {
-using namespace std;
 /* holds struct tm */
 class TimeStruct {
     struct tm mytm;
@@ -52,7 +52,7 @@ public:
     Date& setMonth(int m);
     Date& setYear(int y);
     Date& setTimeStamp(time_t t);
-    string asString(string format="%u") const;
+    LITESQL_String asString(LITESQL_String format= LITESQL_L("%u")) const;
 };
 /** holds time of day */
 class Time {
@@ -65,7 +65,7 @@ public:
     int min() const;
     int sec() const;
     int secs() const;
-    string asString(string format="%u") const;
+    LITESQL_String asString(LITESQL_String format= LITESQL_L("%u")) const;
 
     Time& setHour(int d);
     Time& setMin(int m);
@@ -85,7 +85,7 @@ public:
     int sec() const;
     time_t timeStamp() const;
     TimeStruct timeStruct() const;
-    string asString(string format="%u") const;
+    LITESQL_String asString(LITESQL_String format= LITESQL_L("%u")) const;
 
     DateTime& setDay(int d);
     DateTime& setMonth(int m);
@@ -96,22 +96,22 @@ public:
     Date& setTimeStamp(time_t t);
 };
 template <>
-Date convert<const string&, Date>(const string& value);
+Date convert<const LITESQL_String&, Date>(const LITESQL_String& value);
 template <>
-Time convert<const string&, Time>(const string& value);
+Time convert<const LITESQL_String&, Time>(const LITESQL_String& value);
 template <>
-DateTime convert<const string&, DateTime>(const string& value);
+DateTime convert<const LITESQL_String&, DateTime>(const LITESQL_String& value);
 
 template <>
-std::string convert<const Date&, std::string>(const Date& value);
+LITESQL_String convert<const Date&, LITESQL_String>(const Date& value);
 template <>
-std::string convert<const Time&, std::string>(const Time& value);
+LITESQL_String convert<const Time&, LITESQL_String>(const Time& value);
 template <>
-std::string convert<const DateTime&, std::string>(const DateTime& value);
+LITESQL_String convert<const DateTime&, LITESQL_String>(const DateTime& value);
 
-ostream& operator << (ostream& os, const Date& d);
-ostream& operator << (ostream& os, const Time& d);
-ostream& operator << (ostream& os, const DateTime& d);
+LITESQL_oStream& operator << (LITESQL_oStream& os, const Date& d);
+LITESQL_oStream& operator << (LITESQL_oStream& os, const Time& d);
+LITESQL_oStream& operator << (LITESQL_oStream& os, const DateTime& d);
 }
 
 #endif

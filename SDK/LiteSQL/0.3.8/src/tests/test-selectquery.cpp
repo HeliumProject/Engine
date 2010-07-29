@@ -12,28 +12,28 @@
   TC2: Simple SQL-query
 */
 using namespace litesql;
-int main(int argc, char *argv[]) {
+int main(int argc, LiteSQL_Char *argv[]) {
     // TC1
     SelectQuery tc1;
     tc1.distinct(true).limit(15).offset(5)
-        .result("a.id").result("b.id").result("count(b.pages)")
-        .source("alphabets", "a").source("books", "b")
-        .where("a.id = b.id")
-        .groupBy("b.id")
-        .having("count(b.pages) > 5")
-        .orderBy("a.id");
+        .result( LiteSQL_L( "a.id" )).result( LiteSQL_L( "b.id" )).result( LiteSQL_L( "count(b.pages)" ))
+        .source( LiteSQL_L( "alphabets" ),  LiteSQL_L( "a" )).source( LiteSQL_L( "books" ),  LiteSQL_L( "b" ))
+        .where( LiteSQL_L( "a.id = b.id" ))
+        .groupBy( LiteSQL_L( "b.id" ))
+        .having( LiteSQL_L( "count(b.pages) > 5" ))
+        .orderBy( LiteSQL_L( "a.id" ));
     assert(tc1.asString() == 
-           "SELECT DISTINCT a.id,b.id,count(b.pages) "
-           "FROM alphabets AS a,books AS b "
-           "WHERE a.id = b.id "
-           "GROUP BY b.id "
-           "HAVING count(b.pages) > 5 "
-           "ORDER BY a.id LIMIT 15 OFFSET 5");
+            LiteSQL_L( "SELECT DISTINCT a.id,b.id,count(b.pages) " )
+            LiteSQL_L( "FROM alphabets AS a,books AS b " )
+            LiteSQL_L( "WHERE a.id = b.id " )
+            LiteSQL_L( "GROUP BY b.id " )
+            LiteSQL_L( "HAVING count(b.pages) > 5 " )
+            LiteSQL_L( "ORDER BY a.id LIMIT 15 OFFSET 5" ));
     // TC2
     SelectQuery tc2;
-    tc2.result("id").result("name").result("filename")
-        .source("programmes");
-    assert(tc2.asString() == "SELECT id,name,filename FROM programmes");
+    tc2.result( LiteSQL_L( "id" )).result( LiteSQL_L( "name" )).result( LiteSQL_L( "filename" ))
+        .source( LiteSQL_L( "programmes" ));
+    assert(tc2.asString() ==  LiteSQL_L( "SELECT id,name,filename FROM programmes" ));
     
         
     return 0;

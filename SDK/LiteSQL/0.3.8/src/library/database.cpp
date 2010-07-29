@@ -3,7 +3,7 @@
  * The list of contributors at http://litesql.sf.net/ 
  * 
  * See LICENSE for copyright information. */
-
+#include "litesql_char.hpp"
 #include "compatibility.hpp"
 #include "litesql/database.hpp"
 #include "litesql/cursor.hpp"
@@ -13,35 +13,34 @@
 #include <algorithm>
 
 namespace litesql {
-using namespace std;
 
 void Database::openDatabase() {
    backend = Backend::getBackend(backendType,connInfo);
    if (backend==NULL)
-      throw DatabaseError("Unknown backend: " + backendType);
+      throw DatabaseError(LITESQL_L("Unknown backend: ") + backendType);
 }
 
 void Database::storeSchemaItem(const SchemaItem& s) const {
-    delete_("schema_", 
-            RawExpr("name_='" + s.name 
-                + "' and type_='" + s.type + "'"));
+    delete_(LITESQL_L("schema_"), 
+            RawExpr(LITESQL_L("name_='") + s.name 
+                +  LITESQL_L("' and type_='") + s.type +  LITESQL_L("'")));
     Record values(3);
 
     values.push_back(s.name);
     values.push_back(s.type);
     values.push_back(s.sql);
-    insert("schema_", values);
+    insert(LITESQL_L("schema_"), values);
 }
 
-vector<Database::SchemaItem> Database::getCurrentSchema() const {
+std::vector<Database::SchemaItem> Database::getCurrentSchema() const {
     SelectQuery sel;
-    sel.result("name_").result("type_").result("sql_").source("schema_");
-    vector<SchemaItem> s;
+    sel.result(LITESQL_L("name_")).result(LITESQL_L("type_")).result(LITESQL_L("sql_")).source(LITESQL_L("schema_"));
+    std::vector<SchemaItem> s;
     Records recs;
     try {
         recs = query(sel);
     } catch (Except e) {
-        return vector<Database::SchemaItem>();
+        return std::vector<Database::SchemaItem>();
     }
     for (size_t i = 0; i < recs.size(); i++) {
         s.push_back(SchemaItem(recs[i][0], recs[i][1], recs[i][2]));
@@ -54,15 +53,15 @@ bool operator ==(const ColumnDefinition& c1,const ColumnDefinition& c2)
   return (c1.name == c2.name) && (c1.type==c2.type);
 }
 
-typedef vector<ColumnDefinition> ColumnDefinitions;
+typedef std::vector<ColumnDefinition> ColumnDefinitions;
 
-static ColumnDefinitions getFields(string schema) {
+static ColumnDefinitions getFields(LITESQL_String schema) {
     ColumnDefinitions fields;
-    int start = schema.find("(");
-    int end = schema.find(")");
+    int start = schema.find(LITESQL_L("("));
+    int end = schema.find(LITESQL_L(")"));
     if (start == -1 || end == -1)
         return fields;
-    Split tmp(replace(schema.substr(start+1, end-start-1), ", ", ","), ",");
+    Split tmp(replace(schema.substr(start+1, end-start-1),  LITESQL_L(", "),  LITESQL_L(",")),  LITESQL_L(","));
     
     ColumnDefinition field_def;
     for (size_t i = 0; i < tmp.size(); i++) 
@@ -76,14 +75,14 @@ static ColumnDefinitions getFields(string schema) {
 }
 
 
-bool Database::addColumn(const string & name,const ColumnDefinition & column_def) const 
+bool Database::addColumn(const LITESQL_String & name,const ColumnDefinition & column_def) const 
 {
-  query("ALTER TABLE " + name + " ADD COLUMN " + column_def.name +" "+ column_def.type);
+  query(LITESQL_L("ALTER TABLE ") + name +  LITESQL_L(" ADD COLUMN ") + column_def.name + LITESQL_L(" ")+ column_def.type);
   return true;
 }
 
-void Database::upgradeTable(string name, 
-                            string oldSchema, string newSchema) const {
+void Database::upgradeTable(LITESQL_String name, 
+                            LITESQL_String oldSchema, LITESQL_String newSchema) const {
     ColumnDefinitions oldFields = getFields(oldSchema);
     ColumnDefinitions newFields = getFields(newSchema);
 
@@ -110,8 +109,8 @@ void Database::upgradeTable(string name,
     }
 
     begin();
-    string bkp_name(name+"backup");
-    query(" ALTER TABLE " + name + " RENAME TO " + bkp_name); 
+    LITESQL_String bkp_name(name+ LITESQL_L("backup"));
+    query(LITESQL_L(" ALTER TABLE ") + name +  LITESQL_L(" RENAME TO ") + bkp_name); 
     for (ColumnDefinitions::iterator it = toAdd.begin();it!= toAdd.end();it++)
     {
       addColumn(bkp_name,*it);
@@ -120,12 +119,12 @@ void Database::upgradeTable(string name,
     query(newSchema);
     // oldfields as ...
     Split cols;
-    string s;
+    LITESQL_String s;
 
     for (ColumnDefinitions::iterator it = commonFields.begin();it!= commonFields.end();it++)
     {
         s = it->name;
-        s.append(" AS ");
+        s.append(LITESQL_L(" AS "));
         s.append(it->name);
         cols.push_back(s);
     }
@@ -133,17 +132,17 @@ void Database::upgradeTable(string name,
     for (ColumnDefinitions::iterator it = toAdd.begin();it!= toAdd.end();it++)
     {
         s = it->name;
-        s.append(" AS ");
+        s.append(LITESQL_L(" AS "));
         s.append(it->name);
         cols.push_back(s);
     }
 
-    query(" INSERT INTO " + name + " SELECT "+ cols.join(",")+" FROM " + bkp_name); 
-    query(" DROP TABLE " + bkp_name); 
+    query(LITESQL_L(" INSERT INTO ") + name +  LITESQL_L(" SELECT ")+ cols.join(LITESQL_L(","))+ LITESQL_L(" FROM ") + bkp_name); 
+    query(LITESQL_L(" DROP TABLE ") + bkp_name); 
     commit();
 }
 
-Database::Database(const string& backend, const string& conn) 
+Database::Database(const LITESQL_String& backend, const LITESQL_String& conn) 
      : backendType(backend), connInfo(conn), backend(NULL), verbose(false) {
         openDatabase();
     }
@@ -156,7 +155,7 @@ Database::Database(const string& backend, const string& conn)
         delete backend;
     }
     void Database::create() const { 
-        vector<SchemaItem> s = getSchema(); 
+        std::vector<SchemaItem> s = getSchema(); 
         begin();
         for (size_t i = 0; i < s.size(); i++) {
             query(s[i].sql);
@@ -165,15 +164,15 @@ Database::Database(const string& backend, const string& conn)
         commit();
     } 
     void Database::drop() const { 
-        vector<SchemaItem> s = getSchema(); 
+        std::vector<SchemaItem> s = getSchema(); 
 
         for (size_t i = 0; i < s.size(); i++) {
             try {
                 begin();
-                if (s[i].type == "table")
-                    query("DROP TABLE " + s[i].name);
-                else if (s[i].type == "sequence")
-                    query("DROP SEQUENCE " + s[i].name);
+                if (s[i].type ==  LITESQL_L("table"))
+                    query(LITESQL_L("DROP TABLE ") + s[i].name);
+                else if (s[i].type ==  LITESQL_L("sequence"))
+                    query(LITESQL_L("DROP SEQUENCE ") + s[i].name);
                 commit();
             } catch (Except e) {
                 rollback();
@@ -182,9 +181,9 @@ Database::Database(const string& backend, const string& conn)
     }  
    
     bool Database::needsUpgrade() const {
-        vector<SchemaItem> cs = getCurrentSchema();
-        vector<SchemaItem> s = getSchema();
-        map<string, int> items;
+        std::vector<SchemaItem> cs = getCurrentSchema();
+        std::vector<SchemaItem> s = getSchema();
+        std::map<LITESQL_String, int> items;
         for (size_t i = 0; i < cs.size(); i++) 
             items[cs[i].name] = i;
     
@@ -196,9 +195,9 @@ Database::Database(const string& backend, const string& conn)
         return false;
     }
     void Database::upgrade() const {
-        vector<SchemaItem> cs = getCurrentSchema();
-        vector<SchemaItem> s = getSchema();
-        map<string, int> items;
+        std::vector<SchemaItem> cs = getCurrentSchema();
+        std::vector<SchemaItem> s = getSchema();
+        std::map<LITESQL_String, int> items;
         for (size_t i = 0; i < cs.size(); i++) {
             items[cs[i].name] = i;
         }
@@ -209,51 +208,51 @@ Database::Database(const string& backend, const string& conn)
                 storeSchemaItem(s[i]);
                 continue;
             }
-            if (s[i].type == "table" && cs[items[s[i].name]].sql != s[i].sql) {
+            if (s[i].type ==  LITESQL_L("table") && cs[items[s[i].name]].sql != s[i].sql) {
                 upgradeTable(s[i].name, cs[items[s[i].name]].sql, s[i].sql);
                 storeSchemaItem(s[i]);
             }
         }
         commit();
     }
-    Records Database::query(const string &q) const {
+    Records Database::query(const LITESQL_String &q) const {
         if (verbose)
-            cerr << q << endl;
-        auto_ptr<Backend::Result> r(backend->execute(q));
+            LITESQL_cerr << q << std::endl;
+        std::auto_ptr<Backend::Result> r(backend->execute(q));
         return r->records();
     }
 
-    void Database::insert(const string &table, const Record &r,
+    void Database::insert(const LITESQL_String &table, const Record &r,
                           const Split& fields) const {
-        string command = "INSERT INTO " + table;
+        LITESQL_String command =  LITESQL_L("INSERT INTO ") + table;
         if (fields.size())
-            command += " (" + fields.join(",") + ")";
-        command += " VALUES (";
+            command +=  LITESQL_L(" (") + fields.join(LITESQL_L(",")) +  LITESQL_L(")");
+        command +=  LITESQL_L(" VALUES (");
         unsigned int i;
         for (i=0; i < r.size() -1; i++) {
-            command += escapeSQL(r[i]) + ",";
+            command += escapeSQL(r[i]) +  LITESQL_L(",");
         }
-        command += escapeSQL(r[i]) + ")";
+        command += escapeSQL(r[i]) +  LITESQL_L(")");
         query(command);
     }
-    string Database::groupInsert(Record tables, Records fields, Records values, 
-                     string sequence) const {
+    LITESQL_String Database::groupInsert(Record tables, Records fields, Records values, 
+                     LITESQL_String sequence) const {
         if (verbose) {
-            cerr << "groupInsert" << endl;
+            LITESQL_cerr <<  LITESQL_L("groupInsert") << std::endl;
             for (size_t i = 0; i < tables.size(); i++) {
-                cerr << "\t" << tables[i] << endl;
-                cerr << "\t\tfields : " << Split::join(fields[i],",") << endl;
-                cerr << "\t\tvalues : " << Split::join(values[i],"|") << endl;
+                LITESQL_cerr <<  LITESQL_L("\t") << tables[i] << std::endl;
+                LITESQL_cerr <<  LITESQL_L("\t\tfields : ") << Split::join(fields[i], LITESQL_L(",")) << std::endl;
+                LITESQL_cerr <<  LITESQL_L("\t\tvalues : ") << Split::join(values[i], LITESQL_L("|")) << std::endl;
             }
         }
         return backend->groupInsert(tables, fields, values, sequence);
     }
 
-    void Database::delete_(const string& table, const Expr& e) const {
-        string where = "";
-        if (e.asString() != "True")
-            where = " WHERE " + e.asString();
-        query("DELETE FROM " + table + where);
+    void Database::delete_(const LITESQL_String& table, const Expr& e) const {
+        LITESQL_String where =  LITESQL_L("");
+        if (e.asString() !=  LITESQL_L("True"))
+            where =  LITESQL_L(" WHERE ") + e.asString();
+        query(LITESQL_L("DELETE FROM ") + table + where);
     }
 
 }

@@ -8,13 +8,13 @@ using namespace xml;
 IMPLEMENT_DYNAMIC_CLASS(LitesqlObjectPanel,ui::ObjectPanel)
 
 
-LitesqlObjectPanel::LitesqlObjectPanel( wxWindow* parent, vector<Object*> baseClasses,Object* pObject  )
+LitesqlObjectPanel::LitesqlObjectPanel( wxWindow* parent, std::vector<Object*> baseClasses,Object* pObject  )
 :
 ui::ObjectPanel( parent ),
 m_pObject(pObject)
 {
   m_choiceInheritsFrom->Append(wxString::FromUTF8(Object::DEFAULT_BASE.name.c_str()));
-  for (vector<Object*>::const_iterator it = baseClasses.begin();
+  for (std::vector<Object*>::const_iterator it = baseClasses.begin();
       it != baseClasses.end();
       it++)
   {

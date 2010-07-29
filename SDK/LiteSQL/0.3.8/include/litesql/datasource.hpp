@@ -8,17 +8,17 @@
  * selectObjectQuery<T> and DataSource<T> */
 #ifndef litesql_datasource_hpp
 #define litesql_datasource_hpp
+#include "litesql_char.hpp"
 #include <set>
 #include <string>
 #include "litesql/database.hpp"
 #include "litesql/selectquery.hpp"
 #include "litesql/expr.hpp"
 namespace litesql {
-using namespace std;
 /** returns SelectQuery which selects objects of type T 
  *  \param fdatas fields of class T
     \param e optional filter expression */
-SelectQuery selectObjectQuery(const vector<FieldType>& fdatas, 
+SelectQuery selectObjectQuery(const std::vector<FieldType>& fdatas, 
                                const Expr & e=Expr());
    
 /** returns SelectQuery which selects objects of type T 
@@ -65,8 +65,8 @@ public:
        SelectQuery cq(sel);
        cq.clearResults();
        cq.limit(0).offset(0);
-       cq.result("count(*)");
-       return atoi(db.query(cq)[0][0]);
+       cq.result(LITESQL_L("count(*)"));
+       return _tstoi(db.query(cq)[0][0]);
     }
     /** returns SelectQuery which selects objects */
     SelectQuery objectQuery() const {
@@ -82,7 +82,7 @@ public:
         return *cursor();
     }
     /** returns all objects in result set. */
-    vector<T> all() const {
+    std::vector<T> all() const {
         // \TODO a cursor is not appropriate here, because we fetch all results of the query 
         return cursor().dump();
     }

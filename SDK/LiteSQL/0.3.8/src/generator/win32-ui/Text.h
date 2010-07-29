@@ -53,4 +53,3 @@ private:
 
 
 #endif // TEXT_H
-

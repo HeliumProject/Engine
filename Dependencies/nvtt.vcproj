@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="Expat"
-	ProjectGUID="{533F2B69-13FC-4557-9D26-517FDA493D75}"
-	RootNamespace="Expat"
+	Name="nvtt"
+	ProjectGUID="{1A02AC8B-51F6-46CD-A5BB-0B3F09FB2ABF}"
+	RootNamespace="nvtt"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -44,8 +44,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;_DEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories="nvtt;nvtt\src;nvtt\project\vc8"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;__SSE2__;__SSE__;__MMX__"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -111,8 +111,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;_DEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories="nvtt;nvtt\src;nvtt\project\vc8"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;__SSE2__;__SSE__;__MMX__"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -176,8 +176,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;NDEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories="nvtt;nvtt\src;nvtt\project\vc8"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;__SSE2__;__SSE__;__MMX__"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -241,8 +241,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;NDEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories="nvtt;nvtt\src;nvtt\project\vc8"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;__SSE2__;__SSE__;__MMX__"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -306,8 +306,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;_DEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories="nvtt;nvtt\src;nvtt\project\vc8"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;__SSE2__;__SSE__;__MMX__"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -373,8 +373,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;_DEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories="nvtt;nvtt\src;nvtt\project\vc8"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;__SSE2__;__SSE__;__MMX__"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -438,8 +438,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;NDEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories="nvtt;nvtt\src;nvtt\project\vc8"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;__SSE2__;__SSE__;__MMX__"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -503,8 +503,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;NDEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories="nvtt;nvtt\src;nvtt\project\vc8"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;__SSE2__;__SSE__;__MMX__"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -547,84 +547,312 @@
 	<References>
 	</References>
 	<Files>
-		<File
-			RelativePath=".\amigaconfig.h"
+		<Filter
+			Name="nvmath"
 			>
-		</File>
-		<File
-			RelativePath=".\ascii.h"
+			<File
+				RelativePath=".\nvtt\src\nvmath\Basis.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvmath\Basis.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvmath\Box.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvmath\Color.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvmath\Matrix.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvmath\Montecarlo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvmath\Montecarlo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvmath\nvmath.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvmath\Plane.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvmath\Plane.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvmath\Quaternion.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvmath\Random.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvmath\Random.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvmath\SphericalHarmonic.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvmath\SphericalHarmonic.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvmath\Triangle.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvmath\Triangle.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvmath\TriBox.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvmath\Vector.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="nvcore"
 			>
-		</File>
-		<File
-			RelativePath=".\asciitab.h"
+			<File
+				RelativePath=".\nvtt\src\nvcore\BitArray.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\Containers.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\Debug.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\Debug.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\DefsGnucDarwin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\DefsGnucLinux.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\DefsGnucWin32.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\DefsVcWin32.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\Library.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\Library.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\Memory.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\Memory.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\nvcore.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\poshlib\posh.c"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\poshlib\posh.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\Prefetch.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\Ptr.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\Radix.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\Radix.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\StdStream.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\Stream.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\StrLib.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\StrLib.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\TextReader.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\TextReader.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\TextWriter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvcore\TextWriter.h"
+				>
+			</File>
+			<Filter
+				Name="poshlib"
+				>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="nvimage"
 			>
-		</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\BlockDXT.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\BlockDXT.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\ColorBlock.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\ColorBlock.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\DirectDrawSurface.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\DirectDrawSurface.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\Filter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\Filter.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\FloatImage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\FloatImage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\HoleFilling.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\HoleFilling.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\Image.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\Image.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\ImageIO.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\ImageIO.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\NormalMap.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\NormalMap.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\NormalMipmap.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\NormalMipmap.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\nvimage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\PixelFormat.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\PsdFile.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\Quantize.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\Quantize.h"
+				>
+			</File>
+			<File
+				RelativePath=".\nvtt\src\nvimage\TgaFile.h"
+				>
+			</File>
+		</Filter>
 		<File
-			RelativePath=".\expat.h"
-			>
-		</File>
-		<File
-			RelativePath=".\expat_external.h"
-			>
-		</File>
-		<File
-			RelativePath=".\iasciitab.h"
-			>
-		</File>
-		<File
-			RelativePath=".\internal.h"
-			>
-		</File>
-		<File
-			RelativePath=".\latin1tab.h"
-			>
-		</File>
-		<File
-			RelativePath=".\macconfig.h"
-			>
-		</File>
-		<File
-			RelativePath=".\nametab.h"
-			>
-		</File>
-		<File
-			RelativePath=".\utf8tab.h"
-			>
-		</File>
-		<File
-			RelativePath=".\winconfig.h"
-			>
-		</File>
-		<File
-			RelativePath=".\xmlparse.c"
-			>
-		</File>
-		<File
-			RelativePath=".\xmlrole.c"
-			>
-		</File>
-		<File
-			RelativePath=".\xmlrole.h"
-			>
-		</File>
-		<File
-			RelativePath=".\xmltok.c"
-			>
-		</File>
-		<File
-			RelativePath=".\xmltok.h"
-			>
-		</File>
-		<File
-			RelativePath=".\xmltok_impl.c"
-			>
-		</File>
-		<File
-			RelativePath=".\xmltok_impl.h"
-			>
-		</File>
-		<File
-			RelativePath=".\xmltok_ns.c"
+			RelativePath=".\nvtt\project\vc8\nvconfig.h"
 			>
 		</File>
 	</Files>

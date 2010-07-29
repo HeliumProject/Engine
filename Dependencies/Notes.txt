@@ -1,0 +1,12 @@
+Expat       : 2.01
+LiteSQL     : 0.3.8
+lua         : 5.1.4
+MySQL       : 6.0.2
+ntt         : 2.0.7
+p4api       : 2009.2
+SQLite      : 3.6.23.1
+squish      : 1.10
+tiff        : 3.9.2
+TinyXML     : 2.6.1    
+wxWidgets   : 2.9.1
+zlib        : 1.2.5    

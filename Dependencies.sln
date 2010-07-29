@@ -1,16 +1,26 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Luna", "Luna\Luna.vcproj", "{42ACA40F-393C-4412-9709-CBAA776D1537}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Expat", "Dependencies\Expat.vcproj", "{533F2B69-13FC-4557-9D26-517FDA493D75}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Application", "Application\Application.vcproj", "{82FA5300-7B8A-4B72-A404-D5748984A231}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MySQL", "Dependencies\MySQL.vcproj", "{1EBDB40D-9808-463B-AA43-04D65586485F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Foundation", "Foundation\Foundation.vcproj", "{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLite", "Dependencies\SQLite.vcproj", "{190A611A-399F-47F6-B686-DF40C8B20F84}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pipeline", "Pipeline\Pipeline.vcproj", "{6005C4B7-F1A0-442F-81AA-1377FF18F910}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TinyXML", "Dependencies\TinyXML.vcproj", "{06092F0D-324B-484D-A9ED-397DFF76AE53}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Platform", "Platform\Platform.vcproj", "{4BC148DF-F832-4724-B9B9-2550D848E737}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZLib", "Dependencies\zlib.vcproj", "{CFCA9C73-C321-48BA-8F29-097FD061EBB1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Maya", "Maya\Maya.vcproj", "{0FBA8851-5A4E-4CEB-B24C-9487E9B9AF4A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Squish", "Dependencies\squish.vcproj", "{CF9387AB-7C10-4217-A248-575EE8610008}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nvtt", "Dependencies\nvtt.vcproj", "{1A02AC8B-51F6-46CD-A5BB-0B3F09FB2ABF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TIFF", "Dependencies\tiff.vcproj", "{BC01F636-4D0F-489D-B082-7538025CE185}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lua", "Dependencies\lua.vcproj", "{C87D1745-76D6-4A2E-B655-23564E398510}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LiteSQL", "Dependencies\LiteSQL.vcproj", "{05ED8488-418B-499C-895B-5654C64209F6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wxWidgets", "Dependencies\wxWidgets.vcproj", "{42C56E94-62D5-45EC-9746-F2349992C028}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

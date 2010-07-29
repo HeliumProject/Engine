@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="ZLib"
-	ProjectGUID="{CFCA9C73-C321-48BA-8F29-097FD061EBB1}"
-	RootNamespace="zlib"
+	Name="Expat"
+	ProjectGUID="{533F2B69-13FC-4557-9D26-517FDA493D75}"
+	RootNamespace="Expat"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -44,8 +44,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\libraries"
-				PreprocessorDefinitions="WIN32;_DEBUG"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;_DEBUG;COMPILED_FROM_DSP"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -111,8 +111,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\libraries"
-				PreprocessorDefinitions="WIN32;_DEBUG"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;_DEBUG;COMPILED_FROM_DSP"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -176,8 +176,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\libraries"
-				PreprocessorDefinitions="WIN32;NDEBUG"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;NDEBUG;COMPILED_FROM_DSP"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -241,8 +241,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\libraries"
-				PreprocessorDefinitions="WIN32;NDEBUG"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;NDEBUG;COMPILED_FROM_DSP"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -306,8 +306,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\libraries"
-				PreprocessorDefinitions="WIN32;_DEBUG"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;_DEBUG;COMPILED_FROM_DSP"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -373,8 +373,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\libraries"
-				PreprocessorDefinitions="WIN32;_DEBUG"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;_DEBUG;COMPILED_FROM_DSP"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -438,8 +438,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\libraries"
-				PreprocessorDefinitions="WIN32;NDEBUG"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;NDEBUG;COMPILED_FROM_DSP"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -503,8 +503,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\libraries"
-				PreprocessorDefinitions="WIN32;NDEBUG"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;NDEBUG;COMPILED_FROM_DSP"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -548,63 +548,83 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\adler32.c"
+			RelativePath=".\Expat\amigaconfig.h"
 			>
 		</File>
 		<File
-			RelativePath=".\compress.c"
+			RelativePath=".\Expat\ascii.h"
 			>
 		</File>
 		<File
-			RelativePath=".\crc32.c"
+			RelativePath=".\Expat\asciitab.h"
 			>
 		</File>
 		<File
-			RelativePath=".\deflate.c"
+			RelativePath=".\Expat\expat.h"
 			>
 		</File>
 		<File
-			RelativePath=".\gzclose.c"
+			RelativePath=".\Expat\expat_external.h"
 			>
 		</File>
 		<File
-			RelativePath=".\gzlib.c"
+			RelativePath=".\Expat\iasciitab.h"
 			>
 		</File>
 		<File
-			RelativePath=".\gzread.c"
+			RelativePath=".\Expat\internal.h"
 			>
 		</File>
 		<File
-			RelativePath=".\gzwrite.c"
+			RelativePath=".\Expat\latin1tab.h"
 			>
 		</File>
 		<File
-			RelativePath=".\infback.c"
+			RelativePath=".\Expat\macconfig.h"
 			>
 		</File>
 		<File
-			RelativePath=".\inffast.c"
+			RelativePath=".\Expat\nametab.h"
 			>
 		</File>
 		<File
-			RelativePath=".\inflate.c"
+			RelativePath=".\Expat\utf8tab.h"
 			>
 		</File>
 		<File
-			RelativePath=".\inftrees.c"
+			RelativePath=".\Expat\winconfig.h"
 			>
 		</File>
 		<File
-			RelativePath=".\trees.c"
+			RelativePath=".\Expat\xmlparse.c"
 			>
 		</File>
 		<File
-			RelativePath=".\uncompr.c"
+			RelativePath=".\Expat\xmlrole.c"
 			>
 		</File>
 		<File
-			RelativePath=".\zutil.c"
+			RelativePath=".\Expat\xmlrole.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Expat\xmltok.c"
+			>
+		</File>
+		<File
+			RelativePath=".\Expat\xmltok.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Expat\xmltok_impl.c"
+			>
+		</File>
+		<File
+			RelativePath=".\Expat\xmltok_impl.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Expat\xmltok_ns.c"
 			>
 		</File>
 	</Files>

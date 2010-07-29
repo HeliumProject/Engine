@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="nVidiaTextureTools"
-	ProjectGUID="{1A02AC8B-51F6-46CD-A5BB-0B3F09FB2ABF}"
-	RootNamespace="nvtt"
+	Name="squish"
+	ProjectGUID="{CF9387AB-7C10-4217-A248-575EE8610008}"
+	RootNamespace="squish"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -44,8 +44,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;src;project\vc8"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;__SSE2__;__SSE__;__MMX__"
+				AdditionalIncludeDirectories="squish"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;squish_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -111,8 +111,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;src;project\vc8"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;__SSE2__;__SSE__;__MMX__"
+				AdditionalIncludeDirectories="squish"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;squish_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -176,8 +176,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;src;project\vc8"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;__SSE2__;__SSE__;__MMX__"
+				AdditionalIncludeDirectories="squish"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;squish_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -241,8 +241,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;src;project\vc8"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;__SSE2__;__SSE__;__MMX__"
+				AdditionalIncludeDirectories="squish"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;squish_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -306,8 +306,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;src;project\vc8"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;__SSE2__;__SSE__;__MMX__"
+				AdditionalIncludeDirectories="squish"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;squish_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -373,8 +373,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;src;project\vc8"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;__SSE2__;__SSE__;__MMX__"
+				AdditionalIncludeDirectories="squish"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;squish_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -438,8 +438,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;src;project\vc8"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;__SSE2__;__SSE__;__MMX__"
+				AdditionalIncludeDirectories="squish"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;squish_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -503,8 +503,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;src;project\vc8"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;__SSE2__;__SSE__;__MMX__"
+				AdditionalIncludeDirectories="squish"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;squish_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -547,312 +547,100 @@
 	<References>
 	</References>
 	<Files>
-		<Filter
-			Name="nvmath"
-			>
-			<File
-				RelativePath=".\src\nvmath\Basis.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvmath\Basis.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvmath\Box.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvmath\Color.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvmath\Matrix.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvmath\Montecarlo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvmath\Montecarlo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvmath\nvmath.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvmath\Plane.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvmath\Plane.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvmath\Quaternion.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvmath\Random.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvmath\Random.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvmath\SphericalHarmonic.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvmath\SphericalHarmonic.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvmath\Triangle.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvmath\Triangle.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvmath\TriBox.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvmath\Vector.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="nvcore"
-			>
-			<File
-				RelativePath=".\src\nvcore\BitArray.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\Containers.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\Debug.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\Debug.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\DefsGnucDarwin.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\DefsGnucLinux.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\DefsGnucWin32.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\DefsVcWin32.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\Library.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\Library.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\Memory.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\Memory.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\nvcore.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\poshlib\posh.c"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\poshlib\posh.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\Prefetch.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\Ptr.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\Radix.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\Radix.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\StdStream.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\Stream.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\StrLib.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\StrLib.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\TextReader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\TextReader.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\TextWriter.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvcore\TextWriter.h"
-				>
-			</File>
-			<Filter
-				Name="poshlib"
-				>
-			</Filter>
-		</Filter>
-		<Filter
-			Name="nvimage"
-			>
-			<File
-				RelativePath=".\src\nvimage\BlockDXT.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\BlockDXT.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\ColorBlock.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\ColorBlock.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\DirectDrawSurface.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\DirectDrawSurface.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\Filter.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\Filter.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\FloatImage.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\FloatImage.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\HoleFilling.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\HoleFilling.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\Image.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\Image.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\ImageIO.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\ImageIO.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\NormalMap.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\NormalMap.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\NormalMipmap.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\NormalMipmap.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\nvimage.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\PixelFormat.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\PsdFile.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\Quantize.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\Quantize.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\nvimage\TgaFile.h"
-				>
-			</File>
-		</Filter>
 		<File
-			RelativePath=".\project\vc8\nvconfig.h"
+			RelativePath=".\squish\alpha.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\alpha.h"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\clusterfit.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\clusterfit.h"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\colourblock.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\colourblock.h"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\colourfit.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\colourfit.h"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\colourset.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\colourset.h"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\config.h"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\maths.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\maths.h"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\rangefit.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\rangefit.h"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\simd.h"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\simd_float.h"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\simd_sse.h"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\simd_ve.h"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\singlecolourfit.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\singlecolourfit.h"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\singlecolourlookup.inl"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\squish.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\squish\squish.h"
 			>
 		</File>
 	</Files>

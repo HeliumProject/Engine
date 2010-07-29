@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="Squish"
-	ProjectGUID="{CF9387AB-7C10-4217-A248-575EE8610008}"
-	RootNamespace="squish"
+	Name="TinyXML"
+	ProjectGUID="{06092F0D-324B-484D-A9ED-397DFF76AE53}"
+	RootNamespace="TinyXML"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -44,8 +44,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="."
-				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;squish_EXPORTS"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;TinyXML_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -111,8 +111,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="."
-				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;squish_EXPORTS"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;TinyXML_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -176,8 +176,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="."
-				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;squish_EXPORTS"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;TinyXML_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -241,8 +241,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="."
-				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;squish_EXPORTS"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;TinyXML_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -306,8 +306,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="."
-				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;squish_EXPORTS"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;TinyXML_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -373,8 +373,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="."
-				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;squish_EXPORTS"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;TinyXML_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -438,8 +438,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="."
-				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;squish_EXPORTS"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;TinyXML_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -503,8 +503,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="."
-				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;squish_EXPORTS"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;TinyXML_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -548,99 +548,27 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\alpha.cpp"
+			RelativePath=".\TinyXML\tinystr.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\alpha.h"
+			RelativePath=".\TinyXML\tinystr.h"
 			>
 		</File>
 		<File
-			RelativePath=".\clusterfit.cpp"
+			RelativePath=".\TinyXML\tinyxml.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\clusterfit.h"
+			RelativePath=".\TinyXML\tinyxml.h"
 			>
 		</File>
 		<File
-			RelativePath=".\colourblock.cpp"
+			RelativePath=".\TinyXML\tinyxmlerror.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\colourblock.h"
-			>
-		</File>
-		<File
-			RelativePath=".\colourfit.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\colourfit.h"
-			>
-		</File>
-		<File
-			RelativePath=".\colourset.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\colourset.h"
-			>
-		</File>
-		<File
-			RelativePath=".\config.h"
-			>
-		</File>
-		<File
-			RelativePath=".\maths.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\maths.h"
-			>
-		</File>
-		<File
-			RelativePath=".\rangefit.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\rangefit.h"
-			>
-		</File>
-		<File
-			RelativePath=".\simd.h"
-			>
-		</File>
-		<File
-			RelativePath=".\simd_float.h"
-			>
-		</File>
-		<File
-			RelativePath=".\simd_sse.h"
-			>
-		</File>
-		<File
-			RelativePath=".\simd_ve.h"
-			>
-		</File>
-		<File
-			RelativePath=".\singlecolourfit.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\singlecolourfit.h"
-			>
-		</File>
-		<File
-			RelativePath=".\singlecolourlookup.inl"
-			>
-		</File>
-		<File
-			RelativePath=".\squish.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\squish.h"
+			RelativePath=".\TinyXML\tinyxmlparser.cpp"
 			>
 		</File>
 	</Files>

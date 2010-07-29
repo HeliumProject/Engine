@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="TIFF"
-	ProjectGUID="{BC01F636-4D0F-489D-B082-7538025CE185}"
-	RootNamespace="tiff"
+	Name="LiteSQL"
+	ProjectGUID="{05ED8488-418B-499C-895B-5654C64209F6}"
+	RootNamespace="LiteSQL"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="."
+				AdditionalIncludeDirectories="LiteSQL;LiteSQL\include;LiteSQL\include\litesql;LiteSQL\src;LiteSQL\src\library;LiteSQL\src\generator;&quot;$(expat)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;COMPILED_FROM_DSP"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -111,7 +111,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="."
+				AdditionalIncludeDirectories="LiteSQL;LiteSQL\include;LiteSQL\include\litesql;LiteSQL\src;LiteSQL\src\library;LiteSQL\src\generator;&quot;$(expat)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;COMPILED_FROM_DSP"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -176,7 +176,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="."
+				AdditionalIncludeDirectories="LiteSQL;LiteSQL\include;LiteSQL\include\litesql;LiteSQL\src;LiteSQL\src\library;LiteSQL\src\generator;&quot;$(expat)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;COMPILED_FROM_DSP"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -241,7 +241,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="."
+				AdditionalIncludeDirectories="LiteSQL;LiteSQL\include;LiteSQL\include\litesql;LiteSQL\src;LiteSQL\src\library;LiteSQL\src\generator;&quot;$(expat)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;COMPILED_FROM_DSP"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -306,7 +306,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="."
+				AdditionalIncludeDirectories="LiteSQL;LiteSQL\include;LiteSQL\include\litesql;LiteSQL\src;LiteSQL\src\library;LiteSQL\src\generator;&quot;$(expat)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;COMPILED_FROM_DSP"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -373,7 +373,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="."
+				AdditionalIncludeDirectories="LiteSQL;LiteSQL\include;LiteSQL\include\litesql;LiteSQL\src;LiteSQL\src\library;LiteSQL\src\generator;&quot;$(expat)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;COMPILED_FROM_DSP"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -438,7 +438,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="."
+				AdditionalIncludeDirectories="LiteSQL;LiteSQL\include;LiteSQL\include\litesql;LiteSQL\src;LiteSQL\src\library;LiteSQL\src\generator;&quot;$(expat)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;COMPILED_FROM_DSP"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -503,7 +503,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="."
+				AdditionalIncludeDirectories="LiteSQL;LiteSQL\include;LiteSQL\include\litesql;LiteSQL\src;LiteSQL\src\library;LiteSQL\src\generator;&quot;$(expat)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;COMPILED_FROM_DSP"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -545,180 +545,324 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{533F2B69-13FC-4557-9D26-517FDA493D75}"
+			RelativePathToProject=".\Dependencies\Expat.vcproj"
+		/>
 	</References>
 	<Files>
-		<File
-			RelativePath=".\libtiff\mkg3states.c"
+		<Filter
+			Name="Library"
 			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_aux.c"
+			<File
+				RelativePath=".\LiteSQL\src\library\backend.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql\backend.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\library\compatibility.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\library\compatibility.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\library\database.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql\database.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\library\datasource.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql\datasource.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\library\datetime.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql\datetime.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\library\expr.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql\expr.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\library\field.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql\field.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\library\odbc_backend.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\library\odbc_backend.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\library\persistent.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql\persistent.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\library\selectquery.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql\selectquery.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\library\updatequery.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql\updatequery.hpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="SQLite"
 			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_close.c"
+			<File
+				RelativePath=".\LiteSQL\src\library\sqlite3.c"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\library\sqlite3.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\library\sqlite3.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\library\sqlite3_backend.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\library\sqlite3ext.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Postgress"
 			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_codec.c"
+			<File
+				RelativePath=".\LiteSQL\src\library\postgresql.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\library\postgresql.hpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="MySQL"
 			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_color.c"
+			<File
+				RelativePath=".\LiteSQL\src\library\mysql.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\library\mysql.hpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Model"
 			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_compress.c"
+			<File
+				RelativePath=".\LiteSQL\src\generator\generator.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\generator.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\litesql-gen-cpp.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\litesql-gen-cpp.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\litesql-gen-graphviz.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\litesql-gen-graphviz.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\litesql-gen-ruby-activerecord.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\litesql-gen-ruby-activerecord.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\litesql-gen-xml.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\litesql-gen-xml.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\litesql-gen.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\litesql-gen.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\logger.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						GeneratePreprocessedFile="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\logger.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\md5.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\md5.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\objectmodel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\objectmodel.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\xmlobjects.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\xmlobjects.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\xmlparser.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\generator\xmlparser.hpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Utilities"
 			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_dir.c"
+			<File
+				RelativePath=".\LiteSQL\src\library\split.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql\split.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\src\library\string.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql\string.hpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Common"
 			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_dirinfo.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_dirread.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_dirwrite.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_dumpmode.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_error.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_extension.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_fax3.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_fax3sm.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_flush.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_getimage.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_jbig.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_jpeg.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_luv.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_lzw.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_next.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_ojpeg.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_open.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_packbits.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_pixarlog.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_predict.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_print.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_read.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_strip.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_swab.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_thunder.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_tile.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_version.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_warning.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_win32.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_write.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tif_zip.c"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tiff.h"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tiffio.h"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tiffiop.h"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\tiffvers.h"
-			>
-		</File>
-		<File
-			RelativePath=".\libtiff\uvcode.h"
-			>
-		</File>
+			<File
+				RelativePath=".\LiteSQL\include\config.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql\cursor.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql\except.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql_char.cpp"
+				>
+				<FileConfiguration
+					Name="Debug Unicode|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						GeneratePreprocessedFile="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql_char.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql\operations.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql\relation.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql\types.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LiteSQL\include\litesql\utils.hpp"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

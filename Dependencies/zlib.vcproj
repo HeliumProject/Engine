@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="Lua"
-	ProjectGUID="{C87D1745-76D6-4A2E-B655-23564E398510}"
-	RootNamespace="lua"
+	Name="zlib"
+	ProjectGUID="{CFCA9C73-C321-48BA-8F29-097FD061EBB1}"
+	RootNamespace="zlib"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -45,7 +45,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\libraries"
-				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;lua_EXPORTS"
+				PreprocessorDefinitions="WIN32;_DEBUG"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -112,7 +112,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\libraries"
-				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;lua_EXPORTS"
+				PreprocessorDefinitions="WIN32;_DEBUG"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -177,7 +177,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..\..\libraries"
-				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;lua_EXPORTS"
+				PreprocessorDefinitions="WIN32;NDEBUG"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -242,7 +242,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..\..\libraries"
-				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;lua_EXPORTS"
+				PreprocessorDefinitions="WIN32;NDEBUG"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -307,7 +307,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\libraries"
-				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;lua_EXPORTS"
+				PreprocessorDefinitions="WIN32;_DEBUG"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -374,7 +374,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\libraries"
-				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;lua_EXPORTS"
+				PreprocessorDefinitions="WIN32;_DEBUG"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -439,7 +439,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..\..\libraries"
-				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;lua_EXPORTS"
+				PreprocessorDefinitions="WIN32;NDEBUG"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -504,7 +504,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..\..\libraries"
-				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;lua_EXPORTS"
+				PreprocessorDefinitions="WIN32;NDEBUG"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -548,215 +548,63 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\src\lapi.c"
+			RelativePath=".\zlib\adler32.c"
 			>
 		</File>
 		<File
-			RelativePath=".\src\lapi.h"
+			RelativePath=".\zlib\compress.c"
 			>
 		</File>
 		<File
-			RelativePath=".\src\lauxlib.c"
+			RelativePath=".\zlib\crc32.c"
 			>
 		</File>
 		<File
-			RelativePath=".\src\lauxlib.h"
+			RelativePath=".\zlib\deflate.c"
 			>
 		</File>
 		<File
-			RelativePath=".\src\lbaselib.c"
+			RelativePath=".\zlib\gzclose.c"
 			>
 		</File>
 		<File
-			RelativePath=".\src\lcode.c"
+			RelativePath=".\zlib\gzlib.c"
 			>
 		</File>
 		<File
-			RelativePath=".\src\lcode.h"
+			RelativePath=".\zlib\gzread.c"
 			>
 		</File>
 		<File
-			RelativePath=".\src\ldblib.c"
+			RelativePath=".\zlib\gzwrite.c"
 			>
 		</File>
 		<File
-			RelativePath=".\src\ldebug.c"
+			RelativePath=".\zlib\infback.c"
 			>
 		</File>
 		<File
-			RelativePath=".\src\ldebug.h"
+			RelativePath=".\zlib\inffast.c"
 			>
 		</File>
 		<File
-			RelativePath=".\src\ldo.c"
+			RelativePath=".\zlib\inflate.c"
 			>
 		</File>
 		<File
-			RelativePath=".\src\ldo.h"
+			RelativePath=".\zlib\inftrees.c"
 			>
 		</File>
 		<File
-			RelativePath=".\src\ldump.c"
+			RelativePath=".\zlib\trees.c"
 			>
 		</File>
 		<File
-			RelativePath=".\src\lfunc.c"
+			RelativePath=".\zlib\uncompr.c"
 			>
 		</File>
 		<File
-			RelativePath=".\src\lfunc.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lgc.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lgc.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\linit.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\liolib.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\llex.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\llex.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\llimits.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lmathlib.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lmem.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lmem.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\loadlib.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lobject.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lobject.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lopcodes.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lopcodes.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\loslib.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lparser.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lparser.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lstate.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lstate.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lstring.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lstring.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lstrlib.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\ltable.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\ltable.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\ltablib.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\ltm.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\ltm.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lua.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\luaconf.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lualib.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lundump.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lundump.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lvm.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lvm.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lzio.c"
-			>
-		</File>
-		<File
-			RelativePath=".\src\lzio.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\print.c"
+			RelativePath=".\zlib\zutil.c"
 			>
 		</File>
 	</Files>

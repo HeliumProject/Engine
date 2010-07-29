@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="LiteSQL"
-	ProjectGUID="{05ED8488-418B-499C-895B-5654C64209F6}"
-	RootNamespace="LiteSQL"
+	Name="Lua"
+	ProjectGUID="{C87D1745-76D6-4A2E-B655-23564E398510}"
+	RootNamespace="lua"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -44,8 +44,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;.\include;.\include\litesql;.\src;.\src\library;.\src\generator;&quot;$(expat)&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;lua_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -111,8 +111,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;.\include;.\include\litesql;.\src;.\src\library;.\src\generator;&quot;$(expat)&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;lua_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -176,8 +176,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;.\include;.\include\litesql;.\src;.\src\library;.\src\generator;&quot;$(expat)&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;lua_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -241,8 +241,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;.\include;.\include\litesql;.\src;.\src\library;.\src\generator;&quot;$(expat)&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;lua_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -306,8 +306,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;.\include;.\include\litesql;.\src;.\src\library;.\src\generator;&quot;$(expat)&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;lua_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -373,8 +373,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;.\include;.\include\litesql;.\src;.\src\library;.\src\generator;&quot;$(expat)&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;lua_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -438,8 +438,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;.\include;.\include\litesql;.\src;.\src\library;.\src\generator;&quot;$(expat)&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;lua_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -503,8 +503,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;.\include;.\include\litesql;.\src;.\src\library;.\src\generator;&quot;$(expat)&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;lua_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -545,324 +545,220 @@
 		</Configuration>
 	</Configurations>
 	<References>
-		<ProjectReference
-			ReferencedProjectIdentifier="{533F2B69-13FC-4557-9D26-517FDA493D75}"
-			RelativePathToProject=".\SDK\Expat\2.01\Expat.vcproj"
-		/>
 	</References>
 	<Files>
-		<Filter
-			Name="Library"
+		<File
+			RelativePath=".\lua\src\lapi.c"
 			>
-			<File
-				RelativePath=".\src\library\backend.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\include\litesql\backend.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\library\compatibility.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\library\compatibility.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\library\database.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\include\litesql\database.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\library\datasource.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\include\litesql\datasource.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\library\datetime.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\include\litesql\datetime.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\library\expr.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\include\litesql\expr.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\library\field.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\include\litesql\field.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\library\odbc_backend.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\library\odbc_backend.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\library\persistent.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\include\litesql\persistent.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\library\selectquery.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\include\litesql\selectquery.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\library\updatequery.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\include\litesql\updatequery.hpp"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="SQLite"
+		</File>
+		<File
+			RelativePath=".\lua\src\lapi.h"
 			>
-			<File
-				RelativePath=".\src\library\sqlite3.c"
-				>
-			</File>
-			<File
-				RelativePath=".\src\library\sqlite3.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\library\sqlite3.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\library\sqlite3_backend.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\library\sqlite3ext.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Postgress"
+		</File>
+		<File
+			RelativePath=".\lua\src\lauxlib.c"
 			>
-			<File
-				RelativePath=".\src\library\postgresql.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\library\postgresql.hpp"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="MySQL"
+		</File>
+		<File
+			RelativePath=".\lua\src\lauxlib.h"
 			>
-			<File
-				RelativePath=".\src\library\mysql.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\library\mysql.hpp"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Model"
+		</File>
+		<File
+			RelativePath=".\lua\src\lbaselib.c"
 			>
-			<File
-				RelativePath=".\src\generator\generator.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\generator.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\litesql-gen-cpp.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\litesql-gen-cpp.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\litesql-gen-graphviz.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\litesql-gen-graphviz.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\litesql-gen-ruby-activerecord.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\litesql-gen-ruby-activerecord.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\litesql-gen-xml.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\litesql-gen-xml.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\litesql-gen.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\litesql-gen.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\logger.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						GeneratePreprocessedFile="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\src\generator\logger.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\md5.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\md5.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\objectmodel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\objectmodel.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\xmlobjects.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\xmlobjects.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\xmlparser.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\generator\xmlparser.hpp"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Utilities"
+		</File>
+		<File
+			RelativePath=".\lua\src\lcode.c"
 			>
-			<File
-				RelativePath=".\src\library\split.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\include\litesql\split.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\library\string.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\include\litesql\string.hpp"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Common"
+		</File>
+		<File
+			RelativePath=".\lua\src\lcode.h"
 			>
-			<File
-				RelativePath=".\include\config.h"
-				>
-			</File>
-			<File
-				RelativePath=".\include\litesql\cursor.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\include\litesql\except.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\include\litesql.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\include\litesql_char.cpp"
-				>
-				<FileConfiguration
-					Name="Debug Unicode|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						GeneratePreprocessedFile="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\include\litesql_char.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\include\litesql\operations.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\include\litesql\relation.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\include\litesql\types.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\include\litesql\utils.hpp"
-				>
-			</File>
-		</Filter>
+		</File>
+		<File
+			RelativePath=".\lua\src\ldblib.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\ldebug.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\ldebug.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\ldo.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\ldo.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\ldump.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lfunc.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lfunc.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lgc.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lgc.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\linit.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\liolib.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\llex.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\llex.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\llimits.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lmathlib.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lmem.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lmem.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\loadlib.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lobject.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lobject.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lopcodes.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lopcodes.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\loslib.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lparser.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lparser.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lstate.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lstate.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lstring.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lstring.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lstrlib.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\ltable.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\ltable.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\ltablib.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\ltm.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\ltm.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lua.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\luaconf.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lualib.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lundump.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lundump.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lvm.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lvm.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lzio.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\lzio.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua\src\print.c"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

@@ -548,7 +548,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\sqlite3.c"
+			RelativePath=".\SQLite\sqlite3.c"
 			>
 		</File>
 	</Files>

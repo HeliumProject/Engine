@@ -23,47 +23,43 @@
 	/>
 	<UserMacro
 		Name="Expat"
-		Value="$(SolutionDir)Dependencies\Expat\2.01"
+		Value="$(SolutionDir)Dependencies\Expat"
 	/>
 	<UserMacro
 		Name="LiteSQL"
-		Value="$(SolutionDir)Dependencies\LiteSQL\0.3.8"
+		Value="$(SolutionDir)Dependencies\LiteSQL"
 	/>
 	<UserMacro
 		Name="lua"
-		Value="$(SolutionDir)Dependencies\lua\5.1.4"
+		Value="$(SolutionDir)Dependencies\lua"
 	/>
 	<UserMacro
 		Name="MySQL"
-		Value="$(SolutionDir)Dependencies\MySQL\6.0.2"
+		Value="$(SolutionDir)Dependencies\MySQL"
 	/>
 	<UserMacro
 		Name="nvtt"
-		Value="$(SolutionDir)Dependencies\nvtt\2.0.7"
+		Value="$(SolutionDir)Dependencies\nvtt"
 	/>
 	<UserMacro
 		Name="p4api"
-		Value="$(SolutionDir)Dependencies\p4api\2009.2"
-	/>
-	<UserMacro
-		Name="PCRE"
-		Value="$(SolutionDir)Dependencies\pcre\8.10"
+		Value="$(SolutionDir)Dependencies\p4api"
 	/>
 	<UserMacro
 		Name="SQLite"
-		Value="$(SolutionDir)Dependencies\SQLite\3.6.23.1"
+		Value="$(SolutionDir)Dependencies\SQLite"
 	/>
 	<UserMacro
 		Name="squish"
-		Value="$(SolutionDir)Dependencies\squish\1.10"
+		Value="$(SolutionDir)Dependencies\squish"
 	/>
 	<UserMacro
 		Name="tiff"
-		Value="$(SolutionDir)Dependencies\tiff\3.9.2"
+		Value="$(SolutionDir)Dependencies\tiff"
 	/>
 	<UserMacro
 		Name="TinyXML"
-		Value="$(SolutionDir)Dependencies\TinyXML\2.6.1"
+		Value="$(SolutionDir)Dependencies\TinyXML"
 	/>
 	<UserMacro
 		Name="wxWidgets"
@@ -79,6 +75,6 @@
 	/>
 	<UserMacro
 		Name="zlib"
-		Value="$(SolutionDir)Dependencies\zlib\1.2.5"
+		Value="$(SolutionDir)Dependencies\zlib"
 	/>
 </VisualStudioPropertySheet>

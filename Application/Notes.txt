@@ -1,6 +1,0 @@
-== TODO ==
-
-* Cull a dependency on wxWidgets in this library -Geoff
-** Break Inspect's direct dependency with wxWidgets, create adapter controls in Editor
-** Move wxTreeWndCtrl into Editor
-* Tidy up exception listener code to be more simple... cull db insert code -Geoff

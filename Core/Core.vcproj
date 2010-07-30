@@ -599,10 +599,6 @@
 			RelativePath=".\API.h"
 			>
 		</File>
-		<File
-			RelativePath=".\Notes.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

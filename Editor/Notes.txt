@@ -1,4 +1,0 @@
-== TODO ==
-* Cull /Task and create console output panel in MainFrame
-* Move everything besides /Commands, /Graph, /Tracker, /UI, and /Vault into Core (see Core Notes.txt)
-* Move /UI into project root

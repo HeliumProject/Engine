@@ -3,7 +3,8 @@
 #include "VaultPanel.h"
 #include "ArtProvider.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
 : VaultPanelGenerated( parent, id, pos, size, style )

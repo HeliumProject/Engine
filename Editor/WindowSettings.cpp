@@ -4,7 +4,8 @@
 #include <wx/aui/aui.h>
 #include <wx/display.h>
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 // Statics
 const tchar* WindowSettings::s_Reset = TXT( "resetWin" );

@@ -1,4 +1,5 @@
 #include "Precompile.h"
 #include "Project.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;

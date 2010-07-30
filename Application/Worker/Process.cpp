@@ -11,7 +11,8 @@
 #include "Application/Application.h"
 #include "Application/Exception.h"
 
-using namespace Worker;
+using namespace Helium;
+using namespace Helium::Worker;
 
 const tchar* Worker::Args::Worker  = TXT( "worker" );
 const tchar* Worker::Args::Debug   = TXT( "worker_debug" );

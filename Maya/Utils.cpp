@@ -15,140 +15,142 @@
 
 #include <sstream>
 
-namespace Maya
+using namespace Helium;
+using namespace Helium::Maya;
+
+void Maya::MObjectSetToObjectArray( const MObjectSet &nodes, MObjectArray &array )
 {
-  void MObjectSetToObjectArray( const MObjectSet &nodes, MObjectArray &array )
-  {
     MObjectSet::const_iterator itor;
     for( itor = nodes.begin(); itor != nodes.end(); ++itor )
     {
-      array.append( *itor );
+        array.append( *itor );
     }
-  }
-  static MStatus _findNodesOfType( MItDag &itor, MObjectSet &nodes, const MString &typeStr )
-  {
+}
+
+static MStatus _findNodesOfType( MItDag &itor, MObjectSet &nodes, const MString &typeStr )
+{
     MStatus stat;
 
     for (;!itor.isDone();itor.next()) 
     {
-      MObject obj = itor.item(&stat);
-      MCheckErr(stat, "Unable to do: itDag.item");
+        MObject obj = itor.item(&stat);
+        MCheckErr(stat, "Unable to do: itDag.item");
 
-      if( ! obj.hasFn( MFn::kDagNode ) ) continue;
+        if( ! obj.hasFn( MFn::kDagNode ) ) continue;
 
-      MFnDependencyNode node(obj, &stat);
-      MCheckErr(stat, "Unable to do: MFnDagNode node");
+        MFnDependencyNode node(obj, &stat);
+        MCheckErr(stat, "Unable to do: MFnDagNode node");
 
-      MString nodeType = node.typeName( &stat );
-      MCheckErr(stat, "Unable to do: node.typeId");
+        MString nodeType = node.typeName( &stat );
+        MCheckErr(stat, "Unable to do: node.typeId");
 
-      if( nodeType == typeStr )
-      {
-        nodes.insert( obj );
-      }
+        if( nodeType == typeStr )
+        {
+            nodes.insert( obj );
+        }
     }
     return MS::kSuccess;
-  }
+}
 
-  static MStatus _findNodesOfType( MItDag &itor, MObjectArray &array, const MString &typeStr )
-  {
+static MStatus _findNodesOfType( MItDag &itor, MObjectArray &array, const MString &typeStr )
+{
     MObjectSet set;
     MStatus stat = _findNodesOfType( itor, set, typeStr );
 
     MObjectSetToObjectArray( set, array );
 
     return stat;
-  }
+}
 
-  static MStatus  _findNodesOfType( MItDependencyNodes &itor, MObjectSet &nodes, const MString &typeStr )
-  {
+static MStatus  _findNodesOfType( MItDependencyNodes &itor, MObjectSet &nodes, const MString &typeStr )
+{
     MStatus stat;
 
     for (;!itor.isDone();itor.next()) 
     {
-      MObject obj = itor.item(&stat);
-      MCheckErr(stat, "Unable to do: itDag.item");
+        MObject obj = itor.item(&stat);
+        MCheckErr(stat, "Unable to do: itDag.item");
 
-      if( obj.hasFn( MFn::kDagNode ) ) continue;
+        if( obj.hasFn( MFn::kDagNode ) ) continue;
 
-      MFnDependencyNode node(obj, &stat);
-      MCheckErr(stat, "Unable to do: MFnDagNode node");
+        MFnDependencyNode node(obj, &stat);
+        MCheckErr(stat, "Unable to do: MFnDagNode node");
 
-      MString nodeType = node.typeName( &stat );
-      MCheckErr(stat, "Unable to do: node.typeId");
+        MString nodeType = node.typeName( &stat );
+        MCheckErr(stat, "Unable to do: node.typeId");
 
-      if( nodeType == typeStr )
-      {
-        nodes.insert( obj );
-      }
+        if( nodeType == typeStr )
+        {
+            nodes.insert( obj );
+        }
     }
     return MS::kSuccess;
-  }
+}
 
-  static MStatus  _findNodesOfType( MItDependencyNodes &itor, MObjectArray &array, const MString &typeStr )
-  {
+static MStatus  _findNodesOfType( MItDependencyNodes &itor, MObjectArray &array, const MString &typeStr )
+{
     MObjectSet set;
     MStatus stat = _findNodesOfType( itor, set, typeStr );
 
     MObjectSetToObjectArray( set, array );
 
     return stat;
-  }
+}
 
-  MStatus findNodesOfType(MObjectSet& objects, const MTypeId &typeId, const MFn::Type FnType, MObject& pathRoot ) 
-  {
+MStatus Maya::findNodesOfType(MObjectSet& objects, const MTypeId &typeId, const MFn::Type FnType, MObject& pathRoot ) 
+{
     // Find all the ref nodes in the Dag
     MStatus stat;
 
     if ( pathRoot != MObject::kNullObj )
     {
-      // Create the Dag iterator
-      MItDag itDag( MItDag::kDepthFirst, FnType, &stat );
-      MCheckErr(stat, "Unable to do: MItDag itDag");
+        // Create the Dag iterator
+        MItDag itDag( MItDag::kDepthFirst, FnType, &stat );
+        MCheckErr(stat, "Unable to do: MItDag itDag");
 
-      stat = itDag.reset( pathRoot );
-      MCheckErr(stat, "Unable to do: itDag.reset()");
+        stat = itDag.reset( pathRoot );
+        MCheckErr(stat, "Unable to do: itDag.reset()");
 
-      for ( ; !itDag.isDone(); itDag.next() )
-      {
-        MObject obj = itDag.item(&stat);
-        MCheckErr(stat, "Unable to do: itDag.item");
+        for ( ; !itDag.isDone(); itDag.next() )
+        {
+            MObject obj = itDag.item(&stat);
+            MCheckErr(stat, "Unable to do: itDag.item");
 
-        MFnDagNode node(obj, &stat);
-        MCheckErr(stat, "Unable to do: MFnDagNode node");
+            MFnDagNode node(obj, &stat);
+            MCheckErr(stat, "Unable to do: MFnDagNode node");
 
-        MTypeId nodeType = node.typeId( );
+            MTypeId nodeType = node.typeId( );
 
-        if( nodeType == typeId )
-          objects.insert(obj);      
-      }
+            if( nodeType == typeId )
+                objects.insert(obj);      
+        }
     }
     else
     {
-      // Create the Dag iterator
-      MItDependencyNodes itDep( FnType, &stat );
-      MCheckErr(stat, "Unable to do: MItDependencyNodes itDep");
+        // Create the Dag iterator
+        MItDependencyNodes itDep( FnType, &stat );
+        MCheckErr(stat, "Unable to do: MItDependencyNodes itDep");
 
-      for ( ; !itDep.isDone(); itDep.next() )
-      {
-        MObject obj = itDep.item(&stat);
-        MCheckErr(stat, "Unable to do: itDag.item");
+        for ( ; !itDep.isDone(); itDep.next() )
+        {
+            MObject obj = itDep.item(&stat);
+            MCheckErr(stat, "Unable to do: itDag.item");
 
-        MFnDependencyNode node(obj, &stat);
-        MCheckErr(stat, "Unable to do: MFnDagNode node");
+            MFnDependencyNode node(obj, &stat);
+            MCheckErr(stat, "Unable to do: MFnDagNode node");
 
-        MTypeId nodeType = node.typeId( );
+            MTypeId nodeType = node.typeId( );
 
-        if( nodeType == typeId )
-          objects.insert(obj);      
-      }
+            if( nodeType == typeId )
+                objects.insert(obj);      
+        }
     }
 
     return stat;
-  }
+}
 
-  MStatus findNodesOfType(MObjectArray& oArray, const MTypeId &typeId, const MFn::Type FnType, MObject& pathRoot ) 
-  {
+MStatus Maya::findNodesOfType(MObjectArray& oArray, const MTypeId &typeId, const MFn::Type FnType, MObject& pathRoot ) 
+{
     MObjectSet set;
 
     MStatus stat = findNodesOfType( set, typeId, FnType, pathRoot );
@@ -156,90 +158,90 @@ namespace Maya
     MObjectSetToObjectArray( set, oArray );
 
     return stat;
-  }
+}
 
-  MStatus findNodesOfType( MObjectSet &nodes, const MString &typeStr, bool isDagNode )
-  {
+MStatus Maya::findNodesOfType( MObjectSet &nodes, const MString &typeStr, bool isDagNode )
+{
     // Find all the ref nodes in the Dag
 
     MStatus stat;
 
     if( isDagNode )
     {
-      // Create the Dag iterator
-      MItDag itor(MItDag::kDepthFirst, MFn::kInvalid, &stat);
-      MCheckErr(stat, "Unable to do: MItDag itDag");
+        // Create the Dag iterator
+        MItDag itor(MItDag::kDepthFirst, MFn::kInvalid, &stat);
+        MCheckErr(stat, "Unable to do: MItDag itDag");
 
-      stat = _findNodesOfType( itor, nodes, typeStr );
+        stat = _findNodesOfType( itor, nodes, typeStr );
     }
     else
     {
-      MItDependencyNodes itor;
-      stat = _findNodesOfType( itor, nodes, typeStr );
+        MItDependencyNodes itor;
+        stat = _findNodesOfType( itor, nodes, typeStr );
     }
 
     return stat;
 
-  }
+}
 
-  MStatus findNodesOfType( MObjectArray &array, const MString &typeStr, bool isDagNode )
-  {
+MStatus Maya::findNodesOfType( MObjectArray &array, const MString &typeStr, bool isDagNode )
+{
     MObjectSet set;
     MStatus stat = findNodesOfType( set, typeStr, isDagNode );
 
     MObjectSetToObjectArray( set, array );
 
     return stat;
-  }
+}
 
-  MStatus findNodesOfType( MObjectSet &nodes, const MFn::Type FnType, MObject& pathRoot )
-  {
+MStatus Maya::findNodesOfType( MObjectSet &nodes, const MFn::Type FnType, MObject& pathRoot )
+{
     // Find all the ref nodes in the Dag
     MStatus stat;
 
     if ( pathRoot != MObject::kNullObj )
     {
-      // Create the dag iterator
-      MItDag dagIt( MItDag::kDepthFirst, FnType, &stat );
-      MCheckErr(stat, "Unable to do: MItDag itDag");
+        // Create the dag iterator
+        MItDag dagIt( MItDag::kDepthFirst, FnType, &stat );
+        MCheckErr(stat, "Unable to do: MItDag itDag");
 
-      stat = dagIt.reset( pathRoot );
-      MCheckErr(stat, "Unable to do: itDag.reset()");
+        stat = dagIt.reset( pathRoot );
+        MCheckErr(stat, "Unable to do: itDag.reset()");
 
-      for ( ; !dagIt.isDone(); dagIt.next() ) 
-      {
-        MObject obj = dagIt.item(&stat);
-        MCheckErr(stat, "Unable to do: itDag.item");
+        for ( ; !dagIt.isDone(); dagIt.next() ) 
+        {
+            MObject obj = dagIt.item(&stat);
+            MCheckErr(stat, "Unable to do: itDag.item");
 
-        if( FnType != MFn::kInvalid && !obj.hasFn(FnType) )
-          continue;
+            if( FnType != MFn::kInvalid && !obj.hasFn(FnType) )
+                continue;
 
-        if( obj != MObject::kNullObj ) nodes.insert( obj );
-      }
+            if( obj != MObject::kNullObj ) nodes.insert( obj );
+        }
     }
     else
     {
-      // Create the dependency iterator
-      MItDependencyNodes depIt( FnType, &stat );
-      MCheckErr(stat, "Unable to do: MItDependencyNodes depIt");
+        // Create the dependency iterator
+        MItDependencyNodes depIt( FnType, &stat );
+        MCheckErr(stat, "Unable to do: MItDependencyNodes depIt");
 
-      for (;!depIt.isDone();depIt.next()) 
-      {
-        MObject obj = depIt.item(&stat);
-        MCheckErr(stat, "Unable to do: depIt.item");
+        for (;!depIt.isDone();depIt.next()) 
+        {
+            MObject obj = depIt.item(&stat);
+            MCheckErr(stat, "Unable to do: depIt.item");
 
-        if( !obj.hasFn(FnType) )
-          continue;
+            if( !obj.hasFn(FnType) )
+                continue;
 
-        if( obj != MObject::kNullObj ) nodes.insert( obj );
-      }
+            if( obj != MObject::kNullObj ) nodes.insert( obj );
+        }
     }
-  
-    return stat;
-  }
 
-  MStatus findNodesOfType(MObjectArray& oArray, const MFn::Type FnType, MObject& pathRoot ) 
-  {
+    return stat;
+}
+
+MStatus Maya::findNodesOfType(MObjectArray& oArray, const MFn::Type FnType, MObject& pathRoot ) 
+{
     MObjectSet set;
 
     MStatus stat = findNodesOfType( set, FnType, pathRoot );
@@ -247,28 +249,28 @@ namespace Maya
     MObjectSetToObjectArray( set, oArray );
 
     return stat;
-  }
+}
 
-  void appendObjectArray( MObjectArray & receiver, const MObjectArray & source )
-  {
+void Maya::appendObjectArray( MObjectArray & receiver, const MObjectArray & source )
+{
     const unsigned int sourceLength = source.length();
     for (unsigned int i=0; i<sourceLength; i++)
     {
-      receiver.append( source[i] );
+        receiver.append( source[i] );
     }
-  }
+}
 
-  void appendObjectArray( MObjectSet &receiver, const MObjectArray & source )
-  {
+void Maya::appendObjectArray( MObjectSet &receiver, const MObjectArray & source )
+{
     const unsigned int sourceLength = source.length();
     for (unsigned int i=0; i<sourceLength; i++)
     {
-      receiver.insert( source[i] );
+        receiver.insert( source[i] );
     }
-  }
+}
 
-  bool Exists( const MString& name )
-  {
+bool Maya::Exists( const MString& name )
+{
 
     MSelectionList selList;
 
@@ -277,52 +279,52 @@ namespace Maya
     if (selList.length() != 1) return false;
 
     return true;
-  }
+}
 
-  ///////////////////////////////////////////////////////////////////////////////
-  // 
-  MStatus SetTUIDAttribute( MObject &object, const MString& idAttributeName, tuid id, const bool hidden )
-  {
+///////////////////////////////////////////////////////////////////////////////
+// 
+MStatus Maya::SetTUIDAttribute( MObject &object, const MString& idAttributeName, tuid id, const bool hidden )
+{
     MStatus status( MStatus::kSuccess );
 
     tstringstream idStr;
-    idStr << Helium::TUID::HexFormat << id;
+    idStr << TUID::HexFormat << id;
 
     MString idMStr( idStr.str().c_str() );
     return SetStringAttribute( object, idAttributeName, idStr.str(), hidden );
-  }
+}
 
 
-  ///////////////////////////////////////////////////////////////////////////////
-  // 
-  tuid GetTUIDAttribute( const MObject &object, const MString& idAttributeName, MStatus* returnStatus )
-  {
+///////////////////////////////////////////////////////////////////////////////
+// 
+tuid Maya::GetTUIDAttribute( const MObject &object, const MString& idAttributeName, MStatus* returnStatus )
+{
     MStatus status( MStatus::kSuccess );
 
     tstring idStr;
     status = GetStringAttribute( object, idAttributeName, idStr );
 
-    tuid id = Helium::TUID::Null;
+    tuid id = TUID::Null;
 
     if ( !idStr.empty() )
     {
-      tistringstream idStream ( idStr );
-      idStream >> std::hex >> id;
+        tistringstream idStream ( idStr );
+        idStream >> std::hex >> id;
     }
 
     if ( returnStatus != NULL )
     {
-      *returnStatus = status;
+        *returnStatus = status;
     }
 
     return id;
-  }
+}
 
 
-  ///////////////////////////////////////////////////////////////////////////////
-  // 
-  MStatus SetStringAttribute( MObject &object, const MString& attributeName, const tstring& stringAtr, const bool hidden )
-  {
+///////////////////////////////////////////////////////////////////////////////
+// 
+MStatus Maya::SetStringAttribute( MObject &object, const MString& attributeName, const tstring& stringAtr, const bool hidden )
+{
     // locate/create an attribute to store our id attribute
     // we use one of maya's compound types to store our 64 bit id
     MStatus status( MStatus::kSuccess );
@@ -336,18 +338,18 @@ namespace Maya
     bool nodeWasLocked = nodeFn.isLocked();
     if ( nodeWasLocked )
     {
-      // turn off any node locking so an attribute can be added
-      nodeFn.setLocked( false );
+        // turn off any node locking so an attribute can be added
+        nodeFn.setLocked( false );
     }
 
     if ( nodeFn.hasAttribute( attributeName, &status ) )
     {
-      attribute = nodeFn.attribute( attributeName );
+        attribute = nodeFn.attribute( attributeName );
     }
     else
     {
-      attribute = attributeFn.create( attributeName, attributeName, MFnData::kString );
-      nodeFn.addAttribute( attribute );
+        attribute = attributeFn.create( attributeName, attributeName, MFnData::kString );
+        nodeFn.addAttribute( attribute );
     }
 
     status = attributeFn.setObject( attribute );
@@ -362,33 +364,33 @@ namespace Maya
     // reset to the prior state of wasLocked
     if ( nodeWasLocked )
     {
-      nodeFn.setLocked( nodeWasLocked );
+        nodeFn.setLocked( nodeWasLocked );
     }
 
     return status;
-  }
+}
 
 
-  ///////////////////////////////////////////////////////////////////////////////
-  // 
-  MStatus GetStringAttribute( const MObject &object, const MString& attributeName, tstring& stringAtr )
-  {
+///////////////////////////////////////////////////////////////////////////////
+// 
+MStatus Maya::GetStringAttribute( const MObject &object, const MString& attributeName, tstring& stringAtr )
+{
     MStatus status( MStatus::kSuccess );
-    
+
     stringAtr = TXT("");
-    
+
     MFnDependencyNode nodeFn( object );
 
     MObject attribute = nodeFn.attribute( attributeName, &status );
     if ( !status )
     {
-      return status;
+        return status;
     }
 
     MPlug objPlug = nodeFn.findPlug( attribute, &status );
     if ( !status )
     {
-      return status;
+        return status;
     }
 
     MObject objValue;
@@ -400,54 +402,54 @@ namespace Maya
     stringAtr = stringDataFn.string( &status ).asTChar();
 
     return status ;
-  }
+}
 
 
-  ///////////////////////////////////////////////////////////////////////////////
-  // Removes an attribute from the given object
-  //
-  MStatus RemoveAttribute( MObject& object, const MString& attributeName )
-  {
+///////////////////////////////////////////////////////////////////////////////
+// Removes an attribute from the given object
+//
+MStatus Maya::RemoveAttribute( MObject& object, const MString& attributeName )
+{
     MStatus status( MStatus::kSuccess );
 
     MFnDependencyNode nodeFn( object, &status );
 
     if ( nodeFn.hasAttribute( attributeName, &status ) )
     {
-      MObject attrObj = nodeFn.attribute( attributeName, &status );
-      HELIUM_ASSERT( status != MS::kFailure );
+        MObject attrObj = nodeFn.attribute( attributeName, &status );
+        HELIUM_ASSERT( status != MS::kFailure );
 
-      MPlug attrObjPlug( object, attrObj );
+        MPlug attrObjPlug( object, attrObj );
 
-      // check to see if we are a locked node
-      bool nodeWasLocked = nodeFn.isLocked();
-      if ( nodeWasLocked )
-      {
-        // turn off any node locking so an attribute can be added
-        nodeFn.setLocked( false );
-      }
+        // check to see if we are a locked node
+        bool nodeWasLocked = nodeFn.isLocked();
+        if ( nodeWasLocked )
+        {
+            // turn off any node locking so an attribute can be added
+            nodeFn.setLocked( false );
+        }
 
-      // unlock the attribute
-      status = attrObjPlug.setLocked( false );
-      HELIUM_ASSERT( status != MS::kFailure );
+        // unlock the attribute
+        status = attrObjPlug.setLocked( false );
+        HELIUM_ASSERT( status != MS::kFailure );
 
-      // remove the attribute
-      status = nodeFn.removeAttribute( attrObj );
-      HELIUM_ASSERT( status != MS::kFailure );
+        // remove the attribute
+        status = nodeFn.removeAttribute( attrObj );
+        HELIUM_ASSERT( status != MS::kFailure );
 
-      // reset to the prior state of wasLocked
-      if ( nodeWasLocked )
-      {
-        nodeFn.setLocked( nodeWasLocked );
-      }
+        // reset to the prior state of wasLocked
+        if ( nodeWasLocked )
+        {
+            nodeFn.setLocked( nodeWasLocked );
+        }
     }
 
     return status;
-  }
+}
 
 
-  MStatus LockHierarchy(MObject& obj, bool state) 
-  {
+MStatus Maya::LockHierarchy(MObject& obj, bool state) 
+{
 
     MStatus stat;
 
@@ -464,13 +466,13 @@ namespace Maya
     // Iterate the Dag
     for (;!itDag.isDone();itDag.next()) {
 
-      // Get child object
-      MObject childObj = itDag.item(&stat);
-      MCheckErr(stat, "Unable to do: itDag.item");
+        // Get child object
+        MObject childObj = itDag.item(&stat);
+        MCheckErr(stat, "Unable to do: itDag.item");
 
-      // Lock child object attributes and node
-      stat = LockAttributes(childObj, state);
-      MCheckErr(stat, "Unable to do: LockAttributes");
+        // Lock child object attributes and node
+        stat = LockAttributes(childObj, state);
+        MCheckErr(stat, "Unable to do: LockAttributes");
 
     }
 
@@ -479,10 +481,10 @@ namespace Maya
     MCheckErr(stat, "Unable to do: LockAttributes");
 
     return MS::kSuccess;
-  }
+}
 
-  MStatus LockAttributes(MObject& obj, bool state) 
-  {
+MStatus Maya::LockAttributes(MObject& obj, bool state) 
+{
 
     MStatus stat;
 
@@ -497,20 +499,20 @@ namespace Maya
     // Walk attribs
     for (unsigned i=0;i<attributeCount;++i) {
 
-      // Get attrib object
-      MObject attribObj = node.attribute(i, &stat);
-      MCheckErr(stat, "Unable to do: node.attribute");
+        // Get attrib object
+        MObject attribObj = node.attribute(i, &stat);
+        MCheckErr(stat, "Unable to do: node.attribute");
 
-      // Get plug to attrib
-      MPlug plug(obj, attribObj);	
-      if (plug.isNull()) {
-        stat = MS::kFailure;
-        MCheckErr(stat, "Unable to do: MPlug plug(obj, attribObj)");
-      }
+        // Get plug to attrib
+        MPlug plug(obj, attribObj);	
+        if (plug.isNull()) {
+            stat = MS::kFailure;
+            MCheckErr(stat, "Unable to do: MPlug plug(obj, attribObj)");
+        }
 
-      // Lock attrib
-      stat = plug.setLocked(state);
-      MCheckErr(stat, "Unable to do: plug.setLocked");
+        // Lock attrib
+        stat = plug.setLocked(state);
+        MCheckErr(stat, "Unable to do: plug.setLocked");
     }
 
     // Lock node
@@ -519,31 +521,29 @@ namespace Maya
     MCheckErr(stat, "Unable to do: node.setLocked(state)");
 
     return MS::kSuccess;
-  }
+}
 
-  MStatus RemoveHierarchy( MObject& object, MSelectionList& list )
-  {
+MStatus Maya::RemoveHierarchy( MObject& object, MSelectionList& list )
+{
     MStatus status;
 
     u32 len = list.length();
     for( u32 i = 0; i < len; ++i )
     {
-      MObject obj;
-      status = list.getDependNode( i, obj );
-      if( obj == object )
-      {
-        status = list.remove( i );
-        break;
-      }
+        MObject obj;
+        status = list.getDependNode( i, obj );
+        if( obj == object )
+        {
+            status = list.remove( i );
+            break;
+        }
     }
 
     MFnDagNode nodeFn( object );
     len = nodeFn.childCount();
     for( u32 i = 0; i < len; ++i )
     {
-      status = RemoveHierarchy( nodeFn.child( i ), list );
+        status = RemoveHierarchy( nodeFn.child( i ), list );
     }
     return status;
-  }
-  
 }

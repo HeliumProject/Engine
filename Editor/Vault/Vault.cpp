@@ -13,7 +13,8 @@
 #include "Scene/SceneManager.h"
 #include "App.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 Vault::Vault()
 : m_VaultSearch( NULL ) 

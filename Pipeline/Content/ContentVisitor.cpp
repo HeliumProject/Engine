@@ -1,15 +1,11 @@
 #include "Pipeline/Content/ContentVisitor.h" 
 
-namespace Content
+using namespace Helium::Content;
+
+ContentVisitor::ContentVisitor()
 {
-  ContentVisitor::ContentVisitor()
-  {
+}
 
-  }
-
-  ContentVisitor::~ContentVisitor()
-  {
-
-  }
-  
+ContentVisitor::~ContentVisitor()
+{
 }

@@ -15,7 +15,7 @@
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
 
-using namespace Reflect;
+using namespace Helium::Reflect;
 
 //
 // Standard

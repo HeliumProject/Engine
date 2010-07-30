@@ -18,12 +18,12 @@
 #include "Foundation/Component/ComponentHandle.h"
 #include "LightPanel.h"
 
-// Using
-using namespace Math;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
 // RTTI
-LUNA_DEFINE_TYPE(Editor::Light);
+EDITOR_DEFINE_TYPE(Editor::Light);
 
 // statics
 D3DMATERIAL9 Light::s_Material;

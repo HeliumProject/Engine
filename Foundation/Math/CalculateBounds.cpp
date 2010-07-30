@@ -10,7 +10,8 @@
 #include "CalculateBounds.h"
 #include "Macros.h"
 
-using namespace Math;
+using namespace Helium;
+using namespace Helium::Math;
 
 static const f32 epsilon = 1.0e-10F;
 static const i32 sweeps = 32;

@@ -14,12 +14,12 @@
 
 #include "Pipeline/Content/Nodes/Locator.h"
 
-// Using
-using namespace Math;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
 // RTTI
-LUNA_DEFINE_TYPE(Editor::Locator);
+EDITOR_DEFINE_TYPE(Editor::Locator);
 
 void Locator::InitializeType()
 {

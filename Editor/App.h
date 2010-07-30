@@ -14,59 +14,62 @@
 #include <wx/app.h>
 #include <wx/xrc/xmlres.h>
 
-namespace Editor
+namespace Helium
 {
-    class App : public wxApp
+    namespace Editor
     {
-    public:
-        App();
-        ~App();
-
-        virtual bool    OnInit() HELIUM_OVERRIDE;
-        virtual int     OnExit() HELIUM_OVERRIDE;
-        virtual void    OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg) HELIUM_OVERRIDE;
-
-        void SavePreferences();
-        void LoadPreferences();
-
-        DocumentManager& GetDocumentManager()
+        class App : public wxApp
         {
-            return m_DocumentManager;
-        }
+        public:
+            App();
+            ~App();
 
-        Preferences* GetPreferences()
-        {
-            return m_Preferences;
-        }
+            virtual bool    OnInit() HELIUM_OVERRIDE;
+            virtual int     OnExit() HELIUM_OVERRIDE;
+            virtual void    OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg) HELIUM_OVERRIDE;
 
-        MainFrame* GetFrame()
-        {
-            if ( !m_Frame )
+            void SavePreferences();
+            void LoadPreferences();
+
+            DocumentManager& GetDocumentManager()
             {
-                m_Frame = new MainFrame();
+                return m_DocumentManager;
             }
-            return m_Frame;
-        }
 
-        Vault& GetVault()
-        {
-            if ( !m_Vault )
+            Preferences* GetPreferences()
             {
-                m_Vault = new Vault();
+                return m_Preferences;
             }
-            return *m_Vault;
-        }
 
-    protected:
-        Helium::InitializerStack m_InitializerStack;
-        DocumentManager m_DocumentManager;
-        Tracker m_Tracker;
-        Platform::Thread m_TrackerThread;
+            MainFrame* GetFrame()
+            {
+                if ( !m_Frame )
+                {
+                    m_Frame = new MainFrame();
+                }
+                return m_Frame;
+            }
 
-        PreferencesPtr m_Preferences;
-        Vault* m_Vault;
-        MainFrame* m_Frame;
-    };
+            Vault& GetVault()
+            {
+                if ( !m_Vault )
+                {
+                    m_Vault = new Vault();
+                }
+                return *m_Vault;
+            }
 
-    DECLARE_APP( App );
+        protected:
+            Helium::InitializerStack m_InitializerStack;
+            DocumentManager m_DocumentManager;
+            Tracker m_Tracker;
+            Platform::Thread m_TrackerThread;
+
+            PreferencesPtr m_Preferences;
+            Vault* m_Vault;
+            MainFrame* m_Frame;
+        };
+
+        DECLARE_APP( App );
+    }
 }

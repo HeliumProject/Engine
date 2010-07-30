@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "ExportOptionsDlg.h"
 
-// Using
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 // Static event table
 BEGIN_EVENT_TABLE( ExportOptionsDlg, wxDialog )

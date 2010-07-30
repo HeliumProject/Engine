@@ -3,7 +3,8 @@
 #include "ExportPoint.h"
 #include "MayaContentCmd.h"
 
-using namespace MayaContent;
+using namespace Helium;
+using namespace Helium::MayaContent;
 
 void ExportCurve::GatherMayaData( V_ExportBase& newExportObjects )
 {

@@ -11,7 +11,8 @@
 #include "Platform/Mutex.h"
 #include "Application/RCS/RCS.h"
 
-using namespace Perforce;
+using namespace Helium;
+using namespace Helium::Perforce;
 
 static u32 g_InitThread = GetCurrentThreadId();
 

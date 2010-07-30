@@ -1,9 +1,10 @@
 #include "Precompile.h"
 #include "Selectable.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE( Selectable );
+EDITOR_DEFINE_TYPE( Selectable );
 
 void Selectable::InitializeType()
 {

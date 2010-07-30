@@ -11,9 +11,9 @@
 #include "EditorGenerated.h"
 
 ///////////////////////////////////////////////////////////////////////////
-using namespace Editor;
+using namespace Helium::Editor;
 
-MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : Editor::Frame( parent, id, title, pos, size, style )
+MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : Helium::Editor::Frame( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	

@@ -22,7 +22,7 @@
 using namespace Helium;
 using Helium::Insert; 
 
-int g_InitCount = 0;
+static int g_InitCount = 0;
 
 
 #if wxUSE_DIRDLG || wxUSE_FILEDLG

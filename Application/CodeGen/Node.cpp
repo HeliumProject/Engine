@@ -1,7 +1,8 @@
 #include "Node.h"
 #include "Platform/Assert.h"
 
-using namespace CodeGen;
+using namespace Helium;
+using namespace Helium::CodeGen;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

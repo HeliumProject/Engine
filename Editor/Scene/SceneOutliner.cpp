@@ -5,8 +5,8 @@
 #include "SceneOutlinerItemData.h"
 #include "Application/Undo/PropertyCommand.h"
 
-// Forwards
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 // Helper macro.  In debug, asserts that m_TreeCtrl exists.  In release,
 // bails out of the function if m_TreeCtrl does not exist.

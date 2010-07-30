@@ -2,7 +2,8 @@
 #include "ExportShader.h"
 #include "MayaContentCmd.h"
 
-using namespace MayaContent;
+using namespace Helium;
+using namespace Helium::MayaContent;
 
 void ExportShader::GatherMayaData( V_ExportBase &newExportObjects )
 {

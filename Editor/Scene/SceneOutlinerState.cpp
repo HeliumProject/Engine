@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "SceneOutlinerState.h"
 
-// Using
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

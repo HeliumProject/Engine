@@ -3,9 +3,10 @@
 
 #include "Application/Undo/PropertyCommand.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE( Persistent );
+EDITOR_DEFINE_TYPE( Persistent );
 
 void Persistent::InitializeType()
 {

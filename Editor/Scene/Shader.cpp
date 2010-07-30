@@ -8,11 +8,12 @@
 
 #include "Scene.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 Profile::MemoryPoolHandle g_ShaderTextureMemoryPool;
 
-LUNA_DEFINE_TYPE( Shader );
+EDITOR_DEFINE_TYPE( Shader );
 
 void Shader::InitializeType()
 {

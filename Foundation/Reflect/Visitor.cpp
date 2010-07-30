@@ -1,7 +1,7 @@
 #include "Visitor.h"
 #include "Serializers.h"
 
-using namespace Reflect;
+using namespace Helium::Reflect;
 
 FindByTypeVisitor::FindByTypeVisitor(i32 type, V_Element& found)
 : m_Type (type)

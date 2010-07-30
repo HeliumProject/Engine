@@ -2,7 +2,8 @@
 #include "ExportBase.h"
 #include "MayaContentCmd.h"
 
-using namespace MayaContent;
+using namespace Helium;
+using namespace Helium::MayaContent;
 
 void ExportBase::GatherMayaData( V_ExportBase &newExportObjects )
 {

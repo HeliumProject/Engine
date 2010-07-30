@@ -3,7 +3,8 @@
 
 #include "Platform/Exception.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ThumbnailTile::ThumbnailTile( const Helium::Path& path )
 : m_Path( path )

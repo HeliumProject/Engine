@@ -1,29 +1,29 @@
 #include "Pipeline/Content/Nodes/HierarchyNode.h"
 
-using namespace Reflect;
-using namespace Content;
+using namespace Helium;
+using namespace Helium::Content;
 
 REFLECT_DEFINE_ABSTRACT(HierarchyNode);
 
 void HierarchyNode::EnumerateClass( Reflect::Compositor<HierarchyNode>& comp )
 {
-  Reflect::Field* fieldParentID = comp.AddField( &HierarchyNode::m_ParentID, "m_ParentID" );
-  Reflect::Field* fieldHidden = comp.AddField( &HierarchyNode::m_Hidden, "m_Hidden" );
-  Reflect::Field* fieldLive = comp.AddField( &HierarchyNode::m_Live, "m_Live" );
+    Reflect::Field* fieldParentID = comp.AddField( &HierarchyNode::m_ParentID, "m_ParentID" );
+    Reflect::Field* fieldHidden = comp.AddField( &HierarchyNode::m_Hidden, "m_Hidden" );
+    Reflect::Field* fieldLive = comp.AddField( &HierarchyNode::m_Live, "m_Live" );
 }
 
 
-bool HierarchyNode::ProcessComponent(ElementPtr element, const tstring& memberName)
+bool HierarchyNode::ProcessComponent( Reflect::ElementPtr element, const tstring& memberName)
 {
-  if (memberName == TXT( "m_Visible" ) )
-  {
-    if ( Serializer::GetValue( AssertCast<Serializer>(element), m_Hidden ) )
+    if (memberName == TXT( "m_Visible" ) )
     {
-      m_Hidden = !m_Hidden;
+        if ( Reflect::Serializer::GetValue( Reflect::AssertCast< Reflect::Serializer >(element), m_Hidden ) )
+        {
+            m_Hidden = !m_Hidden;
+        }
+
+        return true;
     }
 
-    return true;
-  }
-
-  return __super::ProcessComponent(element, memberName);
+    return __super::ProcessComponent(element, memberName);
 }

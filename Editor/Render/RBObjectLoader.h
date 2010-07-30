@@ -2,14 +2,17 @@
 
 #include "Render/ObjectLoader.h"
 
-namespace Content
+namespace Helium
 {
-  class RBObjectLoader : public Render::ObjectLoader
-  {
-  public:
-    RBObjectLoader();
-    virtual ~RBObjectLoader();
+    namespace Content
+    {
+        class RBObjectLoader : public Render::ObjectLoader
+        {
+        public:
+            RBObjectLoader();
+            virtual ~RBObjectLoader();
 
-    u32 ParseFile(const tchar* fname,bool winding);
-  };
+            u32 ParseFile(const tchar* fname,bool winding);
+        };
+    }
 }

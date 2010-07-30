@@ -1,9 +1,10 @@
 #include "Precompile.h"
 #include "Primitive.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE(Editor::Primitive);
+EDITOR_DEFINE_TYPE(Editor::Primitive);
 
 void Primitive::InitializeType()
 {

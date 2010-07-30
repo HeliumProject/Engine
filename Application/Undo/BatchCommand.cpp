@@ -1,6 +1,6 @@
 #include "BatchCommand.h"
 
-using namespace Undo;
+using namespace Helium::Undo;
 
 BatchCommand::BatchCommand()
 : m_IsSignificant( false )

@@ -13,6 +13,8 @@
 #ifndef trackerdbgenerated_hpp
 #define trackerdbgenerated_hpp
 #include "litesql.hpp"
+namespace Helium
+{
 namespace Editor {
 class TrackedFile;
 class TrackedProperty;
@@ -166,5 +168,6 @@ protected:
     virtual std::vector<litesql::Database::SchemaItem> getSchema() const;
     static void initialize();
 };
+}
 }
 #endif

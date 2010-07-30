@@ -1,7 +1,8 @@
 #include "Precompile.h"
 #include "PerforceSubmitDialog.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 PerforceSubmitDialog::PerforceSubmitDialog( wxWindow* parent, int id, int changelistNumber, const tstring& description, wxString title )

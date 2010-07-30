@@ -5,7 +5,8 @@
 
 #include "EditorIDs.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
 : ToolbarPanelGenerated( parent, id, pos, size, style )

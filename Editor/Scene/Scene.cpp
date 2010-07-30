@@ -68,9 +68,9 @@
 
 #define snprintf _snprintf
 
-using namespace Math;
-using namespace Editor;
 using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
 Scene::Scene( Editor::Viewport* viewport, Editor::SceneManager* manager, const SceneDocumentPtr& file )
 : m_File( file )

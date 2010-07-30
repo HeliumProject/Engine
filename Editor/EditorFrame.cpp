@@ -8,8 +8,8 @@
 #include "Platform/Process.h"
 #include "Platform/Exception.h"
 
-// Using
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 
 // Static UI event table

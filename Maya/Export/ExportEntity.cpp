@@ -4,8 +4,9 @@
 #include "MayaContentCmd.h"
 #include "ExportPivotTransform.h"
 
-using namespace Content;
-using namespace MayaContent;
+using namespace Helium;
+using namespace Helium::Content;
+using namespace Helium::MayaContent;
 
 void ExportEntity::GatherMayaData( V_ExportBase &newExportObjects )
 {

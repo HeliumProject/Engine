@@ -2,8 +2,11 @@
 
 #include "Application/API.h"
 
-namespace InspectFile
+namespace Helium
 {
-  APPLICATION_API void Initialize();
-  APPLICATION_API void Cleanup();
+    namespace InspectFile
+    {
+        APPLICATION_API void Initialize();
+        APPLICATION_API void Cleanup();
+    }
 }

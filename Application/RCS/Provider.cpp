@@ -1,6 +1,6 @@
 #include "Provider.h"
 
-using namespace RCS;
+using namespace Helium::RCS;
 
 Provider::Provider()
 {

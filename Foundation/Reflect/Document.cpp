@@ -1,7 +1,7 @@
 #include "Document.h"
 #include "Serializers.h"
 
-using namespace Reflect;
+using namespace Helium::Reflect;
 
 void DocumentElement::Initialize( Document* document, DocumentElement* parent, DocumentElement* nextSibling, DocumentElement* previousSibling )
 {

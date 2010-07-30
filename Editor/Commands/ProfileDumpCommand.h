@@ -2,13 +2,16 @@
 
 #include "Foundation/CommandLine/Command.h"
 
-namespace Editor
+namespace Helium
 {
-    class ProfileDumpCommand : public Helium::CommandLine::Command
+    namespace Editor
     {
-    public:
-        ProfileDumpCommand();
+        class ProfileDumpCommand : public Helium::CommandLine::Command
+        {
+        public:
+            ProfileDumpCommand();
 
-        virtual bool Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) HELIUM_OVERRIDE;
-    };
+            virtual bool Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) HELIUM_OVERRIDE;
+        };
+    }
 }

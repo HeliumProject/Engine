@@ -20,10 +20,11 @@
 #include "Foundation/Math/AngleAxis.h"
 #include "Foundation/Math/Utils.h"
 
-using namespace Math;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE(Editor::TranslateManipulator);
+EDITOR_DEFINE_TYPE(Editor::TranslateManipulator);
 
 
 void TranslateManipulator::InitializeType()

@@ -14,7 +14,8 @@ using Helium::ArrayPtr;
 #include <strstream>
 #include <sstream>
 
-using namespace Reflect;
+using namespace Helium;
+using namespace Helium::Reflect;
 
 HELIUM_COMPILE_ASSERT( Reflect::CharacterEncodings::ASCII == 0 );
 HELIUM_COMPILE_ASSERT( Reflect::CharacterEncodings::UTF_16 == 1 );

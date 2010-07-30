@@ -4,7 +4,7 @@
 #include "Foundation/Log.h"
 #include "Platform/String.h"
 
-using namespace Perforce;
+using namespace Helium::Perforce;
 
 void Command::Run()
 {

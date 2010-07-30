@@ -5,7 +5,8 @@
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Reflect/Registry.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 static i32 g_InitCount = 0;
 static Helium::InitializerStack g_InitializerStack;

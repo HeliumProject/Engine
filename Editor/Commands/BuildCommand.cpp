@@ -32,7 +32,7 @@
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Content/ContentInit.h"
 
-using namespace Asset;
+using namespace Helium::Asset;
 using namespace Helium::CommandLine;
 
 #define MAX_MATCHES 20

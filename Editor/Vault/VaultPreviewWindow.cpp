@@ -4,7 +4,8 @@
 #include "VaultFrame.h"
 #include "App.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 BEGIN_EVENT_TABLE( VaultPreviewWindow, RenderWindow )
 END_EVENT_TABLE()

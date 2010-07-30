@@ -4,57 +4,60 @@
 
 #include "SceneNodeType.h"
 
-namespace Editor
+namespace Helium
 {
-  class PickHit;
-  typedef Helium::SmartPtr< PickHit > PickHitPtr;
-  typedef std::vector< PickHitPtr > V_PickHitSmartPtr;
+    namespace Editor
+    {
+        class PickHit;
+        typedef Helium::SmartPtr< PickHit > PickHitPtr;
+        typedef std::vector< PickHitPtr > V_PickHitSmartPtr;
 
-  class HierarchyNodeType : public Editor::SceneNodeType
-  {
-    // 
-    // Member variables
-    //
+        class HierarchyNodeType : public Editor::SceneNodeType
+        {
+            // 
+            // Member variables
+            //
 
-  protected:
-    // members
-    bool m_Visible;
-    bool m_Selectable;
+        protected:
+            // members
+            bool m_Visible;
+            bool m_Selectable;
 
-  public:
-    // materials
-    D3DMATERIAL9 m_WireMaterial;
-    D3DMATERIAL9 m_SolidMaterial;
-
-
-    //
-    // Runtime Type Info
-    //
-
-  public:
-    LUNA_DECLARE_TYPE( HierarchyNodeType, Editor::SceneNodeType );
-    static void InitializeType();
-    static void CleanupType();
+        public:
+            // materials
+            D3DMATERIAL9 m_WireMaterial;
+            D3DMATERIAL9 m_SolidMaterial;
 
 
-    //
-    // Implementation
-    //
+            //
+            // Runtime Type Info
+            //
 
-  public:
-    HierarchyNodeType( Editor::Scene* scene, i32 instanceType );
+        public:
+            EDITOR_DECLARE_TYPE( HierarchyNodeType, Editor::SceneNodeType );
+            static void InitializeType();
+            static void CleanupType();
 
-    virtual void Create();
-    virtual void Delete();
 
-    bool IsVisible() const;
-    void SetVisible(bool value);
+            //
+            // Implementation
+            //
 
-    bool IsSelectable() const;
-    void SetSelectable( bool value );
+        public:
+            HierarchyNodeType( Editor::Scene* scene, i32 instanceType );
 
-    virtual bool IsTransparent();
-  };
+            virtual void Create();
+            virtual void Delete();
 
-  typedef std::map< tstring, HierarchyNodeType* > M_HierarchyNodeTypeDumbPtr;
+            bool IsVisible() const;
+            void SetVisible(bool value);
+
+            bool IsSelectable() const;
+            void SetSelectable( bool value );
+
+            virtual bool IsTransparent();
+        };
+
+        typedef std::map< tstring, HierarchyNodeType* > M_HierarchyNodeTypeDumbPtr;
+    }
 }

@@ -9,14 +9,15 @@
 #include "SceneManager.h"
 #include "HierarchyNodeType.h"
 
-using namespace Math;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
 Content::CurveType CurveCreateTool::s_CurveType = Content::CurveTypes::BSpline;
 bool CurveCreateTool::s_SurfaceSnap = false;
 bool CurveCreateTool::s_ObjectSnap = false;
 
-LUNA_DEFINE_TYPE(Editor::CurveCreateTool);
+EDITOR_DEFINE_TYPE(Editor::CurveCreateTool);
 
 void CurveCreateTool::InitializeType()
 {

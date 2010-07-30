@@ -1,5 +1,5 @@
 #include "Plane.h"
 
-using namespace Math;
+using namespace Helium::Math;
 
 const Plane Plane::Null = Plane ( Vector3::Zero, Vector3::Zero );

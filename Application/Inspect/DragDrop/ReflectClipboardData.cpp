@@ -1,6 +1,7 @@
 #include "ReflectClipboardData.h"
 
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Inspect;
 
 // Definition
 REFLECT_DEFINE_ABSTRACT( ReflectClipboardData );

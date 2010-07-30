@@ -4,7 +4,8 @@
 
 #include "Foundation/Memory/Endian.h"
 
-using namespace Reflect;
+using namespace Helium;
+using namespace Helium::Reflect;
 
 template <class T>
 SimpleSerializer<T>::SimpleSerializer()

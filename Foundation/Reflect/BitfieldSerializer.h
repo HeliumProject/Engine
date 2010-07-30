@@ -2,22 +2,25 @@
 
 #include "EnumerationSerializer.h"
 
-namespace Reflect
+namespace Helium
 {
-    class FOUNDATION_API BitfieldSerializer : public EnumerationSerializer
+    namespace Reflect
     {
-    public:
-        REFLECT_DECLARE_CLASS( BitfieldSerializer, EnumerationSerializer )
+        class FOUNDATION_API BitfieldSerializer : public EnumerationSerializer
+        {
+        public:
+            REFLECT_DECLARE_CLASS( BitfieldSerializer, EnumerationSerializer )
 
-        BitfieldSerializer ();
-        virtual ~BitfieldSerializer();
+                BitfieldSerializer ();
+            virtual ~BitfieldSerializer();
 
-        virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;
-        virtual void Deserialize(Archive& archive) HELIUM_OVERRIDE;
+            virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;
+            virtual void Deserialize(Archive& archive) HELIUM_OVERRIDE;
 
-        virtual tostream& operator>> (tostream& stream) const;
-        virtual tistream& operator<< (tistream& stream);
-    };
+            virtual tostream& operator>> (tostream& stream) const;
+            virtual tistream& operator<< (tistream& stream);
+        };
 
-    typedef Helium::SmartPtr<BitfieldSerializer> BitfieldSerializerPtr;
+        typedef Helium::SmartPtr<BitfieldSerializer> BitfieldSerializerPtr;
+    }
 }

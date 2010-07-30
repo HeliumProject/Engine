@@ -1,6 +1,6 @@
 #include "Namespace.h"
 
-using namespace CodeGen;
+using namespace Helium::CodeGen;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

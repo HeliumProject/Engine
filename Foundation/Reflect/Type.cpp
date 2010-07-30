@@ -4,7 +4,7 @@
 
 #include "Platform/Mutex.h"
 
-using namespace Reflect;
+using namespace Helium::Reflect;
 
 Platform::Mutex g_TypeMutex;
 

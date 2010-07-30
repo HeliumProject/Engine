@@ -18,9 +18,9 @@
 #include "Foundation/Log.h"
 #include "Application/UI/FileDialog.h"
 
-using namespace Reflect;
-using namespace Inspect;
 using namespace Helium;
+using namespace Helium::Reflect;
+using namespace Helium::Inspect;
 
 FileContainerInterpreter::FileContainerInterpreter (Container* labelContainer)
 : ReflectFieldInterpreter (labelContainer)

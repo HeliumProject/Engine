@@ -2,18 +2,21 @@
 
 #include "Vector3.h"
 
-namespace Math
+namespace Helium
 {
-    class FOUNDATION_API Curve
+    namespace Math
     {
-    public:
-        enum Type
+        class FOUNDATION_API Curve
         {
-            kLinear,
-            kBSpline,
-            kCatmullRom,
-        };
+        public:
+            enum Type
+            {
+                kLinear,
+                kBSpline,
+                kCatmullRom,
+            };
 
-        static bool ComputeCurve( const V_Vector3& controlPoints, const u32 resolution, const bool closed, const Type type, V_Vector3& points );
-    };
+            static bool ComputeCurve( const V_Vector3& controlPoints, const u32 resolution, const bool closed, const Type type, V_Vector3& points );
+        };
+    }
 }

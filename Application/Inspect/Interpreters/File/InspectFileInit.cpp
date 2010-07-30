@@ -12,7 +12,8 @@
 #include "FileInterpreter.h"
 #include "FileContainerInterpreter.h"
 
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Inspect;
 
 #pragma TODO( "Why is RegisterClass defined?" )
 #undef RegisterClass

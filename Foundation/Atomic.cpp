@@ -1,7 +1,7 @@
 #include "Platform/Windows/Windows.h"
 #include "Atomic.h"
 
-using namespace Foundation;
+using namespace Helium;
 
 AtomicRefCountBase::AtomicRefCountBase()
 : m_RefCount (0)

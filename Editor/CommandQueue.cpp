@@ -3,7 +3,8 @@
 
 #include "Platform/Mutex.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 DEFINE_EVENT_TYPE(wxEVT_FLUSH_COMMANDS)
 

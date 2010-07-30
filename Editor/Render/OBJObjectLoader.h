@@ -2,11 +2,14 @@
 
 #include "ObjectLoader.h"
 
-namespace Render
+namespace Helium
 {
-  class OBJObjectLoader : public ObjectLoader
-  {
-  public:
-    u32 ParseFile(const tchar* fname, bool winding = false);
-  };
+    namespace Render
+    {
+        class OBJObjectLoader : public ObjectLoader
+        {
+        public:
+            u32 ParseFile(const tchar* fname, bool winding = false);
+        };
+    }
 }

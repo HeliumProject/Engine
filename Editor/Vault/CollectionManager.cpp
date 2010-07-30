@@ -8,7 +8,8 @@
 #include "Foundation/Reflect/Element.h"
 #include "Foundation/Reflect/Version.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// class CollectionManager

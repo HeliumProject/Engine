@@ -15,9 +15,10 @@
 #include "Foundation/Component/ComponentHandle.h"
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE(Editor::EntityType);
+EDITOR_DEFINE_TYPE(Editor::EntityType);
 
 void EntityType::InitializeType()
 {

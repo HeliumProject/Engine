@@ -18,12 +18,14 @@
 #include <maya/MFnPlugin.h>
 #include <maya/MUserEventMessage.h>
 
+using namespace Helium;
+
 void AfterSaveCallback( void *clientData );
 void MayaExitingCallback( void *clientData );
 
 MCallbackId g_AfterSaveCallbackID;
 MCallbackId g_MayaExitingCallbackID;
-Helium::InitializerStack g_InitializerStack;
+static Helium::InitializerStack g_InitializerStack;
 
 MAYA_API MStatus initializePlugin( MObject obj )
 {

@@ -4,7 +4,8 @@
 #include "MayaContentCmd.h"
 #include "Foundation/Math/EulerAngles.h"
 
-using namespace MayaContent;
+using namespace Helium;
+using namespace Helium::MayaContent;
 
 void ExportJoint::GatherMayaData( V_ExportBase &newExportObjects )
 {

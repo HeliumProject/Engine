@@ -8,11 +8,12 @@
 
 #include "Pick.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 Content::VolumeShape VolumeCreateTool::s_Shape = Content::VolumeShapes::Cube;
 
-LUNA_DEFINE_TYPE(Editor::VolumeCreateTool);
+EDITOR_DEFINE_TYPE(Editor::VolumeCreateTool);
 
 void VolumeCreateTool::InitializeType()
 {

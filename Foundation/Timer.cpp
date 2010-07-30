@@ -1,7 +1,7 @@
 #include "Timer.h"
 #include "Platform/Profile.h"
 
-using namespace Profile; 
+using namespace Helium::Profile; 
 
 void Timer::Reset()
 {

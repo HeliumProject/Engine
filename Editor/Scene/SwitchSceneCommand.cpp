@@ -7,7 +7,8 @@
 #include "Foundation/Log.h"
 #include "Application/Undo/Exceptions.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

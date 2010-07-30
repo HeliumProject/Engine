@@ -14,7 +14,8 @@
 #include "Platform/Windows/Memory.h"
 #include "Foundation/Log.h"
 
-using namespace Debug;
+using namespace Helium;
+using namespace Helium::Debug;
 
 bool g_EnableExceptionFilter = false;
 u32 Debug::ExecuteHandler = EXCEPTION_EXECUTE_HANDLER;

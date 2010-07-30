@@ -1,6 +1,8 @@
 #pragma once
 
-namespace IG
+#include "Platform/Types.h"
+
+namespace Helium
 {
   namespace AnimationSettings
   {

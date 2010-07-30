@@ -4,24 +4,28 @@
 
 #include <maya/MPxTransform.h>
 
-//
-// This coallates EntityNode objects for scene tidyness,
-//  and makes wrangling instances in the code easier
-//
-
-class MAYA_API EntityGroupNode : public MPxTransform 
+namespace Helium
 {
-public:
-  static const char* s_TypeName;
-  static const MTypeId s_TypeID;  
+    //
+    // This coallates EntityNode objects for scene tidyness,
+    //  and makes wrangling instances in the code easier
+    //
 
-  static void * Creator()
-  {
-    return new EntityGroupNode();  
-  }
+    class MAYA_API EntityGroupNode : public MPxTransform 
+    {
+    public:
+        static const char* s_TypeName;
+        static const MTypeId s_TypeID;  
 
-  static MStatus Initialize()
-  {
-    return MS::kSuccess;
-  }
-};
+        static void * Creator()
+        {
+            return new EntityGroupNode();  
+        }
+
+        static MStatus Initialize()
+        {
+            return MS::kSuccess;
+        }
+    };
+
+}

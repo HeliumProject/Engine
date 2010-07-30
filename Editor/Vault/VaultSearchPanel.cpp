@@ -10,7 +10,8 @@
 #include "Application/UI/ArtProvider.h"
 #include "App.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 static const tchar* s_WordsHelpText = TXT( "This will search for file paths that\ncontain all of these words, in any order." );
 static const tchar* s_PhraseHelpText = TXT( "You can do this in standard search by\n\"surrounding your phrase with quotes\"" );

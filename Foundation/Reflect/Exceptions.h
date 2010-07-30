@@ -3,128 +3,131 @@
 #include "Platform/Compiler.h"
 #include "Platform/Exception.h"
 
-namespace Reflect
+namespace Helium
 {
-    //
-    // Basic exception for all reflect exceptions classes
-    //
-
-    class Exception HELIUM_ABSTRACT : public Helium::Exception
+    namespace Reflect
     {
+        //
+        // Basic exception for all reflect exceptions classes
+        //
 
-    };
-
-    //
-    // For TryCast<>, etc...
-    //
-
-    class CastException : public Reflect::Exception
-    {
-    public:
-        CastException( const tchar *msgFormat, ... )
+        class Exception HELIUM_ABSTRACT : public Helium::Exception
         {
-            va_list msgArgs;
-            va_start( msgArgs, msgFormat );
-            SetMessage( msgFormat, msgArgs );
-            va_end( msgArgs );
-        }
 
-    protected:
-        CastException() throw() {} // hide default c_tor
-    };
+        };
 
-    //
-    // Base class for heinous exception cases
-    //
+        //
+        // For TryCast<>, etc...
+        //
 
-    class LogisticException : public Reflect::Exception
-    {
-    public:
-        LogisticException( const tchar *msgFormat, ... )
+        class CastException : public Reflect::Exception
         {
-            va_list msgArgs;
-            va_start( msgArgs, msgFormat );
-            SetMessage( msgFormat, msgArgs );
-            va_end( msgArgs );
-        }
+        public:
+            CastException( const tchar *msgFormat, ... )
+            {
+                va_list msgArgs;
+                va_start( msgArgs, msgFormat );
+                SetMessage( msgFormat, msgArgs );
+                va_end( msgArgs );
+            }
 
-    protected:
-        LogisticException() throw() {} // hide default c_tor
-    };
+        protected:
+            CastException() throw() {} // hide default c_tor
+        };
 
-    //
-    // RTTI information is missing or invalid
-    //
+        //
+        // Base class for heinous exception cases
+        //
 
-    class TypeInformationException : public Reflect::LogisticException
-    {
-    public:
-        TypeInformationException( const tchar *msgFormat, ... )
+        class LogisticException : public Reflect::Exception
         {
-            va_list msgArgs;
-            va_start( msgArgs, msgFormat );
-            SetMessage( msgFormat, msgArgs );
-            va_end( msgArgs );
-        }
+        public:
+            LogisticException( const tchar *msgFormat, ... )
+            {
+                va_list msgArgs;
+                va_start( msgArgs, msgFormat );
+                SetMessage( msgFormat, msgArgs );
+                va_end( msgArgs );
+            }
 
-    protected:
-        TypeInformationException() throw() {} // hide default c_tor
-    };
+        protected:
+            LogisticException() throw() {} // hide default c_tor
+        };
 
-    //
-    // Data or its format is invalid or unreadable
-    //
+        //
+        // RTTI information is missing or invalid
+        //
 
-    class DataFormatException : public Reflect::LogisticException
-    {
-    public:
-        DataFormatException( const tchar* msgFormat, ... )
+        class TypeInformationException : public Reflect::LogisticException
         {
-            va_list msgArgs;
-            va_start( msgArgs, msgFormat );
-            SetMessage( msgFormat, msgArgs );
-            va_end( msgArgs );
-        }
+        public:
+            TypeInformationException( const tchar *msgFormat, ... )
+            {
+                va_list msgArgs;
+                va_start( msgArgs, msgFormat );
+                SetMessage( msgFormat, msgArgs );
+                va_end( msgArgs );
+            }
 
-    protected:
-        DataFormatException() throw() {} // hide default c_tor
-    };
+        protected:
+            TypeInformationException() throw() {} // hide default c_tor
+        };
 
-    //
-    // There is a problem dealing with a opening/closing reading/writing to a file or stream
-    //
+        //
+        // Data or its format is invalid or unreadable
+        //
 
-    class StreamException : public Reflect::Exception
-    {
-    public:
-        StreamException( const tchar* msgFormat, ... )
+        class DataFormatException : public Reflect::LogisticException
         {
-            va_list msgArgs;
-            va_start( msgArgs, msgFormat );
-            SetMessage( msgFormat, msgArgs );
-            va_end( msgArgs );
-        }
+        public:
+            DataFormatException( const tchar* msgFormat, ... )
+            {
+                va_list msgArgs;
+                va_start( msgArgs, msgFormat );
+                SetMessage( msgFormat, msgArgs );
+                va_end( msgArgs );
+            }
 
-    protected:
-        StreamException() throw() {} // hide default c_tor
-    };
+        protected:
+            DataFormatException() throw() {} // hide default c_tor
+        };
 
-    //
-    // There is a problem with the checksum of a file, either its corrupted or Reflect could not generate a checksum
-    //
+        //
+        // There is a problem dealing with a opening/closing reading/writing to a file or stream
+        //
 
-    class ChecksumException : public Reflect::StreamException
-    {
-    public:
-        ChecksumException( const tchar* msgFormat, ... )
+        class StreamException : public Reflect::Exception
         {
-            va_list msgArgs;
-            va_start( msgArgs, msgFormat );
-            SetMessage( msgFormat, msgArgs );
-            va_end( msgArgs );
-        }
+        public:
+            StreamException( const tchar* msgFormat, ... )
+            {
+                va_list msgArgs;
+                va_start( msgArgs, msgFormat );
+                SetMessage( msgFormat, msgArgs );
+                va_end( msgArgs );
+            }
 
-    protected:
-        ChecksumException() throw() {} // hide default c_tor
-    };
+        protected:
+            StreamException() throw() {} // hide default c_tor
+        };
+
+        //
+        // There is a problem with the checksum of a file, either its corrupted or Reflect could not generate a checksum
+        //
+
+        class ChecksumException : public Reflect::StreamException
+        {
+        public:
+            ChecksumException( const tchar* msgFormat, ... )
+            {
+                va_list msgArgs;
+                va_start( msgArgs, msgFormat );
+                SetMessage( msgFormat, msgArgs );
+                va_end( msgArgs );
+            }
+
+        protected:
+            ChecksumException() throw() {} // hide default c_tor
+        };
+    }
 }

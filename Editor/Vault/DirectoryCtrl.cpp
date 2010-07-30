@@ -4,7 +4,8 @@
 #include "Application/UI/ArtProvider.h"
 #include "UI/Controls/Tree/SortTreeCtrl.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 BEGIN_EVENT_TABLE( DirectoryCtrl, wxGenericDirCtrl )
 EVT_TREE_ITEM_COLLAPSING( wxID_ANY, DirectoryCtrl::OnItemCollapsing )

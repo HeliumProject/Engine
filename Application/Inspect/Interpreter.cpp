@@ -5,7 +5,7 @@
 #include "Application/Inspect/Controls/Label.h"
 #include "Application/Inspect/Controls/Action.h"
 
-using namespace Inspect;
+using namespace Helium::Inspect;
 
 ST_Container& Interpreter::GetCurrentContainerStack()
 {

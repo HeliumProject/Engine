@@ -9,6 +9,8 @@
 #include "Precompile.h"
 
 #include "TrackerDBGenerated.h"
+namespace Helium
+{
 namespace Editor {
 using namespace litesql;
 TrackedFileProperties::Row::Row(const litesql::Database& db, const litesql::Record& rec)
@@ -474,5 +476,6 @@ void TrackerDBGenerated::initialize() {
     if (initialized)
         return;
     initialized = true;
+}
 }
 }

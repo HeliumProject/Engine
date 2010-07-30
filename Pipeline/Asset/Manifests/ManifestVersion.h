@@ -5,29 +5,32 @@
 #include "Foundation/Reflect/Version.h"
 #include "Foundation/Reflect/Serializers.h"
 
-namespace Asset
+namespace Helium
 {
-  //
-  // Version information for scene classes
-  //
+    namespace Asset
+    {
+        //
+        // Version information for scene classes
+        //
 
-  class PIPELINE_API ManifestVersion : public Reflect::Version
-  {
-  public:
-    tstring m_ManifestVersion;
-    static const tchar* MANIFEST_VERSION;
+        class PIPELINE_API ManifestVersion : public Reflect::Version
+        {
+        public:
+            tstring m_ManifestVersion;
+            static const tchar* MANIFEST_VERSION;
 
-    REFLECT_DECLARE_CLASS(ManifestVersion, Reflect::Version);
+            REFLECT_DECLARE_CLASS(ManifestVersion, Reflect::Version);
 
-    static void EnumerateClass( Reflect::Compositor<ManifestVersion>& comp );
+            static void EnumerateClass( Reflect::Compositor<ManifestVersion>& comp );
 
-    ManifestVersion();
+            ManifestVersion();
 
-    ManifestVersion(const tchar* source, const tchar* sourceVersion);
+            ManifestVersion(const tchar* source, const tchar* sourceVersion);
 
-    virtual bool IsCurrent();
-  };
+            virtual bool IsCurrent();
+        };
 
-  typedef Helium::SmartPtr<ManifestVersion> ManifestVersionPtr;
-  typedef std::vector<ManifestVersionPtr> V_ManifestVersion;
+        typedef Helium::SmartPtr<ManifestVersion> ManifestVersionPtr;
+        typedef std::vector<ManifestVersionPtr> V_ManifestVersion;
+    }
 }

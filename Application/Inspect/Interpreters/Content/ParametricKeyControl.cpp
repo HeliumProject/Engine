@@ -7,7 +7,8 @@
 
 #include "Pipeline/Content/ParametricKey/ParametricKey.h"
 
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Inspect;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Color gradient widget.

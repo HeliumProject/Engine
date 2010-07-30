@@ -2,6 +2,8 @@
 
 #include "Foundation/String/Tokenize.h"
 
+using namespace Helium;
+
 FileDropTarget::FileDropTarget(const tstring& extensions, const tstring& delims)
 {
   Tokenize( extensions, m_FileExtensions, delims );

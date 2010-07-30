@@ -5,7 +5,8 @@
 #include "Application/Inspect/DragDrop/ClipboardDataObject.h"
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
 
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Inspect;
 
 FilteredDropTarget::FilteredDropTarget( const tstring& filter ) 
 : Inspect::DropTarget()

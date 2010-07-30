@@ -18,7 +18,9 @@
 // #define REFLECT_DEBUG_INIT_AND_CLEANUP
 
 using Helium::Insert; 
-using namespace Reflect;
+
+using namespace Helium;
+using namespace Helium::Reflect;
 
 // globals
 static Registry* g_Instance = NULL;
@@ -52,9 +54,12 @@ struct CaseInsensitiveCompare
     }
 };
 
-namespace Reflect
+namespace Helium
 {
-    i32 g_InitCount = 0;
+    namespace Reflect
+    {
+        i32 g_InitCount = 0;
+    }
 }
 
 bool Reflect::IsInitialized()

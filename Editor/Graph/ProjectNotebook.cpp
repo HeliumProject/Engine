@@ -21,6 +21,8 @@
 #include "Application/RCS/RCS.h"
 #include "Foundation/Log.h"
 
+using namespace Helium;
+
 static std::map<wxString, wxString> l_Types;
 static Project *l_instance = NULL;
 

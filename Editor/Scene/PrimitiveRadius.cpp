@@ -1,7 +1,8 @@
 #include "Precompile.h"
 #include "PrimitiveRadius.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 PrimitiveRadius::PrimitiveRadius(ResourceTracker* tracker)
 : PrimitiveTemplate(tracker)

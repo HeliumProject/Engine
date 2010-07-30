@@ -6,7 +6,7 @@
 
 #include "Foundation/Log.h"
 
-using namespace Reflect;
+using namespace Helium::Reflect;
 
 Class::Class()
 : m_Create (NULL)

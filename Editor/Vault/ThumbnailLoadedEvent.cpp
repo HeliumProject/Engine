@@ -1,7 +1,8 @@
 #include "Precompile.h"
 #include "ThumbnailLoadedEvent.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 DEFINE_EVENT_TYPE( Editor::ThumbnailLoadedCommandEvent )
 

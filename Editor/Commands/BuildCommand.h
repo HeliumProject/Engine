@@ -11,6 +11,9 @@
 #include "Pipeline/Content/ContentInit.h"
 
 /*
+namespace Helium
+{
+
 namespace AssetBuilder
 {
   class AssetBuiltArgs;
@@ -60,5 +63,5 @@ namespace Editor
     };
 
 }
-
+}
 */

@@ -3,8 +3,11 @@
 #include "Foundation/API.h" 
 #include "Foundation/Reflect/Registry.h" 
 
-namespace Component
+namespace Helium
 {
-  void FOUNDATION_API Initialize(); 
-  void FOUNDATION_API Cleanup(); 
+    namespace Component
+    {
+        void FOUNDATION_API Initialize(); 
+        void FOUNDATION_API Cleanup(); 
+    }
 }

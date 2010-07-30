@@ -7,7 +7,8 @@
 #include "Foundation/Log.h"
 #include "UI/ArtProvider.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 enum
 {

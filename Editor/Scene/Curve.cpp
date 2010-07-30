@@ -21,9 +21,10 @@
 
 #include <algorithm>
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE( Editor::Curve );
+EDITOR_DEFINE_TYPE( Editor::Curve );
 
 D3DMATERIAL9 Editor::Curve::s_Material;
 D3DMATERIAL9 Editor::Curve::s_HullMaterial;

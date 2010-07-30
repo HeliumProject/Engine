@@ -1,6 +1,6 @@
 #include "Enumeration.h"
 
-using namespace Reflect;
+using namespace Helium::Reflect;
 
 EnumerationElement::EnumerationElement(u32 value, const tstring& name, const tstring& label)
 : m_Value (value)

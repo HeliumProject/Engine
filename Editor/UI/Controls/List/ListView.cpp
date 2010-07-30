@@ -9,7 +9,9 @@
 #include <wx/wx.h>
 
 using Helium::Insert; 
-using namespace Editor;
+
+using namespace Helium;
+using namespace Helium::Editor;
 
 IMPLEMENT_DYNAMIC_CLASS( ListView, wxListView )
 

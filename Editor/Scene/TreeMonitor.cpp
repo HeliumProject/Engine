@@ -7,7 +7,8 @@
 
 #include "UI/Controls/Tree/SortTreeCtrl.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

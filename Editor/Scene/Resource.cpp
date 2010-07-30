@@ -12,9 +12,9 @@
 #include <algorithm>
 
 using Helium::Insert; 
-using namespace Editor;
 
-
+using namespace Helium;
+using namespace Helium::Editor;
 
 ResourceTracker::ResourceTracker(IDirect3DDevice9* device)
 : m_Device (device)

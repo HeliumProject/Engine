@@ -28,7 +28,8 @@
 
 #include <wx/clipbrd.h>
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 static const tchar* s_VaultHelpText = TXT( "FFFFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUUU FIXME PUT HELP TEXT HERE" );
 

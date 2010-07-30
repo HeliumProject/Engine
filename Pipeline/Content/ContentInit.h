@@ -3,8 +3,11 @@
 #include "Foundation/Reflect/Registry.h"
 #include "Pipeline/API.h"
 
-namespace Content
+namespace Helium
 {
-  void PIPELINE_API Initialize();
-  void PIPELINE_API Cleanup();
+    namespace Content
+    {
+        void PIPELINE_API Initialize();
+        void PIPELINE_API Cleanup();
+    }
 }

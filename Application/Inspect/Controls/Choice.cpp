@@ -4,7 +4,7 @@
 #include <wx/textctrl.h>
 #include <wx/combobox.h>
 
-using namespace Inspect;
+using namespace Helium::Inspect;
 
 class ComboBox : public wxComboBox
 {

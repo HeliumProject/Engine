@@ -8,10 +8,10 @@
 #include "Transform.h"
 #include "Mesh.h"
 
-using namespace Editor;
 using namespace Helium;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE( Skin );
+EDITOR_DEFINE_TYPE( Skin );
 
 void Skin::InitializeType()
 {

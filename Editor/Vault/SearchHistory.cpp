@@ -3,7 +3,8 @@
 
 #include "VaultSearch.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 REFLECT_DEFINE_CLASS( SearchHistory );

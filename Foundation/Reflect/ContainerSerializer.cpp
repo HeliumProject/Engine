@@ -1,8 +1,7 @@
 #include "ContainerSerializer.h"
 #include "Serializers.h"
 
-using namespace Math;
-using namespace Reflect;
+using namespace Helium::Reflect;
 
 REFLECT_DEFINE_ABSTRACT( ContainerSerializer )
 

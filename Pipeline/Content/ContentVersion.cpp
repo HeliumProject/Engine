@@ -1,9 +1,9 @@
 #include "ContentVersion.h"
 
-const tchar* Content::ContentVersion::CONTENT_VERSION = TXT( "5" );
+using namespace Helium;
+using namespace Helium::Content;
 
-using namespace Reflect;
-using namespace Content;
+const tchar* Content::ContentVersion::CONTENT_VERSION = TXT( "5" );
 
 REFLECT_DEFINE_CLASS(ContentVersion)
 

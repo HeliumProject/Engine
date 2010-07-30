@@ -3,33 +3,36 @@
 #include "Application/API.h"
 #include "Application/Inspect/Controls/InspectButton.h"
 
-namespace Inspect
+namespace Helium
 {
-  ///////////////////////////////////////////////////////////////////////////
-  // 
-  // 
-  class APPLICATION_API Action : public Reflect::ConcreteInheritor<Action, Button>
-  {
-  protected:
-    // Event for when the button is clicked
-    ActionSignature::Event m_ActionEvent;
-
-  public:
-    Action();
-
-    virtual bool Write();
-
-    // Button click listeners
-  public:
-    void AddListener( const ActionSignature::Delegate& listener )
+    namespace Inspect
     {
-      m_ActionEvent.Add( listener );
-    }
-    void RemoveListener( const ActionSignature::Delegate& listener )
-    {
-      m_ActionEvent.Remove( listener );
-    }
-  };
+        ///////////////////////////////////////////////////////////////////////////
+        // 
+        // 
+        class APPLICATION_API Action : public Reflect::ConcreteInheritor<Action, Button>
+        {
+        protected:
+            // Event for when the button is clicked
+            ActionSignature::Event m_ActionEvent;
 
-  typedef Helium::SmartPtr<Action> ActionPtr;
+        public:
+            Action();
+
+            virtual bool Write();
+
+            // Button click listeners
+        public:
+            void AddListener( const ActionSignature::Delegate& listener )
+            {
+                m_ActionEvent.Add( listener );
+            }
+            void RemoveListener( const ActionSignature::Delegate& listener )
+            {
+                m_ActionEvent.Remove( listener );
+            }
+        };
+
+        typedef Helium::SmartPtr<Action> ActionPtr;
+    }
 }

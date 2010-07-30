@@ -9,8 +9,9 @@
 #include "Foundation/String/Wildcard.h"
 #include "Foundation/String/Tokenize.h"
 
-using namespace Math;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
 RenderVisitor::RenderVisitor()
 : m_Args (NULL)

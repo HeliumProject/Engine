@@ -4,7 +4,7 @@
 #include "Matrix4.h"
 #include "Plane.h"
 
-using namespace Math;
+using namespace Helium::Math;
 
 #define EPSILON (0.00001f)
 

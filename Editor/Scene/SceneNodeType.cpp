@@ -4,9 +4,10 @@
 #include "Foundation/Container/Insert.h" 
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE( Editor::SceneNodeType );
+EDITOR_DEFINE_TYPE( Editor::SceneNodeType );
 
 void SceneNodeType::InitializeType()
 {

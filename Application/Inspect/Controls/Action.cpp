@@ -2,7 +2,7 @@
 #include "Application/Inspect/Controls/Container.h"
 
 // Using
-using namespace Inspect;
+using namespace Helium::Inspect;
 
 ///////////////////////////////////////////////////////////////////////////////
 // 

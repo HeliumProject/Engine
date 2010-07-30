@@ -10,7 +10,8 @@
 #include <maya/MFnTypedAttribute.h>
 #include <maya/MPlug.h>
 
-using namespace Maya;
+using namespace Helium;
+using namespace Helium::Maya;
 
 const char* s_GUIDAttributeName = "GUID";
 const char* s_TUIDAttributeName = "TUID";

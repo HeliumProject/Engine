@@ -3,7 +3,8 @@
 
 #include <algorithm>
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 Selection::Selection()
 {

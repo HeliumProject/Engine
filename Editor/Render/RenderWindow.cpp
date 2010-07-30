@@ -6,7 +6,8 @@
 #include "Scene/Camera.h"
 #include "Application/UI/FileDialog.h"
 
-using namespace Render;
+using namespace Helium;
+using namespace Helium::Render;
 
 static const u32 s_InvalidMesh = (u32)(-1);
 

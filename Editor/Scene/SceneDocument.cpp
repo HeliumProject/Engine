@@ -1,12 +1,13 @@
 #include "Precompile.h"
 #include "SceneDocument.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 // 
 // RTTI
 // 
-LUNA_DEFINE_TYPE( SceneDocument );
+EDITOR_DEFINE_TYPE( SceneDocument );
 
 void SceneDocument::InitializeType()
 {

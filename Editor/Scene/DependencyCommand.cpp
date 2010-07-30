@@ -4,7 +4,8 @@
 
 #include "Foundation/Log.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 DependencyCommand::DependencyCommand( DependencyAction action, const SceneNodePtr& ancestor, const SceneNodePtr& descendant )
 : m_Action( action )

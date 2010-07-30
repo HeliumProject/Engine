@@ -17,10 +17,9 @@
 #include <omp.h>
 
 using Helium::Insert; 
-using namespace Reflect;
-using namespace Math;
-using namespace Content;
-using namespace Asset;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Content;
 
 #define MIN_JOINT_SKIN_WEIGHT  0.1f
 #define MIN_JOINT_BSPHERE_RAD  0.001f  // 1 mm
@@ -66,7 +65,7 @@ void Scene::Remove( const SceneNodePtr &node )
     m_DependencyNodes.erase( node->m_ID );
 
     // remove the current transform from the hierarchy if it's a Hierarchy node
-    HierarchyNodePtr hierarchyNode = ObjectCast< HierarchyNode >( node );
+    HierarchyNodePtr hierarchyNode = Reflect::ObjectCast< HierarchyNode >( node );
     if( hierarchyNode.ReferencesObject() )
     {
         V_HierarchyNode children;
@@ -92,25 +91,25 @@ void Scene::Add( const SceneNodePtr &node )
     if( node->HasType( Reflect::GetType<HierarchyNode>() ) )
     {
         // if it's a hierarchy node, hold onto it so we can update the Scene Hierarchy
-        m_AddedHierarchyNodes.push_back( DangerousCast< HierarchyNode >( node ) );
+        m_AddedHierarchyNodes.push_back( Reflect::DangerousCast< HierarchyNode >( node ) );
         if( node->HasType( Reflect::GetType<Transform>() ) )
         {
-            Transform* transform = DangerousCast< Transform >( node );
+            Transform* transform = Reflect::DangerousCast< Transform >( node );
 
             if( transform->HasType( Reflect::GetType<PivotTransform>() ) )
             {
-                PivotTransform* pivot = DangerousCast< PivotTransform >( transform );
+                PivotTransform* pivot = Reflect::DangerousCast< PivotTransform >( transform );
                 m_Transforms.push_back( pivot );
 
                 if( node->HasType( Reflect::GetType<Mesh>() ) )
                 {
-                    Mesh* mesh = DangerousCast< Mesh >( node );
+                    Mesh* mesh = Reflect::DangerousCast< Mesh >( node );
                     m_Meshes.push_back( mesh );
                 }
             }
             else if( transform->HasType( Reflect::GetType<JointTransform>() ) )
             {
-                JointTransform* joint = DangerousCast< JointTransform >( transform );
+                JointTransform* joint = Reflect::DangerousCast< JointTransform >( transform );
                 m_Joints.push_back( joint );
                 m_JointIds.insert( joint->m_ID );
             }
@@ -118,19 +117,19 @@ void Scene::Add( const SceneNodePtr &node )
     }
     else if( node->HasType( Reflect::GetType<Shader>() ) )
     {
-        Shader* shader = DangerousCast< Shader >( node );
+        Shader* shader = Reflect::DangerousCast< Shader >( node );
         m_Shaders.push_back( shader );
     }      
 
     else if( node->HasType( Reflect::GetType<Skin>() ) )
     {
-        Skin* skin = DangerousCast< Skin >( node );
+        Skin* skin = Reflect::DangerousCast< Skin >( node );
         m_Skins.push_back( skin );
     }
 
     else if( node->HasType( Reflect::GetType<Animation>() ) )
     {
-        Animation* clip = DangerousCast< Animation >( node );
+        Animation* clip = Reflect::DangerousCast< Animation >( node );
         m_Animations.push_back( clip );
     }
 
@@ -146,13 +145,13 @@ void Scene::Load( const tstring &filePath )
 void Scene::Load( const tstring &filePath, Reflect::V_Element& elements, Reflect::StatusHandler* status )
 {
     m_FilePath = filePath;
-    Archive::FromFile( filePath, elements, status );
+    Reflect::Archive::FromFile( filePath, elements, status );
     PostLoad( elements );
 }
 
 void Scene::LoadXML( const tstring& xml, Reflect::V_Element& elements, Reflect::StatusHandler* status )
 {
-    ArchiveXML::FromString( xml, elements, status );
+    Reflect::ArchiveXML::FromString( xml, elements, status );
     PostLoad( elements );
 }
 
@@ -160,8 +159,8 @@ void Scene::PostLoad( Reflect::V_Element& elements )
 {
     // gather data and do stuff with it post-load
 
-    V_Element::iterator itr = elements.begin();
-    V_Element::iterator end= elements.end();
+    Reflect::V_Element::iterator itr = elements.begin();
+    Reflect::V_Element::iterator end= elements.end();
 
     for( ; itr != end; ++itr )
     {
@@ -169,7 +168,7 @@ void Scene::PostLoad( Reflect::V_Element& elements )
         if( !(*itr)->HasType( Reflect::GetType<SceneNode>() ) )
             continue;
 
-        SceneNodePtr dependencyNode = DangerousCast< SceneNode >( *itr );
+        SceneNodePtr dependencyNode = Reflect::DangerousCast< SceneNode >( *itr );
         Add( dependencyNode );
     }
 
@@ -204,7 +203,7 @@ void Scene::Serialize()
 
 void Scene::Serialize( const tstring& filePath )
 {
-    V_Element elements;
+    Reflect::V_Element elements;
 
     std::map< Helium::TUID, SceneNodePtr >::const_iterator itr = m_DependencyNodes.begin();
     std::map< Helium::TUID, SceneNodePtr >::const_iterator end = m_DependencyNodes.end();
@@ -213,7 +212,7 @@ void Scene::Serialize( const tstring& filePath )
         elements.push_back( itr->second );
     }
 
-    Archive::ToFile( elements, filePath );
+    Reflect::Archive::ToFile( elements, filePath );
 }
 
 void Scene::Update()
@@ -314,7 +313,7 @@ bool Scene::Exists( const Helium::TUID& id )
 void Scene::UpdateGlobalTransforms( const TransformPtr& parent )
 {
     V_HierarchyNode children;
-    HierarchyNodePtr hierarchyNode = ObjectCast< HierarchyNode >( parent );
+    HierarchyNodePtr hierarchyNode = Reflect::ObjectCast< HierarchyNode >( parent );
     if( !hierarchyNode ) 
         return;
 
@@ -322,7 +321,7 @@ void Scene::UpdateGlobalTransforms( const TransformPtr& parent )
 
     for each( const HierarchyNodePtr& node in children )
     {
-        TransformPtr child = ObjectCast< Transform >( node );
+        TransformPtr child = Reflect::ObjectCast< Transform >( node );
         if( child )
         {
             child->m_GlobalTransform = parent->m_GlobalTransform * child->m_ObjectTransform;
@@ -358,7 +357,7 @@ void Scene::Optimize()
     std::map< Helium::TUID, SceneNodePtr >::const_iterator end = dependencyNodes.end();
     for ( ; itr != end; ++itr )
     {
-        HierarchyNodePtr node = ObjectCast<HierarchyNode>( itr->second );
+        HierarchyNodePtr node = Reflect::ObjectCast<HierarchyNode>( itr->second );
 
         if (!node)
         {
@@ -389,7 +388,7 @@ void Scene::Optimize(const HierarchyNodePtr& object)
     bool removed = false;
     if (object->HasType( Reflect::GetType<PivotTransform>() ))
     {
-        PivotTransformPtr transform = DangerousCast< PivotTransform >( object );
+        PivotTransformPtr transform = Reflect::DangerousCast< PivotTransform >( object );
 
         if ( object->HasType( Reflect::GetType<Mesh>() ) )
         {
@@ -397,7 +396,7 @@ void Scene::Optimize(const HierarchyNodePtr& object)
             // Transform vertices and normals and reset transform to identity
             //
 
-            MeshPtr mesh = DangerousCast< Mesh >( object );
+            MeshPtr mesh = Reflect::DangerousCast< Mesh >( object );
 
             // don't bother if the transform is already identity
             if( mesh->m_GlobalTransform != Math::Matrix4::Identity )
@@ -432,7 +431,7 @@ void Scene::Optimize(const HierarchyNodePtr& object)
 
             if (found != m_DependencyNodes.end())
             {
-                TransformPtr parentTransform = ObjectCast< Transform > ( found->second );
+                TransformPtr parentTransform = Reflect::ObjectCast< Transform > ( found->second );
 
                 if (parentTransform.ReferencesObject())
                 {

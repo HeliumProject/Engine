@@ -11,7 +11,8 @@
 
 #include "Export/MayaContentCmd.h"
 
-using namespace MayaContent;
+using namespace Helium;
+using namespace Helium::MayaContent;
 
 extern void AfterSaveCallback( void *clientData );
 extern MCallbackId g_AfterSaveCallbackID;

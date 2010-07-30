@@ -18,7 +18,8 @@
 #define MAX(A,B)        ((A) > (B) ? (A) : (B))
 #endif
 
-using namespace Profile;
+using namespace Helium;
+using namespace Helium::Profile;
 
 static u32           g_AccumulatorCount = 0;
 static Accumulator*  g_Accumulators[ PROFILE_ACCUMULATOR_MAX ];

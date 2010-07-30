@@ -3,7 +3,8 @@
 
 #include "Platform/Debug.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Overridden to store the current preferences version (provided by derived 

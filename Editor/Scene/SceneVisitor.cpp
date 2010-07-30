@@ -8,7 +8,8 @@
 #include "Transform.h"
 #include "HierarchyNodeType.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 TraversalAction HierarchyChildTraverser::VisitHierarchyNode(Editor::HierarchyNode* node)
 {

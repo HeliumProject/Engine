@@ -8,8 +8,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-using namespace Profile;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Profile;
+using namespace Helium::Editor;
 
 static u32 g_Indent = 0; 
 

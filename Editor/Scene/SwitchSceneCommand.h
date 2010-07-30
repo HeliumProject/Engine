@@ -3,32 +3,35 @@
 #include "Editor/API.h"
 #include "Application/Undo/PropertyCommand.h"
 
-namespace Editor
+namespace Helium
 {
-  // Forwards
-  class Scene;
-  class SceneManager;
-  struct SceneChangeArgs;
+    namespace Editor
+    {
+        // Forwards
+        class Scene;
+        class SceneManager;
+        struct SceneChangeArgs;
 
-  /////////////////////////////////////////////////////////////////////////////
-  // Undo command for switching the current scene.
-  // 
-  class LSwitchSceneCommand : public Undo::PropertyCommand< Editor::Scene* >
-  {
-  private:
-    Editor::SceneManager* m_SceneManager;
-    Editor::Scene* m_OldScene;
-    Editor::Scene* m_NewScene;
-    bool m_IsValid;
+        /////////////////////////////////////////////////////////////////////////////
+        // Undo command for switching the current scene.
+        // 
+        class LSwitchSceneCommand : public Undo::PropertyCommand< Editor::Scene* >
+        {
+        private:
+            Editor::SceneManager* m_SceneManager;
+            Editor::Scene* m_OldScene;
+            Editor::Scene* m_NewScene;
+            bool m_IsValid;
 
-  public:
-    LSwitchSceneCommand( Editor::SceneManager* manager, Editor::Scene* newScene );
-    virtual ~LSwitchSceneCommand();
-    virtual bool IsSignificant() const HELIUM_OVERRIDE;
-    virtual void Undo() HELIUM_OVERRIDE;
-    virtual void Redo() HELIUM_OVERRIDE;
+        public:
+            LSwitchSceneCommand( Editor::SceneManager* manager, Editor::Scene* newScene );
+            virtual ~LSwitchSceneCommand();
+            virtual bool IsSignificant() const HELIUM_OVERRIDE;
+            virtual void Undo() HELIUM_OVERRIDE;
+            virtual void Redo() HELIUM_OVERRIDE;
 
-  private:
-    void SceneRemoving( const SceneChangeArgs& args );
-  };
+        private:
+            void SceneRemoving( const SceneChangeArgs& args );
+        };
+    }
 }

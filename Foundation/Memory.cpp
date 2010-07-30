@@ -16,7 +16,8 @@
 #define abs64 labs
 #endif
 
-using namespace Profile; 
+using namespace Helium;
+using namespace Helium::Profile; 
 
 static const u32        g_MaxMemoryPools = 64;
 static MemoryPool       g_MemoryPools[g_MaxMemoryPools];

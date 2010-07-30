@@ -3,7 +3,8 @@
 #include "Transform.h"
 #include "Foundation/Reflect/Object.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ParentCommand::ParentCommand(const HierarchyNodePtr& child, const HierarchyNodePtr& parent)
 {

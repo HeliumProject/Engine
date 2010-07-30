@@ -3,84 +3,87 @@
 #include "Editor/API.h"
 #include "Selectable.h"
 
-namespace Editor
+namespace Helium
 {
-  class Scene;
-  class HierarchyNode;
-
-  class PickVisitor;
-  class RenderVisitor;
-
-
-  //
-  // What action to take after the traverser visits a node
-  //
-
-  namespace TraversalActions
-  {
-    enum TraversalAction
+    namespace Editor
     {
-      Continue,   // keep traversing
-      Prune,      // do not visit my children
-      Abort,      // abort and unwind traversal
-    };
-  }
+        class Scene;
+        class HierarchyNode;
 
-  typedef TraversalActions::TraversalAction TraversalAction;
+        class PickVisitor;
+        class RenderVisitor;
 
 
-  //
-  // Hierarchy traverser walks the hierarchy of object in the scene
-  //
+        //
+        // What action to take after the traverser visits a node
+        //
 
-  class HierarchyTraverser
-  {
-  public:
-    virtual TraversalAction VisitHierarchyNode(Editor::HierarchyNode* node) = 0;
-  };
+        namespace TraversalActions
+        {
+            enum TraversalAction
+            {
+                Continue,   // keep traversing
+                Prune,      // do not visit my children
+                Abort,      // abort and unwind traversal
+            };
+        }
 
-
-  //
-  // Hierarchy traverser walks the hierarchy of object in the scene
-  //
-
-  class HierarchyChildTraverser : public HierarchyTraverser
-  {
-  public:
-    OS_SelectableDumbPtr m_Children;
-
-    virtual TraversalAction VisitHierarchyNode(Editor::HierarchyNode* node) HELIUM_OVERRIDE;
-  };
+        typedef TraversalActions::TraversalAction TraversalAction;
 
 
-  //
-  // Render the scene
-  //
+        //
+        // Hierarchy traverser walks the hierarchy of object in the scene
+        //
 
-  class HierarchyRenderTraverser : public HierarchyTraverser
-  {
-  private:
-    RenderVisitor* m_RenderVisitor;
-
-  public:
-    HierarchyRenderTraverser(RenderVisitor* renderVisitor);
-
-    virtual TraversalAction VisitHierarchyNode(Editor::HierarchyNode* node) HELIUM_OVERRIDE;
-  };
+        class HierarchyTraverser
+        {
+        public:
+            virtual TraversalAction VisitHierarchyNode(Editor::HierarchyNode* node) = 0;
+        };
 
 
-  //
-  // Pick items in the scene
-  //
+        //
+        // Hierarchy traverser walks the hierarchy of object in the scene
+        //
 
-  class HierarchyPickTraverser : public HierarchyTraverser
-  {
-  private:
-    PickVisitor* m_PickVisitor;
+        class HierarchyChildTraverser : public HierarchyTraverser
+        {
+        public:
+            OS_SelectableDumbPtr m_Children;
 
-  public:
-    HierarchyPickTraverser(PickVisitor* pickVisitor);
+            virtual TraversalAction VisitHierarchyNode(Editor::HierarchyNode* node) HELIUM_OVERRIDE;
+        };
 
-    virtual TraversalAction VisitHierarchyNode(Editor::HierarchyNode* node) HELIUM_OVERRIDE;
-  };
+
+        //
+        // Render the scene
+        //
+
+        class HierarchyRenderTraverser : public HierarchyTraverser
+        {
+        private:
+            RenderVisitor* m_RenderVisitor;
+
+        public:
+            HierarchyRenderTraverser(RenderVisitor* renderVisitor);
+
+            virtual TraversalAction VisitHierarchyNode(Editor::HierarchyNode* node) HELIUM_OVERRIDE;
+        };
+
+
+        //
+        // Pick items in the scene
+        //
+
+        class HierarchyPickTraverser : public HierarchyTraverser
+        {
+        private:
+            PickVisitor* m_PickVisitor;
+
+        public:
+            HierarchyPickTraverser(PickVisitor* pickVisitor);
+
+            virtual TraversalAction VisitHierarchyNode(Editor::HierarchyNode* node) HELIUM_OVERRIDE;
+        };
+    }
 }

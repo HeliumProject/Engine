@@ -9,8 +9,7 @@
 #include "Foundation/Checksum/CRC32.h"
 
 using Helium::Insert;
-using namespace Helium;
-using namespace Reflect; 
+using namespace Helium::Reflect; 
 
 //#define REFLECT_DEBUG_BINARY_CRC
 //#define REFLECT_DISABLE_BINARY_CRC
@@ -36,9 +35,12 @@ const u32 CRC_BLOCK_SIZE = 4096;
 #endif
 
 // this is sneaky, but in general people shouldn't use this
-namespace Reflect
+namespace Helium
 {
-    FOUNDATION_API bool g_OverrideCRC = false;
+    namespace Reflect
+    {
+        FOUNDATION_API bool g_OverrideCRC = false;
+    }
 }
 
 //
@@ -888,7 +890,7 @@ void ArchiveBinary::Deserialize(V_Element& elements, u32 flags)
     REFLECT_SCOPE_TIMER_INST( "" )
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    m_Indent.Get(stdout);
+        m_Indent.Get(stdout);
     Debug(TXT("Deserializing %d elements\n"), element_count);
     m_Indent.Push();
 #endif

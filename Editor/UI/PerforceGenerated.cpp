@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version May  4 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -10,7 +10,7 @@
 #include "PerforceGenerated.h"
 
 ///////////////////////////////////////////////////////////////////////////
-using namespace Editor;
+using namespace Helium::Editor;
 
 PerforceSubmitPanelGenerated::PerforceSubmitPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
@@ -285,7 +285,6 @@ PerforceSubmitPanelGenerated::PerforceSubmitPanelGenerated( wxWindow* parent, wx
 	bSizerReopenCheckbox = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_ReopenCheckBox = new wxCheckBox( m_CommitButtonsPanel, wxID_ANY, wxT("Reopen Files"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bSizerReopenCheckbox->Add( m_ReopenCheckBox, 0, wxALL, 5 );
 	
 	bSizerReopen->Add( bSizerReopenCheckbox, 6, wxEXPAND|wxLEFT|wxTOP, 2 );

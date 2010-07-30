@@ -1,6 +1,6 @@
 #include "Writer.h"
 
-using namespace CodeGen;
+using namespace Helium::CodeGen;
 
 static const std::string s_Space = "  ";
 

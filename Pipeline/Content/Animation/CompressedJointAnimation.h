@@ -12,83 +12,86 @@
 // rough, but I am hoping it's at least somewhat cleaner and more
 // contained than it was before. :(
 
-namespace Content
+namespace Helium
 {
-  
-  struct AnimationCompressionControl;
+    namespace Content
+    {
 
-  class PIPELINE_API CompressedJointAnimation : public Reflect::Element
-  {
-  public:
-    
-    CompressedJointAnimation();
-    CompressedJointAnimation( const AnimationCompressionControl& compressionControl, bool looping = false );
+        struct AnimationCompressionControl;
 
-    bool m_Looping;
+        class PIPELINE_API CompressedJointAnimation : public Reflect::Element
+        {
+        public:
 
-    bool m_UseHypercubeCompression;
-    u32  m_TranslateScale;
-    u32  m_ScaleScale;
-    u32  m_RotateScale;
+            CompressedJointAnimation();
+            CompressedJointAnimation( const AnimationCompressionControl& compressionControl, bool looping = false );
 
-    // The values in the animation
-    std::vector< i16 > m_TranslateX;
-    std::vector< i16 > m_TranslateY;
-    std::vector< i16 > m_TranslateZ;
+            bool m_Looping;
 
-    std::vector< i16 > m_RotateX;
-    std::vector< i16 > m_RotateY;
-    std::vector< i16 > m_RotateZ;
-    std::vector< i16 > m_RotateW;
+            bool m_UseHypercubeCompression;
+            u32  m_TranslateScale;
+            u32  m_ScaleScale;
+            u32  m_RotateScale;
 
-    std::vector< i16 > m_ScaleX;
-    std::vector< i16 > m_ScaleY;
-    std::vector< i16 > m_ScaleZ;
+            // The values in the animation
+            std::vector< i16 > m_TranslateX;
+            std::vector< i16 > m_TranslateY;
+            std::vector< i16 > m_TranslateZ;
 
-    std::vector< i16 > m_BindTranslate;  // 3 elements: x, y, z
-    std::vector< i16 > m_MinTranslate;
-    std::vector< i16 > m_MaxTranslate;
-    std::vector< i16 > m_AvgTranslate;
-    std::vector< u8 >  m_DiffTypeTranslate;
+            std::vector< i16 > m_RotateX;
+            std::vector< i16 > m_RotateY;
+            std::vector< i16 > m_RotateZ;
+            std::vector< i16 > m_RotateW;
 
-    std::vector< i16 > m_MinScale;
-    std::vector< i16 > m_MaxScale;
-    std::vector< i16 > m_AvgScale;
-    std::vector< u8 >  m_DiffTypeScale;
+            std::vector< i16 > m_ScaleX;
+            std::vector< i16 > m_ScaleY;
+            std::vector< i16 > m_ScaleZ;
 
-    std::vector< i16 > m_MinRotate;
-    std::vector< i16 > m_MaxRotate;
-    std::vector< i16 > m_AvgRotate;
-    std::vector< u8 >  m_DiffTypeRotate;
+            std::vector< i16 > m_BindTranslate;  // 3 elements: x, y, z
+            std::vector< i16 > m_MinTranslate;
+            std::vector< i16 > m_MaxTranslate;
+            std::vector< i16 > m_AvgTranslate;
+            std::vector< u8 >  m_DiffTypeTranslate;
 
-    Helium::TUID m_JointID;
+            std::vector< i16 > m_MinScale;
+            std::vector< i16 > m_MaxScale;
+            std::vector< i16 > m_AvgScale;
+            std::vector< u8 >  m_DiffTypeScale;
 
-    REFLECT_DECLARE_CLASS( CompressedJointAnimation, Reflect::Element );
+            std::vector< i16 > m_MinRotate;
+            std::vector< i16 > m_MaxRotate;
+            std::vector< i16 > m_AvgRotate;
+            std::vector< u8 >  m_DiffTypeRotate;
 
-    static void EnumerateClass( Reflect::Compositor<CompressedJointAnimation>& comp );
+            Helium::TUID m_JointID;
 
-    bool m_ExceededRangeOnBindConversion;
-    bool m_ExceededRangeOnTranslationConversion;
-    bool m_ExceededRangeOnScaleConversion;
-    bool m_ExceededRangeOnRotationConversion;
+            REFLECT_DECLARE_CLASS( CompressedJointAnimation, Reflect::Element );
 
-    void Compress( const tstring& jt_name, const JointAnimationPtr& uncompressedAnimation, const Math::Vector3& bindTranslate );
+            static void EnumerateClass( Reflect::Compositor<CompressedJointAnimation>& comp );
 
-    u32 NumSamples() const;
-    bool HasMotion() const { return m_HasMotion; }
+            bool m_ExceededRangeOnBindConversion;
+            bool m_ExceededRangeOnTranslationConversion;
+            bool m_ExceededRangeOnScaleConversion;
+            bool m_ExceededRangeOnRotationConversion;
 
-    inline bool ExceededRangeOnTranslationConversion() { return m_ExceededRangeOnTranslationConversion; }
-    inline bool ExceededRangeOnScaleConversion() { return m_ExceededRangeOnScaleConversion; }
-    inline bool ExceededRangeOnRotationConversion() { return m_ExceededRangeOnRotationConversion; }
+            void Compress( const tstring& jt_name, const JointAnimationPtr& uncompressedAnimation, const Math::Vector3& bindTranslate );
 
-  private:
+            u32 NumSamples() const;
+            bool HasMotion() const { return m_HasMotion; }
 
-    bool m_HasMotion;
+            inline bool ExceededRangeOnTranslationConversion() { return m_ExceededRangeOnTranslationConversion; }
+            inline bool ExceededRangeOnScaleConversion() { return m_ExceededRangeOnScaleConversion; }
+            inline bool ExceededRangeOnRotationConversion() { return m_ExceededRangeOnRotationConversion; }
 
-    static void ComputeAverageAndDiffType( i16& average, u8& diffType, const i16& min, const i16& max );
-  };
+        private:
 
-  typedef Helium::SmartPtr< CompressedJointAnimation > CompressedJointAnimationPtr;
-  typedef std::vector< CompressedJointAnimationPtr > V_CompressedJointAnimation;
-  typedef std::map< Helium::TUID, CompressedJointAnimationPtr > M_CompressedJointAnimation;
+            bool m_HasMotion;
+
+            static void ComputeAverageAndDiffType( i16& average, u8& diffType, const i16& min, const i16& max );
+        };
+
+        typedef Helium::SmartPtr< CompressedJointAnimation > CompressedJointAnimationPtr;
+        typedef std::vector< CompressedJointAnimationPtr > V_CompressedJointAnimation;
+        typedef std::map< Helium::TUID, CompressedJointAnimationPtr > M_CompressedJointAnimation;
+    }
 }

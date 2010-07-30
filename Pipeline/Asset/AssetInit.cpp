@@ -27,7 +27,7 @@
 
 #include "Foundation/InitializerStack.h"
 
-using namespace Reflect;
+using namespace Helium;
 
 #define ASSET_BEGIN_REGISTER_ENGINE_TYPES                                       \
   Helium::Insert<M_AssetTypeInfo>::Result et_inserted;

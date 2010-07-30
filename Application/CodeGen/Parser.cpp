@@ -4,7 +4,7 @@
 
 #include <tinyxml.h>
 
-using namespace CodeGen;
+using namespace Helium::CodeGen;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

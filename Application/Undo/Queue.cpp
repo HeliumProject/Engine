@@ -8,7 +8,7 @@
 //#define DEBUG_UNDO
 #endif
 
-using namespace Undo;
+using namespace Helium::Undo;
 
 Queue::Queue()
 : m_MaxLength (0)

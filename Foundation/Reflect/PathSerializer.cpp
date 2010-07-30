@@ -4,7 +4,7 @@
 
 #include "Foundation/Log.h"
 
-using namespace Reflect;
+using namespace Helium::Reflect;
 
 REFLECT_DEFINE_CLASS( PathSerializer );
 

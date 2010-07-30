@@ -10,426 +10,428 @@
 //
 // Row Major Rotation Matrix
 //
-
-namespace Math
+namespace Helium
 {
-    class Matrix4;
-    class EulerAngles;
-    class AngleAxis;
-    class Quaternion;
-
-    class FOUNDATION_API Matrix3
+    namespace Math
     {
-    public:
-        union
+        class Matrix4;
+        class EulerAngles;
+        class AngleAxis;
+        class Quaternion;
+
+        class FOUNDATION_API Matrix3
         {
-            f32 array1d[9];
-            f32 array2d[3][3];
-            struct
-            { 
-                Vector3 x;
-                Vector3 y;
-                Vector3 z;
-            };
-            struct
+        public:
+            union
             {
-                f32 xx, xy, xz;
-                f32 yx, yy, yz;
-                f32 zx, zy, zz;
+                f32 array1d[9];
+                f32 array2d[3][3];
+                struct
+                { 
+                    Vector3 x;
+                    Vector3 y;
+                    Vector3 z;
+                };
+                struct
+                {
+                    f32 xx, xy, xz;
+                    f32 yx, yy, yz;
+                    f32 zx, zy, zz;
+                };
             };
+
+            const static Matrix3 Identity;
+            const static Matrix3 Zero;
+
+            Matrix3               ()
+                : x (1, 0, 0)
+                , y (0, 1, 0)
+                , z (0, 0, 1)
+            {
+
+            }
+
+            explicit Matrix3      (const Vector3& vx, const Vector3& vy, const Vector3& vz)
+                : x(vx)
+                , y(vy)
+                , z(vz)
+            {
+
+            }
+
+            explicit Matrix3      (const Matrix4& v);
+            Matrix3&              operator= (const Matrix4& v);
+
+            explicit Matrix3      (const EulerAngles& v);
+            Matrix3&              operator= (const EulerAngles& v);
+
+            explicit Matrix3      (const AngleAxis& v);
+            Matrix3&              operator= (const AngleAxis& v);
+
+            explicit Matrix3      (const Quaternion& v);
+            Matrix3&              operator= (const Quaternion& v);
+
+            Matrix3&              operator= (const Matrix3& v)
+            {
+                x = v.x;
+                y = v.y;
+                z = v.z;
+                return *this;
+            }
+
+            Matrix3&              operator+= (const Matrix3& v);
+            Matrix3               operator+ (const Matrix3& v) const;
+            Matrix3&              operator*= (const Matrix3& v);
+            Matrix3               operator* (const Matrix3& v) const;
+            Vector3               operator* (const Vector3& v) const;
+
+            Matrix3&              operator*= (const f32 v)
+            {
+                x *= v;
+                y *= v;
+                z *= v;
+                return *this;
+            }
+
+            Matrix3               operator* (const f32 v) const
+            {
+                return Matrix3 (x * v, y * v, z * v);
+            }
+
+            Matrix3&              operator/= (const f32 v)
+            {
+                x /= v;
+                y /= v;
+                z /= v;
+                return *this;
+            }
+
+            Matrix3               operator/ (const f32 v) const
+            {
+                return Matrix3 (x / v, y / v, z / v);
+            }
+
+            Vector3&              operator[] (const u32 i)
+            {
+                HELIUM_ASSERT(i < 3);
+                return (&x)[i];
+            }
+
+            const Vector3&        operator[] (const u32 i) const
+            {
+                HELIUM_ASSERT(i < 3);
+                return (&x)[i];
+            }
+
+            f32&                  operator()(const u32 i, const u32 j)
+            {
+                return (array2d[j][i]);
+            }
+
+            const f32&            operator()(const u32 i, const u32 j) const
+            {
+                return (array2d[j][i]);
+            }
+
+            bool                  operator== (const Matrix3& v) const
+            {
+                return (x == v.x && y == v.y && z == v.z);
+            }
+
+            bool                  operator!= (const Matrix3& v) const
+            {
+                return !(x == v.x && y == v.y && z == v.z);
+            }
+
+            bool                  Valid()
+            {
+                return x.Valid() && y.Valid() && z.Valid();
+            }
+
+            f32                   Determinant () const;
+
+            Matrix3&              Invert ();
+            Matrix3               Inverted () const;
+
+            Matrix3&              Transpose ();
+            Matrix3               Transposed () const;
+
+            Matrix3&              Normalize ();
+            Matrix3               Normalized () const;
+
+            const Vector3&        GetBasis(Axis axis) const;
+            Matrix3&              SetBasis(Axis axis, const Vector3& v);
+            Matrix3&              Orthogonalize (Axis first = SingleAxes::Y, Axis second = SingleAxes::X, Axis third = SingleAxes::Z);
+
+            static Matrix3        RotateX (f32 theta);
+            static Matrix3        RotateY (f32 theta);
+            static Matrix3        RotateZ (f32 theta);
+
+            friend FOUNDATION_API tostream& operator<<(tostream& outStream, const Matrix3& vector);
+            friend FOUNDATION_API tistream& operator>>(tistream& inStream, Matrix3& vector);
+            friend class FOUNDATION_API Matrix4;
         };
 
-        const static Matrix3 Identity;
-        const static Matrix3 Zero;
+        typedef std::vector<Matrix3> V_Matrix3;
 
-        Matrix3               ()
-            : x (1, 0, 0)
-            , y (0, 1, 0)
-            , z (0, 0, 1)
+        inline Matrix3& Matrix3::operator+=(const Matrix3& b)
         {
+            Matrix3 a (*this);
+            Matrix3 &result = *this;
+            result = Matrix3::Zero;
 
+            for (unsigned row=0; row<3; row++)
+                for (unsigned col=0; col<3; col++)
+                    result[row][col] = a[row][col]+b[row][col];
+
+            return result;
         }
 
-        explicit Matrix3      (const Vector3& vx, const Vector3& vy, const Vector3& vz)
-            : x(vx)
-            , y(vy)
-            , z(vz)
+        inline Matrix3 Matrix3::operator+(const Matrix3& b) const
         {
+            Matrix3 a (*this);
+            Matrix3 result = Matrix3::Zero;
 
+            for (unsigned row=0; row<3; row++)
+                for (unsigned col=0; col<3; col++)
+                    result[row][col] = a[row][col]+b[row][col];
+
+            return result;
         }
 
-        explicit Matrix3      (const Matrix4& v);
-        Matrix3&              operator= (const Matrix4& v);
-
-        explicit Matrix3      (const EulerAngles& v);
-        Matrix3&              operator= (const EulerAngles& v);
-
-        explicit Matrix3      (const AngleAxis& v);
-        Matrix3&              operator= (const AngleAxis& v);
-
-        explicit Matrix3      (const Quaternion& v);
-        Matrix3&              operator= (const Quaternion& v);
-
-        Matrix3&              operator= (const Matrix3& v)
+        inline Matrix3& Matrix3::operator*=(const Matrix3& b)
         {
-            x = v.x;
-            y = v.y;
-            z = v.z;
-            return *this;
+            Matrix3 a (*this);
+            Matrix3 &result = *this;
+            result = Matrix3::Zero;
+
+            for (unsigned row=0; row<3; row++)
+                for (unsigned col=0; col<3; col++)
+                    for (unsigned mid=0; mid<3; mid++)
+                        result[row][col] += a[row][mid]*b[mid][col];
+
+            return result;
         }
 
-        Matrix3&              operator+= (const Matrix3& v);
-        Matrix3               operator+ (const Matrix3& v) const;
-        Matrix3&              operator*= (const Matrix3& v);
-        Matrix3               operator* (const Matrix3& v) const;
-        Vector3               operator* (const Vector3& v) const;
-
-        Matrix3&              operator*= (const f32 v)
+        inline Matrix3 Matrix3::operator*(const Matrix3& b) const
         {
-            x *= v;
-            y *= v;
-            z *= v;
-            return *this;
+            Matrix3 a (*this);
+            Matrix3 result = Matrix3::Zero;
+
+            for (unsigned row=0; row<3; row++)
+                for (unsigned col=0; col<3; col++)
+                    for (unsigned mid=0; mid<3; mid++)
+                        result[row][col] += a[row][mid]*b[mid][col];
+
+            return result;
         }
 
-        Matrix3               operator* (const f32 v) const
+        inline Vector3 Matrix3::operator* (const Vector3& v) const
         {
-            return Matrix3 (x * v, y * v, z * v);
+            const Matrix3& m (*this);
+
+            return Vector3(
+                (m[0][0]*v[0]) + (m[1][0]*v[1]) + (m[2][0]*v[2]),
+                (m[0][1]*v[0]) + (m[1][1]*v[1]) + (m[2][1]*v[2]),
+                (m[0][2]*v[0]) + (m[1][2]*v[1]) + (m[2][2]*v[2]));
         }
 
-        Matrix3&              operator/= (const f32 v)
+        inline f32 Matrix3::Determinant() const
         {
-            x /= v;
-            y /= v;
-            z /= v;
-            return *this;
+            const Matrix3 &m = *this;
+
+            auto f32 det1 = ((m[1][1] * m[2][2]) - (m[1][2] * m[2][1]));
+            auto f32 det2 = ((m[0][2] * m[2][1]) - (m[0][1] * m[2][2]));
+            auto f32 det3 = ((m[0][1] * m[1][2]) - (m[0][2] * m[1][1]));
+
+            return (m[0][0] * det1) + (m[1][0] * det2) + (m[2][0] * det3);
         }
 
-        Matrix3               operator/ (const f32 v) const
+        inline Matrix3& Matrix3::Invert()
         {
-            return Matrix3 (x / v, y / v, z / v);
-        }
+            Matrix3 m = *this;
+            Matrix3 &result = *this;
 
-        Vector3&              operator[] (const u32 i)
-        {
-            HELIUM_ASSERT(i < 3);
-            return (&x)[i];
-        }
+            f32 det1 = ((m[1][1] * m[2][2]) - (m[1][2] * m[2][1]));
+            f32 det2 = ((m[0][2] * m[2][1]) - (m[0][1] * m[2][2]));
+            f32 det3 = ((m[0][1] * m[1][2]) - (m[0][2] * m[1][1]));
 
-        const Vector3&        operator[] (const u32 i) const
-        {
-            HELIUM_ASSERT(i < 3);
-            return (&x)[i];
-        }
+            f32 det = (m[0][0] * det1) + (m[1][0] * det2) + (m[2][0] * det3);
 
-        f32&                  operator()(const u32 i, const u32 j)
-        {
-            return (array2d[j][i]);
-        }
-
-        const f32&            operator()(const u32 i, const u32 j) const
-        {
-            return (array2d[j][i]);
-        }
-
-        bool                  operator== (const Matrix3& v) const
-        {
-            return (x == v.x && y == v.y && z == v.z);
-        }
-
-        bool                  operator!= (const Matrix3& v) const
-        {
-            return !(x == v.x && y == v.y && z == v.z);
-        }
-
-        bool                  Valid()
-        {
-            return x.Valid() && y.Valid() && z.Valid();
-        }
-
-        f32                   Determinant () const;
-
-        Matrix3&              Invert ();
-        Matrix3               Inverted () const;
-
-        Matrix3&              Transpose ();
-        Matrix3               Transposed () const;
-
-        Matrix3&              Normalize ();
-        Matrix3               Normalized () const;
-
-        const Vector3&        GetBasis(Axis axis) const;
-        Matrix3&              SetBasis(Axis axis, const Vector3& v);
-        Matrix3&              Orthogonalize (Axis first = SingleAxes::Y, Axis second = SingleAxes::X, Axis third = SingleAxes::Z);
-
-        static Matrix3        RotateX (f32 theta);
-        static Matrix3        RotateY (f32 theta);
-        static Matrix3        RotateZ (f32 theta);
-
-        friend FOUNDATION_API tostream& operator<<(tostream& outStream, const Matrix3& vector);
-        friend FOUNDATION_API tistream& operator>>(tistream& inStream, Matrix3& vector);
-        friend class FOUNDATION_API Matrix4;
-    };
-
-    typedef std::vector<Matrix3> V_Matrix3;
-
-    inline Matrix3& Matrix3::operator+=(const Matrix3& b)
-    {
-        Matrix3 a (*this);
-        Matrix3 &result = *this;
-        result = Matrix3::Zero;
-
-        for (unsigned row=0; row<3; row++)
-            for (unsigned col=0; col<3; col++)
-                result[row][col] = a[row][col]+b[row][col];
-
-        return result;
-    }
-
-    inline Matrix3 Matrix3::operator+(const Matrix3& b) const
-    {
-        Matrix3 a (*this);
-        Matrix3 result = Matrix3::Zero;
-
-        for (unsigned row=0; row<3; row++)
-            for (unsigned col=0; col<3; col++)
-                result[row][col] = a[row][col]+b[row][col];
-
-        return result;
-    }
-
-    inline Matrix3& Matrix3::operator*=(const Matrix3& b)
-    {
-        Matrix3 a (*this);
-        Matrix3 &result = *this;
-        result = Matrix3::Zero;
-
-        for (unsigned row=0; row<3; row++)
-            for (unsigned col=0; col<3; col++)
-                for (unsigned mid=0; mid<3; mid++)
-                    result[row][col] += a[row][mid]*b[mid][col];
-
-        return result;
-    }
-
-    inline Matrix3 Matrix3::operator*(const Matrix3& b) const
-    {
-        Matrix3 a (*this);
-        Matrix3 result = Matrix3::Zero;
-
-        for (unsigned row=0; row<3; row++)
-            for (unsigned col=0; col<3; col++)
-                for (unsigned mid=0; mid<3; mid++)
-                    result[row][col] += a[row][mid]*b[mid][col];
-
-        return result;
-    }
-
-    inline Vector3 Matrix3::operator* (const Vector3& v) const
-    {
-        const Matrix3& m (*this);
-
-        return Vector3(
-            (m[0][0]*v[0]) + (m[1][0]*v[1]) + (m[2][0]*v[2]),
-            (m[0][1]*v[0]) + (m[1][1]*v[1]) + (m[2][1]*v[2]),
-            (m[0][2]*v[0]) + (m[1][2]*v[1]) + (m[2][2]*v[2]));
-    }
-
-    inline f32 Matrix3::Determinant() const
-    {
-        const Matrix3 &m = *this;
-
-        auto f32 det1 = ((m[1][1] * m[2][2]) - (m[1][2] * m[2][1]));
-        auto f32 det2 = ((m[0][2] * m[2][1]) - (m[0][1] * m[2][2]));
-        auto f32 det3 = ((m[0][1] * m[1][2]) - (m[0][2] * m[1][1]));
-
-        return (m[0][0] * det1) + (m[1][0] * det2) + (m[2][0] * det3);
-    }
-
-    inline Matrix3& Matrix3::Invert()
-    {
-        Matrix3 m = *this;
-        Matrix3 &result = *this;
-
-        f32 det1 = ((m[1][1] * m[2][2]) - (m[1][2] * m[2][1]));
-        f32 det2 = ((m[0][2] * m[2][1]) - (m[0][1] * m[2][2]));
-        f32 det3 = ((m[0][1] * m[1][2]) - (m[0][2] * m[1][1]));
-
-        f32 det = (m[0][0] * det1) + (m[1][0] * det2) + (m[2][0] * det3);
-
-        if (det != 0)
-        {
-            if (fabs(1.0/det) < AngleNearZero)
+            if (det != 0)
             {
-                return (*this) = Matrix3 ();
+                if (fabs(1.0/det) < AngleNearZero)
+                {
+                    return (*this) = Matrix3 ();
+                }
+                else
+                {
+                    result[0][0] = det1 / det;
+                    result[1][0] = ((m[2][0] * m[1][2]) - (m[1][0] * m[2][2])) / det;
+                    result[2][0] = ((m[1][0] * m[2][1]) - (m[2][0] * m[1][1])) / det;
+                    result[0][1] = det2 / det;
+                    result[1][1] = ((m[0][0] * m[2][2]) - (m[2][0] * m[0][2])) / det;
+                    result[2][1] = ((m[2][0] * m[0][1]) - (m[0][0] * m[2][1])) / det;
+                    result[0][2] = det3 / det;
+                    result[1][2] = ((m[1][0] * m[0][2]) - (m[0][0] * m[1][2])) / det;
+                    result[2][2] = ((m[0][0] * m[1][1]) - (m[1][0] * m[0][1])) / det;
+                }
             }
-            else
+
+            return *this;
+        }
+
+        inline Matrix3 Matrix3::Inverted() const
+        {
+            Matrix3 result = *this;
+
+            result.Invert();
+
+            return result;
+        }
+
+        inline Matrix3& Matrix3::Transpose()
+        {
+            f32 temp;
+
+            temp = x[1];  x[1] = y[0];  y[0] = temp;
+            temp = x[2];  x[2] = z[0];  z[0] = temp;
+            temp = y[2];  y[2] = z[1];  z[1] = temp;
+
+            return *this;
+        }
+
+        inline Matrix3 Matrix3::Transposed() const
+        {
+            Matrix3 result = *this;
+            return result.Transpose();
+        }
+
+        inline Matrix3& Matrix3::Normalize()
+        {
+            x.Normalize();
+            y.Normalize();
+            z.Normalize();
+
+            return *this;
+        }
+
+        inline Matrix3 Matrix3::Normalized() const
+        {
+            Matrix3 result = *this;
+            return result.Normalize();
+        }
+
+        inline const Vector3& Matrix3::GetBasis(Axis axis) const
+        {
+            switch (axis)
             {
-                result[0][0] = det1 / det;
-                result[1][0] = ((m[2][0] * m[1][2]) - (m[1][0] * m[2][2])) / det;
-                result[2][0] = ((m[1][0] * m[2][1]) - (m[2][0] * m[1][1])) / det;
-                result[0][1] = det2 / det;
-                result[1][1] = ((m[0][0] * m[2][2]) - (m[2][0] * m[0][2])) / det;
-                result[2][1] = ((m[2][0] * m[0][1]) - (m[0][0] * m[2][1])) / det;
-                result[0][2] = det3 / det;
-                result[1][2] = ((m[1][0] * m[0][2]) - (m[0][0] * m[1][2])) / det;
-                result[2][2] = ((m[0][0] * m[1][1]) - (m[1][0] * m[0][1])) / det;
+            case SingleAxes::X:
+                return x;
+
+            case SingleAxes::Y:
+                return y;
+
+            case SingleAxes::Z:
+                return z;
             }
+
+            return Vector3::Zero;
         }
 
-        return *this;
-    }
-
-    inline Matrix3 Matrix3::Inverted() const
-    {
-        Matrix3 result = *this;
-
-        result.Invert();
-
-        return result;
-    }
-
-    inline Matrix3& Matrix3::Transpose()
-    {
-        f32 temp;
-
-        temp = x[1];  x[1] = y[0];  y[0] = temp;
-        temp = x[2];  x[2] = z[0];  z[0] = temp;
-        temp = y[2];  y[2] = z[1];  z[1] = temp;
-
-        return *this;
-    }
-
-    inline Matrix3 Matrix3::Transposed() const
-    {
-        Matrix3 result = *this;
-        return result.Transpose();
-    }
-
-    inline Matrix3& Matrix3::Normalize()
-    {
-        x.Normalize();
-        y.Normalize();
-        z.Normalize();
-
-        return *this;
-    }
-
-    inline Matrix3 Matrix3::Normalized() const
-    {
-        Matrix3 result = *this;
-        return result.Normalize();
-    }
-
-    inline const Vector3& Matrix3::GetBasis(Axis axis) const
-    {
-        switch (axis)
+        inline Matrix3& Matrix3::SetBasis(Axis axis, const Vector3& v)
         {
-        case SingleAxes::X:
-            return x;
+            switch (axis)
+            {
+            case SingleAxes::X:
+                x = v;
+                break;
 
-        case SingleAxes::Y:
-            return y;
+            case SingleAxes::Y:
+                y = v;
+                break;
 
-        case SingleAxes::Z:
-            return z;
+            case SingleAxes::Z:
+                z = v;
+                break;
+            }
+
+            return *this;
         }
 
-        return Vector3::Zero;
-    }
-
-    inline Matrix3& Matrix3::SetBasis(Axis axis, const Vector3& v)
-    {
-        switch (axis)
+        inline Matrix3& Matrix3::Orthogonalize(Axis first, Axis second, Axis third)
         {
-        case SingleAxes::X:
-            x = v;
-            break;
-
-        case SingleAxes::Y:
-            y = v;
-            break;
-
-        case SingleAxes::Z:
-            z = v;
-            break;
-        }
-
-        return *this;
-    }
-
-    inline Matrix3& Matrix3::Orthogonalize(Axis first, Axis second, Axis third)
-    {
-        HELIUM_ASSERT(first != second && second != third);
+            HELIUM_ASSERT(first != second && second != third);
 
 #ifdef HELIUM_ASSERT_ENABLED
-        Vector3 oldFirst = GetBasis(first);
+            Vector3 oldFirst = GetBasis(first);
 #endif
 
-        Vector3 oldThird = GetBasis(third);
-        SetBasis(third, GetBasis( NextAxis(third) ).Cross( GetBasis(PrevAxis(third)) ));
-        Vector3 newThird = GetBasis(third);
+            Vector3 oldThird = GetBasis(third);
+            SetBasis(third, GetBasis( NextAxis(third) ).Cross( GetBasis(PrevAxis(third)) ));
+            Vector3 newThird = GetBasis(third);
 
-        newThird.Normalize();
-        oldThird.Normalize();
-        if (newThird.Dot(oldThird) < 0.0f)
-        {
-            SetBasis(third, GetBasis(third) * -1.0f);
+            newThird.Normalize();
+            oldThird.Normalize();
+            if (newThird.Dot(oldThird) < 0.0f)
+            {
+                SetBasis(third, GetBasis(third) * -1.0f);
+            }
+
+            Vector3 oldSecond = GetBasis(second);
+            SetBasis(second, GetBasis( NextAxis(second) ).Cross( GetBasis(PrevAxis(second)) ));
+            Vector3 newSecond = GetBasis(second);
+
+            newSecond.Normalize();
+            oldSecond.Normalize();
+            if (newSecond.Dot(oldSecond) < 0.0f)
+            {
+                SetBasis(second, GetBasis(second) * -1.0f);
+            }
+
+            HELIUM_ASSERT( oldFirst == GetBasis(first) );
+
+            return *this;
         }
 
-        Vector3 oldSecond = GetBasis(second);
-        SetBasis(second, GetBasis( NextAxis(second) ).Cross( GetBasis(PrevAxis(second)) ));
-        Vector3 newSecond = GetBasis(second);
-
-        newSecond.Normalize();
-        oldSecond.Normalize();
-        if (newSecond.Dot(oldSecond) < 0.0f)
+        inline tostream& operator<<(tostream& outStream, const Matrix3& matrix)
         {
-            SetBasis(second, GetBasis(second) * -1.0f);
+            outStream << matrix.x.x << ", " << matrix.x.y << ", " << matrix.x.z << ", ";
+            outStream << matrix.y.x << ", " << matrix.y.y << ", " << matrix.y.z << ", ";
+            outStream << matrix.z.x << ", " << matrix.z.y << ", " << matrix.z.z;
+
+            return outStream;
         }
 
-        HELIUM_ASSERT( oldFirst == GetBasis(first) );
+        inline tistream& operator>>(tistream& inStream, Matrix3& matrix)
+        {
+            inStream >> matrix.x.x;
+            inStream.ignore();
 
-        return *this;
-    }
+            inStream >> matrix.x.y;
+            inStream.ignore();
 
-    inline tostream& operator<<(tostream& outStream, const Matrix3& matrix)
-    {
-        outStream << matrix.x.x << ", " << matrix.x.y << ", " << matrix.x.z << ", ";
-        outStream << matrix.y.x << ", " << matrix.y.y << ", " << matrix.y.z << ", ";
-        outStream << matrix.z.x << ", " << matrix.z.y << ", " << matrix.z.z;
+            inStream >> matrix.x.z;
+            inStream.ignore();
 
-        return outStream;
-    }
+            inStream >> matrix.y.x;
+            inStream.ignore();
 
-    inline tistream& operator>>(tistream& inStream, Matrix3& matrix)
-    {
-        inStream >> matrix.x.x;
-        inStream.ignore();
+            inStream >> matrix.y.y;
+            inStream.ignore();
 
-        inStream >> matrix.x.y;
-        inStream.ignore();
+            inStream >> matrix.y.z;
+            inStream.ignore();
 
-        inStream >> matrix.x.z;
-        inStream.ignore();
+            inStream >> matrix.z.x;
+            inStream.ignore();
 
-        inStream >> matrix.y.x;
-        inStream.ignore();
+            inStream >> matrix.z.y;
+            inStream.ignore();
 
-        inStream >> matrix.y.y;
-        inStream.ignore();
+            inStream >> matrix.z.z;
 
-        inStream >> matrix.y.z;
-        inStream.ignore();
-
-        inStream >> matrix.z.x;
-        inStream.ignore();
-
-        inStream >> matrix.z.y;
-        inStream.ignore();
-
-        inStream >> matrix.z.z;
-
-        return inStream;
+            return inStream;
+        }
     }
 }

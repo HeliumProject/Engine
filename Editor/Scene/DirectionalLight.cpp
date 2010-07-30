@@ -10,12 +10,12 @@
 
 #include "PrimitivePointer.h"
 
-// Using
-using namespace Math;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
 // RTTI
-LUNA_DEFINE_TYPE(Editor::DirectionalLight);
+EDITOR_DEFINE_TYPE(Editor::DirectionalLight);
 
 void DirectionalLight::InitializeType()
 {

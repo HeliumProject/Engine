@@ -1,7 +1,7 @@
 #include "EnumValue.h"
 #include "Enum.h"
 
-using namespace CodeGen;
+using namespace Helium::CodeGen;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

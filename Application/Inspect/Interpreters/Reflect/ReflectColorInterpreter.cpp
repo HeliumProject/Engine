@@ -7,8 +7,9 @@
 #include "Application/Inspect/Controls/InspectColorPicker.h"
 #include "Application/Inspect/Data/StringData.h"
 
-using namespace Reflect;
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Reflect;
+using namespace Helium::Inspect;
 
 ReflectColorInterpreter::ReflectColorInterpreter( Container* container )
 : ReflectFieldInterpreter( container )

@@ -13,13 +13,14 @@
 #include "HierarchyNodeType.h"
 #include "Scene.h"
 
-using namespace Math;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
 // Initialize static members
 static D3DMATERIAL9 g_JointTransformMaterial;
 
-LUNA_DEFINE_TYPE( Editor::JointTransform );
+EDITOR_DEFINE_TYPE( Editor::JointTransform );
 
 void JointTransform::InitializeType()
 {

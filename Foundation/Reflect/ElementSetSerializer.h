@@ -6,30 +6,33 @@
 #include "SimpleSerializer.h"
 #include "ContainerSerializer.h"
 
-namespace Reflect
+namespace Helium
 {
-    class FOUNDATION_API ElementSetSerializer : public ContainerSerializer
+    namespace Reflect
     {
-    public:
-        typedef std::set<ElementPtr> DataType;
-        Serializer::DataPtr<DataType> m_Data;
+        class FOUNDATION_API ElementSetSerializer : public ContainerSerializer
+        {
+        public:
+            typedef std::set<ElementPtr> DataType;
+            Serializer::DataPtr<DataType> m_Data;
 
-        REFLECT_DECLARE_CLASS( ElementSetSerializer, ContainerSerializer )
+            REFLECT_DECLARE_CLASS( ElementSetSerializer, ContainerSerializer )
 
-            ElementSetSerializer();
-        virtual ~ElementSetSerializer();
+                ElementSetSerializer();
+            virtual ~ElementSetSerializer();
 
-        virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
+            virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
 
-        virtual size_t GetSize() const HELIUM_OVERRIDE;
-        virtual void Clear() HELIUM_OVERRIDE;
+            virtual size_t GetSize() const HELIUM_OVERRIDE;
+            virtual void Clear() HELIUM_OVERRIDE;
 
-        virtual bool Set(const Serializer* src, u32 flags = 0) HELIUM_OVERRIDE;
-        virtual bool Equals(const Serializer* s) const HELIUM_OVERRIDE;
+            virtual bool Set(const Serializer* src, u32 flags = 0) HELIUM_OVERRIDE;
+            virtual bool Equals(const Serializer* s) const HELIUM_OVERRIDE;
 
-        virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;
-        virtual void Deserialize(Archive& archive) HELIUM_OVERRIDE;
+            virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;
+            virtual void Deserialize(Archive& archive) HELIUM_OVERRIDE;
 
-        virtual void Host(Visitor& visitor) HELIUM_OVERRIDE;
-    };
+            virtual void Host(Visitor& visitor) HELIUM_OVERRIDE;
+        };
+    }
 }

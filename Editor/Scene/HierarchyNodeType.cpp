@@ -8,9 +8,10 @@
 #include "Color.h"
 #include "Primitive.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE( Editor::HierarchyNodeType );
+EDITOR_DEFINE_TYPE( Editor::HierarchyNodeType );
 
 void HierarchyNodeType::InitializeType()
 {

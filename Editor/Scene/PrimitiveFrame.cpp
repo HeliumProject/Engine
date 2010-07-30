@@ -4,8 +4,9 @@
 #include "Pick.h"
 #include "Color.h"
 
-using namespace Math;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
 PrimitiveFrame::PrimitiveFrame(ResourceTracker* tracker)
 : PrimitiveTemplate(tracker)

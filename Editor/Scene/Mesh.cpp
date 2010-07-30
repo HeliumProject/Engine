@@ -12,11 +12,11 @@
 #include "Transform.h"
 #include "HierarchyNodeType.h"
 
-using namespace Math;
-using namespace Editor;
 using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE( Editor::Mesh );
+EDITOR_DEFINE_TYPE( Editor::Mesh );
 
 D3DMATERIAL9 Mesh::s_WireMaterial;
 D3DMATERIAL9 Mesh::s_FillMaterial;

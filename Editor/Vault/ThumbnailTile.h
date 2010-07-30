@@ -6,76 +6,79 @@
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Container/OrderedSet.h"
 
-namespace Editor
+namespace Helium
 {
-    class ThumbnailTile : public Helium::RefCountBase< ThumbnailTile >
+    namespace Editor
     {
-    public:
-        ThumbnailTile( const Helium::Path& path );
-        virtual ~ThumbnailTile();
-
-    public:
-        const Helium::Path& GetPath() const;
-
-        inline u32 GetRow() const
+        class ThumbnailTile : public Helium::RefCountBase< ThumbnailTile >
         {
-            return m_Row;
-        }
+        public:
+            ThumbnailTile( const Helium::Path& path );
+            virtual ~ThumbnailTile();
 
-        inline u32 GetColumn() const
-        {
-            return m_Column;
-        }
+        public:
+            const Helium::Path& GetPath() const;
 
-        void GetRowColumn( u32& row, u32& col ) const;
-        void SetRowColumn( u32 row, u32 col );
+            inline u32 GetRow() const
+            {
+                return m_Row;
+            }
 
-        inline bool IsSelected() const 
-        {
-            return m_IsSelected;
-        }
+            inline u32 GetColumn() const
+            {
+                return m_Column;
+            }
 
-        inline void SetSelected( bool selected )
-        {
-            m_IsSelected = selected;
-        }
+            void GetRowColumn( u32& row, u32& col ) const;
+            void SetRowColumn( u32 row, u32 col );
 
-        inline bool IsHighlighed() const
-        {
-            return m_IsHighlighted;
-        }
+            inline bool IsSelected() const 
+            {
+                return m_IsSelected;
+            }
 
-        inline void SetHighlighted( bool highlight )
-        {
-            m_IsHighlighted = highlight;
-        }
+            inline void SetSelected( bool selected )
+            {
+                m_IsSelected = selected;
+            }
 
-        tstring GetLabel() const;
-        tstring GetEditableName() const;
-        const tstring& GetFullPath() const;
-        tstring GetTypeLabel() const;
-        bool GetTypeColor( DWORD& color ) const;
+            inline bool IsHighlighed() const
+            {
+                return m_IsHighlighted;
+            }
 
-        const Thumbnail* GetThumbnail() const;
-        void SetThumbnail( ThumbnailPtr thumbnail );
+            inline void SetHighlighted( bool highlight )
+            {
+                m_IsHighlighted = highlight;
+            }
 
-    private:
-        Helium::Path m_Path;
+            tstring GetLabel() const;
+            tstring GetEditableName() const;
+            const tstring& GetFullPath() const;
+            tstring GetTypeLabel() const;
+            bool GetTypeColor( DWORD& color ) const;
 
-        u32 m_Row;
-        u32 m_Column;
+            const Thumbnail* GetThumbnail() const;
+            void SetThumbnail( ThumbnailPtr thumbnail );
 
-        bool m_IsSelected;
-        bool m_IsHighlighted;
+        private:
+            Helium::Path m_Path;
 
-        ThumbnailPtr m_Thumbnail;
-    };
-    typedef Helium::SmartPtr< ThumbnailTile > ThumbnailTilePtr;
+            u32 m_Row;
+            u32 m_Column;
 
-    typedef std::vector< ThumbnailTilePtr > V_ThumbnailTilePtr;
+            bool m_IsSelected;
+            bool m_IsHighlighted;
 
-    typedef std::set< ThumbnailTilePtr > S_ThumbnailTiles;
-    typedef Helium::OrderedSet< ThumbnailTilePtr > OS_ThumbnailTiles;
+            ThumbnailPtr m_Thumbnail;
+        };
+        typedef Helium::SmartPtr< ThumbnailTile > ThumbnailTilePtr;
 
-    typedef std::map< const Helium::Path, ThumbnailTilePtr > M_PathToTilePtr;
+        typedef std::vector< ThumbnailTilePtr > V_ThumbnailTilePtr;
+
+        typedef std::set< ThumbnailTilePtr > S_ThumbnailTiles;
+        typedef Helium::OrderedSet< ThumbnailTilePtr > OS_ThumbnailTiles;
+
+        typedef std::map< const Helium::Path, ThumbnailTilePtr > M_PathToTilePtr;
+    }
 }

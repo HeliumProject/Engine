@@ -7,7 +7,8 @@
 
 #include <malloc.h>
 
-using namespace Reflect;
+using namespace Helium;
+using namespace Helium::Reflect;
 
 Object::Object()
 : m_RefCount (0)

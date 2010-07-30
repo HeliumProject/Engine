@@ -13,10 +13,11 @@
 
 #include "Color.h"
 
-using namespace Math;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE( Editor::Transform );
+EDITOR_DEFINE_TYPE( Editor::Transform );
 
 struct ScaleColorInfo
 {

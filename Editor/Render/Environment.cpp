@@ -3,6 +3,8 @@
 
 #include "Foundation/Checksum/CRC32.h"
 
+using namespace Helium;
+
 Render::Environment::Environment(const tchar* fname)
 {
   m_load_count = 0;

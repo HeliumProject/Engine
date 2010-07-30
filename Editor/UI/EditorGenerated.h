@@ -10,7 +10,7 @@
 
 #include <wx/intl.h>
 
-namespace Editor{ class Frame; }
+namespace Helium{ namespace Editor{ class Frame; } }
 
 #include "Frame.h"
 #include <wx/string.h>
@@ -43,421 +43,424 @@ namespace Editor{ class Frame; }
 
 ///////////////////////////////////////////////////////////////////////////
 
-namespace Editor
+namespace Helium
 {
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class MainFrameGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class MainFrameGenerated : public Editor::Frame
+	namespace Editor
 	{
-		private:
-		
-		protected:
-			enum
-			{
-				ID_NewScene = 1000,
-				ID_NewEntity,
-				ID_NewProject,
-				ID_Open,
-				ID_Close,
-				ID_SaveAll,
-				ID_Import,
-				ID_ImportFromClipboard,
-				ID_Export,
-				ID_ExportToClipboard,
-				ID_Exit,
-				ID_SelectAll,
-				ID_InvertSelection,
-				ID_Parent,
-				ID_Unparent,
-				ID_Group,
-				ID_Ungroup,
-				ID_Center,
-				ID_Duplicate,
-				ID_SmartDuplicate,
-				ID_CopyTransform,
-				ID_PasteTransform,
-				ID_SnapToCamera,
-				ID_SnapCameraTo,
-				ID_WalkUp,
-				ID_WalkDown,
-				ID_WalkForward,
-				ID_WalkBackward,
-				ID_Preferences,
-				ID_About,
-			};
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class MainFrameGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class MainFrameGenerated : public Helium::Editor::Frame
+		{
+			private:
 			
-			wxMenuBar* m_MainMenuBar;
-			wxMenu* m_MenuFile;
-			wxMenu* m_MenuFileNew;
-			wxMenu* m_MenuFileOpenRecent;
-			wxMenu* m_MenuEdit;
-			wxMenu* m_MenuTools;
-			wxMenu* m_MenuPanels;
-			wxMenu* m_MenuSettings;
-			wxMenu* m_MenuHelp;
-			wxStatusBar* m_MainStatusBar;
+			protected:
+				enum
+				{
+					ID_NewScene = 1000,
+					ID_NewEntity,
+					ID_NewProject,
+					ID_Open,
+					ID_Close,
+					ID_SaveAll,
+					ID_Import,
+					ID_ImportFromClipboard,
+					ID_Export,
+					ID_ExportToClipboard,
+					ID_Exit,
+					ID_SelectAll,
+					ID_InvertSelection,
+					ID_Parent,
+					ID_Unparent,
+					ID_Group,
+					ID_Ungroup,
+					ID_Center,
+					ID_Duplicate,
+					ID_SmartDuplicate,
+					ID_CopyTransform,
+					ID_PasteTransform,
+					ID_SnapToCamera,
+					ID_SnapCameraTo,
+					ID_WalkUp,
+					ID_WalkDown,
+					ID_WalkForward,
+					ID_WalkBackward,
+					ID_Preferences,
+					ID_About,
+				};
+				
+				wxMenuBar* m_MainMenuBar;
+				wxMenu* m_MenuFile;
+				wxMenu* m_MenuFileNew;
+				wxMenu* m_MenuFileOpenRecent;
+				wxMenu* m_MenuEdit;
+				wxMenu* m_MenuTools;
+				wxMenu* m_MenuPanels;
+				wxMenu* m_MenuSettings;
+				wxMenu* m_MenuHelp;
+				wxStatusBar* m_MainStatusBar;
+				
+				// Virtual event handlers, overide them in your derived class
+				virtual void OnNewScene( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnNewEntity( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnNew( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnOpen( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnClose( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnSaveAll( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnImport( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnExport( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnExit( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnUndo( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnRedo( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnCut( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnCopy( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnPaste( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnSelectAll( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnInvertSelection( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnDelete( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnParent( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnUnparent( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnGroup( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnUngroup( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnCenter( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnDuplicate( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnSmartDuplicate( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnCopyTransform( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnPasteTransform( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnSnapToCamera( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnSnapCameraTo( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnPickWalk( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnPreferences( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnAbout( wxCommandEvent& event ) { event.Skip(); }
+				
 			
-			// Virtual event handlers, overide them in your derived class
-			virtual void OnNewScene( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnNewEntity( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnNew( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnOpen( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnClose( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnSaveAll( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnImport( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnExport( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnExit( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnUndo( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnRedo( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnCut( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnCopy( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnPaste( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnSelectAll( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnInvertSelection( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnDelete( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnParent( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnUnparent( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnGroup( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnUngroup( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnCenter( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnDuplicate( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnSmartDuplicate( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnCopyTransform( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnPasteTransform( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnSnapToCamera( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnSnapCameraTo( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnPickWalk( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnPreferences( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnAbout( wxCommandEvent& event ) { event.Skip(); }
+			public:
+				
+				MainFrameGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1280,1024 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+				~MainFrameGenerated();
 			
+		};
 		
-		public:
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class ToolbarPanelGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class ToolbarPanelGenerated : public wxPanel 
+		{
+			private:
 			
-			MainFrameGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1280,1024 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
-			~MainFrameGenerated();
-		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class ToolbarPanelGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class ToolbarPanelGenerated : public wxPanel 
-	{
-		private:
-		
-		protected:
-			wxPanel* m_MainPanel;
-			wxBitmapButton* m_NewSceneButton;
-			wxBitmapButton* m_OpenButton;
-			wxBitmapButton* m_SaveAllButton;
-			wxStaticLine* m_staticline1;
-			wxBitmapButton* m_CutButton;
-			wxBitmapButton* m_CopyButton;
-			wxBitmapButton* m_PasteButton;
-			wxBitmapButton* m_DeleteButton;
-			wxStaticLine* m_staticline2;
-			wxBitmapButton* m_UndoButton;
-			wxBitmapButton* m_RedoButton;
+			protected:
+				wxPanel* m_MainPanel;
+				wxBitmapButton* m_NewSceneButton;
+				wxBitmapButton* m_OpenButton;
+				wxBitmapButton* m_SaveAllButton;
+				wxStaticLine* m_staticline1;
+				wxBitmapButton* m_CutButton;
+				wxBitmapButton* m_CopyButton;
+				wxBitmapButton* m_PasteButton;
+				wxBitmapButton* m_DeleteButton;
+				wxStaticLine* m_staticline2;
+				wxBitmapButton* m_UndoButton;
+				wxBitmapButton* m_RedoButton;
+				
+				wxPanel* m_ToolsPanel;
+				wxBitmapButton* m_PlayButton;
+				wxBitmapButton* m_PauseButton;
+				wxBitmapButton* m_StopButton;
+				
+				wxSearchCtrl* m_VaultSearchBox;
+				wxPanel* m_ToolsPropertiesPanel;
+				
+				// Virtual event handlers, overide them in your derived class
+				virtual void OnNewScene( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnOpen( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnSaveAll( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnCut( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnCopy( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnPaste( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnDelete( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnUndo( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnRedo( wxCommandEvent& event ) { event.Skip(); }
+				
 			
-			wxPanel* m_ToolsPanel;
-			wxBitmapButton* m_PlayButton;
-			wxBitmapButton* m_PauseButton;
-			wxBitmapButton* m_StopButton;
+			public:
+				
+				ToolbarPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 939,70 ), long style = wxTAB_TRAVERSAL );
+				~ToolbarPanelGenerated();
 			
-			wxSearchCtrl* m_VaultSearchBox;
-			wxPanel* m_ToolsPropertiesPanel;
+		};
+		
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class HelpPanelGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class HelpPanelGenerated : public wxPanel 
+		{
+			private:
 			
-			// Virtual event handlers, overide them in your derived class
-			virtual void OnNewScene( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnOpen( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnSaveAll( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnCut( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnCopy( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnPaste( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnDelete( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnUndo( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnRedo( wxCommandEvent& event ) { event.Skip(); }
+			protected:
+				wxRichTextCtrl* m_HelpRichText;
 			
-		
-		public:
+			public:
+				
+				HelpPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,200 ), long style = wxTAB_TRAVERSAL );
+				~HelpPanelGenerated();
 			
-			ToolbarPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 939,70 ), long style = wxTAB_TRAVERSAL );
-			~ToolbarPanelGenerated();
+		};
 		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class HelpPanelGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class HelpPanelGenerated : public wxPanel 
-	{
-		private:
-		
-		protected:
-			wxRichTextCtrl* m_HelpRichText;
-		
-		public:
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class LayersPanelGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class LayersPanelGenerated : public wxPanel 
+		{
+			private:
 			
-			HelpPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,200 ), long style = wxTAB_TRAVERSAL );
-			~HelpPanelGenerated();
-		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class LayersPanelGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class LayersPanelGenerated : public wxPanel 
-	{
-		private:
-		
-		protected:
-			enum
-			{
-				ID_CreateNewLayer = 1000,
-				ID_CreateNewLayerFromSelection,
-				ID_DeleteSelectedLayers,
-				ID_AddSelectionToLayers,
-				ID_RemoveSelectionFromLayers,
-				ID_SelectLayerMembers,
-				ID_SelectLayers,
-			};
+			protected:
+				enum
+				{
+					ID_CreateNewLayer = 1000,
+					ID_CreateNewLayerFromSelection,
+					ID_DeleteSelectedLayers,
+					ID_AddSelectionToLayers,
+					ID_RemoveSelectionFromLayers,
+					ID_SelectLayerMembers,
+					ID_SelectLayers,
+				};
+				
+				wxToolBar* m_LayerManagementToolbar;
+				
+				// Virtual event handlers, overide them in your derived class
+				virtual void OnNewLayer( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnNewLayerFromSelection( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnDeleteLayer( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnAddSelectionToLayer( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnRemoveSelectionFromLayer( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnSelectLayerMembers( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnSelectLayer( wxCommandEvent& event ) { event.Skip(); }
+				
 			
-			wxToolBar* m_LayerManagementToolbar;
+			public:
+				
+				LayersPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+				~LayersPanelGenerated();
 			
-			// Virtual event handlers, overide them in your derived class
-			virtual void OnNewLayer( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnNewLayerFromSelection( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnDeleteLayer( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnAddSelectionToLayer( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnRemoveSelectionFromLayer( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnSelectLayerMembers( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnSelectLayer( wxCommandEvent& event ) { event.Skip(); }
+		};
+		
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class VaultPanelGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class VaultPanelGenerated : public wxPanel 
+		{
+			private:
 			
-		
-		public:
+			protected:
+				wxPanel* m_NavigationPanel;
+				wxBitmapButton* m_BackButton;
+				wxBitmapButton* m_ForwardButton;
+				wxSearchCtrl* m_SearchCtrl;
+				wxBitmapButton* m_OptionsButton;
+				wxListBox* m_SourceListBox;
+				wxPanel* m_ResultsPanel;
 			
-			LayersPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
-			~LayersPanelGenerated();
-		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class VaultPanelGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class VaultPanelGenerated : public wxPanel 
-	{
-		private:
-		
-		protected:
-			wxPanel* m_NavigationPanel;
-			wxBitmapButton* m_BackButton;
-			wxBitmapButton* m_ForwardButton;
-			wxSearchCtrl* m_SearchCtrl;
-			wxBitmapButton* m_OptionsButton;
-			wxListBox* m_SourceListBox;
-			wxPanel* m_ResultsPanel;
-		
-		public:
+			public:
+				
+				VaultPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 773,453 ), long style = wxTAB_TRAVERSAL );
+				~VaultPanelGenerated();
 			
-			VaultPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 773,453 ), long style = wxTAB_TRAVERSAL );
-			~VaultPanelGenerated();
+		};
 		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class DetailsPanelGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class DetailsPanelGenerated : public wxPanel 
-	{
-		private:
-		
-		protected:
-			wxScrolledWindow* m_ScrollWindow;
-			wxStaticText* m_LabelName;
-			wxTextCtrl* m_Name;
-			wxStaticText* m_LabelFileType;
-			wxTextCtrl* m_FileType;
-			wxStaticText* m_LabelFileID;
-			wxTextCtrl* m_FileID;
-			wxStaticText* m_LabelFolder;
-			wxTextCtrl* m_Folder;
-			wxPanel* m_RevisionPanel;
-			wxStaticText* m_LabelPerforce;
-			wxStaticText* m_LabelRevisionStatus;
-			wxPanel* m_StatusPanel;
-			wxStaticBitmap* m_RevisionStatusIcon;
-			wxStaticText* m_RevisionStatus;
-			wxPanel* m_LastCheckInPanel;
-			wxStaticText* m_LabelLastCheckIn;
-			wxTextCtrl* m_LastCheckIn;
-			wxPanel* m_FirstCheckInPanel;
-			wxStaticText* m_LabelFirstCheckIn;
-			wxTextCtrl* m_FirstCheckIn;
-		
-		public:
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class DetailsPanelGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class DetailsPanelGenerated : public wxPanel 
+		{
+			private:
 			
-			DetailsPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,421 ), long style = wxTAB_TRAVERSAL );
-			~DetailsPanelGenerated();
-		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class ToolsPanelGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class ToolsPanelGenerated : public wxPanel 
-	{
-		private:
-		
-		protected:
-			wxPanel* m_ToolsContainerPanel;
-			wxPanel* m_PropertiesPanel;
-		
-		public:
+			protected:
+				wxScrolledWindow* m_ScrollWindow;
+				wxStaticText* m_LabelName;
+				wxTextCtrl* m_Name;
+				wxStaticText* m_LabelFileType;
+				wxTextCtrl* m_FileType;
+				wxStaticText* m_LabelFileID;
+				wxTextCtrl* m_FileID;
+				wxStaticText* m_LabelFolder;
+				wxTextCtrl* m_Folder;
+				wxPanel* m_RevisionPanel;
+				wxStaticText* m_LabelPerforce;
+				wxStaticText* m_LabelRevisionStatus;
+				wxPanel* m_StatusPanel;
+				wxStaticBitmap* m_RevisionStatusIcon;
+				wxStaticText* m_RevisionStatus;
+				wxPanel* m_LastCheckInPanel;
+				wxStaticText* m_LabelLastCheckIn;
+				wxTextCtrl* m_LastCheckIn;
+				wxPanel* m_FirstCheckInPanel;
+				wxStaticText* m_LabelFirstCheckIn;
+				wxTextCtrl* m_FirstCheckIn;
 			
-			ToolsPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 218,369 ), long style = wxTAB_TRAVERSAL );
-			~ToolsPanelGenerated();
-		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class TypesPanelGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class TypesPanelGenerated : public wxPanel 
-	{
-		private:
-		
-		protected:
-		
-		public:
+			public:
+				
+				DetailsPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,421 ), long style = wxTAB_TRAVERSAL );
+				~DetailsPanelGenerated();
 			
-			TypesPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
-			~TypesPanelGenerated();
+		};
 		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class ProjectPanelGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class ProjectPanelGenerated : public wxPanel 
-	{
-		private:
-		
-		protected:
-			wxDataViewCtrl* m_DataViewCtrl;
-		
-		public:
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class ToolsPanelGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class ToolsPanelGenerated : public wxPanel 
+		{
+			private:
 			
-			ProjectPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
-			~ProjectPanelGenerated();
-		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class DirectoryPanelGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class DirectoryPanelGenerated : public wxPanel 
-	{
-		private:
-		
-		protected:
-			wxNotebook* m_DirectoryNotebook;
-			wxPanel* m_HierarchyPanel;
-			wxPanel* m_EntitiesPanel;
-			wxPanel* m_TypesPanel;
-		
-		public:
+			protected:
+				wxPanel* m_ToolsContainerPanel;
+				wxPanel* m_PropertiesPanel;
 			
-			DirectoryPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
-			~DirectoryPanelGenerated();
-		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class PropertiesPanelGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class PropertiesPanelGenerated : public wxPanel 
-	{
-		private:
-		
-		protected:
-			wxPanel* m_ControlsPanel;
-			wxRadioButton* m_CommonButton;
-			wxRadioButton* m_AllButton;
-			wxStaticLine* m_staticline5;
-			wxButton* m_ExpandAllButton;
-			wxButton* m_CollapseAllButton;
-			wxPanel* m_PropertiesPanel;
+			public:
+				
+				ToolsPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 218,369 ), long style = wxTAB_TRAVERSAL );
+				~ToolsPanelGenerated();
 			
-			// Virtual event handlers, overide them in your derived class
-			virtual void OnIntersection( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnUnion( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnExpandAll( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnCollapseAll( wxCommandEvent& event ) { event.Skip(); }
-			
+		};
 		
-		public:
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class TypesPanelGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class TypesPanelGenerated : public wxPanel 
+		{
+			private:
 			
-			PropertiesPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
-			~PropertiesPanelGenerated();
+			protected:
+			
+			public:
+				
+				TypesPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+				~TypesPanelGenerated();
+			
+		};
 		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class ViewPanelGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class ViewPanelGenerated : public wxPanel 
-	{
-		private:
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class ProjectPanelGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class ProjectPanelGenerated : public wxPanel 
+		{
+			private:
+			
+			protected:
+				wxDataViewCtrl* m_DataViewCtrl;
+			
+			public:
+				
+				ProjectPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+				~ProjectPanelGenerated();
+			
+		};
 		
-		protected:
-			enum
-			{
-				ID_FrameOrigin = 1000,
-				ID_FrameSelected,
-				ID_PreviousView,
-				ID_NextView,
-				ID_HighlightMode,
-				ID_CameraOrbit,
-				ID_CameraFront,
-				ID_CameraSide,
-				ID_CameraTop,
-				ID_ShowAxes,
-				ID_ShowGrid,
-				ID_ShowBounds,
-				ID_ShowStatistics,
-				ID_FrustumCull,
-				ID_BackfaceCull,
-				ID_ShadingWireframe,
-				ID_ShadingMaterial,
-				ID_ColorModeScene,
-				ID_ColorModeLayer,
-				ID_ColorModeNodeType,
-				ID_ColorModeScale,
-				ID_ColorModeScaleGradient,
-			};
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class DirectoryPanelGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class DirectoryPanelGenerated : public wxPanel 
+		{
+			private:
 			
-			wxToolBar* m_ToolbarView;
-			wxPanel* m_ViewContainerPanel;
+			protected:
+				wxNotebook* m_DirectoryNotebook;
+				wxPanel* m_HierarchyPanel;
+				wxPanel* m_EntitiesPanel;
+				wxPanel* m_TypesPanel;
 			
-			// Virtual event handlers, overide them in your derived class
-			virtual void OnFrameOrigin( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnFrameSelected( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnPreviousView( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnNextView( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnHighlightMode( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnViewCameraChange( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnViewChange( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnColorMode( wxCommandEvent& event ) { event.Skip(); }
+			public:
+				
+				DirectoryPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+				~DirectoryPanelGenerated();
 			
+		};
 		
-		public:
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class PropertiesPanelGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class PropertiesPanelGenerated : public wxPanel 
+		{
+			private:
 			
-			ViewPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 766,617 ), long style = wxTAB_TRAVERSAL );
-			~ViewPanelGenerated();
+			protected:
+				wxPanel* m_ControlsPanel;
+				wxRadioButton* m_CommonButton;
+				wxRadioButton* m_AllButton;
+				wxStaticLine* m_staticline5;
+				wxButton* m_ExpandAllButton;
+				wxButton* m_CollapseAllButton;
+				wxPanel* m_PropertiesPanel;
+				
+				// Virtual event handlers, overide them in your derived class
+				virtual void OnIntersection( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnUnion( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnExpandAll( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnCollapseAll( wxCommandEvent& event ) { event.Skip(); }
+				
+			
+			public:
+				
+				PropertiesPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+				~PropertiesPanelGenerated();
+			
+		};
 		
-	};
-	
-} // namespace Editor
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class ViewPanelGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class ViewPanelGenerated : public wxPanel 
+		{
+			private:
+			
+			protected:
+				enum
+				{
+					ID_FrameOrigin = 1000,
+					ID_FrameSelected,
+					ID_PreviousView,
+					ID_NextView,
+					ID_HighlightMode,
+					ID_CameraOrbit,
+					ID_CameraFront,
+					ID_CameraSide,
+					ID_CameraTop,
+					ID_ShowAxes,
+					ID_ShowGrid,
+					ID_ShowBounds,
+					ID_ShowStatistics,
+					ID_FrustumCull,
+					ID_BackfaceCull,
+					ID_ShadingWireframe,
+					ID_ShadingMaterial,
+					ID_ColorModeScene,
+					ID_ColorModeLayer,
+					ID_ColorModeNodeType,
+					ID_ColorModeScale,
+					ID_ColorModeScaleGradient,
+				};
+				
+				wxToolBar* m_ToolbarView;
+				wxPanel* m_ViewContainerPanel;
+				
+				// Virtual event handlers, overide them in your derived class
+				virtual void OnFrameOrigin( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnFrameSelected( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnPreviousView( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnNextView( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnHighlightMode( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnViewCameraChange( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnViewChange( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnColorMode( wxCommandEvent& event ) { event.Skip(); }
+				
+			
+			public:
+				
+				ViewPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 766,617 ), long style = wxTAB_TRAVERSAL );
+				~ViewPanelGenerated();
+			
+		};
+		
+	} // namespace Editor
+} // namespace Helium
 
 #endif //__EditorGenerated__

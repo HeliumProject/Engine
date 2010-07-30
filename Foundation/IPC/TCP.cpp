@@ -8,7 +8,7 @@
 #include <string.h>
 #include <algorithm>
 
-using namespace IPC;
+using namespace Helium::IPC;
 
 #define IPC_TCP_NO_DELAY
 

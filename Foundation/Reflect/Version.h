@@ -2,25 +2,28 @@
 
 #include "Serializers.h"
 
-namespace Reflect
+namespace Helium
 {
-    class FOUNDATION_API Version : public ConcreteInheritor<Version, Element>
+    namespace Reflect
     {
-    public:
-        tstring m_Source;
-        tstring m_SourceVersion;
+        class FOUNDATION_API Version : public ConcreteInheritor<Version, Element>
+        {
+        public:
+            tstring m_Source;
+            tstring m_SourceVersion;
 
-        static void EnumerateClass( Reflect::Compositor<Version>& comp );
+            static void EnumerateClass( Reflect::Compositor<Version>& comp );
 
-        Version ();
-        Version(const tchar* source, const tchar* sourceVersion);
+            Version ();
+            Version(const tchar* source, const tchar* sourceVersion);
 
-        virtual bool IsCurrent();
+            virtual bool IsCurrent();
 
-        bool ConvertToInts( int* ints );
+            bool ConvertToInts( int* ints );
 
-        void DetectVersion();
-    };
+            void DetectVersion();
+        };
 
-    typedef Helium::SmartPtr<Version> VersionPtr;
+        typedef Helium::SmartPtr<Version> VersionPtr;
+    }
 }

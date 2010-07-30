@@ -1,7 +1,8 @@
 #include "Component.h"
 #include "ComponentCollection.h"
 
-using namespace Component;
+using namespace Helium;
+using namespace Helium::Component;
 
 REFLECT_DEFINE_ABSTRACT(ComponentBase)
 

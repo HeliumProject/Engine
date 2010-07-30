@@ -4,7 +4,7 @@
 #include <wx/checkbox.h>
 #include <wx/panel.h>
 
-using namespace Inspect;
+using namespace Helium::Inspect;
 
 const i32 CHECKBOXWIDTH = 16;
 const i32 CHECKBOXHEIGHT = 22;

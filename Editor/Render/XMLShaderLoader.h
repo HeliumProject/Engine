@@ -2,19 +2,22 @@
 
 #include "ShaderLoader.h"
 
-namespace Render
+namespace Helium
 {
-  class XMLShaderLoader : public ShaderLoader
-  {
-  public:
-    XMLShaderLoader()
+    namespace Render
     {
-    }
+        class XMLShaderLoader : public ShaderLoader
+        {
+        public:
+            XMLShaderLoader()
+            {
+            }
 
-    virtual ~XMLShaderLoader()
-    {
-    }
+            virtual ~XMLShaderLoader()
+            {
+            }
 
-    virtual class Shader* ParseFile( const tchar* filename, class ShaderManager* db );
-  };
+            virtual class Shader* ParseFile( const tchar* filename, class ShaderManager* db );
+        };
+    }
 }

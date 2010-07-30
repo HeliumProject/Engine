@@ -5,37 +5,41 @@
 
 #include <wx/dnd.h>
 
-struct FileDroppedArgs
+namespace Helium
 {
-  Helium::Path m_Path;
 
-  FileDroppedArgs( const tstring& path = TXT( "" ) )
-    : m_Path( path )
-  {
-  }
-};
-typedef Helium::Signature< void, const FileDroppedArgs& > FileDroppedSignature;
-typedef std::set< FileDroppedSignature::Delegate > S_FileDroppedSignature;
+    struct FileDroppedArgs
+    {
+        Helium::Path m_Path;
 
-class FileDropTarget : public wxFileDropTarget
-{
-public:
-  FileDropTarget(const tstring& extensions, const tstring& delims = TXT( "," ) );
+        FileDroppedArgs( const tstring& path = TXT( "" ) )
+            : m_Path( path )
+        {
+        }
+    };
+    typedef Helium::Signature< void, const FileDroppedArgs& > FileDroppedSignature;
+    typedef std::set< FileDroppedSignature::Delegate > S_FileDroppedSignature;
 
-  void AddListener( FileDroppedSignature::Delegate& listener )
-  {
-    m_DropEvent.Add( listener );
-  }
+    class FileDropTarget : public wxFileDropTarget
+    {
+    public:
+        FileDropTarget(const tstring& extensions, const tstring& delims = TXT( "," ) );
 
-  void RemoveListener( FileDroppedSignature::Delegate& listener )
-  {
-    m_DropEvent.Remove( listener );
-  }
+        void AddListener( FileDroppedSignature::Delegate& listener )
+        {
+            m_DropEvent.Add( listener );
+        }
 
-protected:
-  virtual bool OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& filenames );
+        void RemoveListener( FileDroppedSignature::Delegate& listener )
+        {
+            m_DropEvent.Remove( listener );
+        }
 
-private:
-  FileDroppedSignature::Event m_DropEvent;
-  std::vector< tstring >                    m_FileExtensions;
-};
+    protected:
+        virtual bool OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& filenames );
+
+    private:
+        FileDroppedSignature::Event m_DropEvent;
+        std::vector< tstring >                    m_FileExtensions;
+    };
+}

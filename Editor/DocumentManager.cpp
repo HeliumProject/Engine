@@ -9,8 +9,8 @@
 #include <cctype>
 #include <sstream>
 
-// Using
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 DocumentChangeSignature::Event DocumentManager::s_DocumentChange;
 

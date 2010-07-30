@@ -11,7 +11,8 @@
 
 #include <sstream>
 
-using namespace Application;
+using namespace Helium;
+using namespace Helium::Application;
 
 ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
 : m_Args ( args )

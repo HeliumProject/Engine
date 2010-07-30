@@ -37,7 +37,8 @@
 #include "ExportOptionsDlg.h"
 #include "App.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 tstring MainFrame::s_PreferencesPrefix = TXT( "MainFrame" );
 

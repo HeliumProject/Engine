@@ -2,7 +2,8 @@
 
 #include "HelpPanel.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 HelpPanel::HelpPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
 : HelpPanelGenerated( parent, id, pos, size, style )

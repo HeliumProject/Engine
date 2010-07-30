@@ -6,7 +6,8 @@
 
 #include <wx/msgdlg.h>
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 static bool ShowWaitDialog(Perforce::WaitInterface* waitInterface)
 {

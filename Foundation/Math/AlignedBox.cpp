@@ -3,7 +3,7 @@
 #include "Matrix4.h"
 #include "Frustum.h"
 
-using namespace Math;
+using namespace Helium::Math;
 
 const AlignedBox AlignedBox::Unit = AlignedBox ( Vector3 (-0.5f, -0.5f, -0.5f),
                                                 Vector3 ( 0.5f,  0.5f,  0.5f) );

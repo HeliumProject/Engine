@@ -4,6 +4,8 @@
 #include "Foundation/Log.h"
 #include "Pipeline/Image/Formats/TGA.h"
 
+using namespace Helium;
+
 bool                           Render::D3DManager::m_unique = false;
 u32                            Render::D3DManager::m_master_count = 0;
 IDirect3D9*                    Render::D3DManager::m_master_d3d = 0;

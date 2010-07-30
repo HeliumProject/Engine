@@ -5,7 +5,8 @@
 
 #include "Application/UI/ArtProvider.h"
 
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Inspect;
 
 BEGIN_EVENT_TABLE( CanvasStrip, wxPanel )
 EVT_SHOW( CanvasStrip::OnShow )

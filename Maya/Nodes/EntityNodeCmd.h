@@ -4,27 +4,32 @@
 
 #include <maya/MPxCommand.h>
 
-class MAYA_API EntityNodeCmd : public MPxCommand
+namespace Helium
 {
-public:
-  static MString CommandName;
-  
-  static void * creator()
-  {
-    return new EntityNodeCmd;
-  }
 
-  static MSyntax newSyntax();
+    class MAYA_API EntityNodeCmd : public MPxCommand
+    {
+    public:
+        static MString CommandName;
 
-  virtual bool isUndoable()
-  {
-    return false;
-  }
+        static void * creator()
+        {
+            return new EntityNodeCmd;
+        }
 
-  virtual bool hasSyntax()
-  {
-    return true;
-  }
+        static MSyntax newSyntax();
 
-  virtual MStatus doIt( const MArgList & args );
-};
+        virtual bool isUndoable()
+        {
+            return false;
+        }
+
+        virtual bool hasSyntax()
+        {
+            return true;
+        }
+
+        virtual MStatus doIt( const MArgList & args );
+    };
+
+}

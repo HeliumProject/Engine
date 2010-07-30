@@ -3,34 +3,37 @@
 #include "Foundation/API.h"
 #include "Platform/Types.h"
 
-namespace Profile
+namespace Helium
 {
-    //
-    // Bare Timer
-    //
-
-    class FOUNDATION_API Timer
+    namespace Profile
     {
-    private:
-        u64 m_StartTime;
+        //
+        // Bare Timer
+        //
 
-    public:
-        Timer()
+        class FOUNDATION_API Timer
         {
-            Reset();
-        }
+        private:
+            u64 m_StartTime;
 
-    private:
-        Timer(const Timer& rhs)
-        {
+        public:
+            Timer()
+            {
+                Reset();
+            }
 
-        }
+        private:
+            Timer(const Timer& rhs)
+            {
 
-    public:
-        // reset timer (for re-use)
-        void Reset();
+            }
 
-        // get elapsed time in millis
-        float Elapsed();
-    };
+        public:
+            // reset timer (for re-use)
+            void Reset();
+
+            // get elapsed time in millis
+            float Elapsed();
+        };
+    }
 }

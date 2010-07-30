@@ -9,7 +9,8 @@
 
 #include <wx/msgdlg.h>
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 static const tchar* s_DefaultDescription = TXT( "<enter description here>" );
 

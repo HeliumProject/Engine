@@ -3,7 +3,8 @@
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Natural.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

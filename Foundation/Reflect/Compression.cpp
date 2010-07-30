@@ -3,7 +3,8 @@
 
 #include <zlib.h> 
 
-using namespace Reflect;
+using namespace Helium;
+using namespace Helium::Reflect;
 
 static const u32 ZLIB_BUFFER_SIZE = 16 * 1024; 
 

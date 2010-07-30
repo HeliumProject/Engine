@@ -4,16 +4,19 @@
 #include "ParametricKeyControl.h"
 #include "Application/Inspect/Interpreters/Reflect/ReflectFieldInterpreter.h"
 
-namespace Inspect
+namespace Helium
 {
-  class APPLICATION_API ParametricKeyInterpreter : public ReflectFieldInterpreter
-  {
-  public:
-    ParametricKeyInterpreter( Container* container );
+    namespace Inspect
+    {
+        class APPLICATION_API ParametricKeyInterpreter : public ReflectFieldInterpreter
+        {
+        public:
+            ParametricKeyInterpreter( Container* container );
 
-    virtual void InterpretField( const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent );
-  };
+            virtual void InterpretField( const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent );
+        };
 
-  typedef Helium::SmartPtr<ParametricKeyInterpreter> ParametricKeyInterpreterPtr;
-  typedef std::vector< ParametricKeyInterpreterPtr > V_ParametricKeyInterpreter;
+        typedef Helium::SmartPtr<ParametricKeyInterpreter> ParametricKeyInterpreterPtr;
+        typedef std::vector< ParametricKeyInterpreterPtr > V_ParametricKeyInterpreter;
+    }
 }

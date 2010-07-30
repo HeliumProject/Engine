@@ -1,7 +1,7 @@
 #include "Changeset.h"
 #include "RCS.h"
 
-using namespace RCS;
+using namespace Helium::RCS;
 
 void Changeset::Open( File& file, const OpenFlag flags ) const
 {

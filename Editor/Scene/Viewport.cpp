@@ -20,8 +20,9 @@
 #include "Platform/Exception.h"
 #include "Orientation.h"
 
-using namespace Math;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
 
 BEGIN_EVENT_TABLE(Editor::Viewport, wxWindow)

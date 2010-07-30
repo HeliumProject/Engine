@@ -14,11 +14,10 @@
 #include "Pipeline/Content/Nodes/Curve.h"
 #include "Maya/Utils.h"
 
-using namespace Reflect;
-using namespace Content;
-using namespace Symbol;
-using namespace MayaContent;
 using namespace Helium;
+using namespace Helium::Reflect;
+using namespace Helium::Content;
+using namespace Helium::MayaContent;
 
 static const char* ExportSelectionFlag = "-es";
 static const char* ExportSelectionFlagLong  = "-exportSelection";

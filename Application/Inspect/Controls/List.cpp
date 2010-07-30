@@ -3,8 +3,8 @@
 
 #include "Foundation/String/Tokenize.h"
 
-using namespace Reflect;
-using namespace Inspect;
+using namespace Helium::Reflect;
+using namespace Helium::Inspect;
 
 const tchar* List::s_MapKeyValDelim = TXT( ", " ); 
 
@@ -182,7 +182,7 @@ tstring temp;
 bool converted = Platform::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
 HELIUM_ASSERT( converted );
 
-    ::Tokenize( str, m_Items, temp );
+    Helium::Tokenize( str, m_Items, temp );
 
     if ( m_IsMap )
     {
@@ -259,7 +259,7 @@ HELIUM_ASSERT( converted );
     WriteData( str );
 
     m_Items.clear();
-    ::Tokenize( str, m_Items, temp );
+    Helium::Tokenize( str, m_Items, temp );
   }
   else
   {
@@ -309,7 +309,7 @@ HELIUM_ASSERT( converted );
       WriteData( delimited );
 
       m_Items.clear();
-      ::Tokenize( delimited, m_Items, temp );
+      Helium::Tokenize( delimited, m_Items, temp );
       uiNeedsUpdate = true;
     }
   }
@@ -435,7 +435,7 @@ tstring List::GetSelectedItems( const tstring delimiter )
 void List::SetSelectedItems( const tstring& delimitedList, const tstring& delimiter )
 {
   std::vector< tstring > items;
-  ::Tokenize( delimitedList, items, delimiter );
+  Helium::Tokenize( delimitedList, items, delimiter );
   SetSelectedItems( items );
 }
 

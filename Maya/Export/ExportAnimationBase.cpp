@@ -3,8 +3,9 @@
 
 #include "MayaContentCmd.h"
 
-using namespace Content;
-using namespace MayaContent;
+using namespace Helium;
+using namespace Helium::Content;
+using namespace Helium::MayaContent;
 
 
 V_ExportAnimationBasePtr ExportAnimationBase::s_AnimationExporters;

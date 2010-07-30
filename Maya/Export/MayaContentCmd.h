@@ -20,156 +20,160 @@
 #include "ExportScene.h"
 #include "Platform/Types.h"
 
-//
-// Typedefs
-//
-
-typedef std::map<int, int> M_types;
-typedef std::map<tstring, MObject> M_object;
-typedef std::map<tstring, tstring> M_string;
-
-
-//
-// Export Insomniac Resources from Maya Scene to Reflect File
-//  Created 1/21/03 by Geoff Evans
-//
-
-namespace MayaContent
+namespace Helium
 {
+
     //
-    // Exporter class definition
+    // Typedefs
     //
 
-    class MAYA_API MayaContentCmd : public MPxCommand
+    typedef std::map<int, int> M_types;
+    typedef std::map<tstring, MObject> M_object;
+    typedef std::map<tstring, tstring> M_string;
+
+
+    //
+    // Export Insomniac Resources from Maya Scene to Reflect File
+    //  Created 1/21/03 by Geoff Evans
+    //
+
+    namespace MayaContent
     {
-    public:
         //
-        // Operation Data
+        // Exporter class definition
         //
 
-        enum CommandData
+        class MAYA_API MayaContentCmd : public MPxCommand
         {
-            kAnimation, // animation curves
-            kScene,     // entire scene
-            kSelected,  // selection
+        public:
+            //
+            // Operation Data
+            //
 
-            // anything under here is not mappable to a filespec
-            kCommandDataCount,   
+            enum CommandData
+            {
+                kAnimation, // animation curves
+                kScene,     // entire scene
+                kSelected,  // selection
+
+                // anything under here is not mappable to a filespec
+                kCommandDataCount,   
+            };
+
+            typedef std::map< CommandData, MObjectArray > M_DataObjects;
+
+        private:
+            // this sets the data set we want to process
+            CommandData m_Data;
+
+            // the file name of the source file we are dealing with
+            tstring m_SourceFileName;
+            tstring m_ContentFileName;
+
+            // the action abort flag
+            bool m_Abort;
+
+            // this tracks objects are queued to be exported, so we don't export a node twice
+            Maya::MObjectSet m_QueuedNodes;
+
+            // the scene full of export objects to do the export
+            ExportScene m_ExportScene;
+
+            // the objects sorted by export type
+            MObjectArray m_ObjectsToExport;
+
+            static M_string m_UnloadedProxyFileRefNodes;
+
+            //
+            // Implementation
+            //
+
+        public:
+            MayaContentCmd ();
+
+            static void* creator ()
+            {
+                return new MayaContentCmd ();
+            }
+
+            virtual bool isUndoable()
+            {
+                return false;
+            }
+
+            virtual bool hasSyntax()
+            {
+                return true;
+            }
+
+            static MSyntax newSyntax();
+
+            // MEL entry point
+            MStatus doIt (const MArgList &args);
+
+            // Common code for MEL and Library entry points
+            MStatus doIt ();
+
+            // Guts of the export process
+            bool DefineExportScene();
+            void ExportSceneData();
+            bool WriteExportedData();
+
+
+            //
+            // Member Functions
+            //
+
+            void GetSelected (MObjectArray& objects);
+            bool GetFile ();
+
+            //
+            // Export routines
+            //
+
+            // exports objects
+            bool ExportArray (MObjectArray objects);
+
+            // export maya class object
+            bool ExportObject(MObject object, int percent = -1);
+
+
+            //
+            // Export queue and touched tracking
+            //
+
+            void Queue (MItDag& dagItr, MObjectArray& objects);
+            void QueueNode (const MObject node, MObjectArray& objects);
+            bool QueueParents (const MObject node, MObjectArray& objects);
+
+            bool IsQueued (const MObject node);
+            void SetQueued (const MObject node);
+
+            //
+            // This is the primary interface to the exporter
+            //
+            static void ExportCurrentScene(CommandData data);
+
+            //
+            // Export whatever is selected to the clipboard as XML
+            //
+            static bool ExportSelectionToClipboard();
+
+            //
+            // Proxy File References
+            //
+            static MStatus UnloadProxyFileReferences();
+            static MStatus ReloadProxyFileReferences();
+
+            //
+            // Utils
+            //
+
+            static void ConvertMatrix (const MMatrix& matrix, Math::Matrix4& outMatrix);
+            static void ConvertMatrix (const Math::Matrix4& outMatrix, MMatrix& matrix);
+
+            static void GetDynamicAttributes( const MObject& node, const Component::ComponentCollectionPtr& element );
+            static void ConvertAttributeToComponent( const MFnDependencyNode &nodeFn, const MFnAttribute &attrFn, const Component::ComponentCollectionPtr &element );
         };
-
-        typedef std::map< CommandData, MObjectArray > M_DataObjects;
-
-    private:
-        // this sets the data set we want to process
-        CommandData m_Data;
-
-        // the file name of the source file we are dealing with
-        tstring m_SourceFileName;
-        tstring m_ContentFileName;
-
-        // the action abort flag
-        bool m_Abort;
-
-        // this tracks objects are queued to be exported, so we don't export a node twice
-        Maya::MObjectSet m_QueuedNodes;
-
-        // the scene full of export objects to do the export
-        ExportScene m_ExportScene;
-
-        // the objects sorted by export type
-        MObjectArray m_ObjectsToExport;
-
-        static M_string m_UnloadedProxyFileRefNodes;
-
-        //
-        // Implementation
-        //
-
-    public:
-        MayaContentCmd ();
-
-        static void* creator ()
-        {
-            return new MayaContentCmd ();
-        }
-
-        virtual bool isUndoable()
-        {
-            return false;
-        }
-
-        virtual bool hasSyntax()
-        {
-            return true;
-        }
-
-        static MSyntax newSyntax();
-
-        // MEL entry point
-        MStatus doIt (const MArgList &args);
-
-        // Common code for MEL and Library entry points
-        MStatus doIt ();
-
-        // Guts of the export process
-        bool DefineExportScene();
-        void ExportSceneData();
-        bool WriteExportedData();
-
-
-        //
-        // Member Functions
-        //
-
-        void GetSelected (MObjectArray& objects);
-        bool GetFile ();
-
-        //
-        // Export routines
-        //
-
-        // exports objects
-        bool ExportArray (MObjectArray objects);
-
-        // export maya class object
-        bool ExportObject(MObject object, int percent = -1);
-
-
-        //
-        // Export queue and touched tracking
-        //
-
-        void Queue (MItDag& dagItr, MObjectArray& objects);
-        void QueueNode (const MObject node, MObjectArray& objects);
-        bool QueueParents (const MObject node, MObjectArray& objects);
-
-        bool IsQueued (const MObject node);
-        void SetQueued (const MObject node);
-
-        //
-        // This is the primary interface to the exporter
-        //
-        static void ExportCurrentScene(CommandData data);
-
-        //
-        // Export whatever is selected to the clipboard as XML
-        //
-        static bool ExportSelectionToClipboard();
-
-        //
-        // Proxy File References
-        //
-        static MStatus UnloadProxyFileReferences();
-        static MStatus ReloadProxyFileReferences();
-
-        //
-        // Utils
-        //
-
-        static void ConvertMatrix (const MMatrix& matrix, Math::Matrix4& outMatrix);
-        static void ConvertMatrix (const Math::Matrix4& outMatrix, MMatrix& matrix);
-
-        static void GetDynamicAttributes( const MObject& node, const Component::ComponentCollectionPtr& element );
-        static void ConvertAttributeToComponent( const MFnDependencyNode &nodeFn, const MFnAttribute &attrFn, const Component::ComponentCollectionPtr &element );
-    };
+    }
 }

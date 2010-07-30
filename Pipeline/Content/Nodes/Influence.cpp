@@ -1,7 +1,7 @@
 #include "Influence.h"
 
-using namespace Reflect;
-using namespace Content;
+using namespace Helium;
+using namespace Helium::Content;
 
 REFLECT_DEFINE_CLASS(Influence)
 

@@ -4,44 +4,47 @@
 #include "ThumbnailLoader.h"
 #include "Platform/Mutex.h"
 
-namespace Render
+namespace Helium
 {
-    class D3DManager;
-}
-
-namespace Editor
-{
-    struct ThumbnailResultArgs
+    namespace Render
     {
-        const V_ThumbnailPtr& m_Thumbnails;
-        Helium::Path m_Path;
+        class D3DManager;
+    }
 
-        ThumbnailResultArgs( const V_ThumbnailPtr& thumbnails, const Helium::Path& path )
-            : m_Thumbnails( thumbnails )
-            , m_Path( path )
+    namespace Editor
+    {
+        struct ThumbnailResultArgs
         {
-        }
-    };
-    typedef Helium::Signature< void, const ThumbnailResultArgs& > ThumbnailResultSignature;
+            const V_ThumbnailPtr& m_Thumbnails;
+            Helium::Path m_Path;
 
-    class ThumbnailManager
-    {
-    public:
-        ThumbnailManager( wxWindow* window, Render::D3DManager* d3dmanager, const tstring& thumbnailDirectory );
-        virtual ~ThumbnailManager();
+            ThumbnailResultArgs( const V_ThumbnailPtr& thumbnails, const Helium::Path& path )
+                : m_Thumbnails( thumbnails )
+                , m_Path( path )
+            {
+            }
+        };
+        typedef Helium::Signature< void, const ThumbnailResultArgs& > ThumbnailResultSignature;
 
-        void Reset();
-        void Request( const std::set< Helium::Path >& paths );
-        void Cancel();
-        void DetachFromWindow();
+        class ThumbnailManager
+        {
+        public:
+            ThumbnailManager( wxWindow* window, Render::D3DManager* d3dmanager, const tstring& thumbnailDirectory );
+            virtual ~ThumbnailManager();
 
-    private:
-        void OnThumbnailLoaded( const ThumbnailLoader::ResultArgs& args );
+            void Reset();
+            void Request( const std::set< Helium::Path >& paths );
+            void Cancel();
+            void DetachFromWindow();
 
-    private:
-        wxWindow* m_Window;
-        ThumbnailLoader m_Loader;
-        Platform::Locker< std::map< u64, Helium::Path* > > m_AllRequests;
-        Platform::Mutex m_WindowMutex;
-    };
+        private:
+            void OnThumbnailLoaded( const ThumbnailLoader::ResultArgs& args );
+
+        private:
+            wxWindow* m_Window;
+            ThumbnailLoader m_Loader;
+            Platform::Locker< std::map< u64, Helium::Path* > > m_AllRequests;
+            Platform::Mutex m_WindowMutex;
+        };
+    }
 }

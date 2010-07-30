@@ -4,9 +4,10 @@
 
 //#define LUNA_DEBUG_EVALUATE
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE( SceneGraph );
+EDITOR_DEFINE_TYPE( SceneGraph );
 
 void SceneGraph::InitializeType()
 {

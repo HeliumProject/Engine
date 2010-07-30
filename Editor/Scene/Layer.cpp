@@ -9,10 +9,10 @@
 #include "Foundation/String/Natural.h"
 #include "Foundation/Log.h"
 
-using namespace Editor;
 using namespace Helium;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE( Editor::Layer );
+EDITOR_DEFINE_TYPE( Editor::Layer );
 
 ///////////////////////////////////////////////////////////////////////////////
 // Called once to prepare this class for use in the RTTI system.  Also sets

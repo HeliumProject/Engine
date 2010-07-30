@@ -8,31 +8,34 @@
 
 #include "GridWithIcons.h"
 
-namespace Editor
+namespace Helium
 {
-    class TypesPanel : public TypesPanelGenerated
+    namespace Editor
     {
-    public:
-        TypesPanel( SceneManager* manager, wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
-        virtual ~TypesPanel();
+        class TypesPanel : public TypesPanelGenerated
+        {
+        public:
+            TypesPanel( SceneManager* manager, wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+            virtual ~TypesPanel();
 
-        bool AddType( Editor::HierarchyNodeType* type );
-        bool RemoveType( Editor::HierarchyNodeType* type );
+            bool AddType( Editor::HierarchyNodeType* type );
+            bool RemoveType( Editor::HierarchyNodeType* type );
 
-    private:
-        void AddNodeType( const NodeTypeExistenceArgs& args );
-        void RemoveNodeType( const NodeTypeExistenceArgs& args );
+        private:
+            void AddNodeType( const NodeTypeExistenceArgs& args );
+            void RemoveNodeType( const NodeTypeExistenceArgs& args );
 
-    private:
-        void VisibilityChanged( const GridRowChangeArgs& args );
-        void SelectabilityChanged( const GridRowChangeArgs& args );
-        void CurrentSceneChanging( const SceneChangeArgs& args );
-        void CurrentSceneChanged( const SceneChangeArgs& args );
- 
-    private:
-        SceneManager* m_SceneManager;
-        GridWithIcons* m_Grid;
-        Scene* m_Scene;
-        M_HierarchyNodeTypeDumbPtr m_NodeTypes;
-    };
+        private:
+            void VisibilityChanged( const GridRowChangeArgs& args );
+            void SelectabilityChanged( const GridRowChangeArgs& args );
+            void CurrentSceneChanging( const SceneChangeArgs& args );
+            void CurrentSceneChanged( const SceneChangeArgs& args );
+
+        private:
+            SceneManager* m_SceneManager;
+            GridWithIcons* m_Grid;
+            Scene* m_Scene;
+            M_HierarchyNodeTypeDumbPtr m_NodeTypes;
+        };
+    }
 }

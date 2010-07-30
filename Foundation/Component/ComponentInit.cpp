@@ -6,7 +6,7 @@
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Reflect/Registry.h"
 
-using namespace Component;
+using namespace Helium;
 
 i32 g_ComponentInitCount = 0; 
 Helium::InitializerStack g_ComponentRegisteredTypes;

@@ -2,24 +2,27 @@
 
 #include <wx/valgen.h>
 
-namespace Editor
+namespace Helium
 {
-  class ExportOptionsDlg : public wxDialog
-  {
-  private:
-    wxGenericValidator m_DependencyValidator;
-    wxCheckBox m_DependencyCheckbox;
+    namespace Editor
+    {
+        class ExportOptionsDlg : public wxDialog
+        {
+        private:
+            wxGenericValidator m_DependencyValidator;
+            wxCheckBox m_DependencyCheckbox;
 
-    wxGenericValidator m_HierarchyValidator;
-    wxCheckBox m_HierarchyCheckbox;
+            wxGenericValidator m_HierarchyValidator;
+            wxCheckBox m_HierarchyCheckbox;
 
-  public:
-    ExportOptionsDlg( wxWindow* parent, bool& dependencies, bool& hierarchy );
-    virtual ~ExportOptionsDlg();
+        public:
+            ExportOptionsDlg( wxWindow* parent, bool& dependencies, bool& hierarchy );
+            virtual ~ExportOptionsDlg();
 
-  private:
-    void OnInit( wxInitDialogEvent& event );
+        private:
+            void OnInit( wxInitDialogEvent& event );
 
-    DECLARE_EVENT_TABLE();
-  };
+            DECLARE_EVENT_TABLE();
+        };
+    }
 }

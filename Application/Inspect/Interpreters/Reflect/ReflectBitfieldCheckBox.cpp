@@ -7,8 +7,8 @@
 #include <wx/checkbox.h>
 #include <wx/panel.h>
 
-using namespace Reflect;
-using namespace Inspect;
+using namespace Helium::Reflect;
+using namespace Helium::Inspect;
 
 const i32 CHECKBOXWIDTH = 16;
 const i32 CHECKBOXHEIGHT = 22;
@@ -120,7 +120,7 @@ CheckBoxStates::CheckBoxState ReflectBitfieldCheckBox::GetChecked()
     {
 #pragma TODO( "There should be a version of Tokenize that builds sets instead of vectors to make all these searches faster" )
       std::vector< tstring > tokens;
-      ::Tokenize( *strItr, tokens, TXT( "\\|" ) );
+      Helium::Tokenize( *strItr, tokens, TXT( "\\|" ) );
       bool found = std::find( tokens.begin(), tokens.end(), m_BitfieldString ) != tokens.end();
       m_State = found ? CheckBoxStates::Checked : CheckBoxStates::Unchecked;
 
@@ -167,7 +167,7 @@ bool ReflectBitfieldCheckBox::IsDefault() const
   else
   {
     std::vector< tstring > tokens;
-    ::Tokenize( m_Default, tokens, TXT( "\\|" ) );
+    Helium::Tokenize( m_Default, tokens, TXT( "\\|" ) );
     bool shouldBeChecked = std::find( tokens.begin(), tokens.end(), m_BitfieldString ) != tokens.end();
     switch ( GetUIState() )
     {
@@ -226,7 +226,7 @@ bool ReflectBitfieldCheckBox::WriteBitfield()
         const tstring& current = *strItr;
         tstring newVal = current;
         std::vector< tstring > tokens;
-        ::Tokenize( current, tokens, TXT( "\\|" ) );
+        Helium::Tokenize( current, tokens, TXT( "\\|" ) );
         std::vector< tstring >::iterator foundItr = std::find( tokens.begin(), tokens.end(), m_BitfieldString );
         if ( ( m_State == CheckBoxStates::Checked ) && ( foundItr == tokens.end() ) )
         {

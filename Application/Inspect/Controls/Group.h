@@ -5,49 +5,52 @@
 
 #include <wx/panel.h>
 
-namespace Inspect
+namespace Helium
 {
-  class PanelOutline : public wxPanel
-  {
-  public:
-    Group* m_Group;
+    namespace Inspect
+    {
+        class PanelOutline : public wxPanel
+        {
+        public:
+            Group* m_Group;
 
-    PanelOutline( wxWindow* parent, Group* group, const tchar* name );
-    void OnPaint( wxPaintEvent& args );
-    
-    DECLARE_EVENT_TABLE();
-  };
+            PanelOutline( wxWindow* parent, Group* group, const tchar* name );
+            void OnPaint( wxPaintEvent& args );
 
-  //
-  // Contains other controls and arranges them vertically.
-  // Can optionally draw a square border around all contained controls.
-  //
+            DECLARE_EVENT_TABLE();
+        };
 
-  class APPLICATION_API Group : public Reflect::ConcreteInheritor<Group, Container>
-  {
-  private:
-    bool m_DrawBorder;
+        //
+        // Contains other controls and arranges them vertically.
+        // Can optionally draw a square border around all contained controls.
+        //
 
-  public:
-    Group();
+        class APPLICATION_API Group : public Reflect::ConcreteInheritor<Group, Container>
+        {
+        private:
+            bool m_DrawBorder;
 
-    virtual void Realize(Container* parent);
+        public:
+            Group();
 
-    bool IsBorderEnabled() const;
-    void EnableBorder( bool enable = true );
-    void DisableBorder() { EnableBorder( false ); }
+            virtual void Realize(Container* parent);
 
-    virtual bool IsSelected() { return false; }
+            bool IsBorderEnabled() const;
+            void EnableBorder( bool enable = true );
+            void DisableBorder() { EnableBorder( false ); }
 
-    // helper
-    static GroupPtr CreatePanel(Control* control);
+            virtual bool IsSelected() { return false; }
 
-    // helper
-    static GroupPtr CreatePanel(const V_Control& controls);
+            // helper
+            static GroupPtr CreatePanel(Control* control);
 
-    friend class APPLICATION_API Canvas;
-  };
+            // helper
+            static GroupPtr CreatePanel(const V_Control& controls);
 
-  typedef Helium::SmartPtr<Group> GroupPtr;
-  typedef std::vector<GroupPtr> V_Group;
+            friend class APPLICATION_API Canvas;
+        };
+
+        typedef Helium::SmartPtr<Group> GroupPtr;
+        typedef std::vector<GroupPtr> V_Group;
+    }
 }

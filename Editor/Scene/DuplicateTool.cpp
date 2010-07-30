@@ -8,9 +8,10 @@
 
 #include "Pick.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE(Editor::DuplicateTool);
+EDITOR_DEFINE_TYPE(Editor::DuplicateTool);
 
 void DuplicateTool::InitializeType()
 {

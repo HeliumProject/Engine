@@ -2,18 +2,21 @@
 
 #include "VaultGenerated.h"
 
-namespace Asset
+namespace Helium
 {
-  class AssetFile;
-}
+    namespace Asset
+    {
+        class AssetFile;
+    }
 
-namespace Editor
-{
-  class DetailsFrame : public DetailsFrameGenerated
-  {
-  public:
-    DetailsFrame( wxWindow* parent );
+    namespace Editor
+    {
+        class DetailsFrame : public DetailsFrameGenerated
+        {
+        public:
+            DetailsFrame( wxWindow* parent );
 
-    void Populate( const Helium::Path& path );
-  };
+            void Populate( const Helium::Path& path );
+        };
+    }
 }

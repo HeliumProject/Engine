@@ -17,13 +17,13 @@
 
 #include "Foundation/Log.h"
 
-// Using
-using namespace Math;
-using namespace Editor;
-using namespace Component;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
+using namespace Helium::Component;
 
 // RTTI
-LUNA_DEFINE_TYPE(Editor::Entity);
+EDITOR_DEFINE_TYPE(Editor::Entity);
 
 void Entity::InitializeType()
 {

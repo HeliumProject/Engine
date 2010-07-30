@@ -3,7 +3,8 @@
 
 #include "Application/Preferences.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Globals, statics, etc.

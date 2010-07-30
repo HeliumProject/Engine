@@ -7,8 +7,8 @@
 #include "Application/UI/ArtProvider.h"
 #include "UI/Controls/Tree/SortTreeCtrl.h"
 
-// Using
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

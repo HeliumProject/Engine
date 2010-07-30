@@ -14,10 +14,10 @@
 #include "Statistics.h"
 #include "Application/UI/ArtProvider.h"
 
-using namespace Editor;
 using namespace Helium;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE( SceneNode );
+EDITOR_DEFINE_TYPE( SceneNode );
 
 void SceneNode::InitializeType()
 {

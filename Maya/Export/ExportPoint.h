@@ -5,14 +5,17 @@
 
 #include <maya/MPoint.h>
 
-namespace MayaContent
+namespace Helium
 {
-  class MAYA_API ExportPoint : public ExportBase
-  {
-  public:
-    ExportPoint( const MPoint& mayaPoint );
+    namespace MayaContent
+    {
+        class MAYA_API ExportPoint : public ExportBase
+        {
+        public:
+            ExportPoint( const MPoint& mayaPoint );
 
-    Content::Point* GetContentPoint() const;
-  };
-  typedef Helium::SmartPtr< ExportPoint > ExportPointPtr;
+            Content::Point* GetContentPoint() const;
+        };
+        typedef Helium::SmartPtr< ExportPoint > ExportPointPtr;
+    }
 }

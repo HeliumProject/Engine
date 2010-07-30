@@ -5,7 +5,8 @@
 #include "Application/UI/ArtProvider.h"
 
 // Using
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Inspect;
 
 ///////////////////////////////////////////////////////////////////////////////
 // 

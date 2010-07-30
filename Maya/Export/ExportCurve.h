@@ -4,17 +4,20 @@
 
 #include "ExportBase.h"
 
-namespace MayaContent
+namespace Helium
 {
-  class MAYA_API ExportCurve : public ExportBase
-  {
-  public:
-      ExportCurve( const MObject& mayaCurve, const Helium::TUID& id ) 
-      : ExportBase( mayaCurve )
+    namespace MayaContent
     {
-      m_ContentObject = new Content::Curve( id );
-    }
+        class MAYA_API ExportCurve : public ExportBase
+        {
+        public:
+            ExportCurve( const MObject& mayaCurve, const Helium::TUID& id ) 
+                : ExportBase( mayaCurve )
+            {
+                m_ContentObject = new Content::Curve( id );
+            }
 
-    virtual void GatherMayaData( V_ExportBase& newExportObjects ) HELIUM_OVERRIDE;
-  };
+            virtual void GatherMayaData( V_ExportBase& newExportObjects ) HELIUM_OVERRIDE;
+        };
+    }
 }

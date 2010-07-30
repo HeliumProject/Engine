@@ -15,6 +15,8 @@
 #include <tlhelp32.h>
 #pragma comment ( lib, "dbghelp.lib" )
 
+using namespace Helium;
+
 #ifdef _UNICODE
 # undef IMAGEHLP_MODULE64
 # define IMAGEHLP_MODULE64 IMAGEHLP_MODULEW64

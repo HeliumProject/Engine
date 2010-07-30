@@ -7,6 +7,8 @@
 #include "Foundation/File/Path.h"
 #include "Foundation/Checksum/CRC32.h"
 
+using namespace Helium;
+
 static std::vector<Render::Mesh*>         g_loaded_meshes;
 static std::vector<Render::Environment*>  g_loaded_environments;
 static u32 g_init_count = 0;

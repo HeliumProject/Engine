@@ -2,7 +2,7 @@
 
 #include "Platform/Environment.h"
 
-bool Application::GetPreferencesDirectory( Helium::Path& preferencesDirectory )
+bool Helium::Application::GetPreferencesDirectory( Helium::Path& preferencesDirectory )
 {
     tstring prefDirectory;
 

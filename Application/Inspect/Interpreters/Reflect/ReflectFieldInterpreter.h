@@ -5,20 +5,23 @@
 #include "Application/Inspect/Controls/Canvas.h"
 #include "Application/Inspect/Interpreter.h"
 
-namespace Inspect
+namespace Helium
 {
-  class APPLICATION_API ReflectFieldInterpreter : public Interpreter
-  {
-  public:
-    ReflectFieldInterpreter (Container* container);
+    namespace Inspect
+    {
+        class APPLICATION_API ReflectFieldInterpreter : public Interpreter
+        {
+        public:
+            ReflectFieldInterpreter (Container* container);
 
-    virtual void InterpretField(const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent) = 0;
+            virtual void InterpretField(const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent) = 0;
 
-  protected:
-    std::vector<Reflect::Element*> m_Instances;
-    std::vector<Reflect::SerializerPtr> m_Serializers;
-  };
+        protected:
+            std::vector<Reflect::Element*> m_Instances;
+            std::vector<Reflect::SerializerPtr> m_Serializers;
+        };
 
-  typedef Helium::SmartPtr<ReflectFieldInterpreter> ReflectFieldInterpreterPtr;
-  typedef std::vector< ReflectFieldInterpreterPtr > V_ReflectFieldInterpreter;
+        typedef Helium::SmartPtr<ReflectFieldInterpreter> ReflectFieldInterpreterPtr;
+        typedef std::vector< ReflectFieldInterpreterPtr > V_ReflectFieldInterpreter;
+    }
 }

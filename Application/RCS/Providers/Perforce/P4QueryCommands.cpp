@@ -6,7 +6,7 @@
 
 #include <p4/errornum.h>
 
-using namespace Perforce;
+using namespace Helium::Perforce;
 
 void WhereCommand::Run()
 {

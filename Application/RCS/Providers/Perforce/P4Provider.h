@@ -10,13 +10,7 @@
 #include "Platform/Thread.h"
 #include "Platform/Mutex.h"
 #include "Platform/Event.h"
-
-#ifndef P4CLIENTAPI_H
-# define P4CLIENTAPI_H
-# pragma warning (disable : 4267 4244)
-# include "p4/clientapi.h"
-# pragma warning (default : 4267 4244)
-#endif
+#include "P4API.h"
 
 namespace Perforce
 {

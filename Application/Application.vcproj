@@ -21,7 +21,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
@@ -45,7 +45,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;APPLICATION_EXPORTS;WXMAKINGDLL_TWC"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -64,10 +64,15 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="TinyXML.lib wxmsw29d.lib ws2_32.lib"
+				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll;$(p4api)\lib\$(PlatformName)\Debug"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -77,6 +82,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -85,7 +93,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
@@ -110,7 +118,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;APPLICATION_EXPORTS;WXMAKINGDLL_TWC"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -129,10 +137,15 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="TinyXML.lib wxmsw29d.lib ws2_32.lib"
+				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_amd64_dll;$(p4api)\lib\$(PlatformName)\Debug"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -144,13 +157,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
@@ -173,7 +189,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;APPLICATION_EXPORTS;WXMAKINGDLL_TWC"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -191,10 +207,15 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="TinyXML.lib wxmsw29.lib ws2_32.lib"
+				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll;$(p4api)\lib\$(PlatformName)\Release"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -206,13 +227,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=" "
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
@@ -236,7 +260,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;APPLICATION_EXPORTS;WXMAKINGDLL_TWC"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -254,10 +278,15 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="TinyXML.lib wxmsw29.lib ws2_32.lib"
+				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_amd64_dll;$(p4api)\lib\$(PlatformName)\Release"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -269,13 +298,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=" "
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug Unicode|Win32"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
@@ -299,7 +331,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;APPLICATION_EXPORTS;WXMAKINGDLL_TWC"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -318,10 +350,15 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="TinyXML.lib wxmsw29ud.lib ws2_32.lib"
+				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll;$(p4api)\lib\$(PlatformName)\Debug"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -333,13 +370,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug Unicode|x64"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
@@ -364,7 +404,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;APPLICATION_EXPORTS;WXMAKINGDLL_TWC"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -383,10 +423,15 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="TinyXML.lib wxmsw29ud.lib ws2_32.lib"
+				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_amd64_dll;$(p4api)\lib\$(PlatformName)\Debug"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -398,13 +443,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release Unicode|Win32"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
@@ -427,7 +475,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;APPLICATION_EXPORTS;WXMAKINGDLL_TWC"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -445,10 +493,15 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="TinyXML.lib wxmsw29u.lib ws2_32.lib"
+				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll;$(p4api)\lib\$(PlatformName)\Release"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -460,13 +513,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=" "
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release Unicode|x64"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
@@ -490,7 +546,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;APPLICATION_EXPORTS;WXMAKINGDLL_TWC"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -508,10 +564,15 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="TinyXML.lib wxmsw29u.lib ws2_32.lib"
+				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_amd64_dll;$(p4api)\lib\$(PlatformName)\Release"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -521,6 +582,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -1496,6 +1560,10 @@
 				<Filter
 					Name="Perforce"
 					>
+					<File
+						RelativePath=".\RCS\Providers\Perforce\P4API.h"
+						>
+					</File>
 					<File
 						RelativePath=".\RCS\Providers\Perforce\P4ChangelistCommands.cpp"
 						>

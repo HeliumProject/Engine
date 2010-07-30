@@ -3,6 +3,7 @@
 #include "Foundation/File/Path.h"
 
 #include <tinyxml.h>
+#pragma comment (lib, "TinyXML.lib")
 
 using namespace CodeGen;
 

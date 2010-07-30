@@ -16,6 +16,8 @@
 #include "wx/wx.h"
 #include "wx/treebase.h"
 
+#include "TreeWndCtrlApi.h"
+
 namespace Helium
 {
 
@@ -30,7 +32,7 @@ namespace Helium
     // TreeWndCtrlNode
     // ----------------------------------------------------------------------------
 
-    class TreeWndCtrlNode
+    class WXDLLIMPEXP_TWC TreeWndCtrlNode
     {
     public:
         TreeWndCtrlNode(TreeWndCtrl* treeWndCtrl,

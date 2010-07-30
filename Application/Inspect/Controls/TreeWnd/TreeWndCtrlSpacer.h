@@ -16,6 +16,8 @@
 #include "wx/wx.h"
 #include "wx/treebase.h"
 
+#include "TreeWndCtrlApi.h"
+
 namespace Helium
 {
 
@@ -29,7 +31,7 @@ namespace Helium
     // TreeWndCtrlSpacer
     // ----------------------------------------------------------------------------
 
-    class TreeWndCtrlSpacer : public wxPanel
+    class WXDLLIMPEXP_TWC TreeWndCtrlSpacer : public wxPanel
     {
         DECLARE_DYNAMIC_CLASS(TreeWndCtrlSpacer)
 

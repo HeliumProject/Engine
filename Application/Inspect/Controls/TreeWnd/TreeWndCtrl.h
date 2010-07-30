@@ -17,6 +17,8 @@
 #include "wx/scrolwin.h"
 #include "wx/treebase.h"
 
+#include "TreeWndCtrlApi.h"
+
 // ----------------------------------------------------------------------------
 // defines
 // ----------------------------------------------------------------------------
@@ -70,16 +72,16 @@ namespace Helium
     // globals
     // ----------------------------------------------------------------------------
 
-    extern const wxTreeItemId TreeWndCtrlItemIdInvalid;
-    extern wxBitmap TreeWndCtrlDefaultExpand;
-    extern wxBitmap TreeWndCtrlDefaultCollapse;
-    extern wxPen TreeWndCtrlDefaultPen;
+    WXDLLIMPEXP_TWC extern const wxTreeItemId TreeWndCtrlItemIdInvalid;
+    WXDLLIMPEXP_TWC extern wxBitmap TreeWndCtrlDefaultExpand;
+    WXDLLIMPEXP_TWC extern wxBitmap TreeWndCtrlDefaultCollapse;
+    WXDLLIMPEXP_TWC extern wxPen TreeWndCtrlDefaultPen;
 
     // ----------------------------------------------------------------------------
     // TreeWndCtrl
     // ----------------------------------------------------------------------------
 
-    class TreeWndCtrl : public wxScrolledWindow
+    class WXDLLIMPEXP_TWC TreeWndCtrl : public wxScrolledWindow
     {
         DECLARE_DYNAMIC_CLASS(TreeWndCtrl)
 

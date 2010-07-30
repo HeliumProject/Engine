@@ -69,7 +69,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib zlib.lib nvtt.lib tiff.lib Expat.lib wxmsw29d.lib libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib wxmsw29d.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				OutputFile="$(BuiltDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Debug&quot;;&quot;$(wxWidgets)\lib\vc_dll&quot;;&quot;$(DirectX)\lib\x86&quot;"
@@ -155,7 +155,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib zlib.lib nvtt.lib tiff.lib Expat.lib wxmsw29d.lib libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib wxmsw29d.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				OutputFile="$(BuiltDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Debug&quot;;&quot;$(wxWidgets)\lib\vc_amd64_dll&quot;;&quot;$(DirectX)\lib\x64&quot;"
@@ -238,7 +238,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib zlib.lib nvtt.lib tiff.lib Expat.lib wxmsw29.lib libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib wxmsw29.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				OutputFile="$(BuiltDir)\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Release&quot;;&quot;$(wxWidgets)\lib\vc_dll&quot;;&quot;$(DirectX)\lib\x86&quot;"
@@ -321,7 +321,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib zlib.lib nvtt.lib tiff.lib Expat.lib wxmsw29.lib libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib wxmsw29.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				OutputFile="$(BuiltDir)\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Release&quot;;&quot;$(wxWidgets)\lib\vc_amd64_dll&quot;;&quot;$(DirectX)\lib\x64&quot;"
@@ -407,7 +407,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib zlib.lib nvtt.lib tiff.lib Expat.lib wxmsw29ud.lib libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib wxmsw29ud.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				OutputFile="$(BuiltDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Debug&quot;;&quot;$(wxWidgets)\lib\vc_dll&quot;;&quot;$(DirectX)\lib\x86&quot;"
@@ -493,7 +493,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib zlib.lib nvtt.lib tiff.lib Expat.lib wxmsw29ud.lib libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib wxmsw29ud.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				OutputFile="$(BuiltDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Debug&quot;;&quot;$(wxWidgets)\lib\vc_amd64_dll&quot;;&quot;$(DirectX)\lib\x64&quot;"
@@ -576,7 +576,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib zlib.lib nvtt.lib tiff.lib Expat.lib wxmsw29u.lib libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib wxmsw29u.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				OutputFile="$(BuiltDir)\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Release&quot;;&quot;$(wxWidgets)\lib\vc_dll&quot;;&quot;$(DirectX)\lib\x86&quot;"
@@ -659,7 +659,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib zlib.lib nvtt.lib tiff.lib Expat.lib wxmsw29u.lib libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib wxmsw29u.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				OutputFile="$(BuiltDir)\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Release&quot;;&quot;$(wxWidgets)\lib\vc_amd64_dll&quot;;&quot;$(DirectX)\lib\x64&quot;"

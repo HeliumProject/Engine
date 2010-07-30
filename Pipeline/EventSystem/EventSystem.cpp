@@ -598,7 +598,7 @@ void EventSystem::FlushHandledEvents()
     {
         if ( !m_HandledEventsFile.Delete() )
         {
-            throw PlatformException( TXT( "Could not delete handled events file: %s" ), m_HandledEventsFile.c_str() );
+            throw Exception( TXT( "Could not delete handled events file (%s)" ), m_HandledEventsFile.c_str() );
         }
     }
 }

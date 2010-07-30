@@ -7,7 +7,7 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		PreprocessorDefinitions="XML_STATIC=1;wxNO_EXCEPTIONS=1;wxUSE_UNICODE=0;wxNO_EXPAT_LIB=1;wxNO_JPEG_LIB=1;wxNO_PNG_LIB=1;wxNO_TIFF_LIB=1;wxNO_ZLIB_LIB=1;WXUSINGDLL=1"
+		PreprocessorDefinitions="XML_STATIC=1;WXUSINGDLL=1;wxUSE_UNICODE=0;wxNO_EXPAT_LIB=1;wxNO_JPEG_LIB=1;wxNO_PNG_LIB=1;wxNO_TIFF_LIB=1;wxNO_ZLIB_LIB=1"
 	/>
 	<Tool
 		Name="VCLinkerTool"
@@ -67,7 +67,7 @@
 	/>
 	<UserMacro
 		Name="wxWidgetsBuildFlags"
-		Value="SHARED=1 MONOLITHIC=1 DEBUG_INFO=1 USE_EXCEPTIONS=0"
+		Value="SHARED=1 MONOLITHIC=1 DEBUG_INFO=1"
 	/>
 	<UserMacro
 		Name="wxWidgetsBuildCommand"

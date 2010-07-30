@@ -21,7 +21,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
@@ -48,11 +48,8 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;PLATFORM_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				EnableEnhancedInstructionSet="0"
-				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4251;4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -64,10 +61,15 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="ws2_32.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -77,6 +79,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -85,7 +90,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
@@ -113,11 +118,8 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;PLATFORM_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				EnableEnhancedInstructionSet="0"
-				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4251;4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -129,10 +131,15 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="ws2_32.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -142,6 +149,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -150,7 +160,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
@@ -173,14 +183,11 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories=".."
-				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;PLATFORM_EXPORTS"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
-				EnableEnhancedInstructionSet="0"
-				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4251;4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -192,10 +199,15 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="ws2_32.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -205,6 +217,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -213,7 +228,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
@@ -237,14 +252,11 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories=".."
-				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;PLATFORM_EXPORTS"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
-				EnableEnhancedInstructionSet="0"
-				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4251;4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -256,10 +268,15 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="ws2_32.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -269,6 +286,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -277,7 +297,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug Unicode|Win32"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
@@ -304,11 +324,8 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;PLATFORM_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				EnableEnhancedInstructionSet="0"
-				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4251;4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -320,10 +337,15 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="ws2_32.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -333,6 +355,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -341,7 +366,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug Unicode|x64"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
@@ -369,11 +394,8 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;PLATFORM_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				EnableEnhancedInstructionSet="0"
-				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4251;4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -385,10 +407,15 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="ws2_32.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -400,13 +427,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release Unicode|Win32"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
@@ -429,14 +459,11 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories=".."
-				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;PLATFORM_EXPORTS"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
-				EnableEnhancedInstructionSet="0"
-				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4251;4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -448,10 +475,15 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="ws2_32.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -463,13 +495,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=" "
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release Unicode|x64"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
@@ -493,14 +528,11 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories=".."
-				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;PLATFORM_EXPORTS"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
-				EnableEnhancedInstructionSet="0"
-				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4251;4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -512,10 +544,15 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="ws2_32.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -525,6 +562,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"

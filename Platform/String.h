@@ -40,5 +40,5 @@ namespace Platform
     PLATFORM_API bool ConvertString( const std::wstring& src, std::string& dest );
 #endif
 
-    tstring GetEncoding();
+    PLATFORM_API tstring GetEncoding();
 }

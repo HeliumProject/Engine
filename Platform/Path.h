@@ -13,7 +13,7 @@
 
 namespace Platform
 {
-    PLATFORM_API const extern tchar PathSeparator;
+    PLATFORM_API extern const tchar PathSeparator;
 
     PLATFORM_API bool GetFullPath( const tchar* path, tstring& fullPath );
     PLATFORM_API bool IsAbsolute( const tchar* path );

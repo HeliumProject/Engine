@@ -117,7 +117,7 @@ bool Directory::Find(const tstring& query)
 
             if ( (error = GetLastError()) != ERROR_FILE_NOT_FOUND && error != ERROR_PATH_NOT_FOUND ) 
             {
-                throw PlatformException( error, TXT( "Error calling FindFirstFile" ) );
+                throw Exception( TXT( "Error calling FindFirstFile (%s)" ), Platform::GetErrorString(error).c_str() );
             }
         }
     }
@@ -131,7 +131,7 @@ bool Directory::Find(const tstring& query)
 
             if ( (error = GetLastError()) != ERROR_NO_MORE_FILES ) 
             {
-                throw PlatformException( error, TXT( "Error calling FindNextFile" ) );
+                throw Exception( TXT( "Error calling FindNextFile (%s)" ), Platform::GetErrorString(error).c_str() );
             }
         }
     }
@@ -214,7 +214,7 @@ bool Directory::Find(const tstring& query)
 
                 if ( (error = GetLastError()) != ERROR_NO_MORE_FILES ) 
                 {
-                    throw PlatformException( error, TXT( "Error calling FindNextFile" ) );
+                    throw Exception( TXT( "Error calling FindNextFile (%s)" ), Platform::GetErrorString(error).c_str() );
                 }
             }
         }

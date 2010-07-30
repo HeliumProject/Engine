@@ -5,7 +5,7 @@
 #include <vector>
 #include <sys/stat.h>
 
-const tchar Platform::PathSeparator = '\\';
+const tchar Platform::PathSeparator = TXT('\\');
 
 #pragma comment( lib, "Version.lib" )
 

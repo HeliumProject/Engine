@@ -80,8 +80,6 @@
 				OptimizeReferences="0"
 				EnableCOMDATFolding="0"
 				LinkTimeCodeGeneration="0"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -168,8 +166,6 @@
 				OptimizeReferences="0"
 				EnableCOMDATFolding="0"
 				LinkTimeCodeGeneration="0"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -253,8 +249,6 @@
 				OptimizeReferences="0"
 				EnableCOMDATFolding="0"
 				LinkTimeCodeGeneration="0"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -338,8 +332,6 @@
 				OptimizeReferences="0"
 				EnableCOMDATFolding="0"
 				LinkTimeCodeGeneration="0"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -426,8 +418,6 @@
 				OptimizeReferences="0"
 				EnableCOMDATFolding="0"
 				LinkTimeCodeGeneration="0"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -514,8 +504,6 @@
 				OptimizeReferences="0"
 				EnableCOMDATFolding="0"
 				LinkTimeCodeGeneration="0"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -599,8 +587,6 @@
 				OptimizeReferences="0"
 				EnableCOMDATFolding="0"
 				LinkTimeCodeGeneration="0"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -684,8 +670,6 @@
 				OptimizeReferences="0"
 				EnableCOMDATFolding="0"
 				LinkTimeCodeGeneration="0"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -3801,62 +3785,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\UI\ExportOptionsDlg.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\ExportOptionsDlg.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\Grid.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\Grid.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\GridCellImageRenderer.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\GridCellImageRenderer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\GridWithIcons.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\GridWithIcons.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\HelpPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\HelpPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\ImportOptionsDlg.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\ImportOptionsDlg.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\LayersPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\LayersPanel.h"
-				>
-			</File>
-			<File
 				RelativePath=".\UI\EditorGenerated.cpp"
 				>
 			</File>
@@ -3934,6 +3862,62 @@
 			</File>
 			<File
 				RelativePath=".\UI\EditorIDs.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ExportOptionsDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ExportOptionsDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\Grid.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\Grid.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\GridCellImageRenderer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\GridCellImageRenderer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\GridWithIcons.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\GridWithIcons.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\HelpPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\HelpPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ImportOptionsDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ImportOptionsDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\LayersPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\LayersPanel.h"
 				>
 			</File>
 			<File
@@ -4222,6 +4206,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Editor.rc"
+			>
+		</File>
+		<File
 			RelativePath=".\EditorFrame.cpp"
 			>
 		</File>
@@ -4235,10 +4223,6 @@
 		</File>
 		<File
 			RelativePath=".\Frame.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Editor.rc"
 			>
 		</File>
 		<File

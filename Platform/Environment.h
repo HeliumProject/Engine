@@ -36,7 +36,7 @@ namespace Helium
 
         _tgetenv_s( &requiredSize, stringValue, requiredSize, variableName.c_str() );
 
-        tstringstream str ( stringValue, (std::streamsize)_tcslen( stringValue ) );
+        tstringstream str ( stringValue );
         str >> value;
         bool result = !str.fail();
 

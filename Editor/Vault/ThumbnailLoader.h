@@ -69,8 +69,8 @@ namespace Editor
         private:
             ThumbnailLoader& m_Loader;
         }                                       m_LoadThread; // The loading thread object
-        Platform::Locker< Helium::OrderedSet< Helium::Path > >  m_FileQueue; // The queue of files to load (mutex locked)
-        Platform::Semaphore                     m_Signal; // Signalling semaphore to wake up load thread
+        Helium::Locker< Helium::OrderedSet< Helium::Path > >  m_FileQueue; // The queue of files to load (mutex locked)
+        Helium::Semaphore                     m_Signal; // Signalling semaphore to wake up load thread
         bool                                    m_Quit;
         Render::D3DManager*                 m_D3DManager;
         tstring                             m_ThumbnailDirectory;

@@ -3,7 +3,7 @@
 #include "Platform/Windows/Windows.h"
 #include <sys/stat.h>
 
-bool Platform::StatPath( const tchar* path, Platform::Stat& stat )
+bool Helium::StatPath( const tchar* path, Helium::Stat& stat )
 {
     struct _stati64 windowsStats;
     bool result = ( _tstati64( path, &windowsStats ) == 0 );

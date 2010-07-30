@@ -105,8 +105,8 @@ namespace IPC
         u32 m_Count;        // number of messages in queue
         u32 m_Total;        // number of messages that have passed through the queue since clear
 
-        Platform::Mutex m_Mutex;      // mutex to control access to the queue
-        Platform::Semaphore m_Append; // semaphore that increments on add, decrements on remove
+        Helium::Mutex m_Mutex;      // mutex to control access to the queue
+        Helium::Semaphore m_Append; // semaphore that increments on add, decrements on remove
 
     public:
         MessageQueue();

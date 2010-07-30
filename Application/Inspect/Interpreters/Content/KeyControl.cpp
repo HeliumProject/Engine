@@ -309,7 +309,7 @@ bool KeyControl::ToClipboard( const V_KeyPtr& keys )
   if ( wxTheClipboard->Open() )
   {
       tstring temp;
-      bool converted = Platform::ConvertString( xml, temp );
+      bool converted = Helium::ConvertString( xml, temp );
       HELIUM_ASSERT( converted );
 
       wxTheClipboard->SetData( new wxTextDataObject( temp ) );
@@ -333,7 +333,7 @@ bool KeyControl::FromClipboard( V_KeyPtr& keys )
             wxTextDataObject data;
             wxTheClipboard->GetData( data );
             const wxChar* str = data.GetText().c_str();
-            bool converted = Platform::ConvertString( str, xml );
+            bool converted = Helium::ConvertString( str, xml );
             HELIUM_ASSERT( converted );
         }  
         wxTheClipboard->Close();

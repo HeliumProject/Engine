@@ -6,7 +6,7 @@
 
 #include <mstcpip.h>
 
-using namespace Platform;
+using namespace Helium;
 
 HELIUM_COMPILE_ASSERT( sizeof( u32* ) == sizeof( SOCKET ) );
 HELIUM_COMPILE_ASSERT( sizeof( Socket::Overlapped ) == sizeof( OVERLAPPED ) );
@@ -31,14 +31,14 @@ Socket::~Socket()
     ::CloseHandle( m_Overlapped.hEvent );
 }
 
-bool Platform::InitializeSockets()
+bool Helium::InitializeSockets()
 {
     if ( ++g_Count == 1 )
     {
         int result = WSAStartup(MAKEWORD(2,2), &g_WSAData);
         if (result != NO_ERROR)
         {
-            Platform::Print(TXT("TCP Support: Error initializing socket layer (%d)\n"), WSAGetLastError());
+            Helium::Print(TXT("TCP Support: Error initializing socket layer (%d)\n"), WSAGetLastError());
             return false;
         }
     }
@@ -46,29 +46,29 @@ bool Platform::InitializeSockets()
     return true;
 }
 
-void Platform::CleanupSockets()
+void Helium::CleanupSockets()
 {
     if ( --g_Count == 0 )
     {
         int result = WSACleanup();
         if (result != NO_ERROR)
         {
-            Platform::Print(TXT("TCP Support: Error cleaning up socket layer (%d)\n"), WSAGetLastError());
+            Helium::Print(TXT("TCP Support: Error cleaning up socket layer (%d)\n"), WSAGetLastError());
         }
     }
 }
 
-void Platform::CleanupSocketThread()
+void Helium::CleanupSocketThread()
 {
 
 }
 
-int Platform::GetSocketError()
+int Helium::GetSocketError()
 {
     return WSAGetLastError();
 }
 
-bool Platform::CreateSocket(Socket& socket)
+bool Helium::CreateSocket(Socket& socket)
 {
     socket.m_Handle = ::WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 
@@ -89,18 +89,18 @@ bool Platform::CreateSocket(Socket& socket)
     int result = ::WSAIoctl( socket, SIO_KEEPALIVE_VALS, &keepalive, sizeof( keepalive ), NULL, 0, &returned, NULL, NULL );
     if ( result == SOCKET_ERROR )
     {
-        Platform::Print( TXT("TCP Support: Error setting keep alive on socket (%d)\n"), WSAGetLastError() );
+        Helium::Print( TXT("TCP Support: Error setting keep alive on socket (%d)\n"), WSAGetLastError() );
     }
 
     return true;
 }
 
-bool Platform::CloseSocket(Socket& socket)
+bool Helium::CloseSocket(Socket& socket)
 {
     return ::closesocket(socket) != SOCKET_ERROR;
 }
 
-bool Platform::BindSocket(Socket& socket, u16 port)
+bool Helium::BindSocket(Socket& socket, u16 port)
 {
     sockaddr_in service;
     service.sin_family = AF_INET;
@@ -108,7 +108,7 @@ bool Platform::BindSocket(Socket& socket, u16 port)
     service.sin_port = htons(port);
     if ( ::bind(socket, (sockaddr*)&service, sizeof(sockaddr_in) ) == SOCKET_ERROR )
     {
-        Platform::Print(TXT("TCP Support: Failed to bind socket (%d)\n"), WSAGetLastError());
+        Helium::Print(TXT("TCP Support: Failed to bind socket (%d)\n"), WSAGetLastError());
         closesocket(socket);
         return false;
     }
@@ -116,11 +116,11 @@ bool Platform::BindSocket(Socket& socket, u16 port)
     return true;
 }
 
-bool Platform::ListenSocket(Socket& socket)
+bool Helium::ListenSocket(Socket& socket)
 {
     if ( ::listen(socket, SOMAXCONN) == SOCKET_ERROR)
     {
-        Platform::Print(TXT("TCP Support: Failed to listen socket (%d)\n"), WSAGetLastError());
+        Helium::Print(TXT("TCP Support: Failed to listen socket (%d)\n"), WSAGetLastError());
         closesocket(socket);
         return false;
     }
@@ -128,12 +128,12 @@ bool Platform::ListenSocket(Socket& socket)
     return true;
 }
 
-bool Platform::ConnectSocket(Socket& socket, sockaddr_in* service)
+bool Helium::ConnectSocket(Socket& socket, sockaddr_in* service)
 {
     return ::connect(socket, (SOCKADDR*)service, sizeof(sockaddr_in)) != SOCKET_ERROR;
 }
 
-bool Platform::AcceptSocket(Socket& socket, Socket& server_socket, sockaddr_in* client_info)
+bool Helium::AcceptSocket(Socket& socket, Socket& server_socket, sockaddr_in* client_info)
 {
     int lengthname = sizeof(sockaddr_in);
 
@@ -142,12 +142,12 @@ bool Platform::AcceptSocket(Socket& socket, Socket& server_socket, sockaddr_in* 
     return socket != SOCKET_ERROR;
 }
 
-int Platform::SelectSocket(int range, fd_set* read_set, fd_set* write_set,struct timeval* timeout)
+int Helium::SelectSocket(int range, fd_set* read_set, fd_set* write_set,struct timeval* timeout)
 {
     return ::select(range, read_set, write_set, 0, timeout);
 }
 
-bool Platform::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Event& terminate)
+bool Helium::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Event& terminate)
 {
     if (bytes == 0)
     {
@@ -165,7 +165,7 @@ bool Platform::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Ev
         if ( WSAGetLastError() != WSA_IO_PENDING )
         {
 #ifdef IPC_TCP_DEBUG_SOCKETS
-            Platform::Print("TCP Support: Failed to initiate overlapped read (%s)\n", Platform::GetErrorString().c_str());
+            Helium::Print("TCP Support: Failed to initiate overlapped read (%s)\n", Helium::GetErrorString().c_str());
 #endif
             return false;
         }
@@ -179,7 +179,7 @@ bool Platform::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Ev
             if ( (result - WAIT_OBJECT_0) == 0 )
             {
 #ifdef IPC_TCP_DEBUG_SOCKETS
-                Platform::Print("TCP Support: Terminating read\n");
+                Helium::Print("TCP Support: Terminating read\n");
 #endif
                 return false;
             }
@@ -187,7 +187,7 @@ bool Platform::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Ev
             if ( !::WSAGetOverlappedResult(socket.m_Handle, (OVERLAPPED*)&socket.m_Overlapped, &read_local, false, &flags) )
             {
 #ifdef IPC_TCP_DEBUG_SOCKETS
-                Platform::Print("TCP Support: Failed read (%s)\n", Platform::GetErrorString().c_str());
+                Helium::Print("TCP Support: Failed read (%s)\n", Helium::GetErrorString().c_str());
 #endif
                 return false;
             }
@@ -204,7 +204,7 @@ bool Platform::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Ev
     return true;
 }
 
-bool Platform::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, Event& terminate)
+bool Helium::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, Event& terminate)
 {
     if (bytes == 0)
     {
@@ -222,7 +222,7 @@ bool Platform::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, 
         if ( WSAGetLastError() != WSA_IO_PENDING )
         {
 #ifdef IPC_TCP_DEBUG_SOCKETS
-            Platform::Print("TCP Support: Failed to initiate overlapped write (%s)\n", Platform::GetErrorString().c_str());
+            Helium::Print("TCP Support: Failed to initiate overlapped write (%s)\n", Helium::GetErrorString().c_str());
 #endif
             return false;
         }
@@ -236,7 +236,7 @@ bool Platform::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, 
             if ( (result - WAIT_OBJECT_0) == 0 )
             {
 #ifdef IPC_TCP_DEBUG_SOCKETS
-                Platform::Print("TCP Support: Terminating write\n");
+                Helium::Print("TCP Support: Terminating write\n");
 #endif
                 return false;
             }
@@ -244,7 +244,7 @@ bool Platform::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, 
             if ( !::WSAGetOverlappedResult(socket.m_Handle, (OVERLAPPED*)&socket.m_Overlapped, &wrote_local, false, &flags) )
             {
 #ifdef IPC_TCP_DEBUG_SOCKETS
-                Platform::Print("TCP Support: Failed write (%s)\n", Platform::GetErrorString().c_str());
+                Helium::Print("TCP Support: Failed write (%s)\n", Helium::GetErrorString().c_str());
 #endif
                 return false;
             }

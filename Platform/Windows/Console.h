@@ -6,7 +6,7 @@
 #include "Platform/API.h"
 #include "Platform/Types.h"
 
-namespace Platform
+namespace Helium
 {
     namespace ConsoleColors
     {

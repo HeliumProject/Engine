@@ -222,7 +222,7 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
     {
         V_Element elements;
 
-        if ( Platform::IsDebuggerPresent() )
+        if ( Helium::IsDebuggerPresent() )
         {
             Reflect::PrintStatus status;
             Archive::FromFile( input, elements, &status );
@@ -253,7 +253,7 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
 
     V_Element spool;
 
-    if ( Platform::IsDebuggerPresent() )
+    if ( Helium::IsDebuggerPresent() )
     {
         Reflect::PrintStatus status;
         Archive::FromFile( input, spool, &status );
@@ -322,7 +322,7 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
         }
     }
 
-    if ( Platform::IsDebuggerPresent() )
+    if ( Helium::IsDebuggerPresent() )
     {
         Reflect::PrintStatus status;
         Archive::ToFile( spool, absolute, version, &status );
@@ -348,7 +348,7 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
 
     if (m_Verify)
     {
-        if ( Platform::IsDebuggerPresent() )
+        if ( Helium::IsDebuggerPresent() )
         {
             V_Element duplicates;
             Reflect::PrintStatus status;

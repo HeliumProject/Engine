@@ -4,82 +4,84 @@
 #include <vector>
 #include <exception>
 
-#include "Platform/Windows/Debug.h"
-
-#include "Foundation/API.h"
 #include "Platform/Exception.h"
+#include "Platform/Windows/Debug.h"
 #include "Foundation/Automation/Event.h"
+#include "Application/API.h"
 
-namespace Debug
+namespace Helium
 {
-  //
-  // Filter exceptions via CRT
-  //
-
-  // installs unhandled exception filter into the C-runtime (for worker threads)
-  FOUNDATION_API void EnableExceptionFilter(bool enable);
-
-  //
-  // Breakpoint Hit
-  //
-
-  struct BreakpointArgs
-  {
-    LPEXCEPTION_POINTERS  m_Info;
-    bool                  m_Fatal;
-
-    BreakpointArgs( LPEXCEPTION_POINTERS info, bool fatal )
-      : m_Info( info )
-      , m_Fatal( fatal )
+    namespace Debug
     {
+        //
+        // Filter exceptions via CRT
+        //
 
-    }
-  };
-  typedef Helium::Signature<int, const BreakpointArgs&> BreakpointSignature;
-  FOUNDATION_API extern BreakpointSignature::Delegate g_BreakpointOccurred;
+        // installs unhandled exception filter into the C-runtime (for worker threads)
+        APPLICATION_API void EnableExceptionFilter(bool enable);
 
-  //
-  // Exception Event (raised when an exception occurs)
-  //
+        //
+        // Breakpoint Hit
+        //
 
-  typedef Helium::Signature<void, const ExceptionArgs&> ExceptionSignature;
-  extern FOUNDATION_API ExceptionSignature::Delegate g_ExceptionOccurred;
+        struct BreakpointArgs
+        {
+            LPEXCEPTION_POINTERS  m_Info;
+            bool                  m_Fatal;
 
-  //
-  // Termination Event (raised before process termination after a fatal exception)
-  //
+            BreakpointArgs( LPEXCEPTION_POINTERS info, bool fatal )
+                : m_Info( info )
+                , m_Fatal( fatal )
+            {
 
-  struct FOUNDATION_API TerminateArgs
-  {
-  };
-  typedef Helium::Signature<void, const TerminateArgs&> TerminateSignature;
-  extern FOUNDATION_API TerminateSignature::Event g_Terminating;
+            }
+        };
+        typedef Helium::Signature<int, const BreakpointArgs&> BreakpointSignature;
+        APPLICATION_API extern BreakpointSignature::Delegate g_BreakpointOccurred;
 
-  //
-  // Exception reporting
-  //
+        //
+        // Exception Event (raised when an exception occurs)
+        //
 
-  // some constants
-  extern FOUNDATION_API u32 ExecuteHandler;    // execute the __except statement for this __try
-  extern FOUNDATION_API u32 ContinueSearch;    // continue up the stack and look for another __except to handle this exception
-  extern FOUNDATION_API u32 ContinueExecution; // continue execution at the exception point (ex. after you changed some instructions or mapped some memory)
+        typedef Helium::Signature<void, const ExceptionArgs&> ExceptionSignature;
+        extern APPLICATION_API ExceptionSignature::Delegate g_ExceptionOccurred;
 
-  // get environment-driven handling behavior
-  FOUNDATION_API int GetExceptionBehavior();
+        //
+        // Termination Event (raised before process termination after a fatal exception)
+        //
 
-  // prepare and dispatch a report for a C++ exception
-  FOUNDATION_API void ProcessException( const Helium::Exception& ex,
-                                   bool print = false,
-                                   bool fatal = false );
+        struct APPLICATION_API TerminateArgs
+        {
+        };
+        typedef Helium::Signature<void, const TerminateArgs&> TerminateSignature;
+        extern APPLICATION_API TerminateSignature::Event g_Terminating;
 
-  // prepare and dispatch a report for a C++ exception
-  FOUNDATION_API void ProcessException( const std::exception& ex,
-                                   bool print = false,
-                                   bool fatal = false );
+        //
+        // Exception reporting
+        //
 
-  // prepare and dispatch a report for an SEH exception such as divide by zero, page fault from a invalid memory access, or even breakpoint instructions
-  FOUNDATION_API u32 ProcessException( LPEXCEPTION_POINTERS info,
-                                    u32 ret_code = GetExceptionBehavior(),
-                                    bool print = false,
-                                    bool fatal = false );
-};
+        // some constants
+        extern APPLICATION_API u32 ExecuteHandler;    // execute the __except statement for this __try
+        extern APPLICATION_API u32 ContinueSearch;    // continue up the stack and look for another __except to handle this exception
+        extern APPLICATION_API u32 ContinueExecution; // continue execution at the exception point (ex. after you changed some instructions or mapped some memory)
+
+        // get environment-driven handling behavior
+        APPLICATION_API int GetExceptionBehavior();
+
+        // prepare and dispatch a report for a C++ exception
+        APPLICATION_API void ProcessException( const Helium::Exception& ex,
+            bool print = false,
+            bool fatal = false );
+
+        // prepare and dispatch a report for a C++ exception
+        APPLICATION_API void ProcessException( const std::exception& ex,
+            bool print = false,
+            bool fatal = false );
+
+        // prepare and dispatch a report for an SEH exception such as divide by zero, page fault from a invalid memory access, or even breakpoint instructions
+        APPLICATION_API u32 ProcessException( LPEXCEPTION_POINTERS info,
+            u32 ret_code = GetExceptionBehavior(),
+            bool print = false,
+            bool fatal = false );
+    };
+}

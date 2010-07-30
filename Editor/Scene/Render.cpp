@@ -35,7 +35,7 @@ void RenderVisitor::Reset( DrawArgs* args, const Editor::Viewport* view )
   m_EntryData.clear();
   m_EntryPointers.clear();
 
-  m_StartTime = Platform::TimerGetClock();
+  m_StartTime = Helium::TimerGetClock();
 }
 
 int RenderEntry::Compare( const void* ptr1, const void* ptr2 )
@@ -51,12 +51,12 @@ int RenderEntry::Compare( const void* ptr1, const void* ptr2 )
     CompareTimer(RenderVisitor* visitor)
       : m_Visitor (visitor)
     {
-      m_Start = Platform::TimerGetClock();
+      m_Start = Helium::TimerGetClock();
     }
 
     ~CompareTimer()
     {
-      m_Visitor->m_CompareTime += Platform::TimerGetClock() - m_Start;
+      m_Visitor->m_CompareTime += Helium::TimerGetClock() - m_Start;
     };
   };
 
@@ -140,7 +140,7 @@ RenderEntry* RenderVisitor::Allocate(const SceneNode* node)
 
 void RenderVisitor::Draw()
 {
-  m_Args->m_WalkTime = Platform::CyclesToMillis( Platform::TimerGetClock() - m_StartTime );
+  m_Args->m_WalkTime = Helium::CyclesToMillis( Helium::TimerGetClock() - m_StartTime );
 
   // reset
   m_Device->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&Matrix4::Identity );
@@ -174,19 +174,19 @@ void RenderVisitor::Draw()
     {
       LUNA_SCENE_DRAW_SCOPE_TIMER( ("Sort") );
 
-      u64 start = Platform::TimerGetClock();
+      u64 start = Helium::TimerGetClock();
       m_CompareTime = 0x0;
 
       qsort( &m_EntryPointers.front(), m_EntryPointers.size(), sizeof(RenderEntry*), &RenderEntry::Compare );
 
-      m_Args->m_SortTime = Platform::CyclesToMillis( Platform::TimerGetClock() - start );
-      m_Args->m_CompareTime = Platform::CyclesToMillis( m_CompareTime );
+      m_Args->m_SortTime = Helium::CyclesToMillis( Helium::TimerGetClock() - start );
+      m_Args->m_CompareTime = Helium::CyclesToMillis( m_CompareTime );
     }
 
     {
       LUNA_SCENE_DRAW_SCOPE_TIMER( ("Draw") );
 
-      u64 start = Platform::TimerGetClock();
+      u64 start = Helium::TimerGetClock();
 
       DrawFunction draw = NULL;
       DeviceFunction drawReset = NULL;
@@ -261,7 +261,7 @@ void RenderVisitor::Draw()
         nodeReset( m_Device, node );
       }
 
-      m_Args->m_DrawTime = Platform::CyclesToMillis( Platform::TimerGetClock() - start );
+      m_Args->m_DrawTime = Helium::CyclesToMillis( Helium::TimerGetClock() - start );
     }
   }
 }

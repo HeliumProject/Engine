@@ -58,13 +58,13 @@ namespace Editor
         SearchQueryPtr          m_CurrentSearchQuery;
         SearchResultsPtr        m_SearchResults;     // The results to populate and pass to ResultsAvailableArgs
         std::set< Helium::Path > m_FoundPaths;        // The *complete* list of found files from this section
-        Platform::Mutex         m_SearchResultsMutex;
+        Helium::Mutex         m_SearchResultsMutex;
 
         // Searching Thread
         bool                    m_StopSearching;
         DummyWindow*            m_DummyWindow;
         HANDLE                  m_SearchInitializedEvent;   // OK to cancel searches after this is set
-        Platform::Mutex         m_BeginSearchMutex;         // Take Lock until m_SearchInitializedEvent
+        Helium::Mutex         m_BeginSearchMutex;         // Take Lock until m_SearchInitializedEvent
 
         HANDLE                  m_EndSearchEvent;
 

@@ -35,7 +35,7 @@ void Command::HandleError( Error *error )
     {
         error->Fmt( &buf );
 
-        bool converted = Platform::ConvertString( buf.Text(), errString );
+        bool converted = Helium::ConvertString( buf.Text(), errString );
         HELIUM_ASSERT( converted );
 
         Log::Warning( errString.c_str() );
@@ -47,7 +47,7 @@ void Command::HandleError( Error *error )
 
         if ( m_ErrorCount == 1 )
         {
-            bool converted = Platform::ConvertString( buf.Text(), m_ErrorString );
+            bool converted = Helium::ConvertString( buf.Text(), m_ErrorString );
             HELIUM_ASSERT( converted );
         }
         else
@@ -60,7 +60,7 @@ void Command::HandleError( Error *error )
             {
                 m_ErrorString += TXT( "\n" );
 
-                bool converted = Platform::ConvertString( buf.Text(), errString );
+                bool converted = Helium::ConvertString( buf.Text(), errString );
                 HELIUM_ASSERT( converted );
 
                 m_ErrorString += errString;
@@ -74,7 +74,7 @@ void Command::HandleError( Error *error )
     else if ( error->IsFatal() )
     {
         error->Fmt( &buf );
-        bool converted = Platform::ConvertString( buf.Text(), errString );
+        bool converted = Helium::ConvertString( buf.Text(), errString );
         HELIUM_ASSERT( converted );
         throw Helium::Exception( errString.c_str() );
     }

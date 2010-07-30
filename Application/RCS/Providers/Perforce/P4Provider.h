@@ -129,11 +129,11 @@ namespace Perforce
 
   private:
     // transaction thread
-    Platform::Thread      m_Thread;     // the thread to run commands in
+    Helium::Thread      m_Thread;     // the thread to run commands in
     bool                  m_Shutdown;   // the shutdown signal
-    Platform::Mutex       m_Mutex;      // to ensure thread safety
-    Platform::Event       m_Execute;    // to wakeup the command thread
-    Platform::Event       m_Completed;  // to wakeup the calling thread
+    Helium::Mutex       m_Mutex;      // to ensure thread safety
+    Helium::Event       m_Execute;    // to wakeup the command thread
+    Helium::Event       m_Completed;  // to wakeup the calling thread
 
     // command to execute
     class Command*        m_Command;    // the command to run

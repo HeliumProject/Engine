@@ -61,7 +61,7 @@ namespace Editor
         Helium::InitializerStack m_InitializerStack;
         DocumentManager m_DocumentManager;
         Tracker m_Tracker;
-        Platform::Thread m_TrackerThread;
+        Helium::Thread m_TrackerThread;
 
         PreferencesPtr m_Preferences;
         Vault* m_Vault;

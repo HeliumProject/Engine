@@ -8,7 +8,7 @@
 # include <pthread.h>
 #endif
 
-namespace Platform
+namespace Helium
 {
     class PLATFORM_API Mutex
     {
@@ -138,6 +138,6 @@ namespace Platform
 
     private:
         T               m_Data;
-        Platform::Mutex m_Mutex;
+        Helium::Mutex m_Mutex;
     };
 }

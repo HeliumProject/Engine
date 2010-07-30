@@ -12,6 +12,7 @@
 
 #include <sstream>
 
+using namespace Helium;
 using namespace Worker;
 
 // the ipc connection for worker applications

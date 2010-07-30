@@ -47,10 +47,10 @@ void SyncCommand::HandleError( Error* error )
 
 void SyncCommand::OutputStat( StrDict* dict )
 {
-    bool converted = Platform::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), m_File->m_DepotPath );
+    bool converted = Helium::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), m_File->m_DepotPath );
     HELIUM_ASSERT( converted );
 
-    converted = Platform::ConvertString( dict->GetVar( g_ClientFileTag )->Text(), m_File->m_LocalPath );
+    converted = Helium::ConvertString( dict->GetVar( g_ClientFileTag )->Text(), m_File->m_LocalPath );
     HELIUM_ASSERT( converted );
 
     m_File->m_LocalRevision = dict->GetVar( g_RevisionTag )->Atoi();
@@ -69,7 +69,7 @@ void SyncCommand::OutputStat( StrDict* dict )
 
 void OpenCommand::OutputStat( StrDict* dict )
 {
-    bool converted = Platform::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), m_File->m_DepotPath );
+    bool converted = Helium::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), m_File->m_DepotPath );
     HELIUM_ASSERT( converted );
 
     m_File->m_LocalRevision = dict->GetVar( g_WorkRevTag )->Atoi();
@@ -77,7 +77,7 @@ void OpenCommand::OutputStat( StrDict* dict )
     StrPtr* localPath = dict->GetVar( g_ClientFileTag );
     if ( localPath )
     {
-        converted = Platform::ConvertString( localPath->Text(), m_File->m_LocalPath );
+        converted = Helium::ConvertString( localPath->Text(), m_File->m_LocalPath );
         HELIUM_ASSERT( converted );
     }
 
@@ -85,7 +85,7 @@ void OpenCommand::OutputStat( StrDict* dict )
     if ( action )
     {
         tstring actionString;
-        converted = Platform::ConvertString( action->Text(), actionString );
+        converted = Helium::ConvertString( action->Text(), actionString );
         HELIUM_ASSERT( converted );
 
         m_File->m_Operation = GetOperationEnum( actionString );
@@ -95,7 +95,7 @@ void OpenCommand::OutputStat( StrDict* dict )
     if ( type )
     {
         tstring fileType;
-        converted = Platform::ConvertString( type->Text(), fileType );
+        converted = Helium::ConvertString( type->Text(), fileType );
         HELIUM_ASSERT( converted );
 
         m_File->m_FileType = GetFileType( fileType );
@@ -132,16 +132,16 @@ void IntegrateCommand::Run()
 
 void IntegrateCommand::OutputStat( StrDict* dict )
 {
-    bool converted = Platform::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), m_Dest->m_DepotPath );
+    bool converted = Helium::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), m_Dest->m_DepotPath );
     HELIUM_ASSERT( converted );
 
-    converted = Platform::ConvertString( dict->GetVar( g_ClientFileTag )->Text(), m_Dest->m_LocalPath );
+    converted = Helium::ConvertString( dict->GetVar( g_ClientFileTag )->Text(), m_Dest->m_LocalPath );
     HELIUM_ASSERT( converted );
 
     m_Dest->m_LocalRevision = dict->GetVar( g_WorkRevTag )->Atoi();
     
     tstring actionString;
-    converted = Platform::ConvertString( dict->GetVar( g_ActionTag )->Text(), actionString );
+    converted = Helium::ConvertString( dict->GetVar( g_ActionTag )->Text(), actionString );
     HELIUM_ASSERT( converted );
 
     m_Dest->m_Operation = GetOperationEnum( actionString );

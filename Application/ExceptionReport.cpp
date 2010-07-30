@@ -11,9 +11,10 @@
 
 #include <sstream>
 
-using namespace Application;
+using namespace Helium;
+using namespace Helium::Debug;
 
-ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
+ExceptionReport::ExceptionReport( const ExceptionArgs& args )
 : m_Args ( args )
 , m_MemTotalReserve( 0 )
 , m_MemTotalCommit( 0 )
@@ -26,8 +27,8 @@ ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
     m_Computer.clear();
     Helium::GetComputer( m_Computer );
 
-    m_ApplicationPath = Platform::GetProcessPath();
-    m_ApplicationName = Platform::GetProcessName();
+    m_ApplicationPath = Helium::GetProcessPath();
+    m_ApplicationName = Helium::GetProcessName();
 
     size_t firstDot = m_ApplicationName.find_last_of( '.' );
     m_ApplicationName = m_ApplicationName.substr( 0, firstDot );

@@ -5,7 +5,7 @@
 
 #define IPC_PIPE_ROOT ""
 
-namespace Platform
+namespace Helium
 {
     typedef int Pipe;
 }

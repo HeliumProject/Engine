@@ -10,16 +10,16 @@ void OpenedCommand::OutputStat( StrDict* dict )
 {
   RCS::File file;
 
-  bool converted = Platform::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), file.m_DepotPath );
+  bool converted = Helium::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), file.m_DepotPath );
   HELIUM_ASSERT( converted );
 
-  converted = Platform::ConvertString( dict->GetVar( g_ClientFileTag )->Text(), file.m_LocalPath );
+  converted = Helium::ConvertString( dict->GetVar( g_ClientFileTag )->Text(), file.m_LocalPath );
   HELIUM_ASSERT( converted );
 
   file.m_LocalRevision = dict->GetVar( g_RevisionTag )->Atoi();
   
   tstring actionString;
-  converted = Platform::ConvertString( dict->GetVar( g_ActionTag )->Text(), actionString );
+  converted = Helium::ConvertString( dict->GetVar( g_ActionTag )->Text(), actionString );
   HELIUM_ASSERT( converted );
 
   file.m_Operation = GetOperationEnum( actionString );
@@ -27,15 +27,15 @@ void OpenedCommand::OutputStat( StrDict* dict )
   file.m_ChangesetId = dict->GetVar( g_ChangeTag )->Atoi();
   
   tstring fileType;
-  converted = Platform::ConvertString( dict->GetVar( g_TypeTag )->Text(), fileType );
+  converted = Helium::ConvertString( dict->GetVar( g_TypeTag )->Text(), fileType );
   HELIUM_ASSERT( converted );
 
   file.m_FileType = GetFileType( fileType );
 
-  converted = Platform::ConvertString( dict->GetVar( g_UserTag )->Text(), file.m_Username );
+  converted = Helium::ConvertString( dict->GetVar( g_UserTag )->Text(), file.m_Username );
   HELIUM_ASSERT( converted );
 
-  converted = Platform::ConvertString( dict->GetVar( g_ClientTag )->Text(), file.m_Client );
+  converted = Helium::ConvertString( dict->GetVar( g_ClientTag )->Text(), file.m_Client );
   HELIUM_ASSERT( converted );
 
   m_FileList->push_back( file );
@@ -68,7 +68,7 @@ void SubmitCommand::OutputStat( StrDict* dict )
     StrPtr* depotFile = dict->GetVar( g_DepotFileTag, i );
     if ( depotFile )
     {
-        bool converted = Platform::ConvertString( depotFile->Text(), file->m_DepotPath );
+        bool converted = Helium::ConvertString( depotFile->Text(), file->m_DepotPath );
         HELIUM_ASSERT( converted );
     }
 
@@ -82,7 +82,7 @@ void SubmitCommand::OutputStat( StrDict* dict )
     if ( action )
     {
         tstring actionString;
-        bool converted = Platform::ConvertString( action->Text(), actionString );
+        bool converted = Helium::ConvertString( action->Text(), actionString );
         HELIUM_ASSERT( converted );
 
         file->m_Operation = GetOperationEnum( actionString );
@@ -97,16 +97,16 @@ void RevertCommand::OutputStat( StrDict* dict )
     return;
   }
 
-  bool converted = Platform::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), m_File->m_DepotPath );
+  bool converted = Helium::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), m_File->m_DepotPath );
   HELIUM_ASSERT( converted );
 
-  converted = Platform::ConvertString( dict->GetVar( g_ClientFileTag )->Text(), m_File->m_LocalPath );
+  converted = Helium::ConvertString( dict->GetVar( g_ClientFileTag )->Text(), m_File->m_LocalPath );
   HELIUM_ASSERT( converted );
 
   m_File->m_LocalRevision = dict->GetVar( g_HaveRevTag )->Atoi();
   
   tstring actionString;
-  converted = Platform::ConvertString( dict->GetVar( g_OldActionTag )->Text(), actionString );
+  converted = Helium::ConvertString( dict->GetVar( g_OldActionTag )->Text(), actionString );
   HELIUM_ASSERT( converted );
 
   m_File->m_Operation = GetOperationEnum( actionString );
@@ -124,7 +124,7 @@ void CreateChangelistCommand::InputData( StrBuf *buf, Error *e )
   spec += m_Changeset->m_Description;
 
   std::string narrowSpec;
-  bool converted = Platform::ConvertString( spec, narrowSpec );
+  bool converted = Helium::ConvertString( spec, narrowSpec );
   HELIUM_ASSERT( converted );
   buf->Set( narrowSpec.c_str() );
 }
@@ -161,7 +161,7 @@ void GetChangelistsCommand::OutputStat( StrDict* dict )
 
   changeset.m_Id = dict->GetVar( g_ChangeTag )->Atoi();
   
-  bool converted = Platform::ConvertString( dict->GetVar( g_DescriptionTag )->Text(), changeset.m_Description );
+  bool converted = Helium::ConvertString( dict->GetVar( g_DescriptionTag )->Text(), changeset.m_Description );
   HELIUM_ASSERT( converted );
 
   m_Changesets->push_back( changeset );

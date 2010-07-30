@@ -5,7 +5,8 @@
 
 #include <exception>
 
-using namespace Profile; 
+using namespace Helium;
+using namespace Helium::Profile; 
 
 bool MemoryProfiler::s_Enabled = false;
 MemoryStatus MemoryProfiler::s_Last;
@@ -26,7 +27,7 @@ MemoryProfiler::~MemoryProfiler()
         GetMemoryStatus(&finish);
         intptr delta = finish.m_TotalCommit - s_Last.m_TotalCommit;
         intptr scope = finish.m_TotalCommit - m_Start.m_TotalCommit;
-        Platform::Print(TXT("Memory Commit: %u M bytes (Delta: %i K, %i K within scope)\n"), (finish.m_TotalCommit) >> 20, (delta) >> 10, (scope) >> 10);
+        Helium::Print(TXT("Memory Commit: %u M bytes (Delta: %i K, %i K within scope)\n"), (finish.m_TotalCommit) >> 20, (delta) >> 10, (scope) >> 10);
         s_Last = finish;
     }
 }

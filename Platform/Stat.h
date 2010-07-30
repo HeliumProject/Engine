@@ -3,7 +3,7 @@
 #include "API.h"
 #include "Types.h"
 
-namespace Platform
+namespace Helium
 {
     namespace ModeFlags
     {

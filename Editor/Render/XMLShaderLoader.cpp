@@ -188,7 +188,7 @@ bool ParseXMLTextureSettings( const TiXmlElement* node, const tchar* baseDirecto
   if (tres)
   {
       tstring temp;
-      bool converted = Platform::ConvertString( tres, temp );
+      bool converted = Helium::ConvertString( tres, temp );
       HELIUM_ASSERT( converted );
         textureSettings.m_Path += temp;
   }
@@ -300,7 +300,7 @@ Render::Shader* Render::XMLShaderLoader::ParseFile( const tchar* fname, ShaderMa
   }
 
   std::string temp;
-  bool converted = Platform::ConvertString( fname, temp );
+  bool converted = Helium::ConvertString( fname, temp );
   HELIUM_ASSERT( converted );
 
   TiXmlDocument shader( temp.c_str() );

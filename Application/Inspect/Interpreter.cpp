@@ -9,7 +9,7 @@ using namespace Inspect;
 
 ST_Container& Interpreter::GetCurrentContainerStack()
 {
-  Platform::TakeMutex mutex( m_ContainerStackMutex );
+  Helium::TakeMutex mutex( m_ContainerStackMutex );
 
   u32 threadId = GetCurrentThreadId();
   

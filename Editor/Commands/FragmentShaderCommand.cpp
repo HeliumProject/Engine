@@ -67,7 +67,7 @@ static void
 Abort(std::exception *e)
 {
     tstring temp;
-    Platform::ConvertString( e->what(), temp );
+    Helium::ConvertString( e->what(), temp );
 
     wxMessageBox(temp, wxT("Error"), wxOK | wxICON_ERROR);
     if (wxTheClipboard->Open())
@@ -93,7 +93,7 @@ FragmentShaderApp::ProcessOptions()
         const wxChar* argStr = argv[index];
 
         std::string temp;
-        Platform::ConvertString( argStr, temp );
+        Helium::ConvertString( argStr, temp );
         wxString option = wxString::FromAscii(temp.c_str());
 
         wxString arg;
@@ -101,7 +101,7 @@ FragmentShaderApp::ProcessOptions()
         {
             const wxChar* bareArg = argv[index];
             bareArg++;
-            Platform::ConvertString( bareArg, temp );
+            Helium::ConvertString( bareArg, temp );
             arg = wxString::FromAscii(temp.c_str());
         }
 
@@ -157,7 +157,7 @@ FragmentShaderApp::ProcessOptions()
             {
                 while (++index != argc)
                 {
-                    Platform::ConvertString( (const wxChar*)argv[index], temp );
+                    Helium::ConvertString( (const wxChar*)argv[index], temp );
 
                     wxString name;
                     name.Append(wxString::FromAscii(temp.c_str()));

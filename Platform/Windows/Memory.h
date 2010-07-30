@@ -3,51 +3,54 @@
 #include "Platform/API.h"
 #include "Platform/Types.h"
 
-namespace Profile
+namespace Helium
 {
-    //
-    // Status Data
-    //
-
-    class PLATFORM_API MemoryStatus
+    namespace Profile
     {
-    public:
-        uintptr m_TotalReserve;
-        uintptr m_TotalCommit;
-        uintptr m_TotalFree;
-        uintptr m_LargestFree;
+        //
+        // Status Data
+        //
 
-        MemoryStatus()
-            : m_TotalReserve (0)
-            , m_TotalCommit (0)
-            , m_TotalFree (0)
-            , m_LargestFree (0)
+        class PLATFORM_API MemoryStatus
         {
+        public:
+            uintptr m_TotalReserve;
+            uintptr m_TotalCommit;
+            uintptr m_TotalFree;
+            uintptr m_LargestFree;
 
-        }
-    };
+            MemoryStatus()
+                : m_TotalReserve (0)
+                , m_TotalCommit (0)
+                , m_TotalFree (0)
+                , m_LargestFree (0)
+            {
 
-    //
-    // Profiler, drop this on the stack to profile memory consumption
-    //
+            }
+        };
 
-    class PLATFORM_API MemoryProfiler
-    {
-    private:
-        static bool s_Enabled;
-        static MemoryStatus s_Last;
-        MemoryStatus m_Start;
+        //
+        // Profiler, drop this on the stack to profile memory consumption
+        //
 
-    public:
-        MemoryProfiler();
-        ~MemoryProfiler();
-        static void EnableProfiling(bool enable);
-    };
+        class PLATFORM_API MemoryProfiler
+        {
+        private:
+            static bool s_Enabled;
+            static MemoryStatus s_Last;
+            MemoryStatus m_Start;
 
-    //
-    // Query status
-    //
+        public:
+            MemoryProfiler();
+            ~MemoryProfiler();
+            static void EnableProfiling(bool enable);
+        };
 
-    PLATFORM_API void GetMemoryStatus(MemoryStatus* status);
-    PLATFORM_API void GetMemoryStatus(tchar* buffer, size_t bufSize);
+        //
+        // Query status
+        //
+
+        PLATFORM_API void GetMemoryStatus(MemoryStatus* status);
+        PLATFORM_API void GetMemoryStatus(tchar* buffer, size_t bufSize);
+    }
 }

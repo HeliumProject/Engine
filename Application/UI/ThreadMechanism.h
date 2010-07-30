@@ -45,7 +45,7 @@ namespace Helium
     bool IsThreadRunning() const { return !m_StopThread; }
 
     // DO NO CHANGE OR ACCESS thread related data outside of UpdateMutex
-    Platform::Mutex& GetUpdateMutex() { return m_UpdateMutex; }
+    Helium::Mutex& GetUpdateMutex() { return m_UpdateMutex; }
 
     i32 GetCurrentThreadID() const { return m_CurrentThreadID; }
     bool IsCurrentThread( i32 threadID ) const { return threadID == GetCurrentThreadID(); }
@@ -70,12 +70,12 @@ namespace Helium
   protected:
     bool             m_StopThread;
     i32              m_CurrentThreadID;
-    Platform::Mutex  m_UpdateMutex;
+    Helium::Mutex  m_UpdateMutex;
     
     DummyWindow*     m_DummyWindow;
-    Platform::Mutex  m_BeginThreadMutex;         // Take Lock until m_ThreadInitializedEvent
-    Platform::Thread::Handle m_ThreadInitializedEvent;   // OK to cancel thread after this is set
-    Platform::Thread::Handle m_EndThreadEvent;
+    Helium::Mutex  m_BeginThreadMutex;         // Take Lock until m_ThreadInitializedEvent
+    Helium::Thread::Handle m_ThreadInitializedEvent;   // OK to cancel thread after this is set
+    Helium::Thread::Handle m_EndThreadEvent;
 
     friend class DummyThread;
   };

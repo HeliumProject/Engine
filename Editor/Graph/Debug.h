@@ -18,7 +18,7 @@ extern "C"
 #define DESTROY(arg)         do { Debug::DumpHeap(TXT("delete"), (void *)arg, 0, __FILE__, __LINE__ ); delete arg; } while (0)
 #define NEWARRAY(type, size) (type *)Debug::DumpHeap(TXT("new[]"), new type[size], sizeof(type) * size, __FILE__, __LINE__)
 #define DESTROYARRAY(arg)    do { Debug::DumpHeap(TXT("delete[]"), (void *)arg, 0, __FILE__, __LINE__); delete[] arg; } while (0)
-#define THROW(...)           do { Debug::Printf(TXT("Exception at %s(%d):\n\n"), __FILE__, __LINE__); Debug::Printf(__VA_ARGS__); std::string temp; Platform::ConvertString( Debug::Format(__VA_ARGS__), temp ); throw NEW(std::exception, (temp.c_str())); } while (0)
+#define THROW(...)           do { Debug::Printf(TXT("Exception at %s(%d):\n\n"), __FILE__, __LINE__); Debug::Printf(__VA_ARGS__); std::string temp; Helium::ConvertString( Debug::Format(__VA_ARGS__), temp ); throw NEW(std::exception, (temp.c_str())); } while (0)
 #define BREAK(cond)          do { if (cond) { DebugBreak(); } } while (0)
 
 #else
@@ -27,7 +27,7 @@ extern "C"
 #define DESTROY(arg)         delete (arg)
 #define NEWARRAY(type, size) new type[size]
 #define DESTROYARRAY(arg)    delete[] arg
-#define THROW(...)           do { std::string temp; Platform::ConvertString( Debug::Format(__VA_ARGS__), temp ); throw NEW(std::exception, (temp.c_str())); } while (0)
+#define THROW(...)           do { std::string temp; Helium::ConvertString( Debug::Format(__VA_ARGS__), temp ); throw NEW(std::exception, (temp.c_str())); } while (0)
 #define BREAK(cond)          do {} while (0)
 
 #endif

@@ -2,8 +2,11 @@
 
 #include "Application/API.h"
 
-namespace Application
+namespace Helium
 {
-  void InitializeExceptionListener();
-  void CleanupExceptionListener();
+    namespace Debug
+    {
+        APPLICATION_API void InitializeExceptionListener();
+        APPLICATION_API void CleanupExceptionListener();
+    }
 }

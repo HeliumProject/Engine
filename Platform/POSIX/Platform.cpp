@@ -4,14 +4,14 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-using namespace Platform;
+using namespace Helium;
 
-Platform::Type Platform::GetType()
+Platform::Type Helium::GetType()
 {
     return Types::PlayStation3;
 }
 
-void Platform::Print(const tchar* fmt, ...)
+void Helium::Print(const tchar* fmt, ...)
 {
     va_list args;
     va_start(args, fmt);
@@ -19,7 +19,7 @@ void Platform::Print(const tchar* fmt, ...)
     va_end(args);
 }
 
-void Platform::Sleep(int millis)
+void Helium::Sleep(int millis)
 {
     usleep( millis * 1000 );
 }

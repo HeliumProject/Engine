@@ -6,7 +6,7 @@
 
 #include <sstream>
 
-int Platform::Execute( const tstring& command, bool showWindow, bool block )
+int Helium::Execute( const tstring& command, bool showWindow, bool block )
 {
     DWORD result = 0;
 
@@ -47,7 +47,7 @@ int Platform::Execute( const tstring& command, bool showWindow, bool block )
     return result;
 }
 
-int Platform::Execute( const tstring& command, tstring& output, bool showWindow )
+int Helium::Execute( const tstring& command, tstring& output, bool showWindow )
 {
     HANDLE hReadPipe;
     HANDLE hWritePipe;
@@ -136,14 +136,14 @@ int Platform::Execute( const tstring& command, tstring& output, bool showWindow 
     return result;
 }
 
-tstring Platform::GetProcessString()
+tstring Helium::GetProcessString()
 {
     tostringstream result;
     result << GetProcessName() << "_" << GetCurrentProcessId() << "_" << GetCurrentThreadId();
     return result.str();
 }
 
-tstring Platform::GetProcessPath()
+tstring Helium::GetProcessPath()
 {
     HMODULE moduleHandle = GetModuleHandle( NULL );
 
@@ -153,7 +153,7 @@ tstring Platform::GetProcessPath()
     return module;
 }
 
-tstring Platform::GetProcessName()
+tstring Helium::GetProcessName()
 {
     HMODULE moduleHandle = GetModuleHandle( NULL );
 

@@ -36,7 +36,7 @@ bool Parser::Parse( const std::string& file )
   }
 
   tstring filename;
-  bool converted = Platform::ConvertString( m_File, filename );
+  bool converted = Helium::ConvertString( m_File, filename );
   HELIUM_ASSERT( converted );
 
   Helium::Path path( filename );

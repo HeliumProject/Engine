@@ -78,7 +78,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
       Label* label = Reflect::ObjectCast<Label>( *itr );
       if (label)
       {
-          bool converted = Platform::ConvertString( label->GetText(), labelText );
+          bool converted = Helium::ConvertString( label->GetText(), labelText );
           HELIUM_ASSERT( converted );
             
         if ( !labelText.empty() )
@@ -118,7 +118,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
   }
 
   tstring temp;
-  bool converted = Platform::ConvertString( labelText, temp );
+  bool converted = Helium::ConvertString( labelText, temp );
   HELIUM_ASSERT( converted );
 
   panel->SetText( temp );
@@ -311,7 +311,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
             PanelPtr childPanel = panel->GetCanvas()->Create<Panel>( this );
 
                tstring temp;
-              bool converted = Platform::ConvertString( field->m_UIName, temp );
+              bool converted = Helium::ConvertString( field->m_UIName, temp );
               HELIUM_ASSERT( converted );
 
               childPanel->SetText( temp );

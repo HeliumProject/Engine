@@ -5,7 +5,7 @@
 #include "Platform/API.h"
 #include "Platform/Types.h"
 
-namespace Platform
+namespace Helium
 {
     //
     // Decode the last error string

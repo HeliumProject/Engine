@@ -13,7 +13,7 @@ namespace Editor
     {
     public:
         //m_Tracker.SetDirectory( Helium::Directory( "C:\\Projects\\github\\kramdar\\AppFramework\\Editor\\Icons\\16x16\\" ) );
-        //if (!m_TrackerThread.Create(&Platform::Thread::EntryHelper<Tracker, &Tracker::TrackEverything>, &m_Tracker, TXT( "Tracker Thread" ), THREAD_PRIORITY_BELOW_NORMAL ) )
+        //if (!m_TrackerThread.Create(&Helium::Thread::EntryHelper<Tracker, &Tracker::TrackEverything>, &m_Tracker, TXT( "Tracker Thread" ), THREAD_PRIORITY_BELOW_NORMAL ) )
         //{
         //    throw Exception( TXT( "Unable to create thread for asset tracking." ) );
         //}

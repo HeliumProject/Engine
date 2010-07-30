@@ -34,7 +34,7 @@ void ClipboardElementArray::CleanupType()
 ClipboardElementArray::ClipboardElementArray()
 {
   // By default, all items added to this array should derive from Reflect::Element
-    bool converted = Platform::ConvertString( Reflect::Registry::GetInstance()->GetClass( Reflect::GetType< Reflect::Element >() )->m_FullName, m_CommonBaseClass );
+    bool converted = Helium::ConvertString( Reflect::Registry::GetInstance()->GetClass( Reflect::GetType< Reflect::Element >() )->m_FullName, m_CommonBaseClass );
     HELIUM_ASSERT( converted );
 }
 
@@ -59,7 +59,7 @@ i32 ClipboardElementArray::GetCommonBaseTypeID() const
 // 
 void ClipboardElementArray::SetCommonBaseTypeID( i32 typeID )
 {
-    bool converted = Platform::ConvertString( Reflect::Registry::GetInstance()->GetClass( typeID )->m_FullName, m_CommonBaseClass );
+    bool converted = Helium::ConvertString( Reflect::Registry::GetInstance()->GetClass( typeID )->m_FullName, m_CommonBaseClass );
     HELIUM_ASSERT( converted );
 }
 

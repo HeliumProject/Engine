@@ -2,25 +2,25 @@
 
 #include "Platform/Assert.h"
 
-using namespace Platform;
+using namespace Helium;
 
-bool Platform::InitializePipes()
+bool Helium::InitializePipes()
 {
     return true;
 }
 
-void Platform::CleanupPipes()
+void Helium::CleanupPipes()
 {
 
 }
 
-bool Platform::CreatePipe(const tchar* name, Pipe& pipe)
+bool Helium::CreatePipe(const tchar* name, Pipe& pipe)
 {
     // not supported
     HELIUM_BREAK(); return false;
 }
 
-bool Platform::OpenPipe(const tchar* name, Pipe& pipe)
+bool Helium::OpenPipe(const tchar* name, Pipe& pipe)
 {
     if ( ( pipe = (int)fopen( name, TXT( "rw" ) ) ) == 0 )
     {
@@ -30,24 +30,24 @@ bool Platform::OpenPipe(const tchar* name, Pipe& pipe)
     return true;
 }
 
-void Platform::ClosePipe(Pipe& pipe)
+void Helium::ClosePipe(Pipe& pipe)
 {
     fclose( (FILE*)pipe );
 }
 
-bool Platform::ConnectPipe(Pipe& pipe, Event& terminate)
+bool Helium::ConnectPipe(Pipe& pipe, Event& terminate)
 {
     // not supported
     HELIUM_BREAK(); return false;
 }
 
-void Platform::DisconnectPipe(Pipe& pipe)
+void Helium::DisconnectPipe(Pipe& pipe)
 {
     // not supported
     HELIUM_BREAK();
 }
 
-bool Platform::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& terminate)
+bool Helium::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& terminate)
 {
     if (bytes == 0)
     {
@@ -64,7 +64,7 @@ bool Platform::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& t
     return false;
 }
 
-bool Platform::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Event& terminate)
+bool Helium::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Event& terminate)
 {
     if (bytes == 0)
     {

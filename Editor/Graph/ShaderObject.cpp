@@ -38,7 +38,7 @@ ShaderObject::LuaUID(lua_State *L)
 	wxString uid = wxString::Format(wxT("%p"), pointer);
 
     std::string temp;
-    Platform::ConvertString( tstring( uid ), temp );
+    Helium::ConvertString( tstring( uid ), temp );
 
 	lua_pushlstring(L, temp.c_str(), temp.length());
 	return 1;

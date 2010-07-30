@@ -30,7 +30,7 @@ void ParametricKeyInterpreter::InterpretField( const Reflect::Field* field, cons
   PanelPtr panel = m_Container->GetCanvas()->Create<Panel>( this );
   parent->AddControl( panel );
   tstring temp;
-  bool converted = Platform::ConvertString( field->m_UIName, temp );
+  bool converted = Helium::ConvertString( field->m_UIName, temp );
   HELIUM_ASSERT( converted );
   panel->SetText( temp );
 

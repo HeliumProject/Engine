@@ -5,7 +5,7 @@
 
 #include <pthread.h>
 
-using namespace Platform;
+using namespace Helium;
 
 // Manual-Reset event implementation for pthreads:
 // http://www.cs.wustl.edu/~schmidt/win32-cv-2.html

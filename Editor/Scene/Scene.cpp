@@ -503,7 +503,7 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
 {
     LUNA_SCENE_SCOPE_TIMER( ("") );
 
-    u64 startTimer = Platform::TimerGetClock();
+    u64 startTimer = Helium::TimerGetClock();
 
     // 
     // Initialize
@@ -683,7 +683,7 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
     // report
     tostringstream str;
     str.precision( 2 );
-    str << "Scene Loading Complete: " << std::fixed << Platform::CyclesToMillis( Platform::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
+    str << "Scene Loading Complete: " << std::fixed << Helium::CyclesToMillis( Helium::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
     m_StatusChanged.Raise( str.str() );
 
     // done
@@ -1030,7 +1030,7 @@ bool Scene::Save()
 
 bool Scene::ExportFile( const tstring& file, const ExportArgs& args )
 {
-    u64 startTimer = Platform::TimerGetClock();
+    u64 startTimer = Helium::TimerGetClock();
 
     bool result = false;
 
@@ -1071,7 +1071,7 @@ bool Scene::ExportFile( const tstring& file, const ExportArgs& args )
     {
         tostringstream str;
         str.precision( 2 );
-        str << "Saving Complete: " << std::fixed << Platform::CyclesToMillis( Platform::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
+        str << "Saving Complete: " << std::fixed << Helium::CyclesToMillis( Helium::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
         m_StatusChanged.Raise( str.str() );
     }
 
@@ -1089,7 +1089,7 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
 
     bool result = false;
 
-    u64 startTimer = Platform::TimerGetClock();
+    u64 startTimer = Helium::TimerGetClock();
 
     m_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Normal, SceneContexts::Saving ) );
 
@@ -1128,7 +1128,7 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
     {
         tostringstream str;
         str.precision( 2 );
-        str << "Export Complete: " << std::fixed << Platform::CyclesToMillis( Platform::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
+        str << "Export Complete: " << std::fixed << Helium::CyclesToMillis( Helium::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
         m_StatusChanged.Raise( str.str() );
     }
 

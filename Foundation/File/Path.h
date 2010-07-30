@@ -8,7 +8,7 @@
 #include "Foundation/String/Utilities.h"
 #include "Platform/String.h"
 
-namespace Platform
+namespace Helium
 {
     struct Stat;
 }
@@ -77,7 +77,7 @@ namespace Helium
         tstring Signature();
 
         bool Exists() const;
-        bool Stat( Platform::Stat& stat ) const;
+        bool Stat( Helium::Stat& stat ) const;
         bool IsAbsolute() const;
         bool IsUnder( const tstring& location );
         bool IsFile() const;

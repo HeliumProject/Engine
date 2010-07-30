@@ -6,7 +6,7 @@
 
 using namespace Reflect;
 
-Platform::Mutex g_TypeMutex;
+Helium::Mutex g_TypeMutex;
 
 Type::Type ()
 : m_TypeID (ReservedTypes::Invalid)
@@ -45,28 +45,28 @@ i32 Type::AssignTypeID()
 
 void Type::TrackPointer(void** pointer) const
 {
-    Platform::TakeMutex mutex (g_TypeMutex);
+    Helium::TakeMutex mutex (g_TypeMutex);
 
     m_Pointers.push_back( pointer );
 }
 
 void Type::RemovePointer(void** pointer) const
 {
-    Platform::TakeMutex mutex (g_TypeMutex);
+    Helium::TakeMutex mutex (g_TypeMutex);
 
     m_Pointers.erase( std::remove( m_Pointers.begin(), m_Pointers.end(), pointer ), m_Pointers.end() );
 }
 
 void Type::TrackID(i32* id) const
 {
-    Platform::TakeMutex mutex (g_TypeMutex);
+    Helium::TakeMutex mutex (g_TypeMutex);
 
     m_IDs.push_back( id );
 }
 
 void Type::RemoveID(i32* id) const
 {
-    Platform::TakeMutex mutex (g_TypeMutex);
+    Helium::TakeMutex mutex (g_TypeMutex);
 
     m_IDs.erase( std::remove( m_IDs.begin(), m_IDs.end(), id ), m_IDs.end() );
 }

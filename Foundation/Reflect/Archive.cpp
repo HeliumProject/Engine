@@ -47,7 +47,7 @@ void PrintStatus::ArchiveStatus(StatusInfo& info)
     {
     case Reflect::ArchiveStates::Starting:
         {
-            m_Timer = Platform::TimerGetClock();
+            m_Timer = Helium::TimerGetClock();
 
             const char* verb = info.m_Archive.GetMode() == ArchiveModes::Read ? "Reading" : "Writing";
             const char* type = info.m_Archive.GetType() == ArchiveTypes::XML ? "XML" : "Binary";
@@ -87,7 +87,7 @@ void PrintStatus::ArchiveStatus(StatusInfo& info)
 
     case Reflect::ArchiveStates::Complete:
         {
-            Log::Bullet bullet( TXT( "Completed in %.2f ms\n" ), Platform::CyclesToMillis(Platform::TimerGetClock() - m_Timer));
+            Log::Bullet bullet( TXT( "Completed in %.2f ms\n" ), Helium::CyclesToMillis(Helium::TimerGetClock() - m_Timer));
             break;
         }
 
@@ -369,7 +369,7 @@ void Archive::PostDeserialize(const ElementPtr& element, const Field* field)
 
 bool Archive::TryElementCallback( Element* element, ElementCallback callback )
 {
-    if ( Platform::IsDebuggerPresent() )
+    if ( Helium::IsDebuggerPresent() )
     {
         (element->*callback)();
     }
@@ -447,7 +447,7 @@ ElementPtr Archive::FromFile(const tstring& file, int searchType, StatusHandler*
 
     s_FileAccess.Raise( FileAccessArgs( file, FileOperations::PreRead ) );
 
-    if ( Platform::IsDebuggerPresent() )
+    if ( Helium::IsDebuggerPresent() )
     {
         archive->OpenFile( file );
         archive->Read();
@@ -538,11 +538,11 @@ void Archive::ToFile(const V_Element& elements, const tstring& file, VersionPtr 
     }
 
     // build a path to a unique file for this process
-    Helium::Path safetyPath( outputPath.Directory() + Platform::GetProcessString() );
+    Helium::Path safetyPath( outputPath.Directory() + Helium::GetProcessString() );
     safetyPath.ReplaceExtension( outputPath.Extension() );
 
     // generate the file to the safety location
-    if ( Platform::IsDebuggerPresent() )
+    if ( Helium::IsDebuggerPresent() )
     {
         archive->OpenFile( safetyPath.Get(), true );
         archive->Write();
@@ -628,7 +628,7 @@ void Archive::FromFile(const tstring& file, V_Element& elements, StatusHandler* 
 
     s_FileAccess.Raise( FileAccessArgs( file, FileOperations::PreRead ) );
 
-    if ( Platform::IsDebuggerPresent() )
+    if ( Helium::IsDebuggerPresent() )
     {
         archive->OpenFile( file );
         archive->Read();

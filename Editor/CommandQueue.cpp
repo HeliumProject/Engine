@@ -7,7 +7,7 @@ using namespace Editor;
 
 DEFINE_EVENT_TYPE(wxEVT_FLUSH_COMMANDS)
 
-static Platform::Mutex g_CommandQueueMutex;
+static Helium::Mutex g_CommandQueueMutex;
 
 CommandQueue::CommandQueue( wxWindow* window )
 : m_Window( window )
@@ -30,7 +30,7 @@ void CommandQueue::Push( const Undo::CommandPtr& command )
   bool flush = m_Commands.empty();
 
   {
-    Platform::TakeMutex taken ( g_CommandQueueMutex);
+    Helium::TakeMutex taken ( g_CommandQueueMutex);
     m_Commands.push_back( command );
   }
 
@@ -45,7 +45,7 @@ void CommandQueue::Flush()
   Undo::V_CommandSmartPtr commands;
 
   {
-    Platform::TakeMutex taken ( g_CommandQueueMutex);
+    Helium::TakeMutex taken ( g_CommandQueueMutex);
     
     commands = m_Commands;
     m_Commands.clear();

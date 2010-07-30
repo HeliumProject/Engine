@@ -5,10 +5,10 @@ using namespace Profile;
 
 void Timer::Reset()
 {
-    m_StartTime = Platform::TimerGetClock();
+    m_StartTime = Helium::TimerGetClock();
 }
 
 float Timer::Elapsed()
 {
-    return Platform::CyclesToMillis(Platform::TimerGetClock() - m_StartTime);
+    return Helium::CyclesToMillis(Helium::TimerGetClock() - m_StartTime);
 }

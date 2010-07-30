@@ -12,7 +12,7 @@
 
 const static u32 IPC_PIPE_BUFFER_SIZE = 8192;
 
-namespace Platform
+namespace Helium
 {
     PLATFORM_API bool InitializePipes();
     PLATFORM_API void CleanupPipes();

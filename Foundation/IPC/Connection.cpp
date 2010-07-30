@@ -36,7 +36,7 @@ Connection::Connection()
 , m_Terminating (false)
 , m_State (ConnectionStates::Closed)
 , m_ConnectCount (0)
-, m_RemotePlatform ((Platform::Type)-1)
+, m_RemotePlatform ((Helium::Platform::Type)-1)
 , m_NextTransaction (0)
 {
     SetState(ConnectionStates::Closed);
@@ -92,27 +92,27 @@ void Connection::Cleanup()
 
 void Connection::SetState(ConnectionState state)
 {
-    Platform::TakeMutex mutex (m_Mutex);
+    Helium::TakeMutex mutex (m_Mutex);
 
     if (m_State != state)
     {
         // report status change
 #ifdef IPC_CONNECTION_DEBUG
-        Platform::Print("%s: State changing from '%s' to '%s'\n", m_Name, ConnectionStateNames[m_State], ConnectionStateNames[state]);
+        Helium::Print("%s: State changing from '%s' to '%s'\n", m_Name, ConnectionStateNames[m_State], ConnectionStateNames[state]);
 #else
         if (m_State != ConnectionStates::Active && state == ConnectionStates::Active)
         {
-            Platform::Print( TXT( "%s: Connected\n" ), m_Name);
+            Helium::Print( TXT( "%s: Connected\n" ), m_Name);
         }
 
         if (m_State == ConnectionStates::Active && state != ConnectionStates::Active)
         {
-            Platform::Print( TXT( "%s: Disconnected\n" ), m_Name);
+            Helium::Print( TXT( "%s: Disconnected\n" ), m_Name);
         }
 
         if (m_State == ConnectionStates::Active && state == ConnectionStates::Waiting)
         {
-            Platform::Print( TXT( "%S: Waiting for connection\n" ), m_Name);
+            Helium::Print( TXT( "%S: Waiting for connection\n" ), m_Name);
         }
 #endif
 
@@ -147,7 +147,7 @@ Message* Connection::CreateMessage(u32 id, u32 size, i32 trans, u32 type)
 
     if (!msg)
     {
-        Platform::Print( TXT( "%s: Failed to create message (ID: %u, TRN: %u, Size: %u)\n" ), m_Name, id, trans, size);
+        Helium::Print( TXT( "%s: Failed to create message (ID: %u, TRN: %u, Size: %u)\n" ), m_Name, id, trans, size);
     }
 
     return msg;
@@ -234,7 +234,7 @@ bool Connection::ReadPump()
         }
 
 #ifdef IPC_CONNECTION_DEBUG
-        Platform::Print("%s: Got message %d, id '%d', transaction '%d', size '%d'\n", m_Name, msg->GetNumber(), msg->GetID(), msg->GetTransaction(), msg->GetSize());
+        Helium::Print("%s: Got message %d, id '%d', transaction '%d', size '%d'\n", m_Name, msg->GetNumber(), msg->GetID(), msg->GetTransaction(), msg->GetSize());
 #endif
     }
 
@@ -258,7 +258,7 @@ bool Connection::WritePump()
         result = WriteMessage(msg);
 
 #ifdef IPC_CONNECTION_DEBUG
-        Platform::Print("%s: Put message %d, id '%d', transaction '%d', size '%d'\n", m_Name, msg->GetNumber(), msg->GetID(), msg->GetTransaction(), msg->GetSize());
+        Helium::Print("%s: Put message %d, id '%d', transaction '%d', size '%d'\n", m_Name, msg->GetNumber(), msg->GetID(), msg->GetTransaction(), msg->GetSize());
 #endif
 
         // free the memory
@@ -350,17 +350,17 @@ void Connection::ConnectThread()
     SetState(ConnectionStates::Active);
 
     // report our remote platform type
-    Platform::Print( TXT( "%s: Remote platform is '%s'\n" ), m_Name, Platform::GetTypeName(m_RemotePlatform));
+    Helium::Print( TXT( "%s: Remote platform is '%s'\n" ), m_Name, Helium::Platform::GetTypeName(m_RemotePlatform));
 
     // start read thread
-    if (!m_ReadThread.Create(&Platform::Thread::EntryHelper<Connection, &Connection::ReadThread>, this, TXT( "IPC Read Thread" )))
+    if (!m_ReadThread.Create(&Helium::Thread::EntryHelper<Connection, &Connection::ReadThread>, this, TXT( "IPC Read Thread" )))
     {
         HELIUM_BREAK();
         return;
     }
 
     // start write thread
-    if (!m_WriteThread.Create(&Platform::Thread::EntryHelper<Connection, &Connection::WriteThread>, this, TXT( "IPC Write Thread" )))
+    if (!m_WriteThread.Create(&Helium::Thread::EntryHelper<Connection, &Connection::WriteThread>, this, TXT( "IPC Write Thread" )))
     {
         HELIUM_BREAK();
         return;
@@ -423,21 +423,21 @@ bool Connection::ReadHostType()
 
     if (!Read(&byte, sizeof(byte)))
     {
-        Platform::Print( TXT( "%s: Failed to read remote platform type!\n" ), m_Name);
+        Helium::Print( TXT( "%s: Failed to read remote platform type!\n" ), m_Name);
         return false;
     }
 
-    m_RemotePlatform = (Platform::Type)byte;
+    m_RemotePlatform = (Helium::Platform::Type)byte;
 
     return true;
 }
 
 bool Connection::WriteHostType()
 {
-    u8 byte = (u8)Platform::GetType();
+    u8 byte = (u8)Helium::Platform::GetType();
     if (!Write(&byte, sizeof(byte)))
     {
-        Platform::Print( TXT( "%s: Failed to write remote Platform type!\n" ), m_Name);
+        Helium::Print( TXT( "%s: Failed to write remote Platform type!\n" ), m_Name);
         return false;
     }
 

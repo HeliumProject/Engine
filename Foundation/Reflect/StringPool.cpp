@@ -106,7 +106,7 @@ void StringPool::DeserializeDirect(CharStream& stream, CharacterEncoding encodin
                 std::string temp;
                 temp.resize(stringLength); 
                 stream.ReadBuffer(&temp[0], stringLength); 
-                Platform::ConvertString(temp, outputString);
+                Helium::ConvertString(temp, outputString);
 #else
                 // read the bytes directly into the string
                 outputString.resize(stringLength); 
@@ -125,7 +125,7 @@ void StringPool::DeserializeDirect(CharStream& stream, CharacterEncoding encodin
                 std::wstring temp;
                 temp.resize(stringLength);
                 stream.ReadBuffer(&temp[0], stringLength * 2); 
-                Platform::ConvertString(temp, outputString);
+                Helium::ConvertString(temp, outputString);
 #endif
                 break;
             }

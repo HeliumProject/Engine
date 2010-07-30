@@ -2,7 +2,6 @@
 #include "SmartBuffer.h"
 #include "ObjectBuffer.h"
 #include "BasicBuffer.h"
-#include "Fixup.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/SmartBuffer/SmartLoader.h"
@@ -305,7 +304,7 @@ bool BufferSerializer::WriteToStream( tostream& strm ) const
             P_Fixup fix;
             fix.source_chunk_offset = chunk_start_loc;
 
-            SmartBuffer::Location destination;
+            BufferLocation destination;
 
             SmartBuffer::M_OffsetToFixup::const_iterator of_itr = (*itr)->GetOutgoingFixups().begin();
             SmartBuffer::M_OffsetToFixup::const_iterator of_end = (*itr)->GetOutgoingFixups().end();

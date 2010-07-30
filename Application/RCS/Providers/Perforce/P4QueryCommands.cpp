@@ -25,10 +25,10 @@ void WhereCommand::OutputStat( StrDict *dict )
 {
     bool converted = false;
 
-    Platform::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), m_File->m_DepotPath );
+    Helium::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), m_File->m_DepotPath );
     HELIUM_ASSERT( converted );
 
-    Platform::ConvertString( dict->GetVar( g_PathTag )->Text(), m_File->m_LocalPath );
+    Helium::ConvertString( dict->GetVar( g_PathTag )->Text(), m_File->m_LocalPath );
     HELIUM_ASSERT( converted );
 }
 
@@ -79,7 +79,7 @@ void FStatCommand::OutputStat( StrDict *dict )
 
     if ( m_File->m_FileData & RCS::FileData::DepotPath )
     {
-        bool converted = Platform::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), m_File->m_DepotPath );
+        bool converted = Helium::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), m_File->m_DepotPath );
         HELIUM_ASSERT( converted );
     }
 
@@ -87,7 +87,7 @@ void FStatCommand::OutputStat( StrDict *dict )
     {
         if ( dict->GetVar( g_ClientFileTag ) )
         {
-            bool converted = Platform::ConvertString( dict->GetVar( g_ClientFileTag )->Text(), m_File->m_LocalPath );
+            bool converted = Helium::ConvertString( dict->GetVar( g_ClientFileTag )->Text(), m_File->m_LocalPath );
             HELIUM_ASSERT( converted );
         }
     }
@@ -97,7 +97,7 @@ void FStatCommand::OutputStat( StrDict *dict )
         StrPtr* username = dict->GetVar( g_ActionOwnerTag );
         if ( username )
         {
-            bool converted = Platform::ConvertString( username->Text(), m_File->m_Username );
+            bool converted = Helium::ConvertString( username->Text(), m_File->m_Username );
             HELIUM_ASSERT( converted );
         }
     }
@@ -121,7 +121,7 @@ void FStatCommand::OutputStat( StrDict *dict )
         if ( action )
         {
             tstring actionString;
-            bool converted = Platform::ConvertString( action->Text(), actionString );
+            bool converted = Helium::ConvertString( action->Text(), actionString );
             HELIUM_ASSERT( converted );
             m_File->m_Operation = GetOperationEnum( actionString );
 
@@ -159,7 +159,7 @@ void FStatCommand::OutputStat( StrDict *dict )
                     if ( userInfo != NULL )
                     {
                         tstring otherUserInfo;
-                        bool converted = Platform::ConvertString( userInfo->Text(), otherUserInfo );
+                        bool converted = Helium::ConvertString( userInfo->Text(), otherUserInfo );
                         HELIUM_ASSERT( converted );
 
                         size_t atLocation = otherUserInfo.find( TXT( "@" ) );
@@ -194,7 +194,7 @@ void FStatCommand::OutputStat( StrDict *dict )
                     if ( actionInfo )
                     {
                         tstring actionString;
-                        bool converted = Platform::ConvertString( actionInfo->Text(), actionString );
+                        bool converted = Helium::ConvertString( actionInfo->Text(), actionString );
                         HELIUM_ASSERT( converted );
                         action->m_Operation = GetOperationEnum( actionString );
                     }
@@ -208,7 +208,7 @@ void FStatCommand::OutputStat( StrDict *dict )
     if ( m_File->m_Operation == RCS::Operations::Add )
     {
         tstring fileType;
-        bool converted = Platform::ConvertString( dict->GetVar( g_TypeTag )->Text(), fileType );
+        bool converted = Helium::ConvertString( dict->GetVar( g_TypeTag )->Text(), fileType );
         HELIUM_ASSERT( converted );
 
         if ( m_File->m_FileData & RCS::FileData::FileType )
@@ -240,7 +240,7 @@ void FStatCommand::OutputStat( StrDict *dict )
         if ( headAction )
         {
             tstring actionString;
-            bool converted = Platform::ConvertString( headAction->Text(), actionString );
+            bool converted = Helium::ConvertString( headAction->Text(), actionString );
             HELIUM_ASSERT( converted );
 
             if ( GetOperationEnum( actionString ) == RCS::Operations::Delete )
@@ -257,7 +257,7 @@ void FStatCommand::OutputStat( StrDict *dict )
                     StrPtr* digest = dict->GetVar( g_DigestTag );
                     if ( digest )
                     {
-                        bool converted = Platform::ConvertString( digest->Text(), m_File->m_Digest );
+                        bool converted = Helium::ConvertString( digest->Text(), m_File->m_Digest );
                         HELIUM_ASSERT( converted );
                     }
                 }
@@ -280,7 +280,7 @@ void FStatCommand::OutputStat( StrDict *dict )
         if ( headType )
         {
             tstring fileType;
-            bool converted = Platform::ConvertString( headType->Text(), fileType );
+            bool converted = Helium::ConvertString( headType->Text(), fileType );
             HELIUM_ASSERT( converted );
 
             if ( m_File->m_FileData & RCS::FileData::FileType)
@@ -405,23 +405,23 @@ void FileLogCommand::OutputStat( StrDict *dict )
             revision->m_ChangesetId = dict->GetVar( g_ChangeTag, i )->Atoi();
 
             tstring actionString;
-            bool converted = Platform::ConvertString( dict->GetVar( g_ActionTag, i )->Text(), actionString );
+            bool converted = Helium::ConvertString( dict->GetVar( g_ActionTag, i )->Text(), actionString );
             HELIUM_ASSERT( converted );
 
             revision->m_Operation = GetOperationEnum( actionString );
 
             tstring fileType;
-            converted = Platform::ConvertString( dict->GetVar( g_TypeTag, i )->Text(), fileType ); 
+            converted = Helium::ConvertString( dict->GetVar( g_TypeTag, i )->Text(), fileType ); 
             HELIUM_ASSERT( converted );
 
             revision->m_FileType = GetFileType( fileType );
 
             revision->m_Time = (time_t) dict->GetVar( g_TimeTag, i )->Atoi();
             
-            converted = Platform::ConvertString( dict->GetVar( g_UserTag, i )->Text(), revision->m_Username );
+            converted = Helium::ConvertString( dict->GetVar( g_UserTag, i )->Text(), revision->m_Username );
             HELIUM_ASSERT( converted );
 
-            converted = Platform::ConvertString( dict->GetVar( g_ClientTag, i )->Text(), revision->m_Client );
+            converted = Helium::ConvertString( dict->GetVar( g_ClientTag, i )->Text(), revision->m_Client );
             HELIUM_ASSERT( converted );
 
             // This should not happen, but it has happened before when "move/delete" was added
@@ -432,11 +432,11 @@ void FileLogCommand::OutputStat( StrDict *dict )
             {
                 revision->m_Size = dict->GetVar( g_FileSizeTag, i )->Atoi64();
                 
-                converted = Platform::ConvertString( dict->GetVar( g_DigestTag, i )->Text(), revision->m_Digest );
+                converted = Helium::ConvertString( dict->GetVar( g_DigestTag, i )->Text(), revision->m_Digest );
                 HELIUM_ASSERT( converted );
             }
 
-            converted = Platform::ConvertString( dict->GetVar( g_DescriptionTag, i )->Text(), revision->m_Description );
+            converted = Helium::ConvertString( dict->GetVar( g_DescriptionTag, i )->Text(), revision->m_Description );
             HELIUM_ASSERT( converted );
 
             for ( u32 target = 0; target < PERFORCE_MAX_DICT_ENTRIES; ++target )
@@ -454,7 +454,7 @@ void FileLogCommand::OutputStat( StrDict *dict )
                 {
                     RCS::File* targetInfo = new RCS::File();
                     
-                    converted = Platform::ConvertString( dict->GetVar( g_FileTag, i, target )->Text(), targetInfo->m_DepotPath );
+                    converted = Helium::ConvertString( dict->GetVar( g_FileTag, i, target )->Text(), targetInfo->m_DepotPath );
                     HELIUM_ASSERT( converted );
 
                     revision->m_IntegrationTargets.push_back( targetInfo );
@@ -463,7 +463,7 @@ void FileLogCommand::OutputStat( StrDict *dict )
                 {
                     RCS::File* targetInfo = new RCS::File();
                     
-                    converted = Platform::ConvertString( dict->GetVar( g_FileTag, i, target )->Text(), targetInfo->m_DepotPath );
+                    converted = Helium::ConvertString( dict->GetVar( g_FileTag, i, target )->Text(), targetInfo->m_DepotPath );
                     HELIUM_ASSERT( converted );
 
                     revision->m_IntegrationOrigins.push_back( targetInfo );

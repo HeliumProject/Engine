@@ -139,7 +139,7 @@ namespace Editor
 
         // thread count
         int m_ThreadCount;
-        Platform::Mutex m_ThreadCountMutex;
+        Helium::Mutex m_ThreadCountMutex;
 
     public:
         PropertiesManager( PropertiesGenerator* generator );

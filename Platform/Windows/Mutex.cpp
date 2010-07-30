@@ -4,7 +4,7 @@
 #include "Platform/Platform.h"
 #include "Platform/Assert.h"
 
-using namespace Platform;
+using namespace Helium;
 
 HELIUM_COMPILE_ASSERT( sizeof(Mutex::Handle::DebugInfoStruct::ListEntryStruct) == sizeof(LIST_ENTRY) );
 HELIUM_COMPILE_ASSERT( sizeof(Mutex::Handle::DebugInfoStruct) == sizeof(RTL_CRITICAL_SECTION_DEBUG) );

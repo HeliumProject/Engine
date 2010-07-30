@@ -994,7 +994,7 @@ void Viewport::Draw()
 
   LUNA_SCENE_DRAW_SCOPE_TIMER( ("") );
 
-  u64 start = Platform::TimerGetClock();
+  u64 start = Helium::TimerGetClock();
 
   DrawArgs args;
 
@@ -1191,7 +1191,7 @@ void Viewport::Draw()
     m_Statistics->m_FrameNumber++;
     m_Statistics->m_FrameCount++;
 
-    m_Statistics->m_RenderTime += Platform::CyclesToMillis( Platform::TimerGetClock() - start );
+    m_Statistics->m_RenderTime += Helium::CyclesToMillis( Helium::TimerGetClock() - start );
     m_Statistics->m_RenderWalkTime += args.m_WalkTime;
     m_Statistics->m_RenderSortTime += args.m_SortTime;
     m_Statistics->m_RenderCompareTime += args.m_CompareTime;

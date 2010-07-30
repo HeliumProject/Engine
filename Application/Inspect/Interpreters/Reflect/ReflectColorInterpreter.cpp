@@ -24,7 +24,7 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
   LabelPtr label = parent->GetCanvas()->Create<Label>( this );
 
   tstring temp;
-  bool converted = Platform::ConvertString( field->m_UIName, temp );
+  bool converted = Helium::ConvertString( field->m_UIName, temp );
   HELIUM_ASSERT( converted );
 
   label->SetText( temp );

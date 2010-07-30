@@ -27,7 +27,7 @@ Reflect::Field* Composite::AddField(Element& instance, const std::string& name, 
 {
     tstring convertedName;
     {
-        bool converted = Platform::ConvertString( name, convertedName );
+        bool converted = Helium::ConvertString( name, convertedName );
         HELIUM_ASSERT( converted );
     }
 
@@ -73,7 +73,7 @@ Reflect::ElementField* Composite::AddElementField(Element& instance, const std::
 {
     tstring convertedName;
     {
-        bool converted = Platform::ConvertString( name, convertedName );
+        bool converted = Helium::ConvertString( name, convertedName );
         HELIUM_ASSERT( converted );
     }
 
@@ -120,13 +120,13 @@ Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, con
 {
     tstring convertedName;
     {
-        bool converted = Platform::ConvertString( name, convertedName );
+        bool converted = Helium::ConvertString( name, convertedName );
         HELIUM_ASSERT( converted );
     }
 
     tstring convertedEnumName;
     {
-        bool converted = Platform::ConvertString( enumName, convertedEnumName );
+        bool converted = Helium::ConvertString( enumName, convertedEnumName );
         HELIUM_ASSERT( converted );
     }
 

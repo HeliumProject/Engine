@@ -34,26 +34,26 @@ namespace IPC
     class FOUNDATION_API Connection
     {
     protected:
-        tchar              m_Name[256];          // friendly name for this connection
-        bool              m_Server;             // are we the server side or the client side
-        bool              m_Terminating;        // used by the closedown code to signal it wants the threads to terminate
-        Platform::Event   m_Terminate;          // used to wake up sleeping threads for when we want to terminate
+        tchar                   m_Name[256];          // friendly name for this connection
+        bool                    m_Server;             // are we the server side or the client side
+        bool                    m_Terminating;        // used by the closedown code to signal it wants the threads to terminate
+        Helium::Event           m_Terminate;          // used to wake up sleeping threads for when we want to terminate
 
-        ConnectionState   m_State;              // current status, do not change outside of m_Mutex 
-        u32               m_ConnectCount;       // track the number of connection that have occured
-        Platform::Type    m_RemotePlatform;     // the platform of the end point on the other side
-        i32               m_NextTransaction;    // next transaction id for this connection endpoint
+        ConnectionState         m_State;              // current status, do not change outside of m_Mutex 
+        u32                     m_ConnectCount;       // track the number of connection that have occured
+        Helium::Platform::Type  m_RemotePlatform;     // the platform of the end point on the other side
+        i32                     m_NextTransaction;    // next transaction id for this connection endpoint
 
-        Platform::Mutex   m_Mutex;              // mutex to protect access to this class
-        MessageQueue      m_ReadQueue;          // incoming messages
-        MessageQueue      m_WriteQueue;         // outgoing messages
+        Helium::Mutex           m_Mutex;              // mutex to protect access to this class
+        MessageQueue            m_ReadQueue;          // incoming messages
+        MessageQueue            m_WriteQueue;         // outgoing messages
 
-        Platform::Thread  m_ConnectThread;      // handle of the core thread that manages the connection, once
-        Platform::Thread  m_ReadThread;         // handle of the thread reads from the pipe (incomming)
-        Platform::Thread  m_WriteThread;        // handle of the thread that writes to the pipe (outgoing)
+        Helium::Thread          m_ConnectThread;      // handle of the core thread that manages the connection, once
+        Helium::Thread          m_ReadThread;         // handle of the thread reads from the pipe (incomming)
+        Helium::Thread          m_WriteThread;        // handle of the thread that writes to the pipe (outgoing)
 
-        MessageHeader     m_ReadHeader;
-        MessageHeader     m_WriteHeader;
+        MessageHeader           m_ReadHeader;
+        MessageHeader           m_WriteHeader;
 
     public:
         Connection();
@@ -85,7 +85,7 @@ namespace IPC
         //
 
     public:
-        Platform::Type GetRemotePlatform()
+        Helium::Platform::Type GetRemotePlatform()
         {
             return m_RemotePlatform;
         }

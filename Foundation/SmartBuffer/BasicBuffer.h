@@ -117,20 +117,20 @@ namespace Helium
         u32 AddVector4( const Math::Vector3& v, f32 w, const tchar* debugStr = NULL);
         u32 AddVector4( f32 x, f32 y, f32 z, f32 w, const tchar* debugStr = NULL);
 
-        void AddAtLocI8(i8 val, const Location& destination);
-        void AddAtLocU8(u8 val, const Location& destination);
+        void AddAtLocI8(i8 val, const BufferLocation& destination);
+        void AddAtLocU8(u8 val, const BufferLocation& destination);
 
-        void AddAtLocI16(i16 val, const Location& destination);
-        void AddAtLocU16(u16 val, const Location& destination);
+        void AddAtLocI16(i16 val, const BufferLocation& destination);
+        void AddAtLocU16(u16 val, const BufferLocation& destination);
 
-        void AddAtLocI32(i32 val, const Location& destination);
-        void AddAtLocU32(u32 val, const Location& destination);
+        void AddAtLocI32(i32 val, const BufferLocation& destination);
+        void AddAtLocU32(u32 val, const BufferLocation& destination);
 
-        void AddAtLocI64(i64 val, const Location& destination);
-        void AddAtLocU64(u64 val, const Location& destination);
+        void AddAtLocI64(i64 val, const BufferLocation& destination);
+        void AddAtLocU64(u64 val, const BufferLocation& destination);
 
-        void AddAtLocF32(f32 val, const Location& destination);
-        void AddAtLocF64(f64 val, const Location& destination);
+        void AddAtLocF32(f32 val, const BufferLocation& destination);
+        void AddAtLocF64(f64 val, const BufferLocation& destination);
 
         void AddPad ( u32 pad_length );
         void PadToArb ( u32 align_size );
@@ -147,27 +147,27 @@ namespace Helium
         /// Sets maximum capacity for buffer, reallocating if necessary.
         void SetCapacity(u32 capacity);
 
-        /// Reserves 'size' space in the buffer and returns a Location object, advances the write location
-        Location Reserve(u32 size, const tchar* dbgStr = NULL, ...);
-        void Reserve(Location& loc, u32 size, const tchar* dbgStr = NULL, ...);
+        /// Reserves 'size' space in the buffer and returns a BufferLocation object, advances the write location
+        BufferLocation Reserve(u32 size, const tchar* dbgStr = NULL, ...);
+        void Reserve(BufferLocation& loc, u32 size, const tchar* dbgStr = NULL, ...);
 
-        /// Reserves space for a pointer in the buffer and returns a Location object, advances the write location
+        /// Reserves space for a pointer in the buffer and returns a BufferLocation object, advances the write location
         // if size is zero an automatically sized pointer is reserved based on the platform otherwise size
         // must be 4 or 8 and in either case a pointer of this size will be created
-        Location ReservePointer(u32 size, const tchar* dbgStr = NULL, ... );
-        void ReservePointer(Location& loc, u32 size, const tchar* dbgStr = NULL, ... );
+        BufferLocation ReservePointer(u32 size, const tchar* dbgStr = NULL, ... );
+        void ReservePointer(BufferLocation& loc, u32 size, const tchar* dbgStr = NULL, ... );
 
-        /// Reserves space for an offset in the buffer and returns a Location object, advances the write location
-        Location ReserveOffset(const tchar* dbgStr = NULL, ... );
-        void ReserveOffset(Location& loc, const tchar* dbgStr = NULL, ... );
+        /// Reserves space for an offset in the buffer and returns a BufferLocation object, advances the write location
+        BufferLocation ReserveOffset(const tchar* dbgStr = NULL, ... );
+        void ReserveOffset(BufferLocation& loc, const tchar* dbgStr = NULL, ... );
 
         /// At the current offset write a pointer to the destination, advances the write location
-        void WritePointer( const Location& destination );
-        void WritePointer32( const Location& destination );
-        void WritePointer64( const Location& destination );
+        void WritePointer( const BufferLocation& destination );
+        void WritePointer32( const BufferLocation& destination );
+        void WritePointer64( const BufferLocation& destination );
 
         /// At the current offset write an offset to the destination, advances the write location
-        void WriteOffset( const Location& destination, bool absolute = false );
+        void WriteOffset( const BufferLocation& destination, bool absolute = false );
     };
 
     // this is a handy function for checking to make sure you have written all of the 

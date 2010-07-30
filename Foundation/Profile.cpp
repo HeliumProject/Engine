@@ -171,7 +171,7 @@ void Accumulator::ReportAll()
     }
 }
 
-Platform::ThreadLocalPointer g_ProfileContext;
+Helium::ThreadLocalPointer g_ProfileContext;
 
 ScopeTimer::ScopeTimer(Accumulator* accum, const char* func, u32 line, const char* desc)
 {
@@ -184,7 +184,7 @@ ScopeTimer::ScopeTimer(Accumulator* accum, const char* func, u32 line, const cha
     }
 
     m_Accum       = accum; 
-    m_StartTicks  = Platform::TimerGetClock(); 
+    m_StartTicks  = Helium::TimerGetClock(); 
     m_Print       = desc != NULL; 
 
 #if defined(PROFILE_INSTRUMENTATION)
@@ -204,7 +204,7 @@ ScopeTimer::ScopeTimer(Accumulator* accum, const char* func, u32 line, const cha
 
         init->m_Version    = PROFILE_PROTOCOL_VERSION;
         init->m_Signature  = PROFILE_SIGNATURE; 
-        init->m_Conversion = Platform::CyclesToMillis(PROFILE_CYCLES_FOR_CONVERSION); 
+        init->m_Conversion = Helium::CyclesToMillis(PROFILE_CYCLES_FOR_CONVERSION); 
     }
 
     ScopeEnterPacket* enter = context->AllocPacket<ScopeEnterPacket>(PROFILE_CMD_SCOPE_ENTER); 
@@ -231,10 +231,10 @@ ScopeTimer::ScopeTimer(Accumulator* accum, const char* func, u32 line, const cha
 
 ScopeTimer::~ScopeTimer()
 {
-    u64 stopTicks = Platform::TimerGetClock();  
+    u64 stopTicks = Helium::TimerGetClock();  
 
     u64   taken  = stopTicks - m_StartTicks; 
-    float millis = Platform::CyclesToMillis(taken); 
+    float millis = Helium::CyclesToMillis(taken); 
 
     if ( m_Print && m_Description[0] != '\0' )
     {
@@ -281,7 +281,7 @@ Context::Context()
 , m_StackDepth(0)
 , m_PacketBufferOffset(0)
 {
-    m_TraceFile.Open( Platform::TraceFile::GetFilePath() ); 
+    m_TraceFile.Open( Helium::TraceFile::GetFilePath() ); 
     memset(m_AccumStack, 0, sizeof(m_AccumStack)); 
 }
 
@@ -292,7 +292,7 @@ Context::~Context()
 
 void Context::FlushFile()
 {
-    u64 startTicks = Platform::TimerGetClock(); 
+    u64 startTicks = Helium::TimerGetClock(); 
 
     // make a scope enter packet for flushing the file
     ScopeEnterPacket* enter = (ScopeEnterPacket*) (m_PacketBuffer + m_PacketBufferOffset); 
@@ -329,7 +329,7 @@ void Context::FlushFile()
 
     exit->m_UniqueID   = 0; 
     exit->m_StackDepth = 0; 
-    exit->m_Duration   = Platform::TimerGetClock() - startTicks; 
+    exit->m_Duration   = Helium::TimerGetClock() - startTicks; 
 
     // return to filling out the packet buffer
 }

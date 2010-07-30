@@ -10,14 +10,15 @@
 #include <intrin.h>
 #include <sstream>
 
-using namespace Profile;
+using namespace Helium;
+using namespace Helium::Profile;
 
-void Platform::TraceFile::Open(const tchar* file)
+void Helium::TraceFile::Open(const tchar* file)
 {
     m_FileHandle = _tfopen(file, TXT("wb"));
 }
 
-void Platform::TraceFile::Close()
+void Helium::TraceFile::Close()
 {
     if (m_FileHandle)
     {
@@ -25,7 +26,7 @@ void Platform::TraceFile::Close()
     }
 }
 
-void Platform::TraceFile::Write(const tchar* data, int size)
+void Helium::TraceFile::Write(const tchar* data, int size)
 {
     if (m_FileHandle)
     {
@@ -33,7 +34,7 @@ void Platform::TraceFile::Write(const tchar* data, int size)
     }
 }
 
-const tchar* Platform::TraceFile::GetFilePath()
+const tchar* Helium::TraceFile::GetFilePath()
 {
     tchar buf[MAX_PATH];
     GetModuleFileName(NULL, buf, MAX_PATH);
@@ -55,7 +56,7 @@ const tchar* Platform::TraceFile::GetFilePath()
     return file;
 }
 
-u64 Platform::TimerGetClock()
+u64 Helium::TimerGetClock()
 {
     return __rdtsc();
 }
@@ -105,26 +106,26 @@ inline double GetClockSpeed()
     return (float)(clockSpeed = d_clock_freq);
 }
 
-float Platform::CyclesToMillis(u64 cycles)
+float Helium::CyclesToMillis(u64 cycles)
 {
     return (float)((1000.0 * (double)cycles) / GetClockSpeed());
 }
 
-float Platform::TimeTaken(u64 start_time)
+float Helium::TimeTaken(u64 start_time)
 {
     u64 time = TimerGetClock() - start_time;
     return CyclesToMillis(time);
 }
 
-void Platform::ReportTime(const tchar* segment, u64 start_time, double& total_millis)
+void Helium::ReportTime(const tchar* segment, u64 start_time, double& total_millis)
 {
     u64 time = TimerGetClock() - start_time;
     double millis = CyclesToMillis(time);
-    Platform::Print(TXT("%s took %f ms\n"), segment, millis);
+    Helium::Print(TXT("%s took %f ms\n"), segment, millis);
     total_millis += millis;
 }
 
-u64 Platform::GetTotalMemory()
+u64 Helium::GetTotalMemory()
 {
     MemoryStatus status;
     GetMemoryStatus( &status );

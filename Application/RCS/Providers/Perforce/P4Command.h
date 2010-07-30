@@ -35,7 +35,7 @@ namespace Perforce
     {
 #ifdef UNICODE
         std::string narrowArg;
-        bool converted = Platform::ConvertString( arg, narrowArg );
+        bool converted = Helium::ConvertString( arg, narrowArg );
         HELIUM_ASSERT( converted );
         AddArg( narrowArg.c_str() );
 #else

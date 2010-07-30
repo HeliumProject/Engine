@@ -1,9 +1,9 @@
 #include "Windows.h"
 #include "Console.h"
 
-using namespace Platform;
+using namespace Helium;
 
-void Platform::Print(ConsoleColor color, FILE* stream, const tchar* fmt, ...)
+void Helium::Print(ConsoleColor color, FILE* stream, const tchar* fmt, ...)
 {
     CONSOLE_SCREEN_BUFFER_INFO info;
 
@@ -33,7 +33,7 @@ void Platform::Print(ConsoleColor color, FILE* stream, const tchar* fmt, ...)
     }
 }
 
-void Platform::PrintArgs(ConsoleColor color, FILE* stream, const tchar* fmt, va_list args)
+void Helium::PrintArgs(ConsoleColor color, FILE* stream, const tchar* fmt, va_list args)
 {
     CONSOLE_SCREEN_BUFFER_INFO info;
 
@@ -60,7 +60,7 @@ void Platform::PrintArgs(ConsoleColor color, FILE* stream, const tchar* fmt, va_
     }
 }
 
-void Platform::PrintString(ConsoleColor color, FILE* stream, const tstring& tstring)
+void Helium::PrintString(ConsoleColor color, FILE* stream, const tstring& tstring)
 {
     CONSOLE_SCREEN_BUFFER_INFO info;
 

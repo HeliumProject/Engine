@@ -85,7 +85,7 @@ void Object::IncrRefCount() const
     }
 #endif
 
-    Platform::AtomicIncrement( &m_RefCount );
+    Helium::AtomicIncrement( &m_RefCount );
 }
 
 void Object::DecrRefCount() const
@@ -97,7 +97,7 @@ void Object::DecrRefCount() const
     }
 #endif
 
-    Platform::AtomicDecrement( &m_RefCount ); 
+    Helium::AtomicDecrement( &m_RefCount ); 
 
     if (m_RefCount == 0)
     {

@@ -127,7 +127,7 @@ bool BuildCommand::Process( std::vector< tstring >::const_iterator& argsBegin, c
 	AssetBuilder::AddAssetBuiltListener( AssetBuilder::AssetBuiltSignature::Delegate ( &AssetBuilt ) );
 
 
-    if ( Platform::IsDebuggerPresent() )
+    if ( Helium::IsDebuggerPresent() )
     {
         if ( m_WorkerFlag )
         {
@@ -279,22 +279,22 @@ void BuildCommand::Report(Asset::AssetClass* assetClass)
         std::fstream file ( tstring( assetClass->GetBuiltDirectory() + "error.txt" ).c_str() );
         if ( !file.fail() )
         {
-            Platform::Print( Platform::ConsoleColors::White, stderr, "Warnings and Errors:\n" );
+            Helium::Print( Helium::ConsoleColors::White, stderr, "Warnings and Errors:\n" );
             while ( !file.eof() )
             {
                 std::getline( file, line );
 
-                Platform::ConsoleColor color = Platform::ConsoleColors::None;
+                Helium::ConsoleColor color = Helium::ConsoleColors::None;
                 if ( strncmp( "Error", line.c_str(), 5 ) == 0 )
                 {
-                    color = Platform::ConsoleColors::Red;
+                    color = Helium::ConsoleColors::Red;
                 }
                 else if ( strncmp( "Warning", line.c_str(), 7 ) == 0 )
                 {
-                    color = Platform::ConsoleColors::Yellow;
+                    color = Helium::ConsoleColors::Yellow;
                 }
 
-                Platform::Print( color, stderr, "%s\n", line.c_str() );
+                Helium::Print( color, stderr, "%s\n", line.c_str() );
             }
         }
     }
@@ -311,7 +311,7 @@ bool BuildCommand::Build( Dependencies::DependencyGraph& depGraph, std::set< Hel
 
         AssetClassPtr assetClass;
 
-        if (Platform::IsDebuggerPresent() && !m_AllFlag )
+        if (Helium::IsDebuggerPresent() && !m_AllFlag )
         {
             assetClass = AssetClass::LoadAssetClass( path );
 
@@ -370,7 +370,7 @@ bool BuildCommand::Build( Dependencies::DependencyGraph& depGraph, std::set< Hel
 
         AssetClassPtr assetClass;
 
-        if (Platform::IsDebuggerPresent() && !m_AllFlag)
+        if (Helium::IsDebuggerPresent() && !m_AllFlag)
         {
             assetClass = AssetClass::LoadAssetClass( filePath );
 
@@ -412,7 +412,7 @@ bool BuildCommand::Build( Dependencies::DependencyGraph& depGraph, std::set< Hel
         }
     }
 
-    if (Platform::IsDebuggerPresent())
+    if (Helium::IsDebuggerPresent())
     {
         AssetBuilder::Build( depGraph, jobs );
     }

@@ -1138,7 +1138,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
             args.m_Flags |= ExportFlags::SelectedNodes;
 
-            u64 startTimer = Platform::TimerGetClock();
+            u64 startTimer = Helium::TimerGetClock();
 
             SetCursor( wxCursor( wxCURSOR_WAIT ) );
 
@@ -1223,7 +1223,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
             {
                 tostringstream str;
                 str.precision( 2 );
-                str << "Export Complete: " << std::fixed << Platform::CyclesToMillis( Platform::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
+                str << "Export Complete: " << std::fixed << Helium::CyclesToMillis( Helium::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
                 SceneStatusChanged( str.str() );
             }
         }

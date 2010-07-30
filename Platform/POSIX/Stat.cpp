@@ -1,6 +1,6 @@
 #include "Platform/Stat.h"
 
-bool Platform::StatPath( const tchar* path, Platform::Stat& stat )
+bool Helium::StatPath( const tchar* path, Helium::Stat& stat )
 {
     return false;
 }

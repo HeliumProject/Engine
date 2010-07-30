@@ -11,7 +11,7 @@
 
 #include <string>
 
-namespace Platform
+namespace Helium
 {
     PLATFORM_API extern const tchar PathSeparator;
 

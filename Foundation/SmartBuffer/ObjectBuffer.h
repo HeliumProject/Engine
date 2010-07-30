@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Fixup.h"
 #include "SmartBuffer.h"
 
 #define OB_TYPEDEF( T ) \
@@ -80,7 +79,7 @@ namespace Helium
       return *((T*)(m_Data + ( sizeof( T ) * index ) ));
     }
 
-    inline Location GetIndexOffsetLocation( u32 index, u32 offset )
+    inline BufferLocation GetIndexOffsetLocation( u32 index, u32 offset )
     {
       return GetOffsetLocation( ( sizeof(T) * index ) + offset );
     }

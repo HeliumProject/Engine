@@ -163,7 +163,7 @@ namespace Debug
         LuaStringfy(L, false);
 
         tstring temp;
-        Platform::ConvertString( lua_tostring(L, -1), temp );
+        Helium::ConvertString( lua_tostring(L, -1), temp );
         Printf(TXT("%s"), temp );
         lua_pop(L, 1);
         return 0;
@@ -174,7 +174,7 @@ namespace Debug
     {
         LuaStringfy(L, false);
         tstring temp;
-        Platform::ConvertString( lua_tostring(L, -1), temp );
+        Helium::ConvertString( lua_tostring(L, -1), temp );
         wxMessageBox(temp, wxT("Debug"));
         lua_pop(L, 1);
         return 0;
@@ -229,7 +229,7 @@ namespace Debug
     {
         LuaStringfy(L, true);
         tstring temp;
-        Platform::ConvertString( lua_tostring(L, -1), temp );
+        Helium::ConvertString( lua_tostring(L, -1), temp );
         Printf(TXT("%s"), temp );
         lua_pop(L, 1);
     }

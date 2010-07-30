@@ -24,10 +24,10 @@ namespace IPC
         tchar              m_ServerName[256];              // name of the server passed in by the user
 
         tchar              m_ReadName[256];                // name of the pipe
-        Platform::Pipe    m_ReadPipe;                     // handle of the pipe
+        Helium::Pipe    m_ReadPipe;                     // handle of the pipe
 
         tchar              m_WriteName[256];               // name of the pipe
-        Platform::Pipe    m_WritePipe;                    // handle of the pipe
+        Helium::Pipe    m_WritePipe;                    // handle of the pipe
 
     public:
         PipeConnection();

@@ -59,7 +59,7 @@ namespace Reflect
             info->m_TypeID = AssignTypeID();
             info->m_Size = sizeof(T);
             info->m_ShortName = name;
-            bool converted = Platform::ConvertString( typeid(T).name(), info->m_FullName );
+            bool converted = Helium::ConvertString( typeid(T).name(), info->m_FullName );
             HELIUM_ASSERT( converted );
             info->m_UIName = info->m_ShortName;
 

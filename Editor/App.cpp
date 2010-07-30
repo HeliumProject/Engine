@@ -86,7 +86,7 @@ static int ShowBreakpointDialog(const Debug::BreakpointArgs& args )
       Debug::GetExceptionDetails( args.m_Info, exArgs ); 
 
       // dump args.m_Info to console
-      Platform::Print(Platform::ConsoleColors::Red, stderr, TXT( "%s" ), Debug::GetExceptionInfo(args.m_Info).c_str());
+      Helium::Print(Helium::ConsoleColors::Red, stderr, TXT( "%s" ), Debug::GetExceptionInfo(args.m_Info).c_str());
 
       // display result
       tstring message( TXT( "A break point was triggered in the application:\n\n" ) );
@@ -303,7 +303,7 @@ void App::SavePreferences()
     path += TXT("EditorPreferences.xml");
 
     tstring error;
-    if ( Platform::IsDebuggerPresent() )
+    if ( Helium::IsDebuggerPresent() )
     {
         m_Preferences->SaveToFile( path, error );
 }
@@ -331,7 +331,7 @@ void App::LoadPreferences()
     Application::GetPreferencesDirectory( path );
     path += TXT("EditorPreferences.xml");
 
-    if ( Platform::IsDebuggerPresent() )
+    if ( Helium::IsDebuggerPresent() )
     {
         m_Preferences->LoadFromFile( path );
 }
@@ -358,7 +358,7 @@ void App::LoadPreferences()
 static int wxEntryWrapper(HINSTANCE hInstance, HINSTANCE hPrevInstance, tchar* pCmdLine, int nCmdShow)
 {
     std::string cmdLine;
-    Platform::ConvertString( pCmdLine, cmdLine );
+    Helium::ConvertString( pCmdLine, cmdLine );
     return wxEntry( hInstance, hPrevInstance, const_cast<char*>(cmdLine.c_str()), nCmdShow );
 }
 

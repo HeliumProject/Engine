@@ -15,7 +15,8 @@
 #include <sstream>
 #include <iomanip>
 
-using namespace Application;
+using namespace Helium;
+using namespace Helium::Debug;
 
 static i32 g_InitCount = 0;
 
@@ -62,7 +63,7 @@ static void CopyDump( ExceptionReport& report )
 
   if ( FALSE == ::CopyFile( report.m_Args.m_Dump.c_str(), destination.str().c_str(), FALSE ) )
   {
-    Platform::Print(Platform::ConsoleColors::Red, stderr, TXT( "Failed to copy '%s' to '%s': %s\n" ), report.m_Args.m_Dump.c_str(), destination.str().c_str(), Platform::GetErrorString().c_str() );
+    Helium::Print(Helium::ConsoleColors::Red, stderr, TXT( "Failed to copy '%s' to '%s': %s\n" ), report.m_Args.m_Dump.c_str(), destination.str().c_str(), Helium::GetErrorString().c_str() );
   }
   else
   {
@@ -173,9 +174,9 @@ static void SendMail( ExceptionReport& report )
   }
 }
 
-static void ProcessException( const Debug::ExceptionArgs& args )
+static void HandleException( const Helium::Debug::ExceptionArgs& args )
 {
-  Application::ExceptionReport report ( args );
+  ExceptionReport report ( args );
 
   try
   {
@@ -187,11 +188,11 @@ static void ProcessException( const Debug::ExceptionArgs& args )
   }
   catch ( Helium::Exception& ex )
   {
-    Platform::Print(Platform::ConsoleColors::Red, stderr, TXT( "%s\n" ), ex.What() );
+    Helium::Print(Helium::ConsoleColors::Red, stderr, TXT( "%s\n" ), ex.What() );
   }
 }
 
-void Application::InitializeExceptionListener()
+void Debug::InitializeExceptionListener()
 {
   // init counting this API seems kind of silly, but we can actually get initialized from several places
   if ( ++g_InitCount == 1 )
@@ -215,11 +216,11 @@ void Application::InitializeExceptionListener()
     Debug::EnableExceptionFilter(true);
 
     // wait for an exception
-    Debug::g_ExceptionOccurred.Set( &ProcessException );
+    Debug::g_ExceptionOccurred.Set( &HandleException );
   }
 }
 
-void Application::CleanupExceptionListener()
+void Debug::CleanupExceptionListener()
 {
   if ( --g_InitCount == 0 )
   {

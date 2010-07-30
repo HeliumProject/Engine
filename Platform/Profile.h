@@ -18,7 +18,7 @@ typedef struct _iobuf FILE;
 
 #endif
 
-namespace Platform
+namespace Helium
 {
     class PLATFORM_API TraceFile
     {

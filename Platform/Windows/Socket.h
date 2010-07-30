@@ -7,7 +7,7 @@
 
 typedef int socklen_t;
 
-namespace Platform
+namespace Helium
 {
     struct PLATFORM_API Socket
     {

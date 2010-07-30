@@ -26,7 +26,7 @@ ArchiveXML::ArchiveXML(StatusHandler* status)
 , m_Version (CURRENT_VERSION)
 , m_Target (&m_Spool)
 {
-    m_Parser = XML_ParserCreate( Platform::GetEncoding().c_str() );
+    m_Parser = XML_ParserCreate( Helium::GetEncoding().c_str() );
 
     // set the user data used in callbacks
     XML_SetUserData(m_Parser, (void*)this);
@@ -196,7 +196,7 @@ void ArchiveXML::Start()
     m_Stream->Write( &feff ); // byte order mark
 #endif
 
-    *m_Stream << "<?xml version=\"1.0\" encoding=\"" << Platform::GetEncoding() << "\"?>\n";
+    *m_Stream << "<?xml version=\"1.0\" encoding=\"" << Helium::GetEncoding() << "\"?>\n";
     *m_Stream << "<Reflect FileFormatVersion=\"" << m_Version << "\">\n";
 }
 
@@ -468,7 +468,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
 
     if ( m_Version < FIRST_VERSION_WITH_NAMESPACE_SUPPORT )
     {
-        bool converted = Platform::ConvertString( pszName, elementType );
+        bool converted = Helium::ConvertString( pszName, elementType );
         HELIUM_ASSERT( converted );
     }
 
@@ -478,7 +478,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
         {
             if ( !_tcscmp( papszAttrs[i], TXT( "Type" ) ) )
             {
-                bool converted = Platform::ConvertString( papszAttrs[ i + 1 ], elementType );
+                bool converted = Helium::ConvertString( papszAttrs[ i + 1 ], elementType );
                 HELIUM_ASSERT( converted );
             }
         }

@@ -4,7 +4,7 @@
 #include "Platform/Types.h"
 #include "Platform/Compiler.h"
 
-namespace Platform
+namespace Helium
 {
     PLATFORM_API void AtomicIncrement( volatile i32* value );
     PLATFORM_API void AtomicDecrement( volatile i32* value );

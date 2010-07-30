@@ -13,31 +13,47 @@ source project at Insomniac Games.
 
 http://nocturnal.insomniacgames.com
 
-============
-Dependencies
-============
+=============
+Prerequisites
+=============
 
-Make sure to build Dependencies.sln before building Helium.sln.
+git
+Visual Studio 2008 with SP1
+DirectX SDK
 
-=======
-Unicode
-=======
+===============
+Building Helium
+===============
 
-Unicode is built via solution and project configurations (Debug Unicode
-and Release Unicode).  wxWidgets is signalled to compile and link via
-wxUSE_UNICODE which is specified in the Unicode.vsprops file.  This
-vsprops file is inherited only in Unicode project configurations.
+First, you'll need to build Dependencies.sln, which should build all
+the libraries Helium depends upon.  You must build Dependencies.sln
+using the same Project Configuration and Platform as you plan to use
+for Helium.  (Eg: Debug / Win32, Release Unicode / x64)
 
-====
-DLLs
-====
 
-Most projects are configured to be built as static libs, but its a best
-practice to continue to use *_API macros to dllexport/dllimport symbols.
+Once you've build Dependencies.sln, you should be able to build
+Helium.sln.  Again, make sure your Project Configuration and Platform
+setting match up.
 
-Depending on how plugin support comes online we may have to put these
-macros back into play to build the DLLs we need to properly support code
-sharing in plugins and host applications.
+  ===============
+  Unicode Support
+  ===============
+
+  Unicode is built via solution and project configurations (Debug Unicode
+  and Release Unicode).  wxWidgets is signalled to compile and link via
+  wxUSE_UNICODE which is specified in the Unicode.vsprops file.  This
+  vsprops file is inherited only in Unicode project configurations.
+
+  ====
+  DLLs
+  ====
+
+  Most projects are configured to be built as static libs, but its a best
+  practice to continue to use *_API macros to dllexport/dllimport symbols.
+
+  Depending on how plugin support comes online we may have to put these
+  macros back into play to build the DLLs we need to properly support code
+  sharing in plugins and host applications.
 
 ====================
 Platform Agnosticism
@@ -48,5 +64,5 @@ the time being we are moving all platform-specific API calls into
 Platform.vcproj.
 
 -Geoff (AKA gorlak)
-
+-Andy (AKA Andy)
 ########################################################################

@@ -6,8 +6,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MySQL", "Dependencies\MySQL
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLite", "Dependencies\SQLite.vcproj", "{190A611A-399F-47F6-B686-DF40C8B20F84}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TinyXML", "Dependencies\TinyXML.vcproj", "{06092F0D-324B-484D-A9ED-397DFF76AE53}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "Dependencies\zlib.vcproj", "{CFCA9C73-C321-48BA-8F29-097FD061EBB1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "squish", "Dependencies\squish.vcproj", "{CF9387AB-7C10-4217-A248-575EE8610008}"
@@ -87,22 +85,6 @@ Global
 		{190A611A-399F-47F6-B686-DF40C8B20F84}.Release|Win32.Build.0 = Release|Win32
 		{190A611A-399F-47F6-B686-DF40C8B20F84}.Release|x64.ActiveCfg = Release|x64
 		{190A611A-399F-47F6-B686-DF40C8B20F84}.Release|x64.Build.0 = Release|x64
-		{06092F0D-324B-484D-A9ED-397DFF76AE53}.Debug Unicode|Win32.ActiveCfg = Debug Unicode|Win32
-		{06092F0D-324B-484D-A9ED-397DFF76AE53}.Debug Unicode|Win32.Build.0 = Debug Unicode|Win32
-		{06092F0D-324B-484D-A9ED-397DFF76AE53}.Debug Unicode|x64.ActiveCfg = Debug Unicode|x64
-		{06092F0D-324B-484D-A9ED-397DFF76AE53}.Debug Unicode|x64.Build.0 = Debug Unicode|x64
-		{06092F0D-324B-484D-A9ED-397DFF76AE53}.Debug|Win32.ActiveCfg = Debug|Win32
-		{06092F0D-324B-484D-A9ED-397DFF76AE53}.Debug|Win32.Build.0 = Debug|Win32
-		{06092F0D-324B-484D-A9ED-397DFF76AE53}.Debug|x64.ActiveCfg = Debug|x64
-		{06092F0D-324B-484D-A9ED-397DFF76AE53}.Debug|x64.Build.0 = Debug|x64
-		{06092F0D-324B-484D-A9ED-397DFF76AE53}.Release Unicode|Win32.ActiveCfg = Release Unicode|Win32
-		{06092F0D-324B-484D-A9ED-397DFF76AE53}.Release Unicode|Win32.Build.0 = Release Unicode|Win32
-		{06092F0D-324B-484D-A9ED-397DFF76AE53}.Release Unicode|x64.ActiveCfg = Release Unicode|x64
-		{06092F0D-324B-484D-A9ED-397DFF76AE53}.Release Unicode|x64.Build.0 = Release Unicode|x64
-		{06092F0D-324B-484D-A9ED-397DFF76AE53}.Release|Win32.ActiveCfg = Release|Win32
-		{06092F0D-324B-484D-A9ED-397DFF76AE53}.Release|Win32.Build.0 = Release|Win32
-		{06092F0D-324B-484D-A9ED-397DFF76AE53}.Release|x64.ActiveCfg = Release|x64
-		{06092F0D-324B-484D-A9ED-397DFF76AE53}.Release|x64.Build.0 = Release|x64
 		{CFCA9C73-C321-48BA-8F29-097FD061EBB1}.Debug Unicode|Win32.ActiveCfg = Debug Unicode|Win32
 		{CFCA9C73-C321-48BA-8F29-097FD061EBB1}.Debug Unicode|Win32.Build.0 = Debug Unicode|Win32
 		{CFCA9C73-C321-48BA-8F29-097FD061EBB1}.Debug Unicode|x64.ActiveCfg = Debug Unicode|x64

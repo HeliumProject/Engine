@@ -2,7 +2,6 @@
 #include "ShaderManager.h"
 #include "Renderer.h"
 #include "ShaderLoader.h"
-#include "XMLShaderLoader.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/File/Path.h"
@@ -245,19 +244,6 @@ u32 Render::ShaderManager::AddShader(Render::Shader* sh)
 u32 Render::ShaderManager::LoadNewShader( const tchar* fname, ShaderLoaderPtr loader )
 {
   Helium::Path shaderPath( fname );
-
-  if ( loader == NULL )
-  {
-    tstring extension = shaderPath.Extension();
-    if ( extension == TXT( "xml" ) )
-    {
-      loader = new XMLShaderLoader ();
-    }
-    else
-    {
-        Log::Warning( TXT( "Unknown shader type '%s'.\n" ), fname );
-    }
-  }
 
   Shader* shader = loader->ParseFile( fname, this );
 

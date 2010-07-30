@@ -58,10 +58,6 @@
 		Value="$(SolutionDir)Dependencies\tiff"
 	/>
 	<UserMacro
-		Name="TinyXML"
-		Value="$(SolutionDir)Dependencies\TinyXML"
-	/>
-	<UserMacro
 		Name="wxWidgets"
 		Value="$(SolutionDir)Dependencies\wxWidgets"
 	/>

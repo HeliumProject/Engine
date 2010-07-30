@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -69,7 +69,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib wxmsw29d.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="lua.lib LiteSQL.lib wxmsw29d.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				OutputFile="$(BuiltDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Debug&quot;;&quot;$(wxWidgets)\lib\vc_dll&quot;;&quot;$(DirectX)\lib\x86&quot;"
@@ -131,7 +131,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -155,7 +155,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib wxmsw29d.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="lua.lib LiteSQL.lib wxmsw29d.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				OutputFile="$(BuiltDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Debug&quot;;&quot;$(wxWidgets)\lib\vc_amd64_dll&quot;;&quot;$(DirectX)\lib\x64&quot;"
@@ -216,7 +216,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="1"
@@ -238,7 +238,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib wxmsw29.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="lua.lib LiteSQL.lib wxmsw29.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				OutputFile="$(BuiltDir)\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Release&quot;;&quot;$(wxWidgets)\lib\vc_dll&quot;;&quot;$(DirectX)\lib\x86&quot;"
@@ -300,7 +300,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -321,7 +321,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib wxmsw29.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="lua.lib LiteSQL.lib wxmsw29.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				OutputFile="$(BuiltDir)\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Release&quot;;&quot;$(wxWidgets)\lib\vc_amd64_dll&quot;;&quot;$(DirectX)\lib\x64&quot;"
@@ -382,7 +382,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -407,7 +407,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib wxmsw29ud.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="lua.lib LiteSQL.lib wxmsw29ud.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				OutputFile="$(BuiltDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Debug&quot;;&quot;$(wxWidgets)\lib\vc_dll&quot;;&quot;$(DirectX)\lib\x86&quot;"
@@ -469,7 +469,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -493,7 +493,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib wxmsw29ud.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="lua.lib LiteSQL.lib wxmsw29ud.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				OutputFile="$(BuiltDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Debug&quot;;&quot;$(wxWidgets)\lib\vc_amd64_dll&quot;;&quot;$(DirectX)\lib\x64&quot;"
@@ -554,7 +554,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="1"
@@ -576,7 +576,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib wxmsw29u.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="lua.lib LiteSQL.lib wxmsw29u.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				OutputFile="$(BuiltDir)\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Release&quot;;&quot;$(wxWidgets)\lib\vc_dll&quot;;&quot;$(DirectX)\lib\x86&quot;"
@@ -638,7 +638,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -659,7 +659,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib lua.lib LiteSQL.lib wxmsw29u.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="lua.lib LiteSQL.lib wxmsw29u.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				OutputFile="$(BuiltDir)\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Release&quot;;&quot;$(wxWidgets)\lib\vc_amd64_dll&quot;;&quot;$(DirectX)\lib\x64&quot;"
@@ -3345,14 +3345,6 @@
 				</File>
 				<File
 					RelativePath=".\Render\ShaderLoader.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Render\XMLShaderLoader.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Render\XMLShaderLoader.h"
 					>
 				</File>
 			</Filter>

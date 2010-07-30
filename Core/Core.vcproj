@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="TinyXML"
-	ProjectGUID="{06092F0D-324B-484D-A9ED-397DFF76AE53}"
-	RootNamespace="TinyXML"
+	Name="Core"
+	ProjectGUID="{9955828E-1B8C-407D-9559-BFCE158A2B7D}"
+	RootNamespace="Core"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -21,7 +21,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
@@ -44,14 +44,12 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;TinyXML_EXPORTS"
+				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;CORE_EXPORTS"
+				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=""
-				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 				DisableSpecificWarnings="4251;4996"
@@ -66,10 +64,14 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -79,6 +81,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -87,7 +92,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
@@ -111,14 +116,12 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;TinyXML_EXPORTS"
+				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;CORE_EXPORTS"
+				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=""
-				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
@@ -133,10 +136,14 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -148,13 +155,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
@@ -176,13 +186,11 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;TinyXML_EXPORTS"
+				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;CORE_EXPORTS"
+				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=""
-				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
@@ -197,10 +205,14 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -212,13 +224,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=" "
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
@@ -241,13 +256,11 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;TinyXML_EXPORTS"
+				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;CORE_EXPORTS"
+				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=""
-				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
@@ -262,10 +275,14 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -277,13 +294,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=" "
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug Unicode|Win32"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
@@ -306,14 +326,12 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;TinyXML_EXPORTS"
+				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;CORE_EXPORTS"
+				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=""
-				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 				DisableSpecificWarnings="4251;4996"
@@ -328,10 +346,14 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -343,13 +365,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug Unicode|x64"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
@@ -373,14 +398,12 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;TinyXML_EXPORTS"
+				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;CORE_EXPORTS"
+				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=""
-				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
@@ -395,10 +418,14 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -410,13 +437,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release Unicode|Win32"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
@@ -438,13 +468,11 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;TinyXML_EXPORTS"
+				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;CORE_EXPORTS"
+				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=""
-				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
@@ -459,10 +487,14 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -474,13 +506,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=" "
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release Unicode|x64"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
@@ -503,13 +538,11 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;TinyXML_EXPORTS"
+				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;CORE_EXPORTS"
+				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=""
-				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
@@ -524,10 +557,14 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -539,36 +576,31 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=" "
 			/>
 		</Configuration>
 	</Configurations>
 	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
+			RelativePathToProject=".\Foundation\Foundation.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"
+			RelativePathToProject=".\Platform\Platform.vcproj"
+		/>
 	</References>
 	<Files>
 		<File
-			RelativePath=".\TinyXML\tinystr.cpp"
+			RelativePath=".\API.h"
 			>
 		</File>
 		<File
-			RelativePath=".\TinyXML\tinystr.h"
-			>
-		</File>
-		<File
-			RelativePath=".\TinyXML\tinyxml.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\TinyXML\tinyxml.h"
-			>
-		</File>
-		<File
-			RelativePath=".\TinyXML\tinyxmlerror.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\TinyXML\tinyxmlparser.cpp"
+			RelativePath=".\Notes.txt"
 			>
 		</File>
 	</Files>

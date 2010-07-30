@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;APPLICATION_EXPORTS;WXMAKINGDLL_TWC"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -65,7 +65,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib wxmsw29d.lib ws2_32.lib"
+				AdditionalDependencies="wxmsw29d.lib ws2_32.lib"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll;$(p4api)\lib\$(PlatformName)\Debug"
 			/>
 			<Tool
@@ -117,7 +117,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;APPLICATION_EXPORTS;WXMAKINGDLL_TWC"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -138,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib wxmsw29d.lib ws2_32.lib"
+				AdditionalDependencies="wxmsw29d.lib ws2_32.lib"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_amd64_dll;$(p4api)\lib\$(PlatformName)\Debug"
 			/>
 			<Tool
@@ -188,7 +188,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;APPLICATION_EXPORTS;WXMAKINGDLL_TWC"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -208,7 +208,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib wxmsw29.lib ws2_32.lib"
+				AdditionalDependencies="wxmsw29.lib ws2_32.lib"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll;$(p4api)\lib\$(PlatformName)\Release"
 			/>
 			<Tool
@@ -259,7 +259,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;APPLICATION_EXPORTS;WXMAKINGDLL_TWC"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -279,7 +279,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib wxmsw29.lib ws2_32.lib"
+				AdditionalDependencies="wxmsw29.lib ws2_32.lib"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_amd64_dll;$(p4api)\lib\$(PlatformName)\Release"
 			/>
 			<Tool
@@ -330,7 +330,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;APPLICATION_EXPORTS;WXMAKINGDLL_TWC"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -351,7 +351,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib wxmsw29ud.lib ws2_32.lib"
+				AdditionalDependencies="wxmsw29ud.lib ws2_32.lib"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll;$(p4api)\lib\$(PlatformName)\Debug"
 			/>
 			<Tool
@@ -403,7 +403,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;APPLICATION_EXPORTS;WXMAKINGDLL_TWC"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -424,7 +424,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib wxmsw29ud.lib ws2_32.lib"
+				AdditionalDependencies="wxmsw29ud.lib ws2_32.lib"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_amd64_dll;$(p4api)\lib\$(PlatformName)\Debug"
 			/>
 			<Tool
@@ -474,7 +474,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;APPLICATION_EXPORTS;WXMAKINGDLL_TWC"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -494,7 +494,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib wxmsw29u.lib ws2_32.lib"
+				AdditionalDependencies="wxmsw29u.lib ws2_32.lib"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll;$(p4api)\lib\$(PlatformName)\Release"
 			/>
 			<Tool
@@ -545,7 +545,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;APPLICATION_EXPORTS;WXMAKINGDLL_TWC"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -565,7 +565,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="TinyXML.lib wxmsw29u.lib ws2_32.lib"
+				AdditionalDependencies="wxmsw29u.lib ws2_32.lib"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_amd64_dll;$(p4api)\lib\$(PlatformName)\Release"
 			/>
 			<Tool
@@ -676,58 +676,6 @@
 			</File>
 			<File
 				RelativePath=".\Worker\Process.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="CodeGen"
-			>
-			<File
-				RelativePath=".\CodeGen\Enum.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CodeGen\Enum.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CodeGen\EnumValue.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CodeGen\EnumValue.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CodeGen\Namespace.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CodeGen\Namespace.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CodeGen\Node.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CodeGen\Node.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CodeGen\Parser.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CodeGen\Parser.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CodeGen\Writer.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CodeGen\Writer.h"
 				>
 			</File>
 		</Filter>
@@ -1661,6 +1609,10 @@
 		</File>
 		<File
 			RelativePath=".\Exceptions.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Notes.txt"
 			>
 		</File>
 		<File

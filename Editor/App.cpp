@@ -26,6 +26,8 @@
 #include "Application/Inspect/Interpreters/File/InspectFileInit.h"
 #include "Application/RCS/Providers/Perforce/Perforce.h"
 
+#include "Core/CoreInit.h"
+
 #include "Object.h"
 #include "Selectable.h"
 #include "Persistent.h"
@@ -61,88 +63,84 @@ using namespace Editor;
 using namespace Helium;
 using namespace Helium::CommandLine;
 
-#if ( wxUSE_EXCEPTIONS == 1 )
-#pragma message( "WARNING: wxWidgets exception handling is enabled!" )
-#endif
-
 static int ShowBreakpointDialog(const Debug::BreakpointArgs& args )
 {
-  static std::set<uintptr> disabled;
-  static bool skipAll = false;
-  bool skip = skipAll;
+    static std::set<uintptr> disabled;
+    static bool skipAll = false;
+    bool skip = skipAll;
 
-  // are we NOT skipping everything?
-  if (!skipAll)
-  {
-    // have we disabled this break point?
-    if (disabled.find(args.m_Info->ContextRecord->IPREG) != disabled.end())
+    // are we NOT skipping everything?
+    if (!skipAll)
     {
-      skip = true;
+        // have we disabled this break point?
+        if (disabled.find(args.m_Info->ContextRecord->IPREG) != disabled.end())
+        {
+            skip = true;
+        }
+        // we have NOT disabled this break point yet
+        else
+        {
+            Debug::ExceptionArgs exArgs ( Debug::ExceptionTypes::SEH, args.m_Fatal ); 
+            Debug::GetExceptionDetails( args.m_Info, exArgs ); 
+
+            // dump args.m_Info to console
+            Helium::Print(Helium::ConsoleColors::Red, stderr, TXT( "%s" ), Debug::GetExceptionInfo(args.m_Info).c_str());
+
+            // display result
+            tstring message( TXT( "A break point was triggered in the application:\n\n" ) );
+            message += Debug::GetSymbolInfo( args.m_Info->ContextRecord->IPREG );
+            message += TXT("\n\nWhat do you wish to do?");
+
+            const tchar* nothing = TXT( "Let the OS handle this as an exception" );
+            const tchar* thisOnce = TXT( "Skip this break point once" );
+            const tchar* thisDisable = TXT( "Skip this break point and disable it" );
+            const tchar* allDisable = TXT( "Skip all break points" );
+
+            wxArrayString choices;
+            choices.Add(nothing);
+            choices.Add(thisOnce);
+            choices.Add(thisDisable);
+            choices.Add(allDisable);
+            wxString choice = ::wxGetSingleChoice( message.c_str(), TXT( "Break Point Triggered" ), choices );
+
+            if (choice == nothing)
+            {
+                // we are not continuable, so unhook the top level filter
+                SetUnhandledExceptionFilter( NULL );
+
+                // this should let the OS prompt for the debugger
+                return EXCEPTION_CONTINUE_SEARCH;
+            }
+            else if (choice == thisOnce)
+            {
+                skip = true;
+            }
+            else if (choice == thisDisable)
+            {
+                skip = true;
+                disabled.insert(args.m_Info->ContextRecord->IPREG);
+            }
+            else if (choice == allDisable)
+            {
+                skip = true;
+                skipAll = true;
+            }
+        }
     }
-    // we have NOT disabled this break point yet
+
+    if (skipAll || skip)
+    {
+        // skip break instruction (move the ip ahead one byte)
+        args.m_Info->ContextRecord->IPREG += 1;
+
+        // continue execution past the break instruction
+        return EXCEPTION_CONTINUE_EXECUTION;
+    }
     else
     {
-      Debug::ExceptionArgs exArgs ( Debug::ExceptionTypes::SEH, args.m_Fatal ); 
-      Debug::GetExceptionDetails( args.m_Info, exArgs ); 
-
-      // dump args.m_Info to console
-      Helium::Print(Helium::ConsoleColors::Red, stderr, TXT( "%s" ), Debug::GetExceptionInfo(args.m_Info).c_str());
-
-      // display result
-      tstring message( TXT( "A break point was triggered in the application:\n\n" ) );
-      message += Debug::GetSymbolInfo( args.m_Info->ContextRecord->IPREG );
-      message += TXT("\n\nWhat do you wish to do?");
-
-      const tchar* nothing = TXT( "Let the OS handle this as an exception" );
-      const tchar* thisOnce = TXT( "Skip this break point once" );
-      const tchar* thisDisable = TXT( "Skip this break point and disable it" );
-      const tchar* allDisable = TXT( "Skip all break points" );
-
-      wxArrayString choices;
-      choices.Add(nothing);
-      choices.Add(thisOnce);
-      choices.Add(thisDisable);
-      choices.Add(allDisable);
-      wxString choice = ::wxGetSingleChoice( message.c_str(), TXT( "Break Point Triggered" ), choices );
-
-      if (choice == nothing)
-      {
-        // we are not continuable, so unhook the top level filter
-        SetUnhandledExceptionFilter( NULL );
-
-        // this should let the OS prompt for the debugger
+        // fall through and let window's crash API run
         return EXCEPTION_CONTINUE_SEARCH;
-      }
-      else if (choice == thisOnce)
-      {
-        skip = true;
-      }
-      else if (choice == thisDisable)
-      {
-        skip = true;
-        disabled.insert(args.m_Info->ContextRecord->IPREG);
-      }
-      else if (choice == allDisable)
-      {
-        skip = true;
-        skipAll = true;
-      }
     }
-  }
-
-  if (skipAll || skip)
-  {
-    // skip break instruction (move the ip ahead one byte)
-    args.m_Info->ContextRecord->IPREG += 1;
-
-    // continue execution past the break instruction
-    return EXCEPTION_CONTINUE_EXECUTION;
-  }
-  else
-  {
-    // fall through and let window's crash API run
-    return EXCEPTION_CONTINUE_SEARCH;
-  }
 }
 
 namespace Editor
@@ -183,51 +181,51 @@ bool App::OnInit()
     Helium::Path exePath( module );
     Helium::Path iconFolder( exePath.Directory() + TXT( "Icons/" ) );
 
-        Editor::WaitDialog::Enable( true );
+    wxInitAllImageHandlers();
 
-                wxInitAllImageHandlers();
+    wxImageHandler* curHandler = wxImage::FindHandler( wxBITMAP_TYPE_CUR );
+    if ( curHandler )
+    {
+        // Force the cursor handler to the end of the list so that it doesn't try to
+        // open TGA files.
+        wxImage::RemoveHandler( curHandler->GetName() );
+        curHandler = NULL;
+        wxImage::AddHandler( new wxCURHandler );
+    }
 
-                wxImageHandler* curHandler = wxImage::FindHandler( wxBITMAP_TYPE_CUR );
-                if ( curHandler )
-                {
-                    // Force the cursor handler to the end of the list so that it doesn't try to
-                    // open TGA files.
-                    wxImage::RemoveHandler( curHandler->GetName() );
-                    curHandler = NULL;
-                    wxImage::AddHandler( new wxCURHandler );
-                }
+    Helium::ArtProvider* artProvider = new Helium::ArtProvider();
+    wxArtProvider::Push( artProvider );
 
-                Helium::ArtProvider* artProvider = new Helium::ArtProvider();
-                wxArtProvider::Push( artProvider );
-
-                wxSimpleHelpProvider* helpProvider = new wxSimpleHelpProvider();
-                wxHelpProvider::Set( helpProvider );
+    wxSimpleHelpProvider* helpProvider = new wxSimpleHelpProvider();
+    wxHelpProvider::Set( helpProvider );
 
     // libs
-                m_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
-                m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
-                m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
-                m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
-                m_InitializerStack.Push( InspectContent::Initialize, InspectContent::Cleanup );
-                m_InitializerStack.Push( InspectFile::Initialize, InspectFile::Cleanup );
+    Editor::PerforceWaitDialog::Enable( true );
+    m_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
+    m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
+    m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
+    m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
+    m_InitializerStack.Push( InspectContent::Initialize, InspectContent::Cleanup );
+    m_InitializerStack.Push( InspectFile::Initialize, InspectFile::Cleanup );
 
     // core
-                m_InitializerStack.Push( Object::InitializeType, Object::CleanupType );
-                m_InitializerStack.Push( Selectable::InitializeType, Selectable::CleanupType );
-                m_InitializerStack.Push( Persistent::InitializeType, Persistent::CleanupType );
-                m_InitializerStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
+    m_InitializerStack.Push( Core::Initialize, Core::Cleanup );
+    m_InitializerStack.Push( Object::InitializeType, Object::CleanupType );
+    m_InitializerStack.Push( Selectable::InitializeType, Selectable::CleanupType );
+    m_InitializerStack.Push( Persistent::InitializeType, Persistent::CleanupType );
+    m_InitializerStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
     m_InitializerStack.Push( Reflect::RegisterEnumeration<FilePathOptions::FilePathOption>( &FilePathOptions::FilePathOptionEnumerateEnumeration, TXT( "FilePathOption" ) ) );
-                m_InitializerStack.Push( Reflect::RegisterEnumeration<EditorTypes::EditorType>( &EditorTypes::EditorTypeEnumerateEnumeration, TXT( "EditorType" ) ) );
-                m_InitializerStack.Push( Document::InitializeType, Document::CleanupType );
+    m_InitializerStack.Push( Reflect::RegisterEnumeration<EditorTypes::EditorType>( &EditorTypes::EditorTypeEnumerateEnumeration, TXT( "EditorType" ) ) );
+    m_InitializerStack.Push( Document::InitializeType, Document::CleanupType );
     m_InitializerStack.Push( Reflect::RegisterClass<MRUData>( TXT( "MRUData" ) ) );
 
     // task
 #pragma TODO("Move init into here")
-                m_InitializerStack.Push( TaskInitialize, TaskCleanup );
+    m_InitializerStack.Push( TaskInitialize, TaskCleanup );
 
     // scene
 #pragma TODO("Move init into here")
-                m_InitializerStack.Push( SceneInitialize, SceneCleanup );
+    m_InitializerStack.Push( SceneInitialize, SceneCleanup );
 
     // vault
     m_InitializerStack.Push( Reflect::RegisterClass<AssetCollection>( TXT( "AssetCollection" ) ) );
@@ -306,7 +304,7 @@ void App::SavePreferences()
     if ( Helium::IsDebuggerPresent() )
     {
         m_Preferences->SaveToFile( path, error );
-}
+    }
     else
     {
         try
@@ -334,7 +332,7 @@ void App::LoadPreferences()
     if ( Helium::IsDebuggerPresent() )
     {
         m_Preferences->LoadFromFile( path );
-}
+    }
     else
     {
         tstring error;
@@ -365,23 +363,23 @@ static int wxEntryWrapper(HINSTANCE hInstance, HINSTANCE hPrevInstance, tchar* p
 /////////////////////////////////////////////////////////////////////////////////
 int Main ( int argc, const tchar** argv )
 {
-	// print physical memory
-	MEMORYSTATUSEX status;
-	memset(&status, 0, sizeof(status));
-	status.dwLength = sizeof(status);
-	::GlobalMemoryStatusEx(&status);
-	Log::Print( TXT( "Physical Memory: %I64u M bytes total, %I64u M bytes available\n" ), status.ullTotalPhys >> 20, status.ullAvailPhys >> 20);
+    // print physical memory
+    MEMORYSTATUSEX status;
+    memset(&status, 0, sizeof(status));
+    status.dwLength = sizeof(status);
+    ::GlobalMemoryStatusEx(&status);
+    Log::Print( TXT( "Physical Memory: %I64u M bytes total, %I64u M bytes available\n" ), status.ullTotalPhys >> 20, status.ullAvailPhys >> 20);
 
-	// fill out the options vector
-	std::vector< tstring > options;
-	for ( int i = 1; i < argc; ++i )
-	{
-		options.push_back( argv[ i ] );
-	}
+    // fill out the options vector
+    std::vector< tstring > options;
+    for ( int i = 1; i < argc; ++i )
+    {
+        options.push_back( argv[ i ] );
+    }
     std::vector< tstring >::const_iterator& argsBegin = options.begin(), argsEnd = options.end();
 
     bool success = true;
-	tstring error; 
+    tstring error; 
 
 
     Processor processor( TXT( "luna" ), TXT( "[COMMAND <ARGS>]" ), TXT( "Editor (c) 2010 - Helium" ) );
@@ -404,48 +402,48 @@ int Main ( int argc, const tchar** argv )
     success &= processor.RegisterCommand( &helpCommand, error );
 
     //success &= processor.AddOption( new FlagOption(  , "pipe", "use pipe for console connection" ), error ); 
-    
+
     bool disableTracker = false;
     success &= processor.AddOption( new FlagOption( &disableTracker, TXT( "disable_tracker" ), TXT( "disable Asset Tracker" ) ), error );
     //GetAppPreferences()->UseTracker( disableTracker );
 
     //success &= processor.AddOption( new FlagOption(  , WindowSettings::s_Reset, "reset all window positions" ), error );
     //success &= processor.AddOption( new FlagOption(  , Preferences::s_ResetPreferences, "resets all preferences for all of Editor" ), error );
-    
+
     //success &= processor.AddOption( new FlagOption(  , Worker::Args::Debug, "debug use of background processes" ), error );
     //success &= processor.AddOption( new FlagOption(  , Worker::Args::Wait, "wait forever for background processes" ), error );
 
     bool scriptFlag = false;
     success &= processor.AddOption( new FlagOption( &scriptFlag, Application::Args::Script, TXT( "omit prefix and suffix in console output" ) ), error );
-    
+
     bool attachFlag = false;
     success &= processor.AddOption( new FlagOption( &attachFlag, Application::Args::Attach, TXT( "wait for a debugger to attach to the process on startup" ) ), error );
-    
+
     bool profileFlag = false;
     success &= processor.AddOption( new FlagOption( &profileFlag, Application::Args::Profile, TXT( "enable profile output to the console windows" ) ), error );
-    
+
     bool memoryFlag = false;
     success &= processor.AddOption( new FlagOption( &memoryFlag, Application::Args::Memory, TXT( "profile and report memory usage to the console" ) ), error );
-    
+
     bool vreboseFlag = false;
     success &= processor.AddOption( new FlagOption( &vreboseFlag, Application::Args::Verbose, TXT( "output a verbose level of console output" ) ), error );
-    
+
     bool extremeFlag = false;
     success &= processor.AddOption( new FlagOption( &extremeFlag, Application::Args::Extreme, TXT( "output an extremely verbose level of console output" ) ), error );
-    
+
     bool debugFlag = false;
     success &= processor.AddOption( new FlagOption( &debugFlag, Application::Args::Debug, TXT( "output debug console output" ) ), error );
-    
+
     int nice = 0;
     success &= processor.AddOption( new SimpleOption<int>( &nice , TXT( "nice" ), TXT( "<NUM>" ), TXT( "number of processors to nice (for other processes)" ) ), error );
-    
+
     bool helpFlag;
     success &= processor.AddOption( new FlagOption( &helpFlag, TXT( "h|help" ), TXT( "print program usage" ) ), error );
 
     success &= processor.ParseOptions( argsBegin, argsEnd, error );
 
-	if ( success )
-	{
+    if ( success )
+    {
         if ( helpFlag )
         {
             Log::Print( TXT( "\nPrinting help for Editor...\n" ) );

@@ -600,6 +600,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\CoreInit.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\CoreInit.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Project.cpp"
 			>
 		</File>

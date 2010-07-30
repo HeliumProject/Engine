@@ -12,12 +12,12 @@ namespace Editor
 {
     typedef bool (*CancelWaitFunc)();
 
-    class WaitDialog : public wxDialog
+    class PerforceWaitDialog : public wxDialog
     {
     public:
         static void Enable( bool enable );
 
-        WaitDialog();
+        PerforceWaitDialog();
 
         int ShowModal( Perforce::WaitInterface* waitInterface );
         void Throb();
@@ -29,13 +29,13 @@ namespace Editor
     class PerforceWaitTimer : public wxTimer
     {
     public:
-        PerforceWaitTimer( class WaitDialog* dialog, Perforce::WaitInterface* waitInterface );
+        PerforceWaitTimer( class PerforceWaitDialog* dialog, Perforce::WaitInterface* waitInterface );
 
     protected:
         void Notify();
 
     private:
-        WaitDialog*               m_WaitDialog;
+        PerforceWaitDialog*       m_WaitDialog;
         Perforce::WaitInterface*  m_WaitInterface;
         Profile::Timer            m_WaitTimer;
     };

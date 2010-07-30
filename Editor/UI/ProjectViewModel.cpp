@@ -1,6 +1,8 @@
 #include "Precompile.h"
 #include "ProjectViewModel.h"
 
+using namespace Helium;
+using namespace Helium::Core;
 using namespace Editor;
 
 ProjectViewModel::ProjectViewModel()

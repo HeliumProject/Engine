@@ -599,6 +599,14 @@
 			RelativePath=".\API.h"
 			>
 		</File>
+		<File
+			RelativePath=".\Project.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Project.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

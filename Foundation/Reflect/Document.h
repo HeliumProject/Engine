@@ -103,8 +103,8 @@ namespace Reflect
     public:
         static void EnumerateClass( Reflect::Compositor< This >& comp )
         {
-            comp.AddField( &This::m_Name, "m_Name" );
-            comp.AddField( &This::m_Value, "m_Value" );
+            comp.AddField( &This::m_Name, "Name" );
+            comp.AddField( &This::m_Value, "Value" );
         }
     };
 
@@ -205,7 +205,7 @@ namespace Reflect
     public:
         static void EnumerateClass( Reflect::Compositor< This >& comp )
         {
-            comp.AddField( &This::m_Children, "m_Children" );
+            comp.AddField( &This::m_Children, "Children" );
         }
     };
 

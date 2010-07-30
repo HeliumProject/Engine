@@ -713,6 +713,10 @@
 			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"
 			RelativePathToProject=".\Platform\Platform.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{9955828E-1B8C-407D-9559-BFCE158A2B7D}"
+			RelativePathToProject=".\Core\Core.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -4311,14 +4315,6 @@
 		</File>
 		<File
 			RelativePath=".\Preferences.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Project.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Project.h"
 			>
 		</File>
 		<File

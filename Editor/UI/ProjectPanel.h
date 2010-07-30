@@ -12,7 +12,7 @@ namespace Editor
    	    ProjectPanel( wxWindow* parent );
         ~ProjectPanel();
 
-        void SetProject( Project* project );
+        void SetProject( Helium::Core::Project* project );
 
     protected:
         ProjectViewModel m_Model;

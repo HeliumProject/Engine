@@ -37,6 +37,8 @@
 #include "ExportOptionsDlg.h"
 #include "App.h"
 
+using namespace Helium;
+using namespace Helium::Core;
 using namespace Editor;
 
 tstring MainFrame::s_PreferencesPrefix = TXT( "MainFrame" );
@@ -322,7 +324,7 @@ bool MainFrame::OpenProject( const Helium::Path& path )
         tstring error;
         try
         {
-            m_Project = Reflect::Archive::FromFile< Editor::Project >( path );
+            m_Project = Reflect::Archive::FromFile< Core::Project >( path );
         }
         catch ( const Helium::Exception& ex )
         {

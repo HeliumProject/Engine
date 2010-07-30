@@ -2,7 +2,7 @@
 
 #include <wx/dataview.h>
 
-#include "Project.h"
+#include "Core/Project.h"
 
 namespace Editor
 {
@@ -10,7 +10,7 @@ namespace Editor
     {
     public:
         ProjectViewModel();
-        void SetProject( Project* project );
+        void SetProject( Helium::Core::Project* project );
 
         unsigned int GetColumnCount() const HELIUM_OVERRIDE;
         wxString GetColumnType(unsigned int) const HELIUM_OVERRIDE;
@@ -24,6 +24,6 @@ namespace Editor
         bool IsContainer(const wxDataViewItem &) const HELIUM_OVERRIDE;
 
     protected:
-        Project* m_Project;
+        Helium::Core::Project* m_Project;
     };
 }

@@ -1,6 +1,6 @@
 == TODO ==
 * Move component system from Application in here -Geoff
 * Move asset and entity from Application in here -Geoff
-* Unite Content scene graph and Editor scene graph -Geoff
-* Move robwyatt's render code in here, define common render interface -Geoff
-* Move editor manipulators in here -Geoff
+* Unite Content::Scene + Nodes with Editor::Scene + Nodes -Geoff
+* Move Rob Wyatt's render code in here, define common render interface -Geoff
+* Move Editor manipulators in here, utilize common render interface -Geoff

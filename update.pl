@@ -23,7 +23,7 @@ $result += _Do("git pull", "Git Pull");
 
 $result += _Do("perl.exe " . File::Spec->catfile( dirname( $0 ), "build.pl Dependencies.sln" ), "Build Dependencies");
 
-$result += _Do("perl.exe " . File::Spec->catfile( dirname( $0 ), "build.pl Luna.sln" ), "Build Luna");
+$result += _Do("perl.exe " . File::Spec->catfile( dirname( $0 ), "build.pl Helium.sln" ), "Build Luna");
 
 if ( $result )
 {

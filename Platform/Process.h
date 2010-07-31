@@ -5,7 +5,7 @@
 
 #include <string>
 
-namespace Platform
+namespace Helium
 {
   //
   // Creates a new process with no window or output, use it for running scripts and file association apps

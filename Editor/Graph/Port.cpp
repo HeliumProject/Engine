@@ -82,7 +82,7 @@ Port::LuaGetType(lua_State *L)
     wxString type = port->GetType();
 
     std::string temp;
-    Platform::ConvertString( (const wxChar*)type.c_str(), temp );
+    Helium::ConvertString( (const wxChar*)type.c_str(), temp );
     lua_pushlstring(L, temp.c_str(), temp.length());
     return 1;
 }

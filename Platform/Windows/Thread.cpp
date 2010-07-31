@@ -4,7 +4,7 @@
 #include "Platform/Platform.h"
 #include "Platform/Assert.h"
 
-using namespace Platform;
+using namespace Helium;
 
 Thread::Thread()
 : m_Handle (0x0)
@@ -30,7 +30,7 @@ bool Thread::Create(Entry entry, void* obj, const tchar* name, int priority)
     m_Handle = ::CreateThread(0,0,(LPTHREAD_START_ROUTINE)entry,obj,0,0);
     if (!m_Handle)
     {
-        Platform::Print(TXT("Failed to create thread: %s\n [0x%x: %s]"), name, ::GetLastError(), Platform::GetErrorString().c_str());
+        Helium::Print(TXT("Failed to create thread: %s\n [0x%x: %s]"), name, ::GetLastError(), Helium::GetErrorString().c_str());
         return false;
     }
 
@@ -52,7 +52,7 @@ void Thread::Close()
     BOOL result = ::CloseHandle(m_Handle);
     if ( result != TRUE )
     {
-        Platform::Print(TXT("Failed to close thread (%s)\n"), Platform::GetErrorString().c_str());
+        Helium::Print(TXT("Failed to close thread (%s)\n"), Helium::GetErrorString().c_str());
         HELIUM_BREAK();
     }
     m_Handle = NULL;
@@ -74,14 +74,14 @@ Thread::Return Thread::Wait(u32 timeout)
 
     if ( timeout == 0xffffffff && result != WAIT_OBJECT_0 )
     {
-        Platform::Print(TXT("Failed to wait for thread (%s)\n"), Platform::GetErrorString().c_str());
+        Helium::Print(TXT("Failed to wait for thread (%s)\n"), Helium::GetErrorString().c_str());
         HELIUM_BREAK();
     }
 
     DWORD code;
     if ( !::GetExitCodeThread(m_Handle, &code) )
     {
-        Platform::Print(TXT("Failed to get thread exit code (%s)\n"), Platform::GetErrorString().c_str());
+        Helium::Print(TXT("Failed to get thread exit code (%s)\n"), Helium::GetErrorString().c_str());
         HELIUM_BREAK();
     }
 

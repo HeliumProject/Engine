@@ -31,7 +31,7 @@ void ReflectVectorInterpreter::InterpretField(const Field* field, const std::vec
   container->AddControl( label );
 
   tstring temp;
-  bool converted = Platform::ConvertString( field->m_UIName, temp );
+  bool converted = Helium::ConvertString( field->m_UIName, temp );
   HELIUM_ASSERT( converted );
 
   label->SetText( temp );

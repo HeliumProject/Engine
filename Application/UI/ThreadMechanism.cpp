@@ -165,12 +165,12 @@ ThreadMechanism::~ThreadMechanism()
 //
 bool ThreadMechanism::StartThread()
 {
-  Platform::TakeMutex beginMutex( m_BeginThreadMutex );
+  Helium::TakeMutex beginMutex( m_BeginThreadMutex );
 
   // kill current thread, if any
   StopThread();
 
-  Platform::TakeMutex resultsMutex( m_UpdateMutex );
+  Helium::TakeMutex resultsMutex( m_UpdateMutex );
 
   // Initialize thread data here
   InitData();

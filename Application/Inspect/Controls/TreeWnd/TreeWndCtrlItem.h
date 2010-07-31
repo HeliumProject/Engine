@@ -16,6 +16,8 @@
 #include "wx/wx.h"
 #include "wx/treebase.h"
 
+#include "TreeWndCtrlApi.h"
+
 // ----------------------------------------------------------------------------
 // definitions
 // ----------------------------------------------------------------------------
@@ -35,7 +37,7 @@ namespace Helium
     // TreeWndCtrlItem
     // ----------------------------------------------------------------------------
 
-    class TreeWndCtrlItem : public wxPanel
+    class WXDLLIMPEXP_TWC TreeWndCtrlItem : public wxPanel
     {
         DECLARE_DYNAMIC_CLASS(TreeWndCtrlItem)
 

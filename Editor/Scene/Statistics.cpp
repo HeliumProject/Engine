@@ -45,9 +45,9 @@ void Statistics::Reset()
 void Statistics::Update()
 {
   // update every second
-  u64 ticks = Platform::TimerGetClock();
+  u64 ticks = Helium::TimerGetClock();
 
-  float elapsed = Platform::CyclesToMillis(ticks - m_Previous);
+  float elapsed = Helium::CyclesToMillis(ticks - m_Previous);
 
   if (m_Previous == 0 || elapsed >= 1000)
   {

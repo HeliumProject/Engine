@@ -6,7 +6,7 @@
 #include "Platform/API.h"
 #include "Platform/Types.h"
 
-namespace Platform
+namespace Helium
 {
     inline bool ConvertChar( char src, char& dest )
     {
@@ -40,5 +40,5 @@ namespace Platform
     PLATFORM_API bool ConvertString( const std::wstring& src, std::string& dest );
 #endif
 
-    tstring GetEncoding();
+    PLATFORM_API tstring GetEncoding();
 }

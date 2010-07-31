@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef PIPELINE_API
+#ifdef PIPELINE_DLL
 # ifdef PIPELINE_EXPORTS
 #  define PIPELINE_API __declspec (dllexport)
 # else

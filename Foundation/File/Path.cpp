@@ -18,7 +18,7 @@ void Path::Init( const tchar* path )
 {
     m_Path = path;
 
-    std::replace( m_Path.begin(), m_Path.end(), Platform::PathSeparator, s_InternalPathSeparator );
+    std::replace( m_Path.begin(), m_Path.end(), Helium::PathSeparator, s_InternalPathSeparator );
 }
 
 Path::Path( const tchar* path )
@@ -92,12 +92,12 @@ Helium::Path& Path::operator+=( const Helium::Path& rhs )
 void Path::Normalize( tstring& path )
 {
     toLower( path );
-    std::replace( path.begin(), path.end(), Platform::PathSeparator, s_InternalPathSeparator );
+    std::replace( path.begin(), path.end(), Helium::PathSeparator, s_InternalPathSeparator );
 }
 
 void Path::MakeNative( tstring& path )
 {
-    std::replace( path.begin(), path.end(), s_InternalPathSeparator, Platform::PathSeparator );
+    std::replace( path.begin(), path.end(), s_InternalPathSeparator, Helium::PathSeparator );
 }
 
 void Path::GuaranteeSlash( tstring& path )
@@ -111,18 +111,18 @@ void Path::GuaranteeSlash( tstring& path )
 bool Path::Exists( const tstring& path )
 {
     Path native( path );
-    Platform::Stat stat;
+    Helium::Stat stat;
     return native.Stat( stat );
 }
 
-bool Path::Stat( Platform::Stat& stat ) const
+bool Path::Stat( Helium::Stat& stat ) const
 {
-    return Platform::StatPath( Native().c_str(), stat );
+    return Helium::StatPath( Native().c_str(), stat );
 }
 
 bool Path::IsAbsolute( const tstring& path )
 {
-    return Platform::IsAbsolute( path.c_str() );
+    return Helium::IsAbsolute( path.c_str() );
 }
 
 bool Path::IsUnder( const tstring& location, const tstring& path )
@@ -137,13 +137,13 @@ bool Path::IsFile() const
         return false;
     }
 
-    Platform::Stat stat;
-    if ( !Platform::StatPath( Native().c_str(), stat ) )
+    Helium::Stat stat;
+    if ( !Helium::StatPath( Native().c_str(), stat ) )
     {
         return false;
     }
 
-    return ( stat.m_Mode & Platform::ModeFlags::File ) == Platform::ModeFlags::File;
+    return ( stat.m_Mode & Helium::ModeFlags::File ) == Helium::ModeFlags::File;
 }
 
 bool Path::IsDirectory() const
@@ -153,41 +153,41 @@ bool Path::IsDirectory() const
         return true;
     }
 
-    Platform::Stat stat;
-    if ( !Platform::StatPath( Native().c_str(), stat ) )
+    Helium::Stat stat;
+    if ( !Helium::StatPath( Native().c_str(), stat ) )
     {
         return false;
     }
 
-    return ( stat.m_Mode & Platform::ModeFlags::Directory ) == Platform::ModeFlags::Directory;
+    return ( stat.m_Mode & Helium::ModeFlags::Directory ) == Helium::ModeFlags::Directory;
 }
 
 bool Path::Writable() const
 {
-    Platform::Stat stat;
-    if ( !Platform::StatPath( Native().c_str(), stat ) )
+    Helium::Stat stat;
+    if ( !Helium::StatPath( Native().c_str(), stat ) )
     {
         return true;
     }
 
-    return ( stat.m_Mode & Platform::ModeFlags::Write ) == Platform::ModeFlags::Write;
+    return ( stat.m_Mode & Helium::ModeFlags::Write ) == Helium::ModeFlags::Write;
 }
 
 bool Path::Readable() const
 {
-    Platform::Stat stat;
-    if ( !Platform::StatPath( Native().c_str(), stat ) )
+    Helium::Stat stat;
+    if ( !Helium::StatPath( Native().c_str(), stat ) )
     {
         return false;
     }
 
-    return ( stat.m_Mode & Platform::ModeFlags::Read ) == Platform::ModeFlags::Read;
+    return ( stat.m_Mode & Helium::ModeFlags::Read ) == Helium::ModeFlags::Read;
 }
 
 bool Path::ChangedSince( u64 lastTime ) const
 {
-    Platform::Stat stat;
-    if ( !Platform::StatPath( Native().c_str(), stat ) )
+    Helium::Stat stat;
+    if ( !Helium::StatPath( Native().c_str(), stat ) )
     {
         return false;
     }
@@ -197,7 +197,7 @@ bool Path::ChangedSince( u64 lastTime ) const
 
 u64 Path::ModifiedTime() const
 {
-    Platform::Stat stat;
+    Helium::Stat stat;
     if ( Stat( stat ) )
     {
         return stat.m_ModifiedTime;
@@ -208,7 +208,7 @@ u64 Path::ModifiedTime() const
 
 u64 Path::CreatedTime() const
 {
-    Platform::Stat stat;
+    Helium::Stat stat;
     if ( Stat( stat ) )
     {
         return stat.m_CreatedTime;
@@ -219,7 +219,7 @@ u64 Path::CreatedTime() const
 
 u64 Path::AccessTime() const
 {
-    Platform::Stat stat;
+    Helium::Stat stat;
     if ( Stat( stat ) )
     {
         return stat.m_AccessTime;
@@ -230,7 +230,7 @@ u64 Path::AccessTime() const
 
 i64 Path::Size() const
 {
-    Platform::Stat stat;
+    Helium::Stat stat;
     if ( Stat( stat ) )
     {
         return stat.m_Size;
@@ -242,7 +242,7 @@ i64 Path::Size() const
 bool Path::MakePath() const
 {
     Path dir( Directory() );
-    return Platform::MakePath( dir.Native().c_str() );
+    return Helium::MakePath( dir.Native().c_str() );
 }
 
 bool Path::Create() const
@@ -265,17 +265,17 @@ bool Path::Create() const
 
 bool Path::Copy( const Helium::Path& target, bool overwrite ) const
 {
-    return Platform::Copy( Native().c_str(), target.Native().c_str(), overwrite );
+    return Helium::Copy( Native().c_str(), target.Native().c_str(), overwrite );
 }
 
 bool Path::Move( const Helium::Path& target ) const 
 {
-    return Platform::Move( Native().c_str(), target.Native().c_str() );
+    return Helium::Move( Native().c_str(), target.Native().c_str() );
 }
 
 bool Path::Delete() const
 {
-    return Platform::Delete( Native().c_str() );
+    return Helium::Delete( Native().c_str() );
 }
 
 const tstring& Path::Get() const
@@ -454,7 +454,7 @@ tstring Path::Native() const
 tstring Path::Absolute() const
 {
     tstring full;
-    Platform::GetFullPath( Native().c_str(), full );
+    Helium::GetFullPath( Native().c_str(), full );
     return full;
 }
 
@@ -480,7 +480,7 @@ Helium::Path Path::GetAbsolutePath( const Helium::Path& basisPath ) const
     HELIUM_ASSERT( !IsAbsolute() ); // shouldn't call this on an already-absolute path
 
     tstring newPathString;
-    Platform::GetFullPath( tstring( basisPath.Directory() + m_Path ).c_str(), newPathString );
+    Helium::GetFullPath( tstring( basisPath.Directory() + m_Path ).c_str(), newPathString );
     return Helium::Path( newPathString );
 }
 

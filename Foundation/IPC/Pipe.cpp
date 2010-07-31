@@ -6,6 +6,7 @@
 #include <string.h>
 #include <algorithm>
 
+using namespace Helium;
 using namespace Helium::IPC;
 
 PipeConnection::PipeConnection()
@@ -66,11 +67,11 @@ bool PipeConnection::Initialize(bool server, const tchar* name, const tchar* pip
 
     SetState(ConnectionStates::Waiting);
 
-    Platform::Thread::Entry serverEntry = Platform::Thread::EntryHelper<PipeConnection, &PipeConnection::ServerThread>;
-    Platform::Thread::Entry clientEntry = Platform::Thread::EntryHelper<PipeConnection, &PipeConnection::ClientThread>;
+    Helium::Thread::Entry serverEntry = Helium::Thread::EntryHelper<PipeConnection, &PipeConnection::ServerThread>;
+    Helium::Thread::Entry clientEntry = Helium::Thread::EntryHelper<PipeConnection, &PipeConnection::ClientThread>;
     if (!m_ConnectThread.Create(server ? serverEntry : clientEntry, this, TXT( "IPC Connection Thread" ) ))
     {
-        Platform::Print( TXT( "%s: Failed to create connect thread\n" ), m_Name);
+        Helium::Print( TXT( "%s: Failed to create connect thread\n" ), m_Name);
         SetState(ConnectionStates::Failed);
         return false;  
     }
@@ -80,30 +81,30 @@ bool PipeConnection::Initialize(bool server, const tchar* name, const tchar* pip
 
 void PipeConnection::ServerThread()
 {
-    Platform::Print( TXT( "%s: Starting pipe server '%s'\n" ), m_Name, m_PipeName);
+    Helium::Print( TXT( "%s: Starting pipe server '%s'\n" ), m_Name, m_PipeName);
 
     // while the server is still running, cycle through connections
     while (!m_Terminating)
     {
-        if ( !Platform::CreatePipe( m_ReadName, m_ReadPipe ) )
+        if ( !Helium::CreatePipe( m_ReadName, m_ReadPipe ) )
         {
             SetState(ConnectionStates::Failed);
             return;
         }
 
-        if ( !Platform::CreatePipe( m_WriteName, m_WritePipe ) )
+        if ( !Helium::CreatePipe( m_WriteName, m_WritePipe ) )
         {
             SetState(ConnectionStates::Failed);
             return;
         }
 
-        Platform::Print( TXT( "%s: Ready for client\n" ), m_Name, m_PipeName);
+        Helium::Print( TXT( "%s: Ready for client\n" ), m_Name, m_PipeName);
 
         // wait for the connection
         while (!m_Terminating)
         {
-            bool readConnect = Platform::ConnectPipe( m_ReadPipe, m_Terminate );
-            bool writeConnect = Platform::ConnectPipe( m_WritePipe, m_Terminate );
+            bool readConnect = Helium::ConnectPipe( m_ReadPipe, m_Terminate );
+            bool writeConnect = Helium::ConnectPipe( m_WritePipe, m_Terminate );
 
             if (readConnect && writeConnect)
             {
@@ -111,7 +112,7 @@ void PipeConnection::ServerThread()
             }
             else
             {
-                Platform::Sleep(100);
+                Helium::Sleep(100);
             }
         }
 
@@ -122,12 +123,12 @@ void PipeConnection::ServerThread()
         }
 
         // force disconnect of the client
-        Platform::DisconnectPipe(m_ReadPipe);
-        Platform::DisconnectPipe(m_WritePipe);
+        Helium::DisconnectPipe(m_ReadPipe);
+        Helium::DisconnectPipe(m_WritePipe);
 
         // release the handles to the pipes
-        Platform::ClosePipe(m_ReadPipe);
-        Platform::ClosePipe(m_WritePipe);
+        Helium::ClosePipe(m_ReadPipe);
+        Helium::ClosePipe(m_WritePipe);
 
         if (!m_Terminating)
         {
@@ -136,22 +137,22 @@ void PipeConnection::ServerThread()
         }
     }
 
-    Platform::Print( TXT( "%s: Stopping pipe server '%s'\n" ), m_Name, m_PipeName);
+    Helium::Print( TXT( "%s: Stopping pipe server '%s'\n" ), m_Name, m_PipeName);
 }
 
 void PipeConnection::ClientThread()
 {
-    Platform::Print( TXT( "%s: Starting pipe client '%s'\n" ), m_Name, m_PipeName);
+    Helium::Print( TXT( "%s: Starting pipe client '%s'\n" ), m_Name, m_PipeName);
 
     while (!m_Terminating)
     {
-        Platform::Print( TXT( "%s: Ready for server\n" ), m_Name, m_PipeName);
+        Helium::Print( TXT( "%s: Ready for server\n" ), m_Name, m_PipeName);
 
         // wait for write pipe creation
         while (!m_Terminating)
         {
-            bool writeOpen = Platform::OpenPipe( m_WriteName, m_WritePipe );
-            bool readOpen = Platform::OpenPipe( m_ReadName, m_ReadPipe );
+            bool writeOpen = Helium::OpenPipe( m_WriteName, m_WritePipe );
+            bool readOpen = Helium::OpenPipe( m_ReadName, m_ReadPipe );
 
             if (writeOpen && readOpen)
             {
@@ -159,7 +160,7 @@ void PipeConnection::ClientThread()
             }
             else
             {
-                Platform::Sleep(100);
+                Helium::Sleep(100);
             }
         }
 
@@ -170,8 +171,8 @@ void PipeConnection::ClientThread()
         }
 
         // close the handles to the pipes
-        Platform::ClosePipe(m_ReadPipe);
-        Platform::ClosePipe(m_WritePipe);
+        Helium::ClosePipe(m_ReadPipe);
+        Helium::ClosePipe(m_WritePipe);
 
         if (!m_Terminating)
         {
@@ -180,7 +181,7 @@ void PipeConnection::ClientThread()
         }
     }
 
-    Platform::Print( TXT( "%s: Stopping pipe client '%s'\n" ), m_Name, m_PipeName);
+    Helium::Print( TXT( "%s: Stopping pipe client '%s'\n" ), m_Name, m_PipeName);
 }
 
 bool PipeConnection::ReadMessage(Message** msg)
@@ -196,12 +197,12 @@ bool PipeConnection::ReadMessage(Message** msg)
         }
 
 #ifdef WIN32
-        if ( m_RemotePlatform != (Platform::Type)-1 )
+        if ( m_RemotePlatform != (Helium::Platform::Type)-1 )
         {
-            m_ReadHeader.m_ID = ConvertEndian(m_ReadHeader.m_ID, m_RemotePlatform != Platform::Types::Windows);
-            m_ReadHeader.m_TRN = ConvertEndian(m_ReadHeader.m_TRN, m_RemotePlatform != Platform::Types::Windows);
-            m_ReadHeader.m_Size = ConvertEndian(m_ReadHeader.m_Size, m_RemotePlatform != Platform::Types::Windows);
-            m_ReadHeader.m_Type = ConvertEndian(m_ReadHeader.m_Type, m_RemotePlatform != Platform::Types::Windows);
+            m_ReadHeader.m_ID = ConvertEndian(m_ReadHeader.m_ID, m_RemotePlatform != Helium::Platform::Types::Windows);
+            m_ReadHeader.m_TRN = ConvertEndian(m_ReadHeader.m_TRN, m_RemotePlatform != Helium::Platform::Types::Windows);
+            m_ReadHeader.m_Size = ConvertEndian(m_ReadHeader.m_Size, m_RemotePlatform != Helium::Platform::Types::Windows);
+            m_ReadHeader.m_Type = ConvertEndian(m_ReadHeader.m_Type, m_RemotePlatform != Helium::Platform::Types::Windows);
         }
 #endif
     }
@@ -254,12 +255,12 @@ bool PipeConnection::WriteMessage(Message* msg)
         m_WriteHeader.m_Type = msg->GetType();
 
 #ifdef WIN32
-        if ( m_RemotePlatform != (Platform::Type)-1 )
+        if ( m_RemotePlatform != (Helium::Platform::Type)-1 )
         {
-            m_WriteHeader.m_ID = ConvertEndian(m_WriteHeader.m_ID, m_RemotePlatform != Platform::Types::Windows);
-            m_WriteHeader.m_TRN = ConvertEndian(m_WriteHeader.m_TRN, m_RemotePlatform != Platform::Types::Windows);
-            m_WriteHeader.m_Size = ConvertEndian(m_WriteHeader.m_Size, m_RemotePlatform != Platform::Types::Windows);
-            m_WriteHeader.m_Type = ConvertEndian(m_WriteHeader.m_Type, m_RemotePlatform != Platform::Types::Windows);
+            m_WriteHeader.m_ID = ConvertEndian(m_WriteHeader.m_ID, m_RemotePlatform != Helium::Platform::Types::Windows);
+            m_WriteHeader.m_TRN = ConvertEndian(m_WriteHeader.m_TRN, m_RemotePlatform != Helium::Platform::Types::Windows);
+            m_WriteHeader.m_Size = ConvertEndian(m_WriteHeader.m_Size, m_RemotePlatform != Helium::Platform::Types::Windows);
+            m_WriteHeader.m_Type = ConvertEndian(m_WriteHeader.m_Type, m_RemotePlatform != Helium::Platform::Types::Windows);
         }
 #endif
 
@@ -286,7 +287,7 @@ bool PipeConnection::WriteMessage(Message* msg)
 bool PipeConnection::Read(void* buffer, u32 bytes)
 {  
 #ifdef IPC_PIPE_DEBUG_PIPES_CHUNKS
-    Platform::Print("%s: Starting read of %d bytes\n", m_Name, bytes);
+    Helium::Print("%s: Starting read of %d bytes\n", m_Name, bytes);
 #endif
 
     u32 bytes_left = bytes;
@@ -297,10 +298,10 @@ bool PipeConnection::Read(void* buffer, u32 bytes)
         u32 count = std::min(bytes_left, IPC_PIPE_BUFFER_SIZE);
 
 #ifdef IPC_PIPE_DEBUG_PIPES_CHUNKS
-        Platform::Print(" %s: Receiving %d bytes...\n", m_Name, count);
+        Helium::Print(" %s: Receiving %d bytes...\n", m_Name, count);
 #endif
 
-        if (!Platform::ReadPipe(m_ReadPipe, buffer, count, bytes_got, m_Terminate))
+        if (!Helium::ReadPipe(m_ReadPipe, buffer, count, bytes_got, m_Terminate))
         {
             return false;
         }
@@ -314,12 +315,12 @@ bool PipeConnection::Read(void* buffer, u32 bytes)
         buffer = ((u8*)buffer) + bytes_got;
 
 #ifdef IPC_PIPE_DEBUG_PIPES_CHUNKS
-        Platform::Print(" %s: Got %d bytes, %d bytes to go\n", m_Name, bytes_got, bytes_left);
+        Helium::Print(" %s: Got %d bytes, %d bytes to go\n", m_Name, bytes_got, bytes_left);
 #endif
     }
 
 #ifdef IPC_PIPE_DEBUG_PIPES_CHUNKS
-    Platform::Print("%s: Completed read of %d bytes\n", m_Name, bytes);
+    Helium::Print("%s: Completed read of %d bytes\n", m_Name, bytes);
 #endif
 
     return true;
@@ -328,7 +329,7 @@ bool PipeConnection::Read(void* buffer, u32 bytes)
 bool PipeConnection::Write(void* buffer, u32 bytes)
 {
 #ifdef IPC_PIPE_DEBUG_PIPES_CHUNKS
-    Platform::Print("%s: Starting write of %d bytes\n", m_Name, bytes);
+    Helium::Print("%s: Starting write of %d bytes\n", m_Name, bytes);
 #endif
 
     u32 bytes_left = bytes;
@@ -339,10 +340,10 @@ bool PipeConnection::Write(void* buffer, u32 bytes)
         u32 count = std::min(bytes_left, IPC_PIPE_BUFFER_SIZE);
 
 #ifdef IPC_PIPE_DEBUG_PIPES_CHUNKS
-        Platform::Print(" %s: Sending %d bytes...\n", m_Name, count);
+        Helium::Print(" %s: Sending %d bytes...\n", m_Name, count);
 #endif
 
-        if (!Platform::WritePipe(m_WritePipe, buffer, count, bytes_put, m_Terminate))
+        if (!Helium::WritePipe(m_WritePipe, buffer, count, bytes_put, m_Terminate))
         {
             return false;
         }
@@ -356,12 +357,12 @@ bool PipeConnection::Write(void* buffer, u32 bytes)
         buffer = ((u8*)buffer) + bytes_put;
 
 #ifdef IPC_PIPE_DEBUG_PIPES_CHUNKS
-        Platform::Print(" %s: Put %d bytes, %d bytes to go\n", m_Name, bytes_put, bytes_left);
+        Helium::Print(" %s: Put %d bytes, %d bytes to go\n", m_Name, bytes_put, bytes_left);
 #endif
     }
 
 #ifdef IPC_PIPE_DEBUG_PIPES_CHUNKS
-    Platform::Print("%s: Completed write of %d bytes\n", m_Name, bytes);
+    Helium::Print("%s: Completed write of %d bytes\n", m_Name, bytes);
 #endif
 
     return true;

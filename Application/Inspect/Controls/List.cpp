@@ -103,7 +103,7 @@ bool List::Write()
     m_Items.resize( total );
 
 tstring temp;
-bool converted = Platform::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
+bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
 HELIUM_ASSERT( converted );
 
     for ( i32 index = 0; index < total; ++index )
@@ -179,7 +179,7 @@ const std::vector< tstring >& List::GetItems()
     ReadData( str );
 
 tstring temp;
-bool converted = Platform::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
+bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
 HELIUM_ASSERT( converted );
 
     Helium::Tokenize( str, m_Items, temp );
@@ -219,7 +219,7 @@ void List::AddItems( const std::vector< tstring >& items )
   if ( IsBound() )
   {
 tstring temp;
-bool converted = Platform::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
+bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
 HELIUM_ASSERT( converted );
 
     tstring str = GetDelimitedList( items, temp );
@@ -247,7 +247,7 @@ void List::AddItem( const tstring& item )
     ReadData( str );
 
 tstring temp;
-bool converted = Platform::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
+bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
 HELIUM_ASSERT( converted );
 
     if ( !str.empty() )
@@ -282,7 +282,7 @@ void List::RemoveItem( const tstring& item )
     ReadData( delimited );
 
 tstring temp;
-bool converted = Platform::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
+bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
 HELIUM_ASSERT( converted );
 
     // Search for item + delimiter
@@ -523,7 +523,7 @@ tstring List::GetDelimitedList( const std::vector< tstring >& items, const tstri
   tstring delimitedList;
 
 tstring temp;
-bool converted = Platform::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
+bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
 HELIUM_ASSERT( converted );
 
   std::vector< tstring >::const_iterator itr = items.begin();

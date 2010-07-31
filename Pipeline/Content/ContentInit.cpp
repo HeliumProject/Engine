@@ -46,10 +46,9 @@
 #include "Foundation/InitializerStack.h"
 
 using namespace Helium;
-using namespace Helium::Content;
 
 i32 g_InitCount = 0;
-Helium::InitializerStack g_InitializerStack;
+static Helium::InitializerStack g_InitializerStack;
 
 void Content::Initialize()
 {

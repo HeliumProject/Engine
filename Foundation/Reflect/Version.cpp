@@ -86,7 +86,7 @@ void Reflect::Version::DetectVersion()
     // if we found an executable, get its version
     if ( !m_Source.empty() )
     {
-        Platform::GetVersionInfo( m_Source.c_str(), m_SourceVersion );
+        Helium::GetVersionInfo( m_Source.c_str(), m_SourceVersion );
 
         m_Source = Helium::Path( m_Source ).Filename();
     }

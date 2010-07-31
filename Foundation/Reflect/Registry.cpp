@@ -489,12 +489,12 @@ const Type* Registry::GetType(const tstring& str) const
 
 void Registry::AtomicGetType(int id, const Type** addr) const
 {
-    Platform::AtomicExchange( (intptr*)addr, (intptr)GetType(id) );
+    Helium::AtomicExchange( (intptr*)addr, (intptr)GetType(id) );
 }
 
 void Registry::AtomicGetType(const tstring& str, const Type** addr) const
 {
-    Platform::AtomicExchange( (intptr*)addr, (intptr)GetType(str) );
+    Helium::AtomicExchange( (intptr*)addr, (intptr)GetType(str) );
 }
 
 ObjectPtr Registry::CreateInstance(int id) const
@@ -631,7 +631,7 @@ void CreationRecord::Dump(FILE* f)
 #endif
 }
 
-Platform::Mutex g_TrackerMutex;
+Helium::Mutex g_TrackerMutex;
 
 Tracker::Tracker()
 {
@@ -645,7 +645,7 @@ Tracker::~Tracker()
 
 StackRecordPtr Tracker::GetStack()
 {
-    Platform::TakeMutex mutex (g_TrackerMutex);
+    Helium::TakeMutex mutex (g_TrackerMutex);
 
     StackRecordPtr ptr = new StackRecord();
 
@@ -666,7 +666,7 @@ StackRecordPtr Tracker::GetStack()
 
 void Tracker::Create(uintptr ptr)
 {
-    Platform::TakeMutex mutex (g_TrackerMutex);
+    Helium::TakeMutex mutex (g_TrackerMutex);
 
     M_CreationRecord::iterator create_iter = m_CreatedObjects.find( ptr );
     if ( create_iter == m_CreatedObjects.end() )
@@ -702,7 +702,7 @@ void Tracker::Create(uintptr ptr)
 
 void Tracker::Delete(uintptr ptr)
 {
-    Platform::TakeMutex mutex (g_TrackerMutex);
+    Helium::TakeMutex mutex (g_TrackerMutex);
 
     M_CreationRecord::iterator iter = m_CreatedObjects.find(ptr);
     if ( iter != m_CreatedObjects.end())
@@ -742,7 +742,7 @@ void Tracker::Delete(uintptr ptr)
 
 void Tracker::Check(uintptr ptr)
 {
-    Platform::TakeMutex mutex (g_TrackerMutex);
+    Helium::TakeMutex mutex (g_TrackerMutex);
 
     M_CreationRecord::iterator iter = m_CreatedObjects.find(ptr);
     if ( iter != m_CreatedObjects.end())
@@ -778,7 +778,7 @@ void Tracker::Check(uintptr ptr)
 
 void Tracker::Dump()
 {
-    Platform::TakeMutex mutex (g_TrackerMutex);
+    Helium::TakeMutex mutex (g_TrackerMutex);
 
     tchar module[MAX_PATH];
     GetModuleFileName( 0, module, MAX_PATH );

@@ -34,7 +34,7 @@ void ReflectArrayInterpreter::InterpretField(const Field* field, const std::vect
   LabelPtr label = labelContainer->GetCanvas()->Create<Label>(this);
   labelContainer->AddControl( label );
   tstring temp;
-  bool converted = Platform::ConvertString( field->m_UIName, temp );
+  bool converted = Helium::ConvertString( field->m_UIName, temp );
   HELIUM_ASSERT( converted );
   label->SetText( temp );
 

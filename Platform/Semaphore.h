@@ -8,7 +8,7 @@
 # include <semaphore.h>
 #endif
 
-namespace Platform
+namespace Helium
 {
     class PLATFORM_API Semaphore
     {

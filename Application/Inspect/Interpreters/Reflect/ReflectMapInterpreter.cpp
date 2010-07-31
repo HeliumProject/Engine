@@ -37,7 +37,7 @@ void ReflectMapInterpreter::InterpretField( const Reflect::Field* field, const s
   parent->AddControl( panel );
 
   tstring temp;
-  bool converted = Platform::ConvertString( field->m_UIName, temp );
+  bool converted = Helium::ConvertString( field->m_UIName, temp );
   HELIUM_ASSERT( converted );
 
   panel->SetText( temp );

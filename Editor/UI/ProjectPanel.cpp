@@ -3,6 +3,7 @@
 #include "ProjectPanel.h"
 
 using namespace Helium;
+using namespace Helium::Core;
 using namespace Helium::Editor;
 
 ProjectPanel::ProjectPanel( wxWindow *parent )

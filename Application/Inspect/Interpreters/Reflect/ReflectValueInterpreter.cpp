@@ -59,10 +59,10 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
       for ( size_t index=0; itr != end; ++itr, ++index )
       {
         Item& item = items[index];
-        bool converted = Platform::ConvertString( (*itr)->m_Label.c_str(), item.m_Key );
+        bool converted = Helium::ConvertString( (*itr)->m_Label.c_str(), item.m_Key );
         HELIUM_ASSERT( converted );
 
-        converted = Platform::ConvertString( (*itr)->m_Label.c_str(), item.m_Data );
+        converted = Helium::ConvertString( (*itr)->m_Label.c_str(), item.m_Data );
         HELIUM_ASSERT( converted );
       }
 
@@ -113,7 +113,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
     label = group->GetCanvas()->Create<Label>(this);
 
     tstring temp;
-    bool converted = Platform::ConvertString( field->m_UIName, temp );
+    bool converted = Helium::ConvertString( field->m_UIName, temp );
     HELIUM_ASSERT( converted );
 
    label->SetText( temp );

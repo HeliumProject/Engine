@@ -54,7 +54,7 @@ Provider::~Provider()
 
 void Provider::Initialize()
 {
-    if (!m_Thread.Create(&Platform::Thread::EntryHelper<Provider, &Provider::ThreadEntry>, this, TXT( "Perforce Transaction Thread" ) ) )
+    if (!m_Thread.Create(&Helium::Thread::EntryHelper<Provider, &Provider::ThreadEntry>, this, TXT( "Perforce Transaction Thread" ) ) )
     {
         throw Perforce::Exception( TXT( "Unable to create thread for perforce transaction" ) );
     }
@@ -83,7 +83,7 @@ void Provider::ThreadEntry()
         if ( m_Command )
         {
             std::string cmd;
-            bool converted = Platform::ConvertString( m_Command->m_Command, cmd );
+            bool converted = Helium::ConvertString( m_Command->m_Command, cmd );
             HELIUM_ASSERT( converted );
 
             std::vector< const char* > args;
@@ -124,7 +124,7 @@ void Provider::RunCommand( Command* command )
 
     const bool foregroundThread = g_InitThread == GetCurrentThreadId();
 
-    Platform::TakeMutex mutex ( m_Mutex );
+    Helium::TakeMutex mutex ( m_Mutex );
 
     m_Abort = false;
     m_Phase = CommandPhases::Unknown;
@@ -294,10 +294,10 @@ bool Provider::Connect()
 
         m_Client.SetProg( buf );
 
-        bool converted = Platform::ConvertString( m_Client.GetUser().Text(), m_UserName );
+        bool converted = Helium::ConvertString( m_Client.GetUser().Text(), m_UserName );
         HELIUM_ASSERT( converted );
 
-        converted = Platform::ConvertString( m_Client.GetClient().Text(), m_ClientName );
+        converted = Helium::ConvertString( m_Client.GetClient().Text(), m_ClientName );
         HELIUM_ASSERT( converted );
 
         m_Connected = e.Test() == 0;
@@ -486,7 +486,7 @@ void Provider::Revert( RCS::File& file, bool revertUnchangedOnly )
     }
 
     std::string narrowPath;
-    bool converted = Platform::ConvertString( file.m_LocalPath, narrowPath );
+    bool converted = Helium::ConvertString( file.m_LocalPath, narrowPath );
     HELIUM_ASSERT( converted );
 
     command.AddArg( narrowPath.c_str() );

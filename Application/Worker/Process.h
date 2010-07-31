@@ -55,7 +55,7 @@ namespace Helium
             IPC::Connection* m_Connection;
 
             // mutex to handles killing the process
-            Platform::Mutex m_KillMutex;
+            Helium::Mutex m_KillMutex;
 
             // this process was killed
             bool m_Killed;

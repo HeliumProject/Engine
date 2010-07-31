@@ -26,10 +26,14 @@
 
 namespace Helium
 {
-    typedef Helium::SmartPtr<class Fixup> FixupPtr;
-    typedef Helium::SmartPtr<class SmartBuffer> SmartBufferPtr;
-    typedef Helium::OrderedSet< SmartBufferPtr > S_SmartBufferPtr;
-    typedef std::vector< SmartBufferPtr > V_SmartBufferPtr;
+    class SmartBuffer;
+    typedef Helium::SmartPtr<SmartBuffer>               SmartBufferPtr;
+    typedef Helium::OrderedSet< SmartBufferPtr >        S_SmartBufferPtr;
+    typedef std::vector< SmartBufferPtr >               V_SmartBufferPtr;
+
+    typedef std::pair< u32, SmartBufferPtr >            BufferLocation;
+    typedef std::pair< u32, SmartBuffer* >              DumbBufferLocation;
+    typedef Helium::OrderedSet< DumbBufferLocation >    S_DumbBufferLocation;
 
     namespace ByteOrders
     {
@@ -44,16 +48,138 @@ namespace Helium
 
     const ByteOrder DEFAULT_BYTE_ORDER = ByteOrders::LittleEndian;
 
+    typedef Helium::SmartPtr<class Fixup> FixupPtr;
+
+    namespace FixupTypes
+    {
+        enum FixupType
+        {
+            Unknown = 0,
+            Pointer,
+            Offset,
+            Endian,
+            VTable,
+        };
+    }
+    typedef FixupTypes::FixupType FixupType;
+
+    class Fixup : public Helium::RefCountBase<Fixup>
+    {
+    protected:
+        Fixup();
+        virtual ~Fixup();
+
+    public:
+        virtual FixupType GetType() const
+        {
+            return FixupTypes::Unknown;
+        }
+
+        virtual bool GetDestination( BufferLocation& destination ) const
+        {
+            return false;
+        }
+
+        virtual void EraseIncoming( const DumbBufferLocation& source_location ) const
+        {
+
+        }
+
+        virtual void ChangeDestination( const BufferLocation& new_destination )
+        {
+
+        }
+
+        virtual bool DoFixup( const DumbBufferLocation& source_location )
+        {
+            return true;
+        }
+    };
+
+    class PointerFixup : public Fixup
+    {
+    protected:
+        u32 m_Size;
+        bool m_HasReference;
+        DumbBufferLocation m_Destination;
+
+    public:
+        PointerFixup(u32 size);
+        ~PointerFixup();
+
+        u32 GetSize()
+        {
+            return m_Size;
+        }
+
+        virtual FixupType GetType() const
+        {
+            return FixupTypes::Pointer;
+        }
+
+        virtual bool GetDestination( BufferLocation& destination ) const
+        {
+            destination = m_Destination;
+            return true;
+        }
+
+        virtual void EraseIncoming( const DumbBufferLocation& source_location ) const;
+        virtual void ChangeDestination( const BufferLocation& new_destination );
+        virtual bool DoFixup( const DumbBufferLocation& source_location );
+    };
+
+    class OffsetFixup : public Fixup
+    {
+    protected:
+        bool m_Absolute;
+        bool m_HasReference;
+        DumbBufferLocation m_Destination;
+
+    public:
+        OffsetFixup( bool absolute );
+        ~OffsetFixup();
+
+        bool IsAbsolute()
+        {
+            return m_Absolute;
+        }
+
+        virtual FixupType GetType() const
+        {
+            return FixupTypes::Offset;
+        }
+
+        virtual bool GetDestination( BufferLocation& destination ) const
+        {
+            destination = m_Destination; return true;
+        }
+
+        virtual void EraseIncoming( const DumbBufferLocation& source_location ) const;
+        virtual void ChangeDestination( const BufferLocation& new_destination );
+        virtual bool DoFixup( const DumbBufferLocation& source_location );    
+    };
+
+    class VTableFixup : public Fixup
+    {
+    protected:
+        u32 m_Size;
+        u32 m_ClassIndex;
+
+    public:
+        VTableFixup( u32 class_index, u32 size );
+
+        virtual FixupType GetType() const
+        {
+            return FixupTypes::VTable;
+        }
+
+        virtual bool DoFixup( const DumbBufferLocation& source_location );
+    };
+
     class FOUNDATION_API SmartBuffer : public Helium::RefCountBase<SmartBuffer>
     {
     public:
-        typedef std::pair< u32, SmartBufferPtr >          Location;
-        typedef std::vector< Location >                   V_Location;
-
-        typedef std::pair< u32, SmartBuffer* >            DumbLocation;
-        typedef Helium::OrderedSet< DumbLocation >     S_DumbLocation;
-
-        typedef std::map< u32, FixupPtr >                 M_OffsetToFixup;
+        typedef std::map< u32, FixupPtr >           M_OffsetToFixup;
 
         static const u32 s_PointerSizes[ ByteOrders::Count ];
         static const bool s_BigEndian[ ByteOrders::Count ];
@@ -62,17 +188,17 @@ namespace Helium
         static Profile::MemoryPoolHandle s_DataPool;
 
     protected:
-        tstring     m_Name;
+        tstring         m_Name;
         u32             m_Type;
         u8*             m_Data;
         u32             m_Size;
         u32             m_MaxSize;
         u32             m_Capacity;
         bool            m_OwnsData;
-        ByteOrder  m_ByteOrder;
+        ByteOrder       m_ByteOrder;
         bool            m_Virtual;
         M_OffsetToFixup m_OutgoingFixups;
-        S_DumbLocation  m_IncomingFixups;
+        S_DumbBufferLocation  m_IncomingFixups;
 
     public:
         SmartBuffer();
@@ -109,30 +235,30 @@ namespace Helium
             return s_BigEndian[ m_ByteOrder ];
         }
 
-        // Returns a Location object denoting the offset at the front of the data
-        SmartBuffer::Location GetHeadLocation()
+        // Returns a BufferLocation object denoting the offset at the front of the data
+        BufferLocation GetHeadLocation()
         {
-            return Location( 0, this );
+            return BufferLocation( 0, this );
         }
 
-        // Returns a Location object denoting current offset (the end of the data)
-        SmartBuffer::Location GetCurrentLocation()
+        // Returns a BufferLocation object denoting current offset (the end of the data)
+        BufferLocation GetCurrentLocation()
         {
-            return Location( m_Size, this );
+            return BufferLocation( m_Size, this );
         }
 
-        // Returns a Location object at the specified offset
-        SmartBuffer::Location GetOffsetLocation( u32 offset )
+        // Returns a BufferLocation object at the specified offset
+        BufferLocation GetOffsetLocation( u32 offset )
         {
             HELIUM_ASSERT( offset <= m_Size );
-            return Location( offset, this );
+            return BufferLocation( offset, this );
         }
 
-        // Return a Location object based on the specified address
-        SmartBuffer::Location GetAddressLocation( void* address )
+        // Return a BufferLocation object based on the specified address
+        BufferLocation GetAddressLocation( void* address )
         {
             HELIUM_ASSERT( (u8*)address >= m_Data && (u8*)address < ( m_Data + m_Size ) );
-            return Location( (u32)(uintptr)((u8*)address - m_Data), this );
+            return BufferLocation( (u32)(uintptr)((u8*)address - m_Data), this );
         }
 
         // Outgoing fixup access
@@ -146,11 +272,11 @@ namespace Helium
         }
 
         // Incoming fixup access
-        S_DumbLocation& GetIncomingFixups()
+        S_DumbBufferLocation& GetIncomingFixups()
         {
             return m_IncomingFixups;
         }
-        const S_DumbLocation& GetIncomingFixups() const
+        const S_DumbBufferLocation& GetIncomingFixups() const
         {
             return m_IncomingFixups;
         }
@@ -208,7 +334,7 @@ namespace Helium
         void Dump();
 
         // Fixup API
-        static bool AddFixup( const DumbLocation& source, const FixupPtr& fixup );
+        static bool AddFixup( const DumbBufferLocation& source, const FixupPtr& fixup );
 
         /// Explicitly link the source location to the destination location with an offset
         /// If absolute is true the offset is intended to be a absolute offset from some
@@ -218,29 +344,29 @@ namespace Helium
         ///  returns true if the source was successfully linked to the destination
         ///  returns false if the destination isn't valid
         ///  asserts on invalid input
-        static bool AddOffsetFixup( const Location& source, const Location& destination, bool absolute = false ); 
+        static bool AddOffsetFixup( const BufferLocation& source, const BufferLocation& destination, bool absolute = false ); 
 
         /// Explicitly link the source location to the destination location with a pointer
         ///  returns true if the source was successfully linked to the destination
         ///  returns false if the destination isn't valid
         ///  asserts on invalid input
-        static bool AddPointerFixup( const Location& source, const Location& destination, u32 size = 0 ); 
+        static bool AddPointerFixup( const BufferLocation& source, const BufferLocation& destination, u32 size = 0 ); 
 
         /// This fixup writes a class index to the virtual function pointer location of a class
         /// which the runtime loader can then use to assign an actual pointer value
-        static bool AddVTableFixup( const Location& source, u32 class_index, u32 size = 0 );
+        static bool AddVTableFixup( const BufferLocation& source, u32 class_index, u32 size = 0 );
 
         // Functions to explictily write a type to a given location
-        static void Write(const Location& pointer,const void* val,u32 size);
-        static void WriteI8(const Location& pointer,i8 val);
-        static void WriteU8(const Location& pointer,u8 val);
-        static void WriteI16(const Location& pointer,i16 val);
-        static void WriteU16(const Location& pointer,u16 val);
-        static void WriteI32(const Location& pointer,i32 val);
-        static void WriteU32(const Location& pointer,u32 val);
-        static void WriteI64(const Location& pointer,i64 val);
-        static void WriteU64(const Location& pointer,u64 val);
-        static void WriteF32(const Location& pointer,f32 val);
-        static void WriteF64(const Location& pointer,f64 val);
+        static void Write(const BufferLocation& pointer,const void* val,u32 size);
+        static void WriteI8(const BufferLocation& pointer,i8 val);
+        static void WriteU8(const BufferLocation& pointer,u8 val);
+        static void WriteI16(const BufferLocation& pointer,i16 val);
+        static void WriteU16(const BufferLocation& pointer,u16 val);
+        static void WriteI32(const BufferLocation& pointer,i32 val);
+        static void WriteU32(const BufferLocation& pointer,u32 val);
+        static void WriteI64(const BufferLocation& pointer,i64 val);
+        static void WriteU64(const BufferLocation& pointer,u64 val);
+        static void WriteF32(const BufferLocation& pointer,f32 val);
+        static void WriteF64(const BufferLocation& pointer,f64 val);
     };
 }

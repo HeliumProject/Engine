@@ -10,13 +10,7 @@
 #include "Platform/Thread.h"
 #include "Platform/Mutex.h"
 #include "Platform/Event.h"
-
-#ifndef P4CLIENTAPI_H
-# define P4CLIENTAPI_H
-# pragma warning (disable : 4267 4244)
-# include "p4/clientapi.h"
-# pragma warning (default : 4267 4244)
-#endif
+#include "P4API.h"
 
 namespace Helium
 {
@@ -131,11 +125,11 @@ namespace Helium
 
         private:
             // transaction thread
-            Platform::Thread      m_Thread;     // the thread to run commands in
+            Helium::Thread      m_Thread;     // the thread to run commands in
             bool                  m_Shutdown;   // the shutdown signal
-            Platform::Mutex       m_Mutex;      // to ensure thread safety
-            Platform::Event       m_Execute;    // to wakeup the command thread
-            Platform::Event       m_Completed;  // to wakeup the calling thread
+            Helium::Mutex       m_Mutex;      // to ensure thread safety
+            Helium::Event       m_Execute;    // to wakeup the command thread
+            Helium::Event       m_Completed;  // to wakeup the calling thread
 
             // command to execute
             class Command*        m_Command;    // the command to run

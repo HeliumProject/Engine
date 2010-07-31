@@ -38,6 +38,7 @@
 #include "App.h"
 
 using namespace Helium;
+using namespace Helium::Core;
 using namespace Helium::Editor;
 
 tstring MainFrame::s_PreferencesPrefix = TXT( "MainFrame" );
@@ -323,7 +324,7 @@ bool MainFrame::OpenProject( const Helium::Path& path )
         tstring error;
         try
         {
-            m_Project = Reflect::Archive::FromFile< Editor::Project >( path );
+            m_Project = Reflect::Archive::FromFile< Core::Project >( path );
         }
         catch ( const Helium::Exception& ex )
         {
@@ -1139,7 +1140,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
             args.m_Flags |= ExportFlags::SelectedNodes;
 
-            u64 startTimer = Platform::TimerGetClock();
+            u64 startTimer = Helium::TimerGetClock();
 
             SetCursor( wxCursor( wxCURSOR_WAIT ) );
 
@@ -1224,7 +1225,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
             {
                 tostringstream str;
                 str.precision( 2 );
-                str << "Export Complete: " << std::fixed << Platform::CyclesToMillis( Platform::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
+                str << "Export Complete: " << std::fixed << Helium::CyclesToMillis( Helium::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
                 SceneStatusChanged( str.str() );
             }
         }

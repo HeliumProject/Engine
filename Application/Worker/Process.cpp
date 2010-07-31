@@ -114,7 +114,7 @@ bool Process::Start( int timeout )
     // Start the child process.
     if( !m_Debug && !::CreateProcess( NULL, (LPTSTR) str.c_str(), NULL, NULL, FALSE, flags, NULL, NULL, &startupInfo, &procInfo ) )
     {
-        throw Helium::Exception( TXT( "Failed to run '%s' (%s)\n" ), str.c_str(), Platform::GetErrorString().c_str() );
+        throw Helium::Exception( TXT( "Failed to run '%s' (%s)\n" ), str.c_str(), Helium::GetErrorString().c_str() );
     }
     else
     {
@@ -145,7 +145,7 @@ bool Process::Start( int timeout )
         ::CloseHandle( procInfo.hThread );
 
         // mutex from kill
-        Platform::TakeMutex mutex ( m_KillMutex );
+        Helium::TakeMutex mutex ( m_KillMutex );
 
         while ( timeout-- != 0 )
         {
@@ -208,7 +208,7 @@ IPC::Message* Process::Receive(bool wait)
 bool Process::Send(u32 id, u32 size, const u8* data)
 {
     // mutex from kill
-    Platform::TakeMutex mutex ( m_KillMutex );
+    Helium::TakeMutex mutex ( m_KillMutex );
 
     if ( m_Connection && m_Connection->GetState() == IPC::ConnectionStates::Active )
     {
@@ -269,7 +269,7 @@ void Process::Kill()
 {
     if ( m_Handle )
     {
-        Platform::TakeMutex mutex ( m_KillMutex );
+        Helium::TakeMutex mutex ( m_KillMutex );
 
         m_Killed = true;
 

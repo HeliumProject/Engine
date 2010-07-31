@@ -101,7 +101,7 @@ namespace Helium
             M_U32ContainerStack m_ContainerStack;
 
             // prevent access to creating new container stacks
-            Platform::Mutex m_ContainerStackMutex;
+            Helium::Mutex m_ContainerStackMutex;
 
         public:
             Interpreter (Container* container)

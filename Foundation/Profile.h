@@ -140,7 +140,7 @@ namespace Helium
         class FOUNDATION_API Context
         {
         public:
-            Platform::TraceFile m_TraceFile; 
+            Helium::TraceFile m_TraceFile; 
             u32               m_UniqueID; 
             u32               m_StackDepth; 
             u32               m_PacketBufferOffset; 

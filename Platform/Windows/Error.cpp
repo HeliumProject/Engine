@@ -2,14 +2,14 @@
 
 #include "Windows.h"
 
-using namespace Platform;
+using namespace Helium;
 
-u32 Platform::GetLastError()
+u32 Helium::GetLastError()
 {
     return ::GetLastError();
 }
 
-tstring Platform::GetErrorString( u32 errorOverride )
+tstring Helium::GetErrorString( u32 errorOverride )
 {
     // get the system error
     DWORD error = ( errorOverride != 0 ) ? errorOverride : ::GetLastError();

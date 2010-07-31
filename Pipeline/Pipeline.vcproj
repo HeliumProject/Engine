@@ -21,7 +21,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
@@ -45,7 +45,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;PIPELINE_EXPORTS"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -64,10 +64,14 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -77,6 +81,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -85,7 +92,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
@@ -110,7 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;PIPELINE_EXPORTS"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -129,10 +136,14 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -144,13 +155,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
@@ -173,7 +187,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;PIPELINE_EXPORTS"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -191,10 +205,14 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -206,13 +224,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=" "
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
@@ -236,7 +257,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;PIPELINE_EXPORTS"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -254,10 +275,14 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -269,13 +294,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=" "
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug Unicode|Win32"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
@@ -299,7 +327,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;PIPELINE_EXPORTS"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -318,10 +346,14 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -333,13 +365,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug Unicode|x64"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
@@ -364,7 +399,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;PIPELINE_EXPORTS"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -383,10 +418,14 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -398,13 +437,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release Unicode|Win32"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
@@ -427,7 +469,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;PIPELINE_EXPORTS"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -445,10 +487,14 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -460,13 +506,16 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=" "
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release Unicode|x64"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
@@ -490,7 +539,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;PIPELINE_EXPORTS"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -508,10 +557,14 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -521,6 +574,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"

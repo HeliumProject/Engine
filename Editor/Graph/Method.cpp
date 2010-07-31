@@ -237,7 +237,7 @@ MethodLua::MethodLua(const wxString& source)
 	, m_source(source)
 {
     std::string temp;
-    Platform::ConvertString( (const wxChar*)m_source.c_str(), temp );
+    Helium::ConvertString( (const wxChar*)m_source.c_str(), temp );
 
 	LuaUtilities::LoadBuffer(g_FragmentShaderLuaState, temp.c_str(), temp.length(), "method");
 	m_lua_ref = luaL_ref(g_FragmentShaderLuaState, LUA_REGISTRYINDEX);
@@ -262,7 +262,7 @@ MethodLua::GetType(const OutputPort *output) const
 {
 	Call(static_cast<Node *>(output->GetParent()));
     tstring temp;
-    Platform::ConvertString( lua_tostring(g_FragmentShaderLuaState, -1), temp );
+    Helium::ConvertString( lua_tostring(g_FragmentShaderLuaState, -1), temp );
     wxString type = temp;
 	lua_pop(g_FragmentShaderLuaState, 1);
 	return type;
@@ -298,7 +298,7 @@ MethodLua::GenerateCode(const Node *node) const
 {
 	Call(node);
 	tstring temp;
-    Platform::ConvertString( lua_tostring(g_FragmentShaderLuaState, -1), temp );
+    Helium::ConvertString( lua_tostring(g_FragmentShaderLuaState, -1), temp );
     wxString code = temp;
 	lua_pop(g_FragmentShaderLuaState, 1);
 	return code;
@@ -319,7 +319,7 @@ MethodLua::Deserialize(const wxXmlNode& root)
 	m_source = root.GetNodeContent();
 
     std::string temp;
-    Platform::ConvertString( (const wxChar*)m_source.c_str(), temp );
+    Helium::ConvertString( (const wxChar*)m_source.c_str(), temp );
     LuaUtilities::LoadBuffer(g_FragmentShaderLuaState, temp.c_str(), temp.length(), "method");
 	m_lua_ref = luaL_ref(g_FragmentShaderLuaState, LUA_REGISTRYINDEX);
 	Method::Deserialize(root);
@@ -343,7 +343,7 @@ MethodLua::Call(const ShaderObject *obj) const
 	lua_rawgeti(g_FragmentShaderLuaState, LUA_REGISTRYINDEX, m_lua_ref);
 
     std::string temp;
-    Platform::ConvertString( (const wxChar*)obj->GetMember(wxT("Name"))->GetString().c_str(), temp);
+    Helium::ConvertString( (const wxChar*)obj->GetMember(wxT("Name"))->GetString().c_str(), temp);
     LuaUtilities::Call(g_FragmentShaderLuaState, 0, 1, temp.c_str());
 	if (ref != LUA_NOREF)
 	{

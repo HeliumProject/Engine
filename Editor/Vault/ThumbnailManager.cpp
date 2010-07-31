@@ -30,7 +30,7 @@ ThumbnailManager::~ThumbnailManager()
 // 
 void ThumbnailManager::Reset()
 {
-    Platform::Locker< std::map< u64, Helium::Path* > >::Handle list = m_AllRequests.Lock();
+    Helium::Locker< std::map< u64, Helium::Path* > >::Handle list = m_AllRequests.Lock();
     list->clear();
 }
 
@@ -56,7 +56,7 @@ void ThumbnailManager::Cancel()
 // 
 void ThumbnailManager::DetachFromWindow()
 {
-    Platform::TakeMutex mutex( m_WindowMutex );
+    Helium::TakeMutex mutex( m_WindowMutex );
     m_Window = NULL;
 }
 
@@ -66,7 +66,7 @@ void ThumbnailManager::DetachFromWindow()
 // 
 void ThumbnailManager::OnThumbnailLoaded( const ThumbnailLoader::ResultArgs& args )
 {
-    Platform::Locker< std::map< u64, Helium::Path* > >::Handle list = m_AllRequests.Lock();
+    Helium::Locker< std::map< u64, Helium::Path* > >::Handle list = m_AllRequests.Lock();
     if ( args.m_Cancelled )
     {
         list->erase( args.m_Path->Hash() );
@@ -77,7 +77,7 @@ void ThumbnailManager::OnThumbnailLoaded( const ThumbnailLoader::ResultArgs& arg
         if ( inserted.second )
         {
             // Only post to the window if we still have a pointer
-            Platform::TakeMutex mutex( m_WindowMutex );
+            Helium::TakeMutex mutex( m_WindowMutex );
             if ( m_Window )
             {
                 ThumbnailLoadedEvent evt;

@@ -35,7 +35,7 @@ bool Settings::LoadFromFile( const Helium::Path& path )
 
     if ( path.Exists() )
     {
-        if ( Platform::IsDebuggerPresent() )
+        if ( Helium::IsDebuggerPresent() )
         {
             Reflect::Archive::FromFile( path, elements );
         }
@@ -78,7 +78,7 @@ bool Settings::SaveToFile( const Helium::Path& path, tstring& error, Reflect::Ve
 {
     bool result = false;
 
-    if ( Platform::IsDebuggerPresent() )
+    if ( Helium::IsDebuggerPresent() )
     {
         Reflect::Archive::ToFile( this, path, version );
         result = true;

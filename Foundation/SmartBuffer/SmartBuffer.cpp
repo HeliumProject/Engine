@@ -1,5 +1,4 @@
 #include "SmartBuffer.h"
-#include "Fixup.h"
 
 #include "Platform/Assert.h"
 #include "Platform/Exception.h"
@@ -15,6 +14,252 @@ const bool SmartBuffer::s_BigEndian[ ByteOrders::Count ] = { false, true };
 // For profiling memory usage
 Profile::MemoryPoolHandle SmartBuffer::s_ObjectPool;
 Profile::MemoryPoolHandle SmartBuffer::s_DataPool;
+
+Fixup::Fixup()
+{
+
+}
+
+Fixup::~Fixup()
+{
+    HELIUM_ASSERT( m_RefCount == 0 );
+}
+
+PointerFixup::PointerFixup(u32 size)
+: Fixup()
+, m_HasReference ( false )
+, m_Size (size)
+, m_Destination ( 0, NULL )
+{
+
+}
+
+PointerFixup::~PointerFixup()
+{
+    if ( m_HasReference )
+    {
+        HELIUM_ASSERT( m_Destination.second != NULL );
+        m_Destination.second->DecrRefCount();
+
+        m_HasReference = false;
+    }
+
+    m_Destination.second = NULL;
+}
+
+void PointerFixup::ChangeDestination( const BufferLocation& new_destination )
+{
+    bool had_ref = m_HasReference;
+    SmartBuffer* old_buffer = m_Destination.second;
+
+    m_Destination.first  = new_destination.first;
+    m_Destination.second = new_destination.second.Ptr();
+
+    m_HasReference = false;
+    if ( m_Destination.second != NULL )
+    {
+        m_HasReference = true;
+        m_Destination.second->IncrRefCount();
+    }
+
+    // we do this second in case the two pointers are the same
+    if ( had_ref )
+    {
+        old_buffer->DecrRefCount();
+    }
+}
+
+void PointerFixup::EraseIncoming( const DumbBufferLocation& source_location ) const
+{
+    if ( m_Destination.second != NULL )
+    {
+        m_Destination.second->GetIncomingFixups().Remove( source_location );
+    }
+}
+
+bool PointerFixup::DoFixup( const DumbBufferLocation& source_location )
+{
+    HELIUM_ASSERT( source_location.second != NULL );
+    HELIUM_ASSERT( source_location.first <= source_location.second->GetSize() );
+
+    u32          source_offset = source_location.first;
+    SmartBuffer* source_buffer = source_location.second;
+    void**       source_addr   = (void**)(source_buffer->GetData() + source_offset);
+
+    if ( m_Destination.second != NULL )
+    {
+        // check the destination data
+        HELIUM_ASSERT( m_Destination.second != NULL );
+        HELIUM_ASSERT( m_Destination.first <= m_Destination.second->GetSize() );
+
+        // get the destination offset & buffer
+        u32          destination_offset = m_Destination.first;
+        SmartBuffer* destination_buffer = m_Destination.second;
+
+        // set the correct value
+        *source_addr = (void*)(destination_buffer->GetData() + destination_offset);
+
+        // insert the fixups into our hashes
+        destination_buffer->GetIncomingFixups().Append( source_location );
+
+        // ok.. this is scary.. there is a potential for a circular reference 
+        // here, so we attempt to address it
+        if ( !m_HasReference )
+        {
+            m_HasReference = true;
+            m_Destination.second->IncrRefCount();
+        }
+        if ( source_buffer == destination_buffer )
+        {
+            m_HasReference = false;
+            m_Destination.second->DecrRefCount();
+        }
+
+        // everything linked
+        return true;
+    }
+
+    // if we link to a missing buffer we ..
+    else
+    {
+        // null out the pointer in the source data
+        *source_addr = NULL;
+
+        // we did not link
+        return false;
+    }
+}
+
+OffsetFixup::OffsetFixup( bool absolute )
+: Fixup()
+, m_HasReference ( false )
+, m_Absolute ( absolute )
+, m_Destination ( 0, NULL )
+{
+
+}
+
+OffsetFixup::~OffsetFixup()
+{
+    if ( m_HasReference )
+    {
+        HELIUM_ASSERT( m_Destination.second != NULL );
+        m_Destination.second->DecrRefCount();
+
+        m_HasReference = false;
+    }
+
+    m_Destination.second = NULL;
+}
+
+void OffsetFixup::ChangeDestination( const BufferLocation& new_destination )
+{
+    bool had_ref = m_HasReference;
+    SmartBuffer* old_buffer = m_Destination.second;
+
+    m_Destination.first  = new_destination.first;
+    m_Destination.second = new_destination.second.Ptr();
+
+    m_HasReference = false;
+    if ( m_Destination.second != NULL )
+    {
+        m_HasReference = true;
+        m_Destination.second->IncrRefCount();
+    }
+
+    // we do this second in case the two pointers are the same
+    if ( had_ref )
+    {
+        old_buffer->DecrRefCount();
+    }
+}
+
+void OffsetFixup::EraseIncoming( const DumbBufferLocation& source_location ) const
+{
+    if ( m_Destination.second != NULL )
+    {
+        m_Destination.second->GetIncomingFixups().Remove( source_location );
+    }
+}
+
+bool OffsetFixup::DoFixup( const DumbBufferLocation& source_location )
+{
+    HELIUM_ASSERT( source_location.second != NULL );
+    HELIUM_ASSERT( source_location.first <= source_location.second->GetSize() );
+
+    u32          source_offset = source_location.first;
+    SmartBuffer* source_buffer = source_location.second;
+    void**       source_addr   = (void**)(source_buffer->GetData() + source_offset);
+
+    // set a temporary value
+    *(i32*)source_addr = 0;
+
+    if ( m_Destination.second != NULL )
+    {
+        // check the destination data
+        HELIUM_ASSERT( m_Destination.second != NULL );
+        HELIUM_ASSERT( m_Destination.first <= m_Destination.second->GetSize() );
+
+        // get the destination offset & buffer
+        u32          destination_offset = m_Destination.first;
+        SmartBuffer* destination_buffer = m_Destination.second;
+
+        if ( destination_buffer == source_buffer )
+        {
+            *(i32*)source_addr = destination_offset - source_offset;
+        }
+
+        // insert the fixups into our hashes
+        destination_buffer->GetIncomingFixups().Append( source_location );
+
+        // ok.. this is scary.. there is a potential for a circular reference 
+        // here, so we attempt to address it
+        if ( !m_HasReference )
+        {
+            m_HasReference = true;
+            m_Destination.second->IncrRefCount();
+        }
+        if ( source_buffer == destination_buffer )
+        {
+            m_HasReference = false;
+            m_Destination.second->DecrRefCount();
+        }
+
+        // everything linked
+        return true;
+    }
+
+    // if we link to a missing buffer we ..
+    else
+    {
+        // we did not link
+        return false;
+    }
+}
+
+VTableFixup::VTableFixup( u32 class_index, u32 size )
+: Fixup()
+, m_ClassIndex ( class_index )
+, m_Size ( size )
+{
+
+}
+
+bool VTableFixup::DoFixup( const DumbBufferLocation& source_location )
+{
+    HELIUM_ASSERT( source_location.second != NULL );
+    HELIUM_ASSERT( source_location.first <= source_location.second->GetSize() );
+
+    u32          source_offset = source_location.first;
+    SmartBuffer* source_buffer = source_location.second;
+    void*        source_addr   = (void*)(source_buffer->GetData() + source_offset);
+
+    // set our index into the buffer
+    *(u32*)source_addr = m_ClassIndex;
+
+    // win
+    return true;
+}
 
 SmartBuffer::SmartBuffer()
 : m_Name( TXT( "Unknown SmartBuffer" ) )
@@ -50,7 +295,7 @@ SmartBuffer::~SmartBuffer()
 
     if ( m_OwnsData )
     {
-        DumbLocation ptr( 0, this );
+        DumbBufferLocation ptr( 0, this );
         while( !m_OutgoingFixups.empty() )
         {
             ptr.first = m_OutgoingFixups.begin()->first;
@@ -88,7 +333,7 @@ void SmartBuffer::Reset()
     HELIUM_ASSERT( m_OwnsData );
 
     // erase the incoming and outgoing fixups
-    DumbLocation ptr;
+    DumbBufferLocation ptr;
     while( !m_IncomingFixups.Empty() )
     {
         ptr = *m_IncomingFixups.Begin();
@@ -247,11 +492,11 @@ void SmartBuffer::GrowBy(u32 size)
                 // Fix incoming pointers
                 if ( !m_IncomingFixups.Empty() )
                 {
-                    S_DumbLocation::Iterator itr = m_IncomingFixups.Begin();
-                    S_DumbLocation::Iterator end = m_IncomingFixups.End();
+                    S_DumbBufferLocation::Iterator itr = m_IncomingFixups.Begin();
+                    S_DumbBufferLocation::Iterator end = m_IncomingFixups.End();
                     for ( ; itr != end; ++itr )
                     {
-                        DumbLocation& source = (*itr);
+                        DumbBufferLocation& source = (*itr);
 
                         // get the target location from the source buffer
                         M_OffsetToFixup::iterator found = source.second->m_OutgoingFixups.find( source.first );
@@ -335,7 +580,7 @@ void SmartBuffer::CollectChildren( S_SmartBufferPtr& buffers )
     // we don't bother collecting empty buffers
     if ( GetSize() > 0 && buffers.Append( SmartBufferPtr (this) ) )
     {
-        SmartBuffer::Location destination;
+        BufferLocation destination;
 
         SmartBuffer::M_OffsetToFixup::const_iterator itr = m_OutgoingFixups.begin();
         SmartBuffer::M_OffsetToFixup::const_iterator end = m_OutgoingFixups.end();
@@ -355,14 +600,14 @@ void SmartBuffer::InheritFixups( const SmartBufferPtr& buffer, u32 offset )
     if ( !buffer->GetIncomingFixups().Empty() )
     {
         // first we copy the incoming fixups, since we are messing with that map 
-        S_DumbLocation incoming_fixup_copy = buffer->GetIncomingFixups();
+        S_DumbBufferLocation incoming_fixup_copy = buffer->GetIncomingFixups();
 
-        SmartBuffer::S_DumbLocation::Iterator itr = incoming_fixup_copy.Begin();
-        SmartBuffer::S_DumbLocation::Iterator end = incoming_fixup_copy.End();
+        S_DumbBufferLocation::Iterator itr = incoming_fixup_copy.Begin();
+        S_DumbBufferLocation::Iterator end = incoming_fixup_copy.End();
         for( ; itr != end; ++itr )
         {
             // this is the old incoming fixup data
-            DumbLocation source_location = (*itr);
+            DumbBufferLocation source_location = (*itr);
 
             // get the target location from the source buffer
             M_OffsetToFixup::iterator i = source_location.second->m_OutgoingFixups.find( source_location.first );
@@ -373,7 +618,7 @@ void SmartBuffer::InheritFixups( const SmartBufferPtr& buffer, u32 offset )
 
             // get the previous destination, we know this fixup must have one or else there 
             // wouldn't be an incoming entry for it
-            Location old_destination;
+            BufferLocation old_destination;
             bool found_destination = fixup->GetDestination( old_destination );
             HELIUM_ASSERT( found_destination && old_destination.second == buffer );
 
@@ -381,7 +626,7 @@ void SmartBuffer::InheritFixups( const SmartBufferPtr& buffer, u32 offset )
             AddFixup( source_location, NULL );
 
             // now change the fixup to have the right Helium::SmartPtr
-            Location new_destination (old_destination.first + offset, this);
+            BufferLocation new_destination (old_destination.first + offset, this);
             fixup->ChangeDestination( new_destination );
 
             // optimization just incase this fixup is completely internal to buffer
@@ -409,11 +654,11 @@ void SmartBuffer::InheritFixups( const SmartBufferPtr& buffer, u32 offset )
             FixupPtr fixup = (*itr).second;
 
             // first remove the old fixup
-            DumbLocation old_source_location ( (*itr).first, buffer );
+            DumbBufferLocation old_source_location ( (*itr).first, buffer );
             AddFixup( old_source_location, NULL );
 
             // we need to offset the previous fixup by the correct offset in the current buffer
-            DumbLocation new_source_location ( offset + (*itr).first, this );
+            DumbBufferLocation new_source_location ( offset + (*itr).first, this );
             AddFixup( new_source_location, fixup );
         }
     }
@@ -431,7 +676,7 @@ void SmartBuffer::Dump()
         SmartBuffer::M_OffsetToFixup::const_iterator end = m_OutgoingFixups.end();
         for( ; itr != end; ++itr )
         {
-            SmartBuffer::Location destination;
+            BufferLocation destination;
             (*itr).second->GetDestination(destination);
 
             Log::Print("  Offset %d - points to buffer %x [ChunkID %x], offset %d\n",(*itr).first,destination.second,destination.second->m_Type,destination.first);
@@ -443,11 +688,11 @@ void SmartBuffer::Dump()
     // also inherit any incoming fixups
     {
         // first we copy the incoming fixups, since we are messing with that map 
-        SmartBuffer::S_DumbLocation::Iterator itr = m_IncomingFixups.begin();
-        SmartBuffer::S_DumbLocation::Iterator end = m_IncomingFixups.end();
+        SmartBuffer::S_DumbBufferLocation::Iterator itr = m_IncomingFixups.begin();
+        SmartBuffer::S_DumbBufferLocation::Iterator end = m_IncomingFixups.end();
         for( ; itr != end; ++itr )
         {
-            const DumbLocation& source_location = (*itr);
+            const DumbBufferLocation& source_location = (*itr);
 
             Log::Print("  Pointed to by buffer %x [Chunk ID = %x] (offset %d)\n",(*itr).second,(*itr).second->m_Type,(*itr).first );
         }
@@ -456,8 +701,8 @@ void SmartBuffer::Dump()
     // dump the info for any incomming buffers
     {
         // first we copy the incoming fixups, since we are messing with that map 
-        SmartBuffer::S_DumbLocation::Iterator itr = m_IncomingFixups.begin();
-        SmartBuffer::S_DumbLocation::Iterator end = m_IncomingFixups.end();
+        SmartBuffer::S_DumbBufferLocation::Iterator itr = m_IncomingFixups.begin();
+        SmartBuffer::S_DumbBufferLocation::Iterator end = m_IncomingFixups.end();
         for( ; itr != end; ++itr )
         {
             (*itr).second->Dump();
@@ -466,7 +711,7 @@ void SmartBuffer::Dump()
 #endif
 }
 
-bool SmartBuffer::AddFixup( const DumbLocation& source, const FixupPtr& fixup )
+bool SmartBuffer::AddFixup( const DumbBufferLocation& source, const FixupPtr& fixup )
 {
     // validate some of the parameters
     HELIUM_ASSERT( source.second != NULL );
@@ -492,7 +737,7 @@ bool SmartBuffer::AddFixup( const DumbLocation& source, const FixupPtr& fixup )
     }
 }
 
-bool SmartBuffer::AddOffsetFixup( const Location& source, const Location& destination,bool absolute)
+bool SmartBuffer::AddOffsetFixup( const BufferLocation& source, const BufferLocation& destination,bool absolute)
 {
     // double check the source data
     HELIUM_ASSERT( source.second != NULL );
@@ -503,7 +748,7 @@ bool SmartBuffer::AddOffsetFixup( const Location& source, const Location& destin
     SmartBuffer* source_buffer = source.second.Ptr();
 
     // find the offset within our data
-    DumbLocation source_location( source_offset, source_buffer );
+    DumbBufferLocation source_location( source_offset, source_buffer );
 
     OffsetFixup* new_fixup = new OffsetFixup(absolute);
     new_fixup->ChangeDestination( destination );
@@ -511,7 +756,7 @@ bool SmartBuffer::AddOffsetFixup( const Location& source, const Location& destin
     return AddFixup( source_location, new_fixup );
 }
 
-bool SmartBuffer::AddPointerFixup( const Location& source, const Location& destination, u32 size )
+bool SmartBuffer::AddPointerFixup( const BufferLocation& source, const BufferLocation& destination, u32 size )
 {
     // double check the source data
     HELIUM_ASSERT( source.second != NULL );
@@ -522,7 +767,7 @@ bool SmartBuffer::AddPointerFixup( const Location& source, const Location& desti
     SmartBuffer* source_buffer = source.second.Ptr();
 
     // find the offset within our data
-    DumbLocation source_location( source_offset, source_buffer );
+    DumbBufferLocation source_location( source_offset, source_buffer );
 
     if ( size == 0 )
     {
@@ -535,7 +780,7 @@ bool SmartBuffer::AddPointerFixup( const Location& source, const Location& desti
     return AddFixup( source_location, new_fixup );
 }
 
-bool SmartBuffer::AddVTableFixup( const Location& source, u32 class_index, u32 size )
+bool SmartBuffer::AddVTableFixup( const BufferLocation& source, u32 class_index, u32 size )
 {  
     // double check the source data
     HELIUM_ASSERT( source.second != NULL );
@@ -546,7 +791,7 @@ bool SmartBuffer::AddVTableFixup( const Location& source, u32 class_index, u32 s
     SmartBuffer* source_buffer = source.second.Ptr();
 
     // find the offset within our data
-    DumbLocation source_location( source_offset, source_buffer );
+    DumbBufferLocation source_location( source_offset, source_buffer );
 
     // 
     if ( size == 0 )
@@ -558,7 +803,7 @@ bool SmartBuffer::AddVTableFixup( const Location& source, u32 class_index, u32 s
     return AddFixup( source_location, new_fixup );
 }
 
-void SmartBuffer::Write(const Location& pointer,const void* src,u32 size)
+void SmartBuffer::Write(const BufferLocation& pointer,const void* src,u32 size)
 {
     HELIUM_ASSERT( pointer.second != NULL );
     HELIUM_ASSERT( pointer.first <= pointer.second->m_Size );
@@ -574,59 +819,59 @@ void SmartBuffer::Write(const Location& pointer,const void* src,u32 size)
     memcpy(dst,src,size);
 }
 
-void SmartBuffer::WriteI8(const Location& pointer,i8 val)
+void SmartBuffer::WriteI8(const BufferLocation& pointer,i8 val)
 {
     Write(pointer,&val,sizeof(i8));
 }
 
-void SmartBuffer::WriteU8(const Location& pointer,u8 val)
+void SmartBuffer::WriteU8(const BufferLocation& pointer,u8 val)
 {
     Write(pointer,&val,sizeof(u8));
 }
 
-void SmartBuffer::WriteI16(const Location& pointer,i16 val)
+void SmartBuffer::WriteI16(const BufferLocation& pointer,i16 val)
 {
     val = ConvertEndian(val,pointer.second->IsPlatformBigEndian());
     Write(pointer,&val,sizeof(i16));
 }
 
-void SmartBuffer::WriteU16(const Location& pointer,u16 val)
+void SmartBuffer::WriteU16(const BufferLocation& pointer,u16 val)
 {
     val = ConvertEndian(val,pointer.second->IsPlatformBigEndian());
     Write(pointer,&val,sizeof(u16));
 }
 
-void SmartBuffer::WriteI32(const Location& pointer,i32 val)
+void SmartBuffer::WriteI32(const BufferLocation& pointer,i32 val)
 {
     val = ConvertEndian(val,pointer.second->IsPlatformBigEndian());
     Write(pointer,&val,sizeof(i32));
 }
 
-void SmartBuffer::WriteU32(const Location& pointer,u32 val)
+void SmartBuffer::WriteU32(const BufferLocation& pointer,u32 val)
 {
     val = ConvertEndian(val,pointer.second->IsPlatformBigEndian());
     Write(pointer,&val,sizeof(u32));
 }
 
-void SmartBuffer::WriteI64(const Location& pointer,i64 val)
+void SmartBuffer::WriteI64(const BufferLocation& pointer,i64 val)
 {
     val = ConvertEndian(val,pointer.second->IsPlatformBigEndian());
     Write(pointer,&val,sizeof(i64));
 }
 
-void SmartBuffer::WriteU64(const Location& pointer,u64 val)
+void SmartBuffer::WriteU64(const BufferLocation& pointer,u64 val)
 {
     val = ConvertEndian(val,pointer.second->IsPlatformBigEndian());
     Write(pointer,&val,sizeof(u64));
 }
 
-void SmartBuffer::WriteF32(const Location& pointer,f32 val)
+void SmartBuffer::WriteF32(const BufferLocation& pointer,f32 val)
 {
     u32 v = ConvertEndianFloatToU32(val,pointer.second->IsPlatformBigEndian());
     Write(pointer,&v,sizeof(v));
 }
 
-void SmartBuffer::WriteF64(const Location& pointer,f64 val)
+void SmartBuffer::WriteF64(const BufferLocation& pointer,f64 val)
 {
     u64 v = ConvertEndianDoubleToU64(val,pointer.second->IsPlatformBigEndian());
     Write(pointer,&v,sizeof(v));

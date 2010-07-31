@@ -214,7 +214,7 @@ EvaluateResult SceneGraph::EvaluateGraph(bool silent)
 
   LUNA_SCENE_EVALUATE_SCOPE_TIMER( ("") );
 
-  u64 start = Platform::TimerGetClock();
+  u64 start = Helium::TimerGetClock();
 
   m_EvaluatedNodes.clear();
 
@@ -240,7 +240,7 @@ EvaluateResult SceneGraph::EvaluateGraph(bool silent)
 
   m_CleanupRoots.clear();
 
-  result.m_TotalTime = Platform::CyclesToMillis(Platform::TimerGetClock() - start);
+  result.m_TotalTime = Helium::CyclesToMillis(Helium::TimerGetClock() - start);
 
   return result;
 }

@@ -1,38 +1,38 @@
 #include "Platform/Path.h"
 
-const tchar Platform::PathSeparator = '/';
+const tchar Helium::PathSeparator = '/';
 
-bool Platform::GetFullPath( const tchar* path, tstring& fullPath )
+bool Helium::GetFullPath( const tchar* path, tstring& fullPath )
 {
     return false;
 }
 
-bool Platform::IsAbsolute( const tchar* path )
+bool Helium::IsAbsolute( const tchar* path )
 {
     return false;
 }
 
-bool Platform::MakePath( const tchar* path )
+bool Helium::MakePath( const tchar* path )
 {
     return false;
 }
 
-bool Platform::Copy( const tchar* source, const tchar* dest, bool overwrite )
+bool Helium::Copy( const tchar* source, const tchar* dest, bool overwrite )
 {
     return false;
 }
 
-bool Platform::Move( const tchar* source, const tchar* dest )
+bool Helium::Move( const tchar* source, const tchar* dest )
 {
     return false;
 }
 
-bool Platform::Delete( const tchar* path )
+bool Helium::Delete( const tchar* path )
 {
     return false;
 }
 
-bool Platform::GetVersionInfo( const tchar* path, tstring& versionInfo )
+bool Helium::GetVersionInfo( const tchar* path, tstring& versionInfo )
 {
     return false;
 }

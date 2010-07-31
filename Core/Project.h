@@ -1,15 +1,20 @@
 #pragma once
 
-#include "Editor/API.h"
+#include "Core/API.h"
 #include "Foundation/Reflect/Document.h"
 
 namespace Helium
 {
-    namespace Editor
+    namespace Core
     {
-        class ProjectFile : public Reflect::ConcreteInheritor< ProjectFile, Reflect::DocumentElement >
+        class CORE_API ProjectFile : public Reflect::ConcreteInheritor< ProjectFile, Reflect::DocumentElement >
         {
         public:
+            ProjectFile()
+            {
+
+            }
+
             ProjectFile( const Helium::Path& path )
                 : m_Path ( path )
             {
@@ -27,13 +32,42 @@ namespace Helium
         public:
             static void EnumerateClass( Reflect::Compositor< This >& comp )
             {
-                comp.AddField( &This::m_Path, "m_Path" );
+                comp.AddField( &This::m_Path, "Path" );
             }
         };
 
         typedef Helium::SmartPtr< ProjectFile > ProjectFilePtr;
 
-        class Project : public Reflect::ConcreteInheritor< Project, Reflect::Document >
+        class CORE_API ProjectFolder : public Reflect::ConcreteInheritor< ProjectFolder, Reflect::DocumentElement >
+        {
+        public:
+            ProjectFolder()
+            {
+
+            }
+
+            ProjectFolder( const tstring& name )
+                : m_Name ( name )
+            {
+
+            }
+
+            const tstring& GetName()
+            {
+                return m_Name;
+            }
+
+        private:
+            tstring m_Name;
+
+        public:
+            static void EnumerateClass( Reflect::Compositor< This >& comp )
+            {
+                comp.AddField( &This::m_Name, "Name" );
+            }
+        };
+
+        class CORE_API Project : public Reflect::ConcreteInheritor< Project, Reflect::Document >
         {
         public:
             const Helium::Path& GetPath()

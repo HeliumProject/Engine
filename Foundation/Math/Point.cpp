@@ -1,5 +1,9 @@
 #include "Point.h"
 
-using namespace Helium::Math;
-
-const Point Point::Zero;
+namespace Helium
+{
+    namespace Math
+    {
+        const Point Point::Zero;
+    }
+}

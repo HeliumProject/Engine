@@ -5,7 +5,7 @@
 #include "Platform/Error.h"
 #include "Platform/Platform.h"
 
-using namespace Platform;
+using namespace Helium;
 
 HELIUM_COMPILE_ASSERT( sizeof( Pipe::Overlapped ) == sizeof( OVERLAPPED ) );
 
@@ -21,17 +21,17 @@ Pipe::~Pipe()
     ::CloseHandle( m_Overlapped.hEvent );
 }
 
-bool Platform::InitializePipes()
+bool Helium::InitializePipes()
 {
     return true;
 }
 
-void Platform::CleanupPipes()
+void Helium::CleanupPipes()
 {
 
 }
 
-bool Platform::CreatePipe(const tchar* name, Pipe& pipe)
+bool Helium::CreatePipe(const tchar* name, Pipe& pipe)
 {
     //
     // We must retry here because quickly thrashing the pipe API can sometimes cause
@@ -55,7 +55,7 @@ bool Platform::CreatePipe(const tchar* name, Pipe& pipe)
         {
             if ( retry > 10 )
             {
-                Platform::Print(TXT("Pipe Support: Failed to create pipe '%s' (%s)\n"), name, Platform::GetErrorString().c_str());
+                Helium::Print(TXT("Pipe Support: Failed to create pipe '%s' (%s)\n"), name, Helium::GetErrorString().c_str());
                 return false;
             }
             else
@@ -74,7 +74,7 @@ bool Platform::CreatePipe(const tchar* name, Pipe& pipe)
     return true;
 }
 
-bool Platform::OpenPipe(const tchar* name, Pipe& pipe)
+bool Helium::OpenPipe(const tchar* name, Pipe& pipe)
 {
     if ( !::WaitNamedPipe(name, 0) ) 
     {
@@ -93,7 +93,7 @@ bool Platform::OpenPipe(const tchar* name, Pipe& pipe)
     {
         if (::GetLastError() != ERROR_PIPE_BUSY) 
         {
-            Platform::Print(TXT("Pipe Support: Failed to open pipe (%s)\n"), Platform::GetErrorString().c_str());
+            Helium::Print(TXT("Pipe Support: Failed to open pipe (%s)\n"), Helium::GetErrorString().c_str());
         }
 
         return false;
@@ -104,7 +104,7 @@ bool Platform::OpenPipe(const tchar* name, Pipe& pipe)
         DWORD mode = PIPE_READMODE_BYTE|PIPE_WAIT; 
         if ( !::SetNamedPipeHandleState(pipe.m_Handle, &mode, NULL, NULL) )
         {
-            Platform::Print(TXT("Pipe Support: Failed to set client byte mode (%s)\n"), Platform::GetErrorString().c_str());
+            Helium::Print(TXT("Pipe Support: Failed to set client byte mode (%s)\n"), Helium::GetErrorString().c_str());
             ::CloseHandle( pipe.m_Handle );
             return false;
         }
@@ -113,12 +113,12 @@ bool Platform::OpenPipe(const tchar* name, Pipe& pipe)
     return true;
 }
 
-void Platform::ClosePipe(Pipe& pipe)
+void Helium::ClosePipe(Pipe& pipe)
 {
     ::CloseHandle(pipe.m_Handle);
 }
 
-bool Platform::ConnectPipe(Pipe& pipe, Event& terminate)
+bool Helium::ConnectPipe(Pipe& pipe, Event& terminate)
 {
     OVERLAPPED connect;
     memset(&connect, 0, sizeof(connect));
@@ -137,7 +137,7 @@ bool Platform::ConnectPipe(Pipe& pipe, Event& terminate)
         if ( error != ERROR_IO_PENDING )
         {
 #ifdef IPC_PIPE_DEBUG_PIPES
-            Platform::Print("Pipe Support: Failed to connect pipe (%s)\n", Platform::GetErrorString().c_str());
+            Helium::Print("Pipe Support: Failed to connect pipe (%s)\n", Helium::GetErrorString().c_str());
 #endif
             ::CloseHandle( connect.hEvent );
             return false;
@@ -153,7 +153,7 @@ bool Platform::ConnectPipe(Pipe& pipe, Event& terminate)
                 if ( (result - WAIT_OBJECT_0) == 0 )
                 {
 #ifdef IPC_PIPE_DEBUG_PIPES
-                    Platform::Print("Pipe Support: Terminating connect\n");
+                    Helium::Print("Pipe Support: Terminating connect\n");
 #endif
                     ::CloseHandle( connect.hEvent );
                     ::CancelIo( pipe.m_Handle );
@@ -165,7 +165,7 @@ bool Platform::ConnectPipe(Pipe& pipe, Event& terminate)
             if ( !::GetOverlappedResult(pipe.m_Handle, &connect, &bytes, false) )
             {
 #ifdef IPC_PIPE_DEBUG_PIPES
-                Platform::Print("Pipe Support: Failed to connect pipe (%s)\n", Platform::GetErrorString().c_str());
+                Helium::Print("Pipe Support: Failed to connect pipe (%s)\n", Helium::GetErrorString().c_str());
 #endif
                 ::CloseHandle( connect.hEvent );
                 return false;
@@ -177,20 +177,20 @@ bool Platform::ConnectPipe(Pipe& pipe, Event& terminate)
     return true;
 }
 
-void Platform::DisconnectPipe(Pipe& pipe)
+void Helium::DisconnectPipe(Pipe& pipe)
 {
     if (!::FlushFileBuffers(pipe.m_Handle))
     {
-        Platform::Print(TXT("Pipe Support: Failed to flush pipe buffers (%s)\n"), Platform::GetErrorString().c_str());
+        Helium::Print(TXT("Pipe Support: Failed to flush pipe buffers (%s)\n"), Helium::GetErrorString().c_str());
     }
 
     if (!::DisconnectNamedPipe(pipe.m_Handle))
     {
-        Platform::Print(TXT("Pipe Support: Failed to diconnect pipe (%s)\n"), Platform::GetErrorString().c_str());
+        Helium::Print(TXT("Pipe Support: Failed to diconnect pipe (%s)\n"), Helium::GetErrorString().c_str());
     }
 }
 
-bool Platform::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& terminate)
+bool Helium::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& terminate)
 {
     if (bytes == 0)
     {
@@ -203,7 +203,7 @@ bool Platform::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& t
         if ( ::GetLastError() != ERROR_IO_PENDING )
         {
 #ifdef IPC_PIPE_DEBUG_PIPES
-            Platform::Print("Pipe Support: Failed to initiate overlapped read (%s)\n", Platform::GetErrorString().c_str());
+            Helium::Print("Pipe Support: Failed to initiate overlapped read (%s)\n", Helium::GetErrorString().c_str());
 #endif
             return false;
         }
@@ -218,7 +218,7 @@ bool Platform::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& t
                 if ( (result - WAIT_OBJECT_0) == 0 )
                 {
 #ifdef IPC_PIPE_DEBUG_PIPES
-                    Platform::Print("Pipe Support: Terminating read\n");
+                    Helium::Print("Pipe Support: Terminating read\n");
 #endif
                     ::CancelIo( pipe.m_Handle );
                     return false;
@@ -228,7 +228,7 @@ bool Platform::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& t
             if ( !::GetOverlappedResult(pipe.m_Handle, (OVERLAPPED*)&pipe.m_Overlapped, &read_local, false) )
             {
 #ifdef IPC_PIPE_DEBUG_PIPES
-                Platform::Print("Pipe Support: Failed read (%s)\n", Platform::GetErrorString().c_str());
+                Helium::Print("Pipe Support: Failed read (%s)\n", Helium::GetErrorString().c_str());
 #endif
                 return false;
             }
@@ -240,7 +240,7 @@ bool Platform::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& t
     return true;
 }
 
-bool Platform::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Event& terminate)
+bool Helium::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Event& terminate)
 {
     if (bytes == 0)
     {
@@ -253,7 +253,7 @@ bool Platform::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Event&
         if ( ::GetLastError() != ERROR_IO_PENDING )
         {
 #ifdef IPC_PIPE_DEBUG_PIPES
-            Platform::Print("Pipe Support: Failed to initiate overlapped write (%s)\n", Platform::GetErrorString().c_str());
+            Helium::Print("Pipe Support: Failed to initiate overlapped write (%s)\n", Helium::GetErrorString().c_str());
 #endif
             return false;
         }
@@ -268,7 +268,7 @@ bool Platform::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Event&
                 if ( (result - WAIT_OBJECT_0) == 0 )
                 {
 #ifdef IPC_PIPE_DEBUG_PIPES
-                    Platform::Print("Pipe Support: Terminating write\n");
+                    Helium::Print("Pipe Support: Terminating write\n");
 #endif
                     ::CancelIo( pipe.m_Handle );
                     return false;
@@ -278,7 +278,7 @@ bool Platform::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Event&
             if ( !::GetOverlappedResult(pipe.m_Handle, (OVERLAPPED*)&pipe.m_Overlapped, &wrote_local, false) )
             {
 #ifdef IPC_PIPE_DEBUG_PIPES
-                Platform::Print("Pipe Support: Failed write (%s)\n", Platform::GetErrorString().c_str());
+                Helium::Print("Pipe Support: Failed write (%s)\n", Helium::GetErrorString().c_str());
 #endif
                 return false;
             }

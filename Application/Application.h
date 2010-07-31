@@ -103,7 +103,7 @@ namespace Helium
         //  }
         //
 
-        APPLICATION_API Platform::Thread::Return StandardThread( Platform::Thread::Entry entry, Platform::Thread::Param param );
+        APPLICATION_API Helium::Thread::Return StandardThread( Helium::Thread::Entry entry, Helium::Thread::Param param );
 
         //
         // Main wrappers for console applications

@@ -4,45 +4,45 @@
 #include <pthread.h>
 #include <assert.h>
 
-void Platform::TraceFile::Open(const tchar* file)
+void Helium::TraceFile::Open(const tchar* file)
 {
 
 }
 
-void Platform::TraceFile::Close()
+void Helium::TraceFile::Close()
 {
 
 }
 
-void Platform::TraceFile::Write(const tchar* data, int size)
+void Helium::TraceFile::Write(const tchar* data, int size)
 {
 
 }
 
-const tchar* Platform::TraceFile::GetFilePath()
+const tchar* Helium::TraceFile::GetFilePath()
 {
     return NULL;
 }
 
-u64 Platform::TimerGetClock()
+u64 Helium::TimerGetClock()
 {
     u64 time = 0;
     HELIUM_BREAK();
     return time;
 }
 
-float Platform::CyclesToMillis(u64 cycles)
+float Helium::CyclesToMillis(u64 cycles)
 {
     return (f64)cycles * (f64)(1000.0 / 79800000ULL);
 }
 
-float Platform::TimeTaken(u64 start_time)
+float Helium::TimeTaken(u64 start_time)
 {
     u64 time = TimerGetClock() - start_time;
     return CyclesToMillis(time);
 }
 
-void Platform::ReportTime(const tchar* segment, u64 start_time, double& total_millis)
+void Helium::ReportTime(const tchar* segment, u64 start_time, double& total_millis)
 {
     u64 time = TimerGetClock() - start_time;
     double millis = CyclesToMillis(time);
@@ -50,7 +50,7 @@ void Platform::ReportTime(const tchar* segment, u64 start_time, double& total_mi
     total_millis += millis;
 }
 
-u64 Platform::GetTotalMemory()
+u64 Helium::GetTotalMemory()
 {
     return 256 * (1 << 20);
 }

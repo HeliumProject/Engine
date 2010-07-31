@@ -4,9 +4,9 @@
 
 namespace Helium
 {
-    namespace Application
+    namespace Debug
     {
-        void InitializeExceptionListener();
-        void CleanupExceptionListener();
+        APPLICATION_API void InitializeExceptionListener();
+        APPLICATION_API void CleanupExceptionListener();
     }
 }

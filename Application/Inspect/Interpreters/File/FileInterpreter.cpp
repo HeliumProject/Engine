@@ -142,7 +142,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
     {
         label = group->GetCanvas()->Create<Label>(this);
         tstring temp;
-        bool converted = Platform::ConvertString( field->m_UIName, temp );
+        bool converted = Helium::ConvertString( field->m_UIName, temp );
         HELIUM_ASSERT( converted );
 
         label->SetText( temp );
@@ -206,7 +206,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
         *field->m_Default >> outStream;
 
         tstring temp;
-        bool converted = Platform::ConvertString( outStream.str().c_str(), temp );
+        bool converted = Helium::ConvertString( outStream.str().c_str(), temp );
         HELIUM_ASSERT( converted );
         group->SetDefault( temp );
     }

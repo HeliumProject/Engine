@@ -3,7 +3,7 @@
 
 #include "Platform/Assert.h"
 
-using namespace Platform;
+using namespace Helium;
 
 Semaphore::Semaphore()
 {

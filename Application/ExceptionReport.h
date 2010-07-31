@@ -7,7 +7,7 @@
 
 namespace Helium
 {
-    namespace Application
+    namespace Debug
     {
         /////////////////////////////////////////////////////////////////////////////
         // Basic Exception report
@@ -15,10 +15,10 @@ namespace Helium
         class ExceptionReport
         {
         public:
-            ExceptionReport( const Debug::ExceptionArgs& args );
+            ExceptionReport( const ExceptionArgs& args );
 
             // Exception Information
-            Debug::ExceptionArgs  m_Args;
+            ExceptionArgs  m_Args;
 
             // Process State Information
             tstring  m_UserName;

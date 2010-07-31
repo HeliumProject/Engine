@@ -121,7 +121,7 @@ tostream& PathSerializer::operator>>( tostream& stream ) const
 {
     tstring path = m_Data.Get().Get();
     tstring temp;
-    bool converted = Platform::ConvertString( path, temp );
+    bool converted = Helium::ConvertString( path, temp );
     HELIUM_ASSERT( converted );
 
     stream << temp;

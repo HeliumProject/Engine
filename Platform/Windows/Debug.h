@@ -95,7 +95,7 @@ namespace Helium
 
         // Query information from a bare address (should be pretty safe to call)
         PLATFORM_API tstring GetSymbolInfo( uintptr adr, bool enumLoadedModules = true );
-        PLATFORM_API Exception* GetHeliumException( uintptr addr );
+        PLATFORM_API Helium::Exception* GetHeliumException( uintptr addr );
         PLATFORM_API std::exception* GetStandardException( uintptr addr );
 
         // Stack traces (capture with or without an explicit context, translate to string rep)

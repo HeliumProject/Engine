@@ -7,7 +7,8 @@
 #include <stdlib.h>
 #include <sstream>
 
-using namespace Platform;
+using namespace Helium;
+using namespace Helium::Platform;
 
 static int NewHandler( size_t size )
 {
@@ -93,7 +94,7 @@ Platform::Type Platform::GetType()
     return Types::Windows;
 }
 
-void Platform::Print(const tchar* fmt, ...)
+void Helium::Print(const tchar* fmt, ...)
 {
     va_list args;
     va_start(args, fmt);
@@ -101,7 +102,7 @@ void Platform::Print(const tchar* fmt, ...)
     va_end(args);
 }
 
-void Platform::Sleep(int millis)
+void Helium::Sleep(int millis)
 {
     ::Sleep(millis);
 }

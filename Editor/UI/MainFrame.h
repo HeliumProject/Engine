@@ -5,7 +5,6 @@
 #include "DirectoryPanel.h"
 #include "HelpPanel.h"
 #include "ProjectPanel.h"
-#include "Project.h"
 #include "LayersPanel.h"
 #include "PropertiesPanel.h"
 #include "ToolbarPanel.h"
@@ -22,6 +21,8 @@
 
 #include "Scene/TreeMonitor.h"
 #include "Scene/TreeSortTimer.h"
+
+#include "Core/Project.h"
 
 namespace Helium
 {
@@ -81,7 +82,7 @@ namespace Helium
             DirectoryPanel*  m_DirectoryPanel;
             PropertiesPanel* m_PropertiesPanel;
 
-            ProjectPtr       m_Project;
+            Helium::Core::ProjectPtr       m_Project;
             SceneManager     m_SceneManager;
 
             // the attributes for the current selection

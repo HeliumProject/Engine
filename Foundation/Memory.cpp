@@ -22,7 +22,7 @@ using namespace Helium::Profile;
 static const u32        g_MaxMemoryPools = 64;
 static MemoryPool       g_MemoryPools[g_MaxMemoryPools];
 static u32              g_MemoryPoolCount = 0;
-static Platform::Thread g_MemoryReportThread;
+static Helium::Thread g_MemoryReportThread;
 static bool             g_MemoryReportThreadTerminate = false;
 static bool             g_MemoryProfilingEnabled = false;
 
@@ -60,14 +60,14 @@ static const tchar* MemoryUnitConvert(f32& size)
     }
 }
 
-static Platform::Thread::Return MemoryReportThread(Platform::Thread::Param)
+static Helium::Thread::Return MemoryReportThread(Helium::Thread::Param)
 {
     u32 oldCount = g_MemoryPoolCount;
-    f32 oldTotal = (f32)Platform::GetTotalMemory();
+    f32 oldTotal = (f32)Helium::GetTotalMemory();
 
     while (!g_MemoryReportThreadTerminate)
     {
-        f32 total = (f32)Platform::GetTotalMemory();
+        f32 total = (f32)Helium::GetTotalMemory();
 
         // report if we have different memory usage or more pools
         bool report = oldTotal != total || oldCount != g_MemoryPoolCount;
@@ -112,11 +112,11 @@ static Platform::Thread::Return MemoryReportThread(Platform::Thread::Param)
 
         while (timer.Elapsed() < 5000 && !g_MemoryReportThreadTerminate)
         {
-            Platform::Sleep(10);
+            Helium::Sleep(10);
         }
     }
 
-    return Platform::Thread::Return(0);
+    return Helium::Thread::Return(0);
 }
 
 u32 Memory::s_InitCount = 0;

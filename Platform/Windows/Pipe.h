@@ -5,7 +5,7 @@
 
 #define IPC_PIPE_ROOT TXT( "" )
 
-namespace Platform
+namespace Helium
 {
     struct PLATFORM_API Pipe
     {

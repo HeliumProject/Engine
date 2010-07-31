@@ -694,9 +694,9 @@ void VaultFrame::OnRevisionHistory( wxCommandEvent& event )
         const Helium::Path& path = *paths.begin();
         tstring command = TXT( "p4win.exe -H \"" ) + path.Get() + TXT( "\"" );
 
-        if ( Platform::Execute( command ) == -1 )
+        if ( Helium::Execute( command ) == -1 )
         {
-            tstring error = Platform::GetErrorString();
+            tstring error = Helium::GetErrorString();
             error += TXT( "\nMake sure that you have p4win properly installed." );
             wxMessageBox( error.c_str(), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
             return;
@@ -769,9 +769,9 @@ void VaultFrame::OnShowInPerforce( wxCommandEvent& event )
         const Helium::Path& path = *( paths.begin() );
         tstring command = tstring( TXT( "p4win.exe -s \"" ) ) + path.c_str() + TXT( "\"" );
 
-        if ( Platform::Execute( command ) == -1 )
+        if ( Helium::Execute( command ) == -1 )
         {
-            tstring error = Platform::GetErrorString();
+            tstring error = Helium::GetErrorString();
             error += TXT( "\nMake sure that you have p4win properly installed." );
             wxMessageBox( error.c_str(), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
             return;
@@ -794,7 +794,7 @@ void VaultFrame::OnShowInWindowsExplorer( wxCommandEvent& event )
         }
         command += TXT( "\"" ) + path.Native() + TXT( "\"" );
 
-        Platform::Execute( command );
+        Helium::Execute( command );
     }
 }
 

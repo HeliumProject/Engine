@@ -287,7 +287,7 @@ Node::LuaIndex(lua_State *L)
     const char *key = luaL_checklstring(L, 2, &len);
 
     tstring temp;
-    Platform::ConvertString( key, temp );
+    Helium::ConvertString( key, temp );
     Member *member = node->FindMember(temp);
     if (member != NULL)
     {
@@ -340,7 +340,7 @@ Node::MemberLuaGetValue(lua_State *L)
     wxString value = member->GetValue();
 
     std::string temp;
-    Platform::ConvertString( (const wxChar*)value.c_str(), temp );
+    Helium::ConvertString( (const wxChar*)value.c_str(), temp );
     lua_pushlstring(L, temp.c_str(), temp.length());
     return 1;
 }
@@ -369,7 +369,7 @@ Node::MemberLuaSetValue(lua_State *L)
     case LUA_TSTRING:
         {
             tstring temp;
-            Platform::ConvertString( lua_tostring(L, 1), temp );
+            Helium::ConvertString( lua_tostring(L, 1), temp );
 
             member->SetValue(wxString(temp));
         }

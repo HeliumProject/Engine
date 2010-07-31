@@ -202,7 +202,7 @@ namespace LuaUtilities
 	Panic(lua_State *L)
 	{
         tstring temp;
-        Platform::ConvertString( lua_tostring(L, -1), temp);
+        Helium::ConvertString( lua_tostring(L, -1), temp);
         wxMessageBox(temp, wxT( "Lua panic!" ) );
 		THROW(TXT("%s"), temp.c_str());
 	}
@@ -314,7 +314,7 @@ namespace LuaUtilities
 				case LUA_ERRERR:
                     {
                         tstring temp;
-                        Platform::ConvertString( lua_tostring(L, -1), temp);
+                        Helium::ConvertString( lua_tostring(L, -1), temp);
 					    BREAK(!strcmp(chunkname, ""));
 					    THROW(TXT("%s: %s"), chunkname, temp);
                     }
@@ -333,7 +333,7 @@ namespace LuaUtilities
 	LoadResource(lua_State *L, HMODULE hModule, const char *resourcename, const char *chunkname)
 	{
         tstring temp;
-        Platform::ConvertString( resourcename, temp );
+        Helium::ConvertString( resourcename, temp );
         HRSRC src = FindResource(hModule, temp.c_str(), RT_RCDATA);
 		if (src == NULL)
 		{
@@ -378,7 +378,7 @@ namespace LuaUtilities
 		else if (type == wxT("string"))
 		{
             std::string temp;
-            Platform::ConvertString( (const wxChar*)value.GetString().c_str(), temp );
+            Helium::ConvertString( (const wxChar*)value.GetString().c_str(), temp );
             lua_pushlstring(L, temp.c_str(), temp.length());
 		}
 		else
@@ -410,7 +410,7 @@ namespace LuaUtilities
 		case LUA_TSTRING:
             {
 			    tstring temp;
-                Platform::ConvertString( lua_tostring(L, -1), temp );
+                Helium::ConvertString( lua_tostring(L, -1), temp );
                 wxString tempStr( temp );
                 result = tempStr;
             }

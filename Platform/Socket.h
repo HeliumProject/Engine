@@ -8,7 +8,7 @@
 
 #include "Event.h"
 
-namespace Platform
+namespace Helium
 {
     PLATFORM_API bool InitializeSockets();
     PLATFORM_API void CleanupSockets();

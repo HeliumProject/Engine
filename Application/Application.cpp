@@ -102,12 +102,12 @@ void Application::Startup( int argc, const tchar** argv )
 
             Log::Print( TXT( "Waiting %d minutes for debugger to attach...\n" ), timeout / 60);
 
-            while ( !Platform::IsDebuggerPresent() && timeout-- )
+            while ( !Helium::IsDebuggerPresent() && timeout-- )
             {
                 Sleep( 1000 );
             }
 
-            if ( Platform::IsDebuggerPresent() )
+            if ( Helium::IsDebuggerPresent() )
             {
                 Log::Print( TXT( "Debugger attached\n" ) );
                 HELIUM_ISSUE_BREAK();
@@ -226,11 +226,11 @@ void Application::Startup( int argc, const tchar** argv )
         // Setup exception handlers, do this last
         //
 
-        // init debug handling
-        InitializeExceptionListener();
-
         // handle 'new' errors, invalid parameters, etc...
-        Platform::Initialize();
+        Helium::Platform::Initialize();
+
+        // init debug handling
+        Helium::Debug::InitializeExceptionListener();
 
         // disable dialogs for main line error cases
         SetErrorMode( SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX );
@@ -385,7 +385,7 @@ int Application::Shutdown( int code )
         // Disable exception handling
         //
 
-        CleanupExceptionListener();
+        Helium::Debug::CleanupExceptionListener();
 
         if (Helium::GetCmdLineFlag( Application::Args::Profile ))
         {
@@ -460,9 +460,9 @@ static DWORD ProcessUnhandledCxxException( LPEXCEPTION_POINTERS info )
     return Debug::ContinueSearch;
 }
 
-static Platform::Thread::Return StandardThreadTryExcept( Platform::Thread::Entry entry, Platform::Thread::Param param )
+static Helium::Thread::Return StandardThreadTryExcept( Helium::Thread::Entry entry, Helium::Thread::Param param )
 {
-    if (Platform::IsDebuggerPresent())
+    if (Helium::IsDebuggerPresent())
     {
         return entry( param );
     }
@@ -481,9 +481,9 @@ static Platform::Thread::Return StandardThreadTryExcept( Platform::Thread::Entry
     }
 }
 
-static Platform::Thread::Return StandardThreadTryCatch( Platform::Thread::Entry entry, Platform::Thread::Param param )
+static Helium::Thread::Return StandardThreadTryCatch( Helium::Thread::Entry entry, Helium::Thread::Param param )
 {
-    if ( Platform::IsDebuggerPresent() )
+    if ( Helium::IsDebuggerPresent() )
     {
         return StandardThreadTryExcept( entry, param );
     }
@@ -502,34 +502,34 @@ static Platform::Thread::Return StandardThreadTryCatch( Platform::Thread::Entry 
     }
 }
 
-static Platform::Thread::Return StandardThreadEntry( Platform::Thread::Entry entry, Platform::Thread::Param param )
+static Helium::Thread::Return StandardThreadEntry( Helium::Thread::Entry entry, Helium::Thread::Param param )
 {
     // any normal thread startup work would go here
     return StandardThreadTryCatch( entry, param );
 }
 
-Platform::Thread::Return Application::StandardThread( Platform::Thread::Entry entry, Platform::Thread::Param param )
+Helium::Thread::Return Application::StandardThread( Helium::Thread::Entry entry, Helium::Thread::Param param )
 {
-    if (Platform::IsDebuggerPresent())
+    if (Helium::IsDebuggerPresent())
     {
         return StandardThreadEntry( entry, param );
     }
     else
     {
-        InitializeExceptionListener();
+        Debug::InitializeExceptionListener();
 
-        Platform::Thread::Return result = -1;
+        Helium::Thread::Return result = -1;
 
         __try
         {
             result = StandardThreadEntry( entry, param );
         }
-        __except( ( g_ShutdownComplete || Platform::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), Debug::GetExceptionBehavior(), true, true ) )
+        __except( ( g_ShutdownComplete || Helium::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), Debug::GetExceptionBehavior(), true, true ) )
         {
             ::ExitProcess( -1 );
         }
 
-        CleanupExceptionListener();
+        Debug::CleanupExceptionListener();
 
         return result;
     }
@@ -537,7 +537,7 @@ Platform::Thread::Return Application::StandardThread( Platform::Thread::Entry en
 
 static int StandardMainTryExcept( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv )
 {
-    if (Platform::IsDebuggerPresent())
+    if (Helium::IsDebuggerPresent())
     {
         return main(argc, argv);
     }
@@ -558,7 +558,7 @@ static int StandardMainTryExcept( int (*main)(int argc, const tchar** argv), int
 
 static int StandardMainTryCatch( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv )
 {
-    if ( Platform::IsDebuggerPresent() )
+    if ( Helium::IsDebuggerPresent() )
     {
         return StandardMainTryExcept( main, argc, argv );
     }
@@ -605,7 +605,7 @@ static int StandardMainEntry( int (*main)(int argc, const tchar** argv), int arg
 
 int Application::StandardMain( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv )
 {
-    if (Platform::IsDebuggerPresent())
+    if (Helium::IsDebuggerPresent())
     {
         return StandardMainEntry( main, argc, argv );
     }
@@ -613,18 +613,18 @@ int Application::StandardMain( int (*main)(int argc, const tchar** argv), int ar
     {
         int result = -1;
 
-        InitializeExceptionListener();
+        Debug::InitializeExceptionListener();
 
         __try
         {
             result = StandardMainEntry( main, argc, argv );
         }
-        __except( ( g_ShutdownComplete || Platform::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), Debug::GetExceptionBehavior(), true, true ) )
+        __except( ( g_ShutdownComplete || Helium::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), Debug::GetExceptionBehavior(), true, true ) )
         {
             ::ExitProcess( Application::Shutdown( result ) );
         }
 
-        CleanupExceptionListener();
+        Debug::CleanupExceptionListener();
 
         return result;
     }
@@ -632,7 +632,7 @@ int Application::StandardMain( int (*main)(int argc, const tchar** argv), int ar
 
 static int StandardWinMainTryExcept( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd)
 {
-    if (Platform::IsDebuggerPresent())
+    if (Helium::IsDebuggerPresent())
     {
         return winMain( hInstance, hPrevInstance, lpCmdLine, nShowCmd );
     }
@@ -653,7 +653,7 @@ static int StandardWinMainTryExcept( int (*winMain)( HINSTANCE hInstance, HINSTA
 
 static int StandardWinMainTryCatch( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd)
 {
-    if ( Platform::IsDebuggerPresent() )
+    if ( Helium::IsDebuggerPresent() )
     {
         return StandardWinMainTryExcept( winMain, hInstance, hPrevInstance, lpCmdLine, nShowCmd );
     }
@@ -710,7 +710,7 @@ static int StandardWinMainEntry( int (*winMain)( HINSTANCE hInstance, HINSTANCE 
 
 int Application::StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd )
 {
-    if (Platform::IsDebuggerPresent())
+    if (Helium::IsDebuggerPresent())
     {
         return StandardWinMainEntry( winMain, hInstance, hPrevInstance, lpCmdLine, nShowCmd );
     }
@@ -718,18 +718,18 @@ int Application::StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE
     {
         int result = -1;
 
-        InitializeExceptionListener();
+        Debug::InitializeExceptionListener();
 
         __try
         {
             result = StandardWinMainEntry( winMain, hInstance, hPrevInstance, lpCmdLine, nShowCmd );
         }
-        __except( ( g_ShutdownComplete || Platform::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), Debug::GetExceptionBehavior(), true, true ) )
+        __except( ( g_ShutdownComplete || Helium::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), Debug::GetExceptionBehavior(), true, true ) )
         {
             ::ExitProcess( Application::Shutdown( result ) );
         }
 
-        CleanupExceptionListener();
+        Debug::CleanupExceptionListener();
 
         return result;
     }

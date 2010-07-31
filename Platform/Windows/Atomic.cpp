@@ -4,21 +4,21 @@
 
 #include "Windows.h"
 
-using namespace Platform;
+using namespace Helium;
 
-void Platform::AtomicIncrement( volatile i32* value )
+void Helium::AtomicIncrement( volatile i32* value )
 {
     HELIUM_ASSERT( HELIUM_ALIGN_4( value ) == (uintptr)value );
     ::InterlockedIncrement( (volatile LONG*)value );
 }
 
-void Platform::AtomicDecrement( volatile i32* value )
+void Helium::AtomicDecrement( volatile i32* value )
 {
     HELIUM_ASSERT( HELIUM_ALIGN_4( value ) == (uintptr)value );
     ::InterlockedDecrement( (volatile LONG*)value );
 }
 
-void Platform::AtomicExchange( volatile i32* addr, i32 value )
+void Helium::AtomicExchange( volatile i32* addr, i32 value )
 {
     HELIUM_ASSERT( HELIUM_ALIGN_4( addr ) == (uintptr)addr );
     ::InterlockedExchange( (volatile LONG*)addr, value );
@@ -26,18 +26,18 @@ void Platform::AtomicExchange( volatile i32* addr, i32 value )
 
 #ifdef X64
 
-void Platform::AtomicIncrement( volatile i64* value )
+void Helium::AtomicIncrement( volatile i64* value )
 {
     HELIUM_ASSERT( HELIUM_ALIGN_4( value ) == (uintptr)value );
     ::InterlockedIncrement64( (volatile LONGLONG*)value );
 }
-void Platform::AtomicDecrement( volatile i64* value )
+void Helium::AtomicDecrement( volatile i64* value )
 {
     HELIUM_ASSERT( HELIUM_ALIGN_4( value ) == (uintptr)value );
     ::InterlockedDecrement64( (volatile LONGLONG*)value );
 }
 
-void Platform::AtomicExchange( volatile i64* addr, i64 value )
+void Helium::AtomicExchange( volatile i64* addr, i64 value )
 {
     HELIUM_ASSERT( HELIUM_ALIGN_4( addr ) == (uintptr)addr );
     ::InterlockedExchange64( (volatile LONGLONG*)addr, value );

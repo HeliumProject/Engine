@@ -195,12 +195,12 @@ VaultSearch::~VaultSearch()
 //
 bool VaultSearch::RequestSearch( SearchQuery* searchQuery )
 {
-    Platform::TakeMutex beginMutex( m_BeginSearchMutex );
+    Helium::TakeMutex beginMutex( m_BeginSearchMutex );
 
     // kill current search, if any
     RequestStop();
 
-    Platform::TakeMutex resultsMutex( m_SearchResultsMutex );
+    Helium::TakeMutex resultsMutex( m_SearchResultsMutex );
     {
         // reset event to lockout new searches from starting
         ++m_CurrentSearchID;
@@ -268,7 +268,7 @@ void VaultSearch::OnResultsAvailable( const Editor::DummyWindowArgs& args )
     if ( args.m_ThreadID != m_CurrentSearchID )
         return;
 
-    Platform::TakeMutex mutex (m_SearchResultsMutex);
+    Helium::TakeMutex mutex (m_SearchResultsMutex);
 
     if ( m_SearchResults->GetSearchID() != m_CurrentSearchID )
         return;
@@ -386,7 +386,7 @@ inline void VaultSearch::SearchThreadEnter( i32 searchID )
 ///////////////////////////////////////////////////////////////////////////////
 inline void VaultSearch::SearchThreadPostResults( i32 searchID )
 {
-    Platform::TakeMutex mutex (m_SearchResultsMutex);
+    Helium::TakeMutex mutex (m_SearchResultsMutex);
 
     if ( m_SearchResults && m_SearchResults->HasResults() )
     {
@@ -435,7 +435,7 @@ u32 VaultSearch::AddPath( const Helium::Path& path, i32 searchID )
 { 
     u32 numFilesAdded = 0;
 
-    Platform::TakeMutex mutex (m_SearchResultsMutex);
+    Helium::TakeMutex mutex (m_SearchResultsMutex);
 
     Helium::Insert<std::set< Helium::Path >>::Result inserted = m_FoundPaths.insert( path );
     if ( inserted.second )
@@ -465,8 +465,7 @@ u32 VaultSearch::AddPath( const Helium::Path& path, i32 searchID )
 u32 VaultSearch::AddPaths( const std::set< Helium::Path >& paths, i32 searchID )
 {
     u32 numFilesAdded = 0;
-
-    Platform::TakeMutex mutex (m_SearchResultsMutex);
+    Helium::TakeMutex mutex (m_SearchResultsMutex);
 
     for ( std::set< Helium::Path >::const_iterator itr = paths.begin(), end = paths.end(); itr != end; ++itr )
     {

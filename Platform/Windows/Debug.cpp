@@ -16,6 +16,7 @@
 #pragma comment ( lib, "dbghelp.lib" )
 
 using namespace Helium;
+using namespace Helium::Debug;
 
 #ifdef _UNICODE
 # undef IMAGEHLP_MODULE64
@@ -72,7 +73,7 @@ static BOOL CALLBACK EnumerateLoadedModulesProc(PCSTR name, DWORD64 base, ULONG 
     }
     else
     {
-      _tprintf( TXT("Failure loading symbols for module: %s: %s\n"), name, Platform::GetErrorString().c_str() );
+      _tprintf( TXT("Failure loading symbols for module: %s: %s\n"), name, Helium::GetErrorString().c_str() );
     }
   }
 
@@ -89,7 +90,7 @@ static void EnumerateLoadedModules()
   EnumerateLoadedModules64(GetCurrentProcess(), &EnumerateLoadedModulesProc, NULL);
 }
 
-bool Platform::IsDebuggerPresent()
+bool Helium::IsDebuggerPresent()
 {
     return ::IsDebuggerPresent() != 0;
 }
@@ -129,7 +130,7 @@ bool Debug::Initialize(const tstring& pdbPaths)
     // initialize symbols (dbghelp.dll)
     if ( SymInitialize(GetCurrentProcess(), dir.c_str(), FALSE) == 0 )
     {
-      _tprintf( TXT("Failure initializing symbol API: %s\n"), Platform::GetErrorString().c_str() );
+      _tprintf( TXT("Failure initializing symbol API: %s\n"), Helium::GetErrorString().c_str() );
       return false;
     }
 
@@ -502,8 +503,8 @@ const tchar* Debug::GetExceptionClass(u32 exceptionCode)
 
 void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args )
 {
-  static Platform::Mutex s_ExceptionMutex;
-  Platform::TakeMutex mutex ( s_ExceptionMutex );
+  static Helium::Mutex s_ExceptionMutex;
+  Helium::TakeMutex mutex ( s_ExceptionMutex );
 
   typedef std::vector< std::pair<DWORD, HANDLE> > V_ThreadHandles;
   V_ThreadHandles threads;
@@ -612,8 +613,8 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
         cppClass = "Unknown";
       }
 
-      Platform::ConvertString( cppClass, args.m_CPPClass );
-      Platform::ConvertString( nocturnalException->What(), args.m_Message );
+      Helium::ConvertString( cppClass, args.m_CPPClass );
+      Helium::ConvertString( nocturnalException->What(), args.m_Message );
     }
     else
     {
@@ -630,8 +631,8 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
               cppClass = "Unknown";
           }
 
-          Platform::ConvertString( cppClass, args.m_CPPClass );
-          Platform::ConvertString( standardException->what(), args.m_Message );
+          Helium::ConvertString( cppClass, args.m_CPPClass );
+          Helium::ConvertString( standardException->what(), args.m_Message );
         }
     }
     

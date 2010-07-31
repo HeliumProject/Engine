@@ -5,11 +5,11 @@
 #include <vector>
 #include <sys/stat.h>
 
-const tchar Platform::PathSeparator = '\\';
+const tchar Helium::PathSeparator = TXT('\\');
 
 #pragma comment( lib, "Version.lib" )
 
-bool Platform::GetFullPath( const tchar* path, tstring& fullPath )
+bool Helium::GetFullPath( const tchar* path, tstring& fullPath )
 {
     tchar* full = new tchar[ PLATFORM_PATH_MAX ];
     u32 result = ::GetFullPathName( path, PLATFORM_PATH_MAX, full, NULL );
@@ -32,7 +32,7 @@ bool Platform::GetFullPath( const tchar* path, tstring& fullPath )
     return true;
 }
 
-bool Platform::IsAbsolute( const tchar* path )
+bool Helium::IsAbsolute( const tchar* path )
 {
     if ( _tcslen( path ) > 1 )
     {
@@ -50,7 +50,7 @@ void SplitDirectories( const tstring& path, std::vector< tstring >& output )
 {
     tstring::size_type start = 0; 
     tstring::size_type end = 0; 
-    while ( ( end = path.find( Platform::PathSeparator, start ) ) != tstring::npos )
+    while ( ( end = path.find( Helium::PathSeparator, start ) ) != tstring::npos )
     { 
         output.push_back( path.substr( start, end - start ) ); 
         start = end + 1;
@@ -58,7 +58,7 @@ void SplitDirectories( const tstring& path, std::vector< tstring >& output )
     output.push_back( path.substr( start ) ); 
 }
 
-bool Platform::MakePath( const tchar* path )
+bool Helium::MakePath( const tchar* path )
 {
     std::vector< tstring > directories;
     SplitDirectories( path, directories );
@@ -83,17 +83,17 @@ bool Platform::MakePath( const tchar* path )
     return true;
 }
 
-bool Platform::Copy( const tchar* source, const tchar* dest, bool overwrite )
+bool Helium::Copy( const tchar* source, const tchar* dest, bool overwrite )
 {
     return ( TRUE == ::CopyFile( source, dest, overwrite ? FALSE : TRUE ) );
 }
 
-bool Platform::Move( const tchar* source, const tchar* dest )
+bool Helium::Move( const tchar* source, const tchar* dest )
 {
     return ( TRUE == ::MoveFile( source, dest ) );
 }
 
-bool Platform::Delete( const tchar* path )
+bool Helium::Delete( const tchar* path )
 {
     return ( TRUE == ::DeleteFile( path ) );
 }
@@ -125,7 +125,7 @@ bool GetTranslationId(LPVOID lpData, UINT unBlockSize, WORD wLangId, DWORD &dwId
     return FALSE;
 }
 
-bool Platform::GetVersionInfo( const tchar* path, tstring& versionInfo )
+bool Helium::GetVersionInfo( const tchar* path, tstring& versionInfo )
 {
     DWORD	dwHandle;
     DWORD fileDataSize = GetFileVersionInfoSize( ( LPTSTR ) path, ( LPDWORD ) &dwHandle );

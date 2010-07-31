@@ -39,7 +39,7 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
   PanelPtr panel = m_Container->GetCanvas()->Create<Panel>(this);
   
   tstring temp;
-  bool converted = Platform::ConvertString( field->m_UIName, temp );
+  bool converted = Helium::ConvertString( field->m_UIName, temp );
   panel->SetText( temp );
 
   panel->SetExpanded( true );
@@ -58,14 +58,14 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
     row->AddControl( label );
 
     tstring temp;
-    bool converted = Platform::ConvertString( enumItr->first, temp );
+    bool converted = Helium::ConvertString( enumItr->first, temp );
     HELIUM_ASSERT( converted );
     label->SetText( temp );
 
     BitfieldCheckBoxPtr checkbox = m_Container->GetCanvas()->Create<ReflectBitfieldCheckBox>( this );
     row->AddControl( checkbox );
 
-    converted = Platform::ConvertString( enumItr->first, temp );
+    converted = Helium::ConvertString( enumItr->first, temp );
     HELIUM_ASSERT( converted );
     checkbox->SetBitfieldString( temp );
     checkbox->SetReadOnly( readOnly );

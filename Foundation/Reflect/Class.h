@@ -36,13 +36,13 @@ namespace Helium
             {
                 tstring convertedBase;
                 {
-                    bool converted = Platform::ConvertString( base, convertedBase );
+                    bool converted = Helium::ConvertString( base, convertedBase );
                     HELIUM_ASSERT( converted );
                 }
 
                 tstring convertedRTTIName;
                 {
-                    bool converted = Platform::ConvertString( typeid(T).name(), convertedRTTIName );
+                    bool converted = Helium::ConvertString( typeid(T).name(), convertedRTTIName );
                     HELIUM_ASSERT( converted );
                 }
 

@@ -2,6 +2,7 @@
 #include "ProjectViewModel.h"
 
 using namespace Helium;
+using namespace Helium::Core;
 using namespace Helium::Editor;
 
 ProjectViewModel::ProjectViewModel()

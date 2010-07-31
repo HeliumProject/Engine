@@ -2,7 +2,7 @@
 
 #include "Platform/Assert.h"
 
-bool Platform::IsDebuggerPresent()
+bool Helium::IsDebuggerPresent()
 {
     HELIUM_ASSERT( false );
     return false;

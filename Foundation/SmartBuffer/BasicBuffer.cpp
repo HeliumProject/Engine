@@ -1,5 +1,4 @@
 #include "BasicBuffer.h"
-#include "Fixup.h"
 
 #include "Platform/Exception.h"
 #include "Foundation/Log.h"
@@ -121,7 +120,7 @@ void BasicBuffer::DumpDebugInfo(FILE* file)
 
             fprintf(file, "Block Label   : %s\n", i->m_DebugString.c_str());
             fprintf(file, "Block Type    : %s, Size: %d\n", blockTypeStr, i->m_BlockSize);
-            fprintf(file, "Block Location: 0x%08X\n", i->m_FileSize);
+            fprintf(file, "Block BufferLocation: 0x%08X\n", i->m_FileSize);
             fprintf(file, "Contents      : ");
 
             u8* data = m_Data + i->m_FileSize;
@@ -420,53 +419,53 @@ u32 BasicBuffer::AddVector4( f32 x, f32 y, f32 z, f32 w, const tchar* debugStr )
     return ret;
 }
 
-void BasicBuffer::AddAtLocI8( i8 val, const Location& destination )
+void BasicBuffer::AddAtLocI8( i8 val, const BufferLocation& destination )
 {
     Write( destination, (u8*)&val, sizeof( i8 ) );
 }
 
-void BasicBuffer::AddAtLocU8( u8 val, const Location& destination )
+void BasicBuffer::AddAtLocU8( u8 val, const BufferLocation& destination )
 {
     Write( destination, (u8*)&val, sizeof( u8 ) );
 }
 
-void BasicBuffer::AddAtLocI16( i16 val, const Location& destination )
+void BasicBuffer::AddAtLocI16( i16 val, const BufferLocation& destination )
 {
     val = ConvertEndian(val,IsPlatformBigEndian());
     Write( destination, (u8*)&val, sizeof( i16 ) );
 }
 
-void BasicBuffer::AddAtLocU16( u16 val, const Location& destination )
+void BasicBuffer::AddAtLocU16( u16 val, const BufferLocation& destination )
 {
     val = ConvertEndian(val,IsPlatformBigEndian());
     Write( destination, (u8*)&val, sizeof( u16 ) );
 }
 
-void BasicBuffer::AddAtLocI32( i32 val, const Location& destination )
+void BasicBuffer::AddAtLocI32( i32 val, const BufferLocation& destination )
 {
     val = ConvertEndian(val,IsPlatformBigEndian());
     Write( destination, (u8*)&val, sizeof( i32 ) );
 }
 
-void BasicBuffer::AddAtLocU32( u32 val, const Location& destination )
+void BasicBuffer::AddAtLocU32( u32 val, const BufferLocation& destination )
 {
     val = ConvertEndian(val,IsPlatformBigEndian());
     Write( destination, (u8*)&val, sizeof( u32 ) );
 }
 
-void BasicBuffer::AddAtLocI64( i64 val, const Location& destination )
+void BasicBuffer::AddAtLocI64( i64 val, const BufferLocation& destination )
 {
     val = ConvertEndian(val,IsPlatformBigEndian());
     Write( destination, (u8*)&val, sizeof( i64 ) );
 }
 
-void BasicBuffer::AddAtLocU64( u64 val, const Location& destination )
+void BasicBuffer::AddAtLocU64( u64 val, const BufferLocation& destination )
 {
     val = ConvertEndian(val,IsPlatformBigEndian());
     Write( destination, (u8*)&val, sizeof( u64 ) );
 }
 
-void BasicBuffer::AddAtLocF32( f32 val, const Location& destination )
+void BasicBuffer::AddAtLocF32( f32 val, const BufferLocation& destination )
 {
     u32 i = *(reinterpret_cast<u32 *>(&val));
 
@@ -485,7 +484,7 @@ void BasicBuffer::AddAtLocF32( f32 val, const Location& destination )
     AddAtLocU32( i, destination );
 }
 
-void BasicBuffer::AddAtLocF64( f64 val, const Location& destination )
+void BasicBuffer::AddAtLocF64( f64 val, const BufferLocation& destination )
 {
     u64 i = *(reinterpret_cast<u64 *>(&val));
 
@@ -534,11 +533,11 @@ void BasicBuffer::SetCapacity(u32 capacity)
     }  
 }
 
-SmartBuffer::Location BasicBuffer::Reserve(u32 size, const tchar* dbgStr, ...)
+BufferLocation BasicBuffer::Reserve(u32 size, const tchar* dbgStr, ...)
 {
     ADD_DEBUG_INFO(BasicBufferDebugInfo::BLOCK_TYPE_RESERVE, size);
 
-    Location return_val = GetCurrentLocation();
+    BufferLocation return_val = GetCurrentLocation();
 
     if ( (size + m_Size) > m_Capacity )
     {
@@ -552,7 +551,7 @@ SmartBuffer::Location BasicBuffer::Reserve(u32 size, const tchar* dbgStr, ...)
     return return_val;
 }
 
-void BasicBuffer::Reserve(Location& loc, u32 size, const tchar* dbgStr, ...)
+void BasicBuffer::Reserve(BufferLocation& loc, u32 size, const tchar* dbgStr, ...)
 {
 #if BASIC_BUFFER_DEBUG_INFO
     {
@@ -570,7 +569,7 @@ void BasicBuffer::Reserve(Location& loc, u32 size, const tchar* dbgStr, ...)
     loc = Reserve(size, dbgStr);
 }
 
-SmartBuffer::Location BasicBuffer::ReservePointer(u32 size, const tchar* dbgStr, ... )
+BufferLocation BasicBuffer::ReservePointer(u32 size, const tchar* dbgStr, ... )
 {
     if (size==0)
     {
@@ -588,7 +587,7 @@ SmartBuffer::Location BasicBuffer::ReservePointer(u32 size, const tchar* dbgStr,
     return Reserve( size );
 }
 
-void BasicBuffer::ReservePointer(SmartBuffer::Location& loc, u32 size, const tchar* dbgStr, ... )
+void BasicBuffer::ReservePointer(BufferLocation& loc, u32 size, const tchar* dbgStr, ... )
 {
 #if BASIC_BUFFER_DEBUG_INFO
     {
@@ -606,14 +605,14 @@ void BasicBuffer::ReservePointer(SmartBuffer::Location& loc, u32 size, const tch
     loc = ReservePointer(size, dbgStr);
 }
 
-SmartBuffer::Location BasicBuffer::ReserveOffset( const tchar* dbgStr, ... )
+BufferLocation BasicBuffer::ReserveOffset( const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_OFFSET, 4);
 
     return Reserve( 4 );
 }
 
-void BasicBuffer::ReserveOffset(SmartBuffer::Location& loc, const tchar* dbgStr, ... )
+void BasicBuffer::ReserveOffset(BufferLocation& loc, const tchar* dbgStr, ... )
 {
 #if BASIC_BUFFER_DEBUG_INFO
     {
@@ -631,22 +630,22 @@ void BasicBuffer::ReserveOffset(SmartBuffer::Location& loc, const tchar* dbgStr,
     loc = ReserveOffset(dbgStr);
 }
 
-void BasicBuffer::WritePointer( const Location& destination )
+void BasicBuffer::WritePointer( const BufferLocation& destination )
 {
     AddPointerFixup( ReservePointer(0), destination,GetPlatformPtrSize() );
 }
 
-void BasicBuffer::WritePointer32( const Location& destination )
+void BasicBuffer::WritePointer32( const BufferLocation& destination )
 {
     AddPointerFixup( ReservePointer(4), destination,4 );
 }
 
-void BasicBuffer::WritePointer64( const Location& destination )
+void BasicBuffer::WritePointer64( const BufferLocation& destination )
 {
     AddPointerFixup( ReservePointer(8), destination,8 );
 }
 
-void BasicBuffer::WriteOffset( const Location& destination, bool absolute )
+void BasicBuffer::WriteOffset( const BufferLocation& destination, bool absolute )
 {
     AddOffsetFixup( ReserveOffset(), destination, absolute );
 }

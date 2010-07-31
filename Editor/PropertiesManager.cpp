@@ -131,13 +131,13 @@ void PropertiesManager::CreateProperties()
   else
   {
     {
-      Platform::TakeMutex mutex( m_ThreadCountMutex );
+      Helium::TakeMutex mutex( m_ThreadCountMutex );
       ++m_ThreadCount;
     }
 
-    Platform::Thread propertyThread;
+    Helium::Thread propertyThread;
     PropertyThreadArgs* propertyThreadArgs = new PropertyThreadArgs( m_Selection, m_SelectionId, &m_SelectionId, m_Setting, m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Container>(), m_PropertiesCreated );
-    propertyThread.CreateWithArgs( Platform::Thread::EntryHelperWithArgs<PropertiesManager, PropertyThreadArgs, &PropertiesManager::GeneratePropertiesThread>, this, propertyThreadArgs, TXT( "GeneratePropertiesThread()" ), THREAD_PRIORITY_BELOW_NORMAL );
+    propertyThread.CreateWithArgs( Helium::Thread::EntryHelperWithArgs<PropertiesManager, PropertyThreadArgs, &PropertiesManager::GeneratePropertiesThread>, this, propertyThreadArgs, TXT( "GeneratePropertiesThread()" ), THREAD_PRIORITY_BELOW_NORMAL );
   }
 }
 
@@ -146,7 +146,7 @@ void PropertiesManager::GeneratePropertiesThread( PropertyThreadArgs& args )
   GenerateProperties( args );
 
   {
-    Platform::TakeMutex mutex( m_ThreadCountMutex );
+    Helium::TakeMutex mutex( m_ThreadCountMutex );
     --m_ThreadCount;
   }
 }
@@ -448,6 +448,6 @@ void PropertiesManager::RemovePropertiesCreatedListener( const PropertiesCreated
 
 bool PropertiesManager::ThreadsActive()
 {
-  Platform::TakeMutex mutex( m_ThreadCountMutex );
+  Helium::TakeMutex mutex( m_ThreadCountMutex );
   return m_ThreadCount > 0;
 }

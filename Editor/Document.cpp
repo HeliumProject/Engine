@@ -14,7 +14,7 @@ EDITOR_DEFINE_TYPE( Document );
 
 void Document::InitializeType()
 {
-    Reflect::RegisterClass<Document>( TXT( "Document" ) );
+    Reflect::RegisterClass<Document>();
 }
 
 void Document::CleanupType()

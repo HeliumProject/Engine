@@ -234,9 +234,9 @@ namespace Helium
 
             const Type* type = NULL;
 
-        tstring temp;
-        bool converted = Helium::ConvertString( typeid( T ).name(), temp );
-        HELIUM_ASSERT( converted ); // if you hit this, for some reason we couldn't convert your typename
+            tstring temp;
+            bool converted = Helium::ConvertString( typeid( T ).name(), temp );
+            HELIUM_ASSERT( converted ); // if you hit this, for some reason we couldn't convert your typename
 
             Registry::GetInstance()->AtomicGetType( temp, &type );
             HELIUM_ASSERT(type); // if you hit this then your type is not registered

@@ -1,5 +1,6 @@
 #include "Registry.h"
 #include "Version.h"
+#include "Document.h"
 #include "Serializers.h"
 
 #ifdef REFLECT_OBJECT_TRACKING
@@ -193,16 +194,20 @@ void Reflect::Initialize()
         g_Instance->RegisterType(TUIDElementMapSerializer::CreateClass( TXT( "TUIDElementMap" ) ));
 
         //
-        // Register Elements
-        //
-
-        g_Instance->RegisterType(Version::CreateClass( TXT( "Version" ) ));
-
-        //
         // Build Casting Table
         //
 
         Serializer::Initialize();
+
+        //
+        // Register Elements
+        //
+
+        g_Instance->RegisterType(Version::CreateClass( TXT( "Version" ) ));
+        g_Instance->RegisterType(DocumentNode::CreateClass( TXT("DocumentNode") ));
+        g_Instance->RegisterType(DocumentAttribute::CreateClass( TXT("DocumentAttribute") ));
+        g_Instance->RegisterType(DocumentElement::CreateClass( TXT("DocumentElement") ));
+        g_Instance->RegisterType(Document::CreateClass( TXT("Document") ));
     }
 
 #ifdef REFLECT_DEBUG_INIT_AND_CLEANUP

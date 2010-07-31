@@ -65,6 +65,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Expat.lib ZLib.lib ws2_32.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -136,6 +137,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Expat.lib ZLib.lib ws2_32.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -204,6 +206,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Expat.lib ZLib.lib ws2_32.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -273,6 +276,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Expat.lib ZLib.lib ws2_32.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -343,6 +347,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Expat.lib ZLib.lib ws2_32.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -414,6 +419,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Expat.lib ZLib.lib ws2_32.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -482,6 +488,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Expat.lib ZLib.lib ws2_32.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -551,6 +558,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Expat.lib ZLib.lib ws2_32.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"

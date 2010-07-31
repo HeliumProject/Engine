@@ -3,14 +3,19 @@
 
 using namespace Helium::Reflect;
 
-void DocumentElement::Initialize( Document* document, DocumentElement* parent, DocumentElement* nextSibling, DocumentElement* previousSibling )
+void DocumentNode::Initialize( Document* document, DocumentElement* parent, DocumentNode* nextSibling, DocumentNode* previousSibling )
 {
     SetDocument( document );
     SetParent( parent );
     SetNextSibling( nextSibling );
     SetPreviousSibling( previousSibling );
+}
 
-    for ( std::vector< DocumentElementPtr >::const_iterator itr = m_Children.begin()
+void DocumentElement::Initialize( Document* document, DocumentElement* parent, DocumentNode* nextSibling, DocumentNode* previousSibling )
+{
+    Base::Initialize( document, parent, nextSibling, previousSibling );
+
+    for ( std::vector< DocumentNodePtr >::const_iterator itr = m_Children.begin()
         , begin = m_Children.begin()
         , end = m_Children.end()
         ; itr != end
@@ -38,7 +43,7 @@ void DocumentElement::Initialize( Document* document, DocumentElement* parent, D
     }
 }
 
-void DocumentElement::AddChild( DocumentElementPtr node )
+void DocumentElement::AddChild( DocumentNodePtr node )
 {
     if ( std::find( m_Children.begin(), m_Children.end(), node ) == m_Children.end() )
     {
@@ -64,7 +69,7 @@ void DocumentElement::AddChild( DocumentElementPtr node )
     }
 }
 
-void DocumentElement::RemoveChild( DocumentElementPtr node )
+void DocumentElement::RemoveChild( DocumentNodePtr node )
 {
     size_t size = m_Children.size();
     std::remove( m_Children.begin(), m_Children.end(), node );
@@ -72,8 +77,8 @@ void DocumentElement::RemoveChild( DocumentElementPtr node )
     {
         if ( m_ChildRemoving.RaiseWithReturn( node ) )
         {
-            DocumentElement* nextSibling = node->GetNextSibling();
-            DocumentElement* previousSibling = node->GetPreviousSibling();
+            DocumentNode* nextSibling = node->GetNextSibling();
+            DocumentNode* previousSibling = node->GetPreviousSibling();
 
             if ( nextSibling )
             {

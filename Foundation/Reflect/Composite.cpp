@@ -224,15 +224,8 @@ tstring Composite::ShortenName(const tstring& fullName)
     }
     else
     {
-        // look for last namespace operator
-        size_t offset = fullName.rfind( TXT(":") );
-        if (offset != std::string::npos)
-        {
-            return fullName.substr(offset+1);
-        }
-
         // look for the space after "struct " or "class "
-        offset = fullName.rfind( TXT(" ") );
+        size_t offset = fullName.rfind( TXT(" ") );
         if (offset != std::string::npos)
         {
             return fullName.substr(offset+1);

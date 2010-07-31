@@ -9,6 +9,7 @@ using namespace Helium::Editor;
 ProjectPanel::ProjectPanel( wxWindow *parent )
 : ProjectPanelGenerated( parent )
 {
+    this->SetHelpText( TXT( "This is the project outliner.  Manage what's included in your project here." ) );
 }
 
 ProjectPanel::~ProjectPanel()

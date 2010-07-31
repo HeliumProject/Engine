@@ -309,7 +309,7 @@ MainFrame::~MainFrame()
 
 void MainFrame::SetHelpText( const tchar* text )
 {
-    m_HelpPanel->SetHelpText( text );
+    m_HelpPanel->SetText( text );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

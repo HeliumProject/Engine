@@ -11,6 +11,8 @@ using namespace Helium::Editor;
 ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
 : ToolbarPanelGenerated( parent, id, pos, size, style )
 {
+    SetHelpText( TXT( "This is the Toolbar, it provides access to commonly used actions and tools." ) );
+
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )
     {
         Freeze();
@@ -32,6 +34,20 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
         Layout();
         Thaw();
     }
+
+    m_NewSceneButton->SetHelpText( TXT( "New Scene\n\nClicking this will create a new scene." ) );
+    m_OpenButton->SetHelpText( TXT( "Open\n\nClicking this button will bring up a file browser, allowing you to open files in the editor." ) );
+    m_SaveAllButton->SetHelpText( TXT( "Save All\n\nClicking this button will save all your work." ) );
+    m_CutButton->SetHelpText( TXT( "Cut\n\nClicking this will cut the selected items to the clipboard." ) );
+    m_CopyButton->SetHelpText( TXT( "Copy\n\nClicking this will copy the selected items to the clipboard." ) );
+    m_PasteButton->SetHelpText( TXT( "Paste\n\nClicking this will paste the contents of the clipboard." ) );
+    m_DeleteButton->SetHelpText( TXT( "Delete\n\nClicking this will delete the selected items." ) );
+    m_UndoButton->SetHelpText( TXT( "Undo\n\nClicking this will undo an action." ) );
+    m_RedoButton->SetHelpText( TXT( "Redo\n\nClicking this will redo an action." ) );
+
+    m_PlayButton->SetHelpText( TXT( "Play\n\nClicking this will start the game in the editing window." ) );
+    m_PauseButton->SetHelpText( TXT( "Pause\n\nClicking this will pause a currently running game session." ) );
+    m_StopButton->SetHelpText( TXT( "Stop\n\nClicking this will stop a currently running game session." ) );
 
     m_SaveAllButton->Disable();
 
@@ -61,6 +77,7 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
 
         wxBitmapToggleButton* btn = new wxBitmapToggleButton( typePanel, info->m_ID, wxArtProvider::GetBitmap( info->m_Bitmap, wxART_OTHER, wxSize( 16, 16 ) ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
         btn->SetToolTip( info->m_Description );
+        btn->SetHelpText( info->m_Description );
 
         // connect its event handler to us
         btn->Connect( btn->GetId(), wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ToolbarPanel::OnToggleToolButton ), NULL, this );

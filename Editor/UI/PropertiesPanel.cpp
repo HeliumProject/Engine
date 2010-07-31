@@ -9,6 +9,8 @@ PropertiesPanel::PropertiesPanel( PropertiesManager* manager, wxWindow *parent, 
 : PropertiesPanelGenerated( parent, id, pos, size, style )
 , m_PropertiesManager( manager )
 {
+    SetHelpText( TXT( "This is the Properties Panel.  It will contain the properties for the items you have selected.  It has two modes:\n Common - Only display the properties common to all the selected items.\n All - Display all properties, regardless of if they are shared by the selected items." ) );
+
   m_PropertyCanvas = new Inspect::CanvasWindow ( m_PropertiesPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxCLIP_CHILDREN );
   m_PropertiesPanel->GetSizer()->Add( m_PropertyCanvas, 1, wxEXPAND | wxALL, 0 );
 }

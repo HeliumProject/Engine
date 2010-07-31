@@ -44,6 +44,8 @@ LayersPanel::LayersPanel( SceneManager* manager, wxWindow* parent, wxWindowID id
 , m_Grid( new Grid( this, EventIds::ID_LayerGrid, true ) )
 , m_Scene( NULL )
 {
+    SetHelpText( TXT( "This is the Layers Panel, you can control how layers are set up in your project here." ) );
+
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )
     {
         Freeze();

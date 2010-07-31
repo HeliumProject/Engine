@@ -8,7 +8,8 @@
 #include "Application/Inspect/Controls/Canvas.h"
 #include "Application/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 PreferenceInfo::PreferenceInfo( Reflect::ElementPtr& source, Reflect::ElementPtr& clone, Inspect::CanvasPtr& canvas )
 : m_Source( source )

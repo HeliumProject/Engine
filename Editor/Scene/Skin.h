@@ -2,52 +2,55 @@
 
 #include "SceneNode.h"
 
-// Forwards
-namespace Content
+namespace Helium
 {
-  class Skin;
-  class Influence;
-}
+    // Forwards
+    namespace Content
+    {
+        class Skin;
+        class Influence;
+    }
 
-namespace Editor
-{
-  class Scene;
-  class Transform;
-  class Mesh;
+    namespace Editor
+    {
+        class Scene;
+        class Transform;
+        class Mesh;
 
-  typedef std::vector< Editor::Transform* > V_TransformDumbPtr;
+        typedef std::vector< Editor::Transform* > V_TransformDumbPtr;
 
-  class Skin : public Editor::SceneNode
-  {
-    //
-    // Member variables
-    //
-    
-  protected:
-    Editor::Mesh* m_Mesh;
-    V_TransformDumbPtr m_InfluenceObjects;
+        class Skin : public Editor::SceneNode
+        {
+            //
+            // Member variables
+            //
 
-    Math::V_Matrix4 m_DeformMatrices;
-    Math::V_Matrix4 m_SkinMatrices;
+        protected:
+            Editor::Mesh* m_Mesh;
+            V_TransformDumbPtr m_InfluenceObjects;
 
-    //
-    // Runtime Type Info
-    //
+            Math::V_Matrix4 m_DeformMatrices;
+            Math::V_Matrix4 m_SkinMatrices;
 
-    LUNA_DECLARE_TYPE( Skin, Editor::SceneNode );
-    static void InitializeType();
-    static void CleanupType();
+            //
+            // Runtime Type Info
+            //
 
-    // 
-    // Member functions
-    // 
-  public:
-    Skin( Editor::Scene* scene, Content::Skin* skin );
-    virtual ~Skin();
-    virtual void Initialize() HELIUM_OVERRIDE;
-    virtual void Evaluate(GraphDirection direction) HELIUM_OVERRIDE;
+            EDITOR_DECLARE_TYPE( Skin, Editor::SceneNode );
+            static void InitializeType();
+            static void CleanupType();
 
-  private:
-    void BlendMatrix(const Editor::Transform* transform, const Content::Influence* influence, Math::Matrix4& matrix);
-  };
+            // 
+            // Member functions
+            // 
+        public:
+            Skin( Editor::Scene* scene, Content::Skin* skin );
+            virtual ~Skin();
+            virtual void Initialize() HELIUM_OVERRIDE;
+            virtual void Evaluate(GraphDirection direction) HELIUM_OVERRIDE;
+
+        private:
+            void BlendMatrix(const Editor::Transform* transform, const Content::Influence* influence, Math::Matrix4& matrix);
+        };
+    }
 }

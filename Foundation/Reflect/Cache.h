@@ -7,27 +7,30 @@
 
 #include "API.h"
 
-namespace Reflect
+namespace Helium
 {
-    class FOUNDATION_API Element;
-    typedef Helium::SmartPtr<Element> ElementPtr;
-    typedef std::stack<ElementPtr> S_Element;
-    typedef stdext::hash_map<int, S_Element> H_Element;
-
-    class Cache
+    namespace Reflect
     {
-    protected:
-        // hash_map of stacks (the free list)
-        H_Element m_Elements;
+        class FOUNDATION_API Element;
+        typedef Helium::SmartPtr<Element> ElementPtr;
+        typedef std::stack<ElementPtr> S_Element;
+        typedef stdext::hash_map<int, S_Element> H_Element;
 
-    public:
-        // creator
-        bool Create(int type, ElementPtr& element);
+        class Cache
+        {
+        protected:
+            // hash_map of stacks (the free list)
+            H_Element m_Elements;
 
-        // creator
-        bool Create(const tstring& shortName, ElementPtr& element);
+        public:
+            // creator
+            bool Create(int type, ElementPtr& element);
 
-        // push into free list
-        void Free(ElementPtr element);
-    };
+            // creator
+            bool Create(const tstring& shortName, ElementPtr& element);
+
+            // push into free list
+            void Free(ElementPtr element);
+        };
+    }
 }

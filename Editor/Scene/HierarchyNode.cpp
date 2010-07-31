@@ -18,10 +18,10 @@
 #include "SceneVisitor.h"
 #include "App.h"
 
-using namespace Editor;
 using namespace Helium;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE( Editor::HierarchyNode );
+EDITOR_DEFINE_TYPE( Editor::HierarchyNode );
 
 void HierarchyNode::InitializeType()
 {

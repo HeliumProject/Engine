@@ -1487,6 +1487,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\RCS\RCSExceptions.h"
+				>
+			</File>
+			<File
 				RelativePath=".\RCS\RCSFile.cpp"
 				>
 			</File>

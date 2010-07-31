@@ -3,36 +3,39 @@
 // Includes
 #include "Editor/API.h"
 
-namespace Editor
+namespace Helium
 {
-  // Forwards
-  class Object;
+    namespace Editor
+    {
+        // Forwards
+        class Object;
 
-  /////////////////////////////////////////////////////////////////////////////
-  // Class for attaching Objects to items displayed in a tree control.
-  // 
-  class SceneOutlinerItemData : public wxTreeItemData
-  {
-  protected:
-    Object*    m_Object;
-    tstring m_ItemText; 
-    int         m_CachedCount; 
-    bool        m_Countable; 
+        /////////////////////////////////////////////////////////////////////////////
+        // Class for attaching Objects to items displayed in a tree control.
+        // 
+        class SceneOutlinerItemData : public wxTreeItemData
+        {
+        protected:
+            Object*    m_Object;
+            tstring m_ItemText; 
+            int         m_CachedCount; 
+            bool        m_Countable; 
 
-  public:
-    SceneOutlinerItemData( Object* object );
-    virtual ~SceneOutlinerItemData();
-    
-    Object* GetObject() const;
-    void SetObject( Object* object );
+        public:
+            SceneOutlinerItemData( Object* object );
+            virtual ~SceneOutlinerItemData();
 
-    void SetItemText(const tstring& text); 
-    const tstring& GetItemText(); 
+            Object* GetObject() const;
+            void SetObject( Object* object );
 
-    int GetCachedCount(); 
-    void SetCachedCount(int count); 
+            void SetItemText(const tstring& text); 
+            const tstring& GetItemText(); 
 
-    bool GetCountable() { return m_Countable; }
-    void SetCountable(bool countable ) { m_Countable = countable; }
-  };
+            int GetCachedCount(); 
+            void SetCachedCount(int count); 
+
+            bool GetCountable() { return m_Countable; }
+            void SetCountable(bool countable ) { m_Countable = countable; }
+        };
+    }
 }

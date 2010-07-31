@@ -3,42 +3,45 @@
 #include "Pipeline/API.h"
 #include "Foundation/Component/Component.h"
 
-namespace Asset
+namespace Helium
 {
-  class PIPELINE_API TransformComponent : public Component::ComponentBase
-  {
-  private:
-      Math::Vector3 m_Translation;
-      Math::Vector3 m_Rotation;
-      Math::Vector3 m_Scale;
+    namespace Asset
+    {
+        class PIPELINE_API TransformComponent : public Component::ComponentBase
+        {
+        private:
+            Math::Vector3 m_Translation;
+            Math::Vector3 m_Rotation;
+            Math::Vector3 m_Scale;
 
-  public:
+        public:
 
-      REFLECT_DECLARE_CLASS( TransformComponent, Component::ComponentBase );
+            REFLECT_DECLARE_CLASS( TransformComponent, Component::ComponentBase );
 
-      static void EnumerateClass( Reflect::Compositor< TransformComponent >& comp );
+            static void EnumerateClass( Reflect::Compositor< TransformComponent >& comp );
 
-  public:
-      TransformComponent()
-      {
-      }
+        public:
+            TransformComponent()
+            {
+            }
 
-      virtual ~TransformComponent()
-      {
-      }
+            virtual ~TransformComponent()
+            {
+            }
 
-  public:
-      virtual Component::ComponentUsage GetComponentUsage() const HELIUM_OVERRIDE;
+        public:
+            virtual Component::ComponentUsage GetComponentUsage() const HELIUM_OVERRIDE;
 
-  public:
+        public:
 
-      const Math::Vector3& GetTranslation() const;
-      const Math::Vector3& GetRotation() const;
-      const Math::Vector3& GetScale() const;
+            const Math::Vector3& GetTranslation() const;
+            const Math::Vector3& GetRotation() const;
+            const Math::Vector3& GetScale() const;
 
-      void SetTranslation( const Math::Vector3& translation );
-      void SetRotation( const Math::Vector3& rotation );
-      void SetScale( const Math::Vector3& scale );
+            void SetTranslation( const Math::Vector3& translation );
+            void SetRotation( const Math::Vector3& rotation );
+            void SetScale( const Math::Vector3& scale );
 
-  };
+        };
+    }
 }

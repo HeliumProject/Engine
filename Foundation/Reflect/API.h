@@ -41,42 +41,43 @@
 //
 // Top Level Forwards
 //
-
-namespace Reflect
+namespace Helium
 {
-    class Object;
-    typedef Helium::SmartPtr<Object> ObjectPtr;
-    typedef std::vector<ObjectPtr> V_Object;
-    typedef Helium::SmartPtr<const Object> ConstObjectPtr;
-    typedef std::vector<ConstObjectPtr> V_ConstObject;
-
-    class Element;
-    typedef Helium::SmartPtr<Element> ElementPtr;
-    typedef std::vector<ElementPtr> V_Element;
-    typedef Helium::SmartPtr<const Element> ConstElementPtr;
-    typedef std::vector<ConstElementPtr> V_ConstElement;
-
-    class Serializer;
-    typedef Helium::SmartPtr<Serializer> SerializerPtr;
-    typedef std::vector<SerializerPtr> V_Serializer;
-    typedef Helium::SmartPtr<const Serializer> ConstSerializerPtr;
-    typedef std::vector<ConstSerializerPtr> V_ConstSerializer;
-
-    class Version;
-    typedef Helium::SmartPtr<Version> VersionPtr;
-    typedef Helium::SmartPtr<const Version> ConstVersionPtr;
-
-    // function type for creating object instances
-    typedef Object* (*CreateObjectFunc)();
-
-    // generic function for creating a new object, an instance of this fits into a CreateObjectFunc
-    template< class T >
-    Object* CreateObject()
+    namespace Reflect
     {
-        return new T();
+        class Object;
+        typedef Helium::SmartPtr<Object> ObjectPtr;
+        typedef std::vector<ObjectPtr> V_Object;
+        typedef Helium::SmartPtr<const Object> ConstObjectPtr;
+        typedef std::vector<ConstObjectPtr> V_ConstObject;
+
+        class Element;
+        typedef Helium::SmartPtr<Element> ElementPtr;
+        typedef std::vector<ElementPtr> V_Element;
+        typedef Helium::SmartPtr<const Element> ConstElementPtr;
+        typedef std::vector<ConstElementPtr> V_ConstElement;
+
+        class Serializer;
+        typedef Helium::SmartPtr<Serializer> SerializerPtr;
+        typedef std::vector<SerializerPtr> V_Serializer;
+        typedef Helium::SmartPtr<const Serializer> ConstSerializerPtr;
+        typedef std::vector<ConstSerializerPtr> V_ConstSerializer;
+
+        class Version;
+        typedef Helium::SmartPtr<Version> VersionPtr;
+        typedef Helium::SmartPtr<const Version> ConstVersionPtr;
+
+        // function type for creating object instances
+        typedef Object* (*CreateObjectFunc)();
+
+        // generic function for creating a new object, an instance of this fits into a CreateObjectFunc
+        template< class T >
+        Object* CreateObject()
+        {
+            return new T();
+        }
     }
 }
-
 
 //
 // Debugging Settings

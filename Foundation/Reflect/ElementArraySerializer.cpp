@@ -1,6 +1,6 @@
 #include "ElementArraySerializer.h"
 
-using namespace Reflect;
+using namespace Helium::Reflect;
 
 REFLECT_DEFINE_CLASS(ElementArraySerializer);
 

@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "SceneNodePanel.h"
 
-using namespace Editor;
 using namespace Helium;
+using namespace Helium::Editor;
 
 SceneNodePanel::SceneNodePanel(PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection)
 : m_Selection (selection)

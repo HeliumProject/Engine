@@ -14,7 +14,7 @@
         <property name="help_provider">none</property>
         <property name="internationalize">1</property>
         <property name="name">EditorGenerated</property>
-        <property name="namespace">&quot;Editor&quot;</property>
+        <property name="namespace">&quot;Helium&quot; &quot;Editor&quot;</property>
         <property name="path">.</property>
         <property name="precompiled_header">#include &quot;Precompile.h&quot;&#x0A;</property>
         <property name="relative_path">1</property>
@@ -39,7 +39,7 @@
             <property name="pos"></property>
             <property name="size">1280,1024</property>
             <property name="style">wxDEFAULT_FRAME_STYLE</property>
-            <property name="subclass">Editor::Frame; Frame.h</property>
+            <property name="subclass">Helium::Editor::Frame; Frame.h</property>
             <property name="title"></property>
             <property name="tooltip"></property>
             <property name="validator_data_type"></property>

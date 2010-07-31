@@ -5,26 +5,29 @@
 
 #include "Foundation/Reflect/Class.h"
 
-namespace Inspect
+namespace Helium
 {
-  class APPLICATION_API CheckBox : public Reflect::ConcreteInheritor<CheckBox, Control>
-  {
-  private:
-    bool m_State;
+    namespace Inspect
+    {
+        class APPLICATION_API CheckBox : public Reflect::ConcreteInheritor<CheckBox, Control>
+        {
+        private:
+            bool m_State;
 
-  public:
-    CheckBox();
+        public:
+            CheckBox();
 
-    virtual void Realize(Container* parent);
-    virtual void Read();
-    virtual bool Write();
-    virtual bool GetChecked();
-    virtual void SetChecked(bool checked);
+            virtual void Realize(Container* parent);
+            virtual void Read();
+            virtual bool Write();
+            virtual bool GetChecked();
+            virtual void SetChecked(bool checked);
 
-  private:
-    virtual void SetDefaultAppearance( bool def ) HELIUM_OVERRIDE;
-    void UpdateUI( bool state );
-  };
+        private:
+            virtual void SetDefaultAppearance( bool def ) HELIUM_OVERRIDE;
+            void UpdateUI( bool state );
+        };
 
-  typedef Helium::SmartPtr<CheckBox> CheckBoxPtr;
+        typedef Helium::SmartPtr<CheckBox> CheckBoxPtr;
+    }
 }

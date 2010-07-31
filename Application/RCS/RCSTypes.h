@@ -6,96 +6,99 @@
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
 
-namespace RCS
+namespace Helium
 {
-  static const u64 InvalidChangesetId = 0xFFFFFFFFFFFFFFFF;
-  static const u64 DefaultChangesetId = 0x0;
-
-  APPLICATION_API tstring GetChangesetIdAsString( const u64 changesetId );
-
-  namespace FileStates
-  {
-    enum FileState
+    namespace RCS
     {
-      Unknown           = 0,
-      ExistsInDepot     = 1 << 0,
-      HeadDeleted       = 1 << 1,
-      LocalDeleted      = 1 << 2, 
-      CheckedOut        = 1 << 3,
-      CheckedOutByMe    = 1 << 4,
-    };
-  }
-  typedef FileStates::FileState FileState;
+        static const u64 InvalidChangesetId = 0xFFFFFFFFFFFFFFFF;
+        static const u64 DefaultChangesetId = 0x0;
 
-  namespace FileFlags
-  {
-    enum FileFlag
-    {
-      Unknown   = 0,
-      Locking   = 1 << 1,
-      HeadOnly  = 1 << 2,
-    };
-  }
-  typedef FileFlags::FileFlag FileFlag;
+        APPLICATION_API tstring GetChangesetIdAsString( const u64 changesetId );
 
-  namespace Operations
-  {
-    enum Operation
-    {
-      Unknown,
-      None,
-      Add,
-      Edit,
-      Delete,
-      Branch,
-      Integrate,
-    };
-  }
-  typedef Operations::Operation Operation;
+        namespace FileStates
+        {
+            enum FileState
+            {
+                Unknown           = 0,
+                ExistsInDepot     = 1 << 0,
+                HeadDeleted       = 1 << 1,
+                LocalDeleted      = 1 << 2, 
+                CheckedOut        = 1 << 3,
+                CheckedOutByMe    = 1 << 4,
+            };
+        }
+        typedef FileStates::FileState FileState;
 
-  namespace FileTypes
-  {
-    enum FileType
-    {
-      Unknown,
-      Text,
-      Binary,
-      Directory,
-    };
-  }
-  typedef FileTypes::FileType FileType;
+        namespace FileFlags
+        {
+            enum FileFlag
+            {
+                Unknown   = 0,
+                Locking   = 1 << 1,
+                HeadOnly  = 1 << 2,
+            };
+        }
+        typedef FileFlags::FileFlag FileFlag;
 
-  enum UserSelection
-  {
-    Yes,
-    No,
-    Cancel
-  };
+        namespace Operations
+        {
+            enum Operation
+            {
+                Unknown,
+                None,
+                Add,
+                Edit,
+                Delete,
+                Branch,
+                Integrate,
+            };
+        }
+        typedef Operations::Operation Operation;
 
-  namespace GetInfoFlags
-  {
-    enum GetInfoFlag
-    {
-      None                  = 0,
-      GetHistory            = 1 << 0,
-      GetIntegrationHistory = 1 << 1,
+        namespace FileTypes
+        {
+            enum FileType
+            {
+                Unknown,
+                Text,
+                Binary,
+                Directory,
+            };
+        }
+        typedef FileTypes::FileType FileType;
 
-      Default = None
-    };
-  }
-  typedef GetInfoFlags::GetInfoFlag GetInfoFlag;
+        enum UserSelection
+        {
+            Yes,
+            No,
+            Cancel
+        };
 
-  namespace OpenFlags
-  {
-    enum OpenFlag
-    {
-      None           = 0,
-      Exclusive      = 1 << 0,
-      UnchangedOnly  = 1 << 1,
-      AllowOutOfDate = 1 << 2, 
+        namespace GetInfoFlags
+        {
+            enum GetInfoFlag
+            {
+                None                  = 0,
+                GetHistory            = 1 << 0,
+                GetIntegrationHistory = 1 << 1,
 
-      Default       = None
-    };
-  }
-  typedef OpenFlags::OpenFlag OpenFlag;
+                Default = None
+            };
+        }
+        typedef GetInfoFlags::GetInfoFlag GetInfoFlag;
+
+        namespace OpenFlags
+        {
+            enum OpenFlag
+            {
+                None           = 0,
+                Exclusive      = 1 << 0,
+                UnchangedOnly  = 1 << 1,
+                AllowOutOfDate = 1 << 2, 
+
+                Default       = None
+            };
+        }
+        typedef OpenFlags::OpenFlag OpenFlag;
+    }
 }

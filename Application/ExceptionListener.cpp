@@ -16,6 +16,7 @@
 #include <iomanip>
 
 using namespace Helium;
+using namespace Helium::Application;
 using namespace Helium::Debug;
 
 static i32 g_InitCount = 0;

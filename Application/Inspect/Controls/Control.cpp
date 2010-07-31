@@ -5,7 +5,8 @@
 #include "Application/Inspect/Data/StringData.h"
 #include <wx/dnd.h>
 
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Inspect;
 
 #ifdef PROFILE_ACCUMULATION
 Profile::Accumulator Inspect::g_RealizeAccumulator( "Inspect Realize Accumulator" );

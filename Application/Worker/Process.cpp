@@ -12,7 +12,7 @@
 #include "Application/Exception.h"
 
 using namespace Helium;
-using namespace Worker;
+using namespace Helium::Worker;
 
 const tchar* Worker::Args::Worker  = TXT( "worker" );
 const tchar* Worker::Args::Debug   = TXT( "worker_debug" );

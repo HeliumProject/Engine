@@ -1,7 +1,7 @@
 #include "Value.h"
 #include "Application/Inspect/Controls/Canvas.h"
 
-using namespace Inspect;
+using namespace Helium::Inspect;
 
 class StdTextBox : public wxTextCtrl
 {

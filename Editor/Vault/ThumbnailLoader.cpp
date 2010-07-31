@@ -7,7 +7,8 @@
 #include "Foundation/File/Directory.h"
 #include "Render/D3DManager.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 void* ThumbnailLoader::LoadThread::Entry()
 {

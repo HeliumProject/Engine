@@ -4,35 +4,33 @@
 #include "Application/Inspect/DragDrop/FilteredDropTarget.h"
 #include "Application/Inspect/Interpreters/Reflect/ReflectFieldInterpreter.h"
 
-namespace Finder
+namespace Helium
 {
-  class FinderSpec;
-}
+    namespace Inspect
+    {
+        class APPLICATION_API FileInterpreter : public ReflectFieldInterpreter
+        {
+        public:
+            FileInterpreter (Container* container);
 
-namespace Inspect
-{
-  class APPLICATION_API FileInterpreter : public ReflectFieldInterpreter
-  {
-  public:
-    FileInterpreter (Container* container);
+            virtual void InterpretField(const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent);
 
-    virtual void InterpretField(const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent);
+        private:
 
-  private:
+            // callbacks
+            bool DataChanging( DataChangingArgs& args );
+            void Edit( Button* button );
 
-    // callbacks
-    bool DataChanging( DataChangingArgs& args );
-    void Edit( Button* button );
-    
-    void OnDrop( const Inspect::FilteredDropTargetArgs& args );
+            void OnDrop( const Inspect::FilteredDropTargetArgs& args );
 
-  protected:
-      tstring m_FileFilter;
+        protected:
+            tstring m_FileFilter;
 
-  private:
-    Inspect::Value* m_Value;
-  };
+        private:
+            Inspect::Value* m_Value;
+        };
 
-  typedef Helium::SmartPtr<FileInterpreter> FileInterpreterPtr;
-  typedef std::vector< FileInterpreterPtr > V_FileInterpreter;
+        typedef Helium::SmartPtr<FileInterpreter> FileInterpreterPtr;
+        typedef std::vector< FileInterpreterPtr > V_FileInterpreter;
+    }
 }

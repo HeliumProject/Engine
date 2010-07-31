@@ -12,282 +12,285 @@
 // copyright message remains intact.
 //
 
-class BitArray
+namespace Helium
 {
-public:
-
-    //
-    // Constructors and destructor
-    //
-
-    explicit BitArray(unsigned size)
+    class BitArray
     {
-        Init(size);
+    public:
 
-        // Clear last bits
-        Trim();
-    }
+        //
+        // Constructors and destructor
+        //
 
-    BitArray(const BitArray &that)
-    {
-        mpStore = 0;
-        *this = that;
-    }
+        explicit BitArray(unsigned size)
+        {
+            Init(size);
 
-    virtual ~BitArray()
-    {
-        if (mLength > 1)
-            delete[] mpStore;
-    }
+            // Clear last bits
+            Trim();
+        }
 
-    //
-    // Operators
-    //
+        BitArray(const BitArray &that)
+        {
+            mpStore = 0;
+            *this = that;
+        }
 
-    class BitProxy;
-
-    BitArray &operator=(const BitArray &that)
-    {
-        if (this != &that)
+        virtual ~BitArray()
         {
             if (mLength > 1)
                 delete[] mpStore;
-
-            Init(that.mNumBits);
-
-            memcpy(mpStore, that.mpStore, mLength * sizeof(store_type));
         }
-        return *this;
-    }
 
-    BitProxy operator[](unsigned pos)
-    {
-        HELIUM_ASSERT(pos < mNumBits);
-        return BitProxy(*this, pos);
-    }
+        //
+        // Operators
+        //
 
-    const BitProxy operator[](unsigned pos) const
-    {
-        HELIUM_ASSERT(pos < mNumBits);
-        return BitProxy(const_cast<BitArray &>(*this), pos);
-    }
+        class BitProxy;
 
-    bool operator==(const BitArray &that) const
-    {
-        if (mNumBits != that.mNumBits)
-            return false;
+        BitArray &operator=(const BitArray &that)
+        {
+            if (this != &that)
+            {
+                if (mLength > 1)
+                    delete[] mpStore;
 
-        for (unsigned i = 0; i < mLength; i++)
-            if (mpStore[i] != that.mpStore[i])
+                Init(that.mNumBits);
+
+                memcpy(mpStore, that.mpStore, mLength * sizeof(store_type));
+            }
+            return *this;
+        }
+
+        BitProxy operator[](unsigned pos)
+        {
+            HELIUM_ASSERT(pos < mNumBits);
+            return BitProxy(*this, pos);
+        }
+
+        const BitProxy operator[](unsigned pos) const
+        {
+            HELIUM_ASSERT(pos < mNumBits);
+            return BitProxy(const_cast<BitArray &>(*this), pos);
+        }
+
+        bool operator==(const BitArray &that) const
+        {
+            if (mNumBits != that.mNumBits)
                 return false;
-        return true;
-    }
 
-    bool operator!=(const BitArray &that) const
-    {
-        return !(*this == that);
-    }
+            for (unsigned i = 0; i < mLength; i++)
+                if (mpStore[i] != that.mpStore[i])
+                    return false;
+            return true;
+        }
 
-    BitArray &operator&=(const BitArray &that)
-    {
-        HELIUM_ASSERT(mNumBits == that.mNumBits);
-        for (unsigned i = 0; i < mLength; i++)
-            mpStore[i] &= that.mpStore[i];
-        return *this;
-    }
+        bool operator!=(const BitArray &that) const
+        {
+            return !(*this == that);
+        }
 
-    BitArray operator|=(const BitArray &that)
-    {
-        HELIUM_ASSERT(mNumBits == that.mNumBits);
-        for (unsigned i = 0; i < mLength; i++)
-            mpStore[i] |= that.mpStore[i];
-        return *this;
-    }
+        BitArray &operator&=(const BitArray &that)
+        {
+            HELIUM_ASSERT(mNumBits == that.mNumBits);
+            for (unsigned i = 0; i < mLength; i++)
+                mpStore[i] &= that.mpStore[i];
+            return *this;
+        }
 
-    BitArray operator^=(const BitArray &that)
-    {
-        HELIUM_ASSERT(mNumBits == that.mNumBits);
-        for (unsigned i = 0; i < mLength; i++)
-            mpStore[i] ^= that.mpStore[i];
-        return *this;
-    }
+        BitArray operator|=(const BitArray &that)
+        {
+            HELIUM_ASSERT(mNumBits == that.mNumBits);
+            for (unsigned i = 0; i < mLength; i++)
+                mpStore[i] |= that.mpStore[i];
+            return *this;
+        }
 
-    BitArray operator~() const
-    {
-        return BitArray(*this).FlipAllBits();
-    }
+        BitArray operator^=(const BitArray &that)
+        {
+            HELIUM_ASSERT(mNumBits == that.mNumBits);
+            for (unsigned i = 0; i < mLength; i++)
+                mpStore[i] ^= that.mpStore[i];
+            return *this;
+        }
 
-    friend BitArray operator&(const BitArray &a1, const BitArray &a2)
-    {
-        return BitArray(a1) &= a2;
-    }
+        BitArray operator~() const
+        {
+            return BitArray(*this).FlipAllBits();
+        }
 
-    friend BitArray operator|(const BitArray &a1, const BitArray &a2)
-    {
-        return BitArray(a1) |= a2;
-    }
+        friend BitArray operator&(const BitArray &a1, const BitArray &a2)
+        {
+            return BitArray(a1) &= a2;
+        }
 
-    friend BitArray operator^(const BitArray &a1, const BitArray &a2)
-    {
-        return BitArray(a1) ^= a2;
-    }
+        friend BitArray operator|(const BitArray &a1, const BitArray &a2)
+        {
+            return BitArray(a1) |= a2;
+        }
 
-    //
-    // Plain English interface
-    //
+        friend BitArray operator^(const BitArray &a1, const BitArray &a2)
+        {
+            return BitArray(a1) ^= a2;
+        }
 
-    // Set all bits to false.
-    void Clear()
-    {
-        memset(mpStore, 0, mLength * sizeof(store_type));
-    }
+        //
+        // Plain English interface
+        //
 
-    // Set the bit at position pos to true.
-    void SetBit(unsigned pos)
-    {
-        HELIUM_ASSERT(pos < mNumBits);
-        mpStore[GetIndex(pos)] |= 1 << GetOffset(pos); 
-    }
+        // Set all bits to false.
+        void Clear()
+        {
+            memset(mpStore, 0, mLength * sizeof(store_type));
+        }
 
-    // Set the bit at position pos to false.
-    void ClearBit(unsigned pos)
-    { 
-        HELIUM_ASSERT(pos < mNumBits);
-        mpStore[GetIndex(pos)] &= ~(1 << GetOffset(pos)); 
-    }
+        // Set the bit at position pos to true.
+        void SetBit(unsigned pos)
+        {
+            HELIUM_ASSERT(pos < mNumBits);
+            mpStore[GetIndex(pos)] |= 1 << GetOffset(pos); 
+        }
 
-    // Toggle the bit at position pos.
-    void FlipBit(unsigned pos) 
-    { 
-        HELIUM_ASSERT(pos < mNumBits);
-        mpStore[GetIndex(pos)] ^= 1 << GetOffset(pos); 
-    }
+        // Set the bit at position pos to false.
+        void ClearBit(unsigned pos)
+        { 
+            HELIUM_ASSERT(pos < mNumBits);
+            mpStore[GetIndex(pos)] &= ~(1 << GetOffset(pos)); 
+        }
 
-    // Set the bit at position pos to the given value.
-    void Set(unsigned pos, bool val)
-    { 
-        val ? SetBit(pos) : ClearBit(pos);
-    }
+        // Toggle the bit at position pos.
+        void FlipBit(unsigned pos) 
+        { 
+            HELIUM_ASSERT(pos < mNumBits);
+            mpStore[GetIndex(pos)] ^= 1 << GetOffset(pos); 
+        }
 
-    // Returns true iff the bit at position pos is true.
-    bool IsBitSet(unsigned pos) const
-    {
-        HELIUM_ASSERT(pos < mNumBits);
-        return (mpStore[GetIndex(pos)] & (1 << GetOffset(pos))) != 0;
-    }
+        // Set the bit at position pos to the given value.
+        void Set(unsigned pos, bool val)
+        { 
+            val ? SetBit(pos) : ClearBit(pos);
+        }
 
-    // Returns true iff all bits are false.
-    bool AllBitsFalse() const
-    {
-        for (unsigned i=0; i < mLength; i++)
-            if (mpStore[i] != 0)
-                return false;
-        return true;
-    }
+        // Returns true iff the bit at position pos is true.
+        bool IsBitSet(unsigned pos) const
+        {
+            HELIUM_ASSERT(pos < mNumBits);
+            return (mpStore[GetIndex(pos)] & (1 << GetOffset(pos))) != 0;
+        }
 
-    // Change value of all bits
-    BitArray &FlipAllBits()
-    {
-        for (unsigned i=0; i < mLength; i++)
-            mpStore[i] = ~mpStore[i];
+        // Returns true iff all bits are false.
+        bool AllBitsFalse() const
+        {
+            for (unsigned i=0; i < mLength; i++)
+                if (mpStore[i] != 0)
+                    return false;
+            return true;
+        }
 
-        Trim();
-        return *this;
-    }
+        // Change value of all bits
+        BitArray &FlipAllBits()
+        {
+            for (unsigned i=0; i < mLength; i++)
+                mpStore[i] = ~mpStore[i];
 
-    //
-    // Bit proxy (for operator[])
-    //
+            Trim();
+            return *this;
+        }
 
-    friend class BitProxy;
+        //
+        // Bit proxy (for operator[])
+        //
 
-    class BitProxy
-    {
+        friend class BitProxy;
+
+        class BitProxy
+        {
+        public:
+            BitProxy(BitArray &array, unsigned pos):
+              mArray(array), mPos(pos)
+              {}
+
+              BitProxy &operator=(bool value)
+              {
+                  mArray.Set(mPos, value);
+                  return *this;
+              }
+
+              BitProxy &operator=(const BitProxy &that)
+              {
+                  mArray.Set(mPos, that.mArray.IsBitSet(that.mPos));
+                  return *this;
+              }
+
+              operator bool() const
+              {
+                  return mArray.IsBitSet(mPos);
+              }
+
+              bool Flip()
+              {
+                  mArray.FlipBit(mPos);
+                  return mArray.IsBitSet(mPos);
+              }
+
+        private:
+            BitArray &mArray;
+            unsigned  mPos;
+        };
+
     public:
-        BitProxy(BitArray &array, unsigned pos):
-          mArray(array), mPos(pos)
-          {}
 
-          BitProxy &operator=(bool value)
-          {
-              mArray.Set(mPos, value);
-              return *this;
-          }
+        typedef u32 store_type;
 
-          BitProxy &operator=(const BitProxy &that)
-          {
-              mArray.Set(mPos, that.mArray.IsBitSet(that.mPos));
-              return *this;
-          }
+        enum
+        {
+            bits_per_byte = 8,
+            cell_size     = sizeof(store_type) * bits_per_byte
+        };
 
-          operator bool() const
-          {
-              return mArray.IsBitSet(mPos);
-          }
 
-          bool Flip()
-          {
-              mArray.FlipBit(mPos);
-              return mArray.IsBitSet(mPos);
-          }
+        store_type        *mpStore;  
+        store_type         mSingleWord; // Use this buffer when mLength is 1
+        u32           mLength;     // Length of mpStore in units of store_type
+        u32           mNumBits;
 
     private:
-        BitArray &mArray;
-        unsigned  mPos;
+
+        // Get the index and bit offset for a given bit number.
+        static u32 GetIndex(unsigned bit_num)
+        {
+            return bit_num / cell_size;
+        }
+
+        static u32 GetOffset(unsigned bit_num)
+        {
+            return bit_num % cell_size;
+        }
+
+        void Init(u32 size)
+        {
+            mNumBits = size;
+
+            if (size == 0)
+                mLength = 0;
+            else
+                mLength = 1 + GetIndex(size - 1);
+
+            // Avoid allocation if length is 1 (common case)
+            if (mLength <= 1)
+                mpStore = &mSingleWord;      
+            else
+                mpStore = new store_type[mLength];
+
+            Clear();
+        }
+
+        // Force overhang bits at the end to 0
+        inline void Trim()
+        {
+            unsigned extra_bits = mNumBits % cell_size;
+            if (mLength > 0 && extra_bits != 0)
+                mpStore[mLength - 1] &= ~((~(store_type) 0) << extra_bits);
+        }
     };
-
-public:
-
-    typedef u32 store_type;
-
-    enum
-    {
-        bits_per_byte = 8,
-        cell_size     = sizeof(store_type) * bits_per_byte
-    };
-
-
-    store_type        *mpStore;  
-    store_type         mSingleWord; // Use this buffer when mLength is 1
-    u32           mLength;     // Length of mpStore in units of store_type
-    u32           mNumBits;
-
-private:
-
-    // Get the index and bit offset for a given bit number.
-    static u32 GetIndex(unsigned bit_num)
-    {
-        return bit_num / cell_size;
-    }
-
-    static u32 GetOffset(unsigned bit_num)
-    {
-        return bit_num % cell_size;
-    }
-
-    void Init(u32 size)
-    {
-        mNumBits = size;
-
-        if (size == 0)
-            mLength = 0;
-        else
-            mLength = 1 + GetIndex(size - 1);
-
-        // Avoid allocation if length is 1 (common case)
-        if (mLength <= 1)
-            mpStore = &mSingleWord;      
-        else
-            mpStore = new store_type[mLength];
-
-        Clear();
-    }
-
-    // Force overhang bits at the end to 0
-    inline void Trim()
-    {
-        unsigned extra_bits = mNumBits % cell_size;
-        if (mLength > 0 && extra_bits != 0)
-            mpStore[mLength - 1] &= ~((~(store_type) 0) << extra_bits);
-    }
-};
+}

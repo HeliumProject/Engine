@@ -1,7 +1,8 @@
 #include "KeyClipboardData.h"
 #include "Foundation/Reflect/ElementArraySerializer.h"
 
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Inspect;
 
 REFLECT_DEFINE_CLASS( KeyClipboardData )
 

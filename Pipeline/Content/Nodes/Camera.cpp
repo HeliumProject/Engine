@@ -1,8 +1,8 @@
 #include "Pipeline/Content/Nodes/Camera.h"
 #include "Pipeline/Content/ContentVisitor.h" 
 
-using namespace Reflect;
-using namespace Content;
+using namespace Helium;
+using namespace Helium::Content;
 
 REFLECT_DEFINE_CLASS(Camera)
 

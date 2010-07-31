@@ -4,8 +4,8 @@
 #include "Foundation/Container/Insert.h"
 #include "Application/UI/FileDialog.h"
 
-// Using
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Inspect;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

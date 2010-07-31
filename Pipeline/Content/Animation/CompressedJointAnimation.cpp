@@ -4,9 +4,9 @@
 
 #include "Foundation/Log.h"
 
-using namespace Math;
-
-using namespace Content;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Content;
 
 REFLECT_DEFINE_CLASS( CompressedJointAnimation );
 

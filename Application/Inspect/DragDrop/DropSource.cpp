@@ -3,7 +3,7 @@
 #include <wx/window.h>
 #include <wx/timer.h>
 
-using namespace Inspect;
+using namespace Helium::Inspect;
 
 static const int s_RaiseTimeMilliseconds = 2000; // 2 seconds
 class DragTimer : public wxTimer

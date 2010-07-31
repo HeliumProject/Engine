@@ -5,38 +5,41 @@
 #include "Foundation/Math/Color3.h"
 #include "Foundation/Reflect/Element.h"
 
-namespace Inspect
+namespace Helium
 {
-  /////////////////////////////////////////////////////////////////////////////
-  // Represents a color at a position along a gradient color control.
-  // 
-  class APPLICATION_API Key : public Reflect::Element
-  {
-  public:
-    enum Constants
+    namespace Inspect
     {
-      InvalidKey = -1,
-    };
+        /////////////////////////////////////////////////////////////////////////////
+        // Represents a color at a position along a gradient color control.
+        // 
+        class APPLICATION_API Key : public Reflect::Element
+        {
+        public:
+            enum Constants
+            {
+                InvalidKey = -1,
+            };
 
-  private:
-    Math::Color3 m_Color;
-    float m_Location;
+        private:
+            Math::Color3 m_Color;
+            float m_Location;
 
-    friend class KeyArray;
+            friend class KeyArray;
 
-    // RTTI
-  public:
-    REFLECT_DECLARE_CLASS( Key, Reflect::Element );
-    static void EnumerateClass( Reflect::Compositor< Key >& comp );
+            // RTTI
+        public:
+            REFLECT_DECLARE_CLASS( Key, Reflect::Element );
+            static void EnumerateClass( Reflect::Compositor< Key >& comp );
 
-  public:
-    Key();
-    Key( const Math::Color3& color, float location );
+        public:
+            Key();
+            Key( const Math::Color3& color, float location );
 
-    Math::Color3 GetColor() const;
+            Math::Color3 GetColor() const;
 
-    float GetLocation() const;
-  };
-  typedef Helium::SmartPtr< Key > KeyPtr;
-  typedef std::vector< KeyPtr > V_KeyPtr;
+            float GetLocation() const;
+        };
+        typedef Helium::SmartPtr< Key > KeyPtr;
+        typedef std::vector< KeyPtr > V_KeyPtr;
+    }
 }

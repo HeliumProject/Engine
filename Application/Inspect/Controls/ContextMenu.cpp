@@ -5,7 +5,7 @@
 
 #include <wx/menu.h>
 
-using namespace Inspect;
+using namespace Helium::Inspect;
 
 ContextMenu::ContextMenu(Control* control)
 : m_Control (control)

@@ -3,8 +3,8 @@
 #include "Application/Inspect/Controls/Canvas.h"
 #include "Foundation/Container/Insert.h" 
 
-// Using
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Inspect;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

@@ -8,7 +8,8 @@
 #include "Application/Inspect/Controls/InspectPanel.h"
 #include "Application/Inspect/Data/StringData.h"
 
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Inspect;
 
 
 ///////////////////////////////////////////////////////////////////////////////

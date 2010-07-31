@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE database SYSTEM "litesql.dtd"> 
-<database name="TrackerDBGenerated" namespace="Editor">
+<database name="TrackerDBGenerated" namespace="Helium::Editor">
 	
 	<object name="TrackedFile">
 		<field name="mPath" type="string" />

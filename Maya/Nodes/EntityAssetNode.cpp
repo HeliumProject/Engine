@@ -23,9 +23,10 @@
 #include <maya/MObjectHandle.h>
 #include <maya/MDagModifier.h>
 
-using namespace Reflect;
-using namespace Component;
-using namespace Asset;
+using namespace Helium;
+using namespace Helium::Reflect;
+using namespace Helium::Component;
+using namespace Helium::Asset;
 
 // callbacks
 MIntArray EntityAssetNode::s_CallbackIDs; 

@@ -4,41 +4,39 @@
 
 #include "Foundation/Atomic.h"
 
-namespace Finder
+namespace Helium
 {
-    class FinderSpec;
-}
-
-namespace Inspect
-{
-    struct FilteredDropTargetArgs
+    namespace Inspect
     {
-        std::vector< tstring > m_Paths;
-
-        FilteredDropTargetArgs( const std::vector< tstring >& paths )
-            : m_Paths( paths )
+        struct FilteredDropTargetArgs
         {
-        }
-    };
-    typedef Helium::Signature<void, const FilteredDropTargetArgs&, Foundation::AtomicRefCountBase> FilteredDropTargetSignature;
+            std::vector< tstring > m_Paths;
 
-    class APPLICATION_API FilteredDropTarget : public DropTarget
-    {
-    public:
-        FilteredDropTarget( const tstring& filter = TXT( "" ) );
-        virtual ~FilteredDropTarget();
+            FilteredDropTargetArgs( const std::vector< tstring >& paths )
+                : m_Paths( paths )
+            {
+            }
+        };
+        typedef Helium::Signature<void, const FilteredDropTargetArgs&, Helium::AtomicRefCountBase> FilteredDropTargetSignature;
 
-        bool ValidateDrag( const Inspect::DragArgs& args );
-        wxDragResult DragOver( const Inspect::DragArgs& args );
-        wxDragResult Drop( const Inspect::DragArgs& args );  
+        class APPLICATION_API FilteredDropTarget : public DropTarget
+        {
+        public:
+            FilteredDropTarget( const tstring& filter = TXT( "" ) );
+            virtual ~FilteredDropTarget();
 
-        void AddDroppedListener( const FilteredDropTargetSignature::Delegate& d );
-        void RemoveDroppedListener( const FilteredDropTargetSignature::Delegate& d );
+            bool ValidateDrag( const Inspect::DragArgs& args );
+            wxDragResult DragOver( const Inspect::DragArgs& args );
+            wxDragResult Drop( const Inspect::DragArgs& args );  
 
-    protected:
-        tstring m_FileFilter;
+            void AddDroppedListener( const FilteredDropTargetSignature::Delegate& d );
+            void RemoveDroppedListener( const FilteredDropTargetSignature::Delegate& d );
 
-    private:
-        FilteredDropTargetSignature::Event m_Dropped;
-    };
+        protected:
+            tstring m_FileFilter;
+
+        private:
+            FilteredDropTargetSignature::Event m_Dropped;
+        };
+    }
 }

@@ -1,7 +1,8 @@
 #include "Precompile.h"
 #include "ExportPoint.h"
 
-using namespace MayaContent;
+using namespace Helium;
+using namespace Helium::MayaContent;
 
 ExportPoint::ExportPoint( const MPoint& mayaPoint )
 : ExportBase( new Content::Point() )

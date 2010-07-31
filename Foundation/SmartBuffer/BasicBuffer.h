@@ -2,14 +2,14 @@
 
 #include "SmartBuffer.h"
 
-namespace Math
-{
-    class Vector3; 
-    class Vector4; 
-}
-
 namespace Helium
 {
+    namespace Math
+    {
+        class Vector3; 
+        class Vector4; 
+    }
+
     class BasicBuffer;
     typedef Helium::SmartPtr<BasicBuffer> BasicBufferPtr;
 

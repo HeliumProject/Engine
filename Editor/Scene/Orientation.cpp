@@ -3,6 +3,8 @@
 
 #include "Foundation/Math/Constants.h"
 
+using namespace Helium;
+
 #ifndef Z_UP
 
 //

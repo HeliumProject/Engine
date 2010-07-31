@@ -1,6 +1,7 @@
 #include "Pipeline/Content/Nodes/Volume.h"
 
-using namespace Content;
+using namespace Helium;
+using namespace Helium::Content;
 
 REFLECT_DEFINE_CLASS(Volume);
 

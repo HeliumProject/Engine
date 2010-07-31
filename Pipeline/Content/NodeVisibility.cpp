@@ -1,6 +1,7 @@
 #include "NodeVisibility.h"
 
-using namespace Content;
+using namespace Helium;
+using namespace Helium::Content;
 
 REFLECT_DEFINE_CLASS( NodeVisibility );
 

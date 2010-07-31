@@ -14,10 +14,11 @@
 
 #include <cmath>
 
-using namespace Reflect;
-using namespace Content;
-using namespace MayaContent;
 using namespace Helium;
+using namespace Helium::Reflect;
+using namespace Helium::Content;
+using namespace Helium::MayaContent;
+
 using Helium::Insert;
 
 #define g_kMinDeltaTol  0.0001f  // .1mm

@@ -8,14 +8,14 @@
 #include <squish.h>
 //#include "AtiCompress/ATI_Compress.h"
 
-Profile::Accumulator g_MipGenAccum ("MIP Generation");
-Profile::Accumulator g_CompressAccum ("DXT Compress");
-Profile::Accumulator g_DecompressAccum ("DXT Decompress");
-
 // disabled -- doesn't seem to improve things
 #define DO_PERCEPTUAL_WEIGHTING    0
 
 using namespace Helium;
+
+Profile::Accumulator g_MipGenAccum ("MIP Generation");
+Profile::Accumulator g_CompressAccum ("DXT Compress");
+Profile::Accumulator g_DecompressAccum ("DXT Decompress");
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //

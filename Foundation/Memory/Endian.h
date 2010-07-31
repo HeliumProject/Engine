@@ -3,163 +3,164 @@
 #include "Platform/Types.h"
 #include "Platform/Assert.h"
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-union U64F64
+namespace Helium
 {
-    f64 m_f64;
-    u64 m_u64;
-};
 
-union U32F32
-{
-    f32 m_f32;
-    u32 m_u32;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-inline u64 ConvertEndian(u64 val, bool endian = true)
-{
-    if (endian)
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    union U64F64
     {
+        f64 m_f64;
+        u64 m_u64;
+    };
+
+    union U32F32
+    {
+        f32 m_f32;
+        u32 m_u32;
+    };
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    inline u64 ConvertEndian(u64 val, bool endian = true)
+    {
+        if (endian)
+        {
 #if defined( WIN32 ) && defined ( _M_IX86 )
-        _asm mov eax,DWORD PTR [val];
-        _asm mov ebx,DWORD PTR [val+4];
-        _asm bswap eax;
-        _asm bswap ebx;
-        _asm mov DWORD PTR [val+4],eax;
-        _asm mov DWORD PTR [val],ebx;
+            _asm mov eax,DWORD PTR [val];
+            _asm mov ebx,DWORD PTR [val+4];
+            _asm bswap eax;
+            _asm bswap ebx;
+            _asm mov DWORD PTR [val+4],eax;
+            _asm mov DWORD PTR [val],ebx;
 #else
-        HELIUM_BREAK();
+            HELIUM_BREAK();
 #endif
+        }
+
+        return val;
     }
 
-    return val;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-inline i64 ConvertEndian(i64 val, bool endian = true)
-{
-    return ConvertEndian((u64)val, endian);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-inline f64 ConvertEndian(f64 val, bool endian = true)
-{
-    if (endian)
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    inline i64 ConvertEndian(i64 val, bool endian = true)
     {
-        U64F64 types_union;
-        types_union.m_f64 = val;
-        types_union.m_u64 = ConvertEndian(types_union.m_u64, endian);
-        return types_union.m_f64;
+        return ConvertEndian((u64)val, endian);
     }
 
-    return val;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-inline u64 ConvertEndianDoubleToU64(f64 val, bool endian = true)
-{
-    U64F64  types_union;
-    types_union.m_f64 = val;  
-
-    if (endian)
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    inline f64 ConvertEndian(f64 val, bool endian = true)
     {
-        types_union.m_u64 = ConvertEndian(types_union.m_u64, endian);
+        if (endian)
+        {
+            U64F64 types_union;
+            types_union.m_f64 = val;
+            types_union.m_u64 = ConvertEndian(types_union.m_u64, endian);
+            return types_union.m_f64;
+        }
+
+        return val;
     }
 
-    return types_union.m_u64;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-inline u32 ConvertEndian(u32 val, bool endian = true)
-{
-    if (endian)
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    inline u64 ConvertEndianDoubleToU64(f64 val, bool endian = true)
     {
+        U64F64  types_union;
+        types_union.m_f64 = val;  
+
+        if (endian)
+        {
+            types_union.m_u64 = ConvertEndian(types_union.m_u64, endian);
+        }
+
+        return types_union.m_u64;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    inline u32 ConvertEndian(u32 val, bool endian = true)
+    {
+        if (endian)
+        {
 #if defined( WIN32 ) && defined ( _M_IX86 )
-        _asm mov eax,val;
-        _asm bswap eax;
-        _asm mov val,eax;
+            _asm mov eax,val;
+            _asm bswap eax;
+            _asm mov val,eax;
 #else
-        HELIUM_BREAK();
+            HELIUM_BREAK();
 #endif
+        }
+
+        return val;
     }
 
-    return val;
-}
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    inline i32 ConvertEndian(i32 val, bool endian = true)
+    {
+        return ConvertEndian((u32)val, endian);
+    }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-inline i32 ConvertEndian(i32 val, bool endian = true)
-{
-    return ConvertEndian((u32)val, endian);
-}
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    inline f32 ConvertEndian(f32 val, bool endian = true)
+    {
+        if (endian)
+        {
+            U32F32 types_union;
+            types_union.m_f32 = val;
+            types_union.m_u32 = ConvertEndian(types_union.m_u32, endian);
+            return types_union.m_f32;
+        }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-inline f32 ConvertEndian(f32 val, bool endian = true)
-{
-    if (endian)
+        return val;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    inline u32 ConvertEndianFloatToU32(f32 val, bool endian = true)
     {
         U32F32 types_union;
         types_union.m_f32 = val;
-        types_union.m_u32 = ConvertEndian(types_union.m_u32, endian);
-        return types_union.m_f32;
+
+        if (endian)
+        {
+            types_union.m_u32 = ConvertEndian(types_union.m_u32, endian);
+        }
+
+        return types_union.m_u32;
     }
 
-    return val;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-inline u32 ConvertEndianFloatToU32(f32 val, bool endian = true)
-{
-    U32F32 types_union;
-    types_union.m_f32 = val;
-
-    if (endian)
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    inline u16 ConvertEndian(u16 val, bool endian = true)
     {
-        types_union.m_u32 = ConvertEndian(types_union.m_u32, endian);
-    }
-
-    return types_union.m_u32;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-inline u16 ConvertEndian(u16 val, bool endian = true)
-{
-    if (endian)
-    {
+        if (endian)
+        {
 #if defined( WIN32 ) && defined ( _M_IX86 )
-        _asm mov ax,val;
-        _asm xchg al,ah;
-        _asm mov val,ax;
+            _asm mov ax,val;
+            _asm xchg al,ah;
+            _asm mov val,ax;
 #else
-        HELIUM_BREAK();
+            HELIUM_BREAK();
 #endif
+        }
+
+        return val;
     }
 
-    return val;
-}
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    inline i16 ConvertEndian(i16 val, bool endian = true)
+    {
+        return ConvertEndian((u16)val,endian);
+    }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-inline i16 ConvertEndian(i16 val, bool endian = true)
-{
-    return ConvertEndian((u16)val,endian);
-}
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    inline u8 ConvertEndian(u8 val, bool endian = true)
+    {
+        return val;
+    }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-inline u8 ConvertEndian(u8 val, bool endian = true)
-{
-    return val;
-}
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    inline i8 ConvertEndian(i8 val, bool endian = true)
+    {
+        return val;
+    }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-inline i8 ConvertEndian(i8 val, bool endian = true)
-{
-    return val;
-}
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-namespace Helium
-{
     template<class T>
     inline void Swizzle(T& val, bool swizzle = true)
     {

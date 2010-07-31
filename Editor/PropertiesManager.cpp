@@ -5,7 +5,8 @@
 #include "Platform/Platform.h"
 #include "Platform/Thread.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 PropertyThreadArgs::PropertyThreadArgs( const PropertyThreadArgs& args )
 : m_Selection( args.m_Selection )

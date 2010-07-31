@@ -4,8 +4,9 @@
 #include "Foundation/Component/ComponentHandle.h"
 #include "Foundation/Log.h"
 
-using namespace Content;
-using namespace Component;
+using namespace Helium;
+using namespace Helium::Content;
+using namespace Helium::Component;
 
 REFLECT_DEFINE_ABSTRACT(Instance);
 

@@ -1,70 +1,70 @@
 #include "Precompile.h"
 #include "IndexResource.h"
 
-namespace Editor
+using namespace Helium;
+using namespace Helium::Editor;
+
+Profile::MemoryPoolHandle IndexResource::s_MemoryPool;
+
+IndexResource::IndexResource( ResourceTracker* tracker )
+: Resource ( ResourceTypes::Index, tracker )
+, m_Buffer(NULL)
 {
 
-  Profile::MemoryPoolHandle IndexResource::s_MemoryPool;
+}
 
-  IndexResource::IndexResource( ResourceTracker* tracker )
-  : Resource ( ResourceTypes::Index, tracker )
-  , m_Buffer(NULL)
-  {
-
-  }
-
-  u8* IndexResource::Lock() 
-  {
+u8* IndexResource::Lock() 
+{
     u8* data = NULL;
     u32 lockFlags = (!IsManaged() && IsDynamic()) ? D3DLOCK_DISCARD : 0;
     HRESULT result = m_Buffer->Lock(0, 0, (void**)&data, lockFlags);
     HELIUM_ASSERT(SUCCEEDED(result));
 
     return data;
-  }
+}
 
 
-  bool IndexResource::SetState() const 
-  {
+bool IndexResource::SetState() const 
+{
     if ( GetElementCount() > 0 )
     {
-      if ( m_Buffer == NULL )
-      {
-        HELIUM_BREAK();
-        return false;
-      }
+        if ( m_Buffer == NULL )
+        {
+            HELIUM_BREAK();
+            return false;
+        }
 
-      if ( m_Buffer != m_Tracker->GetIndices() )
-      {
+        if ( m_Buffer != m_Tracker->GetIndices() )
+        {
 #ifdef LUNA_DEBUG_RESOURCES
-        Log::Print("Setting indices to 0x%p\n", m_Buffer);
+            Log::Print("Setting indices to 0x%p\n", m_Buffer);
 #endif
-        m_Device->SetIndices( m_Buffer );
-        m_Tracker->SetIndices( m_Buffer );
-      }
+            m_Device->SetIndices( m_Buffer );
+            m_Tracker->SetIndices( m_Buffer );
+        }
     }
 
     return true;
-  }
+}
 
-  void IndexResource::Unlock() 
-  {
+void IndexResource::Unlock() 
+{
     m_Buffer->Unlock();
-  }
+}
 
-  bool IndexResource::Allocate() 
-  {
+bool IndexResource::Allocate() 
+{
     UINT size = GetElementCount() * ElementSizes[ GetElementType() ];
 
     if(size == 0)
     {
-      return false; 
+        return false; 
     }
 
     DWORD usage = D3DUSAGE_WRITEONLY;
     if (IsDynamic())
     {
-      usage |= D3DUSAGE_DYNAMIC;
+        usage |= D3DUSAGE_DYNAMIC;
     }
 
     D3DFORMAT format = (D3DFORMAT)ElementFormats[ GetElementType() ];
@@ -79,18 +79,15 @@ namespace Editor
 
     return success;
 
-  }
+}
 
-  void IndexResource::Release() 
-  {
+void IndexResource::Release() 
+{
     if (m_Buffer)
     {
-      m_Buffer->Release();
-      m_Buffer = NULL;
+        m_Buffer->Release();
+        m_Buffer = NULL;
     }
 
     Profile::Memory::Deallocate( s_MemoryPool, GetElementCount() * ElementSizes[ GetElementType() ] );
-  }
-
-
 }

@@ -4,7 +4,7 @@
 
 using namespace Helium;
 using namespace Helium::Core;
-using namespace Editor;
+using namespace Helium::Editor;
 
 ProjectPanel::ProjectPanel( wxWindow *parent )
 : ProjectPanelGenerated( parent )

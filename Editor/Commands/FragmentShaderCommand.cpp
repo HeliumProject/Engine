@@ -26,6 +26,8 @@
 
 #include "Graph/XPM/icon.xpm"
 
+using namespace Helium;
+
 static void InitLibPath()
 {
     tchar* project_data_path =  _tgetenv(TXT("IG_PROJECT_DATA"));

@@ -6,7 +6,8 @@
 
 #include "Scene/DependencyCommand.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 // LGridLayer::LNameChangeInfo

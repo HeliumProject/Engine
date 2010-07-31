@@ -5,7 +5,7 @@
 #include <wx/panel.h>
 #include <wx/stattext.h>
 
-using namespace Inspect;
+using namespace Helium::Inspect;
 
 class Text : public wxPanel
 {

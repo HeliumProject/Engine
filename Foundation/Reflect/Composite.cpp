@@ -6,7 +6,8 @@
 
 #include "Foundation/Log.h"
 
-using namespace Reflect;
+using namespace Helium;
+using namespace Helium::Reflect;
 
 Composite::Composite()
 : m_Enumerator (NULL)

@@ -2,106 +2,109 @@
 
 #include "Utils.h"
 
-namespace Math
+namespace Helium
 {
-    class FOUNDATION_API Point
+    namespace Math
     {
-    public:
-        i32 x, y;
-
-        Point ()
-            : x(0)
-            , y(0)
+        class FOUNDATION_API Point
         {
+        public:
+            i32 x, y;
 
-        }
+            Point ()
+                : x(0)
+                , y(0)
+            {
 
-        Point (unsigned px, unsigned py)
-            : x(px)
-            , y(py)
-        {
+            }
 
-        }
+            Point (unsigned px, unsigned py)
+                : x(px)
+                , y(py)
+            {
 
-        const static Point Zero;
+            }
 
-        bool              operator== (const Point& p) const
-        {
-            return (x == p.x && y == p.y);
-        }
+            const static Point Zero;
 
-        bool              operator!= (const Point& p) const
-        {
-            return !(x == p.x && y == p.y);
-        }
+            bool              operator== (const Point& p) const
+            {
+                return (x == p.x && y == p.y);
+            }
 
-        Point&            operator= (const Point& p)
-        {
-            x = p.x; y = p.y;
-            return *this;
-        }
+            bool              operator!= (const Point& p) const
+            {
+                return !(x == p.x && y == p.y);
+            }
 
-        Point             operator+ (const Point& p) const
-        {
-            return Point (x + p.x, y + p.y);
-        }
+            Point&            operator= (const Point& p)
+            {
+                x = p.x; y = p.y;
+                return *this;
+            }
 
-        Point&            operator+= (const Point& p)
-        {
-            x += p.x; y += p.y; return *this;
-        }
+            Point             operator+ (const Point& p) const
+            {
+                return Point (x + p.x, y + p.y);
+            }
 
-        Point             operator- (const Point& p) const
-        {
-            return Point (x - p.x, y - p.y);
-        }
+            Point&            operator+= (const Point& p)
+            {
+                x += p.x; y += p.y; return *this;
+            }
 
-        Point&            operator-= (const Point& p)
-        {
-            x -= p.x;
-            y -= p.y;
-            return *this;
-        }
+            Point             operator- (const Point& p) const
+            {
+                return Point (x - p.x, y - p.y);
+            }
 
-        Point             operator* (i32 v) const
-        {
-            return Point (x * v, y * v);
-        }
+            Point&            operator-= (const Point& p)
+            {
+                x -= p.x;
+                y -= p.y;
+                return *this;
+            }
 
-        Point&            operator*= (i32 v)
-        {
-            x *= v;
-            y *= v;
-            return *this;
-        }
+            Point             operator* (i32 v) const
+            {
+                return Point (x * v, y * v);
+            }
 
-        Point             operator/ (i32 v) const
-        {
-            return Point (x / v, y / v);
-        }
+            Point&            operator*= (i32 v)
+            {
+                x *= v;
+                y *= v;
+                return *this;
+            }
 
-        Point&            operator/= (i32 v)
-        {
-            x /= v;
-            y /= v;
-            return *this;
-        }
+            Point             operator/ (i32 v) const
+            {
+                return Point (x / v, y / v);
+            }
 
-        i32&              operator[] (const unsigned i)
-        {
-            HELIUM_ASSERT(i < 2);
-            return (&x)[i];
-        }
+            Point&            operator/= (i32 v)
+            {
+                x /= v;
+                y /= v;
+                return *this;
+            }
 
-        const i32&        operator[] (const unsigned i) const
-        {
-            HELIUM_ASSERT(i < 2);
-            return (&x)[i];
-        }
+            i32&              operator[] (const unsigned i)
+            {
+                HELIUM_ASSERT(i < 2);
+                return (&x)[i];
+            }
 
-        static Axis       FlipAxis(Axis axis)
-        {
-            return (Axis)((axis + 1) % 2);
-        }
-    };
+            const i32&        operator[] (const unsigned i) const
+            {
+                HELIUM_ASSERT(i < 2);
+                return (&x)[i];
+            }
+
+            static Axis       FlipAxis(Axis axis)
+            {
+                return (Axis)((axis + 1) % 2);
+            }
+        };
+    }
 }

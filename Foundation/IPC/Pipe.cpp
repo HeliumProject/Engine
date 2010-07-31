@@ -6,7 +6,8 @@
 #include <string.h>
 #include <algorithm>
 
-using namespace IPC;
+using namespace Helium;
+using namespace Helium::IPC;
 
 PipeConnection::PipeConnection()
 : m_ReadPipe (0)

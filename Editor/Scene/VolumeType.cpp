@@ -12,9 +12,10 @@
 #include "PrimitiveCapsule.h"
 #include "PrimitiveCylinder.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE(Editor::VolumeType);
+EDITOR_DEFINE_TYPE(Editor::VolumeType);
 
 void VolumeType::InitializeType()
 {

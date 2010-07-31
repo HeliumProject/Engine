@@ -2,29 +2,32 @@
 
 #include "Utils.h"
 
-namespace Math
+namespace Helium
 {
-    static const i32 I16_LOWER_BOUND = -32768;
-    static const i32 I16_UPPER_BOUND =  32767;
-
-    bool ExceedsRange16( i32 val )
+    namespace Math
     {
-        return ( ( val < I16_LOWER_BOUND ) || ( val > I16_UPPER_BOUND ) );
-    }
+        static const i32 I16_LOWER_BOUND = -32768;
+        static const i32 I16_UPPER_BOUND =  32767;
 
-    bool FloatToI16( i16 &out, f32 val, f32 scale = 1.0 )
-    {
-        val *= scale;
+        bool ExceedsRange16( i32 val )
+        {
+            return ( ( val < I16_LOWER_BOUND ) || ( val > I16_UPPER_BOUND ) );
+        }
 
-        bool stat = !ExceedsRange16( (i32) val );
+        bool FloatToI16( i16 &out, f32 val, f32 scale = 1.0 )
+        {
+            val *= scale;
 
-        i32 convertedValue = 0;
-        if ( val < 0.0f )
-            convertedValue = (i32)( val - 0.5f );
-        else
-            convertedValue = (i32)( val + 0.5f );
+            bool stat = !ExceedsRange16( (i32) val );
 
-        out = Clamp( convertedValue, I16_LOWER_BOUND, I16_UPPER_BOUND );
-        return stat;
+            i32 convertedValue = 0;
+            if ( val < 0.0f )
+                convertedValue = (i32)( val - 0.5f );
+            else
+                convertedValue = (i32)( val + 0.5f );
+
+            out = Clamp( convertedValue, I16_LOWER_BOUND, I16_UPPER_BOUND );
+            return stat;
+        }
     }
 }

@@ -2,13 +2,16 @@
 
 #include "EditorGenerated.h"
 
-namespace Editor
+namespace Helium
 {
-    class HelpPanel : public HelpPanelGenerated
+    namespace Editor
     {
-    public:
-        HelpPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL );
+        class HelpPanel : public HelpPanelGenerated
+        {
+        public:
+            HelpPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL );
 
-        void SetText( const tchar* text );
-    };
+            void SetText( const tchar* text );
+        };
+    }
 }

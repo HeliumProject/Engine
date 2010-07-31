@@ -6,37 +6,40 @@
 
 #include "Foundation/TUID.h"
 
-namespace Editor
+namespace Helium
 {
-  class DuplicateTool : public Editor::CreateTool
-  {
-    //
-    // Members
-    //
+    namespace Editor
+    {
+        class DuplicateTool : public Editor::CreateTool
+        {
+            //
+            // Members
+            //
 
-  private:
-    Editor::Transform* m_Source;
+        private:
+            Editor::Transform* m_Source;
 
-    //
-    // RTTI
-    //
+            //
+            // RTTI
+            //
 
-  public:
-    LUNA_DECLARE_TYPE(Editor::DuplicateTool, Editor::CreateTool);
-    static void InitializeType();
-    static void CleanupType();
+        public:
+            EDITOR_DECLARE_TYPE(Editor::DuplicateTool, Editor::CreateTool);
+            static void InitializeType();
+            static void CleanupType();
 
-  public:
-    DuplicateTool(Editor::Scene* scene, PropertiesGenerator* generator);
+        public:
+            DuplicateTool(Editor::Scene* scene, PropertiesGenerator* generator);
 
-    virtual ~DuplicateTool();
+            virtual ~DuplicateTool();
 
-    virtual Editor::TransformPtr CreateNode() HELIUM_OVERRIDE;
+            virtual Editor::TransformPtr CreateNode() HELIUM_OVERRIDE;
 
-    virtual void CreateProperties() HELIUM_OVERRIDE;
+            virtual void CreateProperties() HELIUM_OVERRIDE;
 
-    int GetVolumeShape() const;
+            int GetVolumeShape() const;
 
-    void SetVolumeShape(int value);
-  };
+            void SetVolumeShape(int value);
+        };
+    }
 }

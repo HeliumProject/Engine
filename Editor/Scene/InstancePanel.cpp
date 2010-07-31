@@ -11,7 +11,8 @@
 
 #include <algorithm>
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection)
 : m_Selection (selection)

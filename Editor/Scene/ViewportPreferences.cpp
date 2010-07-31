@@ -1,7 +1,8 @@
 #include "Precompile.h"
 #include "ViewportPreferences.h"
 
-using namespace Editor; 
+using namespace Helium;
+using namespace Helium::Editor; 
    
 ViewportPreferences::ViewportPreferences()
 : m_CameraMode (CameraModes::Orbit)

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version May  4 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -14,9 +14,9 @@
 #include "VaultGenerated.h"
 
 ///////////////////////////////////////////////////////////////////////////
-using namespace Editor;
+using namespace Helium::Editor;
 
-VaultFrameGenerated::VaultFrameGenerated( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : Frame( parent, id, title, pos, size, style )
+VaultFrameGenerated::VaultFrameGenerated( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : Helium::Editor::Frame( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -29,6 +29,7 @@ VaultFrameGenerated::~VaultFrameGenerated()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( VaultFrameGenerated::OnClose ) );
+	
 }
 
 NavigationPanelGenerated::NavigationPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
@@ -101,6 +102,7 @@ NavigationPanelGenerated::~NavigationPanelGenerated()
 	m_NavBarComboBox->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( NavigationPanelGenerated::OnNavBarTextEnter ), NULL, this );
 	m_GoButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NavigationPanelGenerated::OnGoButtonClick ), NULL, this );
 	m_OptionsButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NavigationPanelGenerated::OnOptionsButtonClick ), NULL, this );
+	
 }
 
 FoldersPanelGenerated::FoldersPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
@@ -108,7 +110,7 @@ FoldersPanelGenerated::FoldersPanelGenerated( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxVERTICAL );
 	
-	m_FoldersTreeCtrl = new Editor::DirectoryCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDIRCTRL_DIR_ONLY|wxDIRCTRL_EDIT_LABELS|wxNO_BORDER, wxEmptyString, 0 );
+	m_FoldersTreeCtrl = new Helium::Editor::DirectoryCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDIRCTRL_DIR_ONLY|wxDIRCTRL_EDIT_LABELS|wxNO_BORDER, wxEmptyString, 0 );
 	
 	m_FoldersTreeCtrl->ShowHidden( false );
 	bSizer12->Add( m_FoldersTreeCtrl, 1, wxEXPAND, 5 );
@@ -132,6 +134,7 @@ FoldersPanelGenerated::~FoldersPanelGenerated()
 	m_FoldersTreeCtrl->Disconnect( wxEVT_COMMAND_TREE_END_DRAG, wxTreeEventHandler( FoldersPanelGenerated::OnTreeEndDrag ), NULL, this );
 	m_FoldersTreeCtrl->Disconnect( wxEVT_COMMAND_TREE_ITEM_MENU, wxTreeEventHandler( FoldersPanelGenerated::OnTreeItemMenu ), NULL, this );
 	m_FoldersTreeCtrl->Disconnect( wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, wxTreeEventHandler( FoldersPanelGenerated::OnTreeItemRightClick ), NULL, this );
+	
 }
 
 ResultsPanelGenerated::ResultsPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
@@ -494,6 +497,7 @@ SearchPanelGenerated::~SearchPanelGenerated()
 	m_ShaderTextCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( SearchPanelGenerated::OnFieldTextEnter ), NULL, this );
 	m_GoButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SearchPanelGenerated::OnSearchButtonClick ), NULL, this );
 	m_CancelButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SearchPanelGenerated::OnCancelButtonClick ), NULL, this );
+	
 }
 
 CollectionsPanelGenerated::CollectionsPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
@@ -533,7 +537,7 @@ CollectionsPanelGenerated::CollectionsPanelGenerated( wxWindow* parent, wxWindow
 	wxBoxSizer* m_MyCollectionsCtrlSizer;
 	m_MyCollectionsCtrlSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_MyCollectionsTreeCtrl = new Editor::SortTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTR_EDIT_LABELS|wxTR_HIDE_ROOT|wxTR_NO_BUTTONS|wxTR_SINGLE|wxNO_BORDER );
+	m_MyCollectionsTreeCtrl = new Helium::Editor::SortTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTR_EDIT_LABELS|wxTR_HIDE_ROOT|wxTR_NO_BUTTONS|wxTR_SINGLE|wxNO_BORDER );
 	m_MyCollectionsTreeCtrl->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	
 	m_MyCollectionsCtrlSizer->Add( m_MyCollectionsTreeCtrl, 1, wxEXPAND|wxLEFT, 5 );
@@ -554,7 +558,7 @@ CollectionsPanelGenerated::CollectionsPanelGenerated( wxWindow* parent, wxWindow
 	wxBoxSizer* m_TempCollectionsCtrlSizer;
 	m_TempCollectionsCtrlSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_TempCollectionsTreeCtrl = new Editor::SortTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_HIDE_ROOT|wxTR_NO_BUTTONS|wxTR_SINGLE|wxNO_BORDER );
+	m_TempCollectionsTreeCtrl = new Helium::Editor::SortTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_HIDE_ROOT|wxTR_NO_BUTTONS|wxTR_SINGLE|wxNO_BORDER );
 	m_TempCollectionsTreeCtrl->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	m_TempCollectionsTreeCtrl->Enable( false );
 	
@@ -593,6 +597,7 @@ CollectionsPanelGenerated::~CollectionsPanelGenerated()
 	m_TempCollectionsTreeCtrl->Disconnect( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, wxTreeEventHandler( CollectionsPanelGenerated::OnTempCollectionsDoubleClick ), NULL, this );
 	m_TempCollectionsTreeCtrl->Disconnect( wxEVT_COMMAND_TREE_ITEM_MENU, wxTreeEventHandler( CollectionsPanelGenerated::OnTempCollectionsMenu ), NULL, this );
 	m_TempCollectionsTreeCtrl->Disconnect( wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, wxTreeEventHandler( CollectionsPanelGenerated::OnTempCollectionsMenu ), NULL, this );
+	
 }
 
 PreviewPanelGenerated::PreviewPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
@@ -600,7 +605,7 @@ PreviewPanelGenerated::PreviewPanelGenerated( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* sizer;
 	sizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_PreviewWindow = new VaultPreviewWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, wxT( "Editor::RenderWindow" ) );
+	m_PreviewWindow = new VaultPreviewWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, wxT( "Editor::PreviewWindow" ) );
 	m_PreviewWindow->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_APPWORKSPACE ) );
 	
 	sizer->Add( m_PreviewWindow, 1, wxEXPAND, 5 );

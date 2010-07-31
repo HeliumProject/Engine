@@ -28,9 +28,10 @@
 
 #include <algorithm>
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE( Editor::NavMesh );
+EDITOR_DEFINE_TYPE( Editor::NavMesh );
 
 D3DMATERIAL9 Editor::NavMesh::s_Material;
 D3DMATERIAL9 Editor::NavMesh::s_HullMaterial;

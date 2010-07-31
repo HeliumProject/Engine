@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "YesNoAllDlg.h"
 
-// Using
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 // Static GUI event table
 BEGIN_EVENT_TABLE( YesNoAllDlg, wxDialog )

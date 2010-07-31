@@ -8,11 +8,12 @@
 
 #include "Pick.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 Content::LocatorShape LocatorCreateTool::s_Shape = Content::LocatorShapes::Cross;
 
-LUNA_DEFINE_TYPE(Editor::LocatorCreateTool);
+EDITOR_DEFINE_TYPE(Editor::LocatorCreateTool);
 
 void LocatorCreateTool::InitializeType()
 {

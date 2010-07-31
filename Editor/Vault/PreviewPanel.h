@@ -2,34 +2,37 @@
 
 #include "VaultGenerated.h"
 
-namespace Asset
+namespace Helium
 {
-  class AssetClass;
-  typedef Helium::SmartPtr< AssetClass > AssetClassPtr;
-}
+    namespace Asset
+    {
+        class AssetClass;
+        typedef Helium::SmartPtr< AssetClass > AssetClassPtr;
+    }
 
-namespace Reflect
-{
-  struct ElementChangeArgs;
-}
+    namespace Reflect
+    {
+        struct ElementChangeArgs;
+    }
 
-namespace Editor
-{
-  class VaultFrame;
+    namespace Editor
+    {
+        class VaultFrame;
 
-  class PreviewPanel : public PreviewPanelGenerated
-  {
-  public:
-		PreviewPanel( VaultFrame* browserFrame );
-		virtual ~PreviewPanel();
+        class PreviewPanel : public PreviewPanelGenerated
+        {
+        public:
+            PreviewPanel( VaultFrame* browserFrame );
+            virtual ~PreviewPanel();
 
-    void Preview( Asset::AssetClass* asset );
+            void Preview( Asset::AssetClass* asset );
 
-    void DisplayReferenceAxis( bool display = true );
+            void DisplayReferenceAxis( bool display = true );
 
-  private:
-    VaultFrame* m_VaultFrame;
-    Asset::AssetClassPtr m_PreviewAsset;
-    tstring m_ContentFile;
-  };
+        private:
+            VaultFrame* m_VaultFrame;
+            Asset::AssetClassPtr m_PreviewAsset;
+            tstring m_ContentFile;
+        };
+    }
 }

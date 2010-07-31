@@ -2,10 +2,11 @@
 
 #include "Editor/API.h"
 
-namespace Editor
+namespace Helium
 {
-  LUNA_TASK_API void TaskInitialize();
-  LUNA_TASK_API void TaskCleanup();
+    namespace Editor
+    {
+        LUNA_TASK_API void TaskInitialize();
+        LUNA_TASK_API void TaskCleanup();
+    }
 }
-
-

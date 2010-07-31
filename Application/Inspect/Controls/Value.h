@@ -5,56 +5,59 @@
 
 #include "Foundation/Reflect/Class.h"
 
-namespace Inspect
+namespace Helium
 {
-  const static tchar TEXTBOX_ATTR_REQUIRED[] = TXT( "required" );
-  const static tchar TEXTBOX_ATTR_JUSTIFY[] = TXT( "justify" );
-  const static tchar TEXTBOX_ATTR_JUSTIFY_LEFT[] = TXT( "left" );
-  const static tchar TEXTBOX_ATTR_JUSTIFY_RIGHT[] = TXT( "right" );
-
-  class APPLICATION_API Value : public Reflect::ConcreteInheritor<Value, Control>
-  {
-  public:
-    enum Justify
+    namespace Inspect
     {
-      kLeft,
-      kRight,
-    };
+        const static tchar TEXTBOX_ATTR_REQUIRED[] = TXT( "required" );
+        const static tchar TEXTBOX_ATTR_JUSTIFY[] = TXT( "justify" );
+        const static tchar TEXTBOX_ATTR_JUSTIFY_LEFT[] = TXT( "left" );
+        const static tchar TEXTBOX_ATTR_JUSTIFY_RIGHT[] = TXT( "right" );
 
-    Value();
+        class APPLICATION_API Value : public Reflect::ConcreteInheritor<Value, Control>
+        {
+        public:
+            enum Justify
+            {
+                kLeft,
+                kRight,
+            };
 
-  protected:
-    virtual bool Process(const tstring& key, const tstring& value) HELIUM_OVERRIDE;
+            Value();
 
-    virtual void SetDefaultAppearance(bool def) HELIUM_OVERRIDE;
+        protected:
+            virtual bool Process(const tstring& key, const tstring& value) HELIUM_OVERRIDE;
 
-    void SetToDefault(const ContextMenuEventArgs& event);
+            virtual void SetDefaultAppearance(bool def) HELIUM_OVERRIDE;
 
-  public:
-    virtual void Realize(Container* parent) HELIUM_OVERRIDE;
+            void SetToDefault(const ContextMenuEventArgs& event);
 
-    virtual void Read() HELIUM_OVERRIDE;
+        public:
+            virtual void Realize(Container* parent) HELIUM_OVERRIDE;
 
-    virtual bool Write() HELIUM_OVERRIDE;
+            virtual void Read() HELIUM_OVERRIDE;
 
-    void GetText(tstring& text);
-    void SetText(const tstring& text);
+            virtual bool Write() HELIUM_OVERRIDE;
 
-    Justify GetJustification() const;
-    void SetJustification( Justify justification );
+            void GetText(tstring& text);
+            void SetText(const tstring& text);
 
-    void SetHighlight(bool highlighted);
-    virtual void SetReadOnly(bool readOnly) HELIUM_OVERRIDE;
+            Justify GetJustification() const;
+            void SetJustification( Justify justification );
 
-  private:
-    void UpdateUI( const tstring& text );
+            void SetHighlight(bool highlighted);
+            virtual void SetReadOnly(bool readOnly) HELIUM_OVERRIDE;
 
-  protected:
-    bool m_Required;
-    Justify m_Justify;
-    tstring m_Text;
-    bool m_Highlight;
-  };
+        private:
+            void UpdateUI( const tstring& text );
 
-  typedef Helium::SmartPtr<Value> ValuePtr;
+        protected:
+            bool m_Required;
+            Justify m_Justify;
+            tstring m_Text;
+            bool m_Highlight;
+        };
+
+        typedef Helium::SmartPtr<Value> ValuePtr;
+    }
 }

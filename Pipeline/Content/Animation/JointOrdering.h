@@ -4,35 +4,38 @@
 
 #include "Pipeline/Content/Nodes/SceneNode.h"
 
-namespace Content
+namespace Helium
 {
-  class PIPELINE_API JointOrdering : public SceneNode
-  {
-  public:
+    namespace Content
+    {
+        class PIPELINE_API JointOrdering : public SceneNode
+        {
+        public:
 
-    JointOrdering() : SceneNode() {}
-    JointOrdering( u32 numRequiredJoints );
+            JointOrdering() : SceneNode() {}
+            JointOrdering( u32 numRequiredJoints );
 
-    Helium::V_TUID m_JointOrdering;
-    Helium::HM_TUID m_MasterToLocalMap;
-    Helium::HM_TUID m_LocalToMasterMap;
+            Helium::V_TUID m_JointOrdering;
+            Helium::HM_TUID m_MasterToLocalMap;
+            Helium::HM_TUID m_LocalToMasterMap;
 
-    REFLECT_DECLARE_CLASS( JointOrdering, SceneNode );
+            REFLECT_DECLARE_CLASS( JointOrdering, SceneNode );
 
-    static void EnumerateClass( Reflect::Compositor<JointOrdering>& comp );
+            static void EnumerateClass( Reflect::Compositor<JointOrdering>& comp );
 
-    void SetRequiredJointCount( u32 requiredJointCount );
-    u32  GetRequiredJointCount();
+            void SetRequiredJointCount( u32 requiredJointCount );
+            u32  GetRequiredJointCount();
 
-    void AddJoint( const Helium::TUID& jointId );
-    void Clear();
+            void AddJoint( const Helium::TUID& jointId );
+            void Clear();
 
-    Helium::TUID GetMasterJoint( const Helium::TUID& localJoint );
-    Helium::TUID GetLocalJoint( const Helium::TUID& masterJoint );
+            Helium::TUID GetMasterJoint( const Helium::TUID& localJoint );
+            Helium::TUID GetLocalJoint( const Helium::TUID& masterJoint );
 
-    bool IsRequired( const Helium::TUID& jointId );
-  };
+            bool IsRequired( const Helium::TUID& jointId );
+        };
 
-  typedef Helium::SmartPtr< JointOrdering > JointOrderingPtr;
-  typedef std::vector< JointOrderingPtr > V_JointOrdering;
+        typedef Helium::SmartPtr< JointOrdering > JointOrderingPtr;
+        typedef std::vector< JointOrderingPtr > V_JointOrdering;
+    }
 }

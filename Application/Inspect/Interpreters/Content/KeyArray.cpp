@@ -2,7 +2,8 @@
 
 #include <algorithm>
 
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Inspect;
 
 
 ///////////////////////////////////////////////////////////////////////////////

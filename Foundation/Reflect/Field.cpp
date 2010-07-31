@@ -5,7 +5,7 @@
 
 #include "Foundation/Log.h"
 
-using namespace Reflect;
+using namespace Helium::Reflect;
 
 Field::Field(const Composite* type)
 : m_Type ( type )

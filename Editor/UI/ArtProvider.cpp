@@ -2,7 +2,7 @@
 
 #include "ArtProvider.h"
 
-using namespace Editor;
+using namespace Helium::Editor;
 
 ArtProvider::ArtProvider()
 : Helium::ArtProvider()

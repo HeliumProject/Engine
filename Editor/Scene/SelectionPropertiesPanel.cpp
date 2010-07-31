@@ -4,7 +4,8 @@
 #include "PropertiesGenerator.h"
 #include "PropertiesManager.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 SelectionPropertiesPanel::SelectionPropertiesPanel( PropertiesManager* propertiesManager, wxWindow* parent, int id, wxPoint pos, wxSize size, int style )
 : wxPanel( parent, id, pos, size, style )

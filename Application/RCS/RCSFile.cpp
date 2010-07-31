@@ -7,7 +7,7 @@
 #include "Platform/Windows/Windows.h"
 #undef GetUserName
 
-using namespace RCS;
+using namespace Helium::RCS;
 
 void File::GetInfo( const GetInfoFlag flags )
 {

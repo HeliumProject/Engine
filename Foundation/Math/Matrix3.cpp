@@ -5,7 +5,7 @@
 #include "EulerAngles.h"
 #include "Quaternion.h"
 
-using namespace Math;
+using namespace Helium::Math;
 
 const Matrix3 Matrix3::Identity (Vector3 (1, 0, 0), Vector3 (0, 1, 0), Vector3 (0, 0, 1));
 const Matrix3 Matrix3::Zero (Vector3 (0, 0, 0), Vector3 (0, 0, 0), Vector3 (0, 0, 0));

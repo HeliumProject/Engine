@@ -15,10 +15,11 @@
 #include "SceneManager.h"
 #include "ScenePreferences.h"
 
-using namespace Math;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE(Editor::ScaleManipulator);
+EDITOR_DEFINE_TYPE(Editor::ScaleManipulator);
 
 void ScaleManipulator::InitializeType()
 {

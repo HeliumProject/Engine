@@ -4,17 +4,20 @@
 
 #include "ProjectViewModel.h"
 
-namespace Editor
+namespace Helium
 {
-    class ProjectPanel : public ProjectPanelGenerated
+    namespace Editor
     {
-    public:
-   	    ProjectPanel( wxWindow* parent );
-        ~ProjectPanel();
+        class ProjectPanel : public ProjectPanelGenerated
+        {
+        public:
+            ProjectPanel( wxWindow* parent );
+            ~ProjectPanel();
 
-        void SetProject( Helium::Core::Project* project );
+            void SetProject( Helium::Core::Project* project );
 
-    protected:
-        ProjectViewModel m_Model;
-    };
+        protected:
+            ProjectViewModel m_Model;
+        };
+    }
 }

@@ -2,8 +2,8 @@
 #include "HierarchyOutlinerItemData.h"
 #include "HierarchyNode.h"
 
-// Using
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

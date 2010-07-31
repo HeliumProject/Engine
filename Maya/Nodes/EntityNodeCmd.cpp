@@ -9,6 +9,7 @@
 #include <maya/MSyntax.h>
 #include <maya/MArgDatabase.h>
 
+using namespace Helium;
 
 //-----------------------------------------------------------------------------
 // the name of the EntityNodeCmd command

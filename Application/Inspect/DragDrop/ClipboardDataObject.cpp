@@ -3,7 +3,7 @@
 #include "Application/Inspect/DragDrop/ClipboardDataWrapper.h"
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
 
-using namespace Inspect;
+using namespace Helium::Inspect;
 
 // Unique identifier for this type of clipboard data.
 static const tchar* s_Format = TXT( "Editor/ClipboardData" );

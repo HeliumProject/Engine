@@ -7,7 +7,8 @@
 
 #include "Pipeline/Asset/AssetClass.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 
 int Tracker::s_InitCount = 0;

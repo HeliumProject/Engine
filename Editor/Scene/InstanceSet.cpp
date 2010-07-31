@@ -6,9 +6,11 @@
 #include "Foundation/Container/Insert.h" 
 
 using Helium::Insert; 
-using namespace Editor;
 
-LUNA_DEFINE_TYPE(Editor::InstanceSet);
+using namespace Helium;
+using namespace Helium::Editor;
+
+EDITOR_DEFINE_TYPE(Editor::InstanceSet);
 
 void InstanceSet::InitializeType()
 {

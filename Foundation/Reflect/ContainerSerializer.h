@@ -2,35 +2,38 @@
 
 #include "Serializer.h"
 
-namespace Reflect
+namespace Helium
 {
-    // Delimiter to use when representing the data in the container as a 
-    // single string.  If your data contains this delimiter naturally, the
-    // string representation may not show up properly.
-    static const tchar* s_ContainerItemDelimiter = TXT("\n");
-
-    class FOUNDATION_API ContainerSerializer : public Serializer
+    namespace Reflect
     {
-    public:
-        REFLECT_DECLARE_ABSTRACT( ContainerSerializer, Serializer )
+        // Delimiter to use when representing the data in the container as a 
+        // single string.  If your data contains this delimiter naturally, the
+        // string representation may not show up properly.
+        static const tchar* s_ContainerItemDelimiter = TXT("\n");
 
-            ContainerSerializer();
+        class FOUNDATION_API ContainerSerializer : public Serializer
+        {
+        public:
+            REFLECT_DECLARE_ABSTRACT( ContainerSerializer, Serializer )
 
-        virtual size_t GetSize() const = 0;
-        virtual void Clear() = 0;
-    };
+                ContainerSerializer();
 
-    typedef Helium::SmartPtr<ContainerSerializer> ContainerSerializerPtr;
+            virtual size_t GetSize() const = 0;
+            virtual void Clear() = 0;
+        };
 
-    class FOUNDATION_API ElementContainerSerializer : public ContainerSerializer
-    {
-    public:
-        REFLECT_DECLARE_ABSTRACT( ElementContainerSerializer, ContainerSerializer );
+        typedef Helium::SmartPtr<ContainerSerializer> ContainerSerializerPtr;
 
-        i32 m_TypeID;
+        class FOUNDATION_API ElementContainerSerializer : public ContainerSerializer
+        {
+        public:
+            REFLECT_DECLARE_ABSTRACT( ElementContainerSerializer, ContainerSerializer );
 
-        ElementContainerSerializer();
-    };
+            i32 m_TypeID;
 
-    typedef Helium::SmartPtr<ContainerSerializer> ContainerSerializerPtr;
+            ElementContainerSerializer();
+        };
+
+        typedef Helium::SmartPtr<ContainerSerializer> ContainerSerializerPtr;
+    }
 }

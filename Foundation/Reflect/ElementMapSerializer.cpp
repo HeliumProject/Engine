@@ -1,6 +1,6 @@
 #include "ElementMapSerializer.h"
 
-using namespace Reflect;
+using namespace Helium::Reflect;
 
 template < class KeyT >
 SimpleElementMapSerializer<KeyT>::SimpleElementMapSerializer()

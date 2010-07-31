@@ -5,9 +5,10 @@
 
 #define MAX_ERR_LENGTH 200
 
-using namespace Perforce;
+using namespace Helium;
+using namespace Helium::Perforce;
 
-u32 g_InitCount = 0;
+static u32 g_InitCount = 0;
 Provider g_Provider;
 
 void Perforce::Initialize()

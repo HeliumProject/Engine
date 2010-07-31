@@ -5,8 +5,9 @@
 
 #include "Orientation.h"
 
-using namespace Math;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
 PrimitiveCylinder::PrimitiveCylinder(ResourceTracker* tracker)
 : PrimitiveRadius(tracker)

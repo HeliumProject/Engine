@@ -2,7 +2,8 @@
 #include "Thumbnail.h"
 #include "Render/D3DManager.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 Thumbnail::Thumbnail( Render::D3DManager* d3dManager )
 : m_D3DManager( d3dManager )

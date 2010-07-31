@@ -2,7 +2,8 @@
 #include "TreeSortTimer.h"
 #include "TreeMonitor.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 
 ///////////////////////////////////////////////////////////////////////////////

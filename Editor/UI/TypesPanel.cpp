@@ -4,7 +4,8 @@
 
 #include "EditorIDs.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 TypesPanel::TypesPanel( SceneManager* manager, wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style )
 : TypesPanelGenerated( parent, id, pos, size, style )

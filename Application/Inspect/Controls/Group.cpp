@@ -2,7 +2,7 @@
 #include "Application/Inspect/Controls/Canvas.h"
 #include "Application/Inspect/Controls/Label.h"
 
-using namespace Inspect;
+using namespace Helium::Inspect;
 
 PanelOutline::PanelOutline( wxWindow* parent, Group* group, const tchar* name )
 : wxPanel( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, name )

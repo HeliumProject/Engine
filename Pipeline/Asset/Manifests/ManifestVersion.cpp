@@ -1,7 +1,7 @@
 #include "ManifestVersion.h"
 
-using namespace Reflect;
-using namespace Asset;
+using namespace Helium;
+using namespace Helium::Asset;
 
 REFLECT_DEFINE_CLASS(ManifestVersion)
 

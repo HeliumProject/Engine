@@ -6,9 +6,9 @@
 #include "Foundation/Math/Frustum.h"
 #include <float.h>
 
-using namespace Reflect;
-using namespace Content;
-using namespace Math;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Content;
 
 REFLECT_DEFINE_CLASS(Mesh);
 

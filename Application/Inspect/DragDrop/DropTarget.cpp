@@ -2,7 +2,7 @@
 #include "Application/Inspect/DragDrop/ClipboardDataObject.h"
 #include "Platform/Exception.h"
 
-using namespace Inspect;
+using namespace Helium::Inspect;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

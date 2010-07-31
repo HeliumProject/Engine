@@ -1,6 +1,6 @@
 #include "ExistenceCommand.h"
 
-using namespace Undo;
+using namespace Helium::Undo;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

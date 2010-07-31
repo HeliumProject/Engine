@@ -1,7 +1,7 @@
 #include "Slider.h"
 #include "Application/Inspect/Controls/Canvas.h"
 
-using namespace Inspect;
+using namespace Helium::Inspect;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Custom wrapper around wxSlider to interact with Slider.

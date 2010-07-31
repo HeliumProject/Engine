@@ -5,195 +5,198 @@
 #include "Foundation/Reflect/Enumeration.h"
 #include <sstream>
 
-namespace Editor
+namespace Helium
 {
-  namespace VaultMenu
-  {
-    ///////////////////////////////////////////////////////////////////////////
-    enum MenuIDs
+    namespace Editor
     {
-      START = wxID_HIGHEST, // Do not use: must be first
+        namespace VaultMenu
+        {
+            ///////////////////////////////////////////////////////////////////////////
+            enum MenuIDs
+            {
+                START = wxID_HIGHEST, // Do not use: must be first
 
-      FoldersPanel,
-      CollectionsPanel,
-      HelpPanel,
-      
-      ViewSmall,
-      ViewMedium,
-      ViewLarge,
-      ViewDetails,
+                FoldersPanel,
+                CollectionsPanel,
+                HelpPanel,
 
-      AdvancedSearch,
-      AdvancedSearchGo,
-      AdvancedSearchCancel,
+                ViewSmall,
+                ViewMedium,
+                ViewLarge,
+                ViewDetails,
 
-      CopyPathNative,
-      CopyPath,
+                AdvancedSearch,
+                AdvancedSearchGo,
+                AdvancedSearchCancel,
 
-      Sync,
-      CheckOut,
-      History,
+                CopyPathNative,
+                CopyPath,
 
-      Open,
-      Preview,
+                Sync,
+                CheckOut,
+                History,
 
-      Refresh,
+                Open,
+                Preview,
 
-      New,
-      NewFolder,
-      Cut,
-      Copy,
-      Paste,
-      Rename,
-      Delete,
-      Properties,
+                Refresh,
 
-      SelectAll,
+                New,
+                NewFolder,
+                Cut,
+                Copy,
+                Paste,
+                Rename,
+                Delete,
+                Properties,
 
-      Sort,
-      SortByName,
-      SortByType,
+                SelectAll,
 
-      ShowInFolders,
-      ShowInPerforce,
-      ShowInWindowsExplorer,
+                Sort,
+                SortByName,
+                SortByType,
 
-      ShowCollection,
+                ShowInFolders,
+                ShowInPerforce,
+                ShowInWindowsExplorer,
 
-      NewCollectionFromSelection,
-      NewDepedencyCollectionFromSelection,
-      NewUsageCollectionFromSelection,
+                ShowCollection,
 
-      NewCollection,
-      OpenCollection,
-      CloseCollection,
-      RenameCollection,
-      DeleteCollection,
-      ImportCollection,
-      ImportIntoCollection,
-      SaveCollection,
-      AddToCollection,
-      RemoveFromCollection,
+                NewCollectionFromSelection,
+                NewDepedencyCollectionFromSelection,
+                NewUsageCollectionFromSelection,
 
-      Preferences,
+                NewCollection,
+                OpenCollection,
+                CloseCollection,
+                RenameCollection,
+                DeleteCollection,
+                ImportCollection,
+                ImportIntoCollection,
+                SaveCollection,
+                AddToCollection,
+                RemoveFromCollection,
 
-      COUNT_PLUS_START // Do not use: must be last
-    };
-    static const u32 s_Count = COUNT_PLUS_START - START;
+                Preferences,
 
-    ///////////////////////////////////////////////////////////////////////////
-    static const tstring s_Labels[s_Count] = 
-    {
-      TXT( "INVALID" ), // placeholder for START
+                COUNT_PLUS_START // Do not use: must be last
+            };
+            static const u32 s_Count = COUNT_PLUS_START - START;
 
-      TXT( "Folders" ),
-      TXT( "Collections" ),
-      TXT( "Help" ),
+            ///////////////////////////////////////////////////////////////////////////
+            static const tstring s_Labels[s_Count] = 
+            {
+                TXT( "INVALID" ), // placeholder for START
 
-      TXT( "Small" ),
-      TXT( "Medium" ),
-      TXT( "Large" ),
-      TXT( "Details" ),
+                TXT( "Folders" ),
+                TXT( "Collections" ),
+                TXT( "Help" ),
 
-      TXT( "Advanced Search" ),
-      TXT( "Go" ),
-      TXT( "Cancel" ),
+                TXT( "Small" ),
+                TXT( "Medium" ),
+                TXT( "Large" ),
+                TXT( "Details" ),
 
-      TXT( "Path (Native Format)" ),
-      TXT( "Path (Internal Tools Format)" ),
+                TXT( "Advanced Search" ),
+                TXT( "Go" ),
+                TXT( "Cancel" ),
 
-      TXT( "Sync" ),
-      TXT( "Check Out" ),
-      TXT( "Revision History" ),
+                TXT( "Path (Native Format)" ),
+                TXT( "Path (Internal Tools Format)" ),
 
-      TXT( "Open" ),
-      TXT( "Preview" ),
+                TXT( "Sync" ),
+                TXT( "Check Out" ),
+                TXT( "Revision History" ),
 
-      TXT( "Refresh" ),
+                TXT( "Open" ),
+                TXT( "Preview" ),
 
-      TXT( "New" ),
-      TXT( "New Folder" ),
-      TXT( "Cut" ),
-      TXT( "Copy" ),
-      TXT( "Paste" ),
-      TXT( "Rename" ),
-      TXT( "Delete" ),
-      TXT( "Properties" ),
+                TXT( "Refresh" ),
 
-      TXT( "Select All\tCtrl+A" ),
+                TXT( "New" ),
+                TXT( "New Folder" ),
+                TXT( "Cut" ),
+                TXT( "Copy" ),
+                TXT( "Paste" ),
+                TXT( "Rename" ),
+                TXT( "Delete" ),
+                TXT( "Properties" ),
 
-      TXT( "Sort" ),
-      TXT( "Name" ),
-      TXT( "Type" ),
+                TXT( "Select All\tCtrl+A" ),
 
-      TXT( "Folders" ),
-      TXT( "Show in Revision Control" ),
-      TXT( "Windows Explorer" ), 
+                TXT( "Sort" ),
+                TXT( "Name" ),
+                TXT( "Type" ),
 
-      TXT( "Show" ),
+                TXT( "Folders" ),
+                TXT( "Show in Revision Control" ),
+                TXT( "Windows Explorer" ), 
 
-      TXT( "Static Collection" ),
-      TXT( "Static Collection" ),
-      TXT( "Asset Dependencies Collection" ),
-      TXT( "Asset Usage Collection" ),
-      TXT( "Open" ),
-      TXT( "Close" ),
-      TXT( "Rename" ),
-      TXT( "Delete" ),
-      TXT( "Import..." ),
-      TXT( "Import into..." ),
-      TXT( "Export..." ),
-      TXT( "Add Selected Assets" ),
-      TXT( "Remove Selected Assets" ),
+                TXT( "Show" ),
 
-      TXT( "Customize Preferences..." ),
-    };
-    
-    inline const tstring& Label( i32 id )
-    {
-      HELIUM_ASSERT( id > START );
-      HELIUM_ASSERT( id < COUNT_PLUS_START );
-      return s_Labels[id-START];
+                TXT( "Static Collection" ),
+                TXT( "Static Collection" ),
+                TXT( "Asset Dependencies Collection" ),
+                TXT( "Asset Usage Collection" ),
+                TXT( "Open" ),
+                TXT( "Close" ),
+                TXT( "Rename" ),
+                TXT( "Delete" ),
+                TXT( "Import..." ),
+                TXT( "Import into..." ),
+                TXT( "Export..." ),
+                TXT( "Add Selected Assets" ),
+                TXT( "Remove Selected Assets" ),
+
+                TXT( "Customize Preferences..." ),
+            };
+
+            inline const tstring& Label( i32 id )
+            {
+                HELIUM_ASSERT( id > START );
+                HELIUM_ASSERT( id < COUNT_PLUS_START );
+                return s_Labels[id-START];
+            }
+        };
+        typedef VaultMenu::MenuIDs VaultMenuID;
+
+        ///////////////////////////////////////////////////////////////////////////
+        namespace ThumbnailSizes
+        {
+            enum ThumbnailSize
+            {
+                Small = 64,
+                Medium = 128,
+                Large = 256
+            };
+            inline tstring Label( ThumbnailSize size )
+            {
+                tstringstream str;
+                str << TXT( "(" ) << size << TXT( "x" ) << size << TXT( ")" );
+                return str.str();
+            }
+        }
+        typedef ThumbnailSizes::ThumbnailSize ThumbnailSize;
+
+        ///////////////////////////////////////////////////////////////////////////
+        namespace ViewOptionIDs
+        {
+            enum ViewOptionID
+            {
+                Small = VaultMenu::ViewSmall,
+                Medium = VaultMenu::ViewMedium,
+                Large = VaultMenu::ViewLarge,
+                Custom = -1,
+            };
+
+            static void ViewOptionIDEnumerateEnumeration( Reflect::Enumeration* info )
+            {
+                info->AddElement(Small, TXT( "Small" ) );
+                info->AddElement(Medium, TXT( "Medium" ) );
+                info->AddElement(Large, TXT( "Large" ) );
+                info->AddElement(Custom, TXT( "Custom" ) );
+            }
+        }
+        typedef ViewOptionIDs::ViewOptionID ViewOptionID;
     }
-  };
-  typedef VaultMenu::MenuIDs VaultMenuID;
-
-  ///////////////////////////////////////////////////////////////////////////
-  namespace ThumbnailSizes
-  {
-    enum ThumbnailSize
-    {
-      Small = 64,
-      Medium = 128,
-      Large = 256
-    };
-    inline tstring Label( ThumbnailSize size )
-    {
-      tstringstream str;
-      str << TXT( "(" ) << size << TXT( "x" ) << size << TXT( ")" );
-      return str.str();
-    }
-  }
-  typedef ThumbnailSizes::ThumbnailSize ThumbnailSize;
-
-  ///////////////////////////////////////////////////////////////////////////
-  namespace ViewOptionIDs
-  {
-    enum ViewOptionID
-    {
-      Small = VaultMenu::ViewSmall,
-      Medium = VaultMenu::ViewMedium,
-      Large = VaultMenu::ViewLarge,
-      Custom = -1,
-    };
-
-    static void ViewOptionIDEnumerateEnumeration( Reflect::Enumeration* info )
-    {
-      info->AddElement(Small, TXT( "Small" ) );
-      info->AddElement(Medium, TXT( "Medium" ) );
-      info->AddElement(Large, TXT( "Large" ) );
-      info->AddElement(Custom, TXT( "Custom" ) );
-    }
-  }
-  typedef ViewOptionIDs::ViewOptionID ViewOptionID;
 }

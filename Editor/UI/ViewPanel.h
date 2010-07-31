@@ -4,19 +4,22 @@
 
 #include "Scene/Viewport.h"
 
-namespace Editor
+namespace Helium
 {
-    class ViewPanel : public ViewPanelGenerated
+    namespace Editor
     {
-    public:
-   	    ViewPanel( wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
-
-        Viewport* GetViewport()
+        class ViewPanel : public ViewPanelGenerated
         {
-            return m_Viewport;
-        }
+        public:
+            ViewPanel( wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
 
-    private:
-        Viewport* m_Viewport;
-    };
+            Viewport* GetViewport()
+            {
+                return m_Viewport;
+            }
+
+        private:
+            Viewport* m_Viewport;
+        };
+    }
 }

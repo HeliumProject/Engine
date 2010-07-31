@@ -1,7 +1,7 @@
 #include "Container.h"
 #include "Canvas.h"
 
-using namespace Inspect;
+using namespace Helium::Inspect;
 
 Container::Container()
 {

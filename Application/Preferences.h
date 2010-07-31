@@ -4,7 +4,10 @@
 
 #include "Foundation/File/Path.h"
 
-namespace Application
+namespace Helium
 {
-    APPLICATION_API bool GetPreferencesDirectory( Helium::Path& preferencesDirectory );
+    namespace Application
+    {
+        APPLICATION_API bool GetPreferencesDirectory( Helium::Path& preferencesDirectory );
+    }
 }

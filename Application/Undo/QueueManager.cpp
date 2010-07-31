@@ -1,7 +1,7 @@
 #include "QueueManager.h"
 #include "Queue.h"
 
-using namespace Undo;
+using namespace Helium::Undo;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

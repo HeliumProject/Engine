@@ -17,12 +17,12 @@
 
 #include "Pipeline/Content/Nodes/Volume.h"
 
-// Using
-using namespace Math;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
 // RTTI
-LUNA_DEFINE_TYPE(Editor::Volume);
+EDITOR_DEFINE_TYPE(Editor::Volume);
 
 void Volume::InitializeType()
 {

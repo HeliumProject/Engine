@@ -21,9 +21,10 @@
 
 #include "EditorFrame.h"
 
-using namespace Reflect;
-using namespace Asset;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Reflect;
+using namespace Helium::Asset;
+using namespace Helium::Editor;
 
 template <class T>
 bool SelectionHasAttribute(const OS_SelectableDumbPtr& selection)

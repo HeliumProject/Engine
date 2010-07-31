@@ -10,10 +10,11 @@
 #include "Scene.h"
 #include "Application/UI/ArtProvider.h"
 
-using namespace Math;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE( Editor::PivotTransform );
+EDITOR_DEFINE_TYPE( Editor::PivotTransform );
 
 void PivotTransform::InitializeType()
 {

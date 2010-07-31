@@ -59,8 +59,8 @@
 #include <wx/splash.h>
 #include <wx/cshelp.h>
 
-using namespace Editor;
 using namespace Helium;
+using namespace Helium::Editor;
 using namespace Helium::CommandLine;
 
 static int ShowBreakpointDialog(const Debug::BreakpointArgs& args )
@@ -143,9 +143,12 @@ static int ShowBreakpointDialog(const Debug::BreakpointArgs& args )
     }
 }
 
-namespace Editor
+namespace Helium
 {
-    IMPLEMENT_APP( App );
+    namespace Editor
+    {
+        IMPLEMENT_APP( App );
+    }
 }
 
 App::App()
@@ -182,7 +185,6 @@ bool App::OnInit()
     Helium::Path iconFolder( exePath.Directory() + TXT( "Icons/" ) );
 
     wxInitAllImageHandlers();
-
     wxImageHandler* curHandler = wxImage::FindHandler( wxBITMAP_TYPE_CUR );
     if ( curHandler )
     {

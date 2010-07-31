@@ -8,8 +8,9 @@
 #include "Foundation/Reflect/Field.h"
 #include "Foundation/Reflect/Enumeration.h"
 
-using namespace Reflect;
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Reflect;
+using namespace Helium::Inspect;
 
 ReflectBitfieldInterpreter::ReflectBitfieldInterpreter (Container* container)
 : ReflectFieldInterpreter (container)

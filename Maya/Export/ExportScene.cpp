@@ -8,9 +8,9 @@
 #include "Pipeline/Content/Nodes/Curve.h"
 #include "Maya/Utils.h"
 
-using namespace MayaContent;
-using namespace Maya;
 using namespace Helium;
+using namespace Helium::MayaContent;
+using namespace Helium::Maya;
 
 static void AddChildrenToSet( MObjectSet& objectSet, MObject object )
 {

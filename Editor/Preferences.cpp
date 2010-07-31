@@ -1,7 +1,8 @@
 #include "Precompile.h"
 #include "Preferences.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

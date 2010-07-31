@@ -1,8 +1,8 @@
 #include "Pipeline/Content/Nodes/JointTransform.h"
 
-using namespace Reflect;
-using namespace Content;
-using namespace Component;
+using namespace Helium;
+using namespace Helium::Content;
+using namespace Helium::Component;
 
 REFLECT_DEFINE_CLASS(JointTransform)
 

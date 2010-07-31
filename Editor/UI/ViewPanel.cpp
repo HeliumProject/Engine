@@ -3,7 +3,8 @@
 #include "ViewPanel.h"
 #include "ArtProvider.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ViewPanel::ViewPanel(wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style )
 : ViewPanelGenerated( parent, id, pos, size, style )

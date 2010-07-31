@@ -3,8 +3,8 @@
 #include "Application/Inspect/Controls/Label.h"
 #include "Application/UI/ArtProvider.h"
 
-using namespace Reflect;
-using namespace Inspect;
+using namespace Helium::Reflect;
+using namespace Helium::Inspect;
 
 Panel::Panel()
 : m_ItemData( this )

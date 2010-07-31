@@ -13,12 +13,12 @@
 #include "PrimitiveCone.h"
 #include "PrimitivePointer.h"
 
-// Using
-using namespace Math;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
 // RTTI
-LUNA_DEFINE_TYPE(SpotLight);
+EDITOR_DEFINE_TYPE(SpotLight);
 
 void SpotLight::InitializeType()
 {

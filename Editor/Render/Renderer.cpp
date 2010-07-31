@@ -4,6 +4,8 @@
 
 #include <mmsystem.h>
 
+using namespace Helium;
+
 static f32 fconst1 = (4.0f/17.0f);
 static f32 fconst2 = (8.0f/17.0f);
 static f32 fconst3 = (15.0f/17.0f);

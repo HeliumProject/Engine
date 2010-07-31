@@ -4,12 +4,13 @@
 #include "Platform/Assert.h"
 #include "Application/RCS/RCS.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 // 
 // RTTI
 // 
-LUNA_DEFINE_TYPE( Document );
+EDITOR_DEFINE_TYPE( Document );
 
 void Document::InitializeType()
 {

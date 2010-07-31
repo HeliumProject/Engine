@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version May  4 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -8,12 +8,12 @@
 #ifndef __VaultGenerated__
 #define __VaultGenerated__
 
-class Frame;
-namespace Editor{ class DirectoryCtrl; }
-namespace Editor{ class SortTreeCtrl; }
 namespace Helium{ class MenuButton; }
+namespace Helium{ namespace Editor{ class DirectoryCtrl; } }
+namespace Helium{ namespace Editor{ class Frame; } }
+namespace Helium{ namespace Editor{ class SortTreeCtrl; } }
 
-#include "Frame.h"
+#include "Editor/Frame.h"
 #include <wx/string.h>
 #include <wx/frame.h>
 #include <wx/gdicmn.h>
@@ -42,246 +42,257 @@ namespace Helium{ class MenuButton; }
 
 ///////////////////////////////////////////////////////////////////////////
 
-namespace Editor
+namespace Helium
 {
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class VaultFrameGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class VaultFrameGenerated : public Frame
+	namespace Editor
 	{
-		private:
-		
-		protected:
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class VaultFrameGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class VaultFrameGenerated : public Helium::Editor::Frame
+		{
+			private:
 			
-			// Virtual event handlers, overide them in your derived class
-			virtual void OnClose( wxCloseEvent& event ){ event.Skip(); }
+			protected:
+				
+				// Virtual event handlers, overide them in your derived class
+				virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
+				
 			
-		
-		public:
-			VaultFrameGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Asset Vault"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
-			~VaultFrameGenerated();
-		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class NavigationPanelGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class NavigationPanelGenerated : public wxPanel 
-	{
-		private:
-		
-		protected:
+			public:
+				
+				VaultFrameGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Asset Vault"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+				~VaultFrameGenerated();
 			
-			// Virtual event handlers, overide them in your derived class
-			virtual void OnBackButtonClick( wxCommandEvent& event ){ event.Skip(); }
-			virtual void OnForwardButtonClick( wxCommandEvent& event ){ event.Skip(); }
-			virtual void OnUpFolderButtonClick( wxCommandEvent& event ){ event.Skip(); }
-			virtual void OnNavBarComboBox( wxCommandEvent& event ){ event.Skip(); }
-			virtual void OnNavBarComboBoxMouseWheel( wxMouseEvent& event ){ event.Skip(); }
-			virtual void OnNavBarText( wxCommandEvent& event ){ event.Skip(); }
-			virtual void OnNavBarTextEnter( wxCommandEvent& event ){ event.Skip(); }
-			virtual void OnGoButtonClick( wxCommandEvent& event ){ event.Skip(); }
-			virtual void OnOptionsButtonClick( wxCommandEvent& event ){ event.Skip(); }
+		};
+		
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class NavigationPanelGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class NavigationPanelGenerated : public wxPanel 
+		{
+			private:
 			
-		
-		public:
-			Helium::MenuButton* m_BackButton;
-			Helium::MenuButton* m_ForwardButton;
-			wxBitmapButton* m_UpFolderButton;
-			wxComboBox* m_NavBarComboBox;
-			wxBitmapButton* m_GoButton;
-			Helium::MenuButton* m_OptionsButton;
-			NavigationPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 557,39 ), long style = wxNO_BORDER|wxTAB_TRAVERSAL );
-			~NavigationPanelGenerated();
-		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class FoldersPanelGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class FoldersPanelGenerated : public wxPanel 
-	{
-		private:
-		
-		protected:
+			protected:
+				
+				// Virtual event handlers, overide them in your derived class
+				virtual void OnBackButtonClick( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnForwardButtonClick( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnUpFolderButtonClick( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnNavBarComboBox( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnNavBarComboBoxMouseWheel( wxMouseEvent& event ) { event.Skip(); }
+				virtual void OnNavBarText( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnNavBarTextEnter( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnGoButtonClick( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnOptionsButtonClick( wxCommandEvent& event ) { event.Skip(); }
+				
 			
-			// Virtual event handlers, overide them in your derived class
-			virtual void OnTreeBeginDrag( wxTreeEvent& event ){ event.Skip(); }
-			virtual void OnTreeItemDelete( wxTreeEvent& event ){ event.Skip(); }
-			virtual void OnTreeEndDrag( wxTreeEvent& event ){ event.Skip(); }
-			virtual void OnTreeItemMenu( wxTreeEvent& event ){ event.Skip(); }
-			virtual void OnTreeItemRightClick( wxTreeEvent& event ){ event.Skip(); }
+			public:
+				Helium::MenuButton* m_BackButton;
+				Helium::MenuButton* m_ForwardButton;
+				wxBitmapButton* m_UpFolderButton;
+				wxComboBox* m_NavBarComboBox;
+				wxBitmapButton* m_GoButton;
+				Helium::MenuButton* m_OptionsButton;
+				
+				NavigationPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 557,39 ), long style = wxNO_BORDER|wxTAB_TRAVERSAL );
+				~NavigationPanelGenerated();
 			
+		};
 		
-		public:
-			Editor::DirectoryCtrl* m_FoldersTreeCtrl;
-			FoldersPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 205,333 ), long style = wxTAB_TRAVERSAL );
-			~FoldersPanelGenerated();
-		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class ResultsPanelGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class ResultsPanelGenerated : public wxPanel 
-	{
-		private:
-		
-		protected:
-		
-		public:
-			ResultsPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL );
-			~ResultsPanelGenerated();
-		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class SearchPanelGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class SearchPanelGenerated : public wxPanel 
-	{
-		private:
-		
-		protected:
-			wxScrolledWindow* m_ScrolledWindow;
-			wxStaticText* m_staticText44;
-			wxStaticBitmap* m_CollectionHelpBitmap;
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class FoldersPanelGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class FoldersPanelGenerated : public wxPanel 
+		{
+			private:
 			
-			wxStaticBitmap* m_WordsHelpBitmap;
-			wxStaticBitmap* m_PhraseHelpBitmap;
+			protected:
+				
+				// Virtual event handlers, overide them in your derived class
+				virtual void OnTreeBeginDrag( wxTreeEvent& event ) { event.Skip(); }
+				virtual void OnTreeItemDelete( wxTreeEvent& event ) { event.Skip(); }
+				virtual void OnTreeEndDrag( wxTreeEvent& event ) { event.Skip(); }
+				virtual void OnTreeItemMenu( wxTreeEvent& event ) { event.Skip(); }
+				virtual void OnTreeItemRightClick( wxTreeEvent& event ) { event.Skip(); }
+				
 			
-			wxStaticBitmap* m_FileIDHelpBitmap;
-			wxStaticText* m_staticText151;
-			wxStaticBitmap* m_ComponentHelpBitmap;
-			wxStaticBitmap* m_LevelHelpBitmap;
-			wxStaticBitmap* m_ShaderHelpBitmap;
+			public:
+				Helium::Editor::DirectoryCtrl* m_FoldersTreeCtrl;
+				
+				FoldersPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 205,333 ), long style = wxTAB_TRAVERSAL );
+				~FoldersPanelGenerated();
 			
-			wxStaticLine* m_staticline3;
+		};
+		
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class ResultsPanelGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class ResultsPanelGenerated : public wxPanel 
+		{
+			private:
 			
+			protected:
 			
-			// Virtual event handlers, overide them in your derived class
-			virtual void OnMouseLeftDoubleClick( wxMouseEvent& event ){ event.Skip(); }
-			virtual void OnMouseLeftDown( wxMouseEvent& event ){ event.Skip(); }
-			virtual void OnMouseRightDown( wxMouseEvent& event ){ event.Skip(); }
-			virtual void OnFieldTextEnter( wxCommandEvent& event ){ event.Skip(); }
-			virtual void OnFolderBrowseButtonClick( wxCommandEvent& event ){ event.Skip(); }
-			virtual void OnFieldText( wxCommandEvent& event ){ event.Skip(); }
-			virtual void OnSearchButtonClick( wxCommandEvent& event ){ event.Skip(); }
-			virtual void OnCancelButtonClick( wxCommandEvent& event ){ event.Skip(); }
+			public:
+				
+				ResultsPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL );
+				~ResultsPanelGenerated();
 			
+		};
 		
-		public:
-			wxRadioButton* m_SearchVaultRadio;
-			wxRadioButton* m_SearchCollectionRadio;
-			wxChoice* m_CollectionChoice;
-			wxTextCtrl* m_WordsTextCtrl;
-			wxTextCtrl* m_PhraseTextCtrl;
-			wxChoice* m_FileTypeChoice;
-			wxChoice* m_FolderChoice;
-			wxButton* m_VaultFoldersButton;
-			wxComboBox* m_CreatedByComboBox;
-			wxChoice* m_AssetTypeChoice;
-			wxTextCtrl* m_FileIDTextCtrl;
-			wxChoice* m_ComponentNameChoice;
-			wxTextCtrl* m_ComponentValueTextCtrl;
-			wxTextCtrl* m_LevelTextCtrl;
-			wxTextCtrl* m_ShaderTextCtrl;
-			wxButton* m_GoButton;
-			wxButton* m_CancelButton;
-			wxButton* m_ClearButton;
-			SearchPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 467,482 ), long style = wxTAB_TRAVERSAL );
-			~SearchPanelGenerated();
-		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class CollectionsPanelGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class CollectionsPanelGenerated : public wxPanel 
-	{
-		private:
-		
-		protected:
-			wxToolBar* m_MyCollectionsToolBar;
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class SearchPanelGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class SearchPanelGenerated : public wxPanel 
+		{
+			private:
 			
-			// Virtual event handlers, overide them in your derived class
-			virtual void OnSizeCollectionsPanel( wxSizeEvent& event ){ event.Skip(); }
-			virtual void OnMyCollectionsTitleMenu( wxMouseEvent& event ){ event.Skip(); }
-			virtual void OnNewCollection( wxCommandEvent& event ){ event.Skip(); }
-			virtual void OnMyCollectionsBeginLabelEdit( wxTreeEvent& event ){ event.Skip(); }
-			virtual void OnMyCollectionsEndLabelEdit( wxTreeEvent& event ){ event.Skip(); }
-			virtual void OnMyCollectionsDoubleClick( wxTreeEvent& event ){ event.Skip(); }
-			virtual void OnMyCollectionsMenu( wxTreeEvent& event ){ event.Skip(); }
-			virtual void OnTempCollectionsDoubleClick( wxTreeEvent& event ){ event.Skip(); }
-			virtual void OnTempCollectionsMenu( wxTreeEvent& event ){ event.Skip(); }
+			protected:
+				wxScrolledWindow* m_ScrolledWindow;
+				wxStaticText* m_staticText44;
+				wxStaticBitmap* m_CollectionHelpBitmap;
+				
+				wxStaticBitmap* m_WordsHelpBitmap;
+				wxStaticBitmap* m_PhraseHelpBitmap;
+				
+				wxStaticBitmap* m_FileIDHelpBitmap;
+				wxStaticText* m_staticText151;
+				wxStaticBitmap* m_ComponentHelpBitmap;
+				wxStaticBitmap* m_LevelHelpBitmap;
+				wxStaticBitmap* m_ShaderHelpBitmap;
+				
+				wxStaticLine* m_staticline3;
+				
+				
+				// Virtual event handlers, overide them in your derived class
+				virtual void OnMouseLeftDoubleClick( wxMouseEvent& event ) { event.Skip(); }
+				virtual void OnMouseLeftDown( wxMouseEvent& event ) { event.Skip(); }
+				virtual void OnMouseRightDown( wxMouseEvent& event ) { event.Skip(); }
+				virtual void OnFieldTextEnter( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnFolderBrowseButtonClick( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnFieldText( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnSearchButtonClick( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
+				
 			
+			public:
+				wxRadioButton* m_SearchVaultRadio;
+				wxRadioButton* m_SearchCollectionRadio;
+				wxChoice* m_CollectionChoice;
+				wxTextCtrl* m_WordsTextCtrl;
+				wxTextCtrl* m_PhraseTextCtrl;
+				wxChoice* m_FileTypeChoice;
+				wxChoice* m_FolderChoice;
+				wxButton* m_VaultFoldersButton;
+				wxComboBox* m_CreatedByComboBox;
+				wxChoice* m_AssetTypeChoice;
+				wxTextCtrl* m_FileIDTextCtrl;
+				wxChoice* m_ComponentNameChoice;
+				wxTextCtrl* m_ComponentValueTextCtrl;
+				wxTextCtrl* m_LevelTextCtrl;
+				wxTextCtrl* m_ShaderTextCtrl;
+				wxButton* m_GoButton;
+				wxButton* m_CancelButton;
+				wxButton* m_ClearButton;
+				
+				SearchPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 467,482 ), long style = wxTAB_TRAVERSAL );
+				~SearchPanelGenerated();
+			
+		};
 		
-		public:
-			wxStaticText* m_MyCollectionsTitle;
-			wxBitmapButton* m_NewDependencyCollectionButton;
-			wxBitmapButton* m_NewCollectionButton;
-			Editor::SortTreeCtrl* m_MyCollectionsTreeCtrl;
-			wxStaticText* m_TempCollectionsTitle;
-			Editor::SortTreeCtrl* m_TempCollectionsTreeCtrl;
-			CollectionsPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 250,397 ), long style = wxTAB_TRAVERSAL );
-			~CollectionsPanelGenerated();
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class CollectionsPanelGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class CollectionsPanelGenerated : public wxPanel 
+		{
+			private:
+			
+			protected:
+				wxToolBar* m_MyCollectionsToolBar;
+				
+				// Virtual event handlers, overide them in your derived class
+				virtual void OnSizeCollectionsPanel( wxSizeEvent& event ) { event.Skip(); }
+				virtual void OnMyCollectionsTitleMenu( wxMouseEvent& event ) { event.Skip(); }
+				virtual void OnNewCollection( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnMyCollectionsBeginLabelEdit( wxTreeEvent& event ) { event.Skip(); }
+				virtual void OnMyCollectionsEndLabelEdit( wxTreeEvent& event ) { event.Skip(); }
+				virtual void OnMyCollectionsDoubleClick( wxTreeEvent& event ) { event.Skip(); }
+				virtual void OnMyCollectionsMenu( wxTreeEvent& event ) { event.Skip(); }
+				virtual void OnTempCollectionsDoubleClick( wxTreeEvent& event ) { event.Skip(); }
+				virtual void OnTempCollectionsMenu( wxTreeEvent& event ) { event.Skip(); }
+				
+			
+			public:
+				wxStaticText* m_MyCollectionsTitle;
+				wxBitmapButton* m_NewDependencyCollectionButton;
+				wxBitmapButton* m_NewCollectionButton;
+				Helium::Editor::SortTreeCtrl* m_MyCollectionsTreeCtrl;
+				wxStaticText* m_TempCollectionsTitle;
+				Helium::Editor::SortTreeCtrl* m_TempCollectionsTreeCtrl;
+				
+				CollectionsPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 250,397 ), long style = wxTAB_TRAVERSAL );
+				~CollectionsPanelGenerated();
+			
+		};
 		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class PreviewPanelGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class PreviewPanelGenerated : public wxPanel 
-	{
-		private:
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class PreviewPanelGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class PreviewPanelGenerated : public wxPanel 
+		{
+			private:
+			
+			protected:
+				wxPanel* m_BottomPanel;
+			
+			public:
+				Helium::Editor::VaultPreviewWindow* m_PreviewWindow;
+				wxTextCtrl* m_Label;
+				
+				PreviewPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDOUBLE_BORDER|wxTAB_TRAVERSAL );
+				~PreviewPanelGenerated();
+			
+		};
 		
-		protected:
-			wxPanel* m_BottomPanel;
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class DetailsFrameGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class DetailsFrameGenerated : public wxFrame 
+		{
+			private:
+			
+			protected:
+				wxScrolledWindow* m_ScrollWindow;
+				wxStaticText* m_LabelName;
+				wxTextCtrl* m_Name;
+				wxStaticText* m_LabelFileType;
+				wxTextCtrl* m_FileType;
+				wxStaticText* m_LabelFileID;
+				wxTextCtrl* m_FileID;
+				wxStaticText* m_LabelFolder;
+				wxTextCtrl* m_Folder;
+				wxPanel* m_RevisionPanel;
+				wxStaticText* m_LabelPerforce;
+				wxStaticText* m_LabelRevisionStatus;
+				wxPanel* m_StatusPanel;
+				wxStaticBitmap* m_RevisionStatusIcon;
+				wxStaticText* m_RevisionStatus;
+				wxPanel* m_LastCheckInPanel;
+				wxStaticText* m_LabelLastCheckIn;
+				wxTextCtrl* m_LastCheckIn;
+				wxPanel* m_FirstCheckInPanel;
+				wxStaticText* m_LabelFirstCheckIn;
+				wxTextCtrl* m_FirstCheckIn;
+			
+			public:
+				
+				DetailsFrameGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,421 ), long style = wxCAPTION|wxCLOSE_BOX|wxFRAME_FLOAT_ON_PARENT|wxFRAME_NO_TASKBAR|wxFRAME_TOOL_WINDOW|wxRESIZE_BORDER|wxSYSTEM_MENU|wxTAB_TRAVERSAL );
+				~DetailsFrameGenerated();
+			
+		};
 		
-		public:
-			Editor::VaultPreviewWindow* m_PreviewWindow;
-			wxTextCtrl* m_Label;
-			PreviewPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDOUBLE_BORDER|wxTAB_TRAVERSAL );
-			~PreviewPanelGenerated();
-		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class DetailsFrameGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class DetailsFrameGenerated : public wxFrame 
-	{
-		private:
-		
-		protected:
-			wxScrolledWindow* m_ScrollWindow;
-			wxStaticText* m_LabelName;
-			wxTextCtrl* m_Name;
-			wxStaticText* m_LabelFileType;
-			wxTextCtrl* m_FileType;
-			wxStaticText* m_LabelFileID;
-			wxTextCtrl* m_FileID;
-			wxStaticText* m_LabelFolder;
-			wxTextCtrl* m_Folder;
-			wxPanel* m_RevisionPanel;
-			wxStaticText* m_LabelPerforce;
-			wxStaticText* m_LabelRevisionStatus;
-			wxPanel* m_StatusPanel;
-			wxStaticBitmap* m_RevisionStatusIcon;
-			wxStaticText* m_RevisionStatus;
-			wxPanel* m_LastCheckInPanel;
-			wxStaticText* m_LabelLastCheckIn;
-			wxTextCtrl* m_LastCheckIn;
-			wxPanel* m_FirstCheckInPanel;
-			wxStaticText* m_LabelFirstCheckIn;
-			wxTextCtrl* m_FirstCheckIn;
-		
-		public:
-			DetailsFrameGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,421 ), long style = wxCAPTION|wxCLOSE_BOX|wxFRAME_FLOAT_ON_PARENT|wxFRAME_NO_TASKBAR|wxFRAME_TOOL_WINDOW|wxRESIZE_BORDER|wxSYSTEM_MENU|wxTAB_TRAVERSAL );
-			~DetailsFrameGenerated();
-		
-	};
-	
-} // namespace Editor
+	} // namespace Editor
+} // namespace Helium
 
 #endif //__VaultGenerated__

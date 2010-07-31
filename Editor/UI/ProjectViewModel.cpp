@@ -3,7 +3,7 @@
 
 using namespace Helium;
 using namespace Helium::Core;
-using namespace Editor;
+using namespace Helium::Editor;
 
 ProjectViewModel::ProjectViewModel()
 : m_Project( NULL )

@@ -5,39 +5,43 @@
 
 #include "Foundation/File/Path.h"
 
-namespace Editor
+namespace Helium
 {
-    //DECLARE_EVENT_TYPE( ThumbnailLoadedCommandEvent, -1 )
-    extern LUNA_CORE_API const wxEventType ThumbnailLoadedCommandEvent;
-
-    // A custom event that transports a whole wxString.
-    class LUNA_CORE_API ThumbnailLoadedEvent: public wxCommandEvent
+    namespace Editor
     {
-    public:
-        ThumbnailLoadedEvent( wxEventType commandType = Editor::ThumbnailLoadedCommandEvent, int id = 0 );
+        //DECLARE_EVENT_TYPE( ThumbnailLoadedCommandEvent, -1 )
+        extern LUNA_CORE_API const wxEventType ThumbnailLoadedCommandEvent;
 
-        ThumbnailLoadedEvent( const ThumbnailLoadedEvent &event );
+        // A custom event that transports a whole wxString.
+        class LUNA_CORE_API ThumbnailLoadedEvent: public wxCommandEvent
+        {
+        public:
+            ThumbnailLoadedEvent( wxEventType commandType = Editor::ThumbnailLoadedCommandEvent, int id = 0 );
 
-        // Required for sending with wxPostEvent()
-        wxEvent* Clone() const;
+            ThumbnailLoadedEvent( const ThumbnailLoadedEvent &event );
 
-        const V_ThumbnailPtr& GetThumbnails() const;
-        void SetThumbnails( const V_ThumbnailPtr& thumbnails );
+            // Required for sending with wxPostEvent()
+            wxEvent* Clone() const;
 
-        const Helium::Path& GetPath() const;
-        void SetPath( const Helium::Path& path );
+            const V_ThumbnailPtr& GetThumbnails() const;
+            void SetThumbnails( const V_ThumbnailPtr& thumbnails );
 
-        bool Cancelled() const;
-        void SetCancelled( bool cancelled );
+            const Helium::Path& GetPath() const;
+            void SetPath( const Helium::Path& path );
 
-    private:
-        V_ThumbnailPtr m_Thumbnails;
-        Helium::Path m_Path;
-        bool m_Cancelled;
-    };
+            bool Cancelled() const;
+            void SetCancelled( bool cancelled );
 
-    typedef void (wxEvtHandler::*igThumbnailLoadedEventFunction)(ThumbnailLoadedEvent &);
-} 
+        private:
+            V_ThumbnailPtr m_Thumbnails;
+            Helium::Path m_Path;
+            bool m_Cancelled;
+        };
+
+        typedef void (wxEvtHandler::*igThumbnailLoadedEventFunction)(ThumbnailLoadedEvent &);
+    } 
+}
+
 // This #define simplifies the one below, and makes the syntax less
 // ugly if you want to use Connect() instead of an event table.
 #define igThumbnailLoadedEventHandler(func)                                         \

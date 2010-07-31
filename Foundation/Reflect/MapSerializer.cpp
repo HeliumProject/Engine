@@ -1,7 +1,8 @@
 #include "MapSerializer.h"
 
-using namespace Reflect;
-using namespace Math;
+using namespace Helium;
+using namespace Helium::Reflect;
+using namespace Helium::Math;
 
 REFLECT_DEFINE_ABSTRACT(MapSerializer)
 

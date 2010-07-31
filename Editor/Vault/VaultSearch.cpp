@@ -11,146 +11,148 @@
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/String/Utilities.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
-
-
-namespace Editor
+namespace Helium
 {
-
-    /////////////////////////////////////////////////////////////////////////////
-    /// DummyWindowArgs
-    /////////////////////////////////////////////////////////////////////////////
-    struct DummyWindowArgs
+    namespace Editor
     {
-        i32 m_ThreadID;
-        DummyWindowArgs( i32 threadID )
-            : m_ThreadID( threadID )
+
+        /////////////////////////////////////////////////////////////////////////////
+        /// DummyWindowArgs
+        /////////////////////////////////////////////////////////////////////////////
+        struct DummyWindowArgs
         {
-        }
-    };
-    typedef Helium::Signature< void, const DummyWindowArgs& > DummyWindowSignature;
-
-    /////////////////////////////////////////////////////////////////////////////
-    /// DummyWindow
-    /////////////////////////////////////////////////////////////////////////////
-    static const tchar* s_DummyWindowName = TXT( "DummyWindowThread" );
-
-    // Custom wxEventTypes for the SearchThread to fire.
-    DEFINE_EVENT_TYPE( LUNA_EVT_BEGIN_SEARCH )
-        DEFINE_EVENT_TYPE( LUNA_EVT_RESULTS_AVAILABLE )
-        DEFINE_EVENT_TYPE( LUNA_EVT_SEARCH_COMPLETE )
-
-    class DummyWindow : public wxFrame
-    {
-    public:
-        DummyWindow( const tchar* name = NULL )
-            : wxFrame( NULL, wxID_ANY, s_DummyWindowName, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, s_DummyWindowName )
-        {
-            Hide();
-
-            if ( name )
+            i32 m_ThreadID;
+            DummyWindowArgs( i32 threadID )
+                : m_ThreadID( threadID )
             {
-                wxString newName( s_DummyWindowName );
-                newName += TXT( "-" );
-                newName += name;
-                SetName( newName );
-                SetTitle( newName );
             }
-        }
+        };
+        typedef Helium::Signature< void, const DummyWindowArgs& > DummyWindowSignature;
 
-        virtual ~DummyWindow()
+        /////////////////////////////////////////////////////////////////////////////
+        /// DummyWindow
+        /////////////////////////////////////////////////////////////////////////////
+        static const tchar* s_DummyWindowName = TXT( "DummyWindowThread" );
+
+        // Custom wxEventTypes for the SearchThread to fire.
+        DEFINE_EVENT_TYPE( LUNA_EVT_BEGIN_SEARCH )
+            DEFINE_EVENT_TYPE( LUNA_EVT_RESULTS_AVAILABLE )
+            DEFINE_EVENT_TYPE( LUNA_EVT_SEARCH_COMPLETE )
+
+        class DummyWindow : public wxFrame
         {
+        public:
+            DummyWindow( const tchar* name = NULL )
+                : wxFrame( NULL, wxID_ANY, s_DummyWindowName, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, s_DummyWindowName )
+            {
+                Hide();
 
-        }
+                if ( name )
+                {
+                    wxString newName( s_DummyWindowName );
+                    newName += TXT( "-" );
+                    newName += name;
+                    SetName( newName );
+                    SetTitle( newName );
+                }
+            }
 
-        void OnBeginThread( wxCommandEvent& evt )
+            virtual ~DummyWindow()
+            {
+
+            }
+
+            void OnBeginThread( wxCommandEvent& evt )
+            {
+                m_BeginListeners.Raise( DummyWindowArgs( evt.GetInt() ) );
+            }
+
+            void OnThreadUpdate( wxCommandEvent& evt )
+            {
+                m_UpdateListeners.Raise( DummyWindowArgs( evt.GetInt() ) );
+            }
+
+            void OnEndThread( wxCommandEvent& evt )
+            {
+                m_EndListeners.Raise( DummyWindowArgs( evt.GetInt() ) ); 
+            }
+
+            // 
+            // Events
+            //
+        private:
+            DummyWindowSignature::Event m_BeginListeners;
+        public:
+            void AddBeginListener( const DummyWindowSignature::Delegate& listener )
+            {
+                m_BeginListeners.Add( listener );
+            }
+            void RemoveBeginListener( const DummyWindowSignature::Delegate& listener )
+            {
+                m_BeginListeners.Remove( listener );
+            }
+
+        private:
+            DummyWindowSignature::Event m_UpdateListeners;
+        public:
+            void AddUpdateListener( const DummyWindowSignature::Delegate& listener )
+            {
+                m_UpdateListeners.Add( listener );
+            }
+            void RemoveUpdateListener( const DummyWindowSignature::Delegate& listener )
+            {
+                m_UpdateListeners.Remove( listener );
+            }
+
+        private:
+            DummyWindowSignature::Event m_EndListeners;
+        public:
+            void AddEndListener( const DummyWindowSignature::Delegate& listener )
+            {
+                m_EndListeners.Add( listener );
+            }
+            void RemoveEndListener( const DummyWindowSignature::Delegate& listener )
+            {
+                m_EndListeners.Remove( listener );
+            }
+
+        };
+
+
+        /////////////////////////////////////////////////////////////////////////////
+        /// SearchThread
+        /////////////////////////////////////////////////////////////////////////////
+        class Editor::SearchThread : public wxThread
         {
-            m_BeginListeners.Raise( DummyWindowArgs( evt.GetInt() ) );
-        }
+        private:
+            VaultSearch* m_VaultSearch;
+            i32            m_SearchID;
 
-        void OnThreadUpdate( wxCommandEvent& evt )
-        {
-            m_UpdateListeners.Raise( DummyWindowArgs( evt.GetInt() ) );
-        }
+        public:
+            // Detached threads delete themselves once they have completed,
+            // and thus must be created on the heap
+            SearchThread( VaultSearch* browserSearch, i32 id )
+                : wxThread( wxTHREAD_DETACHED )
+                , m_VaultSearch( browserSearch )
+                , m_SearchID( id )
+            {
+            }
 
-        void OnEndThread( wxCommandEvent& evt )
-        {
-            m_EndListeners.Raise( DummyWindowArgs( evt.GetInt() ) ); 
-        }
+            virtual ~SearchThread()
+            {
+            }
 
-        // 
-        // Events
-        //
-    private:
-        DummyWindowSignature::Event m_BeginListeners;
-    public:
-        void AddBeginListener( const DummyWindowSignature::Delegate& listener )
-        {
-            m_BeginListeners.Add( listener );
-        }
-        void RemoveBeginListener( const DummyWindowSignature::Delegate& listener )
-        {
-            m_BeginListeners.Remove( listener );
-        }
+            virtual wxThread::ExitCode Entry() HELIUM_OVERRIDE
+            {
+                m_VaultSearch->SearchThreadProc( m_SearchID );
 
-    private:
-        DummyWindowSignature::Event m_UpdateListeners;
-    public:
-        void AddUpdateListener( const DummyWindowSignature::Delegate& listener )
-        {
-            m_UpdateListeners.Add( listener );
-        }
-        void RemoveUpdateListener( const DummyWindowSignature::Delegate& listener )
-        {
-            m_UpdateListeners.Remove( listener );
-        }
-
-    private:
-        DummyWindowSignature::Event m_EndListeners;
-    public:
-        void AddEndListener( const DummyWindowSignature::Delegate& listener )
-        {
-            m_EndListeners.Add( listener );
-        }
-        void RemoveEndListener( const DummyWindowSignature::Delegate& listener )
-        {
-            m_EndListeners.Remove( listener );
-        }
-
-    };
-
-
-    /////////////////////////////////////////////////////////////////////////////
-    /// SearchThread
-    /////////////////////////////////////////////////////////////////////////////
-    class Editor::SearchThread : public wxThread
-    {
-    private:
-        VaultSearch* m_VaultSearch;
-        i32            m_SearchID;
-
-    public:
-        // Detached threads delete themselves once they have completed,
-        // and thus must be created on the heap
-        SearchThread( VaultSearch* browserSearch, i32 id )
-            : wxThread( wxTHREAD_DETACHED )
-            , m_VaultSearch( browserSearch )
-            , m_SearchID( id )
-        {
-        }
-
-        virtual ~SearchThread()
-        {
-        }
-
-        virtual wxThread::ExitCode Entry() HELIUM_OVERRIDE
-        {
-            m_VaultSearch->SearchThreadProc( m_SearchID );
-
-            return NULL;
-        }
-    };
+                return NULL;
+            }
+        };
+    }
 }
 
 
@@ -316,7 +318,7 @@ void VaultSearch::SearchThreadProc( i32 searchID )
     }
 
     if (    m_CurrentSearchQuery->GetSearchType() == SearchTypes::File
-         || m_CurrentSearchQuery->GetSearchType() == SearchTypes::Folder )
+        || m_CurrentSearchQuery->GetSearchType() == SearchTypes::Folder )
     {
         AddPath( searchPath, searchID );
         SearchThreadLeave( searchID );
@@ -463,7 +465,6 @@ u32 VaultSearch::AddPath( const Helium::Path& path, i32 searchID )
 u32 VaultSearch::AddPaths( const std::set< Helium::Path >& paths, i32 searchID )
 {
     u32 numFilesAdded = 0;
-    
     Helium::TakeMutex mutex (m_SearchResultsMutex);
 
     for ( std::set< Helium::Path >::const_iterator itr = paths.begin(), end = paths.end(); itr != end; ++itr )

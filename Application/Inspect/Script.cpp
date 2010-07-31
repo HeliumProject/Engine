@@ -13,7 +13,7 @@
 
 #include <regex> 
 
-using namespace Inspect;
+using namespace Helium::Inspect;
 
 // #define INSPECT_DEBUG_SCRIPT_COMPILE
 

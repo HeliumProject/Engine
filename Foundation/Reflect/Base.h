@@ -23,110 +23,113 @@
     virtual int GetReflectionType () const HELIUM_OVERRIDE { return __Type; } \
     virtual bool HasReflectionType (int id) const HELIUM_OVERRIDE { return __Type == id || __super::HasReflectionType(id); }
 
-namespace Reflect
+namespace Helium
 {
-    //
-    // All types have to belong to this enum
-    //
-
-    namespace ReflectionTypes
+    namespace Reflect
     {
-        enum ReflectionType
+        //
+        // All types have to belong to this enum
+        //
+
+        namespace ReflectionTypes
         {
-            Invalid,
-            Type,
-            Enumeration,
-            Composite,
-            Structure,
-            Class,
-            Field,
-            ElementField,
-            EnumerationField,
-        };
-    }
-    typedef ReflectionTypes::ReflectionType ReflectionType;
-
-
-    //
-    // This lets us safely cast between reflection class pointers
-    //
-
-    class FOUNDATION_API Base : public Foundation::AtomicRefCountBase
-    {
-    public:
-        REFLECTION_BASE(ReflectionTypes::Invalid);
-
-        mutable std::map< tstring, tstring > m_Properties;
-
-        template<class T>
-        inline void SetProperty( const tstring& key, const T& value )
-        {
-            tostringstream str;
-            str << value;
-
-            if ( !str.fail() )
+            enum ReflectionType
             {
-                SetProperty<tstring>( key, str.str() );
-            }
+                Invalid,
+                Type,
+                Enumeration,
+                Composite,
+                Structure,
+                Class,
+                Field,
+                ElementField,
+                EnumerationField,
+            };
         }
+        typedef ReflectionTypes::ReflectionType ReflectionType;
 
-        template<>
-        inline void SetProperty( const tstring& key, const tstring& value )
+
+        //
+        // This lets us safely cast between reflection class pointers
+        //
+
+        class FOUNDATION_API Base : public Helium::AtomicRefCountBase
         {
-            m_Properties[key] = value;
-        }
+        public:
+            REFLECTION_BASE(ReflectionTypes::Invalid);
 
-        template<class T>
-        inline bool GetProperty( const tstring& key, T& value ) const
-        {
-            tstring strValue;
-            bool result = GetProperty<tstring>( key, strValue );
+            mutable std::map< tstring, tstring > m_Properties;
 
-            if ( result )
+            template<class T>
+            inline void SetProperty( const tstring& key, const T& value )
             {
-                tistringstream str( strValue );
-                str >> value;
-                return !str.fail();
+                tostringstream str;
+                str << value;
+
+                if ( !str.fail() )
+                {
+                    SetProperty<tstring>( key, str.str() );
+                }
             }
 
-            return false;
-        }
-
-        template<>
-        inline bool GetProperty( const tstring& key, tstring& value ) const
-        {
-            std::map< tstring, tstring >::const_iterator found = m_Properties.find( key ); 
-            if ( found != m_Properties.end() )
+            template<>
+            inline void SetProperty( const tstring& key, const tstring& value )
             {
-                value = found->second;
-                return true;
+                m_Properties[key] = value;
             }
 
-            return false;
-        }
-
-        inline const tstring& GetProperty( const tstring& key ) const
-        {
-            std::map< tstring, tstring >::const_iterator found = m_Properties.find( key );
-            if ( found != m_Properties.end() )
+            template<class T>
+            inline bool GetProperty( const tstring& key, T& value ) const
             {
-                return found->second;
+                tstring strValue;
+                bool result = GetProperty<tstring>( key, strValue );
+
+                if ( result )
+                {
+                    tistringstream str( strValue );
+                    str >> value;
+                    return !str.fail();
+                }
+
+                return false;
             }
 
-            static tstring empty;
-            return empty;
+            template<>
+            inline bool GetProperty( const tstring& key, tstring& value ) const
+            {
+                std::map< tstring, tstring >::const_iterator found = m_Properties.find( key ); 
+                if ( found != m_Properties.end() )
+                {
+                    value = found->second;
+                    return true;
+                }
+
+                return false;
+            }
+
+            inline const tstring& GetProperty( const tstring& key ) const
+            {
+                std::map< tstring, tstring >::const_iterator found = m_Properties.find( key );
+                if ( found != m_Properties.end() )
+                {
+                    return found->second;
+                }
+
+                static tstring empty;
+                return empty;
+            }
+        }; 
+
+        template<typename T>
+        T* ReflectionCast(Base* type)
+        {
+            return (type && type->HasReflectionType( T::ReflectionTypeID )) ? static_cast<T*>(type) : NULL;
         }
-    }; 
 
-    template<typename T>
-    T* ReflectionCast(Base* type)
-    {
-        return (type && type->HasReflectionType( T::ReflectionTypeID )) ? static_cast<T*>(type) : NULL;
-    }
-
-    template<typename T>
-    const T* ReflectionCast(const Base* type)
-    {
-        return (type && type->HasReflectionType( T::ReflectionTypeID )) ? static_cast<const T*>(type) : NULL;
+        template<typename T>
+        const T* ReflectionCast(const Base* type)
+        {
+            return (type && type->HasReflectionType( T::ReflectionTypeID )) ? static_cast<const T*>(type) : NULL;
+        }
     }
 }

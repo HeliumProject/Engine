@@ -9,7 +9,7 @@
 #include <strstream>
 #include <expat.h>
 
-using namespace Reflect;
+using namespace Helium::Reflect;
 
 char Indent<char>::m_Space = ' ';
 wchar_t Indent<wchar_t>::m_Space = L' ';

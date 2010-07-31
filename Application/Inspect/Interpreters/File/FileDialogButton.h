@@ -5,48 +5,51 @@
 
 #include "Foundation/TUID.h"
 
-namespace Inspect
+namespace Helium
 {
-    const static tchar BUTTON_FILEDIALOG_ATTR_FILTER[] = TXT( "filter" );
-    const static tchar BUTTON_FILEDIALOG_ATTR_PATH[] = TXT( "path" );
-    const static tchar BUTTON_FILEDIALOG_ATTR_TITLE[] = TXT( "caption" );
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Button control that opens a file browser dialog.
-    // 
-    class APPLICATION_API FileDialogButton : public Reflect::ConcreteInheritor<FileDialogButton, Inspect::Button>
+    namespace Inspect
     {
-    public:
-        FileDialogButton( const tstring& path = TXT( "" ) );
+        const static tchar BUTTON_FILEDIALOG_ATTR_FILTER[] = TXT( "filter" );
+        const static tchar BUTTON_FILEDIALOG_ATTR_PATH[] = TXT( "path" );
+        const static tchar BUTTON_FILEDIALOG_ATTR_TITLE[] = TXT( "caption" );
 
-        virtual void  Realize( Inspect::Container* parent ) HELIUM_OVERRIDE;
-        virtual void  Read() HELIUM_OVERRIDE;
-        virtual bool  Write() HELIUM_OVERRIDE;
+        ///////////////////////////////////////////////////////////////////////////
+        // Button control that opens a file browser dialog.
+        // 
+        class APPLICATION_API FileDialogButton : public Reflect::ConcreteInheritor<FileDialogButton, Inspect::Button>
+        {
+        public:
+            FileDialogButton( const tstring& path = TXT( "" ) );
 
-        void          SetTitleBar( const tstring& title );
-        void          SetPath( const tstring& path );
+            virtual void  Realize( Inspect::Container* parent ) HELIUM_OVERRIDE;
+            virtual void  Read() HELIUM_OVERRIDE;
+            virtual bool  Write() HELIUM_OVERRIDE;
 
-        void          SetFilter( const tstring& filter );
-        void          SetFilter( const std::vector< tstring >& filter );
-        void          AddFilter( const tstring& filter );
+            void          SetTitleBar( const tstring& title );
+            void          SetPath( const tstring& path );
 
-        tstring   GetPath();
+            void          SetFilter( const tstring& filter );
+            void          SetFilter( const std::vector< tstring >& filter );
+            void          AddFilter( const tstring& filter );
 
-    protected:
+            tstring   GetPath();
 
-        virtual bool  Process( const tstring& key, const tstring& value ) HELIUM_OVERRIDE;
+        protected:
 
-        void          ReadPathData( tstring& path ) const;
+            virtual bool  Process( const tstring& key, const tstring& value ) HELIUM_OVERRIDE;
 
-        //
-        // Members
-        //
+            void          ReadPathData( tstring& path ) const;
 
-        tstring         m_Title;        // Caption on the title bar of the file browser dialog (defaults to "Open")
-        tstring         m_Path;         // The path to start the file browser in, can contain file name
+            //
+            // Members
+            //
 
-        std::set< tstring >            m_Filters;      // The filter for which file types to show in the file browser dialog (defaults to "All Files (*.*)|*.*")
-    };
+            tstring         m_Title;        // Caption on the title bar of the file browser dialog (defaults to "Open")
+            tstring         m_Path;         // The path to start the file browser in, can contain file name
 
-    typedef Helium::SmartPtr<FileDialogButton> FileDialogButtonPtr;
+            std::set< tstring >            m_Filters;      // The filter for which file types to show in the file browser dialog (defaults to "All Files (*.*)|*.*")
+        };
+
+        typedef Helium::SmartPtr<FileDialogButton> FileDialogButtonPtr;
+    }
 }

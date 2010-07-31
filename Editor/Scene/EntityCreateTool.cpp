@@ -20,14 +20,15 @@
 
 #include <algorithm>
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 bool EntityCreateTool::s_PointerVisible = true;
 bool EntityCreateTool::s_BoundsVisible = true;
 bool EntityCreateTool::s_GeometryVisible = false;
 std::vector< tstring > EntityCreateTool::s_RandomEntities;
 
-LUNA_DEFINE_TYPE(Editor::EntityCreateTool);
+EDITOR_DEFINE_TYPE(Editor::EntityCreateTool);
 
 tstring EntityRowInfo::GetListName() const
 {

@@ -15,10 +15,11 @@
 
 #include "PrimitiveCircle.h"
 
-using namespace Math;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE(Editor::CreateTool);
+EDITOR_DEFINE_TYPE(Editor::CreateTool);
 
 IntersectionPlane CreateTool::s_PlaneSnap = IntersectionPlanes::Ground;
 

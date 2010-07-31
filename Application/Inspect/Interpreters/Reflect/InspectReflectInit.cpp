@@ -15,48 +15,52 @@
 #pragma TODO( "Why is RegisterClass defined?" )
 #undef RegisterClass
 
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Inspect;
 
-namespace InspectReflect
+namespace Helium
 {
-    i32 g_InitCount = 0;
+    namespace InspectReflect
+    {
+        i32 g_InitCount = 0;
+    }
 }
 
 Helium::InitializerStack g_IntializerStack;
 
 void InspectReflect::Initialize()
 {
-  if ( ++g_InitCount == 1 )
-  {
-    g_IntializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
+    if ( ++g_InitCount == 1 )
+    {
+        g_IntializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
 
-    g_IntializerStack.Push( Reflect::RegisterClass<ClientDataControl>( TXT( "InspectClientDataControl" ) ) );
-    g_IntializerStack.Push( Reflect::RegisterClass<ClientDataFilter>( TXT( "InspectClientDataFilter" ) ) );
+        g_IntializerStack.Push( Reflect::RegisterClass<ClientDataControl>( TXT( "InspectClientDataControl" ) ) );
+        g_IntializerStack.Push( Reflect::RegisterClass<ClientDataFilter>( TXT( "InspectClientDataFilter" ) ) );
 
-    g_IntializerStack.Push( Reflect::RegisterClass<ReflectBitfieldCheckBox>( TXT( "InspectReflectBitfieldCheckBox" ) ) );
+        g_IntializerStack.Push( Reflect::RegisterClass<ReflectBitfieldCheckBox>( TXT( "InspectReflectBitfieldCheckBox" ) ) );
 
-    // scalars
-    ReflectFieldInterpreterFactory::Register<ReflectBitfieldInterpreter>( Reflect::GetType<Reflect::BitfieldSerializer>() );
-    ReflectFieldInterpreterFactory::Register<ReflectVectorInterpreter>( Reflect::GetType<Reflect::Vector2Serializer>() );
-    ReflectFieldInterpreterFactory::Register<ReflectVectorInterpreter>( Reflect::GetType<Reflect::Vector3Serializer>() );
-    ReflectFieldInterpreterFactory::Register<ReflectVectorInterpreter>( Reflect::GetType<Reflect::Vector4Serializer>() );
-    ReflectFieldInterpreterFactory::Register<ReflectColorInterpreter>( Reflect::GetType<Reflect::Color3Serializer>() );
-    ReflectFieldInterpreterFactory::Register<ReflectColorInterpreter>( Reflect::GetType<Reflect::HDRColor3Serializer>() );
-    ReflectFieldInterpreterFactory::Register<ReflectColorInterpreter>( Reflect::GetType<Reflect::Color4Serializer>() );
-    ReflectFieldInterpreterFactory::Register<ReflectColorInterpreter>( Reflect::GetType<Reflect::HDRColor4Serializer>() );
+        // scalars
+        ReflectFieldInterpreterFactory::Register<ReflectBitfieldInterpreter>( Reflect::GetType<Reflect::BitfieldSerializer>() );
+        ReflectFieldInterpreterFactory::Register<ReflectVectorInterpreter>( Reflect::GetType<Reflect::Vector2Serializer>() );
+        ReflectFieldInterpreterFactory::Register<ReflectVectorInterpreter>( Reflect::GetType<Reflect::Vector3Serializer>() );
+        ReflectFieldInterpreterFactory::Register<ReflectVectorInterpreter>( Reflect::GetType<Reflect::Vector4Serializer>() );
+        ReflectFieldInterpreterFactory::Register<ReflectColorInterpreter>( Reflect::GetType<Reflect::Color3Serializer>() );
+        ReflectFieldInterpreterFactory::Register<ReflectColorInterpreter>( Reflect::GetType<Reflect::HDRColor3Serializer>() );
+        ReflectFieldInterpreterFactory::Register<ReflectColorInterpreter>( Reflect::GetType<Reflect::Color4Serializer>() );
+        ReflectFieldInterpreterFactory::Register<ReflectColorInterpreter>( Reflect::GetType<Reflect::HDRColor4Serializer>() );
 
-    // containers
-    ReflectFieldInterpreterFactory::Register<ReflectArrayInterpreter>( Reflect::GetType<Reflect::ArraySerializer>() );
-    ReflectFieldInterpreterFactory::Register<ReflectSetInterpreter>( Reflect::GetType<Reflect::SetSerializer>() );
-    ReflectFieldInterpreterFactory::Register<ReflectMapInterpreter>( Reflect::GetType<Reflect::MapSerializer>() );
-  }
+        // containers
+        ReflectFieldInterpreterFactory::Register<ReflectArrayInterpreter>( Reflect::GetType<Reflect::ArraySerializer>() );
+        ReflectFieldInterpreterFactory::Register<ReflectSetInterpreter>( Reflect::GetType<Reflect::SetSerializer>() );
+        ReflectFieldInterpreterFactory::Register<ReflectMapInterpreter>( Reflect::GetType<Reflect::MapSerializer>() );
+    }
 }
 
 void InspectReflect::Cleanup()
 {
-  if ( --g_InitCount == 0 )
-  {
-    ReflectFieldInterpreterFactory::Clear();
-    g_IntializerStack.Cleanup();
-  }
+    if ( --g_InitCount == 0 )
+    {
+        ReflectFieldInterpreterFactory::Clear();
+        g_IntializerStack.Cleanup();
+    }
 }

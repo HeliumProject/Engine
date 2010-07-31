@@ -2,9 +2,10 @@
 #include "Tool.h"
 #include "Scene.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE(Editor::Tool);
+EDITOR_DEFINE_TYPE(Editor::Tool);
 
 void Tool::InitializeType()
 {

@@ -17,13 +17,16 @@
 #include "Application/Application.h"
 #include "Application/RCS/RCS.h"
 
-using namespace Editor;
+using namespace Helium::Editor;
 using namespace Helium::CommandLine;
-using namespace Reflect;
+using namespace Helium::Reflect;
 
-namespace Reflect
+namespace Helium
 {
-    FOUNDATION_API extern bool g_OverrideCRC;
+    namespace Reflect
+    {
+        FOUNDATION_API extern bool g_OverrideCRC;
+    }
 }
 
 const char* RebuildCommand::m_RebuildStrings[REBUILD_CODE_COUNT] = 

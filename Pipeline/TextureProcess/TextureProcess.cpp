@@ -24,7 +24,8 @@
 #include "Pipeline/Image/Image.h"
 #include "Pipeline/TextureProcess/TextureProcess.h"
 
-using namespace TextureProcess;
+using namespace Helium;
+using namespace Helium::TextureProcess;
 
 bool                    TextureProcess::g_PowerOfTwo            = false;
 float                   TextureProcess::g_DefaultScaleX         = 1.0f;

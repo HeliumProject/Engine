@@ -5,8 +5,9 @@
 #include "Application/Inspect/Controls/Container.h"
 #include "Application/Inspect/Data/StringData.h"
 
-using namespace Reflect;
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Reflect;
+using namespace Helium::Inspect;
 
 ReflectVectorInterpreter::ReflectVectorInterpreter (Container* container)
 : ReflectFieldInterpreter (container)

@@ -4,179 +4,182 @@
 #include "Object.h"
 #include "Foundation/File/Path.h"
 
-namespace Editor
+namespace Helium
 {
-    class Document;
-    class Frame;
-
-    // Arguments for file open, close, etc.
-    struct DocumentChangedArgs
+    namespace Editor
     {
-        const Document* m_Document;
+        class Document;
+        class Frame;
 
-        DocumentChangedArgs( const Document* document )
-            : m_Document( document )
+        // Arguments for file open, close, etc.
+        struct DocumentChangedArgs
         {
-        }
-    };
-    // Event delegate for functions that take DocumentChangedArgs
-    typedef Helium::Signature< void, const DocumentChangedArgs& > DocumentChangedSignature;
+            const Document* m_Document;
 
-    // Arguments for a file being renamed (contains the new and old names)
-    struct DocumentPathChangedArgs : public DocumentChangedArgs
-    {
-        tstring m_OldFilePath;
-        tstring m_OldFileName;
+            DocumentChangedArgs( const Document* document )
+                : m_Document( document )
+            {
+            }
+        };
+        // Event delegate for functions that take DocumentChangedArgs
+        typedef Helium::Signature< void, const DocumentChangedArgs& > DocumentChangedSignature;
 
-        DocumentPathChangedArgs( Document* document, const tstring& oldFilePath, const tstring& oldFileName )
-            : DocumentChangedArgs( document )
-            , m_OldFilePath( oldFilePath )
-            , m_OldFileName( oldFileName )
+        // Arguments for a file being renamed (contains the new and old names)
+        struct DocumentPathChangedArgs : public DocumentChangedArgs
         {
-        }
-    };
+            tstring m_OldFilePath;
+            tstring m_OldFileName;
 
-    // Event delegate for functions that take DocumentChangedArgs
-    typedef Helium::Signature< void, const DocumentPathChangedArgs& > DocumentPathChangedSignature;
+            DocumentPathChangedArgs( Document* document, const tstring& oldFilePath, const tstring& oldFileName )
+                : DocumentChangedArgs( document )
+                , m_OldFilePath( oldFilePath )
+                , m_OldFileName( oldFileName )
+            {
+            }
+        };
+
+        // Event delegate for functions that take DocumentChangedArgs
+        typedef Helium::Signature< void, const DocumentPathChangedArgs& > DocumentPathChangedSignature;
 
 
-    /////////////////////////////////////////////////////////////////////////////
-    // Wraps all files manipulated by editors in Editor.  Handles all interaction
-    // with revision control.
-    // 
-    class LUNA_EDITOR_API Document : public Object
-    {
-        //
-        // Member variables
-        //
-
-    private:
-        Helium::Path  m_Path;
-        tstring         m_Name;          // the friendly name (for dialogs)
-        bool                m_IsModified;    // have we been changed since we saved?
-        bool                m_AllowChanges;  // allows override of checkout (but you can't save)
-        i32                 m_Revision;
-
+        /////////////////////////////////////////////////////////////////////////////
+        // Wraps all files manipulated by editors in Editor.  Handles all interaction
+        // with revision control.
         // 
-        // RTTI
-        // 
-
-        LUNA_DECLARE_TYPE( Document, Object );
-        static void InitializeType();
-        static void CleanupType();
-
-
-        // 
-        // Member functions
-        // 
-
-    public:
-        Document( const tstring& path, const tstring& name = TXT( "" ) );
-        virtual ~Document();
-
-        //
-        // Access
-        //
-
-        const Helium::Path& GetPath() const;
-        tstring GetFilePath() const
+        class LUNA_EDITOR_API Document : public Object
         {
-            return m_Path.Get();
-        }
-        void SetFilePath( const tstring& newFilePath, const tstring& newName = TXT( "" ) );
+            //
+            // Member variables
+            //
 
-        const tstring& GetFileName() const;
+        private:
+            Helium::Path  m_Path;
+            tstring         m_Name;          // the friendly name (for dialogs)
+            bool                m_IsModified;    // have we been changed since we saved?
+            bool                m_AllowChanges;  // allows override of checkout (but you can't save)
+            i32                 m_Revision;
 
-        u64 GetHash() const;
-        int GetRevision() const;
+            // 
+            // RTTI
+            // 
 
-        bool GetIsWriteable() const;
-        void SetIsWriteable( bool writeable );
+            EDITOR_DECLARE_TYPE( Document, Object );
+            static void InitializeType();
+            static void CleanupType();
 
-        virtual bool AllowChanges() const;
-        void SetAllowChanges( bool allowChanges );
 
-        bool IsModified() const;
-        void SetModified( bool modified );
+            // 
+            // Member functions
+            // 
 
-    private:
-        void UpdateFileInfo();
+        public:
+            Document( const tstring& path, const tstring& name = TXT( "" ) );
+            virtual ~Document();
 
-        // 
-        // Listeners
-        // 
+            //
+            // Access
+            //
 
-    private:
-        mutable DocumentPathChangedSignature::Event m_PathChanged; // event for file path being changed
-    public:
-        void AddDocumentPathChangedListener( const DocumentPathChangedSignature::Delegate& listener ) const
-        {
-            m_PathChanged.Add( listener );
-        }
-        void RemoveDocumentPathChangedListener( const DocumentPathChangedSignature::Delegate& listener ) const
-        {
-            m_PathChanged.Remove( listener );
-        }
+            const Helium::Path& GetPath() const;
+            tstring GetFilePath() const
+            {
+                return m_Path.Get();
+            }
+            void SetFilePath( const tstring& newFilePath, const tstring& newName = TXT( "" ) );
 
-    private:
-        mutable DocumentChangedSignature::Event m_Modified;        // event for m_IsModified being set to true
-    public:
-        void AddDocumentModifiedListener( const DocumentChangedSignature::Delegate& listener ) const
-        {
-            m_Modified.Add( listener );
-        }
-        void RemoveDocumentModifiedListener( const DocumentChangedSignature::Delegate& listener ) const
-        {
-            m_Modified.Remove( listener );
-        }
+            const tstring& GetFileName() const;
 
-    private:
-        mutable DocumentChangedSignature::Event m_CheckedOut; // Event for when a file is checked out
-    public:
-        void RaiseCheckedOut() const
-        {
-            m_CheckedOut.Raise( DocumentChangedArgs( this ) );
-        }
-        void AddDocumentCheckedOutListener( const DocumentChangedSignature::Delegate& listener ) const
-        {
-            m_CheckedOut.Add( listener );
-        }
-        void RemoveDocumentCheckedOutListener( const DocumentChangedSignature::Delegate& listener ) const
-        {
-            m_CheckedOut.Remove( listener );
-        }
+            u64 GetHash() const;
+            int GetRevision() const;
 
-    private:
-        mutable DocumentChangedSignature::Event m_Saved; // Event for when a file is saved
-    public:
-        void RaiseSaved() const 
-        {
-            m_Saved.Raise( DocumentChangedArgs( this ) );
-        }
-        void AddDocumentSavedListener( const DocumentChangedSignature::Delegate& listener ) const
-        {
-            m_Saved.Add( listener );
-        }
-        void RemoveDocumentSavedListener( const DocumentChangedSignature::Delegate& listener ) const
-        {
-            m_Saved.Remove( listener );
-        }
+            bool GetIsWriteable() const;
+            void SetIsWriteable( bool writeable );
 
-    private:
-        mutable DocumentChangedSignature::Event m_Closed; // Event for when a file is closed
-    public:
-        void RaiseClosed() const
-        {
-            m_Closed.Raise( DocumentChangedArgs( this ) );
-        }
-        void AddDocumentClosedListener( const DocumentChangedSignature::Delegate& listener ) const
-        {
-            m_Closed.Add( listener );
-        }
-        void RemoveDocumentClosedListener( const DocumentChangedSignature::Delegate& listener ) const
-        {
-            m_Closed.Remove( listener );
-        }
-    };
-    typedef Helium::SmartPtr< Document > DocumentPtr;
+            virtual bool AllowChanges() const;
+            void SetAllowChanges( bool allowChanges );
+
+            bool IsModified() const;
+            void SetModified( bool modified );
+
+        private:
+            void UpdateFileInfo();
+
+            // 
+            // Listeners
+            // 
+
+        private:
+            mutable DocumentPathChangedSignature::Event m_PathChanged; // event for file path being changed
+        public:
+            void AddDocumentPathChangedListener( const DocumentPathChangedSignature::Delegate& listener ) const
+            {
+                m_PathChanged.Add( listener );
+            }
+            void RemoveDocumentPathChangedListener( const DocumentPathChangedSignature::Delegate& listener ) const
+            {
+                m_PathChanged.Remove( listener );
+            }
+
+        private:
+            mutable DocumentChangedSignature::Event m_Modified;        // event for m_IsModified being set to true
+        public:
+            void AddDocumentModifiedListener( const DocumentChangedSignature::Delegate& listener ) const
+            {
+                m_Modified.Add( listener );
+            }
+            void RemoveDocumentModifiedListener( const DocumentChangedSignature::Delegate& listener ) const
+            {
+                m_Modified.Remove( listener );
+            }
+
+        private:
+            mutable DocumentChangedSignature::Event m_CheckedOut; // Event for when a file is checked out
+        public:
+            void RaiseCheckedOut() const
+            {
+                m_CheckedOut.Raise( DocumentChangedArgs( this ) );
+            }
+            void AddDocumentCheckedOutListener( const DocumentChangedSignature::Delegate& listener ) const
+            {
+                m_CheckedOut.Add( listener );
+            }
+            void RemoveDocumentCheckedOutListener( const DocumentChangedSignature::Delegate& listener ) const
+            {
+                m_CheckedOut.Remove( listener );
+            }
+
+        private:
+            mutable DocumentChangedSignature::Event m_Saved; // Event for when a file is saved
+        public:
+            void RaiseSaved() const 
+            {
+                m_Saved.Raise( DocumentChangedArgs( this ) );
+            }
+            void AddDocumentSavedListener( const DocumentChangedSignature::Delegate& listener ) const
+            {
+                m_Saved.Add( listener );
+            }
+            void RemoveDocumentSavedListener( const DocumentChangedSignature::Delegate& listener ) const
+            {
+                m_Saved.Remove( listener );
+            }
+
+        private:
+            mutable DocumentChangedSignature::Event m_Closed; // Event for when a file is closed
+        public:
+            void RaiseClosed() const
+            {
+                m_Closed.Raise( DocumentChangedArgs( this ) );
+            }
+            void AddDocumentClosedListener( const DocumentChangedSignature::Delegate& listener ) const
+            {
+                m_Closed.Add( listener );
+            }
+            void RemoveDocumentClosedListener( const DocumentChangedSignature::Delegate& listener ) const
+            {
+                m_Closed.Remove( listener );
+            }
+        };
+        typedef Helium::SmartPtr< Document > DocumentPtr;
+    }
 }

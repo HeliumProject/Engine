@@ -12,9 +12,11 @@
 #include "Foundation/Container/Insert.h" 
 
 using Helium::Insert; 
-using namespace Editor;
 
-LUNA_DEFINE_TYPE(Editor::InstanceType);
+using namespace Helium;
+using namespace Helium::Editor;
+
+EDITOR_DEFINE_TYPE(Editor::InstanceType);
 
 void InstanceType::InitializeType()
 {

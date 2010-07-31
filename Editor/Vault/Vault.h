@@ -11,55 +11,58 @@
 #include "Platform/Types.h"
 #include "DocumentManager.h"
 
-//
-// Forwards
-//
-namespace Asset
-{
-    class SearchResults;
-    typedef Helium::SmartPtr< SearchResults > SearchResultsPtr;
-}
-
-namespace Editor
+namespace Helium
 {
     //
     // Forwards
     //
-    class VaultFrame;
-
-    class Vault
+    namespace Asset
     {
-    public:
-        Vault();
-        Vault( const Vault& rhs ) {}
-        Vault& operator=( const Vault& rhs ) {}
+        class SearchResults;
+        typedef Helium::SmartPtr< SearchResults > SearchResultsPtr;
+    }
 
-    public:
-        ~Vault();
+    namespace Editor
+    {
+        //
+        // Forwards
+        //
+        class VaultFrame;
 
-        void SetRootDirectory( const Helium::Path& path )
+        class Vault
         {
-            m_RootDirectory = path;
-            if ( m_VaultSearch )
+        public:
+            Vault();
+            Vault( const Vault& rhs ) {}
+            Vault& operator=( const Vault& rhs ) {}
+
+        public:
+            ~Vault();
+
+            void SetRootDirectory( const Helium::Path& path )
             {
-                m_VaultSearch->SetRootDirectory( path );
+                m_RootDirectory = path;
+                if ( m_VaultSearch )
+                {
+                    m_VaultSearch->SetRootDirectory( path );
+                }
             }
-        }
 
-        void ShowVault( const tstring& queryString = TXT("") );
-        bool HasFrame();
+            void ShowVault( const tstring& queryString = TXT("") );
+            bool HasFrame();
 
-        friend class VaultFrame;
+            friend class VaultFrame;
 
-    protected:
-        void OnCloseVault();
+        protected:
+            void OnCloseVault();
 
-    private:
-        Helium::Path         m_RootDirectory;
-        VaultSearchPtr          m_VaultSearch;
-        VaultFrame*             m_VaultFrame;
-        bool                    m_HasFrame;
-        SearchHistory*          m_SearchHistory;
-        CollectionManager*      m_CollectionManager;
-    };
-} // namespace Editor
+        private:
+            Helium::Path         m_RootDirectory;
+            VaultSearchPtr          m_VaultSearch;
+            VaultFrame*             m_VaultFrame;
+            bool                    m_HasFrame;
+            SearchHistory*          m_SearchHistory;
+            CollectionManager*      m_CollectionManager;
+        };
+    } // namespace Editor
+}

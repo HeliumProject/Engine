@@ -17,9 +17,10 @@
 #include "Foundation/Component/ComponentHandle.h"
 #include "Pipeline/Asset/Components/BoundingBoxComponent.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE(Editor::EntityAssetSet);
+EDITOR_DEFINE_TYPE(Editor::EntityAssetSet);
 
 void EntityAssetSet::InitializeType()
 {

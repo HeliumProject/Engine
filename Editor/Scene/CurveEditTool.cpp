@@ -8,10 +8,11 @@
 #include "Curve.h"
 #include "Scene.h"
 
-using namespace Math;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE(Editor::CurveEditTool);
+EDITOR_DEFINE_TYPE(Editor::CurveEditTool);
 
 void CurveEditTool::InitializeType()
 {

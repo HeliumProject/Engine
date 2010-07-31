@@ -2,7 +2,7 @@
 
 #include "Matrix3.h"
 
-using namespace Math;
+using namespace Helium::Math;
 
 const EulerAngles EulerAngles::Zero ( 0, 0, 0 );
 

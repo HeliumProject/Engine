@@ -2,7 +2,7 @@
 #include "Polygon.h"
 #include "Line.h"
 
-using namespace Math;
+using namespace Helium::Math;
 
 namespace ClipCodes
 {

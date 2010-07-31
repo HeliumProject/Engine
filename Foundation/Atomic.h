@@ -6,7 +6,7 @@
 #include "Platform/Compiler.h"
 #include "Memory/SmartPtr.h"
 
-namespace Foundation
+namespace Helium
 {
     class FOUNDATION_API AtomicRefCountBase HELIUM_ABSTRACT : public Helium::IRefCount<AtomicRefCountBase>
     {

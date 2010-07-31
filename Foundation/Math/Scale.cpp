@@ -1,5 +1,5 @@
 #include "Scale.h"
 
-using namespace Math;
+using namespace Helium::Math;
 
 const Scale Scale::Identity;

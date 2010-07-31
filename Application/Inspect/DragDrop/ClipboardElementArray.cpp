@@ -1,6 +1,7 @@
 #include "ClipboardElementArray.h"
 
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Inspect;
 
 // Definition
 REFLECT_DEFINE_CLASS( ClipboardElementArray );

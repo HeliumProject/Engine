@@ -14,7 +14,8 @@
 
 #include <algorithm>
 
-using namespace RCS;
+using namespace Helium;
+using namespace Helium::RCS;
 
 Provider*     g_Provider = NULL;
 Changeset     g_DefaultChangeset;

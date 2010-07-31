@@ -6,7 +6,7 @@
 #include <memory>
 
 using Helium::Insert; 
-using namespace Reflect;
+using namespace Helium::Reflect;
 
 // uncomment to disable caching completely
 //#define REFLECT_DISABLE_CACHING

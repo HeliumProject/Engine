@@ -2,7 +2,8 @@
 #include "ThumbnailTileCreator.h"
 #include "ThumbnailView.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ThumbnailTileCreator::ThumbnailTileCreator( ThumbnailView* view )
 : m_View( view )

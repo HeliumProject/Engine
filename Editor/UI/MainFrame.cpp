@@ -39,7 +39,7 @@
 
 using namespace Helium;
 using namespace Helium::Core;
-using namespace Editor;
+using namespace Helium::Editor;
 
 tstring MainFrame::s_PreferencesPrefix = TXT( "MainFrame" );
 

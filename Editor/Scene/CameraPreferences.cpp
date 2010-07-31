@@ -1,7 +1,8 @@
 #include "Precompile.h"
 #include "CameraPreferences.h"
 
-using namespace Editor; 
+using namespace Helium;
+using namespace Helium::Editor; 
 
 CameraPreferences::CameraPreferences()
 : m_CameraMode( CameraModes::Orbit ) 

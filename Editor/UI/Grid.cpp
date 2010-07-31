@@ -6,7 +6,9 @@
 
 // Using
 using Helium::Insert; 
-using namespace Editor;
+
+using namespace Helium;
+using namespace Helium::Editor;
 
 // String representations of true/false as needed by cells in the grid
 static const wxString BOOL_TRUE = wxT( "1" );

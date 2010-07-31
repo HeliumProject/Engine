@@ -9,7 +9,8 @@
 #include "Application/Inspect/DragDrop/ReflectClipboardData.h"
 #include "UI/Controls/Tree/SortTreeCtrl.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 FoldersPanel::FoldersPanel( VaultFrame* browserFrame )

@@ -8,7 +8,7 @@
 #include <sstream>
 #include <time.h>
 
-using namespace Perforce;
+using namespace Helium::Perforce;
 
 void SyncCommand::Run()
 {

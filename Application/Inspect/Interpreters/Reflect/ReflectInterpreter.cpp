@@ -7,9 +7,9 @@
 #include "Application/Inspect/Controls/List.h"
 #include "Application/Inspect/Controls/InspectPanel.h"
 
-using namespace Reflect;
-using namespace Inspect;
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Reflect;
+using namespace Helium::Inspect;
 
 ReflectFieldInterpreterFactory::M_Creator ReflectFieldInterpreterFactory::m_Map;
 

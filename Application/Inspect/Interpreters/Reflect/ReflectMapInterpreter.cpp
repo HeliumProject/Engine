@@ -11,7 +11,8 @@
 
 #include "Foundation/TUID.h"
 
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Inspect;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

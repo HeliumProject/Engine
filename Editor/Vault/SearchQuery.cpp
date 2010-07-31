@@ -11,7 +11,8 @@
 #include "Foundation/String/Utilities.h"
 #include "Foundation/Log.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 //
 // Searching

@@ -2,7 +2,7 @@
 #include "Message.h"
 #include "Platform/Assert.h"
 
-using namespace IPC;
+using namespace Helium::IPC;
 
 Message::Message(u32 id, i32 trn, u32 size, u32 type)
 : MessageHeader( id, trn, size, type )

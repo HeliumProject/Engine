@@ -1,7 +1,8 @@
 #include "Precompile.h"
 #include "Color.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 DWORD Color::ColorValueToColor( D3DCOLORVALUE value )
 {

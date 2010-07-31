@@ -6,9 +6,10 @@
 #include "Foundation/Log.h"
 #include "Pipeline/Content/Scene.h"
 
-using namespace Asset;
-using namespace Component;
-using namespace Content;
+using namespace Helium;
+using namespace Helium::Asset;
+using namespace Helium::Component;
+using namespace Helium::Content;
 
 REFLECT_DEFINE_CLASS(Entity);
 

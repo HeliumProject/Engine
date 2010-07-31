@@ -5,16 +5,19 @@
 
 #include <string.h>
 
-using namespace IPC;
+using namespace Helium::IPC;
 
-namespace IPC
+namespace Helium
 {
-    namespace ProtocolMessageIDs
+    namespace IPC
     {
-        enum ProtocolMessageID
+        namespace ProtocolMessageIDs
         {
-            Disconnect,
-        };
+            enum ProtocolMessageID
+            {
+                Disconnect,
+            };
+        }
     }
 }
 

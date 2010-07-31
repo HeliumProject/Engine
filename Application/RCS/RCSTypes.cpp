@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-using namespace RCS;
+using namespace Helium;
 
 tstring RCS::GetChangesetIdAsString( const u64 changesetId )
 {

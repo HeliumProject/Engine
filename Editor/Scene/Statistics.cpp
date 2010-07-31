@@ -3,7 +3,8 @@
 
 #include "Foundation/Profile.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 Statistics::Statistics(IDirect3DDevice9* device)
 : m_Device (device)

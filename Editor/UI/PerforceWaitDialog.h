@@ -8,6 +8,8 @@
 #include <wx/dialog.h>
 #include <wx/timer.h>
 
+namespace Helium
+{
 namespace Editor
 {
     typedef bool (*CancelWaitFunc)();
@@ -39,4 +41,5 @@ namespace Editor
         Perforce::WaitInterface*  m_WaitInterface;
         Profile::Timer            m_WaitTimer;
     };
+    }
 }

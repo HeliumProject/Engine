@@ -1,7 +1,8 @@
 #include "Precompile.h"
 #include "SharedFileManager.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor - PRIVATE - Use GetInstance.

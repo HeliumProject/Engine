@@ -10,9 +10,10 @@
 #include "PrimitiveLocator.h"
 #include "PrimitiveCube.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
-LUNA_DEFINE_TYPE(Editor::LocatorType);
+EDITOR_DEFINE_TYPE(Editor::LocatorType);
 
 void LocatorType::InitializeType()
 {

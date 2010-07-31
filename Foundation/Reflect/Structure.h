@@ -2,53 +2,56 @@
 
 #include "Composite.h"
 
-namespace Reflect
+namespace Helium
 {
-    class Field;
-    class Structure;
-
-
-    //
-    // Structure (struct or class)
-    //
-
-    class FOUNDATION_API Structure : public Composite
+    namespace Reflect
     {
-    public:
-        REFLECTION_TYPE( ReflectionTypes::Structure );
+        class Field;
+        class Structure;
 
-    protected:
-        Structure();
-        virtual ~Structure();
 
-    public:
-        // protect external allocation to keep inlined code in this dll
-        static Structure* Create();
+        //
+        // Structure (struct or class)
+        //
 
-        template<class T>
-        static Structure* Create (const std::string& name, const std::string& base)
+        class FOUNDATION_API Structure : public Composite
         {
-            Structure* info = Structure::Create();
+        public:
+            REFLECTION_TYPE( ReflectionTypes::Structure );
 
-            info->m_TypeID = AssignTypeID();
-            info->m_Size = sizeof(T);
-            info->m_ShortName = name;
-            info->m_FullName = typeid(T).name();
-            info->m_UIName = info->m_ShortName;
+        protected:
+            Structure();
+            virtual ~Structure();
 
-            info->m_Base = base;
-            info->m_Enumerator = (CompositeEnumerator)&Reflect::Enumerate<T>;
+        public:
+            // protect external allocation to keep inlined code in this dll
+            static Structure* Create();
 
-            // enumerate reflection data
+            template<class T>
+            static Structure* Create (const std::string& name, const std::string& base)
             {
-                // create the default object
-                T temp;
+                Structure* info = Structure::Create();
 
-                // enumerate the fields in the structure
-                info->EnumerateInstance<T>(&temp);
+                info->m_TypeID = AssignTypeID();
+                info->m_Size = sizeof(T);
+                info->m_ShortName = name;
+                info->m_FullName = typeid(T).name();
+                info->m_UIName = info->m_ShortName;
+
+                info->m_Base = base;
+                info->m_Enumerator = (CompositeEnumerator)&Reflect::Enumerate<T>;
+
+                // enumerate reflection data
+                {
+                    // create the default object
+                    T temp;
+
+                    // enumerate the fields in the structure
+                    info->EnumerateInstance<T>(&temp);
+                }
+
+                return info;
             }
-
-            return info;
-        }
-    };
+        };
+    }
 }

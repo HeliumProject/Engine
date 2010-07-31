@@ -11,12 +11,12 @@
 #include "PrimitiveSphere.h"
 #include "PrimitivePointer.h"
 
-// Using
-using namespace Math;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
 // RTTI
-LUNA_DEFINE_TYPE(Editor::PointLight);
+EDITOR_DEFINE_TYPE(Editor::PointLight);
 
 void PointLight::InitializeType()
 {

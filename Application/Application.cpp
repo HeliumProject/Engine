@@ -27,6 +27,8 @@
 #include "Exceptions.h"
 #include "ExceptionListener.h"
 
+using namespace Helium;
+
 const tchar* Application::Args::Script = TXT( "script" );
 const tchar* Application::Args::Attach = TXT( "attach" );
 const tchar* Application::Args::Profile = TXT( "profile" );
@@ -42,7 +44,7 @@ const tchar* Application::Args::CheckHeap = TXT( "check_heap" );
 #endif
 
 using namespace Helium;
-using namespace Application;
+using namespace Helium::Application;
 
 // init time
 _timeb g_StartTime;
@@ -63,9 +65,12 @@ Log::Stream g_TraceStreams  = Log::Streams::Normal | Log::Streams::Warning | Log
 
 // so you can set _crtBreakAlloc in the debugger (expression evaluator doesn't like it)
 #ifdef _DEBUG
-namespace Application
+namespace Helium
 {
-    long& g_BreakOnAlloc (_crtBreakAlloc);
+    namespace Application
+    {
+        long& g_BreakOnAlloc (_crtBreakAlloc);
+    }
 }
 #endif //_DEBUG
 

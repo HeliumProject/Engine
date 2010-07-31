@@ -8,7 +8,8 @@
 
 #include <wx/msgdlg.h>
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 const static tstring s_WindowSettingsVersion( TXT( "1" ) );
 

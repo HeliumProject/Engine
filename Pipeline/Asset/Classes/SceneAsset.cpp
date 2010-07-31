@@ -5,7 +5,8 @@
 #include "Pipeline/Asset/Components/DependenciesComponent.h"
 #include "Foundation/Component/ComponentHandle.h"
 
-using namespace Asset;
+using namespace Helium;
+using namespace Helium::Asset;
 
 REFLECT_DEFINE_CLASS( SceneAsset );
 

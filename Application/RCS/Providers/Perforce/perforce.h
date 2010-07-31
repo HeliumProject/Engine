@@ -2,8 +2,11 @@
 
 #include "Application/API.h"
 
-namespace Perforce
+namespace Helium
 {
-  APPLICATION_API void Initialize();
-  APPLICATION_API void Cleanup();
+    namespace Perforce
+    {
+        APPLICATION_API void Initialize();
+        APPLICATION_API void Cleanup();
+    }
 }

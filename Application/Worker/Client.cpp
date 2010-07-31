@@ -13,7 +13,7 @@
 #include <sstream>
 
 using namespace Helium;
-using namespace Worker;
+using namespace Helium::Worker;
 
 // the ipc connection for worker applications
 IPC::Connection* g_Connection = NULL;

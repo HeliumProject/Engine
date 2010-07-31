@@ -16,7 +16,8 @@
 #include "UI/ArtProvider.h"
 #include "App.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 static const tstring s_EmptyString = TXT("");
 

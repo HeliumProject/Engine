@@ -4,7 +4,8 @@
 #include "Application/UI/ArtProvider.h"
 #include "Application/UI/MenuButton.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 NavigationPanel::NavigationPanel( VaultFrame* browserFrame, SearchHistory* history )

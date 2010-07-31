@@ -6,8 +6,11 @@
 
 #include "Foundation/TUID.h"
 
-namespace Maya
+namespace Helium
 {
-  MAYA_API Helium::TUID GetNodeID (const MObject& node, bool create = true);
-  MAYA_API MStatus SetNodeID (const MObject& node, const Helium::TUID& id);
+    namespace Maya
+    {
+        MAYA_API Helium::TUID GetNodeID (const MObject& node, bool create = true);
+        MAYA_API MStatus SetNodeID (const MObject& node, const Helium::TUID& id);
+    }
 }

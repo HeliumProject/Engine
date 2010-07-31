@@ -4,20 +4,23 @@
 
 #include "ListView.h"
 
-namespace Editor
+namespace Helium
 {
-  //////////////////////////////////////////////////////////////////////////////
-  // Dialog that displays a list of messages.
-  // 
-  class ListDialog : public wxDialog 
-  {
-  protected:
-    wxStaticText* m_StaticText;
-    SortableListView* m_MsgList;
-    wxButton* m_OK;
-    tstring m_Description;
+    namespace Editor
+    {
+        //////////////////////////////////////////////////////////////////////////////
+        // Dialog that displays a list of messages.
+        // 
+        class ListDialog : public wxDialog 
+        {
+        protected:
+            wxStaticText* m_StaticText;
+            SortableListView* m_MsgList;
+            wxButton* m_OK;
+            tstring m_Description;
 
-  public:
-    ListDialog( wxWindow* parent, const tstring& title, const tstring& desc, const std::vector< tstring >& msgs );
-  };
+        public:
+            ListDialog( wxWindow* parent, const tstring& title, const tstring& desc, const std::vector< tstring >& msgs );
+        };
+    }
 }

@@ -12,8 +12,8 @@
 #include <wx/settings.h>
 #include <wx/clipbrd.h>
 
-using namespace Inspect;
 using namespace Helium;
+using namespace Helium::Inspect;
 
 // Event table
 BEGIN_EVENT_TABLE( KeyControl, wxPanel )

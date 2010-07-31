@@ -7,7 +7,8 @@
 #include "ArchiveXML.h"
 #include "ArchiveBinary.h"
 
-using namespace Reflect;
+using namespace Helium;
+using namespace Helium::Reflect;
 
 REFLECT_DEFINE_ABSTRACT( Element );
 

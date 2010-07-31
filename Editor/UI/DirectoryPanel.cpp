@@ -6,7 +6,8 @@
 #include "Scene/SceneManager.h"
 #include "EditorIDs.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 DirectoryPanel::DirectoryPanel( SceneManager* manager, TreeMonitor* treeMonitor, wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style )
 : DirectoryPanelGenerated( parent, id, pos, size, style )

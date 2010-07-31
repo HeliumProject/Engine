@@ -14,147 +14,150 @@
 #include "Foundation/Reflect/Version.h"
 #include "Foundation/TUID.h"
 
-namespace Asset
+namespace Helium
 {
-  struct TrackerArgs;
-}
+    namespace Asset
+    {
+        struct TrackerArgs;
+    }
 
-namespace Editor
-{
-  //
-  // Forwards
-  //
-  class Vault;
-  class NavigationPanel;
-  class ResultsPanel;
-  class PreviewPanel;
-  class FoldersPanel;
-  class CollectionsPanel;
-  class HelpPanel;
-  struct ResultChangeArgs;
+    namespace Editor
+    {
+        //
+        // Forwards
+        //
+        class Vault;
+        class NavigationPanel;
+        class ResultsPanel;
+        class PreviewPanel;
+        class FoldersPanel;
+        class CollectionsPanel;
+        class HelpPanel;
+        struct ResultChangeArgs;
 
-  class VaultSearch;
-  typedef Helium::SmartPtr< VaultSearch > VaultSearchPtr;
+        class VaultSearch;
+        typedef Helium::SmartPtr< VaultSearch > VaultSearchPtr;
 
-  ///////////////////////////////////////////////////////////////////////////////
-  /// Class Vault
-  //
-  // Basic rules:
-  //  - Searching will:
-  //   o hide the FoldersPanel
-  //   o clear and display the serach results in the ResultsPanel
-  //   o Change the Tile bar to the search query
-  //   o Change the Address bar 
-  //  - Double clicking a folder in the Folders Panel will change the results
-  //
-  ///////////////////////////////////////////////////////////////////////////////
-  class VaultFrame : public VaultFrameGenerated
-  {
-  public:
-    VaultFrame( Vault* browser, VaultSearch* browserSearch, SearchHistory* searchHistory, wxWindow* parent = NULL );
-    virtual ~VaultFrame();
+        ///////////////////////////////////////////////////////////////////////////////
+        /// Class Vault
+        //
+        // Basic rules:
+        //  - Searching will:
+        //   o hide the FoldersPanel
+        //   o clear and display the serach results in the ResultsPanel
+        //   o Change the Tile bar to the search query
+        //   o Change the Address bar 
+        //  - Double clicking a folder in the Folders Panel will change the results
+        //
+        ///////////////////////////////////////////////////////////////////////////////
+        class VaultFrame : public VaultFrameGenerated
+        {
+        public:
+            VaultFrame( Vault* browser, VaultSearch* browserSearch, SearchHistory* searchHistory, wxWindow* parent = NULL );
+            virtual ~VaultFrame();
 
-    void Search( const tstring& queryString, const AssetCollection* collection = NULL );
+            void Search( const tstring& queryString, const AssetCollection* collection = NULL );
 
-    void GetSelectedPaths( std::set< Helium::Path >& paths );
+            void GetSelectedPaths( std::set< Helium::Path >& paths );
 
-    Vault* GetVault() { return m_Vault; }
+            Vault* GetVault() { return m_Vault; }
 
-    wxMenu* GetNewAssetMenu( bool forceEnableAll = false );
-    bool InFolder();
+            wxMenu* GetNewAssetMenu( bool forceEnableAll = false );
+            bool InFolder();
 
-  public:
-    // Virtual overrides of Frame class
-    virtual void SaveWindowState() HELIUM_OVERRIDE;
-    virtual const tstring& GetPreferencePrefix() const HELIUM_OVERRIDE;
+        public:
+            // Virtual overrides of Frame class
+            virtual void SaveWindowState() HELIUM_OVERRIDE;
+            virtual const tstring& GetPreferencePrefix() const HELIUM_OVERRIDE;
 
-  protected:
-    virtual void OnClose( wxCloseEvent& event );
+        protected:
+            virtual void OnClose( wxCloseEvent& event );
 
-    void OnOptionsMenuOpen( wxMenuEvent& event );
-    void OnOptionsMenuClose( wxMenuEvent& event );
-    void OnOptionsMenuSelect( wxCommandEvent& event );
-    void OnFolderSelected( wxTreeEvent& event );
+            void OnOptionsMenuOpen( wxMenuEvent& event );
+            void OnOptionsMenuClose( wxMenuEvent& event );
+            void OnOptionsMenuSelect( wxCommandEvent& event );
+            void OnFolderSelected( wxTreeEvent& event );
 
-    void OnAdvancedSearch( wxCommandEvent& event );
-    void OnAdvancedSearchGoButton( wxCommandEvent& event );
-    void OnAdvancedSearchCancelButton( wxCommandEvent& event );
+            void OnAdvancedSearch( wxCommandEvent& event );
+            void OnAdvancedSearchGoButton( wxCommandEvent& event );
+            void OnAdvancedSearchCancelButton( wxCommandEvent& event );
 
-    void OnOpen( wxCommandEvent& event );
-    void OnPreview( wxCommandEvent& event );
-    void OnSync( wxCommandEvent& event );
-    void OnCheckOut( wxCommandEvent& event );
-    void OnRevisionHistory( wxCommandEvent& event );
-    void OnCopyPath( wxCommandEvent& event );
-    void OnShowInFolders( wxCommandEvent& event );
-    void OnShowInPerforce( wxCommandEvent& event );
-    void OnShowInWindowsExplorer( wxCommandEvent& event );
-    void OnNewCollectionFromSelection( wxCommandEvent& event );
+            void OnOpen( wxCommandEvent& event );
+            void OnPreview( wxCommandEvent& event );
+            void OnSync( wxCommandEvent& event );
+            void OnCheckOut( wxCommandEvent& event );
+            void OnRevisionHistory( wxCommandEvent& event );
+            void OnCopyPath( wxCommandEvent& event );
+            void OnShowInFolders( wxCommandEvent& event );
+            void OnShowInPerforce( wxCommandEvent& event );
+            void OnShowInWindowsExplorer( wxCommandEvent& event );
+            void OnNewCollectionFromSelection( wxCommandEvent& event );
 
-    void OnRefresh( wxCommandEvent& args );
+            void OnRefresh( wxCommandEvent& args );
 
-    void OnNew( wxCommandEvent& args );
-    void OnNewFolder( wxCommandEvent& args );
-    void OnCut( wxCommandEvent& args );
-    void OnCopy( wxCommandEvent& args );
-    void OnPaste( wxCommandEvent& args );
+            void OnNew( wxCommandEvent& args );
+            void OnNewFolder( wxCommandEvent& args );
+            void OnCut( wxCommandEvent& args );
+            void OnCopy( wxCommandEvent& args );
+            void OnPaste( wxCommandEvent& args );
 
-    void OnPreferences( wxCommandEvent& event );
+            void OnPreferences( wxCommandEvent& event );
 
-    void OnUpdateStatusBar( Editor::UpdateStatusEvent& event );
+            void OnUpdateStatusBar( Editor::UpdateStatusEvent& event );
 
-    // Our Event Listener Callbacks
-    //void OnSearchQueryChanged( const Reflect::ElementChangeArgs& args );
-    void OnRequestSearch( const Editor::RequestSearchArgs& args );
-    void OnBeginSearching( const Editor::BeginSearchingArgs& args );
-    void OnResultsAvailable( const Editor::ResultsAvailableArgs& args );
-    void OnSearchComplete( const Editor::SearchCompleteArgs& args );
-    void OnPreferencesChanged( const Reflect::ElementChangeArgs& args );
-    void OnResultsPanelUpdated( const ResultChangeArgs& args );
-    
-    
-    //
-    // Helper Functions
-    //
+            // Our Event Listener Callbacks
+            //void OnSearchQueryChanged( const Reflect::ElementChangeArgs& args );
+            void OnRequestSearch( const Editor::RequestSearchArgs& args );
+            void OnBeginSearching( const Editor::BeginSearchingArgs& args );
+            void OnResultsAvailable( const Editor::ResultsAvailableArgs& args );
+            void OnSearchComplete( const Editor::SearchCompleteArgs& args );
+            void OnPreferencesChanged( const Reflect::ElementChangeArgs& args );
+            void OnResultsPanelUpdated( const ResultChangeArgs& args );
 
-  private:
-    void SetFolderPath( const tstring& folderPath );
-    void UpdateNavBar( const SearchQueryPtr& searchQuery );
-    void UpdateResultsView( u16 customSize = ThumbnailSizes::Medium );
-    void UpdateStatusBar( size_t numFolders, size_t numFiles, size_t numSelected, const tstring& hover );
 
-    DECLARE_EVENT_TABLE();
+            //
+            // Helper Functions
+            //
 
-  private:
-    Vault*                  m_Vault;
-    VaultSearch*            m_VaultSearch;
-    SearchHistory*          m_SearchHistory;
+        private:
+            void SetFolderPath( const tstring& folderPath );
+            void UpdateNavBar( const SearchQueryPtr& searchQuery );
+            void UpdateResultsView( u16 customSize = ThumbnailSizes::Medium );
+            void UpdateStatusBar( size_t numFolders, size_t numFiles, size_t numSelected, const tstring& hover );
 
-    tstring                 m_PreferencePrefix;
-    NavigationPanel*        m_NavigationPanel;
-    ResultsPanel*           m_ResultsPanel;
-    PreviewPanel*           m_PreviewPanel;
-    FoldersPanel*           m_FoldersPanel;
-    CollectionsPanel*       m_CollectionsPanel;
-    HelpPanel*              m_HelpPanel;
-    wxStatusBar*            m_StatusBar;
+            DECLARE_EVENT_TABLE();
 
-    wxTextAttr              m_DefaultTextAttr;
-    wxTextAttr              m_TitleTextAttr;
-    wxTextAttr              m_ItalicTextAttr;
+        private:
+            Vault*                  m_Vault;
+            VaultSearch*            m_VaultSearch;
+            SearchHistory*          m_SearchHistory;
 
-    std::map< i32, i32 >    m_MenuItemToAssetType;
+            tstring                 m_PreferencePrefix;
+            NavigationPanel*        m_NavigationPanel;
+            ResultsPanel*           m_ResultsPanel;
+            PreviewPanel*           m_PreviewPanel;
+            FoldersPanel*           m_FoldersPanel;
+            CollectionsPanel*       m_CollectionsPanel;
+            HelpPanel*              m_HelpPanel;
+            wxStatusBar*            m_StatusBar;
 
-    //
-    // NavBar Menus
-    // 
-    ViewOptionID            m_CurrentViewOption;             
-    wxMenu*                 m_OptionsMenu;
-    wxMenu*                 m_ThumbnailViewMenu;
-    wxMenu*                 m_PanelsMenu;
+            wxTextAttr              m_DefaultTextAttr;
+            wxTextAttr              m_TitleTextAttr;
+            wxTextAttr              m_ItalicTextAttr;
 
-    bool                    m_IsSearching;
-    bool                    m_IgnoreFolderSelect;
-  };
+            std::map< i32, i32 >    m_MenuItemToAssetType;
 
+            //
+            // NavBar Menus
+            // 
+            ViewOptionID            m_CurrentViewOption;             
+            wxMenu*                 m_OptionsMenu;
+            wxMenu*                 m_ThumbnailViewMenu;
+            wxMenu*                 m_PanelsMenu;
+
+            bool                    m_IsSearching;
+            bool                    m_IgnoreFolderSelect;
+        };
+
+    }
 }

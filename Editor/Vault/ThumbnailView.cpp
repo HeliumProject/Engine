@@ -19,7 +19,8 @@
 #include <wx/dnd.h>
 #include <shellapi.h>
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 // Statics
 const float ThumbnailView::s_NearClipDistance( 0.05f );

@@ -10,7 +10,8 @@
 
 #include "Foundation/Component/ComponentHandle.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

@@ -4,7 +4,7 @@
 #include <wx/ctrlsub.h>
 #include <wx/settings.h>
 
-using namespace Inspect;
+using namespace Helium::Inspect;
 
 Items::Items()
 : m_Required (false)

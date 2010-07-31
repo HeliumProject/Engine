@@ -1,11 +1,13 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  7 2007)
+// C++ code generated with wxFormBuilder (version May  4 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifdef WX_PRECOMP
+
+#include "stdafx.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -18,9 +20,9 @@
 #include "ReflectMapEntryDialog.h"
 
 ///////////////////////////////////////////////////////////////////////////
-using namespace Inspect;
+using namespace Helium::Inspect;
 
-ReflectMapEntryDialog::ReflectMapEntryDialog( wxWindow* parent, int id, wxString title, wxPoint pos, wxSize size, int style ) : wxDialog( parent, id, title, pos, size, style )
+ReflectMapEntryDialog::ReflectMapEntryDialog( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -71,4 +73,8 @@ ReflectMapEntryDialog::ReflectMapEntryDialog( wxWindow* parent, int id, wxString
 	this->SetSizer( mainSizer );
 	this->Layout();
 	mainSizer->Fit( this );
+}
+
+ReflectMapEntryDialog::~ReflectMapEntryDialog()
+{
 }

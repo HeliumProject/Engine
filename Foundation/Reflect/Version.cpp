@@ -4,7 +4,8 @@
 #include "Platform/Path.h"
 #include "Platform/Windows/Windows.h"
 
-using namespace Reflect;
+using namespace Helium;
+using namespace Helium::Reflect;
 
 REFLECT_DEFINE_CLASS(Version);
 

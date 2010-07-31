@@ -1,7 +1,7 @@
 #include "Structure.h"
 #include "Serializers.h"
 
-using namespace Reflect;
+using namespace Helium::Reflect;
 
 Structure::Structure ()
 {

@@ -5,9 +5,9 @@
 #include "Foundation/Regex.h"
 #include "Foundation/Log.h"
 
-using namespace Content;
-using namespace MayaContent;
 using namespace Helium;
+using namespace Helium::Content;
+using namespace Helium::MayaContent;
 
 #define g_kMinTargetWeight  0.01f // min target contribution
 

@@ -15,7 +15,8 @@
 #include <sys/timeb.h>
 #include <time.h>
 
-using namespace Log;
+using namespace Helium;
+using namespace Helium::Log;
 
 #define NTFS_PATH_MAX (0x7FFF)
 

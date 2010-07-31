@@ -8,9 +8,8 @@
 #include "Application/Application.h"
 #include "Foundation/String/Utilities.h"
 
-
-// Using
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 enum
 {

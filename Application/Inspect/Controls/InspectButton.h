@@ -7,35 +7,38 @@
 
 #include "Foundation/Reflect/Class.h"
 
-namespace Inspect
+namespace Helium
 {
-  const static tchar BUTTON_ATTR_TEXT[] = TXT( "text" );
+    namespace Inspect
+    {
+        const static tchar BUTTON_ATTR_TEXT[] = TXT( "text" );
 
-  ///////////////////////////////////////////////////////////////////////////
-  // 
-  // 
-  class APPLICATION_API Button : public Reflect::ConcreteInheritor<Button, Control>
-  {
-  protected:
-    // Label on the button
-    tstring m_Text;
+        ///////////////////////////////////////////////////////////////////////////
+        // 
+        // 
+        class APPLICATION_API Button : public Reflect::ConcreteInheritor<Button, Control>
+        {
+        protected:
+            // Label on the button
+            tstring m_Text;
 
-    // Icon for the button
-    wxArtID m_Icon;
+            // Icon for the button
+            wxArtID m_Icon;
 
-  public:
-    Button();
+        public:
+            Button();
 
-  protected:
-    virtual bool Process( const tstring& key, const tstring& value );
+        protected:
+            virtual bool Process( const tstring& key, const tstring& value );
 
-  public:
-    virtual void Realize( Container* parent );
-    virtual bool Write();
+        public:
+            virtual void Realize( Container* parent );
+            virtual bool Write();
 
-    virtual void SetText( const tstring& text );
-    virtual void SetIcon( const wxArtID& icon );
-  };
+            virtual void SetText( const tstring& text );
+            virtual void SetIcon( const wxArtID& icon );
+        };
 
-  typedef Helium::SmartPtr<Button> ButtonPtr;
+        typedef Helium::SmartPtr<Button> ButtonPtr;
+    }
 }

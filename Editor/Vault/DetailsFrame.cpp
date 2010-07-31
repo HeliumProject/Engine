@@ -4,7 +4,8 @@
 #include "Application/UI/ArtProvider.h"
 #include "Application/RCS/RCS.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 static const i32 s_DisplayTimeSize = 32;
 

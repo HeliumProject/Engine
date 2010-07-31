@@ -6,70 +6,73 @@
 #include "Curve.h"
 #include "Tool.h"
 
-namespace Editor
+namespace Helium
 {
-  class PickVisitor;
-  class TranslateManipulator;
-
-  namespace CurveEditModes
-  {
-    enum CurveEditMode
+    namespace Editor
     {
-      None,
-      Modify,
-      Insert,
-      Remove,
-    };
-  }
-  typedef CurveEditModes::CurveEditMode CurveEditMode;
+        class PickVisitor;
+        class TranslateManipulator;
 
-  class CurveEditTool: public Tool
-  {
-  private:
-    static CurveEditMode s_EditMode;
-    static bool s_CurrentSelection;
+        namespace CurveEditModes
+        {
+            enum CurveEditMode
+            {
+                None,
+                Modify,
+                Insert,
+                Remove,
+            };
+        }
+        typedef CurveEditModes::CurveEditMode CurveEditMode;
 
-    CurveEditMode m_HotEditMode;
-    Editor::TranslateManipulator* m_ControlPointManipulator;
- 
-    //
-    // RTTI
-    //
+        class CurveEditTool: public Tool
+        {
+        private:
+            static CurveEditMode s_EditMode;
+            static bool s_CurrentSelection;
 
-    LUNA_DECLARE_TYPE(Editor::CurveEditTool, Tool);
-    static void InitializeType();
-    static void CleanupType();
+            CurveEditMode m_HotEditMode;
+            Editor::TranslateManipulator* m_ControlPointManipulator;
 
-  public:
-    CurveEditTool( Editor::Scene* scene, PropertiesGenerator* generator );
-    virtual ~CurveEditTool();
+            //
+            // RTTI
+            //
 
-    CurveEditMode GetEditMode() const;
+            EDITOR_DECLARE_TYPE(Editor::CurveEditTool, Tool);
+            static void InitializeType();
+            static void CleanupType();
 
-    virtual bool MouseDown( wxMouseEvent& e ) HELIUM_OVERRIDE;
-    virtual void MouseUp( wxMouseEvent& e) HELIUM_OVERRIDE;
-    virtual void MouseMove( wxMouseEvent& e ) HELIUM_OVERRIDE;
+        public:
+            CurveEditTool( Editor::Scene* scene, PropertiesGenerator* generator );
+            virtual ~CurveEditTool();
 
-    virtual void KeyPress( wxKeyEvent& e ) HELIUM_OVERRIDE;
-    virtual void KeyDown( wxKeyEvent& e ) HELIUM_OVERRIDE;
-    virtual void KeyUp( wxKeyEvent& e ) HELIUM_OVERRIDE;
+            CurveEditMode GetEditMode() const;
 
-    virtual bool ValidateSelection( OS_SelectableDumbPtr& items ) HELIUM_OVERRIDE;
+            virtual bool MouseDown( wxMouseEvent& e ) HELIUM_OVERRIDE;
+            virtual void MouseUp( wxMouseEvent& e) HELIUM_OVERRIDE;
+            virtual void MouseMove( wxMouseEvent& e ) HELIUM_OVERRIDE;
 
-    virtual void Evaluate() HELIUM_OVERRIDE;
-    virtual void Draw( DrawArgs* args ) HELIUM_OVERRIDE;
+            virtual void KeyPress( wxKeyEvent& e ) HELIUM_OVERRIDE;
+            virtual void KeyDown( wxKeyEvent& e ) HELIUM_OVERRIDE;
+            virtual void KeyUp( wxKeyEvent& e ) HELIUM_OVERRIDE;
 
-    virtual void CreateProperties() HELIUM_OVERRIDE;
+            virtual bool ValidateSelection( OS_SelectableDumbPtr& items ) HELIUM_OVERRIDE;
 
-    int GetCurveEditMode() const;
-    void SetCurveEditMode( int mode );
-    
-    bool GetSelectionMode() const;
-    void SetSelectionMode( bool mode );
-    
-    void StoreSelectedCurves();
-    
-  protected:
-    OS_SelectableDumbPtr m_SelectedCurves;
-  };
+            virtual void Evaluate() HELIUM_OVERRIDE;
+            virtual void Draw( DrawArgs* args ) HELIUM_OVERRIDE;
+
+            virtual void CreateProperties() HELIUM_OVERRIDE;
+
+            int GetCurveEditMode() const;
+            void SetCurveEditMode( int mode );
+
+            bool GetSelectionMode() const;
+            void SetSelectionMode( bool mode );
+
+            void StoreSelectedCurves();
+
+        protected:
+            OS_SelectableDumbPtr m_SelectedCurves;
+        };
+    }
 }

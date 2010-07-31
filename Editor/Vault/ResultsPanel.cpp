@@ -3,7 +3,8 @@
 #include "ThumbnailView.h"
 #include "SearchResults.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 BEGIN_EVENT_TABLE( Editor::ResultsPanel, ResultsPanelGenerated )
 END_EVENT_TABLE()

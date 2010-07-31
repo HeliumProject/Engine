@@ -5,7 +5,8 @@
 #include "Foundation/TUID.h"
 #include "Foundation/Numeric.h"
 
-using namespace Reflect;
+using namespace Helium;
+using namespace Helium::Reflect;
 
 REFLECT_DEFINE_ABSTRACT( Serializer )
 

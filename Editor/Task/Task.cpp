@@ -1,7 +1,8 @@
 #include "Precompile.h"
 #include "Task.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 TaskStartedSignature::Event g_Started;
 void Editor::AddTaskStartedListener( const TaskStartedSignature::Delegate& listener )

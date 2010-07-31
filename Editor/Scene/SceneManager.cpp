@@ -12,8 +12,8 @@
 #include "Foundation/Log.h"
 #include "Application/UI/FileDialog.h"
 
-// Using
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Returns a different name each time this function is called so that scenes

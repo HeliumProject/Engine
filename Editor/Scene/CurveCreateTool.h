@@ -6,74 +6,77 @@
 #include "Curve.h"
 #include "Tool.h"
 
-namespace Editor
+namespace Helium
 {
-  class CurveCreateTool : public Tool
-  {
-    //
-    //  Members
-    //
+    namespace Editor
+    {
+        class CurveCreateTool : public Tool
+        {
+            //
+            //  Members
+            //
 
-  private:
-    // Created flag
-    bool m_Created;
+        private:
+            // Created flag
+            bool m_Created;
 
-    // The selection of the created objects
-    OS_SelectableDumbPtr m_Selection;
+            // The selection of the created objects
+            OS_SelectableDumbPtr m_Selection;
 
-    // The instance we are creating
-    LCurvePtr m_Instance;
+            // The instance we are creating
+            LCurvePtr m_Instance;
 
-  public:
-    // Type of curve interpolation
-    static Content::CurveType s_CurveType;
+        public:
+            // Type of curve interpolation
+            static Content::CurveType s_CurveType;
 
-    // Should we snap to surfaces
-    static bool s_SurfaceSnap;
+            // Should we snap to surfaces
+            static bool s_SurfaceSnap;
 
-    // Should we snap to objects
-    static bool s_ObjectSnap;
+            // Should we snap to objects
+            static bool s_ObjectSnap;
 
-    //
-    // RTTI
-    //
+            //
+            // RTTI
+            //
 
-    LUNA_DECLARE_TYPE(Editor::CurveCreateTool, Tool);
-    static void InitializeType();
-    static void CleanupType();
+            EDITOR_DECLARE_TYPE(Editor::CurveCreateTool, Tool);
+            static void InitializeType();
+            static void CleanupType();
 
-  public:
-    CurveCreateTool( Editor::Scene* scene, PropertiesGenerator* generator );
-    virtual ~CurveCreateTool();
+        public:
+            CurveCreateTool( Editor::Scene* scene, PropertiesGenerator* generator );
+            virtual ~CurveCreateTool();
 
-    void CreateInstance( const Math::Vector3& position );
-    void PickPosition( int x, int y, Math::Vector3& position );
+            void CreateInstance( const Math::Vector3& position );
+            void PickPosition( int x, int y, Math::Vector3& position );
 
-  private:
-    void AddToScene();
+        private:
+            void AddToScene();
 
-  public:
-    virtual bool AllowSelection() HELIUM_OVERRIDE;
+        public:
+            virtual bool AllowSelection() HELIUM_OVERRIDE;
 
-    virtual bool MouseDown( wxMouseEvent& e ) HELIUM_OVERRIDE;
-    virtual void MouseMove( wxMouseEvent& e ) HELIUM_OVERRIDE;
-    virtual void KeyPress( wxKeyEvent& e ) HELIUM_OVERRIDE;
+            virtual bool MouseDown( wxMouseEvent& e ) HELIUM_OVERRIDE;
+            virtual void MouseMove( wxMouseEvent& e ) HELIUM_OVERRIDE;
+            virtual void KeyPress( wxKeyEvent& e ) HELIUM_OVERRIDE;
 
-    virtual void CreateProperties() HELIUM_OVERRIDE;
+            virtual void CreateProperties() HELIUM_OVERRIDE;
 
-    bool GetSurfaceSnap() const;
-    void SetSurfaceSnap( bool snap );
+            bool GetSurfaceSnap() const;
+            void SetSurfaceSnap( bool snap );
 
-    bool GetObjectSnap() const;
-    void SetObjectSnap( bool snap );
+            bool GetObjectSnap() const;
+            void SetObjectSnap( bool snap );
 
-    int GetPlaneSnap() const;
-    void SetPlaneSnap(int snap);
+            int GetPlaneSnap() const;
+            void SetPlaneSnap(int snap);
 
-    int GetCurveType() const;
-    void SetCurveType( int selection );
+            int GetCurveType() const;
+            void SetCurveType( int selection );
 
-    bool GetClosed() const;
-    void SetClosed( bool closed );
-  };
+            bool GetClosed() const;
+            void SetClosed( bool closed );
+        };
+    }
 }

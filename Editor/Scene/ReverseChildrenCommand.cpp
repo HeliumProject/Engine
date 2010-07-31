@@ -1,7 +1,8 @@
 #include "Precompile.h"
 #include "ReverseChildrenCommand.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 ReverseChildrenCommand::ReverseChildrenCommand( const HierarchyNodePtr& node )
 : m_Node( node )

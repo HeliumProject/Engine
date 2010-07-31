@@ -4,7 +4,8 @@
 #include "Foundation/Reflect/Serializer.h"
 #include "Foundation/Reflect/Serializers.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 REFLECT_DEFINE_CLASS( GridPreferences );
 

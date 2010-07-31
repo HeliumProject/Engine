@@ -2,74 +2,77 @@
 
 #include "TransformManipulator.h"
 
-namespace Editor
+namespace Helium
 {
-  class PrimitiveCircle;
-
-  namespace RotationTypes
-  {
-    enum RotationType
+    namespace Editor
     {
-      None,
-      Normal,
-      ArcBall,
-      CameraPlane,
-    };
-  }
+        class PrimitiveCircle;
 
-  typedef RotationTypes::RotationType RotationType;
+        namespace RotationTypes
+        {
+            enum RotationType
+            {
+                None,
+                Normal,
+                ArcBall,
+                CameraPlane,
+            };
+        }
 
-  class RotateManipulator : public Editor::TransformManipulator
-  {
-  private:
-    ManipulatorSpace m_Space;
-    bool m_AxisSnap;
-    float m_SnapDegrees;
+        typedef RotationTypes::RotationType RotationType;
 
-    // Rotation drag mode
-    RotationType m_Type;
+        class RotateManipulator : public Editor::TransformManipulator
+        {
+        private:
+            ManipulatorSpace m_Space;
+            bool m_AxisSnap;
+            float m_SnapDegrees;
 
-    // UI
-    Editor::PrimitiveCircle* m_Ring;
+            // Rotation drag mode
+            RotationType m_Type;
 
-    LUNA_DECLARE_TYPE(Editor::RotateManipulator, Editor::TransformManipulator);
-    static void InitializeType();
-    static void CleanupType();
+            // UI
+            Editor::PrimitiveCircle* m_Ring;
 
-  public:
-    RotateManipulator(const ManipulatorMode mode, Editor::Scene* scene, PropertiesGenerator* generator);
+            EDITOR_DECLARE_TYPE(Editor::RotateManipulator, Editor::TransformManipulator);
+            static void InitializeType();
+            static void CleanupType();
 
-    ~RotateManipulator();
+        public:
+            RotateManipulator(const ManipulatorMode mode, Editor::Scene* scene, PropertiesGenerator* generator);
 
-    virtual void ResetSize() HELIUM_OVERRIDE;
+            ~RotateManipulator();
 
-    virtual void ScaleTo(float factor) HELIUM_OVERRIDE;
+            virtual void ResetSize() HELIUM_OVERRIDE;
 
-    virtual void Evaluate() HELIUM_OVERRIDE;
+            virtual void ScaleTo(float factor) HELIUM_OVERRIDE;
 
-  protected:
-    virtual void SetResult() HELIUM_OVERRIDE;
+            virtual void Evaluate() HELIUM_OVERRIDE;
 
-    bool ClosestSphericalIntersection(Math::Line line, Math::Vector3 spherePosition, float sphereRadius, Math::Vector3 cameraPosition, Math::Vector3& intersection);
+        protected:
+            virtual void SetResult() HELIUM_OVERRIDE;
 
-  public:
-    virtual void Draw( DrawArgs* args ) HELIUM_OVERRIDE;
-    virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
-    virtual Math::AxesFlags PickRing(PickVisitor* pick, float err);
+            bool ClosestSphericalIntersection(Math::Line line, Math::Vector3 spherePosition, float sphereRadius, Math::Vector3 cameraPosition, Math::Vector3& intersection);
 
-    virtual bool MouseDown(wxMouseEvent& e) HELIUM_OVERRIDE;
-    virtual void MouseUp(wxMouseEvent& e) HELIUM_OVERRIDE;
-    virtual void MouseMove(wxMouseEvent& e) HELIUM_OVERRIDE;
+        public:
+            virtual void Draw( DrawArgs* args ) HELIUM_OVERRIDE;
+            virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
+            virtual Math::AxesFlags PickRing(PickVisitor* pick, float err);
 
-    virtual void CreateProperties() HELIUM_OVERRIDE;
+            virtual bool MouseDown(wxMouseEvent& e) HELIUM_OVERRIDE;
+            virtual void MouseUp(wxMouseEvent& e) HELIUM_OVERRIDE;
+            virtual void MouseMove(wxMouseEvent& e) HELIUM_OVERRIDE;
 
-    int GetSpace() const;
-    void SetSpace(int space);
-    
-    bool GetAxisSnap() const;
-    void SetAxisSnap(bool axisSnap);
+            virtual void CreateProperties() HELIUM_OVERRIDE;
 
-    f32 GetSnapDegrees() const;
-    void SetSnapDegrees(float snapDegrees);
-  };
+            int GetSpace() const;
+            void SetSpace(int space);
+
+            bool GetAxisSnap() const;
+            void SetAxisSnap(bool axisSnap);
+
+            f32 GetSnapDegrees() const;
+            void SetSnapDegrees(float snapDegrees);
+        };
+    }
 }

@@ -5,8 +5,9 @@
 
 using Helium::Insert; 
 
-using namespace Reflect;
-using namespace Component;
+using namespace Helium;
+using namespace Helium::Component;
+using namespace Helium::Reflect;
 
 REFLECT_DEFINE_CLASS(ComponentCollection)
 

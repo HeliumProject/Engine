@@ -5,8 +5,8 @@
 
 #include "Foundation/String/Tokenize.h"
 
-using namespace Reflect;
-using namespace Inspect;
+using namespace Helium::Reflect;
+using namespace Helium::Inspect;
 
 typedef std::map< tstring, bool > M_strbool;
 

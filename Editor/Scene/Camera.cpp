@@ -4,14 +4,15 @@
 #include "Orientation.h"
 #include "Foundation/Math/AngleAxis.h"
 
-using namespace Math;
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Math;
+using namespace Helium::Editor;
 
 const float Editor::Camera::NearClipDistance = 0.05f;
 const float Editor::Camera::FarClipDistance = 10000.0f;
 const float Editor::Camera::FieldOfView = 72.0f * Math::DegToRad;
 
-LUNA_DEFINE_TYPE(Editor::Camera);
+EDITOR_DEFINE_TYPE(Editor::Camera);
 
 Camera::Camera()
 : m_ControlWidth ( 0 )

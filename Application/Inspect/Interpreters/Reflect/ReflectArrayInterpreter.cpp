@@ -11,8 +11,9 @@
 
 #include "Foundation/String/Tokenize.h"
 
-using namespace Reflect;
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Reflect;
+using namespace Helium::Inspect;
 
 ReflectArrayInterpreter::ReflectArrayInterpreter (Container* labelContainer)
 : ReflectFieldInterpreter (labelContainer)

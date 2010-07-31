@@ -18,9 +18,9 @@
 #include <maya/MFnStringData.h>
 #include <maya/MObjectHandle.h>
 
-using namespace Asset;
-using namespace Component;
 using namespace Helium;
+using namespace Helium::Asset;
+using namespace Helium::Component;
 
 // enable this to watch all dag changes, just for debugging
 //#define WATCH_ALL_DAG_CHANGES

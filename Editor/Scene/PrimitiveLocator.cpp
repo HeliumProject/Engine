@@ -3,7 +3,8 @@
 
 #include "Pick.h"
 
-using namespace Editor;
+using namespace Helium;
+using namespace Helium::Editor;
 
 PrimitiveLocator::PrimitiveLocator(ResourceTracker* tracker)
 : PrimitiveTemplate(tracker)

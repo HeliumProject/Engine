@@ -1,6 +1,7 @@
 #include "ClipboardDataWrapper.h"
 
-using namespace Inspect;
+using namespace Helium;
+using namespace Helium::Inspect;
 
 REFLECT_DEFINE_CLASS( ClipboardDataWrapper );
 

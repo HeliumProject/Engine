@@ -7,21 +7,24 @@
 #include <maya/MSceneMessage.h>
 #include <maya/MArgDatabase.h>
 
-class ExportContentCmd : public MPxCommand
+namespace Helium
 {
-public:
-  static MString CommandName;
+    class ExportContentCmd : public MPxCommand
+    {
+    public:
+        static MString CommandName;
 
-  static void * creator()               { return new ExportContentCmd; }
-  static MSyntax newSyntax();
+        static void * creator()               { return new ExportContentCmd; }
+        static MSyntax newSyntax();
 
-  virtual bool isUndoable()             { return false; }
-  virtual bool hasSyntax()              { return true; }
+        virtual bool isUndoable()             { return false; }
+        virtual bool hasSyntax()              { return true; }
 
-  virtual MStatus doIt( const MArgList & args );
-  static MStatus ExportContent( MArgDatabase& argParser );
+        virtual MStatus doIt( const MArgList & args );
+        static MStatus ExportContent( MArgDatabase& argParser );
 
-protected:
+    protected:
 
-  bool parseArgs( const MArgList & args );
-};
+        bool parseArgs( const MArgList & args );
+    };
+}

@@ -8,18 +8,16 @@
 #include <wx/dialog.h>
 #include <wx/timer.h>
 
-namespace Helium
-{
 namespace Editor
 {
     typedef bool (*CancelWaitFunc)();
 
-    class PerforceWaitDialog : public wxDialog
+    class WaitDialog : public wxDialog
     {
     public:
         static void Enable( bool enable );
 
-        PerforceWaitDialog();
+        WaitDialog();
 
         int ShowModal( Perforce::WaitInterface* waitInterface );
         void Throb();
@@ -31,15 +29,14 @@ namespace Editor
     class PerforceWaitTimer : public wxTimer
     {
     public:
-        PerforceWaitTimer( class PerforceWaitDialog* dialog, Perforce::WaitInterface* waitInterface );
+        PerforceWaitTimer( class WaitDialog* dialog, Perforce::WaitInterface* waitInterface );
 
     protected:
         void Notify();
 
     private:
-        PerforceWaitDialog*       m_WaitDialog;
+        WaitDialog*               m_WaitDialog;
         Perforce::WaitInterface*  m_WaitInterface;
         Profile::Timer            m_WaitTimer;
     };
-    }
 }

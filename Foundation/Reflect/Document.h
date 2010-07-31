@@ -29,6 +29,8 @@ namespace Helium
             DocumentNode()
                 : m_Document( NULL )
                 , m_Parent( NULL )
+                , m_Next( NULL )
+                , m_Previous( NULL )
             {
 
             }
@@ -53,9 +55,34 @@ namespace Helium
                 m_Parent = node;
             }
 
+
+            DocumentNode* GetNextSibling() const
+            {
+                return m_Next;
+            }
+
+            void SetNextSibling( DocumentNode* node )
+            {
+                m_Next = node;
+            }
+
+            DocumentNode* GetPreviousSibling() const
+            {
+                return m_Previous;
+            }
+
+            void SetPreviousSibling( DocumentNode* node )
+            {
+                m_Previous = node;
+            }
+
+            virtual void Initialize( Document* document, DocumentElement* parent, DocumentNode* nextSibling = NULL, DocumentNode* previousSibling = NULL );
+
         protected:
             Document*           m_Document;
             DocumentElement*    m_Parent;
+            DocumentNode*       m_Next;
+            DocumentNode*       m_Previous;
 
         public:
             static void EnumerateClass( Reflect::Compositor< This >& comp )
@@ -105,50 +132,28 @@ namespace Helium
         public:
             static void EnumerateClass( Reflect::Compositor< This >& comp )
             {
-                comp.AddField( &This::m_Name, "m_Name" );
-                comp.AddField( &This::m_Value, "m_Value" );
+                comp.AddField( &This::m_Name, "Name" );
+                comp.AddField( &This::m_Value, "Value" );
             }
         };
 
-        typedef Helium::Signature< bool, DocumentElement* > DocumentHierarchyChangingSignature;
-        typedef Helium::Signature< void, DocumentElement* > DocumentHierarchyChangedSignature;
+        typedef Helium::Signature< bool, DocumentNode* > DocumentHierarchyChangingSignature;
+        typedef Helium::Signature< void, DocumentNode* > DocumentHierarchyChangedSignature;
 
         class FOUNDATION_API DocumentElement : public Reflect::ConcreteInheritor< DocumentElement, DocumentNode >
         {
         public:
             DocumentElement()
-                : m_Next( NULL )
-                , m_Previous( NULL )
             {
 
             }
 
-            DocumentElement* GetNextSibling() const
-            {
-                return m_Next;
-            }
-
-            void SetNextSibling( DocumentElement* node )
-            {
-                m_Next = node;
-            }
-
-            DocumentElement* GetPreviousSibling() const
-            {
-                return m_Previous;
-            }
-
-            void SetPreviousSibling( DocumentElement* node )
-            {
-                m_Previous = node;
-            }
-
-            std::vector< DocumentElementPtr >& GetChildren()
+            std::vector< DocumentNodePtr >& GetChildren()
             {
                 return m_Children;
             }
 
-            const std::vector< DocumentElementPtr >& GetChildren() const
+            const std::vector< DocumentNodePtr >& GetChildren() const
             {
                 return m_Children;
             }
@@ -169,9 +174,9 @@ namespace Helium
                 }
             }
 
-            virtual void Initialize( Document* document, DocumentElement* parent, DocumentElement* nextSibling = NULL, DocumentElement* previousSibling = NULL );
+            virtual void Initialize( Document* document, DocumentElement* parent, DocumentNode* nextSibling = NULL, DocumentNode* previousSibling = NULL ) HELIUM_OVERRIDE;
 
-            virtual void AddChild( DocumentElementPtr node );
+            virtual void AddChild( DocumentNodePtr node );
 
             DocumentHierarchyChangingSignature::Event GetChildAdding()
             {
@@ -183,7 +188,7 @@ namespace Helium
                 return m_ChildAdded;
             }
 
-            virtual void RemoveChild( DocumentElementPtr node );
+            virtual void RemoveChild( DocumentNodePtr node );
 
             DocumentHierarchyChangingSignature::Event GetChildRemoving()
             {
@@ -196,9 +201,7 @@ namespace Helium
             }
 
         protected:
-            DocumentElement*                            m_Next;
-            DocumentElement*                            m_Previous;
-            std::vector< DocumentElementPtr >           m_Children;
+            std::vector< DocumentNodePtr >              m_Children;
             DocumentHierarchyChangingSignature::Event   m_ChildAdding;
             DocumentHierarchyChangedSignature::Event    m_ChildAdded;
             DocumentHierarchyChangingSignature::Event   m_ChildRemoving;
@@ -207,7 +210,7 @@ namespace Helium
         public:
             static void EnumerateClass( Reflect::Compositor< This >& comp )
             {
-                comp.AddField( &This::m_Children, "m_Children" );
+                comp.AddField( &This::m_Children, "Children" );
             }
         };
 

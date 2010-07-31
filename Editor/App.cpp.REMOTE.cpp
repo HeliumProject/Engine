@@ -26,8 +26,6 @@
 #include "Application/Inspect/Interpreters/File/InspectFileInit.h"
 #include "Application/RCS/Providers/Perforce/Perforce.h"
 
-#include "Core/CoreInit.h"
-
 #include "Object.h"
 #include "Selectable.h"
 #include "Persistent.h"
@@ -62,6 +60,10 @@
 using namespace Helium;
 using namespace Helium::Editor;
 using namespace Helium::CommandLine;
+
+#if ( wxUSE_EXCEPTIONS == 1 )
+#pragma message( "WARNING: wxWidgets exception handling is enabled!" )
+#endif
 
 static int ShowBreakpointDialog(const Debug::BreakpointArgs& args )
 {
@@ -184,7 +186,10 @@ bool App::OnInit()
     Helium::Path exePath( module );
     Helium::Path iconFolder( exePath.Directory() + TXT( "Icons/" ) );
 
+    Editor::WaitDialog::Enable( true );
+
     wxInitAllImageHandlers();
+
     wxImageHandler* curHandler = wxImage::FindHandler( wxBITMAP_TYPE_CUR );
     if ( curHandler )
     {
@@ -202,7 +207,6 @@ bool App::OnInit()
     wxHelpProvider::Set( helpProvider );
 
     // libs
-    Editor::PerforceWaitDialog::Enable( true );
     m_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
     m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
     m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
@@ -211,7 +215,6 @@ bool App::OnInit()
     m_InitializerStack.Push( InspectFile::Initialize, InspectFile::Cleanup );
 
     // core
-    m_InitializerStack.Push( Core::Initialize, Core::Cleanup );
     m_InitializerStack.Push( Object::InitializeType, Object::CleanupType );
     m_InitializerStack.Push( Selectable::InitializeType, Selectable::CleanupType );
     m_InitializerStack.Push( Persistent::InitializeType, Persistent::CleanupType );

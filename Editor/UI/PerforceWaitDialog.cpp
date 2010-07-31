@@ -11,7 +11,7 @@ using namespace Helium::Editor;
 
 static bool ShowWaitDialog(Perforce::WaitInterface* waitInterface)
 {
-    int result = Editor::WaitDialog().ShowModal( waitInterface );
+    int result = Editor::PerforceWaitDialog().ShowModal( waitInterface );
 
     return result != wxID_OK;
 }
@@ -21,7 +21,7 @@ static void ShowWarningDialog(const Perforce::MessageArgs& args )
     wxMessageBox( args.m_Message.c_str(), args.m_Title.c_str(), wxOK | wxICON_EXCLAMATION );
 }
 
-void WaitDialog::Enable( bool enable )
+void PerforceWaitDialog::Enable( bool enable )
 {
     if ( enable )
     {
@@ -35,13 +35,13 @@ void WaitDialog::Enable( bool enable )
     }
 }
 
-WaitDialog::WaitDialog()
+PerforceWaitDialog::PerforceWaitDialog()
 : wxDialog( NULL, wxID_ANY, wxT("Waiting for Perforce..."), wxDefaultPosition, wxSize( 260,80 ), wxCAPTION )
 {
     m_Panel = new PerforceWaitPanelGenerated( this );
 }
 
-int WaitDialog::ShowModal( Perforce::WaitInterface* waitInterface )
+int PerforceWaitDialog::ShowModal( Perforce::WaitInterface* waitInterface )
 {
     PerforceWaitTimer timer ( this, waitInterface );
 
@@ -52,12 +52,12 @@ int WaitDialog::ShowModal( Perforce::WaitInterface* waitInterface )
     return result;
 }
 
-void WaitDialog::Throb()
+void PerforceWaitDialog::Throb()
 {
     m_Panel->m_Gauge->Pulse();
 }
 
-PerforceWaitTimer::PerforceWaitTimer( WaitDialog* dialog, Perforce::WaitInterface* waitInterface )
+PerforceWaitTimer::PerforceWaitTimer( PerforceWaitDialog* dialog, Perforce::WaitInterface* waitInterface )
 : wxTimer ( dialog )
 , m_WaitDialog( dialog )
 , m_WaitInterface( waitInterface )

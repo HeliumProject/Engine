@@ -67,6 +67,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="wxmsw29d.lib ws2_32.lib"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll;$(p4api)\lib\$(PlatformName)\Debug"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -140,6 +141,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="wxmsw29d.lib ws2_32.lib"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_amd64_dll;$(p4api)\lib\$(PlatformName)\Debug"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -210,6 +212,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="wxmsw29.lib ws2_32.lib"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll;$(p4api)\lib\$(PlatformName)\Release"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -281,6 +284,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="wxmsw29.lib ws2_32.lib"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_amd64_dll;$(p4api)\lib\$(PlatformName)\Release"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -353,6 +357,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="wxmsw29ud.lib ws2_32.lib"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll;$(p4api)\lib\$(PlatformName)\Debug"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -426,6 +431,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="wxmsw29ud.lib ws2_32.lib"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_amd64_dll;$(p4api)\lib\$(PlatformName)\Debug"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -496,6 +502,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="wxmsw29u.lib ws2_32.lib"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll;$(p4api)\lib\$(PlatformName)\Release"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -567,6 +574,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="wxmsw29u.lib ws2_32.lib"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_amd64_dll;$(p4api)\lib\$(PlatformName)\Release"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"

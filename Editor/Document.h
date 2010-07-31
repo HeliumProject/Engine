@@ -46,15 +46,15 @@ namespace Helium
         // Wraps all files manipulated by editors in Editor.  Handles all interaction
         // with revision control.
         // 
-        class LUNA_EDITOR_API Document : public Object
+        class LUNA_EDITOR_API Document : public Reflect::AbstractInheritor< Editor::Document, Editor::Object >
         {
             //
             // Member variables
             //
 
         private:
-            Helium::Path  m_Path;
-            tstring         m_Name;          // the friendly name (for dialogs)
+            Helium::Path        m_Path;
+            tstring             m_Name;          // the friendly name (for dialogs)
             bool                m_IsModified;    // have we been changed since we saved?
             bool                m_AllowChanges;  // allows override of checkout (but you can't save)
             i32                 m_Revision;
@@ -62,8 +62,7 @@ namespace Helium
             // 
             // RTTI
             // 
-
-            EDITOR_DECLARE_TYPE( Document, Object );
+        public:
             static void InitializeType();
             static void CleanupType();
 

@@ -66,6 +66,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -138,6 +139,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -207,6 +209,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -277,6 +280,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -348,6 +352,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -420,6 +425,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -489,6 +495,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -559,6 +566,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -597,6 +605,14 @@
 	<Files>
 		<File
 			RelativePath=".\API.h"
+			>
+		</File>
+		<File
+			RelativePath=".\CoreInit.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\CoreInit.h"
 			>
 		</File>
 		<File

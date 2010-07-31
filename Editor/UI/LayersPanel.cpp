@@ -50,21 +50,29 @@ LayersPanel::LayersPanel( SceneManager* manager, wxWindow* parent, wxWindowID id
     {
         Freeze();
 
-        m_LayerManagementToolbar->FindById( ID_CreateNewLayer )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::CreateNewLayer ) );
-        m_LayerManagementToolbar->FindById( ID_CreateNewLayerFromSelection )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::CreateNewLayerFromSelection ) );
-        m_LayerManagementToolbar->FindById( ID_DeleteSelectedLayers )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::DeleteSelectedLayers ) );
-        m_LayerManagementToolbar->FindById( ID_AddSelectionToLayers )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::AddSelectionToLayers ) );
-        m_LayerManagementToolbar->FindById( ID_RemoveSelectionFromLayers )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::RemoveSelectionFromLayers ) );
-        m_LayerManagementToolbar->FindById( ID_SelectLayerMembers )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::SelectLayerMembers ) );
-        m_LayerManagementToolbar->FindById( ID_SelectLayers )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::SelectLayers ) );
+        m_CreateNewLayerButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::CreateNewLayer ) );
+        m_CreateNewLayerFromSelectionButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::CreateNewLayerFromSelection ) );
+        m_DeleteSelectedLayersButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::DeleteSelectedLayers ) );
+        m_AddSelectionToLayerButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::AddSelectionToLayers ) );
+        m_RemoveSelectionFromLayerButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::RemoveSelectionFromLayers ) );
+        m_SelectLayerMembersButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::SelectLayerMembers ) );
+        m_SelectLayersButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::SelectLayers ) );
 
-        m_LayerManagementToolbar->Realize();
+        m_LayerManagementPanel->Layout();
 
         Layout();
         Thaw();
     }
 
-    m_LayerManagementToolbar->SetHelpText( TXT( "This is the layer toolbar." ) );
+    m_CreateNewLayerButton->SetHelpText( TXT( "Creates a new layer in the scene." ) );
+    m_CreateNewLayerFromSelectionButton->SetHelpText( TXT( "Creates a new layer in the scene and adds the selection to it." ) );
+    m_DeleteSelectedLayersButton->SetHelpText( TXT( "Deletes the selected layer from the scene." ) );
+    m_AddSelectionToLayerButton->SetHelpText( TXT( "Adds the currently selected items to the layer." ) );
+    m_RemoveSelectionFromLayerButton->SetHelpText( TXT( "Removes the currently selected items from the layer." ) );
+    m_SelectLayerMembersButton->SetHelpText( TXT( "Selects all items that are part of this layer." ) );
+    m_SelectLayersButton->SetHelpText( TXT( "Selects all items in all selected layers." ) );
+
+    m_LayerManagementPanel->SetHelpText( TXT( "This is the layer toolbar." ) );
     m_Grid->GetPanel()->SetHelpText( TXT( "This is the layer grid, you can select a layer to manipulate here." ) );
 
     // Make sure the toolbar buttons start out disabled
@@ -75,12 +83,12 @@ LayersPanel::LayersPanel( SceneManager* manager, wxWindow* parent, wxWindowID id
     // Listeners that are not dependent on the current scene
     if ( m_SceneManager )
     {
-        m_SceneManager->AddCurrentSceneChangingListener( SceneChangeSignature::Delegate ( this, &LayersPanel::CurrentSceneChanging ) );
-        m_SceneManager->AddCurrentSceneChangedListener( SceneChangeSignature::Delegate ( this, &LayersPanel::CurrentSceneChanged ) );
+        m_SceneManager->AddCurrentSceneChangingListener( SceneChangeSignature::Delegate( this, &LayersPanel::CurrentSceneChanging ) );
+        m_SceneManager->AddCurrentSceneChangedListener( SceneChangeSignature::Delegate( this, &LayersPanel::CurrentSceneChanged ) );
     }
-    m_Grid->AddRowVisibilityChangedListener( GridRowChangeSignature::Delegate  ( this, &LayersPanel::LayerVisibleChanged ) );
-    m_Grid->AddRowSelectabilityChangedListener( GridRowChangeSignature::Delegate  ( this, &LayersPanel::LayerSelectableChanged ) );
-    m_Grid->AddRowRenamedListener( GridRowRenamedSignature::Delegate ( this, &LayersPanel::RowRenamed ) );
+    m_Grid->AddRowVisibilityChangedListener( GridRowChangeSignature::Delegate( this, &LayersPanel::LayerVisibleChanged ) );
+    m_Grid->AddRowSelectabilityChangedListener( GridRowChangeSignature::Delegate( this, &LayersPanel::LayerSelectableChanged ) );
+    m_Grid->AddRowRenamedListener( GridRowRenamedSignature::Delegate( this, &LayersPanel::RowRenamed ) );
 }
 
 LayersPanel::~LayersPanel()
@@ -236,14 +244,14 @@ void LayersPanel::UpdateToolBarButtons()
     // a valid scene.
     if ( m_Scene )
     {
-        m_LayerManagementToolbar->Enable();
+        m_LayerManagementPanel->Enable();
     }
     else
     {
-        m_LayerManagementToolbar->Disable();
+        m_LayerManagementPanel->Disable();
     }
 
-    m_LayerManagementToolbar->Refresh();
+    m_LayerManagementPanel->Refresh();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

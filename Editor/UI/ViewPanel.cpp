@@ -3,6 +3,8 @@
 #include "ViewPanel.h"
 #include "ArtProvider.h"
 
+#include <wx/tglbtn.h>
+
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -13,62 +15,92 @@ ViewPanel::ViewPanel(wxWindow *parent, wxWindowID id, const wxPoint &pos, const 
     {
 //        Freeze();
 
-        m_ToolbarView->FindById( ID_FrameOrigin )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::FrameOrigin ) );
-        m_ToolbarView->FindById( ID_FrameSelected )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::FrameSelected ) );
+        m_FrameOriginButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::FrameOrigin ) );
+        m_FrameSelectedButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::FrameSelected ) );
 
-        m_ToolbarView->FindById( ID_PreviousView )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::PreviousView ) );
-        m_ToolbarView->FindById( ID_NextView )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::NextView ) );
+        m_PreviousViewButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::PreviousView ) );
+        m_NextViewButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::NextView ) );
 
-        m_ToolbarView->FindById( ID_HighlightMode )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::HighlightMode ) );
+        m_HighlightModeToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::HighlightMode ) );
 
-        m_ToolbarView->FindById( ID_CameraOrbit )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::PerspectiveCamera ) );
-        m_ToolbarView->FindById( ID_CameraFront )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::FrontOrthoCamera ) );
-        m_ToolbarView->FindById( ID_CameraSide )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::SideOrthoCamera ) );
-        m_ToolbarView->FindById( ID_CameraTop )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::TopOrthoCamera ) );
+        m_OrbitCameraToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::PerspectiveCamera ) );
+        m_FrontCameraToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::FrontOrthoCamera ) );
+        m_SideCameraToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::SideOrthoCamera ) );
+        m_TopCameraToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::TopOrthoCamera ) );
 
-        m_ToolbarView->FindById( ID_ShowAxes )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::ShowAxes ) );
-        m_ToolbarView->FindById( ID_ShowGrid )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::ShowGrid ) );
-        m_ToolbarView->FindById( ID_ShowBounds )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::ShowBounds ) );
-        m_ToolbarView->FindById( ID_ShowStatistics )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::ShowStatistics ) );
+        m_ShowAxesToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ShowAxes ) );
+        m_ShowGridToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ShowGrid ) );
+        m_ShowBoundsToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ShowBounds ) );
+        m_ShowStatisticsToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ShowStatistics ) );
 
-        m_ToolbarView->FindById( ID_FrustumCull )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::FrustumCull ) );
-        m_ToolbarView->FindById( ID_BackfaceCull )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::BackfaceCull ) );
+        m_FrustumCullingToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::FrustumCull ) );
+        m_BackfaceCullingToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::BackfaceCull ) );
 
-        m_ToolbarView->FindById( ID_ShadingWireframe )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::ShadingWireframe ) );
-        m_ToolbarView->FindById( ID_ShadingMaterial )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::ShadingMaterial ) );
+        m_WireframeShadingToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ShadingWireframe ) );
+        m_MaterialShadingToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ShadingMaterial ) );
 
-        m_ToolbarView->FindById( ID_ColorModeScene )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::ColorModeScene ) );
-        m_ToolbarView->FindById( ID_ColorModeLayer )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::ColorModeLayer ) );
-        m_ToolbarView->FindById( ID_ColorModeNodeType )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::ColorModeNodeType ) );
-        m_ToolbarView->FindById( ID_ColorModeScale )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::ColorModeScale ) );
-        m_ToolbarView->FindById( ID_ColorModeScaleGradient )->SetNormalBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::ColorModeScaleGradient ) );
+        m_ColorModeSceneToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ColorModeScene ) );
+        m_ColorModeLayerToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ColorModeLayer ) );
+        m_ColorModeNodeTypeToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ColorModeNodeType ) );
+        m_ColorModeScaleToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ColorModeScale ) );
+        m_ColorModeScaleGradientToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ColorModeScaleGradient ) );
 
-        m_ToolbarView->Realize();
+        m_ToolPanel->Layout();
 
         Layout();
         //Thaw();
     }
 
+    m_FrameOriginButton->SetHelpText( TXT( "Frame the origin in the viewport." ) );
+    m_FrameSelectedButton->SetHelpText( TXT( "Frame the selected item in the viewport." ) );
+
+    m_PreviousViewButton->SetHelpText( TXT( "Switch to the previous camera view." ) );
+    m_NextViewButton->SetHelpText( TXT( "Switch to the next camera view." ) );
+
+    m_HighlightModeToggleButton->SetHelpText( TXT( "Toggle Highlight mode." ) );
+
+    m_OrbitCameraToggleButton->SetHelpText( TXT( "Use the orbit camera." ) );
+    m_FrontCameraToggleButton->SetHelpText( TXT( "Use the front camera." ) );
+    m_SideCameraToggleButton->SetHelpText( TXT( "Use the side camera." ) );
+    m_TopCameraToggleButton->SetHelpText( TXT( "Use the top camera." ) );
+
+    m_ShowAxesToggleButton->SetHelpText( TXT( "Toggle drawing the axes in the viewport." ) );
+    m_ShowGridToggleButton->SetHelpText( TXT( "Toggle drawing the grid in the viewport." ) );
+    m_ShowBoundsToggleButton->SetHelpText( TXT( "Toggle drawing object bounds in the viewport." ) );
+    m_ShowStatisticsToggleButton->SetHelpText( TXT( "Toggle showing statistics for the current scene." ) );
+
+    m_FrustumCullingToggleButton->SetHelpText( TXT( "Toggle frustum culling." ) );
+    m_BackfaceCullingToggleButton->SetHelpText( TXT( "Toggle backface culling." ) );
+
+    m_WireframeShadingToggleButton->SetHelpText( TXT( "Toggle wireframe mode." ) );
+    m_MaterialShadingToggleButton->SetHelpText( TXT( "Toggle material shading mode." ) );
+
+    m_ColorModeSceneToggleButton->SetHelpText( TXT( "Toggle scene coloring mode." ) );
+    m_ColorModeLayerToggleButton->SetHelpText( TXT( "Toggle layer coloring mode." ) );
+    m_ColorModeNodeTypeToggleButton->SetHelpText( TXT( "Toggle node type coloring mode." ) );
+    m_ColorModeScaleToggleButton->SetHelpText( TXT( "Toggle scale coloring mode." ) );
+    m_ColorModeScaleGradientToggleButton->SetHelpText( TXT( "Toggle scale gradient coloring mode." ) );
+
     m_Viewport = new Editor::Viewport( m_ViewContainerPanel, -1, wxPoint(0,0), wxSize(150,250), wxNO_BORDER | wxWANTS_CHARS | wxEXPAND );
-    m_ViewContainerPanel->GetSizer()->Add( m_Viewport, 1, wxEXPAND | wxALL, 5 );
+    m_ViewContainerPanel->GetSizer()->Add( m_Viewport, 1, wxEXPAND | wxALL, 0 );
 
-    m_ToolbarView->FindById( ID_HighlightMode )->SetToggle( m_Viewport->IsHighlighting() );
+    m_HighlightModeToggleButton->SetValue( m_Viewport->IsHighlighting() );
 
-    m_ToolbarView->FindById( ID_CameraOrbit )->SetToggle( m_Viewport->GetCameraMode() == CameraModes::Orbit );
-    m_ToolbarView->FindById( ID_CameraFront )->SetToggle( m_Viewport->GetCameraMode() == CameraModes::Front );
-    m_ToolbarView->FindById( ID_CameraSide )->SetToggle( m_Viewport->GetCameraMode() == CameraModes::Side );
-    m_ToolbarView->FindById( ID_CameraTop )->SetToggle( m_Viewport->GetCameraMode() == CameraModes::Top );
+    m_OrbitCameraToggleButton->SetValue( m_Viewport->GetCameraMode() == CameraModes::Orbit );
+    m_FrontCameraToggleButton->SetValue( m_Viewport->GetCameraMode() == CameraModes::Front );
+    m_SideCameraToggleButton->SetValue( m_Viewport->GetCameraMode() == CameraModes::Side );
+    m_TopCameraToggleButton->SetValue( m_Viewport->GetCameraMode() == CameraModes::Top );
 
-    m_ToolbarView->FindById( ID_ShowAxes )->SetToggle( m_Viewport->IsAxesVisible() );
-    m_ToolbarView->FindById( ID_ShowGrid )->SetToggle( m_Viewport->IsGridVisible() );
-    m_ToolbarView->FindById( ID_ShowBounds )->SetToggle( m_Viewport->IsBoundsVisible() );
-    m_ToolbarView->FindById( ID_ShowStatistics )->SetToggle( m_Viewport->IsStatisticsVisible() );
+    m_ShowAxesToggleButton->SetValue( m_Viewport->IsAxesVisible() );
+    m_ShowGridToggleButton->SetValue( m_Viewport->IsGridVisible() );
+    m_ShowBoundsToggleButton->SetValue( m_Viewport->IsBoundsVisible() );
+    m_ShowStatisticsToggleButton->SetValue( m_Viewport->IsStatisticsVisible() );
 
-    m_ToolbarView->FindById( ID_FrustumCull )->SetToggle( m_Viewport->GetCamera()->IsViewFrustumCulling() );
-    m_ToolbarView->FindById( ID_BackfaceCull )->SetToggle( m_Viewport->GetCamera()->IsBackFaceCulling() );
+    m_FrustumCullingToggleButton->SetValue( m_Viewport->GetCamera()->IsViewFrustumCulling() );
+    m_BackfaceCullingToggleButton->SetValue( m_Viewport->GetCamera()->IsBackFaceCulling() );
 
-    m_ToolbarView->FindById( ID_ShadingWireframe )->SetToggle( m_Viewport->GetCamera()->GetShadingMode() == ShadingModes::Wireframe );
-    m_ToolbarView->FindById( ID_ShadingMaterial )->SetToggle( m_Viewport->GetCamera()->GetShadingMode() == ShadingModes::Material );
+    m_WireframeShadingToggleButton->SetValue( m_Viewport->GetCamera()->GetShadingMode() == ShadingModes::Wireframe );
+    m_MaterialShadingToggleButton->SetValue( m_Viewport->GetCamera()->GetShadingMode() == ShadingModes::Material );
 
     //ViewColorMode colorMode = MainFramePreferences()->GetViewPreferences()->GetColorMode();
     //M_IDToColorMode::const_iterator colorModeItr = m_ColorModeLookup.begin();

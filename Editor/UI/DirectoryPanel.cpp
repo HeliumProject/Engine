@@ -14,6 +14,8 @@ DirectoryPanel::DirectoryPanel( SceneManager* manager, TreeMonitor* treeMonitor,
 , m_SceneManager( manager )
 , m_TreeMonitor( treeMonitor )
 {
+    SetHelpText( TXT( "This is the directory panel, you can explore the hierarchy of your scene here." ) );
+
 #ifndef LUNA_SCENE_DISABLE_OUTLINERS
     // Hierarchy
     m_HierarchyOutline = new HierarchyOutliner( m_SceneManager );

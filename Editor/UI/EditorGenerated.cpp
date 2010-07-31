@@ -8,6 +8,8 @@
 #include "Precompile.h"
 
 
+#include "wx/tglbtn.h"
+
 #include "EditorGenerated.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -483,43 +485,65 @@ LayersPanelGenerated::LayersPanelGenerated( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bSizer19;
 	bSizer19 = new wxBoxSizer( wxVERTICAL );
 	
-	m_LayerManagementToolbar = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL ); 
-	m_LayerManagementToolbar->AddTool( ID_CreateNewLayer, _("Create New Layer"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_LayerManagementToolbar->AddTool( ID_CreateNewLayerFromSelection, _("Create New Layer From Selection"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_LayerManagementToolbar->AddTool( ID_DeleteSelectedLayers, _("Delete Selected Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_LayerManagementToolbar->AddSeparator(); 
-	m_LayerManagementToolbar->AddTool( ID_AddSelectionToLayers, _("Add Selection to Selected Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_LayerManagementToolbar->AddTool( ID_RemoveSelectionFromLayers, _("Remove Selection from Selected Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_LayerManagementToolbar->AddSeparator(); 
-	m_LayerManagementToolbar->AddTool( ID_SelectLayerMembers, _("Select Layer Members"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_LayerManagementToolbar->AddTool( ID_SelectLayers, _("Select Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_LayerManagementToolbar->Realize();
+	m_LayerManagementPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer36;
+	bSizer36 = new wxBoxSizer( wxHORIZONTAL );
 	
-	bSizer19->Add( m_LayerManagementToolbar, 0, wxEXPAND, 5 );
+	m_CreateNewLayerFromSelectionButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer36->Add( m_CreateNewLayerFromSelectionButton, 0, wxALL, 2 );
+	
+	m_CreateNewLayerButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer36->Add( m_CreateNewLayerButton, 0, wxALL, 2 );
+	
+	m_DeleteSelectedLayersButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer36->Add( m_DeleteSelectedLayersButton, 0, wxALL, 2 );
+	
+	
+	bSizer36->Add( 10, 0, 0, wxEXPAND, 0 );
+	
+	m_AddSelectionToLayerButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer36->Add( m_AddSelectionToLayerButton, 0, wxALL, 2 );
+	
+	m_RemoveSelectionFromLayerButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer36->Add( m_RemoveSelectionFromLayerButton, 0, wxALL, 2 );
+	
+	
+	bSizer36->Add( 10, 0, 0, wxEXPAND, 0 );
+	
+	m_SelectLayerMembersButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer36->Add( m_SelectLayerMembersButton, 0, wxALL, 2 );
+	
+	m_SelectLayersButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer36->Add( m_SelectLayersButton, 0, wxALL, 2 );
+	
+	m_LayerManagementPanel->SetSizer( bSizer36 );
+	m_LayerManagementPanel->Layout();
+	bSizer36->Fit( m_LayerManagementPanel );
+	bSizer19->Add( m_LayerManagementPanel, 0, wxEXPAND | wxALL, 0 );
 	
 	this->SetSizer( bSizer19 );
 	this->Layout();
 	
 	// Connect Events
-	this->Connect( ID_CreateNewLayer, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayer ) );
-	this->Connect( ID_CreateNewLayerFromSelection, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayerFromSelection ) );
-	this->Connect( ID_DeleteSelectedLayers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnDeleteLayer ) );
-	this->Connect( ID_AddSelectionToLayers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnAddSelectionToLayer ) );
-	this->Connect( ID_RemoveSelectionFromLayers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnRemoveSelectionFromLayer ) );
-	this->Connect( ID_SelectLayerMembers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayerMembers ) );
-	this->Connect( ID_SelectLayers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayer ) );
+	m_CreateNewLayerFromSelectionButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayerFromSelection ), NULL, this );
+	m_CreateNewLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayer ), NULL, this );
+	m_DeleteSelectedLayersButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnDeleteLayer ), NULL, this );
+	m_AddSelectionToLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnAddSelectionToLayer ), NULL, this );
+	m_RemoveSelectionFromLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnRemoveSelectionFromLayer ), NULL, this );
+	m_SelectLayerMembersButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayerMembers ), NULL, this );
+	m_SelectLayersButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayer ), NULL, this );
 }
 
 LayersPanelGenerated::~LayersPanelGenerated()
 {
 	// Disconnect Events
-	this->Disconnect( ID_CreateNewLayer, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayer ) );
-	this->Disconnect( ID_CreateNewLayerFromSelection, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayerFromSelection ) );
-	this->Disconnect( ID_DeleteSelectedLayers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnDeleteLayer ) );
-	this->Disconnect( ID_AddSelectionToLayers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnAddSelectionToLayer ) );
-	this->Disconnect( ID_RemoveSelectionFromLayers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnRemoveSelectionFromLayer ) );
-	this->Disconnect( ID_SelectLayerMembers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayerMembers ) );
-	this->Disconnect( ID_SelectLayers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayer ) );
+	m_CreateNewLayerFromSelectionButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayerFromSelection ), NULL, this );
+	m_CreateNewLayerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayer ), NULL, this );
+	m_DeleteSelectedLayersButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnDeleteLayer ), NULL, this );
+	m_AddSelectionToLayerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnAddSelectionToLayer ), NULL, this );
+	m_RemoveSelectionFromLayerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnRemoveSelectionFromLayer ), NULL, this );
+	m_SelectLayerMembersButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayerMembers ), NULL, this );
+	m_SelectLayersButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayer ), NULL, this );
 	
 }
 
@@ -898,39 +922,101 @@ ViewPanelGenerated::ViewPanelGenerated( wxWindow* parent, wxWindowID id, const w
 	wxBoxSizer* bSizer21;
 	bSizer21 = new wxBoxSizer( wxVERTICAL );
 	
-	m_ToolbarView = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL ); 
-	m_ToolbarView->AddTool( ID_FrameOrigin, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, _("Frame the origin (o)"), wxEmptyString ); 
-	m_ToolbarView->AddTool( ID_FrameSelected, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, _("Frame selected item (f)"), wxEmptyString ); 
-	m_ToolbarView->AddSeparator(); 
-	m_ToolbarView->AddTool( ID_PreviousView, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, _("Switch to the previous view ([)"), wxEmptyString ); 
-	m_ToolbarView->AddTool( ID_NextView, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, _("Switch to the next view (])"), wxEmptyString ); 
-	m_ToolbarView->AddSeparator(); 
-	m_ToolbarView->AddTool( ID_HighlightMode, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle highlight mode (h)"), wxEmptyString ); 
-	m_ToolbarView->AddSeparator(); 
-	m_ToolbarView->AddTool( ID_CameraOrbit, _("Orbit"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Use the orbit camera"), wxEmptyString ); 
-	m_ToolbarView->AddTool( ID_CameraFront, _("Front"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Use the front camera"), wxEmptyString ); 
-	m_ToolbarView->AddTool( ID_CameraSide, _("Side"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Use the side camera"), wxEmptyString ); 
-	m_ToolbarView->AddTool( ID_CameraTop, _("Top"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Use the top camera"), wxEmptyString ); 
-	m_ToolbarView->AddSeparator(); 
-	m_ToolbarView->AddTool( ID_ShowAxes, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle axes display"), wxEmptyString ); 
-	m_ToolbarView->AddTool( ID_ShowGrid, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle grid display"), wxEmptyString ); 
-	m_ToolbarView->AddTool( ID_ShowBounds, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle bounds display"), wxEmptyString ); 
-	m_ToolbarView->AddTool( ID_ShowStatistics, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle statistics display"), wxEmptyString ); 
-	m_ToolbarView->AddSeparator(); 
-	m_ToolbarView->AddTool( ID_FrustumCull, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Enable frustum culling"), wxEmptyString ); 
-	m_ToolbarView->AddTool( ID_BackfaceCull, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Enable backface culling"), wxEmptyString ); 
-	m_ToolbarView->AddSeparator(); 
-	m_ToolbarView->AddTool( ID_ShadingWireframe, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle wireframe display"), wxEmptyString ); 
-	m_ToolbarView->AddTool( ID_ShadingMaterial, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle material display"), wxEmptyString ); 
-	m_ToolbarView->AddSeparator(); 
-	m_ToolbarView->AddTool( ID_ColorModeScene, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle scene coloring mode"), wxEmptyString ); 
-	m_ToolbarView->AddTool( ID_ColorModeLayer, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle layer coloring mode"), wxEmptyString ); 
-	m_ToolbarView->AddTool( ID_ColorModeNodeType, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle node type coloring mode"), wxEmptyString ); 
-	m_ToolbarView->AddTool( ID_ColorModeScale, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle scale coloring mode"), wxEmptyString ); 
-	m_ToolbarView->AddTool( ID_ColorModeScaleGradient, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle scale gradient coloring mode"), wxEmptyString ); 
-	m_ToolbarView->Realize();
+	m_ToolPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer35;
+	bSizer35 = new wxBoxSizer( wxHORIZONTAL );
 	
-	bSizer21->Add( m_ToolbarView, 0, wxEXPAND, 1 );
+	m_FrameOriginButton = new wxBitmapButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_FrameOriginButton, 0, wxALL, 2 );
+	
+	m_FrameSelectedButton = new wxBitmapButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_FrameSelectedButton, 0, wxALL, 2 );
+	
+	
+	bSizer35->Add( 10, 0, 0, wxEXPAND, 0 );
+	
+	m_PreviousViewButton = new wxBitmapButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_PreviousViewButton, 0, wxALL, 2 );
+	
+	m_NextViewButton = new wxBitmapButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_NextViewButton, 0, wxALL, 2 );
+	
+	
+	bSizer35->Add( 10, 0, 0, wxEXPAND, 0 );
+	
+	m_HighlightModeToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_HighlightModeToggleButton, 0, wxALL, 2 );
+	
+	
+	bSizer35->Add( 10, 0, 0, wxEXPAND, 0 );
+	
+	m_OrbitCameraToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_OrbitCameraToggleButton, 0, wxALL, 2 );
+	
+	m_FrontCameraToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_FrontCameraToggleButton, 0, wxALL, 2 );
+	
+	m_SideCameraToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_SideCameraToggleButton, 0, wxALL, 2 );
+	
+	m_TopCameraToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_TopCameraToggleButton, 0, wxALL, 2 );
+	
+	
+	bSizer35->Add( 10, 0, 0, wxEXPAND, 0 );
+	
+	m_ShowAxesToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_ShowAxesToggleButton, 0, wxALL, 2 );
+	
+	m_ShowGridToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_ShowGridToggleButton, 0, wxALL, 2 );
+	
+	m_ShowBoundsToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_ShowBoundsToggleButton, 0, wxALL, 2 );
+	
+	m_ShowStatisticsToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_ShowStatisticsToggleButton, 0, wxALL, 2 );
+	
+	
+	bSizer35->Add( 10, 0, 0, wxEXPAND, 0 );
+	
+	m_FrustumCullingToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_FrustumCullingToggleButton, 0, wxALL, 2 );
+	
+	m_BackfaceCullingToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_BackfaceCullingToggleButton, 0, wxALL, 2 );
+	
+	
+	bSizer35->Add( 10, 0, 0, wxEXPAND, 0 );
+	
+	m_WireframeShadingToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_WireframeShadingToggleButton, 0, wxALL, 2 );
+	
+	m_MaterialShadingToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_MaterialShadingToggleButton, 0, wxALL, 2 );
+	
+	
+	bSizer35->Add( 10, 0, 0, wxEXPAND, 0 );
+	
+	m_ColorModeSceneToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_ColorModeSceneToggleButton, 0, wxALL, 2 );
+	
+	m_ColorModeLayerToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_ColorModeLayerToggleButton, 0, wxALL, 2 );
+	
+	m_ColorModeNodeTypeToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_ColorModeNodeTypeToggleButton, 0, wxALL, 2 );
+	
+	m_ColorModeScaleToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_ColorModeScaleToggleButton, 0, wxALL, 2 );
+	
+	m_ColorModeScaleGradientToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_ColorModeScaleGradientToggleButton, 0, wxALL, 2 );
+	
+	m_ToolPanel->SetSizer( bSizer35 );
+	m_ToolPanel->Layout();
+	bSizer35->Fit( m_ToolPanel );
+	bSizer21->Add( m_ToolPanel, 0, wxEXPAND | wxALL, 1 );
 	
 	m_ViewContainerPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL );
 	wxBoxSizer* m_ViewSizer;
@@ -945,54 +1031,54 @@ ViewPanelGenerated::ViewPanelGenerated( wxWindow* parent, wxWindowID id, const w
 	this->Layout();
 	
 	// Connect Events
-	this->Connect( ID_FrameOrigin, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameOrigin ) );
-	this->Connect( ID_FrameSelected, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameSelected ) );
-	this->Connect( ID_PreviousView, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnPreviousView ) );
-	this->Connect( ID_NextView, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnNextView ) );
-	this->Connect( ID_HighlightMode, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnHighlightMode ) );
-	this->Connect( ID_CameraOrbit, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ) );
-	this->Connect( ID_CameraFront, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ) );
-	this->Connect( ID_CameraSide, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ) );
-	this->Connect( ID_CameraTop, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ) );
-	this->Connect( ID_ShowAxes, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
-	this->Connect( ID_ShowGrid, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
-	this->Connect( ID_ShowBounds, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
-	this->Connect( ID_ShowStatistics, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
-	this->Connect( ID_FrustumCull, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
-	this->Connect( ID_BackfaceCull, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
-	this->Connect( ID_ShadingWireframe, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
-	this->Connect( ID_ShadingMaterial, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
-	this->Connect( ID_ColorModeScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
-	this->Connect( ID_ColorModeLayer, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
-	this->Connect( ID_ColorModeNodeType, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
-	this->Connect( ID_ColorModeScale, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
-	this->Connect( ID_ColorModeScaleGradient, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
+	m_FrameOriginButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameOrigin ), NULL, this );
+	m_FrameSelectedButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameSelected ), NULL, this );
+	m_PreviousViewButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnPreviousView ), NULL, this );
+	m_NextViewButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnNextView ), NULL, this );
+	m_HighlightModeToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnHighlightMode ), NULL, this );
+	m_OrbitCameraToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ), NULL, this );
+	m_FrontCameraToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ), NULL, this );
+	m_SideCameraToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ), NULL, this );
+	m_TopCameraToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ), NULL, this );
+	m_ShowAxesToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
+	m_ShowGridToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
+	m_ShowBoundsToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
+	m_ShowStatisticsToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
+	m_FrustumCullingToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
+	m_BackfaceCullingToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
+	m_WireframeShadingToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
+	m_MaterialShadingToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
+	m_ColorModeSceneToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ), NULL, this );
+	m_ColorModeLayerToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ), NULL, this );
+	m_ColorModeNodeTypeToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ), NULL, this );
+	m_ColorModeScaleToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ), NULL, this );
+	m_ColorModeScaleGradientToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ), NULL, this );
 }
 
 ViewPanelGenerated::~ViewPanelGenerated()
 {
 	// Disconnect Events
-	this->Disconnect( ID_FrameOrigin, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameOrigin ) );
-	this->Disconnect( ID_FrameSelected, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameSelected ) );
-	this->Disconnect( ID_PreviousView, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnPreviousView ) );
-	this->Disconnect( ID_NextView, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnNextView ) );
-	this->Disconnect( ID_HighlightMode, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnHighlightMode ) );
-	this->Disconnect( ID_CameraOrbit, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ) );
-	this->Disconnect( ID_CameraFront, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ) );
-	this->Disconnect( ID_CameraSide, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ) );
-	this->Disconnect( ID_CameraTop, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ) );
-	this->Disconnect( ID_ShowAxes, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
-	this->Disconnect( ID_ShowGrid, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
-	this->Disconnect( ID_ShowBounds, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
-	this->Disconnect( ID_ShowStatistics, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
-	this->Disconnect( ID_FrustumCull, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
-	this->Disconnect( ID_BackfaceCull, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
-	this->Disconnect( ID_ShadingWireframe, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
-	this->Disconnect( ID_ShadingMaterial, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
-	this->Disconnect( ID_ColorModeScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
-	this->Disconnect( ID_ColorModeLayer, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
-	this->Disconnect( ID_ColorModeNodeType, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
-	this->Disconnect( ID_ColorModeScale, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
-	this->Disconnect( ID_ColorModeScaleGradient, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
+	m_FrameOriginButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameOrigin ), NULL, this );
+	m_FrameSelectedButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameSelected ), NULL, this );
+	m_PreviousViewButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnPreviousView ), NULL, this );
+	m_NextViewButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnNextView ), NULL, this );
+	m_HighlightModeToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnHighlightMode ), NULL, this );
+	m_OrbitCameraToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ), NULL, this );
+	m_FrontCameraToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ), NULL, this );
+	m_SideCameraToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ), NULL, this );
+	m_TopCameraToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ), NULL, this );
+	m_ShowAxesToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
+	m_ShowGridToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
+	m_ShowBoundsToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
+	m_ShowStatisticsToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
+	m_FrustumCullingToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
+	m_BackfaceCullingToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
+	m_WireframeShadingToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
+	m_MaterialShadingToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
+	m_ColorModeSceneToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ), NULL, this );
+	m_ColorModeLayerToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ), NULL, this );
+	m_ColorModeNodeTypeToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ), NULL, this );
+	m_ColorModeScaleToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ), NULL, this );
+	m_ColorModeScaleGradientToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ), NULL, this );
 	
 }

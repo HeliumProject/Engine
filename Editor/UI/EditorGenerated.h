@@ -10,6 +10,7 @@
 
 #include <wx/intl.h>
 
+class wxBitmapToggleButton;
 namespace Helium{ namespace Editor{ class Frame; } }
 
 #include "Frame.h"
@@ -31,7 +32,6 @@ namespace Helium{ namespace Editor{ class Frame; } }
 #include <wx/panel.h>
 #include <wx/srchctrl.h>
 #include <wx/richtext/richtextctrl.h>
-#include <wx/toolbar.h>
 #include <wx/listbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
@@ -214,22 +214,20 @@ namespace Helium
 			private:
 			
 			protected:
-				enum
-				{
-					ID_CreateNewLayer = 1000,
-					ID_CreateNewLayerFromSelection,
-					ID_DeleteSelectedLayers,
-					ID_AddSelectionToLayers,
-					ID_RemoveSelectionFromLayers,
-					ID_SelectLayerMembers,
-					ID_SelectLayers,
-				};
+				wxPanel* m_LayerManagementPanel;
+				wxBitmapButton* m_CreateNewLayerFromSelectionButton;
+				wxBitmapButton* m_CreateNewLayerButton;
+				wxBitmapButton* m_DeleteSelectedLayersButton;
 				
-				wxToolBar* m_LayerManagementToolbar;
+				wxBitmapButton* m_AddSelectionToLayerButton;
+				wxBitmapButton* m_RemoveSelectionFromLayerButton;
+				
+				wxBitmapButton* m_SelectLayerMembersButton;
+				wxBitmapButton* m_SelectLayersButton;
 				
 				// Virtual event handlers, overide them in your derived class
-				virtual void OnNewLayer( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnNewLayerFromSelection( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnNewLayer( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnDeleteLayer( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnAddSelectionToLayer( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnRemoveSelectionFromLayer( wxCommandEvent& event ) { event.Skip(); }
@@ -413,33 +411,36 @@ namespace Helium
 			private:
 			
 			protected:
-				enum
-				{
-					ID_FrameOrigin = 1000,
-					ID_FrameSelected,
-					ID_PreviousView,
-					ID_NextView,
-					ID_HighlightMode,
-					ID_CameraOrbit,
-					ID_CameraFront,
-					ID_CameraSide,
-					ID_CameraTop,
-					ID_ShowAxes,
-					ID_ShowGrid,
-					ID_ShowBounds,
-					ID_ShowStatistics,
-					ID_FrustumCull,
-					ID_BackfaceCull,
-					ID_ShadingWireframe,
-					ID_ShadingMaterial,
-					ID_ColorModeScene,
-					ID_ColorModeLayer,
-					ID_ColorModeNodeType,
-					ID_ColorModeScale,
-					ID_ColorModeScaleGradient,
-				};
+				wxPanel* m_ToolPanel;
+				wxBitmapButton* m_FrameOriginButton;
+				wxBitmapButton* m_FrameSelectedButton;
 				
-				wxToolBar* m_ToolbarView;
+				wxBitmapButton* m_PreviousViewButton;
+				wxBitmapButton* m_NextViewButton;
+				
+				wxBitmapToggleButton* m_HighlightModeToggleButton;
+				
+				wxBitmapToggleButton* m_OrbitCameraToggleButton;
+				wxBitmapToggleButton* m_FrontCameraToggleButton;
+				wxBitmapToggleButton* m_SideCameraToggleButton;
+				wxBitmapToggleButton* m_TopCameraToggleButton;
+				
+				wxBitmapToggleButton* m_ShowAxesToggleButton;
+				wxBitmapToggleButton* m_ShowGridToggleButton;
+				wxBitmapToggleButton* m_ShowBoundsToggleButton;
+				wxBitmapToggleButton* m_ShowStatisticsToggleButton;
+				
+				wxBitmapToggleButton* m_FrustumCullingToggleButton;
+				wxBitmapToggleButton* m_BackfaceCullingToggleButton;
+				
+				wxBitmapToggleButton* m_WireframeShadingToggleButton;
+				wxBitmapToggleButton* m_MaterialShadingToggleButton;
+				
+				wxBitmapToggleButton* m_ColorModeSceneToggleButton;
+				wxBitmapToggleButton* m_ColorModeLayerToggleButton;
+				wxBitmapToggleButton* m_ColorModeNodeTypeToggleButton;
+				wxBitmapToggleButton* m_ColorModeScaleToggleButton;
+				wxBitmapToggleButton* m_ColorModeScaleGradientToggleButton;
 				wxPanel* m_ViewContainerPanel;
 				
 				// Virtual event handlers, overide them in your derived class
@@ -455,7 +456,7 @@ namespace Helium
 			
 			public:
 				
-				ViewPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 766,617 ), long style = wxTAB_TRAVERSAL );
+				ViewPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 826,617 ), long style = wxTAB_TRAVERSAL );
 				~ViewPanelGenerated();
 			
 		};

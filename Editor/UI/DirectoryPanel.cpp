@@ -20,6 +20,7 @@ DirectoryPanel::DirectoryPanel( SceneManager* manager, TreeMonitor* treeMonitor,
     // Hierarchy
     m_HierarchyOutline = new HierarchyOutliner( m_SceneManager );
     SortTreeCtrl* hierarchyTree = m_HierarchyOutline->InitTreeCtrl( m_HierarchyPanel, wxID_ANY );
+    hierarchyTree->SetHelpText( TXT( "This is the hierarchy tree, it allows you to interact with the scene hierarchy." ) );
     hierarchyTree->SetImageList( Helium::GlobalFileIconsTable().GetSmallImageList() );
     m_HierarchyPanel->GetSizer()->Add( hierarchyTree, 1, wxEXPAND );
     m_TreeMonitor->AddTree( hierarchyTree );
@@ -27,6 +28,7 @@ DirectoryPanel::DirectoryPanel( SceneManager* manager, TreeMonitor* treeMonitor,
     // Entities
     m_EntityOutline = new EntityAssetOutliner( m_SceneManager );
     SortTreeCtrl* entityTree = m_EntityOutline->InitTreeCtrl( m_EntitiesPanel, wxID_ANY );
+    entityTree->SetHelpText( TXT( "This is the entity tree, it allows you to see all the entities placed in the scene." ) );
     entityTree->SetImageList( Helium::GlobalFileIconsTable().GetSmallImageList() );
     m_EntitiesPanel->GetSizer()->Add( entityTree, 1, wxEXPAND );
     m_TreeMonitor->AddTree( entityTree );
@@ -34,6 +36,7 @@ DirectoryPanel::DirectoryPanel( SceneManager* manager, TreeMonitor* treeMonitor,
     // Types
     m_TypeOutline = new NodeTypeOutliner( m_SceneManager );
     SortTreeCtrl* typeTree = m_TypeOutline->InitTreeCtrl( m_TypesPanel, EventIds::ID_TypeOutlineControl );
+    typeTree->SetHelpText( TXT( "This is the type tree, it allows you to see all the different types in the scene." ) );
     typeTree->SetImageList( Helium::GlobalFileIconsTable().GetSmallImageList() );
     m_TypesPanel->GetSizer()->Add( typeTree, 1, wxEXPAND );
     m_TreeMonitor->AddTree( typeTree );

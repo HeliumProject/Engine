@@ -869,24 +869,24 @@ PropertiesPanelGenerated::PropertiesPanelGenerated( wxWindow* parent, wxWindowID
 	bSizer33 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_CommonButton = new wxRadioButton( m_ControlsPanel, wxID_ANY, _("Common"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer33->Add( m_CommonButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer33->Add( m_CommonButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 2 );
 	
 	m_AllButton = new wxRadioButton( m_ControlsPanel, wxID_ANY, _("All"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer33->Add( m_AllButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer33->Add( m_AllButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 2 );
 	
 	m_staticline5 = new wxStaticLine( m_ControlsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bSizer33->Add( m_staticline5, 0, wxEXPAND | wxALL, 5 );
+	bSizer33->Add( m_staticline5, 0, wxEXPAND | wxALL, 2 );
 	
 	m_ExpandAllButton = new wxButton( m_ControlsPanel, wxID_ANY, _("Expand All"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer33->Add( m_ExpandAllButton, 0, wxALL, 5 );
+	bSizer33->Add( m_ExpandAllButton, 0, wxALL, 2 );
 	
 	m_CollapseAllButton = new wxButton( m_ControlsPanel, wxID_ANY, _("Collapse All"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer33->Add( m_CollapseAllButton, 0, wxALL, 5 );
+	bSizer33->Add( m_CollapseAllButton, 0, wxALL, 2 );
 	
 	m_ControlsPanel->SetSizer( bSizer33 );
 	m_ControlsPanel->Layout();
 	bSizer33->Fit( m_ControlsPanel );
-	bSizer32->Add( m_ControlsPanel, 0, wxEXPAND | wxALL, 5 );
+	bSizer32->Add( m_ControlsPanel, 0, wxEXPAND | wxALL, 2 );
 	
 	m_PropertiesPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer34;
@@ -895,7 +895,7 @@ PropertiesPanelGenerated::PropertiesPanelGenerated( wxWindow* parent, wxWindowID
 	m_PropertiesPanel->SetSizer( bSizer34 );
 	m_PropertiesPanel->Layout();
 	bSizer34->Fit( m_PropertiesPanel );
-	bSizer32->Add( m_PropertiesPanel, 1, wxEXPAND | wxALL, 5 );
+	bSizer32->Add( m_PropertiesPanel, 1, wxEXPAND | wxALL, 2 );
 	
 	this->SetSizer( bSizer32 );
 	this->Layout();

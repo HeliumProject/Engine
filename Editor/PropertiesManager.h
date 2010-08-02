@@ -20,7 +20,7 @@ namespace Helium
         }
         typedef PropertySettings::PropertySetting PropertySetting;
 
-        struct LUNA_CORE_API ElementTypeFlags
+        struct EDITOR_CORE_API ElementTypeFlags
         {
             i32 m_Type;
 
@@ -57,7 +57,7 @@ namespace Helium
             }
         };
 
-        struct LUNA_CORE_API PropertiesCreatedArgs
+        struct EDITOR_CORE_API PropertiesCreatedArgs
         {
             class PropertiesManager* m_PropertiesManager;
             u32 m_SelectionId;
@@ -76,7 +76,7 @@ namespace Helium
 
         typedef Helium::OrderedSet<LSelectablePtr> OS_SelectablePtr;
 
-        struct LUNA_CORE_API PropertyThreadArgs
+        struct EDITOR_CORE_API PropertyThreadArgs
         {
             OS_SelectablePtr m_Selection;
             u32 m_SelectionId;
@@ -100,7 +100,7 @@ namespace Helium
         typedef std::map<ElementTypeFlags, Inspect::InterpreterPtr> M_InterpretersByType;
         typedef std::map<tstring, Inspect::InterpreterPtr> M_InterpretersBySymbol;
 
-        class LUNA_CORE_API EnumerateElementArgs
+        class EDITOR_CORE_API EnumerateElementArgs
         {
         private:
             M_ElementByType& m_CurrentElements;
@@ -115,7 +115,7 @@ namespace Helium
             void EnumerateElement(Reflect::Element* element, i32 includeFlags = 0xFFFFFFFF, i32 excludeFlags = 0x0 );
         };
 
-        class LUNA_CORE_API PropertiesManager : public Helium::RefCountBase< PropertiesManager > // : public Inspect::Interpreter
+        class EDITOR_CORE_API PropertiesManager : public Helium::RefCountBase< PropertiesManager > // : public Inspect::Interpreter
         {
         private:
             // generator container

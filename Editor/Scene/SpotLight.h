@@ -9,7 +9,7 @@ namespace Helium
     {
         class PrimitiveCone;
 
-        class LUNA_SCENE_API SpotLight : public Editor::Light
+        class EDITOR_SCENE_API SpotLight : public Editor::Light
         {
             //
             // Members

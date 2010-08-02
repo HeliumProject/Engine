@@ -9,7 +9,7 @@ namespace Helium
     {
         class PrimitiveSphere;
 
-        class LUNA_SCENE_API PointLight : public Editor::Light
+        class EDITOR_SCENE_API PointLight : public Editor::Light
         {
             //
             // Members

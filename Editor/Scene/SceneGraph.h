@@ -9,7 +9,7 @@ namespace Helium
 {
     namespace Editor
     {
-        struct LUNA_SCENE_API EvaluateResult
+        struct EDITOR_SCENE_API EvaluateResult
         {
             f32 m_TotalTime;
             u32 m_NodeCount;
@@ -49,7 +49,7 @@ namespace Helium
         // Evaluates dirty nodes when appropriate, and notifies interested listeners
         // that evaluation has occurred.
         // 
-        class LUNA_SCENE_API SceneGraph : public Object
+        class EDITOR_SCENE_API SceneGraph : public Object
         {
             //
             // Members

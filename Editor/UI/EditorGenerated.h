@@ -344,7 +344,17 @@ namespace Helium
 			private:
 			
 			protected:
+				wxPanel* m_LayerManagementPanel;
+				wxBitmapButton* m_AddFile;
+				wxBitmapButton* m_CreateFolder;
+				wxBitmapButton* m_Delete;
 				wxDataViewCtrl* m_DataViewCtrl;
+				
+				// Virtual event handlers, overide them in your derived class
+				virtual void OnAddFile( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnCreateFolder( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnDelete( wxCommandEvent& event ) { event.Skip(); }
+				
 			
 			public:
 				

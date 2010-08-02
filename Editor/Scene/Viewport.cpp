@@ -993,7 +993,7 @@ void Viewport::Draw()
     return;
   }
 
-  LUNA_SCENE_DRAW_SCOPE_TIMER( ("") );
+  EDITOR_SCENE_DRAW_SCOPE_TIMER( ("") );
 
   u64 start = Helium::TimerGetClock();
 
@@ -1002,7 +1002,7 @@ void Viewport::Draw()
   // this seems like a bad place to do this
   if (m_Tool)
   {
-    LUNA_SCENE_DRAW_SCOPE_TIMER( ("Tool Evaluate") );
+    EDITOR_SCENE_DRAW_SCOPE_TIMER( ("Tool Evaluate") );
     
     m_Tool->Evaluate();
   }
@@ -1012,7 +1012,7 @@ void Viewport::Draw()
   // Begin Rendering
   //
   {
-    LUNA_SCENE_DRAW_SCOPE_TIMER( ("Clear and Reset Scene") );
+    EDITOR_SCENE_DRAW_SCOPE_TIMER( ("Clear and Reset Scene") );
 
     device->BeginScene();
 
@@ -1032,7 +1032,7 @@ void Viewport::Draw()
   //
 
   {
-    LUNA_SCENE_DRAW_SCOPE_TIMER( ("Setup Viewport and Projection") );
+    EDITOR_SCENE_DRAW_SCOPE_TIMER( ("Setup Viewport and Projection") );
 
     // proj
     int w, h;
@@ -1045,7 +1045,7 @@ void Viewport::Draw()
 
 
   {
-    LUNA_SCENE_DRAW_SCOPE_TIMER( ("Set RenderState (culling, lighting, and fill") );
+    EDITOR_SCENE_DRAW_SCOPE_TIMER( ("Set RenderState (culling, lighting, and fill") );
 
 
     //
@@ -1139,35 +1139,35 @@ void Viewport::Draw()
   //
 
   {
-    LUNA_SCENE_DRAW_SCOPE_TIMER( ("PreRender") );
+    EDITOR_SCENE_DRAW_SCOPE_TIMER( ("PreRender") );
 
     PreDraw( &args );
   }
 
   {
-    LUNA_SCENE_DRAW_SCOPE_TIMER( ("Render") );
+    EDITOR_SCENE_DRAW_SCOPE_TIMER( ("Render") );
 
     {
-      LUNA_SCENE_DRAW_SCOPE_TIMER( ("Render Setup") );
+      EDITOR_SCENE_DRAW_SCOPE_TIMER( ("Render Setup") );
 
       m_RenderVisitor.Reset( &args, this );
     }
 
     {
-      LUNA_SCENE_DRAW_SCOPE_TIMER( ("Render Walk") );
+      EDITOR_SCENE_DRAW_SCOPE_TIMER( ("Render Walk") );
 
       m_Render.Raise( &m_RenderVisitor );
     }
 
     if (m_Tool)
     {
-      LUNA_SCENE_DRAW_SCOPE_TIMER( ("Render Tool") );
+      EDITOR_SCENE_DRAW_SCOPE_TIMER( ("Render Tool") );
 
       m_Tool->Draw( &args );
     }
 
     {
-      LUNA_SCENE_DRAW_SCOPE_TIMER( ("Render Draw") );
+      EDITOR_SCENE_DRAW_SCOPE_TIMER( ("Render Draw") );
 
       m_RenderVisitor.Draw();
     }
@@ -1176,7 +1176,7 @@ void Viewport::Draw()
   }
 
   {
-    LUNA_SCENE_DRAW_SCOPE_TIMER( ("Post Render") );
+    EDITOR_SCENE_DRAW_SCOPE_TIMER( ("Post Render") );
 
     PostDraw( &args );
   }
@@ -1187,7 +1187,7 @@ void Viewport::Draw()
   //
 
   {
-    LUNA_SCENE_DRAW_SCOPE_TIMER( ("Process Statistics") );
+    EDITOR_SCENE_DRAW_SCOPE_TIMER( ("Process Statistics") );
 
     m_Statistics->m_FrameNumber++;
     m_Statistics->m_FrameCount++;
@@ -1212,7 +1212,7 @@ void Viewport::Draw()
 
 
   {
-    LUNA_SCENE_DRAW_SCOPE_TIMER( ("End Scene") );
+    EDITOR_SCENE_DRAW_SCOPE_TIMER( ("End Scene") );
 
     //
     // End Rendering
@@ -1227,7 +1227,7 @@ void Viewport::Draw()
 
 
   {
-    LUNA_SCENE_DRAW_SCOPE_TIMER( ("Present") );
+    EDITOR_SCENE_DRAW_SCOPE_TIMER( ("Present") );
 
     //
     // Buffer Swap

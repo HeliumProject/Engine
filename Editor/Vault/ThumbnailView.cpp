@@ -61,7 +61,7 @@ EVT_MENU( ID_SortByName, ThumbnailView::OnSortAlphabetical )
 EVT_MENU( ID_SortByType, ThumbnailView::OnSortByType )
 EVT_MENU( ID_Sort, ThumbnailView::OnSort )
 EVT_MENU( ID_Properties, ThumbnailView::OnFileProperties )
-LUNA_EVT_THUMBNAIL_LOADED( wxID_ANY, ThumbnailView::OnThumbnailLoaded )
+EDITOR_EVT_THUMBNAIL_LOADED( wxID_ANY, ThumbnailView::OnThumbnailLoaded )
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////

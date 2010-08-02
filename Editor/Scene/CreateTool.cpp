@@ -534,7 +534,7 @@ void CreateTool::AddToScene()
   }
 
   {
-    LUNA_SCENE_SCOPE_TIMER( ("Remove Transient Instance") );
+    EDITOR_SCENE_SCOPE_TIMER( ("Remove Transient Instance") );
 
     m_Scene->RemoveObject( m_Instance );
   }
@@ -550,31 +550,31 @@ void CreateTool::AddToScene()
   m_Instance->SetTransient( false );
 
   {
-    LUNA_SCENE_SCOPE_TIMER( ("Push Undo Command Adding Instance Into Batch") );
+    EDITOR_SCENE_SCOPE_TIMER( ("Push Undo Command Adding Instance Into Batch") );
 
     batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Scene, m_Instance ) );
   }
 
   {
-    LUNA_SCENE_SCOPE_TIMER( ("Initialize Instance") );
+    EDITOR_SCENE_SCOPE_TIMER( ("Initialize Instance") );
 
     m_Instance->Initialize();
   }
 
   {
-    LUNA_SCENE_SCOPE_TIMER( ("Append To Selection") );
+    EDITOR_SCENE_SCOPE_TIMER( ("Append To Selection") );
 
     m_Selection.Append( m_Instance );
   }
 
   {
-    LUNA_SCENE_SCOPE_TIMER( ("Push Undo Batch Into Scene") );
+    EDITOR_SCENE_SCOPE_TIMER( ("Push Undo Batch Into Scene") );
 
     m_Scene->Push( batch );
   }
 
   {
-    LUNA_SCENE_SCOPE_TIMER( ("Place New Instance At Origin") );
+    EDITOR_SCENE_SCOPE_TIMER( ("Place New Instance At Origin") );
 
     m_Instance = NULL;
 #ifdef UI_REFACTOR
@@ -638,7 +638,7 @@ bool CreateTool::MouseDown(wxMouseEvent& e)
     Math::Vector3 normal;
 
     {
-      LUNA_SCENE_SCOPE_TIMER( ( "Pick Location For Instance" ) );
+      EDITOR_SCENE_SCOPE_TIMER( ( "Pick Location For Instance" ) );
       DetermineTranslationAndNormal( e.GetX(), e.GetY(), translation, normal );
     }
 
@@ -659,7 +659,7 @@ bool CreateTool::MouseDown(wxMouseEvent& e)
     }
 
     {
-      LUNA_SCENE_SCOPE_TIMER( ( "Execute Scene" ) );
+      EDITOR_SCENE_SCOPE_TIMER( ( "Execute Scene" ) );
 
       m_Scene->Execute(true);
     }
@@ -1068,7 +1068,7 @@ void CreateTool::CreateSingleObject( const Math::Vector3& translation, const Mat
   Math::Matrix4 orientation;
 
   {
-    LUNA_SCENE_SCOPE_TIMER( ( "Finalize Instance Orientation" ) );
+    EDITOR_SCENE_SCOPE_TIMER( ( "Finalize Instance Orientation" ) );
     FinalizeOrientation( orientation, translation, normal );
   }
 
@@ -1091,24 +1091,24 @@ void CreateTool::CreateSingleObject( const Math::Vector3& translation, const Mat
   
   if ( m_Instance.ReferencesObject() )
   {
-    LUNA_SCENE_SCOPE_TIMER( ( "Update Temporary Instance At Location" ) );
+    EDITOR_SCENE_SCOPE_TIMER( ( "Update Temporary Instance At Location" ) );
     m_Instance->SetObjectTransform( orientation );
     m_Instance->Evaluate( GraphDirections::Downstream );
   }
   else
   {
-    LUNA_SCENE_SCOPE_TIMER( ( "Place Temporary Instance At Location" ) );
+    EDITOR_SCENE_SCOPE_TIMER( ( "Place Temporary Instance At Location" ) );
     Place( orientation );
   }
 
   {
-    LUNA_SCENE_SCOPE_TIMER( ( "Add Instance To Scene" ) );
+    EDITOR_SCENE_SCOPE_TIMER( ( "Add Instance To Scene" ) );
     AddToScene();
   }
 
   if ( m_Instance.ReferencesObject() )
   {
-    LUNA_SCENE_SCOPE_TIMER( ( "Update Temporary Instance At Location" ) );
+    EDITOR_SCENE_SCOPE_TIMER( ( "Update Temporary Instance At Location" ) );
     if ( m_PaintTimer.IsRunning() )
     {
       orientation *= Math::Matrix4( Math::Scale( 0.0f, 0.0f, 0.0f ) );
@@ -1121,7 +1121,7 @@ void CreateTool::CreateSingleObject( const Math::Vector3& translation, const Mat
 
 void CreateTool::CreateMultipleObjects( bool stamp )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("Place Multiple Instances At Location") );
+  EDITOR_SCENE_SCOPE_TIMER( ("Place Multiple Instances At Location") );
 
   if ( m_InstanceRadius <= 0.0f )
   {

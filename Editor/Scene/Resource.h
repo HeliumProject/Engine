@@ -10,7 +10,7 @@
 #include "Render.h"
 
 // this enables stream source and fvf transition printing
-//#define LUNA_DEBUG_RESOURCES
+//#define EDITOR_DEBUG_RESOURCES
 
 namespace Helium
 {

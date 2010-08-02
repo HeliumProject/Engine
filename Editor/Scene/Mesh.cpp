@@ -490,7 +490,7 @@ void Mesh::ResetNormal( IDirect3DDevice9* device )
 
 void Mesh::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-  LUNA_SCENE_DRAW_SCOPE_TIMER( ("") );
+  EDITOR_SCENE_DRAW_SCOPE_TIMER( ("") );
 
   const Editor::HierarchyNode* node = Reflect::ConstAssertCast<Editor::HierarchyNode>( object );
   const Editor::Mesh* mesh = Reflect::ConstAssertCast<Editor::Mesh>( node );

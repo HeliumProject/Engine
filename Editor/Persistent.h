@@ -16,7 +16,7 @@ namespace Helium
         //   o Support for Undo/Redo on a general level using serialization
         //
 
-        class LUNA_CORE_API Persistent : public Selectable
+        class EDITOR_CORE_API Persistent : public Selectable
         {
             //
             // Persistent Data is the packed version of this application object

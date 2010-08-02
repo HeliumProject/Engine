@@ -16,7 +16,7 @@ namespace Helium
         // Base class for preferenced within Editor.  Provides convenience functions
         // for saving and loading.
         // 
-        class LUNA_EDITOR_API Preferences : public Reflect::ConcreteInheritor< Preferences, Settings >
+        class EDITOR_EDITOR_API Preferences : public Reflect::ConcreteInheritor< Preferences, Settings >
         {
         public:
             Preferences();
@@ -82,6 +82,6 @@ namespace Helium
         typedef FilePathOptions::FilePathOption FilePathOption;
 
         // Get the UI label for a file path based upon the specified FilePathOption
-        LUNA_EDITOR_API tstring PathToLabel( const Helium::Path& path, const FilePathOption filePathOption );
+        EDITOR_EDITOR_API tstring PathToLabel( const Helium::Path& path, const FilePathOption filePathOption );
     }
 }

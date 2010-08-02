@@ -30,7 +30,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // Editor's wrapper for an entity instance.
         // 
-        class LUNA_SCENE_API Instance HELIUM_ABSTRACT : public Editor::PivotTransform
+        class EDITOR_SCENE_API Instance HELIUM_ABSTRACT : public Editor::PivotTransform
         {
             //
             // Members

@@ -10,10 +10,10 @@ namespace Helium
     namespace Editor
     {
         //DECLARE_EVENT_TYPE( ThumbnailLoadedCommandEvent, -1 )
-        extern LUNA_CORE_API const wxEventType ThumbnailLoadedCommandEvent;
+        extern EDITOR_CORE_API const wxEventType ThumbnailLoadedCommandEvent;
 
         // A custom event that transports a whole wxString.
-        class LUNA_CORE_API ThumbnailLoadedEvent: public wxCommandEvent
+        class EDITOR_CORE_API ThumbnailLoadedEvent: public wxCommandEvent
         {
         public:
             ThumbnailLoadedEvent( wxEventType commandType = Editor::ThumbnailLoadedCommandEvent, int id = 0 );
@@ -49,13 +49,13 @@ namespace Helium
     wxStaticCastEvent(igThumbnailLoadedEventFunction, &func)                    
 
 // Define the event table entry. Yes, it really *does* end in a comma.
-#define LUNA_EVT_THUMBNAIL_LOADED(id, fn)                                            \
+#define EDITOR_EVT_THUMBNAIL_LOADED(id, fn)                                            \
     DECLARE_EVENT_TABLE_ENTRY( Editor::ThumbnailLoadedCommandEvent, id, wxID_ANY,  \
     (wxObjectEventFunction)(wxEventFunction)                     \
     (wxCommandEventFunction) wxStaticCastEvent(                  \
     igThumbnailLoadedEventFunction, &fn ), (wxObject*) NULL ),
 
-// Optionally, you can do a similar #define for LUNA_EVT_THUMBNAIL_LOADED_RANGE.
-#define LUNA_EVT_THUMBNAIL_LOADED_RANGE(id1,id2, fn)                                 \
+// Optionally, you can do a similar #define for EDITOR_EVT_THUMBNAIL_LOADED_RANGE.
+#define EDITOR_EVT_THUMBNAIL_LOADED_RANGE(id1,id2, fn)                                 \
     DECLARE_EVENT_TABLE_ENTRY( Editor::ThumbnailLoadedCommandEvent, id1, id2,      \
     igThumbnailLoadedEventHandler(fn), (wxObject*) NULL ),

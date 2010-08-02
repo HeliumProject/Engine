@@ -121,7 +121,7 @@ namespace Helium
         //   o Dependencies of this object are traversed by SceneGraph to compute the order of evaluation.
         //
 
-        class LUNA_SCENE_API SceneNode HELIUM_ABSTRACT : public Persistent
+        class EDITOR_SCENE_API SceneNode HELIUM_ABSTRACT : public Persistent
         {
             //
             // Members

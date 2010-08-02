@@ -45,7 +45,7 @@ HierarchyOutlinerItemData* HierarchyOutliner::GetTreeItemData( const wxTreeItemI
 // 
 void HierarchyOutliner::AddHierarchyNodes()
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+  EDITOR_SCENE_SCOPE_TIMER( ("") );
 
   if ( m_CurrentScene )
   {
@@ -76,7 +76,7 @@ void HierarchyOutliner::AddHierarchyNodes()
 // 
 void HierarchyOutliner::RecurseAddHierarchyNode( Editor::HierarchyNode* node )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+  EDITOR_SCENE_SCOPE_TIMER( ("") );
 
   m_TreeCtrl->Freeze();
 
@@ -98,7 +98,7 @@ void HierarchyOutliner::RecurseAddHierarchyNode( Editor::HierarchyNode* node )
 // 
 void HierarchyOutliner::AddHierarchyNode( Editor::HierarchyNode* node )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+  EDITOR_SCENE_SCOPE_TIMER( ("") );
 
   wxTreeItemId parentItem;
   M_TreeItems::const_iterator foundParent = m_Items.find( node->GetParent() );
@@ -238,7 +238,7 @@ void HierarchyOutliner::OnEndDrag( wxTreeEvent& args )
 // 
 void HierarchyOutliner::ParentChanged( const ParentChangedArgs& args )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+  EDITOR_SCENE_SCOPE_TIMER( ("") );
 
   Editor::HierarchyNode* child = args.m_Node;
   m_TreeCtrl->Freeze();
@@ -256,7 +256,7 @@ void HierarchyOutliner::ParentChanged( const ParentChangedArgs& args )
 // 
 void HierarchyOutliner::NodeAdded( const NodeChangeArgs& args )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+  EDITOR_SCENE_SCOPE_TIMER( ("") );
 
   if ( args.m_Node->HasType( Reflect::GetType<Editor::HierarchyNode>() ) )
   {
@@ -296,7 +296,7 @@ void HierarchyOutliner::NodeAdded( const NodeChangeArgs& args )
 // 
 void HierarchyOutliner::NodeRemoved( const NodeChangeArgs& args )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+  EDITOR_SCENE_SCOPE_TIMER( ("") );
 
   if ( args.m_Node->HasType( Reflect::GetType<Editor::HierarchyNode>() ) )
   {

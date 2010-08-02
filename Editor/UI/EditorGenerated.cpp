@@ -807,15 +807,43 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer24;
 	bSizer24 = new wxBoxSizer( wxVERTICAL );
 	
+	m_LayerManagementPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer36;
+	bSizer36 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_AddFile = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer36->Add( m_AddFile, 0, wxALL, 2 );
+	
+	m_CreateFolder = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer36->Add( m_CreateFolder, 0, wxALL, 2 );
+	
+	m_Delete = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer36->Add( m_Delete, 0, wxALL, 2 );
+	
+	m_LayerManagementPanel->SetSizer( bSizer36 );
+	m_LayerManagementPanel->Layout();
+	bSizer36->Fit( m_LayerManagementPanel );
+	bSizer24->Add( m_LayerManagementPanel, 0, wxEXPAND | wxALL, 2 );
+	
 	m_DataViewCtrl = new wxDataViewCtrl ( this, wxID_ANY );
 	bSizer24->Add( m_DataViewCtrl, 1, wxALL|wxEXPAND, 5 );
 	
 	this->SetSizer( bSizer24 );
 	this->Layout();
+	
+	// Connect Events
+	m_AddFile->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnAddFile ), NULL, this );
+	m_CreateFolder->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnCreateFolder ), NULL, this );
+	m_Delete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnDelete ), NULL, this );
 }
 
 ProjectPanelGenerated::~ProjectPanelGenerated()
 {
+	// Disconnect Events
+	m_AddFile->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnAddFile ), NULL, this );
+	m_CreateFolder->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnCreateFolder ), NULL, this );
+	m_Delete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnDelete ), NULL, this );
+	
 }
 
 DirectoryPanelGenerated::DirectoryPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )

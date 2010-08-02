@@ -9,7 +9,7 @@ namespace Helium
 {
     namespace Editor
     {
-        class LUNA_EDITOR_API MRUData : public Reflect::ConcreteInheritor< MRUData, Reflect::Element >
+        class EDITOR_EDITOR_API MRUData : public Reflect::ConcreteInheritor< MRUData, Reflect::Element >
         {
         public:
             const std::vector< tstring >& GetPaths() const
@@ -40,7 +40,7 @@ namespace Helium
         struct PreferencesLoadedArgs {};
         typedef Helium::Signature< void, const PreferencesLoadedArgs& > PreferencesLoadedSignature;
 
-        class LUNA_EDITOR_API Settings HELIUM_ABSTRACT : public Reflect::AbstractInheritor< Settings, Reflect::Element >
+        class EDITOR_EDITOR_API Settings HELIUM_ABSTRACT : public Reflect::AbstractInheritor< Settings, Reflect::Element >
         {
         public:
             virtual void PreSerialize() HELIUM_OVERRIDE;

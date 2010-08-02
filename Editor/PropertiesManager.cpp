@@ -106,10 +106,10 @@ void PropertiesManager::SetSelection(const OS_SelectableDumbPtr& selection)
 
 void PropertiesManager::CreateProperties()
 {
-  LUNA_CORE_SCOPE_TIMER( ("") );
+  EDITOR_CORE_SCOPE_TIMER( ("") );
 
   {
-    LUNA_CORE_SCOPE_TIMER( ("Reset Property State") );
+    EDITOR_CORE_SCOPE_TIMER( ("Reset Property State") );
 
     m_Generator->Reset();
   }
@@ -180,7 +180,7 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
   M_PanelCreators unionedPanels;
 
   {
-    LUNA_CORE_SCOPE_TIMER( ("Selection Processing") );
+    EDITOR_CORE_SCOPE_TIMER( ("Selection Processing") );
 
     OS_SelectableDumbPtr::Iterator itr = selection.Begin();
     OS_SelectableDumbPtr::Iterator end = selection.End();
@@ -194,19 +194,19 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
       currentElements.clear();
 
       {
-        LUNA_CORE_SCOPE_TIMER( ("Object Property Enumeration") );
+        EDITOR_CORE_SCOPE_TIMER( ("Object Property Enumeration") );
 
         (*itr)->ConnectProperties(enumerateElementArgs);
       }
 
       M_PanelCreators currentPanels;
 
-#ifdef LUNA_DEBUG_PROPERTIES_GENERATOR
+#ifdef EDITOR_DEBUG_PROPERTIES_GENERATOR
       Log::Print("Object type %s:\n", typeid(*(*itr)).name());
 #endif
 
       {
-        LUNA_CORE_SCOPE_TIMER( ("Object Panel Validation") );
+        EDITOR_CORE_SCOPE_TIMER( ("Object Panel Validation") );
 
         M_PanelCreators::const_iterator itrPanel = args.m_Setting == PropertySettings::Intersection ? intersectingPanels.begin() : s_PanelCreators.begin();
         M_PanelCreators::const_iterator endPanel = args.m_Setting == PropertySettings::Intersection ? intersectingPanels.end() : s_PanelCreators.end();
@@ -219,7 +219,7 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
 
           if ((*itr)->ValidatePanel(itrPanel->first))
           {
-#ifdef LUNA_DEBUG_PROPERTIES_GENERATOR
+#ifdef EDITOR_DEBUG_PROPERTIES_GENERATOR
             Log::Print(" accepts %s\n", itrPanel->first.c_str());
 #endif
             switch (m_Setting)
@@ -243,14 +243,14 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
           }
           else
           {
-#ifdef LUNA_DEBUG_PROPERTIES_GENERATOR
+#ifdef EDITOR_DEBUG_PROPERTIES_GENERATOR
             Log::Print(" rejects %s\n", itrPanel->first.c_str());
 #endif
           }
         }
       }
 
-#ifdef LUNA_DEBUG_PROPERTIES_GENERATOR
+#ifdef EDITOR_DEBUG_PROPERTIES_GENERATOR
       Log::Print("\n");
 #endif
 
@@ -265,7 +265,7 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
       }
       else
       {
-        LUNA_CORE_SCOPE_TIMER( ("Object Unique Reflect Property Culling") );
+        EDITOR_CORE_SCOPE_TIMER( ("Object Unique Reflect Property Culling") );
 
         M_ElementsByType newCommonElements;
 
@@ -336,7 +336,7 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
   //
   
   {
-    LUNA_CORE_SCOPE_TIMER( ("Static Panel Creation") );
+    EDITOR_CORE_SCOPE_TIMER( ("Static Panel Creation") );
 
     M_PanelCreators::const_iterator itr = args.m_Setting == PropertySettings::Intersection ? intersectingPanels.begin() : unionedPanels.begin();
     M_PanelCreators::const_iterator end = args.m_Setting == PropertySettings::Intersection ? intersectingPanels.end() : unionedPanels.end();
@@ -391,7 +391,7 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
   //
 
   {
-    LUNA_CORE_SCOPE_TIMER( ("Reflect Interpret") );
+    EDITOR_CORE_SCOPE_TIMER( ("Reflect Interpret") );
 
     M_ElementsByType::const_iterator itr = commonElements.begin();
     M_ElementsByType::const_iterator end = commonElements.end();
@@ -422,7 +422,7 @@ void PropertiesManager::FinalizeProperties( u32 selectionId, const Inspect::V_Co
     return;
   }
 
-  LUNA_CORE_SCOPE_TIMER( ("Canvas Layout") );
+  EDITOR_CORE_SCOPE_TIMER( ("Canvas Layout") );
   
   for ( Inspect::V_Control::const_iterator itr = controls.begin(), end = controls.end(); itr != end; ++itr )
   {

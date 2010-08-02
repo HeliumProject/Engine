@@ -38,7 +38,7 @@ VolumeCreateTool::~VolumeCreateTool()
 
 Editor::TransformPtr VolumeCreateTool::CreateNode()
 {
-#ifdef LUNA_DEBUG_RUNTIME_DATA_SELECTION
+#ifdef EDITOR_DEBUG_RUNTIME_DATA_SELECTION
 
   Content::VolumePtr v = new Content::Volume( s_Shape );
 

@@ -24,7 +24,7 @@ namespace Helium
         }
         typedef ManipulatorSpaces::ManipulatorSpace;
 
-        class LUNA_SCENE_API Transform HELIUM_ABSTRACT : public Editor::HierarchyNode
+        class EDITOR_SCENE_API Transform HELIUM_ABSTRACT : public Editor::HierarchyNode
         {
             // 
             // Member variables

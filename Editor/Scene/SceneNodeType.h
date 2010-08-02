@@ -31,7 +31,7 @@ namespace Helium
         // among all the instances.
         // 
 
-        class LUNA_SCENE_API SceneNodeType : public Object
+        class EDITOR_SCENE_API SceneNodeType : public Object
         {
             //
             // Members

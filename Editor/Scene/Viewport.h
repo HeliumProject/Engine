@@ -244,7 +244,7 @@ namespace Helium
         class PrimitiveGrid;
         class PrimitiveFrame;
 
-        class LUNA_SCENE_API Viewport : public wxWindow
+        class EDITOR_SCENE_API Viewport : public wxWindow
         {
             //
             // Members

@@ -46,7 +46,7 @@ namespace Helium
         // Wraps all files manipulated by editors in Editor.  Handles all interaction
         // with revision control.
         // 
-        class LUNA_EDITOR_API Document : public Reflect::AbstractInheritor< Editor::Document, Editor::Object >
+        class EDITOR_EDITOR_API Document : public Reflect::AbstractInheritor< Editor::Document, Editor::Object >
         {
             //
             // Member variables

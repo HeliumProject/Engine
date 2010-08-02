@@ -56,7 +56,7 @@ EVT_MENU( VaultMenu::Preferences, VaultFrame::OnPreferences )
 EVT_MENU( VaultMenu::NewCollectionFromSelection, VaultFrame::OnNewCollectionFromSelection )
 EVT_MENU( VaultMenu::NewDepedencyCollectionFromSelection, VaultFrame::OnNewCollectionFromSelection )
 EVT_MENU( VaultMenu::NewUsageCollectionFromSelection, VaultFrame::OnNewCollectionFromSelection )
-LUNA_EVT_UPDATE_STATUS( wxID_ANY, VaultFrame::OnUpdateStatusBar )
+EDITOR_EVT_UPDATE_STATUS( wxID_ANY, VaultFrame::OnUpdateStatusBar )
 END_EVENT_TABLE()
 
 

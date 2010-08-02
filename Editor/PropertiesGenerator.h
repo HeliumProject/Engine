@@ -18,7 +18,7 @@ namespace Helium
 {
     namespace Editor
     {
-        struct LUNA_CORE_API CreatePanelArgs
+        struct EDITOR_CORE_API CreatePanelArgs
         {
             class PropertiesGenerator* m_Generator;
             const OS_SelectableDumbPtr& m_Selection;
@@ -38,7 +38,7 @@ namespace Helium
 
         extern M_PanelCreators s_PanelCreators;
 
-        class LUNA_CORE_API PropertiesGenerator : public Inspect::Interpreter
+        class EDITOR_CORE_API PropertiesGenerator : public Inspect::Interpreter
         {
         public:
             PropertiesGenerator (Inspect::Container* container);

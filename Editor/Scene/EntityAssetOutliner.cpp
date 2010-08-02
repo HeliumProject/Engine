@@ -173,7 +173,7 @@ void EntityAssetOutliner::RemoveEntityAssetSet( Editor::EntityAssetSet* classSet
 // 
 void EntityAssetOutliner::AddEntity( Editor::Entity* entity )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+  EDITOR_SCENE_SCOPE_TIMER( ("") );
 
   // Find the tree item that corresponds to the class set that this entity
   // belongs to.
@@ -196,7 +196,7 @@ void EntityAssetOutliner::AddEntity( Editor::Entity* entity )
 // 
 void EntityAssetOutliner::RemoveEntity( Editor::Entity* entity )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+  EDITOR_SCENE_SCOPE_TIMER( ("") );
 
   // Remove the item from the tree
   DeleteItem( entity );

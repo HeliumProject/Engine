@@ -244,7 +244,7 @@ bool Scene::LoadFile( const tstring& file )
 
 Undo::CommandPtr Scene::ImportFile( const tstring& file, ImportAction action, u32 importFlags, Editor::HierarchyNode* importRoot, i32 importReflectType )
 {
-    LUNA_SCENE_SCOPE_TIMER( ( "%s", file.c_str() ) );
+    EDITOR_SCENE_SCOPE_TIMER( ( "%s", file.c_str() ) );
 
     if ( action != ImportActions::Load )
     {
@@ -315,7 +315,7 @@ Undo::CommandPtr Scene::ImportFile( const tstring& file, ImportAction action, u3
 
 Undo::CommandPtr Scene::ImportXML( const tstring& xml, u32 importFlags, Editor::HierarchyNode* importRoot )
 {
-    LUNA_SCENE_SCOPE_TIMER( ("") );
+    EDITOR_SCENE_SCOPE_TIMER( ("") );
 
     m_LoadStarted.Raise( LoadArgs( this ) );
 
@@ -501,7 +501,7 @@ void Scene::Reset()
 
 Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAction action, u32 importFlags, i32 importReflectType )
 {
-    LUNA_SCENE_SCOPE_TIMER( ("") );
+    EDITOR_SCENE_SCOPE_TIMER( ("") );
 
     u64 startTimer = Helium::TimerGetClock();
 
@@ -696,7 +696,7 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
 
 Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, u32 importFlags, i32 importReflectType )
 {
-    LUNA_SCENE_SCOPE_TIMER( ("ImportSceneNode: %s", element->GetClass()->m_ShortName.c_str()) );
+    EDITOR_SCENE_SCOPE_TIMER( ("ImportSceneNode: %s", element->GetClass()->m_ShortName.c_str()) );
 
     SceneNodePtr createdNode = NULL;
 
@@ -1085,7 +1085,7 @@ bool Scene::ExportFile( const tstring& file, const ExportArgs& args )
 // 
 bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
 {
-    LUNA_SCENE_SCOPE_TIMER( ("") );
+    EDITOR_SCENE_SCOPE_TIMER( ("") );
 
     bool result = false;
 
@@ -1371,7 +1371,7 @@ void Scene::RemoveNodeType(const SceneNodeTypePtr& nodeType)
 
 void Scene::AddObject( const SceneNodePtr& node )
 {
-    LUNA_SCENE_SCOPE_TIMER( ("") );
+    EDITOR_SCENE_SCOPE_TIMER( ("") );
 
     ClearHighlight( ClearHighlightArgs (false) );
 
@@ -1390,7 +1390,7 @@ void Scene::AddObject( const SceneNodePtr& node )
 
 void Scene::RemoveObject( const SceneNodePtr& node )
 {
-    LUNA_SCENE_SCOPE_TIMER( ("") );
+    EDITOR_SCENE_SCOPE_TIMER( ("") );
 
     ClearHighlight( ClearHighlightArgs (false) );
 
@@ -1410,7 +1410,7 @@ void Scene::RemoveObject( const SceneNodePtr& node )
 void Scene::AddSceneNode( const SceneNodePtr& node )
 {
     {
-        LUNA_SCENE_SCOPE_TIMER( ("Insert in node list") );
+        EDITOR_SCENE_SCOPE_TIMER( ("Insert in node list") );
 
         // this would be bad
         HELIUM_ASSERT( node->GetID() != TUID::Null );
@@ -1429,32 +1429,32 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
         Editor::SceneNodeType* t = node->GetNodeType();
         if ( t == NULL )
         {
-            LUNA_SCENE_SCOPE_TIMER( ("Deduce node type") );
+            EDITOR_SCENE_SCOPE_TIMER( ("Deduce node type") );
             t = node->DeduceNodeType();
         }
 
         {
-            LUNA_SCENE_SCOPE_TIMER( ("Add instance") );
+            EDITOR_SCENE_SCOPE_TIMER( ("Add instance") );
             t->AddInstance(node);
         }
     }
 
 
     {
-        LUNA_SCENE_SCOPE_TIMER( ("Set name") );
+        EDITOR_SCENE_SCOPE_TIMER( ("Set name") );
 
         // check name
         SetName( node, node->GetName() );
     }
 
     {
-        LUNA_SCENE_SCOPE_TIMER( ("Create") );
+        EDITOR_SCENE_SCOPE_TIMER( ("Create") );
         // (re)creates disposable resources in object
         node->Create();
     }
 
     {
-        LUNA_SCENE_SCOPE_TIMER( ("Hierarchy check") );
+        EDITOR_SCENE_SCOPE_TIMER( ("Hierarchy check") );
         if ( node->HasType( Reflect::GetType<Editor::HierarchyNode>() ) )
         {
             Editor::HierarchyNode* hierarchyNode = Reflect::DangerousCast< Editor::HierarchyNode >( node );
@@ -1467,7 +1467,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
     }
 
     {
-        LUNA_SCENE_SCOPE_TIMER( ("Raise events if not transient") );
+        EDITOR_SCENE_SCOPE_TIMER( ("Raise events if not transient") );
         if ( !node->IsTransient() && !m_Importing )
         {
             m_NodeAdded.Raise( NodeChangeArgs( node.Ptr() ) );
@@ -1477,7 +1477,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
 
 void Scene::RemoveSceneNode( const SceneNodePtr& node )
 {
-    LUNA_SCENE_SCOPE_TIMER( ("") );
+    EDITOR_SCENE_SCOPE_TIMER( ("") );
 
     if ( !node->IsTransient() )
     {
@@ -1519,7 +1519,7 @@ void Scene::OnSceneNodeRemoved( const NodeChangeArgs& args )
 
 void Scene::Evaluate(bool silent)
 {
-    LUNA_SCENE_EVALUATE_SCOPE_TIMER( ("") );
+    EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("") );
 
     Editor::EvaluateResult result = m_Graph->EvaluateGraph(silent);
 
@@ -1530,7 +1530,7 @@ void Scene::Evaluate(bool silent)
 
 void Scene::Execute(bool interactively)
 {
-    LUNA_SCENE_EVALUATE_SCOPE_TIMER( ("") );
+    EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("") );
 
     // update data
     Evaluate();
@@ -1589,7 +1589,7 @@ void Scene::Delete()
 void Scene::Render( RenderVisitor* render ) const
 {
     {
-        LUNA_SCENE_DRAW_SCOPE_TIMER( ("") );
+        EDITOR_SCENE_DRAW_SCOPE_TIMER( ("") );
 
         HierarchyRenderTraverser renderTraverser ( render );
 
@@ -1602,7 +1602,7 @@ bool Scene::Pick( PickVisitor* pick ) const
     size_t hitCount = pick->GetHits().size();
 
     {
-        LUNA_SCENE_SCOPE_TIMER( ("") );
+        EDITOR_SCENE_SCOPE_TIMER( ("") );
 
         HierarchyPickTraverser pickTraverser ( pick );
 
@@ -1614,7 +1614,7 @@ bool Scene::Pick( PickVisitor* pick ) const
 
 void Scene::Select( const SelectArgs& args )
 {
-    LUNA_SCENE_SCOPE_TIMER( ("") );
+    EDITOR_SCENE_SCOPE_TIMER( ("") );
 
     ClearHighlight( ClearHighlightArgs (false) );
 
@@ -1794,7 +1794,7 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
 
 void Scene::SetHighlight(const SetHighlightArgs& args)
 {
-    LUNA_SCENE_SCOPE_TIMER( ("") );
+    EDITOR_SCENE_SCOPE_TIMER( ("") );
 
     ClearHighlight( ClearHighlightArgs (false) );
 
@@ -2065,7 +2065,7 @@ void Scene::PropertyChanged( const Inspect::ChangeArgs& args )
 
 bool Scene::SelectionChanging(const OS_SelectableDumbPtr& selection)
 {
-    LUNA_SCENE_SCOPE_TIMER( ("") );
+    EDITOR_SCENE_SCOPE_TIMER( ("") );
 
     bool result = true;
 
@@ -2104,7 +2104,7 @@ bool Scene::SelectionChanging(const OS_SelectableDumbPtr& selection)
 
 void Scene::SelectionChanged(const OS_SelectableDumbPtr& selection)
 {
-    LUNA_SCENE_SCOPE_TIMER( ("") );
+    EDITOR_SCENE_SCOPE_TIMER( ("") );
 
     m_ValidSmartDuplicateMatrix = false;
 

@@ -62,7 +62,7 @@ namespace Helium
         //  Its allocated as a reference-counted heap object that is tracked by a smart (shared) pointer
         //
 
-        class LUNA_CORE_API Object : public Reflect::Object
+        class EDITOR_CORE_API Object : public Reflect::Object
         {
             //
             // Runtime Type Info

@@ -50,7 +50,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // Tracks all the scenes and their undo queues.
         // 
-        class LUNA_SCENE_API SceneManager : public DocumentManager
+        class EDITOR_SCENE_API SceneManager : public DocumentManager
         {
         private:
             // the root scene (the first one opened)

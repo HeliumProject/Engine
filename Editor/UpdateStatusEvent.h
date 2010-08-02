@@ -7,10 +7,10 @@ namespace Helium
     namespace Editor
     {
         //DECLARE_EVENT_TYPE( UpdateStatusCommandEvent, -1 )
-        extern LUNA_CORE_API const wxEventType UpdateStatusCommandEvent;
+        extern EDITOR_CORE_API const wxEventType UpdateStatusCommandEvent;
 
         // A custom event that transports a whole wxString.
-        class LUNA_CORE_API UpdateStatusEvent: public wxCommandEvent
+        class EDITOR_CORE_API UpdateStatusEvent: public wxCommandEvent
         {
         public:
             UpdateStatusEvent( wxEventType commandType = Editor::UpdateStatusCommandEvent, int id = 0 )
@@ -36,18 +36,18 @@ namespace Helium
 
 // This #define simplifies the one below, and makes the syntax less
 // ugly if you want to use Connect() instead of an event table.
-#define LUNA_UPDATE_STATUS_EVENT_HANDLER(func) \
+#define EDITOR_UPDATE_STATUS_EVENT_HANDLER(func) \
     (wxObjectEventFunction)(wxEventFunction)(wxCommandEventFunction) \
     wxStaticCastEvent(Editor::UpdateStatusEventFunction, &func)                    
 
 // Define the event table entry. Yes, it really *does* end in a comma.
-#define LUNA_EVT_UPDATE_STATUS(id, fn) \
+#define EDITOR_EVT_UPDATE_STATUS(id, fn) \
     DECLARE_EVENT_TABLE_ENTRY( Editor::UpdateStatusCommandEvent, id, wxID_ANY, \
     (wxObjectEventFunction)(wxEventFunction) \
     (wxCommandEventFunction) wxStaticCastEvent( \
     UpdateStatusEventFunction, &fn ), (wxObject*) NULL ),
 
-// Optionally, you can do a similar #define for LUNA_EVT_UPDATE_STATUS_RANGE.
-#define LUNA_EVT_UPDATE_STATUS_RANGE(id1,id2, fn) \
+// Optionally, you can do a similar #define for EDITOR_EVT_UPDATE_STATUS_RANGE.
+#define EDITOR_EVT_UPDATE_STATUS_RANGE(id1,id2, fn) \
     DECLARE_EVENT_TABLE_ENTRY( Editor::UpdateStatusCommandEvent, id1, id2, \
-    LUNA_UPDATE_STATUS_EVENT_HANDLER(fn), (wxObject*) NULL ),
+    EDITOR_UPDATE_STATUS_EVENT_HANDLER(fn), (wxObject*) NULL ),

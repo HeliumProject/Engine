@@ -173,7 +173,7 @@ namespace Helium
 // declares creator for constructable types
 #define _REFLECT_DECLARE_CREATOR( __Class )                                                                         \
 public:                                                                                                             \
-    static Reflect::Object* CreateObject()                                                                              \
+static Reflect::Object* CreateObject()                                                                              \
 {                                                                                                                   \
     return new __Class;                                                                                             \
 }
@@ -181,25 +181,25 @@ public:                                                                         
 // declares type checking functions
 #define _REFLECT_DECLARE_CLASS( __Class, __Base, __Creator )                                                        \
 public:                                                                                                             \
-    typedef __Base Base;                                                                                                \
-    typedef __Class This;                                                                                                \
-    \
-    virtual i32 GetType() const HELIUM_OVERRIDE                                                                            \
+typedef __Base Base;                                                                                                \
+typedef __Class This;                                                                                               \
+\
+virtual i32 GetType() const HELIUM_OVERRIDE                                                                         \
 {                                                                                                                   \
     return Reflect::GetType<__Class>();                                                                             \
 }                                                                                                                   \
-    \
-    virtual bool HasType(i32 id) const HELIUM_OVERRIDE                                                                     \
+\
+virtual bool HasType(i32 id) const HELIUM_OVERRIDE                                                                  \
 {                                                                                                                   \
     return Reflect::GetType<__Class>() == id || __Base::HasType(id);                                                \
 }                                                                                                                   \
-    \
-    virtual const Reflect::Class* GetClass() const HELIUM_OVERRIDE                                                         \
+\
+virtual const Reflect::Class* GetClass() const HELIUM_OVERRIDE                                                      \
 {                                                                                                                   \
     return Reflect::GetClass<__Class>();                                                                            \
 }                                                                                                                   \
-    \
-    static Reflect::Class* CreateClass(const tstring& shortName = TXT( "" ) )                                           \
+\
+static Reflect::Class* CreateClass(const tstring& shortName = TXT( "" ) )                                           \
 {                                                                                                                   \
     return Reflect::Class::Create<__Class>(typeid(__Base).name(), shortName, __Creator);                            \
 }

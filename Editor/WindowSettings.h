@@ -12,7 +12,7 @@ namespace Helium
         class WindowSettings;
         typedef Helium::SmartPtr< WindowSettings > WindowSettingsPtr;
 
-        class LUNA_EDITOR_API WindowSettings : public Reflect::ConcreteInheritor< WindowSettings, Settings >
+        class EDITOR_EDITOR_API WindowSettings : public Reflect::ConcreteInheritor< WindowSettings, Settings >
         {
         public:
             WindowSettings( const tstring& version = TXT( "" ), wxPoint pos = wxDefaultPosition, wxSize size = wxDefaultSize );

@@ -47,7 +47,7 @@ namespace Helium
         // Manages a group of documents, providing convenience functions for saving,
         // closing, etc. all of them at once.
         // 
-        class LUNA_EDITOR_API DocumentManager
+        class EDITOR_EDITOR_API DocumentManager
         {
         private:
             OS_DocumentSmartPtr m_Documents;

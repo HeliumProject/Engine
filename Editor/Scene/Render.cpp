@@ -152,7 +152,7 @@ void RenderVisitor::Draw()
     m_View->GetCamera()->GetPosition(camera);
 
     {
-      LUNA_SCENE_DRAW_SCOPE_TIMER( ("Setup") );
+      EDITOR_SCENE_DRAW_SCOPE_TIMER( ("Setup") );
 
       // make a block of pointers to sort
       m_EntryPointers.resize(m_EntryData.size());
@@ -173,7 +173,7 @@ void RenderVisitor::Draw()
     }
 
     {
-      LUNA_SCENE_DRAW_SCOPE_TIMER( ("Sort") );
+      EDITOR_SCENE_DRAW_SCOPE_TIMER( ("Sort") );
 
       u64 start = Helium::TimerGetClock();
       m_CompareTime = 0x0;
@@ -185,7 +185,7 @@ void RenderVisitor::Draw()
     }
 
     {
-      LUNA_SCENE_DRAW_SCOPE_TIMER( ("Draw") );
+      EDITOR_SCENE_DRAW_SCOPE_TIMER( ("Draw") );
 
       u64 start = Helium::TimerGetClock();
 

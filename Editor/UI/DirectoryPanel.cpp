@@ -16,7 +16,7 @@ DirectoryPanel::DirectoryPanel( SceneManager* manager, TreeMonitor* treeMonitor,
 {
     SetHelpText( TXT( "This is the directory panel, you can explore the hierarchy of your scene here." ) );
 
-#ifndef LUNA_SCENE_DISABLE_OUTLINERS
+#ifndef EDITOR_SCENE_DISABLE_OUTLINERS
     // Hierarchy
     m_HierarchyOutline = new HierarchyOutliner( m_SceneManager );
     SortTreeCtrl* hierarchyTree = m_HierarchyOutline->InitTreeCtrl( m_HierarchyPanel, wxID_ANY );
@@ -46,7 +46,7 @@ DirectoryPanel::DirectoryPanel( SceneManager* manager, TreeMonitor* treeMonitor,
 
 DirectoryPanel::~DirectoryPanel()
 {
-#ifndef LUNA_SCENE_DISABLE_OUTLINERS
+#ifndef EDITOR_SCENE_DISABLE_OUTLINERS
     delete m_TypeOutline;
     delete m_EntityOutline;
     delete m_HierarchyOutline;
@@ -55,7 +55,7 @@ DirectoryPanel::~DirectoryPanel()
 
 void DirectoryPanel::SaveState( SceneOutlinerState& hierarchyState, SceneOutlinerState& entityState, SceneOutlinerState& typesState )
 {
-#ifndef LUNA_SCENE_DISABLE_OUTLINERS
+#ifndef EDITOR_SCENE_DISABLE_OUTLINERS
     m_TypeOutline->SaveState( typesState );
     m_EntityOutline->SaveState( entityState );
     m_HierarchyOutline->SaveState( hierarchyState );
@@ -64,7 +64,7 @@ void DirectoryPanel::SaveState( SceneOutlinerState& hierarchyState, SceneOutline
 
 void DirectoryPanel::RestoreState( SceneOutlinerState& hierarchyState, SceneOutlinerState& entityState, SceneOutlinerState& typesState )
 {
-#ifndef LUNA_SCENE_DISABLE_OUTLINERS
+#ifndef EDITOR_SCENE_DISABLE_OUTLINERS
     m_TypeOutline->RestoreState( typesState );
     m_EntityOutline->RestoreState( entityState );
     m_HierarchyOutline->RestoreState( hierarchyState );

@@ -273,14 +273,14 @@ Undo::CommandPtr Transform::CenterTransform()
 
 void Transform::Evaluate(GraphDirection direction)
 {
-  LUNA_SCENE_EVALUATE_SCOPE_TIMER( ("") );
+  EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("") );
 
   switch (direction)
   {
   case GraphDirections::Downstream:
     {
       {
-        LUNA_SCENE_EVALUATE_SCOPE_TIMER( ("Compose Local Matrices") );
+        EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("Compose Local Matrices") );
 
         //
         // Compute Local Transform
@@ -291,7 +291,7 @@ void Transform::Evaluate(GraphDirection direction)
 
 
       {
-        LUNA_SCENE_EVALUATE_SCOPE_TIMER( ("Compute Global Matrices") );
+        EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("Compute Global Matrices") );
 
         //
         // Compute Global Transform
@@ -309,7 +309,7 @@ void Transform::Evaluate(GraphDirection direction)
 
 
       {
-        LUNA_SCENE_EVALUATE_SCOPE_TIMER( ("Compute Inverse Matrices") );
+        EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("Compute Inverse Matrices") );
 
         //
         // Compute Inverses
@@ -329,7 +329,7 @@ void Transform::Evaluate(GraphDirection direction)
 
       if (m_BindIsDirty)
       {
-        LUNA_SCENE_EVALUATE_SCOPE_TIMER( ("Compute Bind Matrix and Inverse") );
+        EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("Compute Bind Matrix and Inverse") );
 
         if (m_Parent == NULL)
           m_BindTransform = m_ObjectTransform;

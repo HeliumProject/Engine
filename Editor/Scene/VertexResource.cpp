@@ -42,7 +42,7 @@ bool VertexResource::SetState() const
 
         if ( m_Buffer != m_Tracker->GetVertices() )
         {
-#ifdef LUNA_DEBUG_RESOURCES
+#ifdef EDITOR_DEBUG_RESOURCES
             Log::Print("Setting vertices to 0x%p\n", m_Buffer);
 #endif
             m_Device->SetStreamSource( 0, m_Buffer, 0, (UINT)ElementSizes[ GetElementType() ] );
@@ -51,7 +51,7 @@ bool VertexResource::SetState() const
 
         if ( ElementFormats[ GetElementType() ] != m_Tracker->GetVertexFormat() )
         {
-#ifdef LUNA_DEBUG_RESOURCES
+#ifdef EDITOR_DEBUG_RESOURCES
             Log::Print("Setting FVF to 0x%x\n", ElementFormats[ m_ElementType ]);
 #endif
             m_Device->SetFVF( ElementFormats[ GetElementType() ] );

@@ -349,7 +349,7 @@ void SceneNode::Prune( V_SceneNodeDumbPtr& prunedNodes )
 
 void SceneNode::DoEvaluate(GraphDirection direction)
 {
-  LUNA_SCENE_EVALUATE_SCOPE_TIMER( ("Evaluate %s", GetClass()->m_ShortName.c_str()) );
+  EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("Evaluate %s", GetClass()->m_ShortName.c_str()) );
 
   m_NodeStates[direction] = NodeStates::Evaluating;
 

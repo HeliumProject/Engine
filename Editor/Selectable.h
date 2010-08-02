@@ -12,7 +12,7 @@ namespace Helium
         class PropertiesGenerator;
         class EnumerateElementArgs;
 
-        class LUNA_CORE_API Selectable : public Object
+        class EDITOR_CORE_API Selectable : public Object
         {
         protected:
             bool m_Selected;

@@ -10,7 +10,7 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-//#define LUNA_DEBUG_PROPERTIES_GENERATOR
+//#define EDITOR_DEBUG_PROPERTIES_GENERATOR
 
 namespace Helium
 {
@@ -44,7 +44,7 @@ void PropertiesGenerator::Cleanup()
 
 bool PropertiesGenerator::InitializePanel(const tstring& name, const CreatePanelSignature::Delegate& creator)
 {
-    LUNA_CORE_SCOPE_TIMER( ("") );
+    EDITOR_CORE_SCOPE_TIMER( ("") );
 
     HELIUM_ASSERT(g_Initialized);
 
@@ -76,7 +76,7 @@ void PropertiesGenerator::CleanupPanel(const tstring& name)
 
 void PropertiesGenerator::Reset()
 {
-    LUNA_CORE_SCOPE_TIMER( ("") );
+    EDITOR_CORE_SCOPE_TIMER( ("") );
 
     m_Container->Clear();
 }

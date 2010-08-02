@@ -13,7 +13,7 @@ Selection::Selection()
 
 void Selection::Refresh()
 {
-  LUNA_CORE_SCOPE_TIMER( ("") );
+  EDITOR_CORE_SCOPE_TIMER( ("") );
 
   Profile::Timer timer;
 
@@ -38,7 +38,7 @@ Undo::CommandPtr Selection::Clear(const SelectionChangingSignature::Delegate& em
     return NULL;
   }
 
-  LUNA_CORE_SCOPE_TIMER( ("") );
+  EDITOR_CORE_SCOPE_TIMER( ("") );
 
   Profile::Timer timer;
 
@@ -86,7 +86,7 @@ Undo::CommandPtr Selection::SetItems(const OS_SelectableDumbPtr& items, const Se
     return Clear(emitterChanging, emitterChanged);
   }
 
-  LUNA_CORE_SCOPE_TIMER( ("") );
+  EDITOR_CORE_SCOPE_TIMER( ("") );
 
   Profile::Timer timer;
 
@@ -159,7 +159,7 @@ Undo::CommandPtr Selection::AddItems(const OS_SelectableDumbPtr &items, const Se
     return NULL;
   }
 
-  LUNA_CORE_SCOPE_TIMER( ("") );
+  EDITOR_CORE_SCOPE_TIMER( ("") );
 
   Profile::Timer timer;
 
@@ -221,7 +221,7 @@ Undo::CommandPtr Selection::RemoveItems(const OS_SelectableDumbPtr& items, const
     return NULL;
   }
 
-  LUNA_CORE_SCOPE_TIMER( ("") );
+  EDITOR_CORE_SCOPE_TIMER( ("") );
 
   Profile::Timer timer;
 

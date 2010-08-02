@@ -13,7 +13,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // Base class for top level windows in Editor.
         // 
-        class LUNA_EDITOR_API Frame HELIUM_ABSTRACT : public wxFrame
+        class EDITOR_EDITOR_API Frame HELIUM_ABSTRACT : public wxFrame
         {
             // 
             // Member variables

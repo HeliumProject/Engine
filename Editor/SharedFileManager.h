@@ -30,7 +30,7 @@ namespace Helium
         // Defines the arguments that will be passed to listeners when an event is
         // raised on a shared file resource.
         // 
-        struct LUNA_EDITOR_API SharedFileChangeArgs
+        struct EDITOR_EDITOR_API SharedFileChangeArgs
         {
             Helium::Path m_Path;
             FileActions::FileAction m_Action;
@@ -51,7 +51,7 @@ namespace Helium
         // based file in Editor.  The Editors will fire events when they make changes to
         // a file, and you can listen for any of these events.
         // 
-        class LUNA_EDITOR_API SharedFileManager
+        class EDITOR_EDITOR_API SharedFileManager
         {
         private:
             M_SharedFileChangedEvent m_Events;

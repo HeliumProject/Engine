@@ -2,7 +2,7 @@
 #include "SceneGraph.h"
 #include "SceneNode.h"
 
-//#define LUNA_DEBUG_EVALUATE
+//#define EDITOR_DEBUG_EVALUATE
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -212,7 +212,7 @@ EvaluateResult SceneGraph::EvaluateGraph(bool silent)
 {
   EvaluateResult result;
 
-  LUNA_SCENE_EVALUATE_SCOPE_TIMER( ("") );
+  EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("") );
 
   u64 start = Helium::TimerGetClock();
 

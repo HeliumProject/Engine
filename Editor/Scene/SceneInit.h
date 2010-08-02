@@ -6,7 +6,7 @@ namespace Helium
 {
     namespace Editor
     {
-        LUNA_SCENE_API void SceneInitialize();
-        LUNA_SCENE_API void SceneCleanup();
+        EDITOR_SCENE_API void SceneInitialize();
+        EDITOR_SCENE_API void SceneCleanup();
     }
 }

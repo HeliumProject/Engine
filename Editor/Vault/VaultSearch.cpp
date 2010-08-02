@@ -38,9 +38,9 @@ namespace Helium
         static const tchar* s_DummyWindowName = TXT( "DummyWindowThread" );
 
         // Custom wxEventTypes for the SearchThread to fire.
-        DEFINE_EVENT_TYPE( LUNA_EVT_BEGIN_SEARCH )
-            DEFINE_EVENT_TYPE( LUNA_EVT_RESULTS_AVAILABLE )
-            DEFINE_EVENT_TYPE( LUNA_EVT_SEARCH_COMPLETE )
+        DEFINE_EVENT_TYPE( EDITOR_EVT_BEGIN_SEARCH )
+            DEFINE_EVENT_TYPE( EDITOR_EVT_RESULTS_AVAILABLE )
+            DEFINE_EVENT_TYPE( EDITOR_EVT_SEARCH_COMPLETE )
 
         class DummyWindow : public wxFrame
         {
@@ -215,9 +215,9 @@ bool VaultSearch::RequestSearch( SearchQuery* searchQuery )
 
         HELIUM_ASSERT( !m_DummyWindow );
         m_DummyWindow = new DummyWindow( TXT( "VaultSearch" ) );
-        m_DummyWindow->Connect( m_DummyWindow->GetId(), LUNA_EVT_BEGIN_SEARCH, wxCommandEventHandler( DummyWindow::OnBeginThread ), NULL, m_DummyWindow );
-        m_DummyWindow->Connect( m_DummyWindow->GetId(), LUNA_EVT_RESULTS_AVAILABLE, wxCommandEventHandler( DummyWindow::OnThreadUpdate ), NULL, m_DummyWindow );
-        m_DummyWindow->Connect( m_DummyWindow->GetId(), LUNA_EVT_SEARCH_COMPLETE, wxCommandEventHandler( DummyWindow::OnEndThread ), NULL, m_DummyWindow );
+        m_DummyWindow->Connect( m_DummyWindow->GetId(), EDITOR_EVT_BEGIN_SEARCH, wxCommandEventHandler( DummyWindow::OnBeginThread ), NULL, m_DummyWindow );
+        m_DummyWindow->Connect( m_DummyWindow->GetId(), EDITOR_EVT_RESULTS_AVAILABLE, wxCommandEventHandler( DummyWindow::OnThreadUpdate ), NULL, m_DummyWindow );
+        m_DummyWindow->Connect( m_DummyWindow->GetId(), EDITOR_EVT_SEARCH_COMPLETE, wxCommandEventHandler( DummyWindow::OnEndThread ), NULL, m_DummyWindow );
 
         m_DummyWindow->AddBeginListener( Editor::DummyWindowSignature::Delegate( this, &VaultSearch::OnBeginSearchThread ) );
         m_DummyWindow->AddUpdateListener( Editor::DummyWindowSignature::Delegate( this, &VaultSearch::OnResultsAvailable ) );
@@ -375,7 +375,7 @@ inline void VaultSearch::SearchThreadEnter( i32 searchID )
 {
     ::ResetEvent( m_EndSearchEvent );
 
-    wxCommandEvent evt( LUNA_EVT_BEGIN_SEARCH, m_DummyWindow->GetId() );
+    wxCommandEvent evt( EDITOR_EVT_BEGIN_SEARCH, m_DummyWindow->GetId() );
     evt.SetInt( searchID );
     wxPostEvent( m_DummyWindow, evt );
 
@@ -390,7 +390,7 @@ inline void VaultSearch::SearchThreadPostResults( i32 searchID )
 
     if ( m_SearchResults && m_SearchResults->HasResults() )
     {
-        wxCommandEvent evt( LUNA_EVT_RESULTS_AVAILABLE, m_DummyWindow->GetId() );
+        wxCommandEvent evt( EDITOR_EVT_RESULTS_AVAILABLE, m_DummyWindow->GetId() );
         evt.SetInt( searchID );
         wxPostEvent( m_DummyWindow, evt );
     }
@@ -413,7 +413,7 @@ inline void VaultSearch::SearchThreadLeave( i32 searchID )
 
     SearchThreadPostResults( searchID );
 
-    wxCommandEvent evt( LUNA_EVT_SEARCH_COMPLETE, m_DummyWindow->GetId() );
+    wxCommandEvent evt( EDITOR_EVT_SEARCH_COMPLETE, m_DummyWindow->GetId() );
     evt.SetInt( searchID );
     wxPostEvent( m_DummyWindow, evt );
     if ( m_DummyWindow )

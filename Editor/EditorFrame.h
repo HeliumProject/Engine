@@ -39,7 +39,7 @@ namespace Helium
         // Class managing all the information about an editor, including what function
         // to use to create the editor.
         // 
-        class LUNA_EDITOR_API EditorInfo : public Helium::RefCountBase< EditorInfo >
+        class EDITOR_EDITOR_API EditorInfo : public Helium::RefCountBase< EditorInfo >
         {
         private:
             EditorType m_Type;
@@ -82,7 +82,7 @@ namespace Helium
         // Base class for different editors in Editor.  Think of each editor as a top
         // level window.
         // 
-        class LUNA_EDITOR_API EditorFrame HELIUM_ABSTRACT : public Frame
+        class EDITOR_EDITOR_API EditorFrame HELIUM_ABSTRACT : public Frame
         {
         private:
             EditorType  m_EditorType;

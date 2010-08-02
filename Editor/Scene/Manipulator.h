@@ -62,7 +62,7 @@ namespace Helium
 
         typedef ManipulatorAdapterTypes::ManipulatorAdapterType ManipulatorAdapterType;
 
-        class LUNA_CORE_API ManipulatorAdapter : public Helium::RefCountBase<ManipulatorAdapter>
+        class EDITOR_CORE_API ManipulatorAdapter : public Helium::RefCountBase<ManipulatorAdapter>
         {
         public:
             const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::ManiuplatorAdapterCollection;
@@ -87,7 +87,7 @@ namespace Helium
         typedef Helium::SmartPtr<ManipulatorAdapter> ManipulatorAdapterPtr;
         typedef std::vector<ManipulatorAdapterPtr> V_ManipulatorAdapterSmartPtr;
 
-        class LUNA_CORE_API ScaleManipulatorAdapter : public ManipulatorAdapter
+        class EDITOR_CORE_API ScaleManipulatorAdapter : public ManipulatorAdapter
         {
         public:
             const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::ScaleManipulatorAdapter;
@@ -104,7 +104,7 @@ namespace Helium
             virtual Undo::CommandPtr SetValue(const Math::Scale& v) = 0;
         };
 
-        class LUNA_CORE_API RotateManipulatorAdapter : public ManipulatorAdapter
+        class EDITOR_CORE_API RotateManipulatorAdapter : public ManipulatorAdapter
         {
         public:
             const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::RotateManipulatorAdapter;
@@ -121,7 +121,7 @@ namespace Helium
             virtual Undo::CommandPtr SetValue(const Math::EulerAngles& v) = 0;
         };
 
-        class LUNA_CORE_API TranslateManipulatorAdapter : public ManipulatorAdapter
+        class EDITOR_CORE_API TranslateManipulatorAdapter : public ManipulatorAdapter
         {
         public:
             const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::TranslateManipulatorAdapter;
@@ -138,7 +138,7 @@ namespace Helium
             virtual Undo::CommandPtr SetValue(const Math::Vector3& v) = 0;
         };
 
-        class LUNA_CORE_API ManiuplatorAdapterCollection HELIUM_ABSTRACT
+        class EDITOR_CORE_API ManiuplatorAdapterCollection HELIUM_ABSTRACT
         {
         protected:
             V_ManipulatorAdapterSmartPtr m_ManipulatorAdapters;

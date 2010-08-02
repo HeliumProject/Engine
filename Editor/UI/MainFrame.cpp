@@ -645,7 +645,7 @@ void MainFrame::OnChar(wxKeyEvent& event)
 
 void MainFrame::OnShow(wxShowEvent& event)
 {
-#ifdef LUNA_DEBUG_RUNTIME_DATA_SELECTION
+#ifdef EDITOR_DEBUG_RUNTIME_DATA_SELECTION
     // Sometimes it's handy to put debug code here for program start up.
     New();
     wxCommandEvent evt( wxEVT_COMMAND_TOOL_CLICKED, EventIds::ID_ToolsVolumeCreate );
@@ -655,7 +655,7 @@ void MainFrame::OnShow(wxShowEvent& event)
     GetEventHandler()->AddPendingEvent( close );
 #endif
 
-#ifdef LUNA_DEBUG_RENDER
+#ifdef EDITOR_DEBUG_RENDER
     class RenderThread : public wxThread
     {
     private:
@@ -2092,7 +2092,7 @@ void MainFrame::OnTypeContextMenu(wxCommandEvent &event)
 // 
 bool MainFrame::Copy( Editor::Scene* scene )
 {
-    LUNA_SCENE_SCOPE_TIMER( ("") );
+    EDITOR_SCENE_SCOPE_TIMER( ("") );
     bool isOk = true;
     HELIUM_ASSERT( scene );
 
@@ -2123,7 +2123,7 @@ bool MainFrame::Copy( Editor::Scene* scene )
 // 
 bool MainFrame::Paste( Editor::Scene* scene )
 {
-    LUNA_SCENE_SCOPE_TIMER( ("") );
+    EDITOR_SCENE_SCOPE_TIMER( ("") );
     HELIUM_ASSERT( scene );
 
     bool isOk = false;

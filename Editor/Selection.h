@@ -23,7 +23,7 @@ namespace Helium
         //  If you need to extend the functionality of this class, patch in more events :)
         //
 
-        class LUNA_CORE_API Selection
+        class EDITOR_CORE_API Selection
         {
         private:
             //

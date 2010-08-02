@@ -17,7 +17,7 @@ namespace Helium
         //     -1                      -1
         //  [Sp]x[S]x[Sh]x[Sp]x[St]x[Rp]x[R]x[Rp]x[Rt]x[T]x[Tp]
 
-        class LUNA_SCENE_API PivotTransform : public Editor::Transform
+        class EDITOR_SCENE_API PivotTransform : public Editor::Transform
         {
             // 
             // Member variables

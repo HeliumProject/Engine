@@ -98,7 +98,7 @@ void NodeTypeOutliner::AddNodeType( Editor::SceneNodeType* nodeType )
 // 
 void NodeTypeOutliner::AddInstance( Editor::SceneNode* instance )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+  EDITOR_SCENE_SCOPE_TIMER( ("") );
 
   M_TreeItems::const_iterator found = m_Items.find( instance->GetNodeType() );
   if ( found != m_Items.end() )
@@ -118,7 +118,7 @@ void NodeTypeOutliner::AddInstance( Editor::SceneNode* instance )
 // 
 void NodeTypeOutliner::RemoveNodeType( Editor::SceneNodeType* nodeType )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+  EDITOR_SCENE_SCOPE_TIMER( ("") );
 #ifdef _DEBUG
   // Sanity check.  The item we are deleting shouldn't have any children (they
   // should have already been removed).  If this needs to change for some 

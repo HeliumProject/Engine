@@ -259,7 +259,7 @@ namespace Helium
         class Transform;
         typedef std::map< Helium::TUID, const Editor::Transform* > M_TransformConstDumbPtr;
 
-        class LUNA_SCENE_API Scene : public Object, public Reflect::StatusHandler
+        class EDITOR_SCENE_API Scene : public Object, public Reflect::StatusHandler
         {
             //
             // Members

@@ -66,7 +66,7 @@ namespace Helium
         };
         typedef Helium::Signature< void, const RealtimeLightExistenceArgs& > RealtimeLightExistenceSignature;
 
-        class LUNA_SCENE_API Light HELIUM_ABSTRACT : public Editor::Instance
+        class EDITOR_SCENE_API Light HELIUM_ABSTRACT : public Editor::Instance
         {
             //
             // Members

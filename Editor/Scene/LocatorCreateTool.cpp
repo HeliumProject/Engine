@@ -38,7 +38,7 @@ LocatorCreateTool::~LocatorCreateTool()
 
 Editor::TransformPtr LocatorCreateTool::CreateNode()
 {
-#ifdef LUNA_DEBUG_RUNTIME_DATA_SELECTION
+#ifdef EDITOR_DEBUG_RUNTIME_DATA_SELECTION
 
   Content::LocatorPtr v = new Content::Locator( s_Shape );
 

@@ -29,7 +29,7 @@ namespace Helium
 
         typedef Helium::Signature<void, const PushCommandArgs&> PushCommandSignature;
 
-        class LUNA_EDITOR_API CommandQueue : public wxEvtHandler
+        class EDITOR_EDITOR_API CommandQueue : public wxEvtHandler
         {
         private:
             // the editor to use

@@ -47,7 +47,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // Editor's wrapper for an entity instance.
         //
-        class LUNA_SCENE_API Entity : public Editor::Instance
+        class EDITOR_SCENE_API Entity : public Editor::Instance
         {
             //
             // Members

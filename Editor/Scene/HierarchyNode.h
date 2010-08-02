@@ -85,7 +85,7 @@ namespace Helium
         // In addition to Ancestors and Descendants, hierarchy nodes add Parents
         // and Children.
         // 
-        class LUNA_SCENE_API HierarchyNode : public Editor::SceneNode
+        class EDITOR_SCENE_API HierarchyNode : public Editor::SceneNode
         {
             // 
             // Member variables 

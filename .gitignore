@@ -2,9 +2,9 @@
 *.ncb
 *.user
 *.db
-BASE.*
-LOCAL.*
-REMOTE.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
 Build/*
 Built/*
 Dependencies/LiteSQL/0.3.8/build/*

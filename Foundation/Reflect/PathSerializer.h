@@ -35,9 +35,6 @@ namespace Helium
 
         typedef Helium::SmartPtr< PathSerializer > PathSerializerPtr;
 
-        template<> static inline int Reflect::GetType< PathSerializer::DataType >()
-        {
-            return Reflect::GetType< PathSerializer >();
-        }
+        REFLECT_SPECIALIZE_SERIALIZER( PathSerializer );
     }
 }

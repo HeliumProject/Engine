@@ -13,6 +13,8 @@ void Core::Initialize()
 {
     if ( ++g_InitCount == 1 )
     {
+        g_InitStack.Push( Reflect::RegisterClass<Core::ProjectFile>( TXT("ProjectFile") ) );
+        g_InitStack.Push( Reflect::RegisterClass<Core::ProjectFolder>( TXT("ProjectFolder") ) );
         g_InitStack.Push( Reflect::RegisterClass<Core::Project>( TXT("Project") ) );
     }
 }

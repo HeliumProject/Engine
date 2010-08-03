@@ -525,16 +525,16 @@ namespace Helium
 }
 
 #define REFLECT_SPECIALIZE_SERIALIZER(Name) \
-    typedef Helium::SmartPtr< Name > ##Name##Ptr; \
-    template<> static inline i32 Reflect::GetType<Name::DataType>() \
+typedef Helium::SmartPtr< Name > ##Name##Ptr; \
+template<> static inline i32 Reflect::GetType<Name::DataType>() \
 { \
     return Reflect::GetType<Name>(); \
 } \
-    template<> static inline Name::DataType* Serializer::GetData<Name::DataType>( Serializer* serializer ) \
+template<> static inline Name::DataType* Serializer::GetData<Name::DataType>( Serializer* serializer ) \
 { \
     return serializer && serializer->GetType() == Reflect::GetType<Name::DataType>() ? static_cast<Name*>( serializer )->m_Data.Ptr() : NULL; \
 } \
-    template<> static inline const Name::DataType* Serializer::GetData<Name::DataType>( const Serializer* serializer ) \
+template<> static inline const Name::DataType* Serializer::GetData<Name::DataType>( const Serializer* serializer ) \
 { \
     return serializer && serializer->GetType() == Reflect::GetType<Name::DataType>() ? static_cast<const Name*>( serializer )->m_Data.Ptr() : NULL; \
 }

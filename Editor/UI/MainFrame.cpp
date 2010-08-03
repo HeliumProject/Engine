@@ -120,6 +120,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 , m_TreeMonitor( &m_SceneManager )
 , m_TreeSortTimer( &m_TreeMonitor )
 {
+    SetLabel( TXT("Helium Editor") );
 
     //
     // Dynamic Menu Generation
@@ -748,7 +749,8 @@ void MainFrame::OnNewEntity( wxCommandEvent& event )
 
 void MainFrame::OnNewProject( wxCommandEvent& event )
 {
-    m_Project = new Project;
+    m_Project = new Project ();
+    m_Project->Path().Set( TXT("New Project") );
     m_ProjectPanel->SetProject( m_Project );
 }
 

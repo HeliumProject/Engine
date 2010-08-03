@@ -247,6 +247,16 @@ const Field* Composite::FindFieldByName(const tstring& name) const
     return NULL;
 }
 
+const Field* Composite::FindFieldByOffset(u32 offset) const
+{
+    M_FieldOffsetToInfo::const_iterator found = m_FieldOffsetToInfo.find( offset );
+    if ( found != m_FieldOffsetToInfo.end() )
+    {
+        return found->second;
+    }
+    return NULL;
+}
+
 bool Composite::Equals(const Element* a, const Element* b)
 {
     if (a == b)

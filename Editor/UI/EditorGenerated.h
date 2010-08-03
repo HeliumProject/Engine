@@ -103,7 +103,7 @@ namespace Helium
 				// Virtual event handlers, overide them in your derived class
 				virtual void OnNewScene( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnNewEntity( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnNew( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnNewProject( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnOpen( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnClose( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnSaveAll( wxCommandEvent& event ) { event.Skip(); }
@@ -344,7 +344,7 @@ namespace Helium
 			private:
 			
 			protected:
-				wxPanel* m_LayerManagementPanel;
+				wxPanel* m_ProjectManagementPanel;
 				wxBitmapButton* m_AddFile;
 				wxBitmapButton* m_CreateFolder;
 				wxBitmapButton* m_Delete;

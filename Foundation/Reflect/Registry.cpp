@@ -23,9 +23,6 @@ using Helium::Insert;
 using namespace Helium;
 using namespace Helium::Reflect;
 
-// globals
-static Registry* g_Instance = NULL;
-
 // profile interface
 #ifdef PROFILE_ACCUMULATION
 Profile::Accumulator Reflect::g_CloneAccum ( "Reflect Clone" );
@@ -59,139 +56,140 @@ namespace Helium
 {
     namespace Reflect
     {
-        i32 g_InitCount = 0;
+        i32         g_InitCount = 0;
+        Registry*   g_Registry = NULL;
     }
 }
 
 bool Reflect::IsInitialized()
 {
-    return g_Instance != NULL;
+    return g_Registry != NULL;
 }
 
 void Reflect::Initialize()
 {
     if (++g_InitCount == 1)
     {
-        g_Instance = new Registry();
-        HELIUM_ASSERT(g_Instance != NULL);
+        g_Registry = new Registry();
+        HELIUM_ASSERT(g_Registry != NULL);
 
         //
         // Serializers
         //
 
-        g_Instance->RegisterType(Class::Create<Object>("", TXT( "Object" ) ));
-        g_Instance->RegisterType(Element::CreateClass( TXT( "Element" ) ));
-        g_Instance->RegisterType(Serializer::CreateClass( TXT( "Serializer" ) ));
-        g_Instance->RegisterType(ContainerSerializer::CreateClass( TXT( "Container" ) ));
-        g_Instance->RegisterType(ElementContainerSerializer::CreateClass( TXT( "ElementContainer" ) ));
-        g_Instance->RegisterType(TypeIDSerializer::CreateClass( TXT( "TypeID" ) ));
-        g_Instance->RegisterType(PointerSerializer::CreateClass( TXT( "Pointer" ) ));
-        g_Instance->RegisterType(EnumerationSerializer::CreateClass( TXT( "Enumeration" ) ));
-        g_Instance->RegisterType(BitfieldSerializer::CreateClass( TXT( "Bitfield" ) ));
-        g_Instance->RegisterType( PathSerializer::CreateClass( TXT( "PathSerializer" ) ));
+        g_Registry->RegisterType(Class::Create<Object>("", TXT( "Object" ) ));
+        g_Registry->RegisterType(Element::CreateClass( TXT( "Element" ) ));
+        g_Registry->RegisterType(Serializer::CreateClass( TXT( "Serializer" ) ));
+        g_Registry->RegisterType(ContainerSerializer::CreateClass( TXT( "Container" ) ));
+        g_Registry->RegisterType(ElementContainerSerializer::CreateClass( TXT( "ElementContainer" ) ));
+        g_Registry->RegisterType(TypeIDSerializer::CreateClass( TXT( "TypeID" ) ));
+        g_Registry->RegisterType(PointerSerializer::CreateClass( TXT( "Pointer" ) ));
+        g_Registry->RegisterType(EnumerationSerializer::CreateClass( TXT( "Enumeration" ) ));
+        g_Registry->RegisterType(BitfieldSerializer::CreateClass( TXT( "Bitfield" ) ));
+        g_Registry->RegisterType(PathSerializer::CreateClass( TXT( "Path" ) ));
 
         // SimpleSerializer
-        g_Instance->RegisterType(StringSerializer::CreateClass( TXT( "String" ) ));
-        g_Instance->RegisterType(BoolSerializer::CreateClass( TXT( "Bool" ) ));
-        g_Instance->RegisterType(U8Serializer::CreateClass( TXT( "U8" ) ));
-        g_Instance->RegisterType(I8Serializer::CreateClass( TXT( "I8" ) ));
-        g_Instance->RegisterType(U16Serializer::CreateClass( TXT( "U16" ) ));
-        g_Instance->RegisterType(I16Serializer::CreateClass( TXT( "I16" ) ));
-        g_Instance->RegisterType(U32Serializer::CreateClass( TXT( "U32" ) ));
-        g_Instance->RegisterType(I32Serializer::CreateClass( TXT( "I32" ) ));
-        g_Instance->RegisterType(U64Serializer::CreateClass( TXT( "U64" ) ));
-        g_Instance->RegisterType(I64Serializer::CreateClass( TXT( "I64" ) ));
-        g_Instance->RegisterType(F32Serializer::CreateClass( TXT( "F32" ) ));
-        g_Instance->RegisterType(F64Serializer::CreateClass( TXT( "F64" ) ));
-        g_Instance->RegisterType(GUIDSerializer::CreateClass( TXT( "GUID" ) ));
-        g_Instance->RegisterType(TUIDSerializer::CreateClass( TXT( "TUID" ) ));
-        g_Instance->RegisterType(Vector2Serializer::CreateClass( TXT( "Vector2" ) ));
-        g_Instance->RegisterType(Vector3Serializer::CreateClass( TXT( "Vector3" ) ));
-        g_Instance->RegisterType(Vector4Serializer::CreateClass( TXT( "Vector4" ) ));
-        g_Instance->RegisterType(Matrix3Serializer::CreateClass( TXT( "Matrix3" ) ));
-        g_Instance->RegisterType(Matrix4Serializer::CreateClass( TXT( "Matrix4" ) ));
-        g_Instance->RegisterType(QuaternionSerializer::CreateClass( TXT( "Quaternion" ) ));
-        g_Instance->RegisterType(Color3Serializer::CreateClass( TXT( "Color3" ) ));
-        g_Instance->RegisterType(Color4Serializer::CreateClass( TXT( "Color4" ) ));
-        g_Instance->RegisterType(HDRColor3Serializer::CreateClass( TXT( "HDRColor3" ) ));
-        g_Instance->RegisterType(HDRColor4Serializer::CreateClass( TXT( "HDRColor4" ) ));
+        g_Registry->RegisterType(StringSerializer::CreateClass( TXT( "String" ) ));
+        g_Registry->RegisterType(BoolSerializer::CreateClass( TXT( "Bool" ) ));
+        g_Registry->RegisterType(U8Serializer::CreateClass( TXT( "U8" ) ));
+        g_Registry->RegisterType(I8Serializer::CreateClass( TXT( "I8" ) ));
+        g_Registry->RegisterType(U16Serializer::CreateClass( TXT( "U16" ) ));
+        g_Registry->RegisterType(I16Serializer::CreateClass( TXT( "I16" ) ));
+        g_Registry->RegisterType(U32Serializer::CreateClass( TXT( "U32" ) ));
+        g_Registry->RegisterType(I32Serializer::CreateClass( TXT( "I32" ) ));
+        g_Registry->RegisterType(U64Serializer::CreateClass( TXT( "U64" ) ));
+        g_Registry->RegisterType(I64Serializer::CreateClass( TXT( "I64" ) ));
+        g_Registry->RegisterType(F32Serializer::CreateClass( TXT( "F32" ) ));
+        g_Registry->RegisterType(F64Serializer::CreateClass( TXT( "F64" ) ));
+        g_Registry->RegisterType(GUIDSerializer::CreateClass( TXT( "GUID" ) ));
+        g_Registry->RegisterType(TUIDSerializer::CreateClass( TXT( "TUID" ) ));
+        g_Registry->RegisterType(Vector2Serializer::CreateClass( TXT( "Vector2" ) ));
+        g_Registry->RegisterType(Vector3Serializer::CreateClass( TXT( "Vector3" ) ));
+        g_Registry->RegisterType(Vector4Serializer::CreateClass( TXT( "Vector4" ) ));
+        g_Registry->RegisterType(Matrix3Serializer::CreateClass( TXT( "Matrix3" ) ));
+        g_Registry->RegisterType(Matrix4Serializer::CreateClass( TXT( "Matrix4" ) ));
+        g_Registry->RegisterType(QuaternionSerializer::CreateClass( TXT( "Quaternion" ) ));
+        g_Registry->RegisterType(Color3Serializer::CreateClass( TXT( "Color3" ) ));
+        g_Registry->RegisterType(Color4Serializer::CreateClass( TXT( "Color4" ) ));
+        g_Registry->RegisterType(HDRColor3Serializer::CreateClass( TXT( "HDRColor3" ) ));
+        g_Registry->RegisterType(HDRColor4Serializer::CreateClass( TXT( "HDRColor4" ) ));
 
         // ArraySerializer
-        g_Instance->RegisterType(ArraySerializer::CreateClass( TXT( "Array" ) ));
-        g_Instance->RegisterType(StringArraySerializer::CreateClass( TXT( "StringArray" ) ));
-        g_Instance->RegisterType(BoolArraySerializer::CreateClass( TXT( "BoolArray" ) ));
-        g_Instance->RegisterType(U8ArraySerializer::CreateClass( TXT( "U8Array" ) ));
-        g_Instance->RegisterType(I8ArraySerializer::CreateClass( TXT( "I8Array" ) ));
-        g_Instance->RegisterType(U16ArraySerializer::CreateClass( TXT( "U16Array" ) ));
-        g_Instance->RegisterType(I16ArraySerializer::CreateClass( TXT( "I16Array" ) ));
-        g_Instance->RegisterType(U32ArraySerializer::CreateClass( TXT( "U32Array" ) ));
-        g_Instance->RegisterType(I32ArraySerializer::CreateClass( TXT( "I32Array" ) ));
-        g_Instance->RegisterType(U64ArraySerializer::CreateClass( TXT( "U64Array" ) ));
-        g_Instance->RegisterType(I64ArraySerializer::CreateClass( TXT( "I64Array" ) ));
-        g_Instance->RegisterType(F32ArraySerializer::CreateClass( TXT( "F32Array" ) ));
-        g_Instance->RegisterType(F64ArraySerializer::CreateClass( TXT( "F64Array" ) ));
-        g_Instance->RegisterType(GUIDArraySerializer::CreateClass( TXT( "GUIDArray" ) ));
-        g_Instance->RegisterType(TUIDArraySerializer::CreateClass( TXT( "TUIDArray" ) ));
-        g_Instance->RegisterType(Vector2ArraySerializer::CreateClass( TXT( "Vector2Array" ) ));
-        g_Instance->RegisterType(Vector3ArraySerializer::CreateClass( TXT( "Vector3Array" ) ));
-        g_Instance->RegisterType(Vector4ArraySerializer::CreateClass( TXT( "Vector4Array" ) ));
-        g_Instance->RegisterType(Matrix3ArraySerializer::CreateClass( TXT( "Matrix3Array" ) ));
-        g_Instance->RegisterType(Matrix4ArraySerializer::CreateClass( TXT( "Matrix4Array" ) ));
-        g_Instance->RegisterType(QuaternionArraySerializer::CreateClass( TXT( "QuaternionArray" ) ));
-        g_Instance->RegisterType(Color3ArraySerializer::CreateClass( TXT( "Color3Array" ) ));
-        g_Instance->RegisterType(Color4ArraySerializer::CreateClass( TXT( "Color4Array" ) ));
-        g_Instance->RegisterType(HDRColor3ArraySerializer::CreateClass( TXT( "HDRColor3Array" ) ));
-        g_Instance->RegisterType(HDRColor4ArraySerializer::CreateClass( TXT( "HDRColor4Array" ) ));
+        g_Registry->RegisterType(ArraySerializer::CreateClass( TXT( "Array" ) ));
+        g_Registry->RegisterType(StringArraySerializer::CreateClass( TXT( "StringArray" ) ));
+        g_Registry->RegisterType(BoolArraySerializer::CreateClass( TXT( "BoolArray" ) ));
+        g_Registry->RegisterType(U8ArraySerializer::CreateClass( TXT( "U8Array" ) ));
+        g_Registry->RegisterType(I8ArraySerializer::CreateClass( TXT( "I8Array" ) ));
+        g_Registry->RegisterType(U16ArraySerializer::CreateClass( TXT( "U16Array" ) ));
+        g_Registry->RegisterType(I16ArraySerializer::CreateClass( TXT( "I16Array" ) ));
+        g_Registry->RegisterType(U32ArraySerializer::CreateClass( TXT( "U32Array" ) ));
+        g_Registry->RegisterType(I32ArraySerializer::CreateClass( TXT( "I32Array" ) ));
+        g_Registry->RegisterType(U64ArraySerializer::CreateClass( TXT( "U64Array" ) ));
+        g_Registry->RegisterType(I64ArraySerializer::CreateClass( TXT( "I64Array" ) ));
+        g_Registry->RegisterType(F32ArraySerializer::CreateClass( TXT( "F32Array" ) ));
+        g_Registry->RegisterType(F64ArraySerializer::CreateClass( TXT( "F64Array" ) ));
+        g_Registry->RegisterType(GUIDArraySerializer::CreateClass( TXT( "GUIDArray" ) ));
+        g_Registry->RegisterType(TUIDArraySerializer::CreateClass( TXT( "TUIDArray" ) ));
+        g_Registry->RegisterType(Vector2ArraySerializer::CreateClass( TXT( "Vector2Array" ) ));
+        g_Registry->RegisterType(Vector3ArraySerializer::CreateClass( TXT( "Vector3Array" ) ));
+        g_Registry->RegisterType(Vector4ArraySerializer::CreateClass( TXT( "Vector4Array" ) ));
+        g_Registry->RegisterType(Matrix3ArraySerializer::CreateClass( TXT( "Matrix3Array" ) ));
+        g_Registry->RegisterType(Matrix4ArraySerializer::CreateClass( TXT( "Matrix4Array" ) ));
+        g_Registry->RegisterType(QuaternionArraySerializer::CreateClass( TXT( "QuaternionArray" ) ));
+        g_Registry->RegisterType(Color3ArraySerializer::CreateClass( TXT( "Color3Array" ) ));
+        g_Registry->RegisterType(Color4ArraySerializer::CreateClass( TXT( "Color4Array" ) ));
+        g_Registry->RegisterType(HDRColor3ArraySerializer::CreateClass( TXT( "HDRColor3Array" ) ));
+        g_Registry->RegisterType(HDRColor4ArraySerializer::CreateClass( TXT( "HDRColor4Array" ) ));
 
         // SetSerializer
-        g_Instance->RegisterType(SetSerializer::CreateClass( TXT( "Set" ) ));
-        g_Instance->RegisterType(StringSetSerializer::CreateClass( TXT( "StrSet" ) ));
-        g_Instance->RegisterType(U32SetSerializer::CreateClass( TXT( "U32Set" ) ));
-        g_Instance->RegisterType(U64SetSerializer::CreateClass( TXT( "U64Set" ) ));
-        g_Instance->RegisterType(F32SetSerializer::CreateClass( TXT( "F32Set" ) ));
-        g_Instance->RegisterType(GUIDSetSerializer::CreateClass( TXT( "GUIDSet" ) ));
-        g_Instance->RegisterType(TUIDSetSerializer::CreateClass( TXT( "TUIDSet" ) ));
-        g_Instance->RegisterType( PathSetSerializer::CreateClass( TXT( "PathSet" ) ));
+        g_Registry->RegisterType(SetSerializer::CreateClass( TXT( "Set" ) ));
+        g_Registry->RegisterType(StringSetSerializer::CreateClass( TXT( "StrSet" ) ));
+        g_Registry->RegisterType(U32SetSerializer::CreateClass( TXT( "U32Set" ) ));
+        g_Registry->RegisterType(U64SetSerializer::CreateClass( TXT( "U64Set" ) ));
+        g_Registry->RegisterType(F32SetSerializer::CreateClass( TXT( "F32Set" ) ));
+        g_Registry->RegisterType(GUIDSetSerializer::CreateClass( TXT( "GUIDSet" ) ));
+        g_Registry->RegisterType(TUIDSetSerializer::CreateClass( TXT( "TUIDSet" ) ));
+        g_Registry->RegisterType( PathSetSerializer::CreateClass( TXT( "PathSet" ) ));
 
         // MapSerializer
-        g_Instance->RegisterType(MapSerializer::CreateClass( TXT( "Map" ) ));
-        g_Instance->RegisterType(StringStringMapSerializer::CreateClass( TXT( "StrStrMap" ) ));
-        g_Instance->RegisterType(StringBoolMapSerializer::CreateClass( TXT( "StrBoolMap" ) ));
-        g_Instance->RegisterType(StringU32MapSerializer::CreateClass( TXT( "StrU32Map" ) ));
-        g_Instance->RegisterType(StringI32MapSerializer::CreateClass( TXT( "StrI32Map" ) ));
-        g_Instance->RegisterType(U32StringMapSerializer::CreateClass( TXT( "U32StrMap" ) ));
-        g_Instance->RegisterType(U32U32MapSerializer::CreateClass( TXT( "U32U32Map" ) ));
-        g_Instance->RegisterType(U32I32MapSerializer::CreateClass( TXT( "U32I32Map" ) ));
-        g_Instance->RegisterType(U32U64MapSerializer::CreateClass( TXT( "U32U64Map" ) ));
-        g_Instance->RegisterType(I32StringMapSerializer::CreateClass( TXT( "I32StrMap" ) ));
-        g_Instance->RegisterType(I32U32MapSerializer::CreateClass( TXT( "I32U32Map" ) ));
-        g_Instance->RegisterType(I32I32MapSerializer::CreateClass( TXT( "I32I32Map" ) ));
-        g_Instance->RegisterType(I32U64MapSerializer::CreateClass( TXT( "I32U64Map" ) ));
-        g_Instance->RegisterType(U64StringMapSerializer::CreateClass( TXT( "U64StrMap" ) ));
-        g_Instance->RegisterType(U64U32MapSerializer::CreateClass( TXT( "U64U32Map" ) ));
-        g_Instance->RegisterType(U64U64MapSerializer::CreateClass( TXT( "U64U64Map" ) ));
-        g_Instance->RegisterType(U64Matrix4MapSerializer::CreateClass( TXT( "U64Matrix4Map" ) ));
-        g_Instance->RegisterType(GUIDU32MapSerializer::CreateClass( TXT( "GUIDU32Map" ) ));
-        g_Instance->RegisterType(GUIDMatrix4MapSerializer::CreateClass( TXT( "GUIDMatrix4Map" ) ));
-        g_Instance->RegisterType(TUIDU32MapSerializer::CreateClass( TXT( "TUIDU32Map" ) ));
-        g_Instance->RegisterType(TUIDMatrix4MapSerializer::CreateClass( TXT( "TUIDMatrix4Map" ) ));
+        g_Registry->RegisterType(MapSerializer::CreateClass( TXT( "Map" ) ));
+        g_Registry->RegisterType(StringStringMapSerializer::CreateClass( TXT( "StrStrMap" ) ));
+        g_Registry->RegisterType(StringBoolMapSerializer::CreateClass( TXT( "StrBoolMap" ) ));
+        g_Registry->RegisterType(StringU32MapSerializer::CreateClass( TXT( "StrU32Map" ) ));
+        g_Registry->RegisterType(StringI32MapSerializer::CreateClass( TXT( "StrI32Map" ) ));
+        g_Registry->RegisterType(U32StringMapSerializer::CreateClass( TXT( "U32StrMap" ) ));
+        g_Registry->RegisterType(U32U32MapSerializer::CreateClass( TXT( "U32U32Map" ) ));
+        g_Registry->RegisterType(U32I32MapSerializer::CreateClass( TXT( "U32I32Map" ) ));
+        g_Registry->RegisterType(U32U64MapSerializer::CreateClass( TXT( "U32U64Map" ) ));
+        g_Registry->RegisterType(I32StringMapSerializer::CreateClass( TXT( "I32StrMap" ) ));
+        g_Registry->RegisterType(I32U32MapSerializer::CreateClass( TXT( "I32U32Map" ) ));
+        g_Registry->RegisterType(I32I32MapSerializer::CreateClass( TXT( "I32I32Map" ) ));
+        g_Registry->RegisterType(I32U64MapSerializer::CreateClass( TXT( "I32U64Map" ) ));
+        g_Registry->RegisterType(U64StringMapSerializer::CreateClass( TXT( "U64StrMap" ) ));
+        g_Registry->RegisterType(U64U32MapSerializer::CreateClass( TXT( "U64U32Map" ) ));
+        g_Registry->RegisterType(U64U64MapSerializer::CreateClass( TXT( "U64U64Map" ) ));
+        g_Registry->RegisterType(U64Matrix4MapSerializer::CreateClass( TXT( "U64Matrix4Map" ) ));
+        g_Registry->RegisterType(GUIDU32MapSerializer::CreateClass( TXT( "GUIDU32Map" ) ));
+        g_Registry->RegisterType(GUIDMatrix4MapSerializer::CreateClass( TXT( "GUIDMatrix4Map" ) ));
+        g_Registry->RegisterType(TUIDU32MapSerializer::CreateClass( TXT( "TUIDU32Map" ) ));
+        g_Registry->RegisterType(TUIDMatrix4MapSerializer::CreateClass( TXT( "TUIDMatrix4Map" ) ));
 
         // ElementArraySerializer
-        g_Instance->RegisterType(ElementArraySerializer::CreateClass( TXT( "ElementArray" ) ));
+        g_Registry->RegisterType(ElementArraySerializer::CreateClass( TXT( "ElementArray" ) ));
 
         // ElementSetSerializer
-        g_Instance->RegisterType(ElementSetSerializer::CreateClass( TXT( "ElementSet" ) ));
+        g_Registry->RegisterType(ElementSetSerializer::CreateClass( TXT( "ElementSet" ) ));
 
         // ElementMapSerializer
-        g_Instance->RegisterType(ElementMapSerializer::CreateClass( TXT( "ElementMap" ) ));
-        g_Instance->RegisterType(TypeIDElementMapSerializer::CreateClass( TXT( "TypeIDElementMap" ) ));
-        g_Instance->RegisterType(StringElementMapSerializer::CreateClass( TXT( "StringElementMap" ) ));
-        g_Instance->RegisterType(U32ElementMapSerializer::CreateClass( TXT( "U32ElementMap" ) ));
-        g_Instance->RegisterType(I32ElementMapSerializer::CreateClass( TXT( "I32ElementMap" ) ));
-        g_Instance->RegisterType(U64ElementMapSerializer::CreateClass( TXT( "U64ElementMap" ) ));
-        g_Instance->RegisterType(I64ElementMapSerializer::CreateClass( TXT( "I64ElementMap" ) ));
-        g_Instance->RegisterType(GUIDElementMapSerializer::CreateClass( TXT( "GUIDElementMap" ) ));
-        g_Instance->RegisterType(TUIDElementMapSerializer::CreateClass( TXT( "TUIDElementMap" ) ));
+        g_Registry->RegisterType(ElementMapSerializer::CreateClass( TXT( "ElementMap" ) ));
+        g_Registry->RegisterType(TypeIDElementMapSerializer::CreateClass( TXT( "TypeIDElementMap" ) ));
+        g_Registry->RegisterType(StringElementMapSerializer::CreateClass( TXT( "StringElementMap" ) ));
+        g_Registry->RegisterType(U32ElementMapSerializer::CreateClass( TXT( "U32ElementMap" ) ));
+        g_Registry->RegisterType(I32ElementMapSerializer::CreateClass( TXT( "I32ElementMap" ) ));
+        g_Registry->RegisterType(U64ElementMapSerializer::CreateClass( TXT( "U64ElementMap" ) ));
+        g_Registry->RegisterType(I64ElementMapSerializer::CreateClass( TXT( "I64ElementMap" ) ));
+        g_Registry->RegisterType(GUIDElementMapSerializer::CreateClass( TXT( "GUIDElementMap" ) ));
+        g_Registry->RegisterType(TUIDElementMapSerializer::CreateClass( TXT( "TUIDElementMap" ) ));
 
         //
         // Build Casting Table
@@ -203,11 +201,11 @@ void Reflect::Initialize()
         // Register Elements
         //
 
-        g_Instance->RegisterType(Version::CreateClass( TXT( "Version" ) ));
-        g_Instance->RegisterType(DocumentNode::CreateClass( TXT("DocumentNode") ));
-        g_Instance->RegisterType(DocumentAttribute::CreateClass( TXT("DocumentAttribute") ));
-        g_Instance->RegisterType(DocumentElement::CreateClass( TXT("DocumentElement") ));
-        g_Instance->RegisterType(Document::CreateClass( TXT("Document") ));
+        g_Registry->RegisterType(Version::CreateClass( TXT( "Version" ) ));
+        g_Registry->RegisterType(DocumentNode::CreateClass( TXT("DocumentNode") ));
+        g_Registry->RegisterType(DocumentAttribute::CreateClass( TXT("DocumentAttribute") ));
+        g_Registry->RegisterType(DocumentElement::CreateClass( TXT("DocumentElement") ));
+        g_Registry->RegisterType(Document::CreateClass( TXT("Document") ));
     }
 
 #ifdef REFLECT_DEBUG_INIT_AND_CLEANUP
@@ -230,8 +228,8 @@ void Reflect::Cleanup()
         Serializer::Cleanup();
 
         // delete registry
-        delete g_Instance;
-        g_Instance = NULL;
+        delete g_Registry;
+        g_Registry = NULL;
     }
 
 #ifdef REFLECT_DEBUG_INIT_AND_CLEANUP
@@ -279,8 +277,8 @@ Registry::~Registry()
 
 Registry* Registry::GetInstance()
 {
-    HELIUM_ASSERT(g_Instance != NULL);
-    return g_Instance;
+    HELIUM_ASSERT(g_Registry != NULL);
+    return g_Registry;
 }
 
 bool Registry::IsInitThread()

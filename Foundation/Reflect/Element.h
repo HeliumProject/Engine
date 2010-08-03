@@ -14,6 +14,7 @@
 
 #include "Platform/Assert.h"
 #include "Foundation/Automation/Event.h"
+#include "Foundation/Automation/Attribute.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/GUID.h"
 #include "Foundation/TUID.h"
@@ -129,13 +130,38 @@ namespace Helium
             {
                 m_Changed.Add(d);
             }
+            
             void RemoveChangedListener(const ElementChangeSignature::Delegate& d) const
             {
                 m_Changed.Remove(d);
             }
+
             virtual void RaiseChanged(const Field* field = NULL) const
             {
                 m_Changed.Raise( ElementChangeArgs (this, field) );
+            }
+
+            template< class T >
+            void FieldChanged(T* fieldAddress) const
+            {
+                // the offset of the field is the address of the field minus the address of this element instance
+                const Reflect::Field* field = GetClass()->FindFieldByOffset( ((u32)fieldAddress - (u32)this) );
+                if ( field )
+                {
+                    RaiseChanged(field);
+                }
+                else
+                {
+                    // your field address probably doesn't point to the field in this instance
+                    HELIUM_BREAK();
+                }
+            }
+
+            template< class T >
+            void AttributeChanged( typename const Helium::Attribute<T>::ChangeArgs& args )
+            {
+                // this works since m_Value is always a reference to m_Value, which is a reference to the field
+                FieldChanged( &args.m_Value );
             }
         };
     }

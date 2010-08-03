@@ -695,6 +695,10 @@
 			Name="Automation"
 			>
 			<File
+				RelativePath=".\Automation\Attribute.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Automation\Event.h"
 				>
 			</File>

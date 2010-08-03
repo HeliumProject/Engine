@@ -3,12 +3,56 @@
 
 using namespace Helium::Reflect;
 
+void DocumentNode::SetDocument( Document* document )
+{
+    m_Document = document;
+}
+
 void DocumentNode::Initialize( Document* document, DocumentElement* parent, DocumentNode* nextSibling, DocumentNode* previousSibling )
 {
-    SetDocument( document );
-    SetParent( parent );
-    SetNextSibling( nextSibling );
-    SetPreviousSibling( previousSibling );
+    if ( this != document )
+    {
+        SetDocument( document );
+    }
+
+    if ( this != parent )
+    {
+        SetParent( parent );
+    }
+
+    if ( this != nextSibling )
+    {
+        SetNextSibling( nextSibling );
+    }
+
+    if ( this != previousSibling )
+    {
+        SetPreviousSibling( previousSibling );
+    }
+}
+
+void DocumentElement::SetDocument( Document* document )
+{
+    if ( m_Document != document )
+    {
+        if ( m_Document )
+        {
+            m_Document->ChildAdding().RemoveMethod( m_Document, &DocumentElement::RaiseChildAdding );
+            m_Document->ChildAdded().RemoveMethod( m_Document, &DocumentElement::RaiseChildAdded );
+            m_Document->ChildRemoving().RemoveMethod( m_Document, &DocumentElement::RaiseChildRemoving );
+            m_Document->ChildRemoved().RemoveMethod( m_Document, &DocumentElement::RaiseChildRemoved );
+        }
+
+        Base::SetDocument( document );
+
+        if ( m_Document )
+        {
+            m_Document->ChildAdding().AddMethod( m_Document, &DocumentElement::RaiseChildAdding );
+            m_Document->ChildAdded().AddMethod( m_Document, &DocumentElement::RaiseChildAdded );
+            m_Document->ChildRemoving().AddMethod( m_Document, &DocumentElement::RaiseChildRemoving );
+            m_Document->ChildRemoved().AddMethod( m_Document, &DocumentElement::RaiseChildRemoved );
+        }
+    }
 }
 
 void DocumentElement::Initialize( Document* document, DocumentElement* parent, DocumentNode* nextSibling, DocumentNode* previousSibling )
@@ -47,9 +91,10 @@ void DocumentElement::AddChild( DocumentNodePtr node )
 {
     if ( std::find( m_Children.begin(), m_Children.end(), node ) == m_Children.end() )
     {
-        if ( m_ChildAdding.RaiseWithReturn( node ) )
+        DocumentElement* parent = node->GetParent();
+
+        if ( m_ChildAdding.RaiseWithReturn( DocumentHierarchyChangeArgs ( node, parent, this ) ) )
         {
-            DocumentElement* parent = node->GetParent();
             if ( parent )
             {
                 parent->RemoveChild( node );
@@ -61,10 +106,11 @@ void DocumentElement::AddChild( DocumentNodePtr node )
             }
 
             node->SetNextSibling( NULL );
+            node->SetDocument( m_Document );
             node->SetParent( this );
 
             m_Children.push_back( node );
-            m_ChildAdded.Raise( node );
+            m_ChildAdded.Raise( DocumentHierarchyChangeArgs ( node, parent, this ) );
         }
     }
 }
@@ -75,7 +121,9 @@ void DocumentElement::RemoveChild( DocumentNodePtr node )
     std::remove( m_Children.begin(), m_Children.end(), node );
     if ( m_Children.size() < size )
     {
-        if ( m_ChildRemoving.RaiseWithReturn( node ) )
+        DocumentElement* parent = node->GetParent();
+
+        if ( m_ChildRemoving.RaiseWithReturn( DocumentHierarchyChangeArgs ( node, parent, NULL ) ) )
         {
             DocumentNode* nextSibling = node->GetNextSibling();
             DocumentNode* previousSibling = node->GetPreviousSibling();
@@ -100,9 +148,10 @@ void DocumentElement::RemoveChild( DocumentNodePtr node )
                 }
             }
 
+            node->SetDocument( NULL );
             node->SetParent( NULL );
 
-            m_ChildRemoved.Raise( node );
+            m_ChildRemoved.Raise( DocumentHierarchyChangeArgs ( node, parent, NULL ) );
         }
     }
 }

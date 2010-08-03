@@ -65,7 +65,6 @@ VaultFrame::VaultFrame( Vault* browser, VaultSearch* browserSearch, SearchHistor
 , m_Vault( browser )
 , m_VaultSearch( browserSearch )
 , m_SearchHistory( searchHistory )
-, m_PreferencePrefix( TXT( "VaultFrame" ) )
 , m_NavigationPanel( NULL )
 , m_ResultsPanel( NULL )
 , m_FoldersPanel( NULL )
@@ -347,17 +346,6 @@ VaultFrame::~VaultFrame()
     m_VaultSearch->RemoveSearchCompleteListener( Editor::SearchCompleteSignature::Delegate( this, &VaultFrame::OnSearchComplete ) );
 
     m_ResultsPanel->RemoveResultsChangedListener( ResultSignature::Delegate( this, &VaultFrame::OnResultsPanelUpdated ) );
-}
-
-/////////////////////////////////////////////////////////////////////////////
-void VaultFrame::SaveWindowState()
-{
-}
-
-/////////////////////////////////////////////////////////////////////////////
-const tstring& VaultFrame::GetPreferencePrefix() const
-{
-    return m_PreferencePrefix;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

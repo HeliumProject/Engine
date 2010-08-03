@@ -21,26 +21,10 @@ void Persistent::CleanupType()
 Persistent::Persistent( Reflect::Element* package )
 : m_Package( package )
 {
-  if ( m_Package.ReferencesObject() )
-  {
-    m_Package->AddChangedListener( Reflect::ElementChangeSignature::Delegate ( this, &Persistent::PackageChanged ) );
-  }
 }
 
 Persistent::~Persistent()
 {
-  if ( m_Package.ReferencesObject() )
-  {
-    m_Package->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate ( this, &Persistent::PackageChanged ) );
-  }
-}
-
-void Persistent::PackageChanged( const Reflect::ElementChangeArgs& args )
-{
-  HELIUM_ASSERT( args.m_Element == m_Package.Ptr() );
-
-  // Convert the Element Changed callback into an Object Changed event
-  RaiseObjectChanged( args );
 }
 
 void Persistent::GetState( Reflect::ElementPtr& state ) const

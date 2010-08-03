@@ -74,12 +74,8 @@ void Frame::PostCommand( const Undo::CommandPtr& command )
   m_CommandQueue.Push( command );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Adds a prefix to the key so that it is unique between editors/frames.
-//
-tstring Frame::PrefixPreferenceKey( const tstring& key ) const
+void Frame::SetHelpText( const tchar* text )
 {
-  return GetPreferencePrefix() + TXT( ":" ) + key;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -160,7 +156,8 @@ void Frame::OnShowPanel( wxCommandEvent& args )
 // 
 void Frame::OnExiting( wxCloseEvent& args )
 {
-  SaveWindowState();
+#pragma TODO("Save window state -Geoff")
+  //SaveWindowState();
   args.Skip();
 }
 

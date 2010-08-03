@@ -11,7 +11,6 @@
 #include "PrimitiveCircle.h"
 
 #include "App.h"
-#include "EditorFrame.h"
 #include "SceneManager.h"
 #include "Scene.h"
 #include "ScenePreferences.h"

@@ -13,14 +13,14 @@ using namespace Helium::Editor;
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-LSwitchSceneCommand::LSwitchSceneCommand( Editor::SceneManager* manager, Editor::Scene* newScene )
+SwitchSceneCommand::SwitchSceneCommand( Editor::SceneManager* manager, Editor::Scene* newScene )
 : Undo::PropertyCommand< Editor::Scene* >( new Helium::MemberProperty< Editor::SceneManager, Editor::Scene* >( manager, &Editor::SceneManager::GetCurrentScene, &Editor::SceneManager::SetCurrentScene ) )
 , m_SceneManager( manager )
 , m_OldScene( manager->GetCurrentScene() )
 , m_NewScene( newScene )
 , m_IsValid( true )
 {
-  m_SceneManager->AddSceneRemovingListener( SceneChangeSignature::Delegate ( this, &LSwitchSceneCommand::SceneRemoving ) );
+  m_SceneManager->AddSceneRemovingListener( SceneChangeSignature::Delegate ( this, &SwitchSceneCommand::SceneRemoving ) );
   
   // Automatically apply the new scene (can't do this as part of LPropertyCommand's constructor
   // because that would invalidate the current scene before we stored it in the m_OldScene variable).
@@ -30,16 +30,16 @@ LSwitchSceneCommand::LSwitchSceneCommand( Editor::SceneManager* manager, Editor:
 ///////////////////////////////////////////////////////////////////////////////
 // Destructor
 // 
-LSwitchSceneCommand::~LSwitchSceneCommand()
+SwitchSceneCommand::~SwitchSceneCommand()
 {
-  m_SceneManager->RemoveSceneRemovingListener( SceneChangeSignature::Delegate ( this, &LSwitchSceneCommand::SceneRemoving ) );
+  m_SceneManager->RemoveSceneRemovingListener( SceneChangeSignature::Delegate ( this, &SwitchSceneCommand::SceneRemoving ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Switching scenes is not significant (it shouldn't cause either scene to
 // be checked out or modified).
 // 
-bool LSwitchSceneCommand::IsSignificant() const
+bool SwitchSceneCommand::IsSignificant() const
 {
   return false;
 }
@@ -47,7 +47,7 @@ bool LSwitchSceneCommand::IsSignificant() const
 ///////////////////////////////////////////////////////////////////////////////
 // Overridden to make sure this command is still valid.
 // 
-void LSwitchSceneCommand::Undo()
+void SwitchSceneCommand::Undo()
 {
   if ( m_IsValid )
   {
@@ -62,7 +62,7 @@ void LSwitchSceneCommand::Undo()
 ///////////////////////////////////////////////////////////////////////////////
 // Overridden to make sure this command is still valid.
 // 
-void LSwitchSceneCommand::Redo()
+void SwitchSceneCommand::Redo()
 {
   if ( m_IsValid )
   {
@@ -77,7 +77,7 @@ void LSwitchSceneCommand::Redo()
 ///////////////////////////////////////////////////////////////////////////////
 // Callback for when a scene is being unloaded.
 // 
-void LSwitchSceneCommand::SceneRemoving( const SceneChangeArgs& args )
+void SwitchSceneCommand::SceneRemoving( const SceneChangeArgs& args )
 {
   if ( m_OldScene && ( m_OldScene == args.m_Scene ) )
   {

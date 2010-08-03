@@ -10,16 +10,29 @@ namespace Helium
 {
     namespace Editor
     {
-        /////////////////////////////////////////////////////////////////////////////
-        // Base class for top level windows in Editor.
-        // 
+        typedef std::map< i32, wxWindow* > M_MenuIdToPanel;
+
         class EDITOR_EDITOR_API Frame HELIUM_ABSTRACT : public wxFrame
         {
-            // 
-            // Member variables
-            //
+        public:
+            Frame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxT( "frame" ) );
+            virtual ~Frame();
+
+            virtual void PostCommand( const Undo::CommandPtr& command );
+            virtual void SetHelpText( const tchar* text );
+
+        protected:
+            u32 CreatePanelsMenu( wxMenu* menu );
+            void UpdatePanelsMenu( wxMenu* menu );
+
+            // UI event handlers
         private:
-            typedef std::map< i32, wxWindow* > M_MenuIdToPanel;
+            void OnSetFocus( wxFocusEvent& args );
+            void OnShowPanel( wxCommandEvent& args );
+            void OnExiting( wxCloseEvent& args );
+            void OnHelpTimer( wxTimerEvent& evt );
+
+        private:
             M_MenuIdToPanel m_Panels;
 
         protected:
@@ -28,40 +41,8 @@ namespace Helium
 
             wxTimer*  m_HelpTimer;
             wxWindow* m_HelpLastWindow;
-            // 
-            // General member functions
-            // 
-        public:
-            Frame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxT( "frame" ) );
-            virtual ~Frame();
 
-            virtual void SaveWindowState() = 0;
-
-            void PostCommand( const Undo::CommandPtr& command );
-
-            virtual const tstring& GetPreferencePrefix() const = 0;
-            virtual tstring PrefixPreferenceKey( const tstring& key ) const;
-
-            virtual void SetHelpText( const tchar* text )
-            {
-            }
-
-        protected:
-            u32 CreatePanelsMenu( wxMenu* menu );
-            void UpdatePanelsMenu( wxMenu* menu );
-
-            // 
-            // UI event handlers
-            // 
-        private:
-            void OnSetFocus( wxFocusEvent& args );
-            void OnShowPanel( wxCommandEvent& args );
-            void OnExiting( wxCloseEvent& args );
-            void OnHelpTimer( wxTimerEvent& evt );
-
-        protected:
             DECLARE_EVENT_TABLE();
         };
-
     }
 }

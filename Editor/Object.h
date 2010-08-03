@@ -36,27 +36,6 @@ namespace Helium
 {
     namespace Editor
     {
-        // Forwards
-        class Object;
-
-        // 
-        // Event related objects for when an Object is changed.
-        // 
-
-        struct ObjectChangeArgs
-        {
-            Object*                           m_Object;
-            const Reflect::ElementChangeArgs&  m_ElementArgs; 
-
-            ObjectChangeArgs( Object* object, const Reflect::ElementChangeArgs& elementArgs )
-                : m_Object( object )
-                , m_ElementArgs( elementArgs )
-            {
-
-            }
-        };
-        typedef Helium::Signature< void, const ObjectChangeArgs& > ObjectChangeSignature;
-
         //
         // Object is a basic application object
         //  Its allocated as a reference-counted heap object that is tracked by a smart (shared) pointer
@@ -81,27 +60,6 @@ namespace Helium
         public:
             Object();
             virtual ~Object();
-
-
-            //
-            // Events
-            //
-
-        private:
-            ObjectChangeSignature::Event m_Changed;
-        public:
-            void AddChangedListener( const ObjectChangeSignature::Delegate& listener )
-            {
-                m_Changed.Add( listener );
-            }
-            void RemoveChangedListener( const ObjectChangeSignature::Delegate& listener )
-            {
-                m_Changed.Remove( listener );
-            }
-            void RaiseObjectChanged(const Reflect::ElementChangeArgs& args)
-            {
-                m_Changed.Raise( ObjectChangeArgs(this, args) );
-            }
         };
 
         typedef Helium::SmartPtr< Object > ObjectPtr;

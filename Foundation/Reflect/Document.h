@@ -6,6 +6,7 @@
 #include "Foundation/API.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Serializers.h"
 #include "Foundation/File/Path.h"
 
 namespace Helium
@@ -40,10 +41,7 @@ namespace Helium
                 return m_Document;
             }
 
-            void SetDocument( Document* document )
-            {
-                m_Document = document;
-            }
+            virtual void SetDocument( Document* document );
 
             DocumentElement* GetParent() const
             {
@@ -54,7 +52,6 @@ namespace Helium
             {
                 m_Parent = node;
             }
-
 
             DocumentNode* GetNextSibling() const
             {
@@ -137,8 +134,23 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< bool, DocumentNode* > DocumentHierarchyChangingSignature;
-        typedef Helium::Signature< void, DocumentNode* > DocumentHierarchyChangedSignature;
+        struct DocumentHierarchyChangeArgs
+        {
+            DocumentNode* m_Node;
+            DocumentElement* m_OldParent;
+            DocumentElement* m_NewParent;
+
+            DocumentHierarchyChangeArgs( DocumentNode* node, DocumentElement* oldParent, DocumentElement* newParent )
+                : m_Node( node )
+                , m_OldParent( oldParent )
+                , m_NewParent( newParent )
+            {
+
+            }
+        };
+
+        typedef Helium::Signature< bool, const DocumentHierarchyChangeArgs& > DocumentHierarchyChangingSignature;
+        typedef Helium::Signature< void, const DocumentHierarchyChangeArgs& > DocumentHierarchyChangedSignature;
 
         class FOUNDATION_API DocumentElement : public Reflect::ConcreteInheritor< DocumentElement, DocumentNode >
         {
@@ -147,6 +159,8 @@ namespace Helium
             {
 
             }
+
+            virtual void SetDocument( Document* document ) HELIUM_OVERRIDE;
 
             std::vector< DocumentNodePtr >& GetChildren()
             {
@@ -178,26 +192,46 @@ namespace Helium
 
             virtual void AddChild( DocumentNodePtr node );
 
-            DocumentHierarchyChangingSignature::Event GetChildAdding()
+            virtual void RemoveChild( DocumentNodePtr node );
+
+            DocumentHierarchyChangingSignature::Event& ChildAdding()
             {
                 return m_ChildAdding;
             }
 
-            DocumentHierarchyChangedSignature::Event GetChildAdded()
+            DocumentHierarchyChangedSignature::Event& ChildAdded()
             {
                 return m_ChildAdded;
             }
 
-            virtual void RemoveChild( DocumentNodePtr node );
-
-            DocumentHierarchyChangingSignature::Event GetChildRemoving()
+            DocumentHierarchyChangingSignature::Event& ChildRemoving()
             {
                 return m_ChildRemoving;
             }
 
-            DocumentHierarchyChangedSignature::Event GetChildRemoved()
+            DocumentHierarchyChangedSignature::Event& ChildRemoved()
             {
                 return m_ChildRemoved;
+            }
+
+            bool RaiseChildAdding( const DocumentHierarchyChangeArgs& args )
+            {
+                return m_ChildAdding.RaiseWithReturn( args );
+            }
+
+            void RaiseChildAdded( const DocumentHierarchyChangeArgs& args )
+            {
+                m_ChildAdding.Raise( args );
+            }
+
+            bool RaiseChildRemoving( const DocumentHierarchyChangeArgs& args )
+            {
+                return m_ChildRemoving.RaiseWithReturn( args );
+            }
+
+            void RaiseChildRemoved( const DocumentHierarchyChangeArgs& args )
+            {
+                m_ChildRemoved.Raise( args );
             }
 
         protected:
@@ -217,11 +251,9 @@ namespace Helium
         class FOUNDATION_API Document : public Reflect::ConcreteInheritor< Document, DocumentElement >
         {
         public:
-            virtual void PostDeserialize() HELIUM_OVERRIDE
+            void Initialize()
             {
-                Base::PostDeserialize();
-
-                Initialize( this, this, NULL, NULL );
+                Base::Initialize( this, this, NULL, NULL );
             }
 
         public:

@@ -169,6 +169,8 @@ namespace Helium
 
             const Field* FindFieldByName(const tstring& name) const;
 
+            const Field* FindFieldByOffset(u32 offset) const;
+
             // 
             // Finds the field info given a pointer to a member variable on a class.
             // FieldT is the member variable's type and ClassT is the class that the 
@@ -273,7 +275,7 @@ namespace Helium
             }
 
             template <class ElementT>
-            inline Reflect::ElementField* AddField( Helium::SmartPtr<ElementT> T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::ElementField* AddField( Helium::SmartPtr< ElementT > T::* field, const std::string& name, i32 flags = 0 )
             {
                 return m_Composite.AddElementField(
                     m_Instance,
@@ -286,7 +288,7 @@ namespace Helium
             }
 
             template <class ElementT>
-            inline Reflect::ElementField* AddField( std::vector< Helium::SmartPtr< ElementT > >T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::ElementField* AddField( std::vector< Helium::SmartPtr< ElementT > > T::* field, const std::string& name, i32 flags = 0 )
             {
                 return m_Composite.AddElementField(
                     m_Instance,
@@ -299,7 +301,7 @@ namespace Helium
             }
 
             template <class ElementT>
-            inline Reflect::ElementField* AddField( std::set< Helium::SmartPtr< ElementT > >T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::ElementField* AddField( std::set< Helium::SmartPtr< ElementT > > T::* field, const std::string& name, i32 flags = 0 )
             {
                 return m_Composite.AddElementField(
                     m_Instance,
@@ -312,7 +314,7 @@ namespace Helium
             }
 
             template <class KeyT, class ElementT>
-            inline Reflect::ElementField* AddField( std::map< KeyT, Helium::SmartPtr< ElementT > >T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::ElementField* AddField( std::map< KeyT, Helium::SmartPtr< ElementT > > T::* field, const std::string& name, i32 flags = 0 )
             {
                 return m_Composite.AddElementField( 
                     m_Instance, 

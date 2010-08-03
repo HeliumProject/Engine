@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/API.h"
+#include "Foundation/Automation/Attribute.h"
 #include "Foundation/Reflect/Document.h"
 
 namespace Helium
@@ -11,23 +12,31 @@ namespace Helium
         {
         public:
             ProjectFile()
+                : m_PathAttr( m_Path )
             {
-
+                AddChangedListeners();
             }
 
             ProjectFile( const Helium::Path& path )
-                : m_Path ( path )
+                : m_Path( path )
+                , m_PathAttr( m_Path )
             {
-
+                AddChangedListeners();
             }
 
-            Helium::Path GetPath()
+            Helium::Attribute<Helium::Path>& Path()
             {
-                return m_Path;
+                return m_PathAttr;
             }
 
         private:
-            Helium::Path m_Path;
+            Helium::Path                    m_Path;
+            Helium::Attribute<Helium::Path> m_PathAttr;
+
+            void AddChangedListeners()
+            {
+                m_PathAttr.Changed().AddMethod( this, &Element::AttributeChanged<Helium::Path> );
+            }
 
         public:
             static void EnumerateClass( Reflect::Compositor< This >& comp )
@@ -42,23 +51,31 @@ namespace Helium
         {
         public:
             ProjectFolder()
+                : m_NameAttr( m_Name )
             {
 
             }
 
             ProjectFolder( const tstring& name )
                 : m_Name ( name )
+                , m_NameAttr( m_Name )
             {
 
             }
 
-            const tstring& GetName()
+            Helium::Attribute<tstring>& Name()
             {
-                return m_Name;
+                return m_NameAttr;
             }
 
         private:
-            tstring m_Name;
+            tstring                     m_Name;
+            Helium::Attribute<tstring>  m_NameAttr;
+
+            void AddChangedListeners()
+            {
+                m_NameAttr.Changed().AddMethod( this, &Element::AttributeChanged<tstring> );
+            }
 
         public:
             static void EnumerateClass( Reflect::Compositor< This >& comp )
@@ -67,27 +84,36 @@ namespace Helium
             }
         };
 
+        typedef Helium::SmartPtr< ProjectFolder > ProjectFolderPtr;
+
         class CORE_API Project : public Reflect::ConcreteInheritor< Project, Reflect::Document >
         {
         public:
-            const Helium::Path& GetPath()
+            Project()
+                : m_PathAttr( m_Path )
             {
-                return m_Path;
+                AddChangedListeners();
             }
 
-            void SetPath(const Helium::Path& path)
+            Helium::Attribute<tstring>& Path()
             {
-                m_Path = path;
+                return m_PathAttr;
+            }
+
+        private:
+            tstring                     m_Path;
+            Helium::Attribute<tstring>  m_PathAttr;
+
+            void AddChangedListeners()
+            {
+                m_PathAttr.Changed().AddMethod( this, &Element::AttributeChanged<tstring> );
             }
 
         public:
             static void EnumerateClass( Reflect::Compositor< This >& comp )
             {
-
+                comp.AddField( &This::m_Path, "Path", Reflect::FieldFlags::Discard );
             }
-
-        private:
-            Helium::Path m_Path;
         };
 
         typedef Helium::SmartPtr<Project> ProjectPtr;

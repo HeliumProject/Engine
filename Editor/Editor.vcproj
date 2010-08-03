@@ -3977,14 +3977,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\UI\ProjectViewModel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\ProjectViewModel.h"
-				>
-			</File>
-			<File
 				RelativePath=".\UI\PropertiesPanel.cpp"
 				>
 			</File>

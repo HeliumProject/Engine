@@ -643,7 +643,7 @@ namespace Helium
             }
 
             template <typename FunctionType>
-            void Add(FunctionType function)
+            void AddFunction(FunctionType function)
             {
                 if (!m_Impl.ReferencesObject())
                 {
@@ -654,7 +654,7 @@ namespace Helium
             }
 
             template <class ClassType, typename MethodType>
-            void Add(ClassType* instance, MethodType method)
+            void AddMethod(ClassType* instance, MethodType method)
             {
                 if (!m_Impl.ReferencesObject())
                 {
@@ -678,7 +678,7 @@ namespace Helium
             }
 
             template <typename FunctionType>
-            void Remove(FunctionType function)
+            void RemoveFunction(FunctionType function)
             {
                 if (m_Impl.ReferencesObject())
                 {
@@ -692,7 +692,7 @@ namespace Helium
             }
 
             template <class ClassType, typename MethodType>
-            void Remove(ClassType* instance, MethodType method)
+            void RemoveMethod(ClassType* instance, MethodType method)
             {
                 if (m_Impl.ReferencesObject())
                 {

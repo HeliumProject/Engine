@@ -100,11 +100,11 @@ void Path::MakeNative( tstring& path )
     std::replace( path.begin(), path.end(), s_InternalPathSeparator, Helium::PathSeparator );
 }
 
-void Path::GuaranteeSlash( tstring& path )
+void Path::GuaranteeSeparator( tstring& path )
 {
-    if ( !path.empty() && *path.rbegin() != '/' )
+    if ( !path.empty() && *path.rbegin() != s_InternalPathSeparator )
     {
-        path += TXT( "/" );
+        path += s_InternalPathSeparator;
     }
 }
 
@@ -306,7 +306,7 @@ tstring Path::Basename() const
     size_t slash = m_Path.rfind( s_InternalPathSeparator );
     if ( slash != tstring::npos )
     {
-        size_t pos = m_Path.rfind( '.' );
+        size_t pos = m_Path.rfind( TXT( '.' ) );
         if ( pos != tstring::npos )
         {
             return m_Path.substr( slash + 1, pos + 1 );
@@ -334,7 +334,7 @@ tstring Path::Basename() const
 
 tstring Path::Filename() const
 {
-    size_t pos = m_Path.rfind( '/' );
+    size_t pos = m_Path.rfind( s_InternalPathSeparator );
     if ( pos != tstring::npos )
     {
         return m_Path.substr( pos + 1 );
@@ -345,7 +345,7 @@ tstring Path::Filename() const
 
 tstring Path::Directory() const
 {
-    size_t pos = m_Path.rfind( '/' );
+    size_t pos = m_Path.rfind( s_InternalPathSeparator );
     if ( pos != tstring::npos )
     {
         return m_Path.substr( 0, pos + 1 );
@@ -375,7 +375,7 @@ std::vector< tstring > Path::DirectoryAsVector() const
 tstring Path::Extension() const
 {
     tstring filename = Filename();
-    size_t pos = filename.rfind( '.' );
+    size_t pos = filename.rfind( TXT( '.' ) );
     if ( pos != tstring::npos )
     {
         return filename.substr( pos + 1 );
@@ -387,7 +387,7 @@ tstring Path::Extension() const
 tstring Path::FullExtension() const
 {
     tstring filename = Filename();
-    size_t pos = filename.find_first_of( '.' );
+    size_t pos = filename.find_first_of( TXT( '.' ) );
     if ( pos != tstring::npos )
     {
         return filename.substr( pos + 1 );
@@ -399,7 +399,7 @@ tstring Path::FullExtension() const
 void Path::RemoveExtension()
 {
     size_t slash = m_Path.find_last_of( s_InternalPathSeparator );
-    size_t pos = m_Path.find_last_of( '.', slash == tstring::npos ? 0 : slash );
+    size_t pos = m_Path.find_last_of( TXT( '.' ), slash == tstring::npos ? 0 : slash );
     if ( pos != tstring::npos )
     {
         m_Path.erase( pos );
@@ -409,7 +409,7 @@ void Path::RemoveExtension()
 void Path::RemoveFullExtension()
 {
     size_t slash = m_Path.find_last_of( s_InternalPathSeparator );
-    size_t pos = m_Path.find_first_of( '.', slash == tstring::npos ? 0 : slash );
+    size_t pos = m_Path.find_first_of( TXT( '.' ), slash == tstring::npos ? 0 : slash );
     if ( pos != tstring::npos )
     {
         m_Path.erase( pos );
@@ -419,28 +419,28 @@ void Path::RemoveFullExtension()
 void Path::ReplaceExtension( const tstring& newExtension )
 {
     size_t slash = m_Path.find_last_of( s_InternalPathSeparator );
-    size_t offset = m_Path.find_last_of( '.', slash == tstring::npos ? 0 : slash );
+    size_t offset = m_Path.find_last_of( TXT( '.' ), slash == tstring::npos ? 0 : slash );
     if ( offset != tstring::npos )
     {
         m_Path.replace( offset + 1, newExtension.length(), newExtension );
     }
     else
     {
-        m_Path += TXT( "." ) + newExtension;
+        m_Path += TXT( '.' ) + newExtension;
     }
 }
 
 void Path::ReplaceFullExtension( const tstring& newExtension )
 {
     size_t slash = m_Path.find_last_of( s_InternalPathSeparator );
-    size_t offset = m_Path.find_first_of( '.', slash == tstring::npos ? 0 : slash );
+    size_t offset = m_Path.find_first_of( TXT( '.' ), slash == tstring::npos ? 0 : slash );
     if ( offset != tstring::npos )
     {
         m_Path.replace( offset + 1, newExtension.length(), newExtension );
     }
     else
     {
-        m_Path += TXT( "." ) + newExtension;
+        m_Path += TXT( '.' ) + newExtension;
     }
 }
 

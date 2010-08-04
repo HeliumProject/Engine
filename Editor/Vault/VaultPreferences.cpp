@@ -26,7 +26,7 @@ VaultPreferences::VaultPreferences( const tstring& defaultFolder, ViewOptionID t
  , m_UsageCollectionRecursionDepth( 0 )
 {
   Helium::Path::Normalize( m_DefaultFolder );
-  Helium::Path::GuaranteeSlash( m_DefaultFolder );
+  Helium::Path::GuaranteeSeparator( m_DefaultFolder );
 }
 
 VaultPreferences::~VaultPreferences()
@@ -149,5 +149,5 @@ void VaultPreferences::SetDefaultFolderPath( const tstring& path )
 {
   m_DefaultFolder = path;
   Helium::Path::Normalize( m_DefaultFolder );
-  Helium::Path::GuaranteeSlash( m_DefaultFolder );
+  Helium::Path::GuaranteeSeparator( m_DefaultFolder );
 }

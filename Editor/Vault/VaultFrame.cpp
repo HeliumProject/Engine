@@ -490,7 +490,7 @@ void VaultFrame::OnFolderSelected( wxTreeEvent& event )
     if ( !queryString.empty() )
     {
         Helium::Path::Normalize( queryString );
-        Helium::Path::GuaranteeSlash( queryString );
+        Helium::Path::GuaranteeSeparator( queryString );
         Search( queryString );
         event.Skip();
     }

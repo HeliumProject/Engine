@@ -27,7 +27,7 @@ namespace Helium
     public:
         static void Normalize( tstring& path );
         static void MakeNative( tstring& path );
-        static void GuaranteeSlash( tstring& path );
+        static void GuaranteeSeparator( tstring& path );
 
         static bool Exists( const tstring& path );
         static bool IsAbsolute( const tstring& path );

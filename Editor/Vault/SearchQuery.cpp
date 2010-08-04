@@ -242,7 +242,7 @@ bool SearchQuery::ParseQueryString( const tstring& queryString, tstring& errors,
                 query->m_SearchType = SearchTypes::Folder;
 
                 Helium::Path::Normalize( query->m_QueryString );
-                Helium::Path::GuaranteeSlash( query->m_QueryString );
+                Helium::Path::GuaranteeSeparator( query->m_QueryString );
             }
             return true;
         }

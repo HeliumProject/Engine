@@ -78,7 +78,7 @@ CollectionsPanel::CollectionsPanel( VaultFrame* browserFrame )
     m_UsageImageIndex = Helium::GlobalFileIconsTable().GetIconID( TXT( "chart_organisation_reverse" ) );
 
     m_MyCollectionsToolBar->SetToolBitmapSize( wxSize( 16, 16 ) );
-    m_MyCollectionsToolBar->AddTool( ID_NewCollection, TXT( "" ), wxArtProvider::GetBitmap( Editor::ArtIDs::NewCollection ), VaultMenu::Label( ID_NewCollection ) );
+    m_MyCollectionsToolBar->AddTool( ID_NewCollection, TXT( "" ), wxArtProvider::GetBitmap( Editor::ArtIDs::Collection ), VaultMenu::Label( ID_NewCollection ) );
     m_MyCollectionsToolBar->Realize();
 
     Connect( wxEVT_SIZE, wxSizeEventHandler( CollectionsPanel::OnSizeCollectionsPanel ), NULL, this );

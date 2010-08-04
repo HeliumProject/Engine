@@ -556,12 +556,6 @@ VaultPanelGenerated::VaultPanelGenerated( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer34;
 	bSizer34 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_BackButton = new wxBitmapButton( m_NavigationPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer34->Add( m_BackButton, 0, wxALL, 5 );
-	
-	m_ForwardButton = new wxBitmapButton( m_NavigationPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer34->Add( m_ForwardButton, 0, wxALL, 5 );
-	
 	m_SearchCtrl = new wxSearchCtrl( m_NavigationPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	#ifndef __WXMAC__
 	m_SearchCtrl->ShowSearchButton( true );

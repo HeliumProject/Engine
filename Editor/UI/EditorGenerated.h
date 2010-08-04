@@ -251,8 +251,6 @@ namespace Helium
 			
 			protected:
 				wxPanel* m_NavigationPanel;
-				wxBitmapButton* m_BackButton;
-				wxBitmapButton* m_ForwardButton;
 				wxSearchCtrl* m_SearchCtrl;
 				wxBitmapButton* m_OptionsButton;
 				wxListBox* m_SourceListBox;

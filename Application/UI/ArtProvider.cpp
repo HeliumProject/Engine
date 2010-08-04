@@ -162,15 +162,12 @@ void ArtProvider::Create()
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::Undo, TXT( "actions/undo.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::Redo, TXT( "actions/redo.png" ) ) );
 
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::Back, TXT( "actions/previous.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::Forward, TXT( "actions/forward.png" ) ) );
-
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::Options, TXT( "actions/messagebox_info.png" ) ) );
 
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::RCSCheckedOutByMe, TXT( "actions/apply.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::RCSCheckedOutBySomeoneElse, TXT( "actions/lock.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::RCSOutOfDate, TXT( "actions/messagebox_warning.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::RCSUnknown, TXT( "nocturnal/unknown.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::RevisionControl::CheckedOutByMe, TXT( "actions/apply.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::RevisionControl::CheckedOutBySomeoneElse, TXT( "actions/lock.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::RevisionControl::OutOfDate, TXT( "actions/messagebox_warning.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Helium::ArtIDs::RevisionControl::Unknown, TXT( "nocturnal/unknown.png" ) ) );
 }
 
 wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& artClient, const wxSize& size )

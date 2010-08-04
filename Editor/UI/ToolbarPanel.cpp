@@ -17,7 +17,7 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
     {
         Freeze();
 
-        m_NewSceneButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::NewScene ) );
+        m_NewSceneButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::Scene ) );
         m_OpenButton->SetBitmap( wxArtProvider::GetBitmap( Helium::ArtIDs::Open ) );
         m_SaveAllButton->SetBitmap( wxArtProvider::GetBitmap( Helium::ArtIDs::SaveAll ) );
         m_CutButton->SetBitmap( wxArtProvider::GetBitmap( Helium::ArtIDs::Cut ) );

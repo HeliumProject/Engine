@@ -189,7 +189,8 @@ namespace Helium
             { ToolModes::VolumeCreate,  ToolTypes::Creator,        wxT("Create Volume"),   Editor::ArtIDs::Volume,        wxT("Place volume objects (items for setting up gameplay)") },
             { ToolModes::EntityCreate,  ToolTypes::Creator,        wxT("Create Entity"),   Editor::ArtIDs::Entity,        wxT("Place entity objects (such as art instances or characters)") },
             { ToolModes::CurveCreate,   ToolTypes::Creator,        wxT("Create Curve"),    Editor::ArtIDs::Curve,         wxT("Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)") },
-            { ToolModes::CurveEdit,     ToolTypes::Editor,         wxT("Edit Curve"),      Editor::ArtIDs::CurveEdit,     wxT("Edit created curves (modify or create/delete control points)") },
+#pragma TODO( "Add an overlay to the curve tool for editing" )
+            { ToolModes::CurveEdit,     ToolTypes::Editor,         wxT("Edit Curve"),      Editor::ArtIDs::Curve,         wxT("Edit created curves (modify or create/delete control points)") },
             { ToolModes::NavMesh,       ToolTypes::Editor,         wxT("Edit NavMesh"),    Editor::ArtIDs::NavMesh,       wxT("Create NavMesh or add new verts and tris") },
         };
 

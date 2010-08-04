@@ -33,8 +33,8 @@ ViewPanel::ViewPanel(wxWindow *parent, wxWindowID id, const wxPoint &pos, const 
         m_ShowBoundsToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ShowBounds ) );
         m_ShowStatisticsToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ShowStatistics ) );
 
-        m_FrustumCullingToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::FrustumCull ) );
-        m_BackfaceCullingToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::BackfaceCull ) );
+        m_FrustumCullingToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::FrustumCulling ) );
+        m_BackfaceCullingToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::BackfaceCulling ) );
 
         m_WireframeShadingToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ShadingWireframe ) );
         m_MaterialShadingToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ShadingMaterial ) );

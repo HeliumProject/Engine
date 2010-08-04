@@ -54,7 +54,7 @@ namespace Helium
             wxWindow*           m_ParentWindow;
 
         public:
-            DocumentManager( wxWindow* parentWindow = NULL );
+            DocumentManager( wxWindow* parentWindow );
             virtual ~DocumentManager();
 
             const OS_DocumentSmartPtr& GetDocuments();

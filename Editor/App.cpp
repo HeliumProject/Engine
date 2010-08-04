@@ -33,7 +33,6 @@
 #include "Persistent.h"
 #include "PropertiesGenerator.h"
 
-#include "EditorFrame.h"
 #include "Preferences.h"
 #include "Settings.h"
 #include "Preferences.h"
@@ -152,7 +151,8 @@ namespace Helium
 }
 
 App::App()
-: wxApp()
+#pragma TODO("This needs fixing otherwise dialogs will not be modal -Geoff")
+: m_DocumentManager( NULL )
 , m_Preferences( new Preferences )
 , m_Vault( NULL )
 , m_Frame( NULL )
@@ -217,7 +217,6 @@ bool App::OnInit()
     m_InitializerStack.Push( Persistent::InitializeType, Persistent::CleanupType );
     m_InitializerStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
     m_InitializerStack.Push( Reflect::RegisterEnumeration<FilePathOptions::FilePathOption>( &FilePathOptions::FilePathOptionEnumerateEnumeration, TXT( "FilePathOption" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterEnumeration<EditorTypes::EditorType>( &EditorTypes::EditorTypeEnumerateEnumeration, TXT( "EditorType" ) ) );
     m_InitializerStack.Push( Document::InitializeType, Document::CleanupType );
     m_InitializerStack.Push( Reflect::RegisterClass<MRUData>( TXT( "MRUData" ) ) );
 

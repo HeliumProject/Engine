@@ -19,8 +19,6 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
-#include "EditorFrame.h"
-
 using namespace Helium;
 using namespace Helium::Reflect;
 using namespace Helium::Asset;

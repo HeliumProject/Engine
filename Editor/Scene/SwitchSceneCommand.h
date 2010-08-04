@@ -15,7 +15,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // Undo command for switching the current scene.
         // 
-        class LSwitchSceneCommand : public Undo::PropertyCommand< Editor::Scene* >
+        class SwitchSceneCommand : public Undo::PropertyCommand< Editor::Scene* >
         {
         private:
             Editor::SceneManager* m_SceneManager;
@@ -24,8 +24,8 @@ namespace Helium
             bool m_IsValid;
 
         public:
-            LSwitchSceneCommand( Editor::SceneManager* manager, Editor::Scene* newScene );
-            virtual ~LSwitchSceneCommand();
+            SwitchSceneCommand( Editor::SceneManager* manager, Editor::Scene* newScene );
+            virtual ~SwitchSceneCommand();
             virtual bool IsSignificant() const HELIUM_OVERRIDE;
             virtual void Undo() HELIUM_OVERRIDE;
             virtual void Redo() HELIUM_OVERRIDE;

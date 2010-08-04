@@ -10,7 +10,6 @@
 #include "PrimitiveCube.h"
 
 #include "App.h"
-#include "EditorFrame.h"
 #include "Scene.h"
 #include "SceneManager.h"
 #include "ScenePreferences.h"

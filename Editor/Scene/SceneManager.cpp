@@ -36,7 +36,7 @@ SceneManager::SceneManager(SceneEditor* editor)
 : DocumentManager( editor )
 #else
 SceneManager::SceneManager()
-: DocumentManager()
+: DocumentManager( NULL )
 #endif
 , m_CurrentScene( NULL )
 #ifdef UI_REFACTOR
@@ -110,7 +110,7 @@ DocumentPtr SceneManager::OpenPath( const tstring& path, tstring& error )
     Editor::Scene* previousScene = GetCurrentScene();
     if ( previousScene )
     {
-        batch->Push( new LSwitchSceneCommand( this, NULL ) );
+        batch->Push( new SwitchSceneCommand( this, NULL ) );
     }
 
     tstring scenePath = path;
@@ -133,7 +133,7 @@ DocumentPtr SceneManager::OpenPath( const tstring& path, tstring& error )
             SetCurrentScene( scene );
         }
 
-        batch->Push( new LSwitchSceneCommand( this, scene ) );
+        batch->Push( new SwitchSceneCommand( this, scene ) );
         if ( previousScene && GetRootScene() )
         {
             GetRootScene()->Push( batch );
@@ -147,7 +147,7 @@ DocumentPtr SceneManager::OpenPath( const tstring& path, tstring& error )
         // If we switched from a valid scene, restore that scene as the current one
         if ( previousScene )
         {
-            batch->Push( new LSwitchSceneCommand( this, previousScene ) );
+            batch->Push( new SwitchSceneCommand( this, previousScene ) );
         }
     }
     return document;

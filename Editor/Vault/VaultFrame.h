@@ -65,11 +65,6 @@ namespace Helium
             wxMenu* GetNewAssetMenu( bool forceEnableAll = false );
             bool InFolder();
 
-        public:
-            // Virtual overrides of Frame class
-            virtual void SaveWindowState() HELIUM_OVERRIDE;
-            virtual const tstring& GetPreferencePrefix() const HELIUM_OVERRIDE;
-
         protected:
             virtual void OnClose( wxCloseEvent& event );
 
@@ -132,7 +127,6 @@ namespace Helium
             VaultSearch*            m_VaultSearch;
             SearchHistory*          m_SearchHistory;
 
-            tstring                 m_PreferencePrefix;
             NavigationPanel*        m_NavigationPanel;
             ResultsPanel*           m_ResultsPanel;
             PreviewPanel*           m_PreviewPanel;

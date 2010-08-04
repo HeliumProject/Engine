@@ -101,13 +101,6 @@ namespace Helium
 
             }
 
-            // 
-            // Callback for when data is changed on the package
-            // 
-
-        protected:
-            virtual void PackageChanged( const Reflect::ElementChangeArgs& args );
-
             //
             // State Functionality (used by undo)
             //

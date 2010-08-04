@@ -9,7 +9,6 @@
 #include "PrimitiveCircle.h"
 
 #include "App.h"
-#include "EditorFrame.h"
 #include "Scene.h"
 #include "ScenePreferences.h"
 

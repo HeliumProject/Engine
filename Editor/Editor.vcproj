@@ -4198,14 +4198,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\EditorFrame.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\EditorFrame.h"
-			>
-		</File>
-		<File
 			RelativePath=".\Frame.cpp"
 			>
 		</File>

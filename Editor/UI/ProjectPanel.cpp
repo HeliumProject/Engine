@@ -111,6 +111,8 @@ wxDataViewItem ProjectViewModel::GetParent(const wxDataViewItem& item) const
     {
         return node->GetParent();
     }
+
+    return NULL;
 }
 
 unsigned int ProjectViewModel::GetChildren(const wxDataViewItem& item, wxDataViewItemArray& items) const

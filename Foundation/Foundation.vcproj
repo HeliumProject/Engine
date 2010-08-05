@@ -1451,6 +1451,30 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="RPC"
+			>
+			<File
+				RelativePath=".\RPC\RPC.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\RPC\RPC.h"
+				>
+			</File>
+			<File
+				RelativePath=".\RPC\Swizzle.h"
+				>
+			</File>
+			<File
+				RelativePath=".\RPC\Test.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\RPC\Test.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\API.h"
 			>

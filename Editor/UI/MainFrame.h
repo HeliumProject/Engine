@@ -19,8 +19,8 @@
 #include "Application/UI/MenuMRU.h"
 #include "Application/Inspect/DragDrop/DropTarget.h"
 
-#include "Scene/TreeMonitor.h"
-#include "Scene/TreeSortTimer.h"
+#include "UI/TreeMonitor.h"
+#include "UI/TreeSortTimer.h"
 
 #include "Core/Project.h"
 

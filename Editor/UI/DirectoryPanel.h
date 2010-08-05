@@ -2,8 +2,9 @@
 
 #include "EditorGenerated.h"
 
+#include "UI/TreeMonitor.h"
+
 #include "Scene/SceneManager.h"
-#include "Scene/TreeMonitor.h"
 #include "Scene/EntityAssetOutliner.h"
 #include "Scene/HierarchyOutliner.h"
 #include "Scene/NodeTypeOutliner.h"

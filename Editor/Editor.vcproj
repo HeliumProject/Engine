@@ -790,30 +790,6 @@
 				RelativePath=".\Scene\ScenePreferences.h"
 				>
 			</File>
-			<File
-				RelativePath=".\Scene\SelectionPropertiesPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SelectionPropertiesPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\TreeMonitor.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\TreeMonitor.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\TreeSortTimer.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\TreeSortTimer.h"
-				>
-			</File>
 			<Filter
 				Name="Tools"
 				>
@@ -3985,11 +3961,35 @@
 				>
 			</File>
 			<File
+				RelativePath=".\UI\SelectionPropertiesPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\SelectionPropertiesPanel.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UI\ToolbarPanel.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\UI\ToolbarPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TreeMonitor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TreeMonitor.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TreeSortTimer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TreeSortTimer.h"
 				>
 			</File>
 			<File

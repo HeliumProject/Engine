@@ -6,7 +6,10 @@
 #include "SceneManager.h"
 #include "ToolTimer.h"
 #include "Transform.h"
+
+#ifdef UI_REFACTOR
 #include "TreeSortTimer.h"
+#endif
 
 #include "Pick.h"
 

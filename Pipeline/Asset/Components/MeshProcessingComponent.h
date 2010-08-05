@@ -33,7 +33,6 @@ namespace Helium
             f32                   m_ScalingFactor;
             MeshCompressionFactor m_MeshCompressionFactor;
 
-
         public:
 
             REFLECT_DECLARE_CLASS( MeshProcessingComponent, Component::ComponentBase );
@@ -75,5 +74,8 @@ namespace Helium
             }
 
         };
+
+        typedef Helium::SmartPtr< MeshProcessingComponent > MeshProcessingComponentPtr;
+
     }
 }

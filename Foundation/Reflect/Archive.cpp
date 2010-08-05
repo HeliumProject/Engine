@@ -509,7 +509,12 @@ void Archive::ToFile(const V_Element& elements, const tstring& file, VersionPtr 
 #pragma TODO("Profiler support for wide strings")
     PROFILE_SCOPE_ACCUM_VERBOSE(g_AuthorAccum, ""/*print*/);
 
-    std::auto_ptr<Archive> archive (GetArchive(file, status));
+    std::auto_ptr<Archive> archive( GetArchive(file, status) );
+    if ( archive.get() == NULL )
+    {
+        throw Helium::Exception( TXT( "Could not create an archive for the given filename.  Perhaps we do not support the archive type (based on the file extension)?" ) );
+    }
+
     archive->Debug( TXT( "%s\n" ), print);
 
     s_FileAccess.Raise( FileAccessArgs( file, FileOperations::PreWrite ) );

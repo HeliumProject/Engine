@@ -10,7 +10,7 @@ void MeshProcessingComponent::EnumerateClass( Reflect::Compositor< MeshProcessin
   comp.GetComposite().m_UIName = TXT( "Mesh Processing" );
 
   comp.AddField( &MeshProcessingComponent::m_ScalingFactor, "m_ScalingFactor" );
-  comp.AddField( &MeshProcessingComponent::m_MeshCompressionFactor, "m_MeshCompressionFactor" );
+  comp.AddEnumerationField( &MeshProcessingComponent::m_MeshCompressionFactor, "m_MeshCompressionFactor" );
 }
 
 Component::ComponentUsage MeshProcessingComponent::GetComponentUsage() const

@@ -5,6 +5,8 @@
 
 #include "Pipeline/API.h"
 
+#include "Pipeline/Asset/AssetFactory.h"
+
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/Component/Component.h"
@@ -35,13 +37,16 @@ namespace Helium
         {
         private:
 
-            Helium::Path m_Path;
+            Helium::Path m_SerializationPath; // optional path where this asset was deserialized from
+            Helium::Path m_Path; // path to the asset's backing/art file
 
             tstring m_Description;
             std::set< tstring > m_Tags;
 
         private:
             static tstring s_BaseBuiltDirectory;
+
+            static std::map< tstring, class AssetFactory* > s_AssetFactories;
 
         public:
             //
@@ -90,6 +95,57 @@ namespace Helium
             }
 
         public:
+            static void RegisterFactory( const tstring& extension, AssetFactory* factory )
+            {
+                s_AssetFactories[ extension ] = factory;
+            }
+
+            static void UnregisterFactory( const tstring& extension )
+            {
+                s_AssetFactories.erase( extension );
+            }
+
+            static void UnregisterFactory( const AssetFactory* factory )
+            {
+                for ( std::map< tstring, AssetFactory* >::iterator itr = s_AssetFactories.begin(), end = s_AssetFactories.end(); itr != end; )
+                {
+                    if ( (*itr).second == factory )
+                    {
+                        s_AssetFactories.erase( itr++ );
+
+                        if ( itr == end )
+                        {
+                            break;
+                        }
+                    }
+
+                    ++itr;
+                }
+            }
+
+            static AssetClassPtr Create( const Helium::Path& path )
+            {
+                std::map< tstring, AssetFactory* >::iterator itr = s_AssetFactories.find( path.Extension() );
+                
+                if ( itr != s_AssetFactories.end() )
+                {
+                    return (*itr).second->Create( path );
+                }
+
+                return NULL;
+            }
+
+        public:
+
+            void SetSerializationPath( const Helium::Path& path )
+            {
+                m_SerializationPath = path;
+            }
+
+            const Helium::Path& GetSerializationPath()
+            {
+                return m_SerializationPath;
+            }
 
             void SetPath( const Helium::Path& path )
             {
@@ -140,13 +196,13 @@ namespace Helium
 
         public:
             // we were changed by somebody, reclassify
-            virtual void ComponentChanged( const Component::ComponentBase* attr = NULL ) HELIUM_OVERRIDE;
+            virtual void ComponentChanged( const Component::ComponentBase* component = NULL ) HELIUM_OVERRIDE;
 
             // add to or set an attribute in the collection
-            virtual void SetComponent( const Component::ComponentPtr& attr, bool validate = true ) HELIUM_OVERRIDE;
+            virtual bool SetComponent( const Component::ComponentPtr& component, bool validate = true, tstring* error = NULL ) HELIUM_OVERRIDE;
 
             // remove attribute from a slot
-            virtual void RemoveComponent( i32 typeID ) HELIUM_OVERRIDE;
+            virtual bool RemoveComponent( i32 typeID ) HELIUM_OVERRIDE;
 
         public:
 

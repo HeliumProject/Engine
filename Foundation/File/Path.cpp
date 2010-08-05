@@ -419,8 +419,8 @@ void Path::RemoveFullExtension()
 void Path::ReplaceExtension( const tstring& newExtension )
 {
     size_t slash = m_Path.find_last_of( s_InternalPathSeparator );
-    size_t offset = m_Path.find_last_of( TXT( '.' ), slash == tstring::npos ? 0 : slash );
-    if ( offset != tstring::npos )
+    size_t offset = m_Path.rfind( TXT( '.' ) );
+    if ( offset != tstring::npos && ( offset > ( slash != tstring::npos ? slash : 0 ) ) )
     {
         m_Path.replace( offset + 1, newExtension.length(), newExtension );
     }

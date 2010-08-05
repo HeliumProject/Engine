@@ -87,7 +87,7 @@ namespace Helium
 
             virtual ComponentBehavior GetComponentBehavior() const
             {
-                return ComponentBehaviors::Exclusive;
+                return ComponentBehaviors::Inclusive;
             }
 
             // 

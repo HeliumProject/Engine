@@ -10,7 +10,7 @@ void TextureProcessingComponent::EnumerateClass( Reflect::Compositor< TexturePro
   comp.GetComposite().m_UIName = TXT( "Texture Processing" );
 
   comp.AddField( &TextureProcessingComponent::m_MaxTextureResolution, "m_MaxTextureResolution" );
-  comp.AddField( &TextureProcessingComponent::m_TextureDataFormat, "m_TextureDataFormat" );
+  comp.AddEnumerationField( &TextureProcessingComponent::m_TextureDataFormat, "m_TextureDataFormat" );
   comp.AddField( &TextureProcessingComponent::m_GenerateMipMaps, "m_GenerateMipMaps" );
   comp.AddField( &TextureProcessingComponent::m_GenerateBumpMap, "m_GenerateBumpMap" );
 }

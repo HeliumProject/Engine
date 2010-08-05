@@ -955,6 +955,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Asset\AssetFactory.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Asset\AssetInit.cpp"
 				>
 			</File>
@@ -1103,6 +1107,18 @@
 				</File>
 				<File
 					RelativePath=".\Asset\Manifests\SceneManifest.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Factories"
+				>
+				<File
+					RelativePath=".\Asset\Factories\MeshAssetFactory.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Asset\Factories\MeshAssetFactory.h"
 					>
 				</File>
 			</Filter>

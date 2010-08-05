@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Application/API.h"
+
 #include "Foundation/File/Path.h"
 #include "Foundation/Automation/Event.h"
 
@@ -20,7 +22,7 @@ namespace Helium
     typedef Helium::Signature< void, const FileDroppedArgs& > FileDroppedSignature;
     typedef std::set< FileDroppedSignature::Delegate > S_FileDroppedSignature;
 
-    class FileDropTarget : public wxFileDropTarget
+    class APPLICATION_API FileDropTarget : public wxFileDropTarget
     {
     public:
         FileDropTarget(const tstring& extensions, const tstring& delims = TXT( "," ) );
@@ -38,8 +40,8 @@ namespace Helium
     protected:
         virtual bool OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& filenames );
 
-    private:
+    protected:
         FileDroppedSignature::Event m_DropEvent;
-        std::vector< tstring >                    m_FileExtensions;
+        std::set< tstring >         m_FileExtensions;
     };
 }

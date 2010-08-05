@@ -30,6 +30,7 @@ using namespace Helium::Asset;
 const tchar* ASSET_VERSION = TXT( "1" );
 
 tstring AssetClass::s_BaseBuiltDirectory = TXT( "" );
+std::map< tstring, AssetFactory* > AssetClass::s_AssetFactories;
 
 REFLECT_DEFINE_ABSTRACT( AssetClass );
 void AssetClass::EnumerateClass( Reflect::Compositor<AssetClass>& comp )
@@ -52,7 +53,7 @@ AssetClassPtr AssetClass::LoadAssetClass( const tchar* path )
         Helium::Path filePath( path );
 
         assetClass = Reflect::Archive::FromFile< AssetClass >( filePath );
-        assetClass->SetPath( filePath );
+        assetClass->SetSerializationPath( filePath );
         assetClass->LoadFinished();
     }
     catch ( const Helium::Exception& exception )
@@ -280,19 +281,19 @@ void AssetClass::GetFileReferences( std::set< Helium::Path >& fileReferences )
     fileReferences.erase( m_Path );
 }
 
-void AssetClass::ComponentChanged( const Component::ComponentBase* attr )
+void AssetClass::ComponentChanged( const Component::ComponentBase* component )
 {
-    __super::ComponentChanged( attr );
+    __super::ComponentChanged( component );
 }
 
-void AssetClass::SetComponent( const Component::ComponentPtr& attr, bool validate )
+bool AssetClass::SetComponent( const Component::ComponentPtr& component, bool validate, tstring* error )
 {
-    __super::SetComponent( attr, validate );
+    return __super::SetComponent( component, validate, error );
 }
 
-void AssetClass::RemoveComponent( i32 typeID )
+bool AssetClass::RemoveComponent( i32 typeID )
 {
-    __super::RemoveComponent( typeID );
+    return __super::RemoveComponent( typeID );
 }
 
 void AssetClass::Serialize()

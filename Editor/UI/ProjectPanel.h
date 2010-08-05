@@ -5,6 +5,8 @@
 
 #include "EditorGenerated.h"
 
+#include "Application/UI/FileDropTarget.h"
+
 namespace Helium
 {
     namespace Editor
@@ -38,6 +40,7 @@ namespace Helium
         {
         public:
             ProjectPanel( wxWindow* parent );
+            virtual ~ProjectPanel();
 
             void SetProject( Helium::Core::Project* project );
 
@@ -46,10 +49,13 @@ namespace Helium
 			virtual void OnCreateFolder( wxCommandEvent& event ) HELIUM_OVERRIDE;
 			virtual void OnDelete( wxCommandEvent& event ) HELIUM_OVERRIDE;
 
+            virtual void OnDroppedFiles( const FileDroppedArgs& args );
+
         protected:
             Helium::Core::ProjectPtr                            m_Project;
             wxObjectDataPtr<ProjectViewModel>                   m_Model;
             Helium::OrderedSet< Reflect::DocumentElementPtr >   m_Selected;
+            Helium::FileDropTarget*                             m_DropTarget;
         };
     }
 }

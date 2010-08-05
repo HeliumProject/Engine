@@ -109,7 +109,7 @@ const ComponentPtr& EntityInstance::GetComponent(i32 typeID) const
     return instAttr;
 }
 
-void EntityInstance::SetComponent(const ComponentPtr& attr, bool validate)
+bool EntityInstance::SetComponent( const ComponentPtr& attr, bool validate, tstring* error )
 {
     // NOTE: GetAssetClass should ensure that the AssetClass is valid, and throw an exception otherwise
     AssetClassPtr entityClass = GetEntity();
@@ -122,9 +122,9 @@ void EntityInstance::SetComponent(const ComponentPtr& attr, bool validate)
         // make sure we aren't attempting to pass in an attribute with the same address as the corresponding attribute in the EntityAsset attr
         if ( classAttr == attr )
         {
-            return;
+            return true;
         }
     }
 
-    __super::SetComponent( attr, validate );
+    return __super::SetComponent( attr, validate, error );
 }

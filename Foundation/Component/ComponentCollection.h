@@ -73,13 +73,13 @@ namespace Helium
             // Set attribute into a slot.  If validate param is false, ValidateComponent
             // will not be called, and it is up to the caller to do any necessary
             // checking, including for duplicate attributes.
-            virtual void SetComponent(const ComponentPtr& attr, bool validate = true );
+            virtual bool SetComponent(const ComponentPtr& attr, bool validate = true, tstring* error = NULL );
 
             // remove attribute from a slot
-            virtual void RemoveComponent(i32 slotID);
+            virtual bool RemoveComponent( i32 slotID );
 
             // queries the container for the existence of the specified attribute
-            virtual bool ContainsComponent(i32 slotID) const;
+            virtual bool ContainsComponent( i32 slotID ) const;
 
             // Validates the attribute for add to this attribute collection.  If the addition is
             // not valid, the return value will be false and "error" will have additional info about

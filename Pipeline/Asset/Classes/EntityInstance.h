@@ -31,7 +31,7 @@ namespace Helium
 
             virtual bool ValidatePersistent( const Component::ComponentPtr& attr ) const HELIUM_OVERRIDE;
             virtual const Component::ComponentPtr& GetComponent( i32 typeID ) const HELIUM_OVERRIDE;
-            virtual void SetComponent( const Component::ComponentPtr& component, bool validate = true ) HELIUM_OVERRIDE;
+            virtual bool SetComponent( const Component::ComponentPtr& component, bool validate = true, tstring* error = NULL ) HELIUM_OVERRIDE;
 
         private:
             Helium::Path m_Path;

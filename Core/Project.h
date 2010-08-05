@@ -95,18 +95,18 @@ namespace Helium
                 AddChangedListeners();
             }
 
-            Helium::Attribute<tstring>& Path()
+            Helium::Attribute< Helium::Path >& Path()
             {
                 return m_PathAttr;
             }
 
         private:
-            tstring                     m_Path;
-            Helium::Attribute<tstring>  m_PathAttr;
+            Helium::Path                      m_Path;
+            Helium::Attribute< Helium::Path > m_PathAttr;
 
             void AddChangedListeners()
             {
-                m_PathAttr.Changed().AddMethod( this, &Element::AttributeChanged<tstring> );
+                m_PathAttr.Changed().AddMethod( this, &Element::AttributeChanged< Helium::Path > );
             }
 
         public:

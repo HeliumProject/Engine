@@ -3,6 +3,8 @@
 #include "ProjectPanel.h"
 #include "ArtProvider.h"
 
+#include "Pipeline/Asset/AssetClass.h"
+
 using namespace Helium;
 using namespace Helium::Core;
 using namespace Helium::Editor;
@@ -159,6 +161,10 @@ ProjectPanel::ProjectPanel( wxWindow *parent )
     wxDataViewColumn *column1 = new wxDataViewColumn( "Details", render1, 1, 150, wxALIGN_LEFT, wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
     m_DataViewCtrl->AppendColumn( column1 );
 
+    m_DropTarget = new FileDropTarget( TXT( "obj" ) );
+    m_DropTarget->AddListener( FileDroppedSignature::Delegate( this, &ProjectPanel::OnDroppedFiles ) );
+    SetDropTarget( m_DropTarget );
+
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )
     {
         Freeze();
@@ -174,6 +180,11 @@ ProjectPanel::ProjectPanel( wxWindow *parent )
         Thaw();
     }
 }
+
+ProjectPanel::~ProjectPanel()
+{
+}
+
 
 void ProjectPanel::SetProject( Project* project )
 {
@@ -211,6 +222,24 @@ void ProjectPanel::OnDelete( wxCommandEvent& event )
         for ( Helium::OrderedSet< Reflect::DocumentElementPtr >::Iterator itr = m_Selected.Begin(), end = m_Selected.End(); itr != end; ++itr )
         {
             m_Project->RemoveChild( *itr );
+        }
+    }
+}
+
+void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
+{
+    HELIUM_ASSERT( m_Project );
+
+    Asset::AssetClassPtr asset = Asset::AssetClass::Create( args.m_Path );
+
+    if ( asset.ReferencesObject() )
+    {
+        if ( asset->GetSerializationPath().Exists() )
+        {
+            ProjectFilePtr file = new ProjectFile();
+            asset->SetSerializationPath( asset->GetSerializationPath().GetRelativePath( m_Project->Path().Get() ) );
+            file->Path().Set( asset->GetSerializationPath().Get() );
+            m_Project->AddChild( file );
         }
     }
 }

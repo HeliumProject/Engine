@@ -111,28 +111,25 @@ const ComponentPtr& ComponentCollection::GetComponent(i32 slotID) const
     return kNull;
 }
 
-void ComponentCollection::SetComponent(const ComponentPtr& component, bool validate)
+bool ComponentCollection::SetComponent(const ComponentPtr& component, bool validate, tstring* error )
 {
     HELIUM_ASSERT( component->GetSlot() != Reflect::ReservedTypes::Invalid );
 
     M_Component::const_iterator found = m_Components.find( component->GetSlot() );
     if (found != m_Components.end() && found->second == component)
     {
-        return; // nothing to do, this is already in the collection
+        return true; // nothing to do, this is already in the collection
     }
 
-    // this will prevent inappropriate attributes from being added by throwing an exception
-    tstring error;
-    if ( validate && !ValidateComponent( component, error ) )
+    tstring errorMessage;
+    if ( validate && !ValidateComponent( component, errorMessage ) )
     {
-        if ( error.empty() )
+        if ( error )
         {
-            throw Helium::Exception( TXT( "Component '%s' is not valid for collection '%s'" ), component->GetClass()->m_ShortName.c_str(), GetClass()->m_ShortName.c_str() );
+            *error = tstring( TXT( "Component '" ) ) + component->GetClass()->m_ShortName + TXT( "' is not valid for collection '" ) + GetClass()->m_ShortName + TXT( "': " ) + errorMessage;
         }
-        else
-        {
-            throw Helium::Exception( TXT( "Component '%s' is not valid for collection '%s': %s" ), component->GetClass()->m_ShortName.c_str(), GetClass()->m_ShortName.c_str(), error.c_str() );
-        }
+        
+        return false;
     }
 
     // Event args
@@ -147,17 +144,18 @@ void ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
 
     // Raise event
     m_Modified = true;
-    m_ComponentAdded.Raise( args ); 
+    m_ComponentAdded.Raise( args );
+    return true;
 }
 
-void ComponentCollection::RemoveComponent(i32 slotID)
+bool ComponentCollection::RemoveComponent( i32 slotID )
 {
     HELIUM_ASSERT( slotID != Reflect::ReservedTypes::Invalid );
 
     M_Component::iterator found = m_Components.find(slotID);
     if (found == m_Components.end())
     {
-        return;
+        return false;
     }
 
     // Hold a pointer to the component so that it doesn't get deleted immediately
@@ -178,6 +176,7 @@ void ComponentCollection::RemoveComponent(i32 slotID)
     // Raise event
     m_Modified = true;
     m_ComponentRemoved.Raise( args );
+    return true;
 }
 
 bool ComponentCollection::ContainsComponent( i32 slotID ) const
@@ -225,7 +224,7 @@ bool ComponentCollection::ValidateCompatible( const ComponentPtr& component, tst
 
     if ( component->GetComponentBehavior() == ComponentBehaviors::Exclusive )
     {
-        error = component->GetClass()->m_UIName + TXT( " cannot be added to a " ) + GetClass()->m_UIName + TXT( " because it is an exclusive component." );
+        error = component->GetClass()->m_UIName + TXT( " cannot be added to a(n) " ) + GetClass()->m_UIName + TXT( " because it is an exclusive component." );
         return false;
     }
 

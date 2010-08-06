@@ -898,14 +898,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\EntityAssetOutliner.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\EntityAssetOutliner.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Scene\EntityAssetSet.cpp"
 					>
 				</File>
@@ -1495,58 +1487,6 @@
 				</File>
 				<File
 					RelativePath=".\Scene\PrimitiveSphere.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Outlines"
-				>
-				<File
-					RelativePath=".\Scene\HierarchyOutliner.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\HierarchyOutliner.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\HierarchyOutlinerItemData.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\HierarchyOutlinerItemData.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\NodeTypeOutliner.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\NodeTypeOutliner.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\SceneOutliner.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\SceneOutliner.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\SceneOutlinerItemData.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\SceneOutlinerItemData.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\SceneOutlinerState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\SceneOutlinerState.h"
 					>
 				</File>
 			</Filter>
@@ -3829,6 +3769,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\UI\EntityAssetOutliner.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\EntityAssetOutliner.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UI\ExportOptionsDlg.cpp"
 				>
 			</File>
@@ -3869,6 +3817,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\UI\HierarchyOutliner.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\HierarchyOutliner.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\HierarchyOutlinerItemData.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\HierarchyOutlinerItemData.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UI\ImportOptionsDlg.cpp"
 				>
 			</File>
@@ -3898,6 +3862,14 @@
 			</File>
 			<File
 				RelativePath=".\UI\MessageDisplayer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\NodeTypeOutliner.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\NodeTypeOutliner.h"
 				>
 			</File>
 			<File
@@ -3958,6 +3930,30 @@
 			</File>
 			<File
 				RelativePath=".\UI\PropertiesPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\SceneOutliner.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\SceneOutliner.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\SceneOutlinerItemData.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\SceneOutlinerItemData.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\SceneOutlinerState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\SceneOutlinerState.h"
 				>
 			</File>
 			<File

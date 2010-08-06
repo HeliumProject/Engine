@@ -2,18 +2,16 @@
 
 #include "EditorGenerated.h"
 
-#include "UI/TreeMonitor.h"
-
 #include "Scene/SceneManager.h"
-#include "Scene/EntityAssetOutliner.h"
-#include "Scene/HierarchyOutliner.h"
-#include "Scene/NodeTypeOutliner.h"
+#include "UI/EntityAssetOutliner.h"
+#include "UI/HierarchyOutliner.h"
+#include "UI/NodeTypeOutliner.h"
+#include "UI/TreeMonitor.h"
 
 namespace Helium
 {
     namespace Editor
     {
-
         class DirectoryPanel : public DirectoryPanelGenerated
         {
         public:

@@ -10,6 +10,8 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
+static const f32 g_MinTimeBetweenSceneEvents = 1000.0f;
+
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
@@ -26,7 +28,7 @@ TreeMonitor::TreeMonitor( Editor::SceneManager* sceneManager )
     m_ThawTimer.AddTickListener( TimerTickSignature::Delegate( this, &TreeMonitor::OnThawTimer ) );
     m_ThawTimer.Start();
 
-    m_NodeAddedTimer.Reset();
+    m_SceneChangedTimer.Reset();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -162,7 +164,7 @@ void TreeMonitor::OnNodeAdded( const NodeChangeArgs& args )
 
     // freeze sorting if we're getting nodes added too quickly
     // every 2 seconds sorting is automatically thawed
-    if ( !IsFrozen() && m_NodeAddedTimer.Elapsed() < 1000.0f )
+    if ( !IsFrozen() && m_SceneChangedTimer.Elapsed() < g_MinTimeBetweenSceneEvents )
     {
         FreezeSorting();
         m_SelfFrozen = true;
@@ -173,7 +175,7 @@ void TreeMonitor::OnNodeAdded( const NodeChangeArgs& args )
         m_NeedsSorting = true;
     }
 
-    m_NodeAddedTimer.Reset();
+    m_SceneChangedTimer.Reset();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -182,8 +184,18 @@ void TreeMonitor::OnNodeAdded( const NodeChangeArgs& args )
 // 
 void TreeMonitor::OnNodeRemoved( const NodeChangeArgs& args )
 {
+    // freeze sorting if we're getting nodes removed too quickly
+    // every 2 seconds sorting is automatically thawed
+    if ( !IsFrozen() && m_SceneChangedTimer.Elapsed() < g_MinTimeBetweenSceneEvents )
+    {
+        FreezeSorting();
+        m_SelfFrozen = true;
+    }
+
     // stop listening for rename
     args.m_Node->RemoveNameChangedListener( SceneNodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeRenamed ) );
+
+    m_SceneChangedTimer.Reset();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -192,10 +204,20 @@ void TreeMonitor::OnNodeRemoved( const NodeChangeArgs& args )
 // 
 void TreeMonitor::OnNodeRenamed( const SceneNodeChangeArgs& args )
 {
+    // freeze sorting if we're getting nodes renamed too quickly
+    // every 2 seconds sorting is automatically thawed
+    if ( !IsFrozen() && m_SceneChangedTimer.Elapsed() < g_MinTimeBetweenSceneEvents )
+    {
+        FreezeSorting();
+        m_SelfFrozen = true;
+    }
+
     if ( IsFrozen() )
     {
         m_NeedsSorting = true;
     }
+
+    m_SceneChangedTimer.Reset();
 }
 
 void TreeMonitor::OnThawTimer( const TimerTickArgs& args )

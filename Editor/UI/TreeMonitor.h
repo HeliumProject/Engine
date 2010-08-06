@@ -36,7 +36,7 @@ namespace Helium
             u32 m_FreezeTreeSorting;
             bool m_NeedsSorting;
             TimerThread m_ThawTimer;
-            Timer m_NodeAddedTimer;
+            Timer m_SceneChangedTimer;
             bool m_SelfFrozen;
 
         public:

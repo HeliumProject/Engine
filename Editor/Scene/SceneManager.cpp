@@ -31,30 +31,12 @@ static tstring GetUniqueSceneName()
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-#ifdef UI_REFACTOR
-SceneManager::SceneManager(SceneEditor* editor)
-: DocumentManager( editor )
-#else
 SceneManager::SceneManager( MessageSignature::Delegate message )
 : DocumentManager( message )
-#endif
 , m_CurrentScene( NULL )
-#ifdef UI_REFACTOR
-, m_Editor (editor)
-#endif
 {
 
 }
-
-#ifdef UI_REFACTOR
-///////////////////////////////////////////////////////////////////////////////
-// The editor that owns us
-// 
-SceneEditor* SceneManager::GetEditor()
-{
-    return m_Editor;
-}
-#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // Create a new scene.  Pass in true if this should be the root scene.
@@ -213,11 +195,8 @@ bool SceneManager::Save( DocumentPtr document, tstring& error )
     // Check for "save as"
     if ( document->GetFilePath().empty() )
     {
-#ifdef UI_REFACTOR
-        tstring savePath = PromptSaveAs( sceneDocument, m_Editor );
-#else
         tstring savePath = PromptSaveAs( sceneDocument );
-#endif
+
         if ( !savePath.empty() )
         {
             document->SetFilePath( savePath );
@@ -483,26 +462,6 @@ bool SceneManager::IsCurrentScene( const Editor::Scene* sceneToCompare ) const
 Editor::Scene* SceneManager::GetCurrentScene() const
 {
     return m_CurrentScene;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Freezes sorting in all the outliners (tree controls).
-// 
-void SceneManager::FreezeTreeSorting()
-{
-#ifdef UI_REFACTOR
-    m_Editor->GetTreeMonitor().FreezeSorting();
-#endif
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Resumes sorting (and sorts) all the outliners.
-// 
-void SceneManager::ThawTreeSorting()
-{
-#ifdef UI_REFACTOR
-    m_Editor->GetTreeMonitor().ThawSorting();
-#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -6,6 +6,8 @@ using namespace Helium;
 
 TimerThread::~TimerThread()
 {
+    // m_TimerThreadArgs are cleaned up when the thread stops
+
     if ( m_Alive )
     {
         Stop();
@@ -32,9 +34,14 @@ void TimerThread::Start()
     // create thread
     m_Alive = true;
 
-    m_ThreadArgs.m_TimerInstance = this;
-    m_ThreadArgs.m_Interval = m_Interval;
-    m_Thread.CreateWithArgs( Helium::Thread::EntryHelperWithArgs< TimerThread, TimerThreadArgs, &TimerThread::ThreadEntryPoint >, this, &m_ThreadArgs, m_Name.c_str() );
+    if ( !m_ThreadArgs )
+    {
+        m_ThreadArgs = new TimerThreadArgs();
+    }
+
+    m_ThreadArgs->m_TimerInstance = this;
+    m_ThreadArgs->m_Interval = m_Interval;
+    m_Thread.CreateWithArgs( Helium::Thread::EntryHelperWithArgs< TimerThread, TimerThreadArgs, &TimerThread::ThreadEntryPoint >, this, m_ThreadArgs, m_Name.c_str() );
 
     m_Timer.Reset();
 }

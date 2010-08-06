@@ -110,9 +110,6 @@ namespace Helium
             Editor::Scene* GetCurrentScene() const;
             void SetCurrentScene( Editor::Scene* scene );
 
-            void FreezeTreeSorting();
-            void ThawTreeSorting();
-
             // Undo/redo support
             bool CanUndo();
             bool CanRedo();

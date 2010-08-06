@@ -30,6 +30,7 @@ namespace Helium
             , m_Interval( intervalInMilliseconds )
             , m_SingleShot( singleShot )
             , m_Alive( false )
+            , m_ThreadArgs( NULL )
         {
         }
         virtual ~TimerThread();
@@ -85,7 +86,7 @@ namespace Helium
         TimerTickSignature::Event m_TimerTickEvent;
 
         bool   m_Alive;
-        TimerThreadArgs m_ThreadArgs;
+        TimerThreadArgs* m_ThreadArgs;
         Thread m_Thread;
         Timer  m_Timer;
     };

@@ -2037,8 +2037,6 @@ void Scene::RefreshSelection()
 
 bool Scene::PropertyChanging( const Inspect::ChangingArgs& args )
 {
-    m_Manager->FreezeTreeSorting();
-
     if ( args.m_Preview )
     {
         return true;
@@ -2060,7 +2058,6 @@ bool Scene::PropertyChanging( const Inspect::ChangingArgs& args )
 void Scene::PropertyChanged( const Inspect::ChangeArgs& args )
 {
     Execute(false);
-    m_Manager->ThawTreeSorting();
 }
 
 bool Scene::SelectionChanging(const OS_SelectableDumbPtr& selection)

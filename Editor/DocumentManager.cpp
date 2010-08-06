@@ -12,20 +12,8 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-DocumentChangeSignature::Event DocumentManager::s_DocumentChange;
-
-///////////////////////////////////////////////////////////////////////////////
-// Constructor
-// 
-DocumentManager::DocumentManager( wxWindow* parentWindow )
-: m_ParentWindow( parentWindow )
-{
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Destructor
-// 
-DocumentManager::~DocumentManager()
+DocumentManager::DocumentManager( MessageSignature::Delegate message )
+: m_Message( message )
 {
 }
 
@@ -37,8 +25,7 @@ bool DocumentManager::AddDocument( const DocumentPtr& document )
 {
     if ( m_Documents.Append( document ) )
     {
-        s_DocumentChange.Raise( DocumentManagerChangeArgs( this, document ) );
-        document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &DocumentManager::OnDocumentClosed ) );
+        document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &DocumentManager::DocumentClosed ) );
         return true;
     }
 
@@ -70,22 +57,12 @@ Document* DocumentManager::FindDocument( const tstring& path ) const
 // 
 bool DocumentManager::RemoveDocument( const DocumentPtr& document )
 {
-    document->RemoveDocumentClosedListener( DocumentChangedSignature::Delegate( this, &DocumentManager::OnDocumentClosed ) );
+    document->RemoveDocumentClosedListener( DocumentChangedSignature::Delegate( this, &DocumentManager::DocumentClosed ) );
     if ( m_Documents.Remove( document ) )
     {
-        s_DocumentChange.Raise( DocumentManagerChangeArgs( this, document ) );
         return true;
     }
     return false;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the list of documents managed by this class (in the order they were
-// opened).
-// 
-const OS_DocumentSmartPtr& DocumentManager::GetDocuments()
-{
-    return m_Documents;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -116,7 +93,7 @@ bool DocumentManager::IsUpToDate( Document* document ) const
             {
                 tstringstream str;
                 str << "Unable to get info for '" << document->GetFilePath() << "': " << ex.What();
-                wxMessageBox( str.str().c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
+                m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
             }
 
             if ( rcsFile.ExistsInDepot() )
@@ -140,23 +117,9 @@ bool DocumentManager::ValidateDocument( Document* document, tstring& error ) con
         return false;
     }
 
-    if ( !ValidatePath( document->GetFilePath(), error ) )
+    if ( Contains( document->GetFilePath() ) )
     {
-        return false;
-    }
-
-    return true;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// 
-// 
-bool DocumentManager::ValidatePath( const tstring& path, tstring& error ) const
-{
-    // TODO: support add duplicates
-    if ( Contains( path ) )
-    {
-        error = TXT( "The specified file (" ) + path + TXT( ") is already open." );
+        error = TXT( "The specified file (" ) + document->GetFilePath() + TXT( ") is already open." );
         return false;
     }
 
@@ -188,8 +151,6 @@ DocumentPtr DocumentManager::OpenPath( const tstring& path, tstring& error )
 //
 bool DocumentManager::Save( DocumentPtr document, tstring& error )
 {
-
-#pragma TODO( "UMMMMM, shouldn't this actually save?" )
     document->SetModified( false );
     document->RaiseSaved();
 
@@ -399,7 +360,7 @@ bool DocumentManager::CloseDocuments( OS_DocumentSmartPtr documents )
             if ( !Save( document, error ) )
             {
                 error += TXT( "\nAborting operation." );
-                wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
+                m_Message.Invoke( MessageArgs( TXT( "Error" ), error, MessagePriorities::Error, MessageAppearances::Ok ) );
                 return false;
             }
         }
@@ -408,7 +369,7 @@ bool DocumentManager::CloseDocuments( OS_DocumentSmartPtr documents )
         {
             tstring error;
             error = TXT( "Failed to close '" ) + document->GetFileName() + TXT( "'.  Aborting operation." );
-            wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
+            m_Message.Invoke( MessageArgs( TXT( "Error" ), error, MessagePriorities::Error, MessageAppearances::Ok ) );
             return false;
         }
     }
@@ -434,7 +395,7 @@ bool DocumentManager::IsCheckedOut( Document* document ) const
         {
             tstringstream str;
             str << "Unable to get info for '" << document->GetFilePath() << "': " << ex.What();
-            wxMessageBox( str.str().c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
+            m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
         }
 
         return rcsFile.IsCheckedOutByMe();
@@ -479,7 +440,7 @@ bool DocumentManager::CheckOut( Document* document ) const
     {
         tstringstream str;
         str << "Unable to get info for '" << document->GetFilePath() << "': " << ex.What();
-        wxMessageBox( str.str().c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
+        m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
         return false;
     }
 
@@ -487,7 +448,7 @@ bool DocumentManager::CheckOut( Document* document ) const
     {
         tostringstream str;
         str << "The version of " << document->GetFileName() << " on your computer is out of date.  You will not be able to check it out.";
-        wxMessageBox( str.str().c_str(), wxT( "Warning" ), wxOK | wxCENTER | wxICON_WARNING, m_ParentWindow );
+        m_Message.Invoke( MessageArgs( TXT( "Warning" ), str.str(), MessagePriorities::Warning, MessageAppearances::Ok ) );
         return false;
     }
 
@@ -502,7 +463,7 @@ bool DocumentManager::CheckOut( Document* document ) const
 
         tostringstream str;
         str << "Unable to check out " << document->GetFileName() << ", it's currently checked out by " << usernames << ".";
-        wxMessageBox( str.str().c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR, m_ParentWindow );
+        m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
         return false;
     }
 
@@ -514,7 +475,7 @@ bool DocumentManager::CheckOut( Document* document ) const
     {
         tstringstream str;
         str << "Unable to open '" << document->GetFilePath() << "': " << ex.What();
-        wxMessageBox( str.str().c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
+        m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
         return false;
     }
 
@@ -537,7 +498,7 @@ bool DocumentManager::QueryAllowChanges( Document* document ) const
         QueryCheckOut( document );
         if ( !IsCheckedOut( document ) )
         {
-            if ( wxMessageBox( wxT( "Would you like to edit this file anyway?\n(NOTE: You may not be able to save your changes)" ), wxT( "Edit anyway?" ), wxCENTER | wxYES_NO | wxICON_QUESTION, m_ParentWindow ) == wxYES )
+            if ( MessageResults::Yes == m_Message.Invoke( MessageArgs( TXT( "Edit anyway?" ), TXT( "Would you like to edit this file anyway?\n(NOTE: You may not be able to save your changes)" ), MessagePriorities::Question, MessageAppearances::YesNo ) ) )
             {
                 document->SetAllowChanges( true );
             }
@@ -564,7 +525,7 @@ bool DocumentManager::QueryAdd( Document* document ) const
         {
             tostringstream msg;
             msg << "Would you like to add \"" << document->GetFileName() << "\" to revision control?";
-            if ( wxYES == wxMessageBox( msg.str().c_str(), wxT( "Add to Revision Control?" ), wxYES_NO | wxCENTER | wxICON_QUESTION, m_ParentWindow ) )
+            if ( MessageResults::Yes == m_Message.Invoke( MessageArgs( TXT( "Add to Revision Control?" ), msg.str(), MessagePriorities::Question, MessageAppearances::YesNo ) ) )
             {
                 try
                 {
@@ -574,7 +535,7 @@ bool DocumentManager::QueryAdd( Document* document ) const
                 {
                     tstringstream str;
                     str << "Unable to open '" << document->GetFilePath() << "': " << ex.What();
-                    wxMessageBox( str.str().c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
+                    m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
                     isOk = false;
                 }
             }
@@ -600,7 +561,7 @@ bool DocumentManager::QueryOpen( Document* document ) const
         {
             tstringstream str;
             str << "Unable to get info for '" << document->GetFilePath() << "': " << ex.What();
-            wxMessageBox( str.str().c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
+            m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
         }
 
         // Is the file already managed?
@@ -615,7 +576,7 @@ bool DocumentManager::QueryOpen( Document* document ) const
                 tstring capitalized = document->GetFileName();
                 capitalized[0] = toupper( capitalized[0] );
                 str << capitalized << " is already checked out by \"" << usernames << "\"\nDo you still wish to open the file?";
-                if ( wxYES == wxMessageBox( str.str().c_str(), wxT( "Checked Out by Another User" ), wxYES_NO | wxCENTER | wxICON_QUESTION, m_ParentWindow ) )
+                if ( MessageResults::Yes == m_Message.Invoke( MessageArgs( TXT( "Checked Out by Another User" ), str.str(), MessagePriorities::Question, MessageAppearances::YesNo ) ) )
                 {
                     return true;
                 }
@@ -636,7 +597,7 @@ bool DocumentManager::QueryOpen( Document* document ) const
             {
                 tostringstream str;
                 str << "Unable to add " << document->GetFileName() << " to revision control.  Would you like to continue opening the file?";
-                if ( wxYES == wxMessageBox( str.str().c_str(), wxT( "Continue Opening?" ), wxYES_NO | wxCENTER | wxICON_QUESTION, m_ParentWindow ) )
+                if ( MessageResults::Yes == m_Message.Invoke( MessageArgs( TXT( "Continue Opening?" ), str.str(), MessagePriorities::Question, MessageAppearances::YesNo ) ) )
                 {
                     return true;
                 }
@@ -666,7 +627,7 @@ bool DocumentManager::QueryCheckOut( Document* document ) const
     {
         tostringstream str;
         str << "The version of " << document->GetFileName() << " on your computer is out of date.  You will not be able to check it out.";
-        wxMessageBox( str.str().c_str(), wxT( "Warning" ), wxOK | wxCENTER | wxICON_WARNING, m_ParentWindow );
+        m_Message.Invoke( MessageArgs( TXT( "Warning" ), str.str(), MessagePriorities::Warning, MessageAppearances::Ok ) );
     }
     else
     {
@@ -674,7 +635,7 @@ bool DocumentManager::QueryCheckOut( Document* document ) const
         {
             tostringstream str;
             str << "Do you wish to check out " << document->GetFileName() << "?";
-            if ( wxYES == wxMessageBox( str.str().c_str(), wxT( "Check Out?" ), wxYES_NO | wxCENTER | wxICON_QUESTION, m_ParentWindow ) )
+            if ( MessageResults::Yes == m_Message.Invoke( MessageArgs( TXT( "Check Out?" ), str.str(), MessagePriorities::Question, MessageAppearances::YesNo ) ) )
             {
                 return CheckOut( document );
             }
@@ -709,12 +670,12 @@ SaveAction DocumentManager::QuerySave( Document* document ) const
             if ( !IsUpToDate( document ) )
             {
                 msg = TXT( "Unfortunately, the file '" ) + document->GetFileName() + TXT( "' has been modified in revsion control since you opened it.\n\nYou cannot save the changes you have made.\n\nTo fix this:\n1) Close the file\n2) Get updated assets\n3) Make your changes again\n\nSorry for the inconvenience." );
-                wxMessageBox( msg.c_str(), wxT( "Cannot save" ), wxOK | wxCENTER | wxICON_ERROR, m_ParentWindow );
+                m_Message.Invoke( MessageArgs( TXT( "Cannot save" ), msg, MessagePriorities::Error, MessageAppearances::Ok ) );
                 return SaveActions::Skip;
             }
 
             msg = TXT( "File '" ) + document->GetFileName() + TXT( "' has been changed, but is not checked out.  Would you like to check out and save this file?" );
-            if ( wxNO == wxMessageBox( msg.c_str(), wxT( "Check out and save?" ), wxYES_NO | wxCENTER | wxICON_QUESTION, m_ParentWindow ) )
+            if ( MessageResults::No == m_Message.Invoke( MessageArgs( TXT( "Check out and save?" ), msg.c_str(), MessagePriorities::Question, MessageAppearances::YesNo ) ) )
             {
                 return SaveActions::Skip;
             }
@@ -744,18 +705,17 @@ SaveAction DocumentManager::QueryClose( Document* document ) const
     {
         tstring msg( TXT( "Would you like to save changes to " ) );
         msg += TXT( "'" ) + document->GetFileName() + TXT( "' before closing?" );
-        const int result = wxMessageBox( msg.c_str(), wxT( "Save Changes?" ), wxYES_NO | wxCANCEL | wxCENTER | wxICON_QUESTION, m_ParentWindow );
-        switch ( result )
+        switch (  m_Message.Invoke( MessageArgs( TXT( "Save Changes?" ), msg.c_str(), MessagePriorities::Question, MessageAppearances::YesNoCancel ) ) )
         {
-        case wxYES:
+        case MessageResults::Yes:
             return SaveActions::Save;
             break;
 
-        case wxNO:
+        case MessageResults::No:
             return SaveActions::Skip;
             break;
 
-        case wxCANCEL:
+        case MessageResults::Cancel:
         default:
             return SaveActions::Abort;
         }
@@ -773,18 +733,12 @@ SaveAction DocumentManager::QueryCloseAll( Document* document ) const
 {
     if ( document->IsModified() )
     {
-        tostringstream msg;
-        msg << "You are attempting to close file " << document->GetFileName() << " which has changed. Would you like to save your changes before closing?";
-        YesNoAllDlg dlg( m_ParentWindow, wxT( "Save Changes?" ), msg.str().c_str() );
-        dlg.SetButtonToolTip( wxID_YES, wxT( "Save and close this file" ) );
-        dlg.SetButtonToolTip( wxID_YESTOALL, wxT( "Save and close all files" ) );
-        dlg.SetButtonToolTip( wxID_NO, wxT( "Do not save this file (it will still be closed)" ) );
-        dlg.SetButtonToolTip( wxID_NOTOALL, wxT( "Do not save any files that have changed (they will still be closed)" ) );
-        dlg.SetButtonToolTip( wxID_CANCEL, wxT( "No files will be saved or closed" ) );
-
         bool attemptCheckOut = false;
         SaveActions::SaveAction action = SaveActions::Save;
-        switch ( dlg.ShowModal() )
+
+        tostringstream msg;
+        msg << "You are attempting to close file " << document->GetFileName() << " which has changed. Would you like to save your changes before closing?";       
+        switch ( m_Message.Invoke( MessageArgs( TXT( "Save Changes?" ), msg.str(), MessagePriorities::Question, MessageAppearances::YesNoCancelToAll ) ) )
         {
         case wxID_YES:
             action = SaveActions::Save;
@@ -830,7 +784,7 @@ SaveAction DocumentManager::QueryCloseAll( Document* document ) const
 // Callback for when a document is closed.  Removes the document from the list
 // managed by this class.
 // 
-void DocumentManager::OnDocumentClosed( const DocumentChangedArgs& args )
+void DocumentManager::DocumentClosed( const DocumentChangedArgs& args )
 {
     RemoveDocument( args.m_Document );
 }

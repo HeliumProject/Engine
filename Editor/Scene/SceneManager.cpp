@@ -35,21 +35,13 @@ static tstring GetUniqueSceneName()
 SceneManager::SceneManager(SceneEditor* editor)
 : DocumentManager( editor )
 #else
-SceneManager::SceneManager()
-: DocumentManager( NULL )
+SceneManager::SceneManager( MessageSignature::Delegate message )
+: DocumentManager( message )
 #endif
 , m_CurrentScene( NULL )
 #ifdef UI_REFACTOR
 , m_Editor (editor)
 #endif
-{
-
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// 
-// 
-SceneManager::~SceneManager()
 {
 
 }
@@ -76,7 +68,7 @@ ScenePtr SceneManager::NewScene( Editor::Viewport* viewport, bool isRoot, tstrin
     }
 
     SceneDocumentPtr document = new SceneDocument( path, name );
-    document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &SceneManager::OnDocumentClosed ) );
+    document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &SceneManager::DocumentClosed ) );
     ScenePtr scene = new Editor::Scene( viewport, this, document );
     if ( isRoot )
     {
@@ -621,7 +613,7 @@ void SceneManager::DocumentPathChanged( const DocumentPathChangedArgs& args )
 ///////////////////////////////////////////////////////////////////////////////
 // Callback for when a document is closed.  Closes the associated scene.
 // 
-void SceneManager::OnDocumentClosed( const DocumentChangedArgs& args )
+void SceneManager::DocumentClosed( const DocumentChangedArgs& args )
 {
     const SceneDocument* document = Reflect::ConstObjectCast< SceneDocument >( args.m_Document );
     HELIUM_ASSERT( document );
@@ -657,6 +649,6 @@ void SceneManager::OnDocumentClosed( const DocumentChangedArgs& args )
             SetCurrentScene( FindFirstNonNestedScene() );
         }
 
-        document->RemoveDocumentClosedListener( DocumentChangedSignature::Delegate( this, &SceneManager::OnDocumentClosed ) );
+        document->RemoveDocumentClosedListener( DocumentChangedSignature::Delegate( this, &SceneManager::DocumentClosed ) );
     }
 }

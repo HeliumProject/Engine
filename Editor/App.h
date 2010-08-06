@@ -31,11 +31,6 @@ namespace Helium
             void SavePreferences();
             void LoadPreferences();
 
-            DocumentManager& GetDocumentManager()
-            {
-                return m_DocumentManager;
-            }
-
             Preferences* GetPreferences()
             {
                 return m_Preferences;
@@ -61,7 +56,6 @@ namespace Helium
 
         protected:
             Helium::InitializerStack m_InitializerStack;
-            DocumentManager m_DocumentManager;
             Tracker m_Tracker;
             Helium::Thread m_TrackerThread;
 

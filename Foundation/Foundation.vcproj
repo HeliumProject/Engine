@@ -1524,6 +1524,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Message.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Numeric.cpp"
 			>
 		</File>

@@ -3901,6 +3901,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\UI\MessageDisplayer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\MessageDisplayer.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UI\PerforceGenerated.cpp"
 				>
 			</File>

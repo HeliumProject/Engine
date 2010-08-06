@@ -152,8 +152,7 @@ namespace Helium
 
 App::App()
 #pragma TODO("This needs fixing otherwise dialogs will not be modal -Geoff")
-: m_DocumentManager( NULL )
-, m_Preferences( new Preferences )
+: m_Preferences( new Preferences )
 , m_Vault( NULL )
 , m_Frame( NULL )
 {

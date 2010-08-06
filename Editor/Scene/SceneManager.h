@@ -76,9 +76,8 @@ namespace Helium
             SceneManager( SceneEditor* editor );
             SceneEditor* GetEditor();
 #else
-            SceneManager();
+            SceneManager( MessageSignature::Delegate message );
 #endif
-            ~SceneManager();
 
             ScenePtr NewScene( Editor::Viewport* viewport, bool isRoot, tstring path = TXT( "" ), bool addDoc = true );
             virtual DocumentPtr OpenPath( const tstring& path, tstring& error ) HELIUM_OVERRIDE;
@@ -123,7 +122,7 @@ namespace Helium
         private:
             Editor::Scene* FindFirstNonNestedScene() const;
             void DocumentPathChanged( const DocumentPathChangedArgs& args );
-            void OnDocumentClosed( const DocumentChangedArgs& args );
+            void DocumentClosed( const DocumentChangedArgs& args );
 
         private:
             SceneChangeSignature::Event m_SceneAdded;

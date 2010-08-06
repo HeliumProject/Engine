@@ -21,6 +21,7 @@
 
 #include "UI/TreeMonitor.h"
 #include "UI/TreeSortTimer.h"
+#include "UI/MessageDisplayer.h"
 
 #include "Core/Project.h"
 
@@ -73,8 +74,9 @@ namespace Helium
             DirectoryPanel*  m_DirectoryPanel;
             PropertiesPanel* m_PropertiesPanel;
 
-            Helium::Core::ProjectPtr       m_Project;
-            SceneManager     m_SceneManager;
+            Helium::Core::ProjectPtr        m_Project;
+            MessageDisplayer                m_MessageDisplayer;
+            SceneManager                    m_SceneManager;
 
             // the attributes for the current selection
             EnumeratorPtr m_SelectionEnumerator;

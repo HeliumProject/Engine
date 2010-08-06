@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "PrimitiveLocator.h"
 
-#include "Pick.h"
+#include "Editor/Scene/Pick.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

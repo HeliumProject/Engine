@@ -13,7 +13,7 @@
 class wxBitmapToggleButton;
 namespace Helium{ namespace Editor{ class Frame; } }
 
-#include "Frame.h"
+#include "Editor/Frame.h"
 #include <wx/string.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>

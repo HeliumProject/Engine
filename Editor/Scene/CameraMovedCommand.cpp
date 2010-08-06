@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "CameraMovedCommand.h"
 
-#include "Camera.h"
-#include "Viewport.h"
+#include "Editor/Scene/Camera.h"
+#include "Editor/UI/Viewport.h"
 
 using namespace Helium;
 using namespace Helium::Math;

@@ -1,21 +1,19 @@
 #include "Precompile.h"
 #include "EntityAssetSet.h"
 
-#include "Scene.h"
-#include "Entity.h"
-#include "EntityType.h"
-
-#include "SharedFileManager.h"
-#include "PrimitiveCube.h"
-#include "PrimitiveSphere.h"
-#include "PrimitiveCylinder.h"
-#include "PrimitiveCapsule.h"
-
 #include "Foundation/Log.h"
-
-#include "Pipeline/Asset/Classes/Entity.h"
 #include "Foundation/Component/ComponentHandle.h"
+#include "Pipeline/Asset/Classes/Entity.h"
 #include "Pipeline/Asset/Components/BoundingBoxComponent.h"
+
+#include "Editor/SharedFileManager.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/Entity.h"
+#include "Editor/Scene/EntityType.h"
+#include "Editor/Scene/PrimitiveCube.h"
+#include "Editor/Scene/PrimitiveSphere.h"
+#include "Editor/Scene/PrimitiveCylinder.h"
+#include "Editor/Scene/PrimitiveCapsule.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

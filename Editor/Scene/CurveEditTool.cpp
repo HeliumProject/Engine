@@ -1,12 +1,12 @@
 #include "Precompile.h"
 #include "CurveEditTool.h"
 
-#include "Point.h"
-#include "Pick.h"
+#include "Editor/Scene/Point.h"
+#include "Editor/Scene/Pick.h"
 
 #include "TranslateManipulator.h"
 #include "Curve.h"
-#include "Scene.h"
+#include "Editor/Scene/Scene.h"
 
 using namespace Helium;
 using namespace Helium::Math;

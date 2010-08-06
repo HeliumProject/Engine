@@ -1,11 +1,11 @@
 #include "Precompile.h"
 #include "TreeMonitor.h"
 
-#include "Scene.h"
-#include "SceneManager.h"
-#include "SceneNode.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/SceneManager.h"
+#include "Editor/Scene/SceneNode.h"
 
-#include "UI/Controls/Tree/SortTreeCtrl.h"
+#include "Editor/UI/Controls/Tree/SortTreeCtrl.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

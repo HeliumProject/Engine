@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Graph/ShaderObject.h"
-#include "Graph/Property.h"
-#include "Graph/CodeTextCtrl.h"
-#include "Graph/ReportListCtrl.h"
-#include "Graph/LuaUtilities.h"
-#include "Graph/Port.h"
-#include "Graph/Debug.h"
+#include "Editor/Graph/ShaderObject.h"
+#include "Editor/Graph/Property.h"
+#include "Editor/Graph/CodeTextCtrl.h"
+#include "Editor/Graph/ReportListCtrl.h"
+#include "Editor/Graph/LuaUtilities.h"
+#include "Editor/Graph/Port.h"
+#include "Editor/Graph/Debug.h"
 
 class Node: public ShaderObject
 {

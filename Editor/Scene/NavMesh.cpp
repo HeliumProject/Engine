@@ -5,12 +5,12 @@
 #include "Pipeline/Content/Nodes/Camera.h"
 #include "Pipeline/Content/Nodes/Mesh.h"
 
-#include "Pick.h"
+#include "Editor/Scene/Pick.h"
 #include "PrimitiveLocator.h"
 #include "PrimitiveCone.h"
 #include "Color.h"
-#include "Scene.h"
-#include "SceneManager.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/SceneManager.h"
 #include "NavMeshCreateTool.h"
 #include "Statistics.h"
 #include "HierarchyNodeType.h"
@@ -18,7 +18,7 @@
 
 
 #include "Application/UI/ArtProvider.h"
-#include "PropertiesGenerator.h"
+#include "Editor/PropertiesGenerator.h"
 #include "Application/Undo/PropertyCommand.h"
 #include "Foundation/Log.h"
 #include "Orientation.h"

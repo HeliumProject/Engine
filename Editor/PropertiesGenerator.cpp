@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "PropertiesGenerator.h"
+#include "Editor/PropertiesGenerator.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/Container/Insert.h" 

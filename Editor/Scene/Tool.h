@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Object.h"
-#include "Selection.h"
-#include "Viewport.h"
+#include "Editor/Object.h"
+#include "Editor/Selection.h"
+#include "Editor/UI/Viewport.h"
 
 namespace Helium
 {

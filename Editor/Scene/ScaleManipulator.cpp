@@ -1,17 +1,17 @@
 #include "Precompile.h"
 #include "ScaleManipulator.h"
 
-#include "Pick.h"
-#include "Viewport.h"
-#include "Camera.h"
+#include "Editor/Scene/Pick.h"
+#include "Editor/UI/Viewport.h"
+#include "Editor/Scene/Camera.h"
 #include "Color.h"
 
 #include "PrimitiveAxes.h"
 #include "PrimitiveCube.h"
 
-#include "App.h"
-#include "Scene.h"
-#include "SceneManager.h"
+#include "Editor/App.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/SceneManager.h"
 #include "ScenePreferences.h"
 
 using namespace Helium;

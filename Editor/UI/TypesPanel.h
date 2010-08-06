@@ -1,10 +1,10 @@
 #pragma once
 
-#include "EditorGenerated.h"
+#include "Editor/UI/EditorGenerated.h"
 
-#include "Scene/Scene.h"
-#include "Scene/SceneManager.h"
-#include "Scene/HierarchyNodeType.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/SceneManager.h"
+#include "Editor/Scene/HierarchyNodeType.h"
 
 #include "GridWithIcons.h"
 

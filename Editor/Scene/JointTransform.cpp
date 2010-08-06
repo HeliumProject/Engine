@@ -11,7 +11,7 @@
 
 #include "Application/Undo/PropertyCommand.h"
 #include "HierarchyNodeType.h"
-#include "Scene.h"
+#include "Editor/Scene/Scene.h"
 
 using namespace Helium;
 using namespace Helium::Math;

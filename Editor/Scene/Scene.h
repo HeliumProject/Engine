@@ -7,25 +7,25 @@
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Version.h"
 
-#include "Selection.h"
+#include "Editor/Selection.h"
 
 #include "Application/Inspect/Data/Data.h"
 #include "Application/Inspect/Controls/Canvas.h"
-#include "PropertiesGenerator.h"
+#include "Editor/PropertiesGenerator.h"
 
 #include "Application/Undo/ExistenceCommand.h"
 #include "Application/Undo/Queue.h"
 
 #include "SceneGraph.h"
 
-#include "Pick.h"
-#include "Tool.h"
+#include "Editor/Scene/Pick.h"
+#include "Editor/Scene/Tool.h"
 
 #include "SceneDocument.h"
-#include "SceneNodeType.h"
-#include "SceneNode.h"
+#include "Editor/Scene/SceneNodeType.h"
+#include "Editor/Scene/SceneNode.h"
 
-#include "Transform.h"
+#include "Editor/Scene/Transform.h"
 
 #include "Pipeline/Content/NodeVisibility.h"
 #include "Pipeline/Content/SceneVisibility.h"

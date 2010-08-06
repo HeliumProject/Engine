@@ -5,10 +5,10 @@
 #include "Foundation/Math/AlignedBox.h"
 
 #include "Editor/API.h"
-#include "Render.h"
-#include "Resource.h"
-#include "Camera.h"
-#include "Render/D3DManager.h"
+#include "Editor/Scene/Render.h"
+#include "Editor/Scene/Camera.h"
+#include "Editor/Scene/Resource.h"
+#include "Editor/Render/D3DManager.h"
 #include "Application/Undo/Queue.h"
 
 #include "Foundation/Reflect/Enumeration.h"

@@ -1,6 +1,6 @@
 #include "Precompile.h"
-#include "SceneNodeType.h"
-#include "SceneNode.h"
+#include "Editor/Scene/SceneNodeType.h"
+#include "Editor/Scene/SceneNode.h"
 #include "Foundation/Container/Insert.h" 
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
 

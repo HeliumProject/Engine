@@ -1,9 +1,9 @@
 #include "Precompile.h"
 #include "Render.h"
 
-#include "Viewport.h"
-#include "Camera.h"
-#include "SceneNode.h"
+#include "Editor/UI/Viewport.h"
+#include "Editor/Scene/Camera.h"
+#include "Editor/Scene/SceneNode.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/String/Wildcard.h"

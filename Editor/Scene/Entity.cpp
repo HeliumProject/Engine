@@ -4,10 +4,10 @@
 #include "EntityPanel.h"
 #include "EntityAssetSet.h"
 
-#include "Scene.h"
-#include "SceneManager.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/SceneManager.h"
 
-#include "PropertiesGenerator.h"
+#include "Editor/PropertiesGenerator.h"
 #include "PrimitiveCube.h"
 #include "PrimitivePointer.h"
 

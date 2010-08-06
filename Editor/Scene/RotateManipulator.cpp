@@ -1,15 +1,15 @@
 #include "Precompile.h"
 #include "RotateManipulator.h"
 
-#include "Pick.h"
-#include "Viewport.h"
-#include "Camera.h"
+#include "Editor/Scene/Pick.h"
+#include "Editor/UI/Viewport.h"
+#include "Editor/Scene/Camera.h"
 #include "Color.h"
 
 #include "PrimitiveCircle.h"
 
-#include "App.h"
-#include "Scene.h"
+#include "Editor/App.h"
+#include "Editor/Scene/Scene.h"
 #include "ScenePreferences.h"
 
 #include "Foundation/Math/AngleAxis.h"

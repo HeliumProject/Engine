@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Render/ObjectLoader.h"
+#include "Editor/Render/ObjectLoader.h"
 
 namespace Helium
 {

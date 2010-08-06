@@ -1,6 +1,6 @@
 #pragma once
 
-#include "UI/ArtProvider.h"
+#include "Editor/UI/ArtProvider.h"
 
 namespace Helium
 {

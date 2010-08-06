@@ -1,16 +1,16 @@
 #include "Precompile.h"
 #include "CreateTool.h"
 
-#include "Mesh.h"
-#include "Scene.h"
-#include "SceneManager.h"
-#include "Transform.h"
+#include "Editor/Scene/Mesh.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/SceneManager.h"
+#include "Editor/Scene/Transform.h"
 
 #ifdef UI_REFACTOR
 #include "TreeSortTimer.h"
 #endif
 
-#include "Pick.h"
+#include "Editor/Scene/Pick.h"
 
 #include "Foundation/Math/AngleAxis.h"
 #include "Orientation.h"

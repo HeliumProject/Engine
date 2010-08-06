@@ -2,7 +2,7 @@
 
 // Includes
 #include "Editor/API.h"
-#include "SceneOutliner.h"
+#include "Editor/UI/SceneOutliner.h"
 
 namespace Helium
 {

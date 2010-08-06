@@ -10,7 +10,7 @@
 
 #include "wx/tglbtn.h"
 
-#include "EditorGenerated.h"
+#include "Editor/UI/EditorGenerated.h"
 
 ///////////////////////////////////////////////////////////////////////////
 using namespace Helium::Editor;

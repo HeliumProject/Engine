@@ -2,7 +2,7 @@
 #include "VaultPreviewWindow.h"
 #include "Vault.h"
 #include "VaultFrame.h"
-#include "App.h"
+#include "Editor/App.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

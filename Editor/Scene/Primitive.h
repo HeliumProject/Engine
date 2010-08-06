@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Camera.h"
+#include "Editor/Scene/Camera.h"
 #include "VertexResource.h"
 #include "Render.h"
 

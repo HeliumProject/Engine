@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Editor/API.h"
-#include "Tool.h"
+#include "Editor/Scene/Tool.h"
 #include "HierarchyNode.h"
-#include "Scene.h"
+#include "Editor/Scene/Scene.h"
 
 #include "Foundation/TimerThread.h"
 

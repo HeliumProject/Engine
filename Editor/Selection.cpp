@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "Selection.h"
+#include "Editor/Selection.h"
 
 #include <algorithm>
 

@@ -4,9 +4,9 @@
 #include "Pipeline/Content/Nodes/Skin.h"
 #include "Pipeline/Content/Nodes/Mesh.h"
 
-#include "Scene.h"
-#include "Transform.h"
-#include "Mesh.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/Transform.h"
+#include "Editor/Scene/Mesh.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

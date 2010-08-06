@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "ParentCommand.h"
-#include "Transform.h"
+#include "Editor/Scene/Transform.h"
 #include "Foundation/Reflect/Object.h"
 
 using namespace Helium;

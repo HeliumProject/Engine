@@ -3,7 +3,7 @@
 #include "HierarchyNode.h"
 
 #include "Pipeline/Content/Nodes/Point.h"
-#include "Manipulator.h"
+#include "Editor/Scene/Manipulator.h"
 
 namespace Helium
 {

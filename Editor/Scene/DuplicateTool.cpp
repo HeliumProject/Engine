@@ -1,12 +1,12 @@
 #include "Precompile.h"
 #include "DuplicateTool.h"
 
-#include "Mesh.h"
-#include "Scene.h"
+#include "Editor/Scene/Mesh.h"
+#include "Editor/Scene/Scene.h"
 #include "Volume.h"
 #include "VolumeType.h"
 
-#include "Pick.h"
+#include "Editor/Scene/Pick.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

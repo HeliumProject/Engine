@@ -2,7 +2,7 @@
 
 #include "Pipeline/Content/Nodes/Transform.h"
 
-#include "Manipulator.h"
+#include "Editor/Scene/Manipulator.h"
 
 #include "HierarchyNode.h"
 #include "Foundation/Math/EulerAngles.h"

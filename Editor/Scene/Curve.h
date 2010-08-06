@@ -1,7 +1,7 @@
 #pragma once
 
 #include "PivotTransform.h"
-#include "Point.h"
+#include "Editor/Scene/Point.h"
 #include "VertexResource.h"
 
 #include "Pipeline/Content/Nodes/Curve.h"

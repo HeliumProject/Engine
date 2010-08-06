@@ -1,12 +1,12 @@
 #pragma once
 
-#include "EditorGenerated.h"
+#include "Editor/UI/EditorGenerated.h"
 
-#include "Scene/SceneManager.h"
-#include "UI/EntityAssetOutliner.h"
-#include "UI/HierarchyOutliner.h"
-#include "UI/NodeTypeOutliner.h"
-#include "UI/TreeMonitor.h"
+#include "Editor/Scene/SceneManager.h"
+#include "Editor/UI/EntityAssetOutliner.h"
+#include "Editor/UI/HierarchyOutliner.h"
+#include "Editor/UI/NodeTypeOutliner.h"
+#include "Editor/UI/TreeMonitor.h"
 
 namespace Helium
 {

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Pick.h"
+#include "Editor/Scene/Pick.h"
 
-#include "SceneNodeType.h"
+#include "Editor/Scene/SceneNodeType.h"
 
 namespace Helium
 {

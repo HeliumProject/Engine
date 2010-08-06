@@ -1,8 +1,8 @@
 #pragma once
 
-#include "EditorGenerated.h"
+#include "Editor/UI/EditorGenerated.h"
 
-#include "Scene/Viewport.h"
+#include "Editor/UI/Viewport.h"
 
 namespace Helium
 {

@@ -13,7 +13,7 @@
 #include "SceneDocument.h"
 #include "ScenePreferences.h"
 
-#include "Tool.h"
+#include "Editor/Scene/Tool.h"
 #include "CreateTool.h"
 #include "DuplicateTool.h"
 
@@ -27,11 +27,11 @@
 
 #include "Layer.h"
 #include "Shader.h"
-#include "Mesh.h"
+#include "Editor/Scene/Mesh.h"
 #include "Skin.h"
 
 #include "Curve.h"
-#include "Point.h"
+#include "Editor/Scene/Point.h"
 #include "CurveCreateTool.h"
 #include "CurveEditTool.h"
 
@@ -60,10 +60,10 @@
 #include "DirectionalLight.h"
 #include "AmbientLight.h"
 
+#include "Editor/Preferences.h"
+#include "Editor/UI/ViewportPreferences.h"
 #include "ScenePreferences.h"
-#include "ViewportPreferences.h"
 #include "GridPreferences.h"
-#include "Preferences.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

@@ -6,7 +6,7 @@
 #include "Foundation/Log.h"
 #include "Application/UI/ArtProvider.h"
 
-#include "Scene.h"
+#include "Editor/Scene/Scene.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

@@ -4,7 +4,7 @@
 
 #include "Pipeline/Content/Nodes/Curve.h"
 #include "Curve.h"
-#include "Tool.h"
+#include "Editor/Scene/Tool.h"
 
 namespace Helium
 {

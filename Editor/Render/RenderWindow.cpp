@@ -1,9 +1,9 @@
 #include "Precompile.h"
 
 #include "Foundation/Math/Utils.h"
-#include "Render/RBObjectLoader.h"
-#include "Render/RenderWindow.h"
-#include "Scene/Camera.h"
+#include "Editor/Render/RBObjectLoader.h"
+#include "Editor/Render/RenderWindow.h"
+#include "Editor/Scene/Camera.h"
 #include "Application/UI/FileDialog.h"
 
 using namespace Helium;

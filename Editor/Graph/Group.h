@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Graph/Node.h"
-#include "Graph/Debug.h"
+#include "Editor/Graph/Node.h"
+#include "Editor/Graph/Debug.h"
 
 class Group: public Node
 {

@@ -6,7 +6,7 @@
 
 #include "RotateManipulator.h"
 #include "NavMesh.h"
-#include "Tool.h"
+#include "Editor/Scene/Tool.h"
 
 #define PUNCH_VOLUME 1
 

@@ -2,9 +2,9 @@
 
 #include "Editor/API.h"
 
-#include "Object.h"
+#include "Editor/Object.h"
 
-#include "SceneNode.h"
+#include "Editor/Scene/SceneNode.h"
 
 namespace Helium
 {

@@ -11,31 +11,31 @@
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
 #include "Application/Inspect/DragDrop/ClipboardDataObject.h"
 
-#include "Scene/Scene.h"
-#include "Scene/InstanceSet.h"
-#include "Scene/EntityType.h"
-#include "Scene/EntityAssetSet.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/InstanceSet.h"
+#include "Editor/Scene/EntityType.h"
+#include "Editor/Scene/EntityAssetSet.h"
 
-#include "Scene/TransformManipulator.h"
+#include "Editor/Scene/TransformManipulator.h"
 
-#include "Scene/CurveCreateTool.h"
-#include "Scene/CurveEditTool.h"
-#include "Scene/DuplicateTool.h"
-#include "Scene/EntityCreateTool.h"
-#include "Scene/LocatorCreateTool.h"
-#include "Scene/NavMeshCreateTool.h"
-#include "Scene/VolumeCreateTool.h"
+#include "Editor/Scene/CurveCreateTool.h"
+#include "Editor/Scene/CurveEditTool.h"
+#include "Editor/Scene/DuplicateTool.h"
+#include "Editor/Scene/EntityCreateTool.h"
+#include "Editor/Scene/LocatorCreateTool.h"
+#include "Editor/Scene/NavMeshCreateTool.h"
+#include "Editor/Scene/VolumeCreateTool.h"
 
-#include "Scene/ScaleManipulator.h"
-#include "Scene/TranslateManipulator.h"
+#include "Editor/Scene/ScaleManipulator.h"
+#include "Editor/Scene/TranslateManipulator.h"
 
-#include "UI/PreferencesDialog.h"
+#include "Editor/UI/PreferencesDialog.h"
 
 #include "EditorIDs.h"
 #include "ArtProvider.h"
 #include "ImportOptionsDlg.h"
 #include "ExportOptionsDlg.h"
-#include "App.h"
+#include "Editor/App.h"
 
 using namespace Helium;
 using namespace Helium::Core;

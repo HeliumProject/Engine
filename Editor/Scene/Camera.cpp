@@ -1,6 +1,6 @@
 #include "Precompile.h"
-#include "Camera.h"
-#include "Viewport.h"
+#include "Editor/Scene/Camera.h"
+#include "Editor/UI/Viewport.h"
 #include "Orientation.h"
 #include "Foundation/Math/AngleAxis.h"
 

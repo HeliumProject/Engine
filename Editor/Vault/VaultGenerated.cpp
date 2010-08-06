@@ -9,7 +9,7 @@
 
 #include "Application/UI/MenuButton.h"
 #include "DirectoryCtrl.h"
-#include "UI/Controls/Tree/SortTreeCtrl.h"
+#include "Editor/UI/Controls/Tree/SortTreeCtrl.h"
 
 #include "VaultGenerated.h"
 

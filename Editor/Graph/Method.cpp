@@ -1,14 +1,14 @@
 #include "Precompile.h"
-#include "Graph/Method.h"
+#include "Editor/Graph/Method.h"
 
 #include <wx/tokenzr.h>
 #include <wx/sstream.h>
 
-#include "Graph/Node.h"
-#include "Graph/Property.h"
-#include "Graph/XML.h"
-#include "Graph/Debug.h"
-#include "Graph/Panel.h"
+#include "Editor/Graph/Node.h"
+#include "Editor/Graph/Property.h"
+#include "Editor/Graph/XML.h"
+#include "Editor/Graph/Debug.h"
+#include "Editor/Graph/Panel.h"
 
 #include "Platform/String.h"
 

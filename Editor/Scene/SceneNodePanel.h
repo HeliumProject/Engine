@@ -3,7 +3,7 @@
 #include "Editor/API.h"
 #include "Application/Inspect/Data/Data.h"
 #include "Application/Inspect/Controls/InspectPanel.h"
-#include "SceneNode.h"
+#include "Editor/Scene/SceneNode.h"
 
 namespace Helium
 {

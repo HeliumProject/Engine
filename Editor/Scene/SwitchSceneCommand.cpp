@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "SwitchSceneCommand.h"
 
-#include "Scene.h"
-#include "SceneManager.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/SceneManager.h"
 
 #include "Foundation/Log.h"
 #include "Application/Undo/Exceptions.h"

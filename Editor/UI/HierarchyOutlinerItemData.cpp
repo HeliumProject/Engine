@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "HierarchyOutlinerItemData.h"
-#include "HierarchyNode.h"
+#include "Editor/Scene/HierarchyNode.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

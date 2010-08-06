@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "Object.h"
+#include "Editor/Object.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

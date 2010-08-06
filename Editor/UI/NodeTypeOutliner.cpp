@@ -1,11 +1,11 @@
 #include "Precompile.h"
 #include "NodeTypeOutliner.h"
-#include "Scene.h"
+#include "Editor/Scene/Scene.h"
 #include "SceneOutlinerItemData.h"
 
 #include "Foundation/Log.h"
 
-#include "UI/Controls/Tree/SortTreeCtrl.h"
+#include "Editor/UI/Controls/Tree/SortTreeCtrl.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

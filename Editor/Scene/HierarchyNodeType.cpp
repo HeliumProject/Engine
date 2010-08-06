@@ -3,7 +3,7 @@
 
 #include "Foundation/Reflect/Object.h" 
 
-#include "Scene.h"
+#include "Editor/Scene/Scene.h"
 #include "HierarchyNode.h"
 #include "Color.h"
 #include "Primitive.h"

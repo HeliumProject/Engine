@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "Document.h"
+#include "Editor/Document.h"
 
 #include "Platform/Assert.h"
 #include "Application/RCS/RCS.h"

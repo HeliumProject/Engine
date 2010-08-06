@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graph/UndoRedo.h"
+#include "Editor/Graph/UndoRedo.h"
 
 class Graph;
 class Property;

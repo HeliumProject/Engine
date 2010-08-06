@@ -2,8 +2,8 @@
 
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
-#include "Render/Renderer.h"
-#include "Camera.h"
+#include "Editor/Render/Renderer.h"
+#include "Editor/Scene/Camera.h"
 
 namespace Helium
 {

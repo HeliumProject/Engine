@@ -2,9 +2,9 @@
 #include "LocatorType.h"
 
 #include "Locator.h"
-#include "Scene.h"
+#include "Editor/Scene/Scene.h"
 
-#include "Viewport.h"
+#include "Editor/UI/Viewport.h"
 #include "Color.h"
 
 #include "PrimitiveLocator.h"

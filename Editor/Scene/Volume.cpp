@@ -1,12 +1,12 @@
 #include "Precompile.h"
 #include "Volume.h"
 
-#include "Scene.h"
-#include "SceneManager.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/SceneManager.h"
 
 #include "VolumeType.h"
 
-#include "PropertiesGenerator.h"
+#include "Editor/PropertiesGenerator.h"
 #include "Application/UI/ArtProvider.h"
 
 #include "PrimitiveCube.h"

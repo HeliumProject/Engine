@@ -1,8 +1,8 @@
 #include "Precompile.h"
-#include "Pick.h"
-#include "Camera.h"
+#include "Editor/Scene/Pick.h"
+#include "Editor/Scene/Camera.h"
 
-#include "Viewport.h"
+#include "Editor/UI/Viewport.h"
 
 #include <map>
 

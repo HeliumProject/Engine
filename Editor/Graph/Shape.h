@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Graph/Serialized.h"
-#include "Graph/Member.h"
-#include "Graph/Property.h"
-#include "Graph/PropertyGrid.h"
-#include "Graph/Utilities.h"
-#include "Graph/Debug.h"
+#include "Editor/Graph/Serialized.h"
+#include "Editor/Graph/Member.h"
+#include "Editor/Graph/Property.h"
+#include "Editor/Graph/PropertyGrid.h"
+#include "Editor/Graph/Utilities.h"
+#include "Editor/Graph/Debug.h"
 
 ///////////////////////////////////////////////////////////////
 // The basic shape class.

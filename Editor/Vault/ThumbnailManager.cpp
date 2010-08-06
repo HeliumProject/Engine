@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "ThumbnailManager.h"
 #include "ThumbnailLoadedEvent.h"
-#include "Render/D3DManager.h"
+#include "Editor/Render/D3DManager.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

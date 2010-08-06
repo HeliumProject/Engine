@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Editor/API.h"
-#include "SceneOutliner.h"
-#include "Object.h"
+#include "Editor/UI/SceneOutliner.h"
+#include "Editor/Object.h"
 
 namespace Helium
 {

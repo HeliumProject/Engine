@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "PrimitiveSphere.h"
 
-#include "Pick.h"
+#include "Editor/Scene/Pick.h"
 #include "Orientation.h"
 
 using namespace Helium;

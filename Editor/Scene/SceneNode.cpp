@@ -1,15 +1,15 @@
 #include "Precompile.h"
-#include "SceneNode.h"
+#include "Editor/Scene/SceneNode.h"
 
 #include "Pipeline/Content/Nodes/SceneNode.h"
 
-#include "SceneNodeType.h"
+#include "Editor/Scene/SceneNodeType.h"
 #include "SceneNodePanel.h"
 #include "SceneGraph.h"
 
-#include "Scene.h"
+#include "Editor/Scene/Scene.h"
 #include "Layer.h"
-#include "Transform.h"
+#include "Editor/Scene/Transform.h"
 
 #include "Statistics.h"
 #include "Application/UI/ArtProvider.h"

@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "Graph/Graph.h"
+#include "Editor/Graph/Graph.h"
 
 #include <wx/clipbrd.h>
 #include <wx/xml/xml.h>
@@ -11,14 +11,14 @@
 #include <stack>
 #include <set>
 
-#include "Graph/ShaderFrame.h"
-#include "Graph/Node.h"
-#include "Graph/NodeDefinition.h"
-#include "Graph/Clipboard.h"
-#include "Graph/ProjectNotebook.h"
-#include "Graph/Group.h"
-#include "Graph/TypeDialog.h"
-#include "Graph/Debug.h"
+#include "Editor/Graph/ShaderFrame.h"
+#include "Editor/Graph/Node.h"
+#include "Editor/Graph/NodeDefinition.h"
+#include "Editor/Graph/Clipboard.h"
+#include "Editor/Graph/ProjectNotebook.h"
+#include "Editor/Graph/Group.h"
+#include "Editor/Graph/TypeDialog.h"
+#include "Editor/Graph/Debug.h"
 
 class URAddNode: public UndoRedo
 {

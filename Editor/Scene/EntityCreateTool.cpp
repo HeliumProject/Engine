@@ -1,15 +1,15 @@
 #include "Precompile.h"
 #include "EntityCreateTool.h"
 
-#include "Mesh.h"
-#include "Scene.h"
+#include "Editor/Scene/Mesh.h"
+#include "Editor/Scene/Scene.h"
 #include "Entity.h"
 #include "EntityType.h"
 #include "EntityAssetSet.h"
 
 #include "Application/Inspect/Interpreters/File/FileDialogButton.h"
 #include "Application/Inspect/Interpreters/File/FileBrowserButton.h"
-#include "Pick.h"
+#include "Editor/Scene/Pick.h"
 
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Asset/Classes/Entity.h"

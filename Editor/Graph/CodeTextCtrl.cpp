@@ -1,7 +1,7 @@
 #include "Precompile.h"
-#include "Graph/CodeTextCtrl.h"
+#include "Editor/Graph/CodeTextCtrl.h"
 
-#include "Graph/Debug.h"
+#include "Editor/Graph/Debug.h"
 
 CodeTextCtrl::CodeTextCtrl(wxWindow *parent, wxWindowID id)
 	: wxTextCtrl(parent, id, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY | wxTE_RICH, wxDefaultValidator, wxTextCtrlNameStr)

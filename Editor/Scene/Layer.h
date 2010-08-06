@@ -4,7 +4,7 @@
 #include "Pipeline/Content/NodeVisibility.h"
 
 #include "Editor/API.h"
-#include "SceneNode.h"
+#include "Editor/Scene/SceneNode.h"
 
 namespace Helium
 {

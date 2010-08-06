@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EditorGenerated.h"
+#include "Editor/UI/EditorGenerated.h"
 
 #include <wx/tglbtn.h>
 

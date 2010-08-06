@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Foundation/Reflect/Element.h"
-#include "CameraPreferences.h"
-#include "Viewport.h"
+#include "Editor/Scene/CameraPreferences.h"
+#include "Editor/UI/Viewport.h"
 
 namespace Helium
 {

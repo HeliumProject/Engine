@@ -2,7 +2,7 @@
 
 #include "Editor/API.h"
 #include "SceneNodePanel.h"
-#include "Selectable.h"
+#include "Editor/Selectable.h"
 
 namespace Helium
 {

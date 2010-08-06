@@ -1,9 +1,9 @@
 #include "Precompile.h"
 #include "TransformManipulator.h"
-#include "Transform.h"
+#include "Editor/Scene/Transform.h"
 
-#include "Viewport.h"
-#include "Camera.h"
+#include "Editor/UI/Viewport.h"
+#include "Editor/Scene/Camera.h"
 #include "Color.h"
 
 using namespace Helium;

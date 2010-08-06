@@ -1,15 +1,15 @@
 #include "Precompile.h"
-#include "Mesh.h"
+#include "Editor/Scene/Mesh.h"
 
 #include "Pipeline/Content/Nodes/Mesh.h"
 
 #include "Application/UI/ArtProvider.h"
-#include "Pick.h"
+#include "Editor/Scene/Pick.h"
 #include "Color.h"
 
-#include "Scene.h"
+#include "Editor/Scene/Scene.h"
 #include "Shader.h"
-#include "Transform.h"
+#include "Editor/Scene/Transform.h"
 #include "HierarchyNodeType.h"
 
 using namespace Helium;

@@ -2,7 +2,7 @@
 
 #include "Platform/Compiler.h"
 
-#include "Render/RenderWindow.h"
+#include "Editor/Render/RenderWindow.h"
 
 namespace Helium
 {

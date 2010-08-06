@@ -1,11 +1,11 @@
 #include "Precompile.h"
 #include "PointLight.h"
 
-#include "Scene.h"
-#include "SceneManager.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/SceneManager.h"
 #include "InstanceType.h"
 
-#include "PropertiesGenerator.h"
+#include "Editor/PropertiesGenerator.h"
 #include "Application/UI/ArtProvider.h"
 
 #include "PrimitiveSphere.h"

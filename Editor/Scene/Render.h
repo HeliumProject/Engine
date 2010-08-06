@@ -1,14 +1,15 @@
 #pragma once
 
-#include "Foundation/Automation/Event.h" 
 #include "Platform/Types.h"
+
+#include "Foundation/Automation/Event.h" 
 #include "Foundation/Math/Vector2.h"
 #include "Foundation/Math/Vector3.h"
 #include "Foundation/Math/Vector4.h"
 #include "Foundation/Math/Matrix4.h"
 
-#include "Pick.h"
-#include "Visitor.h"
+#include "Editor/Scene/Pick.h"
+#include "Editor/Scene/Visitor.h"
 
 namespace Helium
 {

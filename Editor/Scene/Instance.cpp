@@ -3,7 +3,7 @@
 #include "InstanceType.h"
 #include "InstancePanel.h"
 
-#include "Scene.h"
+#include "Editor/Scene/Scene.h"
 
 #include "Application/UI/ArtProvider.h"
 

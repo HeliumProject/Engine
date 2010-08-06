@@ -2,11 +2,12 @@
 
 #include "Editor/API.h"
 
-#include "Pipeline/Asset/Classes/SceneAsset.h"
 #include "Foundation/Automation/Event.h"
-#include "DocumentManager.h"
-#include "Selection.h"
+#include "Pipeline/Asset/Classes/SceneAsset.h"
 #include "Application/Undo/QueueManager.h"
+
+#include "Editor/DocumentManager.h"
+#include "Editor/Selection.h"
 
 namespace Helium
 {

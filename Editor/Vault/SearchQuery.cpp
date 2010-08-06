@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "SearchQuery.h"
 
-#include "App.h"
+#include "Editor/App.h"
 #include "Vault.h"
 
 #include "Foundation/Regex.h"

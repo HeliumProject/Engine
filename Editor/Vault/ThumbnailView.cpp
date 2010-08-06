@@ -8,13 +8,13 @@
 
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
-#include "UpdateStatusEvent.h"
+#include "Editor/UpdateStatusEvent.h"
 #include "Application/Inspect/DragDrop/DropSource.h"
 #include "Application/Undo/Command.h"
 #include "Application/UI/ArtProvider.h"
 
-#include "Scene/Color.h"  // BARF! Should we move Color.h to Editor?
-#include "Scene/Render.h" // BARF! Should we move Render.h to Editor?
+#include "Editor/Scene/Color.h"  // BARF! Should we move Color.h to Editor?
+#include "Editor/Scene/Render.h" // BARF! Should we move Render.h to Editor?
 
 #include <wx/dnd.h>
 #include <shellapi.h>

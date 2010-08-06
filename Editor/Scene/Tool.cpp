@@ -1,6 +1,6 @@
 #include "Precompile.h"
-#include "Tool.h"
-#include "Scene.h"
+#include "Editor/Scene/Tool.h"
+#include "Editor/Scene/Scene.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

@@ -1,11 +1,11 @@
 #include "Precompile.h"
 #include "SceneVisitor.h"
 
-#include "Pick.h"
+#include "Editor/Scene/Pick.h"
 
 #include "Entity.h"
-#include "Scene.h"
-#include "Transform.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/Transform.h"
 #include "HierarchyNodeType.h"
 
 using namespace Helium;

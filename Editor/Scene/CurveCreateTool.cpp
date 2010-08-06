@@ -2,11 +2,11 @@
 #include "CurveCreateTool.h"
 #include "CreateTool.h"
 
-#include "Point.h"
-#include "Pick.h"
+#include "Editor/Scene/Point.h"
+#include "Editor/Scene/Pick.h"
 
-#include "Scene.h"
-#include "SceneManager.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/SceneManager.h"
 #include "HierarchyNodeType.h"
 
 using namespace Helium;

@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "Graph/ProjectNotebook.h"
+#include "Editor/Graph/ProjectNotebook.h"
 
 #include <wx/config.h>
 #include <wx/dir.h>
@@ -10,13 +10,13 @@
 
 #include <map>
 
-#include "Graph/ShaderFrame.h"
-#include "Graph/Panel.h"
-#include "Graph/LuaUtilities.h"
-#include "Graph/LuaInputStream.h"
-#include "Graph/UndoRedo.h"
-#include "Graph/XML.h"
-#include "Graph/Debug.h"
+#include "Editor/Graph/ShaderFrame.h"
+#include "Editor/Graph/Panel.h"
+#include "Editor/Graph/LuaUtilities.h"
+#include "Editor/Graph/LuaInputStream.h"
+#include "Editor/Graph/UndoRedo.h"
+#include "Editor/Graph/XML.h"
+#include "Editor/Graph/Debug.h"
 
 #include "Application/RCS/RCS.h"
 #include "Foundation/Log.h"

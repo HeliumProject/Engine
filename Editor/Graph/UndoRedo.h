@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include "Graph/MenuState.h"
-#include "Graph/Debug.h"
+#include "Editor/Graph/MenuState.h"
+#include "Editor/Graph/Debug.h"
 
 class UndoRedo
 {

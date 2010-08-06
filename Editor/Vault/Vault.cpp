@@ -10,8 +10,8 @@
 
 #include "Platform/Exception.h"
 #include "Application/RCS/Providers/Perforce/Perforce.h"
-#include "Scene/SceneManager.h"
-#include "App.h"
+#include "Editor/Scene/SceneManager.h"
+#include "Editor/App.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

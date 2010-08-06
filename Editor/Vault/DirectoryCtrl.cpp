@@ -2,7 +2,7 @@
 #include "DirectoryCtrl.h"
 
 #include "Application/UI/ArtProvider.h"
-#include "UI/Controls/Tree/SortTreeCtrl.h"
+#include "Editor/UI/Controls/Tree/SortTreeCtrl.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

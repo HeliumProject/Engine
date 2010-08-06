@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "SelectionPropertiesPanel.h"
 
-#include "PropertiesGenerator.h"
-#include "PropertiesManager.h"
+#include "Editor/PropertiesGenerator.h"
+#include "Editor/PropertiesManager.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

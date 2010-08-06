@@ -1,13 +1,13 @@
 #include "Precompile.h"
-#include "Graph/Panel.h"
+#include "Editor/Graph/Panel.h"
 
 #include <wx/tokenzr.h>
 #include <wx/propgrid/advprops.h>
 #include <wx/xml/xml.h>
 
-#include "Graph/LuaUtilities.h"
-#include "Graph/CodeTextCtrl.h"
-#include "Graph/Debug.h"
+#include "Editor/Graph/LuaUtilities.h"
+#include "Editor/Graph/CodeTextCtrl.h"
+#include "Editor/Graph/Debug.h"
 
 wxString g_FragmentShaderLibPath;
 lua_State *g_FragmentShaderLuaState;

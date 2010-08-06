@@ -1,11 +1,11 @@
 #include "Precompile.h"
 #include "HierarchyOutliner.h"
 #include "HierarchyOutlinerItemData.h"
-#include "ParentCommand.h"
-#include "Scene.h"
 
 #include "Application/UI/ArtProvider.h"
-#include "UI/Controls/Tree/SortTreeCtrl.h"
+#include "Editor/UI/Controls/Tree/SortTreeCtrl.h"
+#include "Editor/Scene/ParentCommand.h"
+#include "Editor/Scene/Scene.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

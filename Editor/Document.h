@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Editor/API.h"
-#include "Object.h"
+#include "Editor/Object.h"
 #include "Foundation/File/Path.h"
 
 namespace Helium

@@ -7,10 +7,10 @@
 
 #include "Application/Undo/Queue.h"
 
-#include "Tool.h"
-#include "Scene.h"
-#include "Transform.h"
-#include "Manipulator.h"
+#include "Editor/Scene/Tool.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/Transform.h"
+#include "Editor/Scene/Manipulator.h"
 
 namespace Helium
 {

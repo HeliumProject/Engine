@@ -12,7 +12,7 @@
 #include "Application/Inspect/Interpreters/Content/ParametricKeyData.h"
 #include "Application/Inspect/Interpreters/Content/ParametricKeyControl.h"
 
-#include "Selection.h"
+#include "Editor/Selection.h"
 
 namespace Helium
 {

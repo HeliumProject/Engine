@@ -3,9 +3,9 @@
 
 #include "EntityAssetSet.h"
 #include "Entity.h"
-#include "Scene.h"
+#include "Editor/Scene/Scene.h"
 
-#include "Viewport.h"
+#include "Editor/UI/Viewport.h"
 #include "Color.h"
 #include "PrimitiveCube.h"
 #include "PrimitiveSphere.h"

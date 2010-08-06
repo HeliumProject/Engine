@@ -6,7 +6,7 @@
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Reflect/Element.h"
 
-#include "Selectable.h"
+#include "Editor/Selectable.h"
 #include "Application/Undo/PropertyCommand.h"
 
 namespace Helium

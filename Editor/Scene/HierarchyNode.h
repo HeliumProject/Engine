@@ -2,11 +2,11 @@
 
 #include "Foundation/Math/AlignedBox.h"
 
-#include "Pick.h"
-#include "Viewport.h"
+#include "Editor/Scene/Pick.h"
+#include "Editor/UI/Viewport.h"
 
 #include "Editor/API.h"
-#include "SceneNode.h"
+#include "Editor/Scene/SceneNode.h"
 #include "SceneVisitor.h"
 
 #include "Foundation/Container/OrderedSet.h"

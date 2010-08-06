@@ -1,20 +1,20 @@
 #include "Precompile.h"
 #include "TranslateManipulator.h"
 
-#include "Pick.h"
-#include "Viewport.h"
-#include "Camera.h"
+#include "Editor/Scene/Pick.h"
+#include "Editor/UI/Viewport.h"
+#include "Editor/Scene/Camera.h"
 #include "Color.h"
 
 #include "PrimitiveAxes.h"
 #include "PrimitiveCone.h"
 #include "PrimitiveCircle.h"
 
-#include "App.h"
-#include "SceneManager.h"
-#include "Scene.h"
+#include "Editor/App.h"
+#include "Editor/Scene/SceneManager.h"
+#include "Editor/Scene/Scene.h"
 #include "ScenePreferences.h"
-#include "Mesh.h"
+#include "Editor/Scene/Mesh.h"
 
 #include "Foundation/Math/AngleAxis.h"
 #include "Foundation/Math/Utils.h"

@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "Layer.h"
-#include "Scene.h"
+#include "Editor/Scene/Scene.h"
 
 #include "Application/UI/ArtProvider.h"
 #include "Application/Inspect/Controls/Choice.h"

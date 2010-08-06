@@ -4,10 +4,10 @@
 
 #include "Foundation/Reflect/Element.h"
 
-#include "Persistent.h"
-#include "Selection.h"
+#include "Editor/Persistent.h"
+#include "Editor/Selection.h"
 
-#include "PropertiesGenerator.h"
+#include "Editor/PropertiesGenerator.h"
 
 #include "Editor/API.h"
 

@@ -1,7 +1,7 @@
 #include "Precompile.h"
-#include "Graph/Group.h"
+#include "Editor/Graph/Group.h"
 
-#include "Graph/XML.h"
+#include "Editor/Graph/XML.h"
 
 Group::Group()
 	: Node()

@@ -1,13 +1,13 @@
 #include "Precompile.h"
-#include "Graph/Debug.h"
+#include "Editor/Graph/Debug.h"
 
 #include "Platform/Windows/Windows.h"
 
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "Graph/Shape.h"
-#include "Graph/LuaUtilities.h"
+#include "Editor/Graph/Shape.h"
+#include "Editor/Graph/LuaUtilities.h"
 
 #include "Platform/String.h"
 

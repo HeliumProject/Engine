@@ -1,6 +1,6 @@
 #include "Precompile.h"
-#include "UI/MessageDisplayer.h"
-#include "UI/YesNoAllDlg.h"
+#include "Editor/UI/MessageDisplayer.h"
+#include "Editor/UI/YesNoAllDlg.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

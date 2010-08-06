@@ -29,12 +29,12 @@
 Changed by André de Leiradella to work without std::string.
 */
 #include "Precompile.h"
-#include "Graph/Base64Encode.h"
+#include "Editor/Graph/Base64Encode.h"
 
 #include <string.h>
 #include <ctype.h>
 
-#include "Graph/Debug.h"
+#include "Editor/Graph/Debug.h"
 
 static const unsigned char base64_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 

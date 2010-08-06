@@ -1,12 +1,14 @@
 #include "Precompile.h"
 #include "EntityAssetOutliner.h"
-#include "Entity.h"
-#include "EntityType.h"
-#include "EntityAssetSet.h"
-#include "Scene.h"
-#include "SceneOutlinerItemData.h"
+
 #include "Application/UI/ArtProvider.h"
-#include "UI/Controls/Tree/SortTreeCtrl.h"
+
+#include "Editor/Scene/Entity.h"
+#include "Editor/Scene/EntityType.h"
+#include "Editor/Scene/EntityAssetSet.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/UI/SceneOutlinerItemData.h"
+#include "Editor/UI/Controls/Tree/SortTreeCtrl.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Graph/Node.h"
-#include "Graph/Property.h"
-#include "Graph/ShaderObject.h"
-#include "Graph/Serialized.h"
+#include "Editor/Graph/Node.h"
+#include "Editor/Graph/Property.h"
+#include "Editor/Graph/ShaderObject.h"
+#include "Editor/Graph/Serialized.h"
 
 class Method: public Serialized
 {

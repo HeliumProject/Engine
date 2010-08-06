@@ -6,7 +6,7 @@
 #include "Editor/API.h"
 #include "Application/Inspect/Data/Data.h"
 
-#include "Selection.h"
+#include "Editor/Selection.h"
 
 namespace Helium
 {

@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "UpdateStatusEvent.h"
+#include "Editor/UpdateStatusEvent.h"
 
 using namespace Helium;
 

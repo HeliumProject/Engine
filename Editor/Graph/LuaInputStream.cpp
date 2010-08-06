@@ -1,9 +1,9 @@
 #include "Precompile.h"
-#include "Graph/LuaInputStream.h"
+#include "Editor/Graph/LuaInputStream.h"
 
 #include <math.h>
 
-#include "Graph/Debug.h"
+#include "Editor/Graph/Debug.h"
 
 // 2.0
 #define TYPE_NIL		0

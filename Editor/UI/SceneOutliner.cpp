@@ -1,7 +1,7 @@
 #include "Precompile.h"
-#include "SceneOutliner.h"
-#include "Scene.h"
-#include "SceneManager.h"
+#include "Editor/UI/SceneOutliner.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/SceneManager.h"
 #include "SceneOutlinerItemData.h"
 #include "Application/Undo/PropertyCommand.h"
 

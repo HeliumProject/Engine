@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graph/Serialized.h"
+#include "Editor/Graph/Serialized.h"
 
 class Shape;
 

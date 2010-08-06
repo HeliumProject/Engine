@@ -1,7 +1,7 @@
 #include "Precompile.h"
-#include "Graph/RulerMemoryDC.h"
+#include "Editor/Graph/RulerMemoryDC.h"
 
-#include "Graph/Debug.h"
+#include "Editor/Graph/Debug.h"
 
 RulerMemoryDC::RulerMemoryDC()
 	: wxMemoryDC()

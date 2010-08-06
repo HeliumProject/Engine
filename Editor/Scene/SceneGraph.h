@@ -2,8 +2,8 @@
 
 #include "Editor/API.h"
 #include "Foundation/Automation/Event.h"     // for Helium::Delegate
-#include "SceneNode.h"
-#include "Object.h"
+#include "Editor/Scene/SceneNode.h"
+#include "Editor/Object.h"
 
 namespace Helium
 {

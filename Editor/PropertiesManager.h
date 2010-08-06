@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Editor/API.h"
-#include "PropertiesGenerator.h"
+#include "Editor/PropertiesGenerator.h"
 #include "Application/Inspect/Controls/Controls.h"
-#include "Selection.h"
+#include "Editor/Selection.h"
 #include "Platform/Mutex.h"
 
 namespace Helium

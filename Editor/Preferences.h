@@ -3,10 +3,10 @@
 #include "Editor/API.h"
 
 #include "Settings.h"
-#include "Scene/ScenePreferences.h"
-#include "Scene/ViewportPreferences.h"
-#include "Scene/GridPreferences.h"
-#include "Vault/VaultPreferences.h"
+#include "Editor/Scene/ScenePreferences.h"
+#include "Editor/Scene/GridPreferences.h"
+#include "Editor/UI/ViewportPreferences.h"
+#include "Editor/Vault/VaultPreferences.h"
 
 namespace Helium
 {

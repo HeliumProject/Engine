@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "Graph/ShaderFrame.h"
+#include "Editor/Graph/ShaderFrame.h"
 
 #include <wx/config.h>
 #include <wx/filename.h>
@@ -8,18 +8,18 @@
 #include <wx/aboutdlg.h>
 #include <wx/clipbrd.h>
 
-#include "Graph/LuaUtilities.h"
-#include "Graph/ProjectNotebook.h"
-#include "Graph/MenuState.h"
-#include "Graph/Debug.h"
+#include "Editor/Graph/LuaUtilities.h"
+#include "Editor/Graph/ProjectNotebook.h"
+#include "Editor/Graph/MenuState.h"
+#include "Editor/Graph/Debug.h"
 
-#include "Graph/XPM/copy.xpm"
-#include "Graph/XPM/cut.xpm"
-#include "Graph/XPM/new.xpm"
-#include "Graph/XPM/open.xpm"
-#include "Graph/XPM/paste.xpm"
-#include "Graph/XPM/save.xpm"
-#include "Graph/XPM/x.xpm"
+#include "Editor/Graph/XPM/copy.xpm"
+#include "Editor/Graph/XPM/cut.xpm"
+#include "Editor/Graph/XPM/new.xpm"
+#include "Editor/Graph/XPM/open.xpm"
+#include "Editor/Graph/XPM/paste.xpm"
+#include "Editor/Graph/XPM/save.xpm"
+#include "Editor/Graph/XPM/x.xpm"
 
 BEGIN_EVENT_TABLE(Shader, wxFrame)
 EVT_CLOSE(Shader::OnClose)

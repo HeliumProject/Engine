@@ -4,7 +4,7 @@
 #include "CreateTool.h"
 
 #include "Color.h"
-#include "Pick.h"
+#include "Editor/Scene/Pick.h"
 
 #include "PrimitiveAxes.h"
 #include "PrimitiveCone.h"
@@ -12,8 +12,8 @@
 #include "PrimitiveFrame.h"
 #include "PrimitiveCube.h"
 
-#include "Scene.h"
-#include "SceneManager.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/SceneManager.h"
 #include "HierarchyNodeType.h"
 #include "ScaleManipulator.h"
 #include "TranslateManipulator.h"

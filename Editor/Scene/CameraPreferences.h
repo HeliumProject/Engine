@@ -3,7 +3,7 @@
 #include "Foundation/Reflect/Element.h"
 #include "Pipeline/Content/Nodes/Camera.h"
 #include "Editor/Scene/Camera.h" 
-#include "Editor/Scene/Viewport.h"
+#include "Editor/UI/Viewport.h"
 #include "Editor/Settings.h"
 
 namespace Helium

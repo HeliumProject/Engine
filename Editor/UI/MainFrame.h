@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EditorGenerated.h"
+#include "Editor/UI/EditorGenerated.h"
 
 #include "DirectoryPanel.h"
 #include "HelpPanel.h"
@@ -11,17 +11,17 @@
 #include "TypesPanel.h"
 #include "ViewPanel.h"
 
-#include "PropertiesManager.h"
+#include "Editor/PropertiesManager.h"
 
-#include "Scene/Scene.h"
-#include "Scene/SceneManager.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/SceneManager.h"
 
 #include "Application/UI/MenuMRU.h"
 #include "Application/Inspect/DragDrop/DropTarget.h"
 
-#include "UI/TreeMonitor.h"
-#include "UI/TreeSortTimer.h"
-#include "UI/MessageDisplayer.h"
+#include "Editor/UI/TreeMonitor.h"
+#include "Editor/UI/TreeSortTimer.h"
+#include "Editor/UI/MessageDisplayer.h"
 
 #include "Core/Project.h"
 

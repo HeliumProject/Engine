@@ -1,7 +1,7 @@
 #include "Precompile.h"
-#include "Point.h"
-#include "Transform.h"
-#include "PropertiesGenerator.h"
+#include "Editor/Scene/Point.h"
+#include "Editor/Scene/Transform.h"
+#include "Editor/PropertiesGenerator.h"
 #include "Application/UI/ArtProvider.h"
 
 using namespace Helium;

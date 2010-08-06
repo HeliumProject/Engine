@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Graph/LuaUtilities.h"
-#include "Graph/MenuState.h"
-#include "Graph/LuaInputStream.h"
-#include "Graph/Panel.h"
+#include "Editor/Graph/LuaUtilities.h"
+#include "Editor/Graph/MenuState.h"
+#include "Editor/Graph/LuaInputStream.h"
+#include "Editor/Graph/Panel.h"
 
 class Project: public wxNotebook
 {

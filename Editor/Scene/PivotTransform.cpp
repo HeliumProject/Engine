@@ -7,7 +7,7 @@
 
 #include "Application/Undo/PropertyCommand.h"
 #include "HierarchyNodeType.h"
-#include "Scene.h"
+#include "Editor/Scene/Scene.h"
 #include "Application/UI/ArtProvider.h"
 
 using namespace Helium;

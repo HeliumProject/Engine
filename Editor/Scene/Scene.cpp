@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "Scene.h"
+#include "Editor/Scene/Scene.h"
 
 #include <algorithm>
 #include <hash_set>
@@ -14,8 +14,8 @@
 #include "Pipeline/Asset/Classes/Entity.h"
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
 
-#include "App.h"
-#include "Vault/Vault.h"
+#include "Editor/App.h"
+#include "Editor/Vault/Vault.h"
 
 #include "Pipeline/Content/Scene.h"
 #include "Pipeline/Content/ContentVersion.h"
@@ -33,10 +33,10 @@
 #include "SceneGraph.h"
 #include "Statistics.h"
 
-#include "SceneNodeType.h"
+#include "Editor/Scene/SceneNodeType.h"
 #include "HierarchyNodeType.h"
 
-#include "SceneManager.h"
+#include "Editor/Scene/SceneManager.h"
 #include "ScenePreferences.h"
 
 #include "ParentCommand.h"
@@ -44,12 +44,12 @@
 #include "PivotTransform.h"
 #include "JointTransform.h"
 #include "Layer.h"
-#include "Mesh.h"
+#include "Editor/Scene/Mesh.h"
 #include "NavMesh.h"
 #include "Shader.h"
 #include "Skin.h"
 #include "Curve.h"
-#include "Point.h"
+#include "Editor/Scene/Point.h"
 #include "InstanceType.h"
 #include "Entity.h"
 #include "EntityAssetSet.h"

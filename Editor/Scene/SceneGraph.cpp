@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "SceneGraph.h"
-#include "SceneNode.h"
+#include "Editor/Scene/SceneNode.h"
 
 //#define EDITOR_DEBUG_EVALUATE
 

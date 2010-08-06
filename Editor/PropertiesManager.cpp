@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "PropertiesManager.h"
+#include "Editor/PropertiesManager.h"
 
 #include "Application/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 #include "Platform/Platform.h"

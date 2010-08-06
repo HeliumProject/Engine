@@ -11,12 +11,12 @@
 #include "EntityAssetSet.h"
 #include "HierarchyNodeType.h"
 #include "Layer.h"
-#include "Transform.h"
-#include "Scene.h"
-#include "SceneManager.h"
+#include "Editor/Scene/Transform.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/SceneManager.h"
 #include "ScenePreferences.h"
 #include "SceneVisitor.h"
-#include "App.h"
+#include "Editor/App.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

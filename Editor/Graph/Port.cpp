@@ -1,15 +1,15 @@
 #include "Precompile.h"
-#include "Graph/Port.h"
+#include "Editor/Graph/Port.h"
 
 #include <stdio.h>
 
-#include "Graph/NodeDefinition.h"
-#include "Graph/RulerMemoryDC.h"
-#include "Graph/LuaUtilities.h"
-#include "Graph/Method.h"
-#include "Graph/ProjectNotebook.h"
-#include "Graph/XML.h"
-#include "Graph/Debug.h"
+#include "Editor/Graph/NodeDefinition.h"
+#include "Editor/Graph/RulerMemoryDC.h"
+#include "Editor/Graph/LuaUtilities.h"
+#include "Editor/Graph/Method.h"
+#include "Editor/Graph/ProjectNotebook.h"
+#include "Editor/Graph/XML.h"
+#include "Editor/Graph/Debug.h"
 
 #include "Platform/String.h"
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Graph/PropertyGrid.h"
-#include "Graph/Member.h"
+#include "Editor/Graph/PropertyGrid.h"
+#include "Editor/Graph/Member.h"
 
 #include "Platform/Types.h"
 

@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "PrimitiveGrid.h"
 
-#include "Pick.h"
+#include "Editor/Scene/Pick.h"
 
 #include "Orientation.h"
 

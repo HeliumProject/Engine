@@ -2,8 +2,8 @@
 #include "NavMeshCommand.h"
 #include "NavMesh.h"
 
-#include "Scene.h"
-#include "SceneManager.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/SceneManager.h"
 #include "NavMeshCreateTool.h"
 
 using namespace Helium;

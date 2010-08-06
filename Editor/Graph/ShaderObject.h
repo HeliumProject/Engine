@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Graph/Shape.h"
-#include "Graph/LuaUtilities.h"
+#include "Editor/Graph/Shape.h"
+#include "Editor/Graph/LuaUtilities.h"
 
 class Method;
 

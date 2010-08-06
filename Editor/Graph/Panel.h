@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Graph/PropertyGrid.h"
-#include "Graph/Graph.h"
-#include "Graph/NodeDefinition.h"
-#include "Graph/Graph.h"
-#include "Graph/MenuState.h"
-#include "Graph/CodeTextCtrl.h"
-#include "Graph/ReportListCtrl.h"
-#include "Graph/UndoRedo.h"
-#include "Graph/Clipboard.h"
-#include "Graph/LuaInputStream.h"
+#include "Editor/Graph/PropertyGrid.h"
+#include "Editor/Graph/Graph.h"
+#include "Editor/Graph/NodeDefinition.h"
+#include "Editor/Graph/Graph.h"
+#include "Editor/Graph/MenuState.h"
+#include "Editor/Graph/CodeTextCtrl.h"
+#include "Editor/Graph/ReportListCtrl.h"
+#include "Editor/Graph/UndoRedo.h"
+#include "Editor/Graph/Clipboard.h"
+#include "Editor/Graph/LuaInputStream.h"
 
 extern wxString g_FragmentShaderLibPath;
 extern lua_State *g_FragmentShaderLuaState;

@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "Selectable.h"
+#include "Editor/Selectable.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

@@ -1,10 +1,10 @@
 #include "Precompile.h"
-#include "SceneManager.h"
+#include "Editor/Scene/SceneManager.h"
 
-#include "Scene.h"
+#include "Editor/Scene/Scene.h"
 #include "SceneDocument.h"
 #include "SwitchSceneCommand.h"
-#include "Viewport.h"
+#include "Editor/UI/Viewport.h"
 
 #include "Pipeline/Asset/Classes/SceneAsset.h"
 #include "Foundation/Component/ComponentHandle.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SceneNode.h"
+#include "Editor/Scene/SceneNode.h"
 
 namespace Helium
 {

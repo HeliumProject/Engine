@@ -3,7 +3,7 @@
 #include "Foundation/Container/OrderedSet.h"
 #include "Core/Project.h"
 
-#include "EditorGenerated.h"
+#include "Editor/UI/EditorGenerated.h"
 
 #include "Application/UI/FileDropTarget.h"
 

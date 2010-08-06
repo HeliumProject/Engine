@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "App.h"
+#include "Editor/App.h"
 
 #include "Platform/Windows/Windows.h"
 #include "Platform/Windows/Console.h"
@@ -28,22 +28,22 @@
 
 #include "Core/CoreInit.h"
 
-#include "Object.h"
-#include "Selectable.h"
-#include "Persistent.h"
-#include "PropertiesGenerator.h"
+#include "Editor/Object.h"
+#include "Editor/Selectable.h"
+#include "Editor/Persistent.h"
+#include "Editor/PropertiesGenerator.h"
 
 #include "Preferences.h"
 #include "Settings.h"
 #include "Preferences.h"
 #include "WindowSettings.h"
-#include "Document.h"
+#include "Editor/Document.h"
 
-#include "Scene/SceneInit.h"
+#include "Editor/Scene/SceneInit.h"
 #include "Tracker/Tracker.h"
 #include "Task/TaskInit.h"
-#include "UI/PerforceWaitDialog.h"
-#include "Vault/Vault.h"
+#include "Editor/UI/PerforceWaitDialog.h"
+#include "Editor/Vault/Vault.h"
 
 //#include "Commands/BuildCommand.h"
 #include "Commands/ProfileDumpCommand.h"

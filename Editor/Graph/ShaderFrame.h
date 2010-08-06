@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graph/RecentMenu.h"
+#include "Editor/Graph/RecentMenu.h"
 
 #define wxID_RECENT			(wxID_HIGHEST + 0)
 // wxID_HIGHEST + 1 through + 20 are reserved for entries in the recent menu.

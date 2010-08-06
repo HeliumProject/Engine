@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Object.h"
+#include "Editor/Object.h"
 
 #include "Foundation/Container/OrderedSet.h"
 

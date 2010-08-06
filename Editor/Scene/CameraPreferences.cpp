@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "CameraPreferences.h"
+#include "Editor/Scene/CameraPreferences.h"
 
 using namespace Helium;
 using namespace Helium::Editor; 

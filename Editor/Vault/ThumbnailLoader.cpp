@@ -1,11 +1,11 @@
 #include "Precompile.h"
 #include "ThumbnailLoader.h"
-#include "Render.h"
 
+#include "Foundation/File/Directory.h"
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
-#include "Foundation/File/Directory.h"
-#include "Render/D3DManager.h"
+#include "Editor/Render/D3DManager.h"
+#include "Editor/Scene/Render.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

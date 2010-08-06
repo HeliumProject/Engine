@@ -3,9 +3,9 @@
 // Includes
 #include "Editor/API.h"
 #include "SceneOutlinerState.h"
-#include "Selection.h"
+#include "Editor/Selection.h"
 #include "Platform/Types.h"
-#include "UI/Controls/Tree/SortTreeCtrl.h"
+#include "Editor/UI/Controls/Tree/SortTreeCtrl.h"
 
 namespace Helium
 {

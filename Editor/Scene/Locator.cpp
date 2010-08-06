@@ -1,12 +1,12 @@
 #include "Precompile.h"
 #include "Locator.h"
 
-#include "Scene.h"
-#include "SceneManager.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/SceneManager.h"
 
 #include "LocatorType.h"
 
-#include "PropertiesGenerator.h"
+#include "Editor/PropertiesGenerator.h"
 #include "Application/UI/ArtProvider.h"
 
 #include "PrimitiveLocator.h"

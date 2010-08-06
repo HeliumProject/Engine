@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graph/Debug.h"
+#include "Editor/Graph/Debug.h"
 
 template<class T>
 class List

@@ -2,7 +2,7 @@
 #include "EntityPanel.h"
 #include "EntityAssetSet.h"
 
-#include "App.h"
+#include "Editor/App.h"
 
 #include "Application/Inspect/Controls/Value.h"
 #include "Application/Inspect/Controls/InspectButton.h"
@@ -16,8 +16,8 @@
 
 #include "Light.h"
 
-#include "Scene.h"
-#include "SceneManager.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/SceneManager.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;

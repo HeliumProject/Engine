@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Viewport.h"
-#include "Object.h"
+#include "Editor/UI/Viewport.h"
+#include "Editor/Object.h"
 
 namespace Helium
 {

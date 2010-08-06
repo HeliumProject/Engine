@@ -21,7 +21,7 @@
         <property name="skip_python_events">1</property>
         <property name="use_enum">1</property>
         <property name="use_microsoft_bom">0</property>
-        <object class="Frame" expanded="0">
+        <object class="Frame" expanded="1">
             <property name="bg"></property>
             <property name="center"></property>
             <property name="context_help"></property>
@@ -39,7 +39,7 @@
             <property name="pos"></property>
             <property name="size">1280,1024</property>
             <property name="style">wxDEFAULT_FRAME_STYLE</property>
-            <property name="subclass">Helium::Editor::Frame; Frame.h</property>
+            <property name="subclass">Helium::Editor::Frame; Editor/Frame.h</property>
             <property name="title"></property>
             <property name="tooltip"></property>
             <property name="validator_data_type"></property>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graph/Node.h"
+#include "Editor/Graph/Node.h"
 
 class NodeDefinition
 {

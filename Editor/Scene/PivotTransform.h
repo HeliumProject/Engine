@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Editor/API.h"
-#include "Transform.h"
+#include "Editor/Scene/Transform.h"
 
 namespace Helium
 {

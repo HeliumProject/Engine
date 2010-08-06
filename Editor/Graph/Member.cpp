@@ -1,13 +1,13 @@
 #include "Precompile.h"
-#include "Graph/Member.h"
+#include "Editor/Graph/Member.h"
 
 #include <wx/tokenzr.h>
 
-#include "Graph/Shape.h"
-#include "Graph/Serialized.h"
-#include "Graph/Utilities.h"
-#include "Graph/XML.h"
-#include "Graph/Debug.h"
+#include "Editor/Graph/Shape.h"
+#include "Editor/Graph/Serialized.h"
+#include "Editor/Graph/Utilities.h"
+#include "Editor/Graph/XML.h"
+#include "Editor/Graph/Debug.h"
 
 Member::Member(Shape *owner, const wxString& name, int *value, const wxString& id)
 	: m_owner(owner)

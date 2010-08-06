@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Mesh.h"
+#include "Editor/Scene/Mesh.h"
 #include "IndexResource.h"
 #include "VertexResource.h"
 

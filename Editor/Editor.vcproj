@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -131,7 +131,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -216,7 +216,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="1"
@@ -300,7 +300,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -382,7 +382,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -469,7 +469,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -554,7 +554,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="1"
@@ -638,7 +638,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;;&quot;$(LiteSQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -1351,22 +1351,6 @@
 				</File>
 				<File
 					RelativePath=".\Scene\VertexResource.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\Viewport.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\Viewport.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\ViewportPreferences.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\ViewportPreferences.h"
 					>
 				</File>
 				<File
@@ -4010,6 +3994,22 @@
 			</File>
 			<File
 				RelativePath=".\UI\ViewPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\Viewport.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\Viewport.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ViewportPreferences.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ViewportPreferences.h"
 				>
 			</File>
 			<File

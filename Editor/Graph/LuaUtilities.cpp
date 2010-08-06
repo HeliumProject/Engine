@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "Graph/LuaUtilities.h"
+#include "Editor/Graph/LuaUtilities.h"
 
 #include <string.h>
 #include <stdarg.h>
@@ -7,13 +7,13 @@
 
 extern "C"
 {
-	#include "Graph/expr.h"
+	#include "Editor/Graph/expr.h"
 }
 
 #include "base64.h"
 
-#include "Graph/Debug.h"
-#include "Graph/Base64Encode.h"
+#include "Editor/Graph/Debug.h"
+#include "Editor/Graph/Base64Encode.h"
 
 namespace LuaUtilities
 {

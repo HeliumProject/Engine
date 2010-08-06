@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "DependencyCommand.h"
-#include "SceneNode.h"
+#include "Editor/Scene/SceneNode.h"
 
 #include "Foundation/Log.h"
 

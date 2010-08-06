@@ -8,7 +8,7 @@
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/Container/Insert.h" 
 #include "Application/UI/ArtProvider.h"
-#include "App.h"
+#include "Editor/App.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

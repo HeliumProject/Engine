@@ -1,11 +1,11 @@
 #include "Precompile.h"
-#include "Graph/Shape.h"
+#include "Editor/Graph/Shape.h"
 
 #include <set>
 
-#include "Graph/Debug.h"
-#include "Graph/ProjectNotebook.h"
-#include "Graph/XML.h"
+#include "Editor/Graph/Debug.h"
+#include "Editor/Graph/ProjectNotebook.h"
+#include "Editor/Graph/XML.h"
 
 Shape::Shape()
 	: m_parent((Shape *)NULL)

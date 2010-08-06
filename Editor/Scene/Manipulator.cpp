@@ -1,2 +1,2 @@
 #include "Precompile.h"
-#include "Manipulator.h"
+#include "Editor/Scene/Manipulator.h"

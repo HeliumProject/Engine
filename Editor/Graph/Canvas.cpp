@@ -1,13 +1,13 @@
 #include "Precompile.h"
-#include "Graph/Canvas.h"
+#include "Editor/Graph/Canvas.h"
 
 #include <wx/metafile.h>
 #include <wx/dcbuffer.h>
 
 #include <math.h>
 
-#include "Graph/RulerMemoryDC.h"
-#include "Graph/Debug.h"
+#include "Editor/Graph/RulerMemoryDC.h"
+#include "Editor/Graph/Debug.h"
 
 BEGIN_EVENT_TABLE(Canvas, wxScrolledWindow)
 	EVT_SIZE(Canvas::OnResize)

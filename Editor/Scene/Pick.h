@@ -7,9 +7,9 @@
 
 #include "Foundation/Memory/SmartPtr.h"
 
-#include "Object.h"
+#include "Editor/Object.h"
 
-#include "Visitor.h"
+#include "Editor/Scene/Visitor.h"
 
 namespace Helium
 {

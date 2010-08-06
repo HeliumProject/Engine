@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Editor/API.h"
-#include "Document.h"
+#include "Editor/Document.h"
 
 #include "Foundation/TUID.h"
 #include "Foundation/Message.h"

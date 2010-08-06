@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Graph/Shape.h"
-#include "Graph/Utilities.h"
-#include "Graph/Debug.h"
+#include "Editor/Graph/Shape.h"
+#include "Editor/Graph/Utilities.h"
+#include "Editor/Graph/Debug.h"
 
 class Clipboard: public Shape
 {

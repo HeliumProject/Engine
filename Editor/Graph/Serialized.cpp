@@ -1,8 +1,8 @@
 #include "Precompile.h"
-#include "Graph/Serialized.h"
+#include "Editor/Graph/Serialized.h"
 
-#include "Graph/XML.h"
-#include "Graph/Debug.h"
+#include "Editor/Graph/XML.h"
+#include "Editor/Graph/Debug.h"
 
 std::map<wxString, Serialized::Creator> Serialized::m_Creators;
 std::map<wxString, Serialized *> Serialized::m_Objects;

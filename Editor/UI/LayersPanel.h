@@ -1,14 +1,14 @@
 #pragma once
 
-#include "EditorGenerated.h"
+#include "Editor/UI/EditorGenerated.h"
 #include "Grid.h"
 
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Container/OrderedSet.h"
 
-#include "Scene/Scene.h"
-#include "Scene/Layer.h"
-#include "Scene/SceneManager.h"
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/Layer.h"
+#include "Editor/Scene/SceneManager.h"
 
 namespace Helium
 {

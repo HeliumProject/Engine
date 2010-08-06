@@ -1,14 +1,14 @@
 #include "Precompile.h"
-#include "Transform.h"
+#include "Editor/Scene/Transform.h"
 
 #include "Foundation/Math/EulerAngles.h"
 #include "Foundation/Math/Constants.h"
 
-#include "Manipulator.h"
+#include "Editor/Scene/Manipulator.h"
 #include "Application/Undo/PropertyCommand.h"
 #include "PrimitiveAxes.h"
 
-#include "Scene.h"
+#include "Editor/Scene/Scene.h"
 #include "HierarchyNodeType.h"
 
 #include "Color.h"

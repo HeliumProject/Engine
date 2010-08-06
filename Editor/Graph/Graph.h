@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Graph/Canvas.h"
-#include "Graph/Shape.h"
-#include "Graph/Node.h"
-#include "Graph/PropertyGrid.h"
-#include "Graph/Utilities.h"
-#include "Graph/MenuState.h"
-#include "Graph/UndoRedo.h"
-#include "Graph/ReportListCtrl.h"
-#include "Graph/CodeTextCtrl.h"
-#include "Graph/Debug.h"
+#include "Editor/Graph/Canvas.h"
+#include "Editor/Graph/Shape.h"
+#include "Editor/Graph/Node.h"
+#include "Editor/Graph/PropertyGrid.h"
+#include "Editor/Graph/Utilities.h"
+#include "Editor/Graph/MenuState.h"
+#include "Editor/Graph/UndoRedo.h"
+#include "Editor/Graph/ReportListCtrl.h"
+#include "Editor/Graph/CodeTextCtrl.h"
+#include "Editor/Graph/Debug.h"
 
 class Graph: public Canvas, public Shape
 {

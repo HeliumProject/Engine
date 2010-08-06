@@ -226,7 +226,7 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     //
 
     wxGetApp().GetPreferences()->GetScenePreferences()->GetWindowSettings()->ApplyToWindow( this, &m_FrameManager, true );
-    wxGetApp().GetPreferences()->GetViewportPreferences()->ApplyToViewport( m_ViewPanel->GetViewport() ); 
+    m_ViewPanel->GetViewport()->LoadPreferences( wxGetApp().GetPreferences()->GetViewportPreferences() ); 
 
     //
     // Attach event handlers
@@ -259,7 +259,6 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     dropTarget->SetDragOverCallback( Inspect::DragOverCallback::Delegate( this, &MainFrame::DragOver ) );
     dropTarget->SetDropCallback( Inspect::DropCallback::Delegate( this, &MainFrame::Drop ) );
     m_ViewPanel->GetViewport()->SetDropTarget( dropTarget );
-
 }
 
 MainFrame::~MainFrame()
@@ -281,7 +280,7 @@ MainFrame::~MainFrame()
     m_MRU->ToVector( mruPaths );
     wxGetApp().GetPreferences()->GetScenePreferences()->GetMRU()->SetPaths( mruPaths );
 #endif
-    wxGetApp().GetPreferences()->GetViewportPreferences()->LoadFromViewport( m_ViewPanel->GetViewport() ); 
+    m_ViewPanel->GetViewport()->SavePreferences( wxGetApp().GetPreferences()->GetViewportPreferences() ); 
     wxGetApp().SavePreferences();
 
     //

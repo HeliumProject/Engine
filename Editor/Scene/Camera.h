@@ -3,6 +3,7 @@
 #include "Editor/API.h"
 
 #include "Editor/Persistent.h"
+#include "Editor/Scene/CameraPreferences.h"
 
 #include "Foundation/Math/Line.h"
 #include "Foundation/Math/Frustum.h"
@@ -24,25 +25,6 @@ namespace Helium
         }
 
         typedef ProjectionModes::ProjectionMode ProjectionMode;
-
-        namespace ShadingModes
-        {
-            enum ShadingMode
-            {
-                Wireframe,
-                Material,
-                Texture,
-            };
-
-            static void EnumerateEnumeration( Reflect::Enumeration* info )
-            {
-                info->AddElement(ShadingModes::Wireframe, TXT( "Wireframe" ) );
-                info->AddElement(ShadingModes::Material, TXT( "Material" ) );
-                info->AddElement(ShadingModes::Texture, TXT( "Texture" ) );
-            }
-        }
-
-        typedef ShadingModes::ShadingMode ShadingMode;
 
         namespace MovementModes
         {
@@ -145,6 +127,9 @@ namespace Helium
             //
 
             Camera();
+
+            void LoadPreferences(CameraPreferences* prefs);
+            void SavePreferences(CameraPreferences* prefs);
 
             void Setup(ProjectionMode mode = ProjectionModes::Perspective, const Math::Vector3& dir = Math::Vector3::Zero, const Math::Vector3& up = Math::Vector3::Zero);
 

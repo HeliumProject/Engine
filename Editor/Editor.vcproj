@@ -1241,6 +1241,14 @@
 					RelativePath=".\Scene\CameraPreferences.h"
 					>
 				</File>
+				<File
+					RelativePath=".\Scene\ViewportPreferences.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\ViewportPreferences.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Commands"
@@ -3994,14 +4002,6 @@
 			</File>
 			<File
 				RelativePath=".\UI\Viewport.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\ViewportPreferences.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\ViewportPreferences.h"
 				>
 			</File>
 			<File

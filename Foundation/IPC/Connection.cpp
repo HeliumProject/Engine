@@ -356,14 +356,14 @@ void Connection::ConnectThread()
     Helium::Print( TXT( "%s: Remote platform is '%s'\n" ), m_Name, Helium::Platform::GetTypeName(m_RemotePlatform));
 
     // start read thread
-    if (!m_ReadThread.Create(&Helium::Thread::EntryHelper<Connection, &Connection::ReadThread>, this, TXT( "IPC Read Thread" )))
+    if (!m_ReadThread.Create(&Helium::Thread::EntryHelper<Connection, &Connection::ReadThread>, this, "IPC Read Thread" ))
     {
         HELIUM_BREAK();
         return;
     }
 
     // start write thread
-    if (!m_WriteThread.Create(&Helium::Thread::EntryHelper<Connection, &Connection::WriteThread>, this, TXT( "IPC Write Thread" )))
+    if (!m_WriteThread.Create(&Helium::Thread::EntryHelper<Connection, &Connection::WriteThread>, this, "IPC Write Thread" ))
     {
         HELIUM_BREAK();
         return;

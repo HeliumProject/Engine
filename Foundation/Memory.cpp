@@ -129,7 +129,7 @@ bool Memory::Initialize()
         g_MemoryProfilingEnabled = true;
         g_MemoryReportThreadTerminate = false;
 
-        if (!g_MemoryReportThread.Create( &MemoryReportThread, NULL, TXT( "Profile Memory Report Thread" ) ))
+        if (!g_MemoryReportThread.Create( &MemoryReportThread, NULL, "Profile Memory Report Thread" ))
         {
             HELIUM_BREAK();
         }

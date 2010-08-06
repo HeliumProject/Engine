@@ -3965,14 +3965,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\UI\TreeSortTimer.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\TreeSortTimer.h"
-				>
-			</File>
-			<File
 				RelativePath=".\UI\TypesPanel.cpp"
 				>
 			</File>

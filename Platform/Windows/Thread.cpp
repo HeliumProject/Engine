@@ -3,6 +3,7 @@
 #include "Platform/Thread.h"
 #include "Platform/Platform.h"
 #include "Platform/Assert.h"
+#include "Platform/String.h"
 
 using namespace Helium;
 
@@ -20,14 +21,42 @@ Thread::~Thread()
     }
 }
 
-bool Thread::Create(Entry entry, void* obj, const tchar* name, int priority)
+void SetThreadName( DWORD threadId, const char* name )
+{
+    //
+    // name the thread (this is brutal)
+    //
+    struct tagTHREADNAME_INFO
+    {
+        DWORD dwType; // must be 0x1000
+        LPCSTR szName; // pointer to name (in user addr space)
+        DWORD dwThreadID; // thread ID (-1=caller thread)
+        DWORD dwFlags; // reserved for future use, must be zero
+    } threadInfo;
+
+    threadInfo.dwType = 0x1000;
+    threadInfo.szName = name;
+    threadInfo.dwThreadID = threadId;
+    threadInfo.dwFlags = 0;
+
+    __try
+    {
+        RaiseException( 0x406D1388, 0, sizeof(threadInfo)/sizeof(DWORD), (DWORD*)&threadInfo );
+    }
+    __except( EXCEPTION_CONTINUE_EXECUTION )
+    {
+    }
+}
+
+bool Thread::Create(Entry entry, void* obj, const char* name, int priority)
 {
     if (Valid())
     {
         Close();
     }
 
-    m_Handle = ::CreateThread(0,0,(LPTHREAD_START_ROUTINE)entry,obj,0,0);
+    DWORD threadId;
+    m_Handle = ::CreateThread(0,0,(LPTHREAD_START_ROUTINE)entry,obj,0, &threadId );
     if (!m_Handle)
     {
         Helium::Print(TXT("Failed to create thread: %s\n [0x%x: %s]"), name, ::GetLastError(), Helium::GetErrorString().c_str());
@@ -38,6 +67,8 @@ bool Thread::Create(Entry entry, void* obj, const tchar* name, int priority)
     {
         SetThreadPriority( m_Handle, priority );
     }
+    
+    SetThreadName( threadId, name );
 
     return true;
 }

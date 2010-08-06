@@ -6,10 +6,6 @@
 #include "Editor/Scene/SceneManager.h"
 #include "Editor/Scene/Transform.h"
 
-#ifdef UI_REFACTOR
-#include "TreeSortTimer.h"
-#endif
-
 #include "Editor/Scene/Pick.h"
 
 #include "Foundation/Math/AngleAxis.h"
@@ -79,7 +75,7 @@ CreateTool::CreateTool(Editor::Scene* scene, PropertiesGenerator* generator)
 , m_PaintSpeed (NULL)
 , m_PaintDensity (NULL)
 , m_PaintJitter (NULL)
-, m_PaintTimer( TXT( "CreateToolPaintTimer" ), 1000 / s_PaintSpeed )
+, m_PaintTimer( "CreateToolPaintTimer", 1000 / s_PaintSpeed )
 {
   m_Scene->AddNodeAddedListener( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeAdded ) );
   m_Scene->AddNodeRemovedListener( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeRemoved ) );
@@ -89,10 +85,6 @@ CreateTool::CreateTool(Editor::Scene* scene, PropertiesGenerator* generator)
 
 CreateTool::~CreateTool()
 {
-#ifdef UI_REFACTOR
-  m_Scene->GetManager()->GetEditor()->GetTreeSortTimer().Stop();
-#endif
-
   m_PaintTimer.RemoveTickListener( TimerTickSignature::Delegate( this, &CreateTool::TimerCallback ) );
 
   m_Scene->RemoveNodeAddedListener( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeAdded ) );
@@ -580,9 +572,6 @@ void CreateTool::AddToScene()
     EDITOR_SCENE_SCOPE_TIMER( ("Place New Instance At Origin") );
 
     m_Instance = NULL;
-#ifdef UI_REFACTOR
-    m_Scene->GetManager()->GetEditor()->GetTreeSortTimer().Start( TreeSortTimer::DefaultMilliseconds, wxTIMER_ONE_SHOT );
-#endif
     Place( Math::Matrix4::Identity );
   }
 }

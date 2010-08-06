@@ -4,6 +4,8 @@
 
 #include "Platform/Types.h"
 
+#include "Foundation/TimerThread.h"
+
 namespace Helium
 {
     namespace Editor
@@ -30,8 +32,12 @@ namespace Helium
 
             Editor::SceneManager* m_SceneManager;
             S_Trees m_Trees;
+
             u32 m_FreezeTreeSorting;
             bool m_NeedsSorting;
+            TimerThread m_ThawTimer;
+            Timer m_NodeAddedTimer;
+            bool m_SelfFrozen;
 
         public:
             TreeMonitor( Editor::SceneManager* sceneManager );
@@ -51,6 +57,7 @@ namespace Helium
             void OnNodeAdded( const NodeChangeArgs& args );
             void OnNodeRemoved( const NodeChangeArgs& args );
             void OnNodeRenamed( const SceneNodeChangeArgs& args );
+            void OnThawTimer( const TimerTickArgs& args );
         };
     }
 }

@@ -57,7 +57,7 @@ bool TCPConnection::Initialize(bool server, const tchar* name, const tchar* serv
 
     Helium::Thread::Entry serverEntry = Helium::Thread::EntryHelper<TCPConnection, &TCPConnection::ServerThread>;
     Helium::Thread::Entry clientEntry = Helium::Thread::EntryHelper<TCPConnection, &TCPConnection::ClientThread>;
-    if (!m_ConnectThread.Create(server ? serverEntry : clientEntry, this, TXT( "IPC Connection Thread" )))
+    if (!m_ConnectThread.Create(server ? serverEntry : clientEntry, this, "IPC Connection Thread" ))
     {
         Helium::Print( TXT( "%s: Failed to create connect thread\n" ), m_Name);
         SetState(ConnectionStates::Failed);

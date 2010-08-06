@@ -137,7 +137,7 @@ void PropertiesManager::CreateProperties()
 
     Helium::Thread propertyThread;
     PropertyThreadArgs* propertyThreadArgs = new PropertyThreadArgs( m_Selection, m_SelectionId, &m_SelectionId, m_Setting, m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Container>(), m_PropertiesCreated );
-    propertyThread.CreateWithArgs( Helium::Thread::EntryHelperWithArgs<PropertiesManager, PropertyThreadArgs, &PropertiesManager::GeneratePropertiesThread>, this, propertyThreadArgs, TXT( "GeneratePropertiesThread()" ), THREAD_PRIORITY_BELOW_NORMAL );
+    propertyThread.CreateWithArgs( Helium::Thread::EntryHelperWithArgs<PropertiesManager, PropertyThreadArgs, &PropertiesManager::GeneratePropertiesThread>, this, propertyThreadArgs, "GeneratePropertiesThread()", THREAD_PRIORITY_BELOW_NORMAL );
   }
 }
 

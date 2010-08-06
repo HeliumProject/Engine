@@ -20,7 +20,6 @@
 #include "Application/Inspect/DragDrop/DropTarget.h"
 
 #include "Editor/UI/TreeMonitor.h"
-#include "Editor/UI/TreeSortTimer.h"
 #include "Editor/UI/MessageDisplayer.h"
 
 #include "Core/Project.h"
@@ -99,7 +98,6 @@ namespace Helium
             std::vector< wxBitmapToggleButton* > m_ToolsButtons;
 
             TreeMonitor m_TreeMonitor;
-            TreeSortTimer m_TreeSortTimer;
 
         private:
             bool ValidateDrag( const Inspect::DragArgs& args );

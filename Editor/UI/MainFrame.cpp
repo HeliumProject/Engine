@@ -118,7 +118,6 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 : MainFrameGenerated( parent, id, title, pos, size, style )
 , m_MRU( new Helium::MenuMRU( 30, this ) )
 , m_TreeMonitor( &m_SceneManager )
-, m_TreeSortTimer( &m_TreeMonitor )
 , m_MessageDisplayer( this )
 , m_SceneManager( MessageSignature::Delegate( &m_MessageDisplayer, &MessageDisplayer::DisplayMessage ) )
 {

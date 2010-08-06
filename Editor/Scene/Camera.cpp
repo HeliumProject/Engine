@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "Editor/Scene/Camera.h"
-#include "Editor/UI/Viewport.h"
-#include "Orientation.h"
+
 #include "Foundation/Math/AngleAxis.h"
+#include "Editor/Scene/Orientation.h"
 
 using namespace Helium;
 using namespace Helium::Math;
@@ -27,6 +27,24 @@ Camera::Camera()
 , m_BackFaceCulling ( true )
 {
 
+}
+
+void Camera::LoadPreferences( CameraPreferences* prefs )
+{
+  SetShadingMode( (Editor::ShadingMode)prefs->m_ShadingMode ); 
+  SetWireframeOnMesh( prefs->m_WireframeOnMesh ); 
+  SetWireframeOnShaded( prefs->m_WireframeOnShaded ); 
+  SetViewFrustumCulling( prefs->m_ViewFrustumCulling ); 
+  SetBackFaceCulling( prefs->m_BackFaceCulling ); 
+}
+
+void Camera::SavePreferences( CameraPreferences* prefs )
+{
+  prefs->m_ShadingMode = GetShadingMode(); 
+  prefs->m_WireframeOnMesh = GetWireframeOnMesh(); 
+  prefs->m_WireframeOnShaded = GetWireframeOnShaded(); 
+  prefs->m_ViewFrustumCulling = IsViewFrustumCulling(); 
+  prefs->m_BackFaceCulling = IsBackFaceCulling(); 
 }
 
 void Camera::Setup(ProjectionMode mode, const Vector3& dir, const Vector3& up)

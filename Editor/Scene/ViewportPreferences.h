@@ -2,12 +2,34 @@
 
 #include "Foundation/Reflect/Element.h"
 #include "Editor/Scene/CameraPreferences.h"
-#include "Editor/UI/Viewport.h"
 
 namespace Helium
 {
     namespace Editor
     {
+        namespace GeometryModes
+        {
+            enum GeometryMode
+            {
+                None,
+                Render,
+                Collision,
+                Pathfinding,
+                Count
+            };
+
+            static void GeometryModeEnumerateEnumeration( Reflect::Enumeration* info )
+            {
+                info->AddElement(GeometryModes::None, TXT( "GeometryModes::None" ) ); 
+                info->AddElement(GeometryModes::Render, TXT( "GeometryModes::Render" ) ); 
+                info->AddElement(GeometryModes::Collision, TXT( "GeometryModes::Collision" ) ); 
+                info->AddElement(GeometryModes::Pathfinding, TXT( "GeometryModes::Pathfinding" ) ); 
+                info->AddElement(GeometryModes::Count, TXT( "GeometryModes::Count" ) ); 
+            }
+        }
+
+        typedef GeometryModes::GeometryMode GeometryMode;
+
         namespace ViewColorModes
         {
             enum ViewColorMode
@@ -30,24 +52,22 @@ namespace Helium
         public: 
             ViewportPreferences(); 
 
-            void ApplyToViewport(Editor::Viewport* view); 
-            void LoadFromViewport(Editor::Viewport* view); 
-
             ViewColorMode GetColorMode() const;
             void SetColorMode( ViewColorMode mode );
             const Reflect::Field* ColorModeField() const;
 
-        private: 
             CameraMode           m_CameraMode; 
             GeometryMode         m_GeometryMode; 
             V_CameraPreferences  m_CameraPrefs; // do not use m_CameraMode as an index!
-            ViewColorMode        m_ColorMode;
 
             bool                 m_Highlighting; 
             bool                 m_AxesVisible; 
             bool                 m_GridVisible; 
             bool                 m_BoundsVisible; 
             bool                 m_StatisticsVisible; 
+
+        private:
+            ViewColorMode        m_ColorMode;
 
         public:
             static void EnumerateClass( Reflect::Compositor<ViewportPreferences>& comp )

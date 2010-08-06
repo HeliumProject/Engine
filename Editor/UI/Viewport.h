@@ -3,15 +3,16 @@
 #include "Foundation/Math/Constants.h"
 #include "Foundation/Math/Vector3.h"
 #include "Foundation/Math/AlignedBox.h"
+#include "Foundation/Reflect/Enumeration.h"
+
+#include "Application/Undo/Queue.h"
 
 #include "Editor/API.h"
 #include "Editor/Scene/Render.h"
 #include "Editor/Scene/Camera.h"
 #include "Editor/Scene/Resource.h"
+#include "Editor/Scene/ViewportPreferences.h"
 #include "Editor/Render/D3DManager.h"
-#include "Application/Undo/Queue.h"
-
-#include "Foundation/Reflect/Enumeration.h"
 
 namespace Helium
 {
@@ -33,53 +34,6 @@ namespace Helium
         }
 
         typedef DragModes::DragMode DragMode;
-
-        namespace GeometryModes
-        {
-            enum GeometryMode
-            {
-                None,
-                Render,
-                Collision,
-                Pathfinding,
-                Count
-            };
-
-            static void GeometryModeEnumerateEnumeration( Reflect::Enumeration* info )
-            {
-                info->AddElement(GeometryModes::None, TXT( "GeometryModes::None" ) ); 
-                info->AddElement(GeometryModes::Render, TXT( "GeometryModes::Render" ) ); 
-                info->AddElement(GeometryModes::Collision, TXT( "GeometryModes::Collision" ) ); 
-                info->AddElement(GeometryModes::Pathfinding, TXT( "GeometryModes::Pathfinding" ) ); 
-                info->AddElement(GeometryModes::Count, TXT( "GeometryModes::Count" ) ); 
-            }
-        }
-
-        typedef GeometryModes::GeometryMode GeometryMode;
-
-        namespace CameraModes
-        {
-            enum CameraMode
-            {
-                Orbit,
-                Front,
-                Side,
-                Top,
-
-                Count
-            };
-
-            static void CameraModeEnumerateEnumeration( Reflect::Enumeration* info )
-            {
-                info->AddElement(CameraModes::Orbit, TXT( "CameraModes::Orbit" ), TXT( "Orbit" ) ); 
-                info->AddElement(CameraModes::Front, TXT( "CameraModes::Front" ), TXT( "Front" ) ); 
-                info->AddElement(CameraModes::Side, TXT( "CameraModes::Side" ), TXT( "Side" ) ); 
-                info->AddElement(CameraModes::Top, TXT( "CameraModes::Top" ), TXT( "Top" ) ); 
-                info->AddElement(CameraModes::Count, TXT( "CameraModes::Count" ) ); 
-            }
-        }
-
-        typedef CameraModes::CameraMode CameraMode;
 
         namespace GlobalPrimitives
         {
@@ -320,6 +274,9 @@ namespace Helium
             DECLARE_EVENT_TABLE();
 
         public:
+            void LoadPreferences(ViewportPreferences* prefs);
+            void SavePreferences(ViewportPreferences* prefs);
+
             inline IDirect3DDevice9* GetDevice() const
             {
                 return m_D3DManager.GetD3DDevice();

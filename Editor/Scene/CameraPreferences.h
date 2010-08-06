@@ -2,21 +2,59 @@
 
 #include "Foundation/Reflect/Element.h"
 #include "Pipeline/Content/Nodes/Camera.h"
-#include "Editor/Scene/Camera.h" 
-#include "Editor/UI/Viewport.h"
 #include "Editor/Settings.h"
 
 namespace Helium
 {
     namespace Editor
     {
+        namespace CameraModes
+        {
+            enum CameraMode
+            {
+                Orbit,
+                Front,
+                Side,
+                Top,
+
+                Count
+            };
+
+            static void CameraModeEnumerateEnumeration( Reflect::Enumeration* info )
+            {
+                info->AddElement(CameraModes::Orbit, TXT( "CameraModes::Orbit" ), TXT( "Orbit" ) ); 
+                info->AddElement(CameraModes::Front, TXT( "CameraModes::Front" ), TXT( "Front" ) ); 
+                info->AddElement(CameraModes::Side, TXT( "CameraModes::Side" ), TXT( "Side" ) ); 
+                info->AddElement(CameraModes::Top, TXT( "CameraModes::Top" ), TXT( "Top" ) ); 
+                info->AddElement(CameraModes::Count, TXT( "CameraModes::Count" ) ); 
+            }
+        }
+
+        typedef CameraModes::CameraMode CameraMode;
+
+        namespace ShadingModes
+        {
+            enum ShadingMode
+            {
+                Wireframe,
+                Material,
+                Texture,
+            };
+
+            static void EnumerateEnumeration( Reflect::Enumeration* info )
+            {
+                info->AddElement(ShadingModes::Wireframe, TXT( "Wireframe" ) );
+                info->AddElement(ShadingModes::Material, TXT( "Material" ) );
+                info->AddElement(ShadingModes::Texture, TXT( "Texture" ) );
+            }
+        }
+
+        typedef ShadingModes::ShadingMode ShadingMode;
+
         class CameraPreferences : public Reflect::ConcreteInheritor< CameraPreferences, Settings >
         {
         public: 
             CameraPreferences(); 
-
-            void ApplyToCamera(Editor::Camera* camera); 
-            void LoadFromCamera(Editor::Camera* camera); 
 
         public: 
             CameraMode  m_CameraMode; // we save what mode we correspond to

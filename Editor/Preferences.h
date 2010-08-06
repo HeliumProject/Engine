@@ -5,7 +5,7 @@
 #include "Settings.h"
 #include "Editor/Scene/ScenePreferences.h"
 #include "Editor/Scene/GridPreferences.h"
-#include "Editor/UI/ViewportPreferences.h"
+#include "Editor/Scene/ViewportPreferences.h"
 #include "Editor/Vault/VaultPreferences.h"
 
 namespace Helium

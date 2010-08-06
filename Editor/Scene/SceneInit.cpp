@@ -61,7 +61,7 @@
 #include "AmbientLight.h"
 
 #include "Editor/Preferences.h"
-#include "Editor/UI/ViewportPreferences.h"
+#include "ViewportPreferences.h"
 #include "ScenePreferences.h"
 #include "GridPreferences.h"
 

@@ -184,6 +184,50 @@ Viewport::~Viewport()
   delete m_ResourceTracker;
 }
 
+void Viewport::LoadPreferences(Editor::ViewportPreferences* prefs)
+{
+  // apply settings for all modes that we have... 
+  for(size_t i = 0; i < prefs->m_CameraPrefs.size(); ++i)
+  {
+    CameraPreferencesPtr cameraPrefs = prefs->m_CameraPrefs[i]; 
+    CameraMode mode = cameraPrefs->m_CameraMode; 
+    Editor::Camera* camera = GetCameraForMode(mode); 
+    camera->LoadPreferences(cameraPrefs); 
+  }
+
+  SetCameraMode( prefs->m_CameraMode ); 
+  SetGeometryMode( prefs->m_GeometryMode ); 
+  SetHighlighting( prefs->m_Highlighting ); 
+  SetAxesVisible( prefs->m_AxesVisible ); 
+  SetGridVisible( prefs->m_GridVisible ); 
+  SetBoundsVisible( prefs->m_BoundsVisible ); 
+  SetStatisticsVisible( prefs->m_StatisticsVisible ); 
+}
+
+void Viewport::SavePreferences(Editor::ViewportPreferences* prefs)
+{
+  // just blow away the previous preferences
+  prefs->m_CameraPrefs.clear(); 
+
+  for(int i = 0; i < CameraModes::Count; ++i)
+  {
+    CameraMode mode = (CameraMode)i; 
+    CameraPreferencesPtr cameraPrefs = new CameraPreferences(); 
+    cameraPrefs->m_CameraMode = mode;
+    Editor::Camera* camera = GetCameraForMode( mode ); 
+    camera->SavePreferences(cameraPrefs); 
+    prefs->m_CameraPrefs.push_back( cameraPrefs ); 
+  }
+
+  prefs->m_CameraMode = GetCameraMode(); 
+  prefs->m_GeometryMode = GetGeometryMode(); 
+  prefs->m_Highlighting = IsHighlighting(); 
+  prefs->m_AxesVisible = IsAxesVisible(); 
+  prefs->m_GridVisible = IsGridVisible(); 
+  prefs->m_BoundsVisible = IsBoundsVisible(); 
+  prefs->m_StatisticsVisible = IsStatisticsVisible(); 
+}
+
 ResourceTracker* Viewport::GetResources() const
 {
   return m_ResourceTracker;

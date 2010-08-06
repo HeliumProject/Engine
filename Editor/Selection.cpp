@@ -15,7 +15,7 @@ void Selection::Refresh()
 {
   EDITOR_CORE_SCOPE_TIMER( ("") );
 
-  Profile::Timer timer;
+  Timer timer;
 
   m_SelectionChanging.Raise(m_Items);
 
@@ -40,7 +40,7 @@ Undo::CommandPtr Selection::Clear(const SelectionChangingSignature::Delegate& em
 
   EDITOR_CORE_SCOPE_TIMER( ("") );
 
-  Profile::Timer timer;
+  Timer timer;
 
   Undo::CommandPtr command;
 
@@ -88,7 +88,7 @@ Undo::CommandPtr Selection::SetItems(const OS_SelectableDumbPtr& items, const Se
 
   EDITOR_CORE_SCOPE_TIMER( ("") );
 
-  Profile::Timer timer;
+  Timer timer;
 
   OS_SelectableDumbPtr selectableItems;
 
@@ -161,7 +161,7 @@ Undo::CommandPtr Selection::AddItems(const OS_SelectableDumbPtr &items, const Se
 
   EDITOR_CORE_SCOPE_TIMER( ("") );
 
-  Profile::Timer timer;
+  Timer timer;
 
   std::vector<Selectable*> added;
   OS_SelectableDumbPtr temp = m_Items;
@@ -223,7 +223,7 @@ Undo::CommandPtr Selection::RemoveItems(const OS_SelectableDumbPtr& items, const
 
   EDITOR_CORE_SCOPE_TIMER( ("") );
 
-  Profile::Timer timer;
+  Timer timer;
 
   std::vector<Selectable*> removed;
   OS_SelectableDumbPtr temp = m_Items;

@@ -95,7 +95,7 @@ void Tracker::TrackEverything()
 
         // find all the files in the project
         {
-            Profile::Timer timer;
+            Timer timer;
             m_Directory.GetFiles( assetFiles, TXT("*.*"), true );
             Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, TXT("Tracker: File reslover database lookup took %.2fms\n"), timer.Elapsed() );
         }
@@ -104,7 +104,7 @@ void Tracker::TrackEverything()
         m_CurrentProgress = 0;
         m_Total = (u32)assetFiles.size();
 
-        Profile::Timer timer;
+        Timer timer;
         Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, TXT("Tracker: Scanning %d asset file(s) for changes...\n"), (u32)assetFiles.size() );
 
         for( std::set< Helium::Path >::const_iterator assetFileItr = assetFiles.begin(), assetFileItrEnd = assetFiles.end();

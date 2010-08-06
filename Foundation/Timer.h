@@ -5,35 +5,32 @@
 
 namespace Helium
 {
-    namespace Profile
+    //
+    // Bare Timer
+    //
+
+    class FOUNDATION_API Timer
     {
-        //
-        // Bare Timer
-        //
+    private:
+        u64 m_StartTime;
 
-        class FOUNDATION_API Timer
+    public:
+        Timer()
         {
-        private:
-            u64 m_StartTime;
+            Reset();
+        }
 
-        public:
-            Timer()
-            {
-                Reset();
-            }
+    private:
+        Timer(const Timer& rhs)
+        {
 
-        private:
-            Timer(const Timer& rhs)
-            {
+        }
 
-            }
+    public:
+        // reset timer (for re-use)
+        void Reset();
 
-        public:
-            // reset timer (for re-use)
-            void Reset();
-
-            // get elapsed time in millis
-            float Elapsed();
-        };
-    }
+        // get elapsed time in millis
+        float Elapsed();
+    };
 }

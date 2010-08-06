@@ -113,7 +113,7 @@ namespace Helium
         public:
             bool                  m_Enabled;
             bool                  m_Connected;
-            Profile::Timer        m_ConnectTimer;
+            Timer                 m_ConnectTimer;
             u32                   m_ConnectionTestTimeout;        // the time we are willing to wait to test if the server is running
             u32                   m_ForegroundExecuteTimeout;     // the timeout in the foreground thread before we open the wait dialog
             u32                   m_BackgroundExecuteTimeout;     // this is lame and we should consider opening a new connection per-calling thread?

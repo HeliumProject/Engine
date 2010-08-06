@@ -809,14 +809,6 @@
 					RelativePath=".\Scene\Tool.h"
 					>
 				</File>
-				<File
-					RelativePath=".\Scene\ToolTimer.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\ToolTimer.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="Manipulators"

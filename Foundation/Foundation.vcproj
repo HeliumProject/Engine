@@ -1556,6 +1556,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\TimerThread.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\TimerThread.h"
+			>
+		</File>
+		<File
 			RelativePath=".\TUID.cpp"
 			>
 		</File>

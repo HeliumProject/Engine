@@ -4,7 +4,6 @@
 #include "Mesh.h"
 #include "Scene.h"
 #include "SceneManager.h"
-#include "ToolTimer.h"
 #include "Transform.h"
 
 #ifdef UI_REFACTOR
@@ -80,11 +79,12 @@ CreateTool::CreateTool(Editor::Scene* scene, PropertiesGenerator* generator)
 , m_PaintSpeed (NULL)
 , m_PaintDensity (NULL)
 , m_PaintJitter (NULL)
+, m_PaintTimer( TXT( "CreateToolPaintTimer" ), 1000 / s_PaintSpeed )
 {
   m_Scene->AddNodeAddedListener( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeAdded ) );
   m_Scene->AddNodeRemovedListener( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeRemoved ) );
   
-  m_PaintTimer.AddTickListener( TickSignature::Delegate( this, &CreateTool::TimerCallback ) );
+  m_PaintTimer.AddTickListener( TimerTickSignature::Delegate( this, &CreateTool::TimerCallback ) );
 }
 
 CreateTool::~CreateTool()
@@ -93,7 +93,7 @@ CreateTool::~CreateTool()
   m_Scene->GetManager()->GetEditor()->GetTreeSortTimer().Stop();
 #endif
 
-  m_PaintTimer.RemoveTickListener( TickSignature::Delegate( this, &CreateTool::TimerCallback ) );
+  m_PaintTimer.RemoveTickListener( TimerTickSignature::Delegate( this, &CreateTool::TimerCallback ) );
 
   m_Scene->RemoveNodeAddedListener( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeAdded ) );
   m_Scene->RemoveNodeRemovedListener( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeRemoved ) );
@@ -655,9 +655,9 @@ bool CreateTool::MouseDown(wxMouseEvent& e)
       {
         CreateMultipleObjects( true );
       }
-      if ( !m_PaintTimer.IsRunning() )
+      if ( !m_PaintTimer.IsAlive() )
       {
-        m_PaintTimer.Start( 1000 / s_PaintSpeed );
+        m_PaintTimer.Start();
       }
     }
 
@@ -678,10 +678,9 @@ void CreateTool::MouseMove( wxMouseEvent& e )
     return;
   }
   
-  if ( m_PaintTimer.IsRunning() )
+  if ( m_PaintTimer.IsAlive() )
   {
     m_InstanceUpdateOffsets = true;
-    m_PaintTimer.CheckUpdate();
   }
   
   // get position
@@ -696,7 +695,7 @@ void CreateTool::MouseMove( wxMouseEvent& e )
   m_InstanceNormal = ( normal == Math::Vector3::Zero ) ? Editor::UpVector : normal;
   
   // hide the temporary object when painting and moving
-  if ( m_PaintTimer.IsRunning() )
+  if ( m_PaintTimer.IsAlive() )
   {
     position *= Math::Matrix4( Math::Scale( 0.0f, 0.0f, 0.0f ) );
   }
@@ -1112,7 +1111,7 @@ void CreateTool::CreateSingleObject( const Math::Vector3& translation, const Mat
   if ( m_Instance.ReferencesObject() )
   {
     EDITOR_SCENE_SCOPE_TIMER( ( "Update Temporary Instance At Location" ) );
-    if ( m_PaintTimer.IsRunning() )
+    if ( m_PaintTimer.IsAlive() )
     {
       orientation *= Math::Matrix4( Math::Scale( 0.0f, 0.0f, 0.0f ) );
     }
@@ -1139,7 +1138,7 @@ void CreateTool::CreateMultipleObjects( bool stamp )
   }
   
   f32 maxTime = 100.0f;
-  Profile::Timer instanceTimer;
+  Timer instanceTimer;
   Math::Vector3 instanceNormalOffset = m_InstanceNormal.Normalize() * 2.0f * s_PaintRadius;
 
   while ( m_InstanceOffsets.size() && ( stamp || ( instanceTimer.Elapsed() < maxTime ) ) )
@@ -1169,7 +1168,7 @@ void CreateTool::CreateMultipleObjects( bool stamp )
   }
 }
 
-void CreateTool::TimerCallback( const TickArgs& args )
+void CreateTool::TimerCallback( const TimerTickArgs& args )
 {
   CreateMultipleObjects();
   m_Scene->Execute(true);

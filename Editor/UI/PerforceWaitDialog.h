@@ -39,7 +39,7 @@ namespace Editor
     private:
         PerforceWaitDialog*       m_WaitDialog;
         Perforce::WaitInterface*  m_WaitInterface;
-        Profile::Timer            m_WaitTimer;
+        Timer                     m_WaitTimer;
     };
     }
 }

@@ -2,9 +2,10 @@
 
 #include "Editor/API.h"
 #include "Tool.h"
-#include "ToolTimer.h"
 #include "HierarchyNode.h"
 #include "Scene.h"
+
+#include "Foundation/TimerThread.h"
 
 namespace Helium
 {
@@ -66,7 +67,7 @@ namespace Helium
             float m_InstanceRadius;
             Math::V_Vector3 m_InstanceOffsets;
 
-            ToolTimer m_PaintTimer;
+            TimerThread m_PaintTimer;
 
             // UI handles
             Inspect::Container* m_AzimuthMin;
@@ -195,7 +196,7 @@ namespace Helium
             void CreateSingleObject( const Math::Vector3& translation, const Math::Vector3& normal, bool checkValid = false );
             void CreateMultipleObjects( bool stamp = false );
 
-            void TimerCallback( const TickArgs& args );
+            void TimerCallback( const TimerTickArgs& args );
 
             int GetPlaneSnap() const;
             void SetPlaneSnap(int snap);

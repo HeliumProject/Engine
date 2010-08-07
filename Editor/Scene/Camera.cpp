@@ -229,19 +229,19 @@ float Camera::ScalingTo(const Vector3& location) const
   return 1.0f;
 }
 
-void Camera::MouseDown(wxMouseEvent& e)
+void Camera::MouseDown( const MouseButtonInput& e )
 {
   // we have changed movement mode, so reset our delta
   m_Prev = Math::Point (e.GetPosition().x, e.GetPosition().y);
 }
 
-void Camera::MouseUp(wxMouseEvent& e)
+void Camera::MouseUp( const MouseButtonInput& e )
 {
   // we have changed movement mode, so reset our delta
   m_Prev = Math::Point (e.GetPosition().x, e.GetPosition().y);
 }
 
-void Camera::MouseMove(wxMouseEvent& e)
+void Camera::MouseMove( const MouseMoveInput& e )
 {
   if (e.LeftIsDown() && !e.MiddleIsDown())
   {
@@ -329,7 +329,7 @@ void Camera::MouseMove(wxMouseEvent& e)
   m_Prev = Math::Point(e.GetPosition().x, e.GetPosition().y);
 }
 
-void Camera::MouseScroll(wxMouseEvent& e)
+void Camera::MouseScroll( const MouseScrollInput& e )
 {
 #ifdef MOUSE_ZOOM
 

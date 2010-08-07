@@ -447,7 +447,7 @@ void EntityCreateTool::OnModify( Inspect::Button* button )
         return;
     }
 
-    wxTextEntryDialog dlg( NULL, wxT( "Please enter the new percentage" ), wxT( "Modify Percentage" ) );
+    wxTextEntryDialog dlg( NULL, TXT( "Please enter the new percentage" ), TXT( "Modify Percentage" ) );
     if ( dlg.ShowModal() != wxID_OK )
     {
         return;

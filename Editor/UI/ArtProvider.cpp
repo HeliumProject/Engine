@@ -28,7 +28,6 @@ void ArtProvider::Create()
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Editor::ArtIDs::Volume, TXT( "apps/3d.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Editor::ArtIDs::Entity, TXT( "apps/katuberling.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Editor::ArtIDs::Curve, TXT( "nocturnal/unknown.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Editor::ArtIDs::NavMesh, TXT( "apps/gnome_apps.png" ) ) );
 
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Editor::ArtIDs::Collection, TXT( "actions/folder_new.png" ) ) );
 

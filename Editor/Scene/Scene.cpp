@@ -45,7 +45,6 @@
 #include "JointTransform.h"
 #include "Layer.h"
 #include "Editor/Scene/Mesh.h"
-#include "NavMesh.h"
 #include "Shader.h"
 #include "Skin.h"
 #include "Curve.h"
@@ -390,7 +389,7 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
     }
     else if ( data->HasType( Reflect::GetType<Content::SpotLight>() ) )
     {
-        createdNode = new SpotLight( this, Reflect::DangerousCast< Content::SpotLight >( data ) );
+        createdNode = new Editor::SpotLight( this, Reflect::DangerousCast< Content::SpotLight >( data ) );
     }
     else if ( data->HasType( Reflect::GetType<Content::PointLight>() ) )
     {
@@ -402,23 +401,15 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
     }
     else if ( data->HasType( Reflect::GetType<Content::Shader>() ) )
     {
-        createdNode = new Shader( this, Reflect::DangerousCast< Content::Shader >( data ) );
+        createdNode = new Editor::Shader( this, Reflect::DangerousCast< Content::Shader >( data ) );
     }
     else if ( data->HasType( Reflect::GetType<Content::Skin>() ) )
     {
-        createdNode = new Skin( this, Reflect::DangerousCast< Content::Skin >( data ) );
+        createdNode = new Editor::Skin( this, Reflect::DangerousCast< Content::Skin >( data ) );
     }
     else if ( data->HasType( Reflect::GetType<Content::Mesh>() ) )
     {
-        Content::Mesh* mesh = Reflect::DangerousCast< Content::Mesh >( data );
-        if (mesh->m_MeshOriginType == Content::Mesh::NavHiRes || mesh->m_MeshOriginType == Content::Mesh::NavLowRes)
-        {
-            createdNode = new Editor::NavMesh( this, mesh );
-        }
-        else
-        {
-            createdNode = new Editor::Mesh( this, mesh );
-        }
+        createdNode = new Editor::Mesh( this, Reflect::DangerousCast< Content::Mesh >( data ) );
     }
     else if ( data->HasType( Reflect::GetType<Content::Layer>() ) )
     {
@@ -1059,7 +1050,7 @@ bool Scene::ExportFile( const tstring& file, const ExportArgs& args )
         {
             tostringstream str;
             str << "Failed to write file " << file << ": " << ex.What();
-            wxMessageBox( str.str(), wxT( "Error" ), wxOK|wxCENTRE|wxICON_ERROR );
+            wxMessageBox( str.str(), TXT( "Error" ), wxOK|wxCENTRE|wxICON_ERROR );
             result = false;
         }
     }
@@ -1116,7 +1107,7 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
         {
             tostringstream str;
             str << "Failed to generate xml: " << ex.What();
-            wxMessageBox( str.str(), wxT( "Error" ), wxOK|wxCENTRE|wxICON_ERROR );
+            wxMessageBox( str.str(), TXT( "Error" ), wxOK|wxCENTRE|wxICON_ERROR );
             result = false;
         }
     }

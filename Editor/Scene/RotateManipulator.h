@@ -59,9 +59,9 @@ namespace Helium
             virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
             virtual Math::AxesFlags PickRing(PickVisitor* pick, float err);
 
-            virtual bool MouseDown(wxMouseEvent& e) HELIUM_OVERRIDE;
-            virtual void MouseUp(wxMouseEvent& e) HELIUM_OVERRIDE;
-            virtual void MouseMove(wxMouseEvent& e) HELIUM_OVERRIDE;
+            virtual bool MouseDown( const MouseButtonInput& e ) HELIUM_OVERRIDE;
+            virtual void MouseUp( const MouseButtonInput& e ) HELIUM_OVERRIDE;
+            virtual void MouseMove( const MouseMoveInput& e ) HELIUM_OVERRIDE;
 
             virtual void CreateProperties() HELIUM_OVERRIDE;
 

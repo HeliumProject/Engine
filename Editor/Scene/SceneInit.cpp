@@ -51,9 +51,6 @@
 #include "VolumeType.h"
 #include "VolumeCreateTool.h"
 
-#include "NavMesh.h"
-#include "NavMeshCreateTool.h"
-
 #include "Light.h"
 #include "SpotLight.h"
 #include "PointLight.h"
@@ -148,9 +145,6 @@ void Editor::SceneInitialize()
 
     g_InitializerStack.Push( Viewport::InitializeType, Viewport::CleanupType );
     g_InitializerStack.Push( Primitive::InitializeType, Primitive::CleanupType );
-
-    g_InitializerStack.Push( NavMesh::InitializeType, NavMesh::CleanupType );
-    g_InitializerStack.Push( NavMeshCreateTool::InitializeType, NavMeshCreateTool::CleanupType );
   }
 }
 

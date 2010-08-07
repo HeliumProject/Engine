@@ -633,7 +633,7 @@ bool CreateTool::AllowSelection()
   return false;
 }
 
-bool CreateTool::MouseDown(wxMouseEvent& e)
+bool CreateTool::MouseDown( const MouseButtonInput& e )
 {
   if ( e.MiddleDown() )
   {
@@ -642,7 +642,7 @@ bool CreateTool::MouseDown(wxMouseEvent& e)
 
     {
       EDITOR_SCENE_SCOPE_TIMER( ( "Pick Location For Instance" ) );
-      DetermineTranslationAndNormal( e.GetX(), e.GetY(), translation, normal );
+      DetermineTranslationAndNormal( e.GetPosition().x, e.GetPosition().y, translation, normal );
     }
 
     CreateSingleObject( translation, normal );
@@ -671,7 +671,7 @@ bool CreateTool::MouseDown(wxMouseEvent& e)
   return __super::MouseDown( e );
 }
 
-void CreateTool::MouseMove( wxMouseEvent& e )
+void CreateTool::MouseMove( const MouseMoveInput& e )
 {
   if ( !m_Instance.ReferencesObject() )
   {
@@ -686,7 +686,7 @@ void CreateTool::MouseMove( wxMouseEvent& e )
   // get position
   Math::Vector3 translation;
   Math::Vector3 normal;
-  DetermineTranslationAndNormal( e.GetX(), e.GetY(), translation, normal );
+  DetermineTranslationAndNormal( e.GetPosition().x, e.GetPosition().y, translation, normal );
 
   Math::Matrix4 position;
   FinalizeOrientation( position, translation, normal );
@@ -712,7 +712,7 @@ void CreateTool::MouseMove( wxMouseEvent& e )
   __super::MouseMove(e);
 }
 
-void CreateTool::MouseUp(wxMouseEvent& e)
+void CreateTool::MouseUp( const MouseButtonInput& e )
 {
   if ( !e.MiddleDown() )
   {
@@ -722,7 +722,7 @@ void CreateTool::MouseUp(wxMouseEvent& e)
   __super::MouseUp(e);
 }
 
-void CreateTool::KeyPress( wxKeyEvent& e )
+void CreateTool::KeyPress( const KeyboardInput& e )
 {
   if (e.GetKeyCode() == WXK_RETURN)
   {

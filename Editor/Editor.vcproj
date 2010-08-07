@@ -858,6 +858,14 @@
 				Name="Scene Graph"
 				>
 				<File
+					RelativePath=".\Scene\AmbientLight.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\AmbientLight.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Scene\CreateTool.cpp"
 					>
 				</File>
@@ -887,6 +895,14 @@
 				</File>
 				<File
 					RelativePath=".\Scene\CurveEditTool.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\DirectionalLight.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\DirectionalLight.h"
 					>
 				</File>
 				<File
@@ -994,6 +1010,22 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Scene\Light.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Light.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\LightPanel.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\LightPanel.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Scene\Locator.cpp"
 					>
 				</File>
@@ -1026,30 +1058,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\NavMesh.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\NavMesh.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\NavMeshCommand.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\NavMeshCommand.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\NavMeshCreateTool.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\NavMeshCreateTool.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Scene\PivotTransform.cpp"
 					>
 				</File>
@@ -1063,6 +1071,14 @@
 				</File>
 				<File
 					RelativePath=".\Scene\Point.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PointLight.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PointLight.h"
 					>
 				</File>
 				<File
@@ -1130,6 +1146,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Scene\SpotLight.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\SpotLight.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Scene\Transform.cpp"
 					>
 				</File>
@@ -1161,58 +1185,6 @@
 					RelativePath=".\Scene\VolumeType.h"
 					>
 				</File>
-				<Filter
-					Name="Lights"
-					>
-					<File
-						RelativePath=".\Scene\AmbientLight.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\AmbientLight.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\DirectionalLight.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\DirectionalLight.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\Light.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\Light.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightPanel.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightPanel.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PointLight.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PointLight.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\SpotLight.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\SpotLight.h"
-						>
-					</File>
-				</Filter>
 			</Filter>
 			<Filter
 				Name="Cameras"
@@ -3830,6 +3802,14 @@
 			</File>
 			<File
 				RelativePath=".\UI\ImportOptionsDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\Input.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\Input.h"
 				>
 			</File>
 			<File

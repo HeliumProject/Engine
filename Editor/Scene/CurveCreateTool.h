@@ -57,9 +57,9 @@ namespace Helium
         public:
             virtual bool AllowSelection() HELIUM_OVERRIDE;
 
-            virtual bool MouseDown( wxMouseEvent& e ) HELIUM_OVERRIDE;
-            virtual void MouseMove( wxMouseEvent& e ) HELIUM_OVERRIDE;
-            virtual void KeyPress( wxKeyEvent& e ) HELIUM_OVERRIDE;
+            virtual bool MouseDown( const MouseButtonInput& e ) HELIUM_OVERRIDE;
+            virtual void MouseMove( const MouseMoveInput& e ) HELIUM_OVERRIDE;
+            virtual void KeyPress( const KeyboardInput& e ) HELIUM_OVERRIDE;
 
             virtual void CreateProperties() HELIUM_OVERRIDE;
 

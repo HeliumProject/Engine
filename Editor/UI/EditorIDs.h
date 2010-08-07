@@ -115,7 +115,6 @@ namespace Helium
                 ID_ToolsEntityCreate,
                 ID_ToolsCurveCreate,
                 ID_ToolsCurveEdit,
-                ID_ToolsNavMesh,
                 ID_ToolsEnd,
                 ID_ToolsCount = ID_ToolsEnd - ID_ToolsBegin,
                 // end tools id region
@@ -152,7 +151,6 @@ namespace Helium
                 EntityCreate = EventIds::ID_ToolsEntityCreate,
                 CurveCreate = EventIds::ID_ToolsCurveCreate,
                 CurveEdit = EventIds::ID_ToolsCurveEdit,
-                NavMesh = EventIds::ID_ToolsNavMesh,
                 End = EventIds::ID_ToolsEnd,
                 Count = EventIds::ID_ToolsCount,
             };
@@ -191,7 +189,6 @@ namespace Helium
             { ToolModes::CurveCreate,   ToolTypes::Creator,        wxT("Create Curve"),    Editor::ArtIDs::Curve,         wxT("Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)") },
 #pragma TODO( "Add an overlay to the curve tool for editing" )
             { ToolModes::CurveEdit,     ToolTypes::Editor,         wxT("Edit Curve"),      Editor::ArtIDs::Curve,         wxT("Edit created curves (modify or create/delete control points)") },
-            { ToolModes::NavMesh,       ToolTypes::Editor,         wxT("Edit NavMesh"),    Editor::ArtIDs::NavMesh,       wxT("Create NavMesh or add new verts and tris") },
         };
 
         HELIUM_COMPILE_ASSERT( sizeof(ToolInfos) == EventIds::ID_ToolsCount * sizeof(ToolInfo) );

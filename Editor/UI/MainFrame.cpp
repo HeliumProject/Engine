@@ -23,10 +23,10 @@
 #include "Editor/Scene/DuplicateTool.h"
 #include "Editor/Scene/EntityCreateTool.h"
 #include "Editor/Scene/LocatorCreateTool.h"
-#include "Editor/Scene/NavMeshCreateTool.h"
 #include "Editor/Scene/VolumeCreateTool.h"
 
 #include "Editor/Scene/ScaleManipulator.h"
+#include "Editor/Scene/RotateManipulator.h"
 #include "Editor/Scene/TranslateManipulator.h"
 
 #include "Editor/UI/PreferencesDialog.h"
@@ -158,7 +158,6 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     Connect( EventIds::ID_ToolsEntityCreate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
     Connect( EventIds::ID_ToolsCurveCreate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
     Connect( EventIds::ID_ToolsCurveEdit, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
-    Connect( EventIds::ID_ToolsNavMesh, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
 
     //
     // Tools
@@ -1490,14 +1489,6 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
                 curveEditTool->StoreSelectedCurves();
             }
             break;
-
-        case EventIds::ID_ToolsNavMesh:
-            {
-                Editor::NavMeshCreateTool* navMeshCreate = new Editor::NavMeshCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator);
-                m_SceneManager.GetCurrentScene()->SetTool( navMeshCreate );
-                navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ADD);
-            }
-            break;
         }
 
         m_ToolProperties.GetCanvas()->Clear();
@@ -1605,10 +1596,6 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
         {
             selectedTool = EventIds::ID_ToolsCurveEdit;
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType<Editor::NavMeshCreateTool>() )
-        {
-            selectedTool = EventIds::ID_ToolsNavMesh;
-        }
     }
 
     m_ToolbarPanel->ToggleTool( selectedTool );
@@ -1659,13 +1646,7 @@ void MainFrame::OnCut( wxCommandEvent& event )
 // 
 void MainFrame::OnCopy( wxCommandEvent& event )
 {
-    // special copy handler for navmesh
-    if ( m_SceneManager.HasCurrentScene() && m_SceneManager.GetCurrentScene()->GetTool() && m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Editor::NavMeshCreateTool>() )
-    {
-        Editor::NavMeshCreateTool* navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
-        navMeshCreate->CopySelected();
-    }
-    else if ( m_SceneManager.HasCurrentScene() && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0 )
+    if ( m_SceneManager.HasCurrentScene() && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0 )
     {
         if ( !Copy( m_SceneManager.GetCurrentScene() ) )
         {
@@ -1680,13 +1661,7 @@ void MainFrame::OnCopy( wxCommandEvent& event )
 // 
 void MainFrame::OnPaste( wxCommandEvent& event )
 {
-    // special copy handler for navmesh
-    if ( m_SceneManager.HasCurrentScene() && m_SceneManager.GetCurrentScene()->GetTool() && m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Editor::NavMeshCreateTool>() )
-    {
-        Editor::NavMeshCreateTool* navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
-        navMeshCreate->Paste();
-    }
-    else if ( m_SceneManager.HasCurrentScene() )
+    if ( m_SceneManager.HasCurrentScene() )
     {
         Paste( m_SceneManager.GetCurrentScene() );
     }

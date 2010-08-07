@@ -46,7 +46,7 @@ CurveEditMode CurveEditTool::GetEditMode() const
   return m_HotEditMode != CurveEditModes::None ? m_HotEditMode : s_EditMode;
 }
 
-bool CurveEditTool::MouseDown( wxMouseEvent &e )
+bool CurveEditTool::MouseDown( const MouseButtonInput& e )
 {
   bool success = true;
 
@@ -59,7 +59,7 @@ bool CurveEditTool::MouseDown( wxMouseEvent &e )
     Curve* curve = NULL;
     
     {
-      FrustumLinePickVisitor pick (m_Scene->GetViewport()->GetCamera(), e.GetX(), e.GetY());
+      FrustumLinePickVisitor pick (m_Scene->GetViewport()->GetCamera(), e.GetPosition().x, e.GetPosition().y);
 
       m_Scene->Pick( &pick );
 
@@ -80,7 +80,7 @@ bool CurveEditTool::MouseDown( wxMouseEvent &e )
       return false;
     }
 
-    LinePickVisitor pick (m_Scene->GetViewport()->GetCamera(), e.GetX(), e.GetY());
+    LinePickVisitor pick (m_Scene->GetViewport()->GetCamera(), e.GetPosition().x, e.GetPosition().y);
 
     switch ( GetEditMode() )
     {
@@ -145,7 +145,7 @@ bool CurveEditTool::MouseDown( wxMouseEvent &e )
   return success || __super::MouseDown( e );
 }
 
-void CurveEditTool::MouseUp( wxMouseEvent& e )
+void CurveEditTool::MouseUp( const MouseButtonInput& e )
 {
   if ( GetEditMode() )
   {
@@ -157,7 +157,7 @@ void CurveEditTool::MouseUp( wxMouseEvent& e )
   __super::MouseUp( e );
 }
 
-void CurveEditTool::MouseMove( wxMouseEvent& e )
+void CurveEditTool::MouseMove( const MouseMoveInput& e )
 {
   if ( GetEditMode() )
   {
@@ -176,7 +176,7 @@ void CurveEditTool::MouseMove( wxMouseEvent& e )
   __super::MouseMove( e );
 }
 
-void CurveEditTool::KeyPress(wxKeyEvent &e)
+void CurveEditTool::KeyPress( const KeyboardInput& e )
 {
   if ( !m_Scene->IsEditable() )
   {
@@ -238,21 +238,21 @@ void CurveEditTool::KeyPress(wxKeyEvent &e)
   __super::KeyPress( e );
 }
 
-void CurveEditTool::KeyDown( wxKeyEvent& e )
+void CurveEditTool::KeyDown( const KeyboardInput& e )
 {
   CurveEditMode mode = m_HotEditMode;
 
   switch (e.GetKeyCode())
   {
-  case wxT('M'):
+  case TXT('M'):
     m_HotEditMode = CurveEditModes::Modify;
     break;
 
-  case wxT('I'):
+  case TXT('I'):
     m_HotEditMode = CurveEditModes::Insert;
     break;
 
-  case wxT('R'):
+  case TXT('R'):
     m_HotEditMode = CurveEditModes::Remove;
     break;
 
@@ -267,15 +267,15 @@ void CurveEditTool::KeyDown( wxKeyEvent& e )
   }
 }
 
-void CurveEditTool::KeyUp( wxKeyEvent& e )
+void CurveEditTool::KeyUp( const KeyboardInput& e )
 {
   CurveEditMode mode = m_HotEditMode;
 
   switch (e.GetKeyCode())
   {
-  case wxT('M'):
-  case wxT('I'):
-  case wxT('R'):
+  case TXT('M'):
+  case TXT('I'):
+  case TXT('R'):
     m_HotEditMode = CurveEditModes::None;
     break;
 

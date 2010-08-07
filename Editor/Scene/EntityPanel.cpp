@@ -304,7 +304,7 @@ bool EntityPanel::OnEntityAssetChanging( const Inspect::ChangingArgs& args )
     if ( !result )
     {
         // Message to the user that the value is not correct.
-        wxMessageBox( wxT( "Invalid Entity Class specified!" ), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR, GetWindow() );
+        wxMessageBox( TXT( "Invalid Entity Class specified!" ), TXT( "Error" ), wxOK | wxCENTER | wxICON_ERROR, GetWindow() );
     }
 
     return result;

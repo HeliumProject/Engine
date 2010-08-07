@@ -112,9 +112,9 @@ namespace Helium
 
         public:
             // manage mouse events (if pick succeeded)
-            virtual bool MouseDown(wxMouseEvent& e);
-            virtual void MouseUp(wxMouseEvent& e);
-            virtual void MouseMove(wxMouseEvent& e);
+            virtual bool MouseDown( const MouseButtonInput& e );
+            virtual void MouseUp( const MouseButtonInput& e );
+            virtual void MouseMove( const MouseMoveInput& e );
 
 
             //

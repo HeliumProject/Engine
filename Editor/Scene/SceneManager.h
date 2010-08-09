@@ -81,11 +81,11 @@ namespace Helium
 #endif
 
             ScenePtr NewScene( Editor::Viewport* viewport, bool isRoot, tstring path = TXT( "" ), bool addDoc = true );
-            virtual DocumentPtr OpenPath( const tstring& path, tstring& error ) HELIUM_OVERRIDE;
+            virtual DocumentPtr OpenDocument( const Helium::Path& path, tstring& error ) HELIUM_OVERRIDE;
             ScenePtr OpenScene( Editor::Viewport* viewport, const tstring& path, tstring& error );
 
         public:
-            virtual bool Save( DocumentPtr document, tstring& error ) HELIUM_OVERRIDE;
+            virtual bool SaveDocument( DocumentPtr document, tstring& error ) HELIUM_OVERRIDE;
 
             void SetRootScene( Editor::Scene* root );
             Editor::Scene* GetRootScene();

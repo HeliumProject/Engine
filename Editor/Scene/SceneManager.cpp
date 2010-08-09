@@ -87,7 +87,7 @@ ScenePtr SceneManager::NewScene( Editor::Viewport* viewport, bool isRoot, tstrin
 ///////////////////////////////////////////////////////////////////////////////
 // Open a top-level scene (world).
 // 
-DocumentPtr SceneManager::OpenPath( const tstring& path, tstring& error ) 
+DocumentPtr SceneManager::OpenDocument( const Helium::Path& path, tstring& error ) 
 {
     if ( !CloseAll() )
     {
@@ -192,7 +192,7 @@ static tstring PromptSaveAs( const DocumentPtr& file, wxWindow* window = NULL )
 // Called when the "save all" option is chosen in the UI.  Iterates over all
 // the open scenes and asks the session manager to save them.
 // 
-bool SceneManager::Save( DocumentPtr document, tstring& error )
+bool SceneManager::SaveDocument( DocumentPtr document, tstring& error )
 {
     SceneDocument* sceneDocument = Reflect::ObjectCast< SceneDocument >( document );
     if ( !sceneDocument )
@@ -231,7 +231,7 @@ bool SceneManager::Save( DocumentPtr document, tstring& error )
 
     if ( scene->Save() )
     {
-        return __super::Save( document, error );
+        return __super::SaveDocument( document, error );
     }
 
     error = TXT( "Failed to save " ) + scene->GetFullPath();

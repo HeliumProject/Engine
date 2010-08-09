@@ -146,11 +146,12 @@ bool Scene::IsCurrent()
 
 bool Scene::IsEditable()
 {
-    if ( m_Manager->AttemptChanges( m_File ) )
+    if ( m_Manager->AllowChanges( m_File ) )
     {
         m_File->SetModified( true );
         return true;
     }
+
     return false;
 }
 

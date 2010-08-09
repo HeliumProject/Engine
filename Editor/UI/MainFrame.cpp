@@ -365,7 +365,7 @@ bool MainFrame::AddScene( const Helium::Path& path )
 
             try
             {
-                opened = m_SceneManager.OpenPath( path, error ) != NULL;
+                opened = m_SceneManager.OpenDocument( path, error ) != NULL;
             }
             catch ( const Helium::Exception& ex )
             {
@@ -766,7 +766,7 @@ bool MainFrame::DoOpen( const tstring& path )
 
             try
             {
-                opened = m_SceneManager.OpenPath( path, error ) != NULL;
+                opened = m_SceneManager.OpenDocument( path, error ) != NULL;
             }
             catch ( const Helium::Exception& ex )
             {

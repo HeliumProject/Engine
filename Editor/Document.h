@@ -91,9 +91,6 @@ namespace Helium
             u64 GetHash() const;
             int GetRevision() const;
 
-            bool GetIsWriteable() const;
-            void SetIsWriteable( bool writeable );
-
             virtual bool AllowChanges() const;
             void SetAllowChanges( bool allowChanges );
 

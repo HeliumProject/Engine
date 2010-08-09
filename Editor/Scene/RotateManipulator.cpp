@@ -40,7 +40,6 @@ RotateManipulator::RotateManipulator(const ManipulatorMode mode, Editor::Scene* 
   prefs->Get( prefs->RotateManipulatorSize(), m_Size );
   prefs->Get( prefs->RotateManipulatorAxisSnap(), m_AxisSnap );
   prefs->Get( prefs->RotateManipulatorSnapDegrees(), m_SnapDegrees );
-
   prefs->GetEnum( prefs->RotateManipulatorSpace(), m_Space );
 
   m_Ring = new Editor::PrimitiveCircle (m_Scene->GetViewport()->GetResources());

@@ -1,4 +1,4 @@
-#include "Precompile.h"
+/*#include "Precompile.h"*/
 #include "RenderSceneManager.h"
 #include "Renderer.h"
 #include "OBJObjectLoader.h"

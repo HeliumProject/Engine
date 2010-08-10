@@ -1,12 +1,13 @@
 #pragma once
 
-#include "Editor/Render/ObjectLoader.h"
+#include "Render/API.h"
+#include "Render/ObjectLoader.h"
 
 namespace Helium
 {
     namespace Content
     {
-        class RBObjectLoader : public Render::ObjectLoader
+        class RENDER_API RBObjectLoader : public Render::ObjectLoader
         {
         public:
             RBObjectLoader();

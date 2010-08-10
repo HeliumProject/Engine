@@ -2,12 +2,12 @@
 
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
-#include "Editor/Render/Renderer.h"
+#include "Render/Renderer.h"
 #include "Editor/Scene/Camera.h"
 
 namespace Helium
 {
-    namespace Render
+    namespace Editor
     {
         struct D3DEventArgs;
 

@@ -2,14 +2,16 @@
 
 #include <d3d9.h>
 #include <d3dx9.h>
+#include <vector>
 
-#include "ShaderLoader.h"
+#include "Render/API.h"
+#include "Render/ShaderLoader.h"
 
 namespace Helium
 {
     namespace Render
     {
-        class ShaderFrag
+        class RENDER_API ShaderFrag
         {
         public:
             ShaderFrag()
@@ -41,14 +43,14 @@ namespace Helium
             u32                 m_bangle_index;
         };
 
-        struct Fragment
+        struct RENDER_API Fragment
         {
             u32     m_orig_shader;
             u32     m_prim_count;
             u32     m_base_index;
         };
 
-        class Mesh
+        class RENDER_API Mesh
         {
         public:
             Mesh( const tchar* name );

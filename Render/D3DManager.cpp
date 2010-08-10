@@ -1,4 +1,4 @@
-#include "Precompile.h"
+/*#include "Precompile.h"*/
 #include "Renderer.h"
 
 #include "Foundation/Log.h"

@@ -4,7 +4,7 @@
 #include "Foundation/File/Directory.h"
 #include "Core/Asset/AssetClass.h"
 #include "Core/Asset/Classes/ShaderAsset.h"
-#include "Editor/Render/D3DManager.h"
+#include "Render/D3DManager.h"
 #include "Editor/Scene/Render.h"
 
 using namespace Helium;

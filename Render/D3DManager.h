@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Foundation/Automation/Event.h"
+#include "Render/API.h"
 
 #include <d3d9.h>
 #include <d3dx9.h>
@@ -81,7 +82,7 @@ namespace Helium
         typedef Helium::Signature< void, const DeviceStateArgs& > DeviceStateSignature;
 
         // all rendering classes should be derived this
-        class D3DManager
+        class RENDER_API D3DManager
         {
         public:
             D3DManager();

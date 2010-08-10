@@ -1,6 +1,9 @@
 #pragma once
 
-#include "RenderMesh.h"
+#include <map>
+
+#include "Render/API.h"
+#include "Render/RenderMesh.h"
 #include "Foundation/Memory/SmartPtr.h"
 
 namespace Helium
@@ -14,7 +17,7 @@ namespace Helium
             PARSE_FILE_FAILED = 2,      //file failed to load
         };
 
-        class ObjectLoader : public Helium::RefCountBase<ObjectLoader>
+        class RENDER_API ObjectLoader : public Helium::RefCountBase<ObjectLoader>
         {
         public:
             ObjectLoader();

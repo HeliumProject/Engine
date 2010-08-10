@@ -1,4 +1,4 @@
-#include "Precompile.h"
+/*#include "Precompile.h"*/
 #include "RBObjectLoader.h"
 #include "RBShaderLoader.h"
 
@@ -142,7 +142,7 @@ u32 Content::RBObjectLoader::ParseFile( const tchar* filename, bool winding )
       std::map<u64,u32>::iterator frag_idx = frag_finder.find(shader_turd);
 
       // there is no way we should not be able to find the fragment, we just added them all above
-      assert(frag_idx!=frag_finder.end());
+      HELIUM_ASSERT(frag_idx!=frag_finder.end());
 
       Render::ShaderFrag& frag = m_fragments[ (*frag_idx).second ];
     
@@ -162,7 +162,7 @@ u32 Content::RBObjectLoader::ParseFile( const tchar* filename, bool winding )
       {
         // we must have added the same number of colors as the other elements, all meshes within the set have
         // to be the same format/have the same components
-        assert(master_base_color==master_base_position);
+        HELIUM_ASSERT(master_base_color==master_base_position);
         // if we added some colors add the indices for them too
         frag.m_cIndex.push_back( mesh->m_TriangleVertexIndices[f*3+0]+master_base_color );
         frag.m_cIndex.push_back( mesh->m_TriangleVertexIndices[f*3+1]+master_base_color );
@@ -173,7 +173,7 @@ u32 Content::RBObjectLoader::ParseFile( const tchar* filename, bool winding )
       {
         // we must have added the same number of tangents and positions, all meshes within the set have
         // to be the same format
-        assert(master_base_tangent==master_base_position);
+        HELIUM_ASSERT(master_base_tangent==master_base_position);
         // if we added some tangents we'll use them as they are, the indices for them
         frag.m_tanIndex.push_back( mesh->m_TriangleVertexIndices[f*3+0]+master_base_tangent );
         frag.m_tanIndex.push_back( mesh->m_TriangleVertexIndices[f*3+1]+master_base_tangent );

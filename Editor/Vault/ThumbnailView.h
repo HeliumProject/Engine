@@ -13,7 +13,7 @@
 #include "Foundation/Math/Matrix4.h"
 #include "Foundation/Math/Frustum.h"
 
-#include "Editor/Render/D3DManager.h"
+#include "Render/D3DManager.h"
 
 namespace Helium
 {

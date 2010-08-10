@@ -1,4 +1,4 @@
-#include "Precompile.h"
+/*#include "Precompile.h"*/
 #include "ObjectLoader.h"
 
 #include "Foundation/Math/Utils.h"

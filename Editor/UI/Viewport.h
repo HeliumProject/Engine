@@ -12,7 +12,7 @@
 #include "Editor/Scene/Camera.h"
 #include "Editor/Scene/Resource.h"
 #include "Editor/Scene/ViewportPreferences.h"
-#include "Editor/Render/D3DManager.h"
+#include "Render/D3DManager.h"
 
 namespace Helium
 {

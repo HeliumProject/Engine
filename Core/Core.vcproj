@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				AdditionalIncludeDirectories=".."
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;CORE_EXPORTS"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -65,7 +65,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
@@ -117,7 +116,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				AdditionalIncludeDirectories=".."
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;CORE_EXPORTS"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -138,7 +137,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
@@ -188,7 +186,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				AdditionalIncludeDirectories=".."
 				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;CORE_EXPORTS"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -208,7 +206,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
@@ -259,7 +256,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				AdditionalIncludeDirectories=".."
 				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;CORE_EXPORTS"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -279,7 +276,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
@@ -330,7 +326,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				AdditionalIncludeDirectories=".."
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;CORE_EXPORTS"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -351,7 +347,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
@@ -403,7 +398,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				AdditionalIncludeDirectories=".."
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;CORE_EXPORTS"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -424,7 +419,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
@@ -474,7 +468,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				AdditionalIncludeDirectories=".."
 				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;CORE_EXPORTS"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -494,7 +488,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
@@ -545,7 +538,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				AdditionalIncludeDirectories=".."
 				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;CORE_EXPORTS"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -565,7 +558,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="nvtt.lib tiff.lib squish.lib"
 				GenerateDebugInformation="true"
 			/>
 			<Tool

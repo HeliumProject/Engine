@@ -1,14 +1,16 @@
 #pragma once
 
 #include <d3d9.h>
+#include <vector>
 
-#include "ShaderLoader.h"
+#include "Render/API.h"
+#include "Render/ShaderLoader.h"
 
 namespace Helium
 {
     namespace Render
     {
-        class Texture
+        class RENDER_API Texture
         {
         public:
             Texture(const tchar* fname);
@@ -64,7 +66,7 @@ namespace Helium
             };
         };
 
-        class TextureSettings
+        class RENDER_API TextureSettings
         {
         public:
             tstring m_Path;
@@ -97,7 +99,7 @@ namespace Helium
 #define SHDR_FLAG_GPI_MAP    0x00000001      // shader has a GPI map instead of having all three maps seperate
 #define SHDR_FLAG_TWO_SIDED  0x00000002      // two sided
 
-        class Shader
+        class RENDER_API Shader
         {
         public:
             Shader(class ShaderManager* sd, const tchar* fname);
@@ -153,7 +155,7 @@ namespace Helium
         };
 
         // there is only a single shader database regardless of how many meshes are loaded.
-        class ShaderManager
+        class RENDER_API ShaderManager
         {
         public:
             ShaderManager(class Renderer* render);

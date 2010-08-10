@@ -3,6 +3,8 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
+#include "Render/API.h"
+
 #include "Platform/Types.h"
 
 namespace Helium
@@ -16,7 +18,7 @@ namespace Helium
         };
 
         // the environment contains the cubemap for the background and the diffuse/specular lighting info contained derived from the cubemap
-        class Environment
+        class RENDER_API Environment
         {
         public:
             tstring                     m_filename;       

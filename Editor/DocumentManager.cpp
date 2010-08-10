@@ -1,9 +1,10 @@
 #include "Precompile.h"
 #include "Editor/DocumentManager.h"
 
-#include "Editor/UI/YesNoAllDlg.h"
-
 #include "Application/RCS/RCS.h"
+#include "Application/UI/FileDialog.h"
+
+#include "Editor/UI/YesNoAllDlg.h"
 
 #include <algorithm>
 #include <cctype>
@@ -38,19 +39,17 @@ Document* DocumentManager::FindDocument( const Helium::Path& path ) const
 ///////////////////////////////////////////////////////////////////////////////
 // Returns true if it successfully opens a document with the specified path.
 // 
-DocumentPtr DocumentManager::OpenDocument( const Helium::Path& path, tstring& error )
+DocumentPtr DocumentManager::OpenDocument( const DocumentPtr& document, tstring& error )
 {
-    if ( FindDocument( path ) )
+    if ( FindDocument( document->GetFilePath() ) )
     {
-        error = TXT( "The specified file (" ) + path + TXT( ") is already open." );
+        error = TXT( "The specified file (" ) + document->GetFilePath() + TXT( ") is already open." );
         return NULL;
     }
 
-    DocumentPtr document = new Document( path );
-
     if ( !IsUpToDate( document ) )
     {
-        error = TXT( "The version of '" ) + path + TXT( "' on your computer is out of date.  You will not be able to check it out." );
+        error = TXT( "The version of '" ) + document->GetFilePath() + TXT( "' on your computer is out of date.  You will not be able to check it out." );
         return NULL;
     }
 
@@ -125,6 +124,34 @@ bool DocumentManager::SaveAll( tstring& error )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+// Prompt the user to save a file to a new location.  Returns the path to the
+// new file location, or an empty string if the user cancels the operation.
+// 
+#pragma TODO("This need to be externalized -Geoff")
+static tstring PromptSaveAs( const DocumentPtr& file, wxWindow* window = NULL )
+{
+    tstring path;
+    tstring defaultDir = Helium::Path( file->GetFilePath() ).Directory();
+    tstring defaultFile = file->GetFilePath();
+
+    Helium::FileDialog saveDlg( window, TXT( "Save As..." ), defaultDir.c_str(), defaultFile.c_str(), TXT( "" ), Helium::FileDialogStyles::DefaultSave );
+    
+    std::set< tstring > extensions;
+    Reflect::Archive::GetExtensions( extensions );
+    for ( std::set< tstring >::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
+    {
+        saveDlg.AddFilter( TXT( "Scene (*.scene." ) + *itr + TXT( ")|*.scene." ) + *itr );
+    }
+
+    if ( saveDlg.ShowModal() == wxID_OK )
+    {
+        path = saveDlg.GetPath();
+    }
+
+    return path;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // Saves the specified document and returns true if successful.
 //
 // Derived classes should HELIUM_OVERRIDE this function to actually perform saving 
@@ -134,10 +161,37 @@ bool DocumentManager::SaveAll( tstring& error )
 //
 bool DocumentManager::SaveDocument( DocumentPtr document, tstring& error )
 {
-    document->SetModified( false );
-    document->RaiseSaved();
+    // Check for "save as"
+    if ( document->GetFilePath().empty() )
+    {
+#ifdef UI_REFACTOR
+        tstring savePath = PromptSaveAs( document, m_Editor );
+#else
+        tstring savePath = PromptSaveAs( document );
+#endif
+        if ( !savePath.empty() )
+        {
+            document->SetFilePath( savePath );
+        }
+        else
+        {
+            // No error, operation cancelled
+            return true;
+        }
+    }
 
-    return true;
+    if ( document->Save( error ) )
+    {
+        document->SetModified( false );
+        return true;
+    }
+
+    if ( error.empty() )
+    {
+       error = TXT( "Failed to save " ) + document->GetFilePath();
+    }
+
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

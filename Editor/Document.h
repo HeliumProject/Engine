@@ -46,38 +46,11 @@ namespace Helium
         // Wraps all files manipulated by editors in Editor.  Handles all interaction
         // with revision control.
         // 
-        class EDITOR_EDITOR_API Document : public Reflect::AbstractInheritor< Editor::Document, Editor::Object >
+        class EDITOR_EDITOR_API Document : public Helium::RefCountBase< Document >
         {
-            //
-            // Member variables
-            //
-
-        private:
-            Helium::Path        m_Path;
-            tstring             m_Name;          // the friendly name (for dialogs)
-            bool                m_IsModified;    // have we been changed since we saved?
-            bool                m_AllowChanges;  // allows override of checkout (but you can't save)
-            i32                 m_Revision;
-
-            // 
-            // RTTI
-            // 
-        public:
-            static void InitializeType();
-            static void CleanupType();
-
-
-            // 
-            // Member functions
-            // 
-
         public:
             Document( const tstring& path, const tstring& name = TXT( "" ) );
             virtual ~Document();
-
-            //
-            // Access
-            //
 
             const Helium::Path& GetPath() const;
             tstring GetFilePath() const
@@ -97,12 +70,10 @@ namespace Helium
             bool IsModified() const;
             void SetModified( bool modified );
 
+            virtual bool Save( tstring& error ) = 0;
+
         private:
             void UpdateFileInfo();
-
-            // 
-            // Listeners
-            // 
 
         private:
             mutable DocumentPathChangedSignature::Event m_PathChanged; // event for file path being changed
@@ -175,6 +146,13 @@ namespace Helium
             {
                 m_Closed.Remove( listener );
             }
+
+        private:
+            Helium::Path        m_Path;
+            tstring             m_Name;          // the friendly name (for dialogs)
+            bool                m_IsModified;    // have we been changed since we saved?
+            bool                m_AllowChanges;  // allows override of checkout (but you can't save)
+            i32                 m_Revision;
         };
         typedef Helium::SmartPtr< Document > DocumentPtr;
     }

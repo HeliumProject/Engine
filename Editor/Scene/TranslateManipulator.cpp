@@ -649,7 +649,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
             FrustumLinePickVisitor pick( m_View->GetCamera(), e.GetPosition().x, e.GetPosition().y );
 
             // pick stuff in the scene
-            primary->GetNode()->GetScene()->GetManager()->GetRootScene()->Pick(&pick);
+            primary->GetNode()->GetScene()->GetManager()->Pick(&pick);
 
             if (pick.HasHits())
             {

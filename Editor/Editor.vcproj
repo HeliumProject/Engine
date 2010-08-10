@@ -759,14 +759,6 @@
 			Name="Scene"
 			>
 			<File
-				RelativePath=".\Scene\SceneDocument.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SceneDocument.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scene\SceneInit.cpp"
 				>
 			</File>

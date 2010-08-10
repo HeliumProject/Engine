@@ -42,11 +42,11 @@ namespace Helium
                 return m_Documents;
             }
 
+            DocumentPtr         OpenDocument( const DocumentPtr& document, tstring& error );
             Document*           FindDocument( const Helium::Path& path ) const;
-            virtual DocumentPtr OpenDocument( const Helium::Path& path, tstring& error );
 
             bool                SaveAll( tstring& error );
-            virtual bool        SaveDocument( DocumentPtr document, tstring& error );
+            bool                SaveDocument( DocumentPtr document, tstring& error );
 
             bool                CloseAll();
             bool                CloseDocuments( OS_DocumentSmartPtr documents );
@@ -68,11 +68,9 @@ namespace Helium
             bool                IsCheckedOut( Document* document ) const;
             bool                IsUpToDate( Document* document ) const;
 
-        protected:
+        private:
             bool                AddDocument( const DocumentPtr& document );
             bool                RemoveDocument( const DocumentPtr& document );
-
-        private:
             void                DocumentClosed( const DocumentChangedArgs& args );
 
             OS_DocumentSmartPtr         m_Documents;

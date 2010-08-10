@@ -85,7 +85,7 @@ void CurveCreateTool::PickPosition(int x, int y, Math::Vector3 &position)
   FrustumLinePickVisitor pick (m_Scene->GetViewport()->GetCamera(), x, y);
 
   // pick in the world
-  m_Scene->GetManager()->GetRootScene()->Pick(&pick);
+  m_Scene->GetManager()->Pick(&pick);
 
   bool set = false;
 

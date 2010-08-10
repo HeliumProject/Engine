@@ -41,8 +41,6 @@ using namespace Helium;
 using namespace Helium::Core;
 using namespace Helium::Editor;
 
-tstring MainFrame::s_PreferencesPrefix = TXT( "MainFrame" );
-
 ///////////////////////////////////////////////////////////////////////////////
 // Wraps up a pointer to an Editor::Scene so that it can be stored in the combo box that
 // is used for selecting the current scene.  Each item in the combo box stores 
@@ -345,30 +343,6 @@ bool MainFrame::OpenProject( const Helium::Path& path )
             if ( !error.empty() )
             {
                 wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
-            }
-        }
-    }
-
-    return opened;
-}
-
-bool MainFrame::AddScene( const Helium::Path& path )
-{
-    bool opened = false;
-
-    if ( !path.empty() && path.Exists() )
-    {
-        if ( m_SceneManager.GetDocumentManager().CloseAll() )
-        {
-            tstring error;
-
-            try
-            {
-                opened = m_SceneManager.OpenScene( m_ViewPanel->GetViewport(), path, error ) != NULL;
-            }
-            catch ( const Helium::Exception& ex )
-            {
-                error = ex.What();
             }
         }
     }

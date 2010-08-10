@@ -28,6 +28,8 @@ namespace Helium
 {
     namespace Editor
     {
+        typedef std::map< i32, i32 > M_IDToColorMode; // Maps wx ID for menu items to our ViewColorMode enum
+
         class MainFrame : public MainFrameGenerated
         {
         protected:
@@ -53,51 +55,44 @@ namespace Helium
             void SetHelpText( const tchar* text );
 
             bool OpenProject( const Helium::Path& path );
-            bool AddScene( const Helium::Path& path );
 
             void SyncPropertyThread();
 
         private:
-            static tstring s_PreferencesPrefix;
-
             // Stores information about the state of each outliner for each scene
             // that is open.  Restores the state when switching between scenes.
-            M_OutlinerStates m_OutlinerStates;
+            M_OutlinerStates            m_OutlinerStates;
 
-            HelpPanel*       m_HelpPanel;
-            ProjectPanel*    m_ProjectPanel;
-            LayersPanel*     m_LayersPanel;
-            TypesPanel*      m_TypesPanel;
-            ViewPanel*       m_ViewPanel;
-            ToolbarPanel*    m_ToolbarPanel;
-            DirectoryPanel*  m_DirectoryPanel;
-            PropertiesPanel* m_PropertiesPanel;
+            HelpPanel*                  m_HelpPanel;
+            ProjectPanel*               m_ProjectPanel;
+            LayersPanel*                m_LayersPanel;
+            TypesPanel*                 m_TypesPanel;
+            ViewPanel*                  m_ViewPanel;
+            ToolbarPanel*               m_ToolbarPanel;
+            DirectoryPanel*             m_DirectoryPanel;
+            PropertiesPanel*            m_PropertiesPanel;
 
-            Helium::Core::ProjectPtr        m_Project;
-            MessageDisplayer                m_MessageDisplayer;
-            SceneManager                    m_SceneManager;
+            Helium::Core::ProjectPtr    m_Project;
+            MessageDisplayer            m_MessageDisplayer;
+            SceneManager                m_SceneManager;
 
             // the attributes for the current selection
-            EnumeratorPtr m_SelectionEnumerator;
-            PropertiesManagerPtr m_SelectionPropertiesManager;
-            Inspect::Canvas m_SelectionProperties;
+            EnumeratorPtr               m_SelectionEnumerator;
+            PropertiesManagerPtr        m_SelectionPropertiesManager;
+            Inspect::Canvas             m_SelectionProperties;
 
             // the attributes for the current tool
-            EnumeratorPtr m_ToolEnumerator;
-            PropertiesManagerPtr m_ToolPropertiesManager;
-            Inspect::Canvas m_ToolProperties;
+            EnumeratorPtr               m_ToolEnumerator;
+            PropertiesManagerPtr        m_ToolPropertiesManager;
+            Inspect::Canvas             m_ToolProperties;
 
-            Helium::MenuMRUPtr m_MRU;
-
-            typedef std::map< i32, i32 > M_IDToColorMode; // Maps wx ID for menu items to our ViewColorMode enum
-            M_IDToColorMode m_ColorModeLookup;
+            Helium::MenuMRUPtr          m_MRU;
+            M_IDToColorMode             m_ColorModeLookup;
 
             //context items ordered by name  
-            V_HierarchyNodeDumbPtr m_OrderedContextItems;
+            V_HierarchyNodeDumbPtr      m_OrderedContextItems;
 
-            std::vector< wxBitmapToggleButton* > m_ToolsButtons;
-
-            TreeMonitor m_TreeMonitor;
+            TreeMonitor                 m_TreeMonitor;
 
         private:
             bool ValidateDrag( const Inspect::DragArgs& args );

@@ -2,7 +2,7 @@
 
 #include "API.h"
 #include "Foundation/TUID.h"
-#include "Pipeline/Asset/Classes/EntityInstance.h"
+#include "Core/Asset/Classes/EntityInstance.h"
 
 #include <maya/MDagMessage.h>
 #include <maya/MNodeMessage.h>

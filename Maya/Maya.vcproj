@@ -658,8 +658,8 @@
 			RelativePathToProject=".\Foundation\Foundation.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{6005C4B7-F1A0-442F-81AA-1377FF18F910}"
-			RelativePathToProject=".\Pipeline\Pipeline.vcproj"
+			ReferencedProjectIdentifier="{9955828E-1B8C-407D-9559-BFCE158A2B7D}"
+			RelativePathToProject=".\Core\Core.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"

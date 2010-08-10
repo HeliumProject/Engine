@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Light.h"
-#include "Pipeline/Content/Nodes/AmbientLight.h"
+#include "Core/Content/Nodes/AmbientLight.h"
 
 namespace Helium
 {

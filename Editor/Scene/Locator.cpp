@@ -12,7 +12,7 @@
 #include "PrimitiveLocator.h"
 #include "PrimitiveCube.h"
 
-#include "Pipeline/Content/Nodes/Locator.h"
+#include "Core/Content/Nodes/Locator.h"
 
 using namespace Helium;
 using namespace Helium::Math;

@@ -13,8 +13,8 @@
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Element.h"
 
-#include "Pipeline/Asset/Classes/Entity.h"
-#include "Pipeline/Content/Scene.h"
+#include "Core/Asset/Classes/Entity.h"
+#include "Core/Content/Scene.h"
 
 #include "Export/MayaContentCmd.h"
 

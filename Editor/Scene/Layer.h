@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Pipeline/Content/Nodes/Layer.h"
-#include "Pipeline/Content/NodeVisibility.h"
+#include "Core/Content/Nodes/Layer.h"
+#include "Core/Content/NodeVisibility.h"
 
 #include "Editor/API.h"
 #include "Editor/Scene/SceneNode.h"

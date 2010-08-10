@@ -2,7 +2,7 @@
 #include "Foundation/Profile.h"
 #include "API.h"
 
-#include "Pipeline/Content/Scene.h"
+#include "Core/Content/Scene.h"
 
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"

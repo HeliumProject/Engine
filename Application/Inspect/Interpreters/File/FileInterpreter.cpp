@@ -10,7 +10,7 @@
 #include "Application/Inspect/DragDrop/ClipboardDataObject.h"
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
 
-#include "Pipeline/Asset/AssetClass.h"
+#include "Core/Asset/AssetClass.h"
 #include "Application/UI/FileDialog.h"
 #include "Foundation/Log.h"
 #include "Foundation/String/Wildcard.h"

@@ -4,9 +4,9 @@
 
 #include "Foundation/Log.h"
 
-#include "Pipeline/Asset/AssetInit.h"
-#include "Pipeline/Asset/Classes/ShaderAsset.h"
-#include "Pipeline/Asset/Classes/Texture.h"
+#include "Core/Asset/AssetInit.h"
+#include "Core/Asset/Classes/ShaderAsset.h"
+#include "Core/Asset/Classes/Texture.h"
 
 #include <d3d9.h>
 #include <d3dx9.h>

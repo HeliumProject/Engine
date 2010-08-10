@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Editor/Render/ShaderLoader.h"
-#include "Pipeline/Asset/Classes/ShaderAsset.h"
+#include "Core/Asset/Classes/ShaderAsset.h"
 
 namespace Helium
 {

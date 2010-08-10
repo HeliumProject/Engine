@@ -5,7 +5,7 @@
 #include "MayaContentCmd.h"
 
 #include "Foundation/Log.h"
-#include "Pipeline/Content/Nodes/Curve.h"
+#include "Core/Content/Nodes/Curve.h"
 #include "Maya/Utils.h"
 
 using namespace Helium;

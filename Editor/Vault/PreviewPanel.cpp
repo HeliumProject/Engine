@@ -4,8 +4,8 @@
 #include "VaultFrame.h"
 #include "VaultPreferences.h"
 
-#include "Pipeline/Asset/AssetClass.h"
-#include "Pipeline/Asset/Classes/Entity.h"
+#include "Core/Asset/AssetClass.h"
+#include "Core/Asset/Classes/Entity.h"
 #include "Foundation/Component/ComponentHandle.h"
 #include "Application/UI/ArtProvider.h"
 #include "Application/UI/MenuButton.h"

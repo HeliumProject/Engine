@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Pipeline/Content/NodeVisibility.h"
+#include "Core/Content/NodeVisibility.h"
 
 #include "Editor/API.h"
 #include "Editor/Scene/Manipulator.h"

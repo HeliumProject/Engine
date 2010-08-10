@@ -4,7 +4,7 @@
 
 #include "Export/ExportContentCmd.h"
 #include "Foundation/InitializerStack.h"
-#include "Pipeline/Content/ContentInit.h"
+#include "Core/Content/ContentInit.h"
 
 #include "Nodes/EntityNode.h"
 #include "Nodes/EntityNodeCmd.h"
@@ -12,7 +12,7 @@
 #include "Nodes/EntityGroupNode.h"
 
 #include "Foundation/InitializerStack.h"
-#include "Pipeline/Content/ContentInit.h"
+#include "Core/Content/ContentInit.h"
 #include "Maya/NodeTypes.h"
 
 #include <maya/MFnPlugin.h>

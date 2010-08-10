@@ -3,7 +3,7 @@
 #include "Editor/API.h"
 
 #include "Foundation/Automation/Event.h"
-#include "Pipeline/Asset/Classes/SceneAsset.h"
+#include "Core/Asset/Classes/SceneAsset.h"
 #include "Application/Undo/QueueManager.h"
 
 #include "Editor/DocumentManager.h"

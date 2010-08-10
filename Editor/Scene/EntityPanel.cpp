@@ -7,9 +7,9 @@
 #include "Application/Inspect/Controls/Value.h"
 #include "Application/Inspect/Controls/InspectButton.h"
 
-#include "Pipeline/Asset/AssetInit.h"
+#include "Core/Asset/AssetInit.h"
 #include "Foundation/Component/ComponentHandle.h"
-#include "Pipeline/Asset/AssetClass.h"
+#include "Core/Asset/AssetClass.h"
 #include "Foundation/Log.h"
 #include "Platform/Process.h"
 #include "Volume.h"

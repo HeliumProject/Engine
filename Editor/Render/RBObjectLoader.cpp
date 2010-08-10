@@ -2,8 +2,8 @@
 #include "RBObjectLoader.h"
 #include "RBShaderLoader.h"
 
-#include "Pipeline/Content/ContentInit.h"
-#include "Pipeline/Content/Scene.h"
+#include "Core/Content/ContentInit.h"
+#include "Core/Content/Scene.h"
 
 #include <map>
 #include <set>

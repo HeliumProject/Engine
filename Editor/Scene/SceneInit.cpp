@@ -5,9 +5,9 @@
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Application/RCS/Providers/Perforce/Perforce.h"
-#include "Pipeline/Content/ContentInit.h"
-#include "Pipeline/Content/ContentVersion.h"
-#include "Pipeline/Asset/AssetInit.h"
+#include "Core/Content/ContentInit.h"
+#include "Core/Content/ContentVersion.h"
+#include "Core/Asset/AssetInit.h"
 
 // Types
 #include "ScenePreferences.h"

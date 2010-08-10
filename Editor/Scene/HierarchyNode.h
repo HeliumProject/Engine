@@ -10,7 +10,7 @@
 #include "SceneVisitor.h"
 
 #include "Foundation/Container/OrderedSet.h"
-#include "Pipeline/Content/NodeVisibility.h"
+#include "Core/Content/NodeVisibility.h"
 
 namespace Helium
 {

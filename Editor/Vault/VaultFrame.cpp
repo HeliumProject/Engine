@@ -15,8 +15,8 @@
 #include "Editor/UI/HelpPanel.h"
 #include "Editor/UI/PreferencesDialog.h"
 
-#include "Pipeline/Asset/AssetInit.h"
-#include "Pipeline/Asset/Classes/ShaderAsset.h"
+#include "Core/Asset/AssetInit.h"
+#include "Core/Asset/Classes/ShaderAsset.h"
 #include "Foundation/Component/ComponentHandle.h"
 #include "Editor/DocumentManager.h"
 #include "Application/RCS/RCS.h"

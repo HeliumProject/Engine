@@ -2,9 +2,9 @@
 
 #include "ExportBase.h"
 
-#include "Pipeline/Content/Nodes/Mesh.h"
-#include "Pipeline/Content/Nodes/Skin.h"
-#include "Pipeline/Content/Nodes/Shader.h"
+#include "Core/Content/Nodes/Mesh.h"
+#include "Core/Content/Nodes/Skin.h"
+#include "Core/Content/Nodes/Shader.h"
 
 #include "ExportScene.h"
 #include "ExportShader.h"

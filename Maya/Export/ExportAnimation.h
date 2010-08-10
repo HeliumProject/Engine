@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ExportAnimationBase.h"
-#include "Pipeline/Content/Animation/Animation.h"
+#include "Core/Content/Animation/Animation.h"
 
 namespace Helium
 {

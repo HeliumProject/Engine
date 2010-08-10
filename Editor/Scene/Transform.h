@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Pipeline/Content/Nodes/Transform.h"
+#include "Core/Content/Nodes/Transform.h"
 
 #include "Editor/Scene/Manipulator.h"
 

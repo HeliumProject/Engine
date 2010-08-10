@@ -13,7 +13,7 @@
 #include "PrimitiveCylinder.h"
 
 #include "Foundation/Component/ComponentHandle.h"
-#include "Pipeline/Asset/Manifests/SceneManifest.h"
+#include "Core/Asset/Manifests/SceneManifest.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

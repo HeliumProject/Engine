@@ -2,7 +2,7 @@
 #include "Editor/Scene/SceneNodeType.h"
 #include "Editor/Scene/SceneNode.h"
 #include "Foundation/Container/Insert.h" 
-#include "Pipeline/Asset/Manifests/SceneManifest.h"
+#include "Core/Asset/Manifests/SceneManifest.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

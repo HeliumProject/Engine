@@ -3,8 +3,8 @@
 #include "InstanceSet.h"
 
 #include "Foundation/TUID.h"
-#include "Pipeline/Asset/Classes/Entity.h"
-#include "Pipeline/Asset/Manifests/EntityManifest.h"
+#include "Core/Asset/Classes/Entity.h"
+#include "Core/Asset/Manifests/EntityManifest.h"
 
 namespace Helium
 {

@@ -5,7 +5,7 @@
 #include "Application/Inspect/Controls/Canvas.h"
 #include "Application/Inspect/Controls/Container.h"
 
-#include "Pipeline/Content/ParametricKey/ParametricKey.h"
+#include "Core/Content/ParametricKey/ParametricKey.h"
 
 using namespace Helium;
 using namespace Helium::Inspect;

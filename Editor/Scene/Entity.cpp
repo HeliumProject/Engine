@@ -12,8 +12,8 @@
 #include "PrimitivePointer.h"
 
 #include "Foundation/Component/ComponentHandle.h"
-#include "Pipeline/Asset/Manifests/SceneManifest.h"
-#include "Pipeline/Asset/Classes/Entity.h"
+#include "Core/Asset/Manifests/SceneManifest.h"
+#include "Core/Asset/Classes/Entity.h"
 
 #include "Foundation/Log.h"
 

@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Editor/Scene/Mesh.h"
 
-#include "Pipeline/Content/Nodes/Mesh.h"
+#include "Core/Content/Nodes/Mesh.h"
 
 #include "Application/UI/ArtProvider.h"
 #include "Editor/Scene/Pick.h"

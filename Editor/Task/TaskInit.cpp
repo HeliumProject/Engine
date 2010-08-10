@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "TaskInit.h"
 
-#include "Pipeline/Asset/AssetInit.h"
+#include "Core/Asset/AssetInit.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Reflect/Registry.h"
 

@@ -2,7 +2,7 @@
 
 #include "Editor/API.h"
 
-#include "Pipeline/Content/Nodes/Curve.h"
+#include "Core/Content/Nodes/Curve.h"
 #include "Curve.h"
 #include "Editor/Scene/Tool.h"
 

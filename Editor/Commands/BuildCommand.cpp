@@ -28,9 +28,9 @@
 #include "Application/Worker/Process.h"
 #include "Application/Application.h"
 
-#include "Pipeline/Asset/AssetInit.h"
-#include "Pipeline/Asset/AssetClass.h"
-#include "Pipeline/Content/ContentInit.h"
+#include "Core/Asset/AssetInit.h"
+#include "Core/Asset/AssetClass.h"
+#include "Core/Content/ContentInit.h"
 
 using namespace Helium::Asset;
 using namespace Helium::CommandLine;

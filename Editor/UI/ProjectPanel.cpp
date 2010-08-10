@@ -3,7 +3,7 @@
 #include "ProjectPanel.h"
 #include "ArtProvider.h"
 
-#include "Pipeline/Asset/AssetClass.h"
+#include "Core/Asset/AssetClass.h"
 
 using namespace Helium;
 using namespace Helium::Core;

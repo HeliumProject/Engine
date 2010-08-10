@@ -10,8 +10,8 @@
 #include "Application/Undo/ExistenceCommand.h"
 #include "Application/Undo/Queue.h"
 
-#include "Pipeline/Content/NodeVisibility.h"
-#include "Pipeline/Content/SceneVisibility.h"
+#include "Core/Content/NodeVisibility.h"
+#include "Core/Content/SceneVisibility.h"
 
 #include "Editor/API.h"
 #include "Editor/Selection.h"

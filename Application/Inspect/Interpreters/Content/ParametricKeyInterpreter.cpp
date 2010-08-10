@@ -4,7 +4,7 @@
 #include "Application/Inspect/Interpreters/Content/ParametricKeyControl.h"
 #include "Application/Inspect/Interpreters/Content/ParametricKeyData.h"
 
-#include "Pipeline/Content/ParametricKey/ParametricKey.h"
+#include "Core/Content/ParametricKey/ParametricKey.h"
 
 using namespace Helium;
 using namespace Helium::Inspect;

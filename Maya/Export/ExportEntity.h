@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ExportBase.h"
-#include "Pipeline/Asset/Classes/EntityInstance.h"
+#include "Core/Asset/Classes/EntityInstance.h"
 
 namespace Helium
 {

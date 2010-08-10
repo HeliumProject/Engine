@@ -5,7 +5,7 @@
 #include "Editor/Scene/Scene.h"
 #include "Editor/Scene/SceneManager.h"
 
-#include "Pipeline/Asset/Classes/SceneAsset.h"
+#include "Core/Asset/Classes/SceneAsset.h"
 #include "Foundation/Math/Color3.h"
 
 #include "Foundation/Component/ComponentHandle.h"

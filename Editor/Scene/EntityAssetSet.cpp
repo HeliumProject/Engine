@@ -3,8 +3,8 @@
 
 #include "Foundation/Log.h"
 #include "Foundation/Component/ComponentHandle.h"
-#include "Pipeline/Asset/Classes/Entity.h"
-#include "Pipeline/Asset/Components/BoundingBoxComponent.h"
+#include "Core/Asset/Classes/Entity.h"
+#include "Core/Asset/Components/BoundingBoxComponent.h"
 
 #include "Editor/SharedFileManager.h"
 #include "Editor/Scene/Scene.h"

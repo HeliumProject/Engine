@@ -11,8 +11,8 @@
 #include "Application/Inspect/Interpreters/File/FileBrowserButton.h"
 #include "Editor/Scene/Pick.h"
 
-#include "Pipeline/Asset/AssetInit.h"
-#include "Pipeline/Asset/Classes/Entity.h"
+#include "Core/Asset/AssetInit.h"
+#include "Core/Asset/Classes/Entity.h"
 
 #include "Application/UI/FileDialog.h"
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Application/Inspect/Data/Data.h"
-#include "Pipeline/Content/ParametricKey/ParametricKey.h"
+#include "Core/Content/ParametricKey/ParametricKey.h"
 
 namespace Helium
 {

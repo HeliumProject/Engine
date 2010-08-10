@@ -10,8 +10,8 @@
 #include "Platform/Windows/Debug.h"
 #include "Foundation/Container/BitArray.h"
 #include "Foundation/Reflect/ArchiveXML.h"
-#include "Pipeline/Content/ContentVersion.h"
-#include "Pipeline/Content/Nodes/Curve.h"
+#include "Core/Content/ContentVersion.h"
+#include "Core/Content/Nodes/Curve.h"
 #include "Maya/Utils.h"
 
 using namespace Helium;

@@ -4,7 +4,7 @@
 #include "Foundation/Component/ComponentHandle.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Log.h"
-#include "Pipeline/Asset/Classes/SceneAsset.h"
+#include "Core/Asset/Classes/SceneAsset.h"
 
 #include "Editor/Scene/Scene.h"
 #include "Editor/Scene/SwitchSceneCommand.h"

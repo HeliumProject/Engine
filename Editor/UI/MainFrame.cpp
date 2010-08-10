@@ -4,8 +4,8 @@
 
 #include "Foundation/Reflect/ArchiveXML.h"
 
-#include "Pipeline/Content/ContentVersion.h"
-#include "Pipeline/Content/Scene.h"
+#include "Core/Content/ContentVersion.h"
+#include "Core/Content/Scene.h"
 
 #include "Application/UI/FileDialog.h"
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"

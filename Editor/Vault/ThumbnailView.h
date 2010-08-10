@@ -13,7 +13,7 @@
 #include "Foundation/Math/Matrix4.h"
 #include "Foundation/Math/Frustum.h"
 
-#include "Render/D3DManager.h"
+#include "Render/DeviceManager.h"
 
 namespace Helium
 {
@@ -272,7 +272,7 @@ namespace Helium
             static const float s_MinThumbnailSize;
             static const float s_MaxThumbnailSize;
 
-            Render::D3DManager m_D3DManager;
+            Render::DeviceManager m_DeviceManager;
             float m_LabelFontHeight;
             ID3DXFont* m_LabelFont;
             ID3DXFont* m_TypeFont;

@@ -1,5 +1,5 @@
 /*#include "Precompile.h"*/
-#include "RenderMesh.h"
+#include "Mesh.h"
 
 #include "Foundation/Checksum/CRC32.h"
 

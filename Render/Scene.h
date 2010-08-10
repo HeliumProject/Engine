@@ -6,7 +6,7 @@
 #include "Render/API.h"
 #include "Render/ObjectLoader.h"
 #include "Render/Environment.h"
-#include "Render/RenderMesh.h"
+#include "Render/Mesh.h"
 
 namespace Helium
 {

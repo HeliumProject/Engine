@@ -1,5 +1,5 @@
 /*#include "Precompile.h"*/
-#include "RenderSceneManager.h"
+#include "Scene.h"
 #include "Renderer.h"
 #include "OBJObjectLoader.h"
 

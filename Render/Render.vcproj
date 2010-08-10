@@ -616,50 +616,6 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Loaders"
-			>
-			<File
-				RelativePath=".\ObjectLoader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ObjectLoader.h"
-				>
-			</File>
-			<File
-				RelativePath=".\OBJObjectLoader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\OBJObjectLoader.h"
-				>
-			</File>
-			<File
-				RelativePath=".\RBObjectLoader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\RBObjectLoader.h"
-				>
-			</File>
-			<File
-				RelativePath=".\RBShaderLoader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\RBShaderLoader.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ShaderLoader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ShaderLoader.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="Shaders"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
@@ -2022,11 +1978,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\D3DManager.cpp"
+			RelativePath=".\DeviceManager.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\D3DManager.h"
+			RelativePath=".\DeviceManager.h"
 			>
 		</File>
 		<File
@@ -2038,6 +1994,46 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Mesh.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Mesh.h"
+			>
+		</File>
+		<File
+			RelativePath=".\ObjectLoader.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ObjectLoader.h"
+			>
+		</File>
+		<File
+			RelativePath=".\OBJObjectLoader.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\OBJObjectLoader.h"
+			>
+		</File>
+		<File
+			RelativePath=".\RBObjectLoader.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\RBObjectLoader.h"
+			>
+		</File>
+		<File
+			RelativePath=".\RBShaderLoader.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\RBShaderLoader.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Renderer.cpp"
 			>
 		</File>
@@ -2046,19 +2042,19 @@
 			>
 		</File>
 		<File
-			RelativePath=".\RenderMesh.cpp"
+			RelativePath=".\Scene.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\RenderMesh.h"
+			RelativePath=".\Scene.h"
 			>
 		</File>
 		<File
-			RelativePath=".\RenderSceneManager.cpp"
+			RelativePath=".\ShaderLoader.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\RenderSceneManager.h"
+			RelativePath=".\ShaderLoader.h"
 			>
 		</File>
 		<File

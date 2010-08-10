@@ -2,9 +2,9 @@
 
 #include "Render/API.h"
 
-#include "Render/D3DManager.h"
+#include "Render/DeviceManager.h"
 #include "Render/ShaderManager.h"
-#include "Render/RenderSceneManager.h"
+#include "Render/Scene.h"
 
 namespace Helium
 {
@@ -35,7 +35,7 @@ namespace Helium
         };
 
         // Only create a single renderer
-        class RENDER_API Renderer : public D3DManager
+        class RENDER_API Renderer : public DeviceManager
         {
         public:
             Renderer();

@@ -82,7 +82,7 @@ ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, VaultFrame *bro
 , m_Scale( 128.0f )
 , m_VaultFrame( browserFrame )
 {
-    m_ThumbnailManager = new ThumbnailManager( this, &m_D3DManager, m_ThumbnailDirectory );
+    m_ThumbnailManager = new ThumbnailManager( this, &m_DeviceManager, m_ThumbnailDirectory );
 
     // Don't erase background
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
@@ -104,9 +104,9 @@ ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, VaultFrame *bro
     const Math::Vector3 pivot( 0, 0, 0 );
     m_ViewMatrix = Math::Matrix4( pivot * -1 ) * m_Orientation * Math::Matrix4( Math::Vector3::BasisZ * ( -s_FarClipDistance / 2.0f ) );
 
-    m_D3DManager.InitD3D( GetHwnd(), 64, 64 );
-    m_D3DManager.AddDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
-    m_D3DManager.AddDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
+    m_DeviceManager.Init( GetHwnd(), 64, 64 );
+    m_DeviceManager.AddDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
+    m_DeviceManager.AddDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
     CreateResources();
 
     m_TileCreator.SetDefaultThumbnails( m_TextureError, m_TextureLoading, m_TextureFolder );
@@ -125,7 +125,7 @@ ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, VaultFrame *bro
     m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.nrb" ), D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
     m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.tga" ), D3DCOLOR_ARGB( 0xff, 0, 130, 132 ) ) ); 
 
-    IDirect3DDevice9* device = m_D3DManager.GetD3DDevice();
+    IDirect3DDevice9* device = m_DeviceManager.GetD3DDevice();
 
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.entity.*" ), TXT( "moon" ) );
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.scene.*" ), TXT( "enginetype_level" ) );
@@ -150,8 +150,8 @@ ThumbnailView::~ThumbnailView()
     m_EditCtrl->Disconnect( m_EditCtrl->GetId(), wxEVT_KILL_FOCUS, wxFocusEventHandler( ThumbnailView::OnEditBoxLostFocus ), NULL, this );
     m_EditCtrl->Disconnect( m_EditCtrl->GetId(), wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ThumbnailView::OnEditBoxPressEnter ), NULL, this );
 
-    m_D3DManager.RemoveDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
-    m_D3DManager.RemoveDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
+    m_DeviceManager.RemoveDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
+    m_DeviceManager.RemoveDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
 
     if ( m_LabelFont )
     {
@@ -182,7 +182,7 @@ void ThumbnailView::InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcon
 #pragma TODO( "reimplement icons as resources" )
     tstring file = fileName;
 
-    Helium::Insert<M_FileTypeIcons>::Result inserted = fileTypeIcons.insert( M_FileTypeIcons::value_type( type, new Thumbnail( &m_D3DManager, LoadTexture( device, file ) ) ) );
+    Helium::Insert<M_FileTypeIcons>::Result inserted = fileTypeIcons.insert( M_FileTypeIcons::value_type( type, new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) ) ) );
     HELIUM_ASSERT( inserted.second && inserted.first->second && inserted.first->second->GetTexture() );
 }
 
@@ -595,7 +595,7 @@ void ThumbnailView::UpdateProjectionMatrix()
 // 
 void ThumbnailView::CreateResources()
 {
-    IDirect3DDevice9* device = m_D3DManager.GetD3DDevice();
+    IDirect3DDevice9* device = m_DeviceManager.GetD3DDevice();
     if ( !device )
     {
         return;
@@ -653,7 +653,7 @@ void ThumbnailView::CreateResources()
     {
         tstring file = TXT( "screenshot_missing.png" );
 
-        m_TextureMissing = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
+        m_TextureMissing = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureMissing->GetTexture() );
     }
 
@@ -661,7 +661,7 @@ void ThumbnailView::CreateResources()
     {
         tstring file = TXT( "file_error_256.png" );
 
-        m_TextureError = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
+        m_TextureError = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureError->GetTexture() );
     }
 
@@ -669,7 +669,7 @@ void ThumbnailView::CreateResources()
     {
         tstring file = TXT( "screenshot_loading.png" );
 
-        m_TextureLoading = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
+        m_TextureLoading = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureLoading->GetTexture() );
     }
 
@@ -677,7 +677,7 @@ void ThumbnailView::CreateResources()
     {
         tstring file = TXT( "folder_256.png" );
 
-        m_TextureFolder = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
+        m_TextureFolder = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureFolder->GetTexture() );
     }
 
@@ -685,7 +685,7 @@ void ThumbnailView::CreateResources()
     {
         tstring file = TXT( "thumbnail_overlay.png" );
 
-        m_TextureOverlay = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
+        m_TextureOverlay = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureOverlay->GetTexture() );
     }
 
@@ -693,7 +693,7 @@ void ThumbnailView::CreateResources()
     {
         tstring file = TXT( "thumbnail_overlay_selected.png" );
 
-        m_TextureSelected = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
+        m_TextureSelected = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureSelected->GetTexture() );
     }
 
@@ -701,7 +701,7 @@ void ThumbnailView::CreateResources()
     {
         tstring file = TXT( "thumbnail_overlay_highlighted.png" );
 
-        m_TextureHighlighted = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
+        m_TextureHighlighted = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureHighlighted->GetTexture() );
     }
 
@@ -709,7 +709,7 @@ void ThumbnailView::CreateResources()
     {
         tstring file = TXT( "blank_file_32.png" );
 
-        m_TextureBlankFile = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
+        m_TextureBlankFile = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureBlankFile->GetTexture() );
     }
 }
@@ -1115,18 +1115,18 @@ void ThumbnailView::Pick( wxPoint mousePos1, wxPoint mousePos2, OS_ThumbnailTile
 // 
 bool ThumbnailView::Draw()
 {
-    if ( !m_D3DManager.TestDeviceReady() )
+    if ( !m_DeviceManager.TestDeviceReady() )
     {
         return false;
     }
 
-    IDirect3DDevice9* device = m_D3DManager.GetD3DDevice();
+    IDirect3DDevice9* device = m_DeviceManager.GetD3DDevice();
 
     // Begin Scene
     HRESULT result = S_OK;
     result = device->BeginScene();
-    result = device->SetRenderTarget( 0, m_D3DManager.GetBackBuffer() );
-    result = device->SetDepthStencilSurface( m_D3DManager.GetDepthBuffer() );
+    result = device->SetRenderTarget( 0, m_DeviceManager.GetBackBuffer() );
+    result = device->SetDepthStencilSurface( m_DeviceManager.GetDepthBuffer() );
     result = device->Clear( NULL, NULL, D3DCLEAR_TARGET | D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB( 255, 80, 80, 80 ), 1.0f, 0 );
 
     // Camera Transforms
@@ -1209,10 +1209,10 @@ bool ThumbnailView::Draw()
     device->SetRenderState( D3DRS_ALPHABLENDENABLE, FALSE );
     device->EndScene();
 
-    if ( m_D3DManager.Display( GetHwnd() ) == D3DERR_DEVICELOST )
+    if ( m_DeviceManager.Display( GetHwnd() ) == D3DERR_DEVICELOST )
     {
         // Device needs to be reset, so tell the caller not to validate this window
-        m_D3DManager.SetDeviceLost();
+        m_DeviceManager.SetDeviceLost();
         return false;
     }
 
@@ -1327,7 +1327,7 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
 
             if ( tile->IsSelected() )
             {
-                device->ColorFill( m_D3DManager.GetBackBuffer(), &rect, s_TextColorBGSelected );
+                device->ColorFill( m_DeviceManager.GetBackBuffer(), &rect, s_TextColorBGSelected );
             }
 
             //tile->IsSelected() ? s_TextColorBGSelected : s_TextColorDefault
@@ -1518,7 +1518,7 @@ void ThumbnailView::OnPaint( wxPaintEvent& args )
 // 
 void ThumbnailView::OnSize( wxSizeEvent& args )
 {
-    if ( !m_D3DManager.GetD3DDevice() )
+    if ( !m_DeviceManager.GetD3DDevice() )
     {
         return;
     }
@@ -1528,7 +1528,7 @@ void ThumbnailView::OnSize( wxSizeEvent& args )
         UpdateProjectionMatrix();
         CalculateTotalVisibleItems();
         AdjustScrollBar( true );
-        m_D3DManager.Resize( args.GetSize().x, args.GetSize().y );
+        m_DeviceManager.Resize( args.GetSize().x, args.GetSize().y );
     }
 
     Refresh();
@@ -2003,7 +2003,7 @@ void ThumbnailView::OnThumbnailLoaded( Editor::ThumbnailLoadedEvent& args )
                     if ( _tcsicmp( file, TXT( "SHELL32" ) ) )
                     {
                         // build a thumbnail texture from the icon resource
-                        ThumbnailPtr thumb = new Thumbnail( &m_D3DManager );
+                        ThumbnailPtr thumb = new Thumbnail( &m_DeviceManager );
                         if ( thumb->FromIcon( icon ) )
                         {
                             // cache it for re-use

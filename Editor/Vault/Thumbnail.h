@@ -8,7 +8,7 @@ namespace Helium
 {
     namespace Render
     {
-        class D3DManager;
+        class DeviceManager;
     }
 
     namespace Editor
@@ -16,8 +16,8 @@ namespace Helium
         class Thumbnail : public Helium::RefCountBase< Thumbnail >
         {
         public:
-            Thumbnail( Render::D3DManager* d3dManager );
-            Thumbnail( Render::D3DManager* d3dManager, IDirect3DTexture9* texture );
+            Thumbnail( Render::DeviceManager* d3dManager );
+            Thumbnail( Render::DeviceManager* d3dManager, IDirect3DTexture9* texture );
             virtual ~Thumbnail();
 
             bool FromIcon( HICON icon );
@@ -29,7 +29,7 @@ namespace Helium
             }
 
         private:
-            Render::D3DManager* m_D3DManager;
+            Render::DeviceManager* m_DeviceManager;
             IDirect3DTexture9* m_Texture;
             bool m_IsFromIcon;
         };

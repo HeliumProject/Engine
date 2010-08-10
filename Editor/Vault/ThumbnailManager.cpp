@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "ThumbnailManager.h"
 #include "ThumbnailLoadedEvent.h"
-#include "Render/D3DManager.h"
+#include "Render/DeviceManager.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -10,7 +10,7 @@ using namespace Helium::Editor;
 // Constructor
 // window - the window to receive ThumbnailLoadedEvents.
 // 
-ThumbnailManager::ThumbnailManager( wxWindow* window, Render::D3DManager* d3dmanager, const tstring& thumbnailDirectory )
+ThumbnailManager::ThumbnailManager( wxWindow* window, Render::DeviceManager* d3dmanager, const tstring& thumbnailDirectory )
 : m_Window( window )
 , m_Loader( d3dmanager, thumbnailDirectory )
 {

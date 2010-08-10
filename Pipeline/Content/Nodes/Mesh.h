@@ -306,9 +306,7 @@ namespace Helium
             void GetEdges( S_Edge& edges ) const;
 
             void GetTriangle( u32 triIndex, Math::Vector3& v0, Math::Vector3& v1, Math::Vector3& v2, Math::Matrix4* transform = NULL );
-
-
-            void WeldNavMeshVerts(const f32 vertex_merge_threshold);
+            void WeldMeshVerts(const f32 vertex_merge_threshold);
             u32  GetEdgeIdForVerts(u32 vert_a, u32 vert_b);
             void AddTri(u32 vert_a, u32 vert_b, u32 vert_c);
             u32  GetClosestTri(const Math::Vector3& sphere_pos, const f32& sphere_rad);
@@ -327,7 +325,6 @@ namespace Helium
             void MergeVertToClosest(u32 vert_id);
             void PunchCubeHole(Math::Matrix4& mat, Math::Matrix4& inv_mat, f32 vert_merge_threshold);
         };
-
 
         typedef Helium::SmartPtr<Mesh> MeshPtr;
         typedef std::vector<MeshPtr> V_Mesh;

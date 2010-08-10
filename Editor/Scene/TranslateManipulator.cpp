@@ -578,11 +578,11 @@ bool TranslateManipulator::Pick( PickVisitor* pick )
     }
 }
 
-bool TranslateManipulator::MouseDown(wxMouseEvent& e)
+bool TranslateManipulator::MouseDown( const MouseButtonInput& e )
 {
     Math::AxesFlags previous = m_SelectedAxes;
 
-    LinePickVisitor pick (m_View->GetCamera(), e.GetX(), e.GetY());
+    LinePickVisitor pick (m_View->GetCamera(), e.GetPosition().x, e.GetPosition().y);
     if (!Pick(&pick))
     {
         if (e.MiddleIsDown())
@@ -614,7 +614,7 @@ bool TranslateManipulator::MouseDown(wxMouseEvent& e)
     return true;
 }
 
-void TranslateManipulator::MouseMove(wxMouseEvent& e)
+void TranslateManipulator::MouseMove( const MouseMoveInput& e )
 {
     __super::MouseMove(e);
 
@@ -646,10 +646,10 @@ void TranslateManipulator::MouseMove(wxMouseEvent& e)
             Vector3 result;
 
             // construct pick ray
-            FrustumLinePickVisitor pick( m_View->GetCamera(), e.GetX(), e.GetY() );
+            FrustumLinePickVisitor pick( m_View->GetCamera(), e.GetPosition().x, e.GetPosition().y );
 
             // pick stuff in the scene
-            primary->GetNode()->GetScene()->GetManager()->GetRootScene()->Pick(&pick);
+            primary->GetNode()->GetScene()->GetManager()->Pick(&pick);
 
             if (pick.HasHits())
             {
@@ -770,7 +770,7 @@ void TranslateManipulator::MouseMove(wxMouseEvent& e)
 
         // Pick ray from our current location
         Line endRay;
-        m_View->GetCamera()->ViewportToLine(e.GetX(), e.GetY(), endRay);
+        m_View->GetCamera()->ViewportToLine(e.GetPosition().x, e.GetPosition().y, endRay);
 
         // start and end points of the drag in world space, on the line or on the plane
         Vector3 p1, p2;
@@ -1188,11 +1188,11 @@ void TranslateManipulator::MouseMove(wxMouseEvent& e)
     }
 }
 
-void TranslateManipulator::KeyPress( wxKeyEvent& e )
+void TranslateManipulator::KeyPress( const KeyboardInput& e )
 {
     switch (e.GetKeyCode())
     {
-    case wxT('L'):
+    case TXT('L'):
         SetLiveObjectsOnly( !m_LiveObjectsOnly );
         break;
 
@@ -1202,25 +1202,25 @@ void TranslateManipulator::KeyPress( wxKeyEvent& e )
     }
 }
 
-void TranslateManipulator::KeyDown( wxKeyEvent& e )
+void TranslateManipulator::KeyDown( const KeyboardInput& e )
 {
     TranslateSnappingMode mode = m_HotSnappingMode;
 
     switch (e.GetKeyCode())
     {
-    case wxT('S'):
+    case TXT('S'):
         m_HotSnappingMode = TranslateSnappingModes::Surface;
         break;
 
-    case wxT('O'):
+    case TXT('O'):
         m_HotSnappingMode = TranslateSnappingModes::Object;
         break;
 
-    case wxT('V'):
+    case TXT('V'):
         m_HotSnappingMode = TranslateSnappingModes::Vertex;
         break;
 
-    case wxT('X'):
+    case TXT('X'):
         m_HotSnappingMode = TranslateSnappingModes::Grid;
         break;
 
@@ -1242,16 +1242,16 @@ void TranslateManipulator::KeyDown( wxKeyEvent& e )
     }
 }
 
-void TranslateManipulator::KeyUp( wxKeyEvent& e )
+void TranslateManipulator::KeyUp( const KeyboardInput& e )
 {
     TranslateSnappingMode mode = m_HotSnappingMode;
 
     switch (e.GetKeyCode())
     {
-    case wxT('S'):
-    case wxT('O'):
-    case wxT('V'):
-    case wxT('X'):
+    case TXT('S'):
+    case TXT('O'):
+    case TXT('V'):
+    case TXT('X'):
         m_HotSnappingMode = TranslateSnappingModes::None;
         break;
 

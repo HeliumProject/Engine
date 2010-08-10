@@ -7,21 +7,6 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-// 
-// RTTI
-// 
-EDITOR_DEFINE_TYPE( Document );
-
-void Document::InitializeType()
-{
-    Reflect::RegisterClass<Document>();
-}
-
-void Document::CleanupType()
-{
-    Reflect::UnregisterClass<Document>();
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 

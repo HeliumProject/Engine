@@ -378,11 +378,11 @@ bool ScaleManipulator::Pick( PickVisitor* pick )
   }
 }
 
-bool ScaleManipulator::MouseDown(wxMouseEvent& e)
+bool ScaleManipulator::MouseDown( const MouseButtonInput& e )
 {
   Math::AxesFlags previous = m_SelectedAxes;
 
-  LinePickVisitor pick (m_View->GetCamera(), e.GetX(), e.GetY());
+  LinePickVisitor pick (m_View->GetCamera(), e.GetPosition().x, e.GetPosition().y);
 
   if (!Pick(&pick))
   {
@@ -415,7 +415,7 @@ bool ScaleManipulator::MouseDown(wxMouseEvent& e)
   return true;
 }
 
-void ScaleManipulator::MouseMove(wxMouseEvent& e)
+void ScaleManipulator::MouseMove( const MouseMoveInput& e )
 {
   __super::MouseMove(e);
 
@@ -455,7 +455,7 @@ void ScaleManipulator::MouseMove(wxMouseEvent& e)
     return;
   }
 
-  int sX = m_StartX, sY = m_StartY, eX = e.GetX(), eY = e.GetY();
+  int sX = m_StartX, sY = m_StartY, eX = e.GetPosition().x, eY = e.GetPosition().y;
 
   if (uniform)
   {

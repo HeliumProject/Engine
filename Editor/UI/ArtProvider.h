@@ -53,7 +53,6 @@ namespace Helium
             static const wxChar* Volume = wxART_MAKE_ART_ID( EDITOR_ART_ID_VOLUME );
             static const wxChar* EntityPlacementTool = wxART_MAKE_ART_ID( EDITOR_ART_ID_ENTITY_PLACEMENT_TOOL );
             static const wxChar* Curve = wxART_MAKE_ART_ID( EDITOR_ART_ID_CURVE );
-            static const wxChar* NavMesh = wxART_MAKE_ART_ID( EDITOR_ART_ID_NAVMESH );
 
             static const wxChar* ProjectFolder = wxART_MAKE_ART_ID( EDITOR_ART_ID_CREATE_PROJECT_FOLDER );
             

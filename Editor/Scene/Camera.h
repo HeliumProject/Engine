@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Editor/API.h"
-
-#include "Editor/Persistent.h"
-#include "Editor/Scene/CameraPreferences.h"
-
 #include "Foundation/Math/Line.h"
 #include "Foundation/Math/Frustum.h"
 #include "Foundation/Math/Vector3.h"
 #include "Foundation/Math/Matrix4.h"
 #include "Foundation/Math/Point.h"
+#include "Foundation/Input.h"
+
+#include "Editor/API.h"
+#include "Editor/Persistent.h"
+#include "Editor/Scene/CameraPreferences.h"
 
 namespace Helium
 {
@@ -301,10 +301,10 @@ namespace Helium
 
             float ScalingTo(const Math::Vector3& pos) const;
 
-            void MouseDown(wxMouseEvent& e);
-            void MouseUp(wxMouseEvent& e);
-            void MouseMove(wxMouseEvent& e);
-            void MouseScroll(wxMouseEvent& e);
+            void MouseDown( const MouseButtonInput& e );
+            void MouseUp( const MouseButtonInput& e );
+            void MouseMove( const MouseMoveInput& e );
+            void MouseScroll( const MouseScrollInput& e );
 
             void Update( bool updateRemote = false );
 

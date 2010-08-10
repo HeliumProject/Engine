@@ -1,34 +1,29 @@
 #pragma once
 
-#include "Editor/API.h"
-
 #include "Foundation/Automation/Event.h"
 #include "Foundation/TUID.h"
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Version.h"
 
-#include "Editor/Selection.h"
-
 #include "Application/Inspect/Data/Data.h"
 #include "Application/Inspect/Controls/Canvas.h"
-#include "Editor/PropertiesGenerator.h"
-
 #include "Application/Undo/ExistenceCommand.h"
 #include "Application/Undo/Queue.h"
 
-#include "SceneGraph.h"
-
-#include "Editor/Scene/Pick.h"
-#include "Editor/Scene/Tool.h"
-
-#include "SceneDocument.h"
-#include "Editor/Scene/SceneNodeType.h"
-#include "Editor/Scene/SceneNode.h"
-
-#include "Editor/Scene/Transform.h"
-
 #include "Pipeline/Content/NodeVisibility.h"
 #include "Pipeline/Content/SceneVisibility.h"
+
+#include "Editor/API.h"
+#include "Editor/Selection.h"
+#include "Editor/PropertiesGenerator.h"
+
+#include "Pick.h"
+#include "Tool.h"
+#include "SceneNode.h"
+#include "SceneNodeType.h"
+#include "SceneGraph.h"
+#include "SceneManager.h"
+#include "Transform.h"
 
 namespace Helium
 {
@@ -1011,11 +1006,9 @@ namespace Helium
             }
 
         private:
-
             Editor::Scene* m_Scene;
             OS_SelectableDumbPtr m_Selection;
             OS_SelectableDumbPtr m_OldSelection;
-
         };
     }
 }

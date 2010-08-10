@@ -1,16 +1,14 @@
 #include "Precompile.h"
 #include "Editor/Scene/SceneManager.h"
 
-#include "Editor/Scene/Scene.h"
-#include "SceneDocument.h"
-#include "SwitchSceneCommand.h"
-#include "Editor/UI/Viewport.h"
-
-#include "Pipeline/Asset/Classes/SceneAsset.h"
 #include "Foundation/Component/ComponentHandle.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Log.h"
-#include "Application/UI/FileDialog.h"
+#include "Pipeline/Asset/Classes/SceneAsset.h"
+
+#include "Editor/Scene/Scene.h"
+#include "Editor/Scene/SwitchSceneCommand.h"
+#include "Editor/UI/Viewport.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -28,11 +26,17 @@ static tstring GetUniqueSceneName()
     return str.str();
 }
 
+bool SceneDocument::Save( tstring& error )
+{
+    return m_Scene->Save();
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
 SceneManager::SceneManager( MessageSignature::Delegate message )
-: DocumentManager( message )
+: m_DocumentManager( message )
 , m_CurrentScene( NULL )
 {
 
@@ -41,7 +45,7 @@ SceneManager::SceneManager( MessageSignature::Delegate message )
 ///////////////////////////////////////////////////////////////////////////////
 // Create a new scene.  Pass in true if this should be the root scene.
 // 
-ScenePtr SceneManager::NewScene( Editor::Viewport* viewport, bool isRoot, tstring path, bool addDoc )
+ScenePtr SceneManager::NewScene( Editor::Viewport* viewport, tstring path, bool addDoc )
 {
     tstring name;
     if ( path.empty() )
@@ -52,79 +56,16 @@ ScenePtr SceneManager::NewScene( Editor::Viewport* viewport, bool isRoot, tstrin
     SceneDocumentPtr document = new SceneDocument( path, name );
     document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &SceneManager::DocumentClosed ) );
     ScenePtr scene = new Editor::Scene( viewport, this, document );
-    if ( isRoot )
-    {
-        SetRootScene( scene );
-    }
     AddScene( scene );
 
-    if ( addDoc && !AddDocument( document ) )
+    tstring error;
+    if ( addDoc && !m_DocumentManager.OpenDocument( document, error ) )
     {
         // Shouldn't happen
         HELIUM_BREAK();
     }
+
     return scene;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Open a top-level scene (world).
-// 
-DocumentPtr SceneManager::OpenPath( const tstring& path, tstring& error ) 
-{
-    if ( !CloseAll() )
-    {
-        return NULL;
-    }
-
-    // Create a batch command to toggle between the previous scene, the new scene,
-    // and no scene (while we are loading the file).  This batch command will be
-    // committed to the undo stack only if this is not the first scene that we
-    // are opening.
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand();
-    Editor::Scene* previousScene = GetCurrentScene();
-    if ( previousScene )
-    {
-        batch->Push( new SwitchSceneCommand( this, NULL ) );
-    }
-
-    tstring scenePath = path;
-    SceneDocumentPtr document;
-    Helium::Path filePath( path );
-
-    ScenePtr scene = NewScene( NULL, m_Root == NULL, scenePath, true );
-    if ( !scene->LoadFile( scenePath ) )
-    {
-        error = TXT( "Failed to load scene from " ) + path + TXT( "." );
-        RemoveScene( scene );
-        scene = NULL;
-    }
-
-    if ( scene.ReferencesObject() )
-    {
-        document = scene->GetSceneDocument();
-        if ( !m_CurrentScene )
-        {
-            SetCurrentScene( scene );
-        }
-
-        batch->Push( new SwitchSceneCommand( this, scene ) );
-        if ( previousScene && GetRootScene() )
-        {
-            GetRootScene()->Push( batch );
-        }
-        // else: Throw away the batch;  it's already done the work of switching scenes
-        // and we didn't start with a valid scene, so this command is meaningless to put
-        // on the undo queue.
-    }
-    else
-    {
-        // If we switched from a valid scene, restore that scene as the current one
-        if ( previousScene )
-        {
-            batch->Push( new SwitchSceneCommand( this, previousScene ) );
-        }
-    }
-    return document;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -132,7 +73,7 @@ DocumentPtr SceneManager::OpenPath( const tstring& path, tstring& error )
 // 
 ScenePtr SceneManager::OpenScene( Editor::Viewport* viewport, const tstring& path, tstring& error )
 {
-    ScenePtr scene = NewScene( viewport, false, path, true );
+    ScenePtr scene = NewScene( viewport, path, true );
     if ( !scene->LoadFile( path ) )
     {
         error = TXT( "Failed to load scene from " ) + path + TXT( "." );
@@ -141,118 +82,6 @@ ScenePtr SceneManager::OpenScene( Editor::Viewport* viewport, const tstring& pat
     }
 
     return scene;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Prompt the user to save a file to a new location.  Returns the path to the
-// new file location, or an empty string if the user cancels the operation.
-// 
-static tstring PromptSaveAs( const DocumentPtr& file, wxWindow* window = NULL )
-{
-    tstring path;
-    tstring defaultDir = Helium::Path( file->GetFilePath() ).Directory();
-    tstring defaultFile = file->GetFilePath();
-
-    Helium::FileDialog saveDlg( window, TXT( "Save As..." ), defaultDir.c_str(), defaultFile.c_str(), TXT( "" ), Helium::FileDialogStyles::DefaultSave );
-    
-    std::set< tstring > extensions;
-    Reflect::Archive::GetExtensions( extensions );
-    for ( std::set< tstring >::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
-    {
-        saveDlg.AddFilter( TXT( "Scene (*.scene." ) + *itr + TXT( ")|*.scene." ) + *itr );
-    }
-
-    if ( saveDlg.ShowModal() == wxID_OK )
-    {
-        path = saveDlg.GetPath();
-    }
-
-    return path;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Called when the "save all" option is chosen in the UI.  Iterates over all
-// the open scenes and asks the session manager to save them.
-// 
-bool SceneManager::Save( DocumentPtr document, tstring& error )
-{
-    SceneDocument* sceneDocument = Reflect::ObjectCast< SceneDocument >( document );
-    if ( !sceneDocument )
-    {
-        HELIUM_BREAK();
-        error = document->GetFilePath() + TXT( " is not a valid scene file." );
-        return false;
-    }
-
-    Editor::Scene* scene = sceneDocument->GetScene();
-    if ( !scene )
-    {
-        HELIUM_BREAK();
-        error = scene->GetFullPath() + TXT( " does not contain a valid scene to save." );
-        return false;
-    }
-
-    // Check for "save as"
-    if ( document->GetFilePath().empty() )
-    {
-        tstring savePath = PromptSaveAs( sceneDocument );
-
-        if ( !savePath.empty() )
-        {
-            document->SetFilePath( savePath );
-        }
-        else
-        {
-            // No error, operation cancelled
-            return true;
-        }
-    }
-
-    if ( scene->Save() )
-    {
-        return __super::Save( document, error );
-    }
-
-    error = TXT( "Failed to save " ) + scene->GetFullPath();
-    return false;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Sets the root scene.  There can only be one root scene.  All zones that are
-// created should be added to the root scene.
-// 
-void SceneManager::SetRootScene( Editor::Scene* root )
-{
-    if ( m_Root.Ptr() != root )
-    {
-        if ( m_Root.Ptr() )
-        {
-            // Do something?  Close all open scenes?
-        }
-
-        m_Root = root;
-
-        if ( m_Root.Ptr() )
-        {
-            // Do something?  Notify listeners?
-        }
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the root scene.
-// 
-Editor::Scene* SceneManager::GetRootScene()
-{
-    return m_Root;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns true if the specified scene is the root scene.
-// 
-bool SceneManager::IsRoot( Editor::Scene* scene ) const
-{
-    return ( ( scene != NULL ) && ( scene == m_Root ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -302,12 +131,6 @@ void SceneManager::RemoveScene(Editor::Scene* scene)
         }
     }
 
-    if ( IsRoot( scene ) )
-    {
-        SetRootScene( NULL );
-    }
-
-    RemoveDocument( scene->GetSceneDocument() );
     m_Scenes.erase( found );
 }
 
@@ -317,9 +140,6 @@ void SceneManager::RemoveScene(Editor::Scene* scene)
 void SceneManager::RemoveAllScenes()
 {
     SetCurrentScene( NULL );
-
-#pragma TODO("This is a hack to support our current unwinding of all the allocated scenes, which is unordered.  We need to redesign the scene manager so that the root scene is deallocated last")
-    ScenePtr root = m_Root; // hold a reference to the root while we close all its nested scenes
 
     typedef std::vector< Editor::Scene* > V_SceneDumbPtr;
     V_SceneDumbPtr topLevelScenes;
@@ -342,8 +162,6 @@ void SceneManager::RemoveAllScenes()
         (*removeItr)->SaveVisibility(); 
         RemoveScene( *removeItr );
     }
-
-    root = NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -393,7 +211,7 @@ Editor::Scene* SceneManager::AllocateNestedScene( Editor::Viewport* viewport, co
         // Try to load nested scene.
         parent->ChangeStatus( TXT("Loading ") + path + TXT( "..." ) );
 
-        ScenePtr scenePtr = NewScene( viewport, false, path, false );
+        ScenePtr scenePtr = NewScene( viewport, path, false );
         if ( !scenePtr->LoadFile( path ) )
         {
             Log::Error( TXT( "Failed to load scene from %s\n" ), path.c_str() );
@@ -574,7 +392,7 @@ void SceneManager::DocumentPathChanged( const DocumentPathChangedArgs& args )
 // 
 void SceneManager::DocumentClosed( const DocumentChangedArgs& args )
 {
-    const SceneDocument* document = Reflect::ConstObjectCast< SceneDocument >( args.m_Document );
+    const SceneDocument* document = static_cast< const SceneDocument* >( args.m_Document );
     HELIUM_ASSERT( document );
 
 #ifdef UI_REFACTOR
@@ -592,15 +410,8 @@ void SceneManager::DocumentClosed( const DocumentChangedArgs& args )
             SetCurrentScene( NULL );
         }
 
-        if ( IsRoot( scene ) )
-        {
-            RemoveAllScenes();
-        }
-        else
-        {
-            scene->SaveVisibility(); 
-            RemoveScene( scene );
-        }
+        scene->SaveVisibility(); 
+        RemoveScene( scene );
 
         // Select the next scene in the list, if there is one
         if ( !HasCurrentScene() )

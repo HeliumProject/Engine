@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Foundation/Input.h"
+
 #include "Editor/Object.h"
 #include "Editor/Selection.h"
 #include "Editor/UI/Viewport.h"
@@ -110,33 +112,37 @@ namespace Helium
             // Handle Mouse Input
             //
 
-            // this returns whether the tool is taking the drag
-            virtual bool MouseDown( wxMouseEvent& e )
+            virtual bool MouseDown( const MouseButtonInput& e )
             {
-                return !AllowSelection();
+                if ( !AllowSelection() )
+                {
+                    return true; // the tool is accepting the drag
+                }
+
+                return false; // do not skip, our caller will always handle this input
             }
 
-            virtual void MouseUp( wxMouseEvent& e )
+            virtual void MouseUp( const MouseButtonInput& e )
             {
-
+                // do not skip, our caller will always handle this input
             }
 
-            virtual void MouseMove( wxMouseEvent& e )
+            virtual void MouseMove( const MouseMoveInput& e )
             {
-
+                // do not skip, our caller will always handle this input
             }
 
-            virtual void KeyPress( wxKeyEvent& e )
+            virtual void KeyPress( const KeyboardInput& e )
             {
                 e.Skip();
             }
 
-            virtual void KeyDown( wxKeyEvent& e )
+            virtual void KeyDown( const KeyboardInput& e )
             {
                 e.Skip();
             }
 
-            virtual void KeyUp( wxKeyEvent& e )
+            virtual void KeyUp( const KeyboardInput& e )
             {
                 e.Skip();
             }

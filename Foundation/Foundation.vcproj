@@ -1508,6 +1508,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Input.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Input.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Log.cpp"
 			>
 		</File>

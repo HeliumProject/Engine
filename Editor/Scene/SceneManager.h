@@ -9,6 +9,9 @@
 #include "Editor/DocumentManager.h"
 #include "Editor/Selection.h"
 
+#include "Pick.h"
+#include "Render.h"
+
 namespace Helium
 {
     namespace Asset
@@ -20,7 +23,6 @@ namespace Helium
     namespace Editor
     {
         // Forwards
-        class SceneEditor;
         class HierarchyNode;
         class Viewport;
 
@@ -49,13 +51,48 @@ namespace Helium
         typedef Helium::Signature< void, const SceneChangeArgs& > SceneChangeSignature;
 
         /////////////////////////////////////////////////////////////////////////////
+        // Wrapper for files edited by the scene editor.  Handles RCS prompts (in the
+        // base class) and stores a pointer to the scene that this file is associated
+        // with.
+        // 
+        class SceneDocument : public Document
+        {
+        public:
+            SceneDocument( const tstring& file, const tstring& name = TXT( "" ) )
+                : Document( file, name )
+                , m_Scene( NULL )
+            {
+
+            }
+            
+            void SetScene( Editor::Scene* scene )
+            {
+              HELIUM_ASSERT( m_Scene == NULL );
+              m_Scene = scene;
+            }
+            
+            Editor::Scene* GetScene() const
+            {
+              HELIUM_ASSERT( m_Scene != NULL );
+              return m_Scene;
+            }
+
+            virtual bool Save( tstring& error );
+
+        private:
+            Editor::Scene* m_Scene;
+        };
+
+        typedef Helium::SmartPtr< SceneDocument > SceneDocumentPtr;
+
+        /////////////////////////////////////////////////////////////////////////////
         // Tracks all the scenes and their undo queues.
         // 
-        class EDITOR_SCENE_API SceneManager : public DocumentManager
+        class EDITOR_SCENE_API SceneManager
         {
         private:
-            // the root scene (the first one opened)
-            ScenePtr m_Root;
+            // manages the documents (scenes)
+            DocumentManager m_DocumentManager;
 
             // all loaded scenes by path
             M_SceneSmartPtr m_Scenes;
@@ -80,16 +117,24 @@ namespace Helium
             SceneManager( MessageSignature::Delegate message );
 #endif
 
-            ScenePtr NewScene( Editor::Viewport* viewport, bool isRoot, tstring path = TXT( "" ), bool addDoc = true );
-            virtual DocumentPtr OpenPath( const tstring& path, tstring& error ) HELIUM_OVERRIDE;
+            ScenePtr NewScene( Editor::Viewport* viewport, tstring path = TXT( "" ), bool addDoc = true );
             ScenePtr OpenScene( Editor::Viewport* viewport, const tstring& path, tstring& error );
 
-        public:
-            virtual bool Save( DocumentPtr document, tstring& error ) HELIUM_OVERRIDE;
+            DocumentManager& GetDocumentManager()
+            {
+                return m_DocumentManager;
+            }
 
-            void SetRootScene( Editor::Scene* root );
-            Editor::Scene* GetRootScene();
-            bool IsRoot( Editor::Scene* scene ) const;
+            bool AllowChanges( SceneDocument* document )
+            {
+                return m_DocumentManager.AllowChanges( document );
+            }
+
+#pragma TODO("What to do with these? -Geoff")
+            /*
+            DocumentPtr OpenDocument( const Helium::Path& path, tstring& error );
+            bool SaveDocument( Document* document, tstring& error );
+            */
 
             void AddScene( Editor::Scene* scene );
             void RemoveScene( Editor::Scene* scene );
@@ -116,6 +161,17 @@ namespace Helium
             void Undo();
             void Redo();
             void Push( Undo::Queue* queue );
+
+            void Render( RenderVisitor* render ) const
+            {
+#pragma TODO("This should be moved to the Project which should call the root scene's Render()")
+            }
+
+            bool Pick( PickVisitor* pick ) const
+            {
+#pragma TODO("This should be moved to the Project which should call the root scene's Pick()")
+                return false;
+            }
 
         private:
             Editor::Scene* FindFirstNonNestedScene() const;

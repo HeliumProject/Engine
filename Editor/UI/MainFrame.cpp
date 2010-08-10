@@ -23,10 +23,10 @@
 #include "Editor/Scene/DuplicateTool.h"
 #include "Editor/Scene/EntityCreateTool.h"
 #include "Editor/Scene/LocatorCreateTool.h"
-#include "Editor/Scene/NavMeshCreateTool.h"
 #include "Editor/Scene/VolumeCreateTool.h"
 
 #include "Editor/Scene/ScaleManipulator.h"
+#include "Editor/Scene/RotateManipulator.h"
 #include "Editor/Scene/TranslateManipulator.h"
 
 #include "Editor/UI/PreferencesDialog.h"
@@ -157,7 +157,6 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     Connect( EventIds::ID_ToolsEntityCreate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
     Connect( EventIds::ID_ToolsCurveCreate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
     Connect( EventIds::ID_ToolsCurveEdit, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
-    Connect( EventIds::ID_ToolsNavMesh, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
 
     //
     // Tools
@@ -264,8 +263,8 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
 MainFrame::~MainFrame()
 {
     // Remove any straggling document listeners
-    OS_DocumentSmartPtr::Iterator docItr = m_SceneManager.GetDocuments().Begin();
-    OS_DocumentSmartPtr::Iterator docEnd = m_SceneManager.GetDocuments().End();
+    OS_DocumentSmartPtr::Iterator docItr = m_SceneManager.GetDocumentManager().GetDocuments().Begin();
+    OS_DocumentSmartPtr::Iterator docEnd = m_SceneManager.GetDocumentManager().GetDocuments().End();
     for ( ; docItr != docEnd; ++docItr )
     {
         ( *docItr )->RemoveDocumentModifiedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
@@ -359,13 +358,13 @@ bool MainFrame::AddScene( const Helium::Path& path )
 
     if ( !path.empty() && path.Exists() )
     {
-        if ( m_SceneManager.CloseAll() )
+        if ( m_SceneManager.GetDocumentManager().CloseAll() )
         {
             tstring error;
 
             try
             {
-                opened = m_SceneManager.OpenPath( path, error ) != NULL;
+                opened = m_SceneManager.OpenScene( m_ViewPanel->GetViewport(), path, error ) != NULL;
             }
             catch ( const Helium::Exception& ex )
             {
@@ -469,14 +468,7 @@ void MainFrame::SceneRemoving( const SceneChangeArgs& args )
 
     m_ViewPanel->GetViewport()->Refresh();
 
-    if ( m_SceneManager.IsRoot( args.m_Scene ) )
-    {
-        m_OutlinerStates.clear();
-    }
-    else
-    {
-        m_OutlinerStates.erase( args.m_Scene );
-    }
+    m_OutlinerStates.erase( args.m_Scene );
 }
 
 void MainFrame::SceneLoadFinished( const LoadArgs& args )
@@ -734,9 +726,9 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
 
 void MainFrame::OnNewScene( wxCommandEvent& event )
 {
-    if ( m_SceneManager.CloseAll() )
+    if ( m_SceneManager.GetDocumentManager().CloseAll() )
     {
-        ScenePtr scene = m_SceneManager.NewScene( m_ViewPanel->GetViewport(), true );
+        ScenePtr scene = m_SceneManager.NewScene( m_ViewPanel->GetViewport() );
         scene->GetSceneDocument()->SetModified( true );
         m_SceneManager.SetCurrentScene( scene );
     }
@@ -760,13 +752,13 @@ bool MainFrame::DoOpen( const tstring& path )
     Helium::Path nocPath( path );
     if ( !path.empty() && nocPath.Exists() )
     {
-        if ( m_SceneManager.CloseAll() )
+        if ( m_SceneManager.GetDocumentManager().CloseAll() )
         {
             tstring error;
 
             try
             {
-                opened = m_SceneManager.OpenPath( path, error ) != NULL;
+                opened = m_SceneManager.OpenScene( m_ViewPanel->GetViewport(), path, error ) != NULL;
             }
             catch ( const Helium::Exception& ex )
             {
@@ -802,14 +794,14 @@ void MainFrame::OnOpen( wxCommandEvent& event )
 
 void MainFrame::OnClose( wxCommandEvent& event )
 {
-    m_SceneManager.CloseAll();
+    m_SceneManager.GetDocumentManager().CloseAll();
     m_Project = NULL;
 }
 
 void MainFrame::OnSaveAll( wxCommandEvent& event )
 {
     tstring error;
-    if ( !m_SceneManager.SaveAll( error ) )
+    if ( !m_SceneManager.GetDocumentManager().SaveAll( error ) )
     {
         wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
     }
@@ -1489,14 +1481,6 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
                 curveEditTool->StoreSelectedCurves();
             }
             break;
-
-        case EventIds::ID_ToolsNavMesh:
-            {
-                Editor::NavMeshCreateTool* navMeshCreate = new Editor::NavMeshCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator);
-                m_SceneManager.GetCurrentScene()->SetTool( navMeshCreate );
-                navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ADD);
-            }
-            break;
         }
 
         m_ToolProperties.GetCanvas()->Clear();
@@ -1521,8 +1505,8 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
 void MainFrame::DocumentModified( const DocumentChangedArgs& args )
 {
     bool doAnyDocsNeedSaved = false;
-    OS_DocumentSmartPtr::Iterator docItr = m_SceneManager.GetDocuments().Begin();
-    OS_DocumentSmartPtr::Iterator docEnd = m_SceneManager.GetDocuments().End();
+    OS_DocumentSmartPtr::Iterator docItr = m_SceneManager.GetDocumentManager().GetDocuments().Begin();
+    OS_DocumentSmartPtr::Iterator docEnd = m_SceneManager.GetDocumentManager().GetDocuments().End();
     for ( ; docItr != docEnd; ++docItr )
     {
         if ( ( *docItr )->IsModified() || !( *docItr )->GetPath().Exists() )
@@ -1604,10 +1588,6 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
         {
             selectedTool = EventIds::ID_ToolsCurveEdit;
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType<Editor::NavMeshCreateTool>() )
-        {
-            selectedTool = EventIds::ID_ToolsNavMesh;
-        }
     }
 
     m_ToolbarPanel->ToggleTool( selectedTool );
@@ -1658,13 +1638,7 @@ void MainFrame::OnCut( wxCommandEvent& event )
 // 
 void MainFrame::OnCopy( wxCommandEvent& event )
 {
-    // special copy handler for navmesh
-    if ( m_SceneManager.HasCurrentScene() && m_SceneManager.GetCurrentScene()->GetTool() && m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Editor::NavMeshCreateTool>() )
-    {
-        Editor::NavMeshCreateTool* navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
-        navMeshCreate->CopySelected();
-    }
-    else if ( m_SceneManager.HasCurrentScene() && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0 )
+    if ( m_SceneManager.HasCurrentScene() && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0 )
     {
         if ( !Copy( m_SceneManager.GetCurrentScene() ) )
         {
@@ -1679,13 +1653,7 @@ void MainFrame::OnCopy( wxCommandEvent& event )
 // 
 void MainFrame::OnPaste( wxCommandEvent& event )
 {
-    // special copy handler for navmesh
-    if ( m_SceneManager.HasCurrentScene() && m_SceneManager.GetCurrentScene()->GetTool() && m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Editor::NavMeshCreateTool>() )
-    {
-        Editor::NavMeshCreateTool* navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
-        navMeshCreate->Paste();
-    }
-    else if ( m_SceneManager.HasCurrentScene() )
+    if ( m_SceneManager.HasCurrentScene() )
     {
         Paste( m_SceneManager.GetCurrentScene() );
     }
@@ -1991,7 +1959,7 @@ void MainFrame::OnExit( wxCommandEvent& event )
 // 
 void MainFrame::OnExiting( wxCloseEvent& args )
 {
-    if ( !m_SceneManager.CloseAll() )
+    if ( !m_SceneManager.GetDocumentManager().CloseAll() )
     {
         if ( args.CanVeto() )
         {
@@ -2159,16 +2127,7 @@ bool MainFrame::Paste( Editor::Scene* scene )
 
 void MainFrame::Render( RenderVisitor* render )
 {
-    //
-    // Top level draw routine
-    //
-
-    Editor::Scene* rootScene = m_SceneManager.GetRootScene();
-
-    if (rootScene)
-    {
-        rootScene->Render( render );
-    }
+    m_SceneManager.Render( render );
 }
 
 void MainFrame::Select(const SelectArgs& args)

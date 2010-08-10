@@ -85,7 +85,7 @@ void CurveCreateTool::PickPosition(int x, int y, Math::Vector3 &position)
   FrustumLinePickVisitor pick (m_Scene->GetViewport()->GetCamera(), x, y);
 
   // pick in the world
-  m_Scene->GetManager()->GetRootScene()->Pick(&pick);
+  m_Scene->GetManager()->Pick(&pick);
 
   bool set = false;
 
@@ -195,12 +195,12 @@ bool CurveCreateTool::AllowSelection()
   return false;
 }
 
-bool CurveCreateTool::MouseDown( wxMouseEvent& e )
+bool CurveCreateTool::MouseDown( const MouseButtonInput& e )
 {
   if ( m_Instance.ReferencesObject() && m_Scene->IsEditable() )
   {
     Math::Vector3 position;
-    PickPosition( e.GetX(), e.GetY(), position );
+    PickPosition( e.GetPosition().x, e.GetPosition().y, position );
 
     PointPtr point = new Editor::Point( m_Scene, new Content::Point( position ) );
     point->SetParent( m_Instance );
@@ -215,7 +215,7 @@ bool CurveCreateTool::MouseDown( wxMouseEvent& e )
   return __super::MouseDown( e );
 }
 
-void CurveCreateTool::MouseMove( wxMouseEvent& e )
+void CurveCreateTool::MouseMove( const MouseMoveInput& e )
 {
   if ( m_Instance.ReferencesObject() )
   {
@@ -224,7 +224,7 @@ void CurveCreateTool::MouseMove( wxMouseEvent& e )
     if ( countControlPoints > 0 )
     {
       Math::Vector3 position;
-      PickPosition( e.GetX(), e.GetY(), position );
+      PickPosition( e.GetPosition().x, e.GetPosition().y, position );
 
       Editor::Point* current = m_Instance->GetControlPointByIndex( countControlPoints - 1 );
       current->SetPosition( position );
@@ -238,7 +238,7 @@ void CurveCreateTool::MouseMove( wxMouseEvent& e )
   __super::MouseMove( e );
 } 
 
-void CurveCreateTool::KeyPress(wxKeyEvent &e)
+void CurveCreateTool::KeyPress( const KeyboardInput& e )
 {
   const int keyCode = e.GetKeyCode();
 

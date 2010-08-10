@@ -216,7 +216,6 @@ bool App::OnInit()
     m_InitializerStack.Push( Persistent::InitializeType, Persistent::CleanupType );
     m_InitializerStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
     m_InitializerStack.Push( Reflect::RegisterEnumeration<FilePathOptions::FilePathOption>( &FilePathOptions::FilePathOptionEnumerateEnumeration, TXT( "FilePathOption" ) ) );
-    m_InitializerStack.Push( Document::InitializeType, Document::CleanupType );
     m_InitializerStack.Push( Reflect::RegisterClass<MRUData>( TXT( "MRUData" ) ) );
 
     // task
@@ -251,7 +250,6 @@ bool App::OnInit()
         wxMessageBox( TXT( "There were errors during startup, use Editor with caution." ), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK );
     }
 
-    //GetSceneEditor()->Show();
     GetFrame()->Show();
 
     return true;

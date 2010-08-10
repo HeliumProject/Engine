@@ -413,7 +413,7 @@ void Mesh::GetTriangle( u32 triIndex, Math::Vector3& v0, Math::Vector3& v1, Math
 /////////////////////////////////////////////////////////////
 // welds mesh verts for a given threshold
 /////////////////////////////////////////////////////////////
-void Mesh::WeldNavMeshVerts(const f32 vertex_merge_threshold)
+void Mesh::WeldMeshVerts(const f32 vertex_merge_threshold)
 {
     Math::V_Vector3  pos_array;
     MM_i32 pos_lookup;
@@ -1411,6 +1411,6 @@ void Mesh::PunchCubeHole(Math::Matrix4& mat, Math::Matrix4& inv_mat, f32 vert_me
             AddTri(start, start+1, start+2);
         }
         DeleteTris(tris_to_be_deleted);
-        WeldNavMeshVerts(0.001f);
+        WeldMeshVerts(0.001f);
     }
 }

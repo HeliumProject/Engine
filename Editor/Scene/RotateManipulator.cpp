@@ -40,7 +40,6 @@ RotateManipulator::RotateManipulator(const ManipulatorMode mode, Editor::Scene* 
   prefs->Get( prefs->RotateManipulatorSize(), m_Size );
   prefs->Get( prefs->RotateManipulatorAxisSnap(), m_AxisSnap );
   prefs->Get( prefs->RotateManipulatorSnapDegrees(), m_SnapDegrees );
-
   prefs->GetEnum( prefs->RotateManipulatorSpace(), m_Space );
 
   m_Ring = new Editor::PrimitiveCircle (m_Scene->GetViewport()->GetResources());
@@ -429,11 +428,11 @@ AxesFlags RotateManipulator::PickRing(PickVisitor* pick, float err)
   return MultipleAxes::None;
 }
 
-bool RotateManipulator::MouseDown(wxMouseEvent& e)
+bool RotateManipulator::MouseDown( const MouseButtonInput& e )
 {
   Math::AxesFlags previous = m_SelectedAxes;
 
-  LinePickVisitor pick (m_View->GetCamera(), e.GetX(), e.GetY());
+  LinePickVisitor pick (m_View->GetCamera(), e.GetPosition().x, e.GetPosition().y);
   if (!Pick(&pick))
   {
     if (previous != MultipleAxes::All && e.MiddleIsDown())
@@ -465,14 +464,14 @@ bool RotateManipulator::MouseDown(wxMouseEvent& e)
   return true;
 }
 
-void RotateManipulator::MouseUp(wxMouseEvent& e)
+void RotateManipulator::MouseUp( const MouseButtonInput& e )
 {
   __super::MouseUp(e);
 
   m_Type = RotationTypes::None;
 }
 
-void RotateManipulator::MouseMove(wxMouseEvent& e)
+void RotateManipulator::MouseMove( const MouseMoveInput& e )
 {
   __super::MouseMove(e);
 
@@ -489,7 +488,7 @@ void RotateManipulator::MouseMove(wxMouseEvent& e)
   primaryStart.m_StartFrame.TransformVertex(startPoint);
 
   Vector3 cameraPosition;
-  m_View->GetCamera()->ViewportToWorldVertex(e.GetX(), e.GetY(), cameraPosition);
+  m_View->GetCamera()->ViewportToWorldVertex(e.GetPosition().x, e.GetPosition().y, cameraPosition);
 
 
   //
@@ -523,7 +522,7 @@ void RotateManipulator::MouseMove(wxMouseEvent& e)
 
   // Pick ray from our current location
   Line endRay;
-  m_View->GetCamera()->ViewportToLine(e.GetX(), e.GetY(), endRay);
+  m_View->GetCamera()->ViewportToLine(e.GetPosition().x, e.GetPosition().y, endRay);
 
   // Our from and to vectors for angle axis rotation about a rotation plane
   Vector3 p1, p2;

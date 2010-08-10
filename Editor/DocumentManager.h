@@ -42,40 +42,36 @@ namespace Helium
                 return m_Documents;
             }
 
-            bool Contains( const tstring& path ) const;
+            DocumentPtr         OpenDocument( const DocumentPtr& document, tstring& error );
+            Document*           FindDocument( const Helium::Path& path ) const;
 
-            bool ValidateDocument( Document* document, tstring& error ) const;
+            bool                SaveAll( tstring& error );
+            bool                SaveDocument( DocumentPtr document, tstring& error );
 
-            virtual DocumentPtr OpenPath( const tstring& path, tstring& error );
-            virtual bool Save( DocumentPtr document, tstring& error );
-            bool SaveAll( tstring& error );
+            bool                CloseAll();
+            bool                CloseDocuments( OS_DocumentSmartPtr documents );
+            bool                CloseDocument( DocumentPtr document, bool prompt = true );
 
-            bool CloseAll();
-            bool CloseDocument( DocumentPtr document, bool prompt = true );
-            bool CloseDocuments( OS_DocumentSmartPtr documents );
+            bool                QueryAllowChanges( Document* document ) const;
+            bool                AllowChanges( Document* document ) const;
 
-            bool QueryCheckOut( Document* document ) const;
-            bool IsCheckedOut( Document* document ) const;
-            bool CheckOut( Document* document ) const;
+            bool                QueryCheckOut( Document* document ) const;
+            bool                CheckOut( Document* document ) const;
 
-            bool QueryAllowChanges( Document* document ) const;
-            bool AttemptChanges( Document* document ) const;
+            bool                QueryOpen( Document* document ) const;
+            bool                QueryAdd( Document* document ) const;
 
-            bool IsUpToDate( Document* document ) const;
+            SaveAction          QueryCloseAll( Document* document ) const;
+            SaveAction          QueryClose( Document* document ) const;
+            SaveAction          QuerySave( Document* document ) const;
 
-            bool QueryAdd( Document* document ) const;
-            bool QueryOpen( Document* document ) const;
-            SaveAction QuerySave( Document* document ) const;
-            SaveAction QueryClose( Document* document ) const;
-            SaveAction QueryCloseAll( Document* document ) const;
-
-        protected:
-            bool AddDocument( const DocumentPtr& document );
-            bool RemoveDocument( const DocumentPtr& document );
-            Document* FindDocument( const tstring& path ) const;
+            bool                IsCheckedOut( Document* document ) const;
+            bool                IsUpToDate( Document* document ) const;
 
         private:
-            void DocumentClosed( const DocumentChangedArgs& args );
+            bool                AddDocument( const DocumentPtr& document );
+            bool                RemoveDocument( const DocumentPtr& document );
+            void                DocumentClosed( const DocumentChangedArgs& args );
 
             OS_DocumentSmartPtr         m_Documents;
             MessageSignature::Delegate  m_Message;

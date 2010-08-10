@@ -80,12 +80,12 @@ namespace Helium
             virtual void Draw( DrawArgs* args ) HELIUM_OVERRIDE;
             virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
 
-            virtual bool MouseDown(wxMouseEvent& e) HELIUM_OVERRIDE;
-            virtual void MouseMove(wxMouseEvent& e) HELIUM_OVERRIDE;
+            virtual bool MouseDown( const MouseButtonInput& e ) HELIUM_OVERRIDE;
+            virtual void MouseMove( const MouseMoveInput& e ) HELIUM_OVERRIDE;
 
-            virtual void KeyPress( wxKeyEvent& e ) HELIUM_OVERRIDE;
-            virtual void KeyDown( wxKeyEvent& e ) HELIUM_OVERRIDE;
-            virtual void KeyUp( wxKeyEvent& e ) HELIUM_OVERRIDE;
+            virtual void KeyPress( const KeyboardInput& e ) HELIUM_OVERRIDE;
+            virtual void KeyDown( const KeyboardInput& e ) HELIUM_OVERRIDE;
+            virtual void KeyUp( const KeyboardInput& e ) HELIUM_OVERRIDE;
 
             virtual void CreateProperties() HELIUM_OVERRIDE;
 

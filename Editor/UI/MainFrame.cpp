@@ -1487,6 +1487,8 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
 
         if (m_SceneManager.GetCurrentScene()->GetTool().ReferencesObject())
         {
+            m_SceneManager.GetCurrentScene()->GetTool()->PickWorld().Add( PickSignature::Delegate( this, &MainFrame::PickWorld ) );
+
             m_SceneManager.GetCurrentScene()->GetTool()->CreateProperties();
 
             m_ToolProperties.GetCanvas()->Layout();
@@ -1500,6 +1502,11 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
     {
         GetStatusBar()->SetStatusText( TXT( "You must create a new scene or open an existing scene to use a tool" ) );
     }
+}
+
+void MainFrame::PickWorld( PickArgs& args )
+{
+#pragma TODO("Pick the project's root scene -Geoff")
 }
 
 void MainFrame::DocumentModified( const DocumentChangedArgs& args )
@@ -2127,7 +2134,7 @@ bool MainFrame::Paste( Editor::Scene* scene )
 
 void MainFrame::Render( RenderVisitor* render )
 {
-    m_SceneManager.Render( render );
+#pragma TODO("Render the project's root scene -Geoff")
 }
 
 void MainFrame::Select(const SelectArgs& args)

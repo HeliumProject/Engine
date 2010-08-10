@@ -140,7 +140,7 @@ void CreateTool::DetermineTranslationAndNormal( int x, int y, Math::Vector3& t, 
 bool CreateTool::DetermineTranslationAndNormal( PickVisitor& pick, Math::Vector3& t, Math::Vector3& n )
 {
   // pick in the world
-  m_Scene->GetManager()->Pick( &pick );
+  m_PickWorld.Raise( PickArgs( &pick ) );
 
   bool set = false;
   if ( s_SurfaceSnap || s_ObjectSnap )

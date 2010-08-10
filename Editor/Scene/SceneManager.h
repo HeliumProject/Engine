@@ -130,12 +130,6 @@ namespace Helium
                 return m_DocumentManager.AllowChanges( document );
             }
 
-#pragma TODO("What to do with these? -Geoff")
-            /*
-            DocumentPtr OpenDocument( const Helium::Path& path, tstring& error );
-            bool SaveDocument( Document* document, tstring& error );
-            */
-
             void AddScene( Editor::Scene* scene );
             void RemoveScene( Editor::Scene* scene );
             void RemoveAllScenes();
@@ -161,17 +155,6 @@ namespace Helium
             void Undo();
             void Redo();
             void Push( Undo::Queue* queue );
-
-            void Render( RenderVisitor* render ) const
-            {
-#pragma TODO("This should be moved to the Project which should call the root scene's Render()")
-            }
-
-            bool Pick( PickVisitor* pick ) const
-            {
-#pragma TODO("This should be moved to the Project which should call the root scene's Pick()")
-                return false;
-            }
 
         private:
             Editor::Scene* FindFirstNonNestedScene() const;

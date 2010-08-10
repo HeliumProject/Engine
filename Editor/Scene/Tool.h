@@ -13,6 +13,18 @@ namespace Helium
         class PropertiesGenerator;
         class Scene;
 
+        struct PickArgs
+        {
+            PickVisitor* m_PickVisitor;
+
+            PickArgs( PickVisitor* visitor )
+                : m_PickVisitor( visitor )
+            {
+
+            }
+        };
+        typedef Helium::Signature< void, PickArgs& > PickSignature;
+
         class Tool HELIUM_ABSTRACT : public Object
         {
             //
@@ -29,11 +41,11 @@ namespace Helium
             // The scene to edit
             Scene* m_Scene;
 
+            // Allow the selection set to be changed
             bool m_AllowSelection;
 
-            //
-            // RTTI
-            //
+            // Pick the world for intersections
+            PickSignature::Event m_PickWorld;
 
         public:
             EDITOR_DECLARE_TYPE(Editor::Tool, Object);
@@ -106,6 +118,12 @@ namespace Helium
             virtual bool Pick( PickVisitor* pick )
             {
                 return false;
+            }
+
+            // Pick the world
+            PickSignature::Event& PickWorld()
+            {
+                return m_PickWorld;
             }
 
             //

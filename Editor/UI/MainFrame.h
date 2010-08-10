@@ -168,6 +168,7 @@ namespace Helium
             void CurrentSceneChanging( const SceneChangeArgs& args );
             void OnPropertiesCreated( const PropertiesCreatedArgs& args );
             void OnToolSelected(wxCommandEvent& event);
+            void PickWorld( PickArgs& args );
             void DocumentModified( const DocumentChangedArgs& args );
             void DocumentClosed( const DocumentChangedArgs& args );
             void ViewToolChanged( const ToolChangeArgs& args );

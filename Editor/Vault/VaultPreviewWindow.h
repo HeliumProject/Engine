@@ -2,7 +2,7 @@
 
 #include "Platform/Compiler.h"
 
-#include "Editor/Render/RenderWindow.h"
+#include "Editor/UI/RenderWindow.h"
 
 namespace Helium
 {
@@ -15,7 +15,7 @@ namespace Helium
     {
         class VaultFrame;
 
-        class VaultPreviewWindow : public Render::RenderWindow
+        class VaultPreviewWindow : public RenderWindow
         {
         public:
             VaultPreviewWindow( wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, const wxString& name = wxT( "Editor::VaultPreviewWindow" ) );

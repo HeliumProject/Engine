@@ -1,14 +1,14 @@
 #include "Precompile.h"
+#include "RenderWindow.h"
 
 #include "Foundation/Math/Utils.h"
 #include "Application/UI/FileDialog.h"
-#include "Editor/Render/RBObjectLoader.h"
-#include "Editor/Render/RenderWindow.h"
+#include "Render/RBObjectLoader.h"
 #include "Editor/Scene/Camera.h"
 #include "Editor/UI/Input.h"
 
 using namespace Helium;
-using namespace Helium::Render;
+using namespace Helium::Editor;
 
 static const u32 s_InvalidMesh = (u32)(-1);
 

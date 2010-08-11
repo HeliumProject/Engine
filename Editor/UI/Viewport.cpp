@@ -172,8 +172,8 @@ Viewport::~Viewport()
 {
     m_Cameras[ CameraModes::Orbit ].RemoveMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
 
-    m_D3DManager.RemoveDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &Viewport::OnAllocateResources ) );
-    m_D3DManager.RemoveDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &Viewport::OnReleaseResources ) );
+    m_DeviceManager.RemoveDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &Viewport::OnAllocateResources ) );
+    m_DeviceManager.RemoveDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &Viewport::OnReleaseResources ) );
 
     for (u32 i=0; i<GlobalPrimitives::Count; i++)
         delete m_GlobalPrimitives[i];
@@ -386,9 +386,9 @@ Editor::Primitive* Viewport::GetGlobalPrimitive( GlobalPrimitives::GlobalPrimiti
 
 void Viewport::InitDevice()
 {
-    m_D3DManager.InitD3D( GetHwnd(), 64, 64 );
-    m_D3DManager.AddDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &Viewport::OnAllocateResources ) );
-    m_D3DManager.AddDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &Viewport::OnReleaseResources ) );
+    m_DeviceManager.Init( GetHwnd(), 64, 64 );
+    m_DeviceManager.AddDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &Viewport::OnAllocateResources ) );
+    m_DeviceManager.AddDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &Viewport::OnReleaseResources ) );
 
     m_ResourceTracker = new ResourceTracker( GetDevice() );
 }
@@ -501,7 +501,7 @@ void Viewport::OnSize(wxSizeEvent& e)
 
     if ( e.GetSize().x > 0 && e.GetSize().y > 0 )
     {
-        m_D3DManager.Resize( e.GetSize().x, e.GetSize().y );
+        m_DeviceManager.Resize( e.GetSize().x, e.GetSize().y );
     }
 
     Refresh();
@@ -1059,7 +1059,7 @@ void Viewport::OnMouseCaptureLost(wxMouseCaptureLostEvent& e)
 
 void Viewport::Draw()
 {
-    if ( !m_D3DManager.TestDeviceReady() )
+    if ( !m_DeviceManager.TestDeviceReady() )
     {
         return;
     }
@@ -1093,8 +1093,8 @@ void Viewport::Draw()
 
         device->BeginScene();
 
-        device->SetRenderTarget( 0, m_D3DManager.GetBackBuffer() );
-        device->SetDepthStencilSurface( m_D3DManager.GetDepthBuffer() );
+        device->SetRenderTarget( 0, m_DeviceManager.GetBackBuffer() );
+        device->SetDepthStencilSurface( m_DeviceManager.GetDepthBuffer() );
 
         device->Clear(NULL, NULL, D3DCLEAR_TARGET | D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(255, 80, 80, 80), 1.0f, 0);
 
@@ -1310,9 +1310,9 @@ void Viewport::Draw()
         // Buffer Swap
         //
 
-        if ( m_D3DManager.Display( GetHwnd() ) == D3DERR_DEVICELOST )
+        if ( m_DeviceManager.Display( GetHwnd() ) == D3DERR_DEVICELOST )
         {
-            m_D3DManager.SetDeviceLost();
+            m_DeviceManager.SetDeviceLost();
         }
     }
 

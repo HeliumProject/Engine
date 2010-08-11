@@ -11,7 +11,7 @@ namespace Helium
 {
     namespace Render
     {
-        class D3DManager;
+        class DeviceManager;
     }
 
     namespace Editor
@@ -23,7 +23,7 @@ namespace Helium
         class ThumbnailLoader
         {
         public:
-            ThumbnailLoader( Render::D3DManager* d3dManager, const tstring& thumbnailDirectory );
+            ThumbnailLoader( Render::DeviceManager* d3dManager, const tstring& thumbnailDirectory );
             ~ThumbnailLoader();
 
             void Enqueue( const std::set< Helium::Path >& files );
@@ -75,7 +75,7 @@ namespace Helium
             Helium::Locker< Helium::OrderedSet< Helium::Path > >  m_FileQueue; // The queue of files to load (mutex locked)
             Helium::Semaphore                     m_Signal; // Signalling semaphore to wake up load thread
             bool                                    m_Quit;
-            Render::D3DManager*                 m_D3DManager;
+            Render::DeviceManager*                 m_DeviceManager;
             tstring                             m_ThumbnailDirectory;
         };
     }

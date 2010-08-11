@@ -8,7 +8,7 @@ namespace Helium
 {
     namespace Render
     {
-        class D3DManager;
+        class DeviceManager;
     }
 
     namespace Editor
@@ -29,7 +29,7 @@ namespace Helium
         class ThumbnailManager
         {
         public:
-            ThumbnailManager( wxWindow* window, Render::D3DManager* d3dmanager, const tstring& thumbnailDirectory );
+            ThumbnailManager( wxWindow* window, Render::DeviceManager* d3dmanager, const tstring& thumbnailDirectory );
             virtual ~ThumbnailManager();
 
             void Reset();

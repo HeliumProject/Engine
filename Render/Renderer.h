@@ -1,8 +1,10 @@
 #pragma once
 
-#include "D3DManager.h"
-#include "ShaderManager.h"
-#include "RenderSceneManager.h"
+#include "Render/API.h"
+
+#include "Render/DeviceManager.h"
+#include "Render/ShaderManager.h"
+#include "Render/Scene.h"
 
 namespace Helium
 {
@@ -33,7 +35,7 @@ namespace Helium
         };
 
         // Only create a single renderer
-        class Renderer : public D3DManager
+        class RENDER_API Renderer : public DeviceManager
         {
         public:
             Renderer();

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Foundation/Automation/Event.h"
+#include "Render/API.h"
 
 #include <d3d9.h>
 #include <d3dx9.h>
@@ -81,15 +82,15 @@ namespace Helium
         typedef Helium::Signature< void, const DeviceStateArgs& > DeviceStateSignature;
 
         // all rendering classes should be derived this
-        class D3DManager
+        class RENDER_API DeviceManager
         {
         public:
-            D3DManager();
-            virtual ~D3DManager();
+            DeviceManager();
+            virtual ~DeviceManager();
 
             static void SetUnique(); // call before init
 
-            HRESULT InitD3D(HWND hwnd,u32 back_buffer_width, u32 back_buffer_height, u32 init_flags=0);
+            HRESULT Init(HWND hwnd,u32 back_buffer_width, u32 back_buffer_height, u32 init_flags=0);
 
         private:
             HRESULT ResizeSwapChain(u32 width, u32 height);
@@ -225,7 +226,7 @@ namespace Helium
             static IDirect3DVertexShader9*        m_vertex_shaders[__VERTEX_SHADER_LAST__];
             static IDirect3DPixelShader9*         m_pixel_shaders[__PIXEL_SHADER_LAST__];
             static IDirect3DVertexDeclaration9*   m_vertex_dec[__VERTEX_DECL_LAST__];
-            static D3DManager*                    m_clients[__MAX_CLIENTS__];
+            static DeviceManager*                    m_clients[__MAX_CLIENTS__];
         };
 
         // a predefined structure for use with vertex decl VERTEX_DECL_DEBUG

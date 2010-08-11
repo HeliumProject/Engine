@@ -1,12 +1,13 @@
 #pragma once
 
-#include "ObjectLoader.h"
+#include "Render/API.h"
+#include "Render/ObjectLoader.h"
 
 namespace Helium
 {
     namespace Render
     {
-        class OBJObjectLoader : public ObjectLoader
+        class RENDER_API OBJObjectLoader : public ObjectLoader
         {
         public:
             u32 ParseFile(const tchar* fname, bool winding = false);

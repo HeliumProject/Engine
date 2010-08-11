@@ -1,4 +1,4 @@
-#include "Precompile.h"
+/*#include "Precompile.h"*/
 #include "Renderer.h"
 #include "Foundation/Checksum/CRC32.h"
 
@@ -200,7 +200,7 @@ Render::Renderer::~Renderer()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 bool Render::Renderer::Init(HWND hwnd, u32 width, u32 height, u32 flags)
 {
-  HRESULT hr = D3DManager::InitD3D(hwnd,width,height,flags);
+  HRESULT hr = DeviceManager::Init(hwnd,width,height,flags);
   if (FAILED(hr))
     return false;
 

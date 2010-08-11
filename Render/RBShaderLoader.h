@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Editor/Render/ShaderLoader.h"
+#include "Render/API.h"
+#include "Render/ShaderLoader.h"
 #include "Core/Asset/Classes/ShaderAsset.h"
 
 namespace Helium
@@ -12,7 +13,7 @@ namespace Helium
 
     namespace Content
     {
-        class RBShaderLoader : public Helium::Render::ShaderLoader
+        class RENDER_API RBShaderLoader : public Helium::Render::ShaderLoader
         {
         public:
             RBShaderLoader();

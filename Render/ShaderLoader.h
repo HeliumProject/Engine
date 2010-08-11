@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Render/API.h"
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
 
@@ -10,7 +11,7 @@ namespace Helium
         class Shader;
         class ShaderManager;
 
-        class ShaderLoader: public Helium::RefCountBase<ShaderLoader>
+        class RENDER_API ShaderLoader: public Helium::RefCountBase<ShaderLoader>
         {
         public:
             ShaderLoader();

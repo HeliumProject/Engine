@@ -1,0 +1,2071 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="9.00"
+	Name="Render"
+	ProjectGUID="{BF60836D-8D01-41EE-9C37-F82D11228CBD}"
+	RootNamespace="Render"
+	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
+	>
+	<Platforms>
+		<Platform
+			Name="Win32"
+		/>
+		<Platform
+			Name="x64"
+		/>
+	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			ConfigurationType="2"
+			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
+			CharacterSet="0"
+			WholeProgramOptimization="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;RENDER_EXPORTS"
+				ExceptionHandling="2"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="4"
+				DisableSpecificWarnings="4251;4996"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalLibraryDirectories="$(DirectX)\lib\x86"
+				GenerateDebugInformation="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug|x64"
+			ConfigurationType="2"
+			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
+			CharacterSet="0"
+			WholeProgramOptimization="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;RENDER_EXPORTS"
+				ExceptionHandling="2"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4251;4996"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalLibraryDirectories="$(DirectX)\lib\x64"
+				GenerateDebugInformation="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			ConfigurationType="2"
+			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
+			CharacterSet="0"
+			WholeProgramOptimization="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;RENDER_EXPORTS"
+				ExceptionHandling="2"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4251;4996"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalLibraryDirectories="$(DirectX)\lib\x86"
+				GenerateDebugInformation="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine=" "
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			ConfigurationType="2"
+			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
+			CharacterSet="0"
+			WholeProgramOptimization="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;RENDER_EXPORTS"
+				ExceptionHandling="2"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4251;4996"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalLibraryDirectories="$(DirectX)\lib\x64"
+				GenerateDebugInformation="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine=" "
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug Unicode|Win32"
+			ConfigurationType="2"
+			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
+			CharacterSet="1"
+			WholeProgramOptimization="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;RENDER_EXPORTS"
+				ExceptionHandling="2"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="4"
+				DisableSpecificWarnings="4251;4996"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalLibraryDirectories="$(DirectX)\lib\x86"
+				GenerateDebugInformation="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug Unicode|x64"
+			ConfigurationType="2"
+			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
+			CharacterSet="1"
+			WholeProgramOptimization="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;RENDER_EXPORTS"
+				ExceptionHandling="2"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4251;4996"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalLibraryDirectories="$(DirectX)\lib\x64"
+				GenerateDebugInformation="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release Unicode|Win32"
+			ConfigurationType="2"
+			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
+			CharacterSet="1"
+			WholeProgramOptimization="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;RENDER_EXPORTS"
+				ExceptionHandling="2"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4251;4996"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalLibraryDirectories="$(DirectX)\lib\x86"
+				GenerateDebugInformation="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine=" "
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release Unicode|x64"
+			ConfigurationType="2"
+			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
+			CharacterSet="1"
+			WholeProgramOptimization="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;RENDER_EXPORTS"
+				ExceptionHandling="2"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4251;4996"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalLibraryDirectories="$(DirectX)\lib\x64"
+				GenerateDebugInformation="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine=" "
+			/>
+		</Configuration>
+	</Configurations>
+	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
+			RelativePathToProject=".\Foundation\Foundation.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"
+			RelativePathToProject=".\Platform\Platform.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{9955828E-1B8C-407D-9559-BFCE158A2B7D}"
+			RelativePathToProject=".\Core\Core.vcproj"
+		/>
+	</References>
+	<Files>
+		<Filter
+			Name="Shaders"
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+			>
+			<Filter
+				Name="Vertex Shaders"
+				>
+				<File
+					RelativePath=".\Shaders\basicobjspace.vsh"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Shaders\basicworldspace.vsh"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Shaders\mesh_debug_color.vsh"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Shaders\mesh_debug_constcolor.vsh"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Shaders\mesh_debug_uv.vsh"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Shaders\mesh_debug_vertnormal.vsh"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Shaders\mesh_debug_verttangent.vsh"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Shaders\mesh_normal.vsh"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Shaders\screenspace.vsh"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Vertex Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn &quot;g_$(InputName)_vs&quot;  /Fh &quot;$(IntDir)\$(InputName)_vs.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_vs.h&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+			</Filter>
+			<Filter
+				Name="Pixel Shaders"
+				>
+				<File
+					RelativePath=".\Shaders\color.psh"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Shaders\diffuse.psh"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Shaders\diffuse_gpi.psh"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot; /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot; /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot; /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot; /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot; /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot; /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot; /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot; /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Shaders\sky.psh"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Shaders\texture.psh"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Shaders\texture_a.psh"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Shaders\texture_g.psh"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|x64"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Building Pixel Shader $(InputPath)"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn &quot;g_$(InputName)_ps&quot;  /Fh &quot;$(IntDir)\$(InputName)_ps.h&quot; /nologo &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+							Outputs="&quot;$(IntDir)\$(InputName)_ps.h&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+			</Filter>
+		</Filter>
+		<File
+			RelativePath=".\API.h"
+			>
+		</File>
+		<File
+			RelativePath=".\DeviceManager.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\DeviceManager.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Environment.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Environment.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Mesh.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Mesh.h"
+			>
+		</File>
+		<File
+			RelativePath=".\ObjectLoader.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ObjectLoader.h"
+			>
+		</File>
+		<File
+			RelativePath=".\OBJObjectLoader.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\OBJObjectLoader.h"
+			>
+		</File>
+		<File
+			RelativePath=".\RBObjectLoader.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\RBObjectLoader.h"
+			>
+		</File>
+		<File
+			RelativePath=".\RBShaderLoader.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\RBShaderLoader.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Renderer.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Renderer.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Scene.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Scene.h"
+			>
+		</File>
+		<File
+			RelativePath=".\ShaderLoader.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ShaderLoader.h"
+			>
+		</File>
+		<File
+			RelativePath=".\ShaderManager.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ShaderManager.h"
+			>
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

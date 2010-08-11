@@ -4,7 +4,7 @@
 #include "Foundation/File/Directory.h"
 #include "Core/Asset/AssetClass.h"
 #include "Core/Asset/Classes/ShaderAsset.h"
-#include "Editor/Render/D3DManager.h"
+#include "Render/DeviceManager.h"
 #include "Editor/Scene/Render.h"
 
 using namespace Helium;
@@ -26,7 +26,7 @@ void* ThumbnailLoader::LoadThread::Entry()
         }
 
         // the device is gone, our glorious benefactor is probably cleaning up
-        IDirect3DDevice9* device = m_Loader.m_D3DManager->GetD3DDevice();
+        IDirect3DDevice9* device = m_Loader.m_DeviceManager->GetD3DDevice();
         if ( !device )
         {
             // You should stop this thread before letting go of the window that
@@ -86,7 +86,7 @@ void* ThumbnailLoader::LoadThread::Entry()
             IDirect3DTexture9* texture = NULL;
             if ( texture = LoadTexture( device, path.Get() ) )
             {
-                ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_D3DManager, texture );
+                ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_DeviceManager, texture );
                 args.m_Textures.push_back( thumbnail );
             }
         }
@@ -102,7 +102,7 @@ void* ThumbnailLoader::LoadThread::Entry()
                 IDirect3DTexture9* texture = NULL;
                 if ( texture = LoadTexture( device, thumbnailFolder.GetItem().m_Path ) )
                 {
-                    ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_D3DManager, texture );
+                    ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_DeviceManager, texture );
                     args.m_Textures.push_back( thumbnail );
                 }
 
@@ -123,7 +123,7 @@ void* ThumbnailLoader::LoadThread::Entry()
                             IDirect3DTexture9* texture = NULL;
                             if ( texture = LoadTexture( device, colorMap->GetPath().Get() ) )
                             {
-                                ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_D3DManager, texture );
+                                ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_DeviceManager, texture );
                                 args.m_Textures.push_back( thumbnail );
                             }
                         }
@@ -138,11 +138,11 @@ void* ThumbnailLoader::LoadThread::Entry()
     return NULL;
 }
 
-ThumbnailLoader::ThumbnailLoader( Render::D3DManager* d3dManager, const tstring& thumbnailDirectory )
+ThumbnailLoader::ThumbnailLoader( Render::DeviceManager* d3dManager, const tstring& thumbnailDirectory )
 : m_LoadThread( *this )
 , m_Quit( false )
 , m_ThumbnailDirectory( thumbnailDirectory )
-, m_D3DManager( d3dManager )
+, m_DeviceManager( d3dManager )
 {
     m_LoadThread.Create();
     m_LoadThread.Run();

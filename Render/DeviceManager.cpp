@@ -1,4 +1,4 @@
-#include "Precompile.h"
+/*#include "Precompile.h"*/
 #include "Renderer.h"
 
 #include "Foundation/Log.h"
@@ -6,19 +6,19 @@
 
 using namespace Helium;
 
-bool                           Render::D3DManager::m_unique = false;
-u32                            Render::D3DManager::m_master_count = 0;
-IDirect3D9*                    Render::D3DManager::m_master_d3d = 0;
-IDirect3DDevice9*              Render::D3DManager::m_master_device = 0;
-D3DFORMAT                      Render::D3DManager::m_back_buffer_format = D3DFMT_UNKNOWN;
-D3DPRESENT_PARAMETERS          Render::D3DManager::m_master_pp = {0};
-IDirect3DVertexShader9*        Render::D3DManager::m_vertex_shaders[__VERTEX_SHADER_LAST__] = {0};
-IDirect3DPixelShader9*         Render::D3DManager::m_pixel_shaders[__PIXEL_SHADER_LAST__] = {0};
-IDirect3DVertexDeclaration9*   Render::D3DManager::m_vertex_dec[__VERTEX_DECL_LAST__] = {0};
-Render::D3DManager*        Render::D3DManager::m_clients[__MAX_CLIENTS__] = {0};
+bool                           Render::DeviceManager::m_unique = false;
+u32                            Render::DeviceManager::m_master_count = 0;
+IDirect3D9*                    Render::DeviceManager::m_master_d3d = 0;
+IDirect3DDevice9*              Render::DeviceManager::m_master_device = 0;
+D3DFORMAT                      Render::DeviceManager::m_back_buffer_format = D3DFMT_UNKNOWN;
+D3DPRESENT_PARAMETERS          Render::DeviceManager::m_master_pp = {0};
+IDirect3DVertexShader9*        Render::DeviceManager::m_vertex_shaders[__VERTEX_SHADER_LAST__] = {0};
+IDirect3DPixelShader9*         Render::DeviceManager::m_pixel_shaders[__PIXEL_SHADER_LAST__] = {0};
+IDirect3DVertexDeclaration9*   Render::DeviceManager::m_vertex_dec[__VERTEX_DECL_LAST__] = {0};
+Render::DeviceManager*        Render::DeviceManager::m_clients[__MAX_CLIENTS__] = {0};
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-Render::D3DManager::D3DManager()
+Render::DeviceManager::DeviceManager()
 : m_IsLost( false )
 {
     m_d3d=0;
@@ -52,7 +52,7 @@ Render::D3DManager::D3DManager()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-Render::D3DManager::~D3DManager()
+Render::DeviceManager::~DeviceManager()
 {
     m_master_count--;  
 
@@ -110,7 +110,7 @@ Render::D3DManager::~D3DManager()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void Render::D3DManager::SetUnique()
+void Render::DeviceManager::SetUnique()
 {
     if (m_master_d3d==0)
     {
@@ -119,7 +119,7 @@ void Render::D3DManager::SetUnique()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT Render::D3DManager::InitD3D(HWND hwnd,u32 back_buffer_width, u32 back_buffer_height, u32 init_flags)
+HRESULT Render::DeviceManager::Init(HWND hwnd,u32 back_buffer_width, u32 back_buffer_height, u32 init_flags)
 {
     HRESULT hr;
 
@@ -257,7 +257,7 @@ HRESULT Render::D3DManager::InitD3D(HWND hwnd,u32 back_buffer_width, u32 back_bu
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT Render::D3DManager::ResizeSwapChain(u32 width, u32 height)
+HRESULT Render::DeviceManager::ResizeSwapChain(u32 width, u32 height)
 {
     // we always have a back buffer pointer, release it
     if (m_back_buffer)
@@ -303,7 +303,7 @@ HRESULT Render::D3DManager::ResizeSwapChain(u32 width, u32 height)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT Render::D3DManager::ResizeDevice(u32 width, u32 height)
+HRESULT Render::DeviceManager::ResizeDevice(u32 width, u32 height)
 {
     // release the default pool
     HandleClientDefaultPool(DEFPOOL_RELEASE);
@@ -352,7 +352,7 @@ HRESULT Render::D3DManager::ResizeDevice(u32 width, u32 height)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT Render::D3DManager::Resize(u32 width, u32 height)
+HRESULT Render::DeviceManager::Resize(u32 width, u32 height)
 {
     if (m_swapchain)
     {
@@ -366,7 +366,7 @@ HRESULT Render::D3DManager::Resize(u32 width, u32 height)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT Render::D3DManager::Display(HWND target,RECT* src, RECT* dst)
+HRESULT Render::DeviceManager::Display(HWND target,RECT* src, RECT* dst)
 {  
     HRESULT hr;
 
@@ -386,7 +386,7 @@ HRESULT Render::D3DManager::Display(HWND target,RECT* src, RECT* dst)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT Render::D3DManager::Reset()
+HRESULT Render::DeviceManager::Reset()
 {
     HRESULT hr = S_OK;
 
@@ -466,7 +466,7 @@ HRESULT Render::D3DManager::Reset()
     return hr;
 }
 
-bool Render::D3DManager::TestDeviceReady()
+bool Render::DeviceManager::TestDeviceReady()
 {
   IDirect3DDevice9* device = GetD3DDevice();
   if ( !device )
@@ -492,7 +492,7 @@ bool Render::D3DManager::TestDeviceReady()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-IDirect3DSurface9* Render::D3DManager::GetBufferData()
+IDirect3DSurface9* Render::DeviceManager::GetBufferData()
 {
     D3DSURFACE_DESC desc;
     m_back_buffer->GetDesc(&desc);
@@ -515,7 +515,7 @@ IDirect3DSurface9* Render::D3DManager::GetBufferData()
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool Render::D3DManager::SaveTGA(const tchar* fname)
+bool Render::DeviceManager::SaveTGA(const tchar* fname)
 {
     IDirect3DSurface9* surface = GetBufferData();
     if (surface==0)
@@ -653,7 +653,7 @@ static D3DVERTEXELEMENT9 g_VertexDec_Mesh[] =  // total size 64
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void Render::D3DManager::CreateBaseResources()
+void Render::DeviceManager::CreateBaseResources()
 {
     for (u32 vs=0;vs<Render::__VERTEX_SHADER_LAST__;vs++)
     {
@@ -679,7 +679,7 @@ void Render::D3DManager::CreateBaseResources()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void Render::D3DManager::FreeBaseResources()
+void Render::DeviceManager::FreeBaseResources()
 {
     // delete all the shaders and vertex decls
     for (u32 s=0;s<__VERTEX_SHADER_LAST__;s++)

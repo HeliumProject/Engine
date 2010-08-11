@@ -1,4 +1,4 @@
-#include "Precompile.h"
+/*#include "Precompile.h"*/
 #include "ShaderManager.h"
 #include "Renderer.h"
 #include "ShaderLoader.h"

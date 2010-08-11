@@ -12,7 +12,7 @@
 #include "Editor/Scene/Camera.h"
 #include "Editor/Scene/Resource.h"
 #include "Editor/Scene/ViewportPreferences.h"
-#include "Editor/Render/D3DManager.h"
+#include "Render/DeviceManager.h"
 
 namespace Helium
 {
@@ -207,7 +207,7 @@ namespace Helium
         private:
             // Control/Device
             bool m_Focused;
-            Render::D3DManager m_D3DManager;
+            Render::DeviceManager m_DeviceManager;
 
             // Resources
             ResourceTracker* m_ResourceTracker;
@@ -279,7 +279,7 @@ namespace Helium
 
             inline IDirect3DDevice9* GetDevice() const
             {
-                return m_D3DManager.GetD3DDevice();
+                return m_DeviceManager.GetD3DDevice();
             }
 
             ResourceTracker* GetResources() const;

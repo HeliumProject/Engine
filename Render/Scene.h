@@ -3,9 +3,10 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
-#include "ObjectLoader.h"
-#include "Environment.h"
-#include "RenderMesh.h"
+#include "Render/API.h"
+#include "Render/ObjectLoader.h"
+#include "Render/Environment.h"
+#include "Render/Mesh.h"
 
 namespace Helium
 {
@@ -13,7 +14,7 @@ namespace Helium
     {
         class Renderer;
 
-        class Scene
+        class RENDER_API Scene
         {
         public:
             Scene(Renderer* render);

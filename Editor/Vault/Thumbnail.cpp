@@ -1,19 +1,19 @@
 #include "Precompile.h"
 #include "Thumbnail.h"
-#include "Editor/Render/D3DManager.h"
+#include "Render/DeviceManager.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
 
-Thumbnail::Thumbnail( Render::D3DManager* d3dManager )
-: m_D3DManager( d3dManager )
+Thumbnail::Thumbnail( Render::DeviceManager* d3dManager )
+: m_DeviceManager( d3dManager )
 , m_Texture( NULL )
 , m_IsFromIcon( false )
 {
 }
 
-Thumbnail::Thumbnail( Render::D3DManager* d3dManager, IDirect3DTexture9* texture )
-: m_D3DManager( d3dManager )
+Thumbnail::Thumbnail( Render::DeviceManager* d3dManager, IDirect3DTexture9* texture )
+: m_DeviceManager( d3dManager )
 , m_Texture( texture )
 , m_IsFromIcon( false )
 {
@@ -43,7 +43,7 @@ bool Thumbnail::FromIcon( HICON icon )
       if ( image.IsOk() )
       {
         // create texture
-        if ( SUCCEEDED( m_D3DManager->GetD3DDevice()->CreateTexture(image.GetWidth(), image.GetHeight(), 0, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, &m_Texture, NULL) ) )
+        if ( SUCCEEDED( m_DeviceManager->GetD3DDevice()->CreateTexture(image.GetWidth(), image.GetHeight(), 0, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, &m_Texture, NULL) ) )
         {
           // lock texture
           D3DLOCKED_RECT rect;

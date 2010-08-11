@@ -349,7 +349,7 @@ void EntityPanel::OnEntityAssetRefresh( Inspect::Button* button )
 
                 if (nestedScene)
                 {
-                    if ( files.insert( nestedScene->GetFullPath() ).second )
+                    if ( files.insert( nestedScene->GetPath().Get() ).second )
                     {
                         // Only reload the scene if we haven't already done so during this iteration.
                         nestedScene->Reload();

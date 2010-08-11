@@ -79,6 +79,44 @@ void Frame::SetHelpText( const tchar* text )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+// Returns true if there is a command on the undo stack.
+// 
+bool Frame::CanUndo()
+{
+    return m_UndoQueue.CanUndo();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Returns true if there is a command on the redo stack.
+// 
+bool Frame::CanRedo()
+{
+    return m_UndoQueue.CanRedo();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Undo the previous command.
+// 
+void Frame::Undo()
+{
+    m_UndoQueue.Undo();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Redo the previously undone command.
+// 
+void Frame::Redo()
+{
+    m_UndoQueue.Redo();
+}
+
+void Frame::Push( const Undo::CommandPtr& command )
+{
+    m_UndoQueue.Push( command );
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
 // Creates a menu that enumerates all panes attached to the frame manager, as
 // long as the pane has a caption.  The menu items will display checkmarks next
 // to the name if the panel is currently visible.  Clicking on a menu item will

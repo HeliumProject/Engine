@@ -425,7 +425,7 @@ void MainFrame::SceneAdded( const SceneChangeArgs& args )
 
         m_SelectionEnumerator->AddPopulateLinkListener( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Editor::Scene::PopulateLink));
 
-        Document* document = args.m_Scene->GetSceneDocument();
+        Document* document = m_SceneManager.GetDocumentManager().FindDocument( args.m_Scene->GetPath() );
         document->AddDocumentModifiedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
         document->AddDocumentSavedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
         document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
@@ -448,7 +448,8 @@ void MainFrame::SceneRemoving( const SceneChangeArgs& args )
 void MainFrame::SceneLoadFinished( const LoadArgs& args )
 {
     m_ViewPanel->GetViewport()->Refresh();
-    DocumentModified( DocumentChangedArgs( args.m_Scene->GetSceneDocument() ) );
+    Document* document = m_SceneManager.GetDocumentManager().FindDocument( args.m_Scene->GetPath() );
+    DocumentModified( DocumentChangedArgs( document ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -678,10 +679,8 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
     else if ( menu == m_MenuEdit )
     {
         // Edit->Undo/Redo is only enabled if there are commands in the queue
-        const bool canUndo = m_SceneManager.HasCurrentScene() && m_SceneManager.CanUndo();
-        const bool canRedo = m_SceneManager.HasCurrentScene() && m_SceneManager.CanRedo();
-        m_MenuEdit->Enable( wxID_UNDO, canUndo );
-        m_MenuEdit->Enable( wxID_REDO, canRedo );
+        m_MenuEdit->Enable( wxID_UNDO, CanUndo() );
+        m_MenuEdit->Enable( wxID_REDO, CanRedo() );
 
         // Edit->Invert Selection is only enabled if something is selected
         const bool isAnythingSelected = m_SceneManager.HasCurrentScene() && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0;
@@ -703,7 +702,7 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
     if ( m_SceneManager.GetDocumentManager().CloseAll() )
     {
         ScenePtr scene = m_SceneManager.NewScene( m_ViewPanel->GetViewport() );
-        scene->GetSceneDocument()->SetModified( true );
+        m_SceneManager.GetDocumentManager().FindDocument( scene->GetPath() )->SetModified( true );
         m_SceneManager.SetCurrentScene( scene );
     }
 }
@@ -1050,7 +1049,8 @@ void MainFrame::OnImport(wxCommandEvent& event)
                         return;
                     }
 
-                    currentScene->Push( currentScene->ImportFile( (const wxChar*)fileDialog.GetPath().c_str(), ImportActions::Import, flags, currentScene->GetRoot() ) );
+                    Helium::Path path( (const wxChar*)fileDialog.GetPath().c_str() );
+                    currentScene->Push( currentScene->Import( path, ImportActions::Import, flags, currentScene->GetRoot() ) );
                     break;
                 }
 
@@ -1576,9 +1576,9 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
 
 void MainFrame::OnUndo( wxCommandEvent& event )
 {
-    if ( m_SceneManager.CanUndo() )
+    if ( CanUndo() )
     {
-        m_SceneManager.Undo();
+        m_UndoQueue.Undo();
         m_ToolProperties.Read();
         if ( m_SceneManager.HasCurrentScene() )
         {
@@ -1589,9 +1589,9 @@ void MainFrame::OnUndo( wxCommandEvent& event )
 
 void MainFrame::OnRedo( wxCommandEvent& event )
 {
-    if ( m_SceneManager.CanRedo() )
+    if ( CanRedo() )
     {
-        m_SceneManager.Redo();
+        m_UndoQueue.Redo();
         m_ToolProperties.Read();
         if ( m_SceneManager.HasCurrentScene() )
         {

@@ -6,7 +6,6 @@
 #include "Foundation/Log.h"
 #include "Core/Asset/Classes/SceneAsset.h"
 
-#include "Editor/Scene/Scene.h"
 #include "Editor/Scene/SwitchSceneCommand.h"
 #include "Editor/UI/Viewport.h"
 
@@ -55,7 +54,8 @@ ScenePtr SceneManager::NewScene( Editor::Viewport* viewport, tstring path, bool 
 
     SceneDocumentPtr document = new SceneDocument( path, name );
     document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &SceneManager::DocumentClosed ) );
-    ScenePtr scene = new Editor::Scene( viewport, this, document );
+
+    ScenePtr scene = new Editor::Scene( viewport, path );
     AddScene( scene );
 
     tstring error;
@@ -74,7 +74,7 @@ ScenePtr SceneManager::NewScene( Editor::Viewport* viewport, tstring path, bool 
 ScenePtr SceneManager::OpenScene( Editor::Viewport* viewport, const tstring& path, tstring& error )
 {
     ScenePtr scene = NewScene( viewport, path, true );
-    if ( !scene->LoadFile( path ) )
+    if ( !scene->Load( path ) )
     {
         error = TXT( "Failed to load scene from " ) + path + TXT( "." );
         RemoveScene( scene );
@@ -89,10 +89,10 @@ ScenePtr SceneManager::OpenScene( Editor::Viewport* viewport, const tstring& pat
 // 
 void SceneManager::AddScene(Editor::Scene* scene)
 {
-    scene->GetSceneDocument()->AddDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
+    scene->SetEditingDelegate( SceneEditingSignature::Delegate( this, &SceneManager::OnSceneEditing ) );
+    m_DocumentManager.FindDocument( scene->GetPath() )->AddDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
 
-    const tstring& path = scene->GetFullPath();
-    Helium::Insert<M_SceneSmartPtr>::Result inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( path, scene ) );
+    Helium::Insert<M_SceneSmartPtr>::Result inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
     HELIUM_ASSERT(inserted.second);
 
     m_SceneAdded.Raise( scene );
@@ -113,10 +113,12 @@ void SceneManager::RemoveScene(Editor::Scene* scene)
     // we have no way to test (in this function) that it was a nested scene we're unloading. 
     // 
 
-    scene->GetSceneDocument()->RemoveDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
+    m_DocumentManager.FindDocument( scene->GetPath() )->RemoveDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
     m_SceneRemoving.Raise( scene );
 
-    M_SceneSmartPtr::iterator found = m_Scenes.find( scene->GetFullPath() );
+    scene->RemoveEditingDelegate();
+
+    M_SceneSmartPtr::iterator found = m_Scenes.find( scene->GetPath().Get() );
     HELIUM_ASSERT( found != m_Scenes.end() );
 
     if (found->second.Ptr() == m_CurrentScene)
@@ -212,7 +214,7 @@ Editor::Scene* SceneManager::AllocateNestedScene( Editor::Viewport* viewport, co
         parent->ChangeStatus( TXT("Loading ") + path + TXT( "..." ) );
 
         ScenePtr scenePtr = NewScene( viewport, path, false );
-        if ( !scenePtr->LoadFile( path ) )
+        if ( !scenePtr->Load( path ) )
         {
             Log::Error( TXT( "Failed to load scene from %s\n" ), path.c_str() );
         }
@@ -301,48 +303,6 @@ void SceneManager::SetCurrentScene( Editor::Scene* scene )
     m_CurrentSceneChanged.Raise( m_CurrentScene );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Returns true if there is a command on the undo stack.
-// 
-bool SceneManager::CanUndo()
-{
-    return m_UndoManager.CanUndo();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns true if there is a command on the redo stack.
-// 
-bool SceneManager::CanRedo()
-{
-    return m_UndoManager.CanRedo();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Undo the previous command.
-// 
-void SceneManager::Undo()
-{
-    m_UndoManager.Undo();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Redo the previously undone command.
-// 
-void SceneManager::Redo()
-{
-    m_UndoManager.Redo();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// The scene manager keeps track of which scene's undo queue contains the last
-// command that was done.  For every command done on a scene, this Push call
-// should be made to keep the scene manager up to date.  Adds the specified 
-// undo queue to be the next undoable operation.
-// 
-void SceneManager::Push( Undo::Queue* queue )
-{
-    m_UndoManager.Push( queue );
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Iterates over the scenes and returns the first one that is not allocated
@@ -366,6 +326,17 @@ Editor::Scene* SceneManager::FindFirstNonNestedScene() const
     return found;
 }
 
+bool SceneManager::OnSceneEditing( const SceneEditingArgs& args )
+{
+    SceneDocument* document = (SceneDocument*)m_DocumentManager.FindDocument( args.m_Scene->GetPath() );
+    if ( document )
+    {
+        return m_DocumentManager.IsCheckedOut( document );
+    }
+
+    return false;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Callback for when the path of a scene changes.  Since the scene manager 
 // stores the scenes by their paths, the internal list has to be updated.
@@ -382,7 +353,7 @@ void SceneManager::DocumentPathChanged( const DocumentPathChangedArgs& args )
 
         m_Scenes.erase( found );
         Helium::Insert<M_SceneSmartPtr>::Result inserted = 
-            m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetFullPath(), scene ) );
+            m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
         HELIUM_ASSERT( inserted.second );
     }
 }

@@ -658,14 +658,6 @@
 				RelativePath=".\Undo\Queue.h"
 				>
 			</File>
-			<File
-				RelativePath=".\Undo\QueueManager.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Undo\QueueManager.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Worker"

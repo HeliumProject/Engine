@@ -30,15 +30,15 @@ Scene::Scene()
 
 }
 
-Scene::Scene( const tstring &filePath )
+Scene::Scene( const Helium::Path& path )
 : m_MorphTargetData( new MorphTargetData() )
 {
-    Load( filePath );
+    Load( path );
 }
 
 void Scene::Reset()
 {
-    m_FilePath.clear();
+    m_Path.Set( TXT( "" ) );
     m_Hierarchy.clear();
     m_DependencyNodes.clear();
     m_Transforms.clear();
@@ -136,16 +136,16 @@ void Scene::Add( const SceneNodePtr &node )
     m_NodeAddedSignature.Raise( NodeAddedArgs( *node ) );
 }
 
-void Scene::Load( const tstring &filePath )
+void Scene::Load( const Helium::Path& path )
 {
     Reflect::V_Element elements;
-    Load( filePath, elements );
+    Load( path, elements );
 }
 
-void Scene::Load( const tstring &filePath, Reflect::V_Element& elements, Reflect::StatusHandler* status )
+void Scene::Load( const Helium::Path& path, Reflect::V_Element& elements, Reflect::StatusHandler* status )
 {
-    m_FilePath = filePath;
-    Reflect::Archive::FromFile( filePath, elements, status );
+    m_Path = path;
+    Reflect::Archive::FromFile( path, elements, status );
     PostLoad( elements );
 }
 
@@ -197,11 +197,11 @@ void Scene::PostLoad( Reflect::V_Element& elements )
 
 void Scene::Serialize()
 {
-    HELIUM_ASSERT( !m_FilePath.empty() );
-    Serialize( m_FilePath );
+    HELIUM_ASSERT( !m_Path.empty() );
+    Serialize( m_Path );
 }
 
-void Scene::Serialize( const tstring& filePath )
+void Scene::Serialize( const Helium::Path& path )
 {
     Reflect::V_Element elements;
 
@@ -212,7 +212,7 @@ void Scene::Serialize( const tstring& filePath )
         elements.push_back( itr->second );
     }
 
-    Reflect::Archive::ToFile( elements, filePath );
+    Reflect::Archive::ToFile( elements, path );
 }
 
 void Scene::Update()

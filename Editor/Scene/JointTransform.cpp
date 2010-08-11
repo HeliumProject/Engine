@@ -66,7 +66,7 @@ void JointTransform::Render( RenderVisitor* render )
   entry->m_Location = render->State().m_Matrix.Normalized();
   entry->m_Center = m_ObjectBounds.Center();
 
-  if (IsSelected() && m_Scene->IsCurrent())
+  if (IsSelected() && m_Scene->IsFocused() )
   {
     entry->m_Draw = &JointTransform::DrawSelected;
   }

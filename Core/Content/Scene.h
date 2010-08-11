@@ -120,8 +120,7 @@ namespace Helium
                 std::vector< f32 >          m_Weights;
             };
 
-            // enable reference counting
-            tstring          m_FilePath;
+            Helium::Path m_Path;
 
             // stores hierarchy info for the scene
             std::map< Helium::TUID, Helium::OrderedSet< Helium::TUID > > m_Hierarchy;
@@ -144,7 +143,7 @@ namespace Helium
 
             Scene();
             Scene( tuid fileID );
-            Scene( const tstring &filePath );
+            Scene( const Helium::Path& path );
 
             //
             //  Resets the Scene
@@ -154,8 +153,8 @@ namespace Helium
             //
             // Load a content file into the Scene
             //
-            void Load( const tstring& filePath );
-            void Load( const tstring &filePath, Reflect::V_Element& elements, Reflect::StatusHandler* status = NULL );
+            void Load( const Helium::Path& path );
+            void Load( const Helium::Path& path, Reflect::V_Element& elements, Reflect::StatusHandler* status = NULL );
             void LoadXML( const tstring& xml, Reflect::V_Element& elements, Reflect::StatusHandler* status = NULL );
 
         private:
@@ -166,7 +165,7 @@ namespace Helium
             //
         public:
             void Serialize();
-            void Serialize( const tstring& filePath );
+            void Serialize( const Helium::Path& path );
 
             //
             // Resolve shader object for a given tri in a given mesh

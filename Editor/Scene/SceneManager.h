@@ -2,6 +2,8 @@
 
 #include "Editor/API.h"
 
+#include "Scene.h"
+
 #include "Foundation/Automation/Event.h"
 #include "Core/Asset/Classes/SceneAsset.h"
 #include "Application/Undo/QueueManager.h"
@@ -26,14 +28,6 @@ namespace Helium
         class HierarchyNode;
         class Viewport;
 
-        class Scene;
-        typedef Helium::SmartPtr< Editor::Scene > ScenePtr;
-        typedef std::map< tstring, ScenePtr > M_SceneSmartPtr;
-        typedef std::map< Editor::Scene*, i32 > M_AllocScene;
-
-        class SceneDocument;
-        typedef Helium::SmartPtr< SceneDocument > SceneDocumentPtr;
-
         struct FilePathChangedArgs;
         struct NodeChangeArgs;
 
@@ -44,7 +38,6 @@ namespace Helium
             SceneChangeArgs (Editor::Scene* scene)
                 : m_Scene (scene)
             {
-
             }
         };
 
@@ -103,19 +96,8 @@ namespace Helium
             // the current scene
             Editor::Scene* m_CurrentScene;
 
-#ifdef UI_REFACTOR
-            SceneEditor* m_Editor;
-#endif
-
-            Undo::QueueManager m_UndoManager;
-
         public:
-#ifdef UI_REFACTOR
-            SceneManager( SceneEditor* editor );
-            SceneEditor* GetEditor();
-#else
             SceneManager( MessageSignature::Delegate message );
-#endif
 
             ScenePtr NewScene( Editor::Viewport* viewport, tstring path = TXT( "" ), bool addDoc = true );
             ScenePtr OpenScene( Editor::Viewport* viewport, const tstring& path, tstring& error );
@@ -158,6 +140,7 @@ namespace Helium
 
         private:
             Editor::Scene* FindFirstNonNestedScene() const;
+            bool OnSceneEditing( const SceneEditingArgs& args );
             void DocumentPathChanged( const DocumentPathChangedArgs& args );
             void DocumentClosed( const DocumentChangedArgs& args );
 

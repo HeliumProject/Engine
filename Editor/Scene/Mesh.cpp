@@ -277,9 +277,9 @@ void Mesh::Render( RenderVisitor* render )
   entry->m_Flags |= m_HasAlpha ? RenderFlags::DistanceSort : 0;
 
   bool selectable = render->State().m_Selectable;
-  bool highlighted = ( ( IsHighlighted() && m_Scene->IsCurrent() ) || ( render->State().m_Highlighted ) ) && render->GetViewport()->IsHighlighting();
-  bool selected = ( IsSelected() && m_Scene->IsCurrent() ) || ( render->State().m_Selected );
-  bool live = ( IsLive() && m_Scene->IsCurrent() ) || ( render->State().m_Live );
+  bool highlighted = ( ( IsHighlighted() && m_Scene->IsFocused() ) || ( render->State().m_Highlighted ) ) && render->GetViewport()->IsHighlighting();
+  bool selected = ( IsSelected() && m_Scene->IsFocused() ) || ( render->State().m_Selected );
+  bool live = ( IsLive() && m_Scene->IsFocused() ) || ( render->State().m_Live );
   bool wire = render->GetViewport()->GetCamera()->GetWireframeOnShaded();
 
   switch ( render->GetViewport()->GetCamera()->GetShadingMode() )

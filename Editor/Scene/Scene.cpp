@@ -36,7 +36,6 @@
 #include "Editor/Scene/SceneNodeType.h"
 #include "HierarchyNodeType.h"
 
-#include "Editor/Scene/SceneManager.h"
 #include "ScenePreferences.h"
 
 #include "ParentCommand.h"
@@ -71,19 +70,17 @@ using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Editor;
 
-Scene::Scene( Editor::Viewport* viewport, Editor::SceneManager* manager, const SceneDocumentPtr& file )
-: m_File( file )
+Scene::Scene( Editor::Viewport* viewport, const Helium::Path& path )
+: m_Path( path )
 , m_Id( TUID::Generate() )
 , m_Progress( 0 )
 , m_Importing( false )
 , m_View( viewport )
-, m_Manager( manager )
 , m_SmartDuplicateMatrix(Math::Matrix4::Identity)
 , m_ValidSmartDuplicateMatrix( false )
 , m_Color( 255 )
+, m_IsFocused( false )
 {
-    m_File->SetScene( this );
-
     LoadVisibility(); 
 
     // Mark the scene as needing to be saved when a command is added to the undo stack
@@ -94,9 +91,6 @@ Scene::Scene( Editor::Viewport* viewport, Editor::SceneManager* manager, const S
     // This event delegate will cause the scene to execute and render a frame to effect the visual outcome of a selection change
     m_Selection.AddChangingListener( SelectionChangingSignature::Delegate (this, &Scene::SelectionChanging) );
     m_Selection.AddChangedListener( SelectionChangedSignature::Delegate (this, &Scene::SelectionChanged) );
-
-    m_Manager->AddCurrentSceneChangingListener( SceneChangeSignature::Delegate( this, &Scene::CurrentSceneChanging ) );
-    m_Manager->AddCurrentSceneChangedListener( SceneChangeSignature::Delegate( this, &Scene::CurrentSceneChanged ) );
 
     // Evaluation
     m_Graph = new SceneGraph();
@@ -124,9 +118,6 @@ Scene::~Scene()
     RemoveNodeAddedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeAdded )); 
     RemoveNodeRemovedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeRemoved )); 
 
-    m_Manager->RemoveCurrentSceneChangingListener( SceneChangeSignature::Delegate( this, &Scene::CurrentSceneChanging ) );
-    m_Manager->RemoveCurrentSceneChangingListener( SceneChangeSignature::Delegate( this, &Scene::CurrentSceneChanged ) );
-
     // remove undo listener
     m_UndoQueue.RemoveCommandPushedListener( Undo::QueueChangeSignature::Delegate ( this, &Scene::UndoQueueCommandPushed ) );
     m_UndoQueue.RemoveUndoingListener( Undo::QueueChangingSignature::Delegate ( this, &Scene::UndoingOrRedoing ) );
@@ -139,42 +130,19 @@ Scene::~Scene()
     Reset();
 }
 
-bool Scene::IsCurrent()
-{
-    return m_Manager->IsCurrentScene( this );
-}
-
 bool Scene::IsEditable()
 {
-    if ( m_Manager->AllowChanges( m_File ) )
+    if ( m_EditingDelegate.Invoke( SceneEditingArgs( this ) ) )
     {
-        m_File->SetModified( true );
         return true;
     }
 
     return false;
 }
 
-const tstring& Scene::GetFileName() const
+const Helium::Path& Scene::GetPath() const
 {
-    return m_File->GetFileName();
-}
-
-tstring Scene::GetFullPath() const
-{
-    if ( !m_File->GetFilePath().empty() )
-    {
-        return m_File->GetFilePath();
-    }
-    else
-    {
-        return GetFileName();
-    }
-}
-
-SceneDocument* Scene::GetSceneDocument() const
-{
-    return m_File;
+    return m_Path;
 }
 
 const LToolPtr& Scene::GetTool()
@@ -227,24 +195,25 @@ bool Scene::Reload()
 {
     Reset();
 
-    return LoadFile( GetFullPath() );
+    return Load( m_Path );
 }
 
-bool Scene::LoadFile( const tstring& file )
+bool Scene::Load( const Helium::Path& path )
 {
     if ( !m_Nodes.empty() )
     {
+        HELIUM_BREAK();
         // Shouldn't happen
-        Log::Error( TXT( "Scene '%s' is not empty!  You should not be trying to Load '%s'.  Do an Import instead.\n" ), m_File->GetFilePath().c_str(), file.c_str() );
+        Log::Error( TXT( "Scene '%s' is not empty!  You should not be trying to Load '%s'.  Do an Import instead.\n" ), m_Path.c_str(), path.c_str() );
         return false;
     }
 
-    return ImportFile( file, ImportActions::Load, NULL ).ReferencesObject();
+    return Import( path, ImportActions::Load, NULL ).ReferencesObject();
 }
 
-Undo::CommandPtr Scene::ImportFile( const tstring& file, ImportAction action, u32 importFlags, Editor::HierarchyNode* importRoot, i32 importReflectType )
+Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u32 importFlags, Editor::HierarchyNode* importRoot, i32 importReflectType )
 {
-    EDITOR_SCENE_SCOPE_TIMER( ( "%s", file.c_str() ) );
+    EDITOR_SCENE_SCOPE_TIMER( ( "%s", path.c_str() ) );
 
     if ( action != ImportActions::Load )
     {
@@ -254,7 +223,7 @@ Undo::CommandPtr Scene::ImportFile( const tstring& file, ImportAction action, u3
         }
     }
 
-    if ( file.empty() )
+    if ( path.empty() )
     {
         return NULL;
     }
@@ -268,7 +237,7 @@ Undo::CommandPtr Scene::ImportFile( const tstring& file, ImportAction action, u3
 
     if ( action == ImportActions::Load )
     {
-        m_File->SetFilePath( file );
+        m_Path = path;
 
         LoadVisibility(); 
     }
@@ -277,7 +246,7 @@ Undo::CommandPtr Scene::ImportFile( const tstring& file, ImportAction action, u3
     m_ImportRoot = importRoot;
 
     tostringstream str;
-    str << "Loading File: " << file;
+    str << "Loading File: " << path.c_str();
     m_StatusChanged.Raise( str.str() );
 
     // read data
@@ -291,7 +260,7 @@ Undo::CommandPtr Scene::ImportFile( const tstring& file, ImportAction action, u3
 
     try
     {
-        scene->Load( file, elements, this );
+        scene->Load( path, elements, this );
     }
     catch ( const Helium::Exception& exception )
     {
@@ -1016,11 +985,11 @@ void Scene::ExportHierarchyNode( Editor::HierarchyNode* node, Reflect::V_Element
 
 bool Scene::Save()
 {
-    HELIUM_ASSERT( !m_File->GetFilePath().empty() );
-    return ExportFile( m_File->GetFilePath(), ExportFlags::Default );
+    HELIUM_ASSERT( !m_Path.empty() );
+    return Export( m_Path, ExportFlags::Default );
 }
 
-bool Scene::ExportFile( const tstring& file, const ExportArgs& args )
+bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
 {
     u64 startTimer = Helium::TimerGetClock();
 
@@ -1032,7 +1001,7 @@ bool Scene::ExportFile( const tstring& file, const ExportArgs& args )
 
     {
         tostringstream str;
-        str << "Preparing to save: " << file;
+        str << "Preparing to save: " << path.c_str();
         m_StatusChanged.Raise( str.str() );
     }
 
@@ -1045,12 +1014,12 @@ bool Scene::ExportFile( const tstring& file, const ExportArgs& args )
     {
         try
         {
-            Reflect::Archive::ToFile( spool, file, new Content::ContentVersion (), this );
+            Reflect::Archive::ToFile( spool, path.Get(), new Content::ContentVersion (), this );
         }
         catch ( Helium::Exception& ex )
         {
             tostringstream str;
-            str << "Failed to write file " << file << ": " << ex.What();
+            str << "Failed to write file " << path.c_str() << ": " << ex.What();
             wxMessageBox( str.str(), TXT( "Error" ), wxOK|wxCENTRE|wxICON_ERROR );
             result = false;
         }
@@ -1753,11 +1722,9 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
 
     tstring suffix;
 
-    if ( !m_Manager->IsCurrentScene( this ) )
+    if ( !IsFocused() )
     {
-        Helium::Path path( m_File->GetFileName() );
-        path.RemoveExtension();
-        suffix = TXT( " (" ) + path.Get() + TXT( ")" );
+        suffix = TXT( " (" ) + m_Path.Basename() + TXT( ")" );
     }
 
     //
@@ -1936,8 +1903,8 @@ bool Scene::Push(const Undo::CommandPtr& command)
         return false;
     }
 
-    m_UndoQueue.Push(command);
-    m_Manager->Push( &m_UndoQueue );
+#pragma TODO( "Raise an event, don't reach up in to the app..." )
+    wxGetApp().GetFrame()->Push( command );
 
     // change committed
     return true;
@@ -1965,7 +1932,8 @@ void Scene::UndoQueueCommandPushed( const Undo::QueueChangeArgs& args )
 {
     if ( args.m_Command->IsSignificant() )
     {
-        m_File->SetModified( true );
+#pragma TODO( "Raise an event so the SceneDocument knows this file has been modified" )
+        //m_File->SetModified( true );
     }
 }
 
@@ -2110,26 +2078,6 @@ void Scene::SelectionChanged(const OS_SelectableDumbPtr& selection)
     m_StatusChanged.Raise( str.str() );
 
     Execute(false);
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Current scene is being changed.
-// 
-void Scene::CurrentSceneChanging( const SceneChangeArgs& args )
-{
-    if ( args.m_Scene == this )
-    {
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Current scene was changed.
-// 
-void Scene::CurrentSceneChanged( const SceneChangeArgs& args )
-{
-    if ( args.m_Scene == this )
-    {
-    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3294,7 +3242,7 @@ Content::NodeVisibilityPtr Scene::GetVisibility(tuid nodeId)
 bool Scene::GetVisibilityFile(tstring& filename)
 {
     tchar buffer[1024]; 
-    _sntprintf(buffer, 1024, TXT( "Visibility/" ) TUID_HEX_FORMAT TXT( ".vis.nrb" ), m_File->GetPath().Hash() ); 
+    _sntprintf(buffer, 1024, TXT( "Visibility/" ) TUID_HEX_FORMAT TXT( ".vis.nrb" ), m_Path.Hash() ); 
 
     Helium::Path prefsDir;
     if ( !Application::GetPreferencesDirectory( prefsDir ) )

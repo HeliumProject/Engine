@@ -22,7 +22,6 @@
 #include "SceneNode.h"
 #include "SceneNodeType.h"
 #include "SceneGraph.h"
-#include "SceneManager.h"
 #include "Transform.h"
 
 namespace Helium
@@ -39,7 +38,6 @@ namespace Helium
         // 
 
         class Layer;
-        class SceneManager;
         class PickVisitor;
         struct SceneChangeArgs;
 
@@ -141,6 +139,18 @@ namespace Helium
             }
         };
         typedef Helium::Signature< void, const TitleChangeArgs& > TitleChangeSignature;
+
+        struct SceneEditingArgs
+        {
+            SceneEditingArgs( Scene* scene )
+                : m_Scene( scene )
+            {
+            }
+
+            Scene* m_Scene;
+
+        };
+        typedef Helium::Signature< bool, const SceneEditingArgs& > SceneEditingSignature;
 
         // update the status bar of the frame of this instance of the scene editor
         struct SceneStatusChangeArgs
@@ -261,10 +271,8 @@ namespace Helium
             //
 
         private:
-            // file
-            SceneDocumentPtr m_File;
-
-            // id
+            
+            Helium::Path m_Path;
             Helium::TUID m_Id;
 
             // load
@@ -306,9 +314,6 @@ namespace Helium
             // the 3d view control
             Editor::Viewport* m_View;
 
-            // the manager for this class
-            Editor::SceneManager* m_Manager;
-
             // the tool in use by this scene
             LToolPtr m_Tool;
 
@@ -325,13 +330,14 @@ namespace Helium
             // the 3D view's "color modes"
             Math::Color3 m_Color;
 
+            bool m_IsFocused;
 
             //
             // Constructor
             //
 
         public:
-            Scene( Editor::Viewport* viewport, Editor::SceneManager* manager, const SceneDocumentPtr& file );
+            Scene( Editor::Viewport* viewport, const Helium::Path& path );
             ~Scene();
 
             Helium::TUID GetId() const
@@ -340,16 +346,18 @@ namespace Helium
             }
 
             // is this the current scene in the editor?
-            bool IsCurrent();
+            void SetFocused( bool focused )
+            {
+                m_IsFocused = focused;
+            }
+            bool IsFocused()
+            {
+                return m_IsFocused;
+            }
+
 
             // is this scene able to be edited?
             bool IsEditable();
-
-            // allows access to the scene editor
-            Editor::SceneManager* GetManager() const
-            {
-                return m_Manager;
-            }
 
             // sigh, people really should only use this if they know they need to
             Undo::Queue& GetUndoQueue()
@@ -358,9 +366,7 @@ namespace Helium
             }
 
             // Path to the file that this scene is currently editing
-            const tstring& GetFileName() const;
-            tstring GetFullPath() const;
-            SceneDocument* GetSceneDocument() const;
+            const Helium::Path& GetPath() const;
 
             // get the current tool in use in this scene
             const LToolPtr& GetTool();
@@ -585,10 +591,10 @@ namespace Helium
         public:
             // Open a whole scene, replacing the current one.
             bool Reload();
-            bool LoadFile( const tstring& file ); 
+            bool Load( const Helium::Path& path ); 
 
             // Import data into this scene, possibly merging with existing nodes.
-            Undo::CommandPtr ImportFile( const tstring& file, ImportAction action = ImportActions::Import, u32 importFlags = ImportFlags::None, Editor::HierarchyNode* parent = NULL, i32 importReflectType = Reflect::ReservedTypes::Invalid );
+            Undo::CommandPtr Import( const Helium::Path& path, ImportAction action = ImportActions::Import, u32 importFlags = ImportFlags::None, Editor::HierarchyNode* parent = NULL, i32 importReflectType = Reflect::ReservedTypes::Invalid );
             Undo::CommandPtr ImportXML( const tstring& xml, u32 importFlags = ImportFlags::None, Editor::HierarchyNode* parent = NULL );
             SceneNodePtr CreateNode( Content::SceneNode* data );
             Undo::CommandPtr ImportSceneNodes( Reflect::V_Element& elements, ImportAction action, u32 importFlags, i32 importReflectType = Reflect::ReservedTypes::Invalid );
@@ -622,7 +628,7 @@ namespace Helium
             // Save nodes to a file or to an xml string buffer.  Do not change the file
             // that this scene is pointing at.  Optionally export the entire scene or
             // just selected nodes.  Optionally maintain hiearchy or dependencies.
-            bool ExportFile( const tstring& file, const ExportArgs& args );
+            bool Export( const Helium::Path& path, const ExportArgs& args );
             bool ExportXML( tstring& xml, const ExportArgs& args );
             bool Export( Reflect::V_Element& elements, const ExportArgs& args, Undo::BatchCommand* changes );
 
@@ -786,6 +792,18 @@ namespace Helium
             //
 
         private:
+            SceneEditingSignature::Delegate m_EditingDelegate;
+        public:
+            void SetEditingDelegate( const SceneEditingSignature::Delegate& listener )
+            {
+                m_EditingDelegate.Set( listener );
+            }
+            void RemoveEditingDelegate()
+            {
+                m_EditingDelegate.Clear();
+            }
+
+        private:
             SceneStatusChangeSignature::Event m_StatusChanged;
         public:
             void AddStatusChangedListener( const SceneStatusChangeSignature::Delegate& listener )
@@ -908,6 +926,8 @@ namespace Helium
 
         typedef Helium::SmartPtr< Editor::Scene > ScenePtr;
         typedef std::set< ScenePtr > S_SceneSmartPtr;
+        typedef std::map< tstring, ScenePtr > M_SceneSmartPtr;
+        typedef std::map< Scene*, i32 > M_AllocScene;
 
         /////////////////////////////////////////////////////////////////////////////
         // Command for adding and removing nodes from a scene.
@@ -927,9 +947,9 @@ namespace Helium
         class SceneImportCommand : public Undo::Command
         {
         public:
-            SceneImportCommand( Editor::Scene* scene, const tstring& sceneFilePath, ImportAction importAction = ImportActions::Import, u32 importFlags = ImportFlags::None, Editor::HierarchyNode* importRoot = NULL, i32 importReflectType = Reflect::ReservedTypes::Invalid )
+            SceneImportCommand( Editor::Scene* scene, const Helium::Path& path, ImportAction importAction = ImportActions::Import, u32 importFlags = ImportFlags::None, Editor::HierarchyNode* importRoot = NULL, i32 importReflectType = Reflect::ReservedTypes::Invalid )
                 : m_Scene( scene )
-                , m_SceneFilePath( sceneFilePath )
+                , m_Path( path )
                 , m_ImportAction( importAction )
                 , m_ImportFlags( importFlags )
                 , m_ImportRoot( importRoot )
@@ -955,19 +975,19 @@ namespace Helium
                     }
                     else
                     {
-                        m_UndoCommand = m_Scene->ImportFile( m_SceneFilePath, m_ImportAction, m_ImportFlags, m_ImportRoot, m_ImportReflectType );
+                        m_UndoCommand = m_Scene->Import( m_Path, m_ImportAction, m_ImportFlags, m_ImportRoot, m_ImportReflectType );
                     }
                 }
             }
 
         private:
             Editor::Scene*           m_Scene;
-            tstring       m_SceneFilePath;
-            ImportAction      m_ImportAction;
-            u32               m_ImportFlags;
+            Helium::Path             m_Path;
+            ImportAction             m_ImportAction;
+            u32                      m_ImportFlags;
             Editor::HierarchyNode*   m_ImportRoot;
-            Undo::CommandPtr  m_UndoCommand;
-            i32  m_ImportReflectType;
+            Undo::CommandPtr         m_UndoCommand;
+            i32                      m_ImportReflectType;
         };
 
 

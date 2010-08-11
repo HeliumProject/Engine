@@ -4,6 +4,8 @@
 #include "CommandQueue.h"
 #include "Foundation/Memory/SmartPtr.h"
 
+#include "Application/Undo/Queue.h"
+
 #include <wx/timer.h>
 
 namespace Helium
@@ -20,6 +22,13 @@ namespace Helium
 
             virtual void PostCommand( const Undo::CommandPtr& command );
             virtual void SetHelpText( const tchar* text );
+
+            // Undo/redo support
+            virtual bool CanUndo();
+            virtual bool CanRedo();
+            virtual void Undo();
+            virtual void Redo();
+            virtual void Push( const Undo::CommandPtr& command );
 
         protected:
             u32 CreatePanelsMenu( wxMenu* menu );
@@ -38,6 +47,8 @@ namespace Helium
         protected:
             CommandQueue m_CommandQueue;
             wxAuiManager m_FrameManager;
+
+            Undo::Queue  m_UndoQueue;
 
             wxTimer*  m_HelpTimer;
             wxWindow* m_HelpLastWindow;

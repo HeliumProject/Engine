@@ -292,10 +292,10 @@ void Entity::Render( RenderVisitor* render )
         const Editor::Scene* nested = GetNestedScene( render->GetViewport()->GetGeometryMode() );
 
         VisitorState state ( render->State().m_Matrix,
-            render->State().m_Highlighted || (m_Scene->IsCurrent() && IsHighlighted()),
-            render->State().m_Selected || (m_Scene->IsCurrent() && IsSelected()),
-            render->State().m_Live || (m_Scene->IsCurrent() && IsLive()),
-            render->State().m_Selectable || (m_Scene->IsCurrent() && IsSelectable()) );
+            render->State().m_Highlighted || (m_Scene->IsFocused() && IsHighlighted()),
+            render->State().m_Selected || (m_Scene->IsFocused() && IsSelected()),
+            render->State().m_Live || (m_Scene->IsFocused() && IsLive()),
+            render->State().m_Selectable || (m_Scene->IsFocused() && IsSelectable()) );
 
         if (nested)
         {

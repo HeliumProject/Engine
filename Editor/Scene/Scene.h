@@ -140,6 +140,17 @@ namespace Helium
         };
         typedef Helium::Signature< void, const TitleChangeArgs& > TitleChangeSignature;
 
+        struct ResolveSceneArgs
+        {
+            ResolveSceneArgs( const Helium::Path& path )
+                : m_Path( path )
+            {
+            }
+
+            Helium::Path m_Path;
+        };
+        typedef Helium::Signature< Scene*, const ResolveSceneArgs& > ResolveSceneSignature;
+
         struct SceneEditingArgs
         {
             SceneEditingArgs( Scene* scene )
@@ -790,6 +801,13 @@ namespace Helium
             //
             // Events
             //
+        private:
+            ResolveSceneSignature::Delegate m_ResolveDelegate;
+        public:
+            ResolveSceneSignature::Delegate& ResolveSceneDelegate()
+            {
+                return m_ResolveDelegate;
+            }
 
         private:
             SceneEditingSignature::Delegate m_EditingDelegate;

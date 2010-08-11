@@ -39,22 +39,25 @@ Document* DocumentManager::FindDocument( const Helium::Path& path ) const
 ///////////////////////////////////////////////////////////////////////////////
 // Returns true if it successfully opens a document with the specified path.
 // 
-DocumentPtr DocumentManager::OpenDocument( const DocumentPtr& document, tstring& error )
+bool DocumentManager::OpenDocument( const DocumentPtr& document, tstring& error )
 {
-    if ( FindDocument( document->GetFilePath() ) )
+    if ( !document->GetFilePath().empty() )
     {
-        error = TXT( "The specified file (" ) + document->GetFilePath() + TXT( ") is already open." );
-        return NULL;
-    }
+        if ( FindDocument( document->GetFilePath() ) )
+        {
+            error = TXT( "The specified file (" ) + document->GetFilePath() + TXT( ") is already open." );
+            return false;
+        }
 
-    if ( !IsUpToDate( document ) )
-    {
-        error = TXT( "The version of '" ) + document->GetFilePath() + TXT( "' on your computer is out of date.  You will not be able to check it out." );
-        return NULL;
+        if ( !IsUpToDate( document ) )
+        {
+            error = TXT( "The version of '" ) + document->GetFilePath() + TXT( "' on your computer is out of date.  You will not be able to check it out." );
+            return false;
+        }
     }
 
     AddDocument( document );
-    return document;
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

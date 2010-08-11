@@ -119,7 +119,7 @@ bool CurveEditTool::MouseDown( const MouseButtonInput& e )
 
         PointPtr point = new Editor::Point( m_Scene, new Content::Point( p ) );
 
-        curve->GetScene()->Push( curve->InsertControlPointAtIndex( index, point ) );
+        curve->GetOwner()->Push( curve->InsertControlPointAtIndex( index, point ) );
         break;
       }
 
@@ -132,7 +132,7 @@ bool CurveEditTool::MouseDown( const MouseButtonInput& e )
           return false;
         }
 
-        curve->GetScene()->Push( curve->RemoveControlPointAtIndex( index ) );
+        curve->GetOwner()->Push( curve->RemoveControlPointAtIndex( index ) );
         break;
       }
     }

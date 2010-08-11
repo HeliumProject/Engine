@@ -44,7 +44,7 @@ SceneManager::SceneManager( MessageSignature::Delegate message )
 ///////////////////////////////////////////////////////////////////////////////
 // Create a new scene.  Pass in true if this should be the root scene.
 // 
-ScenePtr SceneManager::NewScene( Editor::Viewport* viewport, tstring path, bool addDoc )
+ScenePtr SceneManager::NewScene( Editor::Viewport* viewport, tstring path )
 {
     tstring name;
     if ( path.empty() )
@@ -54,16 +54,16 @@ ScenePtr SceneManager::NewScene( Editor::Viewport* viewport, tstring path, bool 
 
     SceneDocumentPtr document = new SceneDocument( path, name );
     document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &SceneManager::DocumentClosed ) );
+    document->AddDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
 
     ScenePtr scene = new Editor::Scene( viewport, path );
-    AddScene( scene );
+    document->SetScene( scene );
 
     tstring error;
-    if ( addDoc && !m_DocumentManager.OpenDocument( document, error ) )
-    {
-        // Shouldn't happen
-        HELIUM_BREAK();
-    }
+    bool result = m_DocumentManager.OpenDocument( document, error );
+    HELIUM_ASSERT( result );
+
+    AddScene( scene );
 
     return scene;
 }
@@ -73,7 +73,7 @@ ScenePtr SceneManager::NewScene( Editor::Viewport* viewport, tstring path, bool 
 // 
 ScenePtr SceneManager::OpenScene( Editor::Viewport* viewport, const tstring& path, tstring& error )
 {
-    ScenePtr scene = NewScene( viewport, path, true );
+    ScenePtr scene = NewScene( viewport, path );
     if ( !scene->Load( path ) )
     {
         error = TXT( "Failed to load scene from " ) + path + TXT( "." );
@@ -90,7 +90,6 @@ ScenePtr SceneManager::OpenScene( Editor::Viewport* viewport, const tstring& pat
 void SceneManager::AddScene(Editor::Scene* scene)
 {
     scene->SetEditingDelegate( SceneEditingSignature::Delegate( this, &SceneManager::OnSceneEditing ) );
-    m_DocumentManager.FindDocument( scene->GetPath() )->AddDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
 
     Helium::Insert<M_SceneSmartPtr>::Result inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
     HELIUM_ASSERT(inserted.second);
@@ -213,7 +212,7 @@ Editor::Scene* SceneManager::AllocateNestedScene( Editor::Viewport* viewport, co
         // Try to load nested scene.
         parent->ChangeStatus( TXT("Loading ") + path + TXT( "..." ) );
 
-        ScenePtr scenePtr = NewScene( viewport, path, false );
+        ScenePtr scenePtr = NewScene( viewport, path );
         if ( !scenePtr->Load( path ) )
         {
             Log::Error( TXT( "Failed to load scene from %s\n" ), path.c_str() );

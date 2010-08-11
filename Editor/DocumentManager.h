@@ -42,7 +42,7 @@ namespace Helium
                 return m_Documents;
             }
 
-            DocumentPtr         OpenDocument( const DocumentPtr& document, tstring& error );
+            bool                OpenDocument( const DocumentPtr& document, tstring& error );
             Document*           FindDocument( const Helium::Path& path ) const;
 
             bool                SaveAll( tstring& error );

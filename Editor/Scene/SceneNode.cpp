@@ -31,12 +31,12 @@ void SceneNode::CleanupType()
   Reflect::UnregisterClass< Editor::SceneNode >();
 }
 
-SceneNode::SceneNode( Editor::Scene* scene, Content::SceneNode* data )
+SceneNode::SceneNode( Editor::Scene* owner, Content::SceneNode* data )
 : Persistent( data )
 , m_IsInitialized ( false )
 , m_NodeType( NULL )
 , m_Graph( NULL )
-, m_Scene( scene )
+, m_Owner( owner )
 , m_VisitedID( 0 )
 , m_IsTransient( false )
 {
@@ -104,7 +104,7 @@ void SceneNode::SetUseGivenName(bool use)
 
   node->m_UseGivenName = use;
 
-  m_Scene->Rename( this, use ? node->GetName() : GenerateName(), oldName );
+  m_Owner->Rename( this, use ? node->GetName() : GenerateName(), oldName );
 }
 
 void SceneNode::SetGivenName(const tstring& newName)
@@ -120,13 +120,13 @@ void SceneNode::SetGivenName(const tstring& newName)
   // this may generate us a name if we conflict with someone else
   // however, it will still be the given name, and we will still be
   // marked m_UseGivenName = true
-  m_Scene->Rename( this, newName, oldName );  
+  m_Owner->Rename( this, newName, oldName );  
 
 }
 
 void SceneNode::Rename(const tstring& newName)
 {
-  m_Scene->Rename( this, newName );
+  m_Owner->Rename( this, newName );
 }
 
 void SceneNode::PopulateManifest( Asset::SceneManifest* manifest ) const
@@ -418,7 +418,7 @@ Editor::SceneNodeType* SceneNode::DeduceNodeType()
   const tstring name = GetApplicationTypeName();
 
   // attempt to find a "natural" simple type for this object in the scene (matches compile-time type)
-  const HM_StrToSceneNodeTypeSmartPtr& nodeTypes = m_Scene->GetNodeTypesByName();
+  const HM_StrToSceneNodeTypeSmartPtr& nodeTypes = m_Owner->GetNodeTypesByName();
   HM_StrToSceneNodeTypeSmartPtr::const_iterator found = nodeTypes.find( name );
 
   // did we find it?
@@ -432,13 +432,13 @@ Editor::SceneNodeType* SceneNode::DeduceNodeType()
   if (!nodeType)
   {
     // create it
-    nodeType = CreateNodeType( m_Scene );
+    nodeType = CreateNodeType( m_Owner );
 
     // set its name
     nodeType->SetName( name );
 
     // add it to the scene
-    m_Scene->AddNodeType( nodeType );
+    m_Owner->AddNodeType( nodeType );
   }
 
   return nodeType;
@@ -465,7 +465,7 @@ void SceneNode::Execute(bool interactively)
   Dirty();
 
   // update and render
-  m_Scene->Execute(interactively);
+  m_Owner->Execute(interactively);
 }
 
 bool SceneNode::ValidatePanel(const tstring& name)
@@ -501,7 +501,7 @@ tstring SceneNode::GetMembership() const
     if ( node->HasType( Reflect::GetType<Editor::Layer>() ) )
     {
       Editor::Layer* layer = Reflect::DangerousCast< Editor::Layer >( node );
-      if ( layer->GetScene()->GetNodes().find( layer->GetID() ) != layer->GetScene()->GetNodes().end() )
+      if ( layer->GetOwner()->GetNodes().find( layer->GetID() ) != layer->GetOwner()->GetNodes().end() )
       {
         layerNames.insert( node->GetName() );
       }

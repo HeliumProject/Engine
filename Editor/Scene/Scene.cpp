@@ -1787,7 +1787,7 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
                 SceneNode* node = Reflect::ObjectCast<SceneNode>( (*itr)->GetObject() );
                 if (node)
                 {
-                    HELIUM_ASSERT( node->GetScene() == this );
+                    HELIUM_ASSERT( node->GetOwner() == this );
                 }
 #endif
             }
@@ -1811,7 +1811,7 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
                 SceneNode* node = Reflect::ObjectCast<SceneNode>( (*itr)->GetObject() );
                 if (node)
                 {
-                    HELIUM_ASSERT( node->GetScene() == this );
+                    HELIUM_ASSERT( node->GetOwner() == this );
                 }
 #endif
             }

@@ -26,6 +26,8 @@ namespace Helium
     namespace Editor
     {
         class Scene;
+        typedef Helium::SmartPtr< Editor::Scene > ScenePtr;
+
         class SceneGraph;
 
         class SceneNode;
@@ -141,7 +143,7 @@ namespace Helium
             SceneGraph* m_Graph;
 
             // The scene that owns us
-            Editor::Scene* m_Scene;
+            Editor::Scene* m_Owner;
 
             // ancestors are Dependency Nodes that are evaluated before this Node
             S_SceneNodeDumbPtr m_Ancestors;
@@ -172,7 +174,7 @@ namespace Helium
             // Implementation
             //
 
-            SceneNode( Editor::Scene* scene, Content::SceneNode* data );
+            SceneNode( Editor::Scene* owner, Content::SceneNode* data );
             virtual ~SceneNode();
 
 
@@ -215,14 +217,14 @@ namespace Helium
                 m_Graph = value;
             }
 
-            Editor::Scene* GetScene()
+            Editor::Scene* GetOwner()
             {
-                return m_Scene;
+                return m_Owner;
             }
 
-            const Editor::Scene* GetScene() const
+            const Editor::Scene* GetOwner() const
             {
-                return m_Scene;
+                return m_Owner;
             }
 
             virtual bool IsTransient() const

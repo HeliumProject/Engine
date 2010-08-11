@@ -142,7 +142,7 @@ void ScaleManipulator::SetResult()
 
       if (primary != NULL)
       {
-        if (!primary->GetNode()->GetScene()->IsEditable())
+        if (!primary->GetNode()->GetOwner()->IsEditable())
         {
           for each (ScaleManipulatorAdapter* accessor in CompleteSet<ScaleManipulatorAdapter>())
           {
@@ -171,7 +171,7 @@ void ScaleManipulator::SetResult()
         }
 
         // apply modification
-        primary->GetNode()->GetScene()->Execute(false);
+        primary->GetNode()->GetOwner()->Execute(false);
       }
     }
   }
@@ -630,7 +630,7 @@ void ScaleManipulator::MouseMove( const MouseMoveInput& e )
   }
 
   // apply modification
-  primary->GetNode()->GetScene()->Execute(true);
+  primary->GetNode()->GetOwner()->Execute(true);
 
   // flag as changed
   m_Manipulated = true;

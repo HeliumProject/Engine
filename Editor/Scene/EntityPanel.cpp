@@ -333,7 +333,7 @@ void EntityPanel::OnEntityAssetRefresh( Inspect::Button* button )
         if ( !scene )
         {
             Editor::SceneNode* node = Reflect::ObjectCast< Editor::SceneNode >( *selectionIter );
-            scene = node->GetScene();
+            scene = node->GetOwner();
         }
 
         if( entity->GetClassSet( ) )
@@ -345,7 +345,7 @@ void EntityPanel::OnEntityAssetRefresh( Inspect::Button* button )
         {
             for ( int i=0; i<GeometryModes::Count; i++ )
             {
-                Editor::Scene* nestedScene = entity->GetNestedScene(entity->GetScene()->GetViewport()->GetGeometryMode());
+                Editor::Scene* nestedScene = entity->GetNestedScene(entity->GetOwner()->GetViewport()->GetGeometryMode());
 
                 if (nestedScene)
                 {

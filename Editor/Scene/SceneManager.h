@@ -6,7 +6,6 @@
 
 #include "Foundation/Automation/Event.h"
 #include "Core/Asset/Classes/SceneAsset.h"
-#include "Application/Undo/QueueManager.h"
 
 #include "Editor/DocumentManager.h"
 #include "Editor/Selection.h"
@@ -99,7 +98,7 @@ namespace Helium
         public:
             SceneManager( MessageSignature::Delegate message );
 
-            ScenePtr NewScene( Editor::Viewport* viewport, tstring path = TXT( "" ), bool addDoc = true );
+            ScenePtr NewScene( Editor::Viewport* viewport, tstring path = TXT( "" ) );
             ScenePtr OpenScene( Editor::Viewport* viewport, const tstring& path, tstring& error );
 
             DocumentManager& GetDocumentManager()

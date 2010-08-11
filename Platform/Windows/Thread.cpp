@@ -41,7 +41,7 @@ void SetThreadName( DWORD threadId, const char* name )
 
     __try
     {
-        RaiseException( 0x406D1388, 0, sizeof(threadInfo)/sizeof(uintptr), (uintptr*)&threadInfo );
+        RaiseException( 0x406D1388, 0, 4, (ULONG_PTR*)&threadInfo );
     }
     __except( EXCEPTION_CONTINUE_EXECUTION )
     {

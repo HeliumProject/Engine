@@ -170,7 +170,7 @@ void TranslateManipulator::SetResult()
 
             if (primary != NULL)
             {
-                if (!primary->GetNode()->GetScene()->IsEditable())
+                if (!primary->GetNode()->GetOwner()->IsEditable())
                 {
                     for each (TranslateManipulatorAdapter* accessor in CompleteSet<TranslateManipulatorAdapter>())
                     {
@@ -199,7 +199,7 @@ void TranslateManipulator::SetResult()
                 }
 
                 // apply modification
-                primary->GetNode()->GetScene()->Execute(false);
+                primary->GetNode()->GetOwner()->Execute(false);
             }
         }
     }
@@ -654,7 +654,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
             if (pick.HasHits())
             {
                 V_PickHitSmartPtr sorted;
-                PickHit::Sort(primary->GetNode()->GetScene()->GetViewport()->GetCamera(), pick.GetHits(), sorted, GetSnappingMode() == TranslateSnappingModes::Vertex ? PickSortTypes::Vertex : PickSortTypes::Intersection);
+                PickHit::Sort(primary->GetNode()->GetOwner()->GetViewport()->GetCamera(), pick.GetHits(), sorted, GetSnappingMode() == TranslateSnappingModes::Vertex ? PickSortTypes::Vertex : PickSortTypes::Intersection);
 
                 V_PickHitSmartPtr::const_iterator itr = sorted.begin();
                 V_PickHitSmartPtr::const_iterator end = sorted.end();
@@ -1181,7 +1181,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
         }
 
         // apply modification
-        primary->GetNode()->GetScene()->Execute(true);
+        primary->GetNode()->GetOwner()->Execute(true);
 
         // flag as changed
         m_Manipulated = true;
@@ -1237,7 +1237,7 @@ void TranslateManipulator::KeyDown( const KeyboardInput& e )
 
         if (primary != NULL)
         {
-            primary->GetNode()->GetScene()->Execute(false);
+            primary->GetNode()->GetOwner()->Execute(false);
         }
     }
 }
@@ -1268,7 +1268,7 @@ void TranslateManipulator::KeyUp( const KeyboardInput& e )
 
         if (primary != NULL)
         {
-            primary->GetNode()->GetScene()->Execute(false);
+            primary->GetNode()->GetOwner()->Execute(false);
         }
     }
 }
@@ -1373,7 +1373,7 @@ void TranslateManipulator::SetSpace(int space)
 
     if (primary != NULL)
     {
-        primary->GetNode()->GetScene()->Execute(false);
+        primary->GetNode()->GetOwner()->Execute(false);
     }
 }
 
@@ -1390,7 +1390,7 @@ void TranslateManipulator::SetLiveObjectsOnly(bool snap)
 
     if (primary != NULL)
     {
-        primary->GetNode()->GetScene()->Execute(false);
+        primary->GetNode()->GetOwner()->Execute(false);
     }
 }
 
@@ -1414,7 +1414,7 @@ void TranslateManipulator::SetSurfaceSnap(bool snap)
 
         if (primary != NULL)
         {
-            primary->GetNode()->GetScene()->Execute(false);
+            primary->GetNode()->GetOwner()->Execute(false);
         }
     }
 }
@@ -1439,7 +1439,7 @@ void TranslateManipulator::SetObjectSnap(bool snap)
 
         if (primary != NULL)
         {
-            primary->GetNode()->GetScene()->Execute(false);
+            primary->GetNode()->GetOwner()->Execute(false);
         }
     }
 }
@@ -1464,7 +1464,7 @@ void TranslateManipulator::SetVertexSnap(bool snap)
 
         if (primary != NULL)
         {
-            primary->GetNode()->GetScene()->Execute(false);
+            primary->GetNode()->GetOwner()->Execute(false);
         }
     }
 }
@@ -1489,7 +1489,7 @@ void TranslateManipulator::SetOffsetSnap(bool snap)
 
         if (primary != NULL)
         {
-            primary->GetNode()->GetScene()->Execute(false);
+            primary->GetNode()->GetOwner()->Execute(false);
         }
     }
 }
@@ -1514,7 +1514,7 @@ void TranslateManipulator::SetGridSnap(bool snap)
 
         if (primary != NULL)
         {
-            primary->GetNode()->GetScene()->Execute(false);
+            primary->GetNode()->GetOwner()->Execute(false);
         }
     }
 }
@@ -1532,6 +1532,6 @@ void TranslateManipulator::SetDistance(float distance)
 
     if (primary != NULL)
     {
-        primary->GetNode()->GetScene()->Execute(false);
+        primary->GetNode()->GetOwner()->Execute(false);
     }
 }

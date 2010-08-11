@@ -67,10 +67,10 @@ Curve::Curve( Editor::Scene* scene, Content::Curve* curve )
 , m_Locator ( NULL )
 , m_Cone ( NULL )
 {
-  m_Locator = new Editor::PrimitiveLocator( m_Scene->GetViewport()->GetResources() );
+  m_Locator = new Editor::PrimitiveLocator( m_Owner->GetViewport()->GetResources() );
   m_Locator->Update();
 
-  m_Cone = new Editor::PrimitiveCone( m_Scene->GetViewport()->GetResources() );
+  m_Cone = new Editor::PrimitiveCone( m_Owner->GetViewport()->GetResources() );
   m_Cone->m_Radius = 0.2f;
   m_Cone->SetSolid(true);
   m_Cone->Update();
@@ -384,7 +384,7 @@ Undo::CommandPtr Curve::RemoveControlPointAtIndex( u32 index )
     {
       if ( i == index )
       {
-        Undo::CommandPtr command = new SceneNodeExistenceCommand( Undo::ExistenceActions::Remove, m_Scene, point );
+        Undo::CommandPtr command = new SceneNodeExistenceCommand( Undo::ExistenceActions::Remove, m_Owner, point );
         Dirty();
         return command;
       }
@@ -419,7 +419,7 @@ Undo::CommandPtr Curve::InsertControlPointAtIndex( u32 index, Editor::Point* pc 
   pc->SetNext( next );
   pc->SetParent( this );
 
-  Undo::CommandPtr command = new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Scene, pc );
+  Undo::CommandPtr command = new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Owner, pc );
   Dirty();
   return command;
 }
@@ -723,7 +723,7 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
 
   const VertexResource* vertices = curve->m_Vertices;
 
-  Editor::Viewport* view = node->GetScene()->GetViewport();
+  Editor::Viewport* view = node->GetOwner()->GetViewport();
   Editor::Camera* camera = view->GetCamera();
 
   u32 countCurvePoints    = (u32) data->m_Points.size();
@@ -834,10 +834,10 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
     //  Overdraw selected points
     //
     {
-      Editor::Camera* camera = curve->GetScene()->GetViewport()->GetCamera();
+      Editor::Camera* camera = curve->GetOwner()->GetViewport()->GetCamera();
       const Math::Matrix4& viewMatrix = camera->GetViewport();
       const Math::Matrix4& projMatrix = camera->GetProjection();
-      ID3DXFont* font = curve->GetScene()->GetViewport()->GetStatistics()->GetFont();
+      ID3DXFont* font = curve->GetOwner()->GetViewport()->GetStatistics()->GetFont();
       DWORD color = D3DCOLOR_ARGB(255, 255, 255, 255);
       tchar textBuf[256];
 
@@ -1063,7 +1063,7 @@ void Curve::OnReverseControlPoints( Inspect::Button* button )
       Editor::Curve* curve = Reflect::ObjectCast< Editor::Curve >( *selItr );
       if ( curve )
       {
-        scene = curve->GetScene();
+        scene = curve->GetOwner();
         batch->Push( curve->ReverseControlPoints() );
       }
     }

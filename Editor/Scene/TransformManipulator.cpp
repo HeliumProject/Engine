@@ -244,6 +244,6 @@ void TransformManipulator::SetSize(f32 size)
 
   if (primary != NULL)
   {
-    primary->GetNode()->GetScene()->Execute(false);
+    primary->GetNode()->GetOwner()->Execute(false);
   }
 }

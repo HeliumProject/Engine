@@ -50,21 +50,6 @@ Entity::Entity(Editor::Scene* scene, Asset::EntityInstance* entity)
 
 Entity::~Entity()
 {
-    if ( m_NestedSceneArt )
-    {
-        m_Scene->GetManager()->ReleaseNestedScene( m_NestedSceneArt );
-    }
-
-    if ( m_NestedSceneCollision )
-    {
-        m_Scene->GetManager()->ReleaseNestedScene( m_NestedSceneCollision );
-    }
-
-    if ( m_NestedScenePathfinding )
-    {
-        m_Scene->GetManager()->ReleaseNestedScene( m_NestedScenePathfinding );
-    }
-
     Asset::Entity* pkg = GetPackage< Asset::Entity >();
 
     pkg->RemoveComponentAddedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &Entity::OnComponentAdded ) );
@@ -74,9 +59,7 @@ Entity::~Entity()
 void Entity::ConstructorInit()
 {
     m_ClassSet = NULL;
-    m_NestedSceneArt = NULL;
-    m_NestedSceneCollision = NULL;
-    m_NestedScenePathfinding = NULL;
+    m_Scene = NULL;
 
     Asset::Entity* pkg = GetPackage< Asset::Entity >();
 
@@ -126,16 +109,14 @@ SceneNodeTypePtr Entity::CreateNodeType( Editor::Scene* scene ) const
 
 Editor::Scene* Entity::GetNestedScene( GeometryMode mode, bool load_on_demand ) const
 {
-    Editor::Scene* nestedScene = NULL;
-
     if (m_ClassSet->GetEntity())
     {
 #pragma TODO( "Support the various rendering modes.  This used to load different files for art, collision, etc." )
-        tstring nestedFile = m_ClassSet->GetContentFile();
-        m_NestedSceneArt = m_Scene->GetManager()->AllocateNestedScene( m_Scene->GetViewport(), nestedFile, m_Scene );
+        Helium::Path scenePath( m_ClassSet->GetContentFile() );
+        m_Scene = m_Owner->ResolveSceneDelegate().Invoke( ResolveSceneArgs( scenePath ) );
     }
 
-    return m_NestedSceneArt;
+    return m_Scene;
 }
 
 bool Entity::IsPointerVisible() const
@@ -373,7 +354,7 @@ bool Entity::Pick( PickVisitor* pick )
         pick->PushState( VisitorState (pick->State().m_Matrix, IsHighlighted(), IsSelected(), IsLive(), IsSelectable()) );
 
         // retrieve nested scene
-        const Editor::Scene* scene = GetNestedScene(GetScene()->GetViewport()->GetGeometryMode());
+        const Editor::Scene* scene = GetNestedScene(GetOwner()->GetViewport()->GetGeometryMode());
 
         // hit test the entire nested scene
         if (scene && scene->Pick(pick))
@@ -448,22 +429,6 @@ void Entity::SetEntityAssetPath( const tstring& entityClass )
     // since our entity class is criteria used for deducing object type,
     //  ensure we are a member of the correct type
     CheckNodeType();
-
-    // release leased nested scene pointers
-    if ( m_NestedSceneArt )
-    {
-        m_Scene->GetManager()->ReleaseNestedScene( m_NestedSceneArt );
-    }
-
-    if ( m_NestedSceneCollision )
-    {
-        m_Scene->GetManager()->ReleaseNestedScene( m_NestedSceneCollision );
-    }
-
-    if ( m_NestedScenePathfinding )
-    {
-        m_Scene->GetManager()->ReleaseNestedScene( m_NestedScenePathfinding );
-    }
 
     m_ClassChanged.Raise( EntityAssetChangeArgs( this, oldPath, newPath ) );
 

@@ -40,7 +40,7 @@ void Skin::Initialize()
 
   Content::Skin* skin = GetPackage<Content::Skin>();
 
-  m_Mesh = Reflect::ObjectCast< Editor::Mesh > (m_Scene->FindNode( skin->m_Mesh ));
+  m_Mesh = Reflect::ObjectCast< Editor::Mesh > ( m_Owner->FindNode( skin->m_Mesh ));
 
   if ( m_Mesh )
   {
@@ -52,7 +52,7 @@ void Skin::Initialize()
     V_TUID::const_iterator infEnd = skin->m_InfluenceObjectIDs.end();
     for ( ; infItr != infEnd; ++infItr )
     {
-      Editor::SceneNode* obj = m_Scene->FindNode( *infItr );
+      Editor::SceneNode* obj = m_Owner->FindNode( *infItr );
       Editor::Transform* transform = Reflect::ObjectCast< Editor::Transform >( obj );
       HELIUM_ASSERT( transform );
       if ( transform )

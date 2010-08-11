@@ -55,14 +55,7 @@ namespace Helium
 
         protected:
             class EntityAssetSet* m_ClassSet;
-            mutable Editor::Scene* m_NestedSceneArt;
-            mutable Editor::Scene* m_NestedSceneCollision;
-            mutable Editor::Scene* m_NestedScenePathfinding;
-
-
-            //
-            // Runtime Type Info
-            //
+            mutable Editor::ScenePtr m_Scene;
 
         public:
             EDITOR_DECLARE_TYPE( Editor::Entity, Editor::Instance );
@@ -70,12 +63,8 @@ namespace Helium
             static void CleanupType();
 
 
-            //
-            // Member functions
-            //
-
-            Entity(Editor::Scene* s);
-            Entity(Editor::Scene* s, Asset::EntityInstance* entity);
+            Entity(Editor::Scene* parent);
+            Entity(Editor::Scene* parent, Asset::EntityInstance* entity);
             virtual ~Entity();
 
             void ConstructorInit();

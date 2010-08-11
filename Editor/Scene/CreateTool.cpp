@@ -464,7 +464,7 @@ bool CreateTool::ValidPosition( const Math::AlignedBox& bounds, const Math::Vect
   Editor::HierarchyNode* node = Reflect::ObjectCast<Editor::HierarchyNode>( m_Instance );
   
   FrustumPickVisitor frustumPick( m_Scene->GetViewport()->GetCamera(), Math::Frustum( bounds ) );
-  m_Scene->GetManager()->GetCurrentScene()->Pick( &frustumPick );
+  m_Scene->Pick( &frustumPick );
 
   V_PickHitSmartPtr::const_iterator resultsItr = frustumPick.GetHits().begin();
   V_PickHitSmartPtr::const_iterator resultsEnd = frustumPick.GetHits().end();

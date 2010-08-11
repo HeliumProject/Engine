@@ -712,7 +712,7 @@ void LayersPanel::LayerVisibleChanged( const GridRowChangeArgs& args )
     {
         Editor::Layer* layer = layerItr->second;
         layer->SetVisible( m_Grid->IsRowVisibleChecked( args.m_RowNumber ) );
-        layer->GetScene()->Execute( false );
+        layer->GetOwner()->Execute( false );
     }
     else
     {
@@ -741,7 +741,7 @@ void LayersPanel::LayerSelectableChanged( const GridRowChangeArgs& args )
         {
             OS_SelectableDumbPtr newSelection;
 
-            OS_SelectableDumbPtr selection = layer->GetScene()->GetSelection().GetItems();
+            OS_SelectableDumbPtr selection = layer->GetOwner()->GetSelection().GetItems();
             OS_SelectableDumbPtr::Iterator itr = selection.Begin();
             OS_SelectableDumbPtr::Iterator end = selection.End();
             for ( ; itr != end; ++itr )
@@ -756,11 +756,11 @@ void LayersPanel::LayerSelectableChanged( const GridRowChangeArgs& args )
 
             if (newSelection.Size() != selection.Size())
             {
-                layer->GetScene()->GetSelection().SetItems( newSelection );
+                layer->GetOwner()->GetSelection().SetItems( newSelection );
             }
         }
 
-        layer->GetScene()->Execute( false );
+        layer->GetOwner()->Execute( false );
     }
     else
     {
@@ -779,7 +779,7 @@ void LayersPanel::RowRenamed( const GridRowRenamedArgs& args )
     if ( found != m_Layers.end() )
     {
         Editor::Layer* layer = found->second;
-        layer->GetScene()->Push( new Undo::PropertyCommand< tstring >( new Helium::MemberProperty< Editor::Layer, tstring >( layer, &Editor::Layer::GetName, &Editor::Layer::SetGivenName ), args.m_NewName ) );
+        layer->GetOwner()->Push( new Undo::PropertyCommand< tstring >( new Helium::MemberProperty< Editor::Layer, tstring >( layer, &Editor::Layer::GetName, &Editor::Layer::SetGivenName ), args.m_NewName ) );
     }
 }
 

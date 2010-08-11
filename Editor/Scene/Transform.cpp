@@ -47,7 +47,7 @@ Transform::Transform( Editor::Scene* scene, Content::Transform* transform ) : Ed
   m_BindIsDirty = true;
   m_BindTransform = Math::Matrix4::Identity;
 
-  Editor::PrimitiveAxes* axes = static_cast< Editor::PrimitiveAxes* >( m_Scene->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes ) );
+  Editor::PrimitiveAxes* axes = static_cast< Editor::PrimitiveAxes* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes ) );
   m_ObjectBounds.minimum = Math::Vector3(-axes->m_Length, -axes->m_Length, -axes->m_Length);
   m_ObjectBounds.maximum = Math::Vector3(axes->m_Length, axes->m_Length, axes->m_Length);
 }
@@ -374,14 +374,14 @@ void Transform::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const Scen
 {
   const Editor::HierarchyNode* node = Reflect::ConstAssertCast<Editor::HierarchyNode>( object );
 
-  node->GetScene()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes )->Draw( args );
+  node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes )->Draw( args );
 }
 
 void Transform::DrawSelected( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
   const Editor::HierarchyNode* node = Reflect::ConstAssertCast<Editor::HierarchyNode>( object );
 
-  node->GetScene()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::SelectedAxes )->Draw( args );
+  node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::SelectedAxes )->Draw( args );
 }
 
 bool Transform::Pick( PickVisitor* pick )

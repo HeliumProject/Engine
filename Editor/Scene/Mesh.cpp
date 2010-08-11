@@ -101,7 +101,7 @@ void Mesh::Initialize()
   V_TUID::const_iterator end = mesh->m_ShaderIDs.end();
   for ( ; itr != end; ++itr )
   {
-    Shader* shader = Reflect::ObjectCast< Shader >( m_Scene->FindNode( *itr ) );
+    Shader* shader = Reflect::ObjectCast< Shader >( m_Owner->FindNode( *itr ) );
 
     if ( shader )
     {
@@ -277,9 +277,9 @@ void Mesh::Render( RenderVisitor* render )
   entry->m_Flags |= m_HasAlpha ? RenderFlags::DistanceSort : 0;
 
   bool selectable = render->State().m_Selectable;
-  bool highlighted = ( ( IsHighlighted() && m_Scene->IsFocused() ) || ( render->State().m_Highlighted ) ) && render->GetViewport()->IsHighlighting();
-  bool selected = ( IsSelected() && m_Scene->IsFocused() ) || ( render->State().m_Selected );
-  bool live = ( IsLive() && m_Scene->IsFocused() ) || ( render->State().m_Live );
+  bool highlighted = ( ( IsHighlighted() && m_Owner->IsFocused() ) || ( render->State().m_Highlighted ) ) && render->GetViewport()->IsHighlighting();
+  bool selected = ( IsSelected() && m_Owner->IsFocused() ) || ( render->State().m_Selected );
+  bool live = ( IsLive() && m_Owner->IsFocused() ) || ( render->State().m_Live );
   bool wire = render->GetViewport()->GetCamera()->GetWireframeOnShaded();
 
   switch ( render->GetViewport()->GetCamera()->GetShadingMode() )
@@ -501,7 +501,7 @@ void Mesh::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode
 
   if (indices && vertices)
   {
-    Editor::Viewport* view = node->GetScene()->GetViewport();
+    Editor::Viewport* view = node->GetOwner()->GetViewport();
     Editor::Camera* camera = view->GetCamera();
 
     switch ( camera->GetShadingMode() )

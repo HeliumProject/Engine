@@ -74,7 +74,7 @@ void SpotLight::Initialize()
 
   if (!m_InnerCone)
   {
-    m_InnerCone = new Editor::PrimitiveCone ( m_Scene->GetViewport()->GetResources() );
+    m_InnerCone = new Editor::PrimitiveCone ( m_Owner->GetViewport()->GetResources() );
     m_InnerCone->m_Length = light->GetInnerRadius();
     m_InnerCone->m_Radius = tan(light->m_InnerConeAngle ) * m_InnerCone->m_Length;
     m_InnerCone->Update();
@@ -82,7 +82,7 @@ void SpotLight::Initialize()
 
   if (!m_OuterCone)
   {
-    m_OuterCone = new Editor::PrimitiveCone ( m_Scene->GetViewport()->GetResources() );
+    m_OuterCone = new Editor::PrimitiveCone ( m_Owner->GetViewport()->GetResources() );
     m_OuterCone->m_Length = light->GetOuterRadius();
     m_OuterCone->m_Radius = tan(light->m_OuterConeAngle ) * m_OuterCone->m_Length;
     m_OuterCone->Update();

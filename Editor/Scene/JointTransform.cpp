@@ -39,7 +39,7 @@ void JointTransform::CleanupType()
 
 JointTransform::JointTransform( Editor::Scene* scene, Content::JointTransform* joint ) : Editor::Transform( scene, joint )
 {
-  Editor::PrimitiveRings* rings = static_cast< Editor::PrimitiveRings* >( m_Scene->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings ) );
+  Editor::PrimitiveRings* rings = static_cast< Editor::PrimitiveRings* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings ) );
   m_ObjectBounds.minimum = Math::Vector3(-rings->m_Radius, -rings->m_Radius, -rings->m_Radius);
   m_ObjectBounds.maximum = Math::Vector3(rings->m_Radius, rings->m_Radius, rings->m_Radius);
 }
@@ -66,7 +66,7 @@ void JointTransform::Render( RenderVisitor* render )
   entry->m_Location = render->State().m_Matrix.Normalized();
   entry->m_Center = m_ObjectBounds.Center();
 
-  if (IsSelected() && m_Scene->IsFocused() )
+  if (IsSelected() && m_Owner->IsFocused() )
   {
     entry->m_Draw = &JointTransform::DrawSelected;
   }
@@ -87,8 +87,8 @@ void JointTransform::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const
 
   joint->SetMaterial( g_JointTransformMaterial );
 
-  node->GetScene()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointAxes )->Draw( args );
-  node->GetScene()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings )->Draw( args );
+  node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointAxes )->Draw( args );
+  node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings )->Draw( args );
 }
 
 void JointTransform::DrawSelected( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
@@ -99,13 +99,13 @@ void JointTransform::DrawSelected( IDirect3DDevice9* device, DrawArgs* args, con
 
   joint->SetMaterial( g_JointTransformMaterial );
 
-  node->GetScene()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointAxes )->Draw( args );
-  node->GetScene()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings )->Draw( args );
+  node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointAxes )->Draw( args );
+  node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings )->Draw( args );
 }
 
 bool JointTransform::Pick( PickVisitor* pick )
 {
   pick->SetCurrentObject (this, pick->State().m_Matrix.Normalized());
 
-  return pick->PickPoint(Vector3::Zero, static_cast< Editor::PrimitiveAxes* >( m_Scene->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointAxes ) )->m_Length);
+  return pick->PickPoint(Vector3::Zero, static_cast< Editor::PrimitiveAxes* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointAxes ) )->m_Length);
 }

@@ -100,7 +100,7 @@ void RotateManipulator::SetResult()
 
       if (primary != NULL)
       {
-        if (!primary->GetNode()->GetScene()->IsEditable())
+        if (!primary->GetNode()->GetOwner()->IsEditable())
         {
           for each (RotateManipulatorAdapter* accessor in CompleteSet<RotateManipulatorAdapter>())
           {
@@ -129,7 +129,7 @@ void RotateManipulator::SetResult()
         }
 
         // apply modification
-        primary->GetNode()->GetScene()->Execute(false);
+        primary->GetNode()->GetOwner()->Execute(false);
       }
     }
   }
@@ -728,7 +728,7 @@ void RotateManipulator::MouseMove( const MouseMoveInput& e )
   }
 
   // apply modification
-  primary->GetNode()->GetScene()->Execute(true);
+  primary->GetNode()->GetOwner()->Execute(true);
 
   // flag as changed
   m_Manipulated = true;
@@ -831,7 +831,7 @@ void RotateManipulator::SetSpace(int space)
 
   if (primary != NULL)
   {
-    primary->GetNode()->GetScene()->Execute(false);
+    primary->GetNode()->GetOwner()->Execute(false);
   }
 }
 

@@ -170,7 +170,7 @@ void TreeMonitor::OnNodeAdded( const NodeChangeArgs& args )
         m_SelfFrozen = true;
     }
 
-    if ( IsFrozen() && args.m_Node->GetScene() == m_SceneManager->GetCurrentScene() )
+    if ( IsFrozen() && args.m_Node->GetOwner() == m_SceneManager->GetCurrentScene() )
     {
         m_NeedsSorting = true;
     }

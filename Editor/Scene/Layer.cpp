@@ -82,7 +82,7 @@ void Layer::Initialize()
   V_TUID::const_iterator end = layer->m_Members.end();
   for ( ; itr != end; ++itr )
   {
-    Editor::SceneNode* node = m_Scene->FindNode( *itr );
+    Editor::SceneNode* node = m_Owner->FindNode( *itr );
     if ( node )
     {
       node->CreateDependency( this );
@@ -264,7 +264,7 @@ void Layer::Insert(SceneGraph* g, V_SceneNodeDumbPtr& insertedNodes )
     for ( ; itr != end; ++itr )
     {
       const TUID& id = *itr;
-      Editor::SceneNode* node = m_Scene->FindNode( id );
+      Editor::SceneNode* node = m_Owner->FindNode( id );
       if ( node )
       {
         ConnectDescendant( node );

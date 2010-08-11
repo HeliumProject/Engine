@@ -72,14 +72,14 @@ void PointLight::Initialize()
 
   if (!m_InnerSphere)
   {
-    m_InnerSphere = new Editor::PrimitiveSphere ( m_Scene->GetViewport()->GetResources() );
+    m_InnerSphere = new Editor::PrimitiveSphere ( m_Owner->GetViewport()->GetResources() );
     m_InnerSphere->m_Radius = light->GetInnerRadius();
     m_InnerSphere->Update();
   }
 
   if (!m_OuterSphere)
   {
-    m_OuterSphere = new Editor::PrimitiveSphere ( m_Scene->GetViewport()->GetResources() );
+    m_OuterSphere = new Editor::PrimitiveSphere ( m_Owner->GetViewport()->GetResources() );
     m_OuterSphere->m_Radius = light->GetOuterRadius();
     m_OuterSphere->Update();
   }

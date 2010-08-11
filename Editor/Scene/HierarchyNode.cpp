@@ -86,7 +86,7 @@ void HierarchyNode::Pack()
 
   TUID parentID( TUID::Null );
 
-  if ( GetParent() != NULL && GetParent() != m_Scene->GetRoot() )
+  if ( GetParent() != NULL && GetParent() != m_Owner->GetRoot() )
   {
     parentID = GetParent()->GetID();
   }
@@ -145,7 +145,7 @@ bool HierarchyNode::IsVisible() const
 {
   bool isVisible = m_Visible;
 
-  if ( m_Scene->GetRoot().Ptr() == this )
+  if ( m_Owner->GetRoot().Ptr() == this )
   {
     // The root object is never visible
     isVisible = false;
@@ -158,7 +158,7 @@ bool HierarchyNode::IsSelectable() const
 {
   bool isSelectable = m_Selectable;
 
-  if ( m_Scene->GetRoot().Ptr() == this )
+  if ( m_Owner->GetRoot().Ptr() == this )
   {
     // The root object is never selectable
     isSelectable = false;
@@ -329,7 +329,7 @@ HierarchyNodePtr HierarchyNode::Duplicate()
   TUID::Generate( data->m_ID ); 
 
   // have the scene create the correct application object for this data
-  HierarchyNodePtr duplicate = Reflect::ObjectCast< Editor::HierarchyNode > ( m_Scene->CreateNode( data ) );
+  HierarchyNodePtr duplicate = Reflect::ObjectCast< Editor::HierarchyNode > ( m_Owner->CreateNode( data ) );
 
   // the duplicate must be a part of the dependency graph to hold the parent/child relationship
   m_Graph->AddNode( duplicate );
@@ -368,8 +368,8 @@ HierarchyNodePtr HierarchyNode::Duplicate()
     duplicateChild->SetParent( duplicate );
   }
 
-  Content::NodeVisibilityPtr visibilityData = m_Scene->GetVisibility( duplicate->GetID() ); 
-  m_Scene->GetVisibility( GetID() )->CopyTo( visibilityData );
+  Content::NodeVisibilityPtr visibilityData = m_Owner->GetVisibility( duplicate->GetID() ); 
+  m_Owner->GetVisibility( GetID() )->CopyTo( visibilityData );
   
   return duplicate;
 }
@@ -628,7 +628,7 @@ bool HierarchyNode::ComputeVisibility() const
 
   bool isVisible = !IsHidden();
 
-  isVisible &= (parent && m_Scene && parent != m_Scene->GetRoot()) ? parent->IsVisible() : true;
+  isVisible &= (parent && m_Owner && parent != m_Owner->GetRoot()) ? parent->IsVisible() : true;
 
   isVisible &= m_NodeType ? Reflect::AssertCast<Editor::HierarchyNodeType>(m_NodeType)->IsVisible() : true;
 
@@ -746,7 +746,7 @@ void HierarchyNode::Evaluate(GraphDirection direction)
 
 bool HierarchyNode::BoundsCheck(const Math::Matrix4& instanceMatrix) const
 {
-  Editor::Camera* camera = m_Scene->GetViewport()->GetCamera();
+  Editor::Camera* camera = m_Owner->GetViewport()->GetCamera();
 
   Math::AlignedBox bounds (m_ObjectHierarchyBounds);
 
@@ -762,7 +762,7 @@ bool HierarchyNode::BoundsCheck(const Math::Matrix4& instanceMatrix) const
 
 void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
 {
-  Editor::Viewport* view = m_Scene->GetViewport();
+  Editor::Viewport* view = m_Owner->GetViewport();
 
   IDirect3DDevice9* device = view->GetResources()->GetDevice();
 
@@ -780,13 +780,13 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
 
   case ViewColorModes::Scene:
     {
-      const Math::Color3& color = m_Scene->GetColor();
+      const Math::Color3& color = m_Owner->GetColor();
       material.Ambient = Editor::Color::ColorToColorValue( defaultMaterial.Ambient.a, color.r, color.g, color.b );
     }
     break;
   }
 
-  if ( m_Scene->IsCurrent() )
+  if ( m_Owner->IsFocused() )
   {
     if ( IsSelectable() )
     {
@@ -862,7 +862,7 @@ void HierarchyNode::Render( RenderVisitor* render )
 {
   Editor::Transform* transform = GetTransform();
 
-  if ( transform && IsSelected() && m_Scene->IsCurrent() && render->GetViewport()->IsBoundsVisible() )
+  if ( transform && IsSelected() && m_Owner->IsFocused() && render->GetViewport()->IsBoundsVisible() )
   {
     Math::V_Vector3 vertices;
     Math::V_Vector3 lineList;
@@ -870,7 +870,7 @@ void HierarchyNode::Render( RenderVisitor* render )
     D3DMATERIAL9 material;
     ZeroMemory(&material, sizeof(material));
 
-    m_Scene->GetViewport()->GetDevice()->SetFVF( ElementFormats[ ElementTypes::Position ] );
+    m_Owner->GetViewport()->GetDevice()->SetFVF( ElementFormats[ ElementTypes::Position ] );
 
 
     //
@@ -880,14 +880,14 @@ void HierarchyNode::Render( RenderVisitor* render )
     {
       Math::Matrix4 matrix = render->State().m_Matrix;
 
-      m_Scene->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
+      m_Owner->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
 
       vertices.clear();
       m_ObjectBounds.GetVertices(vertices);
       Math::AlignedBox::GetWireframe( vertices, lineList );
       material.Ambient = Editor::Color::ColorToColorValue( 1, 255, 0, 0 );
-      m_Scene->GetViewport()->GetDevice()->SetMaterial(&material);
-      m_Scene->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
+      m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
+      m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
     }
 
 
@@ -898,14 +898,14 @@ void HierarchyNode::Render( RenderVisitor* render )
     {
       Math::Matrix4 matrix = render->ParentState().m_Matrix;
 
-      m_Scene->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
+      m_Owner->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
 
       vertices.clear();
       GetGlobalBounds().GetVertices(vertices);
       Math::AlignedBox::GetWireframe( vertices, lineList );
       material.Ambient = Editor::Color::ColorToColorValue( 1, 255, 128, 128 );
-      m_Scene->GetViewport()->GetDevice()->SetMaterial(&material);
-      m_Scene->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
+      m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
+      m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
     }
 
 
@@ -916,14 +916,14 @@ void HierarchyNode::Render( RenderVisitor* render )
     {
       Math::Matrix4 matrix = render->State().m_Matrix;
 
-      m_Scene->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
+      m_Owner->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
 
       vertices.clear();
       m_ObjectHierarchyBounds.GetVertices(vertices);
       Math::AlignedBox::GetWireframe( vertices, lineList );
       material.Ambient = Editor::Color::ColorToColorValue( 1, 0, 0, 255 );
-      m_Scene->GetViewport()->GetDevice()->SetMaterial(&material);
-      m_Scene->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
+      m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
+      m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
     }
 
 
@@ -934,17 +934,17 @@ void HierarchyNode::Render( RenderVisitor* render )
     {
       Math::Matrix4 matrix = render->ParentState().m_Matrix;
 
-      m_Scene->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
+      m_Owner->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
 
       vertices.clear();
       GetGlobalHierarchyBounds().GetVertices(vertices);
       Math::AlignedBox::GetWireframe( vertices, lineList );
       material.Ambient = Editor::Color::ColorToColorValue( 1, 128, 128, 255 );
-      m_Scene->GetViewport()->GetDevice()->SetMaterial(&material);
-      m_Scene->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
+      m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
+      m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
     }
 
-    m_Scene->GetViewport()->GetResources()->ResetState();
+    m_Owner->GetViewport()->GetResources()->ResetState();
   }
 }
 
@@ -1071,7 +1071,7 @@ void HierarchyNode::ConnectManipulator(ManiuplatorAdapterCollection* collection)
 {
   Editor::Transform* transform = GetTransform();
 
-  if (transform != m_Scene->GetRoot())
+  if (transform != m_Owner->GetRoot())
   {
     // for non-transform types, just forward on the call
     transform->ConnectManipulator(collection);

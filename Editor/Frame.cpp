@@ -194,8 +194,6 @@ void Frame::OnShowPanel( wxCommandEvent& args )
 // 
 void Frame::OnExiting( wxCloseEvent& args )
 {
-#pragma TODO("Save window state -Geoff")
-  //SaveWindowState();
   args.Skip();
 }
 

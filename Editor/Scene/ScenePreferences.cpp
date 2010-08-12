@@ -10,12 +10,8 @@ using namespace Helium::Editor;
 // Globals, statics, etc.
 ///////////////////////////////////////////////////////////////////////////////
 
-// Increment this value to invalidate just the window settings for the Scene Editor
-const static tstring s_WindowSettingsVersion( TXT( "11" ) );
-
 ScenePreferences::ScenePreferences()
 : m_MRU( new MRUData() )
-, m_WindowSettings( new WindowSettings( s_WindowSettingsVersion ) )
 , m_DefaultNodeVisibility( new Content::NodeVisibility() )
 , m_ScaleManipulatorSize( 0.3f )
 , m_RotateManipulatorSize( 0.3f )
@@ -35,11 +31,6 @@ ScenePreferences::ScenePreferences()
 MRUData* ScenePreferences::GetMRU()
 {
     return m_MRU;
-}
-
-WindowSettings* ScenePreferences::GetWindowSettings()
-{
-    return m_WindowSettings;
 }
 
 Content::NodeVisibility* ScenePreferences::GetDefaultNodeVisibility()

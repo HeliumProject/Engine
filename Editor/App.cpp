@@ -152,7 +152,7 @@ namespace Helium
 
 App::App()
 #pragma TODO("This needs fixing otherwise dialogs will not be modal -Geoff")
-: m_Preferences( new Preferences )
+: m_Preferences( new Preferences() )
 , m_Vault( NULL )
 , m_Frame( NULL )
 {
@@ -243,6 +243,7 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::RegisterClass<ScenePreferences>( TXT( "ScenePreferences" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClass<VaultPreferences>( TXT( "VaultPreferences" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClass<Preferences>( TXT( "Preferences" ) ) );
+
     LoadPreferences();
 
     if ( Log::GetErrorCount() )

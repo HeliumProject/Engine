@@ -17,7 +17,6 @@ namespace Helium
             ScenePreferences();
 
             MRUData* GetMRU();
-            WindowSettings* GetWindowSettings();
             Content::NodeVisibility* GetDefaultNodeVisibility(); 
 
             const Reflect::Field* ScaleManipulatorSize() const;
@@ -38,7 +37,6 @@ namespace Helium
 
         private:
             MRUDataPtr m_MRU;
-            WindowSettingsPtr m_WindowSettings;
             Content::NodeVisibilityPtr m_DefaultNodeVisibility; 
 
             f32 m_ScaleManipulatorSize;
@@ -59,7 +57,6 @@ namespace Helium
         public:
             static void EnumerateClass( Reflect::Compositor<ScenePreferences>& comp )
             {
-                comp.AddField( &ScenePreferences::m_WindowSettings, "m_WindowSettings" );
                 comp.AddField( &ScenePreferences::m_MRU, "m_MRU" );
                 comp.AddField( &ScenePreferences::m_DefaultNodeVisibility, "m_DefaultNodeVisibility" );
 

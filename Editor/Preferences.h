@@ -7,6 +7,7 @@
 #include "Editor/Scene/GridPreferences.h"
 #include "Editor/Scene/ViewportPreferences.h"
 #include "Editor/Vault/VaultPreferences.h"
+#include "Editor/WindowSettings.h"
 
 namespace Helium
 {
@@ -41,11 +42,17 @@ namespace Helium
                 return m_VaultPreferences;
             }
 
+            WindowSettings* GetWindowSettings()
+            {
+                return m_WindowSettings;
+            }
+
         private:
             ScenePreferencesPtr m_ScenePreferences;
             ViewportPreferencesPtr m_ViewportPreferences;
             GridPreferencesPtr m_GridPreferences;
             VaultPreferencesPtr m_VaultPreferences;
+            WindowSettingsPtr m_WindowSettings;
 
         public:
             static void EnumerateClass( Reflect::Compositor<Preferences>& comp )
@@ -54,6 +61,7 @@ namespace Helium
                 comp.AddField( &Preferences::m_ViewportPreferences, "ViewportPreferences"  );
                 comp.AddField( &Preferences::m_GridPreferences, "GridPreferences" );
                 comp.AddField( &Preferences::m_VaultPreferences, "VaultPreferences" );
+                comp.AddField( &Preferences::m_WindowSettings, "WindowSettings" );
             }
         };
         typedef Helium::SmartPtr< Preferences > PreferencesPtr;

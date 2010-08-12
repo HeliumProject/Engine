@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "Thumbnail.h"
-#include "Render/DeviceManager.h"
+#include "Core/Render/DeviceManager.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

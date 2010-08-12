@@ -21,7 +21,7 @@ namespace Helium
                 ID,
                 DBSearch,
             };
-            static void SearchTypesEnumerateEnumeration( Reflect::Enumeration* info )
+            static void SearchTypesEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement( File, TXT( "File" ) );
                 info->AddElement( Folder, TXT( "Folder" ) );

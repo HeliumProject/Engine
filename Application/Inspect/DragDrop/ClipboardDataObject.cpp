@@ -6,7 +6,7 @@
 using namespace Helium::Inspect;
 
 // Unique identifier for this type of clipboard data.
-static const tchar* s_Format = TXT( "Editor/ClipboardData" );
+static const tchar* s_Format = TXT( "ClipboardData" );
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

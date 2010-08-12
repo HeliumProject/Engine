@@ -5,7 +5,7 @@
 #include "VaultMenuIDs.h"
 #include "CollectionManager.h"
 
-#include "Editor/DocumentManager.h"
+#include "Application/DocumentManager.h"
 #include "Application/Inspect/DragDrop/DropTarget.h"
 #include "Application/Inspect/DragDrop/ReflectClipboardData.h"
 

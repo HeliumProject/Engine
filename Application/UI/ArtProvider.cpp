@@ -1,5 +1,3 @@
-#include "Platform/Windows/Windows.h"
-
 #include "ArtProvider.h"
 
 #include "Platform/Exception.h"

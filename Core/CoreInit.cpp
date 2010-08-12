@@ -17,9 +17,9 @@ void Core::Initialize()
     {
         g_InitStack.Push( &Content::Initialize, &Content::Cleanup );
         g_InitStack.Push( &Asset::Initialize, &Asset::Cleanup );
-        g_InitStack.Push( Reflect::RegisterClass<Core::ProjectFile>( TXT("ProjectFile") ) );
-        g_InitStack.Push( Reflect::RegisterClass<Core::ProjectFolder>( TXT("ProjectFolder") ) );
-        g_InitStack.Push( Reflect::RegisterClass<Core::Project>( TXT("Project") ) );
+        g_InitStack.Push( Reflect::RegisterClassType<Core::ProjectFile>( TXT("ProjectFile") ) );
+        g_InitStack.Push( Reflect::RegisterClassType<Core::ProjectFolder>( TXT("ProjectFolder") ) );
+        g_InitStack.Push( Reflect::RegisterClassType<Core::Project>( TXT("Project") ) );
     }
 }
 

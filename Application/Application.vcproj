@@ -1588,6 +1588,22 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Document.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Document.h"
+			>
+		</File>
+		<File
+			RelativePath=".\DocumentManager.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\DocumentManager.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Exception.cpp"
 			>
 		</File>

@@ -1,5 +1,3 @@
-#include "Platform/Windows/Windows.h"
-
 #include "FileIconsTable.h"
 
 #include "Platform/Exception.h"
@@ -12,6 +10,7 @@
 
 #include <sstream>
 
+#include <wx/wx.h>
 #include <wx/hash.h>
 #include <wx/image.h>
 #include <wx/stdpaths.h>

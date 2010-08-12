@@ -21,7 +21,7 @@ namespace Helium
                 AL88     = TextureColorFormats::AL88,
                 RGB565   = TextureColorFormats::RGB565,
             };
-            static void TextureFormatEnumerateEnumeration( Reflect::Enumeration* info )
+            static void TextureFormatEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement( DXT1,     TXT( "DXT1" ),     TXT( "DXT1" ) );
                 info->AddElement( DXT5,     TXT( "DXT5" ),     TXT( "DXT5" ) );
@@ -41,7 +41,7 @@ namespace Helium
                 Bilinear = Helium::FILTER_LINEAR_SELECT_MIP,
                 Trilinear = Helium::FILTER_LINEAR_LINEAR_MIP,
             };
-            static void TextureFilterEnumerateEnumeration( Reflect::Enumeration* info )
+            static void TextureFilterEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement( Point,     TXT( "Point" ),     TXT( "Point" ) );
                 info->AddElement( Bilinear,  TXT( "Bilinear" ),  TXT( "Bilinear" ) );
@@ -57,7 +57,7 @@ namespace Helium
                 Wrap,
                 Clamp,
             };
-            static void WrapModeEnumerateEnumeration( Reflect::Enumeration* info )
+            static void WrapModeEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement( Wrap,  TXT( "Wrap" ),  TXT( "Wrap" ) );
                 info->AddElement( Clamp, TXT( "Clamp" ), TXT( "Clamp" ) );

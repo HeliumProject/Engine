@@ -5,7 +5,7 @@
 #include "TaskOutputWindow.h"
 
 #include "Foundation/Log.h"
-#include "Editor/UI/ArtProvider.h"
+#include "Editor/ArtProvider.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

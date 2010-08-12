@@ -16,7 +16,7 @@ namespace Helium
                 Sphere,
                 Capsule,
             };
-            static void VolumeShapeEnumerateEnumeration( Reflect::Enumeration* info )
+            static void VolumeShapeEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement(Cube, TXT( "Cube" ) );
                 info->AddElement(Cylinder, TXT( "Cylinder" ) );

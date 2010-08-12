@@ -22,7 +22,7 @@ namespace Helium
                 ALPHA_SOFT_EDGE,
                 ALPHA_BLENDED,
             };
-            static void AlphaTypeEnumerateEnumeration( Reflect::Enumeration* info )
+            static void AlphaTypeEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement(ALPHA_OPAQUE, TXT( "ALPHA_OPAQUE" ), TXT( "OPAQUE" ) );
                 info->AddElement(ALPHA_OVERLAY, TXT( "ALPHA_OVERLAY" ), TXT( "OVERLAY" ) );
@@ -51,7 +51,7 @@ namespace Helium
                 WET_SURFACE_METAL,
             };
 
-            static void WetSurfaceTypeEnumerateEnumeration( Reflect::Enumeration* info )
+            static void WetSurfaceTypeEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement(WET_SURFACE_NONE,     TXT( "WET_SURFACE_NONE" ),        TXT( "None" ) );
                 info->AddElement(WET_SURFACE_SKIN,     TXT( "WET_SURFACE_SKIN" ),        TXT( "Skin" ) );

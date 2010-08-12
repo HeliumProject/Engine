@@ -189,7 +189,7 @@ namespace Helium
                 Custom = -1,
             };
 
-            static void ViewOptionIDEnumerateEnumeration( Reflect::Enumeration* info )
+            static void ViewOptionIDEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement(Small, TXT( "Small" ) );
                 info->AddElement(Medium, TXT( "Medium" ) );

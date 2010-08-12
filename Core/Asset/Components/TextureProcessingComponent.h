@@ -23,7 +23,7 @@ namespace Helium
                 RGBA32,
                 Alpha8
             };
-            static void TextureDataFormatEnumerateEnumeration( Reflect::Enumeration* info )
+            static void TextureDataFormatEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement(DXT1,   TXT( "DXT1" ),   TXT( "DXT1" ) );
                 info->AddElement(DXT5,   TXT( "DXT5" ),   TXT( "DXT5" ) );

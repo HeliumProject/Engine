@@ -1,5 +1,19 @@
-#include "Platform/Windows/Windows.h"
 #include "Application.h"
+
+#include "Platform/Assert.h"
+#include "Platform/Platform.h"
+#include "Platform/Process.h"
+#include "Platform/Debug.h"
+#include "Platform/Exception.h"
+#include "Platform/Windows/Windows.h"
+
+#include "Foundation/Log.h"
+#include "Foundation/Profile.h"
+#include "Foundation/CommandLine/Utilities.h"
+
+#include "Application/Exception.h"
+#include "Application/Exceptions.h"
+#include "Application/ExceptionListener.h"
 
 #include <crtdbg.h>
 #include <assert.h>
@@ -12,20 +26,6 @@
 #include <algorithm>
 #include <memory>
 #include <sys/timeb.h>
-
-#include "Platform/Assert.h"
-#include "Platform/Platform.h"
-#include "Platform/Process.h"
-#include "Platform/Debug.h"
-#include "Platform/Exception.h"
-
-#include "Foundation/Log.h"
-#include "Foundation/Profile.h"
-#include "Foundation/CommandLine/Utilities.h"
-
-#include "Exception.h"
-#include "Exceptions.h"
-#include "ExceptionListener.h"
 
 using namespace Helium;
 
@@ -630,6 +630,8 @@ int Application::StandardMain( int (*main)(int argc, const tchar** argv), int ar
     }
 }
 
+#if defined( WIN32 ) && defined ( _WINDOWS_ )
+
 static int StandardWinMainTryExcept( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd)
 {
     if (Helium::IsDebuggerPresent())
@@ -708,6 +710,18 @@ static int StandardWinMainEntry( int (*winMain)( HINSTANCE hInstance, HINSTANCE 
     return result;
 }
 
+namespace Helium
+{
+    namespace Application
+    {
+        APPLICATION_API int StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ),
+            HINSTANCE hInstance = ::GetModuleHandle(NULL),
+            HINSTANCE hPrevInstance = NULL,
+            LPTSTR lpCmdLine = ::GetCommandLine(),
+            int nShowCmd = SW_SHOWNORMAL );
+    }
+}
+
 int Application::StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd )
 {
     if (Helium::IsDebuggerPresent())
@@ -734,3 +748,5 @@ int Application::StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE
         return result;
     }
 }
+
+#endif

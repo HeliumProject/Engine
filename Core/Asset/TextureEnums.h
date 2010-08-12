@@ -21,7 +21,7 @@ namespace Helium
 
             HELIUM_COMPILE_ASSERT(Count == Helium::UV_COUNT);
 
-            static void TextureWrapModeEnumerateEnumeration( Reflect::Enumeration* info )
+            static void TextureWrapModeEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement(Wrap, TXT( "Wrap" ) );
                 info->AddElement(Mirror, TXT( "Mirror" ) );
@@ -60,7 +60,7 @@ namespace Helium
 
             HELIUM_COMPILE_ASSERT(COUNT == Helium::OUTPUT_CF_COUNT);
 
-            static void TextureColorFormatEnumerateEnumeration( Reflect::Enumeration* info )
+            static void TextureColorFormatEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement(UNKNOWN, TXT( "UNKNOWN" ) );
                 info->AddElement(ARGB8888, TXT( "ARGB8888" ) );
@@ -100,7 +100,7 @@ namespace Helium
                 RTF_COUNT
             };
             HELIUM_COMPILE_ASSERT( RTF_COUNT == Helium::FILTER_COUNT );
-            static void RunTimeFilterEnumerateEnumeration( Reflect::Enumeration* info )
+            static void RunTimeFilterEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement(RTF_POINT, TXT( "RTF_POINT" ), TXT( "POINT" ) );
                 info->AddElement(RTF_BILINEAR, TXT( "RTF_BILINEAR" ), TXT( "BILINEAR" ) );
@@ -122,7 +122,7 @@ namespace Helium
                 ONE_HALF,
                 ONE_FOURTH,
             };
-            static void ReductionRatioEnumerateEnumeration( Reflect::Enumeration* info )
+            static void ReductionRatioEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement(ONE_ONE, TXT( "ONE_ONE" ) );
                 info->AddElement(ONE_HALF, TXT( "ONE_HALF" ) );
@@ -151,7 +151,7 @@ namespace Helium
             };
             HELIUM_COMPILE_ASSERT( MIP_COUNT == Helium::MIP_FILTER_COUNT );
 
-            static void MipGenFilterTypeEnumerateEnumeration( Reflect::Enumeration* info )
+            static void MipGenFilterTypeEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement(MIP_NONE, TXT( "MIP_NONE" ), TXT( "NONE" ) );
                 info->AddElement(MIP_POINT, TXT( "MIP_POINT" ), TXT( "POINT" ) );
@@ -188,7 +188,7 @@ namespace Helium
             };
             HELIUM_COMPILE_ASSERT( POST_COUNT == Helium::IMAGE_FILTER_COUNT );
 
-            static void PostMipFilterTypeEnumerateEnumeration( Reflect::Enumeration* info )
+            static void PostMipFilterTypeEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement(POST_NOCHANGE, TXT( "POST_NOCHANGE" ), TXT( "NO_CHANGE" ) );
                 info->AddElement(POST_LIGHTER, TXT( "POST_LIGHTER" ), TXT( "LIGHTER" ) );

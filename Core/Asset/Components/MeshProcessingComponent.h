@@ -17,7 +17,7 @@ namespace Helium
                 High
             };
 
-            static void MeshComressionFactorEnumerateEnumeration( Reflect::Enumeration* info )
+            static void MeshComressionFactorEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement( None,   TXT( "None" ),   TXT( "None" ) );
                 info->AddElement( Low,    TXT( "Low" ),    TXT( "Low" ) );

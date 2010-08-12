@@ -7,8 +7,6 @@
 
 #include <wx/wx.h>
 
-#undef RegisterClass
-
 #include "Application/Application.h"
 
 #include "Editor/Graph/ShaderFrame.h"
@@ -258,7 +256,7 @@ FragmentShaderApp::OnRun()
     Shape      t5; Serialized::RegisterSerializedClass(t5.GetClassName(), t5.Create);
     Clipboard  t6; Serialized::RegisterSerializedClass(t6.GetClassName(), t6.Create);
     // HACK must separate Graph into a Canvas and a Shape
-    //Graph      t7; Serialized::RegisterClass(t7.GetClassName(), t7.Create);
+    //Graph      t7; Serialized::RegisterSerializedClass(t7.GetClassName(), t7.Create);
     Serialized::RegisterSerializedClass(wxT("graph"), Graph::Create);
 
     g_FragmentShaderLuaState = LuaUtilities::NewState();

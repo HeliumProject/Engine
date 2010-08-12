@@ -1,25 +1,15 @@
-#include "Platform/Windows/Windows.h"
-
 #include "AssetClass.h"
 
+#include "Foundation/Log.h"
+#include "Foundation/Reflect/Object.h"
+#include "Foundation/Reflect/Version.h"
+#include "Foundation/Reflect/Visitor.h"
+#include "Foundation/Reflect/Serializers.h"
 #include "Foundation/Component/Component.h"
 
 #include "Core/Asset/Classes/Entity.h"
 #include "Core/Asset/Classes/ShaderAsset.h"
 #include "Core/Asset/Classes/SceneAsset.h"
-
-#include "Foundation/Log.h"
-#include "Foundation/Reflect/Version.h"
-#include "Foundation/Reflect/Object.h"
-
-#include "Foundation/Reflect/Visitor.h"
-#include "Foundation/Reflect/PathSerializer.h"
-#include "Foundation/Reflect/ArraySerializer.h"
-#include "Foundation/Reflect/MapSerializer.h"
-#include "Foundation/Reflect/SetSerializer.h"
-#include "Foundation/Reflect/ElementArraySerializer.h"
-#include "Foundation/Reflect/ElementMapSerializer.h"
-#include "Foundation/Reflect/ElementSetSerializer.h"
 
 #include <memory>
 

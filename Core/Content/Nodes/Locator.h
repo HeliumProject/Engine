@@ -14,7 +14,7 @@ namespace Helium
                 Cross,
                 Cube,
             };
-            static void LocatorShapeEnumerateEnumeration( Reflect::Enumeration* info )
+            static void LocatorShapeEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement(Cross, TXT( "Cross" ) );
                 info->AddElement(Cube, TXT( "Cube" ) );

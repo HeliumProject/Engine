@@ -9,7 +9,7 @@
 #include "SearchHistory.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Platform/Types.h"
-#include "Editor/DocumentManager.h"
+#include "Application/DocumentManager.h"
 
 namespace Helium
 {

@@ -15,9 +15,6 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
-#pragma TODO( "Why is RegisterClass defined?" )
-#undef RegisterClass
-
 static i32 g_InitCount = 0;
 static Helium::InitializerStack g_RegisteredTypes;
 
@@ -27,8 +24,8 @@ void InspectFile::Initialize()
   {
     Inspect::Initialize();
 
-    g_RegisteredTypes.Push( Reflect::RegisterClass<FileDialogButton>( TXT( "InspectFileDialogButton" ) ) );
-    g_RegisteredTypes.Push( Reflect::RegisterClass<FileBrowserButton>( TXT( "InspectFileBrowserButton" ) ) );
+    g_RegisteredTypes.Push( Reflect::RegisterClassType<FileDialogButton>( TXT( "InspectFileDialogButton" ) ) );
+    g_RegisteredTypes.Push( Reflect::RegisterClassType<FileBrowserButton>( TXT( "InspectFileBrowserButton" ) ) );
 
     ReflectFieldInterpreterFactory::Register<FileContainerInterpreter>( Reflect::GetType<Reflect::StringArraySerializer>(), Reflect::FieldFlags::FilePath );
     ReflectFieldInterpreterFactory::Register<FileInterpreter>( Reflect::GetType<Reflect::StringSerializer>(), Reflect::FieldFlags::FilePath );

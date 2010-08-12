@@ -1,15 +1,13 @@
-#include "Platform/Windows/Windows.h"
-#include "Platform/Windows/Console.h"
-#include "Platform/Exception.h"
-
-#include "Application.h"
 #include "ExceptionListener.h"
-#include "ExceptionReport.h"
 
+#include "Platform/Exception.h"
+#include "Platform/Windows/Console.h"
+#include "Platform/Windows/Windows.h"
 #include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/Profile.h"
 #include "Foundation/Log.h"
-#include "Platform/Exception.h"
+#include "Application/Application.h"
+#include "Application/ExceptionReport.h"
 
 #include <time.h>
 #include <sstream>

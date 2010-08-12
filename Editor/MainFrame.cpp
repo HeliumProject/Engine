@@ -222,7 +222,7 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     // Restore layout if any
     //
 
-    wxGetApp().GetPreferences()->GetScenePreferences()->GetWindowSettings()->ApplyToWindow( this, &m_FrameManager, true );
+    wxGetApp().GetPreferences()->GetWindowSettings()->ApplyToWindow( this, &m_FrameManager, true );
     m_ViewPanel->GetViewport()->LoadPreferences( wxGetApp().GetPreferences()->GetViewportPreferences() ); 
 
     //
@@ -277,6 +277,8 @@ MainFrame::~MainFrame()
     m_MRU->ToVector( mruPaths );
     wxGetApp().GetPreferences()->GetScenePreferences()->GetMRU()->SetPaths( mruPaths );
 #endif
+
+    wxGetApp().GetPreferences()->GetWindowSettings()->SetFromWindow( this, &m_FrameManager );
     m_ViewPanel->GetViewport()->SavePreferences( wxGetApp().GetPreferences()->GetViewportPreferences() ); 
     wxGetApp().SavePreferences();
 

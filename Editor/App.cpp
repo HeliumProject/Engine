@@ -152,7 +152,7 @@ namespace Helium
 
 App::App()
 #pragma TODO("This needs fixing otherwise dialogs will not be modal -Geoff")
-: m_Preferences( new Preferences )
+: m_Preferences( new Preferences() )
 , m_Vault( NULL )
 , m_Frame( NULL )
 {
@@ -235,14 +235,15 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::RegisterEnumType<ViewOptionIDs::ViewOptionID>( &ViewOptionIDs::ViewOptionIDEnumerateEnum, TXT( "ViewOptionID" ) ) );
 
     // preferences
-    m_InitializerStack.Push( Reflect::RegisterClassType<Settings>( TXT( "Settings" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType<WindowSettings>( TXT( "WindowSettings" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType<CameraPreferences>( TXT( "CameraPreferences" ) ) ); 
-    m_InitializerStack.Push( Reflect::RegisterClassType<ViewportPreferences>( TXT( "ViewportPreferences" ) ) ); 
-    m_InitializerStack.Push( Reflect::RegisterClassType<GridPreferences>( TXT( "GridPreferences" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType<ScenePreferences>( TXT( "ScenePreferences" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType<VaultPreferences>( TXT( "VaultPreferences" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType<Preferences>( TXT( "Preferences" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClass<Settings>( TXT( "Settings" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClass<WindowSettings>( TXT( "WindowSettings" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClass<CameraPreferences>( TXT( "CameraPreferences" ) ) ); 
+    m_InitializerStack.Push( Reflect::RegisterClass<ViewportPreferences>( TXT( "ViewportPreferences" ) ) ); 
+    m_InitializerStack.Push( Reflect::RegisterClass<GridPreferences>( TXT( "GridPreferences" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClass<ScenePreferences>( TXT( "ScenePreferences" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClass<VaultPreferences>( TXT( "VaultPreferences" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClass<Preferences>( TXT( "Preferences" ) ) );
+
     LoadPreferences();
 
     if ( Log::GetErrorCount() )

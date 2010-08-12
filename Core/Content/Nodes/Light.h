@@ -18,7 +18,7 @@ namespace Helium
                 VortexNoTrail,
             };
 
-            static void LensFlareTypeEnumerateEnumeration( Reflect::Enumeration* info )
+            static void LensFlareTypeEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement(Disabled ,       TXT( "Disabled" ) );
                 info->AddElement(Vortex ,         TXT( "Vortex" ) );
@@ -44,7 +44,7 @@ namespace Helium
                 AmbientVolume,
                 SunShadow
             };
-            static void LightTypeEnumerateEnumeration( Reflect::Enumeration* info )
+            static void LightTypeEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement(Point, TXT( "Point" ) );
                 info->AddElement(Spot, TXT( "Spot" ) );
@@ -70,7 +70,7 @@ namespace Helium
                 RealTime,
                 LightmapOnly,
             };
-            static void LightRenderTypeEnumerateEnumeration( Reflect::Enumeration* info )
+            static void LightRenderTypeEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement(Baked, TXT( "Baked" ) );
                 info->AddElement(RealTime, TXT( "RealTime" ) );

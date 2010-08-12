@@ -1,13 +1,12 @@
-#include "Platform/Windows/Windows.h"
-
 #include "ExceptionReport.h"
 
+#include "Platform/Process.h"
+#include "Platform/Environment.h"
+#include "Platform/Windows/Memory.h"
+#include "Platform/Windows/Windows.h"
 #include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
-#include "Platform/Windows/Memory.h"
-#include "Platform/Process.h"
-#include "Platform/Environment.h"
 
 #include <sstream>
 

@@ -8,12 +8,12 @@
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
 #include "Application/Inspect/DragDrop/DropTarget.h"
 #include "Application/Inspect/DragDrop/ReflectClipboardData.h"
-#include "Editor/Scene/SceneManager.h"
+#include "Core/Scene/SceneManager.h"
 #include "Application/UI/FileDialog.h"
 #include "Application/UI/ArtProvider.h"
 #include "Application/UI/MenuButton.h"
-#include "Editor/UI/Controls/Tree/SortTreeCtrl.h"
-#include "Editor/UI/ArtProvider.h"
+#include "Editor/Controls/Tree/SortTreeCtrl.h"
+#include "Editor/ArtProvider.h"
 #include "Editor/App.h"
 
 using namespace Helium;

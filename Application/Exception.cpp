@@ -1,18 +1,18 @@
 #include "Exception.h"
 
+#include "Platform/Assert.h"
+#include "Platform/String.h"
+#include "Platform/Windows/Console.h"
+#include "Platform/Windows/Memory.h"
+#include "Platform/Windows/Windows.h"
+#include "Foundation/Log.h"
+
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>
 #include <fstream>
 #include <sys/stat.h>
-
-#include "Platform/Assert.h"
-#include "Platform/String.h"
-#include "Platform/Windows/Windows.h"
-#include "Platform/Windows/Console.h"
-#include "Platform/Windows/Memory.h"
-#include "Foundation/Log.h"
 
 using namespace Helium;
 using namespace Helium::Debug;

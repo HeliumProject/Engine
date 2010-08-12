@@ -1,14 +1,14 @@
-#include "Platform/Windows/Windows.h"
 #include "Client.h"
-#include "Process.h"
 
 #include "Foundation/Log.h"
 #include "Platform/Exception.h"
+#include "Platform/Windows/Windows.h"
 #include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/IPC/Pipe.h"
 
 #include "Application/Exception.h"
 #include "Application/Application.h"
+#include "Application/Worker/Process.h"
 
 #include <sstream>
 
@@ -58,19 +58,19 @@ bool Client::Initialize( bool debug, bool wait )
 {
     IPC::PipeConnection* connection = new IPC::PipeConnection ();
 
-  // init pipe connection with this process' process id (hex)
-  tostringstream stream;
+    // init pipe connection with this process' process id (hex)
+    tostringstream stream;
 
-  if ( debug )
-  {
-    stream << TXT( "worker_debug" );
-  }
-  else
-  {
-    stream << TXT( "worker_" ) << std::hex << GetProcessId(GetCurrentProcess());
-  }
+    if ( debug )
+    {
+        stream << TXT( "worker_debug" );
+    }
+    else
+    {
+        stream << TXT( "worker_" ) << std::hex << ::GetProcessId(GetCurrentProcess());
+    }
 
-  connection->Initialize(false, TXT( "Worker Process Connection" ), stream.str().c_str());
+    connection->Initialize(false, TXT( "Worker Process Connection" ), stream.str().c_str());
 
     // setup global connection
     g_Connection = connection;
@@ -90,12 +90,12 @@ bool Client::Initialize( bool debug, bool wait )
         Sleep( 1 );
     }
 
-  // error out with an exception if we didnt' connect
-  if (g_Connection->GetState() != IPC::ConnectionStates::Active)
-  {
-    Log::Error( TXT( "Timeout connecting to manager process" ) );
-    return false;
-  }
+    // error out with an exception if we didnt' connect
+    if (g_Connection->GetState() != IPC::ConnectionStates::Active)
+    {
+        Log::Error( TXT( "Timeout connecting to manager process" ) );
+        return false;
+    }
 
     // hook up our handler to Console
     Log::AddPrintedListener( Log::PrintedSignature::Delegate (&PrintedListener) );

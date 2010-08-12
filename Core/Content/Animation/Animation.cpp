@@ -1,10 +1,9 @@
-#include "Platform/Windows/Windows.h"
 #include "Animation.h"
+
+#include "Foundation/Log.h"
 
 #include "Core/Content/Scene.h"
 #include "Core/Content/ContentExceptions.h"
-
-#include "Foundation/Log.h"
 
 using namespace Helium;
 using namespace Helium::Content;

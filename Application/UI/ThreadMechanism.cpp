@@ -1,7 +1,6 @@
 #include "ThreadMechanism.h"
 
-#include "Platform/Windows/Windows.h"
-
+#include <wx/wx.h>
 #include <wx/event.h>
 #include <wx/frame.h>
 

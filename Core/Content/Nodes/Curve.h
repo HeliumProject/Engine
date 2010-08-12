@@ -20,7 +20,7 @@ namespace Helium
                 CatmullRom,
             };
 
-            static void CurveTypeEnumerateEnumeration( Reflect::Enumeration* info )
+            static void CurveTypeEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement(Linear, TXT( "Linear" ) );
                 info->AddElement(BSpline, TXT( "BSpline" ) );
@@ -39,7 +39,7 @@ namespace Helium
                 IndexOnly
             };
 
-            static void ControlPointLabelEnumerateEnumeration( Reflect::Enumeration* info )
+            static void ControlPointLabelEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement( None, TXT( "None" ) );
                 info->AddElement( CurveAndIndex, TXT( "Curve and Index" ) );

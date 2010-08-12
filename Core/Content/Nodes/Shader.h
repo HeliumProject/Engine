@@ -29,6 +29,9 @@ namespace Helium
             // Base material color (128 bit)
             Math::Vector4 m_BaseColor;
 
+            // The file for additional shader details
+            Helium::Path m_AssetPath;
+
             Shader ()
                 : m_WrapU (true)
                 , m_WrapV (true)

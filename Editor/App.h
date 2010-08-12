@@ -3,13 +3,13 @@
 #include "Platform/Compiler.h"
 #include "Foundation/InitializerStack.h"
 
-#include "Editor/UI/MainFrame.h"
+#include "Editor/MainFrame.h"
 #include "Platform/Thread.h"
 #include "Tracker/Tracker.h"
 #include "Editor/Vault/Vault.h"
 
 #include "Preferences.h"
-#include "Editor/DocumentManager.h"
+#include "Application/DocumentManager.h"
 
 #include <wx/app.h>
 #include <wx/xrc/xmlres.h>

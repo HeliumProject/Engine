@@ -53,12 +53,11 @@ namespace Helium
 
     namespace AcceleratorButtons
     {
-        enum AcceleratorButtons
+        enum AcceleratorButton
         {
             Alt         = 1 << 16,
             Ctrl        = 1 << 17,
             Shift       = 1 << 18,
-            Symbol      = 1 << 19,
         };
     }
 
@@ -115,6 +114,10 @@ namespace Helium
         bool LeftIsDown() const     { return IsButtonDown( MouseButtons::Left ); }
         bool MiddleIsDown() const   { return IsButtonDown( MouseButtons::Middle ); }
         bool RightIsDown() const    { return IsButtonDown( MouseButtons::Right ); }
+
+        bool AltIsDown() const      { return IsButtonDown( AcceleratorButtons::Alt ); }
+        bool CtrlIsDown() const     { return IsButtonDown( AcceleratorButtons::Ctrl ); }
+        bool ShiftIsDown() const    { return IsButtonDown( AcceleratorButtons::Shift ); }
 
     protected:
         u32         m_Buttons;  // the states of all the buttons (always set)

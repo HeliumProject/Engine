@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Editor/API.h"
-#include "Settings.h"
+#include "Core/Scene/Settings.h"
 
 class wxAuiManager;
 
@@ -12,7 +12,7 @@ namespace Helium
         class WindowSettings;
         typedef Helium::SmartPtr< WindowSettings > WindowSettingsPtr;
 
-        class EDITOR_EDITOR_API WindowSettings : public Reflect::ConcreteInheritor< WindowSettings, Settings >
+        class WindowSettings : public Reflect::ConcreteInheritor< WindowSettings, Core::Settings >
         {
         public:
             WindowSettings( const tstring& version = TXT( "" ), wxPoint pos = wxDefaultPosition, wxSize size = wxDefaultSize );

@@ -4,8 +4,8 @@
 #include "Foundation/File/Directory.h"
 #include "Core/Asset/AssetClass.h"
 #include "Core/Asset/Classes/ShaderAsset.h"
-#include "Render/DeviceManager.h"
-#include "Editor/Scene/Render.h"
+#include "Core/Render/DeviceManager.h"
+#include "Core/Scene/Render.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

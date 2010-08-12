@@ -1,0 +1,37 @@
+#pragma once
+
+#include "Core/API.h"
+#include "Application/Undo/PropertyCommand.h"
+
+namespace Helium
+{
+    namespace Core
+    {
+        // Forwards
+        class Scene;
+        class SceneManager;
+        struct SceneChangeArgs;
+
+        /////////////////////////////////////////////////////////////////////////////
+        // Undo command for switching the current scene.
+        // 
+        class SwitchSceneCommand : public Undo::PropertyCommand< Core::Scene* >
+        {
+        private:
+            Core::SceneManager* m_SceneManager;
+            Core::Scene* m_OldScene;
+            Core::Scene* m_NewScene;
+            bool m_IsValid;
+
+        public:
+            SwitchSceneCommand( Core::SceneManager* manager, Core::Scene* newScene );
+            virtual ~SwitchSceneCommand();
+            virtual bool IsSignificant() const HELIUM_OVERRIDE;
+            virtual void Undo() HELIUM_OVERRIDE;
+            virtual void Redo() HELIUM_OVERRIDE;
+
+        private:
+            void SceneRemoving( const SceneChangeArgs& args );
+        };
+    }
+}

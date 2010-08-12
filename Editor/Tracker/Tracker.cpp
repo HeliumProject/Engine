@@ -24,7 +24,7 @@ Tracker::Tracker()
 {
     if ( ++s_InitCount == 1 )
     {
-        //s_InitializerStack.Push( Reflect::RegisterClass< AssetIndexData >( TXT( "AssetIndexData" ) ) );
+        //s_InitializerStack.Push( Reflect::RegisterClassType< AssetIndexData >( TXT( "AssetIndexData" ) ) );
     }
 }
 

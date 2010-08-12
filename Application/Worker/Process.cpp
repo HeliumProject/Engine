@@ -1,15 +1,16 @@
-#include "Platform/Windows/Windows.h"
 #include "Process.h"
 
-#include <sstream>
+#include "Platform/Exception.h"
+#include "Platform/Windows/Windows.h"
 
 #include "Foundation/Log.h"
-#include "Platform/Exception.h"
-#include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/IPC/Pipe.h"
+#include "Foundation/CommandLine/Utilities.h"
 
 #include "Application/Application.h"
 #include "Application/Exception.h"
+
+#include <sstream>
 
 using namespace Helium;
 using namespace Helium::Worker;

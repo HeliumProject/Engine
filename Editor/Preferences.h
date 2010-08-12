@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Editor/API.h"
+#include "Core/API.h"
 
-#include "Settings.h"
-#include "Editor/Scene/ScenePreferences.h"
-#include "Editor/Scene/GridPreferences.h"
-#include "Editor/Scene/ViewportPreferences.h"
+#include "Core/Scene/Settings.h"
+#include "Core/Scene/ScenePreferences.h"
+#include "Core/Scene/GridPreferences.h"
+#include "Core/Scene/ViewportPreferences.h"
 #include "Editor/Vault/VaultPreferences.h"
 #include "Editor/WindowSettings.h"
 
@@ -17,7 +17,7 @@ namespace Helium
         // Base class for preferenced within Editor.  Provides convenience functions
         // for saving and loading.
         // 
-        class EDITOR_EDITOR_API Preferences : public Reflect::ConcreteInheritor< Preferences, Settings >
+        class Preferences : public Reflect::ConcreteInheritor< Preferences, Settings >
         {
         public:
             Preferences();
@@ -79,7 +79,7 @@ namespace Helium
                 FullPath
             };
 
-            static void FilePathOptionEnumerateEnumeration( Reflect::Enumeration* info )
+            static void FilePathOptionEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement(Basename, TXT( "Basename" ) );
                 info->AddElement(Filename, TXT( "Filename" ) );
@@ -90,6 +90,6 @@ namespace Helium
         typedef FilePathOptions::FilePathOption FilePathOption;
 
         // Get the UI label for a file path based upon the specified FilePathOption
-        EDITOR_EDITOR_API tstring PathToLabel( const Helium::Path& path, const FilePathOption filePathOption );
+        tstring PathToLabel( const Helium::Path& path, const FilePathOption filePathOption );
     }
 }

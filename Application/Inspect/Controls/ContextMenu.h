@@ -48,7 +48,7 @@ namespace Helium
         typedef Helium::SmartPtr<ContextMenu> ContextMenuPtr;
 
         // popup-time context menu setup delegate
-        typedef Helium::Signature<void, ContextMenuPtr> LSetupContextMenuSignature;
+        typedef Helium::Signature<void, ContextMenuPtr> SetupContextMenuSignature;
 
 
         //
@@ -89,7 +89,7 @@ namespace Helium
             }
 
             // event to add dynamic context menus items to the menu instance
-            LSetupContextMenuSignature::Event m_SetupContextMenuEvent;
+            SetupContextMenuSignature::Event m_SetupContextMenuEvent;
 
             virtual void AddItem(const tstring& item, ContextMenuSignature::Delegate delegate);
             virtual void AddSeperator();

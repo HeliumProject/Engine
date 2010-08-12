@@ -19,8 +19,8 @@ void Component::Initialize()
   {
     g_ComponentInitializerStack.Push( &Reflect::Initialize, &Reflect::Cleanup );
 
-    g_ComponentRegisteredTypes.Push( Reflect::RegisterClass<ComponentBase>( TXT("ComponentBase") ) );
-    g_ComponentRegisteredTypes.Push( Reflect::RegisterClass<ComponentCollection>( TXT("ComponentCollection") ) );
+    g_ComponentRegisteredTypes.Push( Reflect::RegisterClassType<ComponentBase>( TXT("ComponentBase") ) );
+    g_ComponentRegisteredTypes.Push( Reflect::RegisterClassType<ComponentCollection>( TXT("ComponentCollection") ) );
 
   }
 }

@@ -14,7 +14,7 @@ namespace Helium
     {
         typedef std::map< i32, wxWindow* > M_MenuIdToPanel;
 
-        class EDITOR_EDITOR_API Frame HELIUM_ABSTRACT : public wxFrame
+        class Frame HELIUM_ABSTRACT : public wxFrame
         {
         public:
             Frame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxT( "frame" ) );

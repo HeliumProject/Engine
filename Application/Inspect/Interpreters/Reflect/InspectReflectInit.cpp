@@ -12,9 +12,6 @@
 #include "Application/Inspect/Interpreters/Reflect/ReflectSetInterpreter.h"
 #include "Application/Inspect/Interpreters/Reflect/ReflectMapInterpreter.h"
 
-#pragma TODO( "Why is RegisterClass defined?" )
-#undef RegisterClass
-
 using namespace Helium;
 using namespace Helium::Inspect;
 
@@ -34,10 +31,10 @@ void InspectReflect::Initialize()
     {
         g_IntializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
 
-        g_IntializerStack.Push( Reflect::RegisterClass<ClientDataControl>( TXT( "InspectClientDataControl" ) ) );
-        g_IntializerStack.Push( Reflect::RegisterClass<ClientDataFilter>( TXT( "InspectClientDataFilter" ) ) );
+        g_IntializerStack.Push( Reflect::RegisterClassType<ClientDataControl>( TXT( "InspectClientDataControl" ) ) );
+        g_IntializerStack.Push( Reflect::RegisterClassType<ClientDataFilter>( TXT( "InspectClientDataFilter" ) ) );
 
-        g_IntializerStack.Push( Reflect::RegisterClass<ReflectBitfieldCheckBox>( TXT( "InspectReflectBitfieldCheckBox" ) ) );
+        g_IntializerStack.Push( Reflect::RegisterClassType<ReflectBitfieldCheckBox>( TXT( "InspectReflectBitfieldCheckBox" ) ) );
 
         // scalars
         ReflectFieldInterpreterFactory::Register<ReflectBitfieldInterpreter>( Reflect::GetType<Reflect::BitfieldSerializer>() );

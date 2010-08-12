@@ -7,10 +7,10 @@ namespace Helium
     namespace Editor
     {
         //DECLARE_EVENT_TYPE( UpdateStatusCommandEvent, -1 )
-        extern EDITOR_CORE_API const wxEventType UpdateStatusCommandEvent;
+        extern const wxEventType UpdateStatusCommandEvent;
 
         // A custom event that transports a whole wxString.
-        class EDITOR_CORE_API UpdateStatusEvent: public wxCommandEvent
+        class UpdateStatusEvent: public wxCommandEvent
         {
         public:
             UpdateStatusEvent( wxEventType commandType = Editor::UpdateStatusCommandEvent, int id = 0 )

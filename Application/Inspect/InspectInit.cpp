@@ -11,8 +11,6 @@
 
 #include "Foundation/Reflect/Registry.h"
 
-#undef RegisterClass
-
 using namespace Helium;
 using namespace Helium::Inspect;
 
@@ -31,24 +29,24 @@ void Inspect::Initialize()
 {
     if ( ++g_InitCount == 1 )
     {
-        g_InitializerStack.Push( Reflect::RegisterClass<Control>( TXT( "InspectControl" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClass<Container>( TXT( "InspectContainer" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClass<Group>( TXT( "InspectGroup" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClass<Panel>( TXT( "InspectPanel" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClass<Canvas>( TXT( "InspectCanvas" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterClassType<Control>( TXT( "InspectControl" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterClassType<Container>( TXT( "InspectContainer" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterClassType<Group>( TXT( "InspectGroup" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterClassType<Panel>( TXT( "InspectPanel" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterClassType<Canvas>( TXT( "InspectCanvas" ) ) );
 
-        g_InitializerStack.Push( Reflect::RegisterClass<Button>( TXT( "InspectButton" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClass<Action>( TXT( "InspectAction" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClass<CheckBox>( TXT( "InspectCheckBox" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClass<CheckList>( TXT( "InspectCheckList" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClass<ColorPicker>( TXT( "InspectColorPicker" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClass<Label>( TXT( "InspectLabel" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClass<List>( TXT( "InspectList" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClass<Slider>( TXT( "InspectSlider" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterClassType<Button>( TXT( "InspectButton" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterClassType<Action>( TXT( "InspectAction" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterClassType<CheckBox>( TXT( "InspectCheckBox" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterClassType<CheckList>( TXT( "InspectCheckList" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterClassType<ColorPicker>( TXT( "InspectColorPicker" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterClassType<Label>( TXT( "InspectLabel" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterClassType<List>( TXT( "InspectList" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterClassType<Slider>( TXT( "InspectSlider" ) ) );
 
-        g_InitializerStack.Push( Reflect::RegisterClass<Items>( TXT( "InspectItems" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClass<Choice>( TXT( "InspectChoice" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClass<Value>( TXT( "InspectValue" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterClassType<Items>( TXT( "InspectItems" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterClassType<Choice>( TXT( "InspectChoice" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterClassType<Value>( TXT( "InspectValue" ) ) );
 
         g_InitializerStack.Push( Script::Initialize, Script::Cleanup );
 

@@ -16,7 +16,7 @@ namespace Helium
                 Loop,
                 PingPong
             };
-            static void AnimationClipModeEnumerateEnumeration( Reflect::Enumeration* info )
+            static void AnimationClipModeEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement( Default,  TXT( "Default" ),  TXT( "Default" ) );
                 info->AddElement( Once,     TXT( "Once" ),     TXT( "Once" ) );

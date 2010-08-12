@@ -323,13 +323,13 @@ namespace Helium
         typedef void (*UnregisterFunc)();
 
         template<class T>
-        inline UnregisterFunc RegisterClass(const tstring& shortName = TXT( "" ))
+        inline UnregisterFunc RegisterClassType(const tstring& shortName = TXT( "" ))
         {
             // create the type information and register it with the registry
             if ( Reflect::Registry::GetInstance()->RegisterType( T::CreateClass( shortName ) ) )
             {
                 // this function will unregister the type we just registered
-                return &UnregisterClass<T>;
+                return &UnregisterClassType<T>;
             }
 
             // there was a problem
@@ -337,16 +337,16 @@ namespace Helium
         }
 
         template<class T>
-        inline void UnregisterClass()
+        inline void UnregisterClassType()
         {
             // retrieve the class information and unregister it from the registry
             Reflect::Registry::GetInstance()->UnregisterType( Reflect::GetClass<T>() );
         }
 
-        typedef void EnumerateEnumerationFunc( Reflect::Enumeration* info );
+        typedef void EnumerateEnumFunc( Reflect::Enumeration* info );
 
         template<class T>
-        inline UnregisterFunc RegisterEnumeration(EnumerateEnumerationFunc enumerate, const tstring& shortName = TXT( "" ))
+        inline UnregisterFunc RegisterEnumType(EnumerateEnumFunc enumerate, const tstring& shortName = TXT( "" ))
         {
             Reflect::Enumeration* info = Reflect::Enumeration::Create<T>( shortName );
 
@@ -357,7 +357,7 @@ namespace Helium
             if ( Reflect::Registry::GetInstance()->RegisterType( info ) )
             {
                 // this function will unregister the type we just registered
-                return &UnregisterEnumeration<T>;
+                return &UnregisterEnumType<T>;
             }
 
             // there was a problem
@@ -365,7 +365,7 @@ namespace Helium
         }
 
         template<class T>
-        inline void UnregisterEnumeration()
+        inline void UnregisterEnumType()
         {
             // retrieve the class information and unregister it from the registry
             Reflect::Registry::GetInstance()->UnregisterType( Reflect::GetEnumeration<T>() );

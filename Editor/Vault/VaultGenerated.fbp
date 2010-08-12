@@ -3588,7 +3588,7 @@
                                 <property name="pos"></property>
                                 <property name="size">-1,-1</property>
                                 <property name="style">wxTR_EDIT_LABELS|wxTR_HIDE_ROOT|wxTR_NO_BUTTONS|wxTR_SINGLE</property>
-                                <property name="subclass">Helium::Editor::SortTreeCtrl; UI/Controls/Tree/SortTreeCtrl.h</property>
+                                <property name="subclass">Helium::Editor::SortTreeCtrl; Controls/Tree/SortTreeCtrl.h</property>
                                 <property name="tooltip"></property>
                                 <property name="validator_data_type"></property>
                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -3741,7 +3741,7 @@
                                 <property name="pos"></property>
                                 <property name="size"></property>
                                 <property name="style">wxTR_HIDE_ROOT|wxTR_NO_BUTTONS|wxTR_SINGLE</property>
-                                <property name="subclass">Helium::Editor::SortTreeCtrl; UI/Controls/Tree/SortTreeCtrl.h</property>
+                                <property name="subclass">Helium::Editor::SortTreeCtrl; Controls/Tree/SortTreeCtrl.h</property>
                                 <property name="tooltip"></property>
                                 <property name="validator_data_type"></property>
                                 <property name="validator_style">wxFILTER_NONE</property>

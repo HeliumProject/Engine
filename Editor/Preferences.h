@@ -17,22 +17,22 @@ namespace Helium
         // Base class for preferenced within Editor.  Provides convenience functions
         // for saving and loading.
         // 
-        class Preferences : public Reflect::ConcreteInheritor< Preferences, Settings >
+        class Preferences : public Reflect::ConcreteInheritor< Preferences, Core::Settings >
         {
         public:
             Preferences();
 
-            ScenePreferences* GetScenePreferences()
+            Core::ScenePreferences* GetScenePreferences()
             {
                 return m_ScenePreferences;
             }
 
-            ViewportPreferences* GetViewportPreferences()
+            Core::ViewportPreferences* GetViewportPreferences()
             {
                 return m_ViewportPreferences;
             }
 
-            GridPreferences* GetGridPreferences()
+            Core::GridPreferences* GetGridPreferences()
             {
                 return m_GridPreferences;
             }
@@ -48,9 +48,9 @@ namespace Helium
             }
 
         private:
-            ScenePreferencesPtr m_ScenePreferences;
-            ViewportPreferencesPtr m_ViewportPreferences;
-            GridPreferencesPtr m_GridPreferences;
+            Core::ScenePreferencesPtr m_ScenePreferences;
+            Core::ViewportPreferencesPtr m_ViewportPreferences;
+            Core::GridPreferencesPtr m_GridPreferences;
             VaultPreferencesPtr m_VaultPreferences;
             WindowSettingsPtr m_WindowSettings;
 

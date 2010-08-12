@@ -3,6 +3,7 @@
 #include "PropertiesPanel.h"
 
 using namespace Helium;
+using namespace Helium::Core;
 using namespace Helium::Editor;
 
 PropertiesPanel::PropertiesPanel( PropertiesManager* manager, wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style )

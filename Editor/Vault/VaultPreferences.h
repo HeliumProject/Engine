@@ -15,7 +15,7 @@ namespace Helium
     {
         class VaultFrame;
 
-        class VaultPreferences : public Reflect::ConcreteInheritor< VaultPreferences, Settings >
+        class VaultPreferences : public Reflect::ConcreteInheritor< VaultPreferences, Core::Settings >
         {
         public:
             VaultPreferences( const tstring& defaultFolder = TXT( "" ),

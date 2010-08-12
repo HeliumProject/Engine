@@ -13,7 +13,7 @@ using namespace Helium::Editor;
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-NodeTypeOutliner::NodeTypeOutliner( Editor::SceneManager* sceneManager )
+NodeTypeOutliner::NodeTypeOutliner( Core::SceneManager* sceneManager )
 : SceneOutliner( sceneManager )
 , m_InvisibleRoot( NULL )
 {

@@ -25,7 +25,7 @@ namespace Helium
 
             // Public functions
         public:
-            NodeTypeOutliner( Editor::SceneManager* sceneManager );
+            NodeTypeOutliner( Core::SceneManager* sceneManager );
             virtual ~NodeTypeOutliner();
             void AddNodeTypes();
 

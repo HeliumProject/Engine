@@ -21,7 +21,7 @@ using namespace Helium::Editor;
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-SceneOutliner::SceneOutliner( Editor::SceneManager* sceneManager )
+SceneOutliner::SceneOutliner( Core::SceneManager* sceneManager )
 : m_SceneManager( sceneManager )
 , m_CurrentScene( NULL )
 , m_TreeCtrl( NULL )

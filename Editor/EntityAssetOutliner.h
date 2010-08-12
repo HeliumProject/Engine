@@ -29,7 +29,7 @@ namespace Helium
 
             // Public functions
         public:
-            EntityAssetOutliner( Editor::SceneManager* sceneManager );
+            EntityAssetOutliner( Core::SceneManager* sceneManager );
             virtual ~EntityAssetOutliner();
             void AddEntityTypes();
 

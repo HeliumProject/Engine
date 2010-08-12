@@ -13,7 +13,7 @@ using namespace Helium::Editor;
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-HierarchyOutliner::HierarchyOutliner( Editor::SceneManager* sceneManager )
+HierarchyOutliner::HierarchyOutliner( Core::SceneManager* sceneManager )
 : SceneOutliner( sceneManager )
 {
 }

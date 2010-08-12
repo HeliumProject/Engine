@@ -31,7 +31,7 @@ namespace Helium
 
         protected:
             // Member variables
-            Editor::SceneManager* m_SceneManager;
+            Core::SceneManager* m_SceneManager;
             Editor::Scene* m_CurrentScene;
             SortTreeCtrl* m_TreeCtrl;
             M_TreeItems m_Items;
@@ -41,7 +41,7 @@ namespace Helium
 
         public:
             // Functions
-            SceneOutliner( Editor::SceneManager* sceneManager );
+            SceneOutliner( Core::SceneManager* sceneManager );
             virtual ~SceneOutliner();
             SortTreeCtrl* InitTreeCtrl( wxWindow* parent, wxWindowID id );
             void SaveState( SceneOutlinerState& state );

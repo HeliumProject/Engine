@@ -25,7 +25,7 @@ namespace Helium
         class HierarchyOutliner : public SceneOutliner
         {
         public:
-            HierarchyOutliner( Editor::SceneManager* sceneManager );
+            HierarchyOutliner( Core::SceneManager* sceneManager );
             virtual ~HierarchyOutliner();
 
         protected:

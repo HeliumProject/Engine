@@ -12,6 +12,8 @@
 #include <d3dx9.h>
 
 using namespace Helium;
+using namespace Helium::Core;
+using namespace Helium::Core::Render;
 
 u32 TextureAddressModes( u32 mode )
 {
@@ -116,17 +118,17 @@ void SetShaderClassAlpha( Render::Shader* sh, Asset::AlphaType alphaMode )
     }
 }
 
-Content::RBShaderLoader::RBShaderLoader()
+RBShaderLoader::RBShaderLoader()
 {
 
 }
 
-Content::RBShaderLoader::~RBShaderLoader()
+RBShaderLoader::~RBShaderLoader()
 {
 
 }
 
-Render::Shader* Content::RBShaderLoader::ParseFile( const tchar* fname, Render::ShaderManager* db )
+Render::Shader* RBShaderLoader::ParseFile( const tchar* fname, Render::ShaderManager* db )
 {
     Asset::ShaderAssetPtr shaderClass = Asset::AssetClass::LoadAssetClass< Asset::ShaderAsset >( fname );
     if ( !shaderClass.ReferencesObject() )
@@ -314,20 +316,20 @@ Render::Shader* Content::RBShaderLoader::ParseFile( const tchar* fname, Render::
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Content::RBShaderLoader::SetWrapUV( Render::TextureSettings* settings, u32 wrapU, u32 wrapV )
+void RBShaderLoader::SetWrapUV( Render::TextureSettings* settings, u32 wrapU, u32 wrapV )
 {
     settings->m_WrapU = TextureAddressModes( wrapU );
     settings->m_WrapV = TextureAddressModes( wrapV );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Content::RBShaderLoader::SetFilter( Render::TextureSettings* settings, u32 filter )
+void RBShaderLoader::SetFilter( Render::TextureSettings* settings, u32 filter )
 {
     settings->m_Filter = TextureFilterMode( (Asset::TextureFilter) filter );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Content::RBShaderLoader::SetColorFormat( Render::TextureSettings* settings, u32 colorFormat, u32 mode )
+void RBShaderLoader::SetColorFormat( Render::TextureSettings* settings, u32 colorFormat, u32 mode )
 {
     switch ( mode )
     {
@@ -347,7 +349,7 @@ void Content::RBShaderLoader::SetColorFormat( Render::TextureSettings* settings,
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Content::RBShaderLoader::UpdateShaderClass(Render::ShaderManager* db, const tchar* shaderFilename, u32 alphaMode)
+void RBShaderLoader::UpdateShaderClass(Render::ShaderManager* db, const tchar* shaderFilename, u32 alphaMode)
 {
     u32 shaderHandle = db->FindShader( shaderFilename );
     if ( shaderHandle == 0xffffffff )
@@ -362,7 +364,7 @@ void Content::RBShaderLoader::UpdateShaderClass(Render::ShaderManager* db, const
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Content::RBShaderLoader::UpdateShader(Render::Shader* sh, const Asset::ShaderAsset* shader)
+void RBShaderLoader::UpdateShader(Render::Shader* sh, const Asset::ShaderAsset* shader)
 {
     if ( shader->m_EnableColorMapTint )
     {

@@ -50,6 +50,11 @@ namespace Helium
             void OnMouseLeave(wxMouseEvent& e);
             void OnMouseCaptureLost(wxMouseCaptureLostEvent& e);
 
+            Core::Viewport& GetViewport()
+            {
+                return m_Viewport;
+            }
+
         private:
             bool            m_Focused;
             Core::Viewport  m_Viewport;

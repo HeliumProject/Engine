@@ -2,7 +2,7 @@
 
 #include "Editor/EditorGenerated.h"
 
-#include "Editor/Viewport.h"
+#include "Editor/ViewCanvas.h"
 
 namespace Helium
 {
@@ -13,13 +13,13 @@ namespace Helium
         public:
             ViewPanel( wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
 
-            Viewport* GetViewport()
+            ViewCanvas* GetViewCanvas()
             {
-                return m_Viewport;
+                return m_ViewCanvas;
             }
 
         private:
-            Viewport* m_Viewport;
+            ViewCanvas* m_ViewCanvas;
         };
     }
 }

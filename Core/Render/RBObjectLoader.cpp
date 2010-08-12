@@ -9,21 +9,23 @@
 #include <set>
 
 using namespace Helium;
+using namespace Helium::Core;
+using namespace Helium::Core::Render;
 
-Content::RBObjectLoader::RBObjectLoader()
+RBObjectLoader::RBObjectLoader()
 : Render::ObjectLoader()
 {
   Reflect::Initialize();
   Content::Initialize();
 }
 
-Content::RBObjectLoader::~RBObjectLoader()
+RBObjectLoader::~RBObjectLoader()
 {
   Content::Cleanup();
   Reflect::Cleanup();
 }
 
-u32 Content::RBObjectLoader::ParseFile( const tchar* filename, bool winding )
+u32 RBObjectLoader::ParseFile( const tchar* filename, bool winding )
 {
   Content::Scene scene;
 

@@ -1,16 +1,14 @@
 #pragma once
 
-#include "Thumbnail.h"
-#include "ThumbnailLoader.h"
 #include "Platform/Mutex.h"
+
+#include "Core/Render/DeviceManager.h"
+
+#include "Editor/Vault/Thumbnail.h"
+#include "Editor/Vault/ThumbnailLoader.h"
 
 namespace Helium
 {
-    namespace Render
-    {
-        class DeviceManager;
-    }
-
     namespace Editor
     {
         struct ThumbnailResultArgs
@@ -29,7 +27,7 @@ namespace Helium
         class ThumbnailManager
         {
         public:
-            ThumbnailManager( wxWindow* window, Render::DeviceManager* d3dmanager, const tstring& thumbnailDirectory );
+            ThumbnailManager( wxWindow* window, Core::Render::DeviceManager* d3dmanager, const tstring& thumbnailDirectory );
             virtual ~ThumbnailManager();
 
             void Reset();

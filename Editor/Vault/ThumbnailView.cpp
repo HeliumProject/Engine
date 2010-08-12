@@ -20,6 +20,7 @@
 #include <shellapi.h>
 
 using namespace Helium;
+using namespace Helium::Core;
 using namespace Helium::Editor;
 
 // Statics
@@ -105,8 +106,8 @@ ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, VaultFrame *bro
     m_ViewMatrix = Math::Matrix4( pivot * -1 ) * m_Orientation * Math::Matrix4( Math::Vector3::BasisZ * ( -s_FarClipDistance / 2.0f ) );
 
     m_DeviceManager.Init( GetHwnd(), 64, 64 );
-    m_DeviceManager.AddDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
-    m_DeviceManager.AddDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
+    m_DeviceManager.AddDeviceFoundListener( Core::Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
+    m_DeviceManager.AddDeviceLostListener( Core::Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
     CreateResources();
 
     m_TileCreator.SetDefaultThumbnails( m_TextureError, m_TextureLoading, m_TextureFolder );

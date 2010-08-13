@@ -1403,27 +1403,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\UI\MessageDialog.cpp"
+				RelativePath=".\UI\SimpleConfig.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\UI\MessageDialog.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\ModalFrame.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\ModalFrame.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\RegistryConfig.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\RegistryConfig.h"
+				RelativePath=".\UI\SimpleConfig.h"
 				>
 			</File>
 			<File
@@ -1434,30 +1418,6 @@
 				RelativePath=".\UI\ThreadMechanism.h"
 				>
 			</File>
-			<Filter
-				Name="MRU"
-				>
-				<File
-					RelativePath=".\UI\FieldMRU.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\UI\FieldMRU.h"
-					>
-				</File>
-				<File
-					RelativePath=".\UI\MenuMRU.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\UI\MenuMRU.h"
-					>
-				</File>
-				<File
-					RelativePath=".\UI\MRU.h"
-					>
-				</File>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="RCS"

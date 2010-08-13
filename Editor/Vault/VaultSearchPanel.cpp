@@ -61,7 +61,7 @@ VaultSearchPanel::VaultSearchPanel( VaultFrame* browserFrame, wxWindow* parent )
 : SearchPanelGenerated( parent )
 , m_VaultFrame( browserFrame )
 , m_CollectionManager( NULL )
-, m_FieldMRU( new Helium::FieldMRU() )
+, m_FieldMRU( new FieldMRU() )
 {
     m_GoButton->SetId( VaultMenu::AdvancedSearchGo );
     m_CancelButton->SetId( VaultMenu::AdvancedSearchCancel );

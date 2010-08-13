@@ -115,7 +115,7 @@ public:
 
 MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style )
 : MainFrameGenerated( parent, id, title, pos, size, style )
-, m_MRU( new Helium::MenuMRU( 30, this ) )
+, m_MRU( new MenuMRU( 30, this ) )
 , m_TreeMonitor( &m_SceneManager )
 , m_MessageDisplayer( this )
 , m_SceneManager( MessageSignature::Delegate( &m_MessageDisplayer, &MessageDisplayer::DisplayMessage ) )
@@ -235,7 +235,7 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     m_SceneManager.AddSceneAddedListener( SceneChangeSignature::Delegate( this, &MainFrame::SceneAdded ) );
     m_SceneManager.AddSceneRemovingListener( SceneChangeSignature::Delegate( this, &MainFrame::SceneRemoving ) );
 
-    m_MRU->AddItemSelectedListener( Helium::MRUSignature::Delegate( this, &MainFrame::OnMRUOpen ) );
+    m_MRU->AddItemSelectedListener( MRUSignature::Delegate( this, &MainFrame::OnMRUOpen ) );
 
 #pragma TODO("MRU")
 #if 0
@@ -292,7 +292,7 @@ MainFrame::~MainFrame()
     m_SceneManager.RemoveSceneAddedListener( SceneChangeSignature::Delegate( this, &MainFrame::SceneAdded ) );
     m_SceneManager.RemoveSceneRemovingListener( SceneChangeSignature::Delegate( this, &MainFrame::SceneRemoving ) );
 
-    m_MRU->RemoveItemSelectedListener( Helium::MRUSignature::Delegate( this, &MainFrame::OnMRUOpen ) );
+    m_MRU->RemoveItemSelectedListener( MRUSignature::Delegate( this, &MainFrame::OnMRUOpen ) );
 
     m_SelectionPropertiesManager->RemovePropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &MainFrame::OnPropertiesCreated ) );
     m_ToolPropertiesManager->RemovePropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &MainFrame::OnPropertiesCreated ) );
@@ -459,7 +459,7 @@ void MainFrame::SceneLoadFinished( const LoadArgs& args )
 // Overridden from base class.  Called when attempting to open a file from the
 // MRU list.  Closes all currently open files before trying to open the new one.
 // 
-void MainFrame::OnMRUOpen( const Helium::MRUArgs& args )
+void MainFrame::OnMRUOpen( const MRUArgs& args )
 {
     DoOpen( args.m_Item );
 }

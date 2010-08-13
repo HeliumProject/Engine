@@ -2,7 +2,7 @@
 #include "Foundation/Reflect/ArchiveXML.h"
 #include "Application/Inspect/Interpreters/Content/KeyClipboardData.h"
 #include "Application/UI/CustomColors.h"
-#include "Application/UI/RegistryConfig.h"
+#include "Application/UI/SimpleConfig.h"
 
 #include <wx/dcclient.h>
 #include <wx/colordlg.h>
@@ -173,7 +173,7 @@ bool KeyControl::EditKey( u32 index )
 
     // Restore custom colors from the registry
     tstring info;
-    RegistryConfig::GetInstance()->Read( TXT( "" ), CustomColors::GetDefaultRegistryKey(), info );
+    SimpleConfig::GetInstance()->Read( TXT( "" ), CustomColors::GetConfigKey(), info );
 
     // Show the dialog
     wxColourData colorData;
@@ -191,7 +191,7 @@ bool KeyControl::EditKey( u32 index )
 
     // Save custom colors to the registry
     info = CustomColors::Save( dlg.GetColourData() );
-    RegistryConfig::GetInstance()->Write( TXT( "" ), CustomColors::GetDefaultRegistryKey(), info );
+    SimpleConfig::GetInstance()->Write( TXT( "" ), CustomColors::GetConfigKey(), info );
   }
 
   return ok;

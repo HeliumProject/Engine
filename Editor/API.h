@@ -8,12 +8,12 @@
 
 #ifdef EDITOR_CORE_DLL
 # ifdef EDITOR_CORE_EXPORTS
-#  define EDITOR_CORE_API __declspec(dllexport)
+#  define EDITOR_API __declspec(dllexport)
 # else
-#  define EDITOR_CORE_API __declspec(dllimport)
+#  define EDITOR_API __declspec(dllimport)
 # endif
 #else
-# define EDITOR_CORE_API
+# define EDITOR_API
 #endif
 
 // profiling for CORE systems

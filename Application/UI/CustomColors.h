@@ -21,7 +21,7 @@ namespace Helium
     };
 
     // Gets the location where custom colors should be saved in the registry by default.
-    APPLICATION_API tstring GetDefaultRegistryKey();
+    APPLICATION_API tstring GetConfigKey();
 
     // Converts the custom colors located in colorData into a string that can be loaded later.
     APPLICATION_API tstring Save( wxColourData& colorData );

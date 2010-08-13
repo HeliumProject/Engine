@@ -1,12 +1,11 @@
 #include "FileDialog.h"
 
-#include "MessageDialog.h"
-
 #include "Platform/Types.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
 #include "Foundation/String/Tokenize.h"
 
+#include <wx/wx.h>
 
 /////////////////////////////////////////////////////////////////////////////
 

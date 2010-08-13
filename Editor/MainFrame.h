@@ -16,9 +16,9 @@
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/SceneManager.h"
 
-#include "Application/UI/MenuMRU.h"
 #include "Application/Inspect/DragDrop/DropTarget.h"
 
+#include "Editor/MRU/MenuMRU.h"
 #include "Editor/TreeMonitor.h"
 #include "Editor/MessageDisplayer.h"
 
@@ -86,7 +86,7 @@ namespace Helium
             Core::PropertiesManagerPtr  m_ToolPropertiesManager;
             Inspect::Canvas             m_ToolProperties;
 
-            Helium::MenuMRUPtr          m_MRU;
+            MenuMRUPtr                  m_MRU;
             M_IDToColorMode             m_ColorModeLookup;
 
             //context items ordered by name  
@@ -107,7 +107,7 @@ namespace Helium
 
         private:
 
-            void OnMRUOpen( const Helium::MRUArgs& args );
+            void OnMRUOpen( const MRUArgs& args );
 
             // frame events
             void OnEraseBackground( wxEraseEvent& event );

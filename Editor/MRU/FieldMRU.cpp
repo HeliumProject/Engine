@@ -1,3 +1,4 @@
+#include "Precompile.h"
 #include "FieldMRU.h"
 #include "Foundation/Container/Insert.h" 
 
@@ -6,7 +7,7 @@
 using Helium::Insert; 
 
 using namespace Helium;
-
+using namespace Helium::Editor;
 
 //////////////////////////////////////////////////////////////////////////////
 // doesn't do a damned thing actually

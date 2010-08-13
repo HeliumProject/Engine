@@ -1,4 +1,4 @@
-#include "RegistryConfig.h"
+#include "SimpleConfig.h"
 #include <wx/config.h>
 
 #include "Platform/Assert.h"
@@ -9,29 +9,18 @@ using namespace Helium;
 // Private Constructor
 // This is a singleton class.  Use GetInstance to access the one and only instance.
 // 
-RegistryConfig::RegistryConfig()
+SimpleConfig::SimpleConfig()
 {
   m_Config = wxConfig::Create();
-
-  // All registry entries will be grouped in: VendorName/Application/ProjectName.
-  // For example: Insomniac Games/Tool/Project
-#pragma TODO( "Old Project-name reference!" )
-  m_Config->SetPath( TXT( "Unknown" ) );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Destructor
-// 
-RegistryConfig::~RegistryConfig()
-{
+  m_Config->SetPath( TXT( "Helium" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Returns a pointer to the one and only instance of this class.
 // 
-RegistryConfig* RegistryConfig::GetInstance()
+SimpleConfig* SimpleConfig::GetInstance()
 {
-  static RegistryConfig theRegistryConfig;
+  static SimpleConfig theRegistryConfig;
   return &theRegistryConfig;
 }
 
@@ -43,7 +32,7 @@ RegistryConfig* RegistryConfig::GetInstance()
 // The relativePath parameter should be separated by forward-slashes, but not 
 // start with one.  Example: Foo/Bar
 // 
-bool RegistryConfig::Read( const tstring& relativePath, const tstring& key, tstring& value )
+bool SimpleConfig::Read( const tstring& relativePath, const tstring& key, tstring& value )
 {
   bool wasRead = false;
 
@@ -73,7 +62,7 @@ bool RegistryConfig::Read( const tstring& relativePath, const tstring& key, tstr
 // The relativePath parameter should be separated by forward-slashes, but not 
 // start with one.  Example: Foo/Bar
 // 
-bool RegistryConfig::Write( const tstring& relativePath, const tstring& key, const tstring& value )
+bool SimpleConfig::Write( const tstring& relativePath, const tstring& key, const tstring& value )
 {
   wxString oldPath = m_Config->GetPath();
 

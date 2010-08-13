@@ -14,7 +14,7 @@ static const tstring s_ColorDelimiter = TXT( "#" );
 ///////////////////////////////////////////////////////////////////////////////
 // Gets the registry key for where the custom colors should be stored by default.
 // 
-tstring CustomColors::GetDefaultRegistryKey()
+tstring CustomColors::GetConfigKey()
 {
   return TXT( "CustomColors" );
 }

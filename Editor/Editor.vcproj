@@ -1100,6 +1100,30 @@
 			</File>
 		</Filter>
 		<Filter
+			Name="MRU"
+			>
+			<File
+				RelativePath=".\MRU\FieldMRU.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MRU\FieldMRU.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MRU\MenuMRU.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MRU\MenuMRU.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MRU\MRU.h"
+				>
+			</File>
+		</Filter>
+		<Filter
 			Name="Tracker"
 			>
 			<File

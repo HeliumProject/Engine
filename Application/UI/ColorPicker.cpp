@@ -1,6 +1,6 @@
 #include "ColorPicker.h"
 #include "Application/UI/CustomColors.h"
-#include "Application/UI/RegistryConfig.h"
+#include "Application/UI/SimpleConfig.h"
 
 // Using
 using namespace Helium;
@@ -83,7 +83,7 @@ void ColorPicker::EnableAutoSaveCustomColors( bool enable, const tstring& key, c
   {
     if ( key.empty() )
     {
-      m_Key = CustomColors::GetDefaultRegistryKey();
+      m_Key = CustomColors::GetConfigKey();
     }
     else
     {
@@ -114,7 +114,7 @@ void ColorPicker::OnButtonClick( wxCommandEvent& args )
     if ( m_AutoSaveCustomColors )
     {
       // Load custom colors from registry
-      if ( RegistryConfig::GetInstance()->Read( m_RegistryLocation, m_Key, colors ) )
+      if ( SimpleConfig::GetInstance()->Read( m_RegistryLocation, m_Key, colors ) )
       {
         LoadCustomColors( colors );
       }
@@ -127,7 +127,7 @@ void ColorPicker::OnButtonClick( wxCommandEvent& args )
       if ( SaveCustomColors( colors ) )
       {
         // Save custom colors to registry
-        RegistryConfig::GetInstance()->Write( m_RegistryLocation, m_Key, colors );
+        SimpleConfig::GetInstance()->Write( m_RegistryLocation, m_Key, colors );
       }
     }
   }

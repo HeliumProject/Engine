@@ -2,7 +2,7 @@
 #include "Application/Inspect/Controls/Container.h"
 
 #include "Application/UI/ColorPicker.h"
-#include "Application/UI/RegistryConfig.h"
+#include "Application/UI/SimpleConfig.h"
 
 #include <sstream>
 

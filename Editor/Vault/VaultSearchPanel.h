@@ -3,7 +3,7 @@
 #include "VaultGenerated.h"
 #include "VaultFrame.h"
 
-#include "Application/UI/FieldMRU.h"
+#include "Editor/MRU/FieldMRU.h"
 
 namespace Helium
 {
@@ -94,7 +94,7 @@ namespace Helium
             typedef Helium::OrderedSet< Filter > OS_Filter;
             OS_Filter m_Filters;
 
-            Helium::FieldMRUPtr m_FieldMRU;
+            FieldMRUPtr m_FieldMRU;
         };
     }
 }

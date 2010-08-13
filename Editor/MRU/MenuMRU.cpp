@@ -1,3 +1,4 @@
+#include "Precompile.h"
 #include "MenuMRU.h"
 
 #include "Foundation/File/Path.h"
@@ -6,6 +7,7 @@
 #include <wx/menu.h>
 
 using namespace Helium;
+using namespace Helium::Editor;
 
 typedef std::map< i32, tstring> M_MenuItemIDToString;
 

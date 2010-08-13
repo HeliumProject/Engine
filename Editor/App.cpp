@@ -28,7 +28,7 @@
 
 #include "Core/CoreInit.h"
 
-#include "Editor/Object.h"
+#include "Core/Scene/Object.h"
 #include "Editor/Selectable.h"
 #include "Editor/Persistent.h"
 #include "Core/Scene/PropertiesGenerator.h"

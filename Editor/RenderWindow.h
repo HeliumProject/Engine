@@ -11,7 +11,7 @@ namespace Helium
     {
         struct D3DEventArgs;
 
-        typedef std::vector< Render::Scene* > V_Scene;
+        typedef std::vector< Core::Render::Scene* > V_Scene;
 
         class RenderWindow : public wxWindow
         {
@@ -29,7 +29,7 @@ namespace Helium
             virtual void Frame();
 
         protected:
-            virtual void SetupLighting( Render::Scene* scene );
+            virtual void SetupLighting( Core::Render::Scene* scene );
             virtual void Draw();
             virtual void Resize( const wxSize& size );
             virtual void ShowContextMenu( const wxPoint& pos );
@@ -52,13 +52,16 @@ namespace Helium
             void OnChangeAxisDisplay( wxCommandEvent& args );
 
         protected:
-            Render::Renderer m_Render;
-            Render::Scene* m_Scene;
+            Core::Render::Renderer m_Render;
+            Core::Render::Scene* m_Scene;
+            Core::Camera m_Camera;
+
             bool m_IsDeviceLost;
-            Editor::Camera m_Camera;
-            u32 m_MeshHandle;
-            wxMenu m_ContextMenu;
             bool m_DisplayAxis;
+
+            u32 m_MeshHandle;
+
+            wxMenu m_ContextMenu;
             wxMenu* m_AxisSubMenu;
             i32 m_AxisOnMenuID;
             i32 m_AxisOffMenuID;

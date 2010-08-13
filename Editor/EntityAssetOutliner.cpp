@@ -16,7 +16,7 @@ using namespace Helium::Editor;
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-EntityAssetOutliner::EntityAssetOutliner( Editor::SceneManager* sceneManager )
+EntityAssetOutliner::EntityAssetOutliner( Core::SceneManager* sceneManager )
 : SceneOutliner( sceneManager )
 , m_InvisibleRoot( NULL )
 {

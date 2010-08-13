@@ -25,7 +25,7 @@ namespace Helium
             class NameChangeInfo
             {
             public:
-                Layer* m_Layer;
+                Core::Layer* m_Layer;
                 tstring m_OldName;
 
             public:
@@ -35,28 +35,40 @@ namespace Helium
             };
 
         public:
-            LayersPanel( SceneManager* manager, wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+            LayersPanel( Core::SceneManager* manager, wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
             virtual ~LayersPanel();
 
-            bool AddLayer( Editor::Layer* layer );
-            bool RemoveLayer( Editor::Layer* layer );
+            bool AddLayer( Core::Layer* layer );
+            bool RemoveLayer( Core::Layer* layer );
             void BeginBatch();
             void EndBatch();
 
-            virtual bool  IsSelectionItemsLinked()                { return false;             }
-            virtual bool  IsSelectableValid(Selectable* sl) const { return sl ? true : false; }
-            virtual bool  IsSelectionValid() const                { return true;              }
-            virtual void  UnlinkSelectedElements()        {}
-            virtual void  SelectLinkedElements()          {}
-            virtual void  GenerateLayerName(Layer* layer) {}
-            virtual void  CleanUpLayers()                 {}
+            virtual bool  IsSelectionItemsLinked()
+            {
+                return false;
+            }
+
+            virtual bool  IsSelectableValid(Core::Selectable* sl) const
+            {
+                return sl ? true : false;
+            }
+
+            virtual bool  IsSelectionValid() const
+            {
+                return true;
+            }
+
+            virtual void  UnlinkSelectedElements()              {}
+            virtual void  SelectLinkedElements()                {}
+            virtual void  GenerateLayerName(Core::Layer* layer) {}
+            virtual void  CleanUpLayers()                       {}
 
         protected:
-            SceneManager*   m_SceneManager;
-            Scene*          m_Scene;
-            Grid*           m_Grid;
-            M_LayerDumbPtr  m_Layers;
-            NameChangeInfo  m_NameChangeInfo;
+            Core::SceneManager*     m_SceneManager;
+            Core::Scene*            m_Scene;
+            Core::M_LayerDumbPtr    m_Layers;
+            Grid*                   m_Grid;
+            NameChangeInfo          m_NameChangeInfo;
 
         protected:
             void ConnectSceneListeners();
@@ -84,18 +96,16 @@ namespace Helium
             // Event callbacks
             // 
         private:
-            void SelectionChanged( const OS_SelectableDumbPtr& selection );
-            void NameChanging( const SceneNodeChangeArgs& args );
-            void NameChanged( const SceneNodeChangeArgs& args );
+            void SelectionChanged( const Core::OS_SelectableDumbPtr& selection );
+            void NameChanging( const Core::SceneNodeChangeArgs& args );
+            void NameChanged( const Core::SceneNodeChangeArgs& args );
             void LayerVisibleChanged( const GridRowChangeArgs& args );
             void LayerSelectableChanged( const GridRowChangeArgs& args );
             void RowRenamed( const GridRowRenamedArgs& args );
-            void CurrentSceneChanging( const SceneChangeArgs& args );
-            void CurrentSceneChanged( const SceneChangeArgs& args );
-            void NodeAdded( const NodeChangeArgs& args );
-            void SceneNodeRemoved( const NodeChangeArgs& args );
-
-
+            void CurrentSceneChanging( const Core::SceneChangeArgs& args );
+            void CurrentSceneChanged( const Core::SceneChangeArgs& args );
+            void NodeAdded( const Core::NodeChangeArgs& args );
+            void NodeRemoved( const Core::NodeChangeArgs& args );
         };
     }
 }

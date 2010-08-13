@@ -2,6 +2,7 @@
 #include "Preferences.h"
 
 using namespace Helium;
+using namespace Helium::Core;
 using namespace Helium::Editor;
 
 const static tstring s_WindowSettingsVersion( TXT( "12" ) );

@@ -8,6 +8,7 @@
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
 
 using namespace Helium;
+using namespace Helium::Core;
 using namespace Helium::Editor;
 
 static const f32 g_MinTimeBetweenSceneEvents = 1000.0f;
@@ -15,7 +16,7 @@ static const f32 g_MinTimeBetweenSceneEvents = 1000.0f;
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-TreeMonitor::TreeMonitor( Editor::SceneManager* sceneManager )
+TreeMonitor::TreeMonitor( Core::SceneManager* sceneManager )
 : m_SceneManager( sceneManager )
 , m_FreezeTreeSorting( 0 )
 , m_NeedsSorting( false )

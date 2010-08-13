@@ -4,6 +4,7 @@
 #include "Foundation/Checksum/CRC32.h"
 
 using namespace Helium;
+using namespace Helium::Core;
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 Render::Mesh::Mesh(const tchar* name)

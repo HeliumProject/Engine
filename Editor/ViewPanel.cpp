@@ -81,26 +81,26 @@ ViewPanel::ViewPanel(wxWindow *parent, wxWindowID id, const wxPoint &pos, const 
     m_ColorModeScaleToggleButton->SetHelpText( TXT( "Toggle scale coloring mode." ) );
     m_ColorModeScaleGradientToggleButton->SetHelpText( TXT( "Toggle scale gradient coloring mode." ) );
 
-    m_Viewport = new Editor::Viewport( m_ViewContainerPanel, -1, wxPoint(0,0), wxSize(150,250), wxNO_BORDER | wxWANTS_CHARS | wxEXPAND );
-    m_ViewContainerPanel->GetSizer()->Add( m_Viewport, 1, wxEXPAND | wxALL, 0 );
+    m_ViewCanvas = new Editor::ViewCanvas( m_ViewContainerPanel, -1, wxPoint(0,0), wxSize(150,250), wxNO_BORDER | wxWANTS_CHARS | wxEXPAND );
+    m_ViewContainerPanel->GetSizer()->Add( m_ViewCanvas, 1, wxEXPAND | wxALL, 0 );
 
-    m_HighlightModeToggleButton->SetValue( m_Viewport->IsHighlighting() );
+    m_HighlightModeToggleButton->SetValue( m_ViewCanvas->GetViewport().IsHighlighting() );
 
-    m_OrbitCameraToggleButton->SetValue( m_Viewport->GetCameraMode() == CameraModes::Orbit );
-    m_FrontCameraToggleButton->SetValue( m_Viewport->GetCameraMode() == CameraModes::Front );
-    m_SideCameraToggleButton->SetValue( m_Viewport->GetCameraMode() == CameraModes::Side );
-    m_TopCameraToggleButton->SetValue( m_Viewport->GetCameraMode() == CameraModes::Top );
+    m_OrbitCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Orbit );
+    m_FrontCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Front );
+    m_SideCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Side );
+    m_TopCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Top );
 
-    m_ShowAxesToggleButton->SetValue( m_Viewport->IsAxesVisible() );
-    m_ShowGridToggleButton->SetValue( m_Viewport->IsGridVisible() );
-    m_ShowBoundsToggleButton->SetValue( m_Viewport->IsBoundsVisible() );
-    m_ShowStatisticsToggleButton->SetValue( m_Viewport->IsStatisticsVisible() );
+    m_ShowAxesToggleButton->SetValue( m_ViewCanvas->GetViewport().IsAxesVisible() );
+    m_ShowGridToggleButton->SetValue( m_ViewCanvas->GetViewport().IsGridVisible() );
+    m_ShowBoundsToggleButton->SetValue( m_ViewCanvas->GetViewport().IsBoundsVisible() );
+    m_ShowStatisticsToggleButton->SetValue( m_ViewCanvas->GetViewport().IsStatisticsVisible() );
 
-    m_FrustumCullingToggleButton->SetValue( m_Viewport->GetCamera()->IsViewFrustumCulling() );
-    m_BackfaceCullingToggleButton->SetValue( m_Viewport->GetCamera()->IsBackFaceCulling() );
+    m_FrustumCullingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->IsViewFrustumCulling() );
+    m_BackfaceCullingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->IsBackFaceCulling() );
 
-    m_WireframeShadingToggleButton->SetValue( m_Viewport->GetCamera()->GetShadingMode() == ShadingModes::Wireframe );
-    m_MaterialShadingToggleButton->SetValue( m_Viewport->GetCamera()->GetShadingMode() == ShadingModes::Material );
+    m_WireframeShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == Core::ShadingModes::Wireframe );
+    m_MaterialShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == Core::ShadingModes::Material );
 
     //ViewColorMode colorMode = MainFramePreferences()->GetViewPreferences()->GetColorMode();
     //M_IDToColorMode::const_iterator colorModeItr = m_ColorModeLookup.begin();

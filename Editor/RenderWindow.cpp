@@ -8,6 +8,7 @@
 #include "Editor/Input.h"
 
 using namespace Helium;
+using namespace Helium::Core;
 using namespace Helium::Editor;
 
 static const u32 s_InvalidMesh = (u32)(-1);
@@ -91,7 +92,7 @@ bool RenderWindow::LoadScene( const tstring& path )
 {
     HELIUM_ASSERT( m_MeshHandle == s_InvalidMesh );
 
-    Content::RBObjectLoader loader;
+    Render::RBObjectLoader loader;
     loader.IncrRefCount();
     if ( m_Scene )
     {

@@ -3,6 +3,7 @@
 #include "Core/Render/DeviceManager.h"
 
 using namespace Helium;
+using namespace Helium::Core;
 using namespace Helium::Editor;
 
 Thumbnail::Thumbnail( Render::DeviceManager* d3dManager )

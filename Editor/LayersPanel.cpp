@@ -7,23 +7,14 @@
 #include "Core/Scene/DependencyCommand.h"
 
 using namespace Helium;
+using namespace Helium::Core;
 using namespace Helium::Editor;
 
-///////////////////////////////////////////////////////////////////////////////
-// LGridLayer::LNameChangeInfo
-///////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-// Constructor
-// 
 LayersPanel::NameChangeInfo::NameChangeInfo()
 : m_Layer( NULL )
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Destructor
-// 
 LayersPanel::NameChangeInfo::~NameChangeInfo()
 {
 }
@@ -36,7 +27,6 @@ void LayersPanel::NameChangeInfo::Clear()
     m_Layer = NULL;
     m_OldName.clear();
 }
-
 
 LayersPanel::LayersPanel( SceneManager* manager, wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
 : LayersPanelGenerated( parent, id, pos, size, style )
@@ -113,7 +103,7 @@ LayersPanel::~LayersPanel()
 // in the grid, and its selectability and visibility will be able to be 
 // changed.
 // 
-bool LayersPanel::AddLayer( Editor::Layer* layer )
+bool LayersPanel::AddLayer( Layer* layer )
 {
     //Verify this is the correct destination
     Content::Layer* cLayer = layer->GetPackage<Content::Layer>();
@@ -140,7 +130,7 @@ bool LayersPanel::AddLayer( Editor::Layer* layer )
 ///////////////////////////////////////////////////////////////////////////////
 // Removes the specified layer from the list managed by this control.
 // 
-bool LayersPanel::RemoveLayer( Editor::Layer* layer )
+bool LayersPanel::RemoveLayer( Layer* layer )
 {
     //Verify this is the correct destination
     Content::Layer* cLayer = layer->GetPackage<Content::Layer>();
@@ -193,7 +183,7 @@ void LayersPanel::ConnectSceneListeners()
     {
         // Add listeners for when layers are added/removed from a the scene
         m_Scene->AddNodeAddedListener( NodeChangeSignature::Delegate ( this, &LayersPanel::NodeAdded ) );
-        m_Scene->AddNodeRemovedListener( NodeChangeSignature::Delegate ( this, &LayersPanel::SceneNodeRemoved ) );
+        m_Scene->AddNodeRemovedListener( NodeChangeSignature::Delegate ( this, &LayersPanel::NodeRemoved ) );
 
         // Listen for changes to the scene's selection
         m_Scene->AddSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &LayersPanel::SelectionChanged ) );
@@ -209,7 +199,7 @@ void LayersPanel::DisconnectSceneListeners()
     {
         // Remove layer creation listeners on the scene
         m_Scene->RemoveNodeAddedListener( NodeChangeSignature::Delegate ( this, &LayersPanel::NodeAdded ) );
-        m_Scene->RemoveNodeRemovedListener( NodeChangeSignature::Delegate ( this, &LayersPanel::SceneNodeRemoved ) );
+        m_Scene->RemoveNodeRemovedListener( NodeChangeSignature::Delegate ( this, &LayersPanel::NodeRemoved ) );
 
         // Remove selection change listener on scene
         m_Scene->RemoveSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &LayersPanel::SelectionChanged ) );
@@ -226,7 +216,7 @@ void LayersPanel::RemoveAllLayers()
     M_LayerDumbPtr::const_iterator layerEnd = m_Layers.end();
     for ( ; layerItr != layerEnd; ++layerItr )
     {
-        Editor::Layer* layer = layerItr->second;
+        Layer* layer = layerItr->second;
         layer->RemoveNameChangingListener( SceneNodeChangeSignature::Delegate ( this, &LayersPanel::NameChanging ) );
         layer->RemoveNameChangedListener( SceneNodeChangeSignature::Delegate ( this, &LayersPanel::NameChanged ) );
     }
@@ -310,7 +300,7 @@ void LayersPanel::LayerSelectedItems( bool addToLayer )
                 continue;
             }
 
-            Editor::SceneNode* node = Reflect::ObjectCast< Editor::SceneNode >( *nodeItr );
+            SceneNode* node = Reflect::ObjectCast< SceneNode >( *nodeItr );
             if ( node )
             {
                 // For each row that is highlighted...
@@ -321,7 +311,7 @@ void LayersPanel::LayerSelectedItems( bool addToLayer )
                     if ( layerItr != layerEnd )
                     {
                         // Check to see if the node is already in the current layer...
-                        Editor::Layer* layer = layerItr->second;
+                        Layer* layer = layerItr->second;
                         S_SceneNodeSmartPtr::const_iterator foundDescendant = layer->GetDescendants().find( node );
 
                         // If the node is already in this layer, and we are suppose to be adding the node to the layer,
@@ -398,7 +388,7 @@ void LayersPanel::OnNewLayer( wxCommandEvent& event )
 {
     if ( m_Scene )
     {
-        Editor::Layer* layer = new Editor::Layer( m_Scene, new Content::Layer() );
+        Layer* layer = new Layer( m_Scene, new Content::Layer() );
         m_Scene->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Scene, layer ) );
         m_Scene->Execute( false ); 
     }
@@ -417,7 +407,7 @@ void LayersPanel::OnNewLayerFromSelection( wxCommandEvent& dummyEvt )
         }
 
         Undo::BatchCommandPtr batch       = new Undo::BatchCommand ();
-        Editor::Layer* layer = new Editor::Layer( m_Scene, new Content::Layer() );
+        Layer* layer = new Layer( m_Scene, new Content::Layer() );
 
         // Generate a name for this layer
         GenerateLayerName(layer);
@@ -433,7 +423,7 @@ void LayersPanel::OnNewLayerFromSelection( wxCommandEvent& dummyEvt )
             //If the element is a supported type
             if(IsSelectableValid(*itr))
             {
-                Editor::SceneNode* node = Reflect::ObjectCast< Editor::SceneNode >( *itr );
+                SceneNode* node = Reflect::ObjectCast< SceneNode >( *itr );
                 if ( node )
                 {
                     batch->Push( new DependencyCommand( DependencyCommand::Connect, layer, node ) );
@@ -485,7 +475,7 @@ void LayersPanel::DeleteSelectedLayers()
             // Recalculate m_Layers.end() each time through the loop.
             if ( layerItr != m_Layers.end() )
             {
-                Editor::Layer* layer = layerItr->second;
+                Layer* layer = layerItr->second;
 
                 // If the layer that we are about to delete is in the scene's selection list,
                 // we had better just clear out the selection list (otherwise the attribute
@@ -499,8 +489,8 @@ void LayersPanel::DeleteSelectedLayers()
                 // If the layer has any members, we should remove them before removing the layer,
                 // otherwise if those members are deleted, they will be pointing to an invalid
                 // layer that will eventually be Disconnected.
-                Editor::S_SceneNodeSmartPtr descendents = layer->GetDescendants();
-                for ( Editor::S_SceneNodeSmartPtr::iterator itr = descendents.begin(), end = descendents.end(); itr != end; ++itr )
+                S_SceneNodeSmartPtr descendents = layer->GetDescendants();
+                for ( S_SceneNodeSmartPtr::iterator itr = descendents.begin(), end = descendents.end(); itr != end; ++itr )
                 {
                     batch->Push( new DependencyCommand( DependencyCommand::Disconnect, layer, *itr ) );
                 }
@@ -557,7 +547,7 @@ void LayersPanel::OnSelectLayerMembers( wxCommandEvent& event )
         M_LayerDumbPtr::const_iterator layerEnd = m_Layers.end();
         for ( ; layerItr != layerEnd; ++layerItr )
         {
-            Editor::Layer* layer = layerItr->second;
+            Layer* layer = layerItr->second;
             if ( m_Grid->IsSelected( layer->GetName() ) )
             {
                 S_SceneNodeSmartPtr::const_iterator dependItr = layer->GetDescendants().begin();
@@ -593,7 +583,7 @@ void LayersPanel::OnSelectLayer( wxCommandEvent& event )
         {
             M_LayerDumbPtr::iterator layerItr = m_Layers.find( m_Grid->GetRowName( *rowItr ) );
             HELIUM_ASSERT( layerItr != m_Layers.end() );
-            Editor::Layer* layer = layerItr->second;
+            Layer* layer = layerItr->second;
             newSelection.Append( layer );
         }
 
@@ -619,7 +609,7 @@ void LayersPanel::SelectionChanged( const OS_SelectableDumbPtr& selection )
         OS_SelectableDumbPtr::Iterator end = selection.End();
         for ( ; itr != end; ++itr )
         {
-            Editor::Layer* lunaLayer = Reflect::ObjectCast< Editor::Layer >( *itr );
+            Layer* lunaLayer = Reflect::ObjectCast< Layer >( *itr );
             if ( lunaLayer )
             {
                 Content::Layer* contentLayer = lunaLayer->GetPackage<Content::Layer>();
@@ -655,7 +645,7 @@ void LayersPanel::NameChanging( const SceneNodeChangeArgs& args )
     M_LayerDumbPtr::const_iterator layerItr = m_Layers.find( args.m_Node->GetName() );
     if ( layerItr != m_Layers.end() )
     {
-        Editor::Layer* layer = layerItr->second;
+        Layer* layer = layerItr->second;
         const tstring& name = layerItr->first;
         if ( args.m_Node != layer || layer->GetName() != name )
         {
@@ -683,7 +673,7 @@ void LayersPanel::NameChanged( const SceneNodeChangeArgs& args )
     M_LayerDumbPtr::iterator layerItr = m_Layers.find( oldName );
     if ( layerItr != m_Layers.end() )
     {
-        Editor::Layer* layer = layerItr->second;
+        Layer* layer = layerItr->second;
         const tstring& newName = args.m_Node->GetName();
         m_Layers.erase( layerItr );
         m_Layers.insert( M_LayerDumbPtr::value_type( newName, layer ) );
@@ -710,7 +700,7 @@ void LayersPanel::LayerVisibleChanged( const GridRowChangeArgs& args )
     M_LayerDumbPtr::const_iterator layerItr = m_Layers.find( name );
     if ( layerItr != m_Layers.end() )
     {
-        Editor::Layer* layer = layerItr->second;
+        Layer* layer = layerItr->second;
         layer->SetVisible( m_Grid->IsRowVisibleChecked( args.m_RowNumber ) );
         layer->GetOwner()->Execute( false );
     }
@@ -732,7 +722,7 @@ void LayersPanel::LayerSelectableChanged( const GridRowChangeArgs& args )
     M_LayerDumbPtr::const_iterator layerItr = m_Layers.find( name );
     if ( layerItr != m_Layers.end() )
     {
-        Editor::Layer* layer = layerItr->second;
+        Layer* layer = layerItr->second;
         bool selectable = m_Grid->IsRowSelectableChecked( args.m_RowNumber );
 
         layer->SetSelectable( selectable );
@@ -746,7 +736,7 @@ void LayersPanel::LayerSelectableChanged( const GridRowChangeArgs& args )
             OS_SelectableDumbPtr::Iterator end = selection.End();
             for ( ; itr != end; ++itr )
             {
-                Editor::SceneNode* node = Reflect::ObjectCast<Editor::SceneNode>( *itr );
+                SceneNode* node = Reflect::ObjectCast<SceneNode>( *itr );
 
                 if (!node || !layer->ContainsMember( node ))
                 {
@@ -778,8 +768,8 @@ void LayersPanel::RowRenamed( const GridRowRenamedArgs& args )
     M_LayerDumbPtr::iterator found = m_Layers.find( args.m_OldName );
     if ( found != m_Layers.end() )
     {
-        Editor::Layer* layer = found->second;
-        layer->GetOwner()->Push( new Undo::PropertyCommand< tstring >( new Helium::MemberProperty< Editor::Layer, tstring >( layer, &Editor::Layer::GetName, &Editor::Layer::SetGivenName ), args.m_NewName ) );
+        Layer* layer = found->second;
+        layer->GetOwner()->Push( new Undo::PropertyCommand< tstring >( new Helium::MemberProperty< Layer, tstring >( layer, &Layer::GetName, &Layer::SetGivenName ), args.m_NewName ) );
     }
 }
 
@@ -820,9 +810,9 @@ void LayersPanel::CurrentSceneChanged( const SceneChangeArgs& args )
 // 
 void LayersPanel::NodeAdded( const NodeChangeArgs& args )
 {
-    if ( args.m_Node->HasType( Reflect::GetType<Editor::Layer>() ) )
+    if ( args.m_Node->HasType( Reflect::GetType<Layer>() ) )
     {
-        AddLayer( Reflect::DangerousCast< Editor::Layer >( args.m_Node ) );
+        AddLayer( Reflect::DangerousCast< Layer >( args.m_Node ) );
     }
 }
 
@@ -830,10 +820,10 @@ void LayersPanel::NodeAdded( const NodeChangeArgs& args )
 // Callback for when a layer has been removed from the scene.  Removes the
 // corresponding layer from the UI.
 // 
-void LayersPanel::SceneNodeRemoved( const NodeChangeArgs& args )
+void LayersPanel::NodeRemoved( const NodeChangeArgs& args )
 {
-    if ( args.m_Node->HasType( Reflect::GetType<Editor::Layer>() ) )
+    if ( args.m_Node->HasType( Reflect::GetType<Layer>() ) )
     {
-        RemoveLayer( Reflect::DangerousCast< Editor::Layer >( args.m_Node ) );
+        RemoveLayer( Reflect::DangerousCast< Layer >( args.m_Node ) );
     }
 }

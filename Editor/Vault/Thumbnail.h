@@ -4,20 +4,17 @@
 
 #include "Foundation/Memory/SmartPtr.h"
 
+#include "Core/Render/DeviceManager.h"
+
 namespace Helium
 {
-    namespace Render
-    {
-        class DeviceManager;
-    }
-
     namespace Editor
     {
         class Thumbnail : public Helium::RefCountBase< Thumbnail >
         {
         public:
-            Thumbnail( Render::DeviceManager* d3dManager );
-            Thumbnail( Render::DeviceManager* d3dManager, IDirect3DTexture9* texture );
+            Thumbnail( Core::Render::DeviceManager* d3dManager );
+            Thumbnail( Core::Render::DeviceManager* d3dManager, IDirect3DTexture9* texture );
             virtual ~Thumbnail();
 
             bool FromIcon( HICON icon );
@@ -29,7 +26,7 @@ namespace Helium
             }
 
         private:
-            Render::DeviceManager* m_DeviceManager;
+            Core::Render::DeviceManager* m_DeviceManager;
             IDirect3DTexture9* m_Texture;
             bool m_IsFromIcon;
         };

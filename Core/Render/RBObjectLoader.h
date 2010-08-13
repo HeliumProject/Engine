@@ -5,15 +5,18 @@
 
 namespace Helium
 {
-    namespace Content
+    namespace Core
     {
-        class CORE_API RBObjectLoader : public Render::ObjectLoader
+        namespace Render
         {
-        public:
-            RBObjectLoader();
-            virtual ~RBObjectLoader();
+            class CORE_API RBObjectLoader : public ObjectLoader
+            {
+            public:
+                RBObjectLoader();
+                virtual ~RBObjectLoader();
 
-            u32 ParseFile(const tchar* fname,bool winding);
-        };
+                u32 ParseFile(const tchar* fname,bool winding);
+            };
+        }
     }
 }

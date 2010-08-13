@@ -6,16 +6,14 @@
 
 #include "Foundation/TimerThread.h"
 
+#include "Core/Scene/SceneManager.h"
+
+#include "Editor/Controls/Tree/SortTreeCtrl.h"
+
 namespace Helium
 {
     namespace Editor
     {
-        // Forwards
-        class SceneManager;
-        class SortTreeCtrl;
-        struct NodeChangeArgs;
-        struct SceneChangeArgs;
-        struct SceneNodeChangeArgs;
 
         /////////////////////////////////////////////////////////////////////////////
         // This class allows you to add a number of tree controls to it, and it will
@@ -30,7 +28,7 @@ namespace Helium
         private:
             typedef std::set< SortTreeCtrl* > S_Trees;
 
-            Editor::SceneManager* m_SceneManager;
+            Core::SceneManager* m_SceneManager;
             S_Trees m_Trees;
 
             u32 m_FreezeTreeSorting;
@@ -40,7 +38,7 @@ namespace Helium
             bool m_SelfFrozen;
 
         public:
-            TreeMonitor( Editor::SceneManager* sceneManager );
+            TreeMonitor( Core::SceneManager* sceneManager );
             virtual ~TreeMonitor();
 
             void AddTree( SortTreeCtrl* tree );
@@ -52,11 +50,11 @@ namespace Helium
             bool IsFrozen() const;
 
         private:
-            void OnSceneAdded( const SceneChangeArgs& args );
-            void OnSceneRemoving( const SceneChangeArgs& args );
-            void OnNodeAdded( const NodeChangeArgs& args );
-            void OnNodeRemoved( const NodeChangeArgs& args );
-            void OnNodeRenamed( const SceneNodeChangeArgs& args );
+            void OnSceneAdded( const Core::SceneChangeArgs& args );
+            void OnSceneRemoving( const Core::SceneChangeArgs& args );
+            void OnNodeAdded( const Core::NodeChangeArgs& args );
+            void OnNodeRemoved( const Core::NodeChangeArgs& args );
+            void OnNodeRenamed( const Core::SceneNodeChangeArgs& args );
             void OnThawTimer( const TimerTickArgs& args );
         };
     }

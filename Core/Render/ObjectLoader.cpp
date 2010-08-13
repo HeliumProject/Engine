@@ -7,45 +7,49 @@
 #include <set>
 
 using namespace Helium;
+using namespace Helium::Core;
 
 //  Index gathering and ordering structure
 namespace Helium
 {
-    namespace Render
+    namespace Core
     {
-        struct IdxSet 
+        namespace Render
         {
-            u32 pIndex;
-            u32 nIndex;
-            u32 tIndex;
-            u32 tanIndex;
-            u32 cIndex;
-
-            bool operator< ( const IdxSet &rhs) const 
+            struct IdxSet 
             {
-                if (pIndex < rhs.pIndex)
-                    return true;
-                else if (pIndex == rhs.pIndex) 
+                u32 pIndex;
+                u32 nIndex;
+                u32 tIndex;
+                u32 tanIndex;
+                u32 cIndex;
+
+                bool operator< ( const IdxSet &rhs) const 
                 {
-                    if (nIndex < rhs.nIndex)
+                    if (pIndex < rhs.pIndex)
                         return true;
-                    else if (nIndex == rhs.nIndex) 
-                    {            
-                        if ( tIndex < rhs.tIndex)
+                    else if (pIndex == rhs.pIndex) 
+                    {
+                        if (nIndex < rhs.nIndex)
                             return true;
-                        else if ( tIndex == rhs.tIndex) 
-                        {
-                            if (tanIndex < rhs.tanIndex)
+                        else if (nIndex == rhs.nIndex) 
+                        {            
+                            if ( tIndex < rhs.tIndex)
                                 return true;
-                            else if (tanIndex == rhs.tanIndex)
-                                return (cIndex < rhs.cIndex);
+                            else if ( tIndex == rhs.tIndex) 
+                            {
+                                if (tanIndex < rhs.tanIndex)
+                                    return true;
+                                else if (tanIndex == rhs.tanIndex)
+                                    return (cIndex < rhs.cIndex);
+                            }
                         }
                     }
-                }
 
-                return false;
-            }
-        };
+                    return false;
+                }
+            };
+        }
     }
 }
 

@@ -4,8 +4,7 @@
 #include "Core/Project.h"
 
 #include "Editor/EditorGenerated.h"
-
-#include "Application/UI/FileDropTarget.h"
+#include "Editor/FileDropTarget.h"
 
 namespace Helium
 {
@@ -55,7 +54,7 @@ namespace Helium
             Helium::Core::ProjectPtr                            m_Project;
             wxObjectDataPtr<ProjectViewModel>                   m_Model;
             Helium::OrderedSet< Reflect::DocumentElementPtr >   m_Selected;
-            Helium::FileDropTarget*                             m_DropTarget;
+            FileDropTarget*                                     m_DropTarget;
         };
     }
 }

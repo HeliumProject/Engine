@@ -11,7 +11,7 @@
 #include "Core/Scene/SceneManager.h"
 #include "Application/UI/FileDialog.h"
 #include "Editor/ArtProvider.h"
-#include "Application/UI/MenuButton.h"
+#include "Editor/Controls/MenuButton.h"
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
 #include "Editor/ArtProvider.h"
 #include "Editor/App.h"

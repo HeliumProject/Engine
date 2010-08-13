@@ -22,7 +22,7 @@
 #include "Application/RCS/RCS.h"
 #include "Core/Scene/SceneManager.h"
 #include "Editor/ArtProvider.h"
-#include "Application/UI/MenuButton.h"
+#include "Editor/Controls/MenuButton.h"
 #include "Platform/Exception.h"
 #include "Platform/Process.h"
 

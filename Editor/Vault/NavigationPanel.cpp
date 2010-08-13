@@ -2,7 +2,7 @@
 #include "NavigationPanel.h"
 
 #include "Editor/ArtProvider.h"
-#include "Application/UI/MenuButton.h"
+#include "Editor/Controls/MenuButton.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

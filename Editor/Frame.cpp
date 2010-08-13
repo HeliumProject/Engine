@@ -199,6 +199,11 @@ void Frame::OnExiting( wxCloseEvent& args )
 
 void Frame::OnHelpTimer( wxTimerEvent& evt )
 {
+    if ( wxWindow::GetCapture() )
+    {
+        return;
+    }
+
     wxPoint pos = wxGetMousePosition();
     wxWindow *w = wxFindWindowAtPoint( pos );
     if ( w && w != m_HelpLastWindow )

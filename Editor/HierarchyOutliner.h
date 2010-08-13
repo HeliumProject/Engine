@@ -8,11 +8,36 @@ namespace Helium
 {
     namespace Editor
     {
-        // Forwards
-        class HierarchyNode;
-        class HierarchyOutlinerItemData;
-        struct ParentChangedArgs;
-        struct NodeChangeArgs;
+
+        /////////////////////////////////////////////////////////////////////////////
+        // Wrapper for hierarchy data stored in tree items.  Derives from 
+        // SceneOutlinerItemData and internally handles casting from Object to
+        // Editor::HierarchyNode.  Used in the Hierarchy Outline to track hierarchy nodes
+        // for each item in the tree (instead of just the Object base class).
+        // 
+        class HierarchyOutlinerItemData : public SceneOutlinerItemData
+        {
+        public:
+            HierarchyOutlinerItemData( Core::HierarchyNode* node )
+            : SceneOutlinerItemData( node )
+            {
+            }
+
+            ~HierarchyOutlinerItemData()
+            {
+            }
+
+            Core::HierarchyNode* GetHierarchyNode() const
+            {
+              return Reflect::AssertCast< Core::HierarchyNode >( GetObject() );
+            }
+
+            void SetHierarchyNode( Core::HierarchyNode* node )
+            {
+              SetObject( node );
+            }
+        };
+
 
         /////////////////////////////////////////////////////////////////////////////
         // Class to coordinate GUI events on a tree control, and the underlying 
@@ -25,19 +50,19 @@ namespace Helium
         class HierarchyOutliner : public SceneOutliner
         {
         public:
-            HierarchyOutliner( Editor::SceneManager* sceneManager );
+            HierarchyOutliner( Core::SceneManager* sceneManager );
             virtual ~HierarchyOutliner();
 
         protected:
             HierarchyOutlinerItemData* GetTreeItemData( const wxTreeItemId& item );
             void AddHierarchyNodes();
-            void RecurseAddHierarchyNode( Editor::HierarchyNode* node );
-            void AddHierarchyNode( Editor::HierarchyNode* node );
+            void RecurseAddHierarchyNode( Core::HierarchyNode* node );
+            void AddHierarchyNode( Core::HierarchyNode* node );
 
         protected:
             // Overrides from SceneOutliner
             virtual SortTreeCtrl* CreateTreeCtrl( wxWindow* parent, wxWindowID id ) HELIUM_OVERRIDE;
-            virtual void CurrentSceneChanged( Editor::Scene* oldScene ) HELIUM_OVERRIDE;
+            virtual void CurrentSceneChanged( Core::Scene* oldScene ) HELIUM_OVERRIDE;
             virtual void ConnectSceneListeners() HELIUM_OVERRIDE;
             virtual void DisconnectSceneListeners() HELIUM_OVERRIDE;
 
@@ -48,9 +73,9 @@ namespace Helium
 
         private:
             // Event callbacks for other systems in Editor - do not call directly
-            void ParentChanged( const ParentChangedArgs& args );
-            void NodeAdded( const NodeChangeArgs& args );
-            void NodeRemoved( const NodeChangeArgs& args );
+            void ParentChanged( const Core::ParentChangedArgs& args );
+            void NodeAdded( const Core::NodeChangeArgs& args );
+            void NodeRemoved( const Core::NodeChangeArgs& args );
         };
     }
 }

@@ -49,5 +49,6 @@ namespace Helium
         };
 
         typedef Helium::SmartPtr< Object > ObjectPtr;
+        typedef std::set< Object* > S_Objects;
     }
 }

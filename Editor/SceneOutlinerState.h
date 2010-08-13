@@ -2,6 +2,8 @@
 
 #include <set>
 
+#include "Core/Scene/Object.h"
+
 #include "Editor/API.h"
 #include "Platform/Types.h"
 
@@ -9,10 +11,6 @@ namespace Helium
 {
     namespace Editor
     {
-        // Forwards & Typedefs
-        class Object;
-        typedef std::set< Object* > S_Objects;
-
         /////////////////////////////////////////////////////////////////////////////
         // Manages the state of a scene outliner so that it can be saved and restored.
         // The state includes which nodes are expanded, and the postions of the scroll
@@ -25,7 +23,7 @@ namespace Helium
         protected:
             i32 m_HorizScrollPos;
             i32 m_VertScrollPos;
-            S_Objects m_ExpandedObjects;
+            Core::S_Objects m_ExpandedObjects;
 
         public:
             SceneOutlinerState();
@@ -36,10 +34,10 @@ namespace Helium
             void SetHorizontalScrollBarPos( i32 pos );
             i32 GetVerticalScrollBarPos() const;
             void SetVerticalScrollBarPos( i32 pos );
-            void AddExpandedObject( Object* object );
-            void RemoveExpandedObject( Object* object );
-            bool IsExpanded( Object* object );
-            const S_Objects& GetExpandedObjects() const;
+            void AddExpandedObject( Core::Object* object );
+            void RemoveExpandedObject( Core::Object* object );
+            bool IsExpanded( Core::Object* object );
+            const Core::S_Objects& GetExpandedObjects() const;
         };
     }
 }

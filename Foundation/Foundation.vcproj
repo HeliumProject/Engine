@@ -1516,6 +1516,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Localization.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Log.cpp"
 			>
 		</File>

@@ -25,30 +25,30 @@ namespace Helium
 
             // Public functions
         public:
-            NodeTypeOutliner( Editor::SceneManager* sceneManager );
+            NodeTypeOutliner( Core::SceneManager* sceneManager );
             virtual ~NodeTypeOutliner();
             void AddNodeTypes();
 
             // Helpers
         private:
-            void AddNodeType( Editor::SceneNodeType* nodeType );
-            void AddInstance( Editor::SceneNode* instance );
-            void RemoveNodeType( Editor::SceneNodeType* nodeType );
-            void RemoveInstance( Editor::SceneNode* instance );
+            void AddNodeType( Core::SceneNodeType* nodeType );
+            void AddInstance( Core::SceneNode* instance );
+            void RemoveNodeType( Core::SceneNodeType* nodeType );
+            void RemoveInstance( Core::SceneNode* instance );
 
             // Overrides from SceneOutliner
             SortTreeCtrl* CreateTreeCtrl( wxWindow* parent, wxWindowID id ) HELIUM_OVERRIDE;
             virtual void Clear() HELIUM_OVERRIDE;
-            virtual void CurrentSceneChanged( Editor::Scene* oldScene ) HELIUM_OVERRIDE;
+            virtual void CurrentSceneChanged( Core::Scene* oldScene ) HELIUM_OVERRIDE;
             virtual void ConnectSceneListeners() HELIUM_OVERRIDE;
             virtual void DisconnectSceneListeners() HELIUM_OVERRIDE;
 
             // Application callbacks
         private:
-            void NodeTypeAdded( const NodeTypeExistenceArgs& args );
-            void NodeTypeRemoved( const NodeTypeExistenceArgs& args );
-            void NodeAddedToType( const NodeTypeChangeArgs& args );
-            void NodeRemovedFromType( const NodeTypeChangeArgs& args );
+            void NodeTypeAdded( const Core::NodeTypeExistenceArgs& args );
+            void NodeTypeRemoved( const Core::NodeTypeExistenceArgs& args );
+            void NodeAddedToType( const Core::NodeTypeChangeArgs& args );
+            void NodeRemovedFromType( const Core::NodeTypeChangeArgs& args );
 
         private:
             // GUI callbacks

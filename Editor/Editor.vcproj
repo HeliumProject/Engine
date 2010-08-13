@@ -1791,14 +1791,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\HierarchyOutlinerItemData.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\HierarchyOutlinerItemData.h"
-			>
-		</File>
-		<File
 			RelativePath=".\ImportOptionsDlg.cpp"
 			>
 		</File>
@@ -2004,14 +1996,6 @@
 		</File>
 		<File
 			RelativePath=".\SceneOutliner.h"
-			>
-		</File>
-		<File
-			RelativePath=".\SceneOutlinerItemData.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\SceneOutlinerItemData.h"
 			>
 		</File>
 		<File

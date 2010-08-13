@@ -67,7 +67,7 @@ void ViewCanvas::OnSize(wxSizeEvent& e)
 void ViewCanvas::OnPaint(wxPaintEvent& e)
 {
     // draw
-    Draw();
+    m_Viewport.Draw();
 
     // set our entire window to be valid
     ::ValidateRect( (HWND)GetHandle(), NULL );

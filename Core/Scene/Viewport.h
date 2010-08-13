@@ -322,21 +322,20 @@ namespace Helium
             void InitDevice( HWND wnd );
             void InitWidgets();
             void InitCameras();
-
             void Reset();
 
+        public:
             void Resize(u32 x, u32 y);
 
             void KeyDown( const Helium::KeyboardInput& input );
             void KeyUp( const Helium::KeyboardInput& input );
             void KeyPress( const Helium::KeyboardInput& input );
 
-            void OnMouseDown( const Helium::MouseButtonInput& input );
-            void OnMouseUp( const Helium::MouseButtonInput& input );
-            void OnMouseMove( const Helium::MouseMoveInput& input );
-            void OnMouseScroll( const Helium::MouseScrollInput& input );
+            void MouseDown( const Helium::MouseButtonInput& input );
+            void MouseUp( const Helium::MouseButtonInput& input );
+            void MouseMove( const Helium::MouseMoveInput& input );
+            void MouseScroll( const Helium::MouseScrollInput& input );
 
-        public:
             void Draw();
 
             /// @brief Undo the last translation of the last selected view

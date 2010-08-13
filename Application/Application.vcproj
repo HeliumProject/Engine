@@ -1410,14 +1410,6 @@
 				RelativePath=".\UI\SimpleConfig.h"
 				>
 			</File>
-			<File
-				RelativePath=".\UI\ThreadMechanism.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\ThreadMechanism.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="RCS"

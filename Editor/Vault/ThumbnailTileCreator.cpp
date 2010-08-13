@@ -85,7 +85,7 @@ void ThumbnailTileCreator::ThreadProc( i32 threadID )
     ThreadLeave( threadID );
 }
 
-void ThumbnailTileCreator::OnEndThread( const Helium::ThreadProcArgs& args )
+void ThumbnailTileCreator::OnEndThread( const ThreadProcArgs& args )
 {
     if ( !IsCurrentThread( args.m_ThreadID ) )
         return;

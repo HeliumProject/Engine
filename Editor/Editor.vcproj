@@ -2040,6 +2040,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\ThreadMechanism.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ThreadMechanism.h"
+			>
+		</File>
+		<File
 			RelativePath=".\ToolbarPanel.cpp"
 			>
 		</File>

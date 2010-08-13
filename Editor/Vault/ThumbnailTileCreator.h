@@ -2,7 +2,7 @@
 
 #include "SearchResults.h"
 #include "ThumbnailSorter.h"
-#include "Application/UI/ThreadMechanism.h"
+#include "Editor/ThreadMechanism.h"
 
 namespace Helium
 {
@@ -10,7 +10,7 @@ namespace Helium
     {
         class ThumbnailView;
 
-        class ThumbnailTileCreator : public Helium::ThreadMechanism
+        class ThumbnailTileCreator : public ThreadMechanism
         {
         public:
             ThumbnailTileCreator( ThumbnailView* view );
@@ -23,7 +23,7 @@ namespace Helium
             virtual void InitData() HELIUM_OVERRIDE;
             virtual void ThreadProc( i32 threadID ) HELIUM_OVERRIDE;
 
-            void OnEndThread( const Helium::ThreadProcArgs& args );
+            void OnEndThread( const ThreadProcArgs& args );
 
         private:
             ThumbnailView* m_View;

@@ -200,51 +200,7 @@ namespace Helium
 
         class CORE_API Viewport
         {
-            //
-            // Members
-            //
-
-        private:
-            Math::Point m_Size;
-
-            HWND m_Window;
-
-            // Control/Device
-            Render::DeviceManager m_DeviceManager;
-
-            // Resources
-            ResourceTracker* m_ResourceTracker;
-
-            // Renderer
-            RenderVisitor m_RenderVisitor;
-
-            // Tool
-            Tool* m_Tool;
-
-            // Camera
-            Camera m_Cameras[CameraModes::Count];
-            Undo::Queue m_CameraHistory[CameraModes::Count];
-
-            CameraMode m_CameraMode;
-            GeometryMode m_GeometryMode;
-
-            // Drag
-            DragMode m_DragMode;
-            Math::Point m_Start;
-            Math::Point m_End;
-
-            // Widgets
-            bool m_Highlighting;
-            bool m_AxesVisible;
-            bool m_GridVisible;
-            bool m_BoundsVisible;
-            bool m_StatisticsVisible;
-            Statistics* m_Statistics;
-            PrimitiveFrame* m_SelectionFrame;
-            Primitive* m_GlobalPrimitives[GlobalPrimitives::Count];
-
         public:
-            // Materials
             static D3DMATERIAL9 s_LiveMaterial;
             static D3DMATERIAL9 s_SelectedMaterial;
             static D3DMATERIAL9 s_ReactiveMaterial;
@@ -258,17 +214,14 @@ namespace Helium
             static D3DMATERIAL9 s_GreenMaterial;
             static D3DMATERIAL9 s_BlueMaterial;
 
-            //
-            // Setup/Reset
-            //
-
             static void InitializeType();
             static void CleanupType();
 
             Viewport( HWND wnd );
             ~Viewport();
 
-        public:
+            void Reset();
+
             void LoadPreferences(ViewportPreferences* prefs);
             void SavePreferences(ViewportPreferences* prefs);
 
@@ -282,39 +235,100 @@ namespace Helium
                 return m_DeviceManager.GetD3DDevice();
             }
 
-            ResourceTracker* GetResources() const;
-            Statistics* GetStatistics() const;
+            ResourceTracker* GetResources() const
+            {
+                return m_ResourceTracker;
+            }
 
-            Camera* GetCamera();
-            const Camera* GetCamera() const;
+            Statistics* GetStatistics() const
+            {
+                return m_Statistics;
+            }
 
-            Camera* GetCameraForMode(CameraMode mode); 
+            Core::Camera* GetCamera()
+            {
+                return &m_Cameras[m_CameraMode];
+            }
 
-            CameraMode GetCameraMode() const;
+            const Core::Camera* GetCamera() const
+            {
+                return &m_Cameras[m_CameraMode];
+            }
+
+            Core::Camera* GetCameraForMode(CameraMode mode)
+            {
+                return &m_Cameras[mode]; 
+            }
+
+            CameraMode GetCameraMode() const
+            {
+                return m_CameraMode;
+            }
+
             void SetCameraMode(CameraMode mode);
             void NextCameraMode();
 
-            GeometryMode GetGeometryMode() const;
-            void SetGeometryMode(GeometryMode mode);
+            GeometryMode GetGeometryMode() const
+            {
+                return m_GeometryMode;
+            }
+
+            void SetGeometryMode(GeometryMode mode)
+            {
+                m_GeometryMode = mode;
+            }
+
             void NextGeometryMode();
 
-            Tool* GetTool();
+            Core::Tool* GetTool()
+            {
+                return m_Tool;
+            }
+
             void SetTool(Tool* tool);
 
             bool IsHighlighting() const;
             void SetHighlighting(bool highlight);
 
-            bool IsAxesVisible() const;
-            void SetAxesVisible(bool visible);
+            bool IsAxesVisible() const
+            {
+                return m_AxesVisible;
+            }
 
-            bool IsGridVisible() const;
-            void SetGridVisible(bool visible);
+            void SetAxesVisible(bool visible)
+            {
+                m_AxesVisible = visible;
+            }
 
-            bool IsBoundsVisible() const;
-            void SetBoundsVisible(bool visible);
+            bool IsGridVisible() const
+            {
+                return m_GridVisible;
+            }
 
-            bool IsStatisticsVisible() const;
-            void SetStatisticsVisible(bool visible);
+            void SetGridVisible(bool visible)
+            {
+                m_GridVisible = visible;
+            }
+
+            bool IsBoundsVisible() const
+            {
+                return m_BoundsVisible;
+            }
+
+            void SetBoundsVisible(bool visible)
+            {
+                m_BoundsVisible = visible;
+            }
+
+            bool IsStatisticsVisible() const
+            {
+                return m_StatisticsVisible;
+            }
+
+            void SetStatisticsVisible(bool visible)
+            {
+                m_StatisticsVisible = visible;
+            }
 
             Core::Primitive* GetGlobalPrimitive( GlobalPrimitives::GlobalPrimitive which );
 
@@ -322,10 +336,10 @@ namespace Helium
             void InitDevice( HWND wnd );
             void InitWidgets();
             void InitCameras();
-            void Reset();
 
         public:
-            void Resize(u32 x, u32 y);
+            void SetSize(u32 x, u32 y);
+            void SetFocused(bool focused);
 
             void KeyDown( const Helium::KeyboardInput& input );
             void KeyUp( const Helium::KeyboardInput& input );
@@ -338,38 +352,20 @@ namespace Helium
 
             void Draw();
 
-            /// @brief Undo the last translation of the last selected view
             void UndoTransform();
-
-            /// @brief Undo the last translation of the specified camera mode
             void UndoTransform( CameraMode mode );
-
-            /// @brief Redo the last translation of the last selected view
             void RedoTransform();
-
-            /// @brief Redo the last translation of the specified view
             void RedoTransform( CameraMode mode );    
-
-            /// @brief Update the camera history. 
-            /// Update the camera history so we can undo/redo previous camera moves. 
-            /// This is implemented seperately from 'CameraMoved' since 'CameraMoved' reports all incremental spots during a transition.
-            /// We also need to be able to update this from other events in the scene editor, such as when we focus on an object
-            /// directly ( shortcut key - f )
-            void UpdateCameraHistory( );
+            void UpdateCameraHistory();
 
         private:
-            void PreDraw( DrawArgs* args );
-            void PostDraw( DrawArgs* args );
-            void OnReleaseResources( const Render::DeviceStateArgs& args );
-            void OnAllocateResources( const Render::DeviceStateArgs& args );
-
-        private:
+            // callbacks
+            void ReleaseResources( const Render::DeviceStateArgs& args );
+            void AllocateResources( const Render::DeviceStateArgs& args );
             void CameraMoved( const Core::CameraMovedArgs& args );
-        public:
-            void RemoteCameraMoved( const Math::Matrix4& transform );
 
             // 
-            // Listeners
+            // Events
             // 
 
         protected:
@@ -462,6 +458,35 @@ namespace Helium
 
         protected:
             void OnGridPreferencesChanged( const Reflect::ElementChangeArgs& args );
+
+        private:
+            HWND                    m_Window;
+            Math::Point             m_Size;
+            bool                    m_Focused;
+
+            Render::DeviceManager   m_DeviceManager;
+            ResourceTracker*        m_ResourceTracker;
+            RenderVisitor           m_RenderVisitor;
+
+            Tool*                   m_Tool;
+            Camera                  m_Cameras[CameraModes::Count];
+            Undo::Queue             m_CameraHistory[CameraModes::Count];
+
+            CameraMode              m_CameraMode;
+            GeometryMode            m_GeometryMode;
+
+            DragMode                m_DragMode;
+            Math::Point             m_Start;
+            Math::Point             m_End;
+
+            bool                    m_Highlighting;
+            bool                    m_AxesVisible;
+            bool                    m_GridVisible;
+            bool                    m_BoundsVisible;
+            bool                    m_StatisticsVisible;
+            Statistics*             m_Statistics;
+            PrimitiveFrame*         m_SelectionFrame;
+            Primitive*              m_GlobalPrimitives[GlobalPrimitives::Count];
         };
     }
 }

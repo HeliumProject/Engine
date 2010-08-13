@@ -20,9 +20,7 @@ const float Core::Camera::FieldOfView = 72.0f * Math::DegToRad;
 SCENE_DEFINE_TYPE(Core::Camera);
 
 Camera::Camera()
-: m_ControlWidth ( 0 )
-, m_ControlHeight ( 0 )
-, m_ProjectionMode( ProjectionModes::Perspective )
+: m_ProjectionMode( ProjectionModes::Perspective )
 , m_MovementMode( MovementModes::Orbit )
 , m_Offset ( 0.0 )
 , m_Sensitivity ( 0.5f )
@@ -108,10 +106,10 @@ void Camera::GetUpAxisTransform(Matrix4& m) const
 
 Matrix4& Camera::SetProjection(int w, int h)
 {
-  m_ControlWidth = w;
-  m_ControlHeight = h;
+  m_Size.x = w;
+  m_Size.y = h;
 
-  if (m_ControlWidth != 0 && m_ControlHeight != 0)
+  if (m_Size.x != 0 && m_Size.y != 0)
   {
     switch (m_ProjectionMode)
     {
@@ -143,7 +141,7 @@ Matrix4& Camera::SetProjection(int w, int h)
 
 void Camera::GetPerspectiveProjection(Matrix4& m) const
 {
-  const float aspect = (float)m_ControlWidth / (float)m_ControlHeight;
+  const float aspect = (float)m_Size.x / (float)m_Size.y;
 
   m = Matrix4::Identity;
 
@@ -168,7 +166,7 @@ void Camera::GetPerspectiveProjection(Matrix4& m) const
 
 void Camera::GetOrthographicProjection(Matrix4& m) const
 {
-  const float aspect = (float)m_ControlWidth / (float)m_ControlHeight;
+  const float aspect = (float)m_Size.x / (float)m_Size.y;
 
   m = Matrix4::Identity;
 
@@ -427,14 +425,14 @@ void Camera::WorldToScreen(const Math::Vector3& p, float& x, float& y)
 
 void Camera::ViewportToScreen(const Math::Vector3& v, float& x, float& y)
 {
-  x = ( (v.x + 1) * m_ControlWidth ) / 2.0f;
-  y = ( (-v.y + 1) * m_ControlHeight ) / 2.0f;
+  x = ( (v.x + 1) * m_Size.x ) / 2.0f;
+  y = ( (-v.y + 1) * m_Size.y ) / 2.0f;
 }
 
 void Camera::ScreenToViewport(float x, float y, Math::Vector3& v) const
 {
-  v.x = (((2.0f * x) / m_ControlWidth) - 1);
-  v.y = -(((2.0f * y) / m_ControlHeight) - 1);
+  v.x = (((2.0f * x) / m_Size.x) - 1);
+  v.y = -(((2.0f * y) / m_Size.y) - 1);
 }
 
 void Camera::ViewportToWorldVertex(float x, float y, Vector3& v) const

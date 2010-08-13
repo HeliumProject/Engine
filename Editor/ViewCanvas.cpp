@@ -58,7 +58,7 @@ void ViewCanvas::OnSize(wxSizeEvent& e)
 
     if ( e.GetSize().x > 0 && e.GetSize().y > 0 )
     {
-        m_Viewport.Resize( e.GetSize().x, e.GetSize().y );
+        m_Viewport.SetSize( e.GetSize().x, e.GetSize().y );
     }
 
     Refresh();
@@ -66,24 +66,20 @@ void ViewCanvas::OnSize(wxSizeEvent& e)
 
 void ViewCanvas::OnPaint(wxPaintEvent& e)
 {
-    // draw
     m_Viewport.Draw();
-
-    // set our entire window to be valid
-    ::ValidateRect( (HWND)GetHandle(), NULL );
 }
 
 void ViewCanvas::OnSetFocus(wxFocusEvent& e)
 {
+    m_Viewport.SetFocused( true );
     m_Focused = true;
-
     Refresh();
 }
 
 void ViewCanvas::OnKillFocus(wxFocusEvent& e)
 {
+    m_Viewport.SetFocused( false );
     m_Focused = false;
-
     Refresh();
 }
 
@@ -137,8 +133,6 @@ void ViewCanvas::OnChar(wxKeyEvent& e)
 
 void ViewCanvas::OnMouseDown(wxMouseEvent& e)
 {
-#pragma TODO("Freeze here -Geoff")
-
     if (!m_Focused)
     {
         // focus and eat the event
@@ -146,6 +140,17 @@ void ViewCanvas::OnMouseDown(wxMouseEvent& e)
     }
     else
     {
+        // if any key is down
+        if (e.LeftIsDown() || e.MiddleIsDown() || e.RightIsDown())
+        {
+            // and we don't already own the mouse
+            if (GetCapture() != this)
+            {
+                // capture it
+                CaptureMouse();
+            }
+        }
+
         Helium::MouseButtonInput input;
         Helium::ConvertEvent( e, input );
         m_Viewport.MouseDown( input );
@@ -158,10 +163,13 @@ void ViewCanvas::OnMouseDown(wxMouseEvent& e)
 
 void ViewCanvas::OnMouseUp(wxMouseEvent& e)
 {
-#pragma TODO("Freeze here -Geoff")
-
-    // focus
-    SetFocus();
+    if (!e.LeftIsDown() && !e.MiddleIsDown() && !e.RightIsDown())
+    {
+        if (GetCapture() == this)
+        {
+            ReleaseMouse();
+        }
+    }
 
     Helium::MouseButtonInput input;
     Helium::ConvertEvent( e, input );
@@ -178,20 +186,18 @@ void ViewCanvas::OnMouseMove(wxMouseEvent& e)
     if ( !m_Focused )
     {
         wxWindow* parent = GetParent();
-        if ( parent->IsTopLevel() )
+        while ( !parent->IsTopLevel() )
+            parent = parent->GetParent();
+
+        wxTopLevelWindow* topLevel = reinterpret_cast< wxTopLevelWindow* >( parent );
+        if ( topLevel->IsActive() )
         {
-            wxTopLevelWindow* topLevel = reinterpret_cast< wxTopLevelWindow* >( parent );
-            if ( topLevel->IsActive() )
-            {
-                SetFocus();
-            }
+            SetFocus();
         }
     }
 
     if (m_Focused)
     {
-#pragma TODO("Freeze here -Geoff")
-
         Helium::MouseMoveInput input;
         Helium::ConvertEvent( e, input );
         m_Viewport.MouseMove( input );

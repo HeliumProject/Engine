@@ -97,25 +97,27 @@ void Viewport::CleanupType()
 }
 
 Viewport::Viewport(HWND wnd)
-: m_Window ( wnd )
-, m_ResourceTracker (NULL)
-, m_Tool (NULL)
-, m_CameraMode (CameraModes::Orbit)
-, m_GeometryMode (GeometryModes::Render)
-, m_DragMode (DragModes::None)
-, m_Highlighting (true)
-, m_AxesVisible (true)
-, m_GridVisible (true)
-, m_BoundsVisible (false)
-, m_StatisticsVisible (false)
-, m_Statistics (NULL)
-, m_SelectionFrame (NULL)
+: m_Window( wnd )
+, m_Focused( false )
+, m_ResourceTracker( NULL )
+, m_Tool( NULL )
+, m_CameraMode( CameraModes::Orbit )
+, m_GeometryMode( GeometryModes::Render )
+, m_DragMode( DragModes::None )
+, m_Highlighting( true )
+, m_AxesVisible( true )
+, m_GridVisible( true )
+, m_BoundsVisible( false )
+, m_StatisticsVisible( false )
+, m_Statistics( NULL )
+, m_SelectionFrame( NULL )
 {
     memset(m_GlobalPrimitives, NULL, sizeof(m_GlobalPrimitives));
 
     InitDevice(wnd);
     InitWidgets();
     InitCameras();
+
     Reset();
 }
 
@@ -123,8 +125,8 @@ Viewport::~Viewport()
 {
     m_Cameras[ CameraModes::Orbit ].RemoveMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
 
-    m_DeviceManager.RemoveDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &Viewport::OnAllocateResources ) );
-    m_DeviceManager.RemoveDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &Viewport::OnReleaseResources ) );
+    m_DeviceManager.RemoveDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &Viewport::ReleaseResources ) );
+    m_DeviceManager.RemoveDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &Viewport::AllocateResources ) );
 
     for (u32 i=0; i<GlobalPrimitives::Count; i++)
         delete m_GlobalPrimitives[i];
@@ -133,6 +135,49 @@ Viewport::~Viewport()
     delete m_SelectionFrame;
 
     delete m_ResourceTracker;
+}
+
+void Viewport::Reset()
+{
+    if ( !GetDevice() )
+    {
+        return;
+    }
+
+    for (u32 i=0; i<CameraModes::Count; i++)
+    {
+        m_Cameras[i].Reset();
+    }
+
+    static_cast<Core::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->m_Length = 0.05f;
+    static_cast<Core::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->Update();
+
+    Core::PrimitiveAxes* transformAxes = static_cast< Core::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::TransformAxes] );
+    transformAxes->m_Length = 0.10f;
+    transformAxes->Update();
+
+    Core::PrimitiveAxes* transformAxesSelected = static_cast< Core::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::SelectedAxes] );
+    transformAxesSelected->m_Length = 0.10f;
+    transformAxesSelected->SetColor( D3DCOLOR_COLORVALUE( s_SelectedMaterial.Ambient.r, s_SelectedMaterial.Ambient.g, s_SelectedMaterial.Ambient.b, s_SelectedMaterial.Ambient.a ) );
+    transformAxesSelected->Update();
+
+    Core::PrimitiveAxes* jointAxes = static_cast< Core::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::JointAxes] );
+    jointAxes->m_Length = 0.015f;
+    jointAxes->Update();
+
+    Core::PrimitiveRings* jointRings = static_cast< Core::PrimitiveRings* >( m_GlobalPrimitives[GlobalPrimitives::JointRings] );
+    jointRings->m_Radius = 0.015f;
+    jointRings->m_Steps = 18;
+    jointRings->Update();
+
+    m_AxesVisible = true;
+    m_GridVisible = true;
+    m_BoundsVisible = false;
+    m_StatisticsVisible = false;
+
+#ifdef _DEBUG
+    m_StatisticsVisible = true;
+#endif
 }
 
 void Viewport::LoadPreferences(Core::ViewportPreferences* prefs)
@@ -179,36 +224,6 @@ void Viewport::SavePreferences(Core::ViewportPreferences* prefs)
     prefs->m_StatisticsVisible = IsStatisticsVisible(); 
 }
 
-ResourceTracker* Viewport::GetResources() const
-{
-    return m_ResourceTracker;
-}
-
-Statistics* Viewport::GetStatistics() const
-{
-    return m_Statistics;
-}
-
-Core::Camera* Viewport::GetCamera()
-{
-    return &m_Cameras[m_CameraMode];
-}
-
-const Core::Camera* Viewport::GetCamera() const
-{
-    return &m_Cameras[m_CameraMode];
-}
-
-Core::Camera* Viewport::GetCameraForMode(CameraMode mode)
-{
-    return &m_Cameras[mode]; 
-}
-
-CameraMode Viewport::GetCameraMode() const
-{
-    return m_CameraMode;
-}
-
 void Viewport::SetCameraMode(CameraMode mode)
 {
     if ( mode != m_CameraMode )
@@ -225,24 +240,9 @@ void Viewport::NextCameraMode()
     SetCameraMode((CameraMode)((m_CameraMode + 1) % CameraModes::Count));
 }
 
-GeometryMode Viewport::GetGeometryMode() const
-{
-    return m_GeometryMode;
-}
-
-void Viewport::SetGeometryMode(GeometryMode mode)
-{
-    m_GeometryMode = mode;
-}
-
 void Viewport::NextGeometryMode()
 {
     SetGeometryMode((GeometryMode)((m_GeometryMode + 1) % GeometryModes::Count));
-}
-
-Core::Tool* Viewport::GetTool()
-{
-    return m_Tool;
 }
 
 void Viewport::SetTool(Core::Tool* tool)
@@ -277,46 +277,6 @@ void Viewport::SetHighlighting(bool highlight)
     }
 }
 
-bool Viewport::IsAxesVisible() const
-{
-    return m_AxesVisible;
-}
-
-void Viewport::SetAxesVisible(bool visible)
-{
-    m_AxesVisible = visible;
-}
-
-bool Viewport::IsGridVisible() const
-{
-    return m_GridVisible;
-}
-
-void Viewport::SetGridVisible(bool visible)
-{
-    m_GridVisible = visible;
-}
-
-bool Viewport::IsBoundsVisible() const
-{
-    return m_BoundsVisible;
-}
-
-void Viewport::SetBoundsVisible(bool visible)
-{
-    m_BoundsVisible = visible;
-}
-
-bool Viewport::IsStatisticsVisible() const
-{
-    return m_StatisticsVisible;
-}
-
-void Viewport::SetStatisticsVisible(bool visible)
-{
-    m_StatisticsVisible = visible;
-}
-
 Core::Primitive* Viewport::GetGlobalPrimitive( GlobalPrimitives::GlobalPrimitive which )
 {
     Core::Primitive* prim = NULL;
@@ -330,9 +290,8 @@ Core::Primitive* Viewport::GetGlobalPrimitive( GlobalPrimitives::GlobalPrimitive
 void Viewport::InitDevice( HWND wnd )
 {
     m_DeviceManager.Init( wnd, 64, 64 );
-    m_DeviceManager.AddDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &Viewport::OnAllocateResources ) );
-    m_DeviceManager.AddDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &Viewport::OnReleaseResources ) );
-
+    m_DeviceManager.AddDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &Viewport::ReleaseResources ) );
+    m_DeviceManager.AddDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &Viewport::AllocateResources ) );
     m_ResourceTracker = new ResourceTracker( GetDevice() );
 }
 
@@ -394,51 +353,11 @@ void Viewport::InitCameras()
     m_Cameras[ CameraModes::Orbit ].AddMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
 }
 
-void Viewport::Reset()
+void Viewport::SetSize(u32 x, u32 y)
 {
-    if ( !GetDevice() )
-    {
-        return;
-    }
+    m_Size.x = x;
+    m_Size.y = y;
 
-    for (u32 i=0; i<CameraModes::Count; i++)
-    {
-        m_Cameras[i].Reset();
-    }
-
-    static_cast<Core::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->m_Length = 0.05f;
-    static_cast<Core::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->Update();
-
-    Core::PrimitiveAxes* transformAxes = static_cast< Core::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::TransformAxes] );
-    transformAxes->m_Length = 0.10f;
-    transformAxes->Update();
-
-    Core::PrimitiveAxes* transformAxesSelected = static_cast< Core::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::SelectedAxes] );
-    transformAxesSelected->m_Length = 0.10f;
-    transformAxesSelected->SetColor( D3DCOLOR_COLORVALUE( s_SelectedMaterial.Ambient.r, s_SelectedMaterial.Ambient.g, s_SelectedMaterial.Ambient.b, s_SelectedMaterial.Ambient.a ) );
-    transformAxesSelected->Update();
-
-    Core::PrimitiveAxes* jointAxes = static_cast< Core::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::JointAxes] );
-    jointAxes->m_Length = 0.015f;
-    jointAxes->Update();
-
-    Core::PrimitiveRings* jointRings = static_cast< Core::PrimitiveRings* >( m_GlobalPrimitives[GlobalPrimitives::JointRings] );
-    jointRings->m_Radius = 0.015f;
-    jointRings->m_Steps = 18;
-    jointRings->Update();
-
-    m_AxesVisible = true;
-    m_GridVisible = true;
-    m_BoundsVisible = false;
-    m_StatisticsVisible = false;
-
-#ifdef _DEBUG
-    m_StatisticsVisible = true;
-#endif
-}
-
-void Viewport::Resize(u32 x, u32 y)
-{
     if ( !GetDevice() )
     {
         return;
@@ -448,6 +367,11 @@ void Viewport::Resize(u32 x, u32 y)
     {
         m_DeviceManager.Resize( x, y );
     }
+}
+
+void Viewport::SetFocused(bool focused)
+{
+    m_Focused = focused;
 }
 
 void Viewport::KeyDown(const Helium::KeyboardInput& input)
@@ -849,60 +773,33 @@ void Viewport::Draw()
     if (m_Tool)
     {
         CORE_RENDER_SCOPE_TIMER( ("Tool Evaluate") );
-
         m_Tool->Evaluate();
     }
 
-
-    //
-    // Begin Rendering
-    //
     {
         CORE_RENDER_SCOPE_TIMER( ("Clear and Reset Scene") );
 
         device->BeginScene();
-
         device->SetRenderTarget( 0, m_DeviceManager.GetBackBuffer() );
         device->SetDepthStencilSurface( m_DeviceManager.GetDepthBuffer() );
-
         device->Clear(NULL, NULL, D3DCLEAR_TARGET | D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(255, 80, 80, 80), 1.0f, 0);
-
         device->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&Math::Matrix4::Identity);
 
         m_ResourceTracker->ResetState();
     }
 
-
-    //
-    // Set Camera Transforms
-    //
-
     {
         CORE_RENDER_SCOPE_TIMER( ("Setup Viewport and Projection") );
 
-        // proj
         device->SetTransform(D3DTS_PROJECTION, (D3DMATRIX*)&m_Cameras[m_CameraMode].SetProjection(m_Size.x, m_Size.y));
-
-        // view
         device->SetTransform(D3DTS_VIEW, (D3DMATRIX*)&m_Cameras[m_CameraMode].GetViewport());
     }
 
-
     {
-        CORE_RENDER_SCOPE_TIMER( ("Set RenderState (culling, lighting, and fill") );
-
-
-        //
-        // Set default blending equations
-        //
+        CORE_RENDER_SCOPE_TIMER( ("Setup RenderState (culling, lighting, and fill") );
 
         device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
         device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-
-
-        //
-        // Set Camera State
-        //
 
         if (m_Cameras[m_CameraMode].IsBackFaceCulling())
         {
@@ -912,11 +809,6 @@ void Viewport::Draw()
         {
             device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
         }
-
-
-        //
-        // Set Lights
-        //
 
         device->SetRenderState(D3DRS_LIGHTING, TRUE);
         device->SetRenderState(D3DRS_COLORVERTEX, FALSE);
@@ -977,15 +869,15 @@ void Viewport::Draw()
         device->LightEnable(1, true);
     }
 
-
-    //
-    // Render
-    //
-
     {
         CORE_RENDER_SCOPE_TIMER( ("PreRender") );
 
-        PreDraw( &args );
+        device->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&Matrix4::Identity);
+
+        if (m_GridVisible)
+        {
+            m_GlobalPrimitives[GlobalPrimitives::StandardGrid]->Draw( &args );
+        }
     }
 
     {
@@ -993,26 +885,22 @@ void Viewport::Draw()
 
         {
             CORE_RENDER_SCOPE_TIMER( ("Render Setup") );
-
             m_RenderVisitor.Reset( &args, this );
         }
 
         {
             CORE_RENDER_SCOPE_TIMER( ("Render Walk") );
-
             m_Render.Raise( &m_RenderVisitor );
         }
 
         if (m_Tool)
         {
             CORE_RENDER_SCOPE_TIMER( ("Render Tool") );
-
             m_Tool->Draw( &args );
         }
 
         {
             CORE_RENDER_SCOPE_TIMER( ("Render Draw") );
-
             m_RenderVisitor.Draw();
         }
 
@@ -1020,15 +908,81 @@ void Viewport::Draw()
     }
 
     {
-        CORE_RENDER_SCOPE_TIMER( ("Post Render") );
+        CORE_RENDER_SCOPE_TIMER( ("PostRender") );
 
-        PostDraw( &args );
+        device->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&Matrix4::Identity);
+        device->Clear(NULL, NULL, D3DCLEAR_ZBUFFER, 0, 1.0f, 0);
+
+        if (m_AxesVisible)
+        {
+            static_cast<Core::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->DrawViewport( &args, &m_Cameras[m_CameraMode] );
+        }
+
+        if (m_Tool)
+        {
+            m_Tool->Draw( &args );
+        }
+
+        if ( m_Focused )
+        {
+            unsigned w = 3;
+            unsigned x = m_Size.x;
+            unsigned y = m_Size.y;
+
+            wxColour temp = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+            u32 color = D3DCOLOR_ARGB(255, temp.Red(), temp.Green(), temp.Blue());
+
+            std::vector< TransformedColored > vertices;
+
+            //   <--
+            //  | \  ^
+            //  v  \ |
+            //   -->
+
+            // top
+            vertices.push_back(TransformedColored ((float)0,    (float)0,     1.0f,   color));
+            vertices.push_back(TransformedColored ((float)0,    (float)w,     1.0f,   color));
+            vertices.push_back(TransformedColored ((float)x,    (float)w,     1.0f,   color));
+            vertices.push_back(TransformedColored ((float)x,    (float)0,     1.0f,   color));
+            vertices.push_back(TransformedColored ((float)0,    (float)0,     1.0f,   color));
+
+            // bottom
+            vertices.push_back(TransformedColored ((float)0,    (float)y-w,   1.0f,   color));
+            vertices.push_back(TransformedColored ((float)0,    (float)y,     1.0f,   color));
+            vertices.push_back(TransformedColored ((float)x,    (float)y,     1.0f,   color));
+            vertices.push_back(TransformedColored ((float)x,    (float)y-w,   1.0f,   color));
+            vertices.push_back(TransformedColored ((float)0,    (float)y-w,   1.0f,   color));
+
+            // left
+            vertices.push_back(TransformedColored ((float)0,    (float)0,     1.0f,   color));
+            vertices.push_back(TransformedColored ((float)0,    (float)y,     1.0f,   color));
+            vertices.push_back(TransformedColored ((float)w,    (float)y,     1.0f,   color));
+            vertices.push_back(TransformedColored ((float)w,    (float)0,     1.0f,   color));
+            vertices.push_back(TransformedColored ((float)0,    (float)0,     1.0f,   color));
+
+            // right
+            vertices.push_back(TransformedColored ((float)x-w,  (float)0,     1.0f,   color));
+            vertices.push_back(TransformedColored ((float)x-w,  (float)y,     1.0f,   color));
+            vertices.push_back(TransformedColored ((float)x,    (float)y,     1.0f,   color));
+            vertices.push_back(TransformedColored ((float)x,    (float)0,     1.0f,   color));
+            vertices.push_back(TransformedColored ((float)x-w,  (float)0,     1.0f,   color));
+
+            device->SetRenderState(D3DRS_ZENABLE, FALSE);
+            device->SetFVF(ElementFormats[ElementTypes::TransformedColored]);
+            device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, &vertices.front(), sizeof(TransformedColored));
+            device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, &(vertices[5]), sizeof(TransformedColored));
+            device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, &(vertices[10]), sizeof(TransformedColored));
+            device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, &(vertices[15]), sizeof(TransformedColored));
+            device->SetRenderState(D3DRS_ZENABLE, TRUE);
+
+            m_ResourceTracker->ResetState();
+        }
+
+        if (m_DragMode == DragModes::Select)
+        {
+            m_SelectionFrame->Draw( &args );
+        }
     }
-
-
-    //
-    // Stats
-    //
 
     {
         CORE_RENDER_SCOPE_TIMER( ("Process Statistics") );
@@ -1054,13 +1008,8 @@ void Viewport::Draw()
         }
     }
 
-
     {
         CORE_RENDER_SCOPE_TIMER( ("End Scene") );
-
-        //
-        // End Rendering
-        //
 
         device->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE );
         device->SetRenderState( D3DRS_ZWRITEENABLE, TRUE );
@@ -1069,24 +1018,17 @@ void Viewport::Draw()
 
     }
 
-
     {
-        CORE_RENDER_SCOPE_TIMER( ("Present") );
-
-        //
-        // Buffer Swap
-        //
+        CORE_RENDER_SCOPE_TIMER( ("Display") );
 
         if ( m_DeviceManager.Display( m_Window ) == D3DERR_DEVICELOST )
         {
             m_DeviceManager.SetDeviceLost();
         }
     }
-
-    return;
 }
 
-void Viewport::UndoTransform( )
+void Viewport::UndoTransform()
 {
     UndoTransform( m_CameraMode );
 }
@@ -1096,7 +1038,7 @@ void Viewport::UndoTransform( CameraMode camMode )
     m_CameraHistory[camMode].Undo();
 }
 
-void Viewport::RedoTransform( )
+void Viewport::RedoTransform()
 {
     RedoTransform( m_CameraMode );
 }
@@ -1106,8 +1048,13 @@ void Viewport::RedoTransform( CameraMode camMode )
     m_CameraHistory[camMode].Redo();
 }
 
-void Viewport::UpdateCameraHistory( )
+void Viewport::UpdateCameraHistory()
 {  
+    // Update the camera history so we can undo/redo previous camera moves. 
+    // This is implemented seperately from 'CameraMoved' since 'CameraMoved' reports all incremental spots during a transition.
+    // We also need to be able to update this from other events in the scene editor, such as when we focus on an object
+    // directly ( shortcut key - f )
+
     // We only work for the Orbit camera at the moment. SetTransform assumes a Perspective view
     // Not sure how to handle orthographic at the moment.
     if( m_CameraMode != CameraModes::Orbit )
@@ -1118,114 +1065,13 @@ void Viewport::UpdateCameraHistory( )
     m_CameraHistory[m_CameraMode].Push( new CameraMovedCommand( this, &m_Cameras[m_CameraMode] ) );
 }
 
-void Viewport::PreDraw( DrawArgs* args )
-{
-    IDirect3DDevice9* device = GetDevice();
-    device->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&Matrix4::Identity);
-
-    if (m_GridVisible)
-    {
-        m_GlobalPrimitives[GlobalPrimitives::StandardGrid]->Draw( args );
-    }
-}
-
-void Viewport::PostDraw( DrawArgs* args )
-{
-    IDirect3DDevice9* device = GetDevice();
-    device->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&Matrix4::Identity);
-
-
-    //
-    // Render Helpers
-    //
-
-    device->Clear(NULL, NULL, D3DCLEAR_ZBUFFER, 0, 1.0f, 0);
-
-    if (m_AxesVisible)
-    {
-        static_cast<Core::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->DrawViewport(args, &m_Cameras[m_CameraMode]);
-    }
-
-
-    //
-    // Draw Tool
-    //
-
-    if (m_Tool)
-    {
-        m_Tool->Draw(args);
-    }
-
-
-    //
-    // Draw Frames
-    //
-
-    unsigned w = 3;
-    unsigned x = m_Size.x;
-    unsigned y = m_Size.y;
-
-    wxColour temp = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
-    u32 color = D3DCOLOR_ARGB(255, temp.Red(), temp.Green(), temp.Blue());
-
-    std::vector< TransformedColored > vertices;
-
-    //   <--
-    //  | \  ^
-    //  v  \ |
-    //   -->
-
-    // top
-    vertices.push_back(TransformedColored ((float)0,    (float)0,     1.0f,   color));
-    vertices.push_back(TransformedColored ((float)0,    (float)w,     1.0f,   color));
-    vertices.push_back(TransformedColored ((float)x,    (float)w,     1.0f,   color));
-    vertices.push_back(TransformedColored ((float)x,    (float)0,     1.0f,   color));
-    vertices.push_back(TransformedColored ((float)0,    (float)0,     1.0f,   color));
-
-    // bottom
-    vertices.push_back(TransformedColored ((float)0,    (float)y-w,   1.0f,   color));
-    vertices.push_back(TransformedColored ((float)0,    (float)y,     1.0f,   color));
-    vertices.push_back(TransformedColored ((float)x,    (float)y,     1.0f,   color));
-    vertices.push_back(TransformedColored ((float)x,    (float)y-w,   1.0f,   color));
-    vertices.push_back(TransformedColored ((float)0,    (float)y-w,   1.0f,   color));
-
-    // left
-    vertices.push_back(TransformedColored ((float)0,    (float)0,     1.0f,   color));
-    vertices.push_back(TransformedColored ((float)0,    (float)y,     1.0f,   color));
-    vertices.push_back(TransformedColored ((float)w,    (float)y,     1.0f,   color));
-    vertices.push_back(TransformedColored ((float)w,    (float)0,     1.0f,   color));
-    vertices.push_back(TransformedColored ((float)0,    (float)0,     1.0f,   color));
-
-    // right
-    vertices.push_back(TransformedColored ((float)x-w,  (float)0,     1.0f,   color));
-    vertices.push_back(TransformedColored ((float)x-w,  (float)y,     1.0f,   color));
-    vertices.push_back(TransformedColored ((float)x,    (float)y,     1.0f,   color));
-    vertices.push_back(TransformedColored ((float)x,    (float)0,     1.0f,   color));
-    vertices.push_back(TransformedColored ((float)x-w,  (float)0,     1.0f,   color));
-
-    device->SetRenderState(D3DRS_ZENABLE, FALSE);
-    device->SetFVF(ElementFormats[ElementTypes::TransformedColored]);
-    device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, &vertices.front(), sizeof(TransformedColored));
-    device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, &(vertices[5]), sizeof(TransformedColored));
-    device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, &(vertices[10]), sizeof(TransformedColored));
-    device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, &(vertices[15]), sizeof(TransformedColored));
-    device->SetRenderState(D3DRS_ZENABLE, TRUE);
-
-    m_ResourceTracker->ResetState();
-
-    if (m_DragMode == DragModes::Select)
-    {
-        m_SelectionFrame->Draw(args);
-    }
-}
-
-void Viewport::OnReleaseResources( const Render::DeviceStateArgs& args )
+void Viewport::ReleaseResources( const Render::DeviceStateArgs& args )
 {
     m_ResourceTracker->DeviceLost();
     m_Statistics->Delete();
 }
 
-void Viewport::OnAllocateResources( const Render::DeviceStateArgs& args )
+void Viewport::AllocateResources( const Render::DeviceStateArgs& args )
 {
     m_ResourceTracker->DeviceReset();
     m_Statistics->Create();
@@ -1234,11 +1080,6 @@ void Viewport::OnAllocateResources( const Render::DeviceStateArgs& args )
 void Viewport::CameraMoved( const Core::CameraMovedArgs& args )
 {
     m_CameraMoved.Raise( args );  
-}
-
-void Viewport::RemoteCameraMoved( const Math::Matrix4& transform )
-{
-    m_Cameras[ CameraModes::Orbit ].SetTransform( transform );
 }
 
 void Viewport::OnGridPreferencesChanged( const Reflect::ElementChangeArgs& args )

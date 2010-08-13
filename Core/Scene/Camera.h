@@ -77,8 +77,7 @@ namespace Helium
         {
         private:
             // total control size
-            int m_ControlWidth;
-            int m_ControlHeight;
+            Math::Point m_Size;
 
             // projection information
             ProjectionMode m_ProjectionMode;
@@ -133,14 +132,19 @@ namespace Helium
 
             void Setup(ProjectionMode mode = ProjectionModes::Perspective, const Math::Vector3& dir = Math::Vector3::Zero, const Math::Vector3& up = Math::Vector3::Zero);
 
+            Math::Point GetSize() const
+            {
+                return m_Size;
+            }
+
             int GetWidth() const
             {
-                return m_ControlWidth;
+                return m_Size.x;
             }
 
             int GetHeight() const
             {
-                return m_ControlHeight;
+                return m_Size.y;
             }
 
 

@@ -8,11 +8,17 @@ using namespace Helium;
 static void ConvertMouseEvent( wxMouseEvent& event, MouseInput& input )
 {
     u32 buttons;
+
     buttons |= event.LeftIsDown() ? MouseButtons::Left : 0x0;
     buttons |= event.MiddleIsDown() ? MouseButtons::Middle : 0x0;
     buttons |= event.RightIsDown() ? MouseButtons::Right : 0x0;
     buttons |= event.Aux1IsDown() ? MouseButtons::Backward : 0x0;
     buttons |= event.Aux2IsDown() ? MouseButtons::Forward : 0x0;
+
+    buttons |= event.AltDown() ? AcceleratorButtons::Alt : 0x0;
+    buttons |= event.ControlDown() ? AcceleratorButtons::Ctrl : 0x0;
+    buttons |= event.ShiftDown() ? AcceleratorButtons::Shift : 0x0;
+
     input.SetButtons( buttons );
 
     input.SetPosition( Math::Point( event.GetX(), event.GetY() ) );

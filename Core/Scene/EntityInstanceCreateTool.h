@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Core/API.h"
-#include "EntityInstance.h"
-#include "CreateTool.h"
+#include "Foundation/TUID.h"
 
 #include "Application/Inspect/DragDrop/FilteredDropTarget.h"
 
-#include "Foundation/TUID.h"
+#include "Core/API.h"
+#include "Core/Scene/CreateTool.h"
+#include "Core/Scene/EntityInstance.h"
 
 namespace Helium
 {
@@ -25,7 +25,7 @@ namespace Helium
 
         typedef std::vector< EntityRowInfo > V_EntityRowInfo;
 
-        class EntityCreateTool : public Core::CreateTool
+        class CORE_API EntityInstanceCreateTool : public Core::CreateTool
         {
             //
             // Members
@@ -41,7 +41,7 @@ namespace Helium
             // RTTI
             //
 
-            SCENE_DECLARE_TYPE(Core::EntityCreateTool, Core::CreateTool);
+            SCENE_DECLARE_TYPE(Core::EntityInstanceCreateTool, Core::CreateTool);
             static void InitializeType();
             static void CleanupType();
 
@@ -57,8 +57,8 @@ namespace Helium
             Inspect::FileBrowserButton* m_BrowserButtonAdd;
 
         public:
-            EntityCreateTool(Core::Scene* scene, PropertiesGenerator* generator);
-            virtual ~EntityCreateTool();
+            EntityInstanceCreateTool(Core::Scene* scene, PropertiesGenerator* generator);
+            virtual ~EntityInstanceCreateTool();
 
             virtual Core::TransformPtr CreateNode() HELIUM_OVERRIDE;
             virtual void CreateProperties() HELIUM_OVERRIDE;

@@ -9,7 +9,7 @@ namespace Helium
         class PrimitiveAxes;
         class PrimitiveCube;
 
-        class ScaleManipulator : public Core::TransformManipulator
+        class CORE_API ScaleManipulator : public Core::TransformManipulator
         {
         private:
             // UI

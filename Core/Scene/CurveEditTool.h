@@ -1,9 +1,8 @@
 #pragma once
 
 #include "Core/API.h"
-
 #include "Core/Content/Nodes/ContentCurve.h"
-#include "Curve.h"
+#include "Core/Scene/Curve.h"
 #include "Core/Scene/Tool.h"
 
 namespace Helium
@@ -25,7 +24,7 @@ namespace Helium
         }
         typedef CurveEditModes::CurveEditMode CurveEditMode;
 
-        class CurveEditTool: public Tool
+        class CORE_API CurveEditTool: public Tool
         {
         private:
             static CurveEditMode s_EditMode;

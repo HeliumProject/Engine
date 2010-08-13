@@ -1,11 +1,11 @@
 #pragma once
 
+#include "Foundation/TimerThread.h"
+
 #include "Core/API.h"
 #include "Core/Scene/Tool.h"
-#include "HierarchyNode.h"
+#include "Core/Scene/HierarchyNode.h"
 #include "Core/Scene/Scene.h"
-
-#include "Foundation/TimerThread.h"
 
 namespace Helium
 {
@@ -45,7 +45,7 @@ namespace Helium
 
         typedef std::map< Math::Vector3, Math::V_Vector3, Vector3Compare > M_Vector3;
 
-        class CreateTool : public Tool
+        class CORE_API CreateTool : public Tool
         {
             //
             // Members

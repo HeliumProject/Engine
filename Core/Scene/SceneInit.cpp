@@ -131,7 +131,7 @@ void Core::SceneInitialize()
     g_InitializerStack.Push( Entity::InitializeType, Entity::CleanupType );
     g_InitializerStack.Push( EntitySet::InitializeType, EntitySet::CleanupType );
     g_InitializerStack.Push( EntityType::InitializeType, EntityType::CleanupType );
-    g_InitializerStack.Push( EntityCreateTool::InitializeType, EntityCreateTool::CleanupType );
+    g_InitializerStack.Push( EntityInstanceCreateTool::InitializeType, EntityInstanceCreateTool::CleanupType );
 
     g_InitializerStack.Push( Light::InitializeType, Light::CleanupType );
     g_InitializerStack.Push( SpotLight::InitializeType, SpotLight::CleanupType );

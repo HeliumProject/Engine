@@ -6,15 +6,14 @@
 
 namespace Helium
 {
-
-    class MAYA_API EntityNodeCmd : public MPxCommand
+    class MAYA_API EntityInstanceNodeCmd : public MPxCommand
     {
     public:
         static MString CommandName;
 
         static void * creator()
         {
-            return new EntityNodeCmd;
+            return new EntityInstanceNodeCmd;
         }
 
         static MSyntax newSyntax();

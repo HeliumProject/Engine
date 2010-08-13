@@ -10,7 +10,7 @@ namespace Helium
 {
     namespace Core
     {
-        class Layer : public Core::SceneNode
+        class CORE_API Layer : public Core::SceneNode
         {
             //
             // Runtime Type Info

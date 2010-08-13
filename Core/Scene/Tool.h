@@ -2,6 +2,7 @@
 
 #include "Foundation/Input.h"
 
+#include "Core/API.h"
 #include "Core/Scene/Object.h"
 #include "Core/Scene/Selection.h"
 #include "Core/Scene/Viewport.h"
@@ -25,7 +26,7 @@ namespace Helium
         };
         typedef Helium::Signature< void, PickArgs& > PickSignature;
 
-        class Tool HELIUM_ABSTRACT : public Object
+        class CORE_API Tool HELIUM_ABSTRACT : public Object
         {
             //
             // Members

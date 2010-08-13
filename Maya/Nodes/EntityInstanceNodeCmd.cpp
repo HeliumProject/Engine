@@ -1,8 +1,8 @@
 #include "Precompile.h"
 
-#include "EntityNodeCmd.h"
+#include "EntityInstanceNodeCmd.h"
+#include "EntityInstanceNode.h"
 #include "EntityNode.h"
-#include "EntityAssetNode.h"
 
 #include "Maya/NodeTypes.h"
 
@@ -14,7 +14,7 @@ using namespace Helium;
 //-----------------------------------------------------------------------------
 // the name of the EntityNodeCmd command
 //-----------------------------------------------------------------------------
-MString EntityNodeCmd::CommandName( "entityNode" );
+MString EntityInstanceNodeCmd::CommandName( "entityNode" );
 
 //-----------------------------------------------------------------------------
 // arguments to the EntityNodeCmd command
@@ -45,10 +45,10 @@ static const char* FlattenLong = "-flatten";
 
 
 //-----------------------------------------------------------------------------
-// EntityNodeCmd::newSyntax
+// EntityInstanceNodeCmd::newSyntax
 // definition of the syntax for command
 //-----------------------------------------------------------------------------
-MSyntax EntityNodeCmd::newSyntax()
+MSyntax EntityInstanceNodeCmd::newSyntax()
 {
   MSyntax syntax;
 
@@ -70,10 +70,10 @@ MSyntax EntityNodeCmd::newSyntax()
 }
 
 //-----------------------------------------------------------------------------
-// EntityNodeCmd::doIt
+// EntityInstanceNodeCmd::doIt
 // execution of the command
 //-----------------------------------------------------------------------------
-MStatus EntityNodeCmd::doIt( const MArgList & args )
+MStatus EntityInstanceNodeCmd::doIt( const MArgList & args )
 {
   MStatus stat;
 
@@ -82,13 +82,13 @@ MStatus EntityNodeCmd::doIt( const MArgList & args )
 
   if( argParser.isFlagSet( ReloadAllArtFlagLong ) )
   {
-    EntityAssetNode::UnloadAllArt();
-    EntityAssetNode::LoadAllArt();
+    EntityNode::UnloadAllArt();
+    EntityNode::LoadAllArt();
     return MS::kSuccess;
   }
   else if( argParser.isFlagSet( UnloadAllArtFlagLong ) )
   {
-    EntityAssetNode::UnloadAllArt();
+    EntityNode::UnloadAllArt();
     return MS::kSuccess;
   }
   else if( argParser.isFlagSet( UnselectFlag ) )
@@ -97,7 +97,7 @@ MStatus EntityNodeCmd::doIt( const MArgList & args )
 
     MSelectionList list;
     MGlobal::getActiveSelectionList( list );
-    EntityAssetNode::UnselectAll( list );
+    EntityNode::UnselectAll( list );
     MGlobal::setActiveSelectionList( list );
 
     return MS::kSuccess;
@@ -118,7 +118,7 @@ MStatus EntityNodeCmd::doIt( const MArgList & args )
     //    if ( FileSystem::HasExtension( fullPath, FinderSpecs::Asset::ENTITY_DECORATION.GetDecoration() ) )
     //    {
     //      Asset::EntityPtr instance = new Asset::Entity( fullPath );
-    //      std::pair< EntityAssetNode*, EntityNode* >result = EntityAssetNode::CreateInstance( instance );
+    //      std::pair< EntityNode*, EntityInstanceNode* >result = EntityNode::CreateInstance( instance );
     //      MFnDependencyNode nodeFn( result.second->thisMObject() );
     //    }
     //  }
@@ -128,12 +128,12 @@ MStatus EntityNodeCmd::doIt( const MArgList & args )
   }
   else if( argParser.isFlagSet( FlattenLong ) )
   {
-    EntityAssetNode::FlattenInstances();    
+    EntityNode::FlattenInstances();    
     return MS::kSuccess;
   }
 
   //
-  // the following flags need an EntityAssetNode object to proceed
+  // the following flags need an EntityNode object to proceed
   //
 
   MSelectionList selection;
@@ -145,24 +145,24 @@ MStatus EntityNodeCmd::doIt( const MArgList & args )
   MFnDependencyNode nodeFn;
   nodeFn.setObject( selectedNode );
 
-  EntityAssetNode* classTransform = NULL;
-  if( nodeFn.typeId() == EntityNode::s_TypeID )
+  EntityNode* classTransform = NULL;
+  if( nodeFn.typeId() == EntityInstanceNode::s_TypeID )
   {
-    EntityNode* node = static_cast< EntityNode* >( nodeFn.userNode( &stat ) );
+    EntityInstanceNode* node = static_cast< EntityInstanceNode* >( nodeFn.userNode( &stat ) );
     if( !node )
     {
       return MS::kFailure;
     }
 
-    classTransform = &EntityAssetNode::Get( node->GetBackingEntity()->GetEntity()->GetPath() );
-    if( *classTransform == EntityAssetNode::Null )
+    classTransform = &EntityNode::Get( node->GetBackingEntity()->GetEntity()->GetPath() );
+    if( *classTransform == EntityNode::Null )
     {
       return MS::kFailure;
     }
   }
-  else if ( nodeFn.typeId() == EntityAssetNode::s_TypeID )
+  else if ( nodeFn.typeId() == EntityNode::s_TypeID )
   {
-    classTransform = static_cast< EntityAssetNode* >( nodeFn.userNode( &stat ) );
+    classTransform = static_cast< EntityNode* >( nodeFn.userNode( &stat ) );
     if( !classTransform )
     {
       return MS::kFailure;

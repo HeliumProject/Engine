@@ -21,7 +21,7 @@ namespace Helium
 
         typedef RotationTypes::RotationType RotationType;
 
-        class RotateManipulator : public Core::TransformManipulator
+        class CORE_API RotateManipulator : public Core::TransformManipulator
         {
         private:
             ManipulatorSpace m_Space;

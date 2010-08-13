@@ -2,10 +2,9 @@
 #include "SceneVisitor.h"
 
 #include "Core/Scene/Pick.h"
-
-#include "Entity.h"
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/Transform.h"
+#include "Core/Scene/EntityInstance.h"
 #include "HierarchyNodeType.h"
 
 using namespace Helium;

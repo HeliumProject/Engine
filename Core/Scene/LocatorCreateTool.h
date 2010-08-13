@@ -1,16 +1,16 @@
 #pragma once
 
-#include "Core/API.h"
-#include "Locator.h"
-#include "CreateTool.h"
-
 #include "Foundation/TUID.h"
+
+#include "Core/API.h"
+#include "Core/Scene/Locator.h"
+#include "Core/Scene/CreateTool.h"
 
 namespace Helium
 {
     namespace Core
     {
-        class LocatorCreateTool : public Core::CreateTool
+        class CORE_API LocatorCreateTool : public Core::CreateTool
         {
             //
             // Members

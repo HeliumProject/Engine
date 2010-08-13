@@ -2,6 +2,8 @@
 
 #include "Application/Undo/Command.h"
 
+#include "Core/API.h"
+
 namespace Helium
 {
     namespace Core
@@ -14,7 +16,7 @@ namespace Helium
         // Command for making or breaking connections between ancestor and descendant
         // dependency nodes.
         // 
-        class DependencyCommand : public Undo::Command
+        class CORE_API DependencyCommand : public Undo::Command
         {
         public:
             // Is this command connecting or disconnecting the nodes?

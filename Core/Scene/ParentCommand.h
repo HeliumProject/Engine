@@ -2,6 +2,8 @@
 
 #include "Application/Undo/BatchCommand.h"
 
+#include "Core/API.h"
+
 namespace Helium
 {
     namespace Core
@@ -9,7 +11,7 @@ namespace Helium
         class HierarchyNode;
         typedef Helium::SmartPtr< Core::HierarchyNode > HierarchyNodePtr;
 
-        class ParentCommand : public Undo::BatchCommand
+        class CORE_API ParentCommand : public Undo::BatchCommand
         {
         private:
             HierarchyNodePtr m_Node;

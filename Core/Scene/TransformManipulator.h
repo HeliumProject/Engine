@@ -27,7 +27,7 @@ namespace Helium
 
         class PickVisitor;
 
-        class TransformManipulator HELIUM_ABSTRACT : public Tool, public ManiuplatorAdapterCollection
+        class CORE_API TransformManipulator HELIUM_ABSTRACT : public Tool, public ManiuplatorAdapterCollection
         {
         protected:
             // The mode of the manipulator (duh)

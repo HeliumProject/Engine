@@ -21,12 +21,12 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-bool EntityCreateTool::s_PointerVisible = true;
-bool EntityCreateTool::s_BoundsVisible = true;
-bool EntityCreateTool::s_GeometryVisible = false;
-std::vector< tstring > EntityCreateTool::s_RandomEntities;
+bool EntityInstanceCreateTool::s_PointerVisible = true;
+bool EntityInstanceCreateTool::s_BoundsVisible = true;
+bool EntityInstanceCreateTool::s_GeometryVisible = false;
+std::vector< tstring > EntityInstanceCreateTool::s_RandomEntities;
 
-SCENE_DEFINE_TYPE(Core::EntityCreateTool);
+SCENE_DEFINE_TYPE(Core::EntityInstanceCreateTool);
 
 tstring EntityRowInfo::GetListName() const
 {
@@ -39,17 +39,17 @@ tstring EntityRowInfo::GetListName() const
     return listName;
 }
 
-void EntityCreateTool::InitializeType()
+void EntityInstanceCreateTool::InitializeType()
 {
-    Reflect::RegisterClassType< Core::EntityCreateTool >( TXT( "Core::EntityCreateTool" ) );
+    Reflect::RegisterClassType< Core::EntityInstanceCreateTool >( TXT( "Core::EntityInstanceCreateTool" ) );
 }
 
-void EntityCreateTool::CleanupType()
+void EntityInstanceCreateTool::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::EntityCreateTool >();
+    Reflect::UnregisterClassType< Core::EntityInstanceCreateTool >();
 }
 
-EntityCreateTool::EntityCreateTool(Core::Scene* scene, PropertiesGenerator* generator)
+EntityInstanceCreateTool::EntityInstanceCreateTool(Core::Scene* scene, PropertiesGenerator* generator)
 : Core::CreateTool (scene, generator)
 , m_RandomEntityList ( NULL )
 , m_FileButton( NULL )
@@ -60,7 +60,7 @@ EntityCreateTool::EntityCreateTool(Core::Scene* scene, PropertiesGenerator* gene
 
 }
 
-EntityCreateTool::~EntityCreateTool()
+EntityInstanceCreateTool::~EntityInstanceCreateTool()
 {
     s_RandomEntities.clear();
     for ( V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin(), end = m_RandomEntityInfo.end(); itr != end; ++itr )
@@ -74,7 +74,7 @@ EntityCreateTool::~EntityCreateTool()
     }
 }
 
-Core::TransformPtr EntityCreateTool::CreateNode()
+Core::TransformPtr EntityInstanceCreateTool::CreateNode()
 {
     Helium::Path entityClassPath;
 
@@ -124,37 +124,37 @@ Core::TransformPtr EntityCreateTool::CreateNode()
     return NULL;
 }
 
-void EntityCreateTool::CreateProperties()
+void EntityInstanceCreateTool::CreateProperties()
 {
     m_Generator->PushPanel( TXT( "Entity" ), true);
     {
         m_Generator->PushContainer();
         {
-            m_FileButton = m_Generator->AddFileDialogButton< tstring >( new Helium::MemberProperty<Core::EntityCreateTool, tstring> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::SetEntityAsset ) );
-            m_BrowserButton = m_Generator->AddFileBrowserButton< tstring >( new Helium::MemberProperty<Core::EntityCreateTool, tstring> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::SetEntityAsset ) );
+            m_FileButton = m_Generator->AddFileDialogButton< tstring >( new Helium::MemberProperty<Core::EntityInstanceCreateTool, tstring> (this, &EntityInstanceCreateTool::GetEntityAsset, &EntityInstanceCreateTool::SetEntityAsset ) );
+            m_BrowserButton = m_Generator->AddFileBrowserButton< tstring >( new Helium::MemberProperty<Core::EntityInstanceCreateTool, tstring> (this, &EntityInstanceCreateTool::GetEntityAsset, &EntityInstanceCreateTool::SetEntityAsset ) );
 
-            m_FileButtonAdd = m_Generator->AddFileDialogButton< tstring >( new Helium::MemberProperty<Core::EntityCreateTool, tstring> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::AddEntityAsset ) );
-            m_BrowserButtonAdd = m_Generator->AddFileBrowserButton< tstring >( new Helium::MemberProperty<Core::EntityCreateTool, tstring> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::AddEntityAsset ) );
+            m_FileButtonAdd = m_Generator->AddFileDialogButton< tstring >( new Helium::MemberProperty<Core::EntityInstanceCreateTool, tstring> (this, &EntityInstanceCreateTool::GetEntityAsset, &EntityInstanceCreateTool::AddEntityAsset ) );
+            m_BrowserButtonAdd = m_Generator->AddFileBrowserButton< tstring >( new Helium::MemberProperty<Core::EntityInstanceCreateTool, tstring> (this, &EntityInstanceCreateTool::GetEntityAsset, &EntityInstanceCreateTool::AddEntityAsset ) );
 
             m_FileButtonAdd->SetIcon( TXT( "ellipses_add" ) );
             m_BrowserButtonAdd->SetIcon( TXT( "magnify_add" ) );
 
-            Inspect::Action* modifyButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnModify ) );
+            Inspect::Action* modifyButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityInstanceCreateTool::OnModify ) );
             modifyButton->SetToolTip( TXT( "Modify" ) );
             modifyButton->SetIcon( TXT( "percent" ) );
             modifyButton->SetClientData( this );
 
-            Inspect::Action* normalizeButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnNormalize ) );
+            Inspect::Action* normalizeButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityInstanceCreateTool::OnNormalize ) );
             normalizeButton->SetToolTip( TXT( "Normalize" ) );
             normalizeButton->SetIcon( TXT( "normalize" ) );
             normalizeButton->SetClientData( this );
 
-            Inspect::Action* deleteButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnDeleteClass ) );
+            Inspect::Action* deleteButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityInstanceCreateTool::OnDeleteClass ) );
             deleteButton->SetToolTip( TXT( "Delete" ) );
             deleteButton->SetIcon( TXT( "actions/list-remove" ) );
             deleteButton->SetClientData( this );
 
-            Inspect::Action*  clearButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnClear ) );
+            Inspect::Action*  clearButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityInstanceCreateTool::OnClear ) );
             clearButton->SetToolTip( TXT( "Clear" ) );
             clearButton->SetIcon( TXT( "delete" ) );
             clearButton->SetClientData( this );
@@ -173,10 +173,10 @@ void EntityCreateTool::CreateProperties()
 
         m_Generator->PushContainer();
         {
-            m_RandomEntityList = m_Generator->AddList< tstring >( new Helium::MemberProperty<Core::EntityCreateTool, tstring > (this, &EntityCreateTool::GetRandomEntity, &EntityCreateTool::SetRandomEntity) );
+            m_RandomEntityList = m_Generator->AddList< tstring >( new Helium::MemberProperty<Core::EntityInstanceCreateTool, tstring > (this, &EntityInstanceCreateTool::GetRandomEntity, &EntityInstanceCreateTool::SetRandomEntity) );
 
             Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( TXT( "*.entity.*" ) );
-            filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &EntityCreateTool::OnEntityDropped ) );
+            filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &EntityInstanceCreateTool::OnEntityDropped ) );
 
             m_RandomEntityList->SetDropTarget( filteredDropTarget );
         }
@@ -185,21 +185,21 @@ void EntityCreateTool::CreateProperties()
         m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Show Pointer" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::EntityCreateTool, bool> (this, &EntityCreateTool::GetPointerVisible, &EntityCreateTool::SetPointerVisible) );
+            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::EntityInstanceCreateTool, bool> (this, &EntityInstanceCreateTool::GetPointerVisible, &EntityInstanceCreateTool::SetPointerVisible) );
         }
         m_Generator->Pop();
 
         m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Show Bounds" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::EntityCreateTool, bool> (this, &EntityCreateTool::GetBoundsVisible, &EntityCreateTool::SetBoundsVisible) );
+            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::EntityInstanceCreateTool, bool> (this, &EntityInstanceCreateTool::GetBoundsVisible, &EntityInstanceCreateTool::SetBoundsVisible) );
         }
         m_Generator->Pop();
 
         m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Show Geometry" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::EntityCreateTool, bool> (this, &EntityCreateTool::GetGeometryVisible, &EntityCreateTool::SetGeometryVisible) );
+            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::EntityInstanceCreateTool, bool> (this, &EntityInstanceCreateTool::GetGeometryVisible, &EntityInstanceCreateTool::SetGeometryVisible) );
         }
         m_Generator->Pop();
 
@@ -213,18 +213,18 @@ void EntityCreateTool::CreateProperties()
     }
 }
 
-tstring EntityCreateTool::GetEntityAsset() const
+tstring EntityInstanceCreateTool::GetEntityAsset() const
 {
     return m_ClassPath.Get();
 }
 
-void EntityCreateTool::SetEntityAsset( const tstring& value )
+void EntityInstanceCreateTool::SetEntityAsset( const tstring& value )
 {
     m_RandomEntityInfo.clear();
     AddEntityAsset( value );
 }
 
-void EntityCreateTool::AddEntityAsset( const tstring& value )
+void EntityInstanceCreateTool::AddEntityAsset( const tstring& value )
 {
     tstring entityName = TXT( "" );
 
@@ -255,43 +255,43 @@ void EntityCreateTool::AddEntityAsset( const tstring& value )
     Place(Math::Matrix4::Identity);
 }
 
-bool EntityCreateTool::GetPointerVisible() const
+bool EntityInstanceCreateTool::GetPointerVisible() const
 {
     return s_PointerVisible;
 }
 
-void EntityCreateTool::SetPointerVisible(bool show)
+void EntityInstanceCreateTool::SetPointerVisible(bool show)
 {
     s_PointerVisible = show;
 
     Place( Math::Matrix4::Identity );
 }
 
-bool EntityCreateTool::GetBoundsVisible() const
+bool EntityInstanceCreateTool::GetBoundsVisible() const
 {
     return s_BoundsVisible;
 }
 
-void EntityCreateTool::SetBoundsVisible(bool show)
+void EntityInstanceCreateTool::SetBoundsVisible(bool show)
 {
     s_BoundsVisible = show;
 
     Place( Math::Matrix4::Identity );
 }
 
-bool EntityCreateTool::GetGeometryVisible() const
+bool EntityInstanceCreateTool::GetGeometryVisible() const
 {
     return s_GeometryVisible;
 }
 
-void EntityCreateTool::SetGeometryVisible(bool show)
+void EntityInstanceCreateTool::SetGeometryVisible(bool show)
 {
     s_GeometryVisible = show;
 
     Place( Math::Matrix4::Identity );
 }
 
-tstring EntityCreateTool::GetRandomEntity() const
+tstring EntityInstanceCreateTool::GetRandomEntity() const
 {
     tstring randomEntities;
     V_EntityRowInfo::const_iterator itr = m_RandomEntityInfo.begin();
@@ -309,17 +309,17 @@ tstring EntityCreateTool::GetRandomEntity() const
     return randomEntities;
 }
 
-void EntityCreateTool::SetRandomEntity( const tstring& entityName )
+void EntityInstanceCreateTool::SetRandomEntity( const tstring& entityName )
 {
     HELIUM_BREAK();
 }
 
-void EntityCreateTool::OnDeleteClass( Inspect::Button* button )
+void EntityInstanceCreateTool::OnDeleteClass( Inspect::Button* button )
 {
-    Core::EntityCreateTool* thisTool = Reflect::ObjectCast< Core::EntityCreateTool >( button->GetClientData() );
+    Core::EntityInstanceCreateTool* thisTool = Reflect::ObjectCast< Core::EntityInstanceCreateTool >( button->GetClientData() );
     if ( !thisTool )
     {
-        Log::Error( TXT( "Invalid EntityCreateTool in OnDeleteClass()" ) );
+        Log::Error( TXT( "Invalid EntityInstanceCreateTool in OnDeleteClass()" ) );
         return;
     }
 
@@ -364,12 +364,12 @@ void EntityCreateTool::OnDeleteClass( Inspect::Button* button )
     thisTool->RefreshInstance();
 }
 
-void EntityCreateTool::OnClear( Inspect::Button* button )
+void EntityInstanceCreateTool::OnClear( Inspect::Button* button )
 {
-    Core::EntityCreateTool* thisTool = Reflect::ObjectCast< Core::EntityCreateTool >( button->GetClientData() );
+    Core::EntityInstanceCreateTool* thisTool = Reflect::ObjectCast< Core::EntityInstanceCreateTool >( button->GetClientData() );
     if ( !thisTool )
     {
-        Log::Error( TXT( "Invalid EntityCreateTool in OnClear()" ) );
+        Log::Error( TXT( "Invalid EntityInstanceCreateTool in OnClear()" ) );
         return;
     }
 
@@ -386,12 +386,12 @@ void EntityCreateTool::OnClear( Inspect::Button* button )
     thisTool->RefreshInstance();
 }
 
-void EntityCreateTool::OnNormalize( Inspect::Button* button )
+void EntityInstanceCreateTool::OnNormalize( Inspect::Button* button )
 {
-    Core::EntityCreateTool* thisTool = Reflect::ObjectCast< Core::EntityCreateTool >( button->GetClientData() );
+    Core::EntityInstanceCreateTool* thisTool = Reflect::ObjectCast< Core::EntityInstanceCreateTool >( button->GetClientData() );
     if ( !thisTool )
     {
-        Log::Error( TXT( "Invalid EntityCreateTool in OnNormalize()" ) );
+        Log::Error( TXT( "Invalid EntityInstanceCreateTool in OnNormalize()" ) );
         return;
     }
 
@@ -411,12 +411,12 @@ void EntityCreateTool::OnNormalize( Inspect::Button* button )
     thisTool->m_Generator->GetContainer()->GetCanvas()->Read();
 }
 
-void EntityCreateTool::OnModify( Inspect::Button* button )
+void EntityInstanceCreateTool::OnModify( Inspect::Button* button )
 {
-    Core::EntityCreateTool* thisTool = Reflect::ObjectCast< Core::EntityCreateTool >( button->GetClientData() );
+    Core::EntityInstanceCreateTool* thisTool = Reflect::ObjectCast< Core::EntityInstanceCreateTool >( button->GetClientData() );
     if ( !thisTool )
     {
-        Log::Error( TXT( "Invalid EntityCreateTool in OnModify()" ) );
+        Log::Error( TXT( "Invalid EntityInstanceCreateTool in OnModify()" ) );
         return;
     }
 
@@ -471,12 +471,12 @@ void EntityCreateTool::OnModify( Inspect::Button* button )
     thisTool->m_Generator->GetContainer()->GetCanvas()->Read();
 }
 
-void EntityCreateTool::OnEntityDropped( const Inspect::FilteredDropTargetArgs& args )
+void EntityInstanceCreateTool::OnEntityDropped( const Inspect::FilteredDropTargetArgs& args )
 {
     DropEntities( args.m_Paths, false );
 }
 
-void EntityCreateTool::DropEntities( const std::vector< tstring >& entities, bool appendToList )
+void EntityInstanceCreateTool::DropEntities( const std::vector< tstring >& entities, bool appendToList )
 {
     m_Generator->GetContainer()->GetCanvas()->Freeze();
 

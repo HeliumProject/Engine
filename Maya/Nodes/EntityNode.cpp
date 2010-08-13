@@ -1,77 +1,89 @@
 #include "Precompile.h"
 #include "EntityNode.h"
-#include "EntityGroupNode.h"
-#include "EntityAssetNode.h"
 
-#include "Platform/Types.h"
-#include "Maya/NodeTypes.h"
-#include "Maya/ErrorHelpers.h"
-
-#include "Foundation/TUID.h"
-#include "Foundation/Math/EulerAngles.h"
-#include "Foundation/Component/ComponentHandle.h"
 #include "Maya/Duplicate.h"
 #include "Maya/Utils.h"
 
-#include <maya/MPointArray.h>
-#include <maya/MModelMessage.h>
-#include <maya/MFnStringData.h>
+#include "Maya/NodeTypes.h"
+#include "Maya/ErrorHelpers.h"
+
+#include "Foundation/Component/ComponentHandle.h"
+
+#include "Foundation/Reflect/Archive.h"
+#include "Foundation/Reflect/Element.h"
+
+#include "Core/Asset/Classes/Entity.h"
+#include "Core/Content/ContentScene.h"
+
+#include "Export/MayaContentCmd.h"
+
+#include <maya/MSceneMessage.h>
+#include <maya/MUserEventMessage.h>
 #include <maya/MObjectHandle.h>
+#include <maya/MDagModifier.h>
 
 using namespace Helium;
-using namespace Helium::Asset;
+using namespace Helium::Reflect;
 using namespace Helium::Component;
+using namespace Helium::Asset;
 
-// enable this to watch all dag changes, just for debugging
-//#define WATCH_ALL_DAG_CHANGES
+const MTypeId         EntityNode::s_TypeID(IGT_ENTITYASSETNODE_ID);
+const char*           EntityNode::s_TypeName( "EntityNode" );
+
+const MTypeId       EntityGroupNode::s_TypeID( IGT_ENTITYGROUPNODE_ID );  
+const char*         EntityGroupNode::s_TypeName( "EntityGroupNode" );
 
 // callbacks
 MIntArray EntityNode::s_CallbackIDs; 
 
-// attributes 
+//attribs
 MObject EntityNode::s_ArtFilePath;
+MObject EntityNode::m_ImportNodes;
 
 // statics
-MPointArray       EntityNode::s_PointerPoints;
-MColor            EntityNode::s_DrawColor(0,.2f,1);
-bool              EntityNode::s_PointerYUp;
-const MTypeId     EntityNode::s_TypeID(IGL_ENTITYNODE_ID);
-const char*       EntityNode::s_TypeName("EntityNode");
-Math::Matrix4     EntityNode::s_RelativeTransform;
-V_EntityNodePtr   EntityNode::s_ShowNodes;
-V_EntityNodePtr   EntityNode::s_DupeNodes;
-MObject           EntityNode::s_EntityNodeGroup;
-bool              EntityNode::s_ReplaceSelection = false;
+EntityNode       EntityNode::Null;
+
+MCallbackId           EntityNode::s_EditNodeAddedCBId;
+MCallbackId           EntityNode::s_ImportNodeAddedCBId;
+M_IdClassTransform    EntityNode::s_ClassTransformsMap;
+MObject               EntityNode::s_EntityAssetGroup;
+bool                  EntityNode::s_DoRemoveNodeCallback = true;
+
+namespace NodeArrays
+{
+    enum
+    {
+        KeepNodes,
+        DeleteNodes,
+        Count,
+    };
+}
 
 MStatus EntityNode::AddCallbacks() 
 {
     MStatus stat;
 
+    s_CallbackIDs.append((int)MSceneMessage::addCallback( MSceneMessage::kBeforeNew, EntityNode::FlushCallback, NULL, &stat));
+    if (!stat)
+        MGlobal::displayError("Unable to add Before New callback EntityNode::FlushCallback for EntityNode.\n");  
+
+    s_CallbackIDs.append((int)MSceneMessage::addCallback( MSceneMessage::kBeforeOpen, EntityNode::FlushCallback, NULL, &stat));
+    if (!stat)
+        MGlobal::displayError("Unable to add before open callback EntityNode::FlushCallback for EntityNode.\n"); 
+
     s_CallbackIDs.append((int)MDGMessage::addNodeAddedCallback( EntityNode::NodeAddedCallback, EntityNode::s_TypeName, NULL, &stat ) );
     if (!stat)
-        MGlobal::displayError("Unable to add user callback EntityNode::NodeAddedCallback for EntityAssetNode.\n");
+        MGlobal::displayError("Unable to add user callback EntityNode::NodeAddedCallback for EntityNode.\n");
 
     s_CallbackIDs.append((int)MDGMessage::addNodeRemovedCallback( EntityNode::NodeRemovedCallback, EntityNode::s_TypeName, NULL, &stat ) );
     if (!stat)
-        MGlobal::displayError("Unable to add user callback EntityNode::NodeRemovedCallback for EntityAssetNode.\n");
+        MGlobal::displayError("Unable to add user callback EntityNode::NodeRemovedCallback for EntityNode.\n");
 
-    s_CallbackIDs.append((int)MModelMessage::addAfterDuplicateCallback( EntityNode::AfterDuplicateCallback, NULL, &stat ) );
+    s_CallbackIDs.append((int)MUserEventMessage::addUserEventCallback( MString( kUnselectInstanceData ), EntityNode::UnselectAllCallback, NULL, &stat));
     if (!stat)
-        MGlobal::displayError("Unable to add user callback EntityNode::AfterDuplicateCallback for EntityAssetNode.\n");
+        MGlobal::displayError("Unable to add user callback EntityNode::UnselectAllCallback for EntityNode.\n"); 
 
-    s_CallbackIDs.append((int)MModelMessage::addCallback( MModelMessage::kActiveListModified, EntityNode::SelectionChangedCallback, NULL, &stat ) );
-    if (!stat)
-        MGlobal::displayError("Unable to add user callback EntityNode::SelectionChangedCallback for EntityAssetNode.\n");
-
-#ifdef WATCH_ALL_DAG_CHANGES
-
-    s_CallbackIDs.append( MDagMessage::addAllDagChangesCallback( EntityNode::DagChangesCallback, NULL, &stat ) );
-    if (!stat)
-        MGlobal::displayError("Unable to add user callback EntityNode::DagChangesCallback for EntityAssetNode.\n");
-
-#endif
-
-    return MS::kSuccess; 
+    return stat; 
 }
 
 MStatus EntityNode::RemoveCallbacks()
@@ -82,27 +94,21 @@ MStatus EntityNode::RemoveCallbacks()
     stat = MMessage::removeCallbacks(s_CallbackIDs);
     if (!stat)
     {
-        MGlobal::displayError("Unable to delete callbacks");
+        MGlobal::displayError("Unable to delete callbacks");  
     }
 
     return MS::kSuccess;
 }
 
-EntityNode::EntityNode() 
-: m_UID( TUID::Null )
-, m_AttributeChangedCB( -1 )
-, m_ChildAddedCB( -1 )
+EntityNode::EntityNode()
 {
-
 }
 
 EntityNode::~EntityNode()
 {
-    MNodeMessage::removeCallback( m_AttributeChangedCB );
-    m_Entity = NULL;
 }
 
-void* EntityNode::Creator()
+void * EntityNode::Creator()
 {
     return new EntityNode();
 }
@@ -113,14 +119,11 @@ MStatus EntityNode::Initialize()
 
     MStatus stat;
 
-    // wtf is this - rachel
-    MFnStringData dataFn;
-    MObject stringData = dataFn.create( "" );
-
-    // fileName attribute
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Create a string attribute "ArtFilePath" 
     MFnTypedAttribute tAttr;
-    s_ArtFilePath = tAttr.create("ArtFilePath", "fn", MFnData::kString, &stat);
-    tAttr.setDefault( stringData );
+
+    s_ArtFilePath = tAttr.create("ArtFilePath", "afp", MFnData::kString, &stat);
     MCheckErr(stat, "Unable to create attr: ArtFilePath");
 
     tAttr.setReadable(true);
@@ -129,308 +132,482 @@ MStatus EntityNode::Initialize()
     stat = addAttribute(s_ArtFilePath);
     MCheckErr(stat, "Unable to add attr: ArtFilePath");
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Create an array attribute "ImportNodes"
+    MFnMessageAttribute mAttr;
+
+    m_ImportNodes = mAttr.create( "ImortObjects", "ios", &stat );
+    MCheckErr(stat, "Unable to create attr: ImportNodes");
+
+    mAttr.setArray( true );
+
+    stat = addAttribute(m_ImportNodes);
+    MCheckErr(stat, "Unable to add attr: ImportNodes");
+
     MAYA_FINISH_EXCEPTION_HANDLING();
 
     return MS::kSuccess;
 }
 
-void EntityNode::postConstructor() 
+void EntityNode::postConstructor()
 {
-    MPlug plug ( thisMObject(), s_ArtFilePath );
+    MPlug visibility( thisMObject(), MPxTransform::visibility );
 
-    m_Plug = plug;
+    visibility.setValue( false );
+    visibility.setLocked( true );
 
-    s_ReplaceSelection = true;
+    EntityNode::s_DoRemoveNodeCallback = true;
 }
 
-void EntityNode::copyInternalData( MPxNode* node )
+void EntityNode::LoadAllArt()
 {
-    MAYA_START_EXCEPTION_HANDLING();
-
-    EntityNode* source = (EntityNode*)(node);
-    source->Hide();
-    m_Entity = Reflect::ObjectCast< Asset::EntityInstance >( source->m_Entity->Clone() );
-    TUID::Generate( m_Entity->m_ID );
-    m_UID = m_Entity->m_ID;
-
-    EntityAssetNode& instanceClassNode = EntityAssetNode::Get( m_Entity->GetEntity()->GetPath() );
-    if( instanceClassNode == EntityAssetNode::Null )
+    M_IdClassTransform::iterator classItor = s_ClassTransformsMap.begin();
+    M_IdClassTransform::iterator classEnd  = s_ClassTransformsMap.end();
+    for( ; classItor != classEnd; ++classItor )
     {
-        return;
+        classItor->second->LoadArt();
+    }
+}
+
+void EntityNode::UnloadAllArt()
+{
+    M_IdClassTransform::iterator classItor = s_ClassTransformsMap.begin();
+    M_IdClassTransform::iterator classEnd  = s_ClassTransformsMap.end();
+    for( ; classItor != classEnd; ++classItor )
+    {
+        classItor->second->UnloadArt();
+    }
+}
+
+void EntityNode::FlattenInstances()
+{
+    M_IdClassTransform::iterator classItor = s_ClassTransformsMap.begin();
+    M_IdClassTransform::iterator classEnd  = s_ClassTransformsMap.end();
+    for( ; classItor != classEnd; ++classItor )
+    {
+        M_EntityNode::iterator itor = classItor->second->m_Instances.begin();
+        M_EntityNode::iterator end  = classItor->second->m_Instances.end();
+        for( ; itor != end; ++itor )
+        {
+            itor->second->Flatten();
+        }
     }
 
-    instanceClassNode.m_Instances.insert( std::pair< TUID, EntityNode*>( m_UID, this ) );
+    MGlobal::deleteNode( EntityInstanceNode::s_EntityNodeGroup );
 
-    s_ShowNodes.push_back( source );
-    s_DupeNodes.push_back( this ); 
-
-    MAYA_FINISH_EXCEPTION_HANDLING();
+    EntityInstanceNode::s_EntityNodeGroup = MObject::kNullObj;
 }
 
-bool EntityNode::isBounded() const 
-{ 
-    return false;
-}
-
-bool EntityNode::isAbstractClass() const 
+EntityNode& EntityNode::Get( const Helium::Path& path, bool createIfNotExisting )
 {
-    return false;
-}
+    MFnDagNode dagFn;
 
-bool EntityNode::excludeAsLocator() const 
-{
-    return false;
-}
-
-MStatus EntityNode::compute(const MPlug& plug, MDataBlock& data) 
-{ 
-    return MS::kUnknownParameter;
-}
-
-void EntityNode::draw( M3dView & view, const MDagPath & path, M3dView::DisplayStyle style, M3dView::DisplayStatus status ) 
-{ 
-    MStatus stat;
-
-    // Check whether need to redo points
-    if (s_PointerPoints.length())
+    try
     {
-        if (s_PointerYUp != MGlobal::isYAxisUp())
+        M_IdClassTransform::iterator findItor = s_ClassTransformsMap.find( path.Hash() );
+        if( findItor != s_ClassTransformsMap.end() )
         {
-            // Store the up axis
-            s_PointerYUp = MGlobal::isYAxisUp();
+            return *findItor->second;
+        }
+        else if ( createIfNotExisting )
+        {
+            // we couldn't find it, so create it and return the loaded art class
+            Asset::AssetClassPtr assetClass = Asset::AssetClass::LoadAssetClass( path );
 
-            // Points are for Y-UP
-            float pointerVerts[][4] =
+            if ( assetClass.ReferencesObject() )
             {
-                {-200, -100,   0, 1},
-                {-200,    0, 100, 1},
-                {-200,    0, 100, 1},
-                {-200,  100,   0, 1},
-                {-200,  100,   0, 1},
-                {   0,    0,   0, 1},
-                {   0,    0,   0, 1},
-                {-200, -100,   0, 1},
-                {-200,    0, 100, 1},
-                {   0,    0,   0, 1},
-                {-200, -100,   0, 1},
-                {-200,  100,   0, 1}
-            };
+                tstring artFilePath = assetClass->GetPath().Get();
 
-            s_PointerPoints = MPointArray(pointerVerts, 12); 
+                MObject classTransform = dagFn.create( EntityNode::s_TypeID, assetClass->GetShortName().c_str() );
+                dagFn.setDoNotWrite( true );
 
-            // Flip the points if Y-Up
-            if (s_PointerYUp) 
-            {
-                for(unsigned i = 0; i < s_PointerPoints.length(); ++i) 
-                {
-                    MPoint p = s_PointerPoints[i];
-                    s_PointerPoints[i].x = p.y;
-                    s_PointerPoints[i].y = p.z;
-                    s_PointerPoints[i].z = p.x;
-                }
+                EntityNode* artClass = static_cast<EntityNode*>( dagFn.userNode() );
+
+                artClass->m_AssetPath = path;
+                artClass->SetArtFilePath( artFilePath.c_str() );
+
+                s_ClassTransformsMap[ path.Hash() ] = artClass;
+                artClass->LoadArt();
+
+                return *artClass;
             }
         }
     }
-
-    // Go ahead and draw pointer selected if this instance is selected
-    switch (status)
+    catch (Helium::Exception& )
     {
-    case M3dView::kDormant:
+        if ( createIfNotExisting )
         {
-            stat = view.setDrawColor(s_DrawColor);
-            MErr(stat, "Unable to do: view.setDrawColor");
-            break;
-        }
-
-    case M3dView::kTemplate:
-        {
-            MColor templateColor = view.templateColor(&stat);
-            MErr(stat, "Unable to do: view.templateColor");
-            stat = view.setDrawColor(templateColor);
-            MErr(stat, "Unable to do: view.setDrawColor");
-            break;
-        }
-
-    default:
-        {
-            stat = view.setDrawColor(15, M3dView::kActiveColors);
-            MErr(stat, "Unable to do: view.setDrawColor"); 
-            break;
+            MGlobal::displayError( MString("Unable to create EntityNode!") );
         }
     }
 
-    glPushMatrix();
-    {
-        glBegin( GL_LINES );
-        {
-            u32 len = s_PointerPoints.length();
-            for( unsigned i = 0; i < len; i += 2 ) 
-            {
-                glVertex3f((GLfloat)s_PointerPoints[i].x,   (GLfloat)s_PointerPoints[i].y,   (GLfloat)s_PointerPoints[i].z);
-                glVertex3f((GLfloat)s_PointerPoints[i+1].x, (GLfloat)s_PointerPoints[i+1].y, (GLfloat)s_PointerPoints[i+1].z);
-            }
-        }
-        glEnd();
-    }
-    glPopMatrix();
+    return EntityNode::Null;
 }
 
-void EntityNode::SetBackingEntity( const Asset::EntityInstancePtr& entity )
+std::pair< EntityNode*, EntityInstanceNode*> EntityNode::CreateInstance( const Asset::EntityInstancePtr& entity )
 {
-    m_Entity = entity;
-    m_UID = m_Entity->m_ID;
+    EntityNode* artClass = &Get( entity->GetEntity()->GetPath() );
+    M_EntityNode::iterator instItor = artClass->m_Instances.find( entity->m_ID );
 
-    m_Plug.setAttribute( s_ArtFilePath );
-    m_Plug.setValue( MString (entity->GetEntity()->GetPath().c_str()) );
-
-    Math::Matrix4 gm = m_Entity->m_GlobalTransform * s_RelativeTransform.Inverted();
-    MMatrix mat;
-
-    gm.t.x *= 100.0f;
-    gm.t.y *= 100.0f;
-    gm.t.z *= 100.0f;
-
-    for (int i=0; i<4; i++)
+    EntityInstanceNode* entityNode = NULL;
+    if( instItor == artClass->m_Instances.end() )
     {
-        for (int j=0; j<4; j++)
-        {
-            mat[i][j] = gm[i][j];
-        }
+        MFnDagNode nodeFn;
+        MObject instanceObject = nodeFn.create( EntityInstanceNode::s_TypeID, entity->GetName().c_str() );
+        nodeFn.setDoNotWrite( true );
+
+        entityNode = static_cast< EntityInstanceNode* >( nodeFn.userNode() );
+
+        artClass->m_Instances[ entity->m_ID ] = entityNode;
+        entityNode->SetBackingEntity( entity );
+        entityNode->Show( *artClass );
+    }
+    else
+    {
+        entityNode = instItor->second;
+        entityNode->SetBackingEntity( entity );
     }
 
-    MFnTransform transFn( thisMObject() );
-    MTransformationMatrix transMat (mat);
-    transFn.set(transMat);
-
-    AddAttributeChangedCallback();
+    return std::pair< EntityNode*, EntityInstanceNode* >( artClass, entityNode );
 }
 
-void EntityNode::UpdateBackingEntity()
+void EntityNode::RemoveInstance( EntityInstanceNode* entityNode )
 {
-    MFnTransform transFn( thisMObject() );
-    MMatrix mat = transFn.transformationMatrix();
+    EntityNode& artClass = EntityNode::Get( entityNode->GetEntity()->GetEntity()->GetPath(), false );
 
-    mat[3][0] *= 0.01;
-    mat[3][1] *= 0.01;
-    mat[3][2] *= 0.01;
-
-    for (int i=0; i<4; i++)
+    if ( artClass != EntityNode::Null )
     {
-        for (int j=0; j<4; j++)
-        {
-            m_Entity->m_GlobalTransform[i][j] = (float)mat[i][j];
-        }
+        artClass.m_Instances.erase( entityNode->GetUID() );
     }
-    m_Entity->m_GlobalTransform *= s_RelativeTransform;
-
-    // there can be no hierarchy in the Scratch Pad scene, so this should be fine
-    Math::Scale scale;
-    Math::Vector3 translate;
-    Math::EulerAngles rotate;
-    m_Entity->m_GlobalTransform.Decompose( scale, rotate, translate );
-
-    m_Entity->m_Scale.x = scale.x;
-    m_Entity->m_Scale.y = scale.y;
-    m_Entity->m_Scale.z = scale.z;
-
-    m_Entity->m_Rotate.x = rotate.angles.x;
-    m_Entity->m_Rotate.y = rotate.angles.y;
-    m_Entity->m_Rotate.z = rotate.angles.z;
-
-    m_Entity->m_Translate = translate;
-
-    m_Entity->m_ObjectTransform = m_Entity->m_GlobalTransform;
 }
 
 void EntityNode::GetArtFilePath( MString& artFilePath )
 {
-    m_Plug.setAttribute( s_ArtFilePath );
-    m_Plug.getValue( artFilePath );
+    MPlug plug( thisMObject(), s_ArtFilePath );
+    plug.getValue( artFilePath );
 }
 
-void EntityNode::Show( const EntityAssetNode& instanceClassNode )
+void EntityNode::SetArtFilePath( const MString& artFilePath )
 {
-    if( instanceClassNode == EntityAssetNode::Null )
+    MPlug plug( thisMObject(), s_ArtFilePath );
+    plug.setValue( MString(artFilePath.asTChar()) );
+}
+
+void EntityNode::LoadArt()
+{
+    MStatus stat;
+    bool callbackRemoved = false;
+    if( s_EditNodeAddedCBId != -1 )
+    {
+        MDGMessage::removeCallback( s_EditNodeAddedCBId );
+        s_EditNodeAddedCBId = -1;
+        callbackRemoved = true;
+    }
+
+    UnloadArt();
+
+    MString artFilePath;
+    GetArtFilePath( artFilePath );
+    std::cout << "Importing from: " << artFilePath.asTChar() << "..." << std::endl;
+
+    // add the callback to catch all the imported objects
+    MObjectArray objectArrays[NodeArrays::Count];
+    s_ImportNodeAddedCBId = MDGMessage::addNodeAddedCallback( ImportNodeAddedCallback, kDefaultNodeType, &objectArrays );
+
+    // import stuff
+    MFileIO::import( artFilePath, NULL, false );
+
+    // remove the callback
+    MDGMessage::removeCallback( s_ImportNodeAddedCBId );
+
+    // add all imported stuff under this guy's transform
+    MFnDagNode nodeFn( thisMObject() );
+    for( u32 i=0; i<objectArrays[NodeArrays::KeepNodes].length(); ++i )
+    {
+        if( objectArrays[NodeArrays::KeepNodes][i].isNull() )
+        {
+            continue;
+        }
+
+        MObjectHandle handle( objectArrays[NodeArrays::KeepNodes][i] );
+        if ( !handle.isValid() )
+        {
+            continue;
+        }
+
+        // We should be getting only MFnDagNode in here, but just in case
+        MFnDagNode dagFn( objectArrays[NodeArrays::KeepNodes][i], &stat );
+        if ( stat == MStatus::kSuccess )
+        {
+            stat = dagFn.setDoNotWrite( true );
+        }
+        else
+        {
+            MFnDependencyNode depNodeFn( objectArrays[NodeArrays::KeepNodes][i], &stat );
+            stat = depNodeFn.setDoNotWrite( true );
+        }
+
+#ifdef _DEBUG
+        MString name = dagFn.name();
+        MString type = dagFn.typeName();
+        std::string nodeTypeStr( objectArrays[NodeArrays::KeepNodes][i].apiTypeStr() );
+
+        if ( name.length() )
+        {
+            std::cout << " - Importing Child: " << name.asTChar() << " " << type.asTChar() << "(" << nodeTypeStr << ")" << std::endl;
+        }
+#endif
+
+        AddImportNode( objectArrays[NodeArrays::KeepNodes][i] );   
+        nodeFn.addChild( objectArrays[NodeArrays::KeepNodes][i] );
+    }
+
+    for( u32 i=0; i<objectArrays[NodeArrays::DeleteNodes].length(); ++i )
+    {
+        MGlobal::deleteNode( objectArrays[NodeArrays::DeleteNodes][i] );
+    }
+
+    MFnDagNode otherFn;
+    for( u32 i=0 ; i<nodeFn.childCount(); ++i )
+    {
+        MObject child = nodeFn.child( i );
+        if( !child.hasFn( MFn::kDagNode ) ) 
+        {
+            continue;
+        }
+
+        otherFn.setObject( child );
+        if( otherFn.typeId() == EntityNode::s_TypeID )
+        {
+            MDagModifier mod;
+            u32 numChild = otherFn.childCount();
+            for( u32 j = 0; j < numChild; ++j )
+            {
+                stat = mod.reparentNode( otherFn.child( j ), thisMObject() );
+            }
+            mod.doIt();
+
+            MGlobal::deleteNode( child );
+            break;
+        }
+    }
+
+    std::cout << "Done" << std::endl;
+
+}
+
+void EntityNode::UnloadArt()
+{
+    MStatus stat;
+
+    // remove anything currently imported/referenced
+    MFnDagNode dagFn( thisMObject() );
+    while( dagFn.childCount() )
+    {
+        stat = MGlobal::deleteNode( dagFn.child( 0 ) );
+        MContinueErr( stat, ("Unable to delete" + dagFn.fullPathName() ).asChar() );
+    }
+
+    ClearInstances();
+
+    MObjectArray forDelete;
+    GetImportNodes( forDelete );
+    MFnDependencyNode depFn;
+
+    u32 num = forDelete.length();
+    for( u32 i = 0; i < num; ++i )
+    {
+        MObject& node = forDelete[i];
+
+        MObjectHandle handle( node );
+        if( !handle.isValid() )
+            continue;
+
+        depFn.setObject( node );
+
+        stat = MGlobal::deleteNode( node );
+        MContinueErr( stat, ("Unable to delete" + depFn.name() ).asChar() );
+    }
+
+    forDelete.clear();
+}
+
+void EntityNode::AddImportNode( const MObject& object )
+{
+    MStatus stat;
+    MObjectHandle handle( object );
+    if( !handle.isValid() )
+    {
         return;
-
-    MFnDagNode instanceFn( thisMObject() );
-    MDagPath path;
-    instanceFn.getPath( path );
-
-    MFnDagNode nodeFn( instanceClassNode.thisMObject() );
-    u32 len = nodeFn.childCount();
-
-    for( u32 i = 0; i < len; ++i )
-    {
-        MFnDagNode nodeFn( nodeFn.child( i ) );
-
-        MDagPath child;
-        nodeFn.getPath( child );
-        MDagPath result;
-        Maya::duplicate( child, path, result, true, true );
     }
-}
 
-void EntityNode::Show()
-{
-    EntityAssetNode& instanceClassNode = EntityAssetNode::Get( m_Entity->GetEntity()->GetPath() );
+    MFnDependencyNode nodeFn( object, &stat );
+    MCheckNoErr( stat, "Unable to create depenency node fn set" );
+    nodeFn.setDoNotWrite( true );
 
-    Show( instanceClassNode );
-}
+    //MItDependencyGraph childrenIt (MItDependencyGraph::kUpstream);
+    //for ( childrenIt.reset( nodeFn.object() ); !childrenIt.isDone(); childrenIt.next() )
+    //{
+    //  MFnDependencyNode( childrenIt.item() ).setDoNotWrite( true );
+    //}
 
-void EntityNode::Hide()
-{
-    MFnTransform transformFn( thisMObject() );
+    MString name = nodeFn.name( &stat );
+    MCheckNoErr( stat, "Unable to get node name" );
 
-    u32 len = transformFn.childCount();
-
-    MFnDagNode nodeFn;
-    for( u32 i = 0; i < len; ++i )
+    if( name == "" )
     {
-        nodeFn.setObject( transformFn.child( 0 ) );
-        MDagPath path;
-        nodeFn.getPath( path );        
-        MGlobal::deleteNode( path.node() );
-    }
-}
-
-void EntityNode::Flatten()
-{
-    EntityAssetNode& instanceClassNode = EntityAssetNode::Get( m_Entity->GetEntity()->GetPath() );
-
-    if( instanceClassNode == EntityAssetNode::Null )
         return;
-
-    MFnDagNode instanceFn( thisMObject() );
-
-    MFnDagNode nodeFn( instanceClassNode.thisMObject() );
-    u32 len = nodeFn.childCount();
-
-    MDagPath path;
-    MFnTransform newTransformFn;
-    MObject newTransform = newTransformFn.create();
-
-    MTransformationMatrix matrix = instanceFn.transformationMatrix();
-    newTransformFn.set( matrix );
-    newTransformFn.getPath( path );
-
-    for( u32 i = 0; i < len; ++i )
-    {
-        MFnDagNode nodeFn( nodeFn.child( i ) );
-
-        MDagPath child;
-        nodeFn.getPath( child );
-        MDagPath result;
-
-        Maya::duplicate( child, path, result, false, false );
     }
 
-    Maya::LockHierarchy( thisMObject(), false );
+    // don't connect dag nodes to the ImportNodes attributeb array
+    if( object.hasFn( MFn::kDagNode ) )
+    {
+        return;
+    }
+
+#ifdef _DEBUG
+    std::cout << "Adding: " << name.asTChar() << std::endl;
+#endif
+
+    //create ImportMessage attrib on the imported object if necessary
+    if( !nodeFn.hasAttribute( "ImportMessage", &stat ) )
+    {
+        MFnMessageAttribute mAttr;
+        MObject importMessage = mAttr.create( "ImportMessage", "imp", &stat );
+        MCheckNoErr(stat, "Unable to create attr: ImportMessage");
+
+        stat = nodeFn.addAttribute( importMessage );
+        MCheckNoErr(stat, "Unable to add attr: ImportNodes"); 
+    }
+
+    MPlug importMsg = nodeFn.findPlug( "ImportMessage", &stat );
+    MCheckNoErr(stat, "Unable to find attr: ImportMessage");
+
+    MPlug importPlug( thisMObject(), m_ImportNodes );
+    u32 currentIdx = importPlug.numConnectedElements();
+    MPlug importElement = importPlug.elementByLogicalIndex( currentIdx );
+
+    MDGModifier mod;
+
+    //if it's currently connected, disconnect it
+    if( importMsg.isConnected() )
+    {
+        MPlugArray plugs;
+        importMsg.connectedTo( plugs, true, false );
+        if( plugs.length() == 1 )
+        {
+            mod.disconnect( importMsg, plugs[0] );
+        }
+    }
+    stat = mod.connect( importMsg, importElement );
+    mod.doIt();
+}
+
+void EntityNode::GetImportNodes( MObjectArray& objects )
+{
+    MPlug plug(thisMObject(), m_ImportNodes);
+    u32 num = plug.numElements();
+    for( u32 i = 0; i < num; ++i )
+    {
+        MPlug elementPlug = plug.elementByLogicalIndex( i );
+        if( elementPlug.isConnected() )
+        {
+            MPlugArray plugs;
+            elementPlug.connectedTo( plugs, true, false );
+
+            //should be one and only one
+            HELIUM_ASSERT( plugs.length() == 1 );
+            objects.append ( plugs[0].node() );
+        }
+    }
+}
+
+void EntityNode::AddToInstances( MObject &addedNode )
+{
+    MStatus stat;
+
+    MFnDagNode instanceFn;
+    MFnDagNode nodeFn( addedNode );
+    MDagPath source;
+    nodeFn.getPath( source );
+
+    M_EntityNode::iterator itor = m_Instances.begin();
+    M_EntityNode::iterator end  = m_Instances.end();
+    for( ; itor != end; ++itor)
+    {
+        instanceFn.setObject( itor->second->thisMObject() );
+
+        instanceFn.setObject( instanceFn.parent( 0 ) );
+        MDagPath parent;
+        instanceFn.getPath( parent );
+
+        MDagPath result;
+        Maya::duplicate( source, parent, result, true );
+    }
+}
+
+void EntityNode::ClearInstances()
+{
+    MStatus stat;
+
+    M_EntityNode::iterator itor = m_Instances.begin();
+    M_EntityNode::iterator end  = m_Instances.end();
+    for( ; itor != end; ++itor)
+    {
+        itor->second->Hide();    
+    }
+}
+
+void EntityNode::ReloadInstances()
+{
+    MFnDagNode nodeFn( thisMObject() );
+    u32 len = nodeFn.childCount();
+    for( u32 i = 0; i < len; ++i )
+    {
+        AddToInstances( nodeFn.child( i ) );
+    }
 }
 
 void EntityNode::Unselect( MSelectionList& list )
 {
-    Maya::RemoveHierarchy( thisMObject(), list );
+    MObjectArray importNodes;
+    GetImportNodes( importNodes );
+
+    u32 len = importNodes.length();
+    for( u32 i = 0; i < len; ++i )
+    {
+        MGlobal::unselect( importNodes[i] );
+    }
+}
+
+void EntityNode::UnselectAll( MSelectionList& list )
+{
+    MStatus status;
+    M_IdClassTransform::iterator classItor = s_ClassTransformsMap.begin();
+    M_IdClassTransform::iterator classEnd  = s_ClassTransformsMap.end();
+    for( ; classItor != classEnd; ++classItor )
+    {
+        classItor->second->Unselect( list ); 
+    }  
+
+    Maya::RemoveHierarchy( EntityNode::s_EntityAssetGroup, list );
+    Maya::RemoveHierarchy( EntityInstanceNode::s_EntityNodeGroup, list );
+}
+
+void EntityNode::FlushCallback( void* clientData )
+{
+    MAYA_START_EXCEPTION_HANDLING();
+
+    MDGMessage::removeCallback( s_EditNodeAddedCBId );
+    s_ClassTransformsMap.clear();
+
+    s_EntityAssetGroup = MObject::kNullObj;
+    EntityInstanceNode::s_EntityNodeGroup = MObject::kNullObj;
+    EntityInstanceNode::s_ReplaceSelection = false;
+    EntityNode::s_DoRemoveNodeCallback = false;
+    EntityInstanceNode::s_RelativeTransform = Math::Matrix4::Identity;
+
+    MAYA_FINISH_EXCEPTION_HANDLING();
 }
 
 void EntityNode::NodeAddedCallback( MObject& node, void* clientData )
@@ -443,16 +620,13 @@ void EntityNode::NodeAddedCallback( MObject& node, void* clientData )
     }
 
     //
-    // This is because for some reason, if you do this in the postContructor, it doesn't work!
+    // For some reason, if you do this in the postContructor, it doesn't work!
+    // (the new node doesn't get parented to the s_EntityAssetGroup)
     //
-    MFnDagNode nodeFn( s_EntityNodeGroup );
-
-    //I swapped this check to see if the s_EntityNodeGroup is still valid by its handle, instead
-    //of just checking if the object is null because if the object gets deleted, it won't be Null
-    //but it will be fucked and crash Maya.
-    if( !MObjectHandle( s_EntityNodeGroup ).isValid() )
+    MFnDagNode nodeFn( s_EntityAssetGroup );
+    if(!MObjectHandle(s_EntityAssetGroup).isValid())
     {
-        s_EntityNodeGroup = nodeFn.create( EntityGroupNode::s_TypeID, "EntityNodeGroup" );
+        s_EntityAssetGroup = nodeFn.create( EntityGroupNode::s_TypeID, "EntityAssetGroup" );
         nodeFn.setDoNotWrite( true );
     }
 
@@ -465,177 +639,92 @@ void EntityNode::NodeRemovedCallback( MObject& node, void* clientData )
 {
     MAYA_START_EXCEPTION_HANDLING();
 
-    if( !EntityAssetNode::s_DoRemoveNodeCallback )
+    if( !s_DoRemoveNodeCallback )
     {
         return;
     }
 
-    MFnDependencyNode nodeFn( node );
-
-    EntityAssetNode::RemoveInstance( (EntityNode*)(nodeFn.userNode()) );
-
-    MAYA_FINISH_EXCEPTION_HANDLING();
-}
-
-void EntityNode::AddAttributeChangedCallback()
-{
-    if( m_AttributeChangedCB == -1 )
+    s_DoRemoveNodeCallback = false;
     {
-        m_AttributeChangedCB = MNodeMessage::addAttributeChangedCallback( thisMObject(), AttributeChangedCallback );
-    } 
-}
+        MFnDependencyNode nodeFn( node );
 
-void EntityNode::RemoveAttributeChangedCallback()
-{
-    if( m_AttributeChangedCB != -1 )
-    {
-        MNodeMessage::removeCallback( m_AttributeChangedCB );
-        m_AttributeChangedCB = -1;
-    }
-}
+        EntityNode* artClass = (EntityNode*)(nodeFn.userNode());
+        artClass->UnloadArt();
 
-void EntityNode::AttributeChangedCallback( MNodeMessage::AttributeMessage msg, MPlug& plug, MPlug& otherPlug, void* clientData )
-{
-    MAYA_START_EXCEPTION_HANDLING();
-
-    MAYA_FINISH_EXCEPTION_HANDLING();
-}
-
-void EntityNode::AfterDuplicateCallback( void* clientData )
-{
-    MAYA_START_EXCEPTION_HANDLING();
-
-    V_EntityNodePtr::iterator itor = s_ShowNodes.begin();
-    V_EntityNodePtr::iterator end  = s_ShowNodes.end();
-    for( ; itor != end; ++itor )
-    {
-        (*itor)->Show();
-    }
-
-    itor = s_DupeNodes.begin();
-    end  = s_DupeNodes.end();
-    for( ; itor != end; ++itor )
-    {
-        (*itor)->Show();
-        (*itor)->AddAttributeChangedCallback();
-    }
-
-    s_ShowNodes.clear();
-    s_DupeNodes.clear();
-
-    MAYA_FINISH_EXCEPTION_HANDLING();
-}
-
-static MObject EntityNodeParent( MDagPath& path )
-{
-    if( path.hasFn( MFn::kDagNode ) )
-    {
-        MDagPath parentPath;
-        MFnDependencyNode nodeFn;
-
-        while( path.pop( 1 ) != MS::kInvalidParameter )
-        {        
-            nodeFn.setObject( path.node() );
-            if( nodeFn.typeId() == EntityNode::s_TypeID )    
-            {
-                return nodeFn.object();
-            }
-        }
-    }
-
-    return MObject::kNullObj;
-}
-
-void EntityNode::SelectionChangedCallback( void* clientData )
-{
-    MAYA_START_EXCEPTION_HANDLING();
-
-    if( !s_ReplaceSelection )
-    {
-        return;
-    }
-
-    static bool inFunc = false;
-
-    if( inFunc )
-        return;
-    else
-        inFunc = true;
-
-    MSelectionList list;
-    MGlobal::getActiveSelectionList( list );
-
-    MStatus stat;
-
-    MSelectionList addList;
-    bool added = false;
-    u32 len = list.length();
-    for( u32 i = 0; i < len; )
-    {
-        MDagPath path;
-        list.getDagPath( i, path );
-
-        MObject entityNode = EntityNodeParent( path );
-        if( entityNode != MObject::kNullObj )
+        M_EntityNode::iterator itor = artClass->m_Instances.begin();
+        M_EntityNode::iterator end  = artClass->m_Instances.end();
+        for( ; itor != end; ++itor)
         {
-            added = true;
-            MFnDagNode nodeFn( entityNode );
-            MDagPath instancePath;
-            nodeFn.getPath( instancePath );
-            addList.add( instancePath );
-            list.remove( i );
+            MGlobal::deleteNode( itor->second->thisMObject() );
         }
-        else
-        {
-            ++i;
-        }
-    }
+        artClass->m_Instances.clear();
 
-    if( added )
-    {
-        MGlobal::setActiveSelectionList( list, MGlobal::kReplaceList );
-        MGlobal::setActiveSelectionList( addList, MGlobal::kAddToList );
+        s_ClassTransformsMap.erase( artClass->m_AssetPath.Hash() );
     }
-
-    inFunc = false;
+    s_DoRemoveNodeCallback = true;
 
     MAYA_FINISH_EXCEPTION_HANDLING();
 }
 
-void EntityNode::AllDagChangesCallback( MDagMessage::DagMessage dagMsg, MDagPath& child, MDagPath &parent, void* clientData )
+void EntityNode::ImportNodeAddedCallback( MObject &addedNode, void* param )
 {
     MAYA_START_EXCEPTION_HANDLING();
 
-    MString message;
-    switch( dagMsg )
+    MObjectArray (*nodeArrays)[NodeArrays::Count] = (MObjectArray (*)[NodeArrays::Count])param;
+
+
+    MObjectHandle handle( addedNode );
+    if( !handle.isValid() ) 
     {
-    case MDagMessage::kParentAdded:
-        message += "kParentAdded --";
-        break;
-    case MDagMessage::kParentRemoved:
-        message += "kParentRemoved --";
-        break;
-    case MDagMessage::kChildAdded:
-        message += "kChildAdded --";
-        break;
-    case MDagMessage::kChildRemoved:
-        message += "kChildRemoved --";
-        break;
-    case MDagMessage::kChildReordered:
-        message += "kChildReordered --";
-        break;
-    case MDagMessage::kInstanceRemoved:
-        message += "kInstanceRemoved --";
-        break;
-    default:
-        message += "Some crap --";
+        return;
     }
 
-    message += " parent: ";
-    message += parent.fullPathName();
-    message += " child: ";
-    message += child.fullPathName();
-    MGlobal::displayInfo( message );
+    MFnDependencyNode nodeFn( addedNode );
+    nodeFn.setDoNotWrite( true ); 
+
+    // don't gather certain nodes
+    if( addedNode.hasFn( MFn::kReference ) ||
+        addedNode.hasFn( MFn::kPartition ) ||
+        addedNode.hasFn( MFn::kDisplayLayerManager ) ||
+        addedNode.hasFn( MFn::kDisplayLayer ) ||
+        addedNode.hasFn( MFn::kRenderLayerManager ) ||
+        addedNode.hasFn( MFn::kRenderLayer ) ||
+        addedNode.hasFn( MFn::kScript ) ||
+        addedNode.hasFn( MFn::kLightLink ) )
+    {
+        return;
+    }
+
+    // don't gather reference objects
+    if( nodeFn.isFromReferencedFile() )
+    {
+        return;
+    }
+
+    // don't gather maya-designated "shared" nodes
+    if( nodeFn.isShared() )
+    {
+        return;
+    }
+
+#ifdef _DEBUG
+    MString name = nodeFn.name();
+    MString type = nodeFn.typeName();
+    std::cout << " - Importing: " << name.asTChar() << " " << type.asTChar() << std::endl;
+#endif
+
+    nodeArrays[ NodeArrays::KeepNodes ]->append( addedNode );
+
+    MAYA_FINISH_EXCEPTION_HANDLING();
+}
+
+
+
+void EntityNode::UnselectAllCallback( void* clientData )
+{
+    MAYA_START_EXCEPTION_HANDLING();
+
+    EntityNode::UnselectAll( *(MSelectionList*)(clientData) );
 
     MAYA_FINISH_EXCEPTION_HANDLING();
 }

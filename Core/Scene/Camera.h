@@ -73,7 +73,7 @@ namespace Helium
         // Camera
         //
 
-        class Camera
+        class CORE_API Camera
         {
         private:
             // total control size

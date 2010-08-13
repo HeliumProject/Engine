@@ -24,7 +24,7 @@ namespace Helium
         }
         typedef GridUnits::GridUnit GridUnit;
 
-        class GridPreferences : public Reflect::ConcreteInheritor< GridPreferences, Settings >
+        class CORE_API GridPreferences : public Reflect::ConcreteInheritor< GridPreferences, Settings >
         {
         public:
             GridPreferences( const tstring& version = TXT( "" ),

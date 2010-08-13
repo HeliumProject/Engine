@@ -1,16 +1,15 @@
 #pragma once
 
 #include "Core/API.h"
-
 #include "Core/Content/Nodes/ContentCurve.h"
-#include "Curve.h"
+#include "Core/Scene/Curve.h"
 #include "Core/Scene/Tool.h"
 
 namespace Helium
 {
     namespace Core
     {
-        class CurveCreateTool : public Tool
+        class CORE_API CurveCreateTool : public Tool
         {
             //
             //  Members

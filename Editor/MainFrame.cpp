@@ -1441,7 +1441,7 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
 
         case EventIds::ID_ToolsEntityCreate:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Core::EntityCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::EntityInstanceCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
             }
             break;
 
@@ -1548,7 +1548,7 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
                 break;
             }
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType< Core::EntityCreateTool >() )
+        else if ( args.m_NewTool->GetType() == Reflect::GetType< Core::EntityInstanceCreateTool >() )
         {
             selectedTool = EventIds::ID_ToolsEntityCreate;
         }

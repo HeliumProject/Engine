@@ -47,7 +47,7 @@ namespace Helium
         }
         typedef ViewColorModes::ViewColorMode ViewColorMode;
 
-        class ViewportPreferences : public Reflect::ConcreteInheritor< ViewportPreferences, Reflect::Element >
+        class CORE_API ViewportPreferences : public Reflect::ConcreteInheritor< ViewportPreferences, Reflect::Element >
         {
         public: 
             ViewportPreferences(); 

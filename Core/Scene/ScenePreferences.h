@@ -9,7 +9,7 @@ namespace Helium
 {
     namespace Core
     {
-        class ScenePreferences : public Reflect::ConcreteInheritor< ScenePreferences, Settings >
+        class CORE_API ScenePreferences : public Reflect::ConcreteInheritor< ScenePreferences, Settings >
         {
         public:
             ScenePreferences();

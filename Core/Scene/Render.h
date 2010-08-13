@@ -422,7 +422,7 @@ namespace Helium
             void Draw();
         };
 
-        bool IsSupportedTexture( const tstring& file );
-        IDirect3DTexture9* LoadTexture( IDirect3DDevice9* device, const tstring& file, u32* textureSize = NULL, bool* hasAlpha = NULL, D3DPOOL pool = D3DPOOL_MANAGED );
+        CORE_API bool IsSupportedTexture( const tstring& file );
+        CORE_API IDirect3DTexture9* LoadTexture( IDirect3DDevice9* device, const tstring& file, u32* textureSize = NULL, bool* hasAlpha = NULL, D3DPOOL pool = D3DPOOL_MANAGED );
     }
 }

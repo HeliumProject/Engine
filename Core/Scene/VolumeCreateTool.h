@@ -1,16 +1,16 @@
 #pragma once
 
-#include "Core/API.h"
-#include "Volume.h"
-#include "CreateTool.h"
-
 #include "Foundation/TUID.h"
+
+#include "Core/API.h"
+#include "Core/Scene/Volume.h"
+#include "Core/Scene/CreateTool.h"
 
 namespace Helium
 {
     namespace Core
     {
-        class VolumeCreateTool : public Core::CreateTool
+        class CORE_API VolumeCreateTool : public Core::CreateTool
         {
             //
             // Members

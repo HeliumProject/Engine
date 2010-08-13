@@ -33,7 +33,7 @@ namespace Helium
         }
         typedef TranslateSnappingModes::TranslateSnappingMode TranslateSnappingMode;
 
-        class TranslateManipulator : public Core::TransformManipulator
+        class CORE_API TranslateManipulator : public Core::TransformManipulator
         {
         private:
             // Properties

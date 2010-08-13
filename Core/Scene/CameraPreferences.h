@@ -51,7 +51,7 @@ namespace Helium
 
         typedef ShadingModes::ShadingMode ShadingMode;
 
-        class CameraPreferences : public Reflect::ConcreteInheritor< CameraPreferences, Settings >
+        class CORE_API CameraPreferences : public Reflect::ConcreteInheritor< CameraPreferences, Settings >
         {
         public: 
             CameraPreferences(); 

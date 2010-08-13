@@ -4,6 +4,7 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
+#include "Core/API.h"
 #include "Core/Scene/Pick.h"
 #include "Core/Scene/SceneNodeType.h"
 
@@ -15,7 +16,7 @@ namespace Helium
         typedef Helium::SmartPtr< PickHit > PickHitPtr;
         typedef std::vector< PickHitPtr > V_PickHitSmartPtr;
 
-        class HierarchyNodeType : public Core::SceneNodeType
+        class CORE_API HierarchyNodeType : public Core::SceneNodeType
         {
             // 
             // Member variables

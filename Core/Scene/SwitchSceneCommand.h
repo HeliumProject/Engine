@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Core/API.h"
 #include "Application/Undo/PropertyCommand.h"
+
+#include "Core/API.h"
 
 namespace Helium
 {
@@ -15,7 +16,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // Undo command for switching the current scene.
         // 
-        class SwitchSceneCommand : public Undo::PropertyCommand< Core::Scene* >
+        class CORE_API SwitchSceneCommand : public Undo::PropertyCommand< Core::Scene* >
         {
         private:
             Core::SceneManager* m_SceneManager;

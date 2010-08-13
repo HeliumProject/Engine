@@ -29,7 +29,7 @@ void ExportEntity::GatherMayaData( V_ExportBase &newExportObjects )
 
 #if 0
     // this is a special case, because EntityNodes already have a valid Content object. grab it and add it directly to the content scene
-    EntityNode* entityNode = (EntityNode*)(nodeFn.userNode());
+    EntityInstanceNode* entityNode = (EntityInstanceNode*)(nodeFn.userNode());
 
     if ( entityNode )
     {

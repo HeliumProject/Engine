@@ -3,9 +3,9 @@
 #include <string>
 #include <map>
 
-#include "Core/API.h"
 #include "Application/Inspect/Data/Data.h"
 
+#include "Core/API.h"
 #include "Core/Scene/Selection.h"
 
 namespace Helium

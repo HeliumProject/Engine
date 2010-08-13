@@ -13,13 +13,6 @@ namespace Helium
 {
     namespace Editor
     {
-        //
-        // Forwrds
-        //
-        class SortTreeCtrl;
-        struct PreferencesLoadedArgs;
-        class AssetCollectionItemData;
-
         namespace CollectionActions
         {
             enum CollectionAction
@@ -29,6 +22,31 @@ namespace Helium
             };
         }
         typedef CollectionActions::CollectionAction CollectionAction;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// Class AssetCollectionItemData
+        ///////////////////////////////////////////////////////////////////////////////
+        class AssetCollectionItemData : public wxTreeItemData
+        {
+        protected:
+            AssetCollection* m_AssetCollection;
+
+        public:
+            AssetCollectionItemData( AssetCollection* collection )
+                : m_AssetCollection( collection )
+            {
+            }
+
+            virtual ~AssetCollectionItemData()
+            {
+            }
+
+            template <class T>
+            T* GetCollection()
+            {
+                return Reflect::ObjectCast<T>( m_AssetCollection );
+            }
+        };
 
         ///////////////////////////////////////////////////////////////////////////////
         /// Class CollectionsPanel
@@ -65,7 +83,7 @@ namespace Helium
             void OnRemoveFromCollection( wxCommandEvent& event );
 
             // Listeners
-            void OnPreferencesLoaded( const PreferencesLoadedArgs& args );
+            void OnPreferencesLoaded( const Core::PreferencesLoadedArgs& args );
             void OnPrefrencesChanged( const Reflect::ElementChangeArgs& args );
             void OnAssetCollectionsChanged( const Reflect::ElementChangeArgs& args );
             void OnCollectionModified( const Reflect::ElementChangeArgs& args );

@@ -35,32 +35,6 @@ EVT_MENU( VaultMenu::AddToCollection, CollectionsPanel::OnAddToCollection )
 EVT_MENU( VaultMenu::RemoveFromCollection, CollectionsPanel::OnRemoveFromCollection )
 END_EVENT_TABLE()
 
-
-///////////////////////////////////////////////////////////////////////////////
-/// Class AssetCollectionItemData
-///////////////////////////////////////////////////////////////////////////////
-class Editor::AssetCollectionItemData : public wxTreeItemData
-{
-protected:
-    AssetCollection* m_AssetCollection;
-
-public:
-    AssetCollectionItemData( AssetCollection* collection )
-        : m_AssetCollection( collection )
-    {
-    }
-
-    virtual ~AssetCollectionItemData()
-    {
-    }
-
-    template <class T>
-    T* GetCollection()
-    {
-        return Reflect::ObjectCast<T>( m_AssetCollection );
-    }
-};
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class CollectionsPanel
 ///////////////////////////////////////////////////////////////////////////////
@@ -83,7 +57,7 @@ CollectionsPanel::CollectionsPanel( VaultFrame* browserFrame )
 
     Connect( wxEVT_SIZE, wxSizeEventHandler( CollectionsPanel::OnSizeCollectionsPanel ), NULL, this );
 
-    wxGetApp().GetPreferences()->GetVaultPreferences()->AddPreferencesLoadedListener( PreferencesLoadedSignature::Delegate( this, &CollectionsPanel::OnPreferencesLoaded ) );
+    wxGetApp().GetPreferences()->GetVaultPreferences()->AddPreferencesLoadedListener( Core::PreferencesLoadedSignature::Delegate( this, &CollectionsPanel::OnPreferencesLoaded ) );
     wxGetApp().GetPreferences()->GetVaultPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &CollectionsPanel::OnPrefrencesChanged ) );
 
     // Drag-and-drop 
@@ -101,7 +75,7 @@ CollectionsPanel::~CollectionsPanel()
 {
     Disconnect( wxEVT_SIZE, wxSizeEventHandler( CollectionsPanel::OnSizeCollectionsPanel ), NULL, this );
 
-    wxGetApp().GetPreferences()->GetVaultPreferences()->RemovePreferencesLoadedListener( PreferencesLoadedSignature::Delegate( this, &CollectionsPanel::OnPreferencesLoaded ) );
+    wxGetApp().GetPreferences()->GetVaultPreferences()->RemovePreferencesLoadedListener( Core::PreferencesLoadedSignature::Delegate( this, &CollectionsPanel::OnPreferencesLoaded ) );
     wxGetApp().GetPreferences()->GetVaultPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &CollectionsPanel::OnPrefrencesChanged ) );
 
     for ( M_AssetCollections::const_iterator itr = m_CollectionManager->GetCollections().begin(),
@@ -617,7 +591,7 @@ void CollectionsPanel::OnRemoveFromCollection( wxCommandEvent& event )
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void CollectionsPanel::OnPreferencesLoaded( const PreferencesLoadedArgs& args )
+void CollectionsPanel::OnPreferencesLoaded( const Core::PreferencesLoadedArgs& args )
 {
     UpdateCollectionManager();
 }

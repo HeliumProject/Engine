@@ -29,12 +29,12 @@
 #include "Core/CoreInit.h"
 
 #include "Core/Scene/Object.h"
-#include "Editor/Selectable.h"
-#include "Editor/Persistent.h"
+#include "Core/Scene/Selectable.h"
+#include "Core/Scene/Persistent.h"
 #include "Core/Scene/PropertiesGenerator.h"
+#include "Core/Scene/Settings.h"
 
 #include "Preferences.h"
-#include "Settings.h"
 #include "Preferences.h"
 #include "WindowSettings.h"
 #include "Application/Document.h"
@@ -211,12 +211,12 @@ bool App::OnInit()
 
     // core
     m_InitializerStack.Push( Core::Initialize, Core::Cleanup );
-    m_InitializerStack.Push( Object::InitializeType, Object::CleanupType );
-    m_InitializerStack.Push( Selectable::InitializeType, Selectable::CleanupType );
-    m_InitializerStack.Push( Persistent::InitializeType, Persistent::CleanupType );
-    m_InitializerStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
+    m_InitializerStack.Push( Core::Object::InitializeType, Core::Object::CleanupType );
+    m_InitializerStack.Push( Core::Selectable::InitializeType, Core::Selectable::CleanupType );
+    m_InitializerStack.Push( Core::Persistent::InitializeType, Core::Persistent::CleanupType );
+    m_InitializerStack.Push( Core::PropertiesGenerator::Initialize, Core::PropertiesGenerator::Cleanup );
     m_InitializerStack.Push( Reflect::RegisterEnumType<FilePathOptions::FilePathOption>( &FilePathOptions::FilePathOptionEnumerateEnum, TXT( "FilePathOption" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType<MRUData>( TXT( "MRUData" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Core::MRUData >( TXT( "MRUData" ) ) );
 
     // task
 #pragma TODO("Move init into here")
@@ -224,7 +224,7 @@ bool App::OnInit()
 
     // scene
 #pragma TODO("Move init into here")
-    m_InitializerStack.Push( SceneInitialize, SceneCleanup );
+    m_InitializerStack.Push( Core::SceneInitialize, Core::SceneCleanup );
 
     // vault
     m_InitializerStack.Push( Reflect::RegisterClassType<AssetCollection>( TXT( "AssetCollection" ) ) );
@@ -235,14 +235,14 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::RegisterEnumType<ViewOptionIDs::ViewOptionID>( &ViewOptionIDs::ViewOptionIDEnumerateEnum, TXT( "ViewOptionID" ) ) );
 
     // preferences
-    m_InitializerStack.Push( Reflect::RegisterClass<Settings>( TXT( "Settings" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClass<WindowSettings>( TXT( "WindowSettings" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClass<CameraPreferences>( TXT( "CameraPreferences" ) ) ); 
-    m_InitializerStack.Push( Reflect::RegisterClass<ViewportPreferences>( TXT( "ViewportPreferences" ) ) ); 
-    m_InitializerStack.Push( Reflect::RegisterClass<GridPreferences>( TXT( "GridPreferences" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClass<ScenePreferences>( TXT( "ScenePreferences" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClass<VaultPreferences>( TXT( "VaultPreferences" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClass<Preferences>( TXT( "Preferences" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Core::Settings >( TXT( "Settings" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType<WindowSettings>( TXT( "WindowSettings" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Core::CameraPreferences >( TXT( "CameraPreferences" ) ) ); 
+    m_InitializerStack.Push( Reflect::RegisterClassType< Core::ViewportPreferences >( TXT( "ViewportPreferences" ) ) ); 
+    m_InitializerStack.Push( Reflect::RegisterClassType< Core::GridPreferences >( TXT( "GridPreferences" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Core::ScenePreferences >( TXT( "ScenePreferences" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType<VaultPreferences>( TXT( "VaultPreferences" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType<Preferences>( TXT( "Preferences" ) ) );
 
     LoadPreferences();
 

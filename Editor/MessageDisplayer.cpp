@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "Editor/MessageDisplayer.h"
-#include "Editor/YesNoAllDlg.h"
+#include "Editor/Dialogs/YesNoAllDialog.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -59,7 +59,7 @@ MessageResult MessageDisplayer::DisplayMessage( const Helium::MessageArgs& args 
 
     case MessageAppearances::YesNoCancelToAll:
         {
-            YesNoAllDlg dlg( m_Parent, args.m_Caption, args.m_Message );
+            YesNoAllDialog dlg( m_Parent, args.m_Caption, args.m_Message );
 
             switch ( dlg.ShowModal() )
             {

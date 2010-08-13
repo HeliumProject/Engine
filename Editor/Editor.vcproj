@@ -1603,6 +1603,34 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="Dialogs"
+			>
+			<File
+				RelativePath=".\Dialogs\ExportOptionsDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Dialogs\ExportOptionsDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Dialogs\ImportOptionsDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Dialogs\ImportOptionsDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Dialogs\YesNoAllDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Dialogs\YesNoAllDialog.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\API.h"
 			>
@@ -1732,14 +1760,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\ExportOptionsDlg.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\ExportOptionsDlg.h"
-			>
-		</File>
-		<File
 			RelativePath=".\Frame.cpp"
 			>
 		</File>
@@ -1777,14 +1797,6 @@
 		</File>
 		<File
 			RelativePath=".\HierarchyOutliner.h"
-			>
-		</File>
-		<File
-			RelativePath=".\ImportOptionsDlg.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\ImportOptionsDlg.h"
 			>
 		</File>
 		<File
@@ -2065,14 +2077,6 @@
 		</File>
 		<File
 			RelativePath=".\WindowSettings.h"
-			>
-		</File>
-		<File
-			RelativePath=".\YesNoAllDlg.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\YesNoAllDlg.h"
 			>
 		</File>
 	</Files>

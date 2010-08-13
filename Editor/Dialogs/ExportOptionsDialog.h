@@ -6,7 +6,7 @@ namespace Helium
 {
     namespace Editor
     {
-        class ExportOptionsDlg : public wxDialog
+        class ExportOptionsDialog : public wxDialog
         {
         private:
             wxGenericValidator m_DependencyValidator;
@@ -16,8 +16,8 @@ namespace Helium
             wxCheckBox m_HierarchyCheckbox;
 
         public:
-            ExportOptionsDlg( wxWindow* parent, bool& dependencies, bool& hierarchy );
-            virtual ~ExportOptionsDlg();
+            ExportOptionsDialog( wxWindow* parent, bool& dependencies, bool& hierarchy );
+            virtual ~ExportOptionsDialog();
 
         private:
             void OnInit( wxInitDialogEvent& event );

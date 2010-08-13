@@ -1,18 +1,18 @@
 #include "Precompile.h"
-#include "YesNoAllDlg.h"
+#include "Editor/Dialogs/YesNoAllDialog.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
 
 // Static GUI event table
-BEGIN_EVENT_TABLE( YesNoAllDlg, wxDialog )
+BEGIN_EVENT_TABLE( YesNoAllDialog, wxDialog )
 EVT_BUTTON( wxID_ANY, OnButtonClick )
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-YesNoAllDlg::YesNoAllDlg( wxWindow* parent, const tstring& title, const tstring& msg, int id, wxPoint pos, wxSize size, int style ) 
+YesNoAllDialog::YesNoAllDialog( wxWindow* parent, const tstring& title, const tstring& msg, int id, wxPoint pos, wxSize size, int style ) 
 : wxDialog( parent, id, title.c_str(), pos, size, style )
 {
 	wxBoxSizer* sizerMain;
@@ -69,14 +69,14 @@ YesNoAllDlg::YesNoAllDlg( wxWindow* parent, const tstring& title, const tstring&
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-YesNoAllDlg::~YesNoAllDlg()
+YesNoAllDialog::~YesNoAllDialog()
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-void YesNoAllDlg::SetButtonToolTip( int buttonId, const tstring& tooltip )
+void YesNoAllDialog::SetButtonToolTip( int buttonId, const tstring& tooltip )
 {
 
   switch ( buttonId )
@@ -106,7 +106,7 @@ void YesNoAllDlg::SetButtonToolTip( int buttonId, const tstring& tooltip )
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-void YesNoAllDlg::OnButtonClick( wxCommandEvent& args )
+void YesNoAllDialog::OnButtonClick( wxCommandEvent& args )
 {
   EndModal( args.GetId() );
 }

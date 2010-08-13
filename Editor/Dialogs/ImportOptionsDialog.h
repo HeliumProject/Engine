@@ -6,15 +6,15 @@ namespace Helium
 {
     namespace Editor
     {
-        class ImportOptionsDlg : public wxDialog
+        class ImportOptionsDialog : public wxDialog
         {
         private:
             wxGenericValidator m_UpdateValidator;
             wxCheckBox m_UpdateCheckbox;
 
         public:
-            ImportOptionsDlg( wxWindow* parent, bool& update );
-            virtual ~ImportOptionsDlg();
+            ImportOptionsDialog( wxWindow* parent, bool& update );
+            virtual ~ImportOptionsDialog();
 
         private:
             void OnInit( wxInitDialogEvent& event );

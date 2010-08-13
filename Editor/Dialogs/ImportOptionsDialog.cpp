@@ -1,18 +1,18 @@
 #include "Precompile.h"
-#include "ImportOptionsDlg.h"
+#include "Editor/Dialogs/ImportOptionsDialog.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
 
 // Static event table
-BEGIN_EVENT_TABLE( ImportOptionsDlg, wxDialog )
-  EVT_INIT_DIALOG( ImportOptionsDlg::OnInit )
+BEGIN_EVENT_TABLE( ImportOptionsDialog, wxDialog )
+  EVT_INIT_DIALOG( ImportOptionsDialog::OnInit )
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-ImportOptionsDlg::ImportOptionsDlg( wxWindow* parent, bool& update )
+ImportOptionsDialog::ImportOptionsDialog( wxWindow* parent, bool& update )
 : wxDialog( parent, -1, wxT( "Import" ), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, wxT( "EditorImportOptionsDialog" ) )
 , m_UpdateValidator( &update )
 , m_UpdateCheckbox( this, -1, wxT( "Update state of existing objects only" ), wxDefaultPosition, wxDefaultSize, 0, m_UpdateValidator, wxT( "Checkbox_Update" ) )
@@ -23,14 +23,14 @@ ImportOptionsDlg::ImportOptionsDlg( wxWindow* parent, bool& update )
 ///////////////////////////////////////////////////////////////////////////////
 // Destructor
 // 
-ImportOptionsDlg::~ImportOptionsDlg()
+ImportOptionsDialog::~ImportOptionsDialog()
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Called before the dialog is shown and initializes all the controls.
 // 
-void ImportOptionsDlg::OnInit( wxInitDialogEvent& event )
+void ImportOptionsDialog::OnInit( wxInitDialogEvent& event )
 {
   wxBoxSizer* topmostSizer = new wxBoxSizer( wxVERTICAL );
 

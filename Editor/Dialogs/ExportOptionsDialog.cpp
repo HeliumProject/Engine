@@ -1,18 +1,18 @@
 #include "Precompile.h"
-#include "ExportOptionsDlg.h"
+#include "Editor/Dialogs/ExportOptionsDialog.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
 
 // Static event table
-BEGIN_EVENT_TABLE( ExportOptionsDlg, wxDialog )
-  EVT_INIT_DIALOG( ExportOptionsDlg::OnInit )
+BEGIN_EVENT_TABLE( ExportOptionsDialog, wxDialog )
+  EVT_INIT_DIALOG( ExportOptionsDialog::OnInit )
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-ExportOptionsDlg::ExportOptionsDlg( wxWindow* parent, bool& dependencies, bool& hierarchy )
+ExportOptionsDialog::ExportOptionsDialog( wxWindow* parent, bool& dependencies, bool& hierarchy )
 : wxDialog( parent, -1, wxT( "Export" ), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, wxT( "EditorExportOptionsDialog" ) )
 , m_DependencyValidator( &dependencies )
 , m_DependencyCheckbox( this, -1, wxT( "Include dependencies (layers, etc...)" ), wxDefaultPosition, wxDefaultSize, 0, m_DependencyValidator, wxT( "Checkbox_Dependency" ) )
@@ -26,14 +26,14 @@ ExportOptionsDlg::ExportOptionsDlg( wxWindow* parent, bool& dependencies, bool& 
 ///////////////////////////////////////////////////////////////////////////////
 // Destructor
 // 
-ExportOptionsDlg::~ExportOptionsDlg()
+ExportOptionsDialog::~ExportOptionsDialog()
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Called before the dialog is shown and initializes all the controls.
 // 
-void ExportOptionsDlg::OnInit( wxInitDialogEvent& event )
+void ExportOptionsDialog::OnInit( wxInitDialogEvent& event )
 {
   wxBoxSizer* topmostSizer = new wxBoxSizer( wxVERTICAL );
 

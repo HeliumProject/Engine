@@ -9,9 +9,9 @@ namespace Helium
     namespace Editor
     {
         /////////////////////////////////////////////////////////////////////////////
-        // Class YesNoAllDlg
+        // Class YesNoAllDialog
         //
-        class YesNoAllDlg : public wxDialog 
+        class YesNoAllDialog : public wxDialog 
         {
         private:
             wxTextCtrl* m_Text;
@@ -23,8 +23,8 @@ namespace Helium
             wxButton* m_ButtonCancel;
 
         public:
-            YesNoAllDlg( wxWindow* parent, const tstring& title, const tstring& msg, int id = -1, wxPoint pos = wxDefaultPosition, wxSize size = wxSize( 370,130 ), int style = wxCAPTION|wxDEFAULT_DIALOG_STYLE|wxWANTS_CHARS );
-            virtual ~YesNoAllDlg();
+            YesNoAllDialog( wxWindow* parent, const tstring& title, const tstring& msg, int id = -1, wxPoint pos = wxDefaultPosition, wxSize size = wxSize( 370,130 ), int style = wxCAPTION|wxDEFAULT_DIALOG_STYLE|wxWANTS_CHARS );
+            virtual ~YesNoAllDialog();
             void SetButtonToolTip( int buttonId, const tstring& tooltip );
 
         private:

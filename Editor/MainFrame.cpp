@@ -33,8 +33,8 @@
 
 #include "EditorIDs.h"
 #include "ArtProvider.h"
-#include "ImportOptionsDlg.h"
-#include "ExportOptionsDlg.h"
+#include "Editor/Dialogs/ImportOptionsDialog.h"
+#include "Editor/Dialogs/ExportOptionsDialog.h"
 #include "Editor/App.h"
 
 using namespace Helium;
@@ -1024,7 +1024,7 @@ void MainFrame::OnImport(wxCommandEvent& event)
     {
         Core::Scene* currentScene = m_SceneManager.GetCurrentScene();
 
-        ImportOptionsDlg dlg( this, update );
+        ImportOptionsDialog dlg( this, update );
 
         if ( dlg.ShowModal() == wxID_OK && currentScene->IsEditable() )
         {
@@ -1093,7 +1093,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
     if ( m_SceneManager.HasCurrentScene() )
     {
-        ExportOptionsDlg dlg ( this, exportDependencies, exportHierarchy );
+        ExportOptionsDialog dlg ( this, exportDependencies, exportHierarchy );
 
         if ( dlg.ShowModal() == wxID_OK )
         {

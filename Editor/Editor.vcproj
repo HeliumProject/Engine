@@ -1756,14 +1756,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\GridCellImageRenderer.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\GridCellImageRenderer.h"
-			>
-		</File>
-		<File
 			RelativePath=".\GridWithIcons.cpp"
 			>
 		</File>

@@ -7,11 +7,11 @@
 #include "Core/Scene/EntityType.h"
 #include "Core/Scene/EntityAssetSet.h"
 #include "Core/Scene/Scene.h"
-#include "Editor/SceneOutlinerItemData.h"
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
+using namespace Helium::Core;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
@@ -45,12 +45,12 @@ void EntityAssetOutliner::AddEntityTypes()
       m_TreeCtrl->DisableSorting();
 
       // Iterate over the node types, looking for the entity types
-      Editor::EntityType* entityType = NULL;
+      EntityType* entityType = NULL;
       HM_StrToSceneNodeTypeSmartPtr::const_iterator typeItr = m_CurrentScene->GetNodeTypesByName().begin();
       HM_StrToSceneNodeTypeSmartPtr::const_iterator typeEnd = m_CurrentScene->GetNodeTypesByName().end();
       for ( ; typeItr != typeEnd; ++typeItr )
       {
-        entityType = Reflect::ObjectCast< Editor::EntityType >( typeItr->second );
+        entityType = Reflect::ObjectCast< Core::EntityType >( typeItr->second );
         if ( entityType )
         {
           AddEntityType( entityType );
@@ -68,14 +68,14 @@ void EntityAssetOutliner::AddEntityTypes()
 // Hooks up listeners to the entity type for changes and attempts to add any
 // existing entity class sets to the tree.
 // 
-void EntityAssetOutliner::AddEntityType( Editor::EntityType* entityType )
+void EntityAssetOutliner::AddEntityType( Core::EntityType* entityType )
 {
   // Iterate over all the entity instances and add them to the tree
   M_InstanceSetSmartPtr::const_iterator classItr = entityType->GetSets().begin();
   M_InstanceSetSmartPtr::const_iterator classEnd = entityType->GetSets().end();
   for ( ; classItr != classEnd; ++classItr )
   {
-    Editor::EntityAssetSet* set = Reflect::ObjectCast<Editor::EntityAssetSet>( classItr->second );
+    EntityAssetSet* set = Reflect::ObjectCast< Core::EntityAssetSet >( classItr->second );
     if (set)
     {
       AddEntityAssetSet( set );
@@ -91,14 +91,14 @@ void EntityAssetOutliner::AddEntityType( Editor::EntityType* entityType )
 // Unhooks listeners to the entity type and attempts to remove any existing
 // entity class sets from the tree.
 // 
-void EntityAssetOutliner::RemoveEntityType( Editor::EntityType* entityType )
+void EntityAssetOutliner::RemoveEntityType( Core::EntityType* entityType )
 {
   // Iterate over all the entity instances and add them to the tree
   M_InstanceSetSmartPtr::const_iterator classItr = entityType->GetSets().begin();
   M_InstanceSetSmartPtr::const_iterator classEnd = entityType->GetSets().end();
   for ( ; classItr != classEnd; ++classItr )
   {
-    Editor::EntityAssetSet* set = Reflect::ObjectCast<Editor::EntityAssetSet>( classItr->second );
+    EntityAssetSet* set = Reflect::ObjectCast< Core::EntityAssetSet >( classItr->second );
     if (set)
     {
       RemoveEntityAssetSet( set );
@@ -113,7 +113,7 @@ void EntityAssetOutliner::RemoveEntityType( Editor::EntityType* entityType )
 // Adds the specified entity class set to the tree (including the instances
 // that belong to the set).
 // 
-void EntityAssetOutliner::AddEntityAssetSet( Editor::EntityAssetSet* classSet )
+void EntityAssetOutliner::AddEntityAssetSet( Core::EntityAssetSet* classSet )
 {
   if ( m_CurrentScene )
   {
@@ -138,7 +138,7 @@ void EntityAssetOutliner::AddEntityAssetSet( Editor::EntityAssetSet* classSet )
     S_InstanceDumbPtr::const_iterator entityEnd = classSet->GetInstances().end();
     for ( ; entityItr != entityEnd; ++entityItr )
     {
-      AddEntity( Reflect::AssertCast<Editor::Entity>(*entityItr) );
+      AddEntity( Reflect::AssertCast< Core::Entity >(*entityItr) );
     }
 
     m_TreeCtrl->EnableSorting( isSortingEnabled );
@@ -152,7 +152,7 @@ void EntityAssetOutliner::AddEntityAssetSet( Editor::EntityAssetSet* classSet )
 // Removes the entity class set from the tree (all instances of this set should
 // have already been removed).
 // 
-void EntityAssetOutliner::RemoveEntityAssetSet( Editor::EntityAssetSet* classSet )
+void EntityAssetOutliner::RemoveEntityAssetSet( Core::EntityAssetSet* classSet )
 {
   M_TreeItems::const_iterator found = m_Items.find( classSet );
   if ( found != m_Items.end() )
@@ -173,7 +173,7 @@ void EntityAssetOutliner::RemoveEntityAssetSet( Editor::EntityAssetSet* classSet
 // Adds the specified entity to the tree.  The entity will be parented under
 // its class set.
 // 
-void EntityAssetOutliner::AddEntity( Editor::Entity* entity )
+void EntityAssetOutliner::AddEntity( Core::Entity* entity )
 {
   EDITOR_SCOPE_TIMER( ("") );
 
@@ -196,7 +196,7 @@ void EntityAssetOutliner::AddEntity( Editor::Entity* entity )
 ///////////////////////////////////////////////////////////////////////////////
 // Removes the specified entity instance from the tree.
 // 
-void EntityAssetOutliner::RemoveEntity( Editor::Entity* entity )
+void EntityAssetOutliner::RemoveEntity( Core::Entity* entity )
 {
   EDITOR_SCOPE_TIMER( ("") );
 
@@ -237,7 +237,7 @@ void EntityAssetOutliner::Clear()
 // Called when the base class has finished changing the current scene.  Loads
 // the entity class sets into the tree control.
 // 
-void EntityAssetOutliner::CurrentSceneChanged( Editor::Scene* oldScene )
+void EntityAssetOutliner::CurrentSceneChanged( Core::Scene* oldScene )
 {
   AddEntityTypes();
 }
@@ -277,11 +277,11 @@ void EntityAssetOutliner::DisconnectSceneListeners()
 // Callback for when an entity set is added to an entity type.  If the set is
 // an entity class set, it will be added to the tree.
 // 
-void EntityAssetOutliner::SetAdded( const InstanceTypeChangeArgs& args )
+void EntityAssetOutliner::SetAdded( const Core::InstanceTypeChangeArgs& args )
 {
-  if ( args.m_InstanceSet->HasType( Reflect::GetType<Editor::EntityAssetSet>() ) )
+  if ( args.m_InstanceSet->HasType( Reflect::GetType< Core::EntityAssetSet >() ) )
   {
-    AddEntityAssetSet( Reflect::DangerousCast< Editor::EntityAssetSet >( args.m_InstanceSet ) );
+    AddEntityAssetSet( Reflect::DangerousCast< Core::EntityAssetSet >( args.m_InstanceSet ) );
   }
 }
 
@@ -289,40 +289,40 @@ void EntityAssetOutliner::SetAdded( const InstanceTypeChangeArgs& args )
 // Callback for when an entity set is removed from an entity type.  If the set
 // is an entity class set, it will be removed from the tree.
 // 
-void EntityAssetOutliner::SetRemoved( const InstanceTypeChangeArgs& args )
+void EntityAssetOutliner::SetRemoved( const Core::InstanceTypeChangeArgs& args )
 {
-  if ( args.m_InstanceSet->HasType( Reflect::GetType<Editor::EntityAssetSet>() ) )
+  if ( args.m_InstanceSet->HasType( Reflect::GetType< Core::EntityAssetSet >() ) )
   {
-    RemoveEntityAssetSet( Reflect::DangerousCast< Editor::EntityAssetSet >( args.m_InstanceSet ) );
+    RemoveEntityAssetSet( Reflect::DangerousCast< Core::EntityAssetSet >( args.m_InstanceSet ) );
   }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Callback for when an entity is added to the scene.  Updates the tree control.
 // 
-void EntityAssetOutliner::EntityAdded( const InstanceSetChangeArgs& args )
+void EntityAssetOutliner::EntityAdded( const Core::InstanceSetChangeArgs& args )
 {
-  AddEntity( Reflect::AssertCast<Editor::Entity>(args.m_Instance) );
+  AddEntity( Reflect::AssertCast< Core::Entity >(args.m_Instance) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Callback for when an entity is removed from the scene.  Updates the tree 
 // control.
 // 
-void EntityAssetOutliner::EntityRemoved( const InstanceSetChangeArgs& args )
+void EntityAssetOutliner::EntityRemoved( const Core::InstanceSetChangeArgs& args )
 {
-  RemoveEntity( Reflect::AssertCast<Editor::Entity>(args.m_Instance) );
+  RemoveEntity( Reflect::AssertCast< Core::Entity >(args.m_Instance) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Callback when a node type is added to the scene.  If the node type is an
 // Editor::EntityType, this class starts tracking it.
 // 
-void EntityAssetOutliner::NodeTypeAdded( const NodeTypeExistenceArgs& args )
+void EntityAssetOutliner::NodeTypeAdded( const Core::NodeTypeExistenceArgs& args )
 {
-  if ( args.m_NodeType->HasType( Reflect::GetType<Editor::EntityType>() ) )
+  if ( args.m_NodeType->HasType( Reflect::GetType< Core::EntityType >() ) )
   {
-    AddEntityType( Reflect::DangerousCast< Editor::EntityType >( args.m_NodeType ) );
+    AddEntityType( Reflect::DangerousCast< Core::EntityType >( args.m_NodeType ) );
   }
 }
 
@@ -330,11 +330,11 @@ void EntityAssetOutliner::NodeTypeAdded( const NodeTypeExistenceArgs& args )
 // Callback when a node type is removed from the scene.  If the node type is
 // an Editor::EntityType, disconnect from it.
 // 
-void EntityAssetOutliner::NodeTypeRemoved( const NodeTypeExistenceArgs& args )
+void EntityAssetOutliner::NodeTypeRemoved( const Core::NodeTypeExistenceArgs& args )
 {
-  if ( args.m_NodeType->HasType( Reflect::GetType<Editor::EntityType>() ) )
+  if ( args.m_NodeType->HasType( Reflect::GetType< Core::EntityType >() ) )
   {
-    RemoveEntityType( Reflect::DangerousCast< Editor::EntityType >( args.m_NodeType ) );
+    RemoveEntityType( Reflect::DangerousCast< Core::EntityType >( args.m_NodeType ) );
   }
 }
 
@@ -348,7 +348,7 @@ void EntityAssetOutliner::OnBeginLabelEdit( wxTreeEvent& args )
 
   // If a valid Object was not found, or if the the object is not
   // an entity node, we won't allow it's name to be changed.
-  if ( !found || !found->HasType( Reflect::GetType<Editor::Entity>() ) )
+  if ( !found || !found->HasType( Reflect::GetType< Core::Entity >() ) )
   {
     args.Veto();
   }

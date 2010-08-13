@@ -46,7 +46,7 @@ namespace Helium
                 SceneOutlinerState m_Types;
             };
 
-            typedef std::map< Editor::Scene*, OutlinerStates > M_OutlinerStates;
+            typedef std::map< Core::Scene*, OutlinerStates > M_OutlinerStates;
 
         public:
             MainFrame( wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1280,1024 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
@@ -72,25 +72,25 @@ namespace Helium
             DirectoryPanel*             m_DirectoryPanel;
             PropertiesPanel*            m_PropertiesPanel;
 
-            Helium::Core::ProjectPtr    m_Project;
+            Core::ProjectPtr            m_Project;
             MessageDisplayer            m_MessageDisplayer;
-            SceneManager                m_SceneManager;
+            Core::SceneManager          m_SceneManager;
 
             // the attributes for the current selection
-            EnumeratorPtr               m_SelectionEnumerator;
-            PropertiesManagerPtr        m_SelectionPropertiesManager;
+            Core::EnumeratorPtr         m_SelectionEnumerator;
+            Core::PropertiesManagerPtr  m_SelectionPropertiesManager;
             Inspect::Canvas             m_SelectionProperties;
 
             // the attributes for the current tool
-            EnumeratorPtr               m_ToolEnumerator;
-            PropertiesManagerPtr        m_ToolPropertiesManager;
+            Core::EnumeratorPtr         m_ToolEnumerator;
+            Core::PropertiesManagerPtr  m_ToolPropertiesManager;
             Inspect::Canvas             m_ToolProperties;
 
             Helium::MenuMRUPtr          m_MRU;
             M_IDToColorMode             m_ColorModeLookup;
 
             //context items ordered by name  
-            V_HierarchyNodeDumbPtr      m_OrderedContextItems;
+            Core::V_HierarchyNodeDumbPtr m_OrderedContextItems;
 
             TreeMonitor                 m_TreeMonitor;
 
@@ -99,9 +99,9 @@ namespace Helium
             wxDragResult DragOver( const Inspect::DragArgs& args );
             wxDragResult Drop( const Inspect::DragArgs& args );
 
-            void SceneAdded( const SceneChangeArgs& args );
-            void SceneRemoving( const SceneChangeArgs& args );
-            void SceneLoadFinished( const LoadArgs& args );
+            void SceneAdded( const Core::SceneChangeArgs& args );
+            void SceneRemoving( const Core::SceneChangeArgs& args );
+            void SceneLoadFinished( const Core::LoadArgs& args );
 
             bool DoOpen( const tstring& path );
 
@@ -155,20 +155,20 @@ namespace Helium
 
             void OnPickWalk( wxCommandEvent& event );
 
-            void Executed( const ExecuteArgs& args );
+            void Executed( const Core::ExecuteArgs& args );
 
-            void SelectionChanged( const OS_SelectableDumbPtr& selection );
+            void SelectionChanged( const Core::OS_SelectableDumbPtr& selection );
 
-            void CurrentSceneChanged( const SceneChangeArgs& args );
-            void CurrentSceneChanging( const SceneChangeArgs& args );
-            void OnPropertiesCreated( const PropertiesCreatedArgs& args );
+            void CurrentSceneChanged( const Core::SceneChangeArgs& args );
+            void CurrentSceneChanging( const Core::SceneChangeArgs& args );
+            void OnPropertiesCreated( const Core::PropertiesCreatedArgs& args );
             void OnToolSelected(wxCommandEvent& event);
-            void PickWorld( PickArgs& args );
-            void DocumentModified( const DocumentChangedArgs& args );
-            void DocumentClosed( const DocumentChangedArgs& args );
-            void ViewToolChanged( const ToolChangeArgs& args );
-            void SceneStatusChanged( const SceneStatusChangeArgs& args );
-            void SceneContextChanged( const SceneContextChangeArgs& args );
+            void PickWorld( Core::PickArgs& args );
+            void DocumentModified( const Application::DocumentChangedArgs& args );
+            void DocumentClosed( const Application::DocumentChangedArgs& args );
+            void ViewToolChanged( const Core::ToolChangeArgs& args );
+            void SceneStatusChanged( const Core::SceneStatusChangeArgs& args );
+            void SceneContextChanged( const Core::SceneContextChangeArgs& args );
 
             void OnExit( wxCommandEvent& event );
             void OnExiting( wxCloseEvent& args );
@@ -180,25 +180,25 @@ namespace Helium
             void OnTypeContextMenu(wxCommandEvent& event);
 
         private:
-            bool Copy( Editor::Scene* scene );
-            bool Paste( Editor::Scene* scene );
-            void Render( RenderVisitor* render );
-            void Select( const SelectArgs& args );
-            void SetHighlight( const SetHighlightArgs& args );
-            void ClearHighlight( const ClearHighlightArgs& args );
+            bool Copy( Core::Scene* scene );
+            bool Paste( Core::Scene* scene );
+            void Render( Core::RenderVisitor* render );
+            void Select( const Core::SelectArgs& args );
+            void SetHighlight( const Core::SetHighlightArgs& args );
+            void ClearHighlight( const Core::ClearHighlightArgs& args );
 
         private:
             void SelectItemInScene( wxCommandEvent& event );
             void SelectSimilarItemsInScene( wxCommandEvent& event );
 
-            void OpenManifestContextMenu( const SelectArgs& args );
-            void OpenTypeContextMenu( const SelectArgs& args );
+            void OpenManifestContextMenu( const Core::SelectArgs& args );
+            void OpenTypeContextMenu( const Core::SelectArgs& args );
 
-            void SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sceneNodeTypes,wxMenu& contextMenu,  u32& numMenuItems );
-            void SetupEntityTypeMenus( const Editor::EntityType* entity, wxMenu* entityMenu, u32& numMenuItems );
+            void SetupTypeContextMenu( const Core::HM_StrToSceneNodeTypeSmartPtr& sceneNodeTypes,wxMenu& contextMenu,  u32& numMenuItems );
+            void SetupEntityTypeMenus( const Core::EntityType* entity, wxMenu* entityMenu, u32& numMenuItems );
 
-            static bool SortContextItemsByName( Editor::SceneNode* lhs, Editor::SceneNode* rhs ); 
-            static bool SortTypeItemsByName( Editor::SceneNodeType* lhs, Editor::SceneNodeType* rhs );
+            static bool SortContextItemsByName( Core::SceneNode* lhs, Core::SceneNode* rhs ); 
+            static bool SortTypeItemsByName( Core::SceneNodeType* lhs, Core::SceneNodeType* rhs );
 
         };
     }

@@ -2,20 +2,15 @@
 
 #include "Editor/API.h"
 #include "Editor/SceneOutliner.h"
+
 #include "Core/Scene/Object.h"
+#include "Core/Scene/EntityType.h"
+#include "Core/Scene/EntityAssetSet.h"
 
 namespace Helium
 {
     namespace Editor
     {
-        // Forwards
-        class Entity;
-        class EntityType;
-        class EntityAssetSet;
-        struct NodeTypeExistenceArgs;
-        struct InstanceSetChangeArgs;
-        struct InstanceTypeChangeArgs;
-
         /////////////////////////////////////////////////////////////////////////////
         // Provides a tree representation of all the entity classes in the scene, 
         // grouped according to their entity class set.
@@ -35,28 +30,28 @@ namespace Helium
 
             // Helpers
         private:
-            void AddEntityType( Editor::EntityType* entityType );
-            void RemoveEntityType( Editor::EntityType* entityType );
-            void AddEntityAssetSet( Editor::EntityAssetSet* classSet );
-            void RemoveEntityAssetSet( Editor::EntityAssetSet* classSet );
-            void AddEntity( Editor::Entity* entity );
-            void RemoveEntity( Editor::Entity* entity );
+            void AddEntityType( Core::EntityType* entityType );
+            void RemoveEntityType( Core::EntityType* entityType );
+            void AddEntityAssetSet( Core::EntityAssetSet* classSet );
+            void RemoveEntityAssetSet( Core::EntityAssetSet* classSet );
+            void AddEntity( Core::Entity* entity );
+            void RemoveEntity( Core::Entity* entity );
 
             // Overrides from SceneOutliner
             SortTreeCtrl* CreateTreeCtrl( wxWindow* parent, wxWindowID id ) HELIUM_OVERRIDE;
             virtual void Clear() HELIUM_OVERRIDE;
-            virtual void CurrentSceneChanged( Editor::Scene* oldScene ) HELIUM_OVERRIDE;
+            virtual void CurrentSceneChanged( Core::Scene* oldScene ) HELIUM_OVERRIDE;
             virtual void ConnectSceneListeners() HELIUM_OVERRIDE;
             virtual void DisconnectSceneListeners() HELIUM_OVERRIDE;
 
             // Application callbacks
         private:
-            void SetAdded( const InstanceTypeChangeArgs& args );
-            void SetRemoved( const InstanceTypeChangeArgs& args );
-            void EntityAdded( const InstanceSetChangeArgs& args );
-            void EntityRemoved( const InstanceSetChangeArgs& args );
-            void NodeTypeAdded( const NodeTypeExistenceArgs& args );
-            void NodeTypeRemoved( const NodeTypeExistenceArgs& args );
+            void SetAdded( const Core::InstanceTypeChangeArgs& args );
+            void SetRemoved( const Core::InstanceTypeChangeArgs& args );
+            void EntityAdded( const Core::InstanceSetChangeArgs& args );
+            void EntityRemoved( const Core::InstanceSetChangeArgs& args );
+            void NodeTypeAdded( const Core::NodeTypeExistenceArgs& args );
+            void NodeTypeRemoved( const Core::NodeTypeExistenceArgs& args );
 
         private:
             // GUI callbacks

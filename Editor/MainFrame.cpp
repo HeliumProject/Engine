@@ -40,18 +40,19 @@
 using namespace Helium;
 using namespace Helium::Core;
 using namespace Helium::Editor;
+using namespace Helium::Application;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Wraps up a pointer to an Editor::Scene so that it can be stored in the combo box that
+// Wraps up a pointer to an Core::Scene so that it can be stored in the combo box that
 // is used for selecting the current scene.  Each item in the combo box stores 
 // the scene that it refers to.
 // 
 class SceneSelectData : public wxClientData
 {
 public:
-    Editor::Scene* m_Scene;
+    Core::Scene* m_Scene;
 
-    SceneSelectData( Editor::Scene* scene )
+    SceneSelectData( Core::Scene* scene )
         : m_Scene( scene )
     {
     }
@@ -106,9 +107,9 @@ public:
     }
 
     ContextCallbackTypes::ContextCallbackType m_ContextCallbackType;
-    const Editor::SceneNodeType* m_NodeType;
-    const Editor::InstanceSet* m_InstanceSet;
-    Editor::SceneNode* m_Nodes;
+    const Core::SceneNodeType* m_NodeType;
+    const Core::InstanceSet* m_InstanceSet;
+    Core::SceneNode* m_Nodes;
 };
 
 
@@ -172,11 +173,11 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     // View panel area
     //
     m_ViewPanel = new ViewPanel( this );
-    m_ViewPanel->GetViewport()->AddRenderListener( RenderSignature::Delegate ( this, &MainFrame::Render ) );
-    m_ViewPanel->GetViewport()->AddSelectListener( SelectSignature::Delegate ( this, &MainFrame::Select ) ); 
-    m_ViewPanel->GetViewport()->AddSetHighlightListener( SetHighlightSignature::Delegate ( this, &MainFrame::SetHighlight ) );
-    m_ViewPanel->GetViewport()->AddClearHighlightListener( ClearHighlightSignature::Delegate ( this, &MainFrame::ClearHighlight ) );
-    m_ViewPanel->GetViewport()->AddToolChangedListener( ToolChangeSignature::Delegate ( this, &MainFrame::ViewToolChanged ) );
+    m_ViewPanel->GetViewCanvas()->GetViewport().AddRenderListener( RenderSignature::Delegate ( this, &MainFrame::Render ) );
+    m_ViewPanel->GetViewCanvas()->GetViewport().AddSelectListener( SelectSignature::Delegate ( this, &MainFrame::Select ) ); 
+    m_ViewPanel->GetViewCanvas()->GetViewport().AddSetHighlightListener( SetHighlightSignature::Delegate ( this, &MainFrame::SetHighlight ) );
+    m_ViewPanel->GetViewCanvas()->GetViewport().AddClearHighlightListener( ClearHighlightSignature::Delegate ( this, &MainFrame::ClearHighlight ) );
+    m_ViewPanel->GetViewCanvas()->GetViewport().AddToolChangedListener( ToolChangeSignature::Delegate ( this, &MainFrame::ViewToolChanged ) );
     m_FrameManager.AddPane( m_ViewPanel, wxAuiPaneInfo().Name( wxT( "view" ) ).CenterPane() );
 
     //
@@ -223,7 +224,7 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     //
 
     wxGetApp().GetPreferences()->GetWindowSettings()->ApplyToWindow( this, &m_FrameManager, true );
-    m_ViewPanel->GetViewport()->LoadPreferences( wxGetApp().GetPreferences()->GetViewportPreferences() ); 
+    m_ViewPanel->GetViewCanvas()->GetViewport().LoadPreferences( wxGetApp().GetPreferences()->GetViewportPreferences() ); 
 
     //
     // Attach event handlers
@@ -255,7 +256,7 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     Inspect::DropTarget* dropTarget = new Inspect::DropTarget();
     dropTarget->SetDragOverCallback( Inspect::DragOverCallback::Delegate( this, &MainFrame::DragOver ) );
     dropTarget->SetDropCallback( Inspect::DropCallback::Delegate( this, &MainFrame::Drop ) );
-    m_ViewPanel->GetViewport()->SetDropTarget( dropTarget );
+    m_ViewPanel->GetViewCanvas()->SetDropTarget( dropTarget );
 }
 
 MainFrame::~MainFrame()
@@ -279,7 +280,7 @@ MainFrame::~MainFrame()
 #endif
 
     wxGetApp().GetPreferences()->GetWindowSettings()->SetFromWindow( this, &m_FrameManager );
-    m_ViewPanel->GetViewport()->SavePreferences( wxGetApp().GetPreferences()->GetViewportPreferences() ); 
+    m_ViewPanel->GetViewCanvas()->GetViewport().SavePreferences( wxGetApp().GetPreferences()->GetViewportPreferences() ); 
     wxGetApp().SavePreferences();
 
     //
@@ -296,11 +297,11 @@ MainFrame::~MainFrame()
     m_SelectionPropertiesManager->RemovePropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &MainFrame::OnPropertiesCreated ) );
     m_ToolPropertiesManager->RemovePropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &MainFrame::OnPropertiesCreated ) );
 
-    m_ViewPanel->GetViewport()->RemoveRenderListener( RenderSignature::Delegate ( this, &MainFrame::Render ) );
-    m_ViewPanel->GetViewport()->RemoveSelectListener( SelectSignature::Delegate ( this, &MainFrame::Select ) ); 
-    m_ViewPanel->GetViewport()->RemoveSetHighlightListener( SetHighlightSignature::Delegate ( this, &MainFrame::SetHighlight ) );
-    m_ViewPanel->GetViewport()->RemoveClearHighlightListener( ClearHighlightSignature::Delegate ( this, &MainFrame::ClearHighlight ) );
-    m_ViewPanel->GetViewport()->RemoveToolChangedListener( ToolChangeSignature::Delegate ( this, &MainFrame::ViewToolChanged ) );
+    m_ViewPanel->GetViewCanvas()->GetViewport().RemoveRenderListener( RenderSignature::Delegate ( this, &MainFrame::Render ) );
+    m_ViewPanel->GetViewCanvas()->GetViewport().RemoveSelectListener( SelectSignature::Delegate ( this, &MainFrame::Select ) ); 
+    m_ViewPanel->GetViewCanvas()->GetViewport().RemoveSetHighlightListener( SetHighlightSignature::Delegate ( this, &MainFrame::SetHighlight ) );
+    m_ViewPanel->GetViewCanvas()->GetViewport().RemoveClearHighlightListener( ClearHighlightSignature::Delegate ( this, &MainFrame::ClearHighlight ) );
+    m_ViewPanel->GetViewCanvas()->GetViewport().RemoveToolChangedListener( ToolChangeSignature::Delegate ( this, &MainFrame::ViewToolChanged ) );
 
 #pragma TODO( "We shouldn't really have to do these if we clean up how some of our objects reference each other" )
     m_DirectoryPanel->Destroy();
@@ -425,7 +426,7 @@ void MainFrame::SceneAdded( const SceneChangeArgs& args )
         args.m_Scene->AddSceneContextChangedListener( SceneContextChangedSignature::Delegate( this, &MainFrame::SceneContextChanged ) );
         args.m_Scene->AddLoadFinishedListener( LoadSignature::Delegate( this, & MainFrame::SceneLoadFinished ) );
 
-        m_SelectionEnumerator->AddPopulateLinkListener( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Editor::Scene::PopulateLink));
+        m_SelectionEnumerator->AddPopulateLinkListener( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Core::Scene::PopulateLink));
 
         Document* document = m_SceneManager.GetDocumentManager().FindDocument( args.m_Scene->GetPath() );
         document->AddDocumentModifiedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
@@ -440,16 +441,16 @@ void MainFrame::SceneRemoving( const SceneChangeArgs& args )
     args.m_Scene->RemoveSceneContextChangedListener( SceneContextChangedSignature::Delegate ( this, &MainFrame::SceneContextChanged ) );
     args.m_Scene->RemoveLoadFinishedListener( LoadSignature::Delegate( this, & MainFrame::SceneLoadFinished ) );
 
-    m_SelectionEnumerator->RemovePopulateLinkListener( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Editor::Scene::PopulateLink));
+    m_SelectionEnumerator->RemovePopulateLinkListener( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Core::Scene::PopulateLink));
 
-    m_ViewPanel->GetViewport()->Refresh();
+    m_ViewPanel->GetViewCanvas()->Refresh();
 
     m_OutlinerStates.erase( args.m_Scene );
 }
 
 void MainFrame::SceneLoadFinished( const LoadArgs& args )
 {
-    m_ViewPanel->GetViewport()->Refresh();
+    m_ViewPanel->GetViewCanvas()->Refresh();
     Document* document = m_SceneManager.GetDocumentManager().FindDocument( args.m_Scene->GetPath() );
     DocumentModified( DocumentChangedArgs( document ) );
 }
@@ -478,7 +479,7 @@ void MainFrame::OnChar(wxKeyEvent& event)
     switch (event.GetKeyCode())
     {
     case WXK_SPACE:
-        m_ViewPanel->GetViewport()->NextCameraMode();
+        m_ViewPanel->GetViewCanvas()->GetViewport().NextCameraMode();
         event.Skip(false);
         break;
 
@@ -703,7 +704,7 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
 {
     if ( m_SceneManager.GetDocumentManager().CloseAll() )
     {
-        ScenePtr scene = m_SceneManager.NewScene( m_ViewPanel->GetViewport() );
+        ScenePtr scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport() );
         m_SceneManager.GetDocumentManager().FindDocument( scene->GetPath() )->SetModified( true );
         m_SceneManager.SetCurrentScene( scene );
     }
@@ -733,7 +734,7 @@ bool MainFrame::DoOpen( const tstring& path )
 
             try
             {
-                opened = m_SceneManager.OpenScene( m_ViewPanel->GetViewport(), path, error ) != NULL;
+                opened = m_SceneManager.OpenScene( &m_ViewPanel->GetViewCanvas()->GetViewport(), path, error ) != NULL;
             }
             catch ( const Helium::Exception& ex )
             {
@@ -788,90 +789,90 @@ void MainFrame::OnViewChange(wxCommandEvent& event)
     {
     case EventIds::ID_ViewAxes:
         {
-            m_ViewPanel->GetViewport()->SetAxesVisible( !m_ViewPanel->GetViewport()->IsAxesVisible() );
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetAxesVisible( !m_ViewPanel->GetViewCanvas()->GetViewport().IsAxesVisible() );
             break;
         }
 
     case EventIds::ID_ViewGrid:
         {
-            m_ViewPanel->GetViewport()->SetGridVisible( !m_ViewPanel->GetViewport()->IsGridVisible() );
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetGridVisible( !m_ViewPanel->GetViewCanvas()->GetViewport().IsGridVisible() );
             break;
         }
 
     case EventIds::ID_ViewBounds:
         {
-            m_ViewPanel->GetViewport()->SetBoundsVisible( !m_ViewPanel->GetViewport()->IsBoundsVisible() );
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetBoundsVisible( !m_ViewPanel->GetViewCanvas()->GetViewport().IsBoundsVisible() );
             break;
         }
 
     case EventIds::ID_ViewStatistics:
         {
-            m_ViewPanel->GetViewport()->SetStatisticsVisible( !m_ViewPanel->GetViewport()->IsStatisticsVisible() );
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetStatisticsVisible( !m_ViewPanel->GetViewCanvas()->GetViewport().IsStatisticsVisible() );
             break;
         }
 
     case EventIds::ID_ViewNone:
         {
-            m_ViewPanel->GetViewport()->SetGeometryMode( GeometryModes::None );
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryModes::None );
             break;
         }
 
     case EventIds::ID_ViewRender:
         {
-            m_ViewPanel->GetViewport()->SetGeometryMode( GeometryModes::Render );
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryModes::Render );
             break;
         }
 
     case EventIds::ID_ViewCollision:
         {
-            m_ViewPanel->GetViewport()->SetGeometryMode( GeometryModes::Collision );
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryModes::Collision );
             break;
         }
 
     case EventIds::ID_ViewWireframeOnMesh:
         {
-            m_ViewPanel->GetViewport()->GetCamera()->SetWireframeOnMesh( !m_ViewPanel->GetViewport()->GetCamera()->GetWireframeOnMesh() );
+            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetWireframeOnMesh( !m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->GetWireframeOnMesh() );
             break;
         }
 
     case EventIds::ID_ViewWireframeOnShaded:
         {
-            m_ViewPanel->GetViewport()->GetCamera()->SetWireframeOnShaded( !m_ViewPanel->GetViewport()->GetCamera()->GetWireframeOnShaded() );
+            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetWireframeOnShaded( !m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->GetWireframeOnShaded() );
             break;
         }
 
     case EventIds::ID_ViewWireframe:
         {
-            m_ViewPanel->GetViewport()->GetCamera()->SetShadingMode( ShadingModes::Wireframe );
+            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Wireframe );
             break;
         }
 
     case EventIds::ID_ViewMaterial:
         {
-            m_ViewPanel->GetViewport()->GetCamera()->SetShadingMode( ShadingModes::Material );
+            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Material );
             break;
         }
 
     case EventIds::ID_ViewTexture:
         {
-            m_ViewPanel->GetViewport()->GetCamera()->SetShadingMode( ShadingModes::Texture );
+            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Texture );
             break;
         }
 
     case EventIds::ID_ViewFrustumCulling:
         {
-            m_ViewPanel->GetViewport()->GetCamera()->SetViewFrustumCulling( !m_ViewPanel->GetViewport()->GetCamera()->IsViewFrustumCulling() );
+            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetViewFrustumCulling( !m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->IsViewFrustumCulling() );
             break;
         }
 
     case EventIds::ID_ViewBackfaceCulling:
         {
-            m_ViewPanel->GetViewport()->GetCamera()->SetBackFaceCulling( !m_ViewPanel->GetViewport()->GetCamera()->IsBackFaceCulling() );
+            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetBackFaceCulling( !m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->IsBackFaceCulling() );
             break;
         }
     }
 
-    m_ViewPanel->GetViewport()->Refresh();
+    m_ViewPanel->GetViewCanvas()->Refresh();
 }
 
 void MainFrame::OnViewCameraChange(wxCommandEvent& event)
@@ -880,25 +881,25 @@ void MainFrame::OnViewCameraChange(wxCommandEvent& event)
     {
     case EventIds::ID_ViewOrbit:
         {
-            m_ViewPanel->GetViewport()->SetCameraMode(CameraModes::Orbit);
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraModes::Orbit);
             break;
         }
 
     case EventIds::ID_ViewFront:
         {
-            m_ViewPanel->GetViewport()->SetCameraMode(CameraModes::Front);
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraModes::Front);
             break;
         }
 
     case EventIds::ID_ViewSide:
         {
-            m_ViewPanel->GetViewport()->SetCameraMode(CameraModes::Side);
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraModes::Side);
             break;
         }
 
     case EventIds::ID_ViewTop:
         {
-            m_ViewPanel->GetViewport()->SetCameraMode(CameraModes::Top);
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraModes::Top);
             break;
         }
     }
@@ -1021,7 +1022,7 @@ void MainFrame::OnImport(wxCommandEvent& event)
 
     if ( m_SceneManager.HasCurrentScene() )
     {
-        Editor::Scene* currentScene = m_SceneManager.GetCurrentScene();
+        Core::Scene* currentScene = m_SceneManager.GetCurrentScene();
 
         ImportOptionsDlg dlg( this, update );
 
@@ -1219,10 +1220,10 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
         args.m_Scene->AddSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &MainFrame::SelectionChanged ) );
 
         // These events are emitted from the attribute editor and cause execution of the scene to occur, and interactive goodness
-        m_SelectionEnumerator->AddPropertyChangingListener( Inspect::ChangingSignature::Delegate (args.m_Scene, &Editor::Scene::PropertyChanging));
-        m_SelectionEnumerator->AddPropertyChangedListener( Inspect::ChangedSignature::Delegate (args.m_Scene, &Editor::Scene::PropertyChanged));
-        m_SelectionEnumerator->AddPickLinkListener( Inspect::PickLinkSignature::Delegate (args.m_Scene, &Editor::Scene::PickLink));
-        m_SelectionEnumerator->AddSelectLinkListener( Inspect::SelectLinkSignature::Delegate (args.m_Scene, &Editor::Scene::SelectLink));
+        m_SelectionEnumerator->AddPropertyChangingListener( Inspect::ChangingSignature::Delegate (args.m_Scene, &Core::Scene::PropertyChanging));
+        m_SelectionEnumerator->AddPropertyChangedListener( Inspect::ChangedSignature::Delegate (args.m_Scene, &Core::Scene::PropertyChanged));
+        m_SelectionEnumerator->AddPickLinkListener( Inspect::PickLinkSignature::Delegate (args.m_Scene, &Core::Scene::PickLink));
+        m_SelectionEnumerator->AddSelectLinkListener( Inspect::SelectLinkSignature::Delegate (args.m_Scene, &Core::Scene::SelectLink));
 
         // Restore the tree control with the information for the new editing scene
         M_OutlinerStates::iterator foundOutline = m_OutlinerStates.find( args.m_Scene );
@@ -1238,7 +1239,7 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
         for ( ; nodeTypeItr != nodeTypeEnd; ++nodeTypeItr )
         {
             const SceneNodeTypePtr& nodeType = nodeTypeItr->second;
-            if ( Reflect::Registry::GetInstance()->GetClass( nodeType->GetInstanceType() )->HasType( Reflect::GetType<Editor::Layer>() ) )
+            if ( Reflect::Registry::GetInstance()->GetClass( nodeType->GetInstanceType() )->HasType( Reflect::GetType< Core::Layer >() ) )
             {
                 // Now that we have the layer node type, iterate over all the layer instances and
                 // add them to the layer grid UI.
@@ -1251,17 +1252,17 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
                 for ( ; instItr != instEnd; ++instItr )
                 {
                     const SceneNodePtr& dependNode    = instItr->second;
-                    Editor::Layer*        lunaLayer     = Reflect::AssertCast< Editor::Layer >( dependNode );
+                    Core::Layer*        lunaLayer     = Reflect::AssertCast< Core::Layer >( dependNode );
                     m_LayersPanel->AddLayer( lunaLayer );
                 }
 
                 //End batching
                 m_LayersPanel->EndBatch();
             } 
-            else if ( nodeType->HasType( Reflect::GetType<Editor::HierarchyNodeType>() ) )
+            else if ( nodeType->HasType( Reflect::GetType< Core::HierarchyNodeType >() ) )
             {
                 // Hierarchy node types need to be added to the object grid UI.
-                Editor::HierarchyNodeType* hierarchyNodeType = Reflect::AssertCast< Editor::HierarchyNodeType >( nodeTypeItr->second );
+                Core::HierarchyNodeType* hierarchyNodeType = Reflect::AssertCast< Core::HierarchyNodeType >( nodeTypeItr->second );
                 m_TypesPanel->AddType( hierarchyNodeType );
             }
         }
@@ -1273,7 +1274,7 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
         if (args.m_Scene->GetTool().ReferencesObject())
         {
             // Restore tool to the view from the scene
-            m_ViewPanel->GetViewport()->SetTool(args.m_Scene->GetTool());
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetTool(args.m_Scene->GetTool());
 
             // Restore tool attributes
             args.m_Scene->GetTool()->CreateProperties();
@@ -1303,10 +1304,10 @@ void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
     args.m_Scene->RemoveSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &MainFrame::SelectionChanged ) );
 
     // Remove attribute listeners
-    m_SelectionEnumerator->RemovePropertyChangingListener( Inspect::ChangingSignature::Delegate (args.m_Scene, &Editor::Scene::PropertyChanging));
-    m_SelectionEnumerator->RemovePropertyChangedListener( Inspect::ChangedSignature::Delegate (args.m_Scene, &Editor::Scene::PropertyChanged));
-    m_SelectionEnumerator->RemovePickLinkListener( Inspect::PickLinkSignature::Delegate (args.m_Scene, &Editor::Scene::PickLink));
-    m_SelectionEnumerator->RemoveSelectLinkListener( Inspect::SelectLinkSignature::Delegate (args.m_Scene, &Editor::Scene::SelectLink));
+    m_SelectionEnumerator->RemovePropertyChangingListener( Inspect::ChangingSignature::Delegate (args.m_Scene, &Core::Scene::PropertyChanging));
+    m_SelectionEnumerator->RemovePropertyChangedListener( Inspect::ChangedSignature::Delegate (args.m_Scene, &Core::Scene::PropertyChanged));
+    m_SelectionEnumerator->RemovePickLinkListener( Inspect::PickLinkSignature::Delegate (args.m_Scene, &Core::Scene::PickLink));
+    m_SelectionEnumerator->RemoveSelectLinkListener( Inspect::SelectLinkSignature::Delegate (args.m_Scene, &Core::Scene::SelectLink));
 
     // If we were editing a scene, save the outliner info before changing to the new one.
     OutlinerStates* stateInfo = &m_OutlinerStates.insert( M_OutlinerStates::value_type( args.m_Scene, OutlinerStates() ) ).first->second;
@@ -1321,7 +1322,7 @@ void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
     // Release the tool from the VIEW and Scene, saving the tool in the scene isn't a desirable behavior and the way it is currently
     // implimented it will cause a crash under certain scenarios (see trac #1322)
     args.m_Scene->SetTool( NULL );
-    m_ViewPanel->GetViewport()->SetTool( NULL );
+    m_ViewPanel->GetViewCanvas()->GetViewport().SetTool( NULL );
 
     m_ToolbarPanel->GetToolsPanel()->Disable();
     m_ToolbarPanel->GetToolsPanel()->Refresh();
@@ -1346,37 +1347,37 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
 
         case EventIds::ID_ToolsScale:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Editor::ScaleManipulator (ManipulatorModes::Scale, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::ScaleManipulator (ManipulatorModes::Scale, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 break;
             }
 
         case EventIds::ID_ToolsScalePivot:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Editor::TranslateManipulator (ManipulatorModes::ScalePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator (ManipulatorModes::ScalePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 break;
             }
 
         case EventIds::ID_ToolsRotate:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Editor::RotateManipulator (ManipulatorModes::Rotate, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::RotateManipulator (ManipulatorModes::Rotate, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 break;
             }
 
         case EventIds::ID_ToolsRotatePivot:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Editor::TranslateManipulator (ManipulatorModes::RotatePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator (ManipulatorModes::RotatePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 break;
             }
 
         case EventIds::ID_ToolsTranslate:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Editor::TranslateManipulator (ManipulatorModes::Translate, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator (ManipulatorModes::Translate, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 break;
             }
 
         case EventIds::ID_ToolsTranslatePivot:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Editor::TranslateManipulator (ManipulatorModes::TranslatePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator (ManipulatorModes::TranslatePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 break;
             }
 
@@ -1384,34 +1385,34 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
             {
                 if (m_SceneManager.GetCurrentScene()->GetTool().ReferencesObject())
                 {
-                    if ( m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Editor::ScaleManipulator>() )
+                    if ( m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType< Core::ScaleManipulator >() )
                     {
-                        m_SceneManager.GetCurrentScene()->SetTool(new Editor::TranslateManipulator (ManipulatorModes::ScalePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                        m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator (ManipulatorModes::ScalePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                     }
-                    else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Editor::RotateManipulator>() )
+                    else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType< Core::RotateManipulator >() )
                     {
-                        m_SceneManager.GetCurrentScene()->SetTool(new Editor::TranslateManipulator (ManipulatorModes::RotatePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                        m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator (ManipulatorModes::RotatePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                     }
-                    else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Editor::TranslateManipulator>() )
+                    else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType< Core::TranslateManipulator >() )
                     {
-                        Editor::TranslateManipulator* manipulator = Reflect::AssertCast< Editor::TranslateManipulator > (m_SceneManager.GetCurrentScene()->GetTool());
+                        Core::TranslateManipulator* manipulator = Reflect::AssertCast< Core::TranslateManipulator > (m_SceneManager.GetCurrentScene()->GetTool());
 
                         if ( manipulator->GetMode() == ManipulatorModes::Translate)
                         {
-                            m_SceneManager.GetCurrentScene()->SetTool(new Editor::TranslateManipulator (ManipulatorModes::TranslatePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                            m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator (ManipulatorModes::TranslatePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                         }
                         else
                         {
                             switch ( manipulator->GetMode() )
                             {
                             case ManipulatorModes::ScalePivot:
-                                m_SceneManager.GetCurrentScene()->SetTool(new Editor::ScaleManipulator (ManipulatorModes::Scale, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                                m_SceneManager.GetCurrentScene()->SetTool(new Core::ScaleManipulator (ManipulatorModes::Scale, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                                 break;
                             case ManipulatorModes::RotatePivot:
-                                m_SceneManager.GetCurrentScene()->SetTool(new Editor::RotateManipulator (ManipulatorModes::Rotate, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                                m_SceneManager.GetCurrentScene()->SetTool(new Core::RotateManipulator (ManipulatorModes::Rotate, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                                 break;
                             case ManipulatorModes::TranslatePivot:
-                                m_SceneManager.GetCurrentScene()->SetTool(new Editor::TranslateManipulator (ManipulatorModes::Translate, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                                m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator (ManipulatorModes::Translate, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                                 break;
                             }
                         }
@@ -1422,37 +1423,37 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
 
         case EventIds::ID_ToolsDuplicate:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Editor::DuplicateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::DuplicateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
             }
             break;
 
         case EventIds::ID_ToolsLocatorCreate:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Editor::LocatorCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::LocatorCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
             }
             break;
 
         case EventIds::ID_ToolsVolumeCreate:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Editor::VolumeCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::VolumeCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
             }
             break;
 
         case EventIds::ID_ToolsEntityCreate:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Editor::EntityCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::EntityCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
             }
             break;
 
         case EventIds::ID_ToolsCurveCreate:
             {
-                m_SceneManager.GetCurrentScene()->SetTool( new Editor::CurveCreateTool( m_SceneManager.GetCurrentScene(), m_ToolEnumerator ) );
+                m_SceneManager.GetCurrentScene()->SetTool( new Core::CurveCreateTool( m_SceneManager.GetCurrentScene(), m_ToolEnumerator ) );
             }
             break;
 
         case EventIds::ID_ToolsCurveEdit:
             {
-                Editor::CurveEditTool* curveEditTool = new Editor::CurveEditTool( m_SceneManager.GetCurrentScene(), m_ToolEnumerator );
+                Core::CurveEditTool* curveEditTool = new Core::CurveEditTool( m_SceneManager.GetCurrentScene(), m_ToolEnumerator );
                 m_SceneManager.GetCurrentScene()->SetTool( curveEditTool );
                 curveEditTool->StoreSelectedCurves();
             }
@@ -1517,9 +1518,9 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
     i32 selectedTool = EventIds::ID_ToolsSelect;
     if ( args.m_NewTool )
     {
-        if ( args.m_NewTool->HasType( Reflect::GetType<Editor::TransformManipulator>() ) )
+        if ( args.m_NewTool->HasType( Reflect::GetType< Core::TransformManipulator >() ) )
         {
-            Editor::TransformManipulator* manipulator = Reflect::DangerousCast< Editor::TransformManipulator >( args.m_NewTool );
+            Core::TransformManipulator* manipulator = Reflect::DangerousCast< Core::TransformManipulator >( args.m_NewTool );
             switch ( manipulator->GetMode() )
             {
             case ManipulatorModes::Scale:
@@ -1547,27 +1548,27 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
                 break;
             }
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType<Editor::EntityCreateTool>() )
+        else if ( args.m_NewTool->GetType() == Reflect::GetType< Core::EntityCreateTool >() )
         {
             selectedTool = EventIds::ID_ToolsEntityCreate;
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType<Editor::VolumeCreateTool>() )
+        else if ( args.m_NewTool->GetType() == Reflect::GetType< Core::VolumeCreateTool >() )
         {
             selectedTool = EventIds::ID_ToolsVolumeCreate;
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType<Editor::LocatorCreateTool>() )
+        else if ( args.m_NewTool->GetType() == Reflect::GetType< Core::LocatorCreateTool >() )
         {
             selectedTool = EventIds::ID_ToolsLocatorCreate;
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType<Editor::DuplicateTool>() )
+        else if ( args.m_NewTool->GetType() == Reflect::GetType< Core::DuplicateTool >() )
         {
             selectedTool = EventIds::ID_ToolsDuplicate;
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType<Editor::CurveCreateTool>() )
+        else if ( args.m_NewTool->GetType() == Reflect::GetType< Core::CurveCreateTool >() )
         {
             selectedTool = EventIds::ID_ToolsCurveCreate;
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType<Editor::CurveEditTool>() )
+        else if ( args.m_NewTool->GetType() == Reflect::GetType< Core::CurveEditTool >() )
         {
             selectedTool = EventIds::ID_ToolsCurveEdit;
         }
@@ -1670,8 +1671,8 @@ void MainFrame::OnSelectAll(wxCommandEvent& event)
         HM_SceneNodeDumbPtr::const_iterator end = m_SceneManager.GetCurrentScene()->GetNodes().end();
         for ( ; itr != end; ++itr )
         {
-            Editor::SceneNode* sceneNode = itr->second;
-            if ( sceneNode->HasType( Reflect::GetType<Editor::HierarchyNode>() ) )
+            Core::SceneNode* sceneNode = itr->second;
+            if ( sceneNode->HasType( Reflect::GetType< Core::HierarchyNode >() ) )
             {
                 selection.Append( sceneNode );
             }
@@ -1681,11 +1682,11 @@ void MainFrame::OnSelectAll(wxCommandEvent& event)
     }
 }
 
-static void RecurseToggleSelection( Editor::HierarchyNode* node, const OS_SelectableDumbPtr& oldSelection, OS_SelectableDumbPtr& newSelection )
+static void RecurseToggleSelection( Core::HierarchyNode* node, const OS_SelectableDumbPtr& oldSelection, OS_SelectableDumbPtr& newSelection )
 {
     for ( OS_HierarchyNodeDumbPtr::Iterator itr = node->GetChildren().Begin(), end = node->GetChildren().End(); itr != end; ++itr )
     {
-        Editor::HierarchyNode* child = *itr;
+        Core::HierarchyNode* child = *itr;
         RecurseToggleSelection( child, oldSelection, newSelection );
     }
 
@@ -1694,7 +1695,7 @@ static void RecurseToggleSelection( Editor::HierarchyNode* node, const OS_Select
     OS_SelectableDumbPtr::Iterator selEnd = oldSelection.End();
     for ( ; selItr != selEnd && !found; ++selItr )
     {
-        Editor::HierarchyNode* current = Reflect::ObjectCast< Editor::HierarchyNode >( *selItr );
+        Core::HierarchyNode* current = Reflect::ObjectCast< Core::HierarchyNode >( *selItr );
         if ( current )
         {
             if ( current == node )
@@ -1974,7 +1975,7 @@ void MainFrame::OnManifestContextMenu(wxCommandEvent& event)
     { 
         u32 selectionIndex = event.GetId() - EventIds::ID_SelectContextMenu;
 
-        Editor::HierarchyNode* selection = m_OrderedContextItems[ selectionIndex ];
+        Core::HierarchyNode* selection = m_OrderedContextItems[ selectionIndex ];
 
         if( selection )
         {
@@ -2013,7 +2014,7 @@ void MainFrame::OnTypeContextMenu(wxCommandEvent &event)
 
     case ContextCallbackTypes::Item:
         {
-            newSelection.Append( static_cast<Editor::HierarchyNode*>( data->m_Nodes ) );
+            newSelection.Append( static_cast< Core::HierarchyNode* >( data->m_Nodes ) );
             break;
         }
 
@@ -2043,7 +2044,7 @@ void MainFrame::OnTypeContextMenu(wxCommandEvent &event)
 // Copies the currently selected items from the specified scene into the
 // clipboard.
 // 
-bool MainFrame::Copy( Editor::Scene* scene )
+bool MainFrame::Copy( Core::Scene* scene )
 {
     EDITOR_SCOPE_TIMER( ("") );
     bool isOk = true;
@@ -2074,7 +2075,7 @@ bool MainFrame::Copy( Editor::Scene* scene )
 // Fetches data from the clipboard (if there is any) and inserts it into the
 // specified scene.
 // 
-bool MainFrame::Paste( Editor::Scene* scene )
+bool MainFrame::Paste( Core::Scene* scene )
 {
     EDITOR_SCOPE_TIMER( ("") );
     HELIUM_ASSERT( scene );
@@ -2216,7 +2217,7 @@ void MainFrame::OpenManifestContextMenu(const SelectArgs& args)
 
                 if( selection->IsSelectable() )
                 {
-                    Editor::HierarchyNode* node = Reflect::ObjectCast<Editor::HierarchyNode>( selection );
+                    Core::HierarchyNode* node = Reflect::ObjectCast< Core::HierarchyNode >( selection );
 
                     if( node )
                     {
@@ -2336,7 +2337,7 @@ void MainFrame::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& scene
     // iterate over the scene node types, making a new sub menu for each
     for( ; itr != end; ++itr )
     {
-        const Editor::SceneNodeType* type( *itr );
+        const Core::SceneNodeType* type( *itr );
         const HM_SceneNodeSmartPtr& typeInstances( type->GetInstances() );
 
         if( !typeInstances.empty() )
@@ -2389,10 +2390,10 @@ void MainFrame::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& scene
                 ++numMenuItems;
 
                 // if this is an entity, then we need to check if it has art classes
-                const Editor::EntityType* entity = Reflect::ConstObjectCast<Editor::EntityType>( type );
+                const Core::EntityType* entity = Reflect::ConstObjectCast< Core::EntityType >( type );
 
                 // if this is an instance, then we need to check if it has code classes
-                const Editor::InstanceType* instance = Reflect::ConstObjectCast<Editor::InstanceType>( type );
+                const Core::InstanceType* instance = Reflect::ConstObjectCast< Core::InstanceType >( type );
 
                 if (entity)
                 {
@@ -2406,7 +2407,7 @@ void MainFrame::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& scene
     }
 }
 
-void MainFrame::SetupEntityTypeMenus( const Editor::EntityType* entity, wxMenu* subMenu, u32& numMenuItems )
+void MainFrame::SetupEntityTypeMenus( const Core::EntityType* entity, wxMenu* subMenu, u32& numMenuItems )
 {
     const M_InstanceSetSmartPtr& sets = entity->GetSets();
 
@@ -2420,7 +2421,7 @@ void MainFrame::SetupEntityTypeMenus( const Editor::EntityType* entity, wxMenu* 
         M_InstanceSetSmartPtr::const_iterator end = sets.end();
         for( ;itr != end; ++itr )
         {
-            const Editor::EntityAssetSet* art = Reflect::ObjectCast<Editor::EntityAssetSet>( itr->second );
+            const Core::EntityAssetSet* art = Reflect::ObjectCast< Core::EntityAssetSet >( itr->second );
             if (art && !art->GetContentFile().empty())
             {
                 tstring artPath( art->GetContentFile() );
@@ -2456,7 +2457,7 @@ void MainFrame::SetupEntityTypeMenus( const Editor::EntityType* entity, wxMenu* 
 
 ///////////////////////////////////////////////////////////////////////////////
 // Static function used to sort context items by name
-bool MainFrame::SortContextItemsByName( Editor::SceneNode* lhs, Editor::SceneNode* rhs )
+bool MainFrame::SortContextItemsByName( Core::SceneNode* lhs, Core::SceneNode* rhs )
 {
     tstring lname( lhs->GetName() );
     tstring rname( rhs->GetName() );
@@ -2469,7 +2470,7 @@ bool MainFrame::SortContextItemsByName( Editor::SceneNode* lhs, Editor::SceneNod
 
 ///////////////////////////////////////////////////////////////////////////////
 // Static function used to sort type items by name
-bool MainFrame::SortTypeItemsByName( Editor::SceneNodeType* lhs, Editor::SceneNodeType* rhs )
+bool MainFrame::SortTypeItemsByName( Core::SceneNodeType* lhs, Core::SceneNodeType* rhs )
 {
     tstring lname( lhs->GetName() );
     tstring rname( rhs->GetName() );

@@ -1,7 +1,6 @@
 #include "InspectPanel.h"
 #include "Application/Inspect/Controls/Canvas.h"
 #include "Application/Inspect/Controls/Label.h"
-#include "Application/UI/ArtProvider.h"
 
 using namespace Helium::Reflect;
 using namespace Helium::Inspect;
@@ -164,16 +163,23 @@ void Panel::RefreshControls()
     treeWndCtrl = new Helium::TreeWndCtrl( m_Parent->GetWindow() );
     treeWndCtrl->AddRoot( TXT( "Panel Root (hidden)" ) );
     treeWndCtrl->SetHideRoot( true );
+#if INSPECT_REFACTOR
     treeWndCtrl->SetImageList( Helium::GlobalFileIconsTable().GetSmallImageList() );
     treeWndCtrl->SetStateImageList( Helium::GlobalFileIconsTable().GetSmallImageList() );
+#endif
     m_OwnWindow = true;
   }
   
   m_Window = treeWndCtrl;
   treeWndCtrl->Freeze();
   
+#if INSPECT_REFACTOR
   int collapsedIndex = Helium::GlobalFileIconsTable().GetIconID( TXT( "ms_folder_closed" ) );
   int expandedIndex = Helium::GlobalFileIconsTable().GetIconID( TXT( "ms_folder_open" ) );
+#else
+  int collapsedIndex = -1;
+  int expandedIndex = -1;
+#endif
 
   wxTreeItemId item = m_ItemData.GetId();
   if ( m_ShowTreeNode )

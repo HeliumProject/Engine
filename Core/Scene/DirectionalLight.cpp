@@ -3,12 +3,9 @@
 
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/SceneManager.h"
-#include "InstanceType.h"
-
+#include "Core/Scene/InstanceType.h"
 #include "Core/Scene/PropertiesGenerator.h"
-#include "Application/UI/ArtProvider.h"
-
-#include "PrimitivePointer.h"
+#include "Core/Scene/PrimitivePointer.h"
 
 using namespace Helium;
 using namespace Helium::Math;
@@ -43,7 +40,7 @@ DirectionalLight::DirectionalLight(Core::Scene* scene, Content::DirectionalLight
 
 i32 DirectionalLight::GetImageIndex() const
 {
-  return Helium::GlobalFileIconsTable().GetIconID( TXT( "light" ) );
+  return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "light" ) );
 }
 
 tstring DirectionalLight::GetApplicationTypeName() const

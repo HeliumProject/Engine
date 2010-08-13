@@ -1339,14 +1339,6 @@
 			Name="UI"
 			>
 			<File
-				RelativePath=".\UI\ArtProvider.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\ArtProvider.h"
-				>
-			</File>
-			<File
 				RelativePath=".\UI\ColorPicker.cpp"
 				>
 			</File>
@@ -1376,14 +1368,6 @@
 			</File>
 			<File
 				RelativePath=".\UI\FileDropTarget.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\FileIconsTable.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\FileIconsTable.h"
 				>
 			</File>
 			<File

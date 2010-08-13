@@ -3,19 +3,14 @@
 
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/SceneManager.h"
-
-#include "VolumeType.h"
-
-#include "Core/Scene/PropertiesGenerator.h"
-#include "Application/UI/ArtProvider.h"
-
-#include "PrimitiveCube.h"
-#include "PrimitiveCylinder.h"
-#include "PrimitiveSphere.h"
-#include "PrimitiveCapsule.h"
-#include "PrimitivePointer.h"
-
+#include "Core/Scene/VolumeType.h"
 #include "Core/Content/Nodes/ContentVolume.h"
+#include "Core/Scene/PropertiesGenerator.h"
+#include "Core/Scene/PrimitiveCube.h"
+#include "Core/Scene/PrimitiveCylinder.h"
+#include "Core/Scene/PrimitiveSphere.h"
+#include "Core/Scene/PrimitiveCapsule.h"
+#include "Core/Scene/PrimitivePointer.h"
 
 using namespace Helium;
 using namespace Helium::Math;
@@ -55,7 +50,7 @@ Volume::~Volume()
 
 i32 Volume::GetImageIndex() const
 {
-  return Helium::GlobalFileIconsTable().GetIconID( TXT( "volume" ) );
+  return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "volume" ) );
 }
 
 tstring Volume::GetApplicationTypeName() const

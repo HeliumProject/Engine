@@ -10,7 +10,7 @@
 #include "Application/Inspect/DragDrop/ReflectClipboardData.h"
 #include "Core/Scene/SceneManager.h"
 #include "Application/UI/FileDialog.h"
-#include "Application/UI/ArtProvider.h"
+#include "Editor/ArtProvider.h"
 #include "Application/UI/MenuButton.h"
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
 #include "Editor/ArtProvider.h"
@@ -44,15 +44,15 @@ CollectionsPanel::CollectionsPanel( VaultFrame* browserFrame )
 , m_CollectionManager( NULL )
 , m_DragOriginatedHere( false )
 {
-    m_MyCollectionsTreeCtrl->SetImageList( Helium::GlobalFileIconsTable().GetSmallImageList() );
-    m_TempCollectionsTreeCtrl->SetImageList( Helium::GlobalFileIconsTable().GetSmallImageList() );
+    m_MyCollectionsTreeCtrl->SetImageList( GlobalFileIconsTable().GetSmallImageList() );
+    m_TempCollectionsTreeCtrl->SetImageList( GlobalFileIconsTable().GetSmallImageList() );
 
-    m_ContainerImageIndex = Helium::GlobalFileIconsTable().GetIconID( TXT( "folder" ) );
-    m_DependencyImageIndex = Helium::GlobalFileIconsTable().GetIconID( TXT( "chart_organisation" ) );
-    m_UsageImageIndex = Helium::GlobalFileIconsTable().GetIconID( TXT( "chart_organisation_reverse" ) );
+    m_ContainerImageIndex = GlobalFileIconsTable().GetIconID( TXT( "folder" ) );
+    m_DependencyImageIndex = GlobalFileIconsTable().GetIconID( TXT( "chart_organisation" ) );
+    m_UsageImageIndex = GlobalFileIconsTable().GetIconID( TXT( "chart_organisation_reverse" ) );
 
     m_MyCollectionsToolBar->SetToolBitmapSize( wxSize( 16, 16 ) );
-    m_MyCollectionsToolBar->AddTool( ID_NewCollection, TXT( "" ), wxArtProvider::GetBitmap( Editor::ArtIDs::Collection ), VaultMenu::Label( ID_NewCollection ) );
+    m_MyCollectionsToolBar->AddTool( ID_NewCollection, TXT( "" ), wxArtProvider::GetBitmap( ArtIDs::Collection ), VaultMenu::Label( ID_NewCollection ) );
     m_MyCollectionsToolBar->Realize();
 
     Connect( wxEVT_SIZE, wxSizeEventHandler( CollectionsPanel::OnSizeCollectionsPanel ), NULL, this );

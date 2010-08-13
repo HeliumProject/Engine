@@ -1,8 +1,8 @@
 /*#include "Precompile.h"*/
 #include "Core/Scene/Point.h"
+
 #include "Core/Scene/Transform.h"
 #include "Core/Scene/PropertiesGenerator.h"
-#include "Application/UI/ArtProvider.h"
 
 using namespace Helium;
 using namespace Helium::Core;
@@ -31,7 +31,7 @@ Point::~Point()
 
 i32 Point::GetImageIndex() const
 {
-  return Helium::GlobalFileIconsTable().GetIconID( TXT( "point" ) );
+  return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "point" ) );
 }
 
 tstring Point::GetApplicationTypeName() const

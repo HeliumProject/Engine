@@ -5,7 +5,7 @@
 #include "VaultToolBar.h"
 
 #include "Platform/Assert.h"
-#include "Application/UI/ArtProvider.h"
+#include "Editor/ArtProvider.h"
 
 #include <wx/textctrl.h>
 

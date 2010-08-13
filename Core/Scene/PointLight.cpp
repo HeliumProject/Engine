@@ -3,13 +3,10 @@
 
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/SceneManager.h"
-#include "InstanceType.h"
-
+#include "Core/Scene/InstanceType.h"
 #include "Core/Scene/PropertiesGenerator.h"
-#include "Application/UI/ArtProvider.h"
-
-#include "PrimitiveSphere.h"
-#include "PrimitivePointer.h"
+#include "Core/Scene/PrimitiveSphere.h"
+#include "Core/Scene/PrimitivePointer.h"
 
 using namespace Helium;
 using namespace Helium::Math;
@@ -56,7 +53,7 @@ PointLight::~PointLight()
 
 i32 PointLight::GetImageIndex() const
 {
-  return Helium::GlobalFileIconsTable().GetIconID( TXT( "light" ) );
+  return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "light" ) );
 }
 
 tstring PointLight::GetApplicationTypeName() const

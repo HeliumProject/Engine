@@ -1,9 +1,6 @@
 #include "Canvas.h"
 #include "Application/Inspect/Interpreter.h"
-
 #include "Application/Inspect/Controls/Controls.h"
-
-#include "Application/UI/ArtProvider.h"
 
 using namespace Helium;
 using namespace Helium::Inspect;
@@ -272,8 +269,10 @@ void Canvas::Realize(Container* parent)
   treeWndCtrl->SetColumnSize( 15 );
   if ( ( treeWndCtrl->GetStateImageList() == NULL ) && ( treeWndCtrl->GetImageList() == NULL ) )
   {
+#if INSPECT_REFACTOR
     treeWndCtrl->SetImageList( Helium::GlobalFileIconsTable().GetSmallImageList() );
     treeWndCtrl->SetStateImageList( Helium::GlobalFileIconsTable().GetSmallImageList() );
+#endif
   }
 
   wxTreeItemId root = treeWndCtrl->GetRootItem();

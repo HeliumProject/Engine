@@ -15,35 +15,35 @@ ViewPanel::ViewPanel(wxWindow *parent, wxWindowID id, const wxPoint &pos, const 
     {
 //        Freeze();
 
-        m_FrameOriginButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::FrameOrigin ) );
-        m_FrameSelectedButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::FrameSelected ) );
+        m_FrameOriginButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::FrameOrigin ) );
+        m_FrameSelectedButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::FrameSelected ) );
 
-        m_PreviousViewButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::PreviousView ) );
-        m_NextViewButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::NextView ) );
+        m_PreviousViewButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::PreviousView ) );
+        m_NextViewButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::NextView ) );
 
-        m_HighlightModeToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::HighlightMode ) );
+        m_HighlightModeToggleButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::HighlightMode ) );
 
-        m_OrbitCameraToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::PerspectiveCamera ) );
-        m_FrontCameraToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::FrontOrthoCamera ) );
-        m_SideCameraToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::SideOrthoCamera ) );
-        m_TopCameraToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::TopOrthoCamera ) );
+        m_OrbitCameraToggleButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::PerspectiveCamera ) );
+        m_FrontCameraToggleButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::FrontOrthoCamera ) );
+        m_SideCameraToggleButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::SideOrthoCamera ) );
+        m_TopCameraToggleButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::TopOrthoCamera ) );
 
-        m_ShowAxesToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ShowAxes ) );
-        m_ShowGridToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ShowGrid ) );
-        m_ShowBoundsToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ShowBounds ) );
-        m_ShowStatisticsToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ShowStatistics ) );
+        m_ShowAxesToggleButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::ShowAxes ) );
+        m_ShowGridToggleButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::ShowGrid ) );
+        m_ShowBoundsToggleButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::ShowBounds ) );
+        m_ShowStatisticsToggleButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::ShowStatistics ) );
 
-        m_FrustumCullingToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::FrustumCulling ) );
-        m_BackfaceCullingToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::BackfaceCulling ) );
+        m_FrustumCullingToggleButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::FrustumCulling ) );
+        m_BackfaceCullingToggleButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::BackfaceCulling ) );
 
-        m_WireframeShadingToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ShadingWireframe ) );
-        m_MaterialShadingToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ShadingMaterial ) );
+        m_WireframeShadingToggleButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::ShadingWireframe ) );
+        m_MaterialShadingToggleButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::ShadingMaterial ) );
 
-        m_ColorModeSceneToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ColorModeScene ) );
-        m_ColorModeLayerToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ColorModeLayer ) );
-        m_ColorModeNodeTypeToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ColorModeNodeType ) );
-        m_ColorModeScaleToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ColorModeScale ) );
-        m_ColorModeScaleGradientToggleButton->SetLabel( wxArtProvider::GetBitmap( Editor::ArtIDs::ColorModeScaleGradient ) );
+        m_ColorModeSceneToggleButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::ColorModeScene ) );
+        m_ColorModeLayerToggleButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::ColorModeLayer ) );
+        m_ColorModeNodeTypeToggleButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::ColorModeNodeType ) );
+        m_ColorModeScaleToggleButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::ColorModeScale ) );
+        m_ColorModeScaleGradientToggleButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::ColorModeScaleGradient ) );
 
         m_ToolPanel->Layout();
 

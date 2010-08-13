@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "NavigationPanel.h"
 
-#include "Application/UI/ArtProvider.h"
+#include "Editor/ArtProvider.h"
 #include "Application/UI/MenuButton.h"
 
 using namespace Helium;

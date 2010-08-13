@@ -1,5 +1,4 @@
 #include "ImageViewPanel.h"
-#include "ArtProvider.h"
 
 #include <wx/image.h>
 #include <wx/dcclient.h>

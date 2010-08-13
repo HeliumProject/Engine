@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "GridWithIcons.h"
-#include "Application/UI/ArtProvider.h"
+#include "Editor/ArtProvider.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

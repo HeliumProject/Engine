@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "EntityAssetOutliner.h"
 
-#include "Application/UI/ArtProvider.h"
+#include "Editor/ArtProvider.h"
 
 #include "Core/Scene/EntityInstance.h"
 #include "Core/Scene/EntityInstanceType.h"
@@ -121,7 +121,7 @@ void EntityAssetOutliner::AddEntitySet( Core::EntitySet* classSet )
     bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
     m_TreeCtrl->DisableSorting();
 
-    const i32 image = Helium::GlobalFileIconsTable().GetIconID( TXT( "folder" ) );
+    const i32 image = GlobalFileIconsTable().GetIconID( TXT( "folder" ) );
     wxTreeItemId classItem = AddItem( m_InvisibleRoot, 
                                       classSet->GetName(), 
                                       image, 

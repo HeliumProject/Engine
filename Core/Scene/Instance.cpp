@@ -1,13 +1,11 @@
 /*#include "Precompile.h"*/
 #include "Instance.h"
-#include "InstanceType.h"
-#include "InstancePanel.h"
-
-#include "Core/Scene/Scene.h"
-
-#include "Application/UI/ArtProvider.h"
 
 #include "Foundation/Log.h"
+
+#include "Core/Scene/InstanceType.h"
+#include "Core/Scene/InstancePanel.h"
+#include "Core/Scene/Scene.h"
 
 using namespace Helium;
 using namespace Helium::Math;
@@ -48,7 +46,7 @@ void Instance::Unpack()
 
 i32 Instance::GetImageIndex() const
 {
-  i32 image = Helium::GlobalFileIconsTable().GetIconID( TXT( "null" ) );
+  i32 image = -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "null" ) );
 
   if ( GetNodeType() )
   {

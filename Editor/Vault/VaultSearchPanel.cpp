@@ -7,7 +7,7 @@
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/Container/Insert.h" 
-#include "Application/UI/ArtProvider.h"
+#include "Editor/ArtProvider.h"
 #include "Editor/App.h"
 
 using namespace Helium;

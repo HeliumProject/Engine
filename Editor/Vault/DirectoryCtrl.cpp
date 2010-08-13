@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "DirectoryCtrl.h"
 
-#include "Application/UI/ArtProvider.h"
+#include "Editor/ArtProvider.h"
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
 
 using namespace Helium;
@@ -66,7 +66,7 @@ DirectoryCtrl::DirectoryCtrl
         case DirectoryCtrlIconTypes::Executable:
         case DirectoryCtrlIconTypes::Error:
         default:
-            m_ImageList.Add( wxArtProvider::GetBitmap( Helium::ArtIDs::Null ) );
+            m_ImageList.Add( wxArtProvider::GetBitmap( ArtIDs::Null ) );
             break;
         }
     }

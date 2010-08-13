@@ -1784,6 +1784,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\FileIconsTable.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\FileIconsTable.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Frame.cpp"
 			>
 		</File>

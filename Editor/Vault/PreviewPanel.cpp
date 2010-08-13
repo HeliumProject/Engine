@@ -7,7 +7,7 @@
 #include "Core/Asset/AssetClass.h"
 #include "Core/Asset/Classes/Entity.h"
 #include "Foundation/Component/ComponentHandle.h"
-#include "Application/UI/ArtProvider.h"
+#include "Editor/ArtProvider.h"
 #include "Application/UI/MenuButton.h"
 
 using namespace Helium;

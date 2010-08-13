@@ -1,16 +1,15 @@
 /*#include "Precompile.h"*/
 #include "JointTransform.h"
 
-#include "Core/Content/Nodes/ContentJointTransform.h"
 #include "Foundation/Math/EulerAngles.h"
 
-#include "Application/UI/ArtProvider.h"
-#include "Color.h"
-#include "PrimitiveAxes.h"
-#include "PrimitiveRings.h"
-
 #include "Application/Undo/PropertyCommand.h"
-#include "HierarchyNodeType.h"
+
+#include "Core/Content/Nodes/ContentJointTransform.h"
+#include "Core/Scene/Color.h"
+#include "Core/Scene/PrimitiveAxes.h"
+#include "Core/Scene/PrimitiveRings.h"
+#include "Core/Scene/HierarchyNodeType.h"
 #include "Core/Scene/Scene.h"
 
 using namespace Helium;
@@ -51,7 +50,7 @@ JointTransform::~JointTransform()
 
 i32 JointTransform::GetImageIndex() const
 {
-  return Helium::GlobalFileIconsTable().GetIconID( TXT( "joint" ) );
+  return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "joint" ) );
 }
 
 tstring JointTransform::GetApplicationTypeName() const

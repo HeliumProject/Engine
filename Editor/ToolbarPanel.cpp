@@ -17,19 +17,19 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
     {
         Freeze();
 
-        m_NewSceneButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::Scene ) );
-        m_OpenButton->SetBitmap( wxArtProvider::GetBitmap( Helium::ArtIDs::Open ) );
-        m_SaveAllButton->SetBitmap( wxArtProvider::GetBitmap( Helium::ArtIDs::SaveAll ) );
-        m_CutButton->SetBitmap( wxArtProvider::GetBitmap( Helium::ArtIDs::Cut ) );
-        m_CopyButton->SetBitmap( wxArtProvider::GetBitmap( Helium::ArtIDs::Copy ) );
-        m_PasteButton->SetBitmap( wxArtProvider::GetBitmap( Helium::ArtIDs::Paste ) );
-        m_DeleteButton->SetBitmap( wxArtProvider::GetBitmap( Helium::ArtIDs::Delete ) );
-        m_UndoButton->SetBitmap( wxArtProvider::GetBitmap( Helium::ArtIDs::Undo ) );
-        m_RedoButton->SetBitmap( wxArtProvider::GetBitmap( Helium::ArtIDs::Redo ) );
+        m_NewSceneButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Scene ) );
+        m_OpenButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Open ) );
+        m_SaveAllButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::SaveAll ) );
+        m_CutButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Cut ) );
+        m_CopyButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Copy ) );
+        m_PasteButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Paste ) );
+        m_DeleteButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Delete ) );
+        m_UndoButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Undo ) );
+        m_RedoButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Redo ) );
 
-        m_PlayButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::Play ) );
-        m_PauseButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::Pause ) );
-        m_StopButton->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::Stop ) );
+        m_PlayButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Play ) );
+        m_PauseButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Pause ) );
+        m_StopButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Stop ) );
 
         Layout();
         Thaw();

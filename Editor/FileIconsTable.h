@@ -21,9 +21,9 @@ namespace Helium
 #if wxUSE_DIRDLG || wxUSE_FILEDLG
 
         // The global fileicons table
-        EDITOR_API class FileIconsTable& GlobalFileIconsTable();
+        class FileIconsTable& GlobalFileIconsTable();
 
-        class EDITOR_API FileIconsTable //: public wxFileIconsTable
+        class FileIconsTable //: public wxFileIconsTable
         {
         public:
             enum iconId_Type

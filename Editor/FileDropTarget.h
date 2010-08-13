@@ -23,7 +23,7 @@ namespace Helium
         typedef Helium::Signature< void, const FileDroppedArgs& > FileDroppedSignature;
         typedef std::set< FileDroppedSignature::Delegate > S_FileDroppedSignature;
 
-        class EDITOR_API FileDropTarget : public wxFileDropTarget
+        class FileDropTarget : public wxFileDropTarget
         {
         public:
             FileDropTarget(const tstring& extensions, const tstring& delims = TXT( "," ) );

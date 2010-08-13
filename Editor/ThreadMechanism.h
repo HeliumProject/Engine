@@ -18,7 +18,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         /// ThreadProcArgs
         /////////////////////////////////////////////////////////////////////////////
-        struct EDITOR_API ThreadProcArgs
+        struct ThreadProcArgs
         {
             i32 m_ThreadID;
             ThreadProcArgs( i32 threadID )
@@ -26,13 +26,13 @@ namespace Helium
             {
             }
         };
-        typedef EDITOR_API Helium::Signature< void, const ThreadProcArgs& > ThreadProcSignature;
+        typedef Helium::Signature< void, const ThreadProcArgs& > ThreadProcSignature;
 
 
         /////////////////////////////////////////////////////////////////////////////
         /// class ThreadMechanism
         /////////////////////////////////////////////////////////////////////////////
-        class EDITOR_API ThreadMechanism
+        class ThreadMechanism
         {
         public:
             ThreadMechanism( const tstring& evenPrefix = TXT( "ThreadMechanism" ) );

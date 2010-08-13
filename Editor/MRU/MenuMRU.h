@@ -32,7 +32,7 @@ namespace Helium
         // the registry.  In order to be useful, a piece of UI would need to display
         // the MRU and allow choosing items.
         // 
-        class EDITOR_API MenuMRU : public MRU< tstring >
+        class MenuMRU : public MRU< tstring >
         {
         public:
             MenuMRU( i32 maxItems, wxWindow* owner );

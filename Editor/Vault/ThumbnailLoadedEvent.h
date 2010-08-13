@@ -10,10 +10,10 @@ namespace Helium
     namespace Editor
     {
         //DECLARE_EVENT_TYPE( ThumbnailLoadedCommandEvent, -1 )
-        extern EDITOR_API const wxEventType ThumbnailLoadedCommandEvent;
+        extern const wxEventType ThumbnailLoadedCommandEvent;
 
         // A custom event that transports a whole wxString.
-        class EDITOR_API ThumbnailLoadedEvent: public wxCommandEvent
+        class ThumbnailLoadedEvent: public wxCommandEvent
         {
         public:
             ThumbnailLoadedEvent( wxEventType commandType = Editor::ThumbnailLoadedCommandEvent, int id = 0 );

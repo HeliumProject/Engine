@@ -24,7 +24,7 @@ namespace Helium
         }
         typedef ImageViewPanelFlags::ImageViewPanelFlag ImageViewPanelFlag;
 
-        class EDITOR_API ImageViewPanel : public wxPanel
+        class ImageViewPanel : public wxPanel
         {
         public:
             ImageViewPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL, const wxString& name = wxT( "ImageViewPanel" ) );

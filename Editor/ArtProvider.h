@@ -161,7 +161,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         class ArtProviderCache;
 
-        class EDITOR_API ArtProvider : public wxArtProvider
+        class ArtProvider : public wxArtProvider
         {
         public:
             static wxSize DefaultImageSize;

@@ -16,7 +16,7 @@ namespace Helium
     {
         /// @class MenuButton
         /// @brief adds on to the Button class to add menu functionality through mouse interaction
-        class EDITOR_API MenuButton : public wxButton
+        class MenuButton : public wxButton
         {
         public:
             // wxWidgets setup

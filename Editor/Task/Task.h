@@ -31,9 +31,9 @@ namespace Helium
         };
         typedef Helium::Signature< void, const TaskStartedArgs& > TaskStartedSignature;
 
-        EDITOR_TASK_API void AddTaskStartedListener( const TaskStartedSignature::Delegate& listener );
-        EDITOR_TASK_API void RemoveTaskStartedListener( const TaskStartedSignature::Delegate& listener );
-        EDITOR_TASK_API void RaiseTaskStarted( const TaskStartedArgs& );
+        void AddTaskStartedListener( const TaskStartedSignature::Delegate& listener );
+        void RemoveTaskStartedListener( const TaskStartedSignature::Delegate& listener );
+        void RaiseTaskStarted( const TaskStartedArgs& );
 
         struct TaskFinishedArgs
         {
@@ -47,8 +47,8 @@ namespace Helium
         };
         typedef Helium::Signature< void, const TaskFinishedArgs& > TaskFinishedSignature;
 
-        EDITOR_TASK_API void AddTaskFinishedListener( const TaskFinishedSignature::Delegate& listener );
-        EDITOR_TASK_API void RemoveTaskFinishedListener( const TaskFinishedSignature::Delegate& listener );
-        EDITOR_TASK_API void RaiseTaskFinished( const TaskFinishedArgs& );
+        void AddTaskFinishedListener( const TaskFinishedSignature::Delegate& listener );
+        void RemoveTaskFinishedListener( const TaskFinishedSignature::Delegate& listener );
+        void RaiseTaskFinished( const TaskFinishedArgs& );
     }
 }

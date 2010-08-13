@@ -21,7 +21,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // System for managing the global MRU FieldMap 
         //
-        class EDITOR_API FieldMRU : public Helium::RefCountBase<FieldMRU>
+        class FieldMRU : public Helium::RefCountBase<FieldMRU>
         {
         public:
             FieldMRU()
@@ -50,6 +50,6 @@ namespace Helium
 
         };
 
-        typedef EDITOR_API Helium::SmartPtr< FieldMRU > FieldMRUPtr;
+        typedef Helium::SmartPtr< FieldMRU > FieldMRUPtr;
     }
 }

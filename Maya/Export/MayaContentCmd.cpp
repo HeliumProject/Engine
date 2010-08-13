@@ -11,7 +11,7 @@
 #include "Foundation/Container/BitArray.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 #include "Core/Content/ContentVersion.h"
-#include "Core/Content/Nodes/Curve.h"
+#include "Core/Content/Nodes/ContentCurve.h"
 #include "Maya/Utils.h"
 
 using namespace Helium;

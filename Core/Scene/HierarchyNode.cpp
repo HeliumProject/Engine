@@ -7,8 +7,8 @@
 #include "Color.h"
 #include "SceneGraph.h"
 
-#include "Entity.h"
-#include "EntityAssetSet.h"
+#include "EntityInstance.h"
+#include "EntitySet.h"
 #include "HierarchyNodeType.h"
 #include "Layer.h"
 #include "Core/Scene/Transform.h"

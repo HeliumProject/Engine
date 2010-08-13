@@ -2,7 +2,7 @@
 
 #include "Core/API.h"
 
-#include "Core/Content/Nodes/Mesh.h"
+#include "Core/Content/Nodes/ContentMesh.h"
 #include "Foundation/Memory/SmartPtr.h"
 
 namespace Helium

@@ -37,10 +37,10 @@
 #include "Instance.h"
 #include "InstanceType.h"
 
-#include "Entity.h"
-#include "EntityAssetSet.h"
-#include "EntityType.h"
-#include "EntityCreateTool.h"
+#include "EntityInstance.h"
+#include "EntityInstanceType.h"
+#include "EntityInstanceCreateTool.h"
+#include "EntitySet.h"
 
 #include "Locator.h"
 #include "LocatorType.h"
@@ -129,7 +129,7 @@ void Core::SceneInitialize()
     g_InitializerStack.Push( LocatorCreateTool::InitializeType, LocatorCreateTool::CleanupType );
 
     g_InitializerStack.Push( Entity::InitializeType, Entity::CleanupType );
-    g_InitializerStack.Push( EntityAssetSet::InitializeType, EntityAssetSet::CleanupType );
+    g_InitializerStack.Push( EntitySet::InitializeType, EntitySet::CleanupType );
     g_InitializerStack.Push( EntityType::InitializeType, EntityType::CleanupType );
     g_InitializerStack.Push( EntityCreateTool::InitializeType, EntityCreateTool::CleanupType );
 

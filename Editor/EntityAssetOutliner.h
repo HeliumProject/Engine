@@ -4,8 +4,8 @@
 #include "Editor/SceneOutliner.h"
 
 #include "Core/Scene/Object.h"
-#include "Core/Scene/EntityType.h"
-#include "Core/Scene/EntityAssetSet.h"
+#include "Core/Scene/EntityInstanceType.h"
+#include "Core/Scene/EntitySet.h"
 
 namespace Helium
 {
@@ -32,8 +32,8 @@ namespace Helium
         private:
             void AddEntityType( Core::EntityType* entityType );
             void RemoveEntityType( Core::EntityType* entityType );
-            void AddEntityAssetSet( Core::EntityAssetSet* classSet );
-            void RemoveEntityAssetSet( Core::EntityAssetSet* classSet );
+            void AddEntitySet( Core::EntitySet* classSet );
+            void RemoveEntitySet( Core::EntitySet* classSet );
             void AddEntity( Core::Entity* entity );
             void RemoveEntity( Core::Entity* entity );
 

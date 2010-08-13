@@ -1,8 +1,8 @@
 /*#include "Precompile.h"*/
 #include "Skin.h"
 
-#include "Core/Content/Nodes/Skin.h"
-#include "Core/Content/Nodes/Mesh.h"
+#include "Core/Content/Nodes/ContentSkin.h"
+#include "Core/Content/Nodes/ContentMesh.h"
 
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/Transform.h"

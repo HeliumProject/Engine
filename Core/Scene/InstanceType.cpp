@@ -8,7 +8,7 @@
 #include "Color.h"
 #include "PrimitivePointer.h"
 
-#include "Core/Content/Nodes/Instance.h"
+#include "Core/Content/Nodes/ContentInstance.h"
 #include "Foundation/Container/Insert.h" 
 
 using Helium::Insert; 

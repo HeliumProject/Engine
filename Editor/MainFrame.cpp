@@ -5,7 +5,7 @@
 #include "Foundation/Reflect/ArchiveXML.h"
 
 #include "Core/Content/ContentVersion.h"
-#include "Core/Content/Scene.h"
+#include "Core/Content/ContentScene.h"
 
 #include "Application/UI/FileDialog.h"
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
@@ -13,15 +13,15 @@
 
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/InstanceSet.h"
-#include "Core/Scene/EntityType.h"
-#include "Core/Scene/EntityAssetSet.h"
+#include "Core/Scene/EntityInstanceType.h"
+#include "Core/Scene/EntitySet.h"
 
 #include "Core/Scene/TransformManipulator.h"
 
 #include "Core/Scene/CurveCreateTool.h"
 #include "Core/Scene/CurveEditTool.h"
 #include "Core/Scene/DuplicateTool.h"
-#include "Core/Scene/EntityCreateTool.h"
+#include "Core/Scene/EntityInstanceCreateTool.h"
 #include "Core/Scene/LocatorCreateTool.h"
 #include "Core/Scene/VolumeCreateTool.h"
 
@@ -2421,7 +2421,7 @@ void MainFrame::SetupEntityTypeMenus( const Core::EntityType* entity, wxMenu* su
         M_InstanceSetSmartPtr::const_iterator end = sets.end();
         for( ;itr != end; ++itr )
         {
-            const Core::EntityAssetSet* art = Reflect::ObjectCast< Core::EntityAssetSet >( itr->second );
+            const Core::EntitySet* art = Reflect::ObjectCast< Core::EntitySet >( itr->second );
             if (art && !art->GetContentFile().empty())
             {
                 tstring artPath( art->GetContentFile() );

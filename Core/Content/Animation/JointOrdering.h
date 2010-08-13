@@ -2,7 +2,7 @@
 
 #include "Core/API.h"
 
-#include "Core/Content/Nodes/SceneNode.h"
+#include "Core/Content/Nodes/ContentSceneNode.h"
 
 namespace Helium
 {

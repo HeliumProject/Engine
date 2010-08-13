@@ -2,7 +2,7 @@
 
 #include "HierarchyNode.h"
 
-#include "Core/Content/Nodes/Point.h"
+#include "Core/Content/Nodes/ContentPoint.h"
 #include "Core/Scene/Manipulator.h"
 
 namespace Helium

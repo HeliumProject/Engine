@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Content/Nodes/Layer.h"
+#include "Core/Content/Nodes/ContentLayer.h"
 #include "Core/Content/NodeVisibility.h"
 
 #include "Core/API.h"

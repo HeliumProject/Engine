@@ -4,7 +4,7 @@
 
 #include "Core/Render/DeviceManager.h"
 #include "Core/Render/ShaderManager.h"
-#include "Core/Render/Scene.h"
+#include "Core/Render/RenderScene.h"
 
 namespace Helium
 {

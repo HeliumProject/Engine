@@ -2,7 +2,7 @@
 
 #include "Foundation/Log.h"
 
-#include "Core/Content/Scene.h"
+#include "Core/Content/ContentScene.h"
 #include "Core/Content/ContentExceptions.h"
 
 using namespace Helium;

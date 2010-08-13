@@ -4,7 +4,7 @@
 #include "Core/Scene/Point.h"
 #include "VertexResource.h"
 
-#include "Core/Content/Nodes/Curve.h"
+#include "Core/Content/Nodes/ContentCurve.h"
 
 namespace Helium
 {

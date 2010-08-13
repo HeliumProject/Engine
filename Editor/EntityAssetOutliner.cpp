@@ -3,9 +3,9 @@
 
 #include "Application/UI/ArtProvider.h"
 
-#include "Core/Scene/Entity.h"
-#include "Core/Scene/EntityType.h"
-#include "Core/Scene/EntityAssetSet.h"
+#include "Core/Scene/EntityInstance.h"
+#include "Core/Scene/EntityInstanceType.h"
+#include "Core/Scene/EntitySet.h"
 #include "Core/Scene/Scene.h"
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
 
@@ -75,10 +75,10 @@ void EntityAssetOutliner::AddEntityType( Core::EntityType* entityType )
   M_InstanceSetSmartPtr::const_iterator classEnd = entityType->GetSets().end();
   for ( ; classItr != classEnd; ++classItr )
   {
-    EntityAssetSet* set = Reflect::ObjectCast< Core::EntityAssetSet >( classItr->second );
+    EntitySet* set = Reflect::ObjectCast< Core::EntitySet >( classItr->second );
     if (set)
     {
-      AddEntityAssetSet( set );
+      AddEntitySet( set );
     }
   }
 
@@ -98,10 +98,10 @@ void EntityAssetOutliner::RemoveEntityType( Core::EntityType* entityType )
   M_InstanceSetSmartPtr::const_iterator classEnd = entityType->GetSets().end();
   for ( ; classItr != classEnd; ++classItr )
   {
-    EntityAssetSet* set = Reflect::ObjectCast< Core::EntityAssetSet >( classItr->second );
+    EntitySet* set = Reflect::ObjectCast< Core::EntitySet >( classItr->second );
     if (set)
     {
-      RemoveEntityAssetSet( set );
+      RemoveEntitySet( set );
     }
   }
   // Disconnect listeners
@@ -113,7 +113,7 @@ void EntityAssetOutliner::RemoveEntityType( Core::EntityType* entityType )
 // Adds the specified entity class set to the tree (including the instances
 // that belong to the set).
 // 
-void EntityAssetOutliner::AddEntityAssetSet( Core::EntityAssetSet* classSet )
+void EntityAssetOutliner::AddEntitySet( Core::EntitySet* classSet )
 {
   if ( m_CurrentScene )
   {
@@ -152,7 +152,7 @@ void EntityAssetOutliner::AddEntityAssetSet( Core::EntityAssetSet* classSet )
 // Removes the entity class set from the tree (all instances of this set should
 // have already been removed).
 // 
-void EntityAssetOutliner::RemoveEntityAssetSet( Core::EntityAssetSet* classSet )
+void EntityAssetOutliner::RemoveEntitySet( Core::EntitySet* classSet )
 {
   M_TreeItems::const_iterator found = m_Items.find( classSet );
   if ( found != m_Items.end() )
@@ -279,9 +279,9 @@ void EntityAssetOutliner::DisconnectSceneListeners()
 // 
 void EntityAssetOutliner::SetAdded( const Core::InstanceTypeChangeArgs& args )
 {
-  if ( args.m_InstanceSet->HasType( Reflect::GetType< Core::EntityAssetSet >() ) )
+  if ( args.m_InstanceSet->HasType( Reflect::GetType< Core::EntitySet >() ) )
   {
-    AddEntityAssetSet( Reflect::DangerousCast< Core::EntityAssetSet >( args.m_InstanceSet ) );
+    AddEntitySet( Reflect::DangerousCast< Core::EntitySet >( args.m_InstanceSet ) );
   }
 }
 
@@ -291,9 +291,9 @@ void EntityAssetOutliner::SetAdded( const Core::InstanceTypeChangeArgs& args )
 // 
 void EntityAssetOutliner::SetRemoved( const Core::InstanceTypeChangeArgs& args )
 {
-  if ( args.m_InstanceSet->HasType( Reflect::GetType< Core::EntityAssetSet >() ) )
+  if ( args.m_InstanceSet->HasType( Reflect::GetType< Core::EntitySet >() ) )
   {
-    RemoveEntityAssetSet( Reflect::DangerousCast< Core::EntityAssetSet >( args.m_InstanceSet ) );
+    RemoveEntitySet( Reflect::DangerousCast< Core::EntitySet >( args.m_InstanceSet ) );
   }
 }
 

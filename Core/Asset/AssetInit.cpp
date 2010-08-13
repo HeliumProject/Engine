@@ -1,14 +1,12 @@
 #include "AssetInit.h"
 
-#include "Core/Asset/AssetClass.h"
+#include "Foundation/Component/ComponentInit.h"
+#include "Foundation/InitializerStack.h"
+#include "Foundation/Reflect/Registry.h"
+#include "Foundation/InitializerStack.h"
+
 #include "Core/Asset/TextureEnums.h"
-
-#include "Core/Asset/Components/DependenciesComponent.h"
-#include "Core/Asset/Components/MeshProcessingComponent.h"
-#include "Core/Asset/Components/TextureProcessingComponent.h"
-#include "Core/Asset/Components/TransformComponent.h"
-
-#include "Core/Asset/Classes/EntityInstance.h"
+#include "Core/Asset/AssetClass.h"
 #include "Core/Asset/Classes/Entity.h"
 #include "Core/Asset/Classes/Texture.h"
 #include "Core/Asset/Classes/AnimationClip.h"
@@ -16,18 +14,19 @@
 #include "Core/Asset/Classes/SceneAsset.h"
 #include "Core/Asset/Classes/ShaderAsset.h"
 
-#include "Core/Asset/Factories/MeshAssetFactory.h"
+#include "Core/Asset/Components/DependenciesComponent.h"
+#include "Core/Asset/Components/MeshProcessingComponent.h"
+#include "Core/Asset/Components/TextureProcessingComponent.h"
+#include "Core/Asset/Components/TransformComponent.h"
 
+#include "Core/Asset/Factories/MeshAssetFactory.h"
 #include "Core/Asset/Manifests/EntityManifest.h"
+
 #include "Core/Asset/Manifests/ManifestVersion.h"
 #include "Core/Asset/Manifests/SceneManifest.h"
 
-#include "Foundation/Component/ComponentInit.h"
-#include "Foundation/InitializerStack.h"
 #include "Core/Content/ContentInit.h"
-#include "Foundation/Reflect/Registry.h"
-
-#include "Foundation/InitializerStack.h"
+#include "Core/Content/Nodes/ContentEntityInstance.h"
 
 using namespace Helium;
 

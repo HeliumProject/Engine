@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Content/Nodes/Curve.h"
+#include "Core/Content/Nodes/ContentCurve.h"
 
 #include "ExportBase.h"
 

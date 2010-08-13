@@ -14,7 +14,7 @@
 #include "Foundation/Reflect/Element.h"
 
 #include "Core/Asset/Classes/Entity.h"
-#include "Core/Content/Scene.h"
+#include "Core/Content/ContentScene.h"
 
 #include "Export/MayaContentCmd.h"
 

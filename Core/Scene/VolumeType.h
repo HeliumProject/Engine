@@ -2,7 +2,7 @@
 
 #include "InstanceType.h"
 
-#include "Core/Content/Nodes/Volume.h"
+#include "Core/Content/Nodes/ContentVolume.h"
 
 namespace Helium
 {

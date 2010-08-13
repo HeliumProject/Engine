@@ -3,12 +3,12 @@
 #include "Core/API.h"
 #include "Foundation/TUID.h"
 #include "Foundation/Reflect/Serializers.h"
-#include "Core/Content/Nodes/SceneNode.h"
+#include "Core/Content/Nodes/ContentSceneNode.h"
 
 #include "JointAnimation.h"
 #include "CompressedJointAnimation.h"
 
-#include "Core/Content/Nodes/JointTransform.h"
+#include "Core/Content/Nodes/ContentJointTransform.h"
 #include "JointOrdering.h"
 
 namespace Helium

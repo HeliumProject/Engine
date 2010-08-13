@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Instance.h"
-#include "Core/Content/Nodes/Light.h"
+#include "Core/Content/Nodes/ContentLight.h"
 #include "Core/Scene/PropertiesGenerator.h"
 #include "Foundation/Container/BitArray.h"
 #include "Primitive.h"

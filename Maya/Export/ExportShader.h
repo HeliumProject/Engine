@@ -2,7 +2,7 @@
 
 #include "ExportBase.h"
 #include "Foundation/TUID.h"
-#include "Core/Content/Nodes/Shader.h"
+#include "Core/Content/Nodes/ContentShader.h"
 
 namespace Helium
 {

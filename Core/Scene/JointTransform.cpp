@@ -1,7 +1,7 @@
 /*#include "Precompile.h"*/
 #include "JointTransform.h"
 
-#include "Core/Content/Nodes/JointTransform.h"
+#include "Core/Content/Nodes/ContentJointTransform.h"
 #include "Foundation/Math/EulerAngles.h"
 
 #include "Application/UI/ArtProvider.h"

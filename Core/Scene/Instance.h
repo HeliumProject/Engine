@@ -2,7 +2,7 @@
 
 #include "PivotTransform.h"
 
-#include "Core/Content/Nodes/Instance.h"
+#include "Core/Content/Nodes/ContentInstance.h"
 
 namespace Helium
 {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ExportBase.h"
-#include "Core/Content/Nodes/Point.h"
+#include "Core/Content/Nodes/ContentPoint.h"
 
 #include <maya/MPoint.h>
 

@@ -3,7 +3,7 @@
 #include <map>
 
 #include "Core/API.h"
-#include "Core/Render/Mesh.h"
+#include "Core/Render/RenderMesh.h"
 #include "Foundation/Memory/SmartPtr.h"
 
 namespace Helium

@@ -2,7 +2,7 @@
 
 #include "Instance.h"
 
-#include "Core/Content/Nodes/Locator.h"
+#include "Core/Content/Nodes/ContentLocator.h"
 
 namespace Helium
 {

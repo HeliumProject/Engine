@@ -3,7 +3,7 @@
 #include "RBShaderLoader.h"
 
 #include "Core/Content/ContentInit.h"
-#include "Core/Content/Scene.h"
+#include "Core/Content/ContentScene.h"
 
 #include <map>
 #include <set>

@@ -2,9 +2,9 @@
 
 #include "ExportBase.h"
 
-#include "Core/Content/Nodes/Mesh.h"
-#include "Core/Content/Nodes/Skin.h"
-#include "Core/Content/Nodes/Shader.h"
+#include "Core/Content/Nodes/ContentMesh.h"
+#include "Core/Content/Nodes/ContentSkin.h"
+#include "Core/Content/Nodes/ContentShader.h"
 
 #include "ExportScene.h"
 #include "ExportShader.h"

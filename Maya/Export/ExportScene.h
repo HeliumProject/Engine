@@ -2,7 +2,7 @@
 
 #include "ExportBase.h"
 #include "Foundation/Reflect/Element.h"
-#include "Core/Content/Scene.h"
+#include "Core/Content/ContentScene.h"
 
 namespace Helium
 {

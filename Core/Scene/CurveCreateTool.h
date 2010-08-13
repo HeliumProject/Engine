@@ -2,7 +2,7 @@
 
 #include "Core/API.h"
 
-#include "Core/Content/Nodes/Curve.h"
+#include "Core/Content/Nodes/ContentCurve.h"
 #include "Curve.h"
 #include "Core/Scene/Tool.h"
 

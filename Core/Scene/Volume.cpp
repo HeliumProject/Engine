@@ -15,7 +15,7 @@
 #include "PrimitiveCapsule.h"
 #include "PrimitivePointer.h"
 
-#include "Core/Content/Nodes/Volume.h"
+#include "Core/Content/Nodes/ContentVolume.h"
 
 using namespace Helium;
 using namespace Helium::Math;

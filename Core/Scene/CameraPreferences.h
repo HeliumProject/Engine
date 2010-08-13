@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Foundation/Reflect/Element.h"
-#include "Core/Content/Nodes/Camera.h"
+#include "Core/Content/Nodes/ContentCamera.h"
 #include "Core/Scene/Settings.h"
 
 namespace Helium

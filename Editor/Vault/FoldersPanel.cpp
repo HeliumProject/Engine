@@ -3,10 +3,10 @@
 
 #include "DirectoryCtrl.h"
 
-#include "Application/Inspect/DragDrop/ClipboardDataObject.h"
-#include "Application/Inspect/DragDrop/ClipboardFileList.h"
+#include "Application/Inspect/Clipboard/ClipboardDataObject.h"
+#include "Application/Inspect/Clipboard/ClipboardFileList.h"
 #include "Application/Inspect/DragDrop/DropTarget.h"
-#include "Application/Inspect/DragDrop/ReflectClipboardData.h"
+#include "Application/Inspect/Clipboard/ReflectClipboardData.h"
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
 
 using namespace Helium;

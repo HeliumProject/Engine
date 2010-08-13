@@ -2,8 +2,8 @@
 
 #include "Foundation/String/Wildcard.h"
 #include "Foundation/String/Tokenize.h"
-#include "Application/Inspect/DragDrop/ClipboardDataObject.h"
-#include "Application/Inspect/DragDrop/ClipboardFileList.h"
+#include "Application/Inspect/Clipboard/ClipboardDataObject.h"
+#include "Application/Inspect/Clipboard/ClipboardFileList.h"
 
 using namespace Helium;
 using namespace Helium::Inspect;

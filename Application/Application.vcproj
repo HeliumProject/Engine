@@ -695,6 +695,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Inspect\InspectScript.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\InspectScript.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Inspect\InspectTypes.h"
 				>
 			</File>
@@ -704,14 +712,6 @@
 			</File>
 			<File
 				RelativePath=".\Inspect\Interpreter.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Inspect\Script.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Inspect\Script.h"
 				>
 			</File>
 			<Filter
@@ -1254,38 +1254,6 @@
 				Name="DragDrop"
 				>
 				<File
-					RelativePath=".\Inspect\DragDrop\ClipboardDataObject.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\DragDrop\ClipboardDataObject.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\DragDrop\ClipboardDataWrapper.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\DragDrop\ClipboardDataWrapper.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\DragDrop\ClipboardElementArray.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\DragDrop\ClipboardElementArray.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\DragDrop\ClipboardFileList.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\DragDrop\ClipboardFileList.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Inspect\DragDrop\DropSource.cpp"
 					>
 				</File>
@@ -1309,14 +1277,6 @@
 					RelativePath=".\Inspect\DragDrop\FilteredDropTarget.h"
 					>
 				</File>
-				<File
-					RelativePath=".\Inspect\DragDrop\ReflectClipboardData.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\DragDrop\ReflectClipboardData.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="Data"
@@ -1331,6 +1291,50 @@
 				</File>
 				<File
 					RelativePath=".\Inspect\Data\StringData.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Clipboard"
+				>
+				<File
+					RelativePath=".\Inspect\Clipboard\ClipboardDataObject.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Clipboard\ClipboardDataObject.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Clipboard\ClipboardDataWrapper.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Clipboard\ClipboardDataWrapper.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Clipboard\ClipboardElementArray.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Clipboard\ClipboardElementArray.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Clipboard\ClipboardFileList.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Clipboard\ClipboardFileList.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Clipboard\ReflectClipboardData.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Clipboard\ReflectClipboardData.h"
 					>
 				</File>
 			</Filter>

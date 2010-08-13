@@ -1,7 +1,7 @@
 #include "ClipboardDataObject.h"
 #include "Foundation/Reflect/ArchiveXML.h"
-#include "Application/Inspect/DragDrop/ClipboardDataWrapper.h"
-#include "Application/Inspect/DragDrop/ClipboardFileList.h"
+#include "Application/Inspect/Clipboard/ClipboardDataWrapper.h"
+#include "Application/Inspect/Clipboard/ClipboardFileList.h"
 
 using namespace Helium::Inspect;
 

@@ -8,8 +8,8 @@
 #include "Core/Content/ContentScene.h"
 
 #include "Application/UI/FileDialog.h"
-#include "Application/Inspect/DragDrop/ClipboardFileList.h"
-#include "Application/Inspect/DragDrop/ClipboardDataObject.h"
+#include "Application/Inspect/Clipboard/ClipboardFileList.h"
+#include "Application/Inspect/Clipboard/ClipboardDataObject.h"
 
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/InstanceSet.h"

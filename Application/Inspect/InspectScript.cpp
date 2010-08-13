@@ -1,4 +1,5 @@
-#include "Script.h"
+#include "InspectScript.h"
+
 #include "Application/Inspect/Controls/Container.h"
 #include "Application/Inspect/Controls/Label.h"
 #include "Application/Inspect/Controls/CheckBox.h"

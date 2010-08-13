@@ -4,10 +4,10 @@
 #include "Vault.h"
 
 #include "Foundation/String/Utilities.h"
-#include "Application/Inspect/DragDrop/ClipboardDataObject.h"
-#include "Application/Inspect/DragDrop/ClipboardFileList.h"
+#include "Application/Inspect/Clipboard/ClipboardDataObject.h"
+#include "Application/Inspect/Clipboard/ClipboardFileList.h"
 #include "Application/Inspect/DragDrop/DropTarget.h"
-#include "Application/Inspect/DragDrop/ReflectClipboardData.h"
+#include "Application/Inspect/Clipboard/ReflectClipboardData.h"
 #include "Core/Scene/SceneManager.h"
 #include "Application/UI/FileDialog.h"
 #include "Editor/ArtProvider.h"

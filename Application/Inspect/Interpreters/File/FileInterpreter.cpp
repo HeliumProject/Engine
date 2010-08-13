@@ -3,12 +3,12 @@
 #include "FileBrowserButton.h"
 
 #include "Application/Inspect/InspectInit.h"
+#include "Application/Inspect/InspectScript.h"
 #include "Application/Inspect/Data/StringData.h"
-#include "Application/Inspect/Script.h"
 #include "Application/Inspect/Controls/Action.h"
 #include "Application/Inspect/Controls/Value.h"
-#include "Application/Inspect/DragDrop/ClipboardDataObject.h"
-#include "Application/Inspect/DragDrop/ClipboardFileList.h"
+#include "Application/Inspect/Clipboard/ClipboardDataObject.h"
+#include "Application/Inspect/Clipboard/ClipboardFileList.h"
 
 #include "Core/Asset/AssetClass.h"
 #include "Application/UI/FileDialog.h"

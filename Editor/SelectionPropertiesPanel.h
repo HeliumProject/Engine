@@ -20,7 +20,7 @@ namespace Helium
             wxButton* m_CollapseAll;
 
             Core::PropertiesManager* m_PropertyManager;
-            Inspect::CanvasWindow* m_PropertyCanvas;
+            Inspect::TreeCanvasCtrl* m_PropertyCanvas;
 
             SelectionPropertiesPanel( Core::PropertiesManager* propertyManager, wxWindow* parent, int id = wxID_ANY, wxPoint pos = wxDefaultPosition, wxSize size = wxSize( 243,335 ), int style = wxTAB_TRAVERSAL );
 

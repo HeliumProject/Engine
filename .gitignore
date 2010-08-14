@@ -1,6 +1,8 @@
 *.suo
 *.ncb
 *.user
+*.tags
+*.session
 *.db
 *.BASE.*
 *.LOCAL.*

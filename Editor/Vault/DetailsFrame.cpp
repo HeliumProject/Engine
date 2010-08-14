@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "DetailsFrame.h"
 
-#include "Application/UI/ArtProvider.h"
+#include "Editor/ArtProvider.h"
 #include "Application/RCS/RCS.h"
 
 using namespace Helium;
@@ -102,12 +102,12 @@ void DetailsFrame::Populate( const Helium::Path& path )
     {
         if ( rcsFile.IsCheckedOutByMe() )
         {
-            m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( Helium::ArtIDs::RevisionControl::CheckedOutByMe ) );
+            m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::RevisionControl::CheckedOutByMe ) );
             m_RevisionStatus->SetLabel( TXT( "Checked out to you" ) );
         }
         else if ( rcsFile.IsCheckedOutBySomeoneElse() )
         {
-            m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( Helium::ArtIDs::RevisionControl::CheckedOutBySomeoneElse ) );
+            m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::RevisionControl::CheckedOutBySomeoneElse ) );
 
             tstring usernames;
             rcsFile.GetOpenedByUsers( usernames );
@@ -119,12 +119,12 @@ void DetailsFrame::Populate( const Helium::Path& path )
         }
         else if ( !rcsFile.IsUpToDate() )
         {
-            m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( Helium::ArtIDs::RevisionControl::OutOfDate ) );
+            m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::RevisionControl::OutOfDate ) );
             m_RevisionStatus->SetLabel( TXT( "Out of date" ) );
         }
         else
         {
-            m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( Helium::ArtIDs::Null ) );
+            m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Null ) );
             m_RevisionStatus->SetLabel( TXT( "Available for check out" ) );
         }
 
@@ -151,7 +151,7 @@ void DetailsFrame::Populate( const Helium::Path& path )
     else
     {
         m_RevisionStatus->SetLabel( TXT( "No Perforce information available" ) );
-        m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( Helium::ArtIDs::RevisionControl::Unknown ) );
+        m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::RevisionControl::Unknown ) );
         m_LastCheckInPanel->Hide();
         m_FirstCheckInPanel->Hide();
     }

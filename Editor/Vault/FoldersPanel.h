@@ -4,8 +4,8 @@
 #include "VaultFrame.h"
 #include "VaultMenuIDs.h"
 
+#include "Application/Inspect/Clipboard/ReflectClipboardData.h"
 #include "Application/Inspect/DragDrop/DropTarget.h"
-#include "Application/Inspect/DragDrop/ReflectClipboardData.h"
 
 namespace Helium
 {

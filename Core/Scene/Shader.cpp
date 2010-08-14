@@ -1,11 +1,10 @@
 /*#include "Precompile.h"*/
 #include "Shader.h"
-#include "Render.h"
+
+#include "Foundation/Log.h"
 
 #include "Core/Content/Nodes/ContentShader.h"
-#include "Foundation/Log.h"
-#include "Application/UI/ArtProvider.h"
-
+#include "Core/Scene/Render.h"
 #include "Core/Scene/Scene.h"
 
 using namespace Helium;
@@ -38,7 +37,7 @@ Shader::Shader( Core::Scene* scene, Content::Shader* shader )
 
 i32 Shader::GetImageIndex() const
 {
-  return Helium::GlobalFileIconsTable().GetIconID( TXT( "shader" ) );
+  return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "shader" ) );
 }
 
 tstring Shader::GetApplicationTypeName() const

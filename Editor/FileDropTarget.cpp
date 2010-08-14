@@ -1,8 +1,10 @@
+#include "Precompile.h"
 #include "FileDropTarget.h"
 
 #include "Foundation/String/Tokenize.h"
 
 using namespace Helium;
+using namespace Helium::Editor;
 
 FileDropTarget::FileDropTarget(const tstring& extensions, const tstring& delims)
 {

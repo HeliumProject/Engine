@@ -13,7 +13,7 @@ VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
     {
         Freeze();
 
-        m_OptionsButton->SetBitmap( wxArtProvider::GetBitmap( Helium::ArtIDs::Options ) );
+        m_OptionsButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Options ) );
 
         Layout();
         Thaw();

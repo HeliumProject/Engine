@@ -1,7 +1,7 @@
 #include "ReflectInterpreter.h"
 #include "Application/Inspect/Interpreters/Reflect/ReflectValueInterpreter.h"
 
-#include "Application/Inspect/Script.h"
+#include "Application/Inspect/InspectScript.h"
 #include "Application/Inspect/Controls/InspectButton.h"
 #include "Application/Inspect/Controls/Value.h"
 #include "Application/Inspect/Controls/List.h"

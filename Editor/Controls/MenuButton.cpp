@@ -1,12 +1,14 @@
+#include "Precompile.h"
 #include "MenuButton.h"
 
 using namespace Helium;
+using namespace Helium::Editor;
 
 //-----------------------------------------------------------
 // macros
 //-----------------------------------------------------------
-IMPLEMENT_DYNAMIC_CLASS( Helium::MenuButton, wxButton );
-BEGIN_EVENT_TABLE( Helium::MenuButton, wxButton)
+IMPLEMENT_DYNAMIC_CLASS( MenuButton, wxButton );
+BEGIN_EVENT_TABLE( MenuButton, wxButton)
 END_EVENT_TABLE();
 
 MenuButton::MenuButton(wxWindow *parent,

@@ -1214,6 +1214,22 @@
 		<Filter
 			Name="Controls"
 			>
+			<File
+				RelativePath=".\Controls\ImageViewPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Controls\ImageViewPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Controls\MenuButton.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Controls\MenuButton.h"
+				>
+			</File>
 			<Filter
 				Name="Tree"
 				>
@@ -1781,6 +1797,22 @@
 		</File>
 		<File
 			RelativePath=".\EntityAssetOutliner.h"
+			>
+		</File>
+		<File
+			RelativePath=".\FileDropTarget.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\FileDropTarget.h"
+			>
+		</File>
+		<File
+			RelativePath=".\FileIconsTable.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\FileIconsTable.h"
 			>
 		</File>
 		<File

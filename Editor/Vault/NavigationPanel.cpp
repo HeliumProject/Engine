@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "NavigationPanel.h"
 
-#include "Application/UI/ArtProvider.h"
-#include "Application/UI/MenuButton.h"
+#include "Editor/ArtProvider.h"
+#include "Editor/Controls/MenuButton.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

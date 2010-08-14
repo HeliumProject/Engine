@@ -3,12 +3,9 @@
 
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/SceneManager.h"
-#include "InstanceType.h"
-
+#include "Core/Scene/InstanceType.h"
 #include "Core/Scene/PropertiesGenerator.h"
-#include "Application/UI/ArtProvider.h"
-
-#include "PrimitivePointer.h"
+#include "Core/Scene/PrimitivePointer.h"
 
 using namespace Helium;
 using namespace Helium::Math;
@@ -43,7 +40,7 @@ AmbientLight::AmbientLight(Core::Scene* scene, Content::AmbientLight* light)
 
 i32 AmbientLight::GetImageIndex() const
 {
-  return Helium::GlobalFileIconsTable().GetIconID( TXT( "light" ) );
+  return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "light" ) );
 }
 
 tstring AmbientLight::GetApplicationTypeName() const

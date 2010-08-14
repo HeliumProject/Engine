@@ -1,5 +1,5 @@
 #include "DropTarget.h"
-#include "Application/Inspect/DragDrop/ClipboardDataObject.h"
+#include "Application/Inspect/Clipboard/ClipboardDataObject.h"
 #include "Platform/Exception.h"
 
 using namespace Helium::Inspect;

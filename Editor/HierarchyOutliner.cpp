@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "HierarchyOutliner.h"
 
-#include "Application/UI/ArtProvider.h"
+#include "Editor/ArtProvider.h"
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
 #include "Core/Scene/ParentCommand.h"
 #include "Core/Scene/Scene.h"
@@ -57,7 +57,7 @@ void HierarchyOutliner::AddHierarchyNodes()
     RecurseAddHierarchyNode( m_CurrentScene->GetRoot() );
 
     // The root item gets a special icon
-    i32 image = Helium::GlobalFileIconsTable().GetIconID( TXT( "world" ) );
+    i32 image = GlobalFileIconsTable().GetIconID( TXT( "world" ) );
     m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Normal );
     m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Expanded );
     m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Selected );

@@ -2,15 +2,12 @@
 #include "Core/Scene/Mesh.h"
 
 #include "Core/Content/Nodes/ContentMesh.h"
-
-#include "Application/UI/ArtProvider.h"
 #include "Core/Scene/Pick.h"
-#include "Color.h"
-
+#include "Core/Scene/Color.h"
 #include "Core/Scene/Scene.h"
-#include "Shader.h"
+#include "Core/Scene/Shader.h"
 #include "Core/Scene/Transform.h"
-#include "HierarchyNodeType.h"
+#include "Core/Scene/HierarchyNodeType.h"
 
 using namespace Helium;
 using namespace Helium::Math;
@@ -78,7 +75,7 @@ Mesh::~Mesh()
 
 i32 Mesh::GetImageIndex() const
 {
-  return Helium::GlobalFileIconsTable().GetIconID( TXT( "mesh" ) );
+  return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "mesh" ) );
 }
 
 tstring Mesh::GetApplicationTypeName() const

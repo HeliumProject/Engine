@@ -1,7 +1,7 @@
 #include "ReflectValueInterpreter.h"
 
 #include "Application/Inspect/InspectInit.h"
-#include "Application/Inspect/Script.h"
+#include "Application/Inspect/InspectScript.h"
 #include "Application/Inspect/Controls/CheckBox.h"
 #include "Application/Inspect/Controls/Choice.h"
 #include "Application/Inspect/Controls/Action.h"

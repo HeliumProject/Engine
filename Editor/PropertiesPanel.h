@@ -13,13 +13,13 @@ namespace Helium
         public:
             PropertiesPanel( Core::PropertiesManager* manager, wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
 
-            Inspect::CanvasWindow* GetPropertiesCanvas()
+            Inspect::TreeCanvasCtrl* GetPropertiesCanvas()
             {
                 return m_PropertyCanvas;
             }
         private:
             Core::PropertiesManager* m_PropertiesManager;
-            Inspect::CanvasWindow* m_PropertyCanvas;
+            Inspect::TreeCanvasCtrl* m_PropertyCanvas;
 
             void OnIntersection(wxCommandEvent& event);
             void OnUnion(wxCommandEvent& event);

@@ -1,13 +1,13 @@
 /*#include "Precompile.h"*/
 #include "Layer.h"
-#include "Core/Scene/Scene.h"
-
-#include "Application/UI/ArtProvider.h"
-#include "Application/Inspect/Controls/Choice.h"
 
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/String/Natural.h"
 #include "Foundation/Log.h"
+
+#include "Application/Inspect/Controls/Choice.h"
+
+#include "Core/Scene/Scene.h"
 
 using namespace Helium;
 using namespace Helium::Core;
@@ -53,7 +53,7 @@ Layer::~Layer()
 // 
 i32 Layer::GetImageIndex() const
 {
-  return Helium::GlobalFileIconsTable().GetIconID( TXT( "layer" ) );
+  return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "layer" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

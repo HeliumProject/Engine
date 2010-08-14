@@ -1,7 +1,6 @@
 #include "InspectPanel.h"
 #include "Application/Inspect/Controls/Canvas.h"
 #include "Application/Inspect/Controls/Label.h"
-#include "Application/UI/ArtProvider.h"
 
 using namespace Helium::Reflect;
 using namespace Helium::Inspect;
@@ -91,16 +90,16 @@ void Panel::Realize(Container* parent)
   
   INSPECT_SCOPE_TIMER( ("") );
   
-  Canvas::ExpandState cachedState = m_Canvas->GetPanelExpandState( GetPath() );
+  ExpandState cachedState = m_Canvas->GetPanelExpandState( GetPath() );
   switch ( cachedState )
   {
     // The state was cached to be expanded
-  case Canvas::Expanded:
+  case ExpandStates::Expanded:
     m_Expanded = true;
     break;
 
     // The state was cached to be collapsed
-  case Canvas::Collapsed:
+  case ExpandStates::Collapsed:
     m_Expanded = false;
     break;
   }
@@ -164,16 +163,23 @@ void Panel::RefreshControls()
     treeWndCtrl = new Helium::TreeWndCtrl( m_Parent->GetWindow() );
     treeWndCtrl->AddRoot( TXT( "Panel Root (hidden)" ) );
     treeWndCtrl->SetHideRoot( true );
+#if INSPECT_REFACTOR
     treeWndCtrl->SetImageList( Helium::GlobalFileIconsTable().GetSmallImageList() );
     treeWndCtrl->SetStateImageList( Helium::GlobalFileIconsTable().GetSmallImageList() );
+#endif
     m_OwnWindow = true;
   }
   
   m_Window = treeWndCtrl;
   treeWndCtrl->Freeze();
   
+#if INSPECT_REFACTOR
   int collapsedIndex = Helium::GlobalFileIconsTable().GetIconID( TXT( "ms_folder_closed" ) );
   int expandedIndex = Helium::GlobalFileIconsTable().GetIconID( TXT( "ms_folder_open" ) );
+#else
+  int collapsedIndex = -1;
+  int expandedIndex = -1;
+#endif
 
   wxTreeItemId item = m_ItemData.GetId();
   if ( m_ShowTreeNode )
@@ -282,23 +288,23 @@ bool Panel::IsExpanded()
 
 void Panel::SetExpanded(bool expanded, bool force)
 {
-  Canvas::ExpandState cachedState = Canvas::Default;
+  ExpandState cachedState = ExpandStates::Default;
 
   if ( force )
   {
     if ( m_Canvas )
     {
-      m_Canvas->SetPanelExpandState( GetPath(), expanded ? Inspect::Canvas::Expanded : Inspect::Canvas::Collapsed );
+      m_Canvas->SetPanelExpandState( GetPath(), expanded ? Inspect::ExpandStates::Expanded : Inspect::ExpandStates::Collapsed );
     }
   }
   else
   {
-    cachedState = m_Canvas ? m_Canvas->GetPanelExpandState( GetPath() ) : Canvas::Default;
+    cachedState = m_Canvas ? m_Canvas->GetPanelExpandState( GetPath() ) : ExpandStates::Default;
 
     switch ( cachedState )
     {
       // The state was cached to be expanded, ignore the expansion change
-    case Canvas::Expanded:
+    case ExpandStates::Expanded:
       if ( m_Expandable )
       {
         m_Expanded = true;
@@ -307,7 +313,7 @@ void Panel::SetExpanded(bool expanded, bool force)
       break;
 
       // The state was cached to be collapsed, ignore the expansion change
-    case Canvas::Collapsed:
+    case ExpandStates::Collapsed:
       if ( m_Collapsable )
       {
         m_Expanded = false;
@@ -317,7 +323,7 @@ void Panel::SetExpanded(bool expanded, bool force)
     }
   }
 
-  if ( cachedState == Canvas::Default )
+  if ( cachedState == ExpandStates::Default )
   {
     if ( expanded && m_Expandable )
     {

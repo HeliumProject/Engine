@@ -18,7 +18,7 @@ PropertiesPanel::PropertiesPanel( PropertiesManager* manager, wxWindow *parent, 
     m_ExpandAllButton->SetHelpText( TXT( "Clicking this button will expand all properties in the property hierarchy below." ) );
     m_CollapseAllButton->SetHelpText( TXT( "Clicking this button will collapse all properties in the property hierarchy below." ) );
 
-    m_PropertyCanvas = new Inspect::CanvasWindow ( m_PropertiesPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxCLIP_CHILDREN );
+    m_PropertyCanvas = new Inspect::TreeCanvasCtrl ( m_PropertiesPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxCLIP_CHILDREN );
     m_PropertiesPanel->GetSizer()->Add( m_PropertyCanvas, 1, wxEXPAND | wxALL, 0 );
     m_PropertyCanvas->SetHelpText( TXT( "This is the property canvas.  It displays properties for the selected objects." ) );
 }

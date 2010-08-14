@@ -1,21 +1,18 @@
 /*#include "Precompile.h"*/
 #include "Light.h"
 
+#include "Foundation/Component/ComponentHandle.h"
+
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/SceneManager.h"
-#include "InstanceType.h"
-
+#include "Core/Scene/InstanceType.h"
 #include "Core/Scene/PropertiesGenerator.h"
-#include "Application/UI/ArtProvider.h"
-
-#include "PrimitiveSphere.h"
-#include "PrimitivePointer.h"
-#include "PrimitiveCube.h"
-#include "PrimitiveCircle.h"
-#include "PrimitiveCylinder.h"
-
-#include "Foundation/Component/ComponentHandle.h"
-#include "LightPanel.h"
+#include "Core/Scene/PrimitiveSphere.h"
+#include "Core/Scene/PrimitivePointer.h"
+#include "Core/Scene/PrimitiveCube.h"
+#include "Core/Scene/PrimitiveCircle.h"
+#include "Core/Scene/PrimitiveCylinder.h"
+#include "Core/Scene/LightPanel.h"
 
 using namespace Helium;
 using namespace Helium::Math;
@@ -50,7 +47,7 @@ Light::Light(Core::Scene* scene, Content::Light* light)
 
 i32 Light::GetImageIndex() const
 {
-    return Helium::GlobalFileIconsTable().GetIconID( TXT( "light" ) );
+    return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "light" ) );
 }
 
 tstring Light::GetApplicationTypeName() const

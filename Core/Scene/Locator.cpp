@@ -1,18 +1,13 @@
 /*#include "Precompile.h"*/
 #include "Locator.h"
 
+#include "Core/Content/Nodes/ContentLocator.h"
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/SceneManager.h"
-
-#include "LocatorType.h"
-
+#include "Core/Scene/LocatorType.h"
 #include "Core/Scene/PropertiesGenerator.h"
-#include "Application/UI/ArtProvider.h"
-
-#include "PrimitiveLocator.h"
-#include "PrimitiveCube.h"
-
-#include "Core/Content/Nodes/ContentLocator.h"
+#include "Core/Scene/PrimitiveLocator.h"
+#include "Core/Scene/PrimitiveCube.h"
 
 using namespace Helium;
 using namespace Helium::Math;
@@ -52,7 +47,7 @@ Locator::~Locator()
 
 i32 Locator::GetImageIndex() const
 {
-  return Helium::GlobalFileIconsTable().GetIconID( TXT( "locator" ) );
+  return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "locator" ) );
 }
 
 tstring Locator::GetApplicationTypeName() const

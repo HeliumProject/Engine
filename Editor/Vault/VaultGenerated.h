@@ -8,9 +8,9 @@
 #ifndef __VaultGenerated__
 #define __VaultGenerated__
 
-namespace Helium{ class MenuButton; }
 namespace Helium{ namespace Editor{ class DirectoryCtrl; } }
 namespace Helium{ namespace Editor{ class Frame; } }
+namespace Helium{ namespace Editor{ class MenuButton; } }
 namespace Helium{ namespace Editor{ class SortTreeCtrl; } }
 
 #include "Editor/Frame.h"
@@ -88,12 +88,12 @@ namespace Helium
 				
 			
 			public:
-				Helium::MenuButton* m_BackButton;
-				Helium::MenuButton* m_ForwardButton;
+				Helium::Editor::MenuButton* m_BackButton;
+				Helium::Editor::MenuButton* m_ForwardButton;
 				wxBitmapButton* m_UpFolderButton;
 				wxComboBox* m_NavBarComboBox;
 				wxBitmapButton* m_GoButton;
-				Helium::MenuButton* m_OptionsButton;
+				Helium::Editor::MenuButton* m_OptionsButton;
 				
 				NavigationPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 557,39 ), long style = wxNO_BORDER|wxTAB_TRAVERSAL );
 				~NavigationPanelGenerated();

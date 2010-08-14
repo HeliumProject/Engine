@@ -2,17 +2,13 @@
 #include "Core/Scene/SceneNode.h"
 
 #include "Core/Content/Nodes/ContentSceneNode.h"
-
 #include "Core/Scene/SceneNodeType.h"
-#include "SceneNodePanel.h"
-#include "SceneGraph.h"
-
+#include "Core/Scene/SceneNodePanel.h"
+#include "Core/Scene/SceneGraph.h"
 #include "Core/Scene/Scene.h"
-#include "Layer.h"
+#include "Core/Scene/Layer.h"
 #include "Core/Scene/Transform.h"
-
-#include "Statistics.h"
-#include "Application/UI/ArtProvider.h"
+#include "Core/Scene/Statistics.h"
 
 using namespace Helium;
 using namespace Helium::Core;
@@ -378,7 +374,7 @@ void SceneNode::Evaluate(GraphDirection direction)
 
 i32 SceneNode::GetImageIndex() const
 {
-  return Helium::GlobalFileIconsTable().GetIconID( TXT( "null" ) );
+  return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "null" ) );
 }
 
 tstring SceneNode::GetApplicationTypeName() const

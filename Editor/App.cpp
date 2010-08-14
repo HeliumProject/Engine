@@ -18,7 +18,7 @@
 
 #include "Application/Application.h"
 #include "Application/Exception.h"
-#include "Application/UI/ArtProvider.h"
+#include "Editor/ArtProvider.h"
 #include "Application/Worker/Process.h"
 #include "Application/Inspect/InspectInit.h"
 #include "Application/Inspect/Interpreters/Reflect/InspectReflectInit.h"
@@ -194,7 +194,7 @@ bool App::OnInit()
         wxImage::AddHandler( new wxCURHandler );
     }
 
-    Helium::ArtProvider* artProvider = new Helium::ArtProvider();
+    ArtProvider* artProvider = new ArtProvider();
     wxArtProvider::Push( artProvider );
 
     wxSimpleHelpProvider* helpProvider = new wxSimpleHelpProvider();

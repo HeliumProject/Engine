@@ -43,7 +43,7 @@ SelectionPropertiesPanel::SelectionPropertiesPanel( PropertiesManager* propertie
     wxBoxSizer* bottomSizer;
     bottomSizer = new wxBoxSizer( wxHORIZONTAL );
 
-    m_PropertyCanvas = new Inspect::CanvasWindow (this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxCLIP_CHILDREN);	
+    m_PropertyCanvas = new Inspect::TreeCanvasCtrl (this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxCLIP_CHILDREN);	
     bottomSizer->Add( m_PropertyCanvas, 1, wxEXPAND | wxALL, 0 );
 
     mainSizer->Add( bottomSizer, 1, wxEXPAND, 5 );

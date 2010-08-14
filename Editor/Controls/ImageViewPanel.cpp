@@ -1,11 +1,12 @@
+#include "Precompile.h"
 #include "ImageViewPanel.h"
-#include "ArtProvider.h"
 
 #include <wx/image.h>
 #include <wx/dcclient.h>
 #include <wx/dcmemory.h>
 
 using namespace Helium;
+using namespace Helium::Editor;
 
 void DrawBitmap( wxDC& dc, const wxBitmap& bitmap );
 

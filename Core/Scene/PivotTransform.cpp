@@ -1,14 +1,14 @@
 /*#include "Precompile.h"*/
 #include "PivotTransform.h"
 
-#include "Core/Content/Nodes/ContentPivotTransform.h"
 #include "Foundation/Math/EulerAngles.h"
 #include "Foundation/Math/Constants.h"
 
 #include "Application/Undo/PropertyCommand.h"
-#include "HierarchyNodeType.h"
+
+#include "Core/Content/Nodes/ContentPivotTransform.h"
+#include "Core/Scene/HierarchyNodeType.h"
 #include "Core/Scene/Scene.h"
-#include "Application/UI/ArtProvider.h"
 
 using namespace Helium;
 using namespace Helium::Math;
@@ -42,7 +42,7 @@ PivotTransform::PivotTransform(Core::Scene* scene, Content::PivotTransform* pivo
 
 i32 PivotTransform::GetImageIndex() const
 {
-  return Helium::GlobalFileIconsTable().GetIconID( TXT( "transform" ) );
+  return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "transform" ) );
 }
 
 tstring PivotTransform::GetApplicationTypeName() const

@@ -1,23 +1,22 @@
 /*#include "Precompile.h"*/
 #include "Curve.h"
 
-#include "Core/Scene/Pick.h"
-#include "PrimitiveLocator.h"
-#include "PrimitiveCone.h"
-#include "Color.h"
-#include "Core/Scene/Scene.h"
-#include "Statistics.h"
-#include "HierarchyNodeType.h"
-#include "ReverseChildrenCommand.h"
-
-#include "Application/UI/ArtProvider.h"
-#include "Core/Scene/PropertiesGenerator.h"
-#include "Application/Undo/PropertyCommand.h"
 #include "Foundation/Log.h"
-#include "Orientation.h"
-
 #include "Foundation/Math/Curve.h"
 #include "Foundation/Math/AngleAxis.h"
+
+#include "Application/Undo/PropertyCommand.h"
+
+#include "Core/Scene/Pick.h"
+#include "Core/Scene/PrimitiveLocator.h"
+#include "Core/Scene/PrimitiveCone.h"
+#include "Core/Scene/Color.h"
+#include "Core/Scene/Scene.h"
+#include "Core/Scene/Statistics.h"
+#include "Core/Scene/HierarchyNodeType.h"
+#include "Core/Scene/ReverseChildrenCommand.h"
+#include "Core/Scene/PropertiesGenerator.h"
+#include "Core/Scene/Orientation.h"
 
 #include <algorithm>
 
@@ -88,7 +87,7 @@ Curve::~Curve()
 
 i32 Curve::GetImageIndex() const
 {
-  return Helium::GlobalFileIconsTable().GetIconID( TXT( "curve" ) );
+  return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "curve" ) );
 }
 
 tstring Curve::GetApplicationTypeName() const

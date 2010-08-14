@@ -172,9 +172,9 @@ ProjectPanel::ProjectPanel( wxWindow *parent )
         Freeze();
 
 #pragma TODO( "Use overlays for the add/create icons below" )
-        m_AddFile->SetBitmap( wxArtProvider::GetBitmap( Helium::ArtIDs::File ) );
-        m_CreateFolder->SetBitmap( wxArtProvider::GetBitmap( Editor::ArtIDs::ProjectFolder ) );
-        m_Delete->SetBitmap( wxArtProvider::GetBitmap( Helium::ArtIDs::Delete ) );
+        m_AddFile->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::File ) );
+        m_CreateFolder->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::ProjectFolder ) );
+        m_Delete->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Delete ) );
 
         m_ProjectManagementPanel->Layout();
 

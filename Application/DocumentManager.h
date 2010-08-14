@@ -1,12 +1,11 @@
 #pragma once
 
-#include "Editor/API.h"
-#include "Application/Document.h"
-
 #include "Foundation/TUID.h"
 #include "Foundation/Message.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Container/OrderedSet.h"
+
+#include "Application/Document.h"
 
 namespace Helium
 {

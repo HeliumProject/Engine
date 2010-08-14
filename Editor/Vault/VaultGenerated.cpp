@@ -7,8 +7,8 @@
 
 #include "Precompile.h"
 
-#include "Application/UI/MenuButton.h"
 #include "DirectoryCtrl.h"
+#include "Editor/Controls/MenuButton.h"
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
 
 #include "VaultGenerated.h"
@@ -37,14 +37,14 @@ NavigationPanelGenerated::NavigationPanelGenerated( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer20;
 	bSizer20 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_BackButton = new Helium::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
+	m_BackButton = new Helium::Editor::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
 	m_BackButton->Enable( false );
 	
 	m_BackButton->Enable( false );
 	
 	bSizer20->Add( m_BackButton, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
-	m_ForwardButton = new Helium::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
+	m_ForwardButton = new Helium::Editor::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
 	m_ForwardButton->Enable( false );
 	
 	m_ForwardButton->Enable( false );
@@ -72,7 +72,7 @@ NavigationPanelGenerated::NavigationPanelGenerated( wxWindow* parent, wxWindowID
 	m_staticline13 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bSizer20->Add( m_staticline13, 0, wxEXPAND | wxALL, 5 );
 	
-	m_OptionsButton = new Helium::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
+	m_OptionsButton = new Helium::Editor::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
 	bSizer20->Add( m_OptionsButton, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 5 );
 	
 	this->SetSizer( bSizer20 );

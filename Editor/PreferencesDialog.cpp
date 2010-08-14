@@ -61,7 +61,7 @@ int PreferencesDialog::ShowModal( Editor::Preferences* prefs )
     canvasControls.push_back( canvas );
     canvas->SetPanelsExpanded( true );
 
-    Inspect::CanvasWindow* canvasWindow = new Inspect::CanvasWindow( this );
+    Inspect::TreeCanvasCtrl* canvasWindow = new Inspect::TreeCanvasCtrl( this );
     canvas->SetControl( canvasWindow );
 
     m_PreferenceSizer->Add( canvasWindow, 1, wxEXPAND, 0 );

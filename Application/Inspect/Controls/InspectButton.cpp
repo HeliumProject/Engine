@@ -2,8 +2,6 @@
 #include "Application/Inspect/Controls/Container.h"
 #include "Application/Inspect/Controls/Canvas.h"
 
-#include "Application/UI/ArtProvider.h"
-
 // Using
 using namespace Helium;
 using namespace Helium::Inspect;

@@ -11,7 +11,7 @@
 #include "Editor/UpdateStatusEvent.h"
 #include "Application/Inspect/DragDrop/DropSource.h"
 #include "Application/Undo/Command.h"
-#include "Application/UI/ArtProvider.h"
+#include "Editor/ArtProvider.h"
 
 #include "Core/Scene/Color.h"  // BARF! Should we move Color.h to Editor?
 #include "Core/Scene/Render.h" // BARF! Should we move Render.h to Editor?

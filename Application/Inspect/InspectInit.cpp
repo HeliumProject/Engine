@@ -1,13 +1,11 @@
 #include "Foundation/InitializerStack.h"
 #include "Application/Inspect/InspectInit.h"
+#include "Application/Inspect/InspectScript.h"
 #include "Application/Inspect/Controls/Controls.h"
-
-#include "Application/Inspect/Script.h"
-
-#include "Application/Inspect/DragDrop/ClipboardDataWrapper.h"
-#include "Application/Inspect/DragDrop/ClipboardElementArray.h"
-#include "Application/Inspect/DragDrop/ClipboardFileList.h"
-#include "Application/Inspect/DragDrop/ReflectClipboardData.h"
+#include "Application/Inspect/Clipboard/ClipboardDataWrapper.h"
+#include "Application/Inspect/Clipboard/ClipboardElementArray.h"
+#include "Application/Inspect/Clipboard/ClipboardFileList.h"
+#include "Application/Inspect/Clipboard/ReflectClipboardData.h"
 
 #include "Foundation/Reflect/Registry.h"
 

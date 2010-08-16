@@ -9,17 +9,30 @@ help provide foundation technology and GUI tools for building game
 engines (not games per se).
 
 This project was seeded with code from Nocturnal Initiative, an open
-source project at Insomniac Games.
+source project at Insomniac Games.  Its continued development is
+generously funded by Whitemoon Dreams, Inc.
 
-http://nocturnal.insomniacgames.com
+http://nocturnal.insomniacgames.com/
+http://www.insomniacgames.com/
+http://www.insomniacgames.com/research_dev/
+http://whitemoondreams.com/
+
+========
+Download
+========
+
+Source archive of head revision:
+http://github.com/nocturnal/Helium/zipball/master
+
+Git URL (read only):
+git://github.com/nocturnal/Helium.git
 
 =============
 Prerequisites
 =============
 
-git
-Visual Studio 2008 with SP1
-DirectX SDK
+Visual Studio 2008 + SP1 (SP1 is required for regex and compiler fixes)
+DirectX SDK (installed to default location)
 
 ===============
 Building Helium
@@ -52,5 +65,5 @@ the time being we are moving all platform-specific API calls into
 Platform.vcproj.
 
 -Geoff (AKA gorlak)
--Andy (AKA Andy)
+-Andy (AKA andyburke)
 ########################################################################

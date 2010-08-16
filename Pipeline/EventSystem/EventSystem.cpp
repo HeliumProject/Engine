@@ -13,7 +13,7 @@
 #include <sstream>
 #include <set>
 
-#include "Application/Application.h"
+#include "Foundation/Startup.h"
 #include "Foundation/Regex.h" 
 #include "Platform/Types.h"
 #include "Foundation/File/Directory.h"

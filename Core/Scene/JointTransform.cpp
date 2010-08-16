@@ -3,7 +3,7 @@
 
 #include "Foundation/Math/EulerAngles.h"
 
-#include "Application/Undo/PropertyCommand.h"
+#include "Foundation/Undo/PropertyCommand.h"
 
 #include "Core/Content/Nodes/ContentJointTransform.h"
 #include "Core/Scene/Color.h"

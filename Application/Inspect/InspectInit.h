@@ -2,7 +2,7 @@
 
 // Includes
 #include "Application/API.h"
-#include "Application/Application.h"
+#include "Foundation/Startup.h"
 #include "Foundation/Automation/Event.h"
 
 namespace Helium

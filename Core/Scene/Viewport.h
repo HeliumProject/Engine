@@ -5,7 +5,7 @@
 #include "Foundation/Math/AlignedBox.h"
 #include "Foundation/Reflect/Enumeration.h"
 
-#include "Application/Undo/Queue.h"
+#include "Foundation/Undo/Queue.h"
 
 #include "Core/API.h"
 #include "Core/Scene/Render.h"

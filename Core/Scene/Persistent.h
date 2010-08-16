@@ -2,7 +2,7 @@
 
 #include "Core/Scene/Selectable.h"
 
-#include "Application/Undo/Command.h"
+#include "Foundation/Undo/Command.h"
 
 namespace Helium
 {

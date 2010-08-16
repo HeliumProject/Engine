@@ -3,7 +3,7 @@
 
 #include "Vault.h"
 
-#include "Application/Preferences.h"
+#include "Foundation/Preferences.h"
 #include "Foundation/Regex.h"
 #include "Foundation/Checksum/MD5.h"
 #include "Foundation/Flags.h"
@@ -115,7 +115,7 @@ void AssetCollection::CreateFilePath( const tstring name, tstring& filePath, con
     if ( folder.empty() )
     {
         Helium::Path prefsPath;
-        if ( !Application::GetPreferencesDirectory( prefsPath ) )
+        if ( !Helium::GetPreferencesDirectory( prefsPath ) )
         {
             throw Helium::Exception( TXT( "Could not get preferences directory." ) );
         }

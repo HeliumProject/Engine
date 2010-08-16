@@ -2,16 +2,16 @@
 
 #include "Platform/Types.h"
 
-#include "Application/API.h"
-#include "Application/Exception.h"
+#include "Foundation/API.h"
+#include "Foundation/Exception.h"
 
 namespace Helium
 {
     namespace Debug
     {
-        /////////////////////////////////////////////////////////////////////////////
-        // Basic Exception report
-        // 
+        FOUNDATION_API void InitializeExceptionListener();
+        FOUNDATION_API void CleanupExceptionListener();
+
         class ExceptionReport
         {
         public:

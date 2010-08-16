@@ -4,7 +4,7 @@
 #include "Foundation/Math/EulerAngles.h"
 #include "Foundation/Math/Constants.h"
 
-#include "Application/Undo/PropertyCommand.h"
+#include "Foundation/Undo/PropertyCommand.h"
 
 #include "Core/Content/Nodes/ContentPivotTransform.h"
 #include "Core/Scene/HierarchyNodeType.h"

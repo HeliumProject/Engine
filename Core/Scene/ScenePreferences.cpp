@@ -1,7 +1,7 @@
 /*#include "Precompile.h"*/
 #include "ScenePreferences.h"
 
-#include "Application/Preferences.h"
+#include "Foundation/Preferences.h"
 
 using namespace Helium;
 using namespace Helium::Core;

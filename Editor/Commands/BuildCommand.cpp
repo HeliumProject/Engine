@@ -7,26 +7,26 @@
 #include <fstream>
 #include <string>
 
+#include "Platform/Debug.h"
 #include "Platform/Process.h"
 #include "Platform/Windows/Console.h"
+#include "Platform/Exception.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
-#include "Platform/Exception.h"
-#include "Platform/Debug.h"
+#include "Foundation/Exception.h"
+#include "Foundation/Startup.h"
+#include "Foundation/InitializerStack.h"
 #include "Foundation/CommandLine/Option.h"
 #include "Foundation/CommandLine/Command.h"
 #include "Foundation/CommandLine/Utilities.h"
-#include "Foundation/InitializerStack.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/IPC/Connection.h"
 #include "Foundation/String/Utilities.h"
+#include "Foundation/Worker/Client.h"
+#include "Foundation/Worker/Process.h"
 
 #include "Application/RCS/RCS.h"
-#include "Application/Exception.h"
-#include "Application/Worker/Client.h"
-#include "Application/Worker/Process.h"
-#include "Application/Application.h"
 
 #include "Core/Asset/AssetInit.h"
 #include "Core/Asset/AssetClass.h"

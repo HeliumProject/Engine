@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Application/Undo/PropertyCommand.h"
+#include "Foundation/Undo/PropertyCommand.h"
 
 #include "Core/API.h"
 

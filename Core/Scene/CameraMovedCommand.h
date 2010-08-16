@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Application/Undo/Command.h"
+#include "Foundation/Undo/Command.h"
 #include "Foundation/Math/Matrix4.h"
 
 namespace Helium

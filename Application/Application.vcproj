@@ -612,74 +612,6 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Undo"
-			>
-			<File
-				RelativePath=".\Undo\BatchCommand.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Undo\BatchCommand.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Undo\Command.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Undo\Exceptions.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Undo\ExistenceCommand.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Undo\ExistenceCommand.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Undo\FunctionCaller.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Undo\PropertyCommand.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Undo\PropertyCommand.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Undo\Queue.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Undo\Queue.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Worker"
-			>
-			<File
-				RelativePath=".\Worker\Client.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Worker\Client.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Worker\Process.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Worker\Process.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="Inspect"
 			>
 			<File
@@ -1496,14 +1428,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Application.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Application.h"
-			>
-		</File>
-		<File
 			RelativePath=".\Document.cpp"
 			>
 		</File>
@@ -1517,42 +1441,6 @@
 		</File>
 		<File
 			RelativePath=".\DocumentManager.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Exception.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Exception.h"
-			>
-		</File>
-		<File
-			RelativePath=".\ExceptionListener.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\ExceptionListener.h"
-			>
-		</File>
-		<File
-			RelativePath=".\ExceptionReport.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\ExceptionReport.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Exceptions.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Preferences.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Preferences.h"
 			>
 		</File>
 	</Files>

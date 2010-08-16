@@ -4,7 +4,7 @@
 #include "CommandQueue.h"
 #include "Foundation/Memory/SmartPtr.h"
 
-#include "Application/Undo/Queue.h"
+#include "Foundation/Undo/Queue.h"
 
 #include <wx/timer.h>
 

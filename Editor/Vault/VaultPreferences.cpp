@@ -2,7 +2,7 @@
 #include "VaultPreferences.h"
 #include "VaultFrame.h"
 
-#include "Application/Preferences.h"
+#include "Foundation/Preferences.h"
 #include "Foundation/Reflect/Serializer.h"
 #include "Foundation/Reflect/Serializers.h"
 

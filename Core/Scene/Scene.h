@@ -7,8 +7,8 @@
 
 #include "Application/Inspect/Data/Data.h"
 #include "Application/Inspect/Controls/Canvas.h"
-#include "Application/Undo/ExistenceCommand.h"
-#include "Application/Undo/Queue.h"
+#include "Foundation/Undo/ExistenceCommand.h"
+#include "Foundation/Undo/Queue.h"
 
 #include "Core/Content/NodeVisibility.h"
 #include "Core/Content/SceneVisibility.h"

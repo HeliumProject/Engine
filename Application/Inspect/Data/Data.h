@@ -6,7 +6,7 @@
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Automation/Property.h"
 #include "Foundation/Reflect/Serializers.h"
-#include "Application/Undo/Command.h"
+#include "Foundation/Undo/Command.h"
 
 #include <iomanip>
 

@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "Application/API.h"
+#include "Foundation/API.h"
 
 #include "Platform/Compiler.h"
 #include "Foundation/Memory/SmartPtr.h"
@@ -11,7 +11,7 @@ namespace Helium
 {
     namespace Undo
     {
-        class APPLICATION_API Command : public Helium::RefCountBase<Command>
+        class FOUNDATION_API Command : public Helium::RefCountBase<Command>
         {
         public:
             //

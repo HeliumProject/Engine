@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Application/API.h"
+#include "Foundation/API.h"
 
 #include "Command.h"
 
@@ -12,7 +12,7 @@ namespace Helium
         // This is a tuple of commands for making multiple changes to multiple objects in a single command
         //
 
-        class APPLICATION_API BatchCommand : public Command
+        class FOUNDATION_API BatchCommand : public Command
         {
         protected:
             bool m_IsSignificant;

@@ -5,12 +5,12 @@
 #include <hash_set>
 #include <cctype>
 
+#include "Foundation/Log.h"
+#include "Foundation/Preferences.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Reflect/Version.h"
-#include "Foundation/Log.h"
 
-#include "Application/Preferences.h"
 #include "Core/Asset/Classes/Entity.h"
 #include "Core/Asset/Manifests/SceneManifest.h"
 
@@ -26,7 +26,7 @@
 
 #include "Application/Inspect/Data/Data.h"
 #include "Application/Inspect/Controls/Canvas.h"
-#include "Application/Undo/PropertyCommand.h"
+#include "Foundation/Undo/PropertyCommand.h"
 #include "SceneGraph.h"
 #include "Statistics.h"
 
@@ -3252,7 +3252,7 @@ bool Scene::GetVisibilityFile(tstring& filename)
     _sntprintf(buffer, 1024, TXT( "Visibility/" ) TUID_HEX_FORMAT TXT( ".vis.nrb" ), m_Path.Hash() ); 
 
     Helium::Path prefsDir;
-    if ( !Application::GetPreferencesDirectory( prefsDir ) )
+    if ( !Helium::GetPreferencesDirectory( prefsDir ) )
     {
         return false;
     }

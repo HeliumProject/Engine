@@ -1,4 +1,4 @@
-#include "Application.h"
+#include "Startup.h"
 
 #include "Platform/Assert.h"
 #include "Platform/Platform.h"
@@ -9,11 +9,9 @@
 
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
+#include "Foundation/Exception.h"
+#include "Foundation/ExceptionReport.h"
 #include "Foundation/CommandLine/Utilities.h"
-
-#include "Application/Exception.h"
-#include "Application/Exceptions.h"
-#include "Application/ExceptionListener.h"
 
 #include <crtdbg.h>
 #include <assert.h>
@@ -29,22 +27,21 @@
 
 using namespace Helium;
 
-const tchar* Application::Args::Script = TXT( "script" );
-const tchar* Application::Args::Attach = TXT( "attach" );
-const tchar* Application::Args::Profile = TXT( "profile" );
-const tchar* Application::Args::Memory = TXT( "memory" );
-const tchar* Application::Args::Verbose = TXT( "verbose" );
-const tchar* Application::Args::Extreme = TXT( "extreme" );
-const tchar* Application::Args::Debug = TXT( "debug" );
+const tchar* StartupArgs::Script = TXT( "script" );
+const tchar* StartupArgs::Attach = TXT( "attach" );
+const tchar* StartupArgs::Profile = TXT( "profile" );
+const tchar* StartupArgs::Memory = TXT( "memory" );
+const tchar* StartupArgs::Verbose = TXT( "verbose" );
+const tchar* StartupArgs::Extreme = TXT( "extreme" );
+const tchar* StartupArgs::Debug = TXT( "debug" );
 
 #ifdef _DEBUG
-const tchar* Application::Args::DisableDebugHeap = TXT( "no_debug_heap" );
-const tchar* Application::Args::DisableLeakCheck = TXT( "no_leak_check" );
-const tchar* Application::Args::CheckHeap = TXT( "check_heap" );
+const tchar* StartupArgs::DisableDebugHeap = TXT( "no_debug_heap" );
+const tchar* StartupArgs::DisableLeakCheck = TXT( "no_leak_check" );
+const tchar* StartupArgs::CheckHeap = TXT( "check_heap" );
 #endif
 
 using namespace Helium;
-using namespace Helium::Application;
 
 // init time
 _timeb g_StartTime;
@@ -53,7 +50,7 @@ _timeb g_StartTime;
 static i32 g_InitCount = 0;
 
 // the event we raise when we shutdown
-ShutdownSignature::Event Application::g_ShuttingDown;
+ShutdownSignature::Event Helium::g_ShuttingDown;
 
 // are we shutting down
 bool g_ShutdownStarted = false;
@@ -74,7 +71,7 @@ namespace Helium
 }
 #endif //_DEBUG
 
-void Application::Startup( int argc, const tchar** argv )
+void Helium::Startup( int argc, const tchar** argv )
 {
     if ( ++g_InitCount == 1 )
     {
@@ -96,7 +93,7 @@ void Application::Startup( int argc, const tchar** argv )
             Helium::SetCmdLine( argc, argv );
         }
 
-        if ( Helium::GetCmdLineFlag( Application::Args::Attach ) )
+        if ( Helium::GetCmdLineFlag( StartupArgs::Attach ) )
         {
             i32 timeout = 300; // 5min
 
@@ -121,11 +118,11 @@ void Application::Startup( int argc, const tchar** argv )
 
 #ifdef _DEBUG
         int flags = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
-        if (Helium::GetCmdLineFlag( Application::Args::DisableDebugHeap ))
+        if (Helium::GetCmdLineFlag( StartupArgs::DisableDebugHeap ))
         {
             flags = 0x0;
         }
-        else if (Helium::GetCmdLineFlag( Application::Args::CheckHeap ))
+        else if (Helium::GetCmdLineFlag( StartupArgs::CheckHeap ))
         {
             flags |= (flags & 0x0000FFFF) | _CRTDBG_CHECK_ALWAYS_DF; // clear the upper 16 bits and OR in the desired freqency (always)
         }
@@ -137,7 +134,7 @@ void Application::Startup( int argc, const tchar** argv )
         // Only print startup summary if we are not in script mode
         //
 
-        if ( !Helium::GetCmdLineFlag( Application::Args::Script ) )
+        if ( !Helium::GetCmdLineFlag( StartupArgs::Script ) )
         {
             //
             // Print project and version info
@@ -158,25 +155,25 @@ void Application::Startup( int argc, const tchar** argv )
         // Setup Console
         //
 
-        if ( Helium::GetCmdLineFlag( Application::Args::Extreme ) )
+        if ( Helium::GetCmdLineFlag( StartupArgs::Extreme ) )
         {
             Log::SetLevel( Log::Levels::Extreme );
         }
-        else if ( Helium::GetCmdLineFlag( Application::Args::Verbose ) )
+        else if ( Helium::GetCmdLineFlag( StartupArgs::Verbose ) )
         {
             Log::SetLevel( Log::Levels::Verbose );
         }
 
-        Log::EnableStream( Log::Streams::Debug, Helium::GetCmdLineFlag( Application::Args::Debug ) );
-        Log::EnableStream( Log::Streams::Profile, Helium::GetCmdLineFlag( Application::Args::Profile ) );
+        Log::EnableStream( Log::Streams::Debug, Helium::GetCmdLineFlag( StartupArgs::Debug ) );
+        Log::EnableStream( Log::Streams::Profile, Helium::GetCmdLineFlag( StartupArgs::Profile ) );
 
-        if( Helium::GetCmdLineFlag( Application::Args::Debug ) )
+        if( Helium::GetCmdLineFlag( StartupArgs::Debug ) )
         {
             // add the debug stream to the trace
             g_TraceStreams |= Log::Streams::Debug; 
 
             // dump env
-            if ( Helium::GetCmdLineFlag( Application::Args::Verbose ) )
+            if ( Helium::GetCmdLineFlag( StartupArgs::Verbose ) )
             {
                 // get a pointer to the environment block. 
                 const char* env = (const char*)GetEnvironmentStrings();
@@ -206,7 +203,7 @@ void Application::Startup( int argc, const tchar** argv )
             }
         }
 
-        if( Helium::GetCmdLineFlag( Application::Args::Profile ) )
+        if( Helium::GetCmdLineFlag( StartupArgs::Profile ) )
         {
             // init profiling
             Profile::Initialize(); 
@@ -215,7 +212,7 @@ void Application::Startup( int argc, const tchar** argv )
             g_TraceStreams |= Log::Streams::Profile; 
 
             // enable memory reports
-            if ( Helium::GetCmdLineFlag( Application::Args::Memory ) )
+            if ( Helium::GetCmdLineFlag( StartupArgs::Memory ) )
             {
                 Profile::Memory::Initialize();
             }
@@ -237,7 +234,7 @@ void Application::Startup( int argc, const tchar** argv )
     }
 }
 
-int Application::Shutdown( int code )
+int Helium::Shutdown( int code )
 {
     if ( --g_InitCount == 0 )
     {
@@ -255,7 +252,7 @@ int Application::Shutdown( int code )
         //  don't cause breakage in profile
         //
 
-        if (Helium::GetCmdLineFlag( Application::Args::Profile ))
+        if (Helium::GetCmdLineFlag( StartupArgs::Profile ))
         {
             Profile::Memory::Cleanup();
             Profile::Accumulator::ReportAll();
@@ -266,7 +263,7 @@ int Application::Shutdown( int code )
         // Only print shutdown summary if we are not in script mode
         //
 
-        if ( !Helium::GetCmdLineFlag( Application::Args::Script ) )
+        if ( !Helium::GetCmdLineFlag( StartupArgs::Script ) )
         {
             //
             // Print time usage
@@ -367,7 +364,7 @@ int Application::Shutdown( int code )
         //
 
 #ifdef _DEBUG
-        if ( !Helium::GetCmdLineFlag( Application::Args::DisableDebugHeap ) && !Helium::GetCmdLineFlag( Application::Args::DisableLeakCheck ) )
+        if ( !Helium::GetCmdLineFlag( StartupArgs::DisableDebugHeap ) && !Helium::GetCmdLineFlag( StartupArgs::DisableLeakCheck ) )
         {
             int flags = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
             _CrtSetDbgFlag( flags | _CRTDBG_LEAK_CHECK_DF );
@@ -387,7 +384,7 @@ int Application::Shutdown( int code )
 
         Helium::Debug::CleanupExceptionListener();
 
-        if (Helium::GetCmdLineFlag( Application::Args::Profile ))
+        if (Helium::GetCmdLineFlag( StartupArgs::Profile ))
         {
             Profile::Cleanup(); 
         }
@@ -402,12 +399,12 @@ int Application::Shutdown( int code )
     return code;
 }
 
-Log::Stream Application::GetTraceStreams()
+Log::Stream Helium::GetTraceStreams()
 {
     return g_TraceStreams; 
 }
 
-void Application::InitializeStandardTraceFiles()
+void Helium::InitializeStandardTraceFiles()
 {
     tchar module[MAX_PATH];
     GetModuleFileName( 0, module, MAX_PATH );
@@ -422,7 +419,7 @@ void Application::InitializeStandardTraceFiles()
     path += name;
 
     g_TraceFiles.push_back( path + TXT( ".log" ) );
-    Log::AddTraceFile( g_TraceFiles.back(), Application::GetTraceStreams() );
+    Log::AddTraceFile( g_TraceFiles.back(), Helium::GetTraceStreams() );
 
     g_TraceFiles.push_back( path + TXT( "Warnings.log" ) );
     Log::AddTraceFile( g_TraceFiles.back(), Log::Streams::Warning );
@@ -431,7 +428,7 @@ void Application::InitializeStandardTraceFiles()
     Log::AddTraceFile( g_TraceFiles.back(), Log::Streams::Error );
 }
 
-void Application::CleanupStandardTraceFiles()
+void Helium::CleanupStandardTraceFiles()
 {
     for ( std::vector< tstring >::const_iterator itr = g_TraceFiles.begin(), end = g_TraceFiles.begin(); itr != end; ++itr )
     {
@@ -450,14 +447,14 @@ static DWORD ProcessUnhandledCxxException( LPEXCEPTION_POINTERS info )
         if ( nocturnalException )
         {
             // process this as a non-fatal C++ exception, but via the SEH handler so we get the callstack at the throw() statment
-            return Debug::ProcessException( info, Debug::ContinueSearch, false, false );
+            return Debug::ProcessException( info, false, false );
         }
 
         // this is not a nocturnal exception, so it will not be caught by the catch statements below, process it then execute the handler to unload the process
-        return Debug::ProcessException( info, Debug::ExecuteHandler, true, true );
+        return Debug::ProcessException( info, true, true );
     }
 
-    return Debug::ContinueSearch;
+    return EXCEPTION_CONTINUE_SEARCH;
 }
 
 static Helium::Thread::Return StandardThreadTryExcept( Helium::Thread::Entry entry, Helium::Thread::Param param )
@@ -508,7 +505,7 @@ static Helium::Thread::Return StandardThreadEntry( Helium::Thread::Entry entry, 
     return StandardThreadTryCatch( entry, param );
 }
 
-Helium::Thread::Return Application::StandardThread( Helium::Thread::Entry entry, Helium::Thread::Param param )
+Helium::Thread::Return Helium::StandardThread( Helium::Thread::Entry entry, Helium::Thread::Param param )
 {
     if (Helium::IsDebuggerPresent())
     {
@@ -524,7 +521,7 @@ Helium::Thread::Return Application::StandardThread( Helium::Thread::Entry entry,
         {
             result = StandardThreadEntry( entry, param );
         }
-        __except( ( g_ShutdownComplete || Helium::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), Debug::GetExceptionBehavior(), true, true ) )
+        __except( ( g_ShutdownComplete || Helium::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), true, true ) )
         {
             ::ExitProcess( -1 );
         }
@@ -585,25 +582,29 @@ static int StandardMainEntry( int (*main)(int argc, const tchar** argv), int arg
 {
     int result = 0; 
 
+#if VERSION_CHECK
     try
+#endif
     {
-        Application::Startup(argc, argv);
+        Helium::Startup(argc, argv);
     }
-    catch ( const Application::CheckVersionException& ex )
+#if VERSION_CHECK
+    catch ( const Helium::CheckVersionException& ex )
     {
         Log::Error( TXT( "%s\n" ), ex.What() );
         result = 1;
     }
+#endif
 
     if ( result == 0 )
     {
         result = StandardMainTryCatch( main, argc, argv );
     }
 
-    return Application::Shutdown( result );
+    return Helium::Shutdown( result );
 }
 
-int Application::StandardMain( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv )
+int Helium::StandardMain( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv )
 {
     if (Helium::IsDebuggerPresent())
     {
@@ -619,9 +620,9 @@ int Application::StandardMain( int (*main)(int argc, const tchar** argv), int ar
         {
             result = StandardMainEntry( main, argc, argv );
         }
-        __except( ( g_ShutdownComplete || Helium::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), Debug::GetExceptionBehavior(), true, true ) )
+        __except( ( g_ShutdownComplete || Helium::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), true, true ) )
         {
-            ::ExitProcess( Application::Shutdown( result ) );
+            ::ExitProcess( Helium::Shutdown( result ) );
         }
 
         Debug::CleanupExceptionListener();
@@ -687,23 +688,27 @@ static int StandardWinMainEntry( int (*winMain)( HINSTANCE hInstance, HINSTANCE 
 
     int result = 0;
 
+#if VERSION_CHECK
     try
+#endif
     {
-        Application::Startup(argc, argv);
+        Helium::Startup(argc, argv);
     }
-    catch ( const Application::CheckVersionException& ex )
+#if VERSION_CHECK
+    catch ( const Helium::CheckVersionException& ex )
     {
         result = 1;
         Log::Error( TXT( "%s\n" ), ex.What() );
         MessageBox(NULL, ex.What(), TXT( "Fatal Error" ), MB_OK|MB_ICONEXCLAMATION);
     }
+#endif
 
     if ( result == 0 )
     {
         result = StandardWinMainTryCatch( winMain, hInstance, hPrevInstance, lpCmdLine, nShowCmd );
     }
 
-    Application::Shutdown( result );
+    Helium::Shutdown( result );
 
     delete[] argv;
 
@@ -712,17 +717,14 @@ static int StandardWinMainEntry( int (*winMain)( HINSTANCE hInstance, HINSTANCE 
 
 namespace Helium
 {
-    namespace Application
-    {
-        APPLICATION_API int StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ),
-            HINSTANCE hInstance = ::GetModuleHandle(NULL),
-            HINSTANCE hPrevInstance = NULL,
-            LPTSTR lpCmdLine = ::GetCommandLine(),
-            int nShowCmd = SW_SHOWNORMAL );
-    }
+    FOUNDATION_API int StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ),
+        HINSTANCE hInstance = ::GetModuleHandle(NULL),
+        HINSTANCE hPrevInstance = NULL,
+        LPTSTR lpCmdLine = ::GetCommandLine(),
+        int nShowCmd = SW_SHOWNORMAL );
 }
 
-int Application::StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd )
+int Helium::StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd )
 {
     if (Helium::IsDebuggerPresent())
     {
@@ -738,9 +740,9 @@ int Application::StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE
         {
             result = StandardWinMainEntry( winMain, hInstance, hPrevInstance, lpCmdLine, nShowCmd );
         }
-        __except( ( g_ShutdownComplete || Helium::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), Debug::GetExceptionBehavior(), true, true ) )
+        __except( ( g_ShutdownComplete || Helium::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), true, true ) )
         {
-            ::ExitProcess( Application::Shutdown( result ) );
+            ::ExitProcess( Helium::Shutdown( result ) );
         }
 
         Debug::CleanupExceptionListener();

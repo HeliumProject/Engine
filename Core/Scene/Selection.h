@@ -7,7 +7,7 @@
 #include "Foundation/Reflect/Element.h"
 
 #include "Core/Scene/Selectable.h"
-#include "Application/Undo/PropertyCommand.h"
+#include "Foundation/Undo/PropertyCommand.h"
 
 namespace Helium
 {

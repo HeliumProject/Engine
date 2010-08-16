@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Application/API.h"
+#include "Foundation/API.h"
 #include "Command.h"
 #include "FunctionCaller.h"
 
@@ -25,7 +25,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // Undoable command for adding or removing an item.
         //
-        class APPLICATION_API ExistenceCommand : public Command
+        class FOUNDATION_API ExistenceCommand : public Command
         {
         private:
             ExistenceAction m_Action;

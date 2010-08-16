@@ -5,7 +5,7 @@
 #include "Foundation/Math/Vector3.h"
 #include "Foundation/Math/Matrix4.h"
 
-#include "Application/Undo/Queue.h"
+#include "Foundation/Undo/Queue.h"
 
 #include "Core/Scene/Tool.h"
 #include "Core/Scene/Scene.h"

@@ -1475,6 +1475,74 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Worker"
+			>
+			<File
+				RelativePath=".\Worker\Client.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Worker\Client.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Worker\Process.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Worker\Process.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Undo"
+			>
+			<File
+				RelativePath=".\Undo\BatchCommand.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Undo\BatchCommand.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Undo\Command.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Undo\Exceptions.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Undo\ExistenceCommand.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Undo\ExistenceCommand.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Undo\FunctionCaller.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Undo\PropertyCommand.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Undo\PropertyCommand.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Undo\Queue.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Undo\Queue.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\API.h"
 			>
@@ -1485,6 +1553,22 @@
 		</File>
 		<File
 			RelativePath=".\Atomic.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Exception.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Exception.h"
+			>
+		</File>
+		<File
+			RelativePath=".\ExceptionReport.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ExceptionReport.h"
 			>
 		</File>
 		<File
@@ -1556,6 +1640,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Preferences.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Preferences.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Profile.cpp"
 			>
 		</File>
@@ -1565,6 +1657,14 @@
 		</File>
 		<File
 			RelativePath=".\Regex.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Startup.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Startup.h"
 			>
 		</File>
 		<File

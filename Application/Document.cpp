@@ -59,26 +59,17 @@ Document::~Document()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Returns the full path for the file.
-// 
-const Helium::Path& Document::GetPath() const
-{
-    return m_Path;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // Sets the path to this file.  The name of the file is also updated.  Notifies
 // any interested listeners about this event.
 // 
-void Document::SetFilePath( const tstring& newFilePath, const tstring& newName )
+void Document::SetPath( const Helium::Path& newFilePath, const tstring& newName )
 {
-    tstring oldFilePath = m_Path.Get();
-    tstring oldFileName = m_Name;
+    Helium::Path    oldFilePath = m_Path.Get();
+    tstring         oldFileName = m_Name;
 
     m_Path.Set( newFilePath );
-    UpdateFileInfo();
-
     m_Name = newName;
+    UpdateFileInfo();
 
     m_PathChanged.Raise( DocumentPathChangedArgs( this, oldFilePath, oldFileName ) );
 }

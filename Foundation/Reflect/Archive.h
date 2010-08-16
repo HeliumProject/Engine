@@ -399,6 +399,21 @@ namespace Helium
                 }
             }
 
+            static void GetFileFilters( tstring& filters )
+            {
+                filters.clear();
+                for ( int i = 0; i < sizeof( s_ArchiveExtensions ) / sizeof( tchar* ); ++i )
+                {
+                    if ( i != 0 )
+                    {
+                        filters.push_back( TXT(';') );
+                    }
+
+                    filters += tstring( s_ArchiveDescriptions[ i ] ) + TXT( " (*." ) + s_ArchiveExtensions[ i ] + TXT( ")|*." ) + s_ArchiveExtensions[ i ];
+                }
+            }
+
+
             //
             // Event API
             //

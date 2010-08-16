@@ -118,7 +118,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 , m_MRU( new MenuMRU( 30, this ) )
 , m_TreeMonitor( &m_SceneManager )
 , m_MessageDisplayer( this )
-, m_SceneManager( MessageSignature::Delegate( &m_MessageDisplayer, &MessageDisplayer::DisplayMessage ) )
+, m_SceneManager( MessageSignature::Delegate( &m_MessageDisplayer, &MessageDisplayer::DisplayMessage ), FileDialogSignature::Delegate( &m_FileDialogDisplayer, &FileDialogDisplayer::DisplayFileDialog ) )
 {
     SetLabel( TXT("Helium Editor") );
 

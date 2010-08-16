@@ -1800,6 +1800,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\FileDialogDisplayer.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\FileDialogDisplayer.h"
+			>
+		</File>
+		<File
 			RelativePath=".\FileDropTarget.cpp"
 			>
 		</File>

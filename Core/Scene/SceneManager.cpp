@@ -34,8 +34,8 @@ bool SceneDocument::Save( tstring& error )
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-SceneManager::SceneManager( MessageSignature::Delegate message )
-: m_DocumentManager( message )
+SceneManager::SceneManager( MessageSignature::Delegate message, FileDialogSignature::Delegate fileDialog )
+: m_DocumentManager( message, fileDialog )
 , m_CurrentScene( NULL )
 {
 

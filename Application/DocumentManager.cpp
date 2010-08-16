@@ -1,9 +1,7 @@
 #include "DocumentManager.h"
 
 #include "Foundation/Reflect/Archive.h"
-
 #include "Application/RCS/RCS.h"
-#include "Application/UI/FileDialog.h"
 
 #include <algorithm>
 #include <cctype>
@@ -12,8 +10,9 @@
 using namespace Helium;
 using namespace Helium::Application;
 
-DocumentManager::DocumentManager( MessageSignature::Delegate message )
+DocumentManager::DocumentManager( MessageSignature::Delegate message, FileDialogSignature::Delegate fileDialog )
 : m_Message( message )
+, m_FileDialog( fileDialog )
 {
 }
 
@@ -27,7 +26,7 @@ Document* DocumentManager::FindDocument( const Helium::Path& path ) const
     for ( ; docItr != docEnd; ++docItr )
     {
         Document* document = *docItr;
-        if ( document->GetFilePath() == path )
+        if ( document->GetPath() == path )
         {
             return document;
         }
@@ -40,9 +39,9 @@ Document* DocumentManager::FindDocument( const Helium::Path& path ) const
 // 
 bool DocumentManager::OpenDocument( const DocumentPtr& document, tstring& error )
 {
-    if ( !document->GetFilePath().empty() )
+    if ( !document->GetPath().empty() )
     {
-        if ( FindDocument( document->GetFilePath() ) )
+        if ( FindDocument( document->GetPath() ) )
         {
             error = TXT( "The specified file (" ) + document->GetFilePath() + TXT( ") is already open." );
             return false;
@@ -126,34 +125,6 @@ bool DocumentManager::SaveAll( tstring& error )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Prompt the user to save a file to a new location.  Returns the path to the
-// new file location, or an empty string if the user cancels the operation.
-// 
-#pragma TODO("This need to be externalized -Geoff")
-static tstring PromptSaveAs( const DocumentPtr& file, wxWindow* window = NULL )
-{
-    tstring path;
-    tstring defaultDir = Helium::Path( file->GetFilePath() ).Directory();
-    tstring defaultFile = file->GetFilePath();
-
-    Helium::FileDialog saveDlg( window, TXT( "Save As..." ), defaultDir.c_str(), defaultFile.c_str(), TXT( "" ), Helium::FileDialogStyles::DefaultSave );
-    
-    std::set< tstring > extensions;
-    Reflect::Archive::GetExtensions( extensions );
-    for ( std::set< tstring >::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
-    {
-        saveDlg.AddFilter( TXT( "Scene (*.scene." ) + *itr + TXT( ")|*.scene." ) + *itr );
-    }
-
-    if ( saveDlg.ShowModal() == wxID_OK )
-    {
-        path = saveDlg.GetPath();
-    }
-
-    return path;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // Saves the specified document and returns true if successful.
 //
 // Derived classes should HELIUM_OVERRIDE this function to actually perform saving 
@@ -164,17 +135,16 @@ static tstring PromptSaveAs( const DocumentPtr& file, wxWindow* window = NULL )
 bool DocumentManager::SaveDocument( DocumentPtr document, tstring& error )
 {
     // Check for "save as"
-    if ( document->GetFilePath().empty() )
+    if ( document->GetPath().empty() )
     {
-#pragma TODO("UI_REFACTOR")
-#ifdef UI_REFACTOR
-        tstring savePath = PromptSaveAs( document, m_Editor );
-#else
-        tstring savePath = PromptSaveAs( document );
-#endif
+        tstring filters;
+        Reflect::Archive::GetFileFilters( filters );
+        FileDialogArgs args ( FileDialogTypes::SaveFile, TXT("Save As..."), filters, document->GetPath().Directory(), document->GetPath() );
+
+        Helium::Path savePath = m_FileDialog.Invoke( args );
         if ( !savePath.empty() )
         {
-            document->SetFilePath( savePath );
+            document->SetPath( savePath );
         }
         else
         {
@@ -608,25 +578,25 @@ SaveAction DocumentManager::QueryCloseAll( Document* document ) const
         msg << "You are attempting to close file " << document->GetFileName() << " which has changed. Would you like to save your changes before closing?";       
         switch ( m_Message.Invoke( MessageArgs( TXT( "Save Changes?" ), msg.str(), MessagePriorities::Question, MessageAppearances::YesNoCancelToAll ) ) )
         {
-        case wxID_YES:
+        case MessageResults::Yes:
             action = SaveActions::Save;
             attemptCheckOut = true;
             break;
 
-        case wxID_YESTOALL:
+        case MessageResults::YesToAll:
             action = SaveActions::SaveAll;
             attemptCheckOut = true;
             break;
 
-        case wxID_NO:
+        case MessageResults::No:
             action = SaveActions::Skip;
             break;
 
-        case wxID_NOTOALL:
+        case MessageResults::NoToAll:
             action = SaveActions::SkipAll;
             break;
 
-        case wxID_CANCEL:
+        case MessageResults::Cancel:
             action = SaveActions::Abort;
             break;
         }

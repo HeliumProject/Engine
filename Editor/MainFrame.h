@@ -21,6 +21,7 @@
 #include "Editor/MRU/MenuMRU.h"
 #include "Editor/TreeMonitor.h"
 #include "Editor/MessageDisplayer.h"
+#include "Editor/FileDialogDisplayer.h"
 
 #include "Core/Project.h"
 
@@ -74,6 +75,7 @@ namespace Helium
 
             Core::ProjectPtr            m_Project;
             MessageDisplayer            m_MessageDisplayer;
+            FileDialogDisplayer         m_FileDialogDisplayer;
             Core::SceneManager          m_SceneManager;
 
             // the attributes for the current selection

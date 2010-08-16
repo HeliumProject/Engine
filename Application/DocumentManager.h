@@ -2,6 +2,7 @@
 
 #include "Foundation/TUID.h"
 #include "Foundation/Message.h"
+#include "Foundation/FileDialog.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Container/OrderedSet.h"
 
@@ -34,7 +35,7 @@ namespace Helium
         class APPLICATION_API DocumentManager
         {
         public:
-            DocumentManager( MessageSignature::Delegate displayMessage );
+            DocumentManager( MessageSignature::Delegate displayMessage, FileDialogSignature::Delegate fileDialog );
 
             const OS_DocumentSmartPtr& GetDocuments()
             {
@@ -72,8 +73,9 @@ namespace Helium
             bool                RemoveDocument( const DocumentPtr& document );
             void                DocumentClosed( const DocumentChangedArgs& args );
 
-            OS_DocumentSmartPtr         m_Documents;
-            MessageSignature::Delegate  m_Message;
+            OS_DocumentSmartPtr             m_Documents;
+            MessageSignature::Delegate      m_Message;
+            FileDialogSignature::Delegate   m_FileDialog;
         };
     }
 }

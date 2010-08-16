@@ -95,7 +95,7 @@ namespace Helium
             Core::Scene* m_CurrentScene;
 
         public:
-            SceneManager( MessageSignature::Delegate message );
+            SceneManager( MessageSignature::Delegate message, FileDialogSignature::Delegate fileDialog );
 
             ScenePtr NewScene( Core::Viewport* viewport, tstring path = TXT( "" ) );
             ScenePtr OpenScene( Core::Viewport* viewport, const tstring& path, tstring& error );

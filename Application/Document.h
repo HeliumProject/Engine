@@ -27,10 +27,10 @@ namespace Helium
         // Arguments for a file being renamed (contains the new and old names)
         struct DocumentPathChangedArgs : public DocumentChangedArgs
         {
-            tstring m_OldFilePath;
-            tstring m_OldFileName;
+            const Helium::Path& m_OldFilePath;
+            const tstring&      m_OldFileName;
 
-            DocumentPathChangedArgs( Document* document, const tstring& oldFilePath, const tstring& oldFileName )
+            DocumentPathChangedArgs( Document* document, const Helium::Path& oldFilePath, const tstring& oldFileName )
                 : DocumentChangedArgs( document )
                 , m_OldFilePath( oldFilePath )
                 , m_OldFileName( oldFileName )
@@ -51,12 +51,20 @@ namespace Helium
             Document( const tstring& path, const tstring& name = TXT( "" ) );
             virtual ~Document();
 
-            const Helium::Path& GetPath() const;
-            tstring GetFilePath() const
+            const Helium::Path& GetPath() const
+            {
+                return m_Path;
+            }
+            void SetPath( const Helium::Path& path, const tstring& newName = TXT( "" ) );
+
+            const tstring& GetFilePath() const
             {
                 return m_Path.Get();
             }
-            void SetFilePath( const tstring& newFilePath, const tstring& newName = TXT( "" ) );
+            void SetFilePath( const tstring& newFilePath, const tstring& newName = TXT( "" ) )
+            {
+                SetPath( newFilePath, newName );
+            }
 
             const tstring& GetFileName() const;
 

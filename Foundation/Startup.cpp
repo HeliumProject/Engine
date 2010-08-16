@@ -65,11 +65,8 @@ Log::Stream g_TraceStreams  = Log::Streams::Normal | Log::Streams::Warning | Log
 #ifdef _DEBUG
 namespace Helium
 {
-    namespace Application
-    {
-        long& g_BreakOnAlloc (_crtBreakAlloc);
-        static Localization::StringTable g_StringTable( "Helium::Application" );
-    }
+    long& g_BreakOnAlloc (_crtBreakAlloc);
+    static Localization::StringTable g_StringTable( "Helium::Application" );
 }
 #endif //_DEBUG
 

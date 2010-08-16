@@ -50,13 +50,13 @@ Connection::Connection()
 
     if ( !s_RegisteredStringTable )
     {
-        s_StringTable.AddString( "en", "Connected", TXT( "%%name%%: Connected\n" ) );
-        s_StringTable.AddString( "en", "Disconnected", TXT( "%%name%%: Disonnected\n" ) );
-        s_StringTable.AddString( "en", "Waiting", TXT( "%%name%%: Waiting for connection\n" ) );
-        s_StringTable.AddString( "en", "MessageCreateFailed", TXT( "%%name%%: Failed to create message ( ID: %%id%%, TRN: %%trans%%, Size: %%size%% )\n" ) );
-        s_StringTable.AddString( "en", "RemotePlatform", TXT( "%%name%%: Remote platform is '%%platform%%'\n" ) );
-        s_StringTable.AddString( "en", "RemotePlatformTypeReadFailed", TXT( "%%name%%: Failed to read remote platform type!\n" ) );
-        s_StringTable.AddString( "en", "RemotePlatformTypeWriteFailed", TXT( "%s: Failed to write remote Platform type!\n" ) );
+        s_StringTable.AddString( "en", "Connected", TXT( "<NAME>: Connected\n" ) );
+        s_StringTable.AddString( "en", "Disconnected", TXT( "<NAME>: Disonnected\n" ) );
+        s_StringTable.AddString( "en", "Waiting", TXT( "<NAME>: Waiting for connection\n" ) );
+        s_StringTable.AddString( "en", "MessageCreateFailed", TXT( "<NAME>: Failed to create message ( ID: <ID>, TRN: <TRANS>, Size: <SIZE> )\n" ) );
+        s_StringTable.AddString( "en", "RemotePlatform", TXT( "<NAME>: Remote platform is '<PLATFORM>'\n" ) );
+        s_StringTable.AddString( "en", "RemotePlatformTypeReadFailed", TXT( "<NAME>: Failed to read remote platform type!\n" ) );
+        s_StringTable.AddString( "en", "RemotePlatformTypeWriteFailed", TXT( "<NAME>: Failed to write remote Platform type!\n" ) );
   
         Localization::GlobalLocalizer().RegisterTable( &s_StringTable );
         s_RegisteredStringTable = true;

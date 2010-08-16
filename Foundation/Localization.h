@@ -42,9 +42,10 @@ namespace Helium
                 replacement << value;
 
                 tstring escapedKey = tstring( TXT( "<" ) ) + key + TXT( ">" );
-                while ( size_t offset = m_Buffer.find( escapedKey ) != tstring::npos )
+                size_t offset = tstring::npos;
+                while ( ( offset = m_Buffer.find( escapedKey ) ) != tstring::npos )
                 {
-                    m_Buffer.replace( offset, offset + escapedKey.length(), replacement.str() );
+                    m_Buffer.replace( offset, escapedKey.length(), replacement.str() );
                 }
             }
 

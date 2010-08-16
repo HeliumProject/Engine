@@ -10,6 +10,7 @@
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
 #include "Foundation/CommandLine/Utilities.h"
+#include "Foundation/Localization.h"
 
 #include "Application/Exception.h"
 #include "Application/Exceptions.h"
@@ -70,6 +71,7 @@ namespace Helium
     namespace Application
     {
         long& g_BreakOnAlloc (_crtBreakAlloc);
+        static Localization::StringTable g_StringTable( "Helium::Application" );
     }
 }
 #endif //_DEBUG
@@ -78,6 +80,18 @@ void Application::Startup( int argc, const tchar** argv )
 {
     if ( ++g_InitCount == 1 )
     {
+        g_StringTable.AddString( "en", "WaitingDebuggerAttach", TXT( "Waiting <MINUTES> minutes for debugger to attach...\n" ) );
+        g_StringTable.AddString( "en", "DebuggerAttached", TXT( "Debugger attached\n" ) );
+        g_StringTable.AddString( "en", "RunningApp", TXT( "Running <APPNAME>...\n" ) );
+        g_StringTable.AddString( "en", "CurrentTime", TXT( "Current Time: <TIME>\n" ) );
+        g_StringTable.AddString( "en", "CommandLine", TXT( "Command Line: <COMMANDLINE>\n" ) );
+
+        Localization::GlobalLocalizer().RegisterTable( &g_StringTable );
+#pragma TODO( "Set the language at some more appropriate point in the code?" )
+        Localization::GlobalLocalizer().SetLanguageId( "en" );
+
+
+
         InitializeStandardTraceFiles(); 
 
         //
@@ -100,7 +114,9 @@ void Application::Startup( int argc, const tchar** argv )
         {
             i32 timeout = 300; // 5min
 
-            Log::Print( TXT( "Waiting %d minutes for debugger to attach...\n" ), timeout / 60);
+            Localization::Statement stmt( "Helium::Application", "WaitingDebuggerAttach" );
+            stmt.ReplaceKey( TXT( "MINUTES" ), timeout / 60 );
+            Log::Print( stmt.Get().c_str() );
 
             while ( !Helium::IsDebuggerPresent() && timeout-- )
             {
@@ -109,7 +125,8 @@ void Application::Startup( int argc, const tchar** argv )
 
             if ( Helium::IsDebuggerPresent() )
             {
-                Log::Print( TXT( "Debugger attached\n" ) );
+                Localization::Statement stmt( "Helium::Application", "DebuggerAttached" );
+                Log::Print( stmt.Get().c_str() );
                 HELIUM_ISSUE_BREAK();
             }
         }
@@ -148,9 +165,17 @@ void Application::Startup( int argc, const tchar** argv )
             tchar name[MAX_PATH];
             _tsplitpath( module, NULL, NULL, name, NULL );
 
-            Log::Print( TXT( "Running %s\n" ), name );
-            Log::Print( TXT( "Current Time: %s" ), _tctime64( &g_StartTime.time ) );
-            Log::Print( TXT( "Command Line: %s\n" ), Helium::GetCmdLine() );
+            Localization::Statement stmt( "Helium::Application", "RunningApp" );
+            stmt.ReplaceKey( TXT( "APPNAME" ), name );
+            Log::Print( stmt.Get().c_str() );
+
+            stmt.Set( "Helium::Application", "CurrentTime" );
+            stmt.ReplaceKey( TXT( "TIME" ), _tctime64( &g_StartTime.time ) );
+            Log::Print( stmt.Get().c_str() );
+
+            stmt.Set( "Helium::Application", "CommandLine" );
+            stmt.ReplaceKey( TXT( "COMMANDLINE" ), Helium::GetCmdLine() );
+            Log::Print( stmt.Get().c_str() );
         }
 
 
@@ -249,6 +274,8 @@ int Application::Shutdown( int code )
         // signal our shutdown has begun
         g_ShutdownStarted = true;
 
+
+        Localization::Cleanup();
 
         //
         // This should be done first, so that dynamic libraries to be freed in Cleanup()

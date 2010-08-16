@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Application/Undo/Command.h"
+#include "Foundation/Undo/Command.h"
 
 #include "Core/API.h"
 #include "Core/Scene/HierarchyNode.h"

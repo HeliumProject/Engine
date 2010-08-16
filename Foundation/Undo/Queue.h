@@ -8,7 +8,7 @@ namespace Helium
     namespace Undo
     {
         class Queue;
-        struct APPLICATION_API QueueChangeArgs
+        struct FOUNDATION_API QueueChangeArgs
         {
             Queue* m_Queue;
             const Command* m_Command;
@@ -23,7 +23,7 @@ namespace Helium
         typedef Helium::Signature< void, const QueueChangeArgs& > QueueChangeSignature;
         typedef Helium::Signature< bool, const QueueChangeArgs& > QueueChangingSignature;
 
-        class APPLICATION_API Queue
+        class FOUNDATION_API Queue
         {
             //
             // Members

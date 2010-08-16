@@ -2,7 +2,7 @@
 #include "Editor/SceneOutliner.h"
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/SceneManager.h"
-#include "Application/Undo/PropertyCommand.h"
+#include "Foundation/Undo/PropertyCommand.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

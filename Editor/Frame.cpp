@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <wx/config.h>
 
-#include "Application/Application.h"
+#include "Foundation/Startup.h"
 #include "Foundation/String/Utilities.h"
 
 using namespace Helium;

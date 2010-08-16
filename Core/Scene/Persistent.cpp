@@ -1,7 +1,7 @@
 /*#include "Precompile.h"*/
 #include "Core/Scene/Persistent.h"
 
-#include "Application/Undo/PropertyCommand.h"
+#include "Foundation/Undo/PropertyCommand.h"
 
 using namespace Helium;
 using namespace Helium::Core;

@@ -6,9 +6,9 @@
 #include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/IPC/Pipe.h"
 
-#include "Application/Exception.h"
-#include "Application/Application.h"
-#include "Application/Worker/Process.h"
+#include "Foundation/Startup.h"
+#include "Foundation/Exception.h"
+#include "Foundation/Worker/Process.h"
 
 #include <sstream>
 
@@ -41,7 +41,7 @@ static void PrintedListener(Log::PrintedArgs& args)
 }
 
 // Called from Application on Shutdown()
-static void ShutdownListener(const Application::ShutdownArgs& args)
+static void ShutdownListener(const Helium::ShutdownArgs& args)
 {
     // release our connection to our manager process
     Client::Cleanup();
@@ -101,7 +101,7 @@ bool Client::Initialize( bool debug, bool wait )
     Log::AddPrintedListener( Log::PrintedSignature::Delegate (&PrintedListener) );
 
     // hook up our handler to Application
-    Application::g_ShuttingDown.Add( &ShutdownListener );
+    Helium::g_ShuttingDown.Add( &ShutdownListener );
 
     // hook up our handler to debug
     Debug::g_Terminating.Add( &TerminateListener );

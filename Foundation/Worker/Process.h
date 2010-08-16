@@ -6,7 +6,7 @@
 #include "Foundation/Log.h"
 #include "Foundation/Memory/SmartPtr.h"
 
-#include "Application/API.h"
+#include "Foundation/API.h"
 
 namespace Helium
 {
@@ -23,7 +23,7 @@ namespace Helium
         //  - Worker's Worker::Initialize function will wait for a connection with the Manager process
         const static int DefaultWorkerTimeout = 10000;
 
-        struct APPLICATION_API Args
+        struct FOUNDATION_API Args
         {
             static const tchar* Worker;
             static const tchar* Debug;
@@ -42,7 +42,7 @@ namespace Helium
         const static u32 ConsoleOutputMessage = 0;
 #pragma warning ( default: 4200 )
 
-        class APPLICATION_API Process : public Helium::RefCountBase<Process>
+        class FOUNDATION_API Process : public Helium::RefCountBase<Process>
         {
         private:
             // the file to execute

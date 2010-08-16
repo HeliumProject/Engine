@@ -7,8 +7,8 @@
 #include "Foundation/IPC/Pipe.h"
 #include "Foundation/CommandLine/Utilities.h"
 
-#include "Application/Application.h"
-#include "Application/Exception.h"
+#include "Foundation/Startup.h"
+#include "Foundation/Exception.h"
 
 #include <sstream>
 
@@ -30,7 +30,7 @@ static void TerminateListener(const Debug::TerminateArgs& args)
 }
 
 // Called from Application on Shutdown()
-static void ShutdownListener(const Application::ShutdownArgs& args)
+static void ShutdownListener(const Helium::ShutdownArgs& args)
 {
     // murder!
     Process::ReleaseAll();
@@ -45,7 +45,7 @@ Process* Process::Create( const tstring& executable, bool debug, bool wait )
         firstCreate = false;
 
         // hook up our handler to Application
-        Application::g_ShuttingDown.Add( &ShutdownListener );
+        Helium::g_ShuttingDown.Add( &ShutdownListener );
 
         // hook up our handler to debug
         Debug::g_Terminating.Add( &TerminateListener );

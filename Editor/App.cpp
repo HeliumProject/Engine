@@ -16,10 +16,10 @@
 #include "Foundation/CommandLine/Processor.h"
 #include "Foundation/Reflect/Registry.h"
 
-#include "Application/Application.h"
-#include "Application/Exception.h"
+#include "Foundation/Startup.h"
+#include "Foundation/Exception.h"
 #include "Editor/ArtProvider.h"
-#include "Application/Worker/Process.h"
+#include "Foundation/Worker/Process.h"
 #include "Application/Inspect/InspectInit.h"
 #include "Application/Inspect/Interpreters/Reflect/InspectReflectInit.h"
 #include "Application/Inspect/Interpreters/Content/InspectContentInit.h"
@@ -296,7 +296,7 @@ void App::OnAssertFailure(const wxChar *file, int line, const wxChar *func, cons
 void App::SavePreferences()
 {
     Helium::Path path;
-    Application::GetPreferencesDirectory( path );
+    Helium::GetPreferencesDirectory( path );
     path += TXT("EditorPreferences.xml");
 
     tstring error;
@@ -325,7 +325,7 @@ void App::SavePreferences()
 void App::LoadPreferences()
 {
     Helium::Path path;
-    Application::GetPreferencesDirectory( path );
+    Helium::GetPreferencesDirectory( path );
     path += TXT("EditorPreferences.xml");
 
     if ( Helium::IsDebuggerPresent() )
@@ -413,25 +413,25 @@ int Main ( int argc, const tchar** argv )
     //success &= processor.AddOption( new FlagOption(  , Worker::Args::Wait, "wait forever for background processes" ), error );
 
     bool scriptFlag = false;
-    success &= processor.AddOption( new FlagOption( &scriptFlag, Application::Args::Script, TXT( "omit prefix and suffix in console output" ) ), error );
+    success &= processor.AddOption( new FlagOption( &scriptFlag, StartupArgs::Script, TXT( "omit prefix and suffix in console output" ) ), error );
 
     bool attachFlag = false;
-    success &= processor.AddOption( new FlagOption( &attachFlag, Application::Args::Attach, TXT( "wait for a debugger to attach to the process on startup" ) ), error );
+    success &= processor.AddOption( new FlagOption( &attachFlag, StartupArgs::Attach, TXT( "wait for a debugger to attach to the process on startup" ) ), error );
 
     bool profileFlag = false;
-    success &= processor.AddOption( new FlagOption( &profileFlag, Application::Args::Profile, TXT( "enable profile output to the console windows" ) ), error );
+    success &= processor.AddOption( new FlagOption( &profileFlag, StartupArgs::Profile, TXT( "enable profile output to the console windows" ) ), error );
 
     bool memoryFlag = false;
-    success &= processor.AddOption( new FlagOption( &memoryFlag, Application::Args::Memory, TXT( "profile and report memory usage to the console" ) ), error );
+    success &= processor.AddOption( new FlagOption( &memoryFlag, StartupArgs::Memory, TXT( "profile and report memory usage to the console" ) ), error );
 
     bool vreboseFlag = false;
-    success &= processor.AddOption( new FlagOption( &vreboseFlag, Application::Args::Verbose, TXT( "output a verbose level of console output" ) ), error );
+    success &= processor.AddOption( new FlagOption( &vreboseFlag, StartupArgs::Verbose, TXT( "output a verbose level of console output" ) ), error );
 
     bool extremeFlag = false;
-    success &= processor.AddOption( new FlagOption( &extremeFlag, Application::Args::Extreme, TXT( "output an extremely verbose level of console output" ) ), error );
+    success &= processor.AddOption( new FlagOption( &extremeFlag, StartupArgs::Extreme, TXT( "output an extremely verbose level of console output" ) ), error );
 
     bool debugFlag = false;
-    success &= processor.AddOption( new FlagOption( &debugFlag, Application::Args::Debug, TXT( "output debug console output" ) ), error );
+    success &= processor.AddOption( new FlagOption( &debugFlag, StartupArgs::Debug, TXT( "output debug console output" ) ), error );
 
     int nice = 0;
     success &= processor.AddOption( new SimpleOption<int>( &nice , TXT( "nice" ), TXT( "<NUM>" ), TXT( "number of processors to nice (for other processes)" ) ), error );
@@ -491,7 +491,7 @@ int Main ( int argc, const tchar** argv )
             ::FreeConsole();
 #endif
 
-            return Application::StandardWinMain( &wxEntryWrapper );
+            return Helium::StandardWinMain( &wxEntryWrapper );
         }
     }
 
@@ -516,7 +516,7 @@ int _tmain( int argc, const tchar** argv )
 
     Debug::g_BreakpointOccurred.Set( &ShowBreakpointDialog );
 
-    int result = Application::StandardMain( &Main, argc, argv );
+    int result = Helium::StandardMain( &Main, argc, argv );
 
     Debug::g_BreakpointOccurred.Clear();
 

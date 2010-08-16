@@ -5,7 +5,7 @@
 #include "Core/Scene/SceneManager.h"
 
 #include "Foundation/Log.h"
-#include "Application/Undo/Exceptions.h"
+#include "Foundation/Undo/Exceptions.h"
 
 using namespace Helium;
 using namespace Helium::Core;

@@ -7,7 +7,7 @@
 
 #include <wx/wx.h>
 
-#include "Application/Application.h"
+#include "Foundation/Startup.h"
 
 #include "Editor/Graph/ShaderFrame.h"
 #include "Editor/Graph/ProjectNotebook.h"

@@ -5,7 +5,7 @@
 #include "Foundation/Math/Curve.h"
 #include "Foundation/Math/AngleAxis.h"
 
-#include "Application/Undo/PropertyCommand.h"
+#include "Foundation/Undo/PropertyCommand.h"
 
 #include "Core/Scene/Pick.h"
 #include "Core/Scene/PrimitiveLocator.h"

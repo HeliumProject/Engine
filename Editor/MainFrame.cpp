@@ -11,6 +11,8 @@
 #include "Application/Inspect/Clipboard/ClipboardFileList.h"
 #include "Application/Inspect/Clipboard/ClipboardDataObject.h"
 
+#include "Core/Asset/AssetClass.h"
+
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/InstanceSet.h"
 #include "Core/Scene/EntityInstanceType.h"
@@ -357,8 +359,9 @@ bool MainFrame::ValidateDrag( const Inspect::DragArgs& args )
 {
     bool canHandleArgs = false;
 
-    std::set< tstring > reflectExtensions;
-    Reflect::Archive::GetExtensions( reflectExtensions );
+    std::set< tstring > supportedExtensions;
+    Reflect::Archive::GetExtensions( supportedExtensions );
+    Asset::AssetClass::GetExtensions( supportedExtensions ); 
 
     Inspect::ClipboardFileListPtr fileList = Reflect::ObjectCast< Inspect::ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
     if ( fileList )
@@ -372,7 +375,7 @@ bool MainFrame::ValidateDrag( const Inspect::DragArgs& args )
             if ( path.Exists() )
             {
                 tstring ext = path.Extension();
-                if ( reflectExtensions.find( ext ) != reflectExtensions.end() )
+                if ( supportedExtensions.find( ext ) != supportedExtensions.end() )
                 {
                     canHandleArgs = true;
                 }

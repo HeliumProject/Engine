@@ -6,7 +6,12 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-FileDropTarget::FileDropTarget(const tstring& extensions, const tstring& delims)
+FileDropTarget::FileDropTarget( const std::set< tstring >& extensions )
+{
+    m_FileExtensions = extensions;
+}
+
+FileDropTarget::FileDropTarget( const tstring& extensions, const tstring& delims )
 {
     Tokenize( extensions, m_FileExtensions, delims );
 }

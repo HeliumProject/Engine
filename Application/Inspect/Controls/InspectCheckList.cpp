@@ -1,7 +1,7 @@
 #include "Application/Inspect/Controls/InspectCheckList.h"
 #include "Application/Inspect/Controls/InspectContainer.h"
 #include "Application/Inspect/Controls/InspectCanvas.h"
-#include "Application/Inspect/Data/SerializerData.h"
+#include "Application/Inspect/InspectData.h"
 
 #include "Foundation/String/Tokenize.h"
 
@@ -46,7 +46,7 @@ END_EVENT_TABLE();
 // 
 CheckList::CheckList()
 {
-    m_FixedHeight = true;
+    m_IsFixedHeight = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

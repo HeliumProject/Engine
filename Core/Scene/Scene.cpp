@@ -2000,7 +2000,7 @@ void Scene::RefreshSelection()
     m_Selection.Refresh();
 }
 
-bool Scene::PropertyChanging( const Inspect::ChangingArgs& args )
+bool Scene::PropertyChanging( const Inspect::ControlChangingArgs& args )
 {
     if ( args.m_Preview )
     {
@@ -2020,7 +2020,7 @@ bool Scene::PropertyChanging( const Inspect::ChangingArgs& args )
     return IsEditable();
 }
 
-void Scene::PropertyChanged( const Inspect::ChangeArgs& args )
+void Scene::PropertyChanged( const Inspect::ControlChangedArgs& args )
 {
     Execute(false);
 }

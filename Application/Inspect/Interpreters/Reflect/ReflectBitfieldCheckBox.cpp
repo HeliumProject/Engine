@@ -1,7 +1,7 @@
 #include "ReflectBitfieldCheckBox.h"
 
 #include "Application/Inspect/Controls/InspectContainer.h"
-#include "Application/Inspect/Data/StringData.h"
+#include "Application/Inspect/InspectData.h"
 #include "Foundation/String/Tokenize.h"
 
 #include <wx/checkbox.h>

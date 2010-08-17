@@ -7,9 +7,8 @@ namespace Helium
 {
     namespace Inspect
     {
-        ///////////////////////////////////////////////////////////////////////////
-        // 
-        // 
+        typedef Helium::Signature< void, Button* > ActionSignature;
+
         class APPLICATION_API Action : public Reflect::ConcreteInheritor<Action, Button>
         {
         protected:

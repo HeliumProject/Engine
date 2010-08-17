@@ -260,14 +260,14 @@ void Value::SetHighlight(bool highlighted)
 
 void Value::SetReadOnly(bool readOnly)
 {
-  if ( m_ReadOnly != readOnly )
+  if ( m_IsReadOnly != readOnly )
   {
-    m_ReadOnly = readOnly;
+    m_IsReadOnly = readOnly;
 
     if ( IsRealized() )
     {
       StdTextBox* textCtrl = Control::Cast< StdTextBox >( this );
-      textCtrl->SetEditable( !m_ReadOnly );
+      textCtrl->SetEditable( !m_IsReadOnly );
     }
   }
 }

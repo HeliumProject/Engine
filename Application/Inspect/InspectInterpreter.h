@@ -3,8 +3,8 @@
 #include "Application/API.h"
 
 #include "Application/Inspect/InspectData.h"
-#include "Application/Inspect/Data/StringData.h"
-#include "Application/Inspect/Data/SerializerData.h"
+#include "Application/Inspect/InspectControls.h"
+#include "Application/Inspect/InspectData.h"
 #include "Platform/Mutex.h"
 
 namespace Helium
@@ -12,69 +12,33 @@ namespace Helium
     namespace Inspect
     {
         //
-        // Forwards
-        //
-
-        class Control;
-        class Container;
-        class Group;
-        class Panel;
-
-        class Button;
-        class Action;
-
-        class CheckBox;
-        class CheckList;
-        class ColorPicker;
-        class Label;
-        class List;
-        class Slider;
-
-        class Choice;
-        class Value;
-
-
-        //
-        // Events
+        // Event Args
         //
 
         struct PopulateLinkArgs
         {
-            u32 m_Type;
-            V_Item m_Items;
+            PopulateLinkArgs(u32 type) : m_Type (type) {}
 
-            PopulateLinkArgs(u32 type)
-                : m_Type (type)
-            {
-
-            }
+            u32     m_Type;
+            V_Item  m_Items;
         };
         typedef Helium::Signature<void, PopulateLinkArgs&> PopulateLinkSignature;
 
         struct SelectLinkArgs
         {
+            SelectLinkArgs(const tstring& id) : m_ID (id) {}
+
             const tstring& m_ID;
-
-            SelectLinkArgs(const tstring& id)
-                : m_ID (id)
-            {
-
-            }
         };
         typedef Helium::Signature<void, const SelectLinkArgs&> SelectLinkSignature;
 
         struct PickLinkArgs
         {
+            PickLinkArgs(const DataPtr& data) : m_Data (data) {}
+
             const DataPtr& m_Data;
-
-            PickLinkArgs(const DataPtr& data)
-                : m_Data (data)
-            {
-
-            }
         };
         typedef Helium::Signature<void, const PickLinkArgs&> PickLinkSignature;
-
 
         //
         // Interpreters are owned by one or more controls.  They are the
@@ -91,30 +55,12 @@ namespace Helium
 
         class APPLICATION_API Interpreter HELIUM_ABSTRACT : public Reflect::Object
         {
-        protected:
-            // the container to inject into (these are not long lived hard references)
-            //  this only stores pointers to GUI when generating UI (before they are added
-            //  to the canvas, which is where the controls live permanently)
-            Container* m_Container;
-
-            // context for push/pop api
-            M_U32ContainerStack m_ContainerStack;
-
-            // prevent access to creating new container stacks
-            Helium::Mutex m_ContainerStackMutex;
-
         public:
             Interpreter (Container* container)
                 : m_Container (container) 
             {
                 HELIUM_ASSERT(container);
             }
-
-            virtual ~Interpreter()
-            {
-
-            }
-
 
             //
             // These helpers provide a pinch point for connecting nested interpreter events into this object's event emitters
@@ -138,7 +84,6 @@ namespace Helium
                 child->AddPickLinkListener( PickLinkSignature::Delegate (parent, &Interpreter::RaisePickLink) );
             }
 
-
             //
             // Panel/container state management
             //
@@ -157,25 +102,11 @@ namespace Helium
             Container* Pop( bool setParent = true );
             Container* Top();
 
-
-            //
             // Label (no data binding)
-            //
-
             Label* AddLabel(const tstring& name);
-
-
-            //
-            // Button
-            //
 
             // Button that notifies a listener when it is clicked
             Action* AddAction( const ActionSignature::Delegate& listener );
-
-
-            //
-            // CheckBox
-            //
 
             template <class T>
             CheckBox* AddCheckBox( const Helium::SmartPtr< Helium::Property<T> >& property )
@@ -187,11 +118,6 @@ namespace Helium
                 return control;
             }
 
-
-            //
-            // Value
-            //
-
             template <class T>
             Value* AddValue( const Helium::SmartPtr< Helium::Property<T> >& property )
             {
@@ -201,11 +127,6 @@ namespace Helium
                 containerStack.top()->AddControl(control);
                 return control;
             }
-
-
-            //
-            // Choice
-            //
 
             template <class T>
             Choice* AddChoice( const Helium::SmartPtr< Helium::Property<T> >& property )
@@ -237,11 +158,6 @@ namespace Helium
                 return control;        
             }
 
-
-            //
-            // List
-            //
-
             template <class T>
             List* AddList( const Helium::SmartPtr< Helium::Property<T> >& property )
             {
@@ -251,11 +167,6 @@ namespace Helium
                 containerStack.top()->AddControl(control);
                 return control;
             }
-
-
-            //
-            // CheckList
-            //
 
             template <class T>
             CheckList* AddCheckList( const Helium::SmartPtr< Helium::Property<T> >& property )
@@ -267,11 +178,6 @@ namespace Helium
                 return control;
             }
 
-
-            //
-            // Slider
-            //
-
             template <class T>
             Slider* AddSlider( const Helium::SmartPtr< Helium::Property<T> >& property )
             {
@@ -281,11 +187,6 @@ namespace Helium
                 containerStack.top()->AddControl(control);
                 return control;
             }
-
-
-            //
-            // ColorPicker
-            //
 
             template <class T>
             ColorPicker* AddColorPicker( const Helium::SmartPtr< Helium::Property<T> >& property )
@@ -297,95 +198,62 @@ namespace Helium
                 return control;
             }
 
-
             //
             // Events
             //
 
+        public:
+            ChangingSignature::Event& PropertyChanging() const
+            {
+                return m_PropertyChanging;
+            }
+
+            ChangedSignature::Event& PropertyChanged() const
+            {
+                return m_PropertyChanged;
+            }
+
+            PopulateLinkSignature::Event& PopulateLink() const
+            {
+                return m_PopulateLink;
+            }
+
+            SelectLinkSignature::Event& SelectLink() const
+            {
+                return m_SelectLink;
+            }
+
+            PickLinkSignature::Event& PickLink() const
+            {
+                return m_PickLink;
+            }
+
         protected:
+            // the container to inject into (these are not long lived hard references)
+            //  this only stores pointers to GUI when generating UI (before they are added
+            //  to the canvas, which is where the controls live permanently)
+            Container* m_Container;
+
+            // context for push/pop api
+            M_U32ContainerStack m_ContainerStack;
+
+            // prevent access to creating new container stacks
+            Helium::Mutex m_ContainerStackMutex;
+
             // the changing event, emitted from Changing()
             mutable ChangingSignature::Event m_PropertyChanging;
-        public:
-            void AddPropertyChangingListener(const ChangingSignature::Delegate& listener)
-            {
-                m_PropertyChanging.Add(listener);
-            }
-            void RemovePropertyChangingListener(const ChangingSignature::Delegate& listener)
-            {
-                m_PropertyChanging.Remove(listener);
-            }
-            bool RaisePropertyChanging( const ChangingArgs& args )
-            {
-                return m_PropertyChanging.RaiseWithReturn( args );
-            }
 
-        protected:
             // the changed event, emitted from Changed()
             mutable ChangedSignature::Event m_PropertyChanged;
-        public:
-            void AddPropertyChangedListener(const ChangedSignature::Delegate& listener)
-            {
-                m_PropertyChanged.Add(listener);
-            }
-            void RemovePropertyChangedListener(const ChangedSignature::Delegate& listener)
-            {
-                m_PropertyChanged.Remove(listener);
-            }
-            void RaisePropertyChanged( const ChangeArgs& args )
-            {
-                m_PropertyChanged.Raise( args );
-            }
 
-        protected:
             // the find event, handlers should seek and select the contents
             mutable PopulateLinkSignature::Event m_PopulateLink;
-        public:
-            void AddPopulateLinkListener(const PopulateLinkSignature::Delegate& listener)
-            {
-                m_PopulateLink.Add(listener);
-            }
-            void RemovePopulateLinkListener(const PopulateLinkSignature::Delegate& listener)
-            {
-                m_PopulateLink.Remove(listener);
-            }
-            void RaisePopulateLink( PopulateLinkArgs& args )
-            {
-                m_PopulateLink.Raise( args );
-            }
 
-        protected:
             // the select event, handlers should seek and select the item linked by the data
             mutable SelectLinkSignature::Event m_SelectLink;
-        public:
-            void AddSelectLinkListener(const SelectLinkSignature::Delegate& listener)
-            {
-                m_SelectLink.Add(listener);
-            }
-            void RemoveSelectLinkListener(const SelectLinkSignature::Delegate& listener)
-            {
-                m_SelectLink.Remove(listener);
-            }
-            void RaiseSelectLink( const SelectLinkArgs& args )
-            {
-                m_SelectLink.Raise( args );
-            }
 
-        protected:
             // the pick event, handlers should stash data and write descriptor when selection occurs
             mutable PickLinkSignature::Event m_PickLink;
-        public:
-            void AddPickLinkListener(const PickLinkSignature::Delegate& listener)
-            {
-                m_PickLink.Add(listener);
-            }
-            void RemovePickLinkListener(const PickLinkSignature::Delegate& listener)
-            {
-                m_PickLink.Remove(listener);
-            }
-            void RaisePickLink( const PickLinkArgs& args )
-            {
-                m_PickLink.Raise( args );
-            }
         };
 
         typedef Helium::SmartPtr<Interpreter> InterpreterPtr;

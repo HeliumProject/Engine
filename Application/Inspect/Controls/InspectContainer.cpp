@@ -382,19 +382,3 @@ void Container::SetReadOnly(bool readOnly)
     (*itr)->SetReadOnly( readOnly );
   }
 }
-
-#ifdef INSPECT_DEBUG_LAYOUT_LOGIC
-
-void Container::PrintLayout()
-{
-  V_Control::iterator itr = m_Controls.begin();
-  V_Control::iterator end = m_Controls.end();
-  for( ; itr != end; ++itr )
-  {
-    (*itr)->PrintLayout();
-  }
-  
-  __super::PrintLayout();
-}
-
-#endif

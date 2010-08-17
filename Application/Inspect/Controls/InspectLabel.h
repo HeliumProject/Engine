@@ -34,7 +34,7 @@ namespace Helium
 
             void SetAutoToolTip( bool enable );
             virtual void SetToolTip( const tstring& toolTip ) HELIUM_OVERRIDE;
-            virtual bool TrimString(tstring& str, int width) HELIUM_OVERRIDE;
+            virtual bool EllipsizeString(tstring& str, int width) HELIUM_OVERRIDE;
 
         private:
             void UpdateUI( const tstring& text );

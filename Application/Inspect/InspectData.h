@@ -156,27 +156,18 @@ namespace Helium
 
         struct DataChangingArgs
         {
-            const Data* m_Data;
-            Reflect::SerializerPtr m_NewValue;
+            DataChangingArgs( const Data* data, Reflect::Serializer* value ) : m_Data (data) , m_NewValue( value ) {}
 
-            DataChangingArgs( const Data* data, const Reflect::SerializerPtr& value )
-                : m_Data (data)
-                , m_NewValue( value )
-            {
-
-            }
+            const Data*             m_Data;
+            Reflect::SerializerPtr  m_NewValue;
         };
         typedef Helium::Signature<bool, DataChangingArgs&> DataChangingSignature;
 
         struct DataChangedArgs
         {
+            DataChangedArgs( const Data* data ) : m_Data (data) {}
+
             const Data* m_Data;
-
-            DataChangedArgs( const Data* data )
-                : m_Data (data)
-            {
-
-            }
         };
         typedef Helium::Signature<void, const DataChangedArgs&> DataChangedSignature;
 

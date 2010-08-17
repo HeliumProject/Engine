@@ -104,13 +104,13 @@ void InstancePanel::Intersect(std::set< tstring >& intersection, const std::set<
 }
 
 
-void InstancePanel::OnSolidOverride( const Inspect::ChangeArgs& args )
+void InstancePanel::OnSolidOverride( const Inspect::ControlChangedArgs& args )
 {
   m_Solid->SetEnabled( m_SolidOverride->GetChecked() );
   m_Solid->Read();
 }
 
-void InstancePanel::OnTransparentOverride( const Inspect::ChangeArgs& args )
+void InstancePanel::OnTransparentOverride( const Inspect::ControlChangedArgs& args )
 {
   m_Transparent->SetEnabled( m_TransparentOverride->GetChecked() );
   m_Transparent->Read();

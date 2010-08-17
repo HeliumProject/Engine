@@ -111,8 +111,8 @@ namespace Helium
             virtual void GetChangesets( RCS::V_Changeset& changesets ) HELIUM_OVERRIDE;
 
         public:
-            bool                  m_Enabled;
-            bool                  m_Connected;
+            bool                  m_IsEnabled;
+            bool                  m_IsConnected;
             Timer                 m_ConnectTimer;
             u32                   m_ConnectionTestTimeout;        // the time we are willing to wait to test if the server is running
             u32                   m_ForegroundExecuteTimeout;     // the timeout in the foreground thread before we open the wait dialog

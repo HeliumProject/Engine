@@ -1,11 +1,11 @@
 #include "ReflectValueInterpreter.h"
 
 #include "Application/Inspect/InspectInit.h"
+#include "Application/Inspect/InspectData.h"
 #include "Application/Inspect/InspectScript.h"
 #include "Application/Inspect/Controls/InspectCheckBox.h"
 #include "Application/Inspect/Controls/InspectChoice.h"
 #include "Application/Inspect/Controls/InspectAction.h"
-#include "Application/Inspect/Data/StringData.h"
 #include "Application/Inspect/Controls/InspectValue.h"
 #include "Application/Inspect/Controls/InspectList.h"
 

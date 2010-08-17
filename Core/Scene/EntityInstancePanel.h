@@ -92,8 +92,8 @@ namespace Helium
         protected:
             // UI callbacks
 
-            bool OnEntityAssetChanging( const Inspect::ChangingArgs& args );
-            void OnEntityAssetChanged( const Inspect::ChangeArgs& args );
+            bool OnEntityAssetChanging( const Inspect::ControlChangingArgs& args );
+            void OnEntityAssetChanged( const Inspect::ControlChangedArgs& args );
             void OnEntityAssetRefresh( Inspect::Button* button );
             void OnEntityAssetEditAsset( Inspect::Button* button );
             void OnEntityAssetEditArt( Inspect::Button* button );

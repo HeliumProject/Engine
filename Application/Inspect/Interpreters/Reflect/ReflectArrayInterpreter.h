@@ -4,7 +4,7 @@
 
 #include "Application/Inspect/Controls/InspectCanvas.h"
 #include "Application/Inspect/Controls/InspectContainer.h"
-#include "Application/Inspect/Data/StringData.h"
+#include "Application/Inspect/InspectData.h"
 
 namespace Helium
 {

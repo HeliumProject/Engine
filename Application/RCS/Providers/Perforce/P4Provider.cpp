@@ -26,12 +26,12 @@ Profile::Accumulator g_CommandAccum( "Perforce Commands" );
 #endif
 
 Provider::Provider()
-: m_Enabled ( true )
-, m_Connected( false )
-, m_Abort ( false )
-, m_Shutdown ( false )
-, m_Command ( NULL )
-, m_Phase ( CommandPhases::Unknown )
+: m_IsEnabled( true )
+, m_IsConnected( false )
+, m_Abort( false )
+, m_Shutdown( false )
+, m_Command( NULL )
+, m_Phase( CommandPhases::Unknown )
 {
     if ( IsDebuggerPresent() )
     {
@@ -62,7 +62,7 @@ void Provider::Initialize()
 
 void Provider::Cleanup()
 {
-    if ( m_Connected && !m_Client.Dropped() )
+    if ( m_IsConnected && !m_Client.Dropped() )
     {
         Error e;
         m_Client.Final( &e );
@@ -117,7 +117,7 @@ void Provider::ThreadEntry()
 
 void Provider::RunCommand( Command* command )
 {
-    if ( !m_Enabled )
+    if ( !m_IsEnabled )
     {
         throw Perforce::Exception( TXT( "Perforce connection is not enabled" ) );
     }
@@ -145,7 +145,7 @@ void Provider::RunCommand( Command* command )
 
     do
     {
-        if ( m_Connected )
+        if ( m_IsConnected )
         {
             m_Phase = CommandPhases::Executing;
 
@@ -159,7 +159,7 @@ void Provider::RunCommand( Command* command )
                 {
                     if ( g_ShowWaitDialog.Valid() && g_ShowWaitDialog.Invoke( this ) )
                     {
-                        m_Enabled = false;
+                        m_IsEnabled = false;
                         m_Abort = true;
                     }
                 }
@@ -178,10 +178,10 @@ void Provider::RunCommand( Command* command )
 
         if ( m_Client.Dropped() )
         {
-            m_Connected = false;
+            m_IsConnected = false;
         }
 
-        if ( !m_Connected )
+        if ( !m_IsConnected )
         {
             m_ConnectTimer.Reset();
 
@@ -194,7 +194,7 @@ void Provider::RunCommand( Command* command )
                     // this will poll Connect() in a timer
                     if ( g_ShowWaitDialog.Valid() && g_ShowWaitDialog.Invoke( this ) )
                     {
-                        m_Enabled = false;
+                        m_IsEnabled = false;
 
                         if ( g_ShowWarningDialog.Valid() )
                         {
@@ -205,14 +205,14 @@ void Provider::RunCommand( Command* command )
                     }
                 }
 
-                if ( m_Connected )
+                if ( m_IsConnected )
                 {
                     Log::Print( TXT( "Connection to Perforce has been established\n" ) );
                 }
             }
         }
     }
-    while ( m_Phase != CommandPhases::Complete && m_Enabled && m_Connected && !m_Abort && command->m_ErrorCount == 0 );
+    while ( m_Phase != CommandPhases::Complete && m_IsEnabled && m_IsConnected && !m_Abort && command->m_ErrorCount == 0 );
 
     if ( foregroundThread )
     {
@@ -240,7 +240,7 @@ void Provider::RunCommand( Command* command )
 
 bool Provider::Connect()
 {
-    if ( m_Connected )
+    if ( m_IsConnected )
     {
         // This extra 'info' command is unfortunate but necessary
         //  .Dropped() can only be trusted immediately after .Run(), so do a lightweight run here to update .Dropped()'s state
@@ -260,7 +260,7 @@ bool Provider::Connect()
     {
         Error e;
         m_Client.Final( &e );
-        m_Connected = false;
+        m_IsConnected = false;
 
 #ifdef PERFORCE_DEBUG_CONNECT
         if ( e.Test() )
@@ -272,7 +272,7 @@ bool Provider::Connect()
 #endif
     }
 
-    if ( !m_Connected )
+    if ( !m_IsConnected )
     {
         Error e;
         m_Client.SetProtocol( "tag", "" );
@@ -300,10 +300,10 @@ bool Provider::Connect()
         converted = Helium::ConvertString( m_Client.GetClient().Text(), m_ClientName );
         HELIUM_ASSERT( converted );
 
-        m_Connected = e.Test() == 0;
+        m_IsConnected = e.Test() == 0;
     }
 
-    return m_Connected;
+    return m_IsConnected;
 }
 
 // this instructs when a p4api transaction should keep waiting (return true to keep waiting)
@@ -359,12 +359,12 @@ bool Provider::StopWaiting()
 
 bool Provider::IsEnabled()
 {
-    return m_Enabled;
+    return m_IsEnabled;
 }
 
 void Provider::SetEnabled( bool enabled )
 {
-    m_Enabled = enabled;
+    m_IsEnabled = enabled;
 }
 
 const char* Provider::GetName()

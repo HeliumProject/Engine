@@ -19,6 +19,7 @@ ReflectInterpreter::ReflectInterpreter (Container* container)
 
 }
 
+#if INSPECT_REFACTOR
 void ReflectInterpreter::Reset()
 {
   // Clear out the controls that belong to this interpreter.
@@ -45,6 +46,7 @@ void ReflectInterpreter::Reset()
   m_Serializers.clear();
   m_Interpreters.clear();
 }
+#endif
 
 void ReflectInterpreter::Interpret(const std::vector<Reflect::Element*>& instances, i32 includeFlags, i32 excludeFlags, bool expandPanel)
 {

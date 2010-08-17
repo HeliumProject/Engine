@@ -19,6 +19,24 @@ namespace Helium
         const static tchar ITEMS_ATTR_REQUIRED[]  = TXT( "required" );
         const static tchar ITEMS_ATTR_PREFIX[]    = TXT( "prefix" );
 
+        //
+        // Key/Data pair
+        //
+
+        struct Item
+        {
+            Item(const tstring& key = "", const tstring& data = "")
+            {
+                m_Key = key;
+                m_Data = data;
+            }
+
+            tstring m_Key;
+            tstring m_Data;
+        };
+
+        typedef std::vector<Item> V_Item;
+
         class APPLICATION_API Items : public Reflect::AbstractInheritor<Items, Control>
         {
         protected:

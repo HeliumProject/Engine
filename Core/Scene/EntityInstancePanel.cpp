@@ -282,7 +282,7 @@ void EntityPanel::Create()
 // Returns true if the new value for the Entity Class field can be resolved to
 // a file TUID.
 //
-bool EntityPanel::OnEntityAssetChanging( const Inspect::ChangingArgs& args )
+bool EntityPanel::OnEntityAssetChanging( const Inspect::ControlChangingArgs& args )
 {
     bool result = false;
 
@@ -310,7 +310,7 @@ bool EntityPanel::OnEntityAssetChanging( const Inspect::ChangingArgs& args )
     return result;
 }
 
-void EntityPanel::OnEntityAssetChanged( const Inspect::ChangeArgs& args )
+void EntityPanel::OnEntityAssetChanged( const Inspect::ControlChangedArgs& args )
 {
 }
 

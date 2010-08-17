@@ -37,9 +37,10 @@ namespace Helium
             {
                 m_Window = window;
 
-                if ( m_Window && m_DropTarget )
+                if ( m_DropTarget )
                 {
                     m_Window->SetDropTarget( m_DropTarget );
+                    m_DropTarget = NULL;
                 }
             }
 
@@ -55,11 +56,14 @@ namespace Helium
 
             void SetDropTarget( wxDropTarget* dropTarget )
             {
-                m_DropTarget = dropTarget;
-
-                if ( m_Window && m_DropTarget )
+                if ( m_Window )
                 {
                     m_Window->SetDropTarget( dropTarget );
+                }
+                else
+                {
+                    delete m_DropTarget;
+                    m_DropTarget = dropTarget;
                 }
             }
 

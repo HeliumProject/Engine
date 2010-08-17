@@ -6,7 +6,7 @@
 #include "Application/Inspect/Controls/InspectChoice.h"
 #include "Application/Inspect/Controls/InspectList.h"
 #include "Application/Inspect/Controls/InspectAction.h"
-#include "Application/Inspect/Data/StringData.h"
+#include "Application/Inspect/InspectData.h"
 #include "Application/Inspect/InspectInit.h"
 
 #include "Foundation/String/Tokenize.h"

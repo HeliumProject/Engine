@@ -5,7 +5,7 @@
 #include "Application/Inspect/Controls/InspectSlider.h"
 #include "Application/Inspect/Controls/InspectValue.h"
 #include "Application/Inspect/Controls/InspectColorPicker.h"
-#include "Application/Inspect/Data/StringData.h"
+#include "Application/Inspect/InspectData.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;

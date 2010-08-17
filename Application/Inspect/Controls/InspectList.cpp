@@ -38,7 +38,7 @@ List::List()
 : m_Sorted( false )
 , m_IsMap( false )
 {
-  m_FixedHeight = true;
+  m_IsFixedHeight = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -67,7 +67,7 @@ Button::Button()
 : m_Text( TXT( "..." ) )
 , m_Icon( (wxArtID)wxT( "" ) )
 {
-  m_FixedWidth = true;
+  m_IsFixedWidth = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

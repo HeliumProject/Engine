@@ -36,9 +36,6 @@
 # define INSPECT_SCOPE_TIMER(__Str)
 #endif
 
-// prints console output of size and position info
-//#define INSPECT_DEBUG_LAYOUT_LOGIC
-
 // prints stepping of script code compilation
 //#define INSPECT_DEBUG_SCRIPT_COMPILE
 

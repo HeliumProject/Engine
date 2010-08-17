@@ -1,49 +1,52 @@
 #pragma once
 
+#include "Foundation/Math/Point.h"
+#include "Foundation/Reflect/Object.h"
+#include "Foundation/Automation/Attribute.h"
+
 #include "Application/API.h"
 #include "Application/Inspect/InspectData.h"
-#include "Application/Inspect/InspectInterpreter.h"
 #include "Application/Inspect/Controls/InspectContextMenu.h"
-
-#include "Foundation/Math/Point.h"
-#include "Foundation/Reflect/Class.h"
-#include "Foundation/Reflect/Object.h"
 
 namespace Helium
 {
     namespace Inspect
     {
-        // the scroll increment in pixels
-        const static tchar ATTR_VALUE_TRUE[] = TXT( "true" );
-        const static tchar ATTR_VALUE_FALSE[] = TXT( "false" );
-        const static tchar ATTR_TOOLTIP[] = TXT( "tooltip" );
-
-#ifdef PROFILE_ACCUMULATION
-        APPLICATION_API extern Profile::Accumulator g_RealizeAccumulator;
-#endif
+        const static tchar ATTR_VALUE_TRUE[]    = TXT( "true" );
+        const static tchar ATTR_VALUE_FALSE[]   = TXT( "false" );
+        const static tchar ATTR_TOOLTIP[]       = TXT( "tooltip" );
 
         //
-        // Attribute
+        // Event Args and Signatures
         //
 
-        class APPLICATION_API ControlAttribute
+        class Control;
+
+        typedef Helium::Signature< void, Control* > ControlSignature;
+
+        struct ControlChangingArgs
         {
-        public:
-            tstring m_Key;
-            tstring m_Value;
-
-            ControlAttribute ()
+            ControlChangingArgs( class Control* control, Reflect::Serializer* newValue, bool preview )
+                : m_Control( control )
+                , m_NewValue( newValue )
+                , m_Preview( preview )
             {
 
             }
 
-            ControlAttribute (const tstring& key, const tstring& value)
-            {
-                m_Key = key;
-                m_Value = value;
-            }
+            Control*                m_Control;
+            Reflect::Serializer*    m_NewValue;
+            bool                    m_Preview;
         };
-        typedef std::vector<ControlAttribute> V_ControlAttribute;
+        typedef Helium::Signature<bool, const ControlChangingArgs&> ControlChangingSignature;
+
+        struct ControlChangedArgs
+        {
+            ControlChangedArgs(class Control* control) : m_Control (control) {}
+
+            Control* m_Control;
+        };
+        typedef Helium::Signature<void, const ControlChangedArgs&> ControlChangedSignature;
 
         //
         // ClientData, this could be toolkit OR interpreter client data, there are two pointer in Control
@@ -89,18 +92,12 @@ namespace Helium
         // Control
         //
 
-        class APPLICATION_API Control : public Reflect::AbstractInheritor<Control, Reflect::Element>
+        class APPLICATION_API Control : public Reflect::AbstractInheritor<Control, Reflect::Object>
         {
         public:
             Control();
             virtual ~Control();
-
-            // post-create initialize
-            virtual void Create();
-
-            //
-            // Accessors
-            //
+            virtual void Create(); // post-create initialize
 
             int GetDepth();
 
@@ -108,7 +105,6 @@ namespace Helium
             {
                 return m_Canvas;
             }
-
             void SetCanvas(Canvas* canvas)
             {
                 m_Canvas = canvas;
@@ -119,26 +115,21 @@ namespace Helium
                 return m_Parent;
             }
 
-            Interpreter* GetInterpreter()
-            {
-                return m_Interpreter;
-            }
-
-            void SetInterpreter(Interpreter* interpreter)
-            {
-                m_Interpreter = interpreter;
-            }
-
             //
             // Data Binding
             //
 
-            // query
-            const DataPtr& GetData();
+            bool IsBound() const
+            {
+                return m_BoundData.ReferencesObject();
+            }
 
-            // performs binding to specified data
+            const Data* GetData() const
+            {
+              return m_BoundData;
+            }
+
             virtual void Bind(const DataPtr& data);
-            virtual bool IsBound() const;
 
             // 
             // Client data
@@ -199,12 +190,12 @@ namespace Helium
 
             bool IsFixedWidth() const
             {
-                return m_FixedWidth;
+                return m_IsFixedWidth;
             }
 
             bool IsFixedHeight() const
             {
-                return m_FixedHeight;
+                return m_IsFixedHeight;
             }
 
             f32 GetProportionalWidth() const
@@ -246,7 +237,7 @@ namespace Helium
 
             // string elipsization
             int GetStringWidth(const tstring& str);
-            virtual bool TrimString(tstring& str, int width);
+            virtual bool EllipsizeString(tstring& str, int width);
 
             // ToolTip
             const tstring& GetToolTip();
@@ -301,7 +292,7 @@ namespace Helium
             //
 
             // fires callback
-            virtual bool PreWrite( const Reflect::SerializerPtr& newValue, bool preview );
+            virtual bool PreWrite( Reflect::Serializer* newValue, bool preview );
 
             // updates the data based on the state of the UI
             virtual bool Write();
@@ -329,9 +320,9 @@ namespace Helium
                         return false;
                     }
 
-                    m_Writing = true;
+                    m_IsWriting = true;
                     bool result = data->Set( val );
-                    m_Writing = false;
+                    m_IsWriting = false;
 
                     if (result)
                     {
@@ -372,110 +363,81 @@ namespace Helium
             // Events
             //
 
-        protected:
-            ControlSignature::Event m_RealizeEvent;
-        public:
-            void AddRealizedListener( const ControlSignature::Delegate& listener )
+            ControlChangingSignature::Event& ControlChanging() const
             {
-                m_RealizeEvent.Add( listener );
+                return m_ControlChanging;
             }
-            void RemoveRealizedListener( const ControlSignature::Delegate& listener )
+
+            ControlChangedSignature::Event& ControlChanged() const
             {
-                m_RealizeEvent.Remove( listener );
+                return m_ControlChanged;
+            }
+
+            ControlSignature::Event& Realized() const
+            {
+                return m_Realized;
             }
 
         protected:
-            ChangingSignature::Event m_BoundDataChanging;
-        public:
-            void AddBoundDataChangingListener( const ChangingSignature::Delegate& listener )
-            {
-                m_BoundDataChanging.Add( listener );
-            }
-            void RemoveBoundDataChangingListener( const ChangingSignature::Delegate& listener )
-            {
-                m_BoundDataChanging.Remove( listener );
-            }
-            bool RaiseBoundDataChanging( const Reflect::SerializerPtr& newValue, bool preview )
-            {
-                return m_BoundDataChanging.RaiseWithReturn( ChangingArgs(this, newValue, preview) );
-            }
+            // are we enabled?
+            bool m_IsEnabled;
 
-        protected:
-            ChangedSignature::Event m_BoundDataChanged;
-        public:
-            void AddBoundDataChangedListener( const ChangedSignature::Delegate& listener )
-            {
-                m_BoundDataChanged.Add( listener );
-            }
-            void RemoveBoundDataChangedListener( const ChangedSignature::Delegate& listener )
-            {
-                m_BoundDataChanged.Remove( listener );
-            }
-            void RaiseBoundDataChanged()
-            {
-                m_BoundDataChanged.Raise( ChangeArgs(this) );
-            }
+            // are we writable?
+            bool m_IsReadOnly;
 
-            //
-            // Debug
-            //
+            // our colors for appearange
+            int m_ForeColor;
+            int m_BackColor;
 
-#ifdef INSPECT_DEBUG_LAYOUT_LOGIC
-            virtual void PrintLayout();
-#endif
+            // are we fixed along an axis?
+            bool m_IsFixedWidth;
+            bool m_IsFixedHeight;
 
-        protected:
+            // are we proportional along an axis?
+            f32 m_ProportionalWidth;
+            f32 m_ProportionalHeight;
+
+            // the default value
+            tstring m_Default;
+
+            // the tool tip for this control
+            tstring m_ToolTip;
+
+            // our context menu, if any
+            ContextMenuPtr m_ContextMenu;
+
             // the canvas that implements us
             Canvas* m_Canvas;
 
             // the parent
             Container* m_Parent;
 
-            // the interpreter that created us
-            InterpreterPtr m_Interpreter;
+            // writing flag (for re-entrancy checking)
+            bool m_IsWriting;
+
+            // have we really fully realized?
+            bool m_IsRealized;
 
             // the data we manipulate
             DataPtr m_BoundData;
-
-            // writing flag
-            bool m_Writing;
-
-            // the default value
-            tstring m_Default;
 
             // client-configurable data
             ClientDataPtr m_ToolkitClientData;
             ClientDataPtr m_InterpreterClientData;
 
-            // are we fixed along an axis?
-            bool m_FixedWidth;
-            bool m_FixedHeight;
+            // upon realization of the control
+            ControlSignature::Event m_Realized;
 
-            // are we proportional along an axis?
-            f32 m_ProportionalWidth;
-            f32 m_ProportionalHeight;
-
-            // our colors for appearange
-            int m_ForeColor;
-            int m_BackColor;
-
-            // are we enabled?
-            bool m_Enabled;
-
-            // are we writable?
-            bool m_ReadOnly;
-
-            // our context menu, if any
-            ContextMenuPtr m_ContextMenu;
-
-            // have we really fully realized?
-            bool m_Realized;
-
-            // the tool tip for this control
-            tstring m_ToolTip;
+            // these mean the *data state* of the control, not the appearance metrics
+            ControlChangingSignature::Event m_ControlChanging;
+            ControlChangedSignature::Event m_ControlChanged;
         };
 
         typedef Helium::SmartPtr<Control> ControlPtr;
         typedef std::vector<ControlPtr> V_Control;
+
+#ifdef PROFILE_ACCUMULATION
+        APPLICATION_API extern Profile::Accumulator g_RealizeAccumulator;
+#endif
     }
 }

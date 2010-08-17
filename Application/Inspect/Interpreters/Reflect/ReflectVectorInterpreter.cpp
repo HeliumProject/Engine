@@ -3,7 +3,7 @@
 #include "Application/Inspect/Controls/InspectLabel.h"
 #include "Application/Inspect/Controls/InspectValue.h"
 #include "Application/Inspect/Controls/InspectContainer.h"
-#include "Application/Inspect/Data/StringData.h"
+#include "Application/Inspect/InspectData.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;

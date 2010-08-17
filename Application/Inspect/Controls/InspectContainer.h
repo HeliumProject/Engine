@@ -83,11 +83,6 @@ namespace Helium
 
             // set read only state on child controls
             virtual void SetReadOnly(bool readOnly) HELIUM_OVERRIDE;
-
-#ifdef INSPECT_DEBUG_LAYOUT_LOGIC
-            // print recursively to the console
-            virtual void PrintLayout();
-#endif
         };
 
         typedef Helium::SmartPtr<Container> ContainerPtr;

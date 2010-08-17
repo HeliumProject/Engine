@@ -30,8 +30,8 @@ namespace Helium
         protected:
             void CreateAppearanceFlags();
 
-            void OnSolidOverride( const Inspect::ChangeArgs& args );
-            void OnTransparentOverride( const Inspect::ChangeArgs& args );
+            void OnSolidOverride( const Inspect::ControlChangedArgs& args );
+            void OnTransparentOverride( const Inspect::ControlChangedArgs& args );
 
             // utility functions
             //

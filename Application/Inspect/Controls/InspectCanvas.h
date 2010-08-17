@@ -71,13 +71,6 @@ namespace Helium
             ExpandState GetPanelExpandState( const tstring& panelName ) const;
             void SetPanelExpandState( const tstring& panelName, ExpandState state );
 
-            // Lock - To lock the canvas means that none of the controls contained should be enabled for edit.
-            bool IsLocked() const
-            { 
-                return m_IsLocked; 
-            }
-            void SetLocked( bool isLocked );
-
             // Expand Panels - Make all children panels expanded and hide their tree nodes
             bool ArePanelsExpanded() const
             {
@@ -126,9 +119,6 @@ namespace Helium
         protected:
             // list of panels that are expanded
             M_ExpandState m_PanelExpandState;
-
-            // is the canvas locked?
-            bool m_IsLocked;
 
             // should the canvas automatically expand its children panels and hide their nodes?
             bool m_PanelsExpanded;

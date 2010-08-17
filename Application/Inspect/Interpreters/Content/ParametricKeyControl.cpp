@@ -80,7 +80,7 @@ public:
 ParametricKeyControl::ParametricKeyControl()
 : m_BlockRead( false )
 {
-  m_FixedHeight = true;
+  m_IsFixedHeight = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

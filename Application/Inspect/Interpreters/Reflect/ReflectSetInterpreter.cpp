@@ -6,7 +6,7 @@
 #include "Application/Inspect/Controls/InspectGroup.h"
 #include "Application/Inspect/Controls/InspectList.h"
 #include "Application/Inspect/Controls/InspectPanel.h"
-#include "Application/Inspect/Data/StringData.h"
+#include "Application/Inspect/InspectData.h"
 
 using namespace Helium;
 using namespace Helium::Inspect;

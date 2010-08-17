@@ -751,8 +751,8 @@ namespace Helium
             void RefreshSelection();
 
             // callbacks when important events occur
-            bool PropertyChanging( const Inspect::ChangingArgs& args );
-            void PropertyChanged( const Inspect::ChangeArgs& args );
+            bool PropertyChanging( const Inspect::ControlChangingArgs& args );
+            void PropertyChanged( const Inspect::ControlChangedArgs& args );
             bool SelectionChanging( const OS_SelectableDumbPtr& selection );
             void SelectionChanged( const OS_SelectableDumbPtr& selection );
             void CurrentSceneChanging( const SceneChangeArgs& args );

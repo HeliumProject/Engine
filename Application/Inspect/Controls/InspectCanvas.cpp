@@ -6,8 +6,7 @@ using namespace Helium;
 using namespace Helium::Inspect;
 
 Canvas::Canvas ()
-: m_IsLocked( false )
-, m_PanelsExpanded( false )
+: m_PanelsExpanded( false )
 {
     m_Canvas = this;
     m_StdSize = Math::Point (100, 20);
@@ -189,18 +188,6 @@ void Canvas::SetPanelExpandState( const tstring& panelName, ExpandState state )
             m_PanelExpandState.erase( found );
         }
         break;
-    }
-}
-
-void Canvas::SetLocked(bool isLocked)
-{
-    m_IsLocked = isLocked;
-    V_Control::iterator itr = m_Controls.begin();
-    V_Control::iterator end = m_Controls.end();
-    for( ; itr != end; ++itr )
-    {
-        // Push the enable state back down to the control (it will query back for the lock status).
-        (*itr)->SetEnabled( (*itr)->IsEnabled() );
     }
 }
 

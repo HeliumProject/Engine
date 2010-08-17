@@ -1,6 +1,6 @@
 #include "Application/Inspect/Controls/InspectLabel.h"
 #include "Application/Inspect/Controls/InspectContainer.h"
-#include "Application/Inspect/Data/StringData.h"
+#include "Application/Inspect/InspectData.h"
 
 #include <wx/panel.h>
 #include <wx/stattext.h>
@@ -147,10 +147,10 @@ void Label::SetToolTip( const tstring& toolTip )
   control->UpdateToolTip( toolTip.c_str() );
 }
 
-bool Label::TrimString(tstring& str, int width)
+bool Label::EllipsizeString(tstring& str, int width)
 {
   tstring tooltip = str;
-  bool trimmed = __super::TrimString( str, width );
+  bool trimmed = __super::EllipsizeString( str, width );
   if ( m_AutoToolTip )
   {
     if ( !trimmed )
@@ -169,7 +169,7 @@ void Label::UpdateUI( const tstring& text )
   if ( IsRealized() )
   {
     tstring trimmed = text;
-    TrimString( trimmed, m_Window->GetSize().GetWidth() );
+    EllipsizeString( trimmed, m_Window->GetSize().GetWidth() );
 
     wxStaticText* staticText = Control::Cast< wxStaticText >( this );
     if ( trimmed != staticText->GetLabel().c_str() )

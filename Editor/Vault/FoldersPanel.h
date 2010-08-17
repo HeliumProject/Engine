@@ -4,8 +4,8 @@
 #include "VaultFrame.h"
 #include "VaultMenuIDs.h"
 
-#include "Application/Inspect/Clipboard/ReflectClipboardData.h"
-#include "Application/Inspect/DragDrop/DropTarget.h"
+#include "Editor/Clipboard/ReflectClipboardData.h"
+#include "Editor/DragDrop/DropTarget.h"
 
 namespace Helium
 {
@@ -38,8 +38,8 @@ namespace Helium
             virtual void OnTreeItemRightClick( wxTreeEvent& event ) HELIUM_OVERRIDE;
 
             // Drag-n-Drop Listeners
-            wxDragResult DragOver( const Inspect::DragArgs& args );
-            wxDragResult Drop( const Inspect::DragArgs& args );
+            wxDragResult DragOver( const Editor::DragArgs& args );
+            wxDragResult Drop( const Editor::DragArgs& args );
             void DragLeave( Helium::Void );
 
         private:

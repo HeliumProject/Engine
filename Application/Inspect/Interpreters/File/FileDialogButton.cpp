@@ -1,6 +1,6 @@
 #include "FileDialogButton.h"
 
-#include "Application/Inspect/Controls/Canvas.h"
+#include "Application/Inspect/Controls/InspectCanvas.h"
 #include "Foundation/Container/Insert.h"
 #include "Application/UI/FileDialog.h"
 

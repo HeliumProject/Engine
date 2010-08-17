@@ -5,7 +5,7 @@
 #include "Foundation/Container/Insert.h" 
 
 #include "Application/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
-#include "Application/Inspect/Controls/Label.h"
+#include "Application/Inspect/Controls/InspectLabel.h"
 
 using namespace Helium;
 using namespace Helium::Core;

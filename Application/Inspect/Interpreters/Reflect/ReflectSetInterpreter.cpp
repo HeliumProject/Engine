@@ -1,10 +1,10 @@
 #include "ReflectSetInterpreter.h"
 #include "InspectReflectInit.h"
 
-#include "Application/Inspect/Controls/Action.h"
-#include "Application/Inspect/Controls/Canvas.h"
-#include "Application/Inspect/Controls/Group.h"
-#include "Application/Inspect/Controls/List.h"
+#include "Application/Inspect/Controls/InspectAction.h"
+#include "Application/Inspect/Controls/InspectCanvas.h"
+#include "Application/Inspect/Controls/InspectGroup.h"
+#include "Application/Inspect/Controls/InspectList.h"
 #include "Application/Inspect/Controls/InspectPanel.h"
 #include "Application/Inspect/Data/StringData.h"
 
@@ -68,13 +68,13 @@ void ReflectSetInterpreter::InterpretField( const Reflect::Field* field, const s
     buttonContainer->AddControl( buttonAdd );
     buttonAdd->SetText( TXT( "Add" ) );
     buttonAdd->AddListener( ActionSignature::Delegate ( this, &ReflectSetInterpreter::OnAdd ) );
-    buttonAdd->SetClientData( new ClientDataControl( list ) );
+    buttonAdd->SetInterpreterClientData( new ClientData( list ) );
 
     ActionPtr buttonRemove = parent->GetCanvas()->Create<Action>( this );
     buttonContainer->AddControl( buttonRemove );
     buttonRemove->SetText( TXT( "Remove" ) );
     buttonRemove->AddListener( ActionSignature::Delegate ( this, &ReflectSetInterpreter::OnRemove ) );
-    buttonRemove->SetClientData( new ClientDataControl( list ) );
+    buttonRemove->SetInterpreterClientData( new ClientData( list ) );
   }
 
   // for now let's just disable this panel if there is more than one item selected. I'm not sure if it will behave properly in this case.
@@ -91,10 +91,10 @@ void ReflectSetInterpreter::InterpretField( const Reflect::Field* field, const s
 // 
 void ReflectSetInterpreter::OnAdd( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetClientData();
-  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataControl>() ) )
+  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
-    ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
+    ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
     wxTextEntryDialog dlg( m_Container->GetCanvas()->GetControl(), TXT( "" ), TXT( "Add" ) );
     if ( dlg.ShowModal() == wxID_OK )
     {
@@ -122,10 +122,10 @@ void ReflectSetInterpreter::OnAdd( Button* button )
 // 
 void ReflectSetInterpreter::OnRemove( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetClientData();
-  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataControl>() ) )
+  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
-    ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
+    ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
     const std::vector< tstring >& selectedItems = list->GetSelectedItems();
     if ( selectedItems.size() > 0 )

@@ -16,7 +16,7 @@
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/SceneManager.h"
 
-#include "Application/Inspect/DragDrop/DropTarget.h"
+#include "Editor/DragDrop/DropTarget.h"
 
 #include "Editor/MRU/MenuMRU.h"
 #include "Editor/TreeMonitor.h"
@@ -97,9 +97,9 @@ namespace Helium
             TreeMonitor                 m_TreeMonitor;
 
         private:
-            bool ValidateDrag( const Inspect::DragArgs& args );
-            wxDragResult DragOver( const Inspect::DragArgs& args );
-            wxDragResult Drop( const Inspect::DragArgs& args );
+            bool ValidateDrag( const Editor::DragArgs& args );
+            wxDragResult DragOver( const Editor::DragArgs& args );
+            wxDragResult Drop( const Editor::DragArgs& args );
 
             void SceneAdded( const Core::SceneChangeArgs& args );
             void SceneRemoving( const Core::SceneChangeArgs& args );

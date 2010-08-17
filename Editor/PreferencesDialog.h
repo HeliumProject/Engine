@@ -3,7 +3,7 @@
 #include <map>
 
 #include "Foundation/Reflect/Element.h"
-#include "Application/Inspect/Controls/Canvas.h"
+#include "Application/Inspect/Controls/InspectCanvas.h"
 
 #include "Editor/API.h"
 #include "Editor/Preferences.h"

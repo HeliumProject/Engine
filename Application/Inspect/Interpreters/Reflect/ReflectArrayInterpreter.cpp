@@ -1,11 +1,11 @@
 #include "ReflectArrayInterpreter.h"
 #include "InspectReflectInit.h"
 
-#include "Application/Inspect/Controls/Label.h"
-#include "Application/Inspect/Controls/Value.h"
-#include "Application/Inspect/Controls/Choice.h"
-#include "Application/Inspect/Controls/List.h"
-#include "Application/Inspect/Controls/Action.h"
+#include "Application/Inspect/Controls/InspectLabel.h"
+#include "Application/Inspect/Controls/InspectValue.h"
+#include "Application/Inspect/Controls/InspectChoice.h"
+#include "Application/Inspect/Controls/InspectList.h"
+#include "Application/Inspect/Controls/InspectAction.h"
 #include "Application/Inspect/Data/StringData.h"
 #include "Application/Inspect/InspectInit.h"
 
@@ -108,7 +108,7 @@ ActionPtr ReflectArrayInterpreter::AddAddButton( List* list )
 {
   ActionPtr addButton = m_Container->GetCanvas()->Create<Action>(this);
   addButton->AddListener( ActionSignature::Delegate ( &ReflectArrayInterpreter::OnAdd ) );
-  addButton->SetClientData( new ClientDataControl( list ) );
+  addButton->SetInterpreterClientData( new ClientData( list ) );
   addButton->SetText( TXT( "Add" ) );
 
   return addButton;
@@ -119,7 +119,7 @@ ActionPtr ReflectArrayInterpreter::AddRemoveButton( List* list )
   ActionPtr removeButton = m_Container->GetCanvas()->Create<Action>(this);
   removeButton->SetText( TXT( "Remove" ) );
   removeButton->AddListener( ActionSignature::Delegate ( &ReflectArrayInterpreter::OnRemove ) );
-  removeButton->SetClientData( new ClientDataControl( list ) );
+  removeButton->SetInterpreterClientData( new ClientData( list ) );
   
   return removeButton;
 }
@@ -129,7 +129,7 @@ ActionPtr ReflectArrayInterpreter::AddMoveUpButton( List* list )
   ActionPtr upButton = m_Container->GetCanvas()->Create<Action>(this);
   upButton->SetIcon( TXT( "actions/go-up" ) );
   upButton->AddListener( ActionSignature::Delegate ( &ReflectArrayInterpreter::OnMoveUp ) );
-  upButton->SetClientData( new ClientDataControl( list ) );
+  upButton->SetInterpreterClientData( new ClientData( list ) );
   
   return upButton;
 }
@@ -139,17 +139,17 @@ ActionPtr ReflectArrayInterpreter::AddMoveDownButton( List* list )
   ActionPtr downButton = m_Container->GetCanvas()->Create<Action>(this);
   downButton->SetIcon( TXT( "actions/go-down" ) );
   downButton->AddListener( ActionSignature::Delegate ( &ReflectArrayInterpreter::OnMoveDown ) );
-  downButton->SetClientData( new ClientDataControl( list ) );
+  downButton->SetInterpreterClientData( new ClientData( list ) );
   
   return downButton;
 }
 
 void ReflectArrayInterpreter::OnAdd( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetClientData();
-  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataControl>() ) )
+  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
-    ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
+    ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
     wxTextEntryDialog dlg( button->GetCanvas()->GetControl(), TXT( "" ), TXT( "Add" ) );
     if ( dlg.ShowModal() == wxID_OK )
     {
@@ -167,10 +167,10 @@ void ReflectArrayInterpreter::OnAdd( Button* button )
 
 void ReflectArrayInterpreter::OnRemove( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetClientData();
-  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataControl>() ) )
+  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
-    ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
+    ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
     const std::vector< tstring >& selectedItems = list->GetSelectedItems();
     if ( !selectedItems.empty() )
@@ -190,10 +190,10 @@ void ReflectArrayInterpreter::OnRemove( Button* button )
 
 void ReflectArrayInterpreter::OnMoveUp( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetClientData();
-  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataControl>() ) )
+  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
-    ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
+    ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
     list->MoveSelectedItems( Inspect::MoveDirections::Up );
   }
@@ -201,10 +201,10 @@ void ReflectArrayInterpreter::OnMoveUp( Button* button )
 
 void ReflectArrayInterpreter::OnMoveDown( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetClientData();
-  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataControl>() ) )
+  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
-    ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
+    ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
     list->MoveSelectedItems( Inspect::MoveDirections::Down );
   }

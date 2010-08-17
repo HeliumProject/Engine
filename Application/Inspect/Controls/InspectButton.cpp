@@ -1,6 +1,6 @@
 #include "Application/Inspect/Controls/InspectButton.h"
-#include "Application/Inspect/Controls/Container.h"
-#include "Application/Inspect/Controls/Canvas.h"
+#include "Application/Inspect/Controls/InspectContainer.h"
+#include "Application/Inspect/Controls/InspectCanvas.h"
 
 // Using
 using namespace Helium;

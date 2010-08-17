@@ -3,11 +3,14 @@
 #include "Core/API.h"
 #include "InstancePanel.h"
 
-#include "Application/Inspect/Data/Data.h"
-#include "Application/Inspect/DragDrop/FilteredDropTarget.h"
-#include "Application/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
-#include "Application/UI/FileDialog.h"
 #include "Application/RCS/RCS.h"
+#include "Application/UI/FileDialog.h"
+#include "Application/Inspect/InspectData.h"
+#include "Application/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
+
+#ifdef INSPECT_REFACTOR
+#include "Application/Inspect/DragDrop/FilteredDropTarget.h"
+#endif
 
 #include "EntityInstance.h"
 

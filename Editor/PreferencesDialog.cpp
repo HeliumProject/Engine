@@ -5,7 +5,7 @@
 #include <wx/listbook.h>
 
 #include "Core/Scene/PropertiesGenerator.h"
-#include "Application/Inspect/Controls/Canvas.h"
+#include "Application/Inspect/Controls/InspectCanvas.h"
 #include "Application/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 
 using namespace Helium;

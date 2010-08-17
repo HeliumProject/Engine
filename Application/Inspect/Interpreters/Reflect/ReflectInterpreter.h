@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Application/Inspect/Controls/Canvas.h"
-#include "Application/Inspect/Controls/Container.h"
-#include "Application/Inspect/Interpreter.h"
+#include "Application/Inspect/Controls/InspectCanvas.h"
+#include "Application/Inspect/Controls/InspectContainer.h"
+#include "Application/Inspect/InspectInterpreter.h"
 #include "ReflectFieldInterpreter.h"
 
 namespace Helium

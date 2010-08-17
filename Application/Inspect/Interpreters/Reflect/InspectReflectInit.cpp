@@ -2,7 +2,7 @@
 
 #include "Foundation/InitializerStack.h"
 #include "Application/Inspect/InspectInit.h"
-#include "Application/Inspect/Controls/Container.h"
+#include "Application/Inspect/Controls/InspectContainer.h"
 
 #include "Application/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 #include "Application/Inspect/Interpreters/Reflect/ReflectBitfieldInterpreter.h"
@@ -31,7 +31,7 @@ void InspectReflect::Initialize()
     {
         g_IntializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
 
-        g_IntializerStack.Push( Reflect::RegisterClassType<ClientDataControl>( TXT( "InspectClientDataControl" ) ) );
+        g_IntializerStack.Push( Reflect::RegisterClassType<ClientData>( TXT( "InspectClientDataControl" ) ) );
         g_IntializerStack.Push( Reflect::RegisterClassType<ClientDataFilter>( TXT( "InspectClientDataFilter" ) ) );
 
         g_IntializerStack.Push( Reflect::RegisterClassType<ReflectBitfieldCheckBox>( TXT( "InspectReflectBitfieldCheckBox" ) ) );

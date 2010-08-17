@@ -2,10 +2,10 @@
 #include "ReflectMapEntryDialog.h"
 #include "InspectReflectInit.h"
 
-#include "Application/Inspect/Controls/Action.h"
-#include "Application/Inspect/Controls/Canvas.h"
-#include "Application/Inspect/Controls/Group.h"
-#include "Application/Inspect/Controls/List.h"
+#include "Application/Inspect/Controls/InspectAction.h"
+#include "Application/Inspect/Controls/InspectCanvas.h"
+#include "Application/Inspect/Controls/InspectGroup.h"
+#include "Application/Inspect/Controls/InspectList.h"
 #include "Application/Inspect/Controls/InspectPanel.h"
 #include "Application/Inspect/Data/StringData.h"
 
@@ -73,19 +73,19 @@ void ReflectMapInterpreter::InterpretField( const Reflect::Field* field, const s
     buttonContainer->AddControl( buttonAdd );
     buttonAdd->SetText( TXT( "Add" ) );
     buttonAdd->AddListener( ActionSignature::Delegate ( this, &ReflectMapInterpreter::OnAdd ) );
-    buttonAdd->SetClientData( new ClientDataControl( list ) );
+    buttonAdd->SetInterpreterClientData( new ClientData( list ) );
 
     ActionPtr buttonRemove = parent->GetCanvas()->Create<Action>( this );
     buttonContainer->AddControl( buttonRemove );
     buttonRemove->SetText( TXT( "Remove" ) );
     buttonRemove->AddListener( ActionSignature::Delegate ( this, &ReflectMapInterpreter::OnRemove ) );
-    buttonRemove->SetClientData( new ClientDataControl( list ) );
+    buttonRemove->SetInterpreterClientData( new ClientData( list ) );
 
     ActionPtr buttonEdit = parent->GetCanvas()->Create<Action>( this );
     buttonContainer->AddControl( buttonEdit );
     buttonEdit->SetText( TXT( "Edit" ) );
     buttonEdit->AddListener( ActionSignature::Delegate ( this, &ReflectMapInterpreter::OnEdit ) );
-    buttonEdit->SetClientData( new ClientDataControl( list ) );
+    buttonEdit->SetInterpreterClientData( new ClientData( list ) );
   }
 
   // for now let's just disable this panel if there is more than one item selected. I'm not sure if it will behave properly in this case.
@@ -122,10 +122,10 @@ tstring RunDialog( wxWindow* parent, const tstring& initialKey = TXT( "" ), cons
 // 
 void ReflectMapInterpreter::OnAdd( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetClientData();
-  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataControl>() ) )
+  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
-    ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
+    ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
 
     tstring result = RunDialog( button->GetCanvas()->GetControl() );
@@ -176,10 +176,10 @@ void ReflectMapInterpreter::OnAdd( Button* button )
 // 
 void ReflectMapInterpreter::OnRemove( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetClientData();
-  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataControl>() ) )
+  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
-    ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
+    ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
     const std::vector< tstring >& selectedItems = list->GetSelectedItems();
     if ( selectedItems.size() > 0 )
@@ -217,10 +217,10 @@ void ReflectMapInterpreter::OnRemove( Button* button )
 // 
 void ReflectMapInterpreter::OnEdit( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetClientData();
-  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataControl>() ) )
+  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
-    ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
+    ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
     const std::vector< tstring >& selected = list->GetSelectedItems();
     if ( selected.size() == 1 )

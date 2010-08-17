@@ -3,12 +3,15 @@
 
 #include <wx/aui/aui.h>
 
+#ifdef INSPECT_REFACTOR
 #include "Application/Inspect/DragDrop/FilteredDropTarget.h"
-#include "Application/Inspect/Controls/Label.h"
-#include "Application/Inspect/Controls/Value.h"
-#include "Application/Inspect/Controls/Choice.h"
-#include "Application/Inspect/Controls/List.h"
-#include "Application/Inspect/Controls/Action.h"
+#endif
+
+#include "Application/Inspect/Controls/InspectLabel.h"
+#include "Application/Inspect/Controls/InspectValue.h"
+#include "Application/Inspect/Controls/InspectChoice.h"
+#include "Application/Inspect/Controls/InspectList.h"
+#include "Application/Inspect/Controls/InspectAction.h"
 #include "Application/Inspect/Data/StringData.h"
 #include "Application/Inspect/InspectInit.h"
 #include "Application/Inspect/Interpreters/Reflect/InspectReflectInit.h"
@@ -85,48 +88,50 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
 
       // Add button - normal file open dialog
       addButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnAddFile ) );
-      addButton->SetClientData( new ClientDataFilter( list, instances.front()->GetType(), specName ) );
+      addButton->SetInterpreterClientData( new ClientDataFilter( list, instances.front()->GetType(), specName ) );
 
       // Add button - opens file browser
       findButton = m_Container->GetCanvas()->Create<Action>(this);
       findButton->SetIcon( "actions/system-search" );
       findButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnFindFile ) );
-      findButton->SetClientData( new ClientDataFilter( list, instances.front()->GetType(), specName ) );
+      findButton->SetInterpreterClientData( new ClientDataFilter( list, instances.front()->GetType(), specName ) );
 
       // Edit button - attempt to edit the selected file
       editButton = m_Container->GetCanvas()->Create<Action>(this);
       editButton->SetText( "Edit" );
       editButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnEdit ) );
-      editButton->SetClientData( new ClientDataControl( list ) );
+      editButton->SetInterpreterClientData( new ClientData( list ) );
     }
     else
     {
       addButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnAdd ) );
-      addButton->SetClientData( new ClientDataControl( list ) );
+      addButton->SetInterpreterClientData( new ClientData( list ) );
     }
     addButton->SetText( "Add" );
 
     removeButton = m_Container->GetCanvas()->Create<Action>(this);
     removeButton->SetText( "Remove" );
     removeButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnRemove ) );
-    removeButton->SetClientData( new ClientDataControl( list ) );
+    removeButton->SetInterpreterClientData( new ClientData( list ) );
 
     if ( isFileIdArray )
     {
       upButton = m_Container->GetCanvas()->Create<Action>(this);
       upButton->SetIcon( "actions/go-up" );
       upButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnMoveUp ) );
-      upButton->SetClientData( new ClientDataControl( list ) );
+      upButton->SetInterpreterClientData( new ClientData( list ) );
 
       downButton = m_Container->GetCanvas()->Create<Action>(this);
       downButton->SetIcon( "actions/go-down" );
       downButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnMoveDown ) );
-      downButton->SetClientData( new ClientDataControl( list ) );
+      downButton->SetInterpreterClientData( new ClientData( list ) );
     }
 
+#ifdef INSPECT_REFACTOR
     Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( m_FinderSpec );
     filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &FileContainerInterpreter::OnDrop ) );
     m_List->SetDropTarget( filteredDropTarget );
+#endif
   }
 
   // add the buttons to the panel
@@ -195,10 +200,10 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
 
 void FileContainerInterpreter::OnAdd( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetClientData();
-  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataControl>() ) )
+  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
-    ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
+    ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
     wxTextEntryDialog dlg( m_Container->GetCanvas()->GetControl(), TXT( "" ), TXT( "Add" ) );
     if ( dlg.ShowModal() == wxID_OK )
     {
@@ -216,7 +221,7 @@ void FileContainerInterpreter::OnAdd( Button* button )
 
 void FileContainerInterpreter::OnAddFile( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetClientData();
+  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
   
   if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataFilter>() ) )
   {
@@ -245,7 +250,7 @@ void FileContainerInterpreter::OnAddFile( Button* button )
 
 void FileContainerInterpreter::OnFindFile( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetClientData();
+  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
   
   if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataFilter>() ) )
   {
@@ -277,10 +282,10 @@ void FileContainerInterpreter::OnFindFile( Button* button )
 
 void FileContainerInterpreter::OnEdit( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetClientData();
-  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataControl>() ) )
+  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
-    ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
+    ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
     const std::vector< tstring >& selectedItems = list->GetSelectedItems();
 
@@ -295,10 +300,10 @@ void FileContainerInterpreter::OnEdit( Button* button )
 
 void FileContainerInterpreter::OnRemove( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetClientData();
-  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataControl>() ) )
+  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
-    ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
+    ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
     const std::vector< tstring >& selectedItems = list->GetSelectedItems();
     if ( !selectedItems.empty() )
@@ -318,10 +323,10 @@ void FileContainerInterpreter::OnRemove( Button* button )
 
 void FileContainerInterpreter::OnMoveUp( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetClientData();
-  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataControl>() ) )
+  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
-    ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
+    ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
     list->MoveSelectedItems( Inspect::MoveDirections::Up );
   }
@@ -329,10 +334,10 @@ void FileContainerInterpreter::OnMoveUp( Button* button )
 
 void FileContainerInterpreter::OnMoveDown( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetClientData();
-  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataControl>() ) )
+  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
-    ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
+    ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
     list->MoveSelectedItems( Inspect::MoveDirections::Down );
   }

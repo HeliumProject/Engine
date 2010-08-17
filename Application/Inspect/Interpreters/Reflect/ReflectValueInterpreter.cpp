@@ -2,12 +2,12 @@
 
 #include "Application/Inspect/InspectInit.h"
 #include "Application/Inspect/InspectScript.h"
-#include "Application/Inspect/Controls/CheckBox.h"
-#include "Application/Inspect/Controls/Choice.h"
-#include "Application/Inspect/Controls/Action.h"
+#include "Application/Inspect/Controls/InspectCheckBox.h"
+#include "Application/Inspect/Controls/InspectChoice.h"
+#include "Application/Inspect/Controls/InspectAction.h"
 #include "Application/Inspect/Data/StringData.h"
-#include "Application/Inspect/Controls/Value.h"
-#include "Application/Inspect/Controls/List.h"
+#include "Application/Inspect/Controls/InspectValue.h"
+#include "Application/Inspect/Controls/InspectList.h"
 
 // Using
 using namespace Helium;

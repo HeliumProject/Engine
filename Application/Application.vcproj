@@ -619,11 +619,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Inspect\InspectControls.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\InspectData.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Inspect\InspectInit.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Inspect\InspectInit.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\InspectInterpreter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\InspectInterpreter.h"
 				>
 			</File>
 			<File
@@ -636,14 +652,6 @@
 			</File>
 			<File
 				RelativePath=".\Inspect\InspectTypes.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Inspect\Interpreter.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Inspect\Interpreter.h"
 				>
 			</File>
 			<Filter
@@ -866,79 +874,11 @@
 				Name="Controls"
 				>
 				<File
-					RelativePath=".\Inspect\Controls\Action.cpp"
+					RelativePath=".\Inspect\Controls\InspectAction.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\Action.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\Canvas.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\Canvas.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\CheckBox.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\CheckBox.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\CheckList.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\CheckList.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\Choice.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\Choice.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\Container.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\Container.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\ContextMenu.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\ContextMenu.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\Control.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\Control.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\Controls.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\Group.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\Group.h"
+					RelativePath=".\Inspect\Controls\InspectAction.h"
 					>
 				</File>
 				<File
@@ -950,11 +890,99 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Inspect\Controls\InspectCanvas.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectCanvas.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectCheckBox.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectCheckBox.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectCheckList.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectCheckList.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectChoice.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectChoice.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Inspect\Controls\InspectColorPicker.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\Inspect\Controls\InspectColorPicker.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectContainer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectContainer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectContextMenu.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectContextMenu.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectControl.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectControl.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectGroup.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectGroup.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectItems.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectItems.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectLabel.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectLabel.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectList.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectList.h"
 					>
 				</File>
 				<File
@@ -966,307 +994,19 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\Items.cpp"
+					RelativePath=".\Inspect\Controls\InspectSlider.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\Items.h"
+					RelativePath=".\Inspect\Controls\InspectSlider.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\Label.cpp"
+					RelativePath=".\Inspect\Controls\InspectValue.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\Label.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\List.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\List.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\Slider.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\Slider.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\Value.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\Value.h"
-					>
-				</File>
-				<Filter
-					Name="TreeWnd"
-					>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrl.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrl.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrlApi.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrlCollapsed.xpm"
-						>
-						<FileConfiguration
-							Name="Debug|Win32"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Debug|x64"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|x64"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Debug Unicode|Win32"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Debug Unicode|x64"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release Unicode|Win32"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release Unicode|x64"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-							/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrlExpanded.xpm"
-						>
-						<FileConfiguration
-							Name="Debug|Win32"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Debug|x64"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|x64"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Debug Unicode|Win32"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Debug Unicode|x64"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release Unicode|Win32"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release Unicode|x64"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-							/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrlItem.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrlItem.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrlNode.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrlNode.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrlSpacer.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrlSpacer.h"
-						>
-					</File>
-				</Filter>
-			</Filter>
-			<Filter
-				Name="DragDrop"
-				>
-				<File
-					RelativePath=".\Inspect\DragDrop\DropSource.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\DragDrop\DropSource.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\DragDrop\DropTarget.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\DragDrop\DropTarget.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\DragDrop\FilteredDropTarget.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\DragDrop\FilteredDropTarget.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Data"
-				>
-				<File
-					RelativePath=".\Inspect\Data\Data.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Data\SerializerData.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Data\StringData.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Clipboard"
-				>
-				<File
-					RelativePath=".\Inspect\Clipboard\ClipboardDataObject.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Clipboard\ClipboardDataObject.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Clipboard\ClipboardDataWrapper.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Clipboard\ClipboardDataWrapper.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Clipboard\ClipboardElementArray.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Clipboard\ClipboardElementArray.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Clipboard\ClipboardFileList.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Clipboard\ClipboardFileList.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Clipboard\ReflectClipboardData.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Clipboard\ReflectClipboardData.h"
+					RelativePath=".\Inspect\Controls\InspectValue.h"
 					>
 				</File>
 			</Filter>

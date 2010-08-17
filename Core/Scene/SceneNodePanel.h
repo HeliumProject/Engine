@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/API.h"
-#include "Application/Inspect/Data/Data.h"
+#include "Application/Inspect/InspectData.h"
 #include "Application/Inspect/Controls/InspectPanel.h"
 #include "Core/Scene/SceneNode.h"
 

@@ -8,8 +8,8 @@
 #include "Core/Content/ContentScene.h"
 
 #include "Application/UI/FileDialog.h"
-#include "Application/Inspect/Clipboard/ClipboardFileList.h"
-#include "Application/Inspect/Clipboard/ClipboardDataObject.h"
+#include "Editor/Clipboard/ClipboardFileList.h"
+#include "Editor/Clipboard/ClipboardDataObject.h"
 
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/InstanceSet.h"
@@ -353,7 +353,7 @@ bool MainFrame::OpenProject( const Helium::Path& path )
     return opened;
 }
 
-bool MainFrame::ValidateDrag( const Inspect::DragArgs& args )
+bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
 {
     bool canHandleArgs = false;
 
@@ -383,7 +383,7 @@ bool MainFrame::ValidateDrag( const Inspect::DragArgs& args )
     return canHandleArgs;
 }
 
-wxDragResult MainFrame::DragOver( const Inspect::DragArgs& args )
+wxDragResult MainFrame::DragOver( const Editor::DragArgs& args )
 {
     wxDragResult result = args.m_Default;
 
@@ -395,7 +395,7 @@ wxDragResult MainFrame::DragOver( const Inspect::DragArgs& args )
     return result;
 }
 
-wxDragResult MainFrame::Drop( const Inspect::DragArgs& args )
+wxDragResult MainFrame::Drop( const Editor::DragArgs& args )
 {
     wxDragResult result = args.m_Default;
 

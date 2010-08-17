@@ -1,6 +1,6 @@
 #include "ReflectBitfieldCheckBox.h"
 
-#include "Application/Inspect/Controls/Container.h"
+#include "Application/Inspect/Controls/InspectContainer.h"
 #include "Application/Inspect/Data/StringData.h"
 #include "Foundation/String/Tokenize.h"
 

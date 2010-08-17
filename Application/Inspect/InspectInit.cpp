@@ -1,7 +1,7 @@
 #include "Foundation/InitializerStack.h"
 #include "Application/Inspect/InspectInit.h"
 #include "Application/Inspect/InspectScript.h"
-#include "Application/Inspect/Controls/Controls.h"
+#include "Application/Inspect/InspectControls.h"
 #include "Application/Inspect/Clipboard/ClipboardDataWrapper.h"
 #include "Application/Inspect/Clipboard/ClipboardElementArray.h"
 #include "Application/Inspect/Clipboard/ClipboardFileList.h"

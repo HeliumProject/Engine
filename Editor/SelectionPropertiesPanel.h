@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Application/Inspect/Controls/Canvas.h"
+#include "Application/Inspect/Controls/InspectCanvas.h"
 
 #include "Core/Scene/PropertiesManager.h"
 

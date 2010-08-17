@@ -2,7 +2,9 @@
 
 #include "Foundation/TUID.h"
 
+#ifdef INSPECT_REFACTOR
 #include "Application/Inspect/DragDrop/FilteredDropTarget.h"
+#endif
 
 #include "Core/API.h"
 #include "Core/Scene/CreateTool.h"

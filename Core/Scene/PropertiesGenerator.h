@@ -4,9 +4,9 @@
 #include <map>
 
 #include "Core/API.h"
-#include "Application/Inspect/Data/Data.h"
-#include "Application/Inspect/Controls/Controls.h"
-#include "Application/Inspect/Interpreter.h"
+#include "Application/Inspect/InspectData.h"
+#include "Application/Inspect/InspectControls.h"
+#include "Application/Inspect/InspectInterpreter.h"
 #include "Application/Inspect/Interpreters/File/FileDialogButton.h"
 #include "Application/Inspect/Interpreters/File/FileBrowserButton.h"
 #include "Application/Inspect/Interpreters/Content/ParametricKeyData.h"

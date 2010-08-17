@@ -3,10 +3,10 @@
 
 #include "DirectoryCtrl.h"
 
-#include "Application/Inspect/Clipboard/ClipboardDataObject.h"
-#include "Application/Inspect/Clipboard/ClipboardFileList.h"
-#include "Application/Inspect/DragDrop/DropTarget.h"
-#include "Application/Inspect/Clipboard/ReflectClipboardData.h"
+#include "Editor/Clipboard/ClipboardDataObject.h"
+#include "Editor/Clipboard/ClipboardFileList.h"
+#include "Editor/DragDrop/DropTarget.h"
+#include "Editor/Clipboard/ReflectClipboardData.h"
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
 
 using namespace Helium;
@@ -95,7 +95,7 @@ wxTreeItemId FoldersPanel::DragHitTest( SortTreeCtrl* treeCtrl, wxPoint point )
 // Callback for when a drag operation is occurring over this control.  Highlights
 // the tree item that will receive the drop if one were to take place.
 // 
-wxDragResult FoldersPanel::DragOver( const Inspect::DragArgs& args )
+wxDragResult FoldersPanel::DragOver( const Editor::DragArgs& args )
 {
   SortTreeCtrl* treeCtrl = GetSortTreeCtrl();
 
@@ -152,7 +152,7 @@ wxDragResult FoldersPanel::DragOver( const Inspect::DragArgs& args )
 ///////////////////////////////////////////////////////////////////////////////
 // Callback for when items are dropped onto the tree.
 // 
-wxDragResult FoldersPanel::Drop( const Inspect::DragArgs& args )
+wxDragResult FoldersPanel::Drop( const Editor::DragArgs& args )
 {
   SortTreeCtrl* treeCtrl = GetSortTreeCtrl();
   

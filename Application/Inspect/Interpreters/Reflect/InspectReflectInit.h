@@ -1,30 +1,13 @@
 #pragma once
 
 #include "Application/API.h"
-#include "Application/Inspect/Controls/Control.h"
+#include "Application/Inspect/Controls/InspectControl.h"
 
 namespace Helium
 {
     namespace Inspect
     {
-        class ClientDataControl : public Reflect::AbstractInheritor<ClientDataControl, Reflect::Object>
-        {
-        public:
-            Control* m_Control;
-
-            ClientDataControl( Control* control )
-                : m_Control ( control )
-            {
-
-            }
-
-            virtual ~ClientDataControl()
-            {
-
-            }
-        };
-
-        class ClientDataFilter  : public Reflect::AbstractInheritor<ClientDataFilter, Reflect::Object>
+        class ClientDataFilter : public Reflect::AbstractInheritor<ClientDataFilter, Reflect::Object>
         {
         public:
             List*       m_List;

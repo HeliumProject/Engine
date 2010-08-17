@@ -2,8 +2,8 @@
 #include "Application/Inspect/Interpreters/Content/ParametricKeyData.h"
 #include "Application/Inspect/Interpreters/Content/KeyControl.h"
 
-#include "Application/Inspect/Controls/Canvas.h"
-#include "Application/Inspect/Controls/Container.h"
+#include "Application/Inspect/Controls/InspectCanvas.h"
+#include "Application/Inspect/Controls/InspectContainer.h"
 
 #include "Core/Content/ParametricKey/ParametricKey.h"
 

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Application/Inspect/Data/Data.h"
-#include "Application/Inspect/Controls/Label.h"
-#include "Application/Inspect/Controls/Canvas.h"
+#include "Application/Inspect/InspectData.h"
+#include "Application/Inspect/Controls/InspectLabel.h"
+#include "Application/Inspect/Controls/InspectCanvas.h"
 
 namespace Helium
 {

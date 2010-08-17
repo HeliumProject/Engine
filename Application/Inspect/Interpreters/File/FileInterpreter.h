@@ -1,8 +1,11 @@
 #pragma once
 
 #include "Application/API.h"
-#include "Application/Inspect/DragDrop/FilteredDropTarget.h"
 #include "Application/Inspect/Interpreters/Reflect/ReflectFieldInterpreter.h"
+
+#ifdef INSPECT_REFACTOR
+#include "Application/Inspect/DragDrop/FilteredDropTarget.h"
+#endif
 
 namespace Helium
 {

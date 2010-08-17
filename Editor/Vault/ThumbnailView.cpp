@@ -9,7 +9,7 @@
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
 #include "Editor/UpdateStatusEvent.h"
-#include "Application/Inspect/DragDrop/DropSource.h"
+#include "Editor/DragDrop/DropSource.h"
 #include "Foundation/Undo/Command.h"
 #include "Editor/ArtProvider.h"
 

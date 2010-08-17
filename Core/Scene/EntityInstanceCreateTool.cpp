@@ -142,22 +142,22 @@ void EntityInstanceCreateTool::CreateProperties()
             Inspect::Action* modifyButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityInstanceCreateTool::OnModify ) );
             modifyButton->SetToolTip( TXT( "Modify" ) );
             modifyButton->SetIcon( TXT( "percent" ) );
-            modifyButton->SetClientData( this );
+            modifyButton->SetInterpreterClientData( this );
 
             Inspect::Action* normalizeButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityInstanceCreateTool::OnNormalize ) );
             normalizeButton->SetToolTip( TXT( "Normalize" ) );
             normalizeButton->SetIcon( TXT( "normalize" ) );
-            normalizeButton->SetClientData( this );
+            normalizeButton->SetInterpreterClientData( this );
 
             Inspect::Action* deleteButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityInstanceCreateTool::OnDeleteClass ) );
             deleteButton->SetToolTip( TXT( "Delete" ) );
             deleteButton->SetIcon( TXT( "actions/list-remove" ) );
-            deleteButton->SetClientData( this );
+            deleteButton->SetInterpreterClientData( this );
 
             Inspect::Action*  clearButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityInstanceCreateTool::OnClear ) );
             clearButton->SetToolTip( TXT( "Clear" ) );
             clearButton->SetIcon( TXT( "delete" ) );
-            clearButton->SetClientData( this );
+            clearButton->SetInterpreterClientData( this );
 
             tstring filter;
             if ( Reflect::GetClass<Asset::Entity>()->GetProperty( Asset::AssetProperties::FileFilter, filter ) )
@@ -175,10 +175,11 @@ void EntityInstanceCreateTool::CreateProperties()
         {
             m_RandomEntityList = m_Generator->AddList< tstring >( new Helium::MemberProperty<Core::EntityInstanceCreateTool, tstring > (this, &EntityInstanceCreateTool::GetRandomEntity, &EntityInstanceCreateTool::SetRandomEntity) );
 
+#ifdef INSPECT_REFACTOR
             Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( TXT( "*.entity.*" ) );
             filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &EntityInstanceCreateTool::OnEntityDropped ) );
-
             m_RandomEntityList->SetDropTarget( filteredDropTarget );
+#endif
         }
         m_Generator->Pop();
 
@@ -316,7 +317,7 @@ void EntityInstanceCreateTool::SetRandomEntity( const tstring& entityName )
 
 void EntityInstanceCreateTool::OnDeleteClass( Inspect::Button* button )
 {
-    Core::EntityInstanceCreateTool* thisTool = Reflect::ObjectCast< Core::EntityInstanceCreateTool >( button->GetClientData() );
+    Core::EntityInstanceCreateTool* thisTool = Reflect::ObjectCast< Core::EntityInstanceCreateTool >( button->GetInterpreterClientData() );
     if ( !thisTool )
     {
         Log::Error( TXT( "Invalid EntityInstanceCreateTool in OnDeleteClass()" ) );
@@ -366,7 +367,7 @@ void EntityInstanceCreateTool::OnDeleteClass( Inspect::Button* button )
 
 void EntityInstanceCreateTool::OnClear( Inspect::Button* button )
 {
-    Core::EntityInstanceCreateTool* thisTool = Reflect::ObjectCast< Core::EntityInstanceCreateTool >( button->GetClientData() );
+    Core::EntityInstanceCreateTool* thisTool = Reflect::ObjectCast< Core::EntityInstanceCreateTool >( button->GetInterpreterClientData() );
     if ( !thisTool )
     {
         Log::Error( TXT( "Invalid EntityInstanceCreateTool in OnClear()" ) );
@@ -388,7 +389,7 @@ void EntityInstanceCreateTool::OnClear( Inspect::Button* button )
 
 void EntityInstanceCreateTool::OnNormalize( Inspect::Button* button )
 {
-    Core::EntityInstanceCreateTool* thisTool = Reflect::ObjectCast< Core::EntityInstanceCreateTool >( button->GetClientData() );
+    Core::EntityInstanceCreateTool* thisTool = Reflect::ObjectCast< Core::EntityInstanceCreateTool >( button->GetInterpreterClientData() );
     if ( !thisTool )
     {
         Log::Error( TXT( "Invalid EntityInstanceCreateTool in OnNormalize()" ) );
@@ -413,7 +414,7 @@ void EntityInstanceCreateTool::OnNormalize( Inspect::Button* button )
 
 void EntityInstanceCreateTool::OnModify( Inspect::Button* button )
 {
-    Core::EntityInstanceCreateTool* thisTool = Reflect::ObjectCast< Core::EntityInstanceCreateTool >( button->GetClientData() );
+    Core::EntityInstanceCreateTool* thisTool = Reflect::ObjectCast< Core::EntityInstanceCreateTool >( button->GetInterpreterClientData() );
     if ( !thisTool )
     {
         Log::Error( TXT( "Invalid EntityInstanceCreateTool in OnModify()" ) );

@@ -24,8 +24,8 @@
 #include "Core/Content/Nodes/ContentCurve.h"
 #include "Core/Content/Nodes/ContentVolume.h"
 
-#include "Application/Inspect/Data/Data.h"
-#include "Application/Inspect/Controls/Canvas.h"
+#include "Application/Inspect/InspectData.h"
+#include "Application/Inspect/Controls/InspectCanvas.h"
 #include "Foundation/Undo/PropertyCommand.h"
 #include "SceneGraph.h"
 #include "Statistics.h"

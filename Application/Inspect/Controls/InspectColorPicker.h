@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Application/API.h"
-#include "Application/Inspect/Controls/Control.h"
+#include "Application/Inspect/Controls/InspectControl.h"
 
 #include "Foundation/Math/Color3.h"
 #include "Foundation/Math/Color4.h"

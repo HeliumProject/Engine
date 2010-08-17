@@ -1,6 +1,6 @@
 #include "FileBrowserButton.h"
 
-#include "Application/Inspect/Controls/Canvas.h"
+#include "Application/Inspect/Controls/InspectCanvas.h"
 #include "Foundation/Container/Insert.h" 
 
 using namespace Helium;
@@ -85,16 +85,14 @@ bool FileBrowserButton::Write()
 
         wxWindow* parent = GetCanvas() ? GetCanvas()->GetControl() : NULL;
 
-        HELIUM_BREAK();
-#pragma TODO( "Reimplement to use the Vault" )
-        //File::FileBrowser fileBrowser( parent, wxID_ANY, m_Title.c_str() );
-        //fileBrowser.SetFilter( filterStr.c_str() );
+        File::FileBrowser fileBrowser( parent, wxID_ANY, m_Title.c_str() );
+        fileBrowser.SetFilter( filterStr.c_str() );
 
-        //if ( fileBrowser.ShowModal() == wxID_OK )
-        //{
-        //  tstring path = fileBrowser.GetPath().c_str();
-        //  result = WriteData( path );
-        //}
+        if ( fileBrowser.ShowModal() == wxID_OK )
+        {
+          tstring path = fileBrowser.GetPath().c_str();
+          result = WriteData( path );
+        }
     }
 
     return result;

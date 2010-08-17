@@ -2,7 +2,7 @@
 #include "EntityInstancePanel.h"
 #include "EntitySet.h"
 
-#include "Application/Inspect/Controls/Value.h"
+#include "Application/Inspect/Controls/InspectValue.h"
 #include "Application/Inspect/Controls/InspectButton.h"
 
 #include "Core/Asset/AssetInit.h"
@@ -199,9 +199,11 @@ void EntityPanel::CreateClassPath()
             browserButton->SetEnabled( false );
         }
 
+#ifdef INSPECT_REFACTOR
         Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( filter );
         filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &EntityPanel::OnEntityAssetDrop ) );
         m_TextBox->SetDropTarget( filteredDropTarget );
+#endif
     }
     m_Generator->Pop();
 

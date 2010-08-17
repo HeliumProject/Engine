@@ -2,8 +2,8 @@
 
 #include "ReflectFieldInterpreter.h"
 
-#include "Application/Inspect/Controls/Canvas.h"
-#include "Application/Inspect/Controls/Container.h"
+#include "Application/Inspect/Controls/InspectCanvas.h"
+#include "Application/Inspect/Controls/InspectContainer.h"
 
 namespace Helium
 {

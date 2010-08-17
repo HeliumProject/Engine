@@ -4,10 +4,10 @@
 #include "Vault.h"
 
 #include "Foundation/String/Utilities.h"
-#include "Application/Inspect/Clipboard/ClipboardDataObject.h"
-#include "Application/Inspect/Clipboard/ClipboardFileList.h"
-#include "Application/Inspect/DragDrop/DropTarget.h"
-#include "Application/Inspect/Clipboard/ReflectClipboardData.h"
+#include "Editor/Clipboard/ClipboardDataObject.h"
+#include "Editor/Clipboard/ClipboardFileList.h"
+#include "Editor/DragDrop/DropTarget.h"
+#include "Editor/Clipboard/ReflectClipboardData.h"
 #include "Core/Scene/SceneManager.h"
 #include "Application/UI/FileDialog.h"
 #include "Editor/ArtProvider.h"
@@ -687,7 +687,7 @@ wxTreeItemId CollectionsPanel::DragHitTest( SortTreeCtrl* treeCtrl, wxPoint poin
 // Callback for when a drag operation is occurring over this control.  Highlights
 // the tree item that will receive the drop if one were to take place.
 // 
-wxDragResult CollectionsPanel::DragOver( const Inspect::DragArgs& args )
+wxDragResult CollectionsPanel::DragOver( const Editor::DragArgs& args )
 {
     SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
 
@@ -743,7 +743,7 @@ wxDragResult CollectionsPanel::DragOver( const Inspect::DragArgs& args )
 ///////////////////////////////////////////////////////////////////////////////
 // Callback for when items are dropped onto the tree.
 // 
-wxDragResult CollectionsPanel::Drop( const Inspect::DragArgs& args )
+wxDragResult CollectionsPanel::Drop( const Editor::DragArgs& args )
 {
     SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
 

@@ -5,8 +5,8 @@
 #include "Application/Inspect/InspectInit.h"
 #include "Application/Inspect/InspectScript.h"
 #include "Application/Inspect/Data/StringData.h"
-#include "Application/Inspect/Controls/Action.h"
-#include "Application/Inspect/Controls/Value.h"
+#include "Application/Inspect/Controls/InspectAction.h"
+#include "Application/Inspect/Controls/InspectValue.h"
 #include "Application/Inspect/Clipboard/ClipboardDataObject.h"
 #include "Application/Inspect/Clipboard/ClipboardFileList.h"
 
@@ -94,11 +94,12 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
                     }
                     group->AddControl( browserButton );
 
+#ifdef INSPECT_REFACTOR
                     Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( m_FileFilter );
                     filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &FileInterpreter::OnDrop ) );
-
+                    value->SetDropTarget( filteredDropTarget );
+#endif
                     m_Value = value;
-                    m_Value->SetDropTarget( filteredDropTarget );
                 }
 
                 if ( instances.size() == 1 )

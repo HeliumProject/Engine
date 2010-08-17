@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Application/Inspect/Data/Data.h"
+#include "Application/Inspect/InspectData.h"
 #include "Core/Content/ParametricKey/ParametricKey.h"
 
 namespace Helium

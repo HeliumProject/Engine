@@ -1,7 +1,7 @@
 #include "ReflectBitfieldInterpreter.h"
 #include "ReflectBitfieldCheckBox.h"
 
-#include "Application/Inspect/Controls/Label.h"
+#include "Application/Inspect/Controls/InspectLabel.h"
 #include "Application/Inspect/Controls/InspectPanel.h"
 #include "Application/Inspect/Data/StringData.h"
 

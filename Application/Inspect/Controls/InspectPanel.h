@@ -1,34 +1,13 @@
 #pragma once
 
 #include "Application/API.h"
-#include "Application/Inspect/Controls/Group.h"
+#include "Application/Inspect/Controls/InspectGroup.h"
 #include "wx/treebase.h"
 
 namespace Helium
 {
     namespace Inspect
     {
-        class APPLICATION_API PanelItemData : public wxTreeItemData
-        {
-        public:
-            PanelItemData( Panel* panel )
-                : wxTreeItemData()
-                , m_Panel( panel )
-                , m_IgnoreToggle( false )
-            {
-            }
-
-            Panel* GetPanel() { return m_Panel; }
-
-            void StartIgnoreToggle() { m_IgnoreToggle = true; }
-            void EndIgnoreToggle() { m_IgnoreToggle = false; }
-            bool GetIgnoreToggle() { return m_IgnoreToggle; }
-
-        protected:
-            Panel* m_Panel;
-            bool m_IgnoreToggle;
-        };
-
         const static tchar PANEL_ATTR_TEXT[] = TXT( "text" );
 
         //

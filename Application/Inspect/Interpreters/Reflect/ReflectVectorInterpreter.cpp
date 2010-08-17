@@ -1,8 +1,8 @@
 #include "ReflectVectorInterpreter.h"
 
-#include "Application/Inspect/Controls/Label.h"
-#include "Application/Inspect/Controls/Value.h"
-#include "Application/Inspect/Controls/Container.h"
+#include "Application/Inspect/Controls/InspectLabel.h"
+#include "Application/Inspect/Controls/InspectValue.h"
+#include "Application/Inspect/Controls/InspectContainer.h"
 #include "Application/Inspect/Data/StringData.h"
 
 using namespace Helium;

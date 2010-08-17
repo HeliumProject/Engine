@@ -1,6 +1,6 @@
-#include "InspectPanel.h"
-#include "Application/Inspect/Controls/Canvas.h"
-#include "Application/Inspect/Controls/Label.h"
+#include "Application/Inspect/Controls/InspectInspectPanel.h"
+#include "Application/Inspect/Controls/InspectCanvas.h"
+#include "Application/Inspect/Controls/InspectLabel.h"
 
 using namespace Helium::Reflect;
 using namespace Helium::Inspect;

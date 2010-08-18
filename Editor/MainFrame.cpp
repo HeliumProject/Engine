@@ -31,7 +31,7 @@
 #include "Core/Scene/RotateManipulator.h"
 #include "Core/Scene/TranslateManipulator.h"
 
-#include "Editor/PreferencesDialog.h"
+#include "Editor/SettingsDialog.h"
 
 #include "EditorIDs.h"
 #include "ArtProvider.h"
@@ -225,8 +225,8 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     // Restore layout if any
     //
 
-    wxGetApp().GetPreferences()->GetWindowSettings()->ApplyToWindow( this, &m_FrameManager, true );
-    m_ViewPanel->GetViewCanvas()->GetViewport().LoadPreferences( wxGetApp().GetPreferences()->GetViewportPreferences() ); 
+    wxGetApp().GetSettings()->GetWindowSettings()->ApplyToWindow( this, &m_FrameManager, true );
+    m_ViewPanel->GetViewCanvas()->GetViewport().LoadSettings( wxGetApp().GetSettings()->GetViewportSettings() ); 
 
     //
     // Attach event handlers
@@ -242,8 +242,8 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
 #pragma TODO("MRU")
 #if 0
     std::vector< tstring > paths;
-    std::vector< tstring >::const_iterator itr = wxGetApp().GetPreferences()->GetMRU()->GetPaths().begin();
-    std::vector< tstring >::const_iterator end = wxGetApp().GetPreferences()->GetMRU()->GetPaths().end();
+    std::vector< tstring >::const_iterator itr = wxGetApp().GetSettings()->GetMRU()->GetPaths().begin();
+    std::vector< tstring >::const_iterator end = wxGetApp().GetSettings()->GetMRU()->GetPaths().end();
     for ( ; itr != end; ++itr )
     {
         Helium::Path path( *itr );
@@ -278,12 +278,12 @@ MainFrame::~MainFrame()
 #if 0
     std::vector< tstring > mruPaths;
     m_MRU->ToVector( mruPaths );
-    wxGetApp().GetPreferences()->GetScenePreferences()->GetMRU()->SetPaths( mruPaths );
+    wxGetApp().GetSettings()->GetSceneSettings()->GetMRU()->SetPaths( mruPaths );
 #endif
 
-    wxGetApp().GetPreferences()->GetWindowSettings()->SetFromWindow( this, &m_FrameManager );
-    m_ViewPanel->GetViewCanvas()->GetViewport().SavePreferences( wxGetApp().GetPreferences()->GetViewportPreferences() ); 
-    wxGetApp().SavePreferences();
+    wxGetApp().GetSettings()->GetWindowSettings()->SetFromWindow( this, &m_FrameManager );
+    m_ViewPanel->GetViewCanvas()->GetViewport().SaveSettings( wxGetApp().GetSettings()->GetViewportSettings() ); 
+    wxGetApp().SaveSettings();
 
     //
     // Detach event handlers
@@ -1005,12 +1005,12 @@ void MainFrame::OnViewVisibleChange(wxCommandEvent& event)
 
 void MainFrame::OnViewColorModeChange(wxCommandEvent& event)
 {
-    const ViewColorMode previousColorMode = wxGetApp().GetPreferences()->GetViewportPreferences()->GetColorMode();
+    const ViewColorMode previousColorMode = wxGetApp().GetSettings()->GetViewportSettings()->GetColorMode();
 
     const M_IDToColorMode::const_iterator newColorModeItr = m_ColorModeLookup.find( event.GetId() );
     if ( newColorModeItr != m_ColorModeLookup.end() )
     {
-        wxGetApp().GetPreferences()->GetViewportPreferences()->SetColorMode( ( ViewColorMode )( newColorModeItr->second ) );
+        wxGetApp().GetSettings()->GetViewportSettings()->SetColorMode( ( ViewColorMode )( newColorModeItr->second ) );
     }
 }
 
@@ -1963,10 +1963,10 @@ void MainFrame::OnAbout( wxCommandEvent& event )
     wxMessageBox( wxT( "Editor" ), wxT( "About" ), wxOK | wxCENTER, this );
 }
 
-void MainFrame::OnPreferences( wxCommandEvent& event )
+void MainFrame::OnSettings( wxCommandEvent& event )
 {
-    PreferencesDialog dlg ( this, wxID_ANY, TXT( "Preferences" ) );
-    dlg.ShowModal( wxGetApp().GetPreferences() );
+    SettingsDialog dlg ( this, wxID_ANY, TXT( "Settings" ) );
+    dlg.ShowModal( wxGetApp().GetSettings() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

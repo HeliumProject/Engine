@@ -8,7 +8,7 @@
 #include "Tracker/Tracker.h"
 #include "Editor/Vault/Vault.h"
 
-#include "Preferences.h"
+#include "Settings.h"
 #include "Application/DocumentManager.h"
 
 #include <wx/app.h>
@@ -28,12 +28,12 @@ namespace Helium
             virtual int     OnExit() HELIUM_OVERRIDE;
             virtual void    OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg) HELIUM_OVERRIDE;
 
-            void SavePreferences();
-            void LoadPreferences();
+            void SaveSettings();
+            void LoadSettings();
 
-            Preferences* GetPreferences()
+            Settings* GetSettings()
             {
-                return m_Preferences;
+                return m_Settings;
             }
 
             MainFrame* GetFrame()
@@ -59,7 +59,7 @@ namespace Helium
             Tracker m_Tracker;
             Helium::Thread m_TrackerThread;
 
-            PreferencesPtr m_Preferences;
+            SettingsPtr m_Settings;
             Vault* m_Vault;
             MainFrame* m_Frame;
         };

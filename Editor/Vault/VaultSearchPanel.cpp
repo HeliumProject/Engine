@@ -95,7 +95,7 @@ VaultSearchPanel::~VaultSearchPanel()
 
 void VaultSearchPanel::ConnectListners()
 {
-    m_CollectionManager = wxGetApp().GetPreferences()->GetVaultPreferences()->GetCollectionManager();
+    m_CollectionManager = wxGetApp().GetSettings()->GetVaultSettings()->GetCollectionManager();
     //m_CollectionManager->AddClearAllListener( CollectionManagerSignature::Delegate( this, &VaultSearchPanel::OnCollectionManagerChanged ) );
     //m_CollectionManager->AddCollectionAddedListener( CollectionManagerSignature::Delegate( this, &VaultSearchPanel::OnCollectionManagerChanged ) );
     //m_CollectionManager->AddCollectionRemovingListener( CollectionManagerSignature::Delegate( this, &VaultSearchPanel::OnCollectionManagerChanged ) );

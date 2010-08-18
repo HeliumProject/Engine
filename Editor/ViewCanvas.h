@@ -12,7 +12,7 @@
 #include "Core/Scene/Camera.h"
 #include "Core/Scene/Resource.h"
 #include "Core/Scene/Viewport.h"
-#include "Core/Scene/ViewportPreferences.h"
+#include "Core/Scene/ViewportSettings.h"
 #include "Core/Render/DeviceManager.h"
 
 namespace Helium

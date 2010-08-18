@@ -1,8 +1,7 @@
 #include "Precompile.h"
-#include "Preferences.h"
+#include "Settings.h"
 
 using namespace Helium;
-using namespace Helium::Core;
 using namespace Helium::Editor;
 
 const static tstring s_WindowSettingsVersion( TXT( "12" ) );
@@ -10,11 +9,11 @@ const static tstring s_WindowSettingsVersion( TXT( "12" ) );
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-Preferences::Preferences()
-: m_ScenePreferences( new ScenePreferences )
-, m_ViewportPreferences( new ViewportPreferences )
-, m_GridPreferences( new GridPreferences )
-, m_VaultPreferences( new VaultPreferences )
+Settings::Settings()
+: m_SceneSettings( new Core::SceneSettings )
+, m_ViewportSettings( new Core::ViewportSettings )
+, m_GridSettings( new Core::GridSettings )
+, m_VaultSettings( new VaultSettings )
 , m_WindowSettings( new WindowSettings( s_WindowSettingsVersion ) )
 {
 }

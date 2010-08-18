@@ -15,13 +15,13 @@ namespace Helium
     {
         class VaultFrame;
 
-        class VaultPreferences : public Reflect::ConcreteInheritor< VaultPreferences, Core::Settings >
+        class VaultSettings : public Reflect::ConcreteInheritor< VaultSettings, Core::Settings >
         {
         public:
-            VaultPreferences( const tstring& defaultFolder = TXT( "" ),
+            VaultSettings( const tstring& defaultFolder = TXT( "" ),
                 ViewOptionID thumbnailMode = ViewOptionIDs::Medium,
                 u32 thumbnailSize = ThumbnailSizes::Medium );
-            ~VaultPreferences();
+            ~VaultSettings();
 
             void GetWindowSettings( VaultFrame* browserFrame, wxAuiManager* manager = NULL );
             void SetWindowSettings( VaultFrame* browserFrame, wxAuiManager* manager = NULL );
@@ -62,33 +62,33 @@ namespace Helium
             u32                   m_UsageCollectionRecursionDepth;
 
         public:
-            static void EnumerateClass( Reflect::Compositor< VaultPreferences >& comp )
+            static void EnumerateClass( Reflect::Compositor< VaultSettings >& comp )
             {
-                comp.AddField( &VaultPreferences::m_WindowSettings, "m_WindowSettings", Reflect::FieldFlags::Hide );
-                comp.AddField( &VaultPreferences::m_DefaultFolder, "m_DefaultFolder", Reflect::FieldFlags::Hide );
-                comp.AddEnumerationField( &VaultPreferences::m_ThumbnailMode, "m_ThumbnailMode" );
+                comp.AddField( &VaultSettings::m_WindowSettings, "m_WindowSettings", Reflect::FieldFlags::Hide );
+                comp.AddField( &VaultSettings::m_DefaultFolder, "m_DefaultFolder", Reflect::FieldFlags::Hide );
+                comp.AddEnumerationField( &VaultSettings::m_ThumbnailMode, "m_ThumbnailMode" );
 
                 {
-                    Reflect::Field* field = comp.AddField( &VaultPreferences::m_ThumbnailSize, "m_ThumbnailSize" );
+                    Reflect::Field* field = comp.AddField( &VaultSettings::m_ThumbnailSize, "m_ThumbnailSize" );
                     field->SetProperty( TXT( "UIScript" ), TXT( "UI[.[slider{min=16.0; max=256.0} value{}].]" ) );
                 }
 
-                comp.AddField( &VaultPreferences::m_DisplayPreviewAxis, "m_DisplayPreviewAxis" );
-                comp.AddField( &VaultPreferences::m_CollectionManager, "m_CollectionManager", Reflect::FieldFlags::Hide | Reflect::FieldFlags::Share );
-                comp.AddField( &VaultPreferences::m_SearchHistory, "m_SearchHistory", Reflect::FieldFlags::Hide | Reflect::FieldFlags::Share );
+                comp.AddField( &VaultSettings::m_DisplayPreviewAxis, "m_DisplayPreviewAxis" );
+                comp.AddField( &VaultSettings::m_CollectionManager, "m_CollectionManager", Reflect::FieldFlags::Hide | Reflect::FieldFlags::Share );
+                comp.AddField( &VaultSettings::m_SearchHistory, "m_SearchHistory", Reflect::FieldFlags::Hide | Reflect::FieldFlags::Share );
 
                 {
-                    Reflect::Field* field = comp.AddField( &VaultPreferences::m_DependencyCollectionRecursionDepth, "DependencySearchDepth" );
+                    Reflect::Field* field = comp.AddField( &VaultSettings::m_DependencyCollectionRecursionDepth, "DependencySearchDepth" );
                     field->SetProperty( TXT( "UIScript" ), TXT( "UI[.[slider{min=0; max=100} value{}].]" ) );
                 }
 
                 {
-                    Reflect::Field* field = comp.AddField( &VaultPreferences::m_UsageCollectionRecursionDepth, "UsageSearchDepth" );
+                    Reflect::Field* field = comp.AddField( &VaultSettings::m_UsageCollectionRecursionDepth, "UsageSearchDepth" );
                     field->SetProperty( TXT( "UIScript" ), TXT( "UI[.[slider{min=0; max=100} value{}].]" ) );
                 }
             }
         };
 
-        typedef Helium::SmartPtr< VaultPreferences > VaultPreferencesPtr;
+        typedef Helium::SmartPtr< VaultSettings > VaultSettingsPtr;
     }
 }

@@ -61,7 +61,7 @@ bool Settings::LoadFromFile( const Helium::Path& path )
                 if ( settings.ReferencesObject() && settings->m_SavedVersion == GetCurrentVersion() )
                 {
                     settings->CopyTo( this );
-                    m_Loaded.Raise( PreferencesLoadedArgs() );
+                    m_Loaded.Raise( SettingsLoadedArgs() );
                     return true;
                 }
             }

@@ -9,10 +9,10 @@ namespace Helium
 {
     namespace Core
     {
-        class CORE_API ScenePreferences : public Reflect::ConcreteInheritor< ScenePreferences, Settings >
+        class CORE_API SceneSettings : public Reflect::ConcreteInheritor< SceneSettings, Settings >
         {
         public:
-            ScenePreferences();
+            SceneSettings();
 
             MRUData* GetMRU();
             Content::NodeVisibility* GetDefaultNodeVisibility(); 
@@ -53,27 +53,27 @@ namespace Helium
             bool m_TranslateManipulatorLiveObjectsOnly;
 
         public:
-            static void EnumerateClass( Reflect::Compositor<ScenePreferences>& comp )
+            static void EnumerateClass( Reflect::Compositor<SceneSettings>& comp )
             {
-                comp.AddField( &ScenePreferences::m_MRU, "m_MRU" );
-                comp.AddField( &ScenePreferences::m_DefaultNodeVisibility, "m_DefaultNodeVisibility" );
+                comp.AddField( &SceneSettings::m_MRU, "m_MRU" );
+                comp.AddField( &SceneSettings::m_DefaultNodeVisibility, "m_DefaultNodeVisibility" );
 
-                comp.AddField( &ScenePreferences::m_ScaleManipulatorSize, "m_ScaleManipulatorSize" );
-                comp.AddField( &ScenePreferences::m_ScaleManipulatorGridSnap, "m_ScaleManipulatorGridSnap" );
-                comp.AddField( &ScenePreferences::m_ScaleManipulatorDistance, "m_ScaleManipulatorDistance" );
+                comp.AddField( &SceneSettings::m_ScaleManipulatorSize, "m_ScaleManipulatorSize" );
+                comp.AddField( &SceneSettings::m_ScaleManipulatorGridSnap, "m_ScaleManipulatorGridSnap" );
+                comp.AddField( &SceneSettings::m_ScaleManipulatorDistance, "m_ScaleManipulatorDistance" );
 
-                comp.AddField( &ScenePreferences::m_RotateManipulatorSize, "m_RotateManipulatorSize" );
-                comp.AddField( &ScenePreferences::m_RotateManipulatorAxisSnap, "m_RotateManipulatorAxisSnap" );
-                comp.AddField( &ScenePreferences::m_RotateManipulatorSnapDegrees, "m_RotateManipulatorSnapDegrees" );
-                comp.AddEnumerationField( &ScenePreferences::m_RotateManipulatorSpace, "m_RotateManipulatorSpace" );
+                comp.AddField( &SceneSettings::m_RotateManipulatorSize, "m_RotateManipulatorSize" );
+                comp.AddField( &SceneSettings::m_RotateManipulatorAxisSnap, "m_RotateManipulatorAxisSnap" );
+                comp.AddField( &SceneSettings::m_RotateManipulatorSnapDegrees, "m_RotateManipulatorSnapDegrees" );
+                comp.AddEnumerationField( &SceneSettings::m_RotateManipulatorSpace, "m_RotateManipulatorSpace" );
 
-                comp.AddField( &ScenePreferences::m_TranslateManipulatorSize, "m_TranslateManipulatorSize" );
-                comp.AddEnumerationField( &ScenePreferences::m_TranslateManipulatorSpace, "m_TranslateManipulatorSpace" );
-                comp.AddEnumerationField( &ScenePreferences::m_TranslateManipulatorSnappingMode, "m_TranslateManipulatorSnappingMode" );
-                comp.AddField( &ScenePreferences::m_TranslateManipulatorDistance, "m_TranslateManipulatorDistance" );
-                comp.AddField( &ScenePreferences::m_TranslateManipulatorLiveObjectsOnly, "m_TranslateManipulatorLiveObjectsOnly" );
+                comp.AddField( &SceneSettings::m_TranslateManipulatorSize, "m_TranslateManipulatorSize" );
+                comp.AddEnumerationField( &SceneSettings::m_TranslateManipulatorSpace, "m_TranslateManipulatorSpace" );
+                comp.AddEnumerationField( &SceneSettings::m_TranslateManipulatorSnappingMode, "m_TranslateManipulatorSnappingMode" );
+                comp.AddField( &SceneSettings::m_TranslateManipulatorDistance, "m_TranslateManipulatorDistance" );
+                comp.AddField( &SceneSettings::m_TranslateManipulatorLiveObjectsOnly, "m_TranslateManipulatorLiveObjectsOnly" );
             }
         };
-        typedef Helium::SmartPtr< ScenePreferences > ScenePreferencesPtr;
+        typedef Helium::SmartPtr< SceneSettings > SceneSettingsPtr;
     }
 }

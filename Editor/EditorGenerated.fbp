@@ -79,7 +79,7 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxMenuBar" expanded="0">
+            <object class="wxMenuBar" expanded="1">
                 <property name="bg"></property>
                 <property name="context_help"></property>
                 <property name="context_menu">1</property>
@@ -881,7 +881,7 @@
                     <property name="name">m_MenuPanels</property>
                     <property name="permission">protected</property>
                 </object>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">Settings</property>
                     <property name="name">m_MenuSettings</property>
                     <property name="permission">protected</property>
@@ -890,14 +890,14 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">ID_Preferences</property>
+                        <property name="id">wxID_ANY</property>
                         <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">Preferences...</property>
-                        <property name="name">m_ItemPreferences</property>
+                        <property name="label">Settings...</property>
+                        <property name="name">m_ItemSettings</property>
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection">OnPreferences</event>
+                        <event name="OnMenuSelection">OnSettings</event>
                         <event name="OnUpdateUI"></event>
                     </object>
                 </object>

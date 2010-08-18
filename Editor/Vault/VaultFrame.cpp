@@ -13,7 +13,7 @@
 #include "ResultsPanel.h"
 #include "SearchQuery.h"
 #include "Editor/HelpPanel.h"
-#include "Editor/PreferencesDialog.h"
+#include "Editor/SettingsDialog.h"
 
 #include "Core/Asset/AssetInit.h"
 #include "Core/Asset/Classes/ShaderAsset.h"
@@ -52,7 +52,7 @@ EVT_MENU( VaultMenu::CopyPathNative, VaultFrame::OnCopyPath )
 EVT_MENU( VaultMenu::ShowInFolders, VaultFrame::OnShowInFolders )
 EVT_MENU( VaultMenu::ShowInPerforce, VaultFrame::OnShowInPerforce )
 EVT_MENU( VaultMenu::ShowInWindowsExplorer, VaultFrame::OnShowInWindowsExplorer )
-EVT_MENU( VaultMenu::Preferences, VaultFrame::OnPreferences )
+EVT_MENU( VaultMenu::Settings, VaultFrame::OnSettings )
 EVT_MENU( VaultMenu::NewCollectionFromSelection, VaultFrame::OnNewCollectionFromSelection )
 EVT_MENU( VaultMenu::NewDepedencyCollectionFromSelection, VaultFrame::OnNewCollectionFromSelection )
 EVT_MENU( VaultMenu::NewUsageCollectionFromSelection, VaultFrame::OnNewCollectionFromSelection )
@@ -78,7 +78,7 @@ VaultFrame::VaultFrame( Vault* browser, VaultSearch* browserSearch, SearchHistor
 , m_IsSearching( false )
 , m_IgnoreFolderSelect( false )
 {
-#pragma TODO( "Populate the CollectionsPanel from VaultPreferences" )
+#pragma TODO( "Populate the CollectionsPanel from VaultSettings" )
 
     HELIUM_ASSERT( m_Vault );
 
@@ -169,7 +169,7 @@ VaultFrame::VaultFrame( Vault* browser, VaultSearch* browserSearch, SearchHistor
 
         m_FrameManager.AddPane( m_FoldersPanel, info );
 
-        tstring defaultPath = wxGetApp().GetPreferences()->GetVaultPreferences()->GetDefaultFolderPath();
+        tstring defaultPath = wxGetApp().GetSettings()->GetVaultSettings()->GetDefaultFolderPath();
         if ( !defaultPath.empty() )
         {
             m_FoldersPanel->SetPath( defaultPath );
@@ -293,7 +293,7 @@ VaultFrame::VaultFrame( Vault* browser, VaultSearch* browserSearch, SearchHistor
         m_OptionsMenu->AppendSeparator();
         m_OptionsMenu->Append( wxID_ANY, wxT( "Show Panels" ), m_PanelsMenu );
         m_OptionsMenu->AppendSeparator();
-        m_OptionsMenu->Append( VaultMenu::Preferences, VaultMenu::Label( VaultMenu::Preferences ) );
+        m_OptionsMenu->Append( VaultMenu::Settings, VaultMenu::Label( VaultMenu::Settings ) );
 
         m_NavigationPanel->m_OptionsButton->SetContextMenu( m_OptionsMenu );
         m_NavigationPanel->m_OptionsButton->SetHoldDelay( 0.0f );
@@ -303,12 +303,12 @@ VaultFrame::VaultFrame( Vault* browser, VaultSearch* browserSearch, SearchHistor
     }
 
     //
-    // Load Preferences
+    // Load Settings
     //
-    wxGetApp().GetPreferences()->GetVaultPreferences()->GetWindowSettings( this, &m_FrameManager );
-    wxGetApp().GetPreferences()->GetVaultPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &VaultFrame::OnPreferencesChanged ) );
-    m_CurrentViewOption = wxGetApp().GetPreferences()->GetVaultPreferences()->GetThumbnailMode();
-    UpdateResultsView( wxGetApp().GetPreferences()->GetVaultPreferences()->GetThumbnailSize() );
+    wxGetApp().GetSettings()->GetVaultSettings()->GetWindowSettings( this, &m_FrameManager );
+    wxGetApp().GetSettings()->GetVaultSettings()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &VaultFrame::OnSettingsChanged ) );
+    m_CurrentViewOption = wxGetApp().GetSettings()->GetVaultSettings()->GetThumbnailMode();
+    UpdateResultsView( wxGetApp().GetSettings()->GetVaultSettings()->GetThumbnailSize() );
 
     //
     // Connect Events
@@ -809,7 +809,7 @@ void VaultFrame::OnNewCollectionFromSelection( wxCommandEvent& event )
 
     if ( collection )
     {
-        CollectionManager* collectionManager = wxGetApp().GetPreferences()->GetVaultPreferences()->GetCollectionManager();
+        CollectionManager* collectionManager = wxGetApp().GetSettings()->GetVaultSettings()->GetCollectionManager();
         tstring name;
         collectionManager->GetUniqueName( name, collection->GetName().c_str() );
         collection->SetName( name );
@@ -885,10 +885,10 @@ void VaultFrame::OnPaste( wxCommandEvent& args )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void VaultFrame::OnPreferences( wxCommandEvent& event )
+void VaultFrame::OnSettings( wxCommandEvent& event )
 {
-    PreferencesDialog dlg( this );
-    dlg.ShowModal( wxGetApp().GetPreferences() );
+    SettingsDialog dlg( this );
+    dlg.ShowModal( wxGetApp().GetSettings() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -902,14 +902,14 @@ void VaultFrame::OnClose( wxCloseEvent& event )
 {
     event.Skip();
 
-    wxGetApp().GetPreferences()->GetVaultPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &VaultFrame::OnPreferencesChanged ) );
+    wxGetApp().GetSettings()->GetVaultSettings()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &VaultFrame::OnSettingsChanged ) );
 
-    wxGetApp().GetPreferences()->GetVaultPreferences()->SetThumbnailMode( m_CurrentViewOption );
-    wxGetApp().GetPreferences()->GetVaultPreferences()->SetWindowSettings( this, &m_FrameManager );
+    wxGetApp().GetSettings()->GetVaultSettings()->SetThumbnailMode( m_CurrentViewOption );
+    wxGetApp().GetSettings()->GetVaultSettings()->SetWindowSettings( this, &m_FrameManager );
 
     tstring path;
     m_FoldersPanel->GetPath( path );
-    wxGetApp().GetPreferences()->GetVaultPreferences()->SetDefaultFolderPath( path );
+    wxGetApp().GetSettings()->GetVaultSettings()->SetDefaultFolderPath( path );
     m_Vault->OnCloseVault();
 }
 
@@ -956,10 +956,10 @@ void VaultFrame::OnSearchComplete( const Editor::SearchCompleteArgs& args )
 ///////////////////////////////////////////////////////////////////////////////
 // Update the UI when the preferences change
 // 
-void VaultFrame::OnPreferencesChanged( const Reflect::ElementChangeArgs& args )
+void VaultFrame::OnSettingsChanged( const Reflect::ElementChangeArgs& args )
 {
-    m_CurrentViewOption = wxGetApp().GetPreferences()->GetVaultPreferences()->GetThumbnailMode();
-    UpdateResultsView( wxGetApp().GetPreferences()->GetVaultPreferences()->GetThumbnailSize() );
+    m_CurrentViewOption = wxGetApp().GetSettings()->GetVaultSettings()->GetThumbnailMode();
+    UpdateResultsView( wxGetApp().GetSettings()->GetVaultSettings()->GetThumbnailSize() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

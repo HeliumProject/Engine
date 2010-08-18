@@ -9,7 +9,7 @@
 #include "PrimitiveCircle.h"
 
 #include "Core/Scene/Scene.h"
-#include "ScenePreferences.h"
+#include "SceneSettings.h"
 
 #include "Foundation/Math/AngleAxis.h"
 
@@ -36,7 +36,7 @@ RotateManipulator::RotateManipulator(const ManipulatorMode mode, Core::Scene* sc
 , m_SnapDegrees (15.0f)
 {
 #if SCENE_REFACTOR
-  Core::ScenePreferences* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
+  Core::SceneSettings* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
   prefs->Get( prefs->RotateManipulatorSize(), m_Size );
   prefs->Get( prefs->RotateManipulatorAxisSnap(), m_AxisSnap );
   prefs->Get( prefs->RotateManipulatorSnapDegrees(), m_SnapDegrees );
@@ -51,7 +51,7 @@ RotateManipulator::RotateManipulator(const ManipulatorMode mode, Core::Scene* sc
 RotateManipulator::~RotateManipulator()
 {
 #if SCENE_REFACTOR
-  ScenePreferences* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
+  SceneSettings* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
   prefs->Set( prefs->RotateManipulatorSize(), m_Size );
   prefs->Set( prefs->RotateManipulatorAxisSnap(), m_AxisSnap );
   prefs->Set( prefs->RotateManipulatorSnapDegrees(), m_SnapDegrees );

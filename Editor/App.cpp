@@ -34,8 +34,7 @@
 #include "Core/Scene/PropertiesGenerator.h"
 #include "Core/Scene/Settings.h"
 
-#include "Preferences.h"
-#include "Preferences.h"
+#include "Settings.h"
 #include "WindowSettings.h"
 #include "Application/Document.h"
 
@@ -152,7 +151,7 @@ namespace Helium
 
 App::App()
 #pragma TODO("This needs fixing otherwise dialogs will not be modal -Geoff")
-: m_Preferences( new Preferences() )
+: m_Settings( new Settings() )
 , m_Vault( NULL )
 , m_Frame( NULL )
 {
@@ -235,16 +234,16 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::RegisterEnumType<ViewOptionIDs::ViewOptionID>( &ViewOptionIDs::ViewOptionIDEnumerateEnum, TXT( "ViewOptionID" ) ) );
 
     // preferences
-    m_InitializerStack.Push( Reflect::RegisterClassType< Core::Settings >( TXT( "Settings" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType<WindowSettings>( TXT( "WindowSettings" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Core::CameraPreferences >( TXT( "CameraPreferences" ) ) ); 
-    m_InitializerStack.Push( Reflect::RegisterClassType< Core::ViewportPreferences >( TXT( "ViewportPreferences" ) ) ); 
-    m_InitializerStack.Push( Reflect::RegisterClassType< Core::GridPreferences >( TXT( "GridPreferences" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Core::ScenePreferences >( TXT( "ScenePreferences" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType<VaultPreferences>( TXT( "VaultPreferences" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType<Preferences>( TXT( "Preferences" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Core::Settings >( TXT( "Core::Settings" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Core::CameraSettings >( TXT( "Core::CameraSettings" ) ) ); 
+    m_InitializerStack.Push( Reflect::RegisterClassType< Core::ViewportSettings >( TXT( "Core::ViewportSettings" ) ) ); 
+    m_InitializerStack.Push( Reflect::RegisterClassType< Core::GridSettings >( TXT( "Core::GridSettings" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Core::SceneSettings >( TXT( "Core::SceneSettings" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< WindowSettings >( TXT( "Editor::WindowSettings" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< VaultSettings >( TXT( "Editor::VaultSettings" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Settings >( TXT( "Editor::Settings" ) ) );
 
-    LoadPreferences();
+    LoadSettings();
 
     if ( Log::GetErrorCount() )
     {
@@ -263,7 +262,7 @@ int App::OnExit()
 {
     m_TrackerThread.Wait();
 
-    SavePreferences();
+    SaveSettings();
 
     m_InitializerStack.Cleanup();
 
@@ -293,22 +292,22 @@ void App::OnAssertFailure(const wxChar *file, int line, const wxChar *func, cons
     HELIUM_BREAK();
 }
 
-void App::SavePreferences()
+void App::SaveSettings()
 {
     Helium::Path path;
     Helium::GetPreferencesDirectory( path );
-    path += TXT("EditorPreferences.xml");
+    path += TXT("EditorSettings.xml");
 
     tstring error;
     if ( Helium::IsDebuggerPresent() )
     {
-        m_Preferences->SaveToFile( path, error );
+        m_Settings->SaveToFile( path, error );
     }
     else
     {
         try
         {
-            m_Preferences->SaveToFile( path, error );
+            m_Settings->SaveToFile( path, error );
         }
         catch ( const Helium::Exception& ex )
         {
@@ -322,22 +321,22 @@ void App::SavePreferences()
     }
 }
 
-void App::LoadPreferences()
+void App::LoadSettings()
 {
     Helium::Path path;
     Helium::GetPreferencesDirectory( path );
-    path += TXT("EditorPreferences.xml");
+    path += TXT("EditorSettings.xml");
 
     if ( Helium::IsDebuggerPresent() )
     {
-        m_Preferences->LoadFromFile( path );
+        m_Settings->LoadFromFile( path );
     }
     else
     {
         tstring error;
         try
         {
-            m_Preferences->LoadFromFile( path );
+            m_Settings->LoadFromFile( path );
         }
         catch ( const Helium::Exception& ex )
         {
@@ -404,10 +403,10 @@ int Main ( int argc, const tchar** argv )
 
     bool disableTracker = false;
     success &= processor.AddOption( new FlagOption( &disableTracker, TXT( "disable_tracker" ), TXT( "disable Asset Tracker" ) ), error );
-    //GetAppPreferences()->UseTracker( disableTracker );
+    //GetAppSettings()->UseTracker( disableTracker );
 
     //success &= processor.AddOption( new FlagOption(  , WindowSettings::s_Reset, "reset all window positions" ), error );
-    //success &= processor.AddOption( new FlagOption(  , Preferences::s_ResetPreferences, "resets all preferences for all of Editor" ), error );
+    //success &= processor.AddOption( new FlagOption(  , Settings::s_ResetSettings, "resets all preferences for all of Editor" ), error );
 
     //success &= processor.AddOption( new FlagOption(  , Worker::Args::Debug, "debug use of background processes" ), error );
     //success &= processor.AddOption( new FlagOption(  , Worker::Args::Wait, "wait forever for background processes" ), error );

@@ -10,7 +10,7 @@
 #include "Core/Asset/AssetInit.h"
 
 // Types
-#include "ScenePreferences.h"
+#include "SceneSettings.h"
 
 #include "Core/Scene/Tool.h"
 #include "CreateTool.h"
@@ -56,9 +56,9 @@
 #include "DirectionalLight.h"
 #include "AmbientLight.h"
 
-#include "ViewportPreferences.h"
-#include "ScenePreferences.h"
-#include "GridPreferences.h"
+#include "ViewportSettings.h"
+#include "SceneSettings.h"
+#include "GridSettings.h"
 
 using namespace Helium;
 using namespace Helium::Core;

@@ -14,7 +14,7 @@
 #include "Core/Scene/Transform.h"
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/SceneManager.h"
-#include "ScenePreferences.h"
+#include "SceneSettings.h"
 #include "SceneVisitor.h"
 
 using namespace Helium;

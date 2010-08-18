@@ -96,7 +96,7 @@ namespace Helium
             void OnCopy( wxCommandEvent& args );
             void OnPaste( wxCommandEvent& args );
 
-            void OnPreferences( wxCommandEvent& event );
+            void OnSettings( wxCommandEvent& event );
 
             void OnUpdateStatusBar( Editor::UpdateStatusEvent& event );
 
@@ -106,7 +106,7 @@ namespace Helium
             void OnBeginSearching( const Editor::BeginSearchingArgs& args );
             void OnResultsAvailable( const Editor::ResultsAvailableArgs& args );
             void OnSearchComplete( const Editor::SearchCompleteArgs& args );
-            void OnPreferencesChanged( const Reflect::ElementChangeArgs& args );
+            void OnSettingsChanged( const Reflect::ElementChangeArgs& args );
             void OnResultsPanelUpdated( const ResultChangeArgs& args );
 
 

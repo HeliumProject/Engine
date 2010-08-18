@@ -135,6 +135,14 @@ namespace Helium
                 return NULL;
             }
 
+            static void GetExtensions( std::set< tstring >& extensions )
+            {
+                for ( std::map< tstring, AssetFactory* >::const_iterator itr = s_AssetFactories.begin(), end = s_AssetFactories.end(); itr != end; ++itr )
+                {
+                    (*itr).second->GetExtensions( extensions );
+                }
+            }
+
         public:
 
             void SetSerializationPath( const Helium::Path& path )

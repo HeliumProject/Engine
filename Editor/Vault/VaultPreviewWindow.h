@@ -26,7 +26,7 @@ namespace Helium
             virtual void DisplayReferenceAxis( bool display ) HELIUM_OVERRIDE;
 
         private:
-            void OnPreferencesChanged( const Reflect::ElementChangeArgs& args );
+            void OnSettingsChanged( const Reflect::ElementChangeArgs& args );
 
         private:
             VaultFrame* m_VaultFrame;

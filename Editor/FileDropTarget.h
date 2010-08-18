@@ -26,7 +26,8 @@ namespace Helium
         class FileDropTarget : public wxFileDropTarget
         {
         public:
-            FileDropTarget(const tstring& extensions, const tstring& delims = TXT( "," ) );
+            FileDropTarget( const std::set< tstring >& extensions );
+            FileDropTarget( const tstring& extensions, const tstring& delims = TXT( "," ) );
 
             void AddListener( FileDroppedSignature::Delegate& listener )
             {

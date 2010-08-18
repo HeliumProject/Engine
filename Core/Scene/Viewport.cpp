@@ -12,7 +12,7 @@
 #include "Core/Scene/PrimitiveRings.h"
 #include "Core/Scene/Resource.h"
 #include "Core/Scene/SceneInit.h"
-#include "Core/Scene/ScenePreferences.h"
+#include "Core/Scene/SceneSettings.h"
 #include "Core/Scene/Statistics.h"
 #include "Core/Scene/Orientation.h"
 #include "Core/Scene/Tool.h"
@@ -180,15 +180,15 @@ void Viewport::Reset()
 #endif
 }
 
-void Viewport::LoadPreferences(Core::ViewportPreferences* prefs)
+void Viewport::LoadSettings(Core::ViewportSettings* prefs)
 {
     // apply settings for all modes that we have... 
     for(size_t i = 0; i < prefs->m_CameraPrefs.size(); ++i)
     {
-        CameraPreferencesPtr cameraPrefs = prefs->m_CameraPrefs[i]; 
+        CameraSettingsPtr cameraPrefs = prefs->m_CameraPrefs[i]; 
         CameraMode mode = cameraPrefs->m_CameraMode; 
         Core::Camera* camera = GetCameraForMode(mode); 
-        camera->LoadPreferences(cameraPrefs); 
+        camera->LoadSettings(cameraPrefs); 
     }
 
     SetCameraMode( prefs->m_CameraMode ); 
@@ -200,7 +200,7 @@ void Viewport::LoadPreferences(Core::ViewportPreferences* prefs)
     SetStatisticsVisible( prefs->m_StatisticsVisible ); 
 }
 
-void Viewport::SavePreferences(Core::ViewportPreferences* prefs)
+void Viewport::SaveSettings(Core::ViewportSettings* prefs)
 {
     // just blow away the previous preferences
     prefs->m_CameraPrefs.clear(); 
@@ -208,10 +208,10 @@ void Viewport::SavePreferences(Core::ViewportPreferences* prefs)
     for(int i = 0; i < CameraModes::Count; ++i)
     {
         CameraMode mode = (CameraMode)i; 
-        CameraPreferencesPtr cameraPrefs = new CameraPreferences(); 
+        CameraSettingsPtr cameraPrefs = new CameraSettings(); 
         cameraPrefs->m_CameraMode = mode;
         Core::Camera* camera = GetCameraForMode( mode ); 
-        camera->SavePreferences(cameraPrefs); 
+        camera->SaveSettings(cameraPrefs); 
         prefs->m_CameraPrefs.push_back( cameraPrefs ); 
     }
 
@@ -313,9 +313,9 @@ void Viewport::InitWidgets()
 
     m_GlobalPrimitives[GlobalPrimitives::StandardGrid] = new Core::PrimitiveGrid (m_ResourceTracker);
 #if SCENE_REFACTOR
-    wxGetApp().GetPreferences()->GetGridPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Viewport::OnGridPreferencesChanged ));
+    wxGetApp().GetSettings()->GetGridSettings()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Viewport::OnGridSettingsChanged ));
 #endif
-    OnGridPreferencesChanged( Reflect::ElementChangeArgs( NULL, NULL ) );
+    OnGridSettingsChanged( Reflect::ElementChangeArgs( NULL, NULL ) );
 
     m_GlobalPrimitives[GlobalPrimitives::StandardRings] = new Core::PrimitiveRings (m_ResourceTracker);
     m_GlobalPrimitives[GlobalPrimitives::StandardRings]->Update();
@@ -1082,19 +1082,19 @@ void Viewport::CameraMoved( const Core::CameraMovedArgs& args )
     m_CameraMoved.Raise( args );  
 }
 
-void Viewport::OnGridPreferencesChanged( const Reflect::ElementChangeArgs& args )
+void Viewport::OnGridSettingsChanged( const Reflect::ElementChangeArgs& args )
 {
 #ifdef SCENE_REFACTOR
-    GridPreferences* gridPreferences = wxGetApp().GetPreferences()->GetGridPreferences();
+    GridSettings* gridSettings = wxGetApp().GetSettings()->GetGridSettings();
     Core::PrimitiveGrid* grid = (Core::PrimitiveGrid*) m_GlobalPrimitives[GlobalPrimitives::StandardGrid];
 
-    grid->m_Width = gridPreferences->GetWidth();
-    grid->m_Length = gridPreferences->GetLength();
-    grid->m_MajorStep = gridPreferences->GetMajorStep();
-    grid->m_MinorStep = gridPreferences->GetMinorStep();
-    grid->SetAxisColor( gridPreferences->GetAxisColor().r, gridPreferences->GetAxisColor().g, gridPreferences->GetAxisColor().b, 0xFF );
-    grid->SetMajorColor( gridPreferences->GetMajorColor().r, gridPreferences->GetMajorColor().g, gridPreferences->GetMajorColor().b, 0xFF );
-    grid->SetMinorColor( gridPreferences->GetMinorColor().r, gridPreferences->GetMinorColor().g, gridPreferences->GetMinorColor().b, 0xFF );
+    grid->m_Width = gridSettings->GetWidth();
+    grid->m_Length = gridSettings->GetLength();
+    grid->m_MajorStep = gridSettings->GetMajorStep();
+    grid->m_MinorStep = gridSettings->GetMinorStep();
+    grid->SetAxisColor( gridSettings->GetAxisColor().r, gridSettings->GetAxisColor().g, gridSettings->GetAxisColor().b, 0xFF );
+    grid->SetMajorColor( gridSettings->GetMajorColor().r, gridSettings->GetMajorColor().g, gridSettings->GetMajorColor().b, 0xFF );
+    grid->SetMinorColor( gridSettings->GetMinorColor().r, gridSettings->GetMinorColor().g, gridSettings->GetMinorColor().b, 0xFF );
     grid->Update();
 #endif
 }

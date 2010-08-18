@@ -26,8 +26,8 @@ VaultPreviewWindow::~VaultPreviewWindow()
 {
   if ( m_VaultFrame )
   {
-    VaultPreferences* preferences = wxGetApp().GetPreferences()->GetVaultPreferences();
-    preferences->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &VaultPreviewWindow::OnPreferencesChanged ) );
+    VaultSettings* preferences = wxGetApp().GetSettings()->GetVaultSettings();
+    preferences->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &VaultPreviewWindow::OnSettingsChanged ) );
   }
 }
 
@@ -39,10 +39,10 @@ void VaultPreviewWindow::SetVaultFrame( VaultFrame* browserFrame )
 {
   m_VaultFrame = browserFrame;
 
-  VaultPreferences* preferences = wxGetApp().GetPreferences()->GetVaultPreferences();
+  VaultSettings* preferences = wxGetApp().GetSettings()->GetVaultSettings();
   __super::DisplayReferenceAxis( preferences->DisplayPreviewAxis() );
 
-  preferences->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &VaultPreviewWindow::OnPreferencesChanged ) );
+  preferences->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &VaultPreviewWindow::OnSettingsChanged ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ void VaultPreviewWindow::SetVaultFrame( VaultFrame* browserFrame )
 // 
 void VaultPreviewWindow::DisplayReferenceAxis( bool display )
 {
-  VaultPreferences* preferences = wxGetApp().GetPreferences()->GetVaultPreferences();
+  VaultSettings* preferences = wxGetApp().GetSettings()->GetVaultSettings();
   preferences->SetDisplayPreviewAxis( display );
 }
 
@@ -58,9 +58,9 @@ void VaultPreviewWindow::DisplayReferenceAxis( bool display )
 // Callback for when the browser preferences are edited.  Updates the Axis display
 // setting.
 // 
-void VaultPreviewWindow::OnPreferencesChanged( const Reflect::ElementChangeArgs& args )
+void VaultPreviewWindow::OnSettingsChanged( const Reflect::ElementChangeArgs& args )
 {
-  VaultPreferences* preferences = wxGetApp().GetPreferences()->GetVaultPreferences();
+  VaultSettings* preferences = wxGetApp().GetSettings()->GetVaultSettings();
   if ( args.m_Element == preferences )
   {
     if ( args.m_Field == preferences->DisplayPreviewAxisField() || args.m_Field == NULL )

@@ -3,10 +3,10 @@
 #include "Core/API.h"
 
 #include "Core/Scene/Settings.h"
-#include "Core/Scene/ScenePreferences.h"
-#include "Core/Scene/GridPreferences.h"
-#include "Core/Scene/ViewportPreferences.h"
-#include "Editor/Vault/VaultPreferences.h"
+#include "Core/Scene/SceneSettings.h"
+#include "Core/Scene/GridSettings.h"
+#include "Core/Scene/ViewportSettings.h"
+#include "Editor/Vault/VaultSettings.h"
 #include "Editor/WindowSettings.h"
 
 namespace Helium
@@ -17,29 +17,29 @@ namespace Helium
         // Base class for preferenced within Editor.  Provides convenience functions
         // for saving and loading.
         // 
-        class Preferences : public Reflect::ConcreteInheritor< Preferences, Core::Settings >
+        class Settings : public Reflect::ConcreteInheritor< Settings, Core::Settings >
         {
         public:
-            Preferences();
+            Settings();
 
-            Core::ScenePreferences* GetScenePreferences()
+            Core::SceneSettings* GetSceneSettings()
             {
-                return m_ScenePreferences;
+                return m_SceneSettings;
             }
 
-            Core::ViewportPreferences* GetViewportPreferences()
+            Core::ViewportSettings* GetViewportSettings()
             {
-                return m_ViewportPreferences;
+                return m_ViewportSettings;
             }
 
-            Core::GridPreferences* GetGridPreferences()
+            Core::GridSettings* GetGridSettings()
             {
-                return m_GridPreferences;
+                return m_GridSettings;
             }
 
-            VaultPreferences* GetVaultPreferences()
+            VaultSettings* GetVaultSettings()
             {
-                return m_VaultPreferences;
+                return m_VaultSettings;
             }
 
             WindowSettings* GetWindowSettings()
@@ -48,23 +48,23 @@ namespace Helium
             }
 
         private:
-            Core::ScenePreferencesPtr m_ScenePreferences;
-            Core::ViewportPreferencesPtr m_ViewportPreferences;
-            Core::GridPreferencesPtr m_GridPreferences;
-            VaultPreferencesPtr m_VaultPreferences;
+            Core::SceneSettingsPtr m_SceneSettings;
+            Core::ViewportSettingsPtr m_ViewportSettings;
+            Core::GridSettingsPtr m_GridSettings;
+            VaultSettingsPtr m_VaultSettings;
             WindowSettingsPtr m_WindowSettings;
 
         public:
-            static void EnumerateClass( Reflect::Compositor<Preferences>& comp )
+            static void EnumerateClass( Reflect::Compositor<Settings>& comp )
             {
-                comp.AddField( &Preferences::m_ScenePreferences, "ScenePreferences" );
-                comp.AddField( &Preferences::m_ViewportPreferences, "ViewportPreferences"  );
-                comp.AddField( &Preferences::m_GridPreferences, "GridPreferences" );
-                comp.AddField( &Preferences::m_VaultPreferences, "VaultPreferences" );
-                comp.AddField( &Preferences::m_WindowSettings, "WindowSettings" );
+                comp.AddField( &Settings::m_SceneSettings, "SceneSettings" );
+                comp.AddField( &Settings::m_ViewportSettings, "ViewportSettings"  );
+                comp.AddField( &Settings::m_GridSettings, "GridSettings" );
+                comp.AddField( &Settings::m_VaultSettings, "VaultSettings" );
+                comp.AddField( &Settings::m_WindowSettings, "WindowSettings" );
             }
         };
-        typedef Helium::SmartPtr< Preferences > PreferencesPtr;
+        typedef Helium::SmartPtr< Settings > SettingsPtr;
 
         /////////////////////////////////////////////////////////////////////////////
         // Choice of how file paths should be displayed in the UI.

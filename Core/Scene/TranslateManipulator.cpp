@@ -12,7 +12,7 @@
 
 #include "Core/Scene/SceneManager.h"
 #include "Core/Scene/Scene.h"
-#include "ScenePreferences.h"
+#include "SceneSettings.h"
 #include "Core/Scene/Mesh.h"
 
 #include "Foundation/Math/AngleAxis.h"
@@ -44,7 +44,7 @@ TranslateManipulator::TranslateManipulator(const ManipulatorMode mode, Core::Sce
 , m_Factor (1.f)
 {
 #if SCENE_REFACTOR
-    Core::ScenePreferences* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
+    Core::SceneSettings* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
     prefs->Get( prefs->TranslateManipulatorSize(), m_Size );
     prefs->GetEnum( prefs->TranslateManipulatorSpace(), m_Space );
     prefs->GetEnum( prefs->TranslateManipulatorSnappingMode(), m_SnappingMode );
@@ -79,7 +79,7 @@ TranslateManipulator::TranslateManipulator(const ManipulatorMode mode, Core::Sce
 TranslateManipulator::~TranslateManipulator()
 {
 #if SCENE_REFACTOR
-    Core::ScenePreferences* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
+    Core::SceneSettings* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
     prefs->Set( prefs->TranslateManipulatorSize(), m_Size );
     prefs->SetEnum( prefs->TranslateManipulatorSpace(), m_Space );
     prefs->SetEnum( prefs->TranslateManipulatorSnappingMode(), m_SnappingMode );

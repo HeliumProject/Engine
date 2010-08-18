@@ -96,7 +96,7 @@ namespace Helium
                 ID_Preview = VaultMenu::Preview,
 
                 ID_Refresh = VaultMenu::Refresh,
-                ID_Preferences = VaultMenu::Preferences,
+                ID_Settings = VaultMenu::Settings,
 
                 ID_New = VaultMenu::New,
                 ID_NewFolder = VaultMenu::NewFolder,

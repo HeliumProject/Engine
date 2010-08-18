@@ -134,7 +134,7 @@ void SearchQuery::SetCollection( const AssetCollection* collection )
 /////////////////////////////////////////////////////////////////////////////////
 AssetCollection* SearchQuery::GetCollection()
 {
-    //return wxGetApp().GetVaultPreferences()->GetCollectionManager()->FindCollection( m_CollectionPath->GetPath() );
+    //return wxGetApp().GetVaultSettings()->GetCollectionManager()->FindCollection( m_CollectionPath->GetPath() );
 #pragma TODO( "collections are being replaced... ?" )
     return NULL;
 }
@@ -301,7 +301,7 @@ bool SearchQuery::ParseQueryString( const tstring& queryString, tstring& errors,
                     {
                         if ( ParseCollectionName( curToken, matchResults, currentValue, errors ) )
                         {
-                            AssetCollection* collection = wxGetApp().GetPreferences()->GetVaultPreferences()->GetCollectionManager()->FindCollection( currentValue );
+                            AssetCollection* collection = wxGetApp().GetSettings()->GetVaultSettings()->GetCollectionManager()->FindCollection( currentValue );
                             if ( !collection )
                             {
                                 // TODO: error out

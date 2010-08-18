@@ -57,8 +57,8 @@ CollectionsPanel::CollectionsPanel( VaultFrame* browserFrame )
 
     Connect( wxEVT_SIZE, wxSizeEventHandler( CollectionsPanel::OnSizeCollectionsPanel ), NULL, this );
 
-    wxGetApp().GetPreferences()->GetVaultPreferences()->AddPreferencesLoadedListener( Core::PreferencesLoadedSignature::Delegate( this, &CollectionsPanel::OnPreferencesLoaded ) );
-    wxGetApp().GetPreferences()->GetVaultPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &CollectionsPanel::OnPrefrencesChanged ) );
+    wxGetApp().GetSettings()->GetVaultSettings()->AddSettingsLoadedListener( Core::SettingsLoadedSignature::Delegate( this, &CollectionsPanel::OnSettingsLoaded ) );
+    wxGetApp().GetSettings()->GetVaultSettings()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &CollectionsPanel::OnPrefrencesChanged ) );
 
     // Drag-and-drop 
     // No need to delete drop target, wx takes care of that after calling SetDropTarget.
@@ -75,8 +75,8 @@ CollectionsPanel::~CollectionsPanel()
 {
     Disconnect( wxEVT_SIZE, wxSizeEventHandler( CollectionsPanel::OnSizeCollectionsPanel ), NULL, this );
 
-    wxGetApp().GetPreferences()->GetVaultPreferences()->RemovePreferencesLoadedListener( Core::PreferencesLoadedSignature::Delegate( this, &CollectionsPanel::OnPreferencesLoaded ) );
-    wxGetApp().GetPreferences()->GetVaultPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &CollectionsPanel::OnPrefrencesChanged ) );
+    wxGetApp().GetSettings()->GetVaultSettings()->RemoveSettingsLoadedListener( Core::SettingsLoadedSignature::Delegate( this, &CollectionsPanel::OnSettingsLoaded ) );
+    wxGetApp().GetSettings()->GetVaultSettings()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &CollectionsPanel::OnPrefrencesChanged ) );
 
     for ( M_AssetCollections::const_iterator itr = m_CollectionManager->GetCollections().begin(),
         end = m_CollectionManager->GetCollections().end(); itr != end; ++itr )
@@ -591,7 +591,7 @@ void CollectionsPanel::OnRemoveFromCollection( wxCommandEvent& event )
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void CollectionsPanel::OnPreferencesLoaded( const Core::PreferencesLoadedArgs& args )
+void CollectionsPanel::OnSettingsLoaded( const Core::SettingsLoadedArgs& args )
 {
     UpdateCollectionManager();
 }
@@ -876,7 +876,7 @@ void CollectionsPanel::UpdateCollectionManager()
         DisconnectCollectionManagerListeners();
     }
 
-    m_CollectionManager = wxGetApp().GetPreferences()->GetVaultPreferences()->GetCollectionManager();
+    m_CollectionManager = wxGetApp().GetSettings()->GetVaultSettings()->GetCollectionManager();
     ConnectCollectionManagerListeners();
     ConnectCollectionListeners();
     UpdateCollections();

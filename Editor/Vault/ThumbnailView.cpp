@@ -969,11 +969,11 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
             menu.Enable( ID_Refresh, inFolder );
         }
 
-        // Preference
+        // Setting
         {
             menu.AppendSeparator();
-            menu.Append( ID_Preferences, VaultMenu::Label( ID_Preferences ) );
-            menu.Enable( ID_Preferences, inFolder );
+            menu.Append( ID_Settings, VaultMenu::Label( ID_Settings ) );
+            menu.Enable( ID_Settings, inFolder );
         }
 
         // New

@@ -37,8 +37,8 @@ namespace Helium
         };
         typedef Helium::SmartPtr< MRUData > MRUDataPtr;
 
-        struct PreferencesLoadedArgs {};
-        typedef Helium::Signature< void, const PreferencesLoadedArgs& > PreferencesLoadedSignature;
+        struct SettingsLoadedArgs {};
+        typedef Helium::Signature< void, const SettingsLoadedArgs& > SettingsLoadedSignature;
 
         class CORE_API Settings HELIUM_ABSTRACT : public Reflect::AbstractInheritor< Settings, Reflect::Element >
         {
@@ -147,13 +147,13 @@ namespace Helium
 
             // Listeners
         private:
-            mutable PreferencesLoadedSignature::Event m_Loaded;
+            mutable SettingsLoadedSignature::Event m_Loaded;
         public:
-            void AddPreferencesLoadedListener( const PreferencesLoadedSignature::Delegate& listener ) const
+            void AddSettingsLoadedListener( const SettingsLoadedSignature::Delegate& listener ) const
             {
                 m_Loaded.Add( listener );
             }
-            void RemovePreferencesLoadedListener( const PreferencesLoadedSignature::Delegate& listener ) const
+            void RemoveSettingsLoadedListener( const SettingsLoadedSignature::Delegate& listener ) const
             {
                 m_Loaded.Remove( listener );
             }

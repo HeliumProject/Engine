@@ -11,7 +11,7 @@
 #include "Core/Scene/Render.h"
 #include "Core/Scene/Camera.h"
 #include "Core/Scene/Resource.h"
-#include "Core/Scene/ViewportPreferences.h"
+#include "Core/Scene/ViewportSettings.h"
 #include "Core/Render/DeviceManager.h"
 
 namespace Helium
@@ -222,8 +222,8 @@ namespace Helium
 
             void Reset();
 
-            void LoadPreferences(ViewportPreferences* prefs);
-            void SavePreferences(ViewportPreferences* prefs);
+            void LoadSettings(ViewportSettings* prefs);
+            void SaveSettings(ViewportSettings* prefs);
 
             void SetSize( Math::Point size )
             {
@@ -457,7 +457,7 @@ namespace Helium
             }
 
         protected:
-            void OnGridPreferencesChanged( const Reflect::ElementChangeArgs& args );
+            void OnGridSettingsChanged( const Reflect::ElementChangeArgs& args );
 
         private:
             HWND                    m_Window;

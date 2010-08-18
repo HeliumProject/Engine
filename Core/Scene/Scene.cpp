@@ -33,7 +33,7 @@
 #include "Core/Scene/SceneNodeType.h"
 #include "HierarchyNodeType.h"
 
-#include "ScenePreferences.h"
+#include "SceneSettings.h"
 
 #include "ParentCommand.h"
 

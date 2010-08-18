@@ -1163,11 +1163,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\ScenePreferences.cpp"
+				RelativePath=".\Scene\SceneSettings.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\ScenePreferences.h"
+				RelativePath=".\Scene\SceneSettings.h"
 				>
 			</File>
 			<File
@@ -1610,11 +1610,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\CameraPreferences.cpp"
+					RelativePath=".\Scene\CameraSettings.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\CameraPreferences.h"
+					RelativePath=".\Scene\CameraSettings.h"
 					>
 				</File>
 				<File
@@ -1626,11 +1626,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\ViewportPreferences.cpp"
+					RelativePath=".\Scene\ViewportSettings.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\ViewportPreferences.h"
+					RelativePath=".\Scene\ViewportSettings.h"
 					>
 				</File>
 			</Filter>
@@ -1682,11 +1682,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\GridPreferences.cpp"
+					RelativePath=".\Scene\GridSettings.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\GridPreferences.h"
+					RelativePath=".\Scene\GridSettings.h"
 					>
 				</File>
 				<File
@@ -3335,6 +3335,10 @@
 		</File>
 		<File
 			RelativePath=".\Project.h"
+			>
+		</File>
+		<File
+			RelativePath=".\SettingsManager.h"
 			>
 		</File>
 	</Files>

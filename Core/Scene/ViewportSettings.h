@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Foundation/Reflect/Element.h"
-#include "Core/Scene/CameraPreferences.h"
+#include "Core/Scene/CameraSettings.h"
 
 namespace Helium
 {
@@ -47,10 +47,10 @@ namespace Helium
         }
         typedef ViewColorModes::ViewColorMode ViewColorMode;
 
-        class CORE_API ViewportPreferences : public Reflect::ConcreteInheritor< ViewportPreferences, Reflect::Element >
+        class CORE_API ViewportSettings : public Reflect::ConcreteInheritor< ViewportSettings, Reflect::Element >
         {
         public: 
-            ViewportPreferences(); 
+            ViewportSettings(); 
 
             ViewColorMode GetColorMode() const;
             void SetColorMode( ViewColorMode mode );
@@ -58,7 +58,7 @@ namespace Helium
 
             CameraMode           m_CameraMode; 
             GeometryMode         m_GeometryMode; 
-            V_CameraPreferences  m_CameraPrefs; // do not use m_CameraMode as an index!
+            V_CameraSettings  m_CameraPrefs; // do not use m_CameraMode as an index!
 
             bool                 m_Highlighting; 
             bool                 m_AxesVisible; 
@@ -70,21 +70,21 @@ namespace Helium
             ViewColorMode        m_ColorMode;
 
         public:
-            static void EnumerateClass( Reflect::Compositor<ViewportPreferences>& comp )
+            static void EnumerateClass( Reflect::Compositor<ViewportSettings>& comp )
             {
-                comp.AddEnumerationField( &ViewportPreferences::m_CameraMode, "m_CameraMode" );
-                comp.AddEnumerationField( &ViewportPreferences::m_GeometryMode, "m_GeometryMode" );
-                comp.AddField( &ViewportPreferences::m_CameraPrefs, "m_CameraPrefs" );
-                comp.AddEnumerationField( &ViewportPreferences::m_ColorMode, "m_ColorMode" );
+                comp.AddEnumerationField( &ViewportSettings::m_CameraMode, "m_CameraMode" );
+                comp.AddEnumerationField( &ViewportSettings::m_GeometryMode, "m_GeometryMode" );
+                comp.AddField( &ViewportSettings::m_CameraPrefs, "m_CameraPrefs" );
+                comp.AddEnumerationField( &ViewportSettings::m_ColorMode, "m_ColorMode" );
 
-                comp.AddField( &ViewportPreferences::m_Highlighting, "m_Highlighting" );
-                comp.AddField( &ViewportPreferences::m_AxesVisible, "m_AxesVisible" );
-                comp.AddField( &ViewportPreferences::m_GridVisible, "m_GridVisible" );
-                comp.AddField( &ViewportPreferences::m_BoundsVisible, "m_BoundsVisible" );
-                comp.AddField( &ViewportPreferences::m_StatisticsVisible, "m_StatisticsVisible" );
+                comp.AddField( &ViewportSettings::m_Highlighting, "m_Highlighting" );
+                comp.AddField( &ViewportSettings::m_AxesVisible, "m_AxesVisible" );
+                comp.AddField( &ViewportSettings::m_GridVisible, "m_GridVisible" );
+                comp.AddField( &ViewportSettings::m_BoundsVisible, "m_BoundsVisible" );
+                comp.AddField( &ViewportSettings::m_StatisticsVisible, "m_StatisticsVisible" );
             }
         }; 
 
-        typedef Helium::SmartPtr<ViewportPreferences> ViewportPreferencesPtr; 
+        typedef Helium::SmartPtr<ViewportSettings> ViewportSettingsPtr; 
     }
 }

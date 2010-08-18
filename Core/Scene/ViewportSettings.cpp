@@ -1,10 +1,10 @@
 /*#include "Precompile.h"*/
-#include "ViewportPreferences.h"
+#include "ViewportSettings.h"
 
 using namespace Helium;
 using namespace Helium::Core; 
    
-ViewportPreferences::ViewportPreferences()
+ViewportSettings::ViewportSettings()
 : m_CameraMode (CameraModes::Orbit)
 , m_GeometryMode (GeometryModes::Render)
 , m_ColorMode (ViewColorModes::Type)
@@ -16,17 +16,17 @@ ViewportPreferences::ViewportPreferences()
 {
   for(int i = 0; i < CameraModes::Count; ++i)
   {
-    m_CameraPrefs.push_back( new CameraPreferences() ); 
+    m_CameraPrefs.push_back( new CameraSettings() ); 
     m_CameraPrefs.back()->m_CameraMode = CameraMode(i);
   }
 }
 
-ViewColorMode ViewportPreferences::GetColorMode() const
+ViewColorMode ViewportSettings::GetColorMode() const
 {
   return m_ColorMode;
 }
 
-void ViewportPreferences::SetColorMode( ViewColorMode mode )
+void ViewportSettings::SetColorMode( ViewColorMode mode )
 {
   if ( m_ColorMode != mode )
   {
@@ -35,7 +35,7 @@ void ViewportPreferences::SetColorMode( ViewColorMode mode )
   }
 }
 
-const Reflect::Field* ViewportPreferences::ColorModeField() const
+const Reflect::Field* ViewportSettings::ColorModeField() const
 {
-  return GetClass()->FindField( &ViewportPreferences::m_ColorMode );
+  return GetClass()->FindField( &ViewportSettings::m_ColorMode );
 }

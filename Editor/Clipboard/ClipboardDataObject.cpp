@@ -142,5 +142,5 @@ bool ClipboardDataObject::ToBuffer( ReflectClipboardData* data )
     tstring xml;
     Reflect::ArchiveXML::ToString( wrapper, xml );
 
-    return SetData( xml.size(), (const tchar*)( xml.c_str() ) );
+    return SetData( xml.size() * sizeof( tchar ), (const tchar*)( xml.c_str() ) );
 }

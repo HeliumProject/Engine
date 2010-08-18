@@ -11,7 +11,7 @@
 
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/SceneManager.h"
-#include "ScenePreferences.h"
+#include "SceneSettings.h"
 
 #include <wx/msw/private.h>
 
@@ -37,7 +37,7 @@ ScaleManipulator::ScaleManipulator(const ManipulatorMode mode, Core::Scene* scen
 , m_Distance( 1.0f )
 {
 #if SCENE_REFACTOR
-  ScenePreferences* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
+  SceneSettings* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
   prefs->Get( prefs->ScaleManipulatorSize(), m_Size );
   prefs->Get( prefs->ScaleManipulatorGridSnap(), m_GridSnap );
   prefs->Get( prefs->ScaleManipulatorDistance(), m_Distance );
@@ -68,7 +68,7 @@ ScaleManipulator::ScaleManipulator(const ManipulatorMode mode, Core::Scene* scen
 ScaleManipulator::~ScaleManipulator()
 {
 #if SCENE_REFACTOR
-  ScenePreferences* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
+  SceneSettings* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
   prefs->Set( prefs->ScaleManipulatorSize(), m_Size );
   prefs->Set( prefs->ScaleManipulatorGridSnap(), m_GridSnap );
   prefs->Set( prefs->ScaleManipulatorDistance(), m_Distance );

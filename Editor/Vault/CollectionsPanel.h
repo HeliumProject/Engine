@@ -83,7 +83,7 @@ namespace Helium
             void OnRemoveFromCollection( wxCommandEvent& event );
 
             // Listeners
-            void OnPreferencesLoaded( const Core::PreferencesLoadedArgs& args );
+            void OnSettingsLoaded( const Core::SettingsLoadedArgs& args );
             void OnPrefrencesChanged( const Reflect::ElementChangeArgs& args );
             void OnAssetCollectionsChanged( const Reflect::ElementChangeArgs& args );
             void OnCollectionModified( const Reflect::ElementChangeArgs& args );

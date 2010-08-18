@@ -3,7 +3,7 @@
 
 #include "VaultFrame.h"
 #include "VaultSearch.h"
-#include "VaultPreferences.h"
+#include "VaultSettings.h"
 #include "CollectionManager.h"
 #include "SearchHistory.h"
 #include "SearchQuery.h"
@@ -24,8 +24,8 @@ Vault::Vault()
     // Create the one and only VaultSearch
     m_VaultSearch = new VaultSearch();
 
-    m_CollectionManager = wxGetApp().GetPreferences()->GetVaultPreferences()->GetCollectionManager();
-    m_SearchHistory = wxGetApp().GetPreferences()->GetVaultPreferences()->GetSearchHistory();
+    m_CollectionManager = wxGetApp().GetSettings()->GetVaultSettings()->GetCollectionManager();
+    m_SearchHistory = wxGetApp().GetSettings()->GetVaultSettings()->GetSearchHistory();
     m_SearchHistory->SetVaultSearch( m_VaultSearch );
 }
 
@@ -60,7 +60,7 @@ void Vault::ShowVault( const tstring& queryString )
     {
         if ( !m_SearchHistory->RunCurrentQuery() )
         {
-            m_VaultFrame->Search( wxGetApp().GetPreferences()->GetVaultPreferences()->GetDefaultFolderPath() );
+            m_VaultFrame->Search( wxGetApp().GetSettings()->GetVaultSettings()->GetDefaultFolderPath() );
         }
     }
 }
@@ -74,7 +74,7 @@ bool Vault::HasFrame()
 ///////////////////////////////////////////////////////////////////////////////
 void Vault::OnCloseVault()
 {
-    wxGetApp().SavePreferences();
+    wxGetApp().SaveSettings();
     m_VaultFrame = NULL;
     m_VaultSearch->RequestStop();
 

@@ -53,7 +53,7 @@ namespace Helium
         //
         // ClientData, this could be toolkit OR interpreter client data, there are two pointer in Control
         //
-        
+
         class APPLICATION_API ClientData : public Reflect::AbstractInheritor< ClientData, Reflect::Object >
         {
         public:
@@ -67,7 +67,7 @@ namespace Helium
             {
 
             }
-            
+
             Control* GetControl()
             {
                 return m_Control;
@@ -126,7 +126,7 @@ namespace Helium
 
             const Data* GetData() const
             {
-              return m_BoundData;
+                return m_BoundData;
             }
 
             virtual void Bind(const DataPtr& data);
@@ -232,92 +232,27 @@ namespace Helium
             // fires callback
             virtual void PostWrite();
 
-            //
-            // Attributes
-            //
+        public:
+            Attribute<bool>                         a_IsEnabled;              // are we enabled?
+            Attribute<bool>                         a_IsReadOnly;             // are we writable?
+            Attribute<bool>                         a_IsFrozen;               // is updating (polling, sorting, etc) disabled?
+            Attribute<bool>                         a_IsHidden;               // is rendering disabled?
+            Attribute<u32>                          a_ForegroundColor;        // our colors for appearange
+            Attribute<u32>                          a_BackgroundColor;
+            Attribute<bool>                         a_IsFixedWidth;           // are we fixed along an axis?
+            Attribute<bool>                         a_IsFixedHeight;
+            Attribute<f32>                          a_ProportionalWidth;      // are we proportional along an axis?
+            Attribute<f32>                          a_ProportionalHeight;
+            Attribute<tstring>                      a_Default;                // the default value
+            Attribute<tstring>                      a_ToolTip;                // the tool tip for this control
+            
+            mutable ControlSignature::Event         e_Realized;               // upon realization of the control
+            mutable ControlSignature::Event         e_Unrealized;
+            
+            mutable ControlChangingSignature::Event e_ControlChanging;        // these mean the *data state* of the control, not the appearance metrics
+            mutable ControlChangedSignature::Event  e_ControlChanged;
 
-            Attribute<bool>&        IsEnabled()             { return m_IsEnabledAttr; }
-            Attribute<bool>&        IsReadOnly()            { return m_IsReadOnlyAttr; }
-            Attribute<bool>&        IsFrozen()              { return m_IsFrozenAttr; }
-            Attribute<bool>&        IsHidden()              { return m_IsHiddenAttr; }
-            Attribute<u32>&         ForegroundColor()       { return m_ForegroundColorAttr; }
-            Attribute<u32>&         BackgroundColor()       { return m_BackgroundColorAttr; }
-
-            Attribute<bool>&        IsFixedWidth()          { return m_IsFixedWidthAttr; }
-            Attribute<bool>&        IsFixedHeight()         { return m_IsFixedHeightAttr; }
-            Attribute<f32>&         ProportionalWidth()     { return m_ProportionalWidthAttr; }
-            Attribute<f32>&         ProportionalHeight()    { return m_ProportionalHeightAttr; }
-
-            Attribute<tstring>&     Default()               { return m_DefaultAttr; }
-            Attribute<tstring>&     ToolTip()               { return m_ToolTipAttr; }
-
-            //
-            // Events
-            //
-
-            ControlChangingSignature::Event& ControlChanging() const
-            {
-                return m_ControlChanging;
-            }
-
-            ControlChangedSignature::Event& ControlChanged() const
-            {
-                return m_ControlChanged;
-            }
-
-            ControlSignature::Event& Realized() const
-            {
-                return m_Realized;
-            }
-
-            ControlSignature::Event& Unrealized() const
-            {
-                return m_Unrealized;
-            }
-
-        protected:
-            // are we enabled?
-            bool                m_IsEnabled;
-            Attribute<bool>     m_IsEnabledAttr;
-
-            // are we writable?
-            bool                m_IsReadOnly;
-            Attribute<bool>     m_IsReadOnlyAttr;
-
-            // is updating (polling, sorting, etc) disabled?
-            bool                m_IsFrozen;
-            Attribute<bool>     m_IsFrozenAttr;
-
-            // is rendering disabled?
-            bool                m_IsHidden;
-            Attribute<bool>     m_IsHiddenAttr;
-
-            // our colors for appearange
-            u32                 m_ForegroundColor;
-            Attribute<u32>      m_ForegroundColorAttr;
-            u32                 m_BackgroundColor;
-            Attribute<u32>      m_BackgroundColorAttr;
-
-            // are we fixed along an axis?
-            bool                m_IsFixedWidth;
-            Attribute<bool>     m_IsFixedWidthAttr;
-            bool                m_IsFixedHeight;
-            Attribute<bool>     m_IsFixedHeightAttr;
-
-            // are we proportional along an axis?
-            f32                 m_ProportionalWidth;
-            Attribute<f32>      m_ProportionalWidthAttr;
-            f32                 m_ProportionalHeight;
-            Attribute<f32>      m_ProportionalHeightAttr;
-
-            // the default value
-            tstring             m_Default;
-            Attribute<tstring>  m_DefaultAttr;
-
-            // the tool tip for this control
-            tstring             m_ToolTip;
-            Attribute<tstring>  m_ToolTipAttr;
-
+        private:
             // our context menu, if any
             ContextMenuPtr      m_ContextMenu;
 
@@ -339,14 +274,6 @@ namespace Helium
             // client-configurable data
             ClientDataPtr       m_ToolkitClientData;
             ClientDataPtr       m_ClientData;
-
-            // upon realization of the control
-            mutable ControlSignature::Event         m_Realized;
-            mutable ControlSignature::Event         m_Unrealized;
-
-            // these mean the *data state* of the control, not the appearance metrics
-            mutable ControlChangingSignature::Event m_ControlChanging;
-            mutable ControlChangedSignature::Event  m_ControlChanged;
         };
 
         typedef Helium::SmartPtr<Control> ControlPtr;

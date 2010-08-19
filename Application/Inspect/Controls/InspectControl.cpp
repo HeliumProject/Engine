@@ -11,28 +11,16 @@ Profile::Accumulator Inspect::g_RealizeAccumulator( "Inspect Realize Accumulator
 #endif
 
 Control::Control()
-: m_IsEnabled( true )
-, m_IsEnabledAttr( m_IsEnabled )
-, m_IsReadOnly( false )
-, m_IsReadOnlyAttr( m_IsReadOnly )
-, m_IsFrozen( false )
-, m_IsFrozenAttr( m_IsFrozen )
-, m_IsHidden( false )
-, m_IsHiddenAttr( m_IsHidden )
-, m_ForegroundColor( 0 )
-, m_ForegroundColorAttr( m_ForegroundColor )
-, m_BackgroundColor( 0 )
-, m_BackgroundColorAttr( m_BackgroundColor )
-, m_IsFixedWidth( false )
-, m_IsFixedWidthAttr( m_IsFixedWidth )
-, m_IsFixedHeight( false )
-, m_IsFixedHeightAttr( m_IsFixedHeight )
-, m_ProportionalWidth( 0.f )
-, m_ProportionalWidthAttr( m_ProportionalWidth )
-, m_ProportionalHeight( 0.f )
-, m_ProportionalHeightAttr( m_ProportionalHeight )
-, m_DefaultAttr( m_Default )
-, m_ToolTipAttr( m_ToolTip )
+: a_IsEnabled( true )
+, a_IsReadOnly( false )
+, a_IsFrozen( false )
+, a_IsHidden( false )
+, a_ForegroundColor( 0 )
+, a_BackgroundColor( 0 )
+, a_IsFixedWidth( false )
+, a_IsFixedHeight( false )
+, a_ProportionalWidth( 0.f )
+, a_ProportionalHeight( 0.f )
 , m_Canvas( NULL )
 , m_Parent( NULL )
 , m_IsWriting( false )
@@ -90,7 +78,7 @@ void Control::Bind(const DataPtr& data)
 
 bool Control::IsDefault() const
 {
-    if (m_Default.empty() || m_BoundData == NULL)
+    if (a_Default.Get().empty() || m_BoundData == NULL)
     {
         return false;
     }
@@ -100,7 +88,7 @@ bool Control::IsDefault() const
     {
         tstring val;
         data->Get(val);
-        return m_Default == val;
+        return a_Default.Get() == val;
     }
 
     HELIUM_BREAK(); // you need to HELIUM_OVERRIDE this, your control is using custom data
@@ -109,9 +97,9 @@ bool Control::IsDefault() const
 
 bool Control::SetDefault()
 {
-    if (!m_Default.empty())
+    if (!a_Default.Get().empty())
     {
-        return WriteData(m_Default);
+        return WriteData(a_Default);
     }
     else
     {
@@ -123,7 +111,7 @@ bool Control::Process(const tstring& key, const tstring& value)
 {
     if ( key == ATTR_TOOLTIP )
     {
-        ToolTip() = value;
+        a_ToolTip.Set(value);
 
         return true;
     }
@@ -204,7 +192,7 @@ void Control::Realize(Container* parent)
     m_IsRealized = true;
 
 #pragma TODO("This will cause the canvas to allocate a widget specific to the type of canvas that is being used")
-    m_Realized.Raise(this);
+    e_Realized.Raise(this);
 }
 
 void Control::Unrealize()
@@ -217,7 +205,7 @@ void Control::Unrealize()
     }
 
     m_IsRealized = false;
-    m_Unrealized.Raise(this);
+    e_Unrealized.Raise(this);
 }
 
 void Control::DataChanged(const DataChangedArgs& args)
@@ -227,7 +215,7 @@ void Control::DataChanged(const DataChangedArgs& args)
         Read();
     }
 
-    m_ControlChanged.Raise( this );
+    e_ControlChanged.Raise( this );
 }
 
 void Control::Read()
@@ -266,7 +254,7 @@ bool Control::ReadAll(std::vector< tstring >& strs) const
 bool Control::PreWrite( Reflect::Serializer* newValue, bool preview )
 {
     // check to see if a event handler bound to this control bypasses the write
-    if ( !m_ControlChanging.RaiseWithReturn( ControlChangingArgs(this, newValue, preview) ) )
+    if ( !e_ControlChanging.RaiseWithReturn( ControlChangingArgs(this, newValue, preview) ) )
     {
         return false;
     }
@@ -328,7 +316,7 @@ void Control::PostWrite()
     SetDefaultAppearance(IsDefault());
 
     // callback to our interpreter that we changed
-    m_ControlChanged.Raise( this );
+    e_ControlChanged.Raise( this );
 
     // data validator could change our value, so re-read the value
     Read();

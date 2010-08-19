@@ -66,7 +66,7 @@ namespace Helium
 
         protected:
             // the children controls
-            V_Control m_Controls;
+            V_Control m_Children;
 
             // on add/remove
             ControlSignature::Event m_ControlAdded;

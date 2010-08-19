@@ -974,14 +974,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectPanel.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\InspectPanel.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Inspect\Controls\InspectSlider.cpp"
 					>
 				</File>

@@ -7,6 +7,8 @@ namespace Helium
 {
     namespace Inspect
     {
+        const static tchar CONTAINER_ATTR_NAME[] = TXT( "name" );
+
         //
         // Contains other controls and distributes layout logic
         //
@@ -27,8 +29,31 @@ namespace Helium
             void RemoveChild(Control* control);
             void Clear();
 
+            const tstring& GetPath() const
+            {
+                if ( m_Path.empty() )
+                {
+                    BuildPath( m_Path );
+                }
+
+                return m_Path;
+            }
+
+            void BuildPath(tstring& path) const
+            {
+                if (m_Parent)
+                {
+                    m_Parent->BuildPath(path);
+                }
+
+                path += TXT( "|" ) + a_Name.Get();
+            }
+
             // recusively binds contained controls to data
             virtual void Bind(const DataPtr& data) HELIUM_OVERRIDE;
+
+            // process properties coming from script
+            virtual bool Container::Process(const tstring& key, const tstring& value) HELIUM_OVERRIDE;
 
             // realize control
             virtual void Realize(Container* parent) HELIUM_OVERRIDE;
@@ -42,19 +67,10 @@ namespace Helium
             // updates the data based on the state of the UI
             virtual bool Write() HELIUM_OVERRIDE;
 
-            //
-            // Events
-            //
+            Attribute<tstring>                  a_Name;
 
-            ControlSignature::Event& ControlAdded()
-            {
-                return m_ControlAdded;
-            }
-
-            ControlSignature::Event& ControlRemoved()
-            {
-                return m_ControlRemoved;
-            }
+            mutable ControlSignature::Event     e_ControlAdded;
+            mutable ControlSignature::Event     e_ControlRemoved;
 
         private:
             void AddListeners( Control* control );
@@ -68,9 +84,8 @@ namespace Helium
             // the children controls
             V_Control m_Children;
 
-            // on add/remove
-            ControlSignature::Event m_ControlAdded;
-            ControlSignature::Event m_ControlRemoved;
+            // the path of the panel
+            mutable tstring m_Path;
         };
 
         typedef Helium::SmartPtr<Container> ContainerPtr;

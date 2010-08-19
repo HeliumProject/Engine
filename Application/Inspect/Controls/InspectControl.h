@@ -252,7 +252,7 @@ namespace Helium
             mutable ControlChangingSignature::Event e_ControlChanging;        // these mean the *data state* of the control, not the appearance metrics
             mutable ControlChangedSignature::Event  e_ControlChanged;
 
-        private:
+        protected:
             // our context menu, if any
             ContextMenuPtr      m_ContextMenu;
 

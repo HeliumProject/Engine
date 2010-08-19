@@ -27,8 +27,9 @@ void InspectFile::Initialize()
     g_RegisteredTypes.Push( Reflect::RegisterClassType<FileDialogButton>( TXT( "InspectFileDialogButton" ) ) );
     g_RegisteredTypes.Push( Reflect::RegisterClassType<FileBrowserButton>( TXT( "InspectFileBrowserButton" ) ) );
 
-    ReflectFieldInterpreterFactory::Register<FileContainerInterpreter>( Reflect::GetType<Reflect::StringArraySerializer>(), Reflect::FieldFlags::FilePath );
-    ReflectFieldInterpreterFactory::Register<FileInterpreter>( Reflect::GetType<Reflect::StringSerializer>(), Reflect::FieldFlags::FilePath );
+    ReflectFieldInterpreterFactory::Register<FileContainerInterpreter>( Reflect::GetType<Reflect::PathArraySerializer>() );
+    ReflectFieldInterpreterFactory::Register<FileContainerInterpreter>( Reflect::GetType<Reflect::PathSetSerializer>() );
+    ReflectFieldInterpreterFactory::Register<FileInterpreter>( Reflect::GetType<Reflect::PathSerializer>() );
   }
 }
 

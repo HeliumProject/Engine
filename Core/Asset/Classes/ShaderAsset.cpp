@@ -15,9 +15,9 @@ void ShaderAsset::EnumerateClass( Reflect::Compositor<ShaderAsset>& comp )
     comp.GetComposite().m_UIName = TXT( "Shader" );
     comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.shader.*" );
 
-    comp.AddField( &ShaderAsset::m_ColorMapPath, "m_ColorMapPath", Reflect::FieldFlags::FilePath );
-    comp.AddField( &ShaderAsset::m_NormalMapPath, "m_NormalMapPath", Reflect::FieldFlags::FilePath );
-    comp.AddField( &ShaderAsset::m_GPIMapPath, "m_GPIMapPath", Reflect::FieldFlags::FilePath );
+    comp.AddField( &ShaderAsset::m_ColorMapPath, "m_ColorMapPath" );
+    comp.AddField( &ShaderAsset::m_NormalMapPath, "m_NormalMapPath" );
+    comp.AddField( &ShaderAsset::m_GPIMapPath, "m_GPIMapPath" );
 
     comp.AddField( &ShaderAsset::m_EnableColorMapTint, "m_EnableColorMapTint" );
     comp.AddField( &ShaderAsset::m_ColorMapTint, "m_ColorMapTint" );

@@ -42,26 +42,23 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
     return;
   }
 
-  return;
-#pragma TODO( "support std::set< Helium::Path > and File::V_Reference" )
-/*
-  bool isfileidarray = ( field->m_serializerid == reflect::gettype<u64arrayserializer>() ) && ( field->m_flags & fieldflags::fileid ) != 0;
-  bool isfileidset = ( field->m_serializerid == reflect::gettype<u64setserializer>() ) && ( field->m_flags & fieldflags::fileid ) != 0;
-  bool isfileidcontainer = isfileidarray || isfileidset;
+  bool isArray = ( field->m_SerializerID == Reflect::GetType<PathArraySerializer>() ) && ( field->m_Flags & FieldFlags::Path ) != 0;
+  bool isSet = ( field->m_SerializerID == Reflect::GetType<PathSetSerializer>() ) && ( field->m_Flags & FieldFlags::Path ) != 0;
+  bool isContainer = isArray || isSet;
 
   // create the label
   ContainerPtr labelContainer = m_Container->GetCanvas()->Create<Container>(this);
-  parent->AddControl( labelContainer );
+  parent->AddChild( labelContainer );
   LabelPtr label = labelContainer->GetCanvas()->Create<Label>(this);
-  labelContainer->AddControl( label );
+  labelContainer->AddChild( label );
   label->SetText( field->m_UIName );
 
   // create the list view
   ContainerPtr listContainer = m_Container->GetCanvas()->Create<Container>(this);
-  parent->AddControl( listContainer );
+  parent->AddChild( listContainer );
   ListPtr list = m_Container->GetCanvas()->Create<List>(this);
   m_List = list;
-  listContainer->AddControl( list );
+  listContainer->AddChild( list );
 
   // create the buttons
   ActionPtr editButton;
@@ -75,56 +72,48 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
     addButton = m_Container->GetCanvas()->Create<Action>(this);
     if ( isFileIdContainer || ( field->m_Flags & FieldFlags::FilePath ) )
     {
-      tstring specName;
-      field->GetProperty( "FilterSpec", specName );
-      if ( specName.empty() )
-      {
-        field->GetProperty( "ModifierSpec", specName );
-      }
-      if ( !specName.empty() )
-      {
-        m_FinderSpec = Finder::GetFinderSpec( specName );
-      }
+      tstring filter;
+      field->GetProperty( TXT("FileFilter"), filter );
 
       // Add button - normal file open dialog
       addButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnAddFile ) );
-      addButton->SetInterpreterClientData( new ClientDataFilter( list, instances.front()->GetType(), specName ) );
+      addButton->SetClientData( new ClientDataFilter( list, instances.front()->GetType(), filter ) );
 
       // Add button - opens file browser
       findButton = m_Container->GetCanvas()->Create<Action>(this);
       findButton->SetIcon( "actions/system-search" );
       findButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnFindFile ) );
-      findButton->SetInterpreterClientData( new ClientDataFilter( list, instances.front()->GetType(), specName ) );
+      findButton->SetClientData( new ClientDataFilter( list, instances.front()->GetType(), filter ) );
 
       // Edit button - attempt to edit the selected file
       editButton = m_Container->GetCanvas()->Create<Action>(this);
       editButton->SetText( "Edit" );
       editButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnEdit ) );
-      editButton->SetInterpreterClientData( new ClientData( list ) );
+      editButton->SetClientData( new ClientData( list ) );
     }
     else
     {
       addButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnAdd ) );
-      addButton->SetInterpreterClientData( new ClientData( list ) );
+      addButton->SetClientData( new ClientData( list ) );
     }
     addButton->SetText( "Add" );
 
     removeButton = m_Container->GetCanvas()->Create<Action>(this);
     removeButton->SetText( "Remove" );
     removeButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnRemove ) );
-    removeButton->SetInterpreterClientData( new ClientData( list ) );
+    removeButton->SetClientData( new ClientData( list ) );
 
-    if ( isFileIdArray )
+    if ( isArray )
     {
       upButton = m_Container->GetCanvas()->Create<Action>(this);
       upButton->SetIcon( "actions/go-up" );
       upButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnMoveUp ) );
-      upButton->SetInterpreterClientData( new ClientData( list ) );
+      upButton->SetClientData( new ClientData( list ) );
 
       downButton = m_Container->GetCanvas()->Create<Action>(this);
       downButton->SetIcon( "actions/go-down" );
       downButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnMoveDown ) );
-      downButton->SetInterpreterClientData( new ClientData( list ) );
+      downButton->SetClientData( new ClientData( list ) );
     }
 
 #ifdef INSPECT_REFACTOR
@@ -136,30 +125,30 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
 
   // add the buttons to the panel
   ContainerPtr buttonGroup = m_Container->GetCanvas()->Create<Container>(this);
-  parent->AddControl( buttonGroup );
+  parent->AddChild( buttonGroup );
   if ( addButton )
   {
-    buttonGroup->AddControl( addButton );
+    buttonGroup->AddChild( addButton );
   }
   if ( findButton )
   {
-    buttonGroup->AddControl( findButton );
+    buttonGroup->AddChild( findButton );
   }
   if ( editButton )
   {
-    buttonGroup->AddControl( editButton );
+    buttonGroup->AddChild( editButton );
   }
   if ( removeButton )
   {
-    buttonGroup->AddControl( removeButton );
+    buttonGroup->AddChild( removeButton );
   }
   if ( upButton )
   {
-    buttonGroup->AddControl( upButton );
+    buttonGroup->AddChild( upButton );
   }
   if ( downButton )
   {
-    buttonGroup->AddControl( downButton );
+    buttonGroup->AddChild( downButton );
   }
 
   // create the serializers
@@ -195,12 +184,11 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
     *field->m_Default >> outStream;
     list->SetDefault(outStream.str());
   }
-  */
 }
 
 void FileContainerInterpreter::OnAdd( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  Reflect::ObjectPtr clientData = button->GetClientData();
   if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
     ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
@@ -221,28 +209,19 @@ void FileContainerInterpreter::OnAdd( Button* button )
 
 void FileContainerInterpreter::OnAddFile( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  Reflect::ObjectPtr clientData = button->GetClientData();
   
   if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataFilter>() ) )
   {
     ClientDataFilter* data = static_cast< ClientDataFilter* >( clientData.Ptr() );
 
-    FileDialog browserDlg( button->GetCanvas()->GetControl() );
-
-    if ( !data->m_FileFilter.empty() )
-    {
-      browserDlg.SetFilter( data->m_FileFilter );
-    }
-    else
-    {
-      browserDlg.SetFilter( TXT( "All (*.*)|*.*" ) );
-    }
-
-    if ( browserDlg.ShowModal() == wxID_OK )
-    {
-      tstring filePath = browserDlg.GetPath().c_str();
-      data->m_List->AddItem( filePath );
-    }
+    HELIUM_BREAK();
+#pragma TODO( "Reimplement to use an event that interfaces with the File Dialog" )
+    //if ( browserDlg.ShowModal() == wxID_OK )
+    //{
+    //  tstring filePath = browserDlg.GetPath().c_str();
+    //  data->m_List->AddItem( filePath );
+    //}
 
     button->GetCanvas()->Read();
   }
@@ -250,27 +229,14 @@ void FileContainerInterpreter::OnAddFile( Button* button )
 
 void FileContainerInterpreter::OnFindFile( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  Reflect::ObjectPtr clientData = button->GetClientData();
   
   if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataFilter>() ) )
   {
     ClientDataFilter* data = static_cast< ClientDataFilter* >( clientData.Ptr() );
 
-      HELIUM_BREAK();
-#pragma TODO( "Reimplement to use the Vault" )
-    //File::FileBrowser browserDlg( button->GetCanvas()->GetControl(), wxID_ANY, "Add Asset to List" );
-
-    //if ( !data->m_FinderSpec.empty() )
-    //{
-    //  const Finder::FinderSpec* spec = Finder::GetFinderSpec( data->m_FinderSpec );
-    //  browserDlg.SetFilter( *spec );
-    //  browserDlg.SetFilterIndex( *spec );
-    //}
-    //else
-    //{
-    //  browserDlg.SetFilter( FinderSpecs::Extension::ALL_FILTER );
-    //}
-
+    HELIUM_BREAK();
+#pragma TODO( "Reimplement to use an event that interfaces with the Vault" )
     //if ( browserDlg.ShowModal() == wxID_OK )
     //{
     //  data->m_List->AddItem( browserDlg.GetPath().c_str() );
@@ -282,7 +248,7 @@ void FileContainerInterpreter::OnFindFile( Button* button )
 
 void FileContainerInterpreter::OnEdit( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  Reflect::ObjectPtr clientData = button->GetClientData();
   if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
     ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
@@ -300,7 +266,7 @@ void FileContainerInterpreter::OnEdit( Button* button )
 
 void FileContainerInterpreter::OnRemove( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  Reflect::ObjectPtr clientData = button->GetClientData();
   if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
     ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
@@ -323,7 +289,7 @@ void FileContainerInterpreter::OnRemove( Button* button )
 
 void FileContainerInterpreter::OnMoveUp( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  Reflect::ObjectPtr clientData = button->GetClientData();
   if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
     ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
@@ -334,7 +300,7 @@ void FileContainerInterpreter::OnMoveUp( Button* button )
 
 void FileContainerInterpreter::OnMoveDown( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  Reflect::ObjectPtr clientData = button->GetClientData();
   if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
     ClientData* data = static_cast< ClientData* >( clientData.Ptr() );

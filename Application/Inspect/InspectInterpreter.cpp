@@ -26,7 +26,7 @@ ST_Container& Interpreter::GetCurrentContainerStack()
 void Interpreter::Add(Control* control)
 {
   ST_Container& containerStack = GetCurrentContainerStack();
-  containerStack.top()->AddControl(control);
+  containerStack.top()->AddChild(control);
 }
 
 void Interpreter::Push(Container* container)
@@ -72,13 +72,13 @@ Container* Interpreter::Pop( bool setParent )
   {
     if (containerStack.empty())
     {
-      m_Container->AddControl(child);
+      m_Container->AddChild(child);
     }
     else
     {
       Container* parent = containerStack.top();
 
-      parent->AddControl(child);
+      parent->AddChild(child);
     }
   }
 
@@ -104,7 +104,7 @@ Label* Interpreter::AddLabel(const tstring& name)
   control->SetText( name );
 
   ST_Container& containerStack = GetCurrentContainerStack();
-  containerStack.top()->AddControl(control);
+  containerStack.top()->AddChild(control);
 
   return control;
 }
@@ -116,7 +116,7 @@ Action* Interpreter::AddAction( const ActionSignature::Delegate& listener )
   control->AddListener( listener );
 
   ST_Container& containerStack = GetCurrentContainerStack();
-  containerStack.top()->AddControl(control);
+  containerStack.top()->AddChild(control);
 
   return control;
 }

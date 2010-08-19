@@ -10,6 +10,31 @@
 
 #include <iomanip>
 
+
+#define INSPECT_BASE(__Type)                                  \
+  public:                                                     \
+    virtual int GetType () const                              \
+    {                                                         \
+      return __Type;                                          \
+    }                                                         \
+                                                              \
+    virtual bool HasType (int id) const                       \
+    {                                                         \
+      return __Type == id;                                    \
+    }
+
+#define INSPECT_TYPE(__Type)                                  \
+  public:                                                     \
+    virtual int GetType () const                              \
+    {                                                         \
+      return __Type;                                          \
+    }                                                         \
+                                                              \
+    virtual bool HasType (int id) const                       \
+    {                                                         \
+      return __Type == id || __super::HasType(id);            \
+    }
+
 namespace Helium
 {
     namespace Inspect

@@ -119,7 +119,7 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SelectableDumb
 , m_HighResShadowMapEnabler( NULL )
 {
     m_Expanded = true;
-    m_Text = TXT( "Entity" );
+    m_Name = TXT( "Entity" );
 
     OS_SelectableDumbPtr::Iterator itr = m_Selection.Begin();
     OS_SelectableDumbPtr::Iterator end = m_Selection.End();

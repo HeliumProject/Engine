@@ -6,8 +6,6 @@
 #include "Foundation/Automation/Event.h"
 #include "Application/API.h"
 
-#include <wx/event.h>
-
 namespace Helium
 {
     namespace Inspect
@@ -55,44 +53,43 @@ namespace Helium
         // The menu class
         //
 
-        class APPLICATION_API ContextMenu : public wxEvtHandler, public Helium::RefCountBase<ContextMenu>
+        class APPLICATION_API ContextMenu : public Helium::RefCountBase<ContextMenu>
         {
-        protected:
-            Control* m_Control;
-
-            std::vector< tstring > m_Items;
-            M_ContextMenuDelegate m_Delegates;
-
         public:
             ContextMenu(Control* control);
             ~ContextMenu();
 
-        protected:
-            void ControlRealized( Control* control );
-            void OnShow( wxContextMenuEvent& event );
-            void OnItem( wxCommandEvent& event );
-
         public:
-            virtual const std::vector< tstring >& GetItems()
+            void AddItem(const tstring& item, ContextMenuSignature::Delegate delegate);
+            void AddSeperator();
+
+            const std::vector< tstring >& GetItems()
             {
                 return m_Items;
             }
 
-            virtual void Resize(size_t size)
+            void Resize(size_t size)
             {
                 m_Items.resize(size);
             }
 
-            virtual void Clear()
+            void Clear()
             {
                 m_Items.clear();
             }
 
-            // event to add dynamic context menus items to the menu instance
-            SetupContextMenuSignature::Event m_SetupContextMenuEvent;
+        protected:
+            void ControlRealized( Control* control );
 
-            virtual void AddItem(const tstring& item, ContextMenuSignature::Delegate delegate);
-            virtual void AddSeperator();
+#ifdef INSPECT_REFACTOR
+            void OnShow( wxContextMenuEvent& event );
+            void OnItem( wxCommandEvent& event );
+#endif
+
+        protected:
+            Control*                m_Control;
+            std::vector< tstring >  m_Items;
+            M_ContextMenuDelegate   m_Delegates;
         };
 
         typedef Helium::SmartPtr<ContextMenu> ContextMenuPtr;

@@ -1719,15 +1719,19 @@
 			Name="Inspect"
 			>
 			<File
+				RelativePath=".\Inspect\InspectWidgets.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\InspectWidgets.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Inspect\StripCanvasCtrl.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Inspect\StripCanvasCtrl.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Inspect\ToolkitClientData.h"
 				>
 			</File>
 			<File

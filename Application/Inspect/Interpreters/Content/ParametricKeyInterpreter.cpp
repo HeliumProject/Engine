@@ -29,7 +29,7 @@ void ParametricKeyInterpreter::InterpretField( const Reflect::Field* field, cons
 
   // Validation is complete, create the UI
   PanelPtr panel = m_Container->GetCanvas()->Create<Panel>( this );
-  parent->AddControl( panel );
+  parent->AddChild( panel );
   tstring temp;
   bool converted = Helium::ConvertString( field->m_UIName, temp );
   HELIUM_ASSERT( converted );
@@ -55,7 +55,7 @@ void ParametricKeyInterpreter::InterpretField( const Reflect::Field* field, cons
 
   // create the key control
   ParametricKeyControlPtr keyControl = m_Container->GetCanvas()->Create<ParametricKeyControl>( this );
-  panel->AddControl( keyControl );
+  panel->AddChild( keyControl );
 
   // bind the ui to the serializers
   keyControl->Bind( new MultiParametricKeySerializerFormatter( field->m_Create, m_Serializers ) );

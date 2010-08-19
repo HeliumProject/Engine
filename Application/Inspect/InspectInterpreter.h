@@ -4,7 +4,6 @@
 
 #include "Application/Inspect/InspectData.h"
 #include "Application/Inspect/InspectControls.h"
-#include "Application/Inspect/InspectData.h"
 #include "Platform/Mutex.h"
 
 namespace Helium
@@ -114,7 +113,7 @@ namespace Helium
                 CheckBoxPtr control = m_Container->GetCanvas()->Create<CheckBox>(this);
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
                 ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                containerStack.top()->AddChild(control);
                 return control;
             }
 
@@ -124,7 +123,7 @@ namespace Helium
                 ValuePtr control = m_Container->GetCanvas()->Create<Value>(this);
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
                 ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                containerStack.top()->AddChild(control);
                 return control;
             }
 
@@ -134,7 +133,7 @@ namespace Helium
                 ChoicePtr control = m_Container->GetCanvas()->Create<Choice>(this);
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
                 ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                containerStack.top()->AddChild(control);
                 return control;
             }
 
@@ -164,7 +163,7 @@ namespace Helium
                 ListPtr control = m_Container->GetCanvas()->Create<List>(this);
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
                 ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                containerStack.top()->AddChild(control);
                 return control;
             }
 
@@ -174,7 +173,7 @@ namespace Helium
                 CheckListPtr control = m_Container->GetCanvas()->Create<CheckList>(this);
                 control->Bind( new SerializerPropertyFormatter< T >( property ) );
                 ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                containerStack.top()->AddChild(control);
                 return control;
             }
 
@@ -184,7 +183,7 @@ namespace Helium
                 SliderPtr control = m_Container->GetCanvas()->Create<Slider>(this);
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
                 ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                containerStack.top()->AddChild(control);
                 return control;
             }
 
@@ -194,7 +193,7 @@ namespace Helium
                 ColorPickerPtr control = m_Container->GetCanvas()->Create<ColorPicker>(this);
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
                 ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                containerStack.top()->AddChild(control);
                 return control;
             }
 

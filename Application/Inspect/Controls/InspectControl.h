@@ -12,6 +12,10 @@ namespace Helium
 {
     namespace Inspect
     {
+        class Control;
+        class Container;
+        class Canvas;
+
         const static tchar ATTR_VALUE_TRUE[]    = TXT( "true" );
         const static tchar ATTR_VALUE_FALSE[]   = TXT( "false" );
         const static tchar ATTR_TOOLTIP[]       = TXT( "tooltip" );
@@ -19,8 +23,6 @@ namespace Helium
         //
         // Event Args and Signatures
         //
-
-        class Control;
 
         typedef Helium::Signature< void, Control* > ControlSignature;
 
@@ -52,8 +54,6 @@ namespace Helium
         // ClientData, this could be toolkit OR interpreter client data, there are two pointer in Control
         //
         
-        class Control;
-
         class APPLICATION_API ClientData : public Reflect::AbstractInheritor< ClientData, Reflect::Object >
         {
         public:
@@ -135,47 +135,32 @@ namespace Helium
             // Client data
             // 
 
-            ClientData* GetToolkitClientData()
+            ClientData* GetClientData()
             {
-                return m_ToolkitClientData;
+                return m_ClientData;
             }
-            void SetToolkitClientData( ClientData* clientData )
+            void SetClientData( ClientData* clientData )
             {
-                m_ToolkitClientData = clientData;
+                m_ClientData = clientData;
             }
-            template< class T > Helium::SmartPtr< T > CreateToolkitClientData()
+            template< class T > Helium::SmartPtr< T > CreateClientData()
             {
-                return new T ( this );
-            }
-
-            ClientData* GetInterpreterClientData()
-            {
-                return m_InterpreterClientData;
-            }
-            void SetInterpreterClientData( ClientData* clientData )
-            {
-                m_InterpreterClientData = clientData;
-            }
-            template< class T > Helium::SmartPtr< T > CreateInterpreterClientData()
-            {
-                return new T ( this );
+                delete m_ClientData;
+                return m_ClientData = new T ( this );
             }
 
             //
             // Defaults
             //
 
-            // sets default data
-            virtual void SetDefault(const tstring& def);
+            // queries if value is at default
+            virtual bool IsDefault() const;
 
             // sets data back to default
             virtual bool SetDefault();
 
-            // queries if value is at default
-            virtual bool IsDefault() const;
-
             // updates control appearance to appear to be at default value
-            virtual void SetDefaultAppearance(bool def);
+            virtual void SetDefaultAppearance(bool def) {}
 
             //
             // Attributes
@@ -183,53 +168,6 @@ namespace Helium
 
             // process individual attribute key
             virtual bool Process(const tstring& key, const tstring& value);
-
-            //
-            // Arrangement
-            //
-
-            bool IsFixedWidth() const
-            {
-                return m_IsFixedWidth;
-            }
-
-            bool IsFixedHeight() const
-            {
-                return m_IsFixedHeight;
-            }
-
-            f32 GetProportionalWidth() const
-            {
-                return m_ProportionalWidth;
-            }
-            void SetProportionalWidth(f32 proportion)
-            {
-                m_ProportionalWidth = proportion;
-            }
-
-            f32 GetProportionalHeight() const
-            {
-                return m_ProportionalHeight;
-            }
-            void SetProportionalHeight(f32 proportion)
-            {
-                m_ProportionalHeight = proportion;
-            }
-
-            // Color, ARGB
-            virtual int GetForeColor();
-            virtual void SetForeColor(int color);
-
-            virtual int GetBackColor();
-            virtual void SetBackColor(int color);
-
-            // Enabled
-            virtual bool IsEnabled() const;
-            virtual void SetEnabled(bool enabled);
-
-            // ReadOnly
-            virtual bool IsReadOnly() const;
-            virtual void SetReadOnly(bool readOnly);
 
             // Context Menu
             virtual const ContextMenuPtr& GetContextMenu();
@@ -239,10 +177,6 @@ namespace Helium
             int GetStringWidth(const tstring& str);
             virtual bool EllipsizeString(tstring& str, int width);
 
-            // ToolTip
-            const tstring& GetToolTip();
-            virtual void SetToolTip( const tstring& toolTip );
-
             // Checks for initialization status
             virtual bool IsRealized();
 
@@ -250,26 +184,14 @@ namespace Helium
             virtual void Realize(Container* parent);
 
             // Unrealizes the control (delete toolkit object)
-            virtual void UnRealize();
+            virtual void Unrealize();
 
             //
             // Layout
             //
 
-        public:
             // populated cachend UI state (drop down lists, etc)
             virtual void Populate() {}
-
-            // invalidate (force repaint)
-            virtual void Invalidate();
-
-            // Freeze/Thaw
-            virtual void Freeze();
-            virtual void Thaw();
-
-            // Show/Hide
-            virtual void Show();
-            virtual void Hide();
 
             //
             // Read
@@ -300,40 +222,9 @@ namespace Helium
             // helper write call for string based controls
             bool WriteData(const tstring& str, bool preview = false);
 
+            // helper write function for all other types of data
             template<class T>
-            bool WriteTypedData(const T& val, const typename DataTemplate<T>::Ptr& data, bool preview = false)
-            {
-                if (data)
-                {
-                    T currentValue;
-                    data->Get( currentValue );
-                    if ( val == currentValue )
-                    {
-                        return true;
-                    }
-
-                    Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create<T>() );
-                    serializer->ConnectData( const_cast< T* >( &val ) );
-                    if ( !PreWrite( serializer, preview ) )
-                    {
-                        Read();
-                        return false;
-                    }
-
-                    m_IsWriting = true;
-                    bool result = data->Set( val );
-                    m_IsWriting = false;
-
-                    if (result)
-                    {
-                        PostWrite();
-                        return true;
-                    }
-                }
-
-                HELIUM_BREAK(); // you should not call this, your control is using custom data
-                return false;
-            }
+            bool WriteTypedData(const T& val, const typename DataTemplate<T>::Ptr& data, bool preview = false);
 
             // helper to write values to each bound data member separately
             virtual bool WriteAll(const std::vector< tstring >& strs, bool preview = false);
@@ -342,22 +233,23 @@ namespace Helium
             virtual void PostWrite();
 
             //
-            // Casting
+            // Attributes
             //
 
-            template<class T>
-            static T* Cast(Control* control)
-            {
-                HELIUM_ASSERT( control->GetWindow() );
-                return static_cast<T*>(control->GetWindow());
-            }
+            Attribute<bool>&        IsEnabled()             { return m_IsEnabledAttr; }
+            Attribute<bool>&        IsReadOnly()            { return m_IsReadOnlyAttr; }
+            Attribute<bool>&        IsFrozen()              { return m_IsFrozenAttr; }
+            Attribute<bool>&        IsHidden()              { return m_IsHiddenAttr; }
+            Attribute<u32>&         ForegroundColor()       { return m_ForegroundColorAttr; }
+            Attribute<u32>&         BackgroundColor()       { return m_BackgroundColorAttr; }
 
-            template<class T>
-            static const T* Cast( const Control* control )
-            {
-                HELIUM_ASSERT( control->GetWindow() );
-                return static_cast< const T* >( control->GetWindow() );
-            }
+            Attribute<bool>&        IsFixedWidth()          { return m_IsFixedWidthAttr; }
+            Attribute<bool>&        IsFixedHeight()         { return m_IsFixedHeightAttr; }
+            Attribute<f32>&         ProportionalWidth()     { return m_ProportionalWidthAttr; }
+            Attribute<f32>&         ProportionalHeight()    { return m_ProportionalHeightAttr; }
+
+            Attribute<tstring>&     Default()               { return m_DefaultAttr; }
+            Attribute<tstring>&     ToolTip()               { return m_ToolTipAttr; }
 
             //
             // Events
@@ -378,63 +270,122 @@ namespace Helium
                 return m_Realized;
             }
 
+            ControlSignature::Event& Unrealized() const
+            {
+                return m_Unrealized;
+            }
+
         protected:
             // are we enabled?
-            bool m_IsEnabled;
+            bool                m_IsEnabled;
+            Attribute<bool>     m_IsEnabledAttr;
 
             // are we writable?
-            bool m_IsReadOnly;
+            bool                m_IsReadOnly;
+            Attribute<bool>     m_IsReadOnlyAttr;
+
+            // is updating (polling, sorting, etc) disabled?
+            bool                m_IsFrozen;
+            Attribute<bool>     m_IsFrozenAttr;
+
+            // is rendering disabled?
+            bool                m_IsHidden;
+            Attribute<bool>     m_IsHiddenAttr;
 
             // our colors for appearange
-            int m_ForeColor;
-            int m_BackColor;
+            u32                 m_ForegroundColor;
+            Attribute<u32>      m_ForegroundColorAttr;
+            u32                 m_BackgroundColor;
+            Attribute<u32>      m_BackgroundColorAttr;
 
             // are we fixed along an axis?
-            bool m_IsFixedWidth;
-            bool m_IsFixedHeight;
+            bool                m_IsFixedWidth;
+            Attribute<bool>     m_IsFixedWidthAttr;
+            bool                m_IsFixedHeight;
+            Attribute<bool>     m_IsFixedHeightAttr;
 
             // are we proportional along an axis?
-            f32 m_ProportionalWidth;
-            f32 m_ProportionalHeight;
+            f32                 m_ProportionalWidth;
+            Attribute<f32>      m_ProportionalWidthAttr;
+            f32                 m_ProportionalHeight;
+            Attribute<f32>      m_ProportionalHeightAttr;
 
             // the default value
-            tstring m_Default;
+            tstring             m_Default;
+            Attribute<tstring>  m_DefaultAttr;
 
             // the tool tip for this control
-            tstring m_ToolTip;
+            tstring             m_ToolTip;
+            Attribute<tstring>  m_ToolTipAttr;
 
             // our context menu, if any
-            ContextMenuPtr m_ContextMenu;
+            ContextMenuPtr      m_ContextMenu;
 
             // the canvas that implements us
-            Canvas* m_Canvas;
+            Canvas*             m_Canvas;
 
             // the parent
-            Container* m_Parent;
+            Container*          m_Parent;
 
             // writing flag (for re-entrancy checking)
-            bool m_IsWriting;
+            bool                m_IsWriting;
 
             // have we really fully realized?
-            bool m_IsRealized;
+            bool                m_IsRealized;
 
             // the data we manipulate
-            DataPtr m_BoundData;
+            DataPtr             m_BoundData;
 
             // client-configurable data
-            ClientDataPtr m_ToolkitClientData;
-            ClientDataPtr m_InterpreterClientData;
+            ClientDataPtr       m_ToolkitClientData;
+            ClientDataPtr       m_ClientData;
 
             // upon realization of the control
-            ControlSignature::Event m_Realized;
+            mutable ControlSignature::Event         m_Realized;
+            mutable ControlSignature::Event         m_Unrealized;
 
             // these mean the *data state* of the control, not the appearance metrics
-            ControlChangingSignature::Event m_ControlChanging;
-            ControlChangedSignature::Event m_ControlChanged;
+            mutable ControlChangingSignature::Event m_ControlChanging;
+            mutable ControlChangedSignature::Event  m_ControlChanged;
         };
 
         typedef Helium::SmartPtr<Control> ControlPtr;
         typedef std::vector<ControlPtr> V_Control;
+
+        template<class T>
+        inline bool Control::WriteTypedData(const T& val, const typename DataTemplate<T>::Ptr& data, bool preview)
+        {
+            if (data)
+            {
+                T currentValue;
+                data->Get( currentValue );
+                if ( val == currentValue )
+                {
+                    return true;
+                }
+
+                Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create<T>() );
+                serializer->ConnectData( const_cast< T* >( &val ) );
+                if ( !PreWrite( serializer, preview ) )
+                {
+                    Read();
+                    return false;
+                }
+
+                m_IsWriting = true;
+                bool result = data->Set( val );
+                m_IsWriting = false;
+
+                if (result)
+                {
+                    PostWrite();
+                    return true;
+                }
+            }
+
+            HELIUM_BREAK(); // you should not call this, your control is using custom data
+            return false;
+        }
 
 #ifdef PROFILE_ACCUMULATION
         APPLICATION_API extern Profile::Accumulator g_RealizeAccumulator;

@@ -60,9 +60,9 @@ namespace Helium
 
         struct CORE_API PropertiesCreatedArgs
         {
-            class PropertiesManager* m_PropertiesManager;
-            u32 m_SelectionId;
-            Inspect::V_Control m_Controls;
+            class PropertiesManager*    m_PropertiesManager;
+            u32                         m_SelectionId;
+            Inspect::V_Control          m_Controls;
 
             PropertiesCreatedArgs( PropertiesManager* propertiesManager, u32 selectionId, const Inspect::V_Control& controls )
                 : m_PropertiesManager (propertiesManager)

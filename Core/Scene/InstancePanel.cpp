@@ -23,7 +23,7 @@ InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_Selectable
 {
   m_Interpreter = m_Generator = generator;
   m_Expanded = true;
-  m_Text = TXT( "Instance" );
+  m_Name = TXT( "Instance" );
 }
 
 void InstancePanel::Create()

@@ -20,7 +20,7 @@ ReflectColorInterpreter::ReflectColorInterpreter( Container* container )
 void ReflectColorInterpreter::InterpretField( const Field* field, const std::vector<Reflect::Element*>& instances, Container* parent )
 {
   ContainerPtr container = m_Container->GetCanvas()->Create<Container>( this );
-  parent->AddControl( container );
+  parent->AddChild( container );
 
   LabelPtr label = parent->GetCanvas()->Create<Label>( this );
 
@@ -30,7 +30,7 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
 
   label->SetText( temp );
 
-  container->AddControl( label );
+  container->AddChild( label );
 
   bool color3 = field->m_SerializerID == Reflect::GetType<Color3Serializer>() || field->m_SerializerID == Reflect::GetType<HDRColor3Serializer>();
   bool color4 = field->m_SerializerID == Reflect::GetType<Color4Serializer>() || field->m_SerializerID == Reflect::GetType<HDRColor4Serializer>();
@@ -66,7 +66,7 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
     if ( !m_Serializers.empty() )
     {
       ColorPickerPtr colorPicker = parent->GetCanvas()->Create<ColorPicker>( this );
-      container->AddControl( colorPicker );
+      container->AddChild( colorPicker );
 
       bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;
       colorPicker->SetReadOnly( readOnly );
@@ -84,13 +84,13 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
         colorPicker->UseAlpha( true );
 
         SliderPtr slider = parent->GetCanvas()->Create<Slider>( this );
-        container->AddControl( slider );
+        container->AddChild( slider );
         slider->SetRangeMin( 0.0 );
         slider->SetRangeMax( 255.0f );
         slider->SetReadOnly( readOnly );
 
         ValuePtr value = parent->GetCanvas()->Create<Value>( this );
-        container->AddControl( value );
+        container->AddChild( value );
         value->SetReadOnly( readOnly );
 
         std::vector<Serializer*> alphaSer;
@@ -119,13 +119,13 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
       if ( field->m_SerializerID == Reflect::GetType<HDRColor3Serializer>() || field->m_SerializerID == Reflect::GetType<HDRColor4Serializer>() )
       {
         SliderPtr slider = parent->GetCanvas()->Create<Slider>( this );
-        container->AddControl( slider );
+        container->AddChild( slider );
         slider->SetRangeMin( 0.0 );
         slider->SetRangeMax( 8.0 );
         slider->SetReadOnly( readOnly );
 
         ValuePtr value = parent->GetCanvas()->Create<Value>( this );
-        container->AddControl( value );
+        container->AddChild( value );
         value->SetReadOnly( readOnly );
 
         std::vector<Serializer*> intensitySer;

@@ -35,9 +35,19 @@ namespace Helium
             return m_Value;
         }
 
+        operator T&()
+        {
+            return Value();
+        }
+
         const T& Get() const
         {
             return m_Value;
+        }
+
+        operator const T&() const
+        {
+            return Get();
         }
 
         bool Set(const T& value)
@@ -51,6 +61,12 @@ namespace Helium
             }
 
             return false;
+        }
+
+        T operator=( const T& rhs )
+        {
+            Set( rhs );
+            return m_Value;
         }
 
         typename ChangingSignature::Event& Changing()

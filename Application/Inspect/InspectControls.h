@@ -2,7 +2,6 @@
 
 #include "Application/Inspect/Controls/InspectControl.h"
 #include "Application/Inspect/Controls/InspectContainer.h"
-#include "Application/Inspect/Controls/InspectGroup.h"
 #include "Application/Inspect/Controls/InspectPanel.h"
 #include "Application/Inspect/Controls/InspectCanvas.h"
 

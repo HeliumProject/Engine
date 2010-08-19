@@ -3,7 +3,6 @@
 
 #include "Application/Inspect/Controls/InspectAction.h"
 #include "Application/Inspect/Controls/InspectCanvas.h"
-#include "Application/Inspect/Controls/InspectGroup.h"
 #include "Application/Inspect/Controls/InspectList.h"
 #include "Application/Inspect/Controls/InspectPanel.h"
 #include "Application/Inspect/InspectData.h"
@@ -32,7 +31,7 @@ void ReflectSetInterpreter::InterpretField( const Reflect::Field* field, const s
 
   // create the panel
   PanelPtr panel = m_Container->GetCanvas()->Create<Panel>( this );
-  parent->AddControl( panel );
+  parent->AddChild( panel );
 
   tstring temp;
   bool converted = Helium::ConvertString( field->m_UIName, temp );
@@ -53,7 +52,7 @@ void ReflectSetInterpreter::InterpretField( const Reflect::Field* field, const s
 
   // create the list
   ListPtr list = parent->GetCanvas()->Create<List>( this );
-  panel->AddControl( list );
+  panel->AddChild( list );
 
   // bind the ui to the serialiers
   list->Bind( new MultiStringFormatter< Reflect::Serializer >( (std::vector<Reflect::Serializer*>&)m_Serializers ) );
@@ -62,19 +61,19 @@ void ReflectSetInterpreter::InterpretField( const Reflect::Field* field, const s
   if ( !( field->m_Flags & Reflect::FieldFlags::ReadOnly ) )
   {
     ContainerPtr buttonContainer = parent->GetCanvas()->Create<Container>( this );
-    panel->AddControl( buttonContainer );
+    panel->AddChild( buttonContainer );
 
     ActionPtr buttonAdd = parent->GetCanvas()->Create<Action>( this );
-    buttonContainer->AddControl( buttonAdd );
+    buttonContainer->AddChild( buttonAdd );
     buttonAdd->SetText( TXT( "Add" ) );
     buttonAdd->AddListener( ActionSignature::Delegate ( this, &ReflectSetInterpreter::OnAdd ) );
-    buttonAdd->SetInterpreterClientData( new ClientData( list ) );
+    buttonAdd->SetClientData( new ClientData( list ) );
 
     ActionPtr buttonRemove = parent->GetCanvas()->Create<Action>( this );
-    buttonContainer->AddControl( buttonRemove );
+    buttonContainer->AddChild( buttonRemove );
     buttonRemove->SetText( TXT( "Remove" ) );
     buttonRemove->AddListener( ActionSignature::Delegate ( this, &ReflectSetInterpreter::OnRemove ) );
-    buttonRemove->SetInterpreterClientData( new ClientData( list ) );
+    buttonRemove->SetClientData( new ClientData( list ) );
   }
 
   // for now let's just disable this panel if there is more than one item selected. I'm not sure if it will behave properly in this case.
@@ -91,7 +90,7 @@ void ReflectSetInterpreter::InterpretField( const Reflect::Field* field, const s
 // 
 void ReflectSetInterpreter::OnAdd( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  Reflect::ObjectPtr clientData = button->GetClientData();
   if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
     ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
@@ -122,7 +121,7 @@ void ReflectSetInterpreter::OnAdd( Button* button )
 // 
 void ReflectSetInterpreter::OnRemove( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  Reflect::ObjectPtr clientData = button->GetClientData();
   if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
     ClientData* data = static_cast< ClientData* >( clientData.Ptr() );

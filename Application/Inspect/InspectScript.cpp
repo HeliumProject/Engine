@@ -305,7 +305,7 @@ bool Script::Parse(const tstring& script, Interpreter* interpreter, Canvas* canv
     // Add control
     //
 
-    output->AddControl(control);
+    output->AddChild(control);
 
     // keep going
     pos = end+1;

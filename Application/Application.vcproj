@@ -650,10 +650,6 @@
 				RelativePath=".\Inspect\InspectScript.h"
 				>
 			</File>
-			<File
-				RelativePath=".\Inspect\InspectTypes.h"
-				>
-			</File>
 			<Filter
 				Name="Interpreters"
 				>
@@ -951,14 +947,6 @@
 				</File>
 				<File
 					RelativePath=".\Inspect\Controls\InspectControl.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\InspectGroup.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\InspectGroup.h"
 					>
 				</File>
 				<File

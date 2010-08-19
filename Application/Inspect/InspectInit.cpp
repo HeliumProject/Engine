@@ -29,7 +29,6 @@ void Inspect::Initialize()
     {
         g_InitializerStack.Push( Reflect::RegisterClassType<Control>( TXT( "InspectControl" ) ) );
         g_InitializerStack.Push( Reflect::RegisterClassType<Container>( TXT( "InspectContainer" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClassType<Group>( TXT( "InspectGroup" ) ) );
         g_InitializerStack.Push( Reflect::RegisterClassType<Panel>( TXT( "InspectPanel" ) ) );
         g_InitializerStack.Push( Reflect::RegisterClassType<Canvas>( TXT( "InspectCanvas" ) ) );
 

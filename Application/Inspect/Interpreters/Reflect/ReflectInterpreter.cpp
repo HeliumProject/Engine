@@ -19,13 +19,13 @@ ReflectInterpreter::ReflectInterpreter (Container* container)
 
 }
 
-#if INSPECT_REFACTOR
+#ifdef INSPECT_REFACTOR
 void ReflectInterpreter::Reset()
 {
   // Clear out the controls that belong to this interpreter.
   V_Control controlsToRemove;
-  V_Control::const_iterator itr = m_Container->GetControls().begin();
-  V_Control::const_iterator end = m_Container->GetControls().end();
+  V_Control::const_iterator itr = m_Container->GetChildren().begin();
+  V_Control::const_iterator end = m_Container->GetChildren().end();
   for ( ; itr != end; ++itr )
   {
     Control* control = *itr;
@@ -39,7 +39,7 @@ void ReflectInterpreter::Reset()
   V_Control::iterator removeEnd = controlsToRemove.end();
   for ( ; removeItr != removeEnd; ++removeItr )
   {
-    m_Container->RemoveControl( *removeItr );
+    m_Container->RemoveChild( *removeItr );
   }
 
   m_Instances.clear();
@@ -73,8 +73,8 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
   tstring labelText;
   if (result)
   {
-    V_Control::const_iterator itr = scriptOutput->GetControls().begin();
-    V_Control::const_iterator end = scriptOutput->GetControls().end();
+    V_Control::const_iterator itr = scriptOutput->GetChildren().begin();
+    V_Control::const_iterator end = scriptOutput->GetChildren().end();
     for( ; itr != end; ++itr )
     {
       Label* label = Reflect::ObjectCast<Label>( *itr );
@@ -185,7 +185,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
                   // no more parents so we add it to the root
                   panelsMap.insert( std::make_pair(currentParent, parent) );
                   parent->SetText( currentParent );
-                  panelsMap[ TXT( "" ) ]->AddControl( parent );
+                  panelsMap[ TXT( "" ) ]->AddChild( parent );
                   break;
                 }
                 else
@@ -199,7 +199,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
                   else
                   {
                     PanelPtr grandParent = m_Container->GetCanvas()->Create<Panel>(this);
-                    grandParent->AddControl( parent );
+                    grandParent->AddChild( parent );
                     panelsMap.insert( std::make_pair(currentParent, parent) );
                     
                     parent = grandParent;
@@ -221,7 +221,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
           {
             newPanel->SetExpanded( true );
           }
-          parent->AddControl( newPanel );
+          parent->AddChild( newPanel );
         }
         
         panel = panelsMap[fieldUIGroup];
@@ -327,7 +327,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
               InterpretType(childInstances, childPanel);
             }
 
-            panel->AddControl( childPanel );
+            panel->AddChild( childPanel );
           }
         }
 
@@ -358,9 +358,9 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
     panel->SetExpanded(expandPanel);
   }
 
-  if ( !panel->GetControls().empty() )
+  if ( !panel->GetChildren().empty() )
   {
-    parent->AddControl(panel);
+    parent->AddChild(panel);
   }
 }
 

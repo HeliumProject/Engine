@@ -25,19 +25,6 @@ namespace Helium
         };
         typedef Helium::Signature<void, const CanvasShowArgs&> CanvasShowSignature;
 
-        typedef std::map< tstring, bool > M_ExpandState;
-
-        namespace ExpandStates
-        {
-            enum ExpandState
-            {
-                Expanded,
-                Collapsed,
-                Default
-            };
-        }
-        typedef ExpandStates::ExpandState ExpandState;
-
         class APPLICATION_API Canvas : public Reflect::ConcreteInheritor<Canvas, Container>
         {
         public:
@@ -61,22 +48,11 @@ namespace Helium
             ControlPtr Create(int type, Interpreter* interpreter = NULL);
 
             // Children
-            virtual void RemoveControl(Control* control) HELIUM_OVERRIDE;
+            virtual void RemoveChild(Control* control) HELIUM_OVERRIDE;
             virtual void Clear() HELIUM_OVERRIDE;
 
             // Realize
             virtual void Realize(Container* parent) HELIUM_OVERRIDE;
-
-            // Expansion State
-            ExpandState GetPanelExpandState( const tstring& panelName ) const;
-            void SetPanelExpandState( const tstring& panelName, ExpandState state );
-
-            // Expand Panels - Make all children panels expanded and hide their tree nodes
-            bool ArePanelsExpanded() const
-            {
-                return m_PanelsExpanded;
-            }
-            void SetPanelsExpanded( bool panelsExpanded );
 
             // Metrics
             virtual int GetStdSize(Math::Axis axis)
@@ -117,12 +93,6 @@ namespace Helium
             }
 
         protected:
-            // list of panels that are expanded
-            M_ExpandState m_PanelExpandState;
-
-            // should the canvas automatically expand its children panels and hide their nodes?
-            bool m_PanelsExpanded;
-
             // standard control size
             Math::Point m_StdSize;
 

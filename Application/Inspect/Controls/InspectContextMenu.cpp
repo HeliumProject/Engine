@@ -3,33 +3,37 @@
 
 #include <memory>
 
-#include <wx/menu.h>
-
 using namespace Helium::Inspect;
 
 ContextMenu::ContextMenu(Control* control)
 : m_Control (control)
 {
-  m_Control->AddRealizedListener( ControlSignature::Delegate ( this, &ContextMenu::ControlRealized ) );
+  m_Control->Realized().AddMethod( this, &ContextMenu::ControlRealized );
 }
 
 ContextMenu::~ContextMenu()
 {
-  m_Control->RemoveRealizedListener( ControlSignature::Delegate ( this, &ContextMenu::ControlRealized ) );
+  m_Control->Realized().RemoveMethod( this, &ContextMenu::ControlRealized );
 
+#ifdef INSPECT_REFACTOR
   if (m_Control->IsRealized())
   {
     m_Control->GetContextWindow()->Disconnect( m_Control->GetContextWindow()->GetId(), wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( ContextMenu::OnShow ), NULL, this );
   }
+#endif
 }
 
 void ContextMenu::ControlRealized( Control* control )
 {
   HELIUM_ASSERT( control == m_Control );
   HELIUM_ASSERT( control->IsRealized() );
+
+#ifdef INSPECT_REFACTOR
   control->GetContextWindow()->Connect( control->GetContextWindow()->GetId(), wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( ContextMenu::OnShow ), NULL, this );
+#endif
 }
 
+#ifdef INSPECT_REFACTOR
 void ContextMenu::OnShow( wxContextMenuEvent& event )
 {
   wxMenu menu;
@@ -64,6 +68,7 @@ void ContextMenu::OnItem( wxCommandEvent& event )
     found->second.Invoke( ContextMenuEventArgs (m_Control, item) );
   }
 }
+#endif
 
 void ContextMenu::AddItem(const tstring& item, ContextMenuSignature::Delegate delegate)
 {

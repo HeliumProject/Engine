@@ -62,15 +62,18 @@ void Provider::Initialize()
 
 void Provider::Cleanup()
 {
-    if ( m_IsConnected && !m_Client.Dropped() )
+    if ( m_IsConnected )
     {
-        Error e;
-        m_Client.Final( &e );
-    }
+        if ( !m_Client.Dropped() )
+        {
+            Error e;
+            m_Client.Final( &e );
+        }
 
-    m_Shutdown = true;
-    m_Execute.Signal();
-    m_Thread.Wait();
+        m_Shutdown = true;
+        m_Execute.Signal();
+        m_Thread.Wait();
+    }
 }
 
 void Provider::ThreadEntry()
@@ -79,6 +82,11 @@ void Provider::ThreadEntry()
     {
         m_Execute.Wait();
         m_Execute.Reset();
+
+        if ( m_Shutdown )
+        {
+            break;
+        }
 
         if ( m_Command )
         {

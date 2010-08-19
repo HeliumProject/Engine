@@ -139,7 +139,7 @@ tstring Items::GetValue()
     int selection = cwi->GetSelection();
     if ( selection != wxNOT_FOUND )
     {
-      return *static_cast<const tstring*>( cwi->GetInterpreterClientData( selection ) );
+      return *static_cast<const tstring*>( cwi->GetClientData( selection ) );
     }
   }
   else

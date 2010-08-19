@@ -66,8 +66,8 @@ void SelectionPropertiesPanel::OnExpandAll(wxCommandEvent& event)
 {
     Inspect::Canvas* canvas = m_PropertyCanvas->GetCanvas();
 
-    Inspect::V_Control::const_iterator itr = canvas->GetControls().begin();
-    Inspect::V_Control::const_iterator end = canvas->GetControls().end();
+    Inspect::V_Control::const_iterator itr = canvas->GetChildren().begin();
+    Inspect::V_Control::const_iterator end = canvas->GetChildren().end();
     for ( ; itr != end; ++itr )
     {
         Inspect::Panel* panel = Reflect::ObjectCast<Inspect::Panel>( *itr );
@@ -84,8 +84,8 @@ void SelectionPropertiesPanel::OnCollapseAll(wxCommandEvent& event)
 {
     Inspect::Canvas* canvas = m_PropertyCanvas->GetCanvas();
 
-    Inspect::V_Control::const_iterator itr = canvas->GetControls().begin();
-    Inspect::V_Control::const_iterator end = canvas->GetControls().end();
+    Inspect::V_Control::const_iterator itr = canvas->GetChildren().begin();
+    Inspect::V_Control::const_iterator end = canvas->GetChildren().end();
     for ( ; itr != end; ++itr )
     {
         Inspect::Panel* panel = Reflect::ObjectCast<Inspect::Panel>( *itr );

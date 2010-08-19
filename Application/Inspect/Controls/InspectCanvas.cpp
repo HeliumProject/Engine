@@ -46,7 +46,7 @@ ControlPtr Canvas::Create(int type, Interpreter* interpreter)
 ///////////////////////////////////////////////////////////////////////////////
 // Overridden to remove any controls it added to the tree
 // 
-void Canvas::RemoveControl(Control* control)
+void Canvas::RemoveChild(Control* control)
 {
     TreeCanvasCtrl* treeWndCtrl = GetControl();
 
@@ -56,7 +56,7 @@ void Canvas::RemoveControl(Control* control)
         treeWndCtrl->Delete( item );
     }
 
-    __super::RemoveControl( control );
+    __super::RemoveChild( control );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ void Canvas::Realize(Container* parent)
 {
     if ( IsRealized() )
     {
-        for ( V_Control::iterator itr = m_Controls.begin(), end = m_Controls.end(); itr != end; ++itr )
+        for ( V_Control::iterator itr = m_Children.begin(), end = m_Children.end(); itr != end; ++itr )
         {
             (*itr)->Realize( this );
         }
@@ -91,7 +91,7 @@ void Canvas::Realize(Container* parent)
     treeWndCtrl->SetColumnSize( 15 );
     if ( ( treeWndCtrl->GetStateImageList() == NULL ) && ( treeWndCtrl->GetImageList() == NULL ) )
     {
-#if INSPECT_REFACTOR
+#ifdef INSPECT_REFACTOR
         treeWndCtrl->SetImageList( Helium::GlobalFileIconsTable().GetSmallImageList() );
         treeWndCtrl->SetStateImageList( Helium::GlobalFileIconsTable().GetSmallImageList() );
 #endif
@@ -103,19 +103,11 @@ void Canvas::Realize(Container* parent)
         root = treeWndCtrl->AddRoot( TXT( "Canvas Root" ) );
     }
 
-    V_Control::const_iterator itr = m_Controls.begin();
-    V_Control::const_iterator end = m_Controls.end();
+    V_Control::const_iterator itr = m_Children.begin();
+    V_Control::const_iterator end = m_Children.end();
     for( ; itr != end; ++itr )
     {
         Control* c = *itr;
-        if ( m_PanelsExpanded )
-        {
-            Inspect::Panel* panel = Reflect::ObjectCast<Inspect::Panel>( c );
-            if ( panel )
-            {
-                panel->SetShowTreeNode( false );
-            }
-        }
 
         c->Realize( this );
 

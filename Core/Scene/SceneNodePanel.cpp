@@ -9,7 +9,7 @@ SceneNodePanel::SceneNodePanel(PropertiesGenerator* generator, const OS_Selectab
 {
   m_Interpreter = m_Generator = generator;
   m_Expanded = true;
-  m_Text = TXT( "Scene Node" );
+  m_Name = TXT( "Scene Node" );
 }
 
 SceneNodePanel::~SceneNodePanel()

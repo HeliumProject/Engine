@@ -4,7 +4,6 @@
 
 #include "Application/Inspect/Controls/InspectAction.h"
 #include "Application/Inspect/Controls/InspectCanvas.h"
-#include "Application/Inspect/Controls/InspectGroup.h"
 #include "Application/Inspect/Controls/InspectList.h"
 #include "Application/Inspect/Controls/InspectPanel.h"
 #include "Application/Inspect/InspectData.h"
@@ -34,7 +33,7 @@ void ReflectMapInterpreter::InterpretField( const Reflect::Field* field, const s
 
   // create the panel
   PanelPtr panel = m_Container->GetCanvas()->Create<Panel>( this );
-  parent->AddControl( panel );
+  parent->AddChild( panel );
 
   tstring temp;
   bool converted = Helium::ConvertString( field->m_UIName, temp );
@@ -57,7 +56,7 @@ void ReflectMapInterpreter::InterpretField( const Reflect::Field* field, const s
 
   // create the list
   ListPtr list = parent->GetCanvas()->Create<List>( this );
-  panel->AddControl( list );
+  panel->AddChild( list );
   list->SetMap( true );
 
   // bind the data to the controls
@@ -67,25 +66,25 @@ void ReflectMapInterpreter::InterpretField( const Reflect::Field* field, const s
   if ( !(field->m_Flags & Reflect::FieldFlags::ReadOnly) )
   {
     ContainerPtr buttonContainer = parent->GetCanvas()->Create<Container>( this );
-    panel->AddControl( buttonContainer );
+    panel->AddChild( buttonContainer );
 
     ActionPtr buttonAdd = parent->GetCanvas()->Create<Action>( this );
-    buttonContainer->AddControl( buttonAdd );
+    buttonContainer->AddChild( buttonAdd );
     buttonAdd->SetText( TXT( "Add" ) );
     buttonAdd->AddListener( ActionSignature::Delegate ( this, &ReflectMapInterpreter::OnAdd ) );
-    buttonAdd->SetInterpreterClientData( new ClientData( list ) );
+    buttonAdd->SetClientData( new ClientData( list ) );
 
     ActionPtr buttonRemove = parent->GetCanvas()->Create<Action>( this );
-    buttonContainer->AddControl( buttonRemove );
+    buttonContainer->AddChild( buttonRemove );
     buttonRemove->SetText( TXT( "Remove" ) );
     buttonRemove->AddListener( ActionSignature::Delegate ( this, &ReflectMapInterpreter::OnRemove ) );
-    buttonRemove->SetInterpreterClientData( new ClientData( list ) );
+    buttonRemove->SetClientData( new ClientData( list ) );
 
     ActionPtr buttonEdit = parent->GetCanvas()->Create<Action>( this );
-    buttonContainer->AddControl( buttonEdit );
+    buttonContainer->AddChild( buttonEdit );
     buttonEdit->SetText( TXT( "Edit" ) );
     buttonEdit->AddListener( ActionSignature::Delegate ( this, &ReflectMapInterpreter::OnEdit ) );
-    buttonEdit->SetInterpreterClientData( new ClientData( list ) );
+    buttonEdit->SetClientData( new ClientData( list ) );
   }
 
   // for now let's just disable this panel if there is more than one item selected. I'm not sure if it will behave properly in this case.
@@ -122,7 +121,7 @@ tstring RunDialog( wxWindow* parent, const tstring& initialKey = TXT( "" ), cons
 // 
 void ReflectMapInterpreter::OnAdd( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  Reflect::ObjectPtr clientData = button->GetClientData();
   if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
     ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
@@ -176,7 +175,7 @@ void ReflectMapInterpreter::OnAdd( Button* button )
 // 
 void ReflectMapInterpreter::OnRemove( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  Reflect::ObjectPtr clientData = button->GetClientData();
   if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
     ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
@@ -217,7 +216,7 @@ void ReflectMapInterpreter::OnRemove( Button* button )
 // 
 void ReflectMapInterpreter::OnEdit( Button* button )
 {
-  Reflect::ObjectPtr clientData = button->GetInterpreterClientData();
+  Reflect::ObjectPtr clientData = button->GetClientData();
   if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
   {
     ClientData* data = static_cast< ClientData* >( clientData.Ptr() );

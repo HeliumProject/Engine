@@ -20,7 +20,7 @@ LightPanel::LightPanel( PropertiesGenerator* generator, const OS_SelectableDumbP
 : m_Selection( selection )
 {
   m_Interpreter = m_Generator = generator;
-  m_Text = TXT( "Light" );
+  m_Name = TXT( "Light" );
   m_Expanded = true;
 }
 

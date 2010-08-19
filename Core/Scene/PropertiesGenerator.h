@@ -146,7 +146,7 @@ namespace Helium
                 Inspect::FileDialogButtonPtr control = m_Container->GetCanvas()->Create<Inspect::FileDialogButton>( this );
                 control->Bind( new Inspect::PropertyStringFormatter<T> ( property ) );
                 Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                containerStack.top()->AddChild(control);
                 return control;
             }
 
@@ -157,7 +157,7 @@ namespace Helium
                 Inspect::FileDialogButtonPtr control = m_Container->GetCanvas()->Create<Inspect::FileDialogButton>( this );
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
                 Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                containerStack.top()->AddChild(control);
                 return control;
             }
 
@@ -168,7 +168,7 @@ namespace Helium
                 Inspect::FileBrowserButtonPtr control = m_Container->GetCanvas()->Create<Inspect::FileBrowserButton>( this );
                 control->Bind( new Inspect::PropertyStringFormatter<T> ( property ) );
                 Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                containerStack.top()->AddChild(control);
                 return control;
             }
 
@@ -179,7 +179,7 @@ namespace Helium
                 Inspect::FileBrowserButtonPtr control = m_Container->GetCanvas()->Create<Inspect::FileBrowserButton>( this );
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
                 Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                containerStack.top()->AddChild(control);
                 return control;
             }
 
@@ -198,7 +198,7 @@ namespace Helium
                 control->Bind( data );
 
                 Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                containerStack.top()->AddChild(control);
                 return control;
             }
 
@@ -213,7 +213,7 @@ namespace Helium
                 Inspect::ValuePtr control = m_Container->GetCanvas()->Create<Inspect::Value>( this );
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
                 Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                containerStack.top()->AddChild(control);
                 return control;
             }
 
@@ -228,7 +228,7 @@ namespace Helium
                 Inspect::ChoicePtr control = m_Container->GetCanvas()->Create<Inspect::Choice>( this );
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
                 Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                containerStack.top()->AddChild(control);
                 return control;
             }
 
@@ -263,7 +263,7 @@ namespace Helium
                 Inspect::ListPtr control = m_Container->GetCanvas()->Create<Inspect::List>( this );
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
                 Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                containerStack.top()->AddChild(control);
                 return control;
             }
 
@@ -278,7 +278,7 @@ namespace Helium
                 Inspect::SliderPtr control = m_Container->GetCanvas()->Create<Inspect::Slider>( this );
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
                 Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                containerStack.top()->AddChild(control);
                 return control;
             }
 
@@ -293,7 +293,7 @@ namespace Helium
                 Inspect::ColorPickerPtr control = m_Container->GetCanvas()->Create<Inspect::ColorPicker>( this );
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
                 Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                containerStack.top()->AddChild(control);
                 return control;
             }
 
@@ -308,7 +308,7 @@ namespace Helium
                 Inspect::ParametricKeyControlPtr control = m_Container->GetCanvas()->Create<Inspect::ParametricKeyControl>( this );
                 control->Bind( new Inspect::MultiParametricKeyPropertyFormatter( creator, BuildSelectionProperties<T, Content::V_ParametricKeyPtr, G, S>( selection, getter, setter ) ) );
                 Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl( control );
+                containerStack.top()->AddChild( control );
                 return control;
             }
         };

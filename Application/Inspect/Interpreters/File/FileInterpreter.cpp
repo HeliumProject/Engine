@@ -66,7 +66,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
             ValuePtr value = m_Container->GetCanvas()->Create<Value>(this);
             value->SetJustification( Value::kRight );
             value->SetReadOnly( readOnly );
-            valueGroup->AddControl( value );
+            valueGroup->AddChild( value );
             groups.push_back( valueGroup );
 
             if ( pathField || field->m_Flags & FieldFlags::FilePath ) 
@@ -84,7 +84,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
                     {
                         fileDialogButton->SetFilter( m_FileFilter );
                     }
-                    group->AddControl( fileDialogButton );
+                    group->AddChild( fileDialogButton );
 
                     // File search button
                     browserButton = m_Container->GetCanvas()->Create<FileBrowserButton>(this);
@@ -92,7 +92,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
                     {
                         browserButton->SetFilter( m_FileFilter );
                     }
-                    group->AddControl( browserButton );
+                    group->AddChild( browserButton );
 
 #ifdef INSPECT_REFACTOR
                     Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( m_FileFilter );
@@ -108,7 +108,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
                     ActionPtr editButton = m_Container->GetCanvas()->Create<Action>(this);
                     editButton->AddListener( ActionSignature::Delegate ( this, &FileInterpreter::Edit ) );
                     editButton->SetText( TXT( "Edit" ) );
-                    group->AddControl( editButton );
+                    group->AddChild( editButton );
                 }
             }
         }
@@ -116,7 +116,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
         {
             ValuePtr value = m_Container->GetCanvas()->Create<Value>( this );
             value->SetReadOnly( readOnly );
-            group->AddControl( value );
+            group->AddChild( value );
         }
     }
 
@@ -127,8 +127,8 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
     LabelPtr label = NULL;
 
     {
-        V_Control::const_iterator itr = group->GetControls().begin();
-        V_Control::const_iterator end = group->GetControls().end();
+        V_Control::const_iterator itr = group->GetChildren().begin();
+        V_Control::const_iterator end = group->GetChildren().end();
         for( ; itr != end; ++itr )
         {
             Label* label = Reflect::ObjectCast<Label>( *itr );
@@ -148,7 +148,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
         label->SetText( temp );
 
-        group->InsertControl(0, label);
+        group->InsertChild(0, label);
     }
 
     //
@@ -221,7 +221,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
         std::vector<ContainerPtr>::const_iterator end = groups.end();
         for ( ; itr != end; ++itr )
         {
-            parent->AddControl(*itr);
+            parent->AddChild(*itr);
         }
     }
 }

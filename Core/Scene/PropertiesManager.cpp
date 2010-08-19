@@ -412,7 +412,7 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
     }
   }
 
-  PropertiesCreatedArgs propertiesCreatedArgs( this, args.m_SelectionId, args.m_Container->GetControls() );
+  PropertiesCreatedArgs propertiesCreatedArgs( this, args.m_SelectionId, args.m_Container->GetChildren() );
   m_PropertiesCreated.Raise( propertiesCreatedArgs );
 }
 
@@ -427,7 +427,7 @@ void PropertiesManager::FinalizeProperties( u32 selectionId, const Inspect::V_Co
   
   for ( Inspect::V_Control::const_iterator itr = controls.begin(), end = controls.end(); itr != end; ++itr )
   {
-    m_Generator->GetContainer()->AddControl( *itr );
+    m_Generator->GetContainer()->AddChild( *itr );
   }
 
   m_Generator->GetContainer()->GetCanvas()->Freeze();

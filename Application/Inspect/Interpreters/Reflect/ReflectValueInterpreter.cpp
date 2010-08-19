@@ -70,7 +70,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
       choice->SetDropDown( true );
       choice->SetReadOnly( readOnly );
 
-      group->AddControl(choice);
+      group->AddChild(choice);
     }
     else
     {
@@ -78,13 +78,13 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
       {
         CheckBoxPtr checkBox = m_Container->GetCanvas()->Create<CheckBox>(this);
         checkBox->SetReadOnly( readOnly );
-        group->AddControl( checkBox );
+        group->AddChild( checkBox );
       }
       else
       {
         ValuePtr value = m_Container->GetCanvas()->Create<Value>( this );
         value->SetReadOnly( readOnly );
-        group->AddControl( value );
+        group->AddChild( value );
       }
     }
   }
@@ -96,8 +96,8 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
   LabelPtr label = NULL;
 
   {
-    V_Control::const_iterator itr = group->GetControls().begin();
-    V_Control::const_iterator end = group->GetControls().end();
+    V_Control::const_iterator itr = group->GetChildren().begin();
+    V_Control::const_iterator end = group->GetChildren().end();
     for( ; itr != end; ++itr )
     {
       Label* label = Reflect::ObjectCast<Label>( *itr );
@@ -118,7 +118,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
 
    label->SetText( temp );
 
-    group->InsertControl(0, label);
+    group->InsertChild(0, label);
   }
 
   //
@@ -166,5 +166,5 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
   // Close
   //
 
-  parent->AddControl(group);
+  parent->AddChild(group);
 }

@@ -43,7 +43,7 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
   panel->SetText( temp );
 
   panel->SetExpanded( true );
-  parent->AddControl(panel);
+  parent->AddChild(panel);
 
   // build the child gui elements
   bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;
@@ -52,10 +52,10 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
   for ( ; enumItr != enumEnd; ++enumItr )
   {
     ContainerPtr row = m_Container->GetCanvas()->Create<Container>( this );
-    panel->AddControl( row );
+    panel->AddChild( row );
 
     LabelPtr label = m_Container->GetCanvas()->Create<Label>( this );
-    row->AddControl( label );
+    row->AddChild( label );
 
     tstring temp;
     bool converted = Helium::ConvertString( enumItr->first, temp );
@@ -63,7 +63,7 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
     label->SetText( temp );
 
     BitfieldCheckBoxPtr checkbox = m_Container->GetCanvas()->Create<ReflectBitfieldCheckBox>( this );
-    row->AddControl( checkbox );
+    row->AddChild( checkbox );
 
     converted = Helium::ConvertString( enumItr->first, temp );
     HELIUM_ASSERT( converted );

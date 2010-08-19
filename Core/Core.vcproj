@@ -1186,14 +1186,6 @@
 				RelativePath=".\Scene\Selection.h"
 				>
 			</File>
-			<File
-				RelativePath=".\Scene\Settings.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\Settings.h"
-				>
-			</File>
 			<Filter
 				Name="Tools"
 				>
@@ -3330,11 +3322,23 @@
 			>
 		</File>
 		<File
+			RelativePath=".\MRUData.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\MRUData.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Project.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\Project.h"
+			>
+		</File>
+		<File
+			RelativePath=".\SettingsManager.cpp"
 			>
 		</File>
 		<File

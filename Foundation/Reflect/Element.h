@@ -156,13 +156,6 @@ namespace Helium
                     HELIUM_BREAK();
                 }
             }
-
-            template< class T >
-            void AttributeChanged( typename const Helium::Attribute<T>::ChangeArgs& args )
-            {
-                // this works since m_Value is always a reference to m_Value, which is a reference to the field
-                FieldChanged( &args.m_Value );
-            }
         };
     }
 }

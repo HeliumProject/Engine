@@ -2,59 +2,64 @@
 
 #include "Core/API.h"
 
+#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Version.h"
+
 namespace Helium
 {
-    class CORE_API SettingsManager
+    namespace Core
     {
-    public:
-        SettingsManager()
-        {
-        }
+        struct SettingsManagerLoadedArgs {};
+        typedef Helium::Signature< void, const SettingsManagerLoadedArgs& > SettingsManagerLoadedSignature;
 
-        virtual ~SettingsManager()
+        class CORE_API SettingsManager : public Reflect::ConcreteInheritor< SettingsManager, Reflect::Element >
         {
-        }
-
-        Settings* GetSettings( i32 type ) const
-        {
-            std::map< i32, Settings* >::iterator itr = m_SettingsMap.find( type );
-            if ( itr != m_SettingsMap.end() )
+        public:
+            SettingsManager()
             {
-                return (*itr).second;
             }
 
-            return NULL;
-        }
-
-        void RegisterSettings( i32 type, Settings* settings )
-        {
-            HELIUM_ASSERT( m_SettingsMap.find( type ) == m_SettingsMap.end() );
-            m_SettingsMap[ type ] = settings;
-        }
-
-        void UnregisterSettings( i32 type )
-        {
-            HELIUM_ASSERT( m_SettingsMap.find( type ) != m_SettingsMap.end() );
-            m_SettingsMap.erase( type );
-        }
-
-        void UnregisterSettings( Settings* settings )
-        {
-            bool found = false;
-            for ( std::map< i32, Settings* >::iterator itr = m_SettingsMap.begin(), end = m_SettingsMap.end(); itr != end; ++itr )
+            virtual ~SettingsManager()
             {
-                if ( (*itr).second == settings )
+            }
+
+            template< class Type >
+            Type* GetSettings()
+            {
+                std::map< i32, Reflect::ElementPtr >::const_iterator itr = m_SettingsMap.find( Type::GetType() );
+                if ( itr != m_SettingsMap.end() )
                 {
-                    m_SettingsMap.erase( itr );
-                    found = true;
-                    break;
+                    return (Type*)(*itr).second;
+                }
+                else
+                {
+                    // if we haven't seen this type of settings object before, just new one up
+                    Type* newSettings = (Type*) Reflect::Registry::GetInstance()->GetClass( Type::GetType() )->m_Create();
+                    HELIUM_ASSERT( newSettings );
+
+                    m_SettingsMap[ type ] = newSettings;
+                    return newSettings;
                 }
             }
 
-            HELIUM_ASSERT( found );
-        }
+            template< class Type >
+            void UnregisterSettings()
+            {
+                HELIUM_ASSERT( m_SettingsMap.find( Type::GetType() ) != m_SettingsMap.end() );
+                m_SettingsMap.erase( Type::GetType() );
+            }
 
-    private:
-        std::map< i32, Settings* > m_SettingsMap;
-    };
+        private:
+            std::map< i32, Reflect::ElementPtr > m_SettingsMap;
+
+        public:
+            static void EnumerateClass( Reflect::Compositor< SettingsManager >& comp )
+            {
+                comp.AddField( &SettingsManager::m_SettingsMap, "m_SettingsMap" );
+            }
+        };
+
+        typedef Helium::SmartPtr< SettingsManager > SettingsManagerPtr;
+    }
 }

@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Core/API.h"
+
 #include "Foundation/Reflect/Element.h"
 #include "Core/Content/Nodes/ContentCamera.h"
-#include "Core/Scene/Settings.h"
 
 namespace Helium
 {
@@ -51,7 +52,7 @@ namespace Helium
 
         typedef ShadingModes::ShadingMode ShadingMode;
 
-        class CORE_API CameraSettings : public Reflect::ConcreteInheritor< CameraSettings, Settings >
+        class CORE_API CameraSettings : public Reflect::ConcreteInheritor< CameraSettings, Reflect::Element >
         {
         public: 
             CameraSettings(); 

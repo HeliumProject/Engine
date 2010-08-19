@@ -130,6 +130,7 @@ void Reflect::Initialize()
         g_Registry->RegisterType(F64ArraySerializer::CreateClass( TXT( "F64Array" ) ));
         g_Registry->RegisterType(GUIDArraySerializer::CreateClass( TXT( "GUIDArray" ) ));
         g_Registry->RegisterType(TUIDArraySerializer::CreateClass( TXT( "TUIDArray" ) ));
+        g_Registry->RegisterType(PathArraySerializer::CreateClass( TXT( "PathArray" ) ));
         g_Registry->RegisterType(Vector2ArraySerializer::CreateClass( TXT( "Vector2Array" ) ));
         g_Registry->RegisterType(Vector3ArraySerializer::CreateClass( TXT( "Vector3Array" ) ));
         g_Registry->RegisterType(Vector4ArraySerializer::CreateClass( TXT( "Vector4Array" ) ));

@@ -66,7 +66,7 @@ namespace Helium
             static const wxChar* Redo = wxART_MAKE_ART_ID( HELIUM_ART_ID_REDO );
 
             static const wxChar* Options = wxART_MAKE_ART_ID( HELIUM_ART_ID_OPTIONS );
-            static const wxChar* Preferences = wxART_MAKE_ART_ID( HELIUM_ART_ID_PREFERENCES );
+            static const wxChar* Settings = wxART_MAKE_ART_ID( HELIUM_ART_ID_SETTINGS );
 
             static const wxChar* Find = wxART_MAKE_ART_ID( HELIUM_ART_ID_FIND );
 

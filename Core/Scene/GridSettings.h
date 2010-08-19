@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Core/API.h"
+
 #include "Foundation/Math/Color3.h"
 #include "Foundation/Reflect/Element.h"
-#include "Core/Scene/Settings.h"
 
 namespace Helium
 {
@@ -24,7 +25,7 @@ namespace Helium
         }
         typedef GridUnits::GridUnit GridUnit;
 
-        class CORE_API GridSettings : public Reflect::ConcreteInheritor< GridSettings, Settings >
+        class CORE_API GridSettings : public Reflect::ConcreteInheritor< GridSettings, Reflect::Element >
         {
         public:
             GridSettings( const tstring& version = TXT( "" ),

@@ -4,12 +4,13 @@
 #include "Core/Content/NodeVisibility.h"
 #include "Core/Scene/Manipulator.h"
 #include "Core/Scene/TranslateManipulator.h"
+#include "Core/MRUData.h"
 
 namespace Helium
 {
     namespace Core
     {
-        class CORE_API SceneSettings : public Reflect::ConcreteInheritor< SceneSettings, Settings >
+        class CORE_API SceneSettings : public Reflect::ConcreteInheritor< SceneSettings, Reflect::Element >
         {
         public:
             SceneSettings();

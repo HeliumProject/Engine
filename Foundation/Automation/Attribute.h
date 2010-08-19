@@ -10,12 +10,12 @@ namespace Helium
     public:
         struct ChangeArgs
         {
-            const T& m_Value;   // always a reference to the attribute's value member variable
-            const T& m_Other;   // the new value in Changing(), and the old value in Changed()
+            const T& m_OldValue;
+            const T& m_NewValue;
 
-            ChangeArgs( const T& value, const T& other )
-                : m_Value( value )
-                , m_Other( other )
+            ChangeArgs( const T& oldValue, const T& newValue )
+                : m_OldValue( oldValue )
+                , m_NewValue( newValue )
             {
 
             }
@@ -24,7 +24,13 @@ namespace Helium
         typedef Helium::Signature< bool, const ChangeArgs& > ChangingSignature;
         typedef Helium::Signature< void, const ChangeArgs& > ChangedSignature;
 
-        Attribute( T& value )
+        Attribute()
+            : m_Value ()
+        {
+
+        }
+
+        Attribute( const T& value )
             : m_Value ( value )
         {
 
@@ -79,13 +85,13 @@ namespace Helium
             return m_Changed;
         }
 
-        void RaiseChanged( const T& previous )
+        void RaiseChanged( const T& previous = T() )
         {
-            m_Changed.Raise( ChangeArgs( m_Value, previous ) );
+            m_Changed.Raise( ChangeArgs( previous, m_Value ) );
         }
 
     protected:
-        T&                                  m_Value;
+        T                                   m_Value;
         typename ChangingSignature::Event   m_Changing;
         typename ChangedSignature::Event    m_Changed;
     };

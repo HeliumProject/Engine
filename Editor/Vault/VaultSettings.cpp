@@ -5,11 +5,9 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-const static tstring s_WindowSettingsVersion( TXT( "1" ) );
-
 ///////////////////////////////////////////////////////////////////////////////
 VaultSettings::VaultSettings( const tstring& defaultFolder, ViewOptionID thumbnailMode, u32 thumbnailSize )
- : m_WindowSettings( new WindowSettings(s_WindowSettingsVersion) )
+ : m_WindowSettings( new WindowSettings() )
  , m_DefaultFolder( defaultFolder )
  , m_ThumbnailMode( thumbnailMode )
  , m_ThumbnailSize( thumbnailSize )

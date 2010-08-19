@@ -2,7 +2,6 @@
 
 #include "Core/API.h"
 
-#include "Core/Scene/Settings.h"
 #include "Core/Scene/SceneSettings.h"
 #include "Core/Scene/GridSettings.h"
 #include "Core/Scene/ViewportSettings.h"
@@ -17,7 +16,7 @@ namespace Helium
         // Base class for preferenced within Editor.  Provides convenience functions
         // for saving and loading.
         // 
-        class Settings : public Reflect::ConcreteInheritor< Settings, Core::Settings >
+        class Settings : public Reflect::ConcreteInheritor< Settings, Reflect::Element >
         {
         public:
             Settings();

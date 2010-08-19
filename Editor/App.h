@@ -1,15 +1,18 @@
 #pragma once
 
 #include "Platform/Compiler.h"
+#include "Platform/Thread.h"
+
+#include "Application/DocumentManager.h"
+
+#include "Core/SettingsManager.h"
+
 #include "Foundation/InitializerStack.h"
 
 #include "Editor/MainFrame.h"
-#include "Platform/Thread.h"
-#include "Tracker/Tracker.h"
+#include "Editor/Tracker/Tracker.h"
 #include "Editor/Vault/Vault.h"
-
-#include "Settings.h"
-#include "Application/DocumentManager.h"
+#include "Editor/Settings.h"
 
 #include <wx/app.h>
 #include <wx/xrc/xmlres.h>
@@ -30,6 +33,11 @@ namespace Helium
 
             void SaveSettings();
             void LoadSettings();
+
+            Core::SettingsManagerPtr& GetSettingsManager()
+            {
+                return m_SettingsManager;
+            }
 
             Settings* GetSettings()
             {
@@ -59,6 +67,7 @@ namespace Helium
             Tracker m_Tracker;
             Helium::Thread m_TrackerThread;
 
+            Core::SettingsManagerPtr m_SettingsManager;
             SettingsPtr m_Settings;
             Vault* m_Vault;
             MainFrame* m_Frame;

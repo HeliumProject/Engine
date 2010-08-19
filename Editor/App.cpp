@@ -32,7 +32,6 @@
 #include "Core/Scene/Selectable.h"
 #include "Core/Scene/Persistent.h"
 #include "Core/Scene/PropertiesGenerator.h"
-#include "Core/Scene/Settings.h"
 
 #include "Settings.h"
 #include "WindowSettings.h"
@@ -151,7 +150,8 @@ namespace Helium
 
 App::App()
 #pragma TODO("This needs fixing otherwise dialogs will not be modal -Geoff")
-: m_Settings( new Settings() )
+: m_SettingsManager( new Core::SettingsManager() )
+, m_Settings( new Settings() )
 , m_Vault( NULL )
 , m_Frame( NULL )
 {
@@ -234,7 +234,6 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::RegisterEnumType<ViewOptionIDs::ViewOptionID>( &ViewOptionIDs::ViewOptionIDEnumerateEnum, TXT( "ViewOptionID" ) ) );
 
     // preferences
-    m_InitializerStack.Push( Reflect::RegisterClassType< Core::Settings >( TXT( "Core::Settings" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClassType< Core::CameraSettings >( TXT( "Core::CameraSettings" ) ) ); 
     m_InitializerStack.Push( Reflect::RegisterClassType< Core::ViewportSettings >( TXT( "Core::ViewportSettings" ) ) ); 
     m_InitializerStack.Push( Reflect::RegisterClassType< Core::GridSettings >( TXT( "Core::GridSettings" ) ) );
@@ -301,13 +300,13 @@ void App::SaveSettings()
     tstring error;
     if ( Helium::IsDebuggerPresent() )
     {
-        m_Settings->SaveToFile( path, error );
+        Reflect::Archive::ToFile( m_Settings, path );
     }
     else
     {
         try
         {
-            m_Settings->SaveToFile( path, error );
+            Reflect::Archive::ToFile( m_Settings, path );
         }
         catch ( const Helium::Exception& ex )
         {
@@ -329,14 +328,14 @@ void App::LoadSettings()
 
     if ( Helium::IsDebuggerPresent() )
     {
-        m_Settings->LoadFromFile( path );
+        m_Settings = Reflect::Archive::FromFile< Settings >( path );
     }
     else
     {
         tstring error;
         try
         {
-            m_Settings->LoadFromFile( path );
+            m_Settings = Reflect::Archive::FromFile< Settings >( path );
         }
         catch ( const Helium::Exception& ex )
         {

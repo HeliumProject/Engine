@@ -57,7 +57,7 @@ CollectionsPanel::CollectionsPanel( VaultFrame* browserFrame )
 
     Connect( wxEVT_SIZE, wxSizeEventHandler( CollectionsPanel::OnSizeCollectionsPanel ), NULL, this );
 
-    wxGetApp().GetSettings()->GetVaultSettings()->AddSettingsLoadedListener( Core::SettingsLoadedSignature::Delegate( this, &CollectionsPanel::OnSettingsLoaded ) );
+//    wxGetApp().GetSettings()->GetVaultSettings()->AddSettingsLoadedListener( Core::SettingsLoadedSignature::Delegate( this, &CollectionsPanel::OnSettingsLoaded ) );
     wxGetApp().GetSettings()->GetVaultSettings()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &CollectionsPanel::OnPrefrencesChanged ) );
 
     // Drag-and-drop 
@@ -75,7 +75,7 @@ CollectionsPanel::~CollectionsPanel()
 {
     Disconnect( wxEVT_SIZE, wxSizeEventHandler( CollectionsPanel::OnSizeCollectionsPanel ), NULL, this );
 
-    wxGetApp().GetSettings()->GetVaultSettings()->RemoveSettingsLoadedListener( Core::SettingsLoadedSignature::Delegate( this, &CollectionsPanel::OnSettingsLoaded ) );
+//    wxGetApp().GetSettings()->GetVaultSettings()->RemoveSettingsLoadedListener( Core::SettingsLoadedSignature::Delegate( this, &CollectionsPanel::OnSettingsLoaded ) );
     wxGetApp().GetSettings()->GetVaultSettings()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &CollectionsPanel::OnPrefrencesChanged ) );
 
     for ( M_AssetCollections::const_iterator itr = m_CollectionManager->GetCollections().begin(),
@@ -589,12 +589,6 @@ void CollectionsPanel::OnRemoveFromCollection( wxCommandEvent& event )
     UpdateCollection( CollectionActions::Remove );
 }
 
-
-///////////////////////////////////////////////////////////////////////////////
-void CollectionsPanel::OnSettingsLoaded( const Core::SettingsLoadedArgs& args )
-{
-    UpdateCollectionManager();
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 void CollectionsPanel::OnPrefrencesChanged( const Reflect::ElementChangeArgs& args )

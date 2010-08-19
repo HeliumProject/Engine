@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Core/API.h"
+
 #include "Foundation/Reflect/Element.h"
 #include "Core/Scene/CameraSettings.h"
 

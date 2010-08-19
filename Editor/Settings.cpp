@@ -4,8 +4,6 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-const static tstring s_WindowSettingsVersion( TXT( "12" ) );
-
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
@@ -14,7 +12,7 @@ Settings::Settings()
 , m_ViewportSettings( new Core::ViewportSettings )
 , m_GridSettings( new Core::GridSettings )
 , m_VaultSettings( new VaultSettings )
-, m_WindowSettings( new WindowSettings( s_WindowSettingsVersion ) )
+, m_WindowSettings( new WindowSettings() )
 {
 }
 

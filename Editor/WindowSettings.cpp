@@ -14,22 +14,13 @@ const tchar* WindowSettings::s_ResetLong = TXT( "ResetWindowSettings" );
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-WindowSettings::WindowSettings( const tstring& version, wxPoint pos, wxSize size )
-: m_Version( version )
-, m_IsMaximized( false )
+WindowSettings::WindowSettings( wxPoint pos, wxSize size )
+: m_IsMaximized( false )
 , m_PosX( pos.x )
 , m_PosY( pos.y )
 , m_Width( size.x )
 , m_Height( size.y )
 {
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Get the version of these settings.
-// 
-tstring WindowSettings::GetCurrentVersion() const
-{
-    return m_Version;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -94,22 +85,6 @@ void WindowSettings::ApplyToWindow( wxWindow* window, wxAuiManager* manager, boo
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Returns the field representing the x position.
-// 
-const Reflect::Field* WindowSettings::PositionX() const
-{
-    return GetClass()->FindField( &WindowSettings::m_PosX );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the field representing the y position.
-// 
-const Reflect::Field* WindowSettings::PositionY() const
-{
-    return GetClass()->FindField( &WindowSettings::m_PosY );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // Returns the position setting.
 // 
 wxPoint WindowSettings::GetPosition() const
@@ -122,24 +97,8 @@ wxPoint WindowSettings::GetPosition() const
 // 
 void WindowSettings::SetPosition( i32 x, i32 y )
 {
-    Set( PositionX(), x );
-    Set( PositionY(), y );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the field for the width.
-// 
-const Reflect::Field* WindowSettings::Width() const
-{
-    return GetClass()->FindField( &WindowSettings::m_Width );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the field for the height.
-// 
-const Reflect::Field* WindowSettings::Height() const
-{
-    return GetClass()->FindField( &WindowSettings::m_Height );
+    m_PosX = x;
+    m_PosY = y;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -155,16 +114,8 @@ wxSize WindowSettings::GetSize() const
 // 
 void WindowSettings::SetSize( i32 width, i32 height )
 {
-    Set( Width(), width );
-    Set( Height(), height );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the field for the maximized state.
-// 
-const Reflect::Field* WindowSettings::Maximized() const
-{
-    return GetClass()->FindField( &WindowSettings::m_IsMaximized );
+    m_Width = width;
+    m_Height = height;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -180,15 +131,7 @@ bool WindowSettings::IsMaximized() const
 // 
 void WindowSettings::SetMaximized( bool maximized )
 {
-    Set( Maximized(), maximized );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the field for docking state.
-// 
-const Reflect::Field* WindowSettings::DockingState() const
-{
-    return GetClass()->FindField( &WindowSettings::m_DockingState );
+    m_IsMaximized = maximized;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -204,28 +147,19 @@ const tstring& WindowSettings::GetDockingState() const
 // 
 void WindowSettings::SetDockingState( const tstring& state )
 {
-    Set( DockingState(), state );
+    m_DockingState = state;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Checks the window settings against the provided version number and recreates 
 // the window settings if necessary.
 // 
-void WindowSettings::Check( WindowSettingsPtr& settings, const tstring& version )
+void WindowSettings::Check( WindowSettingsPtr& settings )
 {
     if ( !settings )
     {
-        settings = new WindowSettings( version );
+        settings = new WindowSettings();
     }
-    else if ( settings->GetCurrentVersion() != version )
-    {
-        settings = new WindowSettings( version );
-    }
-#pragma TODO ("Shouldn't be using the command line here, it should be an option IN luna to reset prefs")
-    //else if ( Helium::GetCmdLineFlag( s_Reset ) )
-    //{
-    //    settings = new WindowSettings( version );
-    //}
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -326,6 +326,11 @@ void App::LoadSettings()
     Helium::GetPreferencesDirectory( path );
     path += TXT("EditorSettings.xml");
 
+	if ( !path.Exists() )
+	{
+		return;
+	}
+
     if ( Helium::IsDebuggerPresent() )
     {
         m_Settings = Reflect::Archive::FromFile< Settings >( path );

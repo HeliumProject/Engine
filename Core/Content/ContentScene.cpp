@@ -14,7 +14,6 @@
 #include "Core/Content/ContentVisitor.h" 
 
 #include <algorithm>
-#include <omp.h>
 
 using Helium::Insert; 
 using namespace Helium;

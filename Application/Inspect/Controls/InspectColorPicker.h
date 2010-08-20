@@ -1,11 +1,13 @@
 #pragma once
 
-#include "Application/API.h"
-#include "Application/Inspect/Controls/InspectControl.h"
-
 #include "Foundation/Math/Color3.h"
 #include "Foundation/Math/Color4.h"
 #include "Foundation/Reflect/Class.h"
+
+#include "Application/API.h"
+#include "Application/Inspect/Controls/InspectControl.h"
+
+#ifdef INSPECT_REFACTOR
 
 namespace Helium
 {
@@ -44,3 +46,5 @@ namespace Helium
         typedef Helium::SmartPtr<ColorPicker> ColorPickerPtr;
     }
 }
+
+#endif

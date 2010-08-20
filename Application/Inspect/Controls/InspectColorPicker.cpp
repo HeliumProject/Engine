@@ -6,10 +6,11 @@
 
 #include <sstream>
 
-#include <wx/panel.h>
-
-// Using
 using namespace Helium::Inspect;
+
+#ifdef INSPECT_REFACTOR
+
+#include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 // Class wrapping up the wxColourPickerCtrl.
@@ -253,3 +254,5 @@ const Helium::Math::Color4& ColorPicker::GetColor4() const
 
     return m_Color4;
 }
+
+#endif

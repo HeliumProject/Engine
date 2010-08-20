@@ -1,7 +1,10 @@
 #include "Application/Inspect/Controls/InspectSlider.h"
 #include "Application/Inspect/Controls/InspectCanvas.h"
 
+using namespace Helium;
 using namespace Helium::Inspect;
+
+#ifdef INSPECT_REFACTOR
 
 ///////////////////////////////////////////////////////////////////////////////
 // Custom wrapper around wxSlider to interact with Slider.
@@ -9,47 +12,47 @@ using namespace Helium::Inspect;
 class StdSlider : public wxSlider
 {
 public:
-  Slider* m_Slider;
+    Slider* m_Slider;
 
-  bool m_Override;
+    bool m_Override;
 
-  // Constructor
-  StdSlider( wxWindow* parent, Slider* slider )
-  : wxSlider( parent, wxID_ANY, 0, 0, 1000 )
-  , m_Slider( slider )
-  {
-
-  }
-
-  // Callback every time a value changes on the slider.
-  void OnScroll( wxScrollEvent& e)
-  {
-    // NOTE: This skip is important.  If you remove it,
-    // the EVT_SCROLL_CHANGED event will never get fired.
-    e.Skip();
-
-    if ( !m_Override )
+    // Constructor
+    StdSlider( wxWindow* parent, Slider* slider )
+        : wxSlider( parent, wxID_ANY, 0, 0, 1000 )
+        , m_Slider( slider )
     {
-      m_Slider->Write();
+
     }
-  }
 
-  // Callback when a mouse click occurs on the slider.
-  void OnMouseDown( wxMouseEvent& e )
-  {
-    e.Skip();
-    m_Slider->Start();
-  }
+    // Callback every time a value changes on the slider.
+    void OnScroll( wxScrollEvent& e)
+    {
+        // NOTE: This skip is important.  If you remove it,
+        // the EVT_SCROLL_CHANGED event will never get fired.
+        e.Skip();
 
-  // Callback when a scroll operation has completed (such as
-  // when the user stops dragging the thumb).
-  void OnScrollChanged( wxScrollEvent& e )
-  {
-    e.Skip();
-    m_Slider->End();
-  }
+        if ( !m_Override )
+        {
+            m_Slider->Write();
+        }
+    }
 
-  DECLARE_EVENT_TABLE();
+    // Callback when a mouse click occurs on the slider.
+    void OnMouseDown( wxMouseEvent& e )
+    {
+        e.Skip();
+        m_Slider->Start();
+    }
+
+    // Callback when a scroll operation has completed (such as
+    // when the user stops dragging the thumb).
+    void OnScrollChanged( wxScrollEvent& e )
+    {
+        e.Skip();
+        m_Slider->End();
+    }
+
+    DECLARE_EVENT_TABLE();
 };
 
 BEGIN_EVENT_TABLE( StdSlider, wxSlider )
@@ -75,27 +78,27 @@ Slider::Slider()
 // 
 void Slider::Realize(Container* parent)
 {
-  PROFILE_SCOPE_ACCUM( g_RealizeAccumulator );
+    PROFILE_SCOPE_ACCUM( g_RealizeAccumulator );
 
-  if ( m_Window != NULL )
-    return;
+    if ( m_Window != NULL )
+        return;
 
-  StdSlider* slider = new StdSlider( parent->GetWindow(), this );
+    StdSlider* slider = new StdSlider( parent->GetWindow(), this );
 
-  slider->ClearTicks();
+    slider->ClearTicks();
 
-  m_Window = slider;
+    m_Window = slider;
 
-  wxSize size( -1, m_Canvas->GetStdSize( Math::SingleAxes::Y ) );
-  m_Window->SetSize( size );
-  m_Window->SetMinSize( size );
-  m_Window->SetMaxSize( size );
+    wxSize size( -1, m_Canvas->GetStdSize( Math::SingleAxes::Y ) );
+    m_Window->SetSize( size );
+    m_Window->SetMinSize( size );
+    m_Window->SetMaxSize( size );
 
-  __super::Realize( parent );
+    __super::Realize( parent );
 
-  // Push the min and max values down to the slider.
-  SetRangeMin( m_Min, false );
-  SetRangeMax( m_Max, false );
+    // Push the min and max values down to the slider.
+    SetRangeMin( m_Min, false );
+    SetRangeMax( m_Max, false );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -103,12 +106,12 @@ void Slider::Realize(Container* parent)
 // 
 void Slider::Read()
 {
-  if ( IsBound() )
-  {
-    SetUIValue( GetValue() );
+    if ( IsBound() )
+    {
+        SetUIValue( GetValue() );
 
-    __super::Read();
-  }
+        __super::Read();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -116,20 +119,20 @@ void Slider::Read()
 // 
 bool Slider::Write()
 {
-  bool result = false;
+    bool result = false;
 
-  if ( IsBound() )
-  {
-    // Get the float value from the UI
-    m_CurrentValue = GetUIValue();
+    if ( IsBound() )
+    {
+        // Get the float value from the UI
+        m_CurrentValue = GetUIValue();
 
-    // Write the value back into the data
-    tostringstream str;
-    str << m_CurrentValue;
-    result = WriteData( str.str(), m_Tracking );
-  }
+        // Write the value back into the data
+        tostringstream str;
+        str << m_CurrentValue;
+        result = WriteData( str.str(), m_Tracking );
+    }
 
-  return result;
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -138,9 +141,9 @@ bool Slider::Write()
 // 
 void Slider::Start()
 {
-  // Store the value when the user starts dragging the thumb
-  m_StartDragValue = GetUIValue();
-  m_Tracking = true;
+    // Store the value when the user starts dragging the thumb
+    m_StartDragValue = GetUIValue();
+    m_Tracking = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -148,18 +151,18 @@ void Slider::Start()
 // 
 void Slider::End()
 {
-  // The user is done dragging around the thumb, so reset the
-  // value back to what it was when the drag began, then force
-  // an undoable command that jumps to the final value.
-  if ( m_Tracking )
-  {
-    Freeze();
-    float temp = GetUIValue();
-    SetValue( m_StartDragValue );
-    m_Tracking = false;
-    SetValue( temp );
-    Thaw();
-  }
+    // The user is done dragging around the thumb, so reset the
+    // value back to what it was when the drag began, then force
+    // an undoable command that jumps to the final value.
+    if ( m_Tracking )
+    {
+        Freeze();
+        float temp = GetUIValue();
+        SetValue( m_StartDragValue );
+        m_Tracking = false;
+        SetValue( temp );
+        Thaw();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -167,17 +170,17 @@ void Slider::End()
 // 
 float Slider::GetValue()
 {
-  if ( IsBound() )
-  {
-    tstring str;
-    ReadData( str );
-    if ( str != MULTI_VALUE_STRING && str != UNDEF_VALUE_STRING )
+    if ( IsBound() )
     {
-      m_CurrentValue = static_cast< float >( _tstof( str.c_str() ) );
+        tstring str;
+        ReadData( str );
+        if ( str != MULTI_VALUE_STRING && str != UNDEF_VALUE_STRING )
+        {
+            m_CurrentValue = static_cast< float >( _tstof( str.c_str() ) );
+        }
     }
-  }
 
-  return m_CurrentValue;
+    return m_CurrentValue;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -185,18 +188,18 @@ float Slider::GetValue()
 // 
 void Slider::SetValue(float value)
 {
-  // Update our cached value
-  m_CurrentValue = value;
+    // Update our cached value
+    m_CurrentValue = value;
 
-  // If we have a data pointer, update it
-  if ( IsBound() )
-  {
-    tostringstream str;
-    str << m_CurrentValue;
-    WriteData( str.str() );
-  }
+    // If we have a data pointer, update it
+    if ( IsBound() )
+    {
+        tostringstream str;
+        str << m_CurrentValue;
+        WriteData( str.str() );
+    }
 
-  SetUIValue( m_CurrentValue );
+    SetUIValue( m_CurrentValue );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -205,12 +208,12 @@ void Slider::SetValue(float value)
 // 
 void Slider::SetRangeMin(float min, bool clamp)
 {
-  m_Min = min;
+    m_Min = min;
 
-  if ( clamp && GetValue() < m_Min )
-  {
-    SetValue( m_Min );
-  }
+    if ( clamp && GetValue() < m_Min )
+    {
+        SetValue( m_Min );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -218,12 +221,12 @@ void Slider::SetRangeMin(float min, bool clamp)
 // current value is greater than max, the value will be set to the max.
 void Slider::SetRangeMax(float max, bool clamp)
 {
-  m_Max = max;
+    m_Max = max;
 
-  if ( clamp && GetValue() > m_Max )
-  {
-    SetValue( m_Max );
-  }
+    if ( clamp && GetValue() > m_Max )
+    {
+        SetValue( m_Max );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -232,7 +235,7 @@ void Slider::SetRangeMax(float max, bool clamp)
 // 
 void Slider::SetAutoAdjustMinMax( bool autoAdjust )
 {
-  m_AutoAdjustMinMax = autoAdjust;
+    m_AutoAdjustMinMax = autoAdjust;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -240,21 +243,21 @@ void Slider::SetAutoAdjustMinMax( bool autoAdjust )
 // 
 bool Slider::Process( const tstring& key, const tstring& value )
 {
-  if (__super::Process(key, value))
-    return true;
+    if (__super::Process(key, value))
+        return true;
 
-  if (key == SLIDER_ATTR_MIN)
-  {
-    SetRangeMin( static_cast< float >( _tstof( value.c_str() ) ) );
-    return true;
-  }
-  else if (key == SLIDER_ATTR_MAX)
-  {
-    SetRangeMax( static_cast< float >( _tstof( value.c_str() ) ) );
-    return true;
-  }
+    if (key == SLIDER_ATTR_MIN)
+    {
+        SetRangeMin( static_cast< float >( _tstof( value.c_str() ) ) );
+        return true;
+    }
+    else if (key == SLIDER_ATTR_MAX)
+    {
+        SetRangeMax( static_cast< float >( _tstof( value.c_str() ) ) );
+        return true;
+    }
 
-  return false;
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -262,38 +265,38 @@ bool Slider::Process( const tstring& key, const tstring& value )
 // 
 void Slider::SetUIValue( float value )
 {
-  // If the control has been realized, update the UI
-  if ( IsRealized() )
-  {
-		if ( m_AutoAdjustMinMax )
+    // If the control has been realized, update the UI
+    if ( IsRealized() )
     {
-      if ( value > m_Max )
-      {
-        m_Max = value;
-      }
-      else if ( value < m_Min )
-      {
-        m_Min = value;
-      }
+        if ( m_AutoAdjustMinMax )
+        {
+            if ( value > m_Max )
+            {
+                m_Max = value;
+            }
+            else if ( value < m_Min )
+            {
+                m_Min = value;
+            }
+        }
+
+        int val = static_cast< int >( 0.5f + ( ( (m_CurrentValue - m_Min ) / ( m_Max - m_Min ) ) * 1000.f ) );
+
+        if ( val < 0 )
+        {
+            val = 0;
+        }
+
+        if ( val > 1000 )
+        {
+            val = 1000;
+        }
+
+        StdSlider* slider = Control::Cast<StdSlider>( this );
+        slider->m_Override = true;
+        slider->SetValue( val );
+        slider->m_Override = false;
     }
-
-    int val = static_cast< int >( 0.5f + ( ( (m_CurrentValue - m_Min ) / ( m_Max - m_Min ) ) * 1000.f ) );
-
-    if ( val < 0 )
-    {
-      val = 0;
-    }
-
-    if ( val > 1000 )
-    {
-      val = 1000;
-    }
-
-    StdSlider* slider = Control::Cast<StdSlider>( this );
-    slider->m_Override = true;
-    slider->SetValue( val );
-    slider->m_Override = false;
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -301,7 +304,9 @@ void Slider::SetUIValue( float value )
 // 
 float Slider::GetUIValue() const
 {
-  int val = Control::Cast< wxSlider >( this )->GetValue();
-  const float result = m_Min + ( ( m_Max - m_Min ) * ( static_cast< float >( val ) / 1000.f ) );
-  return result;
+    int val = Control::Cast< wxSlider >( this )->GetValue();
+    const float result = m_Min + ( ( m_Max - m_Min ) * ( static_cast< float >( val ) / 1000.f ) );
+    return result;
 }
+
+#endif

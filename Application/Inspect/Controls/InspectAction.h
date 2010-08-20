@@ -3,6 +3,8 @@
 #include "Application/API.h"
 #include "Application/Inspect/Controls/InspectButton.h"
 
+#ifdef INSPECT_REFACTOR
+
 namespace Helium
 {
     namespace Inspect
@@ -35,3 +37,5 @@ namespace Helium
         typedef Helium::SmartPtr<Action> ActionPtr;
     }
 }
+
+#endif

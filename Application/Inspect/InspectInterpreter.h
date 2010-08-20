@@ -14,12 +14,26 @@ namespace Helium
         // Event Args
         //
 
+        struct PopulateItem
+        {
+            PopulateItem(const tstring& key, const tstring& data)
+            {
+                m_Key = key;
+                m_Data = data;
+            }
+
+            tstring m_Key;
+            tstring m_Data;
+        };
+
+        typedef std::vector<PopulateItem> V_PopulateItem;
+
         struct PopulateLinkArgs
         {
             PopulateLinkArgs(u32 type) : m_Type (type) {}
 
-            u32     m_Type;
-            V_Item  m_Items;
+            u32             m_Type;
+            V_PopulateItem  m_Items;
         };
         typedef Helium::Signature<void, PopulateLinkArgs&> PopulateLinkSignature;
 

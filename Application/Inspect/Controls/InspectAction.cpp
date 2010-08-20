@@ -4,6 +4,8 @@
 // Using
 using namespace Helium::Inspect;
 
+#ifdef INSPECT_REFACTOR
+
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
@@ -16,6 +18,8 @@ Action::Action()
 // 
 bool Action::Write()
 {
-  m_ActionEvent.Raise( this );
-  return true;
+    m_ActionEvent.Raise( this );
+    return true;
 }
+
+#endif

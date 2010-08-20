@@ -25,5 +25,10 @@ namespace Helium
             Inspect::Control*   m_Control;
             wxWindow*           m_Window;
         };
+
+        class InspectContainer : public InspectWindow
+        {
+
+        };
     }
 }

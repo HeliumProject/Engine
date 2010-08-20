@@ -5,8 +5,10 @@
 
 #include "Foundation/String/Tokenize.h"
 
-using namespace Helium::Reflect;
+using namespace Helium;
 using namespace Helium::Inspect;
+
+#ifdef INSPECT_REFACTOR
 
 typedef std::map< tstring, bool > M_strbool;
 
@@ -153,3 +155,5 @@ bool CheckList::IsDefault() const
     // go here.
     return false;
 }
+
+#endif

@@ -3,11 +3,12 @@
 
 #include "Foundation/String/Tokenize.h"
 
-using namespace Helium::Reflect;
+using namespace Helium;
 using namespace Helium::Inspect;
 
-const tchar* List::s_MapKeyValDelim = TXT( ", " ); 
+#ifdef INSPECT_REFACTOR
 
+const tchar* List::s_MapKeyValDelim = TXT( ", " ); 
 
 ///////////////////////////////////////////////////////////////////////////////
 // Local class wrapping the wxListBox.
@@ -15,17 +16,17 @@ const tchar* List::s_MapKeyValDelim = TXT( ", " );
 class ListBox : public wxListBox
 {
 public:
-  List* m_ListBox;
+    List* m_ListBox;
 
-  ListBox (wxWindow* parent, List* listBox, long style )
-    : wxListBox (parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, style)
-    , m_ListBox (listBox)
-  {
+    ListBox (wxWindow* parent, List* listBox, long style )
+        : wxListBox (parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, style)
+        , m_ListBox (listBox)
+    {
 
-  }
+    }
 
 
-  DECLARE_EVENT_TABLE();
+    DECLARE_EVENT_TABLE();
 };
 
 BEGIN_EVENT_TABLE(ListBox, wxListBox)
@@ -38,7 +39,7 @@ List::List()
 : m_Sorted( false )
 , m_IsMap( false )
 {
-  m_IsFixedHeight = true;
+    m_IsFixedHeight = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -46,29 +47,29 @@ List::List()
 // 
 void List::Realize(Container* parent)
 {
-  PROFILE_SCOPE_ACCUM( g_RealizeAccumulator );
+    PROFILE_SCOPE_ACCUM( g_RealizeAccumulator );
 
-  if (m_Window != NULL)
-    return;
+    if (m_Window != NULL)
+        return;
 
-  m_Window = new ListBox(parent->GetWindow(), this, ( m_Sorted ? wxLB_SORT : 0 ) | wxLB_SINGLE | wxLB_HSCROLL);
-  
-  wxSize size( -1, m_Canvas->GetStdSize(Math::SingleAxes::Y) * 5 );
-  m_Window->SetSize( size );
-  m_Window->SetMinSize( size );
-  m_Window->SetMaxSize( size );
+    m_Window = new ListBox(parent->GetWindow(), this, ( m_Sorted ? wxLB_SORT : 0 ) | wxLB_SINGLE | wxLB_HSCROLL);
 
-  __super::Realize(parent);
+    wxSize size( -1, m_Canvas->GetStdSize(Math::SingleAxes::Y) * 5 );
+    m_Window->SetSize( size );
+    m_Window->SetMinSize( size );
+    m_Window->SetMaxSize( size );
 
-  if ( !m_Items.empty() )
-  {
-    AddItems( m_Items );
-  }
+    __super::Realize(parent);
 
-  if ( !m_SelectedItems.empty() )
-  {
-    SetSelectedItems( m_SelectedItems );
-  }
+    if ( !m_Items.empty() )
+    {
+        AddItems( m_Items );
+    }
+
+    if ( !m_SelectedItems.empty() )
+    {
+        SetSelectedItems( m_SelectedItems );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -76,15 +77,15 @@ void List::Realize(Container* parent)
 // 
 void List::Read()
 {
-  // from data into ui
-  if ( IsRealized() )
-  {
-    const std::vector< tstring >& items = GetItems();
+    // from data into ui
+    if ( IsRealized() )
+    {
+        const std::vector< tstring >& items = GetItems();
 
-    UpdateUI( items );
-  }
+        UpdateUI( items );
+    }
 
-  __super::Read();
+    __super::Read();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -92,59 +93,59 @@ void List::Read()
 // 
 bool List::Write()
 {
-  bool result = false;
+    bool result = false;
 
-  if ( IsRealized() )
-  {
-    tstring delimited;
-    ListBox* list = Control::Cast< ListBox >( this );
-    const i32 total = list->GetCount();
-    m_Items.clear();
-    m_Items.resize( total );
-
-tstring temp;
-bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
-HELIUM_ASSERT( converted );
-
-    for ( i32 index = 0; index < total; ++index )
+    if ( IsRealized() )
     {
-      if ( !delimited.empty() )
-      {
-        delimited += temp;
-      }
+        tstring delimited;
+        ListBox* list = Control::Cast< ListBox >( this );
+        const i32 total = list->GetCount();
+        m_Items.clear();
+        m_Items.resize( total );
 
-      const tstring val = list->GetString( index ).c_str();
+        tstring temp;
+        bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
+        HELIUM_ASSERT( converted );
 
-      if ( m_IsMap )
-      {
-        tstring::size_type pos = val.find( s_MapKeyValDelim );
-
-        // This is suppose to be a map, there better be a key-value pair
-        HELIUM_ASSERT( pos != tstring::npos );
-        if ( tstring::npos != pos )
+        for ( i32 index = 0; index < total; ++index )
         {
-          delimited += val.substr( 0, pos ) + temp;
-          delimited += val.substr( pos + _tcslen( s_MapKeyValDelim ) );
+            if ( !delimited.empty() )
+            {
+                delimited += temp;
+            }
+
+            const tstring val = list->GetString( index ).c_str();
+
+            if ( m_IsMap )
+            {
+                tstring::size_type pos = val.find( s_MapKeyValDelim );
+
+                // This is suppose to be a map, there better be a key-value pair
+                HELIUM_ASSERT( pos != tstring::npos );
+                if ( tstring::npos != pos )
+                {
+                    delimited += val.substr( 0, pos ) + temp;
+                    delimited += val.substr( pos + _tcslen( s_MapKeyValDelim ) );
+                }
+            }
+            else
+            {
+                delimited += val;
+            }
+
+            m_Items[index] = val;
         }
-      }
-      else
-      {
-        delimited += val;
-      }
 
-      m_Items[index] = val;
+        if ( IsBound() )
+        {
+            if ( WriteData( delimited ) )
+            {
+                result = __super::Write();
+            }
+        }
     }
 
-    if ( IsBound() )
-    {
-      if ( WriteData( delimited ) )
-      {
-        result = __super::Write();
-      }
-    }
-  }
-
-  return result;
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -154,8 +155,8 @@ HELIUM_ASSERT( converted );
 // 
 void List::SetSorted( bool sort )
 {
-  HELIUM_ASSERT( !IsRealized() );
-  m_Sorted = sort;
+    HELIUM_ASSERT( !IsRealized() );
+    m_Sorted = sort;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -163,8 +164,8 @@ void List::SetSorted( bool sort )
 // 
 void List::SetMap( bool isMap )
 {
-  HELIUM_ASSERT( !IsRealized() );
-  m_IsMap = isMap;
+    HELIUM_ASSERT( !IsRealized() );
+    m_IsMap = isMap;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -172,42 +173,42 @@ void List::SetMap( bool isMap )
 // 
 const std::vector< tstring >& List::GetItems()
 {
-  if ( IsBound() )
-  {
-    m_Items.clear();
-    tstring str;
-    ReadData( str );
-
-tstring temp;
-bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
-HELIUM_ASSERT( converted );
-
-    Helium::Tokenize( str, m_Items, temp );
-
-    if ( m_IsMap )
+    if ( IsBound() )
     {
-      // This list is a map representation so it better have an even number of elemnts
-      HELIUM_ASSERT( m_Items.size() % 2 == 0 );
+        m_Items.clear();
+        tstring str;
+        ReadData( str );
 
-      std::vector< tstring >::iterator itr = m_Items.begin();
-      std::vector< tstring >::iterator previous = itr;
-      for ( ; itr != m_Items.end(); ++itr )
-      {
-        if ( previous != itr )
+        tstring temp;
+        bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
+        HELIUM_ASSERT( converted );
+
+        Helium::Tokenize( str, m_Items, temp );
+
+        if ( m_IsMap )
         {
-          *previous = ( *previous ) + s_MapKeyValDelim + ( *itr );
-          itr = m_Items.erase( itr );
-          previous = itr;
+            // This list is a map representation so it better have an even number of elemnts
+            HELIUM_ASSERT( m_Items.size() % 2 == 0 );
 
-          if ( itr == m_Items.end() )
-          {
-            break;
-          }
+            std::vector< tstring >::iterator itr = m_Items.begin();
+            std::vector< tstring >::iterator previous = itr;
+            for ( ; itr != m_Items.end(); ++itr )
+            {
+                if ( previous != itr )
+                {
+                    *previous = ( *previous ) + s_MapKeyValDelim + ( *itr );
+                    itr = m_Items.erase( itr );
+                    previous = itr;
+
+                    if ( itr == m_Items.end() )
+                    {
+                        break;
+                    }
+                }
+            }
         }
-      }
     }
-  }
-  return m_Items;
+    return m_Items;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -216,24 +217,24 @@ HELIUM_ASSERT( converted );
 // 
 void List::AddItems( const std::vector< tstring >& items )
 {
-  if ( IsBound() )
-  {
-tstring temp;
-bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
-HELIUM_ASSERT( converted );
-
-    tstring str = GetDelimitedList( items, temp );
-    WriteData( str );
-  }
-  else
-  {
-    if ( m_Items != items )
+    if ( IsBound() )
     {
-     m_Items = items;
-    }
-  }
+        tstring temp;
+        bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
+        HELIUM_ASSERT( converted );
 
-  UpdateUI( items );
+        tstring str = GetDelimitedList( items, temp );
+        WriteData( str );
+    }
+    else
+    {
+        if ( m_Items != items )
+        {
+            m_Items = items;
+        }
+    }
+
+    UpdateUI( items );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -241,32 +242,32 @@ HELIUM_ASSERT( converted );
 // 
 void List::AddItem( const tstring& item )
 {
-  if ( IsBound() )
-  {
-    tstring str;
-    ReadData( str );
-
-tstring temp;
-bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
-HELIUM_ASSERT( converted );
-
-    if ( !str.empty() )
+    if ( IsBound() )
     {
-      str += temp;
+        tstring str;
+        ReadData( str );
+
+        tstring temp;
+        bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
+        HELIUM_ASSERT( converted );
+
+        if ( !str.empty() )
+        {
+            str += temp;
+        }
+        str += item;
+
+        WriteData( str );
+
+        m_Items.clear();
+        Helium::Tokenize( str, m_Items, temp );
     }
-    str += item;
+    else
+    {
+        m_Items.push_back( item );
+    }
 
-    WriteData( str );
-
-    m_Items.clear();
-    Helium::Tokenize( str, m_Items, temp );
-  }
-  else
-  {
-    m_Items.push_back( item );
-  }
-
-  UpdateUI( m_Items );
+    UpdateUI( m_Items );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -274,65 +275,65 @@ HELIUM_ASSERT( converted );
 // 
 void List::RemoveItem( const tstring& item )
 {
-  bool uiNeedsUpdate = false;
+    bool uiNeedsUpdate = false;
 
-  if ( IsBound() )
-  {
-    tstring delimited;
-    ReadData( delimited );
-
-tstring temp;
-bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
-HELIUM_ASSERT( converted );
-
-    // Search for item + delimiter
-    tstring search = item + temp;
-    tstring::size_type pos = delimited.find( search );
-    if ( pos == tstring::npos )
+    if ( IsBound() )
     {
-      // Not found, search for delimiter + item
-      search = temp + item;
-      pos = delimited.find( search );
-      if ( pos == tstring::npos )
-      {
-        // Not found, search for the item with no delimiter (this would occur if the
-        // item we are removing is the only item in the list).
-        search = item;
-        pos = delimited.find( search );
-      }
-    }
-    
-    // If we found the item to remove, take it out of the string
-    if ( pos != tstring::npos )
-    {
-      delimited.replace( pos, search.size(), TXT( "" ) );
-      WriteData( delimited );
+        tstring delimited;
+        ReadData( delimited );
 
-      m_Items.clear();
-      Helium::Tokenize( delimited, m_Items, temp );
-      uiNeedsUpdate = true;
-    }
-  }
-  else
-  {
-    std::vector< tstring >::iterator itr = m_Items.begin();
-    std::vector< tstring >::iterator end = m_Items.end();
-    for ( ; itr != end; ++itr )
-    {
-      const tstring& current = *itr;
-      if ( current == item )
-      {
-        m_Items.erase( itr );
-        uiNeedsUpdate = true;
-        break;
-      }
-    }
-  }
+        tstring temp;
+        bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
+        HELIUM_ASSERT( converted );
 
-  if ( uiNeedsUpdate )
-  {
-    UpdateUI( m_Items );
-  }
+        // Search for item + delimiter
+        tstring search = item + temp;
+        tstring::size_type pos = delimited.find( search );
+        if ( pos == tstring::npos )
+        {
+            // Not found, search for delimiter + item
+            search = temp + item;
+            pos = delimited.find( search );
+            if ( pos == tstring::npos )
+            {
+                // Not found, search for the item with no delimiter (this would occur if the
+                // item we are removing is the only item in the list).
+                search = item;
+                pos = delimited.find( search );
+            }
+        }
+
+        // If we found the item to remove, take it out of the string
+        if ( pos != tstring::npos )
+        {
+            delimited.replace( pos, search.size(), TXT( "" ) );
+            WriteData( delimited );
+
+            m_Items.clear();
+            Helium::Tokenize( delimited, m_Items, temp );
+            uiNeedsUpdate = true;
+        }
+    }
+    else
+    {
+        std::vector< tstring >::iterator itr = m_Items.begin();
+        std::vector< tstring >::iterator end = m_Items.end();
+        for ( ; itr != end; ++itr )
+        {
+            const tstring& current = *itr;
+            if ( current == item )
+            {
+                m_Items.erase( itr );
+                uiNeedsUpdate = true;
+                break;
+            }
+        }
+    }
+
+    if ( uiNeedsUpdate )
+    {
+        UpdateUI( m_Items );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -340,22 +341,22 @@ HELIUM_ASSERT( converted );
 // 
 const std::vector< tstring >& List::GetSelectedItems()
 {
-  if ( IsRealized() )
-  {
-    ListBox* list = Control::Cast<ListBox>( this );
-    wxArrayInt indices;
-    const i32 numIndices = list->GetSelections( indices );
-
-    m_SelectedItems.clear();
-    m_SelectedItems.resize( numIndices );
-
-    for ( i32 index = 0; index < numIndices; ++index )
+    if ( IsRealized() )
     {
-      m_SelectedItems[index] = list->GetString( indices[index] ).c_str();
-    }
-  }
+        ListBox* list = Control::Cast<ListBox>( this );
+        wxArrayInt indices;
+        const i32 numIndices = list->GetSelections( indices );
 
-  return m_SelectedItems;
+        m_SelectedItems.clear();
+        m_SelectedItems.resize( numIndices );
+
+        for ( i32 index = 0; index < numIndices; ++index )
+        {
+            m_SelectedItems[index] = list->GetString( indices[index] ).c_str();
+        }
+    }
+
+    return m_SelectedItems;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -363,27 +364,27 @@ const std::vector< tstring >& List::GetSelectedItems()
 // 
 void List::SetSelectedItems( const std::vector< tstring >& items )
 {
-  if ( IsRealized() )
-  {
-    ListBox* list = Control::Cast<ListBox>( this );
-
-    // Deselect everything
-    list->SetSelection( wxNOT_FOUND );
-
-    m_Window->Freeze();
-    // Select each item in the list
-    std::vector< tstring >::const_iterator itr = items.begin();
-    std::vector< tstring >::const_iterator end = items.end();
-    for ( ; itr < end; ++itr )
+    if ( IsRealized() )
     {
-      list->SetStringSelection( (*itr).c_str() );
+        ListBox* list = Control::Cast<ListBox>( this );
+
+        // Deselect everything
+        list->SetSelection( wxNOT_FOUND );
+
+        m_Window->Freeze();
+        // Select each item in the list
+        std::vector< tstring >::const_iterator itr = items.begin();
+        std::vector< tstring >::const_iterator end = items.end();
+        for ( ; itr < end; ++itr )
+        {
+            list->SetStringSelection( (*itr).c_str() );
+        }
+        m_Window->Thaw();
     }
-    m_Window->Thaw();
-  }
-  else
-  {
-    m_SelectedItems = items;
-  }
+    else
+    {
+        m_SelectedItems = items;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -391,37 +392,37 @@ void List::SetSelectedItems( const std::vector< tstring >& items )
 // 
 tstring List::GetSelectedItems( const tstring delimiter )
 {
-  tstring items;
+    tstring items;
 
-  if ( IsRealized() )
-  {
-    ListBox* list = Control::Cast<ListBox>( this );
-    wxArrayInt indices;
-    i32 numIndices = list->GetSelections( indices );
-    for ( i32 index = 0; index < numIndices; ++index )
+    if ( IsRealized() )
     {
-      if ( !items.empty() )
-      {
-        items += delimiter;
-      }
-      items += list->GetString( index ).c_str();
+        ListBox* list = Control::Cast<ListBox>( this );
+        wxArrayInt indices;
+        i32 numIndices = list->GetSelections( indices );
+        for ( i32 index = 0; index < numIndices; ++index )
+        {
+            if ( !items.empty() )
+            {
+                items += delimiter;
+            }
+            items += list->GetString( index ).c_str();
+        }
     }
-  }
-  else
-  {
-    std::vector< tstring >::const_iterator itr = m_SelectedItems.begin();
-    std::vector< tstring >::const_iterator end = m_SelectedItems.end();
-    for ( ; itr != end; ++itr )
+    else
     {
-      if ( !items.empty() )
-      {
-        items += delimiter;
-      }
-      items += *itr;
+        std::vector< tstring >::const_iterator itr = m_SelectedItems.begin();
+        std::vector< tstring >::const_iterator end = m_SelectedItems.end();
+        for ( ; itr != end; ++itr )
+        {
+            if ( !items.empty() )
+            {
+                items += delimiter;
+            }
+            items += *itr;
+        }
     }
-  }
 
-  return items;
+    return items;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -434,9 +435,9 @@ tstring List::GetSelectedItems( const tstring delimiter )
 // 
 void List::SetSelectedItems( const tstring& delimitedList, const tstring& delimiter )
 {
-  std::vector< tstring > items;
-  Helium::Tokenize( delimitedList, items, delimiter );
-  SetSelectedItems( items );
+    std::vector< tstring > items;
+    Helium::Tokenize( delimitedList, items, delimiter );
+    SetSelectedItems( items );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -444,12 +445,12 @@ void List::SetSelectedItems( const tstring& delimitedList, const tstring& delimi
 // 
 static inline void SetSelection( ListBox* list, const std::vector< i32 > indices )
 {
-  std::vector< i32 >::const_iterator indexItr = indices.begin();
-  std::vector< i32 >::const_iterator indexEnd = indices.end();
-  for ( ; indexItr != indexEnd; ++indexItr )
-  {
-    list->Select( *indexItr );
-  }
+    std::vector< i32 >::const_iterator indexItr = indices.begin();
+    std::vector< i32 >::const_iterator indexEnd = indices.end();
+    for ( ; indexItr != indexEnd; ++indexItr )
+    {
+        list->Select( *indexItr );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -457,62 +458,62 @@ static inline void SetSelection( ListBox* list, const std::vector< i32 > indices
 // 
 void List::MoveSelectedItems( MoveDirection direction )
 {
-  bool isDirty = false;
-  const std::vector< tstring >& selectedItems = GetSelectedItems();
-  std::vector< i32 > selectedItemIndices;
+    bool isDirty = false;
+    const std::vector< tstring >& selectedItems = GetSelectedItems();
+    std::vector< i32 > selectedItemIndices;
 
-  const size_t numSelectedItems = selectedItems.size();
-  if ( numSelectedItems > 0 )
-  {
-    i32 currentSelection = 0;
-    const size_t numItems = m_Items.size();
-    for ( size_t itemIndex = 0; itemIndex < numItems; ++itemIndex )
+    const size_t numSelectedItems = selectedItems.size();
+    if ( numSelectedItems > 0 )
     {
-      tstring& current = m_Items[itemIndex];
-      if ( current == selectedItems[currentSelection] )
-      {
-        // Move the item up in the list if possible.
-        if ( direction == MoveDirections::Up && itemIndex > 0 )
+        i32 currentSelection = 0;
+        const size_t numItems = m_Items.size();
+        for ( size_t itemIndex = 0; itemIndex < numItems; ++itemIndex )
         {
-          tstring temp = m_Items[itemIndex-1];
-          m_Items[itemIndex-1] = m_Items[itemIndex];
-          m_Items[itemIndex] = temp;
-          isDirty = true;
-          selectedItemIndices.push_back( static_cast< i32 >( itemIndex ) - 1 );
-        }
-        else if ( direction == MoveDirections::Down && itemIndex + 1 < numItems )
-        {
-          tstring temp = m_Items[itemIndex+1];
-          m_Items[itemIndex+1] = m_Items[itemIndex];
-          m_Items[itemIndex] = temp;
-          isDirty = true;
-          selectedItemIndices.push_back( static_cast< i32 >( itemIndex ) + 1 );
-        }
+            tstring& current = m_Items[itemIndex];
+            if ( current == selectedItems[currentSelection] )
+            {
+                // Move the item up in the list if possible.
+                if ( direction == MoveDirections::Up && itemIndex > 0 )
+                {
+                    tstring temp = m_Items[itemIndex-1];
+                    m_Items[itemIndex-1] = m_Items[itemIndex];
+                    m_Items[itemIndex] = temp;
+                    isDirty = true;
+                    selectedItemIndices.push_back( static_cast< i32 >( itemIndex ) - 1 );
+                }
+                else if ( direction == MoveDirections::Down && itemIndex + 1 < numItems )
+                {
+                    tstring temp = m_Items[itemIndex+1];
+                    m_Items[itemIndex+1] = m_Items[itemIndex];
+                    m_Items[itemIndex] = temp;
+                    isDirty = true;
+                    selectedItemIndices.push_back( static_cast< i32 >( itemIndex ) + 1 );
+                }
 
-        // Advance selection and quit if we have no more selected items
-        ++currentSelection;
-        if ( currentSelection >= static_cast< i32 >( numSelectedItems ) )
-        {
-          break;
+                // Advance selection and quit if we have no more selected items
+                ++currentSelection;
+                if ( currentSelection >= static_cast< i32 >( numSelectedItems ) )
+                {
+                    break;
+                }
+            }
         }
-      }
     }
-  }
 
-  // TODO: This is brutal, we should probably not rebuild the whole control.
+    // TODO: This is brutal, we should probably not rebuild the whole control.
 
-  if ( isDirty && IsRealized() )
-  {
-    ListBox* list = Control::Cast< ListBox >( this );
-    list->Freeze();
+    if ( isDirty && IsRealized() )
+    {
+        ListBox* list = Control::Cast< ListBox >( this );
+        list->Freeze();
 
-    AddItems( m_Items );
+        AddItems( m_Items );
 
-    // Restore the selected items
-    SetSelection( list, selectedItemIndices );
+        // Restore the selected items
+        SetSelection( list, selectedItemIndices );
 
-    list->Thaw();
-  }
+        list->Thaw();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -520,37 +521,37 @@ void List::MoveSelectedItems( MoveDirection direction )
 // 
 tstring List::GetDelimitedList( const std::vector< tstring >& items, const tstring& delimiter )
 {
-  tstring delimitedList;
+    tstring delimitedList;
 
-tstring temp;
-bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
-HELIUM_ASSERT( converted );
+    tstring temp;
+    bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
+    HELIUM_ASSERT( converted );
 
-  std::vector< tstring >::const_iterator itr = items.begin();
-  std::vector< tstring >::const_iterator end = items.end();
-  for ( ; itr != end; ++itr )
-  {
-    if ( !delimitedList.empty() )
+    std::vector< tstring >::const_iterator itr = items.begin();
+    std::vector< tstring >::const_iterator end = items.end();
+    for ( ; itr != end; ++itr )
     {
-      delimitedList += delimiter;
+        if ( !delimitedList.empty() )
+        {
+            delimitedList += delimiter;
+        }
+        if ( m_IsMap )
+        {
+            // Replace our delimiters with the appropriate ones for the container
+            tstring::size_type pos = ( *itr ).find_first_of( s_MapKeyValDelim );
+            tstring::size_type lastPos = ( *itr ).find_first_not_of( s_MapKeyValDelim, pos );
+            if ( pos != tstring::npos )
+            {
+                delimitedList += ( *itr ).substr( 0, pos ) + temp + ( *itr ).substr( lastPos );
+            }
+        }
+        else
+        {
+            delimitedList += *itr;
+        }
     }
-    if ( m_IsMap )
-    {
-      // Replace our delimiters with the appropriate ones for the container
-      tstring::size_type pos = ( *itr ).find_first_of( s_MapKeyValDelim );
-      tstring::size_type lastPos = ( *itr ).find_first_not_of( s_MapKeyValDelim, pos );
-      if ( pos != tstring::npos )
-      {
-          delimitedList += ( *itr ).substr( 0, pos ) + temp + ( *itr ).substr( lastPos );
-      }
-    }
-    else
-    {
-      delimitedList += *itr;
-    }
-  }
-  
-  return delimitedList;
+
+    return delimitedList;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -558,21 +559,21 @@ HELIUM_ASSERT( converted );
 // 
 void List::UpdateUI( const std::vector< tstring >& items )
 {
-  if ( IsRealized() )
-  {
-    // Clear list box
-    ListBox* list = Control::Cast< ListBox >( this );
-    list->Freeze();
-    list->Clear();
-
-    std::vector< tstring >::const_iterator itr = items.begin();
-    std::vector< tstring >::const_iterator end = items.end();
-    for ( ; itr != end; ++itr )
+    if ( IsRealized() )
     {
-      list->Append( (*itr).c_str() );
+        // Clear list box
+        ListBox* list = Control::Cast< ListBox >( this );
+        list->Freeze();
+        list->Clear();
+
+        std::vector< tstring >::const_iterator itr = items.begin();
+        std::vector< tstring >::const_iterator end = items.end();
+        for ( ; itr != end; ++itr )
+        {
+            list->Append( (*itr).c_str() );
+        }
+        list->Thaw();
     }
-    list->Thaw();
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -580,22 +581,24 @@ void List::UpdateUI( const std::vector< tstring >& items )
 // 
 bool List::Process(const tstring& key, const tstring& value)
 {
-  if (__super::Process(key, value))
-    return true;
+    if (__super::Process(key, value))
+        return true;
 
-  if (key == LIST_ATTR_SORTED)
-  {
-    if (value == ATTR_VALUE_TRUE)
+    if (key == LIST_ATTR_SORTED)
     {
-      m_Sorted = true;
-      return true;
+        if (value == ATTR_VALUE_TRUE)
+        {
+            m_Sorted = true;
+            return true;
+        }
+        else if (value == ATTR_VALUE_FALSE)
+        {
+            m_Sorted = false;
+            return true;
+        }
     }
-    else if (value == ATTR_VALUE_FALSE)
-    {
-      m_Sorted = false;
-      return true;
-    }
-  }
 
-  return false;
+    return false;
 }
+
+#endif

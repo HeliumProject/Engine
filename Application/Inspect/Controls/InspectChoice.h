@@ -2,7 +2,8 @@
 
 #include "Application/API.h"
 #include "Application/Inspect/Controls/InspectItems.h"
-#include "Foundation/Automation/Event.h"
+
+#ifdef INSPECT_REFACTOR
 
 namespace Helium
 {
@@ -114,3 +115,5 @@ namespace Helium
         typedef Helium::SmartPtr<Choice> ChoicePtr;
     }
 }
+
+#endif

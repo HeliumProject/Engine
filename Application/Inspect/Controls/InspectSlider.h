@@ -3,7 +3,7 @@
 #include "Application/API.h"
 #include "Application/Inspect/Controls/InspectControl.h"
 
-#include "Foundation/Reflect/Class.h"
+#ifdef INSPECT_REFACTOR
 
 namespace Helium
 {
@@ -45,3 +45,5 @@ namespace Helium
         typedef Helium::SmartPtr<Slider> SliderPtr;
     }
 }
+
+#endif

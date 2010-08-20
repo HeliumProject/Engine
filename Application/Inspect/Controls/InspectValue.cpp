@@ -1,7 +1,10 @@
 #include "Application/Inspect/Controls/InspectValue.h"
 #include "Application/Inspect/Controls/InspectCanvas.h"
 
+using namespace Helium;
 using namespace Helium::Inspect;
+
+#ifdef INSPECT_REFACTOR
 
 class StdTextBox : public wxTextCtrl
 {
@@ -285,3 +288,5 @@ void Value::UpdateUI( const tstring& text )
     SetJustification( m_Justify );
   }
 }
+
+#endif

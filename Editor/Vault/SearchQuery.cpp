@@ -301,7 +301,7 @@ bool SearchQuery::ParseQueryString( const tstring& queryString, tstring& errors,
                     {
                         if ( ParseCollectionName( curToken, matchResults, currentValue, errors ) )
                         {
-                            AssetCollection* collection = wxGetApp().GetSettings()->GetVaultSettings()->GetCollectionManager()->FindCollection( currentValue );
+                            AssetCollection* collection = wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >()->GetCollectionManager()->FindCollection( currentValue );
                             if ( !collection )
                             {
                                 // TODO: error out

@@ -12,7 +12,6 @@
 #include "Editor/MainFrame.h"
 #include "Editor/Tracker/Tracker.h"
 #include "Editor/Vault/Vault.h"
-#include "Editor/Settings.h"
 
 #include <wx/app.h>
 #include <wx/xrc/xmlres.h>
@@ -39,11 +38,6 @@ namespace Helium
                 return m_SettingsManager;
             }
 
-            Settings* GetSettings()
-            {
-                return m_Settings;
-            }
-
             MainFrame* GetFrame()
             {
                 if ( !m_Frame )
@@ -68,7 +62,6 @@ namespace Helium
             Helium::Thread m_TrackerThread;
 
             Core::SettingsManagerPtr m_SettingsManager;
-            SettingsPtr m_Settings;
             Vault* m_Vault;
             MainFrame* m_Frame;
         };

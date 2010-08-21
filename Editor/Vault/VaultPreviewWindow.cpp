@@ -13,8 +13,9 @@ END_EVENT_TABLE()
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-VaultPreviewWindow::VaultPreviewWindow( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
+VaultPreviewWindow::VaultPreviewWindow( Core::SettingsManager* settingsManager, wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
 : RenderWindow( parent, id, pos, size, style, name )
+, m_SettingsManager( settingsManager )
 , m_VaultFrame( NULL )
 {
 }
@@ -24,11 +25,11 @@ VaultPreviewWindow::VaultPreviewWindow( wxWindow *parent, wxWindowID id, const w
 // 
 VaultPreviewWindow::~VaultPreviewWindow()
 {
-  if ( m_VaultFrame )
-  {
-    VaultSettings* preferences = wxGetApp().GetSettings()->GetVaultSettings();
-    preferences->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &VaultPreviewWindow::OnSettingsChanged ) );
-  }
+    if ( m_VaultFrame )
+    {
+        VaultSettings* settings = m_SettingsManager->GetSettings< VaultSettings >();
+        settings->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &VaultPreviewWindow::OnSettingsChanged ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -37,12 +38,12 @@ VaultPreviewWindow::~VaultPreviewWindow()
 // 
 void VaultPreviewWindow::SetVaultFrame( VaultFrame* browserFrame )
 {
-  m_VaultFrame = browserFrame;
+    m_VaultFrame = browserFrame;
 
-  VaultSettings* preferences = wxGetApp().GetSettings()->GetVaultSettings();
-  __super::DisplayReferenceAxis( preferences->DisplayPreviewAxis() );
+    VaultSettings* settings = m_SettingsManager->GetSettings< VaultSettings >();
+    __super::DisplayReferenceAxis( settings->DisplayPreviewAxis() );
 
-  preferences->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &VaultPreviewWindow::OnSettingsChanged ) );
+    settings->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &VaultPreviewWindow::OnSettingsChanged ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -50,8 +51,8 @@ void VaultPreviewWindow::SetVaultFrame( VaultFrame* browserFrame )
 // 
 void VaultPreviewWindow::DisplayReferenceAxis( bool display )
 {
-  VaultSettings* preferences = wxGetApp().GetSettings()->GetVaultSettings();
-  preferences->SetDisplayPreviewAxis( display );
+    VaultSettings* settings = m_SettingsManager->GetSettings< VaultSettings >();
+    settings->SetDisplayPreviewAxis( display );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -60,12 +61,12 @@ void VaultPreviewWindow::DisplayReferenceAxis( bool display )
 // 
 void VaultPreviewWindow::OnSettingsChanged( const Reflect::ElementChangeArgs& args )
 {
-  VaultSettings* preferences = wxGetApp().GetSettings()->GetVaultSettings();
-  if ( args.m_Element == preferences )
-  {
-    if ( args.m_Field == preferences->DisplayPreviewAxisField() || args.m_Field == NULL )
+    VaultSettings* settings = m_SettingsManager->GetSettings< VaultSettings >();
+    if ( args.m_Element == settings )
     {
-      __super::DisplayReferenceAxis( preferences->DisplayPreviewAxis() );
+        if ( args.m_Field->m_Name == settings->DisplayPreviewAxisField()->m_Name || args.m_Field == NULL )
+        {
+            __super::DisplayReferenceAxis( settings->DisplayPreviewAxis() );
+        }
     }
-  }
 }

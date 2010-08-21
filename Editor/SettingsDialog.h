@@ -2,11 +2,12 @@
 
 #include <map>
 
+#include "Core/SettingsManager.h"
+
 #include "Foundation/Reflect/Element.h"
 #include "Application/Inspect/Controls/Canvas.h"
 
 #include "Editor/API.h"
-#include "Editor/Settings.h"
 
 namespace Helium
 {
@@ -31,7 +32,7 @@ namespace Helium
             SettingsDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 644,375 ), long style = wxDEFAULT_DIALOG_STYLE );
             ~SettingsDialog();
 
-            virtual int ShowModal( Editor::Settings* prefs );
+			virtual int ShowModal( Core::SettingsManager* settingsManager );
 
         private:
             void OnRestoreDefaults( wxCommandEvent& args );

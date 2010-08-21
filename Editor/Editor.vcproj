@@ -2064,14 +2064,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Settings.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Settings.h"
-			>
-		</File>
-		<File
 			RelativePath=".\SettingsDialog.cpp"
 			>
 		</File>

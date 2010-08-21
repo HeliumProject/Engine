@@ -169,7 +169,7 @@ VaultFrame::VaultFrame( Vault* browser, VaultSearch* browserSearch, SearchHistor
 
         m_FrameManager.AddPane( m_FoldersPanel, info );
 
-        tstring defaultPath = wxGetApp().GetSettings()->GetVaultSettings()->GetDefaultFolderPath();
+        tstring defaultPath = wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >()->GetDefaultFolderPath();
         if ( !defaultPath.empty() )
         {
             m_FoldersPanel->SetPath( defaultPath );
@@ -305,10 +305,12 @@ VaultFrame::VaultFrame( Vault* browser, VaultSearch* browserSearch, SearchHistor
     //
     // Load Settings
     //
-    wxGetApp().GetSettings()->GetVaultSettings()->GetWindowSettings( this, &m_FrameManager );
-    wxGetApp().GetSettings()->GetVaultSettings()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &VaultFrame::OnSettingsChanged ) );
-    m_CurrentViewOption = wxGetApp().GetSettings()->GetVaultSettings()->GetThumbnailMode();
-    UpdateResultsView( wxGetApp().GetSettings()->GetVaultSettings()->GetThumbnailSize() );
+    VaultSettings* vaultSettings = wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >();
+
+    vaultSettings->GetWindowSettings( this, &m_FrameManager );
+    vaultSettings->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &VaultFrame::OnSettingsChanged ) );
+    m_CurrentViewOption = vaultSettings->GetThumbnailMode();
+    UpdateResultsView( vaultSettings->GetThumbnailSize() );
 
     //
     // Connect Events
@@ -809,7 +811,7 @@ void VaultFrame::OnNewCollectionFromSelection( wxCommandEvent& event )
 
     if ( collection )
     {
-        CollectionManager* collectionManager = wxGetApp().GetSettings()->GetVaultSettings()->GetCollectionManager();
+        CollectionManager* collectionManager = wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >()->GetCollectionManager();
         tstring name;
         collectionManager->GetUniqueName( name, collection->GetName().c_str() );
         collection->SetName( name );
@@ -888,7 +890,7 @@ void VaultFrame::OnPaste( wxCommandEvent& args )
 void VaultFrame::OnSettings( wxCommandEvent& event )
 {
     SettingsDialog dlg( this );
-    dlg.ShowModal( wxGetApp().GetSettings() );
+    dlg.ShowModal( wxGetApp().GetSettingsManager() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -902,14 +904,15 @@ void VaultFrame::OnClose( wxCloseEvent& event )
 {
     event.Skip();
 
-    wxGetApp().GetSettings()->GetVaultSettings()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &VaultFrame::OnSettingsChanged ) );
+    VaultSettings* vaultSettings = wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >();
+    vaultSettings->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &VaultFrame::OnSettingsChanged ) );
 
-    wxGetApp().GetSettings()->GetVaultSettings()->SetThumbnailMode( m_CurrentViewOption );
-    wxGetApp().GetSettings()->GetVaultSettings()->SetWindowSettings( this, &m_FrameManager );
+    vaultSettings->SetThumbnailMode( m_CurrentViewOption );
+    vaultSettings->SetWindowSettings( this, &m_FrameManager );
 
     tstring path;
     m_FoldersPanel->GetPath( path );
-    wxGetApp().GetSettings()->GetVaultSettings()->SetDefaultFolderPath( path );
+    vaultSettings->SetDefaultFolderPath( path );
     m_Vault->OnCloseVault();
 }
 
@@ -958,8 +961,8 @@ void VaultFrame::OnSearchComplete( const Editor::SearchCompleteArgs& args )
 // 
 void VaultFrame::OnSettingsChanged( const Reflect::ElementChangeArgs& args )
 {
-    m_CurrentViewOption = wxGetApp().GetSettings()->GetVaultSettings()->GetThumbnailMode();
-    UpdateResultsView( wxGetApp().GetSettings()->GetVaultSettings()->GetThumbnailSize() );
+    m_CurrentViewOption = wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >()->GetThumbnailMode();
+    UpdateResultsView( wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >()->GetThumbnailSize() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

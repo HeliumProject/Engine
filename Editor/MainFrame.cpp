@@ -225,8 +225,8 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     // Restore layout if any
     //
 
-    wxGetApp().GetSettings()->GetWindowSettings()->ApplyToWindow( this, &m_FrameManager, true );
-    m_ViewPanel->GetViewCanvas()->GetViewport().LoadSettings( wxGetApp().GetSettings()->GetViewportSettings() ); 
+    wxGetApp().GetSettingsManager()->GetSettings< WindowSettings >()->ApplyToWindow( this, &m_FrameManager, true );
+    m_ViewPanel->GetViewCanvas()->GetViewport().LoadSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
 
     //
     // Attach event handlers
@@ -281,8 +281,8 @@ MainFrame::~MainFrame()
     wxGetApp().GetSettings()->GetSceneSettings()->GetMRU()->SetPaths( mruPaths );
 #endif
 
-    wxGetApp().GetSettings()->GetWindowSettings()->SetFromWindow( this, &m_FrameManager );
-    m_ViewPanel->GetViewCanvas()->GetViewport().SaveSettings( wxGetApp().GetSettings()->GetViewportSettings() ); 
+    wxGetApp().GetSettingsManager()->GetSettings< WindowSettings >()->SetFromWindow( this, &m_FrameManager );
+    m_ViewPanel->GetViewCanvas()->GetViewport().SaveSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
     wxGetApp().SaveSettings();
 
     //
@@ -1005,12 +1005,12 @@ void MainFrame::OnViewVisibleChange(wxCommandEvent& event)
 
 void MainFrame::OnViewColorModeChange(wxCommandEvent& event)
 {
-    const ViewColorMode previousColorMode = wxGetApp().GetSettings()->GetViewportSettings()->GetColorMode();
+    const ViewColorMode previousColorMode = wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >()->GetColorMode();
 
     const M_IDToColorMode::const_iterator newColorModeItr = m_ColorModeLookup.find( event.GetId() );
     if ( newColorModeItr != m_ColorModeLookup.end() )
     {
-        wxGetApp().GetSettings()->GetViewportSettings()->SetColorMode( ( ViewColorMode )( newColorModeItr->second ) );
+        wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >()->SetColorMode( ( ViewColorMode )( newColorModeItr->second ) );
     }
 }
 
@@ -1966,7 +1966,7 @@ void MainFrame::OnAbout( wxCommandEvent& event )
 void MainFrame::OnSettings( wxCommandEvent& event )
 {
     SettingsDialog dlg ( this, wxID_ANY, TXT( "Settings" ) );
-    dlg.ShowModal( wxGetApp().GetSettings() );
+    dlg.ShowModal( wxGetApp().GetSettingsManager() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

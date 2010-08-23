@@ -29,18 +29,14 @@ SettingsDialog::~SettingsDialog()
 {
 }
 
-int SettingsDialog::ShowModal( Editor::Settings* prefs )
+int SettingsDialog::ShowModal( Core::SettingsManager* settingsManager )
 {
   m_SettingSizer = new wxBoxSizer( wxVERTICAL );
   m_CurrentSetting = NULL;
   m_SettingInfo.clear();
 
 #pragma TODO("Automate this")
-  Reflect::V_Element preferences;
-  preferences.push_back( prefs->GetSceneSettings() );
-  preferences.push_back( prefs->GetViewportSettings() );
-  preferences.push_back( prefs->GetGridSettings() );
-  preferences.push_back( prefs->GetVaultSettings() );
+  Core::M_Settings settings = settingsManager->GetSettingsMap();
 
   wxListBox* propertiesListBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxSize( 130 /* 207 */, -1 ) );
   propertiesListBox->Connect( propertiesListBox->GetId(), wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( SettingsDialog::OnSettingsChanged ), NULL, this );
@@ -52,9 +48,9 @@ int SettingsDialog::ShowModal( Editor::Settings* prefs )
   propertiesSizer->Add( 6, 0, 0 );
   
   Inspect::V_Control canvasControls;
-  for ( Reflect::V_Element::iterator itr = preferences.begin(), end = preferences.end(); itr != end; ++itr )
+  for ( Core::M_Settings::iterator itr = settings.begin(), end = settings.end(); itr != end; ++itr )
   {
-    Reflect::ElementPtr clone = (*itr)->Clone();
+    Reflect::ElementPtr clone = (*itr).second->Clone();
     clone->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &SettingsDialog::OnRefreshElements ) );
 
     Inspect::CanvasPtr canvas = new Inspect::Canvas();
@@ -72,8 +68,8 @@ int SettingsDialog::ShowModal( Editor::Settings* prefs )
     elems.push_back( clone );
     interpreter->Interpret( elems );
 
-    int index = propertiesListBox->Append( (*itr)->GetTitle() );
-    m_SettingInfo.insert( std::make_pair( index, new SettingInfo( (*itr), clone, canvas ) ) );
+    int index = propertiesListBox->Append( (*itr).second->GetTitle() );
+    m_SettingInfo.insert( std::make_pair( index, new SettingInfo( (*itr).second, clone, canvas ) ) );
   }
   
   wxButton* restoreDefaults = new wxButton( this, wxID_ANY, wxT( "Restore Defaults" ), wxDefaultPosition, wxDefaultSize, 0 );

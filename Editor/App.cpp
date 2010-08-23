@@ -27,19 +27,22 @@
 #include "Application/RCS/Providers/Perforce/Perforce.h"
 
 #include "Core/CoreInit.h"
+#include "Core/MRUData.h"
 
+#include "Core/Scene/SceneInit.h"
 #include "Core/Scene/Object.h"
 #include "Core/Scene/Selectable.h"
 #include "Core/Scene/Persistent.h"
 #include "Core/Scene/PropertiesGenerator.h"
 
-#include "Settings.h"
+#include "Core/Scene/GridSettings.h"
+#include "Core/Scene/SceneSettings.h"
+
 #include "WindowSettings.h"
 #include "Application/Document.h"
 
-#include "Core/Scene/SceneInit.h"
-#include "Tracker/Tracker.h"
-#include "Task/TaskInit.h"
+#include "Editor/Tracker/Tracker.h"
+#include "Editor/Task/TaskInit.h"
 #include "Editor/PerforceWaitDialog.h"
 #include "Editor/Vault/Vault.h"
 
@@ -151,7 +154,6 @@ namespace Helium
 App::App()
 #pragma TODO("This needs fixing otherwise dialogs will not be modal -Geoff")
 : m_SettingsManager( new Core::SettingsManager() )
-, m_Settings( new Settings() )
 , m_Vault( NULL )
 , m_Frame( NULL )
 {
@@ -214,8 +216,7 @@ bool App::OnInit()
     m_InitializerStack.Push( Core::Selectable::InitializeType, Core::Selectable::CleanupType );
     m_InitializerStack.Push( Core::Persistent::InitializeType, Core::Persistent::CleanupType );
     m_InitializerStack.Push( Core::PropertiesGenerator::Initialize, Core::PropertiesGenerator::Cleanup );
-    m_InitializerStack.Push( Reflect::RegisterEnumType<FilePathOptions::FilePathOption>( &FilePathOptions::FilePathOptionEnumerateEnum, TXT( "FilePathOption" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Core::MRUData >( TXT( "MRUData" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Core::MRUData >( TXT( "Core::MRUData" ) ) );
 
     // task
 #pragma TODO("Move init into here")
@@ -233,14 +234,14 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::RegisterClassType<SearchHistory>( TXT( "SearchHistory" ) ) );
     m_InitializerStack.Push( Reflect::RegisterEnumType<ViewOptionIDs::ViewOptionID>( &ViewOptionIDs::ViewOptionIDEnumerateEnum, TXT( "ViewOptionID" ) ) );
 
-    // preferences
+    // settings
+    m_InitializerStack.Push( Reflect::RegisterClassType< Core::SettingsManager >( TXT( "Core::SettingsManager" ) ) ); 
     m_InitializerStack.Push( Reflect::RegisterClassType< Core::CameraSettings >( TXT( "Core::CameraSettings" ) ) ); 
     m_InitializerStack.Push( Reflect::RegisterClassType< Core::ViewportSettings >( TXT( "Core::ViewportSettings" ) ) ); 
     m_InitializerStack.Push( Reflect::RegisterClassType< Core::GridSettings >( TXT( "Core::GridSettings" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClassType< Core::SceneSettings >( TXT( "Core::SceneSettings" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClassType< WindowSettings >( TXT( "Editor::WindowSettings" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClassType< VaultSettings >( TXT( "Editor::VaultSettings" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Settings >( TXT( "Editor::Settings" ) ) );
 
     LoadSettings();
 
@@ -300,13 +301,13 @@ void App::SaveSettings()
     tstring error;
     if ( Helium::IsDebuggerPresent() )
     {
-        Reflect::Archive::ToFile( m_Settings, path );
+        Reflect::Archive::ToFile( m_SettingsManager, path );
     }
     else
     {
         try
         {
-            Reflect::Archive::ToFile( m_Settings, path );
+            Reflect::Archive::ToFile( m_SettingsManager, path );
         }
         catch ( const Helium::Exception& ex )
         {
@@ -326,16 +327,21 @@ void App::LoadSettings()
     Helium::GetPreferencesDirectory( path );
     path += TXT("EditorSettings.xml");
 
+	if ( !path.Exists() )
+	{
+		return;
+	}
+
     if ( Helium::IsDebuggerPresent() )
     {
-        m_Settings = Reflect::Archive::FromFile< Settings >( path );
+		m_SettingsManager = Reflect::Archive::FromFile< Core::SettingsManager >( path );
     }
     else
     {
         tstring error;
         try
         {
-            m_Settings = Reflect::Archive::FromFile< Settings >( path );
+			m_SettingsManager = Reflect::Archive::FromFile< Core::SettingsManager >( path );
         }
         catch ( const Helium::Exception& ex )
         {

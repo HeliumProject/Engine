@@ -58,7 +58,7 @@ CollectionsPanel::CollectionsPanel( VaultFrame* browserFrame )
     Connect( wxEVT_SIZE, wxSizeEventHandler( CollectionsPanel::OnSizeCollectionsPanel ), NULL, this );
 
 //    wxGetApp().GetSettings()->GetVaultSettings()->AddSettingsLoadedListener( Core::SettingsLoadedSignature::Delegate( this, &CollectionsPanel::OnSettingsLoaded ) );
-    wxGetApp().GetSettings()->GetVaultSettings()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &CollectionsPanel::OnPrefrencesChanged ) );
+    wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &CollectionsPanel::OnPrefrencesChanged ) );
 
     // Drag-and-drop 
     // No need to delete drop target, wx takes care of that after calling SetDropTarget.
@@ -76,7 +76,7 @@ CollectionsPanel::~CollectionsPanel()
     Disconnect( wxEVT_SIZE, wxSizeEventHandler( CollectionsPanel::OnSizeCollectionsPanel ), NULL, this );
 
 //    wxGetApp().GetSettings()->GetVaultSettings()->RemoveSettingsLoadedListener( Core::SettingsLoadedSignature::Delegate( this, &CollectionsPanel::OnSettingsLoaded ) );
-    wxGetApp().GetSettings()->GetVaultSettings()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &CollectionsPanel::OnPrefrencesChanged ) );
+    wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &CollectionsPanel::OnPrefrencesChanged ) );
 
     for ( M_AssetCollections::const_iterator itr = m_CollectionManager->GetCollections().begin(),
         end = m_CollectionManager->GetCollections().end(); itr != end; ++itr )
@@ -870,7 +870,7 @@ void CollectionsPanel::UpdateCollectionManager()
         DisconnectCollectionManagerListeners();
     }
 
-    m_CollectionManager = wxGetApp().GetSettings()->GetVaultSettings()->GetCollectionManager();
+    m_CollectionManager = wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >()->GetCollectionManager();
     ConnectCollectionManagerListeners();
     ConnectCollectionListeners();
     UpdateCollections();

@@ -13,6 +13,8 @@ namespace Helium
         struct SettingsManagerLoadedArgs {};
         typedef Helium::Signature< void, const SettingsManagerLoadedArgs& > SettingsManagerLoadedSignature;
 
+		typedef std::map< i32, Reflect::ElementPtr > M_Settings;
+
         class CORE_API SettingsManager : public Reflect::ConcreteInheritor< SettingsManager, Reflect::Element >
         {
         public:
@@ -24,21 +26,26 @@ namespace Helium
             {
             }
 
+			const M_Settings& GetSettingsMap()
+			{
+				return m_SettingsMap;
+			}
+
             template< class Type >
             Type* GetSettings()
             {
-                std::map< i32, Reflect::ElementPtr >::const_iterator itr = m_SettingsMap.find( Type::GetType() );
+                M_Settings::const_iterator itr = m_SettingsMap.find( Reflect::GetType< Type >() );
                 if ( itr != m_SettingsMap.end() )
                 {
-                    return (Type*)(*itr).second;
+                    return Reflect::ObjectCast< Type >( (*itr).second );
                 }
                 else
                 {
                     // if we haven't seen this type of settings object before, just new one up
-                    Type* newSettings = (Type*) Reflect::Registry::GetInstance()->GetClass( Type::GetType() )->m_Create();
+                    Type* newSettings = Reflect::ObjectCast< Type >( Reflect::Registry::GetInstance()->GetClass( Reflect::GetType< Type >() )->m_Create() );
                     HELIUM_ASSERT( newSettings );
 
-                    m_SettingsMap[ type ] = newSettings;
+                    m_SettingsMap[ Reflect::GetType< Type >() ] = newSettings;
                     return newSettings;
                 }
             }
@@ -51,7 +58,7 @@ namespace Helium
             }
 
         private:
-            std::map< i32, Reflect::ElementPtr > m_SettingsMap;
+            M_Settings m_SettingsMap;
 
         public:
             static void EnumerateClass( Reflect::Compositor< SettingsManager >& comp )

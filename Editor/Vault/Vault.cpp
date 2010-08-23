@@ -24,8 +24,8 @@ Vault::Vault()
     // Create the one and only VaultSearch
     m_VaultSearch = new VaultSearch();
 
-    m_CollectionManager = wxGetApp().GetSettings()->GetVaultSettings()->GetCollectionManager();
-    m_SearchHistory = wxGetApp().GetSettings()->GetVaultSettings()->GetSearchHistory();
+    m_CollectionManager = wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >()->GetCollectionManager();
+    m_SearchHistory = wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >()->GetSearchHistory();
     m_SearchHistory->SetVaultSearch( m_VaultSearch );
 }
 
@@ -60,7 +60,7 @@ void Vault::ShowVault( const tstring& queryString )
     {
         if ( !m_SearchHistory->RunCurrentQuery() )
         {
-            m_VaultFrame->Search( wxGetApp().GetSettings()->GetVaultSettings()->GetDefaultFolderPath() );
+            m_VaultFrame->Search( wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >()->GetDefaultFolderPath() );
         }
     }
 }

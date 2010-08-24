@@ -12,16 +12,18 @@ namespace Helium
 {
     namespace Asset
     {
-        class CORE_API MeshAssetFactory : public AssetFactory
+        class CORE_API TextureAssetFactory : public AssetFactory
         {
         public:
-            MeshAssetFactory()
+            TextureAssetFactory()
                 : AssetFactory()
             {
-                m_FileExtensions.insert( TXT( "obj" ) );
-				m_FileExtensions.insert( TXT( "fbx" ) );
+                m_FileExtensions.insert( TXT( "png" ) );
+				m_FileExtensions.insert( TXT( "jpg" ) );
+				m_FileExtensions.insert( TXT( "tif" ) );
+				m_FileExtensions.insert( TXT( "tga" ) );
             }
-            virtual ~MeshAssetFactory()
+            virtual ~TextureAssetFactory()
             {
             }
 

@@ -76,6 +76,5 @@ namespace Helium
         };
 
         typedef Helium::SmartPtr< MeshProcessingComponent > MeshProcessingComponentPtr;
-
     }
 }

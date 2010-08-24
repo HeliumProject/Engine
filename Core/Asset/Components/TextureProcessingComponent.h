@@ -106,5 +106,7 @@ namespace Helium
                 m_GenerateBumpMap = generateBumpMap;
             }
         };
+
+		typedef Helium::SmartPtr< TextureProcessingComponent > TextureProcessingComponentPtr;
     }
 }

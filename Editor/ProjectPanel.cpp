@@ -87,12 +87,12 @@ void ProjectViewModel::GetValue(wxVariant& value, const wxDataViewItem& item, un
                 {
                     switch ( column )
                     {
-                    case 0:
-                        value = project->Path().Get().c_str();
-                        break;
+						case 0:
+							value = project->Path().Get().c_str();
+							break;
 
-                    case 1:
-                        break;
+						case 1:
+							break;
                     }
                 }
             }
@@ -163,7 +163,10 @@ ProjectPanel::ProjectPanel( wxWindow *parent )
     wxDataViewColumn *column1 = new wxDataViewColumn( "Details", render1, 1, 150, wxALIGN_LEFT, wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
     m_DataViewCtrl->AppendColumn( column1 );
 
-    m_DropTarget = new FileDropTarget( TXT( "obj" ) );
+	std::set< tstring > extension;
+	Asset::AssetClass::GetExtensions( extension );
+
+    m_DropTarget = new FileDropTarget( extension );
     m_DropTarget->AddListener( FileDroppedSignature::Delegate( this, &ProjectPanel::OnDroppedFiles ) );
     SetDropTarget( m_DropTarget );
 

@@ -432,6 +432,9 @@ void MainFrame::SceneAdded( const SceneChangeArgs& args )
         args.m_Scene->AddSceneContextChangedListener( SceneContextChangedSignature::Delegate( this, &MainFrame::SceneContextChanged ) );
         args.m_Scene->AddLoadFinishedListener( LoadSignature::Delegate( this, & MainFrame::SceneLoadFinished ) );
         args.m_Scene->UndoCommandDelegate().Set( UndoCommandSignature::Delegate( this, &MainFrame::OnSceneUndoCommand ) );
+        args.m_Scene->AddExecutedListener( ExecuteSignature::Delegate( this, &MainFrame::SceneExecuted ) );
+
+        m_ViewPanel->GetViewCanvas()->GetViewport().AddRenderListener( RenderSignature::Delegate( args.m_Scene, &Scene::Render ) );
 
         m_SelectionEnumerator->AddPopulateLinkListener( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Core::Scene::PopulateLink));
 
@@ -448,6 +451,9 @@ void MainFrame::SceneRemoving( const SceneChangeArgs& args )
     args.m_Scene->RemoveSceneContextChangedListener( SceneContextChangedSignature::Delegate ( this, &MainFrame::SceneContextChanged ) );
     args.m_Scene->RemoveLoadFinishedListener( LoadSignature::Delegate( this, & MainFrame::SceneLoadFinished ) );
     args.m_Scene->UndoCommandDelegate().Clear();
+    args.m_Scene->RemoveExecutedListener( ExecuteSignature::Delegate( this, &MainFrame::SceneExecuted ) );
+
+    m_ViewPanel->GetViewCanvas()->GetViewport().RemoveRenderListener( RenderSignature::Delegate( args.m_Scene, &Scene::Render ) );
 
     m_SelectionEnumerator->RemovePopulateLinkListener( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Core::Scene::PopulateLink));
 
@@ -461,6 +467,18 @@ void MainFrame::SceneLoadFinished( const LoadArgs& args )
     m_ViewPanel->GetViewCanvas()->Refresh();
     Document* document = m_SceneManager.GetDocumentManager().FindDocument( args.m_Scene->GetPath() );
     DocumentModified( DocumentChangedArgs( document ) );
+}
+
+void MainFrame::SceneExecuted( const ExecuteArgs& args )
+{
+    // invalidate the view
+    m_ViewPanel->Refresh();
+
+    if ( args.m_Interactively )
+    {
+        // paint 3d view
+        m_ViewPanel->Update();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

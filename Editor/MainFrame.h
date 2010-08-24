@@ -107,6 +107,7 @@ namespace Helium
             void SceneAdded( const Core::SceneChangeArgs& args );
             void SceneRemoving( const Core::SceneChangeArgs& args );
             void SceneLoadFinished( const Core::LoadArgs& args );
+            void SceneExecuted( const Core::ExecuteArgs& args );
 
             bool DoOpen( const tstring& path );
 

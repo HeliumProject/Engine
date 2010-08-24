@@ -1494,17 +1494,6 @@ void Scene::Execute(bool interactively)
     // update data
     Evaluate();
 
-#ifdef SCENE_REFACTOR
-    // invalidate the view
-    m_View->Refresh();
-
-    if (interactively)
-    {
-        // paint 3d view
-        m_View->Update();
-    }
-#endif
-
     m_Executed.Raise( ExecuteArgs (this, interactively) );
 }
 
@@ -1547,28 +1536,24 @@ void Scene::Delete()
     }
 }
 
-void Scene::Render( RenderVisitor* render ) const
+void Scene::Render( RenderVisitor* render )
 {
-    {
-        CORE_RENDER_SCOPE_TIMER( ("") );
+    CORE_RENDER_SCOPE_TIMER( ("") );
 
-        HierarchyRenderTraverser renderTraverser ( render );
+    HierarchyRenderTraverser renderTraverser ( render );
 
-        m_Root->TraverseHierarchy( &renderTraverser );
-    }
+    m_Root->TraverseHierarchy( &renderTraverser );
 }
 
 bool Scene::Pick( PickVisitor* pick ) const
 {
+    CORE_SCOPE_TIMER( ("") );
+
     size_t hitCount = pick->GetHits().size();
 
-    {
-        CORE_SCOPE_TIMER( ("") );
+    HierarchyPickTraverser pickTraverser ( pick );
 
-        HierarchyPickTraverser pickTraverser ( pick );
-
-        m_Root->TraverseHierarchy ( &pickTraverser );
-    }
+    m_Root->TraverseHierarchy ( &pickTraverser );
 
     return pick->GetHits().size() > hitCount;
 }

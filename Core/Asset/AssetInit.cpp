@@ -13,6 +13,7 @@
 #include "Core/Asset/Classes/AudioClip.h"
 #include "Core/Asset/Classes/SceneAsset.h"
 #include "Core/Asset/Classes/ShaderAsset.h"
+#include "Core/Asset/Classes/RawFile.h"
 
 #include "Core/Asset/Components/DependenciesComponent.h"
 #include "Core/Asset/Components/MeshProcessingComponent.h"
@@ -20,6 +21,7 @@
 #include "Core/Asset/Components/TransformComponent.h"
 
 #include "Core/Asset/Factories/MeshAssetFactory.h"
+#include "Core/Asset/Factories/TextureAssetFactory.h"
 #include "Core/Asset/Manifests/EntityManifest.h"
 
 #include "Core/Asset/Manifests/ManifestVersion.h"
@@ -136,6 +138,8 @@ void Asset::Initialize()
         g_AssetClassTypes.push_back( Reflect::GetType<AnimationClip>() );
         g_AssetInitializerStack.Push( Reflect::RegisterClassType<AudioClip>( TXT( "AudioClip" ) ) );
         g_AssetClassTypes.push_back( Reflect::GetType<AudioClip>() );
+		g_AssetInitializerStack.Push( Reflect::RegisterClassType<RawFile>( TXT( "RawFile" ) ) );
+		g_AssetClassTypes.push_back( Reflect::GetType<RawFile>() );
 
         /////////////////////////////////////////////////////////////
         // Support for engine types
@@ -179,6 +183,7 @@ void Asset::Initialize()
         ///////////////////////////////////////////////////////////////
 
         g_AssetFactories.push_back( new MeshAssetFactory() );
+		g_AssetFactories.push_back( new TextureAssetFactory() );
 
         for ( std::vector< AssetFactory* >::iterator itr = g_AssetFactories.begin(), end = g_AssetFactories.end(); itr != end; ++itr )
         {

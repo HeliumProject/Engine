@@ -994,6 +994,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Asset\Classes\RawFile.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Asset\Classes\RawFile.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Asset\Classes\SceneAsset.cpp"
 					>
 				</File>

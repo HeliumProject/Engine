@@ -87,20 +87,7 @@ bool Choice::Process(const tstring& key, const tstring& value)
     if (__super::Process(key, value))
         return true;
 
-    if (key == ITEMS_ATTR_REQUIRED)
-    {
-        if (value == ATTR_VALUE_TRUE)
-        {
-            m_Required = true;
-            return true;
-        }
-        else if (value == ATTR_VALUE_FALSE)
-        {
-            m_Required = false;
-            return true;
-        }
-    }
-    else if (key == CHOICE_ATTR_ENUM)
+    if (key == CHOICE_ATTR_ENUM)
     {
         m_Enum = value;
         return true;

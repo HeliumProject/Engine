@@ -43,7 +43,6 @@ namespace Helium
             tstring m_Prefix;
             V_Item m_Items;
             V_Item m_Statics;
-            bool m_Required;
             bool m_Highlight;
 
         public:

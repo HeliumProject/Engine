@@ -1727,14 +1727,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Inspect\Label.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Inspect\Label.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Inspect\StripCanvas.cpp"
 				>
 			</File>
@@ -1774,6 +1766,26 @@
 				RelativePath=".\Inspect\Widget.h"
 				>
 			</File>
+			<Filter
+				Name="Widgets"
+				>
+				<File
+					RelativePath=".\Inspect\Widgets\Label.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\Label.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\Value.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\Value.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="DragDrop"

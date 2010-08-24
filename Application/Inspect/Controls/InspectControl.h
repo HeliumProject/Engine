@@ -94,7 +94,23 @@ namespace Helium
 
         class APPLICATION_API Widget : public Reflect::AbstractInheritor<Control, Reflect::Object>
         {
+        public:
+            Widget( Control* control )
+                : m_Control( control )
+            {
 
+            }
+
+            Inspect::Control* GetControl()
+            {
+                return m_Control;
+            }
+
+            virtual void Read() = 0;
+            virtual bool Write() = 0;
+
+        protected:
+            Inspect::Control* m_Control;
         };
         typedef Helium::SmartPtr<Widget> WidgetPtr;
 
@@ -260,7 +276,7 @@ namespace Helium
             
             mutable ControlSignature::Event         e_Realized;               // upon realization of the control
             mutable ControlSignature::Event         e_Unrealized;
-            
+
             mutable ControlChangingSignature::Event e_ControlChanging;        // these mean the *data state* of the control, not the appearance metrics
             mutable ControlChangedSignature::Event  e_ControlChanged;
 

@@ -5,7 +5,7 @@ using namespace Helium;
 using namespace Helium::Editor;
 
 Widget::Widget( Inspect::Control* control )
-: m_Control( control )
+: Inspect::Widget( control )
 , m_Window( NULL )
 {
 
@@ -96,7 +96,7 @@ void Widget::SetWindow( wxWindow* window )
         m_Window->SetBackgroundColour( m_Control->a_BackgroundColor.Get() );
         m_Window->SetHelpText( m_Control->a_ToolTip.Get() );
 
-        // attach listeners
+        // add listeners
         m_Control->a_IsEnabled.Changed().AddMethod( this, &Widget::IsEnabledChanged );
         m_Control->a_IsReadOnly.Changed().AddMethod( this, &Widget::IsReadOnlyChanged );
         m_Control->a_IsFrozen.Changed().AddMethod( this, &Widget::IsFrozenChanged );

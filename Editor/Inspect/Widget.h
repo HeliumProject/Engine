@@ -12,11 +12,6 @@ namespace Helium
             Widget( Inspect::Control* control );
             ~Widget();
 
-            Inspect::Control* GetControl()
-            {
-                return m_Control;
-            }
-
             wxWindow* GetWindow()
             {
                 return m_Window;
@@ -39,7 +34,6 @@ namespace Helium
             virtual void ToolTipChanged( const Attribute<tstring>::ChangeArgs& args );
 
         protected:
-            Inspect::Control*   m_Control;
             wxWindow*           m_Window;
         };
     }

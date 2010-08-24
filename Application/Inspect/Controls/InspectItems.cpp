@@ -9,8 +9,7 @@ using namespace Helium::Inspect;
 #include <wx/settings.h>
 
 Items::Items()
-: m_Required (false)
-, m_Highlight(false)
+: m_Highlight(false)
 {
 
 }
@@ -20,20 +19,7 @@ bool Items::Process(const tstring& key, const tstring& value)
     if (__super::Process(key, value))
         return true;
 
-    if (key == ITEMS_ATTR_REQUIRED)
-    {
-        if (value == ATTR_VALUE_TRUE)
-        {
-            m_Required = true;
-            return true;
-        }
-        else if (value == ATTR_VALUE_FALSE)
-        {
-            m_Required = false;
-            return true;
-        }
-    }
-    else if (key == ITEMS_ATTR_ITEM)
+    if (key == ITEMS_ATTR_ITEM)
     {
         size_t delim = value.find_first_of(ITEMS_ATTR_ITEM_DELIM);
 
@@ -200,16 +186,8 @@ void Items::SetHighlight(bool highlighted)
     {
         if ( m_Highlight )
         {
-            if ( m_Required )
-            {
-                m_Window->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
-                m_Window->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
-            }
-            else
-            {
-                m_Window->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-                m_Window->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
-            }
+            m_Window->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+            m_Window->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
         }
         else
         {

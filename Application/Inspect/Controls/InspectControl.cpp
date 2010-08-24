@@ -155,7 +155,12 @@ void Control::Unrealize()
 
 void Control::Read()
 {
-    SetDefaultAppearance(IsDefault());
+    if ( m_Widget )
+    {
+        m_Widget->Read();
+    }
+
+    SetDefaultAppearance( IsDefault() );
 }
 
 bool Control::ReadStringData(tstring& str) const
@@ -209,6 +214,11 @@ bool Control::PreWrite( Reflect::Serializer* newValue, bool preview )
 
 bool Control::Write()
 {
+    if ( m_Widget )
+    {
+        return m_Widget->Write();
+    }
+
     return true;
 }
 
@@ -258,7 +268,7 @@ bool Control::WriteAllStringData(const std::vector< tstring >& strs, bool previe
 
 void Control::PostWrite()
 {
-    SetDefaultAppearance(IsDefault());
+    SetDefaultAppearance( IsDefault() );
 
     // callback to our interpreter that we changed
     e_ControlChanged.Raise( this );

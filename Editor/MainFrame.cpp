@@ -429,6 +429,7 @@ void MainFrame::SceneAdded( const SceneChangeArgs& args )
         args.m_Scene->AddStatusChangedListener( SceneStatusChangeSignature::Delegate( this, &MainFrame::SceneStatusChanged ) );
         args.m_Scene->AddSceneContextChangedListener( SceneContextChangedSignature::Delegate( this, &MainFrame::SceneContextChanged ) );
         args.m_Scene->AddLoadFinishedListener( LoadSignature::Delegate( this, & MainFrame::SceneLoadFinished ) );
+        args.m_Scene->UndoCommandDelegate().Set( UndoCommandSignature::Delegate( this, &MainFrame::OnSceneUndoCommand ) );
 
         m_SelectionEnumerator->AddPopulateLinkListener( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Core::Scene::PopulateLink));
 
@@ -444,6 +445,7 @@ void MainFrame::SceneRemoving( const SceneChangeArgs& args )
     args.m_Scene->RemoveStatusChangedListener( SceneStatusChangeSignature::Delegate ( this, &MainFrame::SceneStatusChanged ) );
     args.m_Scene->RemoveSceneContextChangedListener( SceneContextChangedSignature::Delegate ( this, &MainFrame::SceneContextChanged ) );
     args.m_Scene->RemoveLoadFinishedListener( LoadSignature::Delegate( this, & MainFrame::SceneLoadFinished ) );
+    args.m_Scene->UndoCommandDelegate().Clear();
 
     m_SelectionEnumerator->RemovePopulateLinkListener( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Core::Scene::PopulateLink));
 
@@ -1579,6 +1581,12 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
     }
 
     m_ToolbarPanel->ToggleTool( selectedTool );
+}
+
+bool MainFrame::OnSceneUndoCommand( const Core::UndoCommandArgs& args )
+{
+    m_UndoQueue.Push( args.m_Command );
+    return true;
 }
 
 void MainFrame::OnUndo( wxCommandEvent& event )

@@ -236,6 +236,11 @@ namespace Helium
                 return m_DeviceManager.GetD3DDevice();
             }
 
+            SettingsManager* GetSettingsManager() const
+            {
+                return m_SettingsManager;
+            }
+
             ResourceTracker* GetResources() const
             {
                 return m_ResourceTracker;

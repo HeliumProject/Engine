@@ -264,6 +264,17 @@ namespace Helium
         typedef Helium::Signature< void, const ExecuteArgs& > ExecuteSignature;
 
 
+        struct UndoCommandArgs
+        {
+            const Undo::CommandPtr& m_Command;
+            
+            UndoCommandArgs( const Undo::CommandPtr& command )
+                : m_Command( command )
+            {
+            }
+        };
+        typedef Helium::Signature< bool, const UndoCommandArgs& > UndoCommandSignature; 
+
         //
         // This manages all the objects in a scene (typically Reflected in a file on disk)
         //  Scenes are primarily used as partitions of a level, and as a point of nesting for nested instanced types
@@ -801,6 +812,15 @@ namespace Helium
             //
             // Events
             //
+
+        private:
+            UndoCommandSignature::Delegate m_UndoCommandDelegate;
+        public:
+            UndoCommandSignature::Delegate& UndoCommandDelegate()
+            {
+                return m_UndoCommandDelegate;
+            }
+
         private:
             ResolveSceneSignature::Delegate m_ResolveDelegate;
         public:

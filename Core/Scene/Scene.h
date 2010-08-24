@@ -719,7 +719,7 @@ namespace Helium
             void Delete();
 
             // core render and pick visitation entry points
-            void Render( RenderVisitor* render ) const;
+            void Render( RenderVisitor* render );
             bool Pick( PickVisitor* pick ) const;
 
             // selection and highlight setup

@@ -136,6 +136,8 @@ namespace Helium
             void OnImport( wxCommandEvent& event );
             void OnExport( wxCommandEvent& event );
 
+            bool OnSceneUndoCommand( const Core::UndoCommandArgs& command );
+
             void OnUndo( wxCommandEvent& event );
             void OnRedo( wxCommandEvent& event );
             void OnCut( wxCommandEvent& event );

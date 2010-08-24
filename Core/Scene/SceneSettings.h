@@ -18,21 +18,20 @@ namespace Helium
             MRUData* GetMRU();
             Content::NodeVisibility* GetDefaultNodeVisibility(); 
 
-            const Reflect::Field* ScaleManipulatorSize() const;
+            f32 ScaleManipulatorSize() const;
+            bool ScaleManipulatorGridSnap() const;
+            f32 ScaleManipulatorDistance() const;
 
-            const Reflect::Field* RotateManipulatorSize() const;
-            const Reflect::Field* RotateManipulatorAxisSnap() const;
-            const Reflect::Field* RotateManipulatorSnapDegrees() const;
-            const Reflect::Field* RotateManipulatorSpace() const;
+            f32 RotateManipulatorSize() const;
+            bool RotateManipulatorAxisSnap() const;
+            f32 RotateManipulatorSnapDegrees() const;
+            ManipulatorSpace RotateManipulatorSpace() const;
 
-            const Reflect::Field* TranslateManipulatorSize() const;
-            const Reflect::Field* TranslateManipulatorSpace() const;
-            const Reflect::Field* TranslateManipulatorSnappingMode() const;
-            const Reflect::Field* TranslateManipulatorDistance() const;
-            const Reflect::Field* TranslateManipulatorLiveObjectsOnly() const;
-
-            const Reflect::Field* ScaleManipulatorGridSnap() const;
-            const Reflect::Field* ScaleManipulatorDistance() const;
+            f32 TranslateManipulatorSize() const;
+            ManipulatorSpace TranslateManipulatorSpace() const;
+            TranslateSnappingMode TranslateManipulatorSnappingMode() const;
+            f32 TranslateManipulatorDistance() const;
+            bool TranslateManipulatorLiveObjectsOnly() const;
 
         private:
             MRUDataPtr m_MRU;

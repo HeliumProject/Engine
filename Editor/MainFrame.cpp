@@ -115,8 +115,9 @@ public:
 };
 
 
-MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style )
+MainFrame::MainFrame( Core::SettingsManager* settingsManager, wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style )
 : MainFrameGenerated( parent, id, title, pos, size, style )
+, m_SettingsManager( settingsManager )
 , m_MRU( new MenuMRU( 30, this ) )
 , m_TreeMonitor( &m_SceneManager )
 , m_MessageDisplayer( this )
@@ -174,7 +175,7 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     //
     // View panel area
     //
-    m_ViewPanel = new ViewPanel( this );
+    m_ViewPanel = new ViewPanel( m_SettingsManager, this );
     m_ViewPanel->GetViewCanvas()->GetViewport().AddRenderListener( RenderSignature::Delegate ( this, &MainFrame::Render ) );
     m_ViewPanel->GetViewCanvas()->GetViewport().AddSelectListener( SelectSignature::Delegate ( this, &MainFrame::Select ) ); 
     m_ViewPanel->GetViewCanvas()->GetViewport().AddSetHighlightListener( SetHighlightSignature::Delegate ( this, &MainFrame::SetHighlight ) );
@@ -1350,37 +1351,37 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
 
         case EventIds::ID_ToolsScale:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Core::ScaleManipulator (ManipulatorModes::Scale, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::ScaleManipulator( m_SettingsManager, ManipulatorModes::Scale, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 break;
             }
 
         case EventIds::ID_ToolsScalePivot:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator (ManipulatorModes::ScalePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator( m_SettingsManager, ManipulatorModes::ScalePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 break;
             }
 
         case EventIds::ID_ToolsRotate:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Core::RotateManipulator (ManipulatorModes::Rotate, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::RotateManipulator( m_SettingsManager, ManipulatorModes::Rotate, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 break;
             }
 
         case EventIds::ID_ToolsRotatePivot:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator (ManipulatorModes::RotatePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator( m_SettingsManager, ManipulatorModes::RotatePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 break;
             }
 
         case EventIds::ID_ToolsTranslate:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator (ManipulatorModes::Translate, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator( m_SettingsManager, ManipulatorModes::Translate, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 break;
             }
 
         case EventIds::ID_ToolsTranslatePivot:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator (ManipulatorModes::TranslatePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator( m_SettingsManager, ManipulatorModes::TranslatePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 break;
             }
 
@@ -1390,32 +1391,32 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
                 {
                     if ( m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType< Core::ScaleManipulator >() )
                     {
-                        m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator (ManipulatorModes::ScalePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                        m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator( m_SettingsManager, ManipulatorModes::ScalePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                     }
                     else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType< Core::RotateManipulator >() )
                     {
-                        m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator (ManipulatorModes::RotatePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                        m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator( m_SettingsManager, ManipulatorModes::RotatePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                     }
                     else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType< Core::TranslateManipulator >() )
                     {
-                        Core::TranslateManipulator* manipulator = Reflect::AssertCast< Core::TranslateManipulator > (m_SceneManager.GetCurrentScene()->GetTool());
+                        Core::TranslateManipulator* manipulator = Reflect::AssertCast< Core::TranslateManipulator >(m_SceneManager.GetCurrentScene()->GetTool());
 
                         if ( manipulator->GetMode() == ManipulatorModes::Translate)
                         {
-                            m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator (ManipulatorModes::TranslatePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                            m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator( m_SettingsManager, ManipulatorModes::TranslatePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                         }
                         else
                         {
                             switch ( manipulator->GetMode() )
                             {
                             case ManipulatorModes::ScalePivot:
-                                m_SceneManager.GetCurrentScene()->SetTool(new Core::ScaleManipulator (ManipulatorModes::Scale, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                                m_SceneManager.GetCurrentScene()->SetTool(new Core::ScaleManipulator( m_SettingsManager, ManipulatorModes::Scale, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                                 break;
                             case ManipulatorModes::RotatePivot:
-                                m_SceneManager.GetCurrentScene()->SetTool(new Core::RotateManipulator (ManipulatorModes::Rotate, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                                m_SceneManager.GetCurrentScene()->SetTool(new Core::RotateManipulator( m_SettingsManager, ManipulatorModes::Rotate, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                                 break;
                             case ManipulatorModes::TranslatePivot:
-                                m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator (ManipulatorModes::Translate, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                                m_SceneManager.GetCurrentScene()->SetTool(new Core::TranslateManipulator( m_SettingsManager, ManipulatorModes::Translate, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                                 break;
                             }
                         }
@@ -1426,25 +1427,25 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
 
         case EventIds::ID_ToolsDuplicate:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Core::DuplicateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::DuplicateTool(m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
             }
             break;
 
         case EventIds::ID_ToolsLocatorCreate:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Core::LocatorCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::LocatorCreateTool(m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
             }
             break;
 
         case EventIds::ID_ToolsVolumeCreate:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Core::VolumeCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::VolumeCreateTool(m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
             }
             break;
 
         case EventIds::ID_ToolsEntityCreate:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Core::EntityInstanceCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Core::EntityInstanceCreateTool(m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
             }
             break;
 
@@ -1456,7 +1457,7 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
 
         case EventIds::ID_ToolsCurveEdit:
             {
-                Core::CurveEditTool* curveEditTool = new Core::CurveEditTool( m_SceneManager.GetCurrentScene(), m_ToolEnumerator );
+                Core::CurveEditTool* curveEditTool = new Core::CurveEditTool( m_SettingsManager, m_SceneManager.GetCurrentScene(), m_ToolEnumerator );
                 m_SceneManager.GetCurrentScene()->SetTool( curveEditTool );
                 curveEditTool->StoreSelectedCurves();
             }

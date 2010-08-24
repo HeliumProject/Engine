@@ -27,13 +27,14 @@ void CurveEditTool::CleanupType()
 CurveEditMode CurveEditTool::s_EditMode = CurveEditModes::Modify;
 bool CurveEditTool::s_CurrentSelection = false;
 
-CurveEditTool::CurveEditTool(Core::Scene *scene, Core::PropertiesGenerator *generator)
+CurveEditTool::CurveEditTool( SettingsManager* settingsManager, Core::Scene *scene, Core::PropertiesGenerator *generator)
 : Tool( scene, generator )
+, m_SettingsManager( settingsManager )
 , m_HotEditMode ( CurveEditModes::None )
 {
   Initialize();
 
-  m_ControlPointManipulator = new Core::TranslateManipulator( ManipulatorModes::Translate, scene, generator );
+  m_ControlPointManipulator = new Core::TranslateManipulator( m_SettingsManager, ManipulatorModes::Translate, scene, generator );
 }
 
 CurveEditTool::~CurveEditTool()

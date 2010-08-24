@@ -16,6 +16,7 @@
 #include "Core/Scene/Statistics.h"
 #include "Core/Scene/Orientation.h"
 #include "Core/Scene/Tool.h"
+#include "Core/Scene/GridSettings.h"
 
 using namespace Helium;
 using namespace Helium::Math;
@@ -96,8 +97,9 @@ void Viewport::CleanupType()
 
 }
 
-Viewport::Viewport(HWND wnd)
+Viewport::Viewport( HWND wnd, SettingsManager* settingsManager )
 : m_Window( wnd )
+, m_SettingsManager( settingsManager )
 , m_Focused( false )
 , m_ResourceTracker( NULL )
 , m_Tool( NULL )
@@ -312,9 +314,9 @@ void Viewport::InitWidgets()
     m_GlobalPrimitives[GlobalPrimitives::StandardAxes]->Update();
 
     m_GlobalPrimitives[GlobalPrimitives::StandardGrid] = new Core::PrimitiveGrid (m_ResourceTracker);
-#if SCENE_REFACTOR
-    wxGetApp().GetSettings()->GetGridSettings()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Viewport::OnGridSettingsChanged ));
-#endif
+
+    m_SettingsManager->GetSettings< GridSettings >()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Viewport::OnGridSettingsChanged ));
+
     OnGridSettingsChanged( Reflect::ElementChangeArgs( NULL, NULL ) );
 
     m_GlobalPrimitives[GlobalPrimitives::StandardRings] = new Core::PrimitiveRings (m_ResourceTracker);
@@ -1084,8 +1086,7 @@ void Viewport::CameraMoved( const Core::CameraMovedArgs& args )
 
 void Viewport::OnGridSettingsChanged( const Reflect::ElementChangeArgs& args )
 {
-#ifdef SCENE_REFACTOR
-    GridSettings* gridSettings = wxGetApp().GetSettings()->GetGridSettings();
+    GridSettings* gridSettings = m_SettingsManager->GetSettings< GridSettings >();
     Core::PrimitiveGrid* grid = (Core::PrimitiveGrid*) m_GlobalPrimitives[GlobalPrimitives::StandardGrid];
 
     grid->m_Width = gridSettings->GetWidth();
@@ -1096,5 +1097,4 @@ void Viewport::OnGridSettingsChanged( const Reflect::ElementChangeArgs& args )
     grid->SetMajorColor( gridSettings->GetMajorColor().r, gridSettings->GetMajorColor().g, gridSettings->GetMajorColor().b, 0xFF );
     grid->SetMinorColor( gridSettings->GetMinorColor().r, gridSettings->GetMinorColor().g, gridSettings->GetMinorColor().b, 0xFF );
     grid->Update();
-#endif
 }

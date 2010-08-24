@@ -2,6 +2,8 @@
 
 #include "TransformManipulator.h"
 
+#include "Core/SettingsManager.h"
+
 namespace Helium
 {
     namespace Core
@@ -22,15 +24,18 @@ namespace Helium
             Core::PrimitiveCube* m_ZCube;
             Math::Vector3 m_ZPosition;
 
+            f32 m_Size;
             bool m_GridSnap;
-            float m_Distance;
+            f32 m_Distance;
+
+            SettingsManager* m_SettingsManager;
 
             SCENE_DECLARE_TYPE(Core::ScaleManipulator, Core::TransformManipulator);
             static void InitializeType();
             static void CleanupType();
 
         public:
-            ScaleManipulator(const ManipulatorMode mode, Core::Scene* scene, PropertiesGenerator* generator);
+            ScaleManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, Core::Scene* scene, PropertiesGenerator* generator);
 
             ~ScaleManipulator();
 
@@ -51,6 +56,9 @@ namespace Helium
             virtual void MouseMove( const MouseMoveInput& e ) HELIUM_OVERRIDE;
 
             virtual void CreateProperties() HELIUM_OVERRIDE;
+
+            f32 GetSize() const;
+            void SetSize( f32 size );
 
             bool GetGridSnap() const;
             void SetGridSnap( bool gridSnap );

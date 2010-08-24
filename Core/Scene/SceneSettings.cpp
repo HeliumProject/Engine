@@ -34,62 +34,62 @@ Content::NodeVisibility* SceneSettings::GetDefaultNodeVisibility()
     return m_DefaultNodeVisibility; 
 }
 
-const Reflect::Field* SceneSettings::ScaleManipulatorSize() const
+f32 SceneSettings::ScaleManipulatorSize() const
 {
-    return GetClass()->FindField( &SceneSettings::m_ScaleManipulatorSize );
+    return m_ScaleManipulatorSize;
 }
 
-const Reflect::Field* SceneSettings::RotateManipulatorSize() const
+bool SceneSettings::ScaleManipulatorGridSnap() const
 {
-    return GetClass()->FindField( &SceneSettings::m_RotateManipulatorSize );
+    return m_ScaleManipulatorGridSnap;
 }
 
-const Reflect::Field* SceneSettings::RotateManipulatorAxisSnap() const
+f32 SceneSettings::ScaleManipulatorDistance() const
 {
-    return GetClass()->FindField( &SceneSettings::m_RotateManipulatorAxisSnap );
+    return m_ScaleManipulatorDistance;
 }
 
-const Reflect::Field* SceneSettings::RotateManipulatorSnapDegrees() const
+f32 SceneSettings::RotateManipulatorSize() const
 {
-    return GetClass()->FindField( &SceneSettings::m_RotateManipulatorSnapDegrees );
+    return m_RotateManipulatorSize;
 }
 
-const Reflect::Field* SceneSettings::RotateManipulatorSpace() const
+bool SceneSettings::RotateManipulatorAxisSnap() const
 {
-    return GetClass()->FindField( &SceneSettings::m_RotateManipulatorSpace );
+    return m_RotateManipulatorAxisSnap;
 }
 
-const Reflect::Field* SceneSettings::TranslateManipulatorSize() const
+f32 SceneSettings::RotateManipulatorSnapDegrees() const
 {
-    return GetClass()->FindField( &SceneSettings::m_TranslateManipulatorSize );
+    return m_RotateManipulatorSnapDegrees;
 }
 
-const Reflect::Field* SceneSettings::TranslateManipulatorSpace() const
+ManipulatorSpace SceneSettings::RotateManipulatorSpace() const
 {
-    return GetClass()->FindField( &SceneSettings::m_TranslateManipulatorSpace );
+    return m_RotateManipulatorSpace;
 }
 
-const Reflect::Field* SceneSettings::TranslateManipulatorSnappingMode() const
+f32 SceneSettings::TranslateManipulatorSize() const
 {
-    return GetClass()->FindField( &SceneSettings::m_TranslateManipulatorSnappingMode );
+    return m_TranslateManipulatorSize;
 }
 
-const Reflect::Field* SceneSettings::TranslateManipulatorDistance() const
+ManipulatorSpace SceneSettings::TranslateManipulatorSpace() const
 {
-    return GetClass()->FindField( &SceneSettings::m_TranslateManipulatorDistance );
+    return m_TranslateManipulatorSpace;
 }
 
-const Reflect::Field* SceneSettings::TranslateManipulatorLiveObjectsOnly() const
+TranslateSnappingMode SceneSettings::TranslateManipulatorSnappingMode() const
 {
-    return GetClass()->FindField( &SceneSettings::m_TranslateManipulatorLiveObjectsOnly );
+    return m_TranslateManipulatorSnappingMode;
 }
 
-const Reflect::Field* SceneSettings::ScaleManipulatorGridSnap() const
+f32 SceneSettings::TranslateManipulatorDistance() const
 {
-    return GetClass()->FindField( &SceneSettings::m_ScaleManipulatorGridSnap );
+    return m_TranslateManipulatorDistance;
 }
 
-const Reflect::Field* SceneSettings::ScaleManipulatorDistance() const
+bool SceneSettings::TranslateManipulatorLiveObjectsOnly() const
 {
-    return GetClass()->FindField( &SceneSettings::m_ScaleManipulatorDistance );
+    return m_TranslateManipulatorLiveObjectsOnly;
 }

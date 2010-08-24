@@ -2,6 +2,8 @@
 
 #include "TransformManipulator.h"
 
+#include "Core/SettingsManager.h"
+
 namespace Helium
 {
     namespace Core
@@ -24,6 +26,9 @@ namespace Helium
         class CORE_API RotateManipulator : public Core::TransformManipulator
         {
         private:
+            SettingsManager* m_SettingsManager;
+
+            f32 m_Size;
             ManipulatorSpace m_Space;
             bool m_AxisSnap;
             float m_SnapDegrees;
@@ -39,7 +44,7 @@ namespace Helium
             static void CleanupType();
 
         public:
-            RotateManipulator(const ManipulatorMode mode, Core::Scene* scene, PropertiesGenerator* generator);
+            RotateManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, Core::Scene* scene, PropertiesGenerator* generator);
 
             ~RotateManipulator();
 
@@ -64,6 +69,9 @@ namespace Helium
             virtual void MouseMove( const MouseMoveInput& e ) HELIUM_OVERRIDE;
 
             virtual void CreateProperties() HELIUM_OVERRIDE;
+
+            f32 GetSize() const;
+            void SetSize( f32 size );
 
             int GetSpace() const;
             void SetSpace(int space);

@@ -332,16 +332,18 @@ void App::LoadSettings()
 		return;
 	}
 
+    Core::SettingsManagerPtr settingsManager = NULL;
+
     if ( Helium::IsDebuggerPresent() )
     {
-		m_SettingsManager = Reflect::Archive::FromFile< Core::SettingsManager >( path );
+		settingsManager = Reflect::Archive::FromFile< Core::SettingsManager >( path );
     }
     else
     {
         tstring error;
         try
         {
-			m_SettingsManager = Reflect::Archive::FromFile< Core::SettingsManager >( path );
+			settingsManager = Reflect::Archive::FromFile< Core::SettingsManager >( path );
         }
         catch ( const Helium::Exception& ex )
         {
@@ -352,6 +354,15 @@ void App::LoadSettings()
         {
             wxMessageBox( error.c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
         }
+    }
+
+    if ( settingsManager.ReferencesObject() )
+    {
+        m_SettingsManager = settingsManager;
+    }
+    else
+    {
+        wxMessageBox( TXT( "Unfortunately, we could not parse your existing settings.  Your settings have been reset to defaults.  We apologize for the inconvenience." ), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
     }
 }
 

@@ -42,7 +42,7 @@ namespace Helium
             {
                 if ( !m_Frame )
                 {
-                    m_Frame = new MainFrame();
+                    m_Frame = new MainFrame( m_SettingsManager );
                 }
                 return m_Frame;
             }

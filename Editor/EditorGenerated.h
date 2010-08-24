@@ -85,6 +85,7 @@ namespace Helium
 					ID_WalkDown,
 					ID_WalkForward,
 					ID_WalkBackward,
+					ID_Settings,
 					ID_About,
 				};
 				

@@ -26,7 +26,6 @@ TransformManipulator::TransformManipulator(const ManipulatorMode mode, Core::Sce
 : Tool(scene, generator)
 , m_Mode (mode)
 , m_SelectedAxes (MultipleAxes::None)
-, m_Size (0.3f)
 , m_Left (false)
 , m_Middle (false)
 , m_Right (false)
@@ -216,34 +215,4 @@ void TransformManipulator::MouseMove( const MouseMoveInput& e )
 void TransformManipulator::CreateProperties()
 {
   __super::CreateProperties();
-
-  m_Generator->PushPanel( TXT( "Manipulator" ), true);
-  {
-    m_Generator->PushContainer();
-    {
-      m_Generator->AddLabel( TXT( "Size" ) );
-      Inspect::Slider* slider = m_Generator->AddSlider<f32>( new Helium::MemberProperty<Core::TransformManipulator, f32> (this, &TransformManipulator::GetSize, &TransformManipulator::SetSize) );
-      slider->SetRangeMin( 0.10f );
-      slider->SetRangeMax( 0.5f );
-    }
-    m_Generator->Pop();
-  }
-  m_Generator->Pop();
-}
-
-f32 TransformManipulator::GetSize() const
-{
-  return m_Size;
-}
-
-void TransformManipulator::SetSize(f32 size)
-{
-  m_Size = size;
-
-  ManipulatorAdapter* primary = PrimaryObject<ManipulatorAdapter>();
-
-  if (primary != NULL)
-  {
-    primary->GetNode()->GetOwner()->Execute(false);
-  }
 }

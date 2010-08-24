@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Editor/EditorGenerated.h"
-
 #include "Editor/ViewCanvas.h"
+
+#include "Core/SettingsManager.h"
 
 namespace Helium
 {
@@ -11,7 +12,7 @@ namespace Helium
         class ViewPanel : public ViewPanelGenerated
         {
         public:
-            ViewPanel( wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+            ViewPanel( Core::SettingsManager* settingsManager, wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
 
             ViewCanvas* GetViewCanvas()
             {

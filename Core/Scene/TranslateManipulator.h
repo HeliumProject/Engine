@@ -2,6 +2,8 @@
 
 #include "TransformManipulator.h"
 
+#include "Core/SettingsManager.h"
+
 namespace Helium
 {
     namespace Core
@@ -36,7 +38,10 @@ namespace Helium
         class CORE_API TranslateManipulator : public Core::TransformManipulator
         {
         private:
+            SettingsManager* m_SettingsManager;
+
             // Properties
+            f32 m_Size;
             ManipulatorSpace m_Space;
             TranslateSnappingMode m_SnappingMode;
             float m_Distance;
@@ -60,10 +65,8 @@ namespace Helium
             static void CleanupType();
 
         public:
-            TranslateManipulator(const ManipulatorMode mode, Core::Scene* scene, PropertiesGenerator* generator);
+            TranslateManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, Core::Scene* scene, PropertiesGenerator* generator);
             ~TranslateManipulator();
-
-            TranslateSnappingMode GetSnappingMode() const;
 
             virtual void ResetSize() HELIUM_OVERRIDE;
 
@@ -89,11 +92,17 @@ namespace Helium
 
             virtual void CreateProperties() HELIUM_OVERRIDE;
 
+            f32 GetSize() const;
+            void SetSize( f32 size );
+
             int GetSpace() const;
             void SetSpace(int space);
 
             bool GetLiveObjectsOnly() const;
             void SetLiveObjectsOnly(bool liveSnap);
+
+            TranslateSnappingMode GetSnappingMode() const;
+            void UpdateSnappingMode();
 
             bool GetSurfaceSnap() const;
             void SetSurfaceSnap(bool polygonSnap);

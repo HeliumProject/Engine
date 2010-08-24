@@ -99,7 +99,7 @@ bool CheckBox::Write()
         if ( IsBound() )
         {
             tstring str ( m_State ? TXT( "1" ) : TXT( "0" ) );
-            return WriteData( str );
+            return WriteStringData( str );
         }
 
         return true;
@@ -114,7 +114,7 @@ bool CheckBox::GetChecked()
     if ( IsBound() )
     {
         tstring str;
-        ReadData( str );
+        ReadStringData( str );
         m_State = _tstoi( str.c_str() ) != 0;
     }
 
@@ -129,7 +129,7 @@ void CheckBox::SetChecked( bool checked )
     // if we have data, write to it
     if ( IsBound() )
     {
-        WriteData( m_State ? TXT( "1" ) : TXT( "0" ) );
+        WriteStringData( m_State ? TXT( "1" ) : TXT( "0" ) );
     }
 
     UpdateUI( m_State );

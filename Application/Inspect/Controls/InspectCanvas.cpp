@@ -16,58 +16,12 @@ Canvas::Canvas ()
 
 Canvas::~Canvas()
 {
-    if (m_Window)
-    {
-        TreeCanvasCtrl* window = Control::Cast<TreeCanvasCtrl>(this);
 
-        if (window->GetCanvas() == this)
-        {
-            window->SetCanvas(NULL);
-        }
-    }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// 
-// 
-ControlPtr Canvas::Create(int type, Interpreter* interpreter)
+void Canvas::RealizeControl(Control* control, Control* parent)
 {
-    INSPECT_SCOPE_TIMER( ("") );
 
-    // create control
-    ControlPtr control = Reflect::ObjectCast<Control>( Reflect::Registry::GetInstance()->CreateInstance( type ) );
-    control->SetInterpreter( interpreter );
-    control->SetCanvas( this );
-    control->Create();
-
-    return control;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Overridden to remove any controls it added to the tree
-// 
-void Canvas::RemoveChild(Control* control)
-{
-    TreeCanvasCtrl* treeWndCtrl = GetControl();
-
-    wxTreeItemId item = treeWndCtrl->FindItem( control->GetWindow() );
-    if ( item != Helium::TreeWndCtrlItemIdInvalid )
-    {
-        treeWndCtrl->Delete( item );
-    }
-
-    __super::RemoveChild( control );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Overridden to remove any controls and delete the root of the tree
-// 
-void Canvas::Clear()
-{
-    TreeCanvasCtrl* treeWndCtrl = GetControl();
-    treeWndCtrl->DeleteAllItems();
-
-    __super::Clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

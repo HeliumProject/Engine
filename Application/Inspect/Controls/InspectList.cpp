@@ -138,7 +138,7 @@ bool List::Write()
 
         if ( IsBound() )
         {
-            if ( WriteData( delimited ) )
+            if ( WriteStringData( delimited ) )
             {
                 result = __super::Write();
             }
@@ -177,7 +177,7 @@ const std::vector< tstring >& List::GetItems()
     {
         m_Items.clear();
         tstring str;
-        ReadData( str );
+        ReadStringData( str );
 
         tstring temp;
         bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
@@ -224,7 +224,7 @@ void List::AddItems( const std::vector< tstring >& items )
         HELIUM_ASSERT( converted );
 
         tstring str = GetDelimitedList( items, temp );
-        WriteData( str );
+        WriteStringData( str );
     }
     else
     {
@@ -245,7 +245,7 @@ void List::AddItem( const tstring& item )
     if ( IsBound() )
     {
         tstring str;
-        ReadData( str );
+        ReadStringData( str );
 
         tstring temp;
         bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
@@ -257,7 +257,7 @@ void List::AddItem( const tstring& item )
         }
         str += item;
 
-        WriteData( str );
+        WriteStringData( str );
 
         m_Items.clear();
         Helium::Tokenize( str, m_Items, temp );
@@ -280,7 +280,7 @@ void List::RemoveItem( const tstring& item )
     if ( IsBound() )
     {
         tstring delimited;
-        ReadData( delimited );
+        ReadStringData( delimited );
 
         tstring temp;
         bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
@@ -307,7 +307,7 @@ void List::RemoveItem( const tstring& item )
         if ( pos != tstring::npos )
         {
             delimited.replace( pos, search.size(), TXT( "" ) );
-            WriteData( delimited );
+            WriteStringData( delimited );
 
             m_Items.clear();
             Helium::Tokenize( delimited, m_Items, temp );

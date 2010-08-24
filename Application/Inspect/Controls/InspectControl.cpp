@@ -39,11 +39,6 @@ Control::~Control()
     m_IsRealized = false;
 }
 
-void Control::Create()
-{
-
-}
-
 int Control::GetDepth()
 {
     int depth = 0;
@@ -99,12 +94,22 @@ bool Control::SetDefault()
 {
     if (!a_Default.Get().empty())
     {
-        return WriteData(a_Default);
+        return WriteStringData( a_Default.Get() );
     }
     else
     {
         return false;
     }
+}
+
+const ContextMenuPtr& Control::GetContextMenu()
+{
+    return m_ContextMenu;
+}
+
+void Control::SetContextMenu(const ContextMenuPtr& contextMenu)
+{
+    m_ContextMenu = contextMenu;
 }
 
 bool Control::Process(const tstring& key, const tstring& value)
@@ -119,66 +124,6 @@ bool Control::Process(const tstring& key, const tstring& value)
     return false;
 }
 
-const ContextMenuPtr& Control::GetContextMenu()
-{
-    return m_ContextMenu;
-}
-
-void Control::SetContextMenu(const ContextMenuPtr& contextMenu)
-{
-    m_ContextMenu = contextMenu;
-}
-
-int Control::GetStringWidth(const tstring& str)
-{
-#ifdef INSPECT_REFACTOR
-    wxClientDC dc (m_Window);
-
-    int x, y;
-    wxString wxStr (str.c_str());
-    dc.GetTextExtent(wxStr, &x, &y, NULL, NULL, &m_Window->GetFont());
-
-    return x;
-#else
-    return 128;
-#endif
-}
-
-bool Control::EllipsizeString(tstring& str, int width)
-{
-#ifdef INSPECT_REFACTOR
-    wxClientDC dc (m_Window);
-
-    int x, y;
-    wxString wxStr (str.c_str());
-    dc.GetTextExtent(wxStr, &x, &y, NULL, NULL, &m_Window->GetFont());
-
-    if (x <= width)
-    {
-        return false;
-    }
-
-    size_t count = str.size();
-    for ( size_t i = count; i>0; i-- )
-    {
-        wxStr = (str.substr(0, i-1) + TXT( "..." ) ).c_str();
-
-        dc.GetTextExtent(wxStr, &x, &y, NULL, NULL, &m_Window->GetFont());
-
-        if (x < width)
-        {
-            str = wxStr.c_str();
-            return true;
-        }
-    }
-
-    str = TXT( "..." );
-    return true;
-#else
-    return true;
-#endif
-}
-
 bool Control::IsRealized()
 {
     return m_IsRealized;
@@ -188,10 +133,10 @@ void Control::Realize(Container* parent)
 {
     PROFILE_SCOPE_ACCUM( g_RealizeAccumulator );
 
-    m_Parent = parent;
+    m_Canvas->RealizeControl( this, parent );
     m_IsRealized = true;
+    m_Parent = parent;
 
-#pragma TODO("This will cause the canvas to allocate a widget specific to the type of canvas that is being used")
     e_Realized.Raise(this);
 }
 
@@ -208,22 +153,12 @@ void Control::Unrealize()
     e_Unrealized.Raise(this);
 }
 
-void Control::DataChanged(const DataChangedArgs& args)
-{
-    if (!m_IsWriting)
-    {
-        Read();
-    }
-
-    e_ControlChanged.Raise( this );
-}
-
 void Control::Read()
 {
     SetDefaultAppearance(IsDefault());
 }
 
-bool Control::ReadData(tstring& str) const
+bool Control::ReadStringData(tstring& str) const
 {
     StringData* data = CastData<StringData, DataTypes::String>( m_BoundData );
     if (data)
@@ -237,7 +172,7 @@ bool Control::ReadData(tstring& str) const
     return false;
 }
 
-bool Control::ReadAll(std::vector< tstring >& strs) const
+bool Control::ReadAllStringData(std::vector< tstring >& strs) const
 {
     StringData* data = CastData<StringData, DataTypes::String>( m_BoundData );
     if ( data )
@@ -249,6 +184,16 @@ bool Control::ReadAll(std::vector< tstring >& strs) const
 
     HELIUM_BREAK(); // you should not call this, your control is using custom data
     return false;
+}
+
+void Control::DataChanged(const DataChangedArgs& args)
+{
+    if ( !m_IsWriting )
+    {
+        Read();
+
+        e_ControlChanged.Raise( this );
+    }
 }
 
 bool Control::PreWrite( Reflect::Serializer* newValue, bool preview )
@@ -267,14 +212,14 @@ bool Control::Write()
     return true;
 }
 
-bool Control::WriteData(const tstring& str, bool preview)
+bool Control::WriteStringData(const tstring& str, bool preview)
 {
     StringData* data = CastData<StringData, DataTypes::String>( m_BoundData );
 
     return WriteTypedData(str, data, preview);
 }
 
-bool Control::WriteAll(const std::vector< tstring >& strs, bool preview)
+bool Control::WriteAllStringData(const std::vector< tstring >& strs, bool preview)
 {
     StringData* data = CastData<StringData, DataTypes::String>( m_BoundData );
     if (data)

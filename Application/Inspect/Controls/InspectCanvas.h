@@ -37,19 +37,7 @@ namespace Helium
                 Realize( NULL );
             }
 
-            // creation factory for child controls
-            template<class T>
-            Helium::SmartPtr<T> Create()
-            {
-                return Reflect::ObjectCast<T>( Canvas::Create( Reflect::GetType<T>() ) );
-            }
-
-            // actual creation factory
-            ControlPtr Create(int type);
-
-            // Children
-            virtual void RemoveChild(Control* control) /*HELIUM_OVERRIDE*/;
-            virtual void Clear() /*HELIUM_OVERRIDE*/;
+            virtual void RealizeControl(Control* control, Control* parent);
 
             // Realize
             virtual void Realize(Container* parent) HELIUM_OVERRIDE;

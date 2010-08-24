@@ -89,7 +89,20 @@ namespace Helium
         typedef Helium::SmartPtr<ClientData> ClientDataPtr;
 
         //
-        // Control
+        // Widget, a base class for a GUI system implementation-specific Widget classes
+        //
+
+        class APPLICATION_API Widget : public Reflect::AbstractInheritor<Control, Reflect::Object>
+        {
+
+        };
+        typedef Helium::SmartPtr<Widget> WidgetPtr;
+
+        //
+        // Control, a class that is binadable to data and controls the state and appearance of a widget
+        //  Controls own a Widget via a references counter smart pointer
+        //  Controls can be created and modified without causing GUI widgets being created)
+        //  Widgets are allocated to a Control when Realized, and deleted when Unrealized
         //
 
         class APPLICATION_API Control : public Reflect::AbstractInheritor<Control, Reflect::Object>
@@ -97,7 +110,6 @@ namespace Helium
         public:
             Control();
             virtual ~Control();
-            virtual void Create(); // post-create initialize
 
             int GetDepth();
 
@@ -113,6 +125,32 @@ namespace Helium
             Container* GetParent()
             {
                 return m_Parent;
+            }
+
+            // 
+            // Client data
+            // 
+
+            Widget* GetWidget()
+            {
+                return m_Widget;
+            }
+            void SetWidget( Widget* widget )
+            {
+                m_Widget = widget;
+            }
+
+            // 
+            // Client data
+            // 
+
+            ClientData* GetClientData()
+            {
+                return m_ClientData;
+            }
+            void SetClientData( ClientData* clientData )
+            {
+                m_ClientData = clientData;
             }
 
             //
@@ -131,24 +169,6 @@ namespace Helium
 
             virtual void Bind(const DataPtr& data);
 
-            // 
-            // Client data
-            // 
-
-            ClientData* GetClientData()
-            {
-                return m_ClientData;
-            }
-            void SetClientData( ClientData* clientData )
-            {
-                m_ClientData = clientData;
-            }
-            template< class T > Helium::SmartPtr< T > CreateClientData()
-            {
-                delete m_ClientData;
-                return m_ClientData = new T ( this );
-            }
-
             //
             // Defaults
             //
@@ -162,20 +182,12 @@ namespace Helium
             // updates control appearance to appear to be at default value
             virtual void SetDefaultAppearance(bool def) {}
 
-            //
-            // Attributes
-            //
-
-            // process individual attribute key
-            virtual bool Process(const tstring& key, const tstring& value);
-
             // Context Menu
             virtual const ContextMenuPtr& GetContextMenu();
             virtual void SetContextMenu(const ContextMenuPtr& contextMenu);
 
-            // string elipsization
-            int GetStringWidth(const tstring& str);
-            virtual bool EllipsizeString(tstring& str, int width);
+            // process individual attribute key
+            virtual bool Process(const tstring& key, const tstring& value);
 
             // Checks for initialization status
             virtual bool IsRealized();
@@ -185,10 +197,6 @@ namespace Helium
 
             // Unrealizes the control (delete toolkit object)
             virtual void Unrealize();
-
-            //
-            // Layout
-            //
 
             // populated cachend UI state (drop down lists, etc)
             virtual void Populate() {}
@@ -201,36 +209,40 @@ namespace Helium
             virtual void Read();
 
             // helper read call for string based controls
-            virtual bool ReadData(tstring& str) const;
+            bool ReadStringData(tstring& str) const;
 
             // helper read call to get values of all bound data
-            virtual bool ReadAll(std::vector< tstring >& strs) const;
+            bool ReadAllStringData(std::vector< tstring >& strs) const;
+
+            // helper write function for all other types of data
+            template<class T>
+            bool ReadTypedData(const typename DataTemplate<T>::Ptr& data, T& val);
 
             // callback when data changed, implements DataReference
-            virtual void DataChanged(const DataChangedArgs& args);
+            void DataChanged(const DataChangedArgs& args);
 
             //
             // Write
             //
 
             // fires callback
-            virtual bool PreWrite( Reflect::Serializer* newValue, bool preview );
+            bool PreWrite( Reflect::Serializer* newValue, bool preview );
 
             // updates the data based on the state of the UI
             virtual bool Write();
 
             // helper write call for string based controls
-            bool WriteData(const tstring& str, bool preview = false);
+            bool WriteStringData(const tstring& str, bool preview = false);
+
+            // helper to write values to each bound data member separately
+            bool WriteAllStringData(const std::vector< tstring >& strs, bool preview = false);
 
             // helper write function for all other types of data
             template<class T>
             bool WriteTypedData(const T& val, const typename DataTemplate<T>::Ptr& data, bool preview = false);
 
-            // helper to write values to each bound data member separately
-            virtual bool WriteAll(const std::vector< tstring >& strs, bool preview = false);
-
             // fires callback
-            virtual void PostWrite();
+            void PostWrite();
 
         public:
             Attribute<bool>                         a_IsEnabled;              // are we enabled?
@@ -271,13 +283,28 @@ namespace Helium
             // the data we manipulate
             DataPtr             m_BoundData;
 
+            // GUI toolkit object
+            WidgetPtr           m_Widget;
+
             // client-configurable data
-            ClientDataPtr       m_ToolkitClientData;
             ClientDataPtr       m_ClientData;
         };
 
         typedef Helium::SmartPtr<Control> ControlPtr;
         typedef std::vector<ControlPtr> V_Control;
+
+        template<class T>
+        inline bool Control::ReadTypedData(const typename DataTemplate<T>::Ptr& data, T& val)
+        {
+            if (data)
+            {
+                T currentValue;
+                data->Get( currentValue );
+            }
+
+            HELIUM_BREAK(); // you should not call this, your control is using custom data
+            return false;
+        }
 
         template<class T>
         inline bool Control::WriteTypedData(const T& val, const typename DataTemplate<T>::Ptr& data, bool preview)

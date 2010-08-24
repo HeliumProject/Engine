@@ -45,11 +45,11 @@ void FileDialogButton::Read()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Wrapper around Control::ReadData that cleans the file path returned
+// Wrapper around Control::ReadStringData that cleans the file path returned
 //
 void FileDialogButton::ReadPathData( tstring& path ) const
 {
-    ReadData( path );
+    ReadStringData( path );
     if ( !path.empty() )
     {
         Helium::Path::Normalize( path );
@@ -88,7 +88,7 @@ bool FileDialogButton::Write()
         if ( fileDialog.ShowModal() == wxID_OK )
         {
             tstring path = fileDialog.GetPath().c_str();
-            result = WriteData( path );
+            result = WriteStringData( path );
         }
     }
 
@@ -160,7 +160,7 @@ void FileDialogButton::SetPath( const tstring& path )
     Helium::Path::Normalize( m_Path );
     if ( IsBound() )
     {
-        WriteData( m_Path );
+        WriteStringData( m_Path );
     }
 }
 

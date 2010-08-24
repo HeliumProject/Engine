@@ -110,7 +110,7 @@ CheckBoxStates::CheckBoxState ReflectBitfieldCheckBox::GetChecked()
   if ( IsBound() && !m_BitfieldString.empty() )
   {
     std::vector< tstring > strs;
-    ReadAll( strs );
+    ReadAllStringData( strs );
 
     bool previous = false;
     const std::vector< tstring >::const_iterator strBegin = strs.begin();
@@ -217,7 +217,7 @@ bool ReflectBitfieldCheckBox::WriteBitfield()
     {
       std::vector< tstring > newVals;
       std::vector< tstring > strs;
-      ReadAll( strs );
+      ReadAllStringData( strs );
 
       std::vector< tstring >::const_iterator strItr = strs.begin();
       std::vector< tstring >::const_iterator strEnd = strs.end();
@@ -246,7 +246,7 @@ bool ReflectBitfieldCheckBox::WriteBitfield()
 
       if ( newVals != strs )
       {
-        WriteAll( newVals );
+        WriteAllStringData( newVals );
       }
 
       dataWasUpdated = true;

@@ -247,7 +247,7 @@ void Choice::Read()
     if ( IsBound() && IsRealized() )
     {
         tstring str;
-        ReadData(str);
+        ReadStringData(str);
 
         SetOverride( true );
         SetValue(str);
@@ -270,7 +270,7 @@ bool Choice::Write()
         if(shouldWrite)
         {
             SetOverride( true );
-            result = WriteData( value );
+            result = WriteStringData( value );
             SetOverride( false );
         }
         else

@@ -103,7 +103,7 @@ void ColorPicker::Read()
     if ( IsBound() && IsRealized() )
     {
         tstring str;
-        ReadData( str );
+        ReadStringData( str );
         tstringstream stream( str );
 
         if (m_Alpha)
@@ -153,7 +153,7 @@ bool ColorPicker::Write()
             stream << m_Color3;
         }
 
-        WriteData( stream.str() );
+        WriteStringData( stream.str() );
 
         result = true;
     }
@@ -183,7 +183,7 @@ void ColorPicker::SetColor3( const Helium::Math::Color3& color )
         {
             tstringstream stream;
             stream << m_Color3;
-            WriteData( stream.str() );
+            WriteStringData( stream.str() );
         }
 
         static_cast<StdColorPickerWindow*>(GetWindow())->m_ColorPicker->SetColour( wxColour ( m_Color3.r, m_Color3.g, m_Color3.b ) );
@@ -201,7 +201,7 @@ const Helium::Math::Color3& ColorPicker::GetColor3() const
         if ( IsBound() )
         {
             tstring str;
-            ReadData( str );
+            ReadStringData( str );
             tstringstream stream( str );
             stream >> (Math::Color3)m_Color3;
         }
@@ -224,7 +224,7 @@ void ColorPicker::SetColor4( const Helium::Math::Color4& color )
         {
             tstringstream stream;
             stream << m_Color4;
-            WriteData( stream.str() );
+            WriteStringData( stream.str() );
         }
 
         static_cast<StdColorPickerWindow*>(GetWindow())->m_ColorPicker->SetColour( wxColour ( m_Color4.r, m_Color4.g, m_Color4.b, m_Color4.a ) );
@@ -242,7 +242,7 @@ const Helium::Math::Color4& ColorPicker::GetColor4() const
         if ( IsBound() )
         {
             tstring str;
-            ReadData( str );
+            ReadStringData( str );
             tstringstream stream( str );
             stream >> (Math::Color4)m_Color4;
         }

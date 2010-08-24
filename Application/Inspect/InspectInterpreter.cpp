@@ -1,4 +1,4 @@
-#include "Interpreter.h"
+#include "InspectInterpreter.h"
 
 #include "Application/Inspect/Controls/InspectCanvas.h"
 #include "Application/Inspect/Controls/InspectPanel.h"
@@ -35,7 +35,7 @@ void Interpreter::Push(Container* container)
   containerStack.push(container);
 }
 
-Panel* Interpreter::PushPanel(const tstring& name, bool expanded)
+Panel* Interpreter::PushContainer(const tstring& name, bool expanded)
 {
   PanelPtr panel = m_Container->GetCanvas()->Create<Panel>( this );
 

@@ -153,7 +153,7 @@ void Value::Read()
 {
   if ( IsBound() )
   {
-    ReadData( m_Text );
+    ReadStringData( m_Text );
 
     UpdateUI( m_Text );
 
@@ -171,7 +171,7 @@ bool Value::Write()
     m_Text = textCtrl->GetValue().c_str();
 
     textCtrl->m_Override = true;
-    result = WriteData( m_Text );
+    result = WriteStringData( m_Text );
     textCtrl->m_Override = false;
 
     textCtrl->SetSelection( 0, static_cast< long >( m_Text.size() ) );
@@ -184,7 +184,7 @@ void Value::GetText(tstring& text)
 {
   if ( IsBound() )
   {
-    ReadData( m_Text );
+    ReadStringData( m_Text );
   }
 
   text = m_Text;
@@ -196,7 +196,7 @@ void Value::SetText(const tstring& text)
 
   if ( IsBound() )
   {
-    WriteData( m_Text );
+    WriteStringData( m_Text );
   }
 
   UpdateUI( m_Text );

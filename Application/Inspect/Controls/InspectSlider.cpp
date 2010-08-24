@@ -129,7 +129,7 @@ bool Slider::Write()
         // Write the value back into the data
         tostringstream str;
         str << m_CurrentValue;
-        result = WriteData( str.str(), m_Tracking );
+        result = WriteStringData( str.str(), m_Tracking );
     }
 
     return result;
@@ -173,7 +173,7 @@ float Slider::GetValue()
     if ( IsBound() )
     {
         tstring str;
-        ReadData( str );
+        ReadStringData( str );
         if ( str != MULTI_VALUE_STRING && str != UNDEF_VALUE_STRING )
         {
             m_CurrentValue = static_cast< float >( _tstof( str.c_str() ) );
@@ -196,7 +196,7 @@ void Slider::SetValue(float value)
     {
         tostringstream str;
         str << m_CurrentValue;
-        WriteData( str.str() );
+        WriteStringData( str.str() );
     }
 
     SetUIValue( m_CurrentValue );

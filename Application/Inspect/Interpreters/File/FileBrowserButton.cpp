@@ -46,11 +46,11 @@ void FileBrowserButton::Read()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Wrapper around Control::ReadData that cleans the file path returned
+// Wrapper around Control::ReadStringData that cleans the file path returned
 //
 void FileBrowserButton::ReadPathData( tstring& path ) const
 {
-    ReadData( path );
+    ReadStringData( path );
     if ( !path.empty() )
     {
         Helium::Path::Normalize( path );
@@ -91,7 +91,7 @@ bool FileBrowserButton::Write()
         if ( fileBrowser.ShowModal() == wxID_OK )
         {
           tstring path = fileBrowser.GetPath().c_str();
-          result = WriteData( path );
+          result = WriteStringData( path );
         }
     }
 
@@ -163,7 +163,7 @@ void FileBrowserButton::SetPath( const tstring& path )
     Helium::Path::Normalize( m_Path );
     if ( IsBound() )
     {
-        WriteData( m_Path );
+        WriteStringData( m_Path );
     }
 }
 

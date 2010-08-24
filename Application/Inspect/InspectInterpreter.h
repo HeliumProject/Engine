@@ -110,8 +110,8 @@ namespace Helium
 
             void Add(Control* control);
             void Push(Container* container);
-            Panel* PushPanel(const tstring& name, bool expanded = false);
-            Container* PushContainer();
+
+            Container* PushContainer(const tstring& name, bool expanded = false);
             Container* Pop( bool setParent = true );
             Container* Top();
 

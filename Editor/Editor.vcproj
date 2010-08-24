@@ -1719,11 +1719,27 @@
 			Name="Inspect"
 			>
 			<File
-				RelativePath=".\Inspect\InspectWidgets.cpp"
+				RelativePath=".\Inspect\Canvas.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Inspect\InspectWidgets.h"
+				RelativePath=".\Inspect\Canvas.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Label.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Label.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\StripCanvas.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\StripCanvas.h"
 				>
 			</File>
 			<File
@@ -1735,11 +1751,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Inspect\TreeCanvas.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\TreeCanvas.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Inspect\TreeCanvasCtrl.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Inspect\TreeCanvasCtrl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Widget.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Widget.h"
 				>
 			</File>
 		</Filter>

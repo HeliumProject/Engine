@@ -415,7 +415,7 @@ void EntityPanel::OnEntityAssetDrop( const Inspect::FilteredDropTargetArgs& args
 {
     if ( args.m_Paths.size() )
     {
-        m_TextBox->WriteData( args.m_Paths[ 0 ] );
+        m_TextBox->WriteStringData( args.m_Paths[ 0 ] );
     }
 }
 

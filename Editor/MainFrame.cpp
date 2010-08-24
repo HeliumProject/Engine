@@ -264,6 +264,8 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
 
 MainFrame::~MainFrame()
 {
+    SyncPropertyThread();
+
     // Remove any straggling document listeners
     OS_DocumentSmartPtr::Iterator docItr = m_SceneManager.GetDocumentManager().GetDocuments().Begin();
     OS_DocumentSmartPtr::Iterator docEnd = m_SceneManager.GetDocumentManager().GetDocuments().End();
@@ -708,6 +710,8 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
 
 void MainFrame::OnNewScene( wxCommandEvent& event )
 {
+    SyncPropertyThread();
+
     if ( m_SceneManager.GetDocumentManager().CloseAll() )
     {
         ScenePtr scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport() );
@@ -734,6 +738,8 @@ bool MainFrame::DoOpen( const tstring& path )
     Helium::Path nocPath( path );
     if ( !path.empty() && nocPath.Exists() )
     {
+        SyncPropertyThread();
+
         if ( m_SceneManager.GetDocumentManager().CloseAll() )
         {
             tstring error;
@@ -776,6 +782,7 @@ void MainFrame::OnOpen( wxCommandEvent& event )
 
 void MainFrame::OnClose( wxCommandEvent& event )
 {
+    SyncPropertyThread();
     m_SceneManager.GetDocumentManager().CloseAll();
     m_Project = NULL;
 }
@@ -1955,6 +1962,8 @@ void MainFrame::OnExit( wxCommandEvent& event )
 // 
 void MainFrame::OnExiting( wxCloseEvent& args )
 {
+    SyncPropertyThread();
+
     if ( !m_SceneManager.GetDocumentManager().CloseAll() )
     {
         if ( args.CanVeto() )

@@ -714,7 +714,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
 
         parentState->m_Components.push_back(topState->m_Element);
     }
-    else
+    else if ( topState->m_Element != NULL )
     {
         // we've reached the top of the processed stack, send off to client for processing
         m_Target->push_back( topState->m_Element );

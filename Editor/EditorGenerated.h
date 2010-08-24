@@ -85,7 +85,7 @@ namespace Helium
 					ID_WalkDown,
 					ID_WalkForward,
 					ID_WalkBackward,
-					ID_Preferences,
+					ID_Settings,
 					ID_About,
 				};
 				
@@ -130,7 +130,7 @@ namespace Helium
 				virtual void OnSnapToCamera( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnSnapCameraTo( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnPickWalk( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnPreferences( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnSettings( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnAbout( wxCommandEvent& event ) { event.Skip(); }
 				
 			

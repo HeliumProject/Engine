@@ -32,7 +32,7 @@ Camera::Camera()
 
 }
 
-void Camera::LoadPreferences( CameraPreferences* prefs )
+void Camera::LoadSettings( CameraSettings* prefs )
 {
   SetShadingMode( (Core::ShadingMode)prefs->m_ShadingMode ); 
   SetWireframeOnMesh( prefs->m_WireframeOnMesh ); 
@@ -41,7 +41,7 @@ void Camera::LoadPreferences( CameraPreferences* prefs )
   SetBackFaceCulling( prefs->m_BackFaceCulling ); 
 }
 
-void Camera::SavePreferences( CameraPreferences* prefs )
+void Camera::SaveSettings( CameraSettings* prefs )
 {
   prefs->m_ShadingMode = GetShadingMode(); 
   prefs->m_WireframeOnMesh = GetWireframeOnMesh(); 

@@ -8,10 +8,11 @@
 #include "Foundation/Undo/Queue.h"
 
 #include "Core/API.h"
+#include "Core/SettingsManager.h"
 #include "Core/Scene/Render.h"
 #include "Core/Scene/Camera.h"
 #include "Core/Scene/Resource.h"
-#include "Core/Scene/ViewportPreferences.h"
+#include "Core/Scene/ViewportSettings.h"
 #include "Core/Render/DeviceManager.h"
 
 namespace Helium
@@ -217,13 +218,13 @@ namespace Helium
             static void InitializeType();
             static void CleanupType();
 
-            Viewport( HWND wnd );
+            Viewport( HWND wnd, SettingsManager* settingsManager );
             ~Viewport();
 
             void Reset();
 
-            void LoadPreferences(ViewportPreferences* prefs);
-            void SavePreferences(ViewportPreferences* prefs);
+            void LoadSettings(ViewportSettings* prefs);
+            void SaveSettings(ViewportSettings* prefs);
 
             void SetSize( Math::Point size )
             {
@@ -233,6 +234,11 @@ namespace Helium
             inline IDirect3DDevice9* GetDevice() const
             {
                 return m_DeviceManager.GetD3DDevice();
+            }
+
+            SettingsManager* GetSettingsManager() const
+            {
+                return m_SettingsManager;
             }
 
             ResourceTracker* GetResources() const
@@ -457,12 +463,14 @@ namespace Helium
             }
 
         protected:
-            void OnGridPreferencesChanged( const Reflect::ElementChangeArgs& args );
+            void OnGridSettingsChanged( const Reflect::ElementChangeArgs& args );
 
         private:
             HWND                    m_Window;
             Math::Point             m_Size;
             bool                    m_Focused;
+
+            SettingsManager*        m_SettingsManager;
 
             Render::DeviceManager   m_DeviceManager;
             ResourceTracker*        m_ResourceTracker;

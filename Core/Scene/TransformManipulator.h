@@ -36,9 +36,6 @@ namespace Helium
             // Axes to manipulate
             Math::AxesFlags m_SelectedAxes;
 
-            // Size of manipulator
-            f32 m_Size;
-
             // Mouse input
             bool m_Left;
             bool m_Middle;
@@ -122,10 +119,6 @@ namespace Helium
             //
 
             virtual void CreateProperties() HELIUM_OVERRIDE;
-
-            f32 GetSize() const;
-            void SetSize(f32 space);
-
 
             //
             // Manipulation Set, these find the primary, secondary, complete set of objects in the manpiulation set

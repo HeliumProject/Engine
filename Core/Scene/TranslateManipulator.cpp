@@ -12,7 +12,7 @@
 
 #include "Core/Scene/SceneManager.h"
 #include "Core/Scene/Scene.h"
-#include "ScenePreferences.h"
+#include "SceneSettings.h"
 #include "Core/Scene/Mesh.h"
 
 #include "Foundation/Math/AngleAxis.h"
@@ -37,20 +37,20 @@ void TranslateManipulator::CleanupType()
     Reflect::UnregisterClassType< Core::TranslateManipulator >();
 }
 
-TranslateManipulator::TranslateManipulator(const ManipulatorMode mode, Core::Scene* scene, PropertiesGenerator* generator)
+TranslateManipulator::TranslateManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, Core::Scene* scene, PropertiesGenerator* generator)
 : Core::TransformManipulator (mode, scene, generator)
+, m_SettingsManager( settingsManager )
+, m_Size( 0.3f )
 , m_HotSnappingMode (TranslateSnappingModes::None)
 , m_ShowCones (true)
 , m_Factor (1.f)
 {
-#if SCENE_REFACTOR
-    Core::ScenePreferences* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
-    prefs->Get( prefs->TranslateManipulatorSize(), m_Size );
-    prefs->GetEnum( prefs->TranslateManipulatorSpace(), m_Space );
-    prefs->GetEnum( prefs->TranslateManipulatorSnappingMode(), m_SnappingMode );
-    prefs->Get( prefs->TranslateManipulatorDistance(), m_Distance );
-    prefs->Get( prefs->TranslateManipulatorLiveObjectsOnly(), m_LiveObjectsOnly );
-#endif
+    Core::SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
+    m_Size = settings->TranslateManipulatorSize();
+    m_Space = settings->TranslateManipulatorSpace();
+    m_SnappingMode = settings->TranslateManipulatorSnappingMode();
+    m_Distance = settings->TranslateManipulatorDistance();
+    m_LiveObjectsOnly = settings->TranslateManipulatorLiveObjectsOnly();
 
     m_ShowCones = mode == ManipulatorModes::Translate;
     m_Factor = 1.0f;
@@ -78,26 +78,12 @@ TranslateManipulator::TranslateManipulator(const ManipulatorMode mode, Core::Sce
 
 TranslateManipulator::~TranslateManipulator()
 {
-#if SCENE_REFACTOR
-    Core::ScenePreferences* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
-    prefs->Set( prefs->TranslateManipulatorSize(), m_Size );
-    prefs->SetEnum( prefs->TranslateManipulatorSpace(), m_Space );
-    prefs->SetEnum( prefs->TranslateManipulatorSnappingMode(), m_SnappingMode );
-    prefs->Set( prefs->TranslateManipulatorDistance(), m_Distance );
-    prefs->Set( prefs->TranslateManipulatorLiveObjectsOnly(), m_LiveObjectsOnly );
-#endif
-
     delete m_Axes;
     delete m_Ring;
 
     delete m_XCone;
     delete m_YCone;
     delete m_ZCone;
-}
-
-TranslateSnappingMode TranslateManipulator::GetSnappingMode() const
-{
-    return m_HotSnappingMode != TranslateSnappingModes::None ? m_HotSnappingMode : m_SnappingMode;
 }
 
 void TranslateManipulator::ResetSize()
@@ -1365,6 +1351,26 @@ void TranslateManipulator::CreateProperties()
     m_Generator->Pop();
 }
 
+f32 TranslateManipulator::GetSize() const
+{
+    return m_Size;
+}
+
+void TranslateManipulator::SetSize( f32 size )
+{
+    m_Size = size;
+
+    ManipulatorAdapter* primary = PrimaryObject<ManipulatorAdapter>();
+
+    if (primary != NULL)
+    {
+        primary->GetNode()->GetOwner()->Execute(false);
+    }
+
+    SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
+    settings->RaiseChanged( settings->GetClass()->FindField( &TranslateManipulator::m_Size ) );
+}
+
 int TranslateManipulator::GetSpace() const
 {
     return m_Space;
@@ -1380,6 +1386,9 @@ void TranslateManipulator::SetSpace(int space)
     {
         primary->GetNode()->GetOwner()->Execute(false);
     }
+
+    SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
+    settings->RaiseChanged( settings->GetClass()->FindField( &TranslateManipulator::m_Space ) );
 }
 
 bool TranslateManipulator::GetLiveObjectsOnly() const
@@ -1397,11 +1406,32 @@ void TranslateManipulator::SetLiveObjectsOnly(bool snap)
     {
         primary->GetNode()->GetOwner()->Execute(false);
     }
+
+    SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
+    settings->RaiseChanged( settings->GetClass()->FindField( &TranslateManipulator::m_LiveObjectsOnly ) );
+}
+
+TranslateSnappingMode TranslateManipulator::GetSnappingMode() const
+{
+    return m_HotSnappingMode != TranslateSnappingModes::None ? m_HotSnappingMode : m_SnappingMode;
 }
 
 bool TranslateManipulator::GetSurfaceSnap() const
 {
     return m_SnappingMode == TranslateSnappingModes::Surface;
+}
+
+void TranslateManipulator::UpdateSnappingMode()
+{
+    TranslateManipulatorAdapter* primary = PrimaryObject<TranslateManipulatorAdapter>();
+
+    if (primary != NULL)
+    {
+        primary->GetNode()->GetOwner()->Execute(false);
+    }
+
+    SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
+    settings->RaiseChanged( settings->GetClass()->FindField( &TranslateManipulator::m_SnappingMode ) );
 }
 
 void TranslateManipulator::SetSurfaceSnap(bool snap)
@@ -1415,12 +1445,7 @@ void TranslateManipulator::SetSurfaceSnap(bool snap)
             m_Generator->GetContainer()->Read();
         }
 
-        TranslateManipulatorAdapter* primary = PrimaryObject<TranslateManipulatorAdapter>();
-
-        if (primary != NULL)
-        {
-            primary->GetNode()->GetOwner()->Execute(false);
-        }
+        UpdateSnappingMode();
     }
 }
 
@@ -1440,12 +1465,7 @@ void TranslateManipulator::SetObjectSnap(bool snap)
             m_Generator->GetContainer()->Read();
         }
 
-        TranslateManipulatorAdapter* primary = PrimaryObject<TranslateManipulatorAdapter>();
-
-        if (primary != NULL)
-        {
-            primary->GetNode()->GetOwner()->Execute(false);
-        }
+        UpdateSnappingMode();
     }
 }
 
@@ -1465,12 +1485,7 @@ void TranslateManipulator::SetVertexSnap(bool snap)
             m_Generator->GetContainer()->Read();
         }
 
-        TranslateManipulatorAdapter* primary = PrimaryObject<TranslateManipulatorAdapter>();
-
-        if (primary != NULL)
-        {
-            primary->GetNode()->GetOwner()->Execute(false);
-        }
+        UpdateSnappingMode();
     }
 }
 
@@ -1490,12 +1505,7 @@ void TranslateManipulator::SetOffsetSnap(bool snap)
             m_Generator->GetContainer()->Read();
         }
 
-        TranslateManipulatorAdapter* primary = PrimaryObject<TranslateManipulatorAdapter>();
-
-        if (primary != NULL)
-        {
-            primary->GetNode()->GetOwner()->Execute(false);
-        }
+        UpdateSnappingMode();
     }
 }
 
@@ -1515,12 +1525,7 @@ void TranslateManipulator::SetGridSnap(bool snap)
             m_Generator->GetContainer()->Read();
         }
 
-        TranslateManipulatorAdapter* primary = PrimaryObject<TranslateManipulatorAdapter>();
-
-        if (primary != NULL)
-        {
-            primary->GetNode()->GetOwner()->Execute(false);
-        }
+        UpdateSnappingMode();
     }
 }
 
@@ -1539,4 +1544,7 @@ void TranslateManipulator::SetDistance(float distance)
     {
         primary->GetNode()->GetOwner()->Execute(false);
     }
+
+    SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
+    settings->RaiseChanged( settings->GetClass()->FindField( &TranslateManipulator::m_Distance ) );
 }

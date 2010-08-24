@@ -9,7 +9,7 @@
 
 #include "Core/API.h"
 #include "Core/Scene/Persistent.h"
-#include "Core/Scene/CameraPreferences.h"
+#include "Core/Scene/CameraSettings.h"
 
 namespace Helium
 {
@@ -127,8 +127,8 @@ namespace Helium
 
             Camera();
 
-            void LoadPreferences(CameraPreferences* prefs);
-            void SavePreferences(CameraPreferences* prefs);
+            void LoadSettings(CameraSettings* prefs);
+            void SaveSettings(CameraSettings* prefs);
 
             void Setup(ProjectionMode mode = ProjectionModes::Perspective, const Math::Vector3& dir = Math::Vector3::Zero, const Math::Vector3& up = Math::Vector3::Zero);
 

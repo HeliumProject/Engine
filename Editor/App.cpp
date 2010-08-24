@@ -27,21 +27,22 @@
 #include "Application/RCS/Providers/Perforce/Perforce.h"
 
 #include "Core/CoreInit.h"
+#include "Core/MRUData.h"
 
+#include "Core/Scene/SceneInit.h"
 #include "Core/Scene/Object.h"
 #include "Core/Scene/Selectable.h"
 #include "Core/Scene/Persistent.h"
 #include "Core/Scene/PropertiesGenerator.h"
-#include "Core/Scene/Settings.h"
 
-#include "Preferences.h"
-#include "Preferences.h"
+#include "Core/Scene/GridSettings.h"
+#include "Core/Scene/SceneSettings.h"
+
 #include "WindowSettings.h"
 #include "Application/Document.h"
 
-#include "Core/Scene/SceneInit.h"
-#include "Tracker/Tracker.h"
-#include "Task/TaskInit.h"
+#include "Editor/Tracker/Tracker.h"
+#include "Editor/Task/TaskInit.h"
 #include "Editor/PerforceWaitDialog.h"
 #include "Editor/Vault/Vault.h"
 
@@ -152,7 +153,7 @@ namespace Helium
 
 App::App()
 #pragma TODO("This needs fixing otherwise dialogs will not be modal -Geoff")
-: m_Preferences( new Preferences() )
+: m_SettingsManager( new Core::SettingsManager() )
 , m_Vault( NULL )
 , m_Frame( NULL )
 {
@@ -215,8 +216,7 @@ bool App::OnInit()
     m_InitializerStack.Push( Core::Selectable::InitializeType, Core::Selectable::CleanupType );
     m_InitializerStack.Push( Core::Persistent::InitializeType, Core::Persistent::CleanupType );
     m_InitializerStack.Push( Core::PropertiesGenerator::Initialize, Core::PropertiesGenerator::Cleanup );
-    m_InitializerStack.Push( Reflect::RegisterEnumType<FilePathOptions::FilePathOption>( &FilePathOptions::FilePathOptionEnumerateEnum, TXT( "FilePathOption" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Core::MRUData >( TXT( "MRUData" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Core::MRUData >( TXT( "Core::MRUData" ) ) );
 
     // task
 #pragma TODO("Move init into here")
@@ -234,17 +234,16 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::RegisterClassType<SearchHistory>( TXT( "SearchHistory" ) ) );
     m_InitializerStack.Push( Reflect::RegisterEnumType<ViewOptionIDs::ViewOptionID>( &ViewOptionIDs::ViewOptionIDEnumerateEnum, TXT( "ViewOptionID" ) ) );
 
-    // preferences
-    m_InitializerStack.Push( Reflect::RegisterClassType< Core::Settings >( TXT( "Settings" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType<WindowSettings>( TXT( "WindowSettings" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Core::CameraPreferences >( TXT( "CameraPreferences" ) ) ); 
-    m_InitializerStack.Push( Reflect::RegisterClassType< Core::ViewportPreferences >( TXT( "ViewportPreferences" ) ) ); 
-    m_InitializerStack.Push( Reflect::RegisterClassType< Core::GridPreferences >( TXT( "GridPreferences" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Core::ScenePreferences >( TXT( "ScenePreferences" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType<VaultPreferences>( TXT( "VaultPreferences" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType<Preferences>( TXT( "Preferences" ) ) );
+    // settings
+    m_InitializerStack.Push( Reflect::RegisterClassType< Core::SettingsManager >( TXT( "Core::SettingsManager" ) ) ); 
+    m_InitializerStack.Push( Reflect::RegisterClassType< Core::CameraSettings >( TXT( "Core::CameraSettings" ) ) ); 
+    m_InitializerStack.Push( Reflect::RegisterClassType< Core::ViewportSettings >( TXT( "Core::ViewportSettings" ) ) ); 
+    m_InitializerStack.Push( Reflect::RegisterClassType< Core::GridSettings >( TXT( "Core::GridSettings" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Core::SceneSettings >( TXT( "Core::SceneSettings" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< WindowSettings >( TXT( "Editor::WindowSettings" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< VaultSettings >( TXT( "Editor::VaultSettings" ) ) );
 
-    LoadPreferences();
+    LoadSettings();
 
     if ( Log::GetErrorCount() )
     {
@@ -263,7 +262,7 @@ int App::OnExit()
 {
     m_TrackerThread.Wait();
 
-    SavePreferences();
+    SaveSettings();
 
     m_InitializerStack.Cleanup();
 
@@ -293,22 +292,22 @@ void App::OnAssertFailure(const wxChar *file, int line, const wxChar *func, cons
     HELIUM_BREAK();
 }
 
-void App::SavePreferences()
+void App::SaveSettings()
 {
     Helium::Path path;
     Helium::GetPreferencesDirectory( path );
-    path += TXT("EditorPreferences.xml");
+    path += TXT("EditorSettings.xml");
 
     tstring error;
     if ( Helium::IsDebuggerPresent() )
     {
-        m_Preferences->SaveToFile( path, error );
+        Reflect::Archive::ToFile( m_SettingsManager, path );
     }
     else
     {
         try
         {
-            m_Preferences->SaveToFile( path, error );
+            Reflect::Archive::ToFile( m_SettingsManager, path );
         }
         catch ( const Helium::Exception& ex )
         {
@@ -322,22 +321,29 @@ void App::SavePreferences()
     }
 }
 
-void App::LoadPreferences()
+void App::LoadSettings()
 {
     Helium::Path path;
     Helium::GetPreferencesDirectory( path );
-    path += TXT("EditorPreferences.xml");
+    path += TXT("EditorSettings.xml");
+
+	if ( !path.Exists() )
+	{
+		return;
+	}
+
+    Core::SettingsManagerPtr settingsManager = NULL;
 
     if ( Helium::IsDebuggerPresent() )
     {
-        m_Preferences->LoadFromFile( path );
+		settingsManager = Reflect::Archive::FromFile< Core::SettingsManager >( path );
     }
     else
     {
         tstring error;
         try
         {
-            m_Preferences->LoadFromFile( path );
+			settingsManager = Reflect::Archive::FromFile< Core::SettingsManager >( path );
         }
         catch ( const Helium::Exception& ex )
         {
@@ -348,6 +354,15 @@ void App::LoadPreferences()
         {
             wxMessageBox( error.c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
         }
+    }
+
+    if ( settingsManager.ReferencesObject() )
+    {
+        m_SettingsManager = settingsManager;
+    }
+    else
+    {
+        wxMessageBox( TXT( "Unfortunately, we could not parse your existing settings.  Your settings have been reset to defaults.  We apologize for the inconvenience." ), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
     }
 }
 
@@ -404,10 +419,10 @@ int Main ( int argc, const tchar** argv )
 
     bool disableTracker = false;
     success &= processor.AddOption( new FlagOption( &disableTracker, TXT( "disable_tracker" ), TXT( "disable Asset Tracker" ) ), error );
-    //GetAppPreferences()->UseTracker( disableTracker );
+    //GetAppSettings()->UseTracker( disableTracker );
 
     //success &= processor.AddOption( new FlagOption(  , WindowSettings::s_Reset, "reset all window positions" ), error );
-    //success &= processor.AddOption( new FlagOption(  , Preferences::s_ResetPreferences, "resets all preferences for all of Editor" ), error );
+    //success &= processor.AddOption( new FlagOption(  , Settings::s_ResetSettings, "resets all preferences for all of Editor" ), error );
 
     //success &= processor.AddOption( new FlagOption(  , Worker::Args::Debug, "debug use of background processes" ), error );
     //success &= processor.AddOption( new FlagOption(  , Worker::Args::Wait, "wait forever for background processes" ), error );

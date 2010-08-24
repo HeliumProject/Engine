@@ -270,7 +270,7 @@ void Entity::Render( RenderVisitor* render )
 
     if (IsGeometryVisible())
     {
-        const Core::Scene* nested = GetNestedScene( render->GetViewport()->GetGeometryMode() );
+        Core::Scene* nested = GetNestedScene( render->GetViewport()->GetGeometryMode() );
 
         VisitorState state ( render->State().m_Matrix,
             render->State().m_Highlighted || (m_Scene->IsFocused() && IsHighlighted()),

@@ -5,6 +5,7 @@
 #include "Type.h"
 #include "Field.h"
 #include "Visitor.h"
+#include "Foundation/Automation/Attribute.h"
 
 //
 //  Composite Binary format:
@@ -274,8 +275,20 @@ namespace Helium
                     flags );
             }
 
+            template <class FieldT>
+            inline Reflect::Field* AddField( Attribute<FieldT> T::* field, const std::string& name, i32 flags = 0, i32 serializerType = -1 )
+            {
+                return m_Composite.AddField(
+                    m_Instance,
+                    GetName(name),
+                    GetOffset(field),
+                    sizeof(FieldT),
+                    serializerType < 0 ? Reflect::GetType<FieldT>() : serializerType,
+                    flags );
+            }
+
             template <class ElementT>
-            inline Reflect::ElementField* AddField( Helium::SmartPtr< ElementT > T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::ElementField* AddField( SmartPtr< ElementT > T::* field, const std::string& name, i32 flags = 0 )
             {
                 return m_Composite.AddElementField(
                     m_Instance,
@@ -288,39 +301,91 @@ namespace Helium
             }
 
             template <class ElementT>
-            inline Reflect::ElementField* AddField( std::vector< Helium::SmartPtr< ElementT > > T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::ElementField* AddField( Attribute< SmartPtr< ElementT > > T::* field, const std::string& name, i32 flags = 0 )
             {
                 return m_Composite.AddElementField(
                     m_Instance,
                     GetName(name),
                     GetOffset(field),
-                    sizeof(std::vector< Helium::SmartPtr< ElementT > >),
+                    sizeof(uintptr),
+                    Reflect::GetType<Reflect::PointerSerializer>(),
+                    Reflect::GetType<ElementT>(),
+                    flags );
+            }
+
+            template <class ElementT>
+            inline Reflect::ElementField* AddField( std::vector< SmartPtr< ElementT > > T::* field, const std::string& name, i32 flags = 0 )
+            {
+                return m_Composite.AddElementField(
+                    m_Instance,
+                    GetName(name),
+                    GetOffset(field),
+                    sizeof(std::vector< SmartPtr< ElementT > >),
                     Reflect::GetType<Reflect::ElementArraySerializer>(),
                     Reflect::GetType<ElementT>(),
                     flags );
             }
 
             template <class ElementT>
-            inline Reflect::ElementField* AddField( std::set< Helium::SmartPtr< ElementT > > T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::ElementField* AddField( Attribute< std::vector< SmartPtr< ElementT > > > T::* field, const std::string& name, i32 flags = 0 )
             {
                 return m_Composite.AddElementField(
                     m_Instance,
                     GetName(name),
                     GetOffset(field),
-                    sizeof(std::set< Helium::SmartPtr< ElementT > >),
+                    sizeof(std::vector< SmartPtr< ElementT > >),
+                    Reflect::GetType<Reflect::ElementArraySerializer>(),
+                    Reflect::GetType<ElementT>(),
+                    flags );
+            }
+
+            template <class ElementT>
+            inline Reflect::ElementField* AddField( std::set< SmartPtr< ElementT > > T::* field, const std::string& name, i32 flags = 0 )
+            {
+                return m_Composite.AddElementField(
+                    m_Instance,
+                    GetName(name),
+                    GetOffset(field),
+                    sizeof(std::set< SmartPtr< ElementT > >),
+                    Reflect::GetType<Reflect::ElementSetSerializer>(),
+                    Reflect::GetType<ElementT>(),
+                    flags );
+            }
+
+            template <class ElementT>
+            inline Reflect::ElementField* AddField( Attribute< std::set< SmartPtr< ElementT > > > T::* field, const std::string& name, i32 flags = 0 )
+            {
+                return m_Composite.AddElementField(
+                    m_Instance,
+                    GetName(name),
+                    GetOffset(field),
+                    sizeof(std::set< SmartPtr< ElementT > >),
                     Reflect::GetType<Reflect::ElementSetSerializer>(),
                     Reflect::GetType<ElementT>(),
                     flags );
             }
 
             template <class KeyT, class ElementT>
-            inline Reflect::ElementField* AddField( std::map< KeyT, Helium::SmartPtr< ElementT > > T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::ElementField* AddField( std::map< KeyT, SmartPtr< ElementT > > T::* field, const std::string& name, i32 flags = 0 )
             {
                 return m_Composite.AddElementField( 
                     m_Instance, 
                     GetName(name), 
                     GetOffset(field), 
-                    sizeof(std::map< KeyT, Helium::SmartPtr< ElementT > >), 
+                    sizeof(std::map< KeyT, SmartPtr< ElementT > >), 
+                    Reflect::GetType<Reflect::SimpleElementMapSerializer< KeyT > >(), 
+                    Reflect::GetType<ElementT>(), 
+                    flags );
+            }
+
+            template <class KeyT, class ElementT>
+            inline Reflect::ElementField* AddField( Attribute< std::map< KeyT, SmartPtr< ElementT > > > T::* field, const std::string& name, i32 flags = 0 )
+            {
+                return m_Composite.AddElementField( 
+                    m_Instance, 
+                    GetName(name), 
+                    GetOffset(field), 
+                    sizeof(std::map< KeyT, SmartPtr< ElementT > >), 
                     Reflect::GetType<Reflect::SimpleElementMapSerializer< KeyT > >(), 
                     Reflect::GetType<ElementT>(), 
                     flags );
@@ -339,8 +404,34 @@ namespace Helium
                     flags );
             }
 
+            template <class FieldT>
+            inline Reflect::EnumerationField* AddEnumerationField( Attribute< FieldT > T::* field, const std::string& name, i32 flags = 0 )
+            {
+                return m_Composite.AddEnumerationField(
+                    m_Instance,
+                    GetName(name),
+                    GetOffset(field),
+                    sizeof(FieldT),
+                    Reflect::GetType<Reflect::EnumerationSerializer>(),
+                    typeid(FieldT).name(),
+                    flags );
+            }
+
             template <class EnumT, class FieldT>
             inline Reflect::EnumerationField* AddBitfieldField( FieldT T::* field, const std::string& name, i32 flags = 0 )
+            {
+                return m_Composite.AddEnumerationField(
+                    m_Instance,
+                    GetName(name),
+                    GetOffset(field),
+                    sizeof(FieldT),
+                    Reflect::GetType<Reflect::BitfieldSerializer>(),
+                    typeid(EnumT).name(),
+                    flags );
+            }
+
+            template <class EnumT, class FieldT>
+            inline Reflect::EnumerationField* AddBitfieldField( Attribute< FieldT > T::* field, const std::string& name, i32 flags = 0 )
             {
                 return m_Composite.AddEnumerationField(
                     m_Instance,

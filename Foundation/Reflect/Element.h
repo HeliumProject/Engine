@@ -60,9 +60,8 @@ namespace Helium
         };
         typedef Helium::Signature<void, const ElementChangeArgs&, Helium::AtomicRefCountBase> ElementChangeSignature;
 
-
         //
-        // Reflect::Element is the HELIUM_ABSTRACT base class of a serializable unit
+        // Reflect::Element is the abstract base class of a serializable unit
         //
 
         class FOUNDATION_API Element HELIUM_ABSTRACT : public AbstractInheritor<Element, Object>
@@ -141,27 +140,37 @@ namespace Helium
                 m_Changed.Raise( ElementChangeArgs (this, field) );
             }
 
-            template< class T >
-            void FieldChanged(T* fieldAddress) const
+            template< class FieldT >
+            void FieldChanged(FieldT* fieldAddress) const
             {
                 // the offset of the field is the address of the field minus the address of this element instance
-                const Reflect::Field* field = GetClass()->FindFieldByOffset( ((u32)fieldAddress - (u32)this) );
-                if ( field )
-                {
-                    RaiseChanged(field);
-                }
-                else
-                {
-                    // your field address probably doesn't point to the field in this instance
-                    HELIUM_BREAK();
-                }
-            }
+                uintptr_t fieldOffset = ((u32)fieldAddress - (u32)this);
 
-            template< class T >
-            void AttributeChanged( typename const Helium::Attribute<T>::ChangeArgs& args )
+                // find the field in our reflection information
+                const Reflect::Field* field = GetClass()->FindFieldByOffset( fieldOffset );
+
+                // your field address probably doesn't point to the field in this instance,
+                //  or your field is not exposed to Reflect, add it in your Composite function
+                HELIUM_ASSERT( field );
+
+                // notify listeners that this field changed
+                RaiseChanged( field );
+            }
+            
+            template< class ElementT, class FieldT >
+            void ChangeField( FieldT ElementT::* field, const FieldT& newValue )
             {
-                // this works since m_Value is always a reference to m_Value, which is a reference to the field
-                FieldChanged( &args.m_Value );
+                // set the field via pointer-to-member on the deduced templated type (!)
+                this->*field = newValue;
+
+                // find the field in our reflection information
+                const Reflect::Field* field = GetClass()->FindField( field );
+
+                // your field is not exposed to Reflect, add it in your Composite function
+                HELIUM_ASSERT( field );
+
+                // notify listeners that this field changed
+                RaiseChanged( field );
             }
         };
     }

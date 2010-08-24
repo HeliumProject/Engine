@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CollectionManager.h"
-#include "VaultPreferences.h"
+#include "VaultSettings.h"
 #include "VaultSearch.h"
 #include "VaultEvents.h"
 #include "SearchQuery.h"

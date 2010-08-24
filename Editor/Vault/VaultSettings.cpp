@@ -1,21 +1,13 @@
 #include "Precompile.h"
-#include "VaultPreferences.h"
+#include "VaultSettings.h"
 #include "VaultFrame.h"
-
-#include "Foundation/Preferences.h"
-#include "Foundation/Reflect/Serializer.h"
-#include "Foundation/Reflect/Serializers.h"
-
-#include <wx/msgdlg.h>
 
 using namespace Helium;
 using namespace Helium::Editor;
 
-const static tstring s_WindowSettingsVersion( TXT( "1" ) );
-
 ///////////////////////////////////////////////////////////////////////////////
-VaultPreferences::VaultPreferences( const tstring& defaultFolder, ViewOptionID thumbnailMode, u32 thumbnailSize )
- : m_WindowSettings( new WindowSettings(s_WindowSettingsVersion) )
+VaultSettings::VaultSettings( const tstring& defaultFolder, ViewOptionID thumbnailMode, u32 thumbnailSize )
+ : m_WindowSettings( new WindowSettings() )
  , m_DefaultFolder( defaultFolder )
  , m_ThumbnailMode( thumbnailMode )
  , m_ThumbnailSize( thumbnailSize )
@@ -29,55 +21,55 @@ VaultPreferences::VaultPreferences( const tstring& defaultFolder, ViewOptionID t
   Helium::Path::GuaranteeSeparator( m_DefaultFolder );
 }
 
-VaultPreferences::~VaultPreferences()
+VaultSettings::~VaultSettings()
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void VaultPreferences::GetWindowSettings( VaultFrame* browserFrame, wxAuiManager* manager )
+void VaultSettings::GetWindowSettings( VaultFrame* browserFrame, wxAuiManager* manager )
 {
   m_WindowSettings->ApplyToWindow( browserFrame, manager, true );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void VaultPreferences::SetWindowSettings( VaultFrame* browserFrame, wxAuiManager* manager )
+void VaultSettings::SetWindowSettings( VaultFrame* browserFrame, wxAuiManager* manager )
 {
   m_WindowSettings->SetFromWindow( browserFrame, manager );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-const ViewOptionID VaultPreferences::GetThumbnailMode() const
+const ViewOptionID VaultSettings::GetThumbnailMode() const
 {
   return m_ThumbnailMode;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void VaultPreferences::SetThumbnailMode( ViewOptionID thumbnailMode )
+void VaultSettings::SetThumbnailMode( ViewOptionID thumbnailMode )
 {
   m_ThumbnailMode = thumbnailMode;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-const u32 VaultPreferences::GetThumbnailSize() const
+const u32 VaultSettings::GetThumbnailSize() const
 {
   return m_ThumbnailSize;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void VaultPreferences::SetThumbnailSize( u32 thumbnailSize )
+void VaultSettings::SetThumbnailSize( u32 thumbnailSize )
 {
   m_ThumbnailSize = thumbnailSize;
   Math::Clamp( m_ThumbnailSize, ThumbnailSizes::Small, ThumbnailSizes::Large );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool VaultPreferences::DisplayPreviewAxis() const
+bool VaultSettings::DisplayPreviewAxis() const
 {
   return m_DisplayPreviewAxis;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void VaultPreferences::SetDisplayPreviewAxis( bool display )
+void VaultSettings::SetDisplayPreviewAxis( bool display )
 {
   if ( m_DisplayPreviewAxis != display )
   {
@@ -87,19 +79,19 @@ void VaultPreferences::SetDisplayPreviewAxis( bool display )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-const Reflect::Field* VaultPreferences::DisplayPreviewAxisField() const
+const Reflect::Field* VaultSettings::DisplayPreviewAxisField() const
 {
-  return GetClass()->FindField( &VaultPreferences::m_DisplayPreviewAxis );
+  return GetClass()->FindField( &VaultSettings::m_DisplayPreviewAxis );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-u32 VaultPreferences::GetDependencyCollectionRecursionDepth() const
+u32 VaultSettings::GetDependencyCollectionRecursionDepth() const
 {
   return m_DependencyCollectionRecursionDepth;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void VaultPreferences::SetDependencyCollectionRecursionDepth( u32 recursionDepth )
+void VaultSettings::SetDependencyCollectionRecursionDepth( u32 recursionDepth )
 {
   if ( m_DependencyCollectionRecursionDepth != recursionDepth )
   {
@@ -110,19 +102,19 @@ void VaultPreferences::SetDependencyCollectionRecursionDepth( u32 recursionDepth
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-const Reflect::Field* VaultPreferences::DependencyCollectionRecursionDepth() const
+const Reflect::Field* VaultSettings::DependencyCollectionRecursionDepth() const
 {
-  return GetClass()->FindField( &VaultPreferences::m_DependencyCollectionRecursionDepth );
+  return GetClass()->FindField( &VaultSettings::m_DependencyCollectionRecursionDepth );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-u32 VaultPreferences::GetUsageCollectionRecursionDepth() const
+u32 VaultSettings::GetUsageCollectionRecursionDepth() const
 {
   return m_UsageCollectionRecursionDepth;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void VaultPreferences::SetUsageCollectionRecursionDepth( u32 recursionDepth )
+void VaultSettings::SetUsageCollectionRecursionDepth( u32 recursionDepth )
 {
   if ( m_UsageCollectionRecursionDepth != recursionDepth )
   {
@@ -133,19 +125,19 @@ void VaultPreferences::SetUsageCollectionRecursionDepth( u32 recursionDepth )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-const Reflect::Field* VaultPreferences::UsageCollectionRecursionDepth() const
+const Reflect::Field* VaultSettings::UsageCollectionRecursionDepth() const
 {
-  return GetClass()->FindField( &VaultPreferences::m_UsageCollectionRecursionDepth );
+  return GetClass()->FindField( &VaultSettings::m_UsageCollectionRecursionDepth );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-const tstring& VaultPreferences::GetDefaultFolderPath() const
+const tstring& VaultSettings::GetDefaultFolderPath() const
 {
   return m_DefaultFolder;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void VaultPreferences::SetDefaultFolderPath( const tstring& path )
+void VaultSettings::SetDefaultFolderPath( const tstring& path )
 {
   m_DefaultFolder = path;
   Helium::Path::Normalize( m_DefaultFolder );

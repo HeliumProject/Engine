@@ -33,7 +33,7 @@
 #include "Core/Scene/SceneNodeType.h"
 #include "HierarchyNodeType.h"
 
-#include "ScenePreferences.h"
+#include "SceneSettings.h"
 
 #include "ParentCommand.h"
 
@@ -104,16 +104,13 @@ Scene::Scene( Core::Viewport* viewport, const Helium::Path& path )
     // we listen to our own events because there a couple ways to add nodes and get this event
     AddNodeAddedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeAdded )); 
     AddNodeRemovedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeRemoved )); 
-#if SCENE_REFACTOR
-    wxGetApp().GetPreferences()->GetViewportPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
-#endif
+
+    m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
 }
 
 Scene::~Scene()
 {
-#if SCENE_REFACTOR
-    wxGetApp().GetPreferences()->GetViewportPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
-#endif
+    m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
 
     // remove our own listeners 
     RemoveNodeAddedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeAdded )); 
@@ -1497,17 +1494,6 @@ void Scene::Execute(bool interactively)
     // update data
     Evaluate();
 
-#if SCENE_REFACTOR
-    // invalidate the view
-    m_View->Refresh();
-
-    if (interactively)
-    {
-        // paint 3d view
-        m_View->Update();
-    }
-#endif
-
     m_Executed.Raise( ExecuteArgs (this, interactively) );
 }
 
@@ -1550,28 +1536,24 @@ void Scene::Delete()
     }
 }
 
-void Scene::Render( RenderVisitor* render ) const
+void Scene::Render( RenderVisitor* render )
 {
-    {
-        CORE_RENDER_SCOPE_TIMER( ("") );
+    CORE_RENDER_SCOPE_TIMER( ("") );
 
-        HierarchyRenderTraverser renderTraverser ( render );
+    HierarchyRenderTraverser renderTraverser ( render );
 
-        m_Root->TraverseHierarchy( &renderTraverser );
-    }
+    m_Root->TraverseHierarchy( &renderTraverser );
 }
 
 bool Scene::Pick( PickVisitor* pick ) const
 {
+    CORE_SCOPE_TIMER( ("") );
+
     size_t hitCount = pick->GetHits().size();
 
-    {
-        CORE_SCOPE_TIMER( ("") );
+    HierarchyPickTraverser pickTraverser ( pick );
 
-        HierarchyPickTraverser pickTraverser ( pick );
-
-        m_Root->TraverseHierarchy ( &pickTraverser );
-    }
+    m_Root->TraverseHierarchy ( &pickTraverser );
 
     return pick->GetHits().size() > hitCount;
 }
@@ -1906,13 +1888,7 @@ bool Scene::Push(const Undo::CommandPtr& command)
         return false;
     }
 
-#pragma TODO( "Raise an event, don't reach up in to the app..." )
-#if SCENE_REFACTOR
-    wxGetApp().GetFrame()->Push( command );
-#endif
-
-    // change committed
-    return true;
+    return m_UndoCommandDelegate.Invoke( UndoCommandArgs( command ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3228,12 +3204,10 @@ Undo::CommandPtr Scene::PickWalkSibling(bool forward)
 
 void Scene::ViewPreferencesChanged( const Reflect::ElementChangeArgs& args )
 {
-#if SCENE_REFACTOR
-    if ( args.m_Field == wxGetApp().GetPreferences()->GetViewportPreferences()->ColorModeField() )
+    if ( args.m_Field == m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->ColorModeField() )
     {
         Execute( false );
     }
-#endif
 }
 
 Content::NodeVisibilityPtr Scene::GetVisibility(tuid nodeId)
@@ -3276,9 +3250,7 @@ void Scene::LoadVisibility()
         m_VisibilityDB = new Content::SceneVisibility(); 
     }
 
-#if SCENE_REFACTOR
-    m_VisibilityDB->SetNodeDefaults( wxGetApp().GetPreferences()->GetScenePreferences()->GetDefaultNodeVisibility() ); 
-#endif
+    m_VisibilityDB->SetNodeDefaults( m_View->GetSettingsManager()->GetSettings< SceneSettings >()->GetDefaultNodeVisibility() ); 
 }
 
 void Scene::SaveVisibility()

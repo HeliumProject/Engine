@@ -8,11 +8,12 @@
 #include "Foundation/Undo/Queue.h"
 
 #include "Editor/API.h"
+#include "Core/SettingsManager.h"
 #include "Core/Scene/Render.h"
 #include "Core/Scene/Camera.h"
 #include "Core/Scene/Resource.h"
 #include "Core/Scene/Viewport.h"
-#include "Core/Scene/ViewportPreferences.h"
+#include "Core/Scene/ViewportSettings.h"
 #include "Core/Render/DeviceManager.h"
 
 namespace Helium
@@ -22,7 +23,8 @@ namespace Helium
         class ViewCanvas : public wxWindow
         {
         public:
-            ViewCanvas(wxWindow *parent,
+            ViewCanvas( Core::SettingsManager* settingsManager,
+                wxWindow *parent,
                 wxWindowID winid = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,

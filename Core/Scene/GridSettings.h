@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Core/API.h"
+
 #include "Foundation/Math/Color3.h"
 #include "Foundation/Reflect/Element.h"
-#include "Core/Scene/Settings.h"
 
 namespace Helium
 {
@@ -24,10 +25,10 @@ namespace Helium
         }
         typedef GridUnits::GridUnit GridUnit;
 
-        class CORE_API GridPreferences : public Reflect::ConcreteInheritor< GridPreferences, Settings >
+        class CORE_API GridSettings : public Reflect::ConcreteInheritor< GridSettings, Reflect::Element >
         {
         public:
-            GridPreferences( const tstring& version = TXT( "" ),
+            GridSettings( const tstring& version = TXT( "" ),
                 GridUnit units = GridUnits::Meters,
                 u32 width = 12,
                 u32 length = 12,
@@ -36,7 +37,7 @@ namespace Helium
                 Math::Color3 axisColor = Math::Color3( Math::Vector3( 0.0f, 0.0f, 0.0f ) ),
                 Math::Color3 majorColor = Math::Color3( Math::Vector3( 0.5f, 0.5f, 0.5f ) ),
                 Math::Color3 minorColor = Math::Color3( Math::Vector3( 0.5f, 0.5f, 0.5f ) ) );
-            ~GridPreferences();
+            ~GridSettings();
 
             virtual void PostDeserialize();
 
@@ -66,19 +67,19 @@ namespace Helium
             Math::Color3 m_MinorColor;
 
         public:
-            static void EnumerateClass( Reflect::Compositor< GridPreferences >& comp )
+            static void EnumerateClass( Reflect::Compositor< GridSettings >& comp )
             {
-                comp.AddEnumerationField( &GridPreferences::m_Units, "m_Units" );
-                comp.AddField( &GridPreferences::m_Width, "m_Width" );
-                comp.AddField( &GridPreferences::m_Length, "m_Length" );
-                comp.AddField( &GridPreferences::m_MajorStep, "m_MajorStep" );
-                comp.AddField( &GridPreferences::m_MinorStep, "m_MinorStep" );
-                comp.AddField( &GridPreferences::m_AxisColor, "m_AxisColor" );
-                comp.AddField( &GridPreferences::m_MajorColor, "m_MajorColor" );
-                comp.AddField( &GridPreferences::m_MinorColor, "m_MinorColor" );
+                comp.AddEnumerationField( &GridSettings::m_Units, "m_Units" );
+                comp.AddField( &GridSettings::m_Width, "m_Width" );
+                comp.AddField( &GridSettings::m_Length, "m_Length" );
+                comp.AddField( &GridSettings::m_MajorStep, "m_MajorStep" );
+                comp.AddField( &GridSettings::m_MinorStep, "m_MinorStep" );
+                comp.AddField( &GridSettings::m_AxisColor, "m_AxisColor" );
+                comp.AddField( &GridSettings::m_MajorColor, "m_MajorColor" );
+                comp.AddField( &GridSettings::m_MinorColor, "m_MinorColor" );
             }
         };
 
-        typedef Helium::SmartPtr<GridPreferences> GridPreferencesPtr;
+        typedef Helium::SmartPtr<GridSettings> GridSettingsPtr;
     }
 }

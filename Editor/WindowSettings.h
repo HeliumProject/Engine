@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Editor/API.h"
-#include "Core/Scene/Settings.h"
+#include "Foundation/Reflect/Element.h"
 
 class wxAuiManager;
 
@@ -12,18 +12,14 @@ namespace Helium
         class WindowSettings;
         typedef Helium::SmartPtr< WindowSettings > WindowSettingsPtr;
 
-        class WindowSettings : public Reflect::ConcreteInheritor< WindowSettings, Core::Settings >
+        class WindowSettings : public Reflect::ConcreteInheritor< WindowSettings, Reflect::Element >
         {
         public:
-            WindowSettings( const tstring& version = TXT( "" ), wxPoint pos = wxDefaultPosition, wxSize size = wxDefaultSize );
-
-            virtual tstring GetCurrentVersion() const HELIUM_OVERRIDE;
+            WindowSettings( wxPoint pos = wxDefaultPosition, wxSize size = wxDefaultSize );
 
             void SetFromWindow( const wxWindow* window, wxAuiManager* manager = NULL );
             void ApplyToWindow( wxWindow* window, wxAuiManager* manager = NULL, bool updateAui = false );
 
-            const Reflect::Field* PositionX() const;
-            const Reflect::Field* PositionY() const;
             wxPoint GetPosition() const;
             void SetPosition( i32 x, i32 y );
             void SetPosition( wxPoint pos ) { SetPosition( pos.x, pos.y ); }
@@ -42,13 +38,10 @@ namespace Helium
             const tstring& GetDockingState() const;
             void SetDockingState( const tstring& state );
 
-            static void Check( WindowSettingsPtr& settings, const tstring& version );
+            static void Check( WindowSettingsPtr& settings );
             static bool Validate( wxPoint pos, wxSize size );
 
         private:
-            // Used to invalidate older values for a particular instance of this class
-            tstring m_Version;
-
             // String (wxWidgets AUI) representing docking state of all child panels 
             tstring m_DockingState;
 
@@ -68,7 +61,6 @@ namespace Helium
 
             static void EnumerateClass( Reflect::Compositor<WindowSettings>& comp )
             {
-                comp.AddField( &WindowSettings::m_Version, "m_Version" );
                 comp.AddField( &WindowSettings::m_DockingState, "m_DockingState" );
                 comp.AddField( &WindowSettings::m_IsMaximized, "m_IsMaximized" );
                 comp.AddField( &WindowSettings::m_PosX, "m_PosX" );

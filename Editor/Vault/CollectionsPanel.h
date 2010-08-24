@@ -9,6 +9,8 @@
 #include "Application/Inspect/Clipboard/ReflectClipboardData.h"
 #include "Application/Inspect/DragDrop/DropTarget.h"
 
+#include "Core/SettingsManager.h"
+
 namespace Helium
 {
     namespace Editor
@@ -83,7 +85,6 @@ namespace Helium
             void OnRemoveFromCollection( wxCommandEvent& event );
 
             // Listeners
-            void OnPreferencesLoaded( const Core::PreferencesLoadedArgs& args );
             void OnPrefrencesChanged( const Reflect::ElementChangeArgs& args );
             void OnAssetCollectionsChanged( const Reflect::ElementChangeArgs& args );
             void OnCollectionModified( const Reflect::ElementChangeArgs& args );

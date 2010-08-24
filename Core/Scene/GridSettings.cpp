@@ -1,5 +1,5 @@
 /*#include "Precompile.h"*/
-#include "GridPreferences.h"
+#include "GridSettings.h"
 
 #include "Foundation/Reflect/Serializer.h"
 #include "Foundation/Reflect/Serializers.h"
@@ -7,9 +7,9 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-REFLECT_DEFINE_CLASS( GridPreferences );
+REFLECT_DEFINE_CLASS( GridSettings );
 
-GridPreferences::GridPreferences( const tstring& version,
+GridSettings::GridSettings( const tstring& version,
                                   GridUnit units,
                                   u32 width,
                                   u32 length,
@@ -28,55 +28,55 @@ GridPreferences::GridPreferences( const tstring& version,
 , m_MajorColor( majorColor )
 , m_MinorColor( minorColor )
 {
-  AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &GridPreferences::OnChanged ) );
+  AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &GridSettings::OnChanged ) );
 }
 
-GridPreferences::~GridPreferences()
+GridSettings::~GridSettings()
 {
-  RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &GridPreferences::OnChanged ) );
+  RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &GridSettings::OnChanged ) );
 }
 
-void GridPreferences::PostDeserialize()
+void GridSettings::PostDeserialize()
 {
   m_PreviousUnits = m_Units;
 }
 
-u32 GridPreferences::GetWidth()
+u32 GridSettings::GetWidth()
 {
   return m_Width;
 }
 
-u32 GridPreferences::GetLength()
+u32 GridSettings::GetLength()
 {
   return m_Length;
 }
 
-f32 GridPreferences::GetMajorStep()
+f32 GridSettings::GetMajorStep()
 {
   return ConvertUnits( m_MajorStep, m_Units, GridUnits::Meters );
 }
 
-f32 GridPreferences::GetMinorStep()
+f32 GridSettings::GetMinorStep()
 {
   return ConvertUnits( m_MinorStep, m_Units, GridUnits::Meters );
 }
 
-const Math::Color3& GridPreferences::GetAxisColor()
+const Math::Color3& GridSettings::GetAxisColor()
 {
   return m_AxisColor;
 }
 
-const Math::Color3& GridPreferences::GetMajorColor()
+const Math::Color3& GridSettings::GetMajorColor()
 {
   return m_MajorColor;
 }
 
-const Math::Color3& GridPreferences::GetMinorColor()
+const Math::Color3& GridSettings::GetMinorColor()
 {
   return m_MinorColor;
 }
 
-void GridPreferences::OnChanged( const Reflect::ElementChangeArgs& args )
+void GridSettings::OnChanged( const Reflect::ElementChangeArgs& args )
 {
   if ( m_Units == m_PreviousUnits )
   {
@@ -90,7 +90,7 @@ void GridPreferences::OnChanged( const Reflect::ElementChangeArgs& args )
   RaiseChanged();
 }
 
-f32 GridPreferences::GetConversionFactor( GridUnit units )
+f32 GridSettings::GetConversionFactor( GridUnit units )
 {
   switch ( units )
   {
@@ -101,7 +101,7 @@ f32 GridPreferences::GetConversionFactor( GridUnit units )
   return 1.0f;
 }
 
-f32 GridPreferences::ConvertUnits( f32 sourceValue, GridUnit sourceUnits, GridUnit destinationUnits )
+f32 GridSettings::ConvertUnits( f32 sourceValue, GridUnit sourceUnits, GridUnit destinationUnits )
 {
   f32 sourceConversion = GetConversionFactor( sourceUnits );
   f32 destinationConversion = GetConversionFactor( destinationUnits );

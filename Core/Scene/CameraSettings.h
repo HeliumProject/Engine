@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Core/API.h"
+
 #include "Foundation/Reflect/Element.h"
 #include "Core/Content/Nodes/ContentCamera.h"
-#include "Core/Scene/Settings.h"
 
 namespace Helium
 {
@@ -51,10 +52,10 @@ namespace Helium
 
         typedef ShadingModes::ShadingMode ShadingMode;
 
-        class CORE_API CameraPreferences : public Reflect::ConcreteInheritor< CameraPreferences, Settings >
+        class CORE_API CameraSettings : public Reflect::ConcreteInheritor< CameraSettings, Reflect::Element >
         {
         public: 
-            CameraPreferences(); 
+            CameraSettings(); 
 
         public: 
             CameraMode  m_CameraMode; // we save what mode we correspond to
@@ -67,18 +68,18 @@ namespace Helium
             bool m_BackFaceCulling; 
 
         public:
-            static void EnumerateClass( Reflect::Compositor<CameraPreferences>& comp )
+            static void EnumerateClass( Reflect::Compositor<CameraSettings>& comp )
             {
-                Reflect::EnumerationField* enumCameraMode = comp.AddEnumerationField( &CameraPreferences::m_CameraMode, "m_CameraMode" );
-                Reflect::EnumerationField* enumShadingMode = comp.AddEnumerationField( &CameraPreferences::m_ShadingMode, "m_ShadingMode" );
-                Reflect::Field* fieldWireframeOnMesh = comp.AddField( &CameraPreferences::m_WireframeOnMesh, "m_WireframeOnMesh" );
-                Reflect::Field* fieldWireframeOnShaded = comp.AddField( &CameraPreferences::m_WireframeOnShaded, "m_WireframeOnShaded" );
-                Reflect::Field* fieldViewFrustumCulling = comp.AddField( &CameraPreferences::m_ViewFrustumCulling, "m_ViewFrustumCulling" );
-                Reflect::Field* fieldBackFaceCulling = comp.AddField( &CameraPreferences::m_BackFaceCulling, "m_BackFaceCulling" );
+                Reflect::EnumerationField* enumCameraMode = comp.AddEnumerationField( &CameraSettings::m_CameraMode, "m_CameraMode" );
+                Reflect::EnumerationField* enumShadingMode = comp.AddEnumerationField( &CameraSettings::m_ShadingMode, "m_ShadingMode" );
+                Reflect::Field* fieldWireframeOnMesh = comp.AddField( &CameraSettings::m_WireframeOnMesh, "m_WireframeOnMesh" );
+                Reflect::Field* fieldWireframeOnShaded = comp.AddField( &CameraSettings::m_WireframeOnShaded, "m_WireframeOnShaded" );
+                Reflect::Field* fieldViewFrustumCulling = comp.AddField( &CameraSettings::m_ViewFrustumCulling, "m_ViewFrustumCulling" );
+                Reflect::Field* fieldBackFaceCulling = comp.AddField( &CameraSettings::m_BackFaceCulling, "m_BackFaceCulling" );
             }
         };
 
-        typedef Helium::SmartPtr<CameraPreferences> CameraPreferencesPtr; 
-        typedef std::vector< CameraPreferencesPtr> V_CameraPreferences; 
+        typedef Helium::SmartPtr<CameraSettings> CameraSettingsPtr; 
+        typedef std::vector< CameraSettingsPtr> V_CameraSettings; 
     }
 }

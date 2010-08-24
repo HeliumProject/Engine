@@ -2,7 +2,7 @@
 #include "PreviewPanel.h"
 
 #include "VaultFrame.h"
-#include "VaultPreferences.h"
+#include "VaultSettings.h"
 
 #include "Core/Asset/AssetClass.h"
 #include "Core/Asset/Classes/Entity.h"

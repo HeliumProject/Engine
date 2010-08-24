@@ -77,7 +77,7 @@ namespace Helium
                 AddToCollection,
                 RemoveFromCollection,
 
-                Preferences,
+                Settings,
 
                 COUNT_PLUS_START // Do not use: must be last
             };
@@ -148,7 +148,7 @@ namespace Helium
                 TXT( "Add Selected Assets" ),
                 TXT( "Remove Selected Assets" ),
 
-                TXT( "Customize Preferences..." ),
+                TXT( "Customize Settings..." ),
             };
 
             inline const tstring& Label( i32 id )

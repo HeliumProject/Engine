@@ -1023,14 +1023,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Vault\VaultPreferences.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\VaultPreferences.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Vault\VaultPreviewWindow.cpp"
 				>
 			</File>
@@ -1052,6 +1044,14 @@
 			</File>
 			<File
 				RelativePath=".\Vault\VaultSearchPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Vault\VaultSettings.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Vault\VaultSettings.h"
 				>
 			</File>
 			<File
@@ -2012,22 +2012,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Preferences.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Preferences.h"
-			>
-		</File>
-		<File
-			RelativePath=".\PreferencesDialog.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\PreferencesDialog.h"
-			>
-		</File>
-		<File
 			RelativePath=".\ProjectPanel.cpp"
 			>
 		</File>
@@ -2077,6 +2061,14 @@
 		</File>
 		<File
 			RelativePath=".\SelectionPropertiesPanel.h"
+			>
+		</File>
+		<File
+			RelativePath=".\SettingsDialog.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\SettingsDialog.h"
 			>
 		</File>
 		<File

@@ -14,7 +14,7 @@
 #include "Core/Scene/Transform.h"
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/SceneManager.h"
-#include "ScenePreferences.h"
+#include "SceneSettings.h"
 #include "SceneVisitor.h"
 
 using namespace Helium;
@@ -767,8 +767,7 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
 
   D3DMATERIAL9 material = defaultMaterial;
 
-#if SCENE_REFACTOR
-  switch ( wxGetApp().GetPreferences()->GetViewportPreferences()->GetColorMode() )
+  switch ( view->GetSettingsManager()->GetSettings< ViewportSettings >()->GetColorMode() )
   {
   case ViewColorModes::Layer:
     if ( m_LayerColor )
@@ -785,7 +784,6 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
     }
     break;
   }
-#endif
 
   if ( m_Owner->IsFocused() )
   {

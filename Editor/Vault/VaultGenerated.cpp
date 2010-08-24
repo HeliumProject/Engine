@@ -605,7 +605,7 @@ PreviewPanelGenerated::PreviewPanelGenerated( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* sizer;
 	sizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_PreviewWindow = new VaultPreviewWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, wxT( "Editor::PreviewWindow" ) );
+	m_PreviewWindow = new VaultPreviewWindow( NULL, this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, wxT( "Editor::PreviewWindow" ) );
 	m_PreviewWindow->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_APPWORKSPACE ) );
 	
 	sizer->Add( m_PreviewWindow, 1, wxEXPAND, 5 );

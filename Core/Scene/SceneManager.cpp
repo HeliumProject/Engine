@@ -365,10 +365,6 @@ void SceneManager::DocumentClosed( const Application::DocumentChangedArgs& args 
     const SceneDocument* document = static_cast< const SceneDocument* >( args.m_Document );
     HELIUM_ASSERT( document );
 
-#ifdef UI_REFACTOR
-    m_Editor->SyncPropertyThread();
-#endif
-
     if ( document )
     {
         ScenePtr scene = document->GetScene();

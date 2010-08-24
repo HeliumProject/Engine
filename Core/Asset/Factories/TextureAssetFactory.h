@@ -22,6 +22,8 @@ namespace Helium
 				m_FileExtensions.insert( TXT( "jpg" ) );
 				m_FileExtensions.insert( TXT( "tif" ) );
 				m_FileExtensions.insert( TXT( "tga" ) );
+				m_FileExtensions.insert( TXT( "psd" ) );
+				m_FileExtensions.insert( TXT( "raw" ) );
             }
             virtual ~TextureAssetFactory()
             {

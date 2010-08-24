@@ -8,6 +8,7 @@
 #include "Foundation/Undo/Queue.h"
 
 #include "Core/API.h"
+#include "Core/SettingsManager.h"
 #include "Core/Scene/Render.h"
 #include "Core/Scene/Camera.h"
 #include "Core/Scene/Resource.h"
@@ -217,7 +218,7 @@ namespace Helium
             static void InitializeType();
             static void CleanupType();
 
-            Viewport( HWND wnd );
+            Viewport( HWND wnd, SettingsManager* settingsManager );
             ~Viewport();
 
             void Reset();
@@ -463,6 +464,8 @@ namespace Helium
             HWND                    m_Window;
             Math::Point             m_Size;
             bool                    m_Focused;
+
+            SettingsManager*        m_SettingsManager;
 
             Render::DeviceManager   m_DeviceManager;
             ResourceTracker*        m_ResourceTracker;

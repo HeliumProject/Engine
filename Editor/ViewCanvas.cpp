@@ -38,10 +38,10 @@ EVT_MOUSE_CAPTURE_LOST(ViewCanvas::OnMouseCaptureLost)
 
 END_EVENT_TABLE()
 
-ViewCanvas::ViewCanvas(wxWindow *parent, wxWindowID winid, const wxPoint& pos, const wxSize& size, long style, const wxString& name)
+ViewCanvas::ViewCanvas( Core::SettingsManager* settingsManager, wxWindow *parent, wxWindowID winid, const wxPoint& pos, const wxSize& size, long style, const wxString& name)
 : wxWindow (parent, winid, pos, size, style, name)
 , m_Focused (false)
-, m_Viewport (GetHWND())
+, m_Viewport ( GetHWND(), settingsManager )
 {
     // don't erase background
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);

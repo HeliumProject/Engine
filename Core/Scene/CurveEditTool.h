@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/API.h"
+#include "Core/SettingsManager.h"
 #include "Core/Content/Nodes/ContentCurve.h"
 #include "Core/Scene/Curve.h"
 #include "Core/Scene/Tool.h"
@@ -27,6 +28,8 @@ namespace Helium
         class CORE_API CurveEditTool: public Tool
         {
         private:
+            SettingsManager* m_SettingsManager;
+
             static CurveEditMode s_EditMode;
             static bool s_CurrentSelection;
 
@@ -42,7 +45,7 @@ namespace Helium
             static void CleanupType();
 
         public:
-            CurveEditTool( Core::Scene* scene, PropertiesGenerator* generator );
+            CurveEditTool( SettingsManager* settingsManager, Core::Scene* scene, PropertiesGenerator* generator );
             virtual ~CurveEditTool();
 
             CurveEditMode GetEditMode() const;

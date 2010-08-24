@@ -11,8 +11,9 @@
 #include "TypesPanel.h"
 #include "ViewPanel.h"
 
-#include "Core/Scene/PropertiesManager.h"
+#include "Core/SettingsManager.h"
 
+#include "Core/Scene/PropertiesManager.h"
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/SceneManager.h"
 
@@ -50,7 +51,7 @@ namespace Helium
             typedef std::map< Core::Scene*, OutlinerStates > M_OutlinerStates;
 
         public:
-            MainFrame( wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1280,1024 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+            MainFrame( Core::SettingsManager* settingsManager, wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1280,1024 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
             virtual ~MainFrame();
 
             void SetHelpText( const tchar* text );
@@ -77,6 +78,8 @@ namespace Helium
             MessageDisplayer            m_MessageDisplayer;
             FileDialogDisplayer         m_FileDialogDisplayer;
             Core::SceneManager          m_SceneManager;
+
+            Core::SettingsManager*      m_SettingsManager;
 
             // the attributes for the current selection
             Core::EnumeratorPtr         m_SelectionEnumerator;

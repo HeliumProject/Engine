@@ -182,16 +182,6 @@ namespace Helium
             }
 
             template <class T>
-            CheckList* AddCheckList( const Helium::SmartPtr< Helium::Property<T> >& property )
-            {
-                CheckListPtr control = m_Container->GetCanvas()->Create<CheckList>(this);
-                control->Bind( new SerializerPropertyFormatter< T >( property ) );
-                ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddChild(control);
-                return control;
-            }
-
-            template <class T>
             Slider* AddSlider( const Helium::SmartPtr< Helium::Property<T> >& property )
             {
                 SliderPtr control = m_Container->GetCanvas()->Create<Slider>(this);

@@ -902,14 +902,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectCheckList.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\InspectCheckList.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Inspect\Controls\InspectChoice.cpp"
 					>
 				</File>

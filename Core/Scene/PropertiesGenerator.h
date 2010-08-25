@@ -95,12 +95,6 @@ namespace Helium
             }
 
             template <class T>
-            Inspect::CheckList* AddCheckList( const Helium::SmartPtr< Helium::Property<T> >& property )
-            {
-                return Inspect::Interpreter::AddCheckList( property );
-            }
-
-            template <class T>
             Inspect::Slider* AddSlider( const Helium::SmartPtr< Helium::Property<T> >& property )
             {
                 return Inspect::Interpreter::AddSlider( property );

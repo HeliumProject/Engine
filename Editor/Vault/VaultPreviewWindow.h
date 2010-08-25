@@ -15,7 +15,7 @@ namespace Helium
 
     namespace Editor
     {
-        class VaultFrame;
+        class VaultPanel;
 
         class VaultPreviewWindow : public RenderWindow
         {
@@ -23,7 +23,7 @@ namespace Helium
             VaultPreviewWindow( Core::SettingsManager* settingsManager, wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, const wxString& name = wxT( "Editor::VaultPreviewWindow" ) );
             virtual ~VaultPreviewWindow();
 
-            void SetVaultFrame( VaultFrame* browserFrame );
+            void SetVaultPanel( VaultPanel* vaultPanel );
 
             virtual void DisplayReferenceAxis( bool display ) HELIUM_OVERRIDE;
 
@@ -32,7 +32,7 @@ namespace Helium
 
         private:
             Core::SettingsManager* m_SettingsManager;
-            VaultFrame* m_VaultFrame;
+            VaultPanel* m_VaultPanel;
 
         private:
             DECLARE_EVENT_TABLE();

@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "VaultPreviewWindow.h"
 #include "Vault.h"
-#include "VaultFrame.h"
+#include "VaultPanel.h"
 #include "Editor/App.h"
 
 using namespace Helium;
@@ -16,7 +16,7 @@ END_EVENT_TABLE()
 VaultPreviewWindow::VaultPreviewWindow( Core::SettingsManager* settingsManager, wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
 : RenderWindow( parent, id, pos, size, style, name )
 , m_SettingsManager( settingsManager )
-, m_VaultFrame( NULL )
+, m_VaultPanel( NULL )
 {
 }
 
@@ -25,7 +25,7 @@ VaultPreviewWindow::VaultPreviewWindow( Core::SettingsManager* settingsManager, 
 // 
 VaultPreviewWindow::~VaultPreviewWindow()
 {
-    if ( m_VaultFrame )
+    if ( m_VaultPanel )
     {
         VaultSettings* settings = m_SettingsManager->GetSettings< VaultSettings >();
         settings->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &VaultPreviewWindow::OnSettingsChanged ) );
@@ -36,9 +36,9 @@ VaultPreviewWindow::~VaultPreviewWindow()
 // Part of initialization.  You must call this function before you can call
 // any others.
 // 
-void VaultPreviewWindow::SetVaultFrame( VaultFrame* browserFrame )
+void VaultPreviewWindow::SetVaultPanel( VaultPanel* vaultPanel )
 {
-    m_VaultFrame = browserFrame;
+    m_VaultPanel = vaultPanel;
 
     VaultSettings* settings = m_SettingsManager->GetSettings< VaultSettings >();
     __super::DisplayReferenceAxis( settings->DisplayPreviewAxis() );

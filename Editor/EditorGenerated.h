@@ -180,6 +180,8 @@ namespace Helium
 				virtual void OnDelete( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnUndo( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnRedo( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnSearchButtonClick( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnSearchTextEnter( wxCommandEvent& event ) { event.Skip(); }
 				
 			
 			public:

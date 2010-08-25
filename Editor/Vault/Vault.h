@@ -13,9 +13,6 @@
 
 namespace Helium
 {
-    //
-    // Forwards
-    //
     namespace Asset
     {
         class SearchResults;
@@ -24,10 +21,7 @@ namespace Helium
 
     namespace Editor
     {
-        //
-        // Forwards
-        //
-        class VaultFrame;
+        class VaultPanel;
 
         class Vault
         {
@@ -51,7 +45,7 @@ namespace Helium
             void ShowVault( const tstring& queryString = TXT("") );
             bool HasFrame();
 
-            friend class VaultFrame;
+            friend class VaultPanel;
 
         protected:
             void OnCloseVault();
@@ -59,7 +53,7 @@ namespace Helium
         private:
             Helium::Path         m_RootDirectory;
             VaultSearchPtr          m_VaultSearch;
-            VaultFrame*             m_VaultFrame;
+            VaultPanel*             m_VaultPanel;
             bool                    m_HasFrame;
             SearchHistory*          m_SearchHistory;
             CollectionManager*      m_CollectionManager;

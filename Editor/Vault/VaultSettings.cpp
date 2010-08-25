@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "VaultSettings.h"
-#include "VaultFrame.h"
+#include "Editor/Vault/VaultPanel.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -26,15 +26,15 @@ VaultSettings::~VaultSettings()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void VaultSettings::GetWindowSettings( VaultFrame* browserFrame, wxAuiManager* manager )
+void VaultSettings::GetWindowSettings( VaultPanel* vaultPanel, wxAuiManager* manager )
 {
-  m_WindowSettings->ApplyToWindow( browserFrame, manager, true );
+  m_WindowSettings->ApplyToWindow( vaultPanel, manager, true );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void VaultSettings::SetWindowSettings( VaultFrame* browserFrame, wxAuiManager* manager )
+void VaultSettings::SetWindowSettings( VaultPanel* vaultPanel, wxAuiManager* manager )
 {
-  m_WindowSettings->SetFromWindow( browserFrame, manager );
+  m_WindowSettings->SetFromWindow( vaultPanel, manager );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

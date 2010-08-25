@@ -445,6 +445,8 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	m_DeleteButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnDelete ), NULL, this );
 	m_UndoButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnUndo ), NULL, this );
 	m_RedoButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnRedo ), NULL, this );
+	m_VaultSearchBox->Connect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchButtonClick ), NULL, this );
+	m_VaultSearchBox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchTextEnter ), NULL, this );
 }
 
 ToolbarPanelGenerated::~ToolbarPanelGenerated()
@@ -459,6 +461,8 @@ ToolbarPanelGenerated::~ToolbarPanelGenerated()
 	m_DeleteButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnDelete ), NULL, this );
 	m_UndoButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnUndo ), NULL, this );
 	m_RedoButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnRedo ), NULL, this );
+	m_VaultSearchBox->Disconnect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchButtonClick ), NULL, this );
+	m_VaultSearchBox->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchTextEnter ), NULL, this );
 	
 }
 

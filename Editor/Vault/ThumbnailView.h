@@ -1,6 +1,6 @@
 #pragma once
 
-#include "VaultFrame.h"
+#include "Editor/Vault/VaultPanel.h"
 #include "VaultMenuIDs.h"
 #include "Thumbnail.h"
 #include "ThumbnailManager.h"
@@ -123,7 +123,7 @@ namespace Helium
             };
 
         public:
-            ThumbnailView( const tstring& thumbnailDirectory, VaultFrame *browserFrame, wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE | wxVSCROLL, const wxString& name = wxT( "Editor::ThumbnailView" ) );
+            ThumbnailView( const tstring& thumbnailDirectory, VaultPanel *vaultPanel, wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE | wxVSCROLL, const wxString& name = wxT( "Editor::ThumbnailView" ) );
             virtual ~ThumbnailView();
 
             void SetResults( SearchResults* results );
@@ -254,7 +254,7 @@ namespace Helium
 
             void OnThumbnailLoaded( Editor::ThumbnailLoadedEvent& args );
 
-            void OnVaultFrameClosing( wxCloseEvent& args );
+            void OnVaultPanelClosing( wxCloseEvent& args );
 
             void OnReleaseResources( const Core::Render::DeviceStateArgs& args );
             void OnAllocateResources( const Core::Render::DeviceStateArgs& args );
@@ -331,7 +331,7 @@ namespace Helium
             Math::Frustum m_ViewFrustum;
             float m_Scale;
 
-            VaultFrame* m_VaultFrame;
+            VaultPanel* m_VaultPanel;
 
         private:
             ThumbnailSelectionSignature::Event m_SelectionChanged;

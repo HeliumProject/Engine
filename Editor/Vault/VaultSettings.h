@@ -13,8 +13,7 @@ namespace Helium
 {
     namespace Editor
     {
-        class VaultFrame;
-
+        class VaultPanel;
         class VaultSettings : public Reflect::ConcreteInheritor< VaultSettings, Reflect::Element >
         {
         public:
@@ -23,8 +22,8 @@ namespace Helium
                 u32 thumbnailSize = ThumbnailSizes::Medium );
             ~VaultSettings();
 
-            void GetWindowSettings( VaultFrame* browserFrame, wxAuiManager* manager = NULL );
-            void SetWindowSettings( VaultFrame* browserFrame, wxAuiManager* manager = NULL );
+            void GetWindowSettings( VaultPanel* vaultPanel, wxAuiManager* manager = NULL );
+            void SetWindowSettings( VaultPanel* vaultPanel, wxAuiManager* manager = NULL );
 
             const ViewOptionID GetThumbnailMode() const;
             void SetThumbnailMode( ViewOptionID thumbnailMode );

@@ -16,8 +16,6 @@ namespace Helium
             {
                 START = wxID_HIGHEST, // Do not use: must be first
 
-                FoldersPanel,
-                CollectionsPanel,
                 HelpPanel,
 
                 ViewSmall,
@@ -88,8 +86,6 @@ namespace Helium
             {
                 TXT( "INVALID" ), // placeholder for START
 
-                TXT( "Folders" ),
-                TXT( "Collections" ),
                 TXT( "Help" ),
 
                 TXT( "Small" ),

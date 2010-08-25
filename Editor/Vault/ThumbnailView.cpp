@@ -3,7 +3,6 @@
 #include "SearchResults.h"
 #include "Vault.h"
 #include "VaultSearch.h"
-#include "DetailsFrame.h"
 #include "ThumbnailLoadedEvent.h"
 
 #include "Foundation/File/Path.h"
@@ -68,7 +67,7 @@ END_EVENT_TABLE()
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, VaultFrame *browserFrame, wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
+ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, VaultPanel *vaultPanel, wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
 : wxScrolledWindow( parent, id, pos, size, style, name )
 , m_ThumbnailDirectory( thumbnailDirectory)
 , m_LabelFontHeight( 14 )
@@ -81,7 +80,7 @@ ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, VaultFrame *bro
 , m_RangeSelectTile( NULL )
 , m_CtrlOnMouseDown( false )
 , m_Scale( 128.0f )
-, m_VaultFrame( browserFrame )
+, m_VaultPanel( vaultPanel )
 {
     m_ThumbnailManager = new ThumbnailManager( this, &m_DeviceManager, m_ThumbnailDirectory );
 
@@ -139,7 +138,7 @@ ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, VaultFrame *bro
     // Connect Listeners
     m_EditCtrl->Connect( m_EditCtrl->GetId(), wxEVT_KILL_FOCUS, wxFocusEventHandler( ThumbnailView::OnEditBoxLostFocus ), NULL, this );
     m_EditCtrl->Connect( m_EditCtrl->GetId(), wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ThumbnailView::OnEditBoxPressEnter ), NULL, this );
-    m_VaultFrame->Connect( m_VaultFrame->GetId(), wxEVT_CLOSE_WINDOW, wxCloseEventHandler( ThumbnailView::OnVaultFrameClosing ), NULL, this );
+    m_VaultPanel->Connect( m_VaultPanel->GetId(), wxEVT_CLOSE_WINDOW, wxCloseEventHandler( ThumbnailView::OnVaultPanelClosing ), NULL, this );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -147,7 +146,7 @@ ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, VaultFrame *bro
 // 
 ThumbnailView::~ThumbnailView()
 {
-    m_VaultFrame->Disconnect( m_VaultFrame->GetId(), wxEVT_CLOSE_WINDOW, wxCloseEventHandler( ThumbnailView::OnVaultFrameClosing ), NULL, this );
+    m_VaultPanel->Disconnect( m_VaultPanel->GetId(), wxEVT_CLOSE_WINDOW, wxCloseEventHandler( ThumbnailView::OnVaultPanelClosing ), NULL, this );
     m_EditCtrl->Disconnect( m_EditCtrl->GetId(), wxEVT_KILL_FOCUS, wxFocusEventHandler( ThumbnailView::OnEditBoxLostFocus ), NULL, this );
     m_EditCtrl->Disconnect( m_EditCtrl->GetId(), wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ThumbnailView::OnEditBoxPressEnter ), NULL, this );
 
@@ -870,7 +869,7 @@ void ThumbnailView::AdjustScrollBar( bool maintainScrollPos )
 void ThumbnailView::ShowContextMenu( const wxPoint& pos )
 {
     // Iterate over the selection so we know what kind of menu to make
-    bool inFolder = m_VaultFrame->InFolder();
+    bool inFolder = false;//m_VaultPanel->InFolder();
     size_t numSelected = m_SelectedTiles.Size();
 
     // Prepare the menu
@@ -977,19 +976,19 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
         }
 
         // New
-        {
-            menu.AppendSeparator();
+        //{
+        //    menu.AppendSeparator();
 
-            wxMenu* newMenu = m_VaultFrame->GetNewAssetMenu();
-            //newMenu->PrependSeparator();
-            //newMenu->Prepend( ID_NewFolder, VaultMenu::Label( ID_NewFolder ) );
-            //newMenu->Enable( ID_NewFolder, inFolder );
+        //    wxMenu* newMenu = m_VaultPanel->GetNewAssetMenu();
+        //    //newMenu->PrependSeparator();
+        //    //newMenu->Prepend( ID_NewFolder, VaultMenu::Label( ID_NewFolder ) );
+        //    //newMenu->Enable( ID_NewFolder, inFolder );
 
-            wxMenuItem* menuItem = new wxMenuItem( &menu, ID_New, VaultMenu::Label( ID_New ), VaultMenu::Label( ID_New ), wxITEM_NORMAL, newMenu );
-            menuItem->SetBitmap( wxArtProvider::GetBitmap( wxART_NEW ) );
-            menu.Append( menuItem );
-            menuItem->Enable( inFolder );
-        }
+        //    wxMenuItem* menuItem = new wxMenuItem( &menu, ID_New, VaultMenu::Label( ID_New ), VaultMenu::Label( ID_New ), wxITEM_NORMAL, newMenu );
+        //    menuItem->SetBitmap( wxArtProvider::GetBitmap( wxART_NEW ) );
+        //    menu.Append( menuItem );
+        //    menuItem->Enable( inFolder );
+        //}
 
         // Paste
         //{
@@ -1768,7 +1767,7 @@ void ThumbnailView::OnMouseLeftDoubleClick( wxMouseEvent& args )
         hit = hits.Front();
         if ( hit->GetPath().IsDirectory() )
         {
-            m_VaultFrame->Search( hit->GetPath().Get() );
+            m_VaultPanel->Search( hit->GetPath().Get() );
         }
         else
         {
@@ -1908,13 +1907,13 @@ void ThumbnailView::OnFileProperties( wxCommandEvent& args )
             }
         }
 
-        for ( std::set< Helium::Path >::const_iterator fileItr = paths.begin(), fileEnd = paths.end();
-            fileItr != fileEnd; ++fileItr )
-        {
-            DetailsFrame* detailsWindow = new DetailsFrame( m_VaultFrame );
-            detailsWindow->Populate( *fileItr );
-            detailsWindow->Show();
-        }
+        //for ( std::set< Helium::Path >::const_iterator fileItr = paths.begin(), fileEnd = paths.end();
+        //    fileItr != fileEnd; ++fileItr )
+        //{
+        //    DetailsFrame* detailsWindow = new DetailsFrame( m_VaultPanel );
+        //    detailsWindow->Populate( *fileItr );
+        //    detailsWindow->Show();
+        //}
     }
 }
 
@@ -2037,10 +2036,10 @@ void ThumbnailView::OnThumbnailLoaded( Editor::ThumbnailLoadedEvent& args )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Callback before the browser frame closes.  Attempts to prevent a race condition
+// Callback before the vault frame closes.  Attempts to prevent a race condition
 // where the thumbnail loader posts a message to this window while it is closing.
 // 
-void ThumbnailView::OnVaultFrameClosing( wxCloseEvent& args )
+void ThumbnailView::OnVaultPanelClosing( wxCloseEvent& args )
 {
     args.Skip();
     m_ThumbnailManager->DetachFromWindow();

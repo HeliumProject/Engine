@@ -122,12 +122,12 @@ namespace Helium
             void OnShow( wxShowEvent& event );
             void OnMenuOpen( wxMenuEvent& event );
 
-            void OnNewScene( wxCommandEvent& event );
-            void OnNewEntity( wxCommandEvent& event );
-            void OnNewProject( wxCommandEvent& event );
-            void OnOpen( wxCommandEvent& event );
-            void OnClose( wxCommandEvent& event );
-            void OnSaveAll( wxCommandEvent& event );
+            virtual void OnNewScene( wxCommandEvent& event ) HELIUM_OVERRIDE;
+            virtual void OnNewEntity( wxCommandEvent& event ) HELIUM_OVERRIDE;
+            virtual void OnNewProject( wxCommandEvent& event ) HELIUM_OVERRIDE;
+            virtual void OnOpen( wxCommandEvent& event ) HELIUM_OVERRIDE;
+            virtual void OnClose( wxCommandEvent& event ) HELIUM_OVERRIDE;
+            virtual void OnSaveAll( wxCommandEvent& event ) HELIUM_OVERRIDE;
 
             void OnViewChange( wxCommandEvent& event );
             void OnViewCameraChange( wxCommandEvent& event );

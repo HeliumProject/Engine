@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Vault.h"
 
-#include "VaultFrame.h"
+#include "Editor/Vault/VaultPanel.h"
 #include "VaultSearch.h"
 #include "VaultSettings.h"
 #include "CollectionManager.h"
@@ -18,7 +18,7 @@ using namespace Helium::Editor;
 
 Vault::Vault()
 : m_VaultSearch( NULL ) 
-, m_VaultFrame( NULL )
+, m_VaultPanel( NULL )
 , m_HasFrame( false )
 {
     // Create the one and only VaultSearch
@@ -39,28 +39,28 @@ Vault::~Vault()
 ///////////////////////////////////////////////////////////////////////////////
 void Vault::ShowVault( const tstring& queryString )
 {
-    if ( !m_VaultFrame )
+    if ( !m_VaultPanel )
     {
-        m_VaultFrame = new VaultFrame( this, m_VaultSearch, m_SearchHistory );
+        m_VaultPanel = new VaultPanel( this, m_VaultSearch, m_SearchHistory );
         m_HasFrame = true;
     }
 
-    m_VaultFrame->Show();
-    if ( m_VaultFrame->IsIconized() )
-    {
-        m_VaultFrame->Restore();
-    }
-    m_VaultFrame->SetFocus();
+    m_VaultPanel->Show();
+    //if ( m_VaultPanel->IsIconized() )
+    //{
+    //    m_VaultPanel->Restore();
+    //}
+    m_VaultPanel->SetFocus();
 
     if ( !queryString.empty() )
     {
-        m_VaultFrame->Search( queryString );
+        m_VaultPanel->Search( queryString );
     }
     else
     {
         if ( !m_SearchHistory->RunCurrentQuery() )
         {
-            m_VaultFrame->Search( wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >()->GetDefaultFolderPath() );
+            m_VaultPanel->Search( wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >()->GetDefaultFolderPath() );
         }
     }
 }
@@ -68,14 +68,14 @@ void Vault::ShowVault( const tstring& queryString )
 ///////////////////////////////////////////////////////////////////////////////
 bool Vault::HasFrame()
 {
-    return ( m_VaultFrame != NULL || m_HasFrame );
+    return ( m_VaultPanel != NULL || m_HasFrame );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void Vault::OnCloseVault()
 {
     wxGetApp().SaveSettings();
-    m_VaultFrame = NULL;
+    m_VaultPanel = NULL;
     m_VaultSearch->RequestStop();
 
     m_HasFrame = false;

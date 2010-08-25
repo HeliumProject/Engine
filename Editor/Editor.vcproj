@@ -1770,6 +1770,14 @@
 				Name="Widgets"
 				>
 				<File
+					RelativePath=".\Inspect\Widgets\CheckBox.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\CheckBox.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Inspect\Widgets\Label.cpp"
 					>
 				</File>

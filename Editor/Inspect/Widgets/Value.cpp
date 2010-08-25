@@ -96,8 +96,9 @@ void ValueWidget::Destroy()
 {
     HELIUM_ASSERT( m_ValueWindow );
 
-    // remove listeners
     SetWindow( NULL );
+
+    // remove listeners
     m_ValueControl->a_Justification.Changed().RemoveMethod( this, &ValueWidget::JustificationChanged );
     m_ValueControl->a_Highlight.Changed().RemoveMethod( this, &ValueWidget::HighlightChanged );
 

@@ -3,33 +3,23 @@
 #include "Application/API.h"
 #include "Application/Inspect/Controls/InspectControl.h"
 
-#ifdef INSPECT_REFACTOR
-
 namespace Helium
 {
     namespace Inspect
     {
-        class APPLICATION_API CheckBox : public Reflect::ConcreteInheritor<CheckBox, Control>
+        class APPLICATION_API CheckBox : public Reflect::ConcreteInheritor< CheckBox, Control >
         {
-        private:
-            bool m_State;
-
         public:
             CheckBox();
 
-            virtual void Realize(Container* parent);
-            virtual void Read();
-            virtual bool Write();
-            virtual bool GetChecked();
-            virtual void SetChecked(bool checked);
-
-        private:
+        protected:
             virtual void SetDefaultAppearance( bool def ) HELIUM_OVERRIDE;
-            void UpdateUI( bool state );
+            void SetToDefault( const ContextMenuEventArgs& event );
+
+        public:
+            Attribute< bool >             a_Highlight;
         };
 
-        typedef Helium::SmartPtr<CheckBox> CheckBoxPtr;
+        typedef Helium::SmartPtr< CheckBox > CheckBoxPtr;
     }
 }
-
-#endif

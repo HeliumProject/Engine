@@ -8,10 +8,10 @@ namespace Helium
     {
         class LabelWidget;
 
-        class LabelPanel : public wxPanel
+        class LabelWindow : public wxPanel
         {
         public:
-            LabelPanel(wxWindow* parent, LabelWidget* labelWidget);
+            LabelWindow(wxWindow* parent, LabelWidget* labelWidget);
 
             void OnSize(wxSizeEvent& event);
 
@@ -47,7 +47,7 @@ namespace Helium
 
         protected:
             Inspect::Label*     m_LabelControl;
-            LabelPanel*         m_LabelWindow;
+            LabelWindow*        m_LabelWindow;
         };
     }
 }

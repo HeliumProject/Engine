@@ -7,7 +7,7 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-CheckBoxPanel::CheckBoxPanel( wxWindow* parent, CheckBoxWidget* checkBoxWidget, int width, int height )
+CheckBoxWindow::CheckBoxWindow( wxWindow* parent, CheckBoxWidget* checkBoxWidget, int width, int height )
 : m_CheckBoxWidget( checkBoxWidget )
 , m_Override( false )
 {
@@ -26,12 +26,12 @@ CheckBoxPanel::CheckBoxPanel( wxWindow* parent, CheckBoxWidget* checkBoxWidget, 
     sizer->Add( m_CheckBox, 0, wxALIGN_CENTER_VERTICAL );
     sizer->Add( 1, 0, 1, wxEXPAND );
 
-    Connect( wxID_ANY, wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( CheckBoxPanel::OnChecked ) );
+    Connect( wxID_ANY, wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( CheckBoxWindow::OnChecked ) );
 
     Layout();
 }
 
-void CheckBoxPanel::OnChecked( wxCommandEvent& )
+void CheckBoxWindow::OnChecked( wxCommandEvent& )
 {
     if ( !m_Override )
     {
@@ -39,24 +39,26 @@ void CheckBoxPanel::OnChecked( wxCommandEvent& )
     }
 }
 
-CheckBoxWidget::CheckBoxWidget( Inspect::Control* control )
+CheckBoxWidget::CheckBoxWidget( Inspect::CheckBox* control )
 : Widget( control )
+, m_CheckBoxControl( control )
+, m_CheckBoxWindow( NULL )
 {
 
 }
 
 void CheckBoxWidget::Create( wxWindow* parent )
 {
-    HELIUM_ASSERT( m_CheckBoxPanel );
+    HELIUM_ASSERT( m_CheckBoxWindow );
 
     // allocate window and connect common listeners
-    SetWindow( m_CheckBoxPanel = new CheckBoxPanel( parent, this ) );
+    SetWindow( m_CheckBoxWindow = new CheckBoxWindow( parent, this ) );
 
     // init layout metrics
     wxSize size( -1, m_CheckBoxControl->GetCanvas()->GetStdSize( Math::SingleAxes::Y ) );
-    m_CheckBoxPanel->SetSize( size );
-    m_CheckBoxPanel->SetMinSize( size );
-    m_CheckBoxPanel->SetMaxSize( size );
+    m_CheckBoxWindow->SetSize( size );
+    m_CheckBoxWindow->SetMinSize( size );
+    m_CheckBoxWindow->SetMaxSize( size );
 
     // add listeners
     m_CheckBoxControl->a_Highlight.Changed().AddMethod( this, &CheckBoxWidget::HighlightChanged );
@@ -67,7 +69,7 @@ void CheckBoxWidget::Create( wxWindow* parent )
 
 void CheckBoxWidget::Destroy()
 {
-    HELIUM_ASSERT( m_CheckBoxPanel );
+    HELIUM_ASSERT( m_CheckBoxWindow );
 
     SetWindow( NULL );
 
@@ -75,8 +77,8 @@ void CheckBoxWidget::Destroy()
     m_CheckBoxControl->a_Highlight.Changed().RemoveMethod( this, &CheckBoxWidget::HighlightChanged );
 
     // destroy window
-    m_CheckBoxPanel->Destroy();
-    m_CheckBoxPanel = NULL;
+    m_CheckBoxWindow->Destroy();
+    m_CheckBoxWindow = NULL;
 }
 
 
@@ -88,20 +90,20 @@ void CheckBoxWidget::Read()
     m_CheckBoxControl->ReadStringData( text );
     int value = _tstoi( text.c_str() );
 
-    m_CheckBoxPanel->SetOverride( true );
-    m_CheckBoxPanel->SetValue( value == 1 ? true : false );
-    m_CheckBoxPanel->SetOverride( false );
+    m_CheckBoxWindow->SetOverride( true );
+    m_CheckBoxWindow->SetValue( value == 1 ? true : false );
+    m_CheckBoxWindow->SetOverride( false );
 }
 
 bool CheckBoxWidget::Write()
 {
     HELIUM_ASSERT( m_CheckBoxControl->IsBound() );
 
-    tstring text = m_CheckBoxPanel->GetValue() ? TXT( "1" ) : TXT( "0" );
+    tstring text = m_CheckBoxWindow->GetValue() ? TXT( "1" ) : TXT( "0" );
 
-    m_CheckBoxPanel->SetOverride( true );
+    m_CheckBoxWindow->SetOverride( true );
     bool result = m_CheckBoxControl->WriteStringData( text );
-    m_CheckBoxPanel->SetOverride( false );
+    m_CheckBoxWindow->SetOverride( false );
 
     return result;
 }
@@ -110,11 +112,11 @@ void CheckBoxWidget::IsReadOnlyChanged( const Attribute<bool>::ChangeArgs& args 
 {
     if ( args.m_NewValue )
     {
-        m_CheckBoxPanel->Enable();
+        m_CheckBoxWindow->Enable();
     }
     else
     {
-        m_CheckBoxPanel->Disable();
+        m_CheckBoxWindow->Disable();
     }
 }
 
@@ -122,13 +124,13 @@ void CheckBoxWidget::HighlightChanged( const Attribute< bool >::ChangeArgs& args
 {
     if ( args.m_NewValue )
     {
-        m_CheckBoxPanel->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-        m_CheckBoxPanel->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
+        m_CheckBoxWindow->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+        m_CheckBoxWindow->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
     }
     else
     {
-        m_CheckBoxPanel->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-        m_CheckBoxPanel->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+        m_CheckBoxWindow->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+        m_CheckBoxWindow->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
     }
 }
 

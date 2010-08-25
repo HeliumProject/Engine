@@ -7,14 +7,14 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-BEGIN_EVENT_TABLE(ValueTextCtrl, wxTextCtrl)
-EVT_TEXT_ENTER(wxID_ANY, ValueTextCtrl::OnConfirm)
-EVT_SET_FOCUS(ValueTextCtrl::OnSetFocus)
-EVT_KILL_FOCUS(ValueTextCtrl::OnKillFocus)
-EVT_KEY_DOWN(ValueTextCtrl::OnKeyDown)
+BEGIN_EVENT_TABLE(ValueWindow, wxTextCtrl)
+EVT_TEXT_ENTER(wxID_ANY, ValueWindow::OnConfirm)
+EVT_SET_FOCUS(ValueWindow::OnSetFocus)
+EVT_KILL_FOCUS(ValueWindow::OnKillFocus)
+EVT_KEY_DOWN(ValueWindow::OnKeyDown)
 END_EVENT_TABLE()
 
-ValueTextCtrl::ValueTextCtrl( wxWindow* parent, ValueWidget* valueWidget )
+ValueWindow::ValueWindow( wxWindow* parent, ValueWidget* valueWidget )
 : m_ValueWidget( valueWidget )
 , m_Override( false )
 {
@@ -29,7 +29,7 @@ ValueTextCtrl::ValueTextCtrl( wxWindow* parent, ValueWidget* valueWidget )
     Create( parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, flags );
 }
 
-void ValueTextCtrl::OnConfirm(wxCommandEvent& e)
+void ValueWindow::OnConfirm(wxCommandEvent& e)
 {
     if (!m_Override)
     {
@@ -37,14 +37,14 @@ void ValueTextCtrl::OnConfirm(wxCommandEvent& e)
     }
 }
 
-void ValueTextCtrl::OnSetFocus(wxFocusEvent& e)
+void ValueWindow::OnSetFocus(wxFocusEvent& e)
 {
     SetSelection(0, GetLastPosition());
 
     e.Skip();
 }
 
-void ValueTextCtrl::OnKillFocus(wxFocusEvent& e)
+void ValueWindow::OnKillFocus(wxFocusEvent& e)
 {
     if ( !m_Override && !m_ValueWidget->GetControl()->a_IsReadOnly.Get() )
     {
@@ -52,7 +52,7 @@ void ValueTextCtrl::OnKillFocus(wxFocusEvent& e)
     }
 }
 
-void ValueTextCtrl::OnKeyDown(wxKeyEvent& e)
+void ValueWindow::OnKeyDown(wxKeyEvent& e)
 {
     if ( e.ControlDown() && ( ( e.GetKeyCode() == 'A' ) || ( e.GetKeyCode() == 'a' ) ) )
     {
@@ -65,18 +65,20 @@ void ValueTextCtrl::OnKeyDown(wxKeyEvent& e)
     }
 }
 
-ValueWidget::ValueWidget( Inspect::Control* control )
+ValueWidget::ValueWidget( Inspect::Value* control )
 : Widget( control )
+, m_ValueControl( control )
+, m_ValueWindow( NULL )
 {
 
 }
 
 void ValueWidget::Create( wxWindow* parent )
 {
-    HELIUM_ASSERT( m_ValueWindow );
+    HELIUM_ASSERT( !m_ValueWindow );
 
     // allocate window and connect common listeners
-    SetWindow( m_ValueWindow = new ValueTextCtrl( parent, this ) );
+    SetWindow( m_ValueWindow = new ValueWindow( parent, this ) );
 
     // init layout metrics
     wxSize size( -1, m_ValueControl->GetCanvas()->GetStdSize( Math::SingleAxes::Y ) );

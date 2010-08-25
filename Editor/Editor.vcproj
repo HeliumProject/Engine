@@ -1786,6 +1786,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Inspect\Slider.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Slider.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Inspect\Widgets\Value.cpp"
 					>
 				</File>

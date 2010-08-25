@@ -7,11 +7,11 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-BEGIN_EVENT_TABLE(LabelPanel, wxPanel)
-EVT_SIZE(LabelPanel::OnSize)
+BEGIN_EVENT_TABLE(LabelWindow, wxPanel)
+EVT_SIZE(LabelWindow::OnSize)
 END_EVENT_TABLE()
 
-LabelPanel::LabelPanel(wxWindow* parent, LabelWidget* labelWidget)
+LabelWindow::LabelWindow(wxWindow* parent, LabelWidget* labelWidget)
 : wxPanel (parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, wxT( "Text" ) )
 , m_LabelWidget (labelWidget)
 {
@@ -22,36 +22,36 @@ LabelPanel::LabelPanel(wxWindow* parent, LabelWidget* labelWidget)
     sizer->Add( m_StaticText, 0, wxALIGN_CENTER_VERTICAL, 0);
 }
 
-void LabelPanel::OnSize(wxSizeEvent& event)
+void LabelWindow::OnSize(wxSizeEvent& event)
 {
     m_LabelWidget->GetControl()->Read();
 
     Layout();
 }
 
-wxString LabelPanel::GetLabel() const
+wxString LabelWindow::GetLabel() const
 {
     return m_StaticText->GetLabelText();
 }
 
-void LabelPanel::SetLabel(const wxString& label)
+void LabelWindow::SetLabel(const wxString& label)
 {
     m_StaticText->SetLabel(label);
 }
 
-void LabelPanel::UpdateToolTip( const wxString& toolTip )
+void LabelWindow::UpdateToolTip( const wxString& toolTip )
 {
     SetToolTip( toolTip );
     m_StaticText->SetToolTip( toolTip );
 }
 
-bool LabelPanel::SetForegroundColour(const wxColour& color)
+bool LabelWindow::SetForegroundColour(const wxColour& color)
 {
     return wxPanel::SetForegroundColour(color)
         && m_StaticText->SetForegroundColour(color);
 }
 
-bool LabelPanel::SetBackgroundColour(const wxColour& color)
+bool LabelWindow::SetBackgroundColour(const wxColour& color)
 {
     return wxPanel::SetBackgroundColour(color)
         && m_StaticText->SetBackgroundColour(color);
@@ -68,7 +68,7 @@ void LabelWidget::Create( wxWindow* parent )
     HELIUM_ASSERT( !m_LabelWindow );
 
     // allocate window and connect common listeners
-    SetWindow( m_LabelWindow = new LabelPanel( parent, this ) );
+    SetWindow( m_LabelWindow = new LabelWindow( parent, this ) );
 
     // add listeners
     m_LabelControl->a_ToolTip.Changed().AddMethod( this, &LabelWidget::ToolTipChanged );

@@ -8,10 +8,10 @@ namespace Helium
     {
         class ValueWidget;
 
-        class ValueTextCtrl : public wxTextCtrl
+        class ValueWindow : public wxTextCtrl
         {
         public:
-            ValueTextCtrl( wxWindow* parent, ValueWidget* valueWidget );
+            ValueWindow( wxWindow* parent, ValueWidget* valueWidget );
 
             void SetOverride( bool override )
             {
@@ -51,7 +51,7 @@ namespace Helium
 
         protected:
             Inspect::Value*     m_ValueControl;
-            ValueTextCtrl*      m_ValueWindow;
+            ValueWindow*        m_ValueWindow;
         };
     }
 }

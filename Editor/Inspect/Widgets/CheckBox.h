@@ -8,10 +8,10 @@ namespace Helium
     {
         class CheckBoxWidget;
 
-        class CheckBoxPanel : public wxPanel
+        class CheckBoxWindow : public wxPanel
         {
         public:
-            CheckBoxPanel( wxWindow* parent, CheckBoxWidget* checkBoxWidget, int width = 16, int height = 22 );
+            CheckBoxWindow( wxWindow* parent, CheckBoxWidget* checkBoxWidget, int width = 16, int height = 22 );
 
             void SetOverride( bool override )
             {
@@ -41,7 +41,7 @@ namespace Helium
         class CheckBoxWidget : public Widget
         {
         public:
-            CheckBoxWidget( Inspect::Control* control );
+            CheckBoxWidget( Inspect::CheckBox* control );
 
             void Create( wxWindow* parent );
             void Destroy();
@@ -58,7 +58,7 @@ namespace Helium
 
         protected:
             Inspect::CheckBox*  m_CheckBoxControl;
-            CheckBoxPanel*      m_CheckBoxPanel;
+            CheckBoxWindow*     m_CheckBoxWindow;
         };
 
     }

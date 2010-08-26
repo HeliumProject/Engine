@@ -63,7 +63,6 @@ namespace Helium
             tstring m_Key;
             tstring m_Data;
         };
-        typedef std::vector<ChoiceItem> V_ChoiceItem;
 
         class APPLICATION_API Choice : public Reflect::ConcreteInheritor<Choice, Control>
         {
@@ -84,19 +83,19 @@ namespace Helium
 
             virtual void Populate() HELIUM_OVERRIDE;
 
-            Attribute<bool>             a_Highlight;
-            Attribute<bool>             a_Sorted;
-            Attribute<bool>             a_DropDown;
-            Attribute<bool>             a_EnableAdds;
-            Attribute<V_ChoiceItem>     a_Items;
+            Attribute< bool >                       a_Highlight;
+            Attribute< bool >                       a_Sorted;
+            Attribute< bool >                       a_DropDown;
+            Attribute< bool >                       a_EnableAdds;
+            Attribute< std::vector< ChoiceItem > >  a_Items;
 
-            ChoiceSignature::Event              e_Populate;
-            ChoiceEnumerateSignature::Event     e_Enumerate;
+            ChoiceSignature::Event                  e_Populate;
+            ChoiceEnumerateSignature::Event         e_Enumerate;
 
         private:
             tstring             m_Enum;
             tstring             m_Prefix;
-            V_ChoiceItem        m_Statics;
+            std::vector< ChoiceItem >        m_Statics;
         };
 
         typedef Helium::SmartPtr<Choice> ChoicePtr;

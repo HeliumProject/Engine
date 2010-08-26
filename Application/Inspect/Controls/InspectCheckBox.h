@@ -17,7 +17,7 @@ namespace Helium
             void SetToDefault( const ContextMenuEventArgs& event );
 
         public:
-            Attribute< bool >             a_Highlight;
+            Attribute< bool >   a_Highlight;
         };
 
         typedef Helium::SmartPtr< CheckBox > CheckBoxPtr;

@@ -1778,6 +1778,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Choice.cpp\Choice.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Choice.cpp\Choice.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Inspect\Widgets\ColorPicker.cpp"
 					>
 				</File>
@@ -1786,19 +1794,19 @@
 					>
 				</File>
 				<File
-				RelativePath=".\Choice.cpp\Choice.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Choice.cpp\Choice.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Inspect\Widgets\Label.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\Inspect\Widgets\Label.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\List.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\List.h"
 					>
 				</File>
 				<File

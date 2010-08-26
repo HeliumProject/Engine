@@ -60,6 +60,5 @@ namespace Helium
             Inspect::CheckBox*  m_CheckBoxControl;
             CheckBoxWindow*     m_CheckBoxWindow;
         };
-
     }
 }

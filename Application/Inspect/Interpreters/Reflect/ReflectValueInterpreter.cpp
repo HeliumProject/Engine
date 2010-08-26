@@ -5,7 +5,6 @@
 #include "Application/Inspect/InspectScript.h"
 #include "Application/Inspect/Controls/InspectCheckBox.h"
 #include "Application/Inspect/Controls/InspectChoice.h"
-#include "Application/Inspect/Controls/InspectAction.h"
 #include "Application/Inspect/Controls/InspectValue.h"
 #include "Application/Inspect/Controls/InspectList.h"
 
@@ -47,7 +46,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
   {
     if ( field->m_SerializerID == Reflect::GetType<EnumerationSerializer>() )
     {
-      ChoicePtr choice = m_Container->GetCanvas()->Create<Choice>(this);
+      ChoicePtr choice = CreateControl<Choice>();
 
       const EnumerationField* enumInfo = static_cast<const EnumerationField*>(field);
 

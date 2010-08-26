@@ -1,6 +1,6 @@
 #include "ReflectFieldInterpreter.h"
 
-// Using
+using namespace Helium;
 using namespace Helium::Reflect;
 using namespace Helium::Inspect;
 

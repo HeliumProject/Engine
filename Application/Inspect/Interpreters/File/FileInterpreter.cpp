@@ -5,7 +5,7 @@
 #include "Application/Inspect/InspectInit.h"
 #include "Application/Inspect/InspectScript.h"
 #include "Application/Inspect/InspectData.h"
-#include "Application/Inspect/Controls/InspectAction.h"
+#include "Application/Inspect/Controls/InspectButton.h"
 #include "Application/Inspect/Controls/InspectValue.h"
 #include "Application/Inspect/Clipboard/ClipboardDataObject.h"
 #include "Application/Inspect/Clipboard/ClipboardFileList.h"

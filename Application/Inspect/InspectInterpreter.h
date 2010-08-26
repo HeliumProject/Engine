@@ -103,6 +103,22 @@ namespace Helium
             //
 
             template <class T>
+            Helium::SmartPtr<T> CreateControl()
+            {
+                Helium::SmartPtr<T> control = new T ();
+                ConnectControlEvents( this, control );
+                return control;
+            }
+
+            static void ConnectControlEvents( Interpreter* interpreter, Control* control )
+            {
+#if INSPECT_REFACTOR
+                control->e_ControlChanging.AddMethod( interpreter->PropertyChanging(), &ControlChangingSignature::Raise );
+                control->e_ControlChanged.AddMethod( interpreter->PropertyChanged(), &ControlChangedSignature::Raise );
+#endif
+            }
+
+            template <class T>
             Helium::SmartPtr<T> CreateInterpreter(Container* container = NULL)
             {
                 Helium::SmartPtr<T> interpreter = new T (container ? container : m_Container);

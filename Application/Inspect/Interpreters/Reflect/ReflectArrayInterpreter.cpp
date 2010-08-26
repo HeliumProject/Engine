@@ -107,7 +107,7 @@ void ReflectArrayInterpreter::InterpretField(const Field* field, const std::vect
 ButtonPtr ReflectArrayInterpreter::AddAddButton( List* list )
 {
   ButtonPtr addButton = m_Container->GetCanvas()->Create<Button>(this);
-  addButton->ButtonClickedEvent().Add( ButtonSignature::Delegate ( &ReflectArrayInterpreter::OnAdd ) );
+  addButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( &ReflectArrayInterpreter::OnAdd ) );
   addButton->SetClientData( new ClientData( list ) );
   addButton->SetText( TXT( "Add" ) );
 
@@ -118,7 +118,7 @@ ButtonPtr ReflectArrayInterpreter::AddRemoveButton( List* list )
 {
   ButtonPtr removeButton = m_Container->GetCanvas()->Create<Button>(this);
   removeButton->SetText( TXT( "Remove" ) );
-  removeButton->ButtonClickedEvent().Add( ButtonSignature::Delegate ( &ReflectArrayInterpreter::OnRemove ) );
+  removeButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( &ReflectArrayInterpreter::OnRemove ) );
   removeButton->SetClientData( new ClientData( list ) );
   
   return removeButton;
@@ -128,7 +128,7 @@ ButtonPtr ReflectArrayInterpreter::AddMoveUpButton( List* list )
 {
   ButtonPtr upButton = m_Container->GetCanvas()->Create<Button>(this);
   upButton->SetIcon( TXT( "actions/go-up" ) );
-  upButton->ButtonClickedEvent().Add( ButtonSignature::Delegate ( &ReflectArrayInterpreter::OnMoveUp ) );
+  upButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( &ReflectArrayInterpreter::OnMoveUp ) );
   upButton->SetClientData( new ClientData( list ) );
   
   return upButton;
@@ -138,7 +138,7 @@ ButtonPtr ReflectArrayInterpreter::AddMoveDownButton( List* list )
 {
   ButtonPtr downButton = m_Container->GetCanvas()->Create<Button>(this);
   downButton->SetIcon( TXT( "actions/go-down" ) );
-  downButton->ButtonClickedEvent().Add( ButtonSignature::Delegate ( &ReflectArrayInterpreter::OnMoveDown ) );
+  downButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( &ReflectArrayInterpreter::OnMoveDown ) );
   downButton->SetClientData( new ClientData( list ) );
   
   return downButton;

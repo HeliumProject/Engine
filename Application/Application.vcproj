@@ -786,14 +786,6 @@
 				Name="Controls"
 				>
 				<File
-					RelativePath=".\Inspect\Controls\InspectAction.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\InspectAction.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Inspect\Controls\InspectButton.cpp"
 					>
 				</File>

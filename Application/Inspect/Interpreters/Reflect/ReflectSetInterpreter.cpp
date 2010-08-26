@@ -66,13 +66,13 @@ void ReflectSetInterpreter::InterpretField( const Reflect::Field* field, const s
     ButtonPtr buttonAdd = parent->GetCanvas()->Create<Button>( this );
     buttonContainer->AddChild( buttonAdd );
     buttonAdd->SetText( TXT( "Add" ) );
-    buttonAdd->ButtonClickedEvent().Add( ButtonSignature::Delegate ( this, &ReflectSetInterpreter::OnAdd ) );
+    buttonAdd->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &ReflectSetInterpreter::OnAdd ) );
     buttonAdd->SetClientData( new ClientData( list ) );
 
     ButtonPtr buttonRemove = parent->GetCanvas()->Create<Button>( this );
     buttonContainer->AddChild( buttonRemove );
     buttonRemove->SetText( TXT( "Remove" ) );
-    buttonRemove->ButtonClickedEvent().Add( ButtonSignature::Delegate ( this, &ReflectSetInterpreter::OnRemove ) );
+    buttonRemove->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &ReflectSetInterpreter::OnRemove ) );
     buttonRemove->SetClientData( new ClientData( list ) );
   }
 

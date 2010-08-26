@@ -139,22 +139,22 @@ void EntityInstanceCreateTool::CreateProperties()
             m_FileButtonAdd->SetIcon( TXT( "ellipses_add" ) );
             m_BrowserButtonAdd->SetIcon( TXT( "magnify_add" ) );
 
-            Inspect::Action* modifyButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityInstanceCreateTool::OnModify ) );
+            Inspect::Button* modifyButton = m_Generator->AddButton( Inspect::ButtonSignature::Delegate( this, &EntityInstanceCreateTool::OnModify ) );
             modifyButton->SetToolTip( TXT( "Modify" ) );
             modifyButton->SetIcon( TXT( "percent" ) );
             modifyButton->SetInterpreterClientData( this );
 
-            Inspect::Action* normalizeButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityInstanceCreateTool::OnNormalize ) );
+            Inspect::Button* normalizeButton = m_Generator->AddButton( Inspect::ButtonSignature::Delegate( this, &EntityInstanceCreateTool::OnNormalize ) );
             normalizeButton->SetToolTip( TXT( "Normalize" ) );
             normalizeButton->SetIcon( TXT( "normalize" ) );
             normalizeButton->SetInterpreterClientData( this );
 
-            Inspect::Action* deleteButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityInstanceCreateTool::OnDeleteClass ) );
+            Inspect::Button* deleteButton = m_Generator->AddButton( Inspect::ButtonSignature::Delegate( this, &EntityInstanceCreateTool::OnDeleteClass ) );
             deleteButton->SetToolTip( TXT( "Delete" ) );
             deleteButton->SetIcon( TXT( "actions/list-remove" ) );
             deleteButton->SetInterpreterClientData( this );
 
-            Inspect::Action*  clearButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityInstanceCreateTool::OnClear ) );
+            Inspect::Button*  clearButton = m_Generator->AddButton( Inspect::ButtonSignature::Delegate( this, &EntityInstanceCreateTool::OnClear ) );
             clearButton->SetToolTip( TXT( "Clear" ) );
             clearButton->SetIcon( TXT( "delete" ) );
             clearButton->SetInterpreterClientData( this );

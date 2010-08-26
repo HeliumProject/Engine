@@ -1027,7 +1027,7 @@ void Curve::CreatePanel( CreatePanelArgs& args )
     args.m_Generator->PushContainer();
     {
       args.m_Generator->AddLabel( TXT( "Reverse Control Points" ) );
-      Inspect::Action* button = args.m_Generator->AddAction( Inspect::ActionSignature::Delegate( &Curve::OnReverseControlPoints ) );
+      Inspect::Button* button = args.m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( &Curve::OnReverseControlPoints ) );
       button->SetIcon( TXT( "reverse" ) );
       button->SetInterpreterClientData( new SelectionDataObject( args.m_Selection ) );
     }

@@ -116,10 +116,6 @@ namespace Helium
                 ID_ShowInFolders = VaultMenu::ShowInFolders,
                 ID_ShowInPerforce = VaultMenu::ShowInPerforce,
                 ID_ShowInWindows = VaultMenu::ShowInWindowsExplorer,
-
-                ID_NewCollectionFromSel = VaultMenu::NewCollectionFromSelection,
-                ID_NewDependencyCollectionFromSel = VaultMenu::NewDepedencyCollectionFromSelection,
-                ID_NewUsageCollectionFromSel = VaultMenu::NewUsageCollectionFromSelection,
             };
 
         public:

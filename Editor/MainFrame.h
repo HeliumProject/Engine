@@ -11,6 +11,8 @@
 #include "TypesPanel.h"
 #include "ViewPanel.h"
 
+#include "Editor/Vault/VaultPanel.h"
+
 #include "Core/SettingsManager.h"
 
 #include "Core/Scene/PropertiesManager.h"
@@ -73,6 +75,7 @@ namespace Helium
             ToolbarPanel*               m_ToolbarPanel;
             DirectoryPanel*             m_DirectoryPanel;
             PropertiesPanel*            m_PropertiesPanel;
+            VaultPanel*                 m_VaultPanel;
 
             Core::ProjectPtr            m_Project;
             MessageDisplayer            m_MessageDisplayer;
@@ -128,6 +131,11 @@ namespace Helium
             virtual void OnOpen( wxCommandEvent& event ) HELIUM_OVERRIDE;
             virtual void OnClose( wxCommandEvent& event ) HELIUM_OVERRIDE;
             virtual void OnSaveAll( wxCommandEvent& event ) HELIUM_OVERRIDE;
+
+            void ShowVaultPanel( const tstring& queryString );
+            void OnSearchButtonClick( wxCommandEvent& event );
+            void OnSearchTextEnter( wxCommandEvent& event );
+            void OnCloseSearchPanel();
 
             void OnViewChange( wxCommandEvent& event );
             void OnViewCameraChange( wxCommandEvent& event );

@@ -43,12 +43,12 @@ namespace Helium
         class SearchHistory : public Reflect::Element
         {
         public:
-            SearchHistory();
+            SearchHistory( VaultSearch* search = NULL );
             ~SearchHistory();
 
-            void SetVaultSearch( VaultSearch* browserSearch );
+            void SetVaultSearch( VaultSearch* search );
 
-            void RunNewQuery( const tstring& queryString, const AssetCollection* collection = NULL );
+            void RunNewQuery( const tstring& queryString );
             bool RunCurrentQuery();
 
             //
@@ -92,8 +92,6 @@ namespace Helium
 
         private:
             void LimitMRUQueries();
-
-            void OnCollectionChanged( const Reflect::ElementChangeArgs& args );
 
         private:
             VaultSearch* m_VaultSearch;

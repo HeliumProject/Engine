@@ -1,8 +1,9 @@
 #pragma once
 
-#include "VaultEvents.h"
 #include "SearchQuery.h"
+#include "SearchResults.h"
 
+#include "Foundation/Automation/Event.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Platform/Types.h"
 #include "Platform/Mutex.h"
@@ -22,14 +23,78 @@ namespace Helium
         class DummyWindow;
         struct DummyWindowArgs;
 
-        class SearchResults;
-        typedef Helium::SmartPtr< SearchResults > SearchResultsPtr;
+        ///////////////////////////////////////////////////////////////////////
+        // RequestSearch:
+        // A search has been requested.
+        struct RequestSearchArgs
+        {
+            SearchQueryPtr m_SearchQuery;
+            RequestSearchArgs( SearchQuery* searchQuery ) : m_SearchQuery( searchQuery ) {}
+        };
+        typedef Helium::Signature< void, const RequestSearchArgs& > RequestSearchSignature;
 
-        /////////////////////////////////////////////////////////////////////////////
+
+        ///////////////////////////////////////////////////////////////////////
+        // SearchError:
+        // A search has been requested.
+        struct SearchErrorArgs
+        {
+            tstring m_Errors;
+            SearchErrorArgs( const tstring& errors ) : m_Errors( errors ) {}
+        };
+        typedef Helium::Signature< void, const SearchErrorArgs& > SearchErrorSignature;
+
+
+        ///////////////////////////////////////////////////////////////////////
+        // BeginSearching:
+        // Search is about to starting running, contains status update info pointers.
+        struct BeginSearchingArgs
+        {
+            BeginSearchingArgs() { }
+        };
+        typedef Helium::Signature< void, const BeginSearchingArgs& > BeginSearchingSignature;
+
+
+        ///////////////////////////////////////////////////////////////////////
+        // StoppingSearch:
+        // Search is done, results are being wrangled.
+        struct StoppingSearchArgs
+        {
+            StoppingSearchArgs() { }
+        };
+        typedef Helium::Signature< void, const StoppingSearchArgs& > StoppingSearchSignature;
+
+
+        ///////////////////////////////////////////////////////////////////////
+        // ResultsAvailable:
+        // {Some or all) search results are available, contains SearchResults
+        struct ResultsAvailableArgs
+        {
+            SearchQueryPtr m_SearchQuery;
+            SearchResultsPtr m_SearchResults;
+            ResultsAvailableArgs( SearchQuery* searchQuery, SearchResults* searchResults )
+                : m_SearchQuery( searchQuery )
+                , m_SearchResults( searchResults )
+            {
+
+            }
+        };
+        typedef Helium::Signature< void, const ResultsAvailableArgs& > ResultsAvailableSignature;
+
+
+        ///////////////////////////////////////////////////////////////////////
+        // SearchComplete: 
+        // Search is complete.
+        struct SearchCompleteArgs
+        {
+            SearchQueryPtr m_SearchQuery;
+            SearchCompleteArgs( SearchQuery* searchQuery ) : m_SearchQuery( searchQuery ) {}
+        };
+        typedef Helium::Signature< void, const SearchCompleteArgs& > SearchCompleteSignature;
+        
+
+        ///////////////////////////////////////////////////////////////////////
         /// class VaultSearch
-        class VaultSearch;
-        typedef Helium::SmartPtr< VaultSearch > VaultSearchPtr;
-
         class VaultSearch : public Helium::RefCountBase< VaultSearch >
         {
         public:
@@ -58,16 +123,15 @@ namespace Helium
             SearchQueryPtr          m_CurrentSearchQuery;
             SearchResultsPtr        m_SearchResults;     // The results to populate and pass to ResultsAvailableArgs
             std::set< Helium::Path > m_FoundPaths;        // The *complete* list of found files from this section
-            Helium::Mutex         m_SearchResultsMutex;
+            Helium::Mutex           m_SearchResultsMutex;
 
             // Searching Thread
             bool                    m_StopSearching;
             DummyWindow*            m_DummyWindow;
             HANDLE                  m_SearchInitializedEvent;   // OK to cancel searches after this is set
-            Helium::Mutex         m_BeginSearchMutex;         // Take Lock until m_SearchInitializedEvent
+            Helium::Mutex           m_BeginSearchMutex;         // Take Lock until m_SearchInitializedEvent
 
             HANDLE                  m_EndSearchEvent;
-
 
         private:
             //
@@ -177,6 +241,7 @@ namespace Helium
             //  }
 
         };
+        typedef Helium::SmartPtr< VaultSearch > VaultSearchPtr;
 
 
     } // namespace Editor

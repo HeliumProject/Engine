@@ -32,6 +32,7 @@
 #include "Core/Scene/TranslateManipulator.h"
 
 #include "Editor/SettingsDialog.h"
+#include "Editor/WindowSettings.h"
 
 #include "EditorIDs.h"
 #include "ArtProvider.h"
@@ -171,6 +172,9 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     m_FrameManager.AddPane( m_ToolbarPanel, wxAuiPaneInfo().Name( wxT( "tools" ) ).Top().Layer( 5 ).Position( 1 ).CaptionVisible( false ).PaneBorder( false ).Gripper( false ).CloseButton( false ).MaximizeButton( false ).MinimizeButton( false ).PinButton( false ).Movable( false ).MinSize( wxSize( -1, 52 ) ) );
     m_ToolbarPanel->GetToolsPanel()->Disable();
     m_ToolbarPanel->GetToolsPanel()->Refresh();
+
+    m_ToolbarPanel->m_VaultSearchBox->Connect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( MainFrame::OnSearchButtonClick ), NULL, this );
+	m_ToolbarPanel->m_VaultSearchBox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MainFrame::OnSearchTextEnter ), NULL, this );
 
     //
     // View panel area
@@ -344,6 +348,12 @@ bool MainFrame::OpenProject( const Helium::Path& path )
             m_MRU->Insert( path );
 
             m_ProjectPanel->SetProject( m_Project );
+#pragma TODO( "set project asset dir for vault" )
+            //m_ProjectAssetDir = path;
+            //if ( m_VaultSearch )
+            //{
+            //    m_VaultSearch->SetRootDirectory( m_ProjectAssetDir );
+            //}
         }
         else
         {
@@ -812,6 +822,62 @@ void MainFrame::OnSaveAll( wxCommandEvent& event )
     {
         wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
     }
+}
+
+void MainFrame::ShowVaultPanel( const tstring& queryString )
+{
+#pragma TODO ("Add Vault panel to the aui manager m_FrameManager")
+    //wxString value = m_SearchBox->GetValue();
+    //value.Trim(true);  // trim white-space right 
+    //value.Trim(false); // trim white-space left
+
+    //wxGetApp().GetVault().ShowVault( value.wx_str() );
+
+
+    //if ( !m_VaultPanel )
+    //{
+    //    // Create the one and only VaultSearch
+    //    m_VaultSearch = new VaultSearch();
+
+    //    //m_SearchHistory = wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >()->GetSearchHistory();
+    //    //m_SearchHistory->SetVaultSearch( m_VaultSearch );
+
+    //    m_VaultPanel = new VaultPanel( this, m_VaultSearch );
+
+    //}
+
+    //m_VaultPanel->Show();
+    //m_VaultPanel->SetFocus();
+
+    //if ( !queryString.empty() )
+    //{
+    //    m_VaultPanel->Search( queryString );
+    //}
+    //else
+    //{
+    //    //if ( !m_SearchHistory->RunCurrentQuery() )
+    //    {
+    //        m_VaultPanel->Search( wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >()->GetDefaultFolderPath() );
+    //    }
+    //}
+}
+
+void MainFrame::OnSearchButtonClick( wxCommandEvent& event )
+{
+    //tstring queryString = m_ToolbarPanel->m_VaultSearchBox->GetLineText(0).c_str();
+    event.Skip();
+}
+
+void MainFrame::OnSearchTextEnter( wxCommandEvent& event )
+{
+    event.Skip();
+}
+
+void MainFrame::OnCloseSearchPanel()
+{
+    wxGetApp().SaveSettings();
+    m_VaultPanel = NULL;
+    //m_VaultSearch->RequestStop();
 }
 
 void MainFrame::OnViewChange(wxCommandEvent& event)

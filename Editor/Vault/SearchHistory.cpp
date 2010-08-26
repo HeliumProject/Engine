@@ -15,8 +15,8 @@ void SearchHistory::EnumerateClass( Reflect::Compositor<SearchHistory>& comp )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-SearchHistory::SearchHistory()
-: m_VaultSearch( NULL )
+SearchHistory::SearchHistory( VaultSearch* search )
+: m_VaultSearch( search )
 , m_Current( NULL )
 , m_Active( false )
 , m_MaxHistory( -1 )
@@ -56,13 +56,13 @@ void SearchHistory::PostDeserialize()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void SearchHistory::SetVaultSearch( VaultSearch* browserSearch )
+void SearchHistory::SetVaultSearch( VaultSearch* search )
 {
-  m_VaultSearch = browserSearch;
+  m_VaultSearch = search;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void SearchHistory::RunNewQuery( const tstring& queryString, const AssetCollection* collection )
+void SearchHistory::RunNewQuery( const tstring& queryString )
 {
   HELIUM_ASSERT( m_VaultSearch );
 
@@ -72,11 +72,6 @@ void SearchHistory::RunNewQuery( const tstring& queryString, const AssetCollecti
   {
     query = new SearchQuery();
     query->SetQueryString( queryString );
-  }
-
-  if ( collection )
-  {
-    query->SetCollection( collection );
   }
   
   PushHistory( query );
@@ -145,21 +140,9 @@ void SearchHistory::PushHistory( const SearchQuery* query )
   {
     // append our query to the queue
     m_Back.push_back( m_Current );
-
-    AssetCollection* oldCollection = m_Current->GetCollection();
-    if ( oldCollection )
-    {
-      oldCollection->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &SearchHistory::OnCollectionChanged ) );
-    }
   }
 
   m_Current = query;
-
-  AssetCollection* collection = m_Current->GetCollection();
-  if ( collection )
-  {
-    collection->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &SearchHistory::OnCollectionChanged ) );
-  }
   
   // fire an event to interested listeners
   m_Changed.Raise( SearchHistoryChangeArgs( this, query ) );
@@ -199,21 +182,9 @@ void SearchHistory::Back( int historyIndex )
       if ( m_Current )
       {
         m_Forward.push_back( m_Current );
-
-        AssetCollection* oldCollection = m_Current->GetCollection();
-        if ( oldCollection )
-        {
-          oldCollection->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &SearchHistory::OnCollectionChanged ) );
-        }
       }
 
       m_Current = query;
-
-      AssetCollection* collection = m_Current->GetCollection();
-      if ( collection )
-      {
-        collection->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &SearchHistory::OnCollectionChanged ) );
-      }
     }
 
     if ( query )
@@ -254,21 +225,9 @@ void SearchHistory::Forward( int historyIndex )
       if ( m_Current )
       {
         m_Back.push_back( m_Current );
-
-        AssetCollection* oldCollection = m_Current->GetCollection();
-        if ( oldCollection )
-        {
-          oldCollection->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &SearchHistory::OnCollectionChanged ) );
-        }
       }
 
       m_Current = query;
-
-      AssetCollection* collection = m_Current->GetCollection();
-      if ( collection )
-      {
-        collection->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &SearchHistory::OnCollectionChanged ) );
-      }
     }
 
     if ( query )
@@ -366,15 +325,5 @@ void SearchHistory::LimitMRUQueries()
   while ( m_MRUQueries.Size() && ( m_MRUQueries.Size() > maxQueries ) )
   {
     m_MRUQueries.Remove( m_MRUQueries.Front() );
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void SearchHistory::OnCollectionChanged( const Reflect::ElementChangeArgs& args )
-{
-  const AssetCollection* collection = Reflect::ConstObjectCast< AssetCollection >( args.m_Element );
-  if ( collection && m_Current && m_Current->GetCollection() == collection )
-  {
-    RunCurrentQuery();
   }
 }

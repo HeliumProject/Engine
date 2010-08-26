@@ -1,7 +1,6 @@
 #include "Precompile.h"
 #include "ThumbnailView.h"
 #include "SearchResults.h"
-#include "Vault.h"
 #include "VaultSearch.h"
 #include "ThumbnailLoadedEvent.h"
 
@@ -903,20 +902,6 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
             showInMenu->Append( ID_ShowInWindows, VaultMenu::Label( ID_ShowInWindows ) );
             wxMenuItem* currentItem = menu.AppendSubMenu( showInMenu, TXT( "Show In" ) );
             menu.Enable( currentItem->GetId(), numSelected == 1 );
-        }
-
-        // Make Collection...
-        {
-            wxMenu* collectionMenu = new wxMenu;
-            collectionMenu->Append( ID_NewCollectionFromSel, VaultMenu::Label( ID_NewCollectionFromSel ) );
-            collectionMenu->Append( ID_NewDependencyCollectionFromSel, VaultMenu::Label( ID_NewDependencyCollectionFromSel ) );
-            collectionMenu->Append( ID_NewUsageCollectionFromSel, VaultMenu::Label( ID_NewUsageCollectionFromSel ) );
-            wxMenuItem* currentItem = menu.AppendSubMenu( collectionMenu, TXT( "Make Collection" ) );
-            menu.Enable( currentItem->GetId(), numSelected > 0 );
-            collectionMenu->Enable( ID_NewCollectionFromSel, true );
-            const bool enableDependencyCollection = numSelected == 1;
-            collectionMenu->Enable( ID_NewDependencyCollectionFromSel, enableDependencyCollection );
-            collectionMenu->Enable( ID_NewUsageCollectionFromSel, enableDependencyCollection );
         }
 
         // Copy To Clipboard...

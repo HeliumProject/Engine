@@ -58,23 +58,6 @@ namespace Helium
                 ShowInPerforce,
                 ShowInWindowsExplorer,
 
-                ShowCollection,
-
-                NewCollectionFromSelection,
-                NewDepedencyCollectionFromSelection,
-                NewUsageCollectionFromSelection,
-
-                NewCollection,
-                OpenCollection,
-                CloseCollection,
-                RenameCollection,
-                DeleteCollection,
-                ImportCollection,
-                ImportIntoCollection,
-                SaveCollection,
-                AddToCollection,
-                RemoveFromCollection,
-
                 Settings,
 
                 COUNT_PLUS_START // Do not use: must be last
@@ -127,22 +110,6 @@ namespace Helium
                 TXT( "Folders" ),
                 TXT( "Show in Revision Control" ),
                 TXT( "Windows Explorer" ), 
-
-                TXT( "Show" ),
-
-                TXT( "Static Collection" ),
-                TXT( "Static Collection" ),
-                TXT( "Asset Dependencies Collection" ),
-                TXT( "Asset Usage Collection" ),
-                TXT( "Open" ),
-                TXT( "Close" ),
-                TXT( "Rename" ),
-                TXT( "Delete" ),
-                TXT( "Import..." ),
-                TXT( "Import into..." ),
-                TXT( "Export..." ),
-                TXT( "Add Selected Assets" ),
-                TXT( "Remove Selected Assets" ),
 
                 TXT( "Customize Settings..." ),
             };

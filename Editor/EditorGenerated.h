@@ -32,7 +32,6 @@ namespace Helium{ namespace Editor{ class Frame; } }
 #include <wx/panel.h>
 #include <wx/srchctrl.h>
 #include <wx/richtext/richtextctrl.h>
-#include <wx/listbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/statbmp.h>
@@ -167,7 +166,6 @@ namespace Helium
 				wxBitmapButton* m_PauseButton;
 				wxBitmapButton* m_StopButton;
 				
-				wxSearchCtrl* m_VaultSearchBox;
 				wxPanel* m_ToolsPropertiesPanel;
 				
 				// Virtual event handlers, overide them in your derived class
@@ -185,6 +183,7 @@ namespace Helium
 				
 			
 			public:
+				wxSearchCtrl* m_VaultSearchBox;
 				
 				ToolbarPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 939,70 ), long style = wxTAB_TRAVERSAL );
 				~ToolbarPanelGenerated();
@@ -255,7 +254,6 @@ namespace Helium
 				wxPanel* m_NavigationPanel;
 				wxSearchCtrl* m_SearchCtrl;
 				wxBitmapButton* m_OptionsButton;
-				wxListBox* m_SourceListBox;
 				wxPanel* m_ResultsPanel;
 			
 			public:

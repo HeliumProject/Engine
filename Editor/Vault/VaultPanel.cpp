@@ -7,11 +7,9 @@ using namespace Helium;
 using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
-VaultPanel::VaultPanel( Vault* vault, VaultSearch* vaultSearch, SearchHistory* searchHistory, wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
+VaultPanel::VaultPanel( VaultSearch* vaultSearch, wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
 : VaultPanelGenerated( parent, id, pos, size, style )
-, m_Vault( vault )
 , m_VaultSearch( vaultSearch )
-, m_SearchHistory( searchHistory )
 {
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )
     {
@@ -22,7 +20,6 @@ VaultPanel::VaultPanel( Vault* vault, VaultSearch* vaultSearch, SearchHistory* s
         Layout();
         Thaw();
     }
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -40,5 +37,9 @@ void VaultPanel::Search( const tstring& queryString )
         return;
     }
 
-    m_SearchHistory->RunNewQuery( queryString );
+    //m_SearchHistory->RunNewQuery( queryString );
+    // parse the query string
+    SearchQueryPtr query = new SearchQuery();
+    query->SetQueryString( queryString );
+    m_VaultSearch->RequestSearch( query );
 }

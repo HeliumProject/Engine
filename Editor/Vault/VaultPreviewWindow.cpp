@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "VaultPreviewWindow.h"
-#include "Vault.h"
 #include "VaultPanel.h"
+#include "VaultSettings.h"
 #include "Editor/App.h"
 
 using namespace Helium;

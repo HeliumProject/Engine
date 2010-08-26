@@ -44,7 +44,7 @@
 #include "Editor/Tracker/Tracker.h"
 #include "Editor/Task/TaskInit.h"
 #include "Editor/PerforceWaitDialog.h"
-#include "Editor/Vault/Vault.h"
+#include "Editor/Vault/VaultSettings.h"
 
 //#include "Commands/BuildCommand.h"
 #include "Commands/ProfileDumpCommand.h"
@@ -154,7 +154,7 @@ namespace Helium
 App::App()
 #pragma TODO("This needs fixing otherwise dialogs will not be modal -Geoff")
 : m_SettingsManager( new Core::SettingsManager() )
-, m_Vault( NULL )
+, m_VaultSearch( NULL )
 , m_Frame( NULL )
 {
 }
@@ -227,12 +227,9 @@ bool App::OnInit()
     m_InitializerStack.Push( Core::SceneInitialize, Core::SceneCleanup );
 
     // vault
-    m_InitializerStack.Push( Reflect::RegisterClassType<AssetCollection>( TXT( "AssetCollection" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType<CollectionManager>( TXT( "CollectionManager" ) ) );
     m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::SearchTypes::SearchType>( &Editor::SearchTypes::SearchTypesEnumerateEnum, TXT( "SearchType" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClassType<SearchQuery>( TXT( "SearchQuery" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType<SearchHistory>( TXT( "SearchHistory" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterEnumType<ViewOptionIDs::ViewOptionID>( &ViewOptionIDs::ViewOptionIDEnumerateEnum, TXT( "ViewOptionID" ) ) );
+    //m_InitializerStack.Push( Reflect::RegisterClassType<SearchHistory>( TXT( "SearchHistory" ) ) );
 
     // settings
     m_InitializerStack.Push( Reflect::RegisterClassType< Core::SettingsManager >( TXT( "Core::SettingsManager" ) ) ); 
@@ -241,6 +238,8 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::RegisterClassType< Core::GridSettings >( TXT( "Core::GridSettings" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClassType< Core::SceneSettings >( TXT( "Core::SceneSettings" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClassType< WindowSettings >( TXT( "Editor::WindowSettings" ) ) );
+    
+    m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::ViewOptionIDs::ViewOptionID>( &Editor::ViewOptionIDs::ViewOptionIDEnumerateEnum, TXT( "ViewOptionID" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClassType< VaultSettings >( TXT( "Editor::VaultSettings" ) ) );
 
     LoadSettings();

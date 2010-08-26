@@ -9,8 +9,8 @@ using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Ctor/Dtor
-SearchResults::SearchResults( u32 browserSearchID )
-: m_VaultSearchID( browserSearchID )
+SearchResults::SearchResults( u32 vaultSearchID )
+: m_VaultSearchID( vaultSearchID )
 {
 }
 

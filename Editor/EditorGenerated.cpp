@@ -578,11 +578,6 @@ VaultPanelGenerated::VaultPanelGenerated( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer24;
 	bSizer24 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_SourceListBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	m_SourceListBox->Append( _("Local") );
-	m_SourceListBox->Append( _("TurboSquid") );
-	bSizer24->Add( m_SourceListBox, 0, wxALL|wxEXPAND, 5 );
-	
 	m_ResultsPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	bSizer24->Add( m_ResultsPanel, 1, wxEXPAND | wxALL, 5 );
 	

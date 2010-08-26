@@ -582,28 +582,6 @@ void Light::SetPhotonIntensity( float intensity )
     GetPackage< Content::Light >()->m_PhotonEnergy.s = intensity;
 }
 
-
-const Content::V_ParametricKeyPtr& Light::GetColorAnimation() const
-{
-    return (Content::V_ParametricKeyPtr& )( GetPackage< Content::Light >()->m_AnimationColor );
-}
-
-void Light::SetColorAnimation( const Content::V_ParametricKeyPtr& animation )
-{
-    GetPackage< Content::Light >()->m_AnimationColor = (Content::V_ParametricColorKeyPtr& )( animation );
-    m_Changed.Raise( LightChangeArgs( this ) );
-}
-const Content::V_ParametricKeyPtr& Light::GetIntensityAnimation() const
-{
-    return (Content::V_ParametricKeyPtr& )( GetPackage< Content::Light >()->m_AnimationIntensity );
-}
-
-void Light::SetIntensityAnimation( const Content::V_ParametricKeyPtr& animation )
-{
-    GetPackage< Content::Light >()->m_AnimationIntensity = (Content::V_ParametricColorKeyPtr& )( animation );
-    m_Changed.Raise( LightChangeArgs( this ) );
-}
-
 f32 Light::GetAnimationDuration() const
 {
     return GetPackage< Content::Light >()->m_AnimationDuration;

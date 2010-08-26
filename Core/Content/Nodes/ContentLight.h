@@ -2,8 +2,6 @@
 
 #include "Core/API.h"
 #include "Core/Content/Nodes/ContentInstance.h"
-#include "Core/Content/ParametricKey/ParametricColorKey.h"
-#include "Core/Content/ParametricKey/ParametricIntensityKey.h"
 
 namespace Helium
 {

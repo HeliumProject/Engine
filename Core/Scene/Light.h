@@ -151,12 +151,6 @@ namespace Helium
             float GetPhotonIntensity() const;
             void SetPhotonIntensity( float intensity );
 
-            const Content::V_ParametricKeyPtr& GetColorAnimation() const;
-            void SetColorAnimation( const Content::V_ParametricKeyPtr& animation );
-
-            const Content::V_ParametricKeyPtr& GetIntensityAnimation() const;
-            void SetIntensityAnimation( const Content::V_ParametricKeyPtr& animation );
-
             f32 GetAnimationDuration() const;
             void SetAnimationDuration( f32 duration );
 

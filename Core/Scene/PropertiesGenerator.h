@@ -9,8 +9,6 @@
 #include "Application/Inspect/InspectInterpreter.h"
 #include "Application/Inspect/Interpreters/File/FileDialogButton.h"
 #include "Application/Inspect/Interpreters/File/FileBrowserButton.h"
-#include "Application/Inspect/Interpreters/Content/ParametricKeyData.h"
-#include "Application/Inspect/Interpreters/Content/ParametricKeyControl.h"
 
 #include "Core/Scene/Selection.h"
 
@@ -288,21 +286,6 @@ namespace Helium
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
                 Inspect::ST_Container& containerStack = GetCurrentContainerStack();
                 containerStack.top()->AddChild(control);
-                return control;
-            }
-
-
-            // 
-            // KeyControl
-            // 
-
-            template <class T, class G, class S>
-            Inspect::ParametricKeyControl* AddKeyControl( const OS_SelectableDumbPtr& selection, Reflect::CreateObjectFunc creator, G getter = NULL, S setter = NULL )
-            {
-                Inspect::ParametricKeyControlPtr control = m_Container->GetCanvas()->Create<Inspect::ParametricKeyControl>( this );
-                control->Bind( new Inspect::MultiParametricKeyPropertyFormatter( creator, BuildSelectionProperties<T, Content::V_ParametricKeyPtr, G, S>( selection, getter, setter ) ) );
-                Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddChild( control );
                 return control;
             }
         };

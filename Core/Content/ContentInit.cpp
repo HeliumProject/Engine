@@ -22,10 +22,6 @@
 #include "Core/Content/Nodes/ContentSkin.h"
 #include "Core/Content/Nodes/ContentShader.h"
 
-#include "Core/Content/ParametricKey/ParametricColorKey.h"
-#include "Core/Content/ParametricKey/ParametricIntensityKey.h"
-#include "Core/Content/ParametricKey/ParametricKey.h"
-
 #include "Core/Content/Animation/Animation.h"
 #include "Core/Content/Animation/JointAnimation.h"
 #include "Core/Content/Animation/CompressedJointAnimation.h"
@@ -100,10 +96,6 @@ void Content::Initialize()
         g_InitializerStack.Push( Reflect::RegisterClassType<CompressedJointAnimation>( TXT( "CompressedJointAnimation" ) ) );
         g_InitializerStack.Push( Reflect::RegisterClassType<JointAnimation>( TXT( "JointAnimation" ) ) );
         g_InitializerStack.Push( Reflect::RegisterClassType<Animation>( TXT( "Animation" ) ) );
-
-        g_InitializerStack.Push( Reflect::RegisterClassType<ParametricKey>( TXT( "ParametricKey" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClassType<ParametricColorKey>( TXT( "ParametricColorKey" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClassType<ParametricIntensityKey>( TXT( "ParametricIntensityKey" ) ) );
 
         // lights
         g_InitializerStack.Push( Reflect::RegisterEnumType<LightTypes::LightType>( &LightTypes::LightTypeEnumerateEnum, TXT( "LightType" ) ) );

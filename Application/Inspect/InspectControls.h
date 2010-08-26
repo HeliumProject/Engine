@@ -9,7 +9,6 @@
 #include "Application/Inspect/Controls/InspectLabel.h"
 #include "Application/Inspect/Controls/InspectCheckBox.h"
 #include "Application/Inspect/Controls/InspectColorPicker.h"
-#include "Application/Inspect/Controls/InspectItems.h"
 #include "Application/Inspect/Controls/InspectList.h"
 #include "Application/Inspect/Controls/InspectSlider.h"
 

@@ -1,119 +1,104 @@
 #pragma once
 
 #include "Application/API.h"
-#include "Application/Inspect/Controls/InspectItems.h"
-
-#ifdef INSPECT_REFACTOR
+#include "Application/Inspect/Controls/InspectControl.h"
 
 namespace Helium
 {
     namespace Inspect
     {
-        //
-        // Event delegates
-        //
+        const static tchar CHOICE_ATTR_ENUM[]      = TXT( "enum" );
+        const static tchar CHOICE_ATTR_SORTED[]    = TXT( "sorted" );
+        const static tchar CHOICE_ATTR_DROPDOWN[]  = TXT( "dropdown" );
+        const static tchar CHOICE_ATTR_ITEM[]      = TXT( "item" );
+        const static tchar CHOICE_ATTR_ITEM_DELIM  = TXT( '|' );
+        const static tchar CHOICE_ATTR_PREFIX[]    = TXT( "prefix" );
 
-        class APPLICATION_API Choice;
+        class Choice;
 
-        // the delegate for populating items
         struct ChoiceArgs
         {
-            Choice* m_Choice;
-
             ChoiceArgs(Choice* choice)
                 : m_Choice (choice)
             {
 
             }
+
+            Choice* m_Choice;
         };
         typedef Helium::Signature<void, const ChoiceArgs&> ChoiceSignature;
 
-        // the delegate for connecting an enumerated type's values
         struct ChoiceEnumerateArgs : public ChoiceArgs
         {
-            tstring m_Enumeration;
-
             ChoiceEnumerateArgs(Choice* choice, const tstring& enumeration)
                 : ChoiceArgs (choice)
                 , m_Enumeration (enumeration)
             {
 
             }
+
+            tstring m_Enumeration;
         };
         typedef Helium::Signature<void, const ChoiceEnumerateArgs&> ChoiceEnumerateSignature;
 
-
-        //
-        // Choice control (base class for comboboxes and listboxes)
-        //
-
-        const static tchar CHOICE_ATTR_ENUM[]      = TXT( "enum" );
-        const static tchar CHOICE_ATTR_SORTED[]    = TXT( "sorted" );
-        const static tchar CHOICE_ATTR_DROPDOWN[]  = TXT( "dropdown" );
-
-        class APPLICATION_API Choice : public Reflect::ConcreteInheritor<Choice, Items>
+        struct ChoiceItem
         {
-        protected:
-            tstring m_Enum;
-            bool m_Sorted;
-            bool m_DropDown;
-            bool m_EnableAdds; 
+            ChoiceItem(const tstring& key = TXT(""), const tstring& data = TXT(""))
+                : m_Key( key )
+                , m_Data( data )
+            {
 
+            }
+
+            bool operator==( const ChoiceItem& rhs ) const
+            {
+                return rhs.m_Key == m_Key && rhs.m_Data == m_Data;
+            }
+
+            bool operator!=( const ChoiceItem& rhs ) const
+            {
+                return !operator==( rhs );
+            }
+
+            tstring m_Key;
+            tstring m_Data;
+        };
+        typedef std::vector<ChoiceItem> V_ChoiceItem;
+
+        class APPLICATION_API Choice : public Reflect::ConcreteInheritor<Choice, Control>
+        {
         public:
             Choice();
 
-        protected:
             virtual bool Process(const tstring& key, const tstring& value) HELIUM_OVERRIDE;
-
-            virtual void SetOverride(bool isOverride);
-
             virtual void SetDefaultAppearance(bool def) HELIUM_OVERRIDE;
-
             void SetToDefault(const ContextMenuEventArgs& event);
 
-        public:
-            virtual void SetSorted(bool sorted);
-            virtual void SetDropDown(bool dropDown);
-            virtual void SetEnableAdds(bool enabled); 
+            const tstring& GetPrefix()
+            {
+                return m_Prefix;
+            }
 
-            virtual tstring GetValue() HELIUM_OVERRIDE;
-            virtual void SetValue(const tstring& data) HELIUM_OVERRIDE;
-
-            virtual void Realize(Container* parent) HELIUM_OVERRIDE;
+            bool Contains(const tstring& data);
+            void Clear();
 
             virtual void Populate() HELIUM_OVERRIDE;
 
-            virtual void Read() HELIUM_OVERRIDE;
+            Attribute<bool>             a_Highlight;
+            Attribute<bool>             a_Sorted;
+            Attribute<bool>             a_DropDown;
+            Attribute<bool>             a_EnableAdds;
+            Attribute<V_ChoiceItem>     a_Items;
 
-            virtual bool Write() HELIUM_OVERRIDE;
+            ChoiceSignature::Event              e_Populate;
+            ChoiceEnumerateSignature::Event     e_Enumerate;
 
-        protected:
-            ChoiceSignature::Event m_Populate;
-        public:
-            void AddPopulateListener(const ChoiceSignature::Delegate& listener)
-            {
-                m_Populate.Add(listener);
-            }
-            void RemovePopulateListener(const ChoiceSignature::Delegate& listener)
-            {
-                m_Populate.Remove(listener);
-            }
-
-        protected:
-            ChoiceEnumerateSignature::Event m_Enumerate;
-        public:
-            void AddEnumerateListener(const ChoiceEnumerateSignature::Delegate& listener)
-            {
-                m_Enumerate.Add(listener);
-            }
-            void RemoveEnumerateListener(const ChoiceEnumerateSignature::Delegate& listener)
-            {
-                m_Enumerate.Remove(listener);
-            }
+        private:
+            tstring             m_Enum;
+            tstring             m_Prefix;
+            V_ChoiceItem        m_Statics;
         };
 
         typedef Helium::SmartPtr<Choice> ChoicePtr;
     }
 }
-
-#endif

@@ -229,7 +229,6 @@ bool App::OnInit()
     // vault
     m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::SearchTypes::SearchType>( &Editor::SearchTypes::SearchTypesEnumerateEnum, TXT( "SearchType" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClassType<SearchQuery>( TXT( "SearchQuery" ) ) );
-    //m_InitializerStack.Push( Reflect::RegisterClassType<SearchHistory>( TXT( "SearchHistory" ) ) );
 
     // settings
     m_InitializerStack.Push( Reflect::RegisterClassType< Core::SettingsManager >( TXT( "Core::SettingsManager" ) ) ); 

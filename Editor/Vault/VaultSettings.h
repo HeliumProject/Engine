@@ -1,7 +1,6 @@
 #pragma once
 
 #include "VaultMenuIDs.h"
-//#include "SearchHistory.h"
 #include "SearchQuery.h"
 
 #include "Foundation/TUID.h"
@@ -37,15 +36,12 @@ namespace Helium
             const tstring& GetDefaultFolderPath() const;
             void SetDefaultFolderPath( const tstring& path );
 
-            //SearchHistory* GetSearchHistory() { return m_SearchHistory; }
-
         private:
             WindowSettingsPtr     m_WindowSettings;
             tstring               m_DefaultFolder;
             ViewOptionID          m_ThumbnailMode;
             u32                   m_ThumbnailSize;
             bool                  m_DisplayPreviewAxis;
-            //SearchHistoryPtr      m_SearchHistory;
 
         public:
             static void EnumerateClass( Reflect::Compositor< VaultSettings >& comp )
@@ -60,7 +56,6 @@ namespace Helium
                 }
 
                 comp.AddField( &VaultSettings::m_DisplayPreviewAxis, "m_DisplayPreviewAxis" );
-                //comp.AddField( &VaultSettings::m_SearchHistory, "m_SearchHistory", Reflect::FieldFlags::Hide | Reflect::FieldFlags::Share );
             }
         };
 

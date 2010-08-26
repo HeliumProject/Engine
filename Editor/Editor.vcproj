@@ -767,14 +767,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Vault\SearchHistory.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\SearchHistory.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Vault\SearchQuery.cpp"
 				>
 			</File>

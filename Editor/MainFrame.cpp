@@ -839,9 +839,6 @@ void MainFrame::ShowVaultPanel( const tstring& queryString )
     //    // Create the one and only VaultSearch
     //    m_VaultSearch = new VaultSearch();
 
-    //    //m_SearchHistory = wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >()->GetSearchHistory();
-    //    //m_SearchHistory->SetVaultSearch( m_VaultSearch );
-
     //    m_VaultPanel = new VaultPanel( this, m_VaultSearch );
 
     //}
@@ -855,7 +852,6 @@ void MainFrame::ShowVaultPanel( const tstring& queryString )
     //}
     //else
     //{
-    //    //if ( !m_SearchHistory->RunCurrentQuery() )
     //    {
     //        m_VaultPanel->Search( wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >()->GetDefaultFolderPath() );
     //    }

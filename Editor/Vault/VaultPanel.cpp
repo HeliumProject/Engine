@@ -37,7 +37,6 @@ void VaultPanel::Search( const tstring& queryString )
         return;
     }
 
-    //m_SearchHistory->RunNewQuery( queryString );
     // parse the query string
     SearchQueryPtr query = new SearchQuery();
     query->SetQueryString( queryString );

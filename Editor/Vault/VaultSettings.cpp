@@ -13,7 +13,6 @@ VaultSettings::VaultSettings( const tstring& defaultFolder, ViewOptionID thumbna
  , m_ThumbnailMode( thumbnailMode )
  , m_ThumbnailSize( thumbnailSize )
  , m_DisplayPreviewAxis( false )
- //, m_SearchHistory( new SearchHistory() )
 {
   Helium::Path::Normalize( m_DefaultFolder );
   Helium::Path::GuaranteeSeparator( m_DefaultFolder );

@@ -1778,6 +1778,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Inspect\Widgets\ColorPicker.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\ColorPicker.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Inspect\Widgets\Label.cpp"
 					>
 				</File>

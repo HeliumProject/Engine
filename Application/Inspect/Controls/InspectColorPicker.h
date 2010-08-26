@@ -7,44 +7,27 @@
 #include "Application/API.h"
 #include "Application/Inspect/Controls/InspectControl.h"
 
-#ifdef INSPECT_REFACTOR
-
 namespace Helium
 {
     namespace Inspect
     {
-        ///////////////////////////////////////////////////////////////////////////
-        // 
-        // 
-        class APPLICATION_API ColorPicker : public Reflect::ConcreteInheritor<ColorPicker, Control>
+        class APPLICATION_API ColorPicker : public Reflect::ConcreteInheritor< ColorPicker, Control >
         {
-        private:
-            Math::Color3 m_Color3;
-            Math::Color4 m_Color4;
-
-            bool m_Alpha;
-
         public:
             ColorPicker();
-            virtual ~ColorPicker()
-            {
-            }
 
-            virtual void Realize( Container* parent ) HELIUM_OVERRIDE;
-            virtual void Read() HELIUM_OVERRIDE;
-            virtual bool Write() HELIUM_OVERRIDE;
+        protected:
+            virtual void SetDefaultAppearance( bool def ) HELIUM_OVERRIDE;
+            void SetToDefault( const ContextMenuEventArgs& event );
 
-            void UseAlpha( bool alpha );
+        public:
+            Attribute< bool >             a_Highlight;
 
-            void SetColor3( const Math::Color3& color );
-            const Math::Color3& GetColor3() const;
-
-            void SetColor4( const Math::Color4& color );
-            const Math::Color4& GetColor4() const;
+            Attribute< bool >             a_Alpha;
+            Attribute< Math::Color3 >     a_Color3;
+            Attribute< Math::Color4 >     a_Color4;
         };
 
-        typedef Helium::SmartPtr<ColorPicker> ColorPickerPtr;
+        typedef Helium::SmartPtr< ColorPicker > ColorPickerPtr;
     }
 }
-
-#endif

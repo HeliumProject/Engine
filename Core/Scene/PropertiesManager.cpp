@@ -380,7 +380,7 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
       }
 
       // if you hit then, then your custom panel creator needs work
-      Inspect::ST_Container& containerStack = m_Generator->GetCurrentContainerStack();
+      Inspect::std::stack< ContainerPtr >& containerStack = m_Generator->GetCurrentContainerStack();
       HELIUM_ASSERT(containerStack.empty());
     }
   }

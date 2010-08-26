@@ -1,6 +1,6 @@
 #include "TreeCanvasCtrl.h"
 
-#include "Application/Inspect/Controls/InspectPanel.h"
+#include "Application/Inspect/Controls/InspectContainer.h"
 
 using namespace Helium;
 using namespace Helium::Inspect;

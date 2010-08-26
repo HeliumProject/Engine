@@ -5,7 +5,7 @@
 #include "Application/Inspect/Controls/InspectButton.h"
 #include "Application/Inspect/Controls/InspectValue.h"
 #include "Application/Inspect/Controls/InspectList.h"
-#include "Application/Inspect/Controls/InspectPanel.h"
+#include "Application/Inspect/Controls/InspectContainer.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;

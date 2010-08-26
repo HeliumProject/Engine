@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Application/API.h"
+#include "Platform/Thread.h"
 
+#include "Application/API.h"
 #include "Application/Inspect/InspectData.h"
 #include "Application/Inspect/InspectControls.h"
-#include "Platform/Mutex.h"
 
 namespace Helium
 {
@@ -63,8 +63,30 @@ namespace Helium
         //  to provide very basic API at a later date.
         //
 
-        typedef std::stack< ContainerPtr > ST_Container;
-        typedef std::map< u32, ST_Container > M_U32ContainerStack;
+        class ContainerStackPointer : public ThreadLocalPointer
+        {
+        public:
+            ContainerStackPointer()
+            {
+                SetPointer( new std::stack< ContainerPtr > );
+            }
+
+            ~ContainerStackPointer()
+            {
+                std::stack< ContainerPtr >* stack = (std::stack< ContainerPtr >*)this;
+                delete stack;
+            }                
+
+            operator std::stack< ContainerPtr >*()
+            {
+                return (std::stack< ContainerPtr >*)GetPointer();
+            }
+
+            std::stack< ContainerPtr >* operator->()
+            {
+                return (std::stack< ContainerPtr >*)GetPointer();
+            }
+        };
 
         class APPLICATION_API Interpreter HELIUM_ABSTRACT : public Reflect::Object
         {
@@ -90,18 +112,20 @@ namespace Helium
 
             static void ConnectInterpreterEvents( Interpreter* parent, Interpreter* child )
             {
-                child->AddPropertyChangingListener( ChangingSignature::Delegate (parent, &Interpreter::RaisePropertyChanging) );
-                child->AddPropertyChangedListener( ChangedSignature::Delegate (parent, &Interpreter::RaisePropertyChanged) );
-                child->AddPopulateLinkListener( PopulateLinkSignature::Delegate (parent, &Interpreter::RaisePopulateLink) );
-                child->AddSelectLinkListener( SelectLinkSignature::Delegate (parent, &Interpreter::RaiseSelectLink) );
-                child->AddPickLinkListener( PickLinkSignature::Delegate (parent, &Interpreter::RaisePickLink) );
+#if INSPECT_REFACTOR
+                child->PropertyChanging().AddMethod( &parent->PropertyChanging(), &ControlChangingSignature::Event::Raise );
+                child->PropertyChanged().AddMethod( &parent->PropertyChanged(), &ControlChangingSignature::Event::Raise );
+                child->PopulateLink().AddMethod( &parent->PopulateLink(), &PopulateLinkSignature::Event::Raise );
+                child->SelectLink().AddMethod( &parent->SelectLink(), &SelectLinkSignature::Event::Raise );
+                child->PickLink().AddMethod( &parent->PickLink(), &SelectLinkSignature::Event::Raise );
+#endif
             }
 
             //
             // Panel/container state management
             //
 
-            ST_Container& GetCurrentContainerStack();
+            std::stack< ContainerPtr >& GetCurrentContainerStack();
 
             Container* GetContainer()
             {
@@ -111,7 +135,7 @@ namespace Helium
             void Add(Control* control);
             void Push(Container* container);
 
-            Container* PushContainer(const tstring& name, bool expanded = false);
+            Container* PushContainer( const tstring& name = TXT("") );
             Container* Pop( bool setParent = true );
             Container* Top();
 
@@ -126,7 +150,7 @@ namespace Helium
             {
                 CheckBoxPtr control = m_Container->GetCanvas()->Create<CheckBox>(this);
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
-                ST_Container& containerStack = GetCurrentContainerStack();
+                std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
                 containerStack.top()->AddChild(control);
                 return control;
             }
@@ -136,7 +160,7 @@ namespace Helium
             {
                 ValuePtr control = m_Container->GetCanvas()->Create<Value>(this);
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
-                ST_Container& containerStack = GetCurrentContainerStack();
+                std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
                 containerStack.top()->AddChild(control);
                 return control;
             }
@@ -146,7 +170,7 @@ namespace Helium
             {
                 ChoicePtr control = m_Container->GetCanvas()->Create<Choice>(this);
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
-                ST_Container& containerStack = GetCurrentContainerStack();
+                std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
                 containerStack.top()->AddChild(control);
                 return control;
             }
@@ -176,7 +200,7 @@ namespace Helium
             {
                 ListPtr control = m_Container->GetCanvas()->Create<List>(this);
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
-                ST_Container& containerStack = GetCurrentContainerStack();
+                std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
                 containerStack.top()->AddChild(control);
                 return control;
             }
@@ -186,7 +210,7 @@ namespace Helium
             {
                 SliderPtr control = m_Container->GetCanvas()->Create<Slider>(this);
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
-                ST_Container& containerStack = GetCurrentContainerStack();
+                std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
                 containerStack.top()->AddChild(control);
                 return control;
             }
@@ -196,7 +220,7 @@ namespace Helium
             {
                 ColorPickerPtr control = m_Container->GetCanvas()->Create<ColorPicker>(this);
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
-                ST_Container& containerStack = GetCurrentContainerStack();
+                std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
                 containerStack.top()->AddChild(control);
                 return control;
             }
@@ -206,12 +230,12 @@ namespace Helium
             //
 
         public:
-            ChangingSignature::Event& PropertyChanging() const
+            ControlChangingSignature::Event& PropertyChanging() const
             {
                 return m_PropertyChanging;
             }
 
-            ChangedSignature::Event& PropertyChanged() const
+            ControlChangedSignature::Event& PropertyChanged() const
             {
                 return m_PropertyChanged;
             }
@@ -238,16 +262,13 @@ namespace Helium
             Container* m_Container;
 
             // context for push/pop api
-            M_U32ContainerStack m_ContainerStack;
-
-            // prevent access to creating new container stacks
-            Helium::Mutex m_ContainerStackMutex;
+            ContainerStackPointer m_ContainerStack;
 
             // the changing event, emitted from Changing()
-            mutable ChangingSignature::Event m_PropertyChanging;
+            mutable ControlChangingSignature::Event m_PropertyChanging;
 
             // the changed event, emitted from Changed()
-            mutable ChangedSignature::Event m_PropertyChanged;
+            mutable ControlChangedSignature::Event m_PropertyChanged;
 
             // the find event, handlers should seek and select the contents
             mutable PopulateLinkSignature::Event m_PopulateLink;

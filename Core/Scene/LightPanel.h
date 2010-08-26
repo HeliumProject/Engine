@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Application/Inspect/Controls/InspectPanel.h"
+#include "Application/Inspect/Controls/InspectContainer.h"
 #include "Application/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 #include "Core/Scene/PropertiesGenerator.h"
 

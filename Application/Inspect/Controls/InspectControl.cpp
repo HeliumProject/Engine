@@ -133,7 +133,9 @@ void Control::Realize(Container* parent)
 {
     PROFILE_SCOPE_ACCUM( g_RealizeAccumulator );
 
+#if 0
     m_Canvas->RealizeControl( this, parent );
+#endif
     m_IsRealized = true;
     m_Parent = parent;
 

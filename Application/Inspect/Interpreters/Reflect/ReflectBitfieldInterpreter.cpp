@@ -2,7 +2,7 @@
 #include "ReflectBitfieldCheckBox.h"
 
 #include "Application/Inspect/Controls/InspectLabel.h"
-#include "Application/Inspect/Controls/InspectPanel.h"
+#include "Application/Inspect/Controls/InspectContainer.h"
 #include "Application/Inspect/InspectData.h"
 
 #include "Foundation/Reflect/Field.h"

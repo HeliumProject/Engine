@@ -2,12 +2,8 @@
 #include "Application/UI/CustomColors.h"
 #include "Application/UI/SimpleConfig.h"
 
-// Using
 using namespace Helium;
 
-///////////////////////////////////////////////////////////////////////////////
-// Constructor
-// 
 ColorPicker::ColorPicker( wxWindow* parent, wxWindowID id, const wxColour& col, const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator, const wxString& name )
 : wxColourPickerCtrl( parent, id, col, pos, size, style, validator, name )
 , m_AutoSaveCustomColors( false )
@@ -19,9 +15,6 @@ ColorPicker::ColorPicker( wxWindow* parent, wxWindowID id, const wxColour& col, 
   }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Destructor
-// 
 ColorPicker::~ColorPicker()
 {
   wxGenericColourButton* picker = wxDynamicCast( GetPickerCtrl(), wxGenericColourButton );

@@ -8,7 +8,6 @@
 #include "Application/Inspect/Controls/InspectValue.h"
 #include "Application/Inspect/Controls/InspectList.h"
 
-// Using
 using namespace Helium;
 using namespace Helium::Reflect;
 using namespace Helium::Inspect;
@@ -50,7 +49,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
 
       const EnumerationField* enumInfo = static_cast<const EnumerationField*>(field);
 
-      V_Item items;
+      std::vector< ChoiceItem > items;
       items.resize( enumInfo->m_Enumeration->m_Elements.size() );
 
       V_EnumerationElement::const_iterator itr = enumInfo->m_Enumeration->m_Elements.begin();

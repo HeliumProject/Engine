@@ -196,7 +196,7 @@ namespace Helium
             {
                 Choice* control = AddChoice<T>( property );
 
-                V_Item items;
+                std::vector< ChoiceItem > items;
                 Reflect::V_EnumerationElement::const_iterator itr = enumInfo->m_Elements.begin();
                 Reflect::V_EnumerationElement::const_iterator end = enumInfo->m_Elements.end();
                 for ( ; itr != end; ++itr )

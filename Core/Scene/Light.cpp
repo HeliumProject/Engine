@@ -216,24 +216,24 @@ void Light::CreatePanel( CreatePanelArgs& args )
             Inspect::Choice* choice = args.m_Generator->AddChoice<Core::Light, int>(args.m_Selection, &Light::GetRenderType, &Light::SetRenderType);
             choice->SetDropDown( true );
 
-            Inspect::V_Item items;
+            std::vector< Inspect::ChoiceItem > items;
             {
                 {
                     tostringstream str;
                     str << Content::LightRenderTypes::Baked;
-                    items.push_back( Inspect::Item( TXT( "Baked" ), str.str() ) );
+                    items.push_back( Inspect::ChoiceItem( TXT( "Baked" ), str.str() ) );
                 }
 
                 {
                     tostringstream str;
                     str << Content::LightRenderTypes::RealTime;
-                    items.push_back( Inspect::Item( TXT( "RealTime" ), str.str() ) );
+                    items.push_back( Inspect::ChoiceItem( TXT( "RealTime" ), str.str() ) );
                 }
 
                 {
                     tostringstream str;
                     str << Content::LightRenderTypes::LightmapOnly;
-                    items.push_back( Inspect::Item( TXT( "LightmapOnly" ), str.str() ) );
+                    items.push_back( Inspect::ChoiceItem( TXT( "LightmapOnly" ), str.str() ) );
                 }
             }
             choice->SetItems( items );
@@ -246,24 +246,24 @@ void Light::CreatePanel( CreatePanelArgs& args )
             Inspect::Choice* choice = args.m_Generator->AddChoice<Core::Light, int>(args.m_Selection, &Light::GetLensFlareType, &Light::SetLensFlareType);
             choice->SetDropDown( true );
 
-            Inspect::V_Item items;
+            std::vector< Inspect::ChoiceItem > items;
             {
                 {
                     tostringstream str;
                     str << Content::LensFlareTypes::Disabled;
-                    items.push_back( Inspect::Item( TXT( "Disabled" ), str.str() ) );
+                    items.push_back( Inspect::ChoiceItem( TXT( "Disabled" ), str.str() ) );
                 }
 
                 {
                     tostringstream str;
                     str << Content::LensFlareTypes::Vortex;
-                    items.push_back( Inspect::Item( TXT( "Vortex" ), str.str() ) );
+                    items.push_back( Inspect::ChoiceItem( TXT( "Vortex" ), str.str() ) );
                 }
 
                 {
                     tostringstream str;
                     str << Content::LensFlareTypes::VortexNoTrail;
-                    items.push_back( Inspect::Item( TXT( "Vortex No Trail" ), str.str() ) );
+                    items.push_back( Inspect::ChoiceItem( TXT( "Vortex No Trail" ), str.str() ) );
                 }
             }
             choice->SetItems( items );

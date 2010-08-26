@@ -77,18 +77,18 @@ void LocatorCreateTool::CreateProperties()
 
       Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::LocatorCreateTool, int>(this, &LocatorCreateTool::GetLocatorShape, &LocatorCreateTool::SetLocatorShape) );
       choice->SetDropDown( true );
-      Inspect::V_Item items;
+      std::vector< Inspect::ChoiceItem > items;
 
       {
         tostringstream str;
         str << Content::LocatorShapes::Cross;
-        items.push_back( Inspect::Item( TXT( "Cross" ), str.str() ) );
+        items.push_back( Inspect::ChoiceItem( TXT( "Cross" ), str.str() ) );
       }
 
       {
         tostringstream str;
         str << Content::LocatorShapes::Cube;
-        items.push_back( Inspect::Item( TXT( "Cube" ), str.str() ) );
+        items.push_back( Inspect::ChoiceItem( TXT( "Cube" ), str.str() ) );
       }
 
       choice->SetItems( items );

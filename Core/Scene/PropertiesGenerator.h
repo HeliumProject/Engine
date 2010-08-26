@@ -229,14 +229,14 @@ namespace Helium
             {
                 Inspect::ChoicePtr control = AddChoice<T, D, G, S>( selection, getter, setter );
 
-                Inspect::V_Item items;
+                std::vector< Inspect::ChoiceItem > items;
                 Reflect::V_EnumerationElement::const_iterator itr = enumInfo->m_Elements.begin();
                 Reflect::V_EnumerationElement::const_iterator end = enumInfo->m_Elements.end();
                 for ( ; itr != end; ++itr )
                 {
                     tostringstream str;
                     str << (*itr)->m_Value;
-                    items.push_back( Inspect::Item ( (*itr)->m_Label, str.str() ) );
+                    items.push_back( Inspect::ChoiceItem ( (*itr)->m_Label, str.str() ) );
                 }
                 control->SetItems(items);
                 control->SetDropDown(true);

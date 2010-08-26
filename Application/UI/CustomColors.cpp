@@ -4,11 +4,8 @@
 
 #include <sstream>
 
-// Using
 using namespace Helium;
 
-// Statics
-// Delimiter between each color
 static const tstring s_ColorDelimiter = TXT( "#" );
 
 ///////////////////////////////////////////////////////////////////////////////

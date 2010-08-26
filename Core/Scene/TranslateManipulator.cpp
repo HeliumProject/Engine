@@ -1275,24 +1275,24 @@ void TranslateManipulator::CreateProperties()
             m_Generator->AddLabel( TXT( "Space" ) );
             Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::TranslateManipulator, int> (this, &TranslateManipulator::GetSpace, &TranslateManipulator::SetSpace) );
             choice->SetDropDown( true );
-            Inspect::V_Item items;
+            std::vector< Inspect::ChoiceItem > items;
 
             {
                 tostringstream str;
                 str << ManipulatorSpaces::Object;
-                items.push_back( Inspect::Item( TXT( "Object" ), str.str() ) );
+                items.push_back( Inspect::ChoiceItem( TXT( "Object" ), str.str() ) );
             }
 
             {
                 tostringstream str;
                 str << ManipulatorSpaces::Local;
-                items.push_back( Inspect::Item( TXT( "Local" ), str.str() ) );
+                items.push_back( Inspect::ChoiceItem( TXT( "Local" ), str.str() ) );
             }
 
             {
                 tostringstream str;
                 str << ManipulatorSpaces::World;
-                items.push_back( Inspect::Item( TXT( "World" ), str.str() ) );
+                items.push_back( Inspect::ChoiceItem( TXT( "World" ), str.str() ) );
             }
 
             choice->SetItems( items );

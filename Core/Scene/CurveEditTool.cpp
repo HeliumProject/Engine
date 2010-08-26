@@ -384,24 +384,24 @@ void CurveEditTool::CreateProperties()
       m_Generator->AddLabel( TXT( "Edit Control Points" ) );
       Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::CurveEditTool, int> (this, &CurveEditTool::GetCurveEditMode, &CurveEditTool::SetCurveEditMode ) );
       choice->SetDropDown( true );
-      Inspect::V_Item items;
+      std::vector< Inspect::ChoiceItem > items;
 
       {
         tostringstream str;
         str << CurveEditModes::Modify;
-        items.push_back( Inspect::Item( TXT( "Modify Points" ), str.str() ) );
+        items.push_back( Inspect::ChoiceItem( TXT( "Modify Points" ), str.str() ) );
       }
 
       {
         tostringstream str;
         str << CurveEditModes::Insert;
-        items.push_back( Inspect::Item( TXT( "Insert Points" ), str.str() ) );
+        items.push_back( Inspect::ChoiceItem( TXT( "Insert Points" ), str.str() ) );
       }
 
       {
         tostringstream str;
         str << CurveEditModes::Remove;
-        items.push_back( Inspect::Item( TXT( "Remove Points" ), str.str() ) );
+        items.push_back( Inspect::ChoiceItem( TXT( "Remove Points" ), str.str() ) );
       }
       choice->SetItems( items );
     }

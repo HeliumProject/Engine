@@ -279,18 +279,18 @@ void CurveCreateTool::CreateProperties()
       m_Generator->AddLabel( TXT( "Plane Snap" ) );
       Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::CurveCreateTool, int> (this, &CurveCreateTool::GetPlaneSnap, &CurveCreateTool::SetPlaneSnap) );
       choice->SetDropDown( true );
-      Inspect::V_Item items;
+      std::vector< Inspect::ChoiceItem > items;
 
       {
         tostringstream str;
         str << IntersectionPlanes::Viewport;
-        items.push_back( Inspect::Item( TXT( "Viewport" ), str.str() ) );
+        items.push_back( Inspect::ChoiceItem( TXT( "Viewport" ), str.str() ) );
       }
 
       {
         tostringstream str;
         str << IntersectionPlanes::Ground;
-        items.push_back( Inspect::Item( TXT( "Ground" ), str.str() ) );
+        items.push_back( Inspect::ChoiceItem( TXT( "Ground" ), str.str() ) );
       }
 
       choice->SetItems( items );
@@ -302,24 +302,24 @@ void CurveCreateTool::CreateProperties()
       m_Generator->AddLabel( TXT( "Curve Type" ) );
       Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::CurveCreateTool, int> (this, &CurveCreateTool::GetCurveType, &CurveCreateTool::SetCurveType ) );
       choice->SetDropDown( true );
-      Inspect::V_Item items;
+      std::vector< Inspect::ChoiceItem > items;
 
       {
         tostringstream str;
         str << Content::CurveTypes::Linear;
-        items.push_back( Inspect::Item( TXT( "Linear" ), str.str() ) );
+        items.push_back( Inspect::ChoiceItem( TXT( "Linear" ), str.str() ) );
       }
 
       {
         tostringstream str;
         str << Content::CurveTypes::BSpline;
-        items.push_back( Inspect::Item( TXT( "BSpline" ), str.str() ) );
+        items.push_back( Inspect::ChoiceItem( TXT( "BSpline" ), str.str() ) );
       }
 
       {
         tostringstream str;
         str << Content::CurveTypes::CatmullRom;
-        items.push_back( Inspect::Item( TXT( "Catmull-Rom" ), str.str() ) );
+        items.push_back( Inspect::ChoiceItem( TXT( "Catmull-Rom" ), str.str() ) );
       }
 
       choice->SetItems( items );

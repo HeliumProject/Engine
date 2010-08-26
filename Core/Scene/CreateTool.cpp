@@ -742,18 +742,18 @@ void CreateTool::CreateProperties()
             m_Generator->AddLabel( TXT( "Plane Snap" ) );
             Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::CreateTool, int> (this, &CreateTool::GetPlaneSnap, &CreateTool::SetPlaneSnap) );
             choice->SetDropDown( true );
-            Inspect::V_Item items;
+            std::vector< Inspect::ChoiceItem > items;
 
             {
                 tostringstream str;
                 str << IntersectionPlanes::Viewport;
-                items.push_back( Inspect::Item( TXT( "Viewport" ), str.str() ) );
+                items.push_back( Inspect::ChoiceItem( TXT( "Viewport" ), str.str() ) );
             }
 
             {
                 tostringstream str;
                 str << IntersectionPlanes::Ground;
-                items.push_back( Inspect::Item( TXT( "Ground" ), str.str() ) );
+                items.push_back( Inspect::ChoiceItem( TXT( "Ground" ), str.str() ) );
             }
 
             choice->SetItems( items );
@@ -909,18 +909,18 @@ void CreateTool::CreateProperties()
 
                 Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::CreateTool, int> (this, &CreateTool::GetPaintPlacementStyle, &CreateTool::SetPaintPlacementStyle ) );
                 choice->SetDropDown( true );
-                Inspect::V_Item items;
+                std::vector< Inspect::ChoiceItem > items;
 
                 {
                     tostringstream str;
                     str << PlacementStyles::Grid;
-                    items.push_back( Inspect::Item( TXT( "Grid" ), str.str() ) );
+                    items.push_back( Inspect::ChoiceItem( TXT( "Grid" ), str.str() ) );
                 }
 
                 {
                     tostringstream str;
                     str << PlacementStyles::Radial;
-                    items.push_back( Inspect::Item( TXT( "Radial" ), str.str() ) );
+                    items.push_back( Inspect::ChoiceItem( TXT( "Radial" ), str.str() ) );
                 }
 
                 choice->SetItems( items );
@@ -933,30 +933,30 @@ void CreateTool::CreateProperties()
 
                 Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::CreateTool, int> (this, &CreateTool::GetPaintDistributionStyle, &CreateTool::SetPaintDistributionStyle ) );
                 choice->SetDropDown( true );
-                Inspect::V_Item items;
+                std::vector< Inspect::ChoiceItem > items;
 
                 {
                     tostringstream str;
                     str << DistributionStyles::Constant;
-                    items.push_back( Inspect::Item( TXT( "Constant" ), str.str() ) );
+                    items.push_back( Inspect::ChoiceItem( TXT( "Constant" ), str.str() ) );
                 }
 
                 {
                     tostringstream str;
                     str << DistributionStyles::Uniform;
-                    items.push_back( Inspect::Item( TXT( "Uniform" ), str.str() ) );
+                    items.push_back( Inspect::ChoiceItem( TXT( "Uniform" ), str.str() ) );
                 }
 
                 {
                     tostringstream str;
                     str << DistributionStyles::Linear;
-                    items.push_back( Inspect::Item( TXT( "Linear" ), str.str() ) );
+                    items.push_back( Inspect::ChoiceItem( TXT( "Linear" ), str.str() ) );
                 }
 
                 {
                     tostringstream str;
                     str << DistributionStyles::Normal;
-                    items.push_back( Inspect::Item( TXT( "Normal" ), str.str() ) );
+                    items.push_back( Inspect::ChoiceItem( TXT( "Normal" ), str.str() ) );
                 }
 
                 choice->SetItems( items );

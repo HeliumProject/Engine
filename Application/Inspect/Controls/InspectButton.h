@@ -1,44 +1,61 @@
 #pragma once
 
+#include "Foundation/Reflect/Class.h"
+
 #include "Application/API.h"
 #include "Application/Inspect/Controls/InspectControl.h"
-
-#ifdef INSPECT_REFACTOR
 
 namespace Helium
 {
     namespace Inspect
     {
         const static tchar BUTTON_ATTR_TEXT[] = TXT( "text" );
+        const static tchar BUTTON_ATTR_ICON[] = TXT( "icon" );
 
-        ///////////////////////////////////////////////////////////////////////////
-        // 
-        // 
-        class APPLICATION_API Button : public Reflect::ConcreteInheritor<Button, Control>
+        class Button;
+
+        struct ButtonClickedArgs
         {
-        protected:
-            // Label on the button
-            tstring m_Text;
+            ButtonClickedArgs( Button* control )
+                : m_Control( control )
+            {
+            }
 
-            // Icon for the button
-            wxArtID m_Icon;
+            Button* m_Control;
+        };
+        typedef Helium::Signature< void, const ButtonClickedArgs& > ButtonClickedSignature;
 
+        class APPLICATION_API Button : public Reflect::ConcreteInheritor< Button, Control >
+        {
         public:
             Button();
+
+            ButtonClickedSignature::Event& ButtonClickedEvent()
+            {
+                return m_ButtonClickedEvent;
+            }
+
+            virtual bool Write() HELIUM_OVERRIDE
+            {
+                m_ButtonClickedEvent.Raise( ButtonClickedArgs( this ) );
+                return true;
+            }
 
         protected:
             virtual bool Process( const tstring& key, const tstring& value );
 
         public:
-            virtual void Realize( Container* parent );
-            virtual bool Write();
+            // Label on the button
+            Attribute< tstring > a_Label;
 
-            virtual void SetText( const tstring& text );
-            virtual void SetIcon( const wxArtID& icon );
+            // Icon for the button
+            Attribute< tstring > a_Icon;
+
+        protected:
+            ButtonClickedSignature::Event m_ButtonClickedEvent;
+
         };
 
-        typedef Helium::SmartPtr<Button> ButtonPtr;
+        typedef Helium::SmartPtr< Button > ButtonPtr;
     }
 }
-
-#endif

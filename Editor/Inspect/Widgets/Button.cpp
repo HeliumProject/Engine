@@ -25,10 +25,10 @@ ButtonWindow::ButtonWindow( wxWindow* parent, ButtonWidget* buttonWidget )
         SetLabel( buttonControl->a_Label.Get().c_str() );
     }
 
-    SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
-    wxSizer* sizer = GetSizer();
-    sizer->Add( m_Button, 0, wxALIGN_CENTER_VERTICAL );
-    sizer->Add( 1, 0, 1, wxEXPAND );
+    m_Sizer = new wxBoxSizer( wxHORIZONTAL );
+    SetSizer( m_Sizer );
+    m_Sizer->Add( m_Button, 0, wxALIGN_CENTER_VERTICAL );
+    m_Sizer->Add( 1, 0, 1, wxEXPAND );
 
     Connect( wxID_ANY, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ButtonWindow::OnClicked ) );
 
@@ -42,28 +42,36 @@ void ButtonWindow::OnClicked( wxCommandEvent& )
 
 void ButtonWindow::SetIcon( const tstring& icon )
 {
-    if ( m_Button )
-    {
-        m_Button->Destroy();
-        m_Button = NULL;
-    }
+    HELIUM_ASSERT( m_Sizer );
+    HELIUM_ASSERT( m_Button );
+
+    m_Sizer->Detach( m_Button );
+    m_Button->Destroy();
+    m_Button = NULL;
 
     Inspect::Button* buttonControl = Reflect::ObjectCast< Inspect::Button >( m_ButtonWidget->GetControl() );
     HELIUM_ASSERT( buttonControl );
     m_Button = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetIcon( (wxArtID)buttonControl->a_Icon.Get().c_str() ) );
+
+    m_Sizer->Insert( 0, m_Button, 0, wxALIGN_CENTER_VERTICAL );
+    Layout();
 }
 
 void ButtonWindow::SetLabel( const tstring& label )
 {
-    if ( m_Button )
-    {
-        m_Button->Destroy();
-        m_Button = NULL;
-    }
+    HELIUM_ASSERT( m_Sizer );
+    HELIUM_ASSERT( m_Button );
+
+    m_Sizer->Detach( m_Button );
+    m_Button->Destroy();
+    m_Button = NULL;
 
     Inspect::Button* buttonControl = Reflect::ObjectCast< Inspect::Button >( m_ButtonWidget->GetControl() );
     HELIUM_ASSERT( buttonControl );
     m_Button = new wxButton( this, wxID_ANY, buttonControl->a_Label.Get().c_str() );
+
+    m_Sizer->Insert( 0, m_Button, 0, wxALIGN_CENTER_VERTICAL );
+    Layout();
 }
 
 ButtonWidget::ButtonWidget( Inspect::Button* control )

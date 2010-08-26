@@ -19,6 +19,7 @@ namespace Helium
             void SetLabel( const tstring& icon );
 
         private:
+            wxSizer*      m_Sizer;
             wxButton*     m_Button;
             ButtonWidget* m_ButtonWidget;
         };

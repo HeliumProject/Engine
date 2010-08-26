@@ -35,15 +35,13 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
 
   const EnumerationField* enumField = static_cast< const EnumerationField* >( field );
 
-  // create the panel
-  PanelPtr panel = m_Container->GetCanvas()->Create<Panel>(this);
+  // create the container
+  ContainerPtr container = new Container ();
   
   tstring temp;
   bool converted = Helium::ConvertString( field->m_UIName, temp );
-  panel->SetText( temp );
-
-  panel->SetExpanded( true );
-  parent->AddChild(panel);
+  container->SetText( temp );
+  parent->AddChild(container);
 
   // build the child gui elements
   bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;
@@ -52,7 +50,7 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
   for ( ; enumItr != enumEnd; ++enumItr )
   {
     ContainerPtr row = m_Container->GetCanvas()->Create<Container>( this );
-    panel->AddChild( row );
+    container->AddChild( row );
 
     LabelPtr label = m_Container->GetCanvas()->Create<Label>( this );
     row->AddChild( label );
@@ -60,7 +58,7 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
     tstring temp;
     bool converted = Helium::ConvertString( enumItr->first, temp );
     HELIUM_ASSERT( converted );
-    label->SetText( temp );
+    label->BindText( temp );
 
     BitfieldCheckBoxPtr checkbox = m_Container->GetCanvas()->Create<ReflectBitfieldCheckBox>( this );
     row->AddChild( checkbox );
@@ -82,13 +80,13 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
   }
 
   // bind the ui to the serializers
-  panel->Bind( new MultiStringFormatter<Serializer>( (std::vector<Reflect::Serializer*>&)m_Serializers ) );
+  container->Bind( new MultiStringFormatter<Serializer>( (std::vector<Reflect::Serializer*>&)m_Serializers ) );
 
   // setup the default value
   if (field->m_Default != NULL)
   {
     tstringstream outStream;
     *field->m_Default >> outStream;
-    panel->SetDefault( outStream.str() );
+    container->SetDefault( outStream.str() );
   }
 }

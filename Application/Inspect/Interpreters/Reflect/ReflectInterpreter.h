@@ -20,8 +20,6 @@ namespace Helium
             void Interpret(const std::vector<Reflect::Element*>& instances, i32 includeFlags = 0xFFFFFFFF, i32 excludeFlags = 0x0, bool expandPanel = true);
             void InterpretType(const std::vector<Reflect::Element*>& instances, Container* parent, i32 includeFlags = 0xFFFFFFFF, i32 excludeFlags = 0x0, bool expandPanel = true);
 
-            typedef std::map< tstring, PanelPtr > M_Panel;
-
         private:
             std::vector<Reflect::Element*> m_Instances;
             std::vector<Reflect::SerializerPtr> m_Serializers;

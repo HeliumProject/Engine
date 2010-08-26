@@ -23,18 +23,18 @@ void ReflectVectorInterpreter::InterpretField(const Field* field, const std::vec
   }
 
   // create the container
-  ContainerPtr container = m_Container->GetCanvas()->Create<Container>(this);
+  ContainerPtr container = new Container ();
   parent->AddControl(container);
 
   // create the label
-  LabelPtr label = parent->GetCanvas()->Create<Label>( this );
+  LabelPtr label = new Label ();
   container->AddControl( label );
 
   tstring temp;
   bool converted = Helium::ConvertString( field->m_UIName, temp );
   HELIUM_ASSERT( converted );
 
-  label->SetText( temp );
+  label->BindText( temp );
 
   // compute dimensions
   int dimensions = 2;

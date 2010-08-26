@@ -28,7 +28,7 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
   bool converted = Helium::ConvertString( field->m_UIName, temp );
   HELIUM_ASSERT( converted );
 
-  label->SetText( temp );
+  label->BindText( temp );
 
   container->AddChild( label );
 

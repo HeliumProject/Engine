@@ -84,7 +84,7 @@ namespace Helium
             // the children controls
             V_Control m_Children;
 
-            // the path of the panel
+            // the path of the container
             mutable tstring m_Path;
         };
 

@@ -29,15 +29,15 @@ void ReflectSetInterpreter::InterpretField( const Reflect::Field* field, const s
     return;
   }
 
-  // create the panel
-  PanelPtr panel = m_Container->GetCanvas()->Create<Panel>( this );
-  parent->AddChild( panel );
+  // create the container
+  ContainerPtr container = m_Container->GetCanvas()->Create<Panel>( this );
+  parent->AddChild( container );
 
   tstring temp;
   bool converted = Helium::ConvertString( field->m_UIName, temp );
   HELIUM_ASSERT( converted );
 
-  panel->SetText( temp );
+  container->SetText( temp );
 
   // create the serializers
   std::vector< Reflect::Element* >::const_iterator itr = instances.begin();
@@ -52,7 +52,7 @@ void ReflectSetInterpreter::InterpretField( const Reflect::Field* field, const s
 
   // create the list
   ListPtr list = parent->GetCanvas()->Create<List>( this );
-  panel->AddChild( list );
+  container->AddChild( list );
 
   // bind the ui to the serialiers
   list->Bind( new MultiStringFormatter< Reflect::Serializer >( (std::vector<Reflect::Serializer*>&)m_Serializers ) );
@@ -61,7 +61,7 @@ void ReflectSetInterpreter::InterpretField( const Reflect::Field* field, const s
   if ( !( field->m_Flags & Reflect::FieldFlags::ReadOnly ) )
   {
     ContainerPtr buttonContainer = parent->GetCanvas()->Create<Container>( this );
-    panel->AddChild( buttonContainer );
+    container->AddChild( buttonContainer );
 
     ButtonPtr buttonAdd = parent->GetCanvas()->Create<Button>( this );
     buttonContainer->AddChild( buttonAdd );
@@ -76,10 +76,10 @@ void ReflectSetInterpreter::InterpretField( const Reflect::Field* field, const s
     buttonRemove->SetClientData( new ClientData( list ) );
   }
 
-  // for now let's just disable this panel if there is more than one item selected. I'm not sure if it will behave properly in this case.
+  // for now let's just disable this container if there is more than one item selected. I'm not sure if it will behave properly in this case.
   if ( instances.size() > 1 )
   {
-    panel->SetEnabled( false );
+    container->SetEnabled( false );
   }
 }
 

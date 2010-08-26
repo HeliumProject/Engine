@@ -5,7 +5,7 @@
 #include "Foundation/String/Tokenize.h"
 
 #include <wx/checkbox.h>
-#include <wx/panel.h>
+#include <wx/container.h>
 
 using namespace Helium::Reflect;
 using namespace Helium::Inspect;

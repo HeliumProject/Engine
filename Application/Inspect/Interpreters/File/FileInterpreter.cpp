@@ -40,8 +40,8 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
     std::vector< ContainerPtr > groups;
 
-    ContainerPtr group = m_Container->GetCanvas()->Create<Container>(this);
-    groups.push_back( group );
+    ContainerPtr container = new Container ();
+    groups.push_back( container );
 
     bool pathField = field->m_SerializerID == Reflect::GetType< PointerSerializer >() && field->m_Flags & FieldFlags::Path;
     bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;
@@ -56,18 +56,18 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
     //
     tstring fieldUI;
     field->GetProperty( TXT( "UIScript" ), fieldUI );
-    bool result = Script::Parse(fieldUI, this, parent->GetCanvas(), group, field->m_Flags);
+    bool result = Script::Parse(fieldUI, this, parent->GetCanvas(), container, field->m_Flags);
 
     if (!result)
     {
         if ( pathField || field->m_SerializerID == Reflect::GetType<StringSerializer>() )
         {
-            ContainerPtr valueGroup = m_Container->GetCanvas()->Create<Container>(this);
+            ContainerPtr valueContainer = new Container ();
             ValuePtr value = m_Container->GetCanvas()->Create<Value>(this);
             value->SetJustification( Value::kRight );
             value->SetReadOnly( readOnly );
-            valueGroup->AddChild( value );
-            groups.push_back( valueGroup );
+            valueContainer->AddChild( value );
+            groups.push_back( valueContainer );
 
             if ( pathField || field->m_Flags & FieldFlags::FilePath ) 
             {
@@ -84,7 +84,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
                     {
                         fileDialogButton->SetFilter( m_FileFilter );
                     }
-                    group->AddChild( fileDialogButton );
+                    container->AddChild( fileDialogButton );
 
                     // File search button
                     browserButton = m_Container->GetCanvas()->Create<FileBrowserButton>(this);
@@ -92,7 +92,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
                     {
                         browserButton->SetFilter( m_FileFilter );
                     }
-                    group->AddChild( browserButton );
+                    container->AddChild( browserButton );
 
 #ifdef INSPECT_REFACTOR
                     Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( m_FileFilter );
@@ -108,7 +108,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
                     ButtonPtr editButton = m_Container->GetCanvas()->Create<Button>(this);
                     editButton->ButtonClickedEvent().Add( ActionSignature::Delegate ( this, &FileInterpreter::Edit ) );
                     editButton->SetText( TXT( "Edit" ) );
-                    group->AddChild( editButton );
+                    container->AddChild( editButton );
                 }
             }
         }
@@ -116,7 +116,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
         {
             ValuePtr value = m_Container->GetCanvas()->Create<Value>( this );
             value->SetReadOnly( readOnly );
-            group->AddChild( value );
+            container->AddChild( value );
         }
     }
 
@@ -127,8 +127,8 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
     LabelPtr label = NULL;
 
     {
-        V_Control::const_iterator itr = group->GetChildren().begin();
-        V_Control::const_iterator end = group->GetChildren().end();
+        V_Control::const_iterator itr = container->GetChildren().begin();
+        V_Control::const_iterator end = container->GetChildren().end();
         for( ; itr != end; ++itr )
         {
             Label* label = Reflect::ObjectCast<Label>( *itr );
@@ -141,14 +141,14 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
     if (label == NULL)
     {
-        label = group->GetCanvas()->Create<Label>(this);
+        label = container->GetCanvas()->Create<Label>(this);
         tstring temp;
         bool converted = Helium::ConvertString( field->m_UIName, temp );
         HELIUM_ASSERT( converted );
 
-        label->SetText( temp );
+        label->BindText( temp );
 
-        group->InsertChild(0, label);
+        container->InsertChild(0, label);
     }
 
     //
@@ -209,7 +209,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
         tstring temp;
         bool converted = Helium::ConvertString( outStream.str().c_str(), temp );
         HELIUM_ASSERT( converted );
-        group->SetDefault( temp );
+        container->SetDefault( temp );
     }
 
     //

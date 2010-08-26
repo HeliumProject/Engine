@@ -47,14 +47,14 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
   bool isContainer = isArray || isSet;
 
   // create the label
-  ContainerPtr labelContainer = m_Container->GetCanvas()->Create<Container>(this);
+  ContainerPtr labelContainer = new Container ();
   parent->AddChild( labelContainer );
   LabelPtr label = labelContainer->GetCanvas()->Create<Label>(this);
   labelContainer->AddChild( label );
-  label->SetText( field->m_UIName );
+  label->BindText( field->m_UIName );
 
   // create the list view
-  ContainerPtr listContainer = m_Container->GetCanvas()->Create<Container>(this);
+  ContainerPtr listContainer = new Container ();
   parent->AddChild( listContainer );
   ListPtr list = m_Container->GetCanvas()->Create<List>(this);
   m_List = list;
@@ -123,32 +123,32 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
 #endif
   }
 
-  // add the buttons to the panel
-  ContainerPtr buttonGroup = m_Container->GetCanvas()->Create<Container>(this);
-  parent->AddChild( buttonGroup );
+  // add the buttons to the container
+  ContainerPtr buttonContainer = new Container ();
+  parent->AddChild( buttonContainer );
   if ( addButton )
   {
-    buttonGroup->AddChild( addButton );
+    buttonContainer->AddChild( addButton );
   }
   if ( findButton )
   {
-    buttonGroup->AddChild( findButton );
+    buttonContainer->AddChild( findButton );
   }
   if ( editButton )
   {
-    buttonGroup->AddChild( editButton );
+    buttonContainer->AddChild( editButton );
   }
   if ( removeButton )
   {
-    buttonGroup->AddChild( removeButton );
+    buttonContainer->AddChild( removeButton );
   }
   if ( upButton )
   {
-    buttonGroup->AddChild( upButton );
+    buttonContainer->AddChild( upButton );
   }
   if ( downButton )
   {
-    buttonGroup->AddChild( downButton );
+    buttonContainer->AddChild( downButton );
   }
 
   // create the serializers

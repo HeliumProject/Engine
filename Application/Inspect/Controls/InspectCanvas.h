@@ -31,16 +31,7 @@ namespace Helium
             Canvas();
             virtual ~Canvas();
 
-            // actual window control
-            void Layout()
-            {
-                Realize( NULL );
-            }
-
             virtual void RealizeControl(Control* control, Control* parent);
-
-            // Realize
-            virtual void Realize(Container* parent) HELIUM_OVERRIDE;
 
             // Metrics
             virtual int GetStdSize(Math::Axis axis)
@@ -55,10 +46,6 @@ namespace Helium
             {
                 return m_Pad;
             }
-
-            // Scrolling
-            virtual Math::Point GetScroll();
-            virtual void SetScroll(const Math::Point& scroll);
 
             //
             // Events

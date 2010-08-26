@@ -29,17 +29,17 @@ void ReflectArrayInterpreter::InterpretField(const Field* field, const std::vect
   }
 
   // create the label
-  ContainerPtr labelContainer = m_Container->GetCanvas()->Create<Container>(this);
+  ContainerPtr labelContainer = new Container ();
   parent->AddChild( labelContainer );
   LabelPtr label = labelContainer->GetCanvas()->Create<Label>(this);
   labelContainer->AddChild( label );
   tstring temp;
   bool converted = Helium::ConvertString( field->m_UIName, temp );
   HELIUM_ASSERT( converted );
-  label->SetText( temp );
+  label->BindText( temp );
 
   // create the list view
-  ContainerPtr listContainer = m_Container->GetCanvas()->Create<Container>(this);
+  ContainerPtr listContainer = new Container ();
   parent->AddChild( listContainer );
   ListPtr list = m_Container->GetCanvas()->Create<List>(this);
   listContainer->AddChild( list );
@@ -57,24 +57,24 @@ void ReflectArrayInterpreter::InterpretField(const Field* field, const std::vect
     downButton = AddMoveDownButton( list );
   }
 
-  // add the buttons to the panel
-  ContainerPtr buttonGroup = m_Container->GetCanvas()->Create<Container>(this);
-  parent->AddChild( buttonGroup );
+  // add the buttons to the container
+  ContainerPtr buttonContainer = new Container ();
+  parent->AddChild( buttonContainer );
   if ( addButton )
   {
-    buttonGroup->AddChild( addButton );
+    buttonContainer->AddChild( addButton );
   }
   if ( removeButton )
   {
-    buttonGroup->AddChild( removeButton );
+    buttonContainer->AddChild( removeButton );
   }
   if ( upButton )
   {
-    buttonGroup->AddChild( upButton );
+    buttonContainer->AddChild( upButton );
   }
   if ( downButton )
   {
-    buttonGroup->AddChild( downButton );
+    buttonContainer->AddChild( downButton );
   }
 
   // create the serializers

@@ -22,419 +22,398 @@ ReflectInterpreter::ReflectInterpreter (Container* container)
 #ifdef INSPECT_REFACTOR
 void ReflectInterpreter::Reset()
 {
-  // Clear out the controls that belong to this interpreter.
-  V_Control controlsToRemove;
-  V_Control::const_iterator itr = m_Container->GetChildren().begin();
-  V_Control::const_iterator end = m_Container->GetChildren().end();
-  for ( ; itr != end; ++itr )
-  {
-    Control* control = *itr;
-    if ( control->GetInterpreter() == this )
+    // Clear out the controls that belong to this interpreter.
+    V_Control controlsToRemove;
+    V_Control::const_iterator itr = m_Container->GetChildren().begin();
+    V_Control::const_iterator end = m_Container->GetChildren().end();
+    for ( ; itr != end; ++itr )
     {
-      controlsToRemove.push_back( control );
+        Control* control = *itr;
+        if ( control->GetInterpreter() == this )
+        {
+            controlsToRemove.push_back( control );
+        }
     }
-  }
 
-  V_Control::iterator removeItr = controlsToRemove.begin();
-  V_Control::iterator removeEnd = controlsToRemove.end();
-  for ( ; removeItr != removeEnd; ++removeItr )
-  {
-    m_Container->RemoveChild( *removeItr );
-  }
+    V_Control::iterator removeItr = controlsToRemove.begin();
+    V_Control::iterator removeEnd = controlsToRemove.end();
+    for ( ; removeItr != removeEnd; ++removeItr )
+    {
+        m_Container->RemoveChild( *removeItr );
+    }
 
-  m_Instances.clear();
-  m_Serializers.clear();
-  m_Interpreters.clear();
+    m_Instances.clear();
+    m_Serializers.clear();
+    m_Interpreters.clear();
 }
 #endif
 
 void ReflectInterpreter::Interpret(const std::vector<Reflect::Element*>& instances, i32 includeFlags, i32 excludeFlags, bool expandPanel)
 {
-  m_Instances = instances;
+    m_Instances = instances;
 
-  InterpretType(instances, m_Container, includeFlags, excludeFlags, expandPanel);
+    InterpretType(instances, m_Container, includeFlags, excludeFlags, expandPanel);
 }
 
 void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& instances, Container* parent, i32 includeFlags, i32 excludeFlags, bool expandPanel)
 {
-  const Class* typeInfo = instances[0]->GetClass();
-  
-  // create a panel
-  PanelPtr panel = m_Container->GetCanvas()->Create<Panel>(this);
+    const Class* typeInfo = instances[0]->GetClass();
 
-  // parse
-  ContainerPtr scriptOutput = m_Container->GetCanvas()->Create<Container>(this);
+    // create a container
+    ContainerPtr container = new Container ();
 
-  tstring typeInfoUI;
-  typeInfo->GetProperty( TXT( "UIScript" ), typeInfoUI );
-  bool result = Script::Parse(typeInfoUI, this, parent->GetCanvas(), scriptOutput);
+    // parse
+    ContainerPtr scriptOutput = new Container ();
 
-  // compute panel label
-  tstring labelText;
-  if (result)
-  {
-    V_Control::const_iterator itr = scriptOutput->GetChildren().begin();
-    V_Control::const_iterator end = scriptOutput->GetChildren().end();
-    for( ; itr != end; ++itr )
+    tstring typeInfoUI;
+    typeInfo->GetProperty( TXT( "UIScript" ), typeInfoUI );
+    bool result = Script::Parse(typeInfoUI, this, parent->GetCanvas(), scriptOutput);
+
+    // compute container label
+    tstring labelText;
+    if (result)
     {
-      Label* label = Reflect::ObjectCast<Label>( *itr );
-      if (label)
-      {
-          bool converted = Helium::ConvertString( label->GetText(), labelText );
-          HELIUM_ASSERT( converted );
-            
-        if ( !labelText.empty() )
+        V_Control::const_iterator itr = scriptOutput->GetChildren().begin();
+        V_Control::const_iterator end = scriptOutput->GetChildren().end();
+        for( ; itr != end; ++itr )
         {
-          break;
-        }
-      }
-    }
-  }
+            Label* label = Reflect::ObjectCast<Label>( *itr );
+            if (label)
+            {
+                label->ReadStringData( labelText );
 
-  if (labelText.empty())
-  {
-    std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
-    std::vector<Reflect::Element*>::const_iterator end = instances.end();
+                if ( !labelText.empty() )
+                {
+                    break;
+                }
+            }
+        }
+    }
+
+    if (labelText.empty())
+    {
+        std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
+        std::vector<Reflect::Element*>::const_iterator end = instances.end();
+        for ( ; itr != end; ++itr )
+        {
+            Reflect::Element* instance = *itr;
+
+            if ( labelText.empty() )
+            {
+                labelText = instance->GetTitle();
+            }
+            else
+            {
+                if ( labelText != instance->GetTitle() )
+                {
+                    labelText.clear();
+                    break;
+                }
+            }
+        }
+
+        if ( labelText.empty() )
+        {
+            labelText = typeInfo->m_UIName;
+        }
+    }
+
+    container->a_Name.Set( labelText );
+
+    std::map< tstring, ContainerPtr > containersMap;
+    containersMap.insert( std::make_pair( TXT( "" ), container) );
+
+    // don't bother including Element's fields
+    int offset = Reflect::GetClass<Element>()->m_LastFieldID;
+
+    // for each field in the type
+    M_FieldIDToInfo::const_iterator itr = typeInfo->m_FieldIDToInfo.find(offset + 1);
+    M_FieldIDToInfo::const_iterator end = typeInfo->m_FieldIDToInfo.end();
     for ( ; itr != end; ++itr )
     {
-      Reflect::Element* instance = *itr;
+        const Field* field = itr->second;
 
-      if ( labelText.empty() )
-      {
-        labelText = instance->GetTitle();
-      }
-      else
-      {
-        if ( labelText != instance->GetTitle() )
+        bool noFlags = ( field->m_Flags == 0 && includeFlags == 0xFFFFFFFF );
+        bool doInclude = ( field->m_Flags & includeFlags ) != 0;
+        bool dontExclude = ( excludeFlags == 0 ) || !(field->m_Flags & excludeFlags );
+        bool hidden = (field->m_Flags & Reflect::FieldFlags::Hide) != 0; 
+
+        // if we don't have flags (or we are included, and we aren't excluded) then make UI
+        if ( ( noFlags || doInclude ) && ( dontExclude ) )
         {
-          labelText.clear();
-          break;
-        }
-      }
-    }
-
-    if ( labelText.empty() )
-    {
-      labelText = typeInfo->m_UIName;
-    }
-  }
-
-  tstring temp;
-  bool converted = Helium::ConvertString( labelText, temp );
-  HELIUM_ASSERT( converted );
-
-  panel->SetText( temp );
-
-  M_Panel panelsMap;
-  panelsMap.insert( std::make_pair( TXT( "" ), panel) );
-
-  // don't bother including Element's fields
-  int offset = Reflect::GetClass<Element>()->m_LastFieldID;
-
-  // for each field in the type
-  M_FieldIDToInfo::const_iterator itr = typeInfo->m_FieldIDToInfo.find(offset + 1);
-  M_FieldIDToInfo::const_iterator end = typeInfo->m_FieldIDToInfo.end();
-  for ( ; itr != end; ++itr )
-  {
-    const Field* field = itr->second;
-
-    bool noFlags = ( field->m_Flags == 0 && includeFlags == 0xFFFFFFFF );
-    bool doInclude = ( field->m_Flags & includeFlags ) != 0;
-    bool dontExclude = ( excludeFlags == 0 ) || !(field->m_Flags & excludeFlags );
-    bool hidden = (field->m_Flags & Reflect::FieldFlags::Hide) != 0; 
-
-    // if we don't have flags (or we are included, and we aren't excluded) then make UI
-    if ( ( noFlags || doInclude ) && ( dontExclude ) )
-    {
-      //
-      // Handle sub panels for grouping content
-      // 
-
-      bool groupExpanded = false;
-      field->GetProperty( TXT( "UIGroupExpanded" ), groupExpanded );
-
-      tstring fieldUIGroup;
-      field->GetProperty( TXT( "UIGroup" ), fieldUIGroup );
-      if ( !fieldUIGroup.empty() )
-      {
-        M_Panel::iterator itr = panelsMap.find( fieldUIGroup );
-        if ( itr == panelsMap.end() )
-        {
-          // This panel isn't in our list so make a new one
-          PanelPtr newPanel = m_Container->GetCanvas()->Create<Panel>(this);
-          panelsMap.insert( std::make_pair(fieldUIGroup, newPanel) );
-
-          PanelPtr parent;
-          tstring groupName;
-          size_t idx = fieldUIGroup.find_last_of( TXT( "/" ) );
-          if ( idx != tstring::npos )
-          {
-            tstring parentName = fieldUIGroup.substr( 0, idx );
-            groupName = fieldUIGroup.substr( idx+1 );
-            if ( panelsMap.find( parentName ) == panelsMap.end() )
-            {          
-              parent = m_Container->GetCanvas()->Create<Panel>(this);
-
-              // create the parent hierarchy since it hasn't already been made
-              tstring currentParent = parentName;
-              for (;;)
-              {
-                idx = currentParent.find_last_of( TXT( "/" ) );
-                if ( idx == tstring::npos )
+            tstring fieldUIGroup;
+            field->GetProperty( TXT( "UIGroup" ), fieldUIGroup );
+            if ( !fieldUIGroup.empty() )
+            {
+                std::map< tstring, ContainerPtr >::iterator itr = containersMap.find( fieldUIGroup );
+                if ( itr == containersMap.end() )
                 {
-                  // no more parents so we add it to the root
-                  panelsMap.insert( std::make_pair(currentParent, parent) );
-                  parent->SetText( currentParent );
-                  panelsMap[ TXT( "" ) ]->AddChild( parent );
-                  break;
+                    // This container isn't in our list so make a new one
+                    ContainerPtr newContainer = new Container ();
+                    containersMap.insert( std::make_pair(fieldUIGroup, newContainer) );
+
+                    ContainerPtr parent;
+                    tstring groupName;
+                    size_t idx = fieldUIGroup.find_last_of( TXT( "/" ) );
+                    if ( idx != tstring::npos )
+                    {
+                        tstring parentName = fieldUIGroup.substr( 0, idx );
+                        groupName = fieldUIGroup.substr( idx+1 );
+                        if ( containersMap.find( parentName ) == containersMap.end() )
+                        {          
+                            parent = new Container ();
+
+                            // create the parent hierarchy since it hasn't already been made
+                            tstring currentParent = parentName;
+                            for (;;)
+                            {
+                                idx = currentParent.find_last_of( TXT( "/" ) );
+                                if ( idx == tstring::npos )
+                                {
+                                    // no more parents so we add it to the root
+                                    containersMap.insert( std::make_pair(currentParent, parent) );
+                                    parent->a_Name.Set( currentParent );
+                                    containersMap[ TXT( "" ) ]->AddChild( parent );
+                                    break;
+                                }
+                                else
+                                {
+                                    parent->a_Name.Set( currentParent.substr( idx+1 ) );
+
+                                    if ( containersMap.find( currentParent ) != containersMap.end() )
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        ContainerPtr grandParent = new Container ();
+                                        grandParent->AddChild( parent );
+                                        containersMap.insert( std::make_pair(currentParent, parent) );
+
+                                        parent = grandParent;
+                                    }
+                                    currentParent = currentParent.substr( 0, idx );
+                                }
+                            }
+                            containersMap.insert( std::make_pair(parentName, parent) );
+                        }
+                        parent = containersMap[parentName];
+                    }
+                    else
+                    {
+                        parent = containersMap[ TXT( "" )];
+                        groupName = fieldUIGroup;
+                    }
+                    newContainer->a_Name.Set( groupName );
+                    parent->AddChild( newContainer );
                 }
-                else
-                {
-                  parent->SetText( currentParent.substr( idx+1 ) );
-                  
-                  if ( panelsMap.find( currentParent ) != panelsMap.end() )
-                  {
-                    break;
-                  }
-                  else
-                  {
-                    PanelPtr grandParent = m_Container->GetCanvas()->Create<Panel>(this);
-                    grandParent->AddChild( parent );
-                    panelsMap.insert( std::make_pair(currentParent, parent) );
-                    
-                    parent = grandParent;
-                  }
-                  currentParent = currentParent.substr( 0, idx );
-                }
-              }
-              panelsMap.insert( std::make_pair(parentName, parent) );
+
+                container = containersMap[fieldUIGroup];
             }
-            parent = panelsMap[parentName];
-          }
-          else
-          {
-            parent = panelsMap[ TXT( "" )];
-            groupName = fieldUIGroup;
-          }
-          newPanel->SetText( groupName );
-          if( groupExpanded )
-          {
-            newPanel->SetExpanded( true );
-          }
-          parent->AddChild( newPanel );
-        }
-        
-        panel = panelsMap[fieldUIGroup];
-      }
-      else
-      {
-        panel = panelsMap[ TXT( "" )];
-      }
+            else
+            {
+                container = containersMap[ TXT( "" )];
+            }
 
 
-      //
-      // Pointer support
-      //
+            //
+            // Pointer support
+            //
 
-      if (field->m_SerializerID == Reflect::GetType<Reflect::PointerSerializer>())
-      {
-        if (hidden)
-        {
-          continue; 
-        }        
+            if (field->m_SerializerID == Reflect::GetType<Reflect::PointerSerializer>())
+            {
+                if (hidden)
+                {
+                    continue; 
+                }        
 
-        std::vector<Reflect::Element*> fieldInstances;
+                std::vector<Reflect::Element*> fieldInstances;
 
-        std::vector<Reflect::Element*>::const_iterator elementItr = instances.begin();
-        std::vector<Reflect::Element*>::const_iterator elementEnd = instances.end();
-        for ( ; elementItr != elementEnd; ++elementItr )
-        {
-          uintptr fieldAddress = (uintptr)(*elementItr) + itr->second->m_Offset;
+                std::vector<Reflect::Element*>::const_iterator elementItr = instances.begin();
+                std::vector<Reflect::Element*>::const_iterator elementEnd = instances.end();
+                for ( ; elementItr != elementEnd; ++elementItr )
+                {
+                    uintptr fieldAddress = (uintptr)(*elementItr) + itr->second->m_Offset;
 
-          Element* element = *((ElementPtr*)(fieldAddress));
+                    Element* element = *((ElementPtr*)(fieldAddress));
 
-          if ( element )
-          {
-            fieldInstances.push_back( element );
-          }
-        }
+                    if ( element )
+                    {
+                        fieldInstances.push_back( element );
+                    }
+                }
 
-        if ( !fieldInstances.empty() && fieldInstances.size() == instances.size() )
-        {
-          InterpretType(fieldInstances, panel);
-        }
+                if ( !fieldInstances.empty() && fieldInstances.size() == instances.size() )
+                {
+                    InterpretType(fieldInstances, container);
+                }
 
-        continue;
-      }
-
-
-      //
-      // Attempt to find a handler via the factory
-      //
-
-      ReflectFieldInterpreterPtr fieldInterpreter;
-
-      for ( const Reflect::Class* type = Registry::GetInstance()->GetClass( field->m_SerializerID );
-            type != Reflect::GetClass<Reflect::Element>() && !fieldInterpreter;
-            type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
-      {
-        fieldInterpreter = ReflectFieldInterpreterFactory::Create( type->m_TypeID, field->m_Flags, m_Container );
-      }
-
-      if ( fieldInterpreter.ReferencesObject() )
-      {
-        Interpreter::ConnectInterpreterEvents( this, fieldInterpreter );
-        fieldInterpreter->InterpretField( field, instances, panel );
-        m_Interpreters.push_back( fieldInterpreter );
-        continue;
-      }
+                continue;
+            }
 
 
-      //
-      // ElementArray support
-      //
+            //
+            // Attempt to find a handler via the factory
+            //
+
+            ReflectFieldInterpreterPtr fieldInterpreter;
+
+            for ( const Reflect::Class* type = Registry::GetInstance()->GetClass( field->m_SerializerID );
+                type != Reflect::GetClass<Reflect::Element>() && !fieldInterpreter;
+                type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
+            {
+                fieldInterpreter = ReflectFieldInterpreterFactory::Create( type->m_TypeID, field->m_Flags, m_Container );
+            }
+
+            if ( fieldInterpreter.ReferencesObject() )
+            {
+                Interpreter::ConnectInterpreterEvents( this, fieldInterpreter );
+                fieldInterpreter->InterpretField( field, instances, container );
+                m_Interpreters.push_back( fieldInterpreter );
+                continue;
+            }
+
+
+            //
+            // ElementArray support
+            //
 
 #pragma TODO("Move this out to an interpreter")
-      if (field->m_SerializerID == Reflect::GetType<ElementArraySerializer>())
-      {
-        if (hidden)
-        {
-          continue;
-        }
-
-        if ( instances.size() == 1 )
-        {
-          uintptr fieldAddress = (uintptr)(instances.front()) + itr->second->m_Offset;
-
-          V_Element* elements = (V_Element*)fieldAddress;
-
-          if ( elements->size() > 0 )
-          {
-            PanelPtr childPanel = panel->GetCanvas()->Create<Panel>( this );
-
-               tstring temp;
-              bool converted = Helium::ConvertString( field->m_UIName, temp );
-              HELIUM_ASSERT( converted );
-
-              childPanel->SetText( temp );
-
-            V_Element::const_iterator elementItr = elements->begin();
-            V_Element::const_iterator elementEnd = elements->end();
-            for ( ; elementItr != elementEnd; ++elementItr )
+            if (field->m_SerializerID == Reflect::GetType<ElementArraySerializer>())
             {
-              std::vector<Reflect::Element*> childInstances;
-              childInstances.push_back(*elementItr);
-              InterpretType(childInstances, childPanel);
+                if (hidden)
+                {
+                    continue;
+                }
+
+                if ( instances.size() == 1 )
+                {
+                    uintptr fieldAddress = (uintptr)(instances.front()) + itr->second->m_Offset;
+
+                    V_Element* elements = (V_Element*)fieldAddress;
+
+                    if ( elements->size() > 0 )
+                    {
+                        ContainerPtr childContainer = new Container ();
+
+                        tstring temp;
+                        bool converted = Helium::ConvertString( field->m_UIName, temp );
+                        HELIUM_ASSERT( converted );
+
+                        childContainer->a_Name.Set( temp );
+
+                        V_Element::const_iterator elementItr = elements->begin();
+                        V_Element::const_iterator elementEnd = elements->end();
+                        for ( ; elementItr != elementEnd; ++elementItr )
+                        {
+                            std::vector<Reflect::Element*> childInstances;
+                            childInstances.push_back(*elementItr);
+                            InterpretType(childInstances, childContainer);
+                        }
+
+                        container->AddChild( childContainer );
+                    }
+                }
+
+                continue;
             }
 
-            panel->AddChild( childPanel );
-          }
+
+            //
+            // Lastly fall back to the value interpreter
+            //
+
+            const Reflect::Class* type = Registry::GetInstance()->GetClass( field->m_SerializerID );
+            if ( !type->HasType( Reflect::GetType<Reflect::ContainerSerializer>() ) )
+            {
+                fieldInterpreter = CreateInterpreter< ReflectValueInterpreter >( m_Container );
+                fieldInterpreter->InterpretField( field, instances, container );
+                m_Interpreters.push_back( fieldInterpreter );
+                continue;
+            }
         }
-
-        continue;
-      }
-
-
-      //
-      // Lastly fall back to the value interpreter
-      //
-
-      const Reflect::Class* type = Registry::GetInstance()->GetClass( field->m_SerializerID );
-      if ( !type->HasType( Reflect::GetType<Reflect::ContainerSerializer>() ) )
-      {
-        fieldInterpreter = CreateInterpreter< ReflectValueInterpreter >( m_Container );
-        fieldInterpreter->InterpretField( field, instances, panel );
-        m_Interpreters.push_back( fieldInterpreter );
-        continue;
-      }
     }
-  }
 
-  // Make sure we have the base panel
-  panel = panelsMap[TXT( "" )];
+    // Make sure we have the base container
+    container = containersMap[TXT( "" )];
 
-  if (parent == m_Container)
-  {
-    panel->SetExpanded(expandPanel);
-  }
-
-  if ( !panel->GetChildren().empty() )
-  {
-    parent->AddChild(panel);
-  }
+    if ( !container->GetChildren().empty() )
+    {
+        parent->AddChild(container);
+    }
 }
 
 
 void ReflectFieldInterpreterFactory::Register(i32 type, u32 mask, Creator creator)
 {
-  m_Map[ type ].push_back( std::make_pair(mask, creator) );
+    m_Map[ type ].push_back( std::make_pair(mask, creator) );
 }
 
 void ReflectFieldInterpreterFactory::Unregister(i32 type, u32 mask, Creator creator)
 {
-  M_Creator::iterator found = m_Map.find( type );
-  if ( found != m_Map.end() )
-  {
-    std::remove( found->second.begin(), found->second.end(), std::make_pair( mask, creator ) );
-  }
+    M_Creator::iterator found = m_Map.find( type );
+    if ( found != m_Map.end() )
+    {
+        std::remove( found->second.begin(), found->second.end(), std::make_pair( mask, creator ) );
+    }
 }
 
 ReflectFieldInterpreterPtr ReflectFieldInterpreterFactory::Create(i32 type, u32 flags, Container* container)
 {
-  Creator creator = NULL;
+    Creator creator = NULL;
 
-  M_Creator::const_iterator found = m_Map.find( type );
-  if ( found != m_Map.end() )
-  {
-    std::map<u32, Creator> results;
-
-    V_Creator::const_iterator itr = found->second.begin();
-    V_Creator::const_iterator end = found->second.end();
-    for ( ; itr != end; ++itr )
+    M_Creator::const_iterator found = m_Map.find( type );
+    if ( found != m_Map.end() )
     {
-      if ( flags == itr->first ) // exact match
-      {
-        creator = itr->second;
-      }
-      else if ( flags && (flags & itr->first) != 0 ) // it has flags, and at least on flag is in the mask
-      {
-        u32 value = flags & itr->first;
+        std::map<u32, Creator> results;
 
-        // count the number of bits set
-        u32 bits = 0;
-        while (value)
+        V_Creator::const_iterator itr = found->second.begin();
+        V_Creator::const_iterator end = found->second.end();
+        for ( ; itr != end; ++itr )
         {
-          value = value & (value - 1);
-          bits++;
+            if ( flags == itr->first ) // exact match
+            {
+                creator = itr->second;
+            }
+            else if ( flags && (flags & itr->first) != 0 ) // it has flags, and at least on flag is in the mask
+            {
+                u32 value = flags & itr->first;
+
+                // count the number of bits set
+                u32 bits = 0;
+                while (value)
+                {
+                    value = value & (value - 1);
+                    bits++;
+                }
+
+                // rank it by the number of matching flags
+                results[ bits ] = itr->second;
+            }
+            else if ( itr->first == 0 ) // fall back to folks that don't care about flags
+            {
+                // rank it at the bottom
+                results[ 0x0 ] = itr->second;
+            }
         }
 
-        // rank it by the number of matching flags
-        results[ bits ] = itr->second;
-      }
-      else if ( itr->first == 0 ) // fall back to folks that don't care about flags
-      {
-        // rank it at the bottom
-        results[ 0x0 ] = itr->second;
-      }
+        if ( !results.empty() )
+        {
+            creator = results.rbegin()->second;
+        }
     }
 
-    if ( !results.empty() )
+    if ( creator )
     {
-      creator = results.rbegin()->second;
+        return creator( container );
     }
-  }
-
-  if ( creator )
-  {
-    return creator( container );
-  }
-  else
-  {
-    return NULL;
-  }
+    else
+    {
+        return NULL;
+    }
 }
 
 void ReflectFieldInterpreterFactory::Clear()
 {
-  m_Map.clear();
+    m_Map.clear();
 }

@@ -31,7 +31,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
   // Create the ui we are generating
   //
 
-  ContainerPtr group = m_Container->GetCanvas()->Create<Container>(this);
+  ContainerPtr container = new Container ();
 
   bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;
 
@@ -41,7 +41,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
 
   tstring fieldUI;
   field->GetProperty( TXT( "UIScript" ), fieldUI );
-  bool result = Script::Parse(fieldUI, this, parent->GetCanvas(), group, field->m_Flags);
+  bool result = Script::Parse(fieldUI, this, parent->GetCanvas(), container, field->m_Flags);
 
   if (!result)
   {
@@ -70,7 +70,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
       choice->SetDropDown( true );
       choice->SetReadOnly( readOnly );
 
-      group->AddChild(choice);
+      container->AddChild(choice);
     }
     else
     {
@@ -78,13 +78,13 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
       {
         CheckBoxPtr checkBox = m_Container->GetCanvas()->Create<CheckBox>(this);
         checkBox->SetReadOnly( readOnly );
-        group->AddChild( checkBox );
+        container->AddChild( checkBox );
       }
       else
       {
         ValuePtr value = m_Container->GetCanvas()->Create<Value>( this );
         value->SetReadOnly( readOnly );
-        group->AddChild( value );
+        container->AddChild( value );
       }
     }
   }
@@ -96,8 +96,8 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
   LabelPtr label = NULL;
 
   {
-    V_Control::const_iterator itr = group->GetChildren().begin();
-    V_Control::const_iterator end = group->GetChildren().end();
+    V_Control::const_iterator itr = container->GetChildren().begin();
+    V_Control::const_iterator end = container->GetChildren().end();
     for( ; itr != end; ++itr )
     {
       Label* label = Reflect::ObjectCast<Label>( *itr );
@@ -110,15 +110,15 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
 
   if (label == NULL)
   {
-    label = group->GetCanvas()->Create<Label>(this);
+    label = container->GetCanvas()->Create<Label>(this);
 
     tstring temp;
     bool converted = Helium::ConvertString( field->m_UIName, temp );
     HELIUM_ASSERT( converted );
 
-   label->SetText( temp );
+   label->BindText( temp );
 
-    group->InsertChild(0, label);
+    container->InsertChild(0, label);
   }
 
   //
@@ -147,7 +147,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
 
   Helium::SmartPtr< MultiStringFormatter<Serializer> > data = new MultiStringFormatter<Serializer>( ser );
 
-  group->Bind( data );
+  container->Bind( data );
 
   //
   // Set default
@@ -159,12 +159,12 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
 
     *field->m_Default >> outStream;
 
-    group->SetDefault( outStream.str() );
+    container->SetDefault( outStream.str() );
   }
 
   //
   // Close
   //
 
-  parent->AddChild(group);
+  parent->AddChild(container);
 }

@@ -9,7 +9,6 @@ namespace Helium
     {
         // Forwards
         class Button;
-        class Action;
         class List;
         struct FilteredDropTargetArgs;
 

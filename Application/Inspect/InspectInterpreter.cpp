@@ -3,7 +3,7 @@
 #include "Application/Inspect/Controls/InspectCanvas.h"
 #include "Application/Inspect/Controls/InspectPanel.h"
 #include "Application/Inspect/Controls/InspectLabel.h"
-#include "Application/Inspect/Controls/InspectAction.h"
+#include "Application/Inspect/Controls/InspectButton.h"
 
 using namespace Helium::Inspect;
 
@@ -109,11 +109,11 @@ Label* Interpreter::AddLabel(const tstring& name)
   return control;
 }
 
-Action* Interpreter::AddAction( const ActionSignature::Delegate& listener )
+Button* Interpreter::AddButton( const ButtonClickedSignature::Delegate& listener )
 {
-  ActionPtr control = m_Container->GetCanvas()->Create<Action>( this );
+  ButtonPtr control = m_Container->GetCanvas()->Create<Button>( this );
   control->SetInterpreter( this );
-  control->AddListener( listener );
+  control->ButtonClickedEvent().Add( listener );
 
   ST_Container& containerStack = GetCurrentContainerStack();
   containerStack.top()->AddChild(control);

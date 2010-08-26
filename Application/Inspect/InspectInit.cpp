@@ -33,7 +33,6 @@ void Inspect::Initialize()
         g_InitializerStack.Push( Reflect::RegisterClassType<Canvas>( TXT( "InspectCanvas" ) ) );
 
         g_InitializerStack.Push( Reflect::RegisterClassType<Button>( TXT( "InspectButton" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClassType<Action>( TXT( "InspectAction" ) ) );
         g_InitializerStack.Push( Reflect::RegisterClassType<CheckBox>( TXT( "InspectCheckBox" ) ) );
         g_InitializerStack.Push( Reflect::RegisterClassType<ColorPicker>( TXT( "InspectColorPicker" ) ) );
         g_InitializerStack.Push( Reflect::RegisterClassType<Label>( TXT( "InspectLabel" ) ) );

@@ -119,7 +119,7 @@ namespace Helium
             Label* AddLabel(const tstring& name);
 
             // Button that notifies a listener when it is clicked
-            Action* AddAction( const ActionSignature::Delegate& listener );
+            Button* AddButton( const ButtonClickedSignature::Delegate& listener );
 
             template <class T>
             CheckBox* AddCheckBox( const Helium::SmartPtr< Helium::Property<T> >& property )

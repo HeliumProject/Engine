@@ -11,7 +11,7 @@
 #include "Application/Inspect/Controls/InspectValue.h"
 #include "Application/Inspect/Controls/InspectChoice.h"
 #include "Application/Inspect/Controls/InspectList.h"
-#include "Application/Inspect/Controls/InspectAction.h"
+#include "Application/Inspect/Controls/InspectButton.h"
 #include "Application/Inspect/InspectData.h"
 #include "Application/Inspect/InspectInit.h"
 #include "Application/Inspect/Interpreters/Reflect/InspectReflectInit.h"
@@ -61,58 +61,58 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
   listContainer->AddChild( list );
 
   // create the buttons
-  ActionPtr editButton;
-  ActionPtr findButton;
-  ActionPtr addButton;
-  ActionPtr removeButton;
-  ActionPtr upButton;
-  ActionPtr downButton;
+  ButtonPtr editButton;
+  ButtonPtr findButton;
+  ButtonPtr addButton;
+  ButtonPtr removeButton;
+  ButtonPtr upButton;
+  ButtonPtr downButton;
   if ( !(field->m_Flags & FieldFlags::ReadOnly) )
   {
-    addButton = m_Container->GetCanvas()->Create<Action>(this);
+    addButton = m_Container->GetCanvas()->Create<Button>(this);
     if ( isFileIdContainer || ( field->m_Flags & FieldFlags::FilePath ) )
     {
       tstring filter;
       field->GetProperty( TXT("FileFilter"), filter );
 
       // Add button - normal file open dialog
-      addButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnAddFile ) );
+      addButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &FileContainerInterpreter::OnAddFile ) );
       addButton->SetClientData( new ClientDataFilter( list, instances.front()->GetType(), filter ) );
 
       // Add button - opens file browser
-      findButton = m_Container->GetCanvas()->Create<Action>(this);
+      findButton = m_Container->GetCanvas()->Create<Button>(this);
       findButton->SetIcon( "actions/system-search" );
-      findButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnFindFile ) );
+      findButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &FileContainerInterpreter::OnFindFile ) );
       findButton->SetClientData( new ClientDataFilter( list, instances.front()->GetType(), filter ) );
 
       // Edit button - attempt to edit the selected file
-      editButton = m_Container->GetCanvas()->Create<Action>(this);
+      editButton = m_Container->GetCanvas()->Create<Button>(this);
       editButton->SetText( "Edit" );
-      editButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnEdit ) );
+      editButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &FileContainerInterpreter::OnEdit ) );
       editButton->SetClientData( new ClientData( list ) );
     }
     else
     {
-      addButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnAdd ) );
+      addButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &FileContainerInterpreter::OnAdd ) );
       addButton->SetClientData( new ClientData( list ) );
     }
     addButton->SetText( "Add" );
 
-    removeButton = m_Container->GetCanvas()->Create<Action>(this);
+    removeButton = m_Container->GetCanvas()->Create<Button>(this);
     removeButton->SetText( "Remove" );
-    removeButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnRemove ) );
+    removeButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &FileContainerInterpreter::OnRemove ) );
     removeButton->SetClientData( new ClientData( list ) );
 
     if ( isArray )
     {
-      upButton = m_Container->GetCanvas()->Create<Action>(this);
+      upButton = m_Container->GetCanvas()->Create<Button>(this);
       upButton->SetIcon( "actions/go-up" );
-      upButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnMoveUp ) );
+      upButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &FileContainerInterpreter::OnMoveUp ) );
       upButton->SetClientData( new ClientData( list ) );
 
-      downButton = m_Container->GetCanvas()->Create<Action>(this);
+      downButton = m_Container->GetCanvas()->Create<Button>(this);
       downButton->SetIcon( "actions/go-down" );
-      downButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnMoveDown ) );
+      downButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &FileContainerInterpreter::OnMoveDown ) );
       downButton->SetClientData( new ClientData( list ) );
     }
 

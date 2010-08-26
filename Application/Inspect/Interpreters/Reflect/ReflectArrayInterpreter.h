@@ -12,9 +12,8 @@ namespace Helium
     {
         // Forwards
         class Button;
-        class Action;
         class List;
-        typedef Helium::SmartPtr<Action> ActionPtr;
+        typedef Helium::SmartPtr<Button> ButtonPtr;
 
         class APPLICATION_API ReflectArrayInterpreter : public ReflectFieldInterpreter
         {
@@ -24,10 +23,10 @@ namespace Helium
             virtual void InterpretField(const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent) override;
 
         protected:
-            virtual ActionPtr AddAddButton( List* list );
-            virtual ActionPtr AddRemoveButton( List* list );
-            virtual ActionPtr AddMoveUpButton( List* list );
-            virtual ActionPtr AddMoveDownButton( List* list );
+            virtual ButtonPtr AddAddButton( List* list );
+            virtual ButtonPtr AddRemoveButton( List* list );
+            virtual ButtonPtr AddMoveUpButton( List* list );
+            virtual ButtonPtr AddMoveDownButton( List* list );
 
             // callbacks
             static void OnAdd( Button* button );

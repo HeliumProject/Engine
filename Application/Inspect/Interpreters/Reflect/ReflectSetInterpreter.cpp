@@ -1,7 +1,7 @@
 #include "ReflectSetInterpreter.h"
 #include "InspectReflectInit.h"
 
-#include "Application/Inspect/Controls/InspectAction.h"
+#include "Application/Inspect/Controls/InspectButton.h"
 #include "Application/Inspect/Controls/InspectCanvas.h"
 #include "Application/Inspect/Controls/InspectList.h"
 #include "Application/Inspect/Controls/InspectPanel.h"
@@ -63,16 +63,16 @@ void ReflectSetInterpreter::InterpretField( const Reflect::Field* field, const s
     ContainerPtr buttonContainer = parent->GetCanvas()->Create<Container>( this );
     panel->AddChild( buttonContainer );
 
-    ActionPtr buttonAdd = parent->GetCanvas()->Create<Action>( this );
+    ButtonPtr buttonAdd = parent->GetCanvas()->Create<Button>( this );
     buttonContainer->AddChild( buttonAdd );
     buttonAdd->SetText( TXT( "Add" ) );
-    buttonAdd->AddListener( ActionSignature::Delegate ( this, &ReflectSetInterpreter::OnAdd ) );
+    buttonAdd->ButtonClickedEvent().Add( ButtonSignature::Delegate ( this, &ReflectSetInterpreter::OnAdd ) );
     buttonAdd->SetClientData( new ClientData( list ) );
 
-    ActionPtr buttonRemove = parent->GetCanvas()->Create<Action>( this );
+    ButtonPtr buttonRemove = parent->GetCanvas()->Create<Button>( this );
     buttonContainer->AddChild( buttonRemove );
     buttonRemove->SetText( TXT( "Remove" ) );
-    buttonRemove->AddListener( ActionSignature::Delegate ( this, &ReflectSetInterpreter::OnRemove ) );
+    buttonRemove->ButtonClickedEvent().Add( ButtonSignature::Delegate ( this, &ReflectSetInterpreter::OnRemove ) );
     buttonRemove->SetClientData( new ClientData( list ) );
   }
 

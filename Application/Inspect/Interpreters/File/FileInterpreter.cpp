@@ -105,8 +105,8 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
                 if ( instances.size() == 1 )
                 {
                     // File edit button
-                    ActionPtr editButton = m_Container->GetCanvas()->Create<Action>(this);
-                    editButton->AddListener( ActionSignature::Delegate ( this, &FileInterpreter::Edit ) );
+                    ButtonPtr editButton = m_Container->GetCanvas()->Create<Button>(this);
+                    editButton->ButtonClickedEvent().Add( ActionSignature::Delegate ( this, &FileInterpreter::Edit ) );
                     editButton->SetText( TXT( "Edit" ) );
                     group->AddChild( editButton );
                 }

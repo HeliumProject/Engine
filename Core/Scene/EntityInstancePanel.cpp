@@ -209,23 +209,23 @@ void EntityPanel::CreateClassPath()
 
 }
 
-void EntityPanel::CreateClassActions()
+void EntityPanel::CreateClassButtons()
 {
     m_Generator->PushContainer();
     {
-        m_Generator->AddLabel( TXT( "Class Actions" ) );
+        m_Generator->AddLabel( TXT( "Class Buttons" ) );
 
-        Inspect::Action* refreshButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetRefresh ) );
+        Inspect::Button* refreshButton = m_Generator->AddButton( Inspect::ButtonSignature::Delegate( this, &EntityPanel::OnEntityAssetRefresh ) );
         refreshButton->SetIcon( TXT( "actions/view-refresh" ) );
         refreshButton->SetToolTip( TXT( "Refresh" ) );
 
         bool singular = m_Selection.Size() == 1;
 
-        Inspect::Action* lunaButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetEditAsset ) );
+        Inspect::Button* lunaButton = m_Generator->AddButton( Inspect::ButtonSignature::Delegate( this, &EntityPanel::OnEntityAssetEditAsset ) );
         lunaButton->SetIcon( TXT( "asset_editor" ) );
         lunaButton->SetToolTip( TXT( "Edit this entity class in Editor's Asset Editor" ) );
 
-        Inspect::Action* mayaButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetEditArt ) );
+        Inspect::Button* mayaButton = m_Generator->AddButton( Inspect::ButtonSignature::Delegate( this, &EntityPanel::OnEntityAssetEditArt ) );
         mayaButton->SetIcon( TXT( "maya" ) );
         mayaButton->SetEnabled( singular );
         mayaButton->SetToolTip( TXT( "Edit this entity class's art in Maya" ) );
@@ -268,7 +268,7 @@ void EntityPanel::CreateShowFlags()
 void EntityPanel::Create()
 {
     CreateClassPath(); 
-    CreateClassActions(); 
+    CreateClassButtons(); 
 
     CreateShowFlags(); 
     CreateAppearanceFlags();

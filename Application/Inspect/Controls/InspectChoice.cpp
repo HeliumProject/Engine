@@ -84,8 +84,8 @@ bool Choice::Contains( const tstring& data )
 {
     if ( IsRealized() )
     {
-        V_ChoiceItem::const_iterator itr = a_Items.Get().begin();
-        V_ChoiceItem::const_iterator end = a_Items.Get().end();
+        std::vector< ChoiceItem >::const_iterator itr = a_Items.Get().begin();
+        std::vector< ChoiceItem >::const_iterator end = a_Items.Get().end();
         for ( ; itr != end; ++itr )
         {
             if ( itr->m_Data == data )
@@ -100,7 +100,7 @@ bool Choice::Contains( const tstring& data )
 
 void Choice::Clear()
 {
-    a_Items.Set( V_ChoiceItem () );
+    a_Items.Set( std::vector< ChoiceItem > () );
 }
 
 void Choice::Populate()

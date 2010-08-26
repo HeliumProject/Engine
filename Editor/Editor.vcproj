@@ -1810,6 +1810,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Inspect\List.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\List.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Inspect\Slider.cpp"
 					>
 				</File>

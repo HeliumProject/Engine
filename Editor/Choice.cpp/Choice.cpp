@@ -166,7 +166,7 @@ void ChoiceWidget::HighlightChanged( const Attribute<bool>::ChangeArgs& args )
     }
 }
 
-void ChoiceWidget::ItemsChanged( const Attribute<Inspect::V_ChoiceItem>::ChangeArgs& args )
+void ChoiceWidget::ItemsChanged( const Attribute< std::vector< Inspect::ChoiceItem > >::ChangeArgs& args )
 {
     m_ChoiceWindow->Clear();
 
@@ -174,8 +174,8 @@ void ChoiceWidget::ItemsChanged( const Attribute<Inspect::V_ChoiceItem>::ChangeA
     {
         m_ChoiceWindow->Freeze();
 
-        Inspect::V_ChoiceItem::const_iterator itr = args.m_NewValue.begin();
-        Inspect::V_ChoiceItem::const_iterator end = args.m_NewValue.end();
+        std::vector< Inspect::ChoiceItem >::const_iterator itr = args.m_NewValue.begin();
+        std::vector< Inspect::ChoiceItem >::const_iterator end = args.m_NewValue.end();
         for ( ; itr != end; ++itr )
         {
             tstring key = itr->m_Key;
@@ -207,8 +207,8 @@ tstring ChoiceWidget::GetValue()
 
 void ChoiceWidget::SetValue(const tstring& data)
 {
-    Inspect::V_ChoiceItem::const_iterator itr = m_ChoiceControl->a_Items.Get().begin();
-    Inspect::V_ChoiceItem::const_iterator end = m_ChoiceControl->a_Items.Get().end();
+    std::vector< Inspect::ChoiceItem >::const_iterator itr = m_ChoiceControl->a_Items.Get().begin();
+    std::vector< Inspect::ChoiceItem >::const_iterator end = m_ChoiceControl->a_Items.Get().end();
     for ( ; itr != end; ++itr )
     {
         if ( itr->m_Data == data )

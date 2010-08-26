@@ -261,18 +261,18 @@ namespace Helium
             void PostWrite();
 
         public:
-            Attribute<bool>                         a_IsEnabled;              // are we enabled?
-            Attribute<bool>                         a_IsReadOnly;             // are we writable?
-            Attribute<bool>                         a_IsFrozen;               // is updating (polling, sorting, etc) disabled?
-            Attribute<bool>                         a_IsHidden;               // is rendering disabled?
-            Attribute<u32>                          a_ForegroundColor;        // our colors for appearange
-            Attribute<u32>                          a_BackgroundColor;
-            Attribute<bool>                         a_IsFixedWidth;           // are we fixed along an axis?
-            Attribute<bool>                         a_IsFixedHeight;
-            Attribute<f32>                          a_ProportionalWidth;      // are we proportional along an axis?
-            Attribute<f32>                          a_ProportionalHeight;
-            Attribute<tstring>                      a_Default;                // the default value
-            Attribute<tstring>                      a_ToolTip;                // the tool tip for this control
+            Attribute< bool >                       a_IsEnabled;              // are we enabled?
+            Attribute< bool >                       a_IsReadOnly;             // are we writable?
+            Attribute< bool >                       a_IsFrozen;               // is updating (polling, sorting, etc) disabled?
+            Attribute< bool >                       a_IsHidden;               // is rendering disabled?
+            Attribute< u32 >                        a_ForegroundColor;        // our colors for appearange
+            Attribute< u32 >                        a_BackgroundColor;
+            Attribute< bool >                       a_IsFixedWidth;           // are we fixed along an axis?
+            Attribute< bool >                       a_IsFixedHeight;
+            Attribute< f32 >                        a_ProportionalWidth;      // are we proportional along an axis?
+            Attribute< f32 >                        a_ProportionalHeight;
+            Attribute< tstring >                    a_Default;                // the default value
+            Attribute< tstring >                    a_ToolTip;                // the tool tip for this control
             
             mutable ControlSignature::Event         e_Realized;               // upon realization of the control
             mutable ControlSignature::Event         e_Unrealized;

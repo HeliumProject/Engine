@@ -33,8 +33,8 @@ namespace Helium
             void SetToDefault(const ContextMenuEventArgs& event);
 
         public:
-            Attribute<Justification>    a_Justification;
-            Attribute<bool>             a_Highlight;
+            Attribute< Justification >  a_Justification;
+            Attribute< bool >           a_Highlight;
         };
 
         typedef Helium::SmartPtr<Value> ValuePtr;

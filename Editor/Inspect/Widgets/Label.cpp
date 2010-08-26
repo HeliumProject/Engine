@@ -81,8 +81,9 @@ void LabelWidget::Destroy()
 {
     HELIUM_ASSERT( m_LabelWindow );
 
-    // remove listeners
     SetWindow( NULL );
+
+    // remove listeners
     m_LabelControl->a_ToolTip.Changed().RemoveMethod( this, &LabelWidget::ToolTipChanged );
 
     // destroy window

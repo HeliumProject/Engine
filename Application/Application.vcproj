@@ -821,26 +821,6 @@
 						>
 					</File>
 					<File
-						RelativePath=".\Inspect\Interpreters\Reflect\ReflectMapEntryDialog.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Interpreters\Reflect\ReflectMapEntryDialog.fbp"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Interpreters\Reflect\ReflectMapEntryDialog.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Interpreters\Reflect\ReflectMapInterpreter.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Interpreters\Reflect\ReflectMapInterpreter.h"
-						>
-					</File>
-					<File
 						RelativePath=".\Inspect\Interpreters\Reflect\ReflectSetInterpreter.cpp"
 						>
 					</File>

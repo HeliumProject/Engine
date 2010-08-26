@@ -18,9 +18,9 @@ namespace Helium
             virtual bool Process( const tstring& key, const tstring& value );
 
         public:
-            Attribute<float>    a_Min;
-            Attribute<float>    a_Max;
-            Attribute<bool>     a_AutoAdjustMinMax;
+            Attribute< float >  a_Min;
+            Attribute< float >  a_Max;
+            Attribute< bool >   a_AutoAdjustMinMax;
         };
 
         typedef Helium::SmartPtr<Slider> SliderPtr;

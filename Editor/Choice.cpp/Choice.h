@@ -45,7 +45,7 @@ namespace Helium
             virtual bool Write() HELIUM_OVERRIDE;
 
             void HighlightChanged( const Attribute<bool>::ChangeArgs& args );
-            void ItemsChanged( const Attribute<Inspect::V_ChoiceItem>::ChangeArgs& args );
+            void ItemsChanged( const Attribute< std::vector< Inspect::ChoiceItem > >::ChangeArgs& args );
 
             tstring GetValue();
             void SetValue( const tstring& value );

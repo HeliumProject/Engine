@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ReflectFieldInterpreter.h"
-#include "ReflectBitfieldCheckBox.h"
 
 namespace Helium
 {

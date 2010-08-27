@@ -33,8 +33,6 @@ void InspectReflect::Initialize()
         g_IntializerStack.Push( Reflect::RegisterClassType<ClientData>( TXT( "InspectClientDataControl" ) ) );
         g_IntializerStack.Push( Reflect::RegisterClassType<ClientDataFilter>( TXT( "InspectClientDataFilter" ) ) );
 
-        g_IntializerStack.Push( Reflect::RegisterClassType<ReflectBitfieldCheckBox>( TXT( "InspectReflectBitfieldCheckBox" ) ) );
-
         // scalars
         ReflectFieldInterpreterFactory::Register<ReflectBitfieldInterpreter>( Reflect::GetType<Reflect::BitfieldSerializer>() );
         ReflectFieldInterpreterFactory::Register<ReflectVectorInterpreter>( Reflect::GetType<Reflect::Vector2Serializer>() );

@@ -24,6 +24,12 @@ namespace Helium
                 m_CheckBox->SetValue( value );
             }
 
+            void SetUndetermined()
+            {
+                HELIUM_ASSERT( m_CheckBox );
+                m_CheckBox->Set3StateValue( wxCHK_UNDETERMINED );
+            }
+
             bool GetValue()
             {
                 HELIUM_ASSERT( m_CheckBox );

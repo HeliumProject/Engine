@@ -15,7 +15,7 @@ CheckBoxWindow::CheckBoxWindow( wxWindow* parent, CheckBoxWidget* checkBoxWidget
 
     Create( parent, wxID_ANY, wxDefaultPosition, size );
 
-    m_CheckBox = new wxCheckBox( this, wxID_ANY, wxEmptyString );
+    m_CheckBox = new wxCheckBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
 
     m_CheckBox->SetSize( size );
     m_CheckBox->SetMinSize( size );
@@ -88,10 +88,19 @@ void CheckBoxWidget::Read()
 
     tstring text;
     m_CheckBoxControl->ReadStringData( text );
-    int value = _tstoi( text.c_str() );
 
     m_CheckBoxWindow->SetOverride( true );
-    m_CheckBoxWindow->SetValue( value == 1 ? true : false );
+
+    if ( text == Inspect::MULTI_VALUE_STRING || text == Inspect::UNDEF_VALUE_STRING )
+    {
+        m_CheckBoxWindow->SetUndetermined();
+    }
+    else
+    {
+        int value = _tstoi( text.c_str() );
+        m_CheckBoxWindow->SetValue( value == 1 ? true : false );
+    }
+
     m_CheckBoxWindow->SetOverride( false );
 }
 

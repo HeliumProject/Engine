@@ -475,7 +475,7 @@ namespace Helium
             bool m_Perishable;
 
         public:
-            MultiStringFormatter(std::vector<T*> data, bool perishable = false)
+            MultiStringFormatter( const std::vector<T*>& data, bool perishable = false)
                 : m_Data (data)
                 , m_Perishable (perishable)
             {
@@ -586,6 +586,8 @@ namespace Helium
                 // else we are unequal
                 else
                 {
+                    HELIUM_ASSERT( m_Data.size() );
+
                     // if we have data
                     if (m_Data.size() > 0)
                     {

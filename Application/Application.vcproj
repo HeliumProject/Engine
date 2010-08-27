@@ -709,14 +709,6 @@
 						>
 					</File>
 					<File
-						RelativePath=".\Inspect\Interpreters\Reflect\ReflectBitfieldCheckBox.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Interpreters\Reflect\ReflectBitfieldCheckBox.h"
-						>
-					</File>
-					<File
 						RelativePath=".\Inspect\Interpreters\Reflect\ReflectBitfieldInterpreter.cpp"
 						>
 					</File>

@@ -5,8 +5,8 @@ using namespace Helium::Inspect;
 
 Choice::Choice()
 : a_Highlight( false )
-, a_Sorted( false )
-, a_DropDown( false )
+, a_IsSorted( false )
+, a_IsDropDown( false )
 , a_EnableAdds( false )
 {
     m_ContextMenu = new ContextMenu (this);
@@ -27,12 +27,12 @@ bool Choice::Process(const tstring& key, const tstring& value)
     {
         if (value == ATTR_VALUE_TRUE)
         {
-            a_Sorted.Set( true );
+            a_IsSorted.Set( true );
             return true;
         }
         else if (value == ATTR_VALUE_FALSE)
         {
-            a_Sorted.Set( false );
+            a_IsSorted.Set( false );
             return true;
         }
     }
@@ -40,12 +40,12 @@ bool Choice::Process(const tstring& key, const tstring& value)
     {
         if (value == ATTR_VALUE_TRUE)
         {
-            a_DropDown.Set( true );
+            a_IsDropDown.Set( true );
             return true;
         }
         else if (value == ATTR_VALUE_FALSE)
         {
-            a_DropDown.Set( false );
+            a_IsDropDown.Set( false );
             return true;
         }
     }

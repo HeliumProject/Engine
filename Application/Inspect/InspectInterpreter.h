@@ -203,7 +203,7 @@ namespace Helium
                 {
                     std::ostringstream str;
                     str << (*itr)->m_Value;
-                    items.push_back( Item ( (*itr)->m_Label, str.str() ) );
+                    items.push_back( ChoiceItem ( (*itr)->m_Label, str.str() ) );
                 }
                 control->SetItems(items);
                 control->SetDropDown(true);

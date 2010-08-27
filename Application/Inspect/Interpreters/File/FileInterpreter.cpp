@@ -1,5 +1,4 @@
 #include "FileInterpreter.h"
-#include "FileDialogButton.h"
 
 #include "Application/Inspect/InspectInit.h"
 #include "Application/Inspect/InspectScript.h"
@@ -76,7 +75,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
                 if ( !m_FileFilter.empty() )
                 {
-                    fileDialogButton->SetFilter( m_FileFilter );
+                    fileDialogButton->a_Filter.Set( m_FileFilter );
                 }
                 container->AddChild( fileDialogButton );
 
@@ -228,7 +227,7 @@ bool FileInterpreter::DataChanging( DataChangingArgs& args )
 
         path.TrimToExisting();
 
-        FileDialogArgs fileDialogArgs( FileDialogTypes::OpenFile, TXT( "Path Does Not Exist" ), m_FileFilter, path );
+        FileDialogArgs fileDialogArgs( Helium::FileDialogTypes::OpenFile, TXT( "Path Does Not Exist" ), m_FileFilter, path );
         path = d_FindMissingFile.Invoke( fileDialogArgs );
         Reflect::Serializer::SetValue< tstring >( args.m_NewValue, path.Get() );
     }

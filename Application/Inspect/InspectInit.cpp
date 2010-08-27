@@ -33,6 +33,7 @@ void Inspect::Initialize()
         g_InitializerStack.Push( Reflect::RegisterClassType<Label>( TXT( "InspectLabel" ) ) );
         g_InitializerStack.Push( Reflect::RegisterClassType<List>( TXT( "InspectList" ) ) );
         g_InitializerStack.Push( Reflect::RegisterClassType<Slider>( TXT( "InspectSlider" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterClassType<FileDialogButton>( TXT( "FileDialogButton" ) ) );
 
         g_InitializerStack.Push( Reflect::RegisterClassType<Choice>( TXT( "InspectChoice" ) ) );
         g_InitializerStack.Push( Reflect::RegisterClassType<Value>( TXT( "InspectValue" ) ) );

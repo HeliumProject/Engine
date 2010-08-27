@@ -190,7 +190,7 @@ void FileContainerInterpreter::OnAdd( const ButtonClickedArgs& args )
     {
         ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
 
-        Path path = d_OpenFileDialog.Invoke( FileDialogArgs( FileDialogTypes::OpenFile, TXT( "Add File" ), TXT( "*.*" ) ) );
+        Path path = d_OpenFileDialog.Invoke( FileDialogArgs( Helium::FileDialogTypes::OpenFile, TXT( "Add File" ), TXT( "*.*" ) ) );
         if ( !path.empty() )
         {
             List* list = static_cast< List* >( data->GetControl() );

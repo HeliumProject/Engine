@@ -161,12 +161,6 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
     {
         SerializerPtr s = field->CreateSerializer();
 
-        if ( isContainer )
-        {
-            s->SetTranslateInputListener( Reflect::TranslateInputSignature::Delegate ( this, &FileContainerInterpreter::TranslateInputTUIDContainer ) );
-            s->SetTranslateOutputListener( Reflect::TranslateOutputSignature::Delegate ( this, &FileContainerInterpreter::TranslateOutputTUIDContainer ) );
-        }
-
         s->ConnectField(*itr, field);
 
         m_Serializers.push_back(s);

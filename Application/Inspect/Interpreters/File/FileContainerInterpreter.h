@@ -22,11 +22,6 @@ namespace Helium
             virtual void InterpretField(const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent);
 
         private:
-            // translate array of TUIDs to file path and back
-            void TranslateInputTUIDContainer( Reflect::TranslateInputEventArgs& args );
-            void TranslateOutputTUID( tstring& path, const u64& fileId );
-            void TranslateOutputTUIDContainer( Reflect::TranslateOutputEventArgs& args );
-
             // callbacks
             void OnAdd( const ButtonClickedArgs& args );
             void OnAddFile( const ButtonClickedArgs& args );

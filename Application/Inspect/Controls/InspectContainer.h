@@ -53,10 +53,7 @@ namespace Helium
             virtual void Bind(const DataPtr& data) HELIUM_OVERRIDE;
 
             // process properties coming from script
-            virtual bool Container::Process(const tstring& key, const tstring& value) HELIUM_OVERRIDE;
-
-            // realize control
-            virtual void Realize(Container* parent) HELIUM_OVERRIDE;
+            virtual bool Process(const tstring& key, const tstring& value) HELIUM_OVERRIDE;
 
             // populate
             virtual void Populate() HELIUM_OVERRIDE;

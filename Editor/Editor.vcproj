@@ -1626,6 +1626,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Inspect\Widgets\FileDialogButton.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\FileDialogButton.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Inspect\Widgets\Label.cpp"
 					>
 				</File>

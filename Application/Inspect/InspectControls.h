@@ -11,3 +11,4 @@
 #include "Application/Inspect/Controls/InspectButton.h"
 #include "Application/Inspect/Controls/InspectColorPicker.h"
 #include "Application/Inspect/Controls/InspectList.h"
+#include "Application/Inspect/Controls/InspectFileDialogButton.h"

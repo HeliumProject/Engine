@@ -665,14 +665,6 @@
 						>
 					</File>
 					<File
-						RelativePath=".\Inspect\Interpreters\File\FileDialogButton.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Interpreters\File\FileDialogButton.h"
-						>
-					</File>
-					<File
 						RelativePath=".\Inspect\Interpreters\File\FileInterpreter.cpp"
 						>
 					</File>
@@ -831,6 +823,14 @@
 				</File>
 				<File
 					RelativePath=".\Inspect\Controls\InspectControl.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectFileDialogButton.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Controls\InspectFileDialogButton.h"
 					>
 				</File>
 				<File

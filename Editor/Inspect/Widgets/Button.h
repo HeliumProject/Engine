@@ -13,12 +13,12 @@ namespace Helium
         public:
             ButtonWindow( wxWindow* parent, ButtonWidget* buttonWidget );
 
-            void OnClicked( wxCommandEvent& );
+            virtual void OnClicked( wxCommandEvent& );
 
             void SetIcon( const tstring& icon );
             void SetLabel( const tstring& icon );
 
-        private:
+        protected:
             wxSizer*      m_Sizer;
             wxButton*     m_Button;
             ButtonWidget* m_ButtonWidget;

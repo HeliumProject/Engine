@@ -42,7 +42,7 @@ namespace Helium
 
             FileDialogSignature::Delegate d_OpenFileDialog;
         private:
-            tstring m_FileFilter;
+            tstring        m_FileFilter;
             Inspect::List* m_List;
         };
 

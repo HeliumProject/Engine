@@ -13,7 +13,7 @@ namespace Helium
         class SearchResults : public Helium::RefCountBase< SearchResults >
         {
         public:
-            SearchResults( u32 browserSearchID = 0 );
+            SearchResults( u32 vaultSearchID = 0 );
             SearchResults( const SearchResults* results );
             virtual ~SearchResults();
 

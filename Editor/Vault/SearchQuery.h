@@ -1,9 +1,8 @@
 #pragma once
 
-#include "AssetCollection.h"
-
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/Reflect/Element.h"
 #include "Platform/Types.h"
 
 namespace Helium
@@ -18,14 +17,12 @@ namespace Helium
                 Invalid = -1,
                 File = 0,
                 Folder,
-                ID,
                 DBSearch,
             };
             static void SearchTypesEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement( File, TXT( "File" ) );
                 info->AddElement( Folder, TXT( "Folder" ) );
-                info->AddElement( ID, TXT( "ID" ) );
                 info->AddElement( DBSearch, TXT( "DBSearch" ) );
             }
         }
@@ -41,11 +38,8 @@ namespace Helium
 
         class SearchQuery : public Reflect::Element
         {
-        protected:
-            // Only SearchHistory should ever create SearchQueries
-            SearchQuery();
-
         public:
+            SearchQuery();
             ~SearchQuery();
 
             SearchType GetSearchType() const { return m_SearchType; }
@@ -57,14 +51,6 @@ namespace Helium
             {
                 return m_QueryPath;
             }
-
-            void SetCollection( const AssetCollection* collection );
-            AssetCollection* GetCollection();
-            const Helium::Path& GetCollectionPath() const
-            {
-                return m_CollectionPath;
-            }
-
 
             bool operator<( const SearchQuery& rhs ) const;
             bool operator==( const SearchQuery& rhs ) const;
@@ -78,12 +64,9 @@ namespace Helium
             virtual void PostDeserialize() HELIUM_OVERRIDE; 
 
         private:
-            SearchType              m_SearchType;
-            tstring             m_QueryString;
+            SearchType        m_SearchType;
+            tstring           m_QueryString;
             Helium::Path      m_QueryPath;
-            Helium::Path      m_CollectionPath;
-
-            friend class SearchHistory;
         };
     }
 }

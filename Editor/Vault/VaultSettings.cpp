@@ -1,6 +1,7 @@
 #include "Precompile.h"
 #include "VaultSettings.h"
-#include "VaultFrame.h"
+#include "Editor/Vault/VaultPanel.h"
+#include "Foundation/Math/Utils.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -12,10 +13,6 @@ VaultSettings::VaultSettings( const tstring& defaultFolder, ViewOptionID thumbna
  , m_ThumbnailMode( thumbnailMode )
  , m_ThumbnailSize( thumbnailSize )
  , m_DisplayPreviewAxis( false )
- , m_CollectionManager( new CollectionManager() )
- , m_SearchHistory( new SearchHistory() )
- , m_DependencyCollectionRecursionDepth( 0 )
- , m_UsageCollectionRecursionDepth( 0 )
 {
   Helium::Path::Normalize( m_DefaultFolder );
   Helium::Path::GuaranteeSeparator( m_DefaultFolder );
@@ -26,15 +23,15 @@ VaultSettings::~VaultSettings()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void VaultSettings::GetWindowSettings( VaultFrame* browserFrame, wxAuiManager* manager )
+void VaultSettings::GetWindowSettings( VaultPanel* vaultPanel, wxAuiManager* manager )
 {
-  m_WindowSettings->ApplyToWindow( browserFrame, manager, true );
+  m_WindowSettings->ApplyToWindow( vaultPanel, manager, true );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void VaultSettings::SetWindowSettings( VaultFrame* browserFrame, wxAuiManager* manager )
+void VaultSettings::SetWindowSettings( VaultPanel* vaultPanel, wxAuiManager* manager )
 {
-  m_WindowSettings->SetFromWindow( browserFrame, manager );
+  m_WindowSettings->SetFromWindow( vaultPanel, manager );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -82,52 +79,6 @@ void VaultSettings::SetDisplayPreviewAxis( bool display )
 const Reflect::Field* VaultSettings::DisplayPreviewAxisField() const
 {
   return GetClass()->FindField( &VaultSettings::m_DisplayPreviewAxis );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-u32 VaultSettings::GetDependencyCollectionRecursionDepth() const
-{
-  return m_DependencyCollectionRecursionDepth;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void VaultSettings::SetDependencyCollectionRecursionDepth( u32 recursionDepth )
-{
-  if ( m_DependencyCollectionRecursionDepth != recursionDepth )
-  {
-    m_DependencyCollectionRecursionDepth = recursionDepth;
-    Math::Clamp( m_DependencyCollectionRecursionDepth, 0, 1000 );
-    RaiseChanged( DependencyCollectionRecursionDepth() );
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-const Reflect::Field* VaultSettings::DependencyCollectionRecursionDepth() const
-{
-  return GetClass()->FindField( &VaultSettings::m_DependencyCollectionRecursionDepth );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-u32 VaultSettings::GetUsageCollectionRecursionDepth() const
-{
-  return m_UsageCollectionRecursionDepth;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void VaultSettings::SetUsageCollectionRecursionDepth( u32 recursionDepth )
-{
-  if ( m_UsageCollectionRecursionDepth != recursionDepth )
-  {
-    m_UsageCollectionRecursionDepth = recursionDepth;
-    Math::Clamp( m_UsageCollectionRecursionDepth, 0, 1000 );
-    RaiseChanged( UsageCollectionRecursionDepth() );
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-const Reflect::Field* VaultSettings::UsageCollectionRecursionDepth() const
-{
-  return GetClass()->FindField( &VaultSettings::m_UsageCollectionRecursionDepth );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

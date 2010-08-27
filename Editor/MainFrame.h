@@ -11,6 +11,8 @@
 #include "TypesPanel.h"
 #include "ViewPanel.h"
 
+#include "Editor/Vault/VaultPanel.h"
+
 #include "Core/SettingsManager.h"
 
 #include "Core/Scene/PropertiesManager.h"
@@ -73,6 +75,7 @@ namespace Helium
             ToolbarPanel*               m_ToolbarPanel;
             DirectoryPanel*             m_DirectoryPanel;
             PropertiesPanel*            m_PropertiesPanel;
+            VaultPanel*                 m_VaultPanel;
 
             Core::ProjectPtr            m_Project;
             MessageDisplayer            m_MessageDisplayer;
@@ -122,12 +125,16 @@ namespace Helium
             void OnShow( wxShowEvent& event );
             void OnMenuOpen( wxMenuEvent& event );
 
-            void OnNewScene( wxCommandEvent& event );
-            void OnNewEntity( wxCommandEvent& event );
-            void OnNewProject( wxCommandEvent& event );
-            void OnOpen( wxCommandEvent& event );
-            void OnClose( wxCommandEvent& event );
-            void OnSaveAll( wxCommandEvent& event );
+            virtual void OnNewScene( wxCommandEvent& event ) HELIUM_OVERRIDE;
+            virtual void OnNewEntity( wxCommandEvent& event ) HELIUM_OVERRIDE;
+            virtual void OnNewProject( wxCommandEvent& event ) HELIUM_OVERRIDE;
+            virtual void OnOpen( wxCommandEvent& event ) HELIUM_OVERRIDE;
+            virtual void OnClose( wxCommandEvent& event ) HELIUM_OVERRIDE;
+            virtual void OnSaveAll( wxCommandEvent& event ) HELIUM_OVERRIDE;
+
+            void OnSearchButtonClick( wxCommandEvent& event );
+            void OnSearchTextEnter( wxCommandEvent& event );
+            void OnCloseSearchPanel();
 
             void OnViewChange( wxCommandEvent& event );
             void OnViewCameraChange( wxCommandEvent& event );

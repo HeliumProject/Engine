@@ -187,8 +187,6 @@ void ArtProvider::Create()
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Entity, TXT( "apps/katuberling.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Curve, TXT( "nocturnal/unknown.png" ) ) );
 
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Collection, TXT( "actions/folder_new.png" ) ) );
-
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::TaskWindow, TXT( "actions/openterm.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::EditorIcon, TXT( "apps/browser.png" ) ) );
 }

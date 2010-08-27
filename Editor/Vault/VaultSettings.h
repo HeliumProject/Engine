@@ -1,8 +1,6 @@
 #pragma once
 
 #include "VaultMenuIDs.h"
-#include "CollectionManager.h"
-#include "SearchHistory.h"
 #include "SearchQuery.h"
 
 #include "Foundation/TUID.h"
@@ -13,8 +11,7 @@ namespace Helium
 {
     namespace Editor
     {
-        class VaultFrame;
-
+        class VaultPanel;
         class VaultSettings : public Reflect::ConcreteInheritor< VaultSettings, Reflect::Element >
         {
         public:
@@ -23,8 +20,8 @@ namespace Helium
                 u32 thumbnailSize = ThumbnailSizes::Medium );
             ~VaultSettings();
 
-            void GetWindowSettings( VaultFrame* browserFrame, wxAuiManager* manager = NULL );
-            void SetWindowSettings( VaultFrame* browserFrame, wxAuiManager* manager = NULL );
+            void GetWindowSettings( VaultPanel* vaultPanel, wxAuiManager* manager = NULL );
+            void SetWindowSettings( VaultPanel* vaultPanel, wxAuiManager* manager = NULL );
 
             const ViewOptionID GetThumbnailMode() const;
             void SetThumbnailMode( ViewOptionID thumbnailMode );
@@ -36,19 +33,8 @@ namespace Helium
             void SetDisplayPreviewAxis( bool display );
             const Reflect::Field* DisplayPreviewAxisField() const;
 
-            u32 GetUsageCollectionRecursionDepth() const;
-            void SetUsageCollectionRecursionDepth( u32 recursionDepth );
-            const Reflect::Field* UsageCollectionRecursionDepth() const;
-
-            u32 GetDependencyCollectionRecursionDepth() const;
-            void SetDependencyCollectionRecursionDepth( u32 recursionDepth );
-            const Reflect::Field* DependencyCollectionRecursionDepth() const;
-
             const tstring& GetDefaultFolderPath() const;
             void SetDefaultFolderPath( const tstring& path );
-
-            CollectionManager* GetCollectionManager() { return m_CollectionManager; }
-            SearchHistory* GetSearchHistory() { return m_SearchHistory; }
 
         private:
             WindowSettingsPtr     m_WindowSettings;
@@ -56,10 +42,6 @@ namespace Helium
             ViewOptionID          m_ThumbnailMode;
             u32                   m_ThumbnailSize;
             bool                  m_DisplayPreviewAxis;
-            CollectionManagerPtr  m_CollectionManager;
-            SearchHistoryPtr      m_SearchHistory;
-            u32                   m_DependencyCollectionRecursionDepth;
-            u32                   m_UsageCollectionRecursionDepth;
 
         public:
             static void EnumerateClass( Reflect::Compositor< VaultSettings >& comp )
@@ -74,18 +56,6 @@ namespace Helium
                 }
 
                 comp.AddField( &VaultSettings::m_DisplayPreviewAxis, "m_DisplayPreviewAxis" );
-                comp.AddField( &VaultSettings::m_CollectionManager, "m_CollectionManager", Reflect::FieldFlags::Hide | Reflect::FieldFlags::Share );
-                comp.AddField( &VaultSettings::m_SearchHistory, "m_SearchHistory", Reflect::FieldFlags::Hide | Reflect::FieldFlags::Share );
-
-                {
-                    Reflect::Field* field = comp.AddField( &VaultSettings::m_DependencyCollectionRecursionDepth, "DependencySearchDepth" );
-                    field->SetProperty( TXT( "UIScript" ), TXT( "UI[.[slider{min=0; max=100} value{}].]" ) );
-                }
-
-                {
-                    Reflect::Field* field = comp.AddField( &VaultSettings::m_UsageCollectionRecursionDepth, "UsageSearchDepth" );
-                    field->SetProperty( TXT( "UIScript" ), TXT( "UI[.[slider{min=0; max=100} value{}].]" ) );
-                }
             }
         };
 

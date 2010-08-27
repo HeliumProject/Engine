@@ -759,83 +759,11 @@
 			Name="Vault"
 			>
 			<File
-				RelativePath=".\Vault\AssetCollection.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\AssetCollection.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\CollectionManager.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\CollectionManager.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\CollectionsPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\CollectionsPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\DetailsFrame.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\DetailsFrame.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Vault\DirectoryCtrl.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Vault\DirectoryCtrl.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\FoldersPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\FoldersPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\NavigationPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\NavigationPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\PreviewPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\PreviewPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\ResultsPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\ResultsPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\SearchHistory.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\SearchHistory.h"
 				>
 			</File>
 			<File
@@ -923,103 +851,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Vault\Vault.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\Vault.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\VaultEvents.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\VaultFrame.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\VaultFrame.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\VaultGenerated.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\VaultGenerated.fbp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|x64"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|x64"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug Unicode|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug Unicode|x64"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release Unicode|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release Unicode|x64"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\Vault\VaultGenerated.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Vault\VaultMenuIDs.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Vault\VaultPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Vault\VaultPanel.h"
 				>
 			</File>
 			<File
@@ -1039,27 +879,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Vault\VaultSearchPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\VaultSearchPanel.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Vault\VaultSettings.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Vault\VaultSettings.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\VaultToolBar.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\VaultToolBar.h"
 				>
 			</File>
 		</Filter>
@@ -2345,14 +2169,6 @@
 		</File>
 		<File
 			RelativePath=".\UpdateStatusEvent.h"
-			>
-		</File>
-		<File
-			RelativePath=".\VaultPanel.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\VaultPanel.h"
 			>
 		</File>
 		<File

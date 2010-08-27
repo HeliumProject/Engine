@@ -11,7 +11,7 @@
 
 #include "Editor/MainFrame.h"
 #include "Editor/Tracker/Tracker.h"
-#include "Editor/Vault/Vault.h"
+#include "Editor/Vault/VaultSearch.h"
 
 #include <wx/app.h>
 #include <wx/xrc/xmlres.h>
@@ -47,13 +47,13 @@ namespace Helium
                 return m_Frame;
             }
 
-            Vault& GetVault()
+            VaultSearch* GetVaultSearch()
             {
-                if ( !m_Vault )
+                if ( !m_VaultSearch )
                 {
-                    m_Vault = new Vault();
+                    m_VaultSearch = new VaultSearch();
                 }
-                return *m_Vault;
+                return m_VaultSearch;
             }
 
         protected:
@@ -62,7 +62,7 @@ namespace Helium
             Helium::Thread m_TrackerThread;
 
             Core::SettingsManagerPtr m_SettingsManager;
-            Vault* m_Vault;
+            VaultSearch* m_VaultSearch;
             MainFrame* m_Frame;
         };
 

@@ -2,8 +2,6 @@
 #include "SearchQuery.h"
 
 #include "Editor/App.h"
-#include "Vault.h"
-
 #include "Foundation/Regex.h"
 #include "Foundation/Container/Insert.h"
 #include "Foundation/Checksum/MD5.h"
@@ -48,12 +46,10 @@ using namespace Helium::Editor;
 #define MATCH_WORD             TXT( "[a-z0-9_\\-\\.\\\\/:\\*]+" )
 #define MATCH_PHRASE           TXT( "[a-z0-9_\\-\\.\\\\/:\\s\\*]+" )
 #define MATCH_COLUMN_NAME      TXT( "[a-z][a-z0-9_\\-]{1,}" )
-#define MATCH_COLLECTION_NAME  TXT( "[a-z0-9]{1}[\\w\\-\\(\\. ]{1,24}" )
 
 const tchar* s_ParseWord             = TXT( "(" ) MATCH_WORD TXT( ")" );
 const tchar* s_ParsePhrase           = TXT( "[\"](" ) MATCH_PHRASE TXT( ")[\"]" );
 const tchar* s_ParseColumnName       = TXT( "(" ) MATCH_COLUMN_NAME TXT( ")\\s*[:=]\\s*" );
-const tchar* s_ParseCollectionName   = TXT( "(" ) MATCH_COLLECTION_NAME TXT( ")" );
 const tchar* s_TokenizeQueryString   = TXT( "(" ) MATCH_COLUMN_NAME TXT( "\\s*[:=]\\s*|[\"]" ) MATCH_PHRASE TXT( "[\"]|" ) MATCH_WORD TXT( ")" );
 
 //const char* s_MatchAssetPathPattern = "^[a-zA-Z]\\:(/[a-zA-Z0-9]([\\w\\-\\. ]*?[a-zA-Z0-9])*){1,}[/]{0,1}$";
@@ -69,7 +65,6 @@ void SearchQuery::EnumerateClass( Reflect::Compositor<SearchQuery>& comp )
     Reflect::EnumerationField* enumSearchType = comp.AddEnumerationField( &SearchQuery::m_SearchType, "m_SearchType" );
     Reflect::Field* fieldQueryString = comp.AddField( &SearchQuery::m_QueryString, "m_QueryString" );
     Reflect::Field* fieldQueryPath = comp.AddField( &SearchQuery::m_QueryPath, "m_QueryPath", Reflect::FieldFlags::Force );
-    Reflect::Field* fieldCollectionPath = comp.AddField( &SearchQuery::m_CollectionPath, "m_CollectionPath", Reflect::FieldFlags::Force );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -108,35 +103,6 @@ void SearchQuery::SetQueryString( const tstring& queryString )
         Log::Warning( TXT( "Errors occurred while parsing the query string: %s\n  %s\n" ), m_QueryString.c_str(), errors.c_str() );
         return;
     }
-}
-
-/////////////////////////////////////////////////////////////////////////////////
-void SearchQuery::SetCollection( const AssetCollection* collection )
-{
-    if ( !collection ) 
-        return;
-
-    m_SearchType = SearchTypes::DBSearch;
-
-    if ( m_CollectionPath )
-    {
-        delete m_CollectionPath;
-    }
-
-    m_CollectionPath = collection->GetPath();
-
-    if ( m_QueryString.empty() )
-    {
-        m_QueryString = TXT( "collection: \"" ) + collection->GetName() + TXT( "\"" );
-    }
-}
-
-/////////////////////////////////////////////////////////////////////////////////
-AssetCollection* SearchQuery::GetCollection()
-{
-    //return wxGetApp().GetVaultSettings()->GetCollectionManager()->FindCollection( m_CollectionPath->GetPath() );
-#pragma TODO( "collections are being replaced... ?" )
-    return NULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -180,24 +146,6 @@ bool TokenizeQuery( const tstring& queryString, std::vector< tstring >& tokens )
     }
 
     return !tokens.empty();
-}
-
-bool ParseCollectionName( const tstring& token, tsmatch& matchResults, tstring& collectionName, tstring& errors )
-{
-    const tregex parseCollectionName( s_ParseCollectionName, std::tr1::regex::icase );
-
-    // Phrase or Word
-    if ( std::tr1::regex_search( token, matchResults, parseCollectionName ) )
-    {
-        if ( matchResults[1].matched )
-        {
-            collectionName = Helium::MatchResultAsString( matchResults, 1 );
-            return true;
-        }
-    }
-
-    errors = TXT( "Vault could not parse collection name: " ) + token;
-    return false;
 }
 
 bool ParsePhrase( const tstring& token, tsmatch& matchResults, tstring& phrase, tstring& errors )
@@ -294,31 +242,6 @@ bool SearchQuery::ParseQueryString( const tstring& queryString, tstring& errors,
                         return false;
                     }
                     curToken = *tokenItr;
-
-                    //-------------------------------------------
-                    // Collection Query
-                    if ( _tcsicmp( columnAlias.c_str(), TXT( "collection" ) ) == 0 )
-                    {
-                        if ( ParseCollectionName( curToken, matchResults, currentValue, errors ) )
-                        {
-                            AssetCollection* collection = wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >()->GetCollectionManager()->FindCollection( currentValue );
-                            if ( !collection )
-                            {
-                                // TODO: error out
-                                errors = "Could not find collection named: " + currentValue;
-                                return false;
-                            }
-                            else if ( collection && query )
-                            {
-                                query->SetCollection( collection );
-                            }
-                            continue;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
                 }
 
                 //-------------------------------------------

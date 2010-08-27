@@ -82,8 +82,10 @@ void Container::Bind(const DataPtr& data)
 
 bool Container::Process(const tstring& key, const tstring& value)
 {
-    if ( __super::Process( key, value ) )
+    if ( Base::Process( key, value ) )
+    {
         return true;
+    }
 
     if ( key == CONTAINER_ATTR_NAME )
     {

@@ -1402,14 +1402,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\LightPanel.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\LightPanel.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Scene\Locator.cpp"
 					>
 				</File>

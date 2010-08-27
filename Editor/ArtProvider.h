@@ -146,8 +146,6 @@ namespace Helium
             static const wxChar* SelectLayerMembers = wxART_MAKE_ART_ID( EDITOR_ART_ID_SELECT_LAYER_MEMBERS );
             static const wxChar* SelectLayers = wxART_MAKE_ART_ID( EDITOR_ART_ID_SELECT_LAYERS );
 
-            static const wxChar* Collection = wxART_MAKE_ART_ID( EDITOR_ART_ID_NEW_COLLECTION );
-
             static const wxChar* TaskWindow = wxART_MAKE_ART_ID( EDITOR_ART_ID_TASKWINDOW );
             static const wxChar* EditorIcon = wxART_MAKE_ART_ID( EDITOR_ART_ID_EDITOR_ICON );
 

@@ -1,7 +1,6 @@
 #include "Precompile.h"
 #include "VaultSearch.h"
 
-#include "Vault.h"
 #include "SearchResults.h"
 
 #include "Platform/Exception.h"
@@ -189,7 +188,6 @@ VaultSearch::~VaultSearch()
 // and thus must be created on the heap
 //
 // Everything comes through here
-//  - collection path
 //  - folder path
 //  - search query
 //
@@ -317,7 +315,7 @@ void VaultSearch::SearchThreadProc( i32 searchID )
         searchPath.Set( searchPath.Directory() );
     }
 
-    if (    m_CurrentSearchQuery->GetSearchType() == SearchTypes::File
+    if ( m_CurrentSearchQuery->GetSearchType() == SearchTypes::File
         || m_CurrentSearchQuery->GetSearchType() == SearchTypes::Folder )
     {
         AddPath( searchPath, searchID );
@@ -336,20 +334,7 @@ void VaultSearch::SearchThreadProc( i32 searchID )
     {
         std::set< Helium::Path > assetFiles;
 
-        AssetCollection* collection = m_CurrentSearchQuery->GetCollection();    
-
-        // Empty collection
-        if ( collection && collection->GetAssetPaths().empty() )
-        {
-            SearchThreadLeave( searchID );
-            return;
-        }
-        // Just the collection 
-        else if ( collection )
-        {
-            assetFiles = collection->GetAssetPaths();
-        }
-
+#pragma TODO( "Search Cache DB")
         if ( CheckSearchThreadLeave( searchID ) )
         {
             return;

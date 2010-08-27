@@ -65,33 +65,33 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
 
     if ( !m_Serializers.empty() )
     {
-      ColorPickerPtr colorPicker = parent->GetCanvas()->Create<ColorPicker>( this );
+      ColorPickerPtr colorPicker = CreateControl<ColorPicker>();
       container->AddChild( colorPicker );
 
       bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;
-      colorPicker->SetReadOnly( readOnly );
+      colorPicker->a_IsReadOnly.Set( readOnly );
 
       DataPtr data = new MultiStringFormatter<Serializer>( ser );
       colorPicker->Bind( data );
 
       if ( color3 )
       {
-        colorPicker->UseAlpha( false );
+        colorPicker->a_Alpha.Set( false );
       }
 
       if ( color4 )
       {
-        colorPicker->UseAlpha( true );
+        colorPicker->a_Alpha.Set( true );
 
-        SliderPtr slider = parent->GetCanvas()->Create<Slider>( this );
+        SliderPtr slider = CreateControl<Slider>();
         container->AddChild( slider );
-        slider->SetRangeMin( 0.0 );
-        slider->SetRangeMax( 255.0f );
-        slider->SetReadOnly( readOnly );
+        slider->a_Min.Set( 0.0 );
+        slider->a_Max.Set( 255.0f );
+        slider->a_IsReadOnly.Set( readOnly );
 
-        ValuePtr value = parent->GetCanvas()->Create<Value>( this );
+        ValuePtr value = CreateControl<Value>();
         container->AddChild( value );
-        value->SetReadOnly( readOnly );
+        value->a_IsReadOnly.Set( readOnly );
 
         std::vector<Serializer*> alphaSer;
         std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
@@ -118,15 +118,15 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
 
       if ( field->m_SerializerID == Reflect::GetType<HDRColor3Serializer>() || field->m_SerializerID == Reflect::GetType<HDRColor4Serializer>() )
       {
-        SliderPtr slider = parent->GetCanvas()->Create<Slider>( this );
+        SliderPtr slider = CreateControl<Slider>();
         container->AddChild( slider );
-        slider->SetRangeMin( 0.0 );
-        slider->SetRangeMax( 8.0 );
-        slider->SetReadOnly( readOnly );
+        slider->a_Min.Set( 0.0 );
+        slider->a_Max.Set( 8.0 );
+        slider->a_IsReadOnly.Set( readOnly );
 
-        ValuePtr value = parent->GetCanvas()->Create<Value>( this );
+        ValuePtr value = CreateControl<Value>();
         container->AddChild( value );
-        value->SetReadOnly( readOnly );
+        value->a_IsReadOnly.Set( readOnly );
 
         std::vector<Serializer*> intensitySer;
         std::vector<Reflect::Element*>::const_iterator itr = instances.begin();

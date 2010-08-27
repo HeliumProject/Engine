@@ -3,7 +3,7 @@
 #include "Application/API.h"
 #include "Application/Inspect/Controls/InspectButton.h"
 
-#include "Foundation/TUID.h"
+#include "Foundation/FileDialog.h"
 
 namespace Helium
 {
@@ -34,6 +34,8 @@ namespace Helium
 
             tstring   GetPath();
 
+            FileDialogSignature::Delegate d_OpenFileBrowser;
+
         protected:
 
             virtual bool  Process( const tstring& key, const tstring& value ) HELIUM_OVERRIDE;
@@ -45,7 +47,7 @@ namespace Helium
             //
 
             tstring         m_Title;        // Caption on the title bar of the file browser dialog (defaults to "Open")
-            tstring         m_Path;         // The path to start the file browser in, can contain file name
+            Path            m_Path;         // The path to start the file browser in, can contain file name
 
             std::set< tstring >            m_Filters;      // The filter for which file types to show in the file browser dialog (defaults to "All Files (*.*)|*.*")
         };

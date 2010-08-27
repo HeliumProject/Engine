@@ -3,6 +3,8 @@
 #include "Application/API.h"
 #include "Application/Inspect/Interpreters/Reflect/ReflectFieldInterpreter.h"
 
+#include "Foundation/FileDialog.h"
+
 namespace Helium
 {
     namespace Inspect
@@ -26,16 +28,19 @@ namespace Helium
             void TranslateOutputTUIDContainer( Reflect::TranslateOutputEventArgs& args );
 
             // callbacks
-            void OnAdd( Button* button );
-            void OnAddFile( Button* button );
-            void OnFindFile( Button* button );
-            void OnEdit( Button* button );
-            void OnRemove( Button* button );
-            void OnMoveUp( Button* button );
-            void OnMoveDown( Button* button );
+            void OnAdd( const ButtonClickedArgs& args );
+            void OnAddFile( const ButtonClickedArgs& args );
+            void OnFindFile( const ButtonClickedArgs& args );
+            void OnEdit( const ButtonClickedArgs& args );
+            void OnRemove( const ButtonClickedArgs& args );
+            void OnMoveUp( const ButtonClickedArgs& args );
+            void OnMoveDown( const ButtonClickedArgs& args );
 
+#ifdef INSPECT_REFACTOR
             void OnDrop( const Inspect::FilteredDropTargetArgs& args );
+#endif
 
+            FileDialogSignature::Delegate d_OpenFileDialog;
         private:
             tstring m_FileFilter;
             Inspect::List* m_List;

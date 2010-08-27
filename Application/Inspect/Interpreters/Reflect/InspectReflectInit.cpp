@@ -10,7 +10,6 @@
 #include "Application/Inspect/Interpreters/Reflect/ReflectColorInterpreter.h"
 #include "Application/Inspect/Interpreters/Reflect/ReflectArrayInterpreter.h"
 #include "Application/Inspect/Interpreters/Reflect/ReflectSetInterpreter.h"
-#include "Application/Inspect/Interpreters/Reflect/ReflectMapInterpreter.h"
 
 using namespace Helium;
 using namespace Helium::Inspect;
@@ -49,7 +48,6 @@ void InspectReflect::Initialize()
         // containers
         ReflectFieldInterpreterFactory::Register<ReflectArrayInterpreter>( Reflect::GetType<Reflect::ArraySerializer>() );
         ReflectFieldInterpreterFactory::Register<ReflectSetInterpreter>( Reflect::GetType<Reflect::SetSerializer>() );
-        ReflectFieldInterpreterFactory::Register<ReflectMapInterpreter>( Reflect::GetType<Reflect::MapSerializer>() );
     }
 }
 

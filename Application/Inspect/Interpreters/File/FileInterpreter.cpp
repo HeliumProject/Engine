@@ -1,6 +1,5 @@
 #include "FileInterpreter.h"
 #include "FileDialogButton.h"
-#include "FileBrowserButton.h"
 
 #include "Application/Inspect/InspectInit.h"
 #include "Application/Inspect/InspectScript.h"
@@ -47,7 +46,6 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
     DataChangingSignature::Delegate changingDelegate;
 
     FileDialogButtonPtr fileDialogButton;
-    FileBrowserButtonPtr browserButton;
 
     //
     // Parse
@@ -81,14 +79,6 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
                     fileDialogButton->SetFilter( m_FileFilter );
                 }
                 container->AddChild( fileDialogButton );
-
-                // File search button
-                browserButton = CreateControl< FileBrowserButton >();
-                if ( !m_FileFilter.empty() )
-                {
-                    browserButton->SetFilter( m_FileFilter );
-                }
-                container->AddChild( browserButton );
 
 #ifdef INSPECT_REFACTOR
                 Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( m_FileFilter );

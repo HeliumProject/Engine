@@ -31,7 +31,9 @@ void FileDialogButton::Realize( Inspect::Container* parent )
 
         if ( IsBound() )
         {
-            ReadPathData( m_Path );
+            tstring path;
+            ReadPathData( path );
+            m_Path.Set( path );
         }
     }
 }
@@ -81,15 +83,9 @@ bool FileDialogButton::Write()
             filterStr.erase( filterStr.size() - 1 );
         }
 
-        wxWindow* parent = GetCanvas() ? GetCanvas()->GetControl() : NULL;
-
-        Helium::FileDialog fileDialog( parent, m_Title.c_str(), GetPath().c_str(), TXT( "" ), filterStr.c_str(), Helium::FileDialogStyles::DefaultOpen );
-
-        if ( fileDialog.ShowModal() == wxID_OK )
-        {
-            tstring path = fileDialog.GetPath().c_str();
-            result = WriteStringData( path );
-        }
+        FileDialogArgs args( FileDialogTypes::OpenFile, m_Title, filterStr, m_Path );
+        m_Path = d_OpenFileBrowser.Invoke( args );
+        result = WriteStringData( m_Path.Get() );
     }
 
     return result;
@@ -144,10 +140,12 @@ tstring FileDialogButton::GetPath()
 {
     if ( IsBound() )
     {
-        ReadPathData( m_Path );
+        tstring path;
+        ReadPathData( path );
+        m_Path.Set( path );
     }
 
-    return m_Path;
+    return m_Path.Get();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -156,11 +154,10 @@ tstring FileDialogButton::GetPath()
 // 
 void FileDialogButton::SetPath( const tstring& path )
 {
-    m_Path = path;
-    Helium::Path::Normalize( m_Path );
+    m_Path.Set( path );
     if ( IsBound() )
     {
-        WriteStringData( m_Path );
+        WriteStringData( m_Path.Get() );
     }
 }
 

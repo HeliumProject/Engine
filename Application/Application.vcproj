@@ -657,14 +657,6 @@
 					Name="File"
 					>
 					<File
-						RelativePath=".\Inspect\Interpreters\File\FileBrowserButton.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Interpreters\File\FileBrowserButton.h"
-						>
-					</File>
-					<File
 						RelativePath=".\Inspect\Interpreters\File\FileContainerInterpreter.cpp"
 						>
 					</File>

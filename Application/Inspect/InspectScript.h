@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Application/Inspect/InspectData.h"
+#include "Application/Inspect/InspectInterpreter.h"
 #include "Application/Inspect/Controls/InspectLabel.h"
 #include "Application/Inspect/Controls/InspectCanvas.h"
 

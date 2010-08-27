@@ -7,6 +7,8 @@ namespace Helium
 {
     namespace Inspect
     {
+        class List;
+
         class ClientDataFilter : public Reflect::AbstractInheritor<ClientDataFilter, Reflect::Object>
         {
         public:

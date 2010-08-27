@@ -271,7 +271,9 @@ bool Script::Parse(const tstring& script, Interpreter* interpreter, Canvas* canv
 
     ControlPtr control = Reflect::ObjectCast<Inspect::Control> ( Reflect::Registry::GetInstance()->CreateInstance( i->second ) );
 
+#ifdef INSPECT_REFACTOR
     control->SetInterpreter( interpreter );
+#endif
 
     control->SetCanvas( canvas );
 
@@ -282,7 +284,7 @@ bool Script::Parse(const tstring& script, Interpreter* interpreter, Canvas* canv
     }
 
     bool readOnly = ( fieldFlags & Reflect::FieldFlags::ReadOnly ) == Reflect::FieldFlags::ReadOnly;
-    control->SetReadOnly( readOnly );
+    control->a_IsReadOnly.Set( readOnly );
 
 
     //

@@ -40,7 +40,7 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
   
   tstring temp;
   bool converted = Helium::ConvertString( field->m_UIName, temp );
-  container->SetText( temp );
+  container->a_Name.Set( temp );
   parent->AddChild(container);
 
   // build the child gui elements
@@ -49,10 +49,10 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
   M_StrEnumerationElement::const_iterator enumEnd = enumField->m_Enumeration->m_ElementsByLabel.end();
   for ( ; enumItr != enumEnd; ++enumItr )
   {
-    ContainerPtr row = m_Container->GetCanvas()->Create<Container>( this );
+    ContainerPtr row = CreateControl< Container >();
     container->AddChild( row );
 
-    LabelPtr label = m_Container->GetCanvas()->Create<Label>( this );
+    LabelPtr label = CreateControl< Label >();
     row->AddChild( label );
 
     tstring temp;
@@ -60,13 +60,13 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
     HELIUM_ASSERT( converted );
     label->BindText( temp );
 
-    BitfieldCheckBoxPtr checkbox = m_Container->GetCanvas()->Create<ReflectBitfieldCheckBox>( this );
+    BitfieldCheckBoxPtr checkbox = CreateControl< ReflectBitfieldCheckBox >();
     row->AddChild( checkbox );
 
     converted = Helium::ConvertString( enumItr->first, temp );
     HELIUM_ASSERT( converted );
     checkbox->SetBitfieldString( temp );
-    checkbox->SetReadOnly( readOnly );
+    checkbox->a_IsReadOnly.Set( readOnly );
   }
 
   // create the serializers
@@ -87,6 +87,6 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
   {
     tstringstream outStream;
     *field->m_Default >> outStream;
-    container->SetDefault( outStream.str() );
+    container->a_Default.Set( outStream.str() );
   }
 }

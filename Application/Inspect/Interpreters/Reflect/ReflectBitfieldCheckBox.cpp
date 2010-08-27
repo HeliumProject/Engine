@@ -4,8 +4,12 @@
 #include "Application/Inspect/InspectData.h"
 #include "Foundation/String/Tokenize.h"
 
+#ifdef INSPEC_REFACTOR
+
 #include <wx/checkbox.h>
 #include <wx/container.h>
+
+#endif
 
 using namespace Helium::Reflect;
 using namespace Helium::Inspect;
@@ -321,3 +325,5 @@ CheckBoxStates::CheckBoxState ReflectBitfieldCheckBox::GetUIState() const
   }
   return state;
 }
+
+#endif

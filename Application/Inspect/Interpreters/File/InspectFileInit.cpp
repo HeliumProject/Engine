@@ -7,7 +7,6 @@
 #include "Application/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 
 #include "FileDialogButton.h"
-#include "FileBrowserButton.h"
 
 #include "FileInterpreter.h"
 #include "FileContainerInterpreter.h"
@@ -25,7 +24,6 @@ void InspectFile::Initialize()
     Inspect::Initialize();
 
     g_RegisteredTypes.Push( Reflect::RegisterClassType<FileDialogButton>( TXT( "InspectFileDialogButton" ) ) );
-    g_RegisteredTypes.Push( Reflect::RegisterClassType<FileBrowserButton>( TXT( "InspectFileBrowserButton" ) ) );
 
     ReflectFieldInterpreterFactory::Register<FileContainerInterpreter>( Reflect::GetType<Reflect::PathArraySerializer>() );
     ReflectFieldInterpreterFactory::Register<FileContainerInterpreter>( Reflect::GetType<Reflect::PathSetSerializer>() );

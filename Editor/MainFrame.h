@@ -132,7 +132,6 @@ namespace Helium
             virtual void OnClose( wxCommandEvent& event ) HELIUM_OVERRIDE;
             virtual void OnSaveAll( wxCommandEvent& event ) HELIUM_OVERRIDE;
 
-            void ShowVaultPanel( const tstring& queryString );
             void OnSearchButtonClick( wxCommandEvent& event );
             void OnSearchTextEnter( wxCommandEvent& event );
             void OnCloseSearchPanel();

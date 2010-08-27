@@ -161,6 +161,11 @@ App::App()
 
 App::~App()
 {
+    if ( m_VaultSearch )
+    {
+        delete m_VaultSearch;
+        m_VaultSearch = NULL;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

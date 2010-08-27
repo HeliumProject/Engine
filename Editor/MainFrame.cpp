@@ -222,6 +222,10 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     m_TypesPanel = new TypesPanel( &m_SceneManager, this );
     m_FrameManager.AddPane( m_TypesPanel, wxAuiPaneInfo().Name( wxT( "types" ) ).Caption( wxT( "Types" ) ).Right().Layer( 1 ).Position( 3 ) );
 
+    m_VaultPanel = new VaultPanel( wxGetApp().GetVaultSearch(), this );
+    m_FrameManager.AddPane( m_VaultPanel, wxAuiPaneInfo().Name( wxT( "vault" ) ).Caption( wxT( "Asset Vault" ) ).Right().Layer( 1 ).Position( 4 ) );
+
+
     m_FrameManager.Update();
 
     CreatePanelsMenu( m_MenuPanels );
@@ -315,6 +319,9 @@ MainFrame::~MainFrame()
 #pragma TODO( "We shouldn't really have to do these if we clean up how some of our objects reference each other" )
     m_DirectoryPanel->Destroy();
     m_LayersPanel->Destroy();
+
+    m_VaultPanel->Destroy();
+    m_VaultPanel=NULL;
 }
 
 void MainFrame::SetHelpText( const tchar* text )
@@ -824,43 +831,22 @@ void MainFrame::OnSaveAll( wxCommandEvent& event )
     }
 }
 
-void MainFrame::ShowVaultPanel( const tstring& queryString )
+void MainFrame::OnSearchButtonClick( wxCommandEvent& event )
 {
-#pragma TODO ("Add Vault panel to the aui manager m_FrameManager")
-    //wxString value = m_SearchBox->GetValue();
-    //value.Trim(true);  // trim white-space right 
-    //value.Trim(false); // trim white-space left
-
-    //wxGetApp().GetVault().ShowVault( value.wx_str() );
-
-
-    //if ( !m_VaultPanel )
-    //{
-    //    // Create the one and only VaultSearch
-    //    m_VaultSearch = new VaultSearch();
-
-    //    m_VaultPanel = new VaultPanel( this, m_VaultSearch );
-
-    //}
-
+    wxString queryString = m_ToolbarPanel->m_VaultSearchBox->GetLineText(0);
+    queryString.Trim(true);  // trim white-space right 
+    queryString.Trim(false); // trim white-space left
+    
+    if ( !m_VaultPanel )
+    {
+        m_VaultPanel = new VaultPanel( wxGetApp().GetVaultSearch(), this );
+        m_FrameManager.AddPane( m_VaultPanel, wxAuiPaneInfo().Name( wxT( "vault" ) ).Caption( wxT( "Asset Vault" ) ).Right().Layer( 1 ).Position( 3 ) );
+    }
     //m_VaultPanel->Show();
     //m_VaultPanel->SetFocus();
 
-    //if ( !queryString.empty() )
-    //{
-    //    m_VaultPanel->Search( queryString );
-    //}
-    //else
-    //{
-    //    {
-    //        m_VaultPanel->Search( wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >()->GetDefaultFolderPath() );
-    //    }
-    //}
-}
+    //queryString.wx_str();
 
-void MainFrame::OnSearchButtonClick( wxCommandEvent& event )
-{
-    //tstring queryString = m_ToolbarPanel->m_VaultSearchBox->GetLineText(0).c_str();
     event.Skip();
 }
 

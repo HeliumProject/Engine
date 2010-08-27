@@ -47,13 +47,13 @@ namespace Helium
                 return m_Frame;
             }
 
-            VaultSearch& GetVaultSearch()
+            VaultSearch* GetVaultSearch()
             {
                 if ( !m_VaultSearch )
                 {
                     m_VaultSearch = new VaultSearch();
                 }
-                return *m_VaultSearch;
+                return m_VaultSearch;
             }
 
         protected:

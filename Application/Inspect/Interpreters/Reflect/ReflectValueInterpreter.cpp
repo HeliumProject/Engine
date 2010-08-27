@@ -56,7 +56,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
       V_EnumerationElement::const_iterator end = enumInfo->m_Enumeration->m_Elements.end();
       for ( size_t index=0; itr != end; ++itr, ++index )
       {
-        Item& item = items[index];
+        ChoiceItem& item = items[index];
         bool converted = Helium::ConvertString( (*itr)->m_Label.c_str(), item.m_Key );
         HELIUM_ASSERT( converted );
 
@@ -64,9 +64,9 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
         HELIUM_ASSERT( converted );
       }
 
-      choice->SetItems( items );
-      choice->SetDropDown( true );
-      choice->SetReadOnly( readOnly );
+      choice->a_Items.Set( items );
+      choice->a_IsDropDown.Set( true );
+      choice->a_IsReadOnly.Set( readOnly );
 
       container->AddChild(choice);
     }
@@ -74,14 +74,14 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
     {
       if ( field->m_SerializerID == Reflect::GetType<BoolSerializer>() )
       {
-        CheckBoxPtr checkBox = m_Container->GetCanvas()->Create<CheckBox>(this);
-        checkBox->SetReadOnly( readOnly );
+        CheckBoxPtr checkBox = CreateControl<CheckBox>();
+        checkBox->a_IsReadOnly.Set( readOnly );
         container->AddChild( checkBox );
       }
       else
       {
-        ValuePtr value = m_Container->GetCanvas()->Create<Value>( this );
-        value->SetReadOnly( readOnly );
+        ValuePtr value = CreateControl<Value>();
+        value->a_IsReadOnly.Set( readOnly );
         container->AddChild( value );
       }
     }
@@ -108,7 +108,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
 
   if (label == NULL)
   {
-    label = container->GetCanvas()->Create<Label>(this);
+    label = CreateControl<Label>();
 
     tstring temp;
     bool converted = Helium::ConvertString( field->m_UIName, temp );
@@ -157,7 +157,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
 
     *field->m_Default >> outStream;
 
-    container->SetDefault( outStream.str() );
+    container->a_Default.Set( outStream.str() );
   }
 
   //

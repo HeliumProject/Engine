@@ -77,7 +77,7 @@ void ChoiceWidget::Create( wxWindow* parent )
 
     u32 style = 0;
     
-    if ( m_ChoiceControl->a_DropDown.Get() )
+    if ( m_ChoiceControl->a_IsDropDown.Get() )
     {
         style |= wxCB_DROPDOWN | wxCB_READONLY;
     }
@@ -86,7 +86,7 @@ void ChoiceWidget::Create( wxWindow* parent )
         style |= wxTE_PROCESS_ENTER;
     }
     
-    if ( m_ChoiceControl->a_Sorted.Get() )
+    if ( m_ChoiceControl->a_IsSorted.Get() )
     {
         style |= wxCB_SORT;
     }

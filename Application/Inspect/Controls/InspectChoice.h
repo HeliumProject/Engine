@@ -84,8 +84,8 @@ namespace Helium
             virtual void Populate() HELIUM_OVERRIDE;
 
             Attribute< bool >                       a_Highlight;
-            Attribute< bool >                       a_Sorted;
-            Attribute< bool >                       a_DropDown;
+            Attribute< bool >                       a_IsSorted;
+            Attribute< bool >                       a_IsDropDown;
             Attribute< bool >                       a_EnableAdds;
             Attribute< std::vector< ChoiceItem > >  a_Items;
 

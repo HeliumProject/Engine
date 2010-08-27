@@ -19,10 +19,10 @@ ReflectColorInterpreter::ReflectColorInterpreter( Container* container )
 
 void ReflectColorInterpreter::InterpretField( const Field* field, const std::vector<Reflect::Element*>& instances, Container* parent )
 {
-  ContainerPtr container = m_Container->GetCanvas()->Create<Container>( this );
+  ContainerPtr container = CreateControl< Container >();
   parent->AddChild( container );
 
-  LabelPtr label = parent->GetCanvas()->Create<Label>( this );
+  LabelPtr label = CreateControl< Label >();
 
   tstring temp;
   bool converted = Helium::ConvertString( field->m_UIName, temp );

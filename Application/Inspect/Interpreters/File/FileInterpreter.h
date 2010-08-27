@@ -3,6 +3,8 @@
 #include "Application/API.h"
 #include "Application/Inspect/Interpreters/Reflect/ReflectFieldInterpreter.h"
 
+#include "Foundation/FileDialog.h"
+
 #ifdef INSPECT_REFACTOR
 #include "Application/Inspect/DragDrop/FilteredDropTarget.h"
 #endif
@@ -18,13 +20,18 @@ namespace Helium
 
             virtual void InterpretField(const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent);
 
+            FileDialogSignature::Delegate d_FindMissingFile;
+
         private:
 
             // callbacks
             bool DataChanging( DataChangingArgs& args );
-            void Edit( Button* button );
+            void Edit( const ButtonClickedArgs& args );
 
+#ifdef INSPECT_REFACTOR
             void OnDrop( const Inspect::FilteredDropTargetArgs& args );
+#endif
+
 
         protected:
             tstring m_FileFilter;

@@ -7,8 +7,6 @@
 #include "Application/Inspect/InspectData.h"
 #include "Application/Inspect/Controls/InspectButton.h"
 #include "Application/Inspect/Controls/InspectValue.h"
-#include "Application/Inspect/Clipboard/ClipboardDataObject.h"
-#include "Application/Inspect/Clipboard/ClipboardFileList.h"
 
 #include "Core/Asset/AssetClass.h"
 #include "Application/UI/FileDialog.h"
@@ -43,7 +41,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
     ContainerPtr container = new Container ();
     groups.push_back( container );
 
-    bool pathField = field->m_SerializerID == Reflect::GetType< PointerSerializer >() && field->m_Flags & FieldFlags::Path;
+    bool pathField = field->m_SerializerID == Reflect::GetType< PathSerializer >();
     bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;
 
     DataChangingSignature::Delegate changingDelegate;
@@ -63,62 +61,60 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
         if ( pathField || field->m_SerializerID == Reflect::GetType<StringSerializer>() )
         {
             ContainerPtr valueContainer = new Container ();
-            ValuePtr value = m_Container->GetCanvas()->Create<Value>(this);
-            value->SetJustification( Value::kRight );
-            value->SetReadOnly( readOnly );
+            ValuePtr value = CreateControl< Value >();
+            value->a_Justification.Set( Justifications::Right );
+            value->a_IsReadOnly.Set( readOnly );
             valueContainer->AddChild( value );
             groups.push_back( valueContainer );
 
-            if ( pathField || field->m_Flags & FieldFlags::FilePath ) 
+            if ( !readOnly )
             {
-                if ( !readOnly )
+                changingDelegate = DataChangingSignature::Delegate(this, &FileInterpreter::DataChanging);
+
+                // File dialog button
+                fileDialogButton = CreateControl< FileDialogButton >();
+
+                field->GetProperty( TXT( "FileFilter" ), m_FileFilter );
+
+                if ( !m_FileFilter.empty() )
                 {
-                    changingDelegate = DataChangingSignature::Delegate(this, &FileInterpreter::DataChanging);
+                    fileDialogButton->SetFilter( m_FileFilter );
+                }
+                container->AddChild( fileDialogButton );
 
-                    // File dialog button
-                    fileDialogButton = m_Container->GetCanvas()->Create<FileDialogButton>(this);
-
-                    field->GetProperty( TXT( "FileFilter" ), m_FileFilter );
-
-                    if ( !m_FileFilter.empty() )
-                    {
-                        fileDialogButton->SetFilter( m_FileFilter );
-                    }
-                    container->AddChild( fileDialogButton );
-
-                    // File search button
-                    browserButton = m_Container->GetCanvas()->Create<FileBrowserButton>(this);
-                    if ( !m_FileFilter.empty() )
-                    {
-                        browserButton->SetFilter( m_FileFilter );
-                    }
-                    container->AddChild( browserButton );
+                // File search button
+                browserButton = CreateControl< FileBrowserButton >();
+                if ( !m_FileFilter.empty() )
+                {
+                    browserButton->SetFilter( m_FileFilter );
+                }
+                container->AddChild( browserButton );
 
 #ifdef INSPECT_REFACTOR
-                    Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( m_FileFilter );
-                    filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &FileInterpreter::OnDrop ) );
-                    value->SetDropTarget( filteredDropTarget );
+                Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( m_FileFilter );
+                filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &FileInterpreter::OnDrop ) );
+                value->SetDropTarget( filteredDropTarget );
 #endif
-                    m_Value = value;
-                }
+                m_Value = value;
+            }
 
-                if ( instances.size() == 1 )
-                {
-                    // File edit button
-                    ButtonPtr editButton = m_Container->GetCanvas()->Create<Button>(this);
-                    editButton->ButtonClickedEvent().Add( ActionSignature::Delegate ( this, &FileInterpreter::Edit ) );
-                    editButton->SetText( TXT( "Edit" ) );
-                    container->AddChild( editButton );
-                }
+            if ( instances.size() == 1 )
+            {
+                // File edit button
+                ButtonPtr editButton = CreateControl< Button >();
+                editButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &FileInterpreter::Edit ) );
+                editButton->a_Label.Set( TXT( "Edit" ) );
+                container->AddChild( editButton );
             }
         }
-        else
-        {
-            ValuePtr value = m_Container->GetCanvas()->Create<Value>( this );
-            value->SetReadOnly( readOnly );
-            container->AddChild( value );
-        }
     }
+    else
+    {
+        ValuePtr value = CreateControl< Value >();
+        value->a_IsReadOnly.Set( readOnly );
+        container->AddChild( value );
+    }
+
 
     //
     // Setup label
@@ -141,7 +137,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
     if (label == NULL)
     {
-        label = container->GetCanvas()->Create<Label>(this);
+        label = CreateControl< Label >();
         tstring temp;
         bool converted = Helium::ConvertString( field->m_UIName, temp );
         HELIUM_ASSERT( converted );
@@ -209,7 +205,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
         tstring temp;
         bool converted = Helium::ConvertString( outStream.str().c_str(), temp );
         HELIUM_ASSERT( converted );
-        container->SetDefault( temp );
+        container->a_Default.Set( temp );
     }
 
     //
@@ -240,79 +236,28 @@ bool FileInterpreter::DataChanging( DataChangingArgs& args )
             return true;
         }
 
-        tstring dir;
-        if ( path.IsDirectory() )
-        {
-            dir = path.Get();
-        }
+        path.TrimToExisting();
 
-        // case 1: the path is right but the file is wrong
-        if ( dir.empty() )
-        {
-            tchar drive[MAX_PATH], folder[MAX_PATH], file[MAX_PATH], ext[MAX_PATH];
-            _tsplitpath(text.c_str(), drive, folder, file, ext);
-            tostringstream directory;
-            directory << drive << folder;
-            if ( Helium::Path( directory.str() ).Exists() )
-            {
-                dir = directory.str();
-            }
-        }
-
-        // case 2: get as close as we can to a valid directory
-        if (dir.empty())
-        {
-            tstring temp;
-            const tchar* token = _tcstok(&temp[0], TXT( "/" ) );
-            while (token)
-            {
-                temp = temp + token + TXT( "/" );
-                if ((_tcslen(token) == 2 && token[1] == ':') || Helium::Path( temp ).Exists() )
-                {
-                    dir = dir + token + TXT( "/" );
-                    token = _tcstok(NULL, TXT( "/" ) );
-                }
-                else
-                {
-                    token = NULL;
-                }
-            }
-        }
-
-        if (!dir.empty())
-        {
-            text = dir;
-        }
-
-        Helium::FileDialog dialog ( m_Container->GetWindow(), wxFileSelectorPromptStr, text.c_str() );
-
-        if ( !m_FileFilter.empty() )
-        {
-            dialog.SetFilter( m_FileFilter );
-        }
-
-        if ( dialog.ShowModal() == wxID_OK )
-        {
-            const wxChar* str = dialog.GetPath().c_str();
-            Reflect::Serializer::SetValue< tstring >( args.m_NewValue, str );
-        }
+        FileDialogArgs fileDialogArgs( FileDialogTypes::OpenFile, TXT( "Path Does Not Exist" ), m_FileFilter, path );
+        path = d_FindMissingFile.Invoke( fileDialogArgs );
+        Reflect::Serializer::SetValue< tstring >( args.m_NewValue, path.Get() );
     }
 
     return true;
 }
 
-void FileInterpreter::Edit( Button* button )
+void FileInterpreter::Edit( const ButtonClickedArgs& args )
 {
-    StringData* data = static_cast<StringData*>(button->GetData().Ptr());
-
     tstring str;
-    data->Get( str );
+    args.m_Control->ReadStringData( str );
 
     if ( !str.empty() )
     {
         g_EditFilePath.Raise( EditFilePathArgs( str ) );
     }
 }
+
+#ifdef INSPECT_REFACTOR
 
 void FileInterpreter::OnDrop( const Inspect::FilteredDropTargetArgs& args )
 {
@@ -321,3 +266,5 @@ void FileInterpreter::OnDrop( const Inspect::FilteredDropTargetArgs& args )
         m_Value->SetText( args.m_Paths[ 0 ] );
     }
 }
+
+#endif

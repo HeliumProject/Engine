@@ -289,6 +289,26 @@ const tstring& Path::Set( const tstring& path )
     return m_Path;
 }
 
+void Path::TrimToExisting()
+{
+    if ( !Exists() )
+    {
+        Set( Directory() );
+    }
+
+    while ( !m_Path.empty() && !Exists() )
+    {
+        std::vector< tstring > directories = DirectoryAsVector();
+        tstring newDir;
+        for( std::vector< tstring >::const_iterator itr = directories.begin(), end = directories.end(); itr != end && itr != end - 1; ++itr )
+        {
+            newDir += *itr + s_InternalPathSeparator;
+        }
+
+        Set( newDir );
+    }
+}
+
 void Path::Split( tstring& directory, tstring& filename ) const
 {
     directory = Directory();

@@ -21,8 +21,8 @@ namespace Helium
 
         private:
             // callbacks
-            void OnAdd( Button* button );
-            void OnRemove( Button* button );
+            void OnAdd( const ButtonClickedArgs& args );
+            void OnRemove( const ButtonClickedArgs& args );
         };
 
         typedef Helium::SmartPtr<ReflectSetInterpreter> ReflectSetInterpreterPtr;

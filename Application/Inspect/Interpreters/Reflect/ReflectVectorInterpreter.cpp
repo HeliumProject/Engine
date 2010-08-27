@@ -23,12 +23,12 @@ void ReflectVectorInterpreter::InterpretField(const Field* field, const std::vec
   }
 
   // create the container
-  ContainerPtr container = new Container ();
-  parent->AddControl(container);
+  ContainerPtr container = CreateControl< Container >();
+  parent->AddChild( container );
 
   // create the label
-  LabelPtr label = new Label ();
-  container->AddControl( label );
+  LabelPtr label = CreateControl< Label >();
+  container->AddChild( label );
 
   tstring temp;
   bool converted = Helium::ConvertString( field->m_UIName, temp );
@@ -66,9 +66,9 @@ void ReflectVectorInterpreter::InterpretField(const Field* field, const std::vec
     }
 
     // create the text box
-    ValuePtr value = parent->GetCanvas()->Create<Value>( this );
-    container->AddControl( value );
-    value->SetReadOnly( ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly );
+    ValuePtr value = CreateControl< Value >();
+    container->AddChild( value );
+    value->a_IsReadOnly.Set( ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly );
 
     // bind the ui to the serializers
     value->Bind( new MultiStringFormatter<Serializer>( data ) );

@@ -8,6 +8,7 @@
 #include "Application/Inspect/InspectData.h"
 
 using namespace Helium;
+using namespace Helium::Reflect;
 using namespace Helium::Inspect;
 
 
@@ -24,63 +25,58 @@ ReflectSetInterpreter::ReflectSetInterpreter( Container* container )
 // 
 void ReflectSetInterpreter::InterpretField( const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent )
 {
-  if ( field->m_Flags & Reflect::FieldFlags::Hide )
-  {
-    return;
-  }
+    if ( field->m_Flags & Reflect::FieldFlags::Hide )
+    {
+        return;
+    }
 
-  // create the container
-  ContainerPtr container = m_Container->GetCanvas()->Create<Panel>( this );
-  parent->AddChild( container );
+    // create the container
+    ContainerPtr container = CreateControl< Container >();
+    parent->AddChild( container );
+    container->a_Name.Set( field->m_UIName );
 
-  tstring temp;
-  bool converted = Helium::ConvertString( field->m_UIName, temp );
-  HELIUM_ASSERT( converted );
+    // create the serializers
+    std::vector< Reflect::Element* >::const_iterator itr = instances.begin();
+    std::vector< Reflect::Element* >::const_iterator end = instances.end();
+    for ( ; itr != end; ++itr )
+    {
+        Reflect::SerializerPtr ser = Reflect::AssertCast< Reflect::Serializer >( Reflect::Registry::GetInstance()->CreateInstance( field->m_SerializerID ) );
+        uintptr fieldAddress = ( uintptr )( *itr ) + field->m_Offset;
+        ser->ConnectData( ( void* )fieldAddress );
+        m_Serializers.push_back( ser );
+    }
 
-  container->SetText( temp );
+    // create the list
+    ListPtr list = CreateControl< List >();
+    container->AddChild( list );
 
-  // create the serializers
-  std::vector< Reflect::Element* >::const_iterator itr = instances.begin();
-  std::vector< Reflect::Element* >::const_iterator end = instances.end();
-  for ( ; itr != end; ++itr )
-  {
-    Reflect::SerializerPtr ser = Reflect::AssertCast< Reflect::Serializer >( Reflect::Registry::GetInstance()->CreateInstance( field->m_SerializerID ) );
-    uintptr fieldAddress = ( uintptr )( *itr ) + field->m_Offset;
-    ser->ConnectData( ( void* )fieldAddress );
-    m_Serializers.push_back( ser );
-  }
+    // bind the ui to the serialiers
+    list->Bind( new MultiStringFormatter< Reflect::Serializer >( (std::vector<Reflect::Serializer*>&)m_Serializers ) );
 
-  // create the list
-  ListPtr list = parent->GetCanvas()->Create<List>( this );
-  container->AddChild( list );
+    // create the buttons if we are not read only
+    if ( !( field->m_Flags & Reflect::FieldFlags::ReadOnly ) )
+    {
+        ContainerPtr buttonContainer = CreateControl< Container >();
+        container->AddChild( buttonContainer );
 
-  // bind the ui to the serialiers
-  list->Bind( new MultiStringFormatter< Reflect::Serializer >( (std::vector<Reflect::Serializer*>&)m_Serializers ) );
+        ButtonPtr buttonAdd = CreateControl< Button >();
+        buttonContainer->AddChild( buttonAdd );
+        buttonAdd->a_Label.Set( TXT( "Add" ) );
+        buttonAdd->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &ReflectSetInterpreter::OnAdd ) );
+        buttonAdd->SetClientData( new ClientData( list ) );
 
-  // create the buttons if we are not read only
-  if ( !( field->m_Flags & Reflect::FieldFlags::ReadOnly ) )
-  {
-    ContainerPtr buttonContainer = parent->GetCanvas()->Create<Container>( this );
-    container->AddChild( buttonContainer );
+        ButtonPtr buttonRemove = CreateControl< Button >();
+        buttonContainer->AddChild( buttonRemove );
+        buttonRemove->a_Label.Set( TXT( "Remove" ) );
+        buttonRemove->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &ReflectSetInterpreter::OnRemove ) );
+        buttonRemove->SetClientData( new ClientData( list ) );
+    }
 
-    ButtonPtr buttonAdd = parent->GetCanvas()->Create<Button>( this );
-    buttonContainer->AddChild( buttonAdd );
-    buttonAdd->SetText( TXT( "Add" ) );
-    buttonAdd->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &ReflectSetInterpreter::OnAdd ) );
-    buttonAdd->SetClientData( new ClientData( list ) );
-
-    ButtonPtr buttonRemove = parent->GetCanvas()->Create<Button>( this );
-    buttonContainer->AddChild( buttonRemove );
-    buttonRemove->SetText( TXT( "Remove" ) );
-    buttonRemove->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &ReflectSetInterpreter::OnRemove ) );
-    buttonRemove->SetClientData( new ClientData( list ) );
-  }
-
-  // for now let's just disable this container if there is more than one item selected. I'm not sure if it will behave properly in this case.
-  if ( instances.size() > 1 )
-  {
-    container->SetEnabled( false );
-  }
+    // for now let's just disable this container if there is more than one item selected. I'm not sure if it will behave properly in this case.
+    if ( instances.size() > 1 )
+    {
+        container->a_IsEnabled.Set( false );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -88,70 +84,52 @@ void ReflectSetInterpreter::InterpretField( const Reflect::Field* field, const s
 // you enter a new key-value pair.  If you enter a key that already exists in
 // the list, you will be asked if you want to replace it or not.
 // 
-void ReflectSetInterpreter::OnAdd( Button* button )
+void ReflectSetInterpreter::OnAdd( const ButtonClickedArgs& args )
 {
-  Reflect::ObjectPtr clientData = button->GetClientData();
-  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
-  {
-    ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
-    wxTextEntryDialog dlg( m_Container->GetCanvas()->GetControl(), TXT( "" ), TXT( "Add" ) );
-    if ( dlg.ShowModal() == wxID_OK )
+    Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
+    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
     {
-      tstring input = dlg.GetValue().c_str();
-      if ( !input.empty() )
-      {
-        List* list = static_cast< List* >( data->m_Control );
-
-        std::vector< tstring > items = list->GetItems();
-        items.push_back( input );
-
-        std::sort( items.begin(), items.end() );
-        std::unique( items.begin(), items.end() );
-
-        list->AddItems( items );
-        button->GetCanvas()->Read();
-      }
+        ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
+        List* list = static_cast< List* >( data->GetControl() );
+        list->e_AddItem.Raise( AddItemArgs() );
+        args.m_Control->GetCanvas()->Read();
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Callback for when the remove button is pressed.  If there are any items 
 // selected in the list control, they will be removed from the list.
 // 
-void ReflectSetInterpreter::OnRemove( Button* button )
+void ReflectSetInterpreter::OnRemove( const ButtonClickedArgs& args )
 {
-  Reflect::ObjectPtr clientData = button->GetClientData();
-  if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
-  {
-    ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
-    List* list = static_cast< List* >( data->m_Control );
-    const std::vector< tstring >& selectedItems = list->GetSelectedItems();
-    if ( selectedItems.size() > 0 )
+    Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
+    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
     {
-      std::vector< tstring >::const_iterator selBegin = selectedItems.begin();
-      std::vector< tstring >::const_iterator selEnd = selectedItems.end();
-
-      std::vector< tstring > items;
-      std::vector< tstring >::const_iterator itr = list->GetItems().begin();
-      std::vector< tstring >::const_iterator end = list->GetItems().end();
-      for ( ; itr != end; ++itr )
-      {
-        const tstring& item ( *itr );
-
-        std::vector< tstring >::const_iterator found = std::find( selBegin, selEnd, item );
-        if ( found == selEnd )
+        ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
+        List* list = static_cast< List* >( data->GetControl() );
+        const std::set< size_t >& selectedItemIndices = list->a_SelectedItemIndices.Get();
+        if ( !selectedItemIndices.empty() )
         {
-          items.push_back( item );
-        }
-      }
+            // for each item in the array to remove (by index)
+            std::set< size_t >::const_reverse_iterator itr = selectedItemIndices.rbegin();
+            std::set< size_t >::const_reverse_iterator end = selectedItemIndices.rend();
+            for ( ; itr != end; ++itr )
+            {
+                // for each array in the selection set (the objects the array serializer is connected to)
+                std::vector< SerializerPtr >::const_iterator serItr = m_Serializers.begin();
+                std::vector< SerializerPtr >::const_iterator serEnd = m_Serializers.end();
+                for ( ; serItr != serEnd; ++serItr )
+                {
+                    Reflect::SetSerializer* setSerializer = Reflect::AssertCast<Reflect::SetSerializer>(*serItr);
+                    V_ConstSerializer items;
+                    setSerializer->GetItems( items );
+                    setSerializer->RemoveItem( items[ *itr ] );
+                }
+            }
 
-      list->AddItems( items );
-      button->GetCanvas()->Read();
+            list->a_SelectedItemIndices.Set( std::set< size_t > () );
+
+            args.m_Control->GetCanvas()->Read();
+        }
     }
-    else
-    {
-      // Select an item to delete
-    }
-  }
 }

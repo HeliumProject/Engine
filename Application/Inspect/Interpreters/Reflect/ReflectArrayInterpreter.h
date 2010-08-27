@@ -29,10 +29,10 @@ namespace Helium
             virtual ButtonPtr AddMoveDownButton( List* list );
 
             // callbacks
-            static void OnAdd( Button* button );
-            static void OnRemove( Button* button );
-            static void OnMoveUp( Button* button );
-            static void OnMoveDown( Button* button );
+            void OnAdd( const ButtonClickedArgs& args );
+            void OnRemove( const ButtonClickedArgs& args );
+            void OnMoveUp( const ButtonClickedArgs& args );
+            void OnMoveDown( const ButtonClickedArgs& args );
 
             virtual void OnCreateFieldSerializer( Reflect::SerializerPtr & s ){ }
         };

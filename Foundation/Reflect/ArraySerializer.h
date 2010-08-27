@@ -19,6 +19,10 @@ namespace Helium
             virtual SerializerPtr GetItem(size_t at) = 0;
             virtual ConstSerializerPtr GetItem(size_t at) const = 0;
             virtual void SetItem(size_t at, const Serializer* value) = 0;
+            virtual void Insert( size_t at, const Serializer* value ) = 0;
+            virtual void Remove( size_t at ) = 0;
+            virtual void MoveUp( std::set< size_t >& selectedIndices ) = 0;
+            virtual void MoveDown( std::set< size_t >& selectedIndices ) = 0;
         };
 
         template <class T>
@@ -44,6 +48,10 @@ namespace Helium
             virtual SerializerPtr GetItem(size_t at) HELIUM_OVERRIDE;
             virtual ConstSerializerPtr GetItem(size_t at) const HELIUM_OVERRIDE;
             virtual void SetItem(size_t at, const Serializer* value) HELIUM_OVERRIDE;
+            virtual void Insert( size_t at, const Serializer* value ) HELIUM_OVERRIDE;
+            virtual void Remove( size_t at ) HELIUM_OVERRIDE;
+            virtual void MoveUp( std::set< size_t >& selectedIndices ) HELIUM_OVERRIDE;
+            virtual void MoveDown( std::set< size_t >& selectedIndices ) HELIUM_OVERRIDE;
 
             virtual bool Set(const Serializer* src, u32 flags = 0) HELIUM_OVERRIDE;
             virtual bool Equals(const Serializer* s) const HELIUM_OVERRIDE;

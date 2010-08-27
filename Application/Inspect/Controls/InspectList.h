@@ -19,6 +19,14 @@ namespace Helium
         }
         typedef MoveDirections::MoveDirection MoveDirection;
 
+        struct AddItemArgs
+        {
+            AddItemArgs()
+            {
+            }
+        };
+        typedef Helium::Signature< void, const AddItemArgs& > AddItemSignature;
+
         class APPLICATION_API List : public Reflect::ConcreteInheritor<List, Control>
         {
         public:
@@ -26,8 +34,9 @@ namespace Helium
 
             virtual bool Process(const tstring& key, const tstring& value) HELIUM_OVERRIDE;
 
+            AddItemSignature::Event             e_AddItem;
             Attribute< bool >                   a_IsSorted;
-            Attribute< std::vector< tstring > > a_SelectedItems;
+            Attribute< std::set< size_t > >     a_SelectedItemIndices;
         };
 
         typedef Helium::SmartPtr<List> ListPtr;

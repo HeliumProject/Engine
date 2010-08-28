@@ -66,24 +66,27 @@ void SelectionPropertiesPanel::OnExpandAll(wxCommandEvent& event)
 {
     Inspect::Canvas* canvas = m_PropertyCanvas->GetCanvas();
 
+#ifdef INSPECT_REFACTOR
     Inspect::V_Control::const_iterator itr = canvas->GetChildren().begin();
     Inspect::V_Control::const_iterator end = canvas->GetChildren().end();
     for ( ; itr != end; ++itr )
     {
-        Inspect::Panel* panel = Reflect::ObjectCast<Inspect::Panel>( *itr );
-        if (panel)
+        Inspect::Container* container = Reflect::ObjectCast< Inspect::Container >( *itr );
+        if ( container )
         {
-            panel->SetExpandedRecursive( true, true );
+            container->SetExpandedRecursive( true, true );
         }
     }
 
     canvas->Layout();
+#endif
 }
 
 void SelectionPropertiesPanel::OnCollapseAll(wxCommandEvent& event)
 {
     Inspect::Canvas* canvas = m_PropertyCanvas->GetCanvas();
 
+#ifdef INSPECT_REFACTOR
     Inspect::V_Control::const_iterator itr = canvas->GetChildren().begin();
     Inspect::V_Control::const_iterator end = canvas->GetChildren().end();
     for ( ; itr != end; ++itr )
@@ -96,4 +99,5 @@ void SelectionPropertiesPanel::OnCollapseAll(wxCommandEvent& event)
     }
 
     canvas->Layout();
+#endif
 }

@@ -1,3 +1,4 @@
+#include "Precompile.h"
 #include "TreeCanvasCtrl.h"
 
 #include "Application/Inspect/Controls/InspectContainer.h"
@@ -7,24 +8,24 @@ using namespace Helium::Inspect;
 
 const static int SCROLL_INCREMENT = 8;
 
-class PanelItemData : public wxTreeItemData
+class ContainerItemData : public wxTreeItemData
 {
 public:
-    PanelItemData( Panel* panel )
+    ContainerItemData( Container* container )
         : wxTreeItemData()
-        , m_Panel( panel )
+        , m_Container( container )
         , m_IgnoreToggle( false )
     {
     }
 
-    Panel* GetPanel() { return m_Panel; }
+    Container* GetContainer() { return m_Container; }
 
     void StartIgnoreToggle() { m_IgnoreToggle = true; }
     void EndIgnoreToggle() { m_IgnoreToggle = false; }
     bool GetIgnoreToggle() { return m_IgnoreToggle; }
 
 protected:
-    Panel* m_Panel;
+    Container* m_Container;
     bool m_IgnoreToggle;
 };
 
@@ -123,21 +124,23 @@ void TreeCanvasCtrl::OnToggle(wxTreeEvent& event)
 {
     wxTreeItemId item = event.GetItem();
 
-    PanelItemData* panelItemData = (PanelItemData*) GetItemData( item );
-    if ( !panelItemData->GetIgnoreToggle() )
+    ContainerItemData* containerItemData = (ContainerItemData*) GetItemData( item );
+    if ( !containerItemData->GetIgnoreToggle() )
     {
-        Panel* panel = panelItemData->GetPanel();
-        if ( panel )
+        Container* container = containerItemData->GetContainer();
+        if ( container )
         {
-            bool newExpandState = !panel->IsExpanded();
+#ifdef INSPECT_REFACTOR
+            bool newExpandState = !container->IsExpanded();
 
-            Canvas* canvas = panel->GetCanvas();
+            Canvas* canvas = container->GetCanvas();
             if ( canvas )
             {
-                canvas->SetPanelExpandState( panel->GetPath(), newExpandState ? ExpandStates::Expanded : ExpandStates::Collapsed );
+                canvas->SetContainerExpandState( container->GetPath(), newExpandState ? ExpandStates::Expanded : ExpandStates::Collapsed );
             }
 
-            panel->SetExpanded( newExpandState );
+            container->SetExpanded( newExpandState );
+#endif
         }
     }
 

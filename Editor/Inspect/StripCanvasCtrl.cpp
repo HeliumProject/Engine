@@ -1,4 +1,5 @@
-#include "TreeCanvasCtrl.h"
+#include "Precompile.h"
+#include "StripCanvasCtrl.h"
 
 using namespace Helium;
 using namespace Helium::Inspect;

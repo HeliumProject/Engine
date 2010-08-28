@@ -87,12 +87,14 @@ namespace Helium
             // the attributes for the current selection
             Core::EnumeratorPtr         m_SelectionEnumerator;
             Core::PropertiesManagerPtr  m_SelectionPropertiesManager;
-            Inspect::Canvas             m_SelectionProperties;
+            Inspect::Canvas             m_SelectionPropertiesCanvas;
+            Inspect::TreeCanvasCtrl     m_SelectionPropertiesControl;
 
             // the attributes for the current tool
             Core::EnumeratorPtr         m_ToolEnumerator;
             Core::PropertiesManagerPtr  m_ToolPropertiesManager;
-            Inspect::Canvas             m_ToolProperties;
+            Inspect::Canvas             m_ToolPropertiesCanvas;
+            Inspect::TreeCanvasCtrl     m_ToolPropertiesControl;
 
             MenuMRUPtr                  m_MRU;
             M_IDToColorMode             m_ColorModeLookup;

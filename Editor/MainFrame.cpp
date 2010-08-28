@@ -123,6 +123,8 @@ MainFrame::MainFrame( Core::SettingsManager* settingsManager, wxWindow* parent, 
 , m_TreeMonitor( &m_SceneManager )
 , m_MessageDisplayer( this )
 , m_SceneManager( MessageSignature::Delegate( &m_MessageDisplayer, &MessageDisplayer::DisplayMessage ), FileDialogSignature::Delegate( &m_FileDialogDisplayer, &FileDialogDisplayer::DisplayFileDialog ) )
+, m_ToolPropertiesControl( this )
+, m_SelectionPropertiesControl( this )
 {
     SetLabel( TXT("Helium Editor") );
 
@@ -165,10 +167,17 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     // Tools
     //
     m_ToolbarPanel = new ToolbarPanel( this );
-    m_ToolEnumerator = new PropertiesGenerator( &m_ToolProperties );
+
+    m_ToolPropertiesControl.SetParent( m_ToolbarPanel->GetToolsPropertiesPanel() );
+    m_ToolPropertiesControl.SetId( EventIds::ID_ToolProperties );
+    m_ToolPropertiesControl.SetPosition( wxPoint( 0, 0 ) );
+    m_ToolPropertiesControl.SetSize( wxSize( 250, 250 ) );
+    m_ToolPropertiesControl.SetWindowStyle( wxNO_BORDER | wxCLIP_CHILDREN );
+    m_ToolPropertiesControl.SetCanvas( &m_ToolPropertiesCanvas );
+
+    m_ToolEnumerator = new PropertiesGenerator( &m_ToolPropertiesCanvas );
     m_ToolPropertiesManager = new PropertiesManager( m_ToolEnumerator );
     m_ToolPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &MainFrame::OnPropertiesCreated ) );
-    m_ToolProperties.SetControl( new Inspect::TreeCanvasCtrl ( m_ToolbarPanel->GetToolsPropertiesPanel(), EventIds::ID_ToolProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN) );
     m_FrameManager.AddPane( m_ToolbarPanel, wxAuiPaneInfo().Name( wxT( "tools" ) ).Top().Layer( 5 ).Position( 1 ).CaptionVisible( false ).PaneBorder( false ).Gripper( false ).CloseButton( false ).MaximizeButton( false ).MinimizeButton( false ).PinButton( false ).Movable( false ).MinSize( wxSize( -1, 52 ) ) );
     m_ToolbarPanel->GetToolsPanel()->Disable();
     m_ToolbarPanel->GetToolsPanel()->Refresh();
@@ -209,11 +218,17 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     //
     // Properties/Layers/Types area
     //
-    m_SelectionEnumerator = new PropertiesGenerator( &m_SelectionProperties );
+    m_SelectionPropertiesControl.SetParent( m_PropertiesPanel );
+    m_SelectionPropertiesControl.SetId( EventIds::ID_ToolProperties );
+    m_SelectionPropertiesControl.SetPosition( wxPoint( 0, 0 ) );
+    m_SelectionPropertiesControl.SetSize( wxSize( 250, 250 ) );
+    m_SelectionPropertiesControl.SetWindowStyle( wxNO_BORDER | wxCLIP_CHILDREN );
+    m_SelectionPropertiesControl.SetCanvas( &m_SelectionPropertiesCanvas );
+
+    m_SelectionEnumerator = new PropertiesGenerator( &m_SelectionPropertiesCanvas );
     m_SelectionPropertiesManager = new PropertiesManager( m_SelectionEnumerator );
     m_SelectionPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &MainFrame::OnPropertiesCreated ) );
     m_PropertiesPanel = new PropertiesPanel( m_SelectionPropertiesManager, this );
-    m_SelectionProperties.SetControl( m_PropertiesPanel->GetPropertiesCanvas() );
     m_FrameManager.AddPane( m_PropertiesPanel, wxAuiPaneInfo().Name( wxT( "properties" ) ).Caption( wxT( "Properties" ) ).Right().Layer( 1 ).Position( 1 ) );
 
     m_LayersPanel = new LayersPanel( &m_SceneManager, this );
@@ -248,8 +263,7 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
 
     m_MRU->AddItemSelectedListener( MRUSignature::Delegate( this, &MainFrame::OnMRUOpen ) );
 
-#pragma TODO("MRU")
-#if 0
+#if MRU_REFACTOR
     std::vector< tstring > paths;
     std::vector< tstring >::const_iterator itr = wxGetApp().GetSettings()->GetMRU()->GetPaths().begin();
     std::vector< tstring >::const_iterator end = wxGetApp().GetSettings()->GetMRU()->GetPaths().end();
@@ -264,10 +278,12 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     m_MRU->FromVector( paths );
 #endif
 
+#ifdef INSPECT_REFACTOR
     Inspect::DropTarget* dropTarget = new Inspect::DropTarget();
     dropTarget->SetDragOverCallback( Inspect::DragOverCallback::Delegate( this, &MainFrame::DragOver ) );
     dropTarget->SetDropCallback( Inspect::DropCallback::Delegate( this, &MainFrame::Drop ) );
     m_ViewPanel->GetViewCanvas()->SetDropTarget( dropTarget );
+#endif
 }
 
 MainFrame::~MainFrame()
@@ -383,6 +399,7 @@ bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
     Reflect::Archive::GetExtensions( supportedExtensions );
     Asset::AssetClass::GetExtensions( supportedExtensions ); 
 
+#ifdef INSPECT_REFACTOR
     Inspect::ClipboardFileListPtr fileList = Reflect::ObjectCast< Inspect::ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
     if ( fileList )
     {
@@ -402,6 +419,7 @@ bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
             }
         }
     }
+#endif
 
     return canHandleArgs;
 }
@@ -422,6 +440,7 @@ wxDragResult MainFrame::Drop( const Editor::DragArgs& args )
 {
     wxDragResult result = args.m_Default;
 
+#ifdef INSPECT_REFACTOR
     if ( ValidateDrag( args ) )
     {
         Inspect::ClipboardFileListPtr fileList = Reflect::ObjectCast< Inspect::ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
@@ -436,6 +455,7 @@ wxDragResult MainFrame::Drop( const Editor::DragArgs& args )
             }
         }
     }
+#endif
 
     return result;
 }
@@ -453,7 +473,9 @@ void MainFrame::SceneAdded( const SceneChangeArgs& args )
 
         m_ViewPanel->GetViewCanvas()->GetViewport().AddRenderListener( RenderSignature::Delegate( args.m_Scene, &Scene::Render ) );
 
+#ifdef INSPECT_REFACTOR
         m_SelectionEnumerator->AddPopulateLinkListener( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Core::Scene::PopulateLink));
+#endif
 
         Document* document = m_SceneManager.GetDocumentManager().FindDocument( args.m_Scene->GetPath() );
         document->AddDocumentModifiedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
@@ -472,7 +494,9 @@ void MainFrame::SceneRemoving( const SceneChangeArgs& args )
 
     m_ViewPanel->GetViewCanvas()->GetViewport().RemoveRenderListener( RenderSignature::Delegate( args.m_Scene, &Scene::Render ) );
 
+#ifdef INSPECT_REFACTOR
     m_SelectionEnumerator->RemovePopulateLinkListener( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Core::Scene::PopulateLink));
+#endif
 
     m_ViewPanel->GetViewCanvas()->Refresh();
 
@@ -1299,10 +1323,12 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
         args.m_Scene->AddSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &MainFrame::SelectionChanged ) );
 
         // These events are emitted from the attribute editor and cause execution of the scene to occur, and interactive goodness
+#ifdef INSPECT_REFACTOR
         m_SelectionEnumerator->AddPropertyChangingListener( Inspect::ChangingSignature::Delegate (args.m_Scene, &Core::Scene::PropertyChanging));
         m_SelectionEnumerator->AddPropertyChangedListener( Inspect::ChangedSignature::Delegate (args.m_Scene, &Core::Scene::PropertyChanged));
         m_SelectionEnumerator->AddPickLinkListener( Inspect::PickLinkSignature::Delegate (args.m_Scene, &Core::Scene::PickLink));
         m_SelectionEnumerator->AddSelectLinkListener( Inspect::SelectLinkSignature::Delegate (args.m_Scene, &Core::Scene::SelectLink));
+#endif
 
         // Restore the tree control with the information for the new editing scene
         M_OutlinerStates::iterator foundOutline = m_OutlinerStates.find( args.m_Scene );
@@ -1359,10 +1385,10 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
             args.m_Scene->GetTool()->CreateProperties();
 
             // Layout ui
-            m_ToolProperties.Layout();
+            m_ToolPropertiesControl.Layout();
 
             // Read state
-            m_ToolProperties.Read();
+            m_ToolPropertiesControl.GetCanvas()->Read();
         }
     }
 }
@@ -1383,20 +1409,22 @@ void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
     args.m_Scene->RemoveSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &MainFrame::SelectionChanged ) );
 
     // Remove attribute listeners
+#ifdef INSPECT_REFACTOR
     m_SelectionEnumerator->RemovePropertyChangingListener( Inspect::ChangingSignature::Delegate (args.m_Scene, &Core::Scene::PropertyChanging));
     m_SelectionEnumerator->RemovePropertyChangedListener( Inspect::ChangedSignature::Delegate (args.m_Scene, &Core::Scene::PropertyChanged));
     m_SelectionEnumerator->RemovePickLinkListener( Inspect::PickLinkSignature::Delegate (args.m_Scene, &Core::Scene::PickLink));
     m_SelectionEnumerator->RemoveSelectLinkListener( Inspect::SelectLinkSignature::Delegate (args.m_Scene, &Core::Scene::SelectLink));
+#endif
 
     // If we were editing a scene, save the outliner info before changing to the new one.
     OutlinerStates* stateInfo = &m_OutlinerStates.insert( M_OutlinerStates::value_type( args.m_Scene, OutlinerStates() ) ).first->second;
     m_DirectoryPanel->SaveState( stateInfo->m_Hierarchy, stateInfo->m_Entities, stateInfo->m_Types );
 
     // Clear the selection attribute canvas
-    m_SelectionProperties.Clear();
+    m_SelectionPropertiesControl.GetCanvas()->Clear();
 
     // Clear the tool attribute canavs
-    m_ToolProperties.Clear();
+    m_ToolPropertiesControl.GetCanvas()->Clear();
 
     // Release the tool from the VIEW and Scene, saving the tool in the scene isn't a desirable behavior and the way it is currently
     // implimented it will cause a crash under certain scenarios (see trac #1322)
@@ -1539,7 +1567,7 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
             break;
         }
 
-        m_ToolProperties.GetCanvas()->Clear();
+        m_ToolPropertiesControl.GetCanvas()->Clear();
 
         if (m_SceneManager.GetCurrentScene()->GetTool().ReferencesObject())
         {
@@ -1547,9 +1575,11 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
 
             m_SceneManager.GetCurrentScene()->GetTool()->CreateProperties();
 
-            m_ToolProperties.GetCanvas()->Layout();
+#ifdef INSPECT_REFACTOR
+            m_ToolPropertiesControl.GetCanvas()->Layout();
+#endif
 
-            m_ToolProperties.GetCanvas()->Read();
+            m_ToolPropertiesControl.GetCanvas()->Read();
         }
 
         m_ViewPanel->Refresh();
@@ -1667,7 +1697,7 @@ void MainFrame::OnUndo( wxCommandEvent& event )
     if ( CanUndo() )
     {
         m_UndoQueue.Undo();
-        m_ToolProperties.Read();
+        m_ToolPropertiesControl.GetCanvas()->Read();
         if ( m_SceneManager.HasCurrentScene() )
         {
             m_SceneManager.GetCurrentScene()->Execute(false);
@@ -1680,7 +1710,7 @@ void MainFrame::OnRedo( wxCommandEvent& event )
     if ( CanRedo() )
     {
         m_UndoQueue.Redo();
-        m_ToolProperties.Read();
+        m_ToolPropertiesControl.GetCanvas()->Read();
         if ( m_SceneManager.HasCurrentScene() )
         {
             m_SceneManager.GetCurrentScene()->Execute(false);
@@ -2008,7 +2038,7 @@ void MainFrame::Executed( const ExecuteArgs& args )
 {
     if (!m_SelectionPropertiesManager->ThreadsActive() && !args.m_Interactively)
     {
-        m_SelectionProperties.Read();
+        m_SelectionPropertiesControl.GetCanvas()->Read();
     }
 }
 

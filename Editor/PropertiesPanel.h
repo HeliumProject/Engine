@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Editor/EditorGenerated.h"
+#include "Editor/Inspect/TreeCanvasCtrl.h"
 
 #include "Core/Scene/PropertiesManager.h"
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Application/Inspect/Controls/InspectCanvas.h"
+#include "Editor/Inspect/TreeCanvasCtrl.h"
 
 #include "Core/Scene/PropertiesManager.h"
 

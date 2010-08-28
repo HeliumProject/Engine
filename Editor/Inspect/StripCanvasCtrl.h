@@ -7,7 +7,7 @@ namespace Helium
 {
     namespace Inspect
     {
-        class APPLICATION_API StripCanvasCtrl : public wxPanel
+        class StripCanvasCtrl : public wxPanel
         {
         public:
             Canvas* m_Canvas;

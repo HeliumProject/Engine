@@ -22,7 +22,6 @@
 #include "Foundation/Worker/Process.h"
 #include "Application/Inspect/InspectInit.h"
 #include "Application/Inspect/Interpreters/Reflect/InspectReflectInit.h"
-#include "Application/Inspect/Interpreters/Content/InspectContentInit.h"
 #include "Application/Inspect/Interpreters/File/InspectFileInit.h"
 #include "Application/RCS/Providers/Perforce/Perforce.h"
 
@@ -212,7 +211,6 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
     m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
     m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
-    m_InitializerStack.Push( InspectContent::Initialize, InspectContent::Cleanup );
     m_InitializerStack.Push( InspectFile::Initialize, InspectFile::Cleanup );
 
     // core

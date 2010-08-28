@@ -33,7 +33,7 @@ namespace Helium
         class ValueWidget : public Widget
         {
         public:
-            ValueWidget( Inspect::Control* control );
+            ValueWidget( Inspect::Value* control );
 
             void Create( wxWindow* parent );
             void Destroy();

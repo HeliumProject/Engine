@@ -2,13 +2,13 @@
 
 #include "Application/API.h"
 #include "Application/Inspect/Controls/InspectCanvas.h"
-#include "Application/Inspect/Controls/InspectTreeWnd/TreeWndCtrl.h"
+#include "Editor/Controls/Tree/TreeWndCtrl.h"
 
 namespace Helium
 {
     namespace Inspect
     {
-        class APPLICATION_API TreeCanvasCtrl : public Helium::TreeWndCtrl
+        class TreeCanvasCtrl : public Helium::TreeWndCtrl
         {
         public:
             Canvas* m_Canvas;

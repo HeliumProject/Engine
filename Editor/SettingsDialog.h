@@ -5,9 +5,9 @@
 #include "Core/SettingsManager.h"
 
 #include "Foundation/Reflect/Element.h"
-#include "Application/Inspect/Controls/Canvas.h"
 
 #include "Editor/API.h"
+#include "Editor/Inspect/Canvas.h"
 
 namespace Helium
 {

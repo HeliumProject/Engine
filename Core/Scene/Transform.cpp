@@ -449,7 +449,7 @@ bool Transform::ValidatePanel(const tstring& name)
 
 void Transform::CreatePanel(CreatePanelArgs& args)
 {
-  args.m_Generator->PushPanel( TXT( "Transform" ), true);
+  args.m_Generator->PushContainer( TXT( "Transform" ) );
 
   {
     args.m_Generator->PushContainer();

@@ -119,7 +119,7 @@ bool Point::ValidatePanel( const tstring& name )
 
 void Point::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Generator->PushPanel( TXT( "Point" ), true);
+  args.m_Generator->PushContainer( TXT( "Point" ) );
   {
     args.m_Generator->PushContainer();
     args.m_Generator->AddLabel( TXT( "Position" ) );

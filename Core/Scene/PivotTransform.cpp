@@ -495,7 +495,7 @@ bool PivotTransform::ValidatePanel(const tstring& name)
 
 void PivotTransform::CreatePanel(CreatePanelArgs& args)
 {
-  args.m_Generator->PushPanel( TXT( "Pivots" ) );
+  args.m_Generator->PushContainer( TXT( "Pivots" ) );
 
   {
     args.m_Generator->PushContainer();

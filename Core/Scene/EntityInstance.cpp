@@ -405,7 +405,6 @@ void Entity::CreatePanel( CreatePanelArgs& args )
     args.m_Generator->Push( panel );
     {
         panel->SetCanvas( args.m_Generator->GetContainer()->GetCanvas() );
-        panel->Create();
     }
     args.m_Generator->Pop();
 }

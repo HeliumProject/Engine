@@ -9,12 +9,10 @@ namespace Helium
 {
     namespace Core
     {
-        class SceneNodePanel : public Inspect::Panel
+        class SceneNodePanel : public Inspect::Container
         {
         public:
             SceneNodePanel(PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection);
-            virtual ~SceneNodePanel();
-            virtual void Create() HELIUM_OVERRIDE;
 
         protected:
             PropertiesGenerator*          m_Generator;

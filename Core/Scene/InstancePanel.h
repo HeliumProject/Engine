@@ -8,7 +8,7 @@ namespace Helium
 {
     namespace Core
     {
-        class InstancePanel : public Inspect::Panel
+        class InstancePanel : public Inspect::Container
         {
         protected:
             PropertiesGenerator*    m_Generator;

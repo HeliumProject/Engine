@@ -765,14 +765,14 @@ void RotateManipulator::CreateProperties()
 {
     __super::CreateProperties();
 
-    m_Generator->PushPanel( TXT( "Rotate" ), true);
+    m_Generator->PushContainer( TXT( "Rotate" ) );
     {
         m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Size" ) );
             Inspect::Slider* slider = m_Generator->AddSlider<f32>( new Helium::MemberProperty<Core::RotateManipulator, f32> (this, &RotateManipulator::GetSize, &RotateManipulator::SetSize) );
-            slider->SetRangeMin( 0.10f );
-            slider->SetRangeMax( 0.5f );
+            slider->a_Min.Set( 0.10f );
+            slider->a_Max.Set( 0.5f );
         }
         m_Generator->Pop();
 
@@ -780,7 +780,7 @@ void RotateManipulator::CreateProperties()
         {
             m_Generator->AddLabel( TXT( "Space" ) );
             Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::RotateManipulator, int> (this, &RotateManipulator::GetSpace, &RotateManipulator::SetSpace) );
-            choice->SetDropDown( true );
+            choice->a_IsDropDown.Set( true );
             std::vector< Inspect::ChoiceItem > items;
 
             {
@@ -801,7 +801,7 @@ void RotateManipulator::CreateProperties()
                 items.push_back( Inspect::ChoiceItem( TXT( "World" ), str.str() ) );
             }
 
-            choice->SetItems( items );
+            choice->a_Items.Set( items );
         }
         m_Generator->Pop();
 

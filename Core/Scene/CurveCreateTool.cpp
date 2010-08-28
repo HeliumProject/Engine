@@ -258,7 +258,7 @@ void CurveCreateTool::CreateProperties()
 {
   __super::CreateProperties();
 
-  m_Generator->PushPanel( TXT( "Create Curve" ), true );
+  m_Generator->PushContainer( TXT( "Create Curve" ) );
   {
     m_Generator->PushContainer();
     {
@@ -278,7 +278,7 @@ void CurveCreateTool::CreateProperties()
     {
       m_Generator->AddLabel( TXT( "Plane Snap" ) );
       Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::CurveCreateTool, int> (this, &CurveCreateTool::GetPlaneSnap, &CurveCreateTool::SetPlaneSnap) );
-      choice->SetDropDown( true );
+      choice->a_IsDropDown.Set( true );
       std::vector< Inspect::ChoiceItem > items;
 
       {
@@ -293,7 +293,7 @@ void CurveCreateTool::CreateProperties()
         items.push_back( Inspect::ChoiceItem( TXT( "Ground" ), str.str() ) );
       }
 
-      choice->SetItems( items );
+      choice->a_Items.Set( items );
     }
     m_Generator->Pop();
 
@@ -301,7 +301,7 @@ void CurveCreateTool::CreateProperties()
     {
       m_Generator->AddLabel( TXT( "Curve Type" ) );
       Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::CurveCreateTool, int> (this, &CurveCreateTool::GetCurveType, &CurveCreateTool::SetCurveType ) );
-      choice->SetDropDown( true );
+      choice->a_IsDropDown.Set( true );
       std::vector< Inspect::ChoiceItem > items;
 
       {
@@ -322,7 +322,7 @@ void CurveCreateTool::CreateProperties()
         items.push_back( Inspect::ChoiceItem( TXT( "Catmull-Rom" ), str.str() ) );
       }
 
-      choice->SetItems( items );
+      choice->a_Items.Set( items );
 
     }
     m_Generator->Pop();

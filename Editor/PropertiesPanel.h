@@ -17,14 +17,13 @@ namespace Helium
             {
                 return m_PropertyCanvas;
             }
+
         private:
             Core::PropertiesManager* m_PropertiesManager;
             Inspect::TreeCanvasCtrl* m_PropertyCanvas;
 
-            void OnIntersection(wxCommandEvent& event);
-            void OnUnion(wxCommandEvent& event);
-            void OnExpandAll(wxCommandEvent& event);
-            void OnCollapseAll(wxCommandEvent& event);
+            virtual void OnIntersection(wxCommandEvent& event) HELIUM_OVERRIDE;
+            virtual void OnUnion(wxCommandEvent& event) HELIUM_OVERRIDE;
         };
     }
 }

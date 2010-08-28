@@ -164,7 +164,7 @@ namespace Helium
             template <class T>
             CheckBox* AddCheckBox( const Helium::SmartPtr< Helium::Property<T> >& property )
             {
-                CheckBoxPtr control = m_Container->GetCanvas()->Create<CheckBox>(this);
+                CheckBoxPtr control = CreateControl<CheckBox>();
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
                 std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
                 containerStack.top()->AddChild(control);
@@ -174,7 +174,7 @@ namespace Helium
             template <class T>
             Value* AddValue( const Helium::SmartPtr< Helium::Property<T> >& property )
             {
-                ValuePtr control = m_Container->GetCanvas()->Create<Value>(this);
+                ValuePtr control = CreateControl<Value>();
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
                 std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
                 containerStack.top()->AddChild(control);
@@ -184,7 +184,7 @@ namespace Helium
             template <class T>
             Choice* AddChoice( const Helium::SmartPtr< Helium::Property<T> >& property )
             {
-                ChoicePtr control = m_Container->GetCanvas()->Create<Choice>(this);
+                ChoicePtr control = CreateControl<Choice>();
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
                 std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
                 containerStack.top()->AddChild(control);
@@ -205,8 +205,8 @@ namespace Helium
                     str << (*itr)->m_Value;
                     items.push_back( ChoiceItem ( (*itr)->m_Label, str.str() ) );
                 }
-                control->SetItems(items);
-                control->SetDropDown(true);
+                control->a_Items.Set(items);
+                control->a_IsDropDown.Set(true);
 
                 return control;        
             }
@@ -214,7 +214,7 @@ namespace Helium
             template <class T>
             List* AddList( const Helium::SmartPtr< Helium::Property<T> >& property )
             {
-                ListPtr control = m_Container->GetCanvas()->Create<List>(this);
+                ListPtr control = CreateControl<List>();
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
                 std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
                 containerStack.top()->AddChild(control);
@@ -224,7 +224,7 @@ namespace Helium
             template <class T>
             Slider* AddSlider( const Helium::SmartPtr< Helium::Property<T> >& property )
             {
-                SliderPtr control = m_Container->GetCanvas()->Create<Slider>(this);
+                SliderPtr control = CreateControl<Slider>();
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
                 std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
                 containerStack.top()->AddChild(control);
@@ -234,7 +234,7 @@ namespace Helium
             template <class T>
             ColorPicker* AddColorPicker( const Helium::SmartPtr< Helium::Property<T> >& property )
             {
-                ColorPickerPtr control = m_Container->GetCanvas()->Create<ColorPicker>(this);
+                ColorPickerPtr control = CreateControl<ColorPicker>();
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
                 std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
                 containerStack.top()->AddChild(control);

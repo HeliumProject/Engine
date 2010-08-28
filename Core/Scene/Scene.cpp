@@ -1702,7 +1702,7 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
     {
         TUID null;
         null.ToString(str);
-        args.m_Items.push_back( Inspect::ChoiceItem( TXT( "NULL" ), str) );
+        args.m_Items.push_back( Inspect::PopulateItem( TXT( "NULL" ), str) );
     }
 
     tstring suffix;
@@ -1730,7 +1730,7 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
             for ( ; nodeItr != nodeEnd; ++nodeItr )
             {
                 nodeItr->second->GetID().ToString(str);
-                args.m_Items.push_back( Inspect::ChoiceItem (nodeItr->second->GetName() + suffix, str) );
+                args.m_Items.push_back( Inspect::PopulateItem (nodeItr->second->GetName() + suffix, str) );
             }
         }
     }
@@ -1983,7 +1983,7 @@ bool Scene::PropertyChanging( const Inspect::ControlChangingArgs& args )
         return true;
     }
 
-    if ( args.m_Control->GetData().ReferencesObject() )
+    if ( args.m_Control->GetData() )
     {
         Undo::CommandPtr command = args.m_Control->GetData()->GetUndoCommand();
 

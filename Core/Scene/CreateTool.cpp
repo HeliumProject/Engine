@@ -735,13 +735,13 @@ void CreateTool::CreateProperties()
 
     Place(Math::Matrix4::Identity);
 
-    m_Generator->PushPanel( TXT( "Create" ), true);
+    m_Generator->PushContainer( TXT( "Create" ) );
     {
         m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Plane Snap" ) );
             Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::CreateTool, int> (this, &CreateTool::GetPlaneSnap, &CreateTool::SetPlaneSnap) );
-            choice->SetDropDown( true );
+            choice->a_IsDropDown.Set( true );
             std::vector< Inspect::ChoiceItem > items;
 
             {
@@ -756,7 +756,7 @@ void CreateTool::CreateProperties()
                 items.push_back( Inspect::ChoiceItem( TXT( "Ground" ), str.str() ) );
             }
 
-            choice->SetItems( items );
+            choice->a_Items.Set( items );
         }
         m_Generator->Pop();
 
@@ -799,10 +799,10 @@ void CreateTool::CreateProperties()
         {
             m_Generator->AddLabel( TXT( "Azimuth Lower Bound" ) );
             Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetAzimuthMin, &CreateTool::SetAzimuthMin) );
-            slider->SetRangeMin( 0.f );
-            slider->SetRangeMax( 180.f );
+            slider->a_Min.Set( 0.f );
+            slider->a_Max.Set( 180.f );
 
-            Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
+            Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
             textBox->Bind( slider->GetData() );
             m_Generator->Add( textBox );
         }
@@ -812,10 +812,10 @@ void CreateTool::CreateProperties()
         {
             m_Generator->AddLabel( TXT( "Azimuth Upper Bound" ) );
             Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetAzimuthMax, &CreateTool::SetAzimuthMax) );
-            slider->SetRangeMin( 0.f );
-            slider->SetRangeMax( 180.f );
+            slider->a_Min.Set( 0.f );
+            slider->a_Max.Set( 180.f );
 
-            Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
+            Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
             textBox->Bind( slider->GetData() );
             m_Generator->Add( textBox );
         }
@@ -832,10 +832,10 @@ void CreateTool::CreateProperties()
         {
             m_Generator->AddLabel( TXT( "Direction Lower Bound" ) );
             Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetDirectionMin, &CreateTool::SetDirectionMin) );
-            slider->SetRangeMin( 0.f );
-            slider->SetRangeMax( 180.f );
+            slider->a_Min.Set( 0.f );
+            slider->a_Max.Set( 180.f );
 
-            Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
+            Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
             textBox->Bind( slider->GetData() );
             m_Generator->Add( textBox );
         }
@@ -845,10 +845,10 @@ void CreateTool::CreateProperties()
         {
             m_Generator->AddLabel( TXT( "Direction Upper Bound" ) );
             Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetDirectionMax, &CreateTool::SetDirectionMax) );
-            slider->SetRangeMin( 0.f );
-            slider->SetRangeMax( 180.f );
+            slider->a_Min.Set( 0.f );
+            slider->a_Max.Set( 180.f );
 
-            Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
+            Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
             textBox->Bind( slider->GetData() );
             m_Generator->Add( textBox );
         }
@@ -865,10 +865,10 @@ void CreateTool::CreateProperties()
         {
             m_Generator->AddLabel( TXT( "Scale Lower Bound" ) );
             Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetScaleMin, &CreateTool::SetScaleMin) );
-            slider->SetRangeMin( 0.05f );
-            slider->SetRangeMax( 5.f );
+            slider->a_Min.Set( 0.05f );
+            slider->a_Max.Set( 5.f );
 
-            Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
+            Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
             textBox->Bind( slider->GetData() );
             m_Generator->Add( textBox );
         }
@@ -878,16 +878,16 @@ void CreateTool::CreateProperties()
         {
             m_Generator->AddLabel( TXT( "Scale Upper Bound" ) );
             Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetScaleMax, &CreateTool::SetScaleMax) );
-            slider->SetRangeMin( 0.05f );
-            slider->SetRangeMax( 5.f );
+            slider->a_Min.Set( 0.05f );
+            slider->a_Max.Set( 5.f );
 
-            Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
+            Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
             textBox->Bind( slider->GetData() );
             m_Generator->Add( textBox );
         }
         m_Generator->Pop();
 
-        m_Generator->PushPanel( TXT( "Paint" ) );
+        m_Generator->PushContainer( TXT( "Paint" ) );
         {
             m_Generator->PushContainer();
             {
@@ -908,7 +908,7 @@ void CreateTool::CreateProperties()
                 m_Generator->AddLabel( TXT( "Placement Style" ) );
 
                 Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::CreateTool, int> (this, &CreateTool::GetPaintPlacementStyle, &CreateTool::SetPaintPlacementStyle ) );
-                choice->SetDropDown( true );
+                choice->a_IsDropDown.Set( true );
                 std::vector< Inspect::ChoiceItem > items;
 
                 {
@@ -923,7 +923,7 @@ void CreateTool::CreateProperties()
                     items.push_back( Inspect::ChoiceItem( TXT( "Radial" ), str.str() ) );
                 }
 
-                choice->SetItems( items );
+                choice->a_Items.Set( items );
             }
             m_Generator->Pop();
 
@@ -932,7 +932,7 @@ void CreateTool::CreateProperties()
                 m_Generator->AddLabel( TXT( "Distribution Style" ) );
 
                 Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::CreateTool, int> (this, &CreateTool::GetPaintDistributionStyle, &CreateTool::SetPaintDistributionStyle ) );
-                choice->SetDropDown( true );
+                choice->a_IsDropDown.Set( true );
                 std::vector< Inspect::ChoiceItem > items;
 
                 {
@@ -959,7 +959,7 @@ void CreateTool::CreateProperties()
                     items.push_back( Inspect::ChoiceItem( TXT( "Normal" ), str.str() ) );
                 }
 
-                choice->SetItems( items );
+                choice->a_Items.Set( items );
             }
             m_Generator->Pop();
 
@@ -967,11 +967,10 @@ void CreateTool::CreateProperties()
             {
                 m_Generator->AddLabel( TXT( "Radius" ) );
                 Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetPaintRadius, &CreateTool::SetPaintRadius) );
-                slider->SetRangeMin( 0.1f );
-                slider->SetRangeMax( 30.0f );
-                slider->SetValue( s_PaintRadius );
+                slider->a_Min.Set( 0.1f );
+                slider->a_Max.Set( 30.0f );
 
-                Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
+                Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
                 textBox->Bind( slider->GetData() );
                 m_Generator->Add( textBox );
             }
@@ -981,11 +980,10 @@ void CreateTool::CreateProperties()
             {
                 m_Generator->AddLabel( TXT( "Speed" ) );
                 Inspect::Slider* slider = m_Generator->AddSlider<int>( new Helium::MemberProperty<Core::CreateTool, int> (this, &CreateTool::GetPaintSpeed, &CreateTool::SetPaintSpeed) );
-                slider->SetRangeMin( 1 );
-                slider->SetRangeMax( 10 );
-                slider->SetValue( s_PaintSpeed );
+                slider->a_Min.Set( 1 );
+                slider->a_Max.Set( 10 );
 
-                Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
+                Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
                 textBox->Bind( slider->GetData() );
                 m_Generator->Add( textBox );
             }
@@ -995,11 +993,10 @@ void CreateTool::CreateProperties()
             {
                 m_Generator->AddLabel( TXT( "Density" ) );
                 Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetPaintDensity, &CreateTool::SetPaintDensity) );
-                slider->SetRangeMin( 0.0f );
-                slider->SetRangeMax( 2.0f );
-                slider->SetValue( s_PaintDensity );
+                slider->a_Min.Set( 0.0f );
+                slider->a_Max.Set( 2.0f );
 
-                Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
+                Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
                 textBox->Bind( slider->GetData() );
                 m_Generator->Add( textBox );
             }
@@ -1009,11 +1006,10 @@ void CreateTool::CreateProperties()
             {
                 m_Generator->AddLabel( TXT( "Jitter" ) );
                 Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetPaintJitter, &CreateTool::SetPaintJitter) );
-                slider->SetRangeMin( 0.0f );
-                slider->SetRangeMax( 1.0f );
-                slider->SetValue( s_PaintJitter );
+                slider->a_Min.Set( 0.0f );
+                slider->a_Max.Set( 1.0f );
 
-                Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
+                Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
                 textBox->Bind( slider->GetData() );
                 m_Generator->Add( textBox );
             }
@@ -1023,22 +1019,22 @@ void CreateTool::CreateProperties()
     }
     m_Generator->Pop();
 
-    m_AzimuthMin->SetEnabled(s_RandomizeAzimuth);
-    m_AzimuthMax->SetEnabled(s_RandomizeAzimuth);
+    m_AzimuthMin->a_IsEnabled.Set(s_RandomizeAzimuth);
+    m_AzimuthMax->a_IsEnabled.Set(s_RandomizeAzimuth);
 
-    m_DirectionMin->SetEnabled(s_RandomizeDirection);
-    m_DirectionMax->SetEnabled(s_RandomizeDirection);
+    m_DirectionMin->a_IsEnabled.Set(s_RandomizeDirection);
+    m_DirectionMax->a_IsEnabled.Set(s_RandomizeDirection);
 
-    m_ScaleMin->SetEnabled(s_RandomizeScale);
-    m_ScaleMax->SetEnabled(s_RandomizeScale);
+    m_ScaleMin->a_IsEnabled.Set(s_RandomizeScale);
+    m_ScaleMax->a_IsEnabled.Set(s_RandomizeScale);
 
-    m_PaintPreventAnyOverlap->SetEnabled(s_PaintMode);
-    m_PaintPlacementStyle->SetEnabled(s_PaintMode);
-    m_PaintDistributionStyle->SetEnabled(s_PaintMode);
-    m_PaintRadius->SetEnabled(s_PaintMode);
-    m_PaintSpeed->SetEnabled(s_PaintMode);
-    m_PaintDensity->SetEnabled(s_PaintMode);
-    m_PaintJitter->SetEnabled(s_PaintMode);
+    m_PaintPreventAnyOverlap->a_IsEnabled.Set(s_PaintMode);
+    m_PaintPlacementStyle->a_IsEnabled.Set(s_PaintMode);
+    m_PaintDistributionStyle->a_IsEnabled.Set(s_PaintMode);
+    m_PaintRadius->a_IsEnabled.Set(s_PaintMode);
+    m_PaintSpeed->a_IsEnabled.Set(s_PaintMode);
+    m_PaintDensity->a_IsEnabled.Set(s_PaintMode);
+    m_PaintJitter->a_IsEnabled.Set(s_PaintMode);
 }
 
 void CreateTool::SetupInstanceOffsets( float instanceRadius, Math::V_Vector3& instanceOffsets )
@@ -1241,8 +1237,8 @@ bool CreateTool::GetRandomizeAzimuth() const
 void CreateTool::SetRandomizeAzimuth(bool value)
 {
     s_RandomizeAzimuth = value;
-    m_AzimuthMin->SetEnabled(value);
-    m_AzimuthMax->SetEnabled(value);
+    m_AzimuthMin->a_IsEnabled.Set(value);
+    m_AzimuthMax->a_IsEnabled.Set(value);
 }
 
 float CreateTool::GetAzimuthMin() const
@@ -1273,8 +1269,8 @@ bool CreateTool::GetRandomizeDirection() const
 void CreateTool::SetRandomizeDirection(bool value)
 {
     s_RandomizeDirection = value;
-    m_DirectionMin->SetEnabled(value);
-    m_DirectionMax->SetEnabled(value);
+    m_DirectionMin->a_IsEnabled.Set(value);
+    m_DirectionMax->a_IsEnabled.Set(value);
 }
 
 float CreateTool::GetDirectionMin() const
@@ -1305,8 +1301,8 @@ bool CreateTool::GetRandomizeScale() const
 void CreateTool::SetRandomizeScale(bool value)
 {
     s_RandomizeScale = value;
-    m_ScaleMin->SetEnabled(value);
-    m_ScaleMax->SetEnabled(value);
+    m_ScaleMin->a_IsEnabled.Set(value);
+    m_ScaleMax->a_IsEnabled.Set(value);
 }
 
 float CreateTool::GetScaleMin() const
@@ -1337,13 +1333,13 @@ bool CreateTool::GetPaintMode() const
 void CreateTool::SetPaintMode(bool value)
 {
     s_PaintMode = value;
-    m_PaintPreventAnyOverlap->SetEnabled(s_PaintMode);
-    m_PaintPlacementStyle->SetEnabled(s_PaintMode);
-    m_PaintDistributionStyle->SetEnabled(s_PaintMode);
-    m_PaintRadius->SetEnabled(s_PaintMode);
-    m_PaintSpeed->SetEnabled(s_PaintMode);
-    m_PaintDensity->SetEnabled(s_PaintMode);
-    m_PaintJitter->SetEnabled(s_PaintMode);
+    m_PaintPreventAnyOverlap->a_IsEnabled.Set(s_PaintMode);
+    m_PaintPlacementStyle->a_IsEnabled.Set(s_PaintMode);
+    m_PaintDistributionStyle->a_IsEnabled.Set(s_PaintMode);
+    m_PaintRadius->a_IsEnabled.Set(s_PaintMode);
+    m_PaintSpeed->a_IsEnabled.Set(s_PaintMode);
+    m_PaintDensity->a_IsEnabled.Set(s_PaintMode);
+    m_PaintJitter->a_IsEnabled.Set(s_PaintMode);
 }
 
 bool CreateTool::GetPaintPreventAnyOverlap() const

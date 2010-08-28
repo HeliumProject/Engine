@@ -139,15 +139,12 @@ bool Light::ValidatePanel(const tstring& name)
 
 void Light::CreatePanel( CreatePanelArgs& args )
 {
-    args.m_Generator->PushPanel( TXT( "Light" ), true);
+    args.m_Generator->PushContainer( TXT( "Light" ) );
     {
         args.m_Generator->PushContainer();
         {
             args.m_Generator->AddLabel( TXT( "Color" ) );
             args.m_Generator->AddColorPicker<Light, Color3>( args.m_Selection, &Light::GetColor, &Light::SetColor );
-
-            Inspect::Slider* slider = args.m_Generator->AddSlider<Light, float>( args.m_Selection, &Light::GetIntensity, &Light::SetIntensity );
-            args.m_Generator->AddValue<Light, float>( args.m_Selection, &Light::GetIntensity, &Light::SetIntensity );
         }
         args.m_Generator->Pop();
     }

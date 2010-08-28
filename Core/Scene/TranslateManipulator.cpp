@@ -1268,13 +1268,13 @@ void TranslateManipulator::CreateProperties()
 {
     __super::CreateProperties();
 
-    m_Generator->PushPanel( TXT( "Translate" ), true);
+    m_Generator->PushContainer( TXT( "Translate" ) );
     {
         m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Space" ) );
             Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::TranslateManipulator, int> (this, &TranslateManipulator::GetSpace, &TranslateManipulator::SetSpace) );
-            choice->SetDropDown( true );
+            choice->a_IsDropDown.Set( true );
             std::vector< Inspect::ChoiceItem > items;
 
             {
@@ -1295,7 +1295,7 @@ void TranslateManipulator::CreateProperties()
                 items.push_back( Inspect::ChoiceItem( TXT( "World" ), str.str() ) );
             }
 
-            choice->SetItems( items );
+            choice->a_Items.Set( items );
         }
         m_Generator->Pop();
 

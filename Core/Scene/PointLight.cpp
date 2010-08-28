@@ -215,7 +215,7 @@ bool PointLight::ValidatePanel(const tstring& name)
 
 void PointLight::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Generator->PushPanel( TXT( "Point Light" ), true);
+  args.m_Generator->PushContainer( TXT( "Point Light" ) );
   {
     args.m_Generator->PushContainer();
     {

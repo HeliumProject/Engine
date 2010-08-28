@@ -176,14 +176,14 @@ bool Locator::ValidatePanel(const tstring& name)
 
 void Locator::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Generator->PushPanel( TXT( "Locator" ), true);
+  args.m_Generator->PushContainer( TXT( "Locator" ) );
   {
     args.m_Generator->PushContainer();
     {
       args.m_Generator->AddLabel( TXT( "Shape" ) );
 
       Inspect::Choice* choice = args.m_Generator->AddChoice<Core::Locator, int>(args.m_Selection, &Locator::GetShape, &Locator::SetShape);
-      choice->SetDropDown( true );
+      choice->a_IsDropDown.Set( true );
       std::vector< Inspect::ChoiceItem > items;
 
       {
@@ -198,7 +198,7 @@ void Locator::CreatePanel( CreatePanelArgs& args )
         items.push_back( Inspect::ChoiceItem( TXT( "Cube" ), str.str() ) );
       }
 
-      choice->SetItems( items );
+      choice->a_Items.Set( items );
     }
     args.m_Generator->Pop();
   }

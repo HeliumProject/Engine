@@ -109,9 +109,6 @@ namespace Helium
             Math::Color3 GetColor() const;
             void SetColor( Math::Color3 color );
 
-            float GetIntensity() const;
-            void SetIntensity( float intensity );
-
             i32 GetRenderType() const;
             void SetRenderType( i32 renderType );
 

@@ -1087,7 +1087,7 @@ bool HierarchyNode::ValidatePanel(const tstring& name)
 
 void HierarchyNode::CreatePanel(CreatePanelArgs& args)
 {
-  args.m_Generator->PushPanel( TXT( "Hierarchy Node" ), true);
+  args.m_Generator->PushContainer( TXT( "Hierarchy Node" ) );
   {
     args.m_Generator->PushContainer();
     {

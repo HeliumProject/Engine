@@ -73,14 +73,14 @@ Core::TransformPtr VolumeCreateTool::CreateNode()
 
 void VolumeCreateTool::CreateProperties()
 {
-  m_Generator->PushPanel( TXT( "Volume" ), true);
+  m_Generator->PushContainer( TXT( "Volume" ) );
   {
     m_Generator->PushContainer();
     {
       m_Generator->AddLabel( TXT( "Shape" ) );
 
       Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::VolumeCreateTool, int>(this, &VolumeCreateTool::GetVolumeShape, &VolumeCreateTool::SetVolumeShape) );
-      choice->SetDropDown( true );
+      choice->a_IsDropDown.Set( true );
       std::vector< Inspect::ChoiceItem > items;
 
       {
@@ -107,7 +107,7 @@ void VolumeCreateTool::CreateProperties()
         items.push_back( Inspect::ChoiceItem( TXT( "Capsule" ), str.str() ) );
       }
 
-      choice->SetItems( items );
+      choice->a_Items.Set( items );
     }
     m_Generator->Pop();
 

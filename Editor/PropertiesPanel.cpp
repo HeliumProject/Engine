@@ -12,11 +12,8 @@ PropertiesPanel::PropertiesPanel( PropertiesManager* manager, wxWindow *parent, 
 {
     SetHelpText( TXT( "This is the Properties Panel.  It will contain the properties for the items you have selected.  It has two modes:\n Common - Only display the properties common to all the selected items.\n All - Display all properties, regardless of if they are shared by the selected items." ) );
 
-    m_CommonButton->SetHelpText( TXT( "Selecting this will only show the properties that are common to all the selected items." ) );
-    m_AllButton->SetHelpText( TXT( "Selecting this will show all the properties for all the selected items." ) );
-
-    m_ExpandAllButton->SetHelpText( TXT( "Clicking this button will expand all properties in the property hierarchy below." ) );
-    m_CollapseAllButton->SetHelpText( TXT( "Clicking this button will collapse all properties in the property hierarchy below." ) );
+    m_IntersectionButton->SetHelpText( TXT( "Selecting this will only show the properties that are common to all the selected items." ) );
+    m_UnionButton->SetHelpText( TXT( "Selecting this will show all the properties for all the selected items." ) );
 
     m_PropertyCanvas = new Inspect::TreeCanvasCtrl ( m_PropertiesPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxCLIP_CHILDREN );
     m_PropertiesPanel->GetSizer()->Add( m_PropertyCanvas, 1, wxEXPAND | wxALL, 0 );
@@ -31,40 +28,4 @@ void PropertiesPanel::OnIntersection(wxCommandEvent& event)
 void PropertiesPanel::OnUnion(wxCommandEvent& event)
 {
     m_PropertiesManager->SetProperties( PropertySettings::Union );
-}
-
-void PropertiesPanel::OnExpandAll(wxCommandEvent& event)
-{
-    Inspect::Canvas* canvas = m_PropertyCanvas->GetCanvas();
-
-    Inspect::V_Control::const_iterator itr = canvas->GetChildren().begin();
-    Inspect::V_Control::const_iterator end = canvas->GetChildren().end();
-    for ( ; itr != end; ++itr )
-    {
-        Inspect::Panel* panel = Reflect::ObjectCast<Inspect::Panel>( *itr );
-        if (panel)
-        {
-            panel->SetExpandedRecursive( true, true );
-        }
-    }
-
-    canvas->Layout();
-}
-
-void PropertiesPanel::OnCollapseAll(wxCommandEvent& event)
-{
-    Inspect::Canvas* canvas = m_PropertyCanvas->GetCanvas();
-
-    Inspect::V_Control::const_iterator itr = canvas->GetChildren().begin();
-    Inspect::V_Control::const_iterator end = canvas->GetChildren().end();
-    for ( ; itr != end; ++itr )
-    {
-        Inspect::Panel* panel = Reflect::ObjectCast<Inspect::Panel>( *itr );
-        if (panel)
-        {
-            panel->SetExpandedRecursive( false, true );
-        }
-    }
-
-    canvas->Layout();
 }

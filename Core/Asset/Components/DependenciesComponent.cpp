@@ -9,5 +9,5 @@ void DependenciesComponent::EnumerateClass( Reflect::Compositor<DependenciesComp
 {
   comp.GetComposite().m_UIName = TXT( "Dependencies" );
 
-  Reflect::Field* fieldPaths = comp.AddField( &DependenciesComponent::m_Paths, "m_Paths", Reflect::FieldFlags::Path );
+  Reflect::Field* fieldPaths = comp.AddField( &DependenciesComponent::m_Paths, "m_Paths" );
 }

@@ -3,8 +3,6 @@
 
 #include "Foundation/Log.h"
 
-#include "Application/Inspect/Interpreters/File/FileDialogButton.h"
-#include "Application/Inspect/Interpreters/File/FileBrowserButton.h"
 #include "Application/UI/FileDialog.h"
 
 #include "Core/Scene/Mesh.h"
@@ -53,9 +51,7 @@ EntityInstanceCreateTool::EntityInstanceCreateTool(Core::Scene* scene, Propertie
 : Core::CreateTool (scene, generator)
 , m_RandomEntityList ( NULL )
 , m_FileButton( NULL )
-, m_BrowserButton( NULL )
 , m_FileButtonAdd( NULL )
-, m_BrowserButtonAdd( NULL )
 {
 
 }
@@ -126,47 +122,35 @@ Core::TransformPtr EntityInstanceCreateTool::CreateNode()
 
 void EntityInstanceCreateTool::CreateProperties()
 {
-    m_Generator->PushPanel( TXT( "Entity" ), true);
+    m_Generator->PushContainer( TXT( "Entity" ) );
     {
         m_Generator->PushContainer();
         {
             m_FileButton = m_Generator->AddFileDialogButton< tstring >( new Helium::MemberProperty<Core::EntityInstanceCreateTool, tstring> (this, &EntityInstanceCreateTool::GetEntityAsset, &EntityInstanceCreateTool::SetEntityAsset ) );
-            m_BrowserButton = m_Generator->AddFileBrowserButton< tstring >( new Helium::MemberProperty<Core::EntityInstanceCreateTool, tstring> (this, &EntityInstanceCreateTool::GetEntityAsset, &EntityInstanceCreateTool::SetEntityAsset ) );
-
             m_FileButtonAdd = m_Generator->AddFileDialogButton< tstring >( new Helium::MemberProperty<Core::EntityInstanceCreateTool, tstring> (this, &EntityInstanceCreateTool::GetEntityAsset, &EntityInstanceCreateTool::AddEntityAsset ) );
-            m_BrowserButtonAdd = m_Generator->AddFileBrowserButton< tstring >( new Helium::MemberProperty<Core::EntityInstanceCreateTool, tstring> (this, &EntityInstanceCreateTool::GetEntityAsset, &EntityInstanceCreateTool::AddEntityAsset ) );
+            m_FileButtonAdd->a_Icon.Set( TXT( "ellipses_add" ) );
 
-            m_FileButtonAdd->SetIcon( TXT( "ellipses_add" ) );
-            m_BrowserButtonAdd->SetIcon( TXT( "magnify_add" ) );
+            Inspect::Button* modifyButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnModify ) );
+            modifyButton->a_ToolTip.Set( TXT( "Modify" ) );
+            modifyButton->a_Icon.Set( TXT( "percent" ) );
 
-            Inspect::Button* modifyButton = m_Generator->AddButton( Inspect::ButtonSignature::Delegate( this, &EntityInstanceCreateTool::OnModify ) );
-            modifyButton->SetToolTip( TXT( "Modify" ) );
-            modifyButton->SetIcon( TXT( "percent" ) );
-            modifyButton->SetInterpreterClientData( this );
+            Inspect::Button* normalizeButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnNormalize ) );
+            normalizeButton->a_ToolTip.Set( TXT( "Normalize" ) );
+            normalizeButton->a_Icon.Set( TXT( "normalize" ) );
 
-            Inspect::Button* normalizeButton = m_Generator->AddButton( Inspect::ButtonSignature::Delegate( this, &EntityInstanceCreateTool::OnNormalize ) );
-            normalizeButton->SetToolTip( TXT( "Normalize" ) );
-            normalizeButton->SetIcon( TXT( "normalize" ) );
-            normalizeButton->SetInterpreterClientData( this );
+            Inspect::Button* deleteButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnDeleteClass ) );
+            deleteButton->a_ToolTip.Set( TXT( "Delete" ) );
+            deleteButton->a_Icon.Set( TXT( "actions/list-remove" ) );
 
-            Inspect::Button* deleteButton = m_Generator->AddButton( Inspect::ButtonSignature::Delegate( this, &EntityInstanceCreateTool::OnDeleteClass ) );
-            deleteButton->SetToolTip( TXT( "Delete" ) );
-            deleteButton->SetIcon( TXT( "actions/list-remove" ) );
-            deleteButton->SetInterpreterClientData( this );
-
-            Inspect::Button*  clearButton = m_Generator->AddButton( Inspect::ButtonSignature::Delegate( this, &EntityInstanceCreateTool::OnClear ) );
-            clearButton->SetToolTip( TXT( "Clear" ) );
-            clearButton->SetIcon( TXT( "delete" ) );
-            clearButton->SetInterpreterClientData( this );
+            Inspect::Button*  clearButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnClear ) );
+            clearButton->a_ToolTip.Set( TXT( "Clear" ) );
+            clearButton->a_Icon.Set( TXT( "delete" ) );
 
             tstring filter;
             if ( Reflect::GetClass<Asset::Entity>()->GetProperty( Asset::AssetProperties::FileFilter, filter ) )
             {
-                m_FileButton->SetFilter( filter );
-                m_BrowserButton->SetFilter( filter );
-
-                m_FileButtonAdd->SetFilter( filter );
-                m_BrowserButtonAdd->SetFilter( filter );
+                m_FileButton->a_Filter.Set( filter );
+                m_FileButtonAdd->a_Filter.Set( filter );
             }
         }
         m_Generator->Pop();
@@ -315,16 +299,10 @@ void EntityInstanceCreateTool::SetRandomEntity( const tstring& entityName )
     HELIUM_BREAK();
 }
 
-void EntityInstanceCreateTool::OnDeleteClass( Inspect::Button* button )
+void EntityInstanceCreateTool::OnDeleteClass( const Inspect::ButtonClickedArgs& args )
 {
-    Core::EntityInstanceCreateTool* thisTool = Reflect::ObjectCast< Core::EntityInstanceCreateTool >( button->GetInterpreterClientData() );
-    if ( !thisTool )
-    {
-        Log::Error( TXT( "Invalid EntityInstanceCreateTool in OnDeleteClass()" ) );
-        return;
-    }
-
-    const std::vector< tstring >& selectedItems = m_RandomEntityList->GetSelectedItems();
+#ifdef INSPECT_REFACTOR
+    const std::vector< tstring >& selectedItems = m_RandomEntityList->a_SelectedItems.Get();
 
     V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin();
     while ( itr != m_RandomEntityInfo.end() )
@@ -359,43 +337,27 @@ void EntityInstanceCreateTool::OnDeleteClass( Inspect::Button* button )
             ++itr;
         }
     }
+#endif
 
-    thisTool->m_Generator->GetContainer()->GetCanvas()->Read();
+    m_Generator->GetContainer()->GetCanvas()->Read();
 
-    thisTool->RefreshInstance();
+    RefreshInstance();
 }
 
-void EntityInstanceCreateTool::OnClear( Inspect::Button* button )
+void EntityInstanceCreateTool::OnClear( const Inspect::ButtonClickedArgs& args )
 {
-    Core::EntityInstanceCreateTool* thisTool = Reflect::ObjectCast< Core::EntityInstanceCreateTool >( button->GetInterpreterClientData() );
-    if ( !thisTool )
-    {
-        Log::Error( TXT( "Invalid EntityInstanceCreateTool in OnClear()" ) );
-        return;
-    }
-
     m_RandomEntityInfo.clear();
 
-    thisTool->m_FileButton->SetPath( TXT( "" ) );
-    thisTool->m_BrowserButton->SetPath( TXT( "" ) );
+    m_FileButton->WriteStringData( TXT( "" ) );
+    m_FileButtonAdd->WriteStringData( TXT( "" ) );
 
-    thisTool->m_FileButtonAdd->SetPath( TXT( "" ) );
-    thisTool->m_BrowserButtonAdd->SetPath( TXT( "" ) );
+    m_Generator->GetContainer()->GetCanvas()->Read();
 
-    thisTool->m_Generator->GetContainer()->GetCanvas()->Read();
-
-    thisTool->RefreshInstance();
+    RefreshInstance();
 }
 
-void EntityInstanceCreateTool::OnNormalize( Inspect::Button* button )
+void EntityInstanceCreateTool::OnNormalize( const Inspect::ButtonClickedArgs& args )
 {
-    Core::EntityInstanceCreateTool* thisTool = Reflect::ObjectCast< Core::EntityInstanceCreateTool >( button->GetInterpreterClientData() );
-    if ( !thisTool )
-    {
-        Log::Error( TXT( "Invalid EntityInstanceCreateTool in OnNormalize()" ) );
-        return;
-    }
-
     float total = 0.0f;  
     V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin();
     V_EntityRowInfo::iterator end = m_RandomEntityInfo.end();
@@ -409,20 +371,14 @@ void EntityInstanceCreateTool::OnNormalize( Inspect::Button* button )
         (*itr).m_Probability /= total;
     }
 
-    thisTool->m_Generator->GetContainer()->GetCanvas()->Read();
+    m_Generator->GetContainer()->GetCanvas()->Read();
 }
 
-void EntityInstanceCreateTool::OnModify( Inspect::Button* button )
+void EntityInstanceCreateTool::OnModify( const Inspect::ButtonClickedArgs& args )
 {
-    Core::EntityInstanceCreateTool* thisTool = Reflect::ObjectCast< Core::EntityInstanceCreateTool >( button->GetInterpreterClientData() );
-    if ( !thisTool )
-    {
-        Log::Error( TXT( "Invalid EntityInstanceCreateTool in OnModify()" ) );
-        return;
-    }
-
     std::map< u64, u64 > selectedHashes;
 
+#ifdef INSPECT_REFACTOR
     const std::vector< tstring >& selectedItems = m_RandomEntityList->GetSelectedItems();
     std::vector< tstring >::const_iterator selectedItr = selectedItems.begin();
     std::vector< tstring >::const_iterator selectedEnd = selectedItems.end();
@@ -467,10 +423,13 @@ void EntityInstanceCreateTool::OnModify( Inspect::Button* button )
         {
             (*itr).m_Probability = newPercentage;
         }
-    }  
+    }
+#endif
 
-    thisTool->m_Generator->GetContainer()->GetCanvas()->Read();
+    m_Generator->GetContainer()->GetCanvas()->Read();
 }
+
+#ifdef INSPECT_REFACTOR
 
 void EntityInstanceCreateTool::OnEntityDropped( const Inspect::FilteredDropTargetArgs& args )
 {
@@ -494,3 +453,4 @@ void EntityInstanceCreateTool::DropEntities( const std::vector< tstring >& entit
     m_Generator->GetContainer()->GetCanvas()->Thaw();
 }
 
+#endif

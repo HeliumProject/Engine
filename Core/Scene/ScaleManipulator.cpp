@@ -638,7 +638,7 @@ void ScaleManipulator::CreateProperties()
 {
     __super::CreateProperties();
 
-    m_Generator->PushPanel( TXT( "Scale" ), true);
+    m_Generator->PushContainer( TXT( "Scale" ) );
     {
         m_Generator->PushContainer();
         {

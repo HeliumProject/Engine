@@ -26,38 +26,31 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SelectableDumb
 : InstancePanel (generator, selection)
 , m_EntityPath( NULL )
 {
-    m_Expanded = true;
-    m_Name = TXT( "Entity" );
+    a_Name.Set( TXT( "Entity" ) );
 
     m_Generator->PushContainer();
     {
         m_Generator->AddLabel( TXT( "Class Path" ) );
 
         m_EntityPath = m_Generator->AddValue<Core::Entity, tstring>( m_Selection, &Core::Entity::GetEntityAssetPath, &Core::Entity::SetEntityAssetPath );
-        m_EntityPath->AddBoundDataChangingListener( Inspect::ChangingSignature::Delegate ( this, &EntityPanel::OnEntityAssetChanging ) );
-        m_EntityPath->AddBoundDataChangedListener( Inspect::ChangedSignature::Delegate ( this, &EntityPanel::OnEntityAssetChanged ) );
+        m_EntityPath->e_ControlChanging.AddMethod( this, &EntityPanel::OnEntityAssetChanging );
+        m_EntityPath->e_ControlChanged.AddMethod( this, &EntityPanel::OnEntityAssetChanged );
 
         Inspect::FileDialogButton* fileButton = m_Generator->AddFileDialogButton<Core::Entity, tstring>( m_Selection, &Core::Entity::GetEntityAssetPath, &Core::Entity::SetEntityAssetPath );
-        fileButton->AddBoundDataChangingListener( Inspect::ChangingSignature::Delegate ( this, &EntityPanel::OnEntityAssetChanging ) );
-        fileButton->AddBoundDataChangedListener( Inspect::ChangedSignature::Delegate ( this, &EntityPanel::OnEntityAssetChanged ) );
-
-        Inspect::FileBrowserButton* browserButton = m_Generator->AddFileBrowserButton<Core::Entity, tstring>( m_Selection, &Core::Entity::GetEntityAssetPath, &Core::Entity::SetEntityAssetPath );
-        browserButton->AddBoundDataChangingListener( Inspect::ChangingSignature::Delegate ( this, &EntityPanel::OnEntityAssetChanging ) );
-        browserButton->AddBoundDataChangedListener( Inspect::ChangedSignature::Delegate ( this, &EntityPanel::OnEntityAssetChanged ) );
+        fileButton->e_ControlChanging.AddMethod( this, &EntityPanel::OnEntityAssetChanging );
+        fileButton->e_ControlChanged.AddMethod( this, &EntityPanel::OnEntityAssetChanged );
 
         tstring filter;
         Reflect::GetClass<Asset::Entity>()->GetProperty( Asset::AssetProperties::FileFilter, filter );
 
         if ( !filter.empty() )
         {
-            fileButton->SetFilter( filter );
-            browserButton->SetFilter( filter );
+            fileButton->a_Filter.Set( filter );
         }
         else
         {
             // There's a problem, better disable the button
-            fileButton->SetEnabled( false );
-            browserButton->SetEnabled( false );
+            fileButton->a_IsEnabled.Set( false );
         }
 
 #ifdef INSPECT_REFACTOR
@@ -72,20 +65,18 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SelectableDumb
     {
         m_Generator->AddLabel( TXT( "Class Buttons" ) );
 
-        Inspect::Button* refreshButton = m_Generator->AddButton( Inspect::ButtonSignature::Delegate( this, &EntityPanel::OnEntityAssetRefresh ) );
-        refreshButton->SetIcon( TXT( "actions/view-refresh" ) );
-        refreshButton->SetToolTip( TXT( "Refresh" ) );
+        Inspect::Button* refreshButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityPanel::OnEntityAssetRefresh ) );
+        refreshButton->a_Icon.Set( TXT( "actions/view-refresh" ) );
+        refreshButton->a_ToolTip.Set( TXT( "Refresh" ) );
 
-        bool singular = m_Selection.Size() == 1;
+        Inspect::Button* lunaButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityPanel::OnEntityAssetEditAsset ) );
+        lunaButton->a_Icon.Set( TXT( "asset_editor" ) );
+        lunaButton->a_ToolTip.Set( TXT( "Edit this entity class in Editor's Asset Editor" ) );
 
-        Inspect::Button* lunaButton = m_Generator->AddButton( Inspect::ButtonSignature::Delegate( this, &EntityPanel::OnEntityAssetEditAsset ) );
-        lunaButton->SetIcon( TXT( "asset_editor" ) );
-        lunaButton->SetToolTip( TXT( "Edit this entity class in Editor's Asset Editor" ) );
-
-        Inspect::Button* mayaButton = m_Generator->AddButton( Inspect::ButtonSignature::Delegate( this, &EntityPanel::OnEntityAssetEditArt ) );
-        mayaButton->SetIcon( TXT( "maya" ) );
-        mayaButton->SetEnabled( singular );
-        mayaButton->SetToolTip( TXT( "Edit this entity class's art in Maya" ) );
+        Inspect::Button* mayaButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityPanel::OnEntityAssetEditArt ) );
+        mayaButton->a_IsEnabled.Set( m_Selection.Size() == 1 );
+        mayaButton->a_Icon.Set( TXT( "maya" ) );
+        mayaButton->a_ToolTip.Set( TXT( "Edit this entity class's art in Maya" ) );
     }
     m_Generator->Pop();
 
@@ -143,8 +134,9 @@ bool EntityPanel::OnEntityAssetChanging( const Inspect::ControlChangingArgs& arg
 
     if ( !result )
     {
+#pragma TODO("How to get the window handle?")
         // Message to the user that the value is not correct.
-        wxMessageBox( TXT( "Invalid Entity Class specified!" ), TXT( "Error" ), wxOK | wxCENTER | wxICON_ERROR, GetWindow() );
+        wxMessageBox( TXT( "Invalid Entity Class specified!" ), TXT( "Error" ), wxOK | wxCENTER | wxICON_ERROR, NULL /*GetWindow()*/ );
     }
 
     return result;
@@ -154,7 +146,7 @@ void EntityPanel::OnEntityAssetChanged( const Inspect::ControlChangedArgs& args 
 {
 }
 
-void EntityPanel::OnEntityAssetRefresh( Inspect::Button* button )
+void EntityPanel::OnEntityAssetRefresh( const Inspect::ButtonClickedArgs& args )
 {
     Core::Scene* scene = NULL;
 
@@ -220,7 +212,7 @@ void EntityPanel::OnEntityAssetRefresh( Inspect::Button* button )
     }
 }
 
-void EntityPanel::OnEntityAssetEditAsset( Inspect::Button* button )
+void EntityPanel::OnEntityAssetEditAsset( const Inspect::ButtonClickedArgs& args )
 {
     std::set< tstring > files;
     OS_SelectableDumbPtr::Iterator selectionIter = m_Selection.Begin();
@@ -247,10 +239,11 @@ void EntityPanel::OnEntityAssetEditAsset( Inspect::Button* button )
     }
 }
 
-void EntityPanel::OnEntityAssetEditArt( Inspect::Button* button )
+void EntityPanel::OnEntityAssetEditArt( const Inspect::ButtonClickedArgs& args )
 {
 }
 
+#if INSPECT_REFACTOR
 void EntityPanel::OnEntityAssetDrop( const Inspect::FilteredDropTargetArgs& args )
 {
     if ( args.m_Paths.size() )
@@ -258,3 +251,4 @@ void EntityPanel::OnEntityAssetDrop( const Inspect::FilteredDropTargetArgs& args
         m_EntityPath->WriteStringData( args.m_Paths[ 0 ] );
     }
 }
+#endif

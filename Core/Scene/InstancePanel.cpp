@@ -17,9 +17,8 @@ using namespace Helium::Core;
 InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection)
 : m_Selection (selection)
 {
-    m_Interpreter = m_Generator = generator;
-    m_Expanded = true;
-    m_Name = TXT( "Instance" );
+    m_Generator = generator;
+    a_Name.Set( TXT( "Instance" ) );
 
     m_Generator->PushContainer();
     {
@@ -30,8 +29,8 @@ InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_Selectable
         m_Solid = m_Generator->AddCheckBox<Core::Instance, bool>( m_Selection, &Core::Instance::GetSolid, &Core::Instance::SetSolid );
         m_Solid->Read();
 
-        m_SolidOverride->AddBoundDataChangedListener( Inspect::ChangedSignature::Delegate ( this, &InstancePanel::OnSolidOverride ) );
-        m_SolidOverride->RaiseBoundDataChanged();
+        m_SolidOverride->e_ControlChanged.AddMethod( this, &InstancePanel::OnSolidOverride );
+        m_SolidOverride->e_ControlChanged.Raise( m_SolidOverride );
     }
     m_Generator->Pop();
 
@@ -44,8 +43,8 @@ InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_Selectable
         m_Transparent = m_Generator->AddCheckBox<Core::Instance, bool>( m_Selection, &Core::Instance::GetTransparent, &Core::Instance::SetTransparent );
         m_Transparent->Read();
 
-        m_TransparentOverride->AddBoundDataChangedListener( Inspect::ChangedSignature::Delegate ( this, &InstancePanel::OnTransparentOverride ) );
-        m_TransparentOverride->RaiseBoundDataChanged();
+        m_TransparentOverride->e_ControlChanged.AddMethod( this, &InstancePanel::OnTransparentOverride );
+        m_TransparentOverride->e_ControlChanged.Raise( m_TransparentOverride );
     }
     m_Generator->Pop();
 
@@ -75,12 +74,16 @@ InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_Selectable
 
 void InstancePanel::OnSolidOverride( const Inspect::ControlChangedArgs& args )
 {
-    m_Solid->SetEnabled( m_SolidOverride->GetChecked() );
+    tstring val;
+    m_SolidOverride->ReadStringData( val );
+    m_Solid->a_IsEnabled.Set( val == TXT("1") );
     m_Solid->Read();
 }
 
 void InstancePanel::OnTransparentOverride( const Inspect::ControlChangedArgs& args )
 {
-    m_Transparent->SetEnabled( m_TransparentOverride->GetChecked() );
+    tstring val;
+    m_TransparentOverride->ReadStringData( val );
+    m_Transparent->a_IsEnabled.Set( val == TXT("1") );
     m_Transparent->Read();
 }

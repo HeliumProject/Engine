@@ -377,13 +377,13 @@ void CurveEditTool::CreateProperties()
 {
   __super::CreateProperties();
 
-  m_Generator->PushPanel( TXT( "Edit Curve" ), true );
+  m_Generator->PushContainer( TXT( "Edit Curve" ) );
   {
     m_Generator->PushContainer();
     { 
       m_Generator->AddLabel( TXT( "Edit Control Points" ) );
       Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::CurveEditTool, int> (this, &CurveEditTool::GetCurveEditMode, &CurveEditTool::SetCurveEditMode ) );
-      choice->SetDropDown( true );
+      choice->a_IsDropDown.Set( true );
       std::vector< Inspect::ChoiceItem > items;
 
       {
@@ -403,7 +403,7 @@ void CurveEditTool::CreateProperties()
         str << CurveEditModes::Remove;
         items.push_back( Inspect::ChoiceItem( TXT( "Remove Points" ), str.str() ) );
       }
-      choice->SetItems( items );
+      choice->a_Items.Set( items );
     }
     m_Generator->Pop();
 

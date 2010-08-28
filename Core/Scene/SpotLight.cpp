@@ -414,7 +414,7 @@ bool SpotLight::ValidatePanel(const tstring& name)
 
 void SpotLight::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Generator->PushPanel( TXT( "Spot Light" ), true);
+  args.m_Generator->PushContainer( TXT( "Spot Light" ) );
   {
     args.m_Generator->PushContainer();
     {
@@ -436,8 +436,8 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
 
       args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetInnerConeAngleDegrees, &SpotLight::SetInnerConeAngleDegrees );
       Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetInnerConeAngle, &SpotLight::SetInnerConeAngle );
-      slider->SetRangeMin( 0 );
-      slider->SetRangeMax( Math::HalfPi );
+      slider->a_Min.Set( 0 );
+      slider->a_Max.Set( Math::HalfPi );
     }
     args.m_Generator->Pop();
 
@@ -446,12 +446,12 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
       args.m_Generator->AddLabel( TXT( "Outer Angle" ) );
       args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetOuterConeAngleDegrees, &SpotLight::SetOuterConeAngleDegrees );
       Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetOuterConeAngle, &SpotLight::SetOuterConeAngle );
-      slider->SetRangeMin( 0 );
-      slider->SetRangeMax( Math::HalfPi );
+      slider->a_Min.Set( 0 );
+      slider->a_Max.Set( Math::HalfPi );
     }
     args.m_Generator->Pop();
 
-    args.m_Generator->PushPanel( TXT( "RealTime" ) );
+    args.m_Generator->PushContainer( TXT( "RealTime" ) );
     {
       args.m_Generator->PushContainer();
       {
@@ -473,8 +473,8 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
 
         args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayOpacity, &SpotLight::SetGodRayOpacity );
         Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayOpacity, &SpotLight::SetGodRayOpacity );
-        slider->SetRangeMin( 0.0f );
-        slider->SetRangeMax( 1.0f );
+        slider->a_Min.Set( 0.0f );
+        slider->a_Max.Set( 1.0f );
       }
       args.m_Generator->Pop();
 
@@ -484,8 +484,8 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
 
         args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayDensity, &SpotLight::SetGodRayDensity );
         Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayDensity, &SpotLight::SetGodRayDensity );
-        slider->SetRangeMin( 0.00f );
-        slider->SetRangeMax( 0.95f );
+        slider->a_Min.Set( 0.00f );
+        slider->a_Max.Set( 0.95f );
       }
       args.m_Generator->Pop();
 
@@ -495,8 +495,8 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
 
         args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayQuality, &SpotLight::SetGodRayQuality );
         Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayQuality, &SpotLight::SetGodRayQuality );
-        slider->SetRangeMin( 0.0f );
-        slider->SetRangeMax( 1.0f );
+        slider->a_Min.Set( 0.0f );
+        slider->a_Max.Set( 1.0f );
       }
       args.m_Generator->Pop();
 
@@ -506,8 +506,8 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
 
         args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeNear, &SpotLight::SetGodRayFadeNear );
         Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeNear, &SpotLight::SetGodRayFadeNear );
-        slider->SetRangeMin( 0.5f );
-        slider->SetRangeMax( 1000.0f );
+        slider->a_Min.Set( 0.5f );
+        slider->a_Max.Set( 1000.0f );
       }
       args.m_Generator->Pop();
 
@@ -517,8 +517,8 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
 
         args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeFar, &SpotLight::SetGodRayFadeFar );
         Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeFar, &SpotLight::SetGodRayFadeFar );
-        slider->SetRangeMin( 10.0f );
-        slider->SetRangeMax( 1000.0f );
+        slider->a_Min.Set( 10.0f );
+        slider->a_Max.Set( 1000.0f );
       }
       args.m_Generator->Pop();
 
@@ -528,8 +528,8 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
 
         args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlanePhiOffset, &SpotLight::SetGodRayClipPlanePhiOffset );
         Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlanePhiOffset, &SpotLight::SetGodRayClipPlanePhiOffset );
-        slider->SetRangeMin(-1.0f );
-        slider->SetRangeMax( 1.0f );
+        slider->a_Min.Set(-1.0f );
+        slider->a_Max.Set( 1.0f );
       }
       args.m_Generator->Pop();
 
@@ -539,8 +539,8 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
 
         args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlaneOffset, &SpotLight::SetGodRayClipPlaneOffset );
         Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlaneOffset, &SpotLight::SetGodRayClipPlaneOffset );
-        slider->SetRangeMin( 0.0f );
-        slider->SetRangeMax( 0.95f );
+        slider->a_Min.Set( 0.0f );
+        slider->a_Max.Set( 0.95f );
       }
       args.m_Generator->Pop();
 
@@ -550,8 +550,8 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
 
         args.m_Generator->AddValue<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetFactor, &SpotLight::SetOffsetFactor );
         Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetFactor, &SpotLight::SetOffsetFactor );
-        slider->SetRangeMin( 0.0f );
-        slider->SetRangeMax( 255.0f );
+        slider->a_Min.Set( 0.0f );
+        slider->a_Max.Set( 255.0f );
       }
       args.m_Generator->Pop();
 
@@ -562,8 +562,8 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
 
         args.m_Generator->AddValue<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetUnits, &SpotLight::SetOffsetUnits );
         Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetUnits, &SpotLight::SetOffsetUnits );
-        slider->SetRangeMin( 0.0f );
-        slider->SetRangeMax( 255.0f );
+        slider->a_Min.Set( 0.0f );
+        slider->a_Max.Set( 255.0f );
       }
       args.m_Generator->Pop();
 

@@ -104,10 +104,6 @@ namespace Helium
             LightRenderType m_RenderType;
             LensFlareType   m_FlareType;
 
-            V_ParametricColorKeyPtr m_AnimationColor;
-
-            V_ParametricColorKeyPtr m_AnimationIntensity;
-
             // real-time options
             float m_DrawDist;
             bool m_KillIfInactive;

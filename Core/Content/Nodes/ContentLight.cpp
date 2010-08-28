@@ -22,14 +22,10 @@ void Light::EnumerateClass( Reflect::Compositor<Light>& comp )
   Reflect::Field* fieldEmitPhotons = comp.AddField( &Light::m_EmitPhotons, "m_EmitPhotons" );
   Reflect::Field* fieldNumPhotons = comp.AddField( &Light::m_NumPhotons, "m_NumPhotons" );
   Reflect::Field* fieldPhotonEnergy = comp.AddField( &Light::m_PhotonEnergy, "m_PhotonEnergy" );
-  Reflect::Field* fieldAnimationColor = comp.AddField( &Light::m_AnimationColor, "m_AnimationColor" );
-  Reflect::Field* fieldAnimationIntensity = comp.AddField( &Light::m_AnimationIntensity, "m_AnimationIntensity" );
   Reflect::Field* fieldAnimationDuration = comp.AddField( &Light::m_AnimationDuration, "m_AnimationDuration" );
   Reflect::Field* fieldRandomAnimOffset = comp.AddField( &Light::m_RandomAnimOffset, "m_RandomAnimOffset" );
   Reflect::Field* fieldPhysicalLight = comp.AddField( &Light::m_PhysicalLight, "m_PhysicalLight" );
-
 }
-
 
 void Light::Host(ContentVisitor* visitor)
 {

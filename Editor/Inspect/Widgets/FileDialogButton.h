@@ -15,8 +15,6 @@ namespace Helium
         {
         public:
             FileDialogButtonWindow( wxWindow* parent, FileDialogButtonWidget* buttonWidget );
-
-            void OnClicked( wxCommandEvent& ) HELIUM_OVERRIDE;
         };
 
         class FileDialogButtonWidget : public ButtonWidget

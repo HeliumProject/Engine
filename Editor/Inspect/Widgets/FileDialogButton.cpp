@@ -13,11 +13,6 @@ FileDialogButtonWindow::FileDialogButtonWindow( wxWindow* parent, FileDialogButt
 {
 }
 
-void FileDialogButtonWindow::OnClicked( wxCommandEvent& )
-{
-    m_ButtonWidget->GetControl()->Write();
-}
-
 FileDialogButtonWidget::FileDialogButtonWidget( Inspect::Button* control )
 : ButtonWidget( control )
 {

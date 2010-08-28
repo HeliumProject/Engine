@@ -47,9 +47,11 @@ namespace Helium
         class APPLICATION_API FileDialogButton : public Reflect::ConcreteInheritor< FileDialogButton, Inspect::Button >
         {
         public:
-            FileDialogButton( const FileDialogType& type = FileDialogTypes::OpenFile, const tstring& caption = TXT( "Open" ), const Path& startPath = TXT( "" ), const tstring& filter = TXT( "All files (*.*)|*.*" ) )
+            FileDialogButton( const FileDialogType& type = FileDialogTypes::OpenFile, const tstring& caption = TXT( "Open" ), const tstring& filter = TXT( "All files (*.*)|*.*" ) )
             {
-                 WriteStringData( startPath.Get() );
+                a_Type.Set( type );
+                a_Caption.Set( caption );
+                a_Filter.Set( filter );
             }
 
             virtual bool Write() HELIUM_OVERRIDE

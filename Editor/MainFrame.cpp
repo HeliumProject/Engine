@@ -123,8 +123,6 @@ MainFrame::MainFrame( Core::SettingsManager* settingsManager, wxWindow* parent, 
 , m_TreeMonitor( &m_SceneManager )
 , m_MessageDisplayer( this )
 , m_SceneManager( MessageSignature::Delegate( &m_MessageDisplayer, &MessageDisplayer::DisplayMessage ), FileDialogSignature::Delegate( &m_FileDialogDisplayer, &FileDialogDisplayer::DisplayFileDialog ) )
-, m_ToolPropertiesControl( this )
-, m_SelectionPropertiesControl( this )
 {
     SetLabel( TXT("Helium Editor") );
 
@@ -167,13 +165,8 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     // Tools
     //
     m_ToolbarPanel = new ToolbarPanel( this );
-
-    m_ToolPropertiesControl.SetParent( m_ToolbarPanel->GetToolsPropertiesPanel() );
-    m_ToolPropertiesControl.SetId( EventIds::ID_ToolProperties );
-    m_ToolPropertiesControl.SetPosition( wxPoint( 0, 0 ) );
-    m_ToolPropertiesControl.SetSize( wxSize( 250, 250 ) );
-    m_ToolPropertiesControl.SetWindowStyle( wxNO_BORDER | wxCLIP_CHILDREN );
-    m_ToolPropertiesControl.SetCanvas( &m_ToolPropertiesCanvas );
+    m_ToolPropertiesControl = new Inspect::StripCanvasCtrl( m_ToolbarPanel->GetToolsPropertiesPanel(), EventIds::ID_ToolProperties );
+    m_ToolPropertiesControl->SetCanvas( &m_ToolPropertiesCanvas );
 
     m_ToolEnumerator = new PropertiesGenerator( &m_ToolPropertiesCanvas );
     m_ToolPropertiesManager = new PropertiesManager( m_ToolEnumerator );
@@ -218,17 +211,13 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     //
     // Properties/Layers/Types area
     //
-    m_SelectionPropertiesControl.SetParent( m_PropertiesPanel );
-    m_SelectionPropertiesControl.SetId( EventIds::ID_ToolProperties );
-    m_SelectionPropertiesControl.SetPosition( wxPoint( 0, 0 ) );
-    m_SelectionPropertiesControl.SetSize( wxSize( 250, 250 ) );
-    m_SelectionPropertiesControl.SetWindowStyle( wxNO_BORDER | wxCLIP_CHILDREN );
-    m_SelectionPropertiesControl.SetCanvas( &m_SelectionPropertiesCanvas );
-
     m_SelectionEnumerator = new PropertiesGenerator( &m_SelectionPropertiesCanvas );
     m_SelectionPropertiesManager = new PropertiesManager( m_SelectionEnumerator );
     m_SelectionPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &MainFrame::OnPropertiesCreated ) );
     m_PropertiesPanel = new PropertiesPanel( m_SelectionPropertiesManager, this );
+    m_SelectionPropertiesControl = new Inspect::TreeCanvasCtrl( m_PropertiesPanel, EventIds::ID_ToolProperties, wxPoint( 0, 0 ), wxSize( 250, 250 ), wxNO_BORDER | wxCLIP_CHILDREN );
+    m_SelectionPropertiesControl->SetCanvas( &m_SelectionPropertiesCanvas );
+
     m_FrameManager.AddPane( m_PropertiesPanel, wxAuiPaneInfo().Name( wxT( "properties" ) ).Caption( wxT( "Properties" ) ).Right().Layer( 1 ).Position( 1 ) );
 
     m_LayersPanel = new LayersPanel( &m_SceneManager, this );
@@ -1385,10 +1374,10 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
             args.m_Scene->GetTool()->CreateProperties();
 
             // Layout ui
-            m_ToolPropertiesControl.Layout();
+            m_ToolPropertiesControl->Layout();
 
             // Read state
-            m_ToolPropertiesControl.GetCanvas()->Read();
+            m_ToolPropertiesControl->GetCanvas()->Read();
         }
     }
 }
@@ -1421,10 +1410,10 @@ void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
     m_DirectoryPanel->SaveState( stateInfo->m_Hierarchy, stateInfo->m_Entities, stateInfo->m_Types );
 
     // Clear the selection attribute canvas
-    m_SelectionPropertiesControl.GetCanvas()->Clear();
+    m_SelectionPropertiesControl->GetCanvas()->Clear();
 
     // Clear the tool attribute canavs
-    m_ToolPropertiesControl.GetCanvas()->Clear();
+    m_ToolPropertiesControl->GetCanvas()->Clear();
 
     // Release the tool from the VIEW and Scene, saving the tool in the scene isn't a desirable behavior and the way it is currently
     // implimented it will cause a crash under certain scenarios (see trac #1322)
@@ -1567,7 +1556,7 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
             break;
         }
 
-        m_ToolPropertiesControl.GetCanvas()->Clear();
+        m_ToolPropertiesControl->GetCanvas()->Clear();
 
         if (m_SceneManager.GetCurrentScene()->GetTool().ReferencesObject())
         {
@@ -1576,10 +1565,10 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
             m_SceneManager.GetCurrentScene()->GetTool()->CreateProperties();
 
 #ifdef INSPECT_REFACTOR
-            m_ToolPropertiesControl.GetCanvas()->Layout();
+            m_ToolPropertiesControl->GetCanvas()->Layout();
 #endif
 
-            m_ToolPropertiesControl.GetCanvas()->Read();
+            m_ToolPropertiesControl->GetCanvas()->Read();
         }
 
         m_ViewPanel->Refresh();
@@ -1697,7 +1686,7 @@ void MainFrame::OnUndo( wxCommandEvent& event )
     if ( CanUndo() )
     {
         m_UndoQueue.Undo();
-        m_ToolPropertiesControl.GetCanvas()->Read();
+        m_ToolPropertiesControl->GetCanvas()->Read();
         if ( m_SceneManager.HasCurrentScene() )
         {
             m_SceneManager.GetCurrentScene()->Execute(false);
@@ -1710,7 +1699,7 @@ void MainFrame::OnRedo( wxCommandEvent& event )
     if ( CanRedo() )
     {
         m_UndoQueue.Redo();
-        m_ToolPropertiesControl.GetCanvas()->Read();
+        m_ToolPropertiesControl->GetCanvas()->Read();
         if ( m_SceneManager.HasCurrentScene() )
         {
             m_SceneManager.GetCurrentScene()->Execute(false);
@@ -2038,7 +2027,7 @@ void MainFrame::Executed( const ExecuteArgs& args )
 {
     if (!m_SelectionPropertiesManager->ThreadsActive() && !args.m_Interactively)
     {
-        m_SelectionPropertiesControl.GetCanvas()->Read();
+        m_SelectionPropertiesControl->GetCanvas()->Read();
     }
 }
 

@@ -73,7 +73,7 @@ namespace Helium
 
             ~ContainerStackPointer()
             {
-                std::stack< ContainerPtr >* stack = (std::stack< ContainerPtr >*)this;
+                std::stack< ContainerPtr >* stack = (std::stack< ContainerPtr >*)GetPointer();
                 delete stack;
             }                
 

@@ -3,10 +3,10 @@
 #include "Foundation/Inspect/InspectInit.h"
 #include "Foundation/Inspect/InspectData.h"
 #include "Foundation/Inspect/InspectScript.h"
-#include "Foundation/Inspect/Controls/InspectCheckBox.h"
-#include "Foundation/Inspect/Controls/InspectChoice.h"
-#include "Foundation/Inspect/Controls/InspectValue.h"
-#include "Foundation/Inspect/Controls/InspectList.h"
+#include "Foundation/Inspect/Controls/CheckBoxControl.h"
+#include "Foundation/Inspect/Controls/ChoiceControl.h"
+#include "Foundation/Inspect/Controls/ValueControl.h"
+#include "Foundation/Inspect/Controls/ListControl.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;

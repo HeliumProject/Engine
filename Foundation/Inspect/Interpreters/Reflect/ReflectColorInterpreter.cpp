@@ -1,10 +1,10 @@
 #include "ReflectColorInterpreter.h"
 
-#include "Foundation/Inspect/Controls/InspectContainer.h"
-#include "Foundation/Inspect/Controls/InspectLabel.h"
-#include "Foundation/Inspect/Controls/InspectSlider.h"
-#include "Foundation/Inspect/Controls/InspectValue.h"
-#include "Foundation/Inspect/Controls/InspectColorPicker.h"
+#include "Foundation/Inspect/Controls/ContainerControl.h"
+#include "Foundation/Inspect/Controls/LabelControl.h"
+#include "Foundation/Inspect/Controls/SliderControl.h"
+#include "Foundation/Inspect/Controls/ValueControl.h"
+#include "Foundation/Inspect/Controls/ColorPickerControl.h"
 #include "Foundation/Inspect/InspectData.h"
 
 using namespace Helium;

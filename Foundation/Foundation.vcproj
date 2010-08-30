@@ -1586,107 +1586,107 @@
 				Name="Controls"
 				>
 				<File
-					RelativePath=".\Inspect\Controls\InspectButton.cpp"
+					RelativePath=".\Inspect\Controls\ButtonControl.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectButton.h"
+					RelativePath=".\Inspect\Controls\ButtonControl.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectCanvas.cpp"
+					RelativePath=".\Inspect\Controls\CanvasControl.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectCanvas.h"
+					RelativePath=".\Inspect\Controls\CanvasControl.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectCheckBox.cpp"
+					RelativePath=".\Inspect\Controls\CheckBoxControl.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectCheckBox.h"
+					RelativePath=".\Inspect\Controls\CheckBoxControl.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectChoice.cpp"
+					RelativePath=".\Inspect\Controls\ChoiceControl.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectChoice.h"
+					RelativePath=".\Inspect\Controls\ChoiceControl.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectColorPicker.cpp"
+					RelativePath=".\Inspect\Controls\ColorPickerControl.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectColorPicker.h"
+					RelativePath=".\Inspect\Controls\ColorPickerControl.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectContainer.cpp"
+					RelativePath=".\Inspect\Controls\ContainerControl.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectContainer.h"
+					RelativePath=".\Inspect\Controls\ContainerControl.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectContextMenu.cpp"
+					RelativePath=".\Inspect\Controls\ContextMenu.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectContextMenu.h"
+					RelativePath=".\Inspect\Controls\ContextMenu.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectControl.cpp"
+					RelativePath=".\Inspect\Controls\Control.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectControl.h"
+					RelativePath=".\Inspect\Controls\Control.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectFileDialogButton.cpp"
+					RelativePath=".\Inspect\Controls\FileDialogButtonControl.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectFileDialogButton.h"
+					RelativePath=".\Inspect\Controls\FileDialogButtonControl.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectLabel.cpp"
+					RelativePath=".\Inspect\Controls\LabelControl.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectLabel.h"
+					RelativePath=".\Inspect\Controls\LabelControl.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectList.cpp"
+					RelativePath=".\Inspect\Controls\ListControl.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectList.h"
+					RelativePath=".\Inspect\Controls\ListControl.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectSlider.cpp"
+					RelativePath=".\Inspect\Controls\SliderControl.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectSlider.h"
+					RelativePath=".\Inspect\Controls\SliderControl.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectValue.cpp"
+					RelativePath=".\Inspect\Controls\ValueControl.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Controls\InspectValue.h"
+					RelativePath=".\Inspect\Controls\ValueControl.h"
 					>
 				</File>
 			</Filter>

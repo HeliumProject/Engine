@@ -6,7 +6,7 @@
 #include "Foundation/Reflect/Version.h"
 
 #include "Foundation/Inspect/InspectData.h"
-#include "Foundation/Inspect/Controls/InspectCanvas.h"
+#include "Foundation/Inspect/Controls/CanvasControl.h"
 #include "Foundation/Undo/ExistenceCommand.h"
 #include "Foundation/Undo/Queue.h"
 

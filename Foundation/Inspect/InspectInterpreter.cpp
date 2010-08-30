@@ -1,9 +1,9 @@
 #include "InspectInterpreter.h"
 
-#include "Foundation/Inspect/Controls/InspectCanvas.h"
-#include "Foundation/Inspect/Controls/InspectContainer.h"
-#include "Foundation/Inspect/Controls/InspectLabel.h"
-#include "Foundation/Inspect/Controls/InspectButton.h"
+#include "Foundation/Inspect/Controls/CanvasControl.h"
+#include "Foundation/Inspect/Controls/ContainerControl.h"
+#include "Foundation/Inspect/Controls/LabelControl.h"
+#include "Foundation/Inspect/Controls/ButtonControl.h"
 
 using namespace Helium;
 using namespace Helium::Inspect;

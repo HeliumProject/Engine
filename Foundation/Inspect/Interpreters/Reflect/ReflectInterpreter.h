@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Foundation/Inspect/Controls/InspectCanvas.h"
-#include "Foundation/Inspect/Controls/InspectContainer.h"
+#include "Foundation/Inspect/Controls/CanvasControl.h"
+#include "Foundation/Inspect/Controls/ContainerControl.h"
 #include "Foundation/Inspect/InspectInterpreter.h"
 #include "ReflectFieldInterpreter.h"
 

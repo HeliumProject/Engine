@@ -2,7 +2,7 @@
 
 #include "Foundation/API.h"
 
-#include "Foundation/Inspect/Controls/InspectCanvas.h"
+#include "Foundation/Inspect/Controls/CanvasControl.h"
 #include "Foundation/Inspect/InspectInterpreter.h"
 
 namespace Helium

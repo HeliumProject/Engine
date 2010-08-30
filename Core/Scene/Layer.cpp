@@ -5,7 +5,7 @@
 #include "Foundation/String/Natural.h"
 #include "Foundation/Log.h"
 
-#include "Foundation/Inspect/Controls/InspectChoice.h"
+#include "Foundation/Inspect/Controls/ChoiceControl.h"
 
 #include "Core/Scene/Scene.h"
 

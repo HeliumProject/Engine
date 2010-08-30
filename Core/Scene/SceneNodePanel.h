@@ -2,7 +2,7 @@
 
 #include "Core/API.h"
 #include "Foundation/Inspect/InspectData.h"
-#include "Foundation/Inspect/Controls/InspectContainer.h"
+#include "Foundation/Inspect/Controls/ContainerControl.h"
 #include "Core/Scene/SceneNode.h"
 
 namespace Helium

@@ -5,11 +5,11 @@
 #include "Foundation/Inspect/DragDrop/FilteredDropTarget.h"
 #endif
 
-#include "Foundation/Inspect/Controls/InspectLabel.h"
-#include "Foundation/Inspect/Controls/InspectValue.h"
-#include "Foundation/Inspect/Controls/InspectChoice.h"
-#include "Foundation/Inspect/Controls/InspectList.h"
-#include "Foundation/Inspect/Controls/InspectButton.h"
+#include "Foundation/Inspect/Controls/LabelControl.h"
+#include "Foundation/Inspect/Controls/ValueControl.h"
+#include "Foundation/Inspect/Controls/ChoiceControl.h"
+#include "Foundation/Inspect/Controls/ListControl.h"
+#include "Foundation/Inspect/Controls/ButtonControl.h"
 #include "Foundation/Inspect/InspectData.h"
 #include "Foundation/Inspect/InspectInit.h"
 #include "Foundation/Inspect/Interpreters/Reflect/InspectReflectInit.h"

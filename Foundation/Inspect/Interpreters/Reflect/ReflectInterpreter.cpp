@@ -2,10 +2,10 @@
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectValueInterpreter.h"
 
 #include "Foundation/Inspect/InspectScript.h"
-#include "Foundation/Inspect/Controls/InspectButton.h"
-#include "Foundation/Inspect/Controls/InspectValue.h"
-#include "Foundation/Inspect/Controls/InspectList.h"
-#include "Foundation/Inspect/Controls/InspectContainer.h"
+#include "Foundation/Inspect/Controls/ButtonControl.h"
+#include "Foundation/Inspect/Controls/ValueControl.h"
+#include "Foundation/Inspect/Controls/ListControl.h"
+#include "Foundation/Inspect/Controls/ContainerControl.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;

@@ -2,8 +2,8 @@
 
 #include "Foundation/Inspect/InspectData.h"
 #include "Foundation/Inspect/InspectInterpreter.h"
-#include "Foundation/Inspect/Controls/InspectLabel.h"
-#include "Foundation/Inspect/Controls/InspectCanvas.h"
+#include "Foundation/Inspect/Controls/LabelControl.h"
+#include "Foundation/Inspect/Controls/CanvasControl.h"
 
 namespace Helium
 {

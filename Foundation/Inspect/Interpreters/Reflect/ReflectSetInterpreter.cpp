@@ -1,10 +1,10 @@
 #include "ReflectSetInterpreter.h"
 #include "InspectReflectInit.h"
 
-#include "Foundation/Inspect/Controls/InspectButton.h"
-#include "Foundation/Inspect/Controls/InspectCanvas.h"
-#include "Foundation/Inspect/Controls/InspectList.h"
-#include "Foundation/Inspect/Controls/InspectContainer.h"
+#include "Foundation/Inspect/Controls/ButtonControl.h"
+#include "Foundation/Inspect/Controls/CanvasControl.h"
+#include "Foundation/Inspect/Controls/ListControl.h"
+#include "Foundation/Inspect/Controls/ContainerControl.h"
 #include "Foundation/Inspect/InspectData.h"
 
 using namespace Helium;

@@ -2,8 +2,8 @@
 #include "EntityInstancePanel.h"
 #include "EntitySet.h"
 
-#include "Foundation/Inspect/Controls/InspectValue.h"
-#include "Foundation/Inspect/Controls/InspectButton.h"
+#include "Foundation/Inspect/Controls/ValueControl.h"
+#include "Foundation/Inspect/Controls/ButtonControl.h"
 
 #include "Core/Asset/AssetInit.h"
 #include "Foundation/Component/ComponentHandle.h"

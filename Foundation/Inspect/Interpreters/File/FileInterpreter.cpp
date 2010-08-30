@@ -3,8 +3,8 @@
 #include "Foundation/Inspect/InspectInit.h"
 #include "Foundation/Inspect/InspectScript.h"
 #include "Foundation/Inspect/InspectData.h"
-#include "Foundation/Inspect/Controls/InspectButton.h"
-#include "Foundation/Inspect/Controls/InspectValue.h"
+#include "Foundation/Inspect/Controls/ButtonControl.h"
+#include "Foundation/Inspect/Controls/ValueControl.h"
 
 #include "Core/Asset/AssetClass.h"
 #include "Foundation/Log.h"

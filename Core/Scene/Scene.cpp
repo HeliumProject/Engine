@@ -25,7 +25,7 @@
 #include "Core/Content/Nodes/ContentVolume.h"
 
 #include "Foundation/Inspect/InspectData.h"
-#include "Foundation/Inspect/Controls/InspectCanvas.h"
+#include "Foundation/Inspect/Controls/CanvasControl.h"
 #include "Foundation/Undo/PropertyCommand.h"
 #include "SceneGraph.h"
 #include "Statistics.h"

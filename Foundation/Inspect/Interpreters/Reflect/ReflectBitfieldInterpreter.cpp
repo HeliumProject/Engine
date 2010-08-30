@@ -1,7 +1,7 @@
 #include "ReflectBitfieldInterpreter.h"
 
-#include "Foundation/Inspect/Controls/InspectLabel.h"
-#include "Foundation/Inspect/Controls/InspectContainer.h"
+#include "Foundation/Inspect/Controls/LabelControl.h"
+#include "Foundation/Inspect/Controls/ContainerControl.h"
 #include "Foundation/Inspect/InspectData.h"
 
 #include "Foundation/Reflect/Field.h"

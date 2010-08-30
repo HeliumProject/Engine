@@ -3,8 +3,8 @@
 #include "Instance.h"
 #include "Volume.h"
 
-#include "Foundation/Inspect/Controls/InspectChoice.h"
-#include "Foundation/Inspect/Controls/InspectButton.h"
+#include "Foundation/Inspect/Controls/ChoiceControl.h"
+#include "Foundation/Inspect/Controls/ButtonControl.h"
 
 #include "Foundation/Component/ComponentHandle.h"
 #include "Foundation/Log.h"

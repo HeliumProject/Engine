@@ -17,7 +17,6 @@
 #include "Core/Asset/AssetClass.h"
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/Log.h"
-#include "Application/UI/FileDialog.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;

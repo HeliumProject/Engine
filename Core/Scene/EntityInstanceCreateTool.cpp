@@ -3,8 +3,6 @@
 
 #include "Foundation/Log.h"
 
-#include "Application/UI/FileDialog.h"
-
 #include "Core/Scene/Mesh.h"
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/EntityInstance.h"

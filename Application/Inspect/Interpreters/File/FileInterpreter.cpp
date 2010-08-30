@@ -7,7 +7,6 @@
 #include "Application/Inspect/Controls/InspectValue.h"
 
 #include "Core/Asset/AssetClass.h"
-#include "Application/UI/FileDialog.h"
 #include "Foundation/Log.h"
 #include "Foundation/String/Wildcard.h"
 #include "Foundation/String/Tokenize.h"

@@ -1,9 +1,6 @@
 #include "Application/Inspect/Controls/InspectColorPicker.h"
 #include "Application/Inspect/Controls/InspectContainer.h"
 
-#include "Application/UI/ColorPicker.h"
-#include "Application/UI/SimpleConfig.h"
-
 #include <sstream>
 
 using namespace Helium::Inspect;

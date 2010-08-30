@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "PerforceWaitDialog.h"
 
-#include "Application/RCS/Providers/Perforce/Perforce.h"
+#include "Editor/Perforce/Perforce.h"
 #include "Foundation/Startup.h"
 
 #include <wx/msgdlg.h>

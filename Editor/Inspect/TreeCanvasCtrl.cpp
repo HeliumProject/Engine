@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "TreeCanvasCtrl.h"
 
-#include "Application/Inspect/Controls/InspectContainer.h"
+#include "Foundation/Inspect/Controls/InspectContainer.h"
 
 using namespace Helium;
 using namespace Helium::Inspect;

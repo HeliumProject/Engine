@@ -53,8 +53,8 @@ ScenePtr SceneManager::NewScene( Core::Viewport* viewport, tstring path )
     }
 
     SceneDocumentPtr document = new SceneDocument( path, name );
-    document->AddDocumentClosedListener( Application::DocumentChangedSignature::Delegate( this, &SceneManager::DocumentClosed ) );
-    document->AddDocumentPathChangedListener( Application::DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
+    document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &SceneManager::DocumentClosed ) );
+    document->AddDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
 
     ScenePtr scene = new Core::Scene( viewport, path );
     document->SetScene( scene );
@@ -112,7 +112,7 @@ void SceneManager::RemoveScene(Core::Scene* scene)
     // we have no way to test (in this function) that it was a nested scene we're unloading. 
     // 
 
-    m_DocumentManager.FindDocument( scene->GetPath() )->RemoveDocumentPathChangedListener( Application::DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
+    m_DocumentManager.FindDocument( scene->GetPath() )->RemoveDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
     m_SceneRemoving.Raise( scene );
 
     scene->RemoveEditingDelegate();
@@ -340,7 +340,7 @@ bool SceneManager::OnSceneEditing( const SceneEditingArgs& args )
 // Callback for when the path of a scene changes.  Since the scene manager 
 // stores the scenes by their paths, the internal list has to be updated.
 // 
-void SceneManager::DocumentPathChanged( const Application::DocumentPathChangedArgs& args )
+void SceneManager::DocumentPathChanged( const DocumentPathChangedArgs& args )
 {
     const tstring pathOrName = !args.m_OldFilePath.empty() ? args.m_OldFilePath : args.m_OldFileName;
     M_SceneSmartPtr::iterator found = m_Scenes.find( pathOrName );
@@ -360,7 +360,7 @@ void SceneManager::DocumentPathChanged( const Application::DocumentPathChangedAr
 ///////////////////////////////////////////////////////////////////////////////
 // Callback for when a document is closed.  Closes the associated scene.
 // 
-void SceneManager::DocumentClosed( const Application::DocumentChangedArgs& args )
+void SceneManager::DocumentClosed( const DocumentChangedArgs& args )
 {
     const SceneDocument* document = static_cast< const SceneDocument* >( args.m_Document );
     HELIUM_ASSERT( document );
@@ -385,6 +385,6 @@ void SceneManager::DocumentClosed( const Application::DocumentChangedArgs& args 
             SetCurrentScene( FindFirstNonNestedScene() );
         }
 
-        document->RemoveDocumentClosedListener( Application::DocumentChangedSignature::Delegate( this, &SceneManager::DocumentClosed ) );
+        document->RemoveDocumentClosedListener( DocumentChangedSignature::Delegate( this, &SceneManager::DocumentClosed ) );
     }
 }

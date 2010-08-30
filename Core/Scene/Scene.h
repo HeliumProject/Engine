@@ -5,8 +5,8 @@
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Version.h"
 
-#include "Application/Inspect/InspectData.h"
-#include "Application/Inspect/Controls/InspectCanvas.h"
+#include "Foundation/Inspect/InspectData.h"
+#include "Foundation/Inspect/Controls/InspectCanvas.h"
 #include "Foundation/Undo/ExistenceCommand.h"
 #include "Foundation/Undo/Queue.h"
 

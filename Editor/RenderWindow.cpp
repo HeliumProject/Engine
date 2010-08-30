@@ -2,7 +2,7 @@
 #include "RenderWindow.h"
 
 #include "Foundation/Math/Utils.h"
-#include "Application/UI/FileDialog.h"
+#include "Editor/FileDialog.h"
 #include "Core/Render/RBObjectLoader.h"
 #include "Core/Scene/Camera.h"
 #include "Editor/Input.h"
@@ -440,7 +440,7 @@ void RenderWindow::OnMouseWheel( wxMouseEvent& args )
 // 
 void RenderWindow::OnScreenShotToFile( wxCommandEvent& args )
 {
-    Helium::FileDialog dialog( this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, TXT( "" ), Helium::FileDialogStyles::DefaultSave );
+    FileDialog dialog( this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, TXT( "" ), FileDialogStyles::DefaultSave );
 
     dialog.AddFilter( TXT( "TGA (*.tga)|*.tga" ) );
 

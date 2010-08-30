@@ -4,7 +4,6 @@
 // Libraries
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Reflect/Registry.h"
-#include "Application/RCS/Providers/Perforce/Perforce.h"
 #include "Core/Content/ContentInit.h"
 #include "Core/Content/ContentVersion.h"
 #include "Core/Asset/AssetInit.h"
@@ -71,7 +70,6 @@ void Core::SceneInitialize()
   if ( ++g_InitCount == 1 )
   {
     // core library initiailization
-    g_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
     g_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
     g_InitializerStack.Push( Content::Initialize, Content::Cleanup );
     g_InitializerStack.Push( Asset::Initialize, Asset::Cleanup );

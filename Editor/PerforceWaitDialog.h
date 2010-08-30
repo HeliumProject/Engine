@@ -3,7 +3,7 @@
 #include "PerforceGenerated.h"
 
 #include "Foundation/Profile.h"
-#include "Application/RCS/Providers/Perforce/P4Provider.h"
+#include "Editor/Perforce/P4Provider.h"
 
 #include <wx/dialog.h>
 #include <wx/timer.h>

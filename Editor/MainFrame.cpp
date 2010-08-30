@@ -7,7 +7,7 @@
 #include "Core/Content/ContentVersion.h"
 #include "Core/Content/ContentScene.h"
 
-#include "Application/UI/FileDialog.h"
+#include "Editor/FileDialog.h"
 #include "Editor/Clipboard/ClipboardFileList.h"
 #include "Editor/Clipboard/ClipboardDataObject.h"
 
@@ -43,7 +43,6 @@
 using namespace Helium;
 using namespace Helium::Core;
 using namespace Helium::Editor;
-using namespace Helium::Application;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Wraps up a pointer to an Core::Scene so that it can be stored in the combo box that
@@ -820,7 +819,7 @@ bool MainFrame::DoOpen( const tstring& path )
 
 void MainFrame::OnOpen( wxCommandEvent& event )
 {
-    Helium::FileDialog openDlg( this, TXT( "Open" ) );
+    FileDialog openDlg( this, TXT( "Open" ) );
 
     if ( openDlg.ShowModal() == wxID_OK )
     {
@@ -1130,7 +1129,7 @@ void MainFrame::OnImport(wxCommandEvent& event)
             {
             case EventIds::ID_FileImport:
                 {
-                    Helium::FileDialog fileDialog( this, TXT( "Import" ) );
+                    FileDialog fileDialog( this, TXT( "Import" ) );
 
                     std::set< tstring > filters;
                     Reflect::Archive::GetFileFilters( filters );
@@ -1223,7 +1222,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
                 {
                 case EventIds::ID_FileExport:
                     {
-                        Helium::FileDialog fileDialog( this, TXT( "Export Selection" ), TXT( "" ), TXT( "" ), wxFileSelectorDefaultWildcardStr, Helium::FileDialogStyles::DefaultSave );
+                        FileDialog fileDialog( this, TXT( "Export Selection" ), TXT( "" ), TXT( "" ), wxFileSelectorDefaultWildcardStr, FileDialogStyles::DefaultSave );
 
                         std::set< tstring > filters;
                         Reflect::Archive::GetFileFilters( filters );

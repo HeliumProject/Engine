@@ -4,7 +4,7 @@
 #include "Platform/Thread.h"
 #include "Platform/Platform.h"
 
-#include "Application/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
+#include "Foundation/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 
 using namespace Helium;
 using namespace Helium::Core;

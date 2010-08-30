@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Application/API.h"
-#include "Application/Inspect/Controls/InspectCanvas.h"
+#include "Foundation/Inspect/Controls/InspectCanvas.h"
 #include "Editor/Controls/Tree/TreeWndCtrl.h"
 
 namespace Helium

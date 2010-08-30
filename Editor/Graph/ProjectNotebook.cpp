@@ -18,7 +18,7 @@
 #include "Editor/Graph/XML.h"
 #include "Editor/Graph/Debug.h"
 
-#include "Application/RCS/RCS.h"
+#include "Foundation/RCS/RCS.h"
 #include "Foundation/Log.h"
 
 using namespace Helium;

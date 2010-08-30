@@ -88,7 +88,7 @@ namespace Helium
     //  * Breakpoint instruction handling - GUI handler makes breakpoints outside the debugger continuable/disableable
     //  * SEH Exception (crash) handling - email reports for illegal instructions or unhandled c++ exceptions
     //  * Top level C++ exception handler that catches Helium::Exceptions and reports them as errors to the user
-    //  * Automatic calling of Application::Startup and Application::Shutdown
+    //  * Automatic calling of Startup and Shutdown
     //  * Automatic trace file output
     //
 
@@ -96,7 +96,7 @@ namespace Helium
     // Thread entry wrapper
     //  void thread()
     //  {
-    //    return Application::StandardThread( &::Thread, param );
+    //    return StandardThread( &::Thread, param );
     //  }
     //
 
@@ -106,7 +106,7 @@ namespace Helium
     // Main wrappers for console applications
     //  int main(int argc, const char** argv)
     //  {
-    //    return Application::StandardMain( &::Main, argc, argv );
+    //    return StandardMain( &::Main, argc, argv );
     //  }
     //
 
@@ -116,14 +116,14 @@ namespace Helium
     // Main wrappers for windows applications
     //  int WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd )
     //  {
-    //    return Application::ProtectedWinMain( &WinMain, hInstance, hPrevInstance, lpCmdLine, int nShowCmd );
+    //    return ProtectedWinMain( &WinMain, hInstance, hPrevInstance, lpCmdLine, int nShowCmd );
     //  }
     //  
     //  or, for windows applications running with the console subsystem set:
     //
     //  int main()
     //  {
-    //    return Application::StandardWinMain( &::WinMain );
+    //    return StandardWinMain( &::WinMain );
     //  }
     //
 

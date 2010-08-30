@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Application/Inspect/InspectControls.h"
+#include "Foundation/Inspect/InspectControls.h"
 
 namespace Helium
 {

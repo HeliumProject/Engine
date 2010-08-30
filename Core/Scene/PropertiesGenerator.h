@@ -4,9 +4,9 @@
 #include <map>
 
 #include "Core/API.h"
-#include "Application/Inspect/InspectData.h"
-#include "Application/Inspect/InspectControls.h"
-#include "Application/Inspect/InspectInterpreter.h"
+#include "Foundation/Inspect/InspectData.h"
+#include "Foundation/Inspect/InspectControls.h"
+#include "Foundation/Inspect/InspectInterpreter.h"
 
 #include "Core/Scene/Selection.h"
 

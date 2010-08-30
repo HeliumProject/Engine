@@ -8,7 +8,7 @@
 
 #include "Editor/Inspect/TreeCanvasCtrl.h"
 
-#include "Application/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
+#include "Foundation/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

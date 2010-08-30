@@ -4,8 +4,8 @@
 
 #include "PerforceGenerated.h"
 
-#include "Application/RCS/RCS.h"
-#include "Application/RCS/Providers/Perforce/Perforce.h"
+#include "Foundation/RCS/RCS.h"
+#include "Editor/Perforce/Perforce.h"
 
 namespace Helium
 {

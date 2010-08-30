@@ -703,7 +703,6 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
-			RelativePathToProject=".\Application\Application.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{6005C4B7-F1A0-442F-81AA-1377FF18F910}"
@@ -1594,75 +1593,75 @@
 				Name="Widgets"
 				>
 				<File
-					RelativePath=".\Inspect\Widgets\Button.cpp"
+					RelativePath=".\Inspect\Widgets\ButtonWidget.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Widgets\Button.h"
+					RelativePath=".\Inspect\Widgets\ButtonWidget.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Widgets\CheckBox.cpp"
+					RelativePath=".\Inspect\Widgets\CheckBoxWidget.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Widgets\CheckBox.h"
+					RelativePath=".\Inspect\Widgets\CheckBoxWidget.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Choice.cpp\Choice.cpp"
+					RelativePath=".\Inspect\Widgets\ChoiceWidget.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Choice.cpp\Choice.h"
+					RelativePath=".\Inspect\Widgets\ChoiceWidget.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Widgets\ColorPicker.cpp"
+					RelativePath=".\Inspect\Widgets\ColorPickerWidget.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Widgets\ColorPicker.h"
+					RelativePath=".\Inspect\Widgets\ColorPickerWidget.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Widgets\FileDialogButton.cpp"
+					RelativePath=".\Inspect\Widgets\FileDialogButtonWidget.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Widgets\FileDialogButton.h"
+					RelativePath=".\Inspect\Widgets\FileDialogButtonWidget.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Widgets\Label.cpp"
+					RelativePath=".\Inspect\Widgets\LabelWidget.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Widgets\Label.h"
+					RelativePath=".\Inspect\Widgets\LabelWidget.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\List.cpp"
+					RelativePath=".\Inspect\Widgets\ListWidget.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\List.h"
+					RelativePath=".\Inspect\Widgets\ListWidget.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Slider.cpp"
+					RelativePath=".\Inspect\Widgets\SliderWidget.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Slider.h"
+					RelativePath=".\Inspect\Widgets\SliderWidget.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Widgets\Value.cpp"
+					RelativePath=".\Inspect\Widgets\ValueWidget.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Inspect\Widgets\Value.h"
+					RelativePath=".\Inspect\Widgets\ValueWidget.h"
 					>
 				</File>
 			</Filter>
@@ -1739,6 +1738,70 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Perforce"
+			>
+			<File
+				RelativePath=".\Perforce\P4API.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4ChangelistCommands.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4ChangelistCommands.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4ClientCommands.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4ClientCommands.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4Command.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4Command.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4Exceptions.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4Provider.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4Provider.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4QueryCommands.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4QueryCommands.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4Tags.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\Perforce.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\Perforce.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\API.h"
 			>
@@ -1760,11 +1823,27 @@
 			>
 		</File>
 		<File
+			RelativePath=".\ColorPicker.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ColorPicker.h"
+			>
+		</File>
+		<File
 			RelativePath=".\CommandQueue.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\CommandQueue.h"
+			>
+		</File>
+		<File
+			RelativePath=".\CustomColors.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\CustomColors.h"
 			>
 		</File>
 		<File
@@ -1868,6 +1947,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\FileDialog.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\FileDialog.h"
+			>
+		</File>
+		<File
 			RelativePath=".\FileDialogDisplayer.cpp"
 			>
 		</File>
@@ -1929,6 +2016,10 @@
 		</File>
 		<File
 			RelativePath=".\HierarchyOutliner.h"
+			>
+		</File>
+		<File
+			RelativePath=".\IconMagnify.xpm"
 			>
 		</File>
 		<File
@@ -2137,6 +2228,14 @@
 		</File>
 		<File
 			RelativePath=".\SettingsDialog.h"
+			>
+		</File>
+		<File
+			RelativePath=".\SimpleConfig.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\SimpleConfig.h"
 			>
 		</File>
 		<File

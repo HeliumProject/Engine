@@ -20,10 +20,10 @@
 #include "Foundation/Exception.h"
 #include "Editor/ArtProvider.h"
 #include "Foundation/Worker/Process.h"
-#include "Application/Inspect/InspectInit.h"
-#include "Application/Inspect/Interpreters/Reflect/InspectReflectInit.h"
-#include "Application/Inspect/Interpreters/File/InspectFileInit.h"
-#include "Application/RCS/Providers/Perforce/Perforce.h"
+#include "Foundation/Inspect/InspectInit.h"
+#include "Foundation/Inspect/Interpreters/Reflect/InspectReflectInit.h"
+#include "Foundation/Inspect/Interpreters/File/InspectFileInit.h"
+#include "Editor/Perforce/Perforce.h"
 
 #include "Core/CoreInit.h"
 #include "Core/MRUData.h"
@@ -38,10 +38,11 @@
 #include "Core/Scene/SceneSettings.h"
 
 #include "WindowSettings.h"
-#include "Application/Document.h"
+#include "Foundation/Document/Document.h"
 
 #include "Editor/Tracker/Tracker.h"
 #include "Editor/Task/TaskInit.h"
+#include "Editor/Perforce/Perforce.h"
 #include "Editor/PerforceWaitDialog.h"
 #include "Editor/Vault/VaultSettings.h"
 

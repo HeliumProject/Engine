@@ -3,7 +3,7 @@
 #include <string>
 #include <map>
 
-#include "Application/Inspect/InspectData.h"
+#include "Foundation/Inspect/InspectData.h"
 
 #include "Core/API.h"
 #include "Core/Scene/Selection.h"

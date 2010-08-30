@@ -1,4 +1,4 @@
-#include "FileInterpreter.h"
+#include "ReflectPathInterpreter.h"
 
 #include "Foundation/Inspect/InspectInit.h"
 #include "Foundation/Inspect/InspectScript.h"
@@ -15,14 +15,14 @@ using namespace Helium;
 using namespace Helium::Reflect;
 using namespace Helium::Inspect;
 
-FileInterpreter::FileInterpreter (Container* container)
+PathInterpreter::PathInterpreter (Container* container)
 : ReflectFieldInterpreter (container)
 , m_FileFilter( TXT( "" ) )
 {
 
 }
 
-void FileInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Element*>& instances, Container* parent)
+void PathInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Element*>& instances, Container* parent)
 {
     if (field->m_Flags & FieldFlags::Hide)
     {
@@ -65,7 +65,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
             if ( !readOnly )
             {
-                changingDelegate = DataChangingSignature::Delegate(this, &FileInterpreter::DataChanging);
+                changingDelegate = DataChangingSignature::Delegate(this, &PathInterpreter::DataChanging);
 
                 // File dialog button
                 fileDialogButton = CreateControl< FileDialogButton >();
@@ -80,7 +80,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
 #ifdef INSPECT_REFACTOR
                 Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( m_FileFilter );
-                filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &FileInterpreter::OnDrop ) );
+                filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &PathInterpreter::OnDrop ) );
                 value->SetDropTarget( filteredDropTarget );
 #endif
                 m_Value = value;
@@ -90,7 +90,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
             {
                 // File edit button
                 ButtonPtr editButton = CreateControl< Button >();
-                editButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &FileInterpreter::Edit ) );
+                editButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &PathInterpreter::Edit ) );
                 editButton->a_Label.Set( TXT( "Edit" ) );
                 container->AddChild( editButton );
             }
@@ -210,7 +210,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
     }
 }
 
-bool FileInterpreter::DataChanging( DataChangingArgs& args )
+bool PathInterpreter::DataChanging( DataChangingArgs& args )
 {
     tstring text;
     Reflect::Serializer::GetValue( args.m_NewValue, text );
@@ -234,7 +234,7 @@ bool FileInterpreter::DataChanging( DataChangingArgs& args )
     return true;
 }
 
-void FileInterpreter::Edit( const ButtonClickedArgs& args )
+void PathInterpreter::Edit( const ButtonClickedArgs& args )
 {
     tstring str;
     args.m_Control->ReadStringData( str );
@@ -247,7 +247,7 @@ void FileInterpreter::Edit( const ButtonClickedArgs& args )
 
 #ifdef INSPECT_REFACTOR
 
-void FileInterpreter::OnDrop( const Inspect::FilteredDropTargetArgs& args )
+void PathInterpreter::OnDrop( const Inspect::FilteredDropTargetArgs& args )
 {
     if ( args.m_Paths.size() )
     {

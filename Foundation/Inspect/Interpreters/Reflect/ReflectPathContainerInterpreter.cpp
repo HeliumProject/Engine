@@ -1,5 +1,4 @@
-#include "FileContainerInterpreter.h"
-#include "InspectFileInit.h"
+#include "ReflectPathContainerInterpreter.h"
 
 #ifdef INSPECT_REFACTOR
 #include "Foundation/Inspect/DragDrop/FilteredDropTarget.h"
@@ -22,7 +21,7 @@ using namespace Helium;
 using namespace Helium::Reflect;
 using namespace Helium::Inspect;
 
-FileContainerInterpreter::FileContainerInterpreter (Container* labelContainer)
+PathContainerInterpreter::PathContainerInterpreter (Container* labelContainer)
 : ReflectFieldInterpreter (labelContainer)
 , m_List( NULL )
 , m_FileFilter( TXT( "" ) )
@@ -30,7 +29,7 @@ FileContainerInterpreter::FileContainerInterpreter (Container* labelContainer)
 
 }
 
-void FileContainerInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Element*>& instances, Container* parent)
+void PathContainerInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Element*>& instances, Container* parent)
 {
     m_List = NULL;
 
@@ -75,14 +74,14 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
             field->GetProperty( TXT("FileFilter"), filter );
 
             // Add button - normal file open dialog
-            addButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &FileContainerInterpreter::OnAddFile ) );
+            addButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &PathContainerInterpreter::OnAddFile ) );
 #ifdef INSPECT_REFACTOR
             addButton->SetClientData( new ClientDataFilter( list, instances.front()->GetType(), filter ) );
 #endif
             // Add button - opens file browser
             findButton = CreateControl< Button >();
             findButton->a_Icon.Set( TXT( "actions/system-search" ) );
-            findButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &FileContainerInterpreter::OnFindFile ) );
+            findButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &PathContainerInterpreter::OnFindFile ) );
 #ifdef INSPECT_REFACTOR
             findButton->SetClientData( new ClientDataFilter( list, instances.front()->GetType(), filter ) );
 #endif
@@ -90,37 +89,37 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
             // Edit button - attempt to edit the selected file
             editButton = CreateControl< Button >();
             editButton->a_Label.Set( TXT( "Edit" ) );
-            editButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &FileContainerInterpreter::OnEdit ) );
+            editButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &PathContainerInterpreter::OnEdit ) );
             editButton->SetClientData( new ClientData( list ) );
         }
         else
         {
-            addButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &FileContainerInterpreter::OnAdd ) );
+            addButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &PathContainerInterpreter::OnAdd ) );
             addButton->SetClientData( new ClientData( list ) );
         }
         addButton->a_Label.Set( TXT( "Add" ) );
 
         removeButton = CreateControl< Button >();
         removeButton->a_Label.Set( TXT( "Remove" ) );
-        removeButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &FileContainerInterpreter::OnRemove ) );
+        removeButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &PathContainerInterpreter::OnRemove ) );
         removeButton->SetClientData( new ClientData( list ) );
 
         if ( isArray )
         {
             upButton = CreateControl< Button >();
             upButton->a_Icon.Set( TXT( "actions/go-up" ) );
-            upButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &FileContainerInterpreter::OnMoveUp ) );
+            upButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &PathContainerInterpreter::OnMoveUp ) );
             upButton->SetClientData( new ClientData( list ) );
 
             downButton = CreateControl< Button >();
             downButton->a_Icon.Set( TXT( "actions/go-down" ) );
-            downButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &FileContainerInterpreter::OnMoveDown ) );
+            downButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &PathContainerInterpreter::OnMoveDown ) );
             downButton->SetClientData( new ClientData( list ) );
         }
 
 #ifdef INSPECT_REFACTOR
         Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( m_FinderSpec );
-        filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &FileContainerInterpreter::OnDrop ) );
+        filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &PathContainerInterpreter::OnDrop ) );
         m_List->SetDropTarget( filteredDropTarget );
 #endif
     }
@@ -182,7 +181,7 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
     }
 }
 
-void FileContainerInterpreter::OnAdd( const ButtonClickedArgs& args )
+void PathContainerInterpreter::OnAdd( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
     if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
@@ -202,7 +201,7 @@ void FileContainerInterpreter::OnAdd( const ButtonClickedArgs& args )
     }
 }
 
-void FileContainerInterpreter::OnAddFile( const ButtonClickedArgs& args )
+void PathContainerInterpreter::OnAddFile( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
 
@@ -222,7 +221,7 @@ void FileContainerInterpreter::OnAddFile( const ButtonClickedArgs& args )
     }
 }
 
-void FileContainerInterpreter::OnFindFile( const ButtonClickedArgs& args )
+void PathContainerInterpreter::OnFindFile( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
 
@@ -241,7 +240,7 @@ void FileContainerInterpreter::OnFindFile( const ButtonClickedArgs& args )
     }
 }
 
-void FileContainerInterpreter::OnEdit( const ButtonClickedArgs& args )
+void PathContainerInterpreter::OnEdit( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
     if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
@@ -262,7 +261,7 @@ void FileContainerInterpreter::OnEdit( const ButtonClickedArgs& args )
     }
 }
 
-void FileContainerInterpreter::OnRemove( const ButtonClickedArgs& args )
+void PathContainerInterpreter::OnRemove( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
     if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
@@ -285,7 +284,7 @@ void FileContainerInterpreter::OnRemove( const ButtonClickedArgs& args )
     }
 }
 
-void FileContainerInterpreter::OnMoveUp( const ButtonClickedArgs& args )
+void PathContainerInterpreter::OnMoveUp( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
     if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
@@ -298,7 +297,7 @@ void FileContainerInterpreter::OnMoveUp( const ButtonClickedArgs& args )
     }
 }
 
-void FileContainerInterpreter::OnMoveDown( const ButtonClickedArgs& args )
+void PathContainerInterpreter::OnMoveDown( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
     if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
@@ -312,7 +311,7 @@ void FileContainerInterpreter::OnMoveDown( const ButtonClickedArgs& args )
 }
 
 #ifdef INSPECT_REFACTOR
-void FileContainerInterpreter::OnDrop( const Inspect::FilteredDropTargetArgs& args )
+void PathContainerInterpreter::OnDrop( const Inspect::FilteredDropTargetArgs& args )
 {
     if ( args.m_Paths.size() )
     {

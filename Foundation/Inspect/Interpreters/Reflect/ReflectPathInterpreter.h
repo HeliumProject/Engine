@@ -13,10 +13,10 @@ namespace Helium
 {
     namespace Inspect
     {
-        class FOUNDATION_API FileInterpreter : public ReflectFieldInterpreter
+        class FOUNDATION_API PathInterpreter : public ReflectFieldInterpreter
         {
         public:
-            FileInterpreter (Container* container);
+            PathInterpreter (Container* container);
 
             virtual void InterpretField(const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent);
 
@@ -40,7 +40,7 @@ namespace Helium
             Inspect::Value* m_Value;
         };
 
-        typedef Helium::SmartPtr<FileInterpreter> FileInterpreterPtr;
-        typedef std::vector< FileInterpreterPtr > V_FileInterpreter;
+        typedef Helium::SmartPtr<PathInterpreter> PathInterpreterPtr;
+        typedef std::vector< PathInterpreterPtr > V_PathInterpreter;
     }
 }

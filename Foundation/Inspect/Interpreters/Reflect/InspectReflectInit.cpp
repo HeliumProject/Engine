@@ -11,6 +11,9 @@
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectArrayInterpreter.h"
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectSetInterpreter.h"
 
+#include "Foundation/Inspect/Interpreters/Reflect/ReflectPathInterpreter.h"
+#include "Foundation/Inspect/Interpreters/Reflect/ReflectPathContainerInterpreter.h"
+
 using namespace Helium;
 using namespace Helium::Inspect;
 
@@ -46,6 +49,11 @@ void InspectReflect::Initialize()
         // containers
         ReflectFieldInterpreterFactory::Register<ReflectArrayInterpreter>( Reflect::GetType<Reflect::ArraySerializer>() );
         ReflectFieldInterpreterFactory::Register<ReflectSetInterpreter>( Reflect::GetType<Reflect::SetSerializer>() );
+
+        // paths
+        ReflectFieldInterpreterFactory::Register<PathInterpreter>( Reflect::GetType<Reflect::PathSerializer>() );
+        ReflectFieldInterpreterFactory::Register<PathContainerInterpreter>( Reflect::GetType<Reflect::PathArraySerializer>() );
+        ReflectFieldInterpreterFactory::Register<PathContainerInterpreter>( Reflect::GetType<Reflect::PathSetSerializer>() );
     }
 }
 

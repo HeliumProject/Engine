@@ -1745,6 +1745,22 @@
 						>
 					</File>
 					<File
+						RelativePath=".\Inspect\Interpreters\Reflect\ReflectPathContainerInterpreter.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Interpreters\Reflect\ReflectPathContainerInterpreter.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Interpreters\Reflect\ReflectPathInterpreter.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Interpreters\Reflect\ReflectPathInterpreter.h"
+						>
+					</File>
+					<File
 						RelativePath=".\Inspect\Interpreters\Reflect\ReflectSetInterpreter.cpp"
 						>
 					</File>
@@ -1766,34 +1782,6 @@
 					</File>
 					<File
 						RelativePath=".\Inspect\Interpreters\Reflect\ReflectVectorInterpreter.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="File"
-					>
-					<File
-						RelativePath=".\Inspect\Interpreters\File\FileContainerInterpreter.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Interpreters\File\FileContainerInterpreter.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Interpreters\File\FileInterpreter.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Interpreters\File\FileInterpreter.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Interpreters\File\InspectFileInit.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Interpreters\File\InspectFileInit.h"
 						>
 					</File>
 				</Filter>

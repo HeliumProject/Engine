@@ -14,10 +14,10 @@ namespace Helium
         class List;
         struct FilteredDropTargetArgs;
 
-        class FOUNDATION_API FileContainerInterpreter : public ReflectFieldInterpreter
+        class FOUNDATION_API PathContainerInterpreter : public ReflectFieldInterpreter
         {
         public:
-            FileContainerInterpreter (Container* container);
+            PathContainerInterpreter (Container* container);
 
             virtual void InterpretField(const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent);
 
@@ -41,7 +41,7 @@ namespace Helium
             Inspect::List* m_List;
         };
 
-        typedef Helium::SmartPtr<FileContainerInterpreter> FileContainerInterpreterPtr;
-        typedef std::vector< FileContainerInterpreterPtr > V_FileContainerInterpreterSmartPtr;
+        typedef Helium::SmartPtr<PathContainerInterpreter> PathContainerInterpreterPtr;
+        typedef std::vector< PathContainerInterpreterPtr > V_PathContainerInterpreterSmartPtr;
     }
 }

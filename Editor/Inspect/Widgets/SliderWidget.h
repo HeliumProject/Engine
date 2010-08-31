@@ -41,8 +41,8 @@ namespace Helium
         public:
             SliderWidget( Inspect::Slider* control );
 
-            void Create( wxWindow* parent );
-            void Destroy();
+            virtual void Create( wxWindow* parent ) HELIUM_OVERRIDE;
+            virtual void Destroy() HELIUM_OVERRIDE;
  
             virtual void Read() HELIUM_OVERRIDE;
             virtual bool Write() HELIUM_OVERRIDE;

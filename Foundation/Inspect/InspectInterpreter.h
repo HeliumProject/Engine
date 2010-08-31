@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Platform/Thread.h"
+#include "Platform/Mutex.h"
 
 #include "Foundation/API.h"
 #include "Foundation/Inspect/InspectData.h"
@@ -53,26 +54,16 @@ namespace Helium
         };
         typedef Helium::Signature<void, const PickLinkArgs&> PickLinkSignature;
 
-        class ContainerStackPointer : public ThreadLocalPointer
+        class FOUNDATION_API ContainerStackPointer : public ThreadLocalPointer
         {
         public:
-            ~ContainerStackPointer()
-            {
-                std::stack< ContainerPtr >* stack = (std::stack< ContainerPtr >*)GetPointer();
-                delete stack;
-            }                
+            ContainerStackPointer();
+            ~ContainerStackPointer();
 
-            std::stack< ContainerPtr >& Get()
-            {
-                std::stack< ContainerPtr >* pointer = (std::stack< ContainerPtr >*)GetPointer();
-                
-                if ( !pointer )
-                {
-                    SetPointer( pointer = new std::stack< ContainerPtr > );
-                }
+            std::stack< ContainerPtr >& Get();
 
-                return *pointer;
-            }
+        private:
+            static std::set< std::stack< ContainerPtr >* >  s_Stacks;
         };
 
         class FOUNDATION_API Interpreter HELIUM_ABSTRACT : public Reflect::Object

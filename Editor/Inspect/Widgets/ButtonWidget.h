@@ -29,8 +29,11 @@ namespace Helium
         public:
             ButtonWidget( Inspect::Button* control );
 
-            void Create( wxWindow* parent );
-            void Destroy();
+            virtual void Create( wxWindow* parent ) HELIUM_OVERRIDE;
+            virtual void Destroy() HELIUM_OVERRIDE;
+
+            virtual void Read() HELIUM_OVERRIDE {}
+            virtual bool Write() HELIUM_OVERRIDE { return true; }
 
             void SetLabel( const tstring& label );
             void SetIcon( const tstring& icon );
@@ -38,7 +41,6 @@ namespace Helium
         protected:
             void OnIconChanged( const Attribute< tstring >::ChangeArgs& args );
             void OnLabelChanged( const Attribute< tstring >::ChangeArgs& args );
-
 
             Inspect::Button*  m_ButtonControl;
             ButtonWindow*     m_ButtonWindow;

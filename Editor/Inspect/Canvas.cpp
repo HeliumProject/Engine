@@ -2,6 +2,14 @@
 #include "Canvas.h"
 
 #include "Editor/Inspect/Widgets/LabelWidget.h"
+#include "Editor/Inspect/Widgets/ValueWidget.h"
+#include "Editor/Inspect/Widgets/SliderWidget.h"
+#include "Editor/Inspect/Widgets/ChoiceWidget.h"
+#include "Editor/Inspect/Widgets/CheckBoxWidget.h"
+#include "Editor/Inspect/Widgets/ColorPickerWidget.h"
+#include "Editor/Inspect/Widgets/ListWidget.h"
+#include "Editor/Inspect/Widgets/ButtonWidget.h"
+#include "Editor/Inspect/Widgets/FileDialogButtonWidget.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -9,6 +17,16 @@ using namespace Helium::Editor;
 Canvas::Canvas( wxWindow* window )
 : m_Window( window )
 {
+    SetWidgetCreator< LabelWidget, Inspect::Label >();
+    SetWidgetCreator< ValueWidget, Inspect::Value >();
+    SetWidgetCreator< SliderWidget, Inspect::Slider >();
+    SetWidgetCreator< ChoiceWidget, Inspect::Choice >();
+    SetWidgetCreator< CheckBoxWidget, Inspect::CheckBox >();
+    SetWidgetCreator< ColorPickerWidget, Inspect::ColorPicker >();
+    SetWidgetCreator< ListWidget, Inspect::List >();
+    SetWidgetCreator< ButtonWidget, Inspect::Button >();
+    SetWidgetCreator< FileDialogButtonWidget, Inspect::FileDialogButton >();
+
     m_Window->Connect( m_Window->GetId(), wxEVT_SHOW, wxShowEventHandler( Canvas::OnShow ), NULL, this );
     m_Window->Connect( m_Window->GetId(), wxEVT_LEFT_DOWN, wxMouseEventHandler( Canvas::OnClick ), NULL, this );
     m_Window->Connect( m_Window->GetId(), wxEVT_MIDDLE_DOWN, wxMouseEventHandler( Canvas::OnClick ), NULL, this );
@@ -33,18 +51,14 @@ void Canvas::RealizeControl( Inspect::Control* control, Inspect::Control* parent
 
     wxWindow* parentWindow = window->GetWindow();
 
-    if ( control->HasType( Reflect::GetType< Inspect::Label >() ) )
+    WidgetCreators::const_iterator found = m_WidgetCreators.find( control->GetType() );
+    bool widgetCreatorFound = found != m_WidgetCreators.end();
+    HELIUM_ASSERT( widgetCreatorFound );
+
+    if ( widgetCreatorFound )
     {
-        Helium::SmartPtr< LabelWidget > label = new LabelWidget( control );
-
-        label->Create( parentWindow );
-
-        control->SetWidget( label );
+        WidgetPtr widget = found->second( control );
+        widget->Create( parentWindow );
+        control->SetWidget( widget );
     }
-    /*
-    else (...)
-    {
-
-    }
-    */
 }

@@ -49,8 +49,8 @@ namespace Helium
         public:
             CheckBoxWidget( Inspect::CheckBox* control );
 
-            void Create( wxWindow* parent );
-            void Destroy();
+            virtual void Create( wxWindow* parent ) HELIUM_OVERRIDE;
+            virtual void Destroy() HELIUM_OVERRIDE;
 
             // Inspect::Widget
             virtual void Read() HELIUM_OVERRIDE;

@@ -8,6 +8,37 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
+std::set< std::stack< ContainerPtr >* > ContainerStackPointer::s_Stacks;
+
+ContainerStackPointer::ContainerStackPointer()
+{
+
+}
+
+ContainerStackPointer::~ContainerStackPointer()
+{
+    while ( !s_Stacks.empty() )
+    {
+        delete *s_Stacks.begin();
+        s_Stacks.erase( *s_Stacks.begin() );
+    }
+}                
+
+std::stack< ContainerPtr >& ContainerStackPointer::Get()
+{
+    std::stack< ContainerPtr >* pointer = (std::stack< ContainerPtr >*)GetPointer();
+    
+    if ( !pointer )
+    {
+        static Helium::Mutex mutex;
+        Helium::TakeMutex lock ( mutex );
+        SetPointer( pointer = new std::stack< ContainerPtr > );
+        s_Stacks.insert( pointer );
+    }
+
+    return *pointer;
+}
+
 void Interpreter::Add(Control* control)
 {
     m_ContainerStack.Get().top()->AddChild(control);

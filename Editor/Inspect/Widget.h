@@ -20,6 +20,9 @@ namespace Helium
             int GetStringWidth(const tstring& str);
             bool EllipsizeString(tstring& str, int width);
 
+            virtual void Create( wxWindow* parent ) = 0;
+            virtual void Destroy() = 0;
+
             // initialize state
             virtual void SetWindow( wxWindow* window );
 
@@ -36,5 +39,7 @@ namespace Helium
         protected:
             wxWindow*           m_Window;
         };
+
+        typedef SmartPtr<Widget> WidgetPtr;
     }
 }

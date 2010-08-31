@@ -1016,9 +1016,7 @@ bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
         }
         catch ( Helium::Exception& ex )
         {
-            tostringstream str;
-            str << "Failed to write file " << path.c_str() << ": " << ex.What();
-            wxMessageBox( str.str(), TXT( "Error" ), wxOK|wxCENTRE|wxICON_ERROR );
+            Log::Error( TXT("Failed to write file %s: %s"), path.c_str(), ex.What() );
             result = false;
         }
     }
@@ -1074,8 +1072,7 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
         catch ( Helium::Exception& ex )
         {
             tostringstream str;
-            str << "Failed to generate xml: " << ex.What();
-            wxMessageBox( str.str(), TXT( "Error" ), wxOK|wxCENTRE|wxICON_ERROR );
+            Log::Error( TXT("Failed to generate xml: %s"), ex.What() );
             result = false;
         }
     }
@@ -1579,7 +1576,7 @@ void Scene::Select( const SelectArgs& args )
             V_PickHitSmartPtr::const_iterator end = sorted.end();
             for ( ; itr != end; ++itr )
             {
-                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetObject());
+                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetHitObject());
                 if (selectable)
                 {
                     // add it to the new selection list
@@ -1596,7 +1593,7 @@ void Scene::Select( const SelectArgs& args )
             V_PickHitSmartPtr::const_iterator end = args.m_Pick->GetHits().end();
             for ( ; itr != end; ++itr )
             {
-                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetObject());
+                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetHitObject());
                 if (selectable)
                 {
                     // add it to the new selection list
@@ -1760,7 +1757,7 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
             V_PickHitSmartPtr::const_iterator end = sorted.end();
             for ( ; itr != end; ++itr )
             {
-                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetObject());
+                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetHitObject());
                 if (selectable)
                 {
                     // add it to the new selection list
@@ -1769,7 +1766,7 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
                 }
 
 #ifdef HELIUM_ASSERT_ENABLED
-                SceneNode* node = Reflect::ObjectCast<SceneNode>( (*itr)->GetObject() );
+                SceneNode* node = Reflect::ObjectCast<SceneNode>( (*itr)->GetHitObject() );
                 if (node)
                 {
                     HELIUM_ASSERT( node->GetOwner() == this );
@@ -1785,7 +1782,7 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
             V_PickHitSmartPtr::const_iterator end = args.m_Pick->GetHits().end();
             for ( ; itr != end; ++itr )
             {
-                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetObject());
+                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetHitObject());
                 if (selectable)
                 {
                     // add it to the new selection list
@@ -1793,7 +1790,7 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
                 }
 
 #ifdef HELIUM_ASSERT_ENABLED
-                SceneNode* node = Reflect::ObjectCast<SceneNode>( (*itr)->GetObject() );
+                SceneNode* node = Reflect::ObjectCast<SceneNode>( (*itr)->GetHitObject() );
                 if (node)
                 {
                     HELIUM_ASSERT( node->GetOwner() == this );

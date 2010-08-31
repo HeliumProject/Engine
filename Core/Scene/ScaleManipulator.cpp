@@ -13,8 +13,6 @@
 #include "Core/Scene/SceneManager.h"
 #include "SceneSettings.h"
 
-#include <wx/msw/private.h>
-
 using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
@@ -361,7 +359,8 @@ bool ScaleManipulator::Pick( PickVisitor* pick )
         }
     }
 
-    if (m_SelectedAxes != MultipleAxes::All && m_SelectedAxes != MultipleAxes::None && wxIsCtrlDown())
+#pragma TODO("How to poll for ctrl button state? -Geoff")
+    if (m_SelectedAxes != MultipleAxes::All && m_SelectedAxes != MultipleAxes::None && false /*wxIsCtrlDown()*/)
     {
         m_SelectedAxes = (AxesFlags)(~m_SelectedAxes & MultipleAxes::All);
     }

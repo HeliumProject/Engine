@@ -331,17 +331,17 @@ namespace Helium
             //
 
         private:
-            Object* m_Object;
+            Object* m_HitObject;
 
         public:
-            Object* GetObject() const
+            Object* GetHitObject() const
             {
-                return m_Object;
+                return m_HitObject;
             }
 
-            void SetObject(Object* object)
+            void SetHitObject(Object* object)
             {
-                m_Object = object;
+                m_HitObject = object;
             }
 
 
@@ -444,7 +444,7 @@ namespace Helium
             //
 
             PickHit(Object* o)
-                : m_Object (o)
+                : m_HitObject (o)
                 , m_HasNormal (false)
                 , m_HasVertex (false)
                 , m_VertexDistance ((float)Math::BigFloat)

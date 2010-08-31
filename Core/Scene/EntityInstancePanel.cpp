@@ -132,13 +132,6 @@ bool EntityPanel::OnEntityAssetChanging( const Inspect::ControlChangingArgs& arg
         }
     }
 
-    if ( !result )
-    {
-#pragma TODO("How to get the window handle?")
-        // Message to the user that the value is not correct.
-        wxMessageBox( TXT( "Invalid Entity Class specified!" ), TXT( "Error" ), wxOK | wxCENTER | wxICON_ERROR, NULL /*GetWindow()*/ );
-    }
-
     return result;
 }
 

@@ -2285,7 +2285,7 @@ void MainFrame::OpenManifestContextMenu(const SelectArgs& args)
     V_PickHitSmartPtr::const_iterator end = args.m_Pick->GetHits().end();
     for ( ; itr != end; ++itr )
     {
-        Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetObject());
+        Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetHitObject());
         if (selectable)
         {
             // add it to the new selection list

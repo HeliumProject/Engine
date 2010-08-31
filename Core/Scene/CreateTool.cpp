@@ -153,7 +153,7 @@ bool CreateTool::DetermineTranslationAndNormal( PickVisitor& pick, Math::Vector3
         V_PickHitSmartPtr::const_iterator end = sorted.end();
         for ( ; itr != end; ++itr )
         {
-            Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>( (*itr)->GetObject() );
+            Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>( (*itr)->GetHitObject() );
 
             // don't snap against what we are placing
             if ( node == m_Instance )
@@ -470,7 +470,7 @@ bool CreateTool::ValidPosition( const Math::AlignedBox& bounds, const Math::Vect
     V_PickHitSmartPtr::const_iterator resultsEnd = frustumPick.GetHits().end();
     for ( ; resultsItr != resultsEnd; ++resultsItr )
     {
-        Core::HierarchyNode* currentNode = Reflect::ObjectCast<Core::HierarchyNode>( (*resultsItr)->GetObject() );
+        Core::HierarchyNode* currentNode = Reflect::ObjectCast<Core::HierarchyNode>( (*resultsItr)->GetHitObject() );
         if ( !currentNode->IsTransient() && ( s_PaintPreventAnyOverlap || node->IsSimilar( currentNode ) ) )
         {
             const Core::Transform* transform = currentNode->GetTransform();
@@ -713,7 +713,7 @@ void CreateTool::MouseUp( const MouseButtonInput& e )
 
 void CreateTool::KeyPress( const KeyboardInput& e )
 {
-    if (e.GetKeyCode() == WXK_RETURN)
+    if (e.GetKeyCode() == KeyCodes::Return)
     {
         AddToScene();
 

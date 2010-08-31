@@ -931,8 +931,7 @@ void Viewport::Draw()
             unsigned x = m_Size.x;
             unsigned y = m_Size.y;
 
-            wxColour temp = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
-            u32 color = D3DCOLOR_ARGB(255, temp.Red(), temp.Green(), temp.Blue());
+            u32 color = D3DCOLOR_ARGB(255, 200, 200, 200);
 
             std::vector< TransformedColored > vertices;
 

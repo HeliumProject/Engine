@@ -18,8 +18,6 @@
 #include "Foundation/Math/AngleAxis.h"
 #include "Foundation/Math/Utils.h"
 
-#include <wx/msw/private.h>
-
 using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
@@ -554,7 +552,8 @@ bool TranslateManipulator::Pick( PickVisitor* pick )
         m_Axes->Update();
     }
 
-    if (m_SelectedAxes != MultipleAxes::All && m_SelectedAxes != MultipleAxes::None && wxIsCtrlDown())
+#pragma TODO("How to poll for ctrl button state? -Geoff")
+    if (m_SelectedAxes != MultipleAxes::All && m_SelectedAxes != MultipleAxes::None && false /*wxIsCtrlDown()*/)
     {
         m_SelectedAxes = (AxesFlags)(~m_SelectedAxes & MultipleAxes::All);
     }
@@ -651,7 +650,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
                 V_PickHitSmartPtr::const_iterator end = sorted.end();
                 for ( ; itr != end; ++itr )
                 {
-                    Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>( (*itr)->GetObject() );
+                    Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>( (*itr)->GetHitObject() );
 
                     // don't use the object we are moving
                     if ( node && node == primary->GetNode() && !primary->AllowSelfSnap() )

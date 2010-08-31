@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;$(expat);$(zlib);$(boost)"
+				AdditionalIncludeDirectories="..;$(expat);$(zlib)"
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;FOUNDATION_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -116,7 +116,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;$(expat);$(zlib);$(boost)"
+				AdditionalIncludeDirectories="..;$(expat);$(zlib)"
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;FOUNDATION_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -186,7 +186,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;$(expat);$(zlib);$(boost)"
+				AdditionalIncludeDirectories="..;$(expat);$(zlib)"
 				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;FOUNDATION_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -256,7 +256,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;$(expat);$(zlib);$(boost)"
+				AdditionalIncludeDirectories="..;$(expat);$(zlib)"
 				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;FOUNDATION_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -326,7 +326,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;$(expat);$(zlib);$(boost)"
+				AdditionalIncludeDirectories="..;$(expat);$(zlib)"
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;FOUNDATION_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -398,7 +398,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;$(expat);$(zlib);$(boost)"
+				AdditionalIncludeDirectories="..;$(expat);$(zlib)"
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;FOUNDATION_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -468,7 +468,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;$(expat);$(zlib);$(boost)"
+				AdditionalIncludeDirectories="..;$(expat);$(zlib)"
 				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;FOUNDATION_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -538,7 +538,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;$(expat);$(zlib);$(boost)"
+				AdditionalIncludeDirectories="..;$(expat);$(zlib)"
 				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;FOUNDATION_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"

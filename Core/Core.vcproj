@@ -45,7 +45,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/bigobj"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;CORE_EXPORTS"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -66,8 +66,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw29d.lib d3d9.lib d3dx9.lib"
-				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll;$(DirectX)\lib\x86"
+				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalLibraryDirectories="$(DirectX)\lib\x86"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
@@ -120,7 +120,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/bigobj"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;CORE_EXPORTS"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -141,8 +141,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw29d.lib d3d9.lib d3dx9.lib"
-				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_amd64_dll;$(DirectX)\lib\x64"
+				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalLibraryDirectories="$(DirectX)\lib\x64"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
@@ -193,7 +193,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/bigobj"
-				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;CORE_EXPORTS"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -213,8 +213,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw29.lib d3d9.lib d3dx9.lib"
-				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll;$(DirectX)\lib\x86"
+				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalLibraryDirectories="$(DirectX)\lib\x86"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
@@ -266,7 +266,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/bigobj"
-				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;CORE_EXPORTS"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -286,8 +286,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw29.lib d3d9.lib d3dx9.lib"
-				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_amd64_dll;$(DirectX)\lib\x64"
+				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalLibraryDirectories="$(DirectX)\lib\x64"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
@@ -339,7 +339,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/bigobj"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;CORE_EXPORTS"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -360,8 +360,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw29ud.lib d3d9.lib d3dx9.lib"
-				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll;$(DirectX)\lib\x86"
+				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalLibraryDirectories="$(DirectX)\lib\x86"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
@@ -414,7 +414,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/bigobj"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;CORE_EXPORTS"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -435,8 +435,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw29ud.lib d3d9.lib d3dx9.lib"
-				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_amd64_dll;$(DirectX)\lib\x64"
+				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalLibraryDirectories="$(DirectX)\lib\x64"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
@@ -487,7 +487,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/bigobj"
-				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;CORE_EXPORTS"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -507,8 +507,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw29u.lib d3d9.lib d3dx9.lib"
-				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll;$(DirectX)\lib\x86"
+				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalLibraryDirectories="$(DirectX)\lib\x86"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
@@ -560,7 +560,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/bigobj"
-				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(IntDir)&quot;;&quot;$(DirectX)\Include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;CORE_EXPORTS"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -580,8 +580,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw29u.lib d3d9.lib d3dx9.lib"
-				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_amd64_dll;$(DirectX)\lib\x64"
+				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalLibraryDirectories="$(DirectX)\lib\x64"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
@@ -619,7 +619,6 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
-			RelativePathToProject=".\Application\Application.vcproj"
 		/>
 	</References>
 	<Files>

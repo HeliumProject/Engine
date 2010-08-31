@@ -368,7 +368,7 @@ bool Entity::Pick( PickVisitor* pick )
             for ( ; itr != end; ++itr )
             {
                 // take ownership
-                (*itr)->SetObject(this);
+                (*itr)->SetHitObject(this);
             }
 
             // success!

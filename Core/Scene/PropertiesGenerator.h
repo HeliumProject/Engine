@@ -135,8 +135,7 @@ namespace Helium
             {
                 Inspect::FileDialogButtonPtr control = CreateControl<Inspect::FileDialogButton>();
                 control->Bind( new Inspect::PropertyStringFormatter<T> ( property ) );
-                std::stack< Inspect::ContainerPtr >& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddChild(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 
@@ -146,8 +145,7 @@ namespace Helium
             {
                 Inspect::FileDialogButtonPtr control = CreateControl<Inspect::FileDialogButton>();
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
-                std::stack< Inspect::ContainerPtr >& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddChild(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 
@@ -165,8 +163,7 @@ namespace Helium
                 data->SetSignificant( significant ); 
                 control->Bind( data );
 
-                std::stack< Inspect::ContainerPtr >& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddChild(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 
@@ -180,8 +177,7 @@ namespace Helium
             {
                 Inspect::ValuePtr control = CreateControl<Inspect::Value>();
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
-                std::stack< Inspect::ContainerPtr >& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddChild(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 
@@ -195,8 +191,7 @@ namespace Helium
             {
                 Inspect::ChoicePtr control = CreateControl<Inspect::Choice>();
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
-                std::stack< Inspect::ContainerPtr >& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddChild(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 
@@ -230,8 +225,7 @@ namespace Helium
             {
                 Inspect::ListPtr control = CreateControl<Inspect::List>();
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
-                std::stack< Inspect::ContainerPtr >& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddChild(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 
@@ -245,8 +239,7 @@ namespace Helium
             {
                 Inspect::SliderPtr control = CreateControl<Inspect::Slider>();
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
-                std::stack< Inspect::ContainerPtr >& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddChild(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 
@@ -260,8 +253,7 @@ namespace Helium
             {
                 Inspect::ColorPickerPtr control = CreateControl<Inspect::ColorPicker>();
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
-                std::stack< Inspect::ContainerPtr >& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddChild(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
         };

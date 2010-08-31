@@ -53,16 +53,6 @@ namespace Helium
         };
         typedef Helium::Signature<void, const PickLinkArgs&> PickLinkSignature;
 
-        //
-        // Interpreters are owned by one or more controls.  They are the
-        //  adapter base class upon which derived interpreters (or enumerators)
-        //  can extend.  Those derived classes can be intimate with the format
-        //  of the data that is being analyzed to generate the GUI widgets.
-        //
-        // This class is HELIUM_ABSTRACT and lightweight, and pretty much only here
-        //  to provide very basic API at a later date.
-        //
-
         class ContainerStackPointer : public ThreadLocalPointer
         {
         public:
@@ -77,14 +67,9 @@ namespace Helium
                 delete stack;
             }                
 
-            operator std::stack< ContainerPtr >*()
+            std::stack< ContainerPtr >& Get()
             {
-                return (std::stack< ContainerPtr >*)GetPointer();
-            }
-
-            std::stack< ContainerPtr >* operator->()
-            {
-                return (std::stack< ContainerPtr >*)GetPointer();
+                return *(std::stack< ContainerPtr >*)GetPointer();
             }
         };
 
@@ -141,7 +126,10 @@ namespace Helium
             // Panel/container state management
             //
 
-            std::stack< ContainerPtr >& GetCurrentContainerStack();
+            std::stack< ContainerPtr >& GetContainerStack()
+            {
+                return m_ContainerStack.Get();
+            }
 
             Container* GetContainer()
             {
@@ -166,8 +154,7 @@ namespace Helium
             {
                 CheckBoxPtr control = CreateControl<CheckBox>();
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
-                std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddChild(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 
@@ -176,8 +163,7 @@ namespace Helium
             {
                 ValuePtr control = CreateControl<Value>();
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
-                std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddChild(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 
@@ -186,8 +172,7 @@ namespace Helium
             {
                 ChoicePtr control = CreateControl<Choice>();
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
-                std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddChild(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 
@@ -216,8 +201,7 @@ namespace Helium
             {
                 ListPtr control = CreateControl<List>();
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
-                std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddChild(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 
@@ -226,8 +210,7 @@ namespace Helium
             {
                 SliderPtr control = CreateControl<Slider>();
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
-                std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddChild(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 
@@ -236,8 +219,7 @@ namespace Helium
             {
                 ColorPickerPtr control = CreateControl<ColorPicker>();
                 control->Bind( new PropertyStringFormatter<T> ( property ) );
-                std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddChild(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 

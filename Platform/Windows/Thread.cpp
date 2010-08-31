@@ -134,7 +134,7 @@ bool Thread::Valid()
 ThreadLocalPointer::ThreadLocalPointer()
 {
     m_Key = TlsAlloc(); 
-    HELIUM_ASSERT(m_Key != TLS_OUT_OF_INDEXES); 
+    HELIUM_ASSERT(m_Key != TLS_OUT_OF_INDEXES);
     SetPointer(NULL); 
 }
 
@@ -145,7 +145,9 @@ ThreadLocalPointer::~ThreadLocalPointer()
 
 void* ThreadLocalPointer::GetPointer()
 {
-    return TlsGetValue(m_Key); 
+    void* value = TlsGetValue(m_Key);
+    HELIUM_ASSERT( value );
+    return value;
 }
 
 void ThreadLocalPointer::SetPointer(void* pointer)

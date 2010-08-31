@@ -8,22 +8,14 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
-std::stack< ContainerPtr >& Interpreter::GetCurrentContainerStack()
-{
-    std::stack< ContainerPtr >* stack = m_ContainerStack;
-    return *stack;
-}
-
 void Interpreter::Add(Control* control)
 {
-    std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
-    containerStack.top()->AddChild(control);
+    m_ContainerStack.Get().top()->AddChild(control);
 }
 
 void Interpreter::Push(Container* container)
 {
-    std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
-    containerStack.push(container);
+    m_ContainerStack.Get().push(container);
 }
 
 Container* Interpreter::PushContainer( const tstring& name )
@@ -31,29 +23,26 @@ Container* Interpreter::PushContainer( const tstring& name )
     ContainerPtr container = new Container ();
     container->a_Name.Set( name );
 
-    std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
-    containerStack.push( container );
+    m_ContainerStack.Get().push( container );
 
     return container;
 }
 
 Container* Interpreter::Pop( bool setParent )
 {
-    std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
+    ContainerPtr child = m_ContainerStack.Get().top();
 
-    ContainerPtr child = containerStack.top();
-
-    containerStack.pop();
+    m_ContainerStack.Get().pop();
 
     if ( setParent )
     {
-        if (containerStack.empty())
+        if ( m_ContainerStack.Get().empty() )
         {
             m_Container->AddChild(child);
         }
         else
         {
-            Container* parent = containerStack.top();
+            Container* parent = m_ContainerStack.Get().top();
 
             parent->AddChild(child);
         }
@@ -64,11 +53,9 @@ Container* Interpreter::Pop( bool setParent )
 
 Container* Interpreter::Top()
 {
-    std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
-
-    if ( !containerStack.empty() )
+    if ( !m_ContainerStack.Get().empty() )
     {
-        return containerStack.top();
+        return m_ContainerStack.Get().top();
     }
 
     return NULL;
@@ -79,8 +66,7 @@ Label* Interpreter::AddLabel(const tstring& name)
     LabelPtr control = new Label ();
     control->Bind( new StringFormatter<tstring>( new tstring( name ), true ) );
 
-    std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
-    containerStack.top()->AddChild(control);
+    m_ContainerStack.Get().top()->AddChild(control);
 
     return control;
 }
@@ -90,8 +76,7 @@ Button* Interpreter::AddButton( const ButtonClickedSignature::Delegate& listener
     ButtonPtr control = new Button ();
     control->ButtonClickedEvent().Add( listener );
 
-    std::stack< ContainerPtr >& containerStack = GetCurrentContainerStack();
-    containerStack.top()->AddChild(control);
+    m_ContainerStack.Get().top()->AddChild(control);
 
     return control;
 }

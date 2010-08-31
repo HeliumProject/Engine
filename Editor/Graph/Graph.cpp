@@ -362,7 +362,7 @@ private:
 	Group *m_group;
 };
 
-BEGIN_EVENT_TABLE(Graph, Canvas)
+BEGIN_EVENT_TABLE(Graph, GraphCanvas)
 	EVT_LEFT_DOWN(Graph::OnLeftDown)
 	EVT_MOTION(Graph::OnMotion)
 //	EVT_LEAVE_WINDOW(Graph::OnLeave)
@@ -373,7 +373,7 @@ END_EVENT_TABLE()
 
 Graph::Graph(wxWindow *parent)
 	: Shape()
-	, Canvas(parent)
+	, GraphCanvas(parent)
 	, m_last_selected(NULL)
 	, m_type(wxT(""))
 	, m_update(false)
@@ -421,7 +421,7 @@ Graph::EndUpdate()
 	if (!IsFrozen() && m_update)
 	{
 		GenerateCode();
-		Canvas::Redraw(true);
+		GraphCanvas::Redraw(true);
 	}
 }
 
@@ -601,7 +601,7 @@ void
 Graph::Center(Shape *shape)
 {
 	wxRect bbox = shape->GetBBox();
-	Canvas::Center((bbox.GetLeft() + bbox.GetRight()) / 2, (bbox.GetTop() + bbox.GetBottom()) / 2);
+	GraphCanvas::Center((bbox.GetLeft() + bbox.GetRight()) / 2, (bbox.GetTop() + bbox.GetBottom()) / 2);
 }
 
 void

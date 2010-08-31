@@ -6,14 +6,12 @@
 
 #include "Core/Scene/PropertiesGenerator.h"
 
-#include "Editor/Inspect/TreeCanvasCtrl.h"
-
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
 
-SettingInfo::SettingInfo( Reflect::ElementPtr& source, Reflect::ElementPtr& clone, Inspect::CanvasPtr& canvas )
+SettingInfo::SettingInfo( Reflect::ElementPtr& source, Reflect::ElementPtr& clone, Editor::TreeCanvasPtr& canvas )
 : m_Source( source )
 , m_Clone( clone )
 , m_Canvas( canvas )
@@ -55,19 +53,15 @@ int SettingsDialog::ShowModal( Core::SettingsManager* settingsManager )
         Reflect::ElementPtr clone = (*itr).second->Clone();
         clone->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &SettingsDialog::OnRefreshElements ) );
 
-        Inspect::CanvasPtr canvas = new Inspect::Canvas();
+        Helium::TreeWndCtrl* treeWndCtrl = new Helium::TreeWndCtrl( this );
+        Editor::TreeCanvasPtr canvas = new Editor::TreeCanvas( treeWndCtrl );
         canvasControls.push_back( canvas );
 #ifdef INSPECT_REFACTOR
         canvas->SetPanelsExpanded( true );
 #endif
 
-        Inspect::TreeCanvasCtrl* canvasWindow = new Inspect::TreeCanvasCtrl( this );
-#ifdef INSPECT_REFACTOR
-        canvas->SetControl( canvasWindow );
-#endif
-
-        m_SettingSizer->Add( canvasWindow, 1, wxEXPAND, 0 );
-        m_SettingSizer->Show( canvasWindow, false );
+        m_SettingSizer->Add( treeWndCtrl, 1, wxEXPAND, 0 );
+        m_SettingSizer->Show( treeWndCtrl, false );
 
         Inspect::ReflectInterpreterPtr interpreter = new Inspect::ReflectInterpreter( canvas );
         std::vector< Reflect::Element* > elems;

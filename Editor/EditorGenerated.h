@@ -39,6 +39,7 @@ namespace Helium{ namespace Editor{ class Frame; } }
 #include <wx/dataview.h>
 #include <wx/notebook.h>
 #include <wx/radiobut.h>
+#include "Editor/Controls/Tree/TreeWndCtrl.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -392,7 +393,7 @@ namespace Helium
 				wxPanel* m_ControlsPanel;
 				wxRadioButton* m_IntersectionButton;
 				wxRadioButton* m_UnionButton;
-				wxPanel* m_PropertiesPanel;
+				Helium::TreeWndCtrl* m_TreeWndCtrl;
 				
 				// Virtual event handlers, overide them in your derived class
 				virtual void OnIntersection( wxCommandEvent& event ) { event.Skip(); }

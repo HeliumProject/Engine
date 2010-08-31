@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "Editor/Graph/Canvas.h"
+#include "Editor/Graph/GraphCanvas.h"
 
 #include <wx/metafile.h>
 #include <wx/dcbuffer.h>
@@ -9,18 +9,18 @@
 #include "Editor/Graph/RulerMemoryDC.h"
 #include "Editor/Graph/Debug.h"
 
-BEGIN_EVENT_TABLE(Canvas, wxScrolledWindow)
-	EVT_SIZE(Canvas::OnResize)
-	EVT_LEFT_DOWN(Canvas::OnLeftDown)
-	EVT_LEFT_UP(Canvas::OnLeftUp)
-	EVT_MOTION(Canvas::OnMotion)
-	EVT_MOUSEWHEEL(Canvas::OnMouseWheel)
-	EVT_KEY_DOWN(Canvas::OnKeyDown)
-	EVT_ERASE_BACKGROUND(Canvas::OnEraseBackground)
-	EVT_PAINT(Canvas::OnPaint)
+BEGIN_EVENT_TABLE(GraphCanvas, wxScrolledWindow)
+	EVT_SIZE(GraphCanvas::OnResize)
+	EVT_LEFT_DOWN(GraphCanvas::OnLeftDown)
+	EVT_LEFT_UP(GraphCanvas::OnLeftUp)
+	EVT_MOTION(GraphCanvas::OnMotion)
+	EVT_MOUSEWHEEL(GraphCanvas::OnMouseWheel)
+	EVT_KEY_DOWN(GraphCanvas::OnKeyDown)
+	EVT_ERASE_BACKGROUND(GraphCanvas::OnEraseBackground)
+	EVT_PAINT(GraphCanvas::OnPaint)
 END_EVENT_TABLE()
 
-Canvas::Canvas(wxWindow* parent, int border) :
+GraphCanvas::GraphCanvas(wxWindow* parent, int border) :
 	wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxALWAYS_SHOW_SB | wxHSCROLL | wxVSCROLL),
 	m_BorderSize(border),
 	m_HandCursor(wxCURSOR_SIZING),
@@ -36,14 +36,14 @@ Canvas::Canvas(wxWindow* parent, int border) :
 }
 
 void
-Canvas::OnResize(wxSizeEvent &evt)
+GraphCanvas::OnResize(wxSizeEvent &evt)
 {
 	Redraw(false);
 	evt.Skip();
 }
 
 void
-Canvas::OnLeftDown(wxMouseEvent &evt)
+GraphCanvas::OnLeftDown(wxMouseEvent &evt)
 {
 	m_HasDragged = false;
 	m_LeftX = evt.GetX() - m_BorderSize;
@@ -52,7 +52,7 @@ Canvas::OnLeftDown(wxMouseEvent &evt)
 }
 
 void
-Canvas::OnLeftUp(wxMouseEvent& evt)
+GraphCanvas::OnLeftUp(wxMouseEvent& evt)
 {
 	if (m_HasDragged)
 	{
@@ -64,7 +64,7 @@ Canvas::OnLeftUp(wxMouseEvent& evt)
 }
 
 void
-Canvas::OnMotion(wxMouseEvent& evt)
+GraphCanvas::OnMotion(wxMouseEvent& evt)
 {
 	m_MouseX = evt.GetX() - m_BorderSize;
 	m_MouseY = evt.GetY() - m_BorderSize;
@@ -95,7 +95,7 @@ Canvas::OnMotion(wxMouseEvent& evt)
 }
 
 void
-Canvas::OnMouseWheel(wxMouseEvent& evt)
+GraphCanvas::OnMouseWheel(wxMouseEvent& evt)
 {
 	if (evt.GetWheelRotation() > 0)
 	{
@@ -108,7 +108,7 @@ Canvas::OnMouseWheel(wxMouseEvent& evt)
 }
 
 void
-Canvas::OnKeyDown(wxKeyEvent& evt)
+GraphCanvas::OnKeyDown(wxKeyEvent& evt)
 {
 	int x, y;
 
@@ -146,13 +146,13 @@ Canvas::OnKeyDown(wxKeyEvent& evt)
 }
 
 void
-Canvas::OnEraseBackground(wxEraseEvent& evt)
+GraphCanvas::OnEraseBackground(wxEraseEvent& evt)
 {
 	(void)evt;
 }
 
 void
-Canvas::OnPaint(wxPaintEvent& evt)
+GraphCanvas::OnPaint(wxPaintEvent& evt)
 {
 	// __REMARK__
 	// Previously we were using a wxMetafileDC to both evaluate the
@@ -214,20 +214,20 @@ Canvas::OnPaint(wxPaintEvent& evt)
 }
 
 bool
-Canvas::HasDragged()
+GraphCanvas::HasDragged()
 {
 	return m_HasDragged;
 }
 
 void
-Canvas::Redraw(bool force)
+GraphCanvas::Redraw(bool force)
 {
 	if (force)
 	{
 		// __REMARK__
 		// The redrawing is actually just an evaluation of the
 		// graph size so that we can set the virtual size of the
-		// Canvas accordingly.
+		// GraphCanvas accordingly.
 		RulerMemoryDC ruler;
 		Paint(ruler);
 		// Oddly enough, if we directly set width and height
@@ -258,7 +258,7 @@ Canvas::Redraw(bool force)
 }
 
 double
-Canvas::SetZoom(double zoom)
+GraphCanvas::SetZoom(double zoom)
 {
 	if (zoom > 0.1f && zoom < 4.0f)
 	{
@@ -275,13 +275,13 @@ Canvas::SetZoom(double zoom)
 }
 
 double
-Canvas::GetZoom()
+GraphCanvas::GetZoom()
 {
 	return m_Zoom;
 }
 
 wxPoint
-Canvas::GetCenter()
+GraphCanvas::GetCenter()
 {
 	// Top left.
 	int left, top;
@@ -295,14 +295,14 @@ Canvas::GetCenter()
 }
 
 void
-Canvas::Center(int x, int y)
+GraphCanvas::Center(int x, int y)
 {
 	wxSize size = GetClientSize();
 	Scroll(x * m_Zoom - size.GetWidth() / 2, y * m_Zoom - size.GetHeight() / 2);
 }
 
 bool
-Canvas::CopyAsMetafile()
+GraphCanvas::CopyAsMetafile()
 {
 #ifdef _WIN32
 	wxMetafileDC mdc;
@@ -317,7 +317,7 @@ Canvas::CopyAsMetafile()
 }
 
 void
-Canvas::ScrollWindow(int dx, int dy, const wxRect *rect)
+GraphCanvas::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
 	// If we're zooming, we disable the physical copy of the
 	// pixels and let OnPaint redraw the client area.
@@ -328,7 +328,7 @@ Canvas::ScrollWindow(int dx, int dy, const wxRect *rect)
 }
 
 bool
-Canvas::SetCursor(const wxCursor& cursor)
+GraphCanvas::SetCursor(const wxCursor& cursor)
 {
 	bool ret = wxScrolledWindow::SetCursor(cursor);
 	// WarpPointer is necessary to force cursor to change
@@ -339,7 +339,7 @@ Canvas::SetCursor(const wxCursor& cursor)
 }
 
 void
-Canvas::MouseToCanvas(int mousex, int mousey, int *bmx, int *bmy)
+GraphCanvas::MouseToCanvas(int mousex, int mousey, int *bmx, int *bmy)
 {
 	int clwidth, clheight;
 	GetClientSize(&clwidth, &clheight);
@@ -361,7 +361,7 @@ Canvas::MouseToCanvas(int mousex, int mousey, int *bmx, int *bmy)
 }
 
 void
-Canvas::CanvasToMouse(int bmx, int bmy, int *mousex, int *mousey)
+GraphCanvas::CanvasToMouse(int bmx, int bmy, int *mousex, int *mousey)
 {
 	int clwidth, clheight;
 	GetClientSize(&clwidth, &clheight);

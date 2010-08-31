@@ -7,14 +7,13 @@ namespace Helium
 {
     namespace Editor
     {
-        class StripCanvas : public Canvas
+        class StripCanvas : public Editor::Canvas
         {
+        public:
+            StripCanvas( wxPanel* panel );
 
-        };
-
-        class StripCanvasContainerWidget : public Widget
-        {
-
+        private:
+            wxPanel*    m_Panel;
         };
     }
 }

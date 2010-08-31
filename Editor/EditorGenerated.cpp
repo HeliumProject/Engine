@@ -430,7 +430,7 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	bSizer26->Add( m_MainPanel, 0, wxEXPAND | wxALL, 0 );
 	
 	m_ToolsPropertiesPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bSizer26->Add( m_ToolsPropertiesPanel, 0, wxEXPAND | wxALL, 0 );
+	bSizer26->Add( m_ToolsPropertiesPanel, 1, wxALL|wxEXPAND, 0 );
 	
 	this->SetSizer( bSizer26 );
 	this->Layout();
@@ -900,14 +900,8 @@ PropertiesPanelGenerated::PropertiesPanelGenerated( wxWindow* parent, wxWindowID
 	bSizer33->Fit( m_ControlsPanel );
 	bSizer32->Add( m_ControlsPanel, 0, wxEXPAND | wxALL, 2 );
 	
-	m_PropertiesPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer34;
-	bSizer34 = new wxBoxSizer( wxVERTICAL );
-	
-	m_PropertiesPanel->SetSizer( bSizer34 );
-	m_PropertiesPanel->Layout();
-	bSizer34->Fit( m_PropertiesPanel );
-	bSizer32->Add( m_PropertiesPanel, 1, wxEXPAND | wxALL, 2 );
+	m_TreeWndCtrl = new Helium::TreeWndCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxScrolledWindowStyle | wxALWAYS_SHOW_SB | wxCLIP_CHILDREN | wxNO_BORDER );
+	bSizer32->Add( m_TreeWndCtrl, 1, wxALL|wxEXPAND, 5 );
 	
 	this->SetSizer( bSizer32 );
 	this->Layout();

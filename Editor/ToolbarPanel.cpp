@@ -10,6 +10,9 @@ using namespace Helium::Editor;
 
 ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
 : ToolbarPanelGenerated( parent, id, pos, size, style )
+, m_ToolPropertiesCanvas( m_ToolsPropertiesPanel )
+, m_ToolPropertiesGenerator( &m_ToolPropertiesCanvas )
+, m_ToolPropertiesManager( &m_ToolPropertiesGenerator )
 {
     SetHelpText( TXT( "This is the Toolbar, it provides access to commonly used actions and tools." ) );
 

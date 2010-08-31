@@ -1021,16 +1021,16 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxBoxSizer" expanded="0">
+            <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">bSizer26</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
-                <object class="sizeritem" expanded="0">
+                <object class="sizeritem" expanded="1">
                     <property name="border">0</property>
                     <property name="flag">wxEXPAND | wxALL</property>
                     <property name="proportion">0</property>
-                    <object class="wxPanel" expanded="0">
+                    <object class="wxPanel" expanded="1">
                         <property name="bg"></property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>
@@ -2079,8 +2079,8 @@
                 </object>
                 <object class="sizeritem" expanded="0">
                     <property name="border">0</property>
-                    <property name="flag">wxEXPAND | wxALL</property>
-                    <property name="proportion">0</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
+                    <property name="proportion">1</property>
                     <object class="wxPanel" expanded="0">
                         <property name="bg"></property>
                         <property name="context_help"></property>
@@ -5392,16 +5392,16 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxBoxSizer" expanded="0">
+            <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">bSizer32</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
-                <object class="sizeritem" expanded="0">
+                <object class="sizeritem" expanded="1">
                     <property name="border">2</property>
                     <property name="flag">wxEXPAND | wxALL</property>
                     <property name="proportion">0</property>
-                    <object class="wxPanel" expanded="0">
+                    <object class="wxPanel" expanded="1">
                         <property name="bg"></property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>
@@ -5448,7 +5448,7 @@
                         <event name="OnSetFocus"></event>
                         <event name="OnSize"></event>
                         <event name="OnUpdateUI"></event>
-                        <object class="wxBoxSizer" expanded="0">
+                        <object class="wxBoxSizer" expanded="1">
                             <property name="minimum_size"></property>
                             <property name="name">bSizer33</property>
                             <property name="orient">wxHORIZONTAL</property>
@@ -5570,26 +5570,31 @@
                         </object>
                     </object>
                 </object>
-                <object class="sizeritem" expanded="0">
-                    <property name="border">2</property>
-                    <property name="flag">wxEXPAND | wxALL</property>
+                <object class="sizeritem" expanded="1">
+                    <property name="border">5</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">1</property>
-                    <object class="wxPanel" expanded="0">
+                    <object class="CustomControl" expanded="1">
                         <property name="bg"></property>
+                        <property name="class">Helium::TreeWndCtrl</property>
+                        <property name="construction">m_TreeWndCtrl = new Helium::TreeWndCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxScrolledWindowStyle | wxALWAYS_SHOW_SB | wxCLIP_CHILDREN | wxNO_BORDER );</property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>
+                        <property name="declaration">Helium::TreeWndCtrl* m_TreeWndCtrl;</property>
                         <property name="enabled">1</property>
                         <property name="fg"></property>
                         <property name="font"></property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
+                        <property name="include">#include &quot;Editor/Controls/Tree/TreeWndCtrl.h&quot;</property>
                         <property name="maximum_size"></property>
                         <property name="minimum_size"></property>
-                        <property name="name">m_PropertiesPanel</property>
+                        <property name="name">m_TreeWndCtrl</property>
                         <property name="permission">protected</property>
                         <property name="pos"></property>
+                        <property name="settings"></property>
                         <property name="size"></property>
-                        <property name="subclass"></property>
+                        <property name="subclass">; </property>
                         <property name="tooltip"></property>
                         <property name="validator_data_type"></property>
                         <property name="validator_style">wxFILTER_NONE</property>
@@ -5597,7 +5602,7 @@
                         <property name="validator_variable"></property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
-                        <property name="window_style">wxTAB_TRAVERSAL</property>
+                        <property name="window_style"></property>
                         <event name="OnChar"></event>
                         <event name="OnEnterWindow"></event>
                         <event name="OnEraseBackground"></event>
@@ -5621,12 +5626,6 @@
                         <event name="OnSetFocus"></event>
                         <event name="OnSize"></event>
                         <event name="OnUpdateUI"></event>
-                        <object class="wxBoxSizer" expanded="0">
-                            <property name="minimum_size"></property>
-                            <property name="name">bSizer34</property>
-                            <property name="orient">wxVERTICAL</property>
-                            <property name="permission">none</property>
-                        </object>
                     </object>
                 </object>
             </object>

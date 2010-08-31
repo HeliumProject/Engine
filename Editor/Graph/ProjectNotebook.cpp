@@ -164,7 +164,7 @@ Project::Load(wxWindow *parent, MenuState *menu, const wxString& filename)
 	{
 		Panel *panel = (Panel *)l_instance->GetPage(index);
 		panel->GetUndoerCtrl()->Clear();
-		panel->GetGraphCtrl()->Canvas::Redraw(true);
+		panel->GetGraphCtrl()->GraphCanvas::Redraw(true);
 		panel->GetGraphCtrl()->GenerateCode();
 	}
 }

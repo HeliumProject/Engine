@@ -1,9 +1,9 @@
 #pragma once
 
-class Canvas: public wxScrolledWindow
+class GraphCanvas: public wxScrolledWindow
 {
 	public:
-		Canvas(wxWindow *parent, int border = 0);
+		GraphCanvas(wxWindow *parent, int border = 0);
 
 		virtual void Paint(wxDC& dc) = 0;
 
@@ -43,7 +43,7 @@ class Canvas: public wxScrolledWindow
 		bool		m_Zooming;
 		//std::vector<wxRect> m_Clickable;
 	
-	DECLARE_NO_COPY_CLASS(Canvas)
+	DECLARE_NO_COPY_CLASS(GraphCanvas)
 	DECLARE_EVENT_TABLE()
 };
 

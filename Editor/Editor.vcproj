@@ -1178,14 +1178,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Graph\Canvas.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Graph\Canvas.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Graph\Clipboard.h"
 				>
 			</File>
@@ -1211,6 +1203,14 @@
 			</File>
 			<File
 				RelativePath=".\Graph\Graph.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\GraphCanvas.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\GraphCanvas.h"
 				>
 			</File>
 			<File
@@ -1558,27 +1558,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Inspect\StripCanvasCtrl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Inspect\StripCanvasCtrl.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Inspect\TreeCanvas.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Inspect\TreeCanvas.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Inspect\TreeCanvasCtrl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Inspect\TreeCanvasCtrl.h"
 				>
 			</File>
 			<File
@@ -2212,14 +2196,6 @@
 		</File>
 		<File
 			RelativePath=".\SceneOutlinerState.h"
-			>
-		</File>
-		<File
-			RelativePath=".\SelectionPropertiesPanel.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\SelectionPropertiesPanel.h"
 			>
 		</File>
 		<File

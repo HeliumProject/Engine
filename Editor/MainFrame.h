@@ -26,8 +26,8 @@
 #include "Editor/MessageDisplayer.h"
 #include "Editor/FileDialogDisplayer.h"
 
-#include "Editor/Inspect/TreeCanvasCtrl.h"
-#include "Editor/Inspect/StripCanvasCtrl.h"
+#include "Editor/Inspect/TreeCanvas.h"
+#include "Editor/Inspect/StripCanvas.h"
 
 #include "Core/Project.h"
 
@@ -86,18 +86,6 @@ namespace Helium
             Core::SceneManager          m_SceneManager;
 
             Core::SettingsManager*      m_SettingsManager;
-
-            // the attributes for the current selection
-            Core::EnumeratorPtr         m_SelectionEnumerator;
-            Core::PropertiesManagerPtr  m_SelectionPropertiesManager;
-            Inspect::Canvas             m_SelectionPropertiesCanvas;
-            Inspect::TreeCanvasCtrl*    m_SelectionPropertiesControl;
-
-            // the attributes for the current tool
-            Core::EnumeratorPtr         m_ToolEnumerator;
-            Core::PropertiesManagerPtr  m_ToolPropertiesManager;
-            Inspect::Canvas             m_ToolPropertiesCanvas;
-            Inspect::StripCanvasCtrl*   m_ToolPropertiesControl;
 
             MenuMRUPtr                  m_MRU;
             M_IDToColorMode             m_ColorModeLookup;

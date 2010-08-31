@@ -391,7 +391,7 @@ int Helium::Shutdown( int code )
         if ( !Helium::GetCmdLineFlag( StartupArgs::DisableDebugHeap ) && !Helium::GetCmdLineFlag( StartupArgs::DisableLeakCheck ) )
         {
             int flags = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
-            _CrtSetDbgFlag( flags | _CRTDBG_LEAK_CHECK_DF );
+            _CrtSetDbgFlag( flags | _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
             _CrtSetReportMode( _CRT_WARN, _CRTDBG_MODE_DEBUG | _CRTDBG_MODE_FILE );
             _CrtSetReportFile( _CRT_WARN, _CRTDBG_FILE_STDERR );
             _CrtSetReportMode( _CRT_ERROR, _CRTDBG_MODE_DEBUG | _CRTDBG_MODE_FILE );

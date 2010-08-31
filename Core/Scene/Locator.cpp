@@ -47,6 +47,7 @@ Locator::~Locator()
 
 i32 Locator::GetImageIndex() const
 {
+#pragma TODO( "Fix this up somehow" )
   return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "locator" ) );
 }
 

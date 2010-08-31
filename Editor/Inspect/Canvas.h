@@ -11,6 +11,11 @@ namespace Helium
         public:
             Canvas( wxWindow* window );
 
+            virtual wxWindow* GetWindow()
+            {
+                return m_Window;
+            }
+
             // callbacks from the window
             virtual void OnShow(wxShowEvent&);
             virtual void OnClick(wxMouseEvent&);

@@ -116,10 +116,10 @@ void PropertiesManager::CreateProperties()
     }
 
 #ifdef INSPECT_REFACTOR
-    m_PreviousScroll = m_Generator->GetContainer()->GetCanvas()->GetScroll();
+    m_PreviousScroll = m_Generator->GetContainer()->GetWindow()->GetScroll();
 
     // early out if we are not visible
-    if (!m_Generator->GetContainer()->GetCanvas()->GetWindow()->IsShown())
+    if (!m_Generator->GetContainer()->GetWidget()->GetWindow()->IsShown())
     {
         return;
     }
@@ -173,9 +173,10 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
     //  Then coallate those results into an intersection member (common)
     //
 
-#pragma TODO( "selection.Empty() should always be false, so s_PanelCreators should always be used" )
+    HELIUM_ASSERT( !selection.Empty() );
+
     // intersection support
-    M_PanelCreators intersectingPanels = selection.Empty() ? M_PanelCreators () : s_PanelCreators;
+    M_PanelCreators intersectingPanels = s_PanelCreators;
 
     // union support
     typedef std::map< tstring, OS_SelectableDumbPtr > M_UnionedSelections;
@@ -434,9 +435,7 @@ void PropertiesManager::FinalizeProperties( u32 selectionId, const Inspect::V_Co
 #ifdef INSPECT_REFACTOR
     m_Generator->GetContainer()->GetCanvas()->Freeze();
     m_Generator->GetContainer()->GetCanvas()->Layout(); // Realize now? -Geoff
-#endif
 
-#ifdef INSPECT_REFACTOR
     m_Generator->GetContainer()->GetCanvas()->SetScroll( m_PreviousScroll );
 #endif
 

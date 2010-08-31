@@ -773,14 +773,14 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
     if ( m_LayerColor )
     {
       const Math::Color3& color = m_LayerColor->GetColor();
-      material.Ambient = Core::Color::ColorToColorValue( defaultMaterial.Ambient.a, color.r, color.g, color.b );
+      material.Ambient = Core::Color::ColorToColorValue( (DWORD)defaultMaterial.Ambient.a, color.r, color.g, color.b );
     }
     break;
 
   case ViewColorModes::Scene:
     {
       const Math::Color3& color = m_Owner->GetColor();
-      material.Ambient = Core::Color::ColorToColorValue( defaultMaterial.Ambient.a, color.r, color.g, color.b );
+      material.Ambient = Core::Color::ColorToColorValue( (DWORD)defaultMaterial.Ambient.a, color.r, color.g, color.b );
     }
     break;
   }

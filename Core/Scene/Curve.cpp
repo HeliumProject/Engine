@@ -556,7 +556,7 @@ Undo::CommandPtr Curve::CenterTransform()
                 position += point->GetPosition();
             }
         }
-        position /= controlPointCount;
+        position /= (f32)controlPointCount;
     }
 
     m_GlobalTransform.TransformVertex( position );
@@ -877,10 +877,10 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
                         const float offsetY = 15;
 
                         RECT rect;
-                        rect.top = screenY - offsetY;
-                        rect.left = screenX - offsetX;
-                        rect.right = screenX;
-                        rect.bottom = screenY - 2;
+                        rect.top = (LONG)( screenY - offsetY );
+                        rect.left = (LONG)( screenX - offsetX );
+                        rect.right = (LONG)screenX;
+                        rect.bottom = (LONG)( screenY - 2 );
 
                         _stprintf_s( textBuf, sizeof( textBuf ), label.str().c_str(), i );
                         font->DrawText( NULL, textBuf, -1, &rect, DT_NOCLIP, color );

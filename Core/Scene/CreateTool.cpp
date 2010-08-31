@@ -133,7 +133,7 @@ void CreateTool::DetermineTranslationAndNormal( int x, int y, Math::Vector3& t, 
     if ( !DetermineTranslationAndNormal( pick, t, n ) )
     {
         // place the object on the selected plane
-        m_Scene->GetViewport()->GetCamera()->ViewportToPlaneVertex( x, y, s_PlaneSnap, t );
+        m_Scene->GetViewport()->GetCamera()->ViewportToPlaneVertex( (f32)x, (f32)y, s_PlaneSnap, t );
     }
 }
 

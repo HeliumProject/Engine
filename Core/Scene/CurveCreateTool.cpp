@@ -129,7 +129,7 @@ void CurveCreateTool::PickPosition(int x, int y, Math::Vector3 &position)
     if (!set)
     {
         // place the object on the camera plane
-        m_Scene->GetViewport()->GetCamera()->ViewportToPlaneVertex(x, y, Core::CreateTool::s_PlaneSnap, position);
+        m_Scene->GetViewport()->GetCamera()->ViewportToPlaneVertex( (f32)x, (f32)y, Core::CreateTool::s_PlaneSnap, position);
     }
 }
 

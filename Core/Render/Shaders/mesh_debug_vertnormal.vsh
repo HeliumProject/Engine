@@ -16,7 +16,7 @@ VS_OUTPUT main( in float4 position : POSITION, in float3 normal : TEXCOORD0)
 	VS_OUTPUT output;
 	
 	float4 ws_pos = mul( position, g_world );
-	float3 ws_normal = mul( normal.xyz, g_world );
+	float3 ws_normal = mul( normal.xyz, (float3x3)g_world ).xyz;
 	ws_normal = normalize(ws_normal);
 	
 	// transform the vertex into projection space. 

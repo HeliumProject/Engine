@@ -49,6 +49,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -119,6 +120,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -187,6 +189,7 @@
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -256,6 +259,7 @@
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -325,6 +329,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -395,6 +400,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -463,6 +469,7 @@
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -532,6 +539,7 @@
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool

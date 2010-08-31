@@ -54,6 +54,7 @@
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Precompile.h"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -140,6 +141,7 @@
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Precompile.h"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -223,6 +225,7 @@
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Precompile.h"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -306,6 +309,7 @@
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Precompile.h"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -392,6 +396,7 @@
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Precompile.h"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -478,6 +483,7 @@
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Precompile.h"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -561,6 +567,7 @@
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Precompile.h"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -644,6 +651,7 @@
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Precompile.h"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>

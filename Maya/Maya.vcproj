@@ -55,6 +55,7 @@
 				PrecompiledHeaderThrough="Precompile.h"
 				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="4"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -135,6 +136,7 @@
 				PrecompiledHeaderThrough="Precompile.h"
 				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -213,6 +215,7 @@
 				PrecompiledHeaderThrough="Precompile.h"
 				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -291,6 +294,7 @@
 				PrecompiledHeaderThrough="Precompile.h"
 				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -371,6 +375,7 @@
 				PrecompiledHeaderThrough="Precompile.h"
 				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="4"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -451,6 +456,7 @@
 				PrecompiledHeaderThrough="Precompile.h"
 				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -529,6 +535,7 @@
 				PrecompiledHeaderThrough="Precompile.h"
 				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -607,6 +614,7 @@
 				PrecompiledHeaderThrough="Precompile.h"
 				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>

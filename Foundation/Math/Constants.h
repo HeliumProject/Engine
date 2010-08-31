@@ -74,7 +74,8 @@ namespace Helium
         const f32 LinearIntersectionError = 0.05f;
 
         const i64 BigInt = 0x40000000;
-        const f64 BigFloat = 1000000000000.0;
+        const f32 BigFloat = 1000000000000.0f;
+        const f64 BigDouble = 1000000000000.0;
 
         //
         // from http://en.wikipedia.org/wiki/Luminance_(relative)

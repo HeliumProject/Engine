@@ -29,10 +29,10 @@ float4   g_base_tint		: register(c14);		//xyze base tint
 float2 ComputeParallaxUV( float2 uv, half parallax, half3 eye_vec)
 {
   // scale and bias parallax value
-  half offset = g_parallax_params.x * parallax + g_parallax_params.y;
+  half offset = (half)( g_parallax_params.x * parallax + g_parallax_params.y );
 
   // normalize eye vector in tangent space
-  half3 eye_vec_nrm = normalize( eye_vec );
+  half3 eye_vec_nrm = (half3)normalize( eye_vec );
 
   // adjust uv for parallax effect
   return float2(eye_vec_nrm.xy * offset) + uv;
@@ -49,47 +49,47 @@ float4 main
     in float3 ts_vert_to_eye_vec	: TEXCOORD6
 ) : COLOR0
 {
-  half4 para_map = tex2D(g_parallax_map,uv).g;
+  half4 para_map = (half4)tex2D(g_parallax_map,uv).g;
   
   // adjust the uv's based on parallax for all the other samplers
-  uv = ComputeParallaxUV(uv,para_map,ts_vert_to_eye_vec);
+  uv = ComputeParallaxUV(uv, (half)para_map, (half3)ts_vert_to_eye_vec);
 
   // sample the base map with the tint color
-  half4 base = tex2D(g_base_map,uv)*g_base_tint;
+  half4 base = half4( tex2D(g_base_map,uv)*g_base_tint );
 
   // incan value
   float4 incan = base*tex2D(g_incan_map,uv)*g_normal_params.w;
 
   // take the tangent space normal back to world space   
-  half4 normal = (tex2D(g_normal_map,uv)*2.0f)-1.0f;
-  normal.xy*=g_normal_params.x;                                      // scale the normal response
+  half4 normal = (half4)( (tex2D(g_normal_map,uv)*2.0f)-1.0f );
+  normal.xy *= (half)g_normal_params.x;                                      // scale the normal response
   half3 ws_normal;
-  ws_normal  = normal.x * ws_vtangent;
-  ws_normal += normal.y * ws_vbinormal;
-  ws_normal += normal.z * ws_vnormal;
-  ws_normal  = normalize(ws_normal);
+  ws_normal  = (half3)( normal.x * ws_vtangent );
+  ws_normal += (half3)( normal.y * ws_vbinormal );
+  ws_normal += (half3)( normal.z * ws_vnormal );
+  ws_normal  = (half3)normalize(ws_normal);
 
   //return half4((ws_normal+1)/2,1);
 
   // compute the spherical harmonic lighting
   half3 norm2 = ws_normal*ws_normal;
   half3 normd = ws_normal.xzy*ws_normal.zyx;
-  half4 diffuse = g_sh[0];
-  diffuse += g_sh[1] * ws_normal.x;
-  diffuse += g_sh[2] * ws_normal.y;
-  diffuse += g_sh[3] * ws_normal.z;
-  diffuse += g_sh[4] * normd.x;
-  diffuse += g_sh[5] * normd.y;
-  diffuse += g_sh[6] * normd.z;  
-  diffuse += g_sh[7] * norm2.z;
-  diffuse += g_sh[8] * (norm2.x - norm2.y);	
+  half4 diffuse = (half4)g_sh[0];
+  diffuse += (half4)( g_sh[1] * ws_normal.x );
+  diffuse += (half4)( g_sh[2] * ws_normal.y );
+  diffuse += (half4)( g_sh[3] * ws_normal.z );
+  diffuse += (half4)( g_sh[4] * normd.x );
+  diffuse += (half4)( g_sh[5] * normd.y );
+  diffuse += (half4)( g_sh[6] * normd.z );  
+  diffuse += (half4)( g_sh[7] * norm2.z );
+  diffuse += (half4)( g_sh[8] * (norm2.x - norm2.y) );
 
   //return scaled diffuse;
-  diffuse*=g_exposure.y;
+  diffuse *= (half4)g_exposure.y;
 
   // compute final diffuse
-  diffuse*=base;
-  diffuse+=incan;
+  diffuse *= base;
+  diffuse += (half4)incan;
 
   // compute the reflection vector and the specular from the environment
   float3 reflect_vec = reflect(ws_view_vec,ws_normal);  
@@ -106,6 +106,5 @@ float4 main
   float3 gloss_tint = lerp(g_gloss_tint.rgb, base.rgb, g_gloss_tint.w);
   specular*=(gloss_tint*gloss_scale);  
 
-  return half4((diffuse+specular)*g_exposure.x,base.w*color.w);
-  
+  return half4( ( diffuse.xyz + specular ) * g_exposure.x, base.w * color.w );
 }

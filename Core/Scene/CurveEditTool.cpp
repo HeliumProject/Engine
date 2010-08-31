@@ -186,7 +186,7 @@ void CurveEditTool::KeyPress( const KeyboardInput& e )
 
     i32 keyCode = e.GetKeyCode();
 
-    if ( keyCode == KeyCodes::Left || keyCode == KeyCode::Up || keyCode == KeyCodes::Right || keyCode == KeyCodes::Down )
+    if ( keyCode == KeyCodes::Left || keyCode == KeyCodes::Up || keyCode == KeyCodes::Right || keyCode == KeyCodes::Down )
     {
         OS_SelectableDumbPtr selection = m_Scene->GetSelection().GetItems();
 

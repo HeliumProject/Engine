@@ -146,7 +146,6 @@ ThreadLocalPointer::~ThreadLocalPointer()
 void* ThreadLocalPointer::GetPointer()
 {
     void* value = TlsGetValue(m_Key);
-    HELIUM_ASSERT( value );
     return value;
 }
 

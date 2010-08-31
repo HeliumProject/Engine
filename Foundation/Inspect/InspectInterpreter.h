@@ -56,11 +56,6 @@ namespace Helium
         class ContainerStackPointer : public ThreadLocalPointer
         {
         public:
-            ContainerStackPointer()
-            {
-                SetPointer( new std::stack< ContainerPtr > );
-            }
-
             ~ContainerStackPointer()
             {
                 std::stack< ContainerPtr >* stack = (std::stack< ContainerPtr >*)GetPointer();
@@ -69,7 +64,14 @@ namespace Helium
 
             std::stack< ContainerPtr >& Get()
             {
-                return *(std::stack< ContainerPtr >*)GetPointer();
+                std::stack< ContainerPtr >* pointer = (std::stack< ContainerPtr >*)GetPointer();
+                
+                if ( !pointer )
+                {
+                    SetPointer( pointer = new std::stack< ContainerPtr > );
+                }
+
+                return *pointer;
             }
         };
 

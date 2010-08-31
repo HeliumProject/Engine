@@ -6,7 +6,10 @@ using namespace Helium::Inspect;
 
 Container::Container()
 {
-
+    a_IsEnabled.Changed().AddMethod( this, &Container::IsEnabledChanged );
+    a_IsReadOnly.Changed().AddMethod( this, &Container::IsReadOnlyChanged );
+    a_IsFrozen.Changed().AddMethod( this, &Container::IsFrozenChanged );
+    a_IsHidden.Changed().AddMethod( this, &Container::IsHiddenChanged );
 }
 
 Container::~Container()
@@ -21,8 +24,6 @@ void Container::AddChild(Control* control)
     control->a_IsFrozen.Set( a_IsFrozen.Get() );
     control->a_IsHidden.Set( a_IsHidden.Get() );
 
-    AddListeners( control );
-
     m_Children.push_back( control );
 }
 
@@ -32,8 +33,6 @@ void Container::InsertChild(int index, Control* control)
     control->a_IsReadOnly.Set( a_IsReadOnly.Get() );
     control->a_IsFrozen.Set( a_IsFrozen.Get() );
     control->a_IsHidden.Set( a_IsHidden.Get() );
-
-    AddListeners( control );
 
     m_Children.insert(m_Children.begin() + index, control);
 }
@@ -54,8 +53,6 @@ void Container::RemoveChild(Control* control)
 
     // unrealize the control
     control->Unrealize();
-
-    RemoveListeners( control );
 }
 
 void Container::Clear()
@@ -133,22 +130,6 @@ bool Container::Write()
     }
 
     return result && __super::Write();
-}
-
-void Container::AddListeners( Control* control )
-{
-    control->a_IsEnabled.Changed().AddMethod( this, &Container::IsEnabledChanged );
-    control->a_IsReadOnly.Changed().AddMethod( this, &Container::IsReadOnlyChanged );
-    control->a_IsFrozen.Changed().AddMethod( this, &Container::IsFrozenChanged );
-    control->a_IsHidden.Changed().AddMethod( this, &Container::IsHiddenChanged );
-}
-
-void Container::RemoveListeners( Control* control )
-{
-    control->a_IsEnabled.Changed().RemoveMethod( this, &Container::IsEnabledChanged );
-    control->a_IsReadOnly.Changed().RemoveMethod( this, &Container::IsReadOnlyChanged );
-    control->a_IsFrozen.Changed().RemoveMethod( this, &Container::IsFrozenChanged );
-    control->a_IsHidden.Changed().RemoveMethod( this, &Container::IsHiddenChanged );
 }
 
 void Container::IsEnabledChanged( const Attribute<bool>::ChangeArgs& args )

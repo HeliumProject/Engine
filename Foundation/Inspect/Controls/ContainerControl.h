@@ -70,8 +70,6 @@ namespace Helium
             mutable ControlSignature::Event     e_ControlRemoved;
 
         private:
-            void AddListeners( Control* control );
-            void RemoveListeners( Control* control );
             void IsEnabledChanged( const Attribute<bool>::ChangeArgs& args );
             void IsReadOnlyChanged( const Attribute<bool>::ChangeArgs& args );
             void IsFrozenChanged( const Attribute<bool>::ChangeArgs& args );

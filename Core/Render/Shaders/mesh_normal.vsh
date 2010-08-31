@@ -29,8 +29,8 @@ VS_OUTPUT_NORMAL main
 	VS_OUTPUT_NORMAL output;
 	
 	float4 ws_pos = mul( position, g_world );
-	float3 ws_normal = mul( normal, g_world );
-	float3 ws_tangent = mul( tangent, g_world );
+	float3 ws_normal = mul( normal, (float3x3)g_world ).xyz;
+	float3 ws_tangent = mul( tangent, (float3x3)g_world ).xyz;
 	output.m_ws_normal = normalize(ws_normal);
 	output.m_ws_tangent = normalize(ws_tangent);
 	output.m_ws_binormal = cross(ws_tangent,ws_normal)*-1.0f;

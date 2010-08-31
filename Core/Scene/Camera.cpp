@@ -290,9 +290,9 @@ void Camera::MouseMove( const MouseMoveInput& e )
     case MovementModes::Track:
     {
       Vector3 p1;
-      ViewportToPlaneVertex(m_Prev.x, m_Prev.y, IntersectionPlanes::Viewport, p1);
+      ViewportToPlaneVertex( (f32)m_Prev.x, (f32)m_Prev.y, IntersectionPlanes::Viewport, p1);
       Vector3 p2;
-      ViewportToPlaneVertex(e.GetPosition().x, e.GetPosition().y, IntersectionPlanes::Viewport, p2);
+      ViewportToPlaneVertex( (f32)e.GetPosition().x, (f32)e.GetPosition().y, IntersectionPlanes::Viewport, p2);
 
       // Track vector is the translation of the m_Pivot from the starting planar intersection to the current planar intersection
       m_Pivot += p1 - p2;

@@ -160,13 +160,19 @@ namespace Helium
             class CORE_API ShaderManager
             {
             public:
-                ShaderManager(class Renderer* render);
+                ShaderManager( class Renderer* renderer = NULL );
                 ~ShaderManager();
+
+                void SetRenderer( class Renderer* renderer )
+                {
+                    m_renderer = renderer;
+                }
 
                 // don't call directly
                 void CreateDefaults();
 
             private:
+
                 u32 AddShader(Shader* sh); // assign a new shader to a handle
                 u32 LoadNewShader(const tchar* fname, ShaderLoaderPtr loader = NULL);
 

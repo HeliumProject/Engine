@@ -298,7 +298,7 @@ AxesFlags RotateManipulator::PickRing(PickVisitor* pick, float err)
     }
 
     float radius = m_Ring->m_Radius;
-    float dist, minX = Math::BigFloat, minY = Math::BigFloat, minZ = Math::BigFloat;
+    float dist = 0.0f, minX = Math::BigFloat, minY = Math::BigFloat, minZ = Math::BigFloat;
     float stepAngle = (float)Math::TwoPi / (float)(m_Ring->m_RadiusSteps);
 
     Matrix4 frame = primary->GetFrame(m_Space).Normalized();
@@ -483,7 +483,7 @@ void RotateManipulator::MouseMove( const MouseMoveInput& e )
     primaryStart.m_StartFrame.TransformVertex(startPoint);
 
     Vector3 cameraPosition;
-    m_View->GetCamera()->ViewportToWorldVertex(e.GetPosition().x, e.GetPosition().y, cameraPosition);
+    m_View->GetCamera()->ViewportToWorldVertex( (f32)e.GetPosition().x, (f32)e.GetPosition().y, cameraPosition);
 
 
     //
@@ -513,11 +513,11 @@ void RotateManipulator::MouseMove( const MouseMoveInput& e )
 
     // Pick ray from our starting location
     Line startRay;
-    m_View->GetCamera()->ViewportToLine(m_StartX, m_StartY, startRay);
+    m_View->GetCamera()->ViewportToLine( (f32)m_StartX, (f32)m_StartY, startRay);
 
     // Pick ray from our current location
     Line endRay;
-    m_View->GetCamera()->ViewportToLine(e.GetPosition().x, e.GetPosition().y, endRay);
+    m_View->GetCamera()->ViewportToLine( (f32)e.GetPosition().x, (f32)e.GetPosition().y, endRay);
 
     // Our from and to vectors for angle axis rotation about a rotation plane
     Vector3 p1, p2;
@@ -659,7 +659,7 @@ void RotateManipulator::MouseMove( const MouseMoveInput& e )
         {
             float minAngle = m_SnapDegrees * Math::DegToRad;
             float absAngle = fabs( angle );
-            int count = absAngle / minAngle;
+            int count = (int)( absAngle / minAngle );
             if ( angle < 0.0f )
             {
                 count = -count;

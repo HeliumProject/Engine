@@ -109,7 +109,6 @@ void Widget::SetWindow( wxWindow* window )
 
 void Widget::Unrealized( Inspect::Control* control )
 {
-    HELIUM_ASSERT( m_Control == control );
     m_Window->Destroy(); // will in turn destroy this object
 }
 

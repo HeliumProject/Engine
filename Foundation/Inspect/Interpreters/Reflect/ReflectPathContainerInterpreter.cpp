@@ -9,8 +9,8 @@
 #include "Foundation/Inspect/Controls/ChoiceControl.h"
 #include "Foundation/Inspect/Controls/ListControl.h"
 #include "Foundation/Inspect/Controls/ButtonControl.h"
-#include "Foundation/Inspect/InspectData.h"
-#include "Foundation/Inspect/InspectInit.h"
+#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/Inspect.h"
 #include "Foundation/Inspect/Interpreters/Reflect/InspectReflectInit.h"
 
 #include "Core/Asset/AssetClass.h"

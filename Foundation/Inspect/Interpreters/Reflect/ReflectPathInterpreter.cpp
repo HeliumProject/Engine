@@ -1,8 +1,8 @@
 #include "ReflectPathInterpreter.h"
 
-#include "Foundation/Inspect/InspectInit.h"
-#include "Foundation/Inspect/InspectScript.h"
-#include "Foundation/Inspect/InspectData.h"
+#include "Foundation/Inspect/Inspect.h"
+#include "Foundation/Inspect/Script.h"
+#include "Foundation/Inspect/Data.h"
 #include "Foundation/Inspect/Controls/ButtonControl.h"
 #include "Foundation/Inspect/Controls/ValueControl.h"
 

@@ -1,5 +1,5 @@
-#include "Foundation/Inspect/Controls/ContextMenu.h"
-#include "Foundation/Inspect/Controls/ContainerControl.h"
+#include "Foundation/Inspect/ContextMenu.h"
+#include "Foundation/Inspect/Container.h"
 
 #include <memory>
 

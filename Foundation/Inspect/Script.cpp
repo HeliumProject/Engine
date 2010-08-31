@@ -1,6 +1,6 @@
-#include "InspectScript.h"
+#include "Script.h"
 
-#include "Foundation/Inspect/Controls/ContainerControl.h"
+#include "Foundation/Inspect/Container.h"
 #include "Foundation/Inspect/Controls/LabelControl.h"
 #include "Foundation/Inspect/Controls/CheckBoxControl.h"
 #include "Foundation/Inspect/Controls/ColorPickerControl.h"

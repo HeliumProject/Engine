@@ -20,7 +20,7 @@
 #include "Foundation/Exception.h"
 #include "Editor/ArtProvider.h"
 #include "Foundation/Worker/Process.h"
-#include "Foundation/Inspect/InspectInit.h"
+#include "Foundation/Inspect/Inspect.h"
 #include "Foundation/Inspect/Interpreters/Reflect/InspectReflectInit.h"
 #include "Editor/Perforce/Perforce.h"
 

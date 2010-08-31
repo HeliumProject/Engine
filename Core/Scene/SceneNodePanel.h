@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Core/API.h"
-#include "Foundation/Inspect/InspectData.h"
-#include "Foundation/Inspect/Controls/ContainerControl.h"
+#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/Container.h"
 #include "Core/Scene/SceneNode.h"
 
 namespace Helium

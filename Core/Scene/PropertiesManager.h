@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Platform/Mutex.h"
-#include "Foundation/Inspect/InspectControls.h"
+#include "Foundation/Inspect/Controls.h"
 
 #include "Core/API.h"
 #include "Core/Scene/PropertiesGenerator.h"

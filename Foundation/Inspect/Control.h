@@ -5,8 +5,8 @@
 #include "Foundation/Automation/Attribute.h"
 
 #include "Foundation/API.h"
-#include "Foundation/Inspect/InspectData.h"
-#include "Foundation/Inspect/Controls/ContextMenu.h"
+#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/ContextMenu.h"
 
 namespace Helium
 {

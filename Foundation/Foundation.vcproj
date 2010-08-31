@@ -1547,39 +1547,71 @@
 			Name="Inspect"
 			>
 			<File
+				RelativePath=".\Inspect\API.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Canvas.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Canvas.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Container.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Container.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\ContextMenu.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\ContextMenu.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Control.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Control.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Controls.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Data.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Inspect.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Inspect\Inspect.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Inspect\InspectControls.h"
+				RelativePath=".\Inspect\Interpreter.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Inspect\InspectData.h"
+				RelativePath=".\Inspect\Interpreter.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Inspect\InspectInit.cpp"
+				RelativePath=".\Inspect\Script.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Inspect\InspectInit.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Inspect\InspectInterpreter.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Inspect\InspectInterpreter.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Inspect\InspectScript.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Inspect\InspectScript.h"
+				RelativePath=".\Inspect\Script.h"
 				>
 			</File>
 			<Filter
@@ -1591,14 +1623,6 @@
 				</File>
 				<File
 					RelativePath=".\Inspect\Controls\ButtonControl.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\CanvasControl.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\CanvasControl.h"
 					>
 				</File>
 				<File
@@ -1623,30 +1647,6 @@
 				</File>
 				<File
 					RelativePath=".\Inspect\Controls\ColorPickerControl.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\ContainerControl.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\ContainerControl.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\ContextMenu.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\ContextMenu.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\Control.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Inspect\Controls\Control.h"
 					>
 				</File>
 				<File

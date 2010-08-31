@@ -1,5 +1,5 @@
 #include "Foundation/Inspect/Controls/ValueControl.h"
-#include "Foundation/Inspect/Controls/CanvasControl.h"
+#include "Foundation/Inspect/Canvas.h"
 
 using namespace Helium;
 using namespace Helium::Inspect;

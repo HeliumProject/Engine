@@ -1,8 +1,8 @@
 #include "InspectReflectInit.h"
 
 #include "Foundation/InitializerStack.h"
-#include "Foundation/Inspect/InspectInit.h"
-#include "Foundation/Inspect/Controls/ContainerControl.h"
+#include "Foundation/Inspect/Inspect.h"
+#include "Foundation/Inspect/Container.h"
 
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectBitfieldInterpreter.h"

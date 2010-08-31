@@ -3,7 +3,7 @@
 #include <hash_map>
 
 #include "Foundation/API.h"
-#include "Foundation/Inspect/Controls/ContainerControl.h"
+#include "Foundation/Inspect/Container.h"
 
 namespace Helium
 {

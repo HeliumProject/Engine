@@ -1,18 +1,29 @@
 #pragma once
 
-#include "Platform/Assert.h"
+// Includes
+#include "Foundation/API.h"
+#include "Foundation/Startup.h"
+#include "Foundation/Automation/Event.h"
 
-// profiling for attribute systems
-//#define INSPECT_PROFILE
+namespace Helium
+{
+    namespace Inspect
+    {
+        FOUNDATION_API void Initialize();
+        FOUNDATION_API void Cleanup();
 
-#if defined(PROFILE_INSTRUMENT_ALL) || defined(INSPECT_PROFILE)
-# define INSPECT_SCOPE_TIMER(__Str) PROFILE_SCOPE_TIMER(__Str)
-#else
-# define INSPECT_SCOPE_TIMER(__Str)
-#endif
+        struct EditFilePathArgs
+        {
+            tstring m_File;
 
-// prints stepping of script code compilation
-//#define INSPECT_DEBUG_SCRIPT_COMPILE
+            EditFilePathArgs( const tstring& file )
+                : m_File( file )
+            {
 
-// prints tracks of Data instances
-//#define INSPECT_DEBUG_DATA_TRACKING
+            }
+        };
+        typedef Helium::Signature<void, const EditFilePathArgs&> EditFilePathSignature;
+
+        extern FOUNDATION_API EditFilePathSignature::Event g_EditFilePath;
+    }
+}

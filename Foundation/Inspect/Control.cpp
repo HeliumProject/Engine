@@ -1,5 +1,5 @@
-#include "Foundation/Inspect/Controls/Control.h"
-#include "Foundation/Inspect/Controls/ContainerControl.h"
+#include "Foundation/Inspect/Control.h"
+#include "Foundation/Inspect/Container.h"
 
 using namespace Helium;
 using namespace Helium::Inspect;

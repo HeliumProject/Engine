@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Foundation/API.h"
-#include "Foundation/Inspect/Inspect.h"
+#include "Foundation/Inspect/API.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Automation/Property.h"

@@ -1,5 +1,5 @@
 #include "Foundation/Inspect/Controls/ColorPickerControl.h"
-#include "Foundation/Inspect/Controls/ContainerControl.h"
+#include "Foundation/Inspect/Container.h"
 
 #include <sstream>
 

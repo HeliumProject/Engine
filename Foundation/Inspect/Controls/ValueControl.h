@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Foundation/API.h"
-#include "Foundation/Inspect/Controls/Control.h"
+#include "Foundation/Inspect/Control.h"
 
 namespace Helium
 {

@@ -4,8 +4,8 @@
 #include "Platform/Mutex.h"
 
 #include "Foundation/API.h"
-#include "Foundation/Inspect/InspectData.h"
-#include "Foundation/Inspect/InspectControls.h"
+#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/Controls.h"
 
 namespace Helium
 {

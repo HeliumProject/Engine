@@ -1,7 +1,7 @@
 #include "Foundation/InitializerStack.h"
-#include "Foundation/Inspect/InspectInit.h"
-#include "Foundation/Inspect/InspectScript.h"
-#include "Foundation/Inspect/InspectControls.h"
+#include "Foundation/Inspect/Inspect.h"
+#include "Foundation/Inspect/Script.h"
+#include "Foundation/Inspect/Controls.h"
 
 #include "Foundation/Reflect/Registry.h"
 

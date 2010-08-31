@@ -1,5 +1,5 @@
 #include "Foundation/Inspect/Controls/ListControl.h"
-#include "Foundation/Inspect/Controls/CanvasControl.h"
+#include "Foundation/Inspect/Canvas.h"
 
 #include "Foundation/String/Tokenize.h"
 

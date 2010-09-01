@@ -269,8 +269,7 @@ MainFrame::~MainFrame()
     }
 
     // Save preferences and MRU
-#pragma TODO("MRU")
-#if 0
+#if MRU_REFACTOR
     std::vector< tstring > mruPaths;
     m_MRU->ToVector( mruPaths );
     wxGetApp().GetSettings()->GetSceneSettings()->GetMRU()->SetPaths( mruPaths );

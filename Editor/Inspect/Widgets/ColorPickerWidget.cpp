@@ -50,7 +50,7 @@ void ColorPickerWidget::Create( wxWindow* parent )
     SetWindow( m_ColorPickerWindow = new ColorPickerWindow( parent, this ) );
 
     // init layout metrics
-    wxSize size( -1, m_ColorPickerControl->GetCanvas()->GetStdSize( Math::SingleAxes::Y ) );
+    wxSize size( -1, m_ColorPickerControl->GetCanvas()->GetDefaultSize( Math::SingleAxes::Y ) );
     m_ColorPickerWindow->SetSize( size );
     m_ColorPickerWindow->SetMinSize( size );
     m_ColorPickerWindow->SetMaxSize( size );

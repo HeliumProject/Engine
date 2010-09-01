@@ -117,7 +117,7 @@ void TreeCanvas::OnToggle(wxTreeEvent& event)
     event.Skip();
 }
 
-#if 0
+#if INSPECT_REFACTOR
 
 void NameChanged(const tstring& text)
 {

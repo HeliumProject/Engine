@@ -666,9 +666,8 @@ void SmartBuffer::InheritFixups( const SmartBufferPtr& buffer, u32 offset )
 
 void SmartBuffer::Dump()
 {
-#if 0
-    Log::Print("Buffer Address %x [chunk ID = %x]\n",this,m_Type);
-    Log::Print("%d outgoing\n",m_OutgoingFixups.size());
+    Log::Print( TXT("Buffer Address %x [chunk ID = %x]\n"), this, m_Type );
+    Log::Print( TXT("%d outgoing\n"), m_OutgoingFixups.size() );
 
     // inherit all the outgoing fixups from the buffer
     {
@@ -679,36 +678,35 @@ void SmartBuffer::Dump()
             BufferLocation destination;
             (*itr).second->GetDestination(destination);
 
-            Log::Print("  Offset %d - points to buffer %x [ChunkID %x], offset %d\n",(*itr).first,destination.second,destination.second->m_Type,destination.first);
+            Log::Print( TXT("  Offset %d - points to buffer %x [ChunkID %x], offset %d\n"), (*itr).first, destination.second, destination.second->m_Type, destination.first );
         }
     }
 
-    Log::Print("%d incoming\n",m_IncomingFixups.size());
+    Log::Print( TXT("%d incoming\n"), m_IncomingFixups.Size() );
 
     // also inherit any incoming fixups
     {
         // first we copy the incoming fixups, since we are messing with that map 
-        SmartBuffer::S_DumbBufferLocation::Iterator itr = m_IncomingFixups.begin();
-        SmartBuffer::S_DumbBufferLocation::Iterator end = m_IncomingFixups.end();
+        S_DumbBufferLocation::Iterator itr = m_IncomingFixups.Begin();
+        S_DumbBufferLocation::Iterator end = m_IncomingFixups.End();
         for( ; itr != end; ++itr )
         {
             const DumbBufferLocation& source_location = (*itr);
 
-            Log::Print("  Pointed to by buffer %x [Chunk ID = %x] (offset %d)\n",(*itr).second,(*itr).second->m_Type,(*itr).first );
+            Log::Print( TXT("  Pointed to by buffer %x [Chunk ID = %x] (offset %d)\n"), (*itr).second, (*itr).second->m_Type, (*itr).first );
         }
     }
 
     // dump the info for any incomming buffers
     {
         // first we copy the incoming fixups, since we are messing with that map 
-        SmartBuffer::S_DumbBufferLocation::Iterator itr = m_IncomingFixups.begin();
-        SmartBuffer::S_DumbBufferLocation::Iterator end = m_IncomingFixups.end();
+        S_DumbBufferLocation::Iterator itr = m_IncomingFixups.Begin();
+        S_DumbBufferLocation::Iterator end = m_IncomingFixups.End();
         for( ; itr != end; ++itr )
         {
             (*itr).second->Dump();
         }
     }
-#endif
 }
 
 bool SmartBuffer::AddFixup( const DumbBufferLocation& source, const FixupPtr& fixup )

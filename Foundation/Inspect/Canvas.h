@@ -28,9 +28,9 @@ namespace Helium
 
             virtual void RealizeControl(Control* control, Control* parent) = 0;
 
-            int GetStdSize(Math::Axis axis)
+            int GetDefaultSize(Math::Axis axis)
             {
-                return m_StdSize[axis];
+                return m_DefaultSize[axis];
             }
 
             int GetBorder()
@@ -46,7 +46,7 @@ namespace Helium
             CanvasShowSignature::Event e_Show;
 
         protected:
-            Math::Point m_StdSize;      // standard control size
+            Math::Point m_DefaultSize;  // standard control size
             int m_Border;               // standard border width
             int m_Pad;                  // standard pad b/t controls
         };

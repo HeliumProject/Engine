@@ -9,73 +9,46 @@ namespace Helium
 {
     namespace Inspect
     {
-        //
-        // Conainer object that manages all the panels displayed in the property canvas
-        //
-
         struct CanvasShowArgs
         {
-            bool m_Show;
-
             CanvasShowArgs(bool show)
                 : m_Show(show)
             {
 
             }
+
+            bool m_Show;
         };
         typedef Helium::Signature<void, const CanvasShowArgs&> CanvasShowSignature;
 
-        class FOUNDATION_API Canvas : public Reflect::ConcreteInheritor<Canvas, Container>
+        class FOUNDATION_API Canvas : public Reflect::AbstractInheritor<Canvas, Container>
         {
         public:
             Canvas();
-            virtual ~Canvas();
 
-            virtual void RealizeControl(Control* control, Control* parent);
+            virtual void RealizeControl(Control* control, Control* parent) = 0;
 
-            // Metrics
-            virtual int GetStdSize(Math::Axis axis)
+            int GetDefaultSize(Math::Axis axis)
             {
-                return m_StdSize[axis];
+                return m_DefaultSize[axis];
             }
-            virtual int GetBorder()
+
+            int GetBorder()
             {
                 return m_Border;
             }
-            virtual int GetPad()
+
+            int GetPad()
             {
                 return m_Pad;
             }
 
-            //
-            // Events
-            //
+            CanvasShowSignature::Event e_Show;
 
         protected:
-            CanvasShowSignature::Event m_Show;
-        public:
-            void AddShowListener( const CanvasShowSignature::Delegate& listener )
-            {
-                m_Show.Add( listener );
-            }
-            void RemoveShowListener( const CanvasShowSignature::Delegate& listener )
-            {
-                m_Show.Remove( listener );
-            }
-            void RaiseShow(const CanvasShowArgs& args)
-            {
-                m_Show.Raise( args );
-            }
-
-        protected:
-            // standard control size
-            Math::Point m_StdSize;
-
-            // standard border width
-            int m_Border;
-
-            // standard pad b/t controls
-            int m_Pad;
+            Math::Point m_DefaultSize;  // standard control size
+            int m_Border;               // standard border width
+            int m_Pad;                  // standard pad b/t controls
         };
 
         typedef Helium::SmartPtr<Canvas> CanvasPtr;

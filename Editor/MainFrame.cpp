@@ -1,44 +1,38 @@
 #include "Precompile.h"
-
 #include "MainFrame.h"
+
+#include "Platform/Platform.h"
 
 #include "Foundation/Reflect/ArchiveXML.h"
 
 #include "Core/Content/ContentVersion.h"
 #include "Core/Content/ContentScene.h"
-
-#include "Editor/FileDialog.h"
-#include "Editor/Clipboard/ClipboardFileList.h"
-#include "Editor/Clipboard/ClipboardDataObject.h"
-
 #include "Core/Asset/AssetClass.h"
-
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/InstanceSet.h"
 #include "Core/Scene/EntityInstanceType.h"
 #include "Core/Scene/EntitySet.h"
-
 #include "Core/Scene/TransformManipulator.h"
-
 #include "Core/Scene/CurveCreateTool.h"
 #include "Core/Scene/CurveEditTool.h"
 #include "Core/Scene/DuplicateTool.h"
 #include "Core/Scene/EntityInstanceCreateTool.h"
 #include "Core/Scene/LocatorCreateTool.h"
 #include "Core/Scene/VolumeCreateTool.h"
-
 #include "Core/Scene/ScaleManipulator.h"
 #include "Core/Scene/RotateManipulator.h"
 #include "Core/Scene/TranslateManipulator.h"
 
+#include "Editor/App.h"
+#include "Editor/EditorIDs.h"
+#include "Editor/ArtProvider.h"
+#include "Editor/FileDialog.h"
 #include "Editor/SettingsDialog.h"
 #include "Editor/WindowSettings.h"
-
-#include "EditorIDs.h"
-#include "ArtProvider.h"
+#include "Editor/Clipboard/ClipboardFileList.h"
+#include "Editor/Clipboard/ClipboardDataObject.h"
 #include "Editor/Dialogs/ImportOptionsDialog.h"
 #include "Editor/Dialogs/ExportOptionsDialog.h"
-#include "Editor/App.h"
 
 using namespace Helium;
 using namespace Helium::Core;
@@ -275,8 +269,7 @@ MainFrame::~MainFrame()
     }
 
     // Save preferences and MRU
-#pragma TODO("MRU")
-#if 0
+#if MRU_REFACTOR
     std::vector< tstring > mruPaths;
     m_MRU->ToVector( mruPaths );
     wxGetApp().GetSettings()->GetSceneSettings()->GetMRU()->SetPaths( mruPaths );
@@ -296,9 +289,6 @@ MainFrame::~MainFrame()
     m_SceneManager.RemoveSceneRemovingListener( SceneChangeSignature::Delegate( this, &MainFrame::SceneRemoving ) );
 
     m_MRU->RemoveItemSelectedListener( MRUSignature::Delegate( this, &MainFrame::OnMRUOpen ) );
-
-    m_PropertiesPanel->GetPropertiesManager().RemovePropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &MainFrame::OnPropertiesCreated ) );
-    m_ToolbarPanel->GetPropertiesManager().RemovePropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &MainFrame::OnPropertiesCreated ) );
 
     m_ViewPanel->GetViewCanvas()->GetViewport().RemoveRenderListener( RenderSignature::Delegate ( this, &MainFrame::Render ) );
     m_ViewPanel->GetViewCanvas()->GetViewport().RemoveSelectListener( SelectSignature::Delegate ( this, &MainFrame::Select ) ); 
@@ -1405,11 +1395,6 @@ void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
     m_ToolbarPanel->GetToolsPanel()->Refresh();
 }
 
-void MainFrame::OnPropertiesCreated( const PropertiesCreatedArgs& args )
-{
-    PostCommand( new PropertiesCreatedCommand( args.m_PropertiesManager, args.m_SelectionId, args.m_Controls ) );
-}
-
 void MainFrame::OnToolSelected( wxCommandEvent& event )
 {
     if (m_SceneManager.HasCurrentScene())
@@ -1734,10 +1719,9 @@ void MainFrame::OnPaste( wxCommandEvent& event )
 // 
 void MainFrame::OnDelete( wxCommandEvent& event )
 {
-    if ( m_PropertiesPanel->GetPropertiesManager().ThreadsActive() )
+    while ( m_PropertiesPanel->GetPropertiesManager().ThreadsActive() )
     {
-        wxMessageBox( wxT( "You cannot delete items while the Properties Panel is generating." ), wxT( "Error" ), wxCENTER | wxOK | wxICON_ERROR, this );
-        return;
+        Helium::Sleep( 1 );
     }
 
     if ( m_SceneManager.HasCurrentScene() )
@@ -2006,7 +1990,7 @@ void MainFrame::SceneContextChanged( const SceneContextChangeArgs& args )
 
 void MainFrame::Executed( const ExecuteArgs& args )
 {
-    if (!m_PropertiesPanel->GetPropertiesManager().ThreadsActive() && !args.m_Interactively)
+    if ( !m_PropertiesPanel->GetPropertiesManager().ThreadsActive() && !args.m_Interactively )
     {
         m_PropertiesPanel->GetCanvas().Read();
     }
@@ -2572,6 +2556,6 @@ void MainFrame::SyncPropertyThread()
 {
     while ( m_PropertiesPanel->GetPropertiesManager().ThreadsActive() )
     {
-        ::Sleep( 500 );
+        Helium::Sleep( 1 );
     }
 }

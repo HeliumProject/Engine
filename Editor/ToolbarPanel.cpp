@@ -6,13 +6,15 @@
 #include "EditorIDs.h"
 
 using namespace Helium;
+using namespace Helium::Core;
 using namespace Helium::Editor;
 
 ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
 : ToolbarPanelGenerated( parent, id, pos, size, style )
+, m_CommandQueue( this )
 , m_ToolPropertiesCanvas( m_ToolsPropertiesPanel )
 , m_ToolPropertiesGenerator( &m_ToolPropertiesCanvas )
-, m_ToolPropertiesManager( &m_ToolPropertiesGenerator )
+, m_ToolPropertiesManager( &m_ToolPropertiesGenerator, &m_CommandQueue )
 {
     SetHelpText( TXT( "This is the Toolbar, it provides access to commonly used actions and tools." ) );
 

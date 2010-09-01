@@ -35,7 +35,7 @@ Canvas::Canvas( wxWindow* window )
 
 void Canvas::OnShow(wxShowEvent& event)
 {
-    RaiseShow( event.GetShow() );
+    e_Show.Raise( event.GetShow() );
 }
 
 void Canvas::OnClick(wxMouseEvent& event)
@@ -47,18 +47,22 @@ void Canvas::OnClick(wxMouseEvent& event)
 
 void Canvas::RealizeControl( Inspect::Control* control, Inspect::Control* parent )
 {
-    Widget* window = Reflect::AssertCast< Widget >( parent->GetWidget() );
-
-    wxWindow* parentWindow = window->GetWindow();
-
     WidgetCreators::const_iterator found = m_WidgetCreators.find( control->GetType() );
-    bool widgetCreatorFound = found != m_WidgetCreators.end();
-    HELIUM_ASSERT( widgetCreatorFound );
+    
+    // this means there is a class of control that doesn't have a corresponding registered widget class
+    HELIUM_ASSERT( found != m_WidgetCreators.end() );
 
-    if ( widgetCreatorFound )
-    {
-        WidgetPtr widget = found->second( control );
-        widget->Create( parentWindow );
-        control->SetWidget( widget );
-    }
+    // allocate the widget from the factory
+    WidgetPtr widget = found->second( control );
+
+    // find the window pointer for the parent window
+    Widget* parentWidget = Reflect::AssertCast< Widget >( parent->GetWidget() );
+    wxWindow* parentWindow = parentWidget->GetWindow();
+
+    // do this before Create() so that Create() can use the canvas pointer
+    control->SetCanvas( this );
+    control->SetWidget( widget );
+
+    // this will cause the widget to allocate its corresponding window (since it has the parent pointer)
+    widget->Create( parentWindow );
 }

@@ -90,7 +90,7 @@ void ButtonWidget::Create( wxWindow* parent )
     SetWindow( m_ButtonWindow = new ButtonWindow( parent, this ) );
 
     // init layout metrics
-    wxSize size( -1, m_ButtonControl->GetCanvas()->GetStdSize( Math::SingleAxes::Y ) );
+    wxSize size( -1, m_ButtonControl->GetCanvas()->GetDefaultSize( Math::SingleAxes::Y ) );
     m_ButtonWindow->SetSize( size );
     m_ButtonWindow->SetMinSize( size );
     m_ButtonWindow->SetMaxSize( size );

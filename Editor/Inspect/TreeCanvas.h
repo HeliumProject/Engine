@@ -8,7 +8,7 @@ namespace Helium
 {
     namespace Editor
     {
-        class TreeCanvas : public Editor::Canvas
+        class TreeCanvas : public Canvas
         {
         public:
             // this is where tree-specific wx code happens

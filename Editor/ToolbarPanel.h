@@ -3,6 +3,7 @@
 #include "Core/Scene/PropertiesManager.h"
 #include "Core/Scene/PropertiesGenerator.h"
 
+#include "Editor/CommandQueue.h"
 #include "Editor/EditorGenerated.h"
 #include "Editor/Inspect/StripCanvas.h"
 
@@ -55,6 +56,7 @@ namespace Helium
         private:
             std::vector< wxBitmapToggleButton* > m_ToolsButtons;
 
+            CommandQueue                m_CommandQueue;
             StripCanvas                 m_ToolPropertiesCanvas;
             Core::PropertiesGenerator   m_ToolPropertiesGenerator; // HEADS UP: do this one first in the constructor!
             Core::PropertiesManager     m_ToolPropertiesManager;

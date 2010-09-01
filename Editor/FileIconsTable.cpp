@@ -403,53 +403,6 @@ static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
     return wxBitmap(smallimg);
 }
 
-// This function is currently not unused anymore
-#if 0
-// finds empty borders and return non-empty area of image:
-static wxImage CutEmptyBorders(const wxImage& img)
-{
-    unsigned char mr = img.GetMaskRed(),
-                  mg = img.GetMaskGreen(),
-                  mb = img.GetMaskBlue();
-    unsigned char *dt = img.GetData(), *dttmp;
-    unsigned w = img.GetWidth(), h = img.GetHeight();
-
-    unsigned top, bottom, left, right, i;
-    bool empt;
-
-#define MK_DTTMP(x,y)      dttmp = dt + ((x + y * w) * 3)
-#define NOEMPTY_PIX(empt)  if (dttmp[0] != mr || dttmp[1] != mg || dttmp[2] != mb) {empt = false; break;}
-
-    for (empt = true, top = 0; empt && top < h; top++)
-    {
-        MK_DTTMP(0, top);
-        for (i = 0; i < w; i++, dttmp+=3)
-            NOEMPTY_PIX(empt)
-    }
-    for (empt = true, bottom = h-1; empt && bottom > top; bottom--)
-    {
-        MK_DTTMP(0, bottom);
-        for (i = 0; i < w; i++, dttmp+=3)
-            NOEMPTY_PIX(empt)
-    }
-    for (empt = true, left = 0; empt && left < w; left++)
-    {
-        MK_DTTMP(left, 0);
-        for (i = 0; i < h; i++, dttmp+=3*w)
-            NOEMPTY_PIX(empt)
-    }
-    for (empt = true, right = w-1; empt && right > left; right--)
-    {
-        MK_DTTMP(right, 0);
-        for (i = 0; i < h; i++, dttmp+=3*w)
-            NOEMPTY_PIX(empt)
-    }
-    top--, left--, bottom++, right++;
-
-    return img.GetSubImage(wxRect(left, top, right - left + 1, bottom - top + 1));
-}
-#endif // #if 0
-
 #endif // wxUSE_MIMETYPE
 
 int FileIconsTable::GetIconID(const wxString& extension, const wxString& mime)

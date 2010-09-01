@@ -1,5 +1,5 @@
 #include "Foundation/Inspect/Control.h"
-#include "Foundation/Inspect/Container.h"
+#include "Foundation/Inspect/Canvas.h"
 
 using namespace Helium;
 using namespace Helium::Inspect;
@@ -131,11 +131,8 @@ void Control::Realize(Container* parent)
 {
     PROFILE_SCOPE_ACCUM( g_RealizeAccumulator );
 
-#if 0
-    m_Canvas->RealizeControl( this, parent );
-#endif
+    m_Canvas->RealizeControl( this, m_Parent = parent );
     m_IsRealized = true;
-    m_Parent = parent;
 
     e_Realized.Raise(this);
 }

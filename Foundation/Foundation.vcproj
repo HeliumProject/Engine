@@ -1876,6 +1876,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\CommandQueue.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\CommandQueue.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Exception.cpp"
 			>
 		</File>

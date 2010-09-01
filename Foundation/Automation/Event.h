@@ -746,4 +746,6 @@ namespace Helium
             }
         };
     };
+
+    typedef Helium::Signature<void, Helium::Void> VoidSignature;
 }

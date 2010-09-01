@@ -188,17 +188,17 @@ namespace Helium
         static Profile::MemoryPoolHandle s_DataPool;
 
     protected:
-        tstring         m_Name;
-        u32             m_Type;
-        u8*             m_Data;
-        u32             m_Size;
-        u32             m_MaxSize;
-        u32             m_Capacity;
-        bool            m_OwnsData;
-        ByteOrder       m_ByteOrder;
-        bool            m_Virtual;
-        M_OffsetToFixup m_OutgoingFixups;
-        S_DumbBufferLocation  m_IncomingFixups;
+        tstring                 m_Name;
+        u32                     m_Type;
+        u8*                     m_Data;
+        u32                     m_Size;
+        u32                     m_MaxSize;
+        u32                     m_Capacity;
+        bool                    m_OwnsData;
+        ByteOrder               m_ByteOrder;
+        bool                    m_Virtual;
+        M_OffsetToFixup         m_OutgoingFixups;
+        S_DumbBufferLocation    m_IncomingFixups;
 
     public:
         SmartBuffer();

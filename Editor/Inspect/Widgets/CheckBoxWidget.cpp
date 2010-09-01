@@ -55,7 +55,7 @@ void CheckBoxWidget::Create( wxWindow* parent )
     SetWindow( m_CheckBoxWindow = new CheckBoxWindow( parent, this ) );
 
     // init layout metrics
-    wxSize size( -1, m_CheckBoxControl->GetCanvas()->GetStdSize( Math::SingleAxes::Y ) );
+    wxSize size( -1, m_CheckBoxControl->GetCanvas()->GetDefaultSize( Math::SingleAxes::Y ) );
     m_CheckBoxWindow->SetSize( size );
     m_CheckBoxWindow->SetMinSize( size );
     m_CheckBoxWindow->SetMaxSize( size );

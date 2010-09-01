@@ -81,7 +81,7 @@ void ValueWidget::Create( wxWindow* parent )
     SetWindow( m_ValueWindow = new ValueWindow( parent, this ) );
 
     // init layout metrics
-    wxSize size( -1, m_ValueControl->GetCanvas()->GetStdSize( Math::SingleAxes::Y ) );
+    wxSize size( -1, m_ValueControl->GetCanvas()->GetDefaultSize( Math::SingleAxes::Y ) );
     m_ValueWindow->SetSize( size );
     m_ValueWindow->SetMinSize( size );
     m_ValueWindow->SetMaxSize( size );

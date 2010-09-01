@@ -72,7 +72,6 @@ Group::DrawConnections(wxDC& dc) const
 void
 Group::GenerateCode(CodeTextCtrl *codectrl, Report *reportctrl) const
 {
-#if 0
 	codectrl->Append(wxT("/*\n===========================================\nMembers:\n"));
 	for (List<Member *>::Iterator i = MemberIterator(); !i; i++)
 	{
@@ -94,7 +93,6 @@ Group::GenerateCode(CodeTextCtrl *codectrl, Report *reportctrl) const
 		codectrl->Append(wxT("\t")).Append((*i)->GetMember(wxT("Name"))->GetString()).Append(wxT("\n"));
 	}
 	codectrl->Append(wxT("===========================================\n*/\n"));
-#endif
 }
 
 bool

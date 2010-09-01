@@ -2019,10 +2019,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\IconMagnify.xpm"
-			>
-		</File>
-		<File
 			RelativePath=".\Input.cpp"
 			>
 		</File>

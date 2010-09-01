@@ -19,35 +19,6 @@ ReflectInterpreter::ReflectInterpreter (Container* container)
 
 }
 
-#ifdef INSPECT_REFACTOR
-void ReflectInterpreter::Reset()
-{
-    // Clear out the controls that belong to this interpreter.
-    V_Control controlsToRemove;
-    V_Control::const_iterator itr = m_Container->GetChildren().begin();
-    V_Control::const_iterator end = m_Container->GetChildren().end();
-    for ( ; itr != end; ++itr )
-    {
-        Control* control = *itr;
-        if ( control->GetInterpreter() == this )
-        {
-            controlsToRemove.push_back( control );
-        }
-    }
-
-    V_Control::iterator removeItr = controlsToRemove.begin();
-    V_Control::iterator removeEnd = controlsToRemove.end();
-    for ( ; removeItr != removeEnd; ++removeItr )
-    {
-        m_Container->RemoveChild( *removeItr );
-    }
-
-    m_Instances.clear();
-    m_Serializers.clear();
-    m_Interpreters.clear();
-}
-#endif
-
 void ReflectInterpreter::Interpret(const std::vector<Reflect::Element*>& instances, i32 includeFlags, i32 excludeFlags, bool expandPanel)
 {
     m_Instances = instances;

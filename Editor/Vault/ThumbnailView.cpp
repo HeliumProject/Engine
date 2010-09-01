@@ -1633,11 +1633,10 @@ void ThumbnailView::OnMouseMove( wxMouseEvent& args )
             // Drag and drop time
             if ( doDrag )
             {
-#ifdef INSPECT_REFACTOR
-                Inspect::DropSource source( clipboardData, this );
+                DropSource source( clipboardData, this );
                 source.SetAutoRaise( true );
                 source.DoDragDrop( wxDrag_DefaultMove );
-#endif
+
                 m_MouseDown = false;
             }
         }

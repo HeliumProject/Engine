@@ -373,15 +373,14 @@ bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
     Reflect::Archive::GetExtensions( supportedExtensions );
     Asset::AssetClass::GetExtensions( supportedExtensions ); 
 
-#ifdef INSPECT_REFACTOR
-    Inspect::ClipboardFileListPtr fileList = Reflect::ObjectCast< Inspect::ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
+    ClipboardFileListPtr fileList = Reflect::ObjectCast< ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
     if ( fileList )
     {
         for ( std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end();
             fileItr != fileEnd && !canHandleArgs;
             ++fileItr )
         {
-            Helium::Path path( *fileItr );
+            Path path( *fileItr );
 
             if ( path.Exists() )
             {
@@ -393,7 +392,6 @@ bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
             }
         }
     }
-#endif
 
     return canHandleArgs;
 }
@@ -414,22 +412,20 @@ wxDragResult MainFrame::Drop( const Editor::DragArgs& args )
 {
     wxDragResult result = args.m_Default;
 
-#ifdef INSPECT_REFACTOR
     if ( ValidateDrag( args ) )
     {
-        Inspect::ClipboardFileListPtr fileList = Reflect::ObjectCast< Inspect::ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
+        ClipboardFileListPtr fileList = Reflect::ObjectCast< ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
         if ( fileList )
         {
             for ( std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin(),
                 fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
             {
-                Helium::Path path( *fileItr );
+                Path path( *fileItr );
 
 #pragma TODO( "Load the files" )
             }
         }
     }
-#endif
 
     return result;
 }

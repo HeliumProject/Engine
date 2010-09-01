@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Platform/Mutex.h"
+#include "Foundation/CommandQueue.h"
 #include "Foundation/Inspect/Controls.h"
 
 #include "Core/API.h"
@@ -142,7 +142,7 @@ namespace Helium
         class CORE_API PropertiesManager : public Helium::RefCountBase< PropertiesManager >
         {
         public:
-            PropertiesManager( PropertiesGenerator* generator, VoidDelegateSignature::Delegate delegator );
+            PropertiesManager( PropertiesGenerator* generator, CommandQueue* commandQueue );
             ~PropertiesManager();
 
             void Show( const Inspect::CanvasShowArgs& args );
@@ -173,8 +173,8 @@ namespace Helium
             // generator container
             PropertiesGenerator*            m_Generator;
 
-            // the delegate to invoke to add our delegate to the command queue
-            VoidDelegateSignature::Delegate m_PropertiesCreatedDelegator;
+            // to defer the finalization of the properties (which are processed in a b/g thread)
+            CommandQueue*                   m_CommandQueue;
 
             // selection to create properties for
             OS_SelectableDumbPtr            m_Selection;

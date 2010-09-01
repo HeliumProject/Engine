@@ -14,7 +14,7 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
 , m_CommandQueue( this )
 , m_ToolPropertiesCanvas( m_ToolsPropertiesPanel )
 , m_ToolPropertiesGenerator( &m_ToolPropertiesCanvas )
-, m_ToolPropertiesManager( &m_ToolPropertiesGenerator, VoidDelegateSignature::Delegate( &m_CommandQueue, &CommandQueue::Post ) )
+, m_ToolPropertiesManager( &m_ToolPropertiesGenerator, &m_CommandQueue )
 {
     SetHelpText( TXT( "This is the Toolbar, it provides access to commonly used actions and tools." ) );
 

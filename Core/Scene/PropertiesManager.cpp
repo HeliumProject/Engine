@@ -9,9 +9,9 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-PropertiesManager::PropertiesManager( PropertiesGenerator* generator, VoidDelegateSignature::Delegate delegator )
+PropertiesManager::PropertiesManager( PropertiesGenerator* generator, CommandQueue* commandQueue )
 : m_Generator( generator )
-, m_PropertiesCreatedDelegator( delegator )
+, m_CommandQueue( commandQueue )
 , m_Setting (PropertySettings::Intersection)
 , m_SelectionDirty (false)
 , m_SelectionId (0)
@@ -389,7 +389,8 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
     };
 
     PropertiesFinalizer* finalizer = new PropertiesFinalizer ( this, args.m_SelectionId, args.m_Container->GetChildren() );
-    m_PropertiesCreatedDelegator.Invoke( VoidSignature::Delegate( finalizer, &PropertiesFinalizer::Finalize ) );
+
+    m_CommandQueue->Post( VoidSignature::Delegate( finalizer, &PropertiesFinalizer::Finalize ) );
 }
 
 void PropertiesManager::FinalizeProperties( u32 selectionId, const Inspect::V_Control& controls )

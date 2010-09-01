@@ -11,7 +11,7 @@ PropertiesPanel::PropertiesPanel( wxWindow *parent, wxWindowID id, const wxPoint
 , m_CommandQueue( this )
 , m_PropertiesCanvas( m_TreeWndCtrl )
 , m_PropertiesGenerator( &m_PropertiesCanvas )
-, m_PropertiesManager( &m_PropertiesGenerator, VoidDelegateSignature::Delegate( &m_CommandQueue, &CommandQueue::Post ) )
+, m_PropertiesManager( &m_PropertiesGenerator, &m_CommandQueue )
 {
     SetHelpText( TXT( "This is the Properties Panel.  It will contain the properties for the items you have selected.  It has two modes:\n Common - Only display the properties common to all the selected items.\n All - Display all properties, regardless of if they are shared by the selected items." ) );
 

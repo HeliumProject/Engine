@@ -42,7 +42,7 @@ public:
     /** syntactic sugar to Expr-API, Object::field_.in(sel) */
     In in(const SelectQuery& sel) const;
     /** syntactic sugar to Expr-API, Object::field_.like(s) */
-    Like like(const LITESQL_String& s);
+    Like like(const LITESQL_String& s) const;
     bool operator==(const FieldType & fd) const {
         return fd.fullName() == fullName();
     }

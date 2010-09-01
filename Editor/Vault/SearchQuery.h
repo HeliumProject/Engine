@@ -16,14 +16,14 @@ namespace Helium
             {
                 Invalid = -1,
                 File = 0,
-                Folder,
-                DBSearch,
+                Directory,
+                CacheDB,
             };
             static void SearchTypesEnumerateEnum( Reflect::Enumeration* info )
             {
                 info->AddElement( File, TXT( "File" ) );
-                info->AddElement( Folder, TXT( "Folder" ) );
-                info->AddElement( DBSearch, TXT( "DBSearch" ) );
+                info->AddElement( Directory, TXT( "Directory" ) );
+                info->AddElement( CacheDB, TXT( "CacheDB" ) );
             }
         }
         typedef SearchTypes::SearchType SearchType;
@@ -44,8 +44,10 @@ namespace Helium
 
             SearchType GetSearchType() const { return m_SearchType; }
 
-            void SetQueryString( const tstring& queryString );
+            bool SetQueryString( const tstring& queryString, tstring& errors );
             const tstring& GetQueryString() const { return m_QueryString; }
+
+            const tstring& GetSQLQueryString() const;
 
             const Helium::Path& GetQueryPath()
             {
@@ -66,6 +68,7 @@ namespace Helium
         private:
             SearchType        m_SearchType;
             tstring           m_QueryString;
+            mutable tstring   m_SQLQueryString;
             Helium::Path      m_QueryPath;
         };
     }

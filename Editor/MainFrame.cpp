@@ -173,7 +173,7 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     m_ToolbarPanel->GetToolsPanel()->Disable();
     m_ToolbarPanel->GetToolsPanel()->Refresh();
 
-    m_ToolbarPanel->m_VaultSearchBox->Connect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( MainFrame::OnSearchButtonClick ), NULL, this );
+    m_ToolbarPanel->m_VaultSearchBox->Connect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( MainFrame::OnSearchGoButtonClick ), NULL, this );
 	m_ToolbarPanel->m_VaultSearchBox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MainFrame::OnSearchTextEnter ), NULL, this );
 
     //
@@ -222,7 +222,7 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     m_TypesPanel = new TypesPanel( &m_SceneManager, this );
     m_FrameManager.AddPane( m_TypesPanel, wxAuiPaneInfo().Name( wxT( "types" ) ).Caption( wxT( "Types" ) ).Right().Layer( 1 ).Position( 3 ) );
 
-    m_VaultPanel = new VaultPanel( wxGetApp().GetVaultSearch(), this );
+    m_VaultPanel = new VaultPanel( this );
     m_FrameManager.AddPane( m_VaultPanel, wxAuiPaneInfo().Name( wxT( "vault" ) ).Caption( wxT( "Asset Vault" ) ).Right().Layer( 1 ).Position( 4 ) );
 
 
@@ -355,12 +355,13 @@ bool MainFrame::OpenProject( const Helium::Path& path )
             m_MRU->Insert( path );
 
             m_ProjectPanel->SetProject( m_Project );
-#pragma TODO( "set project asset dir for vault" )
-            //m_ProjectAssetDir = path;
-            //if ( m_VaultSearch )
-            //{
-            //    m_VaultSearch->SetRootDirectory( m_ProjectAssetDir );
-            //}
+
+            m_VaultPanel->SetDirectory( path );
+            wxGetApp().GetTracker()->SetDirectory( path );
+            if ( !wxGetApp().GetTracker()->IsThreadRunning() )
+            {
+                wxGetApp().GetTracker()->StartThread();
+            }
         }
         else
         {
@@ -831,35 +832,24 @@ void MainFrame::OnSaveAll( wxCommandEvent& event )
     }
 }
 
-void MainFrame::OnSearchButtonClick( wxCommandEvent& event )
+void MainFrame::OnSearchGoButtonClick( wxCommandEvent& event )
 {
     wxString queryString = m_ToolbarPanel->m_VaultSearchBox->GetLineText(0);
     queryString.Trim(true);  // trim white-space right 
     queryString.Trim(false); // trim white-space left
-    
-    if ( !m_VaultPanel )
-    {
-        m_VaultPanel = new VaultPanel( wxGetApp().GetVaultSearch(), this );
-        m_FrameManager.AddPane( m_VaultPanel, wxAuiPaneInfo().Name( wxT( "vault" ) ).Caption( wxT( "Asset Vault" ) ).Right().Layer( 1 ).Position( 3 ) );
-    }
-    //m_VaultPanel->Show();
-    //m_VaultPanel->SetFocus();
 
-    //queryString.wx_str();
-
-    event.Skip();
+    m_VaultPanel->Search( queryString.wx_str() );
+    event.Skip(false);
 }
 
 void MainFrame::OnSearchTextEnter( wxCommandEvent& event )
 {
-    event.Skip();
-}
+    wxString queryString = m_ToolbarPanel->m_VaultSearchBox->GetLineText(0);
+    queryString.Trim(true);  // trim white-space right 
+    queryString.Trim(false); // trim white-space left
 
-void MainFrame::OnCloseSearchPanel()
-{
-    wxGetApp().SaveSettings();
-    m_VaultPanel = NULL;
-    //m_VaultSearch->RequestStop();
+    m_VaultPanel->Search( queryString.wx_str() );
+    event.Skip(false);
 }
 
 void MainFrame::OnViewChange(wxCommandEvent& event)
@@ -2126,6 +2116,86 @@ void MainFrame::OnTypeContextMenu(wxCommandEvent &event)
         m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->GetSelection().SetItems( newSelection ) );
     }
 }
+
+void MainFrame::OnSelectTool( wxCommandEvent& event )
+{
+    if ( !m_ViewPanel->HasFocus() )
+    {
+        event.Skip();
+        return;
+    }
+
+    wxKeyEvent evt( wxEVT_KEY_DOWN );
+    evt.m_keyCode = wxT( 'Q' );
+    m_ViewPanel->GetViewCanvas()->OnKeyDown( evt );
+}
+
+void MainFrame::OnTranslateTool( wxCommandEvent& event )
+{
+    if ( !m_ViewPanel->HasFocus() )
+    {
+        event.Skip();
+        return;
+    }
+
+    wxKeyEvent evt( wxEVT_KEY_DOWN );
+    evt.m_keyCode = wxT( 'W' );
+    m_ViewPanel->GetViewCanvas()->OnKeyDown( evt );
+}
+
+void MainFrame::OnRotateTool( wxCommandEvent& event )
+{
+    if ( !m_ViewPanel->HasFocus() )
+    {
+        event.Skip();
+        return;
+    }
+
+    wxKeyEvent evt( wxEVT_KEY_DOWN );
+    evt.m_keyCode = wxT( 'E' );
+    m_ViewPanel->GetViewCanvas()->OnKeyDown( evt );
+}
+
+void MainFrame::OnScaleTool( wxCommandEvent& event )
+{
+    if ( !m_ViewPanel->HasFocus() )
+    {
+        event.Skip();
+        return;
+    }
+
+    wxKeyEvent evt( wxEVT_KEY_DOWN );
+    evt.m_keyCode = wxT( 'R' );
+    m_ViewPanel->GetViewCanvas()->OnKeyDown( evt );
+}
+
+void MainFrame::OnMovePivotTool( wxCommandEvent& event )
+{
+    if ( !m_ViewPanel->HasFocus() )
+    {
+        event.Skip();
+        return;
+    }
+
+    wxKeyEvent evt( wxEVT_KEY_DOWN );
+    evt.m_keyCode = wxT( 'T' );
+    m_ViewPanel->GetViewCanvas()->OnKeyDown( evt );
+}
+
+void MainFrame::OnDuplicateTool( wxCommandEvent& event )
+{
+    if ( !m_ViewPanel->HasFocus() )
+    {
+        event.Skip();
+        return;
+    }
+
+    wxKeyEvent evt( wxEVT_KEY_DOWN );
+    evt.m_keyCode = wxT( 'D' );
+    evt.SetAltDown( true );
+    m_ViewPanel->GetViewCanvas()->OnKeyDown( evt );
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // Copies the currently selected items from the specified scene into the

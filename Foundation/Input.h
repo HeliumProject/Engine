@@ -361,13 +361,7 @@ namespace Helium
     class FOUNDATION_API KeyboardInput : public Input
     {
     public:
-        KeyboardInput()
-            : m_KeyCode( (KeyCode)0x0 )
-        {
-
-        }
-
-        KeyboardInput( KeyCode code )
+        KeyboardInput( KeyCode code = (KeyCode)0x0 )
             : m_KeyCode( code )
         {
 

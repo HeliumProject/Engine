@@ -3,12 +3,12 @@
 
 #include "SearchResults.h"
 
-#include "Platform/Exception.h"
 #include "Foundation/Regex.h"
 #include "Foundation/Container/Insert.h"
 #include "Foundation/File/Directory.h"
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/String/Utilities.h"
+#include "Platform/Exception.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -36,7 +36,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         static const tchar* s_DummyWindowName = TXT( "DummyWindowThread" );
 
-        // Custom wxEventTypes for the SearchThread to fire.
+        // Custom wxEventTypes for the VaultSearchThread to fire.
         DEFINE_EVENT_TYPE( EDITOR_EVT_BEGIN_SEARCH )
             DEFINE_EVENT_TYPE( EDITOR_EVT_RESULTS_AVAILABLE )
             DEFINE_EVENT_TYPE( EDITOR_EVT_SEARCH_COMPLETE )
@@ -122,9 +122,9 @@ namespace Helium
 
 
         /////////////////////////////////////////////////////////////////////////////
-        /// SearchThread
+        /// VaultSearchThread
         /////////////////////////////////////////////////////////////////////////////
-        class Editor::SearchThread : public wxThread
+        class Editor::VaultSearchThread : public wxThread
         {
         private:
             VaultSearch* m_VaultSearch;
@@ -133,14 +133,14 @@ namespace Helium
         public:
             // Detached threads delete themselves once they have completed,
             // and thus must be created on the heap
-            SearchThread( VaultSearch* browserSearch, i32 id )
+            VaultSearchThread( VaultSearch* browserSearch, i32 id )
                 : wxThread( wxTHREAD_DETACHED )
                 , m_VaultSearch( browserSearch )
                 , m_SearchID( id )
             {
             }
 
-            virtual ~SearchThread()
+            virtual ~VaultSearchThread()
             {
             }
 
@@ -159,7 +159,8 @@ namespace Helium
 /// VaultSearch
 /////////////////////////////////////////////////////////////////////////////
 VaultSearch::VaultSearch()
-: m_SearchResults( NULL )
+: m_TrackerDB(TXT("sqlite3"), TXT("database=trackerDBGenerated.db"))
+, m_SearchResults( NULL )
 , m_StopSearching( true )
 , m_DummyWindow( NULL )
 , m_CurrentSearchID( -1 )
@@ -172,7 +173,7 @@ VaultSearch::VaultSearch()
 VaultSearch::~VaultSearch()
 {
     // wait for searching thread to complete
-    RequestStop();
+    StopSearchThreadAndWait();
     ::CloseHandle( m_SearchInitializedEvent );
     ::CloseHandle( m_EndSearchEvent );
 
@@ -181,8 +182,18 @@ VaultSearch::~VaultSearch()
     m_FoundPaths.clear();
 }
 
+void VaultSearch::SetDirectory( const Helium::Path& directory )
+{
+    m_Directory = directory;
+}
+
+const Path& VaultSearch::GetDirectory() const
+{
+    return m_Directory;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
-// Creates and starts the SearchThread
+// Creates and starts the VaultSearchThread
 //
 // Detached threads delete themselves once they have completed,
 // and thus must be created on the heap
@@ -191,12 +202,12 @@ VaultSearch::~VaultSearch()
 //  - folder path
 //  - search query
 //
-bool VaultSearch::RequestSearch( SearchQuery* searchQuery )
+bool VaultSearch::StartSearchThread( SearchQuery* searchQuery )
 {
     Helium::TakeMutex beginMutex( m_BeginSearchMutex );
 
     // kill current search, if any
-    RequestStop();
+    StopSearchThreadAndWait();
 
     Helium::TakeMutex resultsMutex( m_SearchResultsMutex );
     {
@@ -204,7 +215,7 @@ bool VaultSearch::RequestSearch( SearchQuery* searchQuery )
         ++m_CurrentSearchID;
         ::ResetEvent( m_SearchInitializedEvent );
         m_StopSearching = false;
-        m_RequestSearchListeners.Raise( RequestSearchArgs( searchQuery ) );
+        m_StartSearchThreadListeners.Raise( StartSearchThreadArgs( searchQuery ) );
 
         // clear previous results, if any
         m_CurrentSearchQuery = searchQuery;
@@ -218,11 +229,11 @@ bool VaultSearch::RequestSearch( SearchQuery* searchQuery )
         m_DummyWindow->Connect( m_DummyWindow->GetId(), EDITOR_EVT_SEARCH_COMPLETE, wxCommandEventHandler( DummyWindow::OnEndThread ), NULL, m_DummyWindow );
 
         m_DummyWindow->AddBeginListener( Editor::DummyWindowSignature::Delegate( this, &VaultSearch::OnBeginSearchThread ) );
-        m_DummyWindow->AddUpdateListener( Editor::DummyWindowSignature::Delegate( this, &VaultSearch::OnResultsAvailable ) );
+        m_DummyWindow->AddUpdateListener( Editor::DummyWindowSignature::Delegate( this, &VaultSearch::OnSearchResultsAvailable ) );
         m_DummyWindow->AddEndListener( Editor::DummyWindowSignature::Delegate( this, &VaultSearch::OnEndSearchThread ) );
 
         // start the search thread
-        SearchThread* searchThread = new SearchThread( this, m_CurrentSearchID );
+        VaultSearchThread* searchThread = new VaultSearchThread( this, m_CurrentSearchID );
         searchThread->Create();
         searchThread->Run();
     }
@@ -234,7 +245,7 @@ bool VaultSearch::RequestSearch( SearchQuery* searchQuery )
 // Something has requested the search thread to stop; possibly
 // a new browserSearch is ready to be run, stop the old and start
 // the new.
-void VaultSearch::RequestStop()
+void VaultSearch::StopSearchThreadAndWait()
 {
     // cant cancel a search until the search is initialized and m_SearchInitializedEvent is set
     ::WaitForSingleObject( m_SearchInitializedEvent, INFINITE );
@@ -257,11 +268,11 @@ void VaultSearch::OnBeginSearchThread( const Editor::DummyWindowArgs& args )
     if ( args.m_ThreadID != m_CurrentSearchID )
         return;
 
-    m_BeginSearchingListeners.Raise( BeginSearchingArgs() );
+    m_SearchThreadRunningListeners.Raise( SearchThreadRunningArgs() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void VaultSearch::OnResultsAvailable( const Editor::DummyWindowArgs& args )
+void VaultSearch::OnSearchResultsAvailable( const Editor::DummyWindowArgs& args )
 {
     if ( args.m_ThreadID != m_CurrentSearchID )
         return;
@@ -275,7 +286,7 @@ void VaultSearch::OnResultsAvailable( const Editor::DummyWindowArgs& args )
     u32 searchID = m_SearchResults->GetSearchID();
     if ( m_SearchResults && m_SearchResults->HasResults() )
     {
-        m_ResultsAvailableListeners.Raise( ResultsAvailableArgs( m_CurrentSearchQuery, m_SearchResults ) );
+        m_SearchResultsAvailableListeners.Raise( SearchResultsAvailableArgs( m_CurrentSearchQuery, m_SearchResults ) );
     }
     m_SearchResults = new SearchResults( searchID );
     m_FoundPaths.clear();
@@ -287,37 +298,49 @@ void VaultSearch::OnEndSearchThread( const Editor::DummyWindowArgs& args )
     if ( args.m_ThreadID != m_CurrentSearchID )
         return;
 
-    m_SearchCompleteListeners.Raise( SearchCompleteArgs( m_CurrentSearchQuery ) );
+    m_SearchThreadCompleteListeners.Raise( SearchThreadCompleteArgs( m_CurrentSearchQuery ) );
 }
 
 
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// SearchThreadProc - Called from the SearchThread
+// SearchThreadProc - Called from the VaultSearchThread
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-// Called by SearchThread
-// Fills out the SearchResults structure to pass to ResultsAvailable event
+// Called by VaultSearchThread
+// Fills out the SearchResults structure to pass to SearchResultsAvailable event
 //
 void VaultSearch::SearchThreadProc( i32 searchID )
 {
     SearchThreadEnter( searchID );
 
-    //-------------------------------------------
-    // AssetFolder
-    Helium::Path searchPath( m_CurrentSearchQuery->GetQueryString() );
 
-    if ( m_CurrentSearchQuery->GetSearchType() == SearchTypes::File )
+    // create tables, sequences and indexes
+    m_TrackerDB.verbose = true;
+    try
     {
-        searchPath.Set( searchPath.Directory() );
+        m_TrackerDB.create();
+    }
+    catch( const litesql::SQLError& )
+    {
+        m_TrackerDB.upgrade();
     }
 
+    //-------------------------------------------
+    // Path
+
     if ( m_CurrentSearchQuery->GetSearchType() == SearchTypes::File
-        || m_CurrentSearchQuery->GetSearchType() == SearchTypes::Folder )
+        || m_CurrentSearchQuery->GetSearchType() == SearchTypes::Directory )
     {
+        Helium::Path searchPath( m_CurrentSearchQuery->GetQueryString() );
+        if ( m_CurrentSearchQuery->GetSearchType() == SearchTypes::File )
+        {
+            searchPath.Set( searchPath.Directory() );
+        }
+
         AddPath( searchPath, searchID );
         SearchThreadLeave( searchID );
         return;
@@ -329,22 +352,26 @@ void VaultSearch::SearchThreadProc( i32 searchID )
     }
 
     //-------------------------------------------
-    // CacheDB Search
-    if ( m_CurrentSearchQuery->GetSearchType() == SearchTypes::DBSearch )
+    // CacheDB
+    if ( m_CurrentSearchQuery->GetSearchType() == SearchTypes::CacheDB )
     {
-        std::set< Helium::Path > assetFiles;
+        std::vector<TrackedFile> assetFiles = litesql::select<TrackedFile>( m_TrackerDB, TrackedFile::MPath.like( m_CurrentSearchQuery->GetSQLQueryString().c_str() ) ).all();
 
-#pragma TODO( "Search Cache DB")
-        if ( CheckSearchThreadLeave( searchID ) )
+        for ( std::vector<TrackedFile>::const_iterator itr = assetFiles.begin(), end = assetFiles.end(); itr != end; ++itr )
         {
-            return;
-        }
+            Helium::TakeMutex mutex (m_SearchResultsMutex);
 
-        // FoundAssetFiles
-        if ( !assetFiles.empty() && AddPaths( assetFiles, searchID ) )
-        {
-            SearchThreadLeave( searchID );
-            return;
+            Helium::Path path = itr->mPath.value();
+            Helium::Insert<std::set< Helium::Path >>::Result inserted = m_FoundPaths.insert( path );
+            if ( inserted.second )
+            {
+                m_SearchResults->AddPath( path );
+            }
+
+            if ( CheckSearchThreadLeave( searchID ) )
+            {
+                return;
+            }
         }
     }
 
@@ -364,7 +391,7 @@ inline void VaultSearch::SearchThreadEnter( i32 searchID )
     evt.SetInt( searchID );
     wxPostEvent( m_DummyWindow, evt );
 
-    // Main thread is deadlocked until SearchThread sets this event
+    // Main thread is deadlocked until VaultSearchThread sets this event
     ::SetEvent( m_SearchInitializedEvent );
 }
 
@@ -407,7 +434,7 @@ inline void VaultSearch::SearchThreadLeave( i32 searchID )
         m_DummyWindow = NULL;
     }
 
-    // Main thread is deadlocked until SearchThread sets this event
+    // Main thread is deadlocked until VaultSearchThread sets this event
     ::SetEvent( m_EndSearchEvent );
 }
 
@@ -442,24 +469,6 @@ u32 VaultSearch::AddPath( const Helium::Path& path, i32 searchID )
                 ++numFilesAdded;
             }
         }   
-    }
-
-    return numFilesAdded;
-}
-
-u32 VaultSearch::AddPaths( const std::set< Helium::Path >& paths, i32 searchID )
-{
-    u32 numFilesAdded = 0;
-    Helium::TakeMutex mutex (m_SearchResultsMutex);
-
-    for ( std::set< Helium::Path >::const_iterator itr = paths.begin(), end = paths.end(); itr != end; ++itr )
-    {
-        Helium::Insert<std::set< Helium::Path >>::Result inserted = m_FoundPaths.insert( *itr );
-        if ( inserted.second )
-        {
-            m_SearchResults->AddPath( *itr );
-            ++numFilesAdded;
-        }
     }
 
     return numFilesAdded;

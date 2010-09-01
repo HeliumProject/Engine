@@ -203,50 +203,50 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	
 	m_MenuTools = new wxMenu();
 	wxMenuItem* m_ItemSelect;
-	m_ItemSelect = new wxMenuItem( m_MenuTools, wxID_ANY, wxString( _("Select") ) + wxT('\t') + wxT("q"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemSelect = new wxMenuItem( m_MenuTools, ID_SelectTool, wxString( _("Select") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuTools->Append( m_ItemSelect );
 	
 	wxMenuItem* m_ItemTranslate;
-	m_ItemTranslate = new wxMenuItem( m_MenuTools, wxID_ANY, wxString( _("Translate") ) + wxT('\t') + wxT("w"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemTranslate = new wxMenuItem( m_MenuTools, ID_TranslateTool, wxString( _("Translate") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuTools->Append( m_ItemTranslate );
 	
 	wxMenuItem* m_ItemRotate;
-	m_ItemRotate = new wxMenuItem( m_MenuTools, wxID_ANY, wxString( _("Rotate") ) + wxT('\t') + wxT("e"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemRotate = new wxMenuItem( m_MenuTools, ID_RotateTool, wxString( _("Rotate") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuTools->Append( m_ItemRotate );
 	
 	wxMenuItem* m_ItemScale;
-	m_ItemScale = new wxMenuItem( m_MenuTools, wxID_ANY, wxString( _("Scale") ) + wxT('\t') + wxT("r"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemScale = new wxMenuItem( m_MenuTools, ID_ScaleTool, wxString( _("Scale") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuTools->Append( m_ItemScale );
 	
 	wxMenuItem* m_ItemMovePivot;
-	m_ItemMovePivot = new wxMenuItem( m_MenuTools, wxID_ANY, wxString( _("Move Pivot") ) + wxT('\t') + wxT("t"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemMovePivot = new wxMenuItem( m_MenuTools, ID_MovePivotTool, wxString( _("Move Pivot") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuTools->Append( m_ItemMovePivot );
 	
 	wxMenuItem* m_ItemDuplicateTool;
-	m_ItemDuplicateTool = new wxMenuItem( m_MenuTools, wxID_ANY, wxString( _("Duplicate Tool") ) + wxT('\t') + wxT("ALT-d"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemDuplicateTool = new wxMenuItem( m_MenuTools, ID_DuplicateTool, wxString( _("Duplicate Tool") ) + wxT('\t') + wxT("alt-d"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuTools->Append( m_ItemDuplicateTool );
 	
 	wxMenuItem* m_separator19;
 	m_separator19 = m_MenuTools->AppendSeparator();
 	
 	wxMenuItem* m_ItemCreateEntity;
-	m_ItemCreateEntity = new wxMenuItem( m_MenuTools, wxID_ANY, wxString( _("Create Entity") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemCreateEntity = new wxMenuItem( m_MenuTools, ID_CreateEntityTool, wxString( _("Create Entity") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuTools->Append( m_ItemCreateEntity );
 	
 	wxMenuItem* m_ItemCreateLocator;
-	m_ItemCreateLocator = new wxMenuItem( m_MenuTools, wxID_ANY, wxString( _("Create Locator") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemCreateLocator = new wxMenuItem( m_MenuTools, ID_CreateLocatorTool, wxString( _("Create Locator") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuTools->Append( m_ItemCreateLocator );
 	
 	wxMenuItem* m_ItemCreateVolume;
-	m_ItemCreateVolume = new wxMenuItem( m_MenuTools, wxID_ANY, wxString( _("Create Volume") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemCreateVolume = new wxMenuItem( m_MenuTools, ID_CreateVolumeTool, wxString( _("Create Volume") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuTools->Append( m_ItemCreateVolume );
 	
 	wxMenuItem* m_ItemCreateCurve;
-	m_ItemCreateCurve = new wxMenuItem( m_MenuTools, wxID_ANY, wxString( _("Create Curve") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemCreateCurve = new wxMenuItem( m_MenuTools, ID_CreateCurveTool, wxString( _("Create Curve") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuTools->Append( m_ItemCreateCurve );
 	
 	wxMenuItem* m_ItemEditCurve;
-	m_ItemEditCurve = new wxMenuItem( m_MenuTools, wxID_ANY, wxString( _("Edit Curve") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemEditCurve = new wxMenuItem( m_MenuTools, ID_EditCurveTool, wxString( _("Edit Curve") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuTools->Append( m_ItemEditCurve );
 	
 	m_MainMenuBar->Append( m_MenuTools, _("Tools") ); 
@@ -305,6 +305,12 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	this->Connect( ID_SnapCameraTo, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapCameraTo ) );
 	this->Connect( ID_WalkUp, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
 	this->Connect( ID_WalkForward, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
+	this->Connect( ID_SelectTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSelectTool ) );
+	this->Connect( ID_TranslateTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnTranslateTool ) );
+	this->Connect( ID_RotateTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnRotateTool ) );
+	this->Connect( ID_ScaleTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnScaleTool ) );
+	this->Connect( ID_MovePivotTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnMovePivotTool ) );
+	this->Connect( ID_DuplicateTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDuplicateTool ) );
 	this->Connect( ID_Settings, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSettings ) );
 	this->Connect( ID_About, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnAbout ) );
 }
@@ -344,251 +350,15 @@ MainFrameGenerated::~MainFrameGenerated()
 	this->Disconnect( ID_SnapCameraTo, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapCameraTo ) );
 	this->Disconnect( ID_WalkUp, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
 	this->Disconnect( ID_WalkForward, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
+	this->Disconnect( ID_SelectTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSelectTool ) );
+	this->Disconnect( ID_TranslateTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnTranslateTool ) );
+	this->Disconnect( ID_RotateTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnRotateTool ) );
+	this->Disconnect( ID_ScaleTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnScaleTool ) );
+	this->Disconnect( ID_MovePivotTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnMovePivotTool ) );
+	this->Disconnect( ID_DuplicateTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDuplicateTool ) );
 	this->Disconnect( ID_Settings, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSettings ) );
 	this->Disconnect( ID_About, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnAbout ) );
 	
-}
-
-ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
-{
-	wxBoxSizer* bSizer26;
-	bSizer26 = new wxBoxSizer( wxVERTICAL );
-	
-	m_MainPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer27;
-	bSizer27 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_NewSceneButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_NewSceneButton, 0, wxALL, 2 );
-	
-	m_OpenButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_OpenButton, 0, wxALL, 2 );
-	
-	m_SaveAllButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_SaveAllButton, 0, wxALL, 2 );
-	
-	m_staticline1 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bSizer27->Add( m_staticline1, 0, wxEXPAND | wxALL, 2 );
-	
-	m_CutButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_CutButton, 0, wxALL, 2 );
-	
-	m_CopyButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_CopyButton, 0, wxALL, 2 );
-	
-	m_PasteButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_PasteButton, 0, wxALL, 2 );
-	
-	m_DeleteButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_DeleteButton, 0, wxALL, 2 );
-	
-	m_staticline2 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bSizer27->Add( m_staticline2, 0, wxEXPAND | wxALL, 2 );
-	
-	m_UndoButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_UndoButton, 0, wxALL, 2 );
-	
-	m_RedoButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_RedoButton, 0, wxALL, 2 );
-	
-	
-	bSizer27->Add( 20, 0, 0, 0, 0 );
-	
-	m_ToolsPanel = new wxPanel( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* m_ToolsPanelSizer;
-	m_ToolsPanelSizer = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_ToolsPanel->SetSizer( m_ToolsPanelSizer );
-	m_ToolsPanel->Layout();
-	m_ToolsPanelSizer->Fit( m_ToolsPanel );
-	bSizer27->Add( m_ToolsPanel, 1, wxEXPAND | wxALL, 0 );
-	
-	m_PlayButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_PlayButton, 0, wxALL, 2 );
-	
-	m_PauseButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_PauseButton, 0, wxALL, 2 );
-	
-	m_StopButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_StopButton, 0, wxALL, 2 );
-	
-	
-	bSizer27->Add( 20, 0, 1, wxEXPAND, 5 );
-	
-	m_VaultSearchBox = new wxSearchCtrl( m_MainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 400,-1 ), 0 );
-	#ifndef __WXMAC__
-	m_VaultSearchBox->ShowSearchButton( true );
-	#endif
-	m_VaultSearchBox->ShowCancelButton( false );
-	m_VaultSearchBox->SetMinSize( wxSize( 300,-1 ) );
-	
-	bSizer27->Add( m_VaultSearchBox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 2 );
-	
-	m_MainPanel->SetSizer( bSizer27 );
-	m_MainPanel->Layout();
-	bSizer27->Fit( m_MainPanel );
-	bSizer26->Add( m_MainPanel, 0, wxEXPAND | wxALL, 0 );
-	
-	m_ToolsPropertiesPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bSizer26->Add( m_ToolsPropertiesPanel, 0, wxEXPAND | wxALL, 0 );
-	
-	this->SetSizer( bSizer26 );
-	this->Layout();
-	
-	// Connect Events
-	m_NewSceneButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnNewScene ), NULL, this );
-	m_OpenButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnOpen ), NULL, this );
-	m_SaveAllButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnSaveAll ), NULL, this );
-	m_CutButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnCut ), NULL, this );
-	m_CopyButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnCopy ), NULL, this );
-	m_PasteButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnPaste ), NULL, this );
-	m_DeleteButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnDelete ), NULL, this );
-	m_UndoButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnUndo ), NULL, this );
-	m_RedoButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnRedo ), NULL, this );
-	m_VaultSearchBox->Connect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchButtonClick ), NULL, this );
-	m_VaultSearchBox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchTextEnter ), NULL, this );
-}
-
-ToolbarPanelGenerated::~ToolbarPanelGenerated()
-{
-	// Disconnect Events
-	m_NewSceneButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnNewScene ), NULL, this );
-	m_OpenButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnOpen ), NULL, this );
-	m_SaveAllButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnSaveAll ), NULL, this );
-	m_CutButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnCut ), NULL, this );
-	m_CopyButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnCopy ), NULL, this );
-	m_PasteButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnPaste ), NULL, this );
-	m_DeleteButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnDelete ), NULL, this );
-	m_UndoButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnUndo ), NULL, this );
-	m_RedoButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnRedo ), NULL, this );
-	m_VaultSearchBox->Disconnect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchButtonClick ), NULL, this );
-	m_VaultSearchBox->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchTextEnter ), NULL, this );
-	
-}
-
-HelpPanelGenerated::HelpPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
-{
-	this->SetMinSize( wxSize( 300,200 ) );
-	
-	wxBoxSizer* bSizer32;
-	bSizer32 = new wxBoxSizer( wxVERTICAL );
-	
-	m_HelpRichText = new wxRichTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0|wxVSCROLL|wxHSCROLL|wxNO_BORDER|wxWANTS_CHARS );
-	bSizer32->Add( m_HelpRichText, 1, wxEXPAND | wxALL, 5 );
-	
-	this->SetSizer( bSizer32 );
-	this->Layout();
-}
-
-HelpPanelGenerated::~HelpPanelGenerated()
-{
-}
-
-LayersPanelGenerated::LayersPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
-{
-	wxBoxSizer* bSizer19;
-	bSizer19 = new wxBoxSizer( wxVERTICAL );
-	
-	m_LayerManagementPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer36;
-	bSizer36 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_CreateNewLayerFromSelectionButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer36->Add( m_CreateNewLayerFromSelectionButton, 0, wxALL, 2 );
-	
-	m_CreateNewLayerButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer36->Add( m_CreateNewLayerButton, 0, wxALL, 2 );
-	
-	m_DeleteSelectedLayersButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer36->Add( m_DeleteSelectedLayersButton, 0, wxALL, 2 );
-	
-	
-	bSizer36->Add( 10, 0, 0, wxEXPAND, 0 );
-	
-	m_AddSelectionToLayerButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer36->Add( m_AddSelectionToLayerButton, 0, wxALL, 2 );
-	
-	m_RemoveSelectionFromLayerButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer36->Add( m_RemoveSelectionFromLayerButton, 0, wxALL, 2 );
-	
-	
-	bSizer36->Add( 10, 0, 0, wxEXPAND, 0 );
-	
-	m_SelectLayerMembersButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer36->Add( m_SelectLayerMembersButton, 0, wxALL, 2 );
-	
-	m_SelectLayersButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer36->Add( m_SelectLayersButton, 0, wxALL, 2 );
-	
-	m_LayerManagementPanel->SetSizer( bSizer36 );
-	m_LayerManagementPanel->Layout();
-	bSizer36->Fit( m_LayerManagementPanel );
-	bSizer19->Add( m_LayerManagementPanel, 0, wxEXPAND | wxALL, 0 );
-	
-	this->SetSizer( bSizer19 );
-	this->Layout();
-	
-	// Connect Events
-	m_CreateNewLayerFromSelectionButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayerFromSelection ), NULL, this );
-	m_CreateNewLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayer ), NULL, this );
-	m_DeleteSelectedLayersButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnDeleteLayer ), NULL, this );
-	m_AddSelectionToLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnAddSelectionToLayer ), NULL, this );
-	m_RemoveSelectionFromLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnRemoveSelectionFromLayer ), NULL, this );
-	m_SelectLayerMembersButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayerMembers ), NULL, this );
-	m_SelectLayersButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayer ), NULL, this );
-}
-
-LayersPanelGenerated::~LayersPanelGenerated()
-{
-	// Disconnect Events
-	m_CreateNewLayerFromSelectionButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayerFromSelection ), NULL, this );
-	m_CreateNewLayerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayer ), NULL, this );
-	m_DeleteSelectedLayersButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnDeleteLayer ), NULL, this );
-	m_AddSelectionToLayerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnAddSelectionToLayer ), NULL, this );
-	m_RemoveSelectionFromLayerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnRemoveSelectionFromLayer ), NULL, this );
-	m_SelectLayerMembersButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayerMembers ), NULL, this );
-	m_SelectLayersButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayer ), NULL, this );
-	
-}
-
-VaultPanelGenerated::VaultPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
-{
-	wxBoxSizer* bSizer33;
-	bSizer33 = new wxBoxSizer( wxVERTICAL );
-	
-	m_NavigationPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer34;
-	bSizer34 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_SearchCtrl = new wxSearchCtrl( m_NavigationPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	#ifndef __WXMAC__
-	m_SearchCtrl->ShowSearchButton( true );
-	#endif
-	m_SearchCtrl->ShowCancelButton( false );
-	bSizer34->Add( m_SearchCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_OptionsButton = new wxBitmapButton( m_NavigationPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer34->Add( m_OptionsButton, 0, wxALL, 5 );
-	
-	m_NavigationPanel->SetSizer( bSizer34 );
-	m_NavigationPanel->Layout();
-	bSizer34->Fit( m_NavigationPanel );
-	bSizer33->Add( m_NavigationPanel, 0, wxALL|wxEXPAND, 5 );
-	
-	wxBoxSizer* bSizer24;
-	bSizer24 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_ResultsPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bSizer24->Add( m_ResultsPanel, 1, wxEXPAND | wxALL, 5 );
-	
-	bSizer33->Add( bSizer24, 1, wxEXPAND, 5 );
-	
-	this->SetSizer( bSizer33 );
-	this->Layout();
-}
-
-VaultPanelGenerated::~VaultPanelGenerated()
-{
 }
 
 DetailsPanelGenerated::DetailsPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
@@ -763,36 +533,130 @@ DetailsPanelGenerated::~DetailsPanelGenerated()
 {
 }
 
-ToolsPanelGenerated::ToolsPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+DirectoryPanelGenerated::DirectoryPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
-	wxBoxSizer* bSizer28;
-	bSizer28 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizer21;
+	bSizer21 = new wxBoxSizer( wxVERTICAL );
 	
-	m_ToolsContainerPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bSizer28->Add( m_ToolsContainerPanel, 0, wxEXPAND, 5 );
+	m_DirectoryNotebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_HierarchyPanel = new wxPanel( m_DirectoryNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer31;
+	bSizer31 = new wxBoxSizer( wxVERTICAL );
 	
-	m_PropertiesPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bSizer28->Add( m_PropertiesPanel, 1, wxEXPAND, 5 );
+	m_HierarchyPanel->SetSizer( bSizer31 );
+	m_HierarchyPanel->Layout();
+	bSizer31->Fit( m_HierarchyPanel );
+	m_DirectoryNotebook->AddPage( m_HierarchyPanel, _("Hierarchy"), false );
+	m_EntitiesPanel = new wxPanel( m_DirectoryNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer32;
+	bSizer32 = new wxBoxSizer( wxVERTICAL );
 	
-	this->SetSizer( bSizer28 );
+	m_EntitiesPanel->SetSizer( bSizer32 );
+	m_EntitiesPanel->Layout();
+	bSizer32->Fit( m_EntitiesPanel );
+	m_DirectoryNotebook->AddPage( m_EntitiesPanel, _("Entities"), false );
+	m_TypesPanel = new wxPanel( m_DirectoryNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer33;
+	bSizer33 = new wxBoxSizer( wxVERTICAL );
+	
+	m_TypesPanel->SetSizer( bSizer33 );
+	m_TypesPanel->Layout();
+	bSizer33->Fit( m_TypesPanel );
+	m_DirectoryNotebook->AddPage( m_TypesPanel, _("Types"), false );
+	
+	bSizer21->Add( m_DirectoryNotebook, 1, wxEXPAND | wxALL, 5 );
+	
+	this->SetSizer( bSizer21 );
 	this->Layout();
 }
 
-ToolsPanelGenerated::~ToolsPanelGenerated()
+DirectoryPanelGenerated::~DirectoryPanelGenerated()
 {
 }
 
-TypesPanelGenerated::TypesPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+HelpPanelGenerated::HelpPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
-	wxBoxSizer* bSizer30;
-	bSizer30 = new wxBoxSizer( wxVERTICAL );
+	this->SetMinSize( wxSize( 300,200 ) );
 	
-	this->SetSizer( bSizer30 );
+	wxBoxSizer* bSizer32;
+	bSizer32 = new wxBoxSizer( wxVERTICAL );
+	
+	m_HelpRichText = new wxRichTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0|wxVSCROLL|wxHSCROLL|wxNO_BORDER|wxWANTS_CHARS );
+	bSizer32->Add( m_HelpRichText, 1, wxEXPAND | wxALL, 5 );
+	
+	this->SetSizer( bSizer32 );
 	this->Layout();
 }
 
-TypesPanelGenerated::~TypesPanelGenerated()
+HelpPanelGenerated::~HelpPanelGenerated()
 {
+}
+
+LayersPanelGenerated::LayersPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+{
+	wxBoxSizer* bSizer19;
+	bSizer19 = new wxBoxSizer( wxVERTICAL );
+	
+	m_LayerManagementPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer36;
+	bSizer36 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_CreateNewLayerFromSelectionButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer36->Add( m_CreateNewLayerFromSelectionButton, 0, wxALL, 2 );
+	
+	m_CreateNewLayerButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer36->Add( m_CreateNewLayerButton, 0, wxALL, 2 );
+	
+	m_DeleteSelectedLayersButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer36->Add( m_DeleteSelectedLayersButton, 0, wxALL, 2 );
+	
+	
+	bSizer36->Add( 10, 0, 0, wxEXPAND, 0 );
+	
+	m_AddSelectionToLayerButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer36->Add( m_AddSelectionToLayerButton, 0, wxALL, 2 );
+	
+	m_RemoveSelectionFromLayerButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer36->Add( m_RemoveSelectionFromLayerButton, 0, wxALL, 2 );
+	
+	
+	bSizer36->Add( 10, 0, 0, wxEXPAND, 0 );
+	
+	m_SelectLayerMembersButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer36->Add( m_SelectLayerMembersButton, 0, wxALL, 2 );
+	
+	m_SelectLayersButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer36->Add( m_SelectLayersButton, 0, wxALL, 2 );
+	
+	m_LayerManagementPanel->SetSizer( bSizer36 );
+	m_LayerManagementPanel->Layout();
+	bSizer36->Fit( m_LayerManagementPanel );
+	bSizer19->Add( m_LayerManagementPanel, 0, wxEXPAND | wxALL, 0 );
+	
+	this->SetSizer( bSizer19 );
+	this->Layout();
+	
+	// Connect Events
+	m_CreateNewLayerFromSelectionButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayerFromSelection ), NULL, this );
+	m_CreateNewLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayer ), NULL, this );
+	m_DeleteSelectedLayersButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnDeleteLayer ), NULL, this );
+	m_AddSelectionToLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnAddSelectionToLayer ), NULL, this );
+	m_RemoveSelectionFromLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnRemoveSelectionFromLayer ), NULL, this );
+	m_SelectLayerMembersButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayerMembers ), NULL, this );
+	m_SelectLayersButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayer ), NULL, this );
+}
+
+LayersPanelGenerated::~LayersPanelGenerated()
+{
+	// Disconnect Events
+	m_CreateNewLayerFromSelectionButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayerFromSelection ), NULL, this );
+	m_CreateNewLayerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayer ), NULL, this );
+	m_DeleteSelectedLayersButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnDeleteLayer ), NULL, this );
+	m_AddSelectionToLayerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnAddSelectionToLayer ), NULL, this );
+	m_RemoveSelectionFromLayerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnRemoveSelectionFromLayer ), NULL, this );
+	m_SelectLayerMembersButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayerMembers ), NULL, this );
+	m_SelectLayersButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayer ), NULL, this );
+	
 }
 
 ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
@@ -837,47 +701,6 @@ ProjectPanelGenerated::~ProjectPanelGenerated()
 	m_CreateFolder->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnCreateFolder ), NULL, this );
 	m_Delete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnDelete ), NULL, this );
 	
-}
-
-DirectoryPanelGenerated::DirectoryPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
-{
-	wxBoxSizer* bSizer21;
-	bSizer21 = new wxBoxSizer( wxVERTICAL );
-	
-	m_DirectoryNotebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_HierarchyPanel = new wxPanel( m_DirectoryNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer31;
-	bSizer31 = new wxBoxSizer( wxVERTICAL );
-	
-	m_HierarchyPanel->SetSizer( bSizer31 );
-	m_HierarchyPanel->Layout();
-	bSizer31->Fit( m_HierarchyPanel );
-	m_DirectoryNotebook->AddPage( m_HierarchyPanel, _("Hierarchy"), false );
-	m_EntitiesPanel = new wxPanel( m_DirectoryNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer32;
-	bSizer32 = new wxBoxSizer( wxVERTICAL );
-	
-	m_EntitiesPanel->SetSizer( bSizer32 );
-	m_EntitiesPanel->Layout();
-	bSizer32->Fit( m_EntitiesPanel );
-	m_DirectoryNotebook->AddPage( m_EntitiesPanel, _("Entities"), false );
-	m_TypesPanel = new wxPanel( m_DirectoryNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer33;
-	bSizer33 = new wxBoxSizer( wxVERTICAL );
-	
-	m_TypesPanel->SetSizer( bSizer33 );
-	m_TypesPanel->Layout();
-	bSizer33->Fit( m_TypesPanel );
-	m_DirectoryNotebook->AddPage( m_TypesPanel, _("Types"), false );
-	
-	bSizer21->Add( m_DirectoryNotebook, 1, wxEXPAND | wxALL, 5 );
-	
-	this->SetSizer( bSizer21 );
-	this->Layout();
-}
-
-DirectoryPanelGenerated::~DirectoryPanelGenerated()
-{
 }
 
 PropertiesPanelGenerated::PropertiesPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
@@ -935,6 +758,211 @@ PropertiesPanelGenerated::~PropertiesPanelGenerated()
 	m_AllButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PropertiesPanelGenerated::OnUnion ), NULL, this );
 	m_ExpandAllButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PropertiesPanelGenerated::OnExpandAll ), NULL, this );
 	m_CollapseAllButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PropertiesPanelGenerated::OnCollapseAll ), NULL, this );
+	
+}
+
+ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+{
+	wxBoxSizer* bSizer26;
+	bSizer26 = new wxBoxSizer( wxVERTICAL );
+	
+	m_MainPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer27;
+	bSizer27 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_NewSceneButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_NewSceneButton, 0, wxALL, 2 );
+	
+	m_OpenButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_OpenButton, 0, wxALL, 2 );
+	
+	m_SaveAllButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_SaveAllButton, 0, wxALL, 2 );
+	
+	m_staticline1 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer27->Add( m_staticline1, 0, wxEXPAND | wxALL, 2 );
+	
+	m_CutButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_CutButton, 0, wxALL, 2 );
+	
+	m_CopyButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_CopyButton, 0, wxALL, 2 );
+	
+	m_PasteButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_PasteButton, 0, wxALL, 2 );
+	
+	m_DeleteButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_DeleteButton, 0, wxALL, 2 );
+	
+	m_staticline2 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer27->Add( m_staticline2, 0, wxEXPAND | wxALL, 2 );
+	
+	m_UndoButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_UndoButton, 0, wxALL, 2 );
+	
+	m_RedoButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_RedoButton, 0, wxALL, 2 );
+	
+	
+	bSizer27->Add( 20, 0, 0, 0, 0 );
+	
+	m_ToolsPanel = new wxPanel( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* m_ToolsPanelSizer;
+	m_ToolsPanelSizer = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_ToolsPanel->SetSizer( m_ToolsPanelSizer );
+	m_ToolsPanel->Layout();
+	m_ToolsPanelSizer->Fit( m_ToolsPanel );
+	bSizer27->Add( m_ToolsPanel, 1, wxEXPAND | wxALL, 0 );
+	
+	m_PlayButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_PlayButton, 0, wxALL, 2 );
+	
+	m_PauseButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_PauseButton, 0, wxALL, 2 );
+	
+	m_StopButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_StopButton, 0, wxALL, 2 );
+	
+	
+	bSizer27->Add( 20, 0, 1, wxEXPAND, 5 );
+	
+	m_VaultSearchBox = new wxSearchCtrl( m_MainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 400,-1 ), wxTE_PROCESS_ENTER );
+	#ifndef __WXMAC__
+	m_VaultSearchBox->ShowSearchButton( true );
+	#endif
+	m_VaultSearchBox->ShowCancelButton( false );
+	m_VaultSearchBox->SetMinSize( wxSize( 300,-1 ) );
+	
+	bSizer27->Add( m_VaultSearchBox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 2 );
+	
+	m_MainPanel->SetSizer( bSizer27 );
+	m_MainPanel->Layout();
+	bSizer27->Fit( m_MainPanel );
+	bSizer26->Add( m_MainPanel, 0, wxEXPAND | wxALL, 0 );
+	
+	m_ToolsPropertiesPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	bSizer26->Add( m_ToolsPropertiesPanel, 0, wxEXPAND | wxALL, 0 );
+	
+	this->SetSizer( bSizer26 );
+	this->Layout();
+	
+	// Connect Events
+	m_NewSceneButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnNewScene ), NULL, this );
+	m_OpenButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnOpen ), NULL, this );
+	m_SaveAllButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnSaveAll ), NULL, this );
+	m_CutButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnCut ), NULL, this );
+	m_CopyButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnCopy ), NULL, this );
+	m_PasteButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnPaste ), NULL, this );
+	m_DeleteButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnDelete ), NULL, this );
+	m_UndoButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnUndo ), NULL, this );
+	m_RedoButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnRedo ), NULL, this );
+	m_VaultSearchBox->Connect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchGoButtonClick ), NULL, this );
+	m_VaultSearchBox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchTextEnter ), NULL, this );
+}
+
+ToolbarPanelGenerated::~ToolbarPanelGenerated()
+{
+	// Disconnect Events
+	m_NewSceneButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnNewScene ), NULL, this );
+	m_OpenButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnOpen ), NULL, this );
+	m_SaveAllButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnSaveAll ), NULL, this );
+	m_CutButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnCut ), NULL, this );
+	m_CopyButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnCopy ), NULL, this );
+	m_PasteButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnPaste ), NULL, this );
+	m_DeleteButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnDelete ), NULL, this );
+	m_UndoButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnUndo ), NULL, this );
+	m_RedoButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnRedo ), NULL, this );
+	m_VaultSearchBox->Disconnect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchGoButtonClick ), NULL, this );
+	m_VaultSearchBox->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchTextEnter ), NULL, this );
+	
+}
+
+ToolsPanelGenerated::ToolsPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+{
+	wxBoxSizer* bSizer28;
+	bSizer28 = new wxBoxSizer( wxVERTICAL );
+	
+	m_ToolsContainerPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	bSizer28->Add( m_ToolsContainerPanel, 0, wxEXPAND, 5 );
+	
+	m_PropertiesPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	bSizer28->Add( m_PropertiesPanel, 1, wxEXPAND, 5 );
+	
+	this->SetSizer( bSizer28 );
+	this->Layout();
+}
+
+ToolsPanelGenerated::~ToolsPanelGenerated()
+{
+}
+
+TypesPanelGenerated::TypesPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+{
+	wxBoxSizer* bSizer30;
+	bSizer30 = new wxBoxSizer( wxVERTICAL );
+	
+	this->SetSizer( bSizer30 );
+	this->Layout();
+}
+
+TypesPanelGenerated::~TypesPanelGenerated()
+{
+}
+
+VaultPanelGenerated::VaultPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+{
+	wxBoxSizer* bSizer33;
+	bSizer33 = new wxBoxSizer( wxVERTICAL );
+	
+	m_NavigationPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer34;
+	bSizer34 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_SearchCtrl = new wxSearchCtrl( m_NavigationPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	#ifndef __WXMAC__
+	m_SearchCtrl->ShowSearchButton( true );
+	#endif
+	m_SearchCtrl->ShowCancelButton( true );
+	bSizer34->Add( m_SearchCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_OptionsButton = new wxBitmapButton( m_NavigationPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_OptionsButton->SetToolTip( _("Vault Settings...") );
+	
+	m_OptionsButton->SetToolTip( _("Vault Settings...") );
+	
+	bSizer34->Add( m_OptionsButton, 0, wxALL, 5 );
+	
+	m_NavigationPanel->SetSizer( bSizer34 );
+	m_NavigationPanel->Layout();
+	bSizer34->Fit( m_NavigationPanel );
+	bSizer33->Add( m_NavigationPanel, 0, wxALL|wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer24;
+	bSizer24 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_ResultsPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	bSizer24->Add( m_ResultsPanel, 1, wxEXPAND | wxALL, 5 );
+	
+	bSizer33->Add( bSizer24, 1, wxEXPAND, 5 );
+	
+	this->SetSizer( bSizer33 );
+	this->Layout();
+	
+	// Connect Events
+	m_SearchCtrl->Connect( wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, wxCommandEventHandler( VaultPanelGenerated::OnSearchCancelButtonClick ), NULL, this );
+	m_SearchCtrl->Connect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( VaultPanelGenerated::OnSearchGoButtonClick ), NULL, this );
+	m_SearchCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( VaultPanelGenerated::OnSearchTextEnter ), NULL, this );
+	m_OptionsButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( VaultPanelGenerated::OnVaultSettingsButtonClick ), NULL, this );
+}
+
+VaultPanelGenerated::~VaultPanelGenerated()
+{
+	// Disconnect Events
+	m_SearchCtrl->Disconnect( wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, wxCommandEventHandler( VaultPanelGenerated::OnSearchCancelButtonClick ), NULL, this );
+	m_SearchCtrl->Disconnect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( VaultPanelGenerated::OnSearchGoButtonClick ), NULL, this );
+	m_SearchCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( VaultPanelGenerated::OnSearchTextEnter ), NULL, this );
+	m_OptionsButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( VaultPanelGenerated::OnVaultSettingsButtonClick ), NULL, this );
 	
 }
 

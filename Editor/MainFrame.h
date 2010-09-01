@@ -132,9 +132,8 @@ namespace Helium
             virtual void OnClose( wxCommandEvent& event ) HELIUM_OVERRIDE;
             virtual void OnSaveAll( wxCommandEvent& event ) HELIUM_OVERRIDE;
 
-            void OnSearchButtonClick( wxCommandEvent& event );
+            void OnSearchGoButtonClick( wxCommandEvent& event );
             void OnSearchTextEnter( wxCommandEvent& event );
-            void OnCloseSearchPanel();
 
             void OnViewChange( wxCommandEvent& event );
             void OnViewCameraChange( wxCommandEvent& event );
@@ -193,6 +192,13 @@ namespace Helium
 
             void OnManifestContextMenu(wxCommandEvent& event);
             void OnTypeContextMenu(wxCommandEvent& event);
+
+            void OnSelectTool( wxCommandEvent& event );
+            void OnTranslateTool( wxCommandEvent& event );
+            void OnRotateTool( wxCommandEvent& event );
+            void OnScaleTool( wxCommandEvent& event );
+            void OnMovePivotTool( wxCommandEvent& event );
+            void OnDuplicateTool( wxCommandEvent& event );
 
         private:
             bool Copy( Core::Scene* scene );

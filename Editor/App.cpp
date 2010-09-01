@@ -154,18 +154,12 @@ namespace Helium
 App::App()
 #pragma TODO("This needs fixing otherwise dialogs will not be modal -Geoff")
 : m_SettingsManager( new Core::SettingsManager() )
-, m_VaultSearch( NULL )
 , m_Frame( NULL )
 {
 }
 
 App::~App()
 {
-    if ( m_VaultSearch )
-    {
-        delete m_VaultSearch;
-        m_VaultSearch = NULL;
-    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -253,6 +247,9 @@ bool App::OnInit()
         wxMessageBox( TXT( "There were errors during startup, use Editor with caution." ), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK );
     }
 
+#pragma TODO("Get the tracker tracking the project when it opens")
+    //m_Tracker.SetDirectory( Helium::Path( TXT( "C:\\Projects\\github\\nocturnal\\Helium\\Editor\\Icons\\16x16\\" ) ) );
+
     GetFrame()->Show();
 
     return true;
@@ -263,8 +260,6 @@ bool App::OnInit()
 // 
 int App::OnExit()
 {
-    m_TrackerThread.Wait();
-
     SaveSettings();
 
     m_InitializerStack.Cleanup();

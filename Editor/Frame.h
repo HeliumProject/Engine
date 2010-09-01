@@ -20,7 +20,6 @@ namespace Helium
             Frame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxT( "frame" ) );
             virtual ~Frame();
 
-            virtual void PostCommand( const Undo::CommandPtr& command );
             virtual void SetHelpText( const tchar* text );
 
             // Undo/redo support
@@ -45,13 +44,11 @@ namespace Helium
             M_MenuIdToPanel m_Panels;
 
         protected:
-            CommandQueue m_CommandQueue;
-            wxAuiManager m_FrameManager;
+            Undo::Queue     m_UndoQueue;
+            wxAuiManager    m_FrameManager;
 
-            Undo::Queue  m_UndoQueue;
-
-            wxTimer*  m_HelpTimer;
-            wxWindow* m_HelpLastWindow;
+            wxTimer*        m_HelpTimer;
+            wxWindow*       m_HelpLastWindow;
 
             DECLARE_EVENT_TABLE();
         };

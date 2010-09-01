@@ -35,7 +35,7 @@ Canvas::Canvas( wxWindow* window )
 
 void Canvas::OnShow(wxShowEvent& event)
 {
-    RaiseShow( event.GetShow() );
+    e_Show.Raise( event.GetShow() );
 }
 
 void Canvas::OnClick(wxMouseEvent& event)

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Inspect/Controls.h"
+#include "Foundation/Inspect/Canvas.h"
 
 #include "Editor/Inspect/Widget.h"
 
@@ -8,15 +8,14 @@ namespace Helium
 {
     namespace Editor
     {
-        typedef Helium::SmartPtr< Widget > (*WidgetCreator)( Inspect::Control* control );
-
         template< class WidgetT, class ControlT >
         WidgetPtr CreateWidget( ControlT* control )
         {
             return new WidgetT( control );
         }
 
-        typedef std::map< i32, WidgetCreator > WidgetCreators;
+        typedef Helium::SmartPtr< Widget >    (*WidgetCreator)( Inspect::Control* control );
+        typedef std::map< i32, WidgetCreator >  WidgetCreators;
 
         class Canvas : public Inspect::Canvas, public wxEvtHandler
         {
@@ -35,6 +34,7 @@ namespace Helium
             // widget construction
             virtual void RealizeControl( Inspect::Control* control, Inspect::Control* parent ) HELIUM_OVERRIDE;
 
+            // associate a widget to a control
             template< class WidgetT, class ControlT >
             void SetWidgetCreator()
             {

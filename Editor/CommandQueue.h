@@ -31,38 +31,20 @@ namespace Helium
 
         class CommandQueue : public wxEvtHandler
         {
-        private:
-            // the editor to use
-            wxWindow* m_Window;
-
-            // the commands to redo when flushing
-            Undo::V_CommandSmartPtr m_Commands;
-
         public:
             CommandQueue( wxWindow* window );
-            virtual ~CommandQueue();
+            ~CommandQueue();
+
+        public:
+            void Post( VoidSignature::Delegate delegate );
+            void Flush();
 
         protected:
             void HandleEvent( wxCommandEvent& event );
 
-        public:
-            void Push( const Undo::CommandPtr& command );
-            void Flush();
-
-            //
-            // Events
-            //
-        protected:
-            PushCommandSignature::Event m_PushCommand;
-        public:
-            void AddPushCommandListener( const PushCommandSignature::Delegate& listener )
-            {
-                m_PushCommand.Add( listener );
-            }
-            void RemovePushCommandListener( const PushCommandSignature::Delegate& listener )
-            {
-                m_PushCommand.Remove( listener );
-            }
+        private:
+            wxWindow*                               m_Window;   // the windows to use (for custom message dispatch)
+            std::vector< VoidSignature::Delegate >  m_Commands; // the commands to redo when flushing
         };
     }
 }

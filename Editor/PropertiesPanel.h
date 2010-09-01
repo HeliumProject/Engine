@@ -3,6 +3,7 @@
 #include "Core/Scene/PropertiesManager.h"
 #include "Core/Scene/PropertiesGenerator.h"
 
+#include "Editor/CommandQueue.h"
 #include "Editor/EditorGenerated.h"
 #include "Editor/Inspect/TreeCanvas.h"
 
@@ -29,6 +30,7 @@ namespace Helium
             virtual void OnUnion(wxCommandEvent& event) HELIUM_OVERRIDE;
 
         private:
+            CommandQueue                m_CommandQueue;
             TreeCanvas                  m_PropertiesCanvas;
             Core::PropertiesGenerator   m_PropertiesGenerator; // HEADS UP: do this one first in the constructor!
             Core::PropertiesManager     m_PropertiesManager;

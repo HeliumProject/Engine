@@ -8,9 +8,8 @@ namespace Helium
 {
     namespace Core
     {
-        class ManiuplatorAdapterCollection;
         class PropertiesGenerator;
-        class EnumerateElementArgs;
+        struct EnumerateElementArgs;
 
         class CORE_API Selectable : public Object
         {
@@ -53,7 +52,7 @@ namespace Helium
         };
 
         // Smart pointer to an Selectable
-        typedef Helium::SmartPtr< Selectable > LSelectablePtr;
+        typedef Helium::SmartPtr< Selectable > SelectablePtr;
 
         // vector of selectable objects
         typedef Helium::OrderedSet<Selectable*> OS_SelectableDumbPtr;

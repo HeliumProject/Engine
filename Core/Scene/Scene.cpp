@@ -2245,7 +2245,7 @@ void Scene::GetFlattenedSelection(OS_SelectableDumbPtr& selection)
     OS_SelectableDumbPtr::Iterator end = selectedItems.End();
     for ( ; it != end; ++it )
     {
-        const LSelectablePtr& selectable = *it;
+        const SelectablePtr& selectable = *it;
 
         selection.Append( selectable );
 

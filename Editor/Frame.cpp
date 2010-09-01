@@ -41,16 +41,15 @@ static const tchar* s_UserTitleBarFormat = TXT( "%s %s[ assets: %s, tech/tools: 
 // 
 Frame::Frame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
 : wxFrame( parent, id, title, pos, size, style, name )
-, m_CommandQueue( this )
 {
-  // tell wxAuiManager to manage this frame
-  m_FrameManager.SetFrame( this ); 
+    // tell wxAuiManager to manage this frame
+    m_FrameManager.SetFrame( this ); 
 
-  SetTitle( title.c_str() );
+    SetTitle( title.c_str() );
 
-  m_HelpLastWindow = NULL;
-  m_HelpTimer = new wxTimer( this, FrameTimerID );
-  m_HelpTimer->Start( 100 );
+    m_HelpLastWindow = NULL;
+    m_HelpTimer = new wxTimer( this, FrameTimerID );
+    m_HelpTimer->Start( 100 );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -61,17 +60,7 @@ Frame::~Frame()
     m_HelpTimer->Stop();
     delete m_HelpTimer;
 
-  m_FrameManager.UnInit();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Delays exectution of the specified command until the next time the message
-// pump for the UI runs.  Useful for executing a command from within a UI 
-// callback, when that command may cause the UI to be destroyed.
-// 
-void Frame::PostCommand( const Undo::CommandPtr& command )
-{
-  m_CommandQueue.Push( command );
+    m_FrameManager.UnInit();
 }
 
 void Frame::SetHelpText( const tchar* text )
@@ -115,7 +104,6 @@ void Frame::Push( const Undo::CommandPtr& command )
     m_UndoQueue.Push( command );
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////
 // Creates a menu that enumerates all panes attached to the frame manager, as
 // long as the pane has a caption.  The menu items will display checkmarks next
@@ -125,22 +113,22 @@ void Frame::Push( const Undo::CommandPtr& command )
 // 
 u32 Frame::CreatePanelsMenu( wxMenu* menu )
 {
-  u32 numMenuOptionsAdded = 0;
-  wxAuiPaneInfoArray& panes = m_FrameManager.GetAllPanes();
-  const size_t numPanes = panes.Count();
-  for ( size_t index = 0; index < numPanes; ++index )
-  {
-    wxAuiPaneInfo& pane = panes.Item( index );
-    if ( !pane.caption.empty() )
+    u32 numMenuOptionsAdded = 0;
+    wxAuiPaneInfoArray& panes = m_FrameManager.GetAllPanes();
+    const size_t numPanes = panes.Count();
+    for ( size_t index = 0; index < numPanes; ++index )
     {
-      wxMenuItem* item = menu->AppendCheckItem( wxID_ANY, pane.caption );
-      Connect( item->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( Frame::OnShowPanel ), NULL, this );
-      m_Panels.insert( M_MenuIdToPanel::value_type( item->GetId(), pane.window ) );
-      numMenuOptionsAdded++;
+        wxAuiPaneInfo& pane = panes.Item( index );
+        if ( !pane.caption.empty() )
+        {
+            wxMenuItem* item = menu->AppendCheckItem( wxID_ANY, pane.caption );
+            Connect( item->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( Frame::OnShowPanel ), NULL, this );
+            m_Panels.insert( M_MenuIdToPanel::value_type( item->GetId(), pane.window ) );
+            numMenuOptionsAdded++;
+        }
     }
-  }
 
-  return numMenuOptionsAdded;
+    return numMenuOptionsAdded;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -149,17 +137,17 @@ u32 Frame::CreatePanelsMenu( wxMenu* menu )
 // 
 void Frame::UpdatePanelsMenu( wxMenu* menu )
 {
-  const wxAuiPaneInfoArray& panes = m_FrameManager.GetAllPanes();
-  const size_t numPanes = panes.Count();
-  for ( size_t index = 0; index < numPanes; ++index )
-  {
-    const wxAuiPaneInfo& pane = panes.Item( index );
-    i32 itemId = menu->FindItem( pane.caption );
-    if ( itemId != wxNOT_FOUND )
+    const wxAuiPaneInfoArray& panes = m_FrameManager.GetAllPanes();
+    const size_t numPanes = panes.Count();
+    for ( size_t index = 0; index < numPanes; ++index )
     {
-      menu->Check( itemId, pane.IsShown() );
+        const wxAuiPaneInfo& pane = panes.Item( index );
+        i32 itemId = menu->FindItem( pane.caption );
+        if ( itemId != wxNOT_FOUND )
+        {
+            menu->Check( itemId, pane.IsShown() );
+        }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -167,7 +155,7 @@ void Frame::UpdatePanelsMenu( wxMenu* menu )
 // 
 void Frame::OnSetFocus( wxFocusEvent& args )
 {
-  wxTheApp->SetTopWindow( this );
+    wxTheApp->SetTopWindow( this );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -176,17 +164,17 @@ void Frame::OnSetFocus( wxFocusEvent& args )
 // 
 void Frame::OnShowPanel( wxCommandEvent& args )
 {
-  M_MenuIdToPanel::const_iterator found = m_Panels.find( args.GetId() );
-  if ( found != m_Panels.end() )
-  {
-    wxWindow* window = found->second;
-    wxAuiPaneInfo& pane = m_FrameManager.GetPane( window );
-    if ( pane.IsOk() )
+    M_MenuIdToPanel::const_iterator found = m_Panels.find( args.GetId() );
+    if ( found != m_Panels.end() )
     {
-      pane.Show( !pane.IsShown() );
-      m_FrameManager.Update();
+        wxWindow* window = found->second;
+        wxAuiPaneInfo& pane = m_FrameManager.GetPane( window );
+        if ( pane.IsOk() )
+        {
+            pane.Show( !pane.IsShown() );
+            m_FrameManager.Update();
+        }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -194,7 +182,7 @@ void Frame::OnShowPanel( wxCommandEvent& args )
 // 
 void Frame::OnExiting( wxCloseEvent& args )
 {
-  args.Skip();
+    args.Skip();
 }
 
 void Frame::OnHelpTimer( wxTimerEvent& evt )

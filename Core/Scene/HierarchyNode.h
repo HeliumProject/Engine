@@ -23,7 +23,6 @@ namespace Helium
     {
         class Scene;
         class Transform;
-
         class PickVisitor;
 
         class PickHit;
@@ -35,9 +34,10 @@ namespace Helium
         class HierarchyNode;
         typedef Helium::SmartPtr< Core::HierarchyNode > HierarchyNodePtr;
         typedef Helium::OrderedSet< Core::HierarchyNode* > OS_HierarchyNodeDumbPtr;
-
         typedef std::vector< Core::HierarchyNode* > V_HierarchyNodeDumbPtr;
         typedef std::vector< HierarchyNodePtr > V_HierarchyNodeSmartPtr;
+
+        class ManiuplatorAdapterCollection;
 
 
         // 

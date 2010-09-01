@@ -13,53 +13,57 @@ static Helium::Mutex g_CommandQueueMutex;
 CommandQueue::CommandQueue( wxWindow* window )
 : m_Window( window )
 {
-  m_Window->Connect( m_Window->GetId(), wxEVT_FLUSH_COMMANDS, wxCommandEventHandler(CommandQueue::HandleEvent), NULL, this );
+    m_Window->Connect( m_Window->GetId(), wxEVT_FLUSH_COMMANDS, wxCommandEventHandler(CommandQueue::HandleEvent), NULL, this );
 }
 
 CommandQueue::~CommandQueue()
 {
-  m_Window->Disconnect( m_Window->GetId(), wxEVT_FLUSH_COMMANDS, wxCommandEventHandler(CommandQueue::HandleEvent), NULL, this );
+    m_Window->Disconnect( m_Window->GetId(), wxEVT_FLUSH_COMMANDS, wxCommandEventHandler(CommandQueue::HandleEvent), NULL, this );
 }
 
-void CommandQueue::HandleEvent( wxCommandEvent& event )
+void CommandQueue::Post( VoidSignature::Delegate delegate )
 {
-  Flush();
-}
+    bool flush;
 
-void CommandQueue::Push( const Undo::CommandPtr& command )
-{
-  bool flush = m_Commands.empty();
+    {
+        Helium::TakeMutex taken( g_CommandQueueMutex );
 
-  {
-    Helium::TakeMutex taken ( g_CommandQueueMutex);
-    m_Commands.push_back( command );
-  }
+        // the flash flag groups commands into a batch
+        //  - the first push on an empty queue schedules a flush via message
+        //  - subsequent pushes do not dispatch another message
+        //  - ownership of the messages is taken in a lock, so the all the messages queued during a message pump will be flushed together
+        //  - after the queue is emptied the next push will schedule the next message
+        flush = m_Commands.empty();
 
-  if ( flush )
-  {
-    m_Window->GetEventHandler()->AddPendingEvent( wxCommandEvent ( wxEVT_FLUSH_COMMANDS, m_Window->GetId() ) );
-  }
+        m_Commands.push_back( delegate );
+    }
+
+    if ( flush )
+    {
+        m_Window->GetEventHandler()->AddPendingEvent( wxCommandEvent ( wxEVT_FLUSH_COMMANDS, m_Window->GetId() ) );
+    }
 }
 
 void CommandQueue::Flush()
 {
-  Undo::V_CommandSmartPtr commands;
+    std::vector< VoidSignature::Delegate > commands;
 
-  {
-    Helium::TakeMutex taken ( g_CommandQueueMutex);
-    
-    commands = m_Commands;
-    m_Commands.clear();
-  }
-  
-  Undo::V_CommandSmartPtr::const_iterator itr = commands.begin();
-  Undo::V_CommandSmartPtr::const_iterator end = commands.end();
-  for ( ; itr != end; ++itr )
-  {
-    // perform the work
-    (*itr)->Redo();
-  }
+    {
+        Helium::TakeMutex taken ( g_CommandQueueMutex);
+        commands = m_Commands;
+        m_Commands.clear();
+    }
 
-  // allow event handlers to push these commands on which ever undo queue they please
-  m_PushCommand.Raise( commands );
+    std::vector< VoidSignature::Delegate >::const_iterator itr = commands.begin();
+    std::vector< VoidSignature::Delegate >::const_iterator end = commands.end();
+    for ( ; itr != end; ++itr )
+    {
+        // perform the work
+        (*itr).Invoke( Helium::Void () );
+    }
+}
+
+void CommandQueue::HandleEvent( wxCommandEvent& event )
+{
+    Flush();
 }

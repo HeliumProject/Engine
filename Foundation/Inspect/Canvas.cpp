@@ -12,13 +12,3 @@ Canvas::Canvas ()
     m_Border = 4;
     m_Pad = 2;
 }
-
-Canvas::~Canvas()
-{
-
-}
-
-void Canvas::RealizeControl(Control* control, Control* parent)
-{
-
-}

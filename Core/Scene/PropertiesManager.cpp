@@ -9,63 +9,20 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-PropertyThreadArgs::PropertyThreadArgs( const PropertyThreadArgs& args )
-: m_Selection( args.m_Selection )
-, m_SelectionId( args.m_SelectionId )
-, m_CurrentSelectionId( args.m_CurrentSelectionId )
-, m_Setting( args.m_Setting )
-, m_Container( args.m_Container )
-, m_PropertiesCreated( args.m_PropertiesCreated )
-{
-}
-
-PropertyThreadArgs::PropertyThreadArgs( const OS_SelectableDumbPtr& selection,
-                                       u32 selectionId,
-                                       const u32* currentSelectionId,
-                                       PropertySetting setting,
-                                       Inspect::Container* container,
-                                       PropertiesCreatedSignature::Event& propertiesCreated )
-                                       : m_SelectionId( selectionId )
-                                       , m_CurrentSelectionId( currentSelectionId )
-                                       , m_Setting( setting )
-                                       , m_Container( container )
-                                       , m_PropertiesCreated( propertiesCreated )
-{
-    for ( OS_SelectableDumbPtr::Iterator itr = selection.Begin(), end = selection.End(); itr != end; ++itr )
-    {
-        m_Selection.Append( *itr );
-    }
-}
-
-EnumerateElementArgs::EnumerateElementArgs( M_ElementByType& currentElements,
-                                           M_ElementsByType& commonElements,
-                                           M_InterpretersByType& commonElementInterpreters )
-                                           : m_CurrentElements (currentElements)
-                                           , m_CommonElements (commonElements)
-                                           , m_CommonElementInterpreters (commonElementInterpreters)
-{
-
-}
-
-void EnumerateElementArgs::EnumerateElement(Reflect::Element* element, i32 includeFlags, i32 excludeFlags)
-{
-    // this will insert an empty map at the slot for the type of "element", or just make "b" false and return the iter at the existing one
-    Helium::Insert<M_ElementByType>::Result inserted = m_CurrentElements.insert( M_ElementByType::value_type (ElementTypeFlags ( element->GetType(), includeFlags, excludeFlags ), element) );
-}
-
-PropertiesManager::PropertiesManager( PropertiesGenerator* generator )
+PropertiesManager::PropertiesManager( PropertiesGenerator* generator, VoidDelegateSignature::Delegate delegator )
 : m_Generator( generator )
+, m_PropertiesCreatedDelegator( delegator )
 , m_Setting (PropertySettings::Intersection)
 , m_SelectionDirty (false)
 , m_SelectionId (0)
 , m_ThreadCount (0)
 {
-    m_Generator->GetContainer()->GetCanvas()->AddShowListener( Inspect::CanvasShowSignature::Delegate ( this, &PropertiesManager::Show ) );
+    m_Generator->GetContainer()->GetCanvas()->e_Show.AddMethod( this, &PropertiesManager::Show );
 }
 
 PropertiesManager::~PropertiesManager()
 {
-    m_Generator->GetContainer()->GetCanvas()->RemoveShowListener( Inspect::CanvasShowSignature::Delegate ( this, &PropertiesManager::Show ) );
+    m_Generator->GetContainer()->GetCanvas()->e_Show.RemoveMethod( this, &PropertiesManager::Show );
 }
 
 void PropertiesManager::Show( const Inspect::CanvasShowArgs& args )
@@ -76,11 +33,6 @@ void PropertiesManager::Show( const Inspect::CanvasShowArgs& args )
 
         m_SelectionDirty = false;
     }
-}
-
-Inspect::Container* PropertiesManager::GetContainer()
-{
-    return NULL;
 }
 
 void PropertiesManager::SetProperties(PropertySetting setting)
@@ -139,12 +91,12 @@ void PropertiesManager::CreateProperties()
         }
 
         Helium::Thread propertyThread;
-        PropertyThreadArgs* propertyThreadArgs = new PropertyThreadArgs( m_Selection, m_SelectionId, &m_SelectionId, m_Setting, m_Generator->CreateControl<Inspect::Container>(), m_PropertiesCreated );
-        propertyThread.CreateWithArgs( Helium::Thread::EntryHelperWithArgs<PropertiesManager, PropertyThreadArgs, &PropertiesManager::GeneratePropertiesThread>, this, propertyThreadArgs, "GeneratePropertiesThread()", -1 );
+        PropertyThreadArgs* propertyThreadArgs = new PropertyThreadArgs( m_Selection, m_SelectionId, &m_SelectionId, m_Setting, m_Generator->CreateControl<Inspect::Container>() );
+        propertyThread.CreateWithArgs( Helium::Thread::EntryHelperWithArgs<PropertiesManager, PropertyThreadArgs, &PropertiesManager::GeneratePropertiesThreadEntry>, this, propertyThreadArgs, "GeneratePropertiesThreadEntry()", -1 );
     }
 }
 
-void PropertiesManager::GeneratePropertiesThread( PropertyThreadArgs& args )
+void PropertiesManager::GeneratePropertiesThreadEntry( PropertyThreadArgs& args )
 {
     GenerateProperties( args );
 
@@ -162,7 +114,7 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
     EnumerateElementArgs enumerateElementArgs( currentElements, commonElements, commonElementInterpreters );
     OS_SelectableDumbPtr selection;
 
-    for ( OS_SelectablePtr::Iterator itr = args.m_Selection.Begin(), end = args.m_Selection.End(); itr != end; ++itr )
+    for ( OrderedSet<SelectablePtr>::Iterator itr = args.m_Selection.Begin(), end = args.m_Selection.End(); itr != end; ++itr )
     {
         selection.Append( *itr );
     }
@@ -414,8 +366,30 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
         }
     }
 
-    PropertiesCreatedArgs propertiesCreatedArgs( this, args.m_SelectionId, args.m_Container->GetChildren() );
-    m_PropertiesCreated.Raise( propertiesCreatedArgs );
+    class PropertiesFinalizer
+    {
+    public:
+        PropertiesFinalizer( PropertiesManager* propertiesManager, u32 selectionId, const Inspect::V_Control& controls ) 
+            : m_PropertiesManager( propertiesManager )
+            , m_SelectionId( selectionId )
+            , m_Controls( controls )
+        { 
+        }
+
+        void Finalize( Helium::Void )
+        {
+            m_PropertiesManager->FinalizeProperties( m_SelectionId, m_Controls );
+            delete this;
+        }
+
+    private:
+        PropertiesManager*  m_PropertiesManager;
+        u32                 m_SelectionId;
+        Inspect::V_Control  m_Controls;
+    };
+
+    PropertiesFinalizer* finalizer = new PropertiesFinalizer ( this, args.m_SelectionId, args.m_Container->GetChildren() );
+    m_PropertiesCreatedDelegator.Invoke( VoidSignature::Delegate( finalizer, &PropertiesFinalizer::Finalize ) );
 }
 
 void PropertiesManager::FinalizeProperties( u32 selectionId, const Inspect::V_Control& controls )
@@ -444,16 +418,6 @@ void PropertiesManager::FinalizeProperties( u32 selectionId, const Inspect::V_Co
 #ifdef INSPECT_REFACTOR
     m_Generator->GetContainer()->GetCanvas()->Thaw();
 #endif
-}
-
-void PropertiesManager::AddPropertiesCreatedListener( const PropertiesCreatedSignature::Delegate& listener )
-{
-    m_PropertiesCreated.Add( listener );
-}
-
-void PropertiesManager::RemovePropertiesCreatedListener( const PropertiesCreatedSignature::Delegate& listener )
-{
-    m_PropertiesCreated.Remove( listener );
 }
 
 bool PropertiesManager::ThreadsActive()

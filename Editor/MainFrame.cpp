@@ -248,12 +248,10 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     m_MRU->FromVector( paths );
 #endif
 
-#ifdef INSPECT_REFACTOR
-    Inspect::DropTarget* dropTarget = new Inspect::DropTarget();
-    dropTarget->SetDragOverCallback( Inspect::DragOverCallback::Delegate( this, &MainFrame::DragOver ) );
-    dropTarget->SetDropCallback( Inspect::DropCallback::Delegate( this, &MainFrame::Drop ) );
+    DropTarget* dropTarget = new DropTarget();
+    dropTarget->SetDragOverCallback( DragOverCallback::Delegate( this, &MainFrame::DragOver ) );
+    dropTarget->SetDropCallback( DropCallback::Delegate( this, &MainFrame::Drop ) );
     m_ViewPanel->GetViewCanvas()->SetDropTarget( dropTarget );
-#endif
 }
 
 MainFrame::~MainFrame()

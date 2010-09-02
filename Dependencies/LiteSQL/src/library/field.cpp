@@ -16,7 +16,7 @@ In FieldType::in(const LITESQL_String& set) const {
 In FieldType::in(const SelectQuery& sel) const {
     return In(*this, sel);
 }
-Like FieldType::like(const LITESQL_String& s) {
+Like FieldType::like(const LITESQL_String& s) const {
     return Like(*this, s);
 }
 template <> 

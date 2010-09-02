@@ -3,7 +3,9 @@
 #include "SearchQuery.h"
 #include "SearchResults.h"
 
+#include "Editor/Tracker/TrackerDBGenerated.h"
 #include "Foundation/Automation/Event.h"
+#include "Foundation/File/Directory.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Platform/Types.h"
 #include "Platform/Mutex.h"
@@ -24,73 +26,74 @@ namespace Helium
         struct DummyWindowArgs;
 
         ///////////////////////////////////////////////////////////////////////
-        // RequestSearch:
+        // StartSearchThread:
         // A search has been requested.
-        struct RequestSearchArgs
+        struct StartSearchThreadArgs
         {
             SearchQueryPtr m_SearchQuery;
-            RequestSearchArgs( SearchQuery* searchQuery ) : m_SearchQuery( searchQuery ) {}
+            StartSearchThreadArgs( SearchQuery* searchQuery ) : m_SearchQuery( searchQuery ) {}
         };
-        typedef Helium::Signature< const RequestSearchArgs& > RequestSearchSignature;
+        typedef Helium::Signature< const StartSearchThreadArgs& > StartSearchThreadSignature;
 
 
         ///////////////////////////////////////////////////////////////////////
-        // SearchError:
-        // A search has been requested.
-        struct SearchErrorArgs
+        // SearchThreadRunning:
+        // Search thread is starting, Args contain status update info pointers.
+        struct SearchThreadRunningArgs
         {
-            tstring m_Errors;
-            SearchErrorArgs( const tstring& errors ) : m_Errors( errors ) {}
+            SearchThreadRunningArgs() { }
         };
-        typedef Helium::Signature< const SearchErrorArgs& > SearchErrorSignature;
+        typedef Helium::Signature< const SearchThreadRunningArgs& > SearchThreadRunningSignature;
 
 
         ///////////////////////////////////////////////////////////////////////
-        // BeginSearching:
-        // Search is about to starting running, contains status update info pointers.
-        struct BeginSearchingArgs
-        {
-            BeginSearchingArgs() { }
-        };
-        typedef Helium::Signature< const BeginSearchingArgs& > BeginSearchingSignature;
-
-
-        ///////////////////////////////////////////////////////////////////////
-        // StoppingSearch:
+        // StoppingSearchThread:
         // Search is done, results are being wrangled.
-        struct StoppingSearchArgs
+        struct StoppingSearchThreadArgs
         {
-            StoppingSearchArgs() { }
+            StoppingSearchThreadArgs() { }
         };
-        typedef Helium::Signature< const StoppingSearchArgs& > StoppingSearchSignature;
+        typedef Helium::Signature< const StoppingSearchThreadArgs& > StoppingSearchThreadSignature;
 
 
         ///////////////////////////////////////////////////////////////////////
-        // ResultsAvailable:
-        // {Some or all) search results are available, contains SearchResults
-        struct ResultsAvailableArgs
+        // SearchThreadComplete: 
+        // Search is complete.
+        struct SearchThreadCompleteArgs
         {
             SearchQueryPtr m_SearchQuery;
+            SearchThreadCompleteArgs( SearchQuery* searchQuery ) : m_SearchQuery( searchQuery ) {}
+        };
+        typedef Helium::Signature< const SearchThreadCompleteArgs& > SearchThreadCompleteSignature;
+
+
+        ///////////////////////////////////////////////////////////////////////
+        // SearchResultsAvailable:
+        // (Some or all) search results are available, contains SearchResults
+        struct SearchResultsAvailableArgs
+        {
+            SearchQueryPtr   m_SearchQuery;
             SearchResultsPtr m_SearchResults;
-            ResultsAvailableArgs( SearchQuery* searchQuery, SearchResults* searchResults )
+
+            SearchResultsAvailableArgs( SearchQuery* searchQuery, SearchResults* searchResults )
                 : m_SearchQuery( searchQuery )
                 , m_SearchResults( searchResults )
             {
 
             }
         };
-        typedef Helium::Signature< const ResultsAvailableArgs& > ResultsAvailableSignature;
+        typedef Helium::Signature< const SearchResultsAvailableArgs& > SearchResultsAvailableSignature;
 
 
         ///////////////////////////////////////////////////////////////////////
-        // SearchComplete: 
-        // Search is complete.
-        struct SearchCompleteArgs
+        // SearchThreadError:
+        struct SearchThreadErrorArgs
         {
-            SearchQueryPtr m_SearchQuery;
-            SearchCompleteArgs( SearchQuery* searchQuery ) : m_SearchQuery( searchQuery ) {}
+            tstring m_Errors;
+
+            SearchThreadErrorArgs( const tstring& errors ) : m_Errors( errors ) {}
         };
-        typedef Helium::Signature< const SearchCompleteArgs& > SearchCompleteSignature;
+        typedef Helium::Signature< const SearchThreadErrorArgs& > SearchThreadErrorSignature;
         
 
         ///////////////////////////////////////////////////////////////////////
@@ -101,48 +104,45 @@ namespace Helium
             VaultSearch();
             ~VaultSearch();
 
-            void SetRootDirectory( const Helium::Path& path )
-            {
-                m_RootDirectory = path;
-            }
+            void SetDirectory( const Helium::Path& directory );
+            const Helium::Path& GetDirectory() const;
 
-            bool RequestSearch( SearchQuery* searchQuery );
-            void RequestStop();
+            bool StartSearchThread( SearchQuery* searchQuery );
+            void StopSearchThreadAndWait();
 
-            friend class SearchThread;
+            friend class VaultSearchThread;
 
         private:
-            //
-            // Members
-            //
-            Helium::Path       m_RootDirectory;
+            Helium::Path       m_Directory;
+            TrackerDBGenerated      m_TrackerDB;
 
+            //----------DO NOT ACCESS outside of m_SearchResultsMutex---------//
             // SearchResults and Status
-            // DO NO CHANGE OR ACCESS outside of m_SearchResultsMutex
+            // 
+            Helium::Mutex           m_SearchResultsMutex;
             i32                     m_CurrentSearchID;   // Used for debugging to track a search through the system
             SearchQueryPtr          m_CurrentSearchQuery;
-            SearchResultsPtr        m_SearchResults;     // The results to populate and pass to ResultsAvailableArgs
-            std::set< Helium::Path > m_FoundPaths;        // The *complete* list of found files from this section
-            Helium::Mutex           m_SearchResultsMutex;
+            SearchResultsPtr        m_SearchResults;     // The results to populate and pass to SearchResultsAvailableArgs
+            std::set< Helium::Path > m_FoundPaths;       // The *complete* list of found files from this section
+            //---------------------------------------------------------------//
 
             // Searching Thread
+            Helium::Mutex           m_BeginSearchMutex;  // Take Lock until m_SearchInitializedEvent
             bool                    m_StopSearching;
             DummyWindow*            m_DummyWindow;
-            HANDLE                  m_SearchInitializedEvent;   // OK to cancel searches after this is set
-            Helium::Mutex           m_BeginSearchMutex;         // Take Lock until m_SearchInitializedEvent
-
+            HANDLE                  m_SearchInitializedEvent; // OK to cancel searches after this is set
             HANDLE                  m_EndSearchEvent;
 
         private:
             //
-            // Callbaks to SearchThread events
+            // Callbaks to VaultSearchThread events
             //
             void OnBeginSearchThread( const Editor::DummyWindowArgs& args );
-            void OnResultsAvailable( const Editor::DummyWindowArgs& args );
+            void OnSearchResultsAvailable( const Editor::DummyWindowArgs& args );
             void OnEndSearchThread( const Editor::DummyWindowArgs& args );
 
             //
-            // SearchThread
+            // VaultSearchThread
             //
             void SearchThreadProc( i32 searchID );
             void SearchThreadEnter( i32 searchID );
@@ -151,94 +151,81 @@ namespace Helium
             void SearchThreadLeave( i32 searchID );
 
             u32 AddPath( const Helium::Path& path, i32 searchID );
-            u32 AddPaths( const std::set< Helium::Path >& paths, i32 searchID );
 
             // 
             // Events
             //
         private:
-            RequestSearchSignature::Event m_RequestSearchListeners;
+            StartSearchThreadSignature::Event m_StartSearchThreadListeners;
         public:
-            void AddRequestSearchListener( const RequestSearchSignature::Delegate& listener )
+            void AddStartSearchThreadListener( const StartSearchThreadSignature::Delegate& listener )
             {
-                m_RequestSearchListeners.Add( listener );
+                m_StartSearchThreadListeners.Add( listener );
             }
-            void RemoveRequestSearchListener( const RequestSearchSignature::Delegate& listener )
+            void RemoveStartSearchThreadListener( const StartSearchThreadSignature::Delegate& listener )
             {
-                m_RequestSearchListeners.Remove( listener );
+                m_StartSearchThreadListeners.Remove( listener );
             }
 
         private:
-            SearchErrorSignature::Event m_SearchErrorListeners;
+            SearchThreadRunningSignature::Event m_SearchThreadRunningListeners;
         public:
-            void AddSearchErrorListener( const SearchErrorSignature::Delegate& listener )
+            void AddSearchThreadRunningListener( const SearchThreadRunningSignature::Delegate& listener )
             {
-                m_SearchErrorListeners.Add( listener );
+                m_SearchThreadRunningListeners.Add( listener );
             }
-            void RemoveSearchErrorListener( const SearchErrorSignature::Delegate& listener )
+            void RemoveSearchThreadRunningListener( const SearchThreadRunningSignature::Delegate& listener )
             {
-                m_SearchErrorListeners.Remove( listener );
+                m_SearchThreadRunningListeners.Remove( listener );
             }
 
         private:
-            BeginSearchingSignature::Event m_BeginSearchingListeners;
+            StoppingSearchThreadSignature::Event m_StoppingSearchThreadListeners;
         public:
-            void AddBeginSearchingListener( const BeginSearchingSignature::Delegate& listener )
+            void AddStoppingSearchThreadListener( const StoppingSearchThreadSignature::Delegate& listener )
             {
-                m_BeginSearchingListeners.Add( listener );
+                m_StoppingSearchThreadListeners.Add( listener );
             }
-            void RemoveBeginSearchingListener( const BeginSearchingSignature::Delegate& listener )
+            void RemoveStoppingSearchThreadListener( const StoppingSearchThreadSignature::Delegate& listener )
             {
-                m_BeginSearchingListeners.Remove( listener );
+                m_StoppingSearchThreadListeners.Remove( listener );
             }
 
         private:
-            StoppingSearchSignature::Event m_StoppingSearchListeners;
+            SearchThreadCompleteSignature::Event m_SearchThreadCompleteListeners;
         public:
-            void AddStoppingSearchListener( const StoppingSearchSignature::Delegate& listener )
+            void AddSearchThreadCompleteListener( const SearchThreadCompleteSignature::Delegate& listener )
             {
-                m_StoppingSearchListeners.Add( listener );
+                m_SearchThreadCompleteListeners.Add( listener );
             }
-            void RemoveStoppingSearchListener( const StoppingSearchSignature::Delegate& listener )
+            void RemoveSearchThreadCompleteListener( const SearchThreadCompleteSignature::Delegate& listener )
             {
-                m_StoppingSearchListeners.Remove( listener );
+                m_SearchThreadCompleteListeners.Remove( listener );
             }
 
         private:
-            ResultsAvailableSignature::Event m_ResultsAvailableListeners;
+            SearchResultsAvailableSignature::Event m_SearchResultsAvailableListeners;
         public:
-            void AddResultsAvailableListener( const ResultsAvailableSignature::Delegate& listener )
+            void AddSearchResultsAvailableListener( const SearchResultsAvailableSignature::Delegate& listener )
             {
-                m_ResultsAvailableListeners.Add( listener );
+                m_SearchResultsAvailableListeners.Add( listener );
             }
-            void RemoveResultsAvailableListener( const ResultsAvailableSignature::Delegate& listener )
+            void RemoveSearchResultsAvailableListener( const SearchResultsAvailableSignature::Delegate& listener )
             {
-                m_ResultsAvailableListeners.Remove( listener );
+                m_SearchResultsAvailableListeners.Remove( listener );
             }
 
         private:
-            SearchCompleteSignature::Event m_SearchCompleteListeners;
+            SearchThreadErrorSignature::Event m_SearchThreadErrorListeners;
         public:
-            void AddSearchCompleteListener( const SearchCompleteSignature::Delegate& listener )
+            void AddSearchThreadErrorListener( const SearchThreadErrorSignature::Delegate& listener )
             {
-                m_SearchCompleteListeners.Add( listener );
+                m_SearchThreadErrorListeners.Add( listener );
             }
-            void RemoveSearchCompleteListener( const SearchCompleteSignature::Delegate& listener )
+            void RemoveSearchThreadErrorListener( const SearchThreadErrorSignature::Delegate& listener )
             {
-                m_SearchCompleteListeners.Remove( listener );
+                m_SearchThreadErrorListeners.Remove( listener );
             }
-
-            //private:
-            //  RequestStopSignature::Event m_RequestStopListeners;
-            //public:
-            //  void AddRequestStopListener( const RequestStopSignature::Delegate& listener )
-            //  {
-            //    m_RequestStopListeners.Add( listener );
-            //  }
-            //  void RemoveRequestStopListener( const RequestStopSignature::Delegate& listener )
-            //  {
-            //    m_RequestStopListeners.Remove( listener );
-            //  }
 
         };
         typedef Helium::SmartPtr< VaultSearch > VaultSearchPtr;

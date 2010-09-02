@@ -1,16 +1,33 @@
 #include "Precompile.h"
 #include "Tracker.h"
 
-
+#include "Core/Asset/AssetClass.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/Component/SearchableProperties.h"
-
-#include "Core/Asset/AssetClass.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
 
+///////////////////////////////////////////////////////////////////////////////
+// Sleep between runs and yield to other threads
+// The complex loop is to prevent Editor from hanging on exit (max hang will be "increments" seconds)
+inline void SleepBetweenTracking( bool* cancel = NULL, const u32 minutes = 1 )
+{
+    const u32 increments = 5;
+    u32 totalSeconds = 60 * minutes;
+    for ( u32 seconds = 0; seconds < totalSeconds; seconds += increments )
+    {
+        Sleep( increments * 1000 );
 
+        if ( ( cancel != NULL )
+            && *cancel )
+        {
+            break;
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
 int Tracker::s_InitCount = 0;
 Helium::InitializerStack Tracker::s_InitializerStack;
 
@@ -32,41 +49,61 @@ Tracker::~Tracker()
 {
     if ( --s_InitCount == 0 )
     {
-        s_InitializerStack.Cleanup();
+        //s_InitializerStack.Cleanup();
     }
-
     HELIUM_ASSERT( s_InitCount >= 0 );
 }
 
-
-
-///////////////////////////////////////////////////////////////////////////////
-// Sleep between runs and yield to other threads
-// The complex loop is to prevent Editor from hanging on exit (max hang will be "increments" seconds)
-inline void SleepBetweenTracking( bool* cancel = NULL, const u32 minutes = 1 )
+void Tracker::SetDirectory( const Helium::Path& directory )
 {
-    const u32 increments = 5;
-    u32 totalSeconds = 60 * minutes;
-    for ( u32 seconds = 0; seconds < totalSeconds; seconds += increments )
+    bool restartThread = false;
+    if ( IsThreadRunning() )
     {
-        Sleep( increments * 1000 );
-
-        if ( ( cancel != NULL )
-            && *cancel )
-        {
-            break;
-        }
+        restartThread = true;
+        StopThread();
     }
-}
 
-void Tracker::SetDirectory( const Helium::Directory& directory )
-{
-    m_Directory = directory;
+    m_Directory = Helium::Directory( directory );
+
+    if ( restartThread )
+    {
+        StartThread();
+    }
 }
 
 const Helium::Directory& Tracker::GetDirectory() const
 {
     return m_Directory;
+}
+
+void Tracker::StartThread()
+{
+    HELIUM_ASSERT( !IsThreadRunning() );
+
+    m_StopTracking = false;
+
+    if ( !m_Thread.Create( &Helium::Thread::EntryHelper<Tracker, &Tracker::TrackEverything>, this, "Tracker Thread", THREAD_PRIORITY_BELOW_NORMAL ) )
+    {
+        throw Exception( TXT( "Unable to create thread for asset tracking." ) );
+    }
+}
+
+void Tracker::StopThread()
+{
+    HELIUM_ASSERT( IsThreadRunning() );
+
+    m_StopTracking = true;
+
+    if ( m_Thread.Valid() && m_Thread.Running() )
+    {
+        m_Thread.Wait();
+        m_Thread.Close();
+    }
+}
+
+bool Tracker::IsThreadRunning()
+{
+    return ( m_Thread.Valid() && m_Thread.Running() );
 }
 
 void Tracker::TrackEverything()
@@ -222,4 +259,24 @@ void Tracker::TrackEverything()
             SleepBetweenTracking( &m_StopTracking );
         }
     }
+}
+
+bool Tracker::InitialIndexingCompleted() const
+{
+    return m_InitialIndexingCompleted;
+}
+
+bool Tracker::DidIndexingFail() const
+{
+    return m_IndexingFailed;
+}
+
+u32 Tracker::GetCurrentProgress() const
+{
+    return m_CurrentProgress;
+}
+
+u32 Tracker::GetTrackingTotal() const 
+{
+    return m_Total;
 }

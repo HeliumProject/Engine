@@ -49,10 +49,6 @@ namespace Helium
 
             void SetSaveButtonState( bool enabled );
 
-	    protected:
-			virtual void OnSearchButtonClick( wxCommandEvent& event ) HELIUM_OVERRIDE;
-			virtual void OnSearchTextEnter( wxCommandEvent& event ) HELIUM_OVERRIDE;
-
         private:
             std::vector< wxBitmapToggleButton* > m_ToolsButtons;
 

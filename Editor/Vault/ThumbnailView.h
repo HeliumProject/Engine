@@ -17,18 +17,6 @@
 
 namespace Helium
 {
-    namespace Asset
-    {
-        class AssetFile;
-        typedef Helium::SmartPtr< AssetFile > AssetFilePtr;
-        typedef std::vector< AssetFilePtr > V_AssetFiles;
-        typedef Helium::OrderedSet< AssetFilePtr > OS_AssetFiles;
-
-        class AssetFolder;
-        typedef Helium::SmartPtr< AssetFolder > AssetFolderPtr;
-        typedef std::vector< AssetFolderPtr > V_AssetFolders;
-    }
-
     namespace Editor
     {
         //

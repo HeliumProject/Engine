@@ -1,7 +1,6 @@
 #include "Precompile.h"
 #include "ThumbnailView.h"
 #include "SearchResults.h"
-#include "VaultSearch.h"
 #include "ThumbnailLoadedEvent.h"
 
 #include "Foundation/File/Path.h"

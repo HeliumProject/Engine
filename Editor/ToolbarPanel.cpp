@@ -121,13 +121,3 @@ void ToolbarPanel::SetSaveButtonState( bool enabled )
         m_SaveAllButton->Disable();
     }
 }
-
-void ToolbarPanel::OnSearchButtonClick( wxCommandEvent& event )
-{
-    event.Skip();
-}
-
-void ToolbarPanel::OnSearchTextEnter( wxCommandEvent& event )
-{
-    event.Skip();
-}

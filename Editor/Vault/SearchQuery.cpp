@@ -35,8 +35,7 @@ using namespace Helium::Editor;
 //  enum TokenType
 //  {
 //    File,
-//    Folder,
-//    ID,
+//    Directory,
 //    Phrase,
 //    ColumnName,
 //    ComponentName,
@@ -69,7 +68,8 @@ void SearchQuery::EnumerateClass( Reflect::Compositor<SearchQuery>& comp )
 
 ///////////////////////////////////////////////////////////////////////////////
 SearchQuery::SearchQuery()
-: m_SearchType( SearchTypes::DBSearch )
+: m_SearchType( SearchTypes::CacheDB )
+, m_SQLQueryString( TXT("") )
 {
 
 }
@@ -92,17 +92,33 @@ void SearchQuery::PostDeserialize()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void SearchQuery::SetQueryString( const tstring& queryString )
+bool SearchQuery::SetQueryString( const tstring& queryString, tstring& errors )
 {
     // Set the QueryString
     m_QueryString = queryString;
+    m_SQLQueryString.clear();
 
-    tstring errors;
     if ( !ParseQueryString( m_QueryString, errors, this ) )
     {
         Log::Warning( TXT( "Errors occurred while parsing the query string: %s\n  %s\n" ), m_QueryString.c_str(), errors.c_str() );
-        return;
+        return false;
     }
+
+    return true;
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+const tstring& SearchQuery::GetSQLQueryString() const
+{
+    if ( m_SQLQueryString.empty() )
+    {
+        m_SQLQueryString = m_QueryString;
+        m_SQLQueryString = TXT( '*' ) + m_SQLQueryString + TXT( '*' );
+
+        const tregex sqlQueryString( TXT( "\\*+" ) );
+        m_SQLQueryString = std::tr1::regex_replace( m_SQLQueryString, sqlQueryString, tstring( TXT( "%" ) ) ); 
+    }
+    return m_SQLQueryString;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -178,7 +194,7 @@ bool SearchQuery::ParseQueryString( const tstring& queryString, tstring& errors,
 
     tsmatch matchResult;
     //-------------------------------------------
-    // Is an AssetFile/Folder path?
+    // Path
     if ( std::tr1::regex_match( queryString, matchResult, matchAssetPath ) )
     {
         // we know it's a path, clean it
@@ -187,7 +203,7 @@ bool SearchQuery::ParseQueryString( const tstring& queryString, tstring& errors,
         {
             if ( query )
             {
-                query->m_SearchType = SearchTypes::Folder;
+                query->m_SearchType = SearchTypes::Directory;
 
                 Helium::Path::Normalize( query->m_QueryString );
                 Helium::Path::GuaranteeSeparator( query->m_QueryString );
@@ -196,7 +212,6 @@ bool SearchQuery::ParseQueryString( const tstring& queryString, tstring& errors,
         }
         else if ( path.IsFile() )
         {
-            // it's an AssetFile
             if ( query )
             {
                 query->m_SearchType = SearchTypes::File;
@@ -211,7 +226,7 @@ bool SearchQuery::ParseQueryString( const tstring& queryString, tstring& errors,
     }
 
     //-------------------------------------------
-    // Otherwise we assume it's an CacheDB Query.
+    // CacheDB.
     else
     {
         const tregex parseColumnQuery( s_ParseColumnName, std::tr1::regex::icase );

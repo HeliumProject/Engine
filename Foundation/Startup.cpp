@@ -66,14 +66,19 @@ Log::Stream g_TraceStreams  = Log::Streams::Normal | Log::Streams::Warning | Log
 namespace Helium
 {
     long& g_BreakOnAlloc (_crtBreakAlloc);
-    static Localization::StringTable g_StringTable( "Helium::Application" );
 }
 #endif //_DEBUG
+
+namespace Helium
+{
+	static Localization::StringTable g_StringTable( "Helium::Application" );
+}
 
 void Helium::Startup( int argc, const tchar** argv )
 {
     if ( ++g_InitCount == 1 )
     {
+
         g_StringTable.AddString( "en", "WaitingDebuggerAttach", TXT( "Waiting <MINUTES> minutes for debugger to attach...\n" ) );
         g_StringTable.AddString( "en", "DebuggerAttached", TXT( "Debugger attached\n" ) );
         g_StringTable.AddString( "en", "RunningApp", TXT( "Running <APPNAME>...\n" ) );
@@ -81,6 +86,7 @@ void Helium::Startup( int argc, const tchar** argv )
         g_StringTable.AddString( "en", "CommandLine", TXT( "Command Line: <COMMANDLINE>\n" ) );
 
         Localization::GlobalLocalizer().RegisterTable( &g_StringTable );
+
 #pragma TODO( "Set the language at some more appropriate point in the code?" )
         Localization::GlobalLocalizer().SetLanguageId( "en" );
 

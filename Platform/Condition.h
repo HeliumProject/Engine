@@ -11,7 +11,7 @@
 
 namespace Helium
 {
-    class PLATFORM_API Event
+    class PLATFORM_API Condition
     {
     public:
 
@@ -43,8 +43,8 @@ namespace Helium
         Handle m_Handle;
 
     public:
-        Event();
-        ~Event();
+        Condition();
+        ~Condition();
 
         const Handle& GetHandle()
         {

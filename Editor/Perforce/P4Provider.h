@@ -5,9 +5,9 @@
 #include "Platform/Compiler.h"
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Profile.h"
+#include "Platform/Condition.h"
 #include "Platform/Thread.h"
 #include "Platform/Mutex.h"
-#include "Platform/Event.h"
 #include "P4API.h"
 
 namespace Helium
@@ -123,11 +123,11 @@ namespace Helium
 
         private:
             // transaction thread
-            Helium::Thread      m_Thread;     // the thread to run commands in
+            Helium::Thread        m_Thread;     // the thread to run commands in
             bool                  m_Shutdown;   // the shutdown signal
-            Helium::Mutex       m_Mutex;      // to ensure thread safety
-            Helium::Event       m_Execute;    // to wakeup the command thread
-            Helium::Event       m_Completed;  // to wakeup the calling thread
+            Helium::Mutex         m_Mutex;      // to ensure thread safety
+            Helium::Condition     m_Execute;    // to wakeup the command thread
+            Helium::Condition     m_Completed;  // to wakeup the calling thread
 
             // command to execute
             class Command*        m_Command;    // the command to run

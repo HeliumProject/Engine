@@ -1,12 +1,12 @@
 #include "Platform/Windows/Windows.h"
 #include "Platform/Error.h"
-#include "Platform/Event.h"
+#include "Platform/Condition.h"
 #include "Platform/Platform.h"
 #include "Platform/Assert.h"
 
 using namespace Helium;
 
-Event::Event()
+Condition::Condition()
 {
     m_Handle = ::CreateEvent(NULL, TRUE, FALSE, NULL);
     if ( !m_Handle )
@@ -16,7 +16,7 @@ Event::Event()
     }
 }
 
-Event::~Event()
+Condition::~Condition()
 {
     BOOL result = ::CloseHandle(m_Handle);
     if ( result != TRUE )
@@ -26,7 +26,7 @@ Event::~Event()
     }
 }
 
-void Event::Signal()
+void Condition::Signal()
 {
     BOOL result = ::SetEvent(m_Handle);
     if ( result != TRUE )
@@ -36,7 +36,7 @@ void Event::Signal()
     }
 }
 
-void Event::Reset()
+void Condition::Reset()
 {
     BOOL result = ::ResetEvent(m_Handle);
     if ( result != TRUE )
@@ -46,7 +46,7 @@ void Event::Reset()
     }
 }
 
-bool Event::Wait(u32 timeout)
+bool Condition::Wait(u32 timeout)
 {
     DWORD result = ::WaitForSingleObject(m_Handle, timeout);
 

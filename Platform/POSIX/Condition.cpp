@@ -1,4 +1,4 @@
-#include "Platform/Event.h"
+#include "Platform/Condition.h"
 #include "Platform/Platform.h"
 
 #include "Platform/Assert.h"
@@ -10,7 +10,7 @@ using namespace Helium;
 // Manual-Reset event implementation for pthreads:
 // http://www.cs.wustl.edu/~schmidt/win32-cv-2.html
 
-void event_init(Event::Handle* evt, bool manual_reset, bool initial_state)
+void event_init(Condition::Handle* evt, bool manual_reset, bool initial_state)
 {
     evt->manual_reset = manual_reset;
     evt->is_signaled = initial_state;
@@ -20,18 +20,18 @@ void event_init(Event::Handle* evt, bool manual_reset, bool initial_state)
     pthread_mutex_init (&evt->lock, NULL);
 }
 
-void event_destroy(Event::Handle* evt)
+void event_destroy(Condition::Handle* evt)
 {
     pthread_mutex_destroy (&evt->lock);
     pthread_cond_destroy (&evt->condition);
 }
 
-void event_wait(Event::Handle* evt)
+void event_wait(Condition::Handle* evt)
 {
     // grab the lock first
     pthread_mutex_lock (&evt->lock);
 
-    // Event is currently signaled
+    // Condition is currently signaled
     if (evt->is_signaled)
     {
         if (!evt->manual_reset)
@@ -53,7 +53,7 @@ void event_wait(Event::Handle* evt)
     pthread_mutex_unlock (&evt->lock);
 }
 
-void event_signal(Event::Handle* evt)
+void event_signal(Condition::Handle* evt)
 {
     // grab the lock first
     pthread_mutex_lock (&evt->lock);
@@ -86,7 +86,7 @@ void event_signal(Event::Handle* evt)
     pthread_mutex_unlock (&evt->lock);
 }
 
-void event_pulse(Event::Handle* evt)
+void event_pulse(Condition::Handle* evt)
 {
     // grab the lock first
     pthread_mutex_lock (&evt->lock);
@@ -111,7 +111,7 @@ void event_pulse(Event::Handle* evt)
     pthread_mutex_unlock (&evt->lock);
 }
 
-void event_reset(Event::Handle* evt)
+void event_reset(Condition::Handle* evt)
 {
     // Grab the lock first
     pthread_mutex_lock (&evt->lock);
@@ -123,27 +123,27 @@ void event_reset(Event::Handle* evt)
     pthread_mutex_unlock (&evt->lock);
 }
 
-Event::Event()
+Condition::Condition()
 {
     event_init(&m_Handle, true, false);
 }
 
-Event::~Event()
+Condition::~Condition()
 {
     event_destroy(&m_Handle);
 }
 
-void Event::Signal()
+void Condition::Signal()
 {
     event_signal(&m_Handle);
 }
 
-void Event::Reset()
+void Condition::Reset()
 {
     event_reset(&m_Handle);
 }
 
-bool Event::Wait(u32 timeout)
+bool Condition::Wait(u32 timeout)
 {
     HELIUM_ASSERT( timeout == 0xffffffff ); // not supported
     event_wait(&m_Handle);

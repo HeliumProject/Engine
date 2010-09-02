@@ -166,7 +166,7 @@ int Helium::SelectSocket(int range, fd_set* read_set, fd_set* write_set, struct 
     return -1;
 }
 
-bool Helium::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Event& terminate)
+bool Helium::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Condition& terminate)
 {
 #ifdef PS3_POSIX
     i32 local_read = ::recv( socket, (tchar*)buffer, bytes, 0 );
@@ -185,7 +185,7 @@ bool Helium::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Even
     return false;
 }
 
-bool Helium::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, Event& terminate)
+bool Helium::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, Condition& terminate)
 {
 #ifdef PS3_POSIX
     i32 local_wrote = ::send( socket, (tchar*)buffer, bytes, 0 );

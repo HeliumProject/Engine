@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Event.h"
+#include "Condition.h"
 
 #ifdef __GNUC__
 # include "POSIX/Pipe.h"
@@ -21,9 +21,9 @@ namespace Helium
     PLATFORM_API bool OpenPipe(const tchar* name, Pipe& pipe);
     PLATFORM_API void ClosePipe(Pipe& pipe);
 
-    PLATFORM_API bool ConnectPipe(Pipe& pipe, Event& terminate);
+    PLATFORM_API bool ConnectPipe(Pipe& pipe, Condition& terminate);
     PLATFORM_API void DisconnectPipe(Pipe& pipe);
 
-    PLATFORM_API bool ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& terminate);
-    PLATFORM_API bool WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Event& terminate);
+    PLATFORM_API bool ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Condition& terminate);
+    PLATFORM_API bool WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Condition& terminate);
 }

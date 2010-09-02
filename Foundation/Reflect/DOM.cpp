@@ -93,7 +93,9 @@ void DocumentElement::AddChild( DocumentNodePtr node )
     {
         DocumentElement* parent = node->GetParent();
 
-        if ( m_ChildAdding.RaiseWithReturn( DocumentHierarchyChangeArgs ( node, parent, this ) ) )
+        DocumentHierarchyChangingArgs args ( node, parent, this );
+        m_ChildAdding.Raise( args );
+        if ( !args.m_Veto )
         {
             if ( parent )
             {
@@ -123,7 +125,9 @@ void DocumentElement::RemoveChild( DocumentNodePtr node )
     {
         DocumentElement* parent = node->GetParent();
 
-        if ( m_ChildRemoving.RaiseWithReturn( DocumentHierarchyChangeArgs ( node, parent, NULL ) ) )
+        DocumentHierarchyChangingArgs args ( node, parent, NULL );
+        m_ChildRemoving.Raise( args );
+        if ( !args.m_Veto )
         {
             DocumentNode* nextSibling = node->GetNextSibling();
             DocumentNode* previousSibling = node->GetPreviousSibling();

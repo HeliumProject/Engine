@@ -24,7 +24,7 @@ namespace Helium
             {
             }
         };
-        typedef Helium::Signature< void, const MRUArgs& > MRUSignature;
+        typedef Helium::Signature< const MRUArgs& > MRUSignature;
 
         /////////////////////////////////////////////////////////////////////////////
         // Class for managing a list of "most recently used" items.  The items are

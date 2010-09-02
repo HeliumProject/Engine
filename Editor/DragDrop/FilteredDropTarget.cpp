@@ -67,29 +67,33 @@ bool FilteredDropTarget::ValidateDrag( const Editor::DragArgs& args )
     return false;
 }
 
-wxDragResult FilteredDropTarget::DragOver( const Editor::DragArgs& args )
+void FilteredDropTarget::DragOver( const Editor::DragArgs& args )
 {
     if ( ValidateDrag( args ) )
     {
-        return args.m_Default;
+        args.m_Result = args.m_Default;
     }
-
-    return wxDragNone;
+    else
+    {
+        args.m_Result = wxDragNone;
+    }
 }
 
-wxDragResult FilteredDropTarget::Drop( const Editor::DragArgs& args )
+void FilteredDropTarget::Drop( const Editor::DragArgs& args )
 {
     std::vector< tstring > validPaths;
 
     if ( !ValidateDrag( args ) )
     {
-        return args.m_Default;
+        args.m_Result = args.m_Default;
+        return;
     }
 
     ClipboardFileListPtr fileList = Reflect::ObjectCast< ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
     if ( !fileList )
     {
-        return args.m_Default;
+        args.m_Result = args.m_Default;
+        return;
     }
 
     std::vector< tstring > extensions;
@@ -134,7 +138,7 @@ wxDragResult FilteredDropTarget::Drop( const Editor::DragArgs& args )
         m_Dropped.Raise( FilteredDropTargetArgs( validPaths ) );
     }
 
-    return args.m_Default;
+    args.m_Result = args.m_Default;
 }
 
 void FilteredDropTarget::AddDroppedListener( const FilteredDropTargetSignature::Delegate& d )

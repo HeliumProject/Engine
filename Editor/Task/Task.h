@@ -29,7 +29,7 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature< void, const TaskStartedArgs& > TaskStartedSignature;
+        typedef Helium::Signature< const TaskStartedArgs& > TaskStartedSignature;
 
         void AddTaskStartedListener( const TaskStartedSignature::Delegate& listener );
         void RemoveTaskStartedListener( const TaskStartedSignature::Delegate& listener );
@@ -45,7 +45,7 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature< void, const TaskFinishedArgs& > TaskFinishedSignature;
+        typedef Helium::Signature< const TaskFinishedArgs& > TaskFinishedSignature;
 
         void AddTaskFinishedListener( const TaskFinishedSignature::Delegate& listener );
         void RemoveTaskFinishedListener( const TaskFinishedSignature::Delegate& listener );

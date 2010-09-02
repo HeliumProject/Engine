@@ -143,7 +143,7 @@ namespace Helium
 
         private:
             static void OnReverseControlPoints( const Inspect::ButtonClickedArgs& args );
-            bool ChildChangingParents( const ParentChangingArgs& args );
+            void ChildChangingParents( const ParentChangingArgs& args );
         };
 
         typedef Helium::SmartPtr<Core::Curve> LCurvePtr;

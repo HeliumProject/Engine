@@ -87,7 +87,7 @@ namespace Helium
         bool                m_Done;
     };
 
-    typedef Helium::Signature<void, const DirectoryItem&> DirectoryItemSignature;
+    typedef Helium::Signature< const DirectoryItem&> DirectoryItemSignature;
 
     FOUNDATION_API void RecurseDirectories( DirectoryItemSignature::Delegate delegate, const tstring &path, const tstring &spec = TXT( "*.*" ), u32 flags = DirectoryFlags::Default);
 }

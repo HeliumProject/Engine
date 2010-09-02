@@ -210,7 +210,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
     }
 }
 
-bool PathInterpreter::DataChanging( DataChangingArgs& args )
+void PathInterpreter::DataChanging( const DataChangingArgs& args )
 {
     tstring text;
     Reflect::Serializer::GetValue( args.m_NewValue, text );
@@ -221,17 +221,15 @@ bool PathInterpreter::DataChanging( DataChangingArgs& args )
 
         if ( path.IsFile() )
         {
-            return true;
+            return;
         }
 
         path.TrimToExisting();
 
         FileDialogArgs fileDialogArgs( Helium::FileDialogTypes::OpenFile, TXT( "Path Does Not Exist" ), m_FileFilter, path );
-        path = d_FindMissingFile.Invoke( fileDialogArgs );
-        Reflect::Serializer::SetValue< tstring >( args.m_NewValue, path.Get() );
+        d_FindMissingFile.Invoke( fileDialogArgs );
+        Reflect::Serializer::SetValue< tstring >( args.m_NewValue, fileDialogArgs.m_Result.Get() );
     }
-
-    return true;
 }
 
 void PathInterpreter::Edit( const ButtonClickedArgs& args )

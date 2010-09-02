@@ -20,7 +20,7 @@ namespace Helium
             {
             }
         };
-        typedef Helium::Signature< void, const FileDroppedArgs& > FileDroppedSignature;
+        typedef Helium::Signature< const FileDroppedArgs& > FileDroppedSignature;
         typedef std::set< FileDroppedSignature::Delegate > S_FileDroppedSignature;
 
         class FileDropTarget : public wxFileDropTarget

@@ -25,7 +25,7 @@ namespace Helium
             {
             }
         };
-        typedef Helium::Signature< void, const AddItemArgs& > AddItemSignature;
+        typedef Helium::Signature< const AddItemArgs& > AddItemSignature;
 
         class FOUNDATION_API List : public Reflect::ConcreteInheritor<List, Control>
         {

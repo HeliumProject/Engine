@@ -9,7 +9,7 @@ Test::TestInterface g_TestInterface;
 TestInterface::TestInterface()
 : Interface ("Test")
 {
-    Helium::Signature<void, TestArgs&>::Delegate delegate ( this, &TestInterface::Test );
+    Helium::Signature< TestArgs&>::Delegate delegate ( this, &TestInterface::Test );
 
     AddInvoker( new InvokerTemplate<TestArgs> ( this, delegate ) );
 }

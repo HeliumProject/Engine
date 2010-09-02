@@ -63,7 +63,7 @@ namespace Helium
     {
         int m_Code;
     };
-    typedef Helium::Signature<void, const ShutdownArgs&> ShutdownSignature;
+    typedef Helium::Signature< const ShutdownArgs&> ShutdownSignature;
     extern FOUNDATION_API ShutdownSignature::Event g_ShuttingDown;
 
     //

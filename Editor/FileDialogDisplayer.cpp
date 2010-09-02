@@ -7,7 +7,7 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-Helium::Path FileDialogDisplayer::DisplayFileDialog( const Helium::FileDialogArgs& args )
+void FileDialogDisplayer::DisplayFileDialog( const Helium::FileDialogArgs& args )
 {
     i32 style = 0;
 
@@ -36,5 +36,5 @@ Helium::Path FileDialogDisplayer::DisplayFileDialog( const Helium::FileDialogArg
         path.Set( static_cast<const tchar*>( saveDlg.GetPath().c_str() ) );
     }
 
-    return path;
+    args.m_Result = path;
 }

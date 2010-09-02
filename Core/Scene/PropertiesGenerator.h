@@ -14,9 +14,11 @@ namespace Helium
 {
     namespace Core
     {
+        class PropertiesGenerator;
+
         struct CORE_API CreatePanelArgs
         {
-            class PropertiesGenerator* m_Generator;
+            PropertiesGenerator*        m_Generator;
             const OS_SelectableDumbPtr& m_Selection;
 
             CreatePanelArgs(PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection)
@@ -28,7 +30,7 @@ namespace Helium
         };
 
         // callback for creating a named panel creator for the generator
-        typedef Helium::Signature< void, CreatePanelArgs& > CreatePanelSignature;
+        typedef Helium::Signature< CreatePanelArgs& > CreatePanelSignature;
 
         typedef std::map<tstring, CreatePanelSignature::Delegate> M_PanelCreators;
 

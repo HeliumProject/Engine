@@ -26,7 +26,7 @@ namespace Helium
             {
             }
         };
-        typedef Helium::Signature< void, const ThreadProcArgs& > ThreadProcSignature;
+        typedef Helium::Signature< const ThreadProcArgs& > ThreadProcSignature;
 
 
         /////////////////////////////////////////////////////////////////////////////

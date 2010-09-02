@@ -26,7 +26,7 @@ namespace Helium
  
         protected:
             // UI callbacks
-            bool OnEntityAssetChanging( const Inspect::ControlChangingArgs& args );
+            void OnEntityAssetChanging( const Inspect::ControlChangingArgs& args );
             void OnEntityAssetChanged( const Inspect::ControlChangedArgs& args );
             void OnEntityAssetRefresh( const Inspect::ButtonClickedArgs& args );
             void OnEntityAssetEditAsset( const Inspect::ButtonClickedArgs& args );

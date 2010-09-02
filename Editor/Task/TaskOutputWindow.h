@@ -22,7 +22,7 @@ namespace Helium
             void Notify();
         };
 
-        typedef Helium::Signature<void, Helium::Void> SignalSignature;
+        typedef Helium::Signature< Helium::Void> SignalSignature;
 
         class TaskOutputWindow : public wxFrame
         {

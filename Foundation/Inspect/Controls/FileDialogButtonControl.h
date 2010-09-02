@@ -38,8 +38,9 @@ namespace Helium
             tstring           m_Caption;
             Path              m_StartPath;
             tstring           m_Filter;
+            mutable Path      m_Result;
         };
-        typedef Helium::Signature< Path, const FileDialogButtonClickedArgs& > FileDialogButtonClickedSignature;
+        typedef Helium::Signature< const FileDialogButtonClickedArgs& > FileDialogButtonClickedSignature;
 
         ///////////////////////////////////////////////////////////////////////////
         // Button control that opens a file browser dialog.
@@ -59,8 +60,10 @@ namespace Helium
                 tstring path;
                 ReadStringData( path );
                 Path startPath( path );
-                Path result = d_Clicked.Invoke( FileDialogButtonClickedArgs( this, a_Type.Get(), a_Caption.Get(), startPath, a_Filter.Get() ) );
-                WriteStringData( result.Get() );
+
+                FileDialogButtonClickedArgs args ( this, a_Type.Get(), a_Caption.Get(), startPath, a_Filter.Get() );
+                d_Clicked.Invoke( args );
+                WriteStringData( args.m_Result.Get() );
                 return true;
             }
 

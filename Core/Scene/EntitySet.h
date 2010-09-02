@@ -25,7 +25,7 @@ namespace Helium
             {
             }
         };
-        typedef Helium::Signature< void, const EntitySetChangeArgs& > EntitySetChangeSignature;
+        typedef Helium::Signature< const EntitySetChangeArgs& > EntitySetChangeSignature;
 
         class EntitySet : public Core::InstanceSet
         {

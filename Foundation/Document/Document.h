@@ -20,7 +20,7 @@ namespace Helium
         }
     };
     // Event delegate for functions that take DocumentChangedArgs
-    typedef Helium::Signature< void, const DocumentChangedArgs& > DocumentChangedSignature;
+    typedef Helium::Signature< const DocumentChangedArgs& > DocumentChangedSignature;
 
     // Arguments for a file being renamed (contains the new and old names)
     struct DocumentPathChangedArgs : public DocumentChangedArgs
@@ -37,7 +37,7 @@ namespace Helium
     };
 
     // Event delegate for functions that take DocumentChangedArgs
-    typedef Helium::Signature< void, const DocumentPathChangedArgs& > DocumentPathChangedSignature;
+    typedef Helium::Signature< const DocumentPathChangedArgs& > DocumentPathChangedSignature;
 
     /////////////////////////////////////////////////////////////////////////////
     // Wraps all files manipulated by editors in Editor.  Handles all interaction

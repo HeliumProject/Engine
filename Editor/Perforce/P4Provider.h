@@ -36,7 +36,21 @@ namespace Helium
             virtual ~WaitInterface();
             virtual bool StopWaiting() = 0;
         };
-        typedef Helium::Signature<bool, WaitInterface*> WaitSignature;
+
+        struct WaitArgs
+        {
+            WaitArgs( WaitInterface* waitInterface )
+                : m_WaitInterface( waitInterface )
+                , m_Cancel( false )
+            {
+
+            }
+
+            WaitInterface*  m_WaitInterface;
+            bool            m_Cancel;
+        };
+        typedef Helium::Signature< WaitArgs& > WaitSignature;
+
         extern WaitSignature::Delegate g_ShowWaitDialog;
 
         struct MessageArgs
@@ -51,7 +65,7 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature<void, const MessageArgs&> MessageSignature;
+        typedef Helium::Signature< const MessageArgs&> MessageSignature;
         extern MessageSignature::Delegate g_ShowWarningDialog;
 
 #pragma warning (disable : 4275)

@@ -105,7 +105,7 @@ namespace Helium
             Inspect::V_Control  m_Controls;
         };
 
-        typedef Helium::Signature< void, const PropertiesCreatedArgs& > PropertiesCreatedSignature;
+        typedef Helium::Signature< const PropertiesCreatedArgs& > PropertiesCreatedSignature;
 
         struct PropertyThreadArgs
         {
@@ -137,7 +137,7 @@ namespace Helium
             Inspect::ContainerPtr               m_Container;
         };
 
-        typedef Signature< void, VoidSignature::Delegate > VoidDelegateSignature;
+        typedef Signature< VoidSignature::Delegate > VoidDelegateSignature;
 
         class CORE_API PropertiesManager : public Helium::RefCountBase< PropertiesManager >
         {

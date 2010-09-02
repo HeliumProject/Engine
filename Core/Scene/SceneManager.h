@@ -39,7 +39,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< void, const SceneChangeArgs& > SceneChangeSignature;
+        typedef Helium::Signature< const SceneChangeArgs& > SceneChangeSignature;
 
         /////////////////////////////////////////////////////////////////////////////
         // Wrapper for files edited by the scene editor.  Handles RCS prompts (in the
@@ -138,7 +138,7 @@ namespace Helium
 
         private:
             Core::Scene* FindFirstNonNestedScene() const;
-            bool OnSceneEditing( const SceneEditingArgs& args );
+            void OnSceneEditing( const SceneEditingArgs& args );
             void DocumentPathChanged( const DocumentPathChangedArgs& args );
             void DocumentClosed( const DocumentChangedArgs& args );
 

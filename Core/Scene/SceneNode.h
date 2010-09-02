@@ -83,7 +83,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< void, const SceneNodeChangeArgs& > SceneNodeChangeSignature;
+        typedef Helium::Signature< const SceneNodeChangeArgs& > SceneNodeChangeSignature;
 
 
         //

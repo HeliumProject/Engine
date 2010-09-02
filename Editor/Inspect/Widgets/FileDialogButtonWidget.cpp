@@ -20,7 +20,7 @@ FileDialogButtonWidget::FileDialogButtonWidget( Inspect::Button* control )
     button->d_Clicked.Set( Inspect::FileDialogButtonClickedSignature::Delegate( this, &FileDialogButtonWidget::OnClicked ) );
 }
 
-Path FileDialogButtonWidget::OnClicked( const Inspect::FileDialogButtonClickedArgs& args )
+void FileDialogButtonWidget::OnClicked( const Inspect::FileDialogButtonClickedArgs& args )
 {
     HELIUM_ASSERT( m_ButtonWindow );
 
@@ -45,5 +45,5 @@ Path FileDialogButtonWidget::OnClicked( const Inspect::FileDialogButtonClickedAr
         path.Set( static_cast<const tchar*>( fileDialog.GetPath().c_str() ) );
     }
 
-    return path;
+    args.m_Result = path;
 }

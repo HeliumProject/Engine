@@ -166,10 +166,15 @@ void Provider::RunCommand( Command* command )
             {
                 if ( !m_Completed.Wait( m_ForegroundExecuteTimeout ) )
                 {
-                    if ( g_ShowWaitDialog.Valid() && g_ShowWaitDialog.Invoke( this ) )
+                    if ( g_ShowWaitDialog.Valid() )
                     {
-                        m_IsEnabled = false;
-                        m_Abort = true;
+                        WaitArgs args ( this );
+                        g_ShowWaitDialog.Invoke( args );
+                        if ( args.m_Cancel )
+                        {
+                            m_IsEnabled = false;
+                            m_Abort = true;
+                        }
                     }
                 }
             }
@@ -201,16 +206,21 @@ void Provider::RunCommand( Command* command )
                 if ( foregroundThread )
                 {
                     // this will poll Connect() in a timer
-                    if ( g_ShowWaitDialog.Valid() && g_ShowWaitDialog.Invoke( this ) )
+                    if ( g_ShowWaitDialog.Valid() )
                     {
-                        m_IsEnabled = false;
-
-                        if ( g_ShowWarningDialog.Valid() )
+                        WaitArgs args ( this );
+                        g_ShowWaitDialog.Invoke( args );
+                        if ( args.m_Cancel )
                         {
-                            g_ShowWarningDialog.Invoke( MessageArgs( TXT( "Warning: Continuing to work without a perforce connection could expose unexpected problems.\n\nPlease consider saving your work and waiting until the connection can be restored." ), TXT( "Warning" ) ) );
-                        }
+                            m_IsEnabled = false;
 
-                        throw Perforce::Exception( TXT( "Failed to connect to perforce server" ) );
+                            if ( g_ShowWarningDialog.Valid() )
+                            {
+                                g_ShowWarningDialog.Invoke( MessageArgs( TXT( "Warning: Continuing to work without a perforce connection could expose unexpected problems.\n\nPlease consider saving your work and waiting until the connection can be restored." ), TXT( "Warning" ) ) );
+                            }
+
+                            throw Perforce::Exception( TXT( "Failed to connect to perforce server" ) );
+                        }
                     }
                 }
 

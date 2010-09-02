@@ -1071,8 +1071,8 @@ void Curve::OnReverseControlPoints( const Inspect::ButtonClickedArgs& args )
     }
 }
 
-bool Curve::ChildChangingParents( const ParentChangingArgs& args )
+void Curve::ChildChangingParents( const ParentChangingArgs& args )
 {
     // Prevent rearranging points (for now)
-    return false;
+    args.m_Veto = true;
 }

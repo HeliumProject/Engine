@@ -181,12 +181,19 @@ namespace Helium
 
         struct DataChangingArgs
         {
-            DataChangingArgs( const Data* data, Reflect::Serializer* value ) : m_Data (data) , m_NewValue( value ) {}
+            DataChangingArgs( const Data* data, Reflect::Serializer* value )
+                : m_Data ( data )
+                , m_NewValue( value )
+                , m_Veto ( false )
+            {
+            
+            }
 
             const Data*             m_Data;
             Reflect::SerializerPtr  m_NewValue;
+            mutable bool            m_Veto;
         };
-        typedef Helium::Signature<bool, DataChangingArgs&> DataChangingSignature;
+        typedef Helium::Signature< const DataChangingArgs& > DataChangingSignature;
 
         struct DataChangedArgs
         {
@@ -194,7 +201,7 @@ namespace Helium
 
             const Data* m_Data;
         };
-        typedef Helium::Signature<void, const DataChangedArgs&> DataChangedSignature;
+        typedef Helium::Signature< const DataChangedArgs& > DataChangedSignature;
 
         namespace DataTypes
         {
@@ -437,12 +444,15 @@ namespace Helium
                 bool result = false;
 
                 Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create< tstring >( s ) );
-                if ( m_Changing.RaiseWithReturn( DataChangingArgs( this, serializer ) ) )
+                
+                DataChangingArgs args ( this, serializer );
+                m_Changing.Raise( args );
+                if ( !args.m_Veto )
                 {
                     tstring newValue;
                     Reflect::Serializer::GetValue< tstring >( serializer, newValue );
                     Extract< T >( tstringstream ( newValue ), m_Data );
-                    m_Changed.Raise( this, emitter );
+                    m_Changed.RaiseWithEmitter( this, emitter );
                     result = true;
                 }
 
@@ -500,7 +510,10 @@ namespace Helium
                 bool result = false;
 
                 Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( s ) );
-                if ( m_Changing.RaiseWithReturn( DataChangingArgs( this, serializer ) ) )
+
+                DataChangingArgs args ( this, serializer );
+                m_Changing.Raise( args );
+                if ( !args.m_Veto )
                 {
                     tstring newValue;
                     Reflect::Serializer::GetValue< tstring >( serializer, newValue );
@@ -512,7 +525,7 @@ namespace Helium
                         result = true;
                     }
 
-                    m_Changed.Raise( this, emitter );
+                    m_Changed.RaiseWithEmitter( this, emitter );
                 }
 
                 return result;
@@ -529,7 +542,9 @@ namespace Helium
                     for ( size_t index = 0; itr != end; ++itr, ++index )
                     {
                         Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( *itr ) );
-                        if ( m_Changing.RaiseWithReturn( DataChangingArgs( this, serializer ) ) )
+                        DataChangingArgs args ( this, serializer );
+                        m_Changing.Raise( args );
+                        if ( !args.m_Veto )
                         {
                             tstring newValue;
                             Reflect::Serializer::GetValue< tstring >( serializer, newValue );
@@ -538,7 +553,7 @@ namespace Helium
                         }
                     }
 
-                    m_Changed.Raise( this, emitter );
+                    m_Changed.RaiseWithEmitter( this, emitter );
                 }
                 else
                 {
@@ -651,14 +666,16 @@ namespace Helium
                 bool result = false;
 
                 Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( s ) );
-                if ( m_Changing.RaiseWithReturn( DataChangingArgs ( this, serializer ) ) )
+                DataChangingArgs args ( this, serializer );
+                m_Changing.Raise( args );
+                if ( !args.m_Veto )
                 {
                     T value;
                     tstring newValue;
                     Reflect::Serializer::GetValue< tstring >( serializer, newValue );
                     Extract< T >( tstringstream( newValue ), &value );
                     m_Property->Set( value );
-                    m_Changed.Raise( this, emitter );
+                    m_Changed.RaiseWithEmitter( this, emitter );
                     result = true;
                 }
 
@@ -704,7 +721,9 @@ namespace Helium
                 bool result = false;
 
                 Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create< tstring >( s ) );
-                if ( m_Changing.RaiseWithReturn( DataChangingArgs( this, serializer ) ) )
+                DataChangingArgs args ( this, serializer );
+                m_Changing.Raise( args );
+                if ( !args.m_Veto )
                 {
                     tstring newValue;
                     Reflect::Serializer::GetValue< tstring >( serializer, newValue );
@@ -718,7 +737,7 @@ namespace Helium
                         result = true;
                     }
 
-                    m_Changed.Raise( this, emitter );
+                    m_Changed.RaiseWithEmitter( this, emitter );
                 }
 
                 return result;
@@ -735,7 +754,9 @@ namespace Helium
                     for ( size_t index = 0; itr != end; ++itr, ++index )
                     {
                         Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( *itr ) );
-                        if ( m_Changing.RaiseWithReturn( DataChangingArgs( this, serializer ) ) )
+                        DataChangingArgs args ( this, serializer );
+                        m_Changing.Raise( args );
+                        if ( !args.m_Veto )
                         {
                             T value;
                             tstring newValue;
@@ -746,7 +767,7 @@ namespace Helium
                         }
                     }
 
-                    m_Changed.Raise( this, emitter );
+                    m_Changed.RaiseWithEmitter( this, emitter );
                 }
                 else
                 {
@@ -864,12 +885,14 @@ namespace Helium
                 bool result = false;
 
                 Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( value ) );
-                if ( m_Changing.RaiseWithReturn( DataChangingArgs( this, serializer ) ) )
+                DataChangingArgs args ( this, serializer );
+                m_Changing.Raise( args );
+                if ( !args.m_Veto )
                 {
                     T newValue;
                     Reflect::Serializer::GetValue< T >( serializer, newValue );
                     m_Property->Set( newValue );
-                    m_Changed.Raise( this, emitter );
+                    m_Changed.RaiseWithEmitter( this, emitter );
                     result = true;
                 }
 
@@ -917,7 +940,9 @@ namespace Helium
                 bool result = false;
 
                 Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( value ) );
-                if ( m_Changing.RaiseWithReturn( DataChangingArgs( this, serializer ) ) )
+                DataChangingArgs args ( this, serializer );
+                m_Changing.Raise( args );
+                if ( !args.m_Veto )
                 {
                     T newValue;
                     Serializer::GetValue< T >( serializer, newValue );
@@ -929,7 +954,7 @@ namespace Helium
                         result = true;
                     }
 
-                    m_Changed.Raise( this, emitter );
+                    m_Changed.RaiseWithEmitter( this, emitter );
                 }
 
                 return result;
@@ -946,7 +971,9 @@ namespace Helium
                     for ( size_t index=0; itr != end; ++itr, ++index )
                     {
                         Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( *itr ) );
-                        if ( m_Changing.RaiseWithReturn( DataChangingArgs( this, serializer ) ) )
+                        DataChangingArgs args ( this, serializer );
+                        m_Changing.Raise( args );
+                        if ( !args.m_Veto )
                         {
                             T newValue;
                             Serializer::GetValue< T >( serializer, newValue );
@@ -955,7 +982,7 @@ namespace Helium
                         }
                     }
 
-                    m_Changed.Raise( this, emitter );
+                    m_Changed.RaiseWithEmitter( this, emitter );
                 }
                 else
                 {

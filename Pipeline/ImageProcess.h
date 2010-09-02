@@ -89,13 +89,13 @@ namespace Helium
         typedef Helium::SmartPtr<Definition> DefinitionPtr;
         typedef std::vector<DefinitionPtr> V_Definition;
 
-        typedef Helium::Signature<void, Definition*> DefinitionSignature;
+        typedef Helium::Signature< Definition*> DefinitionSignature;
 
         struct PostLoadArgs
         {
 
         };
-        typedef Helium::Signature<void, const PostLoadArgs&> PostLoadSignature;
+        typedef Helium::Signature< const PostLoadArgs&> PostLoadSignature;
 
         //
         // The Bank class builds Defs into a packed bank of textures

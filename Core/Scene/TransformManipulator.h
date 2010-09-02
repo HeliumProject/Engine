@@ -91,7 +91,7 @@ namespace Helium
 
         protected:
             // update state with current selection
-            virtual void SelectionChanged(const OS_SelectableDumbPtr& selection);
+            virtual void SelectionChanged(const SelectionChangeArgs& args);
 
             // setup the material in the render device for teh applicable axes
             virtual bool SetAxisMaterial(Math::AxesFlags axes);

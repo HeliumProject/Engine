@@ -325,15 +325,17 @@ Core::Scene* SceneManager::FindFirstNonNestedScene() const
     return found;
 }
 
-bool SceneManager::OnSceneEditing( const SceneEditingArgs& args )
+void SceneManager::OnSceneEditing( const SceneEditingArgs& args )
 {
     SceneDocument* document = (SceneDocument*)m_DocumentManager.FindDocument( args.m_Scene->GetPath() );
     if ( document )
     {
-        return m_DocumentManager.IsCheckedOut( document );
+        args.m_Veto = !m_DocumentManager.IsCheckedOut( document );
     }
-
-    return false;
+    else
+    {
+        args.m_Veto = true;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -5,7 +5,7 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-MessageResult MessageDisplayer::DisplayMessage( const Helium::MessageArgs& args )
+void MessageDisplayer::DisplayMessage( const Helium::MessageArgs& args )
 {
     unsigned icon = 0;
     switch ( args.m_Priority )
@@ -36,9 +36,11 @@ MessageResult MessageDisplayer::DisplayMessage( const Helium::MessageArgs& args 
             switch ( wxMessageBox( args.m_Message, args.m_Caption, wxYES_NO | wxCENTER | wxICON_WARNING, m_Parent ) )
             {
             case wxYES:
-                return MessageResults::Yes;
+                args.m_Result = MessageResults::Yes;
+                break;
             case wxNO:
-                return MessageResults::No;
+                args.m_Result = MessageResults::No;
+                break;
             }
             break;
         }
@@ -48,11 +50,14 @@ MessageResult MessageDisplayer::DisplayMessage( const Helium::MessageArgs& args 
             switch ( wxMessageBox( args.m_Message, args.m_Caption, wxYES_NO | wxCANCEL | wxCENTER | wxICON_QUESTION, m_Parent ) )
             {
             case wxYES:
-                return MessageResults::Yes;
+                args.m_Result = MessageResults::Yes;
+                break;
             case wxNO:
-                return MessageResults::No;
+                args.m_Result = MessageResults::No;
+                break;
             case wxCANCEL:
-                return MessageResults::Cancel;
+                args.m_Result = MessageResults::Cancel;
+                break;
             }
             break;
         }
@@ -64,20 +69,23 @@ MessageResult MessageDisplayer::DisplayMessage( const Helium::MessageArgs& args 
             switch ( dlg.ShowModal() )
             {
             case wxID_YES:
-                return MessageResults::Yes;
+                args.m_Result = MessageResults::Yes;
+                break;
             case wxID_YESTOALL:
-                return MessageResults::YesToAll;
+                args.m_Result = MessageResults::YesToAll;
+                break;
             case wxID_NO:
-                return MessageResults::No;
+                args.m_Result = MessageResults::No;
+                break;
             case wxID_NOTOALL:
-                return MessageResults::NoToAll;
+                args.m_Result = MessageResults::NoToAll;
+                break;
             case wxID_CANCEL:
-                return MessageResults::Cancel;
+                args.m_Result = MessageResults::Cancel;
+                break;
             }
 
             break;
         }
     }
-
-    return MessageResults::Cancel;
 }

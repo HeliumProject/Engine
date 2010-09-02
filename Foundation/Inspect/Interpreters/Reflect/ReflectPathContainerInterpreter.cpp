@@ -188,12 +188,13 @@ void PathContainerInterpreter::OnAdd( const ButtonClickedArgs& args )
     {
         ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
 
-        Path path = d_OpenFileDialog.Invoke( FileDialogArgs( Helium::FileDialogTypes::OpenFile, TXT( "Add File" ), TXT( "*.*" ) ) );
-        if ( !path.empty() )
+        FileDialogArgs fileDialogArgs ( Helium::FileDialogTypes::OpenFile, TXT( "Add File" ), TXT( "*.*" ) );
+        d_OpenFileDialog.Invoke( fileDialogArgs );
+        if ( !fileDialogArgs.m_Result.empty() )
         {
             List* list = static_cast< List* >( data->GetControl() );
 #ifdef INSPECT_REFACTOR
-            list->AddItem( path.Get() );
+            list->AddItem( fileDialogArgs.m_Result.Get() );
 #endif
         }
 

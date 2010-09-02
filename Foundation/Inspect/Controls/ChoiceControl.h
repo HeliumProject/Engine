@@ -26,7 +26,7 @@ namespace Helium
 
             Choice* m_Choice;
         };
-        typedef Helium::Signature<void, const ChoiceArgs&> ChoiceSignature;
+        typedef Helium::Signature< const ChoiceArgs&> ChoiceSignature;
 
         struct ChoiceEnumerateArgs : public ChoiceArgs
         {
@@ -39,7 +39,7 @@ namespace Helium
 
             tstring m_Enumeration;
         };
-        typedef Helium::Signature<void, const ChoiceEnumerateArgs&> ChoiceEnumerateSignature;
+        typedef Helium::Signature< const ChoiceEnumerateArgs&> ChoiceEnumerateSignature;
 
         struct ChoiceItem
         {

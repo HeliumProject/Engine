@@ -230,7 +230,7 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature<void, const FileAccessArgs&, Helium::AtomicRefCountBase> FileAccessSignature;
+        typedef Helium::Signature< const FileAccessArgs&, Helium::AtomicRefCountBase> FileAccessSignature;
 
         struct SerializeArgs
         {
@@ -242,7 +242,7 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature<void, SerializeArgs&, Helium::AtomicRefCountBase> SerializeSignature;
+        typedef Helium::Signature< SerializeArgs&, Helium::AtomicRefCountBase> SerializeSignature;
 
         struct DeserializeArgs
         {
@@ -254,7 +254,7 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature<void, DeserializeArgs&, Helium::AtomicRefCountBase> DeserializeSignature;
+        typedef Helium::Signature< DeserializeArgs&, Helium::AtomicRefCountBase> DeserializeSignature;
 
 
         //

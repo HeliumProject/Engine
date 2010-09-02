@@ -19,7 +19,7 @@ namespace Helium
 
             bool m_Show;
         };
-        typedef Helium::Signature<void, const CanvasShowArgs&> CanvasShowSignature;
+        typedef Helium::Signature< const CanvasShowArgs&> CanvasShowSignature;
 
         class FOUNDATION_API Canvas : public Reflect::AbstractInheritor<Canvas, Container>
         {

@@ -24,7 +24,7 @@ namespace Helium
         // Event Args and Signatures
         //
 
-        typedef Helium::Signature< void, Control* > ControlSignature;
+        typedef Helium::Signature< Control* > ControlSignature;
 
         struct ControlChangingArgs
         {
@@ -32,6 +32,7 @@ namespace Helium
                 : m_Control( control )
                 , m_NewValue( newValue )
                 , m_Preview( preview )
+                , m_Veto( false )
             {
 
             }
@@ -39,8 +40,9 @@ namespace Helium
             Control*                m_Control;
             Reflect::Serializer*    m_NewValue;
             bool                    m_Preview;
+            mutable bool            m_Veto;
         };
-        typedef Helium::Signature<bool, const ControlChangingArgs&> ControlChangingSignature;
+        typedef Helium::Signature<const ControlChangingArgs&> ControlChangingSignature;
 
         struct ControlChangedArgs
         {
@@ -48,7 +50,7 @@ namespace Helium
 
             Control* m_Control;
         };
-        typedef Helium::Signature<void, const ControlChangedArgs&> ControlChangedSignature;
+        typedef Helium::Signature< const ControlChangedArgs&> ControlChangedSignature;
 
         //
         // ClientData, this could be toolkit OR interpreter client data, there are two pointer in Control

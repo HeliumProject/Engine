@@ -23,7 +23,7 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature< void, const NodeTypeChangeArgs& > NodeTypeChangeSignature;
+        typedef Helium::Signature< const NodeTypeChangeArgs& > NodeTypeChangeSignature;
 
         //
         // Node type that stores all the instances of any type.  All the

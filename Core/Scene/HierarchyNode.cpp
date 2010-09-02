@@ -238,8 +238,9 @@ void HierarchyNode::SetParent( Core::HierarchyNode* value )
     {
         Core::HierarchyNode* oldParent = m_Parent;
 
-        ParentChangingArgs changing( this, value );
-        if( m_ParentChanging.RaiseWithReturn( changing ) )
+        ParentChangingArgs args ( this, value );
+        m_ParentChanging.Raise( args );
+        if( !args.m_Veto )
         {
             if (value != NULL)
             {

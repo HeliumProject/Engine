@@ -140,11 +140,10 @@ bool DocumentManager::SaveDocument( DocumentPtr document, tstring& error )
         tstring filters;
         Reflect::Archive::GetFileFilters( filters );
         FileDialogArgs args ( FileDialogTypes::SaveFile, TXT("Save As..."), filters, document->GetPath().Directory(), document->GetPath() );
-
-        Helium::Path savePath = m_FileDialog.Invoke( args );
-        if ( !savePath.empty() )
+        m_FileDialog.Invoke( args );
+        if ( !args.m_Result.empty() )
         {
-            document->SetPath( savePath );
+            document->SetPath( args.m_Result );
         }
         else
         {
@@ -334,7 +333,14 @@ bool DocumentManager::QueryAllowChanges( Document* document ) const
         QueryCheckOut( document );
         if ( !IsCheckedOut( document ) )
         {
-            if ( MessageResults::Yes == m_Message.Invoke( MessageArgs( TXT( "Edit anyway?" ), TXT( "Would you like to edit this file anyway?\n(NOTE: You may not be able to save your changes)" ), MessagePriorities::Question, MessageAppearances::YesNo ) ) )
+            MessageArgs args ( TXT( "Edit anyway?" ),
+                TXT( "Would you like to edit this file anyway?\n(NOTE: You may not be able to save your changes)" ),
+                MessagePriorities::Question,
+                MessageAppearances::YesNo );
+
+            m_Message.Invoke( args );
+
+            if ( MessageResults::Yes == args.m_Result )
             {
                 document->SetAllowChanges( true );
             }
@@ -379,7 +385,10 @@ bool DocumentManager::QueryCheckOut( Document* document ) const
         {
             tostringstream str;
             str << "Do you wish to check out " << document->GetFileName() << "?";
-            if ( MessageResults::Yes == m_Message.Invoke( MessageArgs( TXT( "Check Out?" ), str.str(), MessagePriorities::Question, MessageAppearances::YesNo ) ) )
+
+            MessageArgs args ( TXT( "Check Out?" ), str.str(), MessagePriorities::Question, MessageAppearances::YesNo );
+            m_Message.Invoke( args );
+            if ( MessageResults::Yes == args.m_Result )
             {
                 return CheckOut( document );
             }
@@ -486,7 +495,10 @@ bool DocumentManager::QueryOpen( Document* document ) const
                 tstring capitalized = document->GetFileName();
                 capitalized[0] = toupper( capitalized[0] );
                 str << capitalized << " is already checked out by \"" << usernames << "\"\nDo you still wish to open the file?";
-                if ( MessageResults::Yes == m_Message.Invoke( MessageArgs( TXT( "Checked Out by Another User" ), str.str(), MessagePriorities::Question, MessageAppearances::YesNo ) ) )
+
+                MessageArgs args ( TXT( "Checked Out by Another User" ), str.str(), MessagePriorities::Question, MessageAppearances::YesNo );
+                m_Message.Invoke( args );
+                if ( MessageResults::Yes == args.m_Result )
                 {
                     return true;
                 }
@@ -507,7 +519,10 @@ bool DocumentManager::QueryOpen( Document* document ) const
             {
                 tostringstream str;
                 str << "Unable to add " << document->GetFileName() << " to revision control.  Would you like to continue opening the file?";
-                if ( MessageResults::Yes == m_Message.Invoke( MessageArgs( TXT( "Continue Opening?" ), str.str(), MessagePriorities::Question, MessageAppearances::YesNo ) ) )
+
+                MessageArgs args ( TXT( "Continue Opening?" ), str.str(), MessagePriorities::Question, MessageAppearances::YesNo );
+                m_Message.Invoke( args );
+                if ( MessageResults::Yes == args.m_Result )
                 {
                     return true;
                 }
@@ -543,7 +558,10 @@ bool DocumentManager::QueryAdd( Document* document ) const
         {
             tostringstream msg;
             msg << "Would you like to add \"" << document->GetFileName() << "\" to revision control?";
-            if ( MessageResults::Yes == m_Message.Invoke( MessageArgs( TXT( "Add to Revision Control?" ), msg.str(), MessagePriorities::Question, MessageAppearances::YesNo ) ) )
+
+            MessageArgs args ( TXT( "Add to Revision Control?" ), msg.str(), MessagePriorities::Question, MessageAppearances::YesNo );
+            m_Message.Invoke( args );
+            if ( MessageResults::Yes == args.m_Result )
             {
                 try
                 {
@@ -576,7 +594,10 @@ SaveAction DocumentManager::QueryCloseAll( Document* document ) const
 
         tostringstream msg;
         msg << "You are attempting to close file " << document->GetFileName() << " which has changed. Would you like to save your changes before closing?";       
-        switch ( m_Message.Invoke( MessageArgs( TXT( "Save Changes?" ), msg.str(), MessagePriorities::Question, MessageAppearances::YesNoCancelToAll ) ) )
+
+        MessageArgs args ( TXT( "Save Changes?" ), msg.str(), MessagePriorities::Question, MessageAppearances::YesNoCancelToAll );
+        m_Message.Invoke( args );
+        switch ( args.m_Result )
         {
         case MessageResults::Yes:
             action = SaveActions::Save;
@@ -632,7 +653,10 @@ SaveAction DocumentManager::QueryClose( Document* document ) const
     {
         tstring msg( TXT( "Would you like to save changes to " ) );
         msg += TXT( "'" ) + document->GetFileName() + TXT( "' before closing?" );
-        switch (  m_Message.Invoke( MessageArgs( TXT( "Save Changes?" ), msg.c_str(), MessagePriorities::Question, MessageAppearances::YesNoCancel ) ) )
+
+        MessageArgs args ( TXT( "Save Changes?" ), msg.c_str(), MessagePriorities::Question, MessageAppearances::YesNoCancel );
+        m_Message.Invoke( args );
+        switch ( args.m_Result )
         {
         case MessageResults::Yes:
             return SaveActions::Save;
@@ -681,7 +705,10 @@ SaveAction DocumentManager::QuerySave( Document* document ) const
             }
 
             msg = TXT( "File '" ) + document->GetFileName() + TXT( "' has been changed, but is not checked out.  Would you like to check out and save this file?" );
-            if ( MessageResults::No == m_Message.Invoke( MessageArgs( TXT( "Check out and save?" ), msg.c_str(), MessagePriorities::Question, MessageAppearances::YesNo ) ) )
+
+            MessageArgs args ( TXT( "Check out and save?" ), msg.c_str(), MessagePriorities::Question, MessageAppearances::YesNo );
+            m_Message.Invoke( args );
+            if ( MessageResults::No == args.m_Result )
             {
                 return SaveActions::Skip;
             }

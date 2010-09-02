@@ -24,7 +24,7 @@ namespace Helium
         };
 
         // Definition for event delegates dealing with grid row changes.
-        typedef Helium::Signature< void, const GridRowChangeArgs& > GridRowChangeSignature;
+        typedef Helium::Signature< const GridRowChangeArgs& > GridRowChangeSignature;
 
         struct GridRowRenamedArgs : public GridRowChangeArgs
         {
@@ -39,7 +39,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< void, const GridRowRenamedArgs& > GridRowRenamedSignature;
+        typedef Helium::Signature< const GridRowRenamedArgs& > GridRowRenamedSignature;
 
 
         /////////////////////////////////////////////////////////////////////////////

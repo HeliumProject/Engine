@@ -111,9 +111,9 @@ Core::Scene* Entity::GetNestedScene( GeometryMode mode, bool load_on_demand ) co
 {
     if (m_ClassSet->GetEntity())
     {
-#pragma TODO( "Support the various rendering modes.  This used to load different files for art, collision, etc." )
-        Helium::Path scenePath( m_ClassSet->GetContentFile() );
-        m_Scene = m_Owner->ResolveSceneDelegate().Invoke( ResolveSceneArgs( scenePath ) );
+        ResolveSceneArgs args ( m_ClassSet->GetContentFile() );
+        m_Owner->ResolveSceneDelegate().Invoke( args );
+        m_Scene = args.m_Scene;
     }
 
     return m_Scene;

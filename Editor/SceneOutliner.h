@@ -127,7 +127,7 @@ namespace Helium
         protected:
             // Application event callbacks
             virtual void CurrentSceneChanged( const Core::SceneChangeArgs& args );
-            virtual void SelectionChanged( const Core::OS_SelectableDumbPtr& selection );
+            virtual void SelectionChanged( const Core::SelectionChangeArgs& args );
             virtual void SceneNodeNameChanged( const Core::SceneNodeChangeArgs& args );
             void SceneNodeVisibilityChanged( const Core::SceneNodeChangeArgs& args );
 

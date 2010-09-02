@@ -23,7 +23,7 @@ namespace Helium
             FileDialogButtonWidget( Inspect::Button* control );                
 
         protected:
-            Path OnClicked( const Inspect::FileDialogButtonClickedArgs& args );
+            void OnClicked( const Inspect::FileDialogButtonClickedArgs& args );
         };
     }
 }

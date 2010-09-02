@@ -386,7 +386,7 @@ bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
     return canHandleArgs;
 }
 
-wxDragResult MainFrame::DragOver( const Editor::DragArgs& args )
+void MainFrame::DragOver( const Editor::DragArgs& args )
 {
     wxDragResult result = args.m_Default;
 
@@ -395,10 +395,10 @@ wxDragResult MainFrame::DragOver( const Editor::DragArgs& args )
         result = wxDragNone;
     }
 
-    return result;
+    args.m_Result = result;
 }
 
-wxDragResult MainFrame::Drop( const Editor::DragArgs& args )
+void MainFrame::Drop( const Editor::DragArgs& args )
 {
     wxDragResult result = args.m_Default;
 
@@ -417,7 +417,7 @@ wxDragResult MainFrame::Drop( const Editor::DragArgs& args )
         }
     }
 
-    return result;
+    args.m_Result = result;
 }
 
 void MainFrame::SceneAdded( const SceneChangeArgs& args )
@@ -1641,10 +1641,9 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
     m_ToolbarPanel->ToggleTool( selectedTool );
 }
 
-bool MainFrame::OnSceneUndoCommand( const Core::UndoCommandArgs& args )
+void MainFrame::OnSceneUndoCommand( const Core::UndoCommandArgs& args )
 {
     m_UndoQueue.Push( args.m_Command );
-    return true;
 }
 
 void MainFrame::OnUndo( wxCommandEvent& event )
@@ -1996,9 +1995,9 @@ void MainFrame::Executed( const ExecuteArgs& args )
     }
 }
 
-void MainFrame::SelectionChanged( const OS_SelectableDumbPtr& selection )
+void MainFrame::SelectionChanged( const SelectionChangeArgs& args )
 {
-    m_PropertiesPanel->GetPropertiesManager().SetSelection( selection );
+    m_PropertiesPanel->GetPropertiesManager().SetSelection( args.m_Selection );
 }
 
 void MainFrame::OnExit( wxCommandEvent& event )

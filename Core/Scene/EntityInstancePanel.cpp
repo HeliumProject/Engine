@@ -113,9 +113,9 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SelectableDumb
 // Returns true if the new value for the Entity Class field can be resolved to
 // a file TUID.
 //
-bool EntityPanel::OnEntityAssetChanging( const Inspect::ControlChangingArgs& args )
+void EntityPanel::OnEntityAssetChanging( const Inspect::ControlChangingArgs& args )
 {
-    bool result = false;
+    bool allow = false;
 
     tstring newValue;
     Reflect::Serializer::GetValue(args.m_NewValue, newValue);
@@ -128,11 +128,11 @@ bool EntityPanel::OnEntityAssetChanging( const Inspect::ControlChangingArgs& arg
         Reflect::Archive::GetExtensions( extensions );
         if ( extensions.find( path.Extension() ) != extensions.end() )
         {
-            result = true;
+            allow = true;
         }
     }
 
-    return result;
+    args.m_Veto = !allow;
 }
 
 void EntityPanel::OnEntityAssetChanged( const Inspect::ControlChangedArgs& args )

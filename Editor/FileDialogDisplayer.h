@@ -20,7 +20,7 @@ namespace Helium
                 m_Parent = parent;
             }
 
-            Helium::Path DisplayFileDialog( const FileDialogArgs& args );
+            void DisplayFileDialog( const FileDialogArgs& args );
 
         private:
             wxWindow* m_Parent;

@@ -62,7 +62,7 @@ using namespace Helium;
 using namespace Helium::Editor;
 using namespace Helium::CommandLine;
 
-static int ShowBreakpointDialog(const Debug::BreakpointArgs& args )
+static void ShowBreakpointDialog(const Debug::BreakpointArgs& args )
 {
     static std::set<uintptr> disabled;
     static bool skipAll = false;
@@ -108,7 +108,8 @@ static int ShowBreakpointDialog(const Debug::BreakpointArgs& args )
                 SetUnhandledExceptionFilter( NULL );
 
                 // this should let the OS prompt for the debugger
-                return EXCEPTION_CONTINUE_SEARCH;
+                args.m_Result = EXCEPTION_CONTINUE_SEARCH;
+                return;
             }
             else if (choice == thisOnce)
             {
@@ -133,12 +134,12 @@ static int ShowBreakpointDialog(const Debug::BreakpointArgs& args )
         args.m_Info->ContextRecord->IPREG += 1;
 
         // continue execution past the break instruction
-        return EXCEPTION_CONTINUE_EXECUTION;
+        args.m_Result = EXCEPTION_CONTINUE_EXECUTION;
     }
     else
     {
         // fall through and let window's crash API run
-        return EXCEPTION_CONTINUE_SEARCH;
+        args.m_Result = EXCEPTION_CONTINUE_SEARCH;
     }
 }
 

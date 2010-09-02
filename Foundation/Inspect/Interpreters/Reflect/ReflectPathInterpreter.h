@@ -25,7 +25,7 @@ namespace Helium
         private:
 
             // callbacks
-            bool DataChanging( DataChangingArgs& args );
+            void DataChanging( const DataChangingArgs& args );
             void Edit( const ButtonClickedArgs& args );
 
 #ifdef INSPECT_REFACTOR

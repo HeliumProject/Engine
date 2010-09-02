@@ -20,7 +20,7 @@ namespace Helium
                 m_Parent = parent;
             }
 
-            MessageResult DisplayMessage( const MessageArgs& args );
+            void DisplayMessage( const MessageArgs& args );
 
         private:
             wxWindow* m_Parent;

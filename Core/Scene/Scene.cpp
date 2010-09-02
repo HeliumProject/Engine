@@ -130,12 +130,9 @@ Scene::~Scene()
 
 bool Scene::IsEditable()
 {
-    if ( m_EditingDelegate.Invoke( SceneEditingArgs( this ) ) )
-    {
-        return true;
-    }
-
-    return false;
+    SceneEditingArgs args ( this );
+    m_EditingDelegate.Invoke( args );
+    return !args.m_Veto;
 }
 
 const Helium::Path& Scene::GetPath() const
@@ -1885,21 +1882,23 @@ bool Scene::Push(const Undo::CommandPtr& command)
         return false;
     }
 
-    return m_UndoCommandDelegate.Invoke( UndoCommandArgs( command ) );
+    UndoCommandArgs args ( command );
+    m_UndoCommandDelegate.Invoke( args );
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Callback for when the undo queue is about to undo or redo a command.  Makes
 // sure that the scene is editable before allowing the operation to proceed.
 // 
-bool Scene::UndoingOrRedoing( const Undo::QueueChangeArgs& args )
+void Scene::UndoingOrRedoing( const Undo::QueueChangingArgs& args )
 {
     bool allow = true;
     if ( args.m_Command->IsSignificant() )
     {
         allow = IsEditable();
     }
-    return allow;
+    args.m_Veto = !allow;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1973,11 +1972,11 @@ void Scene::RefreshSelection()
     m_Selection.Refresh();
 }
 
-bool Scene::PropertyChanging( const Inspect::ControlChangingArgs& args )
+void Scene::PropertyChanging( const Inspect::ControlChangingArgs& args )
 {
     if ( args.m_Preview )
     {
-        return true;
+        return;
     }
 
     if ( args.m_Control->GetData() )
@@ -1986,11 +1985,12 @@ bool Scene::PropertyChanging( const Inspect::ControlChangingArgs& args )
 
         if ( command )
         {
-            return Push( command );
+            args.m_Veto = !Push( command );
+            return;
         }
     }
 
-    return IsEditable();
+    args.m_Veto = !IsEditable();
 }
 
 void Scene::PropertyChanged( const Inspect::ControlChangedArgs& args )
@@ -1998,17 +1998,17 @@ void Scene::PropertyChanged( const Inspect::ControlChangedArgs& args )
     Execute(false);
 }
 
-bool Scene::SelectionChanging(const OS_SelectableDumbPtr& selection)
+void Scene::SelectionChanging( const SelectionChangingArgs& args )
 {
     CORE_SCOPE_TIMER( ("") );
 
-    bool result = true;
+    bool allow = true;
 
     if (m_PickData.ReferencesObject())
     {
-        if (!selection.Empty())
+        if (!args.m_Selection.Empty())
         {
-            Core::SceneNode* node = Reflect::ObjectCast<Core::SceneNode>( selection.Front() );
+            Core::SceneNode* node = Reflect::ObjectCast<Core::SceneNode>( args.m_Selection.Front() );
 
             if (node)
             {
@@ -2023,7 +2023,7 @@ bool Scene::SelectionChanging(const OS_SelectableDumbPtr& selection)
                 }
 
                 // eat the selection
-                result = false;
+                allow = false;
 
                 // refresh the attributes
                 Execute(false);
@@ -2034,23 +2034,23 @@ bool Scene::SelectionChanging(const OS_SelectableDumbPtr& selection)
         m_PickData = NULL;
     }
 
-    return result;
+    args.m_Veto = !allow;
 }
 
-void Scene::SelectionChanged(const OS_SelectableDumbPtr& selection)
+void Scene::SelectionChanged( const SelectionChangeArgs& args )
 {
     CORE_SCOPE_TIMER( ("") );
 
     m_ValidSmartDuplicateMatrix = false;
 
     tostringstream str;
-    if ( selection.Empty() )
+    if ( args.m_Selection.Empty() )
     {
         str << "Selection cleared";
     }
     else
     {
-        str << "Selected " << selection.Size() << " objects";
+        str << "Selected " << args.m_Selection.Size() << " objects";
     }
 
     m_StatusChanged.Raise( str.str() );

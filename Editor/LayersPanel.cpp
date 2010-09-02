@@ -600,13 +600,13 @@ void LayersPanel::OnSelectLayer( wxCommandEvent& event )
 // are selected.  This mainly facilitates undo/redo of selection so that this
 // control shows the same layers as selected as other controls in the scene.
 // 
-void LayersPanel::SelectionChanged( const OS_SelectableDumbPtr& selection )
+void LayersPanel::SelectionChanged( const SelectionChangeArgs& args )
 {
-    if ( selection.Size() > 0 )
+    if ( args.m_Selection.Size() > 0 )
     {
         u32 numLayersInSelection = 0;
-        OS_SelectableDumbPtr::Iterator itr = selection.Begin();
-        OS_SelectableDumbPtr::Iterator end = selection.End();
+        OS_SelectableDumbPtr::Iterator itr = args.m_Selection.Begin();
+        OS_SelectableDumbPtr::Iterator end = args.m_Selection.End();
         for ( ; itr != end; ++itr )
         {
             Layer* lunaLayer = Reflect::ObjectCast< Layer >( *itr );

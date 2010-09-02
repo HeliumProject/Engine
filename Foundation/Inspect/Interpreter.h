@@ -36,7 +36,7 @@ namespace Helium
             u32             m_Type;
             V_PopulateItem  m_Items;
         };
-        typedef Helium::Signature<void, PopulateLinkArgs&> PopulateLinkSignature;
+        typedef Helium::Signature< PopulateLinkArgs&> PopulateLinkSignature;
 
         struct SelectLinkArgs
         {
@@ -44,7 +44,7 @@ namespace Helium
 
             const tstring& m_ID;
         };
-        typedef Helium::Signature<void, const SelectLinkArgs&> SelectLinkSignature;
+        typedef Helium::Signature< const SelectLinkArgs&> SelectLinkSignature;
 
         struct PickLinkArgs
         {
@@ -52,7 +52,7 @@ namespace Helium
 
             const DataPtr& m_Data;
         };
-        typedef Helium::Signature<void, const PickLinkArgs&> PickLinkSignature;
+        typedef Helium::Signature< const PickLinkArgs&> PickLinkSignature;
 
         class FOUNDATION_API ContainerStackPointer : public ThreadLocalPointer
         {
@@ -90,10 +90,8 @@ namespace Helium
 
             static void ConnectControlEvents( Interpreter* interpreter, Control* control )
             {
-#if INSPECT_REFACTOR
-                control->e_ControlChanging.AddMethod( interpreter->PropertyChanging(), &ControlChangingSignature::Raise );
-                control->e_ControlChanged.AddMethod( interpreter->PropertyChanged(), &ControlChangedSignature::Raise );
-#endif
+                control->e_ControlChanging.AddMethod( &interpreter->PropertyChanging(), &ControlChangingSignature::Event::Raise );
+                control->e_ControlChanged.AddMethod( &interpreter->PropertyChanged(), &ControlChangedSignature::Event::Raise );
             }
 
             template <class T>
@@ -106,13 +104,11 @@ namespace Helium
 
             static void ConnectInterpreterEvents( Interpreter* parent, Interpreter* child )
             {
-#if INSPECT_REFACTOR
                 child->PropertyChanging().AddMethod( &parent->PropertyChanging(), &ControlChangingSignature::Event::Raise );
-                child->PropertyChanged().AddMethod( &parent->PropertyChanged(), &ControlChangingSignature::Event::Raise );
+                child->PropertyChanged().AddMethod( &parent->PropertyChanged(), &ControlChangedSignature::Event::Raise );
                 child->PopulateLink().AddMethod( &parent->PopulateLink(), &PopulateLinkSignature::Event::Raise );
                 child->SelectLink().AddMethod( &parent->SelectLink(), &SelectLinkSignature::Event::Raise );
-                child->PickLink().AddMethod( &parent->PickLink(), &SelectLinkSignature::Event::Raise );
-#endif
+                child->PickLink().AddMethod( &parent->PickLink(), &PickLinkSignature::Event::Raise );
             }
 
             //

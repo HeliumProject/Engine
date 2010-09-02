@@ -31,7 +31,7 @@ namespace Helium
             SearchQueryPtr m_SearchQuery;
             RequestSearchArgs( SearchQuery* searchQuery ) : m_SearchQuery( searchQuery ) {}
         };
-        typedef Helium::Signature< void, const RequestSearchArgs& > RequestSearchSignature;
+        typedef Helium::Signature< const RequestSearchArgs& > RequestSearchSignature;
 
 
         ///////////////////////////////////////////////////////////////////////
@@ -42,7 +42,7 @@ namespace Helium
             tstring m_Errors;
             SearchErrorArgs( const tstring& errors ) : m_Errors( errors ) {}
         };
-        typedef Helium::Signature< void, const SearchErrorArgs& > SearchErrorSignature;
+        typedef Helium::Signature< const SearchErrorArgs& > SearchErrorSignature;
 
 
         ///////////////////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@ namespace Helium
         {
             BeginSearchingArgs() { }
         };
-        typedef Helium::Signature< void, const BeginSearchingArgs& > BeginSearchingSignature;
+        typedef Helium::Signature< const BeginSearchingArgs& > BeginSearchingSignature;
 
 
         ///////////////////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ namespace Helium
         {
             StoppingSearchArgs() { }
         };
-        typedef Helium::Signature< void, const StoppingSearchArgs& > StoppingSearchSignature;
+        typedef Helium::Signature< const StoppingSearchArgs& > StoppingSearchSignature;
 
 
         ///////////////////////////////////////////////////////////////////////
@@ -79,7 +79,7 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature< void, const ResultsAvailableArgs& > ResultsAvailableSignature;
+        typedef Helium::Signature< const ResultsAvailableArgs& > ResultsAvailableSignature;
 
 
         ///////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ namespace Helium
             SearchQueryPtr m_SearchQuery;
             SearchCompleteArgs( SearchQuery* searchQuery ) : m_SearchQuery( searchQuery ) {}
         };
-        typedef Helium::Signature< void, const SearchCompleteArgs& > SearchCompleteSignature;
+        typedef Helium::Signature< const SearchCompleteArgs& > SearchCompleteSignature;
         
 
         ///////////////////////////////////////////////////////////////////////

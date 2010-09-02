@@ -39,29 +39,22 @@ namespace Helium
 
         class ManiuplatorAdapterCollection;
 
-
-        // 
-        // Parent changing event
-        // 
-
         struct ParentChangingArgs
         {
-            Core::HierarchyNode* m_Node;
-            Core::HierarchyNode* m_NewParent;
-
             ParentChangingArgs( Core::HierarchyNode* node, Core::HierarchyNode* newParent )
                 : m_Node( node )
                 , m_NewParent( newParent )
+                , m_Veto( false )
             {
 
             }
+
+            Core::HierarchyNode*    m_Node;
+            Core::HierarchyNode*    m_NewParent;
+            mutable bool            m_Veto;
         };
 
-        typedef Helium::Signature< bool, const ParentChangingArgs& >ParentChangingSignature;
-
-        // 
-        // Parent changed event
-        // 
+        typedef Helium::Signature< const ParentChangingArgs& > ParentChangingSignature;
 
         struct ParentChangedArgs
         {
@@ -76,7 +69,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< void, const ParentChangedArgs& >ParentChangedSignature;
+        typedef Helium::Signature< const ParentChangedArgs& >ParentChangedSignature;
 
 
         /////////////////////////////////////////////////////////////////////////////

@@ -32,7 +32,7 @@ namespace Helium
         };
 
         // the delegate for a per-item callback to be called upon activation
-        typedef Helium::Signature<void, const ContextMenuEventArgs&> ContextMenuSignature;
+        typedef Helium::Signature< const ContextMenuEventArgs&> ContextMenuSignature;
 
         // container for each delegate of each context menu item
         typedef std::map<tstring, ContextMenuSignature::Delegate> M_ContextMenuDelegate;
@@ -46,7 +46,7 @@ namespace Helium
         typedef Helium::SmartPtr<ContextMenu> ContextMenuPtr;
 
         // popup-time context menu setup delegate
-        typedef Helium::Signature<void, ContextMenuPtr> SetupContextMenuSignature;
+        typedef Helium::Signature< ContextMenuPtr> SetupContextMenuSignature;
 
 
         //

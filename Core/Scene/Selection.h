@@ -13,9 +13,29 @@ namespace Helium
 {
     namespace Core
     {
-        // callback for when (before and after) a selection changes
-        typedef Helium::Signature< bool, const OS_SelectableDumbPtr& > SelectionChangingSignature;
-        typedef Helium::Signature< void, const OS_SelectableDumbPtr& > SelectionChangedSignature;
+        struct SelectionChangeArgs
+        {
+            SelectionChangeArgs( const OS_SelectableDumbPtr& selection )
+                : m_Selection( selection )
+            {
+            }
+
+            const OS_SelectableDumbPtr& m_Selection;
+        };
+
+        struct SelectionChangingArgs : SelectionChangeArgs
+        {
+            SelectionChangingArgs( const OS_SelectableDumbPtr& selection )
+                : SelectionChangeArgs( selection )
+                , m_Veto( false )
+            {
+            }
+
+            mutable bool m_Veto;
+        };
+
+        typedef Helium::Signature< const SelectionChangingArgs& > SelectionChangingSignature;
+        typedef Helium::Signature< const SelectionChangeArgs& > SelectionChangedSignature;
 
         //
         // Selection

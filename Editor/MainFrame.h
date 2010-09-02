@@ -97,8 +97,8 @@ namespace Helium
 
         private:
             bool ValidateDrag( const Editor::DragArgs& args );
-            wxDragResult DragOver( const Editor::DragArgs& args );
-            wxDragResult Drop( const Editor::DragArgs& args );
+            void DragOver( const Editor::DragArgs& args );
+            void Drop( const Editor::DragArgs& args );
 
             void SceneAdded( const Core::SceneChangeArgs& args );
             void SceneRemoving( const Core::SceneChangeArgs& args );
@@ -137,7 +137,7 @@ namespace Helium
             void OnImport( wxCommandEvent& event );
             void OnExport( wxCommandEvent& event );
 
-            bool OnSceneUndoCommand( const Core::UndoCommandArgs& command );
+            void OnSceneUndoCommand( const Core::UndoCommandArgs& command );
 
             void OnUndo( wxCommandEvent& event );
             void OnRedo( wxCommandEvent& event );
@@ -165,7 +165,7 @@ namespace Helium
 
             void Executed( const Core::ExecuteArgs& args );
 
-            void SelectionChanged( const Core::OS_SelectableDumbPtr& selection );
+            void SelectionChanged( const Core::SelectionChangeArgs& selection );
 
             void CurrentSceneChanged( const Core::SceneChangeArgs& args );
             void CurrentSceneChanging( const Core::SceneChangeArgs& args );

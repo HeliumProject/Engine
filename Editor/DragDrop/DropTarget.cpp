@@ -11,7 +11,7 @@ using namespace Helium::Editor;
 // 
 DropTarget::DropTarget() 
 {
-  SetDataObject( new ClipboardDataObject() );
+    SetDataObject( new ClipboardDataObject() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -26,14 +26,14 @@ DropTarget::~DropTarget()
 // 
 void DropTarget::SetDragEnterCallback( const DragEnterCallback::Delegate& func )
 {
-  if ( m_DragEnter.Count() == 0 )
-  {
-    m_DragEnter.Add( func );
-  }
-  else
-  {
-    throw Helium::Exception( TXT( "Only one callback for 'drag enter' events is valid in DropTarget." ) );
-  }
+    if ( m_DragEnter.Count() == 0 )
+    {
+        m_DragEnter.Add( func );
+    }
+    else
+    {
+        throw Helium::Exception( TXT( "Only one callback for 'drag enter' events is valid in DropTarget." ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -41,14 +41,14 @@ void DropTarget::SetDragEnterCallback( const DragEnterCallback::Delegate& func )
 // 
 void DropTarget::SetDragOverCallback( const DragOverCallback::Delegate& func )
 {
-  if ( m_DragOver.Count() == 0 )
-  {
-    m_DragOver.Add( func );
-  }
-  else
-  {
-    throw Helium::Exception( TXT( "Only one callback for 'drag over' events is valid in DropTarget." ) );
-  }
+    if ( m_DragOver.Count() == 0 )
+    {
+        m_DragOver.Add( func );
+    }
+    else
+    {
+        throw Helium::Exception( TXT( "Only one callback for 'drag over' events is valid in DropTarget." ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -56,14 +56,14 @@ void DropTarget::SetDragOverCallback( const DragOverCallback::Delegate& func )
 // 
 void DropTarget::SetDragLeaveCallback( const DragLeaveCallback::Delegate& func )
 {
-  if ( m_DragLeave.Count() == 0 )
-  {
-    m_DragLeave.Add( func );
-  }
-  else
-  {
-    throw Helium::Exception( TXT( "Only one callback for 'drag leave' events is valid in DropTarget." ) );
-  }
+    if ( m_DragLeave.Count() == 0 )
+    {
+        m_DragLeave.Add( func );
+    }
+    else
+    {
+        throw Helium::Exception( TXT( "Only one callback for 'drag leave' events is valid in DropTarget." ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -71,14 +71,14 @@ void DropTarget::SetDragLeaveCallback( const DragLeaveCallback::Delegate& func )
 // 
 void DropTarget::SetDropCallback( const DropCallback::Delegate& func )
 {
-  if ( m_Drop.Count() == 0 )
-  {
-    m_Drop.Add( func );
-  }
-  else
-  {
-    throw Helium::Exception( TXT( "Only one callback for 'drop' events is valid in DropTarget." ) );
-  }
+    if ( m_Drop.Count() == 0 )
+    {
+        m_Drop.Add( func );
+    }
+    else
+    {
+        throw Helium::Exception( TXT( "Only one callback for 'drop' events is valid in DropTarget." ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -86,13 +86,13 @@ void DropTarget::SetDropCallback( const DropCallback::Delegate& func )
 // 
 wxDragResult DropTarget::OnEnter( wxCoord x, wxCoord y, wxDragResult def )
 {
-  if ( m_DragEnter.Count() > 0 )
-  {
-    GetData();
-    m_DragEnter.Raise( DragArgs( x, y, def, static_cast< ClipboardDataObject* >( GetDataObject() ) ) );
-  }
+    if ( m_DragEnter.Count() > 0 )
+    {
+        GetData();
+        m_DragEnter.Raise( DragArgs( x, y, static_cast< ClipboardDataObject* >( GetDataObject() ), def ) );
+    }
 
-  return __super::OnEnter( x, y, def );
+    return __super::OnEnter( x, y, def );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -100,15 +100,15 @@ wxDragResult DropTarget::OnEnter( wxCoord x, wxCoord y, wxDragResult def )
 // 
 wxDragResult DropTarget::OnDragOver( wxCoord x, wxCoord y, wxDragResult def )
 {
-  wxDragResult result = wxDragError;
-  if ( m_DragOver.Count() > 0 )
-  {
-    GetData();
-    std::vector< wxDragResult > results( m_DragOver.Count() );
-    m_DragOver.RaiseWithResult( DragArgs( x, y, def, static_cast< ClipboardDataObject* >( GetDataObject() ) ), &results.front(), (u32)results.size() );
-    result = results.front();
-  }
-  return result;
+    wxDragResult result = wxDragError;
+    if ( m_DragOver.Count() > 0 )
+    {
+        GetData();
+        DragArgs args ( x, y, static_cast< ClipboardDataObject* >( GetDataObject() ), def );
+        m_DragOver.Raise( args );
+        result = args.m_Result;
+    }
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -116,20 +116,17 @@ wxDragResult DropTarget::OnDragOver( wxCoord x, wxCoord y, wxDragResult def )
 // 
 wxDragResult DropTarget::OnData( wxCoord x, wxCoord y, wxDragResult def )
 {
-  if ( !GetData() )
-    return wxDragNone;
+    if ( !GetData() )
+        return wxDragNone;
 
-  wxDragResult result = def;
-  if ( m_Drop.Count() > 0 )
-  {
-    std::vector< wxDragResult > results( m_Drop.Count() );
-    m_Drop.RaiseWithResult( DragArgs( x, y, def, static_cast< ClipboardDataObject* >( GetDataObject() ) ), &results.front(), (u32)results.size() );
-    if ( results.size() > 0 )
+    wxDragResult result = def;
+    if ( m_Drop.Count() > 0 )
     {
-      result = results.front();
+        DragArgs args ( x, y, static_cast< ClipboardDataObject* >( GetDataObject() ), def );
+        m_Drop.Raise( args );
+        result = args.m_Result;
     }
-  }
-  return result;
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -137,8 +134,8 @@ wxDragResult DropTarget::OnData( wxCoord x, wxCoord y, wxDragResult def )
 // 
 void DropTarget::OnLeave()
 {
-  if ( m_DragLeave.Count() > 0 )
-  {
-    m_DragLeave.Raise( Helium::Void() );
-  }
+    if ( m_DragLeave.Count() > 0 )
+    {
+        m_DragLeave.Raise( Helium::Void() );
+    }
 }

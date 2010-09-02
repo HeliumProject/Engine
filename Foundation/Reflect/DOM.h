@@ -136,10 +136,6 @@ namespace Helium
 
         struct DocumentHierarchyChangeArgs
         {
-            DocumentNode* m_Node;
-            DocumentElement* m_OldParent;
-            DocumentElement* m_NewParent;
-
             DocumentHierarchyChangeArgs( DocumentNode* node, DocumentElement* oldParent, DocumentElement* newParent )
                 : m_Node( node )
                 , m_OldParent( oldParent )
@@ -147,10 +143,26 @@ namespace Helium
             {
 
             }
+
+            DocumentNode*       m_Node;
+            DocumentElement*    m_OldParent;
+            DocumentElement*    m_NewParent;
         };
 
-        typedef Helium::Signature< bool, const DocumentHierarchyChangeArgs& > DocumentHierarchyChangingSignature;
-        typedef Helium::Signature< void, const DocumentHierarchyChangeArgs& > DocumentHierarchyChangedSignature;
+        struct DocumentHierarchyChangingArgs : public DocumentHierarchyChangeArgs
+        {
+            DocumentHierarchyChangingArgs( DocumentNode* node, DocumentElement* oldParent, DocumentElement* newParent )
+                : DocumentHierarchyChangeArgs( node, oldParent, newParent )
+                , m_Veto( false )
+            {
+
+            }
+
+            mutable bool m_Veto;
+        };
+
+        typedef Helium::Signature< const DocumentHierarchyChangingArgs& > DocumentHierarchyChangingSignature;
+        typedef Helium::Signature< const DocumentHierarchyChangeArgs& > DocumentHierarchyChangedSignature;
 
         class FOUNDATION_API DocumentElement : public Reflect::ConcreteInheritor< DocumentElement, DocumentNode >
         {
@@ -214,19 +226,19 @@ namespace Helium
                 return m_ChildRemoved;
             }
 
-            bool RaiseChildAdding( const DocumentHierarchyChangeArgs& args )
-            {
-                return m_ChildAdding.RaiseWithReturn( args );
-            }
-
-            void RaiseChildAdded( const DocumentHierarchyChangeArgs& args )
+            void RaiseChildAdding( const DocumentHierarchyChangingArgs& args )
             {
                 m_ChildAdding.Raise( args );
             }
 
-            bool RaiseChildRemoving( const DocumentHierarchyChangeArgs& args )
+            void RaiseChildAdded( const DocumentHierarchyChangeArgs& args )
             {
-                return m_ChildRemoving.RaiseWithReturn( args );
+                m_ChildAdded.Raise( args );
+            }
+
+            void RaiseChildRemoving( const DocumentHierarchyChangingArgs& args )
+            {
+                m_ChildRemoving.Raise( args );
             }
 
             void RaiseChildRemoved( const DocumentHierarchyChangeArgs& args )

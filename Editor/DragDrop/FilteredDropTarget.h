@@ -17,7 +17,7 @@ namespace Helium
             {
             }
         };
-        typedef Helium::Signature<void, const FilteredDropTargetArgs&, Helium::AtomicRefCountBase> FilteredDropTargetSignature;
+        typedef Helium::Signature< const FilteredDropTargetArgs&, Helium::AtomicRefCountBase> FilteredDropTargetSignature;
 
         class FilteredDropTarget : public DropTarget
         {
@@ -26,8 +26,8 @@ namespace Helium
             virtual ~FilteredDropTarget();
 
             bool ValidateDrag( const Editor::DragArgs& args );
-            wxDragResult DragOver( const Editor::DragArgs& args );
-            wxDragResult Drop( const Editor::DragArgs& args );  
+            void DragOver( const Editor::DragArgs& args );
+            void Drop( const Editor::DragArgs& args );  
 
             void AddDroppedListener( const FilteredDropTargetSignature::Delegate& d );
             void RemoveDroppedListener( const FilteredDropTargetSignature::Delegate& d );

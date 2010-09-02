@@ -52,7 +52,7 @@ namespace Helium
                 : m_Light( light )
             {}
         };
-        typedef Helium::Signature< void, const LightChangeArgs& > LightChangeSignature;
+        typedef Helium::Signature< const LightChangeArgs& > LightChangeSignature;
 
         struct RealtimeLightExistenceArgs
         {
@@ -64,7 +64,7 @@ namespace Helium
                 , m_Added( added )
             {}
         };
-        typedef Helium::Signature< void, const RealtimeLightExistenceArgs& > RealtimeLightExistenceSignature;
+        typedef Helium::Signature< const RealtimeLightExistenceArgs& > RealtimeLightExistenceSignature;
 
         class CORE_API Light HELIUM_ABSTRACT : public Core::Instance
         {

@@ -27,24 +27,26 @@ namespace Helium
 
         struct BreakpointArgs
         {
-            LPEXCEPTION_POINTERS  m_Info;
-            bool                  m_Fatal;
-
             BreakpointArgs( LPEXCEPTION_POINTERS info, bool fatal )
                 : m_Info( info )
                 , m_Fatal( fatal )
+                , m_Result( 0 )
             {
 
             }
+
+            LPEXCEPTION_POINTERS    m_Info;
+            bool                    m_Fatal;
+            mutable int             m_Result;
         };
-        typedef Helium::Signature<int, const BreakpointArgs&> BreakpointSignature;
+        typedef Helium::Signature< const BreakpointArgs& > BreakpointSignature;
         extern FOUNDATION_API BreakpointSignature::Delegate g_BreakpointOccurred;
 
         //
         // Exception Event (raised when an exception occurs)
         //
 
-        typedef Helium::Signature<void, const ExceptionArgs&> ExceptionSignature;
+        typedef Helium::Signature< const ExceptionArgs& > ExceptionSignature;
         extern FOUNDATION_API ExceptionSignature::Delegate g_ExceptionOccurred;
 
         //
@@ -52,7 +54,7 @@ namespace Helium
         //
 
         struct FOUNDATION_API TerminateArgs {};
-        typedef Helium::Signature<void, const TerminateArgs&> TerminateSignature;
+        typedef Helium::Signature< const TerminateArgs& > TerminateSignature;
         extern FOUNDATION_API TerminateSignature::Event g_Terminating;
 
         //

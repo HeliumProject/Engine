@@ -17,24 +17,26 @@ namespace Helium
         // 
         struct DragArgs
         {
-            wxCoord m_X;
-            wxCoord m_Y;
-            wxDragResult m_Default;
-            ClipboardDataObject* m_ClipboardData;
-
-            DragArgs( wxCoord x, wxCoord y, wxDragResult def, ClipboardDataObject* clipboardData )
+            DragArgs( wxCoord x, wxCoord y, ClipboardDataObject* clipboardData, wxDragResult def )
                 : m_X( x )
                 , m_Y( y )
-                , m_Default( def )
                 , m_ClipboardData( clipboardData )
+                , m_Default( def )
+                , m_Result( wxDragCancel )
             {
             }
+
+            wxCoord m_X;
+            wxCoord m_Y;
+            ClipboardDataObject* m_ClipboardData;
+            wxDragResult m_Default;
+            mutable wxDragResult m_Result;
         };
 
-        typedef Helium::Signature< void, const DragArgs& > DragEnterCallback;
-        typedef Helium::Signature< wxDragResult, const DragArgs& > DragOverCallback;
-        typedef Helium::Signature< void, Helium::Void > DragLeaveCallback;
-        typedef Helium::Signature< wxDragResult, const DragArgs& > DropCallback;
+        typedef Helium::Signature< const DragArgs& > DragEnterCallback;
+        typedef Helium::Signature< const DragArgs& > DragOverCallback;
+        typedef Helium::Signature< Helium::Void > DragLeaveCallback;
+        typedef Helium::Signature< const DragArgs& > DropCallback;
 
         /////////////////////////////////////////////////////////////////////////////
         // Class managing callbacks for when drag/drop operations occur.
@@ -42,10 +44,10 @@ namespace Helium
         class DropTarget : public wxDropTarget
         {
         private:
-            DragEnterCallback::Event m_DragEnter;
-            DragOverCallback::Event m_DragOver;
-            DragLeaveCallback::Event m_DragLeave;
-            DropCallback::Event m_Drop;
+            DragEnterCallback::Event    m_DragEnter;
+            DragOverCallback::Event     m_DragOver;
+            DragLeaveCallback::Event    m_DragLeave;
+            DropCallback::Event         m_Drop;
 
         public:
             DropTarget();

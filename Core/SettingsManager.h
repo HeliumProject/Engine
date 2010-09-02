@@ -11,7 +11,7 @@ namespace Helium
     namespace Core
     {
         struct SettingsManagerLoadedArgs {};
-        typedef Helium::Signature< void, const SettingsManagerLoadedArgs& > SettingsManagerLoadedSignature;
+        typedef Helium::Signature< const SettingsManagerLoadedArgs& > SettingsManagerLoadedSignature;
 
 		typedef std::map< i32, Reflect::ElementPtr > M_Settings;
 

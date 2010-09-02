@@ -22,7 +22,7 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature<void, const EditFilePathArgs&> EditFilePathSignature;
+        typedef Helium::Signature< const EditFilePathArgs&> EditFilePathSignature;
 
         extern FOUNDATION_API EditFilePathSignature::Event g_EditFilePath;
     }

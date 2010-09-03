@@ -735,7 +735,7 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	m_UndoButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer27->Add( m_UndoButton, 0, wxALL, 2 );
 	
-	m_RedoButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_RedoButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer27->Add( m_RedoButton, 0, wxALL, 2 );
 	
 	

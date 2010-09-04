@@ -71,7 +71,7 @@ namespace Helium
 
 namespace Helium
 {
-	static Localization::StringTable g_StringTable( "Helium::Application" );
+	static Localization::StringTable g_StringTable( "Helium" );
 }
 
 void Helium::Startup( int argc, const tchar** argv )

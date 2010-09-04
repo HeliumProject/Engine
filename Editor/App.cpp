@@ -153,7 +153,10 @@ namespace Helium
 
 App::App()
 #pragma TODO("This needs fixing otherwise dialogs will not be modal -Geoff")
-: m_SettingsManager( new Core::SettingsManager() )
+: m_AppVersion( HELIUM_APP_VERSION )
+, m_AppName( HELIUM_APP_NAME )
+, m_AppVerName( HELIUM_APP_VER_NAME )
+, m_SettingsManager( new Core::SettingsManager() )
 , m_Frame( NULL )
 {
 }
@@ -169,9 +172,9 @@ App::~App()
 // 
 bool App::OnInit()
 {
-    SetVendorName( TXT( "Helium" ) );
+    SetVendorName( HELIUM_APP_NAME );
 
-    //parse.SetLogo( wxT( "Editor (c) 2010 - Helium\n" ) );
+    //parse.SetLogo( wxT( "Editor (c) 2010 - "HELIUM_APP_NAME"\n" ) );
 
     // don't spend a lot of time updating idle events for windows that don't need it
     wxUpdateUIEvent::SetMode( wxUPDATE_UI_PROCESS_SPECIFIED );

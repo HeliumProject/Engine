@@ -177,6 +177,15 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     m_FrameManager.AddPane( m_ViewPanel, wxAuiPaneInfo().Name( wxT( "view" ) ).CenterPane() );
 
     //
+    // Help menu
+    //
+    wxString caption = wxT( "About " );
+    caption += wxGetApp().AppVerName().c_str();
+    caption += wxT( "..." );
+    wxMenuItem* aboutMenuItem = m_MenuHelp->FindItem( ID_About );
+    aboutMenuItem->SetText( caption );
+
+    //
     // Project/Help area
     //
     m_ProjectPanel = new ProjectPanel( this );
@@ -2017,7 +2026,18 @@ void MainFrame::OnExiting( wxCloseEvent& args )
 
 void MainFrame::OnAbout( wxCommandEvent& event )
 {
-    wxMessageBox( wxT( "Editor" ), wxT( "About" ), wxOK | wxCENTER, this );
+    wxString caption = wxT( "About " );
+    caption += wxGetApp().AppVerName().c_str();
+    caption += wxT( "..." );
+
+    wxString message = wxT( "" );
+    message += wxGetApp().AppName().c_str();
+    message += wxT( " Editor version " );
+    message += wxGetApp().AppVersion().c_str();
+    message += wxT( ".\n(c) 2010 - " );
+    message += wxGetApp().AppName().c_str();
+
+    wxMessageBox( message, caption, wxOK | wxCENTER, this );
 }
 
 void MainFrame::OnSettings( wxCommandEvent& event )

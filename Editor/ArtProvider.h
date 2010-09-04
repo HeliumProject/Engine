@@ -129,11 +129,11 @@ namespace Helium
             static const wxChar* RotateTool = wxART_MAKE_ART_ID( EDITOR_ART_ID_ROTATE_TOOL );
             static const wxChar* ScaleTool = wxART_MAKE_ART_ID( EDITOR_ART_ID_SCALE_TOOL );
             static const wxChar* DuplicateTool = wxART_MAKE_ART_ID( EDITOR_ART_ID_DUPLICATE_TOOL );
+            static const wxChar* EntityPlacementTool = wxART_MAKE_ART_ID( EDITOR_ART_ID_ENTITY_PLACEMENT_TOOL );
 
             static const wxChar* Camera = wxART_MAKE_ART_ID( EDITOR_ART_ID_CAMERA );
             static const wxChar* Locator = wxART_MAKE_ART_ID( EDITOR_ART_ID_LOCATOR );
             static const wxChar* Volume = wxART_MAKE_ART_ID( EDITOR_ART_ID_VOLUME );
-            static const wxChar* EntityPlacementTool = wxART_MAKE_ART_ID( EDITOR_ART_ID_ENTITY_PLACEMENT_TOOL );
             static const wxChar* Curve = wxART_MAKE_ART_ID( EDITOR_ART_ID_CURVE );
 
             static const wxChar* ProjectFolder = wxART_MAKE_ART_ID( EDITOR_ART_ID_CREATE_PROJECT_FOLDER );

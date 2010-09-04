@@ -35,10 +35,10 @@ namespace Helium{ namespace Editor{ class Frame; } }
 #include <wx/richtext/richtextctrl.h>
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
+#include <wx/statline.h>
 #include <wx/dataview.h>
 #include <wx/radiobut.h>
 #include "Editor/Controls/Tree/TreeWndCtrl.h"
-#include <wx/statline.h>
 #include <wx/srchctrl.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -85,17 +85,6 @@ namespace Helium
 					ID_WalkDown,
 					ID_WalkForward,
 					ID_WalkBackward,
-					ID_SelectTool,
-					ID_TranslateTool,
-					ID_RotateTool,
-					ID_ScaleTool,
-					ID_MovePivotTool,
-					ID_DuplicateTool,
-					ID_CreateEntityTool,
-					ID_CreateLocatorTool,
-					ID_CreateVolumeTool,
-					ID_CreateCurveTool,
-					ID_EditCurveTool,
 					ID_Settings,
 					ID_About,
 				};
@@ -105,7 +94,6 @@ namespace Helium
 				wxMenu* m_MenuFileNew;
 				wxMenu* m_MenuFileOpenRecent;
 				wxMenu* m_MenuEdit;
-				wxMenu* m_MenuTools;
 				wxMenu* m_MenuPanels;
 				wxMenu* m_MenuSettings;
 				wxMenu* m_MenuHelp;
@@ -126,9 +114,9 @@ namespace Helium
 				virtual void OnCut( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnCopy( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnPaste( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnDelete( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnSelectAll( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnInvertSelection( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnDelete( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnParent( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnUnparent( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnGroup( wxCommandEvent& event ) { event.Skip(); }
@@ -141,12 +129,6 @@ namespace Helium
 				virtual void OnSnapToCamera( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnSnapCameraTo( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnPickWalk( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnSelectTool( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnTranslateTool( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnRotateTool( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnScaleTool( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnMovePivotTool( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnDuplicateTool( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnSettings( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnAbout( wxCommandEvent& event ) { event.Skip(); }
 				
@@ -244,10 +226,10 @@ namespace Helium
 				wxBitmapButton* m_CreateNewLayerFromSelectionButton;
 				wxBitmapButton* m_CreateNewLayerButton;
 				wxBitmapButton* m_DeleteSelectedLayersButton;
-				
+				wxStaticLine* m_staticline4;
 				wxBitmapButton* m_AddSelectionToLayerButton;
 				wxBitmapButton* m_RemoveSelectionFromLayerButton;
-				
+				wxStaticLine* m_staticline5;
 				wxBitmapButton* m_SelectLayerMembersButton;
 				wxBitmapButton* m_SelectLayersButton;
 				

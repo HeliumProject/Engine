@@ -94,7 +94,9 @@ void ViewCanvas::OnKeyDown(wxKeyEvent& e)
     {
         wxWindow* frame = GetParent();
         while (frame->GetParent() != NULL)
+        {
             frame = frame->GetParent();
+        }
         frame->GetEventHandler()->ProcessEvent(e);
     }
 }
@@ -126,7 +128,9 @@ void ViewCanvas::OnChar(wxKeyEvent& e)
     {
         wxWindow* frame = GetParent();
         while (frame->GetParent() != NULL)
+        {
             frame = frame->GetParent();
+        }
         frame->GetEventHandler()->ProcessEvent(e);
     }
 }

@@ -15,6 +15,10 @@
 #include <wx/app.h>
 #include <wx/xrc/xmlres.h>
 
+#define HELIUM_APP_VERSION  TXT( "99.99.99.99" )
+#define HELIUM_APP_NAME     TXT( "Helium" )
+#define HELIUM_APP_VER_NAME HELIUM_APP_NAME TXT( " v" ) HELIUM_APP_VERSION
+
 namespace Helium
 {
     namespace Editor
@@ -28,6 +32,10 @@ namespace Helium
             virtual bool    OnInit() HELIUM_OVERRIDE;
             virtual int     OnExit() HELIUM_OVERRIDE;
             virtual void    OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg) HELIUM_OVERRIDE;
+
+            const tstring& AppVersion() const { return m_AppVersion; }
+            const tstring& AppName() const { return m_AppName; }
+            const tstring& AppVerName() const { return m_AppVerName; }
 
             void SaveSettings();
             void LoadSettings();
@@ -53,10 +61,14 @@ namespace Helium
 
         protected:
             Helium::InitializerStack m_InitializerStack;
-            Tracker m_Tracker;
-
+            
+            tstring m_AppVersion;
+            tstring m_AppName;
+            tstring m_AppVerName;           
+            
             Core::SettingsManagerPtr m_SettingsManager;
             MainFrame* m_Frame;
+            Tracker m_Tracker;
         };
 
         DECLARE_APP( App );

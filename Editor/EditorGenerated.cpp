@@ -37,7 +37,7 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	m_MenuFile->Append( -1, _("New"), m_MenuFileNew );
 	
 	wxMenuItem* m_ItemOpen;
-	m_ItemOpen = new wxMenuItem( m_MenuFile, ID_Open, wxString( _("Open...") ) + wxT('\t') + wxT("ctrl-o"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemOpen = new wxMenuItem( m_MenuFile, ID_Open, wxString( _("Open...") ) + wxT('\t') + wxT("Ctrl+O"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemOpen );
 	
 	m_MenuFileOpenRecent = new wxMenu();
@@ -51,7 +51,7 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	m_separator1 = m_MenuFile->AppendSeparator();
 	
 	wxMenuItem* m_ItemSaveAll;
-	m_ItemSaveAll = new wxMenuItem( m_MenuFile, ID_SaveAll, wxString( _("Save All") ) + wxT('\t') + wxT("ctrl-s"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemSaveAll = new wxMenuItem( m_MenuFile, ID_SaveAll, wxString( _("Save All") ) + wxT('\t') + wxT("Ctrl+S"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemSaveAll );
 	
 	wxMenuItem* m_separator2;
@@ -84,100 +84,97 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	
 	m_MenuEdit = new wxMenu();
 	wxMenuItem* m_ItemUndo;
-	m_ItemUndo = new wxMenuItem( m_MenuEdit, wxID_UNDO, wxString( _("Undo") ) + wxT('\t') + wxT("ctrl-z"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemUndo = new wxMenuItem( m_MenuEdit, wxID_UNDO, wxString( _("Undo") ) + wxT('\t') + wxT("Ctrl+Z"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemUndo );
 	
 	wxMenuItem* m_ItemRedo;
-	m_ItemRedo = new wxMenuItem( m_MenuEdit, wxID_REDO, wxString( _("Redo") ) + wxT('\t') + wxT("ctrl-shift-z"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemRedo = new wxMenuItem( m_MenuEdit, wxID_REDO, wxString( _("Redo") ) + wxT('\t') + wxT("Ctrl+Shift+Z"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemRedo );
 	
 	wxMenuItem* m_separator5;
 	m_separator5 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemCut;
-	m_ItemCut = new wxMenuItem( m_MenuEdit, wxID_CUT, wxString( _("Cut") ) + wxT('\t') + wxT("ctrl-x"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemCut = new wxMenuItem( m_MenuEdit, wxID_CUT, wxString( _("Cut") ) + wxT('\t') + wxT("Ctrl+X"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemCut );
 	
 	wxMenuItem* m_ItemCopy;
-	m_ItemCopy = new wxMenuItem( m_MenuEdit, wxID_COPY, wxString( _("Copy") ) + wxT('\t') + wxT("ctrl-c"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemCopy = new wxMenuItem( m_MenuEdit, wxID_COPY, wxString( _("Copy") ) + wxT('\t') + wxT("Ctrl+C"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemCopy );
 	
 	wxMenuItem* m_ItemPaste;
-	m_ItemPaste = new wxMenuItem( m_MenuEdit, wxID_PASTE, wxString( _("Paste") ) + wxT('\t') + wxT("ctrl-v"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemPaste = new wxMenuItem( m_MenuEdit, wxID_PASTE, wxString( _("Paste") ) + wxT('\t') + wxT("Ctrl+V"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemPaste );
-	
-	wxMenuItem* m_separator6;
-	m_separator6 = m_MenuEdit->AppendSeparator();
-	
-	wxMenuItem* m_ItemSelectAll;
-	m_ItemSelectAll = new wxMenuItem( m_MenuEdit, ID_SelectAll, wxString( _("Select All") ) + wxT('\t') + wxT("ctrl-a"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuEdit->Append( m_ItemSelectAll );
-	
-	wxMenuItem* m_ItemInvertSelection;
-	m_ItemInvertSelection = new wxMenuItem( m_MenuEdit, ID_InvertSelection, wxString( _("Invert Selection") ) + wxT('\t') + wxT("ctrl-i"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuEdit->Append( m_ItemInvertSelection );
-	
-	wxMenuItem* m_separator7;
-	m_separator7 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemDelete;
 	m_ItemDelete = new wxMenuItem( m_MenuEdit, wxID_DELETE, wxString( _("Delete") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemDelete );
 	
+	wxMenuItem* m_separator6;
+	m_separator6 = m_MenuEdit->AppendSeparator();
+	
+	wxMenuItem* m_ItemSelectAll;
+	m_ItemSelectAll = new wxMenuItem( m_MenuEdit, ID_SelectAll, wxString( _("Select All") ) + wxT('\t') + wxT("Ctrl+A"), wxEmptyString, wxITEM_NORMAL );
+	m_MenuEdit->Append( m_ItemSelectAll );
+	
+	wxMenuItem* m_ItemInvertSelection;
+	m_ItemInvertSelection = new wxMenuItem( m_MenuEdit, ID_InvertSelection, wxString( _("Invert Selection") ) + wxT('\t') + wxT("Ctrl+I"), wxEmptyString, wxITEM_NORMAL );
+	m_MenuEdit->Append( m_ItemInvertSelection );
+	
 	wxMenuItem* m_separator8;
 	m_separator8 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemParent;
-	m_ItemParent = new wxMenuItem( m_MenuEdit, ID_Parent, wxString( _("Parent") ) + wxT('\t') + wxT("ctrl-p"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemParent = new wxMenuItem( m_MenuEdit, ID_Parent, wxString( _("Parent") ) + wxT('\t') + wxT("Ctrl+P"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemParent );
 	
 	wxMenuItem* m_ItemUnparent;
-	m_ItemUnparent = new wxMenuItem( m_MenuEdit, ID_Unparent, wxString( _("Unparent") ) + wxT('\t') + wxT("ctrl-shift-p"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemUnparent = new wxMenuItem( m_MenuEdit, ID_Unparent, wxString( _("Unparent") ) + wxT('\t') + wxT("Ctrl+Shift+P"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemUnparent );
 	
 	wxMenuItem* m_ItemGroup;
-	m_ItemGroup = new wxMenuItem( m_MenuEdit, ID_Group, wxString( _("Group") ) + wxT('\t') + wxT("ctrl-g"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemGroup = new wxMenuItem( m_MenuEdit, ID_Group, wxString( _("Group") ) + wxT('\t') + wxT("Ctrl+G"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemGroup );
 	
 	wxMenuItem* m_ItemUngroup;
-	m_ItemUngroup = new wxMenuItem( m_MenuEdit, ID_Ungroup, wxString( _("Ungroup") ) + wxT('\t') + wxT("ctrl-shift-g"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemUngroup = new wxMenuItem( m_MenuEdit, ID_Ungroup, wxString( _("Ungroup") ) + wxT('\t') + wxT("Ctrl+Shift+G"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemUngroup );
 	
 	wxMenuItem* m_ItemCenter;
-	m_ItemCenter = new wxMenuItem( m_MenuEdit, ID_Center, wxString( _("Center") ) + wxT('\t') + wxT("ctrl-shift-c"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemCenter = new wxMenuItem( m_MenuEdit, ID_Center, wxString( _("Center") ) + wxT('\t') + wxT("Ctrl+Shift+C"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemCenter );
 	
 	wxMenuItem* m_separator9;
 	m_separator9 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemDuplicate;
-	m_ItemDuplicate = new wxMenuItem( m_MenuEdit, ID_Duplicate, wxString( _("Duplicate") ) + wxT('\t') + wxT("ctrl-d"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemDuplicate = new wxMenuItem( m_MenuEdit, ID_Duplicate, wxString( _("Duplicate") ) + wxT('\t') + wxT("Ctrl+D"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemDuplicate );
 	
 	wxMenuItem* m_ItemSmartDuplicate;
-	m_ItemSmartDuplicate = new wxMenuItem( m_MenuEdit, ID_SmartDuplicate, wxString( _("Smart Duplicate") ) + wxT('\t') + wxT("ctrl-shift-d"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemSmartDuplicate = new wxMenuItem( m_MenuEdit, ID_SmartDuplicate, wxString( _("Smart Duplicate") ) + wxT('\t') + wxT("Ctrl+Shift+D"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemSmartDuplicate );
 	
 	wxMenuItem* m_separator10;
 	m_separator10 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemCopyTransform;
-	m_ItemCopyTransform = new wxMenuItem( m_MenuEdit, ID_CopyTransform, wxString( _("Copy Transform") ) + wxT('\t') + wxT("alt-t"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemCopyTransform = new wxMenuItem( m_MenuEdit, ID_CopyTransform, wxString( _("Copy Transform") ) + wxT('\t') + wxT("Alt+T"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemCopyTransform );
 	
 	wxMenuItem* m_ItemPasteTransform;
-	m_ItemPasteTransform = new wxMenuItem( m_MenuEdit, ID_PasteTransform, wxString( _("Paste Transform") ) + wxT('\t') + wxT("alt-shift-t"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemPasteTransform = new wxMenuItem( m_MenuEdit, ID_PasteTransform, wxString( _("Paste Transform") ) + wxT('\t') + wxT("Alt+Shift+T"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemPasteTransform );
 	
 	wxMenuItem* m_separator11;
 	m_separator11 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemSnapToCamera;
-	m_ItemSnapToCamera = new wxMenuItem( m_MenuEdit, ID_SnapToCamera, wxString( _("Snap To Camera") ) + wxT('\t') + wxT("alt-c"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemSnapToCamera = new wxMenuItem( m_MenuEdit, ID_SnapToCamera, wxString( _("Snap To Camera") ) + wxT('\t') + wxT("Alt+C"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemSnapToCamera );
 	
 	wxMenuItem* m_ItemSnapCameraTo;
-	m_ItemSnapCameraTo = new wxMenuItem( m_MenuEdit, ID_SnapCameraTo, wxString( _("Snap Camera To") ) + wxT('\t') + wxT("alt-shift-c"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemSnapCameraTo = new wxMenuItem( m_MenuEdit, ID_SnapCameraTo, wxString( _("Snap Camera To") ) + wxT('\t') + wxT("Alt+Shift+C"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemSnapCameraTo );
 	
 	wxMenuItem* m_separator12;
@@ -200,56 +197,6 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	m_MenuEdit->Append( m_ItemWalkBackward );
 	
 	m_MainMenuBar->Append( m_MenuEdit, _("Edit") ); 
-	
-	m_MenuTools = new wxMenu();
-	wxMenuItem* m_ItemSelect;
-	m_ItemSelect = new wxMenuItem( m_MenuTools, ID_SelectTool, wxString( _("Select") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuTools->Append( m_ItemSelect );
-	
-	wxMenuItem* m_ItemTranslate;
-	m_ItemTranslate = new wxMenuItem( m_MenuTools, ID_TranslateTool, wxString( _("Translate") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuTools->Append( m_ItemTranslate );
-	
-	wxMenuItem* m_ItemRotate;
-	m_ItemRotate = new wxMenuItem( m_MenuTools, ID_RotateTool, wxString( _("Rotate") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuTools->Append( m_ItemRotate );
-	
-	wxMenuItem* m_ItemScale;
-	m_ItemScale = new wxMenuItem( m_MenuTools, ID_ScaleTool, wxString( _("Scale") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuTools->Append( m_ItemScale );
-	
-	wxMenuItem* m_ItemMovePivot;
-	m_ItemMovePivot = new wxMenuItem( m_MenuTools, ID_MovePivotTool, wxString( _("Move Pivot") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuTools->Append( m_ItemMovePivot );
-	
-	wxMenuItem* m_ItemDuplicateTool;
-	m_ItemDuplicateTool = new wxMenuItem( m_MenuTools, ID_DuplicateTool, wxString( _("Duplicate Tool") ) + wxT('\t') + wxT("alt-d"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuTools->Append( m_ItemDuplicateTool );
-	
-	wxMenuItem* m_separator19;
-	m_separator19 = m_MenuTools->AppendSeparator();
-	
-	wxMenuItem* m_ItemCreateEntity;
-	m_ItemCreateEntity = new wxMenuItem( m_MenuTools, ID_CreateEntityTool, wxString( _("Create Entity") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuTools->Append( m_ItemCreateEntity );
-	
-	wxMenuItem* m_ItemCreateLocator;
-	m_ItemCreateLocator = new wxMenuItem( m_MenuTools, ID_CreateLocatorTool, wxString( _("Create Locator") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuTools->Append( m_ItemCreateLocator );
-	
-	wxMenuItem* m_ItemCreateVolume;
-	m_ItemCreateVolume = new wxMenuItem( m_MenuTools, ID_CreateVolumeTool, wxString( _("Create Volume") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuTools->Append( m_ItemCreateVolume );
-	
-	wxMenuItem* m_ItemCreateCurve;
-	m_ItemCreateCurve = new wxMenuItem( m_MenuTools, ID_CreateCurveTool, wxString( _("Create Curve") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuTools->Append( m_ItemCreateCurve );
-	
-	wxMenuItem* m_ItemEditCurve;
-	m_ItemEditCurve = new wxMenuItem( m_MenuTools, ID_EditCurveTool, wxString( _("Edit Curve") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuTools->Append( m_ItemEditCurve );
-	
-	m_MainMenuBar->Append( m_MenuTools, _("Tools") ); 
 	
 	m_MenuPanels = new wxMenu();
 	m_MainMenuBar->Append( m_MenuPanels, _("Panels") ); 
@@ -289,9 +236,9 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	this->Connect( wxID_CUT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCut ) );
 	this->Connect( wxID_COPY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCopy ) );
 	this->Connect( wxID_PASTE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPaste ) );
+	this->Connect( wxID_DELETE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDelete ) );
 	this->Connect( ID_SelectAll, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSelectAll ) );
 	this->Connect( ID_InvertSelection, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnInvertSelection ) );
-	this->Connect( wxID_DELETE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDelete ) );
 	this->Connect( ID_Parent, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnParent ) );
 	this->Connect( ID_Unparent, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUnparent ) );
 	this->Connect( ID_Group, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnGroup ) );
@@ -305,12 +252,6 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	this->Connect( ID_SnapCameraTo, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapCameraTo ) );
 	this->Connect( ID_WalkUp, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
 	this->Connect( ID_WalkForward, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
-	this->Connect( ID_SelectTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSelectTool ) );
-	this->Connect( ID_TranslateTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnTranslateTool ) );
-	this->Connect( ID_RotateTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnRotateTool ) );
-	this->Connect( ID_ScaleTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnScaleTool ) );
-	this->Connect( ID_MovePivotTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnMovePivotTool ) );
-	this->Connect( ID_DuplicateTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDuplicateTool ) );
 	this->Connect( ID_Settings, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSettings ) );
 	this->Connect( ID_About, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnAbout ) );
 }
@@ -334,9 +275,9 @@ MainFrameGenerated::~MainFrameGenerated()
 	this->Disconnect( wxID_CUT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCut ) );
 	this->Disconnect( wxID_COPY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCopy ) );
 	this->Disconnect( wxID_PASTE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPaste ) );
+	this->Disconnect( wxID_DELETE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDelete ) );
 	this->Disconnect( ID_SelectAll, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSelectAll ) );
 	this->Disconnect( ID_InvertSelection, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnInvertSelection ) );
-	this->Disconnect( wxID_DELETE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDelete ) );
 	this->Disconnect( ID_Parent, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnParent ) );
 	this->Disconnect( ID_Unparent, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUnparent ) );
 	this->Disconnect( ID_Group, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnGroup ) );
@@ -350,12 +291,6 @@ MainFrameGenerated::~MainFrameGenerated()
 	this->Disconnect( ID_SnapCameraTo, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapCameraTo ) );
 	this->Disconnect( ID_WalkUp, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
 	this->Disconnect( ID_WalkForward, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
-	this->Disconnect( ID_SelectTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSelectTool ) );
-	this->Disconnect( ID_TranslateTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnTranslateTool ) );
-	this->Disconnect( ID_RotateTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnRotateTool ) );
-	this->Disconnect( ID_ScaleTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnScaleTool ) );
-	this->Disconnect( ID_MovePivotTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnMovePivotTool ) );
-	this->Disconnect( ID_DuplicateTool, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDuplicateTool ) );
 	this->Disconnect( ID_Settings, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSettings ) );
 	this->Disconnect( ID_About, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnAbout ) );
 	
@@ -610,8 +545,8 @@ LayersPanelGenerated::LayersPanelGenerated( wxWindow* parent, wxWindowID id, con
 	m_DeleteSelectedLayersButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer36->Add( m_DeleteSelectedLayersButton, 0, wxALL, 2 );
 	
-	
-	bSizer36->Add( 10, 0, 0, wxEXPAND, 0 );
+	m_staticline4 = new wxStaticLine( m_LayerManagementPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer36->Add( m_staticline4, 0, wxEXPAND | wxALL, 5 );
 	
 	m_AddSelectionToLayerButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer36->Add( m_AddSelectionToLayerButton, 0, wxALL, 2 );
@@ -619,8 +554,8 @@ LayersPanelGenerated::LayersPanelGenerated( wxWindow* parent, wxWindowID id, con
 	m_RemoveSelectionFromLayerButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer36->Add( m_RemoveSelectionFromLayerButton, 0, wxALL, 2 );
 	
-	
-	bSizer36->Add( 10, 0, 0, wxEXPAND, 0 );
+	m_staticline5 = new wxStaticLine( m_LayerManagementPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer36->Add( m_staticline5, 0, wxEXPAND | wxALL, 5 );
 	
 	m_SelectLayerMembersButton = new wxBitmapButton( m_LayerManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer36->Add( m_SelectLayerMembersButton, 0, wxALL, 2 );

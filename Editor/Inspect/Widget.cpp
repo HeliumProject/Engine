@@ -5,15 +5,14 @@ using namespace Helium;
 using namespace Helium::Editor;
 
 Widget::Widget( Inspect::Control* control )
-: Inspect::Widget( control )
-, m_Window( NULL )
+: m_Window( NULL )
 {
 
 }
 
 Widget::~Widget()
 {
-    SetWindow( NULL );
+
 }
 
 int Widget::GetStringWidth(const tstring& str)

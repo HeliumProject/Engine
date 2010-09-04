@@ -1558,14 +1558,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Container.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Container.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Inspect\StripCanvas.cpp"
 				>
 			</File>
@@ -1579,6 +1571,14 @@
 			</File>
 			<File
 				RelativePath=".\Inspect\TreeCanvas.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\TreeNodeWidget.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\TreeNodeWidget.h"
 				>
 			</File>
 			<File

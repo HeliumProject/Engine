@@ -13,10 +13,9 @@ FileDialogButtonWindow::FileDialogButtonWindow( wxWindow* parent, FileDialogButt
 {
 }
 
-FileDialogButtonWidget::FileDialogButtonWidget( Inspect::Button* control )
-: ButtonWidget( control )
+FileDialogButtonWidget::FileDialogButtonWidget( Inspect::FileDialogButton* button )
 {
-    Inspect::FileDialogButton* button = static_cast< Inspect::FileDialogButton* >( m_ButtonControl );
+    SetControl( button );
     button->d_Clicked.Set( Inspect::FileDialogButtonClickedSignature::Delegate( this, &FileDialogButtonWidget::OnClicked ) );
 }
 

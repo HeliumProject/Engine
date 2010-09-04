@@ -24,10 +24,17 @@ namespace Helium
             ButtonWidget* m_ButtonWidget;
         };
 
-        class ButtonWidget : public Widget
+        class ButtonWidget : public Reflect::ConcreteInheritor< ButtonWidget, Widget >
         {
         public:
-            ButtonWidget( Inspect::Button* control );
+            ButtonWidget()
+                : m_ButtonControl( NULL )
+                , m_ButtonWindow( NULL )
+            {
+
+            }
+
+            ButtonWidget( Inspect::Button* button );
 
             virtual void Create( wxWindow* parent ) HELIUM_OVERRIDE;
             virtual void Destroy() HELIUM_OVERRIDE;

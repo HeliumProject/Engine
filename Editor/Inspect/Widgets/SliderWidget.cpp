@@ -42,14 +42,13 @@ void SliderWindow::OnScrollChanged( wxScrollEvent& e )
     m_SliderWidget->End();
 }
 
-SliderWidget::SliderWidget( Inspect::Slider* control )
-: Widget( control )
-, m_SliderControl( control )
+SliderWidget::SliderWidget( Inspect::Slider* slider )
+: m_SliderControl( slider )
 , m_SliderWindow( NULL )
 , m_StartDragValue( 0.f )
 , m_Tracking( false )
 {
-
+    SetControl( slider );
 }
 
 void SliderWidget::Create( wxWindow* parent )

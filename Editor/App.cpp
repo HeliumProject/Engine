@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "Editor/App.h"
+#include "App.h"
 
 #include "Platform/Windows/Windows.h"
 #include "Platform/Windows/Console.h"
@@ -8,36 +8,25 @@
 #include "Platform/Debug.h"
 
 #include "Foundation/Log.h"
+#include "Foundation/Startup.h"
+#include "Foundation/Exception.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Math/Utils.h"
 #include "Foundation/CommandLine/Option.h"
 #include "Foundation/CommandLine/Command.h"
 #include "Foundation/CommandLine/Commands/Help.h"
 #include "Foundation/CommandLine/Processor.h"
-#include "Foundation/Reflect/Registry.h"
-
-#include "Foundation/Startup.h"
-#include "Foundation/Exception.h"
-#include "Editor/ArtProvider.h"
-#include "Foundation/Worker/Process.h"
+#include "Foundation/Document/Document.h"
 #include "Foundation/Inspect/Inspect.h"
 #include "Foundation/Inspect/Interpreters/Reflect/InspectReflectInit.h"
-#include "Editor/Perforce/Perforce.h"
+#include "Foundation/Reflect/Registry.h"
+#include "Foundation/Worker/Process.h"
 
 #include "Core/CoreInit.h"
-#include "Core/MRUData.h"
 
-#include "Core/Scene/SceneInit.h"
-#include "Core/Scene/Object.h"
-#include "Core/Scene/Selectable.h"
-#include "Core/Scene/Persistent.h"
-#include "Core/Scene/PropertiesGenerator.h"
-
-#include "Core/Scene/GridSettings.h"
-#include "Core/Scene/SceneSettings.h"
-
-#include "WindowSettings.h"
-#include "Foundation/Document/Document.h"
+#include "Editor/ArtProvider.h"
+#include "Editor/Perforce/Perforce.h"
+#include "Editor/WindowSettings.h"
 
 #include "Editor/Tracker/Tracker.h"
 #include "Editor/Task/TaskInit.h"
@@ -45,9 +34,20 @@
 #include "Editor/PerforceWaitDialog.h"
 #include "Editor/Vault/VaultSettings.h"
 
-//#include "Commands/BuildCommand.h"
-#include "Commands/ProfileDumpCommand.h"
-#include "Commands/RebuildCommand.h"
+//#include "Editor/Commands/BuildCommand.h"
+#include "Editor/Commands/ProfileDumpCommand.h"
+#include "Editor/Commands/RebuildCommand.h"
+
+#include "Editor/Inspect/Widgets/LabelWidget.h"
+#include "Editor/Inspect/Widgets/ValueWidget.h"
+#include "Editor/Inspect/Widgets/SliderWidget.h"
+#include "Editor/Inspect/Widgets/ChoiceWidget.h"
+#include "Editor/Inspect/Widgets/CheckBoxWidget.h"
+#include "Editor/Inspect/Widgets/ColorPickerWidget.h"
+#include "Editor/Inspect/Widgets/ListWidget.h"
+#include "Editor/Inspect/Widgets/ButtonWidget.h"
+#include "Editor/Inspect/Widgets/FileDialogButtonWidget.h"
+#include "Editor/Inspect/TreeNodeWidget.h"
 
 #include <set>
 #include <tchar.h>
@@ -206,33 +206,27 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
     m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
     m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
-
-    // core
     m_InitializerStack.Push( Core::Initialize, Core::Cleanup );
-    m_InitializerStack.Push( Core::Object::InitializeType, Core::Object::CleanupType );
-    m_InitializerStack.Push( Core::Selectable::InitializeType, Core::Selectable::CleanupType );
-    m_InitializerStack.Push( Core::Persistent::InitializeType, Core::Persistent::CleanupType );
-    m_InitializerStack.Push( Core::PropertiesGenerator::Initialize, Core::PropertiesGenerator::Cleanup );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Core::MRUData >( TXT( "Core::MRUData" ) ) );
-
-    // task
-#pragma TODO("Move init into here")
     m_InitializerStack.Push( TaskInitialize, TaskCleanup );
 
-    // scene
-#pragma TODO("Move init into here")
-    m_InitializerStack.Push( Core::SceneInitialize, Core::SceneCleanup );
+    // inspect
+    m_InitializerStack.Push( Reflect::RegisterClassType< Widget >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< LabelWidget >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< ValueWidget >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< SliderWidget >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< ChoiceWidget >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< CheckBoxWidget >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< ColorPickerWidget >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< ListWidget >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< ButtonWidget >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< FileDialogButtonWidget >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< TreeNodeWidget >() );
 
     // vault
     m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::SearchTypes::SearchType>( &Editor::SearchTypes::SearchTypesEnumerateEnum, TXT( "SearchType" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClassType<SearchQuery>( TXT( "SearchQuery" ) ) );
 
     // settings
-    m_InitializerStack.Push( Reflect::RegisterClassType< Core::SettingsManager >( TXT( "Core::SettingsManager" ) ) ); 
-    m_InitializerStack.Push( Reflect::RegisterClassType< Core::CameraSettings >( TXT( "Core::CameraSettings" ) ) ); 
-    m_InitializerStack.Push( Reflect::RegisterClassType< Core::ViewportSettings >( TXT( "Core::ViewportSettings" ) ) ); 
-    m_InitializerStack.Push( Reflect::RegisterClassType< Core::GridSettings >( TXT( "Core::GridSettings" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Core::SceneSettings >( TXT( "Core::SceneSettings" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClassType< WindowSettings >( TXT( "Editor::WindowSettings" ) ) );
     
     m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::ViewOptionIDs::ViewOptionID>( &Editor::ViewOptionIDs::ViewOptionIDEnumerateEnum, TXT( "ViewOptionID" ) ) );

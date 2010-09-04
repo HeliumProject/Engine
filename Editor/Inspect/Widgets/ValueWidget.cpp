@@ -65,12 +65,11 @@ void ValueWindow::OnKeyDown(wxKeyEvent& e)
     }
 }
 
-ValueWidget::ValueWidget( Inspect::Value* control )
-: Widget( control )
-, m_ValueControl( control )
+ValueWidget::ValueWidget( Inspect::Value* value )
+: m_ValueControl( value )
 , m_ValueWindow( NULL )
 {
-
+    SetControl( value );
 }
 
 void ValueWidget::Create( wxWindow* parent )

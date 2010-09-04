@@ -36,10 +36,17 @@ namespace Helium
             bool            m_Override;
         };
 
-        class SliderWidget : public Widget
+        class SliderWidget : public Reflect::ConcreteInheritor< SliderWidget, Widget >
         {
         public:
-            SliderWidget( Inspect::Slider* control );
+            SliderWidget()
+                : m_SliderControl( NULL )
+                , m_SliderWindow( NULL )
+            {
+
+            }
+
+            SliderWidget( Inspect::Slider* slider );
 
             virtual void Create( wxWindow* parent ) HELIUM_OVERRIDE;
             virtual void Destroy() HELIUM_OVERRIDE;

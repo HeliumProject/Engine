@@ -75,16 +75,13 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
 
             // Add button - normal file open dialog
             addButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &PathContainerInterpreter::OnAddFile ) );
-#ifdef INSPECT_REFACTOR
             addButton->SetClientData( new ClientDataFilter( list, instances.front()->GetType(), filter ) );
-#endif
+
             // Add button - opens file browser
             findButton = CreateControl< Button >();
             findButton->a_Icon.Set( TXT( "actions/system-search" ) );
             findButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &PathContainerInterpreter::OnFindFile ) );
-#ifdef INSPECT_REFACTOR
             findButton->SetClientData( new ClientDataFilter( list, instances.front()->GetType(), filter ) );
-#endif
 
             // Edit button - attempt to edit the selected file
             editButton = CreateControl< Button >();

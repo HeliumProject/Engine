@@ -19,40 +19,55 @@ Container::~Container()
 
 void Container::AddChild(Control* control)
 {
-    control->a_IsEnabled.Set( a_IsEnabled.Get() );
-    control->a_IsReadOnly.Set( a_IsReadOnly.Get() );
-    control->a_IsFrozen.Set( a_IsFrozen.Get() );
-    control->a_IsHidden.Set( a_IsHidden.Get() );
+    if ( control->GetParent() != this )
+    {
+        control->SetParent( this );
 
-    m_Children.push_back( control );
+        control->a_IsEnabled.Set( a_IsEnabled.Get() );
+        control->a_IsReadOnly.Set( a_IsReadOnly.Get() );
+        control->a_IsFrozen.Set( a_IsFrozen.Get() );
+        control->a_IsHidden.Set( a_IsHidden.Get() );
+
+        m_Children.push_back( control );
+    }
 }
 
 void Container::InsertChild(int index, Control* control)
 {
-    control->a_IsEnabled.Set( a_IsEnabled.Get() );
-    control->a_IsReadOnly.Set( a_IsReadOnly.Get() );
-    control->a_IsFrozen.Set( a_IsFrozen.Get() );
-    control->a_IsHidden.Set( a_IsHidden.Get() );
+    if ( control->GetParent() != this )
+    {
+        control->SetParent( this );
 
-    m_Children.insert(m_Children.begin() + index, control);
+        control->a_IsEnabled.Set( a_IsEnabled.Get() );
+        control->a_IsReadOnly.Set( a_IsReadOnly.Get() );
+        control->a_IsFrozen.Set( a_IsFrozen.Get() );
+        control->a_IsHidden.Set( a_IsHidden.Get() );
+
+        m_Children.insert(m_Children.begin() + index, control);
+    }
 }
 
 void Container::RemoveChild(Control* control)
 {
-    // remove our reference to the control
-    const i32 numControls = static_cast< i32 >( m_Children.size() ) - 1;
-    for ( i32 controlIndex = numControls; controlIndex > -1; --controlIndex )
+    if ( control->GetParent() == this )
     {
-        if ( control == m_Children.at( controlIndex ) )
-        {
-            // remove control from our list
-            m_Children.erase( m_Children.begin() + controlIndex );
-            break;
-        }
-    }
+        control->SetParent( NULL );
 
-    // unrealize the control
-    control->Unrealize();
+        // remove our reference to the control
+        const i32 numControls = static_cast< i32 >( m_Children.size() ) - 1;
+        for ( i32 controlIndex = numControls; controlIndex > -1; --controlIndex )
+        {
+            if ( control == m_Children.at( controlIndex ) )
+            {
+                // remove control from our list
+                m_Children.erase( m_Children.begin() + controlIndex );
+                break;
+            }
+        }
+
+        // unrealize the control
+        control->Unrealize();
+    }
 }
 
 void Container::Clear()
@@ -69,6 +84,8 @@ void Container::Clear()
 
 void Container::Bind(const DataPtr& data)
 {
+    Base::Bind( data );
+
     V_Control::iterator itr = m_Children.begin();
     V_Control::iterator end = m_Children.end();
     for( ; itr != end; ++itr )
@@ -93,34 +110,33 @@ bool Container::Process(const tstring& key, const tstring& value)
     return false;
 }
 
-
 void Container::Populate()
 {
+    Base::Populate();
+
     V_Control::iterator itr = m_Children.begin();
     V_Control::iterator end = m_Children.end();
     for( ; itr != end; ++itr )
     {
         (*itr)->Populate();
     }
-
-    __super::Populate();
 }
 
 void Container::Read()
 {
+    Base::Read();
+
     V_Control::iterator itr = m_Children.begin();
     V_Control::iterator end = m_Children.end();
     for( ; itr != end; ++itr )
     {
         (*itr)->Read();
     }
-
-    __super::Read();
 }
 
 bool Container::Write()
 {
-    bool result = true;
+    bool result = Base::Write();
 
     V_Control::iterator itr = m_Children.begin();
     V_Control::iterator end = m_Children.end();
@@ -129,7 +145,7 @@ bool Container::Write()
         result &= (*itr)->Write();
     }
 
-    return result && __super::Write();
+    return result;
 }
 
 void Container::IsEnabledChanged( const Attribute<bool>::ChangeArgs& args )

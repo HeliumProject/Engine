@@ -26,7 +26,7 @@ namespace Helium
         public:
             Canvas();
 
-            virtual void RealizeControl(Control* control, Control* parent) = 0;
+            virtual void RealizeControl(Control* control) = 0;
 
             int GetDefaultSize(Math::Axis axis)
             {

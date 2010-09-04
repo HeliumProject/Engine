@@ -30,10 +30,17 @@ namespace Helium
             wxStaticText*   m_StaticText;
         };
 
-        class LabelWidget : public Widget
+        class LabelWidget : public Reflect::ConcreteInheritor< LabelWidget, Widget >
         {
         public:
-            LabelWidget( Inspect::Control* control );
+            LabelWidget()
+                : m_LabelControl( NULL )
+                , m_LabelWindow( NULL )
+            {
+
+            }
+
+            LabelWidget( Inspect::Label* label );
 
             virtual void Create( wxWindow* parent ) HELIUM_OVERRIDE;
             virtual void Destroy() HELIUM_OVERRIDE;

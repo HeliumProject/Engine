@@ -57,10 +57,11 @@ bool LabelWindow::SetBackgroundColour(const wxColour& color)
         && m_StaticText->SetBackgroundColour(color);
 }
 
-LabelWidget::LabelWidget( Inspect::Control* control )
-: Widget( control )
+LabelWidget::LabelWidget( Inspect::Label* label )
+: m_LabelControl( label )
+, m_LabelWindow( NULL )
 {
-    
+    SetControl( label );
 }
 
 void LabelWidget::Create( wxWindow* parent )

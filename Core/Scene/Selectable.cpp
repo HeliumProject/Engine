@@ -6,16 +6,6 @@ using namespace Helium::Core;
 
 SCENE_DEFINE_TYPE( Selectable );
 
-void Selectable::InitializeType()
-{
-  Reflect::RegisterClassType<Selectable>( TXT( "Selectable" ) );
-}
-
-void Selectable::CleanupType()
-{
-  Reflect::UnregisterClassType<Selectable>();
-}
-
 Selectable::Selectable()
 : m_Selected( false )
 {

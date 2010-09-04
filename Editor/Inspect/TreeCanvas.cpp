@@ -1,6 +1,9 @@
 #include "Precompile.h"
 #include "TreeCanvas.h"
 
+#include "Editor/FileIconsTable.h"
+#include "Editor/Inspect/TreeNodeWidget.h"
+
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -44,11 +47,24 @@ protected:
 TreeCanvas::TreeCanvas( TreeWndCtrl* treeWndCtrl )
 : Canvas( treeWndCtrl )
 , m_TreeWndCtrl( treeWndCtrl )
+, m_RootId( Helium::TreeWndCtrlItemIdInvalid )
 {
+    SetWidgetCreator< TreeNodeWidget, Container >();
+
     // for now we must always show scroll bars
     HELIUM_ASSERT( m_TreeWndCtrl->GetWindowStyle() & wxALWAYS_SHOW_SB );
 
     m_TreeWndCtrl->SetScrollRate(SCROLL_INCREMENT, SCROLL_INCREMENT);
+    m_TreeWndCtrl->SetColumnSize( 15 );
+    m_TreeWndCtrl->SetImageList( GlobalFileIconsTable().GetSmallImageList() );
+    m_TreeWndCtrl->SetStateImageList( GlobalFileIconsTable().GetSmallImageList() );
+
+    wxTreeItemId root = m_TreeWndCtrl->GetRootItem();
+    if ( root == Helium::TreeWndCtrlItemIdInvalid )
+    {
+        root = m_TreeWndCtrl->AddRoot( TXT( "Canvas Root" ) );
+        m_RootId = root;
+    }
 
     // wxALWAYS_SHOW_SB in the constructor will ensure that there is always scroll bars
     //  in the canvas window.  This will prevent the need from doing layout on the window more than once.
@@ -115,6 +131,30 @@ void TreeCanvas::OnToggle(wxTreeEvent& event)
     }
 
     event.Skip();
+}
+
+void TreeCanvas::Realize( Inspect::Canvas* canvas )
+{
+    HELIUM_ASSERT( canvas == this || canvas == NULL );
+
+    SmartPtr< TreeNodeWidget > widget = new TreeNodeWidget( this );
+    widget->SetTreeWndCtrl( m_TreeWndCtrl );
+    widget->SetId( m_RootId );
+    SetWidget( widget );
+
+    Inspect::V_Control::const_iterator itr = m_Children.begin();
+    Inspect::V_Control::const_iterator end = m_Children.end();
+    for( ; itr != end; ++itr )
+    {
+        Inspect::Control* c = *itr;
+        c->SetCanvas( this );
+        c->Realize( this );
+    }
+
+    m_TreeWndCtrl->Freeze();
+    m_TreeWndCtrl->Scroll( 0, 0 );
+    m_TreeWndCtrl->Layout();
+    m_TreeWndCtrl->Thaw();
 }
 
 #if INSPECT_REFACTOR
@@ -195,179 +235,6 @@ void ChildRemoving(Control* child)
     }
 }
 
-void ContainerRealized(Container* parent)
-{
-    if ( IsRealized() )
-    {
-        for ( V_Control::iterator itr = m_Children.begin(), end = m_Children.end(); itr != end; ++itr )
-        {
-            (*itr)->Realize( this );
-        }
-        return;
-    }
-
-    if ( m_Window == NULL )
-    {
-        INSPECT_SCOPE_TIMER( ( "" ) );
-        m_Window = new wxPanel( parent->GetWindow(), wxID_ANY );
-    }
-
-    if ( m_Window->GetSizer() == NULL )
-    {
-        m_Window->SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
-        wxSizer* sizer = m_Window->GetSizer();
-
-        V_Sizer sizerList;
-        std::vector< i32 > proportionList;
-
-        int proportionMultiplier = 1000;
-        int remainingProportion = proportionMultiplier;
-        int numRemainingProportions = 0;
-
-        wxSizer* unboundedProportionSizer = NULL;
-
-        V_Control::const_iterator itr = m_Children.begin();
-        V_Control::const_iterator end = m_Children.end();
-        for( ; itr != end; ++itr )
-        {
-            Control* c = *itr;
-            c->Realize( this );
-
-            if ( c->GetProportionalWidth() > 0.0f )
-            {
-                int proportion = (int) ( c->GetProportionalWidth() * (f32) proportionMultiplier );
-                remainingProportion -= proportion;
-
-                sizerList.push_back( new wxBoxSizer( wxHORIZONTAL ) );
-                proportionList.push_back( proportion );
-                unboundedProportionSizer = NULL;
-            }
-            else
-            {
-                if ( unboundedProportionSizer == NULL )
-                {
-                    unboundedProportionSizer = new wxBoxSizer( wxHORIZONTAL );
-                    ++numRemainingProportions;
-                }
-
-                sizerList.push_back( unboundedProportionSizer );
-                proportionList.push_back( -1 );
-            }
-        }
-
-        if ( numRemainingProportions > 1 )
-        {
-            remainingProportion = (int) ( (f32) remainingProportion / (f32) numRemainingProportions + 0.5f );
-        }
-
-        int index = 0;
-        int spacing = GetCanvas()->GetPad();
-
-        itr = m_Children.begin();
-        end = m_Children.end();
-        for( ; itr != end; ++index, ++itr )
-        {
-            Control* c = *itr;
-
-            int proportion = proportionList[ index ];
-            wxSizer* currentSizer = sizerList[ index ];
-
-            if ( sizer->GetItem( currentSizer ) == NULL )
-            {
-                sizer->Add( currentSizer, proportion > 0 ? proportion : remainingProportion, wxEXPAND | wxTOP | wxBOTTOM, spacing );
-            }
-
-            int flags = wxALIGN_CENTER_VERTICAL;
-            proportion = 0;
-            if ( !c->IsFixedWidth() )
-            {
-                proportion = 1;
-                flags |= wxEXPAND;
-            }
-
-            currentSizer->Add( spacing, 0, 0 );
-            currentSizer->Add( c->GetWindow(), proportion, flags );
-        }
-        sizer->Add(spacing, 0, 0);
-
-        m_Window->Layout();
-    }
-
-    __super::Realize(parent);
-}
-
-void PanelRealized(Container* parent)
-{
-    if ( IsRealized() )
-    {
-        for ( V_Control::iterator itr = m_Controls.begin(), end = m_Controls.end(); itr != end; ++itr )
-        {
-            (*itr)->Realize( this );
-        }
-        return;
-    }
-
-    INSPECT_SCOPE_TIMER( ("") );
-
-    ExpandState cachedState = m_Canvas->GetPanelExpandState( GetPath() );
-    switch ( cachedState )
-    {
-        // The state was cached to be expanded
-    case ExpandStates::Expanded:
-        m_Expanded = true;
-        break;
-
-        // The state was cached to be collapsed
-    case ExpandStates::Collapsed:
-        m_Expanded = false;
-        break;
-    }
-
-    m_Parent = parent;
-
-    Helium::TreeWndCtrl* treeWndCtrl = (Helium::TreeWndCtrl*) m_Parent->GetWindow();
-
-    m_Window = treeWndCtrl;
-    treeWndCtrl->Freeze();
-
-#ifdef INSPECT_REFACTOR
-    int collapsedIndex = Helium::GlobalFileIconsTable().GetIconID( TXT( "ms_folder_closed" ) );
-    int expandedIndex = Helium::GlobalFileIconsTable().GetIconID( TXT( "ms_folder_open" ) );
-#else
-    int collapsedIndex = -1;
-    int expandedIndex = -1;
-#endif
-
-    wxTreeItemId item = m_ItemData.GetId();
-    if ( item == Helium::TreeWndCtrlItemIdInvalid )
-    {
-        treeWndCtrl->AppendItem( GetParentTreeNode( m_Parent ), m_Name, collapsedIndex, expandedIndex, &m_ItemData );
-        item = m_ItemData.GetId();
-    }
-
-    V_Control::const_iterator beg = m_Controls.begin();
-    V_Control::const_iterator end = m_Controls.end();
-    for( V_Control::const_iterator itr = beg; itr != end; ++itr )
-    {
-        Control* c = *itr;
-
-        c->Realize( this );
-
-        wxWindow* window = c->GetWindow();
-
-        if ( window != treeWndCtrl )
-        {
-            treeWndCtrl->AppendItem( item, window );
-        }
-    }
-
-    m_Window->Layout();
-
-    treeWndCtrl->Thaw();
-
-    __super::Realize( parent );
-}
-
 void PanelUnrealized()
 {
     wxTreeItemId item = m_ItemData.GetId();
@@ -446,62 +313,6 @@ void Canvas::Clear()
     treeWndCtrl->DeleteAllItems();
 
     __super::Clear();
-}
-
-
-
-///////////////////////////////////////////////////////////////////////////////
-// 
-// 
-void Canvas::Realize(Container* parent)
-{
-    if ( IsRealized() )
-    {
-        for ( V_Control::iterator itr = m_Children.begin(), end = m_Children.end(); itr != end; ++itr )
-        {
-            (*itr)->Realize( this );
-        }
-        return;
-    }
-
-    // the canvas must already be realized - this just realizes its children
-    HELIUM_ASSERT( m_Window != NULL );
-
-    TreeCanvasCtrl* treeWndCtrl = GetControl();
-    treeWndCtrl->SetColumnSize( 15 );
-    if ( ( treeWndCtrl->GetStateImageList() == NULL ) && ( treeWndCtrl->GetImageList() == NULL ) )
-    {
-#ifdef INSPECT_REFACTOR
-        treeWndCtrl->SetImageList( Helium::GlobalFileIconsTable().GetSmallImageList() );
-        treeWndCtrl->SetStateImageList( Helium::GlobalFileIconsTable().GetSmallImageList() );
-#endif
-    }
-
-    wxTreeItemId root = treeWndCtrl->GetRootItem();
-    if ( root == Helium::TreeWndCtrlItemIdInvalid )
-    {
-        root = treeWndCtrl->AddRoot( TXT( "Canvas Root" ) );
-    }
-
-    V_Control::const_iterator itr = m_Children.begin();
-    V_Control::const_iterator end = m_Children.end();
-    for( ; itr != end; ++itr )
-    {
-        Control* c = *itr;
-
-        c->Realize( this );
-
-        wxWindow* window = c->GetWindow();
-        if ( window != m_Window )
-        {
-            treeWndCtrl->AppendItem( root, window );
-        }
-    }
-
-    treeWndCtrl->Freeze();
-    treeWndCtrl->Layout();
-    treeWndCtrl->Scroll( 0, 0 );
-    treeWndCtrl->Thaw();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

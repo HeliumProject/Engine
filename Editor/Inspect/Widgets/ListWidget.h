@@ -23,10 +23,17 @@ namespace Helium
             ListWidget* m_ListWidget;
         };
 
-        class ListWidget : public Widget
+        class ListWidget : public Reflect::ConcreteInheritor< ListWidget, Widget >
         {
         public:
-            ListWidget( Inspect::List* control );
+            ListWidget()
+                : m_ListControl( NULL )
+                , m_ListWindow( NULL )
+            {
+
+            }
+
+            ListWidget( Inspect::List* list );
 
             virtual void Create( wxWindow* parent ) HELIUM_OVERRIDE;
             virtual void Destroy() HELIUM_OVERRIDE;

@@ -9,12 +9,12 @@ namespace Helium
     {
         class List;
 
-        class ClientDataFilter : public Reflect::AbstractInheritor<ClientDataFilter, Reflect::Object>
+        class ClientDataFilter : public Reflect::AbstractInheritor< ClientDataFilter, ClientData >
         {
         public:
             List*       m_List;
             i32         m_ClassType;
-            tstring m_FileFilter;
+            tstring     m_FileFilter;
 
             ClientDataFilter( List* list, i32 classType, const tstring& filter )
                 : m_List( list )

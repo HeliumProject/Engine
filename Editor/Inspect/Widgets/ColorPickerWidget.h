@@ -61,10 +61,17 @@ namespace Helium
             bool                    m_Override;
         };
 
-        class ColorPickerWidget : public Widget
+        class ColorPickerWidget : public Reflect::ConcreteInheritor< ColorPickerWidget, Widget >
         {
         public:
-            ColorPickerWidget( Inspect::ColorPicker* control );
+            ColorPickerWidget()
+                : m_ColorPickerControl( NULL )
+                , m_ColorPickerWindow( NULL )
+            {
+
+            }
+
+            ColorPickerWidget( Inspect::ColorPicker* colorPicker );
 
             virtual void Create( wxWindow* parent ) HELIUM_OVERRIDE;
             virtual void Destroy() HELIUM_OVERRIDE;

@@ -30,10 +30,17 @@ namespace Helium
             bool            m_Override;
         };
 
-        class ValueWidget : public Widget
+        class ValueWidget : public Reflect::ConcreteInheritor< ValueWidget, Widget >
         {
         public:
-            ValueWidget( Inspect::Value* control );
+            ValueWidget()
+                : m_ValueControl( NULL )
+                , m_ValueWindow( NULL )
+            {
+
+            }
+
+            ValueWidget( Inspect::Value* value );
 
             virtual void Create( wxWindow* parent ) HELIUM_OVERRIDE;
             virtual void Destroy() HELIUM_OVERRIDE;

@@ -35,11 +35,11 @@ void ColorPickerWindow::OnChanged( wxCommandEvent& )
     m_ColorPickerWidget->GetControl()->Write();
 }
 
-ColorPickerWidget::ColorPickerWidget( Inspect::ColorPicker* control )
-: Widget( control )
-, m_ColorPickerControl( control )
+ColorPickerWidget::ColorPickerWidget( Inspect::ColorPicker* colorPicker )
+: m_ColorPickerControl( colorPicker )
 , m_ColorPickerWindow( NULL )
 {
+    SetControl( colorPicker );
 }
 
 void ColorPickerWidget::Create( wxWindow* parent )

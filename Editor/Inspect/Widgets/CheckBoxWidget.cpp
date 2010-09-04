@@ -39,17 +39,16 @@ void CheckBoxWindow::OnChecked( wxCommandEvent& )
     }
 }
 
-CheckBoxWidget::CheckBoxWidget( Inspect::CheckBox* control )
-: Widget( control )
-, m_CheckBoxControl( control )
+CheckBoxWidget::CheckBoxWidget( Inspect::CheckBox* checkBox )
+: m_CheckBoxControl( checkBox )
 , m_CheckBoxWindow( NULL )
 {
-
+    SetControl( checkBox );
 }
 
 void CheckBoxWidget::Create( wxWindow* parent )
 {
-    HELIUM_ASSERT( m_CheckBoxWindow );
+    HELIUM_ASSERT( !m_CheckBoxWindow );
 
     // allocate window and connect common listeners
     SetWindow( m_CheckBoxWindow = new CheckBoxWindow( parent, this ) );

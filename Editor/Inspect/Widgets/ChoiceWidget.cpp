@@ -64,11 +64,10 @@ void ChoiceWindow::OnKillFocus(wxFocusEvent& event)
 }
 
 ChoiceWidget::ChoiceWidget( Inspect::Choice* choice )
-: Widget( choice )
-, m_ChoiceControl( choice )
+: m_ChoiceControl( choice )
 , m_ChoiceWindow( NULL )
 {
-
+    SetControl( choice );
 }
 
 void ChoiceWidget::Create( wxWindow* parent )

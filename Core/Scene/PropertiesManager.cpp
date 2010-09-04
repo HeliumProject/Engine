@@ -407,18 +407,11 @@ void PropertiesManager::FinalizeProperties( u32 selectionId, const Inspect::V_Co
         m_Generator->GetContainer()->AddChild( *itr );
     }
 
-#ifdef INSPECT_REFACTOR
-    m_Generator->GetContainer()->GetCanvas()->Freeze();
-    m_Generator->GetContainer()->GetCanvas()->Layout(); // Realize now? -Geoff
-
-    m_Generator->GetContainer()->GetCanvas()->SetScroll( m_PreviousScroll );
-#endif
-
+    m_Generator->GetContainer()->GetCanvas()->a_IsFrozen.Set( true );
+    m_Generator->GetContainer()->GetCanvas()->Realize( NULL );
+    m_Generator->GetContainer()->GetCanvas()->Populate();
     m_Generator->GetContainer()->GetCanvas()->Read();
-
-#ifdef INSPECT_REFACTOR
-    m_Generator->GetContainer()->GetCanvas()->Thaw();
-#endif
+    m_Generator->GetContainer()->GetCanvas()->a_IsFrozen.Set( false );
 }
 
 bool PropertiesManager::ThreadsActive()

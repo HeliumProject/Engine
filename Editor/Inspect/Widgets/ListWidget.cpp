@@ -9,12 +9,11 @@ using namespace Helium::Editor;
 BEGIN_EVENT_TABLE(ListWindow, wxListBox)
 END_EVENT_TABLE();
 
-ListWidget::ListWidget( Inspect::List* control )
-: Widget( control )
-, m_ListControl( control )
+ListWidget::ListWidget( Inspect::List* list )
+: m_ListControl( list )
 , m_ListWindow( NULL )
 {
-
+    SetControl( list );
 }
 
 void ListWidget::Create(wxWindow* parent)

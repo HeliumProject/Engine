@@ -188,9 +188,6 @@ namespace Helium
             // thread info for generating properties
             u32                             m_SelectionId;
 
-            // previous scroll
-            Math::Point                     m_PreviousScroll;
-
             // thread count
             int                             m_ThreadCount;
             Helium::Mutex                   m_ThreadCountMutex;

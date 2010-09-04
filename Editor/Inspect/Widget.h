@@ -6,13 +6,19 @@ namespace Helium
 {
     namespace Editor
     {
-        class Widget : public Inspect::Widget
+        class Widget : public Reflect::AbstractInheritor< Widget, Inspect::Widget >
         {
         public:
+            Widget()
+                : m_Window( NULL )
+            {
+
+            }
+
             Widget( Inspect::Control* control );
             ~Widget();
 
-            wxWindow* GetWindow()
+            virtual wxWindow* GetWindow()
             {
                 return m_Window;
             }

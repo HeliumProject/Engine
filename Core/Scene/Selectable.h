@@ -16,22 +16,9 @@ namespace Helium
         protected:
             bool m_Selected;
 
-
-            //
-            // Runtime Type Info
-            //
-
         public:
             SCENE_DECLARE_TYPE( Selectable, Object );
-            static void InitializeType();
-            static void CleanupType();
 
-
-            //
-            // Implementation
-            //
-
-        public:
             Selectable();
             virtual ~Selectable();
 

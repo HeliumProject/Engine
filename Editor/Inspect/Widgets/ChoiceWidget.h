@@ -33,9 +33,16 @@ namespace Helium
             bool            m_Override;
         };
 
-        class ChoiceWidget : public Widget
+        class ChoiceWidget : public Reflect::ConcreteInheritor< ChoiceWidget, Widget >
         {
         public:
+            ChoiceWidget()
+                : m_ChoiceControl( NULL )
+                , m_ChoiceWindow( NULL )
+            {
+
+            }
+
             ChoiceWidget( Inspect::Choice* choice );
 
             virtual void Create( wxWindow* parent ) HELIUM_OVERRIDE;

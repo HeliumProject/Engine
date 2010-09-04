@@ -74,12 +74,11 @@ void ButtonWindow::SetLabel( const tstring& label )
     Layout();
 }
 
-ButtonWidget::ButtonWidget( Inspect::Button* control )
-: Widget( control )
-, m_ButtonControl( control )
+ButtonWidget::ButtonWidget( Inspect::Button* button )
+: m_ButtonControl( button )
 , m_ButtonWindow( NULL )
 {
-
+    SetControl( button );
 }
 
 void ButtonWidget::Create( wxWindow* parent )

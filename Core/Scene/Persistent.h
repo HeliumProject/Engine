@@ -30,22 +30,9 @@ namespace Helium
         protected:
             Reflect::ElementPtr m_Package;
 
-
-            //
-            // Runtime Type Info
-            //
-
         public:
             SCENE_DECLARE_TYPE( Persistent, Selectable );
-            static void InitializeType();
-            static void CleanupType();
 
-
-            //
-            // Constructor
-            //
-
-        public:
             Persistent(Reflect::Element* data);
             virtual ~Persistent();
 

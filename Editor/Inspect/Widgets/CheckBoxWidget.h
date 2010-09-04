@@ -44,9 +44,16 @@ namespace Helium
             bool            m_Override;
         };
 
-        class CheckBoxWidget : public Widget
+        class CheckBoxWidget : public Reflect::ConcreteInheritor< CheckBoxWidget, Widget >
         {
         public:
+            CheckBoxWidget()
+                : m_CheckBoxControl( NULL )
+                , m_CheckBoxWindow( NULL )
+            {
+
+            }
+
             CheckBoxWidget( Inspect::CheckBox* control );
 
             virtual void Create( wxWindow* parent ) HELIUM_OVERRIDE;

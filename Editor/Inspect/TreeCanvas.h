@@ -17,8 +17,11 @@ namespace Helium
             void OnSize(wxSizeEvent&);
             void OnToggle(wxTreeEvent&);
 
+            virtual void Realize( Inspect::Canvas* canvas) HELIUM_OVERRIDE;
+
         private:
-            TreeWndCtrl* m_TreeWndCtrl;
+            TreeWndCtrl*    m_TreeWndCtrl;
+            wxTreeItemId    m_RootId;
         };
 
         typedef Helium::SmartPtr< TreeCanvas > TreeCanvasPtr;

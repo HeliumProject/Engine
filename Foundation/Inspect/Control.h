@@ -94,11 +94,11 @@ namespace Helium
         // Widget, a base class for a GUI system implementation-specific Widget classes
         //
 
-        class FOUNDATION_API Widget : public Reflect::AbstractInheritor<Control, Reflect::Object>
+        class FOUNDATION_API Widget : public Reflect::AbstractInheritor<Widget, Reflect::Object>
         {
         public:
-            Widget( Control* control )
-                : m_Control( control )
+            Widget()
+                : m_Control( NULL )
             {
 
             }
@@ -106,6 +106,11 @@ namespace Helium
             Inspect::Control* GetControl()
             {
                 return m_Control;
+            }
+
+            void SetControl( Inspect::Control* control )
+            {
+                m_Control = control;
             }
 
             virtual void Read() = 0;
@@ -135,15 +140,13 @@ namespace Helium
             {
                 return m_Canvas;
             }
-            void SetCanvas(Canvas* canvas)
-            {
-                m_Canvas = canvas;
-            }
+            void SetCanvas(Canvas* canvas);
 
             Container* GetParent()
             {
                 return m_Parent;
             }
+            void SetParent( Container* parent );
 
             // 
             // Client data
@@ -211,7 +214,7 @@ namespace Helium
             virtual bool IsRealized();
 
             // Creates the canvas control, called during layout
-            virtual void Realize(Container* parent);
+            virtual void Realize(Canvas* canvas);
 
             // Unrealizes the control (delete toolkit object)
             virtual void Unrealize();

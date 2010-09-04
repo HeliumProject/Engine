@@ -17,10 +17,15 @@ namespace Helium
             FileDialogButtonWindow( wxWindow* parent, FileDialogButtonWidget* buttonWidget );
         };
 
-        class FileDialogButtonWidget : public ButtonWidget
+        class FileDialogButtonWidget : public Reflect::ConcreteInheritor< FileDialogButtonWidget, ButtonWidget >
         {
         public:
-            FileDialogButtonWidget( Inspect::Button* control );                
+            FileDialogButtonWidget()
+            {
+
+            }
+
+            FileDialogButtonWidget( Inspect::FileDialogButton* control );                
 
         protected:
             void OnClicked( const Inspect::FileDialogButtonClickedArgs& args );

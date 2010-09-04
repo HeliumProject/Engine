@@ -51,6 +51,35 @@ int Control::GetDepth()
     return depth;
 }
 
+void Control::SetCanvas( Canvas* canvas )
+{
+    if ( m_Canvas != canvas )
+    {
+        HELIUM_ASSERT( (!m_Canvas && canvas) || (m_Canvas && !canvas) );
+        m_Canvas = canvas;
+    }
+}
+
+void Control::SetParent( Container* parent )
+{
+    if ( m_Parent != parent )
+    {
+        Container* oldParent = m_Parent;
+
+        m_Parent = parent;
+
+        if ( oldParent )
+        {
+            oldParent->RemoveChild( this );
+        }
+
+        if ( m_Parent )
+        {
+            m_Parent->AddChild( this );
+        }
+    }
+}
+
 void Control::Bind(const DataPtr& data)
 {
     if ( !m_BoundData.ReferencesObject() || !data.ReferencesObject() )
@@ -127,25 +156,19 @@ bool Control::IsRealized()
     return m_IsRealized;
 }
 
-void Control::Realize(Container* parent)
+void Control::Realize(Canvas* canvas)
 {
     PROFILE_SCOPE_ACCUM( g_RealizeAccumulator );
 
-    m_Canvas->RealizeControl( this, m_Parent = parent );
-    m_IsRealized = true;
+    m_Canvas = canvas;
+    m_Canvas->RealizeControl( this );
 
+    m_IsRealized = true;
     e_Realized.Raise(this);
 }
 
 void Control::Unrealize()
 {
-    if ( m_Parent )
-    {
-        // If you hit this, you are trying to Unrealize a control that still belongs to
-        // its parent.  Remove the control from its parent first, before calling this function.
-        HELIUM_ASSERT( std::find( m_Parent->GetChildren().begin(), m_Parent->GetChildren().end(), ControlPtr(this) ) == m_Parent->GetChildren().end() );
-    }
-
     m_IsRealized = false;
     e_Unrealized.Raise(this);
 }

@@ -29,21 +29,9 @@ namespace Helium
 
         class CORE_API Object : public Reflect::Object
         {
-            //
-            // Runtime Type Info
-            //
-
         public:
             SCENE_DECLARE_TYPE( Object, Reflect::Object );
-            static void InitializeType();
-            static void CleanupType();
 
-
-            //
-            // Constructor
-            //
-
-        public:
             Object();
             virtual ~Object();
         };

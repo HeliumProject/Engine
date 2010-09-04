@@ -102,7 +102,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons\Helium&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -188,7 +188,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons\Helium&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -271,7 +271,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons\Helium&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -354,7 +354,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons\Helium&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -526,7 +526,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons\Helium&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -609,7 +609,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons\Helium&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -692,7 +692,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons\Helium&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>

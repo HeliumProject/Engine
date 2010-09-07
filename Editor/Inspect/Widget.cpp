@@ -91,8 +91,6 @@ void Widget::SetWindow( wxWindow* window )
         {
             m_Window->Hide();
         }   
-        m_Window->SetForegroundColour( m_Control->a_ForegroundColor.Get() );
-        m_Window->SetBackgroundColour( m_Control->a_BackgroundColor.Get() );
         m_Window->SetHelpText( m_Control->a_ToolTip.Get() );
 
         // add listeners

@@ -49,27 +49,21 @@ void Canvas::RealizeControl( Inspect::Control* control )
 {
     HELIUM_ASSERT( control );
 
-    Inspect::Container* parent = control->GetParent();
-    HELIUM_ASSERT( parent );
-
     WidgetCreators::const_iterator found = m_WidgetCreators.find( control->GetType() );
-
-    // this means there is a class of control that doesn't have a corresponding registered widget class
     HELIUM_ASSERT( found != m_WidgetCreators.end() );
-
-    // allocate the widget from the factory
     WidgetPtr widget = found->second( control );
     HELIUM_ASSERT( widget );
 
+    // associate the widget with the control
+    control->SetWidget( widget );
+
     // find the window pointer for the parent window
+    Inspect::Container* parent = control->GetParent();
+    HELIUM_ASSERT( parent );
     Widget* parentWidget = Reflect::AssertCast< Widget >( parent->GetWidget() );
     HELIUM_ASSERT( parentWidget );
     wxWindow* parentWindow = parentWidget->GetWindow();
     HELIUM_ASSERT( parentWindow );
-
-    // do this before Create() so that Create() can use the canvas pointer
-    control->SetCanvas( this );
-    control->SetWidget( widget );
 
     // this will cause the widget to allocate its corresponding window (since it has the parent pointer)
     widget->Create( parentWindow );

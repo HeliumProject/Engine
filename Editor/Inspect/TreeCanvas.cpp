@@ -147,7 +147,6 @@ void TreeCanvas::Realize( Inspect::Canvas* canvas )
     for( ; itr != end; ++itr )
     {
         Inspect::Control* c = *itr;
-        c->SetCanvas( this );
         c->Realize( this );
     }
 

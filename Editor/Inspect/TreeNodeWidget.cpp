@@ -25,6 +25,19 @@ void TreeNodeWidget::Create( wxWindow* parent )
     m_TreeWndCtrl->Freeze();
 
     bool childrenAreContainers = true;
+    {
+        Inspect::V_Control::const_iterator itr = m_ContainerControl->GetChildren().begin();
+        Inspect::V_Control::const_iterator end = m_ContainerControl->GetChildren().end();
+        for ( ; itr != end; ++itr )
+        {
+            if ( !(*itr)->HasType( Reflect::GetType< Inspect::Container >() ) )
+            {
+                childrenAreContainers = false;
+                break;
+            }
+        }
+    }
+
     if ( childrenAreContainers )
     {
         // our window is the treewndctrl

@@ -160,16 +160,11 @@ namespace Helium
             class CORE_API ShaderManager
             {
             public:
-                ShaderManager( class Renderer* renderer = NULL );
+                ShaderManager();
                 ~ShaderManager();
 
-                void SetRenderer( class Renderer* renderer )
-                {
-                    m_renderer = renderer;
-                }
-
                 // don't call directly
-                void CreateDefaults();
+                void Init( IDirect3DDevice9* device );
 
             private:
 
@@ -205,7 +200,7 @@ namespace Helium
 
                 std::vector<Shader*>   m_loaded_shaders;
                 std::vector<Texture*>  m_loaded_textures;
-                Renderer*              m_renderer;
+                IDirect3DDevice9*      m_device;
             };
         }
     }

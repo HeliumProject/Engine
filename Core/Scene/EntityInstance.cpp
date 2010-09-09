@@ -37,12 +37,12 @@ void Entity::CleanupType()
 }
 
 Entity::Entity(Core::Scene* scene)
-: Core::Instance (scene, new Asset::EntityInstance())
+: Core::Instance (scene, new Content::EntityInstance())
 {
     ConstructorInit();
 }
 
-Entity::Entity(Core::Scene* scene, Asset::EntityInstance* entity)
+Entity::Entity(Core::Scene* scene, Content::EntityInstance* entity)
 : Core::Instance ( scene, entity )
 {
     ConstructorInit();
@@ -50,7 +50,7 @@ Entity::Entity(Core::Scene* scene, Asset::EntityInstance* entity)
 
 Entity::~Entity()
 {
-    Asset::Entity* pkg = GetPackage< Asset::Entity >();
+    Content::EntityInstance* pkg = GetPackage< Content::EntityInstance >();
 
     pkg->RemoveComponentAddedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &Entity::OnComponentAdded ) );
     pkg->RemoveComponentRemovedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &Entity::OnComponentRemoved ) );
@@ -61,7 +61,7 @@ void Entity::ConstructorInit()
     m_ClassSet = NULL;
     m_Scene = NULL;
 
-    Asset::Entity* pkg = GetPackage< Asset::Entity >();
+    Content::EntityInstance* pkg = GetPackage< Content::EntityInstance >();
 
     pkg->AddComponentAddedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &Entity::OnComponentAdded ) );
     pkg->AddComponentRemovedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &Entity::OnComponentRemoved ) );
@@ -69,7 +69,7 @@ void Entity::ConstructorInit()
 
 tstring Entity::GenerateName() const
 {
-    const Asset::EntityInstance* entity = GetPackage<Asset::EntityInstance>();
+    const Content::EntityInstance* entity = GetPackage<Content::EntityInstance>();
     Asset::EntityPtr entityClass = entity->GetEntity();
 
     tstring name = entityClass ? entityClass->GetShortName() : TXT( "" );
@@ -243,7 +243,7 @@ void Entity::Evaluate(GraphDirection direction)
 
 void Entity::Render( RenderVisitor* render )
 {
-    const Asset::EntityInstance* package = GetPackage< Asset::EntityInstance >();
+    const Content::EntityInstance* package = GetPackage< Content::EntityInstance >();
 
     if (IsPointerVisible())
     {
@@ -310,7 +310,7 @@ void Entity::DrawBounds( IDirect3DDevice9* device, DrawArgs* args, const SceneNo
 
     const Core::EntitySet* classSet = entity->GetClassSet();
 
-    const Asset::EntityInstance* package = entity->GetPackage< Asset::EntityInstance >();
+    const Content::EntityInstance* package = entity->GetPackage< Content::EntityInstance >();
 
     entity->SetMaterial( type->GetMaterial() );
 
@@ -324,7 +324,7 @@ bool Entity::Pick( PickVisitor* pick )
 
     Core::EntityType* type = Reflect::AssertCast<Core::EntityType>(m_NodeType);
 
-    const Asset::EntityInstance* package = GetPackage< Asset::EntityInstance >();
+    const Content::EntityInstance* package = GetPackage< Content::EntityInstance >();
 
     pick->SetFlag( PickFlags::IgnoreVertex, true );
 
@@ -411,12 +411,12 @@ void Entity::CreatePanel( CreatePanelArgs& args )
 
 tstring Entity::GetEntityAssetPath() const
 {
-    return GetPackage< Asset::EntityInstance >()->GetEntity()->GetPath().Get();
+    return GetPackage< Content::EntityInstance >()->GetEntity()->GetPath().Get();
 }
 
 void Entity::SetEntityAssetPath( const tstring& entityClass )
 {
-    Asset::EntityInstance* entity = GetPackage< Asset::EntityInstance >();
+    Content::EntityInstance* entity = GetPackage< Content::EntityInstance >();
 
     Helium::Path oldPath = entity->GetEntity()->GetPath();
     Helium::Path newPath( entityClass );

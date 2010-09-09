@@ -309,6 +309,73 @@ namespace Helium
 
             // client-configurable data
             ClientDataPtr       m_ClientData;
+
+            //
+            // Properties System
+            //
+        private:
+            mutable std::map< tstring, tstring > m_Properties;
+
+        public:
+
+            template<class T>
+            inline void SetProperty( const tstring& key, const T& value )
+            {
+                tostringstream str;
+                str << value;
+
+                if ( !str.fail() )
+                {
+                    SetProperty<tstring>( key, str.str() );
+                }
+            }
+
+            template<>
+            inline void SetProperty( const tstring& key, const tstring& value )
+            {
+                m_Properties[key] = value;
+            }
+
+            template<class T>
+            inline bool GetProperty( const tstring& key, T& value ) const
+            {
+                tstring strValue;
+                bool result = GetProperty<tstring>( key, strValue );
+
+                if ( result )
+                {
+                    tistringstream str( strValue );
+                    str >> value;
+                    return !str.fail();
+                }
+
+                return false;
+            }
+
+            template<>
+            inline bool GetProperty( const tstring& key, tstring& value ) const
+            {
+                std::map< tstring, tstring >::const_iterator found = m_Properties.find( key ); 
+                if ( found != m_Properties.end() )
+                {
+                    value = found->second;
+                    return true;
+                }
+
+                return false;
+            }
+
+            inline const tstring& GetProperty( const tstring& key ) const
+            {
+                std::map< tstring, tstring >::const_iterator found = m_Properties.find( key );
+                if ( found != m_Properties.end() )
+                {
+                    return found->second;
+                }
+
+                static tstring empty;
+                return empty;
+            }
         };
 
         typedef Helium::SmartPtr<Control> ControlPtr;

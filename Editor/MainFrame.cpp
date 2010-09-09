@@ -443,9 +443,7 @@ void MainFrame::SceneAdded( const SceneChangeArgs& args )
 
         m_ViewPanel->GetViewCanvas()->GetViewport().AddRenderListener( RenderSignature::Delegate( args.m_Scene, &Scene::Render ) );
 
-#ifdef INSPECT_REFACTOR
-        m_SelectionEnumerator->AddPopulateLinkListener( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Core::Scene::PopulateLink));
-#endif
+        m_PropertiesPanel->GetPropertiesGenerator().PopulateLink().Add( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Core::Scene::PopulateLink) );
 
         Document* document = m_SceneManager.GetDocumentManager().FindDocument( args.m_Scene->GetPath() );
         document->AddDocumentModifiedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
@@ -464,9 +462,7 @@ void MainFrame::SceneRemoving( const SceneChangeArgs& args )
 
     m_ViewPanel->GetViewCanvas()->GetViewport().RemoveRenderListener( RenderSignature::Delegate( args.m_Scene, &Scene::Render ) );
 
-#ifdef INSPECT_REFACTOR
-    m_SelectionEnumerator->RemovePopulateLinkListener( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Core::Scene::PopulateLink));
-#endif
+    m_PropertiesPanel->GetPropertiesGenerator().PopulateLink().Remove( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Core::Scene::PopulateLink));
 
     m_ViewPanel->GetViewCanvas()->Refresh();
 

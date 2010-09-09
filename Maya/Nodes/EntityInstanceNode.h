@@ -52,7 +52,7 @@ namespace Helium
     private:
         // private non-static members
         MPlug                 m_Plug;
-        Asset::EntityInstancePtr      m_Entity;
+        Content::EntityInstancePtr      m_Entity;
         Helium::TUID        m_UID; // cache the TUID here so we don't have to look it up on the backing entityPtr each time we do a comparison
         MCallbackId           m_AttributeChangedCB;
         MCallbackId           m_ChildAddedCB;
@@ -78,7 +78,7 @@ namespace Helium
             return m_UID;
         }
 
-        const Asset::EntityInstancePtr& GetEntity() const
+        const Content::EntityInstancePtr& GetEntity() const
         {
             return m_Entity;
         }
@@ -90,12 +90,12 @@ namespace Helium
 
         void GetArtFilePath( MString& artFilePath );
 
-        const Asset::EntityInstancePtr& GetBackingEntity()
+        const Content::EntityInstancePtr& GetBackingEntity()
         {
             return m_Entity;
         }
 
-        void SetBackingEntity( const Asset::EntityInstancePtr& entity );
+        void SetBackingEntity( const Content::EntityInstancePtr& entity );
         void UpdateBackingEntity();
 
         void Show( const EntityNode& instanceClassNode );

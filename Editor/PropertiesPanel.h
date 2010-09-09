@@ -26,6 +26,11 @@ namespace Helium
                 return m_PropertiesManager;
             }
 
+            Core::PropertiesGenerator& GetPropertiesGenerator()
+            {
+                return m_PropertiesGenerator;
+            }
+
             virtual void OnIntersection(wxCommandEvent& event) HELIUM_OVERRIDE;
             virtual void OnUnion(wxCommandEvent& event) HELIUM_OVERRIDE;
 

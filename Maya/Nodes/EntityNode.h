@@ -109,7 +109,7 @@ namespace Helium
         static EntityNode& Get( const Helium::Path& path, bool createIfNotExisting = true );
 
         // get/create an EntityNode, and an EntityInstanceNode for the given content Entity
-        static std::pair< EntityNode*, EntityInstanceNode* > CreateInstance( const Asset::EntityInstancePtr& entity );
+        static std::pair< EntityNode*, EntityInstanceNode* > CreateInstance( const Content::EntityInstancePtr& entity );
 
         // called when removing an instance
         static void RemoveInstance( EntityInstanceNode* entityNode );

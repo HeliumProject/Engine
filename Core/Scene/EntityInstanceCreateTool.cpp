@@ -61,11 +61,6 @@ EntityInstanceCreateTool::~EntityInstanceCreateTool()
     {
         s_RandomEntities.push_back( (*itr).m_OriginalValue );
     }
-
-    if ( m_ClassPath )
-    {
-        delete m_ClassPath;
-    }
 }
 
 Core::TransformPtr EntityInstanceCreateTool::CreateNode()
@@ -100,7 +95,7 @@ Core::TransformPtr EntityInstanceCreateTool::CreateNode()
             }
         }
 
-        EntityPtr entity = new Core::Entity (m_Scene, new Asset::EntityInstance( entityClassPath.Get() ) );
+        EntityPtr entity = new Core::Entity (m_Scene, new Content::EntityInstance( entityClassPath.Get() ) );
 
         entity->SetPointerVisible( s_PointerVisible );
         entity->SetBoundsVisible( s_BoundsVisible );
@@ -156,12 +151,7 @@ void EntityInstanceCreateTool::CreateProperties()
         m_Generator->PushContainer();
         {
             m_RandomEntityList = m_Generator->AddList< tstring >( new Helium::MemberProperty<Core::EntityInstanceCreateTool, tstring > (this, &EntityInstanceCreateTool::GetRandomEntity, &EntityInstanceCreateTool::SetRandomEntity) );
-
-#ifdef INSPECT_REFACTOR
-            Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( TXT( "*.entity.*" ) );
-            filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &EntityInstanceCreateTool::OnEntityDropped ) );
-            m_RandomEntityList->SetDropTarget( filteredDropTarget );
-#endif
+            m_RandomEntityList->SetProperty( TXT( "FileFilter" ), TXT( "*.entity.*" ) );
         }
         m_Generator->Pop();
 
@@ -192,7 +182,7 @@ void EntityInstanceCreateTool::CreateProperties()
 
     for ( std::vector< tstring >::iterator itr = s_RandomEntities.begin(), end = s_RandomEntities.end(); itr != end; ++itr )
     {
-        SetEntityAsset( *itr );
+        AddEntityAsset( *itr );
     }
 }
 
@@ -209,11 +199,7 @@ void EntityInstanceCreateTool::SetEntityAsset( const tstring& value )
 
 void EntityInstanceCreateTool::AddEntityAsset( const tstring& value )
 {
-    tstring entityName = TXT( "" );
-
     m_ClassPath.Set( value );
-
-    entityName = m_ClassPath.Filename();
 
     V_EntityRowInfo::const_iterator itr = m_RandomEntityInfo.begin();
     V_EntityRowInfo::const_iterator end = m_RandomEntityInfo.end();
@@ -221,15 +207,15 @@ void EntityInstanceCreateTool::AddEntityAsset( const tstring& value )
     {
         if ( (*itr).m_ClassPath.Hash() == m_ClassPath.Hash() )
         {
-            Log::Warning( TXT( "Entity '%s' already exists in the random list of entities.\n" ), entityName.c_str() );
+            Log::Warning( TXT( "Entity '%s' already exists in the random list of entities.\n" ), m_ClassPath.Filename().c_str() );
             return;
         }
     }
 
     EntityRowInfo rowInfo;
     rowInfo.m_ClassPath = m_ClassPath;
+    rowInfo.m_Name = m_ClassPath.Filename();
     rowInfo.m_Probability = 1.0f;
-    rowInfo.m_Name = entityName;
     rowInfo.m_OriginalValue = value;
     m_RandomEntityInfo.push_back( rowInfo );
 
@@ -294,48 +280,27 @@ tstring EntityInstanceCreateTool::GetRandomEntity() const
 
 void EntityInstanceCreateTool::SetRandomEntity( const tstring& entityName )
 {
+#pragma TODO( "Implement this once drag-n-drop is testable (CanvasStrip is implemented)" )
     HELIUM_BREAK();
 }
 
 void EntityInstanceCreateTool::OnDeleteClass( const Inspect::ButtonClickedArgs& args )
 {
-#ifdef INSPECT_REFACTOR
-    const std::vector< tstring >& selectedItems = m_RandomEntityList->a_SelectedItems.Get();
+    const std::set< size_t >& selectedItemIndices = m_RandomEntityList->a_SelectedItemIndices.Get();
 
-    V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin();
-    while ( itr != m_RandomEntityInfo.end() )
+    std::set< size_t >::const_reverse_iterator itr = selectedItemIndices.rbegin();
+    std::set< size_t >::const_reverse_iterator end = selectedItemIndices.rend();
+    for ( ; itr != end; ++itr )
     {
-        tstring currentName = (*itr).GetListName();
-
-        bool deleteItem = false;
-        std::vector< tstring >::const_iterator itemItr = selectedItems.begin();
-        std::vector< tstring >::const_iterator itemEnd = selectedItems.end();
-        for ( ; itemItr != itemEnd; ++itemItr )
+        EntityRowInfo& entityInfo = m_RandomEntityInfo[ *itr ];
+        if ( m_ClassPath.Hash() == entityInfo.m_ClassPath.Hash() )
         {
-            if ( *itemItr == currentName )
-            {
-                deleteItem = true;
-                break;
-            }
+            m_ClassPath.Set( TXT( "" ) );
+            Place( Math::Matrix4::Identity );
         }
 
-        if ( deleteItem )
-        {
-            if ( m_ClassPath.Hash() == ( *itr ).m_ClassPath.Hash() )
-            {
-                delete m_ClassPath;
-                Place( Math::Matrix4::Identity );
-            }
-
-            m_RandomEntityInfo.erase( itr );
-            itr = m_RandomEntityInfo.begin();
-        }
-        else
-        {
-            ++itr;
-        }
+        m_RandomEntityInfo.erase( m_RandomEntityInfo.begin() + *itr );
     }
-#endif
 
     m_Generator->GetContainer()->GetCanvas()->Read();
 
@@ -426,29 +391,3 @@ void EntityInstanceCreateTool::OnModify( const Inspect::ButtonClickedArgs& args 
 
     m_Generator->GetContainer()->GetCanvas()->Read();
 }
-
-#ifdef INSPECT_REFACTOR
-
-void EntityInstanceCreateTool::OnEntityDropped( const Inspect::FilteredDropTargetArgs& args )
-{
-    DropEntities( args.m_Paths, false );
-}
-
-void EntityInstanceCreateTool::DropEntities( const std::vector< tstring >& entities, bool appendToList )
-{
-    m_Generator->GetContainer()->GetCanvas()->Freeze();
-
-    if ( !appendToList )
-    {
-        m_RandomEntityInfo.clear();
-    }
-
-    for ( std::vector< tstring >::const_iterator itr = entities.begin(), end = entities.end(); itr != end; ++itr )
-    {
-        AddEntityAsset( *itr );
-    }
-
-    m_Generator->GetContainer()->GetCanvas()->Thaw();
-}
-
-#endif

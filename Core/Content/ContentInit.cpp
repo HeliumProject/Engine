@@ -10,6 +10,7 @@
 #include "Core/Content/Nodes/ContentPivotTransform.h"
 #include "Core/Content/Nodes/ContentJointTransform.h"
 
+#include "Core/Content/Nodes/ContentEntityInstance.h"
 #include "Core/Content/Nodes/ContentInstance.h"
 #include "Core/Content/Nodes/ContentLocator.h"
 #include "Core/Content/Nodes/ContentVolume.h"
@@ -63,6 +64,7 @@ void Content::Initialize()
         g_InitializerStack.Push( Reflect::RegisterClassType<JointTransform>( TXT( "JointTransform" ) ) );
 
         g_InitializerStack.Push( Reflect::RegisterClassType<Instance>( TXT( "Instance" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterClassType<EntityInstance>( TXT( "EntityInstance" ) ) );
 
         g_InitializerStack.Push( Reflect::RegisterEnumType<VolumeShapes::VolumeShape>( &VolumeShapes::VolumeShapeEnumerateEnum, TXT( "VolumeShape" ) ) );
         g_InitializerStack.Push( Reflect::RegisterClassType<Volume>( TXT( "Volume" ) ) );

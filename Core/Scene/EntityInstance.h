@@ -64,7 +64,7 @@ namespace Helium
 
 
             Entity(Core::Scene* parent);
-            Entity(Core::Scene* parent, Asset::EntityInstance* entity);
+            Entity(Core::Scene* parent, Content::EntityInstance* entity);
             virtual ~Entity();
 
             void ConstructorInit();

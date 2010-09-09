@@ -13,7 +13,7 @@ void ExportEntity::GatherMayaData( V_ExportBase &newExportObjects )
     MFnDagNode nodeFn (m_MayaObject);
 
     // doing a dangerous cast, because there should be no way for m_ContentObject to NOT be a Content::Volume
-    Asset::EntityInstance* entity = Reflect::DangerousCast< Asset::EntityInstance >( m_ContentObject );
+    Content::EntityInstance* entity = Reflect::DangerousCast< Content::EntityInstance >( m_ContentObject );
 
     entity->m_DefaultName = nodeFn.name().asTChar();
 

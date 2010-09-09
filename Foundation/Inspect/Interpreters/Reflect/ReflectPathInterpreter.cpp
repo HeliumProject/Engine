@@ -78,11 +78,8 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
                 }
                 container->AddChild( fileDialogButton );
 
-#ifdef INSPECT_REFACTOR
-                Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( m_FileFilter );
-                filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &PathInterpreter::OnDrop ) );
-                value->SetDropTarget( filteredDropTarget );
-#endif
+                value->SetProperty( TXT( "FileFilter" ), m_FileFilter );
+
                 m_Value = value;
             }
 
@@ -242,15 +239,3 @@ void PathInterpreter::Edit( const ButtonClickedArgs& args )
         g_EditFilePath.Raise( EditFilePathArgs( str ) );
     }
 }
-
-#ifdef INSPECT_REFACTOR
-
-void PathInterpreter::OnDrop( const Inspect::FilteredDropTargetArgs& args )
-{
-    if ( args.m_Paths.size() )
-    {
-        m_Value->SetText( args.m_Paths[ 0 ] );
-    }
-}
-
-#endif

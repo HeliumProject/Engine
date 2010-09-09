@@ -244,7 +244,7 @@ EntityNode& EntityNode::Get( const Helium::Path& path, bool createIfNotExisting 
     return EntityNode::Null;
 }
 
-std::pair< EntityNode*, EntityInstanceNode*> EntityNode::CreateInstance( const Asset::EntityInstancePtr& entity )
+std::pair< EntityNode*, EntityInstanceNode*> EntityNode::CreateInstance( const Content::EntityInstancePtr& entity )
 {
     EntityNode* artClass = &Get( entity->GetEntity()->GetPath() );
     M_EntityNode::iterator instItor = artClass->m_Instances.find( entity->m_ID );

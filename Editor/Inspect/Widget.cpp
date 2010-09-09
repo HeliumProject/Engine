@@ -1,6 +1,8 @@
 #include "Precompile.h"
 #include "Widget.h"
 
+#include "Editor/FileDropTarget.h"
+
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -101,6 +103,14 @@ void Widget::SetWindow( wxWindow* window )
         m_Control->a_ForegroundColor.Changed().AddMethod( this, &Widget::ForegroundColorChanged );
         m_Control->a_BackgroundColor.Changed().AddMethod( this, &Widget::BackgroundColorChanged );
         m_Control->a_ToolTip.Changed().AddMethod( this, &Widget::ToolTipChanged );
+
+        if ( !m_Control->GetProperty( TXT( "FileFilter" ) ).empty() )
+        {
+            const tstring& filter = m_Control->GetProperty( TXT( "FileFilter" ) );
+
+            FileDropTarget* dropTarget = new FileDropTarget( filter );
+            m_Window->SetDropTarget( dropTarget );
+        }
     }
 }
 

@@ -338,7 +338,7 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
 
     if ( data->HasType( Reflect::GetType<Asset::Entity>() ) )
     {
-        createdNode = new Core::Entity( this, Reflect::DangerousCast< Asset::EntityInstance >( data ) );
+        createdNode = new Core::Entity( this, Reflect::DangerousCast< Content::EntityInstance >( data ) );
     }
     else if ( data->HasType( Reflect::GetType<Content::Volume>() ) )
     {

@@ -6,10 +6,6 @@
 #include "Foundation/Inspect/Data.h"
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 
-#ifdef INSPECT_REFACTOR
-#include "Foundation/Inspect/DragDrop/FilteredDropTarget.h"
-#endif
-
 #include "EntityInstance.h"
 
 namespace Helium
@@ -31,9 +27,6 @@ namespace Helium
             void OnEntityAssetRefresh( const Inspect::ButtonClickedArgs& args );
             void OnEntityAssetEditAsset( const Inspect::ButtonClickedArgs& args );
             void OnEntityAssetEditArt( const Inspect::ButtonClickedArgs& args );
-#if INSPECT_REFACTOR
-            void OnEntityAssetDrop( const Inspect::FilteredDropTargetArgs& args );
-#endif
         };
     }
 }

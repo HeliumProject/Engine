@@ -260,6 +260,6 @@ namespace Helium
             }
         };
 
-        typedef Helium::SmartPtr<PropertiesGenerator> EnumeratorPtr;
+        typedef Helium::SmartPtr<PropertiesGenerator> GeneratorPtr;
     }
 }

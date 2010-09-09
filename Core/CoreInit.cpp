@@ -20,8 +20,6 @@ void Core::Initialize()
         g_InitStack.Push( &Asset::Initialize,       &Asset::Cleanup );
         g_InitStack.Push( &Core::SceneInitialize,   &Core::SceneCleanup );
 
-        g_InitStack.Push( Reflect::RegisterClassType<Core::ProjectFile>( TXT("ProjectFile") ) );
-        g_InitStack.Push( Reflect::RegisterClassType<Core::ProjectFolder>( TXT("ProjectFolder") ) );
         g_InitStack.Push( Reflect::RegisterClassType<Core::Project>( TXT("Project") ) );
     }
 }

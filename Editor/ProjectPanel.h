@@ -15,9 +15,8 @@ namespace Helium
         public:
             void SetProject( Helium::Core::Project* project );
 
-            // Document event handlers
-            void ChildAdded( const Reflect::DocumentHierarchyChangeArgs& args );
-            void ChildRemoved( const Reflect::DocumentHierarchyChangeArgs& args );
+            void PathAdded( const Path& path );
+            void PathRemoved( const Path& path );
 
             // wxDataModel virtual interface
             unsigned int GetColumnCount() const HELIUM_OVERRIDE;
@@ -44,16 +43,15 @@ namespace Helium
             void SetProject( Helium::Core::Project* project );
 
             // UI event handlers
-			virtual void OnAddFile( wxCommandEvent& event ) HELIUM_OVERRIDE;
-			virtual void OnCreateFolder( wxCommandEvent& event ) HELIUM_OVERRIDE;
+			virtual void OnAddPath( wxCommandEvent& event ) HELIUM_OVERRIDE;
 			virtual void OnDelete( wxCommandEvent& event ) HELIUM_OVERRIDE;
 
             virtual void OnDroppedFiles( const FileDroppedArgs& args );
 
         protected:
             Helium::Core::ProjectPtr                            m_Project;
-            wxObjectDataPtr<ProjectViewModel>                   m_Model;
-            Helium::OrderedSet< Reflect::DocumentElementPtr >   m_Selected;
+            wxObjectDataPtr< ProjectViewModel >                 m_Model;
+            Helium::OrderedSet< Path* >                         m_Selected;
             FileDropTarget*                                     m_DropTarget;
         };
     }

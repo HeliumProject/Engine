@@ -60,7 +60,6 @@ namespace Helium
 					ID_NewScene = 1000,
 					ID_NewEntity,
 					ID_NewProject,
-					ID_Open,
 					ID_Close,
 					ID_SaveAll,
 					ID_Import,
@@ -103,7 +102,6 @@ namespace Helium
 				virtual void OnNewScene( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnNewEntity( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnNewProject( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnOpen( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnClose( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnSaveAll( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnImport( wxCommandEvent& event ) { event.Skip(); }
@@ -260,13 +258,11 @@ namespace Helium
 			protected:
 				wxPanel* m_ProjectManagementPanel;
 				wxBitmapButton* m_AddFile;
-				wxBitmapButton* m_CreateFolder;
 				wxBitmapButton* m_Delete;
 				wxDataViewCtrl* m_DataViewCtrl;
 				
 				// Virtual event handlers, overide them in your derived class
-				virtual void OnAddFile( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnCreateFolder( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnAddPath( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnDelete( wxCommandEvent& event ) { event.Skip(); }
 				
 			
@@ -310,8 +306,12 @@ namespace Helium
 			private:
 			
 			protected:
+				enum
+				{
+					ID_Open = 1000,
+				};
+				
 				wxPanel* m_MainPanel;
-				wxBitmapButton* m_NewSceneButton;
 				wxBitmapButton* m_OpenButton;
 				
 				wxPanel* m_ToolsPanel;
@@ -322,7 +322,6 @@ namespace Helium
 				wxPanel* m_ToolsPropertiesPanel;
 				
 				// Virtual event handlers, overide them in your derived class
-				virtual void OnNewScene( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnOpen( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnSearchGoButtonClick( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnSearchTextEnter( wxCommandEvent& event ) { event.Skip(); }

@@ -17,6 +17,38 @@ namespace Helium
 {
     namespace Editor
     {
+
+        ///////////////////////////////////////////////////////////////////////
+        namespace OverlayQuadrants
+        {
+            enum OverlayQuadrant
+            {
+                TopLeft     = 0,
+                TopRight,
+                BottomLeft,
+                BottomRight,
+            };
+        }
+        typedef OverlayQuadrants::OverlayQuadrant OverlayQuadrant;
+        typedef std::map< OverlayQuadrant, tstring > M_OverlayQuadrants;
+
+        ///////////////////////////////////////////////////////////////////////
+        class IconArtFile
+        {
+        public:
+            tstring m_Filename;
+            M_OverlayQuadrants m_Overlays;
+
+        public:
+            IconArtFile( const tstring& filename );
+
+            IconArtFile& AddOverlay( const tchar* filename, OverlayQuadrants::OverlayQuadrant quadrant = OverlayQuadrants::BottomRight );
+
+            static void CalculatePlacement( wxImage &target_image, const wxImage &source_image, OverlayQuadrants::OverlayQuadrant quadrant, int &x, int &y );
+            static void Paste( wxImage &target_image, const wxImage &source_image, int &x, int &y, bool blendAlpha = false );
+        };
+
+        ///////////////////////////////////////////////////////////////////////
         namespace ArtIDs
         {
             static const wxChar* Unknown = wxART_MAKE_ART_ID( HELIUM_ART_ID_UNKNOWN );
@@ -29,6 +61,7 @@ namespace Helium
             {
                 static const wxChar* Create = wxART_MAKE_ART_ID( HELIUM_ART_ID_VERB_CREATE );
                 static const wxChar* Add = wxART_MAKE_ART_ID( HELIUM_ART_ID_VERB_ADD );
+                static const wxChar* Edit = wxART_MAKE_ART_ID( HELIUM_ART_ID_VERB_EDIT );
                 static const wxChar* Delete = wxART_MAKE_ART_ID( HELIUM_ART_ID_VERB_DELETE );
                 static const wxChar* Select = wxART_MAKE_ART_ID( HELIUM_ART_ID_VERB_SELECT );
                 static const wxChar* Refresh = wxART_MAKE_ART_ID( HELIUM_ART_ID_VERB_REFRESH );
@@ -156,13 +189,13 @@ namespace Helium
             static const wxChar* Vault = wxART_MAKE_ART_ID( EDITOR_ART_ID_VAULT );
         }
 
-        /////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
         class ArtProviderCache;
 
         class ArtProvider : public wxArtProvider
         {
         public:
-            static wxSize DefaultImageSize;
+            static wxSize DefaultIconSize;
 
             ArtProvider();
             virtual ~ArtProvider();
@@ -175,7 +208,7 @@ namespace Helium
             virtual void Create();
 
         protected:
-            typedef std::map< wxArtID, tstring > M_ArtIDToFilename;
+            typedef std::map< wxArtID, IconArtFile > M_ArtIDToFilename;
             M_ArtIDToFilename m_ArtIDToFilename;
 
             ArtProviderCache *m_ArtProviderCache;    

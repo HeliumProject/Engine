@@ -5,10 +5,6 @@
 
 #include "Foundation/FileDialog.h"
 
-#ifdef INSPECT_REFACTOR
-#include "Foundation/Inspect/DragDrop/FilteredDropTarget.h"
-#endif
-
 namespace Helium
 {
     namespace Inspect
@@ -27,11 +23,6 @@ namespace Helium
             // callbacks
             void DataChanging( const DataChangingArgs& args );
             void Edit( const ButtonClickedArgs& args );
-
-#ifdef INSPECT_REFACTOR
-            void OnDrop( const Inspect::FilteredDropTargetArgs& args );
-#endif
-
 
         protected:
             tstring m_FileFilter;

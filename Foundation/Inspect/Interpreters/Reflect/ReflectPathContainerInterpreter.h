@@ -31,13 +31,8 @@ namespace Helium
             void OnMoveUp( const ButtonClickedArgs& args );
             void OnMoveDown( const ButtonClickedArgs& args );
 
-#ifdef INSPECT_REFACTOR
-            void OnDrop( const Inspect::FilteredDropTargetArgs& args );
-#endif
-
             FileDialogSignature::Delegate d_OpenFileDialog;
         private:
-            tstring        m_FileFilter;
             Inspect::List* m_List;
         };
 

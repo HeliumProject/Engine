@@ -53,11 +53,7 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SelectableDumb
             fileButton->a_IsEnabled.Set( false );
         }
 
-#ifdef INSPECT_REFACTOR
-        Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( filter );
-        filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &EntityPanel::OnEntityAssetDrop ) );
-        m_EntityPath->SetDropTarget( filteredDropTarget );
-#endif
+        m_EntityPath->SetProperty( TXT( "FileFilter" ), filter );
     }
     m_Generator->Pop();
 
@@ -235,13 +231,3 @@ void EntityPanel::OnEntityAssetEditAsset( const Inspect::ButtonClickedArgs& args
 void EntityPanel::OnEntityAssetEditArt( const Inspect::ButtonClickedArgs& args )
 {
 }
-
-#if INSPECT_REFACTOR
-void EntityPanel::OnEntityAssetDrop( const Inspect::FilteredDropTargetArgs& args )
-{
-    if ( args.m_Paths.size() )
-    {
-        m_EntityPath->WriteStringData( args.m_Paths[ 0 ] );
-    }
-}
-#endif

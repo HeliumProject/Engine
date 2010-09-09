@@ -1,9 +1,5 @@
 #include "ReflectPathContainerInterpreter.h"
 
-#ifdef INSPECT_REFACTOR
-#include "Foundation/Inspect/DragDrop/FilteredDropTarget.h"
-#endif
-
 #include "Foundation/Inspect/Controls/LabelControl.h"
 #include "Foundation/Inspect/Controls/ValueControl.h"
 #include "Foundation/Inspect/Controls/ChoiceControl.h"
@@ -24,7 +20,6 @@ using namespace Helium::Inspect;
 PathContainerInterpreter::PathContainerInterpreter (Container* labelContainer)
 : ReflectFieldInterpreter (labelContainer)
 , m_List( NULL )
-, m_FileFilter( TXT( "" ) )
 {
 
 }
@@ -67,12 +62,12 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
     ButtonPtr downButton;
     if ( !(field->m_Flags & FieldFlags::ReadOnly) )
     {
+        tstring filter;
+        field->GetProperty( TXT("FileFilter"), filter );
+
         addButton = CreateControl< Button >();
         if ( isContainer )
         {
-            tstring filter;
-            field->GetProperty( TXT("FileFilter"), filter );
-
             // Add button - normal file open dialog
             addButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &PathContainerInterpreter::OnAddFile ) );
             addButton->SetClientData( new ClientDataFilter( list, instances.front()->GetType(), filter ) );
@@ -114,11 +109,7 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
             downButton->SetClientData( new ClientData( list ) );
         }
 
-#ifdef INSPECT_REFACTOR
-        Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( m_FinderSpec );
-        filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &PathContainerInterpreter::OnDrop ) );
-        m_List->SetDropTarget( filteredDropTarget );
-#endif
+        m_List->SetProperty( TXT( "FileFilter" ), filter );
     }
 
     // add the buttons to the container
@@ -307,20 +298,3 @@ void PathContainerInterpreter::OnMoveDown( const ButtonClickedArgs& args )
 #endif
     }
 }
-
-#ifdef INSPECT_REFACTOR
-void PathContainerInterpreter::OnDrop( const Inspect::FilteredDropTargetArgs& args )
-{
-    if ( args.m_Paths.size() )
-    {
-        m_List->Freeze();
-        for ( std::vector< tstring >::const_iterator itr = args.m_Paths.begin(), end = args.m_Paths.end();
-            itr != end; ++itr )
-        {
-            m_List->AddItem( *itr );
-        }
-        m_List->Read();
-        m_List->Thaw();
-    }
-}
-#endif

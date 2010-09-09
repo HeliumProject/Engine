@@ -2,10 +2,6 @@
 
 #include "Foundation/TUID.h"
 
-#ifdef INSPECT_REFACTOR
-#include "Foundation/Inspect/DragDrop/FilteredDropTarget.h"
-#endif
-
 #include "Core/API.h"
 #include "Core/Scene/CreateTool.h"
 #include "Core/Scene/EntityInstance.h"
@@ -79,11 +75,6 @@ namespace Helium
             void OnClear(const Inspect::ButtonClickedArgs& args);
             void OnNormalize(const Inspect::ButtonClickedArgs& args);
             void OnModify(const Inspect::ButtonClickedArgs& args);
-
-#ifdef INSPECT_REFACTOR
-            void OnEntityDropped( const Inspect::FilteredDropTargetArgs& args );
-            void DropEntities( const std::vector< tstring >& entities, bool appendToList );
-#endif
         };
     }
 }

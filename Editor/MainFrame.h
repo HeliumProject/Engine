@@ -121,7 +121,6 @@ namespace Helium
             virtual void OnNewScene( wxCommandEvent& event ) HELIUM_OVERRIDE;
             virtual void OnNewEntity( wxCommandEvent& event ) HELIUM_OVERRIDE;
             virtual void OnNewProject( wxCommandEvent& event ) HELIUM_OVERRIDE;
-            virtual void OnOpen( wxCommandEvent& event ) HELIUM_OVERRIDE;
             virtual void OnClose( wxCommandEvent& event ) HELIUM_OVERRIDE;
             virtual void OnSaveAll( wxCommandEvent& event ) HELIUM_OVERRIDE;
 

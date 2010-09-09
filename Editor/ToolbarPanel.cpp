@@ -5,6 +5,9 @@
 
 #include "EditorIDs.h"
 
+#include "Editor/App.h"
+#include "Editor/FileDialog.h"
+
 using namespace Helium;
 using namespace Helium::Core;
 using namespace Helium::Editor;
@@ -22,7 +25,6 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
     {
         Freeze();
 
-        m_NewSceneButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Scene ) );
         m_OpenButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Open ) );
 
         m_PlayButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Play ) );
@@ -33,7 +35,6 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
         Thaw();
     }
 
-    m_NewSceneButton->SetHelpText( TXT( "New Scene\n\nClicking this will create a new scene." ) );
     m_OpenButton->SetHelpText( TXT( "Open\n\nClicking this button will bring up a file browser, allowing you to open files in the editor." ) );
 
     m_PlayButton->SetHelpText( TXT( "Play\n\nClicking this will start the game in the editing window." ) );
@@ -91,4 +92,14 @@ void ToolbarPanel::ToggleTool( i32 selectedTool )
 void ToolbarPanel::OnToggleToolButton( wxCommandEvent& event )
 {
     GetParent()->GetEventHandler()->ProcessEvent( wxCommandEvent ( wxEVT_COMMAND_MENU_SELECTED, event.GetId() ) );
+}
+
+void ToolbarPanel::OnOpen( wxCommandEvent& event )
+{
+    FileDialog openDlg( this, TXT( "Open" ) );
+
+    if ( openDlg.ShowModal() == wxID_OK )
+    {
+        wxGetApp().GetFrame()->OpenProject( (const wxChar*)openDlg.GetPath().c_str() );
+    }
 }

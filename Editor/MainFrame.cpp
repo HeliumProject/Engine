@@ -25,8 +25,8 @@
 
 #include "Editor/App.h"
 #include "Editor/EditorIDs.h"
-#include "Editor/ArtProvider.h"
 #include "Editor/FileDialog.h"
+#include "Editor/ArtProvider.h"
 #include "Editor/SettingsDialog.h"
 #include "Editor/WindowSettings.h"
 #include "Editor/Clipboard/ClipboardFileList.h"
@@ -793,16 +793,6 @@ bool MainFrame::DoOpen( const tstring& path )
         }
     }
     return opened;
-}
-
-void MainFrame::OnOpen( wxCommandEvent& event )
-{
-    FileDialog openDlg( this, TXT( "Open" ) );
-
-    if ( openDlg.ShowModal() == wxID_OK )
-    {
-        OpenProject( (const wxChar*)openDlg.GetPath().c_str() );
-    }
 }
 
 void MainFrame::OnClose( wxCommandEvent& event )

@@ -63,16 +63,16 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SelectableDumb
 
         Inspect::Button* refreshButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityPanel::OnEntityAssetRefresh ) );
         refreshButton->a_Icon.Set( TXT( "actions/view-refresh" ) );
-        refreshButton->a_ToolTip.Set( TXT( "Refresh" ) );
+        refreshButton->a_HelpText.Set( TXT( "Refresh" ) );
 
         Inspect::Button* lunaButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityPanel::OnEntityAssetEditAsset ) );
         lunaButton->a_Icon.Set( TXT( "asset_editor" ) );
-        lunaButton->a_ToolTip.Set( TXT( "Edit this entity class in Editor's Asset Editor" ) );
+        lunaButton->a_HelpText.Set( TXT( "Edit this entity class in Editor's Asset Editor" ) );
 
         Inspect::Button* mayaButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityPanel::OnEntityAssetEditArt ) );
         mayaButton->a_IsEnabled.Set( m_Selection.Size() == 1 );
         mayaButton->a_Icon.Set( TXT( "maya" ) );
-        mayaButton->a_ToolTip.Set( TXT( "Edit this entity class's art in Maya" ) );
+        mayaButton->a_HelpText.Set( TXT( "Edit this entity class's art in Maya" ) );
     }
     m_Generator->Pop();
 

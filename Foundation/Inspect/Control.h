@@ -18,7 +18,7 @@ namespace Helium
 
         const static tchar ATTR_VALUE_TRUE[]    = TXT( "true" );
         const static tchar ATTR_VALUE_FALSE[]   = TXT( "false" );
-        const static tchar ATTR_TOOLTIP[]       = TXT( "tooltip" );
+        const static tchar ATTR_HELPTEXT[]      = TXT( "helptext" );
 
         //
         // Event Args and Signatures
@@ -277,7 +277,7 @@ namespace Helium
             Attribute< f32 >                        a_ProportionalWidth;      // are we proportional along an axis?
             Attribute< f32 >                        a_ProportionalHeight;
             Attribute< tstring >                    a_Default;                // the default value
-            Attribute< tstring >                    a_ToolTip;                // the tool tip for this control
+            Attribute< tstring >                    a_HelpText;               // the help text for this control
             
             mutable ControlSignature::Event         e_Realized;               // upon realization of the control
             mutable ControlSignature::Event         e_Unrealized;

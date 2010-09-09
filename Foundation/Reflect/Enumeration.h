@@ -16,15 +16,16 @@ namespace Helium
             u32         m_Value;  // the value of the element
             tstring     m_Name;   // the name of the element
             tstring     m_Label;  // the label (friendly name) of the element
+            tstring     m_HelpText; // the help text for the element
 
         protected:
             // for where the friendly name (used for UI AND serialization) is not the real name
-            EnumerationElement( u32 value, const tstring& name, const tstring& label );
+            EnumerationElement( u32 value, const tstring& name, const tstring& label, const tstring& helpText = TXT( "FIXME: SET THE HELP TEXT FOR THIS ENUMERATION ELEMENT" ) );
             virtual ~EnumerationElement();
 
         public:
             // protect external allocation to keep inlined code in this dll
-            static EnumerationElement* Create( u32 value, const tstring& name, const tstring& label );
+            static EnumerationElement* Create( u32 value, const tstring& name, const tstring& label, const tstring& helpText = TXT( "FIXME: SET THE HELP TEXT FOR THIS ENUMERATION ELEMENT" ) );
         };
 
         typedef Helium::SmartPtr<EnumerationElement> EnumerationElementPtr;
@@ -78,7 +79,7 @@ namespace Helium
             // Element data
             //
 
-            void AddElement(u32 value, const tstring& name, tstring label = TXT("") );
+            void AddElement(u32 value, const tstring& name, const tstring& label = TXT(""), const tstring& helpText = TXT( "FIXME: SET THE HELP TEXT FOR THIS ENUMERATION ELEMENT" ) );
 
             bool GetElementValue(const tstring& label, u32& value) const;
             bool GetElementLabel(const u32 value, tstring& label) const;

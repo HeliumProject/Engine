@@ -29,6 +29,7 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
     HELIUM_ASSERT( converted );
 
     label->BindText( temp );
+    label->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
 
     container->AddChild( label );
 
@@ -68,6 +69,8 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
             ColorPickerPtr colorPicker = CreateControl<ColorPicker>();
             container->AddChild( colorPicker );
 
+            colorPicker->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
+
             bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;
             colorPicker->a_IsReadOnly.Set( readOnly );
 
@@ -88,10 +91,12 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
                 slider->a_Min.Set( 0.0 );
                 slider->a_Max.Set( 255.0f );
                 slider->a_IsReadOnly.Set( readOnly );
+                slider->a_HelpText.Set( TXT( "Sets the alpha value for the color." ) );
 
                 ValuePtr value = CreateControl<Value>();
                 container->AddChild( value );
                 value->a_IsReadOnly.Set( readOnly );
+                value->a_HelpText.Set( TXT( "Sets the alpha value for the color." ) );
 
                 std::vector<Serializer*> alphaSer;
                 std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
@@ -123,10 +128,12 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
                 slider->a_Min.Set( 0.0 );
                 slider->a_Max.Set( 8.0 );
                 slider->a_IsReadOnly.Set( readOnly );
+                slider->a_HelpText.Set( TXT( "Adjusts the HDR value of the color." ) );
 
                 ValuePtr value = CreateControl<Value>();
                 container->AddChild( value );
                 value->a_IsReadOnly.Set( readOnly );
+                value->a_HelpText.Set( TXT( "Adjusts the HDR value of the color." ) );
 
                 std::vector<Serializer*> intensitySer;
                 std::vector<Reflect::Element*>::const_iterator itr = instances.begin();

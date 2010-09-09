@@ -64,6 +64,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
                 HELIUM_ASSERT( converted );
             }
 
+            choice->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
             choice->a_Items.Set( items );
             choice->a_IsDropDown.Set( true );
             choice->a_IsReadOnly.Set( readOnly );
@@ -76,12 +77,14 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
             {
                 CheckBoxPtr checkBox = CreateControl<CheckBox>();
                 checkBox->a_IsReadOnly.Set( readOnly );
+                checkBox->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
                 container->AddChild( checkBox );
             }
             else
             {
                 ValuePtr value = CreateControl<Value>();
                 value->a_IsReadOnly.Set( readOnly );
+                value->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
                 container->AddChild( value );
             }
         }
@@ -115,6 +118,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
         HELIUM_ASSERT( converted );
 
         label->BindText( temp );
+        label->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
 
         container->InsertChild(0, label);
     }

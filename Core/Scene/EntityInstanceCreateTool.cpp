@@ -124,19 +124,19 @@ void EntityInstanceCreateTool::CreateProperties()
             m_FileButtonAdd->a_Icon.Set( TXT( "ellipses_add" ) );
 
             Inspect::Button* modifyButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnModify ) );
-            modifyButton->a_ToolTip.Set( TXT( "Modify" ) );
+            modifyButton->a_HelpText.Set( TXT( "Modify" ) );
             modifyButton->a_Icon.Set( TXT( "percent" ) );
 
             Inspect::Button* normalizeButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnNormalize ) );
-            normalizeButton->a_ToolTip.Set( TXT( "Normalize" ) );
+            normalizeButton->a_HelpText.Set( TXT( "Normalize" ) );
             normalizeButton->a_Icon.Set( TXT( "normalize" ) );
 
             Inspect::Button* deleteButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnDeleteClass ) );
-            deleteButton->a_ToolTip.Set( TXT( "Delete" ) );
+            deleteButton->a_HelpText.Set( TXT( "Delete" ) );
             deleteButton->a_Icon.Set( TXT( "actions/list-remove" ) );
 
             Inspect::Button*  clearButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnClear ) );
-            clearButton->a_ToolTip.Set( TXT( "Clear" ) );
+            clearButton->a_HelpText.Set( TXT( "Clear" ) );
             clearButton->a_Icon.Set( TXT( "delete" ) );
 
             tstring filter;

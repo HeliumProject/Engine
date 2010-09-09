@@ -141,9 +141,9 @@ void Control::SetContextMenu(const ContextMenuPtr& contextMenu)
 
 bool Control::Process(const tstring& key, const tstring& value)
 {
-    if ( key == ATTR_TOOLTIP )
+    if ( key == ATTR_HELPTEXT )
     {
-        a_ToolTip.Set(value);
+        a_HelpText.Set(value);
 
         return true;
     }

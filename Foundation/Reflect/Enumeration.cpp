@@ -2,10 +2,11 @@
 
 using namespace Helium::Reflect;
 
-EnumerationElement::EnumerationElement(u32 value, const tstring& name, const tstring& label)
-: m_Value (value)
-, m_Name (name)
-, m_Label (label)
+EnumerationElement::EnumerationElement( u32 value, const tstring& name, const tstring& label, const tstring& helpText )
+: m_Value( value )
+, m_Name( name )
+, m_Label( label )
+, m_HelpText( helpText )
 {
 
 }
@@ -15,9 +16,9 @@ EnumerationElement::~EnumerationElement()
 
 }
 
-EnumerationElement* EnumerationElement::Create(u32 value, const tstring& name, const tstring& label)
+EnumerationElement* EnumerationElement::Create( u32 value, const tstring& name, const tstring& label, const tstring& helpText )
 {
-    return new EnumerationElement( value, name, label );
+    return new EnumerationElement( value, name, label, helpText );
 }
 
 bool Enumeration::Equals(const Enumeration* rhs) const
@@ -66,21 +67,16 @@ Enumeration* Enumeration::Create()
     return new Enumeration();
 }
 
-void Enumeration::AddElement(u32 value, const tstring& name, tstring label)
+void Enumeration::AddElement( u32 value, const tstring& name, const tstring& label, const tstring& helpText )
 {
-    if (label.empty())
-    {
-        label = name;
-    }
-
     HELIUM_ASSERT(m_ElementsByName.find(name) == m_ElementsByName.end());
-    HELIUM_ASSERT(m_ElementsByLabel.find(label) == m_ElementsByLabel.end());
+    HELIUM_ASSERT(m_ElementsByLabel.find( label.empty() ? name : label ) == m_ElementsByLabel.end());
 
-    EnumerationElementPtr elem = EnumerationElement::Create(value, name, label);
+    EnumerationElementPtr elem = EnumerationElement::Create( value, name, label, helpText );
 
     m_Elements.push_back(elem);
     m_ElementsByName[ name ] = elem;
-    m_ElementsByLabel[ label ] = elem;
+    m_ElementsByLabel[ label.empty() ? name : label ] = elem;
     m_ElementsByValue[ value ] = elem;
 }
 

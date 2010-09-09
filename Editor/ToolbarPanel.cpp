@@ -81,7 +81,6 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
         }
 
         wxBitmapToggleButton* btn = new wxBitmapToggleButton( typePanel, info->m_ID, wxArtProvider::GetBitmap( info->m_Bitmap, wxART_OTHER, wxSize( 16, 16 ) ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-        btn->SetToolTip( info->m_Description );
         btn->SetHelpText( info->m_Description );
 
         // connect its event handler to us

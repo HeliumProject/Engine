@@ -32,6 +32,8 @@ void ReflectArrayInterpreter::InterpretField(const Field* field, const std::vect
     ContainerPtr labelContainer = new Container ();
     parent->AddChild( labelContainer );
     LabelPtr label = CreateControl< Label >();
+    label->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
+
     labelContainer->AddChild( label );
     tstring temp;
     bool converted = Helium::ConvertString( field->m_UIName, temp );
@@ -42,6 +44,7 @@ void ReflectArrayInterpreter::InterpretField(const Field* field, const std::vect
     ContainerPtr listContainer = new Container ();
     parent->AddChild( listContainer );
     ListPtr list = CreateControl<List>();
+    list->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
     listContainer->AddChild( list );
 
     // create the buttons
@@ -110,6 +113,7 @@ ButtonPtr ReflectArrayInterpreter::AddAddButton( List* list )
     addButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &ReflectArrayInterpreter::OnAdd ) );
     addButton->SetClientData( new ClientData( list ) );
     addButton->a_Label.Set( TXT( "Add" ) );
+    addButton->a_HelpText.Set( TXT( "Add an item to the list." ) );
 
     return addButton;
 }
@@ -120,6 +124,7 @@ ButtonPtr ReflectArrayInterpreter::AddRemoveButton( List* list )
     removeButton->a_Label.Set( TXT( "Remove" ) );
     removeButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &ReflectArrayInterpreter::OnRemove ) );
     removeButton->SetClientData( new ClientData( list ) );
+    removeButton->a_HelpText.Set( TXT( "Remove the selected item(s) from the list." ) );
 
     return removeButton;
 }
@@ -130,6 +135,7 @@ ButtonPtr ReflectArrayInterpreter::AddMoveUpButton( List* list )
     upButton->a_Icon.Set( TXT( "actions/go-up" ) );
     upButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &ReflectArrayInterpreter::OnMoveUp ) );
     upButton->SetClientData( new ClientData( list ) );
+    upButton->a_HelpText.Set( TXT( "Move the selected item(s) up the list." ) );
 
     return upButton;
 }
@@ -140,6 +146,7 @@ ButtonPtr ReflectArrayInterpreter::AddMoveDownButton( List* list )
     downButton->a_Icon.Set( TXT( "actions/go-down" ) );
     downButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &ReflectArrayInterpreter::OnMoveDown ) );
     downButton->SetClientData( new ClientData( list ) );
+    downButton->a_HelpText.Set( TXT( "Move the selected item(s) down the list." ) );
 
     return downButton;
 }

@@ -18,7 +18,7 @@ namespace Helium
             wxString GetLabel() const;
             void SetLabel(const wxString& label);
 
-            void UpdateToolTip( const wxString& toolTip );
+            void UpdateHelpText( const wxString& helpText );
 
             virtual bool SetForegroundColour(const wxColour& color) HELIUM_OVERRIDE;
             virtual bool SetBackgroundColour(const wxColour& color) HELIUM_OVERRIDE;
@@ -50,7 +50,7 @@ namespace Helium
             virtual bool Write() HELIUM_OVERRIDE;
 
             // Editor::Widget
-            virtual void ToolTipChanged( const Attribute<tstring>::ChangeArgs& args ) HELIUM_OVERRIDE;
+            virtual void HelpTextChanged( const Attribute<tstring>::ChangeArgs& args ) HELIUM_OVERRIDE;
 
         protected:
             Inspect::Label*     m_LabelControl;

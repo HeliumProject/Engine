@@ -40,7 +40,7 @@ namespace Helium
             virtual void IsHiddenChanged( const Attribute<bool>::ChangeArgs& args );
             virtual void ForegroundColorChanged( const Attribute<u32>::ChangeArgs& args );
             virtual void BackgroundColorChanged( const Attribute<u32>::ChangeArgs& args );
-            virtual void ToolTipChanged( const Attribute<tstring>::ChangeArgs& args );
+            virtual void HelpTextChanged( const Attribute<tstring>::ChangeArgs& args );
 
         protected:
             wxWindow*           m_Window;

@@ -41,10 +41,10 @@ void LabelWindow::SetLabel(const wxString& label)
     m_StaticText->SetLabel(label);
 }
 
-void LabelWindow::UpdateToolTip( const wxString& toolTip )
+void LabelWindow::UpdateHelpText( const wxString& helpText )
 {
-    SetToolTip( toolTip );
-    m_StaticText->SetToolTip( toolTip );
+    SetHelpText( helpText );
+    m_StaticText->SetHelpText( helpText );
 }
 
 bool LabelWindow::SetForegroundColour(const wxColour& color)
@@ -74,10 +74,10 @@ void LabelWidget::Create( wxWindow* parent )
     SetWindow( m_LabelWindow = new LabelWindow( parent, this ) );
 
     // add listeners
-    m_LabelControl->a_ToolTip.Changed().AddMethod( this, &LabelWidget::ToolTipChanged );
+    m_LabelControl->a_HelpText.Changed().AddMethod( this, &LabelWidget::HelpTextChanged );
 
     // update state of attributes that are not refreshed during Read()
-    m_LabelControl->a_ToolTip.RaiseChanged();
+    m_LabelControl->a_HelpText.RaiseChanged();
 }
 
 void LabelWidget::Destroy()
@@ -87,7 +87,7 @@ void LabelWidget::Destroy()
     SetWindow( NULL );
 
     // remove listeners
-    m_LabelControl->a_ToolTip.Changed().RemoveMethod( this, &LabelWidget::ToolTipChanged );
+    m_LabelControl->a_HelpText.Changed().RemoveMethod( this, &LabelWidget::HelpTextChanged );
 
     // destroy window
     m_LabelWindow->Destroy();
@@ -115,7 +115,7 @@ bool LabelWidget::Write()
     return true;
 }
 
-void LabelWidget::ToolTipChanged( const Attribute<tstring>::ChangeArgs& args )
+void LabelWidget::HelpTextChanged( const Attribute<tstring>::ChangeArgs& args )
 {
-    m_LabelWindow->UpdateToolTip( args.m_NewValue );
+    m_LabelWindow->UpdateHelpText( args.m_NewValue );
 }

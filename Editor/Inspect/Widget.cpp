@@ -70,7 +70,7 @@ void Widget::SetWindow( wxWindow* window )
         m_Control->a_IsHidden.Changed().RemoveMethod( this, &Widget::IsHiddenChanged );
         m_Control->a_ForegroundColor.Changed().RemoveMethod( this, &Widget::ForegroundColorChanged );
         m_Control->a_BackgroundColor.Changed().RemoveMethod( this, &Widget::BackgroundColorChanged );
-        m_Control->a_ToolTip.Changed().RemoveMethod( this, &Widget::ToolTipChanged );
+        m_Control->a_HelpText.Changed().RemoveMethod( this, &Widget::HelpTextChanged );
 
         m_Window->Destroy();
     }
@@ -93,7 +93,7 @@ void Widget::SetWindow( wxWindow* window )
         {
             m_Window->Hide();
         }   
-        m_Window->SetHelpText( m_Control->a_ToolTip.Get() );
+        m_Window->SetHelpText( m_Control->a_HelpText.Get() );
 
         // add listeners
         m_Control->a_IsEnabled.Changed().AddMethod( this, &Widget::IsEnabledChanged );
@@ -102,7 +102,7 @@ void Widget::SetWindow( wxWindow* window )
         m_Control->a_IsHidden.Changed().AddMethod( this, &Widget::IsHiddenChanged );
         m_Control->a_ForegroundColor.Changed().AddMethod( this, &Widget::ForegroundColorChanged );
         m_Control->a_BackgroundColor.Changed().AddMethod( this, &Widget::BackgroundColorChanged );
-        m_Control->a_ToolTip.Changed().AddMethod( this, &Widget::ToolTipChanged );
+        m_Control->a_HelpText.Changed().AddMethod( this, &Widget::HelpTextChanged );
 
         if ( !m_Control->GetProperty( TXT( "FileFilter" ) ).empty() )
         {
@@ -163,7 +163,7 @@ void Widget::BackgroundColorChanged( const Attribute<u32>::ChangeArgs& args )
     m_Window->SetBackgroundColour( args.m_NewValue );
 }
 
-void Widget::ToolTipChanged( const Attribute<tstring>::ChangeArgs& args )
+void Widget::HelpTextChanged( const Attribute<tstring>::ChangeArgs& args )
 {
-    m_Window->SetToolTip( args.m_NewValue );
+    m_Window->SetHelpText( args.m_NewValue );
 }

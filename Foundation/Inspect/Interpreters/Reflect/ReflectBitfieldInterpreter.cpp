@@ -140,11 +140,13 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
         container->AddChild( row );
 
         LabelPtr label = CreateControl< Label >();
+        label->a_HelpText.Set( enumItr->second->m_HelpText );
         label->BindText( enumItr->first );
         row->AddChild( label );
 
         CheckBoxPtr checkbox = CreateControl< CheckBox >();
         checkbox->a_IsReadOnly.Set( readOnly );
+        checkbox->a_HelpText.Set( enumItr->second->m_HelpText );
 #pragma TODO("Compute correct default value")
         checkbox->a_Default.Set( outStream.str() );
         checkbox->Bind( new MultiBitfieldStringFormatter ( enumItr->second, (std::vector<Reflect::Serializer*>&)m_Serializers ) );

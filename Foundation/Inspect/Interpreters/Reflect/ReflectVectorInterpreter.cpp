@@ -29,6 +29,7 @@ void ReflectVectorInterpreter::InterpretField(const Field* field, const std::vec
     // create the label
     LabelPtr label = CreateControl< Label >();
     container->AddChild( label );
+    label->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
 
     tstring temp;
     bool converted = Helium::ConvertString( field->m_UIName, temp );
@@ -69,6 +70,7 @@ void ReflectVectorInterpreter::InterpretField(const Field* field, const std::vec
         ValuePtr value = CreateControl< Value >();
         container->AddChild( value );
         value->a_IsReadOnly.Set( ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly );
+        value->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
 
         // bind the ui to the serializers
         value->Bind( new MultiStringFormatter<Serializer>( data ) );

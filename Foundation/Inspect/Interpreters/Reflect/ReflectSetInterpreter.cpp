@@ -48,6 +48,7 @@ void ReflectSetInterpreter::InterpretField( const Reflect::Field* field, const s
 
     // create the list
     ListPtr list = CreateControl< List >();
+    list->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
     container->AddChild( list );
 
     // bind the ui to the serialiers
@@ -62,12 +63,14 @@ void ReflectSetInterpreter::InterpretField( const Reflect::Field* field, const s
         ButtonPtr buttonAdd = CreateControl< Button >();
         buttonContainer->AddChild( buttonAdd );
         buttonAdd->a_Label.Set( TXT( "Add" ) );
+        buttonAdd->a_HelpText.Set( TXT( "Add an item to the list." ) );
         buttonAdd->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &ReflectSetInterpreter::OnAdd ) );
         buttonAdd->SetClientData( new ClientData( list ) );
 
         ButtonPtr buttonRemove = CreateControl< Button >();
         buttonContainer->AddChild( buttonRemove );
         buttonRemove->a_Label.Set( TXT( "Remove" ) );
+        buttonRemove->a_HelpText.Set( TXT( "Remove the selected item(s) from the list." ) );
         buttonRemove->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &ReflectSetInterpreter::OnRemove ) );
         buttonRemove->SetClientData( new ClientData( list ) );
     }

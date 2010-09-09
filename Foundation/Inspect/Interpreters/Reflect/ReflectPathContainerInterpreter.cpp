@@ -44,6 +44,7 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
     LabelPtr label = CreateControl< Label >();
     labelContainer->AddChild( label );
     label->BindText( field->m_UIName );
+    label->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
 
     // create the list view
     ContainerPtr listContainer = new Container ();
@@ -52,6 +53,7 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
     ListPtr list = CreateControl< List >();
     m_List = list;
     listContainer->AddChild( list );
+    m_List->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
 
     // create the buttons
     ButtonPtr editButton;
@@ -90,11 +92,13 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
             addButton->SetClientData( new ClientData( list ) );
         }
         addButton->a_Label.Set( TXT( "Add" ) );
+        addButton->a_HelpText.Set( TXT( "Add a file to the list." ) );
 
         removeButton = CreateControl< Button >();
         removeButton->a_Label.Set( TXT( "Remove" ) );
         removeButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &PathContainerInterpreter::OnRemove ) );
         removeButton->SetClientData( new ClientData( list ) );
+        removeButton->a_HelpText.Set( TXT( "Remove a file from the list." ) );
 
         if ( isArray )
         {
@@ -102,11 +106,13 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
             upButton->a_Icon.Set( TXT( "actions/go-up" ) );
             upButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &PathContainerInterpreter::OnMoveUp ) );
             upButton->SetClientData( new ClientData( list ) );
+            upButton->a_HelpText.Set( TXT( "Move the selected file(s) up the list." ) );
 
             downButton = CreateControl< Button >();
             downButton->a_Icon.Set( TXT( "actions/go-down" ) );
             downButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &PathContainerInterpreter::OnMoveDown ) );
             downButton->SetClientData( new ClientData( list ) );
+            downButton->a_HelpText.Set( TXT( "Move the selected file(s) down the list." ) );
         }
 
         m_List->SetProperty( TXT( "FileFilter" ), filter );

@@ -60,6 +60,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
             ValuePtr value = CreateControl< Value >();
             value->a_Justification.Set( Justifications::Right );
             value->a_IsReadOnly.Set( readOnly );
+            value->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
             valueContainer->AddChild( value );
             groups.push_back( valueContainer );
 
@@ -69,6 +70,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
                 // File dialog button
                 fileDialogButton = CreateControl< FileDialogButton >();
+                fileDialogButton->a_HelpText.Set( TXT( "Open a file dialog to choose a new file." ) );
 
                 field->GetProperty( TXT( "FileFilter" ), m_FileFilter );
 
@@ -89,6 +91,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
                 ButtonPtr editButton = CreateControl< Button >();
                 editButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &PathInterpreter::Edit ) );
                 editButton->a_Label.Set( TXT( "Edit" ) );
+                editButton->a_HelpText.Set( TXT( "Attempt to edit the file using its associated default application." ) );
                 container->AddChild( editButton );
             }
         }
@@ -97,6 +100,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
     {
         ValuePtr value = CreateControl< Value >();
         value->a_IsReadOnly.Set( readOnly );
+        value->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
         container->AddChild( value );
     }
 
@@ -128,6 +132,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
         HELIUM_ASSERT( converted );
 
         label->BindText( temp );
+        label->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
 
         container->InsertChild(0, label);
     }

@@ -15,6 +15,7 @@ using namespace Helium::Core;
 // 
 HierarchyOutliner::HierarchyOutliner( Core::SceneManager* sceneManager )
 : SceneOutliner( sceneManager )
+, m_InvisibleRoot( NULL )
 {
 }
 
@@ -34,9 +35,9 @@ HierarchyOutliner::~HierarchyOutliner()
 // 
 HierarchyOutlinerItemData* HierarchyOutliner::GetTreeItemData( const wxTreeItemId& item )
 {
-  HELIUM_ASSERT( item.IsOk() );
-  HELIUM_ASSERT( m_TreeCtrl->GetItemData( item ) );
-  return static_cast< HierarchyOutlinerItemData* >( m_TreeCtrl->GetItemData( item ) );
+    HELIUM_ASSERT( item.IsOk() );
+    HELIUM_ASSERT( m_TreeCtrl->GetItemData( item ) );
+    return static_cast< HierarchyOutlinerItemData* >( m_TreeCtrl->GetItemData( item ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -45,52 +46,55 @@ HierarchyOutlinerItemData* HierarchyOutliner::GetTreeItemData( const wxTreeItemI
 // 
 void HierarchyOutliner::AddHierarchyNodes()
 {
-  EDITOR_SCOPE_TIMER( ("") );
+    EDITOR_SCOPE_TIMER( ("") );
 
-  if ( m_CurrentScene )
-  {
-    // Freeze and disable sorting
-    m_TreeCtrl->Freeze();
-    bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
-    m_TreeCtrl->DisableSorting();
+    if ( m_CurrentScene )
+    {
+        // Freeze and disable sorting
+        m_TreeCtrl->Freeze();
+        bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
+        m_TreeCtrl->DisableSorting();
 
-    RecurseAddHierarchyNode( m_CurrentScene->GetRoot() );
+        RecurseAddHierarchyNode( m_CurrentScene->GetRoot(), true );
 
-    // The root item gets a special icon
-    i32 image = GlobalFileIconsTable().GetIconID( TXT( "world" ) );
-    m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Normal );
-    m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Expanded );
-    m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Selected );
-    m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_SelectedExpanded );
+        // The root item gets a special icon
+        i32 image = GlobalFileIconsTable().GetIconID( TXT( "world" ) );
+        m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Normal );
+        m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Expanded );
+        m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Selected );
+        m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_SelectedExpanded );
 
-    // Sort tree if necessary
-    m_TreeCtrl->EnableSorting( isSortingEnabled );
-    Sort( m_TreeCtrl->GetRootItem() );
-    m_TreeCtrl->Thaw();
-  }
+        // Sort tree if necessary
+        m_TreeCtrl->EnableSorting( isSortingEnabled );
+        Sort( m_InvisibleRoot );
+        m_TreeCtrl->Thaw();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Recursively adds the specified hierarchy node, and all of it's children, as
 // items in this tree.
 // 
-void HierarchyOutliner::RecurseAddHierarchyNode( Core::HierarchyNode* node )
+void HierarchyOutliner::RecurseAddHierarchyNode( Core::HierarchyNode* node, bool root )
 {
-  EDITOR_SCOPE_TIMER( ("") );
+    EDITOR_SCOPE_TIMER( ("") );
 
-  m_TreeCtrl->Freeze();
+    m_TreeCtrl->Freeze();
 
-  AddHierarchyNode( node );
+    if ( !root )
+    {
+        AddHierarchyNode( node );
+    }
 
-  // Recursively add all the children of node
-  Core::OS_HierarchyNodeDumbPtr::Iterator childItr = node->GetChildren().Begin();
-  Core::OS_HierarchyNodeDumbPtr::Iterator childEnd = node->GetChildren().End();
-  for ( ; childItr != childEnd; ++childItr )
-  {
-    RecurseAddHierarchyNode( *childItr );
-  }
+    // Recursively add all the children of node
+    Core::OS_HierarchyNodeDumbPtr::Iterator childItr = node->GetChildren().Begin();
+    Core::OS_HierarchyNodeDumbPtr::Iterator childEnd = node->GetChildren().End();
+    for ( ; childItr != childEnd; ++childItr )
+    {
+        RecurseAddHierarchyNode( *childItr );
+    }
 
-  m_TreeCtrl->Thaw();
+    m_TreeCtrl->Thaw();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -98,18 +102,22 @@ void HierarchyOutliner::RecurseAddHierarchyNode( Core::HierarchyNode* node )
 // 
 void HierarchyOutliner::AddHierarchyNode( Core::HierarchyNode* node )
 {
-  EDITOR_SCOPE_TIMER( ("") );
+    EDITOR_SCOPE_TIMER( ("") );
 
-  wxTreeItemId parentItem;
-  M_TreeItems::const_iterator foundParent = m_Items.find( node->GetParent() );
-  if ( foundParent != m_Items.end() )
-  {
-    parentItem = foundParent->second;
-  }
+    wxTreeItemId parentItem;
+    M_TreeItems::const_iterator foundParent = m_Items.find( node->GetParent() );
+    if ( foundParent != m_Items.end() )
+    {
+        parentItem = foundParent->second;
+    }
+    else
+    {
+        parentItem = m_InvisibleRoot;
+    }
 
-  node->AddParentChangedListener( ParentChangedSignature::Delegate ( this, &HierarchyOutliner::ParentChanged ) );
+    node->AddParentChangedListener( ParentChangedSignature::Delegate ( this, &HierarchyOutliner::ParentChanged ) );
 
-  AddItem( parentItem, node->GetName(), node->GetImageIndex(), new HierarchyOutlinerItemData( node ), node->IsSelected() );
+    AddItem( parentItem, node->GetName(), node->GetImageIndex(), new HierarchyOutlinerItemData( node ), node->IsSelected() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -118,13 +126,24 @@ void HierarchyOutliner::AddHierarchyNode( Core::HierarchyNode* node )
 // 
 SortTreeCtrl* HierarchyOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id )
 {
-  SortTreeCtrl* tree = new SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_MULTIPLE | wxTR_EDIT_LABELS, wxDefaultValidator, wxT( "HierarchyOutliner" ) );
+    SortTreeCtrl* tree = new SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_HIDE_ROOT | wxTR_MULTIPLE | wxTR_EDIT_LABELS, wxDefaultValidator, wxT( "HierarchyOutliner" ) );
+    m_InvisibleRoot = tree->AddRoot( TXT("INVISIBLE_ROOT") );
 
-  // Override dynamic GUI event handlers here
-  tree->Connect( tree->GetId(), wxEVT_COMMAND_TREE_BEGIN_DRAG, wxTreeEventHandler( HierarchyOutliner::OnBeginDrag ), NULL, this );
-  tree->Connect( tree->GetId(), wxEVT_COMMAND_TREE_END_DRAG, wxTreeEventHandler( HierarchyOutliner::OnEndDrag ), NULL, this );
+    // Override dynamic GUI event handlers here
+    tree->Connect( tree->GetId(), wxEVT_COMMAND_TREE_BEGIN_DRAG, wxTreeEventHandler( HierarchyOutliner::OnBeginDrag ), NULL, this );
+    tree->Connect( tree->GetId(), wxEVT_COMMAND_TREE_END_DRAG, wxTreeEventHandler( HierarchyOutliner::OnEndDrag ), NULL, this );
 
-  return tree;
+    return tree;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Clears out the tree.
+// 
+void HierarchyOutliner::Clear()
+{
+    __super::Clear();
+
+    m_TreeCtrl->DeleteChildren( m_InvisibleRoot );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -133,7 +152,7 @@ SortTreeCtrl* HierarchyOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id
 // 
 void HierarchyOutliner::CurrentSceneChanged( Core::Scene* oldScene )
 {
-  AddHierarchyNodes();
+    AddHierarchyNodes();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -142,13 +161,13 @@ void HierarchyOutliner::CurrentSceneChanged( Core::Scene* oldScene )
 // 
 void HierarchyOutliner::ConnectSceneListeners()
 {
-  __super::ConnectSceneListeners();
+    __super::ConnectSceneListeners();
 
-  if ( m_CurrentScene )
-  {
-    m_CurrentScene->AddNodeAddedListener( NodeChangeSignature::Delegate ( this, &HierarchyOutliner::NodeAdded ) );
-    m_CurrentScene->AddNodeRemovedListener( NodeChangeSignature::Delegate ( this, &HierarchyOutliner::NodeRemoved ) );
-  }
+    if ( m_CurrentScene )
+    {
+        m_CurrentScene->AddNodeAddedListener( NodeChangeSignature::Delegate ( this, &HierarchyOutliner::NodeAdded ) );
+        m_CurrentScene->AddNodeRemovedListener( NodeChangeSignature::Delegate ( this, &HierarchyOutliner::NodeRemoved ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -157,13 +176,13 @@ void HierarchyOutliner::ConnectSceneListeners()
 // 
 void HierarchyOutliner::DisconnectSceneListeners()
 {
-  __super::DisconnectSceneListeners();
+    __super::DisconnectSceneListeners();
 
-  if ( m_CurrentScene )
-  {
-    m_CurrentScene->RemoveNodeAddedListener( NodeChangeSignature::Delegate ( this, &HierarchyOutliner::NodeAdded ) );
-    m_CurrentScene->RemoveNodeRemovedListener( NodeChangeSignature::Delegate ( this, &HierarchyOutliner::NodeRemoved ) );
-  }
+    if ( m_CurrentScene )
+    {
+        m_CurrentScene->RemoveNodeAddedListener( NodeChangeSignature::Delegate ( this, &HierarchyOutliner::NodeAdded ) );
+        m_CurrentScene->RemoveNodeRemovedListener( NodeChangeSignature::Delegate ( this, &HierarchyOutliner::NodeRemoved ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -173,20 +192,20 @@ void HierarchyOutliner::DisconnectSceneListeners()
 // 
 void HierarchyOutliner::OnBeginDrag( wxTreeEvent& args )
 {
-  // You can only drag something if...
-  // 1. The drag event contains a valid item to originate the drag
-  // 2. The item that the drag originates on is selected
-  // 3. There is something in the scene's selected item list (which had better be the
-  //    case if item 2 above was true.
-  // 4. You cannot drag the root item
-  if ( ( args.GetItem().IsOk() )&&
-       ( m_TreeCtrl->IsSelected( args.GetItem() ) ) && 
-       ( m_CurrentScene->GetSelection().GetItems().Size() > 0 ) &&
-       ( args.GetItem() != m_TreeCtrl->GetRootItem() ) )
-  {
-    args.Allow();
-  }
-  // else: automatically veto'd (you have to specifically allow a drag operation)
+    // You can only drag something if...
+    // 1. The drag event contains a valid item to originate the drag
+    // 2. The item that the drag originates on is selected
+    // 3. There is something in the scene's selected item list (which had better be the
+    //    case if item 2 above was true.
+    // 4. You cannot drag the root item
+    if ( ( args.GetItem().IsOk() )&&
+        ( m_TreeCtrl->IsSelected( args.GetItem() ) ) && 
+        ( m_CurrentScene->GetSelection().GetItems().Size() > 0 ) &&
+        ( args.GetItem() != m_TreeCtrl->GetRootItem() ) )
+    {
+        args.Allow();
+    }
+    // else: automatically veto'd (you have to specifically allow a drag operation)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -200,36 +219,36 @@ void HierarchyOutliner::OnBeginDrag( wxTreeEvent& args )
 // 
 void HierarchyOutliner::OnEndDrag( wxTreeEvent& args )
 {
-  const wxTreeItemId& dropItem = args.GetItem();
-  
-  // You can only drop on a valid item that's not already selected.
-  if ( dropItem.IsOk() && !m_TreeCtrl->IsSelected( dropItem ) )
-  {
-    m_TreeCtrl->Freeze();
+    const wxTreeItemId& dropItem = args.GetItem();
 
-    // Reparent every selected item into the item that was dropped on
-    Core::HierarchyNode* newParent = GetTreeItemData( dropItem )->GetHierarchyNode();
-    HELIUM_ASSERT( newParent );
-
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
-
-    const OS_SelectableDumbPtr& selection = m_CurrentScene->GetSelection().GetItems();
-    OS_SelectableDumbPtr::Iterator selItr = selection.Begin();
-    const OS_SelectableDumbPtr::Iterator selEnd = selection.End();
-    for ( ; selItr != selEnd; ++selItr )
+    // You can only drop on a valid item that's not already selected.
+    if ( dropItem.IsOk() && !m_TreeCtrl->IsSelected( dropItem ) )
     {
-      Core::HierarchyNode* hNode = Reflect::ObjectCast< Core::HierarchyNode >( *selItr );
-      if ( hNode )
-      {
-        batch->Push( new ParentCommand( hNode, newParent ) );
-      }
+        m_TreeCtrl->Freeze();
+
+        // Reparent every selected item into the item that was dropped on
+        Core::HierarchyNode* newParent = GetTreeItemData( dropItem )->GetHierarchyNode();
+        HELIUM_ASSERT( newParent );
+
+        Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+
+        const OS_SelectableDumbPtr& selection = m_CurrentScene->GetSelection().GetItems();
+        OS_SelectableDumbPtr::Iterator selItr = selection.Begin();
+        const OS_SelectableDumbPtr::Iterator selEnd = selection.End();
+        for ( ; selItr != selEnd; ++selItr )
+        {
+            Core::HierarchyNode* hNode = Reflect::ObjectCast< Core::HierarchyNode >( *selItr );
+            if ( hNode )
+            {
+                batch->Push( new ParentCommand( hNode, newParent ) );
+            }
+        }
+
+        m_CurrentScene->Push( batch );
+
+        m_TreeCtrl->Thaw();
     }
-
-    m_CurrentScene->Push( batch );
-
-    m_TreeCtrl->Thaw();
-  }
-  // else: drop target was not valid
+    // else: drop target was not valid
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -238,16 +257,16 @@ void HierarchyOutliner::OnEndDrag( wxTreeEvent& args )
 // 
 void HierarchyOutliner::ParentChanged( const Core::ParentChangedArgs& args )
 {
-  EDITOR_SCOPE_TIMER( ("") );
+    EDITOR_SCOPE_TIMER( ("") );
 
-  Core::HierarchyNode* child = args.m_Node;
-  m_TreeCtrl->Freeze();
+    Core::HierarchyNode* child = args.m_Node;
+    m_TreeCtrl->Freeze();
 
-  // Delete the item and re-add it to the tree to update the hierarchy
-  DeleteItem( child );
-  RecurseAddHierarchyNode( child );
+    // Delete the item and re-add it to the tree to update the hierarchy
+    DeleteItem( child );
+    RecurseAddHierarchyNode( child );
 
-  m_TreeCtrl->Thaw();
+    m_TreeCtrl->Thaw();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -256,38 +275,38 @@ void HierarchyOutliner::ParentChanged( const Core::ParentChangedArgs& args )
 // 
 void HierarchyOutliner::NodeAdded( const Core::NodeChangeArgs& args )
 {
-  EDITOR_SCOPE_TIMER( ("") );
+    EDITOR_SCOPE_TIMER( ("") );
 
-  if ( args.m_Node->HasType( Reflect::GetType<Core::HierarchyNode>() ) )
-  {
-    m_TreeCtrl->Freeze();
-    bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
-    m_TreeCtrl->DisableSorting();
-
-    Core::HierarchyNode* hierarchyNode = Reflect::DangerousCast< Core::HierarchyNode >( args.m_Node );
-    AddHierarchyNode( hierarchyNode );
-
-    m_TreeCtrl->EnableSorting( isSortingEnabled );
-    if ( m_TreeCtrl->IsSortingEnabled() )
+    if ( args.m_Node->HasType( Reflect::GetType<Core::HierarchyNode>() ) )
     {
-      // Find the item we just added
-      M_TreeItems::const_iterator found = m_Items.find( hierarchyNode );
-      if ( found != m_Items.end() )
-      {
-        // Default to sorting the children of the item we just added (will be changed below if needed)
-        wxTreeItemId itemToSort = found->second;
-        wxTreeItemId parent = m_TreeCtrl->GetItemParent( itemToSort );
-        if ( parent.IsOk() )
+        m_TreeCtrl->Freeze();
+        bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
+        m_TreeCtrl->DisableSorting();
+
+        Core::HierarchyNode* hierarchyNode = Reflect::DangerousCast< Core::HierarchyNode >( args.m_Node );
+        AddHierarchyNode( hierarchyNode );
+
+        m_TreeCtrl->EnableSorting( isSortingEnabled );
+        if ( m_TreeCtrl->IsSortingEnabled() )
         {
-          // If the item has a parent, start sorting with the parent
-          itemToSort = parent;
+            // Find the item we just added
+            M_TreeItems::const_iterator found = m_Items.find( hierarchyNode );
+            if ( found != m_Items.end() )
+            {
+                // Default to sorting the children of the item we just added (will be changed below if needed)
+                wxTreeItemId itemToSort = found->second;
+                wxTreeItemId parent = m_TreeCtrl->GetItemParent( itemToSort );
+                if ( parent.IsOk() )
+                {
+                    // If the item has a parent, start sorting with the parent
+                    itemToSort = parent;
+                }
+
+                Sort( itemToSort );
+            }
         }
-        
-        Sort( itemToSort );
-      }
+        m_TreeCtrl->Thaw();
     }
-    m_TreeCtrl->Thaw();
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -296,13 +315,13 @@ void HierarchyOutliner::NodeAdded( const Core::NodeChangeArgs& args )
 // 
 void HierarchyOutliner::NodeRemoved( const Core::NodeChangeArgs& args )
 {
-  EDITOR_SCOPE_TIMER( ("") );
+    EDITOR_SCOPE_TIMER( ("") );
 
-  if ( args.m_Node->HasType( Reflect::GetType<Core::HierarchyNode>() ) )
-  {
-    Core::HierarchyNode* hierarchyNode = Reflect::DangerousCast< Core::HierarchyNode >( args.m_Node );
-    hierarchyNode->RemoveParentChangedListener( ParentChangedSignature::Delegate ( this, &HierarchyOutliner::ParentChanged ) );
-  }
+    if ( args.m_Node->HasType( Reflect::GetType<Core::HierarchyNode>() ) )
+    {
+        Core::HierarchyNode* hierarchyNode = Reflect::DangerousCast< Core::HierarchyNode >( args.m_Node );
+        hierarchyNode->RemoveParentChangedListener( ParentChangedSignature::Delegate ( this, &HierarchyOutliner::ParentChanged ) );
+    }
 
-  DeleteItem( args.m_Node );
+    DeleteItem( args.m_Node );
 }

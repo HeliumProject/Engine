@@ -182,7 +182,6 @@ void SceneOutliner::Sort( const wxTreeItemId& root )
 // 
 void SceneOutliner::Clear()
 {
-    m_TreeCtrl->DeleteAllItems();
     m_Items.clear();
 }
 

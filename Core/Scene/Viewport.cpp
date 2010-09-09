@@ -500,12 +500,12 @@ void Viewport::MouseUp( const Helium::MouseButtonInput& input )
                 else 
                 {
                     Frustum worldSpaceFrustum;
-                    if ( m_Cameras[m_CameraMode].ViewportToFrustum(m_SelectionFrame->m_Start.x, m_SelectionFrame->m_Start.y, m_SelectionFrame->m_End.x, m_SelectionFrame->m_End.y, worldSpaceFrustum) )
+                    if ( m_Cameras[m_CameraMode].ViewportToFrustum( (f32)m_SelectionFrame->m_Start.x, (f32)m_SelectionFrame->m_Start.y, (f32)m_SelectionFrame->m_End.x, (f32)m_SelectionFrame->m_End.y, worldSpaceFrustum) )
                     {
                         Math::Point center ( m_SelectionFrame->m_Start + m_SelectionFrame->m_End / 2 );
 
                         Math::Line line;
-                        m_Cameras[m_CameraMode].ViewportToLine(center.x, center.y, line);
+                        m_Cameras[m_CameraMode].ViewportToLine( (f32)center.x, (f32)center.y, line);
 
                         pick = new FrustumLinePickVisitor(&m_Cameras[m_CameraMode], line, worldSpaceFrustum );
                         targetMode = SelectionTargetModes::Multiple;
@@ -547,12 +547,12 @@ void Viewport::MouseUp( const Helium::MouseButtonInput& input )
                 {
                     Frustum worldSpaceFrustum;
 
-                    if ( m_Cameras[m_CameraMode].ViewportToFrustum(m_SelectionFrame->m_Start.x, m_SelectionFrame->m_Start.y, m_SelectionFrame->m_End.x, m_SelectionFrame->m_End.y, worldSpaceFrustum) )
+                    if ( m_Cameras[m_CameraMode].ViewportToFrustum( (f32)m_SelectionFrame->m_Start.x, (f32)m_SelectionFrame->m_Start.y, (f32)m_SelectionFrame->m_End.x, (f32)m_SelectionFrame->m_End.y, worldSpaceFrustum) )
                     {
                         Math::Point center ( m_SelectionFrame->m_Start + m_SelectionFrame->m_End / 2 );
 
                         Math::Line line;
-                        m_Cameras[m_CameraMode].ViewportToLine(center.x, center.y, line);
+                        m_Cameras[m_CameraMode].ViewportToLine( (f32)center.x, (f32)center.y, line);
 
                         pick = new FrustumLinePickVisitor (&m_Cameras[m_CameraMode], line, worldSpaceFrustum); 
                         targetMode = SelectionTargetModes::Multiple;
@@ -725,12 +725,12 @@ void Viewport::MouseMove( const Helium::MouseMoveInput& input )
         {
             Frustum worldSpaceFrustum;
 
-            if ( m_Cameras[m_CameraMode].ViewportToFrustum(highlightStartX, highlightStartY, highlightEndX, highlightEndY, worldSpaceFrustum) )
+            if ( m_Cameras[m_CameraMode].ViewportToFrustum( (f32)highlightStartX, (f32)highlightStartY, (f32)highlightEndX, (f32)highlightEndY, worldSpaceFrustum) )
             {
                 Math::Point center ( Point (highlightStartX, highlightStartY) + Point (highlightEndX, highlightEndY) / 2 );
 
                 Math::Line line;
-                m_Cameras[m_CameraMode].ViewportToLine(center.x, center.y, line);
+                m_Cameras[m_CameraMode].ViewportToLine( (f32)center.x, (f32)center.y, line);
 
                 pick = new FrustumLinePickVisitor( &m_Cameras[m_CameraMode], line, worldSpaceFrustum );
                 targetMode = SelectionTargetModes::Multiple;
@@ -931,8 +931,7 @@ void Viewport::Draw()
             unsigned x = m_Size.x;
             unsigned y = m_Size.y;
 
-            wxColour temp = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
-            u32 color = D3DCOLOR_ARGB(255, temp.Red(), temp.Green(), temp.Blue());
+            u32 color = D3DCOLOR_ARGB(255, 200, 200, 200);
 
             std::vector< TransformedColored > vertices;
 

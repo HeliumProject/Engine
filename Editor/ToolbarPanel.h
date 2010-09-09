@@ -1,6 +1,11 @@
 #pragma once
 
+#include "Core/Scene/PropertiesManager.h"
+#include "Core/Scene/PropertiesGenerator.h"
+
+#include "Editor/CommandQueue.h"
 #include "Editor/EditorGenerated.h"
+#include "Editor/Inspect/StripCanvas.h"
 
 #include <wx/tglbtn.h>
 
@@ -27,11 +32,30 @@ namespace Helium
                 return m_ToolsPropertiesPanel;
             }
 
+            StripCanvas& GetCanvas()
+            {
+                return m_ToolPropertiesCanvas;
+            }
+
+            Core::PropertiesManager& GetPropertiesManager()
+            {
+                return m_ToolPropertiesManager;
+            }
+
+            Core::PropertiesGenerator& GetPropertiesGenerator()
+            {
+                return m_ToolPropertiesGenerator;
+            }
+
             void SetSaveButtonState( bool enabled );
 
         private:
             std::vector< wxBitmapToggleButton* > m_ToolsButtons;
 
+            CommandQueue                m_CommandQueue;
+            StripCanvas                 m_ToolPropertiesCanvas;
+            Core::PropertiesGenerator   m_ToolPropertiesGenerator; // HEADS UP: do this one first in the constructor!
+            Core::PropertiesManager     m_ToolPropertiesManager;
         };
     }
 }

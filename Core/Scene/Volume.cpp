@@ -218,41 +218,41 @@ bool Volume::ValidatePanel(const tstring& name)
 
 void Volume::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Generator->PushPanel( TXT( "Volume" ), true);
+  args.m_Generator->PushContainer( TXT( "Volume" ) );
   {
     args.m_Generator->PushContainer();
     {
       args.m_Generator->AddLabel( TXT( "Shape" ) );
 
       Inspect::Choice* choice = args.m_Generator->AddChoice<Core::Volume, int>(args.m_Selection, &Volume::GetShape, &Volume::SetShape);
-      choice->SetDropDown( true );
-      Inspect::V_Item items;
+      choice->a_IsDropDown.Set( true );
+      std::vector< Inspect::ChoiceItem > items;
 
       {
         tostringstream str;
         str << Content::VolumeShapes::Cube;
-        items.push_back( Inspect::Item( TXT( "Cube" ), str.str() ) );
+        items.push_back( Inspect::ChoiceItem( TXT( "Cube" ), str.str() ) );
       }
 
       {
         tostringstream str;
         str << Content::VolumeShapes::Cylinder;
-        items.push_back( Inspect::Item( TXT( "Cylinder" ), str.str() ) );
+        items.push_back( Inspect::ChoiceItem( TXT( "Cylinder" ), str.str() ) );
       }
 
       {
         tostringstream str;
         str << Content::VolumeShapes::Sphere;
-        items.push_back( Inspect::Item( TXT( "Sphere" ), str.str() ) );
+        items.push_back( Inspect::ChoiceItem( TXT( "Sphere" ), str.str() ) );
       }
 
       {
         tostringstream str;
         str << Content::VolumeShapes::Capsule;
-        items.push_back( Inspect::Item( TXT( "Capsule" ), str.str() ) );
+        items.push_back( Inspect::ChoiceItem( TXT( "Capsule" ), str.str() ) );
       }
 
-      choice->SetItems( items );
+      choice->a_Items.Set( items );
     }
     args.m_Generator->Pop();
   }

@@ -34,13 +34,6 @@ namespace Helium
                 Share       = 1 << 2,        // shared fields are not cloned or compared deeply
                 Hide        = 1 << 3,        // hidden fields are not inherently visible in UI
                 ReadOnly    = 1 << 4,        // read-only fields cannot be edited in the UI inherently
-                FilePath    = 1 << 5,        // file path fields are strings that are file paths
-                Path        = 1 << 6,        // path fields are Helium::Path objects
-                NodeID      = 1 << 7,        // this field is a container of other things
-                RuntimeEnum = 1 << 8,        // this field is a runtime enum
-
-                // !!IMPORTANT: MUST BE UPDATED ANY TIME A NEW FLAG IS INTRODUCED!!
-                Last        = RuntimeEnum    // the last used flag
             };
         }
 

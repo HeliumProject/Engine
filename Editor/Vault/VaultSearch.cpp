@@ -29,7 +29,7 @@ namespace Helium
             {
             }
         };
-        typedef Helium::Signature< void, const DummyWindowArgs& > DummyWindowSignature;
+        typedef Helium::Signature< const DummyWindowArgs& > DummyWindowSignature;
 
         /////////////////////////////////////////////////////////////////////////////
         /// DummyWindow

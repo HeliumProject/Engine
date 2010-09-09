@@ -2,7 +2,7 @@
 
 #include "Core/API.h"
 #include "Foundation/Automation/Attribute.h"
-#include "Foundation/Reflect/Document.h"
+#include "Foundation/Reflect/DOM.h"
 
 namespace Helium
 {

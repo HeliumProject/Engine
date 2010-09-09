@@ -26,8 +26,6 @@
 #include "Foundation/Worker/Client.h"
 #include "Foundation/Worker/Process.h"
 
-#include "Application/RCS/RCS.h"
-
 #include "Core/Asset/AssetInit.h"
 #include "Core/Asset/AssetClass.h"
 #include "Core/Content/ContentInit.h"

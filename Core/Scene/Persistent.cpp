@@ -8,16 +8,6 @@ using namespace Helium::Core;
 
 SCENE_DEFINE_TYPE( Persistent );
 
-void Persistent::InitializeType()
-{
-  Reflect::RegisterClassType<Persistent>( TXT( "Persistent" ) );
-}
-
-void Persistent::CleanupType()
-{
-  Reflect::UnregisterClassType<Persistent>();
-}
-
 Persistent::Persistent( Reflect::Element* package )
 : m_Package( package )
 {

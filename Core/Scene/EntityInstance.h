@@ -18,7 +18,7 @@ namespace Helium
                 , m_LightmapSetIndex( lightmapSetIndex )
             {}
         };
-        typedef Helium::Signature< void, const LightmapTweakArgs& > LightmapTweakSignature;
+        typedef Helium::Signature< const LightmapTweakArgs& > LightmapTweakSignature;
 
         struct CubemapTweakArgs
         {
@@ -28,7 +28,7 @@ namespace Helium
                 : m_Entity( entity )
             {}
         };
-        typedef Helium::Signature< void, const CubemapTweakArgs& > CubemapTweakSignature;
+        typedef Helium::Signature< const CubemapTweakArgs& > CubemapTweakSignature;
 
         struct EntityAssetChangeArgs
         {
@@ -42,7 +42,7 @@ namespace Helium
                 , m_NewPath( newPath )
             {}
         };
-        typedef Helium::Signature< void, const EntityAssetChangeArgs& > EntityAssetChangeSignature;
+        typedef Helium::Signature< const EntityAssetChangeArgs& > EntityAssetChangeSignature;
 
         /////////////////////////////////////////////////////////////////////////////
         // Editor's wrapper for an entity instance.
@@ -64,7 +64,7 @@ namespace Helium
 
 
             Entity(Core::Scene* parent);
-            Entity(Core::Scene* parent, Asset::EntityInstance* entity);
+            Entity(Core::Scene* parent, Content::EntityInstance* entity);
             virtual ~Entity();
 
             void ConstructorInit();

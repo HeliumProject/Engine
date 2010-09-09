@@ -378,7 +378,7 @@ void SceneOutliner::CurrentSceneChanged( const SceneChangeArgs& args )
 // Callback for when selection changes.  Updates the selected items in the
 // tree control to match the specified selection.
 // 
-void SceneOutliner::SelectionChanged( const OS_SelectableDumbPtr& selection )
+void SceneOutliner::SelectionChanged( const SelectionChangeArgs& args )
 {
     EDITOR_SCOPE_TIMER( ("") );
 
@@ -387,8 +387,8 @@ void SceneOutliner::SelectionChanged( const OS_SelectableDumbPtr& selection )
 
     m_TreeCtrl->UnselectAll();
 
-    OS_SelectableDumbPtr::Iterator itr = selection.Begin();
-    OS_SelectableDumbPtr::Iterator end = selection.End();
+    OS_SelectableDumbPtr::Iterator itr = args.m_Selection.Begin();
+    OS_SelectableDumbPtr::Iterator end = args.m_Selection.End();
     for ( ; itr != end; ++itr )
     {
         M_TreeItems::const_iterator found = m_Items.find( *itr );

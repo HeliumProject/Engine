@@ -2,8 +2,6 @@
 
 #include "Foundation/TUID.h"
 
-#include "Application/Inspect/DragDrop/FilteredDropTarget.h"
-
 #include "Core/API.h"
 #include "Core/Scene/CreateTool.h"
 #include "Core/Scene/EntityInstance.h"
@@ -51,10 +49,7 @@ namespace Helium
             static std::vector< tstring > s_RandomEntities;
 
             Inspect::FileDialogButton* m_FileButton;
-            Inspect::FileBrowserButton* m_BrowserButton;
-
             Inspect::FileDialogButton* m_FileButtonAdd;
-            Inspect::FileBrowserButton* m_BrowserButtonAdd;
 
         public:
             EntityInstanceCreateTool(Core::Scene* scene, PropertiesGenerator* generator);
@@ -76,13 +71,10 @@ namespace Helium
             tstring GetRandomEntity() const;
             void SetRandomEntity( const tstring& entityName );
 
-            void OnDeleteClass( Inspect::Button* button );
-            void OnClear( Inspect::Button* button );
-            void OnNormalize( Inspect::Button* button );
-            void OnModify( Inspect::Button* button );
-
-            void OnEntityDropped( const Inspect::FilteredDropTargetArgs& args );
-            void DropEntities( const std::vector< tstring >& entities, bool appendToList );
+            void OnDeleteClass( const Inspect::ButtonClickedArgs& args );
+            void OnClear(const Inspect::ButtonClickedArgs& args);
+            void OnNormalize(const Inspect::ButtonClickedArgs& args);
+            void OnModify(const Inspect::ButtonClickedArgs& args);
         };
     }
 }

@@ -35,7 +35,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< void, ListSelectionChangeArgs& > ListSelectionChangingSignature;
+        typedef Helium::Signature< ListSelectionChangeArgs& > ListSelectionChangingSignature;
 
         /////////////////////////////////////////////////////////////////////////////
         // Event arguments and delegate for events that indicate a change in a list
@@ -51,7 +51,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< void, const ListChangeArgs& > ListSelectionChangedSignature;
+        typedef Helium::Signature< const ListChangeArgs& > ListSelectionChangedSignature;
 
         /////////////////////////////////////////////////////////////////////////////
         // Extends the wxListView to provide additional functionality including:

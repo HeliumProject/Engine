@@ -15,7 +15,7 @@
 #include "Foundation/CommandLine/Command.h"
 
 #include "Foundation/Startup.h"
-#include "Application/RCS/RCS.h"
+#include "Foundation/RCS/RCS.h"
 
 using namespace Helium::Editor;
 using namespace Helium::CommandLine;

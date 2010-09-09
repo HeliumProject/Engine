@@ -24,8 +24,8 @@
 #include "Core/Content/Nodes/ContentCurve.h"
 #include "Core/Content/Nodes/ContentVolume.h"
 
-#include "Application/Inspect/Data/Data.h"
-#include "Application/Inspect/Controls/Canvas.h"
+#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/Canvas.h"
 #include "Foundation/Undo/PropertyCommand.h"
 #include "SceneGraph.h"
 #include "Statistics.h"
@@ -130,12 +130,9 @@ Scene::~Scene()
 
 bool Scene::IsEditable()
 {
-    if ( m_EditingDelegate.Invoke( SceneEditingArgs( this ) ) )
-    {
-        return true;
-    }
-
-    return false;
+    SceneEditingArgs args ( this );
+    m_EditingDelegate.Invoke( args );
+    return !args.m_Veto;
 }
 
 const Helium::Path& Scene::GetPath() const
@@ -341,7 +338,7 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
 
     if ( data->HasType( Reflect::GetType<Asset::Entity>() ) )
     {
-        createdNode = new Core::Entity( this, Reflect::DangerousCast< Asset::EntityInstance >( data ) );
+        createdNode = new Core::Entity( this, Reflect::DangerousCast< Content::EntityInstance >( data ) );
     }
     else if ( data->HasType( Reflect::GetType<Content::Volume>() ) )
     {
@@ -1016,9 +1013,7 @@ bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
         }
         catch ( Helium::Exception& ex )
         {
-            tostringstream str;
-            str << "Failed to write file " << path.c_str() << ": " << ex.What();
-            wxMessageBox( str.str(), TXT( "Error" ), wxOK|wxCENTRE|wxICON_ERROR );
+            Log::Error( TXT("Failed to write file %s: %s"), path.c_str(), ex.What() );
             result = false;
         }
     }
@@ -1074,8 +1069,7 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
         catch ( Helium::Exception& ex )
         {
             tostringstream str;
-            str << "Failed to generate xml: " << ex.What();
-            wxMessageBox( str.str(), TXT( "Error" ), wxOK|wxCENTRE|wxICON_ERROR );
+            Log::Error( TXT("Failed to generate xml: %s"), ex.What() );
             result = false;
         }
     }
@@ -1579,7 +1573,7 @@ void Scene::Select( const SelectArgs& args )
             V_PickHitSmartPtr::const_iterator end = sorted.end();
             for ( ; itr != end; ++itr )
             {
-                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetObject());
+                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetHitObject());
                 if (selectable)
                 {
                     // add it to the new selection list
@@ -1596,7 +1590,7 @@ void Scene::Select( const SelectArgs& args )
             V_PickHitSmartPtr::const_iterator end = args.m_Pick->GetHits().end();
             for ( ; itr != end; ++itr )
             {
-                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetObject());
+                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetHitObject());
                 if (selectable)
                 {
                     // add it to the new selection list
@@ -1702,7 +1696,7 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
     {
         TUID null;
         null.ToString(str);
-        args.m_Items.push_back( Inspect::Item( TXT( "NULL" ), str) );
+        args.m_Items.push_back( Inspect::PopulateItem( TXT( "NULL" ), str) );
     }
 
     tstring suffix;
@@ -1730,7 +1724,7 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
             for ( ; nodeItr != nodeEnd; ++nodeItr )
             {
                 nodeItr->second->GetID().ToString(str);
-                args.m_Items.push_back( Inspect::Item (nodeItr->second->GetName() + suffix, str) );
+                args.m_Items.push_back( Inspect::PopulateItem (nodeItr->second->GetName() + suffix, str) );
             }
         }
     }
@@ -1760,7 +1754,7 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
             V_PickHitSmartPtr::const_iterator end = sorted.end();
             for ( ; itr != end; ++itr )
             {
-                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetObject());
+                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetHitObject());
                 if (selectable)
                 {
                     // add it to the new selection list
@@ -1769,7 +1763,7 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
                 }
 
 #ifdef HELIUM_ASSERT_ENABLED
-                SceneNode* node = Reflect::ObjectCast<SceneNode>( (*itr)->GetObject() );
+                SceneNode* node = Reflect::ObjectCast<SceneNode>( (*itr)->GetHitObject() );
                 if (node)
                 {
                     HELIUM_ASSERT( node->GetOwner() == this );
@@ -1785,7 +1779,7 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
             V_PickHitSmartPtr::const_iterator end = args.m_Pick->GetHits().end();
             for ( ; itr != end; ++itr )
             {
-                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetObject());
+                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetHitObject());
                 if (selectable)
                 {
                     // add it to the new selection list
@@ -1793,7 +1787,7 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
                 }
 
 #ifdef HELIUM_ASSERT_ENABLED
-                SceneNode* node = Reflect::ObjectCast<SceneNode>( (*itr)->GetObject() );
+                SceneNode* node = Reflect::ObjectCast<SceneNode>( (*itr)->GetHitObject() );
                 if (node)
                 {
                     HELIUM_ASSERT( node->GetOwner() == this );
@@ -1888,21 +1882,23 @@ bool Scene::Push(const Undo::CommandPtr& command)
         return false;
     }
 
-    return m_UndoCommandDelegate.Invoke( UndoCommandArgs( command ) );
+    UndoCommandArgs args ( command );
+    m_UndoCommandDelegate.Invoke( args );
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Callback for when the undo queue is about to undo or redo a command.  Makes
 // sure that the scene is editable before allowing the operation to proceed.
 // 
-bool Scene::UndoingOrRedoing( const Undo::QueueChangeArgs& args )
+void Scene::UndoingOrRedoing( const Undo::QueueChangingArgs& args )
 {
     bool allow = true;
     if ( args.m_Command->IsSignificant() )
     {
         allow = IsEditable();
     }
-    return allow;
+    args.m_Veto = !allow;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1976,42 +1972,43 @@ void Scene::RefreshSelection()
     m_Selection.Refresh();
 }
 
-bool Scene::PropertyChanging( const Inspect::ChangingArgs& args )
+void Scene::PropertyChanging( const Inspect::ControlChangingArgs& args )
 {
     if ( args.m_Preview )
     {
-        return true;
+        return;
     }
 
-    if ( args.m_Control->GetData().ReferencesObject() )
+    if ( args.m_Control->GetData() )
     {
         Undo::CommandPtr command = args.m_Control->GetData()->GetUndoCommand();
 
         if ( command )
         {
-            return Push( command );
+            args.m_Veto = !Push( command );
+            return;
         }
     }
 
-    return IsEditable();
+    args.m_Veto = !IsEditable();
 }
 
-void Scene::PropertyChanged( const Inspect::ChangeArgs& args )
+void Scene::PropertyChanged( const Inspect::ControlChangedArgs& args )
 {
     Execute(false);
 }
 
-bool Scene::SelectionChanging(const OS_SelectableDumbPtr& selection)
+void Scene::SelectionChanging( const SelectionChangingArgs& args )
 {
     CORE_SCOPE_TIMER( ("") );
 
-    bool result = true;
+    bool allow = true;
 
     if (m_PickData.ReferencesObject())
     {
-        if (!selection.Empty())
+        if (!args.m_Selection.Empty())
         {
-            Core::SceneNode* node = Reflect::ObjectCast<Core::SceneNode>( selection.Front() );
+            Core::SceneNode* node = Reflect::ObjectCast<Core::SceneNode>( args.m_Selection.Front() );
 
             if (node)
             {
@@ -2026,7 +2023,7 @@ bool Scene::SelectionChanging(const OS_SelectableDumbPtr& selection)
                 }
 
                 // eat the selection
-                result = false;
+                allow = false;
 
                 // refresh the attributes
                 Execute(false);
@@ -2037,23 +2034,23 @@ bool Scene::SelectionChanging(const OS_SelectableDumbPtr& selection)
         m_PickData = NULL;
     }
 
-    return result;
+    args.m_Veto = !allow;
 }
 
-void Scene::SelectionChanged(const OS_SelectableDumbPtr& selection)
+void Scene::SelectionChanged( const SelectionChangeArgs& args )
 {
     CORE_SCOPE_TIMER( ("") );
 
     m_ValidSmartDuplicateMatrix = false;
 
     tostringstream str;
-    if ( selection.Empty() )
+    if ( args.m_Selection.Empty() )
     {
         str << "Selection cleared";
     }
     else
     {
-        str << "Selected " << selection.Size() << " objects";
+        str << "Selected " << args.m_Selection.Size() << " objects";
     }
 
     m_StatusChanged.Raise( str.str() );
@@ -2248,7 +2245,7 @@ void Scene::GetFlattenedSelection(OS_SelectableDumbPtr& selection)
     OS_SelectableDumbPtr::Iterator end = selectedItems.End();
     for ( ; it != end; ++it )
     {
-        const LSelectablePtr& selectable = *it;
+        const SelectablePtr& selectable = *it;
 
         selection.Append( selectable );
 

@@ -6,16 +6,6 @@ using namespace Helium::Core;
 
 SCENE_DEFINE_TYPE( Object );
 
-void Object::InitializeType()
-{
-  Reflect::RegisterClassType<Object>( TXT( "Core::Object" ) );
-}
-
-void Object::CleanupType()
-{
-  Reflect::UnregisterClassType<Object>();
-}
-
 Object::Object()
 {
 

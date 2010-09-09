@@ -8,31 +8,17 @@ namespace Helium
 {
     namespace Core
     {
-        class ManiuplatorAdapterCollection;
         class PropertiesGenerator;
-        class EnumerateElementArgs;
+        struct EnumerateElementArgs;
 
         class CORE_API Selectable : public Object
         {
         protected:
             bool m_Selected;
 
-
-            //
-            // Runtime Type Info
-            //
-
         public:
             SCENE_DECLARE_TYPE( Selectable, Object );
-            static void InitializeType();
-            static void CleanupType();
 
-
-            //
-            // Implementation
-            //
-
-        public:
             Selectable();
             virtual ~Selectable();
 
@@ -53,7 +39,7 @@ namespace Helium
         };
 
         // Smart pointer to an Selectable
-        typedef Helium::SmartPtr< Selectable > LSelectablePtr;
+        typedef Helium::SmartPtr< Selectable > SelectablePtr;
 
         // vector of selectable objects
         typedef Helium::OrderedSet<Selectable*> OS_SelectableDumbPtr;

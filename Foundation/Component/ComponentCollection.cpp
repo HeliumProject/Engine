@@ -51,7 +51,7 @@ void ComponentCollection::GatherSearchableProperties( Helium::SearchableProperti
 {
     for( M_Component::const_iterator attrItr = m_Components.begin(), attrEnd = m_Components.end(); attrItr != attrEnd; ++attrItr )
     {
-        if ( attrItr->second->m_Enabled )
+        if ( attrItr->second->m_IsEnabled )
         {
             attrItr->second->GatherSearchableProperties( properties );
         }
@@ -245,7 +245,7 @@ bool ComponentCollection::IsSubset( const ComponentCollection* collection ) cons
     M_Component::const_iterator end = collection->GetComponents().end();
     for ( ; itr != end; ++itr )
     {
-        if ( itr->second->m_Enabled && !ContainsComponent( itr->second->GetSlot() ) )
+        if ( itr->second->m_IsEnabled && !ContainsComponent( itr->second->GetSlot() ) )
         {
             return false;
         }

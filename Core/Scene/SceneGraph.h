@@ -41,7 +41,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< void, const Core::SceneGraphEvaluatedArgs& > SceneGraphEvaluatedSignature;
+        typedef Helium::Signature< const Core::SceneGraphEvaluatedArgs& > SceneGraphEvaluatedSignature;
 
 
         /////////////////////////////////////////////////////////////////////////////

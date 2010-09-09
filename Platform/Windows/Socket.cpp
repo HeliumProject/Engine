@@ -147,7 +147,7 @@ int Helium::SelectSocket(int range, fd_set* read_set, fd_set* write_set,struct t
     return ::select(range, read_set, write_set, 0, timeout);
 }
 
-bool Helium::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Event& terminate)
+bool Helium::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Condition& terminate)
 {
     if (bytes == 0)
     {
@@ -204,7 +204,7 @@ bool Helium::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Even
     return true;
 }
 
-bool Helium::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, Event& terminate)
+bool Helium::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, Condition& terminate)
 {
     if (bytes == 0)
     {

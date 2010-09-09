@@ -25,7 +25,7 @@ namespace Helium
                 , m_NewType (newType)
             {}
         };
-        typedef Helium::Signature< void, const InstancePropertiesChangeArgs& > InstancePropertiesChangeSignature;
+        typedef Helium::Signature< const InstancePropertiesChangeArgs& > InstancePropertiesChangeSignature;
 
         /////////////////////////////////////////////////////////////////////////////
         // Editor's wrapper for an entity instance.

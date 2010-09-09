@@ -4,13 +4,9 @@
 #include <map>
 
 #include "Core/API.h"
-#include "Application/Inspect/Data/Data.h"
-#include "Application/Inspect/Controls/Controls.h"
-#include "Application/Inspect/Interpreter.h"
-#include "Application/Inspect/Interpreters/File/FileDialogButton.h"
-#include "Application/Inspect/Interpreters/File/FileBrowserButton.h"
-#include "Application/Inspect/Interpreters/Content/ParametricKeyData.h"
-#include "Application/Inspect/Interpreters/Content/ParametricKeyControl.h"
+#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/Controls.h"
+#include "Foundation/Inspect/Interpreter.h"
 
 #include "Core/Scene/Selection.h"
 
@@ -18,9 +14,11 @@ namespace Helium
 {
     namespace Core
     {
+        class PropertiesGenerator;
+
         struct CORE_API CreatePanelArgs
         {
-            class PropertiesGenerator* m_Generator;
+            PropertiesGenerator*        m_Generator;
             const OS_SelectableDumbPtr& m_Selection;
 
             CreatePanelArgs(PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection)
@@ -32,7 +30,7 @@ namespace Helium
         };
 
         // callback for creating a named panel creator for the generator
-        typedef Helium::Signature< void, CreatePanelArgs& > CreatePanelSignature;
+        typedef Helium::Signature< CreatePanelArgs& > CreatePanelSignature;
 
         typedef std::map<tstring, CreatePanelSignature::Delegate> M_PanelCreators;
 
@@ -95,12 +93,6 @@ namespace Helium
             }
 
             template <class T>
-            Inspect::CheckList* AddCheckList( const Helium::SmartPtr< Helium::Property<T> >& property )
-            {
-                return Inspect::Interpreter::AddCheckList( property );
-            }
-
-            template <class T>
             Inspect::Slider* AddSlider( const Helium::SmartPtr< Helium::Property<T> >& property )
             {
                 return Inspect::Interpreter::AddSlider( property );
@@ -143,10 +135,9 @@ namespace Helium
             template <class T>
             Inspect::FileDialogButton* AddFileDialogButton( const Helium::SmartPtr< Helium::Property<T> >& property )
             {
-                Inspect::FileDialogButtonPtr control = m_Container->GetCanvas()->Create<Inspect::FileDialogButton>( this );
+                Inspect::FileDialogButtonPtr control = CreateControl<Inspect::FileDialogButton>();
                 control->Bind( new Inspect::PropertyStringFormatter<T> ( property ) );
-                Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 
@@ -154,32 +145,9 @@ namespace Helium
             template <class T, class D, class G, class S>
             Inspect::FileDialogButton* AddFileDialogButton( const OS_SelectableDumbPtr& selection, G getter = NULL, S setter = NULL )
             {
-                Inspect::FileDialogButtonPtr control = m_Container->GetCanvas()->Create<Inspect::FileDialogButton>( this );
+                Inspect::FileDialogButtonPtr control = CreateControl<Inspect::FileDialogButton>();
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
-                Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
-                return control;
-            }
-
-            // File browse button with single target (for wildcard text searches through the asset files)
-            template <class T>
-            Inspect::FileBrowserButton* AddFileBrowserButton( const Helium::SmartPtr< Helium::Property<T> >& property )
-            {
-                Inspect::FileBrowserButtonPtr control = m_Container->GetCanvas()->Create<Inspect::FileBrowserButton>( this );
-                control->Bind( new Inspect::PropertyStringFormatter<T> ( property ) );
-                Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
-                return control;
-            }
-
-            // File browse button with a selection list
-            template <class T, class D, class G, class S>
-            Inspect::FileBrowserButton* AddFileBrowserButton( const OS_SelectableDumbPtr& selection, G getter = NULL, S setter = NULL )
-            {
-                Inspect::FileBrowserButtonPtr control = m_Container->GetCanvas()->Create<Inspect::FileBrowserButton>( this );
-                control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
-                Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 
@@ -191,14 +159,13 @@ namespace Helium
             template <class T, class D, class G, class S>
             Inspect::CheckBox* AddCheckBox( const OS_SelectableDumbPtr& selection, G getter = NULL, S setter = NULL, bool significant = true)
             {
-                Inspect::CheckBoxPtr control = m_Container->GetCanvas()->Create<Inspect::CheckBox>( this );
+                Inspect::CheckBoxPtr control = CreateControl<Inspect::CheckBox>();
 
                 Inspect::DataPtr data = new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )); 
                 data->SetSignificant( significant ); 
                 control->Bind( data );
 
-                Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 
@@ -210,10 +177,9 @@ namespace Helium
             template <class T, class D, class G, class S>
             Inspect::Value* AddValue( const OS_SelectableDumbPtr& selection, G getter = NULL, S setter = NULL )
             {
-                Inspect::ValuePtr control = m_Container->GetCanvas()->Create<Inspect::Value>( this );
+                Inspect::ValuePtr control = CreateControl<Inspect::Value>();
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
-                Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 
@@ -225,10 +191,9 @@ namespace Helium
             template <class T, class D, class G, class S>
             Inspect::Choice* AddChoice( const OS_SelectableDumbPtr& selection, G getter = NULL, S setter = NULL )
             {
-                Inspect::ChoicePtr control = m_Container->GetCanvas()->Create<Inspect::Choice>( this );
+                Inspect::ChoicePtr control = CreateControl<Inspect::Choice>();
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
-                Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 
@@ -237,17 +202,17 @@ namespace Helium
             {
                 Inspect::ChoicePtr control = AddChoice<T, D, G, S>( selection, getter, setter );
 
-                Inspect::V_Item items;
+                std::vector< Inspect::ChoiceItem > items;
                 Reflect::V_EnumerationElement::const_iterator itr = enumInfo->m_Elements.begin();
                 Reflect::V_EnumerationElement::const_iterator end = enumInfo->m_Elements.end();
                 for ( ; itr != end; ++itr )
                 {
                     tostringstream str;
                     str << (*itr)->m_Value;
-                    items.push_back( Inspect::Item ( (*itr)->m_Label, str.str() ) );
+                    items.push_back( Inspect::ChoiceItem ( (*itr)->m_Label, str.str() ) );
                 }
-                control->SetItems(items);
-                control->SetDropDown(true);
+                control->a_Items.Set(items);
+                control->a_IsDropDown.Set(true);
 
                 return control;
             }
@@ -260,10 +225,9 @@ namespace Helium
             template <class T, class D, class G, class S>
             Inspect::List* AddList( const OS_SelectableDumbPtr& selection, G getter = NULL, S setter = NULL )
             {
-                Inspect::ListPtr control = m_Container->GetCanvas()->Create<Inspect::List>( this );
+                Inspect::ListPtr control = CreateControl<Inspect::List>();
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
-                Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 
@@ -275,10 +239,9 @@ namespace Helium
             template <class T, class D, class G, class S>
             Inspect::Slider* AddSlider( const OS_SelectableDumbPtr& selection, G getter = NULL, S setter = NULL )
             {
-                Inspect::SliderPtr control = m_Container->GetCanvas()->Create<Inspect::Slider>( this );
+                Inspect::SliderPtr control = CreateControl<Inspect::Slider>();
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
-                Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
 
@@ -290,29 +253,13 @@ namespace Helium
             template <class T, class D, class G, class S>
             Inspect::ColorPicker* AddColorPicker( const OS_SelectableDumbPtr& selection, G getter = NULL, S setter = NULL )
             {
-                Inspect::ColorPickerPtr control = m_Container->GetCanvas()->Create<Inspect::ColorPicker>( this );
+                Inspect::ColorPickerPtr control = CreateControl<Inspect::ColorPicker>();
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
-                Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl(control);
-                return control;
-            }
-
-
-            // 
-            // KeyControl
-            // 
-
-            template <class T, class G, class S>
-            Inspect::ParametricKeyControl* AddKeyControl( const OS_SelectableDumbPtr& selection, Reflect::CreateObjectFunc creator, G getter = NULL, S setter = NULL )
-            {
-                Inspect::ParametricKeyControlPtr control = m_Container->GetCanvas()->Create<Inspect::ParametricKeyControl>( this );
-                control->Bind( new Inspect::MultiParametricKeyPropertyFormatter( creator, BuildSelectionProperties<T, Content::V_ParametricKeyPtr, G, S>( selection, getter, setter ) ) );
-                Inspect::ST_Container& containerStack = GetCurrentContainerStack();
-                containerStack.top()->AddControl( control );
+                m_ContainerStack.Get().top()->AddChild(control);
                 return control;
             }
         };
 
-        typedef Helium::SmartPtr<PropertiesGenerator> EnumeratorPtr;
+        typedef Helium::SmartPtr<PropertiesGenerator> GeneratorPtr;
     }
 }

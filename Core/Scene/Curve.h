@@ -142,8 +142,8 @@ namespace Helium
             static void CreatePanel( CreatePanelArgs& args );
 
         private:
-            static void OnReverseControlPoints( Inspect::Button* button );
-            bool ChildChangingParents( const ParentChangingArgs& args );
+            static void OnReverseControlPoints( const Inspect::ButtonClickedArgs& args );
+            void ChildChangingParents( const ParentChangingArgs& args );
         };
 
         typedef Helium::SmartPtr<Core::Curve> LCurvePtr;

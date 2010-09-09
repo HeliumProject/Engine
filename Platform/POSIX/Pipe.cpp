@@ -35,7 +35,7 @@ void Helium::ClosePipe(Pipe& pipe)
     fclose( (FILE*)pipe );
 }
 
-bool Helium::ConnectPipe(Pipe& pipe, Event& terminate)
+bool Helium::ConnectPipe(Pipe& pipe, Condition& terminate)
 {
     // not supported
     HELIUM_BREAK(); return false;
@@ -47,7 +47,7 @@ void Helium::DisconnectPipe(Pipe& pipe)
     HELIUM_BREAK();
 }
 
-bool Helium::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& terminate)
+bool Helium::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Condition& terminate)
 {
     if (bytes == 0)
     {
@@ -64,7 +64,7 @@ bool Helium::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& ter
     return false;
 }
 
-bool Helium::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Event& terminate)
+bool Helium::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Condition& terminate)
 {
     if (bytes == 0)
     {

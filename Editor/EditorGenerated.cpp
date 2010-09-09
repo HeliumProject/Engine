@@ -647,52 +647,33 @@ PropertiesPanelGenerated::PropertiesPanelGenerated( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer33;
 	bSizer33 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_CommonButton = new wxRadioButton( m_ControlsPanel, wxID_ANY, _("Common"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer33->Add( m_CommonButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 2 );
+	m_IntersectionButton = new wxRadioButton( m_ControlsPanel, wxID_ANY, _("Intersection"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer33->Add( m_IntersectionButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 2 );
 	
-	m_AllButton = new wxRadioButton( m_ControlsPanel, wxID_ANY, _("All"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer33->Add( m_AllButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 2 );
-	
-	m_staticline5 = new wxStaticLine( m_ControlsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bSizer33->Add( m_staticline5, 0, wxEXPAND | wxALL, 2 );
-	
-	m_ExpandAllButton = new wxButton( m_ControlsPanel, wxID_ANY, _("Expand All"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer33->Add( m_ExpandAllButton, 0, wxALL, 2 );
-	
-	m_CollapseAllButton = new wxButton( m_ControlsPanel, wxID_ANY, _("Collapse All"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer33->Add( m_CollapseAllButton, 0, wxALL, 2 );
+	m_UnionButton = new wxRadioButton( m_ControlsPanel, wxID_ANY, _("Union"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer33->Add( m_UnionButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 2 );
 	
 	m_ControlsPanel->SetSizer( bSizer33 );
 	m_ControlsPanel->Layout();
 	bSizer33->Fit( m_ControlsPanel );
 	bSizer32->Add( m_ControlsPanel, 0, wxEXPAND | wxALL, 2 );
 	
-	m_PropertiesPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer34;
-	bSizer34 = new wxBoxSizer( wxVERTICAL );
-	
-	m_PropertiesPanel->SetSizer( bSizer34 );
-	m_PropertiesPanel->Layout();
-	bSizer34->Fit( m_PropertiesPanel );
-	bSizer32->Add( m_PropertiesPanel, 1, wxEXPAND | wxALL, 2 );
+	m_TreeWndCtrl = new Helium::TreeWndCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxScrolledWindowStyle | wxALWAYS_SHOW_SB | wxCLIP_CHILDREN | wxNO_BORDER, wxPanelNameStr,  wxTR_HIDE_ROOT );
+	bSizer32->Add( m_TreeWndCtrl, 1, wxALL|wxEXPAND, 5 );
 	
 	this->SetSizer( bSizer32 );
 	this->Layout();
 	
 	// Connect Events
-	m_CommonButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PropertiesPanelGenerated::OnIntersection ), NULL, this );
-	m_AllButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PropertiesPanelGenerated::OnUnion ), NULL, this );
-	m_ExpandAllButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PropertiesPanelGenerated::OnExpandAll ), NULL, this );
-	m_CollapseAllButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PropertiesPanelGenerated::OnCollapseAll ), NULL, this );
+	m_IntersectionButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PropertiesPanelGenerated::OnIntersection ), NULL, this );
+	m_UnionButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PropertiesPanelGenerated::OnUnion ), NULL, this );
 }
 
 PropertiesPanelGenerated::~PropertiesPanelGenerated()
 {
 	// Disconnect Events
-	m_CommonButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PropertiesPanelGenerated::OnIntersection ), NULL, this );
-	m_AllButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PropertiesPanelGenerated::OnUnion ), NULL, this );
-	m_ExpandAllButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PropertiesPanelGenerated::OnExpandAll ), NULL, this );
-	m_CollapseAllButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PropertiesPanelGenerated::OnCollapseAll ), NULL, this );
+	m_IntersectionButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PropertiesPanelGenerated::OnIntersection ), NULL, this );
+	m_UnionButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PropertiesPanelGenerated::OnUnion ), NULL, this );
 	
 }
 

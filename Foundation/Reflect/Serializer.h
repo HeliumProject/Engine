@@ -50,7 +50,7 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature< void, TranslateInputEventArgs&, Helium::AtomicRefCountBase > TranslateInputSignature;
+        typedef Helium::Signature< TranslateInputEventArgs&, Helium::AtomicRefCountBase > TranslateInputSignature;
 
         struct TranslateOutputEventArgs : TranslateEventArgs
         {
@@ -64,7 +64,7 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature< void, TranslateOutputEventArgs&, Helium::AtomicRefCountBase > TranslateOutputSignature;
+        typedef Helium::Signature< TranslateOutputEventArgs&, Helium::AtomicRefCountBase > TranslateOutputSignature;
 
 
         //

@@ -13,7 +13,7 @@ namespace Helium
             ExportEntity( const MObject& mayaObject, Helium::TUID id )
                 : ExportBase( mayaObject )
             {
-                m_ContentObject = new Asset::EntityInstance( id );
+                m_ContentObject = new Content::EntityInstance( id );
             }
 
             // Gather the necessary maya data

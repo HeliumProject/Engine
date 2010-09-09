@@ -71,7 +71,7 @@ namespace Helium
 
 namespace Helium
 {
-	static Localization::StringTable g_StringTable( "Helium::Application" );
+	static Localization::StringTable g_StringTable( "Helium" );
 }
 
 void Helium::Startup( int argc, const tchar** argv )
@@ -114,7 +114,7 @@ void Helium::Startup( int argc, const tchar** argv )
         {
             i32 timeout = 300; // 5min
 
-            Localization::Statement stmt( "Helium::Application", "WaitingDebuggerAttach" );
+            Localization::Statement stmt( "Helium", "WaitingDebuggerAttach" );
             stmt.ReplaceKey( TXT( "MINUTES" ), timeout / 60 );
             Log::Print( stmt.Get().c_str() );
 
@@ -125,7 +125,7 @@ void Helium::Startup( int argc, const tchar** argv )
 
             if ( Helium::IsDebuggerPresent() )
             {
-                Localization::Statement stmt( "Helium::Application", "DebuggerAttached" );
+                Localization::Statement stmt( "Helium", "DebuggerAttached" );
                 Log::Print( stmt.Get().c_str() );
                 HELIUM_ISSUE_BREAK();
             }
@@ -165,15 +165,15 @@ void Helium::Startup( int argc, const tchar** argv )
             tchar name[MAX_PATH];
             _tsplitpath( module, NULL, NULL, name, NULL );
 
-            Localization::Statement stmt( "Helium::Application", "RunningApp" );
+            Localization::Statement stmt( "Helium", "RunningApp" );
             stmt.ReplaceKey( TXT( "APPNAME" ), name );
             Log::Print( stmt.Get().c_str() );
 
-            stmt.Set( "Helium::Application", "CurrentTime" );
+            stmt.Set( "Helium", "CurrentTime" );
             stmt.ReplaceKey( TXT( "TIME" ), _tctime64( &g_StartTime.time ) );
             Log::Print( stmt.Get().c_str() );
 
-            stmt.Set( "Helium::Application", "CommandLine" );
+            stmt.Set( "Helium", "CommandLine" );
             stmt.ReplaceKey( TXT( "COMMANDLINE" ), Helium::GetCmdLine() );
             Log::Print( stmt.Get().c_str() );
         }
@@ -397,7 +397,7 @@ int Helium::Shutdown( int code )
         if ( !Helium::GetCmdLineFlag( StartupArgs::DisableDebugHeap ) && !Helium::GetCmdLineFlag( StartupArgs::DisableLeakCheck ) )
         {
             int flags = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
-            _CrtSetDbgFlag( flags | _CRTDBG_LEAK_CHECK_DF );
+            _CrtSetDbgFlag( flags | _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
             _CrtSetReportMode( _CRT_WARN, _CRTDBG_MODE_DEBUG | _CRTDBG_MODE_FILE );
             _CrtSetReportFile( _CRT_WARN, _CRTDBG_FILE_STDERR );
             _CrtSetReportMode( _CRT_ERROR, _CRTDBG_MODE_DEBUG | _CRTDBG_MODE_FILE );

@@ -18,8 +18,6 @@
 #include "Foundation/Math/AngleAxis.h"
 #include "Foundation/Math/Utils.h"
 
-#include <wx/msw/private.h>
-
 using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
@@ -554,7 +552,8 @@ bool TranslateManipulator::Pick( PickVisitor* pick )
         m_Axes->Update();
     }
 
-    if (m_SelectedAxes != MultipleAxes::All && m_SelectedAxes != MultipleAxes::None && wxIsCtrlDown())
+#pragma TODO("How to poll for ctrl button state? -Geoff")
+    if (m_SelectedAxes != MultipleAxes::All && m_SelectedAxes != MultipleAxes::None && false /*wxIsCtrlDown()*/)
     {
         m_SelectedAxes = (AxesFlags)(~m_SelectedAxes & MultipleAxes::All);
     }
@@ -651,7 +650,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
                 V_PickHitSmartPtr::const_iterator end = sorted.end();
                 for ( ; itr != end; ++itr )
                 {
-                    Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>( (*itr)->GetObject() );
+                    Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>( (*itr)->GetHitObject() );
 
                     // don't use the object we are moving
                     if ( node && node == primary->GetNode() && !primary->AllowSelfSnap() )
@@ -757,11 +756,11 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
 
         // Pick ray from our starting location
         Line startRay;
-        m_View->GetCamera()->ViewportToLine(m_StartX, m_StartY, startRay);
+        m_View->GetCamera()->ViewportToLine( (f32)m_StartX, (f32)m_StartY, startRay);
 
         // Pick ray from our current location
         Line endRay;
-        m_View->GetCamera()->ViewportToLine(e.GetPosition().x, e.GetPosition().y, endRay);
+        m_View->GetCamera()->ViewportToLine( (f32)e.GetPosition().x, (f32)e.GetPosition().y, endRay);
 
         // start and end points of the drag in world space, on the line or on the plane
         Vector3 p1, p2;
@@ -1268,34 +1267,34 @@ void TranslateManipulator::CreateProperties()
 {
     __super::CreateProperties();
 
-    m_Generator->PushPanel( TXT( "Translate" ), true);
+    m_Generator->PushContainer( TXT( "Translate" ) );
     {
         m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Space" ) );
             Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::TranslateManipulator, int> (this, &TranslateManipulator::GetSpace, &TranslateManipulator::SetSpace) );
-            choice->SetDropDown( true );
-            Inspect::V_Item items;
+            choice->a_IsDropDown.Set( true );
+            std::vector< Inspect::ChoiceItem > items;
 
             {
                 tostringstream str;
                 str << ManipulatorSpaces::Object;
-                items.push_back( Inspect::Item( TXT( "Object" ), str.str() ) );
+                items.push_back( Inspect::ChoiceItem( TXT( "Object" ), str.str() ) );
             }
 
             {
                 tostringstream str;
                 str << ManipulatorSpaces::Local;
-                items.push_back( Inspect::Item( TXT( "Local" ), str.str() ) );
+                items.push_back( Inspect::ChoiceItem( TXT( "Local" ), str.str() ) );
             }
 
             {
                 tostringstream str;
                 str << ManipulatorSpaces::World;
-                items.push_back( Inspect::Item( TXT( "World" ), str.str() ) );
+                items.push_back( Inspect::ChoiceItem( TXT( "World" ), str.str() ) );
             }
 
-            choice->SetItems( items );
+            choice->a_Items.Set( items );
         }
         m_Generator->Pop();
 

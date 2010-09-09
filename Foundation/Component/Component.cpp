@@ -8,12 +8,12 @@ REFLECT_DEFINE_ABSTRACT(ComponentBase)
 
 void ComponentBase::EnumerateClass( Reflect::Compositor<ComponentBase>& comp )
 {
-    Reflect::Field* fieldEnabled = comp.AddField( &ComponentBase::m_Enabled, "m_Enabled" );
+    Reflect::Field* fieldEnabled = comp.AddField( &ComponentBase::m_IsEnabled, "m_IsEnabled" );
 }
 
 ComponentBase::ComponentBase()
 : m_Collection( NULL )
-, m_Enabled( true )
+, m_IsEnabled( true )
 {
 
 }

@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "PerforceWaitDialog.h"
 
-#include "Application/RCS/Providers/Perforce/Perforce.h"
+#include "Editor/Perforce/Perforce.h"
 #include "Foundation/Startup.h"
 
 #include <wx/msgdlg.h>
@@ -9,11 +9,9 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-static bool ShowWaitDialog(Perforce::WaitInterface* waitInterface)
+static void ShowWaitDialog( Perforce::WaitArgs& args )
 {
-    int result = Editor::PerforceWaitDialog().ShowModal( waitInterface );
-
-    return result != wxID_OK;
+    args.m_Cancel = Editor::PerforceWaitDialog().ShowModal( args.m_WaitInterface ) != wxID_OK;
 }
 
 static void ShowWarningDialog(const Perforce::MessageArgs& args )

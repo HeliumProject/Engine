@@ -7,7 +7,7 @@ using namespace Helium;
 
 static void ConvertMouseEvent( wxMouseEvent& event, MouseInput& input )
 {
-    u32 buttons;
+    u32 buttons = 0x0;
 
     buttons |= event.LeftIsDown() ? MouseButtons::Left : 0x0;
     buttons |= event.MiddleIsDown() ? MouseButtons::Middle : 0x0;

@@ -33,7 +33,7 @@ namespace Helium
             SearchQueryPtr m_SearchQuery;
             StartSearchThreadArgs( SearchQuery* searchQuery ) : m_SearchQuery( searchQuery ) {}
         };
-        typedef Helium::Signature< void, const StartSearchThreadArgs& > StartSearchThreadSignature;
+        typedef Helium::Signature< const StartSearchThreadArgs& > StartSearchThreadSignature;
 
 
         ///////////////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@ namespace Helium
         {
             SearchThreadRunningArgs() { }
         };
-        typedef Helium::Signature< void, const SearchThreadRunningArgs& > SearchThreadRunningSignature;
+        typedef Helium::Signature< const SearchThreadRunningArgs& > SearchThreadRunningSignature;
 
 
         ///////////////////////////////////////////////////////////////////////
@@ -53,7 +53,7 @@ namespace Helium
         {
             StoppingSearchThreadArgs() { }
         };
-        typedef Helium::Signature< void, const StoppingSearchThreadArgs& > StoppingSearchThreadSignature;
+        typedef Helium::Signature< const StoppingSearchThreadArgs& > StoppingSearchThreadSignature;
 
 
         ///////////////////////////////////////////////////////////////////////
@@ -64,7 +64,7 @@ namespace Helium
             SearchQueryPtr m_SearchQuery;
             SearchThreadCompleteArgs( SearchQuery* searchQuery ) : m_SearchQuery( searchQuery ) {}
         };
-        typedef Helium::Signature< void, const SearchThreadCompleteArgs& > SearchThreadCompleteSignature;
+        typedef Helium::Signature< const SearchThreadCompleteArgs& > SearchThreadCompleteSignature;
 
 
         ///////////////////////////////////////////////////////////////////////
@@ -82,7 +82,7 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature< void, const SearchResultsAvailableArgs& > SearchResultsAvailableSignature;
+        typedef Helium::Signature< const SearchResultsAvailableArgs& > SearchResultsAvailableSignature;
 
 
         ///////////////////////////////////////////////////////////////////////
@@ -93,7 +93,7 @@ namespace Helium
 
             SearchThreadErrorArgs( const tstring& errors ) : m_Errors( errors ) {}
         };
-        typedef Helium::Signature< void, const SearchThreadErrorArgs& > SearchThreadErrorSignature;
+        typedef Helium::Signature< const SearchThreadErrorArgs& > SearchThreadErrorSignature;
         
 
         ///////////////////////////////////////////////////////////////////////

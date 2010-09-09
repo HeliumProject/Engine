@@ -63,7 +63,7 @@ bool DirectionalLight::ValidatePanel(const tstring& name)
 
 void DirectionalLight::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Generator->PushPanel( TXT( "Directional Light" ), true);
+  args.m_Generator->PushContainer( TXT( "Directional Light" ) );
   {
     args.m_Generator->PushContainer();
     {

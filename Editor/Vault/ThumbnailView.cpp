@@ -6,7 +6,7 @@
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
 #include "Editor/UpdateStatusEvent.h"
-#include "Application/Inspect/DragDrop/DropSource.h"
+#include "Editor/DragDrop/DropSource.h"
 #include "Foundation/Undo/Command.h"
 #include "Editor/ArtProvider.h"
 
@@ -1632,9 +1632,10 @@ void ThumbnailView::OnMouseMove( wxMouseEvent& args )
             // Drag and drop time
             if ( doDrag )
             {
-                Inspect::DropSource source( clipboardData, this );
+                DropSource source( clipboardData, this );
                 source.SetAutoRaise( true );
                 source.DoDragDrop( wxDrag_DefaultMove );
+
                 m_MouseDown = false;
             }
         }

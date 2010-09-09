@@ -115,7 +115,7 @@ namespace Helium
 
         public:
             // should we utilized or ignored?
-            bool m_Enabled;
+            bool m_IsEnabled;
         };
 
         typedef Helium::SmartPtr< ComponentBase > ComponentPtr;

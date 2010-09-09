@@ -36,7 +36,7 @@ namespace Helium
 
             bool Valid()
             {
-                return m_Component.ReferencesObject() && m_Component->m_Enabled;
+                return m_Component.ReferencesObject() && m_Component->m_IsEnabled;
             }
 
             ComponentType* operator -> ()
@@ -113,7 +113,7 @@ namespace Helium
             void Commit()
             {
                 // this is fishy, but for completeness
-                m_Component->m_Enabled = true;
+                m_Component->m_IsEnabled = true;
 
                 // Fire change event
                 m_Component->RaiseChanged();
@@ -147,7 +147,7 @@ namespace Helium
 
                 m_Component = Reflect::ConstObjectCast<ComponentType>( m_Collection->GetComponent( Reflect::GetType<ComponentType>() ) );
 
-                if ( ( !m_Component.ReferencesObject() || !m_Component->m_Enabled ) && useDefault )
+                if ( ( !m_Component.ReferencesObject() || !m_Component->m_IsEnabled ) && useDefault )
                 {
                     m_Component = new ComponentType();
                 }

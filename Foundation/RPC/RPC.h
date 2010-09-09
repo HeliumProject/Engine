@@ -51,7 +51,7 @@ namespace Helium
             void* m_Payload;
             u32   m_PayloadSize;
         };
-        typedef Helium::Signature<void, RPC::Args&>::Delegate ArgsDelegate;
+        typedef Helium::Signature< RPC::Args&>::Delegate ArgsDelegate;
 
 
         //
@@ -239,7 +239,7 @@ namespace Helium
         class InvokerTemplate : public Invoker
         {
         public:
-            typedef Helium::Signature<void, ArgsType&> InvokerSignature;
+            typedef Helium::Signature< ArgsType&> InvokerSignature;
             typedef typename InvokerSignature::Delegate InvokerDelegate;
 
             InvokerTemplate(Interface* interface, InvokerDelegate delegate)

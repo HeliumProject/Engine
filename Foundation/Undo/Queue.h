@@ -8,20 +8,34 @@ namespace Helium
     namespace Undo
     {
         class Queue;
-        struct FOUNDATION_API QueueChangeArgs
-        {
-            Queue* m_Queue;
-            const Command* m_Command;
 
+        struct QueueChangeArgs
+        {
             QueueChangeArgs( Queue* queue, const Command* command )
                 : m_Queue( queue )
                 , m_Command( command )
             {
 
             }
+
+            Queue*          m_Queue;
+            const Command*  m_Command;
         };
-        typedef Helium::Signature< void, const QueueChangeArgs& > QueueChangeSignature;
-        typedef Helium::Signature< bool, const QueueChangeArgs& > QueueChangingSignature;
+
+        struct QueueChangingArgs : public QueueChangeArgs
+        {
+            QueueChangingArgs( Queue* queue, const Command* command )
+                : QueueChangeArgs( queue, command )
+                , m_Veto( false )
+            {
+
+            }
+
+            mutable bool    m_Veto;
+        };
+
+        typedef Helium::Signature< const QueueChangingArgs& > QueueChangingSignature;
+        typedef Helium::Signature< const QueueChangeArgs& > QueueChangeSignature;
 
         class FOUNDATION_API Queue
         {

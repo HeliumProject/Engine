@@ -3,7 +3,7 @@
 #include "Platform/Compiler.h"
 #include "Platform/Thread.h"
 
-#include "Application/DocumentManager.h"
+#include "Foundation/Document/DocumentManager.h"
 
 #include "Core/SettingsManager.h"
 

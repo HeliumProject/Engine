@@ -26,7 +26,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< void, const InstanceSetChangeArgs& > InstanceSetChangeSignature;
+        typedef Helium::Signature< const InstanceSetChangeArgs& > InstanceSetChangeSignature;
 
         class InstanceSet : public Object
         {

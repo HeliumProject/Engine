@@ -37,7 +37,7 @@ namespace Helium
         {
         }
     };
-    typedef Helium::Signature< void, const FileChangedArgs& > FileChangedSignature;
+    typedef Helium::Signature< const FileChangedArgs& > FileChangedSignature;
 
     typedef void* HANDLE;
     struct FOUNDATION_API FileWatch

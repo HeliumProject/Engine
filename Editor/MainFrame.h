@@ -19,12 +19,15 @@
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/SceneManager.h"
 
-#include "Application/Inspect/DragDrop/DropTarget.h"
+#include "Editor/DragDrop/DropTarget.h"
 
 #include "Editor/MRU/MenuMRU.h"
 #include "Editor/TreeMonitor.h"
 #include "Editor/MessageDisplayer.h"
 #include "Editor/FileDialogDisplayer.h"
+
+#include "Editor/Inspect/TreeCanvas.h"
+#include "Editor/Inspect/StripCanvas.h"
 
 #include "Core/Project.h"
 
@@ -84,16 +87,6 @@ namespace Helium
 
             Core::SettingsManager*      m_SettingsManager;
 
-            // the attributes for the current selection
-            Core::EnumeratorPtr         m_SelectionEnumerator;
-            Core::PropertiesManagerPtr  m_SelectionPropertiesManager;
-            Inspect::Canvas             m_SelectionProperties;
-
-            // the attributes for the current tool
-            Core::EnumeratorPtr         m_ToolEnumerator;
-            Core::PropertiesManagerPtr  m_ToolPropertiesManager;
-            Inspect::Canvas             m_ToolProperties;
-
             MenuMRUPtr                  m_MRU;
             M_IDToColorMode             m_ColorModeLookup;
 
@@ -103,9 +96,9 @@ namespace Helium
             TreeMonitor                 m_TreeMonitor;
 
         private:
-            bool ValidateDrag( const Inspect::DragArgs& args );
-            wxDragResult DragOver( const Inspect::DragArgs& args );
-            wxDragResult Drop( const Inspect::DragArgs& args );
+            bool ValidateDrag( const Editor::DragArgs& args );
+            void DragOver( const Editor::DragArgs& args );
+            void Drop( const Editor::DragArgs& args );
 
             void SceneAdded( const Core::SceneChangeArgs& args );
             void SceneRemoving( const Core::SceneChangeArgs& args );
@@ -143,7 +136,7 @@ namespace Helium
             void OnImport( wxCommandEvent& event );
             void OnExport( wxCommandEvent& event );
 
-            bool OnSceneUndoCommand( const Core::UndoCommandArgs& command );
+            void OnSceneUndoCommand( const Core::UndoCommandArgs& command );
 
             void OnUndo( wxCommandEvent& event );
             void OnRedo( wxCommandEvent& event );
@@ -171,15 +164,14 @@ namespace Helium
 
             void Executed( const Core::ExecuteArgs& args );
 
-            void SelectionChanged( const Core::OS_SelectableDumbPtr& selection );
+            void SelectionChanged( const Core::SelectionChangeArgs& selection );
 
             void CurrentSceneChanged( const Core::SceneChangeArgs& args );
             void CurrentSceneChanging( const Core::SceneChangeArgs& args );
-            void OnPropertiesCreated( const Core::PropertiesCreatedArgs& args );
             void OnToolSelected(wxCommandEvent& event);
             void PickWorld( Core::PickArgs& args );
-            void DocumentModified( const Application::DocumentChangedArgs& args );
-            void DocumentClosed( const Application::DocumentChangedArgs& args );
+            void DocumentModified( const DocumentChangedArgs& args );
+            void DocumentClosed( const DocumentChangedArgs& args );
             void ViewToolChanged( const Core::ToolChangeArgs& args );
             void SceneStatusChanged( const Core::SceneStatusChangeArgs& args );
             void SceneContextChanged( const Core::SceneContextChangeArgs& args );

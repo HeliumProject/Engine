@@ -10,6 +10,7 @@
 #include "Core/Content/Nodes/ContentPivotTransform.h"
 #include "Core/Content/Nodes/ContentJointTransform.h"
 
+#include "Core/Content/Nodes/ContentEntityInstance.h"
 #include "Core/Content/Nodes/ContentInstance.h"
 #include "Core/Content/Nodes/ContentLocator.h"
 #include "Core/Content/Nodes/ContentVolume.h"
@@ -21,10 +22,6 @@
 #include "Core/Content/Nodes/ContentMesh.h"
 #include "Core/Content/Nodes/ContentSkin.h"
 #include "Core/Content/Nodes/ContentShader.h"
-
-#include "Core/Content/ParametricKey/ParametricColorKey.h"
-#include "Core/Content/ParametricKey/ParametricIntensityKey.h"
-#include "Core/Content/ParametricKey/ParametricKey.h"
 
 #include "Core/Content/Animation/Animation.h"
 #include "Core/Content/Animation/JointAnimation.h"
@@ -67,6 +64,7 @@ void Content::Initialize()
         g_InitializerStack.Push( Reflect::RegisterClassType<JointTransform>( TXT( "JointTransform" ) ) );
 
         g_InitializerStack.Push( Reflect::RegisterClassType<Instance>( TXT( "Instance" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterClassType<EntityInstance>( TXT( "EntityInstance" ) ) );
 
         g_InitializerStack.Push( Reflect::RegisterEnumType<VolumeShapes::VolumeShape>( &VolumeShapes::VolumeShapeEnumerateEnum, TXT( "VolumeShape" ) ) );
         g_InitializerStack.Push( Reflect::RegisterClassType<Volume>( TXT( "Volume" ) ) );
@@ -100,10 +98,6 @@ void Content::Initialize()
         g_InitializerStack.Push( Reflect::RegisterClassType<CompressedJointAnimation>( TXT( "CompressedJointAnimation" ) ) );
         g_InitializerStack.Push( Reflect::RegisterClassType<JointAnimation>( TXT( "JointAnimation" ) ) );
         g_InitializerStack.Push( Reflect::RegisterClassType<Animation>( TXT( "Animation" ) ) );
-
-        g_InitializerStack.Push( Reflect::RegisterClassType<ParametricKey>( TXT( "ParametricKey" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClassType<ParametricColorKey>( TXT( "ParametricColorKey" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClassType<ParametricIntensityKey>( TXT( "ParametricIntensityKey" ) ) );
 
         // lights
         g_InitializerStack.Push( Reflect::RegisterEnumType<LightTypes::LightType>( &LightTypes::LightTypeEnumerateEnum, TXT( "LightType" ) ) );

@@ -38,7 +38,7 @@ namespace Helium
             {
             }
         };
-        typedef Helium::Signature< void, const ThumbnailSelectionArgs& > ThumbnailSelectionSignature;
+        typedef Helium::Signature< const ThumbnailSelectionArgs& > ThumbnailSelectionSignature;
 
         // Highlight change event and arguments
         struct ThumbnailHighlightArgs
@@ -50,7 +50,7 @@ namespace Helium
             {
             }
         };
-        typedef Helium::Signature< void, const ThumbnailHighlightArgs& > ThumbnailHighlightSignature;
+        typedef Helium::Signature< const ThumbnailHighlightArgs& > ThumbnailHighlightSignature;
 
 
         /////////////////////////////////////////////////////////////////////////////

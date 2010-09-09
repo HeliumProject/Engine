@@ -17,7 +17,7 @@ void Helium::CleanupSockets()
 
 void Helium::CleanupSocketThread()
 {
-#if 0
+#ifdef PS3_POSIX
     // Cleaning up just a single thread doesn't seem to actually work
     i32 ret = sys_net_free_thread_context( 0, SYS_NET_THREAD_ALL );
 
@@ -32,7 +32,7 @@ void Helium::CleanupSocketThread()
 
 int Helium::GetSocketError()
 {
-#if 0
+#ifdef PS3_POSIX
     return sys_net_errno;
 #endif
 
@@ -42,7 +42,7 @@ int Helium::GetSocketError()
 
 bool Helium::CreateSocket(Socket& socket)
 {
-#if 0
+#ifdef PS3_POSIX
     socket = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
     if (socket < 0)
@@ -60,7 +60,7 @@ bool Helium::CreateSocket(Socket& socket)
 
 bool Helium::CloseSocket(Socket& socket)
 {
-#if 0
+#ifdef PS3_POSIX
     // don't bother to check for errors here, as this socket may not have been communicated through yet
     shutdown(socket, SHUT_RDWR);
 
@@ -79,7 +79,7 @@ bool Helium::CloseSocket(Socket& socket)
 
 bool Helium::BindSocket(Socket& socket, u16 port)
 {
-#if 0
+#ifdef PS3_POSIX
     sockaddr_in service;
     service.sin_family = AF_INET;
     service.sin_addr.s_addr = INADDR_ANY;
@@ -108,7 +108,7 @@ bool Helium::BindSocket(Socket& socket, u16 port)
 
 bool Helium::ListenSocket(Socket& socket)
 {
-#if 0
+#ifdef PS3_POSIX
     if (::listen(socket, 5) < 0)
     {
         Helium::Print("TCP Support: Failed to listen socket %d (%d)\n", socket, Helium::GetSocketError());
@@ -134,7 +134,7 @@ bool Helium::ListenSocket(Socket& socket)
 
 bool Helium::ConnectSocket(Socket& socket, sockaddr_in* service)
 {
-#if 0
+#ifdef PS3_POSIX
     return ::connect(socket, (struct sockaddr *)service, sizeof(sockaddr_in)) >= 0;
 #endif
 
@@ -144,7 +144,7 @@ bool Helium::ConnectSocket(Socket& socket, sockaddr_in* service)
 
 bool Helium::AcceptSocket(Socket& socket, Socket& server_socket, sockaddr_in* client_info)
 {
-#if 0
+#ifdef PS3_POSIX
     socklen_t lengthname = sizeof(sockaddr_in);
 
     socket = ::accept( server_socket, (struct sockaddr *)client_info, &lengthname );
@@ -158,7 +158,7 @@ bool Helium::AcceptSocket(Socket& socket, Socket& server_socket, sockaddr_in* cl
 
 int Helium::SelectSocket(int range, fd_set* read_set, fd_set* write_set, struct timeval* timeout)
 {
-#if 0
+#ifdef PS3_POSIX
     return ::socketselect(range, read_set, write_set, 0, timeout);
 #endif
 
@@ -166,9 +166,9 @@ int Helium::SelectSocket(int range, fd_set* read_set, fd_set* write_set, struct 
     return -1;
 }
 
-bool Helium::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Event& terminate)
+bool Helium::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Condition& terminate)
 {
-#if 0
+#ifdef PS3_POSIX
     i32 local_read = ::recv( socket, (tchar*)buffer, bytes, 0 );
 
     if (local_read < 0)
@@ -185,9 +185,9 @@ bool Helium::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Even
     return false;
 }
 
-bool Helium::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, Event& terminate)
+bool Helium::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, Condition& terminate)
 {
-#if 0
+#ifdef PS3_POSIX
     i32 local_wrote = ::send( socket, (tchar*)buffer, bytes, 0 );
 
     if (local_wrote < 0)

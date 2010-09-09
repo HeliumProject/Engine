@@ -54,6 +54,8 @@ namespace Helium
         const tstring& Get() const;
         const tstring& Set( const tstring& path );
 
+        void TrimToExisting();
+
         void Split( tstring& directory, tstring& filename ) const;
         void Split( tstring& directory, tstring& filename, tstring& extension ) const;
 

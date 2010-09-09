@@ -2,8 +2,8 @@
 
 #include "Foundation/Automation/Event.h"
 
-#include "Application/Document.h"
-#include "Application/DocumentManager.h"
+#include "Foundation/Document/Document.h"
+#include "Foundation/Document/DocumentManager.h"
 
 #include "Core/API.h"
 #include "Core/Asset/Classes/SceneAsset.h"
@@ -39,14 +39,14 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< void, const SceneChangeArgs& > SceneChangeSignature;
+        typedef Helium::Signature< const SceneChangeArgs& > SceneChangeSignature;
 
         /////////////////////////////////////////////////////////////////////////////
         // Wrapper for files edited by the scene editor.  Handles RCS prompts (in the
         // base class) and stores a pointer to the scene that this file is associated
         // with.
         // 
-        class SceneDocument : public Application::Document
+        class SceneDocument : public Document
         {
         public:
             SceneDocument( const tstring& file, const tstring& name = TXT( "" ) )
@@ -83,7 +83,7 @@ namespace Helium
         {
         private:
             // manages the documents (scenes)
-            Application::DocumentManager m_DocumentManager;
+            DocumentManager m_DocumentManager;
 
             // all loaded scenes by path
             M_SceneSmartPtr m_Scenes;
@@ -100,7 +100,7 @@ namespace Helium
             ScenePtr NewScene( Core::Viewport* viewport, tstring path = TXT( "" ) );
             ScenePtr OpenScene( Core::Viewport* viewport, const tstring& path, tstring& error );
 
-            Application::DocumentManager& GetDocumentManager()
+            DocumentManager& GetDocumentManager()
             {
                 return m_DocumentManager;
             }
@@ -138,9 +138,9 @@ namespace Helium
 
         private:
             Core::Scene* FindFirstNonNestedScene() const;
-            bool OnSceneEditing( const SceneEditingArgs& args );
-            void DocumentPathChanged( const Application::DocumentPathChangedArgs& args );
-            void DocumentClosed( const Application::DocumentChangedArgs& args );
+            void OnSceneEditing( const SceneEditingArgs& args );
+            void DocumentPathChanged( const DocumentPathChangedArgs& args );
+            void DocumentClosed( const DocumentChangedArgs& args );
 
         private:
             SceneChangeSignature::Event m_SceneAdded;

@@ -11,9 +11,9 @@ namespace Helium
     namespace Core
     {
         struct SettingsManagerLoadedArgs {};
-        typedef Helium::Signature< void, const SettingsManagerLoadedArgs& > SettingsManagerLoadedSignature;
+        typedef Helium::Signature< const SettingsManagerLoadedArgs& > SettingsManagerLoadedSignature;
 
-		typedef std::map< i32, Reflect::ElementPtr > M_Settings;
+        typedef std::map< Reflect::TypeID, Reflect::ElementPtr > M_Settings;
 
         class CORE_API SettingsManager : public Reflect::ConcreteInheritor< SettingsManager, Reflect::Element >
         {
@@ -37,7 +37,7 @@ namespace Helium
                 M_Settings::const_iterator itr = m_SettingsMap.find( Reflect::GetType< Type >() );
                 if ( itr != m_SettingsMap.end() )
                 {
-                    return Reflect::ObjectCast< Type >( (*itr).second );
+                    return Reflect::TryCast< Type >( (*itr).second );
                 }
                 else
                 {

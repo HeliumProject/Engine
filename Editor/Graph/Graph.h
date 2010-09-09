@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Editor/Graph/Canvas.h"
+#include "Editor/Graph/GraphCanvas.h"
 #include "Editor/Graph/Shape.h"
 #include "Editor/Graph/Node.h"
 #include "Editor/Graph/PropertyGrid.h"
@@ -11,7 +11,7 @@
 #include "Editor/Graph/CodeTextCtrl.h"
 #include "Editor/Graph/Debug.h"
 
-class Graph: public Canvas, public Shape
+class Graph: public GraphCanvas, public Shape
 {
 public:
 	Graph(wxWindow *parent);

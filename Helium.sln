@@ -2,8 +2,6 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Editor", "Editor\Editor.vcproj", "{42ACA40F-393C-4412-9709-CBAA776D1537}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Application", "Application\Application.vcproj", "{82FA5300-7B8A-4B72-A404-D5748984A231}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Foundation", "Foundation\Foundation.vcproj", "{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pipeline", "Pipeline\Pipeline.vcproj", "{6005C4B7-F1A0-442F-81AA-1377FF18F910}"
@@ -42,22 +40,6 @@ Global
 		{42ACA40F-393C-4412-9709-CBAA776D1537}.Release|Win32.Build.0 = Release|Win32
 		{42ACA40F-393C-4412-9709-CBAA776D1537}.Release|x64.ActiveCfg = Release|x64
 		{42ACA40F-393C-4412-9709-CBAA776D1537}.Release|x64.Build.0 = Release|x64
-		{82FA5300-7B8A-4B72-A404-D5748984A231}.Debug Unicode|Win32.ActiveCfg = Debug Unicode|Win32
-		{82FA5300-7B8A-4B72-A404-D5748984A231}.Debug Unicode|Win32.Build.0 = Debug Unicode|Win32
-		{82FA5300-7B8A-4B72-A404-D5748984A231}.Debug Unicode|x64.ActiveCfg = Debug Unicode|x64
-		{82FA5300-7B8A-4B72-A404-D5748984A231}.Debug Unicode|x64.Build.0 = Debug Unicode|x64
-		{82FA5300-7B8A-4B72-A404-D5748984A231}.Debug|Win32.ActiveCfg = Debug|Win32
-		{82FA5300-7B8A-4B72-A404-D5748984A231}.Debug|Win32.Build.0 = Debug|Win32
-		{82FA5300-7B8A-4B72-A404-D5748984A231}.Debug|x64.ActiveCfg = Debug|x64
-		{82FA5300-7B8A-4B72-A404-D5748984A231}.Debug|x64.Build.0 = Debug|x64
-		{82FA5300-7B8A-4B72-A404-D5748984A231}.Release Unicode|Win32.ActiveCfg = Release Unicode|Win32
-		{82FA5300-7B8A-4B72-A404-D5748984A231}.Release Unicode|Win32.Build.0 = Release Unicode|Win32
-		{82FA5300-7B8A-4B72-A404-D5748984A231}.Release Unicode|x64.ActiveCfg = Release Unicode|x64
-		{82FA5300-7B8A-4B72-A404-D5748984A231}.Release Unicode|x64.Build.0 = Release Unicode|x64
-		{82FA5300-7B8A-4B72-A404-D5748984A231}.Release|Win32.ActiveCfg = Release|Win32
-		{82FA5300-7B8A-4B72-A404-D5748984A231}.Release|Win32.Build.0 = Release|Win32
-		{82FA5300-7B8A-4B72-A404-D5748984A231}.Release|x64.ActiveCfg = Release|x64
-		{82FA5300-7B8A-4B72-A404-D5748984A231}.Release|x64.Build.0 = Release|x64
 		{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}.Debug Unicode|Win32.ActiveCfg = Debug Unicode|Win32
 		{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}.Debug Unicode|Win32.Build.0 = Debug Unicode|Win32
 		{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}.Debug Unicode|x64.ActiveCfg = Debug Unicode|x64

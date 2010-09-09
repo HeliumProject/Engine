@@ -4,7 +4,6 @@
 // Libraries
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Reflect/Registry.h"
-#include "Application/RCS/Providers/Perforce/Perforce.h"
 #include "Core/Content/ContentInit.h"
 #include "Core/Content/ContentVersion.h"
 #include "Core/Asset/AssetInit.h"
@@ -71,12 +70,17 @@ void Core::SceneInitialize()
   if ( ++g_InitCount == 1 )
   {
     // core library initiailization
-    g_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
     g_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
     g_InitializerStack.Push( Content::Initialize, Content::Cleanup );
     g_InitializerStack.Push( Asset::Initialize, Asset::Cleanup );
 
-    // reflect types defined in this library (after Reflect::Initialize above)
+    g_InitializerStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
+
+    g_InitializerStack.Push( Reflect::RegisterClassType<Object>() );
+    g_InitializerStack.Push( Reflect::RegisterClassType<Selectable>() );
+    g_InitializerStack.Push( Reflect::RegisterClassType<Persistent>() );
+    g_InitializerStack.Push( Reflect::RegisterClassType<MRUData>() );
+
     g_InitializerStack.Push( Reflect::RegisterEnumType<CameraModes::CameraMode>( &CameraModes::CameraModeEnumerateEnum, TXT( "CameraMode" ) ) ); 
     g_InitializerStack.Push( Reflect::RegisterEnumType<GeometryModes::GeometryMode>( &GeometryModes::GeometryModeEnumerateEnum, TXT( "GeometryMode" ) ) ); 
     g_InitializerStack.Push( Reflect::RegisterEnumType<ViewColorModes::ViewColorMode>( &ViewColorModes::ViewColorModeEnumerateEnum, TXT( "ViewColorMode" ) ) ); 
@@ -85,7 +89,9 @@ void Core::SceneInitialize()
     g_InitializerStack.Push( Reflect::RegisterEnumType<TranslateSnappingModes::TranslateSnappingMode>( &TranslateSnappingModes::TranslateSnappingModeEnumerateEnum, TXT( "TranslateSnappingMode" ) ) ); 
     g_InitializerStack.Push( Reflect::RegisterEnumType<ShadingMode>( &ShadingModes::EnumerateEnum, TXT( "ShadingMode" ) ) );
 
-    // luna types 
+    g_InitializerStack.Push( Viewport::InitializeType, Viewport::CleanupType );
+    g_InitializerStack.Push( Primitive::InitializeType, Primitive::CleanupType );
+
     g_InitializerStack.Push( Tool::InitializeType, Tool::CleanupType );
     g_InitializerStack.Push( CreateTool::InitializeType, CreateTool::CleanupType );
     g_InitializerStack.Push( DuplicateTool::InitializeType, DuplicateTool::CleanupType );
@@ -98,49 +104,43 @@ void Core::SceneInitialize()
     g_InitializerStack.Push( SceneGraph::InitializeType, SceneGraph::CleanupType );
     g_InitializerStack.Push( SceneNode::InitializeType, SceneNode::CleanupType );
     g_InitializerStack.Push( SceneNodeType::InitializeType, SceneNodeType::CleanupType );
-
     g_InitializerStack.Push( HierarchyNode::InitializeType, HierarchyNode::CleanupType );
     g_InitializerStack.Push( HierarchyNodeType::InitializeType, HierarchyNodeType::CleanupType );
-
     g_InitializerStack.Push( Transform::InitializeType, Transform::CleanupType );
     g_InitializerStack.Push( JointTransform::InitializeType, JointTransform::CleanupType );
     g_InitializerStack.Push( PivotTransform::InitializeType, PivotTransform::CleanupType );
-
     g_InitializerStack.Push( Layer::InitializeType, Layer::CleanupType );
     g_InitializerStack.Push( Shader::InitializeType, Shader::CleanupType );
     g_InitializerStack.Push( Mesh::InitializeType, Mesh::CleanupType );
     g_InitializerStack.Push( Skin::InitializeType, Skin::CleanupType );
-
     g_InitializerStack.Push( Point::InitializeType, Point::CleanupType );
     g_InitializerStack.Push( Curve::InitializeType, Curve::CleanupType );
     g_InitializerStack.Push( CurveCreateTool::InitializeType, CurveCreateTool::CleanupType );
     g_InitializerStack.Push( CurveEditTool::InitializeType, CurveEditTool::CleanupType );
-
     g_InitializerStack.Push( Instance::InitializeType, Instance::CleanupType );
     g_InitializerStack.Push( InstanceSet::InitializeType, InstanceSet::CleanupType );
     g_InitializerStack.Push( InstanceType::InitializeType, InstanceType::CleanupType );
-
     g_InitializerStack.Push( Volume::InitializeType, Volume::CleanupType );
     g_InitializerStack.Push( VolumeType::InitializeType, VolumeType::CleanupType );
     g_InitializerStack.Push( VolumeCreateTool::InitializeType, VolumeCreateTool::CleanupType );
-
     g_InitializerStack.Push( Locator::InitializeType, Locator::CleanupType );
     g_InitializerStack.Push( LocatorType::InitializeType, LocatorType::CleanupType );
     g_InitializerStack.Push( LocatorCreateTool::InitializeType, LocatorCreateTool::CleanupType );
-
     g_InitializerStack.Push( Entity::InitializeType, Entity::CleanupType );
     g_InitializerStack.Push( EntitySet::InitializeType, EntitySet::CleanupType );
     g_InitializerStack.Push( EntityType::InitializeType, EntityType::CleanupType );
     g_InitializerStack.Push( EntityInstanceCreateTool::InitializeType, EntityInstanceCreateTool::CleanupType );
-
     g_InitializerStack.Push( Light::InitializeType, Light::CleanupType );
     g_InitializerStack.Push( SpotLight::InitializeType, SpotLight::CleanupType );
     g_InitializerStack.Push( PointLight::InitializeType, PointLight::CleanupType );
     g_InitializerStack.Push( DirectionalLight::InitializeType, DirectionalLight::CleanupType );
     g_InitializerStack.Push( AmbientLight::InitializeType, AmbientLight::CleanupType );
 
-    g_InitializerStack.Push( Viewport::InitializeType, Viewport::CleanupType );
-    g_InitializerStack.Push( Primitive::InitializeType, Primitive::CleanupType );
+    g_InitializerStack.Push( Reflect::RegisterClassType< Core::SettingsManager >() ); 
+    g_InitializerStack.Push( Reflect::RegisterClassType< Core::CameraSettings >() ); 
+    g_InitializerStack.Push( Reflect::RegisterClassType< Core::ViewportSettings >() ); 
+    g_InitializerStack.Push( Reflect::RegisterClassType< Core::GridSettings >() );
+    g_InitializerStack.Push( Reflect::RegisterClassType< Core::SceneSettings >() );
   }
 }
 

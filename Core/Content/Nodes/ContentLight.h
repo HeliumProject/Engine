@@ -2,8 +2,6 @@
 
 #include "Core/API.h"
 #include "Core/Content/Nodes/ContentInstance.h"
-#include "Core/Content/ParametricKey/ParametricColorKey.h"
-#include "Core/Content/ParametricKey/ParametricIntensityKey.h"
 
 namespace Helium
 {
@@ -105,10 +103,6 @@ namespace Helium
 
             LightRenderType m_RenderType;
             LensFlareType   m_FlareType;
-
-            V_ParametricColorKeyPtr m_AnimationColor;
-
-            V_ParametricColorKeyPtr m_AnimationIntensity;
 
             // real-time options
             float m_DrawDist;

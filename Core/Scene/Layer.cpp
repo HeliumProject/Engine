@@ -5,7 +5,7 @@
 #include "Foundation/String/Natural.h"
 #include "Foundation/Log.h"
 
-#include "Application/Inspect/Controls/Choice.h"
+#include "Foundation/Inspect/Controls/ChoiceControl.h"
 
 #include "Core/Scene/Scene.h"
 
@@ -20,8 +20,8 @@ SCENE_DEFINE_TYPE( Core::Layer );
 // 
 void Layer::InitializeType()
 {
-  Reflect::RegisterClassType< Core::Layer >( TXT( "Core::Layer" ) );
-  PropertiesGenerator::InitializePanel( TXT( "Layer" ), CreatePanelSignature::Delegate( &Layer::CreatePanel ) );
+    Reflect::RegisterClassType< Core::Layer >( TXT( "Core::Layer" ) );
+    PropertiesGenerator::InitializePanel( TXT( "Layer" ), CreatePanelSignature::Delegate( &Layer::CreatePanel ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@ void Layer::InitializeType()
 // 
 void Layer::CleanupType()
 {
-  Reflect::UnregisterClassType< Core::Layer >();
+    Reflect::UnregisterClassType< Core::Layer >();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -38,7 +38,7 @@ void Layer::CleanupType()
 Layer::Layer( Core::Scene* scene, Content::Layer* layer )
 : Core::SceneNode( scene, layer )
 {
-  m_VisibilityData = scene->GetVisibility(layer->m_ID); 
+    m_VisibilityData = scene->GetVisibility(layer->m_ID); 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -53,7 +53,7 @@ Layer::~Layer()
 // 
 i32 Layer::GetImageIndex() const
 {
-  return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "layer" ) );
+    return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "layer" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -61,7 +61,7 @@ i32 Layer::GetImageIndex() const
 // 
 tstring Layer::GetApplicationTypeName() const
 {
-  return TXT( "Layer" );
+    return TXT( "Layer" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -71,36 +71,36 @@ tstring Layer::GetApplicationTypeName() const
 // 
 void Layer::Initialize()
 {
-  __super::Initialize();
+    __super::Initialize();
 
-  Content::Layer* layer = GetPackage< Content::Layer >();
-  HELIUM_ASSERT( layer );
+    Content::Layer* layer = GetPackage< Content::Layer >();
+    HELIUM_ASSERT( layer );
 
-  m_Descendants.clear();
-  V_TUID memberIDs;
-  V_TUID::const_iterator itr = layer->m_Members.begin();
-  V_TUID::const_iterator end = layer->m_Members.end();
-  for ( ; itr != end; ++itr )
-  {
-    Core::SceneNode* node = m_Owner->FindNode( *itr );
-    if ( node )
+    m_Descendants.clear();
+    V_TUID memberIDs;
+    V_TUID::const_iterator itr = layer->m_Members.begin();
+    V_TUID::const_iterator end = layer->m_Members.end();
+    for ( ; itr != end; ++itr )
     {
-      node->CreateDependency( this );
+        Core::SceneNode* node = m_Owner->FindNode( *itr );
+        if ( node )
+        {
+            node->CreateDependency( this );
 
-      // The ID might not be the same as what we requested (like
-      // in the case of copy/paste), so save off all the IDs
-      // and update the persistent data when we are done.
-      memberIDs.push_back( node->GetID() );
+            // The ID might not be the same as what we requested (like
+            // in the case of copy/paste), so save off all the IDs
+            // and update the persistent data when we are done.
+            memberIDs.push_back( node->GetID() );
+        }
+        else
+        {
+            tstring idStr;
+            (*itr).ToString( idStr );
+            Log::Debug( TXT( "Layer %s: Unable to reconnect layer member with ID %s (it is no longer in the scene).\n" ), GetName().c_str(), idStr.c_str() );
+        }
     }
-    else
-    {
-      tstring idStr;
-      (*itr).ToString( idStr );
-      Log::Debug( TXT( "Layer %s: Unable to reconnect layer member with ID %s (it is no longer in the scene).\n" ), GetName().c_str(), idStr.c_str() );
-    }
-  }
 
-  layer->m_Members = memberIDs;
+    layer->m_Members = memberIDs;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -110,19 +110,19 @@ void Layer::Initialize()
 // 
 void Layer::Pack()
 {
-  __super::Pack();
+    __super::Pack();
 
-  Content::Layer* layer = GetPackage< Content::Layer >();
-  HELIUM_ASSERT( layer );
+    Content::Layer* layer = GetPackage< Content::Layer >();
+    HELIUM_ASSERT( layer );
 
-  layer->m_Members.clear();
-  layer->m_Members.resize( m_Descendants.size() );
-  S_SceneNodeSmartPtr::const_iterator itr = m_Descendants.begin();
-  S_SceneNodeSmartPtr::const_iterator end = m_Descendants.end();
-  for ( size_t index = 0; itr != end; ++itr, ++index )
-  {
-    layer->m_Members[index] = (*itr)->GetID();
-  }
+    layer->m_Members.clear();
+    layer->m_Members.resize( m_Descendants.size() );
+    S_SceneNodeSmartPtr::const_iterator itr = m_Descendants.begin();
+    S_SceneNodeSmartPtr::const_iterator end = m_Descendants.end();
+    for ( size_t index = 0; itr != end; ++itr, ++index )
+    {
+        layer->m_Members[index] = (*itr)->GetID();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -130,8 +130,8 @@ void Layer::Pack()
 // 
 bool Layer::IsVisible() const
 {
-  HELIUM_ASSERT( m_VisibilityData ); 
-  return m_VisibilityData->GetVisibleLayer(); 
+    HELIUM_ASSERT( m_VisibilityData ); 
+    return m_VisibilityData->GetVisibleLayer(); 
 
 }
 
@@ -141,15 +141,15 @@ bool Layer::IsVisible() const
 // 
 void Layer::SetVisible( bool visible )
 {
-  HELIUM_ASSERT( m_VisibilityData ); 
-  if ( m_VisibilityData->GetVisibleLayer() != visible )
-  {
-    m_VisibilityData->SetVisibleLayer( visible ); 
+    HELIUM_ASSERT( m_VisibilityData ); 
+    if ( m_VisibilityData->GetVisibleLayer() != visible )
+    {
+        m_VisibilityData->SetVisibleLayer( visible ); 
 
-    Dirty();
+        Dirty();
 
-    m_VisibilityChanged.Raise( SceneNodeChangeArgs( this ) );
-  }
+        m_VisibilityChanged.Raise( SceneNodeChangeArgs( this ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -158,9 +158,9 @@ void Layer::SetVisible( bool visible )
 // 
 bool Layer::IsSelectable() const
 {
-  const Content::Layer* layer = GetPackage< Content::Layer >();
-  HELIUM_ASSERT( layer );
-  return layer->m_Selectable;
+    const Content::Layer* layer = GetPackage< Content::Layer >();
+    HELIUM_ASSERT( layer );
+    return layer->m_Selectable;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -168,42 +168,42 @@ bool Layer::IsSelectable() const
 // 
 void Layer::SetSelectable( bool selectable )
 {
-  Content::Layer* layer = GetPackage< Content::Layer >();
-  HELIUM_ASSERT( layer );
-  layer->m_Selectable = selectable;
-  Dirty();
+    Content::Layer* layer = GetPackage< Content::Layer >();
+    HELIUM_ASSERT( layer );
+    layer->m_Selectable = selectable;
+    Dirty();
 }
 
 const Math::Color3& Layer::GetColor() const
 {
-  return GetPackage< Content::Layer >()->m_Color;
+    return GetPackage< Content::Layer >()->m_Color;
 }
 
 void Layer::SetColor( const Math::Color3& color )
 {
-  Content::Layer* layer = GetPackage< Content::Layer >();
-  if ( color != layer->m_Color )
-  {
-    layer->m_Color = color;
-    Dirty();
-  }
+    Content::Layer* layer = GetPackage< Content::Layer >();
+    if ( color != layer->m_Color )
+    {
+        layer->m_Color = color;
+        Dirty();
+    }
 }
 
 OS_SelectableDumbPtr Layer::GetMembers()
 {
-  OS_SelectableDumbPtr members;
+    OS_SelectableDumbPtr members;
 
-  for each (Core::SceneNode* n in m_Descendants)
-  {
-    members.Append(n);
-  }
+    for each (Core::SceneNode* n in m_Descendants)
+    {
+        members.Append(n);
+    }
 
-  return members;
+    return members;
 }
 
 bool Layer::ContainsMember( Core::SceneNode* node ) const
 {
-  return m_Descendants.find( node ) != m_Descendants.end();
+    return m_Descendants.find( node ) != m_Descendants.end();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -211,37 +211,37 @@ bool Layer::ContainsMember( Core::SceneNode* node ) const
 // 
 void Layer::Prune( V_SceneNodeDumbPtr& prunedNodes )
 {
-  Content::Layer* layer = GetPackage< Content::Layer >();
-  HELIUM_ASSERT( layer );
+    Content::Layer* layer = GetPackage< Content::Layer >();
+    HELIUM_ASSERT( layer );
 
-  // Iterate over the layer members, update the persistent data as we do so,
-  // and build a local list of the members.  We have to build a list locally
-  // because disconnecting at this point would change the list that we are
-  // trying to iterate over.
-  V_SceneNodeDumbPtr members;
-  members.resize( m_Descendants.size() );
-  layer->m_Members.clear();
-  layer->m_Members.resize( m_Descendants.size() );
-  S_SceneNodeSmartPtr::const_iterator itr = m_Descendants.begin();
-  S_SceneNodeSmartPtr::const_iterator end = m_Descendants.end();
-  for ( size_t index = 0; itr != end; ++itr, ++index )
-  {
-    const SceneNodePtr& member = (*itr);
+    // Iterate over the layer members, update the persistent data as we do so,
+    // and build a local list of the members.  We have to build a list locally
+    // because disconnecting at this point would change the list that we are
+    // trying to iterate over.
+    V_SceneNodeDumbPtr members;
+    members.resize( m_Descendants.size() );
+    layer->m_Members.clear();
+    layer->m_Members.resize( m_Descendants.size() );
+    S_SceneNodeSmartPtr::const_iterator itr = m_Descendants.begin();
+    S_SceneNodeSmartPtr::const_iterator end = m_Descendants.end();
+    for ( size_t index = 0; itr != end; ++itr, ++index )
+    {
+        const SceneNodePtr& member = (*itr);
 
-    layer->m_Members[index] = member->GetID();
-    members[index] = member.Ptr();
-  }
+        layer->m_Members[index] = member->GetID();
+        members[index] = member.Ptr();
+    }
 
-  // Iterate over the local member list and disconnect each one
-  V_SceneNodeDumbPtr::const_iterator memberItr = members.begin();
-  V_SceneNodeDumbPtr::const_iterator memberEnd = members.end();
-  for ( ; memberItr != memberEnd; ++memberItr )
-  {
-    DisconnectDescendant( *memberItr );
-  }
+    // Iterate over the local member list and disconnect each one
+    V_SceneNodeDumbPtr::const_iterator memberItr = members.begin();
+    V_SceneNodeDumbPtr::const_iterator memberEnd = members.end();
+    for ( ; memberItr != memberEnd; ++memberItr )
+    {
+        DisconnectDescendant( *memberItr );
+    }
 
-  // Let the base class take care of the rest
-  __super::Prune( prunedNodes );
+    // Let the base class take care of the rest
+    __super::Prune( prunedNodes );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -249,34 +249,34 @@ void Layer::Prune( V_SceneNodeDumbPtr& prunedNodes )
 // 
 void Layer::Insert(SceneGraph* g, V_SceneNodeDumbPtr& insertedNodes )
 {
-  // Let the base class put the layer back into the graph
-  __super::Insert( g, insertedNodes );
+    // Let the base class put the layer back into the graph
+    __super::Insert( g, insertedNodes );
 
-  // Fetch the persistent data, dereference each object and add it back
-  // as a member of the layer.
-  if ( IsInitialized() )
-  {
-    Content::Layer* layer = GetPackage< Content::Layer >();
-    HELIUM_ASSERT( layer );
-    HELIUM_ASSERT( m_Descendants.empty() );
-    V_TUID::const_iterator itr = layer->m_Members.begin();
-    V_TUID::const_iterator end = layer->m_Members.end();
-    for ( ; itr != end; ++itr )
+    // Fetch the persistent data, dereference each object and add it back
+    // as a member of the layer.
+    if ( IsInitialized() )
     {
-      const TUID& id = *itr;
-      Core::SceneNode* node = m_Owner->FindNode( id );
-      if ( node )
-      {
-        ConnectDescendant( node );
-      }
-      else
-      {
-        tstring idStr;
-        id.ToString( idStr );
-        Log::Debug( TXT( "Layer %s: Unable to reconnect layer member with ID %s (it is no longer in the scene).\n" ), GetName().c_str(), idStr.c_str() );
-      }
+        Content::Layer* layer = GetPackage< Content::Layer >();
+        HELIUM_ASSERT( layer );
+        HELIUM_ASSERT( m_Descendants.empty() );
+        V_TUID::const_iterator itr = layer->m_Members.begin();
+        V_TUID::const_iterator end = layer->m_Members.end();
+        for ( ; itr != end; ++itr )
+        {
+            const TUID& id = *itr;
+            Core::SceneNode* node = m_Owner->FindNode( id );
+            if ( node )
+            {
+                ConnectDescendant( node );
+            }
+            else
+            {
+                tstring idStr;
+                id.ToString( idStr );
+                Log::Debug( TXT( "Layer %s: Unable to reconnect layer member with ID %s (it is no longer in the scene).\n" ), GetName().c_str(), idStr.c_str() );
+            }
+        }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -285,17 +285,17 @@ void Layer::Insert(SceneGraph* g, V_SceneNodeDumbPtr& insertedNodes )
 // 
 bool Layer::ValidatePanel(const tstring& name)
 {
-  if (name == TXT( "Layer" ) )
-  {
-    return true;
-  }
-  else if ( name == TXT( "Membership" ) )
-  {
-    // We don't have layers of layers, so this panel is not needed
-    return false;
-  }
+    if (name == TXT( "Layer" ) )
+    {
+        return true;
+    }
+    else if ( name == TXT( "Membership" ) )
+    {
+        // We don't have layers of layers, so this panel is not needed
+        return false;
+    }
 
-  return __super::ValidatePanel(name);
+    return __super::ValidatePanel(name);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -304,71 +304,71 @@ bool Layer::ValidatePanel(const tstring& name)
 // 
 void Layer::CreatePanel( CreatePanelArgs& args )
 {
-  tstring unionStr;
-  tstring intersectionStr;
-  BuildUnionAndIntersection( args.m_Generator, args.m_Selection, unionStr, intersectionStr );
+    tstring unionStr;
+    tstring intersectionStr;
+    BuildUnionAndIntersection( args.m_Generator, args.m_Selection, unionStr, intersectionStr );
 
-  args.m_Generator->PushPanel( TXT( "Layer" ), true);
-  {
-    args.m_Generator->PushContainer();
+    args.m_Generator->PushContainer( TXT( "Layer" ) );
     {
-      args.m_Generator->AddLabel( TXT( "Color" ) );
-      args.m_Generator->AddColorPicker< Core::Layer, Math::Color3 >( args.m_Selection, &Layer::GetColor, &Layer::SetColor );
+        args.m_Generator->PushContainer();
+        {
+            args.m_Generator->AddLabel( TXT( "Color" ) );
+            args.m_Generator->AddColorPicker< Core::Layer, Math::Color3 >( args.m_Selection, &Layer::GetColor, &Layer::SetColor );
+        }
+        args.m_Generator->Pop();
+
+        if ( args.m_Selection.Size() == 1 )
+        {
+            // Only one layer selected, just show its members
+
+            args.m_Generator->PushContainer();
+            {
+                args.m_Generator->AddLabel( TXT( "Members" ) );
+            }
+            args.m_Generator->Pop();
+
+            Inspect::Container* container = args.m_Generator->PushContainer();
+            {
+                Inspect::ListPtr control = args.m_Generator->CreateControl<Inspect::List>();
+                control->Bind( new Inspect::StringFormatter<tstring>( new tstring( unionStr ), true ) );
+                container->AddChild(control);
+            }
+            args.m_Generator->Pop();
+        }
+        else if ( args.m_Selection.Size() > 1 )
+        {
+            // More than one layer selected, show union and intersection of members
+
+            args.m_Generator->PushContainer();
+            {
+                args.m_Generator->AddLabel( TXT( "Union" ) );
+            }
+            args.m_Generator->Pop();
+
+            Inspect::Container* unionContainer = args.m_Generator->PushContainer();
+            {
+                Inspect::ListPtr control = args.m_Generator->CreateControl<Inspect::List>();
+                control->Bind( new Inspect::StringFormatter<tstring>( new tstring( unionStr ), true ) );
+                unionContainer->AddChild(control);
+            }
+            args.m_Generator->Pop();
+
+            args.m_Generator->PushContainer();
+            {
+                args.m_Generator->AddLabel( TXT( "Intersection" ) );
+            }
+            args.m_Generator->Pop();
+
+            Inspect::Container* intersectionContainer = args.m_Generator->PushContainer();
+            {
+                Inspect::ListPtr control = args.m_Generator->CreateControl<Inspect::List>();
+                control->Bind( new Inspect::StringFormatter<tstring>( new tstring( intersectionStr ), true ) );
+                intersectionContainer->AddChild(control);
+            }
+            args.m_Generator->Pop();
+        }
     }
     args.m_Generator->Pop();
-
-    if ( args.m_Selection.Size() == 1 )
-    {
-      // Only one layer selected, just show its members
-
-      args.m_Generator->PushContainer();
-      {
-        args.m_Generator->AddLabel( TXT( "Members" ) );
-      }
-      args.m_Generator->Pop();
-
-      Inspect::Container* container = args.m_Generator->PushContainer();
-      {
-        Inspect::ListPtr control = args.m_Generator->GetContainer()->GetCanvas()->Create<Inspect::List>( args.m_Generator );
-        control->Bind( new Inspect::StringFormatter<tstring>( new tstring( unionStr ), true ) );
-        container->AddControl(control);
-      }
-      args.m_Generator->Pop();
-    }
-    else if ( args.m_Selection.Size() > 1 )
-    {
-      // More than one layer selected, show union and intersection of members
-      
-      args.m_Generator->PushContainer();
-      {
-        args.m_Generator->AddLabel( TXT( "Union" ) );
-      }
-      args.m_Generator->Pop();
-
-      Inspect::Container* unionContainer = args.m_Generator->PushContainer();
-      {
-        Inspect::ListPtr control = args.m_Generator->GetContainer()->GetCanvas()->Create<Inspect::List>( args.m_Generator );
-        control->Bind( new Inspect::StringFormatter<tstring>( new tstring( unionStr ), true ) );
-        unionContainer->AddControl(control);
-      }
-      args.m_Generator->Pop();
-
-      args.m_Generator->PushContainer();
-      {
-        args.m_Generator->AddLabel( TXT( "Intersection" ) );
-      }
-      args.m_Generator->Pop();
-
-      Inspect::Container* intersectionContainer = args.m_Generator->PushContainer();
-      {
-        Inspect::ListPtr control = args.m_Generator->GetContainer()->GetCanvas()->Create<Inspect::List>( args.m_Generator );
-        control->Bind( new Inspect::StringFormatter<tstring>( new tstring( intersectionStr ), true ) );
-        intersectionContainer->AddControl(control);
-      }
-      args.m_Generator->Pop();
-    }
-  }
-  args.m_Generator->Pop();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -377,108 +377,108 @@ void Layer::CreatePanel( CreatePanelArgs& args )
 // 
 void Layer::BuildUnionAndIntersection( PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection, tstring& unionStr, tstring& intersectionStr )
 {
-  typedef std::set< tstring, CaseInsensitiveNatStrCmp > S_Ordered;
-  S_Ordered unionSet;
-  S_Ordered intersectionSet;
+    typedef std::set< tstring, CaseInsensitiveNatStrCmp > S_Ordered;
+    S_Ordered unionSet;
+    S_Ordered intersectionSet;
 
-  if ( generator )
-  {
-    // Keep a running tally of the union and intersection of members over each layer.
-    HM_SceneNodeDumbPtr mapUnion;
-    HM_SceneNodeDumbPtr mapIntersection;
-
-    // For each item in the selection
-    OS_SelectableDumbPtr::Iterator selItr = selection.Begin();
-    OS_SelectableDumbPtr::Iterator selEnd = selection.End();
-    for ( bool isFirstLayer = true; selItr != selEnd; ++selItr, isFirstLayer = false )
+    if ( generator )
     {
-      HM_SceneNodeDumbPtr layerMembers;
+        // Keep a running tally of the union and intersection of members over each layer.
+        HM_SceneNodeDumbPtr mapUnion;
+        HM_SceneNodeDumbPtr mapIntersection;
 
-      // If it's a layer
-      Core::Layer* layer = Reflect::ObjectCast< Core::Layer >( *selItr );
-      if ( layer )
-      {
-        // Iterate over the layer's members (descendants)
-        S_SceneNodeSmartPtr::const_iterator memberItr = layer->GetDescendants().begin();
-        S_SceneNodeSmartPtr::const_iterator memberEnd = layer->GetDescendants().end();
-        for ( ; memberItr != memberEnd; ++memberItr )
+        // For each item in the selection
+        OS_SelectableDumbPtr::Iterator selItr = selection.Begin();
+        OS_SelectableDumbPtr::Iterator selEnd = selection.End();
+        for ( bool isFirstLayer = true; selItr != selEnd; ++selItr, isFirstLayer = false )
         {
-          // Create a list box item
-          const SceneNodePtr& dependNode = *memberItr;
+            HM_SceneNodeDumbPtr layerMembers;
 
-          // Try to insert the item into our running list of all the items (the union)
-          Helium::Insert<HM_SceneNodeDumbPtr>::Result inserted =
-            mapUnion.insert( HM_SceneNodeDumbPtr::value_type( dependNode->GetID(), dependNode ) );
+            // If it's a layer
+            Core::Layer* layer = Reflect::ObjectCast< Core::Layer >( *selItr );
+            if ( layer )
+            {
+                // Iterate over the layer's members (descendants)
+                S_SceneNodeSmartPtr::const_iterator memberItr = layer->GetDescendants().begin();
+                S_SceneNodeSmartPtr::const_iterator memberEnd = layer->GetDescendants().end();
+                for ( ; memberItr != memberEnd; ++memberItr )
+                {
+                    // Create a list box item
+                    const SceneNodePtr& dependNode = *memberItr;
 
-          if ( inserted.second )
-          {
-            // Maintain an ordered list of the node names (the union)
-            unionSet.insert( dependNode->GetName() );
-          }
+                    // Try to insert the item into our running list of all the items (the union)
+                    Helium::Insert<HM_SceneNodeDumbPtr>::Result inserted =
+                        mapUnion.insert( HM_SceneNodeDumbPtr::value_type( dependNode->GetID(), dependNode ) );
 
-          // Keep a map of all items that belong to this layer (we'll use it to update the intersection)
-          layerMembers.insert( HM_SceneNodeDumbPtr::value_type( dependNode->GetID(), dependNode ) );
+                    if ( inserted.second )
+                    {
+                        // Maintain an ordered list of the node names (the union)
+                        unionSet.insert( dependNode->GetName() );
+                    }
+
+                    // Keep a map of all items that belong to this layer (we'll use it to update the intersection)
+                    layerMembers.insert( HM_SceneNodeDumbPtr::value_type( dependNode->GetID(), dependNode ) );
+                }
+
+                // Iterate over all intersecting items and make sure that each one was also in the layer
+                // that we just iterated over.  If this is the first time through the loop, there won't
+                // be anything in the intersection.
+                HM_SceneNodeDumbPtr::iterator intersectionItr = mapIntersection.begin();
+                HM_SceneNodeDumbPtr::iterator intersectionEnd = mapIntersection.end();
+                while ( intersectionItr != intersectionEnd )
+                {
+                    const TUID& key = intersectionItr->first;
+                    HM_SceneNodeDumbPtr::iterator found = layerMembers.find( key );
+                    if ( found == layerMembers.end() )
+                    {
+                        // The item in our intersection map was not in the current layer, so erase it.
+                        intersectionItr = mapIntersection.erase( intersectionItr );
+                    }
+                    else
+                    {
+                        // This item was in the layer, so leave it in the intersection map.
+                        intersectionItr++;
+                    }
+                }
+            }
+
+            // If this is the first layer that we have looked at, the intersection is simply
+            // all members of the layer.  We will remove items from the intersection as we 
+            // iterate over the other layers, if an item does not exist in both lists.
+            if ( isFirstLayer )
+            {
+                mapIntersection = layerMembers;
+            }
         }
 
-        // Iterate over all intersecting items and make sure that each one was also in the layer
-        // that we just iterated over.  If this is the first time through the loop, there won't
-        // be anything in the intersection.
-        HM_SceneNodeDumbPtr::iterator intersectionItr = mapIntersection.begin();
-        HM_SceneNodeDumbPtr::iterator intersectionEnd = mapIntersection.end();
-        while ( intersectionItr != intersectionEnd )
+        // Now that we have built the intersection map, add the name of each item to
+        // the list that will be used by the UI.
+        HM_SceneNodeDumbPtr::const_iterator intersectionItr = mapIntersection.begin();
+        HM_SceneNodeDumbPtr::const_iterator intersectionEnd = mapIntersection.end();
+        for ( ; intersectionItr != intersectionEnd; ++intersectionItr )
         {
-          const TUID& key = intersectionItr->first;
-          HM_SceneNodeDumbPtr::iterator found = layerMembers.find( key );
-          if ( found == layerMembers.end() )
-          {
-            // The item in our intersection map was not in the current layer, so erase it.
-            intersectionItr = mapIntersection.erase( intersectionItr );
-          }
-          else
-          {
-            // This item was in the layer, so leave it in the intersection map.
-            intersectionItr++;
-          }
+            Core::SceneNode* node = intersectionItr->second;
+            intersectionSet.insert( node->GetName() );
         }
-      }
 
-      // If this is the first layer that we have looked at, the intersection is simply
-      // all members of the layer.  We will remove items from the intersection as we 
-      // iterate over the other layers, if an item does not exist in both lists.
-      if ( isFirstLayer )
-      {
-        mapIntersection = layerMembers;
-      }
-    }
+        // Build the intersection string
+        for each ( const tstring& str in intersectionSet )
+        {
+            if ( !intersectionStr.empty() )
+            {
+                intersectionStr += Reflect::s_ContainerItemDelimiter;
+            }
+            intersectionStr += str;
+        }
 
-    // Now that we have built the intersection map, add the name of each item to
-    // the list that will be used by the UI.
-    HM_SceneNodeDumbPtr::const_iterator intersectionItr = mapIntersection.begin();
-    HM_SceneNodeDumbPtr::const_iterator intersectionEnd = mapIntersection.end();
-    for ( ; intersectionItr != intersectionEnd; ++intersectionItr )
-    {
-      Core::SceneNode* node = intersectionItr->second;
-      intersectionSet.insert( node->GetName() );
+        // Build the union string
+        for each ( const tstring& str in unionSet )
+        {
+            if ( !unionStr.empty() )
+            {
+                unionStr += Reflect::s_ContainerItemDelimiter;
+            }
+            unionStr += str;
+        }
     }
-
-    // Build the intersection string
-    for each ( const tstring& str in intersectionSet )
-    {
-      if ( !intersectionStr.empty() )
-      {
-        intersectionStr += Reflect::s_ContainerItemDelimiter;
-      }
-      intersectionStr += str;
-    }
-
-    // Build the union string
-    for each ( const tstring& str in unionSet )
-    {
-      if ( !unionStr.empty() )
-      {
-        unionStr += Reflect::s_ContainerItemDelimiter;
-      }
-      unionStr += str;
-    }
-  }
 }

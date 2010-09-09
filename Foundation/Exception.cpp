@@ -144,7 +144,9 @@ u32 Debug::ProcessException(LPEXCEPTION_POINTERS info, bool print, bool fatal)
         && info->ExceptionRecord->ExceptionCode == EXCEPTION_BREAKPOINT
         && g_BreakpointOccurred.Valid() )
     {
-        return g_BreakpointOccurred.Invoke( BreakpointArgs (info, fatal) );
+        BreakpointArgs args (info, fatal);
+        g_BreakpointOccurred.Invoke( args );
+        return args.m_Result;
     }
     else
     {

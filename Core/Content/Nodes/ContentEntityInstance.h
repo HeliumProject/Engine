@@ -7,7 +7,7 @@
 
 namespace Helium
 {
-    namespace Asset
+    namespace Content
     {
         class CORE_API EntityInstance : public Content::Instance
         {

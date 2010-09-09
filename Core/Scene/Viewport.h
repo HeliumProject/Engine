@@ -59,7 +59,7 @@ namespace Helium
         // Events
         //
 
-        typedef Helium::Signature< void, Core::RenderVisitor* > RenderSignature;
+        typedef Helium::Signature< Core::RenderVisitor* > RenderSignature;
 
         namespace SelectionModes
         {
@@ -123,7 +123,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< void, const Core::SelectArgs& > SelectSignature;
+        typedef Helium::Signature< const Core::SelectArgs& > SelectSignature;
 
         //
         // Highlight
@@ -142,7 +142,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< void, const Core::SetHighlightArgs& > SetHighlightSignature;
+        typedef Helium::Signature< const Core::SetHighlightArgs& > SetHighlightSignature;
 
         struct ClearHighlightArgs
         {
@@ -155,7 +155,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< void, const Core::ClearHighlightArgs& > ClearHighlightSignature;
+        typedef Helium::Signature< const Core::ClearHighlightArgs& > ClearHighlightSignature;
 
         // 
         // Tool 
@@ -173,7 +173,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< void, const Core::ToolChangeArgs& > ToolChangeSignature;
+        typedef Helium::Signature< const Core::ToolChangeArgs& > ToolChangeSignature;
 
         struct CameraModeChangeArgs
         {
@@ -187,7 +187,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< void, const CameraModeChangeArgs& > CameraModeChangeSignature;
+        typedef Helium::Signature< const CameraModeChangeArgs& > CameraModeChangeSignature;
 
         //
         // Viewport Manager

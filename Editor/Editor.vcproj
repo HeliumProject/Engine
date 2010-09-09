@@ -54,6 +54,7 @@
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Precompile.h"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -140,6 +141,7 @@
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Precompile.h"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -223,6 +225,7 @@
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Precompile.h"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -306,6 +309,7 @@
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Precompile.h"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -392,6 +396,7 @@
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Precompile.h"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -478,6 +483,7 @@
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Precompile.h"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -561,6 +567,7 @@
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Precompile.h"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -644,6 +651,7 @@
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Precompile.h"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -703,7 +711,6 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
-			RelativePathToProject=".\Application\Application.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{6005C4B7-F1A0-442F-81AA-1377FF18F910}"
@@ -1073,6 +1080,50 @@
 					RelativePath=".\Controls\Tree\SortTreeCtrl.h"
 					>
 				</File>
+				<File
+					RelativePath=".\Controls\Tree\TreeWndCtrl.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Controls\Tree\TreeWndCtrl.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Controls\Tree\TreeWndCtrlApi.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Controls\Tree\TreeWndCtrlCollapsed.xpm"
+					>
+				</File>
+				<File
+					RelativePath=".\Controls\Tree\TreeWndCtrlExpanded.xpm"
+					>
+				</File>
+				<File
+					RelativePath=".\Controls\Tree\TreeWndCtrlItem.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Controls\Tree\TreeWndCtrlItem.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Controls\Tree\TreeWndCtrlNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Controls\Tree\TreeWndCtrlNode.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Controls\Tree\TreeWndCtrlSpacer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Controls\Tree\TreeWndCtrlSpacer.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="List"
@@ -1135,14 +1186,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Graph\Canvas.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Graph\Canvas.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Graph\Clipboard.h"
 				>
 			</File>
@@ -1168,6 +1211,14 @@
 			</File>
 			<File
 				RelativePath=".\Graph\Graph.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\GraphCanvas.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\GraphCanvas.h"
 				>
 			</File>
 			<File
@@ -1495,6 +1546,262 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="Inspect"
+			>
+			<File
+				RelativePath=".\Inspect\Canvas.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Canvas.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\StripCanvas.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\StripCanvas.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\TreeCanvas.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\TreeCanvas.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\TreeNodeWidget.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\TreeNodeWidget.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Widget.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Widget.h"
+				>
+			</File>
+			<Filter
+				Name="Widgets"
+				>
+				<File
+					RelativePath=".\Inspect\Widgets\ButtonWidget.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\ButtonWidget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\CheckBoxWidget.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\CheckBoxWidget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\ChoiceWidget.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\ChoiceWidget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\ColorPickerWidget.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\ColorPickerWidget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\FileDialogButtonWidget.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\FileDialogButtonWidget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\LabelWidget.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\LabelWidget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\ListWidget.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\ListWidget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\SliderWidget.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\SliderWidget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\ValueWidget.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\ValueWidget.h"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="DragDrop"
+			>
+			<File
+				RelativePath=".\DragDrop\DropSource.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DragDrop\DropSource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DragDrop\DropTarget.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DragDrop\DropTarget.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DragDrop\FilteredDropTarget.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DragDrop\FilteredDropTarget.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Clipboard"
+			>
+			<File
+				RelativePath=".\Clipboard\ClipboardDataObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Clipboard\ClipboardDataObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Clipboard\ClipboardDataWrapper.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Clipboard\ClipboardDataWrapper.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Clipboard\ClipboardElementArray.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Clipboard\ClipboardElementArray.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Clipboard\ClipboardFileList.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Clipboard\ClipboardFileList.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Clipboard\ReflectClipboardData.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Clipboard\ReflectClipboardData.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Perforce"
+			>
+			<File
+				RelativePath=".\Perforce\P4API.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4ChangelistCommands.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4ChangelistCommands.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4ClientCommands.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4ClientCommands.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4Command.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4Command.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4Exceptions.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4Provider.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4Provider.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4QueryCommands.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4QueryCommands.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\P4Tags.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\Perforce.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Perforce\Perforce.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\API.h"
 			>
@@ -1516,11 +1823,27 @@
 			>
 		</File>
 		<File
+			RelativePath=".\ColorPicker.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ColorPicker.h"
+			>
+		</File>
+		<File
 			RelativePath=".\CommandQueue.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\CommandQueue.h"
+			>
+		</File>
+		<File
+			RelativePath=".\CustomColors.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\CustomColors.h"
 			>
 		</File>
 		<File
@@ -1621,6 +1944,14 @@
 		</File>
 		<File
 			RelativePath=".\EntityAssetOutliner.h"
+			>
+		</File>
+		<File
+			RelativePath=".\FileDialog.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\FileDialog.h"
 			>
 		</File>
 		<File
@@ -1880,19 +2211,19 @@
 			>
 		</File>
 		<File
-			RelativePath=".\SelectionPropertiesPanel.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\SelectionPropertiesPanel.h"
-			>
-		</File>
-		<File
 			RelativePath=".\SettingsDialog.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\SettingsDialog.h"
+			>
+		</File>
+		<File
+			RelativePath=".\SimpleConfig.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\SimpleConfig.h"
 			>
 		</File>
 		<File

@@ -1,7 +1,7 @@
 #include "Registry.h"
 #include "Version.h"
-#include "Document.h"
 #include "Serializers.h"
+#include "DOM.h"
 
 #ifdef REFLECT_OBJECT_TRACKING
 # include "Platform/Mutex.h"

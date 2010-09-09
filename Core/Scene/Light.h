@@ -52,7 +52,7 @@ namespace Helium
                 : m_Light( light )
             {}
         };
-        typedef Helium::Signature< void, const LightChangeArgs& > LightChangeSignature;
+        typedef Helium::Signature< const LightChangeArgs& > LightChangeSignature;
 
         struct RealtimeLightExistenceArgs
         {
@@ -64,7 +64,7 @@ namespace Helium
                 , m_Added( added )
             {}
         };
-        typedef Helium::Signature< void, const RealtimeLightExistenceArgs& > RealtimeLightExistenceSignature;
+        typedef Helium::Signature< const RealtimeLightExistenceArgs& > RealtimeLightExistenceSignature;
 
         class CORE_API Light HELIUM_ABSTRACT : public Core::Instance
         {
@@ -109,9 +109,6 @@ namespace Helium
             Math::Color3 GetColor() const;
             void SetColor( Math::Color3 color );
 
-            float GetIntensity() const;
-            void SetIntensity( float intensity );
-
             i32 GetRenderType() const;
             void SetRenderType( i32 renderType );
 
@@ -150,12 +147,6 @@ namespace Helium
 
             float GetPhotonIntensity() const;
             void SetPhotonIntensity( float intensity );
-
-            const Content::V_ParametricKeyPtr& GetColorAnimation() const;
-            void SetColorAnimation( const Content::V_ParametricKeyPtr& animation );
-
-            const Content::V_ParametricKeyPtr& GetIntensityAnimation() const;
-            void SetIntensityAnimation( const Content::V_ParametricKeyPtr& animation );
 
             f32 GetAnimationDuration() const;
             void SetAnimationDuration( f32 duration );

@@ -46,7 +46,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature<void, NodeAddedArgs&> NodeAddedSignature;
+        typedef Helium::Signature< NodeAddedArgs&> NodeAddedSignature;
 
         struct TUIDBSphere
         {

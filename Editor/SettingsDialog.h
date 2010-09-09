@@ -5,9 +5,10 @@
 #include "Core/SettingsManager.h"
 
 #include "Foundation/Reflect/Element.h"
-#include "Application/Inspect/Controls/Canvas.h"
 
 #include "Editor/API.h"
+#include "Editor/Inspect/Canvas.h"
+#include "Editor/Inspect/TreeCanvas.h"
 
 namespace Helium
 {
@@ -16,11 +17,11 @@ namespace Helium
         class SettingInfo : public Helium::RefCountBase< SettingInfo >
         {
         public:
-            SettingInfo( Reflect::ElementPtr& source, Reflect::ElementPtr& clone, Inspect::CanvasPtr& canvas );
+            SettingInfo( Reflect::ElementPtr& source, Reflect::ElementPtr& clone, Editor::TreeCanvasPtr& canvas );
 
-            Reflect::ElementPtr m_Source;
-            Reflect::ElementPtr m_Clone;
-            Inspect::CanvasPtr m_Canvas;
+            Reflect::ElementPtr   m_Source;
+            Reflect::ElementPtr   m_Clone;
+            Editor::TreeCanvasPtr m_Canvas;
         };
 
         typedef Helium::SmartPtr< SettingInfo > SettingInfoPtr;

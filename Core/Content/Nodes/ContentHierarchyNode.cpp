@@ -8,7 +8,10 @@ REFLECT_DEFINE_ABSTRACT(HierarchyNode);
 void HierarchyNode::EnumerateClass( Reflect::Compositor<HierarchyNode>& comp )
 {
     Reflect::Field* fieldParentID = comp.AddField( &HierarchyNode::m_ParentID, "m_ParentID" );
+
     Reflect::Field* fieldHidden = comp.AddField( &HierarchyNode::m_Hidden, "m_Hidden" );
+    fieldHidden->SetProperty( TXT( "HelpText" ), TXT( "This determines if the node is hidden or not." ) );
+
     Reflect::Field* fieldLive = comp.AddField( &HierarchyNode::m_Live, "m_Live" );
 }
 

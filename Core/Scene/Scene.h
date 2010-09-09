@@ -5,8 +5,8 @@
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Version.h"
 
-#include "Application/Inspect/Data/Data.h"
-#include "Application/Inspect/Controls/Canvas.h"
+#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/Canvas.h"
 #include "Foundation/Undo/ExistenceCommand.h"
 #include "Foundation/Undo/Queue.h"
 
@@ -138,30 +138,33 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature< void, const TitleChangeArgs& > TitleChangeSignature;
+        typedef Helium::Signature< const TitleChangeArgs& > TitleChangeSignature;
 
         struct ResolveSceneArgs
         {
             ResolveSceneArgs( const Helium::Path& path )
                 : m_Path( path )
+                , m_Scene( NULL )
             {
             }
 
-            Helium::Path m_Path;
+            Helium::Path    m_Path;
+            mutable Scene*  m_Scene;
         };
-        typedef Helium::Signature< Scene*, const ResolveSceneArgs& > ResolveSceneSignature;
+        typedef Helium::Signature< const ResolveSceneArgs& > ResolveSceneSignature;
 
         struct SceneEditingArgs
         {
             SceneEditingArgs( Scene* scene )
                 : m_Scene( scene )
+                , m_Veto( false )
             {
             }
 
-            Scene* m_Scene;
-
+            Scene*          m_Scene;
+            mutable bool    m_Veto;
         };
-        typedef Helium::Signature< bool, const SceneEditingArgs& > SceneEditingSignature;
+        typedef Helium::Signature< const SceneEditingArgs& > SceneEditingSignature;
 
         // update the status bar of the frame of this instance of the scene editor
         struct SceneStatusChangeArgs
@@ -174,7 +177,7 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature< void, const SceneStatusChangeArgs& > SceneStatusChangeSignature;
+        typedef Helium::Signature< const SceneStatusChangeArgs& > SceneStatusChangeSignature;
 
         namespace SceneContexts
         {
@@ -200,7 +203,7 @@ namespace Helium
             {
             }
         };
-        typedef Helium::Signature< void, const SceneContextChangeArgs& > SceneContextChangedSignature;
+        typedef Helium::Signature< const SceneContextChangeArgs& > SceneContextChangedSignature;
 
 
         //
@@ -218,7 +221,7 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature< void, const NodeChangeArgs& > NodeChangeSignature;
+        typedef Helium::Signature< const NodeChangeArgs& > NodeChangeSignature;
 
         // node types appear in the objects window in the UI, this event helps keep it up to date
         struct NodeTypeExistenceArgs
@@ -231,7 +234,7 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature< void, const NodeTypeExistenceArgs& > NodeTypeExistenceSignature;
+        typedef Helium::Signature< const NodeTypeExistenceArgs& > NodeTypeExistenceSignature;
 
         // event for loading a scene.
         struct LoadArgs
@@ -246,7 +249,7 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature< void, const LoadArgs& > LoadSignature;
+        typedef Helium::Signature< const LoadArgs& > LoadSignature;
 
         // event for loading a scene.
         struct ExecuteArgs
@@ -261,19 +264,19 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature< void, const ExecuteArgs& > ExecuteSignature;
+        typedef Helium::Signature< const ExecuteArgs& > ExecuteSignature;
 
 
         struct UndoCommandArgs
         {
-            const Undo::CommandPtr& m_Command;
-            
-            UndoCommandArgs( const Undo::CommandPtr& command )
+            UndoCommandArgs( Undo::CommandPtr command )
                 : m_Command( command )
             {
             }
-        };
-        typedef Helium::Signature< bool, const UndoCommandArgs& > UndoCommandSignature; 
+
+            Undo::CommandPtr m_Command;
+         };
+        typedef Helium::Signature< const UndoCommandArgs& > UndoCommandSignature; 
 
         //
         // This manages all the objects in a scene (typically Reflected in a file on disk)
@@ -735,7 +738,7 @@ namespace Helium
             bool Push(const Undo::CommandPtr& command);
 
         protected:
-            bool UndoingOrRedoing( const Undo::QueueChangeArgs& args );
+            void UndoingOrRedoing( const Undo::QueueChangingArgs& args );
             void UndoQueueCommandPushed( const Undo::QueueChangeArgs& args );
 
             //
@@ -762,10 +765,10 @@ namespace Helium
             void RefreshSelection();
 
             // callbacks when important events occur
-            bool PropertyChanging( const Inspect::ChangingArgs& args );
-            void PropertyChanged( const Inspect::ChangeArgs& args );
-            bool SelectionChanging( const OS_SelectableDumbPtr& selection );
-            void SelectionChanged( const OS_SelectableDumbPtr& selection );
+            void PropertyChanging( const Inspect::ControlChangingArgs& args );
+            void PropertyChanged( const Inspect::ControlChangedArgs& args );
+            void SelectionChanging( const SelectionChangingArgs& args );
+            void SelectionChanged( const SelectionChangeArgs& args );
             void CurrentSceneChanging( const SceneChangeArgs& args );
             void CurrentSceneChanged( const SceneChangeArgs& args );
 

@@ -10,19 +10,31 @@ namespace Helium
     public:
         struct ChangeArgs
         {
-            const T& m_OldValue;
-            const T& m_NewValue;
-
             ChangeArgs( const T& oldValue, const T& newValue )
                 : m_OldValue( oldValue )
                 , m_NewValue( newValue )
             {
 
             }
+
+            const T& m_OldValue;
+            const T& m_NewValue;
         };
 
-        typedef Helium::Signature< bool, const ChangeArgs& > ChangingSignature;
-        typedef Helium::Signature< void, const ChangeArgs& > ChangedSignature;
+        struct ChangingArgs : public ChangeArgs
+        {
+            ChangingArgs( const T& oldValue, const T& newValue )
+                : ChangeArgs( oldValue, newValue )
+                , m_Veto( false )
+            {
+
+            }
+
+            mutable bool m_Veto;
+        };
+
+        typedef Helium::Signature< const ChangingArgs& >  ChangingSignature;
+        typedef Helium::Signature< const ChangeArgs& >    ChangedSignature;
 
         Attribute()
             : m_Value ()
@@ -48,12 +60,17 @@ namespace Helium
 
         bool Set(const T& value)
         {
-            if ( m_Value != value && m_Changing.RaiseWithReturn( ChangeArgs( m_Value, value ) ) )
+            if ( m_Value != value )
             {
-                T previous = m_Value;
-                m_Value = value;
-                m_Changed.Raise( ChangeArgs( m_Value, previous ) );
-                return true;
+                ChangingArgs args ( m_Value, value );
+                m_Changing.Raise( args );
+                if ( !args.m_Veto )
+                {
+                    T previous = m_Value;
+                    m_Value = value;
+                    m_Changed.Raise( ChangeArgs( m_Value, previous ) );
+                    return true;
+                }
             }
 
             return false;

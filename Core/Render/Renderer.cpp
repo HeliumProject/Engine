@@ -187,7 +187,6 @@ void ExtractFromViewProj( D3DXVECTOR4 &center_of_projection, D3DXVECTOR4 *frustu
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 Render::Renderer::Renderer()
-: m_shader_manager (this)
 {
 
 }
@@ -205,7 +204,7 @@ bool Render::Renderer::Init(HWND hwnd, u32 width, u32 height, u32 flags)
   if (FAILED(hr))
     return false;
 
-  m_shader_manager.CreateDefaults();
+  m_shader_manager.Init( GetD3DDevice() );
   return true;
 }
 

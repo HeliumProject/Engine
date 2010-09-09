@@ -28,7 +28,7 @@ namespace Helium
             const ComponentBase*        m_Component;
         };
 
-        typedef Helium::Signature<void, const ComponentCollectionChanged&> ComponentCollectionChangedSignature;
+        typedef Helium::Signature< const ComponentCollectionChanged&> ComponentCollectionChangedSignature;
 
 
         class FOUNDATION_API ComponentCollection : public Reflect::Element

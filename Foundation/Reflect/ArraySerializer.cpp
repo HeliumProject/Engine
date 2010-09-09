@@ -127,6 +127,72 @@ void SimpleArraySerializer<T>::SetItem(size_t at, const Serializer* value)
 }
 
 template < class T >
+void SimpleArraySerializer<T>::Insert( size_t at, const Serializer* value )
+{
+    T temp;
+    Serializer::GetValue( value, temp );
+    m_Data->insert( m_Data->begin() + at, temp );
+}
+
+template < class T >
+void SimpleArraySerializer<T>::Remove( size_t at )
+{
+    m_Data->erase( m_Data->begin() + at );
+}
+
+template < class T >
+void SimpleArraySerializer<T>::MoveUp( std::set< size_t >& selectedIndices )
+{
+    std::set< size_t > newSelectedIndices;
+
+    std::set< size_t >::const_iterator itr = selectedIndices.begin();
+    std::set< size_t >::const_iterator end = selectedIndices.end();
+
+    for( ; itr != end; ++itr )
+    {
+        if ( (*itr) == 0 || ( newSelectedIndices.find( (*itr) - 1 ) != newSelectedIndices.end() ) )
+        {
+            newSelectedIndices.insert( *itr );
+            continue;
+        }
+        
+        T temp = m_Data.Ref()[ (*itr) - 1 ];
+        m_Data.Ref()[ (*itr) - 1 ] = m_Data.Ref()[ (*itr) ];
+        m_Data.Ref()[ (*itr) ] = temp;
+
+        newSelectedIndices.insert( *itr - 1 );
+    }
+
+    selectedIndices = newSelectedIndices;
+}
+
+template < class T >
+void SimpleArraySerializer<T>::MoveDown( std::set< size_t >& selectedIndices )
+{
+    std::set< size_t > newSelectedIndices;
+
+    std::set< size_t >::const_reverse_iterator itr = selectedIndices.rbegin();
+    std::set< size_t >::const_reverse_iterator end = selectedIndices.rend();
+
+    for( ; itr != end; ++itr )
+    {
+        if ( ( (*itr) == m_Data->size() - 1 ) || ( newSelectedIndices.find( (*itr) + 1 ) != newSelectedIndices.end() ) )
+        {
+            newSelectedIndices.insert( *itr );
+            continue;
+        }
+        
+        T temp = m_Data.Ref()[ (*itr) + 1 ];
+        m_Data.Ref()[ (*itr) + 1 ] = m_Data.Ref()[ (*itr) ];
+        m_Data.Ref()[ (*itr) ] = temp;
+
+        newSelectedIndices.insert( *itr + 1 );
+    }
+
+    selectedIndices = newSelectedIndices;
+}
+
+template < class T >
 bool SimpleArraySerializer<T>::Set(const Serializer* src, u32 flags)
 {
     const SimpleArraySerializer<T>* rhs = ConstObjectCast<SimpleArraySerializer<T>>(src);

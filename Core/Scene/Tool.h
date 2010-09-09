@@ -24,7 +24,7 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature< void, PickArgs& > PickSignature;
+        typedef Helium::Signature< PickArgs& > PickSignature;
 
         class CORE_API Tool HELIUM_ABSTRACT : public Object
         {

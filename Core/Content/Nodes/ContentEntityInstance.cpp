@@ -15,7 +15,7 @@ REFLECT_DEFINE_CLASS(Entity);
 
 void EntityInstance::EnumerateClass( Reflect::Compositor< EntityInstance >& comp )
 {
-    Reflect::Field* fieldClassPath = comp.AddField( &EntityInstance::m_Path, "m_Path", Reflect::FieldFlags::Path );
+    Reflect::Field* fieldClassPath = comp.AddField( &EntityInstance::m_Path, "m_Path" );
     Reflect::Field* fieldShowPointer = comp.AddField( &EntityInstance::m_ShowPointer, "m_ShowPointer" );
     Reflect::Field* fieldShowBounds = comp.AddField( &EntityInstance::m_ShowBounds, "m_ShowBounds" );
     Reflect::Field* fieldShowGeometry = comp.AddField( &EntityInstance::m_ShowGeometry, "m_ShowGeometry" );

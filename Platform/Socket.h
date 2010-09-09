@@ -6,7 +6,7 @@
 # include "POSIX/Socket.h"
 #endif
 
-#include "Event.h"
+#include "Condition.h"
 
 namespace Helium
 {
@@ -26,6 +26,6 @@ namespace Helium
 
     PLATFORM_API int SelectSocket(int range, fd_set* read_set, fd_set* write_set, struct timeval* timeout);
 
-    PLATFORM_API bool ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Event& terminate);
-    PLATFORM_API bool WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, Event& terminate);
+    PLATFORM_API bool ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Condition& terminate);
+    PLATFORM_API bool WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, Condition& terminate);
 }

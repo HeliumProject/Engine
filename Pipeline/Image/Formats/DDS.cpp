@@ -7,7 +7,7 @@ using namespace Helium;
 
 static inline u32 GetLineStride(u32 bits_per_pixel, u32 width)
 {
-#if 0
+#if ALIGN_DDS_STRIDE_TO_4_BYTE_BOUNDARIES
   return (((bits_per_pixel * width) >> 3) + 3) & 0xfffffffc;	// align up to 4 byte boundary
 #else
   return (bits_per_pixel * width) >> 3;		// no alignment

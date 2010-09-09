@@ -6,10 +6,15 @@
 #include "EditorIDs.h"
 
 using namespace Helium;
+using namespace Helium::Core;
 using namespace Helium::Editor;
 
 ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
 : ToolbarPanelGenerated( parent, id, pos, size, style )
+, m_CommandQueue( this )
+, m_ToolPropertiesCanvas( m_ToolsPropertiesPanel )
+, m_ToolPropertiesGenerator( &m_ToolPropertiesCanvas )
+, m_ToolPropertiesManager( &m_ToolPropertiesGenerator, &m_CommandQueue )
 {
     SetHelpText( TXT( "This is the Toolbar, it provides access to commonly used actions and tools." ) );
 
@@ -76,7 +81,6 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
         }
 
         wxBitmapToggleButton* btn = new wxBitmapToggleButton( typePanel, info->m_ID, wxArtProvider::GetBitmap( info->m_Bitmap, wxART_OTHER, ArtProvider::DefaultIconSize ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-        btn->SetToolTip( info->m_Description );
         btn->SetHelpText( info->m_Description );
 
         // connect its event handler to us

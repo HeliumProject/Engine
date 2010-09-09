@@ -63,7 +63,7 @@ bool AmbientLight::ValidatePanel(const tstring& name)
 
 void AmbientLight::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Generator->PushPanel( TXT( "Ambient Light" ), true);
+  args.m_Generator->PushContainer( TXT( "Ambient Light" ) );
   {
     args.m_Generator->PushContainer();
     {
@@ -85,7 +85,7 @@ void AmbientLight::CreatePanel( CreatePanelArgs& args )
       args.m_Generator->AddColorPicker<Core::AmbientLight, Color3>( args.m_Selection, &AmbientLight::GetOcclusionColor, &AmbientLight::SetOcclusionColor );
 
       Inspect::Slider* slider = args.m_Generator->AddSlider<Core::AmbientLight, float>( args.m_Selection, &AmbientLight::GetOcclusionIntensity, &AmbientLight::SetOcclusionIntensity );
-      slider->SetRangeMin( 0.0f );
+      slider->a_Min.Set( 0.0f );
 
       args.m_Generator->AddValue<Core::AmbientLight, float>( args.m_Selection, &AmbientLight::GetOcclusionIntensity, &AmbientLight::SetOcclusionIntensity );
     }

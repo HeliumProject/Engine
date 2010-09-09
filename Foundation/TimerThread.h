@@ -20,7 +20,7 @@ namespace Helium
         {
         }
     };
-    typedef Helium::Signature< void, const TimerTickArgs& > TimerTickSignature;
+    typedef Helium::Signature< const TimerTickArgs& > TimerTickSignature;
 
     class FOUNDATION_API TimerThread
     {

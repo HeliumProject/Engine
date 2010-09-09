@@ -129,7 +129,7 @@ namespace Helium
             u32 m_Offset;
             u8* m_Buffer;
         };
-        typedef Helium::Signature<void, PopulateArgs*> PopulateSignature;
+        typedef Helium::Signature< PopulateArgs*> PopulateSignature;
 
         //
         // Resource object

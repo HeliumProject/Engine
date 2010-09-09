@@ -22,7 +22,7 @@ namespace Helium
             {
             }
         };
-        typedef Helium::Signature< void, const ThumbnailResultArgs& > ThumbnailResultSignature;
+        typedef Helium::Signature< const ThumbnailResultArgs& > ThumbnailResultSignature;
 
         class ThumbnailManager
         {

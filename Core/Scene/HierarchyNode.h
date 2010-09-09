@@ -23,7 +23,6 @@ namespace Helium
     {
         class Scene;
         class Transform;
-
         class PickVisitor;
 
         class PickHit;
@@ -35,33 +34,27 @@ namespace Helium
         class HierarchyNode;
         typedef Helium::SmartPtr< Core::HierarchyNode > HierarchyNodePtr;
         typedef Helium::OrderedSet< Core::HierarchyNode* > OS_HierarchyNodeDumbPtr;
-
         typedef std::vector< Core::HierarchyNode* > V_HierarchyNodeDumbPtr;
         typedef std::vector< HierarchyNodePtr > V_HierarchyNodeSmartPtr;
 
-
-        // 
-        // Parent changing event
-        // 
+        class ManiuplatorAdapterCollection;
 
         struct ParentChangingArgs
         {
-            Core::HierarchyNode* m_Node;
-            Core::HierarchyNode* m_NewParent;
-
             ParentChangingArgs( Core::HierarchyNode* node, Core::HierarchyNode* newParent )
                 : m_Node( node )
                 , m_NewParent( newParent )
+                , m_Veto( false )
             {
 
             }
+
+            Core::HierarchyNode*    m_Node;
+            Core::HierarchyNode*    m_NewParent;
+            mutable bool            m_Veto;
         };
 
-        typedef Helium::Signature< bool, const ParentChangingArgs& >ParentChangingSignature;
-
-        // 
-        // Parent changed event
-        // 
+        typedef Helium::Signature< const ParentChangingArgs& > ParentChangingSignature;
 
         struct ParentChangedArgs
         {
@@ -76,7 +69,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< void, const ParentChangedArgs& >ParentChangedSignature;
+        typedef Helium::Signature< const ParentChangedArgs& >ParentChangedSignature;
 
 
         /////////////////////////////////////////////////////////////////////////////

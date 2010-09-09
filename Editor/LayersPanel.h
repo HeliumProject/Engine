@@ -96,7 +96,7 @@ namespace Helium
             // Event callbacks
             // 
         private:
-            void SelectionChanged( const Core::OS_SelectableDumbPtr& selection );
+            void SelectionChanged( const Core::SelectionChangeArgs& args );
             void NameChanging( const Core::SceneNodeChangeArgs& args );
             void NameChanged( const Core::SceneNodeChangeArgs& args );
             void LayerVisibleChanged( const GridRowChangeArgs& args );

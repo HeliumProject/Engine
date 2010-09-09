@@ -81,7 +81,7 @@ namespace Helium
                 {
                 }
             };
-            typedef Helium::Signature< void, const DeviceStateArgs& > DeviceStateSignature;
+            typedef Helium::Signature< const DeviceStateArgs& > DeviceStateSignature;
 
             // all rendering classes should be derived this
             class CORE_API DeviceManager

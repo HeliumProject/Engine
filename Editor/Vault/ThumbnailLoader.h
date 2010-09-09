@@ -35,7 +35,7 @@ namespace Helium
                 V_ThumbnailPtr m_Textures;
                 bool m_Cancelled;
             };
-            typedef Helium::Signature<void, const ResultArgs&> ResultSignature;
+            typedef Helium::Signature< const ResultArgs&> ResultSignature;
 
             //
             // The result event (raised in the loading thread)

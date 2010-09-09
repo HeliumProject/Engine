@@ -149,7 +149,7 @@ void EntityInstanceNode::copyInternalData( MPxNode* node )
 
     EntityInstanceNode* source = (EntityInstanceNode*)(node);
     source->Hide();
-    m_Entity = Reflect::ObjectCast< Asset::EntityInstance >( source->m_Entity->Clone() );
+    m_Entity = Reflect::ObjectCast< Content::EntityInstance >( source->m_Entity->Clone() );
     TUID::Generate( m_Entity->m_ID );
     m_UID = m_Entity->m_ID;
 
@@ -275,7 +275,7 @@ void EntityInstanceNode::draw( M3dView & view, const MDagPath & path, M3dView::D
     glPopMatrix();
 }
 
-void EntityInstanceNode::SetBackingEntity( const Asset::EntityInstancePtr& entity )
+void EntityInstanceNode::SetBackingEntity( const Content::EntityInstancePtr& entity )
 {
     m_Entity = entity;
     m_UID = m_Entity->m_ID;

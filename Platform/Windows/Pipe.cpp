@@ -118,7 +118,7 @@ void Helium::ClosePipe(Pipe& pipe)
     ::CloseHandle(pipe.m_Handle);
 }
 
-bool Helium::ConnectPipe(Pipe& pipe, Event& terminate)
+bool Helium::ConnectPipe(Pipe& pipe, Condition& terminate)
 {
     OVERLAPPED connect;
     memset(&connect, 0, sizeof(connect));
@@ -190,7 +190,7 @@ void Helium::DisconnectPipe(Pipe& pipe)
     }
 }
 
-bool Helium::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& terminate)
+bool Helium::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Condition& terminate)
 {
     if (bytes == 0)
     {
@@ -240,7 +240,7 @@ bool Helium::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& ter
     return true;
 }
 
-bool Helium::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Event& terminate)
+bool Helium::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Condition& terminate)
 {
     if (bytes == 0)
     {

@@ -24,7 +24,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< void, const InstanceTypeChangeArgs& > InstanceTypeChangeSignature;
+        typedef Helium::Signature< const InstanceTypeChangeArgs& > InstanceTypeChangeSignature;
 
         class InstanceType : public Core::HierarchyNodeType
         {

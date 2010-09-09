@@ -13,8 +13,6 @@
 #include "Core/Scene/SceneManager.h"
 #include "SceneSettings.h"
 
-#include <wx/msw/private.h>
-
 using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
@@ -361,7 +359,8 @@ bool ScaleManipulator::Pick( PickVisitor* pick )
         }
     }
 
-    if (m_SelectedAxes != MultipleAxes::All && m_SelectedAxes != MultipleAxes::None && wxIsCtrlDown())
+#pragma TODO("How to poll for ctrl button state? -Geoff")
+    if (m_SelectedAxes != MultipleAxes::All && m_SelectedAxes != MultipleAxes::None && false /*wxIsCtrlDown()*/)
     {
         m_SelectedAxes = (AxesFlags)(~m_SelectedAxes & MultipleAxes::All);
     }
@@ -464,11 +463,11 @@ void ScaleManipulator::MouseMove( const MouseMoveInput& e )
 
     // Pick ray from our starting location
     Line startRay;
-    m_View->GetCamera()->ViewportToLine(sX, sY, startRay);
+    m_View->GetCamera()->ViewportToLine( (f32)sX, (f32)sY, startRay);
 
     // Pick ray from our current location
     Line endRay;
-    m_View->GetCamera()->ViewportToLine(eX, eY, endRay);
+    m_View->GetCamera()->ViewportToLine( (f32)eX, (f32)eY, endRay);
 
     // start and end points of the drag in world space, on the line or on the plane
     Vector3 p1, p2;
@@ -638,7 +637,7 @@ void ScaleManipulator::CreateProperties()
 {
     __super::CreateProperties();
 
-    m_Generator->PushPanel( TXT( "Scale" ), true);
+    m_Generator->PushContainer( TXT( "Scale" ) );
     {
         m_Generator->PushContainer();
         {

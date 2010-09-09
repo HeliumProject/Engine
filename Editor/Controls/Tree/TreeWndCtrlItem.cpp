@@ -24,21 +24,18 @@ using namespace Helium;
 IMPLEMENT_DYNAMIC_CLASS(TreeWndCtrlItem, wxPanel)
 
 BEGIN_EVENT_TABLE( TreeWndCtrlItem, wxPanel )
-EVT_PAINT( TreeWndCtrlItem::OnPaint )
 EVT_LEFT_DCLICK( TreeWndCtrlItem::OnDoubleClick )
 END_EVENT_TABLE()
 
 TreeWndCtrlItem::TreeWndCtrlItem()
 : wxPanel(),
-m_bitmapTextWidth(-1),
 m_image(-1),
 m_stateImage(-1),
 m_spacing(WXTWC_DEFAULT_ITEM_SPACING),
-m_dirty(true),
-m_bitmapPoint(0, 0),
-m_textPoint(0, 0),
 m_item(TreeWndCtrlItemIdInvalid),
-m_text( wxT( "" ) ),
+m_staticBitmap(NULL),
+m_spacingItem(NULL),
+m_staticText(NULL),
 m_treeWndCtrl(NULL)
 {
 }
@@ -48,105 +45,34 @@ TreeWndCtrlItem::TreeWndCtrlItem(TreeWndCtrl *parent,
                                  int image,
                                  int stateImage)
                                  : wxPanel(parent),
-                                 m_bitmapTextWidth(-1),
                                  m_image(image),
                                  m_stateImage(stateImage),
                                  m_spacing(WXTWC_DEFAULT_ITEM_SPACING),
-                                 m_dirty(true),
-                                 m_bitmapPoint(0, 0),
-                                 m_textPoint(0, 0),
                                  m_item(TreeWndCtrlItemIdInvalid),
-                                 m_text(text),
+                                 m_staticBitmap(NULL),
+                                 m_spacingItem(NULL),
+                                 m_staticText(NULL),
                                  m_treeWndCtrl(parent)
 {
+    SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
+    wxSizer* sizer = GetSizer();
+
+    m_staticBitmap = new wxStaticBitmap( this, wxID_ANY, GetBitmap() );
+    m_staticBitmap->Connect( m_staticBitmap->GetId(), wxEVT_LEFT_DCLICK, wxMouseEventHandler( TreeWndCtrlItem::OnDoubleClick ), NULL, this );
+    sizer->Add( m_staticBitmap, 0, wxALIGN_CENTER, 0);
+
+    m_spacingItem = sizer->AddSpacer( m_spacing );
+
+    m_staticText = new wxStaticText( this, wxID_ANY, text );
+    m_staticText->Connect( m_staticText->GetId(), wxEVT_LEFT_DCLICK, wxMouseEventHandler( TreeWndCtrlItem::OnDoubleClick ), NULL, this );
+    sizer->Add( m_staticText, 0, wxALIGN_CENTER, 0);
+
     SetMinSize( wxSize( wxDefaultSize.GetX(), 20 ) );
-}
-
-bool TreeWndCtrlItem::Layout()
-{
-    if ( m_dirty )
-    {
-        Freeze();
-
-        m_bitmapPoint = wxPoint(0, 0);
-        m_textPoint = wxPoint(0, 0);
-
-        wxCoord width = 0;
-        wxCoord height = 0;
-
-        int bitmapWidth = 0;
-        int bitmapHeight = 0;
-        wxBitmap bitmap = GetBitmap();
-        if ( bitmap.Ok() )
-        {
-            bitmapWidth = bitmap.GetWidth();
-            bitmapHeight = bitmap.GetHeight();
-        }
-
-        if ( bitmapWidth )
-            width = bitmapWidth + m_spacing;
-
-        wxCoord textWidth = 0;
-        wxCoord textHeight = 0;
-
-        wxClientDC dc(this);
-        wxFont oldFont = dc.GetFont();
-        dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-        dc.GetTextExtent(m_text, &textWidth, &textHeight);
-        dc.SetFont(oldFont);
-
-        m_textPoint.x = width;
-        width += textWidth;
-
-        if ( bitmapHeight > textHeight )
-        {
-            height = bitmapHeight;
-            m_textPoint.y = (bitmapHeight - textHeight) / 2;
-        }
-        else
-        {
-            height = textHeight;
-            m_bitmapPoint.y = (textHeight - bitmapHeight) / 2;
-        }
-
-        SetSize(width, height);
-        m_bitmapTextWidth = width;
-
-        Thaw();
-        m_dirty = false;
-    }
-
-    return __super::Layout();
-}
-
-#ifdef DrawText
-#undef DrawText // god damn windows.h
-#endif
-
-void TreeWndCtrlItem::OnPaint(wxPaintEvent& e)
-{
-    wxPaintDC dc(this);
-
-    wxBitmap bitmap = GetBitmap();
-    if ( bitmap.Ok() )
-    {
-        dc.DrawBitmap(bitmap, m_bitmapPoint.x, m_bitmapPoint.y, true);
-    }
-
-    wxFont oldFont = dc.GetFont();
-    dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-    dc.DrawText(m_text, m_textPoint.x, m_textPoint.y);
-    dc.SetFont(oldFont);
-
-    e.Skip();
 }
 
 void TreeWndCtrlItem::OnDoubleClick(wxMouseEvent& e)
 {
     if ( m_item == TreeWndCtrlItemIdInvalid )
-        return;
-
-    if ( ( m_bitmapTextWidth >= 0 ) && ( e.GetPosition().x > m_bitmapTextWidth ) )
         return;
 
     m_treeWndCtrl->Toggle(m_item);
@@ -155,35 +81,34 @@ void TreeWndCtrlItem::OnDoubleClick(wxMouseEvent& e)
 void TreeWndCtrlItem::SetSpacing(int spacing)
 {
     m_spacing = spacing;
-    m_dirty = true;
+    m_spacingItem->AssignSpacer( wxSize( m_spacing, -1 ) );
     Layout();
 }
 
 void TreeWndCtrlItem::SetItem(const wxTreeItemId& item)
 {
     m_item = item;
-    m_dirty = true;
+    m_staticBitmap->SetBitmap( GetBitmap() );
     Layout();
 }
 
 void TreeWndCtrlItem::SetText(const wxString& text)
 {
-    m_text = text;
-    m_dirty = true;
+    m_staticText->SetLabel( text );
     Layout();
 }    
 
 void TreeWndCtrlItem::SetImage(int image)
 {
     m_image = image;
-    m_dirty = true;
+    m_staticBitmap->SetBitmap( GetBitmap() );
     Layout();
 }
 
 void TreeWndCtrlItem::SetStateImage(int stateImage)
 {
     m_stateImage = stateImage;
-    m_dirty = true;
+    m_staticBitmap->SetBitmap( GetBitmap() );
     Layout();
 }
 

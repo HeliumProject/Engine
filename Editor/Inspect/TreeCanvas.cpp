@@ -61,7 +61,7 @@ TreeCanvas::TreeCanvas( TreeWndCtrl* treeWndCtrl )
     wxTreeItemId root = m_TreeWndCtrl->GetRootItem();
     if ( root == Helium::TreeWndCtrlItemIdInvalid )
     {
-        root = m_TreeWndCtrl->AddRoot( TXT( "Canvas Root" ) );
+        root = m_TreeWndCtrl->AddRoot( TXT( "INVISIBLE_ROOT" ) );
         m_RootId = root;
     }
 

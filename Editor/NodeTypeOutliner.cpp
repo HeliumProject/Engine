@@ -17,7 +17,7 @@ NodeTypeOutliner::NodeTypeOutliner( Core::SceneManager* sceneManager )
 : SceneOutliner( sceneManager )
 , m_InvisibleRoot( NULL )
 {
-  m_DisplayCounts = true; 
+    m_DisplayCounts = true; 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -35,28 +35,28 @@ NodeTypeOutliner::~NodeTypeOutliner()
 // 
 void NodeTypeOutliner::AddNodeTypes()
 {
-  if ( m_CurrentScene )
-  {
-    if ( m_CurrentScene->GetNodeTypesByName().size() > 0 )
+    if ( m_CurrentScene )
     {
-      m_TreeCtrl->Freeze();
-      bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
-      m_TreeCtrl->DisableSorting();
+        if ( m_CurrentScene->GetNodeTypesByName().size() > 0 )
+        {
+            m_TreeCtrl->Freeze();
+            bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
+            m_TreeCtrl->DisableSorting();
 
-      // For each node type, add it to the tree
-      Core::HM_StrToSceneNodeTypeSmartPtr::const_iterator itr = m_CurrentScene->GetNodeTypesByName().begin();
-      Core::HM_StrToSceneNodeTypeSmartPtr::const_iterator end = m_CurrentScene->GetNodeTypesByName().end();
-      for ( ; itr != end; ++itr )
-      {
-        const SceneNodeTypePtr& nodeType = itr->second;
-        AddNodeType( nodeType );
-      }
+            // For each node type, add it to the tree
+            Core::HM_StrToSceneNodeTypeSmartPtr::const_iterator itr = m_CurrentScene->GetNodeTypesByName().begin();
+            Core::HM_StrToSceneNodeTypeSmartPtr::const_iterator end = m_CurrentScene->GetNodeTypesByName().end();
+            for ( ; itr != end; ++itr )
+            {
+                const SceneNodeTypePtr& nodeType = itr->second;
+                AddNodeType( nodeType );
+            }
 
-      m_TreeCtrl->EnableSorting( isSortingEnabled );
-      Sort( m_InvisibleRoot );
-      m_TreeCtrl->Thaw();
+            m_TreeCtrl->EnableSorting( isSortingEnabled );
+            Sort( m_InvisibleRoot );
+            m_TreeCtrl->Thaw();
+        }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -65,31 +65,31 @@ void NodeTypeOutliner::AddNodeTypes()
 // 
 void NodeTypeOutliner::AddNodeType( Core::SceneNodeType* nodeType )
 {
-  m_TreeCtrl->Freeze();
-  bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
-  m_TreeCtrl->DisableSorting();
+    m_TreeCtrl->Freeze();
+    bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
+    m_TreeCtrl->DisableSorting();
 
-  wxTreeItemId item = AddItem( m_InvisibleRoot, 
-                               nodeType->GetName(), 
-                               nodeType->GetImageIndex(), 
-                               new SceneOutlinerItemData( nodeType ), 
-                               false, 
-                               false);
+    wxTreeItemId item = AddItem( m_InvisibleRoot, 
+        nodeType->GetName(), 
+        nodeType->GetImageIndex(), 
+        new SceneOutlinerItemData( nodeType ), 
+        false, 
+        false);
 
-  HM_SceneNodeSmartPtr::const_iterator itr = nodeType->GetInstances().begin();
-  HM_SceneNodeSmartPtr::const_iterator end = nodeType->GetInstances().end();
-  for ( ; itr != end; ++itr )
-  {
-    const SceneNodePtr& dependency = itr->second;
-    if ( dependency->HasType( Reflect::GetType<Editor::SceneNode>() ) )
+    HM_SceneNodeSmartPtr::const_iterator itr = nodeType->GetInstances().begin();
+    HM_SceneNodeSmartPtr::const_iterator end = nodeType->GetInstances().end();
+    for ( ; itr != end; ++itr )
     {
-      AddInstance( Reflect::DangerousCast< Core::SceneNode >( dependency ) );
+        const SceneNodePtr& dependency = itr->second;
+        if ( dependency->HasType( Reflect::GetType<Editor::SceneNode>() ) )
+        {
+            AddInstance( Reflect::DangerousCast< Core::SceneNode >( dependency ) );
+        }
     }
-  }
 
-  m_TreeCtrl->EnableSorting( isSortingEnabled );
-  Sort( item );
-  m_TreeCtrl->Thaw();
+    m_TreeCtrl->EnableSorting( isSortingEnabled );
+    Sort( item );
+    m_TreeCtrl->Thaw();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -98,17 +98,17 @@ void NodeTypeOutliner::AddNodeType( Core::SceneNodeType* nodeType )
 // 
 void NodeTypeOutliner::AddInstance( Core::SceneNode* instance )
 {
-  EDITOR_SCOPE_TIMER( ("") );
+    EDITOR_SCOPE_TIMER( ("") );
 
-  M_TreeItems::const_iterator found = m_Items.find( instance->GetNodeType() );
-  if ( found != m_Items.end() )
-  {
-    AddItem( found->second, instance->GetName(), instance->GetImageIndex(), new SceneOutlinerItemData( instance ), instance->IsSelected() );
-  }
-  else
-  {
-    Log::Warning( TXT( "Unable to add node %s to the Type Outliner because there is no type named %s.\n" ), instance->GetName().c_str(), instance->GetNodeType()->GetName().c_str() );
-  }
+    M_TreeItems::const_iterator found = m_Items.find( instance->GetNodeType() );
+    if ( found != m_Items.end() )
+    {
+        AddItem( found->second, instance->GetName(), instance->GetImageIndex(), new SceneOutlinerItemData( instance ), instance->IsSelected() );
+    }
+    else
+    {
+        Log::Warning( TXT( "Unable to add node %s to the Type Outliner because there is no type named %s.\n" ), instance->GetName().c_str(), instance->GetNodeType()->GetName().c_str() );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -118,20 +118,20 @@ void NodeTypeOutliner::AddInstance( Core::SceneNode* instance )
 // 
 void NodeTypeOutliner::RemoveNodeType( Core::SceneNodeType* nodeType )
 {
-  EDITOR_SCOPE_TIMER( ("") );
+    EDITOR_SCOPE_TIMER( ("") );
 #ifdef _DEBUG
-  // Sanity check.  The item we are deleting shouldn't have any children (they
-  // should have already been removed).  If this needs to change for some 
-  // reason, this function will need to remove all the children manually.
-  M_TreeItems::iterator found = m_Items.find( nodeType );
-  if ( found != m_Items.end() )
-  {
-    wxTreeItemId item = found->second;
-    HELIUM_ASSERT( m_TreeCtrl->GetChildrenCount( item ) == 0 );
-  }
+    // Sanity check.  The item we are deleting shouldn't have any children (they
+    // should have already been removed).  If this needs to change for some 
+    // reason, this function will need to remove all the children manually.
+    M_TreeItems::iterator found = m_Items.find( nodeType );
+    if ( found != m_Items.end() )
+    {
+        wxTreeItemId item = found->second;
+        HELIUM_ASSERT( m_TreeCtrl->GetChildrenCount( item ) == 0 );
+    }
 #endif
 
-  DeleteItem( nodeType );
+    DeleteItem( nodeType );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -139,7 +139,7 @@ void NodeTypeOutliner::RemoveNodeType( Core::SceneNodeType* nodeType )
 // 
 void NodeTypeOutliner::RemoveInstance( Core::SceneNode* instance )
 {
-  DeleteItem( instance );
+    DeleteItem( instance );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -147,14 +147,14 @@ void NodeTypeOutliner::RemoveInstance( Core::SceneNode* instance )
 // 
 void NodeTypeOutliner::OnBeginLabelEdit( wxTreeEvent& args )
 {
-  Object* found = GetTreeItemData( args.GetItem() )->GetObject();
+    Object* found = GetTreeItemData( args.GetItem() )->GetObject();
 
-  // If a valid Object was not found, or if the the object is not
-  // a dependency node, we won't allow it's name to be changed.
-  if ( !found || !found->HasType( Reflect::GetType<Core::HierarchyNode>() ) )
-  {
-    args.Veto();
-  }
+    // If a valid Object was not found, or if the the object is not
+    // a dependency node, we won't allow it's name to be changed.
+    if ( !found || !found->HasType( Reflect::GetType<Core::HierarchyNode>() ) )
+    {
+        args.Veto();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -164,13 +164,13 @@ void NodeTypeOutliner::OnBeginLabelEdit( wxTreeEvent& args )
 // 
 SortTreeCtrl* NodeTypeOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id )
 {
-  SortTreeCtrl* tree = new SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_HIDE_ROOT | wxTR_EDIT_LABELS | wxTR_MULTIPLE, wxDefaultValidator, TXT( "NodeTypeOutliner" ) );
-  m_InvisibleRoot = tree->AddRoot( TXT( "INVISIBLE_ROOT" ) );
+    SortTreeCtrl* tree = new SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_HIDE_ROOT | wxTR_EDIT_LABELS | wxTR_MULTIPLE, wxDefaultValidator, TXT( "NodeTypeOutliner" ) );
+    m_InvisibleRoot = tree->AddRoot( TXT( "INVISIBLE_ROOT" ) );
 
-  // Override dynamic GUI event handlers here
-  tree->Connect( tree->GetId(), wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, wxTreeEventHandler( NodeTypeOutliner::OnBeginLabelEdit ), NULL, this );
+    // Override dynamic GUI event handlers here
+    tree->Connect( tree->GetId(), wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, wxTreeEventHandler( NodeTypeOutliner::OnBeginLabelEdit ), NULL, this );
 
-  return tree;
+    return tree;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -178,10 +178,9 @@ SortTreeCtrl* NodeTypeOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id 
 // 
 void NodeTypeOutliner::Clear()
 {
-  __super::Clear();
+    __super::Clear();
 
-  // Put the invisible root back into the tree so we are ready to populate it again
-  m_InvisibleRoot = m_TreeCtrl->AddRoot( TXT( "INVISIBLE_ROOT" ) );
+    m_TreeCtrl->DeleteChildren( m_InvisibleRoot );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -190,7 +189,7 @@ void NodeTypeOutliner::Clear()
 // 
 void NodeTypeOutliner::CurrentSceneChanged( Core::Scene* oldScene )
 {
-  AddNodeTypes();
+    AddNodeTypes();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -198,23 +197,23 @@ void NodeTypeOutliner::CurrentSceneChanged( Core::Scene* oldScene )
 // 
 void NodeTypeOutliner::ConnectSceneListeners()
 {
-  __super::ConnectSceneListeners();
+    __super::ConnectSceneListeners();
 
-  if ( m_CurrentScene )
-  {
-    const HM_StrToSceneNodeTypeSmartPtr& types = m_CurrentScene->GetNodeTypesByName();
-    HM_StrToSceneNodeTypeSmartPtr::const_iterator itr = types.begin();
-    HM_StrToSceneNodeTypeSmartPtr::const_iterator end = types.end();
-    for ( ; itr != end; ++itr )
+    if ( m_CurrentScene )
     {
-      itr->second->AddNodeAddedListener( NodeTypeChangeSignature::Delegate ( this, &NodeTypeOutliner::NodeAddedToType ) );
-      itr->second->AddNodeRemovedListener( NodeTypeChangeSignature::Delegate ( this, &NodeTypeOutliner::NodeRemovedFromType ) );
-    }
+        const HM_StrToSceneNodeTypeSmartPtr& types = m_CurrentScene->GetNodeTypesByName();
+        HM_StrToSceneNodeTypeSmartPtr::const_iterator itr = types.begin();
+        HM_StrToSceneNodeTypeSmartPtr::const_iterator end = types.end();
+        for ( ; itr != end; ++itr )
+        {
+            itr->second->AddNodeAddedListener( NodeTypeChangeSignature::Delegate ( this, &NodeTypeOutliner::NodeAddedToType ) );
+            itr->second->AddNodeRemovedListener( NodeTypeChangeSignature::Delegate ( this, &NodeTypeOutliner::NodeRemovedFromType ) );
+        }
 
-    // Connect listeners
-    m_CurrentScene->AddNodeTypeAddedListener( NodeTypeExistenceSignature::Delegate ( this, &NodeTypeOutliner::NodeTypeAdded ) );
-    m_CurrentScene->AddNodeTypeRemovedListener( NodeTypeExistenceSignature::Delegate ( this, &NodeTypeOutliner::NodeTypeRemoved ) );
-  }
+        // Connect listeners
+        m_CurrentScene->AddNodeTypeAddedListener( NodeTypeExistenceSignature::Delegate ( this, &NodeTypeOutliner::NodeTypeAdded ) );
+        m_CurrentScene->AddNodeTypeRemovedListener( NodeTypeExistenceSignature::Delegate ( this, &NodeTypeOutliner::NodeTypeRemoved ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -223,23 +222,23 @@ void NodeTypeOutliner::ConnectSceneListeners()
 // 
 void NodeTypeOutliner::DisconnectSceneListeners()
 {
-  if ( m_CurrentScene )
-  {
-    const HM_StrToSceneNodeTypeSmartPtr& types = m_CurrentScene->GetNodeTypesByName();
-    HM_StrToSceneNodeTypeSmartPtr::const_iterator itr = types.begin();
-    HM_StrToSceneNodeTypeSmartPtr::const_iterator end = types.end();
-    for ( ; itr != end; ++itr )
+    if ( m_CurrentScene )
     {
-      itr->second->RemoveNodeAddedListener( NodeTypeChangeSignature::Delegate ( this, &NodeTypeOutliner::NodeAddedToType ) );
-      itr->second->RemoveNodeRemovedListener( NodeTypeChangeSignature::Delegate ( this, &NodeTypeOutliner::NodeRemovedFromType ) );
+        const HM_StrToSceneNodeTypeSmartPtr& types = m_CurrentScene->GetNodeTypesByName();
+        HM_StrToSceneNodeTypeSmartPtr::const_iterator itr = types.begin();
+        HM_StrToSceneNodeTypeSmartPtr::const_iterator end = types.end();
+        for ( ; itr != end; ++itr )
+        {
+            itr->second->RemoveNodeAddedListener( NodeTypeChangeSignature::Delegate ( this, &NodeTypeOutliner::NodeAddedToType ) );
+            itr->second->RemoveNodeRemovedListener( NodeTypeChangeSignature::Delegate ( this, &NodeTypeOutliner::NodeRemovedFromType ) );
+        }
+
+        // Disconnect listeners
+        m_CurrentScene->RemoveNodeTypeAddedListener( NodeTypeExistenceSignature::Delegate ( this, &NodeTypeOutliner::NodeTypeAdded ) );
+        m_CurrentScene->RemoveNodeTypeRemovedListener( NodeTypeExistenceSignature::Delegate ( this, &NodeTypeOutliner::NodeTypeRemoved ) );
     }
 
-    // Disconnect listeners
-    m_CurrentScene->RemoveNodeTypeAddedListener( NodeTypeExistenceSignature::Delegate ( this, &NodeTypeOutliner::NodeTypeAdded ) );
-    m_CurrentScene->RemoveNodeTypeRemovedListener( NodeTypeExistenceSignature::Delegate ( this, &NodeTypeOutliner::NodeTypeRemoved ) );
-  }
-
-  __super::DisconnectSceneListeners();
+    __super::DisconnectSceneListeners();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -248,10 +247,10 @@ void NodeTypeOutliner::DisconnectSceneListeners()
 // 
 void NodeTypeOutliner::NodeTypeAdded( const Core::NodeTypeExistenceArgs& args )
 {
-  AddNodeType( args.m_NodeType );
+    AddNodeType( args.m_NodeType );
 
-  args.m_NodeType->AddNodeAddedListener( NodeTypeChangeSignature::Delegate ( this, &NodeTypeOutliner::NodeAddedToType ) );
-  args.m_NodeType->AddNodeRemovedListener( NodeTypeChangeSignature::Delegate ( this, &NodeTypeOutliner::NodeRemovedFromType ) );
+    args.m_NodeType->AddNodeAddedListener( NodeTypeChangeSignature::Delegate ( this, &NodeTypeOutliner::NodeAddedToType ) );
+    args.m_NodeType->AddNodeRemovedListener( NodeTypeChangeSignature::Delegate ( this, &NodeTypeOutliner::NodeRemovedFromType ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -260,10 +259,10 @@ void NodeTypeOutliner::NodeTypeAdded( const Core::NodeTypeExistenceArgs& args )
 // 
 void NodeTypeOutliner::NodeTypeRemoved( const Core::NodeTypeExistenceArgs& args )
 {
-  RemoveNodeType( args.m_NodeType );
+    RemoveNodeType( args.m_NodeType );
 
-  args.m_NodeType->RemoveNodeAddedListener( NodeTypeChangeSignature::Delegate ( this, &NodeTypeOutliner::NodeAddedToType ) );
-  args.m_NodeType->RemoveNodeRemovedListener( NodeTypeChangeSignature::Delegate ( this, &NodeTypeOutliner::NodeRemovedFromType ) );
+    args.m_NodeType->RemoveNodeAddedListener( NodeTypeChangeSignature::Delegate ( this, &NodeTypeOutliner::NodeAddedToType ) );
+    args.m_NodeType->RemoveNodeRemovedListener( NodeTypeChangeSignature::Delegate ( this, &NodeTypeOutliner::NodeRemovedFromType ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -272,7 +271,7 @@ void NodeTypeOutliner::NodeTypeRemoved( const Core::NodeTypeExistenceArgs& args 
 // 
 void NodeTypeOutliner::NodeAddedToType( const Core::NodeTypeChangeArgs& args )
 {
-  AddInstance( args.m_Node );
+    AddInstance( args.m_Node );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -281,5 +280,5 @@ void NodeTypeOutliner::NodeAddedToType( const Core::NodeTypeChangeArgs& args )
 // 
 void NodeTypeOutliner::NodeRemovedFromType( const Core::NodeTypeChangeArgs& args )
 {
-  RemoveInstance( args.m_Node );
+    RemoveInstance( args.m_Node );
 }

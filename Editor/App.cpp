@@ -47,7 +47,7 @@
 #include "Editor/Inspect/Widgets/ListWidget.h"
 #include "Editor/Inspect/Widgets/ButtonWidget.h"
 #include "Editor/Inspect/Widgets/FileDialogButtonWidget.h"
-#include "Editor/Inspect/TreeNodeWidget.h"
+#include "Editor/Inspect/TreeCanvasWidget.h"
 
 #include <set>
 #include <tchar.h>
@@ -223,7 +223,7 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::RegisterClassType< ListWidget >() );
     m_InitializerStack.Push( Reflect::RegisterClassType< ButtonWidget >() );
     m_InitializerStack.Push( Reflect::RegisterClassType< FileDialogButtonWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< TreeNodeWidget >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< TreeCanvasWidget >() );
 
     // vault
     m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::SearchTypes::SearchType>( &Editor::SearchTypes::SearchTypesEnumerateEnum, TXT( "SearchType" ) ) );

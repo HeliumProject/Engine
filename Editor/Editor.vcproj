@@ -1574,11 +1574,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Inspect\TreeNodeWidget.cpp"
+				RelativePath=".\Inspect\TreeCanvasWidget.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Inspect\TreeNodeWidget.h"
+				RelativePath=".\Inspect\TreeCanvasWidget.h"
 				>
 			</File>
 			<File

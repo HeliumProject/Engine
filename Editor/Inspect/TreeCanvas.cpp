@@ -2,7 +2,7 @@
 #include "TreeCanvas.h"
 
 #include "Editor/FileIconsTable.h"
-#include "Editor/Inspect/TreeNodeWidget.h"
+#include "Editor/Inspect/TreeCanvasWidget.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -49,7 +49,7 @@ TreeCanvas::TreeCanvas( TreeWndCtrl* treeWndCtrl )
 , m_TreeWndCtrl( treeWndCtrl )
 , m_RootId( Helium::TreeWndCtrlItemIdInvalid )
 {
-    SetWidgetCreator< TreeNodeWidget, Container >();
+    SetWidgetCreator< TreeCanvasWidget, Container >();
 
     // for now we must always show scroll bars
     HELIUM_ASSERT( m_TreeWndCtrl->GetWindowStyle() & wxALWAYS_SHOW_SB );
@@ -136,7 +136,7 @@ void TreeCanvas::Realize( Inspect::Canvas* canvas )
 {
     HELIUM_ASSERT( canvas == this || canvas == NULL );
 
-    SmartPtr< TreeNodeWidget > widget = new TreeNodeWidget( this );
+    SmartPtr< TreeCanvasWidget > widget = new TreeCanvasWidget( this );
     widget->SetTreeWndCtrl( m_TreeWndCtrl );
     widget->SetId( m_RootId );
     SetWidget( widget );
@@ -154,6 +154,14 @@ void TreeCanvas::Realize( Inspect::Canvas* canvas )
     m_TreeWndCtrl->Layout();
     m_TreeWndCtrl->Thaw();
 }
+
+void TreeCanvas::Clear()
+{
+    Base::Clear();
+
+    m_TreeWndCtrl->DeleteChildren( m_TreeWndCtrl->GetRootItem() );
+}
+
 
 #if INSPECT_REFACTOR
 
@@ -300,17 +308,6 @@ void Canvas::RemoveChild(Control* control)
     }
 
     __super::RemoveChild( control );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Overridden to remove any controls and delete the root of the tree
-// 
-void Canvas::Clear()
-{
-    TreeCanvasCtrl* treeWndCtrl = GetControl();
-    treeWndCtrl->DeleteAllItems();
-
-    __super::Clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -1,12 +1,12 @@
 #include "Precompile.h"
-#include "TreeNodeWidget.h"
+#include "TreeCanvasWidget.h"
 
 #include "Editor/FileIconsTable.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
 
-TreeNodeWidget::TreeNodeWidget( Inspect::Container* container )
+TreeCanvasWidget::TreeCanvasWidget( Inspect::Container* container )
 : m_ContainerControl( container )
 , m_TreeWndCtrl( NULL )
 , m_ItemData( this )
@@ -14,11 +14,11 @@ TreeNodeWidget::TreeNodeWidget( Inspect::Container* container )
     SetControl( container );
 }
 
-void TreeNodeWidget::Create( wxWindow* parent )
+void TreeCanvasWidget::Create( wxWindow* parent )
 {
-    // find the parent TreeNodeWidget
+    // find the parent TreeCanvasWidget
     Inspect::Container*     parentContainer = m_ContainerControl->GetParent();
-    TreeNodeWidget*         parentWidget    = Reflect::AssertCast< TreeNodeWidget >( parentContainer->GetWidget() );
+    TreeCanvasWidget*         parentWidget    = Reflect::AssertCast< TreeCanvasWidget >( parentContainer->GetWidget() );
     wxTreeItemId            parentId        = parentWidget->m_ItemData.GetId();
 
     m_TreeWndCtrl = parentWidget->m_TreeWndCtrl;
@@ -146,7 +146,7 @@ void TreeNodeWidget::Create( wxWindow* parent )
     m_TreeWndCtrl->Thaw();
 }
 
-void TreeNodeWidget::Destroy()
+void TreeCanvasWidget::Destroy()
 {
     HELIUM_ASSERT( false );
 }

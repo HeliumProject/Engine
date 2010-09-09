@@ -24,10 +24,10 @@ namespace Helium
                 return m_Children;
             }
 
-            void AddChild(Control* control);
-            void InsertChild(int index, Control* control);
-            void RemoveChild(Control* control);
-            void Clear();
+            virtual void AddChild(Control* control);
+            virtual void InsertChild(int index, Control* control);
+            virtual void RemoveChild(Control* control);
+            virtual void Clear();
 
             const tstring& GetPath() const
             {

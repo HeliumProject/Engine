@@ -9,30 +9,30 @@ namespace Helium
 {
     namespace Editor
     {
-        class TreeNodeWidget;
+        class TreeCanvasWidget;
 
         class TreeItemData : public wxTreeItemData
         {
         public:
-            TreeItemData( TreeNodeWidget* widget )
+            TreeItemData( TreeCanvasWidget* widget )
                 : m_Widget( widget )
             {
 
             }
             
-            TreeNodeWidget* GetWidget()
+            TreeCanvasWidget* GetWidget()
             {
                 return m_Widget;
             }
 
         private:
-            TreeNodeWidget* m_Widget;
+            TreeCanvasWidget* m_Widget;
         };
 
-        class TreeNodeWidget : public Reflect::ConcreteInheritor<TreeNodeWidget, Widget>
+        class TreeCanvasWidget : public Reflect::ConcreteInheritor<TreeCanvasWidget, Widget>
         {
         public:
-            TreeNodeWidget()
+            TreeCanvasWidget()
                 : m_ContainerControl( NULL )
                 , m_TreeWndCtrl( NULL )
                 , m_ItemData( NULL )
@@ -40,7 +40,7 @@ namespace Helium
 
             }
 
-            TreeNodeWidget( Inspect::Container* container );
+            TreeCanvasWidget( Inspect::Container* container );
 
             wxTreeItemId GetId() const
             {

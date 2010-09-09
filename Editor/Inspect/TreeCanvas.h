@@ -18,6 +18,7 @@ namespace Helium
             void OnToggle(wxTreeEvent&);
 
             virtual void Realize( Inspect::Canvas* canvas) HELIUM_OVERRIDE;
+            virtual void Clear() HELIUM_OVERRIDE;
 
         private:
             TreeWndCtrl*    m_TreeWndCtrl;

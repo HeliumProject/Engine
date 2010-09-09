@@ -1559,7 +1559,6 @@ void MainFrame::DocumentModified( const DocumentChangedArgs& args )
         }
     }
 
-    m_ToolbarPanel->SetSaveButtonState( doAnyDocsNeedSaved );
     m_MenuFile->Enable( ID_SaveAll, doAnyDocsNeedSaved );
 }
 

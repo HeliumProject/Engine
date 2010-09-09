@@ -55,7 +55,6 @@ TreeCanvas::TreeCanvas( TreeWndCtrl* treeWndCtrl )
     HELIUM_ASSERT( m_TreeWndCtrl->GetWindowStyle() & wxALWAYS_SHOW_SB );
 
     m_TreeWndCtrl->SetScrollRate(SCROLL_INCREMENT, SCROLL_INCREMENT);
-    m_TreeWndCtrl->SetColumnSize( 15 );
     m_TreeWndCtrl->SetImageList( GlobalFileIconsTable().GetSmallImageList() );
     m_TreeWndCtrl->SetStateImageList( GlobalFileIconsTable().GetSmallImageList() );
 

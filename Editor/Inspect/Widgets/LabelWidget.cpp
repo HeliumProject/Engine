@@ -12,23 +12,23 @@ EVT_SIZE(LabelWindow::OnSize)
 END_EVENT_TABLE()
 
 LabelWindow::LabelWindow(wxWindow* parent, LabelWidget* labelWidget)
-: wxPanel (parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, wxT( "Text" ) )
-, m_LabelWidget (labelWidget)
+: wxPanel( parent )
+, m_LabelWidget( labelWidget )
 {
     SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
     wxSizer* sizer = GetSizer();
 
-    m_StaticText = new wxStaticText( this, wxID_ANY, wxT( "Temp" ) );
-    sizer->Add( m_StaticText, 0, wxALIGN_CENTER_VERTICAL, 0);
+    m_StaticText = new wxStaticText( this, wxID_ANY, wxT( "" ) );
+    sizer->Add( m_StaticText, 0, wxALIGN_CENTER, 0);
 }
 
 void LabelWindow::OnSize(wxSizeEvent& event)
 {
     m_LabelWidget->GetControl()->Read();
 
-#ifdef INSPECT_LAYOUT
+//#ifdef INSPECT_LAYOUT
     Layout();
-#endif
+//#endif
 }
 
 wxString LabelWindow::GetLabel() const

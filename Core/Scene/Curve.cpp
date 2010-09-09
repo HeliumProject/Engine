@@ -992,8 +992,11 @@ void Curve::CreatePanel( CreatePanelArgs& args )
     {
         args.m_Generator->PushContainer();
         {
-            args.m_Generator->AddLabel( TXT( "Type" ) );
-            args.m_Generator->AddChoice<Core::Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( TXT( "CurveType" ) ), &Curve::GetCurveType, &Curve::SetCurveType );
+            Inspect::Label* label = args.m_Generator->AddLabel( TXT( "Type" ) );
+            Inspect::Choice* choice = args.m_Generator->AddChoice<Core::Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( TXT( "CurveType" ) ), &Curve::GetCurveType, &Curve::SetCurveType );
+            tstring helpText = TXT( "Chooses the type of curve to use." );
+            label->a_HelpText.Set( helpText );
+            choice->a_HelpText.Set( helpText );
         }
         args.m_Generator->Pop();
 

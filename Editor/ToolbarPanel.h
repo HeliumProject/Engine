@@ -47,8 +47,6 @@ namespace Helium
                 return m_ToolPropertiesGenerator;
             }
 
-            void SetSaveButtonState( bool enabled );
-
         private:
             std::vector< wxBitmapToggleButton* > m_ToolsButtons;
 

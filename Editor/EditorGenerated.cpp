@@ -692,33 +692,6 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	m_OpenButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer27->Add( m_OpenButton, 0, wxALL, 2 );
 	
-	m_SaveAllButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_SaveAllButton, 0, wxALL, 2 );
-	
-	m_staticline1 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bSizer27->Add( m_staticline1, 0, wxEXPAND | wxALL, 2 );
-	
-	m_CutButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_CutButton, 0, wxALL, 2 );
-	
-	m_CopyButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_CopyButton, 0, wxALL, 2 );
-	
-	m_PasteButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_PasteButton, 0, wxALL, 2 );
-	
-	m_DeleteButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_DeleteButton, 0, wxALL, 2 );
-	
-	m_staticline2 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bSizer27->Add( m_staticline2, 0, wxEXPAND | wxALL, 2 );
-	
-	m_UndoButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_UndoButton, 0, wxALL, 2 );
-	
-	m_RedoButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_RedoButton, 0, wxALL, 2 );
-	
 	
 	bSizer27->Add( 20, 0, 0, 0, 0 );
 	
@@ -766,13 +739,6 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	// Connect Events
 	m_NewSceneButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnNewScene ), NULL, this );
 	m_OpenButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnOpen ), NULL, this );
-	m_SaveAllButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnSaveAll ), NULL, this );
-	m_CutButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnCut ), NULL, this );
-	m_CopyButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnCopy ), NULL, this );
-	m_PasteButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnPaste ), NULL, this );
-	m_DeleteButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnDelete ), NULL, this );
-	m_UndoButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnUndo ), NULL, this );
-	m_RedoButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnRedo ), NULL, this );
 	m_VaultSearchBox->Connect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchGoButtonClick ), NULL, this );
 	m_VaultSearchBox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchTextEnter ), NULL, this );
 }
@@ -782,13 +748,6 @@ ToolbarPanelGenerated::~ToolbarPanelGenerated()
 	// Disconnect Events
 	m_NewSceneButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnNewScene ), NULL, this );
 	m_OpenButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnOpen ), NULL, this );
-	m_SaveAllButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnSaveAll ), NULL, this );
-	m_CutButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnCut ), NULL, this );
-	m_CopyButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnCopy ), NULL, this );
-	m_PasteButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnPaste ), NULL, this );
-	m_DeleteButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnDelete ), NULL, this );
-	m_UndoButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnUndo ), NULL, this );
-	m_RedoButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnRedo ), NULL, this );
 	m_VaultSearchBox->Disconnect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchGoButtonClick ), NULL, this );
 	m_VaultSearchBox->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchTextEnter ), NULL, this );
 	

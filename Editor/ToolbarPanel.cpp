@@ -24,13 +24,6 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
 
         m_NewSceneButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Scene ) );
         m_OpenButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Open ) );
-        m_SaveAllButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::SaveAll ) );
-        m_CutButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Cut ) );
-        m_CopyButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Copy ) );
-        m_PasteButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Paste ) );
-        m_DeleteButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Delete ) );
-        m_UndoButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Undo ) );
-        m_RedoButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Redo ) );
 
         m_PlayButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Play ) );
         m_PauseButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Pause ) );
@@ -42,19 +35,10 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
 
     m_NewSceneButton->SetHelpText( TXT( "New Scene\n\nClicking this will create a new scene." ) );
     m_OpenButton->SetHelpText( TXT( "Open\n\nClicking this button will bring up a file browser, allowing you to open files in the editor." ) );
-    m_SaveAllButton->SetHelpText( TXT( "Save All\n\nClicking this button will save all your work." ) );
-    m_CutButton->SetHelpText( TXT( "Cut\n\nClicking this will cut the selected items to the clipboard." ) );
-    m_CopyButton->SetHelpText( TXT( "Copy\n\nClicking this will copy the selected items to the clipboard." ) );
-    m_PasteButton->SetHelpText( TXT( "Paste\n\nClicking this will paste the contents of the clipboard." ) );
-    m_DeleteButton->SetHelpText( TXT( "Delete\n\nClicking this will delete the selected items." ) );
-    m_UndoButton->SetHelpText( TXT( "Undo\n\nClicking this will undo an action." ) );
-    m_RedoButton->SetHelpText( TXT( "Redo\n\nClicking this will redo an action." ) );
 
     m_PlayButton->SetHelpText( TXT( "Play\n\nClicking this will start the game in the editing window." ) );
     m_PauseButton->SetHelpText( TXT( "Pause\n\nClicking this will pause a currently running game session." ) );
     m_StopButton->SetHelpText( TXT( "Stop\n\nClicking this will stop a currently running game session." ) );
-
-    m_SaveAllButton->Disable();
 
     std::map< ToolType, wxPanel* > toolTypePanels;
     for ( i32 i=0; i < ToolModes::Count; ++i )
@@ -80,7 +64,7 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
             typePanel = (*itr).second;
         }
 
-        wxBitmapToggleButton* btn = new wxBitmapToggleButton( typePanel, info->m_ID, wxArtProvider::GetBitmap( info->m_Bitmap, wxART_OTHER, wxSize( 16, 16 ) ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+        wxBitmapToggleButton* btn = new wxBitmapToggleButton( typePanel, info->m_ID, wxArtProvider::GetBitmap( info->m_Bitmap, wxART_OTHER, ArtProvider::DefaultIconSize ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
         btn->SetHelpText( info->m_Description );
 
         // connect its event handler to us
@@ -107,16 +91,4 @@ void ToolbarPanel::ToggleTool( i32 selectedTool )
 void ToolbarPanel::OnToggleToolButton( wxCommandEvent& event )
 {
     GetParent()->GetEventHandler()->ProcessEvent( wxCommandEvent ( wxEVT_COMMAND_MENU_SELECTED, event.GetId() ) );
-}
-
-void ToolbarPanel::SetSaveButtonState( bool enabled )
-{
-    if ( enabled )
-    {
-        m_SaveAllButton->Enable();
-    }
-    else
-    {
-        m_SaveAllButton->Disable();
-    }
 }

@@ -67,7 +67,7 @@ TreeWndCtrlItem::TreeWndCtrlItem(TreeWndCtrl *parent,
     m_staticText->Connect( m_staticText->GetId(), wxEVT_LEFT_DCLICK, wxMouseEventHandler( TreeWndCtrlItem::OnDoubleClick ), NULL, this );
     sizer->Add( m_staticText, 0, wxALIGN_CENTER, 0);
 
-    SetMinSize( wxSize( wxDefaultSize.GetX(), 20 ) );
+    SetMinSize( wxSize( wxDefaultSize.GetX(), m_treeWndCtrl->GetColumnSize() ) );
 }
 
 void TreeWndCtrlItem::OnDoubleClick(wxMouseEvent& e)

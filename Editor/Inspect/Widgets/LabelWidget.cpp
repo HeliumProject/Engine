@@ -7,56 +7,11 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-BEGIN_EVENT_TABLE(LabelWindow, wxPanel)
-EVT_SIZE(LabelWindow::OnSize)
-END_EVENT_TABLE()
-
 LabelWindow::LabelWindow(wxWindow* parent, LabelWidget* labelWidget)
-: wxPanel( parent )
+: wxStaticText( parent, wxID_ANY, wxT( "" ), wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_END )
 , m_LabelWidget( labelWidget )
 {
-    SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
-    wxSizer* sizer = GetSizer();
 
-    m_StaticText = new wxStaticText( this, wxID_ANY, wxT( "" ) );
-    sizer->Add( m_StaticText, 0, wxALIGN_CENTER, 0);
-}
-
-void LabelWindow::OnSize(wxSizeEvent& event)
-{
-    m_LabelWidget->GetControl()->Read();
-
-//#ifdef INSPECT_LAYOUT
-    Layout();
-//#endif
-}
-
-wxString LabelWindow::GetLabel() const
-{
-    return m_StaticText->GetLabelText();
-}
-
-void LabelWindow::SetLabel(const wxString& label)
-{
-    m_StaticText->SetLabel(label);
-}
-
-void LabelWindow::UpdateHelpText( const wxString& helpText )
-{
-    SetHelpText( helpText );
-    m_StaticText->SetHelpText( helpText );
-}
-
-bool LabelWindow::SetForegroundColour(const wxColour& color)
-{
-    return wxPanel::SetForegroundColour(color)
-        && m_StaticText->SetForegroundColour(color);
-}
-
-bool LabelWindow::SetBackgroundColour(const wxColour& color)
-{
-    return wxPanel::SetBackgroundColour(color)
-        && m_StaticText->SetBackgroundColour(color);
 }
 
 LabelWidget::LabelWidget( Inspect::Label* label )
@@ -101,13 +56,7 @@ void LabelWidget::Read()
     tstring text;
     m_LabelControl->ReadStringData( text );
     
-    tstring trimmed = text;
-    EllipsizeString( trimmed, m_Window->GetSize().GetWidth() );
-
-    if ( trimmed != m_LabelWindow->GetLabel().c_str() )
-    {
-        m_LabelWindow->SetLabel( trimmed.c_str() );
-    }
+    m_LabelWindow->SetLabel( text.c_str() );
 }
 
 bool LabelWidget::Write()
@@ -117,5 +66,5 @@ bool LabelWidget::Write()
 
 void LabelWidget::HelpTextChanged( const Attribute<tstring>::ChangeArgs& args )
 {
-    m_LabelWindow->UpdateHelpText( args.m_NewValue );
+    m_LabelWindow->SetHelpText( args.m_NewValue );
 }

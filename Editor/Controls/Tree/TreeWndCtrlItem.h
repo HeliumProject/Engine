@@ -49,10 +49,6 @@ namespace Helium
             int image = -1,
             int stateImage = -1);
 
-        virtual bool Layout();
-
-        void OnPaint(wxPaintEvent& e);
-
         void OnDoubleClick(wxMouseEvent& e);
 
         void SetSpacing(int spacing);
@@ -68,7 +64,7 @@ namespace Helium
         void SetText(const wxString& text);
 
         wxString GetText() const
-        { return m_text; }
+        { return m_staticText->GetLabel(); }
 
         void SetImage(int image);
 
@@ -81,15 +77,13 @@ namespace Helium
         { return m_stateImage; }
 
     protected:
-        int m_bitmapTextWidth;
         int m_image;
         int m_stateImage;
         int m_spacing;
-        bool m_dirty;
-        wxPoint m_bitmapPoint;
-        wxPoint m_textPoint;
         wxTreeItemId m_item;
-        wxString m_text;
+        wxStaticBitmap* m_staticBitmap;
+        wxSizerItem* m_spacingItem;
+        wxStaticText* m_staticText;
         TreeWndCtrl* m_treeWndCtrl;
 
         wxBitmap GetBitmap();

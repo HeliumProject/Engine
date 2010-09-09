@@ -313,15 +313,6 @@ namespace Helium
 				wxPanel* m_MainPanel;
 				wxBitmapButton* m_NewSceneButton;
 				wxBitmapButton* m_OpenButton;
-				wxBitmapButton* m_SaveAllButton;
-				wxStaticLine* m_staticline1;
-				wxBitmapButton* m_CutButton;
-				wxBitmapButton* m_CopyButton;
-				wxBitmapButton* m_PasteButton;
-				wxBitmapButton* m_DeleteButton;
-				wxStaticLine* m_staticline2;
-				wxBitmapButton* m_UndoButton;
-				wxBitmapButton* m_RedoButton;
 				
 				wxPanel* m_ToolsPanel;
 				wxBitmapButton* m_PlayButton;
@@ -333,13 +324,6 @@ namespace Helium
 				// Virtual event handlers, overide them in your derived class
 				virtual void OnNewScene( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnOpen( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnSaveAll( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnCut( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnCopy( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnPaste( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnDelete( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnUndo( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnRedo( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnSearchGoButtonClick( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnSearchTextEnter( wxCommandEvent& event ) { event.Skip(); }
 				

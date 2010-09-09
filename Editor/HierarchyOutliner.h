@@ -49,6 +49,11 @@ namespace Helium
         // 
         class HierarchyOutliner : public SceneOutliner
         {
+            // Member variables
+        private:
+            // Needed to simulate multiple root items in the tree
+            wxTreeItemId m_InvisibleRoot;
+
         public:
             HierarchyOutliner( Core::SceneManager* sceneManager );
             virtual ~HierarchyOutliner();
@@ -56,12 +61,13 @@ namespace Helium
         protected:
             HierarchyOutlinerItemData* GetTreeItemData( const wxTreeItemId& item );
             void AddHierarchyNodes();
-            void RecurseAddHierarchyNode( Core::HierarchyNode* node );
+            void RecurseAddHierarchyNode( Core::HierarchyNode* node, bool root = false );
             void AddHierarchyNode( Core::HierarchyNode* node );
 
         protected:
             // Overrides from SceneOutliner
             virtual SortTreeCtrl* CreateTreeCtrl( wxWindow* parent, wxWindowID id ) HELIUM_OVERRIDE;
+            virtual void Clear() HELIUM_OVERRIDE;
             virtual void CurrentSceneChanged( Core::Scene* oldScene ) HELIUM_OVERRIDE;
             virtual void ConnectSceneListeners() HELIUM_OVERRIDE;
             virtual void DisconnectSceneListeners() HELIUM_OVERRIDE;

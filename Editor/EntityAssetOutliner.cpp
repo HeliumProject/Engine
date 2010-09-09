@@ -20,7 +20,7 @@ EntityAssetOutliner::EntityAssetOutliner( Core::SceneManager* sceneManager )
 : SceneOutliner( sceneManager )
 , m_InvisibleRoot( NULL )
 {
-  m_DisplayCounts = true; 
+    m_DisplayCounts = true; 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -36,32 +36,32 @@ EntityAssetOutliner::~EntityAssetOutliner()
 // 
 void EntityAssetOutliner::AddEntityTypes()
 {
-  if ( m_CurrentScene )
-  {
-    if ( m_CurrentScene->GetNodeTypesByName().size() > 0 )
+    if ( m_CurrentScene )
     {
-      m_TreeCtrl->Freeze();
-      bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
-      m_TreeCtrl->DisableSorting();
-
-      // Iterate over the node types, looking for the entity types
-      EntityType* entityType = NULL;
-      HM_StrToSceneNodeTypeSmartPtr::const_iterator typeItr = m_CurrentScene->GetNodeTypesByName().begin();
-      HM_StrToSceneNodeTypeSmartPtr::const_iterator typeEnd = m_CurrentScene->GetNodeTypesByName().end();
-      for ( ; typeItr != typeEnd; ++typeItr )
-      {
-        entityType = Reflect::ObjectCast< Core::EntityType >( typeItr->second );
-        if ( entityType )
+        if ( m_CurrentScene->GetNodeTypesByName().size() > 0 )
         {
-          AddEntityType( entityType );
-        }
-      }
+            m_TreeCtrl->Freeze();
+            bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
+            m_TreeCtrl->DisableSorting();
 
-      m_TreeCtrl->EnableSorting( isSortingEnabled );
-      Sort( m_InvisibleRoot );
-      m_TreeCtrl->Thaw();
+            // Iterate over the node types, looking for the entity types
+            EntityType* entityType = NULL;
+            HM_StrToSceneNodeTypeSmartPtr::const_iterator typeItr = m_CurrentScene->GetNodeTypesByName().begin();
+            HM_StrToSceneNodeTypeSmartPtr::const_iterator typeEnd = m_CurrentScene->GetNodeTypesByName().end();
+            for ( ; typeItr != typeEnd; ++typeItr )
+            {
+                entityType = Reflect::ObjectCast< Core::EntityType >( typeItr->second );
+                if ( entityType )
+                {
+                    AddEntityType( entityType );
+                }
+            }
+
+            m_TreeCtrl->EnableSorting( isSortingEnabled );
+            Sort( m_InvisibleRoot );
+            m_TreeCtrl->Thaw();
+        }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -70,21 +70,21 @@ void EntityAssetOutliner::AddEntityTypes()
 // 
 void EntityAssetOutliner::AddEntityType( Core::EntityType* entityType )
 {
-  // Iterate over all the entity instances and add them to the tree
-  M_InstanceSetSmartPtr::const_iterator classItr = entityType->GetSets().begin();
-  M_InstanceSetSmartPtr::const_iterator classEnd = entityType->GetSets().end();
-  for ( ; classItr != classEnd; ++classItr )
-  {
-    EntitySet* set = Reflect::ObjectCast< Core::EntitySet >( classItr->second );
-    if (set)
+    // Iterate over all the entity instances and add them to the tree
+    M_InstanceSetSmartPtr::const_iterator classItr = entityType->GetSets().begin();
+    M_InstanceSetSmartPtr::const_iterator classEnd = entityType->GetSets().end();
+    for ( ; classItr != classEnd; ++classItr )
     {
-      AddEntitySet( set );
+        EntitySet* set = Reflect::ObjectCast< Core::EntitySet >( classItr->second );
+        if (set)
+        {
+            AddEntitySet( set );
+        }
     }
-  }
 
-  // Connect listeners
-  entityType->AddSetAddedListener( InstanceTypeChangeSignature::Delegate ( this, &EntityAssetOutliner::SetAdded ) );
-  entityType->AddSetRemovedListener( InstanceTypeChangeSignature::Delegate ( this, &EntityAssetOutliner::SetRemoved ) );
+    // Connect listeners
+    entityType->AddSetAddedListener( InstanceTypeChangeSignature::Delegate ( this, &EntityAssetOutliner::SetAdded ) );
+    entityType->AddSetRemovedListener( InstanceTypeChangeSignature::Delegate ( this, &EntityAssetOutliner::SetRemoved ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -93,20 +93,20 @@ void EntityAssetOutliner::AddEntityType( Core::EntityType* entityType )
 // 
 void EntityAssetOutliner::RemoveEntityType( Core::EntityType* entityType )
 {
-  // Iterate over all the entity instances and add them to the tree
-  M_InstanceSetSmartPtr::const_iterator classItr = entityType->GetSets().begin();
-  M_InstanceSetSmartPtr::const_iterator classEnd = entityType->GetSets().end();
-  for ( ; classItr != classEnd; ++classItr )
-  {
-    EntitySet* set = Reflect::ObjectCast< Core::EntitySet >( classItr->second );
-    if (set)
+    // Iterate over all the entity instances and add them to the tree
+    M_InstanceSetSmartPtr::const_iterator classItr = entityType->GetSets().begin();
+    M_InstanceSetSmartPtr::const_iterator classEnd = entityType->GetSets().end();
+    for ( ; classItr != classEnd; ++classItr )
     {
-      RemoveEntitySet( set );
+        EntitySet* set = Reflect::ObjectCast< Core::EntitySet >( classItr->second );
+        if (set)
+        {
+            RemoveEntitySet( set );
+        }
     }
-  }
-  // Disconnect listeners
-  entityType->RemoveSetAddedListener( InstanceTypeChangeSignature::Delegate ( this, &EntityAssetOutliner::SetAdded ) );
-  entityType->RemoveSetRemovedListener( InstanceTypeChangeSignature::Delegate ( this, &EntityAssetOutliner::SetRemoved ) );
+    // Disconnect listeners
+    entityType->RemoveSetAddedListener( InstanceTypeChangeSignature::Delegate ( this, &EntityAssetOutliner::SetAdded ) );
+    entityType->RemoveSetRemovedListener( InstanceTypeChangeSignature::Delegate ( this, &EntityAssetOutliner::SetRemoved ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -115,37 +115,37 @@ void EntityAssetOutliner::RemoveEntityType( Core::EntityType* entityType )
 // 
 void EntityAssetOutliner::AddEntitySet( Core::EntitySet* classSet )
 {
-  if ( m_CurrentScene )
-  {
-    m_TreeCtrl->Freeze();
-    bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
-    m_TreeCtrl->DisableSorting();
-
-    const i32 image = GlobalFileIconsTable().GetIconID( TXT( "folder" ) );
-    wxTreeItemId classItem = AddItem( m_InvisibleRoot, 
-                                      classSet->GetName(), 
-                                      image, 
-                                      new SceneOutlinerItemData( classSet ), 
-                                      false, 
-                                      false);
-
-    // Connect listeners
-    classSet->AddInstanceAddedListener( InstanceSetChangeSignature::Delegate ( this, &EntityAssetOutliner::EntityAdded ) );
-    classSet->AddInstanceRemovedListener( InstanceSetChangeSignature::Delegate ( this, &EntityAssetOutliner::EntityRemoved ) );
-
-    // Add all existing instances
-    S_InstanceDumbPtr::const_iterator entityItr = classSet->GetInstances().begin();
-    S_InstanceDumbPtr::const_iterator entityEnd = classSet->GetInstances().end();
-    for ( ; entityItr != entityEnd; ++entityItr )
+    if ( m_CurrentScene )
     {
-      AddEntity( Reflect::AssertCast< Core::Entity >(*entityItr) );
-    }
+        m_TreeCtrl->Freeze();
+        bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
+        m_TreeCtrl->DisableSorting();
 
-    m_TreeCtrl->EnableSorting( isSortingEnabled );
-    m_TreeCtrl->SortChildren( classItem );
-    m_TreeCtrl->SortChildren( m_InvisibleRoot );
-    m_TreeCtrl->Thaw();
-  }
+        const i32 image = GlobalFileIconsTable().GetIconID( TXT( "folder" ) );
+        wxTreeItemId classItem = AddItem( m_InvisibleRoot, 
+            classSet->GetName(), 
+            image, 
+            new SceneOutlinerItemData( classSet ), 
+            false, 
+            false);
+
+        // Connect listeners
+        classSet->AddInstanceAddedListener( InstanceSetChangeSignature::Delegate ( this, &EntityAssetOutliner::EntityAdded ) );
+        classSet->AddInstanceRemovedListener( InstanceSetChangeSignature::Delegate ( this, &EntityAssetOutliner::EntityRemoved ) );
+
+        // Add all existing instances
+        S_InstanceDumbPtr::const_iterator entityItr = classSet->GetInstances().begin();
+        S_InstanceDumbPtr::const_iterator entityEnd = classSet->GetInstances().end();
+        for ( ; entityItr != entityEnd; ++entityItr )
+        {
+            AddEntity( Reflect::AssertCast< Core::Entity >(*entityItr) );
+        }
+
+        m_TreeCtrl->EnableSorting( isSortingEnabled );
+        m_TreeCtrl->SortChildren( classItem );
+        m_TreeCtrl->SortChildren( m_InvisibleRoot );
+        m_TreeCtrl->Thaw();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -154,19 +154,19 @@ void EntityAssetOutliner::AddEntitySet( Core::EntitySet* classSet )
 // 
 void EntityAssetOutliner::RemoveEntitySet( Core::EntitySet* classSet )
 {
-  M_TreeItems::const_iterator found = m_Items.find( classSet );
-  if ( found != m_Items.end() )
-  {
-    // All instances of this class set should have already been cleared out
-    HELIUM_ASSERT( !m_TreeCtrl->HasChildren( found->second ) );
+    M_TreeItems::const_iterator found = m_Items.find( classSet );
+    if ( found != m_Items.end() )
+    {
+        // All instances of this class set should have already been cleared out
+        HELIUM_ASSERT( !m_TreeCtrl->HasChildren( found->second ) );
 
-    // Disconnect listeners
-    classSet->RemoveInstanceAddedListener( InstanceSetChangeSignature::Delegate ( this, &EntityAssetOutliner::EntityAdded ) );
-    classSet->RemoveInstanceRemovedListener( InstanceSetChangeSignature::Delegate ( this, &EntityAssetOutliner::EntityRemoved ) );
+        // Disconnect listeners
+        classSet->RemoveInstanceAddedListener( InstanceSetChangeSignature::Delegate ( this, &EntityAssetOutliner::EntityAdded ) );
+        classSet->RemoveInstanceRemovedListener( InstanceSetChangeSignature::Delegate ( this, &EntityAssetOutliner::EntityRemoved ) );
 
-    // Actually delete the item
-    DeleteItem( classSet );
-  }
+        // Actually delete the item
+        DeleteItem( classSet );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -175,22 +175,22 @@ void EntityAssetOutliner::RemoveEntitySet( Core::EntitySet* classSet )
 // 
 void EntityAssetOutliner::AddEntity( Core::Entity* entity )
 {
-  EDITOR_SCOPE_TIMER( ("") );
+    EDITOR_SCOPE_TIMER( ("") );
 
-  // Find the tree item that corresponds to the class set that this entity
-  // belongs to.
-  HELIUM_ASSERT( entity->GetClassSet() );
-  M_TreeItems::const_iterator foundSet = m_Items.find( entity->GetClassSet() );
-  HELIUM_ASSERT( foundSet != m_Items.end() );
-  if ( foundSet != m_Items.end() )
-  {
-    m_TreeCtrl->Freeze();
+    // Find the tree item that corresponds to the class set that this entity
+    // belongs to.
+    HELIUM_ASSERT( entity->GetClassSet() );
+    M_TreeItems::const_iterator foundSet = m_Items.find( entity->GetClassSet() );
+    HELIUM_ASSERT( foundSet != m_Items.end() );
+    if ( foundSet != m_Items.end() )
+    {
+        m_TreeCtrl->Freeze();
 
-    // Add the entity as a child of the class set
-    const wxTreeItemId& parent = foundSet->second;
-    wxTreeItemId insertedItem = AddItem( parent, entity->GetName(), entity->GetImageIndex(), new SceneOutlinerItemData( entity ), entity->IsSelected() );
-    m_TreeCtrl->Thaw();
-  }
+        // Add the entity as a child of the class set
+        const wxTreeItemId& parent = foundSet->second;
+        wxTreeItemId insertedItem = AddItem( parent, entity->GetName(), entity->GetImageIndex(), new SceneOutlinerItemData( entity ), entity->IsSelected() );
+        m_TreeCtrl->Thaw();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -198,10 +198,10 @@ void EntityAssetOutliner::AddEntity( Core::Entity* entity )
 // 
 void EntityAssetOutliner::RemoveEntity( Core::Entity* entity )
 {
-  EDITOR_SCOPE_TIMER( ("") );
+    EDITOR_SCOPE_TIMER( ("") );
 
-  // Remove the item from the tree
-  DeleteItem( entity );
+    // Remove the item from the tree
+    DeleteItem( entity );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -211,13 +211,13 @@ void EntityAssetOutliner::RemoveEntity( Core::Entity* entity )
 // 
 SortTreeCtrl* EntityAssetOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id )
 {
-  SortTreeCtrl* tree = new SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_HIDE_ROOT | wxTR_EDIT_LABELS | wxTR_MULTIPLE, wxDefaultValidator, wxT( "EntityAssetOutliner" ) );
-  m_InvisibleRoot = tree->AddRoot( TXT( "INVISIBLE_ROOT" ) );
+    SortTreeCtrl* tree = new SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_HIDE_ROOT | wxTR_EDIT_LABELS | wxTR_MULTIPLE, wxDefaultValidator, wxT( "EntityAssetOutliner" ) );
+    m_InvisibleRoot = tree->AddRoot( TXT( "INVISIBLE_ROOT" ) );
 
-  // Override dynamic GUI event handlers here
-  tree->Connect( tree->GetId(), wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, wxTreeEventHandler( EntityAssetOutliner::OnBeginLabelEdit ), NULL, this );
+    // Override dynamic GUI event handlers here
+    tree->Connect( tree->GetId(), wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, wxTreeEventHandler( EntityAssetOutliner::OnBeginLabelEdit ), NULL, this );
 
-  return tree;
+    return tree;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -225,12 +225,9 @@ SortTreeCtrl* EntityAssetOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID 
 // 
 void EntityAssetOutliner::Clear()
 {
-  __super::Clear();
+    __super::Clear();
 
-  // ? Disconnect all listeners on existing tree items?
-
-  // Put the invisible root back into the tree so we are ready to populate it again
-  m_InvisibleRoot = m_TreeCtrl->AddRoot( TXT( "INVISIBLE_ROOT" ) );
+    m_TreeCtrl->DeleteChildren( m_InvisibleRoot );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -239,7 +236,7 @@ void EntityAssetOutliner::Clear()
 // 
 void EntityAssetOutliner::CurrentSceneChanged( Core::Scene* oldScene )
 {
-  AddEntityTypes();
+    AddEntityTypes();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -247,14 +244,14 @@ void EntityAssetOutliner::CurrentSceneChanged( Core::Scene* oldScene )
 // 
 void EntityAssetOutliner::ConnectSceneListeners()
 {
-  __super::ConnectSceneListeners();
+    __super::ConnectSceneListeners();
 
-  if ( m_CurrentScene )
-  {
-    // Connect listeners
-    m_CurrentScene->AddNodeTypeAddedListener( NodeTypeExistenceSignature::Delegate ( this, &EntityAssetOutliner::NodeTypeAdded ) );
-    m_CurrentScene->AddNodeTypeRemovedListener( NodeTypeExistenceSignature::Delegate ( this, &EntityAssetOutliner::NodeTypeRemoved ) );
-  }
+    if ( m_CurrentScene )
+    {
+        // Connect listeners
+        m_CurrentScene->AddNodeTypeAddedListener( NodeTypeExistenceSignature::Delegate ( this, &EntityAssetOutliner::NodeTypeAdded ) );
+        m_CurrentScene->AddNodeTypeRemovedListener( NodeTypeExistenceSignature::Delegate ( this, &EntityAssetOutliner::NodeTypeRemoved ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -263,14 +260,14 @@ void EntityAssetOutliner::ConnectSceneListeners()
 // 
 void EntityAssetOutliner::DisconnectSceneListeners()
 {
-  if ( m_CurrentScene )
-  {
-    // Disconnect listeners
-    m_CurrentScene->RemoveNodeTypeAddedListener( NodeTypeExistenceSignature::Delegate ( this, &EntityAssetOutliner::NodeTypeAdded ) );
-    m_CurrentScene->RemoveNodeTypeRemovedListener( NodeTypeExistenceSignature::Delegate ( this, &EntityAssetOutliner::NodeTypeRemoved ) );
-  }
+    if ( m_CurrentScene )
+    {
+        // Disconnect listeners
+        m_CurrentScene->RemoveNodeTypeAddedListener( NodeTypeExistenceSignature::Delegate ( this, &EntityAssetOutliner::NodeTypeAdded ) );
+        m_CurrentScene->RemoveNodeTypeRemovedListener( NodeTypeExistenceSignature::Delegate ( this, &EntityAssetOutliner::NodeTypeRemoved ) );
+    }
 
-  __super::DisconnectSceneListeners();
+    __super::DisconnectSceneListeners();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -279,10 +276,10 @@ void EntityAssetOutliner::DisconnectSceneListeners()
 // 
 void EntityAssetOutliner::SetAdded( const Core::InstanceTypeChangeArgs& args )
 {
-  if ( args.m_InstanceSet->HasType( Reflect::GetType< Core::EntitySet >() ) )
-  {
-    AddEntitySet( Reflect::DangerousCast< Core::EntitySet >( args.m_InstanceSet ) );
-  }
+    if ( args.m_InstanceSet->HasType( Reflect::GetType< Core::EntitySet >() ) )
+    {
+        AddEntitySet( Reflect::DangerousCast< Core::EntitySet >( args.m_InstanceSet ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -291,10 +288,10 @@ void EntityAssetOutliner::SetAdded( const Core::InstanceTypeChangeArgs& args )
 // 
 void EntityAssetOutliner::SetRemoved( const Core::InstanceTypeChangeArgs& args )
 {
-  if ( args.m_InstanceSet->HasType( Reflect::GetType< Core::EntitySet >() ) )
-  {
-    RemoveEntitySet( Reflect::DangerousCast< Core::EntitySet >( args.m_InstanceSet ) );
-  }
+    if ( args.m_InstanceSet->HasType( Reflect::GetType< Core::EntitySet >() ) )
+    {
+        RemoveEntitySet( Reflect::DangerousCast< Core::EntitySet >( args.m_InstanceSet ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -302,7 +299,7 @@ void EntityAssetOutliner::SetRemoved( const Core::InstanceTypeChangeArgs& args )
 // 
 void EntityAssetOutliner::EntityAdded( const Core::InstanceSetChangeArgs& args )
 {
-  AddEntity( Reflect::AssertCast< Core::Entity >(args.m_Instance) );
+    AddEntity( Reflect::AssertCast< Core::Entity >(args.m_Instance) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -311,7 +308,7 @@ void EntityAssetOutliner::EntityAdded( const Core::InstanceSetChangeArgs& args )
 // 
 void EntityAssetOutliner::EntityRemoved( const Core::InstanceSetChangeArgs& args )
 {
-  RemoveEntity( Reflect::AssertCast< Core::Entity >(args.m_Instance) );
+    RemoveEntity( Reflect::AssertCast< Core::Entity >(args.m_Instance) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -320,10 +317,10 @@ void EntityAssetOutliner::EntityRemoved( const Core::InstanceSetChangeArgs& args
 // 
 void EntityAssetOutliner::NodeTypeAdded( const Core::NodeTypeExistenceArgs& args )
 {
-  if ( args.m_NodeType->HasType( Reflect::GetType< Core::EntityType >() ) )
-  {
-    AddEntityType( Reflect::DangerousCast< Core::EntityType >( args.m_NodeType ) );
-  }
+    if ( args.m_NodeType->HasType( Reflect::GetType< Core::EntityType >() ) )
+    {
+        AddEntityType( Reflect::DangerousCast< Core::EntityType >( args.m_NodeType ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -332,10 +329,10 @@ void EntityAssetOutliner::NodeTypeAdded( const Core::NodeTypeExistenceArgs& args
 // 
 void EntityAssetOutliner::NodeTypeRemoved( const Core::NodeTypeExistenceArgs& args )
 {
-  if ( args.m_NodeType->HasType( Reflect::GetType< Core::EntityType >() ) )
-  {
-    RemoveEntityType( Reflect::DangerousCast< Core::EntityType >( args.m_NodeType ) );
-  }
+    if ( args.m_NodeType->HasType( Reflect::GetType< Core::EntityType >() ) )
+    {
+        RemoveEntityType( Reflect::DangerousCast< Core::EntityType >( args.m_NodeType ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -344,12 +341,12 @@ void EntityAssetOutliner::NodeTypeRemoved( const Core::NodeTypeExistenceArgs& ar
 // 
 void EntityAssetOutliner::OnBeginLabelEdit( wxTreeEvent& args )
 {
-  Object* found = GetTreeItemData( args.GetItem() )->GetObject();
+    Object* found = GetTreeItemData( args.GetItem() )->GetObject();
 
-  // If a valid Object was not found, or if the the object is not
-  // an entity node, we won't allow it's name to be changed.
-  if ( !found || !found->HasType( Reflect::GetType< Core::Entity >() ) )
-  {
-    args.Veto();
-  }
+    // If a valid Object was not found, or if the the object is not
+    // an entity node, we won't allow it's name to be changed.
+    if ( !found || !found->HasType( Reflect::GetType< Core::Entity >() ) )
+    {
+        args.Veto();
+    }
 }

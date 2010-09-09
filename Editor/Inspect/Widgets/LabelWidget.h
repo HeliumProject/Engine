@@ -8,13 +8,22 @@ namespace Helium
     {
         class LabelWidget;
 
-        class LabelWindow : public wxStaticText
+        class LabelWindow : public wxPanel
         {
         public:
             LabelWindow(wxWindow* parent, LabelWidget* labelWidget);
 
+            wxString GetLabel() const;
+            void SetLabel(const wxString& label);
+
+            void UpdateHelpText( const wxString& helpText );
+
+            virtual bool SetForegroundColour(const wxColour& color) HELIUM_OVERRIDE;
+            virtual bool SetBackgroundColour(const wxColour& color) HELIUM_OVERRIDE;
+
         private:
             LabelWidget*    m_LabelWidget;
+            wxStaticText*   m_StaticText;
         };
 
         class LabelWidget : public Reflect::ConcreteInheritor< LabelWidget, Widget >

@@ -7,19 +7,12 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-CheckBoxWindow::CheckBoxWindow( wxWindow* parent, CheckBoxWidget* checkBoxWidget, int width, int height )
-: m_CheckBoxWidget( checkBoxWidget )
+CheckBoxWindow::CheckBoxWindow( wxWindow* parent, CheckBoxWidget* checkBoxWidget )
+: wxPanel( parent )
+, m_CheckBoxWidget( checkBoxWidget )
 , m_Override( false )
 {
-    wxSize size( width, height );
-
-    Create( parent, wxID_ANY, wxDefaultPosition, size );
-
     m_CheckBox = new wxCheckBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
-
-    m_CheckBox->SetSize( size );
-    m_CheckBox->SetMinSize( size );
-    m_CheckBox->SetMaxSize( size );
 
     SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
     wxSizer* sizer = GetSizer();
@@ -28,7 +21,9 @@ CheckBoxWindow::CheckBoxWindow( wxWindow* parent, CheckBoxWidget* checkBoxWidget
 
     Connect( wxID_ANY, wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( CheckBoxWindow::OnChecked ) );
 
+#ifdef INSPECT_LAYOUT
     Layout();
+#endif
 }
 
 void CheckBoxWindow::OnChecked( wxCommandEvent& )
@@ -54,10 +49,9 @@ void CheckBoxWidget::Create( wxWindow* parent )
     SetWindow( m_CheckBoxWindow = new CheckBoxWindow( parent, this ) );
 
     // init layout metrics
-    wxSize size( -1, m_CheckBoxControl->GetCanvas()->GetDefaultSize( Math::SingleAxes::Y ) );
+    wxSize size( m_Control->GetCanvas()->GetDefaultSize( Math::SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( Math::SingleAxes::Y ) );
     m_CheckBoxWindow->SetSize( size );
     m_CheckBoxWindow->SetMinSize( size );
-    m_CheckBoxWindow->SetMaxSize( size );
 
     // add listeners
     m_CheckBoxControl->a_Highlight.Changed().AddMethod( this, &CheckBoxWidget::HighlightChanged );

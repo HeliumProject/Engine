@@ -30,7 +30,7 @@
 #define wxTR_USE_PEN_DASHES               0x8000
 
 #define WXTWC_DEFAULT_CLICK_TOLERANCE     4
-#define WXTWC_DEFAULT_COLUMN_SIZE         23
+#define WXTWC_DEFAULT_COLUMN_SIZE         20
 
 enum TreeWndCtrlDashMode
 {
@@ -48,7 +48,6 @@ enum TreeWndCtrlLineMode
 enum TreeWndCtrlLineDrawMode
 {
     wxTWC_LINEDRAW_NONE,
-    wxTWC_LINEDRAW_ROOT_ONLY,
     wxTWC_LINEDRAW_ALL,
 };
 
@@ -201,7 +200,7 @@ namespace Helium
         wxTreeItemId PrependItem(const wxTreeItemId &parent,
             wxWindow *window,
             wxTreeItemData *data = NULL)
-        { return DoInsertItem(parent, (size_t) 0, window, data); }
+        { return DoInsertItem(parent, 0, window, data); }
 
         wxTreeItemId InsertItem(const wxTreeItemId &parent,
             const wxTreeItemId &previous,
@@ -218,7 +217,7 @@ namespace Helium
         wxTreeItemId AppendItem(const wxTreeItemId &parent,
             wxWindow *window,
             wxTreeItemData *data = NULL)
-        { return DoInsertItem(parent, (size_t) -1, window, data); }
+        { return DoInsertItem(parent, 0, window, data); }
 
         wxTreeItemId PrependItem(const wxTreeItemId &parent,
             const wxString &text,
@@ -248,7 +247,7 @@ namespace Helium
             int image = -1,
             int selImage = -1,
             wxTreeItemData *data = NULL)
-        { return DoInsertItem(parent, (size_t) -1, text, image, selImage, data); }
+        { return DoInsertItem(parent, 0, text, image, selImage, data); }
 
 
         virtual void Delete(const wxTreeItemId &item);

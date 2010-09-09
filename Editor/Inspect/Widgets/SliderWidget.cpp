@@ -62,10 +62,9 @@ void SliderWidget::Create( wxWindow* parent )
     m_SliderWindow->ClearTicks();
 
     // init layout metrics
-    wxSize size( -1, m_SliderControl->GetCanvas()->GetDefaultSize( Math::SingleAxes::Y ) );
+    wxSize size( m_Control->GetCanvas()->GetDefaultSize( Math::SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( Math::SingleAxes::Y ) );
     m_Window->SetSize( size );
     m_Window->SetMinSize( size );
-    m_Window->SetMaxSize( size );
 
     // add listeners
     m_SliderControl->a_Min.Changed().AddMethod( this, &SliderWidget::MinChanged );

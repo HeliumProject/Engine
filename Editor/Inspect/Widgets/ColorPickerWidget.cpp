@@ -7,27 +7,23 @@ using namespace Helium;
 using namespace Helium::Editor;
 
 ColorPickerWindow::ColorPickerWindow( wxWindow* parent, ColorPickerWidget* colorPickerWidget )
-: m_ColorPickerWidget( colorPickerWidget )
+: wxPanel( parent )
+, m_ColorPickerWidget( colorPickerWidget )
 , m_Override( false )
 {
-    wxSize size( 24, 24 );
-
-    Create( parent, wxID_ANY, wxDefaultPosition, size );
-
     m_ColorPicker = new ColorPicker( this, wxID_ANY );
     m_ColorPicker->EnableAutoSaveCustomColors();
-
-    m_ColorPicker->SetSize( size );
-    m_ColorPicker->SetMinSize( size );
-    m_ColorPicker->SetMaxSize( size );
 
     SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
     wxSizer* sizer = GetSizer();
     sizer->Add( m_ColorPicker );
     sizer->Add( 1, 0, 1, wxEXPAND | wxALIGN_CENTER_VERTICAL );
-    Layout();
 
     Connect( wxID_ANY, wxEVT_COMMAND_COLOURPICKER_CHANGED, wxCommandEventHandler( ColorPickerWindow::OnChanged ) );
+
+#ifdef INSPECT_LAYOUT
+    Layout();
+#endif
 }
 
 void ColorPickerWindow::OnChanged( wxCommandEvent& )
@@ -50,10 +46,9 @@ void ColorPickerWidget::Create( wxWindow* parent )
     SetWindow( m_ColorPickerWindow = new ColorPickerWindow( parent, this ) );
 
     // init layout metrics
-    wxSize size( -1, m_ColorPickerControl->GetCanvas()->GetDefaultSize( Math::SingleAxes::Y ) );
+    wxSize size( m_Control->GetCanvas()->GetDefaultSize( Math::SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( Math::SingleAxes::Y ) );
     m_ColorPickerWindow->SetSize( size );
     m_ColorPickerWindow->SetMinSize( size );
-    m_ColorPickerWindow->SetMaxSize( size );
 
     // add listeners
     m_ColorPickerControl->a_Highlight.Changed().AddMethod( this, &ColorPickerWidget::HighlightChanged );

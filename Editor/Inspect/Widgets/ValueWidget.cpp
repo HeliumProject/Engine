@@ -80,10 +80,9 @@ void ValueWidget::Create( wxWindow* parent )
     SetWindow( m_ValueWindow = new ValueWindow( parent, this ) );
 
     // init layout metrics
-    wxSize size( -1, m_ValueControl->GetCanvas()->GetDefaultSize( Math::SingleAxes::Y ) );
+    wxSize size( m_Control->GetCanvas()->GetDefaultSize( Math::SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( Math::SingleAxes::Y ) );
     m_ValueWindow->SetSize( size );
     m_ValueWindow->SetMinSize( size );
-    m_ValueWindow->SetMaxSize( size );
 
     // add listeners
     m_ValueControl->a_Justification.Changed().AddMethod( this, &ValueWidget::JustificationChanged );

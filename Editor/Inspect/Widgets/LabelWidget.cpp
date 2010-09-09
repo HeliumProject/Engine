@@ -26,7 +26,9 @@ void LabelWindow::OnSize(wxSizeEvent& event)
 {
     m_LabelWidget->GetControl()->Read();
 
+#ifdef INSPECT_LAYOUT
     Layout();
+#endif
 }
 
 wxString LabelWindow::GetLabel() const

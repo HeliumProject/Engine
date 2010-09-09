@@ -50,7 +50,9 @@ TreeWndCtrlSpacer::TreeWndCtrlSpacer(TreeWndCtrl *parent,
 
 bool TreeWndCtrlSpacer::Layout()
 {
-    SetSize(m_numColumns * m_treeWndCtrl->GetColumnSize(), wxDefaultSize.GetHeight());
+    // this happens just before layout in case a node was reparented? -Geoff
+    SetSize(m_numColumns * m_treeWndCtrl->GetColumnSize(), 20);
+    SetMinSize( GetSize() );
     return __super::Layout();
 }
 
@@ -154,9 +156,6 @@ void TreeWndCtrlSpacer::DrawLines(wxPaintDC& dc,
     {
         if ( parent != TreeWndCtrlItemIdInvalid )
             DrawLines(dc, parent, columnIndex - 1, false);
-
-        if ( m_treeWndCtrl->GetLineDrawMode() == wxTWC_LINEDRAW_ROOT_ONLY )
-            return;
     }
 
     unsigned int columnSize = m_treeWndCtrl->GetColumnSize();

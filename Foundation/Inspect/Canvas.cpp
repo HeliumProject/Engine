@@ -8,7 +8,7 @@ using namespace Helium::Inspect;
 Canvas::Canvas ()
 {
     m_Canvas = this;
-    m_DefaultSize = Math::Point (100, 20);
+    m_DefaultSize = Math::Point (60, 20);
     m_Border = 4;
     m_Pad = 2;
 }

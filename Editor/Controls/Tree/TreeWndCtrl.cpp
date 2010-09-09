@@ -95,8 +95,6 @@ TreeWndCtrl::TreeWndCtrl(wxWindow *parent,
 
     if ( treeStyle & wxTR_NO_LINES )
         m_lineDrawMode = wxTWC_LINEDRAW_NONE;
-    else if ( treeStyle & wxTR_LINES_AT_ROOT )
-        m_lineDrawMode = wxTWC_LINEDRAW_ROOT_ONLY;
     else if ( treeStyle & wxTWC_LINEDRAW_ALL )
         m_lineDrawMode = wxTWC_LINEDRAW_ALL;
 
@@ -932,9 +930,7 @@ wxTreeItemId TreeWndCtrl::DoInsertItem(const wxTreeItemId& parent,
 
     wxTreeItemId node(newNode);
 
-    if ( pos < 0 )
-        parentNode->m_children.Insert(node, 0);
-    else if ( pos >= parentNode->m_children.GetCount() )
+    if ( pos >= parentNode->m_children.GetCount() )
         parentNode->m_children.Add(node);
     else
         parentNode->m_children.Insert(node, pos);

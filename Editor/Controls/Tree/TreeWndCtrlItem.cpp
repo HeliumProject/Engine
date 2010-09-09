@@ -59,6 +59,7 @@ TreeWndCtrlItem::TreeWndCtrlItem(TreeWndCtrl *parent,
                                  m_text(text),
                                  m_treeWndCtrl(parent)
 {
+    SetMinSize( wxSize( wxDefaultSize.GetX(), 20 ) );
 }
 
 bool TreeWndCtrlItem::Layout()

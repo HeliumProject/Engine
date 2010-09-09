@@ -8,13 +8,17 @@ using namespace Helium;
 using namespace Helium::Editor;
 
 ButtonWindow::ButtonWindow( wxWindow* parent, ButtonWidget* buttonWidget )
-: m_ButtonWidget( buttonWidget )
+: wxPanel( parent )
+, m_Sizer( NULL )
 , m_Button( NULL )
+, m_ButtonWidget( buttonWidget )
 {
-    Create( parent, wxID_ANY, wxDefaultPosition );
-
     Inspect::Button* buttonControl = Reflect::ObjectCast< Inspect::Button >( m_ButtonWidget->GetControl() );
     HELIUM_ASSERT( buttonControl );
+
+    m_Sizer = new wxBoxSizer( wxHORIZONTAL );
+    SetSizer( m_Sizer );
+    m_Sizer->Add( 1, 0, 1, wxEXPAND );
 
     if ( !buttonControl->a_Icon.Get().empty() )
     {
@@ -25,14 +29,11 @@ ButtonWindow::ButtonWindow( wxWindow* parent, ButtonWidget* buttonWidget )
         SetLabel( buttonControl->a_Label.Get().c_str() );
     }
 
-    m_Sizer = new wxBoxSizer( wxHORIZONTAL );
-    SetSizer( m_Sizer );
-    m_Sizer->Add( m_Button, 0, wxALIGN_CENTER_VERTICAL );
-    m_Sizer->Add( 1, 0, 1, wxEXPAND );
-
     Connect( wxID_ANY, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ButtonWindow::OnClicked ) );
 
+#ifdef INSPECT_LAYOUT
     Layout();
+#endif
 }
 
 void ButtonWindow::OnClicked( wxCommandEvent& )
@@ -43,35 +44,45 @@ void ButtonWindow::OnClicked( wxCommandEvent& )
 void ButtonWindow::SetIcon( const tstring& icon )
 {
     HELIUM_ASSERT( m_Sizer );
-    HELIUM_ASSERT( m_Button );
 
-    m_Sizer->Detach( m_Button );
-    m_Button->Destroy();
-    m_Button = NULL;
+    if ( m_Button )
+    {
+        m_Sizer->Detach( m_Button );
+        m_Button->Destroy();
+        m_Button = NULL;
+    }
 
     Inspect::Button* buttonControl = Reflect::ObjectCast< Inspect::Button >( m_ButtonWidget->GetControl() );
     HELIUM_ASSERT( buttonControl );
     m_Button = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetIcon( (wxArtID)buttonControl->a_Icon.Get().c_str() ) );
 
     m_Sizer->Insert( 0, m_Button, 0, wxALIGN_CENTER_VERTICAL );
+
+#ifdef INSPECT_LAYOUT
     Layout();
+#endif
 }
 
 void ButtonWindow::SetLabel( const tstring& label )
 {
     HELIUM_ASSERT( m_Sizer );
-    HELIUM_ASSERT( m_Button );
 
-    m_Sizer->Detach( m_Button );
-    m_Button->Destroy();
-    m_Button = NULL;
+    if ( m_Button )
+    {
+        m_Sizer->Detach( m_Button );
+        m_Button->Destroy();
+        m_Button = NULL;
+    }
 
     Inspect::Button* buttonControl = Reflect::ObjectCast< Inspect::Button >( m_ButtonWidget->GetControl() );
     HELIUM_ASSERT( buttonControl );
     m_Button = new wxButton( this, wxID_ANY, buttonControl->a_Label.Get().c_str() );
 
     m_Sizer->Insert( 0, m_Button, 0, wxALIGN_CENTER_VERTICAL );
+
+#ifdef INSPECT_LAYOUT
     Layout();
+#endif
 }
 
 ButtonWidget::ButtonWidget( Inspect::Button* button )
@@ -83,16 +94,15 @@ ButtonWidget::ButtonWidget( Inspect::Button* button )
 
 void ButtonWidget::Create( wxWindow* parent )
 {
-    HELIUM_ASSERT( m_ButtonWindow );
+    HELIUM_ASSERT( !m_ButtonWindow );
 
     // allocate window and connect common listeners
     SetWindow( m_ButtonWindow = new ButtonWindow( parent, this ) );
 
     // init layout metrics
-    wxSize size( -1, m_ButtonControl->GetCanvas()->GetDefaultSize( Math::SingleAxes::Y ) );
+    wxSize size( m_Control->GetCanvas()->GetDefaultSize( Math::SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( Math::SingleAxes::Y ) );
     m_ButtonWindow->SetSize( size );
     m_ButtonWindow->SetMinSize( size );
-    m_ButtonWindow->SetMaxSize( size );
 
     // add listeners
     m_ButtonControl->a_Icon.Changed().AddMethod( this, &ButtonWidget::OnIconChanged );

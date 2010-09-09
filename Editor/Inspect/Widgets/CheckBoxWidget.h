@@ -11,7 +11,7 @@ namespace Helium
         class CheckBoxWindow : public wxPanel
         {
         public:
-            CheckBoxWindow( wxWindow* parent, CheckBoxWidget* checkBoxWidget, int width = 16, int height = 22 );
+            CheckBoxWindow( wxWindow* parent, CheckBoxWidget* checkBoxWidget );
 
             void SetOverride( bool override )
             {

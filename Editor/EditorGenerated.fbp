@@ -3811,7 +3811,7 @@
                     <object class="CustomControl" expanded="1">
                         <property name="bg"></property>
                         <property name="class">Helium::TreeWndCtrl</property>
-                        <property name="construction">m_TreeWndCtrl = new Helium::TreeWndCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxScrolledWindowStyle | wxALWAYS_SHOW_SB | wxCLIP_CHILDREN | wxNO_BORDER );</property>
+                        <property name="construction">m_TreeWndCtrl = new Helium::TreeWndCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxScrolledWindowStyle | wxALWAYS_SHOW_SB | wxCLIP_CHILDREN | wxNO_BORDER, wxPanelNameStr,  wxTR_HIDE_ROOT );</property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>
                         <property name="declaration">Helium::TreeWndCtrl* m_TreeWndCtrl;</property>

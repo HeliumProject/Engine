@@ -18,14 +18,14 @@ SCENE_DEFINE_TYPE(Core::Locator);
 
 void Locator::InitializeType()
 {
-  Reflect::RegisterClassType< Core::Locator >( TXT( "Core::Locator" ) );
+    Reflect::RegisterClassType< Core::Locator >( TXT( "Core::Locator" ) );
 
-  PropertiesGenerator::InitializePanel( TXT( "Locator" ), CreatePanelSignature::Delegate( &Locator::CreatePanel ) );
+    PropertiesGenerator::InitializePanel( TXT( "Locator" ), CreatePanelSignature::Delegate( &Locator::CreatePanel ) );
 }
 
 void Locator::CleanupType()
 {
-  Reflect::UnregisterClassType< Core::Locator >();
+    Reflect::UnregisterClassType< Core::Locator >();
 }
 
 Locator::Locator(Core::Scene* scene)
@@ -48,118 +48,118 @@ Locator::~Locator()
 i32 Locator::GetImageIndex() const
 {
 #pragma TODO( "Fix this up somehow" )
-  return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "locator" ) );
+    return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "locator" ) );
 }
 
 tstring Locator::GetApplicationTypeName() const
 {
-  return TXT( "Locator" );
+    return TXT( "Locator" );
 }
 
 SceneNodeTypePtr Locator::CreateNodeType( Core::Scene* scene ) const
 {
-  // Overridden to create an locator-specific type
-  Core::LocatorType* nodeType = new Core::LocatorType( scene, GetType() );
+    // Overridden to create an locator-specific type
+    Core::LocatorType* nodeType = new Core::LocatorType( scene, GetType() );
 
-  // Set the image index (usually this is handled by the base class, but we aren't calling the base)
-  nodeType->SetImageIndex( GetImageIndex() );
+    // Set the image index (usually this is handled by the base class, but we aren't calling the base)
+    nodeType->SetImageIndex( GetImageIndex() );
 
-  return nodeType;
+    return nodeType;
 }
 
 int Locator::GetShape() const
 {
-  return GetPackage< Content::Locator >()->m_Shape;
+    return GetPackage< Content::Locator >()->m_Shape;
 }
 
 void Locator::SetShape( int shape )
 {
-  GetPackage< Content::Locator >()->m_Shape = static_cast< Content::LocatorShape > (shape);
+    GetPackage< Content::Locator >()->m_Shape = static_cast< Content::LocatorShape > (shape);
 }
 
 void Locator::Evaluate(GraphDirection direction)
 {
-  __super::Evaluate(direction);
+    __super::Evaluate(direction);
 
-  switch (direction)
-  {
-  case GraphDirections::Downstream:
+    switch (direction)
     {
-      // start the box from scratch
-      m_ObjectBounds.Reset();
-
-      // merge type pointer into our bounding box
-      if (m_NodeType)
-      {
-        Core::LocatorType* type = Reflect::AssertCast<Core::LocatorType>(m_NodeType);
-
-        const Core::Primitive* prim = type->GetShape( GetPackage< Content::Locator >()->m_Shape );
-        if (prim)
+    case GraphDirections::Downstream:
         {
-          m_ObjectBounds.Merge(prim->GetBounds());
-        }
-      }
+            // start the box from scratch
+            m_ObjectBounds.Reset();
 
-      break;
+            // merge type pointer into our bounding box
+            if (m_NodeType)
+            {
+                Core::LocatorType* type = Reflect::AssertCast<Core::LocatorType>(m_NodeType);
+
+                const Core::Primitive* prim = type->GetShape( GetPackage< Content::Locator >()->m_Shape );
+                if (prim)
+                {
+                    m_ObjectBounds.Merge(prim->GetBounds());
+                }
+            }
+
+            break;
+        }
     }
-  }
 }
 
 void Locator::Render( RenderVisitor* render )
 {
-  const Content::Locator* package = GetPackage< Content::Locator >();
+    const Content::Locator* package = GetPackage< Content::Locator >();
 
-  // shape is drawn non-normalized
-  {
-    RenderEntry* entry = render->Allocate(this);
-    entry->m_Location = render->State().m_Matrix;
-    entry->m_Center = m_ObjectBounds.Center();
-    entry->m_Draw = &Locator::DrawShape;
-
-    if ( package->m_TransparentOverride ? package->m_Transparent : Reflect::AssertCast<Core::InstanceType>( m_NodeType )->IsTransparent() )
+    // shape is drawn non-normalized
     {
-      entry->m_Flags |= RenderFlags::DistanceSort;
-    }
-  }
+        RenderEntry* entry = render->Allocate(this);
+        entry->m_Location = render->State().m_Matrix;
+        entry->m_Center = m_ObjectBounds.Center();
+        entry->m_Draw = &Locator::DrawShape;
 
-  // don't call __super here, it will draw big ass axes
-  Core::HierarchyNode::Render( render );
+        if ( package->m_TransparentOverride ? package->m_Transparent : Reflect::AssertCast<Core::InstanceType>( m_NodeType )->IsTransparent() )
+        {
+            entry->m_Flags |= RenderFlags::DistanceSort;
+        }
+    }
+
+    // don't call __super here, it will draw big ass axes
+    Core::HierarchyNode::Render( render );
 }
 
 void Locator::DrawShape( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-  const Core::Locator* locator = Reflect::ConstAssertCast<Core::Locator>( object );
+    const Core::Locator* locator = Reflect::ConstAssertCast<Core::Locator>( object );
 
-  const Core::LocatorType* type = Reflect::ConstAssertCast<Core::LocatorType>( locator->GetNodeType() );
+    const Core::LocatorType* type = Reflect::ConstAssertCast<Core::LocatorType>( locator->GetNodeType() );
 
-  const Content::Locator* package = locator->GetPackage< Content::Locator >();
+    const Content::Locator* package = locator->GetPackage< Content::Locator >();
 
-  locator->SetMaterial( type->GetMaterial() );
+    locator->SetMaterial( type->GetMaterial() );
 
-  const Core::Primitive* prim = type->GetShape( package->m_Shape );
-  if (prim)
-  {
-    prim->Draw( args, package->m_SolidOverride ? &package->m_Solid : NULL, package->m_TransparentOverride ? &package->m_Transparent : NULL );
-  }
+    const Core::Primitive* prim = type->GetShape( package->m_Shape );
+    if (prim)
+    {
+        prim->Draw( args, package->m_SolidOverride ? &package->m_Solid : NULL, package->m_TransparentOverride ? &package->m_Transparent : NULL );
+    }
 }
 
 bool Locator::Pick( PickVisitor* pick )
 {
-  bool result = false;
+    bool result = false;
 
-  const Core::LocatorType* type = Reflect::AssertCast<Core::LocatorType>(m_NodeType);
+    const Core::LocatorType* type = Reflect::AssertCast<Core::LocatorType>(m_NodeType);
 
-  const Content::Locator* package = GetPackage< Content::Locator >();
+    const Content::Locator* package = GetPackage< Content::Locator >();
 
-  pick->SetCurrentObject (this, pick->State().m_Matrix);
+    pick->SetCurrentObject (this, pick->State().m_Matrix);
 
-  const Core::Primitive* prim = type->GetShape( package->m_Shape );
-  if (prim)
-  {
-    result |= prim->Pick(pick, package->m_SolidOverride ? &package->m_Solid : NULL);
-  }
+    const Core::Primitive* prim = type->GetShape( package->m_Shape );
+    if (prim)
+    {
+        result |= prim->Pick(pick, package->m_SolidOverride ? &package->m_Solid : NULL);
+    }
 
-  return result;
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -167,41 +167,44 @@ bool Locator::Pick( PickVisitor* pick )
 // 
 bool Locator::ValidatePanel(const tstring& name)
 {
-  if (name == TXT( "Locator" ) )
-  {
-    return true;
-  }
+    if (name == TXT( "Locator" ) )
+    {
+        return true;
+    }
 
-  return __super::ValidatePanel( name );
+    return __super::ValidatePanel( name );
 }
 
 void Locator::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Generator->PushContainer( TXT( "Locator" ) );
-  {
-    args.m_Generator->PushContainer();
+    Inspect::Container* container = args.m_Generator->PushContainer( TXT( "Locator" ) );
+    container->a_HelpText.Set( TXT( "This area contains settings specific to the locator node type." ) );
     {
-      args.m_Generator->AddLabel( TXT( "Shape" ) );
+        args.m_Generator->PushContainer();
+        {
+            Inspect::Label* label = args.m_Generator->AddLabel( TXT( "Shape" ) );
+            label->a_HelpText.Set( TXT( "Choose the shape of the locator." ) );
 
-      Inspect::Choice* choice = args.m_Generator->AddChoice<Core::Locator, int>(args.m_Selection, &Locator::GetShape, &Locator::SetShape);
-      choice->a_IsDropDown.Set( true );
-      std::vector< Inspect::ChoiceItem > items;
+            Inspect::Choice* choice = args.m_Generator->AddChoice<Core::Locator, int>(args.m_Selection, &Locator::GetShape, &Locator::SetShape);
+            choice->a_IsDropDown.Set( true );
+            choice->a_HelpText.Set( TXT( "Choose the shape of the locator." ) );
+            std::vector< Inspect::ChoiceItem > items;
 
-      {
-        tostringstream str;
-        str << Content::LocatorShapes::Cross;
-        items.push_back( Inspect::ChoiceItem( TXT( "Cross" ), str.str() ) );
-      }
+            {
+                tostringstream str;
+                str << Content::LocatorShapes::Cross;
+                items.push_back( Inspect::ChoiceItem( TXT( "Cross" ), str.str() ) );
+            }
 
-      {
-        tostringstream str;
-        str << Content::LocatorShapes::Cube;
-        items.push_back( Inspect::ChoiceItem( TXT( "Cube" ), str.str() ) );
-      }
+            {
+                tostringstream str;
+                str << Content::LocatorShapes::Cube;
+                items.push_back( Inspect::ChoiceItem( TXT( "Cube" ), str.str() ) );
+            }
 
-      choice->a_Items.Set( items );
+            choice->a_Items.Set( items );
+        }
+        args.m_Generator->Pop();
     }
     args.m_Generator->Pop();
-  }
-  args.m_Generator->Pop();
 }

@@ -145,6 +145,8 @@ void TreeNodeWidget::Create( wxWindow* parent )
         m_TreeWndCtrl->AppendItem( parentId, m_Window );
     }
 
+    m_Window->SetHelpText( m_ContainerControl->a_HelpText.Get() );
+
     m_TreeWndCtrl->Thaw();
 }
 

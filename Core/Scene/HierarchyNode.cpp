@@ -1092,15 +1092,21 @@ void HierarchyNode::CreatePanel(CreatePanelArgs& args)
     {
         args.m_Generator->PushContainer();
         {
-            args.m_Generator->AddLabel( TXT( "Hidden" ) );
-            args.m_Generator->AddCheckBox<Core::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsHidden, &HierarchyNode::SetHidden, false );
+            Inspect::Label* label = args.m_Generator->AddLabel( TXT( "Hidden" ) );
+            Inspect::CheckBox* checkBox = args.m_Generator->AddCheckBox<Core::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsHidden, &HierarchyNode::SetHidden, false );
+
+            label->a_HelpText.Set( TXT( "Controls if this node is hidden/visible." ) );
+            checkBox->a_HelpText.Set( TXT( "Controls if this node is hidden/visible." ) );
         }
         args.m_Generator->Pop();
 
         args.m_Generator->PushContainer();
         {
-            args.m_Generator->AddLabel( TXT( "Live" ) );   
-            args.m_Generator->AddCheckBox<Core::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsLive, &HierarchyNode::SetLive );
+            Inspect::Label* label = args.m_Generator->AddLabel( TXT( "Live" ) );   
+            Inspect::CheckBox* checkBox = args.m_Generator->AddCheckBox<Core::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsLive, &HierarchyNode::SetLive );
+
+            label->a_HelpText.Set( TXT( "Controls if this node is 'live' with regard to the placement tool.  Only live objects will be tested for snapping, etc." ) );
+            checkBox->a_HelpText.Set( TXT( "Controls if this node is 'live' with regard to the placement tool.  Only live objects will be tested for snapping, etc." ) );
         }
         args.m_Generator->Pop();
     }

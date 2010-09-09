@@ -6,6 +6,8 @@ using namespace Helium::Inspect;
 CheckBox::CheckBox()
 : a_Highlight( false )
 {
+    a_IsFixedWidth.Set( true );
+
     m_ContextMenu = new ContextMenu( this );
     m_ContextMenu->AddItem( TXT( "Set To Default" ), ContextMenuSignature::Delegate( this, &CheckBox::SetToDefault ) );
 }

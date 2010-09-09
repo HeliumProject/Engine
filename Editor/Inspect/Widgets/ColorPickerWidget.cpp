@@ -17,13 +17,8 @@ ColorPickerWindow::ColorPickerWindow( wxWindow* parent, ColorPickerWidget* color
     SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
     wxSizer* sizer = GetSizer();
     sizer->Add( m_ColorPicker );
-    sizer->Add( 1, 0, 1, wxEXPAND | wxALIGN_CENTER_VERTICAL );
 
     Connect( wxID_ANY, wxEVT_COMMAND_COLOURPICKER_CHANGED, wxCommandEventHandler( ColorPickerWindow::OnChanged ) );
-
-#ifdef INSPECT_LAYOUT
-    Layout();
-#endif
 }
 
 void ColorPickerWindow::OnChanged( wxCommandEvent& )
@@ -70,7 +65,6 @@ void ColorPickerWidget::Destroy()
     m_ColorPickerWindow->Destroy();
     m_ColorPickerWindow = NULL;
 }
-
 
 void ColorPickerWidget::Read()
 {

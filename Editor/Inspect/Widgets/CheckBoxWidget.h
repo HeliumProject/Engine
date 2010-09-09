@@ -8,7 +8,7 @@ namespace Helium
     {
         class CheckBoxWidget;
 
-        class CheckBoxWindow : public wxPanel
+        class CheckBoxWindow : public wxCheckBox
         {
         public:
             CheckBoxWindow( wxWindow* parent, CheckBoxWidget* checkBoxWidget );
@@ -18,28 +18,14 @@ namespace Helium
                 m_Override = override;
             }
 
-            void SetValue( bool value )
-            {
-                HELIUM_ASSERT( m_CheckBox );
-                m_CheckBox->SetValue( value );
-            }
-
             void SetUndetermined()
             {
-                HELIUM_ASSERT( m_CheckBox );
-                m_CheckBox->Set3StateValue( wxCHK_UNDETERMINED );
-            }
-
-            bool GetValue()
-            {
-                HELIUM_ASSERT( m_CheckBox );
-                return m_CheckBox->GetValue();
+                Set3StateValue( wxCHK_UNDETERMINED );
             }
 
             void OnChecked( wxCommandEvent& );
 
         private:
-            wxCheckBox*     m_CheckBox;
             CheckBoxWidget* m_CheckBoxWidget;
             bool            m_Override;
         };

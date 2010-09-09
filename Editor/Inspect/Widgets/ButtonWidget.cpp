@@ -13,27 +13,10 @@ ButtonWindow::ButtonWindow( wxWindow* parent, ButtonWidget* buttonWidget )
 , m_Button( NULL )
 , m_ButtonWidget( buttonWidget )
 {
-    Inspect::Button* buttonControl = Reflect::ObjectCast< Inspect::Button >( m_ButtonWidget->GetControl() );
-    HELIUM_ASSERT( buttonControl );
-
     m_Sizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( m_Sizer );
-    m_Sizer->Add( 1, 0, 1, wxEXPAND );
-
-    if ( !buttonControl->a_Icon.Get().empty() )
-    {
-        SetIcon( buttonControl->a_Icon.Get().c_str() );
-    }
-    else
-    {
-        SetLabel( buttonControl->a_Label.Get().c_str() );
-    }
 
     Connect( wxID_ANY, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ButtonWindow::OnClicked ) );
-
-#ifdef INSPECT_LAYOUT
-    Layout();
-#endif
 }
 
 void ButtonWindow::OnClicked( wxCommandEvent& )
@@ -58,9 +41,7 @@ void ButtonWindow::SetIcon( const tstring& icon )
 
     m_Sizer->Insert( 0, m_Button, 0, wxALIGN_CENTER_VERTICAL );
 
-#ifdef INSPECT_LAYOUT
     Layout();
-#endif
 }
 
 void ButtonWindow::SetLabel( const tstring& label )
@@ -80,9 +61,7 @@ void ButtonWindow::SetLabel( const tstring& label )
 
     m_Sizer->Insert( 0, m_Button, 0, wxALIGN_CENTER_VERTICAL );
 
-#ifdef INSPECT_LAYOUT
     Layout();
-#endif
 }
 
 ButtonWidget::ButtonWidget( Inspect::Button* button )
@@ -98,6 +77,16 @@ void ButtonWidget::Create( wxWindow* parent )
 
     // allocate window and connect common listeners
     SetWindow( m_ButtonWindow = new ButtonWindow( parent, this ) );
+
+    // init state
+    if ( !m_ButtonControl->a_Icon.Get().empty() )
+    {
+        m_ButtonWindow->SetIcon( m_ButtonControl->a_Icon.Get().c_str() );
+    }
+    else
+    {
+        m_ButtonWindow->SetLabel( m_ButtonControl->a_Label.Get().c_str() );
+    }
 
     // init layout metrics
     wxSize size( m_Control->GetCanvas()->GetDefaultSize( Math::SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( Math::SingleAxes::Y ) );

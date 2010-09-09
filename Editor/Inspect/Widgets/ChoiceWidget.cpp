@@ -22,7 +22,6 @@ ChoiceWindow::ChoiceWindow(wxWindow* parent, ChoiceWidget* choiceWidget, int fla
 
 }
 
-
 void ChoiceWindow::OnConfirm(wxCommandEvent& event)
 {
     if (!m_Override)

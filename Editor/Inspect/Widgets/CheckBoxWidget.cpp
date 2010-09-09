@@ -8,22 +8,11 @@ using namespace Helium;
 using namespace Helium::Editor;
 
 CheckBoxWindow::CheckBoxWindow( wxWindow* parent, CheckBoxWidget* checkBoxWidget )
-: wxPanel( parent )
+: wxCheckBox( parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxCHK_3STATE )
 , m_CheckBoxWidget( checkBoxWidget )
 , m_Override( false )
 {
-    m_CheckBox = new wxCheckBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
-
-    SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
-    wxSizer* sizer = GetSizer();
-    sizer->Add( m_CheckBox, 0, wxALIGN_CENTER_VERTICAL );
-    sizer->Add( 1, 0, 1, wxEXPAND );
-
     Connect( wxID_ANY, wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( CheckBoxWindow::OnChecked ) );
-
-#ifdef INSPECT_LAYOUT
-    Layout();
-#endif
 }
 
 void CheckBoxWindow::OnChecked( wxCommandEvent& )

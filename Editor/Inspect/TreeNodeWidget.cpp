@@ -55,9 +55,7 @@ void TreeNodeWidget::Create( wxWindow* parent )
             c->Realize( m_ContainerControl->GetCanvas() );
         }
 
-#ifdef INSPECT_LAYOUT
         m_TreeWndCtrl->Layout();
-#endif
     }
     else // children are controls
     {
@@ -137,9 +135,7 @@ void TreeNodeWidget::Create( wxWindow* parent )
         }
         sizer->Add(spacing, 0, 0);
 
-#ifdef INSPECT_LAYOUT
         m_Window->Layout();
-#endif
 
         // add the panel to the tree
         m_TreeWndCtrl->AppendItem( parentId, m_Window );

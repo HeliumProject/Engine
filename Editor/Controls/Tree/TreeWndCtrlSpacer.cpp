@@ -50,9 +50,10 @@ TreeWndCtrlSpacer::TreeWndCtrlSpacer(TreeWndCtrl *parent,
 
 bool TreeWndCtrlSpacer::Layout()
 {
-    // this happens just before layout in case a node was reparented? -Geoff
-    SetSize(m_numColumns * m_treeWndCtrl->GetColumnSize(), 20);
-    SetMinSize( GetSize() );
+    wxSize size ( m_numColumns * m_treeWndCtrl->GetColumnSize(), m_treeWndCtrl->GetColumnSize() );
+    SetSize( size );
+    SetMinSize( size );
+
     return __super::Layout();
 }
 

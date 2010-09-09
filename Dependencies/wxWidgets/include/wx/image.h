@@ -313,7 +313,7 @@ public:
 
     // pastes image into this instance and takes care of
     // the mask colour and out of bounds problems
-    void Paste( const wxImage &image, int x, int y );
+    void Paste( const wxImage &image, int x, int y, bool blendAlpha = false );
 
     // return the new image with size width*height
     wxImage Scale( int width, int height,

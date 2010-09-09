@@ -753,7 +753,7 @@ void MainFrame::OnNewEntity( wxCommandEvent& event )
 void MainFrame::OnNewProject( wxCommandEvent& event )
 {
     m_Project = new Project ();
-    m_Project->Path().Set( TXT("New Project") );
+    m_Project->a_Path.Set( TXT("New Project") );
     m_ProjectPanel->SetProject( m_Project );
 }
 

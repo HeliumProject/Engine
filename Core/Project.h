@@ -8,83 +8,49 @@ namespace Helium
 {
     namespace Core
     {
-        class CORE_API ProjectFile : public Reflect::ConcreteInheritor< ProjectFile, Reflect::DocumentElement >
+        class CORE_API Project : public Reflect::ConcreteInheritor< Project, Reflect::Element >
         {
         public:
-            ProjectFile()
-            {
+            Project( const Path& path = TXT( "" ) );
+            virtual ~Project();
 
+            const std::set< Path >& Paths()
+            {
+                return m_Paths;
             }
 
-            ProjectFile( const Helium::Path& path )
-                : m_Path( path )
+            void AddPath( const Path& path )
             {
-
+                std::pair< std::set< Path >::iterator, bool > result = m_Paths.insert( path );
+                if ( result.second )
+                {
+                    e_PathAdded.Raise( path );
+                }
             }
 
-            Helium::Attribute<Helium::Path>& Path()
+            void RemovePath( const Path& path )
             {
-                return m_Path;
+                std::set< Path >::iterator itr = m_Paths.find( path );
+                if ( itr != m_Paths.end() )
+                {
+                    m_Paths.erase( itr );
+                    e_PathRemoved.Raise( path );
+                }
             }
+
+        public:
+            Helium::Attribute< Path >    a_Path;
+            Helium::Event< const Path& > e_PathAdded;
+            Helium::Event< const Path& > e_PathRemoved;
 
         private:
-            Helium::Attribute<Helium::Path> m_Path;
+            std::set< Path > m_Paths;
 
         public:
             static void EnumerateClass( Reflect::Compositor< This >& comp )
             {
-                comp.AddField( &This::m_Path, "Path" );
-            }
-        };
-
-        typedef Helium::SmartPtr< ProjectFile > ProjectFilePtr;
-
-        class CORE_API ProjectFolder : public Reflect::ConcreteInheritor< ProjectFolder, Reflect::DocumentElement >
-        {
-        public:
-            ProjectFolder()
-            {
-
-            }
-
-            ProjectFolder( const tstring& name )
-                : m_Name ( name )
-            {
-
-            }
-
-            Helium::Attribute<tstring>& Name()
-            {
-                return m_Name;
-            }
-
-        private:
-            Helium::Attribute<tstring>  m_Name;
-
-        public:
-            static void EnumerateClass( Reflect::Compositor< This >& comp )
-            {
-                comp.AddField( &This::m_Name, "Name" );
-            }
-        };
-
-        typedef Helium::SmartPtr< ProjectFolder > ProjectFolderPtr;
-
-        class CORE_API Project : public Reflect::ConcreteInheritor< Project, Reflect::Document >
-        {
-        public:
-            Helium::Attribute< Helium::Path >& Path()
-            {
-                return m_Path;
-            }
-
-        private:
-            Helium::Attribute< Helium::Path > m_Path;
-
-        public:
-            static void EnumerateClass( Reflect::Compositor< This >& comp )
-            {
-                comp.AddField( &This::m_Path, "Path", Reflect::FieldFlags::Discard );
+                comp.AddField( &This::a_Path, "Path", Reflect::FieldFlags::Discard );
+                comp.AddField( &This::m_Paths, "m_Paths" );
             }
         };
 

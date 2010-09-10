@@ -1,14 +1,11 @@
 #pragma once
 
-
 extern "C"
 {
 	#include <lua.h>
 	#include <lauxlib.h>
 	#include <lualib.h>
 }
-
-#include "Platform/Windows/Windows.h"
 
 class LuaObject
 {

@@ -1,6 +1,8 @@
 #include "Precompile.h"
 #include "Canvas.h"
 
+#include "Platform/Thread.h"
+
 #include "Editor/Inspect/Widgets/LabelWidget.h"
 #include "Editor/Inspect/Widgets/ValueWidget.h"
 #include "Editor/Inspect/Widgets/SliderWidget.h"
@@ -47,6 +49,8 @@ void Canvas::OnClick(wxMouseEvent& event)
 
 void Canvas::RealizeControl( Inspect::Control* control )
 {
+    HELIUM_ASSERT( IsMainThread() );
+
     if ( this != control )
     {
         WidgetCreators::const_iterator found = m_WidgetCreators.find( control->GetType() );
@@ -72,6 +76,8 @@ void Canvas::RealizeControl( Inspect::Control* control )
 
 void Canvas::UnrealizeControl( Inspect::Control* control )
 {
+    HELIUM_ASSERT( IsMainThread() );
+
     if ( this != control )
     {
         Inspect::Container* container = Reflect::ObjectCast< Inspect::Container >( control );

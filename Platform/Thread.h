@@ -50,11 +50,38 @@ namespace Helium
         }
 
         // create and execute a thread
-        bool Create(Entry entry, void* obj, const char* name, int priority = 0);
-        bool CreateWithArgs(Entry entry, void* obj, void* args, const char* name, int priority = 0)
+        bool Create( Entry entry, void* obj, const char* name, int priority = 0 );
+
+        // C++ helper (remember, it is valid to pass a member function pointer as a template parameter!)
+        template< class ObjectT, void (ObjectT::*method)() >
+        static Thread::Return EntryHelper( Thread::Param param )
+        {
+            ObjectT* object = (ObjectT*)param;
+            (object->*method)();
+            return Thread::Exit();
+        }
+
+        // create and execute a thread with a separate args object
+        bool CreateWithArgs( Entry entry, void* obj, void* args, const char* name, int priority = 0 )
         {
             ThreadHelperArgs* threadHelperArgs = new ThreadHelperArgs( obj, args );
             return Create(entry, threadHelperArgs, name);
+        }
+
+        // C++ helper (remember, it is valid to pass a member function pointer as a template parameter!)
+        template< class ObjectT, typename ArgsT, void (ObjectT::*method)( ArgsT& ) >
+        static Thread::Return EntryHelperWithArgs( Thread::Param param )
+        {
+            ThreadHelperArgs*   helperArgs = (ThreadHelperArgs*)param;
+            ObjectT*            object = (ObjectT*)helperArgs->m_Object;
+            ArgsT*              args = (ArgsT*)helperArgs->m_Args;
+
+            (object->*method)( *args );
+
+            delete helperArgs;
+            delete args;
+
+            return Thread::Exit();
         }
 
         // exit the calling thread
@@ -71,29 +98,6 @@ namespace Helium
 
         // are we valid?
         bool Valid();
-
-        template<class T, void (T::*F)()>
-        static Thread::Return EntryHelper(Thread::Param param)
-        {
-            T* object = (T*)param;
-            (object->*F)();
-            return Thread::Exit();
-        }
-
-        template<class T, typename A, void (T::*F)( A& )>
-        static Thread::Return EntryHelperWithArgs(Thread::Param param)
-        {
-            ThreadHelperArgs* args = (ThreadHelperArgs*) param;
-            T* object = (T*) ( args->m_Object );
-            A* context = (A*) ( args->m_Args );
-
-            (object->*F)( *context );
-
-            delete context;
-            delete args;
-
-            return Thread::Exit();
-        }
     };
 
     class PLATFORM_API ThreadLocalPointer
@@ -108,4 +112,12 @@ namespace Helium
     private:
         u32 m_Key;
     };
+
+    PLATFORM_API u32 GetMainThreadID();
+    PLATFORM_API u32 GetCurrentThreadID();
+
+    inline bool IsMainThread()
+    {
+        return GetMainThreadID() == GetCurrentThreadID();
+    }
 }

@@ -2,8 +2,6 @@
 #include "Perforce.h"
 #include "P4Provider.h"
 
-#include "Platform/Windows/Windows.h"
-
 #define MAX_ERR_LENGTH 200
 
 using namespace Helium;

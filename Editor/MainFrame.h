@@ -63,8 +63,6 @@ namespace Helium
 
             bool OpenProject( const Helium::Path& path );
 
-            void SyncPropertyThread();
-
         private:
             // Stores information about the state of each outliner for each scene
             // that is open.  Restores the state when switching between scenes.
@@ -112,10 +110,7 @@ namespace Helium
             void OnMRUOpen( const MRUArgs& args );
 
             // frame events
-            void OnEraseBackground( wxEraseEvent& event );
-            void OnSize( wxSizeEvent& event );
             void OnChar( wxKeyEvent& event );
-            void OnShow( wxShowEvent& event );
             void OnMenuOpen( wxMenuEvent& event );
 
             virtual void OnNewScene( wxCommandEvent& event ) HELIUM_OVERRIDE;
@@ -211,7 +206,6 @@ namespace Helium
 
             static bool SortContextItemsByName( Core::SceneNode* lhs, Core::SceneNode* rhs ); 
             static bool SortTypeItemsByName( Core::SceneNodeType* lhs, Core::SceneNodeType* rhs );
-
         };
     }
 }

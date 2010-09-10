@@ -120,6 +120,11 @@ MainFrame::MainFrame( Core::SettingsManager* settingsManager, wxWindow* parent, 
     SetLabel( TXT("Helium Editor") );
 
     //
+    // Frame Key events
+    //
+    Connect( wxEVT_CHAR, wxKeyEventHandler( MainFrame::OnChar ) );
+
+    //
     // Dynamic Menu Generation
     //
     Connect( wxEVT_MENU_OPEN, wxMenuEventHandler( MainFrame::OnMenuOpen ) );
@@ -261,11 +266,40 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     dropTarget->SetDragOverCallback( DragOverCallback::Delegate( this, &MainFrame::DragOver ) );
     dropTarget->SetDropCallback( DropCallback::Delegate( this, &MainFrame::Drop ) );
     m_ViewPanel->GetViewCanvas()->SetDropTarget( dropTarget );
+
+#ifdef EDITOR_DEBUG_RENDER
+    class RenderThread : public wxThread
+    {
+    private:
+        Editor::Viewport* m_View;
+
+    public:
+        RenderThread(Editor::Viewport* view)
+            : m_View (view)
+        {
+
+        }
+
+        wxThread::ExitCode Entry()
+        {
+            while (true)
+            {
+                m_View->Refresh();
+            }
+
+            return NULL;
+        }
+    };
+
+    RenderThread* thread = new RenderThread (m_View);
+    thread->Create();
+    thread->Run();
+#endif
 }
 
 MainFrame::~MainFrame()
 {
-    SyncPropertyThread();
+    m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
     // Remove any straggling document listeners
     OS_DocumentSmartPtr::Iterator docItr = m_SceneManager.GetDocumentManager().GetDocuments().Begin();
@@ -497,16 +531,6 @@ void MainFrame::OnMRUOpen( const MRUArgs& args )
     DoOpen( args.m_Item );
 }
 
-void MainFrame::OnEraseBackground(wxEraseEvent& event)
-{
-    event.Skip();
-}
-
-void MainFrame::OnSize(wxSizeEvent& event)
-{
-    event.Skip();
-}
-
 void MainFrame::OnChar(wxKeyEvent& event)
 {
     switch (event.GetKeyCode())
@@ -647,50 +671,6 @@ void MainFrame::OnChar(wxKeyEvent& event)
     }
 }
 
-void MainFrame::OnShow(wxShowEvent& event)
-{
-#ifdef EDITOR_DEBUG_RUNTIME_DATA_SELECTION
-    // Sometimes it's handy to put debug code here for program start up.
-    New();
-    wxCommandEvent evt( wxEVT_COMMAND_TOOL_CLICKED, EventIds::ID_ToolsVolumeCreate );
-    GetEventHandler()->ProcessEvent( evt );
-    m_SceneManager.GetCurrentScene()->SetTool(NULL);
-    wxCloseEvent close( wxEVT_CLOSE_WINDOW );
-    GetEventHandler()->AddPendingEvent( close );
-#endif
-
-#ifdef EDITOR_DEBUG_RENDER
-    class RenderThread : public wxThread
-    {
-    private:
-        Editor::Viewport* m_View;
-
-    public:
-        RenderThread(Editor::Viewport* view)
-            : m_View (view)
-        {
-
-        }
-
-        wxThread::ExitCode Entry()
-        {
-            while (true)
-            {
-                m_View->Refresh();
-            }
-
-            return NULL;
-        }
-    };
-
-    RenderThread* thread = new RenderThread (m_View);
-    thread->Create();
-    thread->Run();
-#endif
-
-    event.Skip();
-}
-
 void MainFrame::OnMenuOpen( wxMenuEvent& event )
 {
     const wxMenu* menu = event.GetMenu();
@@ -735,7 +715,7 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
 
 void MainFrame::OnNewScene( wxCommandEvent& event )
 {
-    SyncPropertyThread();
+    m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
     if ( m_SceneManager.GetDocumentManager().CloseAll() )
     {
@@ -763,7 +743,7 @@ bool MainFrame::DoOpen( const tstring& path )
     Helium::Path nocPath( path );
     if ( !path.empty() && nocPath.Exists() )
     {
-        SyncPropertyThread();
+        m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
         if ( m_SceneManager.GetDocumentManager().CloseAll() )
         {
@@ -797,7 +777,7 @@ bool MainFrame::DoOpen( const tstring& path )
 
 void MainFrame::OnClose( wxCommandEvent& event )
 {
-    SyncPropertyThread();
+    m_PropertiesPanel->GetPropertiesManager().SyncThreads();
     m_SceneManager.GetDocumentManager().CloseAll();
     m_Project = NULL;
 }
@@ -1702,10 +1682,7 @@ void MainFrame::OnPaste( wxCommandEvent& event )
 // 
 void MainFrame::OnDelete( wxCommandEvent& event )
 {
-    while ( m_PropertiesPanel->GetPropertiesManager().ThreadsActive() )
-    {
-        Helium::Sleep( 1 );
-    }
+    m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
     if ( m_SceneManager.HasCurrentScene() )
     {
@@ -1973,7 +1950,7 @@ void MainFrame::SceneContextChanged( const SceneContextChangeArgs& args )
 
 void MainFrame::Executed( const ExecuteArgs& args )
 {
-    if ( !m_PropertiesPanel->GetPropertiesManager().ThreadsActive() && !args.m_Interactively )
+    if ( !m_PropertiesPanel->GetPropertiesManager().IsActive() && !args.m_Interactively )
     {
         m_PropertiesPanel->GetCanvas().Read();
     }
@@ -1995,7 +1972,7 @@ void MainFrame::OnExit( wxCommandEvent& event )
 // 
 void MainFrame::OnExiting( wxCloseEvent& args )
 {
-    SyncPropertyThread();
+    m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
     if ( !m_SceneManager.GetDocumentManager().CloseAll() )
     {
@@ -2624,12 +2601,4 @@ bool MainFrame::SortTypeItemsByName( Core::SceneNodeType* lhs, Core::SceneNodeTy
     toUpper( rname );
 
     return lname < rname;
-}
-
-void MainFrame::SyncPropertyThread()
-{
-    while ( m_PropertiesPanel->GetPropertiesManager().ThreadsActive() )
-    {
-        Helium::Sleep( 1 );
-    }
 }

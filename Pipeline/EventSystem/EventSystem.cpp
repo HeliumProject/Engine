@@ -1,8 +1,13 @@
-#include "Platform/Windows/Windows.h"
-#include "Platform/Exception.h"
-#undef CreateEvent
-
 #include "EventSystem.h"
+
+#include "Platform/Types.h"
+#include "Platform/Exception.h"
+
+#include "Foundation/Startup.h"
+#include "Foundation/Regex.h" 
+#include "Foundation/File/Directory.h"
+#include "Foundation/String/Utilities.h"
+#include "Foundation/Log.h"
 
 #include <fstream>
 #include <iostream>
@@ -13,23 +18,13 @@
 #include <sstream>
 #include <set>
 
-#include "Foundation/Startup.h"
-#include "Foundation/Regex.h" 
-#include "Platform/Types.h"
-#include "Foundation/File/Directory.h"
-#include "Foundation/String/Utilities.h"
-#include "Foundation/Log.h"
-
 using namespace Helium::ES;
 
-
 #define TIME_SIZE 32
-
 
 typedef i32 RecordCount;
 
 static const tchar* s_HandledEventsFilename = TXT( "handled_events.txt" );
-
 
 struct SortEvents
 {

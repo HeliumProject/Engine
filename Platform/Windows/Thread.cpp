@@ -56,7 +56,7 @@ bool Thread::Create(Entry entry, void* obj, const char* name, int priority)
     }
 
     DWORD threadId;
-    m_Handle = ::CreateThread(0,0,(LPTHREAD_START_ROUTINE)entry,obj,0, &threadId );
+    m_Handle = ::CreateThread( 0, 0, (LPTHREAD_START_ROUTINE)entry, obj, 0, &threadId );
     if (!m_Handle)
     {
         Helium::Print(TXT("Failed to create thread: %s\n [0x%x: %s]"), name, ::GetLastError(), Helium::GetErrorString().c_str());
@@ -152,4 +152,16 @@ void* ThreadLocalPointer::GetPointer()
 void ThreadLocalPointer::SetPointer(void* pointer)
 {
     TlsSetValue(m_Key, pointer); 
+}
+
+u32 g_MainThreadID = (u32)::GetCurrentThreadId();
+
+u32 Helium::GetMainThreadID()
+{
+    return g_MainThreadID;
+}
+
+u32 Helium::GetCurrentThreadID()
+{
+    return (u32)::GetCurrentThreadId();
 }

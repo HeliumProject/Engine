@@ -13,15 +13,15 @@ namespace Helium
     {
         class PropertiesManager;
 
-        namespace PropertySettings
+        namespace PropertiesStyles
         {
-            enum PropertySetting
+            enum PropertiesStyle
             {
                 Intersection,
                 Union,
             };
         }
-        typedef PropertySettings::PropertySetting PropertySetting;
+        typedef PropertiesStyles::PropertiesStyle PropertiesStyle;
 
         struct ElementTypeFlags
         {
@@ -107,22 +107,12 @@ namespace Helium
 
         typedef Helium::Signature< const PropertiesCreatedArgs& > PropertiesCreatedSignature;
 
-        struct PropertyThreadArgs
+        struct PropertiesThreadArgs
         {
-            PropertyThreadArgs( const PropertyThreadArgs& args )
-                : m_Selection( args.m_Selection )
-                , m_SelectionId( args.m_SelectionId )
-                , m_CurrentSelectionId( args.m_CurrentSelectionId )
-                , m_Setting( args.m_Setting )
-                , m_Container( args.m_Container )
-            {
-            }
-
-            PropertyThreadArgs( const OS_SelectableDumbPtr& selection, u32 selectionId, const u32* currentSelectionId, PropertySetting setting, Inspect::Container* container )
+            PropertiesThreadArgs( PropertiesStyle setting, u32 selectionId, const u32* currentSelectionId, const OS_SelectableDumbPtr& selection )
                 : m_SelectionId( selectionId )
                 , m_CurrentSelectionId( currentSelectionId )
-                , m_Setting( setting )
-                , m_Container( container )
+                , m_Style( setting )
             {
                 for ( OS_SelectableDumbPtr::Iterator itr = selection.Begin(), end = selection.End(); itr != end; ++itr )
                 {
@@ -130,14 +120,11 @@ namespace Helium
                 }
             }
 
-            OrderedSet<SelectablePtr>           m_Selection;
-            u32                                 m_SelectionId;
-            const u32*                          m_CurrentSelectionId;
-            PropertySetting                     m_Setting;
-            Inspect::ContainerPtr               m_Container;
+            PropertiesStyle             m_Style;
+            u32                         m_SelectionId;
+            const u32*                  m_CurrentSelectionId;
+            OrderedSet<SelectablePtr>   m_Selection;
         };
-
-        typedef Signature< VoidSignature::Delegate > VoidDelegateSignature;
 
         class CORE_API PropertiesManager : public Helium::RefCountBase< PropertiesManager >
         {
@@ -147,7 +134,7 @@ namespace Helium
 
             void Show( const Inspect::CanvasShowArgs& args );
 
-            void SetProperties(PropertySetting setting);
+            void SetProperties(PropertiesStyle setting);
             void SetSelection(const OS_SelectableDumbPtr& selection);
 
             // inspect selection begin creating the property UI
@@ -155,16 +142,20 @@ namespace Helium
 
         private:
             // the thread entry point to do the property creation work
-            void GeneratePropertiesThreadEntry( PropertyThreadArgs& args );
+            void GeneratePropertiesThreadEntry( PropertiesThreadArgs& args );
 
             // called from the thread entry function, does the property creation work
-            void GenerateProperties( PropertyThreadArgs& args );
+            void GenerateProperties( PropertiesThreadArgs& args );
 
         public:
             // display the UI (in the main UI thread)
-            void FinalizeProperties( u32 selectionId, const Inspect::V_Control& controls );
+            void Present( u32 selectionId, const Inspect::V_Control& controls );
 
-            bool ThreadsActive();
+            // are any threads currently active?
+            bool IsActive();
+
+            // wait for threads to complete
+            void SyncThreads();
 
             // event to raise when the properties are done being created
             PropertiesCreatedSignature::Event e_PropertiesCreated;
@@ -180,7 +171,7 @@ namespace Helium
             OS_SelectableDumbPtr            m_Selection;
 
             // do we want to be the intersection or union?
-            PropertySetting                 m_Setting;
+            PropertiesStyle                 m_Style;
 
             // dirty flag for when the selection is out of date with the canvas
             bool                            m_SelectionDirty;
@@ -190,7 +181,6 @@ namespace Helium
 
             // thread count
             int                             m_ThreadCount;
-            Helium::Mutex                   m_ThreadCountMutex;
         };
 
         typedef Helium::SmartPtr< PropertiesManager > PropertiesManagerPtr;

@@ -9,9 +9,9 @@
 #endif
 
 #include "Platform/Atomic.h"
-#include "Platform/Windows/Windows.h"
-#include "Foundation/Container/Insert.h"
+#include "Platform/Thread.h"
 #include "Foundation/Log.h"
+#include "Foundation/Container/Insert.h"
 
 #include <io.h>
 
@@ -254,12 +254,9 @@ Profile::MemoryPoolHandle Reflect::MemoryPool()
 
 // private constructor
 Registry::Registry()
-: m_InitThread (0)
-, m_Created (NULL)
+: m_Created (NULL)
 , m_Destroyed (NULL)
 {
-    m_InitThread = ::GetCurrentThreadId();
-
     if ( Profile::Settings::MemoryProfilingEnabled() )
     {
         g_MemoryPool = Profile::Memory::CreatePool( TXT( "Reflect Objects" ) );
@@ -282,14 +279,9 @@ Registry* Registry::GetInstance()
     return g_Registry;
 }
 
-bool Registry::IsInitThread()
-{
-    return m_InitThread == GetCurrentThreadId();
-}
-
 bool Registry::RegisterType(Type* type)
 {
-    HELIUM_ASSERT( IsInitThread() );
+    HELIUM_ASSERT( IsMainThread() );
 
     switch (type->GetReflectionType())
     {
@@ -387,7 +379,7 @@ bool Registry::RegisterType(Type* type)
 
 void Registry::UnregisterType(const Type* type)
 {
-    HELIUM_ASSERT( IsInitThread() );
+    HELIUM_ASSERT( IsMainThread() );
 
     switch (type->GetReflectionType())
     {
@@ -435,14 +427,14 @@ void Registry::UnregisterType(const Type* type)
 
 void Registry::AliasType(const Type* type, const tstring& alias)
 {
-    HELIUM_ASSERT( IsInitThread() );
+    HELIUM_ASSERT( IsMainThread() );
 
     m_TypesByAlias.insert(M_StrToType::value_type (alias, type));
 }
 
 void Registry::UnAliasType(const Type* type, const tstring& alias)
 {
-    HELIUM_ASSERT( IsInitThread() );
+    HELIUM_ASSERT( IsMainThread() );
 
     M_StrToType::iterator found = m_TypesByAlias.find( alias );
     if (found != m_TypesByAlias.end() && found->second == type)

@@ -4,7 +4,6 @@
 
 #include "Platform/Debug.h"
 #include "Platform/Exception.h"
-#include "Platform/Windows/Windows.h"
 
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Log.h"

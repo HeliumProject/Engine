@@ -1,37 +1,29 @@
-////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  ImageProcess.cpp
-//
-//  Written by: Rob Wyatt
-//
-//  Generic texture packer
-//
-////////////////////////////////////////////////////////////////////////////////////////////////
+#include "ImageProcess.h"
+
+#include "Platform/Types.h"
+#include "Platform/Exception.h"
+
+#include "Foundation/Checksum/CRC32.h"
+#include "Foundation/String/Utilities.h"
+
+#include "Foundation/Log.h"
+
+#include "Pipeline/Image/Image.h"
+
 #include <stdio.h>
 #include <assert.h>
 #include <string>
 #include <vector>
 #include <time.h>
 
-#include "Platform/Windows/Windows.h"
-#include "Platform/Types.h"
-#include "Foundation/String/Utilities.h"
-#include "Platform/Exception.h"
-#include "Foundation/Checksum/CRC32.h"
-
-#include "Foundation/Log.h"
-
-#include "Pipeline/Image/Image.h"
-#include "Pipeline/ImageProcess.h"
-
 using namespace Helium;
 using namespace Helium::ImageProcess;
 
-bool                    ImageProcess::g_PowerOfTwo            = false;
-float                   ImageProcess::g_DefaultScaleX         = 1.0f;
-float                   ImageProcess::g_DefaultScaleY         = 1.0f;
-Helium::OutputColorFormat   ImageProcess::g_DefaultOutputFormat   = Helium::OUTPUT_CF_DXT5;
-Helium::PostMipImageFilter  ImageProcess::g_DefaultPostMipFilter  = Helium::IMAGE_FILTER_NONE;
+bool ImageProcess::g_PowerOfTwo            = false;
+float ImageProcess::g_DefaultScaleX         = 1.0f;
+float ImageProcess::g_DefaultScaleY         = 1.0f;
+Helium::OutputColorFormat ImageProcess::g_DefaultOutputFormat   = Helium::OUTPUT_CF_DXT5;
+Helium::PostMipImageFilter ImageProcess::g_DefaultPostMipFilter  = Helium::IMAGE_FILTER_NONE;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

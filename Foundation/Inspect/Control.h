@@ -431,6 +431,7 @@ namespace Helium
 
 #ifdef PROFILE_ACCUMULATION
         FOUNDATION_API extern Profile::Accumulator g_RealizeAccumulator;
+        FOUNDATION_API extern Profile::Accumulator g_UnrealizeAccumulator;
 #endif
     }
 }

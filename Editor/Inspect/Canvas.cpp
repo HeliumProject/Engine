@@ -47,24 +47,46 @@ void Canvas::OnClick(wxMouseEvent& event)
 
 void Canvas::RealizeControl( Inspect::Control* control )
 {
-    HELIUM_ASSERT( control );
+    if ( this != control )
+    {
+        WidgetCreators::const_iterator found = m_WidgetCreators.find( control->GetType() );
+        HELIUM_ASSERT( found != m_WidgetCreators.end() );
+        WidgetPtr widget = found->second( control );
+        HELIUM_ASSERT( widget );
 
-    WidgetCreators::const_iterator found = m_WidgetCreators.find( control->GetType() );
-    HELIUM_ASSERT( found != m_WidgetCreators.end() );
-    WidgetPtr widget = found->second( control );
-    HELIUM_ASSERT( widget );
+        // associate the widget with the control
+        control->SetWidget( widget );
 
-    // associate the widget with the control
-    control->SetWidget( widget );
+        // find the window pointer for the parent window
+        Inspect::Container* parent = control->GetParent();
+        HELIUM_ASSERT( parent );
+        Widget* parentWidget = Reflect::AssertCast< Widget >( parent->GetWidget() );
+        HELIUM_ASSERT( parentWidget );
+        wxWindow* parentWindow = parentWidget->GetWindow();
+        HELIUM_ASSERT( parentWindow );
 
-    // find the window pointer for the parent window
-    Inspect::Container* parent = control->GetParent();
-    HELIUM_ASSERT( parent );
-    Widget* parentWidget = Reflect::AssertCast< Widget >( parent->GetWidget() );
-    HELIUM_ASSERT( parentWidget );
-    wxWindow* parentWindow = parentWidget->GetWindow();
-    HELIUM_ASSERT( parentWindow );
+        // this will cause the widget to allocate its corresponding window (since it has the parent pointer)
+        widget->Create( parentWindow );
+    }
+}
 
-    // this will cause the widget to allocate its corresponding window (since it has the parent pointer)
-    widget->Create( parentWindow );
+void Canvas::UnrealizeControl( Inspect::Control* control )
+{
+    if ( this != control )
+    {
+        Inspect::Container* container = Reflect::ObjectCast< Inspect::Container >( control );
+        if ( container )
+        {
+            for ( Inspect::V_Control::const_iterator itr = container->GetChildren().begin(), end = container->GetChildren().end(); itr != end; ++itr )
+            {
+                (*itr)->Unrealize(); // unrealize all our children first
+            }
+        }
+
+        Widget* widget = Reflect::AssertCast< Widget >( control->GetWidget() );
+        HELIUM_ASSERT( widget );
+
+        widget->Destroy();
+        control->SetWidget( NULL );
+    }
 }

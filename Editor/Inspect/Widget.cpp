@@ -71,8 +71,6 @@ void Widget::SetWindow( wxWindow* window )
         m_Control->a_ForegroundColor.Changed().RemoveMethod( this, &Widget::ForegroundColorChanged );
         m_Control->a_BackgroundColor.Changed().RemoveMethod( this, &Widget::BackgroundColorChanged );
         m_Control->a_HelpText.Changed().RemoveMethod( this, &Widget::HelpTextChanged );
-
-        m_Window->Destroy();
     }
 
     // save the window pointer
@@ -80,9 +78,6 @@ void Widget::SetWindow( wxWindow* window )
 
     if ( m_Window )
     {
-        // when the control goes into the unrealized state, destroy the control (which will free this object)
-        m_Control->e_Unrealized.AddMethod( this, &Widget::Unrealized );
-
         // configure initial state
         m_Window->Enable( m_Control->a_IsEnabled.Get() && !m_Control->a_IsReadOnly.Get() );
         if ( m_Control->a_IsFrozen.Get() )
@@ -112,11 +107,6 @@ void Widget::SetWindow( wxWindow* window )
             m_Window->SetDropTarget( dropTarget );
         }
     }
-}
-
-void Widget::Unrealized( Inspect::Control* control )
-{
-    m_Window->Destroy(); // will in turn destroy this object
 }
 
 void Widget::IsEnabledChanged( const Attribute<bool>::ChangeArgs& args )

@@ -6,6 +6,7 @@ using namespace Helium::Inspect;
 
 #ifdef PROFILE_ACCUMULATION
 Profile::Accumulator Inspect::g_RealizeAccumulator( "Inspect Realize Accumulator" );
+Profile::Accumulator Inspect::g_UnrealizeAccumulator( "Inspect Unrealize Accumulator" );
 #endif
 
 Control::Control()
@@ -160,17 +161,28 @@ void Control::Realize(Canvas* canvas)
 {
     PROFILE_SCOPE_ACCUM( g_RealizeAccumulator );
 
-    m_Canvas = canvas;
-    m_Canvas->RealizeControl( this );
+    if ( !m_IsRealized )
+    {
+        m_Canvas = canvas;
+        m_Canvas->RealizeControl( this );
 
-    m_IsRealized = true;
-    e_Realized.Raise(this);
+        m_IsRealized = true;
+        e_Realized.Raise(this);
+    }
 }
 
 void Control::Unrealize()
 {
-    m_IsRealized = false;
-    e_Unrealized.Raise(this);
+    PROFILE_SCOPE_ACCUM( g_UnrealizeAccumulator );
+
+    if ( m_IsRealized )
+    {
+        m_Canvas->UnrealizeControl( this );
+        m_Canvas = NULL;
+
+        m_IsRealized = false;
+        e_Unrealized.Raise(this);
+    }
 }
 
 void Control::Read()

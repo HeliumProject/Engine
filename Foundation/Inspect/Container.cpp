@@ -77,6 +77,9 @@ void Container::Clear()
         // get the current control to clear
         ControlPtr control = m_Children.back();
 
+        // free widget resources (recursively)
+        control->Unrealize();
+
         // do the remove work
         RemoveChild( control );
     }

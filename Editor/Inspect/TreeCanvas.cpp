@@ -162,7 +162,6 @@ void TreeCanvas::Clear()
     m_TreeWndCtrl->DeleteChildren( m_TreeWndCtrl->GetRootItem() );
 }
 
-
 #if INSPECT_REFACTOR
 
 void NameChanged(const tstring& text)

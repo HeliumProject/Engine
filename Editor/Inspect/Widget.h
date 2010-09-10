@@ -33,7 +33,6 @@ namespace Helium
             virtual void SetWindow( wxWindow* window );
 
             // callbacks from m_Control
-            virtual void Unrealized( Inspect::Control* control );
             virtual void IsEnabledChanged( const Attribute<bool>::ChangeArgs& args );
             virtual void IsReadOnlyChanged( const Attribute<bool>::ChangeArgs& args );
             virtual void IsFrozenChanged( const Attribute<bool>::ChangeArgs& args );

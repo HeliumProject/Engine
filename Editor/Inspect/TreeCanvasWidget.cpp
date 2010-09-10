@@ -18,7 +18,7 @@ void TreeCanvasWidget::Create( wxWindow* parent )
 {
     // find the parent TreeCanvasWidget
     Inspect::Container*     parentContainer = m_ContainerControl->GetParent();
-    TreeCanvasWidget*         parentWidget    = Reflect::AssertCast< TreeCanvasWidget >( parentContainer->GetWidget() );
+    TreeCanvasWidget*       parentWidget    = Reflect::AssertCast< TreeCanvasWidget >( parentContainer->GetWidget() );
     wxTreeItemId            parentId        = parentWidget->m_ItemData.GetId();
 
     m_TreeWndCtrl = parentWidget->m_TreeWndCtrl;
@@ -148,5 +148,8 @@ void TreeCanvasWidget::Create( wxWindow* parent )
 
 void TreeCanvasWidget::Destroy()
 {
-    HELIUM_ASSERT( false );
+    if ( m_ItemData.GetId() != TreeWndCtrlItemIdInvalid )
+    {
+        m_TreeWndCtrl->Delete( m_ItemData.GetId() );
+    }
 }

@@ -64,12 +64,29 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
         {
             typePanel = (*itr).second;
         }
-
+/*
         wxBitmapToggleButton* btn = new wxBitmapToggleButton( typePanel, info->m_ID, wxArtProvider::GetBitmap( info->m_Bitmap, wxART_OTHER, ArtProvider::DefaultIconSize ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
         btn->SetHelpText( info->m_Description );
 
         // connect its event handler to us
         btn->Connect( btn->GetId(), wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ToolbarPanel::OnToggleToolButton ), NULL, this );
+        btn->Connect( btn->GetId(), wxEVT_ENTER_WINDOW, wxMouseEventHandler( ToolbarPanel::OnMouseOver ), NULL, this );
+*/
+
+        wxButton* btn = new wxButton( typePanel, info->m_ID, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxNO_BORDER );
+
+        wxBitmap& bitmap = wxArtProvider::GetBitmap( info->m_Bitmap, wxART_OTHER, ArtProvider::DefaultIconSize );
+
+        wxImage greyscaleImage = bitmap.ConvertToImage().ConvertToGreyscale();
+
+        btn->SetBitmap( wxBitmap( greyscaleImage ) );
+        btn->SetBitmapCurrent( bitmap );
+        btn->SetBitmapDisabled( wxBitmap( greyscaleImage ) );
+
+        btn->SetHelpText( info->m_Description );
+
+        // connect its event handler to us
+        btn->Connect( btn->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanel::OnToggleToolButton ), NULL, this );
 
         typePanel->GetSizer()->Add( btn, 0, wxALL | wxALIGN_CENTER_VERTICAL, 2 );
         m_ToolsButtons.push_back( btn );
@@ -83,9 +100,16 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
 
 void ToolbarPanel::ToggleTool( i32 selectedTool )
 {
-    for ( std::vector< wxBitmapToggleButton* >::const_iterator itr = m_ToolsButtons.begin(), end = m_ToolsButtons.end(); itr != end; ++itr )
+    for ( std::vector< wxButton* >::const_iterator itr = m_ToolsButtons.begin(), end = m_ToolsButtons.end(); itr != end; ++itr )
     {
-        (*itr)->SetValue( (*itr)->GetId() == selectedTool );
+        if ( (*itr)->GetId() == selectedTool ) 
+        {
+            (*itr)->SetBitmap( (*itr)->GetBitmapCurrent() );
+        }
+        else
+        {
+            (*itr)->SetBitmap( (*itr)->GetBitmapDisabled() );
+        }
     }
 }
 

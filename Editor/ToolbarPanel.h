@@ -51,7 +51,8 @@ namespace Helium
             virtual void OnOpen( wxCommandEvent& event ) HELIUM_OVERRIDE;
 
         private:
-            std::vector< wxBitmapToggleButton* > m_ToolsButtons;
+            //std::vector< wxBitmapToggleButton* > m_ToolsButtons;
+            std::vector< wxButton* > m_ToolsButtons;
 
             CommandQueue                m_CommandQueue;
             StripCanvas                 m_ToolPropertiesCanvas;

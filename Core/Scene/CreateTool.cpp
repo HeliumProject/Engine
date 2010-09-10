@@ -735,13 +735,17 @@ void CreateTool::CreateProperties()
 
     Place(Math::Matrix4::Identity);
 
+    Inspect::CheckBox* checkBox;
+
     m_Generator->PushContainer( TXT( "Create" ) );
     {
         m_Generator->PushContainer();
         {
-            m_Generator->AddLabel( TXT( "Plane Snap" ) );
+            m_Generator->AddLabel( TXT( "Plane Snap" ) )->a_HelpText.Set( TXT( "Controls the snapping for placed objects." ) );
             Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::CreateTool, int> (this, &CreateTool::GetPlaneSnap, &CreateTool::SetPlaneSnap) );
             choice->a_IsDropDown.Set( true );
+            choice->a_HelpText.Set( TXT( "Controls the snapping for placed objects.\n\nViewport - FIXME\n\nGround - FIXME" ) );
+
             std::vector< Inspect::ChoiceItem > items;
 
             {
@@ -762,94 +766,117 @@ void CreateTool::CreateProperties()
 
         m_Generator->PushContainer();
         {
-            m_Generator->AddLabel( TXT( "Snap to live objects only" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetLiveObjectsOnly, &CreateTool::SetLiveObjectsOnly) );
+            static const tstring helpText = TXT( "If set, objects will only snap to other objects which have been marked with the 'Live' flag." );
+            m_Generator->AddLabel( TXT( "Snap to live objects only" ) )->a_HelpText.Set( helpText );
+            checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetLiveObjectsOnly, &CreateTool::SetLiveObjectsOnly) );
+            checkBox->a_HelpText.Set( helpText );
         }
         m_Generator->Pop();
 
         m_Generator->PushContainer();
         {
-            m_Generator->AddLabel( TXT( "Surface Snap" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetSurfaceSnap, &CreateTool::SetSurfaceSnap) );
+            static const tstring helpText = TXT( "Toggles surface snapping for placed objects." );
+            m_Generator->AddLabel( TXT( "Surface Snap" ) )->a_HelpText.Set( helpText );
+            checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetSurfaceSnap, &CreateTool::SetSurfaceSnap) );
+            checkBox->a_HelpText.Set( helpText );
         }
         m_Generator->Pop();
 
         m_Generator->PushContainer();
         {
-            m_Generator->AddLabel( TXT( "Object Snap" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetObjectSnap, &CreateTool::SetObjectSnap) );
+            static const tstring helpText = TXT( "If enabled, created objects will snap to already existing objects." );
+            m_Generator->AddLabel( TXT( "Object Snap" ) )->a_HelpText.Set( helpText );
+            checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetObjectSnap, &CreateTool::SetObjectSnap) );
+            checkBox->a_HelpText.Set( helpText );
         }
         m_Generator->Pop();
 
         m_Generator->PushContainer();
         {
-            m_Generator->AddLabel( TXT( "Normal Snap" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetNormalSnap, &CreateTool::SetNormalSnap) );
+            static const tstring helpText = TXT( "FIXME: ??" );
+            m_Generator->AddLabel( TXT( "Normal Snap" ) )->a_HelpText.Set( helpText );
+            checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetNormalSnap, &CreateTool::SetNormalSnap) );
+            checkBox->a_HelpText.Set( helpText );
         }
         m_Generator->Pop();
 
         m_Generator->PushContainer();
         {
-            m_Generator->AddLabel( TXT( "Randomize Azimuth" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetRandomizeAzimuth, &CreateTool::SetRandomizeAzimuth) );
+            static const tstring helpText = TXT( "If set, this will apply a random offset to the created object's azimuth" );
+            m_Generator->AddLabel( TXT( "Randomize Azimuth" ) )->a_HelpText.Set( helpText );
+            checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetRandomizeAzimuth, &CreateTool::SetRandomizeAzimuth) );
+            checkBox->a_HelpText.Set( helpText );
         }
         m_Generator->Pop();
 
         m_AzimuthMin = m_Generator->PushContainer();
         {
-            m_Generator->AddLabel( TXT( "Azimuth Lower Bound" ) );
+            static const tstring helpText = TXT( "Sets the lower bound for azimuth variation." );
+            m_Generator->AddLabel( TXT( "Azimuth Lower Bound" ) )->a_HelpText.Set( helpText );
             Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetAzimuthMin, &CreateTool::SetAzimuthMin) );
             slider->a_Min.Set( 0.f );
             slider->a_Max.Set( 180.f );
+            slider->a_HelpText.Set( helpText );
 
             Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
             textBox->Bind( slider->GetData() );
+            textBox->a_HelpText.Set( helpText );
             m_Generator->Add( textBox );
         }
         m_Generator->Pop();
 
         m_AzimuthMax = m_Generator->PushContainer();
         {
-            m_Generator->AddLabel( TXT( "Azimuth Upper Bound" ) );
+            static const tstring helpText = TXT( "Sets the upper bound for azimuth variation." );
+            m_Generator->AddLabel( TXT( "Azimuth Upper Bound" ) )->a_HelpText.Set( helpText );
             Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetAzimuthMax, &CreateTool::SetAzimuthMax) );
             slider->a_Min.Set( 0.f );
             slider->a_Max.Set( 180.f );
+            slider->a_HelpText.Set( helpText );
 
             Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
             textBox->Bind( slider->GetData() );
+            textBox->a_HelpText.Set( helpText );
             m_Generator->Add( textBox );
         }
         m_Generator->Pop();
 
         m_Generator->PushContainer();
         {
-            m_Generator->AddLabel( TXT( "Randomize Direction" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetRandomizeDirection, &CreateTool::SetRandomizeDirection) );
+            static const tstring helpText = TXT( "If set, the direction the created objects are facing will be randomized." );
+            m_Generator->AddLabel( TXT( "Randomize Direction" ) )->a_HelpText.Set( helpText );
+            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetRandomizeDirection, &CreateTool::SetRandomizeDirection) )->a_HelpText.Set( helpText );
         }
         m_Generator->Pop();
 
         m_DirectionMin = m_Generator->PushContainer();
         {
-            m_Generator->AddLabel( TXT( "Direction Lower Bound" ) );
+            static const tstring helpText = TXT( "Sets the lower bound for direction variation." );
+            m_Generator->AddLabel( TXT( "Direction Lower Bound" ) )->a_HelpText.Set( helpText );
             Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetDirectionMin, &CreateTool::SetDirectionMin) );
             slider->a_Min.Set( 0.f );
             slider->a_Max.Set( 180.f );
+            slider->a_HelpText.Set( helpText );
 
             Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
             textBox->Bind( slider->GetData() );
+            textBox->a_HelpText.Set( helpText );
             m_Generator->Add( textBox );
         }
         m_Generator->Pop();
 
         m_DirectionMax = m_Generator->PushContainer();
         {
-            m_Generator->AddLabel( TXT( "Direction Upper Bound" ) );
+            static const tstring helpText = TXT( "Sets the upper bound for direction variation." );
+            m_Generator->AddLabel( TXT( "Direction Upper Bound" ) )->a_HelpText.Set( helpText );
             Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetDirectionMax, &CreateTool::SetDirectionMax) );
             slider->a_Min.Set( 0.f );
             slider->a_Max.Set( 180.f );
+            slider->a_HelpText.Set( helpText );
 
             Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
             textBox->Bind( slider->GetData() );
+            textBox->a_HelpText.Set( helpText );
             m_Generator->Add( textBox );
         }
         m_Generator->Pop();

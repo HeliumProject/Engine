@@ -24,6 +24,20 @@ namespace Helium
                 return m_Children;
             }
 
+            inline V_Control ReleaseChildren()
+            {
+                V_Control children = m_Children;
+
+                while ( !m_Children.empty() )
+                {
+                    RemoveChild( m_Children.front() );
+                }
+
+                m_Children.clear();
+
+                return children;
+            }
+
             virtual void AddChild(Control* control);
             virtual void InsertChild(int index, Control* control);
             virtual void RemoveChild(Control* control);

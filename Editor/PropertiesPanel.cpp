@@ -21,10 +21,10 @@ PropertiesPanel::PropertiesPanel( wxWindow *parent, wxWindowID id, const wxPoint
 
 void PropertiesPanel::OnIntersection(wxCommandEvent& event)
 {
-    m_PropertiesManager.SetProperties( PropertySettings::Intersection );
+    m_PropertiesManager.SetProperties( PropertiesStyles::Intersection );
 }
 
 void PropertiesPanel::OnUnion(wxCommandEvent& event)
 {
-    m_PropertiesManager.SetProperties( PropertySettings::Union );
+    m_PropertiesManager.SetProperties( PropertiesStyles::Union );
 }

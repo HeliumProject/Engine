@@ -2,6 +2,7 @@
 
 #include "Platform/Assert.h"
 #include "Platform/Mutex.h"
+#include "Platform/Thread.h"
 #include "Platform/Windows/Windows.h"
 #include "Platform/Windows/Console.h"
 
@@ -23,8 +24,6 @@ using namespace Helium::Log;
 u32 g_LogFileCount = 20;
 
 Helium::Mutex g_Mutex;
-
-DWORD g_MainThread = GetCurrentThreadId();
 
 typedef std::map<tstring, FILE*> M_Files;
 
@@ -285,7 +284,7 @@ void Log::RemoveTraceFile( const tstring& fileName )
 
 void Log::Indent(int col)
 {
-    if (g_MainThread == GetCurrentThreadId())
+    if ( IsMainThread() )
     {
         g_Indent += (col < 0 ? 2 : col);
     }
@@ -293,7 +292,7 @@ void Log::Indent(int col)
 
 void Log::UnIndent(int col)
 {
-    if (g_MainThread == GetCurrentThreadId())
+    if ( IsMainThread() )
     {
         g_Indent -= (col < 0 ? 2 : col);
         if (g_Indent < 0)
@@ -398,7 +397,7 @@ void Log::PrintString(const tchar* string, Stream stream, Level level, Color col
     for( ; itr != end; ++itr )
     {
         if ( ( (*itr).second.m_StreamType & stream ) == stream
-            && ( (*itr).second.m_ThreadId == -1 || (*itr).second.m_ThreadId == GetCurrentThreadId() ) )
+            && ( (*itr).second.m_ThreadId == -1 || (*itr).second.m_ThreadId == GetCurrentThreadID() ) )
         {
             trace = true;
         }
@@ -462,7 +461,7 @@ void Log::PrintString(const tchar* string, Stream stream, Level level, Color col
             for( ; itr != end; ++itr )
             {
                 if ( ( (*itr).second.m_StreamType & stream ) == stream
-                    && ( (*itr).second.m_ThreadId == -1 || (*itr).second.m_ThreadId == GetCurrentThreadId() ) )
+                    && ( (*itr).second.m_ThreadId == -1 || (*itr).second.m_ThreadId == GetCurrentThreadID() ) )
                 {
                     Redirect( (*itr).first, statement.m_String.c_str(), stampNewLine );
                 }
@@ -871,7 +870,7 @@ tstring Log::GetOutlineState()
 }
 
 Listener::Listener( u32 throttle, u32* errorCount, u32* warningCount, Log::V_Statement* consoleOutput )
-: m_Thread( GetCurrentThreadId() )
+: m_Thread( GetCurrentThreadID() )
 , m_Throttle( throttle )
 , m_WarningCount( warningCount )
 , m_ErrorCount( errorCount )
@@ -920,7 +919,7 @@ u32 Listener::GetErrorCount()
 
 void Listener::Print( Log::PrintingArgs& args )
 {
-    if ( m_Thread == GetCurrentThreadId() )
+    if ( m_Thread == GetCurrentThreadID() )
     {
         if ( args.m_Statement.m_Stream == Log::Streams::Warning && m_WarningCount )
         {

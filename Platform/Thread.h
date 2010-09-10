@@ -108,4 +108,12 @@ namespace Helium
     private:
         u32 m_Key;
     };
+
+    PLATFORM_API u32 GetMainThreadID();
+    PLATFORM_API u32 GetCurrentThreadID();
+
+    inline bool IsMainThread()
+    {
+        return GetMainThreadID() == GetCurrentThreadID();
+    }
 }

@@ -89,3 +89,15 @@ void ThreadLocalPointer::SetPointer(void* pointer)
 
     HELIUM_BREAK();
 }
+
+u32 Helium::GetMainThreadID()
+{
+    HELIUM_BREAK();
+    return 0;
+}
+
+u32 Helium::GetCurrentThreadID()
+{
+    HELIUM_BREAK();
+    return 0;
+}

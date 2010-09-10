@@ -7,15 +7,12 @@
 #include "P4ChangelistCommands.h"
 
 #include "Platform/Assert.h"
-#include "Foundation/Startup.h"
-#include "Platform/Windows/Windows.h"
 #include "Platform/Mutex.h"
+#include "Foundation/Startup.h"
 #include "Foundation/RCS/RCS.h"
 
 using namespace Helium;
 using namespace Helium::Perforce;
-
-static u32 g_InitThread = GetCurrentThreadId();
 
 WaitSignature::Delegate Perforce::g_ShowWaitDialog;
 MessageSignature::Delegate Perforce::g_ShowWarningDialog;
@@ -131,8 +128,6 @@ void Provider::RunCommand( Command* command )
         throw Perforce::Exception( TXT( "Perforce connection is not enabled" ) );
     }
 
-    const bool foregroundThread = g_InitThread == GetCurrentThreadId();
-
     Helium::TakeMutex mutex ( m_Mutex );
 
     m_Abort = false;
@@ -162,7 +157,7 @@ void Provider::RunCommand( Command* command )
             m_Command = command;
             m_Execute.Signal();
 
-            if ( foregroundThread )
+            if ( IsMainThread() )
             {
                 if ( !m_Completed.Wait( m_ForegroundExecuteTimeout ) )
                 {
@@ -203,7 +198,7 @@ void Provider::RunCommand( Command* command )
 
             if ( !Connect() )
             {
-                if ( foregroundThread )
+                if ( IsMainThread() )
                 {
                     // this will poll Connect() in a timer
                     if ( g_ShowWaitDialog.Valid() )
@@ -233,7 +228,7 @@ void Provider::RunCommand( Command* command )
     }
     while ( m_Phase != CommandPhases::Complete && m_IsEnabled && m_IsConnected && !m_Abort && command->m_ErrorCount == 0 );
 
-    if ( foregroundThread )
+    if ( IsMainThread() )
     {
         if ( g_ShowWaitDialog.Valid() )
         {

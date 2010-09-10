@@ -150,8 +150,12 @@ void TreeCanvas::Realize( Inspect::Canvas* canvas )
     }
 
     m_TreeWndCtrl->Freeze();
-    m_TreeWndCtrl->Scroll( 0, 0 );
-    m_TreeWndCtrl->Layout();
+    {
+        m_TreeWndCtrl->Scroll( 0, 0 );
+        m_TreeWndCtrl->Layout();
+        Populate();
+        Read();
+    }    
     m_TreeWndCtrl->Thaw();
 }
 

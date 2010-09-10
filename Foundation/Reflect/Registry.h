@@ -136,7 +136,6 @@ namespace Helium
             M_StrToType m_TypesByName;
             M_StrToType m_TypesByAlias;
 
-            u32 m_InitThread;
             CreatedFunc m_Created; // the callback on creation
             DestroyedFunc m_Destroyed; // the callback on deletion
 

@@ -1,6 +1,7 @@
 /*#include "Precompile.h"*/
 #include "PropertiesManager.h"
 
+#include "Platform/Atomic.h"
 #include "Platform/Thread.h"
 #include "Platform/Platform.h"
 
@@ -12,7 +13,7 @@ using namespace Helium::Core;
 PropertiesManager::PropertiesManager( PropertiesGenerator* generator, CommandQueue* commandQueue )
 : m_Generator( generator )
 , m_CommandQueue( commandQueue )
-, m_Setting (PropertySettings::Intersection)
+, m_Style (PropertiesStyles::Intersection)
 , m_SelectionDirty (false)
 , m_SelectionId (0)
 , m_ThreadCount (0)
@@ -35,9 +36,9 @@ void PropertiesManager::Show( const Inspect::CanvasShowArgs& args )
     }
 }
 
-void PropertiesManager::SetProperties(PropertySetting setting)
+void PropertiesManager::SetProperties(PropertiesStyle setting)
 {
-    m_Setting = setting;
+    m_Style = setting;
 
     ++m_SelectionId;
 
@@ -81,32 +82,24 @@ void PropertiesManager::CreateProperties()
     if ( m_Selection.Empty() )
     {
         Inspect::V_Control controls;
-        FinalizeProperties( m_SelectionId, controls );
+        Present( m_SelectionId, controls );
     }
     else
     {
-        {
-            Helium::TakeMutex mutex( m_ThreadCountMutex );
-            ++m_ThreadCount;
-        }
-
+        AtomicIncrement( &m_ThreadCount );
         Helium::Thread propertyThread;
-        PropertyThreadArgs* propertyThreadArgs = new PropertyThreadArgs( m_Selection, m_SelectionId, &m_SelectionId, m_Setting, m_Generator->CreateControl<Inspect::Container>() );
-        propertyThread.CreateWithArgs( Helium::Thread::EntryHelperWithArgs<PropertiesManager, PropertyThreadArgs, &PropertiesManager::GeneratePropertiesThreadEntry>, this, propertyThreadArgs, "GeneratePropertiesThreadEntry()", -1 );
+        PropertiesThreadArgs* propertyThreadArgs = new PropertiesThreadArgs( m_Style, m_SelectionId, &m_SelectionId, m_Selection );
+        propertyThread.CreateWithArgs( Helium::Thread::EntryHelperWithArgs<PropertiesManager, PropertiesThreadArgs, &PropertiesManager::GeneratePropertiesThreadEntry>, this, propertyThreadArgs, "GeneratePropertiesThreadEntry()", -1 );
     }
 }
 
-void PropertiesManager::GeneratePropertiesThreadEntry( PropertyThreadArgs& args )
+void PropertiesManager::GeneratePropertiesThreadEntry( PropertiesThreadArgs& args )
 {
     GenerateProperties( args );
-
-    {
-        Helium::TakeMutex mutex( m_ThreadCountMutex );
-        --m_ThreadCount;
-    }
+    AtomicDecrement( &m_ThreadCount );
 }
 
-void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
+void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
 {
     M_ElementByType currentElements;
     M_ElementsByType commonElements;
@@ -164,8 +157,8 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
             {
                 CORE_SCOPE_TIMER( ("Object Panel Validation") );
 
-                M_PanelCreators::const_iterator itrPanel = args.m_Setting == PropertySettings::Intersection ? intersectingPanels.begin() : s_PanelCreators.begin();
-                M_PanelCreators::const_iterator endPanel = args.m_Setting == PropertySettings::Intersection ? intersectingPanels.end() : s_PanelCreators.end();
+                M_PanelCreators::const_iterator itrPanel = args.m_Style == PropertiesStyles::Intersection ? intersectingPanels.begin() : s_PanelCreators.begin();
+                M_PanelCreators::const_iterator endPanel = args.m_Style == PropertiesStyles::Intersection ? intersectingPanels.end() : s_PanelCreators.end();
                 for ( ; itrPanel != endPanel; ++itrPanel)
                 {
                     if ( *args.m_CurrentSelectionId != args.m_SelectionId )
@@ -178,15 +171,15 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
 #ifdef SCENE_DEBUG_PROPERTIES_GENERATOR
                         Log::Print(" accepts %s\n", itrPanel->first.c_str());
 #endif
-                        switch (m_Setting)
+                        switch (m_Style)
                         {
-                        case PropertySettings::Intersection:
+                        case PropertiesStyles::Intersection:
                             {
                                 currentPanels.insert( *itrPanel );
                                 break;
                             }
 
-                        case PropertySettings::Union:
+                        case PropertiesStyles::Union:
                             {
                                 unionedPanels.insert( *itrPanel );
 
@@ -210,7 +203,7 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
             Log::Print("\n");
 #endif
 
-            if (m_Setting == PropertySettings::Intersection)
+            if ( m_Style == PropertiesStyles::Intersection )
             {
                 intersectingPanels = currentPanels;
             }
@@ -291,11 +284,13 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
     //  Create client-constructed attribute panels
     //
 
+    Inspect::ContainerPtr container = new Inspect::Container ();
+
     {
         CORE_SCOPE_TIMER( ("Static Panel Creation") );
 
-        M_PanelCreators::const_iterator itr = args.m_Setting == PropertySettings::Intersection ? intersectingPanels.begin() : unionedPanels.begin();
-        M_PanelCreators::const_iterator end = args.m_Setting == PropertySettings::Intersection ? intersectingPanels.end() : unionedPanels.end();
+        M_PanelCreators::const_iterator itr = args.m_Style == PropertiesStyles::Intersection ? intersectingPanels.begin() : unionedPanels.begin();
+        M_PanelCreators::const_iterator end = args.m_Style == PropertiesStyles::Intersection ? intersectingPanels.end() : unionedPanels.end();
         for ( ; itr != end; ++itr )
         {
             if ( *args.m_CurrentSelectionId != args.m_SelectionId )
@@ -303,24 +298,24 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
                 return;
             }
 
-            switch ( args.m_Setting )
+            switch ( args.m_Style )
             {
-            case PropertySettings::Intersection:
+            case PropertiesStyles::Intersection:
                 {
-                    m_Generator->Push( args.m_Container );
+                    m_Generator->Push( container );
                     itr->second.Invoke( CreatePanelArgs (m_Generator, selection) );
                     m_Generator->Pop( false );
                     break;
                 }
 
-            case PropertySettings::Union:
+            case PropertiesStyles::Union:
                 {
                     M_UnionedSelections::const_iterator found = unionedSelections.find( itr->first );
 
                     if (found != unionedSelections.end())
                     {
                         // this connects the invocation with the validated selection
-                        m_Generator->Push( args.m_Container );
+                        m_Generator->Push( container );
                         itr->second.Invoke( CreatePanelArgs (m_Generator, found->second) );
                         m_Generator->Pop( false );
                     }
@@ -357,7 +352,7 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
                 return;
             }
 
-            Inspect::ReflectInterpreterPtr interpreter = m_Generator->CreateInterpreter<Inspect::ReflectInterpreter>( args.m_Container );
+            Inspect::ReflectInterpreterPtr interpreter = m_Generator->CreateInterpreter<Inspect::ReflectInterpreter>( container );
 
             interpreter->Interpret(itr->second, itr->first.m_IncludeFlags, itr->first.m_ExcludeFlags);
 
@@ -366,10 +361,10 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
         }
     }
 
-    class PropertiesFinalizer
+    class Presenter
     {
     public:
-        PropertiesFinalizer( PropertiesManager* propertiesManager, u32 selectionId, const Inspect::V_Control& controls ) 
+        Presenter( PropertiesManager* propertiesManager, u32 selectionId, const Inspect::V_Control& controls ) 
             : m_PropertiesManager( propertiesManager )
             , m_SelectionId( selectionId )
             , m_Controls( controls )
@@ -378,7 +373,7 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
 
         void Finalize( Helium::Void )
         {
-            m_PropertiesManager->FinalizeProperties( m_SelectionId, m_Controls );
+            m_PropertiesManager->Present( m_SelectionId, m_Controls );
             delete this;
         }
 
@@ -388,12 +383,16 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
         Inspect::V_Control  m_Controls;
     };
 
-    PropertiesFinalizer* finalizer = new PropertiesFinalizer ( this, args.m_SelectionId, args.m_Container->GetChildren() );
+    // release ownership of the controls now we have passed them onto the main thread for
+    //  realization and presentation to the user, this will try and unrealize the controls
+    //  from a background thread, but that is okay since they haven't been realized yet :)
+    Presenter* presenter = new Presenter ( this, args.m_SelectionId, container->ReleaseChildren() );
 
-    m_CommandQueue->Post( VoidSignature::Delegate( finalizer, &PropertiesFinalizer::Finalize ) );
+    // will cause the main thread to realize and present the controls
+    m_CommandQueue->Post( VoidSignature::Delegate( presenter, &Presenter::Finalize ) );
 }
 
-void PropertiesManager::FinalizeProperties( u32 selectionId, const Inspect::V_Control& controls )
+void PropertiesManager::Present( u32 selectionId, const Inspect::V_Control& controls )
 {
     if ( selectionId != m_SelectionId )
     {
@@ -402,20 +401,27 @@ void PropertiesManager::FinalizeProperties( u32 selectionId, const Inspect::V_Co
 
     CORE_SCOPE_TIMER( ("Canvas Layout") );
 
+    Inspect::Container* container = m_Generator->GetContainer();
+
     for ( Inspect::V_Control::const_iterator itr = controls.begin(), end = controls.end(); itr != end; ++itr )
     {
-        m_Generator->GetContainer()->AddChild( *itr );
+        container->AddChild( *itr );
     }
 
-    m_Generator->GetContainer()->GetCanvas()->a_IsFrozen.Set( true );
-    m_Generator->GetContainer()->GetCanvas()->Realize( NULL );
-    m_Generator->GetContainer()->GetCanvas()->Populate();
-    m_Generator->GetContainer()->GetCanvas()->Read();
-    m_Generator->GetContainer()->GetCanvas()->a_IsFrozen.Set( false );
+    Inspect::Canvas* canvas = container->GetCanvas();
+
+    canvas->Realize( NULL );
 }
 
-bool PropertiesManager::ThreadsActive()
+bool PropertiesManager::IsActive()
 {
-    Helium::TakeMutex mutex( m_ThreadCountMutex );
     return m_ThreadCount > 0;
+}
+
+void PropertiesManager::SyncThreads()
+{
+    while ( IsActive() )
+    {
+        Helium::Sleep( 1 );
+    }
 }

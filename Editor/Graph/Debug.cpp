@@ -1,15 +1,12 @@
 #include "Precompile.h"
 #include "Editor/Graph/Debug.h"
-
-#include "Platform/Windows/Windows.h"
-
-#include <stdio.h>
-#include <stdarg.h>
-
 #include "Editor/Graph/Shape.h"
 #include "Editor/Graph/LuaUtilities.h"
 
 #include "Platform/String.h"
+
+#include <stdio.h>
+#include <stdarg.h>
 
 namespace Debug
 {

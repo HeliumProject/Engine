@@ -390,14 +390,16 @@ void Connection::ConnectThread()
     Helium::Print( stmt.Get().c_str() );
 
     // start read thread
-    if (!m_ReadThread.Create(&Helium::Thread::EntryHelper<Connection, &Connection::ReadThread>, this, "IPC Read Thread" ))
+    Helium::Thread::Entry readEntry = &Helium::Thread::EntryHelper<Connection, &Connection::ReadThread>;
+    if (!m_ReadThread.Create( readEntry, this, "IPC Read Thread" ))
     {
         HELIUM_BREAK();
         return;
     }
 
     // start write thread
-    if (!m_WriteThread.Create(&Helium::Thread::EntryHelper<Connection, &Connection::WriteThread>, this, "IPC Write Thread" ))
+    Helium::Thread::Entry writeEntry = &Helium::Thread::EntryHelper<Connection, &Connection::WriteThread>;
+    if (!m_WriteThread.Create( writeEntry, this, "IPC Write Thread" ))
     {
         HELIUM_BREAK();
         return;

@@ -34,15 +34,9 @@ void TimerThread::Start()
     // create thread
     m_Alive = true;
 
-    if ( !m_ThreadArgs )
-    {
-        m_ThreadArgs = new TimerThreadArgs();
-    }
-
-    m_ThreadArgs->m_TimerInstance = this;
-    m_ThreadArgs->m_Interval = m_Interval;
-    m_Thread.CreateWithArgs( Helium::Thread::EntryHelperWithArgs< TimerThread, TimerThreadArgs, &TimerThread::ThreadEntryPoint >, this, m_ThreadArgs, m_Name.c_str() );
-
+    TimerThreadArgs* args = new TimerThreadArgs( this, m_Interval );
+    Helium::Thread::Entry entry = Helium::Thread::EntryHelperWithArgs< TimerThread, TimerThreadArgs, &TimerThread::ThreadEntryPoint >;
+    m_Thread.CreateWithArgs( entry, this, args, m_Name.c_str() );
     m_Timer.Reset();
 }
 

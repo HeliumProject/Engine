@@ -52,7 +52,8 @@ Provider::~Provider()
 
 void Provider::Initialize()
 {
-    if (!m_Thread.Create(&Helium::Thread::EntryHelper<Provider, &Provider::ThreadEntry>, this, "Perforce Transaction Thread" ) )
+    Helium::Thread::Entry entry = &Helium::Thread::EntryHelper<Provider, &Provider::ThreadEntry>;
+    if ( !m_Thread.Create( entry, this, "Perforce Transaction Thread" ) )
     {
         throw Perforce::Exception( TXT( "Unable to create thread for perforce transaction" ) );
     }

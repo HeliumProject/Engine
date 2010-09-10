@@ -56,7 +56,7 @@ bool Thread::Create(Entry entry, void* obj, const char* name, int priority)
     }
 
     DWORD threadId;
-    m_Handle = ::CreateThread(0,0,(LPTHREAD_START_ROUTINE)entry,obj,0, &threadId );
+    m_Handle = ::CreateThread( 0, 0, (LPTHREAD_START_ROUTINE)entry, obj, 0, &threadId );
     if (!m_Handle)
     {
         Helium::Print(TXT("Failed to create thread: %s\n [0x%x: %s]"), name, ::GetLastError(), Helium::GetErrorString().c_str());

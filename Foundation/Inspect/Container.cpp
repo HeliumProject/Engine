@@ -51,6 +51,10 @@ void Container::RemoveChild(Control* control)
 {
     if ( control->GetParent() == this )
     {
+        // unrealize the control
+        control->Unrealize();
+
+        // free the control from its parent
         control->SetParent( NULL );
 
         // remove our reference to the control
@@ -64,9 +68,6 @@ void Container::RemoveChild(Control* control)
                 break;
             }
         }
-
-        // unrealize the control
-        control->Unrealize();
     }
 }
 

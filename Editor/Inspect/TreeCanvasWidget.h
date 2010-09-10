@@ -68,6 +68,8 @@ namespace Helium
             virtual void Read() HELIUM_OVERRIDE {}
             virtual bool Write() HELIUM_OVERRIDE { return true; }
 
+            virtual void NameChanged( const Attribute<tstring>::ChangeArgs& text);
+
         private:
             Inspect::Container*     m_ContainerControl;
             TreeWndCtrl*            m_TreeWndCtrl;

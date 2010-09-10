@@ -98,6 +98,7 @@ void ChoiceWidget::Create( wxWindow* parent )
 
     // update state of attributes that are not refreshed during Read()
     m_ChoiceControl->a_Highlight.RaiseChanged();
+    m_ChoiceControl->a_Items.RaiseChanged();
 }
 
 void ChoiceWidget::Destroy()

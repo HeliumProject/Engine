@@ -239,7 +239,7 @@ bool Control::PreWrite( Reflect::Serializer* newValue, bool preview )
     e_ControlChanging.Raise( args );
 
     // check to see if a event handler bound to this control bypasses the write
-    if ( !args.m_Veto )
+    if ( args.m_Veto )
     {
         return false;
     }

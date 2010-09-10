@@ -8,7 +8,10 @@ EnumerationElement::EnumerationElement( u32 value, const tstring& name, const ts
 , m_Label( label )
 , m_HelpText( helpText )
 {
-
+    if ( m_Label.empty() )
+    {
+        m_Label = m_Name;
+    }
 }
 
 EnumerationElement::~EnumerationElement()

@@ -222,10 +222,12 @@ void Volume::CreatePanel( CreatePanelArgs& args )
   {
     args.m_Generator->PushContainer();
     {
-      args.m_Generator->AddLabel( TXT( "Shape" ) );
+        static const tstring helpText = TXT( "Select the shape of this volume." );
+      args.m_Generator->AddLabel( TXT( "Shape" ) )->a_HelpText.Set( helpText );
 
       Inspect::Choice* choice = args.m_Generator->AddChoice<Core::Volume, int>(args.m_Selection, &Volume::GetShape, &Volume::SetShape);
       choice->a_IsDropDown.Set( true );
+      choice->a_HelpText.Set( helpText );
       std::vector< Inspect::ChoiceItem > items;
 
       {

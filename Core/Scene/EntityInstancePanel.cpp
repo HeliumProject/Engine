@@ -30,15 +30,18 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SelectableDumb
 
     m_Generator->PushContainer();
     {
-        m_Generator->AddLabel( TXT( "Class Path" ) );
+        static const tstring helpText = TXT( "This sets the path on disk of the entity instance." );
+        m_Generator->AddLabel( TXT( "Class Path" ) )->a_HelpText.Set( helpText );
 
         m_EntityPath = m_Generator->AddValue<Core::Entity, tstring>( m_Selection, &Core::Entity::GetEntityAssetPath, &Core::Entity::SetEntityAssetPath );
+        m_EntityPath->a_HelpText.Set( helpText );
         m_EntityPath->e_ControlChanging.AddMethod( this, &EntityPanel::OnEntityAssetChanging );
         m_EntityPath->e_ControlChanged.AddMethod( this, &EntityPanel::OnEntityAssetChanged );
 
         Inspect::FileDialogButton* fileButton = m_Generator->AddFileDialogButton<Core::Entity, tstring>( m_Selection, &Core::Entity::GetEntityAssetPath, &Core::Entity::SetEntityAssetPath );
         fileButton->e_ControlChanging.AddMethod( this, &EntityPanel::OnEntityAssetChanging );
         fileButton->e_ControlChanged.AddMethod( this, &EntityPanel::OnEntityAssetChanged );
+        fileButton->a_HelpText.Set( TXT( "Clicking this button will allow you to select a different entity from the disk for this instance." ) );
 
         tstring filter;
         Reflect::GetClass<Asset::Entity>()->GetProperty( Asset::AssetProperties::FileFilter, filter );
@@ -78,28 +81,25 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SelectableDumb
 
     m_Generator->PushContainer();
     {
-        m_Generator->AddLabel( TXT( "Show Pointer" ) );
-        m_Generator->AddCheckBox<Core::Entity, bool>( m_Selection, 
-            &Core::Entity::IsPointerVisible, 
-            &Core::Entity::SetPointerVisible, false );
+        static const tstring helpText = TXT( "This determines if a pointer should be drawn in the 3d view where this entity is placed." );
+        m_Generator->AddLabel( TXT( "Show Pointer" ) )->a_HelpText.Set( helpText );
+        m_Generator->AddCheckBox<Core::Entity, bool>( m_Selection, &Core::Entity::IsPointerVisible, &Core::Entity::SetPointerVisible, false )->a_HelpText.Set( helpText );
     }
     m_Generator->Pop();
 
     m_Generator->PushContainer();
     {
-        m_Generator->AddLabel( TXT( "Show Bounds" ) );
-        m_Generator->AddCheckBox<Core::Entity, bool>( m_Selection, 
-            &Core::Entity::IsBoundsVisible, 
-            &Core::Entity::SetBoundsVisible, false );
+        static const tstring helpText = TXT( "This determines if the bounding box for the entity should be drawn in the 3d view where this entity is placed." );
+        m_Generator->AddLabel( TXT( "Show Bounds" ) )->a_HelpText.Set( helpText );
+        m_Generator->AddCheckBox<Core::Entity, bool>( m_Selection, &Core::Entity::IsBoundsVisible, &Core::Entity::SetBoundsVisible, false )->a_HelpText.Set( helpText );
     }
     m_Generator->Pop();
 
     m_Generator->PushContainer();
     {
-        m_Generator->AddLabel( TXT( "Show Geometry" ) );
-        m_Generator->AddCheckBox<Core::Entity, bool>( m_Selection, 
-            &Core::Entity::IsGeometryVisible, 
-            &Core::Entity::SetGeometryVisible, false );
+        static const tstring helpText = TXT( "This determines if the entity's geometry should be drawn in the 3d view." );
+        m_Generator->AddLabel( TXT( "Show Geometry" ) )->a_HelpText.Set( helpText );
+        m_Generator->AddCheckBox<Core::Entity, bool>( m_Selection, &Core::Entity::IsGeometryVisible,  &Core::Entity::SetGeometryVisible, false )->a_HelpText.Set( helpText );
     }
     m_Generator->Pop();
 }

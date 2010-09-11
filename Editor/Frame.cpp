@@ -193,7 +193,7 @@ void Frame::OnHelpTimer( wxTimerEvent& evt )
     }
 
     wxPoint pos = wxGetMousePosition();
-    wxWindow *w = wxFindWindowAtPoint( pos );
+    wxWindow *w = wxGenericFindWindowAtPoint( pos );
     if ( w && w != m_HelpLastWindow )
     {
         m_HelpLastWindow = w;

@@ -499,62 +499,69 @@ void PivotTransform::CreatePanel(CreatePanelArgs& args)
 
   {
     args.m_Generator->PushContainer();
-    args.m_Generator->AddLabel( TXT( "Shear" ) );
-    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearYZ, &PivotTransform::SetShearYZ);
-    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearXZ, &PivotTransform::SetShearXZ);
-    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearXY, &PivotTransform::SetShearXY);
+    static const tstring helpText = TXT( "FIXME: NEEDS HELP" );   
+    args.m_Generator->AddLabel( TXT( "Shear" ) )->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearYZ, &PivotTransform::SetShearYZ)->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearXZ, &PivotTransform::SetShearXZ)->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearXY, &PivotTransform::SetShearXY)->a_HelpText.Set( helpText );
     args.m_Generator->Pop();
   }
 
   {
     args.m_Generator->PushContainer();
-    args.m_Generator->AddLabel( TXT( "Scale Pivot" ) );
-    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotX, &PivotTransform::SetScalePivotX);
-    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotY, &PivotTransform::SetScalePivotY);
-    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotZ, &PivotTransform::SetScalePivotZ);
+    static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+    args.m_Generator->AddLabel( TXT( "Scale Pivot" ) )->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotX, &PivotTransform::SetScalePivotX)->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotY, &PivotTransform::SetScalePivotY)->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotZ, &PivotTransform::SetScalePivotZ)->a_HelpText.Set( helpText );
     args.m_Generator->Pop();
   }
 
   {
     args.m_Generator->PushContainer();
-    args.m_Generator->AddLabel( TXT( "Scale Pivot Translate" ) );
-    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateX, &PivotTransform::SetScalePivotTranslateX);
-    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateY, &PivotTransform::SetScalePivotTranslateY);
-    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateZ, &PivotTransform::SetScalePivotTranslateZ);
+    static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+    args.m_Generator->AddLabel( TXT( "Scale Pivot Translate" ) )->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateX, &PivotTransform::SetScalePivotTranslateX)->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateY, &PivotTransform::SetScalePivotTranslateY)->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateZ, &PivotTransform::SetScalePivotTranslateZ)->a_HelpText.Set( helpText );
     args.m_Generator->Pop();
   }
 
   {
     args.m_Generator->PushContainer();
-    args.m_Generator->AddLabel( TXT( "Rotate Pivot" ) );
-    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotX, &PivotTransform::SetRotatePivotX);
-    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotY, &PivotTransform::SetRotatePivotY);
-    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotZ, &PivotTransform::SetRotatePivotZ);
+    static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+    args.m_Generator->AddLabel( TXT( "Rotate Pivot" ) )->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotX, &PivotTransform::SetRotatePivotX)->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotY, &PivotTransform::SetRotatePivotY)->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotZ, &PivotTransform::SetRotatePivotZ)->a_HelpText.Set( helpText );
     args.m_Generator->Pop();
   }
 
   {
     args.m_Generator->PushContainer();
-    args.m_Generator->AddLabel( TXT( "Rotate Pivot Translate" ) );
-    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateX, &PivotTransform::SetRotatePivotTranslateX);
-    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateY, &PivotTransform::SetRotatePivotTranslateY);
-    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateZ, &PivotTransform::SetRotatePivotTranslateZ);
+    static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+    args.m_Generator->AddLabel( TXT( "Rotate Pivot Translate" ) )->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateX, &PivotTransform::SetRotatePivotTranslateX)->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateY, &PivotTransform::SetRotatePivotTranslateY)->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateZ, &PivotTransform::SetRotatePivotTranslateZ)->a_HelpText.Set( helpText );
     args.m_Generator->Pop();
   }
 
   {
     args.m_Generator->PushContainer();
-    args.m_Generator->AddLabel( TXT( "Translate Pivot" ) );
-    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotX, &PivotTransform::SetTranslatePivotX);
-    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotY, &PivotTransform::SetTranslatePivotY);
-    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotZ, &PivotTransform::SetTranslatePivotZ);
+    static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+    args.m_Generator->AddLabel( TXT( "Translate Pivot" ) )->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotX, &PivotTransform::SetTranslatePivotX)->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotY, &PivotTransform::SetTranslatePivotY)->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotZ, &PivotTransform::SetTranslatePivotZ)->a_HelpText.Set( helpText );
     args.m_Generator->Pop();
   }
 
   {
     args.m_Generator->PushContainer();
-    args.m_Generator->AddLabel( TXT( "Snap Pivots" ) );
-    args.m_Generator->AddCheckBox<Core::PivotTransform, bool>(args.m_Selection, &PivotTransform::GetSnapPivots, &PivotTransform::SetSnapPivots);
+    static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+    args.m_Generator->AddLabel( TXT( "Snap Pivots" ) )->a_HelpText.Set( helpText );
+    args.m_Generator->AddCheckBox<Core::PivotTransform, bool>(args.m_Selection, &PivotTransform::GetSnapPivots, &PivotTransform::SetSnapPivots)->a_HelpText.Set( helpText );
     args.m_Generator->Pop();
   }
 

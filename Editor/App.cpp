@@ -268,19 +268,6 @@ int App::OnExit()
 // 
 void App::OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg)
 {
-    tstring function = func;
-
-#pragma TODO("Remove post wxWidgets 2.9.0")
-    if ( function == wxT("DoNotifyWindowAboutCaptureLost") )
-    {
-        return;
-    }
-
-    if ( wxStrcmp( msg, wxT( "invalid tool button bitmap" ) ) == 0 )
-    {
-        return;
-    }
-
     HELIUM_BREAK();
 }
 

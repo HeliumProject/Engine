@@ -9,7 +9,7 @@ using namespace Helium::Editor;
 
 BEGIN_EVENT_TABLE(ChoiceWindow, wxComboBox)
 EVT_COMBOBOX(wxID_ANY, ChoiceWindow::OnConfirm)
-EVT_TEXT_ENTER(wxID_ANY, ChoiceWindow::OnTextEnter)
+EVT_TEXT_ENTER(wxID_ANY, ChoiceWindow::OnConfirm)
 EVT_SET_FOCUS(ChoiceWindow::OnSetFocus)
 EVT_KILL_FOCUS(ChoiceWindow::OnKillFocus)
 END_EVENT_TABLE();
@@ -28,18 +28,6 @@ void ChoiceWindow::OnConfirm(wxCommandEvent& event)
     {
         m_ChoiceWidget->Write(); 
     }
-
-    event.Skip();
-}
-
-void ChoiceWindow::OnTextEnter(wxCommandEvent& event)
-{
-    if (!m_Override)
-    {
-        m_ChoiceWidget->Write(); 
-    }
-
-    // process the event
 }
 
 void ChoiceWindow::OnSetFocus(wxFocusEvent& event)

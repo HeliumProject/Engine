@@ -271,6 +271,26 @@ void App::OnAssertFailure(const wxChar *file, int line, const wxChar *func, cons
     HELIUM_BREAK();
 }
 
+///////////////////////////////////////////////////////////////////////////////
+// Called when an exception occurs in the process of dispatching events
+//  It is Helium's policy to not throw C++ exceptions into wxWidgets
+//  If this is a Win32/SEH exception then set your debugger to break
+//   on throw instead of break on user-unhandled
+// 
+void App::OnUnhandledException()
+{
+    HELIUM_BREAK();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// See above
+//
+bool App::OnExceptionInMainLoop()
+{
+    HELIUM_BREAK();
+    throw;
+}
+
 void App::SaveSettings()
 {
     Helium::Path path;

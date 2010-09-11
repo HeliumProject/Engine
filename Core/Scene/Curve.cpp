@@ -834,7 +834,6 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
             const Math::Matrix4& projMatrix = camera->GetProjection();
             ID3DXFont* font = curve->GetOwner()->GetViewport()->GetStatistics()->GetFont();
             DWORD color = D3DCOLOR_ARGB(255, 255, 255, 255);
-            tchar textBuf[256];
 
             device->SetMaterial( &Core::Viewport::s_SelectedComponentMaterial );
             OS_HierarchyNodeDumbPtr::Iterator childItr = curve->GetChildren().Begin();
@@ -882,8 +881,7 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
                         rect.right = (LONG)screenX;
                         rect.bottom = (LONG)( screenY - 2 );
 
-                        _stprintf_s( textBuf, sizeof( textBuf ), label.str().c_str(), i );
-                        font->DrawText( NULL, textBuf, -1, &rect, DT_NOCLIP, color );
+                        font->DrawText( NULL, label.str().c_str(), (INT)label.str().length(), &rect, DT_NOCLIP, color );
                     }
                     ++i;
                 }

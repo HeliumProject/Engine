@@ -35,7 +35,6 @@ namespace Helium
 
             // UI event handlers
         private:
-            void OnSetFocus( wxFocusEvent& args );
             void OnShowPanel( wxCommandEvent& args );
             void OnExiting( wxCloseEvent& args );
             void OnHelpTimer( wxTimerEvent& evt );

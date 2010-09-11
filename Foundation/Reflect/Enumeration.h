@@ -13,9 +13,9 @@ namespace Helium
         class FOUNDATION_API EnumerationElement : public Helium::AtomicRefCountBase
         {
         public:
-            u32         m_Value;  // the value of the element
-            tstring     m_Name;   // the name of the element
-            tstring     m_Label;  // the label (friendly name) of the element
+            u32         m_Value;    // the value of the element
+            tstring     m_Name;     // the name of the element
+            tstring     m_Label;    // the label (friendly name) of the element
             tstring     m_HelpText; // the help text for the element
 
         protected:

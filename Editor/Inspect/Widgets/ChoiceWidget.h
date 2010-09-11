@@ -22,7 +22,6 @@ namespace Helium
             }
 
             void OnConfirm(wxCommandEvent& event);
-            void OnTextEnter(wxCommandEvent& event);
             void OnSetFocus(wxFocusEvent& event);
             void OnKillFocus(wxFocusEvent& event);
 

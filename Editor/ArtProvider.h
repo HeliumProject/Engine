@@ -45,6 +45,7 @@ namespace Helium
             IconArtFile& AddOverlay( const tchar* filename, OverlayQuadrants::OverlayQuadrant quadrant = OverlayQuadrants::BottomRight );
 
             static void CalculatePlacement( wxImage &target_image, const wxImage &source_image, OverlayQuadrants::OverlayQuadrant quadrant, int &x, int &y );
+            static void Paste( wxImage &target_image, const wxImage &source_image, int &x, int &y, bool blendAlpha = false );
         };
 
         ///////////////////////////////////////////////////////////////////////

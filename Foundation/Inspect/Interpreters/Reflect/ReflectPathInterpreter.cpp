@@ -35,7 +35,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
     std::vector< ContainerPtr > groups;
 
-    ContainerPtr container = new Container ();
+    ContainerPtr container = CreateControl<Container>();
     groups.push_back( container );
 
     bool pathField = field->m_SerializerID == Reflect::GetType< PathSerializer >();
@@ -56,7 +56,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
     {
         if ( pathField || field->m_SerializerID == Reflect::GetType<StringSerializer>() )
         {
-            ContainerPtr valueContainer = new Container ();
+            ContainerPtr valueContainer = CreateControl<Container>();
             ValuePtr value = CreateControl< Value >();
             value->a_Justification.Set( Justifications::Right );
             value->a_IsReadOnly.Set( readOnly );

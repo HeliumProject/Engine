@@ -110,7 +110,7 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
     const EnumerationField* enumField = static_cast< const EnumerationField* >( field );
 
     // create the container
-    ContainerPtr container = new Container ();
+    ContainerPtr container = CreateControl<Container>();
 
     tstring temp;
     bool converted = Helium::ConvertString( field->m_UIName, temp );

@@ -29,7 +29,7 @@ void ReflectArrayInterpreter::InterpretField(const Field* field, const std::vect
     }
 
     // create the label
-    ContainerPtr labelContainer = new Container ();
+    ContainerPtr labelContainer = CreateControl<Container>();
     parent->AddChild( labelContainer );
     LabelPtr label = CreateControl< Label >();
     label->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
@@ -41,7 +41,7 @@ void ReflectArrayInterpreter::InterpretField(const Field* field, const std::vect
     label->BindText( temp );
 
     // create the list view
-    ContainerPtr listContainer = new Container ();
+    ContainerPtr listContainer = CreateControl<Container>();
     parent->AddChild( listContainer );
     ListPtr list = CreateControl<List>();
     list->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
@@ -61,7 +61,7 @@ void ReflectArrayInterpreter::InterpretField(const Field* field, const std::vect
     }
 
     // add the buttons to the container
-    ContainerPtr buttonContainer = new Container ();
+    ContainerPtr buttonContainer = CreateControl<Container>();
     parent->AddChild( buttonContainer );
     if ( addButton )
     {

@@ -31,10 +31,10 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
     const Class* typeInfo = instances[0]->GetClass();
 
     // create a container
-    ContainerPtr container = new Container ();
+    ContainerPtr container = CreateControl<Container>();
 
     // parse
-    ContainerPtr scriptOutput = new Container ();
+    ContainerPtr scriptOutput = CreateControl<Container>();
 
     tstring typeInfoUI;
     typeInfo->GetProperty( TXT( "UIScript" ), typeInfoUI );
@@ -120,7 +120,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
                 if ( itr == containersMap.end() )
                 {
                     // This container isn't in our list so make a new one
-                    ContainerPtr newContainer = new Container ();
+                    ContainerPtr newContainer = CreateControl<Container>();
                     containersMap.insert( std::make_pair(fieldUIGroup, newContainer) );
 
                     ContainerPtr parent;
@@ -132,7 +132,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
                         groupName = fieldUIGroup.substr( idx+1 );
                         if ( containersMap.find( parentName ) == containersMap.end() )
                         {          
-                            parent = new Container ();
+                            parent = CreateControl<Container>();
 
                             // create the parent hierarchy since it hasn't already been made
                             tstring currentParent = parentName;
@@ -157,7 +157,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
                                     }
                                     else
                                     {
-                                        ContainerPtr grandParent = new Container ();
+                                        ContainerPtr grandParent = CreateControl<Container>();
                                         grandParent->AddChild( parent );
                                         containersMap.insert( std::make_pair(currentParent, parent) );
 
@@ -265,7 +265,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
 
                     if ( elements->size() > 0 )
                     {
-                        ContainerPtr childContainer = new Container ();
+                        ContainerPtr childContainer = CreateControl<Container>();
 
                         tstring temp;
                         bool converted = Helium::ConvertString( field->m_UIName, temp );

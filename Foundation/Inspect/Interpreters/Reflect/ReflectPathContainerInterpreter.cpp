@@ -47,7 +47,7 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
     label->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
 
     // create the list view
-    ContainerPtr listContainer = new Container ();
+    ContainerPtr listContainer = CreateControl<Container>();
     parent->AddChild( listContainer );
 
     ListPtr list = CreateControl< List >();
@@ -119,7 +119,7 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
     }
 
     // add the buttons to the container
-    ContainerPtr buttonContainer = new Container ();
+    ContainerPtr buttonContainer = CreateControl<Container>();
     parent->AddChild( buttonContainer );
     if ( addButton )
     {

@@ -54,6 +54,8 @@ namespace Helium
             static const wxChar* Unknown = wxART_MAKE_ART_ID( HELIUM_ART_ID_UNKNOWN );
             static const wxChar* Null = wxART_MAKE_ART_ID( HELIUM_ART_ID_NULL );
 
+            static const wxChar* Helium = wxART_MAKE_ART_ID( HELIUM_ART_ID_HELIUM );
+
             static const wxChar* File = wxART_MAKE_ART_ID( HELIUM_ART_ID_FILE );
             static const wxChar* Folder = wxART_MAKE_ART_ID( HELIUM_ART_ID_FOLDER );
 

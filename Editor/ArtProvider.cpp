@@ -296,6 +296,8 @@ void ArtProvider::Create()
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Unknown, IconArtFile( TXT( "core/unknown.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Null, IconArtFile( TXT( "core/unknown.png" ) ) ) );
 
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Helium, IconArtFile( TXT( "editor/editor.png" ) ) ) );
+
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::File, IconArtFile( TXT( "editor/file.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Folder, IconArtFile( TXT( "editor/dir.png" ) ) ) );
 

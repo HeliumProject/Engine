@@ -117,6 +117,10 @@ MainFrame::MainFrame( Core::SettingsManager* settingsManager, wxWindow* parent, 
 , m_MessageDisplayer( this )
 , m_SceneManager( MessageSignature::Delegate( &m_MessageDisplayer, &MessageDisplayer::DisplayMessage ), FileDialogSignature::Delegate( &m_FileDialogDisplayer, &FileDialogDisplayer::DisplayFileDialog ) )
 {
+    wxIcon appIcon;
+    appIcon.CopyFromBitmap( wxArtProvider::GetBitmap( ArtIDs::Helium, wxART_OTHER, wxSize( 32, 32 ) ) );
+    SetIcon( appIcon );
+
     SetLabel( TXT("Helium Editor") );
 
     //

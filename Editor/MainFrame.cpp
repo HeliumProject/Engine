@@ -1248,12 +1248,10 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
         args.m_Scene->AddSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &MainFrame::SelectionChanged ) );
 
         // These events are emitted from the attribute editor and cause execution of the scene to occur, and interactive goodness
-#ifdef INSPECT_REFACTOR
-        m_SelectionEnumerator->AddPropertyChangingListener( Inspect::ChangingSignature::Delegate (args.m_Scene, &Core::Scene::PropertyChanging));
-        m_SelectionEnumerator->AddPropertyChangedListener( Inspect::ChangedSignature::Delegate (args.m_Scene, &Core::Scene::PropertyChanged));
-        m_SelectionEnumerator->AddPickLinkListener( Inspect::PickLinkSignature::Delegate (args.m_Scene, &Core::Scene::PickLink));
-        m_SelectionEnumerator->AddSelectLinkListener( Inspect::SelectLinkSignature::Delegate (args.m_Scene, &Core::Scene::SelectLink));
-#endif
+        m_PropertiesPanel->GetPropertiesGenerator().PropertyChanging().AddMethod( args.m_Scene, &Core::Scene::PropertyChanging );
+        m_PropertiesPanel->GetPropertiesGenerator().PropertyChanged().AddMethod( args.m_Scene, &Core::Scene::PropertyChanged );
+        m_PropertiesPanel->GetPropertiesGenerator().SelectLink().AddMethod( args.m_Scene, &Core::Scene::SelectLink );
+        m_PropertiesPanel->GetPropertiesGenerator().PickLink().AddMethod( args.m_Scene, &Core::Scene::PickLink );
 
         // Restore the tree control with the information for the new editing scene
         M_OutlinerStates::iterator foundOutline = m_OutlinerStates.find( args.m_Scene );
@@ -1334,12 +1332,10 @@ void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
     args.m_Scene->RemoveSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &MainFrame::SelectionChanged ) );
 
     // Remove attribute listeners
-#ifdef INSPECT_REFACTOR
-    m_SelectionEnumerator->RemovePropertyChangingListener( Inspect::ChangingSignature::Delegate (args.m_Scene, &Core::Scene::PropertyChanging));
-    m_SelectionEnumerator->RemovePropertyChangedListener( Inspect::ChangedSignature::Delegate (args.m_Scene, &Core::Scene::PropertyChanged));
-    m_SelectionEnumerator->RemovePickLinkListener( Inspect::PickLinkSignature::Delegate (args.m_Scene, &Core::Scene::PickLink));
-    m_SelectionEnumerator->RemoveSelectLinkListener( Inspect::SelectLinkSignature::Delegate (args.m_Scene, &Core::Scene::SelectLink));
-#endif
+    m_PropertiesPanel->GetPropertiesGenerator().PropertyChanging().RemoveMethod( args.m_Scene, &Core::Scene::PropertyChanging );
+    m_PropertiesPanel->GetPropertiesGenerator().PropertyChanged().RemoveMethod( args.m_Scene, &Core::Scene::PropertyChanged );
+    m_PropertiesPanel->GetPropertiesGenerator().SelectLink().RemoveMethod( args.m_Scene, &Core::Scene::SelectLink );
+    m_PropertiesPanel->GetPropertiesGenerator().PickLink().RemoveMethod( args.m_Scene, &Core::Scene::PickLink );
 
     // If we were editing a scene, save the outliner info before changing to the new one.
     OutlinerStates* stateInfo = &m_OutlinerStates.insert( M_OutlinerStates::value_type( args.m_Scene, OutlinerStates() ) ).first->second;

@@ -29,7 +29,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
     // Create the ui we are generating
     //
 
-    ContainerPtr container = new Container ();
+    ContainerPtr container = CreateControl<Container>();
 
     bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;
 

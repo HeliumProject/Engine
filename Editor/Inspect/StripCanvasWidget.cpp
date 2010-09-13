@@ -18,8 +18,7 @@ void StripCanvasWidget::Create( wxWindow* parent )
 {
     SetWindow( m_ContainerWindow = new wxPanel( parent, wxID_ANY ) );
 
-    wxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
-    m_ContainerWindow->SetSizer( sizer );
+    wxSizer* sizer;
 
     bool childrenAreContainers = true;
     {
@@ -35,17 +34,21 @@ void StripCanvasWidget::Create( wxWindow* parent )
         }
     }
 
+    int spacing = m_ContainerControl->GetCanvas()->GetBorder();
+
     if ( childrenAreContainers )
     {
+        sizer = new wxStaticBoxSizer( wxHORIZONTAL, m_ContainerWindow, m_ContainerControl->a_Name.Get() );
+    }
+    else
+    {
+        sizer = new wxBoxSizer( wxHORIZONTAL );
         m_StaticText = new wxStaticText( m_ContainerWindow, wxID_ANY, wxT( "Temp" ) );
         sizer->Add( m_StaticText, 0, wxALIGN_CENTER, 0);
+        sizer->AddSpacer( spacing );
     }
 
-    m_ContainerControl->a_Name.Changed().AddMethod( this, &StripCanvasWidget::NameChanged );
-    m_ContainerControl->a_Name.RaiseChanged();
-
-    int spacing = m_ContainerControl->GetCanvas()->GetPad();
-
+    m_ContainerWindow->SetSizer( sizer );
     m_ContainerWindow->Freeze();
 
     Inspect::V_Control::const_iterator itr = m_ContainerControl->GetChildren().begin();
@@ -62,9 +65,14 @@ void StripCanvasWidget::Create( wxWindow* parent )
 
         c->Realize( m_ContainerControl->GetCanvas() );
         sizer->Add( Reflect::AssertCast< Widget >( c->GetWidget() )->GetWindow(), 0, wxALIGN_CENTER );
+        sizer->AddSpacer( spacing );
     }
 
     m_ContainerWindow->SetHelpText( m_ContainerControl->a_HelpText.Get() );
+
+    m_ContainerControl->a_Name.Changed().AddMethod( this, &StripCanvasWidget::NameChanged );
+    m_ContainerControl->a_Name.RaiseChanged();
+
     m_ContainerWindow->Thaw();
 }
 

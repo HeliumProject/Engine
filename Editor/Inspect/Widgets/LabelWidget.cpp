@@ -7,43 +7,11 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-LabelWindow::LabelWindow(wxWindow* parent, LabelWidget* labelWidget, bool ellipsize)
-: wxPanel (parent, wxID_ANY)
+LabelWindow::LabelWindow( wxWindow* parent, LabelWidget* labelWidget, bool ellipsize )
+: wxStaticText( parent, wxID_ANY, wxT( "Temp" ), wxDefaultPosition, wxDefaultSize, ellipsize ? wxST_ELLIPSIZE_END : 0 )
 , m_LabelWidget (labelWidget)
 {
-    SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
-    wxSizer* sizer = GetSizer();
 
-    m_StaticText = new wxStaticText( this, wxID_ANY, wxT( "Temp" ), wxDefaultPosition, wxDefaultSize, ellipsize ? wxST_ELLIPSIZE_END : 0 );
-    sizer->Add( m_StaticText, 1, wxALIGN_CENTER, 0);
-}
-
-wxString LabelWindow::GetLabel() const
-{
-    return m_StaticText->GetLabelText();
-}
-
-void LabelWindow::SetLabel(const wxString& label)
-{
-    m_StaticText->SetLabel(label);
-}
-
-void LabelWindow::UpdateHelpText( const wxString& helpText )
-{
-    SetHelpText( helpText );
-    m_StaticText->SetHelpText( helpText );
-}
-
-bool LabelWindow::SetForegroundColour(const wxColour& color)
-{
-    return wxPanel::SetForegroundColour(color)
-        && m_StaticText->SetForegroundColour(color);
-}
-
-bool LabelWindow::SetBackgroundColour(const wxColour& color)
-{
-    return wxPanel::SetBackgroundColour(color)
-        && m_StaticText->SetBackgroundColour(color);
 }
 
 LabelWidget::LabelWidget( Inspect::Label* label )
@@ -98,5 +66,5 @@ bool LabelWidget::Write()
 
 void LabelWidget::HelpTextChanged( const Attribute<tstring>::ChangeArgs& args )
 {
-    m_LabelWindow->UpdateHelpText( args.m_NewValue );
+    m_LabelWindow->SetHelpText( args.m_NewValue );
 }

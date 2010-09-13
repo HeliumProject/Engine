@@ -3797,11 +3797,11 @@
             <property name="font"></property>
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
-            <property name="maximum_size"></property>
-            <property name="minimum_size"></property>
+            <property name="maximum_size">-1,88</property>
+            <property name="minimum_size">-1,88</property>
             <property name="name">ToolbarPanelGenerated</property>
             <property name="pos"></property>
-            <property name="size">939,70</property>
+            <property name="size">939,88</property>
             <property name="subclass"></property>
             <property name="tooltip"></property>
             <property name="validator_data_type"></property>
@@ -4300,8 +4300,8 @@
                         <property name="font"></property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
-                        <property name="maximum_size"></property>
-                        <property name="minimum_size"></property>
+                        <property name="maximum_size">-1,-1</property>
+                        <property name="minimum_size">-1,-1</property>
                         <property name="name">m_ToolsPropertiesPanel</property>
                         <property name="permission">protected</property>
                         <property name="pos"></property>

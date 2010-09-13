@@ -330,7 +330,7 @@ namespace Helium
 			public:
 				wxSearchCtrl* m_VaultSearchBox;
 				
-				ToolbarPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 939,70 ), long style = wxTAB_TRAVERSAL );
+				ToolbarPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 939,88 ), long style = wxTAB_TRAVERSAL );
 				~ToolbarPanelGenerated();
 			
 		};

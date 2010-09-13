@@ -668,6 +668,9 @@ PropertiesPanelGenerated::~PropertiesPanelGenerated()
 
 ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
+	this->SetMinSize( wxSize( -1,88 ) );
+	this->SetMaxSize( wxSize( -1,88 ) );
+	
 	wxBoxSizer* bSizer26;
 	bSizer26 = new wxBoxSizer( wxVERTICAL );
 	

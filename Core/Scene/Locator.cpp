@@ -182,12 +182,12 @@ void Locator::CreatePanel( CreatePanelArgs& args )
     {
         args.m_Generator->PushContainer();
         {
-            Inspect::Label* label = args.m_Generator->AddLabel( TXT( "Shape" ) );
-            label->a_HelpText.Set( TXT( "Choose the shape of the locator." ) );
+            static const tstring helpText = TXT( "Choose the shape of the locator." );
+            args.m_Generator->AddLabel( TXT( "Shape" ) )->a_HelpText.Set( helpText );
 
             Inspect::Choice* choice = args.m_Generator->AddChoice<Core::Locator, int>(args.m_Selection, &Locator::GetShape, &Locator::SetShape);
             choice->a_IsDropDown.Set( true );
-            choice->a_HelpText.Set( TXT( "Choose the shape of the locator." ) );
+            choice->a_HelpText.Set( helpText );
             std::vector< Inspect::ChoiceItem > items;
 
             {

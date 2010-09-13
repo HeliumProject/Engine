@@ -1092,21 +1092,17 @@ void HierarchyNode::CreatePanel(CreatePanelArgs& args)
     {
         args.m_Generator->PushContainer();
         {
-            Inspect::Label* label = args.m_Generator->AddLabel( TXT( "Hidden" ) );
-            Inspect::CheckBox* checkBox = args.m_Generator->AddCheckBox<Core::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsHidden, &HierarchyNode::SetHidden, false );
-
-            label->a_HelpText.Set( TXT( "Controls if this node is hidden/visible." ) );
-            checkBox->a_HelpText.Set( TXT( "Controls if this node is hidden/visible." ) );
+            static const tstring helpText = TXT( "Controls if this node is hidden/visible." );
+            args.m_Generator->AddLabel( TXT( "Hidden" ) )->a_HelpText.Set( helpText );
+            args.m_Generator->AddCheckBox<Core::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsHidden, &HierarchyNode::SetHidden, false )->a_HelpText.Set( helpText );
         }
         args.m_Generator->Pop();
 
         args.m_Generator->PushContainer();
         {
-            Inspect::Label* label = args.m_Generator->AddLabel( TXT( "Live" ) );   
-            Inspect::CheckBox* checkBox = args.m_Generator->AddCheckBox<Core::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsLive, &HierarchyNode::SetLive );
-
-            label->a_HelpText.Set( TXT( "Controls if this node is 'live' with regard to the placement tool.  Only live objects will be tested for snapping, etc." ) );
-            checkBox->a_HelpText.Set( TXT( "Controls if this node is 'live' with regard to the placement tool.  Only live objects will be tested for snapping, etc." ) );
+            static const tstring helpText = TXT( "Controls if this node is 'live' with regard to the placement tool.  Only live objects will be tested for snapping, etc." );
+            args.m_Generator->AddLabel( TXT( "Live" ) )->a_HelpText.Set( helpText );   
+            args.m_Generator->AddCheckBox<Core::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsLive, &HierarchyNode::SetLive )->a_HelpText.Set( helpText );
         }
         args.m_Generator->Pop();
     }

@@ -49,17 +49,6 @@ bool Choice::Process(const tstring& key, const tstring& value)
             return true;
         }
     }
-    else if (key == CHOICE_ATTR_ITEM)
-    {
-        size_t delim = value.find_first_of(CHOICE_ATTR_ITEM_DELIM);
-
-        if (delim != tstring::npos)
-        {
-            m_Statics.push_back( ChoiceItem (value.substr(0, delim), value.substr(delim+1)) );
-        }
-
-        return true;
-    }
     else if (key == CHOICE_ATTR_PREFIX)
     {
         m_Prefix = value;
@@ -105,10 +94,6 @@ void Choice::Clear()
 
 void Choice::Populate()
 {
-    Clear();
-
-    a_Items.Set( m_Statics );
-
     e_Populate.Raise( ChoiceArgs (this) );
 
     e_Enumerate.Raise( ChoiceEnumerateArgs (this, m_Enum) );

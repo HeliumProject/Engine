@@ -268,20 +268,27 @@ int App::OnExit()
 // 
 void App::OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg)
 {
-    tstring function = func;
-
-#pragma TODO("Remove post wxWidgets 2.9.0")
-    if ( function == wxT("DoNotifyWindowAboutCaptureLost") )
-    {
-        return;
-    }
-
-    if ( wxStrcmp( msg, wxT( "invalid tool button bitmap" ) ) == 0 )
-    {
-        return;
-    }
-
     HELIUM_BREAK();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Called when an exception occurs in the process of dispatching events
+//  It is Helium's policy to not throw C++ exceptions into wxWidgets
+//  If this is a Win32/SEH exception then set your debugger to break
+//   on throw instead of break on user-unhandled
+// 
+void App::OnUnhandledException()
+{
+    HELIUM_BREAK();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// See above
+//
+bool App::OnExceptionInMainLoop()
+{
+    HELIUM_BREAK();
+    throw;
 }
 
 void App::SaveSettings()

@@ -312,8 +312,9 @@ void Layer::CreatePanel( CreatePanelArgs& args )
     {
         args.m_Generator->PushContainer();
         {
-            args.m_Generator->AddLabel( TXT( "Color" ) );
-            args.m_Generator->AddColorPicker< Core::Layer, Math::Color3 >( args.m_Selection, &Layer::GetColor, &Layer::SetColor );
+            static const tstring helpText = TXT( "Determines the color of this layer." );
+            args.m_Generator->AddLabel( TXT( "Color" ) )->a_HelpText.Set( helpText );
+            args.m_Generator->AddColorPicker< Core::Layer, Math::Color3 >( args.m_Selection, &Layer::GetColor, &Layer::SetColor )->a_HelpText.Set( helpText );
         }
         args.m_Generator->Pop();
 

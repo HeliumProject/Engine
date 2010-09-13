@@ -219,15 +219,17 @@ void PointLight::CreatePanel( CreatePanelArgs& args )
     {
         args.m_Generator->PushContainer();
         {
-            args.m_Generator->AddLabel( TXT( "Inner Radius" ) );
-            args.m_Generator->AddValue<Core::PointLight, float>( args.m_Selection, &PointLight::GetInnerRadius, &PointLight::SetInnerRadius );
+            static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+            args.m_Generator->AddLabel( TXT( "Inner Radius" ) )->a_HelpText.Set( helpText );
+            args.m_Generator->AddValue<Core::PointLight, float>( args.m_Selection, &PointLight::GetInnerRadius, &PointLight::SetInnerRadius )->a_HelpText.Set( helpText );
         }
         args.m_Generator->Pop();
 
         args.m_Generator->PushContainer();
         {
-            args.m_Generator->AddLabel( TXT( "Outer Radius" ) );
-            args.m_Generator->AddValue<Core::PointLight, float>( args.m_Selection, &PointLight::GetOuterRadius, &PointLight::SetOuterRadius );
+            static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+            args.m_Generator->AddLabel( TXT( "Outer Radius" ) )->a_HelpText.Set( helpText );
+            args.m_Generator->AddValue<Core::PointLight, float>( args.m_Selection, &PointLight::GetOuterRadius, &PointLight::SetOuterRadius )->a_HelpText.Set( helpText );
         }
         args.m_Generator->Pop();
     }

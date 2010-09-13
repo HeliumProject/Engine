@@ -418,36 +418,42 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
     {
         args.m_Generator->PushContainer();
         {
-            args.m_Generator->AddLabel( TXT( "Inner Radius" ) );
-            args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetInnerRadius, &SpotLight::SetInnerRadius );
+            static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+            args.m_Generator->AddLabel( TXT( "Inner Radius" ) )->a_HelpText.Set( helpText );
+            args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetInnerRadius, &SpotLight::SetInnerRadius )->a_HelpText.Set( helpText );
         }
         args.m_Generator->Pop();
 
         args.m_Generator->PushContainer();
         {
-            args.m_Generator->AddLabel( TXT( "Outer Radius" ) );
-            args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetOuterRadius, &SpotLight::SetOuterRadius );
+            static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+            args.m_Generator->AddLabel( TXT( "Outer Radius" ) )->a_HelpText.Set( helpText );
+            args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetOuterRadius, &SpotLight::SetOuterRadius )->a_HelpText.Set( helpText );
         }
         args.m_Generator->Pop();
 
         args.m_Generator->PushContainer();
         {
-            args.m_Generator->AddLabel( TXT( "Inner Angle" ) );
+            static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+            args.m_Generator->AddLabel( TXT( "Inner Angle" ) )->a_HelpText.Set( helpText );
 
-            args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetInnerConeAngleDegrees, &SpotLight::SetInnerConeAngleDegrees );
+            args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetInnerConeAngleDegrees, &SpotLight::SetInnerConeAngleDegrees )->a_HelpText.Set( helpText );
             Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetInnerConeAngle, &SpotLight::SetInnerConeAngle );
             slider->a_Min.Set( 0 );
             slider->a_Max.Set( Math::HalfPi );
+            slider->a_HelpText.Set( helpText );
         }
         args.m_Generator->Pop();
 
         args.m_Generator->PushContainer();
         {
-            args.m_Generator->AddLabel( TXT( "Outer Angle" ) );
-            args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetOuterConeAngleDegrees, &SpotLight::SetOuterConeAngleDegrees );
+            static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+            args.m_Generator->AddLabel( TXT( "Outer Angle" ) )->a_HelpText.Set( helpText );
+            args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetOuterConeAngleDegrees, &SpotLight::SetOuterConeAngleDegrees )->a_HelpText.Set( helpText );
             Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetOuterConeAngle, &SpotLight::SetOuterConeAngle );
             slider->a_Min.Set( 0 );
             slider->a_Max.Set( Math::HalfPi );
+            slider->a_HelpText.Set( helpText );
         }
         args.m_Generator->Pop();
 
@@ -455,115 +461,135 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
         {
             args.m_Generator->PushContainer();
             {
-                args.m_Generator->AddLabel( TXT( "Shadow Map Hi Res" ) );
-                args.m_Generator->AddCheckBox<SpotLight, bool>( args.m_Selection, &SpotLight::GetShadowMapHiRes, &SpotLight::SetShadowMapHiRes );
+                static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+                args.m_Generator->AddLabel( TXT( "Shadow Map Hi Res" ) )->a_HelpText.Set( helpText );
+                args.m_Generator->AddCheckBox<SpotLight, bool>( args.m_Selection, &SpotLight::GetShadowMapHiRes, &SpotLight::SetShadowMapHiRes )->a_HelpText.Set( helpText );
             }
             args.m_Generator->Pop();
 
             args.m_Generator->PushContainer();
             {
-                args.m_Generator->AddLabel( TXT( "GodRay Enabled" ) );
-                args.m_Generator->AddCheckBox<SpotLight, bool>( args.m_Selection, &SpotLight::GetGodRayEnabled, &SpotLight::SetGodRayEnabled );
+                static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+                args.m_Generator->AddLabel( TXT( "GodRay Enabled" ) )->a_HelpText.Set( helpText );
+                args.m_Generator->AddCheckBox<SpotLight, bool>( args.m_Selection, &SpotLight::GetGodRayEnabled, &SpotLight::SetGodRayEnabled )->a_HelpText.Set( helpText );
             }
             args.m_Generator->Pop();
 
             args.m_Generator->PushContainer();
             {
-                args.m_Generator->AddLabel( TXT( "GodRay Opacity" ) );
+                static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+                args.m_Generator->AddLabel( TXT( "GodRay Opacity" ) )->a_HelpText.Set( helpText );
 
-                args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayOpacity, &SpotLight::SetGodRayOpacity );
+                args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayOpacity, &SpotLight::SetGodRayOpacity )->a_HelpText.Set( helpText );
                 Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayOpacity, &SpotLight::SetGodRayOpacity );
                 slider->a_Min.Set( 0.0f );
                 slider->a_Max.Set( 1.0f );
+                slider->a_HelpText.Set( helpText );
             }
             args.m_Generator->Pop();
 
             args.m_Generator->PushContainer();
             {
-                args.m_Generator->AddLabel( TXT( "GodRay Density" ) );
+                static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+                args.m_Generator->AddLabel( TXT( "GodRay Density" ) )->a_HelpText.Set( helpText );
 
-                args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayDensity, &SpotLight::SetGodRayDensity );
+                args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayDensity, &SpotLight::SetGodRayDensity )->a_HelpText.Set( helpText );
                 Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayDensity, &SpotLight::SetGodRayDensity );
                 slider->a_Min.Set( 0.00f );
                 slider->a_Max.Set( 0.95f );
+                slider->a_HelpText.Set( helpText );
             }
             args.m_Generator->Pop();
 
             args.m_Generator->PushContainer();
             {
-                args.m_Generator->AddLabel( TXT( "GodRay Quality" ) );
+                static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+                args.m_Generator->AddLabel( TXT( "GodRay Quality" ) )->a_HelpText.Set( helpText );
 
-                args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayQuality, &SpotLight::SetGodRayQuality );
+                args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayQuality, &SpotLight::SetGodRayQuality )->a_HelpText.Set( helpText );
                 Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayQuality, &SpotLight::SetGodRayQuality );
                 slider->a_Min.Set( 0.0f );
                 slider->a_Max.Set( 1.0f );
+                slider->a_HelpText.Set( helpText );
             }
             args.m_Generator->Pop();
 
             args.m_Generator->PushContainer();
             {
-                args.m_Generator->AddLabel( TXT( "GodRay Fade Near" ) );
+                static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+                args.m_Generator->AddLabel( TXT( "GodRay Fade Near" ) )->a_HelpText.Set( helpText );
 
-                args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeNear, &SpotLight::SetGodRayFadeNear );
+                args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeNear, &SpotLight::SetGodRayFadeNear )->a_HelpText.Set( helpText );
                 Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeNear, &SpotLight::SetGodRayFadeNear );
                 slider->a_Min.Set( 0.5f );
                 slider->a_Max.Set( 1000.0f );
+                slider->a_HelpText.Set( helpText );
             }
             args.m_Generator->Pop();
 
             args.m_Generator->PushContainer();
             {
-                args.m_Generator->AddLabel( TXT( "GodRay Fade Far" ) );
+                static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+                args.m_Generator->AddLabel( TXT( "GodRay Fade Far" ) )->a_HelpText.Set( helpText );
 
-                args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeFar, &SpotLight::SetGodRayFadeFar );
+                args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeFar, &SpotLight::SetGodRayFadeFar )->a_HelpText.Set( helpText );
                 Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeFar, &SpotLight::SetGodRayFadeFar );
                 slider->a_Min.Set( 10.0f );
                 slider->a_Max.Set( 1000.0f );
+                slider->a_HelpText.Set( helpText );
             }
             args.m_Generator->Pop();
 
             args.m_Generator->PushContainer();
             {
-                args.m_Generator->AddLabel( TXT( "GodRay Clip Phi Offset" ) );
+                static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+                args.m_Generator->AddLabel( TXT( "GodRay Clip Phi Offset" ) )->a_HelpText.Set( helpText );
 
-                args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlanePhiOffset, &SpotLight::SetGodRayClipPlanePhiOffset );
+                args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlanePhiOffset, &SpotLight::SetGodRayClipPlanePhiOffset )->a_HelpText.Set( helpText );
                 Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlanePhiOffset, &SpotLight::SetGodRayClipPlanePhiOffset );
                 slider->a_Min.Set(-1.0f );
                 slider->a_Max.Set( 1.0f );
+                slider->a_HelpText.Set( helpText );
             }
             args.m_Generator->Pop();
 
             args.m_Generator->PushContainer();
             {
-                args.m_Generator->AddLabel( TXT( "GodRay Clip Offset" ) );
+                static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+                args.m_Generator->AddLabel( TXT( "GodRay Clip Offset" ) )->a_HelpText.Set( helpText );
 
-                args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlaneOffset, &SpotLight::SetGodRayClipPlaneOffset );
+                args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlaneOffset, &SpotLight::SetGodRayClipPlaneOffset )->a_HelpText.Set( helpText );
                 Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlaneOffset, &SpotLight::SetGodRayClipPlaneOffset );
                 slider->a_Min.Set( 0.0f );
                 slider->a_Max.Set( 0.95f );
+                slider->a_HelpText.Set( helpText );
             }
             args.m_Generator->Pop();
 
             args.m_Generator->PushContainer();
             {
-                args.m_Generator->AddLabel( TXT( "Offset Factor" ) );
+                static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+                args.m_Generator->AddLabel( TXT( "Offset Factor" ) )->a_HelpText.Set( helpText );
 
-                args.m_Generator->AddValue<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetFactor, &SpotLight::SetOffsetFactor );
+                args.m_Generator->AddValue<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetFactor, &SpotLight::SetOffsetFactor )->a_HelpText.Set( helpText );
                 Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetFactor, &SpotLight::SetOffsetFactor );
                 slider->a_Min.Set( 0.0f );
                 slider->a_Max.Set( 255.0f );
+                slider->a_HelpText.Set( helpText );
             }
             args.m_Generator->Pop();
 
 
             args.m_Generator->PushContainer();
             {
-                args.m_Generator->AddLabel( TXT( "Offset Units" ) );
+                static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+                args.m_Generator->AddLabel( TXT( "Offset Units" ) )->a_HelpText.Set( helpText );
 
-                args.m_Generator->AddValue<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetUnits, &SpotLight::SetOffsetUnits );
+                args.m_Generator->AddValue<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetUnits, &SpotLight::SetOffsetUnits )->a_HelpText.Set( helpText );
                 Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetUnits, &SpotLight::SetOffsetUnits );
                 slider->a_Min.Set( 0.0f );
                 slider->a_Max.Set( 255.0f );
+                slider->a_HelpText.Set( helpText );
             }
             args.m_Generator->Pop();
 

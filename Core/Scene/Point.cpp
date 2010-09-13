@@ -122,10 +122,11 @@ void Point::CreatePanel( CreatePanelArgs& args )
   args.m_Generator->PushContainer( TXT( "Point" ) );
   {
     args.m_Generator->PushContainer();
-    args.m_Generator->AddLabel( TXT( "Position" ) );
-    args.m_Generator->AddValue<Core::Point, f32>( args.m_Selection, &Point::GetPositionX, &Point::SetPositionX );
-    args.m_Generator->AddValue<Core::Point, f32>( args.m_Selection, &Point::GetPositionY, &Point::SetPositionY );
-    args.m_Generator->AddValue<Core::Point, f32>( args.m_Selection, &Point::GetPositionZ, &Point::SetPositionZ );
+    static const tstring helpText = TXT( "Sets the position of this point in 3d space." );
+    args.m_Generator->AddLabel( TXT( "Position" ) )->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::Point, f32>( args.m_Selection, &Point::GetPositionX, &Point::SetPositionX )->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::Point, f32>( args.m_Selection, &Point::GetPositionY, &Point::SetPositionY )->a_HelpText.Set( helpText );
+    args.m_Generator->AddValue<Core::Point, f32>( args.m_Selection, &Point::GetPositionZ, &Point::SetPositionZ )->a_HelpText.Set( helpText );
     args.m_Generator->Pop();
   }
   args.m_Generator->Pop();

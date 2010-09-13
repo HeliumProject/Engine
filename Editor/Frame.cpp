@@ -19,7 +19,6 @@ enum
 
 // Static UI event table
 BEGIN_EVENT_TABLE( Frame, wxFrame )
-EVT_SET_FOCUS( Frame::OnSetFocus )
 EVT_CLOSE( Frame::OnExiting )
 EVT_TIMER( FrameTimerID, Frame::OnHelpTimer )
 END_EVENT_TABLE()
@@ -151,14 +150,6 @@ void Frame::UpdatePanelsMenu( wxMenu* menu )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Makes this editor the top level window when it becomes focused
-// 
-void Frame::OnSetFocus( wxFocusEvent& args )
-{
-    wxTheApp->SetTopWindow( this );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // Called when the user clicks on an item in the "panels" menu.  Toggles the 
 // visibility of the specified panel.
 // 
@@ -193,7 +184,7 @@ void Frame::OnHelpTimer( wxTimerEvent& evt )
     }
 
     wxPoint pos = wxGetMousePosition();
-    wxWindow *w = wxFindWindowAtPoint( pos );
+    wxWindow *w = wxGenericFindWindowAtPoint( pos );
     if ( w && w != m_HelpLastWindow )
     {
         m_HelpLastWindow = w;

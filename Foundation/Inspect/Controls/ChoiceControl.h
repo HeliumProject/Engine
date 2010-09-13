@@ -10,8 +10,6 @@ namespace Helium
         const static tchar CHOICE_ATTR_ENUM[]      = TXT( "enum" );
         const static tchar CHOICE_ATTR_SORTED[]    = TXT( "sorted" );
         const static tchar CHOICE_ATTR_DROPDOWN[]  = TXT( "dropdown" );
-        const static tchar CHOICE_ATTR_ITEM[]      = TXT( "item" );
-        const static tchar CHOICE_ATTR_ITEM_DELIM  = TXT( '|' );
         const static tchar CHOICE_ATTR_PREFIX[]    = TXT( "prefix" );
 
         class Choice;
@@ -95,7 +93,6 @@ namespace Helium
         private:
             tstring             m_Enum;
             tstring             m_Prefix;
-            std::vector< ChoiceItem >        m_Statics;
         };
 
         typedef Helium::SmartPtr<Choice> ChoicePtr;

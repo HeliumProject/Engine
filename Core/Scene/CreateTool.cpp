@@ -793,7 +793,7 @@ void CreateTool::CreateProperties()
 
         m_Generator->PushContainer();
         {
-            static const tstring helpText = TXT( "FIXME: ??" );
+            static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
             m_Generator->AddLabel( TXT( "Normal Snap" ) )->a_HelpText.Set( helpText );
             checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetNormalSnap, &CreateTool::SetNormalSnap) );
             checkBox->a_HelpText.Set( helpText );
@@ -883,33 +883,40 @@ void CreateTool::CreateProperties()
 
         m_Generator->PushContainer();
         {
-            m_Generator->AddLabel( TXT( "Randomize Scale" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetRandomizeScale, &CreateTool::SetRandomizeScale) );
+            static const tstring helpText = TXT( "When enabled, this will cause the scale of the created objects to be randomized." );
+            m_Generator->AddLabel( TXT( "Randomize Scale" ) )->a_HelpText.Set( helpText );
+            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetRandomizeScale, &CreateTool::SetRandomizeScale) )->a_HelpText.Set( helpText );
         }
         m_Generator->Pop();
 
         m_ScaleMin = m_Generator->PushContainer();
         {
-            m_Generator->AddLabel( TXT( "Scale Lower Bound" ) );
+            static const tstring helpText = TXT( "Sets the lower bound for random scaling of created objects." );
+            m_Generator->AddLabel( TXT( "Scale Lower Bound" ) )->a_HelpText.Set( helpText );
             Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetScaleMin, &CreateTool::SetScaleMin) );
             slider->a_Min.Set( 0.05f );
             slider->a_Max.Set( 5.f );
+            slider->a_HelpText.Set( helpText );
 
             Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
             textBox->Bind( slider->GetData() );
+            textBox->a_HelpText.Set( helpText );
             m_Generator->Add( textBox );
         }
         m_Generator->Pop();
 
         m_ScaleMax = m_Generator->PushContainer();
         {
-            m_Generator->AddLabel( TXT( "Scale Upper Bound" ) );
+            static const tstring helpText = TXT( "Sets the upper bound for random scaling of created objects." );
+            m_Generator->AddLabel( TXT( "Scale Upper Bound" ) )->a_HelpText.Set( helpText );
             Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetScaleMax, &CreateTool::SetScaleMax) );
             slider->a_Min.Set( 0.05f );
             slider->a_Max.Set( 5.f );
+            slider->a_HelpText.Set( helpText );
 
             Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
             textBox->Bind( slider->GetData() );
+            textBox->a_HelpText.Set( helpText );
             m_Generator->Add( textBox );
         }
         m_Generator->Pop();
@@ -918,8 +925,9 @@ void CreateTool::CreateProperties()
         {
             m_Generator->PushContainer();
             {
-                m_Generator->AddLabel( TXT( "Enable Instance Painting" ) );
-                m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetPaintMode, &CreateTool::SetPaintMode) );
+                static const tstring helpText = TXT( "If enabled, object instances will be 'painted' down, following some rules.  So, for instance, if you wished to add a number of shrubs to a scene, you could turn on painting (and some other options) and click and drag to 'paint' the instances into the scene." );
+                m_Generator->AddLabel( TXT( "Enable Instance Painting" ) )->a_HelpText.Set( helpText );
+                m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetPaintMode, &CreateTool::SetPaintMode) )->a_HelpText.Set( helpText );
             }
             m_Generator->Pop();
 

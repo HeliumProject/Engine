@@ -22,11 +22,14 @@ InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_Selectable
 
     m_Generator->PushContainer();
     {
-        m_Generator->AddLabel( TXT( "Solid" ) );
+        static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+        m_Generator->AddLabel( TXT( "Solid" ) )->a_HelpText.Set( helpText );
 
         m_SolidOverride = m_Generator->AddCheckBox<Core::Instance, bool>( m_Selection, &Core::Instance::GetSolidOverride, &Core::Instance::SetSolidOverride );
+        m_SolidOverride->a_HelpText.Set( helpText );
 
         m_Solid = m_Generator->AddCheckBox<Core::Instance, bool>( m_Selection, &Core::Instance::GetSolid, &Core::Instance::SetSolid );
+        m_Solid->a_HelpText.Set( helpText );
         m_Solid->Read();
 
         m_SolidOverride->e_ControlChanged.AddMethod( this, &InstancePanel::OnSolidOverride );
@@ -36,11 +39,14 @@ InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_Selectable
 
     m_Generator->PushContainer();
     {
-        m_Generator->AddLabel( TXT( "Transparent" ) );
+        static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+        m_Generator->AddLabel( TXT( "Transparent" ) )->a_HelpText.Set( helpText );
 
         m_TransparentOverride = m_Generator->AddCheckBox<Core::Instance, bool>( m_Selection, &Core::Instance::GetTransparentOverride, &Core::Instance::SetTransparentOverride );
+        m_TransparentOverride->a_HelpText.Set( helpText );
 
         m_Transparent = m_Generator->AddCheckBox<Core::Instance, bool>( m_Selection, &Core::Instance::GetTransparent, &Core::Instance::SetTransparent );
+        m_Transparent->a_HelpText.Set( helpText );
         m_Transparent->Read();
 
         m_TransparentOverride->e_ControlChanged.AddMethod( this, &InstancePanel::OnTransparentOverride );
@@ -65,8 +71,9 @@ InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_Selectable
     {
         m_Generator->PushContainer();
         {
-            m_Generator->AddLabel( TXT( "Show Pointer" ) );
-            m_Generator->AddCheckBox<Core::Volume, bool>( m_Selection, &Core::Volume::IsPointerVisible, &Core::Volume::SetPointerVisible );
+            static const tstring helpText = TXT( "Determines if a pointer should be drawn in the 3d view at the location where the volume is." );
+            m_Generator->AddLabel( TXT( "Show Pointer" ) )->a_HelpText.Set( helpText );
+            m_Generator->AddCheckBox<Core::Volume, bool>( m_Selection, &Core::Volume::IsPointerVisible, &Core::Volume::SetPointerVisible )->a_HelpText.Set( helpText );
         }
         m_Generator->Pop();
     }

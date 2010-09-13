@@ -834,7 +834,6 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
             const Math::Matrix4& projMatrix = camera->GetProjection();
             ID3DXFont* font = curve->GetOwner()->GetViewport()->GetStatistics()->GetFont();
             DWORD color = D3DCOLOR_ARGB(255, 255, 255, 255);
-            tchar textBuf[256];
 
             device->SetMaterial( &Core::Viewport::s_SelectedComponentMaterial );
             OS_HierarchyNodeDumbPtr::Iterator childItr = curve->GetChildren().Begin();
@@ -882,8 +881,7 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
                         rect.right = (LONG)screenX;
                         rect.bottom = (LONG)( screenY - 2 );
 
-                        _stprintf_s( textBuf, sizeof( textBuf ), label.str().c_str(), i );
-                        font->DrawText( NULL, textBuf, -1, &rect, DT_NOCLIP, color );
+                        font->DrawText( NULL, label.str().c_str(), (INT)label.str().length(), &rect, DT_NOCLIP, color );
                     }
                     ++i;
                 }
@@ -992,54 +990,60 @@ void Curve::CreatePanel( CreatePanelArgs& args )
     {
         args.m_Generator->PushContainer();
         {
-            Inspect::Label* label = args.m_Generator->AddLabel( TXT( "Type" ) );
-            Inspect::Choice* choice = args.m_Generator->AddChoice<Core::Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( TXT( "CurveType" ) ), &Curve::GetCurveType, &Curve::SetCurveType );
-            tstring helpText = TXT( "Chooses the type of curve to use." );
-            label->a_HelpText.Set( helpText );
-            choice->a_HelpText.Set( helpText );
+            static const tstring helpText = TXT( "Chooses the type of curve to use." );
+            args.m_Generator->AddLabel( TXT( "Type" ) )->a_HelpText.Set( helpText );
+            args.m_Generator->AddChoice<Core::Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( TXT( "CurveType" ) ), &Curve::GetCurveType, &Curve::SetCurveType )->a_HelpText.Set( helpText );
         }
         args.m_Generator->Pop();
 
         args.m_Generator->PushContainer();
         {
-            args.m_Generator->AddLabel( TXT( "Control Point Label" ) );
-            args.m_Generator->AddChoice<Core::Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( TXT( "ControlPointLabel" ) ), &Curve::GetControlPointLabel, &Curve::SetControlPointLabel );
+            static const tstring helpText = TXT( "Toggles labeling the control points in the 3d view." );
+            args.m_Generator->AddLabel( TXT( "Control Point Label" ) )->a_HelpText.Set( helpText );
+            args.m_Generator->AddChoice<Core::Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( TXT( "ControlPointLabel" ) ), &Curve::GetControlPointLabel, &Curve::SetControlPointLabel )->a_HelpText.Set( helpText );
         }
         args.m_Generator->Pop();
 
         args.m_Generator->PushContainer();
         {
-            args.m_Generator->AddLabel( TXT( "Resolution" ) );
+            static const tstring helpText = TXT( "Controls the resolution of the curve, higher resolution curves will be smoother." );
+            args.m_Generator->AddLabel( TXT( "Resolution" ) )->a_HelpText.Set( helpText );
             Inspect::Slider* slider = args.m_Generator->AddSlider<Core::Curve, u32>( args.m_Selection, &Curve::GetResolution, &Curve::SetResolution );
             slider->a_Min.Set( 1.0f );
             slider->a_Max.Set( 20.0f );
+            slider->a_HelpText.Set( helpText );
         }
         args.m_Generator->Pop();
 
         args.m_Generator->PushContainer();
         {
-            args.m_Generator->AddLabel( TXT( "Closed" ) );
-            args.m_Generator->AddCheckBox<Core::Curve, bool>( args.m_Selection, &Curve::GetClosed, &Curve::SetClosed );
+            static const tstring helpText = TXT( "Creates a closed curve where the start and end points are the same." );
+            args.m_Generator->AddLabel( TXT( "Closed" ) )->a_HelpText.Set( helpText );
+            args.m_Generator->AddCheckBox<Core::Curve, bool>( args.m_Selection, &Curve::GetClosed, &Curve::SetClosed )->a_HelpText.Set( helpText );
         }
         args.m_Generator->Pop();
 
         args.m_Generator->PushContainer();
         {
-            args.m_Generator->AddLabel( TXT( "Reverse Control Points" ) );
+            static const tstring helpText = TXT( "Clicking this will reverse the control points in the selected curve." );
+            args.m_Generator->AddLabel( TXT( "Reverse Control Points" ) )->a_HelpText.Set( helpText );
             Inspect::Button* button = args.m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( &Curve::OnReverseControlPoints ) );
             button->a_Icon.Set( TXT( "reverse" ) );
+            button->a_HelpText.Set( helpText );
             button->SetClientData( new SelectionDataObject( args.m_Selection ) );
         }
         args.m_Generator->Pop();
 
         args.m_Generator->PushContainer();
         {
-            args.m_Generator->AddLabel( TXT( "Curve Length" ) );
+            static const tstring helpText = TXT( "This field displays the length of the currently selected curve." );
+            args.m_Generator->AddLabel( TXT( "Curve Length" ) )->a_HelpText.Set( helpText );
 
             typedef f32 ( Curve::*Getter )() const;
             typedef void ( Curve::*Setter )( const f32& );
             Inspect::Value* textBox = args.m_Generator->AddValue< Core::Curve, f32, Getter, Setter >( args.m_Selection, &Curve::CalculateCurveLength );
             textBox->a_IsReadOnly.Set( true );
+            textBox->a_HelpText.Set( helpText );
         }
         args.m_Generator->Pop();
     }

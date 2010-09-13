@@ -7,14 +7,14 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-LabelWindow::LabelWindow(wxWindow* parent, LabelWidget* labelWidget)
+LabelWindow::LabelWindow(wxWindow* parent, LabelWidget* labelWidget, bool ellipsize)
 : wxPanel (parent, wxID_ANY)
 , m_LabelWidget (labelWidget)
 {
     SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
     wxSizer* sizer = GetSizer();
 
-    m_StaticText = new wxStaticText( this, wxID_ANY, wxT( "Temp" ), wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_END );
+    m_StaticText = new wxStaticText( this, wxID_ANY, wxT( "Temp" ), wxDefaultPosition, wxDefaultSize, ellipsize ? wxST_ELLIPSIZE_END : 0 );
     sizer->Add( m_StaticText, 1, wxALIGN_CENTER, 0);
 }
 
@@ -58,7 +58,7 @@ void LabelWidget::Create( wxWindow* parent )
     HELIUM_ASSERT( !m_LabelWindow );
 
     // allocate window and connect common listeners
-    SetWindow( m_LabelWindow = new LabelWindow( parent, this ) );
+    SetWindow( m_LabelWindow = new LabelWindow( parent, this, m_LabelControl->a_Ellipsize.Get() ) );
 
     // add listeners
     m_LabelControl->a_HelpText.Changed().AddMethod( this, &LabelWidget::HelpTextChanged );

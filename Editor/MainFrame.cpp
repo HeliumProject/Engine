@@ -1497,7 +1497,6 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
 
             Inspect::Canvas* canvas = &m_ToolbarPanel->GetCanvas();
             canvas->Realize( NULL );
-            canvas->Read();
         }
 
         m_ViewPanel->Refresh();

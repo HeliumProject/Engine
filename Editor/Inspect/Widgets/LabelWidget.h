@@ -11,7 +11,7 @@ namespace Helium
         class LabelWindow : public wxPanel
         {
         public:
-            LabelWindow(wxWindow* parent, LabelWidget* labelWidget);
+            LabelWindow(wxWindow* parent, LabelWidget* labelWidget, bool ellipsize);
 
             wxString GetLabel() const;
             void SetLabel(const wxString& label);

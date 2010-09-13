@@ -22,12 +22,16 @@ void StripCanvas::Realize( Inspect::Canvas* canvas )
     widget->SetPanel( m_Panel );
     SetWidget( widget );
 
+    wxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
+    m_Panel->SetSizer( sizer );
+
     Inspect::V_Control::const_iterator itr = m_Children.begin();
     Inspect::V_Control::const_iterator end = m_Children.end();
     for( ; itr != end; ++itr )
     {
         Inspect::Control* c = *itr;
         c->Realize( this );
+        sizer->Add( Reflect::AssertCast< Widget >( c->GetWidget() )->GetWindow(), 0, wxEXPAND );
     }
 
     m_Panel->Freeze();

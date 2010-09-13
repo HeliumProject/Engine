@@ -793,13 +793,14 @@ void CreateTool::CreateProperties()
 
         m_Generator->PushContainer();
         {
-            static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
+            static const tstring helpText = TXT( "Snaps objects to the face normal of the surface they are placed upon." );
             m_Generator->AddLabel( TXT( "Normal Snap" ) )->a_HelpText.Set( helpText );
             checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetNormalSnap, &CreateTool::SetNormalSnap) );
             checkBox->a_HelpText.Set( helpText );
         }
         m_Generator->Pop();
 
+#if RANDOMIZE_PROPERTIES
         m_Generator->PushContainer();
         {
             static const tstring helpText = TXT( "If set, this will apply a random offset to the created object's azimuth" );
@@ -1051,9 +1052,11 @@ void CreateTool::CreateProperties()
             m_Generator->Pop();
         }
         m_Generator->Pop();
+#endif
     }
     m_Generator->Pop();
 
+#if RANDOMIZE_PROPERTIES
     m_AzimuthMin->a_IsEnabled.Set(s_RandomizeAzimuth);
     m_AzimuthMax->a_IsEnabled.Set(s_RandomizeAzimuth);
 
@@ -1070,6 +1073,8 @@ void CreateTool::CreateProperties()
     m_PaintSpeed->a_IsEnabled.Set(s_PaintMode);
     m_PaintDensity->a_IsEnabled.Set(s_PaintMode);
     m_PaintJitter->a_IsEnabled.Set(s_PaintMode);
+
+#endif
 }
 
 void CreateTool::SetupInstanceOffsets( float instanceRadius, Math::V_Vector3& instanceOffsets )

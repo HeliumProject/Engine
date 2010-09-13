@@ -51,11 +51,10 @@ void Interpreter::Push(Container* container)
 
 Container* Interpreter::PushContainer( const tstring& name )
 {
-    ContainerPtr container = new Container ();
+    ContainerPtr container = CreateControl<Container>();
     container->a_Name.Set( name );
 
     m_ContainerStack.Get().push( container );
-
     return container;
 }
 

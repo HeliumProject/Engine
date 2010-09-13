@@ -336,24 +336,6 @@ namespace Helium
 		};
 		
 		///////////////////////////////////////////////////////////////////////////////
-		/// Class ToolsPanelGenerated
-		///////////////////////////////////////////////////////////////////////////////
-		class ToolsPanelGenerated : public wxPanel 
-		{
-			private:
-			
-			protected:
-				wxPanel* m_ToolsContainerPanel;
-				wxPanel* m_PropertiesPanel;
-			
-			public:
-				
-				ToolsPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 218,369 ), long style = wxTAB_TRAVERSAL );
-				~ToolsPanelGenerated();
-			
-		};
-		
-		///////////////////////////////////////////////////////////////////////////////
 		/// Class TypesPanelGenerated
 		///////////////////////////////////////////////////////////////////////////////
 		class TypesPanelGenerated : public wxPanel 

@@ -1566,6 +1566,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Inspect\StripCanvasWidget.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\StripCanvasWidget.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Inspect\TreeCanvas.cpp"
 				>
 			</File>

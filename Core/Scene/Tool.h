@@ -167,6 +167,6 @@ namespace Helium
             }
         };
 
-        typedef Helium::SmartPtr< Core::Tool > LToolPtr;
+        typedef Helium::SmartPtr< Core::Tool > ToolPtr;
     }
 }

@@ -717,7 +717,7 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	bSizer26->Add( m_MainPanel, 0, wxEXPAND | wxALL, 0 );
 	
 	m_ToolsPropertiesPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bSizer26->Add( m_ToolsPropertiesPanel, 0, wxEXPAND | wxALL, 0 );
+	bSizer26->Add( m_ToolsPropertiesPanel, 1, wxEXPAND | wxALL, 0 );
 	
 	this->SetSizer( bSizer26 );
 	this->Layout();
@@ -735,25 +735,6 @@ ToolbarPanelGenerated::~ToolbarPanelGenerated()
 	m_VaultSearchBox->Disconnect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchGoButtonClick ), NULL, this );
 	m_VaultSearchBox->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchTextEnter ), NULL, this );
 	
-}
-
-ToolsPanelGenerated::ToolsPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
-{
-	wxBoxSizer* bSizer28;
-	bSizer28 = new wxBoxSizer( wxVERTICAL );
-	
-	m_ToolsContainerPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bSizer28->Add( m_ToolsContainerPanel, 0, wxEXPAND, 5 );
-	
-	m_PropertiesPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bSizer28->Add( m_PropertiesPanel, 1, wxEXPAND, 5 );
-	
-	this->SetSizer( bSizer28 );
-	this->Layout();
-}
-
-ToolsPanelGenerated::~ToolsPanelGenerated()
-{
 }
 
 TypesPanelGenerated::TypesPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )

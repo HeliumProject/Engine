@@ -1231,7 +1231,6 @@ void MainFrame::OnExport(wxCommandEvent& event)
     }
 }
 
-
 void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
 {
     if ( args.m_Scene )
@@ -1485,17 +1484,16 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
 
         m_ToolbarPanel->GetCanvas().Clear();
 
-        if (m_SceneManager.GetCurrentScene()->GetTool().ReferencesObject())
+        Tool* tool = m_SceneManager.GetCurrentScene()->GetTool();
+
+        if (tool)
         {
-            m_SceneManager.GetCurrentScene()->GetTool()->PickWorld().Add( PickSignature::Delegate( this, &MainFrame::PickWorld ) );
+            tool->PickWorld().Add( PickSignature::Delegate( this, &MainFrame::PickWorld ) );
+            tool->CreateProperties();
 
-            m_SceneManager.GetCurrentScene()->GetTool()->CreateProperties();
-
-#ifdef INSPECT_REFACTOR
-            m_ToolbarPanel->GetCanvas().Layout();
-#endif
-
-            m_ToolbarPanel->GetCanvas().Read();
+            Inspect::Canvas* canvas = &m_ToolbarPanel->GetCanvas();
+            canvas->Realize( NULL );
+            canvas->Read();
         }
 
         m_ViewPanel->Refresh();

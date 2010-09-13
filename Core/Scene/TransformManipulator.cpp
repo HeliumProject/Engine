@@ -211,8 +211,3 @@ void TransformManipulator::MouseMove( const MouseMoveInput& e )
         m_AllowSelection = true;
     }
 }
-
-void TransformManipulator::CreateProperties()
-{
-    __super::CreateProperties();
-}

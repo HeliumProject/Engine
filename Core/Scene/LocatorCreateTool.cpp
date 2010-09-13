@@ -17,12 +17,12 @@ SCENE_DEFINE_TYPE(Core::LocatorCreateTool);
 
 void LocatorCreateTool::InitializeType()
 {
-  Reflect::RegisterClassType< Core::LocatorCreateTool >( TXT( "Core::LocatorCreateTool" ) );
+    Reflect::RegisterClassType< Core::LocatorCreateTool >( TXT( "Core::LocatorCreateTool" ) );
 }
 
 void LocatorCreateTool::CleanupType()
 {
-  Reflect::UnregisterClassType< Core::LocatorCreateTool >();
+    Reflect::UnregisterClassType< Core::LocatorCreateTool >();
 }
 
 LocatorCreateTool::LocatorCreateTool(Core::Scene* scene, PropertiesGenerator* generator)
@@ -40,74 +40,74 @@ Core::TransformPtr LocatorCreateTool::CreateNode()
 {
 #ifdef SCENE_DEBUG_RUNTIME_DATA_SELECTION
 
-  Content::LocatorPtr v = new Content::Locator( s_Shape );
+    Content::LocatorPtr v = new Content::Locator( s_Shape );
 
-  v->RectifyRuntimeData();
+    v->RectifyRuntimeData();
 
-  LLocatorPtr locator = new Core::Locator( m_Scene, v );
+    LLocatorPtr locator = new Core::Locator( m_Scene, v );
 
-  m_Scene->AddObject( locator );
+    m_Scene->AddObject( locator );
 
-  {
-    OS_SelectableDumbPtr selection;
-    selection.push_back( locator );
-    m_Scene->GetSelection().SetItems( selection );
+    {
+        OS_SelectableDumbPtr selection;
+        selection.push_back( locator );
+        m_Scene->GetSelection().SetItems( selection );
 
-    m_Scene->GetSelection().Clear();
-  }
+        m_Scene->GetSelection().Clear();
+    }
 
-  m_Scene->RemoveObject( locator );
+    m_Scene->RemoveObject( locator );
 
-  return locator;
+    return locator;
 
 #else
 
-  return new Core::Locator ( m_Scene, new Content::Locator ( s_Shape ) );
+    return new Core::Locator ( m_Scene, new Content::Locator ( s_Shape ) );
 
 #endif
 }
 
 void LocatorCreateTool::CreateProperties()
 {
-  m_Generator->PushContainer( TXT( "Locator" ) );
-  {
-    m_Generator->PushContainer();
+    m_Generator->PushContainer( TXT( "Locator" ) );
     {
-      m_Generator->AddLabel( TXT( "Shape" ) );
+        m_Generator->PushContainer();
+        {
+            m_Generator->AddLabel( TXT( "Shape" ) );
 
-      Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::LocatorCreateTool, int>(this, &LocatorCreateTool::GetLocatorShape, &LocatorCreateTool::SetLocatorShape) );
-      choice->a_IsDropDown.Set( true );
-      std::vector< Inspect::ChoiceItem > items;
+            Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::LocatorCreateTool, int>(this, &LocatorCreateTool::GetLocatorShape, &LocatorCreateTool::SetLocatorShape) );
+            choice->a_IsDropDown.Set( true );
+            std::vector< Inspect::ChoiceItem > items;
 
-      {
-        tostringstream str;
-        str << Content::LocatorShapes::Cross;
-        items.push_back( Inspect::ChoiceItem( TXT( "Cross" ), str.str() ) );
-      }
+            {
+                tostringstream str;
+                str << Content::LocatorShapes::Cross;
+                items.push_back( Inspect::ChoiceItem( TXT( "Cross" ), str.str() ) );
+            }
 
-      {
-        tostringstream str;
-        str << Content::LocatorShapes::Cube;
-        items.push_back( Inspect::ChoiceItem( TXT( "Cube" ), str.str() ) );
-      }
+            {
+                tostringstream str;
+                str << Content::LocatorShapes::Cube;
+                items.push_back( Inspect::ChoiceItem( TXT( "Cube" ), str.str() ) );
+            }
 
-      choice->a_Items.Set( items );
+            choice->a_Items.Set( items );
+        }
+        m_Generator->Pop();
     }
     m_Generator->Pop();
 
     __super::CreateProperties();
-  }
-  m_Generator->Pop();
 }
 
 int LocatorCreateTool::GetLocatorShape() const
 {
-  return s_Shape;
+    return s_Shape;
 }
 
 void LocatorCreateTool::SetLocatorShape(int value)
 {
-  s_Shape = static_cast< Content::LocatorShape > (value);
+    s_Shape = static_cast< Content::LocatorShape > (value);
 
-  Place(Math::Matrix4::Identity);
+    Place(Math::Matrix4::Identity);
 }

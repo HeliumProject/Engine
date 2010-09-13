@@ -256,8 +256,6 @@ void CurveCreateTool::KeyPress( const KeyboardInput& e )
 
 void CurveCreateTool::CreateProperties()
 {
-    __super::CreateProperties();
-
     m_Generator->PushContainer( TXT( "Create Curve" ) );
     {
         m_Generator->PushContainer();

@@ -375,8 +375,6 @@ void CurveEditTool::Draw( DrawArgs* args )
 
 void CurveEditTool::CreateProperties()
 {
-    __super::CreateProperties();
-
     m_Generator->PushContainer( TXT( "Edit Curve" ) );
     {
         m_Generator->PushContainer();

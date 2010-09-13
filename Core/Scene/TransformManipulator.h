@@ -113,13 +113,6 @@ namespace Helium
             virtual void MouseUp( const MouseButtonInput& e );
             virtual void MouseMove( const MouseMoveInput& e );
 
-
-            //
-            // Properties
-            //
-
-            virtual void CreateProperties() HELIUM_OVERRIDE;
-
             //
             // Manipulation Set, these find the primary, secondary, complete set of objects in the manpiulation set
             //  The manipulation set is the union of all IManipuatables in the main selection set

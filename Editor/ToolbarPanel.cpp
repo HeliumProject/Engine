@@ -25,8 +25,6 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
     {
         Freeze();
 
-        m_OpenButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Open ) );
-
         m_PlayButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Play ) );
         m_PauseButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Pause ) );
         m_StopButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Stop ) );
@@ -34,8 +32,6 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
         Layout();
         Thaw();
     }
-
-    m_OpenButton->SetHelpText( TXT( "Open\n\nClicking this button will bring up a file browser, allowing you to open files in the editor." ) );
 
     m_PlayButton->SetHelpText( TXT( "Play\n\nClicking this will start the game in the editing window." ) );
     m_PauseButton->SetHelpText( TXT( "Pause\n\nClicking this will pause a currently running game session." ) );
@@ -92,14 +88,4 @@ void ToolbarPanel::ToggleTool( i32 selectedTool )
 void ToolbarPanel::OnToggleToolButton( wxCommandEvent& event )
 {
     GetParent()->GetEventHandler()->ProcessEvent( wxCommandEvent ( wxEVT_COMMAND_MENU_SELECTED, event.GetId() ) );
-}
-
-void ToolbarPanel::OnOpen( wxCommandEvent& event )
-{
-    FileDialog openDlg( this, TXT( "Open" ) );
-
-    if ( openDlg.ShowModal() == wxID_OK )
-    {
-        wxGetApp().GetFrame()->OpenProject( (const wxChar*)openDlg.GetPath().c_str() );
-    }
 }

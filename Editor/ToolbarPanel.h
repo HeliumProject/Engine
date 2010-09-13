@@ -48,9 +48,6 @@ namespace Helium
             }
 
         private:
-            virtual void OnOpen( wxCommandEvent& event ) HELIUM_OVERRIDE;
-
-        private:
             std::vector< wxBitmapToggleButton* > m_ToolsButtons;
 
             CommandQueue                m_CommandQueue;

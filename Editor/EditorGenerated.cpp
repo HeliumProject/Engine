@@ -36,37 +36,41 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	
 	m_MenuFile->Append( -1, _("New"), m_MenuFileNew );
 	
+	wxMenuItem* m_ItemOpen;
+	m_ItemOpen = new wxMenuItem( m_MenuFile, ID_Open, wxString( _("Open...") ) + wxT('\t') + wxT("Ctrl-O"), wxEmptyString, wxITEM_NORMAL );
+	m_MenuFile->Append( m_ItemOpen );
+	
 	m_MenuFileOpenRecent = new wxMenu();
 	m_MenuFile->Append( -1, _("Open Recent"), m_MenuFileOpenRecent );
 	
 	wxMenuItem* m_ItemClose;
-	m_ItemClose = new wxMenuItem( m_MenuFile, ID_Close, wxString( _("Close") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemClose = new wxMenuItem( m_MenuFile, ID_Close, wxString( _("Close") ) + wxT('\t') + wxT("Ctrl-W"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemClose );
 	
 	wxMenuItem* m_separator1;
 	m_separator1 = m_MenuFile->AppendSeparator();
 	
 	wxMenuItem* m_ItemSaveAll;
-	m_ItemSaveAll = new wxMenuItem( m_MenuFile, ID_SaveAll, wxString( _("Save All") ) + wxT('\t') + wxT("Ctrl+S"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemSaveAll = new wxMenuItem( m_MenuFile, ID_SaveAll, wxString( _("Save All") ) + wxT('\t') + wxT("Ctrl-S"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemSaveAll );
 	
 	wxMenuItem* m_separator2;
 	m_separator2 = m_MenuFile->AppendSeparator();
 	
 	wxMenuItem* m_ItemImport;
-	m_ItemImport = new wxMenuItem( m_MenuFile, ID_Import, wxString( _("Import...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemImport = new wxMenuItem( m_MenuFile, ID_Import, wxString( _("Import...") ) + wxT('\t') + wxT("Ctrl-I"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemImport );
 	
 	wxMenuItem* m_ItemImportFromClipboard;
-	m_ItemImportFromClipboard = new wxMenuItem( m_MenuFile, ID_ImportFromClipboard, wxString( _("Import from Clipboard...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemImportFromClipboard = new wxMenuItem( m_MenuFile, ID_ImportFromClipboard, wxString( _("Import from Clipboard...") ) + wxT('\t') + wxT("Shift-Ctrl-I"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemImportFromClipboard );
 	
 	wxMenuItem* m_ItemExport;
-	m_ItemExport = new wxMenuItem( m_MenuFile, ID_Export, wxString( _("Export...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemExport = new wxMenuItem( m_MenuFile, ID_Export, wxString( _("Export...") ) + wxT('\t') + wxT("Ctrl-E"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemExport );
 	
 	wxMenuItem* m_ItemExportToClipboard;
-	m_ItemExportToClipboard = new wxMenuItem( m_MenuFile, ID_ExportToClipboard, wxString( _("Export to Clipboard...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemExportToClipboard = new wxMenuItem( m_MenuFile, ID_ExportToClipboard, wxString( _("Export to Clipboard...") ) + wxT('\t') + wxT("Shift-Ctrl-E"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemExportToClipboard );
 	
 	wxMenuItem* m_separator4;
@@ -219,6 +223,7 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	this->Connect( ID_NewScene, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewScene ) );
 	this->Connect( ID_NewEntity, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewEntity ) );
 	this->Connect( ID_NewProject, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewProject ) );
+	this->Connect( ID_Open, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnOpen ) );
 	this->Connect( ID_Close, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnClose ) );
 	this->Connect( ID_SaveAll, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSaveAll ) );
 	this->Connect( ID_Import, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnImport ) );
@@ -257,6 +262,7 @@ MainFrameGenerated::~MainFrameGenerated()
 	this->Disconnect( ID_NewScene, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewScene ) );
 	this->Disconnect( ID_NewEntity, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewEntity ) );
 	this->Disconnect( ID_NewProject, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewProject ) );
+	this->Disconnect( ID_Open, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnOpen ) );
 	this->Disconnect( ID_Close, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnClose ) );
 	this->Disconnect( ID_SaveAll, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSaveAll ) );
 	this->Disconnect( ID_Import, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnImport ) );
@@ -675,12 +681,6 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer27;
 	bSizer27 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_OpenButton = new wxBitmapButton( m_MainPanel, ID_Open, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_OpenButton, 0, wxALL, 2 );
-	
-	
-	bSizer27->Add( 20, 0, 0, 0, 0 );
-	
 	m_ToolsPanel = new wxPanel( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_ToolsPanelSizer;
 	m_ToolsPanelSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -723,7 +723,6 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	this->Layout();
 	
 	// Connect Events
-	m_OpenButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnOpen ), NULL, this );
 	m_VaultSearchBox->Connect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchGoButtonClick ), NULL, this );
 	m_VaultSearchBox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchTextEnter ), NULL, this );
 }
@@ -731,7 +730,6 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 ToolbarPanelGenerated::~ToolbarPanelGenerated()
 {
 	// Disconnect Events
-	m_OpenButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnOpen ), NULL, this );
 	m_VaultSearchBox->Disconnect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchGoButtonClick ), NULL, this );
 	m_VaultSearchBox->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ToolbarPanelGenerated::OnSearchTextEnter ), NULL, this );
 	

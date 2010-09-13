@@ -526,6 +526,16 @@ void MainFrame::SceneExecuted( const ExecuteArgs& args )
     }
 }
 
+void MainFrame::OnOpen( wxCommandEvent& event )
+{
+    FileDialog openDlg( this, TXT( "Open" ) );
+
+    if ( openDlg.ShowModal() == wxID_OK )
+    {
+        OpenProject( (const wxChar*)openDlg.GetPath().c_str() );
+    }
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Overridden from base class.  Called when attempting to open a file from the
 // MRU list.  Closes all currently open files before trying to open the new one.

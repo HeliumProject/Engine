@@ -107,6 +107,7 @@ namespace Helium
 
         private:
 
+            void OnOpen( wxCommandEvent& event ) HELIUM_OVERRIDE;
             void OnMRUOpen( const MRUArgs& args );
 
             // frame events

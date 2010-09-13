@@ -112,6 +112,159 @@ void IconArtFile::CalculatePlacement( wxImage &target_image, const wxImage &sour
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+void IconArtFile::Paste( wxImage &target_image, const wxImage &source_image, int &x, int &y, bool blendAlpha )
+{
+
+    // add offset to adjust for negative insertion point
+    int offset_x = 0;
+    int offset_y = 0;
+
+    // actual width and height that will be copied from source to target
+    int target_width = source_image.GetWidth();
+    int target_height = source_image.GetHeight();
+
+    if ( x < 0 )
+    {
+        offset_x = -x;
+        target_width += x;
+    }
+    if ( y < 0 )
+    {
+        offset_y = -y;
+        target_height += y;
+    }
+
+    // actual insertion point onto the target image
+    int target_x = x + offset_x;
+    int target_y = y + offset_y;
+
+    if (target_x+target_width > target_image.GetWidth() )
+    {
+        target_width = target_image.GetWidth() - target_x;
+    }
+
+    if (target_y+target_height > target_image.GetHeight() )
+    {
+        target_height = target_image.GetHeight() - target_y;
+    }
+
+    if ( target_width < 1 || target_height < 1 )
+    {
+        return;
+    }
+
+    ///////////////////////////////////////////
+    // Masking
+    bool maskSource = false;
+    unsigned char source_mask_r = 0;
+    unsigned char source_mask_g = 0;
+    unsigned char source_mask_b = 0;
+
+    // if the source image has a mask and either the target image does NOT 
+    // or the target image's mask is different than the source
+    // then use the source mask when pasting onto the target 
+    if ( source_image.HasMask()
+        && ( !target_image.HasMask()
+           || target_image.GetMaskRed() != source_image.GetMaskRed()
+           || target_image.GetMaskGreen() != source_image.GetMaskGreen()
+           || target_image.GetMaskBlue() != source_image.GetMaskBlue() ) )
+    {
+        maskSource = true;
+        source_mask_r = source_image.GetMaskRed();
+        source_mask_g = source_image.GetMaskGreen();
+        source_mask_b = source_image.GetMaskBlue();
+    }
+
+
+    ///////////////////////////////////////////
+    // Alpha blending
+    bool hasAlpha = false;
+
+    unsigned char* source_alpha_data = NULL;
+    int source_alpha_step = 0;
+    
+    unsigned char* target_alpha_data = NULL;
+    int target_alpha_step = 0;
+
+    if ( source_image.HasAlpha() )
+    {
+        if ( !target_image.HasAlpha() )
+        {
+            target_image.InitAlpha();
+        }
+
+        source_alpha_data = source_image.GetAlpha() + offset_x + offset_y*source_image.GetWidth();
+        source_alpha_step = source_image.GetWidth();
+
+        target_alpha_data = target_image.GetAlpha() + (target_x) + (target_y)*target_image.GetWidth();
+        target_alpha_step = target_image.GetWidth();
+
+        hasAlpha = true;
+    }
+
+    // can't blend alpha if there is none
+    blendAlpha &= hasAlpha;
+
+    unsigned char* source_data = source_image.GetData() + offset_x*3 + offset_y*3*source_image.GetWidth();
+    int source_data_step = source_image.GetWidth()*3;
+
+    unsigned char* target_data = target_image.GetData() + (target_x)*3 + (target_y)*3*target_image.GetWidth();
+    int target_data_step = target_image.GetWidth()*3;
+
+    for ( int height_index = 0; height_index < target_height; ++height_index )
+    {
+        for ( int width_index = 0; width_index < target_width; ++width_index )
+        {
+            int r_index = width_index*3;
+            int g_index = width_index*3 + 1;
+            int b_index = width_index*3 + 2;
+
+            // paste the pixel if either:
+            // - not masking the source
+            // - are masking, and the source pixel is NOT masked
+            if ( !maskSource
+                || !(  ( source_data[r_index] == source_mask_r )
+                    && ( source_data[g_index] == source_mask_g )
+                    && ( source_data[b_index] == source_mask_b ) ) )
+            {
+                if ( blendAlpha )
+                {
+                    // value of 255 means that the pixel is 100% opaque
+                    float source_alpha = ( source_alpha_data[width_index] / 255.f );
+                    float inverse_source_alpha = 1 - source_alpha;
+
+                    target_data[r_index] = ( inverse_source_alpha * target_data[r_index] ) + ( source_data[r_index] * source_alpha );
+                    target_data[g_index] = ( inverse_source_alpha * target_data[g_index] ) + ( source_data[g_index] * source_alpha );
+                    target_data[b_index] = ( inverse_source_alpha * target_data[b_index] ) + ( source_data[b_index] * source_alpha );
+
+                    // merge alpha channels
+                    target_alpha_data[width_index] = ( target_alpha_data[width_index] + source_alpha_data[width_index] ) > 255
+                        ? 255
+                        : target_alpha_data[width_index] + source_alpha_data[width_index];
+                }
+                else
+                {
+                    if ( hasAlpha )
+                    {
+                        target_alpha_data[width_index] = source_alpha_data[width_index];
+                    }
+
+                    memcpy( target_data+r_index, source_data+r_index, 3 );
+                }
+            }
+        }
+
+        if ( hasAlpha )
+        {
+            source_alpha_data += source_alpha_step;
+            target_alpha_data += target_alpha_step;
+        }
+
+        source_data += source_data_step;
+        target_data += target_data_step;
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 ArtProvider::ArtProvider()
@@ -142,6 +295,8 @@ void ArtProvider::Create()
 
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Unknown, IconArtFile( TXT( "core/unknown.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Null, IconArtFile( TXT( "core/unknown.png" ) ) ) );
+
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Helium, IconArtFile( TXT( "editor/editor.png" ) ) ) );
 
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::File, IconArtFile( TXT( "editor/file.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Folder, IconArtFile( TXT( "editor/dir.png" ) ) ) );
@@ -395,7 +550,7 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
                     int x = 0;
                     int y = 0;
                     IconArtFile::CalculatePlacement( image, overlayImage, itr->first, x, y );
-                    image.Paste( overlayImage, x, y, true );
+                    IconArtFile::Paste( image, overlayImage, x, y, true );
                 }
             }
 

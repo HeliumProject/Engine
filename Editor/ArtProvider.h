@@ -45,6 +45,7 @@ namespace Helium
             IconArtFile& AddOverlay( const tchar* filename, OverlayQuadrants::OverlayQuadrant quadrant = OverlayQuadrants::BottomRight );
 
             static void CalculatePlacement( wxImage &target_image, const wxImage &source_image, OverlayQuadrants::OverlayQuadrant quadrant, int &x, int &y );
+            static void Paste( wxImage &target_image, const wxImage &source_image, int &x, int &y, bool blendAlpha = false );
         };
 
         ///////////////////////////////////////////////////////////////////////
@@ -52,6 +53,8 @@ namespace Helium
         {
             static const wxChar* Unknown = wxART_MAKE_ART_ID( HELIUM_ART_ID_UNKNOWN );
             static const wxChar* Null = wxART_MAKE_ART_ID( HELIUM_ART_ID_NULL );
+
+            static const wxChar* Helium = wxART_MAKE_ART_ID( HELIUM_ART_ID_HELIUM );
 
             static const wxChar* File = wxART_MAKE_ART_ID( HELIUM_ART_ID_FILE );
             static const wxChar* Folder = wxART_MAKE_ART_ID( HELIUM_ART_ID_FOLDER );

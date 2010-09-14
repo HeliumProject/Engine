@@ -71,6 +71,8 @@ void Widget::SetWindow( wxWindow* window )
         m_Control->a_ForegroundColor.Changed().RemoveMethod( this, &Widget::ForegroundColorChanged );
         m_Control->a_BackgroundColor.Changed().RemoveMethod( this, &Widget::BackgroundColorChanged );
         m_Control->a_HelpText.Changed().RemoveMethod( this, &Widget::HelpTextChanged );
+
+        m_Window->Disconnect( m_Window->GetId(), wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( Widget::OnContextMenu ), NULL, this );
     }
 
     // save the window pointer
@@ -106,6 +108,8 @@ void Widget::SetWindow( wxWindow* window )
             FileDropTarget* dropTarget = new FileDropTarget( filter );
             m_Window->SetDropTarget( dropTarget );
         }
+
+        m_Window->Connect( m_Window->GetId(), wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( Widget::OnContextMenu ), NULL, this );
     }
 }
 
@@ -156,4 +160,39 @@ void Widget::BackgroundColorChanged( const Attribute<u32>::ChangeArgs& args )
 void Widget::HelpTextChanged( const Attribute<tstring>::ChangeArgs& args )
 {
     m_Window->SetHelpText( args.m_NewValue );
+}
+
+void Widget::OnContextMenu( wxContextMenuEvent& event )
+{
+    wxMenu menu;
+
+    std::vector< tstring >::const_iterator itr = m_Control->GetContextMenu()->GetItems().begin();
+    std::vector< tstring >::const_iterator end = m_Control->GetContextMenu()->GetItems().end();
+    for ( i32 count = 0; itr != end; ++itr, ++count )
+    {
+        if ( *itr == TXT( "-" ) )
+        {
+            menu.AppendSeparator();
+        }
+        else
+        {
+            menu.Append( wxID_HIGHEST + count, itr->c_str() );
+        }
+    }
+
+    menu.Connect( wxID_HIGHEST, wxID_HIGHEST + (int)m_Control->GetContextMenu()->GetItems().size() - 1, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( Widget::OnContextMenuItem ), NULL, this );
+
+    m_Window->PopupMenu( &menu );
+}
+
+void Widget::OnContextMenuItem( wxCommandEvent& event )
+{
+    const tstring& item ( m_Control->GetContextMenu()->GetItems()[ event.GetId() - wxID_HIGHEST ] );
+
+    Inspect::M_ContextMenuDelegate::const_iterator found = m_Control->GetContextMenu()->GetDelegates().find(item);
+
+    if (found != m_Control->GetContextMenu()->GetDelegates().end())
+    {
+        found->second.Invoke( Inspect::ContextMenuEventArgs (m_Control, item) );
+    }
 }

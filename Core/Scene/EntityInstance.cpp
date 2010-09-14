@@ -411,7 +411,12 @@ void Entity::CreatePanel( CreatePanelArgs& args )
 
 tstring Entity::GetEntityAssetPath() const
 {
-    return GetPackage< Content::EntityInstance >()->GetEntity()->GetPath().Get();
+    Asset::Entity* entity = GetPackage< Content::EntityInstance >()->GetEntity();
+    if ( entity )
+    {
+        return entity->GetPath().Get();
+    }
+    return TXT("");
 }
 
 void Entity::SetEntityAssetPath( const tstring& entityClass )

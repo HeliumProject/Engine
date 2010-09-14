@@ -21,6 +21,7 @@ namespace Helium
         {
         public:
             Canvas( wxWindow* window );
+            ~Canvas();
 
             virtual wxWindow* GetWindow()
             {

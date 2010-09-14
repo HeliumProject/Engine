@@ -218,14 +218,14 @@ void SettingsDialog::SelectCanvas( SettingInfo* settingInfo )
 
     if ( m_CurrentSetting )
     {
-        m_SettingSizer->Show( m_CurrentSetting->m_Canvas->GetControl(), false );
+        m_SettingSizer->Show( m_CurrentSetting->m_Canvas->GetTreeWndCtrl(), false );
     }
 
     m_CurrentSetting = settingInfo;
 
     if ( m_CurrentSetting )
     {
-        m_SettingSizer->Show( m_CurrentSetting->m_Canvas->GetControl(), true );
+        m_SettingSizer->Show( m_CurrentSetting->m_Canvas->GetTreeWndCtrl(), true );
         m_CurrentSetting->m_Canvas->Realize( NULL );
     }
 

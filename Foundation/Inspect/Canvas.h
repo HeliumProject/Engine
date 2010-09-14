@@ -25,6 +25,7 @@ namespace Helium
         {
         public:
             Canvas();
+            ~Canvas();
 
             virtual void RealizeControl(Control* control) = 0;
             virtual void UnrealizeControl(Control* control) = 0;

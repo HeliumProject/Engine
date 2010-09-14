@@ -35,6 +35,11 @@ Canvas::Canvas( wxWindow* window )
     m_Window->Connect( m_Window->GetId(), wxEVT_RIGHT_DOWN, wxMouseEventHandler( Canvas::OnClick ), NULL, this );
 }
 
+Canvas::~Canvas()
+{
+    Clear();
+}
+
 void Canvas::OnShow(wxShowEvent& event)
 {
     e_Show.Raise( event.GetShow() );

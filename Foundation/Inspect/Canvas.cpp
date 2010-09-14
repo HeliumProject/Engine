@@ -12,3 +12,11 @@ Canvas::Canvas ()
     m_Border = 4;
     m_Pad = 2;
 }
+
+Canvas::~Canvas()
+{
+    // you *must* clear before destroying the canvas (since the canvas
+    //  must still be constructed when clearing its children because
+    //  Realize/Unrealize is pure virtual)
+    HELIUM_ASSERT( m_Children.empty() );
+}

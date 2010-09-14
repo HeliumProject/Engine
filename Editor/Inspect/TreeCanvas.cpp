@@ -78,6 +78,11 @@ TreeCanvas::TreeCanvas( TreeWndCtrl* treeWndCtrl )
     m_TreeWndCtrl->Connect( m_TreeWndCtrl->GetId(), wxEVT_COMMAND_TREE_ITEM_COLLAPSED, wxTreeEventHandler( TreeCanvas::OnToggle ), NULL, this );
 }
 
+TreeCanvas::~TreeCanvas()
+{
+
+}
+
 void TreeCanvas::OnSize(wxSizeEvent& event)
 {
     // to prevent the scroll bar from appearing during an OnSize event, need to 

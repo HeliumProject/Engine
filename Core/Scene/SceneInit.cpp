@@ -126,7 +126,7 @@ void Core::SceneInitialize()
     g_InitializerStack.Push( Locator::InitializeType, Locator::CleanupType );
     g_InitializerStack.Push( LocatorType::InitializeType, LocatorType::CleanupType );
     g_InitializerStack.Push( LocatorCreateTool::InitializeType, LocatorCreateTool::CleanupType );
-    g_InitializerStack.Push( Entity::InitializeType, Entity::CleanupType );
+    g_InitializerStack.Push( EntityInstance::InitializeType, EntityInstance::CleanupType );
     g_InitializerStack.Push( EntitySet::InitializeType, EntitySet::CleanupType );
     g_InitializerStack.Push( EntityType::InitializeType, EntityType::CleanupType );
     g_InitializerStack.Push( EntityInstanceCreateTool::InitializeType, EntityInstanceCreateTool::CleanupType );

@@ -34,8 +34,8 @@ namespace Helium
             void RemoveEntityType( Core::EntityType* entityType );
             void AddEntitySet( Core::EntitySet* classSet );
             void RemoveEntitySet( Core::EntitySet* classSet );
-            void AddEntity( Core::Entity* entity );
-            void RemoveEntity( Core::Entity* entity );
+            void AddEntityInstance( Core::EntityInstance* entityInstance );
+            void RemoveEntityInstance( Core::EntityInstance* entityInstance );
 
             // Overrides from SceneOutliner
             SortTreeCtrl* CreateTreeCtrl( wxWindow* parent, wxWindowID id ) HELIUM_OVERRIDE;

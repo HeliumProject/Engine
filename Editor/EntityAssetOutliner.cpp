@@ -138,7 +138,7 @@ void EntityAssetOutliner::AddEntitySet( Core::EntitySet* classSet )
         S_InstanceDumbPtr::const_iterator entityEnd = classSet->GetInstances().end();
         for ( ; entityItr != entityEnd; ++entityItr )
         {
-            AddEntity( Reflect::AssertCast< Core::Entity >(*entityItr) );
+            AddEntityInstance( Reflect::AssertCast< Core::EntityInstance >(*entityItr) );
         }
 
         m_TreeCtrl->EnableSorting( isSortingEnabled );
@@ -173,14 +173,14 @@ void EntityAssetOutliner::RemoveEntitySet( Core::EntitySet* classSet )
 // Adds the specified entity to the tree.  The entity will be parented under
 // its class set.
 // 
-void EntityAssetOutliner::AddEntity( Core::Entity* entity )
+void EntityAssetOutliner::AddEntityInstance( Core::EntityInstance* entityInstance )
 {
     EDITOR_SCOPE_TIMER( ("") );
 
     // Find the tree item that corresponds to the class set that this entity
     // belongs to.
-    HELIUM_ASSERT( entity->GetClassSet() );
-    M_TreeItems::const_iterator foundSet = m_Items.find( entity->GetClassSet() );
+    HELIUM_ASSERT( entityInstance->GetClassSet() );
+    M_TreeItems::const_iterator foundSet = m_Items.find( entityInstance->GetClassSet() );
     HELIUM_ASSERT( foundSet != m_Items.end() );
     if ( foundSet != m_Items.end() )
     {
@@ -188,7 +188,7 @@ void EntityAssetOutliner::AddEntity( Core::Entity* entity )
 
         // Add the entity as a child of the class set
         const wxTreeItemId& parent = foundSet->second;
-        wxTreeItemId insertedItem = AddItem( parent, entity->GetName(), entity->GetImageIndex(), new SceneOutlinerItemData( entity ), entity->IsSelected() );
+        wxTreeItemId insertedItem = AddItem( parent, entityInstance->GetName(), entityInstance->GetImageIndex(), new SceneOutlinerItemData( entityInstance ), entityInstance->IsSelected() );
         m_TreeCtrl->Thaw();
     }
 }
@@ -196,12 +196,12 @@ void EntityAssetOutliner::AddEntity( Core::Entity* entity )
 ///////////////////////////////////////////////////////////////////////////////
 // Removes the specified entity instance from the tree.
 // 
-void EntityAssetOutliner::RemoveEntity( Core::Entity* entity )
+void EntityAssetOutliner::RemoveEntityInstance( Core::EntityInstance* entityInstance )
 {
     EDITOR_SCOPE_TIMER( ("") );
 
     // Remove the item from the tree
-    DeleteItem( entity );
+    DeleteItem( entityInstance );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -299,7 +299,7 @@ void EntityAssetOutliner::SetRemoved( const Core::InstanceTypeChangeArgs& args )
 // 
 void EntityAssetOutliner::EntityAdded( const Core::InstanceSetChangeArgs& args )
 {
-    AddEntity( Reflect::AssertCast< Core::Entity >(args.m_Instance) );
+    AddEntityInstance( Reflect::AssertCast< Core::EntityInstance >(args.m_Instance) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -308,7 +308,7 @@ void EntityAssetOutliner::EntityAdded( const Core::InstanceSetChangeArgs& args )
 // 
 void EntityAssetOutliner::EntityRemoved( const Core::InstanceSetChangeArgs& args )
 {
-    RemoveEntity( Reflect::AssertCast< Core::Entity >(args.m_Instance) );
+    RemoveEntityInstance( Reflect::AssertCast< Core::EntityInstance >(args.m_Instance) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -345,7 +345,7 @@ void EntityAssetOutliner::OnBeginLabelEdit( wxTreeEvent& args )
 
     // If a valid Object was not found, or if the the object is not
     // an entity node, we won't allow it's name to be changed.
-    if ( !found || !found->HasType( Reflect::GetType< Core::Entity >() ) )
+    if ( !found || !found->HasType( Reflect::GetType< Core::EntityInstance >() ) )
     {
         args.Veto();
     }

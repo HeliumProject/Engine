@@ -11,7 +11,7 @@ using namespace Helium::Asset;
 using namespace Helium::Component;
 using namespace Helium::Content;
 
-REFLECT_DEFINE_CLASS(Entity);
+REFLECT_DEFINE_CLASS( EntityInstance );
 
 void EntityInstance::EnumerateClass( Reflect::Compositor< EntityInstance >& comp )
 {

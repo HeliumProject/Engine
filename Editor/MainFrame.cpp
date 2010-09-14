@@ -241,6 +241,11 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     m_ViewPanel->GetViewCanvas()->GetViewport().LoadSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
 
     //
+    // Disable accelerators, we'll handle them ourselves
+    //
+    m_MainMenuBar->SetAcceleratorTable( wxAcceleratorTable() );
+
+    //
     // Attach event handlers
     //
 
@@ -547,7 +552,9 @@ void MainFrame::OnMRUOpen( const MRUArgs& args )
 
 void MainFrame::OnChar(wxKeyEvent& event)
 {
-    switch (event.GetKeyCode())
+    int keyCode = event.GetKeyCode();
+
+    switch ( keyCode )
     {
     case WXK_SPACE:
         m_ViewPanel->GetViewCanvas()->GetViewport().NextCameraMode();
@@ -587,6 +594,15 @@ void MainFrame::OnChar(wxKeyEvent& event)
     case WXK_ESCAPE:
         GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsSelect) );
         event.Skip(false);
+        break;
+
+    case wxT( 'O' ):
+    case wxT( 'o' ):
+        if ( event.m_controlDown )
+        {
+            GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ID_Open ) );
+            event.Skip( false );
+        }
         break;
 
     default:

@@ -338,7 +338,7 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
 
     if ( data->HasType( Reflect::GetType<Asset::Entity>() ) )
     {
-        createdNode = new Core::Entity( this, Reflect::DangerousCast< Content::EntityInstance >( data ) );
+        createdNode = new Core::EntityInstance( this, Reflect::DangerousCast< Content::EntityInstance >( data ) );
     }
     else if ( data->HasType( Reflect::GetType<Content::Volume>() ) )
     {
@@ -2478,11 +2478,11 @@ Undo::CommandPtr Scene::SetGeometryShown( bool shown, bool selected )
     HM_SceneNodeDumbPtr::const_iterator end = m_Nodes.end();
     for ( ; itr != end; ++itr )
     {
-        Core::Entity* entity = Reflect::ObjectCast< Core::Entity >( itr->second );
+        Core::EntityInstance* entity = Reflect::ObjectCast< Core::EntityInstance >( itr->second );
         if ( entity && entity->IsSelected() == selected )
         {
             Undo::PropertyCommand<bool>* command = 
-                new Undo::PropertyCommand<bool> ( new Helium::MemberProperty<Core::Entity, bool> (entity, &Core::Entity::IsGeometryVisible, &Core::Entity::SetGeometryVisible), shown ); 
+                new Undo::PropertyCommand<bool> ( new Helium::MemberProperty<Core::EntityInstance, bool> (entity, &Core::EntityInstance::IsGeometryVisible, &Core::EntityInstance::SetGeometryVisible), shown ); 
 
             command->SetSignificant(false); 
             batch->Push( command );

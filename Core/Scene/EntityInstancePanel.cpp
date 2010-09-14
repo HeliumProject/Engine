@@ -26,19 +26,19 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SelectableDumb
 : InstancePanel (generator, selection)
 , m_EntityPath( NULL )
 {
-    a_Name.Set( TXT( "Entity" ) );
+    a_Name.Set( TXT( "EntityInstance" ) );
 
     m_Generator->PushContainer();
     {
         static const tstring helpText = TXT( "This sets the path on disk of the entity instance." );
         m_Generator->AddLabel( TXT( "Class Path" ) )->a_HelpText.Set( helpText );
 
-        m_EntityPath = m_Generator->AddValue<Core::Entity, tstring>( m_Selection, &Core::Entity::GetEntityAssetPath, &Core::Entity::SetEntityAssetPath );
+        m_EntityPath = m_Generator->AddValue<Core::EntityInstance, tstring>( m_Selection, &Core::EntityInstance::GetEntityAssetPath, &Core::EntityInstance::SetEntityAssetPath );
         m_EntityPath->a_HelpText.Set( helpText );
         m_EntityPath->e_ControlChanging.AddMethod( this, &EntityPanel::OnEntityAssetChanging );
         m_EntityPath->e_ControlChanged.AddMethod( this, &EntityPanel::OnEntityAssetChanged );
 
-        Inspect::FileDialogButton* fileButton = m_Generator->AddFileDialogButton<Core::Entity, tstring>( m_Selection, &Core::Entity::GetEntityAssetPath, &Core::Entity::SetEntityAssetPath );
+        Inspect::FileDialogButton* fileButton = m_Generator->AddFileDialogButton<Core::EntityInstance, tstring>( m_Selection, &Core::EntityInstance::GetEntityAssetPath, &Core::EntityInstance::SetEntityAssetPath );
         fileButton->e_ControlChanging.AddMethod( this, &EntityPanel::OnEntityAssetChanging );
         fileButton->e_ControlChanged.AddMethod( this, &EntityPanel::OnEntityAssetChanged );
         fileButton->a_HelpText.Set( TXT( "Clicking this button will allow you to select a different entity from the disk for this instance." ) );
@@ -83,7 +83,7 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SelectableDumb
     {
         static const tstring helpText = TXT( "This determines if a pointer should be drawn in the 3d view where this entity is placed." );
         m_Generator->AddLabel( TXT( "Show Pointer" ) )->a_HelpText.Set( helpText );
-        m_Generator->AddCheckBox<Core::Entity, bool>( m_Selection, &Core::Entity::IsPointerVisible, &Core::Entity::SetPointerVisible, false )->a_HelpText.Set( helpText );
+        m_Generator->AddCheckBox<Core::EntityInstance, bool>( m_Selection, &Core::EntityInstance::IsPointerVisible, &Core::EntityInstance::SetPointerVisible, false )->a_HelpText.Set( helpText );
     }
     m_Generator->Pop();
 
@@ -91,7 +91,7 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SelectableDumb
     {
         static const tstring helpText = TXT( "This determines if the bounding box for the entity should be drawn in the 3d view where this entity is placed." );
         m_Generator->AddLabel( TXT( "Show Bounds" ) )->a_HelpText.Set( helpText );
-        m_Generator->AddCheckBox<Core::Entity, bool>( m_Selection, &Core::Entity::IsBoundsVisible, &Core::Entity::SetBoundsVisible, false )->a_HelpText.Set( helpText );
+        m_Generator->AddCheckBox<Core::EntityInstance, bool>( m_Selection, &Core::EntityInstance::IsBoundsVisible, &Core::EntityInstance::SetBoundsVisible, false )->a_HelpText.Set( helpText );
     }
     m_Generator->Pop();
 
@@ -99,14 +99,14 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SelectableDumb
     {
         static const tstring helpText = TXT( "This determines if the entity's geometry should be drawn in the 3d view." );
         m_Generator->AddLabel( TXT( "Show Geometry" ) )->a_HelpText.Set( helpText );
-        m_Generator->AddCheckBox<Core::Entity, bool>( m_Selection, &Core::Entity::IsGeometryVisible,  &Core::Entity::SetGeometryVisible, false )->a_HelpText.Set( helpText );
+        m_Generator->AddCheckBox<Core::EntityInstance, bool>( m_Selection, &Core::EntityInstance::IsGeometryVisible,  &Core::EntityInstance::SetGeometryVisible, false )->a_HelpText.Set( helpText );
     }
     m_Generator->Pop();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Validation function for the controls that change the Entity Class field.
-// Returns true if the new value for the Entity Class field can be resolved to
+// Validation function for the controls that change the EntityInstance Class field.
+// Returns true if the new value for the EntityInstance Class field can be resolved to
 // a file TUID.
 //
 void EntityPanel::OnEntityAssetChanging( const Inspect::ControlChangingArgs& args )
@@ -149,7 +149,7 @@ void EntityPanel::OnEntityAssetRefresh( const Inspect::ButtonClickedArgs& args )
     OS_SelectableDumbPtr::Iterator selectionEnd = m_Selection.End();
     for (; selectionIter != selectionEnd; ++selectionIter )
     {
-        Core::Entity* entity = Reflect::ObjectCast< Core::Entity >( *selectionIter );
+        Core::EntityInstance* entity = Reflect::ObjectCast< Core::EntityInstance >( *selectionIter );
 
         if ( !scene )
         {
@@ -208,7 +208,7 @@ void EntityPanel::OnEntityAssetEditAsset( const Inspect::ButtonClickedArgs& args
     OS_SelectableDumbPtr::Iterator selectionEnd = m_Selection.End();
     for ( ; selectionIter != selectionEnd; ++selectionIter )
     {
-        Core::Entity* entity = Reflect::ObjectCast< Core::Entity >( *selectionIter );
+        Core::EntityInstance* entity = Reflect::ObjectCast< Core::EntityInstance >( *selectionIter );
         if ( entity )
         {
             tstring fileToEdit = entity->GetEntityAssetPath();

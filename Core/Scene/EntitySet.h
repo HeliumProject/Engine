@@ -10,7 +10,7 @@ namespace Helium
 {
     namespace Core
     {
-        class Entity;
+        class EntityInstance;
         class EntitySet;
         class EntityType;
         class PrimitiveCube;

@@ -35,7 +35,7 @@ ColorPickerWidget::ColorPickerWidget( Inspect::ColorPicker* colorPicker )
 
 void ColorPickerWidget::Create( wxWindow* parent )
 {
-    HELIUM_ASSERT( m_ColorPickerWindow );
+    HELIUM_ASSERT( !m_ColorPickerWindow );
 
     // allocate window and connect common listeners
     SetWindow( m_ColorPickerWindow = new ColorPickerWindow( parent, this ) );

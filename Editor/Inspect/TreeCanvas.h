@@ -14,6 +14,11 @@ namespace Helium
             // this is where tree-specific wx code happens
             TreeCanvas( TreeWndCtrl* treeWndCtrl );
 
+            TreeWndCtrl* GetControl()
+            {
+                return m_TreeWndCtrl;
+            }
+
             void OnSize(wxSizeEvent&);
             void OnToggle(wxTreeEvent&);
 

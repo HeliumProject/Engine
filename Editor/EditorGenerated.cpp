@@ -647,7 +647,7 @@ PropertiesPanelGenerated::PropertiesPanelGenerated( wxWindow* parent, wxWindowID
 	bSizer33->Fit( m_ControlsPanel );
 	bSizer32->Add( m_ControlsPanel, 0, wxEXPAND | wxALL, 2 );
 	
-	m_TreeWndCtrl = new Helium::TreeWndCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxScrolledWindowStyle | wxALWAYS_SHOW_SB | wxCLIP_CHILDREN | wxNO_BORDER, wxPanelNameStr,  wxTR_HIDE_ROOT );
+	m_TreeWndCtrl = new Helium::TreeWndCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxScrolledWindowStyle | wxALWAYS_SHOW_SB | wxCLIP_CHILDREN | wxNO_BORDER, wxPanelNameStr, wxTR_HIDE_ROOT );
 	bSizer32->Add( m_TreeWndCtrl, 1, wxALL|wxEXPAND, 5 );
 	
 	this->SetSizer( bSizer32 );

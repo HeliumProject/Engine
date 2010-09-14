@@ -53,12 +53,9 @@ int SettingsDialog::ShowModal( Core::SettingsManager* settingsManager )
         Reflect::ElementPtr clone = (*itr).second->Clone();
         clone->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &SettingsDialog::OnRefreshElements ) );
 
-        Helium::TreeWndCtrl* treeWndCtrl = new Helium::TreeWndCtrl( this );
+        Helium::TreeWndCtrl* treeWndCtrl = new Helium::TreeWndCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxScrolledWindowStyle | wxALWAYS_SHOW_SB | wxCLIP_CHILDREN | wxNO_BORDER, wxPanelNameStr, wxTR_HIDE_ROOT );
         Editor::TreeCanvasPtr canvas = new Editor::TreeCanvas( treeWndCtrl );
         canvasControls.push_back( canvas );
-#ifdef INSPECT_REFACTOR
-        canvas->SetPanelsExpanded( true );
-#endif
 
         m_SettingSizer->Add( treeWndCtrl, 1, wxEXPAND, 0 );
         m_SettingSizer->Show( treeWndCtrl, false );
@@ -67,6 +64,7 @@ int SettingsDialog::ShowModal( Core::SettingsManager* settingsManager )
         std::vector< Reflect::Element* > elems;
         elems.push_back( clone );
         interpreter->Interpret( elems );
+        m_Interpreters.push_back( interpreter );
 
         int index = propertiesListBox->Append( (*itr).second->GetTitle() );
         m_SettingInfo.insert( std::make_pair( index, new SettingInfo( (*itr).second, clone, canvas ) ) );
@@ -220,21 +218,15 @@ void SettingsDialog::SelectCanvas( SettingInfo* settingInfo )
 
     if ( m_CurrentSetting )
     {
-#ifdef INSPECT_REFACTOR
         m_SettingSizer->Show( m_CurrentSetting->m_Canvas->GetControl(), false );
-#endif
     }
 
     m_CurrentSetting = settingInfo;
 
     if ( m_CurrentSetting )
     {
-#ifdef INSPECT_REFACTOR
         m_SettingSizer->Show( m_CurrentSetting->m_Canvas->GetControl(), true );
-
-        m_CurrentSetting->m_Canvas->Layout();
-#endif
-        m_CurrentSetting->m_Canvas->Read();
+        m_CurrentSetting->m_Canvas->Realize( NULL );
     }
 
     m_SettingSizer->Layout();

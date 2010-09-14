@@ -5,6 +5,7 @@
 #include "Core/SettingsManager.h"
 
 #include "Foundation/Reflect/Element.h"
+#include "Foundation/Inspect/Interpreter.h"
 
 #include "Editor/API.h"
 #include "Editor/Inspect/Canvas.h"
@@ -47,8 +48,8 @@ namespace Helium
 
             wxSizer* m_SettingSizer;
             M_SettingInfo m_SettingInfo;
-
             SettingInfo* m_CurrentSetting;
+            std::vector< Inspect::InterpreterPtr > m_Interpreters;
         };
     }
 }

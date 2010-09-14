@@ -75,6 +75,11 @@ namespace Helium
                 HELIUM_ASSERT(container);
             }
 
+            ~Interpreter()
+            {
+
+            }
+
             //
             // These helpers provide a pinch point for connecting nested interpreter events into this object's event emitters
             //  It essentially keeps all the events emitted in nested interpreters emitting events in the parent interpreter

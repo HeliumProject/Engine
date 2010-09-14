@@ -308,14 +308,7 @@ namespace Helium
 			private:
 			
 			protected:
-				enum
-				{
-					ID_Open = 1000,
-				};
-				
 				wxPanel* m_MainPanel;
-				wxBitmapButton* m_OpenButton;
-				
 				wxPanel* m_ToolsPanel;
 				wxBitmapButton* m_PlayButton;
 				wxBitmapButton* m_PauseButton;
@@ -324,7 +317,6 @@ namespace Helium
 				wxPanel* m_ToolsPropertiesPanel;
 				
 				// Virtual event handlers, overide them in your derived class
-				virtual void OnOpen( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnSearchGoButtonClick( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnSearchTextEnter( wxCommandEvent& event ) { event.Skip(); }
 				

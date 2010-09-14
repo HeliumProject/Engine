@@ -308,7 +308,14 @@ namespace Helium
 			private:
 			
 			protected:
+				enum
+				{
+					ID_Open = 1000,
+				};
+				
 				wxPanel* m_MainPanel;
+				wxBitmapButton* m_OpenButton;
+				
 				wxPanel* m_ToolsPanel;
 				wxBitmapButton* m_PlayButton;
 				wxBitmapButton* m_PauseButton;
@@ -317,6 +324,7 @@ namespace Helium
 				wxPanel* m_ToolsPropertiesPanel;
 				
 				// Virtual event handlers, overide them in your derived class
+				virtual void OnOpen( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnSearchGoButtonClick( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnSearchTextEnter( wxCommandEvent& event ) { event.Skip(); }
 				
@@ -324,26 +332,8 @@ namespace Helium
 			public:
 				wxSearchCtrl* m_VaultSearchBox;
 				
-				ToolbarPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 939,70 ), long style = wxTAB_TRAVERSAL );
+				ToolbarPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 939,88 ), long style = wxTAB_TRAVERSAL );
 				~ToolbarPanelGenerated();
-			
-		};
-		
-		///////////////////////////////////////////////////////////////////////////////
-		/// Class ToolsPanelGenerated
-		///////////////////////////////////////////////////////////////////////////////
-		class ToolsPanelGenerated : public wxPanel 
-		{
-			private:
-			
-			protected:
-				wxPanel* m_ToolsContainerPanel;
-				wxPanel* m_PropertiesPanel;
-			
-			public:
-				
-				ToolsPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 218,369 ), long style = wxTAB_TRAVERSAL );
-				~ToolsPanelGenerated();
 			
 		};
 		

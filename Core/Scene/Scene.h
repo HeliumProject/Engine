@@ -340,7 +340,7 @@ namespace Helium
             Core::Viewport* m_View;
 
             // the tool in use by this scene
-            LToolPtr m_Tool;
+            ToolPtr m_Tool;
 
             // offset matrix for smart duplicate
             Math::Matrix4 m_SmartDuplicateMatrix;
@@ -394,8 +394,8 @@ namespace Helium
             const Helium::Path& GetPath() const;
 
             // get the current tool in use in this scene
-            const LToolPtr& GetTool();
-            void SetTool(const LToolPtr& tool);
+            const ToolPtr& GetTool();
+            void SetTool(const ToolPtr& tool);
 
             // support for zone color
             const Math::Color3& GetColor() const;

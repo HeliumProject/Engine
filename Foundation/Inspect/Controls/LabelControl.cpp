@@ -5,6 +5,7 @@
 using namespace Helium::Inspect;
 
 Label::Label()
+: a_Ellipsize( true )
 {
     a_ProportionalWidth.Set( 1.f/3.f );
 }

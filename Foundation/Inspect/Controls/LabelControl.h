@@ -20,6 +20,8 @@ namespace Helium
             {
                 Bind( new StringFormatter<tstring>( new tstring( text ), true ) );
             }
+
+            Attribute<bool> a_Ellipsize;
         };
 
         typedef Helium::SmartPtr<Label> LabelPtr;

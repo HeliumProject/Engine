@@ -175,8 +175,6 @@ void EntityInstanceCreateTool::CreateProperties()
             m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::EntityInstanceCreateTool, bool> (this, &EntityInstanceCreateTool::GetGeometryVisible, &EntityInstanceCreateTool::SetGeometryVisible) );
         }
         m_Generator->Pop();
-
-        __super::CreateProperties();
     }
     m_Generator->Pop();
 
@@ -184,6 +182,8 @@ void EntityInstanceCreateTool::CreateProperties()
     {
         AddEntityAsset( *itr );
     }
+
+    __super::CreateProperties();
 }
 
 tstring EntityInstanceCreateTool::GetEntityAsset() const

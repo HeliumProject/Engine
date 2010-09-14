@@ -140,12 +140,12 @@ const Helium::Path& Scene::GetPath() const
     return m_Path;
 }
 
-const LToolPtr& Scene::GetTool()
+const ToolPtr& Scene::GetTool()
 {
     return m_Tool;
 }
 
-void Scene::SetTool(const LToolPtr& tool)
+void Scene::SetTool(const ToolPtr& tool)
 {
     if (m_Tool.ReferencesObject())
     {

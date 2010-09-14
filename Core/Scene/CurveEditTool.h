@@ -25,7 +25,7 @@ namespace Helium
         }
         typedef CurveEditModes::CurveEditMode CurveEditMode;
 
-        class CORE_API CurveEditTool: public Tool
+        class CORE_API CurveEditTool : public Tool
         {
         private:
             SettingsManager* m_SettingsManager;

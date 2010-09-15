@@ -31,8 +31,6 @@ namespace Helium
                 long style = wxTAB_TRAVERSAL | wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE,
                 const wxString& name = wxT( "Editor::Viewport" ) );
 
-            DECLARE_EVENT_TABLE();
-
         public:
             void OnSize(wxSizeEvent& e);
             void OnPaint(wxPaintEvent& e);

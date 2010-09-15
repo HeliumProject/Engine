@@ -1,5 +1,9 @@
 #include "Precompile.h"
 
+#include "Editor/App.h"
+#include "Editor/EditorIDs.h"
+#include "Editor/EditorGenerated.h"
+
 #include "ViewPanel.h"
 #include "ArtProvider.h"
 
@@ -13,7 +17,7 @@ ViewPanel::ViewPanel( Core::SettingsManager* settingsManager, wxWindow *parent, 
 {
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )
     {
-//        Freeze();
+        //        Freeze();
 
         m_FrameOriginButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::FrameOrigin ) );
         m_FrameSelectedButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::FrameSelected ) );
@@ -110,5 +114,216 @@ ViewPanel::ViewPanel( Core::SettingsManager* settingsManager, wxWindow *parent, 
     //    m_ViewColorMenu->Check( colorModeItr->first, colorModeItr->second == colorMode );
     //}
 
+    Connect( wxEVT_CHAR, wxKeyEventHandler( ViewPanel::OnChar ), NULL, this );
+
+    Connect( ViewPanelEvents::Wireframe, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnRenderMode ), NULL, this );
+    Connect( ViewPanelEvents::Material, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnRenderMode ), NULL, this );
+    Connect( ViewPanelEvents::Texture, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnRenderMode ), NULL, this );
+    Connect( ViewPanelEvents::OrbitCamera, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+    Connect( ViewPanelEvents::FrontCamera, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+    Connect( ViewPanelEvents::SideCamera, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+    Connect( ViewPanelEvents::TopCamera, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+    Connect( ViewPanelEvents::FrameOrigin, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnFrameOrigin ), NULL, this );
+    Connect( ViewPanelEvents::FrameSelected, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnFrameSelected ), NULL, this );
+    Connect( ViewPanelEvents::ToggleHighlightMode, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnToggleHighlightMode ), NULL, this );
+    Connect( ViewPanelEvents::NextView, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnNextView ), NULL, this );
+    Connect( ViewPanelEvents::PreviousView, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnPreviousView ), NULL, this );
+
     Layout();
+}
+
+void ViewPanel::OnChar( wxKeyEvent& event )
+{
+    int keyCode = event.GetKeyCode();
+
+    switch ( keyCode )
+    {
+    case WXK_SPACE:
+        m_ViewCanvas->GetViewport().NextCameraMode();
+        event.Skip(false);
+        break;
+
+    case WXK_UP:
+        wxGetApp().GetFrame()->GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkUp) );
+        event.Skip(false);
+        break;
+
+    case WXK_DOWN:
+        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkDown) );
+        event.Skip(false);
+        break;
+
+    case WXK_RIGHT:
+        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkForward) );
+        event.Skip(false);
+        break;
+
+    case WXK_LEFT:
+        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkBackward) );
+        event.Skip(false);
+        break;
+
+    case WXK_INSERT:
+        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsPivot) );
+        event.Skip(false);
+        break;
+
+    case WXK_DELETE:
+        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, wxID_DELETE) );
+        event.Skip(false);
+        break;
+
+    case WXK_ESCAPE:
+        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsSelect) );
+        event.Skip(false);
+        break;
+
+        //
+        // ASCII has some strange key codes for ctrl-<letter> combos
+        //
+        //01 |   1         Ctrl-a         SOH 
+        //02 |   2         Ctrl-b         STX 
+        //03 |   3         Ctrl-c         ETX 
+        //04 |   4         Ctrl-d         EOT 
+        //05 |   5         Ctrl-e         ENQ 
+        //06 |   6         Ctrl-f         ACK 
+        //07 |   7         Ctrl-g         BEL 
+        //08 |   8         Ctrl-h         BS 
+        //09 |   9  Tab    Ctrl-i         HT 
+        //0A |  10         Ctrl-j         LF 
+        //0B |  11         Ctrl-k         VT 
+        //0C |  12         Ctrl-l         FF 
+        //0D |  13  Enter  Ctrl-m         CR 
+        //0E |  14         Ctrl-n         SO 
+        //0F |  15         Ctrl-o         SI 
+        //10 |  16         Ctrl-p         DLE 
+        //11 |  17         Ctrl-q         DC1 
+        //12 |  18         Ctrl-r         DC2 
+        //13 |  19         Ctrl-s         DC3 
+        //14 |  20         Ctrl-t         DC4 
+        //15 |  21         Ctrl-u         NAK 
+        //16 |  22         Ctrl-v         SYN 
+        //17 |  23         Ctrl-w         ETB 
+        //18 |  24         Ctrl-x         CAN 
+        //19 |  25         Ctrl-y         EM 
+        //1A |  26         Ctrl-z         SUB 
+        //1B |  27  Esc    Ctrl-[         ESC 
+        //1C |  28         Ctrl-\         FS 
+        //1D |  29         Ctrl-]         GS 
+
+    case 1: // ctrl-a
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_SELECTALL ) );
+        event.Skip( false );
+        break;
+
+    case 22: // ctrl-v
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_PASTE ) );
+        event.Skip( false );
+        break;
+
+    case 24: // ctrl-x
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_CUT ) );
+        event.Skip( false );
+        break;
+
+    case wxT( '4' ):
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ViewPanelEvents::Wireframe ) );
+        event.Skip( false );
+        break;
+
+    case wxT( '5' ):
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ViewPanelEvents::Material ) );
+        event.Skip( false );
+        break;
+
+    case wxT( '6' ):
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ViewPanelEvents::Texture ) );
+        event.Skip( false );
+        break;
+
+    case wxT( '7' ):
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ViewPanelEvents::OrbitCamera ) );
+        event.Skip( false );
+        break;
+
+    case wxT( '8' ):
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ViewPanelEvents::FrontCamera ) );
+        event.Skip( false );
+        break;
+
+    case wxT( '9' ):
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ViewPanelEvents::SideCamera ) );
+        event.Skip( false );
+        break;
+
+    case wxT( '0' ):
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ViewPanelEvents::TopCamera ) );
+        event.Skip( false );
+        break;
+
+    case wxT( 'o' ):
+    case wxT( 'O' ):
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ViewPanelEvents::FrameOrigin ) );
+        event.Skip( false );
+        break;
+
+    case wxT( 'f' ):
+    case wxT( 'F' ):
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ViewPanelEvents::FrameSelected ) );
+        event.Skip( false );
+        break;
+
+    case wxT( 'h' ):
+    case wxT( 'H' ):
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ViewPanelEvents::ToggleHighlightMode ) );
+        event.Skip( false );
+        break;
+
+    case wxT( ']' ):
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ViewPanelEvents::NextView ) );
+        event.Skip( false );
+        break;
+
+    case wxT( '[' ):
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ViewPanelEvents::PreviousView ) );
+        event.Skip( false );
+        break;
+
+    default:
+        event.Skip();
+        event.ResumePropagation( wxEVENT_PROPAGATE_MAX );
+        break;
+    }
+}
+
+void ViewPanel::OnRenderMode( wxCommandEvent& event )
+{
+}
+
+void ViewPanel::OnCamera( wxCommandEvent& event )
+{
+}
+
+void ViewPanel::OnFrameOrigin( wxCommandEvent& event )
+{
+}
+
+void ViewPanel::OnFrameSelected( wxCommandEvent& event )
+{
+}
+
+void ViewPanel::OnToggleHighlightMode( wxCommandEvent& event )
+{
+}
+
+void ViewPanel::OnNextView( wxCommandEvent& event )
+{
+    m_ViewCanvas->GetViewport().NextCameraMode();
+    Refresh();
+}
+
+void ViewPanel::OnPreviousView( wxCommandEvent& event )
+{
+    m_ViewCanvas->GetViewport().PreviousCameraMode();
+    Refresh();
 }

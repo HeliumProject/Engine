@@ -2,7 +2,7 @@
 
 #include <set>
 
-#include "Core/Scene/Object.h"
+#include "Foundation/Reflect/Object.h"
 
 #include "Editor/API.h"
 #include "Platform/Types.h"
@@ -23,7 +23,7 @@ namespace Helium
         protected:
             i32 m_HorizScrollPos;
             i32 m_VertScrollPos;
-            Core::S_Objects m_ExpandedObjects;
+            std::set< Reflect::Object* > m_ExpandedObjects;
 
         public:
             SceneOutlinerState();
@@ -34,10 +34,10 @@ namespace Helium
             void SetHorizontalScrollBarPos( i32 pos );
             i32 GetVerticalScrollBarPos() const;
             void SetVerticalScrollBarPos( i32 pos );
-            void AddExpandedObject( Core::Object* object );
-            void RemoveExpandedObject( Core::Object* object );
-            bool IsExpanded( Core::Object* object );
-            const Core::S_Objects& GetExpandedObjects() const;
+            void AddExpandedObject( Reflect::Object* object );
+            void RemoveExpandedObject( Reflect::Object* object );
+            bool IsExpanded( Reflect::Object* object );
+            const std::set< Reflect::Object* >& GetExpandedObjects() const;
         };
     }
 }

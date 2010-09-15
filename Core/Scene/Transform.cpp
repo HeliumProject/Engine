@@ -17,7 +17,7 @@ using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE( Core::Transform );
+REFLECT_DEFINE_ABSTRACT( Core::Transform );
 
 struct ScaleColorInfo
 {

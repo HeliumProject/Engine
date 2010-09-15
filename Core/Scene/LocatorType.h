@@ -30,7 +30,7 @@ namespace Helium
             //
 
         public:
-            SCENE_DECLARE_TYPE( Core::LocatorType, Core::InstanceType );
+            REFLECT_DECLARE_ABSTRACT( Core::LocatorType, Core::InstanceType );
             static void InitializeType();
             static void CleanupType();
 

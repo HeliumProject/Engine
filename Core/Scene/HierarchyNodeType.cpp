@@ -11,7 +11,7 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE( Core::HierarchyNodeType );
+REFLECT_DEFINE_ABSTRACT( Core::HierarchyNodeType );
 
 void HierarchyNodeType::InitializeType()
 {

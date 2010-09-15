@@ -13,7 +13,7 @@ using namespace Helium::Core;
 
 Content::LocatorShape LocatorCreateTool::s_Shape = Content::LocatorShapes::Cross;
 
-SCENE_DEFINE_TYPE(Core::LocatorCreateTool);
+REFLECT_DEFINE_ABSTRACT(Core::LocatorCreateTool);
 
 void LocatorCreateTool::InitializeType()
 {

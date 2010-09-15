@@ -12,7 +12,7 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE( Core::Layer );
+REFLECT_DEFINE_ABSTRACT( Core::Layer );
 
 ///////////////////////////////////////////////////////////////////////////////
 // Called once to prepare this class for use in the RTTI system.  Also sets

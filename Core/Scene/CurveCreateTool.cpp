@@ -17,7 +17,7 @@ Content::CurveType CurveCreateTool::s_CurveType = Content::CurveTypes::BSpline;
 bool CurveCreateTool::s_SurfaceSnap = false;
 bool CurveCreateTool::s_ObjectSnap = false;
 
-SCENE_DEFINE_TYPE(Core::CurveCreateTool);
+REFLECT_DEFINE_ABSTRACT(Core::CurveCreateTool);
 
 void CurveCreateTool::InitializeType()
 {

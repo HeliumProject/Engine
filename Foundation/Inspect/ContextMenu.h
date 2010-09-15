@@ -59,7 +59,6 @@ namespace Helium
             ContextMenu(Control* control);
             ~ContextMenu();
 
-        public:
             void AddItem(const tstring& item, ContextMenuSignature::Delegate delegate);
             void AddSeperator();
 
@@ -68,28 +67,15 @@ namespace Helium
                 return m_Items;
             }
 
-            void Resize(size_t size)
+            const M_ContextMenuDelegate& GetDelegates()
             {
-                m_Items.resize(size);
+                return m_Delegates;
             }
 
-            void Clear()
-            {
-                m_Items.clear();
-            }
-
-        protected:
-            void ControlRealized( Control* control );
-
-#ifdef INSPECT_REFACTOR
-            void OnShow( wxContextMenuEvent& event );
-            void OnItem( wxCommandEvent& event );
-#endif
-
-        protected:
+        private:
             Control*                m_Control;
-            std::vector< tstring >  m_Items;
             M_ContextMenuDelegate   m_Delegates;
+            std::vector< tstring >  m_Items;
         };
 
         typedef Helium::SmartPtr<ContextMenu> ContextMenuPtr;

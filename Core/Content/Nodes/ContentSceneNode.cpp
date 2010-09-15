@@ -1,5 +1,4 @@
 #include "ContentSceneNode.h"
-#include "Core/Content/ContentVisitor.h"
 
 using namespace Helium;
 using namespace Helium::Component;
@@ -13,17 +12,6 @@ void SceneNode::EnumerateClass( Reflect::Compositor<SceneNode>& comp )
     Reflect::Field* fieldDefaultName = comp.AddField( &SceneNode::m_DefaultName, "m_DefaultName", Reflect::FieldFlags::Hide );
     Reflect::Field* fieldGivenName = comp.AddField( &SceneNode::m_GivenName, "m_GivenName", Reflect::FieldFlags::Hide );
     Reflect::Field* fieldUseGivenName = comp.AddField( &SceneNode::m_UseGivenName, "m_UseGivenName", Reflect::FieldFlags::Hide );
-}
-
-
-void SceneNode::Host(ContentVisitor* visitor)
-{
-    visitor->VisitSceneNode(this); 
-}
-
-void SceneNode::PostLoad( Reflect::V_Element& elements )
-{
-    // Override if your node needs to do something
 }
 
 bool SceneNode::ProcessComponent( Reflect::ElementPtr element, const tstring& fieldName )

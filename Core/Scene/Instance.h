@@ -43,7 +43,7 @@ namespace Helium
             //
 
         public:
-            SCENE_DECLARE_TYPE( Core::Instance, Core::PivotTransform );
+            REFLECT_DECLARE_ABSTRACT( Core::Instance, Core::PivotTransform );
             static void InitializeType();
             static void CleanupType();
 

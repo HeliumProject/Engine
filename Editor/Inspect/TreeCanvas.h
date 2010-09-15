@@ -8,26 +8,33 @@ namespace Helium
 {
     namespace Editor
     {
-        class TreeCanvas : public Canvas
+        class TreeCanvas : public Reflect::ConcreteInheritor< TreeCanvas, Canvas >
         {
         public:
-            // this is where tree-specific wx code happens
-            TreeCanvas( TreeWndCtrl* treeWndCtrl );
+            TreeCanvas();
+            ~TreeCanvas();
 
-            TreeWndCtrl* GetControl()
+            TreeWndCtrl* GetTreeWndCtrl()
             {
                 return m_TreeWndCtrl;
             }
+            void SetTreeWndCtrl( TreeWndCtrl* ctrl );
 
-            void OnSize(wxSizeEvent&);
-            void OnToggle(wxTreeEvent&);
+            bool IsCollapsed( const tstring& path )
+            {
+                return m_Collapsed.find( path ) != m_Collapsed.end();
+            }
 
             virtual void Realize( Inspect::Canvas* canvas) HELIUM_OVERRIDE;
             virtual void Clear() HELIUM_OVERRIDE;
 
         private:
-            TreeWndCtrl*    m_TreeWndCtrl;
-            wxTreeItemId    m_RootId;
+            void OnSize(wxSizeEvent&);
+            void OnToggle(wxTreeEvent&);
+
+            TreeWndCtrl*        m_TreeWndCtrl;
+            wxTreeItemId        m_RootId;
+            std::set< tstring > m_Collapsed;
         };
 
         typedef Helium::SmartPtr< TreeCanvas > TreeCanvasPtr;

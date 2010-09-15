@@ -165,7 +165,7 @@ namespace Helium
             //
 
         public:
-            SCENE_DECLARE_TYPE( Core::SceneNode, Persistent );
+            REFLECT_DECLARE_ABSTRACT( Core::SceneNode, Persistent );
             static void InitializeType();
             static void CleanupType();
 

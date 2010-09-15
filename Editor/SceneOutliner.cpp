@@ -149,11 +149,11 @@ void SceneOutliner::DoRestoreState()
 
     if ( m_StateInfo.GetExpandedObjects().size() > 0 )
     {
-        S_Objects::const_iterator itr = m_StateInfo.GetExpandedObjects().begin();
-        S_Objects::const_iterator end = m_StateInfo.GetExpandedObjects().end();
+        std::set< Reflect::Object* >::const_iterator itr = m_StateInfo.GetExpandedObjects().begin();
+        std::set< Reflect::Object* >::const_iterator end = m_StateInfo.GetExpandedObjects().end();
         for ( ; itr != end; ++itr )
         {
-            Core::Object* object = *itr;
+            Reflect::Object* object = *itr;
             M_TreeItems::const_iterator found = m_Items.find( object );
             if ( found != m_Items.end() )
             {
@@ -233,7 +233,7 @@ wxTreeItemId SceneOutliner::AddItem( const wxTreeItemId& parent, const tstring& 
 ///////////////////////////////////////////////////////////////////////////////
 // Deletes the tree item associated with the specified Object.
 // 
-void SceneOutliner::DeleteItem( Object* object )
+void SceneOutliner::DeleteItem( Reflect::Object* object )
 {
     EDITOR_SCOPE_TIMER( ("") );
 
@@ -451,7 +451,7 @@ void SceneOutliner::OnEndLabelEdit( wxTreeEvent& args )
     if ( !args.IsEditCancelled() )
     {
         SceneOutlinerItemData* data = GetTreeItemData( args.GetItem() );
-        Object* object = data->GetObject();
+        Reflect::Object* object = data->GetObject();
         if ( object->HasType( Reflect::GetType<Core::SceneNode>() ) )
         {
             Core::SceneNode* node = Reflect::DangerousCast< Core::SceneNode >( object );
@@ -573,7 +573,7 @@ void SceneOutliner::OnCollapsed( wxTreeEvent& args )
 void SceneOutliner::OnDeleted( wxTreeEvent& args )
 {
     // If the object is a dependency node, disconnect our listeners from it
-    Object* object = GetTreeItemData( args.GetItem() )->GetObject();
+    Reflect::Object* object = GetTreeItemData( args.GetItem() )->GetObject();
     if ( object->HasType( Reflect::GetType<Core::SceneNode>() ) )
     {
         Core::SceneNode* node = Reflect::DangerousCast< Core::SceneNode >( object );

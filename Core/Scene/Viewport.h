@@ -273,6 +273,7 @@ namespace Helium
 
             void SetCameraMode(CameraMode mode);
             void NextCameraMode();
+            void PreviousCameraMode();
 
             GeometryMode GetGeometryMode() const
             {

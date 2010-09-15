@@ -17,7 +17,7 @@ namespace Helium
             //
 
         public:
-            SCENE_DECLARE_TYPE( Core::Layer, Core::SceneNode );
+            REFLECT_DECLARE_ABSTRACT( Core::Layer, Core::SceneNode );
             static void InitializeType();
             static void CleanupType();
 

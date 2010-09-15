@@ -6,7 +6,7 @@ namespace Helium
 {
     namespace Editor
     {
-        class Widget : public Reflect::AbstractInheritor< Widget, Inspect::Widget >
+        class Widget : public Reflect::AbstractInheritor< Widget, Inspect::Widget >, public wxEvtHandler
         {
         public:
             Widget()
@@ -40,6 +40,9 @@ namespace Helium
             virtual void ForegroundColorChanged( const Attribute<u32>::ChangeArgs& args );
             virtual void BackgroundColorChanged( const Attribute<u32>::ChangeArgs& args );
             virtual void HelpTextChanged( const Attribute<tstring>::ChangeArgs& args );
+
+            void OnContextMenu( wxContextMenuEvent& event );
+            void OnContextMenuItem( wxCommandEvent& event );
 
         protected:
             wxWindow*           m_Window;

@@ -60,7 +60,7 @@ namespace Helium
             Core::PrimitiveCone* m_ZCone;
             Math::Vector3 m_ZPosition;
 
-            SCENE_DECLARE_TYPE(Core::TranslateManipulator, Core::TransformManipulator);
+            REFLECT_DECLARE_ABSTRACT(Core::TranslateManipulator, Core::TransformManipulator);
             static void InitializeType();
             static void CleanupType();
 

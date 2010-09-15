@@ -16,8 +16,8 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-Canvas::Canvas( wxWindow* window )
-: m_Window( window )
+Canvas::Canvas()
+: m_Window( NULL )
 {
     SetWidgetCreator< LabelWidget, Inspect::Label >();
     SetWidgetCreator< ValueWidget, Inspect::Value >();
@@ -28,11 +28,32 @@ Canvas::Canvas( wxWindow* window )
     SetWidgetCreator< ListWidget, Inspect::List >();
     SetWidgetCreator< ButtonWidget, Inspect::Button >();
     SetWidgetCreator< FileDialogButtonWidget, Inspect::FileDialogButton >();
+}
 
-    m_Window->Connect( m_Window->GetId(), wxEVT_SHOW, wxShowEventHandler( Canvas::OnShow ), NULL, this );
-    m_Window->Connect( m_Window->GetId(), wxEVT_LEFT_DOWN, wxMouseEventHandler( Canvas::OnClick ), NULL, this );
-    m_Window->Connect( m_Window->GetId(), wxEVT_MIDDLE_DOWN, wxMouseEventHandler( Canvas::OnClick ), NULL, this );
-    m_Window->Connect( m_Window->GetId(), wxEVT_RIGHT_DOWN, wxMouseEventHandler( Canvas::OnClick ), NULL, this );
+Canvas::~Canvas()
+{
+    Clear();
+}
+
+void Canvas::SetWindow( wxWindow* window )
+{
+    if ( m_Window )
+    {
+        m_Window->Disconnect( m_Window->GetId(), wxEVT_SHOW, wxShowEventHandler( Canvas::OnShow ), NULL, this );
+        m_Window->Disconnect( m_Window->GetId(), wxEVT_LEFT_DOWN, wxMouseEventHandler( Canvas::OnClick ), NULL, this );
+        m_Window->Disconnect( m_Window->GetId(), wxEVT_MIDDLE_DOWN, wxMouseEventHandler( Canvas::OnClick ), NULL, this );
+        m_Window->Disconnect( m_Window->GetId(), wxEVT_RIGHT_DOWN, wxMouseEventHandler( Canvas::OnClick ), NULL, this );
+    }
+
+    m_Window = window;
+
+    if ( m_Window )
+    {
+        m_Window->Connect( m_Window->GetId(), wxEVT_SHOW, wxShowEventHandler( Canvas::OnShow ), NULL, this );
+        m_Window->Connect( m_Window->GetId(), wxEVT_LEFT_DOWN, wxMouseEventHandler( Canvas::OnClick ), NULL, this );
+        m_Window->Connect( m_Window->GetId(), wxEVT_MIDDLE_DOWN, wxMouseEventHandler( Canvas::OnClick ), NULL, this );
+        m_Window->Connect( m_Window->GetId(), wxEVT_RIGHT_DOWN, wxMouseEventHandler( Canvas::OnClick ), NULL, this );
+    }
 }
 
 void Canvas::OnShow(wxShowEvent& event)

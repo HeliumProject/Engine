@@ -22,7 +22,7 @@ using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE(Core::TranslateManipulator);
+REFLECT_DEFINE_ABSTRACT(Core::TranslateManipulator);
 
 
 void TranslateManipulator::InitializeType()

@@ -5,7 +5,7 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE(Core::Tool);
+REFLECT_DEFINE_ABSTRACT(Core::Tool);
 
 void Tool::InitializeType()
 {

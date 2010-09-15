@@ -5,8 +5,6 @@
 
 #include "Foundation/Reflect/ArchiveXML.h"
 
-#include "Core/Content/ContentVersion.h"
-#include "Core/Content/ContentScene.h"
 #include "Core/Asset/AssetClass.h"
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/InstanceSet.h"
@@ -138,6 +136,7 @@ MainFrame::MainFrame( Core::SettingsManager* settingsManager, wxWindow* parent, 
     //
     Connect( wxID_CLOSE, wxEVT_CLOSE_WINDOW, wxCloseEventHandler( MainFrame::OnExiting ) );
     Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( MainFrame::OnExiting ) );
+    Connect( wxID_SELECTALL, wxCommandEventHandler( MainFrame::OnSelectAll ) );
 
     /*
 EVT_MENU(wxID_HELP_INDEX, MainFrame::OnHelpIndex)
@@ -239,6 +238,11 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
 
     wxGetApp().GetSettingsManager()->GetSettings< WindowSettings >()->ApplyToWindow( this, &m_FrameManager, true );
     m_ViewPanel->GetViewCanvas()->GetViewport().LoadSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
+
+    //
+    // Disable accelerators, we'll handle them ourselves
+    //
+    m_MainMenuBar->SetAcceleratorTable( wxAcceleratorTable() );
 
     //
     // Attach event handlers
@@ -547,7 +551,9 @@ void MainFrame::OnMRUOpen( const MRUArgs& args )
 
 void MainFrame::OnChar(wxKeyEvent& event)
 {
-    switch (event.GetKeyCode())
+    int keyCode = event.GetKeyCode();
+
+    switch ( keyCode )
     {
     case WXK_SPACE:
         m_ViewPanel->GetViewCanvas()->GetViewport().NextCameraMode();
@@ -589,99 +595,73 @@ void MainFrame::OnChar(wxKeyEvent& event)
         event.Skip(false);
         break;
 
+        //
+        // ASCII has some strange key codes for ctrl-<letter> combos
+        //
+        //01 |   1         Ctrl-a         SOH 
+        //02 |   2         Ctrl-b         STX 
+        //03 |   3         Ctrl-c         ETX 
+        //04 |   4         Ctrl-d         EOT 
+        //05 |   5         Ctrl-e         ENQ 
+        //06 |   6         Ctrl-f         ACK 
+        //07 |   7         Ctrl-g         BEL 
+        //08 |   8         Ctrl-h         BS 
+        //09 |   9  Tab    Ctrl-i         HT 
+        //0A |  10         Ctrl-j         LF 
+        //0B |  11         Ctrl-k         VT 
+        //0C |  12         Ctrl-l         FF 
+        //0D |  13  Enter  Ctrl-m         CR 
+        //0E |  14         Ctrl-n         SO 
+        //0F |  15         Ctrl-o         SI 
+        //10 |  16         Ctrl-p         DLE 
+        //11 |  17         Ctrl-q         DC1 
+        //12 |  18         Ctrl-r         DC2 
+        //13 |  19         Ctrl-s         DC3 
+        //14 |  20         Ctrl-t         DC4 
+        //15 |  21         Ctrl-u         NAK 
+        //16 |  22         Ctrl-v         SYN 
+        //17 |  23         Ctrl-w         ETB 
+        //18 |  24         Ctrl-x         CAN 
+        //19 |  25         Ctrl-y         EM 
+        //1A |  26         Ctrl-z         SUB 
+        //1B |  27  Esc    Ctrl-[         ESC 
+        //1C |  28         Ctrl-\         FS 
+        //1D |  29         Ctrl-]         GS 
+
+    case 1: // ctrl-a
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_SELECTALL ) );
+        event.Skip( false );
+        break;
+
+    case 9: // ctrl-i
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ID_InvertSelection ) );
+        event.Skip( false );
+        break;
+
+    case 15: // ctrl-o
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ID_Open ) );
+        event.Skip( false );
+        break;
+
+    case 22: // ctrl-v
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_PASTE ) );
+        event.Skip( false );
+        break;
+
+    case 23: // ctrl-w
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ID_Close ) );
+        event.Skip( false );
+        break;
+
+    case 24: // ctrl-x
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_CUT ) );
+        event.Skip( false );
+        break;
+
     default:
         event.Skip();
+        event.ResumePropagation( wxEVENT_PROPAGATE_MAX );
         break;
-    }
-
-    if (event.GetSkipped())
-    {
-        switch ( event.GetKeyCode() )
-        {
-        case wxT('4'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewWireframe) );
-            event.Skip(false);
-            break;
-
-        case wxT('5'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewMaterial) );
-            event.Skip(false);
-            break;
-
-        case wxT('6'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewTexture) );
-            event.Skip(false);
-            break;
-
-        case wxT('7'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewOrbit) );
-            event.Skip(false);
-            break;
-
-        case wxT('8'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewFront) );
-            event.Skip(false);
-            break;
-
-        case wxT('9'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewSide) );
-            event.Skip(false);
-            break;
-
-        case wxT('0'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewTop) );
-            event.Skip(false);
-            break;
-
-        case wxT('Q'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsSelect) );
-            event.Skip(false);
-            break;
-
-        case wxT('W'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsTranslate) );
-            event.Skip(false);
-            break;
-
-        case wxT('E'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsRotate) );
-            event.Skip(false);
-            break;
-
-        case wxT('R'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsScale) );
-            event.Skip(false);
-            break;
-
-        case wxT('O'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewFrameOrigin) );
-            event.Skip(false);
-            break;
-
-        case wxT('F'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewFrameSelected) );
-            event.Skip(false);
-            break;
-
-        case wxT('H'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewHighlightMode) );
-            event.Skip(false);
-            break;
-
-        case wxT(']'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent ( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewNextView) );
-            event.Skip(false);
-            break;
-
-        case wxT('['):
-            GetEventHandler()->ProcessEvent( wxCommandEvent ( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewPreviousView) );
-            event.Skip(false);
-            break;
-
-        default:
-            event.Skip();
-            break;
-        }
     }
 }
 
@@ -1191,7 +1171,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
                         try
                         {
-                            Reflect::Archive::ToFile( elements, file.c_str(), new Content::ContentVersion (), m_SceneManager.GetCurrentScene() );
+                            Reflect::Archive::ToFile( elements, file.c_str(), NULL, m_SceneManager.GetCurrentScene() );
                         }
                         catch ( Helium::Exception& ex )
                         {
@@ -1697,25 +1677,28 @@ void MainFrame::OnDelete( wxCommandEvent& event )
     }
 }
 
-void MainFrame::OnSelectAll(wxCommandEvent& event)
+void MainFrame::OnSelectAll( wxCommandEvent& event )
 {
-    if ( m_SceneManager.HasCurrentScene() )
+    if ( !m_ViewPanel->HasFocus() || !m_SceneManager.HasCurrentScene() )
     {
-        OS_SelectableDumbPtr selection;
-
-        HM_SceneNodeDumbPtr::const_iterator itr = m_SceneManager.GetCurrentScene()->GetNodes().begin();
-        HM_SceneNodeDumbPtr::const_iterator end = m_SceneManager.GetCurrentScene()->GetNodes().end();
-        for ( ; itr != end; ++itr )
-        {
-            Core::SceneNode* sceneNode = itr->second;
-            if ( sceneNode->HasType( Reflect::GetType< Core::HierarchyNode >() ) )
-            {
-                selection.Append( sceneNode );
-            }
-        }
-
-        m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->GetSelection().SetItems( selection ) );
+        event.Skip();
+        return;
     }
+
+    OS_SelectableDumbPtr selection;
+
+    HM_SceneNodeDumbPtr::const_iterator itr = m_SceneManager.GetCurrentScene()->GetNodes().begin();
+    HM_SceneNodeDumbPtr::const_iterator end = m_SceneManager.GetCurrentScene()->GetNodes().end();
+    for ( ; itr != end; ++itr )
+    {
+        Core::SceneNode* sceneNode = itr->second;
+        if ( sceneNode->HasType( Reflect::GetType< Core::HierarchyNode >() ) )
+        {
+            selection.Append( sceneNode );
+        }
+    }
+
+    m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->GetSelection().SetItems( selection ) );
 }
 
 static void RecurseToggleSelection( Core::HierarchyNode* node, const OS_SelectableDumbPtr& oldSelection, OS_SelectableDumbPtr& newSelection )

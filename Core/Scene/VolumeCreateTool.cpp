@@ -13,7 +13,7 @@ using namespace Helium::Core;
 
 Content::VolumeShape VolumeCreateTool::s_Shape = Content::VolumeShapes::Cube;
 
-SCENE_DEFINE_TYPE(Core::VolumeCreateTool);
+REFLECT_DEFINE_ABSTRACT(Core::VolumeCreateTool);
 
 void VolumeCreateTool::InitializeType()
 {

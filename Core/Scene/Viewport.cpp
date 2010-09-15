@@ -242,6 +242,11 @@ void Viewport::NextCameraMode()
     SetCameraMode((CameraMode)((m_CameraMode + 1) % CameraModes::Count));
 }
 
+void Viewport::PreviousCameraMode()
+{
+    SetCameraMode( (CameraMode)( ( m_CameraMode + ( CameraModes::Count - 1 ) ) % CameraModes::Count ) );
+}
+
 void Viewport::NextGeometryMode()
 {
     SetGeometryMode((GeometryMode)((m_GeometryMode + 1) % GeometryModes::Count));

@@ -289,7 +289,7 @@ namespace Helium
         class Transform;
         typedef std::map< Helium::TUID, const Core::Transform* > M_TransformConstDumbPtr;
 
-        class CORE_API Scene : public Object, public Reflect::StatusHandler
+        class CORE_API Scene : public Reflect::Object, public Reflect::StatusHandler
         {
             //
             // Members
@@ -525,35 +525,12 @@ namespace Helium
                 {
                     if( itor->second->HasType( Reflect::GetType< T >() ) )
                     {
-                        if( !filterFunc )
+                        if ( !filterFunc || (*filterFunc)( itor->second ) )
                         {
                             objects.push_back( Reflect::AssertCast< T >( itor->second ) );
                         }
-                        else
-                        {
-                            if( (*filterFunc)( itor->second ) )
-                                objects.push_back( Reflect::AssertCast< T >( itor->second ) );
-                        }
                     }
                 }
-                /*
-                HMS_TypeToSceneNodeTypeDumbPtr::const_iterator found = GetNodeTypesByType().find( Reflect::GetType<T>() );
-                if ( found != GetNodeTypesByType().end() )
-                {
-                S_SceneNodeTypeDumbPtr::const_iterator typeItr = found->second.begin();
-                S_SceneNodeTypeDumbPtr::const_iterator typeEnd = found->second.end();
-                for ( ; typeItr != typeEnd; ++typeItr )
-                {
-                Core::SceneNodeType* nodeType = *typeItr;
-                HM_SceneNodeSmartPtr::const_iterator instItr = nodeType->GetInstances().begin();
-                HM_SceneNodeSmartPtr::const_iterator instEnd = nodeType->GetInstances().end();
-                for ( ; instItr != instEnd; ++instItr )
-                {
-                objects.push_back( Reflect::AssertCast< T >( instItr->second ) );
-                }
-                }
-                }
-                */
             }
 
             template< class T >

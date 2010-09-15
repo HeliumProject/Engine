@@ -14,7 +14,7 @@ using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE( Core::PivotTransform );
+REFLECT_DEFINE_ABSTRACT( Core::PivotTransform );
 
 void PivotTransform::InitializeType()
 {

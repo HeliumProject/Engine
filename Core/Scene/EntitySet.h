@@ -10,7 +10,7 @@ namespace Helium
 {
     namespace Core
     {
-        class Entity;
+        class EntityInstance;
         class EntitySet;
         class EntityType;
         class PrimitiveCube;
@@ -58,7 +58,7 @@ namespace Helium
             //
 
         public:
-            SCENE_DECLARE_TYPE( Core::EntitySet, Core::InstanceSet );
+            REFLECT_DECLARE_ABSTRACT( Core::EntitySet, Core::InstanceSet );
             static void InitializeType();
             static void CleanupType();
 

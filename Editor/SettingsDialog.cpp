@@ -54,7 +54,8 @@ int SettingsDialog::ShowModal( Core::SettingsManager* settingsManager )
         clone->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &SettingsDialog::OnRefreshElements ) );
 
         Helium::TreeWndCtrl* treeWndCtrl = new Helium::TreeWndCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxScrolledWindowStyle | wxALWAYS_SHOW_SB | wxCLIP_CHILDREN | wxNO_BORDER, wxPanelNameStr, wxTR_HIDE_ROOT );
-        Editor::TreeCanvasPtr canvas = new Editor::TreeCanvas( treeWndCtrl );
+        Editor::TreeCanvasPtr canvas = new Editor::TreeCanvas();
+        canvas->SetTreeWndCtrl( treeWndCtrl );
         canvasControls.push_back( canvas );
 
         m_SettingSizer->Add( treeWndCtrl, 1, wxEXPAND, 0 );
@@ -218,14 +219,14 @@ void SettingsDialog::SelectCanvas( SettingInfo* settingInfo )
 
     if ( m_CurrentSetting )
     {
-        m_SettingSizer->Show( m_CurrentSetting->m_Canvas->GetControl(), false );
+        m_SettingSizer->Show( m_CurrentSetting->m_Canvas->GetTreeWndCtrl(), false );
     }
 
     m_CurrentSetting = settingInfo;
 
     if ( m_CurrentSetting )
     {
-        m_SettingSizer->Show( m_CurrentSetting->m_Canvas->GetControl(), true );
+        m_SettingSizer->Show( m_CurrentSetting->m_Canvas->GetTreeWndCtrl(), true );
         m_CurrentSetting->m_Canvas->Realize( NULL );
     }
 

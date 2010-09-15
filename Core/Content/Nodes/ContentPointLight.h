@@ -10,10 +10,6 @@ namespace Helium
         class CORE_API PointLight : public Light
         {
         public:
-            virtual void Host(ContentVisitor* visitor); 
-
-
-
             PointLight ()
                 : m_InnerRadius( 0.0f )
                 , m_OuterRadius( 1.0f )

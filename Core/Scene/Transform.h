@@ -59,7 +59,7 @@ namespace Helium
             //
 
         public:
-            SCENE_DECLARE_TYPE( Core::Transform, Core::HierarchyNode );
+            REFLECT_DECLARE_ABSTRACT( Core::Transform, Core::HierarchyNode );
             static void InitializeType();
             static void CleanupType();
 

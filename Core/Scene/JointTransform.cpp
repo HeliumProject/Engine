@@ -19,7 +19,7 @@ using namespace Helium::Core;
 // Initialize static members
 static D3DMATERIAL9 g_JointTransformMaterial;
 
-SCENE_DEFINE_TYPE( Core::JointTransform );
+REFLECT_DEFINE_ABSTRACT( Core::JointTransform );
 
 void JointTransform::InitializeType()
 {

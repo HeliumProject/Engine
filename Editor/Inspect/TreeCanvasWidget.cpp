@@ -1,5 +1,6 @@
 #include "Precompile.h"
 #include "TreeCanvasWidget.h"
+#include "TreeCanvas.h"
 
 #include "Editor/FileIconsTable.h"
 
@@ -46,7 +47,13 @@ void TreeCanvasWidget::Create( wxWindow* parent )
         // add a tree item for this container
         int collapsedIndex = GlobalFileIconsTable().GetIconID( TXT( "ms_folder_closed" ) );
         int expandedIndex = GlobalFileIconsTable().GetIconID( TXT( "ms_folder_open" ) );
-        m_TreeWndCtrl->AppendItem( parentId, m_ContainerControl->a_Name.Get(), collapsedIndex, expandedIndex, &m_ItemData );
+        wxTreeItemId id = m_TreeWndCtrl->AppendItem( parentId, m_ContainerControl->a_Name.Get(), collapsedIndex, expandedIndex, &m_ItemData );
+
+        TreeCanvas* canvas = Reflect::AssertCast< TreeCanvas >( m_ContainerControl->GetCanvas() );
+        if ( !m_ContainerControl->GetPath().empty() && canvas->IsCollapsed( m_ContainerControl->GetPath() ) )
+        {
+            m_TreeWndCtrl->SetExpanded( id, false );
+        }
 
         // realize child controls
         for( Inspect::V_Control::const_iterator itr = m_ContainerControl->GetChildren().begin(), end = m_ContainerControl->GetChildren().end(); itr != end; ++itr )

@@ -17,7 +17,7 @@ using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE(Core::CreateTool);
+REFLECT_DEFINE_ABSTRACT(Core::CreateTool);
 
 IntersectionPlane CreateTool::s_PlaneSnap = IntersectionPlanes::Ground;
 

@@ -18,7 +18,7 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE(Core::EntityType);
+REFLECT_DEFINE_ABSTRACT(Core::EntityType);
 
 void EntityType::InitializeType()
 {
@@ -79,7 +79,7 @@ void EntityType::Delete()
 
 void EntityType::PopulateManifest(Asset::SceneManifest* manifest) const
 {
-    // iterate over every set in the Core::Entity type
+    // iterate over every set in the Core::EntityInstance type
     M_InstanceSetSmartPtr::const_iterator setItr = m_Sets.begin();
     M_InstanceSetSmartPtr::const_iterator setEnd = m_Sets.end();
     for ( ; setItr != setEnd; ++setItr )

@@ -35,7 +35,7 @@ namespace Helium
             //
 
         public:
-            SCENE_DECLARE_TYPE( Core::VolumeType, Core::InstanceType );
+            REFLECT_DECLARE_ABSTRACT( Core::VolumeType, Core::InstanceType );
             static void InitializeType();
             static void CleanupType();
 

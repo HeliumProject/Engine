@@ -16,7 +16,7 @@ using Helium::Insert;
 using namespace Helium;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE(Core::InstanceType);
+REFLECT_DEFINE_ABSTRACT(Core::InstanceType);
 
 void InstanceType::InitializeType()
 {

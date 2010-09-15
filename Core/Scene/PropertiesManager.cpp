@@ -68,16 +68,6 @@ void PropertiesManager::CreateProperties()
         m_Generator->Reset();
     }
 
-#ifdef INSPECT_REFACTOR
-    m_PreviousScroll = m_Generator->GetContainer()->GetWindow()->GetScroll();
-
-    // early out if we are not visible
-    if (!m_Generator->GetContainer()->GetWidget()->GetWindow()->IsShown())
-    {
-        return;
-    }
-#endif
-
     // early out if we have no objects to interpret
     if ( m_Selection.Empty() )
     {

@@ -22,7 +22,7 @@ bool EntityInstanceCreateTool::s_BoundsVisible = true;
 bool EntityInstanceCreateTool::s_GeometryVisible = false;
 std::vector< tstring > EntityInstanceCreateTool::s_RandomEntities;
 
-SCENE_DEFINE_TYPE(Core::EntityInstanceCreateTool);
+REFLECT_DEFINE_ABSTRACT(Core::EntityInstanceCreateTool);
 
 tstring EntityRowInfo::GetListName() const
 {
@@ -95,7 +95,7 @@ Core::TransformPtr EntityInstanceCreateTool::CreateNode()
             }
         }
 
-        EntityPtr entity = new Core::Entity (m_Scene, new Content::EntityInstance( entityClassPath.Get() ) );
+        EntityPtr entity = new Core::EntityInstance (m_Scene, new Content::EntityInstance( entityClassPath.Get() ) );
 
         entity->SetPointerVisible( s_PointerVisible );
         entity->SetBoundsVisible( s_BoundsVisible );
@@ -115,7 +115,7 @@ Core::TransformPtr EntityInstanceCreateTool::CreateNode()
 
 void EntityInstanceCreateTool::CreateProperties()
 {
-    m_Generator->PushContainer( TXT( "Entity" ) );
+    m_Generator->PushContainer( TXT( "EntityInstance" ) );
     {
         m_Generator->PushContainer();
         {
@@ -207,7 +207,7 @@ void EntityInstanceCreateTool::AddEntityAsset( const tstring& value )
     {
         if ( (*itr).m_ClassPath.Hash() == m_ClassPath.Hash() )
         {
-            Log::Warning( TXT( "Entity '%s' already exists in the random list of entities.\n" ), m_ClassPath.Filename().c_str() );
+            Log::Warning( TXT( "EntityInstance '%s' already exists in the random list of entities.\n" ), m_ClassPath.Filename().c_str() );
             return;
         }
     }

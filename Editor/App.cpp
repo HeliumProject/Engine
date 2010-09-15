@@ -46,7 +46,9 @@
 #include "Editor/Inspect/Widgets/ListWidget.h"
 #include "Editor/Inspect/Widgets/ButtonWidget.h"
 #include "Editor/Inspect/Widgets/FileDialogButtonWidget.h"
+#include "Editor/Inspect/TreeCanvas.h"
 #include "Editor/Inspect/TreeCanvasWidget.h"
+#include "Editor/Inspect/StripCanvas.h"
 #include "Editor/Inspect/StripCanvasWidget.h"
 
 #include <set>
@@ -223,7 +225,10 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::RegisterClassType< ListWidget >() );
     m_InitializerStack.Push( Reflect::RegisterClassType< ButtonWidget >() );
     m_InitializerStack.Push( Reflect::RegisterClassType< FileDialogButtonWidget >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::Canvas >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< TreeCanvas >() );
     m_InitializerStack.Push( Reflect::RegisterClassType< TreeCanvasWidget >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< StripCanvas >() );
     m_InitializerStack.Push( Reflect::RegisterClassType< StripCanvasWidget >() );
 
     // vault

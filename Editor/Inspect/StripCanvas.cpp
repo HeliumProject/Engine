@@ -7,11 +7,15 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-StripCanvas::StripCanvas( wxPanel* panel )
-: Canvas( panel )
-, m_Panel( panel )
+StripCanvas::StripCanvas()
+: m_Panel( NULL )
 {
     SetWidgetCreator< StripCanvasWidget, Container >();
+}
+
+void StripCanvas::SetPanel( wxPanel* panel )
+{
+    m_Panel = panel;
 }
 
 void StripCanvas::Realize( Inspect::Canvas* canvas )

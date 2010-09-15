@@ -3,7 +3,7 @@
 #include "Core/API.h"
 #include "Foundation/Automation/Event.h"     // for Helium::Delegate
 #include "Core/Scene/SceneNode.h"
-#include "Core/Scene/Object.h"
+#include "Foundation/Reflect/Object.h"
 
 namespace Helium
 {
@@ -49,7 +49,7 @@ namespace Helium
         // Evaluates dirty nodes when appropriate, and notifies interested listeners
         // that evaluation has occurred.
         // 
-        class CORE_API SceneGraph : public Object
+        class CORE_API SceneGraph : public Reflect::Object
         {
             //
             // Members
@@ -83,7 +83,7 @@ namespace Helium
             //
 
         public:
-            SCENE_DECLARE_TYPE( SceneGraph, Object );
+            REFLECT_DECLARE_ABSTRACT( SceneGraph, Reflect::Object );
             static void InitializeType();
             static void CleanupType();
 

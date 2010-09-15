@@ -14,8 +14,6 @@
 #include "Core/Asset/Classes/Entity.h"
 #include "Core/Asset/Manifests/SceneManifest.h"
 
-#include "Core/Content/ContentScene.h"
-#include "Core/Content/ContentVersion.h"
 #include "Core/Content/Nodes/ContentJointTransform.h"
 #include "Core/Content/Nodes/ContentPivotTransform.h"
 #include "Core/Content/Nodes/ContentMesh.h"
@@ -52,13 +50,9 @@
 #include "Volume.h"
 #include "Locator.h"
 #include "Light.h"
-#include "SpotLight.h"
-#include "PointLight.h"
-#include "DirectionalLight.h"
-#include "AmbientLight.h"
+
 #include "Foundation/String/Utilities.h"
 #include "Foundation/Math/AngleAxis.h"
-
 #include "Foundation/Log.h"
 
 #define snprintf _snprintf
@@ -250,12 +244,9 @@ Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u
 
     bool success = true;
 
-
-    Content::ScenePtr scene = new Content::Scene();
-
     try
     {
-        scene->Load( path, elements, this );
+        Reflect::Archive::FromFile( path, elements );
     }
     catch ( const Helium::Exception& exception )
     {
@@ -306,11 +297,9 @@ Undo::CommandPtr Scene::ImportXML( const tstring& xml, u32 importFlags, Core::Hi
 
     bool success = true;
 
-    Content::ScenePtr scene = new Content::Scene();
-
     try
     {
-        scene->LoadXML( xml, elements, this );
+        Reflect::ArchiveXML::FromString( xml, elements );
     }
     catch ( Helium::Exception& exception )
     {
@@ -338,7 +327,7 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
 
     if ( data->HasType( Reflect::GetType<Asset::Entity>() ) )
     {
-        createdNode = new Core::Entity( this, Reflect::DangerousCast< Content::EntityInstance >( data ) );
+        createdNode = new Core::EntityInstance( this, Reflect::DangerousCast< Content::EntityInstance >( data ) );
     }
     else if ( data->HasType( Reflect::GetType<Content::Volume>() ) )
     {
@@ -347,22 +336,6 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
     else if ( data->HasType( Reflect::GetType<Content::Locator>() ) )
     {
         createdNode = new Core::Locator( this, Reflect::DangerousCast< Content::Locator >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::DirectionalLight>() ) )
-    {
-        createdNode = new Core::DirectionalLight( this, Reflect::DangerousCast< Content::DirectionalLight >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::SpotLight>() ) )
-    {
-        createdNode = new Core::SpotLight( this, Reflect::DangerousCast< Content::SpotLight >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::PointLight>() ) )
-    {
-        createdNode = new Core::PointLight( this, Reflect::DangerousCast< Content::PointLight >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::AmbientLight>() ) )
-    {
-        createdNode = new Core::AmbientLight( this, Reflect::DangerousCast< Content::AmbientLight >( data ) );
     }
     else if ( data->HasType( Reflect::GetType<Content::Shader>() ) )
     {
@@ -1009,7 +982,7 @@ bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
     {
         try
         {
-            Reflect::Archive::ToFile( spool, path.Get(), new Content::ContentVersion (), this );
+            Reflect::Archive::ToFile( spool, path.Get(), NULL, this );
         }
         catch ( Helium::Exception& ex )
         {
@@ -2478,11 +2451,11 @@ Undo::CommandPtr Scene::SetGeometryShown( bool shown, bool selected )
     HM_SceneNodeDumbPtr::const_iterator end = m_Nodes.end();
     for ( ; itr != end; ++itr )
     {
-        Core::Entity* entity = Reflect::ObjectCast< Core::Entity >( itr->second );
+        Core::EntityInstance* entity = Reflect::ObjectCast< Core::EntityInstance >( itr->second );
         if ( entity && entity->IsSelected() == selected )
         {
             Undo::PropertyCommand<bool>* command = 
-                new Undo::PropertyCommand<bool> ( new Helium::MemberProperty<Core::Entity, bool> (entity, &Core::Entity::IsGeometryVisible, &Core::Entity::SetGeometryVisible), shown ); 
+                new Undo::PropertyCommand<bool> ( new Helium::MemberProperty<Core::EntityInstance, bool> (entity, &Core::EntityInstance::IsGeometryVisible, &Core::EntityInstance::SetGeometryVisible), shown ); 
 
             command->SetSignificant(false); 
             batch->Push( command );

@@ -137,7 +137,7 @@ namespace Helium
 
         class ResourceTracker;
 
-        class Resource : public Object
+        class Resource : public Reflect::Object
         {
         protected:
             // type

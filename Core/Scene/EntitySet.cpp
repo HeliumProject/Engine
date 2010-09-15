@@ -17,7 +17,7 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE(Core::EntitySet);
+REFLECT_DEFINE_ABSTRACT(Core::EntitySet);
 
 void EntitySet::InitializeType()
 {
@@ -134,7 +134,7 @@ void EntitySet::Delete()
 void EntitySet::AddInstance(Core::Instance* i)
 {
     // set class link (must be done before calling base class)
-    Reflect::AssertCast<Core::Entity>(i)->SetClassSet(this);
+    Reflect::AssertCast<Core::EntityInstance>(i)->SetClassSet(this);
 
     __super::AddInstance(i);
 }
@@ -144,5 +144,5 @@ void EntitySet::RemoveInstance(Core::Instance* i)
     __super::RemoveInstance(i);
 
     // remove class link (must be done after calling base class)
-    Reflect::AssertCast<Core::Entity>(i)->SetClassSet(NULL);
+    Reflect::AssertCast<Core::EntityInstance>(i)->SetClassSet(NULL);
 }

@@ -10,10 +10,10 @@ namespace Helium
     {
         struct LightmapTweakArgs
         {
-            class Entity* m_Entity;
+            class EntityInstance* m_Entity;
             u32      m_LightmapSetIndex;
 
-            LightmapTweakArgs( class Core::Entity* entity, u32 lightmapSetIndex )
+            LightmapTweakArgs( class Core::EntityInstance* entity, u32 lightmapSetIndex )
                 : m_Entity( entity )
                 , m_LightmapSetIndex( lightmapSetIndex )
             {}
@@ -22,9 +22,9 @@ namespace Helium
 
         struct CubemapTweakArgs
         {
-            class Entity* m_Entity;
+            class EntityInstance* m_Entity;
 
-            CubemapTweakArgs( class Core::Entity* entity )
+            CubemapTweakArgs( class Core::EntityInstance* entity )
                 : m_Entity( entity )
             {}
         };
@@ -32,11 +32,11 @@ namespace Helium
 
         struct EntityAssetChangeArgs
         {
-            class Core::Entity* m_Entity;
+            class Core::EntityInstance* m_Entity;
             Helium::Path m_OldPath;
             Helium::Path m_NewPath;
 
-            EntityAssetChangeArgs( class Core::Entity* entity, const Helium::Path& oldPath, const Helium::Path& newPath )
+            EntityAssetChangeArgs( class Core::EntityInstance* entity, const Helium::Path& oldPath, const Helium::Path& newPath )
                 : m_Entity( entity )
                 , m_OldPath( oldPath )
                 , m_NewPath( newPath )
@@ -47,7 +47,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // Editor's wrapper for an entity instance.
         //
-        class CORE_API Entity : public Core::Instance
+        class CORE_API EntityInstance : public Core::Instance
         {
             //
             // Members
@@ -58,14 +58,14 @@ namespace Helium
             mutable Core::ScenePtr m_Scene;
 
         public:
-            SCENE_DECLARE_TYPE( Core::Entity, Core::Instance );
+            REFLECT_DECLARE_ABSTRACT( Core::EntityInstance, Core::Instance );
             static void InitializeType();
             static void CleanupType();
 
 
-            Entity(Core::Scene* parent);
-            Entity(Core::Scene* parent, Content::EntityInstance* entity);
-            virtual ~Entity();
+            EntityInstance(Core::Scene* parent);
+            EntityInstance(Core::Scene* parent, Content::EntityInstance* entity);
+            virtual ~EntityInstance();
 
             void ConstructorInit();
 
@@ -178,7 +178,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::SmartPtr<Core::Entity> EntityPtr;
-        typedef std::vector<Core::Entity*> V_EntityDumbPtr;
+        typedef Helium::SmartPtr<Core::EntityInstance> EntityPtr;
+        typedef std::vector<Core::EntityInstance*> V_EntityDumbPtr;
     }
 }

@@ -4,14 +4,13 @@
 #include "Foundation/Component/ComponentHandle.h"
 
 #include "Core/Asset/AssetClass.h"
-#include "Core/Content/ContentScene.h"
 
 using namespace Helium;
 using namespace Helium::Asset;
 using namespace Helium::Component;
 using namespace Helium::Content;
 
-REFLECT_DEFINE_CLASS(Entity);
+REFLECT_DEFINE_CLASS( EntityInstance );
 
 void EntityInstance::EnumerateClass( Reflect::Compositor< EntityInstance >& comp )
 {

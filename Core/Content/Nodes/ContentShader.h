@@ -49,8 +49,6 @@ namespace Helium
             {
             }
 
-            virtual void Host(ContentVisitor* visitor); 
-
         public:
 
             REFLECT_DECLARE_CLASS(Shader, SceneNode);

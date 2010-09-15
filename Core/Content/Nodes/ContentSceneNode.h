@@ -9,7 +9,6 @@ namespace Helium
 {
     namespace Content
     {
-        class ContentVisitor;
         class Scene;
 
         //
@@ -20,8 +19,6 @@ namespace Helium
         class CORE_API SceneNode : public Component::ComponentCollection
         {
         public:
-            virtual void Host(ContentVisitor* visitor); 
-
             // The ID of the node
             Helium::TUID m_ID;
 
@@ -56,9 +53,6 @@ namespace Helium
             REFLECT_DECLARE_ABSTRACT(SceneNode, Component::ComponentCollection);
 
             static void EnumerateClass( Reflect::Compositor<SceneNode>& comp );
-
-            // Called after scene is loaded; can be used to fix up legacy data. Add newly created nodes to elements.
-            virtual void PostLoad( Reflect::V_Element& elements );
 
             // migrate m_Name
             virtual bool ProcessComponent( Reflect::ElementPtr element, const tstring& fieldName ) HELIUM_OVERRIDE;

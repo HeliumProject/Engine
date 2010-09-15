@@ -30,7 +30,7 @@ namespace Helium
 
             SettingsManager* m_SettingsManager;
 
-            SCENE_DECLARE_TYPE(Core::ScaleManipulator, Core::TransformManipulator);
+            REFLECT_DECLARE_ABSTRACT(Core::ScaleManipulator, Core::TransformManipulator);
             static void InitializeType();
             static void CleanupType();
 

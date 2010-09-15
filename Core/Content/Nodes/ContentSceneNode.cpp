@@ -14,11 +14,6 @@ void SceneNode::EnumerateClass( Reflect::Compositor<SceneNode>& comp )
     Reflect::Field* fieldUseGivenName = comp.AddField( &SceneNode::m_UseGivenName, "m_UseGivenName", Reflect::FieldFlags::Hide );
 }
 
-void SceneNode::PostLoad( Reflect::V_Element& elements )
-{
-    // Override if your node needs to do something
-}
-
 bool SceneNode::ProcessComponent( Reflect::ElementPtr element, const tstring& fieldName )
 {
     if ( fieldName == TXT( "m_Name" ) )

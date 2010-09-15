@@ -14,7 +14,7 @@ using namespace Helium::Math;
 using namespace Helium::Core;
 
 // RTTI
-SCENE_DEFINE_TYPE(Core::Locator);
+REFLECT_DEFINE_ABSTRACT(Core::Locator);
 
 void Locator::InitializeType()
 {

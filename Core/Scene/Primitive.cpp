@@ -4,7 +4,7 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE(Core::Primitive);
+REFLECT_DEFINE_ABSTRACT(Core::Primitive);
 
 void Primitive::InitializeType()
 {

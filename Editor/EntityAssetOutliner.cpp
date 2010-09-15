@@ -341,7 +341,7 @@ void EntityAssetOutliner::NodeTypeRemoved( const Core::NodeTypeExistenceArgs& ar
 // 
 void EntityAssetOutliner::OnBeginLabelEdit( wxTreeEvent& args )
 {
-    Object* found = GetTreeItemData( args.GetItem() )->GetObject();
+    Reflect::Object* found = GetTreeItemData( args.GetItem() )->GetObject();
 
     // If a valid Object was not found, or if the the object is not
     // an entity node, we won't allow it's name to be changed.

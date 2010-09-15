@@ -15,7 +15,7 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE(Core::VolumeType);
+REFLECT_DEFINE_ABSTRACT(Core::VolumeType);
 
 void VolumeType::InitializeType()
 {

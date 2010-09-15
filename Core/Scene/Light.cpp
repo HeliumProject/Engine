@@ -18,7 +18,7 @@ using namespace Helium::Math;
 using namespace Helium::Core;
 
 // RTTI
-SCENE_DEFINE_TYPE(Core::Light);
+REFLECT_DEFINE_ABSTRACT(Core::Light);
 
 // statics
 D3DMATERIAL9 Light::s_Material;
@@ -39,7 +39,6 @@ void Light::CleanupType()
 
 Light::Light(Core::Scene* scene, Content::Light* light)
 : Core::Instance ( scene, light )
-, m_SelectionHelper(LightSelectionChoices::NumLightSelectionChoices)
 {
 
 }
@@ -160,6 +159,4 @@ Color3 Light::GetColor() const
 void Light::SetColor( Color3 color )
 {
     GetPackage< Content::Light >()->m_Color = color;
-
-    m_Changed.Raise( LightChangeArgs( this ) );
 }

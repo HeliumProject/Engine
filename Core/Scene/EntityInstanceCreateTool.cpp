@@ -22,7 +22,7 @@ bool EntityInstanceCreateTool::s_BoundsVisible = true;
 bool EntityInstanceCreateTool::s_GeometryVisible = false;
 std::vector< tstring > EntityInstanceCreateTool::s_RandomEntities;
 
-SCENE_DEFINE_TYPE(Core::EntityInstanceCreateTool);
+REFLECT_DEFINE_ABSTRACT(Core::EntityInstanceCreateTool);
 
 tstring EntityRowInfo::GetListName() const
 {

@@ -130,7 +130,7 @@ namespace Helium
             //
         public:
 
-            SCENE_DECLARE_TYPE(Core::CreateTool, Tool);
+            REFLECT_DECLARE_ABSTRACT(Core::CreateTool, Tool);
             static void InitializeType();
             static void CleanupType();
 

@@ -661,14 +661,6 @@
 				Name="Nodes"
 				>
 				<File
-					RelativePath=".\Content\Nodes\ContentAmbientLight.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentAmbientLight.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Content\Nodes\ContentCamera.cpp"
 					>
 				</File>
@@ -682,14 +674,6 @@
 				</File>
 				<File
 					RelativePath=".\Content\Nodes\ContentCurve.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentDirectionalLight.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentDirectionalLight.h"
 					>
 				</File>
 				<File
@@ -781,14 +765,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Content\Nodes\ContentPointLight.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentPointLight.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Content\Nodes\ContentSceneNode.cpp"
 					>
 				</File>
@@ -810,14 +786,6 @@
 				</File>
 				<File
 					RelativePath=".\Content\Nodes\ContentSkin.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentSpotLight.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentSpotLight.h"
 					>
 				</File>
 				<File
@@ -1038,14 +1006,6 @@
 			Name="Scene"
 			>
 			<File
-				RelativePath=".\Scene\Object.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\Object.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scene\Persistent.cpp"
 				>
 			</File>
@@ -1177,14 +1137,6 @@
 				Name="Scene Graph"
 				>
 				<File
-					RelativePath=".\Scene\AmbientLight.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\AmbientLight.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Scene\CreateTool.cpp"
 					>
 				</File>
@@ -1214,14 +1166,6 @@
 				</File>
 				<File
 					RelativePath=".\Scene\CurveEditTool.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\DirectionalLight.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\DirectionalLight.h"
 					>
 				</File>
 				<File
@@ -1385,14 +1329,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\PointLight.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PointLight.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Scene\Scene.cpp"
 					>
 				</File>
@@ -1454,14 +1390,6 @@
 				</File>
 				<File
 					RelativePath=".\Scene\Skin.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\SpotLight.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\SpotLight.h"
 					>
 				</File>
 				<File

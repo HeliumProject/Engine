@@ -13,7 +13,7 @@ using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE( Core::Mesh );
+REFLECT_DEFINE_ABSTRACT( Core::Mesh );
 
 D3DMATERIAL9 Mesh::s_WireMaterial;
 D3DMATERIAL9 Mesh::s_FillMaterial;

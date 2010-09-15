@@ -33,7 +33,7 @@ namespace Helium
             // Runtime Type Info
             //
 
-            SCENE_DECLARE_TYPE( Shader, Core::SceneNode );
+            REFLECT_DECLARE_ABSTRACT( Shader, Core::SceneNode );
             static void InitializeType();
             static void CleanupType();
 

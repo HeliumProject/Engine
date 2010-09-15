@@ -39,7 +39,7 @@ namespace Helium
             // UI
             Core::PrimitiveCircle* m_Ring;
 
-            SCENE_DECLARE_TYPE(Core::RotateManipulator, Core::TransformManipulator);
+            REFLECT_DECLARE_ABSTRACT(Core::RotateManipulator, Core::TransformManipulator);
             static void InitializeType();
             static void CleanupType();
 

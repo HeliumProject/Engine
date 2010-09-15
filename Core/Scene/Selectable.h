@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Core/Scene/Object.h"
-
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Container/OrderedSet.h"
+
+#include "Core/API.h"
 
 namespace Helium
 {
@@ -11,13 +12,13 @@ namespace Helium
         class PropertiesGenerator;
         struct EnumerateElementArgs;
 
-        class CORE_API Selectable : public Object
+        class CORE_API Selectable : public Reflect::Object
         {
         protected:
             bool m_Selected;
 
         public:
-            SCENE_DECLARE_TYPE( Selectable, Object );
+            REFLECT_DECLARE_ABSTRACT( Selectable, Reflect::Object );
 
             Selectable();
             virtual ~Selectable();

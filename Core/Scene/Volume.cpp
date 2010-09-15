@@ -17,7 +17,7 @@ using namespace Helium::Math;
 using namespace Helium::Core;
 
 // RTTI
-SCENE_DEFINE_TYPE(Core::Volume);
+REFLECT_DEFINE_ABSTRACT(Core::Volume);
 
 void Volume::InitializeType()
 {

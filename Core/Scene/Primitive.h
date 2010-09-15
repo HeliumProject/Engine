@@ -35,7 +35,7 @@ namespace Helium
             //
 
         public:
-            SCENE_DECLARE_TYPE(Core::Primitive, Object);
+            REFLECT_DECLARE_ABSTRACT( Primitive, Reflect::Object );
             static void InitializeType();
             static void CleanupType();
 

@@ -23,7 +23,7 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE( Core::Curve );
+REFLECT_DEFINE_ABSTRACT( Core::Curve );
 
 D3DMATERIAL9 Core::Curve::s_Material;
 D3DMATERIAL9 Core::Curve::s_HullMaterial;

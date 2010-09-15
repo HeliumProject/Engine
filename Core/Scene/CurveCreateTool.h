@@ -39,7 +39,7 @@ namespace Helium
             // RTTI
             //
 
-            SCENE_DECLARE_TYPE(Core::CurveCreateTool, Tool);
+            REFLECT_DECLARE_ABSTRACT(Core::CurveCreateTool, Tool);
             static void InitializeType();
             static void CleanupType();
 

@@ -3,7 +3,7 @@
 #include "Foundation/Input.h"
 
 #include "Core/API.h"
-#include "Core/Scene/Object.h"
+#include "Foundation/Reflect/Object.h"
 #include "Core/Scene/Selection.h"
 #include "Core/Scene/Viewport.h"
 
@@ -26,7 +26,7 @@ namespace Helium
         };
         typedef Helium::Signature< PickArgs& > PickSignature;
 
-        class CORE_API Tool HELIUM_ABSTRACT : public Object
+        class CORE_API Tool HELIUM_ABSTRACT : public Reflect::Object
         {
             //
             // Members
@@ -49,7 +49,7 @@ namespace Helium
             PickSignature::Event m_PickWorld;
 
         public:
-            SCENE_DECLARE_TYPE(Core::Tool, Object);
+            REFLECT_DECLARE_ABSTRACT( Tool, Reflect::Object );
             static void InitializeType();
             static void CleanupType();
 

@@ -147,7 +147,7 @@ void NodeTypeOutliner::RemoveInstance( Core::SceneNode* instance )
 // 
 void NodeTypeOutliner::OnBeginLabelEdit( wxTreeEvent& args )
 {
-    Object* found = GetTreeItemData( args.GetItem() )->GetObject();
+    Reflect::Object* found = GetTreeItemData( args.GetItem() )->GetObject();
 
     // If a valid Object was not found, or if the the object is not
     // a dependency node, we won't allow it's name to be changed.

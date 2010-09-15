@@ -17,7 +17,7 @@ using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE(Core::ScaleManipulator);
+REFLECT_DEFINE_ABSTRACT(Core::ScaleManipulator);
 
 void ScaleManipulator::InitializeType()
 {

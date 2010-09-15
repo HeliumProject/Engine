@@ -17,7 +17,7 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE(Core::EntitySet);
+REFLECT_DEFINE_ABSTRACT(Core::EntitySet);
 
 void EntitySet::InitializeType()
 {

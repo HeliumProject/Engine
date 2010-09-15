@@ -58,7 +58,7 @@ namespace Helium
             mutable Core::ScenePtr m_Scene;
 
         public:
-            SCENE_DECLARE_TYPE( Core::EntityInstance, Core::Instance );
+            REFLECT_DECLARE_ABSTRACT( Core::EntityInstance, Core::Instance );
             static void InitializeType();
             static void CleanupType();
 

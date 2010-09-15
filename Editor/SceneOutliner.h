@@ -5,7 +5,7 @@
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/SceneManager.h"
 #include "Core/Scene/Selection.h"
-#include "Core/Scene/Object.h"
+#include "Foundation/Reflect/Object.h"
 
 #include "Editor/API.h"
 #include "Editor/SceneOutlinerState.h"
@@ -21,13 +21,13 @@ namespace Helium
         class SceneOutlinerItemData : public wxTreeItemData
         {
         protected:
-            Core::Object* m_Object;
+            Reflect::Object* m_Object;
             tstring       m_ItemText; 
             int           m_CachedCount; 
             bool          m_Countable; 
 
         public:
-            SceneOutlinerItemData( Core::Object* object )
+            SceneOutlinerItemData( Reflect::Object* object )
                 : m_Object( object )
                 , m_CachedCount( 0 )
             {
@@ -37,12 +37,12 @@ namespace Helium
             {
             }
 
-            Core::Object* GetObject() const
+            Reflect::Object* GetObject() const
             {
                 return m_Object;
             }
 
-            void SetObject( Core::Object* object )
+            void SetObject( Reflect::Object* object )
             {
                 m_Object = object;
             }
@@ -83,7 +83,7 @@ namespace Helium
         {
         protected:
             // Typedefs
-            typedef std::map< Core::Object*, wxTreeItemId > M_TreeItems;
+            typedef std::map< Reflect::Object*, wxTreeItemId > M_TreeItems;
 
         protected:
             // Member variables
@@ -115,7 +115,7 @@ namespace Helium
             // Derived classes can optionally HELIUM_OVERRIDE these functions
             virtual void Clear();
             virtual wxTreeItemId AddItem( const wxTreeItemId& parent, const tstring& name, i32 image, SceneOutlinerItemData* data, bool isSelected, bool countable = true); 
-            virtual void DeleteItem( Core::Object* object );
+            virtual void DeleteItem( Reflect::Object* object );
             void UpdateItemCounts( const wxTreeItemId& node, int delta );
             void UpdateItemVisibility( const wxTreeItemId& item, bool visible );
 

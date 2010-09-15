@@ -12,7 +12,7 @@ using namespace Helium::Core;
 
 Profile::MemoryPoolHandle g_ShaderTextureMemoryPool;
 
-SCENE_DEFINE_TYPE( Shader );
+REFLECT_DEFINE_ABSTRACT( Shader );
 
 void Shader::InitializeType()
 {

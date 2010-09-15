@@ -16,7 +16,7 @@ const float Core::Camera::NearClipDistance = 0.05f;
 const float Core::Camera::FarClipDistance = 10000.0f;
 const float Core::Camera::FieldOfView = 72.0f * Math::DegToRad;
 
-SCENE_DEFINE_TYPE(Core::Camera);
+REFLECT_DEFINE_ABSTRACT(Core::Camera);
 
 Camera::Camera()
 : m_ProjectionMode( ProjectionModes::Perspective )

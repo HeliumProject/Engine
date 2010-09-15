@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Core/Scene/Selectable.h"
-
 #include "Foundation/Undo/Command.h"
+#include "Foundation/Reflect/Element.h"
+
+#include "Core/Scene/Selectable.h"
 
 namespace Helium
 {
@@ -31,7 +32,7 @@ namespace Helium
             Reflect::ElementPtr m_Package;
 
         public:
-            SCENE_DECLARE_TYPE( Persistent, Selectable );
+            REFLECT_DECLARE_ABSTRACT( Persistent, Selectable );
 
             Persistent(Reflect::Element* data);
             virtual ~Persistent();

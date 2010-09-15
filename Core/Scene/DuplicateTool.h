@@ -13,7 +13,7 @@ namespace Helium
         class CORE_API DuplicateTool : public Core::CreateTool
         {
         public:
-            SCENE_DECLARE_TYPE(Core::DuplicateTool, Core::CreateTool);
+            REFLECT_DECLARE_ABSTRACT(Core::DuplicateTool, Core::CreateTool);
             static void InitializeType();
             static void CleanupType();
 

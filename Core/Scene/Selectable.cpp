@@ -4,7 +4,7 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE( Selectable );
+REFLECT_DEFINE_ABSTRACT( Selectable );
 
 Selectable::Selectable()
 : m_Selected( false )

@@ -36,7 +36,7 @@ namespace Helium
             // Runtime Type Info
             //
 
-            SCENE_DECLARE_TYPE( Skin, Core::SceneNode );
+            REFLECT_DECLARE_ABSTRACT( Skin, Core::SceneNode );
             static void InitializeType();
             static void CleanupType();
 

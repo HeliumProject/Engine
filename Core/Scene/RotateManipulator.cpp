@@ -17,7 +17,7 @@ using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE(Core::RotateManipulator);
+REFLECT_DEFINE_ABSTRACT(Core::RotateManipulator);
 
 void RotateManipulator::InitializeType()
 {

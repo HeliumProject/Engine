@@ -18,7 +18,7 @@ using namespace Helium::Math;
 using namespace Helium::Core;
 
 // RTTI
-SCENE_DEFINE_TYPE(Core::Light);
+REFLECT_DEFINE_ABSTRACT(Core::Light);
 
 // statics
 D3DMATERIAL9 Light::s_Material;

@@ -23,7 +23,7 @@ namespace Helium
             // RTTI
             //
 
-            SCENE_DECLARE_TYPE(Core::LocatorCreateTool, Core::CreateTool);
+            REFLECT_DECLARE_ABSTRACT(Core::LocatorCreateTool, Core::CreateTool);
             static void InitializeType();
             static void CleanupType();
 

@@ -13,7 +13,7 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE( SceneNode );
+REFLECT_DEFINE_ABSTRACT( SceneNode );
 
 void SceneNode::InitializeType()
 {

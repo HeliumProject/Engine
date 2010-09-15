@@ -2,7 +2,7 @@
 
 #include "Core/API.h"
 
-#include "Core/Scene/Object.h"
+#include "Foundation/Reflect/Object.h"
 
 #include "Core/Scene/SceneNode.h"
 
@@ -31,7 +31,7 @@ namespace Helium
         // among all the instances.
         // 
 
-        class CORE_API SceneNodeType : public Object
+        class CORE_API SceneNodeType : public Reflect::Object
         {
             //
             // Members
@@ -59,7 +59,7 @@ namespace Helium
             //
 
         public:
-            SCENE_DECLARE_TYPE( Core::SceneNodeType, Object );
+            REFLECT_DECLARE_ABSTRACT( SceneNodeType, Reflect::Object );
             static void InitializeType();
             static void CleanupType();
 

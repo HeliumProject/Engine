@@ -8,7 +8,6 @@
 #include "Foundation/Input.h"
 
 #include "Core/API.h"
-#include "Core/Scene/Persistent.h"
 #include "Core/Scene/CameraSettings.h"
 
 namespace Helium

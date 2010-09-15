@@ -3,7 +3,7 @@
 #include "Editor/API.h"
 #include "Editor/SceneOutliner.h"
 
-#include "Core/Scene/Object.h"
+#include "Foundation/Reflect/Object.h"
 #include "Core/Scene/EntityInstanceType.h"
 #include "Core/Scene/EntitySet.h"
 

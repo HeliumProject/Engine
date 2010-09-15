@@ -23,7 +23,7 @@ using namespace Helium::Core;
 using namespace Helium::Component;
 
 // RTTI
-SCENE_DEFINE_TYPE(Core::EntityInstance);
+REFLECT_DEFINE_ABSTRACT(Core::EntityInstance);
 
 void EntityInstance::InitializeType()
 {

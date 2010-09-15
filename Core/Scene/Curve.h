@@ -45,7 +45,7 @@ namespace Helium
             // RTTI
             //
 
-            SCENE_DECLARE_TYPE( Core::Curve, Core::PivotTransform );
+            REFLECT_DECLARE_ABSTRACT( Core::Curve, Core::PivotTransform );
             static void InitializeType();
             static void CleanupType();
 

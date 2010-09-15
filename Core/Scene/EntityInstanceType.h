@@ -22,7 +22,7 @@ namespace Helium
             //
 
         public:
-            SCENE_DECLARE_TYPE( Core::EntityType, Core::InstanceType );
+            REFLECT_DECLARE_ABSTRACT( Core::EntityType, Core::InstanceType );
             static void InitializeType();
             static void CleanupType();
 

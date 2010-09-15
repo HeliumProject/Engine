@@ -65,7 +65,7 @@ namespace Helium
             // Runtime Type Info
             //
 
-            SCENE_DECLARE_TYPE( Core::Mesh, Core::PivotTransform );
+            REFLECT_DECLARE_ABSTRACT( Core::Mesh, Core::PivotTransform );
             static void InitializeType();
             static void CleanupType();
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/Scene/Viewport.h"
-#include "Core/Scene/Object.h"
+#include "Foundation/Reflect/Object.h"
 
 namespace Helium
 {
@@ -28,7 +28,7 @@ namespace Helium
 
         typedef Helium::Signature< const InstanceSetChangeArgs& > InstanceSetChangeSignature;
 
-        class InstanceSet : public Object
+        class InstanceSet : public Reflect::Object
         {
             //
             // Members
@@ -44,7 +44,7 @@ namespace Helium
             //
 
         public:
-            SCENE_DECLARE_TYPE( Core::InstanceSet, Object );
+            REFLECT_DECLARE_ABSTRACT( InstanceSet, Reflect::Object );
             static void InitializeType();
             static void CleanupType();
 

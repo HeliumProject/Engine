@@ -40,7 +40,7 @@ namespace Helium
             // RTTI
             //
 
-            SCENE_DECLARE_TYPE(Core::CurveEditTool, Tool);
+            REFLECT_DECLARE_ABSTRACT(Core::CurveEditTool, Tool);
             static void InitializeType();
             static void CleanupType();
 

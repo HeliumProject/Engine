@@ -63,7 +63,7 @@ namespace Helium
             // RTTI
             //
 
-            SCENE_DECLARE_TYPE(Core::TransformManipulator, Tool);
+            REFLECT_DECLARE_ABSTRACT(Core::TransformManipulator, Tool);
             static void InitializeType();
             static void CleanupType();
 

@@ -11,7 +11,7 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE( Skin );
+REFLECT_DEFINE_ABSTRACT( Skin );
 
 void Skin::InitializeType()
 {

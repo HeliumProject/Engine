@@ -12,7 +12,7 @@ using namespace Helium::Math;
 using namespace Helium::Core;
 
 // RTTI
-SCENE_DEFINE_TYPE(Core::Instance);
+REFLECT_DEFINE_ABSTRACT(Core::Instance);
 
 void Instance::InitializeType()
 {

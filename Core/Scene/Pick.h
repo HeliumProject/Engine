@@ -7,7 +7,7 @@
 
 #include "Foundation/Memory/SmartPtr.h"
 
-#include "Core/Scene/Object.h"
+#include "Foundation/Reflect/Object.h"
 #include "Core/Scene/Visitor.h"
 
 namespace Helium
@@ -57,7 +57,7 @@ namespace Helium
             V_PickHitSmartPtr m_PickHits;
 
             // the object that will be associated with the hits generated in Pick() functions
-            Object* m_CurrentObject;
+            Reflect::Object* m_CurrentObject;
 
             // matrices to map to and from world space and local space 
             //  - testing is performed in local space
@@ -141,12 +141,12 @@ namespace Helium
                 m_PickHits.resize( count );
             }
 
-            void SetCurrentObject(Object* object)
+            void SetCurrentObject(Reflect::Object* object)
             {
                 m_CurrentObject = object;
             }
 
-            void SetCurrentObject(Object* object, const Math::Matrix4& worldSpaceTransform)
+            void SetCurrentObject(Reflect::Object* object, const Math::Matrix4& worldSpaceTransform)
             {
                 m_CurrentObject = object;
                 m_CurrentWorldTransform = worldSpaceTransform;
@@ -156,7 +156,7 @@ namespace Helium
                 Transform(); 
             }
 
-            void SetCurrentObject(Object* object, const Math::Matrix4& worldSpaceTransform, const Math::Matrix4& inverseWorldSpaceTransform)
+            void SetCurrentObject(Reflect::Object* object, const Math::Matrix4& worldSpaceTransform, const Math::Matrix4& inverseWorldSpaceTransform)
             {
                 m_CurrentObject = object;
                 m_CurrentWorldTransform = worldSpaceTransform;
@@ -331,15 +331,15 @@ namespace Helium
             //
 
         private:
-            Object* m_HitObject;
+            Reflect::Object* m_HitObject;
 
         public:
-            Object* GetHitObject() const
+            Reflect::Object* GetHitObject() const
             {
                 return m_HitObject;
             }
 
-            void SetHitObject(Object* object)
+            void SetHitObject(Reflect::Object* object)
             {
                 m_HitObject = object;
             }
@@ -443,7 +443,7 @@ namespace Helium
             // Implementation
             //
 
-            PickHit(Object* o)
+            PickHit(Reflect::Object* o)
                 : m_HitObject (o)
                 , m_HasNormal (false)
                 , m_HasVertex (false)

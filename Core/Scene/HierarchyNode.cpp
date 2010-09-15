@@ -20,7 +20,7 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-SCENE_DEFINE_TYPE( Core::HierarchyNode );
+REFLECT_DEFINE_ABSTRACT( Core::HierarchyNode );
 
 void HierarchyNode::InitializeType()
 {

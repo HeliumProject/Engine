@@ -23,7 +23,7 @@ namespace Helium
             //
 
         public:
-            SCENE_DECLARE_TYPE( Core::JointTransform, Core::Transform );
+            REFLECT_DECLARE_ABSTRACT( Core::JointTransform, Core::Transform );
             static void InitializeType();
             static void CleanupType();
 

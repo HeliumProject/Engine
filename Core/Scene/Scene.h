@@ -289,7 +289,7 @@ namespace Helium
         class Transform;
         typedef std::map< Helium::TUID, const Core::Transform* > M_TransformConstDumbPtr;
 
-        class CORE_API Scene : public Object, public Reflect::StatusHandler
+        class CORE_API Scene : public Reflect::Object, public Reflect::StatusHandler
         {
             //
             // Members

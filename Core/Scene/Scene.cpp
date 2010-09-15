@@ -50,13 +50,9 @@
 #include "Volume.h"
 #include "Locator.h"
 #include "Light.h"
-#include "SpotLight.h"
-#include "PointLight.h"
-#include "DirectionalLight.h"
-#include "AmbientLight.h"
+
 #include "Foundation/String/Utilities.h"
 #include "Foundation/Math/AngleAxis.h"
-
 #include "Foundation/Log.h"
 
 #define snprintf _snprintf
@@ -340,22 +336,6 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
     else if ( data->HasType( Reflect::GetType<Content::Locator>() ) )
     {
         createdNode = new Core::Locator( this, Reflect::DangerousCast< Content::Locator >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::DirectionalLight>() ) )
-    {
-        createdNode = new Core::DirectionalLight( this, Reflect::DangerousCast< Content::DirectionalLight >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::SpotLight>() ) )
-    {
-        createdNode = new Core::SpotLight( this, Reflect::DangerousCast< Content::SpotLight >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::PointLight>() ) )
-    {
-        createdNode = new Core::PointLight( this, Reflect::DangerousCast< Content::PointLight >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::AmbientLight>() ) )
-    {
-        createdNode = new Core::AmbientLight( this, Reflect::DangerousCast< Content::AmbientLight >( data ) );
     }
     else if ( data->HasType( Reflect::GetType<Content::Shader>() ) )
     {

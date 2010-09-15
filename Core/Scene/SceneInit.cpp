@@ -49,10 +49,6 @@
 #include "VolumeCreateTool.h"
 
 #include "Light.h"
-#include "SpotLight.h"
-#include "PointLight.h"
-#include "DirectionalLight.h"
-#include "AmbientLight.h"
 
 #include "ViewportSettings.h"
 #include "SceneSettings.h"
@@ -130,10 +126,6 @@ void Core::SceneInitialize()
     g_InitializerStack.Push( EntityType::InitializeType, EntityType::CleanupType );
     g_InitializerStack.Push( EntityInstanceCreateTool::InitializeType, EntityInstanceCreateTool::CleanupType );
     g_InitializerStack.Push( Light::InitializeType, Light::CleanupType );
-    g_InitializerStack.Push( SpotLight::InitializeType, SpotLight::CleanupType );
-    g_InitializerStack.Push( PointLight::InitializeType, PointLight::CleanupType );
-    g_InitializerStack.Push( DirectionalLight::InitializeType, DirectionalLight::CleanupType );
-    g_InitializerStack.Push( AmbientLight::InitializeType, AmbientLight::CleanupType );
 
     g_InitializerStack.Push( Reflect::RegisterClassType< Core::SettingsManager >() ); 
     g_InitializerStack.Push( Reflect::RegisterClassType< Core::CameraSettings >() ); 

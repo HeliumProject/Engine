@@ -23,10 +23,6 @@
 #include "Core/Content/Nodes/ContentShader.h"
 
 #include "Core/Content/Nodes/ContentLight.h"
-#include "Core/Content/Nodes/ContentSpotLight.h"
-#include "Core/Content/Nodes/ContentPointLight.h"
-#include "Core/Content/Nodes/ContentDirectionalLight.h"
-#include "Core/Content/Nodes/ContentAmbientLight.h"
 
 #include "Core/Content/NodeVisibility.h"
 #include "Core/Content/SceneVisibility.h"
@@ -84,14 +80,7 @@ void Content::Initialize()
         g_InitializerStack.Push( Reflect::RegisterClassType<Curve>( TXT( "Curve" ) ) );
 
         // lights
-        g_InitializerStack.Push( Reflect::RegisterEnumType<LightTypes::LightType>( &LightTypes::LightTypeEnumerateEnum, TXT( "LightType" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterEnumType<LightRenderTypes::LightRenderType>( &LightRenderTypes::LightRenderTypeEnumerateEnum, TXT( "LightRenderType" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterEnumType<LensFlareTypes::LensFlareType>( &LensFlareTypes::LensFlareTypeEnumerateEnum, TXT( "LensFlareType" ) ) );
         g_InitializerStack.Push( Reflect::RegisterClassType<Light>( TXT( "Light" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClassType<SpotLight>( TXT( "SpotLight" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClassType<PointLight>( TXT( "PointLight" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClassType<DirectionalLight>( TXT( "DirectionalLight" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClassType<AmbientLight>( TXT( "AmbientLight" ) ) );
 
         // Visibility
         g_InitializerStack.Push( Reflect::RegisterClassType<NodeVisibility>( TXT( "NodeVisibility" ) ) );

@@ -17,16 +17,17 @@ namespace Helium
         typedef Helium::SmartPtr< Widget >    (*WidgetCreator)( Inspect::Control* control );
         typedef std::map< i32, WidgetCreator >  WidgetCreators;
 
-        class Canvas : public Inspect::Canvas, public wxEvtHandler
+        class Canvas : public Reflect::AbstractInheritor< Canvas, Inspect::Canvas >, public wxEvtHandler
         {
         public:
-            Canvas( wxWindow* window );
+            Canvas();
             ~Canvas();
 
-            virtual wxWindow* GetWindow()
+            wxWindow* GetWindow()
             {
                 return m_Window;
             }
+            void SetWindow( wxWindow* window );
 
             // callbacks from the window
             virtual void OnShow(wxShowEvent&);

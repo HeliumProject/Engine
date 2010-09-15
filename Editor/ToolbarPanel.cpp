@@ -15,10 +15,11 @@ using namespace Helium::Editor;
 ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
 : ToolbarPanelGenerated( parent, id, pos, size, style )
 , m_CommandQueue( this )
-, m_ToolPropertiesCanvas( m_ToolsPropertiesPanel )
 , m_ToolPropertiesGenerator( &m_ToolPropertiesCanvas )
 , m_ToolPropertiesManager( &m_ToolPropertiesGenerator, &m_CommandQueue )
 {
+    m_ToolPropertiesCanvas.SetPanel( m_ToolsPropertiesPanel );
+
     SetHelpText( TXT( "This is the Toolbar, it provides access to commonly used actions and tools." ) );
 
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )

@@ -9,6 +9,8 @@ HelpPanel::HelpPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const
 : HelpPanelGenerated( parent, id, pos, size, style )
 {
     SetHelpText( TXT( "This is the help window.  It will update based on the control the mouse is over." ) );
+    
+    m_HelpRichText->SetEditable( false );
 }
 
 void HelpPanel::SetText( const tchar* text )

@@ -10,17 +10,12 @@ namespace Helium
         class CORE_API AmbientLight : public Light
         {
         public:
-
             bool m_SampleEnvironment;
             bool m_DoAmbientOcclusion;
             u32 m_Samples;
             f32 m_SampleDistance;
             f32 m_Spread;
             Math::HDRColor3 m_OcclusionColor;
-
-
-
-            virtual void Host(ContentVisitor* visitor); 
 
             AmbientLight ()
                 : Light()

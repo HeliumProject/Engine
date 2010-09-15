@@ -642,14 +642,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Content\ContentVisitor.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Content\ContentVisitor.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Content\NodeVisibility.cpp"
 				>
 			</File>

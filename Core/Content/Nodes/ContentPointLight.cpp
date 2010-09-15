@@ -1,5 +1,4 @@
 #include "ContentPointLight.h"
-#include "Core/Content/ContentVisitor.h" 
 
 using namespace Helium;
 using namespace Helium::Content;
@@ -10,12 +9,6 @@ void PointLight::EnumerateClass( Reflect::Compositor<PointLight>& comp )
 {
   Reflect::Field* fieldInnerRadius = comp.AddField( &PointLight::m_InnerRadius, "m_InnerRadius" );
   Reflect::Field* fieldOuterRadius = comp.AddField( &PointLight::m_OuterRadius, "m_OuterRadius" );
-}
-
-
-void PointLight::Host(ContentVisitor* visitor)
-{
-  visitor->VisitPointLight(this); 
 }
 
 float PointLight::GetPhysicalBounds( float threshold ) const

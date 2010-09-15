@@ -1,5 +1,4 @@
 #include "ContentSpotLight.h"
-#include "Core/Content/ContentVisitor.h"
 #include "Foundation/Math/EulerAngles.h"
 
 using namespace Helium;
@@ -76,11 +75,6 @@ const Math::Vector4 SpotLight::GetGodRayClipPlane() const
   plane.w = -plane.Dot(pointA);
 
   return plane;
-}
-
-void SpotLight::Host(ContentVisitor* visitor)
-{
-  visitor->VisitSpotLight(this); 
 }
 
 float SpotLight::GetPhysicalBounds( float threshold ) const

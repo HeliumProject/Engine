@@ -10,8 +10,6 @@ namespace Helium
         class CORE_API DirectionalLight : public Light
         {
         public:
-            virtual void Host(ContentVisitor* visitor);
-
             DirectionalLight ()
                 : Light(),
                 m_GlobalSun( false ),

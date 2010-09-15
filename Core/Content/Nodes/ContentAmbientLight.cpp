@@ -1,5 +1,4 @@
 #include "ContentAmbientLight.h"
-#include "Core/Content/ContentVisitor.h" 
 
 using namespace Helium;
 using namespace Helium::Content;
@@ -17,10 +16,3 @@ void AmbientLight::EnumerateClass( Reflect::Compositor<AmbientLight>& comp )
   Reflect::Field* fieldSpread = comp.AddField( &AmbientLight::m_Spread, "m_Spread" );
 
 }
-
-
-void AmbientLight::Host(ContentVisitor* visitor)
-{
-  visitor->VisitAmbientLight(this); 
-}
-

@@ -10,9 +10,6 @@ namespace Helium
         class CORE_API SpotLight : public Light
         {
         public:
-
-            virtual void Host(ContentVisitor* visitor); 
-
             float m_InnerConeAngle;    
             float m_OuterConeAngle;
 

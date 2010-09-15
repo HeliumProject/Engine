@@ -1,5 +1,4 @@
 #include "ContentLight.h"
-#include "Core/Content/ContentVisitor.h" 
 
 using namespace Helium;
 using namespace Helium::Content;
@@ -25,9 +24,4 @@ void Light::EnumerateClass( Reflect::Compositor<Light>& comp )
   Reflect::Field* fieldAnimationDuration = comp.AddField( &Light::m_AnimationDuration, "m_AnimationDuration" );
   Reflect::Field* fieldRandomAnimOffset = comp.AddField( &Light::m_RandomAnimOffset, "m_RandomAnimOffset" );
   Reflect::Field* fieldPhysicalLight = comp.AddField( &Light::m_PhysicalLight, "m_PhysicalLight" );
-}
-
-void Light::Host(ContentVisitor* visitor)
-{
-  visitor->VisitLight(this); 
 }

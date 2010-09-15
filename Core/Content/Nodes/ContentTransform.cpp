@@ -1,5 +1,4 @@
 #include "ContentTransform.h"
-#include "Core/Content/ContentVisitor.h"
 
 using namespace Helium;
 using namespace Helium::Content;

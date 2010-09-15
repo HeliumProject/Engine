@@ -80,8 +80,6 @@ namespace Helium
         class CORE_API Light HELIUM_ABSTRACT : public Instance
         {
         public:
-            virtual void Host(ContentVisitor* visitor);
-
             bool m_Attenuate;
 
             bool m_CastShadows;

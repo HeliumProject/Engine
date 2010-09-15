@@ -9,7 +9,6 @@ namespace Helium
 {
     namespace Content
     {
-        class ContentVisitor;
         class Scene;
 
         //
@@ -20,8 +19,6 @@ namespace Helium
         class CORE_API SceneNode : public Component::ComponentCollection
         {
         public:
-            virtual void Host(ContentVisitor* visitor); 
-
             // The ID of the node
             Helium::TUID m_ID;
 

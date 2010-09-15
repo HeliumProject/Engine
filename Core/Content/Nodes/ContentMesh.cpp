@@ -1,5 +1,4 @@
 #include "ContentMesh.h"
-#include "Core/Content/ContentVisitor.h" 
 
 #include "Foundation/Math/AlignedBox.h"
 #include "Foundation/Math/CalculateBounds.h"
@@ -10,11 +9,6 @@ using namespace Helium::Math;
 using namespace Helium::Content;
 
 REFLECT_DEFINE_CLASS(Mesh);
-
-void Mesh::Host(ContentVisitor* visitor)
-{
-    visitor->VisitMesh(this); 
-}
 
 void Mesh::ComputeTNBs()
 {

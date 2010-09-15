@@ -1,5 +1,4 @@
 #include "ContentCamera.h"
-#include "Core/Content/ContentVisitor.h" 
 
 using namespace Helium;
 using namespace Helium::Content;
@@ -12,9 +11,4 @@ void Camera::EnumerateClass( Reflect::Compositor<Camera>& comp )
   comp.AddField( &Camera::m_FOV, "m_FOV" );
   comp.AddField( &Camera::m_Width, "m_Width" );
   comp.AddField( &Camera::m_Height, "m_Height" );
-}
-
-void Camera::Host(ContentVisitor* visitor)
-{
-  visitor->VisitCamera(this); 
 }

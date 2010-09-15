@@ -163,9 +163,6 @@ namespace Helium
             typedef std::set<Edge> S_Edge;
 
         public:
-
-            virtual void Host(ContentVisitor* visitor); 
-
             //
             // Per vertex data
             //  - All of these arrays have a common size because they are indexed with the same indices

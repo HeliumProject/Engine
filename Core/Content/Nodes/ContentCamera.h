@@ -14,8 +14,6 @@ namespace Helium
         class CORE_API Camera : public HierarchyNode
         {
         public:
-            virtual void Host(ContentVisitor* visitor); 
-
             Math::Matrix4 m_View;
             float m_FOV;
             u32 m_Width;

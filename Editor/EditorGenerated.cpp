@@ -516,7 +516,7 @@ HelpPanelGenerated::HelpPanelGenerated( wxWindow* parent, wxWindowID id, const w
 	wxBoxSizer* bSizer32;
 	bSizer32 = new wxBoxSizer( wxVERTICAL );
 	
-	m_HelpRichText = new wxRichTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0|wxVSCROLL|wxHSCROLL|wxNO_BORDER|wxWANTS_CHARS );
+	m_HelpRichText = new wxRichTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0|wxHSCROLL|wxNO_BORDER|wxVSCROLL );
 	bSizer32->Add( m_HelpRichText, 1, wxEXPAND | wxALL, 5 );
 	
 	this->SetSizer( bSizer32 );

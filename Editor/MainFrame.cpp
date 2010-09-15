@@ -5,7 +5,6 @@
 
 #include "Foundation/Reflect/ArchiveXML.h"
 
-#include "Core/Content/ContentVersion.h"
 #include "Core/Asset/AssetClass.h"
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/InstanceSet.h"
@@ -1172,7 +1171,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
                         try
                         {
-                            Reflect::Archive::ToFile( elements, file.c_str(), new Content::ContentVersion (), m_SceneManager.GetCurrentScene() );
+                            Reflect::Archive::ToFile( elements, file.c_str(), NULL, m_SceneManager.GetCurrentScene() );
                         }
                         catch ( Helium::Exception& ex )
                         {

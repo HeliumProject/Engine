@@ -5,7 +5,6 @@
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Core/Content/ContentInit.h"
-#include "Core/Content/ContentVersion.h"
 #include "Core/Asset/AssetInit.h"
 
 // Types

@@ -634,27 +634,11 @@
 			Name="Content"
 			>
 			<File
-				RelativePath=".\Content\Constants.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Content\ContentExceptions.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Content\ContentInit.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Content\ContentInit.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Content\ContentVersion.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Content\ContentVersion.h"
 				>
 			</File>
 			<File

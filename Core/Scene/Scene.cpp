@@ -14,7 +14,6 @@
 #include "Core/Asset/Classes/Entity.h"
 #include "Core/Asset/Manifests/SceneManifest.h"
 
-#include "Core/Content/ContentVersion.h"
 #include "Core/Content/Nodes/ContentJointTransform.h"
 #include "Core/Content/Nodes/ContentPivotTransform.h"
 #include "Core/Content/Nodes/ContentMesh.h"
@@ -1003,7 +1002,7 @@ bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
     {
         try
         {
-            Reflect::Archive::ToFile( spool, path.Get(), new Content::ContentVersion (), this );
+            Reflect::Archive::ToFile( spool, path.Get(), NULL, this );
         }
         catch ( Helium::Exception& ex )
         {

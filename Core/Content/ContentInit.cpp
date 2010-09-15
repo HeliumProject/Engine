@@ -1,5 +1,4 @@
 #include "ContentInit.h"
-#include "ContentVersion.h"
 
 #include "Foundation/Reflect/Registry.h"
 
@@ -48,8 +47,6 @@ void Content::Initialize()
     {
         g_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
         g_InitializerStack.Push( Component::Initialize, Component::Cleanup );
-
-        g_InitializerStack.Push( Reflect::RegisterClassType<ContentVersion>( TXT( "ContentVersion" ) ) );
 
         g_InitializerStack.Push( Reflect::RegisterClassType<SceneNode>( TXT( "SceneNode" ) ) );
         g_InitializerStack.Push( Reflect::RegisterClassType<HierarchyNode>( TXT( "HierarchyNode" ) ) );

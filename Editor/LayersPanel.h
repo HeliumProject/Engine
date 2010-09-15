@@ -48,11 +48,6 @@ namespace Helium
                 return false;
             }
 
-            virtual bool  IsSelectableValid(Core::Selectable* sl) const
-            {
-                return sl ? true : false;
-            }
-
             virtual bool  IsSelectionValid() const
             {
                 return true;

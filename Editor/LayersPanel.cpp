@@ -294,7 +294,7 @@ void LayersPanel::LayerSelectedItems( bool addToLayer )
             }
 
             //Check the current selection
-            if(IsSelectableValid(*nodeItr) == false)
+            if( *nodeItr == NULL )
             {
                 //Invalid or incompatible
                 continue;
@@ -421,7 +421,7 @@ void LayersPanel::OnNewLayerFromSelection( wxCommandEvent& dummyEvt )
         for ( ; itr != end; ++itr )
         {
             //If the element is a supported type
-            if(IsSelectableValid(*itr))
+            if( *itr )
             {
                 SceneNode* node = Reflect::ObjectCast< SceneNode >( *itr );
                 if ( node )

@@ -29,18 +29,18 @@ namespace Helium
         typedef SearchTypes::SearchType SearchType;
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// class SearchQuery
+        /// class VaultSearchQuery
         ///////////////////////////////////////////////////////////////////////////////
-        class SearchQuery;
-        typedef Helium::SmartPtr< SearchQuery > SearchQueryPtr;
-        typedef std::vector< SearchQueryPtr > V_SearchQuery;
-        typedef Helium::OrderedSet< Helium::SmartPtrComparator< SearchQuery > > OS_SearchQuery;
+        class VaultSearchQuery;
+        typedef Helium::SmartPtr< VaultSearchQuery > VaultSearchQueryPtr;
+        typedef std::vector< VaultSearchQueryPtr > V_VaultSearchQuery;
+        typedef Helium::OrderedSet< Helium::SmartPtrComparator< VaultSearchQuery > > OS_VaultSearchQuery;
 
-        class SearchQuery : public Reflect::Element
+        class VaultSearchQuery : public Reflect::Element
         {
         public:
-            SearchQuery();
-            ~SearchQuery();
+            VaultSearchQuery();
+            ~VaultSearchQuery();
 
             SearchType GetSearchType() const { return m_SearchType; }
 
@@ -54,15 +54,15 @@ namespace Helium
                 return m_QueryPath;
             }
 
-            bool operator<( const SearchQuery& rhs ) const;
-            bool operator==( const SearchQuery& rhs ) const;
-            bool operator!=( const SearchQuery& rhs ) const;
+            bool operator<( const VaultSearchQuery& rhs ) const;
+            bool operator==( const VaultSearchQuery& rhs ) const;
+            bool operator!=( const VaultSearchQuery& rhs ) const;
 
-            static bool ParseQueryString( const tstring& queryString, tstring& errors, SearchQuery* query = NULL );
+            static bool ParseQueryString( const tstring& queryString, tstring& errors, VaultSearchQuery* query = NULL );
 
         public:
-            REFLECT_DECLARE_CLASS( SearchQuery, Reflect::Element );
-            static void EnumerateClass( Reflect::Compositor<SearchQuery>& comp );
+            REFLECT_DECLARE_CLASS( VaultSearchQuery, Reflect::Element );
+            static void EnumerateClass( Reflect::Compositor<VaultSearchQuery>& comp );
             virtual void PostDeserialize() HELIUM_OVERRIDE; 
 
         private:

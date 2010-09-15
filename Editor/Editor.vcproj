@@ -766,27 +766,11 @@
 			Name="Vault"
 			>
 			<File
-				RelativePath=".\Vault\DirectoryCtrl.cpp"
+				RelativePath=".\Vault\ListResultsView.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Vault\DirectoryCtrl.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\SearchQuery.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\SearchQuery.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\SearchResults.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\SearchResults.h"
+				RelativePath=".\Vault\ListResultsView.h"
 				>
 			</File>
 			<File
@@ -883,6 +867,22 @@
 			</File>
 			<File
 				RelativePath=".\Vault\VaultSearch.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Vault\VaultSearchQuery.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Vault\VaultSearchQuery.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Vault\VaultSearchResults.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Vault\VaultSearchResults.h"
 				>
 			</File>
 			<File

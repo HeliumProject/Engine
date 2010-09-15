@@ -18,14 +18,12 @@ namespace Helium
 
                 HelpPanel,
 
-                ViewSmall,
-                ViewMedium,
-                ViewLarge,
-                ViewDetails,
+                ViewResultDetails,
+                ViewResultList,
 
-                AdvancedSearch,
-                AdvancedSearchGo,
-                AdvancedSearchCancel,
+                ViewThumbnailsSmall,
+                ViewThumbnailsMedium,
+                ViewThumbnailsLarge,
 
                 CopyPathNative,
                 CopyPath,
@@ -71,14 +69,12 @@ namespace Helium
 
                 TXT( "Help" ),
 
+                TXT( "Details" ),
+                TXT( "List" ),
+
                 TXT( "Small" ),
                 TXT( "Medium" ),
                 TXT( "Large" ),
-                TXT( "Details" ),
-
-                TXT( "Advanced Search" ),
-                TXT( "Go" ),
-                TXT( "Cancel" ),
 
                 TXT( "Path (Native Format)" ),
                 TXT( "Path (Internal Tools Format)" ),
@@ -123,43 +119,72 @@ namespace Helium
         };
         typedef VaultMenu::MenuIDs VaultMenuID;
 
-        ///////////////////////////////////////////////////////////////////////////
-        namespace ThumbnailSizes
+        ///////////////////////////////////////////////////////////////////////
+        namespace VaultViewModes
         {
-            enum ThumbnailSize
+            enum VaultViewMode
             {
-                Small = 64,
-                Medium = 128,
-                Large = 256
+                Details,
+                List,
+
+                ThumbnailsSmall,
+                ThumbnailsMedium,
+                ThumbnailsLarge,
+
+                ThumbnailsCustom,
             };
-            inline tstring Label( ThumbnailSize size )
+            static void VaultViewModeEnumerateEnum( Reflect::Enumeration* info )
             {
-                tstringstream str;
-                str << TXT( "(" ) << size << TXT( "x" ) << size << TXT( ")" );
+                info->AddElement( Details, TXT( "Details" ) );
+                info->AddElement( List, TXT( "List" ) );
+
+                info->AddElement( ThumbnailsSmall, TXT( "Small" ) );
+                info->AddElement( ThumbnailsMedium, TXT( "Medium" ) );
+                info->AddElement( ThumbnailsLarge, TXT( "Large" ) );
+
+                info->AddElement( ThumbnailsCustom, TXT( "Custom" ) );
+            }
+        }
+        typedef VaultViewModes::VaultViewMode VaultViewMode;
+
+        ///////////////////////////////////////////////////////////////////////
+        namespace VaultThumbnailsSizes
+        {
+            enum VaultThumbnailsSize
+            {
+                Small   = 64,
+                Medium  = 128,
+                Large   = 256
+            };
+            inline std::string Label( VaultThumbnailsSize size )
+            {
+                std::stringstream str;
+                str << "(" << size << "x" << size << ")";
                 return str.str();
             }
         }
-        typedef ThumbnailSizes::ThumbnailSize ThumbnailSize;
+        typedef VaultThumbnailsSizes::VaultThumbnailsSize VaultThumbnailsSize;
 
-        ///////////////////////////////////////////////////////////////////////////
-        namespace ViewOptionIDs
+        ///////////////////////////////////////////////////////////////////////
+        // Sorting methods for the shown items
+        namespace VaultSortMethods
         {
-            enum ViewOptionID
+            enum VaultSortMethod
             {
-                Small = VaultMenu::ViewSmall,
-                Medium = VaultMenu::ViewMedium,
-                Large = VaultMenu::ViewLarge,
-                Custom = -1,
+                AlphabeticalByName,
+                AlphabeticalByType,
             };
-
-            static void ViewOptionIDEnumerateEnum( Reflect::Enumeration* info )
-            {
-                info->AddElement(Small, TXT( "Small" ) );
-                info->AddElement(Medium, TXT( "Medium" ) );
-                info->AddElement(Large, TXT( "Large" ) );
-                info->AddElement(Custom, TXT( "Custom" ) );
-            }
         }
-        typedef ViewOptionIDs::ViewOptionID ViewOptionID;
+        typedef VaultSortMethods::VaultSortMethod VaultSortMethod;
+
+        ///////////////////////////////////////////////////////////////////////
+        namespace VaultSortOptions
+        {
+            enum VaultSortOption
+            {
+                Refresh = 1 << 1,
+                Force   = 1 << 2,
+            };
+        };
     }
 }

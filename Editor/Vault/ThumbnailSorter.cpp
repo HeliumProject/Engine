@@ -10,7 +10,7 @@ using namespace Helium::Editor;
 // Constructor
 // 
 ThumbnailSorter::ThumbnailSorter()
-: m_SortMethod( ThumbnailSortMethods::AlphabeticalByName )
+: m_SortMethod( VaultSortMethods::AlphabeticalByName )
 , m_AlphaByName( SortAlphabeticalByName )
 , m_AlphaByType( SortAlphabeticalByType )
 {
@@ -26,7 +26,7 @@ ThumbnailSorter::~ThumbnailSorter()
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the current sorting method.
 // 
-void ThumbnailSorter::SetSortMethod( ThumbnailSortMethod sortMethod )
+void ThumbnailSorter::SetSortMethod( VaultSortMethod sortMethod )
 {
   m_SortMethod = sortMethod;
 }
@@ -34,7 +34,7 @@ void ThumbnailSorter::SetSortMethod( ThumbnailSortMethod sortMethod )
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the current sorting method.
 // 
-ThumbnailSortMethod ThumbnailSorter::GetSortMethod() const
+VaultSortMethod ThumbnailSorter::GetSortMethod() const
 {
   return m_SortMethod;
 }
@@ -75,12 +75,12 @@ ThumbnailIteratorPtr ThumbnailSorter::GetIterator( ThumbnailTile* startingTile )
   ThumbnailIteratorPtr iterator;
   switch ( m_SortMethod )
   {
-  case ThumbnailSortMethods::AlphabeticalByName:
+  case VaultSortMethods::AlphabeticalByName:
   default:
     iterator = new ThumbnailSetIterator< S_AlphaByName >( &m_AlphaByName, startingTile );
     break;
 
-  case ThumbnailSortMethods::AlphabeticalByType:
+  case VaultSortMethods::AlphabeticalByType:
     iterator = new ThumbnailSetIterator< S_AlphaByType >( &m_AlphaByType, startingTile );
     break;
   }
@@ -108,13 +108,13 @@ i32 ThumbnailSorter::Compare( const ThumbnailTile* first, const ThumbnailTile* s
 
   switch ( m_SortMethod )
   {
-  case ThumbnailSortMethods::AlphabeticalByName:
+  case VaultSortMethods::AlphabeticalByName:
   default:
     firstBeforeSecond = m_AlphaByName.value_comp()( first, second );
     secondBeforeFirst = m_AlphaByName.value_comp()( second, first );
     break;
 
-  case ThumbnailSortMethods::AlphabeticalByType:
+  case VaultSortMethods::AlphabeticalByType:
     firstBeforeSecond = m_AlphaByType.value_comp()( first, second );
     secondBeforeFirst = m_AlphaByType.value_comp()( second, first );
     break;

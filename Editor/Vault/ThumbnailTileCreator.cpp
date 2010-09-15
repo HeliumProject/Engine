@@ -33,7 +33,7 @@ void ThumbnailTileCreator::Reset()
 void ThumbnailTileCreator::InitData()
 {
     Reset();
-    m_Results = new SearchResults( m_View->GetResults() );
+    m_Results = new VaultSearchResults( m_View->GetResults() );
 }
 
 void ThumbnailTileCreator::ThreadProc( i32 threadID )

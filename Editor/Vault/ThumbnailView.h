@@ -25,8 +25,8 @@ namespace Helium
         class ThumbnailLoadedEvent;
         struct D3DEventArgs;
 
-        class SearchResults;
-        typedef Helium::SmartPtr< SearchResults > SearchResultsPtr;
+        class VaultSearchResults;
+        typedef Helium::SmartPtr< VaultSearchResults > VaultSearchResultsPtr;
 
         // Selection change event and arguments
         struct ThumbnailSelectionArgs
@@ -70,9 +70,9 @@ namespace Helium
         private:
             enum ContextMenuIDs
             {
-                ID_ViewSmall = VaultMenu::ViewSmall,
-                ID_ViewMedium = VaultMenu::ViewMedium,
-                ID_ViewLarge = VaultMenu::ViewLarge,
+                ID_ViewSmall = VaultMenu::ViewThumbnailsSmall,
+                ID_ViewMedium = VaultMenu::ViewThumbnailsMedium,
+                ID_ViewLarge = VaultMenu::ViewThumbnailsLarge,
 
                 ID_CheckOut = VaultMenu::CheckOut,
                 ID_History = VaultMenu::History,
@@ -107,12 +107,13 @@ namespace Helium
             };
 
         public:
-            ThumbnailView( const tstring& thumbnailDirectory, VaultPanel *vaultPanel, wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE | wxVSCROLL, const wxString& name = wxT( "Editor::ThumbnailView" ) );
+            //ThumbnailView( VaultPanel *vaultPanel, wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE | wxVSCROLL, const wxString& name = wxT( "Editor::ThumbnailView" ) );
+            ThumbnailView( wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE | wxVSCROLL, const wxString& name = wxT( "Editor::ThumbnailView" ) );
             virtual ~ThumbnailView();
 
-            void SetResults( SearchResults* results );
+            void SetResults( VaultSearchResults* results );
             void ClearResults();
-            const SearchResults* GetResults() const;
+            const VaultSearchResults* GetResults() const;
 
             void SelectPath( const tstring& path );
             void GetSelectedPaths( std::set< Helium::Path >& paths );
@@ -121,23 +122,13 @@ namespace Helium
 
             void SetZoom( u16 zoom );
 
-            ThumbnailSortMethod GetSortMethod() const;
-            struct SortOptions
-            {
-                enum SortOption
-                {
-                    Refresh = 1 << 1,
-                    Force   = 1 << 2,
-                };
-            };
-            typedef SortOptions::SortOption SortOption;
-
-            void Sort( ThumbnailSortMethod method = ThumbnailSortMethods::AlphabeticalByName, u32 sortOptions = SortOptions::Refresh | SortOptions::Force );
+            VaultSortMethod GetSortMethod() const;
+            void Sort( VaultSortMethod method = VaultSortMethods::AlphabeticalByName, u32 sortOptions = VaultSortOptions::Refresh | VaultSortOptions::Force );
 
             virtual void Scroll( int x, int y ) HELIUM_OVERRIDE;
 
         private:
-            void CreateTiles( SearchResults* results );
+            void CreateTiles( VaultSearchResults* results );
 
             friend ThumbnailTileCreator;
             void OnTilesCreated( const M_PathToTilePtr& tiles, const ThumbnailSorter& sorter, const std::set< Helium::Path >& textures );
@@ -273,11 +264,10 @@ namespace Helium
             ThumbnailPtr m_TextureHighlighted;
             ThumbnailPtr m_TextureBlankFile;
 
-            SearchResultsPtr m_Results;
+            VaultSearchResultsPtr m_Results;
 
             ThumbnailTileCreator m_TileCreator;
 
-            tstring         m_ThumbnailDirectory;
             ThumbnailManager*   m_ThumbnailManager;
             std::set< Helium::Path > m_CurrentTextureRequests;
 
@@ -315,7 +305,7 @@ namespace Helium
             Math::Frustum m_ViewFrustum;
             float m_Scale;
 
-            VaultPanel* m_VaultPanel;
+            //VaultPanel* m_VaultPanel;
 
         private:
             ThumbnailSelectionSignature::Event m_SelectionChanged;

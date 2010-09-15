@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "ThumbnailView.h"
-#include "SearchResults.h"
+#include "VaultSearchResults.h"
 #include "ThumbnailLoadedEvent.h"
 
 #include "Foundation/File/Path.h"
@@ -65,9 +65,9 @@ END_EVENT_TABLE()
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, VaultPanel *vaultPanel, wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
+//ThumbnailView::ThumbnailView( VaultPanel *vaultPanel, wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
+ThumbnailView::ThumbnailView( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
 : wxScrolledWindow( parent, id, pos, size, style, name )
-, m_ThumbnailDirectory( thumbnailDirectory)
 , m_LabelFontHeight( 14 )
 , m_LabelFont( NULL )
 , m_TypeFont( NULL )
@@ -78,9 +78,10 @@ ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, VaultPanel *vau
 , m_RangeSelectTile( NULL )
 , m_CtrlOnMouseDown( false )
 , m_Scale( 128.0f )
-, m_VaultPanel( vaultPanel )
+//, m_VaultPanel( vaultPanel )
 {
-    m_ThumbnailManager = new ThumbnailManager( this, &m_DeviceManager, m_ThumbnailDirectory );
+    Helium::Path thumbnailDirectory;
+    m_ThumbnailManager = new ThumbnailManager( this, &m_DeviceManager, thumbnailDirectory );
 
     // Don't erase background
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
@@ -136,7 +137,7 @@ ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, VaultPanel *vau
     // Connect Listeners
     m_EditCtrl->Connect( m_EditCtrl->GetId(), wxEVT_KILL_FOCUS, wxFocusEventHandler( ThumbnailView::OnEditBoxLostFocus ), NULL, this );
     m_EditCtrl->Connect( m_EditCtrl->GetId(), wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ThumbnailView::OnEditBoxPressEnter ), NULL, this );
-    m_VaultPanel->Connect( m_VaultPanel->GetId(), wxEVT_CLOSE_WINDOW, wxCloseEventHandler( ThumbnailView::OnVaultPanelClosing ), NULL, this );
+    //m_VaultPanel->Connect( m_VaultPanel->GetId(), wxEVT_CLOSE_WINDOW, wxCloseEventHandler( ThumbnailView::OnVaultPanelClosing ), NULL, this );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -144,7 +145,7 @@ ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, VaultPanel *vau
 // 
 ThumbnailView::~ThumbnailView()
 {
-    m_VaultPanel->Disconnect( m_VaultPanel->GetId(), wxEVT_CLOSE_WINDOW, wxCloseEventHandler( ThumbnailView::OnVaultPanelClosing ), NULL, this );
+    //m_VaultPanel->Disconnect( m_VaultPanel->GetId(), wxEVT_CLOSE_WINDOW, wxCloseEventHandler( ThumbnailView::OnVaultPanelClosing ), NULL, this );
     m_EditCtrl->Disconnect( m_EditCtrl->GetId(), wxEVT_KILL_FOCUS, wxFocusEventHandler( ThumbnailView::OnEditBoxLostFocus ), NULL, this );
     m_EditCtrl->Disconnect( m_EditCtrl->GetId(), wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ThumbnailView::OnEditBoxPressEnter ), NULL, this );
 
@@ -187,7 +188,7 @@ void ThumbnailView::InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcon
 ///////////////////////////////////////////////////////////////////////////////
 // Change the results that are currently displayed in this view.
 // 
-void ThumbnailView::SetResults( SearchResults* results )
+void ThumbnailView::SetResults( VaultSearchResults* results )
 {
     if ( m_Results.Ptr() != results )
     {
@@ -231,7 +232,7 @@ void ThumbnailView::ClearResults()
 ///////////////////////////////////////////////////////////////////////////////
 // Returns a pointer to the results that are currently being displayed.
 // 
-const SearchResults* ThumbnailView::GetResults() const
+const VaultSearchResults* ThumbnailView::GetResults() const
 {
     return m_Results;
 }
@@ -359,7 +360,7 @@ void ThumbnailView::SetZoom( u16 zoom )
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the current sorting method.
 // 
-ThumbnailSortMethod ThumbnailView::GetSortMethod() const
+VaultSortMethod ThumbnailView::GetSortMethod() const
 {
     return m_Sorter.GetSortMethod();
 }
@@ -367,10 +368,10 @@ ThumbnailSortMethod ThumbnailView::GetSortMethod() const
 ///////////////////////////////////////////////////////////////////////////////
 // Sorts the view and optionally refreshes it.
 // 
-void ThumbnailView::Sort( ThumbnailSortMethod method, u32 sortOptions )
+void ThumbnailView::Sort( VaultSortMethod method, u32 sortOptions )
 {
     // Only sort if we are being forced to, or if the sort method is actually changing
-    if ( method != GetSortMethod() || ( sortOptions & SortOptions::Force ) )
+    if ( method != GetSortMethod() || ( sortOptions & VaultSortOptions::Force ) )
     {
         wxBusyCursor busyCursor;
 
@@ -379,7 +380,7 @@ void ThumbnailView::Sort( ThumbnailSortMethod method, u32 sortOptions )
         m_Sorter.Add( m_Tiles );
 
         // Only refresh if the option is set
-        if ( sortOptions & SortOptions::Refresh )
+        if ( sortOptions & VaultSortOptions::Refresh )
         {
             Refresh();
         }
@@ -409,7 +410,7 @@ void ThumbnailView::OnTilesCreated( const M_PathToTilePtr& tiles, const Thumbnai
     m_Tiles = tiles;
 
     // Retain the sorting method regardless of the setting specified in the callback
-    ThumbnailSortMethod sortMethod = m_Sorter.GetSortMethod();
+    VaultSortMethod sortMethod = m_Sorter.GetSortMethod();
     m_Sorter = sorter;
     m_Sorter.SetSortMethod( sortMethod );
 
@@ -918,15 +919,15 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
         // Thumbnail Size...
         {
             wxMenu* viewMenu = new wxMenu();
-            viewMenu->AppendCheckItem( ID_ViewSmall, VaultMenu::Label( ID_ViewSmall ) + TXT( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Small ), VaultMenu::Label( ID_ViewSmall ) );
-            viewMenu->AppendCheckItem( ID_ViewMedium, VaultMenu::Label( ID_ViewMedium ) + TXT( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Medium ), VaultMenu::Label( ID_ViewMedium ) );
-            viewMenu->AppendCheckItem( ID_ViewLarge, VaultMenu::Label( ID_ViewLarge ) + TXT( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Large ), VaultMenu::Label( ID_ViewLarge ) );
+            viewMenu->AppendCheckItem( ID_ViewSmall, VaultMenu::Label( ID_ViewSmall ) + TXT( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Small ), VaultMenu::Label( ID_ViewSmall ) );
+            viewMenu->AppendCheckItem( ID_ViewMedium, VaultMenu::Label( ID_ViewMedium ) + TXT( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Medium ), VaultMenu::Label( ID_ViewMedium ) );
+            viewMenu->AppendCheckItem( ID_ViewLarge, VaultMenu::Label( ID_ViewLarge ) + TXT( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Large ), VaultMenu::Label( ID_ViewLarge ) );
             menu.AppendSubMenu( viewMenu, TXT( "Thumbnail Size" ) );
 
             // Make sure view option is correct
-            menu.Check( ID_ViewLarge, m_Scale == ThumbnailSizes::Large );
-            menu.Check( ID_ViewMedium, m_Scale == ThumbnailSizes::Medium );
-            menu.Check( ID_ViewSmall, m_Scale == ThumbnailSizes::Small );
+            menu.Check( ID_ViewLarge, m_Scale == VaultThumbnailsSizes::Large );
+            menu.Check( ID_ViewMedium, m_Scale == VaultThumbnailsSizes::Medium );
+            menu.Check( ID_ViewSmall, m_Scale == VaultThumbnailsSizes::Small );
         }
 
         // Sort...
@@ -940,8 +941,8 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
             sortMenu->Append( ID_Sort, VaultMenu::Label( ID_Sort ) );
             i32 sortMenuId = menu.AppendSubMenu( sortMenu, TXT( "Arrange Icons By" ) )->GetId();
 
-            sortMenu->Check( ID_SortByName, GetSortMethod() == ThumbnailSortMethods::AlphabeticalByName );
-            sortMenu->Check( ID_SortByType, GetSortMethod() == ThumbnailSortMethods::AlphabeticalByType );
+            sortMenu->Check( ID_SortByName, GetSortMethod() == VaultSortMethods::AlphabeticalByName );
+            sortMenu->Check( ID_SortByType, GetSortMethod() == VaultSortMethods::AlphabeticalByType );
 
             menu.Enable( sortMenuId, m_Results && m_Results->HasResults() );
         }  
@@ -1752,7 +1753,7 @@ void ThumbnailView::OnMouseLeftDoubleClick( wxMouseEvent& args )
         hit = hits.Front();
         if ( hit->GetPath().IsDirectory() )
         {
-            m_VaultPanel->Search( hit->GetPath().Get() );
+            //m_VaultPanel->Search( hit->GetPath().Get() );
         }
         else
         {
@@ -1853,7 +1854,7 @@ void ThumbnailView::OnSelectAll( wxCommandEvent& args )
 // 
 void ThumbnailView::OnSortAlphabetical( wxCommandEvent& args )
 {
-    Sort( ThumbnailSortMethods::AlphabeticalByName );
+    Sort( VaultSortMethods::AlphabeticalByName );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1861,7 +1862,7 @@ void ThumbnailView::OnSortAlphabetical( wxCommandEvent& args )
 // 
 void ThumbnailView::OnSortByType( wxCommandEvent& args )
 {
-    Sort( ThumbnailSortMethods::AlphabeticalByType );
+    Sort( VaultSortMethods::AlphabeticalByType );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

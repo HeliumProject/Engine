@@ -18,8 +18,8 @@ namespace Helium
             u8 r, g, b, a;
 
             Color4            () : r(0), g(0), b(0), a(255) {}
-            explicit Color4   (Color3 v) : r(v.r), g(v.g), b(v.b), a(255) {}
-            explicit Color4   (u8 vr, u8 vg, u8 vb, u8 va) : r(vr), g(vg), b(vb), a(va) {}
+            explicit Color4   ( const Color3& c) : r( c.r ), g( c.g ), b( c.b ), a( 255 ) {}
+            explicit Color4   ( u8 r, u8 g, u8 b, u8 a ) : r( r ), g( g ), b( b ), a( a ) {}
             explicit Color4   ( u8 val ) : r( val ), g( val ), b( val ), a( val ) {}
 
             Color4&           operator= (const Color4& v) { r = v.r; g = v.g; b = v.b; a = v.a; return *this; }

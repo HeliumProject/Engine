@@ -6,7 +6,6 @@
 #include "Foundation/Reflect/ArchiveXML.h"
 
 #include "Core/Content/ContentVersion.h"
-#include "Core/Content/ContentScene.h"
 #include "Core/Asset/AssetClass.h"
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/InstanceSet.h"

@@ -1,5 +1,4 @@
 #include "ContentInstance.h"
-#include "Core/Content/ContentScene.h"
 
 #include "Foundation/Component/ComponentHandle.h"
 #include "Foundation/Log.h"

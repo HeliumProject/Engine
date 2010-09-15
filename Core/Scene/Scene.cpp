@@ -14,7 +14,6 @@
 #include "Core/Asset/Classes/Entity.h"
 #include "Core/Asset/Manifests/SceneManifest.h"
 
-#include "Core/Content/ContentScene.h"
 #include "Core/Content/ContentVersion.h"
 #include "Core/Content/Nodes/ContentJointTransform.h"
 #include "Core/Content/Nodes/ContentPivotTransform.h"
@@ -250,12 +249,9 @@ Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u
 
     bool success = true;
 
-
-    Content::ScenePtr scene = new Content::Scene();
-
     try
     {
-        scene->Load( path, elements, this );
+        Reflect::Archive::FromFile( path, elements );
     }
     catch ( const Helium::Exception& exception )
     {
@@ -306,11 +302,9 @@ Undo::CommandPtr Scene::ImportXML( const tstring& xml, u32 importFlags, Core::Hi
 
     bool success = true;
 
-    Content::ScenePtr scene = new Content::Scene();
-
     try
     {
-        scene->LoadXML( xml, elements, this );
+        Reflect::ArchiveXML::FromString( xml, elements );
     }
     catch ( Helium::Exception& exception )
     {

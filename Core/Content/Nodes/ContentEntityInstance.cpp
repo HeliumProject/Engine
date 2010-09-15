@@ -4,7 +4,6 @@
 #include "Foundation/Component/ComponentHandle.h"
 
 #include "Core/Asset/AssetClass.h"
-#include "Core/Content/ContentScene.h"
 
 using namespace Helium;
 using namespace Helium::Asset;

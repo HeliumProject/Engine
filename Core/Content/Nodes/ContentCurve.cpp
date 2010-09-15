@@ -1,5 +1,4 @@
 #include "ContentCurve.h"
-#include "Core/Content/ContentScene.h"
 #include "Foundation/Math/Line.h"
 
 using namespace Helium;

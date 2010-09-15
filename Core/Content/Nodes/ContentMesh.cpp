@@ -1,10 +1,9 @@
 #include "ContentMesh.h"
 #include "Core/Content/ContentVisitor.h" 
-#include "Core/Content/ContentScene.h"
+
 #include "Foundation/Math/AlignedBox.h"
 #include "Foundation/Math/CalculateBounds.h"
 #include "Foundation/Math/Frustum.h"
-#include <float.h>
 
 using namespace Helium;
 using namespace Helium::Math;

@@ -139,8 +139,8 @@ void ViewPanel::OnChar( wxKeyEvent& event )
     switch ( keyCode )
     {
     case WXK_SPACE:
-        m_ViewCanvas->GetViewport().NextCameraMode();
-        event.Skip(false);
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ViewPanelEvents::NextView ) );
+        event.Skip( false );
         break;
 
     case WXK_UP:

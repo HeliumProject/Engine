@@ -266,7 +266,6 @@ namespace Helium
         };
         typedef Helium::Signature< const ExecuteArgs& > ExecuteSignature;
 
-
         struct UndoCommandArgs
         {
             UndoCommandArgs( Undo::CommandPtr command )
@@ -288,6 +287,26 @@ namespace Helium
 
         class Transform;
         typedef std::map< Helium::TUID, const Core::Transform* > M_TransformConstDumbPtr;
+
+        // 
+        // Hashing class for storing UIDs as keys to a hash_map.
+        // 
+
+        class NameHasher : public stdext::hash_compare< tstring >
+        {
+        public:
+            size_t operator( )( const tstring& str ) const
+            {
+                return __super::operator()( str );
+            }
+
+            bool operator( )( const tstring& str1, const tstring& str2 ) const
+            {
+                return _tcsicmp(str1.c_str(), str2.c_str()) < 0;
+            }
+        };
+
+        typedef stdext::hash_map< tstring, Core::SceneNode*, NameHasher > HM_NameToSceneNodeDumbPtr;
 
         class CORE_API Scene : public Reflect::Object, public Reflect::StatusHandler
         {

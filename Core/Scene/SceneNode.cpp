@@ -125,11 +125,6 @@ void SceneNode::Rename(const tstring& newName)
     m_Owner->Rename( this, newName );
 }
 
-void SceneNode::PopulateManifest( Asset::SceneManifest* manifest ) const
-{
-    // by default we reference no other assets
-}
-
 void SceneNode::Reset()
 {
     m_Ancestors.clear();
@@ -443,6 +438,11 @@ Core::SceneNodeType* SceneNode::DeduceNodeType()
 void SceneNode::CheckNodeType()
 {
     ChangeNodeType( DeduceNodeType() );
+}
+
+void SceneNode::PopulateManifest( Asset::SceneManifest* manifest ) const
+{
+    // by default we reference no other assets
 }
 
 void SceneNode::Create()

@@ -26,7 +26,7 @@ void Selection::Refresh()
     Log::Profile( TXT( "Selection Refresh took %fms\n" ), timer.Elapsed());
 }
 
-const OS_PersistentDumbPtr& Selection::GetItems() const
+const OS_SceneNodeDumbPtr& Selection::GetItems() const
 {
     return m_Items;
 }
@@ -44,15 +44,15 @@ Undo::CommandPtr Selection::Clear(const SelectionChangingSignature::Delegate& em
 
     Undo::CommandPtr command;
 
-    OS_PersistentDumbPtr empty;
+    OS_SceneNodeDumbPtr empty;
     SelectionChangingArgs args ( empty );
     m_SelectionChanging.RaiseWithEmitter( args, emitterChanging );
     if ( !args.m_Veto )
     {
         command = new SelectionChangeCommand( this );
 
-        OS_PersistentDumbPtr::Iterator itr = m_Items.Begin();
-        OS_PersistentDumbPtr::Iterator end = m_Items.End();
+        OS_SceneNodeDumbPtr::Iterator itr = m_Items.Begin();
+        OS_SceneNodeDumbPtr::Iterator end = m_Items.End();
         for ( ; itr != end; ++itr )
         {
             (*itr)->SetSelected(false);
@@ -68,21 +68,21 @@ Undo::CommandPtr Selection::Clear(const SelectionChangingSignature::Delegate& em
     return command;
 }
 
-Undo::CommandPtr Selection::SetItem(Persistent* item, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
+Undo::CommandPtr Selection::SetItem(SceneNode* item, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
     if (item == NULL)
     {
         return Clear(emitterChanging, emitterChanged);
     }
 
-    OS_PersistentDumbPtr temp;
+    OS_SceneNodeDumbPtr temp;
 
     temp.Append(item);
 
     return SetItems(temp, emitterChanging, emitterChanged);
 }
 
-Undo::CommandPtr Selection::SetItems(const OS_PersistentDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
+Undo::CommandPtr Selection::SetItems(const OS_SceneNodeDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
     if (items.Empty())
     {
@@ -93,11 +93,11 @@ Undo::CommandPtr Selection::SetItems(const OS_PersistentDumbPtr& items, const Se
 
     Timer timer;
 
-    OS_PersistentDumbPtr selectableItems;
+    OS_SceneNodeDumbPtr selectableItems;
 
     {
-        OS_PersistentDumbPtr::Iterator itr = items.Begin();
-        OS_PersistentDumbPtr::Iterator end = items.End();
+        OS_SceneNodeDumbPtr::Iterator itr = items.Begin();
+        OS_SceneNodeDumbPtr::Iterator end = items.End();
         for ( ; itr != end; ++itr )
         {
             if ((*itr)->IsSelectable())
@@ -116,8 +116,8 @@ Undo::CommandPtr Selection::SetItems(const OS_PersistentDumbPtr& items, const Se
         command = new SelectionChangeCommand( this );
 
         {
-            OS_PersistentDumbPtr::Iterator itr = m_Items.Begin();
-            OS_PersistentDumbPtr::Iterator end = m_Items.End();
+            OS_SceneNodeDumbPtr::Iterator itr = m_Items.Begin();
+            OS_SceneNodeDumbPtr::Iterator end = m_Items.End();
             for ( ; itr != end; ++itr )
             {
                 (*itr)->SetSelected(false);
@@ -127,8 +127,8 @@ Undo::CommandPtr Selection::SetItems(const OS_PersistentDumbPtr& items, const Se
         m_Items = selectableItems;
 
         {
-            OS_PersistentDumbPtr::Iterator itr = m_Items.Begin();
-            OS_PersistentDumbPtr::Iterator end = m_Items.End();
+            OS_SceneNodeDumbPtr::Iterator itr = m_Items.Begin();
+            OS_SceneNodeDumbPtr::Iterator end = m_Items.End();
             for ( ; itr != end; ++itr )
             {
                 (*itr)->SetSelected(true);
@@ -143,21 +143,21 @@ Undo::CommandPtr Selection::SetItems(const OS_PersistentDumbPtr& items, const Se
     return command;
 }
 
-Undo::CommandPtr Selection::AddItem(Persistent* item, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
+Undo::CommandPtr Selection::AddItem(SceneNode* item, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
     if ( item == NULL )
     {
         return NULL;
     }
 
-    OS_PersistentDumbPtr temp;
+    OS_SceneNodeDumbPtr temp;
 
     temp.Append(item);
 
     return AddItems(temp, emitterChanging, emitterChanged);
 }
 
-Undo::CommandPtr Selection::AddItems(const OS_PersistentDumbPtr &items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
+Undo::CommandPtr Selection::AddItems(const OS_SceneNodeDumbPtr &items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
     if ( items.Empty() )
     {
@@ -168,10 +168,10 @@ Undo::CommandPtr Selection::AddItems(const OS_PersistentDumbPtr &items, const Se
 
     Timer timer;
 
-    std::vector<Persistent*> added;
-    OS_PersistentDumbPtr temp = m_Items;
-    OS_PersistentDumbPtr::Iterator itr = items.Begin();
-    OS_PersistentDumbPtr::Iterator end = items.End();
+    std::vector<SceneNode*> added;
+    OS_SceneNodeDumbPtr temp = m_Items;
+    OS_SceneNodeDumbPtr::Iterator itr = items.Begin();
+    OS_SceneNodeDumbPtr::Iterator end = items.End();
     for ( ; itr != end; ++itr )
     {
         if ( temp.Append(*itr) )
@@ -190,8 +190,8 @@ Undo::CommandPtr Selection::AddItems(const OS_PersistentDumbPtr &items, const Se
         {
             command = new SelectionChangeCommand( this );
 
-            std::vector<Persistent*>::iterator itr = added.begin();
-            std::vector<Persistent*>::iterator end = added.end();
+            std::vector<SceneNode*>::iterator itr = added.begin();
+            std::vector<SceneNode*>::iterator end = added.end();
             for ( ; itr != end; ++itr )
             {
                 (*itr)->SetSelected(true);
@@ -208,7 +208,7 @@ Undo::CommandPtr Selection::AddItems(const OS_PersistentDumbPtr &items, const Se
     return command;
 }
 
-Undo::CommandPtr Selection::RemoveItem(Persistent* item, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
+Undo::CommandPtr Selection::RemoveItem(SceneNode* item, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
     // no item to remove or no items to remove from
     if ( item == NULL || m_Items.Empty() )
@@ -216,14 +216,14 @@ Undo::CommandPtr Selection::RemoveItem(Persistent* item, const SelectionChanging
         return NULL;
     }
 
-    OS_PersistentDumbPtr temp;
+    OS_SceneNodeDumbPtr temp;
 
     temp.Append(item);
 
     return RemoveItems(temp, emitterChanging, emitterChanged);
 }
 
-Undo::CommandPtr Selection::RemoveItems(const OS_PersistentDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
+Undo::CommandPtr Selection::RemoveItems(const OS_SceneNodeDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
     // no selected items
     if ( m_Items.Empty() )
@@ -235,10 +235,10 @@ Undo::CommandPtr Selection::RemoveItems(const OS_PersistentDumbPtr& items, const
 
     Timer timer;
 
-    std::vector<Persistent*> removed;
-    OS_PersistentDumbPtr temp = m_Items;
-    OS_PersistentDumbPtr::Iterator itr = items.Begin();
-    OS_PersistentDumbPtr::Iterator end = items.End();
+    std::vector<SceneNode*> removed;
+    OS_SceneNodeDumbPtr temp = m_Items;
+    OS_SceneNodeDumbPtr::Iterator itr = items.Begin();
+    OS_SceneNodeDumbPtr::Iterator end = items.End();
     for ( ; itr != end; ++itr )
     {
         if ( temp.Remove(*itr) )
@@ -255,8 +255,8 @@ Undo::CommandPtr Selection::RemoveItems(const OS_PersistentDumbPtr& items, const
     {
         command = new SelectionChangeCommand( this );
 
-        std::vector<Persistent*>::iterator itr = removed.begin();
-        std::vector<Persistent*>::iterator end = removed.end();
+        std::vector<SceneNode*>::iterator itr = removed.begin();
+        std::vector<SceneNode*>::iterator end = removed.end();
         for ( ; itr != end; ++itr )
         {
             (*itr)->SetSelected(false);
@@ -272,10 +272,10 @@ Undo::CommandPtr Selection::RemoveItems(const OS_PersistentDumbPtr& items, const
     return command;
 }
 
-bool Selection::Contains(Persistent* item) const
+bool Selection::Contains(SceneNode* item) const
 {
-    OS_PersistentDumbPtr::Iterator itr = m_Items.Begin();
-    OS_PersistentDumbPtr::Iterator end = m_Items.End();
+    OS_SceneNodeDumbPtr::Iterator itr = m_Items.Begin();
+    OS_SceneNodeDumbPtr::Iterator end = m_Items.End();
     for ( ; itr != end; ++itr )
     {
         if (*itr == item)
@@ -287,12 +287,12 @@ bool Selection::Contains(Persistent* item) const
     return false;
 }
 
-void Selection::GetUndo( OS_PersistentDumbPtr& outItems ) const
+void Selection::GetUndo( OS_SceneNodeDumbPtr& outItems ) const
 {
     outItems = GetItems();
 }
 
-void Selection::SetUndo( const OS_PersistentDumbPtr& items )
+void Selection::SetUndo( const OS_SceneNodeDumbPtr& items )
 {
     SetItems( items );
 }

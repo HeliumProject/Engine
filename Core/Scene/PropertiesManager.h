@@ -109,12 +109,12 @@ namespace Helium
 
         struct PropertiesThreadArgs
         {
-            PropertiesThreadArgs( PropertiesStyle setting, u32 selectionId, const u32* currentSelectionId, const OS_PersistentDumbPtr& selection )
+            PropertiesThreadArgs( PropertiesStyle setting, u32 selectionId, const u32* currentSelectionId, const OS_SceneNodeDumbPtr& selection )
                 : m_SelectionId( selectionId )
                 , m_CurrentSelectionId( currentSelectionId )
                 , m_Style( setting )
             {
-                for ( OS_PersistentDumbPtr::Iterator itr = selection.Begin(), end = selection.End(); itr != end; ++itr )
+                for ( OS_SceneNodeDumbPtr::Iterator itr = selection.Begin(), end = selection.End(); itr != end; ++itr )
                 {
                     m_Selection.Append( *itr );
                 }
@@ -123,7 +123,7 @@ namespace Helium
             PropertiesStyle             m_Style;
             u32                         m_SelectionId;
             const u32*                  m_CurrentSelectionId;
-            OrderedSet<PersistentPtr>   m_Selection;
+            OrderedSet<SceneNodePtr>    m_Selection;
         };
 
         class CORE_API PropertiesManager : public Helium::RefCountBase< PropertiesManager >
@@ -135,7 +135,7 @@ namespace Helium
             void Show( const Inspect::CanvasShowArgs& args );
 
             void SetProperties(PropertiesStyle setting);
-            void SetSelection(const OS_PersistentDumbPtr& selection);
+            void SetSelection(const OS_SceneNodeDumbPtr& selection);
 
             // inspect selection begin creating the property UI
             void CreateProperties();
@@ -168,7 +168,7 @@ namespace Helium
             CommandQueue*                   m_CommandQueue;
 
             // selection to create properties for
-            OS_PersistentDumbPtr            m_Selection;
+            OS_SceneNodeDumbPtr            m_Selection;
 
             // do we want to be the intersection or union?
             PropertiesStyle                 m_Style;

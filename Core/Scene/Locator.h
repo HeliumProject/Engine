@@ -15,19 +15,10 @@ namespace Helium
         // 
         class Locator : public Core::Instance
         {
-            //
-            // Runtime Type Info
-            //
-
         public:
             REFLECT_DECLARE_ABSTRACT( Core::Locator, Core::Instance );
             static void InitializeType();
             static void CleanupType();
-
-
-            //
-            // Member functions
-            //
 
             Locator(Core::Scene* s);
             Locator(Core::Scene* s, Content::Locator* locator);

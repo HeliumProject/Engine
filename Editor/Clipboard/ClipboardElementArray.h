@@ -16,6 +16,9 @@ namespace Helium
         class ClipboardElementArray : public ReflectClipboardData
         {
         public:
+            REFLECT_DECLARE_CLASS( ClipboardElementArray, ReflectClipboardData );
+            static void EnumerateClass( Reflect::Compositor<ClipboardElementArray>& comp );
+
             ClipboardElementArray();
             virtual ~ClipboardElementArray();
 
@@ -30,10 +33,6 @@ namespace Helium
         public:
             tstring m_CommonBaseClass;
             Reflect::V_Element m_Elements;
-
-        public:
-            REFLECT_DECLARE_CLASS( ClipboardElementArray, ReflectClipboardData );
-            static void EnumerateClass( Reflect::Compositor<ClipboardElementArray>& comp );
         };
         typedef Helium::SmartPtr< ClipboardElementArray > ClipboardElementArrayPtr;
     }

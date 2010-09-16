@@ -347,7 +347,7 @@ namespace Helium
             Selection m_Selection;
 
             // highlighted items of this scene
-            OS_PersistentDumbPtr m_Highlighted;
+            OS_SceneNodeDumbPtr m_Highlighted;
 
             // data for handling picks
             Inspect::DataPtr m_PickData;
@@ -469,7 +469,7 @@ namespace Helium
             }
 
             // allows external people to modify selection
-            const OS_PersistentDumbPtr& GetHighlighted() const
+            const OS_SceneNodeDumbPtr& GetHighlighted() const
             {
                 // right now we don't use the selection when undoing/redoing
                 //  and would like to keep it that way so we can clear it without undo support
@@ -775,9 +775,9 @@ namespace Helium
 
             Core::HierarchyNode* GetCommonParent( const V_HierarchyNodeDumbPtr& nodes );
             void GetCommonParents( const V_HierarchyNodeDumbPtr& nodes, V_HierarchyNodeDumbPtr& parents );
-            void GetSelectionParents(OS_PersistentDumbPtr& parents);
+            void GetSelectionParents(OS_SceneNodeDumbPtr& parents);
 
-            void GetFlattenedSelection(OS_PersistentDumbPtr& selection);
+            void GetFlattenedSelection(OS_SceneNodeDumbPtr& selection);
             void GetFlattenedHierarchy(Core::HierarchyNode* node, OS_HierarchyNodeDumbPtr& items);
 
             void GetSelectedTransforms( Math::V_Matrix4& transforms );
@@ -1036,7 +1036,7 @@ namespace Helium
 
         public:
 
-            SceneSelectCommand( Core::Scene* scene, OS_PersistentDumbPtr& selection  ) 
+            SceneSelectCommand( Core::Scene* scene, OS_SceneNodeDumbPtr& selection  ) 
                 : m_Scene( scene )
                 , m_Selection( selection )
             { 
@@ -1064,8 +1064,8 @@ namespace Helium
 
         private:
             Core::Scene* m_Scene;
-            OS_PersistentDumbPtr m_Selection;
-            OS_PersistentDumbPtr m_OldSelection;
+            OS_SceneNodeDumbPtr m_Selection;
+            OS_SceneNodeDumbPtr m_OldSelection;
         };
     }
 }

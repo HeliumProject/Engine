@@ -998,14 +998,6 @@
 			Name="Scene"
 			>
 			<File
-				RelativePath=".\Scene\Persistent.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\Persistent.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scene\PropertiesGenerator.cpp"
 				>
 			</File>

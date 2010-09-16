@@ -28,10 +28,6 @@ namespace Helium
 
         class InstanceType : public Core::HierarchyNodeType
         {
-            //
-            // Members
-            //
-
         protected:
             // material that describes the color settings of the configuration
             D3DMATERIAL9 m_Material;
@@ -42,25 +38,14 @@ namespace Helium
             // the sets for this type
             M_InstanceSetSmartPtr m_Sets;
 
-
-            //
-            // Runtime Type Info
-            //
-
         public:
             REFLECT_DECLARE_ABSTRACT( Core::InstanceType, Core::HierarchyNodeType );
             static void InitializeType();
             static void CleanupType();
 
-
-            //
-            // Implementation
-            //
-
         public:
             InstanceType( Core::Scene* scene, i32 instanceType );
             virtual ~InstanceType();
-
 
             //
             // Graphics
@@ -77,7 +62,6 @@ namespace Helium
             bool IsTransparent() HELIUM_OVERRIDE;
             const D3DMATERIAL9& GetMaterial() const;
 
-
             //
             // Sets
             //
@@ -89,7 +73,6 @@ namespace Helium
 
             virtual void AddSet(Core::InstanceSet* set);
             virtual void RemoveSet(Core::InstanceSet* set);
-
 
             //
             // Events

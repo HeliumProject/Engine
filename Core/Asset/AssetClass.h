@@ -43,17 +43,11 @@ namespace Helium
 
         private:
             static tstring s_BaseBuiltDirectory;
-
             static std::map< tstring, class AssetFactory* > s_AssetFactories;
 
         public:
-            //
-            // RTTI
-            //
             REFLECT_DECLARE_ABSTRACT( AssetClass, ComponentCollection );
-
             static void EnumerateClass( Reflect::Compositor< AssetClass >& comp );
-
 
         public:
             AssetClass();

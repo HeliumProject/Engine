@@ -2,12 +2,12 @@
 
 #include <vector>
 
-#include "Core/API.h"
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Reflect/Element.h"
-
-#include "Core/Scene/Persistent.h"
 #include "Foundation/Undo/PropertyCommand.h"
+
+#include "Core/API.h"
+#include "Core/Scene/SceneNode.h"
 
 namespace Helium
 {
@@ -15,17 +15,17 @@ namespace Helium
     {
         struct SelectionChangeArgs
         {
-            SelectionChangeArgs( const OS_PersistentDumbPtr& item )
+            SelectionChangeArgs( const OS_SceneNodeDumbPtr& item )
                 : m_Selection( item )
             {
             }
 
-            const OS_PersistentDumbPtr& m_Selection;
+            const OS_SceneNodeDumbPtr& m_Selection;
         };
 
         struct SelectionChangingArgs : SelectionChangeArgs
         {
-            SelectionChangingArgs( const OS_PersistentDumbPtr& item )
+            SelectionChangingArgs( const OS_SceneNodeDumbPtr& item )
                 : SelectionChangeArgs( item )
                 , m_Veto( false )
             {
@@ -50,11 +50,11 @@ namespace Helium
             // Command for item changes
             //
 
-            class SelectionChangeCommand : public Undo::PropertyCommand< OS_PersistentDumbPtr >
+            class SelectionChangeCommand : public Undo::PropertyCommand< OS_SceneNodeDumbPtr >
             {
             public:
                 SelectionChangeCommand( Selection* selection )
-                    : Undo::PropertyCommand< OS_PersistentDumbPtr >( new Helium::MemberProperty< Selection, OS_PersistentDumbPtr > (selection, &Selection::GetUndo, &Selection::SetUndo) )
+                    : Undo::PropertyCommand< OS_SceneNodeDumbPtr >( new Helium::MemberProperty< Selection, OS_SceneNodeDumbPtr > (selection, &Selection::GetUndo, &Selection::SetUndo) )
                 {
 
                 }
@@ -66,7 +66,7 @@ namespace Helium
             };
 
             // The items of selected items
-            OS_PersistentDumbPtr m_Items;
+            OS_SceneNodeDumbPtr m_Items;
 
         public:
             // ctor doesn't do much
@@ -76,36 +76,36 @@ namespace Helium
             void Refresh();
 
             // Get item to a tuple of objects
-            const OS_PersistentDumbPtr& GetItems() const;
+            const OS_SceneNodeDumbPtr& GetItems() const;
 
             // Clear the item
             Undo::CommandPtr Clear(const SelectionChangingSignature::Delegate& emitterChanging = SelectionChangingSignature::Delegate (), const SelectionChangedSignature::Delegate& emitterChanged = SelectionChangedSignature::Delegate ());
 
             // Set item to a single object
-            Undo::CommandPtr SetItem(Persistent* item, const SelectionChangingSignature::Delegate& emitterChanging = SelectionChangingSignature::Delegate (), const SelectionChangedSignature::Delegate& emitterChanged = SelectionChangedSignature::Delegate ());
+            Undo::CommandPtr SetItem(SceneNode* item, const SelectionChangingSignature::Delegate& emitterChanging = SelectionChangingSignature::Delegate (), const SelectionChangedSignature::Delegate& emitterChanged = SelectionChangedSignature::Delegate ());
 
             // Set item to a tuple of objects
-            Undo::CommandPtr SetItems(const OS_PersistentDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging = SelectionChangingSignature::Delegate (), const SelectionChangedSignature::Delegate& emitterChanged = SelectionChangedSignature::Delegate ());
+            Undo::CommandPtr SetItems(const OS_SceneNodeDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging = SelectionChangingSignature::Delegate (), const SelectionChangedSignature::Delegate& emitterChanged = SelectionChangedSignature::Delegate ());
 
             //Add single object to item
-            Undo::CommandPtr AddItem(Persistent* item, const SelectionChangingSignature::Delegate& emitterChanging = SelectionChangingSignature::Delegate (), const SelectionChangedSignature::Delegate& emitterChanged = SelectionChangedSignature::Delegate ());
+            Undo::CommandPtr AddItem(SceneNode* item, const SelectionChangingSignature::Delegate& emitterChanging = SelectionChangingSignature::Delegate (), const SelectionChangedSignature::Delegate& emitterChanged = SelectionChangedSignature::Delegate ());
 
             //Add tuple of objects to the current item
-            Undo::CommandPtr AddItems( const OS_PersistentDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging = SelectionChangingSignature::Delegate (), const SelectionChangedSignature::Delegate& emitterChanged = SelectionChangedSignature::Delegate ());
+            Undo::CommandPtr AddItems( const OS_SceneNodeDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging = SelectionChangingSignature::Delegate (), const SelectionChangedSignature::Delegate& emitterChanged = SelectionChangedSignature::Delegate ());
 
             // Remove single object from item
-            Undo::CommandPtr RemoveItem(Persistent* item, const SelectionChangingSignature::Delegate& emitterChanging = SelectionChangingSignature::Delegate (), const SelectionChangedSignature::Delegate& emitterChanged = SelectionChangedSignature::Delegate () );
+            Undo::CommandPtr RemoveItem(SceneNode* item, const SelectionChangingSignature::Delegate& emitterChanging = SelectionChangingSignature::Delegate (), const SelectionChangedSignature::Delegate& emitterChanged = SelectionChangedSignature::Delegate () );
 
             // Remove tuple of objects from item
-            Undo::CommandPtr RemoveItems(const OS_PersistentDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging = SelectionChangingSignature::Delegate (), const SelectionChangedSignature::Delegate& emitterChanged = SelectionChangedSignature::Delegate () );
+            Undo::CommandPtr RemoveItems(const OS_SceneNodeDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging = SelectionChangingSignature::Delegate (), const SelectionChangedSignature::Delegate& emitterChanged = SelectionChangedSignature::Delegate () );
 
             // Query containment of an individual object
-            bool Contains(Persistent* item) const;
+            bool Contains(SceneNode* item) const;
 
         private:
             // Getter/Setter that matches the prototype required by the undo queue
-            void GetUndo( OS_PersistentDumbPtr& outItems ) const;
-            void SetUndo( const OS_PersistentDumbPtr& items );
+            void GetUndo( OS_SceneNodeDumbPtr& outItems ) const;
+            void SetUndo( const OS_SceneNodeDumbPtr& items );
 
         private:
             // fired before item changes, with the exiting set of selected objects

@@ -18,10 +18,6 @@ namespace Helium
 
         class VolumeType : public Core::InstanceType
         {
-            //
-            // Members
-            //
-
         private:
             // volume shapes
             Core::PrimitiveCube* m_Cube;
@@ -29,24 +25,13 @@ namespace Helium
             Core::PrimitiveSphere* m_Sphere;
             Core::PrimitiveCapsule* m_Capsule;
 
-
-            //
-            // Runtime Type Info
-            //
-
         public:
             REFLECT_DECLARE_ABSTRACT( Core::VolumeType, Core::InstanceType );
             static void InitializeType();
             static void CleanupType();
 
-
-            //
-            // Implementation
-            //
-
         public:
             VolumeType( Core::Scene* scene, i32 instanceType );
-
             virtual ~VolumeType();
 
             virtual void Create() HELIUM_OVERRIDE;

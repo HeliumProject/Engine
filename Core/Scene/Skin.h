@@ -21,10 +21,6 @@ namespace Helium
 
         class Skin : public Core::SceneNode
         {
-            //
-            // Member variables
-            //
-
         protected:
             Core::Mesh* m_Mesh;
             V_TransformDumbPtr m_InfluenceObjects;
@@ -32,20 +28,14 @@ namespace Helium
             Math::V_Matrix4 m_DeformMatrices;
             Math::V_Matrix4 m_SkinMatrices;
 
-            //
-            // Runtime Type Info
-            //
-
             REFLECT_DECLARE_ABSTRACT( Skin, Core::SceneNode );
             static void InitializeType();
             static void CleanupType();
 
-            // 
-            // Member functions
-            // 
         public:
             Skin( Core::Scene* scene, Content::Skin* skin );
             virtual ~Skin();
+
             virtual void Initialize() HELIUM_OVERRIDE;
             virtual void Evaluate(GraphDirection direction) HELIUM_OVERRIDE;
 

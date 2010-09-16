@@ -25,27 +25,12 @@ namespace Helium
 
         class CORE_API Locator : public Instance
         {
-            //
-            // Members
-            //
-
         public:
             LocatorShape m_Shape;
 
-
-            //
-            // RTTI
-            //
-
         public:
             REFLECT_DECLARE_CLASS(Locator, Instance);
-
             static void EnumerateClass( Reflect::Compositor<Locator>& comp );
-
-
-            //
-            // Implementation
-            //
 
         public:
             Locator ()

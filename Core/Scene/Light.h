@@ -19,18 +19,10 @@ namespace Helium
         public:
             static D3DMATERIAL9 s_Material;
 
-            //
-            // Runtime Type Info
-            //
-
         public:
             REFLECT_DECLARE_ABSTRACT( Core::Light, Core::Instance );
             static void InitializeType();
             static void CleanupType();
-
-            //
-            // Member functions
-            //
 
             Light(Core::Scene* scene, Content::Light* light);
 

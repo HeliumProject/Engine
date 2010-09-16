@@ -55,7 +55,7 @@ namespace Helium
         };
 
         //
-        // RTTI information is missing or invalid
+        // Reflection information is missing or invalid
         //
 
         class TypeInformationException : public Reflect::LogisticException

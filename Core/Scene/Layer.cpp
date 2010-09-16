@@ -14,19 +14,12 @@ using namespace Helium::Core;
 
 REFLECT_DEFINE_ABSTRACT( Core::Layer );
 
-///////////////////////////////////////////////////////////////////////////////
-// Called once to prepare this class for use in the RTTI system.  Also sets
-// up the static panel for displaying layer information in the GUI.
-// 
 void Layer::InitializeType()
 {
     Reflect::RegisterClassType< Core::Layer >( TXT( "Core::Layer" ) );
     PropertiesGenerator::InitializePanel( TXT( "Layer" ), CreatePanelSignature::Delegate( &Layer::CreatePanel ) );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Called when this type is being unloaded.
-// 
 void Layer::CleanupType()
 {
     Reflect::UnregisterClassType< Core::Layer >();
@@ -189,9 +182,9 @@ void Layer::SetColor( const Math::Color3& color )
     }
 }
 
-OS_PersistentDumbPtr Layer::GetMembers()
+OS_SceneNodeDumbPtr Layer::GetMembers()
 {
-    OS_PersistentDumbPtr members;
+    OS_SceneNodeDumbPtr members;
 
     for each (Core::SceneNode* n in m_Descendants)
     {
@@ -376,7 +369,7 @@ void Layer::CreatePanel( CreatePanelArgs& args )
 // Static helper function to build the list of all members and common members
 // across all selected objects. These lists will be shown in the UI.
 // 
-void Layer::BuildUnionAndIntersection( PropertiesGenerator* generator, const OS_PersistentDumbPtr& selection, tstring& unionStr, tstring& intersectionStr )
+void Layer::BuildUnionAndIntersection( PropertiesGenerator* generator, const OS_SceneNodeDumbPtr& selection, tstring& unionStr, tstring& intersectionStr )
 {
     typedef std::set< tstring, CaseInsensitiveNatStrCmp > S_Ordered;
     S_Ordered unionSet;
@@ -389,8 +382,8 @@ void Layer::BuildUnionAndIntersection( PropertiesGenerator* generator, const OS_
         HM_SceneNodeDumbPtr mapIntersection;
 
         // For each item in the selection
-        OS_PersistentDumbPtr::Iterator selItr = selection.Begin();
-        OS_PersistentDumbPtr::Iterator selEnd = selection.End();
+        OS_SceneNodeDumbPtr::Iterator selItr = selection.Begin();
+        OS_SceneNodeDumbPtr::Iterator selEnd = selection.End();
         for ( bool isFirstLayer = true; selItr != selEnd; ++selItr, isFirstLayer = false )
         {
             HM_SceneNodeDumbPtr layerMembers;

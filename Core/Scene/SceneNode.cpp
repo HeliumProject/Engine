@@ -28,13 +28,14 @@ void SceneNode::CleanupType()
 }
 
 SceneNode::SceneNode( Core::Scene* owner, Content::SceneNode* data )
-: Persistent( data )
-, m_IsInitialized ( false )
-, m_NodeType( NULL )
-, m_Graph( NULL )
-, m_Owner( owner )
-, m_VisitedID( 0 )
+: m_IsInitialized( false )
+, m_IsSelected( false )
 , m_IsTransient( false )
+, m_Package( data )
+, m_Owner( owner )
+, m_Graph( NULL )
+, m_NodeType( NULL )
+, m_VisitedID( 0 )
 {
     m_NodeStates[ GraphDirections::Downstream ] = NodeStates::Dirty;
     m_NodeStates[ GraphDirections::Upstream ] = NodeStates::Dirty;
@@ -464,6 +465,11 @@ void SceneNode::Execute(bool interactively)
     m_Owner->Execute(interactively);
 }
 
+void SceneNode::ConnectProperties(EnumerateElementArgs& args)
+{
+
+}
+
 bool SceneNode::ValidatePanel(const tstring& name)
 {
     if (name == TXT( "Scene Node" ) )
@@ -523,4 +529,46 @@ void SceneNode::SetMembership( const tstring& layers )
     // This function is required to generate the UI that lists the layer membership.
     // It doesn't do anything and you shouldn't be calling it.
     HELIUM_BREAK();
+}
+
+void SceneNode::GetState( Reflect::ElementPtr& state ) const
+{
+    const_cast<SceneNode*>(this)->Pack();
+
+    state = m_Package->Clone();
+}
+
+void SceneNode::SetState( const Reflect::ElementPtr& state )
+{
+    if ( !state->Equals( m_Package ) )
+    {
+        state->CopyTo( m_Package );
+        Unpack();
+        m_Package->RaiseChanged();
+    }
+}
+
+Undo::CommandPtr SceneNode::SnapShot( Reflect::Element* newState )
+{
+    if ( newState == NULL )
+    {
+        return new Undo::PropertyCommand<Reflect::ElementPtr>( new Helium::MemberProperty<SceneNode, Reflect::ElementPtr> (this, &SceneNode::GetState, &SceneNode::SetState) );
+    }
+
+    return new Undo::PropertyCommand<Reflect::ElementPtr>( new Helium::MemberProperty<SceneNode, Reflect::ElementPtr> (this, &SceneNode::GetState, &SceneNode::SetState), Reflect::ElementPtr( newState ) );
+}
+
+bool SceneNode::IsSelectable() const
+{
+    return true;
+}
+
+bool SceneNode::IsSelected() const
+{
+    return m_IsSelected;
+}
+
+void SceneNode::SetSelected(bool selected)
+{
+    m_IsSelected = selected;
 }

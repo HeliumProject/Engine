@@ -387,7 +387,7 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
 void Scene::Reset()
 {
     // Clear selection to free Properties API UI
-    m_Selection.SetItems( OS_PersistentDumbPtr () );
+    m_Selection.SetItems( OS_SceneNodeDumbPtr () );
 
     // clear Highlighted
     m_Highlighted.Clear();
@@ -580,7 +580,7 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
 
         if ( !newParents.empty() )
         {
-            OS_PersistentDumbPtr newSelection;
+            OS_SceneNodeDumbPtr newSelection;
             V_HierarchyNodeDumbPtr::const_iterator itr = newParents.begin();
             V_HierarchyNodeDumbPtr::const_iterator end = newParents.end();
             for ( ; itr != end; ++itr )
@@ -790,8 +790,8 @@ bool Scene::Export( Reflect::V_Element& elements, const ExportArgs& args, Undo::
         // Walk through the selection list and export each dependency node
         if ( m_Selection.GetItems().Size() > 0 )
         {
-            OS_PersistentDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-            OS_PersistentDumbPtr::Iterator end = m_Selection.GetItems().End();
+            OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+            OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
             for ( ; itr != end; ++itr )
             {
                 Core::SceneNode* node = Reflect::ObjectCast< Core::SceneNode >( *itr );
@@ -1533,7 +1533,7 @@ void Scene::Select( const SelectArgs& args )
 
     bool result = Pick( args.m_Pick );
 
-    OS_PersistentDumbPtr selection;
+    OS_SceneNodeDumbPtr selection;
 
     switch (args.m_Target)
     {
@@ -1546,11 +1546,11 @@ void Scene::Select( const SelectArgs& args )
             V_PickHitSmartPtr::const_iterator end = sorted.end();
             for ( ; itr != end; ++itr )
             {
-                Persistent* persistent = Reflect::ObjectCast<Persistent>((*itr)->GetHitObject());
-                if (persistent)
+                SceneNode* node = Reflect::ObjectCast<SceneNode>((*itr)->GetHitObject());
+                if (node)
                 {
                     // add it to the new selection list
-                    selection.Append(persistent);
+                    selection.Append(node);
                     break;
                 }
             }
@@ -1563,11 +1563,11 @@ void Scene::Select( const SelectArgs& args )
             V_PickHitSmartPtr::const_iterator end = args.m_Pick->GetHits().end();
             for ( ; itr != end; ++itr )
             {
-                Persistent* persistent = Reflect::ObjectCast<Persistent>((*itr)->GetHitObject());
-                if (persistent)
+                SceneNode* node = Reflect::ObjectCast<SceneNode>((*itr)->GetHitObject());
+                if (node)
                 {
                     // add it to the new selection list
-                    selection.Append(persistent);
+                    selection.Append(node);
                 }
             }
             break;
@@ -1601,9 +1601,9 @@ void Scene::Select( const SelectArgs& args )
 
     case SelectionModes::Toggle:
         {
-            OS_PersistentDumbPtr newSelection = m_Selection.GetItems();
-            OS_PersistentDumbPtr::Iterator itr = selection.Begin();
-            OS_PersistentDumbPtr::Iterator end = selection.End();
+            OS_SceneNodeDumbPtr newSelection = m_Selection.GetItems();
+            OS_SceneNodeDumbPtr::Iterator itr = selection.Begin();
+            OS_SceneNodeDumbPtr::Iterator end = selection.End();
             for ( ; itr != end; ++itr )
             {
                 if ( (*itr)->IsSelected() )
@@ -1712,7 +1712,7 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
     if (args.m_Pick == NULL)
         return;
 
-    OS_PersistentDumbPtr selection;
+    OS_SceneNodeDumbPtr selection;
 
     bool result = Pick( args.m_Pick );
 
@@ -1727,21 +1727,15 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
             V_PickHitSmartPtr::const_iterator end = sorted.end();
             for ( ; itr != end; ++itr )
             {
-                Persistent* persistent = Reflect::ObjectCast<Persistent>((*itr)->GetHitObject());
-                if (persistent)
-                {
-                    // add it to the new selection list
-                    selection.Append(persistent);
-                    break;
-                }
-
-#ifdef HELIUM_ASSERT_ENABLED
-                SceneNode* node = Reflect::ObjectCast<SceneNode>( (*itr)->GetHitObject() );
+                SceneNode* node = Reflect::ObjectCast<SceneNode>((*itr)->GetHitObject());
                 if (node)
                 {
                     HELIUM_ASSERT( node->GetOwner() == this );
+
+                    // add it to the new selection list
+                    selection.Append(node);
+                    break;
                 }
-#endif
             }
             break;
         }
@@ -1752,20 +1746,14 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
             V_PickHitSmartPtr::const_iterator end = args.m_Pick->GetHits().end();
             for ( ; itr != end; ++itr )
             {
-                Persistent* persistent = Reflect::ObjectCast<Persistent>((*itr)->GetHitObject());
-                if (persistent)
-                {
-                    // add it to the new selection list
-                    selection.Append(persistent);
-                }
-
-#ifdef HELIUM_ASSERT_ENABLED
-                SceneNode* node = Reflect::ObjectCast<SceneNode>( (*itr)->GetHitObject() );
+                SceneNode* node = Reflect::ObjectCast<SceneNode>((*itr)->GetHitObject());
                 if (node)
                 {
                     HELIUM_ASSERT( node->GetOwner() == this );
+
+                    // add it to the new selection list
+                    selection.Append(node);
                 }
-#endif
             }
             break;
         }
@@ -1779,8 +1767,8 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
     m_Highlighted = selection;
 
     Core::HierarchyNode* first = NULL;
-    OS_PersistentDumbPtr::Iterator itr = m_Highlighted.Begin();
-    OS_PersistentDumbPtr::Iterator end = m_Highlighted.End();
+    OS_SceneNodeDumbPtr::Iterator itr = m_Highlighted.Begin();
+    OS_SceneNodeDumbPtr::Iterator end = m_Highlighted.End();
     for ( ; itr != end; ++itr )
     {
         Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>(*itr);
@@ -1818,8 +1806,8 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
 
 void Scene::ClearHighlight( const ClearHighlightArgs& args )
 {
-    OS_PersistentDumbPtr::Iterator itr = m_Highlighted.Begin();
-    OS_PersistentDumbPtr::Iterator end = m_Highlighted.End();
+    OS_SceneNodeDumbPtr::Iterator itr = m_Highlighted.Begin();
+    OS_SceneNodeDumbPtr::Iterator end = m_Highlighted.End();
     for ( ; itr != end; ++itr )
     {
         Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>(*itr);
@@ -2139,13 +2127,13 @@ void Scene::GetCommonParents( const V_HierarchyNodeDumbPtr& nodes, V_HierarchyNo
     }
 }
 
-void Scene::GetSelectionParents(OS_PersistentDumbPtr& parents)
+void Scene::GetSelectionParents(OS_SceneNodeDumbPtr& parents)
 {
     parents.Clear();
 
     // for each candidate item we want to test that has no other parent in the list
-    OS_PersistentDumbPtr::Iterator outerItr = m_Selection.GetItems().Begin();
-    OS_PersistentDumbPtr::Iterator outerEnd = m_Selection.GetItems().End();
+    OS_SceneNodeDumbPtr::Iterator outerItr = m_Selection.GetItems().Begin();
+    OS_SceneNodeDumbPtr::Iterator outerEnd = m_Selection.GetItems().End();
     for ( ; outerItr != outerEnd; ++outerItr )
     {
         Core::HierarchyNode* outer = Reflect::ObjectCast< Core::HierarchyNode > (*outerItr);
@@ -2166,8 +2154,8 @@ void Scene::GetSelectionParents(OS_PersistentDumbPtr& parents)
         while ( parent && parent != m_Root && !childNode )
         {
             // check each item in the selection, looking for a match to 'parent'
-            OS_PersistentDumbPtr::Iterator innerItr = m_Selection.GetItems().Begin();
-            OS_PersistentDumbPtr::Iterator innerEnd = m_Selection.GetItems().End();
+            OS_SceneNodeDumbPtr::Iterator innerItr = m_Selection.GetItems().Begin();
+            OS_SceneNodeDumbPtr::Iterator innerEnd = m_Selection.GetItems().End();
             for ( ; innerItr != innerEnd; ++innerItr )
             {
                 Core::HierarchyNode* inner = Reflect::ObjectCast< Core::HierarchyNode > (*innerItr);
@@ -2209,16 +2197,16 @@ void Scene::GetSelectionParents(OS_PersistentDumbPtr& parents)
 ///////////////////////////////////////////////////////////////////////////////
 // Iterates over the selection and flattens any selected groups
 //
-void Scene::GetFlattenedSelection(OS_PersistentDumbPtr& selection)
+void Scene::GetFlattenedSelection(OS_SceneNodeDumbPtr& selection)
 {
     selection.Clear();
 
-    const OS_PersistentDumbPtr& selectedItems = m_Selection.GetItems();
-    OS_PersistentDumbPtr::Iterator it = selectedItems.Begin();
-    OS_PersistentDumbPtr::Iterator end = selectedItems.End();
+    const OS_SceneNodeDumbPtr& selectedItems = m_Selection.GetItems();
+    OS_SceneNodeDumbPtr::Iterator it = selectedItems.Begin();
+    OS_SceneNodeDumbPtr::Iterator end = selectedItems.End();
     for ( ; it != end; ++it )
     {
-        const PersistentPtr& item = *it;
+        const SceneNodePtr& item = *it;
 
         selection.Append( item );
 
@@ -2260,8 +2248,8 @@ void Scene::GetFlattenedHierarchy(Core::HierarchyNode* node, OS_HierarchyNodeDum
 
 void Scene::GetSelectedTransforms( Math::V_Matrix4& transforms )
 {
-    OS_PersistentDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-    OS_PersistentDumbPtr::Iterator end = m_Selection.GetItems().End();
+    OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for (int i=0; itr != end; itr++, i++)
     {
         Core::Transform* transform = Reflect::ObjectCast< Core::Transform >( *itr );
@@ -2282,8 +2270,8 @@ Undo::CommandPtr Scene::SetSelectedTransforms( const Math::V_Matrix4& transforms
 
     Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-    OS_PersistentDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-    OS_PersistentDumbPtr::Iterator end = m_Selection.GetItems().End();
+    OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for (size_t i=0; itr != end && i<transforms.size(); itr++, i++)
     {
         Core::Transform* transform = Reflect::ObjectCast< Core::Transform >( *itr );
@@ -2324,8 +2312,8 @@ Undo::CommandPtr Scene::SetHiddenSelected( bool hidden )
 
     Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-    OS_PersistentDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-    OS_PersistentDumbPtr::Iterator end = m_Selection.GetItems().End();
+    OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for ( ; itr != end; ++itr )
     {
         Core::HierarchyNode* hierarchyNode = Reflect::ObjectCast<Core::HierarchyNode>( *itr );
@@ -2361,9 +2349,9 @@ Undo::CommandPtr Scene::SetHiddenUnrelated( bool hidden )
     // Bake selected root parents
     //
 
-    OS_PersistentDumbPtr relatives;
-    OS_PersistentDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-    OS_PersistentDumbPtr::Iterator end = m_Selection.GetItems().End();
+    OS_SceneNodeDumbPtr relatives;
+    OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for ( ; itr != end; ++itr )
     {
         Core::HierarchyNode* hierarchyNode = Reflect::ObjectCast<Core::HierarchyNode>( *itr );
@@ -2382,8 +2370,8 @@ Undo::CommandPtr Scene::SetHiddenUnrelated( bool hidden )
             HierarchyChildTraverser traverser;
             hierarchyNode->TraverseHierarchy( &traverser );
 
-            OS_PersistentDumbPtr::Iterator childItr = traverser.m_Children.Begin();
-            OS_PersistentDumbPtr::Iterator childEnd = traverser.m_Children.End();
+            OS_SceneNodeDumbPtr::Iterator childItr = traverser.m_Children.Begin();
+            OS_SceneNodeDumbPtr::Iterator childEnd = traverser.m_Children.End();
             for ( ; childItr != childEnd; ++childItr )
             {
                 relatives.Append( *childItr );
@@ -2498,10 +2486,10 @@ Undo::CommandPtr Scene::ShowLastHidden()
 
 Undo::CommandPtr Scene::SelectSimilar()
 {
-    OS_PersistentDumbPtr selection;
+    OS_SceneNodeDumbPtr selection;
 
-    OS_PersistentDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-    OS_PersistentDumbPtr::Iterator end = m_Selection.GetItems().End();
+    OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for ( ; itr != end; ++itr )
     {
         Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>( *itr );
@@ -2526,7 +2514,7 @@ Undo::CommandPtr Scene::SelectSimilar()
 Undo::CommandPtr Scene::DeleteSelected()
 {
     // since all of our children are going to be deleted with us, discard selected children from the working set
-    OS_PersistentDumbPtr roots;
+    OS_SceneNodeDumbPtr roots;
     GetSelectionParents(roots);
 
     if (roots.Empty())
@@ -2538,8 +2526,8 @@ Undo::CommandPtr Scene::DeleteSelected()
 
     batch->Push( m_Selection.Clear() );
 
-    OS_PersistentDumbPtr::Iterator itr = roots.Begin();
-    OS_PersistentDumbPtr::Iterator end = roots.End();
+    OS_SceneNodeDumbPtr::Iterator itr = roots.Begin();
+    OS_SceneNodeDumbPtr::Iterator end = roots.End();
     for ( ; itr != end; ++itr )
     {
         SceneNodePtr node = Reflect::ObjectCast< Core::SceneNode >( *itr );
@@ -2556,7 +2544,7 @@ Undo::CommandPtr Scene::DeleteSelected()
 
 Undo::CommandPtr Scene::ParentSelected()
 {
-    OS_PersistentDumbPtr selection;
+    OS_SceneNodeDumbPtr selection;
     GetSelectionParents( selection );
 
     if (selection.Empty())
@@ -2567,8 +2555,8 @@ Undo::CommandPtr Scene::ParentSelected()
     V_HierarchyNodeDumbPtr children;
 
     // Go through the selection list and pull out any hierarchy nodes
-    OS_PersistentDumbPtr::Iterator itr = selection.Begin();
-    OS_PersistentDumbPtr::Iterator end = selection.End();
+    OS_SceneNodeDumbPtr::Iterator itr = selection.Begin();
+    OS_SceneNodeDumbPtr::Iterator end = selection.End();
     for ( ; itr != end; ++itr )
     {
         Core::HierarchyNode* hierarchyNode = Reflect::ObjectCast< Core::HierarchyNode >( *itr );
@@ -2602,8 +2590,8 @@ Undo::CommandPtr Scene::UnparentSelected()
     V_HierarchyNodeDumbPtr children;
 
     // Go through the selection list and pull out any hierarchy nodes
-    OS_PersistentDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-    OS_PersistentDumbPtr::Iterator end = m_Selection.GetItems().End();
+    OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for ( ; itr != end; ++itr )
     {
         Core::HierarchyNode* hierarchyNode = Reflect::ObjectCast< Core::HierarchyNode >( *itr );
@@ -2641,7 +2629,7 @@ Undo::CommandPtr Scene::UnparentSelected()
 // 
 Undo::CommandPtr Scene::GroupSelected()
 {
-    OS_PersistentDumbPtr selection;
+    OS_SceneNodeDumbPtr selection;
     GetSelectionParents( selection );
 
     if (selection.Empty())
@@ -2652,8 +2640,8 @@ Undo::CommandPtr Scene::GroupSelected()
     V_HierarchyNodeDumbPtr selectedHierarchyNodes;
 
     // Go through the selection list and pull out any hierarchy nodes
-    OS_PersistentDumbPtr::Iterator itr = selection.Begin();
-    OS_PersistentDumbPtr::Iterator end = selection.End();
+    OS_SceneNodeDumbPtr::Iterator itr = selection.Begin();
+    OS_SceneNodeDumbPtr::Iterator end = selection.End();
     for ( ; itr != end; ++itr )
     {
         Core::HierarchyNode* hierarchyNode = Reflect::ObjectCast< Core::HierarchyNode >( *itr );
@@ -2719,12 +2707,12 @@ Undo::CommandPtr Scene::UngroupSelected()
 
     Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-    OS_PersistentDumbPtr newSelection;
+    OS_SceneNodeDumbPtr newSelection;
 
     bool warn = false;
     // For each selected item
-    OS_PersistentDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-    OS_PersistentDumbPtr::Iterator end = m_Selection.GetItems().End();
+    OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for ( ; itr != end; ++itr )
     {
         // If the item is a group (pivot transform)
@@ -2783,8 +2771,8 @@ Undo::CommandPtr Scene::CenterSelected()
 
     Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-    OS_PersistentDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-    OS_PersistentDumbPtr::Iterator end = m_Selection.GetItems().End();
+    OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for (int i=0; itr != end; itr++, i++)
     {
         Core::Transform* transform = Reflect::ObjectCast< Core::Transform >( *itr );
@@ -2804,7 +2792,7 @@ Undo::CommandPtr Scene::CenterSelected()
 Undo::CommandPtr Scene::DuplicateSelected()
 {
     // since all of our children are going to be duplicated with us, discard selected children from the working set
-    OS_PersistentDumbPtr roots;
+    OS_SceneNodeDumbPtr roots;
     GetSelectionParents(roots);
 
     // test for nothing to do
@@ -2815,10 +2803,10 @@ Undo::CommandPtr Scene::DuplicateSelected()
 
     Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-    OS_PersistentDumbPtr newSelection;
+    OS_SceneNodeDumbPtr newSelection;
 
-    OS_PersistentDumbPtr::Iterator itr = roots.Begin();
-    OS_PersistentDumbPtr::Iterator end = roots.End();
+    OS_SceneNodeDumbPtr::Iterator itr = roots.Begin();
+    OS_SceneNodeDumbPtr::Iterator end = roots.End();
     for ( ; itr != end; ++itr )
     {
         Core::HierarchyNode* node = Reflect::ObjectCast< Core::HierarchyNode > (*itr);
@@ -2866,7 +2854,7 @@ Undo::CommandPtr Scene::SmartDuplicateSelected()
     }
 
     // since all of our children are going to be duplicated with us, discard selected children from the working set
-    OS_PersistentDumbPtr roots;
+    OS_SceneNodeDumbPtr roots;
     GetSelectionParents(roots);
 
     // only operate on a single object!
@@ -2926,8 +2914,8 @@ Undo::CommandPtr Scene::SnapSelectedToCamera()
 
     Matrix4 m = Matrix4 ( AngleAxis( Math::Pi, Vector3::BasisY ) ) * m_View->GetCamera()->GetInverseView();
 
-    OS_PersistentDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-    OS_PersistentDumbPtr::Iterator end = m_Selection.GetItems().End();
+    OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for (int i=0; itr != end; itr++, i++)
     {
         Core::Transform* transform = Reflect::ObjectCast< Core::Transform >( *itr );
@@ -2971,8 +2959,8 @@ void Scene::FrameSelected()
     bool found = false;
     Math::AlignedBox box;
 
-    OS_PersistentDumbPtr::Iterator itr = GetSelection().GetItems().Begin();
-    OS_PersistentDumbPtr::Iterator end = GetSelection().GetItems().End();
+    OS_SceneNodeDumbPtr::Iterator itr = GetSelection().GetItems().Begin();
+    OS_SceneNodeDumbPtr::Iterator end = GetSelection().GetItems().End();
     for ( ; itr != end; ++itr )
     {
         Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>(*itr);
@@ -3008,8 +2996,8 @@ void Scene::MeasureDistance()
     Core::Transform* first = NULL;
     Core::Transform* second = NULL;
 
-    OS_PersistentDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-    OS_PersistentDumbPtr::Iterator end = m_Selection.GetItems().End();
+    OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for ( ; itr != end; ++itr )
     {
         Core::Transform* t = Reflect::ObjectCast<Core::Transform>( *itr );
@@ -3056,10 +3044,10 @@ Undo::CommandPtr Scene::PickWalkUp()
         return NULL;
     }
 
-    OS_PersistentDumbPtr newSelection;
+    OS_SceneNodeDumbPtr newSelection;
 
-    OS_PersistentDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-    OS_PersistentDumbPtr::Iterator end = m_Selection.GetItems().End();
+    OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for ( ; itr != end; ++itr )
     {
         Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>(*itr);

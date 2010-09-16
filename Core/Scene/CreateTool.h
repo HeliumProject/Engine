@@ -47,16 +47,12 @@ namespace Helium
 
         class CORE_API CreateTool : public Tool
         {
-            //
-            // Members
-            //
-
         private:
             // Created flag
             bool m_Created;
 
             // The selection of the created objects
-            OS_PersistentDumbPtr m_Selection;
+            OS_SceneNodeDumbPtr m_Selection;
 
             // The instance we are creating
             bool m_InstanceUpdateOffsets;
@@ -125,19 +121,10 @@ namespace Helium
             static float s_PaintDensity;
             static float s_PaintJitter;
 
-            //
-            // RTTI
-            //
         public:
-
             REFLECT_DECLARE_ABSTRACT(Core::CreateTool, Tool);
             static void InitializeType();
             static void CleanupType();
-
-
-            //
-            // Implementation
-            //
 
         public:
             CreateTool(Core::Scene* scene, PropertiesGenerator* generator);

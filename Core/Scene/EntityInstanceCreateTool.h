@@ -25,20 +25,13 @@ namespace Helium
 
         class CORE_API EntityInstanceCreateTool : public Core::CreateTool
         {
-            //
-            // Members
-            //
-
         public:
             Helium::Path m_ClassPath;
             static bool s_PointerVisible;
             static bool s_BoundsVisible;
             static bool s_GeometryVisible;
 
-            //
-            // RTTI
-            //
-
+        public:
             REFLECT_DECLARE_ABSTRACT(Core::EntityInstanceCreateTool, Core::CreateTool);
             static void InitializeType();
             static void CleanupType();

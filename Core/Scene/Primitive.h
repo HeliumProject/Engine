@@ -29,20 +29,9 @@ namespace Helium
             bool m_IsUsingCameraShadingMode;
 
         public:
-
-            //
-            // RTTI
-            //
-
-        public:
             REFLECT_DECLARE_ABSTRACT( Primitive, Reflect::Object );
             static void InitializeType();
             static void CleanupType();
-
-
-            //
-            // Implementation
-            //
 
         public:
             Primitive(ResourceTracker* tracker);
@@ -95,16 +84,7 @@ namespace Helium
         class PrimitiveTemplate : public Core::Primitive
         {
         protected:
-            //
-            // System Copy of Resources
-            //
-
             std::vector<T> m_Vertices;
-
-
-            //
-            // Constructor
-            //
 
             PrimitiveTemplate(ResourceTracker* tracker)
                 : Core::Primitive (tracker)

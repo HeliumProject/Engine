@@ -80,11 +80,7 @@ void NodeTypeOutliner::AddNodeType( Core::SceneNodeType* nodeType )
     HM_SceneNodeSmartPtr::const_iterator end = nodeType->GetInstances().end();
     for ( ; itr != end; ++itr )
     {
-        const SceneNodePtr& dependency = itr->second;
-        if ( dependency->HasType( Reflect::GetType<Editor::SceneNode>() ) )
-        {
-            AddInstance( Reflect::DangerousCast< Core::SceneNode >( dependency ) );
-        }
+        AddInstance( itr->second );
     }
 
     m_TreeCtrl->EnableSorting( isSortingEnabled );

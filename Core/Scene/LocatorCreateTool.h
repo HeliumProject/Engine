@@ -12,24 +12,16 @@ namespace Helium
     {
         class CORE_API LocatorCreateTool : public Core::CreateTool
         {
-            //
-            // Members
-            //
-
         public:
             static Content::LocatorShape s_Shape;
 
-            //
-            // RTTI
-            //
-
+        public:
             REFLECT_DECLARE_ABSTRACT(Core::LocatorCreateTool, Core::CreateTool);
             static void InitializeType();
             static void CleanupType();
 
         public:
             LocatorCreateTool(Core::Scene* scene, PropertiesGenerator* generator);
-
             virtual ~LocatorCreateTool();
 
             virtual Core::TransformPtr CreateNode() HELIUM_OVERRIDE;
@@ -37,7 +29,6 @@ namespace Helium
             virtual void CreateProperties() HELIUM_OVERRIDE;
 
             int GetLocatorShape() const;
-
             void SetLocatorShape(int value);
         };
     }

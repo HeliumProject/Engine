@@ -14,6 +14,9 @@ namespace Helium
         class ClipboardFileList : public ReflectClipboardData
         {
         public:
+            REFLECT_DECLARE_CLASS( ClipboardFileList, ReflectClipboardData );
+            static void EnumerateClass( Reflect::Compositor<ClipboardFileList>& comp );
+
             ClipboardFileList();
             virtual ~ClipboardFileList();
 
@@ -25,10 +28,6 @@ namespace Helium
         private:
             std::set< tstring > m_Files;
             bool                m_IsDirty;
-
-        public:
-            REFLECT_DECLARE_CLASS( ClipboardFileList, ReflectClipboardData );
-            static void EnumerateClass( Reflect::Compositor<ClipboardFileList>& comp );
         };
 
         typedef Helium::SmartPtr< ClipboardFileList > ClipboardFileListPtr;

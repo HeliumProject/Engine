@@ -268,15 +268,15 @@ void LayersPanel::LayerSelectedItems( bool addToLayer )
     const DependencyCommand::DependencyAction action = addToLayer ? DependencyCommand::Connect : DependencyCommand::Disconnect;
 
     // If there are selected nodes in the scene, and selected rows in this control...
-    const OS_PersistentDumbPtr& selectedNodes = m_Scene->GetSelection().GetItems();
+    const OS_SceneNodeDumbPtr& selectedNodes = m_Scene->GetSelection().GetItems();
     std::set< u32 > selectedRows = m_Grid->GetSelectedRows();
     if ( selectedNodes.Size() > 0 && selectedRows.size() > 0 )
     {
         //Log::Debug( "LayerSelectedItems\n" );
         Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-        OS_PersistentDumbPtr::Iterator nodeItr = selectedNodes.Begin();
-        OS_PersistentDumbPtr::Iterator nodeEnd = selectedNodes.End();
+        OS_SceneNodeDumbPtr::Iterator nodeItr = selectedNodes.Begin();
+        OS_SceneNodeDumbPtr::Iterator nodeEnd = selectedNodes.End();
         std::set< u32 >::const_iterator rowItr;
         const std::set< u32 >::const_iterator rowEnd = selectedRows.end();
         const M_LayerDumbPtr::const_iterator layerEnd = m_Layers.end();
@@ -415,9 +415,9 @@ void LayersPanel::OnNewLayerFromSelection( wxCommandEvent& dummyEvt )
         batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Scene, layer ) );
 
         // Step 2: add all the selected items to the layer
-        const OS_PersistentDumbPtr& selection = m_Scene->GetSelection().GetItems();
-        OS_PersistentDumbPtr::Iterator itr = selection.Begin();
-        OS_PersistentDumbPtr::Iterator end = selection.End();
+        const OS_SceneNodeDumbPtr& selection = m_Scene->GetSelection().GetItems();
+        OS_SceneNodeDumbPtr::Iterator itr = selection.Begin();
+        OS_SceneNodeDumbPtr::Iterator end = selection.End();
         for ( ; itr != end; ++itr )
         {
             //If the element is a supported type
@@ -542,7 +542,7 @@ void LayersPanel::OnSelectLayerMembers( wxCommandEvent& event )
 {
     if ( m_Scene )
     {
-        OS_PersistentDumbPtr newSelection;
+        OS_SceneNodeDumbPtr newSelection;
         M_LayerDumbPtr::const_iterator layerItr = m_Layers.begin();
         M_LayerDumbPtr::const_iterator layerEnd = m_Layers.end();
         for ( ; layerItr != layerEnd; ++layerItr )
@@ -574,7 +574,7 @@ void LayersPanel::OnSelectLayer( wxCommandEvent& event )
 {
     if ( m_Scene )
     {
-        OS_PersistentDumbPtr newSelection;
+        OS_SceneNodeDumbPtr newSelection;
 
         const std::set< u32 >& selection = m_Grid->GetSelectedRows();
         std::set< u32 >::const_iterator rowItr = selection.begin();
@@ -605,8 +605,8 @@ void LayersPanel::SelectionChanged( const SelectionChangeArgs& args )
     if ( args.m_Selection.Size() > 0 )
     {
         u32 numLayersInSelection = 0;
-        OS_PersistentDumbPtr::Iterator itr = args.m_Selection.Begin();
-        OS_PersistentDumbPtr::Iterator end = args.m_Selection.End();
+        OS_SceneNodeDumbPtr::Iterator itr = args.m_Selection.Begin();
+        OS_SceneNodeDumbPtr::Iterator end = args.m_Selection.End();
         for ( ; itr != end; ++itr )
         {
             Layer* lunaLayer = Reflect::ObjectCast< Layer >( *itr );
@@ -729,11 +729,11 @@ void LayersPanel::LayerSelectableChanged( const GridRowChangeArgs& args )
 
         if (!selectable)
         {
-            OS_PersistentDumbPtr newSelection;
+            OS_SceneNodeDumbPtr newSelection;
 
-            OS_PersistentDumbPtr selection = layer->GetOwner()->GetSelection().GetItems();
-            OS_PersistentDumbPtr::Iterator itr = selection.Begin();
-            OS_PersistentDumbPtr::Iterator end = selection.End();
+            OS_SceneNodeDumbPtr selection = layer->GetOwner()->GetSelection().GetItems();
+            OS_SceneNodeDumbPtr::Iterator itr = selection.Begin();
+            OS_SceneNodeDumbPtr::Iterator end = selection.End();
             for ( ; itr != end; ++itr )
             {
                 SceneNode* node = Reflect::ObjectCast<SceneNode>( *itr );

@@ -3,12 +3,12 @@
 #include <string>
 #include <map>
 
-#include "Core/API.h"
 #include "Foundation/Inspect/Data.h"
 #include "Foundation/Inspect/Controls.h"
 #include "Foundation/Inspect/Interpreter.h"
 
-#include "Core/Scene/Selection.h"
+#include "Core/API.h"
+#include "Core/Scene/SceneNode.h"
 
 namespace Helium
 {
@@ -19,9 +19,9 @@ namespace Helium
         struct CORE_API CreatePanelArgs
         {
             PropertiesGenerator*        m_Generator;
-            const OS_PersistentDumbPtr& m_Selection;
+            const OS_SceneNodeDumbPtr&  m_Selection;
 
-            CreatePanelArgs(PropertiesGenerator* generator, const OS_PersistentDumbPtr& selection)
+            CreatePanelArgs(PropertiesGenerator* generator, const OS_SceneNodeDumbPtr& selection)
                 : m_Generator (generator)
                 , m_Selection (selection)
             {
@@ -111,12 +111,12 @@ namespace Helium
 
             // note the template paramters to types of member function pointers, which actually get deduced by the compiler (thank GOD)
             template<class T, class D, class G, class S>
-            std::vector< Helium::SmartPtr< Helium::Property<D> > > BuildSelectionProperties(const OS_PersistentDumbPtr& selection, G getter, S setter)
+            std::vector< Helium::SmartPtr< Helium::Property<D> > > BuildSelectionProperties(const OS_SceneNodeDumbPtr& selection, G getter, S setter)
             {
                 std::vector< Helium::SmartPtr< Helium::Property<D> > > properties;
 
-                OS_PersistentDumbPtr::Iterator itr = selection.Begin();
-                OS_PersistentDumbPtr::Iterator end = selection.End();
+                OS_SceneNodeDumbPtr::Iterator itr = selection.Begin();
+                OS_SceneNodeDumbPtr::Iterator end = selection.End();
                 for ( ; itr != end; ++itr )
                 {
                     // note the dynamic cast, and how AWESOME it is
@@ -143,7 +143,7 @@ namespace Helium
 
             // File dialog button with a selection list
             template <class T, class D, class G, class S>
-            Inspect::FileDialogButton* AddFileDialogButton( const OS_PersistentDumbPtr& selection, G getter = NULL, S setter = NULL )
+            Inspect::FileDialogButton* AddFileDialogButton( const OS_SceneNodeDumbPtr& selection, G getter = NULL, S setter = NULL )
             {
                 Inspect::FileDialogButtonPtr control = CreateControl<Inspect::FileDialogButton>();
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
@@ -157,7 +157,7 @@ namespace Helium
             //
 
             template <class T, class D, class G, class S>
-            Inspect::CheckBox* AddCheckBox( const OS_PersistentDumbPtr& selection, G getter = NULL, S setter = NULL, bool significant = true)
+            Inspect::CheckBox* AddCheckBox( const OS_SceneNodeDumbPtr& selection, G getter = NULL, S setter = NULL, bool significant = true)
             {
                 Inspect::CheckBoxPtr control = CreateControl<Inspect::CheckBox>();
 
@@ -175,7 +175,7 @@ namespace Helium
             //
 
             template <class T, class D, class G, class S>
-            Inspect::Value* AddValue( const OS_PersistentDumbPtr& selection, G getter = NULL, S setter = NULL )
+            Inspect::Value* AddValue( const OS_SceneNodeDumbPtr& selection, G getter = NULL, S setter = NULL )
             {
                 Inspect::ValuePtr control = CreateControl<Inspect::Value>();
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
@@ -189,7 +189,7 @@ namespace Helium
             //
 
             template <class T, class D, class G, class S>
-            Inspect::Choice* AddChoice( const OS_PersistentDumbPtr& selection, G getter = NULL, S setter = NULL )
+            Inspect::Choice* AddChoice( const OS_SceneNodeDumbPtr& selection, G getter = NULL, S setter = NULL )
             {
                 Inspect::ChoicePtr control = CreateControl<Inspect::Choice>();
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
@@ -198,7 +198,7 @@ namespace Helium
             }
 
             template <class T, class D, class G, class S>
-            Inspect::Choice* AddChoice( const OS_PersistentDumbPtr& selection, const Reflect::Enumeration* enumInfo, G getter = NULL, S setter = NULL )
+            Inspect::Choice* AddChoice( const OS_SceneNodeDumbPtr& selection, const Reflect::Enumeration* enumInfo, G getter = NULL, S setter = NULL )
             {
                 Inspect::ChoicePtr control = AddChoice<T, D, G, S>( selection, getter, setter );
 
@@ -223,7 +223,7 @@ namespace Helium
             //
 
             template <class T, class D, class G, class S>
-            Inspect::List* AddList( const OS_PersistentDumbPtr& selection, G getter = NULL, S setter = NULL )
+            Inspect::List* AddList( const OS_SceneNodeDumbPtr& selection, G getter = NULL, S setter = NULL )
             {
                 Inspect::ListPtr control = CreateControl<Inspect::List>();
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
@@ -237,7 +237,7 @@ namespace Helium
             //
 
             template <class T, class D, class G, class S>
-            Inspect::Slider* AddSlider( const OS_PersistentDumbPtr& selection, G getter = NULL, S setter = NULL )
+            Inspect::Slider* AddSlider( const OS_SceneNodeDumbPtr& selection, G getter = NULL, S setter = NULL )
             {
                 Inspect::SliderPtr control = CreateControl<Inspect::Slider>();
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );
@@ -251,7 +251,7 @@ namespace Helium
             //
 
             template <class T, class D, class G, class S>
-            Inspect::ColorPicker* AddColorPicker( const OS_PersistentDumbPtr& selection, G getter = NULL, S setter = NULL )
+            Inspect::ColorPicker* AddColorPicker( const OS_SceneNodeDumbPtr& selection, G getter = NULL, S setter = NULL )
             {
                 Inspect::ColorPickerPtr control = CreateControl<Inspect::ColorPicker>();
                 control->Bind( new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )) );

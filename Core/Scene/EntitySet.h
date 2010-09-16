@@ -29,10 +29,6 @@ namespace Helium
 
         class EntitySet : public Core::InstanceSet
         {
-            //
-            // Members
-            //
-
         protected:
             // file resolver id
             Helium::Path m_AssetPath;
@@ -53,19 +49,10 @@ namespace Helium
             // the name of the class, derived from the path
             tstring m_Name;
 
-            //
-            // Runtime Type Info
-            //
-
         public:
             REFLECT_DECLARE_ABSTRACT( Core::EntitySet, Core::InstanceSet );
             static void InitializeType();
             static void CleanupType();
-
-
-            //
-            // Implementation
-            //
 
         public:
             EntitySet( Core::EntityType* type, const Helium::Path& assetPath );

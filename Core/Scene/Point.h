@@ -11,19 +11,10 @@ namespace Helium
     {
         class Point : public Core::HierarchyNode
         {
-            //
-            // Runtime Type Info
-            //
-
         public:
             REFLECT_DECLARE_ABSTRACT( Core::Point, Core::HierarchyNode );
             static void InitializeType();
             static void CleanupType();
-
-
-            // 
-            // Member functions
-            // 
 
         public:
             Point(Core::Scene* scene, Content::Point* data);

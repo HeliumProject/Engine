@@ -21,17 +21,10 @@ namespace Helium
 
         class Shader : public Core::SceneNode
         {
-            // 
-            // Member variables
-            // 
         private:
             bool m_Alpha;
             u32 m_BaseTextureSize;
             IDirect3DTexture9* m_BaseTexture;
-
-            //
-            // Runtime Type Info
-            //
 
             REFLECT_DECLARE_ABSTRACT( Shader, Core::SceneNode );
             static void InitializeType();

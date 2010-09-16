@@ -17,10 +17,6 @@ namespace Helium
 
         class CORE_API HierarchyNodeType : public Core::SceneNodeType
         {
-            // 
-            // Member variables
-            //
-
         protected:
             // members
             bool m_Visible;
@@ -31,20 +27,10 @@ namespace Helium
             D3DMATERIAL9 m_WireMaterial;
             D3DMATERIAL9 m_SolidMaterial;
 
-
-            //
-            // Runtime Type Info
-            //
-
         public:
             REFLECT_DECLARE_ABSTRACT( HierarchyNodeType, Core::SceneNodeType );
             static void InitializeType();
             static void CleanupType();
-
-
-            //
-            // Implementation
-            //
 
         public:
             HierarchyNodeType( Core::Scene* scene, i32 instanceType );

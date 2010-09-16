@@ -31,9 +31,9 @@ D3DMATERIAL9 Core::Curve::s_HullMaterial;
 class SelectionDataObject : public Inspect::ClientData
 {
 public:
-    OS_PersistentDumbPtr m_Selection;
+    OS_SceneNodeDumbPtr m_Selection;
 
-    SelectionDataObject( const OS_PersistentDumbPtr& selection )
+    SelectionDataObject( const OS_SceneNodeDumbPtr& selection )
         : m_Selection( selection)
     {
     }
@@ -1057,9 +1057,9 @@ void Curve::OnReverseControlPoints( const Inspect::ButtonClickedArgs& args )
     {
         Core::Scene* scene = NULL;
         Undo::BatchCommandPtr batch = new Undo::BatchCommand();
-        OS_PersistentDumbPtr& selection = selectionData->m_Selection;
-        OS_PersistentDumbPtr::Iterator selItr = selection.Begin();
-        OS_PersistentDumbPtr::Iterator selEnd  = selection.End();
+        OS_SceneNodeDumbPtr& selection = selectionData->m_Selection;
+        OS_SceneNodeDumbPtr::Iterator selItr = selection.Begin();
+        OS_SceneNodeDumbPtr::Iterator selEnd  = selection.End();
         for ( ; selItr != selEnd; ++selItr )
         {
             Core::Curve* curve = Reflect::ObjectCast< Core::Curve >( *selItr );

@@ -8,28 +8,14 @@ namespace Helium
     {
         class EntityType : public Core::InstanceType
         {
-            //
-            // Members
-            //
-
         private:
             // materials
             D3DMATERIAL9 m_Material;
-
-
-            //
-            // Runtime Type Info
-            //
 
         public:
             REFLECT_DECLARE_ABSTRACT( Core::EntityType, Core::InstanceType );
             static void InitializeType();
             static void CleanupType();
-
-
-            //
-            // Implementation
-            //
 
         public:
             EntityType( Core::Scene* scene, i32 instanceType );

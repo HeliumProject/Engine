@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SearchResults.h"
+#include "VaultSearchResults.h"
 #include "ThumbnailSorter.h"
 #include "Editor/ThreadMechanism.h"
 
@@ -30,7 +30,7 @@ namespace Helium
             ThumbnailPtr m_TextureError;
             ThumbnailPtr m_TextureLoading;
             ThumbnailPtr m_TextureFolder;
-            SearchResultsPtr m_Results;
+            VaultSearchResultsPtr m_Results;
             M_PathToTilePtr m_Tiles;
             ThumbnailSorter m_Sorter;
             std::set< Helium::Path > m_TextureRequests;

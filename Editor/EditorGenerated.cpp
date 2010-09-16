@@ -8,6 +8,7 @@
 #include "Precompile.h"
 
 
+#include "Editor/Vault/ListResultsView.h"
 #include "wx/tglbtn.h"
 
 #include "EditorGenerated.h"
@@ -770,8 +771,10 @@ VaultPanelGenerated::VaultPanelGenerated( wxWindow* parent, wxWindowID id, const
 	bSizer34->Add( m_SearchCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_OptionsButton = new wxBitmapButton( m_NavigationPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_OptionsButton->Hide();
 	m_OptionsButton->SetToolTip( _("Vault Settings...") );
 	
+	m_OptionsButton->Hide();
 	m_OptionsButton->SetToolTip( _("Vault Settings...") );
 	
 	bSizer34->Add( m_OptionsButton, 0, wxALL, 5 );
@@ -779,13 +782,22 @@ VaultPanelGenerated::VaultPanelGenerated( wxWindow* parent, wxWindowID id, const
 	m_NavigationPanel->SetSizer( bSizer34 );
 	m_NavigationPanel->Layout();
 	bSizer34->Fit( m_NavigationPanel );
-	bSizer33->Add( m_NavigationPanel, 0, wxALL|wxEXPAND, 5 );
+	bSizer33->Add( m_NavigationPanel, 0, wxEXPAND, 0 );
 	
 	wxBoxSizer* bSizer24;
 	bSizer24 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_ResultsPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bSizer24->Add( m_ResultsPanel, 1, wxEXPAND | wxALL, 5 );
+	wxBoxSizer* bResultsSizer;
+	bResultsSizer = new wxBoxSizer( wxVERTICAL );
+	
+	m_ListResultsView = new Helium::Editor::ListResultsView( m_ResultsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	bResultsSizer->Add( m_ListResultsView, 1, wxEXPAND, 0 );
+	
+	m_ResultsPanel->SetSizer( bResultsSizer );
+	m_ResultsPanel->Layout();
+	bResultsSizer->Fit( m_ResultsPanel );
+	bSizer24->Add( m_ResultsPanel, 1, wxEXPAND, 0 );
 	
 	bSizer33->Add( bSizer24, 1, wxEXPAND, 5 );
 	

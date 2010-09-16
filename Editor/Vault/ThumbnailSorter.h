@@ -3,22 +3,12 @@
 #include "ThumbnailTile.h"
 #include "ThumbnailIterator.h"
 
+#include "VaultMenuIDs.h"
+
 namespace Helium
 {
     namespace Editor
     {
-        // Sorting methods for the shown items
-        namespace ThumbnailSortMethods
-        {
-            enum ThumbnailSortMethod
-            {
-                AlphabeticalByName,
-                AlphabeticalByType,
-            };
-        }
-        typedef ThumbnailSortMethods::ThumbnailSortMethod ThumbnailSortMethod;
-
-
         /////////////////////////////////////////////////////////////////////////////
         // Tracks all the different ways that the thumbnail tiles can be sorted so
         // that we can quickly display a sorted list in the view.
@@ -29,8 +19,8 @@ namespace Helium
             ThumbnailSorter();
             virtual ~ThumbnailSorter();
 
-            void SetSortMethod( ThumbnailSortMethod sortMethod );
-            ThumbnailSortMethod GetSortMethod() const;
+            void SetSortMethod( VaultSortMethod sortMethod );
+            VaultSortMethod GetSortMethod() const;
 
             void Clear();
 
@@ -47,7 +37,7 @@ namespace Helium
             static bool SortAlphabeticalByType( const ThumbnailTile* first, const ThumbnailTile* second );
 
         private:
-            ThumbnailSortMethod m_SortMethod;
+            VaultSortMethod m_SortMethod;
 
             typedef std::set< ThumbnailTile*, SortFunction > S_AlphaByName;
             S_AlphaByName m_AlphaByName;

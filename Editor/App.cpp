@@ -233,12 +233,12 @@ bool App::OnInit()
 
     // vault
     m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::SearchTypes::SearchType>( &Editor::SearchTypes::SearchTypesEnumerateEnum, TXT( "SearchType" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType<SearchQuery>( TXT( "SearchQuery" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType<VaultSearchQuery>( TXT( "VaultSearchQuery" ) ) );
 
     // settings
     m_InitializerStack.Push( Reflect::RegisterClassType< WindowSettings >( TXT( "Editor::WindowSettings" ) ) );
     
-    m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::ViewOptionIDs::ViewOptionID>( &Editor::ViewOptionIDs::ViewOptionIDEnumerateEnum, TXT( "ViewOptionID" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::VaultViewModes::VaultViewMode>( &Editor::VaultViewModes::VaultViewModeEnumerateEnum, TXT( "VaultViewMode" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClassType< VaultSettings >( TXT( "Editor::VaultSettings" ) ) );
 
     LoadSettings();
@@ -247,9 +247,6 @@ bool App::OnInit()
     {
         wxMessageBox( TXT( "There were errors during startup, use Editor with caution." ), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK );
     }
-
-#pragma TODO("Get the tracker tracking the project when it opens")
-    //m_Tracker.SetDirectory( Helium::Path( TXT( "C:\\Projects\\github\\nocturnal\\Helium\\Editor\\Icons\\16x16\\" ) ) );
 
     GetFrame()->Show();
 

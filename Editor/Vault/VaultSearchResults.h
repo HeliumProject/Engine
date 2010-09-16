@@ -10,12 +10,12 @@ namespace Helium
 {
     namespace Editor
     {
-        class SearchResults : public Helium::RefCountBase< SearchResults >
+        class VaultSearchResults : public Helium::RefCountBase< VaultSearchResults >
         {
         public:
-            SearchResults( u32 vaultSearchID = 0 );
-            SearchResults( const SearchResults* results );
-            virtual ~SearchResults();
+            VaultSearchResults( u32 vaultSearchID = 0 );
+            VaultSearchResults( const VaultSearchResults* results );
+            virtual ~VaultSearchResults();
 
             void Clear();
             bool HasResults() const;
@@ -25,12 +25,15 @@ namespace Helium
             bool RemovePath( const Helium::Path& path );
 
             i32 GetSearchID() { return m_VaultSearchID; }
+
         private:
-            i32 m_VaultSearchID; // This is the ID of the VaultSearch that created these results, for easy of debugging
-            std::map< u64, Helium::Path >  m_Paths;
+            // This is the ID of the VaultSearch that created these results, for easy of debugging
+            i32 m_VaultSearchID;
+            
+            std::map< u64, Helium::Path > m_Paths;
 
             const Helium::Path* Find( const u64& hash ) const;
         };
-        typedef Helium::SmartPtr< SearchResults > SearchResultsPtr;
+        typedef Helium::SmartPtr< VaultSearchResults > VaultSearchResultsPtr;
     }
 }

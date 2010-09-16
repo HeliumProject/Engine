@@ -905,6 +905,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Asset\Components\ColorComponent.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Asset\Components\ColorComponent.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Asset\Components\DependenciesComponent.cpp"
 					>
 				</File>

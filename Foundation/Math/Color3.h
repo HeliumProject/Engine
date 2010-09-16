@@ -12,6 +12,9 @@ namespace Helium
 {
     namespace Math
     {
+
+        class Color4;
+
         class FOUNDATION_API Color3
         {
         public:
@@ -23,6 +26,7 @@ namespace Helium
             explicit Color3   ( u8 vr, u8 vg, u8 vb ) : r(vr), g(vg), b(vb) {}
             explicit Color3   ( u8 val ) : r( val ), g( val ), b( val ) {}
 
+            Color3&           operator= (const Color4& v);
             Color3&           operator= (const Color3& v) { r = v.r; g = v.g; b = v.b; return *this; }
             Color3&           operator= (const Vector3& v) { r = (u8)(v.x*255.0f); g = (u8)(v.y*255.0f); b = (u8)(v.z*255.0f); return *this; }
             Color3&           operator+= (const Color3& v) { r += v.r; g += v.g; b += v.b; return *this; }
@@ -44,6 +48,8 @@ namespace Helium
 
             bool              operator== (const Color3& v) const { return (r == v.r && g == v.g && b == v.b); }
             bool              operator!= (const Color3& v) const { return !(r == v.r && g == v.g && b == v.b); }
+
+            operator Color4();
 
             void Set( u8 vr, u8 vg, u8 vb )
             {

@@ -14,6 +14,8 @@ namespace Helium
 {
     namespace Math
     {
+        class HDRColor4;
+
         class FOUNDATION_API HDRColor3 : public Color3
         {
         public:
@@ -28,6 +30,7 @@ namespace Helium
 
             HDRColor3&          operator= (const Color3& v) { r = v.r; g = v.g; b = v.b; return *this; }
             HDRColor3&          operator= (const HDRColor3& v) { r = v.r; g = v.g; b = v.b; s = v.s; return *this; }
+            HDRColor3&          operator= (const HDRColor4& v);
             HDRColor3&          operator= (const Vector3& v) { FromFloat( v.x, v.y, v.z ); return *this; }
             HDRColor3&          operator+= (const HDRColor3& v) { r += v.r; g += v.g; b += v.b; return *this; }
             HDRColor3&          operator-= (const HDRColor3& v) { r -= v.r; g -= v.g; b -= v.b; return *this; }
@@ -48,6 +51,8 @@ namespace Helium
 
             bool                operator== (const HDRColor3& v) const { return (r == v.r && g == v.g && b == v.b && s == v.s); }
             bool                operator!= (const HDRColor3& v) const { return !(r == v.r && g == v.g && b == v.b && s == v.s); }
+
+            operator HDRColor4();
 
             void Set( u8 vr, u8 vg, u8 vb )
             {

@@ -887,6 +887,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Math\Color3.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Math\Color3.h"
 				>
 			</File>
@@ -940,6 +944,10 @@
 			</File>
 			<File
 				RelativePath=".\Math\halftofloat.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Math\HDRColor3.cpp"
 				>
 			</File>
 			<File

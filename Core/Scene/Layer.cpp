@@ -189,9 +189,9 @@ void Layer::SetColor( const Math::Color3& color )
     }
 }
 
-OS_SelectableDumbPtr Layer::GetMembers()
+OS_PersistentDumbPtr Layer::GetMembers()
 {
-    OS_SelectableDumbPtr members;
+    OS_PersistentDumbPtr members;
 
     for each (Core::SceneNode* n in m_Descendants)
     {
@@ -376,7 +376,7 @@ void Layer::CreatePanel( CreatePanelArgs& args )
 // Static helper function to build the list of all members and common members
 // across all selected objects. These lists will be shown in the UI.
 // 
-void Layer::BuildUnionAndIntersection( PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection, tstring& unionStr, tstring& intersectionStr )
+void Layer::BuildUnionAndIntersection( PropertiesGenerator* generator, const OS_PersistentDumbPtr& selection, tstring& unionStr, tstring& intersectionStr )
 {
     typedef std::set< tstring, CaseInsensitiveNatStrCmp > S_Ordered;
     S_Ordered unionSet;
@@ -389,8 +389,8 @@ void Layer::BuildUnionAndIntersection( PropertiesGenerator* generator, const OS_
         HM_SceneNodeDumbPtr mapIntersection;
 
         // For each item in the selection
-        OS_SelectableDumbPtr::Iterator selItr = selection.Begin();
-        OS_SelectableDumbPtr::Iterator selEnd = selection.End();
+        OS_PersistentDumbPtr::Iterator selItr = selection.Begin();
+        OS_PersistentDumbPtr::Iterator selEnd = selection.End();
         for ( bool isFirstLayer = true; selItr != selEnd; ++selItr, isFirstLayer = false )
         {
             HM_SceneNodeDumbPtr layerMembers;

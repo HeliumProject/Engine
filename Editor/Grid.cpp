@@ -74,7 +74,7 @@ Grid::Grid( wxWindow* parent, wxWindowID gridID, bool allowRename, bool showColL
   m_Grid->SetCellHighlightPenWidth( 0 ); 
   m_Grid->SetCellHighlightROPenWidth( 0 ); // i.e. Read-only pen width
 
-  // Settings for Visible and Selectable columns
+  // Settings for visible and selectable columns
   wxGridCellAttr* boolAttr = new wxGridCellAttr();
   boolAttr->SetRenderer( new wxGridCellBoolRenderer() );
   boolAttr->SetReadOnly( true );
@@ -279,7 +279,7 @@ void Grid::SetRowVisibleState( u32 row, bool checked )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Returns true if the "Selectable" column for the specified row has a checkmark
+// Returns true if the "selectable" column for the specified row has a checkmark
 // in it.
 // 
 bool Grid::IsRowSelectableChecked( u32 row )
@@ -288,7 +288,7 @@ bool Grid::IsRowSelectableChecked( u32 row )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Sets the checkmark state for the "Selectable" column of the specified row.
+// Sets the checkmark state for the "selectable" column of the specified row.
 // No events are generated since this is not in response to a user interaction
 // (such as clicking on the checkbox with a mouse).
 // 

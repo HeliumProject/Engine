@@ -232,9 +232,9 @@ void HierarchyOutliner::OnEndDrag( wxTreeEvent& args )
 
         Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-        const OS_SelectableDumbPtr& selection = m_CurrentScene->GetSelection().GetItems();
-        OS_SelectableDumbPtr::Iterator selItr = selection.Begin();
-        const OS_SelectableDumbPtr::Iterator selEnd = selection.End();
+        const OS_PersistentDumbPtr& selection = m_CurrentScene->GetSelection().GetItems();
+        OS_PersistentDumbPtr::Iterator selItr = selection.Begin();
+        const OS_PersistentDumbPtr::Iterator selEnd = selection.End();
         for ( ; selItr != selEnd; ++selItr )
         {
             Core::HierarchyNode* hNode = Reflect::ObjectCast< Core::HierarchyNode >( *selItr );

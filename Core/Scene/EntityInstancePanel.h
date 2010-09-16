@@ -18,7 +18,7 @@ namespace Helium
             Inspect::Value*     m_EntityPath;
 
         public:
-            EntityPanel(PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection);
+            EntityPanel(PropertiesGenerator* generator, const OS_PersistentDumbPtr& selection);
  
         protected:
             // UI callbacks

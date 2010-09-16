@@ -49,7 +49,7 @@ Core::TransformPtr VolumeCreateTool::CreateNode()
     m_Scene->AddObject( volume );
 
     {
-        OS_SelectableDumbPtr selection;
+        OS_PersistentDumbPtr selection;
         selection.push_back( volume );
         m_Scene->GetSelection().SetItems( selection );
 

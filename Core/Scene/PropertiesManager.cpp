@@ -47,7 +47,7 @@ void PropertiesManager::SetProperties(PropertiesStyle setting)
     CreateProperties();
 }
 
-void PropertiesManager::SetSelection(const OS_SelectableDumbPtr& selection)
+void PropertiesManager::SetSelection(const OS_PersistentDumbPtr& selection)
 {
     m_Selection = selection;
 
@@ -97,9 +97,9 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
     M_ElementsByType commonElements;
     M_InterpretersByType commonElementInterpreters;
     EnumerateElementArgs enumerateElementArgs( currentElements, commonElements, commonElementInterpreters );
-    OS_SelectableDumbPtr selection;
+    OS_PersistentDumbPtr selection;
 
-    for ( OrderedSet<SelectablePtr>::Iterator itr = args.m_Selection.Begin(), end = args.m_Selection.End(); itr != end; ++itr )
+    for ( OrderedSet<PersistentPtr>::Iterator itr = args.m_Selection.Begin(), end = args.m_Selection.End(); itr != end; ++itr )
     {
         selection.Append( *itr );
     }
@@ -116,15 +116,15 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
     M_PanelCreators intersectingPanels = s_PanelCreators;
 
     // union support
-    typedef std::map< tstring, OS_SelectableDumbPtr > M_UnionedSelections;
+    typedef std::map< tstring, OS_PersistentDumbPtr > M_UnionedSelections;
     M_UnionedSelections unionedSelections;
     M_PanelCreators unionedPanels;
 
     {
         CORE_SCOPE_TIMER( ("Selection Processing") );
 
-        OS_SelectableDumbPtr::Iterator itr = selection.Begin();
-        OS_SelectableDumbPtr::Iterator end = selection.End();
+        OS_PersistentDumbPtr::Iterator itr = selection.Begin();
+        OS_PersistentDumbPtr::Iterator end = selection.End();
         for ( size_t index = 0; itr != end; ++itr, ++index )
         {
             if ( *args.m_CurrentSelectionId != args.m_SelectionId )
@@ -176,7 +176,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
                                 unionedPanels.insert( *itrPanel );
 
                                 Helium::Insert<M_UnionedSelections>::Result inserted = 
-                                    unionedSelections.insert( M_UnionedSelections::value_type ( itrPanel->first, OS_SelectableDumbPtr () ) );
+                                    unionedSelections.insert( M_UnionedSelections::value_type ( itrPanel->first, OS_PersistentDumbPtr () ) );
 
                                 inserted.first->second.Append( *itr );
                             }

@@ -92,7 +92,7 @@ namespace Helium
             }
 
             // Validate any selection if not in InterfaceOverride
-            virtual bool ValidateSelection( OS_SelectableDumbPtr& items )
+            virtual bool ValidateSelection( OS_PersistentDumbPtr& items )
             {
                 return true;
             }

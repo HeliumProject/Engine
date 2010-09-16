@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "VaultSearch.h"
 
-#include "SearchResults.h"
+#include "VaultSearchResults.h"
 
 #include "Foundation/Regex.h"
 #include "Foundation/Container/Insert.h"
@@ -202,7 +202,7 @@ const Path& VaultSearch::GetDirectory() const
 //  - folder path
 //  - search query
 //
-bool VaultSearch::StartSearchThread( SearchQuery* searchQuery )
+bool VaultSearch::StartSearchThread( VaultSearchQuery* searchQuery )
 {
     Helium::TakeMutex beginMutex( m_BeginSearchMutex );
 
@@ -219,7 +219,7 @@ bool VaultSearch::StartSearchThread( SearchQuery* searchQuery )
 
         // clear previous results, if any
         m_CurrentSearchQuery = searchQuery;
-        m_SearchResults = new SearchResults( m_CurrentSearchID );
+        m_SearchResults = new VaultSearchResults( m_CurrentSearchID );
         m_FoundPaths.clear();
 
         HELIUM_ASSERT( !m_DummyWindow );
@@ -288,7 +288,7 @@ void VaultSearch::OnSearchResultsAvailable( const Editor::DummyWindowArgs& args 
     {
         m_SearchResultsAvailableListeners.Raise( SearchResultsAvailableArgs( m_CurrentSearchQuery, m_SearchResults ) );
     }
-    m_SearchResults = new SearchResults( searchID );
+    m_SearchResults = new VaultSearchResults( searchID );
     m_FoundPaths.clear();
 }
 
@@ -311,7 +311,7 @@ void VaultSearch::OnEndSearchThread( const Editor::DummyWindowArgs& args )
 
 ///////////////////////////////////////////////////////////////////////////////
 // Called by VaultSearchThread
-// Fills out the SearchResults structure to pass to SearchResultsAvailable event
+// Fills out the VaultSearchResults structure to pass to SearchResultsAvailable event
 //
 void VaultSearch::SearchThreadProc( i32 searchID )
 {
@@ -440,7 +440,7 @@ inline void VaultSearch::SearchThreadLeave( i32 searchID )
 
 
 /////////////////////////////////////////////////////////////////////////////
-// SearchThreadProc Helper Functions - Wrangle SearchResults
+// SearchThreadProc Helper Functions - Wrangle VaultSearchResults
 /////////////////////////////////////////////////////////////////////////////
 
 u32 VaultSearch::AddPath( const Helium::Path& path, i32 searchID )

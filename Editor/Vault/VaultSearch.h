@@ -1,7 +1,7 @@
 #pragma once
 
-#include "SearchQuery.h"
-#include "SearchResults.h"
+#include "VaultSearchQuery.h"
+#include "VaultSearchResults.h"
 
 #include "Editor/Tracker/TrackerDBGenerated.h"
 #include "Foundation/Automation/Event.h"
@@ -30,8 +30,8 @@ namespace Helium
         // A search has been requested.
         struct StartSearchThreadArgs
         {
-            SearchQueryPtr m_SearchQuery;
-            StartSearchThreadArgs( SearchQuery* searchQuery ) : m_SearchQuery( searchQuery ) {}
+            VaultSearchQueryPtr m_SearchQuery;
+            StartSearchThreadArgs( VaultSearchQuery* searchQuery ) : m_SearchQuery( searchQuery ) {}
         };
         typedef Helium::Signature< const StartSearchThreadArgs& > StartSearchThreadSignature;
 
@@ -61,21 +61,21 @@ namespace Helium
         // Search is complete.
         struct SearchThreadCompleteArgs
         {
-            SearchQueryPtr m_SearchQuery;
-            SearchThreadCompleteArgs( SearchQuery* searchQuery ) : m_SearchQuery( searchQuery ) {}
+            VaultSearchQueryPtr m_SearchQuery;
+            SearchThreadCompleteArgs( VaultSearchQuery* searchQuery ) : m_SearchQuery( searchQuery ) {}
         };
         typedef Helium::Signature< const SearchThreadCompleteArgs& > SearchThreadCompleteSignature;
 
 
         ///////////////////////////////////////////////////////////////////////
         // SearchResultsAvailable:
-        // (Some or all) search results are available, contains SearchResults
+        // (Some or all) search results are available, contains VaultSearchResults
         struct SearchResultsAvailableArgs
         {
-            SearchQueryPtr   m_SearchQuery;
-            SearchResultsPtr m_SearchResults;
+            VaultSearchQueryPtr m_SearchQuery;
+            VaultSearchResultsPtr m_SearchResults;
 
-            SearchResultsAvailableArgs( SearchQuery* searchQuery, SearchResults* searchResults )
+            SearchResultsAvailableArgs( VaultSearchQuery* searchQuery, VaultSearchResults* searchResults )
                 : m_SearchQuery( searchQuery )
                 , m_SearchResults( searchResults )
             {
@@ -102,12 +102,12 @@ namespace Helium
         {
         public:
             VaultSearch();
-            ~VaultSearch();
+            virtual ~VaultSearch();
 
             void SetDirectory( const Helium::Path& directory );
             const Helium::Path& GetDirectory() const;
 
-            bool StartSearchThread( SearchQuery* searchQuery );
+            bool StartSearchThread( VaultSearchQuery* searchQuery );
             void StopSearchThreadAndWait();
 
             friend class VaultSearchThread;
@@ -117,12 +117,12 @@ namespace Helium
             TrackerDBGenerated      m_TrackerDB;
 
             //----------DO NOT ACCESS outside of m_SearchResultsMutex---------//
-            // SearchResults and Status
+            // VaultSearchResults and Status
             // 
             Helium::Mutex           m_SearchResultsMutex;
             i32                     m_CurrentSearchID;   // Used for debugging to track a search through the system
-            SearchQueryPtr          m_CurrentSearchQuery;
-            SearchResultsPtr        m_SearchResults;     // The results to populate and pass to SearchResultsAvailableArgs
+            VaultSearchQueryPtr     m_CurrentSearchQuery;
+            VaultSearchResultsPtr   m_SearchResults;     // The results to populate and pass to SearchResultsAvailableArgs
             std::set< Helium::Path > m_FoundPaths;       // The *complete* list of found files from this section
             //---------------------------------------------------------------//
 

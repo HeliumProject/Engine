@@ -386,8 +386,8 @@ void SceneOutliner::SelectionChanged( const SelectionChangeArgs& args )
 
     m_TreeCtrl->UnselectAll();
 
-    OS_SelectableDumbPtr::Iterator itr = args.m_Selection.Begin();
-    OS_SelectableDumbPtr::Iterator end = args.m_Selection.End();
+    OS_PersistentDumbPtr::Iterator itr = args.m_Selection.Begin();
+    OS_PersistentDumbPtr::Iterator end = args.m_Selection.End();
     for ( ; itr != end; ++itr )
     {
         M_TreeItems::const_iterator found = m_Items.find( *itr );
@@ -493,10 +493,10 @@ void SceneOutliner::OnSelectionChanging( wxTreeEvent& args )
         if ( !m_TreeCtrl->IsSelected( item ) )
         {
             SceneOutlinerItemData* data = GetTreeItemData( item );
-            Selectable* selectableItem = Reflect::ObjectCast<Selectable>( data->GetObject() );
-            if ( selectableItem )
+            Persistent* persistent = Reflect::ObjectCast<Persistent>( data->GetObject() );
+            if ( persistent )
             {
-                if ( !selectableItem->IsSelectable() )
+                if ( !persistent->IsSelectable() )
                 {
                     args.Veto();
                 }
@@ -518,17 +518,17 @@ void SceneOutliner::OnSelectionChanged( wxTreeEvent& args )
         wxArrayTreeItemIds selections;
         const size_t numSelections = m_TreeCtrl->GetSelections( selections );
 
-        OS_SelectableDumbPtr selectableObjects;
+        OS_PersistentDumbPtr persistentObjects;
 
         for ( size_t i = 0; i < numSelections; i++ )
         {
             SceneOutlinerItemData* itemData = GetTreeItemData( selections[i] );
             if ( itemData )
             {
-                Selectable* selectableItem = Reflect::ObjectCast<Selectable>( itemData->GetObject() );
-                if ( selectableItem )
+                Persistent* persistent = Reflect::ObjectCast<Persistent>( itemData->GetObject() );
+                if ( persistent )
                 {
-                    selectableObjects.Append( selectableItem );
+                    persistentObjects.Append( persistent );
                 }
             }
         }  
@@ -536,7 +536,7 @@ void SceneOutliner::OnSelectionChanged( wxTreeEvent& args )
         // Set the selection on the scene.  Note, the second parameter is a delegate that
         // tells the scene selection event not to pass the event back to this class since
         // we have already updated ourselves.
-        m_CurrentScene->Push( m_CurrentScene->GetSelection().SetItems( selectableObjects, SelectionChangingSignature::Delegate (), SelectionChangedSignature::Delegate( this, &SceneOutliner::SelectionChanged ) ) );
+        m_CurrentScene->Push( m_CurrentScene->GetSelection().SetItems( persistentObjects, SelectionChangingSignature::Delegate (), SelectionChangedSignature::Delegate( this, &SceneOutliner::SelectionChanged ) ) );
     }
 }
 

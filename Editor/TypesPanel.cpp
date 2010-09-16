@@ -117,11 +117,11 @@ void TypesPanel::SelectabilityChanged( const GridRowChangeArgs& args )
 
         if (!selectable)
         {
-            OS_SelectableDumbPtr newSelection;
+            OS_PersistentDumbPtr newSelection;
 
-            OS_SelectableDumbPtr selection = m_Scene->GetSelection().GetItems();
-            OS_SelectableDumbPtr::Iterator itr = selection.Begin();
-            OS_SelectableDumbPtr::Iterator end = selection.End();
+            OS_PersistentDumbPtr selection = m_Scene->GetSelection().GetItems();
+            OS_PersistentDumbPtr::Iterator itr = selection.Begin();
+            OS_PersistentDumbPtr::Iterator end = selection.End();
             for ( ; itr != end; ++itr )
             {
                 Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>( *itr );

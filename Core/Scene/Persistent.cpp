@@ -9,7 +9,8 @@ using namespace Helium::Core;
 REFLECT_DEFINE_ABSTRACT( Persistent );
 
 Persistent::Persistent( Reflect::Element* package )
-: m_Package( package )
+: m_Selected( false )
+, m_Package( package )
 {
 }
 
@@ -42,4 +43,29 @@ Undo::CommandPtr Persistent::SnapShot( Reflect::Element* newState )
     }
 
     return new Undo::PropertyCommand<Reflect::ElementPtr>( new Helium::MemberProperty<Persistent, Reflect::ElementPtr> (this, &Persistent::GetState, &Persistent::SetState), Reflect::ElementPtr( newState ) );
+}
+
+bool Persistent::IsSelectable() const
+{
+    return true;
+}
+
+bool Persistent::IsSelected() const
+{
+    return m_Selected;
+}
+
+void Persistent::SetSelected(bool selected)
+{
+    m_Selected = selected;
+}
+
+void Persistent::ConnectProperties(EnumerateElementArgs& args)
+{
+
+}
+
+bool Persistent::ValidatePanel(const tstring& name)
+{
+    return false;
 }

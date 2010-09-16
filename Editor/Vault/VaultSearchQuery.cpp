@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "SearchQuery.h"
+#include "VaultSearchQuery.h"
 
 #include "Editor/App.h"
 #include "Foundation/Regex.h"
@@ -58,28 +58,28 @@ const tchar* s_MatchDecimalTUIDPattern = TXT( "^((?:[\\-]){0,1}[0-9]{16,})$" ); 
 
 
 ///////////////////////////////////////////////////////////////////////////////
-REFLECT_DEFINE_CLASS( SearchQuery );
-void SearchQuery::EnumerateClass( Reflect::Compositor<SearchQuery>& comp )
+REFLECT_DEFINE_CLASS( VaultSearchQuery );
+void VaultSearchQuery::EnumerateClass( Reflect::Compositor<VaultSearchQuery>& comp )
 {
-    Reflect::EnumerationField* enumSearchType = comp.AddEnumerationField( &SearchQuery::m_SearchType, "m_SearchType" );
-    Reflect::Field* fieldQueryString = comp.AddField( &SearchQuery::m_QueryString, "m_QueryString" );
-    Reflect::Field* fieldQueryPath = comp.AddField( &SearchQuery::m_QueryPath, "m_QueryPath", Reflect::FieldFlags::Force );
+    Reflect::EnumerationField* enumSearchType = comp.AddEnumerationField( &VaultSearchQuery::m_SearchType, "m_SearchType" );
+    Reflect::Field* fieldQueryString = comp.AddField( &VaultSearchQuery::m_QueryString, "m_QueryString" );
+    Reflect::Field* fieldQueryPath = comp.AddField( &VaultSearchQuery::m_QueryPath, "m_QueryPath", Reflect::FieldFlags::Force );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-SearchQuery::SearchQuery()
+VaultSearchQuery::VaultSearchQuery()
 : m_SearchType( SearchTypes::CacheDB )
 , m_SQLQueryString( TXT("") )
 {
 
 }
 
-SearchQuery::~SearchQuery()
+VaultSearchQuery::~VaultSearchQuery()
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void SearchQuery::PostDeserialize()
+void VaultSearchQuery::PostDeserialize()
 {
     __super::PostDeserialize();
 
@@ -92,7 +92,7 @@ void SearchQuery::PostDeserialize()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool SearchQuery::SetQueryString( const tstring& queryString, tstring& errors )
+bool VaultSearchQuery::SetQueryString( const tstring& queryString, tstring& errors )
 {
     // Set the QueryString
     m_QueryString = queryString;
@@ -108,7 +108,7 @@ bool SearchQuery::SetQueryString( const tstring& queryString, tstring& errors )
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-const tstring& SearchQuery::GetSQLQueryString() const
+const tstring& VaultSearchQuery::GetSQLQueryString() const
 {
     if ( m_SQLQueryString.empty() )
     {
@@ -122,19 +122,19 @@ const tstring& SearchQuery::GetSQLQueryString() const
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-bool SearchQuery::operator<( const SearchQuery& rhs ) const
+bool VaultSearchQuery::operator<( const VaultSearchQuery& rhs ) const
 {
     return _tcsicmp( GetQueryString().c_str(), rhs.GetQueryString().c_str() ) < 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-bool SearchQuery::operator==( const SearchQuery& rhs ) const
+bool VaultSearchQuery::operator==( const VaultSearchQuery& rhs ) const
 {
     return _tcsicmp( GetQueryString().c_str(), rhs.GetQueryString().c_str() ) == 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-bool SearchQuery::operator!=( const SearchQuery& rhs ) const
+bool VaultSearchQuery::operator!=( const VaultSearchQuery& rhs ) const
 {
     return _tcsicmp( GetQueryString().c_str(), rhs.GetQueryString().c_str() ) != 0;
 }
@@ -184,9 +184,9 @@ bool ParsePhrase( const tstring& token, tsmatch& matchResults, tstring& phrase, 
     return false;
 }
 
-bool SearchQuery::ParseQueryString( const tstring& queryString, tstring& errors, SearchQuery* query )
+bool VaultSearchQuery::ParseQueryString( const tstring& queryString, tstring& errors, VaultSearchQuery* query )
 {
-#pragma TODO( "Rachel: Need more error checking in SearchQuery::ParseQueryString" )
+#pragma TODO( "Rachel: Need more error checking in VaultSearchQuery::ParseQueryString" )
 
     const tregex matchAssetPath( s_MatchAssetPathPattern, std::tr1::regex::icase ); 
     const tregex matchTUID( s_MatchTUIDPattern, std::tr1::regex::icase );

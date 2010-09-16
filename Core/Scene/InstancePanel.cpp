@@ -14,7 +14,7 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection)
+InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_PersistentDumbPtr& selection)
 : m_Selection (selection)
 {
     m_Generator = generator;
@@ -56,8 +56,8 @@ InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_Selectable
 
     bool allVolumes = true;
 
-    OS_SelectableDumbPtr::Iterator itr = m_Selection.Begin();
-    OS_SelectableDumbPtr::Iterator end = m_Selection.End();
+    OS_PersistentDumbPtr::Iterator itr = m_Selection.Begin();
+    OS_PersistentDumbPtr::Iterator end = m_Selection.End();
     for ( ; itr != end; ++itr )
     {
         Core::VolumePtr volume = Reflect::ObjectCast< Volume >( *itr );

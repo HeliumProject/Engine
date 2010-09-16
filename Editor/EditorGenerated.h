@@ -12,6 +12,7 @@
 
 class wxBitmapToggleButton;
 namespace Helium{ namespace Editor{ class Frame; } }
+namespace Helium{ namespace Editor{ class ListResultsView; } }
 
 #include "Editor/Frame.h"
 #include <wx/string.h>
@@ -357,6 +358,7 @@ namespace Helium
 				wxSearchCtrl* m_SearchCtrl;
 				wxBitmapButton* m_OptionsButton;
 				wxPanel* m_ResultsPanel;
+				Helium::Editor::ListResultsView* m_ListResultsView;
 				
 				// Virtual event handlers, overide them in your derived class
 				virtual void OnSearchCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }

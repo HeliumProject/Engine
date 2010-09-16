@@ -33,7 +33,7 @@ if ( !GetOptions( "clean"      => \$clean,
 my $git_command;
 if ( $git_clean )
 {
-  my $git_command = 'git clean -fdx';
+  $git_command = 'git clean -fdx';
   $result = _Do( $git_command, "Git Clean" );
 }
 $git_command = 'git pull';
@@ -41,8 +41,12 @@ $result += _Do( $git_command, "Git Pull" );
 
 if ( $result )
 {
-  print("\nError during Git commands - Aborting script.\n");
-  exit( 1 );
+  my $prompt = _PromptYesNo("\nError during Git commands, continue (y/n)? ");
+  if ( !$prompt )
+  {
+    print("\nError during Git commands - Aborting script.\n");
+    exit( 1 );
+  }
 }
 
 

@@ -12,11 +12,11 @@ namespace Helium
         class SceneNodePanel : public Inspect::Container
         {
         public:
-            SceneNodePanel(PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection);
+            SceneNodePanel(PropertiesGenerator* generator, const OS_PersistentDumbPtr& selection);
 
         protected:
             PropertiesGenerator*          m_Generator;
-            OS_SelectableDumbPtr  m_Selection;
+            OS_PersistentDumbPtr  m_Selection;
         };
     }
 }

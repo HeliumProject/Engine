@@ -328,7 +328,7 @@ namespace Helium
             Selection m_Selection;
 
             // highlighted items of this scene
-            OS_SelectableDumbPtr m_Highlighted;
+            OS_PersistentDumbPtr m_Highlighted;
 
             // data for handling picks
             Inspect::DataPtr m_PickData;
@@ -450,7 +450,7 @@ namespace Helium
             }
 
             // allows external people to modify selection
-            const OS_SelectableDumbPtr& GetHighlighted() const
+            const OS_PersistentDumbPtr& GetHighlighted() const
             {
                 // right now we don't use the selection when undoing/redoing
                 //  and would like to keep it that way so we can clear it without undo support
@@ -756,9 +756,9 @@ namespace Helium
 
             Core::HierarchyNode* GetCommonParent( const V_HierarchyNodeDumbPtr& nodes );
             void GetCommonParents( const V_HierarchyNodeDumbPtr& nodes, V_HierarchyNodeDumbPtr& parents );
-            void GetSelectionParents(OS_SelectableDumbPtr& parents);
+            void GetSelectionParents(OS_PersistentDumbPtr& parents);
 
-            void GetFlattenedSelection(OS_SelectableDumbPtr& selection);
+            void GetFlattenedSelection(OS_PersistentDumbPtr& selection);
             void GetFlattenedHierarchy(Core::HierarchyNode* node, OS_HierarchyNodeDumbPtr& items);
 
             void GetSelectedTransforms( Math::V_Matrix4& transforms );
@@ -1017,7 +1017,7 @@ namespace Helium
 
         public:
 
-            SceneSelectCommand( Core::Scene* scene, OS_SelectableDumbPtr& selection  ) 
+            SceneSelectCommand( Core::Scene* scene, OS_PersistentDumbPtr& selection  ) 
                 : m_Scene( scene )
                 , m_Selection( selection )
             { 
@@ -1045,8 +1045,8 @@ namespace Helium
 
         private:
             Core::Scene* m_Scene;
-            OS_SelectableDumbPtr m_Selection;
-            OS_SelectableDumbPtr m_OldSelection;
+            OS_PersistentDumbPtr m_Selection;
+            OS_PersistentDumbPtr m_OldSelection;
         };
     }
 }

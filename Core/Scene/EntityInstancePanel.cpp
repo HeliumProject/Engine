@@ -22,7 +22,7 @@ using namespace Helium::Reflect;
 using namespace Helium::Asset;
 using namespace Helium::Core;
 
-EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection)
+EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_PersistentDumbPtr& selection)
 : InstancePanel (generator, selection)
 , m_EntityPath( NULL )
 {
@@ -145,8 +145,8 @@ void EntityPanel::OnEntityAssetRefresh( const Inspect::ButtonClickedArgs& args )
 
     std::set< tstring > files;
 
-    OS_SelectableDumbPtr::Iterator selectionIter = m_Selection.Begin();
-    OS_SelectableDumbPtr::Iterator selectionEnd = m_Selection.End();
+    OS_PersistentDumbPtr::Iterator selectionIter = m_Selection.Begin();
+    OS_PersistentDumbPtr::Iterator selectionEnd = m_Selection.End();
     for (; selectionIter != selectionEnd; ++selectionIter )
     {
         Core::EntityInstance* entity = Reflect::ObjectCast< Core::EntityInstance >( *selectionIter );
@@ -204,8 +204,8 @@ void EntityPanel::OnEntityAssetRefresh( const Inspect::ButtonClickedArgs& args )
 void EntityPanel::OnEntityAssetEditAsset( const Inspect::ButtonClickedArgs& args )
 {
     std::set< tstring > files;
-    OS_SelectableDumbPtr::Iterator selectionIter = m_Selection.Begin();
-    OS_SelectableDumbPtr::Iterator selectionEnd = m_Selection.End();
+    OS_PersistentDumbPtr::Iterator selectionIter = m_Selection.Begin();
+    OS_PersistentDumbPtr::Iterator selectionEnd = m_Selection.End();
     for ( ; selectionIter != selectionEnd; ++selectionIter )
     {
         Core::EntityInstance* entity = Reflect::ObjectCast< Core::EntityInstance >( *selectionIter );

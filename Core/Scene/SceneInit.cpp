@@ -71,7 +71,6 @@ void Core::SceneInitialize()
 
     g_InitializerStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
 
-    g_InitializerStack.Push( Reflect::RegisterClassType<Selectable>() );
     g_InitializerStack.Push( Reflect::RegisterClassType<Persistent>() );
     g_InitializerStack.Push( Reflect::RegisterClassType<MRUData>() );
 

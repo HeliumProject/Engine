@@ -2,47 +2,23 @@
 
 #include "Foundation/Undo/Command.h"
 #include "Foundation/Reflect/Element.h"
+#include "Foundation/Container/OrderedSet.h"
 
-#include "Core/Scene/Selectable.h"
+#include "Core/API.h"
 
 namespace Helium
 {
     namespace Core
     {
-        //
-        // Persistent is a basic application object
-        //  It provides:
-        //   o Support for the Internal package / Application object pattern
-        //   o Support for Serialization through Reflect
-        //   o Support for Undo/Redo on a general level using serialization
-        //
+        class PropertiesGenerator;
+        struct EnumerateElementArgs;
 
-        class CORE_API Persistent : public Selectable
+        class CORE_API Persistent : public Reflect::Object
         {
-            //
-            // Persistent Data is the packed version of this application object
-            //  Serialization occurs like this:
-            //   API calls Pack() to pack data into the persistent block
-            //   API calls GetPackage() to get packed data for this object
-            //  Deserialzation occurs like this:
-            //   API calls Unpack() to re-initialize application object members from persistent data
-            //
-
-        protected:
-            Reflect::ElementPtr m_Package;
-
         public:
-            REFLECT_DECLARE_ABSTRACT( Persistent, Selectable );
-
             Persistent(Reflect::Element* data);
             virtual ~Persistent();
 
-
-            //
-            // We do allow other APIs to access our persistent data, as in step 2 in above
-            //
-
-            // Get
             Reflect::Element* GetPackage()
             {
                 return m_Package;
@@ -77,34 +53,45 @@ namespace Helium
 #endif
             }
 
-            // Pack any application-cached data into the packed data
-            virtual void Pack()
-            {
-
-            }
-
-            // Unpack data from the packed information into the application object
-            virtual void Unpack()
-            {
-
-            }
-
-            //
-            // State Functionality (used by undo)
-            //
-
-        private:
             // Retrieve serialzed data for this object into the parameter
             void GetState( Reflect::ElementPtr& state ) const;
 
             // Restore serialized data from the element for this object
             void SetState( const Reflect::ElementPtr& state );
 
-        public:
-            // Get undo command for this object's state
+            // Get undo command for this object's state (uses GetState/SetState above)
             virtual Undo::CommandPtr SnapShot( Reflect::Element* newState = NULL );
+
+            // Pack any application-cached data into the packed data
+            virtual void Pack() {}
+
+            // Unpack data from the packed information into the application object
+            virtual void Unpack() {}
+
+            // Is this object currently selectable?
+            //  Sometimes objects can on a per-instance or per-type basis decided to NOT be selectable
+            //  This prototype exposes the capability to HELIUM_OVERRIDE the selection of an object
+            virtual bool IsSelectable() const;
+
+            // Get/Set selected state
+            virtual bool IsSelected() const;
+            virtual void SetSelected(bool);
+
+            // do enumeration of applicable attributes on this object
+            virtual void ConnectProperties(EnumerateElementArgs& args);
+
+            // validate a named panel as usable
+            virtual bool ValidatePanel(const tstring& name);
+
+        protected:
+            bool                m_Selected;
+            Reflect::ElementPtr m_Package;
+
+        public:
+            REFLECT_DECLARE_ABSTRACT( Persistent, Reflect::Object );
         };
 
-        typedef Helium::SmartPtr< Persistent > PersistentPtr;
+        typedef SmartPtr< Persistent > PersistentPtr;
+        typedef OrderedSet< Persistent* > OS_PersistentDumbPtr;
     }
 }

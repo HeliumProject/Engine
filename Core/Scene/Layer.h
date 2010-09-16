@@ -40,7 +40,7 @@ namespace Helium
             const Math::Color3& GetColor() const;
             void SetColor( const Math::Color3& color );
 
-            OS_SelectableDumbPtr GetMembers();
+            OS_PersistentDumbPtr GetMembers();
             bool ContainsMember( Core::SceneNode* node ) const;
 
             virtual void Prune( V_SceneNodeDumbPtr& prunedNodes ) HELIUM_OVERRIDE;
@@ -50,7 +50,7 @@ namespace Helium
 
         private:
             static void CreatePanel( CreatePanelArgs& args );
-            static void BuildUnionAndIntersection( PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection, tstring& unionStr, tstring& intersectionStr );
+            static void BuildUnionAndIntersection( PropertiesGenerator* generator, const OS_PersistentDumbPtr& selection, tstring& unionStr, tstring& intersectionStr );
 
             Content::NodeVisibilityPtr m_VisibilityData; 
         };

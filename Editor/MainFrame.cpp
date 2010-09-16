@@ -1685,7 +1685,7 @@ void MainFrame::OnSelectAll( wxCommandEvent& event )
         return;
     }
 
-    OS_SelectableDumbPtr selection;
+    OS_PersistentDumbPtr selection;
 
     HM_SceneNodeDumbPtr::const_iterator itr = m_SceneManager.GetCurrentScene()->GetNodes().begin();
     HM_SceneNodeDumbPtr::const_iterator end = m_SceneManager.GetCurrentScene()->GetNodes().end();
@@ -1701,7 +1701,7 @@ void MainFrame::OnSelectAll( wxCommandEvent& event )
     m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->GetSelection().SetItems( selection ) );
 }
 
-static void RecurseToggleSelection( Core::HierarchyNode* node, const OS_SelectableDumbPtr& oldSelection, OS_SelectableDumbPtr& newSelection )
+static void RecurseToggleSelection( Core::HierarchyNode* node, const OS_PersistentDumbPtr& oldSelection, OS_PersistentDumbPtr& newSelection )
 {
     for ( OS_HierarchyNodeDumbPtr::Iterator itr = node->GetChildren().Begin(), end = node->GetChildren().End(); itr != end; ++itr )
     {
@@ -1710,8 +1710,8 @@ static void RecurseToggleSelection( Core::HierarchyNode* node, const OS_Selectab
     }
 
     bool found = false;
-    OS_SelectableDumbPtr::Iterator selItr = oldSelection.Begin();
-    OS_SelectableDumbPtr::Iterator selEnd = oldSelection.End();
+    OS_PersistentDumbPtr::Iterator selItr = oldSelection.Begin();
+    OS_PersistentDumbPtr::Iterator selEnd = oldSelection.End();
     for ( ; selItr != selEnd && !found; ++selItr )
     {
         Core::HierarchyNode* current = Reflect::ObjectCast< Core::HierarchyNode >( *selItr );
@@ -1734,10 +1734,10 @@ void MainFrame::OnInvertSelection(wxCommandEvent& event)
 {
     if ( m_SceneManager.HasCurrentScene() )
     {
-        const OS_SelectableDumbPtr& selection = m_SceneManager.GetCurrentScene()->GetSelection().GetItems();
+        const OS_PersistentDumbPtr& selection = m_SceneManager.GetCurrentScene()->GetSelection().GetItems();
         if ( selection.Size() > 0 )
         {
-            OS_SelectableDumbPtr newSelection;
+            OS_PersistentDumbPtr newSelection;
             RecurseToggleSelection( m_SceneManager.GetCurrentScene()->GetRoot(), selection, newSelection );
             m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->GetSelection().SetItems( newSelection ) );
         }
@@ -2011,7 +2011,7 @@ void MainFrame::OnManifestContextMenu(wxCommandEvent& event)
 
         if( selection )
         {
-            OS_SelectableDumbPtr newSelection;
+            OS_PersistentDumbPtr newSelection;
             newSelection.Append( selection );
             m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->GetSelection().SetItems( newSelection ) );
         }
@@ -2024,7 +2024,7 @@ void MainFrame::OnManifestContextMenu(wxCommandEvent& event)
 void MainFrame::OnTypeContextMenu(wxCommandEvent &event)
 {
     ContextCallbackData* data = static_cast<ContextCallbackData*>(event.m_callbackUserData);
-    OS_SelectableDumbPtr newSelection;
+    OS_PersistentDumbPtr newSelection;
 
     switch( data->m_ContextCallbackType )
     {
@@ -2299,16 +2299,16 @@ void MainFrame::OpenManifestContextMenu(const SelectArgs& args)
 
     bool result = m_SceneManager.GetCurrentScene()->Pick(args.m_Pick);
 
-    OS_SelectableDumbPtr selectableItems;
+    OS_PersistentDumbPtr selectableItems;
     V_PickHitSmartPtr::const_iterator itr = args.m_Pick->GetHits().begin();
     V_PickHitSmartPtr::const_iterator end = args.m_Pick->GetHits().end();
     for ( ; itr != end; ++itr )
     {
-        Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetHitObject());
-        if (selectable)
+        Persistent* persistent = Reflect::ObjectCast<Persistent>((*itr)->GetHitObject());
+        if (persistent)
         {
-            // add it to the new selection list
-            selectableItems.Append(selectable);
+            // add it to the new persistent list
+            selectableItems.Append(persistent);
         }
     }
 
@@ -2321,15 +2321,15 @@ void MainFrame::OpenManifestContextMenu(const SelectArgs& args)
     if( !selectableItems.Empty() )
     {
         {
-            OS_SelectableDumbPtr::Iterator itr = selectableItems.Begin();
-            OS_SelectableDumbPtr::Iterator end = selectableItems.End();
+            OS_PersistentDumbPtr::Iterator itr = selectableItems.Begin();
+            OS_PersistentDumbPtr::Iterator end = selectableItems.End();
             for( ; itr != end; ++itr)
             {
-                Selectable* selection = *itr;
+                Persistent* persistent = *itr;
 
-                if( selection->IsSelectable() )
+                if( persistent->IsSelectable() )
                 {
-                    Core::HierarchyNode* node = Reflect::ObjectCast< Core::HierarchyNode >( selection );
+                    Core::HierarchyNode* node = Reflect::ObjectCast< Core::HierarchyNode >( persistent );
 
                     if( node )
                     {

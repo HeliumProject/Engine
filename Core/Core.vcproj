@@ -1046,14 +1046,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\Selectable.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\Selectable.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scene\Selection.cpp"
 				>
 			</File>

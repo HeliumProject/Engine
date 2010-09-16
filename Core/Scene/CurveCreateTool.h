@@ -20,7 +20,7 @@ namespace Helium
             bool m_Created;
 
             // The selection of the created objects
-            OS_SelectableDumbPtr m_Selection;
+            OS_PersistentDumbPtr m_Selection;
 
             // The instance we are creating
             LCurvePtr m_Instance;

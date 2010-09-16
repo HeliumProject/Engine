@@ -26,7 +26,7 @@ void Selection::Refresh()
     Log::Profile( TXT( "Selection Refresh took %fms\n" ), timer.Elapsed());
 }
 
-const OS_SelectableDumbPtr& Selection::GetItems() const
+const OS_PersistentDumbPtr& Selection::GetItems() const
 {
     return m_Items;
 }
@@ -44,15 +44,15 @@ Undo::CommandPtr Selection::Clear(const SelectionChangingSignature::Delegate& em
 
     Undo::CommandPtr command;
 
-    OS_SelectableDumbPtr empty;
+    OS_PersistentDumbPtr empty;
     SelectionChangingArgs args ( empty );
     m_SelectionChanging.RaiseWithEmitter( args, emitterChanging );
     if ( !args.m_Veto )
     {
         command = new SelectionChangeCommand( this );
 
-        OS_SelectableDumbPtr::Iterator itr = m_Items.Begin();
-        OS_SelectableDumbPtr::Iterator end = m_Items.End();
+        OS_PersistentDumbPtr::Iterator itr = m_Items.Begin();
+        OS_PersistentDumbPtr::Iterator end = m_Items.End();
         for ( ; itr != end; ++itr )
         {
             (*itr)->SetSelected(false);
@@ -68,21 +68,21 @@ Undo::CommandPtr Selection::Clear(const SelectionChangingSignature::Delegate& em
     return command;
 }
 
-Undo::CommandPtr Selection::SetItem(Selectable* selection, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
+Undo::CommandPtr Selection::SetItem(Persistent* item, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
-    if (selection == NULL)
+    if (item == NULL)
     {
         return Clear(emitterChanging, emitterChanged);
     }
 
-    OS_SelectableDumbPtr temp;
+    OS_PersistentDumbPtr temp;
 
-    temp.Append(selection);
+    temp.Append(item);
 
     return SetItems(temp, emitterChanging, emitterChanged);
 }
 
-Undo::CommandPtr Selection::SetItems(const OS_SelectableDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
+Undo::CommandPtr Selection::SetItems(const OS_PersistentDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
     if (items.Empty())
     {
@@ -93,11 +93,11 @@ Undo::CommandPtr Selection::SetItems(const OS_SelectableDumbPtr& items, const Se
 
     Timer timer;
 
-    OS_SelectableDumbPtr selectableItems;
+    OS_PersistentDumbPtr selectableItems;
 
     {
-        OS_SelectableDumbPtr::Iterator itr = items.Begin();
-        OS_SelectableDumbPtr::Iterator end = items.End();
+        OS_PersistentDumbPtr::Iterator itr = items.Begin();
+        OS_PersistentDumbPtr::Iterator end = items.End();
         for ( ; itr != end; ++itr )
         {
             if ((*itr)->IsSelectable())
@@ -116,8 +116,8 @@ Undo::CommandPtr Selection::SetItems(const OS_SelectableDumbPtr& items, const Se
         command = new SelectionChangeCommand( this );
 
         {
-            OS_SelectableDumbPtr::Iterator itr = m_Items.Begin();
-            OS_SelectableDumbPtr::Iterator end = m_Items.End();
+            OS_PersistentDumbPtr::Iterator itr = m_Items.Begin();
+            OS_PersistentDumbPtr::Iterator end = m_Items.End();
             for ( ; itr != end; ++itr )
             {
                 (*itr)->SetSelected(false);
@@ -127,8 +127,8 @@ Undo::CommandPtr Selection::SetItems(const OS_SelectableDumbPtr& items, const Se
         m_Items = selectableItems;
 
         {
-            OS_SelectableDumbPtr::Iterator itr = m_Items.Begin();
-            OS_SelectableDumbPtr::Iterator end = m_Items.End();
+            OS_PersistentDumbPtr::Iterator itr = m_Items.Begin();
+            OS_PersistentDumbPtr::Iterator end = m_Items.End();
             for ( ; itr != end; ++itr )
             {
                 (*itr)->SetSelected(true);
@@ -143,21 +143,21 @@ Undo::CommandPtr Selection::SetItems(const OS_SelectableDumbPtr& items, const Se
     return command;
 }
 
-Undo::CommandPtr Selection::AddItem(Selectable* selection, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
+Undo::CommandPtr Selection::AddItem(Persistent* item, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
-    if ( selection == NULL )
+    if ( item == NULL )
     {
         return NULL;
     }
 
-    OS_SelectableDumbPtr temp;
+    OS_PersistentDumbPtr temp;
 
-    temp.Append(selection);
+    temp.Append(item);
 
     return AddItems(temp, emitterChanging, emitterChanged);
 }
 
-Undo::CommandPtr Selection::AddItems(const OS_SelectableDumbPtr &items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
+Undo::CommandPtr Selection::AddItems(const OS_PersistentDumbPtr &items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
     if ( items.Empty() )
     {
@@ -168,10 +168,10 @@ Undo::CommandPtr Selection::AddItems(const OS_SelectableDumbPtr &items, const Se
 
     Timer timer;
 
-    std::vector<Selectable*> added;
-    OS_SelectableDumbPtr temp = m_Items;
-    OS_SelectableDumbPtr::Iterator itr = items.Begin();
-    OS_SelectableDumbPtr::Iterator end = items.End();
+    std::vector<Persistent*> added;
+    OS_PersistentDumbPtr temp = m_Items;
+    OS_PersistentDumbPtr::Iterator itr = items.Begin();
+    OS_PersistentDumbPtr::Iterator end = items.End();
     for ( ; itr != end; ++itr )
     {
         if ( temp.Append(*itr) )
@@ -190,8 +190,8 @@ Undo::CommandPtr Selection::AddItems(const OS_SelectableDumbPtr &items, const Se
         {
             command = new SelectionChangeCommand( this );
 
-            std::vector<Selectable*>::iterator itr = added.begin();
-            std::vector<Selectable*>::iterator end = added.end();
+            std::vector<Persistent*>::iterator itr = added.begin();
+            std::vector<Persistent*>::iterator end = added.end();
             for ( ; itr != end; ++itr )
             {
                 (*itr)->SetSelected(true);
@@ -208,22 +208,22 @@ Undo::CommandPtr Selection::AddItems(const OS_SelectableDumbPtr &items, const Se
     return command;
 }
 
-Undo::CommandPtr Selection::RemoveItem(Selectable* selection, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
+Undo::CommandPtr Selection::RemoveItem(Persistent* item, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
     // no item to remove or no items to remove from
-    if ( selection == NULL || m_Items.Empty() )
+    if ( item == NULL || m_Items.Empty() )
     {
         return NULL;
     }
 
-    OS_SelectableDumbPtr temp;
+    OS_PersistentDumbPtr temp;
 
-    temp.Append(selection);
+    temp.Append(item);
 
     return RemoveItems(temp, emitterChanging, emitterChanged);
 }
 
-Undo::CommandPtr Selection::RemoveItems(const OS_SelectableDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
+Undo::CommandPtr Selection::RemoveItems(const OS_PersistentDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
     // no selected items
     if ( m_Items.Empty() )
@@ -235,10 +235,10 @@ Undo::CommandPtr Selection::RemoveItems(const OS_SelectableDumbPtr& items, const
 
     Timer timer;
 
-    std::vector<Selectable*> removed;
-    OS_SelectableDumbPtr temp = m_Items;
-    OS_SelectableDumbPtr::Iterator itr = items.Begin();
-    OS_SelectableDumbPtr::Iterator end = items.End();
+    std::vector<Persistent*> removed;
+    OS_PersistentDumbPtr temp = m_Items;
+    OS_PersistentDumbPtr::Iterator itr = items.Begin();
+    OS_PersistentDumbPtr::Iterator end = items.End();
     for ( ; itr != end; ++itr )
     {
         if ( temp.Remove(*itr) )
@@ -255,8 +255,8 @@ Undo::CommandPtr Selection::RemoveItems(const OS_SelectableDumbPtr& items, const
     {
         command = new SelectionChangeCommand( this );
 
-        std::vector<Selectable*>::iterator itr = removed.begin();
-        std::vector<Selectable*>::iterator end = removed.end();
+        std::vector<Persistent*>::iterator itr = removed.begin();
+        std::vector<Persistent*>::iterator end = removed.end();
         for ( ; itr != end; ++itr )
         {
             (*itr)->SetSelected(false);
@@ -272,13 +272,13 @@ Undo::CommandPtr Selection::RemoveItems(const OS_SelectableDumbPtr& items, const
     return command;
 }
 
-bool Selection::Contains(Selectable* selection) const
+bool Selection::Contains(Persistent* item) const
 {
-    OS_SelectableDumbPtr::Iterator itr = m_Items.Begin();
-    OS_SelectableDumbPtr::Iterator end = m_Items.End();
+    OS_PersistentDumbPtr::Iterator itr = m_Items.Begin();
+    OS_PersistentDumbPtr::Iterator end = m_Items.End();
     for ( ; itr != end; ++itr )
     {
-        if (*itr == selection)
+        if (*itr == item)
         {
             return true;
         }
@@ -287,12 +287,12 @@ bool Selection::Contains(Selectable* selection) const
     return false;
 }
 
-void Selection::GetUndo( OS_SelectableDumbPtr& outItems ) const
+void Selection::GetUndo( OS_PersistentDumbPtr& outItems ) const
 {
     outItems = GetItems();
 }
 
-void Selection::SetUndo( const OS_SelectableDumbPtr& items )
+void Selection::SetUndo( const OS_PersistentDumbPtr& items )
 {
     SetItems( items );
 }

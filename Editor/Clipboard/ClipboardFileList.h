@@ -13,18 +13,6 @@ namespace Helium
         // 
         class ClipboardFileList : public ReflectClipboardData
         {
-        private:
-            std::set< tstring > m_Files;
-
-            // These members are not serialized
-            bool m_IsDirty;
-
-        public:
-            // Runtime Type Info
-            REFLECT_DECLARE_CLASS( ClipboardFileList, ReflectClipboardData );
-            static void InitializeType();
-            static void CleanupType();
-
         public:
             ClipboardFileList();
             virtual ~ClipboardFileList();
@@ -34,7 +22,12 @@ namespace Helium
 
             virtual bool Merge( const ReflectClipboardData* source ) HELIUM_OVERRIDE;
 
+        private:
+            std::set< tstring > m_Files;
+            bool                m_IsDirty;
+
         public:
+            REFLECT_DECLARE_CLASS( ClipboardFileList, ReflectClipboardData );
             static void EnumerateClass( Reflect::Compositor<ClipboardFileList>& comp );
         };
 

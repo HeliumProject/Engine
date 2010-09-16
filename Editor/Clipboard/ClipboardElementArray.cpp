@@ -4,45 +4,21 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-// Definition
 REFLECT_DEFINE_CLASS( ClipboardElementArray );
 
 void ClipboardElementArray::EnumerateClass( Reflect::Compositor<ClipboardElementArray>& comp )
 {
-  Reflect::Field* fieldCommonBaseClass = comp.AddField( &ClipboardElementArray::m_CommonBaseClass, "m_CommonBaseClass" );
-  Reflect::Field* fieldElements = comp.AddField( &ClipboardElementArray::m_Elements, "m_Elements" );
+    comp.AddField( &ClipboardElementArray::m_CommonBaseClass, "m_CommonBaseClass" );
+    comp.AddField( &ClipboardElementArray::m_Elements, "m_Elements" );
 }
 
-
-///////////////////////////////////////////////////////////////////////////////
-// Static initialization.
-// 
-void ClipboardElementArray::InitializeType()
-{
-  Reflect::RegisterClassType< ClipboardElementArray >( TXT( "ClipboardElementArray" ) );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Static cleanup.
-// 
-void ClipboardElementArray::CleanupType()
-{
-  Reflect::UnregisterClassType< ClipboardElementArray >();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Constructor
-// 
 ClipboardElementArray::ClipboardElementArray()
 {
-  // By default, all items added to this array should derive from Reflect::Element
+    // By default, all items added to this array should derive from Reflect::Element
     bool converted = Helium::ConvertString( Reflect::Registry::GetInstance()->GetClass( Reflect::GetType< Reflect::Element >() )->m_FullName, m_CommonBaseClass );
     HELIUM_ASSERT( converted );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Destructor
-// 
 ClipboardElementArray::~ClipboardElementArray()
 {
 }
@@ -53,7 +29,7 @@ ClipboardElementArray::~ClipboardElementArray()
 // 
 i32 ClipboardElementArray::GetCommonBaseTypeID() const
 {
-  return Reflect::Registry::GetInstance()->GetClass( m_CommonBaseClass )->m_TypeID;
+    return Reflect::Registry::GetInstance()->GetClass( m_CommonBaseClass )->m_TypeID;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -71,13 +47,13 @@ void ClipboardElementArray::SetCommonBaseTypeID( i32 typeID )
 // 
 bool ClipboardElementArray::Add( const Reflect::ElementPtr& item )
 {
-  if ( CanAdd( item ) )
-  {
-    m_Elements.push_back( item );
-    return true;
-  }
+    if ( CanAdd( item ) )
+    {
+        m_Elements.push_back( item );
+        return true;
+    }
 
-  return false;
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -87,23 +63,23 @@ bool ClipboardElementArray::Add( const Reflect::ElementPtr& item )
 // 
 bool ClipboardElementArray::Merge( const ReflectClipboardData* source )
 {
-  const ClipboardElementArray* collection = Reflect::ConstObjectCast< ClipboardElementArray >( source );
-  if ( !collection )
-  {
-    return false;
-  }
-
-  size_t originalSize = m_Elements.size();
-  for each ( const Reflect::ElementPtr& item in collection->m_Elements )
-  {
-    if ( !Add( item ) )
+    const ClipboardElementArray* collection = Reflect::ConstObjectCast< ClipboardElementArray >( source );
+    if ( !collection )
     {
-      m_Elements.resize( originalSize );
-      return false;
+        return false;
     }
-  }
 
-  return true;
+    size_t originalSize = m_Elements.size();
+    for each ( const Reflect::ElementPtr& item in collection->m_Elements )
+    {
+        if ( !Add( item ) )
+        {
+            m_Elements.resize( originalSize );
+            return false;
+        }
+    }
+
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -113,10 +89,10 @@ bool ClipboardElementArray::Merge( const ReflectClipboardData* source )
 // 
 bool ClipboardElementArray::CanAdd( const Reflect::ElementPtr& item ) const
 {
-  if ( !item.ReferencesObject() )
-  {
-    return false;
-  }
+    if ( !item.ReferencesObject() )
+    {
+        return false;
+    }
 
-  return item->HasType( GetCommonBaseTypeID() );
+    return item->HasType( GetCommonBaseTypeID() );
 }

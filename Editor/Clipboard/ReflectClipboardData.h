@@ -12,12 +12,6 @@ namespace Helium
         class ReflectClipboardData HELIUM_ABSTRACT : public Reflect::Element
         {
         public:
-            // Runtime Type Info
-            REFLECT_DECLARE_ABSTRACT( ReflectClipboardData, Reflect::Element );
-            static void InitializeType();
-            static void CleanupType();
-
-        public:
             ReflectClipboardData();
             virtual ~ReflectClipboardData();
 
@@ -25,6 +19,8 @@ namespace Helium
             // with another object's (and return true if successful).
             virtual bool Merge( const ReflectClipboardData* source ) = 0;
 
+        public:
+            REFLECT_DECLARE_ABSTRACT( ReflectClipboardData, Reflect::Element );
             static void EnumerateClass( Reflect::Compositor<ReflectClipboardData>& comp );
         };
         typedef Helium::SmartPtr< ReflectClipboardData > ReflectClipboardDataPtr;

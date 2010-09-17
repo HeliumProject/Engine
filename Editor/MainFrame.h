@@ -63,6 +63,11 @@ namespace Helium
 
             bool OpenProject( const Helium::Path& path );
 
+            Core::SceneManager& GetSceneManager()
+            {
+                return m_SceneManager;
+            }
+
         private:
             // Stores information about the state of each outliner for each scene
             // that is open.  Restores the state when switching between scenes.

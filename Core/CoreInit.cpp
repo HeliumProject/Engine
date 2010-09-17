@@ -15,7 +15,6 @@ void Core::Initialize()
 {
     if ( ++g_InitCount == 1 )
     {
-        g_InitStack.Push( &Initialize,     &Cleanup );
         g_InitStack.Push( &Asset::Initialize,       &Asset::Cleanup );
         g_InitStack.Push( &Core::SceneInitialize,   &Core::SceneCleanup );
 

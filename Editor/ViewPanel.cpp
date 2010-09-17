@@ -4,6 +4,8 @@
 #include "Editor/EditorIDs.h"
 #include "Editor/EditorGenerated.h"
 
+#include "Core/Scene/CameraSettings.h"
+
 #include "ViewPanel.h"
 #include "ArtProvider.h"
 
@@ -11,6 +13,7 @@
 
 using namespace Helium;
 using namespace Helium::Editor;
+using namespace Helium::Core;
 
 ViewPanel::ViewPanel( Core::SettingsManager* settingsManager, wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style )
 : ViewPanelGenerated( parent, id, pos, size, style )
@@ -169,7 +172,7 @@ void ViewPanel::OnChar( wxKeyEvent& event )
         break;
 
     case WXK_DELETE:
-        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, wxID_DELETE) );
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_DELETE ) );
         event.Skip(false);
         break;
 
@@ -298,22 +301,108 @@ void ViewPanel::OnChar( wxKeyEvent& event )
 
 void ViewPanel::OnRenderMode( wxCommandEvent& event )
 {
+    switch ( event.GetId() )
+    {
+    case ViewPanelEvents::Wireframe:
+        {
+            m_ViewCanvas->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Wireframe );
+            Refresh();
+            event.Skip( false );
+            break;
+        }
+
+    case ViewPanelEvents::Material:
+        {
+            m_ViewCanvas->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Material );
+            Refresh();
+            event.Skip( false );
+            break;
+        }
+
+    case ViewPanelEvents::Texture:
+        {
+            m_ViewCanvas->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Texture );
+            Refresh();
+            event.Skip( false );
+            break;
+        }
+
+    default:
+        event.Skip();
+        event.ResumePropagation( wxEVENT_PROPAGATE_MAX );
+        break;
+    }
 }
 
 void ViewPanel::OnCamera( wxCommandEvent& event )
 {
+    switch ( event.GetId() )
+    {
+    case ViewPanelEvents::OrbitCamera:
+        {
+            m_ViewCanvas->GetViewport().SetCameraMode( CameraModes::Orbit );
+            Refresh();
+            event.Skip( false );
+            break;
+        }
+
+    case ViewPanelEvents::FrontCamera:
+        {
+            m_ViewCanvas->GetViewport().SetCameraMode( CameraModes::Front );
+            Refresh();
+            event.Skip( false );
+            break;
+        }
+
+    case ViewPanelEvents::SideCamera:
+        {
+            m_ViewCanvas->GetViewport().SetCameraMode( CameraModes::Side );
+            Refresh();
+            event.Skip( false );
+            break;
+        }
+
+    case ViewPanelEvents::TopCamera:
+        {
+            m_ViewCanvas->GetViewport().SetCameraMode( CameraModes::Top );
+            Refresh();
+            event.Skip( false );
+            break;
+        }
+
+    default:
+        event.Skip();
+        event.ResumePropagation( wxEVENT_PROPAGATE_MAX );
+        break;
+    }
 }
 
 void ViewPanel::OnFrameOrigin( wxCommandEvent& event )
 {
+    m_ViewCanvas->GetViewport().GetCamera()->Reset();
+    Refresh();
+    event.Skip( false );
 }
 
 void ViewPanel::OnFrameSelected( wxCommandEvent& event )
 {
+    if ( !wxGetApp().GetFrame()->GetSceneManager().HasCurrentScene() )
+    {
+        event.Skip();
+        event.ResumePropagation( wxEVENT_PROPAGATE_MAX );
+        return;
+    }
+
+    wxGetApp().GetFrame()->GetSceneManager().GetCurrentScene()->FrameSelected();
+    Refresh();
+    event.Skip( false );
 }
 
 void ViewPanel::OnToggleHighlightMode( wxCommandEvent& event )
 {
+    m_ViewCanvas->GetViewport().SetHighlighting( !m_ViewCanvas->GetViewport().IsHighlighting() );
+    Refresh();
+    event.Skip( false );
 }
 
 void ViewPanel::OnNextView( wxCommandEvent& event )

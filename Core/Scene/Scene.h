@@ -781,7 +781,9 @@ namespace Helium
             Undo::CommandPtr SnapCameraToSelected();
 
             void FrameSelected();
+
             void MeasureDistance();
+            
             Undo::CommandPtr PickWalkUp();
             Undo::CommandPtr PickWalkDown();
             Undo::CommandPtr PickWalkSibling(bool forward);

@@ -17,10 +17,8 @@ using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
 
-// RTTI
 REFLECT_DEFINE_ABSTRACT(Core::Light);
 
-// statics
 D3DMATERIAL9 Light::s_Material;
 
 void Light::InitializeType()

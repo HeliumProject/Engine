@@ -53,20 +53,10 @@ namespace Helium
             Math::Matrix4 m_BindTransform;
             Math::Matrix4 m_InverseBindTransform;
 
-
-            //
-            // Runtime Type Info
-            //
-
         public:
             REFLECT_DECLARE_ABSTRACT( Core::Transform, Core::HierarchyNode );
             static void InitializeType();
             static void CleanupType();
-
-
-            // 
-            // Member functions
-            // 
 
         public:
             Transform( Core::Scene* scene, Content::Transform* transform );
@@ -75,14 +65,8 @@ namespace Helium
             virtual void Pack() HELIUM_OVERRIDE;
             virtual void Unpack() HELIUM_OVERRIDE;
 
-
-            //
-            // Returns this
-            //
-
             virtual Core::Transform* GetTransform() HELIUM_OVERRIDE;
             virtual const Core::Transform* GetTransform() const HELIUM_OVERRIDE;
-
 
             //
             // Scale
@@ -94,7 +78,6 @@ namespace Helium
             virtual Math::Vector3 GetScalePivot() const;
             virtual void SetScalePivot( const Math::Vector3& value );
 
-
             //
             // Rotate
             //
@@ -105,7 +88,6 @@ namespace Helium
             virtual Math::Vector3 GetRotatePivot() const;
             virtual void SetRotatePivot( const Math::Vector3& value );
 
-
             //
             // Translate
             //
@@ -115,7 +97,6 @@ namespace Helium
 
             virtual Math::Vector3 GetTranslatePivot() const;
             virtual void SetTranslatePivot( const Math::Vector3& value );
-
 
             //
             // Object Transform (transformation of object coordinates into local space)
@@ -133,7 +114,6 @@ namespace Helium
 
             void SetObjectTransform( const Math::Matrix4& transform );
 
-
             //
             // Parent Transform (transformation of the frame this object is within into world space)
             //
@@ -147,7 +127,6 @@ namespace Helium
             {
                 return m_InverseGlobalTransform * m_ObjectTransform;
             }
-
 
             //
             // Global Transform (transformation of object coordinates into world space)
@@ -165,7 +144,6 @@ namespace Helium
 
             void SetGlobalTransform( const Math::Matrix4& transform );
 
-
             //
             // Binding Matrices
             //
@@ -173,18 +151,12 @@ namespace Helium
             virtual Math::Matrix4 GetBindTransform() const;
             virtual Math::Matrix4 GetInverseBindTransform() const;
 
-
             //
             // Inherit Transform
             //
 
             bool GetInheritTransform() const;
             void SetInheritTransform(bool inherit);
-
-
-            //
-            // Main routines
-            //
 
         public:
             // compute scaling component

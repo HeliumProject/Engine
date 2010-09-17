@@ -16,18 +16,12 @@ namespace Helium
         class ClipboardElementArray : public ReflectClipboardData
         {
         public:
-            tstring m_CommonBaseClass;
-            Reflect::V_Element m_Elements;
-
-        public:
-            // Runtime Type Info
             REFLECT_DECLARE_CLASS( ClipboardElementArray, ReflectClipboardData );
-            static void InitializeType();
-            static void CleanupType();
+            static void EnumerateClass( Reflect::Compositor<ClipboardElementArray>& comp );
 
-        public:
             ClipboardElementArray();
             virtual ~ClipboardElementArray();
+
             i32 GetCommonBaseTypeID() const;
             void SetCommonBaseTypeID( i32 typeID );
             bool Add( const Reflect::ElementPtr& item );
@@ -37,7 +31,8 @@ namespace Helium
             bool CanAdd( const Reflect::ElementPtr& item ) const;
 
         public:
-            static void EnumerateClass( Reflect::Compositor<ClipboardElementArray>& comp );
+            tstring m_CommonBaseClass;
+            Reflect::V_Element m_Elements;
         };
         typedef Helium::SmartPtr< ClipboardElementArray > ClipboardElementArrayPtr;
     }

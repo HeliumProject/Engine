@@ -20,22 +20,22 @@ D3DMATERIAL9 Mesh::s_FillMaterial;
 
 void Mesh::InitializeType()
 {
-  Reflect::RegisterClassType< Core::Mesh >( TXT( "Core::Mesh" ) );
+    Reflect::RegisterClassType< Core::Mesh >( TXT( "Core::Mesh" ) );
 
-  ZeroMemory(&s_WireMaterial, sizeof(s_WireMaterial));
-  s_WireMaterial.Ambient = Core::Color::BLACK;
-  s_WireMaterial.Diffuse = Core::Color::BLACK;
-  s_WireMaterial.Specular = Core::Color::BLACK;
+    ZeroMemory(&s_WireMaterial, sizeof(s_WireMaterial));
+    s_WireMaterial.Ambient = Core::Color::BLACK;
+    s_WireMaterial.Diffuse = Core::Color::BLACK;
+    s_WireMaterial.Specular = Core::Color::BLACK;
 
-  ZeroMemory(&s_FillMaterial, sizeof(s_FillMaterial));
-  s_FillMaterial.Ambient = Core::Color::DARKGRAY;
-  s_FillMaterial.Diffuse = Core::Color::DARKGRAY;
-  s_FillMaterial.Specular = Core::Color::DARKGRAY;
+    ZeroMemory(&s_FillMaterial, sizeof(s_FillMaterial));
+    s_FillMaterial.Ambient = Core::Color::DARKGRAY;
+    s_FillMaterial.Diffuse = Core::Color::DARKGRAY;
+    s_FillMaterial.Specular = Core::Color::DARKGRAY;
 }
 
 void Mesh::CleanupType()
 {
-  Reflect::UnregisterClassType< Core::Mesh >();
+    Reflect::UnregisterClassType< Core::Mesh >();
 }
 
 Mesh::Mesh( Core::Scene* scene, Content::Mesh* mesh )
@@ -44,28 +44,28 @@ Mesh::Mesh( Core::Scene* scene, Content::Mesh* mesh )
 , m_HasColor (false)
 , m_HasTexture (false)
 {
-  m_LineCount = (u32)mesh->m_WireframeVertexIndices.size() / 2;
-  m_VertexCount = (u32)mesh->m_Positions.size();
-  m_TriangleCount = (u32)mesh->m_TriangleVertexIndices.size() / 3;
+    m_LineCount = (u32)mesh->m_WireframeVertexIndices.size() / 2;
+    m_VertexCount = (u32)mesh->m_Positions.size();
+    m_TriangleCount = (u32)mesh->m_TriangleVertexIndices.size() / 3;
 
-  u32 count = 0;
-  for ( size_t i=0; i<mesh->m_ShaderIDs.size(); ++i )
-  {
-    m_ShaderStartIndices.push_back( count );
-    count += mesh->m_ShaderTriangleCounts[i];
-  }
+    u32 count = 0;
+    for ( size_t i=0; i<mesh->m_ShaderIDs.size(); ++i )
+    {
+        m_ShaderStartIndices.push_back( count );
+        count += mesh->m_ShaderTriangleCounts[i];
+    }
 
-  m_Indices = new IndexResource ( scene->GetViewport()->GetResources() );
-  m_Indices->SetElementType( ElementTypes::Unsigned32 );
-  m_Indices->SetElementCount( (u32)(mesh->m_WireframeVertexIndices.size() + mesh->m_TriangleVertexIndices.size()) );
-  m_Indices->SetPopulator( PopulateSignature::Delegate( this, &Mesh::Populate ) );
-  
-  m_Vertices = new VertexResource ( scene->GetViewport()->GetResources() );
-  m_Vertices->SetElementType( ElementTypes::StandardVertex );
-  m_Vertices->SetElementCount( (u32)mesh->m_Positions.size() );
+    m_Indices = new IndexResource ( scene->GetViewport()->GetResources() );
+    m_Indices->SetElementType( ElementTypes::Unsigned32 );
+    m_Indices->SetElementCount( (u32)(mesh->m_WireframeVertexIndices.size() + mesh->m_TriangleVertexIndices.size()) );
+    m_Indices->SetPopulator( PopulateSignature::Delegate( this, &Mesh::Populate ) );
+
+    m_Vertices = new VertexResource ( scene->GetViewport()->GetResources() );
+    m_Vertices->SetElementType( ElementTypes::StandardVertex );
+    m_Vertices->SetElementCount( (u32)mesh->m_Positions.size() );
 
 
-  m_Vertices->SetPopulator( PopulateSignature::Delegate( this, &Mesh::Populate ) );
+    m_Vertices->SetPopulator( PopulateSignature::Delegate( this, &Mesh::Populate ) );
 }
 
 Mesh::~Mesh()
@@ -75,528 +75,528 @@ Mesh::~Mesh()
 
 i32 Mesh::GetImageIndex() const
 {
-  return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "mesh" ) );
+    return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "mesh" ) );
 }
 
 tstring Mesh::GetApplicationTypeName() const
 {
-  return TXT( "Mesh" );
+    return TXT( "Mesh" );
 }
 
 void Mesh::Initialize()
 {
-  __super::Initialize();
+    __super::Initialize();
 
-  Content::Mesh* mesh = GetPackage< Content::Mesh >();
+    Content::Mesh* mesh = GetPackage< Content::Mesh >();
 
 
-  //
-  // Dereference Shaders
-  //
+    //
+    // Dereference Shaders
+    //
 
-  V_TUID::const_iterator itr = mesh->m_ShaderIDs.begin();
-  V_TUID::const_iterator end = mesh->m_ShaderIDs.end();
-  for ( ; itr != end; ++itr )
-  {
-    Shader* shader = Reflect::ObjectCast< Shader >( m_Owner->FindNode( *itr ) );
-
-    if ( shader )
+    V_TUID::const_iterator itr = mesh->m_ShaderIDs.begin();
+    V_TUID::const_iterator end = mesh->m_ShaderIDs.end();
+    for ( ; itr != end; ++itr )
     {
-      CreateDependency( shader );
-      shader->Dirty();
+        Shader* shader = Reflect::ObjectCast< Shader >( m_Owner->FindNode( *itr ) );
+
+        if ( shader )
+        {
+            CreateDependency( shader );
+            shader->Dirty();
+        }
+
+        m_Shaders.push_back( shader );
     }
 
-    m_Shaders.push_back( shader );
-  }
 
+    //
+    // Deduce data
+    //
 
-  //
-  // Deduce data
-  //
-
-  for ( size_t i = 0; i < m_Shaders.size(); i++ )
-  {
-    if ( m_Shaders[i] )
+    for ( size_t i = 0; i < m_Shaders.size(); i++ )
     {
-      m_HasAlpha |= m_Shaders[i]->GetAlpha();
-      m_HasTexture |= m_Shaders[i]->GetBaseTexture() != NULL;
+        if ( m_Shaders[i] )
+        {
+            m_HasAlpha |= m_Shaders[i]->GetAlpha();
+            m_HasTexture |= m_Shaders[i]->GetBaseTexture() != NULL;
+        }
     }
-  }
 
-  if ( mesh->m_Colors.size() > 0 )
-  {
-    if ( mesh->m_Colors.size() == 1 )
+    if ( mesh->m_Colors.size() > 0 )
     {
-      m_HasColor = mesh->m_Colors[0] != Math::Vector4( 0, 0, 0, 1.0 );
+        if ( mesh->m_Colors.size() == 1 )
+        {
+            m_HasColor = mesh->m_Colors[0] != Math::Vector4( 0, 0, 0, 1.0 );
+        }
+        else
+        {
+            m_HasColor = true;
+        }
     }
-    else
-    {
-      m_HasColor = true;
-    }
-  }
 
-  Create();
+    Create();
 }
 
 void Mesh::Create()
 {
-  __super::Create();
+    __super::Create();
 
-  if (m_IsInitialized)
-  {
-    m_Indices->Create();
-    m_Vertices->Create();
-  }
+    if (m_IsInitialized)
+    {
+        m_Indices->Create();
+        m_Vertices->Create();
+    }
 }
 
 void Mesh::Delete()
 {
-  __super::Delete();
+    __super::Delete();
 
-  if (m_IsInitialized)
-  {
-    m_Indices->Delete();
-    m_Vertices->Delete();
-  }
+    if (m_IsInitialized)
+    {
+        m_Indices->Delete();
+        m_Vertices->Delete();
+    }
 }
 
 void Mesh::Populate(PopulateArgs* args)
 {
-  Content::Mesh* mesh = GetPackage< Content::Mesh >();
+    Content::Mesh* mesh = GetPackage< Content::Mesh >();
 
-  switch ( args->m_Type )
-  {
-  case ResourceTypes::Index:
+    switch ( args->m_Type )
     {
-      if ( args->m_Buffer != NULL )
-      {
-        memcpy( args->m_Buffer + args->m_Offset, &( mesh->m_WireframeVertexIndices.front() ), mesh->m_WireframeVertexIndices.size() * sizeof( u32 ) );
-        args->m_Offset += ( (u32)mesh->m_WireframeVertexIndices.size() * sizeof( u32 ) );
-
-        memcpy( args->m_Buffer + args->m_Offset, &( mesh->m_TriangleVertexIndices.front() ), mesh->m_TriangleVertexIndices.size() * sizeof( u32 ) );
-        args->m_Offset += ( (u32)mesh->m_TriangleVertexIndices.size() * sizeof( u32 ) );
-      }
-      break;
-    }
-
-  case ResourceTypes::Vertex:
-    {
-      if ( args->m_Buffer != NULL )
-      {
-        m_ObjectBounds.Reset();
-
-        if (m_VertexCount > 0)
+    case ResourceTypes::Index:
         {
-          StandardVertex* vertex = NULL;
-
-          for ( u32 i=0; i<m_VertexCount; ++i )
-          {
-            // get address for the current vertex in the resource buffer
-            vertex = reinterpret_cast<StandardVertex*>(args->m_Buffer + args->m_Offset) + i;
-
-            // Position, test for local bounds computation
-            vertex->m_Position = m_ObjectBounds.Test( mesh->m_Positions[i] );
-
-            // Normal, used for lighting
-            if (mesh->m_Normals.size())
+            if ( args->m_Buffer != NULL )
             {
-            vertex->m_Normal = mesh->m_Normals[i];
+                memcpy( args->m_Buffer + args->m_Offset, &( mesh->m_WireframeVertexIndices.front() ), mesh->m_WireframeVertexIndices.size() * sizeof( u32 ) );
+                args->m_Offset += ( (u32)mesh->m_WireframeVertexIndices.size() * sizeof( u32 ) );
+
+                memcpy( args->m_Buffer + args->m_Offset, &( mesh->m_TriangleVertexIndices.front() ), mesh->m_TriangleVertexIndices.size() * sizeof( u32 ) );
+                args->m_Offset += ( (u32)mesh->m_TriangleVertexIndices.size() * sizeof( u32 ) );
             }
-
-            if (m_HasColor)
-            {
-              // Vertex Color
-              vertex->m_Diffuse = D3DCOLOR_COLORVALUE( mesh->m_Colors[i].x, mesh->m_Colors[i].y, mesh->m_Colors[i].z, mesh->m_Colors[i].w );
-            }
-
-            if (m_HasTexture)
-            {
-              // Color Map UV
-              vertex->m_BaseUV.x = mesh->m_BaseUVs[i].x;
-              vertex->m_BaseUV.y = 1.0f - mesh->m_BaseUVs[i].y;
-            }
-          }
-
-          args->m_Offset += ( m_VertexCount * sizeof( StandardVertex ) );
-
-          HELIUM_ASSERT(args->m_Buffer + args->m_Offset == reinterpret_cast<u8*>(++vertex));
+            break;
         }
-      }
-      break;
+
+    case ResourceTypes::Vertex:
+        {
+            if ( args->m_Buffer != NULL )
+            {
+                m_ObjectBounds.Reset();
+
+                if (m_VertexCount > 0)
+                {
+                    StandardVertex* vertex = NULL;
+
+                    for ( u32 i=0; i<m_VertexCount; ++i )
+                    {
+                        // get address for the current vertex in the resource buffer
+                        vertex = reinterpret_cast<StandardVertex*>(args->m_Buffer + args->m_Offset) + i;
+
+                        // Position, test for local bounds computation
+                        vertex->m_Position = m_ObjectBounds.Test( mesh->m_Positions[i] );
+
+                        // Normal, used for lighting
+                        if (mesh->m_Normals.size())
+                        {
+                            vertex->m_Normal = mesh->m_Normals[i];
+                        }
+
+                        if (m_HasColor)
+                        {
+                            // Vertex Color
+                            vertex->m_Diffuse = D3DCOLOR_COLORVALUE( mesh->m_Colors[i].x, mesh->m_Colors[i].y, mesh->m_Colors[i].z, mesh->m_Colors[i].w );
+                        }
+
+                        if (m_HasTexture)
+                        {
+                            // Color Map UV
+                            vertex->m_BaseUV.x = mesh->m_BaseUVs[i].x;
+                            vertex->m_BaseUV.y = 1.0f - mesh->m_BaseUVs[i].y;
+                        }
+                    }
+
+                    args->m_Offset += ( m_VertexCount * sizeof( StandardVertex ) );
+
+                    HELIUM_ASSERT(args->m_Buffer + args->m_Offset == reinterpret_cast<u8*>(++vertex));
+                }
+            }
+            break;
+        }
     }
-  }
 }
 
 void Mesh::Evaluate(GraphDirection direction)
 {
-  switch (direction)
-  {
-  case GraphDirections::Downstream:
+    switch (direction)
     {
-      Content::Mesh* mesh = GetPackage< Content::Mesh >();
+    case GraphDirections::Downstream:
+        {
+            Content::Mesh* mesh = GetPackage< Content::Mesh >();
 
-      m_ObjectBounds.Reset();
+            m_ObjectBounds.Reset();
 
-      for ( u32 i=0; i<m_VertexCount; ++i )
-      {
-        m_ObjectBounds.Test( mesh->m_Positions[i] );
-      }
+            for ( u32 i=0; i<m_VertexCount; ++i )
+            {
+                m_ObjectBounds.Test( mesh->m_Positions[i] );
+            }
 
-      if (m_IsInitialized)
-      {
-        m_Indices->Update();
-        m_Vertices->Update();
-      }
+            if (m_IsInitialized)
+            {
+                m_Indices->Update();
+                m_Vertices->Update();
+            }
 
-      break;
+            break;
+        }
     }
-  }
 
-  __super::Evaluate(direction);
+    __super::Evaluate(direction);
 }
 
 void Mesh::Render( RenderVisitor* render )
 {
-  RenderEntry* entry = render->Allocate(this);
+    RenderEntry* entry = render->Allocate(this);
 
-  if (render->GetViewport()->GetCamera()->IsBackFaceCulling() && render->State().m_Matrix.Determinant() < 0)
-  {
-    entry->m_ObjectSetup = &Mesh::SetupFlippedObject;
-    entry->m_ObjectReset = &Mesh::ResetFlippedObject;
-  }
-  else
-  {
-    entry->m_ObjectSetup = &Mesh::SetupNormalObject;
-  }
-
-  entry->m_Location = render->State().m_Matrix;
-  entry->m_Center = m_ObjectBounds.Center();
-  entry->m_Flags |= m_HasAlpha ? RenderFlags::DistanceSort : 0;
-
-  bool selectable = render->State().m_Selectable;
-  bool highlighted = ( ( IsHighlighted() && m_Owner->IsFocused() ) || ( render->State().m_Highlighted ) ) && render->GetViewport()->IsHighlighting();
-  bool selected = ( IsSelected() && m_Owner->IsFocused() ) || ( render->State().m_Selected );
-  bool live = ( IsLive() && m_Owner->IsFocused() ) || ( render->State().m_Live );
-  bool wire = render->GetViewport()->GetCamera()->GetWireframeOnShaded();
-
-  switch ( render->GetViewport()->GetCamera()->GetShadingMode() )
-  {
-  case ShadingModes::Wireframe:
+    if (render->GetViewport()->GetCamera()->IsBackFaceCulling() && render->State().m_Matrix.Determinant() < 0)
     {
-      if ( selectable )
-      {
-        entry->m_Draw = &Mesh::DrawNormalWire;
-
-        if (highlighted)
-        {
-          entry->m_DrawSetup = &Mesh::SetupHighlightedWire;
-        }
-        else if (selected)
-        {
-          entry->m_DrawSetup = &Mesh::SetupSelectedWire;
-        }
-        else if (live)
-        {
-          entry->m_DrawSetup = &Mesh::SetupLiveWire;
-        }
-        else
-        {
-          entry->m_DrawSetup = &Mesh::SetupNormalWire;
-        }
-      }
-      else
-      {
-        entry->m_DrawSetup = &Mesh::SetupUnselectableWire;
-        entry->m_Draw = &Mesh::DrawUnselectableWire;
-      }
-
-      break;
+        entry->m_ObjectSetup = &Mesh::SetupFlippedObject;
+        entry->m_ObjectReset = &Mesh::ResetFlippedObject;
+    }
+    else
+    {
+        entry->m_ObjectSetup = &Mesh::SetupNormalObject;
     }
 
-  default:
+    entry->m_Location = render->State().m_Matrix;
+    entry->m_Center = m_ObjectBounds.Center();
+    entry->m_Flags |= m_HasAlpha ? RenderFlags::DistanceSort : 0;
+
+    bool selectable = render->State().m_Selectable;
+    bool highlighted = ( ( IsHighlighted() && m_Owner->IsFocused() ) || ( render->State().m_Highlighted ) ) && render->GetViewport()->IsHighlighting();
+    bool selected = ( IsSelected() && m_Owner->IsFocused() ) || ( render->State().m_Selected );
+    bool live = ( IsLive() && m_Owner->IsFocused() ) || ( render->State().m_Live );
+    bool wire = render->GetViewport()->GetCamera()->GetWireframeOnShaded();
+
+    switch ( render->GetViewport()->GetCamera()->GetShadingMode() )
     {
-      // this will draw biased geometry
-      if (m_HasAlpha)
-      {
-        entry->m_DrawSetup = &Mesh::SetupAlpha;
-        entry->m_DrawReset = &Mesh::ResetAlpha;
-      }
-      else
-      {
-        entry->m_DrawSetup = &Mesh::SetupNormal;
-        entry->m_DrawReset = &Mesh::ResetNormal;
-      }
-
-      entry->m_Draw = &Mesh::DrawNormal;
-
-      if ( render->GetViewport()->GetCamera()->GetWireframeOnMesh() && ( highlighted || selected || live || wire ) )
-      {
-        // this will draw unbiased wireframe
-        entry = render->Allocate(this);
-
-        if (render->GetViewport()->GetCamera()->IsBackFaceCulling() && render->State().m_Matrix.Determinant() < 0)
+    case ShadingModes::Wireframe:
         {
-          entry->m_ObjectSetup = &Mesh::SetupFlippedObject;
-          entry->m_ObjectReset = &Mesh::ResetFlippedObject;
-        }
-        else
-        {
-          entry->m_ObjectSetup = &Mesh::SetupNormalObject;
+            if ( selectable )
+            {
+                entry->m_Draw = &Mesh::DrawNormalWire;
+
+                if (highlighted)
+                {
+                    entry->m_DrawSetup = &Mesh::SetupHighlightedWire;
+                }
+                else if (selected)
+                {
+                    entry->m_DrawSetup = &Mesh::SetupSelectedWire;
+                }
+                else if (live)
+                {
+                    entry->m_DrawSetup = &Mesh::SetupLiveWire;
+                }
+                else
+                {
+                    entry->m_DrawSetup = &Mesh::SetupNormalWire;
+                }
+            }
+            else
+            {
+                entry->m_DrawSetup = &Mesh::SetupUnselectableWire;
+                entry->m_Draw = &Mesh::DrawUnselectableWire;
+            }
+
+            break;
         }
 
-        entry->m_Draw = &Mesh::DrawNormalWire;
-        entry->m_Location = render->State().m_Matrix;
-        entry->m_Center = m_ObjectBounds.Center();
-
-        if (selectable)
+    default:
         {
-          if (highlighted)
-          {
-            entry->m_DrawSetup = &Mesh::SetupHighlightedWire;
-          }
-          else if (selected)
-          {
-            entry->m_DrawSetup = &Mesh::SetupSelectedWire;
-          }
-          else if (live)
-          {
-            entry->m_DrawSetup = &Mesh::SetupLiveWire;
-          }
-          else if (wire)
-          {
-            entry->m_DrawSetup = &Mesh::SetupNormalWire;
-          }
-        }
-        else
-        {
-          entry->m_DrawSetup = &Mesh::SetupUnselectableWire;
-          entry->m_Draw = &Mesh::DrawUnselectableWire;
-        }
-      }
+            // this will draw biased geometry
+            if (m_HasAlpha)
+            {
+                entry->m_DrawSetup = &Mesh::SetupAlpha;
+                entry->m_DrawReset = &Mesh::ResetAlpha;
+            }
+            else
+            {
+                entry->m_DrawSetup = &Mesh::SetupNormal;
+                entry->m_DrawReset = &Mesh::ResetNormal;
+            }
 
-      break;
+            entry->m_Draw = &Mesh::DrawNormal;
+
+            if ( render->GetViewport()->GetCamera()->GetWireframeOnMesh() && ( highlighted || selected || live || wire ) )
+            {
+                // this will draw unbiased wireframe
+                entry = render->Allocate(this);
+
+                if (render->GetViewport()->GetCamera()->IsBackFaceCulling() && render->State().m_Matrix.Determinant() < 0)
+                {
+                    entry->m_ObjectSetup = &Mesh::SetupFlippedObject;
+                    entry->m_ObjectReset = &Mesh::ResetFlippedObject;
+                }
+                else
+                {
+                    entry->m_ObjectSetup = &Mesh::SetupNormalObject;
+                }
+
+                entry->m_Draw = &Mesh::DrawNormalWire;
+                entry->m_Location = render->State().m_Matrix;
+                entry->m_Center = m_ObjectBounds.Center();
+
+                if (selectable)
+                {
+                    if (highlighted)
+                    {
+                        entry->m_DrawSetup = &Mesh::SetupHighlightedWire;
+                    }
+                    else if (selected)
+                    {
+                        entry->m_DrawSetup = &Mesh::SetupSelectedWire;
+                    }
+                    else if (live)
+                    {
+                        entry->m_DrawSetup = &Mesh::SetupLiveWire;
+                    }
+                    else if (wire)
+                    {
+                        entry->m_DrawSetup = &Mesh::SetupNormalWire;
+                    }
+                }
+                else
+                {
+                    entry->m_DrawSetup = &Mesh::SetupUnselectableWire;
+                    entry->m_Draw = &Mesh::DrawUnselectableWire;
+                }
+            }
+
+            break;
+        }
     }
-  }
 
-  __super::Render( render );
+    __super::Render( render );
 }
 
 void Mesh::SetupNormalObject( IDirect3DDevice9* device, const SceneNode* object )
 {
-  const Core::Mesh* mesh = Reflect::ConstAssertCast< Core::Mesh > ( object );
+    const Core::Mesh* mesh = Reflect::ConstAssertCast< Core::Mesh > ( object );
 
-  const Resource* indices = mesh->m_Indices;
-  const Resource* vertices = mesh->m_Vertices;
+    const Resource* indices = mesh->m_Indices;
+    const Resource* vertices = mesh->m_Vertices;
 
-  if (indices && vertices)
-  {
-    indices->SetState();
-    vertices->SetState();
-  }
-  else
-  {
-    HELIUM_BREAK();
-  }
+    if (indices && vertices)
+    {
+        indices->SetState();
+        vertices->SetState();
+    }
+    else
+    {
+        HELIUM_BREAK();
+    }
 }
 
 void Mesh::SetupFlippedObject( IDirect3DDevice9* device, const SceneNode* object )
 {
-  SetupNormalObject( device, object );
-  device->SetRenderState( D3DRS_CULLMODE, D3DCULL_CCW );
+    SetupNormalObject( device, object );
+    device->SetRenderState( D3DRS_CULLMODE, D3DCULL_CCW );
 }
 
 void Mesh::ResetFlippedObject( IDirect3DDevice9* device, const SceneNode* object )
 {
-  device->SetRenderState( D3DRS_CULLMODE, D3DCULL_CW );
+    device->SetRenderState( D3DRS_CULLMODE, D3DCULL_CW );
 }
 
 void Mesh::SetupNormalWire( IDirect3DDevice9* device )
 {
-  device->SetMaterial( &s_WireMaterial );
+    device->SetMaterial( &s_WireMaterial );
 }
 
 void Mesh::DrawNormalWire( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-  const Core::HierarchyNode* node = Reflect::ConstAssertCast<Core::HierarchyNode>( object );
-  const Core::Mesh* mesh = Reflect::ConstAssertCast<Core::Mesh>( node );
-  
-  const IndexResource* indices = mesh->m_Indices;
-  const VertexResource* vertices = mesh->m_Vertices;
+    const Core::HierarchyNode* node = Reflect::ConstAssertCast<Core::HierarchyNode>( object );
+    const Core::Mesh* mesh = Reflect::ConstAssertCast<Core::Mesh>( node );
 
-  if (indices && vertices)
-  {
-    device->DrawIndexedPrimitive( D3DPT_LINELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), indices->GetBaseIndex(), mesh->m_LineCount );
-    args->m_LineCount += mesh->m_LineCount;
-  }
-  else
-  {
-    HELIUM_BREAK();
-  }
+    const IndexResource* indices = mesh->m_Indices;
+    const VertexResource* vertices = mesh->m_Vertices;
+
+    if (indices && vertices)
+    {
+        device->DrawIndexedPrimitive( D3DPT_LINELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), indices->GetBaseIndex(), mesh->m_LineCount );
+        args->m_LineCount += mesh->m_LineCount;
+    }
+    else
+    {
+        HELIUM_BREAK();
+    }
 }
 
 void Mesh::DrawUnselectableWire( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-  DrawNormalWire( device, args, object );
+    DrawNormalWire( device, args, object );
 }
 
 void Mesh::SetupUnselectableWire( IDirect3DDevice9* device )
 {
-  device->SetMaterial( &Core::Viewport::s_UnselectableMaterial );
+    device->SetMaterial( &Core::Viewport::s_UnselectableMaterial );
 }
 
 void Mesh::SetupSelectedWire( IDirect3DDevice9* device )
 {
-  device->SetMaterial( &Core::Viewport::s_SelectedMaterial );
+    device->SetMaterial( &Core::Viewport::s_SelectedMaterial );
 }
 
 void Mesh::SetupHighlightedWire( IDirect3DDevice9* device )
 {
-  device->SetMaterial( &Core::Viewport::s_HighlightedMaterial );
+    device->SetMaterial( &Core::Viewport::s_HighlightedMaterial );
 }
 
 void Mesh::SetupLiveWire( IDirect3DDevice9* device )
 {
-  device->SetMaterial( &Core::Viewport::s_LiveMaterial );
+    device->SetMaterial( &Core::Viewport::s_LiveMaterial );
 }
 
 void Mesh::SetupAlpha( IDirect3DDevice9* device )
 {
-  device->SetMaterial( &s_FillMaterial );
-  device->SetRenderState( D3DRS_ZWRITEENABLE, FALSE );
-  device->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE );
-  device->SetRenderState( D3DRS_SLOPESCALEDEPTHBIAS, 0x40000000 );
+    device->SetMaterial( &s_FillMaterial );
+    device->SetRenderState( D3DRS_ZWRITEENABLE, FALSE );
+    device->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE );
+    device->SetRenderState( D3DRS_SLOPESCALEDEPTHBIAS, 0x40000000 );
 }
 
 void Mesh::ResetAlpha( IDirect3DDevice9* device )
 {
-  device->SetRenderState( D3DRS_ZWRITEENABLE, TRUE );
-  device->SetRenderState( D3DRS_ALPHABLENDENABLE, FALSE );
-  device->SetRenderState( D3DRS_SLOPESCALEDEPTHBIAS, 0x0 );
+    device->SetRenderState( D3DRS_ZWRITEENABLE, TRUE );
+    device->SetRenderState( D3DRS_ALPHABLENDENABLE, FALSE );
+    device->SetRenderState( D3DRS_SLOPESCALEDEPTHBIAS, 0x0 );
 }
 
 void Mesh::SetupNormal( IDirect3DDevice9* device )
 {
-  device->SetMaterial( &s_FillMaterial );
-  device->SetRenderState( D3DRS_SLOPESCALEDEPTHBIAS, 0x40000000 );
+    device->SetMaterial( &s_FillMaterial );
+    device->SetRenderState( D3DRS_SLOPESCALEDEPTHBIAS, 0x40000000 );
 }
 
 void Mesh::ResetNormal( IDirect3DDevice9* device )
 {
-  device->SetRenderState( D3DRS_SLOPESCALEDEPTHBIAS, 0x0 );
+    device->SetRenderState( D3DRS_SLOPESCALEDEPTHBIAS, 0x0 );
 }
 
 void Mesh::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-  CORE_RENDER_SCOPE_TIMER( ("") );
+    CORE_RENDER_SCOPE_TIMER( ("") );
 
-  const Core::HierarchyNode* node = Reflect::ConstAssertCast<Core::HierarchyNode>( object );
-  const Core::Mesh* mesh = Reflect::ConstAssertCast<Core::Mesh>( node );
-  const Content::Mesh* data = mesh->GetPackage< Content::Mesh >();
+    const Core::HierarchyNode* node = Reflect::ConstAssertCast<Core::HierarchyNode>( object );
+    const Core::Mesh* mesh = Reflect::ConstAssertCast<Core::Mesh>( node );
+    const Content::Mesh* data = mesh->GetPackage< Content::Mesh >();
 
-  const IndexResource* indices = mesh->m_Indices;
-  const VertexResource* vertices = mesh->m_Vertices;
+    const IndexResource* indices = mesh->m_Indices;
+    const VertexResource* vertices = mesh->m_Vertices;
 
-  if (indices && vertices)
-  {
-    Core::Viewport* view = node->GetOwner()->GetViewport();
-    Core::Camera* camera = view->GetCamera();
-
-    switch ( camera->GetShadingMode() )
+    if (indices && vertices)
     {
-    case ShadingModes::Material:
-      {
-        device->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), (UINT)( indices->GetBaseIndex() + data->m_WireframeVertexIndices.size() ), (UINT)( mesh->m_TriangleCount ) );
+        Core::Viewport* view = node->GetOwner()->GetViewport();
+        Core::Camera* camera = view->GetCamera();
 
-        args->m_TriangleCount += mesh->m_TriangleCount;
-
-        break;
-      }
-
-    case ShadingModes::Texture:
-      {
-        size_t shaderCount;
-        size_t shaderTriCountsCount;
-        size_t shaderStartIndicesCount;
-
-        shaderCount = mesh->m_Shaders.size();
-
-        shaderTriCountsCount = data->m_ShaderTriangleCounts.size();
-        if (shaderCount != shaderTriCountsCount)
+        switch ( camera->GetShadingMode() )
         {
-          shaderTriCountsCount = shaderCount = MIN(shaderTriCountsCount, shaderCount);
-        }
-
-        shaderStartIndicesCount = mesh->m_ShaderStartIndices.size();
-        if (shaderCount != shaderStartIndicesCount)
-        {
-          shaderStartIndicesCount = shaderCount = MIN(shaderStartIndicesCount, shaderCount);
-        }
-
-        for ( u32 shaderIndex = 0; shaderIndex < shaderTriCountsCount; shaderIndex++ )
-        {
-          u32 triangleCount = data->m_ShaderTriangleCounts[shaderIndex];
-
-          if ( triangleCount != 0 )
-          {
-            if ( shaderIndex < shaderCount && mesh->m_Shaders[shaderIndex])
+        case ShadingModes::Material:
             {
-              device->SetTexture( 0, mesh->m_Shaders[shaderIndex]->GetBaseTexture() );
-            }
-            else
-            {
-              device->SetTexture( 0, NULL );
+                device->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), (UINT)( indices->GetBaseIndex() + data->m_WireframeVertexIndices.size() ), (UINT)( mesh->m_TriangleCount ) );
+
+                args->m_TriangleCount += mesh->m_TriangleCount;
+
+                break;
             }
 
-            u32 startIndex = (u32)indices->GetBaseIndex() + (u32)data->m_WireframeVertexIndices.size() + (mesh->m_ShaderStartIndices[shaderIndex] * 3);
+        case ShadingModes::Texture:
+            {
+                size_t shaderCount;
+                size_t shaderTriCountsCount;
+                size_t shaderStartIndicesCount;
 
-            device->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), (UINT)startIndex, triangleCount );
+                shaderCount = mesh->m_Shaders.size();
 
-            args->m_TriangleCount += triangleCount;
+                shaderTriCountsCount = data->m_ShaderTriangleCounts.size();
+                if (shaderCount != shaderTriCountsCount)
+                {
+                    shaderTriCountsCount = shaderCount = MIN(shaderTriCountsCount, shaderCount);
+                }
 
-            device->SetTexture( 0, NULL );
-          }
+                shaderStartIndicesCount = mesh->m_ShaderStartIndices.size();
+                if (shaderCount != shaderStartIndicesCount)
+                {
+                    shaderStartIndicesCount = shaderCount = MIN(shaderStartIndicesCount, shaderCount);
+                }
+
+                for ( u32 shaderIndex = 0; shaderIndex < shaderTriCountsCount; shaderIndex++ )
+                {
+                    u32 triangleCount = data->m_ShaderTriangleCounts[shaderIndex];
+
+                    if ( triangleCount != 0 )
+                    {
+                        if ( shaderIndex < shaderCount && mesh->m_Shaders[shaderIndex])
+                        {
+                            device->SetTexture( 0, mesh->m_Shaders[shaderIndex]->GetBaseTexture() );
+                        }
+                        else
+                        {
+                            device->SetTexture( 0, NULL );
+                        }
+
+                        u32 startIndex = (u32)indices->GetBaseIndex() + (u32)data->m_WireframeVertexIndices.size() + (mesh->m_ShaderStartIndices[shaderIndex] * 3);
+
+                        device->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), (UINT)startIndex, triangleCount );
+
+                        args->m_TriangleCount += triangleCount;
+
+                        device->SetTexture( 0, NULL );
+                    }
+                }
+
+                break;
+            }
         }
-
-        break;
-      }
     }
-  }
-  else
-  {
-    HELIUM_BREAK();
-  }
+    else
+    {
+        HELIUM_BREAK();
+    }
 }
 
 bool Mesh::Pick( PickVisitor* pick )
 {
-  const Content::Mesh* mesh = GetPackage< Content::Mesh >();
-  const Core::Transform* t = GetTransform();
+    const Content::Mesh* mesh = GetPackage< Content::Mesh >();
+    const Core::Transform* t = GetTransform();
 
-  // save the size for checking if we got local hits later
-  size_t high = pick->GetHitCount();
+    // save the size for checking if we got local hits later
+    size_t high = pick->GetHitCount();
 
-  // set the pick's matrices to process intersections in this space
-  pick->SetCurrentObject (this, pick->State().m_Matrix);
+    // set the pick's matrices to process intersections in this space
+    pick->SetCurrentObject (this, pick->State().m_Matrix);
 
-  if (pick->GetCamera()->GetShadingMode() == ShadingModes::Wireframe)
-  {
-    // test each segment (vertex data is in local space, intersection function will transform)
-    for (size_t i=0; i<mesh->m_WireframeVertexIndices.size(); i+=2)
+    if (pick->GetCamera()->GetShadingMode() == ShadingModes::Wireframe)
     {
-      pick->PickSegment(mesh->m_Positions[ mesh->m_WireframeVertexIndices[i] ],
-                        mesh->m_Positions[ mesh->m_WireframeVertexIndices[i+1] ]);
+        // test each segment (vertex data is in local space, intersection function will transform)
+        for (size_t i=0; i<mesh->m_WireframeVertexIndices.size(); i+=2)
+        {
+            pick->PickSegment(mesh->m_Positions[ mesh->m_WireframeVertexIndices[i] ],
+                mesh->m_Positions[ mesh->m_WireframeVertexIndices[i+1] ]);
+        }
     }
-  }
-  else
-  {
-    // test each triangle (vertex data is in local space, intersection function will transform)
-    for (size_t i=0; i<mesh->m_TriangleVertexIndices.size(); i+=3)
+    else
     {
-      pick->PickTriangle(mesh->m_Positions[ mesh->m_TriangleVertexIndices[i] ],
-                         mesh->m_Positions[ mesh->m_TriangleVertexIndices[i+1] ],
-                         mesh->m_Positions[ mesh->m_TriangleVertexIndices[i+2] ]);
+        // test each triangle (vertex data is in local space, intersection function will transform)
+        for (size_t i=0; i<mesh->m_TriangleVertexIndices.size(); i+=3)
+        {
+            pick->PickTriangle(mesh->m_Positions[ mesh->m_TriangleVertexIndices[i] ],
+                mesh->m_Positions[ mesh->m_TriangleVertexIndices[i+1] ],
+                mesh->m_Positions[ mesh->m_TriangleVertexIndices[i+2] ]);
+        }
     }
-  }
 
-  return pick->GetHits().size() > high;
+    return pick->GetHits().size() > high;
 }

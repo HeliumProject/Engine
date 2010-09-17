@@ -2,12 +2,9 @@
 
 #include <hash_map>
 
+#include "Foundation/Component/ComponentCollection.h"
 #include "Foundation/Reflect/Element.h"
-
-#include "Core/Scene/Persistent.h"
-#include "Core/Scene/Selection.h"
-
-#include "Core/Scene/PropertiesGenerator.h"
+#include "Foundation/Undo/Command.h"
 
 #include "Core/API.h"
 
@@ -25,70 +22,31 @@ namespace Helium
 
     namespace Core
     {
+        struct CreatePanelArgs;
+        struct EnumerateElementArgs;
+
         class Scene;
-        typedef Helium::SmartPtr< Core::Scene > ScenePtr;
+        typedef Helium::SmartPtr< Scene > ScenePtr;
+
+        class SceneNode;
+        typedef Helium::SmartPtr< SceneNode > SceneNodePtr;
+
+        class SceneNodeType;
+        typedef Helium::SmartPtr< SceneNodeType > SceneNodeTypePtr;
 
         class SceneGraph;
 
-        class SceneNode;
-        typedef Helium::SmartPtr< Core::SceneNode > SceneNodePtr;
-
-        class SceneNodeType;
-        typedef Helium::SmartPtr< Core::SceneNodeType > SceneNodeTypePtr;
-
-        typedef std::vector< Core::SceneNode* > V_SceneNodeDumbPtr;
+        typedef std::vector< SceneNode* > V_SceneNodeDumbPtr;
         typedef std::vector< SceneNodePtr > V_SceneNodeSmartPtr;
 
-        typedef std::set< Core::SceneNode* > S_SceneNodeDumbPtr;
+        typedef std::set< SceneNode* > S_SceneNodeDumbPtr;
         typedef std::set< SceneNodePtr > S_SceneNodeSmartPtr;
+
+        typedef OrderedSet< SceneNode* > OS_SceneNodeDumbPtr;
+        typedef OrderedSet< SceneNodePtr > OS_SceneNodeSmartPtr;
 
         typedef stdext::hash_map< Helium::TUID, Core::SceneNode*, Helium::TUIDHasher > HM_SceneNodeDumbPtr;
         typedef stdext::hash_map< Helium::TUID, SceneNodePtr, Helium::TUIDHasher > HM_SceneNodeSmartPtr;
-
-
-        // 
-        // Hashing class for storing UIDs as keys to a hash_map.
-        // 
-
-        class NameHasher : public stdext::hash_compare< tstring >
-        {
-        public:
-            size_t operator( )( const tstring& str ) const
-            {
-                return __super::operator()( str );
-            }
-
-            bool operator( )( const tstring& str1, const tstring& str2 ) const
-            {
-                return _tcsicmp(str1.c_str(), str2.c_str()) < 0;
-            }
-        };
-
-        typedef stdext::hash_map< tstring, Core::SceneNode*, NameHasher > HM_NameToSceneNodeDumbPtr;
-        typedef stdext::hash_map< tstring, SceneNodePtr, NameHasher > HM_NameToSceneNodeSmartPtr;
-
-
-        // 
-        // Name change event
-        // 
-
-        struct SceneNodeChangeArgs
-        {
-            Core::SceneNode* m_Node;
-
-            SceneNodeChangeArgs( Core::SceneNode* node )
-                : m_Node( node )
-            {
-
-            }
-        };
-
-        typedef Helium::Signature< const SceneNodeChangeArgs& > SceneNodeChangeSignature;
-
-
-        //
-        // Enumerates the different states that a node can be in with regards to its evaluation in the graph
-        //
 
         namespace GraphDirections
         {
@@ -115,6 +73,13 @@ namespace Helium
 
         typedef NodeStates::NodeState NodeState;
 
+        struct SceneNodeChangeArgs
+        {
+            SceneNodeChangeArgs( Core::SceneNode* node ) : m_Node( node ) {}
+
+            Core::SceneNode* m_Node;
+        };
+        typedef Helium::Signature< const SceneNodeChangeArgs& > SceneNodeChangeSignature;
 
         //
         // Scene Node
@@ -123,64 +88,15 @@ namespace Helium
         //   o Dependencies of this object are traversed by SceneGraph to compute the order of evaluation.
         //
 
-        class CORE_API SceneNode HELIUM_ABSTRACT : public Persistent
+        class CORE_API SceneNode HELIUM_ABSTRACT : public Component::ComponentCollection
         {
-            //
-            // Members
-            //
-
-        protected:
-            // our initialization state
-            bool m_IsInitialized;
-
-            // our current state
-            NodeState m_NodeStates[ GraphDirections::Count ];
-
-            // the type we are an instance of
-            Core::SceneNodeType* m_NodeType;
-
-            // the graph that evaluates us
-            SceneGraph* m_Graph;
-
-            // The scene that owns us
-            Core::Scene* m_Owner;
-
-            // ancestors are Dependency Nodes that are evaluated before this Node
-            S_SceneNodeDumbPtr m_Ancestors;
-
-            // descendants are Dependency Nodes that are evaluated after this Node
-            S_SceneNodeSmartPtr m_Descendants;
-
-            // Transient nodes are not really part of the scene and will not be serialized.
-            // See Core::CreateTool for more information.
-            bool m_IsTransient;
-
-        private:
-            // data cached for evaluation
-            u32 m_VisitedID;
-
-
-            //
-            // Runtime Type Info
-            //
-
         public:
-            REFLECT_DECLARE_ABSTRACT( Core::SceneNode, Persistent );
+            REFLECT_DECLARE_ABSTRACT( SceneNode, Component::ComponentCollection );
             static void InitializeType();
             static void CleanupType();
 
-
-            //
-            // Implementation
-            //
-
             SceneNode( Core::Scene* owner, Content::SceneNode* data );
             virtual ~SceneNode();
-
-
-            //
-            // Get/Set state
-            //
 
             SceneNode::NodeState GetNodeState(GraphDirection direction) const
             {
@@ -257,7 +173,6 @@ namespace Helium
                 return m_Descendants;
             }
 
-
             // 
             // Visibility indicates that the item shows up in the 3D view (assuming
             // that additional options are enabled, such as the pointer or bounds).
@@ -271,27 +186,13 @@ namespace Helium
                 return true;
             }
 
-        protected:
-            SceneNodeChangeSignature::Event m_VisibilityChanged;
-
-        public:
-            void AddVisibilityChangedListener( const SceneNodeChangeSignature::Delegate& listener )
-            {
-                m_VisibilityChanged.Add( listener );
-            }
-
-            void RemoveVisibilityChangedListener( const SceneNodeChangeSignature::Delegate& listener )
-            {
-                m_VisibilityChanged.Remove( listener );
-            }
-
             //
             // ID and Name, every node has a unique name
             //
 
         public:
-            virtual const Helium::TUID& SceneNode::GetID() const;
-            virtual void SceneNode::SetID(const Helium::TUID& id);
+            const Helium::TUID& GetID() const;
+            void SetID(const Helium::TUID& id);
 
             virtual tstring GenerateName() const;
             virtual const tstring& GetName() const;
@@ -312,14 +213,6 @@ namespace Helium
             virtual void SetGivenName(const tstring& newName);
             virtual void Rename(const tstring& newName);
 
-
-            //
-            // Manifest Generation
-            //
-
-            virtual void PopulateManifest( Asset::SceneManifest* manifest ) const;
-
-
             //
             // VisitedID tracks which eval traversal we were last visited on
             //
@@ -333,7 +226,6 @@ namespace Helium
             {
                 m_VisitedID = id;
             }
-
 
             //
             // Node management
@@ -351,7 +243,6 @@ namespace Helium
                 return m_IsInitialized;
             }
 
-
             //
             // These protected functions provide a way to extend the logic of an atomic
             //  operation on a dependency
@@ -364,37 +255,6 @@ namespace Helium
             virtual void ConnectAncestor( Core::SceneNode* ancestor );
             virtual void DisconnectAncestor( Core::SceneNode* ancestor );
 
-        public:
-            ///////////////////////////////////////////////////////////////////////////
-            // Returns true if the attribute specified by the template parameter is in
-            // this collection.
-            // 
-            template < class T >
-            bool HasAttribute() const
-            {
-                const Component::ComponentCollection* pkg = GetPackage< Component::ComponentCollection >();
-                return ( pkg->GetAttribute( Reflect::GetType< T >() ).ReferencesObject() );
-            }
-
-            ///////////////////////////////////////////////////////////////////////////
-            // Adds or removes the specified attribute from this collection.
-            // 
-            template < class T >
-            void SetAttribute( bool enable )
-            {
-                Component::ComponentCollection* pkg = GetPackage< Component::ComponentCollection >(); 
-                if ( enable )
-                {
-                    // This will create a new attribute or enable an existing one.
-                    Component::ComponentEditor< T > editor( pkg );
-                    editor.Commit();
-                }
-                else
-                {
-                    pkg->RemoveAttribute( Reflect::GetType< T >() );
-                }
-            }
-
             //
             // These public functions ensure that the dependency is created bidirectionally and that
             //  the dependent object is added to the graph and classified
@@ -403,7 +263,6 @@ namespace Helium
         public:
             void CreateDependency(Core::SceneNode* ancestor);
             void RemoveDependency(Core::SceneNode* ancestor);
-
 
             //
             // Graph seggregation and merging
@@ -419,7 +278,6 @@ namespace Helium
             virtual void Insert( SceneGraph* graph, V_SceneNodeDumbPtr& insertedNodes );
             virtual void Prune( V_SceneNodeDumbPtr& prunedNodes );
 
-
             //
             // Evaluate
             //
@@ -434,7 +292,6 @@ namespace Helium
 
             // overridable method for derived classes
             virtual void Evaluate(GraphDirection direction);
-
 
             //
             // Type system allows us to collect instances of objects into type collectors at runtime
@@ -459,9 +316,11 @@ namespace Helium
             // check that you are a member of the type that best suits you
             virtual void CheckNodeType();
 
+            // used for manifest generation during save
+            virtual void PopulateManifest( Asset::SceneManifest* manifest ) const;
 
             //
-            // Scene nodes use resources, allow them to be created and deleted on demand
+            // Resources
             //
 
         public:
@@ -474,14 +333,16 @@ namespace Helium
             // Make object dirty and iterate world
             virtual void Execute(bool interactively);
 
-
             //
             // UI
             //
 
         public:
+            // do enumeration of applicable attributes on this object
+            virtual void ConnectProperties(EnumerateElementArgs& args);
+
             // validates named panel types usable by this instance
-            virtual bool ValidatePanel(const tstring& name) HELIUM_OVERRIDE;
+            virtual bool ValidatePanel(const tstring& name);
 
             // create the panel from the selection
             static void CreatePanel(CreatePanelArgs& args);
@@ -490,6 +351,76 @@ namespace Helium
             tstring GetMembership() const;
             void SetMembership( const tstring& layers );
 
+            //
+            // Package
+            //
+
+          public:
+            Reflect::Element* GetPackage()
+            {
+                return m_Package;
+            }
+
+            const Reflect::Element* GetPackage() const
+            {
+                return m_Package;
+            }
+
+            template <class T>
+            T* GetPackage()
+            {
+#ifdef _DEBUG
+                T* t = Reflect::ObjectCast<T>(m_Package);
+                HELIUM_ASSERT( t );
+                return t;
+#else
+                return static_cast<T*>(m_Package.Ptr());
+#endif
+            }
+
+            template <class T>
+            const T* GetPackage() const
+            {
+#ifdef _DEBUG
+                const T* t = Reflect::ObjectCast<T>(m_Package);
+                HELIUM_ASSERT( t );
+                return t;
+#else
+                return static_cast<const T*>(m_Package.Ptr());
+#endif
+            }
+
+            // Pack any application-cached data into the packed data
+            virtual void Pack() {}
+
+            // Unpack data from the packed information into the application object
+            virtual void Unpack() {}
+
+            //
+            // Undo/Redo Snapshot
+            //
+
+            // Retrieve serialzed data for this object into the parameter
+            void GetState( Reflect::ElementPtr& state ) const;
+
+            // Restore serialized data from the element for this object
+            void SetState( const Reflect::ElementPtr& state );
+
+            // Get undo command for this object's state (uses GetState/SetState above)
+            virtual Undo::CommandPtr SnapShot( Reflect::Element* newState = NULL );
+
+            //
+            // Selected state
+            //
+
+            // Is this object currently selectable?
+            //  Sometimes objects can on a per-instance or per-type basis decided to NOT be selectable
+            //  This prototype exposes the capability to HELIUM_OVERRIDE the selection of an object
+            virtual bool IsSelectable() const;
+
+            // Get/Set selected state
+            virtual bool IsSelected() const;
+            virtual void SetSelected(bool);
 
             //
             // Events
@@ -518,6 +449,34 @@ namespace Helium
             {
                 m_NameChanged.Remove( listener );
             }
-        };
+
+        protected:
+            SceneNodeChangeSignature::Event m_VisibilityChanged;
+
+        public:
+            void AddVisibilityChangedListener( const SceneNodeChangeSignature::Delegate& listener )
+            {
+                m_VisibilityChanged.Add( listener );
+            }
+
+            void RemoveVisibilityChangedListener( const SceneNodeChangeSignature::Delegate& listener )
+            {
+                m_VisibilityChanged.Remove( listener );
+            }
+
+        protected:
+            bool                    m_IsInitialized;
+            bool                    m_IsSelected;
+            bool                    m_IsTransient;
+            Reflect::ElementPtr     m_Package;
+
+            Scene*                  m_Owner;                                // The scene that owns us
+            SceneGraph*             m_Graph;                                // the graph that evaluates us
+            SceneNodeType*          m_NodeType;                             // the type we are an instance of
+            S_SceneNodeDumbPtr      m_Ancestors;                            // nodes that are evaluated before this Node
+            S_SceneNodeSmartPtr     m_Descendants;                          // nodes that are evaluated after this Node
+            NodeState               m_NodeStates[ GraphDirections::Count ]; // our current state
+            u32                     m_VisitedID;                            // data cached for evaluation
+       };
     }
 }

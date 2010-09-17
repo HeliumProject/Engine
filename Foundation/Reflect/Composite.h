@@ -200,7 +200,7 @@ namespace Helium
             static bool Equals(const Element* a, const Element* b);
 
             //
-            // Visits RTTI data fields recursively, used to interactively traverse structures
+            // Visits fields recursively, used to interactively traverse structures
             //
 
             static void Visit (Element* element, Visitor& visitor);

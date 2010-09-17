@@ -80,10 +80,6 @@ namespace Helium
         // 
         class CORE_API HierarchyNode : public Core::SceneNode
         {
-            // 
-            // Member variables 
-            // 
-
         protected:
             // computed from layers
             bool m_Visible;
@@ -113,20 +109,10 @@ namespace Helium
             ParentChangingSignature::Event m_ParentChanging;
             ParentChangedSignature::Event m_ParentChanged;
 
-
-            //
-            // Runtime Type Info
-            //
-
         public:
             REFLECT_DECLARE_ABSTRACT( Core::HierarchyNode, Core::SceneNode );
             static void InitializeType();
             static void CleanupType();
-
-
-            // 
-            // Member functions
-            // 
 
         public:
             HierarchyNode(Core::Scene* scene, Content::HierarchyNode* data);

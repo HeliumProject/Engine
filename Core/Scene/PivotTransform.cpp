@@ -54,28 +54,28 @@ void PivotTransform::Pack()
 {
   __super::Pack();
 
-  Content::PivotTransform* persistent = GetPackage< Content::PivotTransform >();
+  Content::PivotTransform* transform = GetPackage< Content::PivotTransform >();
 
-  persistent->m_Shear = Math::Vector3( m_Shear.xy, m_Shear.yz, m_Shear.xz );
-  persistent->m_ScalePivot = m_ScalePivot;
-  persistent->m_ScalePivotTranslate = m_ScalePivotTranslate;
-  persistent->m_RotatePivot = m_RotatePivot;
-  persistent->m_RotatePivotTranslate = m_RotatePivotTranslate;
-  persistent->m_TranslatePivot = m_TranslatePivot;
+  transform->m_Shear = Math::Vector3( m_Shear.xy, m_Shear.yz, m_Shear.xz );
+  transform->m_ScalePivot = m_ScalePivot;
+  transform->m_ScalePivotTranslate = m_ScalePivotTranslate;
+  transform->m_RotatePivot = m_RotatePivot;
+  transform->m_RotatePivotTranslate = m_RotatePivotTranslate;
+  transform->m_TranslatePivot = m_TranslatePivot;
 }
 
 void PivotTransform::Unpack() 
 {
   __super::Unpack();
 
-  Content::PivotTransform* persistent = GetPackage< Content::PivotTransform >();
+  Content::PivotTransform* transform = GetPackage< Content::PivotTransform >();
 
-  m_Shear = persistent->m_Shear;
-  m_ScalePivot = persistent->m_ScalePivot;
-  m_ScalePivotTranslate = persistent->m_ScalePivotTranslate;
-  m_RotatePivot = persistent->m_RotatePivot;
-  m_RotatePivotTranslate = persistent->m_RotatePivotTranslate;
-  m_TranslatePivot = persistent->m_TranslatePivot;
+  m_Shear = transform->m_Shear;
+  m_ScalePivot = transform->m_ScalePivot;
+  m_ScalePivotTranslate = transform->m_ScalePivotTranslate;
+  m_RotatePivot = transform->m_RotatePivot;
+  m_RotatePivotTranslate = transform->m_RotatePivotTranslate;
+  m_TranslatePivot = transform->m_TranslatePivot;
 }
 
 Math::Shear PivotTransform::GetShear() const

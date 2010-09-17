@@ -30,28 +30,14 @@ namespace Helium
 
         class InstanceSet : public Reflect::Object
         {
-            //
-            // Members
-            //
-
         protected:
             Core::InstanceType* m_Type;
             S_InstanceDumbPtr m_Instances;
-
-
-            //
-            // Runtime Type Info
-            //
 
         public:
             REFLECT_DECLARE_ABSTRACT( InstanceSet, Reflect::Object );
             static void InitializeType();
             static void CleanupType();
-
-
-            //
-            // Implementation
-            //
 
         public:
             InstanceSet(Core::InstanceType* type);

@@ -4,7 +4,7 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-SceneNodePanel::SceneNodePanel(PropertiesGenerator* generator, const OS_PersistentDumbPtr& selection)
+SceneNodePanel::SceneNodePanel(PropertiesGenerator* generator, const OS_SceneNodeDumbPtr& selection)
 : m_Selection (selection)
 {
     m_Generator = generator;

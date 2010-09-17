@@ -32,25 +32,10 @@ namespace Helium
         // 
         class CORE_API Instance HELIUM_ABSTRACT : public Core::PivotTransform
         {
-            //
-            // Members
-            //
-
-        protected:
-
-            //
-            // Runtime Type Info
-            //
-
         public:
             REFLECT_DECLARE_ABSTRACT( Core::Instance, Core::PivotTransform );
             static void InitializeType();
             static void CleanupType();
-
-
-            //
-            // Member functions
-            //
 
             Instance(Core::Scene* s, Content::Instance* entity);
             virtual ~Instance();

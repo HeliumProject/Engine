@@ -11,16 +11,12 @@ namespace Helium
     {
         class CORE_API CurveCreateTool : public Tool
         {
-            //
-            //  Members
-            //
-
         private:
             // Created flag
             bool m_Created;
 
             // The selection of the created objects
-            OS_PersistentDumbPtr m_Selection;
+            OS_SceneNodeDumbPtr m_Selection;
 
             // The instance we are creating
             LCurvePtr m_Instance;
@@ -35,10 +31,7 @@ namespace Helium
             // Should we snap to objects
             static bool s_ObjectSnap;
 
-            //
-            // RTTI
-            //
-
+        public:
             REFLECT_DECLARE_ABSTRACT(Core::CurveCreateTool, Tool);
             static void InitializeType();
             static void CleanupType();

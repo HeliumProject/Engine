@@ -6,13 +6,15 @@
 
 namespace Helium
 {
-    namespace Editor
+    namespace Core
     {
-        // Forwards
         class SceneNode;
         struct NodeChangeArgs;
         struct NodeTypeExistenceArgs;
+    }
 
+    namespace Editor
+    {
         /////////////////////////////////////////////////////////////////////////////
         // Wrapper for a tree control that displays all of the scene nodes, grouped
         // by NodeType.

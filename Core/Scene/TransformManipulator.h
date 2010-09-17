@@ -58,23 +58,13 @@ namespace Helium
             // Start
             M_ManipulationStart m_ManipulationStart;
 
-
-            //
-            // RTTI
-            //
-
+        public:
             REFLECT_DECLARE_ABSTRACT(Core::TransformManipulator, Tool);
             static void InitializeType();
             static void CleanupType();
 
-
-            //
-            // Constructor, requires a view manager to interact with, a selection to manipulate, and an undo queue to use
-            //
-
         public:
             TransformManipulator(const ManipulatorMode mode, Core::Scene* scene, PropertiesGenerator* generator);
-
             virtual ~TransformManipulator();
 
             virtual void Cleanup();

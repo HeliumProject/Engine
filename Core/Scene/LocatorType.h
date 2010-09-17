@@ -15,29 +15,15 @@ namespace Helium
 
         class LocatorType : public Core::InstanceType
         {
-            //
-            // Members
-            //
-
         private:
             // locator shapes
             Core::PrimitiveLocator* m_Locator;
             Core::PrimitiveCube* m_Cube;
 
-
-            //
-            // Runtime Type Info
-            //
-
         public:
             REFLECT_DECLARE_ABSTRACT( Core::LocatorType, Core::InstanceType );
             static void InitializeType();
             static void CleanupType();
-
-
-            //
-            // Implementation
-            //
 
         public:
             LocatorType( Core::Scene* scene, i32 instanceType );

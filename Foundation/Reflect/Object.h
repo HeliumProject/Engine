@@ -42,7 +42,7 @@ namespace Helium
 
 
             //
-            // RTTI
+            // Type id
             //
 
             // Returns the type id for this instance
@@ -51,7 +51,7 @@ namespace Helium
             // Deduces type membership for this instance
             virtual bool HasType(i32 type) const;
 
-            // Retrieves the RTTI data for this instance
+            // Retrieves the reflection data for this instance
             virtual const Reflect::Class* GetClass() const;
 
             // Enumerates member data (stub)

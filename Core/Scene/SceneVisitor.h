@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/API.h"
-#include "Core/Scene/Persistent.h"
+#include "Core/Scene/SceneNode.h"
 
 namespace Helium
 {
@@ -49,7 +49,7 @@ namespace Helium
         class HierarchyChildTraverser : public HierarchyTraverser
         {
         public:
-            OS_PersistentDumbPtr m_Children;
+            OS_SceneNodeDumbPtr m_Children;
 
             virtual TraversalAction VisitHierarchyNode(Core::HierarchyNode* node) HELIUM_OVERRIDE;
         };

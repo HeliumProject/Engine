@@ -49,7 +49,7 @@ Core::TransformPtr LocatorCreateTool::CreateNode()
     m_Scene->AddObject( locator );
 
     {
-        OS_PersistentDumbPtr selection;
+        OS_SceneNodeDumbPtr selection;
         selection.push_back( locator );
         m_Scene->GetSelection().SetItems( selection );
 

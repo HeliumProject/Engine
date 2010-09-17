@@ -60,19 +60,9 @@ namespace Helium
             IndexResourcePtr m_Indices;
             VertexResourcePtr m_Vertices;
 
-
-            //
-            // Runtime Type Info
-            //
-
             REFLECT_DECLARE_ABSTRACT( Core::Mesh, Core::PivotTransform );
             static void InitializeType();
             static void CleanupType();
-
-
-            // 
-            // Member functions
-            //
 
         public:
             Mesh( Core::Scene* scene, Content::Mesh* mesh );

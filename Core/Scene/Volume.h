@@ -15,19 +15,10 @@ namespace Helium
         // 
         class Volume : public Core::Instance
         {
-            //
-            // Runtime Type Info
-            //
-
         public:
             REFLECT_DECLARE_ABSTRACT( Core::Volume, Core::Instance );
             static void InitializeType();
             static void CleanupType();
-
-
-            //
-            // Member functions
-            //
 
             Volume(Core::Scene* s);
             Volume(Core::Scene* s, Content::Volume* volume);
@@ -51,10 +42,6 @@ namespace Helium
             virtual bool ValidatePanel(const tstring& name) HELIUM_OVERRIDE;
 
             static void CreatePanel( CreatePanelArgs& args );
-
-            //
-            // Should we show the pointer
-            //
 
             bool IsPointerVisible() const;
             void SetPointerVisible(bool visible);

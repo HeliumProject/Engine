@@ -1,10 +1,10 @@
 #pragma once
 
-#include "PivotTransform.h"
-#include "Core/Scene/Point.h"
-#include "VertexResource.h"
-
 #include "Core/Content/Nodes/ContentCurve.h"
+#include "Core/Scene/Point.h"
+#include "Core/Scene/PivotTransform.h"
+#include "Core/Scene/PropertiesGenerator.h"
+#include "Core/Scene/VertexResource.h"
 
 namespace Helium
 {
@@ -21,12 +21,7 @@ namespace Helium
 
         class Curve : public Core::PivotTransform
         {
-            //
-            // Members
-            //
-
         protected:
-
             // start and end locator
             Core::PrimitiveLocator* m_Locator;
 
@@ -40,19 +35,9 @@ namespace Helium
             // resources
             VertexResourcePtr m_Vertices;
 
-
-            //
-            // RTTI
-            //
-
             REFLECT_DECLARE_ABSTRACT( Core::Curve, Core::PivotTransform );
             static void InitializeType();
             static void CleanupType();
-
-
-            //
-            // Implementation
-            //
 
         public:
             Curve( Core::Scene* scene, Content::Curve* curve );
@@ -132,7 +117,6 @@ namespace Helium
             static void Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
 
             virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
-
 
             //
             // UI

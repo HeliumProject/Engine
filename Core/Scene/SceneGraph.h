@@ -51,46 +51,10 @@ namespace Helium
         // 
         class CORE_API SceneGraph : public Reflect::Object
         {
-            //
-            // Members
-            //
-
-        private:
-            // original nodes have no ancestors
-            S_SceneNodeDumbPtr m_OriginalNodes;
-
-            // intermediate nodes have ancestors and descendants
-            S_SceneNodeDumbPtr m_IntermediateNodes;
-
-            // terminal nodes have no descendants
-            S_SceneNodeDumbPtr m_TerminalNodes;
-
-            // roots for the cleanup traversal
-            S_SceneNodeDumbPtr m_CleanupRoots;
-
-            // id for assignment
-            u32 m_NextID;
-
-            // id for evaluating
-            u32 m_CurrentID;
-
-            // number of nodes evaluated
-            S_SceneNodeDumbPtr m_EvaluatedNodes;
-
-
-            //
-            // Runtime Type Info
-            //
-
         public:
             REFLECT_DECLARE_ABSTRACT( SceneGraph, Reflect::Object );
             static void InitializeType();
             static void CleanupType();
-
-
-            //
-            // Implementation
-            // 
 
         public:
             SceneGraph();
@@ -134,6 +98,28 @@ namespace Helium
             {
                 m_EvaluatedEvent.Remove( listener );
             }
+
+        private:
+            // original nodes have no ancestors
+            S_SceneNodeDumbPtr m_OriginalNodes;
+
+            // intermediate nodes have ancestors and descendants
+            S_SceneNodeDumbPtr m_IntermediateNodes;
+
+            // terminal nodes have no descendants
+            S_SceneNodeDumbPtr m_TerminalNodes;
+
+            // roots for the cleanup traversal
+            S_SceneNodeDumbPtr m_CleanupRoots;
+
+            // id for assignment
+            u32 m_NextID;
+
+            // id for evaluating
+            u32 m_CurrentID;
+
+            // number of nodes evaluated
+            S_SceneNodeDumbPtr m_EvaluatedNodes;
         };
     }
 }

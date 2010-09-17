@@ -63,8 +63,8 @@ void TransformManipulator::SelectionChanged(const SelectionChangeArgs& args)
 {
     m_ManipulatorAdapters.clear();
 
-    OS_PersistentDumbPtr::Iterator itr = args.m_Selection.Begin();
-    OS_PersistentDumbPtr::Iterator end = args.m_Selection.End();
+    OS_SceneNodeDumbPtr::Iterator itr = args.m_Selection.Begin();
+    OS_SceneNodeDumbPtr::Iterator end = args.m_Selection.End();
     for ( ; itr != end; ++itr )
     {
         Core::HierarchyNode* h = Reflect::ObjectCast< Core::HierarchyNode >( *itr );

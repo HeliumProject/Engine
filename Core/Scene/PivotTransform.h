@@ -19,10 +19,6 @@ namespace Helium
 
         class CORE_API PivotTransform : public Core::Transform
         {
-            // 
-            // Member variables
-            // 
-
         protected:
             Math::Shear m_Shear;
             Math::Vector3 m_ScalePivot;
@@ -31,20 +27,10 @@ namespace Helium
             Math::Vector3 m_RotatePivotTranslate;
             Math::Vector3 m_TranslatePivot;
 
-
-            //
-            // Runtime Type Info
-            //
-
         public:
             REFLECT_DECLARE_ABSTRACT( Core::PivotTransform, Core::Transform );
             static void InitializeType();
             static void CleanupType();
-
-
-            //
-            // Member functions
-            //
 
         public:
             PivotTransform( Core::Scene* scene );
@@ -56,7 +42,6 @@ namespace Helium
             virtual void Pack() HELIUM_OVERRIDE;
             virtual void Unpack() HELIUM_OVERRIDE;
 
-
             //
             // Group
             //
@@ -67,14 +52,12 @@ namespace Helium
                 return GetType() == Reflect::GetType<Core::PivotTransform>();
             }
 
-
             //
             // Shear
             //
 
             Math::Shear GetShear() const;
             void SetShear(const Math::Shear& value);
-
 
             //
             // ScalePivot
@@ -84,14 +67,12 @@ namespace Helium
             virtual void SetScalePivot(const Math::Vector3& value) HELIUM_OVERRIDE;
             void SetScalePivot(const Math::Vector3& value, bool snapSiblings);
 
-
             //
             // ScalePivotTranslate
             //
 
             Math::Vector3 GetScalePivotTranslate() const;
             void SetScalePivotTranslate(const Math::Vector3& value);
-
 
             //
             // RotatePivot
@@ -101,14 +82,12 @@ namespace Helium
             virtual void SetRotatePivot(const Math::Vector3& value) HELIUM_OVERRIDE;
             void SetRotatePivot(const Math::Vector3& value, bool snapSiblings);
 
-
             //
             // RotatePivotTranslate
             //
 
             Math::Vector3 GetRotatePivotTranslate() const;
             void SetRotatePivotTranslate(const Math::Vector3& value);
-
 
             //
             // TranslatePivot
@@ -118,18 +97,12 @@ namespace Helium
             virtual void SetTranslatePivot(const Math::Vector3& value) HELIUM_OVERRIDE;
             void SetTranslatePivot(const Math::Vector3& value, bool snapSiblings);
 
-
             //
             // SnapPivots
             //
 
             bool GetSnapPivots() const;
             void SetSnapPivots(bool value);
-
-
-            //
-            // Main routines
-            //
 
         public:
             virtual Math::Matrix4 GetScaleComponent() const HELIUM_OVERRIDE;

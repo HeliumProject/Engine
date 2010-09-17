@@ -5,7 +5,6 @@
 
 namespace Helium
 {
-    // Forwards
     namespace Content
     {
         class JointTransform;
@@ -13,24 +12,14 @@ namespace Helium
 
     namespace Core
     {
-        // Forwards
         class PrimitiveRings;
 
         class JointTransform : public Core::Transform
         {
-            //
-            // Runtime Type Info
-            //
-
         public:
             REFLECT_DECLARE_ABSTRACT( Core::JointTransform, Core::Transform );
             static void InitializeType();
             static void CleanupType();
-
-
-            //
-            // Member functions
-            //
 
         public:
             JointTransform( Core::Scene* scene, Content::JointTransform* joint );

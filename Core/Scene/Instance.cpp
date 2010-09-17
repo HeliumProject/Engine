@@ -11,7 +11,6 @@ using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
 
-// RTTI
 REFLECT_DEFINE_ABSTRACT(Core::Instance);
 
 void Instance::InitializeType()

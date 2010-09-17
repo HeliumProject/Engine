@@ -12,24 +12,16 @@ namespace Helium
     {
         class CORE_API VolumeCreateTool : public Core::CreateTool
         {
-            //
-            // Members
-            //
-
         public:
             static Content::VolumeShape s_Shape;
 
-            //
-            // RTTI
-            //
-
+        public:
             REFLECT_DECLARE_ABSTRACT(Core::VolumeCreateTool, Core::CreateTool);
             static void InitializeType();
             static void CleanupType();
 
         public:
             VolumeCreateTool(Core::Scene* scene, PropertiesGenerator* generator);
-
             virtual ~VolumeCreateTool();
 
             virtual Core::TransformPtr CreateNode() HELIUM_OVERRIDE;
@@ -37,7 +29,6 @@ namespace Helium
             virtual void CreateProperties() HELIUM_OVERRIDE;
 
             int GetVolumeShape() const;
-
             void SetVolumeShape(int value);
         };
     }

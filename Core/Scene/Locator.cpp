@@ -13,7 +13,6 @@ using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
 
-// RTTI
 REFLECT_DEFINE_ABSTRACT(Core::Locator);
 
 void Locator::InitializeType()

@@ -22,7 +22,6 @@ using namespace Helium::Math;
 using namespace Helium::Core;
 using namespace Helium::Component;
 
-// RTTI
 REFLECT_DEFINE_ABSTRACT(Core::EntityInstance);
 
 void EntityInstance::InitializeType()
@@ -328,7 +327,7 @@ bool EntityInstance::Pick( PickVisitor* pick )
 
     pick->SetFlag( PickFlags::IgnoreVertex, true );
 
-    if (IsPointerVisible() || m_Selected)
+    if (IsPointerVisible() || m_IsSelected)
     {
         pick->SetCurrentObject (this, pick->State().m_Matrix.Normalized());
         result |= type->GetPointer()->Pick (pick);
@@ -336,7 +335,7 @@ bool EntityInstance::Pick( PickVisitor* pick )
 
     pick->SetFlag( PickFlags::IgnoreVertex, false );
 
-    if ((IsBoundsVisible() || m_Selected) && m_ClassSet && m_ClassSet->GetShape())
+    if ((IsBoundsVisible() || m_IsSelected) && m_ClassSet && m_ClassSet->GetShape())
     {
         pick->SetCurrentObject (this, pick->State().m_Matrix);
         result |= m_ClassSet->GetShape()->Pick (pick, package->m_SolidOverride ? &package->m_Solid : NULL);

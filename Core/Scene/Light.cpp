@@ -17,13 +17,18 @@ using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
 
-REFLECT_DEFINE_ABSTRACT(Core::Light);
+REFLECT_DEFINE_ABSTRACT(Light);
 
 D3DMATERIAL9 Light::s_Material;
 
+void Light::EnumerateClass( Reflect::Compositor<Light>& comp )
+{
+    comp.AddField( &Light::m_Color, "m_Color" );
+}
+
 void Light::InitializeType()
 {
-    Reflect::RegisterClassType< Core::Light >( TXT( "Core::Light" ) );
+    Reflect::RegisterClassType< Light >( TXT( "Light" ) );
 
     ZeroMemory(&s_Material, sizeof(s_Material));
 
@@ -32,11 +37,15 @@ void Light::InitializeType()
 
 void Light::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::Light >();
+    Reflect::UnregisterClassType< Light >();
 }
 
-Light::Light(Core::Scene* scene, Content::Light* light)
-: Core::Instance ( scene, light )
+Light::Light()
+{
+
+}
+
+Light::~Light()
 {
 
 }
@@ -64,7 +73,7 @@ void Light::Evaluate(GraphDirection direction)
 
             if ( m_NodeType )
             {
-                Core::InstanceType* type = Reflect::AssertCast<Core::InstanceType>(m_NodeType);
+                InstanceType* type = Reflect::AssertCast<InstanceType>(m_NodeType);
                 Math::AlignedBox box (type->GetPointer()->GetBounds());
 
                 Math::Scale scale;
@@ -92,14 +101,14 @@ void Light::Render( RenderVisitor* render )
     }
 
     // don't call __super here, it will draw big ass axes
-    Core::HierarchyNode::Render( render );
+    HierarchyNode::Render( render );
 }
 
 void Light::DrawPointer( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const Core::Light* light = Reflect::ConstAssertCast<Core::Light>( object );
+    const Light* light = Reflect::ConstAssertCast<Light>( object );
 
-    const Core::InstanceType* type = Reflect::ConstAssertCast<Core::InstanceType>( light->GetNodeType() );
+    const InstanceType* type = Reflect::ConstAssertCast<InstanceType>( light->GetNodeType() );
 
     light->SetMaterial( type->GetMaterial() );
 
@@ -109,7 +118,7 @@ void Light::DrawPointer( IDirect3DDevice9* device, DrawArgs* args, const SceneNo
 
 bool Light::Pick( PickVisitor* pick )
 {
-    Core::InstanceType* type = Reflect::AssertCast<Core::InstanceType>(m_NodeType);
+    InstanceType* type = Reflect::AssertCast<InstanceType>(m_NodeType);
 
     pick->SetCurrentObject (this, pick->State().m_Matrix.Normalized());
 
@@ -122,7 +131,7 @@ bool Light::Pick( PickVisitor* pick )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Returns true if the specified panel is supported by Core::Light.
+// Returns true if the specified panel is supported by Light.
 //
 bool Light::ValidatePanel(const tstring& name)
 {
@@ -151,10 +160,10 @@ void Light::CreatePanel( CreatePanelArgs& args )
 
 Color3 Light::GetColor() const
 {
-    return GetPackage< Content::Light >()->m_Color;
+    return m_Color;
 }
 
 void Light::SetColor( Color3 color )
 {
-    GetPackage< Content::Light >()->m_Color = color;
+    m_Color = color;
 }

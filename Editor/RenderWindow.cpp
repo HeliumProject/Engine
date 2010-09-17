@@ -47,12 +47,12 @@ RenderWindow::RenderWindow( wxWindow *parent, wxWindowID id, const wxPoint& pos,
     m_Render.Init( GetHwnd(), 513, 541, 0 );
     if ( m_Render.GetD3DDevice() )
     {
-        m_Scene = new Render::Scene( &m_Render );
+        m_Scene = new RenderScene( &m_Render );
         m_Scene->m_normalscale = 0.1f;     // set the scale of the normals before loading the mesh (default scale is 1.0)
         m_Scene->m_render_reference_grid = false;
         m_Scene->m_render_wireframe = false;
         m_Scene->m_render_env_cube = false;
-        Render::Light* t1 = new Render::Light();
+        RenderLight* t1 = new RenderLight();
         t1->m_color = D3DXVECTOR4( 1, 1, 1, 0 );
         t1->m_direction = D3DXVECTOR4( 0, 1, 0, 0 );
         m_Scene->m_lights.push_back( t1 );
@@ -92,7 +92,7 @@ bool RenderWindow::LoadScene( const tstring& path )
 {
     HELIUM_ASSERT( m_MeshHandle == s_InvalidMesh );
 
-    Render::RBObjectLoader loader;
+    RBObjectLoader loader;
     loader.IncrRefCount();
     if ( m_Scene )
     {
@@ -102,7 +102,7 @@ bool RenderWindow::LoadScene( const tstring& path )
         {
             for ( std::map<int, bool>::iterator itr = loader.m_bangleInfo.begin(), end = loader.m_bangleInfo.end(); itr != end; ++itr )
             {
-                Render::Scene* scene = new Render::Scene( &m_Render );
+                RenderScene* scene = new RenderScene( &m_Render );
                 if ( !scene )
                 {
                     continue;
@@ -164,7 +164,7 @@ void RenderWindow::ClearScene()
 // 
 bool RenderWindow::SaveScreenShotAs( const tstring& path )
 {
-    if ( RenderScene() )
+    if ( DrawScene() )
     {
         return m_Render.SaveTGA( path.c_str() );
     }
@@ -210,14 +210,14 @@ void RenderWindow::Frame()
 ///////////////////////////////////////////////////////////////////////////////
 // Sets up lighting in the scene.
 // 
-void RenderWindow::SetupLighting( Render::Scene* scene )
+void RenderWindow::SetupLighting( RenderScene* scene )
 {
     if ( !scene )
     {
         return;
     }
 
-    for ( std::vector< Render::Light* >::iterator itr = scene->m_lights.begin(), end = scene->m_lights.end(); itr != end; ++itr )
+    for ( std::vector< RenderLight* >::iterator itr = scene->m_lights.begin(), end = scene->m_lights.end(); itr != end; ++itr )
     {
         delete *itr;
     }
@@ -229,12 +229,12 @@ void RenderWindow::SetupLighting( Render::Scene* scene )
     scene->m_ambient.z = 0.4f;
     scene->m_ambient.w = 0.0f;
 
-    Render::Light* light1 = new Render::Light();
+    RenderLight* light1 = new RenderLight();
     light1->m_direction = D3DXVECTOR4( 1.0f, 1.0f, 1.0f, 0.0f );
     light1->m_color = D3DXVECTOR4( 0.5f, 0.5f, 0.5f, 0.0f );
     scene->m_lights.push_back( light1 );
 
-    Render::Light* light2 = new Render::Light();
+    RenderLight* light2 = new RenderLight();
     light2->m_direction = D3DXVECTOR4( -1.0f, -1.0f, -1.0f, 0.0f );
     light2->m_color = D3DXVECTOR4( 0.45f, 0.45f, 0.45f, 0.0f );
     scene->m_lights.push_back( light2 );
@@ -266,7 +266,7 @@ void RenderWindow::Draw()
     }
 
     // If we have a scene with a mesh, draw it
-    if ( !RenderScene() )
+    if ( !DrawScene() )
     {
         // No scene or no mesh, just clear the screen
         device->BeginScene();
@@ -317,17 +317,17 @@ void RenderWindow::ShowContextMenu( const wxPoint& pos )
 // Renders the scene if there is one.  Returns true if the scene is valid and
 // has at least one mesh.  Otherwise, returns false.
 // 
-bool RenderWindow::RenderScene()
+bool RenderWindow::DrawScene()
 {
     if ( m_MeshHandle != s_InvalidMesh && m_Scene )
     {
-        std::vector< Render::Scene* > renderScenes;
+        std::vector< RenderScene* > renderScenes;
 
         m_Scene->m_viewmat = *( ( D3DMATRIX* )( &m_Camera.GetViewport() ) );
         m_Scene->m_projmat = *( ( D3DMATRIX* )( &m_Camera.SetProjection( m_Scene->m_width, m_Scene->m_height ) ) );
         renderScenes.push_back( m_Scene );
 
-        m_Render.RenderScenes( (int) renderScenes.size(), &renderScenes[ 0 ] );
+        m_Render.DrawScenes( (int) renderScenes.size(), &renderScenes[ 0 ] );
 
         return true;
     }

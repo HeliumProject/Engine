@@ -39,7 +39,7 @@ static void ObjError(FILE* fp, int fpos, int currpos,const char* error)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-u32 Render::OBJObjectLoader::ParseFile(const tchar* fname, bool winding)
+u32 OBJObjectLoader::ParseFile(const tchar* fname, bool winding)
 {
     //winding = true;
     FILE *fp;

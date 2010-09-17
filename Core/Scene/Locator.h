@@ -2,31 +2,41 @@
 
 #include "Instance.h"
 
-#include "Core/Content/Nodes/ContentLocator.h"
-
 namespace Helium
 {
     namespace Core
     {
         class LocatorType;
 
-        /////////////////////////////////////////////////////////////////////////////
-        // Editor's wrapper for an locator instance.
-        // 
-        class Locator : public Core::Instance
+        namespace LocatorShapes
+        {
+            enum LocatorShape
+            {
+                Cross,
+                Cube,
+            };
+            static void LocatorShapeEnumerateEnum( Reflect::Enumeration* info )
+            {
+                info->AddElement(Cross, TXT( "Cross" ) );
+                info->AddElement(Cube, TXT( "Cube" ) );
+            }
+        }
+        typedef LocatorShapes::LocatorShape LocatorShape;
+
+        class Locator : public Instance
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( Core::Locator, Core::Instance );
+            REFLECT_DECLARE_CLASS( Locator, Instance );
+            static void EnumerateClass( Reflect::Compositor<Locator>& comp );
             static void InitializeType();
             static void CleanupType();
 
-            Locator(Core::Scene* s);
-            Locator(Core::Scene* s, Content::Locator* locator);
-            virtual ~Locator();
+            Locator();
+            ~Locator();
 
             virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
-            virtual SceneNodeTypePtr CreateNodeType( Core::Scene* scene ) const HELIUM_OVERRIDE;
+            virtual SceneNodeTypePtr CreateNodeType( Scene* scene ) const HELIUM_OVERRIDE;
 
             int GetShape() const;
             void SetShape( int shape );
@@ -41,8 +51,11 @@ namespace Helium
             virtual bool ValidatePanel(const tstring& name) HELIUM_OVERRIDE;
 
             static void CreatePanel( CreatePanelArgs& args );
+
+        protected:
+            LocatorShape m_Shape;
         };
 
-        typedef Helium::SmartPtr<Core::Locator> LLocatorPtr;
+        typedef Helium::SmartPtr<Locator> LLocatorPtr;
     }
 }

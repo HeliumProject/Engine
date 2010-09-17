@@ -1,8 +1,5 @@
 #pragma once
 
-#include "Core/Content/Nodes/ContentLayer.h"
-#include "Core/Content/NodeVisibility.h"
-
 #include "Core/API.h"
 #include "Core/Scene/SceneNode.h"
 #include "Core/Scene/PropertiesGenerator.h"
@@ -14,13 +11,14 @@ namespace Helium
         class CORE_API Layer : public Core::SceneNode
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( Core::Layer, Core::SceneNode );
+            REFLECT_DECLARE_CLASS( Layer, Core::SceneNode );
+            static void EnumerateClass( Reflect::Compositor<Layer>& comp );
             static void InitializeType();
             static void CleanupType();
 
         public:
-            Layer( Core::Scene* scene, Content::Layer* layer );
-            virtual ~Layer();
+            Layer();
+            ~Layer();
 
             virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
@@ -49,7 +47,12 @@ namespace Helium
             static void CreatePanel( CreatePanelArgs& args );
             static void BuildUnionAndIntersection( PropertiesGenerator* generator, const OS_SceneNodeDumbPtr& selection, tstring& unionStr, tstring& intersectionStr );
 
-            Content::NodeVisibilityPtr m_VisibilityData; 
+        protected:
+            // Reflected
+            bool                        m_Visible;
+            bool                        m_Selectable;
+            V_TUID                      m_Members;
+            Math::Color3                m_Color;
         };
 
         typedef Helium::SmartPtr< Core::Layer > LayerPtr;

@@ -1,8 +1,7 @@
 #pragma once
 
-#include "Core/Content/Nodes/ContentCurve.h"
-#include "Core/Scene/Point.h"
 #include "Core/Scene/PivotTransform.h"
+#include "Core/Scene/CurveControlPoint.h"
 #include "Core/Scene/PropertiesGenerator.h"
 #include "Core/Scene/VertexResource.h"
 
@@ -19,29 +18,53 @@ namespace Helium
         class PrimitiveLocator;
         class PrimitiveCone;
 
-        class Curve : public Core::PivotTransform
+        namespace CurveTypes
         {
-        protected:
-            // start and end locator
-            Core::PrimitiveLocator* m_Locator;
+            enum CurveType
+            {
+                Linear,
+                BSpline,
+                CatmullRom,
+            };
 
-            // directional cone
-            Core::PrimitiveCone* m_Cone;
+            static void CurveTypeEnumerateEnum( Reflect::Enumeration* info )
+            {
+                info->AddElement(Linear, TXT( "Linear" ) );
+                info->AddElement(BSpline, TXT( "BSpline" ) );
+                info->AddElement(CatmullRom, TXT( "CatmullRom" ) );
+            }
+        }
+        typedef CurveTypes::CurveType CurveType;
 
-            // materials to use for rendering
-            static D3DMATERIAL9 s_Material;
-            static D3DMATERIAL9 s_HullMaterial;
+        namespace ControlPointLabels
+        {
+            enum ControlPointLabel
+            {
+                None,
+                CurveAndIndex,
+                IndexOnly
+            };
 
-            // resources
-            VertexResourcePtr m_Vertices;
+            static void ControlPointLabelEnumerateEnum( Reflect::Enumeration* info )
+            {
+                info->AddElement( None, TXT( "None" ) );
+                info->AddElement( CurveAndIndex, TXT( "Curve and Index" ) );
+                info->AddElement( IndexOnly, TXT( "Index only" ) );
+            }
+        }
+        typedef ControlPointLabels::ControlPointLabel ControlPointLabel;
 
-            REFLECT_DECLARE_ABSTRACT( Core::Curve, Core::PivotTransform );
+        class Curve : public PivotTransform
+        {
+        public:
+            REFLECT_DECLARE_ABSTRACT( Curve, PivotTransform );
+            static void EnumerateClass( Reflect::Compositor<Curve>& comp );
             static void InitializeType();
             static void CleanupType();
 
         public:
-            Curve( Core::Scene* scene, Content::Curve* curve );
-            virtual ~Curve();
+            Curve();
+            ~Curve();
 
             virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
@@ -80,13 +103,13 @@ namespace Helium
             u32 GetNumberControlPoints() const;
 
             // get control point by index
-            Core::Point* GetControlPointByIndex( u32 index );
+            CurveControlPoint* GetControlPointByIndex( u32 index );
 
             // linear seach for the index of a particular point
-            i32 GetIndexForControlPoint( Core::Point* pc );
+            i32 GetIndexForControlPoint( CurveControlPoint* pc );
 
             // insert new control point
-            Undo::CommandPtr InsertControlPointAtIndex( u32 index, Core::Point* pc );
+            Undo::CommandPtr InsertControlPointAtIndex( u32 index, CurveControlPoint* pc );
 
             // remove existing control point
             Undo::CommandPtr RemoveControlPointAtIndex( u32 index );
@@ -94,6 +117,9 @@ namespace Helium
             // reverse curve direction
             Undo::CommandPtr ReverseControlPoints();
 
+            void ProjectPointOnCurve( const Math::Vector3& point, Math::Vector3& projectedPoint ) const;
+            f32 DistanceSqrToCurve( const Math::Vector3& point ) const;
+            f32 DistanceToCurve( const Math::Vector3& point ) const;
 
             //
             // Resources
@@ -128,8 +154,23 @@ namespace Helium
         private:
             static void OnReverseControlPoints( const Inspect::ButtonClickedArgs& args );
             void ChildChangingParents( const ParentChangingArgs& args );
+
+        protected:
+            // Reflected
+            bool                    m_Closed;               // Is the curve closed?
+            CurveType               m_Type;                 // The degree of the curve basis function
+            u32                     m_Resolution;           // The resolution of the points to compute
+            ControlPointLabel       m_ControlPointLabel;    // How to display labels for control points
+            Math::V_Vector3         m_Points;               // The 3D locations of the computed curve points
+
+            // Non-reflected
+            PrimitiveLocator* m_Locator;
+            PrimitiveCone*    m_Cone;
+            static D3DMATERIAL9     s_Material;
+            static D3DMATERIAL9     s_HullMaterial;
+            VertexResourcePtr       m_Vertices;
         };
 
-        typedef Helium::SmartPtr<Core::Curve> LCurvePtr;
+        typedef Helium::SmartPtr<Curve> CurvePtr;
     }
 }

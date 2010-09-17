@@ -1,40 +1,39 @@
 /*#include "Precompile.h"*/
 #include "CurveEditTool.h"
 
-#include "Core/Scene/Point.h"
+#include "Core/Scene/CurveControlPoint.h"
 #include "Core/Scene/Pick.h"
-
-#include "TranslateManipulator.h"
-#include "Curve.h"
+#include "Core/Scene/TranslateManipulator.h"
+#include "Core/Scene/Curve.h"
 #include "Core/Scene/Scene.h"
 
 using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
 
-REFLECT_DEFINE_ABSTRACT(Core::CurveEditTool);
+REFLECT_DEFINE_ABSTRACT(CurveEditTool);
 
 void CurveEditTool::InitializeType()
 {
-    Reflect::RegisterClassType< Core::CurveEditTool >( TXT( "Core::CurveEditTool" ) );
+    Reflect::RegisterClassType< CurveEditTool >( TXT( "CurveEditTool" ) );
 }
 
 void CurveEditTool::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::CurveEditTool >();
+    Reflect::UnregisterClassType< CurveEditTool >();
 }
 
 CurveEditMode CurveEditTool::s_EditMode = CurveEditModes::Modify;
 bool CurveEditTool::s_CurrentSelection = false;
 
-CurveEditTool::CurveEditTool( SettingsManager* settingsManager, Core::Scene *scene, Core::PropertiesGenerator *generator)
+CurveEditTool::CurveEditTool( SettingsManager* settingsManager, Scene *scene, PropertiesGenerator *generator)
 : Tool( scene, generator )
 , m_SettingsManager( settingsManager )
 , m_HotEditMode ( CurveEditModes::None )
 {
     Initialize();
 
-    m_ControlPointManipulator = new Core::TranslateManipulator( m_SettingsManager, ManipulatorModes::Translate, scene, generator );
+    m_ControlPointManipulator = new TranslateManipulator( m_SettingsManager, ManipulatorModes::Translate, scene, generator );
 }
 
 CurveEditTool::~CurveEditTool()
@@ -93,14 +92,14 @@ bool CurveEditTool::MouseDown( const MouseButtonInput& e )
                     return false;
                 }
 
-                Core::Point* p0 = curve->GetControlPointByIndex( points.first );
-                Core::Point* p1 = curve->GetControlPointByIndex( points.second );
+                CurveControlPoint* p0 = curve->GetControlPointByIndex( points.first );
+                CurveControlPoint* p1 = curve->GetControlPointByIndex( points.second );
 
                 Vector3 a( p0->GetPosition() );
                 Vector3 b( p1->GetPosition() );
                 Vector3 p;
 
-                if ( curve->GetCurveType() == Content::CurveTypes::Linear )
+                if ( curve->GetCurveType() == CurveTypes::Linear )
                 {
                     float mu;
 
@@ -118,7 +117,8 @@ bool CurveEditTool::MouseDown( const MouseButtonInput& e )
 
                 u32 index = points.first > points.second ? points.first : points.second;
 
-                PointPtr point = new Core::Point( m_Scene, new Content::Point( p ) );
+                CurveControlPointPtr point = new CurveControlPoint();
+                point->SetOwner( curve->GetOwner() );
 
                 curve->GetOwner()->Push( curve->InsertControlPointAtIndex( index, point ) );
                 break;
@@ -195,14 +195,14 @@ void CurveEditTool::KeyPress( const KeyboardInput& e )
             return;
         }
 
-        Core::Point* point = Reflect::ObjectCast<Core::Point>( selection.Front() );
+        CurveControlPoint* point = Reflect::ObjectCast<CurveControlPoint>( selection.Front() );
 
         if ( !point )
         {
             return;
         }
 
-        Core::Curve* curve = Reflect::ObjectCast<Core::Curve>( point->GetParent() );
+        Curve* curve = Reflect::ObjectCast<Curve>( point->GetParent() );
 
         if ( !curve )
         {
@@ -299,7 +299,7 @@ bool CurveEditTool::ValidateSelection( OS_SceneNodeDumbPtr& items )
     OS_SceneNodeDumbPtr::Iterator end = items.End();
     for( ; itr != end; ++itr )
     {
-        Core::Point* p = Reflect::ObjectCast<Core::Point>( *itr );
+        CurveControlPoint* p = Reflect::ObjectCast<CurveControlPoint>( *itr );
 
         if ( !p )
         {
@@ -336,7 +336,7 @@ bool CurveEditTool::ValidateSelection( OS_SceneNodeDumbPtr& items )
         OS_SceneNodeDumbPtr::Iterator end = items.End();
         for( ; itr != end; ++itr )
         {
-            Core::Curve* c = Reflect::ObjectCast<Core::Curve>( *itr );
+            Curve* c = Reflect::ObjectCast<Curve>( *itr );
 
             if ( !c )
             {
@@ -380,7 +380,7 @@ void CurveEditTool::CreateProperties()
         m_Generator->PushContainer();
         { 
             m_Generator->AddLabel( TXT( "Edit Control Points" ) );
-            Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::CurveEditTool, int> (this, &CurveEditTool::GetCurveEditMode, &CurveEditTool::SetCurveEditMode ) );
+            Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<CurveEditTool, int> (this, &CurveEditTool::GetCurveEditMode, &CurveEditTool::SetCurveEditMode ) );
             choice->a_IsDropDown.Set( true );
             std::vector< Inspect::ChoiceItem > items;
 
@@ -408,7 +408,7 @@ void CurveEditTool::CreateProperties()
         m_Generator->PushContainer();
         { 
             m_Generator->AddLabel( TXT( "Selected Curves Only" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CurveEditTool, bool> (this, &CurveEditTool::GetSelectionMode, &CurveEditTool::SetSelectionMode ) );
+            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<CurveEditTool, bool> (this, &CurveEditTool::GetSelectionMode, &CurveEditTool::SetSelectionMode ) );
         }
         m_Generator->Pop();
     }
@@ -446,7 +446,7 @@ void CurveEditTool::StoreSelectedCurves()
     OS_SceneNodeDumbPtr::Iterator selection_end = m_Scene->GetSelection().GetItems().End();
     for ( ; selection_itr != selection_end; ++selection_itr )
     {
-        Core::Curve* curve = Reflect::ObjectCast<Core::Curve>( *selection_itr );
+        Curve* curve = Reflect::ObjectCast<Curve>( *selection_itr );
         if ( curve )
         {
             m_SelectedCurves.Append( curve );

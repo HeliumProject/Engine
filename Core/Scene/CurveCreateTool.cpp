@@ -1,19 +1,18 @@
 /*#include "Precompile.h"*/
 #include "CurveCreateTool.h"
-#include "CreateTool.h"
 
-#include "Core/Scene/Point.h"
+#include "Core/Scene/CreateTool.h"
+#include "Core/Scene/CurveControlPoint.h"
 #include "Core/Scene/Pick.h"
-
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/SceneManager.h"
-#include "HierarchyNodeType.h"
+#include "Core/Scene/HierarchyNodeType.h"
 
 using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
 
-Content::CurveType CurveCreateTool::s_CurveType = Content::CurveTypes::BSpline;
+CurveType CurveCreateTool::s_CurveType = CurveTypes::BSpline;
 bool CurveCreateTool::s_SurfaceSnap = false;
 bool CurveCreateTool::s_ObjectSnap = false;
 
@@ -63,17 +62,17 @@ void CurveCreateTool::CreateInstance( const Math::Vector3& position )
         m_Scene->RemoveObject( m_Instance );
     }
 
-    m_Instance = new Core::Curve( m_Scene, new Content::Curve() );
-
+    m_Instance = new Curve();
+    m_Instance->SetOwner( m_Scene );
     m_Instance->SetSelected( true );
-
     m_Instance->SetTransient( true );
-
     m_Instance->SetCurveType( s_CurveType );
-
     m_Scene->AddObject( m_Instance );
-    PointPtr point = new Core::Point( m_Scene, new Content::Point( position ) );
+
+    CurveControlPointPtr point = new CurveControlPoint();
+    point->SetOwner( m_Scene );
     point->SetParent( m_Instance );
+    point->SetPosition( position );
     point->SetTransient( true );
     m_Scene->AddObject( point );
 
@@ -202,9 +201,11 @@ bool CurveCreateTool::MouseDown( const MouseButtonInput& e )
         Math::Vector3 position;
         PickPosition( e.GetPosition().x, e.GetPosition().y, position );
 
-        PointPtr point = new Core::Point( m_Scene, new Content::Point( position ) );
+        CurveControlPointPtr point = new CurveControlPoint();
+        point->SetOwner( m_Scene );
         point->SetParent( m_Instance );
         point->SetTransient( true );
+        point->SetPosition( position );
         m_Scene->AddObject( point );
 
         m_Instance->Dirty();
@@ -226,7 +227,7 @@ void CurveCreateTool::MouseMove( const MouseMoveInput& e )
             Math::Vector3 position;
             PickPosition( e.GetPosition().x, e.GetPosition().y, position );
 
-            Core::Point* current = m_Instance->GetControlPointByIndex( countControlPoints - 1 );
+            CurveControlPoint* current = m_Instance->GetControlPointByIndex( countControlPoints - 1 );
             current->SetPosition( position );
 
             m_Instance->Dirty();
@@ -304,19 +305,19 @@ void CurveCreateTool::CreateProperties()
 
             {
                 tostringstream str;
-                str << Content::CurveTypes::Linear;
+                str << CurveTypes::Linear;
                 items.push_back( Inspect::ChoiceItem( TXT( "Linear" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << Content::CurveTypes::BSpline;
+                str << CurveTypes::BSpline;
                 items.push_back( Inspect::ChoiceItem( TXT( "BSpline" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << Content::CurveTypes::CatmullRom;
+                str << CurveTypes::CatmullRom;
                 items.push_back( Inspect::ChoiceItem( TXT( "Catmull-Rom" ), str.str() ) );
             }
 
@@ -400,7 +401,7 @@ void CurveCreateTool::SetCurveType( int selection )
 {
     if ( m_Instance.ReferencesObject() )
     {
-        m_Instance->SetCurveType( (Content::CurveType) selection );  
+        m_Instance->SetCurveType( (CurveType) selection );  
         m_Scene->Execute( true );
     }
 }

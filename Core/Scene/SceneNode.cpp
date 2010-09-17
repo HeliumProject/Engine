@@ -1,7 +1,6 @@
 /*#include "Precompile.h"*/
 #include "Core/Scene/SceneNode.h"
 
-#include "Core/Content/Nodes/ContentSceneNode.h"
 #include "Core/Scene/SceneNodeType.h"
 #include "Core/Scene/SceneNodePanel.h"
 #include "Core/Scene/SceneGraph.h"
@@ -15,9 +14,17 @@ using namespace Helium::Core;
 
 REFLECT_DEFINE_ABSTRACT( SceneNode );
 
+void SceneNode::EnumerateClass( Reflect::Compositor<SceneNode>& comp )
+{
+    comp.AddField( &SceneNode::m_ID,            "m_ID",             Reflect::FieldFlags::ReadOnly );
+    comp.AddField( &SceneNode::m_DefaultName,   "m_DefaultName",    Reflect::FieldFlags::Hide );
+    comp.AddField( &SceneNode::m_GivenName,     "m_GivenName",      Reflect::FieldFlags::Hide );
+    comp.AddField( &SceneNode::m_UseGivenName,  "m_UseGivenName",   Reflect::FieldFlags::Hide );
+}
+
 void SceneNode::InitializeType()
 {
-    Reflect::RegisterClassType< Core::SceneNode >( TXT( "Core::SceneNode" ) );
+    Reflect::RegisterClassType< Core::SceneNode >();
 
     PropertiesGenerator::InitializePanel( TXT( "Scene Node" ), CreatePanelSignature::Delegate( &SceneNode::CreatePanel ));
 }
@@ -27,12 +34,13 @@ void SceneNode::CleanupType()
     Reflect::UnregisterClassType< Core::SceneNode >();
 }
 
-SceneNode::SceneNode( Core::Scene* owner, Content::SceneNode* data )
-: m_IsInitialized( false )
+SceneNode::SceneNode()
+: m_ID ( TUID::Generate() )
+, m_UseGivenName( false )
+, m_IsInitialized( false )
 , m_IsSelected( false )
 , m_IsTransient( false )
-, m_Package( data )
-, m_Owner( owner )
+, m_Owner( NULL )
 , m_Graph( NULL )
 , m_NodeType( NULL )
 , m_VisitedID( 0 )
@@ -48,41 +56,38 @@ SceneNode::~SceneNode()
 
 const TUID& SceneNode::GetID() const
 {
-    return GetPackage<Content::SceneNode>()->m_ID;
+    return m_ID;
 }
 
 void SceneNode::SetID( const TUID& id )
 {
-    GetPackage<Content::SceneNode>()->m_ID = id;
+    m_ID = id;
 }
 
 tstring SceneNode::GenerateName() const
 {
-    tstring name = GetPackage()->GetClass()->m_UIName;
+    tstring name = GetClass()->m_UIName;
     name[0] = tolower( name[0] );
     name += TXT( "1" );
-
     return name;
 }
 
 const tstring& SceneNode::GetName() const
 {
-    return GetPackage<Content::SceneNode>()->GetName();
+    return (!m_GivenName.empty() && m_UseGivenName) ? m_GivenName : m_DefaultName;
 }
 
 void SceneNode::SetName(const tstring& value)
 {
-    Content::SceneNode* node = GetPackage<Content::SceneNode>();
-
     m_NameChanging.Raise( SceneNodeChangeArgs( this ) );
 
-    if ( node->m_UseGivenName )
+    if ( m_UseGivenName )
     {
-        node->m_GivenName = value;
+        m_GivenName = value;
     }
     else
     {
-        node->m_DefaultName = value;
+        m_DefaultName = value;
     }
 
     m_NameChanged.Raise( SceneNodeChangeArgs( this ) );
@@ -90,29 +95,25 @@ void SceneNode::SetName(const tstring& value)
 
 bool SceneNode::UseGivenName() const
 {
-    return GetPackage<Content::SceneNode>()->m_UseGivenName;
+    return m_UseGivenName;
 }
 
 void SceneNode::SetUseGivenName(bool use)
 {
-    Content::SceneNode* node = GetPackage<Content::SceneNode>();
+    tstring oldName = GetName();
 
-    tstring oldName = node->GetName();
+    m_UseGivenName = use;
 
-    node->m_UseGivenName = use;
-
-    m_Owner->Rename( this, use ? node->GetName() : GenerateName(), oldName );
+    m_Owner->Rename( this, use ? GetName() : GenerateName(), oldName );
 }
 
 void SceneNode::SetGivenName(const tstring& newName)
 {
-    Content::SceneNode* node = GetPackage<Content::SceneNode>();
-
-    tstring oldName = node->GetName();
+    tstring oldName = GetName();
 
     // we are setting the given name so mark it so
     // in order to get the m_GivenName used in SetName
-    node->m_UseGivenName = true; 
+    m_UseGivenName = true; 
 
     // this may generate us a name if we conflict with someone else
     // however, it will still be the given name, and we will still be
@@ -465,6 +466,50 @@ void SceneNode::Execute(bool interactively)
     m_Owner->Execute(interactively);
 }
 
+#pragma TODO("Remove this constness")
+
+void SceneNode::GetState( Reflect::ElementPtr& state ) const
+{
+    const_cast<SceneNode*>(this)->Pack();
+
+    state = const_cast<SceneNode*>(this)->Clone();
+}
+
+void SceneNode::SetState( const Reflect::ElementPtr& state )
+{
+    if ( !state->Equals( this ) )
+    {
+        state->CopyTo( this );
+        Unpack();
+        RaiseChanged();
+    }
+}
+
+Undo::CommandPtr SceneNode::SnapShot( Reflect::Element* newState )
+{
+    if ( newState == NULL )
+    {
+        return new Undo::PropertyCommand<Reflect::ElementPtr>( new Helium::MemberProperty<SceneNode, Reflect::ElementPtr> (this, &SceneNode::GetState, &SceneNode::SetState) );
+    }
+
+    return new Undo::PropertyCommand<Reflect::ElementPtr>( new Helium::MemberProperty<SceneNode, Reflect::ElementPtr> (this, &SceneNode::GetState, &SceneNode::SetState), Reflect::ElementPtr( newState ) );
+}
+
+bool SceneNode::IsSelectable() const
+{
+    return true;
+}
+
+bool SceneNode::IsSelected() const
+{
+    return m_IsSelected;
+}
+
+void SceneNode::SetSelected(bool selected)
+{
+    m_IsSelected = selected;
+}
+
 void SceneNode::ConnectProperties(EnumerateElementArgs& args)
 {
 
@@ -529,46 +574,4 @@ void SceneNode::SetMembership( const tstring& layers )
     // This function is required to generate the UI that lists the layer membership.
     // It doesn't do anything and you shouldn't be calling it.
     HELIUM_BREAK();
-}
-
-void SceneNode::GetState( Reflect::ElementPtr& state ) const
-{
-    const_cast<SceneNode*>(this)->Pack();
-
-    state = m_Package->Clone();
-}
-
-void SceneNode::SetState( const Reflect::ElementPtr& state )
-{
-    if ( !state->Equals( m_Package ) )
-    {
-        state->CopyTo( m_Package );
-        Unpack();
-        m_Package->RaiseChanged();
-    }
-}
-
-Undo::CommandPtr SceneNode::SnapShot( Reflect::Element* newState )
-{
-    if ( newState == NULL )
-    {
-        return new Undo::PropertyCommand<Reflect::ElementPtr>( new Helium::MemberProperty<SceneNode, Reflect::ElementPtr> (this, &SceneNode::GetState, &SceneNode::SetState) );
-    }
-
-    return new Undo::PropertyCommand<Reflect::ElementPtr>( new Helium::MemberProperty<SceneNode, Reflect::ElementPtr> (this, &SceneNode::GetState, &SceneNode::SetState), Reflect::ElementPtr( newState ) );
-}
-
-bool SceneNode::IsSelectable() const
-{
-    return true;
-}
-
-bool SceneNode::IsSelected() const
-{
-    return m_IsSelected;
-}
-
-void SceneNode::SetSelected(bool selected)
-{
-    m_IsSelected = selected;
 }

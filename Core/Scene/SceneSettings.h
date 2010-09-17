@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Core/API.h"
-#include "Core/Content/NodeVisibility.h"
 #include "Core/Scene/Manipulator.h"
 #include "Core/Scene/TranslateManipulator.h"
 #include "Core/MRUData.h"
@@ -16,7 +15,6 @@ namespace Helium
             SceneSettings();
 
             MRUData* GetMRU();
-            Content::NodeVisibility* GetDefaultNodeVisibility(); 
 
             f32 ScaleManipulatorSize() const;
             bool ScaleManipulatorGridSnap() const;
@@ -35,7 +33,6 @@ namespace Helium
 
         private:
             MRUDataPtr m_MRU;
-            Content::NodeVisibilityPtr m_DefaultNodeVisibility; 
 
             f32 m_ScaleManipulatorSize;
             bool m_ScaleManipulatorGridSnap;
@@ -56,7 +53,6 @@ namespace Helium
             static void EnumerateClass( Reflect::Compositor<SceneSettings>& comp )
             {
                 comp.AddField( &SceneSettings::m_MRU, "m_MRU" );
-                comp.AddField( &SceneSettings::m_DefaultNodeVisibility, "m_DefaultNodeVisibility" );
 
                 comp.AddField( &SceneSettings::m_ScaleManipulatorSize, "m_ScaleManipulatorSize" );
                 comp.AddField( &SceneSettings::m_ScaleManipulatorGridSnap, "m_ScaleManipulatorGridSnap" );

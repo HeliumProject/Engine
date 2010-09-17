@@ -33,12 +33,12 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SceneNodeDumbP
         static const tstring helpText = TXT( "This sets the path on disk of the entity instance." );
         m_Generator->AddLabel( TXT( "Class Path" ) )->a_HelpText.Set( helpText );
 
-        m_EntityPath = m_Generator->AddValue<Core::EntityInstance, tstring>( m_Selection, &Core::EntityInstance::GetEntityAssetPath, &Core::EntityInstance::SetEntityAssetPath );
+        m_EntityPath = m_Generator->AddValue<EntityInstance, tstring>( m_Selection, &EntityInstance::GetEntityPath, &EntityInstance::SetEntityPath );
         m_EntityPath->a_HelpText.Set( helpText );
         m_EntityPath->e_ControlChanging.AddMethod( this, &EntityPanel::OnEntityAssetChanging );
         m_EntityPath->e_ControlChanged.AddMethod( this, &EntityPanel::OnEntityAssetChanged );
 
-        Inspect::FileDialogButton* fileButton = m_Generator->AddFileDialogButton<Core::EntityInstance, tstring>( m_Selection, &Core::EntityInstance::GetEntityAssetPath, &Core::EntityInstance::SetEntityAssetPath );
+        Inspect::FileDialogButton* fileButton = m_Generator->AddFileDialogButton<EntityInstance, tstring>( m_Selection, &EntityInstance::GetEntityPath, &EntityInstance::SetEntityPath );
         fileButton->e_ControlChanging.AddMethod( this, &EntityPanel::OnEntityAssetChanging );
         fileButton->e_ControlChanged.AddMethod( this, &EntityPanel::OnEntityAssetChanged );
         fileButton->a_HelpText.Set( TXT( "Clicking this button will allow you to select a different entity from the disk for this instance." ) );
@@ -83,7 +83,7 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SceneNodeDumbP
     {
         static const tstring helpText = TXT( "This determines if a pointer should be drawn in the 3d view where this entity is placed." );
         m_Generator->AddLabel( TXT( "Show Pointer" ) )->a_HelpText.Set( helpText );
-        m_Generator->AddCheckBox<Core::EntityInstance, bool>( m_Selection, &Core::EntityInstance::IsPointerVisible, &Core::EntityInstance::SetPointerVisible, false )->a_HelpText.Set( helpText );
+        m_Generator->AddCheckBox<EntityInstance, bool>( m_Selection, &EntityInstance::IsPointerVisible, &EntityInstance::SetPointerVisible, false )->a_HelpText.Set( helpText );
     }
     m_Generator->Pop();
 
@@ -91,7 +91,7 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SceneNodeDumbP
     {
         static const tstring helpText = TXT( "This determines if the bounding box for the entity should be drawn in the 3d view where this entity is placed." );
         m_Generator->AddLabel( TXT( "Show Bounds" ) )->a_HelpText.Set( helpText );
-        m_Generator->AddCheckBox<Core::EntityInstance, bool>( m_Selection, &Core::EntityInstance::IsBoundsVisible, &Core::EntityInstance::SetBoundsVisible, false )->a_HelpText.Set( helpText );
+        m_Generator->AddCheckBox<EntityInstance, bool>( m_Selection, &EntityInstance::IsBoundsVisible, &EntityInstance::SetBoundsVisible, false )->a_HelpText.Set( helpText );
     }
     m_Generator->Pop();
 
@@ -99,7 +99,7 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SceneNodeDumbP
     {
         static const tstring helpText = TXT( "This determines if the entity's geometry should be drawn in the 3d view." );
         m_Generator->AddLabel( TXT( "Show Geometry" ) )->a_HelpText.Set( helpText );
-        m_Generator->AddCheckBox<Core::EntityInstance, bool>( m_Selection, &Core::EntityInstance::IsGeometryVisible,  &Core::EntityInstance::SetGeometryVisible, false )->a_HelpText.Set( helpText );
+        m_Generator->AddCheckBox<EntityInstance, bool>( m_Selection, &EntityInstance::IsGeometryVisible,  &EntityInstance::SetGeometryVisible, false )->a_HelpText.Set( helpText );
     }
     m_Generator->Pop();
 }
@@ -137,7 +137,7 @@ void EntityPanel::OnEntityAssetChanged( const Inspect::ControlChangedArgs& args 
 
 void EntityPanel::OnEntityAssetRefresh( const Inspect::ButtonClickedArgs& args )
 {
-    Core::Scene* scene = NULL;
+    Scene* scene = NULL;
 
     // when we refresh, reload the common class set information in case
     // we did something like reexport an art class, while luna is still opened
@@ -149,11 +149,11 @@ void EntityPanel::OnEntityAssetRefresh( const Inspect::ButtonClickedArgs& args )
     OS_SceneNodeDumbPtr::Iterator selectionEnd = m_Selection.End();
     for (; selectionIter != selectionEnd; ++selectionIter )
     {
-        Core::EntityInstance* entity = Reflect::ObjectCast< Core::EntityInstance >( *selectionIter );
+        EntityInstance* entity = Reflect::ObjectCast< EntityInstance >( *selectionIter );
 
         if ( !scene )
         {
-            Core::SceneNode* node = Reflect::ObjectCast< Core::SceneNode >( *selectionIter );
+            SceneNode* node = Reflect::ObjectCast< SceneNode >( *selectionIter );
             scene = node->GetOwner();
         }
 
@@ -166,7 +166,7 @@ void EntityPanel::OnEntityAssetRefresh( const Inspect::ButtonClickedArgs& args )
         {
             for ( int i=0; i<GeometryModes::Count; i++ )
             {
-                Core::Scene* nestedScene = entity->GetNestedScene(entity->GetOwner()->GetViewport()->GetGeometryMode());
+                Scene* nestedScene = entity->GetNestedScene(entity->GetOwner()->GetViewport()->GetGeometryMode());
 
                 if (nestedScene)
                 {
@@ -208,10 +208,10 @@ void EntityPanel::OnEntityAssetEditAsset( const Inspect::ButtonClickedArgs& args
     OS_SceneNodeDumbPtr::Iterator selectionEnd = m_Selection.End();
     for ( ; selectionIter != selectionEnd; ++selectionIter )
     {
-        Core::EntityInstance* entity = Reflect::ObjectCast< Core::EntityInstance >( *selectionIter );
+        EntityInstance* entity = Reflect::ObjectCast< EntityInstance >( *selectionIter );
         if ( entity )
         {
-            tstring fileToEdit = entity->GetEntityAssetPath();
+            tstring fileToEdit = entity->GetEntityPath();
             if ( !fileToEdit.empty() )
             {
                 files.insert( fileToEdit );

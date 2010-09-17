@@ -1,72 +1,74 @@
 /*#include "Precompile.h"*/
 #include "LocatorType.h"
 
-#include "Locator.h"
+#include "Core/Scene/Locator.h"
 #include "Core/Scene/Scene.h"
-
 #include "Core/Scene/Viewport.h"
-#include "Color.h"
-
-#include "PrimitiveLocator.h"
-#include "PrimitiveCube.h"
+#include "Core/Scene/Color.h"
+#include "Core/Scene/PrimitiveLocator.h"
+#include "Core/Scene/PrimitiveCube.h"
 
 using namespace Helium;
 using namespace Helium::Core;
 
-REFLECT_DEFINE_ABSTRACT(Core::LocatorType);
+REFLECT_DEFINE_ABSTRACT(LocatorType);
 
 void LocatorType::InitializeType()
 {
-  Reflect::RegisterClassType< Core::LocatorType >( TXT( "Core::LocatorType" ) );
+    Reflect::RegisterClassType< LocatorType >( TXT( "LocatorType" ) );
 }
 
 void LocatorType::CleanupType()
 {
-  Reflect::UnregisterClassType< Core::LocatorType >();
+    Reflect::UnregisterClassType< LocatorType >();
 }
 
-LocatorType::LocatorType( Core::Scene* scene, i32 instanceType )
-: Core::InstanceType( scene, instanceType )
+LocatorType::LocatorType( Scene* scene, i32 instanceType )
+: InstanceType( scene, instanceType )
 {
-  m_Locator = new Core::PrimitiveLocator( scene->GetViewport()->GetResources() );
-  m_Locator->Update();
+    m_Locator = new PrimitiveLocator( scene->GetViewport()->GetResources() );
+    m_Locator->Update();
 
-  m_Cube = new Core::PrimitiveCube( scene->GetViewport()->GetResources() );
-  m_Cube->Update();
+    m_Cube = new PrimitiveCube( scene->GetViewport()->GetResources() );
+    m_Cube->Update();
 }
 
 LocatorType::~LocatorType()
 {
-  delete m_Locator;
-  delete m_Cube;
+    delete m_Locator;
+    delete m_Cube;
 }
 
 void LocatorType::Create()
 {
-  m_Locator->Create();
-  m_Cube->Create();
+    __super::Create();
+
+    m_Locator->Create();
+    m_Cube->Create();
 }
 
 void LocatorType::Delete()
 {
-  m_Locator->Delete();
-  m_Cube->Delete();
+    __super::Delete();
+
+    m_Locator->Delete();
+    m_Cube->Delete();
 }
 
-const Core::Primitive* LocatorType::GetShape( Content::LocatorShape shape ) const
+const Primitive* LocatorType::GetShape( LocatorShape shape ) const
 {
-  switch (shape)
-  {
-  case Content::LocatorShapes::Cross:
+    switch (shape)
     {
-      return m_Locator;
+    case LocatorShapes::Cross:
+        {
+            return m_Locator;
+        }
+
+    case LocatorShapes::Cube:
+        {
+            return m_Cube;
+        }
     }
 
-  case Content::LocatorShapes::Cube:
-    {
-      return m_Cube;
-    }
-  }
-
-  return NULL;
+    return NULL;
 }

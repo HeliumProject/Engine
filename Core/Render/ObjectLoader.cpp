@@ -14,56 +14,53 @@ namespace Helium
 {
     namespace Core
     {
-        namespace Render
+        struct IdxSet 
         {
-            struct IdxSet 
-            {
-                u32 pIndex;
-                u32 nIndex;
-                u32 tIndex;
-                u32 tanIndex;
-                u32 cIndex;
+            u32 pIndex;
+            u32 nIndex;
+            u32 tIndex;
+            u32 tanIndex;
+            u32 cIndex;
 
-                bool operator< ( const IdxSet &rhs) const 
+            bool operator< ( const IdxSet &rhs) const 
+            {
+                if (pIndex < rhs.pIndex)
+                    return true;
+                else if (pIndex == rhs.pIndex) 
                 {
-                    if (pIndex < rhs.pIndex)
+                    if (nIndex < rhs.nIndex)
                         return true;
-                    else if (pIndex == rhs.pIndex) 
-                    {
-                        if (nIndex < rhs.nIndex)
+                    else if (nIndex == rhs.nIndex) 
+                    {            
+                        if ( tIndex < rhs.tIndex)
                             return true;
-                        else if (nIndex == rhs.nIndex) 
-                        {            
-                            if ( tIndex < rhs.tIndex)
+                        else if ( tIndex == rhs.tIndex) 
+                        {
+                            if (tanIndex < rhs.tanIndex)
                                 return true;
-                            else if ( tIndex == rhs.tIndex) 
-                            {
-                                if (tanIndex < rhs.tanIndex)
-                                    return true;
-                                else if (tanIndex == rhs.tanIndex)
-                                    return (cIndex < rhs.cIndex);
-                            }
+                            else if (tanIndex == rhs.tanIndex)
+                                return (cIndex < rhs.cIndex);
                         }
                     }
-
-                    return false;
                 }
-            };
-        }
+
+                return false;
+            }
+        };
     }
 }
 
-Render::ObjectLoader::ObjectLoader()
+ObjectLoader::ObjectLoader()
 : m_posSize( 3 )
 , m_tcSize( 2 )
 {
 }
 
-Render::ObjectLoader::~ObjectLoader()
+ObjectLoader::~ObjectLoader()
 {
 }
 
-void Render::ObjectLoader::Compile(bool flip)
+void ObjectLoader::Compile(bool flip)
 {
     // make sure the mesh is fully specified
     InsertColors();
@@ -164,7 +161,7 @@ void Render::ObjectLoader::Compile(bool flip)
 
 //////////////////////////////////////////////////////////////////////
 // Insert dummy white colors in the mesh if it wasn't loaded with any
-void Render::ObjectLoader::InsertColors()
+void ObjectLoader::InsertColors()
 {
     // we already have colors
     if (m_colors.size()>0)
@@ -188,7 +185,7 @@ void Render::ObjectLoader::InsertColors()
 
 //////////////////////////////////////////////////////////////////////
 // Insert spherically mapped UVs
-void Render::ObjectLoader::InsertTexCoords()
+void ObjectLoader::InsertTexCoords()
 {
     // we already have colors
     if (m_texcoords.size()>0)
@@ -217,7 +214,7 @@ void Render::ObjectLoader::InsertTexCoords()
 
 
 //////////////////////////////////////////////////////////////////////
-void Render::ObjectLoader::SetNoTangents()
+void ObjectLoader::SetNoTangents()
 {
     // delete the existing tangents
 
@@ -239,7 +236,7 @@ void Render::ObjectLoader::SetNoTangents()
 
 // compute tangents in the U direction (binormal is V direction)
 //////////////////////////////////////////////////////////////////////
-void Render::ObjectLoader::ComputeTangents() 
+void ObjectLoader::ComputeTangents() 
 {
     //make sure tangents don't already exist
     if ( m_sTangents.size()>0) 
@@ -408,7 +405,7 @@ void Render::ObjectLoader::ComputeTangents()
 //
 //compute vertex normals
 //////////////////////////////////////////////////////////////////////
-void Render::ObjectLoader::ComputeNormals() 
+void ObjectLoader::ComputeNormals() 
 {
     // don't recompute normals
     if (m_normals.size()>0)
@@ -544,7 +541,7 @@ void Render::ObjectLoader::ComputeNormals()
 
 
 //////////////////////////////////////////////////////////////////////
-void Render::ObjectLoader::ComputeBoundingBox( D3DXVECTOR3 &minVal, D3DXVECTOR3 &maxVal) 
+void ObjectLoader::ComputeBoundingBox( D3DXVECTOR3 &minVal, D3DXVECTOR3 &maxVal) 
 {
     if (m_positions.empty())
         return;
@@ -571,7 +568,7 @@ void Render::ObjectLoader::ComputeBoundingBox( D3DXVECTOR3 &minVal, D3DXVECTOR3 
 }
 
 //////////////////////////////////////////////////////////////////////
-void Render::ObjectLoader::Rescale( float radius, D3DXVECTOR3& r, D3DXVECTOR3& center) 
+void ObjectLoader::Rescale( float radius, D3DXVECTOR3& r, D3DXVECTOR3& center) 
 {
     if ( m_positions.empty())
         return;
@@ -589,7 +586,7 @@ void Render::ObjectLoader::Rescale( float radius, D3DXVECTOR3& r, D3DXVECTOR3& c
 }
 
 //////////////////////////////////////////////////////////////////////
-u32 Render::ObjectLoader::GetNumFragments( int bangleIndex )
+u32 ObjectLoader::GetNumFragments( int bangleIndex )
 {
     if ( bangleIndex < 0 )
     {
@@ -597,7 +594,7 @@ u32 Render::ObjectLoader::GetNumFragments( int bangleIndex )
     }
 
     u32 numFragments = 0;
-    for ( std::vector<Render::ShaderFrag>::iterator fragItr = m_fragments.begin(), fragEnd = m_fragments.end(); fragItr != fragEnd; ++fragItr )
+    for ( std::vector<ShaderFrag>::iterator fragItr = m_fragments.begin(), fragEnd = m_fragments.end(); fragItr != fragEnd; ++fragItr )
     {
         if ( (*fragItr).m_bangle_index == bangleIndex )
         {

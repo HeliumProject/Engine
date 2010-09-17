@@ -11,22 +11,22 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-Content::LocatorShape LocatorCreateTool::s_Shape = Content::LocatorShapes::Cross;
+LocatorShape LocatorCreateTool::s_Shape = LocatorShapes::Cross;
 
-REFLECT_DEFINE_ABSTRACT(Core::LocatorCreateTool);
+REFLECT_DEFINE_ABSTRACT(LocatorCreateTool);
 
 void LocatorCreateTool::InitializeType()
 {
-    Reflect::RegisterClassType< Core::LocatorCreateTool >( TXT( "Core::LocatorCreateTool" ) );
+    Reflect::RegisterClassType< LocatorCreateTool >( TXT( "LocatorCreateTool" ) );
 }
 
 void LocatorCreateTool::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::LocatorCreateTool >();
+    Reflect::UnregisterClassType< LocatorCreateTool >();
 }
 
-LocatorCreateTool::LocatorCreateTool(Core::Scene* scene, PropertiesGenerator* generator)
-: Core::CreateTool (scene, generator)
+LocatorCreateTool::LocatorCreateTool(Scene* scene, PropertiesGenerator* generator)
+: CreateTool (scene, generator)
 {
 
 }
@@ -36,15 +36,15 @@ LocatorCreateTool::~LocatorCreateTool()
 
 }
 
-Core::TransformPtr LocatorCreateTool::CreateNode()
+TransformPtr LocatorCreateTool::CreateNode()
 {
 #ifdef SCENE_DEBUG_RUNTIME_DATA_SELECTION
 
-    Content::LocatorPtr v = new Content::Locator( s_Shape );
+    LocatorPtr v = new Locator( s_Shape );
 
     v->RectifyRuntimeData();
 
-    LLocatorPtr locator = new Core::Locator( m_Scene, v );
+    LLocatorPtr locator = new Locator( m_Scene, v );
 
     m_Scene->AddObject( locator );
 
@@ -62,7 +62,9 @@ Core::TransformPtr LocatorCreateTool::CreateNode()
 
 #else
 
-    return new Core::Locator ( m_Scene, new Content::Locator ( s_Shape ) );
+    TransformPtr node = new Locator ();
+    node->SetOwner( m_Scene );
+    return node;
 
 #endif
 }
@@ -75,19 +77,19 @@ void LocatorCreateTool::CreateProperties()
         {
             m_Generator->AddLabel( TXT( "Shape" ) );
 
-            Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::LocatorCreateTool, int>(this, &LocatorCreateTool::GetLocatorShape, &LocatorCreateTool::SetLocatorShape) );
+            Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<LocatorCreateTool, int>(this, &LocatorCreateTool::GetLocatorShape, &LocatorCreateTool::SetLocatorShape) );
             choice->a_IsDropDown.Set( true );
             std::vector< Inspect::ChoiceItem > items;
 
             {
                 tostringstream str;
-                str << Content::LocatorShapes::Cross;
+                str << LocatorShapes::Cross;
                 items.push_back( Inspect::ChoiceItem( TXT( "Cross" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << Content::LocatorShapes::Cube;
+                str << LocatorShapes::Cube;
                 items.push_back( Inspect::ChoiceItem( TXT( "Cube" ), str.str() ) );
             }
 
@@ -107,7 +109,7 @@ int LocatorCreateTool::GetLocatorShape() const
 
 void LocatorCreateTool::SetLocatorShape(int value)
 {
-    s_Shape = static_cast< Content::LocatorShape > (value);
+    s_Shape = static_cast< LocatorShape > (value);
 
     Place(Math::Matrix4::Identity);
 }

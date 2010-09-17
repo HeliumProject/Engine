@@ -4,23 +4,34 @@
 #include "Foundation/Reflect/Object.h"
 #include "Foundation/Container/Insert.h" 
 
-#include "Color.h"
-#include "SceneGraph.h"
-
-#include "EntityInstance.h"
-#include "EntitySet.h"
-#include "HierarchyNodeType.h"
-#include "Layer.h"
+#include "Core/Scene/Color.h"
+#include "Core/Scene/SceneGraph.h"
+#include "Core/Scene/EntityInstance.h"
+#include "Core/Scene/EntitySet.h"
+#include "Core/Scene/HierarchyNodeType.h"
+#include "Core/Scene/Layer.h"
 #include "Core/Scene/Transform.h"
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/SceneManager.h"
-#include "SceneSettings.h"
-#include "SceneVisitor.h"
+#include "Core/Scene/SceneSettings.h"
+#include "Core/Scene/SceneVisitor.h"
 
 using namespace Helium;
 using namespace Helium::Core;
 
 REFLECT_DEFINE_ABSTRACT( Core::HierarchyNode );
+
+void HierarchyNode::EnumerateClass( Reflect::Compositor<HierarchyNode>& comp )
+{
+    comp.AddField( &HierarchyNode::m_ParentID, "m_ParentID" );
+
+    {
+        Reflect::Field* field = comp.AddField( &HierarchyNode::m_Hidden, "m_Hidden" );
+        field->SetProperty( TXT( "HelpText" ), TXT( "This determines if the node is hidden or not." ) );
+    }
+
+    comp.AddField( &HierarchyNode::m_Live, "m_Live" );
+}
 
 void HierarchyNode::InitializeType()
 {
@@ -33,8 +44,10 @@ void HierarchyNode::CleanupType()
     Reflect::UnregisterClassType< Core::HierarchyNode >();
 }
 
-HierarchyNode::HierarchyNode(Core::Scene* scene, Content::HierarchyNode* data) 
-: Core::SceneNode(scene, data)
+HierarchyNode::HierarchyNode() 
+: m_ParentID( Helium::TUID::Null )
+, m_Hidden( false )
+, m_Live( false )
 , m_Parent( NULL )
 , m_Previous( NULL )
 , m_Next( NULL )
@@ -44,14 +57,10 @@ HierarchyNode::HierarchyNode(Core::Scene* scene, Content::HierarchyNode* data)
 , m_Highlighted( false )
 , m_Reactive( false )
 {
-
-    m_VisibilityData = scene->GetVisibility( data->m_ID ); 
-
 }
 
 HierarchyNode::~HierarchyNode()
 {
-
 }
 
 SceneNodeTypePtr HierarchyNode::CreateNodeType( Core::Scene* scene ) const
@@ -90,9 +99,7 @@ void HierarchyNode::Pack()
         parentID = GetParent()->GetID();
     }
 
-    Content::HierarchyNode* node = GetPackage<Content::HierarchyNode>();
-
-    node->m_ParentID = parentID;
+    m_ParentID = parentID;
 }
 
 void HierarchyNode::Unpack()
@@ -118,26 +125,23 @@ void HierarchyNode::SetTransient( bool isTransient )
 
 bool HierarchyNode::IsHidden() const
 {
-    HELIUM_ASSERT(m_VisibilityData); 
-    return m_VisibilityData->GetHiddenNode(); 
+    return m_Hidden; 
 }
 
-void HierarchyNode::SetHidden(bool isHidden)
+void HierarchyNode::SetHidden(bool hidden)
 {
-    HELIUM_ASSERT(m_VisibilityData); 
-    m_VisibilityData->SetHiddenNode(isHidden); 
-
+    m_Hidden = hidden;
     Dirty();
 }
 
 bool HierarchyNode::IsLive() const
 {
-    return GetPackage< Content::HierarchyNode >()->m_Live;
+    return m_Live;
 }
 
 void HierarchyNode::SetLive(bool isLive)
 {
-    GetPackage< Content::HierarchyNode >()->m_Live = isLive;
+    m_Live = isLive;
 }
 
 bool HierarchyNode::IsVisible() const
@@ -323,13 +327,10 @@ HierarchyNodePtr HierarchyNode::Duplicate()
     Pack();
 
     // clone the persistent data into a new instance of content data
-    Content::HierarchyNodePtr data = Reflect::DangerousCast< Content::HierarchyNode > ( GetPackage< Content::HierarchyNode > ()->Clone() );
+    HierarchyNodePtr duplicate = Reflect::AssertCast< HierarchyNode > ( Clone() );
 
     // generate new unique ID 
-    TUID::Generate( data->m_ID ); 
-
-    // have the scene create the correct application object for this data
-    HierarchyNodePtr duplicate = Reflect::ObjectCast< Core::HierarchyNode > ( m_Owner->CreateNode( data ) );
+    TUID::Generate( duplicate->m_ID ); 
 
     // the duplicate must be a part of the dependency graph to hold the parent/child relationship
     m_Graph->AddNode( duplicate );
@@ -368,9 +369,6 @@ HierarchyNodePtr HierarchyNode::Duplicate()
         duplicateChild->SetParent( duplicate );
     }
 
-    Content::NodeVisibilityPtr visibilityData = m_Owner->GetVisibility( duplicate->GetID() ); 
-    m_Owner->GetVisibility( GetID() )->CopyTo( visibilityData );
-
     return duplicate;
 }
 
@@ -408,26 +406,6 @@ Math::AlignedBox HierarchyNode::GetGlobalHierarchyBounds() const
     }
 
     return bounds;
-}
-
-void HierarchyNode::AddParentChangingListener( ParentChangingSignature::Delegate listener )
-{
-    m_ParentChanging.Add( listener );
-}
-
-void HierarchyNode::RemoveParentChangingListener( ParentChangingSignature::Delegate listener )
-{
-    m_ParentChanging.Remove( listener );
-}
-
-void HierarchyNode::AddParentChangedListener( ParentChangedSignature::Delegate listener )
-{
-    m_ParentChanged.Add( listener );
-}
-
-void HierarchyNode::RemoveParentChangedListener( ParentChangedSignature::Delegate listener )
-{
-    m_ParentChanged.Remove( listener );
 }
 
 void HierarchyNode::AddChild(Core::HierarchyNode* c)

@@ -10,27 +10,27 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-static std::vector<Render::Mesh*>         g_loaded_meshes;
-static std::vector<Render::Environment*>  g_loaded_environments;
+static std::vector<RenderMesh*>         g_loaded_meshes;
+static std::vector<RenderEnvironment*>  g_loaded_environments;
 static u32 g_init_count = 0;
 
 // fwd
-void CreateDefaultMeshes(Render::Renderer* render);
-void CreateDefaultEnvironments(Render::Renderer* render);
+void CreateDefaultMeshes(Renderer* render);
+void CreateDefaultEnvironments(Renderer* render);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-Render::Mesh* Render::Scene::ResolveMeshHandle( u32 handle )
+RenderMesh* RenderScene::ResolveMeshHandle( u32 handle )
 {
     return g_loaded_meshes[handle];
 }
 
-Render::Environment* Render::Scene::ResolveEnvironmentHandle( u32 handle )
+RenderEnvironment* RenderScene::ResolveEnvironmentHandle( u32 handle )
 {
     return g_loaded_environments[handle];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-Render::Scene::Scene(Renderer* render)
+RenderScene::RenderScene(Renderer* render)
 {
     if ( ++g_init_count == 1 )
     {
@@ -65,7 +65,7 @@ Render::Scene::Scene(Renderer* render)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-Render::Scene::~Scene()
+RenderScene::~RenderScene()
 {
     // decrement the mesh
     SetMeshHandle( 0xffffffff );
@@ -73,7 +73,7 @@ Render::Scene::~Scene()
     // decrement the env
     if (m_environment!=0xffffffff)
     {
-        Render::Environment* env = ResolveEnvironmentHandle(m_environment);
+        RenderEnvironment* env = ResolveEnvironmentHandle(m_environment);
         if (env->DecrementUsage()==0)
         {
             // delete the environment
@@ -83,7 +83,7 @@ Render::Scene::~Scene()
     // remove references to all the shaders in the shader table
 
     // clean up lights
-    for ( std::vector< Light* >::iterator itr = m_lights.begin(), end = m_lights.end(); itr != end; ++itr )
+    for ( std::vector< RenderLight* >::iterator itr = m_lights.begin(), end = m_lights.end(); itr != end; ++itr )
     {
         if ( (*itr) != NULL )
         {
@@ -99,7 +99,7 @@ Render::Scene::~Scene()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void Render::Scene::SetMeshHandle(u32 handle)
+void RenderScene::SetMeshHandle(u32 handle)
 {
     if (m_mesh_handle!=0xffffffff)
     {
@@ -141,7 +141,7 @@ void Render::Scene::SetMeshHandle(u32 handle)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-void Render::Scene::SetEnvironmentHandle(u32 handle)
+void RenderScene::SetEnvironmentHandle(u32 handle)
 {
     if (m_environment!=0xffffffff)
     {
@@ -160,7 +160,7 @@ void Render::Scene::SetEnvironmentHandle(u32 handle)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-u32 Render::Scene::LoadNewMesh( const tchar* fname, ObjectLoaderPtr loader, int bangleIndex )
+u32 RenderScene::LoadNewMesh( const tchar* fname, ObjectLoaderPtr loader, int bangleIndex )
 {
     Helium::Path path( fname );
 
@@ -213,7 +213,7 @@ u32 Render::Scene::LoadNewMesh( const tchar* fname, ObjectLoaderPtr loader, int 
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-u32 Render::Scene::LoadMesh(const tchar* fname,ObjectLoaderPtr loader, int bangleIndex)
+u32 RenderScene::LoadMesh(const tchar* fname,ObjectLoaderPtr loader, int bangleIndex)
 {
     u32 crc = Helium::StringCrc32(fname);
 
@@ -241,7 +241,7 @@ u32 Render::Scene::LoadMesh(const tchar* fname,ObjectLoaderPtr loader, int bangl
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-u32 Render::Scene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int bangleIndex)
+u32 RenderScene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int bangleIndex)
 {
     tchar meshName[ 1024 ];
     const tchar* fname = name;
@@ -255,7 +255,7 @@ u32 Render::Scene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int ba
 
     u32 frag_count = (u32)loader->m_fragments.size();
 
-    Render::Mesh* result = new Render::Mesh(fname);
+    RenderMesh* result = new RenderMesh(fname);
 
     loader->ComputeBoundingBox(result->m_min,result->m_max);
     D3DXVECTOR3 r = 0.5f*(result->m_max - result->m_min);
@@ -276,7 +276,7 @@ u32 Render::Scene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int ba
     result->m_vert_count = (u32)loader->m_vertices.size()/loader->m_vtxSize;  // size is in floats
     result->m_index_count = total_indices;
 
-    u32 bytes = result->m_vert_count*sizeof(Render::MeshVertex);
+    u32 bytes = result->m_vert_count*sizeof(MeshVertex);
     if ( bytes == 0 )
     {
         Log::Warning( TXT( "Possible legacy file. '%s'\n" ),fname);
@@ -293,7 +293,7 @@ u32 Render::Scene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int ba
     device->CreateVertexBuffer(vec_bytes,D3DUSAGE_WRITEONLY,0,D3DPOOL_MANAGED,&result->m_dbg_tangent,0);
 
     // vertex buffer
-    Render::MeshVertex *p;
+    MeshVertex *p;
     if ( !result->m_verts )
     {
         Log::Warning( TXT( "Possible legacy file. '%s'\n" ),fname);
@@ -355,10 +355,9 @@ u32 Render::Scene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int ba
     }
     result->m_dbg_tangent->Unlock();
 
-
-    result->m_vert_size = sizeof(Render::MeshVertex);
+    result->m_vert_size = sizeof(MeshVertex);
     result->m_fragment_count = loader->GetNumFragments( bangleIndex );
-    result->m_fragments = new Render::Fragment[result->m_fragment_count];
+    result->m_fragments = new Fragment[result->m_fragment_count];
 
     u16 *idx;
     result->m_indices->Lock(0,0,(void**)&idx,0);    
@@ -418,7 +417,7 @@ u32 Render::Scene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int ba
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-u32 Render::Scene::LoadNewEnvironment(const tchar* fname,u32 clear_color)
+u32 RenderScene::LoadNewEnvironment(const tchar* fname,u32 clear_color)
 {
     float r[9];
     float g[9];
@@ -443,7 +442,7 @@ u32 Render::Scene::LoadNewEnvironment(const tchar* fname,u32 clear_color)
     D3DXSHRotate(b1,3,&mat,b);
 
 
-    Render::Environment* env = new Render::Environment(fname);
+    RenderEnvironment* env = new RenderEnvironment(fname);
     env->m_env_texture = cube_tex;
     env->m_clearcolor = clear_color;
 
@@ -461,7 +460,7 @@ u32 Render::Scene::LoadNewEnvironment(const tchar* fname,u32 clear_color)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-u32 Render::Scene::LoadEnvironment(const tchar* fname, u32 clear_color)
+u32 RenderScene::LoadEnvironment(const tchar* fname, u32 clear_color)
 {
     u32 crc = Helium::StringCrc32(fname);
 
@@ -664,21 +663,21 @@ inline D3DXVECTOR3 deriv_uv(D3DXVECTOR3 (*f)(float,float), float u, float v)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-Render::Mesh* InitMesh(Render::Renderer* render,const tchar* name,D3DXVECTOR3 (*func)(float,float),i32 num_u, i32 num_v)
+RenderMesh* InitMesh(Renderer* render,const tchar* name,D3DXVECTOR3 (*func)(float,float),i32 num_u, i32 num_v)
 {
-    Render::Mesh* result = new Render::Mesh(name);
+    RenderMesh* result = new RenderMesh(name);
 
     result->m_vert_count = (num_u + 1) * (num_v + 1);
     result->m_index_count = num_u * num_v * 6;
 
     IDirect3DDevice9* device = render->GetD3DDevice();
 
-    device->CreateVertexBuffer(result->m_vert_count*sizeof(Render::MeshVertex),D3DUSAGE_WRITEONLY,0,D3DPOOL_MANAGED,&result->m_verts,0);
+    device->CreateVertexBuffer(result->m_vert_count*sizeof(MeshVertex),D3DUSAGE_WRITEONLY,0,D3DPOOL_MANAGED,&result->m_verts,0);
     device->CreateIndexBuffer(result->m_index_count*2,D3DUSAGE_WRITEONLY,D3DFMT_INDEX16,D3DPOOL_MANAGED,&result->m_indices,0);
 
     // vertex buffer
     {
-        Render::MeshVertex *p;
+        MeshVertex *p;
         result->m_verts->Lock(0,0,(void**)&p,0);
 
         for (i32 j = 0; j <= num_v; j++)
@@ -749,8 +748,8 @@ Render::Mesh* InitMesh(Render::Renderer* render,const tchar* name,D3DXVECTOR3 (*
     }
 
     // fragments
-    result->m_vert_size = sizeof(Render::MeshVertex);
-    result->m_fragments = new Render::Fragment[1];
+    result->m_vert_size = sizeof(MeshVertex);
+    result->m_fragments = new Fragment[1];
     result->m_fragment_count = 1;
     result->m_fragments->m_orig_shader = render->m_shader_manager.LoadShader( TXT( "@@default" ), true);
     result->m_fragments->m_base_index = 0;
@@ -765,7 +764,7 @@ Render::Mesh* InitMesh(Render::Renderer* render,const tchar* name,D3DXVECTOR3 (*
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void CreateDefaultMeshes(Render::Renderer* render)
+void CreateDefaultMeshes(Renderer* render)
 {
     Log::Print( TXT( "Creating default meshes\n" ) );
     g_loaded_meshes.push_back(InitMesh(render,TXT( "@@torus" ),torus,40,40));
@@ -776,7 +775,7 @@ void CreateDefaultMeshes(Render::Renderer* render)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void Render::Scene::RemoveAllMeshes()
+void RenderScene::RemoveAllMeshes()
 {
     u32 count = (u32)g_loaded_meshes.size();
     for (u32 i=0;i<count;i++)
@@ -805,9 +804,9 @@ static void FillCubeTexture(IDirect3DCubeTexture9* tex, D3DCUBEMAP_FACES face, u
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void CreateDefaultEnvironments(Render::Renderer* render)
+void CreateDefaultEnvironments(Renderer* render)
 {
-    Render::Environment* env = new Render::Environment( TXT( "@@default" ) );
+    RenderEnvironment* env = new RenderEnvironment( TXT( "@@default" ) );
     env->m_clearcolor = D3DCOLOR_ARGB(0x00,0x40,0x40,0x40);
     env->m_env_bias = 0.0f;
     env->m_env_scale = 1.0f;
@@ -866,7 +865,7 @@ void CreateDefaultEnvironments(Render::Renderer* render)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void Render::Scene::RemoveAllEnvironments()
+void RenderScene::RemoveAllEnvironments()
 {
     u32 count = (u32)g_loaded_environments.size();
     for (u32 i=0;i<count;i++)

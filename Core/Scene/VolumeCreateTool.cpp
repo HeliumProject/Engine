@@ -11,7 +11,7 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-Content::VolumeShape VolumeCreateTool::s_Shape = Content::VolumeShapes::Cube;
+VolumeShape VolumeCreateTool::s_Shape = VolumeShapes::Cube;
 
 REFLECT_DEFINE_ABSTRACT(Core::VolumeCreateTool);
 
@@ -40,7 +40,7 @@ Core::TransformPtr VolumeCreateTool::CreateNode()
 {
 #ifdef SCENE_DEBUG_RUNTIME_DATA_SELECTION
 
-    Content::VolumePtr v = new Content::Volume( s_Shape );
+    VolumePtr v = new Volume( s_Shape );
 
     v->RectifyRuntimeData();
 
@@ -62,11 +62,10 @@ Core::TransformPtr VolumeCreateTool::CreateNode()
 
 #else
 
-    Content::VolumePtr volume = new Content::Volume();
-
-    volume->m_Shape = s_Shape;
-
-    return new Core::Volume ( m_Scene, volume );
+    VolumePtr volume = new Volume();
+    volume->SetOwner( m_Scene );
+    volume->SetShape( s_Shape );
+    return volume;
 
 #endif
 }
@@ -85,25 +84,25 @@ void VolumeCreateTool::CreateProperties()
 
             {
                 tostringstream str;
-                str << Content::VolumeShapes::Cube;
+                str << VolumeShapes::Cube;
                 items.push_back( Inspect::ChoiceItem( TXT( "Cube" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << Content::VolumeShapes::Cylinder;
+                str << VolumeShapes::Cylinder;
                 items.push_back( Inspect::ChoiceItem( TXT( "Cylinder" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << Content::VolumeShapes::Sphere;
+                str << VolumeShapes::Sphere;
                 items.push_back( Inspect::ChoiceItem( TXT( "Sphere" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << Content::VolumeShapes::Capsule;
+                str << VolumeShapes::Capsule;
                 items.push_back( Inspect::ChoiceItem( TXT( "Capsule" ), str.str() ) );
             }
 
@@ -123,7 +122,7 @@ int VolumeCreateTool::GetVolumeShape() const
 
 void VolumeCreateTool::SetVolumeShape(int value)
 {
-    s_Shape = static_cast< Content::VolumeShape > (value);
+    s_Shape = static_cast< VolumeShape > (value);
 
     Place(Math::Matrix4::Identity);
 }

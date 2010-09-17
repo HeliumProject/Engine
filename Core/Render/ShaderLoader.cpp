@@ -4,10 +4,10 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-Render::ShaderLoader::ShaderLoader()
+ShaderLoader::ShaderLoader()
 {
 }
 
-Render::ShaderLoader::~ShaderLoader()
+ShaderLoader::~ShaderLoader()
 {
 }

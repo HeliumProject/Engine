@@ -4,7 +4,6 @@
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/SceneManager.h"
 #include "Core/Scene/VolumeType.h"
-#include "Core/Content/Nodes/ContentVolume.h"
 #include "Core/Scene/PropertiesGenerator.h"
 #include "Core/Scene/PrimitiveCube.h"
 #include "Core/Scene/PrimitiveCylinder.h"
@@ -16,28 +15,29 @@ using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
 
-REFLECT_DEFINE_ABSTRACT(Core::Volume);
+REFLECT_DEFINE_ABSTRACT(Volume);
+
+void Volume::EnumerateClass( Reflect::Compositor<Volume>& comp )
+{
+    comp.AddEnumerationField( &Volume::m_Shape, "m_Shape" );
+    comp.AddField( &Volume::m_ShowPointer,      "m_ShowPointer" );
+}
 
 void Volume::InitializeType()
 {
-    Reflect::RegisterClassType< Core::Volume >( TXT( "Core::Volume" ) );
+    Reflect::RegisterClassType< Volume >( TXT( "Volume" ) );
 
     PropertiesGenerator::InitializePanel( TXT( "Volume" ), CreatePanelSignature::Delegate( &Volume::CreatePanel ) );
 }
 
 void Volume::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::Volume >();
+    Reflect::UnregisterClassType< Volume >();
 }
 
-Volume::Volume(Core::Scene* scene)
-: Core::Instance (scene, new Content::Volume ())
-{
-
-}
-
-Volume::Volume(Core::Scene* scene, Content::Volume* volume)
-: Core::Instance ( scene, volume )
+Volume::Volume()
+: m_Shape (VolumeShapes::Cube)
+           
 {
 
 }
@@ -57,10 +57,10 @@ tstring Volume::GetApplicationTypeName() const
     return TXT( "Volume" );
 }
 
-SceneNodeTypePtr Volume::CreateNodeType( Core::Scene* scene ) const
+SceneNodeTypePtr Volume::CreateNodeType( Scene* scene ) const
 {
     // Overridden to create an volume-specific type
-    Core::VolumeType* nodeType = new Core::VolumeType( scene, GetType() );
+    VolumeType* nodeType = new VolumeType( scene, GetType() );
 
     // Set the image index (usually this is handled by the base class, but we aren't calling the base)
     nodeType->SetImageIndex( GetImageIndex() );
@@ -70,12 +70,12 @@ SceneNodeTypePtr Volume::CreateNodeType( Core::Scene* scene ) const
 
 int Volume::GetShape() const
 {
-    return GetPackage< Content::Volume >()->m_Shape;
+    return m_Shape;
 }
 
 void Volume::SetShape( int shape )
 {
-    GetPackage< Content::Volume >()->m_Shape = static_cast< Content::VolumeShape > (shape);
+    m_Shape = static_cast< VolumeShape > (shape);
 }
 
 void Volume::Evaluate(GraphDirection direction)
@@ -92,7 +92,7 @@ void Volume::Evaluate(GraphDirection direction)
             // merge type pointer into our bounding box
             if (m_NodeType)
             {
-                Core::VolumeType* type = Reflect::AssertCast<Core::VolumeType>(m_NodeType);
+                VolumeType* type = Reflect::AssertCast<VolumeType>(m_NodeType);
 
                 if ( IsPointerVisible() )
                 {
@@ -109,7 +109,7 @@ void Volume::Evaluate(GraphDirection direction)
                     m_ObjectBounds.Merge( box );
                 }
 
-                const Core::Primitive* prim = type->GetShape( GetPackage< Content::Volume >()->m_Shape );
+                const Primitive* prim = type->GetShape( m_Shape );
                 if (prim)
                 {
                     m_ObjectBounds.Merge(prim->GetBounds());
@@ -123,8 +123,6 @@ void Volume::Evaluate(GraphDirection direction)
 
 void Volume::Render( RenderVisitor* render )
 {
-    const Content::Volume* package = GetPackage< Content::Volume >();
-
     // pointer is drawn normalized
     if ( IsPointerVisible() )
     {
@@ -141,21 +139,21 @@ void Volume::Render( RenderVisitor* render )
         entry->m_Center = m_ObjectBounds.Center();
         entry->m_Draw = &Volume::DrawShape;
 
-        if ( package->m_TransparentOverride ? package->m_Transparent : Reflect::AssertCast<Core::InstanceType>( m_NodeType )->IsTransparent() )
+        if ( m_TransparentOverride ? m_Transparent : Reflect::AssertCast<InstanceType>( m_NodeType )->IsTransparent() )
         {
             entry->m_Flags |= RenderFlags::DistanceSort;
         }
     }
 
     // don't call __super here, it will draw big ass axes
-    Core::HierarchyNode::Render( render );
+    HierarchyNode::Render( render );
 }
 
 void Volume::DrawPointer( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const Core::Volume* volume = Reflect::ConstAssertCast<Core::Volume>( object );
+    const Volume* volume = Reflect::ConstAssertCast<Volume>( object );
 
-    const Core::VolumeType* type = Reflect::ConstAssertCast<Core::VolumeType>( volume->GetNodeType() );
+    const VolumeType* type = Reflect::ConstAssertCast<VolumeType>( volume->GetNodeType() );
 
     volume->SetMaterial( type->GetMaterial() );
 
@@ -165,18 +163,16 @@ void Volume::DrawPointer( IDirect3DDevice9* device, DrawArgs* args, const SceneN
 
 void Volume::DrawShape( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const Core::Volume* volume = Reflect::ConstAssertCast<Core::Volume>( object );
+    const Volume* volume = Reflect::ConstAssertCast<Volume>( object );
 
-    const Core::VolumeType* type = Reflect::ConstAssertCast<Core::VolumeType>( volume->GetNodeType() );
-
-    const Content::Volume* package = volume->GetPackage< Content::Volume >();
+    const VolumeType* type = Reflect::ConstAssertCast<VolumeType>( volume->GetNodeType() );
 
     volume->SetMaterial( type->GetMaterial() );
 
-    const Core::Primitive* prim = type->GetShape( volume->GetPackage< Content::Volume >()->m_Shape );
+    const Primitive* prim = type->GetShape( volume->m_Shape );
     if (prim)
     {
-        prim->Draw( args, package->m_SolidOverride ? &package->m_Solid : NULL, package->m_TransparentOverride ? &package->m_Transparent : NULL );
+        prim->Draw( args, volume->m_SolidOverride ? &volume->m_Solid : NULL, volume->m_TransparentOverride ? &volume->m_Transparent : NULL );
     }
 }
 
@@ -184,26 +180,24 @@ bool Volume::Pick( PickVisitor* pick )
 {
     bool result = false;
 
-    Core::VolumeType* type = Reflect::AssertCast<Core::VolumeType>(m_NodeType);
-
-    const Content::Volume* package = GetPackage< Content::Volume >();
+    VolumeType* type = Reflect::AssertCast<VolumeType>(m_NodeType);
 
     pick->SetCurrentObject (this, pick->State().m_Matrix.Normalized());
     result |= type->GetPointer()->Pick (pick);
 
     pick->SetCurrentObject (this, pick->State().m_Matrix);
 
-    const Core::Primitive* prim = type->GetShape( GetPackage< Content::Volume >()->m_Shape );
+    const Primitive* prim = type->GetShape( m_Shape );
     if (prim)
     {
-        result |= prim->Pick(pick, package->m_SolidOverride ? &package->m_Solid : NULL);
+        result |= prim->Pick(pick, m_SolidOverride ? &m_Solid : NULL);
     }
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Returns true if the specified panel is supported by Core::Volume.
+// Returns true if the specified panel is supported by Volume.
 // 
 bool Volume::ValidatePanel(const tstring& name)
 {
@@ -224,32 +218,32 @@ void Volume::CreatePanel( CreatePanelArgs& args )
             static const tstring helpText = TXT( "Select the shape of this volume." );
             args.m_Generator->AddLabel( TXT( "Shape" ) )->a_HelpText.Set( helpText );
 
-            Inspect::Choice* choice = args.m_Generator->AddChoice<Core::Volume, int>(args.m_Selection, &Volume::GetShape, &Volume::SetShape);
+            Inspect::Choice* choice = args.m_Generator->AddChoice<Volume, int>(args.m_Selection, &Volume::GetShape, &Volume::SetShape);
             choice->a_IsDropDown.Set( true );
             choice->a_HelpText.Set( helpText );
             std::vector< Inspect::ChoiceItem > items;
 
             {
                 tostringstream str;
-                str << Content::VolumeShapes::Cube;
+                str << VolumeShapes::Cube;
                 items.push_back( Inspect::ChoiceItem( TXT( "Cube" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << Content::VolumeShapes::Cylinder;
+                str << VolumeShapes::Cylinder;
                 items.push_back( Inspect::ChoiceItem( TXT( "Cylinder" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << Content::VolumeShapes::Sphere;
+                str << VolumeShapes::Sphere;
                 items.push_back( Inspect::ChoiceItem( TXT( "Sphere" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << Content::VolumeShapes::Capsule;
+                str << VolumeShapes::Capsule;
                 items.push_back( Inspect::ChoiceItem( TXT( "Capsule" ), str.str() ) );
             }
 
@@ -262,14 +256,12 @@ void Volume::CreatePanel( CreatePanelArgs& args )
 
 bool Volume::IsPointerVisible() const
 {
-    HELIUM_ASSERT(m_VisibilityData); 
-    return m_VisibilityData->GetShowPointer(); 
+    return m_ShowPointer; 
 }
 
 void Volume::SetPointerVisible(bool visible)
 {
-    HELIUM_ASSERT(m_VisibilityData); 
-    m_VisibilityData->SetShowPointer(visible); 
+    m_ShowPointer = m_ShowPointer;
 
     // we need to dirty to cause our bounds needs to be re-computed
     Dirty();

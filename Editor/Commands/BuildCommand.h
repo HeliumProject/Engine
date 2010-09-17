@@ -8,7 +8,6 @@
 
 #include "Core/Asset/AssetInit.h"
 #include "Core/Asset/AssetClass.h"
-#include "Core/Content/ContentInit.h"
 
 /*
 namespace Helium

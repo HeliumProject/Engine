@@ -95,15 +95,14 @@ Core::TransformPtr EntityInstanceCreateTool::CreateNode()
             }
         }
 
-        EntityPtr entity = new Core::EntityInstance (m_Scene, new Content::EntityInstance( entityClassPath.Get() ) );
+        EntityInstancePtr entityInstance = new EntityInstance ();
+        entityInstance->SetOwner( m_Scene );
+        entityInstance->SetPointerVisible( s_PointerVisible );
+        entityInstance->SetBoundsVisible( s_BoundsVisible );
+        entityInstance->SetGeometryVisible( s_GeometryVisible );
+        entityInstance->Rename( entityInstance->GenerateName() );
 
-        entity->SetPointerVisible( s_PointerVisible );
-        entity->SetBoundsVisible( s_BoundsVisible );
-        entity->SetGeometryVisible( s_GeometryVisible );
-
-        entity->Rename( entity->GenerateName() );
-
-        return entity;
+        return entityInstance;
     }
     catch ( const Helium::Exception& ex )
     {

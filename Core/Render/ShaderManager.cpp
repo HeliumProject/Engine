@@ -13,7 +13,7 @@ using namespace Helium;
 using namespace Helium::Core;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Render::Texture::Texture(const tchar* fname)
+Texture::Texture(const tchar* fname)
 {
     m_filename = fname;  
     m_timestamp = (u64)-1;
@@ -29,7 +29,7 @@ Render::Texture::Texture(const tchar* fname)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Render::Texture::~Texture()
+Texture::~Texture()
 {
     if (m_d3d_texture)
     {
@@ -39,7 +39,7 @@ Render::Texture::~Texture()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Render::Shader::Shader(ShaderManager* sd, const tchar* shader)
+RenderShader::RenderShader(ShaderManager* sd, const tchar* shader)
 {
     m_filename = shader;  
     m_timestamp = (u64)-1;
@@ -55,7 +55,7 @@ Render::Shader::Shader(ShaderManager* sd, const tchar* shader)
     m_textures[3] = sd->LoadTexture( TXT( "@@parallax" ),D3DFMT_UNKNOWN);
     m_textures[4] = sd->LoadTexture( TXT( "@@incan" ),D3DFMT_UNKNOWN);
 
-    m_alpha_type=Render::Shader::ALPHA_OPAQUE;
+    m_alpha_type=RenderShader::ALPHA_OPAQUE;
     m_glosstint[0] = 1.0f;
     m_glosstint[1] = 1.0f;
     m_glosstint[2] = 1.0f;
@@ -76,14 +76,14 @@ Render::Shader::Shader(ShaderManager* sd, const tchar* shader)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Render::Shader::~Shader()
+RenderShader::~RenderShader()
 {
     // reduce the ref counts of the textures this shader was using
-    for (u32 t=0;t<Render::Texture::__SAMPLER_LAST__;t++)
+    for (u32 t=0;t<Texture::__SAMPLER_LAST__;t++)
     {
         if (m_textures[t]!=0xffffffff)
         {
-            Render::Texture* tex = m_sd->ResolveTexture(m_textures[t]);
+            Texture* tex = m_sd->ResolveTexture(m_textures[t]);
             tex->DecrementUsage();
             m_textures[t] = 0xffffffff;
         }
@@ -91,11 +91,11 @@ Render::Shader::~Shader()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Render::Shader::ReplaceTexture(u32 th, u32 slot)
+void RenderShader::ReplaceTexture(u32 th, u32 slot)
 {
     if (m_textures[slot]!=0xffffffff)
     {
-        Render::Texture* current = m_sd->ResolveTexture(m_textures[slot]);
+        Texture* current = m_sd->ResolveTexture(m_textures[slot]);
         if (current->DecrementUsage()==0)
         {
 #pragma TODO("delete now?")
@@ -106,20 +106,20 @@ void Render::Shader::ReplaceTexture(u32 th, u32 slot)
 
     if (th!=0xffffffff)
     {
-        Render::Texture* ntex = m_sd->ResolveTexture(th);
+        Texture* ntex = m_sd->ResolveTexture(th);
         ntex->IncrementUsage();
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Render::ShaderManager::ShaderManager()
+ShaderManager::ShaderManager()
 : m_device ( NULL )
 {
 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Render::ShaderManager::~ShaderManager()
+ShaderManager::~ShaderManager()
 {
     // go thorugh all the shaders and delete them
     u32 shader_count = (u32)m_loaded_shaders.size();
@@ -160,7 +160,7 @@ static void FillTexture(IDirect3DTexture9* tex, u32 val)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Render::ShaderManager::Init(IDirect3DDevice9* device)
+void ShaderManager::Init(IDirect3DDevice9* device)
 {
     Log::Print( TXT( "Default shaders/textures created\n" ) );
     m_device = device;
@@ -184,12 +184,12 @@ void Render::ShaderManager::Init(IDirect3DDevice9* device)
     FillTexture(default_incan,D3DCOLOR_ARGB(0xff,0x0,0x0,0x0));
     FillTexture(default_gpi,D3DCOLOR_ARGB(0xff,0x00,0x0,0x00));  // alpha, gloss,incan,parallax
 
-    Render::Texture* base_texture = new Render::Texture( TXT( "@@base" ) );
-    Render::Texture* normal_texture = new Render::Texture( TXT( "@@normal" ) );
-    Render::Texture* gloss_texture = new Render::Texture( TXT( "@@gloss" ) );
-    Render::Texture* parallax_texture = new Render::Texture( TXT( "@@parallax" ) );
-    Render::Texture* incan_texture = new Render::Texture( TXT( "@@incan" ) );
-    Render::Texture* gpi_texture = new Render::Texture( TXT( "@@gpi" ) );
+    Texture* base_texture = new Texture( TXT( "@@base" ) );
+    Texture* normal_texture = new Texture( TXT( "@@normal" ) );
+    Texture* gloss_texture = new Texture( TXT( "@@gloss" ) );
+    Texture* parallax_texture = new Texture( TXT( "@@parallax" ) );
+    Texture* incan_texture = new Texture( TXT( "@@incan" ) );
+    Texture* gpi_texture = new Texture( TXT( "@@gpi" ) );
 
     base_texture->m_d3d_texture = default_base;
     m_loaded_textures.push_back(base_texture);
@@ -210,13 +210,13 @@ void Render::ShaderManager::Init(IDirect3DDevice9* device)
     m_loaded_textures.push_back(gpi_texture);
 
     // now create the shader (this will internally use the default textures)
-    Render::Shader* sh = new Render::Shader(this, TXT( "@@default" ) );
+    RenderShader* sh = new RenderShader(this, TXT( "@@default" ) );
     AddShader(sh);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // add a shader pointer to the array of loaded shaders
-u32 Render::ShaderManager::AddShader(Render::Shader* sh)
+u32 ShaderManager::AddShader(RenderShader* sh)
 {
     u32 shader_count = (u32)m_loaded_shaders.size();
     u32 handle = 0xffffffff;
@@ -244,11 +244,11 @@ u32 Render::ShaderManager::AddShader(Render::Shader* sh)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // shader is an XML file
-u32 Render::ShaderManager::LoadNewShader( const tchar* fname, ShaderLoaderPtr loader )
+u32 ShaderManager::LoadNewShader( const tchar* fname, ShaderLoaderPtr loader )
 {
     Helium::Path shaderPath( fname );
 
-    Shader* shader = loader->ParseFile( fname, this );
+    RenderShader* shader = loader->ParseFile( fname, this );
 
     if ( shader )
     {
@@ -263,7 +263,7 @@ u32 Render::ShaderManager::LoadNewShader( const tchar* fname, ShaderLoaderPtr lo
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-u32 Render::ShaderManager::LoadShader(const tchar* fname, bool inc, ShaderLoaderPtr loader)
+u32 ShaderManager::LoadShader(const tchar* fname, bool inc, ShaderLoaderPtr loader)
 {
     u32 handle = FindShader(fname);
 
@@ -282,7 +282,7 @@ u32 Render::ShaderManager::LoadShader(const tchar* fname, bool inc, ShaderLoader
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-u32 Render::ShaderManager::FindShader(const tchar* fname)
+u32 ShaderManager::FindShader(const tchar* fname)
 {
     u32 crc = Helium::StringCrc32(fname);
 
@@ -304,21 +304,21 @@ u32 Render::ShaderManager::FindShader(const tchar* fname)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-u32 Render::ShaderManager::DuplicateShader(u32 handle,const tchar* new_shader)
+u32 ShaderManager::DuplicateShader(u32 handle,const tchar* new_shader)
 {
     // convert the handle to a pointer
-    Render::Shader* sh = ResolveShader(handle);
+    RenderShader* sh = ResolveShader(handle);
 
     // this seems like a valid shader, allocate a shader
-    Render::Shader* newsh = new Render::Shader(this,new_shader);
+    RenderShader* newsh = new RenderShader(this,new_shader);
 
     // copy the textures and increment the usage on any that are valid
-    for (u32 t=0;t<Render::Texture::__SAMPLER_LAST__;t++)
+    for (u32 t=0;t<Texture::__SAMPLER_LAST__;t++)
     {
         newsh->m_textures[t] = sh->m_textures[t];
         if (sh->m_textures[t]!=0xffffffff)
         {
-            Render::Texture* tex = ResolveTexture(sh->m_textures[t]);
+            Texture* tex = ResolveTexture(sh->m_textures[t]);
             tex->IncrementUsage();
         }
     }
@@ -344,14 +344,14 @@ u32 Render::ShaderManager::DuplicateShader(u32 handle,const tchar* new_shader)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-u32 Render::ShaderManager::LoadTexture(const tchar* fname,D3DFORMAT fmt, u32 levels,bool inc)
+u32 ShaderManager::LoadTexture(const tchar* fname,D3DFORMAT fmt, u32 levels,bool inc)
 {
     u32 handle = FindTexture(fname);
 
     if (handle==0xffffffff)
     {
         // wasn't found so load the new texture
-        Render::Texture* t = new Render::Texture(fname);
+        Texture* t = new Texture(fname);
 
         if (FAILED(D3DXCreateTextureFromFileEx(m_device,fname,0,0,levels,0,fmt,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,0,0,0,&t->m_d3d_texture)))
         {
@@ -373,7 +373,7 @@ u32 Render::ShaderManager::LoadTexture(const tchar* fname,D3DFORMAT fmt, u32 lev
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool Render::ShaderManager::LoadTextureWithSettings(const Render::TextureSettings& textureSettings, Render::Shader* shader, u32 sampler)
+bool ShaderManager::LoadTextureWithSettings(const TextureSettings& textureSettings, RenderShader* shader, u32 sampler)
 {
     u32 handle = LoadTexture( textureSettings.m_Path.c_str(), textureSettings.m_Format, textureSettings.m_Levels );
 
@@ -382,7 +382,7 @@ bool Render::ShaderManager::LoadTextureWithSettings(const Render::TextureSetting
 
     UpdateTextureSettings(handle, textureSettings);
 
-    Render::Texture* texture = ResolveTexture( handle );
+    Texture* texture = ResolveTexture( handle );
     texture->IncrementUsage();
     shader->m_textures[sampler]=handle;
 
@@ -390,9 +390,9 @@ bool Render::ShaderManager::LoadTextureWithSettings(const Render::TextureSetting
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Render::ShaderManager::UpdateTextureSettings(u32 handle, const Render::TextureSettings& textureSettings)
+void ShaderManager::UpdateTextureSettings(u32 handle, const TextureSettings& textureSettings)
 {
-    Render::Texture* texture = ResolveTexture( handle );
+    Texture* texture = ResolveTexture( handle );
     texture->m_wrap_u = textureSettings.m_WrapU;
     texture->m_wrap_v = textureSettings.m_WrapV;
     texture->m_filter = textureSettings.m_Filter;
@@ -407,7 +407,7 @@ void Render::ShaderManager::UpdateTextureSettings(u32 handle, const Render::Text
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool Render::ShaderManager::ReloadTexture( const tchar* fname )
+bool ShaderManager::ReloadTexture( const tchar* fname )
 {
     u32 handle = FindTexture( fname );
     if ( handle == 0xffffffff )
@@ -420,7 +420,7 @@ bool Render::ShaderManager::ReloadTexture( const tchar* fname )
     u32 level_count = m_loaded_textures[ handle ]->m_d3d_texture->GetLevelCount();
 
     u32 texture_count = (u32) m_loaded_textures.size();
-    Render::Texture* old_texture = m_loaded_textures[ handle ];
+    Texture* old_texture = m_loaded_textures[ handle ];
     m_loaded_textures[ handle ] = 0;
 
     u32 new_handle = LoadTexture(fname, fmt, level_count, false);
@@ -445,7 +445,7 @@ bool Render::ShaderManager::ReloadTexture( const tchar* fname )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-u32 Render::ShaderManager::FindTexture(const tchar* fname)
+u32 ShaderManager::FindTexture(const tchar* fname)
 {
     // NOTE: We only include the name in the CRC, we really should include other info such as the format
     u32 crc = Helium::StringCrc32(fname);
@@ -468,19 +468,19 @@ u32 Render::ShaderManager::FindTexture(const tchar* fname)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Render::Texture* Render::ShaderManager::ResolveTexture(u32 handle)
+Texture* ShaderManager::ResolveTexture(u32 handle)
 {
     return m_loaded_textures[handle];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Render::Shader* Render::ShaderManager::ResolveShader(u32 handle)
+RenderShader* ShaderManager::ResolveShader(u32 handle)
 {
     return m_loaded_shaders[handle];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Render::ShaderManager::SetShaderDefaultTexture(const tchar* shaderFilename, u32 textureIndex)
+void ShaderManager::SetShaderDefaultTexture(const tchar* shaderFilename, u32 textureIndex)
 {
     u32 shaderHandle = FindShader( shaderFilename );
     if ( shaderHandle == 0xffffffff )
@@ -488,24 +488,24 @@ void Render::ShaderManager::SetShaderDefaultTexture(const tchar* shaderFilename,
         return;
     }
 
-    Render::Shader* shader = ResolveShader( shaderHandle );
+    RenderShader* shader = ResolveShader( shaderHandle );
     HELIUM_ASSERT( shader );
 
     switch ( textureIndex )
     {
-    case Render::Texture::SAMPLER_GPI_MAP:
+    case Texture::SAMPLER_GPI_MAP:
         shader->m_flags &= ~SHDR_FLAG_GPI_MAP;
-        shader->ReplaceTexture( FindTexture( TXT( "@@gloss" ) ), Render::Texture::SAMPLER_GLOSS_MAP );
-        shader->ReplaceTexture( FindTexture( TXT( "@@parallax" ) ), Render::Texture::SAMPLER_PARALLAX_MAP );
-        shader->ReplaceTexture( FindTexture( TXT( "@@incan" ) ), Render::Texture::SAMPLER_INCAN_MAP );
+        shader->ReplaceTexture( FindTexture( TXT( "@@gloss" ) ), Texture::SAMPLER_GLOSS_MAP );
+        shader->ReplaceTexture( FindTexture( TXT( "@@parallax" ) ), Texture::SAMPLER_PARALLAX_MAP );
+        shader->ReplaceTexture( FindTexture( TXT( "@@incan" ) ), Texture::SAMPLER_INCAN_MAP );
         break;
 
-    case Render::Texture::SAMPLER_NORMAL_MAP:
-        shader->ReplaceTexture( FindTexture( TXT( "@@normal" ) ), Render::Texture::SAMPLER_NORMAL_MAP );
+    case Texture::SAMPLER_NORMAL_MAP:
+        shader->ReplaceTexture( FindTexture( TXT( "@@normal" ) ), Texture::SAMPLER_NORMAL_MAP );
         break;
 
-    case Render::Texture::SAMPLER_BASE_MAP:
-        shader->ReplaceTexture( FindTexture( TXT( "@@base" ) ), Render::Texture::SAMPLER_BASE_MAP );
+    case Texture::SAMPLER_BASE_MAP:
+        shader->ReplaceTexture( FindTexture( TXT( "@@base" ) ), Texture::SAMPLER_BASE_MAP );
         break;
 
     default:
@@ -514,7 +514,7 @@ void Render::ShaderManager::SetShaderDefaultTexture(const tchar* shaderFilename,
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Render::ShaderManager::UpdateShaderTexture( const tchar* shaderFilename, u32 textureIndex, const Render::TextureSettings& settings )
+void ShaderManager::UpdateShaderTexture( const tchar* shaderFilename, u32 textureIndex, const TextureSettings& settings )
 {
     u32 shader_handle = FindShader( shaderFilename );
     if ( shader_handle == 0xffffffff )
@@ -522,7 +522,7 @@ void Render::ShaderManager::UpdateShaderTexture( const tchar* shaderFilename, u3
         return;
     }
 
-    Render::Shader* sh = ResolveShader( shader_handle );
+    RenderShader* sh = ResolveShader( shader_handle );
     HELIUM_ASSERT( sh );
 
     u32 texture_handle = FindTexture( settings.m_Path.c_str() );
@@ -532,7 +532,7 @@ void Render::ShaderManager::UpdateShaderTexture( const tchar* shaderFilename, u3
         return;
     }
 
-    Render::Texture* tex = ResolveTexture( texture_handle );
+    Texture* tex = ResolveTexture( texture_handle );
     HELIUM_ASSERT( tex );
 
     if ( tex->m_format != settings.m_Format )
@@ -548,14 +548,14 @@ void Render::ShaderManager::UpdateShaderTexture( const tchar* shaderFilename, u3
         sh->ReplaceTexture( texture_handle, textureIndex );
     }
 
-    if ( textureIndex == Render::Texture::SAMPLER_GPI_MAP )
+    if ( textureIndex == Texture::SAMPLER_GPI_MAP )
     {
         sh->m_flags |= SHDR_FLAG_GPI_MAP;
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Render::ShaderManager::GetShaderFilenames( std::vector< tstring >& filenames )
+void ShaderManager::GetShaderFilenames( std::vector< tstring >& filenames )
 {
     for( u32 i = 0; i < m_loaded_shaders.size(); ++i )
     {
@@ -564,7 +564,7 @@ void Render::ShaderManager::GetShaderFilenames( std::vector< tstring >& filename
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Render::ShaderManager::GetTextureFilenames( std::vector< tstring >& filenames )
+void ShaderManager::GetTextureFilenames( std::vector< tstring >& filenames )
 {
     for( u32 i = 0; i < m_loaded_textures.size(); ++i )
     {

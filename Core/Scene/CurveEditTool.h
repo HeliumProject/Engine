@@ -2,7 +2,6 @@
 
 #include "Core/API.h"
 #include "Core/SettingsManager.h"
-#include "Core/Content/Nodes/ContentCurve.h"
 #include "Core/Scene/Curve.h"
 #include "Core/Scene/Tool.h"
 

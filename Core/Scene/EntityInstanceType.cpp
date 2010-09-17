@@ -51,6 +51,8 @@ void EntityType::Reset()
 
 void EntityType::Create()
 {
+    __super::Create();
+
     M_InstanceSetSmartPtr::const_iterator itr = m_Sets.begin();
     M_InstanceSetSmartPtr::const_iterator end = m_Sets.end();
     for ( ; itr != end; ++itr )
@@ -65,6 +67,8 @@ void EntityType::Create()
 
 void EntityType::Delete()
 {
+    __super::Delete();
+
     M_InstanceSetSmartPtr::const_iterator itr = m_Sets.begin();
     M_InstanceSetSmartPtr::const_iterator end = m_Sets.end();
     for ( ; itr != end; ++itr )

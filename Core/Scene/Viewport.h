@@ -367,9 +367,9 @@ namespace Helium
 
         private:
             // callbacks
-            void ReleaseResources( const Render::DeviceStateArgs& args );
-            void AllocateResources( const Render::DeviceStateArgs& args );
-            void CameraMoved( const Core::CameraMovedArgs& args );
+            void ReleaseResources( const DeviceStateArgs& args );
+            void AllocateResources( const DeviceStateArgs& args );
+            void CameraMoved( const CameraMovedArgs& args );
 
             // 
             // Events
@@ -473,7 +473,7 @@ namespace Helium
 
             SettingsManager*        m_SettingsManager;
 
-            Render::DeviceManager   m_DeviceManager;
+            DeviceManager           m_DeviceManager;
             ResourceTracker*        m_ResourceTracker;
             RenderVisitor           m_RenderVisitor;
 

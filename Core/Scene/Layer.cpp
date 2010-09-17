@@ -5,14 +5,20 @@
 #include "Foundation/String/Natural.h"
 #include "Foundation/Log.h"
 
-#include "Foundation/Inspect/Controls/ChoiceControl.h"
-
 #include "Core/Scene/Scene.h"
 
 using namespace Helium;
 using namespace Helium::Core;
 
-REFLECT_DEFINE_ABSTRACT( Core::Layer );
+REFLECT_DEFINE_ABSTRACT( Layer );
+
+void Layer::EnumerateClass( Reflect::Compositor<Layer>& comp )
+{
+  comp.AddField( &Layer::m_Visible,     "m_Visible" );
+  comp.AddField( &Layer::m_Selectable,  "m_Selectable" );
+  comp.AddField( &Layer::m_Members,     "m_Members" );
+  comp.AddField( &Layer::m_Color,       "m_Color" );
+}
 
 void Layer::InitializeType()
 {
@@ -28,10 +34,11 @@ void Layer::CleanupType()
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-Layer::Layer( Core::Scene* scene, Content::Layer* layer )
-: Core::SceneNode( scene, layer )
+Layer::Layer()
+: m_Visible( true )
+, m_Selectable( true )
+, m_Color( 255 )
 {
-    m_VisibilityData = scene->GetVisibility(layer->m_ID); 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -66,14 +73,10 @@ void Layer::Initialize()
 {
     __super::Initialize();
 
-    Content::Layer* layer = GetPackage< Content::Layer >();
-    HELIUM_ASSERT( layer );
-
     m_Descendants.clear();
+
     V_TUID memberIDs;
-    V_TUID::const_iterator itr = layer->m_Members.begin();
-    V_TUID::const_iterator end = layer->m_Members.end();
-    for ( ; itr != end; ++itr )
+    for ( V_TUID::const_iterator itr = m_Members.begin(), end = m_Members.end(); itr != end; ++itr )
     {
         Core::SceneNode* node = m_Owner->FindNode( *itr );
         if ( node )
@@ -93,7 +96,7 @@ void Layer::Initialize()
         }
     }
 
-    layer->m_Members = memberIDs;
+    m_Members = memberIDs;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -105,16 +108,14 @@ void Layer::Pack()
 {
     __super::Pack();
 
-    Content::Layer* layer = GetPackage< Content::Layer >();
-    HELIUM_ASSERT( layer );
-
-    layer->m_Members.clear();
-    layer->m_Members.resize( m_Descendants.size() );
+#pragma TODO("Keep members list up to date as dependencies change instead of updating it in Pack()")
+    m_Members.clear();
+    m_Members.resize( m_Descendants.size() );
     S_SceneNodeSmartPtr::const_iterator itr = m_Descendants.begin();
     S_SceneNodeSmartPtr::const_iterator end = m_Descendants.end();
     for ( size_t index = 0; itr != end; ++itr, ++index )
     {
-        layer->m_Members[index] = (*itr)->GetID();
+        m_Members[index] = (*itr)->GetID();
     }
 }
 
@@ -123,9 +124,7 @@ void Layer::Pack()
 // 
 bool Layer::IsVisible() const
 {
-    HELIUM_ASSERT( m_VisibilityData ); 
-    return m_VisibilityData->GetVisibleLayer(); 
-
+    return m_Visible; 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -134,15 +133,9 @@ bool Layer::IsVisible() const
 // 
 void Layer::SetVisible( bool visible )
 {
-    HELIUM_ASSERT( m_VisibilityData ); 
-    if ( m_VisibilityData->GetVisibleLayer() != visible )
-    {
-        m_VisibilityData->SetVisibleLayer( visible ); 
-
-        Dirty();
-
-        m_VisibilityChanged.Raise( SceneNodeChangeArgs( this ) );
-    }
+    m_Visible = visible; 
+    m_VisibilityChanged.Raise( SceneNodeChangeArgs( this ) );
+    Dirty();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -151,9 +144,7 @@ void Layer::SetVisible( bool visible )
 // 
 bool Layer::IsSelectable() const
 {
-    const Content::Layer* layer = GetPackage< Content::Layer >();
-    HELIUM_ASSERT( layer );
-    return layer->m_Selectable;
+    return m_Selectable;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -161,23 +152,20 @@ bool Layer::IsSelectable() const
 // 
 void Layer::SetSelectable( bool selectable )
 {
-    Content::Layer* layer = GetPackage< Content::Layer >();
-    HELIUM_ASSERT( layer );
-    layer->m_Selectable = selectable;
+    m_Selectable = selectable;
     Dirty();
 }
 
 const Math::Color3& Layer::GetColor() const
 {
-    return GetPackage< Content::Layer >()->m_Color;
+    return m_Color;
 }
 
 void Layer::SetColor( const Math::Color3& color )
 {
-    Content::Layer* layer = GetPackage< Content::Layer >();
-    if ( color != layer->m_Color )
+    if ( color != m_Color )
     {
-        layer->m_Color = color;
+        m_Color = color;
         Dirty();
     }
 }
@@ -204,24 +192,21 @@ bool Layer::ContainsMember( Core::SceneNode* node ) const
 // 
 void Layer::Prune( V_SceneNodeDumbPtr& prunedNodes )
 {
-    Content::Layer* layer = GetPackage< Content::Layer >();
-    HELIUM_ASSERT( layer );
-
     // Iterate over the layer members, update the persistent data as we do so,
     // and build a local list of the members.  We have to build a list locally
     // because disconnecting at this point would change the list that we are
     // trying to iterate over.
     V_SceneNodeDumbPtr members;
     members.resize( m_Descendants.size() );
-    layer->m_Members.clear();
-    layer->m_Members.resize( m_Descendants.size() );
+    m_Members.clear();
+    m_Members.resize( m_Descendants.size() );
     S_SceneNodeSmartPtr::const_iterator itr = m_Descendants.begin();
     S_SceneNodeSmartPtr::const_iterator end = m_Descendants.end();
     for ( size_t index = 0; itr != end; ++itr, ++index )
     {
         const SceneNodePtr& member = (*itr);
 
-        layer->m_Members[index] = member->GetID();
+        m_Members[index] = member->GetID();
         members[index] = member.Ptr();
     }
 
@@ -249,11 +234,9 @@ void Layer::Insert(SceneGraph* g, V_SceneNodeDumbPtr& insertedNodes )
     // as a member of the layer.
     if ( IsInitialized() )
     {
-        Content::Layer* layer = GetPackage< Content::Layer >();
-        HELIUM_ASSERT( layer );
         HELIUM_ASSERT( m_Descendants.empty() );
-        V_TUID::const_iterator itr = layer->m_Members.begin();
-        V_TUID::const_iterator end = layer->m_Members.end();
+        V_TUID::const_iterator itr = m_Members.begin();
+        V_TUID::const_iterator end = m_Members.end();
         for ( ; itr != end; ++itr )
         {
             const TUID& id = *itr;

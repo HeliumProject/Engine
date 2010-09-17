@@ -231,8 +231,8 @@ namespace Helium
 
             void OnVaultPanelClosing( wxCloseEvent& args );
 
-            void OnReleaseResources( const Core::Render::DeviceStateArgs& args );
-            void OnAllocateResources( const Core::Render::DeviceStateArgs& args );
+            void OnReleaseResources( const Core::DeviceStateArgs& args );
+            void OnAllocateResources( const Core::DeviceStateArgs& args );
 
         private:
             static const float s_NearClipDistance;
@@ -247,7 +247,7 @@ namespace Helium
             static const float s_MinThumbnailSize;
             static const float s_MaxThumbnailSize;
 
-            Core::Render::DeviceManager m_DeviceManager;
+            Core::DeviceManager m_DeviceManager;
             float m_LabelFontHeight;
             ID3DXFont* m_LabelFont;
             ID3DXFont* m_TypeFont;

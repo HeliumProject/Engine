@@ -2,23 +2,23 @@
 
 #include "HierarchyNode.h"
 
-#include "Core/Content/Nodes/ContentPoint.h"
 #include "Core/Scene/Manipulator.h"
 
 namespace Helium
 {
     namespace Core
     {
-        class Point : public Core::HierarchyNode
+        class CurveControlPoint : public HierarchyNode
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( Core::Point, Core::HierarchyNode );
+            REFLECT_DECLARE_ABSTRACT( CurveControlPoint, HierarchyNode );
+            static void EnumerateClass( Reflect::Compositor<CurveControlPoint>& comp );
             static void InitializeType();
             static void CleanupType();
 
         public:
-            Point(Core::Scene* scene, Content::Point* data);
-            virtual ~Point();
+            CurveControlPoint();
+            ~CurveControlPoint();
 
             virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
@@ -40,21 +40,26 @@ namespace Helium
             virtual void Evaluate( GraphDirection direction ) HELIUM_OVERRIDE;
             virtual bool ValidatePanel( const tstring& name ) HELIUM_OVERRIDE;
             static void CreatePanel( CreatePanelArgs& args );
+
+        protected:
+            Math::Vector3 m_Position;
         };
 
-        class PointTranslateManipulatorAdapter : public TranslateManipulatorAdapter
+        typedef SmartPtr< CurveControlPoint > CurveControlPointPtr;
+
+        class CurveControlPointTranslateManipulatorAdapter : public TranslateManipulatorAdapter
         {
         protected:
-            Core::Point* m_Point;
+            CurveControlPoint* m_Point;
 
         public:
-            PointTranslateManipulatorAdapter( Core::Point* pointComponent )
-                :m_Point( pointComponent )
+            CurveControlPointTranslateManipulatorAdapter( CurveControlPoint* point )
+                : m_Point( point )
             {
                 HELIUM_ASSERT( m_Point );
             }
 
-            virtual Core::HierarchyNode* GetNode() override
+            virtual HierarchyNode* GetNode() override
             {
                 return m_Point;
             }
@@ -75,11 +80,11 @@ namespace Helium
 
             virtual Undo::CommandPtr SetValue( const Math::Vector3& v ) override
             {
-                return new Undo::PropertyCommand<Math::Vector3> ( new Helium::MemberProperty<Core::Point, Math::Vector3> (m_Point, &Core::Point::GetPosition, &Core::Point::SetPosition), v);
+                return new Undo::PropertyCommand<Math::Vector3> ( new Helium::MemberProperty<CurveControlPoint, Math::Vector3> (m_Point, &CurveControlPoint::GetPosition, &CurveControlPoint::SetPosition), v);
             }
         };
 
-        typedef Helium::SmartPtr<Core::Point> PointPtr;
+        typedef Helium::SmartPtr<CurveControlPoint> PointPtr;
         typedef std::vector<PointPtr> V_Point;
     }
 }

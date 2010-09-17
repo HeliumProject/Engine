@@ -106,12 +106,6 @@ void SceneManager::RemoveScene(Core::Scene* scene)
     // someone still has allocated.
     HELIUM_ASSERT( m_AllocatedScenes.find( scene ) == m_AllocatedScenes.end() );
 
-    // RemoveScene is called for nested scenes and non-nested
-    // we don't SaveVisibility in remove scene because i don't want to save it for nested scenes
-    // and because we remove from m_AllocatedScenes before calling RemoveScene, 
-    // we have no way to test (in this function) that it was a nested scene we're unloading. 
-    // 
-
     m_DocumentManager.FindDocument( scene->GetPath() )->RemoveDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
     m_SceneRemoving.Raise( scene );
 
@@ -160,7 +154,6 @@ void SceneManager::RemoveAllScenes()
     V_SceneDumbPtr::const_iterator removeEnd = topLevelScenes.end();
     for ( ; removeItr != removeEnd; ++removeItr )
     {
-        (*removeItr)->SaveVisibility(); 
         RemoveScene( *removeItr );
     }
 }
@@ -378,7 +371,6 @@ void SceneManager::DocumentClosed( const DocumentChangedArgs& args )
             SetCurrentScene( NULL );
         }
 
-        scene->SaveVisibility(); 
         RemoveScene( scene );
 
         // Select the next scene in the list, if there is one

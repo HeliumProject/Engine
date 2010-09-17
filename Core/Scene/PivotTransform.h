@@ -5,48 +5,26 @@
 
 namespace Helium
 {
-    // Forwards
-    namespace Content
-    {
-        class PivotTransform;
-    }
-
     namespace Core
     {
         //  TOTAL TRANSFORM:
         //     -1                      -1
         //  [Sp]x[S]x[Sh]x[Sp]x[St]x[Rp]x[R]x[Rp]x[Rt]x[T]x[Tp]
 
-        class CORE_API PivotTransform : public Core::Transform
+        class CORE_API PivotTransform : public Transform
         {
-        protected:
-            Math::Shear m_Shear;
-            Math::Vector3 m_ScalePivot;
-            Math::Vector3 m_ScalePivotTranslate;
-            Math::Vector3 m_RotatePivot;
-            Math::Vector3 m_RotatePivotTranslate;
-            Math::Vector3 m_TranslatePivot;
-
         public:
             REFLECT_DECLARE_ABSTRACT( Core::PivotTransform, Core::Transform );
+            static void EnumerateClass( Reflect::Compositor<PivotTransform>& comp );
             static void InitializeType();
             static void CleanupType();
 
         public:
-            PivotTransform( Core::Scene* scene );
-            PivotTransform( Core::Scene* scene, Content::PivotTransform* pivotTransform );
+            PivotTransform();
 
             virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
 
-            virtual void Pack() HELIUM_OVERRIDE;
-            virtual void Unpack() HELIUM_OVERRIDE;
-
-            //
-            // Group
-            //
-
-        public:
             virtual bool IsGroup()
             {
                 return GetType() == Reflect::GetType<Core::PivotTransform>();
@@ -165,6 +143,15 @@ namespace Helium
             void SetTranslatePivotY(f32 translate);
             f32 GetTranslatePivotZ() const;
             void SetTranslatePivotZ(f32 translate);
+
+        protected:
+            Math::Shear         m_Shear;                    // shear values
+            Math::Vector3       m_ScalePivot;               // scale pivot translation vector
+            Math::Vector3       m_ScalePivotTranslate;      // compensation vector for preserving the transform when the scale pivot it moved
+            Math::Vector3       m_RotatePivot;              // rotation pivot translation vector
+            Math::Vector3       m_RotatePivotTranslate;     // compensation vector for preserving the transform when the rotation pivot it moved
+            Math::Vector3       m_TranslatePivot;           // translate pivot translation vector
+            bool                m_SnapPivots;               // if this is true, use m_RotatePivot
         };
 
         typedef Helium::SmartPtr<Core::PivotTransform> LPivotTransformPtr;

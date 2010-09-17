@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Core/API.h"
-#include "Core/Content/Nodes/ContentCurve.h"
 #include "Core/Scene/Curve.h"
 #include "Core/Scene/Tool.h"
 
@@ -19,11 +18,11 @@ namespace Helium
             OS_SceneNodeDumbPtr m_Selection;
 
             // The instance we are creating
-            LCurvePtr m_Instance;
+            CurvePtr m_Instance;
 
         public:
             // Type of curve interpolation
-            static Content::CurveType s_CurveType;
+            static CurveType s_CurveType;
 
             // Should we snap to surfaces
             static bool s_SurfaceSnap;

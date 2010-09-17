@@ -3,7 +3,6 @@
 #include "Core/API.h"
 
 #include "Foundation/Reflect/Element.h"
-#include "Core/Content/Nodes/ContentCamera.h"
 
 namespace Helium
 {

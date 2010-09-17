@@ -10,50 +10,37 @@
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Reflect/Version.h"
+#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/Canvas.h"
+#include "Foundation/Undo/PropertyCommand.h"
+#include "Foundation/String/Utilities.h"
+#include "Foundation/Math/AngleAxis.h"
+#include "Foundation/Log.h"
 
 #include "Core/Asset/Classes/Entity.h"
 #include "Core/Asset/Manifests/SceneManifest.h"
 
-#include "Core/Content/Nodes/ContentJointTransform.h"
-#include "Core/Content/Nodes/ContentPivotTransform.h"
-#include "Core/Content/Nodes/ContentMesh.h"
-#include "Core/Content/Nodes/ContentShader.h"
-#include "Core/Content/Nodes/ContentSkin.h"
-#include "Core/Content/Nodes/ContentCurve.h"
-#include "Core/Content/Nodes/ContentVolume.h"
-
-#include "Foundation/Inspect/Data.h"
-#include "Foundation/Inspect/Canvas.h"
-#include "Foundation/Undo/PropertyCommand.h"
-#include "SceneGraph.h"
-#include "Statistics.h"
-
+#include "Core/Scene/SceneGraph.h"
+#include "Core/Scene/Statistics.h"
 #include "Core/Scene/SceneNodeType.h"
-#include "HierarchyNodeType.h"
-
-#include "SceneSettings.h"
-
-#include "ParentCommand.h"
-
-#include "PivotTransform.h"
-#include "JointTransform.h"
-#include "Layer.h"
+#include "Core/Scene/HierarchyNodeType.h"
+#include "Core/Scene/SceneSettings.h"
+#include "Core/Scene/ParentCommand.h"
+#include "Core/Scene/PivotTransform.h"
+#include "Core/Scene/JointTransform.h"
+#include "Core/Scene/Layer.h"
 #include "Core/Scene/Mesh.h"
-#include "Shader.h"
-#include "Skin.h"
-#include "Curve.h"
-#include "Core/Scene/Point.h"
-#include "InstanceType.h"
-#include "EntityInstance.h"
-#include "EntityInstanceType.h"
-#include "EntitySet.h"
-#include "Volume.h"
-#include "Locator.h"
-#include "Light.h"
-
-#include "Foundation/String/Utilities.h"
-#include "Foundation/Math/AngleAxis.h"
-#include "Foundation/Log.h"
+#include "Core/Scene/Shader.h"
+#include "Core/Scene/Skin.h"
+#include "Core/Scene/Curve.h"
+#include "Core/Scene/CurveControlPoint.h"
+#include "Core/Scene/InstanceType.h"
+#include "Core/Scene/EntityInstance.h"
+#include "Core/Scene/EntityInstanceType.h"
+#include "Core/Scene/EntitySet.h"
+#include "Core/Scene/Volume.h"
+#include "Core/Scene/Locator.h"
+#include "Core/Scene/Light.h"
 
 #define snprintf _snprintf
 
@@ -72,8 +59,6 @@ Scene::Scene( Core::Viewport* viewport, const Helium::Path& path )
 , m_Color( 255 )
 , m_IsFocused( false )
 {
-    LoadVisibility(); 
-
     // Mark the scene as needing to be saved when a command is added to the undo stack
     m_UndoQueue.AddCommandPushedListener( Undo::QueueChangeSignature::Delegate ( this, &Scene::UndoQueueCommandPushed ) );
     m_UndoQueue.AddUndoingListener( Undo::QueueChangingSignature::Delegate ( this, &Scene::UndoingOrRedoing ) );
@@ -87,7 +72,8 @@ Scene::Scene( Core::Viewport* viewport, const Helium::Path& path )
     m_Graph = new SceneGraph();
 
     // Setup root node
-    m_Root = new Core::PivotTransform( this );
+    m_Root = new PivotTransform();
+    m_Root->SetOwner( this );
     m_Root->SetName( TXT( "Root" ) );
     m_Root->Evaluate( GraphDirections::Downstream );
     m_Graph->AddNode( m_Root.Ptr() );
@@ -95,20 +81,12 @@ Scene::Scene( Core::Viewport* viewport, const Helium::Path& path )
     // All imports should default to the master root
     m_ImportRoot = m_Root.Ptr();
 
-    // we listen to our own events because there a couple ways to add nodes and get this event
-    AddNodeAddedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeAdded )); 
-    AddNodeRemovedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeRemoved )); 
-
     m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
 }
 
 Scene::~Scene()
 {
     m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
-
-    // remove our own listeners 
-    RemoveNodeAddedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeAdded )); 
-    RemoveNodeRemovedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeRemoved )); 
 
     // remove undo listener
     m_UndoQueue.RemoveCommandPushedListener( Undo::QueueChangeSignature::Delegate ( this, &Scene::UndoQueueCommandPushed ) );
@@ -227,8 +205,6 @@ Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u
     if ( action == ImportActions::Load )
     {
         m_Path = path;
-
-        LoadVisibility(); 
     }
 
     // setup
@@ -319,69 +295,6 @@ Undo::CommandPtr Scene::ImportXML( const tstring& xml, u32 importFlags, Core::Hi
     m_LoadFinished.Raise( LoadArgs( this, success ) );
 
     return command;
-}
-
-SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
-{
-    SceneNodePtr createdNode;
-
-    if ( data->HasType( Reflect::GetType<Asset::Entity>() ) )
-    {
-        createdNode = new Core::EntityInstance( this, Reflect::DangerousCast< Content::EntityInstance >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::Volume>() ) )
-    {
-        createdNode = new Core::Volume( this, Reflect::DangerousCast< Content::Volume >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::Locator>() ) )
-    {
-        createdNode = new Core::Locator( this, Reflect::DangerousCast< Content::Locator >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::Shader>() ) )
-    {
-        createdNode = new Core::Shader( this, Reflect::DangerousCast< Content::Shader >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::Skin>() ) )
-    {
-        createdNode = new Core::Skin( this, Reflect::DangerousCast< Content::Skin >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::Mesh>() ) )
-    {
-        createdNode = new Core::Mesh( this, Reflect::DangerousCast< Content::Mesh >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::Layer>() ) )
-    {
-        createdNode = new Core::Layer( this, Reflect::DangerousCast< Content::Layer >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::Curve>() ) )
-    {
-        createdNode = new Core::Curve( this, Reflect::DangerousCast< Content::Curve >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::PivotTransform>() ) )
-    {
-        createdNode = new Core::PivotTransform( this, Reflect::DangerousCast< Content::PivotTransform >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::JointTransform>() ) )
-    {
-        createdNode = new Core::JointTransform( this, Reflect::DangerousCast< Content::JointTransform >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::Point>() ) )
-    {
-        createdNode = new Core::Point( this, Reflect::DangerousCast< Content::Point >( data ) );
-    }
-
-    if ( createdNode.ReferencesObject() )
-    {
-        // post-create logic
-        createdNode->Unpack();
-    }
-    else
-    {
-        Log::Error( TXT( "Unable to create node for data of type '%s'.\n" ), data->GetClass()->m_UIName.c_str() );
-        HELIUM_BREAK();
-    }
-
-    return createdNode;
 }
 
 void Scene::Reset()
@@ -496,7 +409,7 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
             // Remap parent id
             // 
 
-            TUID parentID = hierarchyNode->GetPackage<Content::HierarchyNode>()->m_ParentID;
+            TUID parentID = hierarchyNode->GetParentID();
 
             HM_TUID::const_iterator findParent = m_RemappedIDs.find( parentID );
             if ( findParent != m_RemappedIDs.end() )
@@ -630,7 +543,7 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_S
     SceneNodePtr createdNode = NULL;
 
     if( importReflectType == Reflect::ReservedTypes::Invalid )
-        importReflectType = Reflect::GetType< Content::SceneNode >();
+        importReflectType = Reflect::GetType< SceneNode >();
 
     // 
     // Merging Nodes / Duplicate ID check
@@ -641,15 +554,15 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_S
     {
         if ( element->HasType( importReflectType ) )
         {
-            Content::SceneNode* node = Reflect::DangerousCast< Content::SceneNode >( element );
+            SceneNode* node = Reflect::DangerousCast< SceneNode >( element );
 
             if ( ImportFlags::HasFlag( importFlags, ImportFlags::Merge ) )
             {
-                HM_SceneNodeDumbPtr::const_iterator find = m_Nodes.find( node->m_ID );
+                HM_SceneNodeDumbPtr::const_iterator find = m_Nodes.find( node->GetID() );
                 if ( find != m_Nodes.end() )
                 {
                     Core::SceneNode* dependNode = find->second;
-                    element->CopyTo( dependNode->GetPackage< Reflect::Element >() );
+                    element->CopyTo( dependNode );
                     dependNode->Unpack();
                     dependNode->Dirty();
                 }    
@@ -658,8 +571,8 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_S
             {
                 // Always generate a new ID when importing and not merging
                 TUID id( TUID::Generate() );
-                m_RemappedIDs.insert( HM_TUID::value_type( node->m_ID, id ) );
-                node->m_ID = id;
+                m_RemappedIDs.insert( HM_TUID::value_type( node->GetID(), id ) );
+                node->SetID( id );
                 convertNode = true;
             }
         }
@@ -672,13 +585,10 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_S
 
     if ( convertNode )
     {
-        if ( element->HasType( Reflect::GetType<Content::SceneNode>() ) )
-        {
-            createdNode = CreateNode( Reflect::DangerousCast< Content::SceneNode >( element ) );
-        }
-
         if ( createdNode.ReferencesObject() )
         {
+            createdNode->Unpack();
+
             // update ui
             tostringstream str;
             str << TXT( "Loading: " ) + createdNode->GetName();
@@ -870,7 +780,7 @@ void Scene::ExportSceneNode( Core::SceneNode* node, Reflect::V_Element& elements
             }
 
             node->Pack();
-            elements.push_back( node->GetPackage() );
+            elements.push_back( node );
             exported.insert( node->GetID() );
 
             // Flag to indicate whether to recursively export ancestors of this node or not
@@ -1431,16 +1341,6 @@ void Scene::RemoveSceneNode( const SceneNodePtr& node )
     {
         m_NodeRemoved.Raise( NodeChangeArgs( node.Ptr() ) );
     }
-}
-
-void Scene::OnSceneNodeAdded( const NodeChangeArgs& args )
-{
-    m_VisibilityDB->ActivateNode( args.m_Node->GetID() ); 
-}
-
-void Scene::OnSceneNodeRemoved( const NodeChangeArgs& args )
-{
-    m_VisibilityDB->DeactivateNode( args.m_Node->GetID() ); 
 }
 
 void Scene::Evaluate(bool silent)
@@ -2670,7 +2570,8 @@ Undo::CommandPtr Scene::GroupSelected()
     }
 
     // Create the new group
-    Core::PivotTransform* group = new Core::PivotTransform( this );
+    Core::PivotTransform* group = new Core::PivotTransform();
+    group->SetOwner( this );
 
     // Get a decent name
     group->Rename( TXT( "group1" ) );
@@ -2971,7 +2872,7 @@ void Scene::FrameSelected()
             continue;
         }
 
-        Core::Point* point = Reflect::ObjectCast<Core::Point>(*itr);
+        CurveControlPoint* point = Reflect::ObjectCast<CurveControlPoint>(*itr);
         if (point)
         {
             Math::Vector3 p = point->GetPosition();
@@ -3165,59 +3066,6 @@ void Scene::ViewPreferencesChanged( const Reflect::ElementChangeArgs& args )
     if ( args.m_Field == m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->ColorModeField() )
     {
         Execute( false );
-    }
-}
-
-Content::NodeVisibilityPtr Scene::GetVisibility(tuid nodeId)
-{
-    HELIUM_ASSERT(m_VisibilityDB); 
-
-    tuid fallbackId = GetRemappedID(nodeId);
-
-    return m_VisibilityDB->GetVisibility(nodeId, fallbackId); 
-
-}
-
-bool Scene::GetVisibilityFile(tstring& filename)
-{
-    tchar buffer[1024]; 
-    _sntprintf(buffer, 1024, TXT( "Visibility/" ) TUID_HEX_FORMAT TXT( ".vis.nrb" ), m_Path.Hash() ); 
-
-    Helium::Path prefsDir;
-    if ( !Helium::GetPreferencesDirectory( prefsDir ) )
-    {
-        return false;
-    }
-
-    Helium::Path filePath( prefsDir.Get() + tstring(buffer) );
-    filename = filePath.Get();
-
-    return true; 
-}
-
-void Scene::LoadVisibility()
-{
-    // attempt to load up our visibility file...
-    tstring filename; 
-    if( GetVisibilityFile(filename) && Helium::Path(filename).Exists() )
-    {
-        m_VisibilityDB = Reflect::Archive::FromFile<Content::SceneVisibility>(filename); 
-    }
-    else
-    {
-        m_VisibilityDB = new Content::SceneVisibility(); 
-    }
-
-    m_VisibilityDB->SetNodeDefaults( m_View->GetSettingsManager()->GetSettings< SceneSettings >()->GetDefaultNodeVisibility() ); 
-}
-
-void Scene::SaveVisibility()
-{
-    tstring filename; 
-    if(m_VisibilityDB && GetVisibilityFile(filename) )
-    {
-        Helium::Path ( filename ).MakePath();
-        Reflect::Archive::ToFile(m_VisibilityDB, filename); 
     }
 }
 

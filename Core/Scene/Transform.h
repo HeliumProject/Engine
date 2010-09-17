@@ -1,69 +1,31 @@
 #pragma once
 
-#include "Core/Content/Nodes/ContentTransform.h"
+#include "Foundation/Math/EulerAngles.h"
 
 #include "Core/Scene/Manipulator.h"
-
-#include "HierarchyNode.h"
-#include "Foundation/Math/EulerAngles.h"
+#include "Core/Scene/HierarchyNode.h"
 
 namespace Helium
 {
     namespace Core
     {
-        // forwards
         class Scene;
-
         class Transform;
         typedef Helium::SmartPtr< Core::Transform > TransformPtr;
 
-        // this is fabulous
-        namespace ManipulatorSpaces
+        class CORE_API Transform : public HierarchyNode
         {
-            enum ManipulatorSpace;
-        }
-        typedef ManipulatorSpaces::ManipulatorSpace;
-
-        class CORE_API Transform HELIUM_ABSTRACT : public Core::HierarchyNode
-        {
-            // 
-            // Member variables
-            // 
-
-        protected:
-            // simple scale component
-            Math::Scale m_Scale;
-
-            // simple rotation component
-            Math::EulerAngles m_Rotate;
-
-            // simple translation component
-            Math::Vector3 m_Translate;
-
-            // local matrix
-            Math::Matrix4 m_ObjectTransform;
-            Math::Matrix4 m_InverseObjectTransform;
-
-            // global matrix
-            Math::Matrix4 m_GlobalTransform;
-            Math::Matrix4 m_InverseGlobalTransform;
-
-            // bind matrix (computed once per dirty setting)
-            bool m_BindIsDirty;
-            Math::Matrix4 m_BindTransform;
-            Math::Matrix4 m_InverseBindTransform;
-
         public:
-            REFLECT_DECLARE_ABSTRACT( Core::Transform, Core::HierarchyNode );
+            REFLECT_DECLARE_CLASS( Transform, HierarchyNode );
+            static void EnumerateClass( Reflect::Compositor<Transform>& comp );
             static void InitializeType();
             static void CleanupType();
 
         public:
-            Transform( Core::Scene* scene, Content::Transform* transform );
-            virtual ~Transform();
+            Transform();
+            ~Transform();
 
-            virtual void Pack() HELIUM_OVERRIDE;
-            virtual void Unpack() HELIUM_OVERRIDE;
+            virtual void Initialize() HELIUM_OVERRIDE;
 
             virtual Core::Transform* GetTransform() HELIUM_OVERRIDE;
             virtual const Core::Transform* GetTransform() const HELIUM_OVERRIDE;
@@ -219,6 +181,22 @@ namespace Helium
             void SetTranslateY(f32 translate);
             f32 GetTranslateZ() const;
             void SetTranslateZ(f32 translate);
+
+        protected:
+            // Reflected
+            Math::Scale         m_Scale;
+            Math::EulerAngles   m_Rotate;
+            Math::Vector3       m_Translate;
+            Math::Matrix4       m_ObjectTransform;
+            Math::Matrix4       m_GlobalTransform;
+            bool                m_InheritTransform;     // Do we transform with our parent?
+
+            // Non-reflected
+            Math::Matrix4       m_InverseObjectTransform;
+            Math::Matrix4       m_InverseGlobalTransform;
+            bool                m_BindIsDirty;
+            Math::Matrix4       m_BindTransform;
+            Math::Matrix4       m_InverseBindTransform;
         };
 
         class TransformScaleManipulatorAdapter : public ScaleManipulatorAdapter

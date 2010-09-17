@@ -65,7 +65,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< const Core::CameraMovedArgs& > CameraMovedSignature;
+        typedef Helium::Signature< const CameraMovedArgs& > CameraMovedSignature;
 
 
         //

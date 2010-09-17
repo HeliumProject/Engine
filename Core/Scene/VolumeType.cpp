@@ -1,88 +1,90 @@
 /*#include "Precompile.h"*/
 #include "VolumeType.h"
 
-#include "Volume.h"
+#include "Core/Scene/Volume.h"
 #include "Core/Scene/Scene.h"
-
 #include "Core/Scene/Viewport.h"
-#include "Color.h"
-
-#include "PrimitiveCube.h"
-#include "PrimitiveSphere.h"
-#include "PrimitiveCapsule.h"
-#include "PrimitiveCylinder.h"
+#include "Core/Scene/Color.h"
+#include "Core/Scene/PrimitiveCube.h"
+#include "Core/Scene/PrimitiveSphere.h"
+#include "Core/Scene/PrimitiveCapsule.h"
+#include "Core/Scene/PrimitiveCylinder.h"
 
 using namespace Helium;
 using namespace Helium::Core;
 
-REFLECT_DEFINE_ABSTRACT(Core::VolumeType);
+REFLECT_DEFINE_ABSTRACT(VolumeType);
 
 void VolumeType::InitializeType()
 {
-  Reflect::RegisterClassType< Core::VolumeType >( TXT( "Core::VolumeType" ) );
+    Reflect::RegisterClassType< VolumeType >( TXT( "VolumeType" ) );
 }
 
 void VolumeType::CleanupType()
 {
-  Reflect::UnregisterClassType< Core::VolumeType >();
+    Reflect::UnregisterClassType< VolumeType >();
 }
 
-VolumeType::VolumeType( Core::Scene* scene, i32 instanceType )
-: Core::InstanceType( scene, instanceType )
+VolumeType::VolumeType( Scene* scene, i32 instanceType )
+: InstanceType( scene, instanceType )
 {
-  m_Cube = new Core::PrimitiveCube( scene->GetViewport()->GetResources() );
-  m_Cube->Update();
+    m_Cube = new PrimitiveCube( scene->GetViewport()->GetResources() );
+    m_Cube->Update();
 
-  m_Cylinder = new Core::PrimitiveCylinder( scene->GetViewport()->GetResources() );
-  m_Cylinder->Update();
-  
-  m_Sphere = new Core::PrimitiveSphere( scene->GetViewport()->GetResources() );
-  m_Sphere->Update();
+    m_Cylinder = new PrimitiveCylinder( scene->GetViewport()->GetResources() );
+    m_Cylinder->Update();
 
-  m_Capsule = new Core::PrimitiveCapsule( scene->GetViewport()->GetResources() );
-  m_Capsule->Update();
+    m_Sphere = new PrimitiveSphere( scene->GetViewport()->GetResources() );
+    m_Sphere->Update();
+
+    m_Capsule = new PrimitiveCapsule( scene->GetViewport()->GetResources() );
+    m_Capsule->Update();
 }
 
 VolumeType::~VolumeType()
 {
-  delete m_Cube;
-  delete m_Cylinder;
-  delete m_Sphere;
-  delete m_Capsule;
+    delete m_Cube;
+    delete m_Cylinder;
+    delete m_Sphere;
+    delete m_Capsule;
 }
 
 void VolumeType::Create()
 {
-  m_Cube->Create();
-  m_Cylinder->Create();
-  m_Sphere->Create();
-  m_Capsule->Create();
+    __super::Create();
+
+    m_Cube->Create();
+    m_Cylinder->Create();
+    m_Sphere->Create();
+    m_Capsule->Create();
 }
 
 void VolumeType::Delete()
 {
-  m_Cube->Delete();
-  m_Cylinder->Delete();
-  m_Sphere->Delete();
-  m_Capsule->Delete();
+    __super::Delete();
+
+    m_Cube->Delete();
+    m_Cylinder->Delete();
+    m_Sphere->Delete();
+    m_Capsule->Delete();
 }
 
-const Core::Primitive* VolumeType::GetShape( Content::VolumeShape shape ) const
+const Primitive* VolumeType::GetShape( VolumeShape shape ) const
 {
-  switch (shape)
-  {
-  case Content::VolumeShapes::Cube:
-    return m_Cube;
+    switch (shape)
+    {
+    case VolumeShapes::Cube:
+        return m_Cube;
 
-  case Content::VolumeShapes::Cylinder:
-    return m_Cylinder;
+    case VolumeShapes::Cylinder:
+        return m_Cylinder;
 
-  case Content::VolumeShapes::Sphere:
-    return m_Sphere;
+    case VolumeShapes::Sphere:
+        return m_Sphere;
 
-  case Content::VolumeShapes::Capsule:
-    return m_Capsule;
-  }
+    case VolumeShapes::Capsule:
+        return m_Capsule;
+    }
 
-  return NULL;
+    return NULL;
 }

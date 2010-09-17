@@ -28,7 +28,6 @@
 
 #include "Core/Asset/AssetInit.h"
 #include "Core/Asset/AssetClass.h"
-#include "Core/Content/ContentInit.h"
 
 using namespace Helium::Asset;
 using namespace Helium::CommandLine;
@@ -118,7 +117,6 @@ bool BuildCommand::Process( std::vector< tstring >::const_iterator& argsBegin, c
     bool success = true;
 
 	m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
-	m_InitializerStack.Push( Content::Initialize, Content::Cleanup );
 	m_InitializerStack.Push( Asset::Initialize, Asset::Cleanup );
 	m_InitializerStack.Push( AssetBuilder::Initialize, AssetBuilder::Cleanup );
 

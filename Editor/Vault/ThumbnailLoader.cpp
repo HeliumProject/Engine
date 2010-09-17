@@ -139,7 +139,7 @@ void* ThumbnailLoader::LoadThread::Entry()
     return NULL;
 }
 
-ThumbnailLoader::ThumbnailLoader( Render::DeviceManager* d3dManager, const tstring& thumbnailDirectory )
+ThumbnailLoader::ThumbnailLoader( DeviceManager* d3dManager, const tstring& thumbnailDirectory )
 : m_LoadThread( *this )
 , m_Quit( false )
 , m_ThumbnailDirectory( thumbnailDirectory )

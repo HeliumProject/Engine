@@ -11,36 +11,37 @@ using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
 
-REFLECT_DEFINE_ABSTRACT(Core::Instance);
+REFLECT_DEFINE_ABSTRACT(Instance);
+
+void Instance::EnumerateClass( Reflect::Compositor<Instance>& comp )
+{
+    comp.AddField( &Instance::m_Solid,                  "m_Solid" );
+    comp.AddField( &Instance::m_SolidOverride,          "m_SolidOverride" );
+    comp.AddField( &Instance::m_Transparent,            "m_Transparent" );
+    comp.AddField( &Instance::m_TransparentOverride,    "m_TransparentOverride" );
+}
 
 void Instance::InitializeType()
 {
-    Reflect::RegisterClassType< Core::Instance >( TXT( "Core::Instance" ) );
+    Reflect::RegisterClassType< Instance >( TXT( "Instance" ) );
     PropertiesGenerator::InitializePanel( TXT( "Instance" ), CreatePanelSignature::Delegate( &Instance::CreatePanel ) );
 }
 
 void Instance::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::Instance >();
+    Reflect::UnregisterClassType< Instance >();
 }
 
-Instance::Instance(Core::Scene* scene, Content::Instance* instance)
-: Core::PivotTransform ( scene, instance )
+Instance::Instance()
+: m_Solid (false)
+, m_SolidOverride (false)
+, m_Transparent (false)
+, m_TransparentOverride (false)
 {
 }
 
 Instance::~Instance()
 {
-}
-
-void Instance::Pack()
-{
-    __super::Pack();
-}
-
-void Instance::Unpack()
-{
-    __super::Unpack();
 }
 
 i32 Instance::GetImageIndex() const
@@ -58,7 +59,7 @@ i32 Instance::GetImageIndex() const
 SceneNodeTypePtr Instance::CreateNodeType( Core::Scene* scene ) const
 {
     // Overridden to create an light-specific type
-    Core::InstanceType* nodeType = new Core::InstanceType( scene, GetType() );
+    InstanceType* nodeType = new InstanceType( scene, GetType() );
 
     // Set the image index (usually this is handled by the base class, but we aren't calling the base)
     nodeType->SetImageIndex( GetImageIndex() );
@@ -78,7 +79,7 @@ bool Instance::ValidatePanel(const tstring& name)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Static function for creating the UI panel that allows users to edit Core::Instance.
+// Static function for creating the UI panel that allows users to edit Instance.
 // 
 void Instance::CreatePanel( CreatePanelArgs& args )
 {
@@ -93,41 +94,41 @@ void Instance::CreatePanel( CreatePanelArgs& args )
 
 bool Instance::GetSolid() const
 {
-    Core::InstanceType* type = Reflect::AssertCast<Core::InstanceType>(m_NodeType);
+    InstanceType* type = Reflect::AssertCast<InstanceType>(m_NodeType);
 
-    return GetPackage< Content::Instance >()->m_SolidOverride;
+    return m_SolidOverride;
 }
 void Instance::SetSolid( bool b )
 {
-    GetPackage< Content::Instance >()->m_Solid = b;
+    m_Solid = b;
 }
 
 bool Instance::GetSolidOverride() const
 {
-    return GetPackage< Content::Instance >()->m_SolidOverride;
+    return m_SolidOverride;
 }
 void Instance::SetSolidOverride( bool b )
 {
-    GetPackage< Content::Instance >()->m_SolidOverride = b;
+    m_SolidOverride = b;
 }
 
 bool Instance::GetTransparent() const
 {
-    Core::InstanceType* type = Reflect::AssertCast<Core::InstanceType>(m_NodeType);
+    InstanceType* type = Reflect::AssertCast<InstanceType>(m_NodeType);
 
-    return GetPackage< Content::Instance >()->m_TransparentOverride;
+    return m_TransparentOverride;
 }
 void Instance::SetTransparent( bool b )
 {
-    GetPackage< Content::Instance >()->m_Transparent = b;
+    m_Transparent = b;
 }
 
 bool Instance::GetTransparentOverride() const
 {
-    return GetPackage< Content::Instance >()->m_TransparentOverride;
+    return m_TransparentOverride;
 }
 void Instance::SetTransparentOverride( bool b )
 {
-    GetPackage< Content::Instance >()->m_TransparentOverride = b;
+    m_TransparentOverride = b;
 }
 

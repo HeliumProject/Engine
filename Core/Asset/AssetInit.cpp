@@ -27,9 +27,6 @@
 #include "Core/Asset/Manifests/ManifestVersion.h"
 #include "Core/Asset/Manifests/SceneManifest.h"
 
-#include "Core/Content/ContentInit.h"
-#include "Core/Content/Nodes/ContentEntityInstance.h"
-
 using namespace Helium;
 
 #define ASSET_BEGIN_REGISTER_ENGINE_TYPES                                       \
@@ -75,7 +72,6 @@ void Asset::Initialize()
     {
         g_AssetInitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
         g_AssetInitializerStack.Push( Component::Initialize, Component::Cleanup );
-        g_AssetInitializerStack.Push( Content::Initialize, Content::Cleanup );
 
         //
         // Enums

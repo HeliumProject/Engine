@@ -1,50 +1,26 @@
 #pragma once
 
-#include "PivotTransform.h"
-
-#include "Core/Content/Nodes/ContentInstance.h"
+#include "Core/Scene/PivotTransform.h"
 
 namespace Helium
 {
     namespace Core
     {
-        class InstanceCodeSet;
         class Instance;
 
-        struct InstancePropertiesChangeArgs
-        {
-            Core::Instance* m_Instance;
-            tstring     m_OldType;
-            tstring     m_NewType;
-
-            InstancePropertiesChangeArgs( Core::Instance*    instance,
-                const tstring& oldType,
-                const tstring& newType)
-                : m_Instance( instance )
-                , m_OldType (oldType)
-                , m_NewType (newType)
-            {}
-        };
-        typedef Helium::Signature< const InstancePropertiesChangeArgs& > InstancePropertiesChangeSignature;
-
-        /////////////////////////////////////////////////////////////////////////////
-        // Editor's wrapper for an entity instance.
-        // 
-        class CORE_API Instance HELIUM_ABSTRACT : public Core::PivotTransform
+        class CORE_API Instance HELIUM_ABSTRACT : public PivotTransform
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( Core::Instance, Core::PivotTransform );
+            REFLECT_DECLARE_ABSTRACT( Instance, PivotTransform );
+            static void EnumerateClass( Reflect::Compositor<Instance>& comp );
             static void InitializeType();
             static void CleanupType();
 
-            Instance(Core::Scene* s, Content::Instance* entity);
-            virtual ~Instance();
-
-            virtual void Pack() HELIUM_OVERRIDE;
-            virtual void Unpack() HELIUM_OVERRIDE;
+            Instance();
+            ~Instance();
 
             virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
-            virtual SceneNodeTypePtr CreateNodeType( Core::Scene* scene ) const HELIUM_OVERRIDE;
+            virtual SceneNodeTypePtr CreateNodeType( Scene* scene ) const HELIUM_OVERRIDE;
 
             virtual bool ValidatePanel(const tstring& name) HELIUM_OVERRIDE;
             static void CreatePanel( CreatePanelArgs& args );
@@ -58,8 +34,14 @@ namespace Helium
             void SetTransparent( bool b );
             bool GetTransparentOverride() const;
             void SetTransparentOverride( bool b );
+
+        protected:
+            bool  m_Solid;
+            bool  m_SolidOverride;
+            bool  m_Transparent;
+            bool  m_TransparentOverride;
         };
 
-        typedef std::vector< Core::Instance* > V_InstanceDumbPtr;
+        typedef std::vector< Instance* > V_InstanceDumbPtr;
     }
 }

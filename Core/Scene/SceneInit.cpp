@@ -1,58 +1,46 @@
 /*#include "Precompile.h"*/
 #include "SceneInit.h"
 
-// Libraries
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Reflect/Registry.h"
-#include "Core/Content/ContentInit.h"
+#include "Foundation/Component/ComponentInit.h"
+
 #include "Core/Asset/AssetInit.h"
 
-// Types
-#include "SceneSettings.h"
-
+#include "Core/Scene/SceneSettings.h"
 #include "Core/Scene/Tool.h"
-#include "CreateTool.h"
-#include "DuplicateTool.h"
-
-#include "ScaleManipulator.h"
-#include "RotateManipulator.h"
-#include "TranslateManipulator.h"
-
-#include "HierarchyNodeType.h"
-#include "JointTransform.h"
-#include "PivotTransform.h"
-
-#include "Layer.h"
-#include "Shader.h"
+#include "Core/Scene/CreateTool.h"
+#include "Core/Scene/DuplicateTool.h"
+#include "Core/Scene/ScaleManipulator.h"
+#include "Core/Scene/RotateManipulator.h"
+#include "Core/Scene/TranslateManipulator.h"
+#include "Core/Scene/HierarchyNodeType.h"
+#include "Core/Scene/JointTransform.h"
+#include "Core/Scene/PivotTransform.h"
+#include "Core/Scene/Layer.h"
+#include "Core/Scene/Shader.h"
 #include "Core/Scene/Mesh.h"
-#include "Skin.h"
-
-#include "Curve.h"
-#include "Core/Scene/Point.h"
-#include "CurveCreateTool.h"
-#include "CurveEditTool.h"
-
-#include "Instance.h"
-#include "InstanceType.h"
-
-#include "EntityInstance.h"
-#include "EntityInstanceType.h"
-#include "EntityInstanceCreateTool.h"
-#include "EntitySet.h"
-
-#include "Locator.h"
-#include "LocatorType.h"
-#include "LocatorCreateTool.h"
-
-#include "Volume.h"
-#include "VolumeType.h"
-#include "VolumeCreateTool.h"
-
-#include "Light.h"
-
-#include "ViewportSettings.h"
-#include "SceneSettings.h"
-#include "GridSettings.h"
+#include "Core/Scene/Skin.h"
+#include "Core/Scene/Curve.h"
+#include "Core/Scene/CurveControlPoint.h"
+#include "Core/Scene/CurveCreateTool.h"
+#include "Core/Scene/CurveEditTool.h"
+#include "Core/Scene/Instance.h"
+#include "Core/Scene/InstanceType.h"
+#include "Core/Scene/EntityInstance.h"
+#include "Core/Scene/EntityInstanceType.h"
+#include "Core/Scene/EntityInstanceCreateTool.h"
+#include "Core/Scene/EntitySet.h"
+#include "Core/Scene/Locator.h"
+#include "Core/Scene/LocatorType.h"
+#include "Core/Scene/LocatorCreateTool.h"
+#include "Core/Scene/Volume.h"
+#include "Core/Scene/VolumeType.h"
+#include "Core/Scene/VolumeCreateTool.h"
+#include "Core/Scene/Light.h"
+#include "Core/Scene/ViewportSettings.h"
+#include "Core/Scene/SceneSettings.h"
+#include "Core/Scene/GridSettings.h"
 
 using namespace Helium;
 using namespace Helium::Core;
@@ -66,19 +54,23 @@ void Core::SceneInitialize()
     {
         // core library initiailization
         g_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
-        g_InitializerStack.Push( Content::Initialize, Content::Cleanup );
+        g_InitializerStack.Push( Component::Initialize, Component::Cleanup );
         g_InitializerStack.Push( Asset::Initialize, Asset::Cleanup );
 
         g_InitializerStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
         g_InitializerStack.Push( Reflect::RegisterClassType<MRUData>() );
 
-        g_InitializerStack.Push( Reflect::RegisterEnumType<CameraModes::CameraMode>( &CameraModes::CameraModeEnumerateEnum, TXT( "CameraMode" ) ) ); 
-        g_InitializerStack.Push( Reflect::RegisterEnumType<GeometryModes::GeometryMode>( &GeometryModes::GeometryModeEnumerateEnum, TXT( "GeometryMode" ) ) ); 
-        g_InitializerStack.Push( Reflect::RegisterEnumType<ViewColorModes::ViewColorMode>( &ViewColorModes::ViewColorModeEnumerateEnum, TXT( "ViewColorMode" ) ) ); 
-        g_InitializerStack.Push( Reflect::RegisterEnumType<GridUnits::GridUnit>( &GridUnits::GridUnitEnumerateEnum, TXT( "GridUnit" ) ) ); 
-        g_InitializerStack.Push( Reflect::RegisterEnumType<ManipulatorSpaces::ManipulatorSpace>( &ManipulatorSpaces::ManipulatorSpaceEnumerateEnum, TXT( "ManipulatorSpace" ) ) ); 
-        g_InitializerStack.Push( Reflect::RegisterEnumType<TranslateSnappingModes::TranslateSnappingMode>( &TranslateSnappingModes::TranslateSnappingModeEnumerateEnum, TXT( "TranslateSnappingMode" ) ) ); 
+        g_InitializerStack.Push( Reflect::RegisterEnumType<CameraMode>( &CameraModes::CameraModeEnumerateEnum, TXT( "CameraMode" ) ) ); 
+        g_InitializerStack.Push( Reflect::RegisterEnumType<GeometryMode>( &GeometryModes::GeometryModeEnumerateEnum, TXT( "GeometryMode" ) ) ); 
+        g_InitializerStack.Push( Reflect::RegisterEnumType<ViewColorMode>( &ViewColorModes::ViewColorModeEnumerateEnum, TXT( "ViewColorMode" ) ) ); 
+        g_InitializerStack.Push( Reflect::RegisterEnumType<GridUnit>( &GridUnits::GridUnitEnumerateEnum, TXT( "GridUnit" ) ) ); 
+        g_InitializerStack.Push( Reflect::RegisterEnumType<ManipulatorSpace>( &ManipulatorSpaces::ManipulatorSpaceEnumerateEnum, TXT( "ManipulatorSpace" ) ) ); 
+        g_InitializerStack.Push( Reflect::RegisterEnumType<TranslateSnappingMode>( &TranslateSnappingModes::TranslateSnappingModeEnumerateEnum, TXT( "TranslateSnappingMode" ) ) ); 
         g_InitializerStack.Push( Reflect::RegisterEnumType<ShadingMode>( &ShadingModes::EnumerateEnum, TXT( "ShadingMode" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterEnumType<VolumeShape>( &VolumeShapes::VolumeShapeEnumerateEnum, TXT( "VolumeShape" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterEnumType<LocatorShape>( &LocatorShapes::LocatorShapeEnumerateEnum, TXT( "LocatorShape" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterEnumType<CurveType>( &CurveTypes::CurveTypeEnumerateEnum, TXT( "CurveType" ) ) );
+        g_InitializerStack.Push( Reflect::RegisterEnumType<ControlPointLabel>( &ControlPointLabels::ControlPointLabelEnumerateEnum, TXT( "ControlPointLabel" ) ) );
 
         g_InitializerStack.Push( Viewport::InitializeType, Viewport::CleanupType );
         g_InitializerStack.Push( Primitive::InitializeType, Primitive::CleanupType );
@@ -104,7 +96,7 @@ void Core::SceneInitialize()
         g_InitializerStack.Push( Shader::InitializeType, Shader::CleanupType );
         g_InitializerStack.Push( Mesh::InitializeType, Mesh::CleanupType );
         g_InitializerStack.Push( Skin::InitializeType, Skin::CleanupType );
-        g_InitializerStack.Push( Point::InitializeType, Point::CleanupType );
+        g_InitializerStack.Push( CurveControlPoint::InitializeType, CurveControlPoint::CleanupType );
         g_InitializerStack.Push( Curve::InitializeType, Curve::CleanupType );
         g_InitializerStack.Push( CurveCreateTool::InitializeType, CurveCreateTool::CleanupType );
         g_InitializerStack.Push( CurveEditTool::InitializeType, CurveEditTool::CleanupType );

@@ -10,11 +10,6 @@
 
 namespace Helium
 {
-    namespace Content
-    {
-        class SceneNode;
-    }
-
     namespace Asset
     {
         class SceneManifest;
@@ -92,17 +87,17 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_ABSTRACT( SceneNode, Component::ComponentCollection );
+            static void EnumerateClass( Reflect::Compositor<SceneNode>& comp );
             static void InitializeType();
             static void CleanupType();
 
-            SceneNode( Core::Scene* owner, Content::SceneNode* data );
-            virtual ~SceneNode();
+            SceneNode();
+            ~SceneNode();
 
             SceneNode::NodeState GetNodeState(GraphDirection direction) const
             {
                 return m_NodeStates[direction];
             }
-
             void SetNodeState(GraphDirection direction, NodeState value)
             {
                 m_NodeStates[direction] = value;
@@ -112,7 +107,6 @@ namespace Helium
             {
                 return m_NodeType;
             }
-
             void SetNodeType(Core::SceneNodeType* type)
             {
                 m_NodeType = type;
@@ -122,12 +116,10 @@ namespace Helium
             {
                 return m_Graph;
             }
-
             const SceneGraph* GetGraph() const
             {
                 return m_Graph;
             }
-
             void SetGraph(SceneGraph* value)
             {
                 m_Graph = value;
@@ -137,17 +129,19 @@ namespace Helium
             {
                 return m_Owner;
             }
-
             const Core::Scene* GetOwner() const
             {
                 return m_Owner;
+            }
+            void SetOwner( Scene* scene )
+            {
+                m_Owner = scene;
             }
 
             virtual bool IsTransient() const
             {
                 return m_IsTransient;
             }
-
             virtual void SetTransient( bool isTransient )
             {
                 m_IsTransient = isTransient;
@@ -157,7 +151,6 @@ namespace Helium
             {
                 return m_Ancestors;
             }
-
             const S_SceneNodeDumbPtr& GetAncestors() const
             {
                 return m_Ancestors;
@@ -167,7 +160,6 @@ namespace Helium
             {
                 return m_Descendants;
             }
-
             const S_SceneNodeSmartPtr& GetDescendants() const
             {
                 return m_Descendants;
@@ -333,63 +325,6 @@ namespace Helium
             // Make object dirty and iterate world
             virtual void Execute(bool interactively);
 
-            //
-            // UI
-            //
-
-        public:
-            // do enumeration of applicable attributes on this object
-            virtual void ConnectProperties(EnumerateElementArgs& args);
-
-            // validates named panel types usable by this instance
-            virtual bool ValidatePanel(const tstring& name);
-
-            // create the panel from the selection
-            static void CreatePanel(CreatePanelArgs& args);
-
-            // membership property
-            tstring GetMembership() const;
-            void SetMembership( const tstring& layers );
-
-            //
-            // Package
-            //
-
-          public:
-            Reflect::Element* GetPackage()
-            {
-                return m_Package;
-            }
-
-            const Reflect::Element* GetPackage() const
-            {
-                return m_Package;
-            }
-
-            template <class T>
-            T* GetPackage()
-            {
-#ifdef _DEBUG
-                T* t = Reflect::ObjectCast<T>(m_Package);
-                HELIUM_ASSERT( t );
-                return t;
-#else
-                return static_cast<T*>(m_Package.Ptr());
-#endif
-            }
-
-            template <class T>
-            const T* GetPackage() const
-            {
-#ifdef _DEBUG
-                const T* t = Reflect::ObjectCast<T>(m_Package);
-                HELIUM_ASSERT( t );
-                return t;
-#else
-                return static_cast<const T*>(m_Package.Ptr());
-#endif
-            }
-
             // Pack any application-cached data into the packed data
             virtual void Pack() {}
 
@@ -423,6 +358,24 @@ namespace Helium
             virtual void SetSelected(bool);
 
             //
+            // UI
+            //
+
+        public:
+            // do enumeration of applicable attributes on this object
+            virtual void ConnectProperties(EnumerateElementArgs& args);
+
+            // validates named panel types usable by this instance
+            virtual bool ValidatePanel(const tstring& name);
+
+            // create the panel from the selection
+            static void CreatePanel(CreatePanelArgs& args);
+
+            // membership property
+            tstring GetMembership() const;
+            void SetMembership( const tstring& layers );
+
+            //
             // Events
             //
 
@@ -452,25 +405,29 @@ namespace Helium
 
         protected:
             SceneNodeChangeSignature::Event m_VisibilityChanged;
-
         public:
             void AddVisibilityChangedListener( const SceneNodeChangeSignature::Delegate& listener )
             {
                 m_VisibilityChanged.Add( listener );
             }
-
             void RemoveVisibilityChangedListener( const SceneNodeChangeSignature::Delegate& listener )
             {
                 m_VisibilityChanged.Remove( listener );
             }
 
         protected:
-            bool                    m_IsInitialized;
-            bool                    m_IsSelected;
-            bool                    m_IsTransient;
-            Reflect::ElementPtr     m_Package;
+            // Reflected
+            TUID                    m_ID;                                   // The ID of the node
+            tstring                 m_DefaultName;                          // generated name of the node
+            tstring                 m_GivenName;                            // user created name (can be empty)
+            bool                    m_UseGivenName;                         // should the name change when the object does?
 
-            Scene*                  m_Owner;                                // The scene that owns us
+            // Non-reflected
+            bool                    m_IsInitialized;                        // has Initialize() been called?
+            bool                    m_IsSelected;                           // is this in the selection list?
+            bool                    m_IsTransient;                          // is this a temp object?
+
+            Scene*                  m_Owner;                                // the scene that owns us
             SceneGraph*             m_Graph;                                // the graph that evaluates us
             SceneNodeType*          m_NodeType;                             // the type we are an instance of
             S_SceneNodeDumbPtr      m_Ancestors;                            // nodes that are evaluated before this Node

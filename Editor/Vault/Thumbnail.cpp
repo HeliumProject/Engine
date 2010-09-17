@@ -6,14 +6,14 @@ using namespace Helium;
 using namespace Helium::Core;
 using namespace Helium::Editor;
 
-Thumbnail::Thumbnail( Render::DeviceManager* d3dManager )
+Thumbnail::Thumbnail( DeviceManager* d3dManager )
 : m_DeviceManager( d3dManager )
 , m_Texture( NULL )
 , m_IsFromIcon( false )
 {
 }
 
-Thumbnail::Thumbnail( Render::DeviceManager* d3dManager, IDirect3DTexture9* texture )
+Thumbnail::Thumbnail( DeviceManager* d3dManager, IDirect3DTexture9* texture )
 : m_DeviceManager( d3dManager )
 , m_Texture( texture )
 , m_IsFromIcon( false )

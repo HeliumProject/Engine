@@ -2,6 +2,7 @@
 #include "Camera.h"
 
 #include "Foundation/Math/AngleAxis.h"
+#include "Foundation/Math/Matrix3.h"
 
 #include "Core/Scene/Orientation.h"
 
@@ -12,11 +13,11 @@ using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::Core;
 
-const float Core::Camera::NearClipDistance = 0.05f;
-const float Core::Camera::FarClipDistance = 10000.0f;
-const float Core::Camera::FieldOfView = 72.0f * Math::DegToRad;
+const float Camera::NearClipDistance = 0.05f;
+const float Camera::FarClipDistance = 10000.0f;
+const float Camera::FieldOfView = 72.0f * Math::DegToRad;
 
-REFLECT_DEFINE_ABSTRACT(Core::Camera);
+REFLECT_DEFINE_ABSTRACT(Camera);
 
 Camera::Camera()
 : m_ProjectionMode( ProjectionModes::Perspective )
@@ -33,7 +34,7 @@ Camera::Camera()
 
 void Camera::LoadSettings( CameraSettings* prefs )
 {
-  SetShadingMode( (Core::ShadingMode)prefs->m_ShadingMode ); 
+  SetShadingMode( (ShadingMode)prefs->m_ShadingMode ); 
   SetWireframeOnMesh( prefs->m_WireframeOnMesh ); 
   SetWireframeOnShaded( prefs->m_WireframeOnShaded ); 
   SetViewFrustumCulling( prefs->m_ViewFrustumCulling ); 
@@ -55,9 +56,9 @@ void Camera::Setup(ProjectionMode mode, const Vector3& dir, const Vector3& up)
 
   if (m_ProjectionMode == ProjectionModes::Orthographic)
   {
-    m_Orientation.SetBasis(Core::UpAxis, Vector4(up));
-    m_Orientation.SetBasis(Core::SideAxis, Vector4(dir.Cross(up)));
-    m_Orientation.SetBasis(Core::OutAxis, Vector4(Vector3::Zero - dir));
+    m_Orientation.SetBasis(UpAxis, Vector4(up));
+    m_Orientation.SetBasis(SideAxis, Vector4(dir.Cross(up)));
+    m_Orientation.SetBasis(OutAxis, Vector4(Vector3::Zero - dir));
     m_Orientation.Invert();
   }
 
@@ -74,7 +75,7 @@ void Camera::Reset()
   {
     AngleAxis up (-0.78539f, UpVector);
     AngleAxis side (0.39269f, SideVector);
-    m_Orientation = Matrix3 (up) * Matrix3 (side);
+    m_Orientation = Matrix3( up ) * Matrix3( side );
   }
 
   m_ViewFrustum = Frustum ();

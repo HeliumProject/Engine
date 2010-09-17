@@ -5,25 +5,21 @@
 
 namespace Helium
 {
-    namespace Content
-    {
-        class JointTransform;
-    }
-
     namespace Core
     {
         class PrimitiveRings;
 
-        class JointTransform : public Core::Transform
+        class JointTransform : public Transform
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( Core::JointTransform, Core::Transform );
+            REFLECT_DECLARE_ABSTRACT( JointTransform, Transform );
+            static void EnumerateClass( Reflect::Compositor<JointTransform>& comp );
             static void InitializeType();
             static void CleanupType();
 
         public:
-            JointTransform( Core::Scene* scene, Content::JointTransform* joint );
-            virtual ~JointTransform();
+            JointTransform();
+            ~JointTransform();
 
             virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
@@ -33,6 +29,9 @@ namespace Helium
             static void DrawSelected( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
 
             virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
+
+        protected:
+            bool m_SegmentScaleCompensate;
         };
     }
 }

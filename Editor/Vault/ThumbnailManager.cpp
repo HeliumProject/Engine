@@ -11,7 +11,7 @@ using namespace Helium::Editor;
 // Constructor
 // window - the window to receive ThumbnailLoadedEvents.
 // 
-ThumbnailManager::ThumbnailManager( wxWindow* window, Render::DeviceManager* d3dmanager, const tstring& thumbnailDirectory )
+ThumbnailManager::ThumbnailManager( wxWindow* window, DeviceManager* d3dmanager, const tstring& thumbnailDirectory )
 : m_Window( window )
 , m_Loader( d3dmanager, thumbnailDirectory )
 {

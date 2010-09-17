@@ -2,31 +2,45 @@
 
 #include "Instance.h"
 
-#include "Core/Content/Nodes/ContentVolume.h"
-
 namespace Helium
 {
     namespace Core
     {
         class VolumeType;
 
-        /////////////////////////////////////////////////////////////////////////////
-        // Editor's wrapper for an volume instance.
-        // 
-        class Volume : public Core::Instance
+        namespace VolumeShapes
+        {
+            enum VolumeShape
+            {
+                Cube,
+                Cylinder,
+                Sphere,
+                Capsule,
+            };
+            static void VolumeShapeEnumerateEnum( Reflect::Enumeration* info )
+            {
+                info->AddElement(Cube, TXT( "Cube" ) );
+                info->AddElement(Cylinder, TXT( "Cylinder" ) );
+                info->AddElement(Sphere, TXT( "Sphere" ) );
+                info->AddElement(Capsule, TXT( "Capsule" ) );
+            }
+        }
+        typedef VolumeShapes::VolumeShape VolumeShape;
+
+        class Volume : public Instance
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( Core::Volume, Core::Instance );
+            REFLECT_DECLARE_ABSTRACT( Volume, Instance );
+            static void EnumerateClass( Reflect::Compositor<Volume>& comp );
             static void InitializeType();
             static void CleanupType();
 
-            Volume(Core::Scene* s);
-            Volume(Core::Scene* s, Content::Volume* volume);
-            virtual ~Volume();
+            Volume();
+            ~Volume();
 
             virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
-            virtual SceneNodeTypePtr CreateNodeType( Core::Scene* scene ) const HELIUM_OVERRIDE;
+            virtual SceneNodeTypePtr CreateNodeType( Scene* scene ) const HELIUM_OVERRIDE;
 
             int GetShape() const;
             void SetShape( int shape );
@@ -45,9 +59,13 @@ namespace Helium
 
             bool IsPointerVisible() const;
             void SetPointerVisible(bool visible);
+
+        protected:
+            VolumeShape m_Shape;
+            bool        m_ShowPointer;
         };
 
-        typedef Helium::SmartPtr<Core::Volume> VolumePtr;
-        typedef std::vector< Core::Volume* > V_VolumeDumbPtr;
+        typedef Helium::SmartPtr<Volume> VolumePtr;
+        typedef std::vector< Volume* > V_VolumeDumbPtr;
     }
 }

@@ -8,7 +8,6 @@ using namespace Helium::Core;
 
 SceneSettings::SceneSettings()
 : m_MRU( new MRUData() )
-, m_DefaultNodeVisibility( new Content::NodeVisibility() )
 , m_ScaleManipulatorSize( 0.3f )
 , m_RotateManipulatorSize( 0.3f )
 , m_RotateManipulatorAxisSnap( false )
@@ -27,11 +26,6 @@ SceneSettings::SceneSettings()
 MRUData* SceneSettings::GetMRU()
 {
     return m_MRU;
-}
-
-Content::NodeVisibility* SceneSettings::GetDefaultNodeVisibility()
-{
-    return m_DefaultNodeVisibility; 
 }
 
 f32 SceneSettings::ScaleManipulatorSize() const

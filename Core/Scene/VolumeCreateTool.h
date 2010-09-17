@@ -13,7 +13,7 @@ namespace Helium
         class CORE_API VolumeCreateTool : public Core::CreateTool
         {
         public:
-            static Content::VolumeShape s_Shape;
+            static VolumeShape s_Shape;
 
         public:
             REFLECT_DECLARE_ABSTRACT(Core::VolumeCreateTool, Core::CreateTool);

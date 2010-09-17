@@ -631,182 +631,6 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Content"
-			>
-			<File
-				RelativePath=".\Content\ContentInit.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Content\ContentInit.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Content\NodeVisibility.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Content\NodeVisibility.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Content\SceneVisibility.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Content\SceneVisibility.h"
-				>
-			</File>
-			<Filter
-				Name="Nodes"
-				>
-				<File
-					RelativePath=".\Content\Nodes\ContentCamera.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentCamera.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentCurve.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentCurve.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentEntityInstance.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentEntityInstance.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentHierarchyNode.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentHierarchyNode.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentInfluence.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentInfluence.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentInstance.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentInstance.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentJointTransform.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentJointTransform.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentLayer.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentLayer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentLight.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentLight.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentLocator.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentLocator.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentMesh.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentMesh.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentPivotTransform.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentPivotTransform.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentPoint.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentPoint.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentSceneNode.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentSceneNode.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentShader.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentShader.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentSkin.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentSkin.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentTransform.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentTransform.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentVolume.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentVolume.h"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
 			Name="Asset"
 			>
 			<File
@@ -1054,7 +878,7 @@
 				>
 			</File>
 			<Filter
-				Name="Tools"
+				Name="Tools/Manipulators"
 				>
 				<File
 					RelativePath=".\Scene\DuplicateTool.cpp"
@@ -1064,18 +888,6 @@
 					RelativePath=".\Scene\DuplicateTool.h"
 					>
 				</File>
-				<File
-					RelativePath=".\Scene\Tool.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\Tool.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Manipulators"
-				>
 				<File
 					RelativePath=".\Scene\Manipulator.cpp"
 					>
@@ -1098,6 +910,14 @@
 				</File>
 				<File
 					RelativePath=".\Scene\ScaleManipulator.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Tool.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Tool.h"
 					>
 				</File>
 				<File
@@ -1134,6 +954,14 @@
 				</File>
 				<File
 					RelativePath=".\Scene\Curve.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\CurveControlPoint.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\CurveControlPoint.h"
 					>
 				</File>
 				<File
@@ -1302,14 +1130,6 @@
 				</File>
 				<File
 					RelativePath=".\Scene\PivotTransform.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\Point.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\Point.h"
 					>
 				</File>
 				<File
@@ -1568,122 +1388,122 @@
 					RelativePath=".\Scene\Visitor.h"
 					>
 				</File>
-			</Filter>
-			<Filter
-				Name="Primitives"
-				>
-				<File
-					RelativePath=".\Scene\Primitive.cpp"
+				<Filter
+					Name="Primitives"
 					>
-				</File>
-				<File
-					RelativePath=".\Scene\Primitive.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveAxes.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveAxes.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCapsule.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCapsule.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCircle.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCircle.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCone.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCone.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCube.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCube.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCylinder.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCylinder.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveFrame.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveFrame.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveGrid.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveGrid.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveLocator.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveLocator.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitivePointer.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitivePointer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveRadius.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveRadius.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveRings.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveRings.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveSphere.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveSphere.h"
-					>
-				</File>
+					<File
+						RelativePath=".\Scene\Primitive.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\Primitive.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveAxes.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveAxes.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveCapsule.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveCapsule.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveCircle.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveCircle.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveCone.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveCone.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveCube.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveCube.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveCylinder.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveCylinder.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveFrame.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveFrame.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveGrid.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveGrid.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveLocator.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveLocator.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitivePointer.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitivePointer.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveRadius.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveRadius.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveRings.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveRings.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveSphere.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scene\PrimitiveSphere.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
@@ -1695,14 +1515,6 @@
 			</File>
 			<File
 				RelativePath=".\Render\DeviceManager.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\Environment.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\Environment.h"
 				>
 			</File>
 			<File
@@ -1735,6 +1547,14 @@
 			</File>
 			<File
 				RelativePath=".\Render\RBShaderLoader.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Render\RenderEnvironment.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Render\RenderEnvironment.h"
 				>
 			</File>
 			<File

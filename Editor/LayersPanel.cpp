@@ -105,9 +105,6 @@ LayersPanel::~LayersPanel()
 // 
 bool LayersPanel::AddLayer( Layer* layer )
 {
-    //Verify this is the correct destination
-    Content::Layer* cLayer = layer->GetPackage<Content::Layer>();
-
     Helium::Insert<M_LayerDumbPtr>::Result inserted = m_Layers.insert( M_LayerDumbPtr::value_type( layer->GetName(), layer ) );
     HELIUM_ASSERT( inserted.second );
 
@@ -132,9 +129,6 @@ bool LayersPanel::AddLayer( Layer* layer )
 // 
 bool LayersPanel::RemoveLayer( Layer* layer )
 {
-    //Verify this is the correct destination
-    Content::Layer* cLayer = layer->GetPackage<Content::Layer>();
-
     bool foundLayer = m_Layers.erase( layer->GetName() ) > 0;
     HELIUM_ASSERT( foundLayer );
 
@@ -388,7 +382,8 @@ void LayersPanel::OnNewLayer( wxCommandEvent& event )
 {
     if ( m_Scene )
     {
-        Layer* layer = new Layer( m_Scene, new Content::Layer() );
+        LayerPtr layer = new Layer();
+        layer->SetOwner( m_Scene );
         m_Scene->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Scene, layer ) );
         m_Scene->Execute( false ); 
     }
@@ -406,8 +401,9 @@ void LayersPanel::OnNewLayerFromSelection( wxCommandEvent& dummyEvt )
             return;
         }
 
-        Undo::BatchCommandPtr batch       = new Undo::BatchCommand ();
-        Layer* layer = new Layer( m_Scene, new Content::Layer() );
+        Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+        LayerPtr layer = new Layer();
+        layer->SetOwner( m_Scene );
 
         // Generate a name for this layer
         GenerateLayerName(layer);
@@ -612,7 +608,6 @@ void LayersPanel::SelectionChanged( const SelectionChangeArgs& args )
             Layer* lunaLayer = Reflect::ObjectCast< Layer >( *itr );
             if ( lunaLayer )
             {
-                Content::Layer* contentLayer = lunaLayer->GetPackage<Content::Layer>();
                 HELIUM_ASSERT( m_Layers.find( lunaLayer->GetName() ) != m_Layers.end() );
 
                 ++numLayersInSelection;

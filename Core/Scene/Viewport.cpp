@@ -127,8 +127,8 @@ Viewport::~Viewport()
 {
     m_Cameras[ CameraModes::Orbit ].RemoveMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
 
-    m_DeviceManager.RemoveDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &Viewport::ReleaseResources ) );
-    m_DeviceManager.RemoveDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &Viewport::AllocateResources ) );
+    m_DeviceManager.RemoveDeviceLostListener( DeviceStateSignature::Delegate( this, &Viewport::ReleaseResources ) );
+    m_DeviceManager.RemoveDeviceFoundListener( DeviceStateSignature::Delegate( this, &Viewport::AllocateResources ) );
 
     for (u32 i=0; i<GlobalPrimitives::Count; i++)
         delete m_GlobalPrimitives[i];
@@ -297,8 +297,8 @@ Core::Primitive* Viewport::GetGlobalPrimitive( GlobalPrimitives::GlobalPrimitive
 void Viewport::InitDevice( HWND wnd )
 {
     m_DeviceManager.Init( wnd, 64, 64 );
-    m_DeviceManager.AddDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &Viewport::ReleaseResources ) );
-    m_DeviceManager.AddDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &Viewport::AllocateResources ) );
+    m_DeviceManager.AddDeviceLostListener( DeviceStateSignature::Delegate( this, &Viewport::ReleaseResources ) );
+    m_DeviceManager.AddDeviceFoundListener( DeviceStateSignature::Delegate( this, &Viewport::AllocateResources ) );
     m_ResourceTracker = new ResourceTracker( GetDevice() );
 }
 
@@ -1071,13 +1071,13 @@ void Viewport::UpdateCameraHistory()
     m_CameraHistory[m_CameraMode].Push( new CameraMovedCommand( this, &m_Cameras[m_CameraMode] ) );
 }
 
-void Viewport::ReleaseResources( const Render::DeviceStateArgs& args )
+void Viewport::ReleaseResources( const DeviceStateArgs& args )
 {
     m_ResourceTracker->DeviceLost();
     m_Statistics->Delete();
 }
 
-void Viewport::AllocateResources( const Render::DeviceStateArgs& args )
+void Viewport::AllocateResources( const DeviceStateArgs& args )
 {
     m_ResourceTracker->DeviceReset();
     m_Statistics->Create();

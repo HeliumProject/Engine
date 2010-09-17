@@ -10,9 +10,6 @@
 #include "Foundation/Undo/ExistenceCommand.h"
 #include "Foundation/Undo/Queue.h"
 
-#include "Core/Content/NodeVisibility.h"
-#include "Core/Content/SceneVisibility.h"
-
 #include "Core/API.h"
 #include "Core/Scene/Selection.h"
 #include "Core/Scene/PropertiesGenerator.h"
@@ -26,11 +23,6 @@
 
 namespace Helium
 {
-    namespace Content
-    {
-        class SceneNode;
-    }
-
     namespace Core
     {
         // 
@@ -578,7 +570,6 @@ namespace Helium
                 }
             }
 
-
             //
             // GUI Elements
             //  Sometimes direct references to GUI are necessary (like the 3d view)
@@ -589,21 +580,6 @@ namespace Helium
             {
                 return m_View;
             }
-
-            /// @brief function that looks up or creates a visibility entry in our database
-            /// Factory function that returns the visibility settings for the ID passed in.
-            /// If that ID does not have visibility settings, assigns and returns the default settings 
-            /// @param ndoeId The ID of the node whos visibility settings we want
-            /// @return The visibility settings
-            Content::NodeVisibilityPtr GetVisibility(tuid nodeId); 
-
-            bool GetVisibilityFile(tstring& filePath); 
-            void LoadVisibility(); 
-            void SaveVisibility(); 
-
-        private: 
-            Content::SceneVisibilityPtr m_VisibilityDB; 
-
 
             //
             // Load
@@ -617,7 +593,6 @@ namespace Helium
             // Import data into this scene, possibly merging with existing nodes.
             Undo::CommandPtr Import( const Helium::Path& path, ImportAction action = ImportActions::Import, u32 importFlags = ImportFlags::None, Core::HierarchyNode* parent = NULL, i32 importReflectType = Reflect::ReservedTypes::Invalid );
             Undo::CommandPtr ImportXML( const tstring& xml, u32 importFlags = ImportFlags::None, Core::HierarchyNode* parent = NULL );
-            SceneNodePtr CreateNode( Content::SceneNode* data );
             Undo::CommandPtr ImportSceneNodes( Reflect::V_Element& elements, ImportAction action, u32 importFlags, i32 importReflectType = Reflect::ReservedTypes::Invalid );
 
         private:
@@ -695,10 +670,6 @@ namespace Helium
             // nitty gritty helpers for AddObject/RemoveObject
             void AddSceneNode( const SceneNodePtr& node );
             void RemoveSceneNode( const SceneNodePtr& node );
-
-            // handle our own events
-            void OnSceneNodeAdded( const NodeChangeArgs& args ); 
-            void OnSceneNodeRemoved( const NodeChangeArgs& args ); 
 
             //
             // Evaluation, Rendering, and Picking

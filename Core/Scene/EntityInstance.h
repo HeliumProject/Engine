@@ -1,42 +1,22 @@
 #pragma once
 
 #include "Instance.h"
-
-#include "Core/Content/Nodes/ContentEntityInstance.h"
+#include "Core/Asset/Classes/Entity.h"
 
 namespace Helium
 {
     namespace Core
     {
-        struct LightmapTweakArgs
-        {
-            class EntityInstance* m_Entity;
-            u32      m_LightmapSetIndex;
-
-            LightmapTweakArgs( class Core::EntityInstance* entity, u32 lightmapSetIndex )
-                : m_Entity( entity )
-                , m_LightmapSetIndex( lightmapSetIndex )
-            {}
-        };
-        typedef Helium::Signature< const LightmapTweakArgs& > LightmapTweakSignature;
-
-        struct CubemapTweakArgs
-        {
-            class EntityInstance* m_Entity;
-
-            CubemapTweakArgs( class Core::EntityInstance* entity )
-                : m_Entity( entity )
-            {}
-        };
-        typedef Helium::Signature< const CubemapTweakArgs& > CubemapTweakSignature;
+        class EntitySet;
+        class EntityInstance;
 
         struct EntityAssetChangeArgs
         {
-            class Core::EntityInstance* m_Entity;
-            Helium::Path m_OldPath;
-            Helium::Path m_NewPath;
+            EntityInstance* m_Entity;
+            Helium::Path    m_OldPath;
+            Helium::Path    m_NewPath;
 
-            EntityAssetChangeArgs( class Core::EntityInstance* entity, const Helium::Path& oldPath, const Helium::Path& newPath )
+            EntityAssetChangeArgs( class EntityInstance* entity, const Helium::Path& oldPath, const Helium::Path& newPath )
                 : m_Entity( entity )
                 , m_OldPath( oldPath )
                 , m_NewPath( newPath )
@@ -44,79 +24,48 @@ namespace Helium
         };
         typedef Helium::Signature< const EntityAssetChangeArgs& > EntityAssetChangeSignature;
 
-        /////////////////////////////////////////////////////////////////////////////
-        // Editor's wrapper for an entity instance.
-        //
-        class CORE_API EntityInstance : public Core::Instance
+        class CORE_API EntityInstance : public Instance
         {
-            //
-            // Members
-            //
-
-        protected:
-            class EntitySet* m_ClassSet;
-            mutable Core::ScenePtr m_Scene;
-
         public:
-            REFLECT_DECLARE_ABSTRACT( Core::EntityInstance, Core::Instance );
+            REFLECT_DECLARE_CLASS( EntityInstance, Instance );
+            static void EnumerateClass( Reflect::Compositor< EntityInstance >& comp );
             static void InitializeType();
             static void CleanupType();
 
+            EntityInstance();
+            ~EntityInstance();
 
-            EntityInstance(Core::Scene* parent);
-            EntityInstance(Core::Scene* parent, Content::EntityInstance* entity);
-            virtual ~EntityInstance();
-
-            void ConstructorInit();
+            virtual bool ValidatePersistent( const Component::ComponentPtr& attr ) const HELIUM_OVERRIDE;
+            virtual const Component::ComponentPtr& GetComponent( i32 typeID ) const HELIUM_OVERRIDE;
+            virtual bool SetComponent( const Component::ComponentPtr& component, bool validate = true, tstring* error = NULL ) HELIUM_OVERRIDE;
 
             virtual tstring GenerateName() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
-            virtual SceneNodeTypePtr CreateNodeType( Core::Scene* scene ) const HELIUM_OVERRIDE;
+            virtual SceneNodeTypePtr CreateNodeType( Scene* scene ) const HELIUM_OVERRIDE;
 
             // retrieve the nested scene from the scene manager
-            Core::Scene* GetNestedScene(GeometryMode mode, bool load_on_demand = true) const;
+            Scene* GetNestedScene(GeometryMode mode, bool load_on_demand = true) const;
 
-
-            //
-            // Should we show the pointer
-            //
+            tstring GetEntityPath() const;
+            void SetEntityPath( const tstring& path );
+            Asset::EntityPtr GetEntity() const;
 
             bool IsPointerVisible() const;
             void SetPointerVisible(bool visible);
 
-
-            //
-            // Should we show our bounds
-            //
-
             bool IsBoundsVisible() const;
             void SetBoundsVisible(bool visible);
-
-
-            //
-            // Should we show geometry while we are drawing?
-            //
 
             bool IsGeometryVisible() const;
             void SetGeometryVisible(bool visible);
 
-
-            //
-            // Sets help us organize groups of entities together
-            //
-
             // class set is the object common to all entities with common class within the same type
-            class Core::EntitySet* GetClassSet();
-            const class Core::EntitySet* GetClassSet() const;
-            void SetClassSet( class Core::EntitySet* artClass );
+            class EntitySet* GetClassSet();
+            const class EntitySet* GetClassSet() const;
+            void SetClassSet( class EntitySet* artClass );
 
             // gather some manifest data
             virtual void PopulateManifest( Asset::SceneManifest* manifest ) const HELIUM_OVERRIDE;
-
-
-            //
-            // Evaluate and Render
-            //
 
         public:
             virtual void Evaluate(GraphDirection direction) HELIUM_OVERRIDE;
@@ -131,15 +80,6 @@ namespace Helium
 
         private:
             static void CreatePanel( CreatePanelArgs& args );
-
-
-            //
-            // UI
-            //
-
-        public:
-            tstring GetEntityAssetPath() const;
-            void SetEntityAssetPath( const tstring& entityClass );
 
             //
             // Callbacks
@@ -176,9 +116,17 @@ namespace Helium
             {
                 m_ClassChanged.Remove( listener );
             }
+
+        protected:
+            Helium::Path        m_Path;
+            bool                m_ShowPointer;
+            bool                m_ShowBounds;
+            bool                m_ShowGeometry;
+            EntitySet*          m_ClassSet;
+            mutable ScenePtr    m_Scene;
         };
 
-        typedef Helium::SmartPtr<Core::EntityInstance> EntityPtr;
-        typedef std::vector<Core::EntityInstance*> V_EntityDumbPtr;
+        typedef Helium::SmartPtr<EntityInstance> EntityInstancePtr;
+        typedef std::vector<EntityInstance*> V_EntityInstanceDumbPtr;
     }
 }

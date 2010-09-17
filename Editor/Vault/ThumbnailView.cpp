@@ -104,8 +104,8 @@ ThumbnailView::ThumbnailView( wxWindow *parent, wxWindowID id, const wxPoint& po
     m_ViewMatrix = Math::Matrix4( pivot * -1 ) * m_Orientation * Math::Matrix4( Math::Vector3::BasisZ * ( -s_FarClipDistance / 2.0f ) );
 
     m_DeviceManager.Init( GetHwnd(), 64, 64 );
-    m_DeviceManager.AddDeviceFoundListener( Core::Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
-    m_DeviceManager.AddDeviceLostListener( Core::Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
+    m_DeviceManager.AddDeviceFoundListener( Core::DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
+    m_DeviceManager.AddDeviceLostListener( Core::DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
     CreateResources();
 
     m_TileCreator.SetDefaultThumbnails( m_TextureError, m_TextureLoading, m_TextureFolder );
@@ -149,8 +149,8 @@ ThumbnailView::~ThumbnailView()
     m_EditCtrl->Disconnect( m_EditCtrl->GetId(), wxEVT_KILL_FOCUS, wxFocusEventHandler( ThumbnailView::OnEditBoxLostFocus ), NULL, this );
     m_EditCtrl->Disconnect( m_EditCtrl->GetId(), wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ThumbnailView::OnEditBoxPressEnter ), NULL, this );
 
-    m_DeviceManager.RemoveDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
-    m_DeviceManager.RemoveDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
+    m_DeviceManager.RemoveDeviceFoundListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
+    m_DeviceManager.RemoveDeviceLostListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
 
     if ( m_LabelFont )
     {
@@ -2035,7 +2035,7 @@ void ThumbnailView::OnVaultPanelClosing( wxCloseEvent& args )
 ///////////////////////////////////////////////////////////////////////////////
 // If the device is lost, clean up any D3D resources that we created.
 // 
-void ThumbnailView::OnReleaseResources( const Render::DeviceStateArgs& args )
+void ThumbnailView::OnReleaseResources( const DeviceStateArgs& args )
 {
     DeleteResources();
 
@@ -2047,7 +2047,7 @@ void ThumbnailView::OnReleaseResources( const Render::DeviceStateArgs& args )
 ///////////////////////////////////////////////////////////////////////////////
 // If the device is found, reset any D3D resources that are needed.
 // 
-void ThumbnailView::OnAllocateResources( const Render::DeviceStateArgs& args )
+void ThumbnailView::OnAllocateResources( const DeviceStateArgs& args )
 {
     CreateResources();
 }

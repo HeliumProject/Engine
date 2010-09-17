@@ -13,7 +13,6 @@
 
 using namespace Helium;
 using namespace Helium::Core;
-using namespace Helium::Core::Render;
 
 u32 TextureAddressModes( u32 mode )
 {
@@ -67,22 +66,22 @@ D3DFORMAT GetD3DColorFormat( const Asset::TextureFormat format )
 
 u32 TextureFilterMode( const Asset::TextureFilter mode )
 {
-    u32 outMode = Render::Texture::FILTER_LINEAR;
+    u32 outMode = Texture::FILTER_LINEAR;
 
     switch( mode )
     {
     case Asset::TextureFilters::Point:
-        outMode = Render::Texture::FILTER_POINT;
+        outMode = Texture::FILTER_POINT;
         break;
     case Asset::TextureFilters::Bilinear:
     case Asset::TextureFilters::Trilinear:
-        outMode = Render::Texture::FILTER_LINEAR;
+        outMode = Texture::FILTER_LINEAR;
         break;
     case Asset::RunTimeFilters::RTF_ANISO2_BI:
     case Asset::RunTimeFilters::RTF_ANISO2_TRI:
     case Asset::RunTimeFilters::RTF_ANISO4_BI:
     case Asset::RunTimeFilters::RTF_ANISO4_TRI:
-        outMode = Render::Texture::FILTER_ANISOTROPIC;
+        outMode = Texture::FILTER_ANISOTROPIC;
         break;
     default:
         break;
@@ -91,29 +90,29 @@ u32 TextureFilterMode( const Asset::TextureFilter mode )
     return outMode;
 }
 
-void SetShaderClassAlpha( Render::Shader* sh, Asset::AlphaType alphaMode )
+void SetShaderClassAlpha( RenderShader* sh, Asset::AlphaType alphaMode )
 {
     switch ( alphaMode )
     {
     case Asset::AlphaTypes::ALPHA_OPAQUE:
-        sh->m_alpha_type = Render::Shader::ALPHA_OPAQUE;
+        sh->m_alpha_type = RenderShader::ALPHA_OPAQUE;
         break;
 
         break;
 
     case Asset::AlphaTypes::ALPHA_ADDITIVE:
-        sh->m_alpha_type = Render::Shader::ALPHA_ADDITIVE;
+        sh->m_alpha_type = RenderShader::ALPHA_ADDITIVE;
         break;
 
     case Asset::AlphaTypes::ALPHA_CUTOUT:
     case Asset::AlphaTypes::ALPHA_SOFT_EDGE:
-        sh->m_alpha_type = Render::Shader::ALPHA_CUTOUT;
+        sh->m_alpha_type = RenderShader::ALPHA_CUTOUT;
         break;
 
     case Asset::AlphaTypes::ALPHA_SCUNGE:
     case Asset::AlphaTypes::ALPHA_OVERLAY:
     case Asset::AlphaTypes::ALPHA_BLENDED:
-        sh->m_alpha_type = Render::Shader::ALPHA_BLENDED;
+        sh->m_alpha_type = RenderShader::ALPHA_BLENDED;
         break;
     }
 }
@@ -128,7 +127,7 @@ RBShaderLoader::~RBShaderLoader()
 
 }
 
-Render::Shader* RBShaderLoader::ParseFile( const tchar* fname, Render::ShaderManager* db )
+RenderShader* RBShaderLoader::ParseFile( const tchar* fname, ShaderManager* db )
 {
     Asset::ShaderAssetPtr shaderClass = Asset::AssetClass::LoadAssetClass< Asset::ShaderAsset >( fname );
     if ( !shaderClass.ReferencesObject() )
@@ -138,7 +137,7 @@ Render::Shader* RBShaderLoader::ParseFile( const tchar* fname, Render::ShaderMan
     }
 
     // this seems like a valid shader, allocate a shader
-    Render::Shader* sh = new Render::Shader(db,fname);
+    RenderShader* sh = new RenderShader(db,fname);
 
     tstring texturePath;
     bool hadError = false;
@@ -148,7 +147,7 @@ Render::Shader* RBShaderLoader::ParseFile( const tchar* fname, Render::ShaderMan
     if (shaderClass->m_DoubleSided)
         sh->m_flags|=SHDR_FLAG_TWO_SIDED;
 
-    Render::TextureSettings settings;
+    TextureSettings settings;
     settings.Clear();
     settings.m_WrapU = TextureAddressModes( shaderClass->m_WrapModeU );
     settings.m_WrapV = TextureAddressModes( shaderClass->m_WrapModeV );
@@ -170,7 +169,7 @@ Render::Shader* RBShaderLoader::ParseFile( const tchar* fname, Render::ShaderMan
 
     UpdateShader(sh, shaderClass);
 
-    if( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_BASE_MAP ) )
+    if( !db->LoadTextureWithSettings( settings, sh, Texture::SAMPLER_BASE_MAP ) )
     {
         if ( settings.m_Path != TXT( "@@base" ) )
         {
@@ -179,7 +178,7 @@ Render::Shader* RBShaderLoader::ParseFile( const tchar* fname, Render::ShaderMan
             settings.m_Format = D3DFMT_UNKNOWN;
             settings.m_Path = TXT( "@@base" );
 
-            if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_BASE_MAP ) )
+            if ( !db->LoadTextureWithSettings( settings, sh, Texture::SAMPLER_BASE_MAP ) )
             {
                 Log::Error( TXT( "Could not load default base map.\n" ) );
                 hadError = true;
@@ -212,7 +211,7 @@ Render::Shader* RBShaderLoader::ParseFile( const tchar* fname, Render::ShaderMan
 
     UpdateShader(sh, shaderClass);
 
-    if( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_NORMAL_MAP ) )
+    if( !db->LoadTextureWithSettings( settings, sh, Texture::SAMPLER_NORMAL_MAP ) )
     {
         if ( settings.m_Path != TXT( "@@normal" ) )
         {
@@ -221,7 +220,7 @@ Render::Shader* RBShaderLoader::ParseFile( const tchar* fname, Render::ShaderMan
             settings.m_Format = D3DFMT_UNKNOWN;
             settings.m_Path = TXT( "@@normal" );
 
-            if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_NORMAL_MAP ) )
+            if ( !db->LoadTextureWithSettings( settings, sh, Texture::SAMPLER_NORMAL_MAP ) )
             {
                 Log::Error( TXT( "Could not load default normal map.\n" ) );
                 hadError = true;
@@ -242,10 +241,10 @@ Render::Shader* RBShaderLoader::ParseFile( const tchar* fname, Render::ShaderMan
         settings.m_Format = GetD3DColorFormat( gpiMap->GetFormat() );
         settings.m_MipBias = 0.0f;
 
-        if( db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_GPI_MAP ) )
+        if( db->LoadTextureWithSettings( settings, sh, Texture::SAMPLER_GPI_MAP ) )
         {
-            sh->m_textures[ Render::Texture::SAMPLER_INCAN_MAP ] = 0xffffffff;
-            sh->m_textures[ Render::Texture::SAMPLER_PARALLAX_MAP ] = 0xffffffff;
+            sh->m_textures[ Texture::SAMPLER_INCAN_MAP ] = 0xffffffff;
+            sh->m_textures[ Texture::SAMPLER_PARALLAX_MAP ] = 0xffffffff;
 
             sh->m_flags |= SHDR_FLAG_GPI_MAP;
 
@@ -259,19 +258,19 @@ Render::Shader* RBShaderLoader::ParseFile( const tchar* fname, Render::ShaderMan
             settings.m_Format = D3DFMT_UNKNOWN;
 
             settings.m_Path = TXT( "@@gloss" );
-            if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_GLOSS_MAP ) )
+            if ( !db->LoadTextureWithSettings( settings, sh, Texture::SAMPLER_GLOSS_MAP ) )
             {
                 Log::Error( TXT( "Could not load default gloss map.\n" ) );
                 hadError = true;
             }
             settings.m_Path = TXT( "@@parallax" );
-            if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_PARALLAX_MAP ) )
+            if ( !db->LoadTextureWithSettings( settings, sh, Texture::SAMPLER_PARALLAX_MAP ) )
             {
                 Log::Error( TXT( "Could not load default parallax map.\n" ) );
                 hadError = true;
             }
             settings.m_Path = TXT( "@@incan" );
-            if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_INCAN_MAP ) )
+            if ( !db->LoadTextureWithSettings( settings, sh, Texture::SAMPLER_INCAN_MAP ) )
             {
                 Log::Error( TXT( "Could not load default incan map.\n" ) );
                 hadError = true;
@@ -286,19 +285,19 @@ Render::Shader* RBShaderLoader::ParseFile( const tchar* fname, Render::ShaderMan
         settings.m_Format = D3DFMT_UNKNOWN;
 
         settings.m_Path = TXT( "@@gloss" );
-        if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_GLOSS_MAP ) )
+        if ( !db->LoadTextureWithSettings( settings, sh, Texture::SAMPLER_GLOSS_MAP ) )
         {
             Log::Error( TXT( "Could not load default gloss map.\n" ) );
             hadError = true;
         }
         settings.m_Path = TXT( "@@parallax" );
-        if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_PARALLAX_MAP ) )
+        if ( !db->LoadTextureWithSettings( settings, sh, Texture::SAMPLER_PARALLAX_MAP ) )
         {
             Log::Error( TXT( "Could not load default parallax map.\n" ) );
             hadError = true;
         }
         settings.m_Path = TXT( "@@incan" );
-        if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_INCAN_MAP ) )
+        if ( !db->LoadTextureWithSettings( settings, sh, Texture::SAMPLER_INCAN_MAP ) )
         {
             Log::Error( TXT( "Could not load default incan map.\n" ) );
             hadError = true;
@@ -316,32 +315,32 @@ Render::Shader* RBShaderLoader::ParseFile( const tchar* fname, Render::ShaderMan
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void RBShaderLoader::SetWrapUV( Render::TextureSettings* settings, u32 wrapU, u32 wrapV )
+void RBShaderLoader::SetWrapUV( TextureSettings* settings, u32 wrapU, u32 wrapV )
 {
     settings->m_WrapU = TextureAddressModes( wrapU );
     settings->m_WrapV = TextureAddressModes( wrapV );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void RBShaderLoader::SetFilter( Render::TextureSettings* settings, u32 filter )
+void RBShaderLoader::SetFilter( TextureSettings* settings, u32 filter )
 {
     settings->m_Filter = TextureFilterMode( (Asset::TextureFilter) filter );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void RBShaderLoader::SetColorFormat( Render::TextureSettings* settings, u32 colorFormat, u32 mode )
+void RBShaderLoader::SetColorFormat( TextureSettings* settings, u32 colorFormat, u32 mode )
 {
     switch ( mode )
     {
-    case Render::Texture::SAMPLER_GPI_MAP:
+    case Texture::SAMPLER_GPI_MAP:
         settings->m_Format = GetD3DColorFormat( (Asset::TextureFormat) colorFormat );
         break;
 
-    case Render::Texture::SAMPLER_NORMAL_MAP:
+    case Texture::SAMPLER_NORMAL_MAP:
         settings->m_Format = GetD3DColorFormat( (Asset::TextureFormat) colorFormat );
         break;
 
-    case Render::Texture::SAMPLER_BASE_MAP:
+    case Texture::SAMPLER_BASE_MAP:
     default:
         settings->m_Format = GetD3DColorFormat( (Asset::TextureFormat) colorFormat );
         break;
@@ -349,7 +348,7 @@ void RBShaderLoader::SetColorFormat( Render::TextureSettings* settings, u32 colo
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void RBShaderLoader::UpdateShaderClass(Render::ShaderManager* db, const tchar* shaderFilename, u32 alphaMode)
+void RBShaderLoader::UpdateShaderClass(ShaderManager* db, const tchar* shaderFilename, u32 alphaMode)
 {
     u32 shaderHandle = db->FindShader( shaderFilename );
     if ( shaderHandle == 0xffffffff )
@@ -357,14 +356,14 @@ void RBShaderLoader::UpdateShaderClass(Render::ShaderManager* db, const tchar* s
         return;
     }
 
-    Render::Shader* sh = db->ResolveShader( shaderHandle );
+    RenderShader* sh = db->ResolveShader( shaderHandle );
     HELIUM_ASSERT( sh );
 
     SetShaderClassAlpha( sh, (Asset::AlphaType) alphaMode );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void RBShaderLoader::UpdateShader(Render::Shader* sh, const Asset::ShaderAsset* shader)
+void RBShaderLoader::UpdateShader(RenderShader* sh, const Asset::ShaderAsset* shader)
 {
     if ( shader->m_EnableColorMapTint )
     {

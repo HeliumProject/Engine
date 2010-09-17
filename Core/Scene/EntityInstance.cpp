@@ -22,54 +22,128 @@ using namespace Helium::Math;
 using namespace Helium::Core;
 using namespace Helium::Component;
 
-REFLECT_DEFINE_ABSTRACT(Core::EntityInstance);
+REFLECT_DEFINE_CLASS(EntityInstance);
+
+void EntityInstance::EnumerateClass( Reflect::Compositor< EntityInstance >& comp )
+{
+    comp.AddField( &EntityInstance::m_Path,         "m_Path" );
+    comp.AddField( &EntityInstance::m_ShowPointer,  "m_ShowPointer" );
+    comp.AddField( &EntityInstance::m_ShowBounds,   "m_ShowBounds" );
+    comp.AddField( &EntityInstance::m_ShowGeometry, "m_ShowGeometry" );
+}
 
 void EntityInstance::InitializeType()
 {
-    Reflect::RegisterClassType< Core::EntityInstance >( TXT( "Core::EntityInstance" ) );
+    Reflect::RegisterClassType< EntityInstance >( TXT( "EntityInstance" ) );
     PropertiesGenerator::InitializePanel( TXT( "EntityInstance" ), CreatePanelSignature::Delegate( &EntityInstance::CreatePanel ) );
 }
 
 void EntityInstance::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::EntityInstance >();
+    Reflect::UnregisterClassType< EntityInstance >();
 }
 
-EntityInstance::EntityInstance(Core::Scene* scene)
-: Core::Instance (scene, new Content::EntityInstance())
+EntityInstance::EntityInstance()
+: m_ShowPointer (true)
+, m_ShowBounds (true)
+, m_ShowGeometry (false)
+, m_ClassSet( NULL )
 {
-    ConstructorInit();
-}
-
-EntityInstance::EntityInstance(Core::Scene* scene, Content::EntityInstance* entity)
-: Core::Instance ( scene, entity )
-{
-    ConstructorInit();
+    AddComponentAddedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &EntityInstance::OnComponentAdded ) );
+    AddComponentRemovedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &EntityInstance::OnComponentRemoved ) );
 }
 
 EntityInstance::~EntityInstance()
 {
-    Content::EntityInstance* pkg = GetPackage< Content::EntityInstance >();
-
-    pkg->RemoveComponentAddedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &EntityInstance::OnComponentAdded ) );
-    pkg->RemoveComponentRemovedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &EntityInstance::OnComponentRemoved ) );
+    RemoveComponentAddedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &EntityInstance::OnComponentAdded ) );
+    RemoveComponentRemovedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &EntityInstance::OnComponentRemoved ) );
 }
 
-void EntityInstance::ConstructorInit()
+bool EntityInstance::ValidatePersistent( const Component::ComponentPtr& attr ) const
 {
-    m_ClassSet = NULL;
-    m_Scene = NULL;
+    Asset::EntityPtr entityClass = GetEntity();
 
-    Content::EntityInstance* pkg = GetPackage< Content::EntityInstance >();
+    if ( entityClass.ReferencesObject() )
+    {
+        // if the value of the attribute we are setting to is the default value, don't set the attribute, and attempt to remove it if it exists in the Entity
+        if ( attr->GetComponentUsage() == ComponentUsages::Overridable )
+        {
+            ComponentPtr classAttr = entityClass->GetComponent( attr->GetType() );
 
-    pkg->AddComponentAddedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &EntityInstance::OnComponentAdded ) );
-    pkg->AddComponentRemovedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &EntityInstance::OnComponentRemoved ) );
+            if ( attr->Equals( classAttr ) )
+            {
+                return false;
+            }
+        }
+    }
+
+    return __super::ValidatePersistent(attr);
+}
+
+const ComponentPtr& EntityInstance::GetComponent(i32 typeID) const
+{
+    // try to get the attribute from the Entity
+    const ComponentPtr &instAttr = __super::GetComponent( typeID );
+
+    if ( instAttr )
+    {
+        ComponentUsage usage = instAttr->GetComponentUsage();
+
+        // NOTE: this handles the case where the Overridable attribute has been removed from the AssetClass
+        if ( usage == ComponentUsages::Overridable )
+        {
+            Asset::EntityPtr entityClass = GetEntity();
+
+            if ( entityClass.ReferencesObject() )
+            {
+                const ComponentPtr &classAttr = entityClass->GetComponent( typeID );
+
+                if ( classAttr == NULL )
+                {
+                    // Fan-fucking-tastic
+                    const_cast<EntityInstance*>(this)->RemoveComponent( typeID );
+                    return classAttr;
+                }
+            }
+        }
+
+        // it's either an Overridable attribute that has been over-riden in the Entity or it's an Instance attribute.
+        return instAttr;
+    }
+
+    Asset::EntityPtr entityClass = GetEntity();
+
+    if ( entityClass.ReferencesObject() )
+    {
+        return entityClass->GetComponent( typeID );
+    }
+
+    return instAttr;
+}
+
+bool EntityInstance::SetComponent( const ComponentPtr& attr, bool validate, tstring* error )
+{
+    // NOTE: GetAssetClass should ensure that the AssetClass is valid, and throw an exception otherwise
+    Asset::EntityPtr entityClass = GetEntity();
+
+    if ( entityClass.ReferencesObject() )
+    {
+        // find the attribute of the corresponding type in the asset class
+        ComponentPtr classAttr = entityClass->GetComponent( attr->GetType() );
+
+        // make sure we aren't attempting to pass in an attribute with the same address as the corresponding attribute in the EntityAsset attr
+        if ( classAttr == attr )
+        {
+            return true;
+        }
+    }
+
+    return __super::SetComponent( attr, validate, error );
 }
 
 tstring EntityInstance::GenerateName() const
 {
-    const Content::EntityInstance* entity = GetPackage<Content::EntityInstance>();
-    Asset::EntityPtr entityClass = entity->GetEntity();
+    Asset::EntityPtr entityClass = GetEntity();
 
     tstring name = entityClass ? entityClass->GetShortName() : TXT( "" );
 
@@ -95,10 +169,10 @@ tstring EntityInstance::GetApplicationTypeName() const
     return TXT( "EntityInstance" );
 }
 
-SceneNodeTypePtr EntityInstance::CreateNodeType( Core::Scene* scene ) const
+SceneNodeTypePtr EntityInstance::CreateNodeType( Scene* scene ) const
 {
     // Overridden to create an entity-specific type
-    Core::EntityType* nodeType = new Core::EntityType( scene, GetType() );
+    EntityType* nodeType = new EntityType( scene, GetType() );
 
     // Set the image index (usually this is handled by the base class, but we aren't calling the base)
     nodeType->SetImageIndex( GetImageIndex() );
@@ -106,7 +180,7 @@ SceneNodeTypePtr EntityInstance::CreateNodeType( Core::Scene* scene ) const
     return nodeType;
 }
 
-Core::Scene* EntityInstance::GetNestedScene( GeometryMode mode, bool load_on_demand ) const
+Scene* EntityInstance::GetNestedScene( GeometryMode mode, bool load_on_demand ) const
 {
     if (m_ClassSet->GetEntity())
     {
@@ -118,16 +192,42 @@ Core::Scene* EntityInstance::GetNestedScene( GeometryMode mode, bool load_on_dem
     return m_Scene;
 }
 
+tstring EntityInstance::GetEntityPath() const
+{
+    return m_Path.Get();
+}
+
+void EntityInstance::SetEntityPath( const tstring& path )
+{
+    Helium::Path oldPath = m_Path;
+    Helium::Path newPath = path;
+
+    m_ClassChanging.Raise( EntityAssetChangeArgs( this, oldPath, newPath ) );
+
+    m_Path = path;
+
+    // since our entity class is criteria used for deducing object type,
+    //  ensure we are a member of the correct type
+    CheckNodeType();
+
+    m_ClassChanged.Raise( EntityAssetChangeArgs( this, oldPath, newPath ) );
+
+    Dirty();
+}
+
+Asset::EntityPtr EntityInstance::GetEntity() const
+{
+    return Asset::AssetClass::LoadAssetClass< Asset::Entity >( m_Path );
+}
+
 bool EntityInstance::IsPointerVisible() const
 {
-    HELIUM_ASSERT(m_VisibilityData); 
-    return m_VisibilityData->GetShowPointer(); 
+    return m_ShowPointer; 
 }
 
 void EntityInstance::SetPointerVisible(bool visible)
 {
-    HELIUM_ASSERT(m_VisibilityData); 
-    m_VisibilityData->SetShowPointer(visible); 
+    m_ShowPointer = visible;
 
     // we need to dirty to cause our bounds needs to be re-computed
     Dirty();
@@ -135,14 +235,12 @@ void EntityInstance::SetPointerVisible(bool visible)
 
 bool EntityInstance::IsBoundsVisible() const
 {
-    HELIUM_ASSERT(m_VisibilityData); 
-    return m_VisibilityData->GetShowBounds(); 
+    return m_ShowBounds; 
 }
 
 void EntityInstance::SetBoundsVisible(bool visible)
 {
-    HELIUM_ASSERT(m_VisibilityData); 
-    m_VisibilityData->SetShowBounds(visible); 
+    m_ShowBounds = visible;
 
     // we need to dirty to cause our bounds needs to be re-computed
     Dirty();
@@ -150,30 +248,28 @@ void EntityInstance::SetBoundsVisible(bool visible)
 
 bool EntityInstance::IsGeometryVisible() const
 {
-    HELIUM_ASSERT(m_VisibilityData); 
-    return m_VisibilityData->GetShowGeometry(); 
+    return m_ShowGeometry; 
 }
 
 void EntityInstance::SetGeometryVisible(bool visible)
 {
-    HELIUM_ASSERT(m_VisibilityData); 
-    m_VisibilityData->SetShowGeometry(visible); 
+    m_ShowGeometry = visible;
 
     // we need to dirty to cause our bounds needs to be re-computed
     Dirty();
 }
 
-Core::EntitySet* EntityInstance::GetClassSet()
+EntitySet* EntityInstance::GetClassSet()
 {
     return m_ClassSet;
 }
 
-const Core::EntitySet* EntityInstance::GetClassSet() const
+const EntitySet* EntityInstance::GetClassSet() const
 {
     return m_ClassSet;
 }
 
-void EntityInstance::SetClassSet(Core::EntitySet* classSet)
+void EntityInstance::SetClassSet(EntitySet* classSet)
 {
     m_ClassSet = classSet;
 }
@@ -196,7 +292,7 @@ void EntityInstance::Evaluate(GraphDirection direction)
             // merge type pointer into our bounding box
             if ( IsPointerVisible() )
             {
-                Core::EntityType* type = Reflect::AssertCast<Core::EntityType>(m_NodeType);
+                EntityType* type = Reflect::AssertCast<EntityType>(m_NodeType);
 
                 if ( type && type->GetPointer() )
                 {
@@ -227,7 +323,7 @@ void EntityInstance::Evaluate(GraphDirection direction)
             if ( IsGeometryVisible() )
             {
                 // merge nested scene into our bounding box
-                const Core::Scene* nested = GetNestedScene( m_Scene->GetViewport()->GetGeometryMode() );
+                const Scene* nested = GetNestedScene( m_Scene->GetViewport()->GetGeometryMode() );
 
                 if (nested)
                 {
@@ -242,8 +338,6 @@ void EntityInstance::Evaluate(GraphDirection direction)
 
 void EntityInstance::Render( RenderVisitor* render )
 {
-    const Content::EntityInstance* package = GetPackage< Content::EntityInstance >();
-
     if (IsPointerVisible())
     {
         // entity pointer is drawn normalized
@@ -261,7 +355,7 @@ void EntityInstance::Render( RenderVisitor* render )
         entry->m_Center = m_ObjectBounds.Center();
         entry->m_Draw = &EntityInstance::DrawBounds;
 
-        if ( package->m_TransparentOverride ? package->m_Transparent : Reflect::AssertCast<Core::InstanceType>( m_NodeType )->IsTransparent() )
+        if ( m_TransparentOverride ? m_Transparent : Reflect::AssertCast<InstanceType>( m_NodeType )->IsTransparent() )
         {
             entry->m_Flags |= RenderFlags::DistanceSort;
         }
@@ -269,7 +363,7 @@ void EntityInstance::Render( RenderVisitor* render )
 
     if (IsGeometryVisible())
     {
-        Core::Scene* nested = GetNestedScene( render->GetViewport()->GetGeometryMode() );
+        Scene* nested = GetNestedScene( render->GetViewport()->GetGeometryMode() );
 
         VisitorState state ( render->State().m_Matrix,
             render->State().m_Highlighted || (m_Scene->IsFocused() && IsHighlighted()),
@@ -286,14 +380,14 @@ void EntityInstance::Render( RenderVisitor* render )
     }
 
     // don't call __super here, it will draw big ass axes
-    Core::HierarchyNode::Render( render );
+    HierarchyNode::Render( render );
 }
 
 void EntityInstance::DrawPointer( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const Core::EntityInstance* entity = Reflect::ConstAssertCast<Core::EntityInstance>( object );
+    const EntityInstance* entity = Reflect::ConstAssertCast<EntityInstance>( object );
 
-    const Core::EntityType* type = Reflect::ConstAssertCast<Core::EntityType>( entity->GetNodeType() );
+    const EntityType* type = Reflect::ConstAssertCast<EntityType>( entity->GetNodeType() );
 
     entity->SetMaterial( type->GetMaterial() );
 
@@ -303,27 +397,23 @@ void EntityInstance::DrawPointer( IDirect3DDevice9* device, DrawArgs* args, cons
 
 void EntityInstance::DrawBounds( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const Core::EntityInstance* entity = Reflect::ConstAssertCast<Core::EntityInstance>( object );
+    const EntityInstance* entity = Reflect::ConstAssertCast<EntityInstance>( object );
 
-    const Core::EntityType* type = Reflect::ConstAssertCast<Core::EntityType>( entity->GetNodeType() );
+    const EntityType* type = Reflect::ConstAssertCast<EntityType>( entity->GetNodeType() );
 
-    const Core::EntitySet* classSet = entity->GetClassSet();
-
-    const Content::EntityInstance* package = entity->GetPackage< Content::EntityInstance >();
+    const EntitySet* classSet = entity->GetClassSet();
 
     entity->SetMaterial( type->GetMaterial() );
 
     // draw class shape
-    classSet->GetShape()->Draw( args, package->m_SolidOverride ? &package->m_Solid : NULL, package->m_TransparentOverride ? &package->m_Transparent : NULL );
+    classSet->GetShape()->Draw( args, entity->m_SolidOverride ? &entity->m_Solid : NULL, entity->m_TransparentOverride ? &entity->m_Transparent : NULL );
 }
 
 bool EntityInstance::Pick( PickVisitor* pick )
 {
     bool result = false;
 
-    Core::EntityType* type = Reflect::AssertCast<Core::EntityType>(m_NodeType);
-
-    const Content::EntityInstance* package = GetPackage< Content::EntityInstance >();
+    EntityType* type = Reflect::AssertCast<EntityType>(m_NodeType);
 
     pick->SetFlag( PickFlags::IgnoreVertex, true );
 
@@ -338,7 +428,7 @@ bool EntityInstance::Pick( PickVisitor* pick )
     if ((IsBoundsVisible() || m_IsSelected) && m_ClassSet && m_ClassSet->GetShape())
     {
         pick->SetCurrentObject (this, pick->State().m_Matrix);
-        result |= m_ClassSet->GetShape()->Pick (pick, package->m_SolidOverride ? &package->m_Solid : NULL);
+        result |= m_ClassSet->GetShape()->Pick(pick, m_SolidOverride ? &m_Solid : NULL);
     }
 
     if (IsGeometryVisible())
@@ -353,7 +443,7 @@ bool EntityInstance::Pick( PickVisitor* pick )
         pick->PushState( VisitorState (pick->State().m_Matrix, IsHighlighted(), IsSelected(), IsLive(), IsSelectable()) );
 
         // retrieve nested scene
-        const Core::Scene* scene = GetNestedScene(GetOwner()->GetViewport()->GetGeometryMode());
+        const Scene* scene = GetNestedScene(GetOwner()->GetViewport()->GetGeometryMode());
 
         // hit test the entire nested scene
         if (scene && scene->Pick(pick))
@@ -381,7 +471,7 @@ bool EntityInstance::Pick( PickVisitor* pick )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Returns true if the specified panel is supported by Core::EntityInstance.
+// Returns true if the specified panel is supported by EntityInstance.
 //
 bool EntityInstance::ValidatePanel(const tstring& name)
 {
@@ -395,7 +485,7 @@ bool EntityInstance::ValidatePanel(const tstring& name)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Static function for creating the UI panel that allows users to edit Core::EntityInstance.
+// Static function for creating the UI panel that allows users to edit EntityInstance.
 //
 void EntityInstance::CreatePanel( CreatePanelArgs& args )
 {
@@ -406,36 +496,6 @@ void EntityInstance::CreatePanel( CreatePanelArgs& args )
         panel->SetCanvas( args.m_Generator->GetContainer()->GetCanvas() );
     }
     args.m_Generator->Pop();
-}
-
-tstring EntityInstance::GetEntityAssetPath() const
-{
-    Asset::Entity* entity = GetPackage< Content::EntityInstance >()->GetEntity();
-    if ( entity )
-    {
-        return entity->GetPath().Get();
-    }
-    return TXT("");
-}
-
-void EntityInstance::SetEntityAssetPath( const tstring& entityClass )
-{
-    Content::EntityInstance* entity = GetPackage< Content::EntityInstance >();
-
-    Helium::Path oldPath = entity->GetEntity()->GetPath();
-    Helium::Path newPath( entityClass );
-
-    m_ClassChanging.Raise( EntityAssetChangeArgs( this, oldPath, newPath ) );
-
-    entity->GetEntity()->SetPath( newPath );
-
-    // since our entity class is criteria used for deducing object type,
-    //  ensure we are a member of the correct type
-    CheckNodeType();
-
-    m_ClassChanged.Raise( EntityAssetChangeArgs( this, oldPath, newPath ) );
-
-    Dirty();
 }
 
 void EntityInstance::OnComponentAdded( const Component::ComponentCollectionChanged& args )

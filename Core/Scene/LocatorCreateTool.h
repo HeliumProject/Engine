@@ -13,7 +13,7 @@ namespace Helium
         class CORE_API LocatorCreateTool : public Core::CreateTool
         {
         public:
-            static Content::LocatorShape s_Shape;
+            static LocatorShape s_Shape;
 
         public:
             REFLECT_DECLARE_ABSTRACT(Core::LocatorCreateTool, Core::CreateTool);

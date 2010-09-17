@@ -1,9 +1,6 @@
 /*#include "Precompile.h"*/
 #include "Skin.h"
 
-#include "Core/Content/Nodes/ContentSkin.h"
-#include "Core/Content/Nodes/ContentMesh.h"
-
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/Transform.h"
 #include "Core/Scene/Mesh.h"
@@ -11,36 +8,49 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-REFLECT_DEFINE_ABSTRACT( Skin );
+REFLECT_DEFINE_CLASS( Influence );
+
+void Influence::EnumerateClass( Reflect::Compositor<Influence>& comp )
+{
+    comp.AddField( &Influence::m_Objects,           "m_Objects" );
+    comp.AddField( &Influence::m_Weights,           "m_Weights" );
+}
+
+REFLECT_DEFINE_CLASS( Skin );
+
+void Skin::EnumerateClass( Reflect::Compositor<Skin>& comp )
+{
+    comp.AddField( &Skin::m_MeshID,                 "m_MeshID" );
+    comp.AddField( &Skin::m_Influences,             "m_Influences" );
+    comp.AddField( &Skin::m_InfluenceObjectIDs,     "m_InfluenceObjectIDs" );
+    comp.AddField( &Skin::m_InfluenceIndices,       "m_InfluenceIndices" );
+}
 
 void Skin::InitializeType()
 {
-    Reflect::RegisterClassType< Skin >( TXT( "Core::Skin" ) );
+    Reflect::RegisterClassType< Influence >();
+    Reflect::RegisterClassType< Skin >();
 }
 
 void Skin::CleanupType()
 {
+    Reflect::UnregisterClassType< Influence >();
     Reflect::UnregisterClassType< Skin >();
 }
 
-Skin::Skin( Core::Scene* scene, Content::Skin* skin )
-: Core::SceneNode ( scene, skin )
+Skin::Skin()
 {
-
 }
 
 Skin::~Skin()
 {
-
 }
 
 void Skin::Initialize()
 {
     __super::Initialize();
 
-    Content::Skin* skin = GetPackage<Content::Skin>();
-
-    m_Mesh = Reflect::ObjectCast< Core::Mesh > ( m_Owner->FindNode( skin->m_Mesh ));
+    m_Mesh = Reflect::ObjectCast< Mesh > ( m_Owner->FindNode( m_MeshID ) );
 
     if ( m_Mesh )
     {
@@ -48,12 +58,12 @@ void Skin::Initialize()
         m_Mesh->CreateDependency( this );
 
         // Dereference influence objects
-        V_TUID::const_iterator infItr = skin->m_InfluenceObjectIDs.begin();
-        V_TUID::const_iterator infEnd = skin->m_InfluenceObjectIDs.end();
+        V_TUID::const_iterator infItr = m_InfluenceObjectIDs.begin();
+        V_TUID::const_iterator infEnd = m_InfluenceObjectIDs.end();
         for ( ; infItr != infEnd; ++infItr )
         {
-            Core::SceneNode* obj = m_Owner->FindNode( *infItr );
-            Core::Transform* transform = Reflect::ObjectCast< Core::Transform >( obj );
+            SceneNode* obj = m_Owner->FindNode( *infItr );
+            Transform* transform = Reflect::ObjectCast< Transform >( obj );
             HELIUM_ASSERT( transform );
             if ( transform )
             {
@@ -81,9 +91,7 @@ void Skin::Evaluate(GraphDirection direction)
             // Get objects
             //
 
-            const Core::Transform* transform = m_Mesh->GetTransform();
-
-            const Content::MeshPtr& mesh (m_Mesh->GetPackage< Content::Mesh >());
+            const Transform* transform = m_Mesh->GetTransform();
 
 
             //
@@ -99,7 +107,7 @@ void Skin::Evaluate(GraphDirection direction)
 
             for ( size_t i = 0; i < m_InfluenceObjects.size(); i++ )
             {
-                const Core::Transform* influence = m_InfluenceObjects[i];
+                const Transform* influence = m_InfluenceObjects[i];
 
                 // build the current deformation transformation in global space
                 Math::Matrix4 deformMat = influence->GetInverseBindTransform() * influence->GetGlobalTransform();
@@ -117,16 +125,14 @@ void Skin::Evaluate(GraphDirection direction)
             // Build Skin Matrices
             //
 
-            Content::Skin* skin = GetPackage< Content::Skin >();
-
 #pragma TODO("This must have been if-zeroed out a long time ago, we need to lookup the polygon data via indices to fix this")
 #if 0
 
             {
                 int count = 0;
 
-                V_Polygon::const_iterator itr = mesh->m_Polygons.begin();
-                V_Polygon::const_iterator end = mesh->m_Polygons.end();
+                V_Polygon::const_iterator itr = m_Mesh->m_Polygons.begin();
+                V_Polygon::const_iterator end = m_Mesh->m_Polygons.end();
                 for ( u32 i = 0; itr != end; ++itr, ++i )
                 {
                     Matrix4 matrix;
@@ -139,16 +145,16 @@ void Skin::Evaluate(GraphDirection direction)
                     {
                         if ( j > 2 )
                         {
-                            BlendMatrix( transform, skin->m_Influences[ polygon->m_Vertices[0] ], matrix );
+                            BlendMatrix( transform, m_Influences[ polygon->m_Vertices[0] ], matrix );
                             m_SkinMatrices.push_back( matrix );
                             count++;
 
-                            BlendMatrix( transform, skin->m_Influences[ polygon->m_Vertices[j-1] ], matrix );
+                            BlendMatrix( transform, m_Influences[ polygon->m_Vertices[j-1] ], matrix );
                             m_SkinMatrices.push_back( matrix );
                             count++;
                         }
 
-                        BlendMatrix( transform, skin->m_Influences[ polygon->m_Vertices[j] ], matrix );
+                        BlendMatrix( transform, m_Influences[ polygon->m_Vertices[j] ], matrix );
                         m_SkinMatrices.push_back( matrix );
                         count++;
                     }
@@ -162,8 +168,8 @@ void Skin::Evaluate(GraphDirection direction)
             {
                 int count = 0;
 
-                V_Polygon::const_iterator itr = mesh->m_Polygons.begin();
-                V_Polygon::const_iterator end = mesh->m_Polygons.end();
+                V_Polygon::const_iterator itr = m_Mesh->m_Polygons.begin();
+                V_Polygon::const_iterator end = m_Mesh->m_Polygons.end();
                 for ( u32 i = 0; itr != end; ++itr, ++i )
                 {
                     const PolygonPtr& polygon (*itr);
@@ -175,18 +181,18 @@ void Skin::Evaluate(GraphDirection direction)
                         if ( j > 2 )
                         {
                             Math::Vector3& triVertex1 (m_Mesh->m_TriangleVertices[count]);
-                            triVertex1 = mesh->m_Vertices[ *vertexItr ];
+                            triVertex1 = m_Mesh->m_Vertices[ *vertexItr ];
                             m_SkinMatrices[polygon->m_Vertices[0]].TransformVertex( triVertex1 );
                             count++;
 
                             Math::Vector3& triVertex2 (m_Mesh->m_TriangleVertices[count]);
-                            triVertex2 = mesh->m_Vertices[ *vertexItr ];
+                            triVertex2 = m_Mesh->m_Vertices[ *vertexItr ];
                             m_SkinMatrices[polygon->m_Vertices[j-1]].TransformVertex( triVertex2 );
                             count++;
                         }
 
                         Math::Vector3& triVertex (m_Mesh->m_TriangleVertices[count]);
-                        triVertex = mesh->m_Vertices[ *vertexItr ];
+                        triVertex = m_Mesh->m_Vertices[ *vertexItr ];
                         m_SkinMatrices[polygon->m_Vertices[j]].TransformVertex( triVertex );
                         count++;
                     }
@@ -196,8 +202,8 @@ void Skin::Evaluate(GraphDirection direction)
             {
                 int count = 0;
 
-                V_Polygon::const_iterator itr = mesh->m_Polygons.begin();
-                V_Polygon::const_iterator end = mesh->m_Polygons.end();
+                V_Polygon::const_iterator itr = m_Mesh->m_Polygons.begin();
+                V_Polygon::const_iterator end = m_Mesh->m_Polygons.end();
                 for ( u32 i = 0; itr != end; ++itr, ++i )
                 {
                     const PolygonPtr& polygon (*itr);
@@ -209,18 +215,18 @@ void Skin::Evaluate(GraphDirection direction)
                         if ( j > 2 )
                         {
                             Math::Vector3& triNormal1 (m_Mesh->m_TriangleNormals[count]);
-                            triNormal1 = mesh->m_Normals[ *normalItr ];
+                            triNormal1 = m_Mesh->m_Normals[ *normalItr ];
                             m_SkinMatrices[polygon->m_Vertices[0]].TransformNormal( triNormal1 );
                             count++;
 
                             Math::Vector3& triNormal2 (m_Mesh->m_TriangleNormals[count]);
-                            triNormal2 = mesh->m_Normals[ *normalItr ];
+                            triNormal2 = m_Mesh->m_Normals[ *normalItr ];
                             m_SkinMatrices[polygon->m_Vertices[j-1]].TransformNormal( triNormal2 );
                             count++;
                         }
 
                         Math::Vector3& triNormal (m_Mesh->m_TriangleNormals[count]);
-                        triNormal = mesh->m_Normals[ *normalItr ];
+                        triNormal = m_Mesh->m_Normals[ *normalItr ];
                         m_SkinMatrices[polygon->m_Vertices[j]].TransformNormal( triNormal );
                         count++;
                     }
@@ -234,7 +240,7 @@ void Skin::Evaluate(GraphDirection direction)
     __super::Evaluate(direction);
 }
 
-void Skin::BlendMatrix(const Core::Transform* transform, const Content::Influence* influence, Math::Matrix4& matrix)
+void Skin::BlendMatrix(const Transform* transform, const Influence* influence, Math::Matrix4& matrix)
 {
     //
     // Blend influence deformation matrices together

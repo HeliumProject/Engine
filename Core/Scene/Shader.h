@@ -8,30 +8,21 @@
 
 namespace Helium
 {
-    // Forwards
-    namespace Content
-    {
-        class Shader;
-    }
-
     namespace Core
     {
-        // Forwards
         class Scene;
 
-        class Shader : public Core::SceneNode
+        class Shader : public SceneNode
         {
-        private:
-            bool m_Alpha;
-            u32 m_BaseTextureSize;
-            IDirect3DTexture9* m_BaseTexture;
-
-            REFLECT_DECLARE_ABSTRACT( Shader, Core::SceneNode );
+        public:
+            REFLECT_DECLARE_ABSTRACT( Shader, SceneNode );
+            static void EnumerateClass( Reflect::Compositor<Shader>& comp );
             static void InitializeType();
             static void CleanupType();
 
         public:
-            Shader( Core::Scene* s, Content::Shader* shader );
+            Shader();
+            ~Shader();
 
             virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
@@ -42,8 +33,20 @@ namespace Helium
             bool GetAlpha() const;
             IDirect3DTexture9* GetBaseTexture() const;
 
-        private:
-            bool LoadTexture();
+        public:
+            // Reflected
+            bool                m_WrapU;
+            bool                m_WrapV;
+            float               m_RepeatU;
+            float               m_RepeatV;
+            Math::Vector4       m_BaseColor;
+            Helium::Path        m_AssetPath;
+
+        protected:
+            // Non-reflected
+            bool                m_Alpha;
+            u32                 m_BaseTextureSize;
+            IDirect3DTexture9*  m_BaseTexture;
         };
     }
 }

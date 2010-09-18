@@ -86,15 +86,18 @@ namespace Helium
             }
 
         private:
+            void RefreshButtonStates();
+
+        private:
             void OnChar( wxKeyEvent& event );
 
             void OnRenderMode( wxCommandEvent& event );
             void OnCamera( wxCommandEvent& event );
-            void OnFrameOrigin( wxCommandEvent& event );
-            void OnFrameSelected( wxCommandEvent& event );
-            void OnToggleHighlightMode( wxCommandEvent& event );
-            void OnNextView( wxCommandEvent& event );
-            void OnPreviousView( wxCommandEvent& event );
+            void OnFrameOrigin( wxCommandEvent& event ) HELIUM_OVERRIDE;
+            void OnFrameSelected( wxCommandEvent& event ) HELIUM_OVERRIDE;
+            void OnToggleHighlightMode( wxCommandEvent& event ) HELIUM_OVERRIDE;
+            void OnNextView( wxCommandEvent& event ) HELIUM_OVERRIDE;
+            void OnPreviousView( wxCommandEvent& event ) HELIUM_OVERRIDE;
 
         private:
             ViewCanvas* m_ViewCanvas;

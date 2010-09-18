@@ -58,6 +58,14 @@ ViewPanel::ViewPanel( Core::SettingsManager* settingsManager, wxWindow *parent, 
         //Thaw();
     }
 
+#pragma TODO( "Remove this block when wxFormBuilder fully supports wxToggleButton" )
+    {
+        m_OrbitCameraToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+	    m_FrontCameraToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+	    m_SideCameraToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+	    m_TopCameraToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+    }
+
     m_FrameOriginButton->SetHelpText( TXT( "Frame the origin in the viewport." ) );
     m_FrameSelectedButton->SetHelpText( TXT( "Frame the selected item in the viewport." ) );
 
@@ -91,23 +99,7 @@ ViewPanel::ViewPanel( Core::SettingsManager* settingsManager, wxWindow *parent, 
     m_ViewCanvas = new Editor::ViewCanvas( settingsManager, m_ViewContainerPanel, -1, wxPoint(0,0), wxSize(150,250), wxNO_BORDER | wxWANTS_CHARS | wxEXPAND );
     m_ViewContainerPanel->GetSizer()->Add( m_ViewCanvas, 1, wxEXPAND | wxALL, 0 );
 
-    m_HighlightModeToggleButton->SetValue( m_ViewCanvas->GetViewport().IsHighlighting() );
-
-    m_OrbitCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Orbit );
-    m_FrontCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Front );
-    m_SideCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Side );
-    m_TopCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Top );
-
-    m_ShowAxesToggleButton->SetValue( m_ViewCanvas->GetViewport().IsAxesVisible() );
-    m_ShowGridToggleButton->SetValue( m_ViewCanvas->GetViewport().IsGridVisible() );
-    m_ShowBoundsToggleButton->SetValue( m_ViewCanvas->GetViewport().IsBoundsVisible() );
-    m_ShowStatisticsToggleButton->SetValue( m_ViewCanvas->GetViewport().IsStatisticsVisible() );
-
-    m_FrustumCullingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->IsViewFrustumCulling() );
-    m_BackfaceCullingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->IsBackFaceCulling() );
-
-    m_WireframeShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == Core::ShadingModes::Wireframe );
-    m_MaterialShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == Core::ShadingModes::Material );
+    RefreshButtonStates();
 
     //ViewColorMode colorMode = MainFramePreferences()->GetViewPreferences()->GetColorMode();
     //M_IDToColorMode::const_iterator colorModeItr = m_ColorModeLookup.begin();
@@ -133,6 +125,27 @@ ViewPanel::ViewPanel( Core::SettingsManager* settingsManager, wxWindow *parent, 
     Connect( ViewPanelEvents::PreviousView, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnPreviousView ), NULL, this );
 
     Layout();
+}
+
+void ViewPanel::RefreshButtonStates()
+{
+    m_HighlightModeToggleButton->SetValue( m_ViewCanvas->GetViewport().IsHighlighting() );
+
+    m_OrbitCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Orbit );
+    m_FrontCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Front );
+    m_SideCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Side );
+    m_TopCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Top );
+
+    m_ShowAxesToggleButton->SetValue( m_ViewCanvas->GetViewport().IsAxesVisible() );
+    m_ShowGridToggleButton->SetValue( m_ViewCanvas->GetViewport().IsGridVisible() );
+    m_ShowBoundsToggleButton->SetValue( m_ViewCanvas->GetViewport().IsBoundsVisible() );
+    m_ShowStatisticsToggleButton->SetValue( m_ViewCanvas->GetViewport().IsStatisticsVisible() );
+
+    m_FrustumCullingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->IsViewFrustumCulling() );
+    m_BackfaceCullingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->IsBackFaceCulling() );
+
+    m_WireframeShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == Core::ShadingModes::Wireframe );
+    m_MaterialShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == Core::ShadingModes::Material );
 }
 
 void ViewPanel::OnChar( wxKeyEvent& event )
@@ -339,6 +352,7 @@ void ViewPanel::OnCamera( wxCommandEvent& event )
     switch ( event.GetId() )
     {
     case ViewPanelEvents::OrbitCamera:
+    case ID_OrbitCamera:
         {
             m_ViewCanvas->GetViewport().SetCameraMode( CameraModes::Orbit );
             Refresh();
@@ -347,6 +361,7 @@ void ViewPanel::OnCamera( wxCommandEvent& event )
         }
 
     case ViewPanelEvents::FrontCamera:
+    case ID_FrontCamera:
         {
             m_ViewCanvas->GetViewport().SetCameraMode( CameraModes::Front );
             Refresh();
@@ -355,6 +370,7 @@ void ViewPanel::OnCamera( wxCommandEvent& event )
         }
 
     case ViewPanelEvents::SideCamera:
+    case ID_SideCamera:
         {
             m_ViewCanvas->GetViewport().SetCameraMode( CameraModes::Side );
             Refresh();
@@ -363,6 +379,7 @@ void ViewPanel::OnCamera( wxCommandEvent& event )
         }
 
     case ViewPanelEvents::TopCamera:
+    case ID_TopCamera:
         {
             m_ViewCanvas->GetViewport().SetCameraMode( CameraModes::Top );
             Refresh();
@@ -375,6 +392,8 @@ void ViewPanel::OnCamera( wxCommandEvent& event )
         event.ResumePropagation( wxEVENT_PROPAGATE_MAX );
         break;
     }
+
+    RefreshButtonStates();
 }
 
 void ViewPanel::OnFrameOrigin( wxCommandEvent& event )
@@ -401,6 +420,7 @@ void ViewPanel::OnFrameSelected( wxCommandEvent& event )
 void ViewPanel::OnToggleHighlightMode( wxCommandEvent& event )
 {
     m_ViewCanvas->GetViewport().SetHighlighting( !m_ViewCanvas->GetViewport().IsHighlighting() );
+    m_HighlightModeToggleButton->SetValue( m_ViewCanvas->GetViewport().IsHighlighting() );
     Refresh();
     event.Skip( false );
 }
@@ -409,10 +429,12 @@ void ViewPanel::OnNextView( wxCommandEvent& event )
 {
     m_ViewCanvas->GetViewport().NextCameraMode();
     Refresh();
+    RefreshButtonStates();
 }
 
 void ViewPanel::OnPreviousView( wxCommandEvent& event )
 {
     m_ViewCanvas->GetViewport().PreviousCameraMode();
     Refresh();
+    RefreshButtonStates();
 }

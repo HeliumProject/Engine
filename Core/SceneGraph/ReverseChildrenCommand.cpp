@@ -2,7 +2,7 @@
 #include "ReverseChildrenCommand.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 ReverseChildrenCommand::ReverseChildrenCommand( const HierarchyNodePtr& node )
 : m_Node( node )

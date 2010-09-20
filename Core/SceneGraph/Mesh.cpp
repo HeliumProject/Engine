@@ -10,7 +10,7 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 D3DMATERIAL9 Mesh::s_WireMaterial;
 D3DMATERIAL9 Mesh::s_FillMaterial;

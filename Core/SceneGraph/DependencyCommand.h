@@ -6,11 +6,11 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         // Forwards and typedefs
         class SceneNode;
-        typedef Helium::SmartPtr< Core::SceneNode > SceneNodePtr;
+        typedef Helium::SmartPtr< SceneGraph::SceneNode > SceneNodePtr;
 
         /////////////////////////////////////////////////////////////////////////////
         // Command for making or breaking connections between ancestor and descendant

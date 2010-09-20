@@ -15,7 +15,7 @@ namespace Helium
         class SceneManifest;
     }
 
-    namespace Core
+    namespace SceneGraph
     {
         struct CreatePanelArgs;
         struct EnumerateElementArgs;
@@ -40,7 +40,7 @@ namespace Helium
         typedef OrderedSet< SceneNode* > OS_SceneNodeDumbPtr;
         typedef OrderedSet< SceneNodePtr > OS_SceneNodeSmartPtr;
 
-        typedef stdext::hash_map< Helium::TUID, Core::SceneNode*, Helium::TUIDHasher > HM_SceneNodeDumbPtr;
+        typedef stdext::hash_map< Helium::TUID, SceneGraph::SceneNode*, Helium::TUIDHasher > HM_SceneNodeDumbPtr;
         typedef stdext::hash_map< Helium::TUID, SceneNodePtr, Helium::TUIDHasher > HM_SceneNodeSmartPtr;
 
         namespace GraphDirections
@@ -70,9 +70,9 @@ namespace Helium
 
         struct SceneNodeChangeArgs
         {
-            SceneNodeChangeArgs( Core::SceneNode* node ) : m_Node( node ) {}
+            SceneNodeChangeArgs( SceneGraph::SceneNode* node ) : m_Node( node ) {}
 
-            Core::SceneNode* m_Node;
+            SceneGraph::SceneNode* m_Node;
         };
         typedef Helium::Signature< const SceneNodeChangeArgs& > SceneNodeChangeSignature;
 
@@ -103,11 +103,11 @@ namespace Helium
                 m_NodeStates[direction] = value;
             }
 
-            Core::SceneNodeType* GetNodeType() const
+            SceneGraph::SceneNodeType* GetNodeType() const
             {
                 return m_NodeType;
             }
-            void SetNodeType(Core::SceneNodeType* type)
+            void SetNodeType(SceneGraph::SceneNodeType* type)
             {
                 m_NodeType = type;
             }
@@ -125,11 +125,11 @@ namespace Helium
                 m_Graph = value;
             }
 
-            Core::Scene* GetOwner()
+            SceneGraph::Scene* GetOwner()
             {
                 return m_Owner;
             }
-            const Core::Scene* GetOwner() const
+            const SceneGraph::Scene* GetOwner() const
             {
                 return m_Owner;
             }
@@ -241,11 +241,11 @@ namespace Helium
             //
 
         protected:
-            virtual void ConnectDescendant( Core::SceneNode* descendant );
-            virtual void DisconnectDescendant( Core::SceneNode* descendant );
+            virtual void ConnectDescendant( SceneGraph::SceneNode* descendant );
+            virtual void DisconnectDescendant( SceneGraph::SceneNode* descendant );
 
-            virtual void ConnectAncestor( Core::SceneNode* ancestor );
-            virtual void DisconnectAncestor( Core::SceneNode* ancestor );
+            virtual void ConnectAncestor( SceneGraph::SceneNode* ancestor );
+            virtual void DisconnectAncestor( SceneGraph::SceneNode* ancestor );
 
             //
             // These public functions ensure that the dependency is created bidirectionally and that
@@ -253,8 +253,8 @@ namespace Helium
             //
 
         public:
-            void CreateDependency(Core::SceneNode* ancestor);
-            void RemoveDependency(Core::SceneNode* ancestor);
+            void CreateDependency(SceneGraph::SceneNode* ancestor);
+            void RemoveDependency(SceneGraph::SceneNode* ancestor);
 
             //
             // Graph seggregation and merging
@@ -297,13 +297,13 @@ namespace Helium
             virtual tstring GetApplicationTypeName() const;
 
             // creates our node type object (we don't have a configured type when we call this)
-            virtual SceneNodeTypePtr CreateNodeType( Core::Scene* scene ) const;
+            virtual SceneNodeTypePtr CreateNodeType( SceneGraph::Scene* scene ) const;
 
             // transition to another node type
-            virtual void ChangeNodeType( Core::SceneNodeType* type );
+            virtual void ChangeNodeType( SceneGraph::SceneNodeType* type );
 
             // take a stab at deducing what node type you should be
-            virtual Core::SceneNodeType* DeduceNodeType();
+            virtual SceneGraph::SceneNodeType* DeduceNodeType();
 
             // check that you are a member of the type that best suits you
             virtual void CheckNodeType();

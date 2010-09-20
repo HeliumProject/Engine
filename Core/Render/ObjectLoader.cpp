@@ -7,12 +7,12 @@
 #include <set>
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::Render;
 
 //  Index gathering and ordering structure
 namespace Helium
 {
-    namespace Core
+    namespace Render
     {
         struct IdxSet 
         {

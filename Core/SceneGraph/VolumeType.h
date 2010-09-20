@@ -5,7 +5,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class Volume;
         class Primitive;

@@ -8,23 +8,23 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
-        class CORE_API LocatorCreateTool : public Core::CreateTool
+        class CORE_API LocatorCreateTool : public SceneGraph::CreateTool
         {
         public:
             static LocatorShape s_Shape;
 
         public:
-            REFLECT_DECLARE_ABSTRACT(Core::LocatorCreateTool, Core::CreateTool);
+            REFLECT_DECLARE_ABSTRACT(SceneGraph::LocatorCreateTool, SceneGraph::CreateTool);
             static void InitializeType();
             static void CleanupType();
 
         public:
-            LocatorCreateTool(Core::Scene* scene, PropertiesGenerator* generator);
+            LocatorCreateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator);
             virtual ~LocatorCreateTool();
 
-            virtual Core::TransformPtr CreateNode() HELIUM_OVERRIDE;
+            virtual SceneGraph::TransformPtr CreateNode() HELIUM_OVERRIDE;
 
             virtual void CreateProperties() HELIUM_OVERRIDE;
 

@@ -4,9 +4,9 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
-        class PrimitiveLocator : public Core::PrimitiveTemplate<Position>
+        class PrimitiveLocator : public SceneGraph::PrimitiveTemplate<Position>
         {
         public:
             float m_Length;

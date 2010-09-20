@@ -7,7 +7,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         struct CORE_API EvaluateResult
         {
@@ -41,7 +41,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< const Core::SceneGraphEvaluatedArgs& > SceneGraphEvaluatedSignature;
+        typedef Helium::Signature< const SceneGraph::SceneGraphEvaluatedArgs& > SceneGraphEvaluatedSignature;
 
 
         /////////////////////////////////////////////////////////////////////////////
@@ -69,23 +69,23 @@ namespace Helium
             void ResetVisitedIDs();
 
             // this classifies a node into the node lists
-            void Classify(Core::SceneNode* n);
+            void Classify(SceneGraph::SceneNode* n);
 
             // add node to the graph
-            void AddNode(Core::SceneNode* n);
+            void AddNode(SceneGraph::SceneNode* n);
 
             // remove node from the graph
-            void RemoveNode(Core::SceneNode* n);
+            void RemoveNode(SceneGraph::SceneNode* n);
 
             // Propagates dirty status down the graph
-            u32 DirtyNode(Core::SceneNode* n, GraphDirection direction);
+            u32 DirtyNode(SceneGraph::SceneNode* n, GraphDirection direction);
 
             // do setup and traversal work to make all dirty nodes clean
             EvaluateResult EvaluateGraph(bool silent = false);
 
         private:
             // walk upstream and evaluate graph
-            void Evaluate(Core::SceneNode* node, GraphDirection direction);
+            void Evaluate(SceneGraph::SceneNode* node, GraphDirection direction);
 
         protected:
             mutable SceneGraphEvaluatedSignature::Event m_EvaluatedEvent;

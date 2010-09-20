@@ -4,7 +4,7 @@
 #include <algorithm>
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 Selection::Selection()
 {

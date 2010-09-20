@@ -8,7 +8,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class EntityRowInfo
         {
@@ -23,7 +23,7 @@ namespace Helium
 
         typedef std::vector< EntityRowInfo > V_EntityRowInfo;
 
-        class CORE_API EntityInstanceCreateTool : public Core::CreateTool
+        class CORE_API EntityInstanceCreateTool : public SceneGraph::CreateTool
         {
         public:
             Helium::Path m_ClassPath;
@@ -32,7 +32,7 @@ namespace Helium
             static bool s_GeometryVisible;
 
         public:
-            REFLECT_DECLARE_ABSTRACT(Core::EntityInstanceCreateTool, Core::CreateTool);
+            REFLECT_DECLARE_ABSTRACT(SceneGraph::EntityInstanceCreateTool, SceneGraph::CreateTool);
             static void InitializeType();
             static void CleanupType();
 
@@ -45,10 +45,10 @@ namespace Helium
             Inspect::FileDialogButton* m_FileButtonAdd;
 
         public:
-            EntityInstanceCreateTool(Core::Scene* scene, PropertiesGenerator* generator);
+            EntityInstanceCreateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator);
             virtual ~EntityInstanceCreateTool();
 
-            virtual Core::TransformPtr CreateNode() HELIUM_OVERRIDE;
+            virtual SceneGraph::TransformPtr CreateNode() HELIUM_OVERRIDE;
             virtual void CreateProperties() HELIUM_OVERRIDE;
 
             tstring GetEntityAsset() const;

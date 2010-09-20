@@ -9,7 +9,7 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT( PivotTransform );
 
@@ -26,14 +26,14 @@ void PivotTransform::EnumerateClass( Reflect::Compositor<PivotTransform>& comp )
 
 void PivotTransform::InitializeType()
 {
-    Reflect::RegisterClassType< Core::PivotTransform >( TXT( "Core::PivotTransform" ) );
+    Reflect::RegisterClassType< SceneGraph::PivotTransform >( TXT( "SceneGraph::PivotTransform" ) );
 
     PropertiesGenerator::InitializePanel( TXT( "Pivot" ), CreatePanelSignature::Delegate( &PivotTransform::CreatePanel ));
 }
 
 void PivotTransform::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::PivotTransform >();
+    Reflect::UnregisterClassType< SceneGraph::PivotTransform >();
 }
 
 PivotTransform::PivotTransform() 
@@ -420,9 +420,9 @@ Undo::CommandPtr PivotTransform::CenterTransform()
     float w = 1.0f / m_Children.Size();
     for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
     {
-        Core::HierarchyNode* hierarchyNode = *itr;
+        SceneGraph::HierarchyNode* hierarchyNode = *itr;
 
-        const Core::Transform* transform = hierarchyNode->GetTransform();
+        const SceneGraph::Transform* transform = hierarchyNode->GetTransform();
         HELIUM_ASSERT( transform );
         if ( transform )
         {
@@ -433,15 +433,15 @@ Undo::CommandPtr PivotTransform::CenterTransform()
         }
     }
 
-    batch->Push( new Undo::PropertyCommand<Math::Matrix4> ( new Helium::MemberProperty<Core::Transform, Math::Matrix4> (this, &Core::Transform::GetGlobalTransform, &Core::Transform::SetGlobalTransform), Matrix4 (pos) ) );
+    batch->Push( new Undo::PropertyCommand<Math::Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Math::Matrix4> (this, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), Matrix4 (pos) ) );
 
     Evaluate(GraphDirections::Downstream);
 
     for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
     {
-        Core::HierarchyNode* n = *itr;
+        SceneGraph::HierarchyNode* n = *itr;
 
-        Core::Transform* t = Reflect::ObjectCast<Core::Transform>( n );
+        SceneGraph::Transform* t = Reflect::ObjectCast<SceneGraph::Transform>( n );
 
         if (!t)
         {
@@ -474,9 +474,9 @@ void PivotTransform::CreatePanel(CreatePanelArgs& args)
         args.m_Generator->PushContainer();
         static const tstring helpText = TXT( "FIXME: NEEDS HELP" );   
         args.m_Generator->AddLabel( TXT( "Shear" ) )->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearYZ, &PivotTransform::SetShearYZ)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearXZ, &PivotTransform::SetShearXZ)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearXY, &PivotTransform::SetShearXY)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearYZ, &PivotTransform::SetShearYZ)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearXZ, &PivotTransform::SetShearXZ)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearXY, &PivotTransform::SetShearXY)->a_HelpText.Set( helpText );
         args.m_Generator->Pop();
     }
 
@@ -484,9 +484,9 @@ void PivotTransform::CreatePanel(CreatePanelArgs& args)
         args.m_Generator->PushContainer();
         static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
         args.m_Generator->AddLabel( TXT( "Scale Pivot" ) )->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotX, &PivotTransform::SetScalePivotX)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotY, &PivotTransform::SetScalePivotY)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotZ, &PivotTransform::SetScalePivotZ)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotX, &PivotTransform::SetScalePivotX)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotY, &PivotTransform::SetScalePivotY)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotZ, &PivotTransform::SetScalePivotZ)->a_HelpText.Set( helpText );
         args.m_Generator->Pop();
     }
 
@@ -494,9 +494,9 @@ void PivotTransform::CreatePanel(CreatePanelArgs& args)
         args.m_Generator->PushContainer();
         static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
         args.m_Generator->AddLabel( TXT( "Scale Pivot Translate" ) )->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateX, &PivotTransform::SetScalePivotTranslateX)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateY, &PivotTransform::SetScalePivotTranslateY)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateZ, &PivotTransform::SetScalePivotTranslateZ)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateX, &PivotTransform::SetScalePivotTranslateX)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateY, &PivotTransform::SetScalePivotTranslateY)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateZ, &PivotTransform::SetScalePivotTranslateZ)->a_HelpText.Set( helpText );
         args.m_Generator->Pop();
     }
 
@@ -504,9 +504,9 @@ void PivotTransform::CreatePanel(CreatePanelArgs& args)
         args.m_Generator->PushContainer();
         static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
         args.m_Generator->AddLabel( TXT( "Rotate Pivot" ) )->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotX, &PivotTransform::SetRotatePivotX)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotY, &PivotTransform::SetRotatePivotY)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotZ, &PivotTransform::SetRotatePivotZ)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotX, &PivotTransform::SetRotatePivotX)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotY, &PivotTransform::SetRotatePivotY)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotZ, &PivotTransform::SetRotatePivotZ)->a_HelpText.Set( helpText );
         args.m_Generator->Pop();
     }
 
@@ -514,9 +514,9 @@ void PivotTransform::CreatePanel(CreatePanelArgs& args)
         args.m_Generator->PushContainer();
         static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
         args.m_Generator->AddLabel( TXT( "Rotate Pivot Translate" ) )->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateX, &PivotTransform::SetRotatePivotTranslateX)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateY, &PivotTransform::SetRotatePivotTranslateY)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateZ, &PivotTransform::SetRotatePivotTranslateZ)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateX, &PivotTransform::SetRotatePivotTranslateX)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateY, &PivotTransform::SetRotatePivotTranslateY)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateZ, &PivotTransform::SetRotatePivotTranslateZ)->a_HelpText.Set( helpText );
         args.m_Generator->Pop();
     }
 
@@ -524,9 +524,9 @@ void PivotTransform::CreatePanel(CreatePanelArgs& args)
         args.m_Generator->PushContainer();
         static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
         args.m_Generator->AddLabel( TXT( "Translate Pivot" ) )->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotX, &PivotTransform::SetTranslatePivotX)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotY, &PivotTransform::SetTranslatePivotY)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<Core::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotZ, &PivotTransform::SetTranslatePivotZ)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotX, &PivotTransform::SetTranslatePivotX)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotY, &PivotTransform::SetTranslatePivotY)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotZ, &PivotTransform::SetTranslatePivotZ)->a_HelpText.Set( helpText );
         args.m_Generator->Pop();
     }
 
@@ -534,7 +534,7 @@ void PivotTransform::CreatePanel(CreatePanelArgs& args)
         args.m_Generator->PushContainer();
         static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
         args.m_Generator->AddLabel( TXT( "Snap Pivots" ) )->a_HelpText.Set( helpText );
-        args.m_Generator->AddCheckBox<Core::PivotTransform, bool>(args.m_Selection, &PivotTransform::GetSnapPivots, &PivotTransform::SetSnapPivots)->a_HelpText.Set( helpText );
+        args.m_Generator->AddCheckBox<SceneGraph::PivotTransform, bool>(args.m_Selection, &PivotTransform::GetSnapPivots, &PivotTransform::SetSnapPivots)->a_HelpText.Set( helpText );
         args.m_Generator->Pop();
     }
 

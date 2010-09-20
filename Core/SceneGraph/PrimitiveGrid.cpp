@@ -7,7 +7,7 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 PrimitiveGrid::PrimitiveGrid(ResourceTracker* tracker)
 : PrimitiveTemplate(tracker)

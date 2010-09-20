@@ -10,7 +10,7 @@
 #include <d3dx9.h>
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::Render;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 Texture::Texture(const tchar* fname)

@@ -10,7 +10,7 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_CLASS(Locator);
 

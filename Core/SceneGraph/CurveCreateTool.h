@@ -6,7 +6,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class CORE_API CurveCreateTool : public Tool
         {
@@ -31,12 +31,12 @@ namespace Helium
             static bool s_ObjectSnap;
 
         public:
-            REFLECT_DECLARE_ABSTRACT(Core::CurveCreateTool, Tool);
+            REFLECT_DECLARE_ABSTRACT(SceneGraph::CurveCreateTool, Tool);
             static void InitializeType();
             static void CleanupType();
 
         public:
-            CurveCreateTool( Core::Scene* scene, PropertiesGenerator* generator );
+            CurveCreateTool( SceneGraph::Scene* scene, PropertiesGenerator* generator );
             virtual ~CurveCreateTool();
 
             void CreateInstance( const Math::Vector3& position );

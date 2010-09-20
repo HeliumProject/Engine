@@ -12,7 +12,7 @@
 #include <d3dx9.h>
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::Render;
 
 u32 TextureAddressModes( u32 mode )
 {

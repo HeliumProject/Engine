@@ -10,7 +10,7 @@
 #include "Core/SceneGraph/Statistics.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT( SceneNode );
 
@@ -24,14 +24,14 @@ void SceneNode::EnumerateClass( Reflect::Compositor<SceneNode>& comp )
 
 void SceneNode::InitializeType()
 {
-    Reflect::RegisterClassType< Core::SceneNode >();
+    Reflect::RegisterClassType< SceneGraph::SceneNode >();
 
     PropertiesGenerator::InitializePanel( TXT( "Scene Node" ), CreatePanelSignature::Delegate( &SceneNode::CreatePanel ));
 }
 
 void SceneNode::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::SceneNode >();
+    Reflect::UnregisterClassType< SceneGraph::SceneNode >();
 }
 
 SceneNode::SceneNode()
@@ -145,7 +145,7 @@ void SceneNode::Initialize()
     m_IsInitialized = true;
 }
 
-void SceneNode::ConnectDescendant(Core::SceneNode* descendant)
+void SceneNode::ConnectDescendant(SceneGraph::SceneNode* descendant)
 {
     if (m_Graph == NULL)
     {
@@ -161,7 +161,7 @@ void SceneNode::ConnectDescendant(Core::SceneNode* descendant)
     Dirty();
 }
 
-void SceneNode::DisconnectDescendant(Core::SceneNode* descendant)
+void SceneNode::DisconnectDescendant(SceneGraph::SceneNode* descendant)
 {
     m_Descendants.erase( descendant );
 
@@ -172,7 +172,7 @@ void SceneNode::DisconnectDescendant(Core::SceneNode* descendant)
     Dirty();
 }
 
-void SceneNode::ConnectAncestor( Core::SceneNode* ancestor )
+void SceneNode::ConnectAncestor( SceneGraph::SceneNode* ancestor )
 {
     if (m_Graph == NULL)
     {
@@ -185,7 +185,7 @@ void SceneNode::ConnectAncestor( Core::SceneNode* ancestor )
     m_Graph->Classify( ancestor );
 }
 
-void SceneNode::DisconnectAncestor( Core::SceneNode* ancestor )
+void SceneNode::DisconnectAncestor( SceneGraph::SceneNode* ancestor )
 {
     m_Ancestors.erase(ancestor);
 
@@ -193,7 +193,7 @@ void SceneNode::DisconnectAncestor( Core::SceneNode* ancestor )
     m_Graph->Classify( ancestor );
 }
 
-void SceneNode::CreateDependency(Core::SceneNode* ancestor)
+void SceneNode::CreateDependency(SceneGraph::SceneNode* ancestor)
 {
     ancestor->ConnectDescendant( this );
 
@@ -205,7 +205,7 @@ void SceneNode::CreateDependency(Core::SceneNode* ancestor)
     }
 }
 
-void SceneNode::RemoveDependency(Core::SceneNode* ancestor)
+void SceneNode::RemoveDependency(SceneGraph::SceneNode* ancestor)
 {
     ancestor->DisconnectDescendant( this );
 
@@ -223,7 +223,7 @@ void SceneNode::Insert(Graph* graph, V_SceneNodeDumbPtr& insertedNodes )
 
     u32 id = m_Graph->AssignVisitedID();
 
-    std::stack<Core::SceneNode*> stack;
+    std::stack<SceneGraph::SceneNode*> stack;
 
     // reconnect this to all ancestors' descendant lists
     for ( S_SceneNodeDumbPtr::const_iterator itr = m_Ancestors.begin(), end = m_Ancestors.end(); itr != end; ++itr )
@@ -246,7 +246,7 @@ void SceneNode::Insert(Graph* graph, V_SceneNodeDumbPtr& insertedNodes )
 
     while (!stack.empty())
     {
-        Core::SceneNode* n = stack.top();
+        SceneGraph::SceneNode* n = stack.top();
 
         // re-add it back to the graph
         m_Graph->AddNode(n);
@@ -283,7 +283,7 @@ void SceneNode::Prune( V_SceneNodeDumbPtr& prunedNodes )
 
     if (!m_Ancestors.empty() || !m_Descendants.empty())
     {
-        std::stack<Core::SceneNode*> stack;
+        std::stack<SceneGraph::SceneNode*> stack;
 
         // prune this from all ancestors' descendants list
         for ( S_SceneNodeDumbPtr::const_iterator itr = m_Ancestors.begin(), end = m_Ancestors.end(); itr != end; ++itr )
@@ -307,13 +307,13 @@ void SceneNode::Prune( V_SceneNodeDumbPtr& prunedNodes )
 
         while (!stack.empty())
         {
-            Core::SceneNode* n = stack.top();
+            SceneGraph::SceneNode* n = stack.top();
             stack.pop();
 
             // remove decendant reference to n from unvisited ancestors
             for ( S_SceneNodeDumbPtr::const_iterator itr = n->m_Ancestors.begin(), end = n->m_Ancestors.end(); itr != end; ++itr )
             {
-                Core::SceneNode* ancestor = *itr;
+                SceneGraph::SceneNode* ancestor = *itr;
 
                 // preserve pruned branch connections
                 if (ancestor->GetVisitedID() != id)
@@ -325,7 +325,7 @@ void SceneNode::Prune( V_SceneNodeDumbPtr& prunedNodes )
             // push each child onto the stack
             for ( S_SceneNodeSmartPtr::const_iterator itr = n->m_Descendants.begin(), end = n->m_Descendants.end(); itr != end; ++itr )
             {
-                Core::SceneNode* decendant = *itr;
+                SceneGraph::SceneNode* decendant = *itr;
                 stack.push(decendant);
                 prunedNodes.push_back( decendant );
             }
@@ -379,16 +379,16 @@ tstring SceneNode::GetApplicationTypeName() const
     return GetClass()->m_UIName;
 }
 
-SceneNodeTypePtr SceneNode::CreateNodeType( Core::Scene* scene ) const
+SceneNodeTypePtr SceneNode::CreateNodeType( SceneGraph::Scene* scene ) const
 {
-    SceneNodeTypePtr nodeType = new Core::SceneNodeType( scene, GetType() );
+    SceneNodeTypePtr nodeType = new SceneGraph::SceneNodeType( scene, GetType() );
 
     nodeType->SetImageIndex( GetImageIndex() );
 
     return nodeType;
 }
 
-void SceneNode::ChangeNodeType( Core::SceneNodeType* type )
+void SceneNode::ChangeNodeType( SceneGraph::SceneNodeType* type )
 {
     if (m_NodeType != type)
     {
@@ -403,7 +403,7 @@ void SceneNode::ChangeNodeType( Core::SceneNodeType* type )
     }
 }
 
-Core::SceneNodeType* SceneNode::DeduceNodeType()
+SceneGraph::SceneNodeType* SceneNode::DeduceNodeType()
 {
     SceneNodeTypePtr nodeType;
 
@@ -543,10 +543,10 @@ tstring SceneNode::GetMembership() const
     S_SceneNodeDumbPtr::const_iterator end = m_Ancestors.end();
     for ( ; itr != end; ++itr )
     {
-        Core::SceneNode* node = *itr;
-        if ( node->HasType( Reflect::GetType<Core::Layer>() ) )
+        SceneGraph::SceneNode* node = *itr;
+        if ( node->HasType( Reflect::GetType<SceneGraph::Layer>() ) )
         {
-            Core::Layer* layer = Reflect::DangerousCast< Core::Layer >( node );
+            SceneGraph::Layer* layer = Reflect::DangerousCast< SceneGraph::Layer >( node );
             if ( layer->GetOwner()->GetNodes().find( layer->GetID() ) != layer->GetOwner()->GetNodes().end() )
             {
                 layerNames.insert( node->GetName() );

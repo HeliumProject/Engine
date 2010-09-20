@@ -6,7 +6,7 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 PrimitiveSphere::PrimitiveSphere(ResourceTracker* tracker)
 : PrimitiveRadius(tracker)

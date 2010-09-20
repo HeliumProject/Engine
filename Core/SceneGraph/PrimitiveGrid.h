@@ -4,9 +4,9 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
-        class PrimitiveGrid : public Core::PrimitiveTemplate<PositionColored>
+        class PrimitiveGrid : public SceneGraph::PrimitiveTemplate<PositionColored>
         {
         public:
             int m_Width;

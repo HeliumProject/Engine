@@ -827,7 +827,7 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="Scene"
+			Name="SceneGraph"
 			>
 			<File
 				RelativePath=".\SceneGraph\PropertiesGenerator.cpp"
@@ -846,11 +846,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\SceneGraph\SceneInit.cpp"
+				RelativePath=".\SceneGraph\SceneGraphInit.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\SceneGraph\SceneInit.h"
+				RelativePath=".\SceneGraph\SceneGraphInit.h"
 				>
 			</File>
 			<File

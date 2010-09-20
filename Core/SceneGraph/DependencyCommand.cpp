@@ -5,7 +5,7 @@
 #include "Foundation/Log.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 DependencyCommand::DependencyCommand( DependencyAction action, const SceneNodePtr& ancestor, const SceneNodePtr& descendant )
 : m_Action( action )

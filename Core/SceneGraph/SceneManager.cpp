@@ -10,7 +10,7 @@
 #include "Core/SceneGraph/Viewport.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Returns a different name each time this function is called so that scenes
@@ -44,7 +44,7 @@ SceneManager::SceneManager( MessageSignature::Delegate message, FileDialogSignat
 ///////////////////////////////////////////////////////////////////////////////
 // Create a new scene.  Pass in true if this should be the root scene.
 // 
-ScenePtr SceneManager::NewScene( Core::Viewport* viewport, tstring path )
+ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, tstring path )
 {
     tstring name;
     if ( path.empty() )
@@ -56,7 +56,7 @@ ScenePtr SceneManager::NewScene( Core::Viewport* viewport, tstring path )
     document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &SceneManager::DocumentClosed ) );
     document->AddDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
 
-    ScenePtr scene = new Core::Scene( viewport, path );
+    ScenePtr scene = new SceneGraph::Scene( viewport, path );
     document->SetScene( scene );
 
     tstring error;
@@ -71,7 +71,7 @@ ScenePtr SceneManager::NewScene( Core::Viewport* viewport, tstring path )
 ///////////////////////////////////////////////////////////////////////////////
 // Open a zone that should be under the root.
 // 
-ScenePtr SceneManager::OpenScene( Core::Viewport* viewport, const tstring& path, tstring& error )
+ScenePtr SceneManager::OpenScene( SceneGraph::Viewport* viewport, const tstring& path, tstring& error )
 {
     ScenePtr scene = NewScene( viewport, path );
     if ( !scene->Load( path ) )
@@ -87,7 +87,7 @@ ScenePtr SceneManager::OpenScene( Core::Viewport* viewport, const tstring& path,
 ///////////////////////////////////////////////////////////////////////////////
 // Adds a scene to this manager
 // 
-void SceneManager::AddScene(Core::Scene* scene)
+void SceneManager::AddScene(SceneGraph::Scene* scene)
 {
     scene->SetEditingDelegate( SceneEditingSignature::Delegate( this, &SceneManager::OnSceneEditing ) );
 
@@ -100,7 +100,7 @@ void SceneManager::AddScene(Core::Scene* scene)
 ///////////////////////////////////////////////////////////////////////////////
 // Removes a scene from this manager
 // 
-void SceneManager::RemoveScene(Core::Scene* scene)
+void SceneManager::RemoveScene(SceneGraph::Scene* scene)
 {
     // There is a problem in the code.  You should not be unloading a scene that
     // someone still has allocated.
@@ -136,14 +136,14 @@ void SceneManager::RemoveAllScenes()
 {
     SetCurrentScene( NULL );
 
-    typedef std::vector< Core::Scene* > V_SceneDumbPtr;
+    typedef std::vector< SceneGraph::Scene* > V_SceneDumbPtr;
     V_SceneDumbPtr topLevelScenes;
 
     M_SceneSmartPtr::const_iterator sceneItr = m_Scenes.begin();
     M_SceneSmartPtr::const_iterator sceneEnd = m_Scenes.end();
     for ( ; sceneItr != sceneEnd; ++sceneItr )
     {
-        Core::Scene* scene = sceneItr->second;
+        SceneGraph::Scene* scene = sceneItr->second;
         if ( m_AllocatedScenes.find( scene ) == m_AllocatedScenes.end() )
         {
             topLevelScenes.push_back( scene );
@@ -169,7 +169,7 @@ const M_SceneSmartPtr& SceneManager::GetScenes() const
 ///////////////////////////////////////////////////////////////////////////////
 // Finds a scene by full path in this manager
 // 
-Core::Scene* SceneManager::GetScene( const tstring& path ) const
+SceneGraph::Scene* SceneManager::GetScene( const tstring& path ) const
 {
     M_SceneSmartPtr::const_iterator found = m_Scenes.find( path );
 
@@ -185,7 +185,7 @@ Core::Scene* SceneManager::GetScene( const tstring& path ) const
 // Returns true if the specified scene is a nested (allocated) scene.  Otherwise
 // the scene is a world or zone.
 // 
-bool SceneManager::IsNestedScene( Core::Scene* scene ) const
+bool SceneManager::IsNestedScene( SceneGraph::Scene* scene ) const
 {
     return m_AllocatedScenes.find( scene ) != m_AllocatedScenes.end();
 }
@@ -196,9 +196,9 @@ bool SceneManager::IsNestedScene( Core::Scene* scene ) const
 // there was a problem loading the scene, it will be empty.  If you allocate a
 // scene, you must call ReleaseNestedScene to free it.
 // 
-Core::Scene* SceneManager::AllocateNestedScene( Core::Viewport* viewport, const tstring& path, Core::Scene* parent )
+SceneGraph::Scene* SceneManager::AllocateNestedScene( SceneGraph::Viewport* viewport, const tstring& path, SceneGraph::Scene* parent )
 {
-    Core::Scene* scene = GetScene( path );
+    SceneGraph::Scene* scene = GetScene( path );
 
     if ( !scene )
     {
@@ -229,7 +229,7 @@ Core::Scene* SceneManager::AllocateNestedScene( Core::Viewport* viewport, const 
 // Decrements the reference count on the specified scene.  If the reference 
 // count reaches zero, the scene will be removed from the manager.
 // 
-void SceneManager::ReleaseNestedScene( Core::Scene*& scene )
+void SceneManager::ReleaseNestedScene( SceneGraph::Scene*& scene )
 {
     M_AllocScene::iterator found = m_AllocatedScenes.find( scene );
     if ( found != m_AllocatedScenes.end() )
@@ -263,7 +263,7 @@ bool SceneManager::HasCurrentScene() const
 // Returns true if the scene that is passed in is the same as the current
 // "editing scene".
 // 
-bool SceneManager::IsCurrentScene( const Core::Scene* sceneToCompare ) const
+bool SceneManager::IsCurrentScene( const SceneGraph::Scene* sceneToCompare ) const
 {
     return m_CurrentScene == sceneToCompare;
 }
@@ -271,7 +271,7 @@ bool SceneManager::IsCurrentScene( const Core::Scene* sceneToCompare ) const
 ///////////////////////////////////////////////////////////////////////////////
 // "Gets" the "Current Scene"
 // 
-Core::Scene* SceneManager::GetCurrentScene() const
+SceneGraph::Scene* SceneManager::GetCurrentScene() const
 {
     return m_CurrentScene;
 }
@@ -281,7 +281,7 @@ Core::Scene* SceneManager::GetCurrentScene() const
 // etc., will all interact with the current "editing scene." Use this function to 
 // change which scene is being edited.
 // 
-void SceneManager::SetCurrentScene( Core::Scene* scene )
+void SceneManager::SetCurrentScene( SceneGraph::Scene* scene )
 {
     if ( m_CurrentScene == scene )
     {
@@ -300,15 +300,15 @@ void SceneManager::SetCurrentScene( Core::Scene* scene )
 // Iterates over the scenes and returns the first one that is not allocated
 // (i.e. not a nested scene).
 // 
-Core::Scene* SceneManager::FindFirstNonNestedScene() const
+SceneGraph::Scene* SceneManager::FindFirstNonNestedScene() const
 {
-    Core::Scene* found = NULL;
+    SceneGraph::Scene* found = NULL;
     M_SceneSmartPtr::const_iterator sceneItr = m_Scenes.begin();
     M_SceneSmartPtr::const_iterator sceneEnd = m_Scenes.end();
     const M_AllocScene::const_iterator nestedSceneEnd = m_AllocatedScenes.end();
     for ( ; sceneItr != sceneEnd && !found; ++sceneItr )
     {
-        Core::Scene* current = sceneItr->second;
+        SceneGraph::Scene* current = sceneItr->second;
         if ( m_AllocatedScenes.find( current ) == nestedSceneEnd )
         {
             found = current; // breaks out of loop

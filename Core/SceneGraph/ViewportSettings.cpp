@@ -2,7 +2,7 @@
 #include "ViewportSettings.h"
 
 using namespace Helium;
-using namespace Helium::Core; 
+using namespace Helium::SceneGraph; 
    
 ViewportSettings::ViewportSettings()
 : m_CameraMode (CameraModes::Orbit)

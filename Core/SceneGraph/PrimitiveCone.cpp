@@ -5,7 +5,7 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 PrimitiveCone::PrimitiveCone(ResourceTracker* m_Tracker)
 : PrimitiveTemplate(m_Tracker)

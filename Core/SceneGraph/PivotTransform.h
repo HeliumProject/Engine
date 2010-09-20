@@ -5,7 +5,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         //  TOTAL TRANSFORM:
         //     -1                      -1
@@ -14,7 +14,7 @@ namespace Helium
         class CORE_API PivotTransform : public Transform
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( Core::PivotTransform, Core::Transform );
+            REFLECT_DECLARE_ABSTRACT( SceneGraph::PivotTransform, SceneGraph::Transform );
             static void EnumerateClass( Reflect::Compositor<PivotTransform>& comp );
             static void InitializeType();
             static void CleanupType();
@@ -27,7 +27,7 @@ namespace Helium
 
             virtual bool IsGroup()
             {
-                return GetType() == Reflect::GetType<Core::PivotTransform>();
+                return GetType() == Reflect::GetType<SceneGraph::PivotTransform>();
             }
 
             //
@@ -154,6 +154,6 @@ namespace Helium
             bool                m_SnapPivots;               // if this is true, use m_RotatePivot
         };
 
-        typedef Helium::SmartPtr<Core::PivotTransform> LPivotTransformPtr;
+        typedef Helium::SmartPtr<SceneGraph::PivotTransform> LPivotTransformPtr;
     }
 }

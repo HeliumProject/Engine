@@ -5,7 +5,7 @@
 #include "Pipeline/Image/Formats/TGA.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::Render;
 
 bool                            DeviceManager::m_unique = false;
 u32                             DeviceManager::m_master_count = 0;

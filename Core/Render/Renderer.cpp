@@ -5,7 +5,7 @@
 #include <mmsystem.h>
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::Render;
 
 static f32 fconst1 = (4.0f/17.0f);
 static f32 fconst2 = (8.0f/17.0f);

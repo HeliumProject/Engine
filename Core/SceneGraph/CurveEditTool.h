@@ -7,7 +7,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class PickVisitor;
         class TranslateManipulator;
@@ -33,15 +33,15 @@ namespace Helium
             static bool s_CurrentSelection;
 
             CurveEditMode m_HotEditMode;
-            Core::TranslateManipulator* m_ControlPointManipulator;
+            SceneGraph::TranslateManipulator* m_ControlPointManipulator;
 
         public:
-            REFLECT_DECLARE_ABSTRACT(Core::CurveEditTool, Tool);
+            REFLECT_DECLARE_ABSTRACT(SceneGraph::CurveEditTool, Tool);
             static void InitializeType();
             static void CleanupType();
 
         public:
-            CurveEditTool( SettingsManager* settingsManager, Core::Scene* scene, PropertiesGenerator* generator );
+            CurveEditTool( SettingsManager* settingsManager, SceneGraph::Scene* scene, PropertiesGenerator* generator );
             virtual ~CurveEditTool();
 
             CurveEditMode GetEditMode() const;

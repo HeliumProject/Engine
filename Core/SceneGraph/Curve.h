@@ -13,7 +13,7 @@ namespace Helium
         class Matrix4;
     }
 
-    namespace Core
+    namespace SceneGraph
     {
         class PrimitiveLocator;
         class PrimitiveCone;

@@ -5,21 +5,21 @@
 #include "Core/Asset/Manifests/SceneManifest.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT( Core::SceneNodeType );
+REFLECT_DEFINE_ABSTRACT( SceneGraph::SceneNodeType );
 
 void SceneNodeType::InitializeType()
 {
-  Reflect::RegisterClassType< Core::SceneNodeType >( TXT( "Core::SceneNodeType" ) );
+  Reflect::RegisterClassType< SceneGraph::SceneNodeType >( TXT( "SceneGraph::SceneNodeType" ) );
 }
 
 void SceneNodeType::CleanupType()
 {
-  Reflect::UnregisterClassType< Core::SceneNodeType >();
+  Reflect::UnregisterClassType< SceneGraph::SceneNodeType >();
 }
 
-SceneNodeType::SceneNodeType(Core::Scene* scene, i32 instanceType)
+SceneNodeType::SceneNodeType(SceneGraph::Scene* scene, i32 instanceType)
 : m_Scene( scene )
 , m_InstanceType ( instanceType )
 , m_ImageIndex( -1 )
@@ -32,7 +32,7 @@ SceneNodeType::~SceneNodeType()
 
 }
 
-Core::Scene* SceneNodeType::GetScene()
+SceneGraph::Scene* SceneNodeType::GetScene()
 {
   return m_Scene;
 }

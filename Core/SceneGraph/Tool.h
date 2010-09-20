@@ -9,7 +9,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class PropertiesGenerator;
         class Scene;
@@ -59,7 +59,7 @@ namespace Helium
             //
 
         public:
-            Tool( Core::Scene* scene, PropertiesGenerator* generator );
+            Tool( SceneGraph::Scene* scene, PropertiesGenerator* generator );
 
             // Create and Initialize
             virtual bool Initialize()
@@ -167,6 +167,6 @@ namespace Helium
             }
         };
 
-        typedef Helium::SmartPtr< Core::Tool > ToolPtr;
+        typedef Helium::SmartPtr< SceneGraph::Tool > ToolPtr;
     }
 }

@@ -4,7 +4,7 @@
 #include "Foundation/Reflect/Object.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 ParentCommand::ParentCommand(const HierarchyNodePtr& child, const HierarchyNodePtr& parent)
 {
@@ -14,7 +14,7 @@ ParentCommand::ParentCommand(const HierarchyNodePtr& child, const HierarchyNodeP
 
   m_Node->SetParent( m_NextParent.Ptr() );
 
-  Core::Transform* transform = Reflect::ObjectCast< Core::Transform >( m_Node );
+  SceneGraph::Transform* transform = Reflect::ObjectCast< SceneGraph::Transform >( m_Node );
   if ( transform )
   {
     Push( transform->ComputeObjectComponents() );

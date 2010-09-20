@@ -8,16 +8,16 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class SceneNode;
 
         // nodes appear in the objects window in the UI by type
         struct NodeTypeChangeArgs
         {
-            Core::SceneNode* m_Node;
+            SceneGraph::SceneNode* m_Node;
 
-            NodeTypeChangeArgs( Core::SceneNode* node )
+            NodeTypeChangeArgs( SceneGraph::SceneNode* node )
                 : m_Node (node)
             {
 
@@ -39,10 +39,10 @@ namespace Helium
             static void CleanupType();
 
         public:
-            SceneNodeType(Core::Scene* scene, i32 instanceType);
+            SceneNodeType(SceneGraph::Scene* scene, i32 instanceType);
             virtual ~SceneNodeType();
 
-            Core::Scene* GetScene();
+            SceneGraph::Scene* GetScene();
 
             const tstring& GetName() const;
             void SetName( const tstring& name );
@@ -89,7 +89,7 @@ namespace Helium
             tstring m_Name;
 
             // The scene that owns us
-            Core::Scene* m_Scene;
+            SceneGraph::Scene* m_Scene;
 
             // Index of image to use in the UI (from the 16x16 image list)
             i32 m_ImageIndex;
@@ -101,10 +101,10 @@ namespace Helium
             i32 m_InstanceType;
         };
 
-        typedef Helium::SmartPtr< Core::SceneNodeType > SceneNodeTypePtr;
+        typedef Helium::SmartPtr< SceneGraph::SceneNodeType > SceneNodeTypePtr;
 
-        typedef std::vector< Core::SceneNodeType* > V_SceneNodeTypeDumbPtr;
-        typedef std::set< Core::SceneNodeType* > S_SceneNodeTypeDumbPtr;
+        typedef std::vector< SceneGraph::SceneNodeType* > V_SceneNodeTypeDumbPtr;
+        typedef std::set< SceneGraph::SceneNodeType* > S_SceneNodeTypeDumbPtr;
 
         typedef stdext::hash_map< i32, S_SceneNodeTypeDumbPtr > HMS_TypeToSceneNodeTypeDumbPtr;
         typedef stdext::hash_map< tstring, SceneNodeTypePtr > HM_StrToSceneNodeTypeSmartPtr;

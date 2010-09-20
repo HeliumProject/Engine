@@ -6,7 +6,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class CurveControlPoint : public HierarchyNode
         {

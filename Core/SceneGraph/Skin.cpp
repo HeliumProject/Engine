@@ -6,7 +6,7 @@
 #include "Core/SceneGraph/Mesh.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_CLASS( Influence );
 

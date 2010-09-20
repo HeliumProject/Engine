@@ -6,10 +6,10 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class HierarchyNode;
-        typedef Helium::SmartPtr< Core::HierarchyNode > HierarchyNodePtr;
+        typedef Helium::SmartPtr< SceneGraph::HierarchyNode > HierarchyNodePtr;
 
         class CORE_API ParentCommand : public Undo::BatchCommand
         {

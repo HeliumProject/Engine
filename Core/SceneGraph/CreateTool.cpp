@@ -15,9 +15,9 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT(Core::CreateTool);
+REFLECT_DEFINE_ABSTRACT(SceneGraph::CreateTool);
 
 IntersectionPlane CreateTool::s_PlaneSnap = IntersectionPlanes::Ground;
 
@@ -49,15 +49,15 @@ float CreateTool::s_PaintJitter = 1.0f;
 
 void CreateTool::InitializeType()
 {
-    Reflect::RegisterClassType< Core::CreateTool >( TXT( "Core::CreateTool" ) );
+    Reflect::RegisterClassType< SceneGraph::CreateTool >( TXT( "SceneGraph::CreateTool" ) );
 }
 
 void CreateTool::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::CreateTool >();
+    Reflect::UnregisterClassType< SceneGraph::CreateTool >();
 }
 
-CreateTool::CreateTool(Core::Scene* scene, PropertiesGenerator* generator)
+CreateTool::CreateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator)
 : Tool (scene, generator)
 , m_Created (false)
 , m_InstanceUpdateOffsets (false)
@@ -153,7 +153,7 @@ bool CreateTool::DetermineTranslationAndNormal( PickVisitor& pick, Math::Vector3
         V_PickHitSmartPtr::const_iterator end = sorted.end();
         for ( ; itr != end; ++itr )
         {
-            Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>( (*itr)->GetHitObject() );
+            SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>( (*itr)->GetHitObject() );
 
             // don't snap against what we are placing
             if ( node == m_Instance )
@@ -221,7 +221,7 @@ void CreateTool::GenerateInstanceOffsets( PlacementStyle style, float radius, fl
                 {
                     if ( x * x + y * y < radiusSquared )
                     {
-                        Math::Vector3 v = ( Core::UpVector * x ) + ( Core::OutVector * y );
+                        Math::Vector3 v = ( SceneGraph::UpVector * x ) + ( SceneGraph::OutVector * y );
                         positions.push_back( v );
                     }
                 }
@@ -245,7 +245,7 @@ void CreateTool::GenerateInstanceOffsets( PlacementStyle style, float radius, fl
                 {
                     float x = currentRadius * cos( currentAngle );
                     float y = currentRadius * sin( currentAngle );
-                    Math::Vector3 v = ( Core::UpVector * x ) + ( Core::OutVector * y );
+                    Math::Vector3 v = ( SceneGraph::UpVector * x ) + ( SceneGraph::OutVector * y );
                     positions.push_back( v );
 
                     currentAngle += deltaAngle;
@@ -327,8 +327,8 @@ void CreateTool::SelectInstanceOffsets( DistributionStyle style, float radius, M
 void CreateTool::JitterInstanceOffsets( float instanceRadius, float maxJitter, Math::V_Vector3& offsets )
 {
     Math::V_Vector3 jitterVectors;
-    jitterVectors.push_back( Core::UpVector );
-    jitterVectors.push_back( Core::OutVector );
+    jitterVectors.push_back( SceneGraph::UpVector );
+    jitterVectors.push_back( SceneGraph::OutVector );
 
     Math::V_Vector3::iterator itr = offsets.begin();
     Math::V_Vector3::iterator end = offsets.end();
@@ -394,7 +394,7 @@ void CreateTool::FinalizeOrientation(Math::Matrix4& position, const Math::Vector
     if ( n != Math::Vector3::Zero )
     {
         // rotate by the normal (we are currently orthogonal)
-        position *= Math::Matrix4 ( Math::AngleAxis::Rotation( Core::UpVector, n ) );
+        position *= Math::Matrix4 ( Math::AngleAxis::Rotation( SceneGraph::UpVector, n ) );
     }
 
     // randomize the rotation
@@ -461,7 +461,7 @@ void CreateTool::FinalizeOrientation(Math::Matrix4& position, const Math::Vector
 
 bool CreateTool::ValidPosition( const Math::AlignedBox& bounds, const Math::Vector3& translation, float minDistance )
 {
-    Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>( m_Instance );
+    SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>( m_Instance );
 
     FrustumPickVisitor frustumPick( m_Scene->GetViewport()->GetCamera(), Math::Frustum( bounds ) );
     m_Scene->Pick( &frustumPick );
@@ -470,10 +470,10 @@ bool CreateTool::ValidPosition( const Math::AlignedBox& bounds, const Math::Vect
     V_PickHitSmartPtr::const_iterator resultsEnd = frustumPick.GetHits().end();
     for ( ; resultsItr != resultsEnd; ++resultsItr )
     {
-        Core::HierarchyNode* currentNode = Reflect::ObjectCast<Core::HierarchyNode>( (*resultsItr)->GetHitObject() );
+        SceneGraph::HierarchyNode* currentNode = Reflect::ObjectCast<SceneGraph::HierarchyNode>( (*resultsItr)->GetHitObject() );
         if ( !currentNode->IsTransient() && ( s_PaintPreventAnyOverlap || node->IsSimilar( currentNode ) ) )
         {
-            const Core::Transform* transform = currentNode->GetTransform();
+            const SceneGraph::Transform* transform = currentNode->GetTransform();
             if ( !transform )
             {
                 return false;
@@ -493,12 +493,12 @@ bool CreateTool::ValidPosition( const Math::AlignedBox& bounds, const Math::Vect
 
 void CreateTool::CalculateInstanceRadiusAndBounds( f32& instanceRadius, Math::AlignedBox& bounds )
 {
-    Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>( m_Instance );
+    SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>( m_Instance );
     bounds = node->GetObjectBounds();
 
     Math::Vector3 boundVector = bounds.maximum - bounds.minimum;
-    Math::Vector3 out = boundVector * Core::OutVector;
-    Math::Vector3 side = boundVector * Core::SideVector;
+    Math::Vector3 out = boundVector * SceneGraph::OutVector;
+    Math::Vector3 side = boundVector * SceneGraph::SideVector;
     instanceRadius = MAX( out.Length(), side.Length() ) / 2.0f;
 }
 
@@ -597,11 +597,11 @@ void CreateTool::Draw( DrawArgs* args )
 
     if ( m_InstanceNormal != Math::Vector3::Zero )
     {
-        ringTransform *= Math::Matrix4( Math::AngleAxis::Rotation( Core::SideVector, m_InstanceNormal ) );
+        ringTransform *= Math::Matrix4( Math::AngleAxis::Rotation( SceneGraph::SideVector, m_InstanceNormal ) );
     }
     else
     {
-        ringTransform *= Math::Matrix4( Math::AngleAxis::Rotation( Core::SideVector, Core::UpVector ) );
+        ringTransform *= Math::Matrix4( Math::AngleAxis::Rotation( SceneGraph::SideVector, SceneGraph::UpVector ) );
     }
 
     ringTransform.t.x = m_InstanceTranslation.x;
@@ -610,7 +610,7 @@ void CreateTool::Draw( DrawArgs* args )
 
     m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)(&ringTransform));
 
-    Core::PrimitiveCircle ring (m_View->GetResources());
+    SceneGraph::PrimitiveCircle ring (m_View->GetResources());
     ring.m_RadiusSteps = 360;
     ring.m_Radius = s_PaintRadius;
     ring.Update();
@@ -681,7 +681,7 @@ void CreateTool::MouseMove( const MouseMoveInput& e )
     FinalizeOrientation( position, translation, normal );
 
     m_InstanceTranslation = translation;
-    m_InstanceNormal = ( normal == Math::Vector3::Zero ) ? Core::UpVector : normal;
+    m_InstanceNormal = ( normal == Math::Vector3::Zero ) ? SceneGraph::UpVector : normal;
 
     // hide the temporary object when painting and moving
     if ( m_PaintTimer.IsAlive() )
@@ -743,7 +743,7 @@ void CreateTool::CreateProperties()
         {
             static const tstring helpText = TXT( "Controls the snapping for placed objects.\n\nViewport - Snap to the camera's point of interest\n\nGround - Snap to the X-Z plane" );
             m_Generator->AddLabel( TXT( "Plane" ) )->a_HelpText.Set( helpText );
-            Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::CreateTool, int> (this, &CreateTool::GetPlaneSnap, &CreateTool::SetPlaneSnap) );
+            Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<SceneGraph::CreateTool, int> (this, &CreateTool::GetPlaneSnap, &CreateTool::SetPlaneSnap) );
             choice->a_IsDropDown.Set( true );
             choice->a_HelpText.Set( helpText );
 
@@ -769,7 +769,7 @@ void CreateTool::CreateProperties()
         {
             static const tstring helpText = TXT( "If set, objects will only snap to other objects which have been marked with the 'Live' flag." );
             m_Generator->AddLabel( TXT( "Live Objects" ) )->a_HelpText.Set( helpText );
-            checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetLiveObjectsOnly, &CreateTool::SetLiveObjectsOnly) );
+            checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CreateTool, bool> (this, &CreateTool::GetLiveObjectsOnly, &CreateTool::SetLiveObjectsOnly) );
             checkBox->a_HelpText.Set( helpText );
         }
         m_Generator->Pop();
@@ -778,7 +778,7 @@ void CreateTool::CreateProperties()
         {
             static const tstring helpText = TXT( "Toggles surface snapping for placed objects." );
             m_Generator->AddLabel( TXT( "Surfaces" ) )->a_HelpText.Set( helpText );
-            checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetSurfaceSnap, &CreateTool::SetSurfaceSnap) );
+            checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CreateTool, bool> (this, &CreateTool::GetSurfaceSnap, &CreateTool::SetSurfaceSnap) );
             checkBox->a_HelpText.Set( helpText );
         }
         m_Generator->Pop();
@@ -787,7 +787,7 @@ void CreateTool::CreateProperties()
         {
             static const tstring helpText = TXT( "If enabled, created objects will snap to already existing objects." );
             m_Generator->AddLabel( TXT( "Objects" ) )->a_HelpText.Set( helpText );
-            checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetObjectSnap, &CreateTool::SetObjectSnap) );
+            checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CreateTool, bool> (this, &CreateTool::GetObjectSnap, &CreateTool::SetObjectSnap) );
             checkBox->a_HelpText.Set( helpText );
         }
         m_Generator->Pop();
@@ -796,7 +796,7 @@ void CreateTool::CreateProperties()
         {
             static const tstring helpText = TXT( "Snaps objects to the face normal of the surface they are placed upon." );
             m_Generator->AddLabel( TXT( "Normals" ) )->a_HelpText.Set( helpText );
-            checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetNormalSnap, &CreateTool::SetNormalSnap) );
+            checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CreateTool, bool> (this, &CreateTool::GetNormalSnap, &CreateTool::SetNormalSnap) );
             checkBox->a_HelpText.Set( helpText );
         }
         m_Generator->Pop();
@@ -809,7 +809,7 @@ void CreateTool::CreateProperties()
         {
             static const tstring helpText = TXT( "If set, this will apply a random offset to the created object's azimuth" );
             m_Generator->AddLabel( TXT( "Azimuth" ) )->a_HelpText.Set( helpText );
-            checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetRandomizeAzimuth, &CreateTool::SetRandomizeAzimuth) );
+            checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CreateTool, bool> (this, &CreateTool::GetRandomizeAzimuth, &CreateTool::SetRandomizeAzimuth) );
             checkBox->a_HelpText.Set( helpText );
         }
         m_Generator->Pop();
@@ -818,7 +818,7 @@ void CreateTool::CreateProperties()
         {
             static const tstring helpText = TXT( "Sets the lower bound for azimuth variation." );
             m_Generator->AddLabel( TXT( "Lower Bound" ) )->a_HelpText.Set( helpText );
-            Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetAzimuthMin, &CreateTool::SetAzimuthMin) );
+            Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<SceneGraph::CreateTool, float> (this, &CreateTool::GetAzimuthMin, &CreateTool::SetAzimuthMin) );
             slider->a_Min.Set( 0.f );
             slider->a_Max.Set( 180.f );
             slider->a_HelpText.Set( helpText );
@@ -834,7 +834,7 @@ void CreateTool::CreateProperties()
         {
             static const tstring helpText = TXT( "Sets the upper bound for azimuth variation." );
             m_Generator->AddLabel( TXT( "Upper Bound" ) )->a_HelpText.Set( helpText );
-            Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetAzimuthMax, &CreateTool::SetAzimuthMax) );
+            Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<SceneGraph::CreateTool, float> (this, &CreateTool::GetAzimuthMax, &CreateTool::SetAzimuthMax) );
             slider->a_Min.Set( 0.f );
             slider->a_Max.Set( 180.f );
             slider->a_HelpText.Set( helpText );
@@ -850,7 +850,7 @@ void CreateTool::CreateProperties()
         {
             static const tstring helpText = TXT( "If set, the direction the created objects are facing will be randomized." );
             m_Generator->AddLabel( TXT( "Direction" ) )->a_HelpText.Set( helpText );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetRandomizeDirection, &CreateTool::SetRandomizeDirection) )->a_HelpText.Set( helpText );
+            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CreateTool, bool> (this, &CreateTool::GetRandomizeDirection, &CreateTool::SetRandomizeDirection) )->a_HelpText.Set( helpText );
         }
         m_Generator->Pop();
 
@@ -858,7 +858,7 @@ void CreateTool::CreateProperties()
         {
             static const tstring helpText = TXT( "Sets the lower bound for direction variation." );
             m_Generator->AddLabel( TXT( "Lower Bound" ) )->a_HelpText.Set( helpText );
-            Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetDirectionMin, &CreateTool::SetDirectionMin) );
+            Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<SceneGraph::CreateTool, float> (this, &CreateTool::GetDirectionMin, &CreateTool::SetDirectionMin) );
             slider->a_Min.Set( 0.f );
             slider->a_Max.Set( 180.f );
             slider->a_HelpText.Set( helpText );
@@ -874,7 +874,7 @@ void CreateTool::CreateProperties()
         {
             static const tstring helpText = TXT( "Sets the upper bound for direction variation." );
             m_Generator->AddLabel( TXT( "Upper Bound" ) )->a_HelpText.Set( helpText );
-            Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetDirectionMax, &CreateTool::SetDirectionMax) );
+            Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<SceneGraph::CreateTool, float> (this, &CreateTool::GetDirectionMax, &CreateTool::SetDirectionMax) );
             slider->a_Min.Set( 0.f );
             slider->a_Max.Set( 180.f );
             slider->a_HelpText.Set( helpText );
@@ -890,7 +890,7 @@ void CreateTool::CreateProperties()
         {
             static const tstring helpText = TXT( "When enabled, this will cause the scale of the created objects to be randomized." );
             m_Generator->AddLabel( TXT( "Scale" ) )->a_HelpText.Set( helpText );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetRandomizeScale, &CreateTool::SetRandomizeScale) )->a_HelpText.Set( helpText );
+            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CreateTool, bool> (this, &CreateTool::GetRandomizeScale, &CreateTool::SetRandomizeScale) )->a_HelpText.Set( helpText );
         }
         m_Generator->Pop();
 
@@ -898,7 +898,7 @@ void CreateTool::CreateProperties()
         {
             static const tstring helpText = TXT( "Sets the lower bound for random scaling of created objects." );
             m_Generator->AddLabel( TXT( "Lower Bound" ) )->a_HelpText.Set( helpText );
-            Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetScaleMin, &CreateTool::SetScaleMin) );
+            Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<SceneGraph::CreateTool, float> (this, &CreateTool::GetScaleMin, &CreateTool::SetScaleMin) );
             slider->a_Min.Set( 0.05f );
             slider->a_Max.Set( 5.f );
             slider->a_HelpText.Set( helpText );
@@ -914,7 +914,7 @@ void CreateTool::CreateProperties()
         {
             static const tstring helpText = TXT( "Sets the upper bound for random scaling of created objects." );
             m_Generator->AddLabel( TXT( "Upper Bound" ) )->a_HelpText.Set( helpText );
-            Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetScaleMax, &CreateTool::SetScaleMax) );
+            Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<SceneGraph::CreateTool, float> (this, &CreateTool::GetScaleMax, &CreateTool::SetScaleMax) );
             slider->a_Min.Set( 0.05f );
             slider->a_Max.Set( 5.f );
             slider->a_HelpText.Set( helpText );
@@ -934,14 +934,14 @@ void CreateTool::CreateProperties()
         {
             static const tstring helpText = TXT( "If enabled, object instances will be 'painted' down, following some rules.  So, for instance, if you wished to add a number of shrubs to a scene, you could turn on painting (and some other options) and click and drag to 'paint' the instances into the scene." );
             m_Generator->AddLabel( TXT( "Enable" ) )->a_HelpText.Set( helpText );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetPaintMode, &CreateTool::SetPaintMode) )->a_HelpText.Set( helpText );
+            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CreateTool, bool> (this, &CreateTool::GetPaintMode, &CreateTool::SetPaintMode) )->a_HelpText.Set( helpText );
         }
         m_Generator->Pop();
 
         m_PaintPreventAnyOverlap = m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Prevent Overlap" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::CreateTool, bool> (this, &CreateTool::GetPaintPreventAnyOverlap, &CreateTool::SetPaintPreventAnyOverlap) );
+            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CreateTool, bool> (this, &CreateTool::GetPaintPreventAnyOverlap, &CreateTool::SetPaintPreventAnyOverlap) );
         }
         m_Generator->Pop();
 
@@ -949,7 +949,7 @@ void CreateTool::CreateProperties()
         {
             m_Generator->AddLabel( TXT( "Placement" ) );
 
-            Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::CreateTool, int> (this, &CreateTool::GetPaintPlacementStyle, &CreateTool::SetPaintPlacementStyle ) );
+            Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<SceneGraph::CreateTool, int> (this, &CreateTool::GetPaintPlacementStyle, &CreateTool::SetPaintPlacementStyle ) );
             choice->a_IsDropDown.Set( true );
             std::vector< Inspect::ChoiceItem > items;
 
@@ -973,7 +973,7 @@ void CreateTool::CreateProperties()
         {
             m_Generator->AddLabel( TXT( "Distribution" ) );
 
-            Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::CreateTool, int> (this, &CreateTool::GetPaintDistributionStyle, &CreateTool::SetPaintDistributionStyle ) );
+            Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<SceneGraph::CreateTool, int> (this, &CreateTool::GetPaintDistributionStyle, &CreateTool::SetPaintDistributionStyle ) );
             choice->a_IsDropDown.Set( true );
             std::vector< Inspect::ChoiceItem > items;
 
@@ -1008,7 +1008,7 @@ void CreateTool::CreateProperties()
         m_PaintRadius = m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Radius" ) );
-            Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetPaintRadius, &CreateTool::SetPaintRadius) );
+            Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<SceneGraph::CreateTool, float> (this, &CreateTool::GetPaintRadius, &CreateTool::SetPaintRadius) );
             slider->a_Min.Set( 0.1f );
             slider->a_Max.Set( 30.0f );
 
@@ -1021,7 +1021,7 @@ void CreateTool::CreateProperties()
         m_PaintSpeed = m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Speed" ) );
-            Inspect::Slider* slider = m_Generator->AddSlider<int>( new Helium::MemberProperty<Core::CreateTool, int> (this, &CreateTool::GetPaintSpeed, &CreateTool::SetPaintSpeed) );
+            Inspect::Slider* slider = m_Generator->AddSlider<int>( new Helium::MemberProperty<SceneGraph::CreateTool, int> (this, &CreateTool::GetPaintSpeed, &CreateTool::SetPaintSpeed) );
             slider->a_Min.Set( 1 );
             slider->a_Max.Set( 10 );
 
@@ -1034,7 +1034,7 @@ void CreateTool::CreateProperties()
         m_PaintDensity = m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Density" ) );
-            Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetPaintDensity, &CreateTool::SetPaintDensity) );
+            Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<SceneGraph::CreateTool, float> (this, &CreateTool::GetPaintDensity, &CreateTool::SetPaintDensity) );
             slider->a_Min.Set( 0.0f );
             slider->a_Max.Set( 2.0f );
 
@@ -1047,7 +1047,7 @@ void CreateTool::CreateProperties()
         m_PaintJitter = m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Jitter" ) );
-            Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Core::CreateTool, float> (this, &CreateTool::GetPaintJitter, &CreateTool::SetPaintJitter) );
+            Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<SceneGraph::CreateTool, float> (this, &CreateTool::GetPaintJitter, &CreateTool::SetPaintJitter) );
             slider->a_Min.Set( 0.0f );
             slider->a_Max.Set( 1.0f );
 
@@ -1172,7 +1172,7 @@ void CreateTool::CreateMultipleObjects( bool stamp )
 
         Math::Matrix4 instanceTransform;
         instanceTransform.t = Math::Vector4( *itr );
-        instanceTransform *= Math::Matrix4( Math::AngleAxis::Rotation( Core::SideVector, m_InstanceNormal ) );
+        instanceTransform *= Math::Matrix4( Math::AngleAxis::Rotation( SceneGraph::SideVector, m_InstanceNormal ) );
         instanceTransform.t += Math::Vector4( m_InstanceTranslation );
 
         Math::Vector3 point = Math::Vector3( instanceTransform.t.x, instanceTransform.t.y, instanceTransform.t.z );

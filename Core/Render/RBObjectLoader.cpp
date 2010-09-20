@@ -9,7 +9,7 @@
 #include <set>
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::Render;
 
 RBObjectLoader::RBObjectLoader()
 : ObjectLoader()
@@ -24,7 +24,7 @@ RBObjectLoader::~RBObjectLoader()
 
 u32 RBObjectLoader::ParseFile( const tchar* filename, bool winding )
 {
-    std::vector< Mesh* > meshes;
+    std::vector< SceneGraph::Mesh* > meshes;
 
     HELIUM_ASSERT( false );
 
@@ -52,7 +52,7 @@ u32 RBObjectLoader::ParseFile( const tchar* filename, bool winding )
     u32 mesh_count = (u32)meshes.size();
     for ( u32 m=0;m<mesh_count;m++)
     {
-        Mesh* mesh = meshes[m];
+        SceneGraph::Mesh* mesh = meshes[m];
 
         u32 master_base_position = (u32)m_positions.size()/m_posSize;
         u32 master_base_normal = (u32)m_normals.size()/3;
@@ -114,7 +114,7 @@ u32 RBObjectLoader::ParseFile( const tchar* filename, bool winding )
                 //A fragment with this shader ID does not exist, create a new fragment        
                 ShaderFrag new_frag;  
 
-                Shader* shader = NULL;
+                SceneGraph::Shader* shader = NULL;
 
 #ifdef CONTENT_REFACTOR
                 shader = scene.Get< Shader >( (*shaderItr ) );

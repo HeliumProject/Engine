@@ -158,7 +158,7 @@ App::App()
 : m_AppVersion( HELIUM_APP_VERSION )
 , m_AppName( HELIUM_APP_NAME )
 , m_AppVerName( HELIUM_APP_VER_NAME )
-, m_SettingsManager( new Core::SettingsManager() )
+, m_SettingsManager( new SettingsManager() )
 , m_Frame( NULL )
 {
 }
@@ -335,18 +335,18 @@ void App::LoadSettings()
 		return;
 	}
 
-    Core::SettingsManagerPtr settingsManager = NULL;
+    SettingsManagerPtr settingsManager = NULL;
 
     if ( Helium::IsDebuggerPresent() )
     {
-		settingsManager = Reflect::Archive::FromFile< Core::SettingsManager >( path );
+		settingsManager = Reflect::Archive::FromFile< SettingsManager >( path );
     }
     else
     {
         tstring error;
         try
         {
-			settingsManager = Reflect::Archive::FromFile< Core::SettingsManager >( path );
+			settingsManager = Reflect::Archive::FromFile< SettingsManager >( path );
         }
         catch ( const Helium::Exception& ex )
         {

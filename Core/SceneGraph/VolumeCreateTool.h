@@ -8,23 +8,23 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
-        class CORE_API VolumeCreateTool : public Core::CreateTool
+        class CORE_API VolumeCreateTool : public SceneGraph::CreateTool
         {
         public:
             static VolumeShape s_Shape;
 
         public:
-            REFLECT_DECLARE_ABSTRACT(Core::VolumeCreateTool, Core::CreateTool);
+            REFLECT_DECLARE_ABSTRACT(SceneGraph::VolumeCreateTool, SceneGraph::CreateTool);
             static void InitializeType();
             static void CleanupType();
 
         public:
-            VolumeCreateTool(Core::Scene* scene, PropertiesGenerator* generator);
+            VolumeCreateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator);
             virtual ~VolumeCreateTool();
 
-            virtual Core::TransformPtr CreateNode() HELIUM_OVERRIDE;
+            virtual SceneGraph::TransformPtr CreateNode() HELIUM_OVERRIDE;
 
             virtual void CreateProperties() HELIUM_OVERRIDE;
 

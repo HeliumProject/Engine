@@ -11,7 +11,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class Scene;
         class Transform;
@@ -38,7 +38,7 @@ namespace Helium
 
         struct ParentChangingArgs
         {
-            ParentChangingArgs( Core::HierarchyNode* node, Core::HierarchyNode* newParent )
+            ParentChangingArgs( SceneGraph::HierarchyNode* node, SceneGraph::HierarchyNode* newParent )
                 : m_Node( node )
                 , m_NewParent( newParent )
                 , m_Veto( false )
@@ -46,18 +46,18 @@ namespace Helium
 
             }
 
-            Core::HierarchyNode*    m_Node;
-            Core::HierarchyNode*    m_NewParent;
+            SceneGraph::HierarchyNode*    m_Node;
+            SceneGraph::HierarchyNode*    m_NewParent;
             mutable bool            m_Veto;
         };
         typedef Helium::Signature< const ParentChangingArgs& > ParentChangingSignature;
 
         struct ParentChangedArgs
         {
-            Core::HierarchyNode* m_Node;
-            Core::HierarchyNode* m_OldParent;
+            SceneGraph::HierarchyNode* m_Node;
+            SceneGraph::HierarchyNode* m_OldParent;
 
-            ParentChangedArgs( Core::HierarchyNode* node, Core::HierarchyNode* oldParent )
+            ParentChangedArgs( SceneGraph::HierarchyNode* node, SceneGraph::HierarchyNode* oldParent )
                 : m_Node( node )
                 , m_OldParent( oldParent )
             {
@@ -72,10 +72,10 @@ namespace Helium
         // In addition to Ancestors and Descendants, hierarchy nodes add Parents
         // and Children.
         // 
-        class CORE_API HierarchyNode HELIUM_ABSTRACT : public Core::SceneNode
+        class CORE_API HierarchyNode HELIUM_ABSTRACT : public SceneGraph::SceneNode
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( Core::HierarchyNode, Core::SceneNode );
+            REFLECT_DECLARE_ABSTRACT( SceneGraph::HierarchyNode, SceneGraph::SceneNode );
             static void EnumerateClass( Reflect::Compositor<HierarchyNode>& comp );
             static void InitializeType();
             static void CleanupType();
@@ -85,7 +85,7 @@ namespace Helium
             ~HierarchyNode();
 
             // Helper
-            virtual SceneNodeTypePtr CreateNodeType( Core::Scene* scene ) const HELIUM_OVERRIDE;
+            virtual SceneNodeTypePtr CreateNodeType( SceneGraph::Scene* scene ) const HELIUM_OVERRIDE;
 
             // Initialize this and children
             void InitializeHierarchy();
@@ -132,7 +132,7 @@ namespace Helium
             virtual void SetReactive( bool value );
 
             //
-            // Override from Core::SceneNode, this resets our (and childrens') cached path member
+            // Override from SceneGraph::SceneNode, this resets our (and childrens') cached path member
             //
 
             virtual void SetName( const tstring& value ) HELIUM_OVERRIDE;
@@ -152,18 +152,18 @@ namespace Helium
             {
                 return m_ParentID;
             }
-            Core::HierarchyNode* GetParent() const;
+            SceneGraph::HierarchyNode* GetParent() const;
 
             // this is the entry point for attaching a node to a graph
-            void SetParent(Core::HierarchyNode* value);
+            void SetParent(SceneGraph::HierarchyNode* value);
 
             // Sets only the previous pointer on this node.  To do a full rearrange,
             // set the previous and next pointers, then remove and re-add (or add for
             // the first time) the node.
-            void SetPrevious( Core::HierarchyNode* value );
+            void SetPrevious( SceneGraph::HierarchyNode* value );
 
             // Sets only the next pointer on this node.  See comment on SetPrevious above.
-            void SetNext( Core::HierarchyNode* value );
+            void SetNext( SceneGraph::HierarchyNode* value );
 
             // thie children of this node
             const OS_HierarchyNodeDumbPtr& GetChildren() const
@@ -200,8 +200,8 @@ namespace Helium
             //
 
         private:
-            void AddChild(Core::HierarchyNode* c);
-            void RemoveChild(Core::HierarchyNode* c);
+            void AddChild(SceneGraph::HierarchyNode* c);
+            void RemoveChild(SceneGraph::HierarchyNode* c);
 
             //
             // DG Sectioning
@@ -209,11 +209,11 @@ namespace Helium
             //
 
         protected:
-            virtual void DisconnectDescendant(Core::SceneNode* descendant) HELIUM_OVERRIDE;
-            virtual void ConnectDescendant(Core::SceneNode* descendant) HELIUM_OVERRIDE;
+            virtual void DisconnectDescendant(SceneGraph::SceneNode* descendant) HELIUM_OVERRIDE;
+            virtual void ConnectDescendant(SceneGraph::SceneNode* descendant) HELIUM_OVERRIDE;
 
-            virtual void ConnectAncestor( Core::SceneNode* ancestor ) HELIUM_OVERRIDE;
-            virtual void DisconnectAncestor( Core::SceneNode* ancestor ) HELIUM_OVERRIDE;
+            virtual void ConnectAncestor( SceneGraph::SceneNode* ancestor ) HELIUM_OVERRIDE;
+            virtual void DisconnectAncestor( SceneGraph::SceneNode* ancestor ) HELIUM_OVERRIDE;
 
             //
             // Transform Access
@@ -221,8 +221,8 @@ namespace Helium
 
         public:
             // returns the closest parent transform node (including this)
-            virtual Core::Transform* GetTransform();
-            virtual const Core::Transform* GetTransform() const;
+            virtual SceneGraph::Transform* GetTransform();
+            virtual const SceneGraph::Transform* GetTransform() const;
 
             //
             // Resources
@@ -266,9 +266,9 @@ namespace Helium
             // Searching
             //
 
-            Core::HierarchyNode* Find(const tstring& targetName);
+            SceneGraph::HierarchyNode* Find(const tstring& targetName);
 
-            Core::HierarchyNode* FindFromPath(tstring path);
+            SceneGraph::HierarchyNode* FindFromPath(tstring path);
 
             virtual void FindSimilar(V_HierarchyNodeDumbPtr& similar) const;
             virtual bool IsSimilar(const HierarchyNodePtr& node) const;

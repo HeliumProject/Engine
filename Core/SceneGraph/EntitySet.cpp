@@ -15,22 +15,22 @@
 #include "Core/SceneGraph/PrimitiveCapsule.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT(Core::EntitySet);
+REFLECT_DEFINE_ABSTRACT(SceneGraph::EntitySet);
 
 void EntitySet::InitializeType()
 {
-    Reflect::RegisterClassType< Core::EntitySet >( TXT( "Core::EntitySet" ) );
+    Reflect::RegisterClassType< SceneGraph::EntitySet >( TXT( "SceneGraph::EntitySet" ) );
 }
 
 void EntitySet::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::EntitySet >();
+    Reflect::UnregisterClassType< SceneGraph::EntitySet >();
 }
 
-EntitySet::EntitySet( Core::EntityType* type, const Helium::Path& assetPath )
-: Core::InstanceSet (type)
+EntitySet::EntitySet( SceneGraph::EntityType* type, const Helium::Path& assetPath )
+: SceneGraph::InstanceSet (type)
 , m_AssetPath( assetPath )
 , m_ClassMissing (false)
 , m_Shape (NULL)
@@ -61,17 +61,17 @@ void EntitySet::LoadAssetClass()
 
         if (!m_ArtFile.empty())
         {
-            Core::PrimitiveCube* cube;
+            SceneGraph::PrimitiveCube* cube;
             if ( !m_Shape )
             {
-                cube = new Core::PrimitiveCube (m_Type->GetScene()->GetViewport()->GetResources());
+                cube = new SceneGraph::PrimitiveCube (m_Type->GetScene()->GetViewport()->GetResources());
                 cube->Update();
 
                 m_Shape = cube;
             }
             else
             {
-                cube = dynamic_cast< Core::PrimitiveCube* >( m_Shape );
+                cube = dynamic_cast< SceneGraph::PrimitiveCube* >( m_Shape );
             }
 
             Asset::BoundingBoxComponentPtr boundingBox = m_Class->GetComponent< Asset::BoundingBoxComponent >();
@@ -131,18 +131,18 @@ void EntitySet::Delete()
     }
 }
 
-void EntitySet::AddInstance(Core::Instance* i)
+void EntitySet::AddInstance(SceneGraph::Instance* i)
 {
     // set class link (must be done before calling base class)
-    Reflect::AssertCast<Core::EntityInstance>(i)->SetClassSet(this);
+    Reflect::AssertCast<SceneGraph::EntityInstance>(i)->SetClassSet(this);
 
     __super::AddInstance(i);
 }
 
-void EntitySet::RemoveInstance(Core::Instance* i)
+void EntitySet::RemoveInstance(SceneGraph::Instance* i)
 {
     __super::RemoveInstance(i);
 
     // remove class link (must be done after calling base class)
-    Reflect::AssertCast<Core::EntityInstance>(i)->SetClassSet(NULL);
+    Reflect::AssertCast<SceneGraph::EntityInstance>(i)->SetClassSet(NULL);
 }

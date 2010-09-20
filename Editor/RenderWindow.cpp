@@ -8,7 +8,8 @@
 #include "Editor/Input.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::Render;
+using namespace Helium::SceneGraph;
 using namespace Helium::Editor;
 
 static const u32 s_InvalidMesh = (u32)(-1);

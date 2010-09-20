@@ -14,7 +14,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         struct ManipulationStart
         {
@@ -59,12 +59,12 @@ namespace Helium
             M_ManipulationStart m_ManipulationStart;
 
         public:
-            REFLECT_DECLARE_ABSTRACT(Core::TransformManipulator, Tool);
+            REFLECT_DECLARE_ABSTRACT(SceneGraph::TransformManipulator, Tool);
             static void InitializeType();
             static void CleanupType();
 
         public:
-            TransformManipulator(const ManipulatorMode mode, Core::Scene* scene, PropertiesGenerator* generator);
+            TransformManipulator(const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator);
             virtual ~TransformManipulator();
 
             virtual void Cleanup();

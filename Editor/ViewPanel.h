@@ -78,7 +78,7 @@ namespace Helium
         class ViewPanel : public ViewPanelGenerated
         {
         public:
-            ViewPanel( Core::SettingsManager* settingsManager, wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+            ViewPanel( SettingsManager* settingsManager, wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
 
             ViewCanvas* GetViewCanvas()
             {

@@ -7,7 +7,7 @@
 #include "Core/SceneGraph/DependencyCommand.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 using namespace Helium::Editor;
 
 LayersPanel::NameChangeInfo::NameChangeInfo()

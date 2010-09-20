@@ -16,27 +16,27 @@
 #include "Core/Asset/Manifests/SceneManifest.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT(Core::EntityType);
+REFLECT_DEFINE_ABSTRACT(SceneGraph::EntityType);
 
 void EntityType::InitializeType()
 {
-    Reflect::RegisterClassType< Core::EntityType >( TXT( "Core::EntityType" ) );
+    Reflect::RegisterClassType< SceneGraph::EntityType >( TXT( "SceneGraph::EntityType" ) );
 }
 
 void EntityType::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::EntityType >();
+    Reflect::UnregisterClassType< SceneGraph::EntityType >();
 }
 
-EntityType::EntityType( Core::Scene* scene, i32 instanceType )
-: Core::InstanceType( scene, instanceType )
+EntityType::EntityType( SceneGraph::Scene* scene, i32 instanceType )
+: SceneGraph::InstanceType( scene, instanceType )
 {
     ZeroMemory(&m_Material, sizeof(m_WireMaterial));
-    m_Material.Ambient = Core::Color::BLACK;
-    m_Material.Diffuse = Core::Color::BLACK;
-    m_Material.Specular = Core::Color::BLACK;
+    m_Material.Ambient = SceneGraph::Color::BLACK;
+    m_Material.Diffuse = SceneGraph::Color::BLACK;
+    m_Material.Specular = SceneGraph::Color::BLACK;
 }
 
 EntityType::~EntityType()
@@ -57,7 +57,7 @@ void EntityType::Create()
     M_InstanceSetSmartPtr::const_iterator end = m_Sets.end();
     for ( ; itr != end; ++itr )
     {
-        Core::EntitySet* set = Reflect::ObjectCast< Core::EntitySet > (itr->second);
+        SceneGraph::EntitySet* set = Reflect::ObjectCast< SceneGraph::EntitySet > (itr->second);
         if (set)
         {
             set->Create();
@@ -73,7 +73,7 @@ void EntityType::Delete()
     M_InstanceSetSmartPtr::const_iterator end = m_Sets.end();
     for ( ; itr != end; ++itr )
     {
-        Core::EntitySet* set = Reflect::ObjectCast< Core::EntitySet > (itr->second);
+        SceneGraph::EntitySet* set = Reflect::ObjectCast< SceneGraph::EntitySet > (itr->second);
         if (set)
         {
             set->Delete();
@@ -83,13 +83,13 @@ void EntityType::Delete()
 
 void EntityType::PopulateManifest(Asset::SceneManifest* manifest) const
 {
-    // iterate over every set in the Core::EntityInstance type
+    // iterate over every set in the SceneGraph::EntityInstance type
     M_InstanceSetSmartPtr::const_iterator setItr = m_Sets.begin();
     M_InstanceSetSmartPtr::const_iterator setEnd = m_Sets.end();
     for ( ; setItr != setEnd; ++setItr )
     {
-        const Core::InstanceSet* set = setItr->second;
-        const Core::EntitySet* entitySet = Reflect::ConstObjectCast<Core::EntitySet>( set );
+        const SceneGraph::InstanceSet* set = setItr->second;
+        const SceneGraph::EntitySet* entitySet = Reflect::ConstObjectCast<SceneGraph::EntitySet>( set );
 
         // if our set is a class set, insert the class id into the manifest
         if (entitySet)

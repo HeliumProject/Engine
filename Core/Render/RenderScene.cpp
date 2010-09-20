@@ -8,7 +8,7 @@
 #include "Foundation/Checksum/CRC32.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::Render;
 
 static std::vector<RenderMesh*>         g_loaded_meshes;
 static std::vector<RenderEnvironment*>  g_loaded_environments;

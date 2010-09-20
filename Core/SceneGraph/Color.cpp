@@ -2,7 +2,7 @@
 #include "Color.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 DWORD Color::ColorValueToColor( D3DCOLORVALUE value )
 {

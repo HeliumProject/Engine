@@ -8,13 +8,13 @@
 #include "Foundation/Inspect/Controls/LabelControl.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 //#define SCENE_DEBUG_PROPERTIES_GENERATOR
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         M_PanelCreators s_PanelCreators;
     }

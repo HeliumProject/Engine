@@ -3,4 +3,3 @@
 #include "Platform/Debug.h"
 
 using namespace Helium;
-using namespace Helium::Core;

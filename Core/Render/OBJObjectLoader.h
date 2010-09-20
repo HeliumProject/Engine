@@ -5,7 +5,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace Render
     {
         class CORE_API OBJObjectLoader : public ObjectLoader
         {

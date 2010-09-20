@@ -5,7 +5,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class Primitive;
         class PrimitivePointer;
@@ -14,10 +14,10 @@ namespace Helium
 
         struct InstanceTypeChangeArgs
         {
-            Core::InstanceType* m_InstanceType;
-            Core::InstanceSet* m_InstanceSet;
+            SceneGraph::InstanceType* m_InstanceType;
+            SceneGraph::InstanceSet* m_InstanceSet;
 
-            InstanceTypeChangeArgs( Core::InstanceType* type, Core::InstanceSet* set )
+            InstanceTypeChangeArgs( SceneGraph::InstanceType* type, SceneGraph::InstanceSet* set )
                 : m_InstanceType( type )
                 , m_InstanceSet( set )
             {
@@ -26,32 +26,32 @@ namespace Helium
 
         typedef Helium::Signature< const InstanceTypeChangeArgs& > InstanceTypeChangeSignature;
 
-        class InstanceType : public Core::HierarchyNodeType
+        class InstanceType : public SceneGraph::HierarchyNodeType
         {
         protected:
             // material that describes the color settings of the configuration
             D3DMATERIAL9 m_Material;
 
             // shared ui pointer is the basic visualization for all instances
-            Core::PrimitivePointer* m_Pointer;
+            SceneGraph::PrimitivePointer* m_Pointer;
 
             // the sets for this type
             M_InstanceSetSmartPtr m_Sets;
 
         public:
-            REFLECT_DECLARE_ABSTRACT( Core::InstanceType, Core::HierarchyNodeType );
+            REFLECT_DECLARE_ABSTRACT( SceneGraph::InstanceType, SceneGraph::HierarchyNodeType );
             static void InitializeType();
             static void CleanupType();
 
         public:
-            InstanceType( Core::Scene* scene, i32 instanceType );
+            InstanceType( SceneGraph::Scene* scene, i32 instanceType );
             virtual ~InstanceType();
 
             //
             // Graphics
             //
 
-            const Core::PrimitivePointer* GetPointer() const
+            const SceneGraph::PrimitivePointer* GetPointer() const
             {
                 return m_Pointer;
             }
@@ -71,8 +71,8 @@ namespace Helium
                 return m_Sets;
             }
 
-            virtual void AddSet(Core::InstanceSet* set);
-            virtual void RemoveSet(Core::InstanceSet* set);
+            virtual void AddSet(SceneGraph::InstanceSet* set);
+            virtual void RemoveSet(SceneGraph::InstanceSet* set);
 
             //
             // Events

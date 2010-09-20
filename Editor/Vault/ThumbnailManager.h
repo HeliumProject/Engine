@@ -27,7 +27,7 @@ namespace Helium
         class ThumbnailManager
         {
         public:
-            ThumbnailManager( wxWindow* window, Core::DeviceManager* d3dmanager, const tstring& thumbnailDirectory );
+            ThumbnailManager( wxWindow* window, Render::DeviceManager* d3dmanager, const tstring& thumbnailDirectory );
             virtual ~ThumbnailManager();
 
             void Reset();

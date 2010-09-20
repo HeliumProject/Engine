@@ -7,7 +7,7 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 PrimitiveAxes::PrimitiveAxes(ResourceTracker* tracker)
 : PrimitiveTemplate (tracker)
@@ -108,7 +108,7 @@ void PrimitiveAxes::DrawAxes( DrawArgs* args, AxesFlags axes ) const
   m_Device->SetRenderState(D3DRS_LIGHTING, TRUE);
 }
 
-void PrimitiveAxes::DrawViewport( DrawArgs* args, const Core::Camera* camera ) const
+void PrimitiveAxes::DrawViewport( DrawArgs* args, const SceneGraph::Camera* camera ) const
 {
   Matrix4 projection, inverseProjection;
   camera->GetOrthographicProjection(projection);

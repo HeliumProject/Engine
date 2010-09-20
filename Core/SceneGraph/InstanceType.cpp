@@ -12,30 +12,30 @@
 using Helium::Insert; 
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT(Core::InstanceType);
+REFLECT_DEFINE_ABSTRACT(SceneGraph::InstanceType);
 
 void InstanceType::InitializeType()
 {
-    Reflect::RegisterClassType< Core::InstanceType >( TXT( "Core::InstanceType" ) );
+    Reflect::RegisterClassType< SceneGraph::InstanceType >( TXT( "SceneGraph::InstanceType" ) );
 }
 
 void InstanceType::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::InstanceType >();
+    Reflect::UnregisterClassType< SceneGraph::InstanceType >();
 }
 
-InstanceType::InstanceType( Core::Scene* scene, i32 instanceType )
-: Core::HierarchyNodeType( scene, instanceType )
+InstanceType::InstanceType( SceneGraph::Scene* scene, i32 instanceType )
+: SceneGraph::HierarchyNodeType( scene, instanceType )
 , m_Pointer( NULL )
 {
     ZeroMemory(&m_Material, sizeof(m_WireMaterial));
-    m_Material.Ambient = Core::Color::BLACK;
-    m_Material.Diffuse = Core::Color::BLACK;
-    m_Material.Specular = Core::Color::BLACK;
+    m_Material.Ambient = SceneGraph::Color::BLACK;
+    m_Material.Diffuse = SceneGraph::Color::BLACK;
+    m_Material.Specular = SceneGraph::Color::BLACK;
 
-    m_Pointer = new Core::PrimitivePointer( scene->GetViewport()->GetResources() );
+    m_Pointer = new SceneGraph::PrimitivePointer( scene->GetViewport()->GetResources() );
     m_Pointer->Update();
 }
 
@@ -68,7 +68,7 @@ const D3DMATERIAL9& InstanceType::GetMaterial() const
     return m_Material;
 }
 
-void InstanceType::AddSet(Core::InstanceSet* set)
+void InstanceType::AddSet(SceneGraph::InstanceSet* set)
 {
     Insert<M_InstanceSetSmartPtr>::Result inserted = m_Sets.insert( M_InstanceSetSmartPtr::value_type( set->GetName(), set ) );
 
@@ -78,9 +78,9 @@ void InstanceType::AddSet(Core::InstanceSet* set)
     }
 }
 
-void InstanceType::RemoveSet(Core::InstanceSet* set)
+void InstanceType::RemoveSet(SceneGraph::InstanceSet* set)
 {
-    Helium::SmartPtr< Core::InstanceSet > keepAlive = set;
+    Helium::SmartPtr< SceneGraph::InstanceSet > keepAlive = set;
 
     if ( m_Sets.erase(set->GetName()) > 0 )
     {

@@ -16,7 +16,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         namespace ElementTypes
         {
@@ -384,7 +384,7 @@ namespace Helium
             DrawArgs* m_Args;
 
             // view we are rendering for
-            const Core::Viewport* m_View;
+            const SceneGraph::Viewport* m_View;
 
             // the render object data pool
             V_RenderEntry m_EntryData;
@@ -404,7 +404,7 @@ namespace Helium
         public:
             RenderVisitor();
 
-            const Core::Viewport* GetViewport()
+            const SceneGraph::Viewport* GetViewport()
             {
                 return m_View;
             }
@@ -414,7 +414,7 @@ namespace Helium
                 return (u32)m_EntryData.size();
             }
 
-            void Reset( DrawArgs* args, const Core::Viewport* view );
+            void Reset( DrawArgs* args, const SceneGraph::Viewport* view );
 
             RenderEntry* Allocate( const SceneNode* object );
 

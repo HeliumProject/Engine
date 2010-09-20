@@ -9,7 +9,7 @@
 #include "Core/SceneGraph/Pick.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 LocatorShape LocatorCreateTool::s_Shape = LocatorShapes::Cross;
 

@@ -11,7 +11,7 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 RenderVisitor::RenderVisitor()
 : m_Args (NULL)
@@ -22,7 +22,7 @@ RenderVisitor::RenderVisitor()
 
 }
 
-void RenderVisitor::Reset( DrawArgs* args, const Core::Viewport* view )
+void RenderVisitor::Reset( DrawArgs* args, const SceneGraph::Viewport* view )
 {
   m_Args = args;
   m_View = view;
@@ -267,7 +267,7 @@ void RenderVisitor::Draw()
   }
 }
 
-bool Core::IsSupportedTexture( const tstring& file )
+bool SceneGraph::IsSupportedTexture( const tstring& file )
 {
   static const tchar* extensions[] = {
       TXT( "*.bmp" ),
@@ -293,7 +293,7 @@ bool Core::IsSupportedTexture( const tstring& file )
   return false;
 }
 
-IDirect3DTexture9* Core::LoadTexture( IDirect3DDevice9* device, const tstring& file, u32* textureSize, bool* hasAlpha, D3DPOOL pool )
+IDirect3DTexture9* SceneGraph::LoadTexture( IDirect3DDevice9* device, const tstring& file, u32* textureSize, bool* hasAlpha, D3DPOOL pool )
 {
   IDirect3DTexture9* texture = NULL;
   bool alpha = false;

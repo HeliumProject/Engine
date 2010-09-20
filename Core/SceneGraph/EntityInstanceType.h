@@ -4,21 +4,21 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
-        class EntityType : public Core::InstanceType
+        class EntityType : public SceneGraph::InstanceType
         {
         private:
             // materials
             D3DMATERIAL9 m_Material;
 
         public:
-            REFLECT_DECLARE_ABSTRACT( Core::EntityType, Core::InstanceType );
+            REFLECT_DECLARE_ABSTRACT( SceneGraph::EntityType, SceneGraph::InstanceType );
             static void InitializeType();
             static void CleanupType();
 
         public:
-            EntityType( Core::Scene* scene, i32 instanceType );
+            EntityType( SceneGraph::Scene* scene, i32 instanceType );
 
             virtual ~EntityType();
 

@@ -4,9 +4,9 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
-        class PrimitiveCylinder : public Core::PrimitiveRadius
+        class PrimitiveCylinder : public SceneGraph::PrimitiveRadius
         {
         public:
             float m_Length;

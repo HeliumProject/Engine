@@ -7,7 +7,7 @@
 #include "Core/SceneGraph/Scene.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 Profile::MemoryPoolHandle g_ShaderTextureMemoryPool;
 

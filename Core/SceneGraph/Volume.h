@@ -4,7 +4,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class VolumeType;
 

@@ -7,7 +7,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class CORE_API SceneSettings : public Reflect::ConcreteInheritor< SceneSettings, Reflect::Element >
         {

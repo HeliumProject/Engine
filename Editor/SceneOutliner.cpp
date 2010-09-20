@@ -6,7 +6,7 @@
 
 using namespace Helium;
 using namespace Helium::Editor;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 // Helper macro.  In debug, asserts that m_TreeCtrl exists.  In release,
 // bails out of the function if m_TreeCtrl does not exist.
@@ -21,14 +21,14 @@ using namespace Helium::Core;
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-SceneOutliner::SceneOutliner( Core::SceneManager* sceneManager )
+SceneOutliner::SceneOutliner( SceneGraph::SceneManager* sceneManager )
 : m_SceneManager( sceneManager )
 , m_CurrentScene( NULL )
 , m_TreeCtrl( NULL )
 , m_IgnoreSelectionChange( false )
 , m_DisplayCounts( false )
 {
-    m_SceneManager->AddCurrentSceneChangedListener( Core::SceneChangeSignature::Delegate::Create<SceneOutliner, void (SceneOutliner::*)( const Core::SceneChangeArgs& args )> ( this, &SceneOutliner::CurrentSceneChanged ) );
+    m_SceneManager->AddCurrentSceneChangedListener( SceneGraph::SceneChangeSignature::Delegate::Create<SceneOutliner, void (SceneOutliner::*)( const SceneGraph::SceneChangeArgs& args )> ( this, &SceneOutliner::CurrentSceneChanged ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@ SceneOutliner::SceneOutliner( Core::SceneManager* sceneManager )
 SceneOutliner::~SceneOutliner()
 {
     DisconnectDynamicEventTable();
-    m_SceneManager->RemoveCurrentSceneChangedListener( Core::SceneChangeSignature::Delegate::Create<SceneOutliner, void (SceneOutliner::*)( const Core::SceneChangeArgs& args )> ( this, &SceneOutliner::CurrentSceneChanged ) );
+    m_SceneManager->RemoveCurrentSceneChangedListener( SceneGraph::SceneChangeSignature::Delegate::Create<SceneOutliner, void (SceneOutliner::*)( const SceneGraph::SceneChangeArgs& args )> ( this, &SceneOutliner::CurrentSceneChanged ) );
     DisconnectSceneListeners();
 }
 
@@ -112,11 +112,11 @@ SceneOutlinerItemData* SceneOutliner::GetTreeItemData( const wxTreeItemId& item 
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the current scene displayed by this oultiner.
 // 
-void SceneOutliner::UpdateCurrentScene( Core::Scene* scene )
+void SceneOutliner::UpdateCurrentScene( SceneGraph::Scene* scene )
 {
     if ( m_CurrentScene != scene )
     {
-        Core::Scene* oldScene = m_CurrentScene;
+        SceneGraph::Scene* oldScene = m_CurrentScene;
 
         m_TreeCtrl->Freeze();
 
@@ -196,9 +196,9 @@ wxTreeItemId SceneOutliner::AddItem( const wxTreeItemId& parent, const tstring& 
     bool isVisible = true;
 
     // If the object is a dependency node, connect a name change listener
-    if ( data->GetObject() && data->GetObject()->HasType( Reflect::GetType< Core::SceneNode >() ) )
+    if ( data->GetObject() && data->GetObject()->HasType( Reflect::GetType< SceneGraph::SceneNode >() ) )
     {
-        Core::SceneNode* node = Reflect::DangerousCast< Core::SceneNode >( data->GetObject() );
+        SceneGraph::SceneNode* node = Reflect::DangerousCast< SceneGraph::SceneNode >( data->GetObject() );
         isVisible = node->IsVisible();
         node->AddNameChangedListener( SceneNodeChangeSignature::Delegate( this, &SceneOutliner::SceneNodeNameChanged ) );
         node->AddVisibilityChangedListener( SceneNodeChangeSignature::Delegate( this, &SceneOutliner::SceneNodeVisibilityChanged ) );
@@ -347,7 +347,7 @@ void SceneOutliner::DisconnectSceneListeners()
 // displayed by the tree control.  Derived classes can HELIUM_OVERRIDE this function
 // to do custom work.
 // 
-void SceneOutliner::CurrentSceneChanging( Core::Scene* newScene )
+void SceneOutliner::CurrentSceneChanging( SceneGraph::Scene* newScene )
 {
     // Override in derived classes if you need to do something here.
 }
@@ -357,7 +357,7 @@ void SceneOutliner::CurrentSceneChanging( Core::Scene* newScene )
 // before thawing the tree control so that it will refresh.  Can be overridden
 // in derived classes to initially populate the tree.
 // 
-void SceneOutliner::CurrentSceneChanged( Core::Scene* oldScene )
+void SceneOutliner::CurrentSceneChanged( SceneGraph::Scene* oldScene )
 {
     // Override in derived classes if you need to do something here.
 }
@@ -452,14 +452,14 @@ void SceneOutliner::OnEndLabelEdit( wxTreeEvent& args )
     {
         SceneOutlinerItemData* data = GetTreeItemData( args.GetItem() );
         Reflect::Object* object = data->GetObject();
-        if ( object->HasType( Reflect::GetType<Core::SceneNode>() ) )
+        if ( object->HasType( Reflect::GetType<SceneGraph::SceneNode>() ) )
         {
-            Core::SceneNode* node = Reflect::DangerousCast< Core::SceneNode >( object );
+            SceneGraph::SceneNode* node = Reflect::DangerousCast< SceneGraph::SceneNode >( object );
             const tstring newName = args.GetLabel().c_str();
             if ( node->GetName() != newName )
             {
                 // Create an undoable command to rename the object
-                m_CurrentScene->Push( new Undo::PropertyCommand<tstring>( new Helium::MemberProperty<Core::SceneNode, tstring> (node, &Core::SceneNode::GetName, &Core::SceneNode::SetGivenName), newName) );
+                m_CurrentScene->Push( new Undo::PropertyCommand<tstring>( new Helium::MemberProperty<SceneGraph::SceneNode, tstring> (node, &SceneGraph::SceneNode::GetName, &SceneGraph::SceneNode::SetGivenName), newName) );
                 m_CurrentScene->Execute( false );
 
                 // Sort
@@ -573,9 +573,9 @@ void SceneOutliner::OnDeleted( wxTreeEvent& args )
 {
     // If the object is a dependency node, disconnect our listeners from it
     Reflect::Object* object = GetTreeItemData( args.GetItem() )->GetObject();
-    if ( object->HasType( Reflect::GetType<Core::SceneNode>() ) )
+    if ( object->HasType( Reflect::GetType<SceneGraph::SceneNode>() ) )
     {
-        Core::SceneNode* node = Reflect::DangerousCast< Core::SceneNode >( object );
+        SceneGraph::SceneNode* node = Reflect::DangerousCast< SceneGraph::SceneNode >( object );
         node->RemoveNameChangedListener( SceneNodeChangeSignature::Delegate( this, &SceneOutliner::SceneNodeNameChanged ) );
         node->RemoveVisibilityChangedListener( SceneNodeChangeSignature::Delegate( this, &SceneOutliner::SceneNodeVisibilityChanged ) );
     }

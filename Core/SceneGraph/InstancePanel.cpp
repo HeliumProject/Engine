@@ -12,7 +12,7 @@
 #include <algorithm>
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_SceneNodeDumbPtr& selection)
 : m_Selection (selection)
@@ -25,10 +25,10 @@ InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_SceneNodeD
         static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
         m_Generator->AddLabel( TXT( "Solid" ) )->a_HelpText.Set( helpText );
 
-        m_SolidOverride = m_Generator->AddCheckBox<Core::Instance, bool>( m_Selection, &Core::Instance::GetSolidOverride, &Core::Instance::SetSolidOverride );
+        m_SolidOverride = m_Generator->AddCheckBox<SceneGraph::Instance, bool>( m_Selection, &SceneGraph::Instance::GetSolidOverride, &SceneGraph::Instance::SetSolidOverride );
         m_SolidOverride->a_HelpText.Set( helpText );
 
-        m_Solid = m_Generator->AddCheckBox<Core::Instance, bool>( m_Selection, &Core::Instance::GetSolid, &Core::Instance::SetSolid );
+        m_Solid = m_Generator->AddCheckBox<SceneGraph::Instance, bool>( m_Selection, &SceneGraph::Instance::GetSolid, &SceneGraph::Instance::SetSolid );
         m_Solid->a_HelpText.Set( helpText );
         m_Solid->Read();
 
@@ -42,10 +42,10 @@ InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_SceneNodeD
         static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
         m_Generator->AddLabel( TXT( "Transparent" ) )->a_HelpText.Set( helpText );
 
-        m_TransparentOverride = m_Generator->AddCheckBox<Core::Instance, bool>( m_Selection, &Core::Instance::GetTransparentOverride, &Core::Instance::SetTransparentOverride );
+        m_TransparentOverride = m_Generator->AddCheckBox<SceneGraph::Instance, bool>( m_Selection, &SceneGraph::Instance::GetTransparentOverride, &SceneGraph::Instance::SetTransparentOverride );
         m_TransparentOverride->a_HelpText.Set( helpText );
 
-        m_Transparent = m_Generator->AddCheckBox<Core::Instance, bool>( m_Selection, &Core::Instance::GetTransparent, &Core::Instance::SetTransparent );
+        m_Transparent = m_Generator->AddCheckBox<SceneGraph::Instance, bool>( m_Selection, &SceneGraph::Instance::GetTransparent, &SceneGraph::Instance::SetTransparent );
         m_Transparent->a_HelpText.Set( helpText );
         m_Transparent->Read();
 
@@ -60,7 +60,7 @@ InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_SceneNodeD
     OS_SceneNodeDumbPtr::Iterator end = m_Selection.End();
     for ( ; itr != end; ++itr )
     {
-        Core::VolumePtr volume = Reflect::ObjectCast< Volume >( *itr );
+        SceneGraph::VolumePtr volume = Reflect::ObjectCast< Volume >( *itr );
         if ( !volume )
         {
             allVolumes = false;
@@ -73,7 +73,7 @@ InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_SceneNodeD
         {
             static const tstring helpText = TXT( "Determines if a pointer should be drawn in the 3d view at the location where the volume is." );
             m_Generator->AddLabel( TXT( "Show Pointer" ) )->a_HelpText.Set( helpText );
-            m_Generator->AddCheckBox<Core::Volume, bool>( m_Selection, &Core::Volume::IsPointerVisible, &Core::Volume::SetPointerVisible )->a_HelpText.Set( helpText );
+            m_Generator->AddCheckBox<SceneGraph::Volume, bool>( m_Selection, &SceneGraph::Volume::IsPointerVisible, &SceneGraph::Volume::SetPointerVisible )->a_HelpText.Set( helpText );
         }
         m_Generator->Pop();
     }

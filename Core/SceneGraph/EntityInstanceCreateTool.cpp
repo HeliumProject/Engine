@@ -15,14 +15,14 @@
 #include <algorithm>
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 bool EntityInstanceCreateTool::s_PointerVisible = true;
 bool EntityInstanceCreateTool::s_BoundsVisible = true;
 bool EntityInstanceCreateTool::s_GeometryVisible = false;
 std::vector< tstring > EntityInstanceCreateTool::s_RandomEntities;
 
-REFLECT_DEFINE_ABSTRACT(Core::EntityInstanceCreateTool);
+REFLECT_DEFINE_ABSTRACT(SceneGraph::EntityInstanceCreateTool);
 
 tstring EntityRowInfo::GetListName() const
 {
@@ -37,16 +37,16 @@ tstring EntityRowInfo::GetListName() const
 
 void EntityInstanceCreateTool::InitializeType()
 {
-    Reflect::RegisterClassType< Core::EntityInstanceCreateTool >( TXT( "Core::EntityInstanceCreateTool" ) );
+    Reflect::RegisterClassType< SceneGraph::EntityInstanceCreateTool >( TXT( "SceneGraph::EntityInstanceCreateTool" ) );
 }
 
 void EntityInstanceCreateTool::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::EntityInstanceCreateTool >();
+    Reflect::UnregisterClassType< SceneGraph::EntityInstanceCreateTool >();
 }
 
-EntityInstanceCreateTool::EntityInstanceCreateTool(Core::Scene* scene, PropertiesGenerator* generator)
-: Core::CreateTool (scene, generator)
+EntityInstanceCreateTool::EntityInstanceCreateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator)
+: SceneGraph::CreateTool (scene, generator)
 , m_RandomEntityList ( NULL )
 , m_FileButton( NULL )
 , m_FileButtonAdd( NULL )
@@ -63,7 +63,7 @@ EntityInstanceCreateTool::~EntityInstanceCreateTool()
     }
 }
 
-Core::TransformPtr EntityInstanceCreateTool::CreateNode()
+SceneGraph::TransformPtr EntityInstanceCreateTool::CreateNode()
 {
     Helium::Path entityClassPath;
 
@@ -118,8 +118,8 @@ void EntityInstanceCreateTool::CreateProperties()
     {
         m_Generator->PushContainer();
         {
-            m_FileButton = m_Generator->AddFileDialogButton< tstring >( new Helium::MemberProperty<Core::EntityInstanceCreateTool, tstring> (this, &EntityInstanceCreateTool::GetEntityAsset, &EntityInstanceCreateTool::SetEntityAsset ) );
-            m_FileButtonAdd = m_Generator->AddFileDialogButton< tstring >( new Helium::MemberProperty<Core::EntityInstanceCreateTool, tstring> (this, &EntityInstanceCreateTool::GetEntityAsset, &EntityInstanceCreateTool::AddEntityAsset ) );
+            m_FileButton = m_Generator->AddFileDialogButton< tstring >( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, tstring> (this, &EntityInstanceCreateTool::GetEntityAsset, &EntityInstanceCreateTool::SetEntityAsset ) );
+            m_FileButtonAdd = m_Generator->AddFileDialogButton< tstring >( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, tstring> (this, &EntityInstanceCreateTool::GetEntityAsset, &EntityInstanceCreateTool::AddEntityAsset ) );
             m_FileButtonAdd->a_Icon.Set( TXT( "ellipses_add" ) );
 
             Inspect::Button* modifyButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnModify ) );
@@ -149,7 +149,7 @@ void EntityInstanceCreateTool::CreateProperties()
 
         m_Generator->PushContainer();
         {
-            m_RandomEntityList = m_Generator->AddList< tstring >( new Helium::MemberProperty<Core::EntityInstanceCreateTool, tstring > (this, &EntityInstanceCreateTool::GetRandomEntity, &EntityInstanceCreateTool::SetRandomEntity) );
+            m_RandomEntityList = m_Generator->AddList< tstring >( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, tstring > (this, &EntityInstanceCreateTool::GetRandomEntity, &EntityInstanceCreateTool::SetRandomEntity) );
             m_RandomEntityList->SetProperty( TXT( "FileFilter" ), TXT( "*.entity.*" ) );
         }
         m_Generator->Pop();
@@ -157,21 +157,21 @@ void EntityInstanceCreateTool::CreateProperties()
         m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Show Pointer" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::EntityInstanceCreateTool, bool> (this, &EntityInstanceCreateTool::GetPointerVisible, &EntityInstanceCreateTool::SetPointerVisible) );
+            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, bool> (this, &EntityInstanceCreateTool::GetPointerVisible, &EntityInstanceCreateTool::SetPointerVisible) );
         }
         m_Generator->Pop();
 
         m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Show Bounds" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::EntityInstanceCreateTool, bool> (this, &EntityInstanceCreateTool::GetBoundsVisible, &EntityInstanceCreateTool::SetBoundsVisible) );
+            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, bool> (this, &EntityInstanceCreateTool::GetBoundsVisible, &EntityInstanceCreateTool::SetBoundsVisible) );
         }
         m_Generator->Pop();
 
         m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Show Geometry" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::EntityInstanceCreateTool, bool> (this, &EntityInstanceCreateTool::GetGeometryVisible, &EntityInstanceCreateTool::SetGeometryVisible) );
+            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, bool> (this, &EntityInstanceCreateTool::GetGeometryVisible, &EntityInstanceCreateTool::SetGeometryVisible) );
         }
         m_Generator->Pop();
     }

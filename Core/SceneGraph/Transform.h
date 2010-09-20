@@ -7,11 +7,11 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class Scene;
         class Transform;
-        typedef Helium::SmartPtr< Core::Transform > TransformPtr;
+        typedef Helium::SmartPtr< SceneGraph::Transform > TransformPtr;
 
         class CORE_API Transform : public HierarchyNode
         {
@@ -27,8 +27,8 @@ namespace Helium
 
             virtual void Initialize() HELIUM_OVERRIDE;
 
-            virtual Core::Transform* GetTransform() HELIUM_OVERRIDE;
-            virtual const Core::Transform* GetTransform() const HELIUM_OVERRIDE;
+            virtual SceneGraph::Transform* GetTransform() HELIUM_OVERRIDE;
+            virtual const SceneGraph::Transform* GetTransform() const HELIUM_OVERRIDE;
 
             //
             // Scale
@@ -202,16 +202,16 @@ namespace Helium
         class TransformScaleManipulatorAdapter : public ScaleManipulatorAdapter
         {
         protected:
-            Core::Transform* m_Transform;
+            SceneGraph::Transform* m_Transform;
 
         public:
-            TransformScaleManipulatorAdapter(Core::Transform* transform)
+            TransformScaleManipulatorAdapter(SceneGraph::Transform* transform)
                 : m_Transform (transform)
             {
 
             }
 
-            virtual Core::HierarchyNode* GetNode() HELIUM_OVERRIDE
+            virtual SceneGraph::HierarchyNode* GetNode() HELIUM_OVERRIDE
             {
                 return m_Transform;
             }
@@ -232,23 +232,23 @@ namespace Helium
 
             virtual Undo::CommandPtr SetValue(const Math::Scale& v) HELIUM_OVERRIDE
             {
-                return new Undo::PropertyCommand<Math::Scale> ( new Helium::MemberProperty<Core::Transform, Math::Scale> (m_Transform, &Core::Transform::GetScale, &Core::Transform::SetScale), v );
+                return new Undo::PropertyCommand<Math::Scale> ( new Helium::MemberProperty<SceneGraph::Transform, Math::Scale> (m_Transform, &SceneGraph::Transform::GetScale, &SceneGraph::Transform::SetScale), v );
             }
         };
 
         class TransformScalePivotManipulatorAdapter : public TranslateManipulatorAdapter
         {
         protected:
-            Core::Transform* m_Transform;
+            SceneGraph::Transform* m_Transform;
 
         public:
-            TransformScalePivotManipulatorAdapter(Core::Transform* transform)
+            TransformScalePivotManipulatorAdapter(SceneGraph::Transform* transform)
                 : m_Transform (transform)
             {
 
             }
 
-            virtual Core::HierarchyNode* GetNode() HELIUM_OVERRIDE
+            virtual SceneGraph::HierarchyNode* GetNode() HELIUM_OVERRIDE
             {
                 return m_Transform;
             }
@@ -274,23 +274,23 @@ namespace Helium
 
             virtual Undo::CommandPtr SetValue(const Math::Vector3& v) HELIUM_OVERRIDE
             {
-                return new Undo::PropertyCommand<Math::Vector3> ( new Helium::MemberProperty<Core::Transform, Math::Vector3> (m_Transform, &Core::Transform::GetScalePivot, &Core::Transform::SetScalePivot), v );
+                return new Undo::PropertyCommand<Math::Vector3> ( new Helium::MemberProperty<SceneGraph::Transform, Math::Vector3> (m_Transform, &SceneGraph::Transform::GetScalePivot, &SceneGraph::Transform::SetScalePivot), v );
             }
         };
 
         class TransformRotateManipulatorAdapter : public RotateManipulatorAdapter
         {
         protected:
-            Core::Transform* m_Transform;
+            SceneGraph::Transform* m_Transform;
 
         public:
-            TransformRotateManipulatorAdapter(Core::Transform* transform)
+            TransformRotateManipulatorAdapter(SceneGraph::Transform* transform)
                 : m_Transform (transform)
             {
 
             }
 
-            virtual Core::HierarchyNode* GetNode() HELIUM_OVERRIDE
+            virtual SceneGraph::HierarchyNode* GetNode() HELIUM_OVERRIDE
             {
                 return m_Transform;
             }
@@ -311,23 +311,23 @@ namespace Helium
 
             virtual Undo::CommandPtr SetValue(const Math::EulerAngles& v) HELIUM_OVERRIDE
             {
-                return new Undo::PropertyCommand<Math::EulerAngles> ( new Helium::MemberProperty<Core::Transform, Math::EulerAngles> (m_Transform, &Core::Transform::GetRotate, &Core::Transform::SetRotate), v );
+                return new Undo::PropertyCommand<Math::EulerAngles> ( new Helium::MemberProperty<SceneGraph::Transform, Math::EulerAngles> (m_Transform, &SceneGraph::Transform::GetRotate, &SceneGraph::Transform::SetRotate), v );
             }
         };
 
         class TransformRotatePivotManipulatorAdapter : public TranslateManipulatorAdapter
         {
         protected:
-            Core::Transform* m_Transform;
+            SceneGraph::Transform* m_Transform;
 
         public:
-            TransformRotatePivotManipulatorAdapter(Core::Transform* transform)
+            TransformRotatePivotManipulatorAdapter(SceneGraph::Transform* transform)
                 : m_Transform (transform)
             {
 
             }
 
-            virtual Core::HierarchyNode* GetNode() HELIUM_OVERRIDE
+            virtual SceneGraph::HierarchyNode* GetNode() HELIUM_OVERRIDE
             {
                 return m_Transform;
             }
@@ -353,23 +353,23 @@ namespace Helium
 
             virtual Undo::CommandPtr SetValue(const Math::Vector3& v) HELIUM_OVERRIDE
             {
-                return new Undo::PropertyCommand<Math::Vector3> ( new Helium::MemberProperty<Core::Transform, Math::Vector3> (m_Transform, &Core::Transform::GetRotatePivot, &Core::Transform::SetRotatePivot), v );
+                return new Undo::PropertyCommand<Math::Vector3> ( new Helium::MemberProperty<SceneGraph::Transform, Math::Vector3> (m_Transform, &SceneGraph::Transform::GetRotatePivot, &SceneGraph::Transform::SetRotatePivot), v );
             }
         };
 
         class TransformTranslateManipulatorAdapter : public TranslateManipulatorAdapter
         {
         protected:
-            Core::Transform* m_Transform;
+            SceneGraph::Transform* m_Transform;
 
         public:
-            TransformTranslateManipulatorAdapter(Core::Transform* transform)
+            TransformTranslateManipulatorAdapter(SceneGraph::Transform* transform)
                 : m_Transform (transform)
             {
 
             }
 
-            virtual Core::HierarchyNode* GetNode() HELIUM_OVERRIDE
+            virtual SceneGraph::HierarchyNode* GetNode() HELIUM_OVERRIDE
             {
                 return m_Transform;
             }
@@ -390,23 +390,23 @@ namespace Helium
 
             virtual Undo::CommandPtr SetValue(const Math::Vector3& v) HELIUM_OVERRIDE
             {
-                return new Undo::PropertyCommand<Math::Vector3> ( new Helium::MemberProperty<Core::Transform, Math::Vector3> (m_Transform, &Core::Transform::GetTranslate, &Core::Transform::SetTranslate), v );
+                return new Undo::PropertyCommand<Math::Vector3> ( new Helium::MemberProperty<SceneGraph::Transform, Math::Vector3> (m_Transform, &SceneGraph::Transform::GetTranslate, &SceneGraph::Transform::SetTranslate), v );
             }
         };
 
         class TransformTranslatePivotManipulatorAdapter : public TranslateManipulatorAdapter
         {
         protected:
-            Core::Transform* m_Transform;
+            SceneGraph::Transform* m_Transform;
 
         public:
-            TransformTranslatePivotManipulatorAdapter(Core::Transform* transform)
+            TransformTranslatePivotManipulatorAdapter(SceneGraph::Transform* transform)
                 : m_Transform (transform)
             {
 
             }
 
-            virtual Core::HierarchyNode* GetNode() HELIUM_OVERRIDE
+            virtual SceneGraph::HierarchyNode* GetNode() HELIUM_OVERRIDE
             {
                 return m_Transform;
             }
@@ -432,7 +432,7 @@ namespace Helium
 
             virtual Undo::CommandPtr SetValue(const Math::Vector3& v) HELIUM_OVERRIDE
             {
-                return new Undo::PropertyCommand<Math::Vector3> ( new Helium::MemberProperty<Core::Transform, Math::Vector3> (m_Transform, &Core::Transform::GetTranslatePivot, &Core::Transform::SetTranslatePivot), v );
+                return new Undo::PropertyCommand<Math::Vector3> ( new Helium::MemberProperty<SceneGraph::Transform, Math::Vector3> (m_Transform, &SceneGraph::Transform::GetTranslatePivot, &SceneGraph::Transform::SetTranslatePivot), v );
             }
         };
     }

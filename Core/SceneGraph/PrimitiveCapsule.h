@@ -4,9 +4,9 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
-        class PrimitiveCapsule : public Core::PrimitiveTemplate<Position>
+        class PrimitiveCapsule : public SceneGraph::PrimitiveTemplate<Position>
         {
         private:
             mutable i32 m_WireVertCount;
@@ -22,7 +22,7 @@ namespace Helium
             i32 m_LengthSteps;
 
         public:
-            Core::PrimitiveCapsule(ResourceTracker* tracker);
+            SceneGraph::PrimitiveCapsule(ResourceTracker* tracker);
 
             int GetWireVertCount() const;
             int GetPolyVertCount() const;

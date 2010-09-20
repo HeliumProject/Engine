@@ -9,7 +9,7 @@
 #define BUF_SIZE 1024
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::Render;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 static void skipLine(char * buf, int size, FILE * fp)

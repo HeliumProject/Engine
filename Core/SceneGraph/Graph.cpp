@@ -5,7 +5,7 @@
 //#define SCENE_DEBUG_EVALUATE
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT( Graph );
 
@@ -28,21 +28,21 @@ Graph::Graph()
 
 void Graph::Reset()
 {
-  for each (Core::SceneNode* node in m_OriginalNodes)
+  for each (SceneGraph::SceneNode* node in m_OriginalNodes)
   {
     node->Reset();
   }
 
   m_OriginalNodes.clear();
 
-  for each (Core::SceneNode* node in m_IntermediateNodes)
+  for each (SceneGraph::SceneNode* node in m_IntermediateNodes)
   {
     node->Reset();
   }
 
   m_IntermediateNodes.clear();
 
-  for each (Core::SceneNode* node in m_TerminalNodes)
+  for each (SceneGraph::SceneNode* node in m_TerminalNodes)
   {
     node->Reset();
   }
@@ -67,23 +67,23 @@ u32 Graph::AssignVisitedID()
 
 void Graph::ResetVisitedIDs()
 {
-  for each (Core::SceneNode* n in m_OriginalNodes)
+  for each (SceneGraph::SceneNode* n in m_OriginalNodes)
   {
     n->SetVisitedID(0);
   }
 
-  for each (Core::SceneNode* n in m_IntermediateNodes)
+  for each (SceneGraph::SceneNode* n in m_IntermediateNodes)
   {
     n->SetVisitedID(0);
   }
 
-  for each (Core::SceneNode* n in m_TerminalNodes)
+  for each (SceneGraph::SceneNode* n in m_TerminalNodes)
   {
     n->SetVisitedID(0);
   }
 }
 
-void Graph::Classify(Core::SceneNode* n)
+void Graph::Classify(SceneGraph::SceneNode* n)
 {
   if (n->GetAncestors().empty())
   {
@@ -105,7 +105,7 @@ void Graph::Classify(Core::SceneNode* n)
   }
 }
 
-void Graph::AddNode(Core::SceneNode* n)
+void Graph::AddNode(SceneGraph::SceneNode* n)
 {
   // Track this node
   Classify(n);
@@ -120,7 +120,7 @@ void Graph::AddNode(Core::SceneNode* n)
   n->SetVisitedID(0);
 }
 
-void Graph::RemoveNode(Core::SceneNode* n)
+void Graph::RemoveNode(SceneGraph::SceneNode* n)
 {
   m_OriginalNodes.erase( n );
   m_IntermediateNodes.erase( n );
@@ -129,7 +129,7 @@ void Graph::RemoveNode(Core::SceneNode* n)
   n->SetGraph( NULL );
 }
 
-u32 Graph::DirtyNode( Core::SceneNode* node, GraphDirection direction )
+u32 Graph::DirtyNode( SceneGraph::SceneNode* node, GraphDirection direction )
 {
   u32 count = 0;
 
@@ -140,9 +140,9 @@ u32 Graph::DirtyNode( Core::SceneNode* node, GraphDirection direction )
   {
   case GraphDirections::Downstream:
     {
-      std::stack<Core::SceneNode*> descendantStack;
+      std::stack<SceneGraph::SceneNode*> descendantStack;
 
-      for each (Core::SceneNode* d in node->GetDescendants())
+      for each (SceneGraph::SceneNode* d in node->GetDescendants())
       {
         if ( d->GetNodeState(direction) != NodeStates::Dirty )
         {
@@ -152,14 +152,14 @@ u32 Graph::DirtyNode( Core::SceneNode* node, GraphDirection direction )
 
       while (!descendantStack.empty())
       {
-        Core::SceneNode* descendant = descendantStack.top();
+        SceneGraph::SceneNode* descendant = descendantStack.top();
 
         descendantStack.pop();
 
         descendant->SetNodeState(direction, NodeStates::Dirty);
         count++;
 
-        for each (Core::SceneNode* d in descendant->GetDescendants())
+        for each (SceneGraph::SceneNode* d in descendant->GetDescendants())
         {
           if ( d->GetNodeState(direction) != NodeStates::Dirty )
           {
@@ -173,9 +173,9 @@ u32 Graph::DirtyNode( Core::SceneNode* node, GraphDirection direction )
 
   case GraphDirections::Upstream:
     {
-      std::stack<Core::SceneNode*> ancestorStack;
+      std::stack<SceneGraph::SceneNode*> ancestorStack;
 
-      for each (Core::SceneNode* d in node->GetAncestors())
+      for each (SceneGraph::SceneNode* d in node->GetAncestors())
       {
         if ( d->GetNodeState(direction) != NodeStates::Dirty )
         {
@@ -185,14 +185,14 @@ u32 Graph::DirtyNode( Core::SceneNode* node, GraphDirection direction )
 
       while (!ancestorStack.empty())
       {
-        Core::SceneNode* ancestor = ancestorStack.top();
+        SceneGraph::SceneNode* ancestor = ancestorStack.top();
 
         ancestorStack.pop();
 
         ancestor->SetNodeState(direction, NodeStates::Dirty);
         count++;
 
-        for each (Core::SceneNode* d in ancestor->GetAncestors())
+        for each (SceneGraph::SceneNode* d in ancestor->GetAncestors())
         {
           if ( d->GetNodeState(direction) != NodeStates::Dirty )
           {
@@ -218,7 +218,7 @@ EvaluateResult Graph::EvaluateGraph(bool silent)
 
   m_EvaluatedNodes.clear();
 
-  for each (Core::SceneNode* n in m_TerminalNodes)
+  for each (SceneGraph::SceneNode* n in m_TerminalNodes)
   {
     if (n->GetNodeState(GraphDirections::Downstream) == NodeStates::Dirty)
     {
@@ -226,7 +226,7 @@ EvaluateResult Graph::EvaluateGraph(bool silent)
     }
   }
 
-  for each (Core::SceneNode* n in m_OriginalNodes)
+  for each (SceneGraph::SceneNode* n in m_OriginalNodes)
   {
     if (n->GetNodeState(GraphDirections::Upstream) == NodeStates::Dirty)
     {
@@ -245,13 +245,13 @@ EvaluateResult Graph::EvaluateGraph(bool silent)
   return result;
 }
 
-void Graph::Evaluate(Core::SceneNode* node, GraphDirection direction)
+void Graph::Evaluate(SceneGraph::SceneNode* node, GraphDirection direction)
 {
   switch (direction)
   {
   case GraphDirections::Downstream:
     {
-      for each (Core::SceneNode* ancestor in node->GetAncestors())
+      for each (SceneGraph::SceneNode* ancestor in node->GetAncestors())
       {
         if (ancestor->GetNodeState(direction) == NodeStates::Dirty)
         {
@@ -264,7 +264,7 @@ void Graph::Evaluate(Core::SceneNode* node, GraphDirection direction)
 
   case GraphDirections::Upstream:
     {
-      for each (Core::SceneNode* descendant in node->GetDescendants())
+      for each (SceneGraph::SceneNode* descendant in node->GetDescendants())
       {
         if (descendant->GetNodeState(direction) == NodeStates::Dirty)
         {

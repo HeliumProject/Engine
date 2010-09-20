@@ -87,8 +87,8 @@ namespace Helium
 
         protected:
             // Member variables
-            Core::SceneManager* m_SceneManager;
-            Core::Scene* m_CurrentScene;
+            SceneGraph::SceneManager* m_SceneManager;
+            SceneGraph::Scene* m_CurrentScene;
             SortTreeCtrl* m_TreeCtrl;
             M_TreeItems m_Items;
             SceneOutlinerState m_StateInfo;
@@ -97,7 +97,7 @@ namespace Helium
 
         public:
             // Functions
-            SceneOutliner( Core::SceneManager* sceneManager );
+            SceneOutliner( SceneGraph::SceneManager* sceneManager );
             virtual ~SceneOutliner();
             SortTreeCtrl* InitTreeCtrl( wxWindow* parent, wxWindowID id );
             void SaveState( SceneOutlinerState& state );
@@ -108,7 +108,7 @@ namespace Helium
 
         protected:
             SceneOutlinerItemData* GetTreeItemData( const wxTreeItemId& item );
-            void UpdateCurrentScene( Core::Scene* scene );
+            void UpdateCurrentScene( SceneGraph::Scene* scene );
             void DoRestoreState();
 
         protected:
@@ -121,15 +121,15 @@ namespace Helium
 
             virtual void ConnectSceneListeners();
             virtual void DisconnectSceneListeners();
-            virtual void CurrentSceneChanging( Core::Scene* newScene );
-            virtual void CurrentSceneChanged( Core::Scene* oldScene );
+            virtual void CurrentSceneChanging( SceneGraph::Scene* newScene );
+            virtual void CurrentSceneChanged( SceneGraph::Scene* oldScene );
 
         protected:
             // Application event callbacks
-            virtual void CurrentSceneChanged( const Core::SceneChangeArgs& args );
-            virtual void SelectionChanged( const Core::SelectionChangeArgs& args );
-            virtual void SceneNodeNameChanged( const Core::SceneNodeChangeArgs& args );
-            void SceneNodeVisibilityChanged( const Core::SceneNodeChangeArgs& args );
+            virtual void CurrentSceneChanged( const SceneGraph::SceneChangeArgs& args );
+            virtual void SelectionChanged( const SceneGraph::SelectionChangeArgs& args );
+            virtual void SceneNodeNameChanged( const SceneGraph::SceneNodeChangeArgs& args );
+            void SceneNodeVisibilityChanged( const SceneGraph::SceneNodeChangeArgs& args );
 
         protected:
             // Derived classes must HELIUM_OVERRIDE these functions

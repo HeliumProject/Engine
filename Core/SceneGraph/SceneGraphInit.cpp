@@ -1,5 +1,5 @@
 /*#include "Precompile.h"*/
-#include "SceneInit.h"
+#include "SceneGraphInit.h"
 
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Reflect/Registry.h"
@@ -43,12 +43,12 @@
 #include "Core/SceneGraph/GridSettings.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 static i32 g_InitCount = 0;
 static Helium::InitializerStack g_InitializerStack;
 
-void Core::SceneInitialize()
+void SceneGraph::Initialize()
 {
     if ( ++g_InitCount == 1 )
     {
@@ -115,15 +115,14 @@ void Core::SceneInitialize()
         g_InitializerStack.Push( EntityInstanceCreateTool::InitializeType, EntityInstanceCreateTool::CleanupType );
         g_InitializerStack.Push( Light::InitializeType, Light::CleanupType );
 
-        g_InitializerStack.Push( Reflect::RegisterClassType< Core::SettingsManager >() ); 
-        g_InitializerStack.Push( Reflect::RegisterClassType< Core::CameraSettings >() ); 
-        g_InitializerStack.Push( Reflect::RegisterClassType< Core::ViewportSettings >() ); 
-        g_InitializerStack.Push( Reflect::RegisterClassType< Core::GridSettings >() );
-        g_InitializerStack.Push( Reflect::RegisterClassType< Core::SceneSettings >() );
+        g_InitializerStack.Push( Reflect::RegisterClassType< SceneGraph::CameraSettings >() ); 
+        g_InitializerStack.Push( Reflect::RegisterClassType< SceneGraph::ViewportSettings >() ); 
+        g_InitializerStack.Push( Reflect::RegisterClassType< SceneGraph::GridSettings >() );
+        g_InitializerStack.Push( Reflect::RegisterClassType< SceneGraph::SceneSettings >() );
     }
 }
 
-void Core::SceneCleanup()
+void SceneGraph::Cleanup()
 {
     if ( --g_InitCount == 0 )
     {

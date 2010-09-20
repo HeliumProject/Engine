@@ -5,7 +5,7 @@
 #include "Core/SceneGraph/PropertiesGenerator.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT( CurveControlPoint );
 

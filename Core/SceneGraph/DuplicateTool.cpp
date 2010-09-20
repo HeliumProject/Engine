@@ -9,27 +9,27 @@
 #include "Core/SceneGraph/Pick.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT(Core::DuplicateTool);
+REFLECT_DEFINE_ABSTRACT(SceneGraph::DuplicateTool);
 
 void DuplicateTool::InitializeType()
 {
-    Reflect::RegisterClassType< Core::DuplicateTool >( TXT( "Core::DuplicateTool" ) );
+    Reflect::RegisterClassType< SceneGraph::DuplicateTool >( TXT( "SceneGraph::DuplicateTool" ) );
 }
 
 void DuplicateTool::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::DuplicateTool >();
+    Reflect::UnregisterClassType< SceneGraph::DuplicateTool >();
 }
 
-DuplicateTool::DuplicateTool(Core::Scene* scene, PropertiesGenerator* generator)
-: Core::CreateTool (scene, generator)
+DuplicateTool::DuplicateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator)
+: SceneGraph::CreateTool (scene, generator)
 , m_Source (NULL)
 {
     if (!m_Scene->GetSelection().GetItems().Empty())
     {
-        m_Source = Reflect::ObjectCast<Core::Transform>( *m_Scene->GetSelection().GetItems().Begin() );
+        m_Source = Reflect::ObjectCast<SceneGraph::Transform>( *m_Scene->GetSelection().GetItems().Begin() );
     }
 }
 
@@ -38,11 +38,11 @@ DuplicateTool::~DuplicateTool()
 
 }
 
-Core::TransformPtr DuplicateTool::CreateNode()
+SceneGraph::TransformPtr DuplicateTool::CreateNode()
 {
     if (m_Source)
     {
-        return Reflect::ObjectCast<Core::Transform>( m_Source->Duplicate() );
+        return Reflect::ObjectCast<SceneGraph::Transform>( m_Source->Duplicate() );
     }
     else
     {

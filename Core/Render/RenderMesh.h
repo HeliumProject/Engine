@@ -9,7 +9,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace Render
     {
         class CORE_API ShaderFrag
         {

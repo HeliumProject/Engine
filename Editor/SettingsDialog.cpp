@@ -29,14 +29,14 @@ SettingsDialog::~SettingsDialog()
 {
 }
 
-int SettingsDialog::ShowModal( Core::SettingsManager* settingsManager )
+int SettingsDialog::ShowModal( SettingsManager* settingsManager )
 {
     m_SettingSizer = new wxBoxSizer( wxVERTICAL );
     m_CurrentSetting = NULL;
     m_SettingInfo.clear();
 
 #pragma TODO("Automate this")
-    Core::M_Settings settings = settingsManager->GetSettingsMap();
+    M_Settings settings = settingsManager->GetSettingsMap();
 
     wxListBox* propertiesListBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxSize( 130 /* 207 */, -1 ) );
     propertiesListBox->Connect( propertiesListBox->GetId(), wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( SettingsDialog::OnSettingsChanged ), NULL, this );
@@ -48,7 +48,7 @@ int SettingsDialog::ShowModal( Core::SettingsManager* settingsManager )
     propertiesSizer->Add( 6, 0, 0 );
 
     Inspect::V_Control canvasControls;
-    for ( Core::M_Settings::iterator itr = settings.begin(), end = settings.end(); itr != end; ++itr )
+    for ( M_Settings::iterator itr = settings.begin(), end = settings.end(); itr != end; ++itr )
     {
         Reflect::ElementPtr clone = (*itr).second->Clone();
         clone->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &SettingsDialog::OnRefreshElements ) );

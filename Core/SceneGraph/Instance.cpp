@@ -9,7 +9,7 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT(Instance);
 
@@ -56,7 +56,7 @@ i32 Instance::GetImageIndex() const
     return image;
 }
 
-SceneNodeTypePtr Instance::CreateNodeType( Core::Scene* scene ) const
+SceneNodeTypePtr Instance::CreateNodeType( SceneGraph::Scene* scene ) const
 {
     // Overridden to create an light-specific type
     InstanceType* nodeType = new InstanceType( scene, GetType() );

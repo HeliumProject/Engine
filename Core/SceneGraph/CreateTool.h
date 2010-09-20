@@ -9,7 +9,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         namespace PlacementStyles
         {
@@ -56,7 +56,7 @@ namespace Helium
 
             // The instance we are creating
             bool m_InstanceUpdateOffsets;
-            Core::TransformPtr m_Instance;
+            SceneGraph::TransformPtr m_Instance;
             Math::Vector3 m_InstanceTranslation;
             Math::Vector3 m_InstanceNormal;
             Math::AlignedBox m_InstanceBounds;
@@ -122,16 +122,16 @@ namespace Helium
             static float s_PaintJitter;
 
         public:
-            REFLECT_DECLARE_ABSTRACT(Core::CreateTool, Tool);
+            REFLECT_DECLARE_ABSTRACT(SceneGraph::CreateTool, Tool);
             static void InitializeType();
             static void CleanupType();
 
         public:
-            CreateTool(Core::Scene* scene, PropertiesGenerator* generator);
+            CreateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator);
 
             virtual ~CreateTool();
 
-            virtual Core::TransformPtr CreateNode() = 0;
+            virtual SceneGraph::TransformPtr CreateNode() = 0;
 
             void Place(const Math::Matrix4& position);
 

@@ -10,7 +10,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class HierarchyNode;
 
@@ -73,7 +73,7 @@ namespace Helium
             }
 
             virtual ManipulatorAdapterType GetType() = 0;
-            virtual Core::HierarchyNode* GetNode() = 0;
+            virtual SceneGraph::HierarchyNode* GetNode() = 0;
             virtual bool AllowSelfSnap()
             {
                 return false;

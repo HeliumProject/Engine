@@ -2,7 +2,7 @@
 #include "PrimitiveRadius.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 PrimitiveRadius::PrimitiveRadius(ResourceTracker* tracker)
 : PrimitiveTemplate(tracker)

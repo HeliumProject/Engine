@@ -2,7 +2,7 @@
 #include "ShaderLoader.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::Render;
 
 ShaderLoader::ShaderLoader()
 {

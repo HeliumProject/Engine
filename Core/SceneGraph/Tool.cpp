@@ -3,21 +3,21 @@
 #include "Core/SceneGraph/Scene.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT(Core::Tool);
+REFLECT_DEFINE_ABSTRACT(SceneGraph::Tool);
 
 void Tool::InitializeType()
 {
-  Reflect::RegisterClassType< Core::Tool >( TXT( "Core::Tool" ) );
+  Reflect::RegisterClassType< SceneGraph::Tool >( TXT( "SceneGraph::Tool" ) );
 }
 
 void Tool::CleanupType()
 {
-  Reflect::UnregisterClassType< Core::Tool >();
+  Reflect::UnregisterClassType< SceneGraph::Tool >();
 }
 
-Tool::Tool( Core::Scene* scene, PropertiesGenerator* generator )
+Tool::Tool( SceneGraph::Scene* scene, PropertiesGenerator* generator )
 : m_Generator ( generator )
 , m_View ( scene->GetViewport() )
 , m_Scene ( scene )

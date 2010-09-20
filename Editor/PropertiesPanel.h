@@ -21,12 +21,12 @@ namespace Helium
                 return m_PropertiesCanvas;
             }
 
-            Core::PropertiesManager& GetPropertiesManager()
+            SceneGraph::PropertiesManager& GetPropertiesManager()
             {
                 return m_PropertiesManager;
             }
 
-            Core::PropertiesGenerator& GetPropertiesGenerator()
+            SceneGraph::PropertiesGenerator& GetPropertiesGenerator()
             {
                 return m_PropertiesGenerator;
             }
@@ -37,8 +37,8 @@ namespace Helium
         private:
             CommandQueue                m_CommandQueue;
             TreeCanvas                  m_PropertiesCanvas;
-            Core::PropertiesGenerator   m_PropertiesGenerator; // HEADS UP: do this one first in the constructor!
-            Core::PropertiesManager     m_PropertiesManager;
+            SceneGraph::PropertiesGenerator   m_PropertiesGenerator; // HEADS UP: do this one first in the constructor!
+            SceneGraph::PropertiesManager     m_PropertiesManager;
         };
     }
 }

@@ -5,7 +5,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class Scene;
         class HierarchyNode;
@@ -38,7 +38,7 @@ namespace Helium
         class HierarchyTraverser
         {
         public:
-            virtual TraversalAction VisitHierarchyNode(Core::HierarchyNode* node) = 0;
+            virtual TraversalAction VisitHierarchyNode(SceneGraph::HierarchyNode* node) = 0;
         };
 
 
@@ -51,7 +51,7 @@ namespace Helium
         public:
             OS_SceneNodeDumbPtr m_Children;
 
-            virtual TraversalAction VisitHierarchyNode(Core::HierarchyNode* node) HELIUM_OVERRIDE;
+            virtual TraversalAction VisitHierarchyNode(SceneGraph::HierarchyNode* node) HELIUM_OVERRIDE;
         };
 
 
@@ -67,7 +67,7 @@ namespace Helium
         public:
             HierarchyRenderTraverser(RenderVisitor* renderVisitor);
 
-            virtual TraversalAction VisitHierarchyNode(Core::HierarchyNode* node) HELIUM_OVERRIDE;
+            virtual TraversalAction VisitHierarchyNode(SceneGraph::HierarchyNode* node) HELIUM_OVERRIDE;
         };
 
 
@@ -83,7 +83,7 @@ namespace Helium
         public:
             HierarchyPickTraverser(PickVisitor* pickVisitor);
 
-            virtual TraversalAction VisitHierarchyNode(Core::HierarchyNode* node) HELIUM_OVERRIDE;
+            virtual TraversalAction VisitHierarchyNode(SceneGraph::HierarchyNode* node) HELIUM_OVERRIDE;
         };
     }
 }

@@ -20,7 +20,7 @@ namespace Helium
         class VaultPreviewWindow : public RenderWindow
         {
         public:
-            VaultPreviewWindow( Core::SettingsManager* settingsManager, wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, const wxString& name = wxT( "Editor::VaultPreviewWindow" ) );
+            VaultPreviewWindow( SettingsManager* settingsManager, wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, const wxString& name = wxT( "Editor::VaultPreviewWindow" ) );
             virtual ~VaultPreviewWindow();
 
             void SetVaultPanel( VaultPanel* vaultPanel );
@@ -31,7 +31,7 @@ namespace Helium
             void OnSettingsChanged( const Reflect::ElementChangeArgs& args );
 
         private:
-            Core::SettingsManager* m_SettingsManager;
+            SettingsManager* m_SettingsManager;
             VaultPanel* m_VaultPanel;
 
         private:

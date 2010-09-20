@@ -14,7 +14,7 @@
 using Helium::Insert; 
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 ResourceTracker::ResourceTracker(IDirect3DDevice9* device)
 : m_Device (device)

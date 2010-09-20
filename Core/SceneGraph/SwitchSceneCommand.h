@@ -6,7 +6,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         // Forwards
         class Scene;
@@ -16,16 +16,16 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // Undo command for switching the current scene.
         // 
-        class CORE_API SwitchSceneCommand : public Undo::PropertyCommand< Core::Scene* >
+        class CORE_API SwitchSceneCommand : public Undo::PropertyCommand< SceneGraph::Scene* >
         {
         private:
-            Core::SceneManager* m_SceneManager;
-            Core::Scene* m_OldScene;
-            Core::Scene* m_NewScene;
+            SceneGraph::SceneManager* m_SceneManager;
+            SceneGraph::Scene* m_OldScene;
+            SceneGraph::Scene* m_NewScene;
             bool m_IsValid;
 
         public:
-            SwitchSceneCommand( Core::SceneManager* manager, Core::Scene* newScene );
+            SwitchSceneCommand( SceneGraph::SceneManager* manager, SceneGraph::Scene* newScene );
             virtual ~SwitchSceneCommand();
             virtual bool IsSignificant() const HELIUM_OVERRIDE;
             virtual void Undo() HELIUM_OVERRIDE;

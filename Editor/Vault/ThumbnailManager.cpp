@@ -4,7 +4,7 @@
 #include "Core/Render/DeviceManager.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::Render;
 using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -9,22 +9,22 @@
 #include "Primitive.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT( Core::HierarchyNodeType );
+REFLECT_DEFINE_ABSTRACT( SceneGraph::HierarchyNodeType );
 
 void HierarchyNodeType::InitializeType()
 {
-  Reflect::RegisterClassType< Core::HierarchyNodeType >( TXT( "Core::HierarchyNodeType" ) );
+  Reflect::RegisterClassType< SceneGraph::HierarchyNodeType >( TXT( "SceneGraph::HierarchyNodeType" ) );
 }
 
-void Core::HierarchyNodeType::CleanupType()
+void SceneGraph::HierarchyNodeType::CleanupType()
 {
-  Reflect::UnregisterClassType< Core::HierarchyNodeType >();
+  Reflect::UnregisterClassType< SceneGraph::HierarchyNodeType >();
 }
 
-HierarchyNodeType::HierarchyNodeType( Core::Scene* scene, i32 instanceType )
-: Core::SceneNodeType( scene, instanceType )
+HierarchyNodeType::HierarchyNodeType( SceneGraph::Scene* scene, i32 instanceType )
+: SceneGraph::SceneNodeType( scene, instanceType )
 {
   int index = -1;
 
@@ -32,14 +32,14 @@ HierarchyNodeType::HierarchyNodeType( Core::Scene* scene, i32 instanceType )
   m_Selectable = true;
 
   ZeroMemory(&m_WireMaterial, sizeof(m_WireMaterial));
-  m_WireMaterial.Ambient = Core::Color::BLACK;
-  m_WireMaterial.Diffuse = Core::Color::BLACK;
-  m_WireMaterial.Specular = Core::Color::BLACK;
+  m_WireMaterial.Ambient = SceneGraph::Color::BLACK;
+  m_WireMaterial.Diffuse = SceneGraph::Color::BLACK;
+  m_WireMaterial.Specular = SceneGraph::Color::BLACK;
 
   ZeroMemory(&m_SolidMaterial, sizeof(m_SolidMaterial));
-  m_SolidMaterial.Ambient = Core::Color::DARKGRAY;
-  m_SolidMaterial.Diffuse = Core::Color::DARKGRAY;
-  m_SolidMaterial.Specular = Core::Color::DARKGRAY;
+  m_SolidMaterial.Ambient = SceneGraph::Color::DARKGRAY;
+  m_SolidMaterial.Diffuse = SceneGraph::Color::DARKGRAY;
+  m_SolidMaterial.Specular = SceneGraph::Color::DARKGRAY;
 }
 
 void HierarchyNodeType::Create()

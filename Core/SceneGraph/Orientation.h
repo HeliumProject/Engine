@@ -4,7 +4,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         const extern Math::Axis SideAxis;
         const extern Math::Vector3 SideVector;

@@ -20,7 +20,7 @@
 using namespace Helium;
 using namespace Helium::Reflect;
 using namespace Helium::Asset;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SceneNodeDumbPtr& selection)
 : InstancePanel (generator, selection)

@@ -10,7 +10,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         // the shader we reference
         typedef std::vector< Shader* > V_ShaderDumbPtr;

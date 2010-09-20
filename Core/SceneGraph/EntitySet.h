@@ -8,7 +8,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class EntityInstance;
         class EntitySet;
@@ -18,16 +18,16 @@ namespace Helium
 
         struct EntitySetChangeArgs
         {
-            Core::EntitySet* m_EntitySet;
+            SceneGraph::EntitySet* m_EntitySet;
 
-            EntitySetChangeArgs( Core::EntitySet* entityClassSet )
+            EntitySetChangeArgs( SceneGraph::EntitySet* entityClassSet )
                 : m_EntitySet( entityClassSet )
             {
             }
         };
         typedef Helium::Signature< const EntitySetChangeArgs& > EntitySetChangeSignature;
 
-        class EntitySet : public Core::InstanceSet
+        class EntitySet : public SceneGraph::InstanceSet
         {
         protected:
             // file resolver id
@@ -44,18 +44,18 @@ namespace Helium
             tstring m_ArtFile;
 
             // shape to render with
-            Core::Primitive* m_Shape;
+            SceneGraph::Primitive* m_Shape;
 
             // the name of the class, derived from the path
             tstring m_Name;
 
         public:
-            REFLECT_DECLARE_ABSTRACT( Core::EntitySet, Core::InstanceSet );
+            REFLECT_DECLARE_ABSTRACT( SceneGraph::EntitySet, SceneGraph::InstanceSet );
             static void InitializeType();
             static void CleanupType();
 
         public:
-            EntitySet( Core::EntityType* type, const Helium::Path& assetPath );
+            EntitySet( SceneGraph::EntityType* type, const Helium::Path& assetPath );
 
             virtual ~EntitySet();
 
@@ -74,12 +74,12 @@ namespace Helium
                 return m_ArtFile;
             }
 
-            Core::Primitive* GetShape()
+            SceneGraph::Primitive* GetShape()
             {
                 return m_Shape;
             }
 
-            const Core::Primitive* GetShape() const
+            const SceneGraph::Primitive* GetShape() const
             {
                 return m_Shape;
             }
@@ -92,8 +92,8 @@ namespace Helium
             virtual void Create();
             virtual void Delete();
 
-            virtual void AddInstance(Core::Instance* i) HELIUM_OVERRIDE;
-            virtual void RemoveInstance(Core::Instance* i) HELIUM_OVERRIDE;
+            virtual void AddInstance(SceneGraph::Instance* i) HELIUM_OVERRIDE;
+            virtual void RemoveInstance(SceneGraph::Instance* i) HELIUM_OVERRIDE;
 
             virtual void LoadAssetClass();
 

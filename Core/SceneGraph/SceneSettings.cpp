@@ -4,7 +4,7 @@
 #include "Foundation/Preferences.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 SceneSettings::SceneSettings()
 : m_MRU( new MRUData() )

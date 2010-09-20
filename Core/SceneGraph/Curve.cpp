@@ -21,7 +21,7 @@
 #include <algorithm>
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT( Curve );
 

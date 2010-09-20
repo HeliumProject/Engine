@@ -10,7 +10,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class EntityPanel : public InstancePanel
         {

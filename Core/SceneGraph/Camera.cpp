@@ -11,7 +11,7 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 const float Camera::NearClipDistance = 0.05f;
 const float Camera::FarClipDistance = 10000.0f;

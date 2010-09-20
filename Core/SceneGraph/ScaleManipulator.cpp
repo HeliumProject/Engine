@@ -15,22 +15,22 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT(Core::ScaleManipulator);
+REFLECT_DEFINE_ABSTRACT(SceneGraph::ScaleManipulator);
 
 void ScaleManipulator::InitializeType()
 {
-    Reflect::RegisterClassType< Core::ScaleManipulator >( TXT( "Core::ScaleManipulator" ) );
+    Reflect::RegisterClassType< SceneGraph::ScaleManipulator >( TXT( "SceneGraph::ScaleManipulator" ) );
 }
 
 void ScaleManipulator::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::ScaleManipulator >();
+    Reflect::UnregisterClassType< SceneGraph::ScaleManipulator >();
 }
 
-ScaleManipulator::ScaleManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, Core::Scene* scene, PropertiesGenerator* generator)
-: Core::TransformManipulator (mode, scene, generator)
+ScaleManipulator::ScaleManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator)
+: SceneGraph::TransformManipulator (mode, scene, generator)
 , m_SettingsManager( settingsManager )
 , m_Size( 0.3f )
 , m_GridSnap( false )
@@ -41,22 +41,22 @@ ScaleManipulator::ScaleManipulator( SettingsManager* settingsManager, const Mani
     m_GridSnap = settings->ScaleManipulatorGridSnap();
     m_Distance = settings->ScaleManipulatorDistance();
 
-    m_Axes = new Core::PrimitiveAxes (m_Scene->GetViewport()->GetResources());
+    m_Axes = new SceneGraph::PrimitiveAxes (m_Scene->GetViewport()->GetResources());
     m_Axes->Update();
 
-    m_Cube = new Core::PrimitiveCube (m_Scene->GetViewport()->GetResources());
+    m_Cube = new SceneGraph::PrimitiveCube (m_Scene->GetViewport()->GetResources());
     m_Cube->SetSolid(true);
     m_Cube->Update();
 
-    m_XCube = new Core::PrimitiveCube (m_Scene->GetViewport()->GetResources());
+    m_XCube = new SceneGraph::PrimitiveCube (m_Scene->GetViewport()->GetResources());
     m_XCube->SetSolid(true);
     m_XCube->Update();
 
-    m_YCube = new Core::PrimitiveCube (m_Scene->GetViewport()->GetResources());
+    m_YCube = new SceneGraph::PrimitiveCube (m_Scene->GetViewport()->GetResources());
     m_YCube->SetSolid(true);
     m_YCube->Update();
 
-    m_ZCube = new Core::PrimitiveCube (m_Scene->GetViewport()->GetResources());
+    m_ZCube = new SceneGraph::PrimitiveCube (m_Scene->GetViewport()->GetResources());
     m_ZCube->SetSolid(true);
     m_ZCube->Update();
 
@@ -233,11 +233,11 @@ void ScaleManipulator::Draw( DrawArgs* args )
 
     if (m_SelectedAxes == MultipleAxes::All)
     {
-        m_AxisMaterial.Ambient = Core::Color::YELLOW;
+        m_AxisMaterial.Ambient = SceneGraph::Color::YELLOW;
     }
     else
     {
-        m_AxisMaterial.Ambient = Core::Color::SKYBLUE;
+        m_AxisMaterial.Ambient = SceneGraph::Color::SKYBLUE;
     }
 
     m_View->GetDevice()->SetMaterial(&m_AxisMaterial);
@@ -642,14 +642,14 @@ void ScaleManipulator::CreateProperties()
         m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Grid Snap" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::ScaleManipulator, bool> (this, &ScaleManipulator::GetGridSnap, &ScaleManipulator::SetGridSnap) );
+            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::ScaleManipulator, bool> (this, &ScaleManipulator::GetGridSnap, &ScaleManipulator::SetGridSnap) );
         }
         m_Generator->Pop();
 
         m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Grid Distance" ) );
-            m_Generator->AddValue<float>( new Helium::MemberProperty<Core::ScaleManipulator, float> (this, &ScaleManipulator::GetDistance, &ScaleManipulator::SetDistance) );
+            m_Generator->AddValue<float>( new Helium::MemberProperty<SceneGraph::ScaleManipulator, float> (this, &ScaleManipulator::GetDistance, &ScaleManipulator::SetDistance) );
         }
         m_Generator->Pop();
     }

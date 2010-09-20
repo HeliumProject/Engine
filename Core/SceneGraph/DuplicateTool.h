@@ -8,22 +8,22 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
-        class CORE_API DuplicateTool : public Core::CreateTool
+        class CORE_API DuplicateTool : public SceneGraph::CreateTool
         {
         public:
-            REFLECT_DECLARE_ABSTRACT(Core::DuplicateTool, Core::CreateTool);
+            REFLECT_DECLARE_ABSTRACT(SceneGraph::DuplicateTool, SceneGraph::CreateTool);
             static void InitializeType();
             static void CleanupType();
 
-            DuplicateTool(Core::Scene* scene, PropertiesGenerator* generator);
+            DuplicateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator);
             virtual ~DuplicateTool();
 
-            virtual Core::TransformPtr CreateNode() HELIUM_OVERRIDE;
+            virtual SceneGraph::TransformPtr CreateNode() HELIUM_OVERRIDE;
 
         private:
-            Core::Transform* m_Source;
+            SceneGraph::Transform* m_Source;
         };
     }
 }

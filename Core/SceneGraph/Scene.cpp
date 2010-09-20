@@ -46,9 +46,9 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
-Scene::Scene( Core::Viewport* viewport, const Helium::Path& path )
+Scene::Scene( SceneGraph::Viewport* viewport, const Helium::Path& path )
 : m_Path( path )
 , m_Id( TUID::Generate() )
 , m_Progress( 0 )
@@ -178,7 +178,7 @@ bool Scene::Load( const Helium::Path& path )
     return Import( path, ImportActions::Load, NULL ).ReferencesObject();
 }
 
-Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u32 importFlags, Core::HierarchyNode* importRoot, i32 importReflectType )
+Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u32 importFlags, SceneGraph::HierarchyNode* importRoot, i32 importReflectType )
 {
     CORE_SCOPE_TIMER( ( "%s", path.c_str() ) );
 
@@ -244,7 +244,7 @@ Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u
     return command;
 }
 
-Undo::CommandPtr Scene::ImportXML( const tstring& xml, u32 importFlags, Core::HierarchyNode* importRoot )
+Undo::CommandPtr Scene::ImportXML( const tstring& xml, u32 importFlags, SceneGraph::HierarchyNode* importRoot )
 {
     CORE_SCOPE_TIMER( ("") );
 
@@ -383,7 +383,7 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
         V_SceneNodeSmartPtr::iterator end = createdNodes.end();
         for ( ; itr != end; ++itr )
         {
-            HierarchyNodePtr hierarchyNode = Reflect::ObjectCast<Core::HierarchyNode>(*itr);
+            HierarchyNodePtr hierarchyNode = Reflect::ObjectCast<SceneGraph::HierarchyNode>(*itr);
 
             if (!hierarchyNode.ReferencesObject())
             {
@@ -422,23 +422,23 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
             // Set Hierarchy
             // 
 
-            Core::HierarchyNode* child = NULL;
+            SceneGraph::HierarchyNode* child = NULL;
             HM_SceneNodeDumbPtr::const_iterator foundChild = m_Nodes.find( childID );
             if ( foundChild != m_Nodes.end() )
             {
-                child = Reflect::ObjectCast< Core::HierarchyNode >( foundChild->second );
+                child = Reflect::ObjectCast< SceneGraph::HierarchyNode >( foundChild->second );
             }
 
             if (child != NULL)
             {
                 if (parentID != TUID::Null)
                 {
-                    Core::HierarchyNode* parent = NULL;
+                    SceneGraph::HierarchyNode* parent = NULL;
 
                     HM_SceneNodeDumbPtr::const_iterator foundParent = m_Nodes.find( parentID );
                     if ( foundParent != m_Nodes.end() )
                     {
-                        parent = Reflect::ObjectCast< Core::HierarchyNode >( foundParent->second );
+                        parent = Reflect::ObjectCast< SceneGraph::HierarchyNode >( foundParent->second );
                     }
 
                     if (parent != NULL)
@@ -477,7 +477,7 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
 
         if ( importFlags & ImportFlags::Select )
         {
-            Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>( *itr );
+            SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>( *itr );
             if ( node )
             {
                 newNodes.push_back( node );
@@ -561,7 +561,7 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_S
                 HM_SceneNodeDumbPtr::const_iterator find = m_Nodes.find( node->GetID() );
                 if ( find != m_Nodes.end() )
                 {
-                    Core::SceneNode* dependNode = find->second;
+                    SceneGraph::SceneNode* dependNode = find->second;
                     element->CopyTo( dependNode );
                     dependNode->Unpack();
                     dependNode->Dirty();
@@ -704,10 +704,10 @@ bool Scene::Export( Reflect::V_Element& elements, const ExportArgs& args, Undo::
             OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
             for ( ; itr != end; ++itr )
             {
-                Core::SceneNode* node = Reflect::ObjectCast< Core::SceneNode >( *itr );
+                SceneGraph::SceneNode* node = Reflect::ObjectCast< SceneGraph::SceneNode >( *itr );
                 if ( node )
                 {
-                    Core::HierarchyNode* hierarchyNode = Reflect::ObjectCast< Core::HierarchyNode >( node );
+                    SceneGraph::HierarchyNode* hierarchyNode = Reflect::ObjectCast< SceneGraph::HierarchyNode >( node );
 
                     if ( hierarchyNode && ExportFlags::HasFlag( args.m_Flags, ExportFlags::MaintainHierarchy ) )
                     {
@@ -761,7 +761,7 @@ bool Scene::Export( Reflect::V_Element& elements, const ExportArgs& args, Undo::
     return result;
 }
 
-void Scene::ExportSceneNode( Core::SceneNode* node, Reflect::V_Element& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes )
+void Scene::ExportSceneNode( SceneGraph::SceneNode* node, Reflect::V_Element& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes )
 {
     // Don't export the root node
     if ( node != m_Root )
@@ -769,13 +769,13 @@ void Scene::ExportSceneNode( Core::SceneNode* node, Reflect::V_Element& elements
         // Don't export a node if it has already been exported
         if ( exported.find( node->GetID() ) == exported.end() && !node->IsTransient() )
         {
-            if ( node->HasType( Reflect::GetType< Core::Transform >() ) && !ExportFlags::HasFlag( args.m_Flags, ExportFlags::MaintainHierarchy ) )
+            if ( node->HasType( Reflect::GetType< SceneGraph::Transform >() ) && !ExportFlags::HasFlag( args.m_Flags, ExportFlags::MaintainHierarchy ) )
             {
                 // If we are exporting a transform node, but we are not maintaining the hierarchy,
                 // we would still like to maintain the object's global position.  So, we create
                 // reparent the node under the root (which maintains the node's position) and
                 // store that command so that it can be undone after export completes.
-                Core::Transform* transformNode = Reflect::DangerousCast< Core::Transform >( node );
+                SceneGraph::Transform* transformNode = Reflect::DangerousCast< SceneGraph::Transform >( node );
                 changes->Push( new ParentCommand( transformNode, GetRoot() ) );
             }
 
@@ -790,14 +790,14 @@ void Scene::ExportSceneNode( Core::SceneNode* node, Reflect::V_Element& elements
                 S_SceneNodeDumbPtr::const_iterator ancestorEnd = node->GetAncestors().end();
                 for ( ; ancestorItr != ancestorEnd; ++ancestorItr )
                 {
-                    Core::SceneNode* ancestor = *ancestorItr;
+                    SceneGraph::SceneNode* ancestor = *ancestorItr;
 
                     bool skipAncestor = false;
 
                     // Check to see if the ancestor is a hierarchy node
-                    if ( node->HasType( Reflect::GetType<Core::HierarchyNode>() ) )
+                    if ( node->HasType( Reflect::GetType<SceneGraph::HierarchyNode>() ) )
                     {
-                        Core::HierarchyNode* hierarchyNode = Reflect::DangerousCast< Core::HierarchyNode >( node );
+                        SceneGraph::HierarchyNode* hierarchyNode = Reflect::DangerousCast< SceneGraph::HierarchyNode >( node );
                         if ( hierarchyNode->GetParent() && hierarchyNode->GetParent() == ancestor )
                         {
                             // Hierarchy is exported separately, so ignore this ancestor if it is a parent of this node
@@ -815,7 +815,7 @@ void Scene::ExportSceneNode( Core::SceneNode* node, Reflect::V_Element& elements
     }
 }
 
-void Scene::ExportHierarchyNode( Core::HierarchyNode* node, Reflect::V_Element& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes, bool exportChildren )
+void Scene::ExportHierarchyNode( SceneGraph::HierarchyNode* node, Reflect::V_Element& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes, bool exportChildren )
 {
     // Export parents first
     if ( node->GetParent() != m_Root )
@@ -1000,7 +1000,7 @@ int Scene::Split( tstring& outName )
     return ret;
 }
 
-void Scene::SetName( Core::SceneNode* sceneNode, const tstring& newName )
+void Scene::SetName( SceneGraph::SceneNode* sceneNode, const tstring& newName )
 {
     // lua keywords
     static stdext::hash_set<tstring, NameHasher> keywords;
@@ -1124,7 +1124,7 @@ void Scene::SetName( Core::SceneNode* sceneNode, const tstring& newName )
     HELIUM_ASSERT( previouslyInserted || newlyInserted );
 }
 
-void Scene::Rename( Core::SceneNode* sceneNode, const tstring& newName, tstring oldName )
+void Scene::Rename( SceneGraph::SceneNode* sceneNode, const tstring& newName, tstring oldName )
 {
     if ( oldName.empty() )
     {
@@ -1165,7 +1165,7 @@ void Scene::AddNodeType(const SceneNodeTypePtr& nodeType)
 
     // insert it into the types for its bases
     const Reflect::Class* type = Reflect::Registry::GetInstance()->GetClass( nodeType->GetInstanceType() );
-    for ( ; type->m_TypeID != Reflect::GetType<Core::SceneNode>(); type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
+    for ( ; type->m_TypeID != Reflect::GetType<SceneGraph::SceneNode>(); type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
     {
         Helium::Insert<HMS_TypeToSceneNodeTypeDumbPtr>::Result baseTypeSet = m_NodeTypesByType.insert( HMS_TypeToSceneNodeTypeDumbPtr::value_type( type->m_TypeID, S_SceneNodeTypeDumbPtr() ) );
         baseTypeSet.first->second.insert( nodeType );
@@ -1190,7 +1190,7 @@ void Scene::RemoveNodeType(const SceneNodeTypePtr& nodeType)
         m_NodeTypesByType.erase( typeSet );
 
         const Reflect::Class* type = Reflect::Registry::GetInstance()->GetClass( nodeType->GetInstanceType() );
-        for ( ; type->m_TypeID != Reflect::GetType<Core::SceneNode>(); type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
+        for ( ; type->m_TypeID != Reflect::GetType<SceneGraph::SceneNode>(); type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
         {
             HMS_TypeToSceneNodeTypeDumbPtr::iterator baseTypeSet = m_NodeTypesByType.find( type->m_TypeID );
 
@@ -1262,7 +1262,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
 
     {
 
-        Core::SceneNodeType* t = node->GetNodeType();
+        SceneGraph::SceneNodeType* t = node->GetNodeType();
         if ( t == NULL )
         {
             CORE_SCOPE_TIMER( ("Deduce node type") );
@@ -1291,9 +1291,9 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
 
     {
         CORE_SCOPE_TIMER( ("Hierarchy check") );
-        if ( node->HasType( Reflect::GetType<Core::HierarchyNode>() ) )
+        if ( node->HasType( Reflect::GetType<SceneGraph::HierarchyNode>() ) )
         {
-            Core::HierarchyNode* hierarchyNode = Reflect::DangerousCast< Core::HierarchyNode >( node );
+            SceneGraph::HierarchyNode* hierarchyNode = Reflect::DangerousCast< SceneGraph::HierarchyNode >( node );
 
             if (hierarchyNode->GetParent() == NULL)
             {
@@ -1323,7 +1323,7 @@ void Scene::RemoveSceneNode( const SceneNodePtr& node )
     // remove shortcuts to node and children
     m_Nodes.erase( node->GetID() );
 
-    Core::SceneNodeType* t = node->GetNodeType();
+    SceneGraph::SceneNodeType* t = node->GetNodeType();
     if ( t == NULL )
     {
         t = node->DeduceNodeType();
@@ -1347,7 +1347,7 @@ void Scene::Evaluate(bool silent)
 {
     CORE_EVALUATE_SCOPE_TIMER( ("") );
 
-    Core::EvaluateResult result = m_Graph->EvaluateGraph(silent);
+    SceneGraph::EvaluateResult result = m_Graph->EvaluateGraph(silent);
 
     Statistics* stats = m_View->GetStatistics();
     stats->m_EvaluateTime += result.m_TotalTime;
@@ -1369,16 +1369,16 @@ void Scene::Create()
     for each ( HM_StrToSceneNodeTypeSmartPtr::value_type valType in m_NodeTypesByName )
     {
         const SceneNodeTypePtr& t = valType.second;
-        if ( t->HasType( Reflect::GetType<Core::HierarchyNodeType>() ) )
+        if ( t->HasType( Reflect::GetType<SceneGraph::HierarchyNodeType>() ) )
         {
-            Core::HierarchyNodeType* h = Reflect::DangerousCast< Core::HierarchyNodeType >( t );
+            SceneGraph::HierarchyNodeType* h = Reflect::DangerousCast< SceneGraph::HierarchyNodeType >( t );
             h->Create();
         }
     }
 
     for each ( HM_SceneNodeDumbPtr::value_type valType in m_Nodes )
     {
-        Core::SceneNode* n = valType.second;
+        SceneGraph::SceneNode* n = valType.second;
         n->Create();
     }
 }
@@ -1388,9 +1388,9 @@ void Scene::Delete()
     for each ( HM_StrToSceneNodeTypeSmartPtr::value_type dependNodeType in m_NodeTypesByName )
     {
         const SceneNodeTypePtr& t = dependNodeType.second;
-        if ( t->HasType( Reflect::GetType<Core::HierarchyNodeType>() ) )
+        if ( t->HasType( Reflect::GetType<SceneGraph::HierarchyNodeType>() ) )
         {
-            Core::HierarchyNodeType* h = Reflect::DangerousCast< Core::HierarchyNodeType >( t );
+            SceneGraph::HierarchyNodeType* h = Reflect::DangerousCast< SceneGraph::HierarchyNodeType >( t );
 
             h->Delete();
         }
@@ -1398,7 +1398,7 @@ void Scene::Delete()
 
     for each ( HM_SceneNodeDumbPtr::value_type dependNode in m_Nodes )
     {
-        Core::SceneNode* n = dependNode.second;
+        SceneGraph::SceneNode* n = dependNode.second;
         n->Delete();
     }
 }
@@ -1529,7 +1529,7 @@ void Scene::PickLink( const Inspect::PickLinkArgs& args )
 
 void Scene::SelectLink( const Inspect::SelectLinkArgs& args )
 {
-    Core::SceneNode* o = FindNode( args.m_ID );
+    SceneGraph::SceneNode* o = FindNode( args.m_ID );
 
     if ( o == NULL )
     {
@@ -1549,7 +1549,7 @@ void Scene::SelectLink( const Inspect::SelectLinkArgs& args )
         return;
     }
 
-    Core::Layer* layer = Reflect::ObjectCast<Core::Layer>( o );
+    SceneGraph::Layer* layer = Reflect::ObjectCast<SceneGraph::Layer>( o );
 
     if ( layer )
     {
@@ -1583,7 +1583,7 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
     // Map engine internal type to luna internal type
     //
 
-    i32 typeID = Reflect::GetType<Core::SceneNode>();
+    i32 typeID = Reflect::GetType<SceneGraph::SceneNode>();
 
     HMS_TypeToSceneNodeTypeDumbPtr::const_iterator found = m_NodeTypesByType.find( typeID );
     if (found != m_NodeTypesByType.end())
@@ -1666,12 +1666,12 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
 
     m_Highlighted = selection;
 
-    Core::HierarchyNode* first = NULL;
+    SceneGraph::HierarchyNode* first = NULL;
     OS_SceneNodeDumbPtr::Iterator itr = m_Highlighted.Begin();
     OS_SceneNodeDumbPtr::Iterator end = m_Highlighted.End();
     for ( ; itr != end; ++itr )
     {
-        Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>(*itr);
+        SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>(*itr);
 
         if (node)
         {
@@ -1710,7 +1710,7 @@ void Scene::ClearHighlight( const ClearHighlightArgs& args )
     OS_SceneNodeDumbPtr::Iterator end = m_Highlighted.End();
     for ( ; itr != end; ++itr )
     {
-        Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>(*itr);
+        SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>(*itr);
 
         if (node)
         {
@@ -1775,9 +1775,9 @@ void Scene::UndoQueueCommandPushed( const Undo::QueueChangeArgs& args )
     }
 }
 
-Core::SceneNode* Scene::FindNode(const TUID& id)
+SceneGraph::SceneNode* Scene::FindNode(const TUID& id)
 {
-    Core::SceneNode* node = NULL;
+    SceneGraph::SceneNode* node = NULL;
 
     // 
     // Guid
@@ -1806,9 +1806,9 @@ Core::SceneNode* Scene::FindNode(const TUID& id)
     return node;
 }
 
-Core::SceneNode* Scene::FindNode(const tstring& name)
+SceneGraph::SceneNode* Scene::FindNode(const tstring& name)
 {
-    Core::SceneNode* node = NULL;
+    SceneGraph::SceneNode* node = NULL;
 
     // 
     // Name
@@ -1869,7 +1869,7 @@ void Scene::SelectionChanging( const SelectionChangingArgs& args )
     {
         if (!args.m_Selection.Empty())
         {
-            Core::SceneNode* node = Reflect::ObjectCast<Core::SceneNode>( args.m_Selection.Front() );
+            SceneGraph::SceneNode* node = Reflect::ObjectCast<SceneGraph::SceneNode>( args.m_Selection.Front() );
 
             if (node)
             {
@@ -1923,13 +1923,13 @@ void Scene::SelectionChanged( const SelectionChangeArgs& args )
 // Helper function to return the closest ancestor that is a parent of all the
 // specified hierarchy nodes.
 // 
-Core::HierarchyNode* Scene::GetCommonParent( const V_HierarchyNodeDumbPtr& nodes )
+SceneGraph::HierarchyNode* Scene::GetCommonParent( const V_HierarchyNodeDumbPtr& nodes )
 {
-    Core::HierarchyNode* commonParent = NULL;
+    SceneGraph::HierarchyNode* commonParent = NULL;
 
-    for each ( Core::HierarchyNode* node in nodes )
+    for each ( SceneGraph::HierarchyNode* node in nodes )
     {
-        Core::HierarchyNode* currentParent = node->GetParent();
+        SceneGraph::HierarchyNode* currentParent = node->GetParent();
         if ( !commonParent )
         {
             // First time through the loop, just use the current parent
@@ -1943,11 +1943,11 @@ Core::HierarchyNode* Scene::GetCommonParent( const V_HierarchyNodeDumbPtr& nodes
                 // Iterate up the hierarchy looking for the first node that is an ancestor
                 // to the "common parent" so far and the current node.
                 bool found = false;
-                Core::HierarchyNode* parent = commonParent;
-                Core::HierarchyNode* searchNode = node;
+                SceneGraph::HierarchyNode* parent = commonParent;
+                SceneGraph::HierarchyNode* searchNode = node;
                 while ( !found && parent )
                 {
-                    Core::HierarchyNode* searchParent = searchNode;
+                    SceneGraph::HierarchyNode* searchParent = searchNode;
                     while ( !found && searchParent )
                     {
                         if ( searchParent == parent )
@@ -1977,7 +1977,7 @@ void Scene::GetCommonParents( const V_HierarchyNodeDumbPtr& nodes, V_HierarchyNo
     V_HierarchyNodeDumbPtr::const_iterator outerEnd = nodes.end();
     for ( ; outerItr != outerEnd; ++outerItr )
     {
-        Core::HierarchyNode* outer = *outerItr;
+        SceneGraph::HierarchyNode* outer = *outerItr;
 
         if ( !outer )
         {
@@ -1988,7 +1988,7 @@ void Scene::GetCommonParents( const V_HierarchyNodeDumbPtr& nodes, V_HierarchyNo
         bool childNode = false;
 
         // start walking up the hierarchy starting from my parent
-        Core::HierarchyNode* parent = outer->GetParent();
+        SceneGraph::HierarchyNode* parent = outer->GetParent();
 
         // while we haven't hit the root
         while ( parent != m_Root )
@@ -1998,7 +1998,7 @@ void Scene::GetCommonParents( const V_HierarchyNodeDumbPtr& nodes, V_HierarchyNo
             V_HierarchyNodeDumbPtr::const_iterator innerEnd = nodes.end();
             for ( ; innerItr != innerEnd; ++innerItr )
             {
-                Core::HierarchyNode* inner = *innerItr;
+                SceneGraph::HierarchyNode* inner = *innerItr;
 
                 if ( !inner )
                 {
@@ -2036,7 +2036,7 @@ void Scene::GetSelectionParents(OS_SceneNodeDumbPtr& parents)
     OS_SceneNodeDumbPtr::Iterator outerEnd = m_Selection.GetItems().End();
     for ( ; outerItr != outerEnd; ++outerItr )
     {
-        Core::HierarchyNode* outer = Reflect::ObjectCast< Core::HierarchyNode > (*outerItr);
+        SceneGraph::HierarchyNode* outer = Reflect::ObjectCast< SceneGraph::HierarchyNode > (*outerItr);
 
         if ( !outer )
         {
@@ -2047,7 +2047,7 @@ void Scene::GetSelectionParents(OS_SceneNodeDumbPtr& parents)
         bool childNode = false;
 
         // start walking up the hierarchy starting from my parent
-        Core::HierarchyNode* parent = outer->GetParent();
+        SceneGraph::HierarchyNode* parent = outer->GetParent();
         HELIUM_ASSERT( parent );
 
         // while we haven't hit the root
@@ -2058,7 +2058,7 @@ void Scene::GetSelectionParents(OS_SceneNodeDumbPtr& parents)
             OS_SceneNodeDumbPtr::Iterator innerEnd = m_Selection.GetItems().End();
             for ( ; innerItr != innerEnd; ++innerItr )
             {
-                Core::HierarchyNode* inner = Reflect::ObjectCast< Core::HierarchyNode > (*innerItr);
+                SceneGraph::HierarchyNode* inner = Reflect::ObjectCast< SceneGraph::HierarchyNode > (*innerItr);
 
                 if ( !inner )
                 {
@@ -2110,7 +2110,7 @@ void Scene::GetFlattenedSelection(OS_SceneNodeDumbPtr& selection)
 
         selection.Append( item );
 
-        Core::PivotTransform* group = Reflect::ObjectCast< Core::PivotTransform >( item );
+        SceneGraph::PivotTransform* group = Reflect::ObjectCast< SceneGraph::PivotTransform >( item );
         if ( group )
         {
             OS_HierarchyNodeDumbPtr items;
@@ -2127,9 +2127,9 @@ void Scene::GetFlattenedSelection(OS_SceneNodeDumbPtr& selection)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Flattends the hierarchy of an Core::HierarchyNode into a flat list
+// Flattends the hierarchy of an SceneGraph::HierarchyNode into a flat list
 //
-void Scene::GetFlattenedHierarchy(Core::HierarchyNode* node, OS_HierarchyNodeDumbPtr& items)
+void Scene::GetFlattenedHierarchy(SceneGraph::HierarchyNode* node, OS_HierarchyNodeDumbPtr& items)
 {
     const OS_HierarchyNodeDumbPtr& children = node->GetChildren();
     OS_HierarchyNodeDumbPtr::Iterator childIt = children.Begin();
@@ -2138,7 +2138,7 @@ void Scene::GetFlattenedHierarchy(Core::HierarchyNode* node, OS_HierarchyNodeDum
     {
         items.Append( *childIt );
 
-        Core::HierarchyNode* group = Reflect::ObjectCast< Core::HierarchyNode >( *childIt );
+        SceneGraph::HierarchyNode* group = Reflect::ObjectCast< SceneGraph::HierarchyNode >( *childIt );
         if ( group )
         {
             GetFlattenedHierarchy( group, items );
@@ -2152,7 +2152,7 @@ void Scene::GetSelectedTransforms( Math::V_Matrix4& transforms )
     OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for (int i=0; itr != end; itr++, i++)
     {
-        Core::Transform* transform = Reflect::ObjectCast< Core::Transform >( *itr );
+        SceneGraph::Transform* transform = Reflect::ObjectCast< SceneGraph::Transform >( *itr );
 
         if (transform)
         {
@@ -2174,7 +2174,7 @@ Undo::CommandPtr Scene::SetSelectedTransforms( const Math::V_Matrix4& transforms
     OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for (size_t i=0; itr != end && i<transforms.size(); itr++, i++)
     {
-        Core::Transform* transform = Reflect::ObjectCast< Core::Transform >( *itr );
+        SceneGraph::Transform* transform = Reflect::ObjectCast< SceneGraph::Transform >( *itr );
 
         if (transform)
         {
@@ -2216,7 +2216,7 @@ Undo::CommandPtr Scene::SetHiddenSelected( bool hidden )
     OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for ( ; itr != end; ++itr )
     {
-        Core::HierarchyNode* hierarchyNode = Reflect::ObjectCast<Core::HierarchyNode>( *itr );
+        SceneGraph::HierarchyNode* hierarchyNode = Reflect::ObjectCast<SceneGraph::HierarchyNode>( *itr );
         if ( hierarchyNode )
         {
             if (hidden)
@@ -2225,7 +2225,7 @@ Undo::CommandPtr Scene::SetHiddenSelected( bool hidden )
             }
 
             Undo::PropertyCommand<bool>* command = 
-                new Undo::PropertyCommand<bool> ( new Helium::MemberProperty<Core::HierarchyNode, bool> (hierarchyNode, &Core::HierarchyNode::IsHidden, &Core::HierarchyNode::SetHidden), hidden ) ; 
+                new Undo::PropertyCommand<bool> ( new Helium::MemberProperty<SceneGraph::HierarchyNode, bool> (hierarchyNode, &SceneGraph::HierarchyNode::IsHidden, &SceneGraph::HierarchyNode::SetHidden), hidden ) ; 
 
             command->SetSignificant( false ); 
             batch->Push(command); 
@@ -2254,12 +2254,12 @@ Undo::CommandPtr Scene::SetHiddenUnrelated( bool hidden )
     OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for ( ; itr != end; ++itr )
     {
-        Core::HierarchyNode* hierarchyNode = Reflect::ObjectCast<Core::HierarchyNode>( *itr );
+        SceneGraph::HierarchyNode* hierarchyNode = Reflect::ObjectCast<SceneGraph::HierarchyNode>( *itr );
         if ( hierarchyNode )
         {
             relatives.Append( *itr );
 
-            Core::HierarchyNode* parent = hierarchyNode->GetParent();
+            SceneGraph::HierarchyNode* parent = hierarchyNode->GetParent();
             while ( parent && parent != m_Root )
             {
                 relatives.Append( parent );
@@ -2287,7 +2287,7 @@ Undo::CommandPtr Scene::SetHiddenUnrelated( bool hidden )
     Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
     {
-        HMS_TypeToSceneNodeTypeDumbPtr::const_iterator found = m_NodeTypesByType.find( Reflect::GetType<Core::HierarchyNode>() );
+        HMS_TypeToSceneNodeTypeDumbPtr::const_iterator found = m_NodeTypesByType.find( Reflect::GetType<SceneGraph::HierarchyNode>() );
 
         if (found != m_NodeTypesByType.end())
         {
@@ -2295,7 +2295,7 @@ Undo::CommandPtr Scene::SetHiddenUnrelated( bool hidden )
             S_SceneNodeTypeDumbPtr::const_iterator typeEnd = found->second.end();
             for ( ; typeItr != typeEnd; ++typeItr )
             {
-                Core::HierarchyNodeType* type = Reflect::AssertCast<Core::HierarchyNodeType>( *typeItr );
+                SceneGraph::HierarchyNodeType* type = Reflect::AssertCast<SceneGraph::HierarchyNodeType>( *typeItr );
 
                 if (type)
                 {
@@ -2303,7 +2303,7 @@ Undo::CommandPtr Scene::SetHiddenUnrelated( bool hidden )
                     HM_SceneNodeSmartPtr::const_iterator end = type->GetInstances().end();
                     for ( ; itr != end; ++itr )
                     {
-                        Core::HierarchyNode* node = Reflect::AssertCast<Core::HierarchyNode>( itr->second );
+                        SceneGraph::HierarchyNode* node = Reflect::AssertCast<SceneGraph::HierarchyNode>( itr->second );
 
                         if (node && !relatives.Contains(node))
                         {
@@ -2313,7 +2313,7 @@ Undo::CommandPtr Scene::SetHiddenUnrelated( bool hidden )
                             }
 
                             Undo::PropertyCommand<bool>* command = 
-                                new Undo::PropertyCommand<bool> ( new Helium::MemberProperty<Core::HierarchyNode, bool> (node, &Core::HierarchyNode::IsHidden, &Core::HierarchyNode::SetHidden), hidden ); 
+                                new Undo::PropertyCommand<bool> ( new Helium::MemberProperty<SceneGraph::HierarchyNode, bool> (node, &SceneGraph::HierarchyNode::IsHidden, &SceneGraph::HierarchyNode::SetHidden), hidden ); 
                             command->SetSignificant(false); 
                             batch->Push( command ); 
 
@@ -2339,11 +2339,11 @@ Undo::CommandPtr Scene::SetGeometryShown( bool shown, bool selected )
     HM_SceneNodeDumbPtr::const_iterator end = m_Nodes.end();
     for ( ; itr != end; ++itr )
     {
-        Core::EntityInstance* entity = Reflect::ObjectCast< Core::EntityInstance >( itr->second );
+        SceneGraph::EntityInstance* entity = Reflect::ObjectCast< SceneGraph::EntityInstance >( itr->second );
         if ( entity && entity->IsSelected() == selected )
         {
             Undo::PropertyCommand<bool>* command = 
-                new Undo::PropertyCommand<bool> ( new Helium::MemberProperty<Core::EntityInstance, bool> (entity, &Core::EntityInstance::IsGeometryVisible, &Core::EntityInstance::SetGeometryVisible), shown ); 
+                new Undo::PropertyCommand<bool> ( new Helium::MemberProperty<SceneGraph::EntityInstance, bool> (entity, &SceneGraph::EntityInstance::IsGeometryVisible, &SceneGraph::EntityInstance::SetGeometryVisible), shown ); 
 
             command->SetSignificant(false); 
             batch->Push( command );
@@ -2368,11 +2368,11 @@ Undo::CommandPtr Scene::ShowLastHidden()
     std::set<TUID>::const_iterator end = m_LastHidden.end();
     for ( ; itr != end; ++itr )
     {
-        Core::HierarchyNode* hierarchyNode = Reflect::ObjectCast<Core::HierarchyNode>( FindNode( *itr ) );
+        SceneGraph::HierarchyNode* hierarchyNode = Reflect::ObjectCast<SceneGraph::HierarchyNode>( FindNode( *itr ) );
         if ( hierarchyNode )
         {
             Undo::PropertyCommand<bool>* command = 
-                new Undo::PropertyCommand<bool> ( new Helium::MemberProperty<Core::HierarchyNode, bool> (hierarchyNode, &Core::HierarchyNode::IsHidden, &Core::HierarchyNode::SetHidden), false ); 
+                new Undo::PropertyCommand<bool> ( new Helium::MemberProperty<SceneGraph::HierarchyNode, bool> (hierarchyNode, &SceneGraph::HierarchyNode::IsHidden, &SceneGraph::HierarchyNode::SetHidden), false ); 
 
             command->SetSignificant(false); 
             batch->Push( command );
@@ -2392,7 +2392,7 @@ Undo::CommandPtr Scene::SelectSimilar()
     OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for ( ; itr != end; ++itr )
     {
-        Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>( *itr );
+        SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>( *itr );
 
         if (node)
         {
@@ -2430,7 +2430,7 @@ Undo::CommandPtr Scene::DeleteSelected()
     OS_SceneNodeDumbPtr::Iterator end = roots.End();
     for ( ; itr != end; ++itr )
     {
-        SceneNodePtr node = Reflect::ObjectCast< Core::SceneNode >( *itr );
+        SceneNodePtr node = Reflect::ObjectCast< SceneGraph::SceneNode >( *itr );
         if ( node )
         {
             batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Remove, this, node ) ); 
@@ -2459,7 +2459,7 @@ Undo::CommandPtr Scene::ParentSelected()
     OS_SceneNodeDumbPtr::Iterator end = selection.End();
     for ( ; itr != end; ++itr )
     {
-        Core::HierarchyNode* hierarchyNode = Reflect::ObjectCast< Core::HierarchyNode >( *itr );
+        SceneGraph::HierarchyNode* hierarchyNode = Reflect::ObjectCast< SceneGraph::HierarchyNode >( *itr );
         if ( hierarchyNode )
         {
             children.push_back( hierarchyNode );
@@ -2471,13 +2471,13 @@ Undo::CommandPtr Scene::ParentSelected()
         return NULL;
     }
 
-    Core::HierarchyNode* parent = children.back();
+    SceneGraph::HierarchyNode* parent = children.back();
     children.resize( children.size() - 1 );
 
     Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
     // Reparent the selected items under the parent node (last selected one)
-    for each (Core::HierarchyNode* hierarchyNode in children)
+    for each (SceneGraph::HierarchyNode* hierarchyNode in children)
     {
         batch->Push( new ParentCommand( hierarchyNode, parent ) );
     }
@@ -2494,7 +2494,7 @@ Undo::CommandPtr Scene::UnparentSelected()
     OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for ( ; itr != end; ++itr )
     {
-        Core::HierarchyNode* hierarchyNode = Reflect::ObjectCast< Core::HierarchyNode >( *itr );
+        SceneGraph::HierarchyNode* hierarchyNode = Reflect::ObjectCast< SceneGraph::HierarchyNode >( *itr );
         if ( hierarchyNode )
         {
             children.push_back( hierarchyNode );
@@ -2509,7 +2509,7 @@ Undo::CommandPtr Scene::UnparentSelected()
     Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
     // Reparent the selected items under the root
-    for each (Core::HierarchyNode* hierarchyNode in children)
+    for each (SceneGraph::HierarchyNode* hierarchyNode in children)
     {
         if ( hierarchyNode->GetParent() != m_Root )
         {
@@ -2544,7 +2544,7 @@ Undo::CommandPtr Scene::GroupSelected()
     OS_SceneNodeDumbPtr::Iterator end = selection.End();
     for ( ; itr != end; ++itr )
     {
-        Core::HierarchyNode* hierarchyNode = Reflect::ObjectCast< Core::HierarchyNode >( *itr );
+        SceneGraph::HierarchyNode* hierarchyNode = Reflect::ObjectCast< SceneGraph::HierarchyNode >( *itr );
         if ( hierarchyNode )
         {
             selectedHierarchyNodes.push_back( hierarchyNode );
@@ -2559,7 +2559,7 @@ Undo::CommandPtr Scene::GroupSelected()
     Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
     Math::Vector3 pos;
-    const Core::Transform* transform = selectedHierarchyNodes.back()->GetTransform();
+    const SceneGraph::Transform* transform = selectedHierarchyNodes.back()->GetTransform();
     HELIUM_ASSERT( transform );
     if ( transform )
     {
@@ -2570,7 +2570,7 @@ Undo::CommandPtr Scene::GroupSelected()
     }
 
     // Create the new group
-    Core::PivotTransform* group = new Core::PivotTransform();
+    SceneGraph::PivotTransform* group = new SceneGraph::PivotTransform();
     group->SetOwner( this );
 
     // Get a decent name
@@ -2588,7 +2588,7 @@ Undo::CommandPtr Scene::GroupSelected()
     batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, this, group ) );
 
     // Reparent the selected items under the new group
-    for each (Core::HierarchyNode* hierarchyNode in selectedHierarchyNodes)
+    for each (SceneGraph::HierarchyNode* hierarchyNode in selectedHierarchyNodes)
     {
         batch->Push( new ParentCommand( hierarchyNode, group ) );
     }
@@ -2617,11 +2617,11 @@ Undo::CommandPtr Scene::UngroupSelected()
     for ( ; itr != end; ++itr )
     {
         // If the item is a group (pivot transform)
-        Core::SceneNode* sceneNode = Reflect::ObjectCast< Core::SceneNode >( *itr );
+        SceneGraph::SceneNode* sceneNode = Reflect::ObjectCast< SceneGraph::SceneNode >( *itr );
 
-        if ( sceneNode && sceneNode->GetType() == Reflect::GetType<Core::PivotTransform>() )
+        if ( sceneNode && sceneNode->GetType() == Reflect::GetType<SceneGraph::PivotTransform>() )
         {
-            Core::PivotTransform* group = Reflect::AssertCast< Core::PivotTransform >( sceneNode );
+            SceneGraph::PivotTransform* group = Reflect::AssertCast< SceneGraph::PivotTransform >( sceneNode );
 
             // If the group has children, parent the children under the group's parent (their grandparent)
             if ( group->GetChildren().Size() > 0 )
@@ -2631,7 +2631,7 @@ Undo::CommandPtr Scene::UngroupSelected()
                 OS_HierarchyNodeDumbPtr copyOfChildren = group->GetChildren();
                 for ( OS_HierarchyNodeDumbPtr::Iterator itr = copyOfChildren.Begin(), end = copyOfChildren.End(); itr != end; ++itr )
                 {
-                    Core::HierarchyNode* child = *itr;
+                    SceneGraph::HierarchyNode* child = *itr;
 
                     // Push the parent command into the queue
                     batch->Push( new ParentCommand( child, group->GetParent() ) );
@@ -2676,7 +2676,7 @@ Undo::CommandPtr Scene::CenterSelected()
     OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for (int i=0; itr != end; itr++, i++)
     {
-        Core::Transform* transform = Reflect::ObjectCast< Core::Transform >( *itr );
+        SceneGraph::Transform* transform = Reflect::ObjectCast< SceneGraph::Transform >( *itr );
 
         if (transform)
         {
@@ -2710,7 +2710,7 @@ Undo::CommandPtr Scene::DuplicateSelected()
     OS_SceneNodeDumbPtr::Iterator end = roots.End();
     for ( ; itr != end; ++itr )
     {
-        Core::HierarchyNode* node = Reflect::ObjectCast< Core::HierarchyNode > (*itr);
+        SceneGraph::HierarchyNode* node = Reflect::ObjectCast< SceneGraph::HierarchyNode > (*itr);
 
         if (!node)
         {
@@ -2735,7 +2735,7 @@ Undo::CommandPtr Scene::DuplicateSelected()
     // set the transform for smart duplicate, if there was only one selection
     if (roots.Size() == 1)
     {
-        Core::HierarchyNode* node = Reflect::ObjectCast< Core::HierarchyNode >(roots.Front());   
+        SceneGraph::HierarchyNode* node = Reflect::ObjectCast< SceneGraph::HierarchyNode >(roots.Front());   
         if (node)
         {
             m_SmartDuplicateMatrix = node->GetTransform()->GetGlobalTransform();
@@ -2764,7 +2764,7 @@ Undo::CommandPtr Scene::SmartDuplicateSelected()
         return DuplicateSelected();
     }
 
-    Core::Transform* node = Reflect::ObjectCast< Core::Transform >(roots.Front());
+    SceneGraph::Transform* node = Reflect::ObjectCast< SceneGraph::Transform >(roots.Front());
 
     if (!node)
     {
@@ -2773,7 +2773,7 @@ Undo::CommandPtr Scene::SmartDuplicateSelected()
 
     HierarchyNodePtr duplicate = node->Duplicate();
 
-    Core::Transform* transform = Reflect::AssertCast<Core::Transform>( duplicate );
+    SceneGraph::Transform* transform = Reflect::AssertCast<SceneGraph::Transform>( duplicate );
 
     Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
@@ -2790,7 +2790,7 @@ Undo::CommandPtr Scene::SmartDuplicateSelected()
     batch->Push( new ParentCommand( duplicate, node->GetParent() ) );
 
     // set the global transform for the duplicate object
-    batch->Push( new Undo::PropertyCommand<Math::Matrix4> ( new Helium::MemberProperty<Core::Transform, Math::Matrix4> (transform, &Core::Transform::GetGlobalTransform, &Core::Transform::SetGlobalTransform), matrix ) );
+    batch->Push( new Undo::PropertyCommand<Math::Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Math::Matrix4> (transform, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), matrix ) );
 
     // make sure the new nodes are initialized
     duplicate->InitializeHierarchy();
@@ -2819,11 +2819,11 @@ Undo::CommandPtr Scene::SnapSelectedToCamera()
     OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for (int i=0; itr != end; itr++, i++)
     {
-        Core::Transform* transform = Reflect::ObjectCast< Core::Transform >( *itr );
+        SceneGraph::Transform* transform = Reflect::ObjectCast< SceneGraph::Transform >( *itr );
 
         if (transform)
         {
-            batch->Push( new Undo::PropertyCommand<Math::Matrix4> ( new Helium::MemberProperty<Core::Transform, Math::Matrix4> (transform, &Core::Transform::GetGlobalTransform, &Core::Transform::SetGlobalTransform), m ) );
+            batch->Push( new Undo::PropertyCommand<Math::Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Math::Matrix4> (transform, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), m ) );
         }
     }
 
@@ -2840,7 +2840,7 @@ Undo::CommandPtr Scene::SnapCameraToSelected()
         return NULL;
     }
 
-    Core::Transform* transform = Reflect::ObjectCast< Core::Transform >( *m_Selection.GetItems().Begin() );
+    SceneGraph::Transform* transform = Reflect::ObjectCast< SceneGraph::Transform >( *m_Selection.GetItems().Begin() );
 
     if (transform)
     {
@@ -2864,7 +2864,7 @@ void Scene::FrameSelected()
     OS_SceneNodeDumbPtr::Iterator end = GetSelection().GetItems().End();
     for ( ; itr != end; ++itr )
     {
-        Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>(*itr);
+        SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>(*itr);
         if (node)
         {
             box.Merge(node->GetGlobalHierarchyBounds());
@@ -2894,14 +2894,14 @@ void Scene::FrameSelected()
 
 void Scene::MeasureDistance()
 {
-    Core::Transform* first = NULL;
-    Core::Transform* second = NULL;
+    SceneGraph::Transform* first = NULL;
+    SceneGraph::Transform* second = NULL;
 
     OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
     OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for ( ; itr != end; ++itr )
     {
-        Core::Transform* t = Reflect::ObjectCast<Core::Transform>( *itr );
+        SceneGraph::Transform* t = Reflect::ObjectCast<SceneGraph::Transform>( *itr );
 
         if (t)
         {
@@ -2951,7 +2951,7 @@ Undo::CommandPtr Scene::PickWalkUp()
     OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
     for ( ; itr != end; ++itr )
     {
-        Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>(*itr);
+        SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>(*itr);
 
         if (node == NULL)
         {
@@ -2981,7 +2981,7 @@ Undo::CommandPtr Scene::PickWalkDown()
         return NULL;
     }
 
-    Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>(m_Selection.GetItems().Front());
+    SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>(m_Selection.GetItems().Front());
 
     if (node == NULL)
     {
@@ -3005,7 +3005,7 @@ Undo::CommandPtr Scene::PickWalkSibling(bool forward)
         return NULL;
     }
 
-    Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>(m_Selection.GetItems().Front());
+    SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>(m_Selection.GetItems().Front());
 
     if (node == NULL)
     {
@@ -3018,7 +3018,7 @@ Undo::CommandPtr Scene::PickWalkSibling(bool forward)
 
         if (!children.Empty())
         {
-            typedef std::map<tstring, Core::HierarchyNode*> M_NameToHierarchyNodeDumbPtr;
+            typedef std::map<tstring, SceneGraph::HierarchyNode*> M_NameToHierarchyNodeDumbPtr;
 
             M_NameToHierarchyNodeDumbPtr sortedChildren;
             {
@@ -3030,7 +3030,7 @@ Undo::CommandPtr Scene::PickWalkSibling(bool forward)
                 }
             }
 
-            typedef std::vector<Core::HierarchyNode*> V_HierarchyNodeDumbPtr;
+            typedef std::vector<SceneGraph::HierarchyNode*> V_HierarchyNodeDumbPtr;
 
             size_t index = -1;
             V_HierarchyNodeDumbPtr indexedChildren;

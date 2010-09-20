@@ -2,7 +2,7 @@
 #include "IndexResource.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 Profile::MemoryPoolHandle IndexResource::s_MemoryPool;
 

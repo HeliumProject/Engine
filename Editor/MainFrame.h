@@ -53,17 +53,17 @@ namespace Helium
                 SceneOutlinerState m_Types;
             };
 
-            typedef std::map< Core::Scene*, OutlinerStates > M_OutlinerStates;
+            typedef std::map< SceneGraph::Scene*, OutlinerStates > M_OutlinerStates;
 
         public:
-            MainFrame( Core::SettingsManager* settingsManager, wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1280,1024 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+            MainFrame( SettingsManager* settingsManager, wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1280,1024 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
             virtual ~MainFrame();
 
             void SetHelpText( const tchar* text );
 
             bool OpenProject( const Helium::Path& path );
 
-            Core::SceneManager& GetSceneManager()
+            SceneGraph::SceneManager& GetSceneManager()
             {
                 return m_SceneManager;
             }
@@ -83,18 +83,18 @@ namespace Helium
             PropertiesPanel*            m_PropertiesPanel;
             VaultPanel*                 m_VaultPanel;
 
-            Core::ProjectPtr            m_Project;
+            ProjectPtr                  m_Project;
             MessageDisplayer            m_MessageDisplayer;
             FileDialogDisplayer         m_FileDialogDisplayer;
-            Core::SceneManager          m_SceneManager;
+            SceneGraph::SceneManager    m_SceneManager;
 
-            Core::SettingsManager*      m_SettingsManager;
+            SettingsManager*            m_SettingsManager;
 
             MenuMRUPtr                  m_MRU;
             M_IDToColorMode             m_ColorModeLookup;
 
             //context items ordered by name  
-            Core::V_HierarchyNodeDumbPtr m_OrderedContextItems;
+            SceneGraph::V_HierarchyNodeDumbPtr m_OrderedContextItems;
 
             TreeMonitor                 m_TreeMonitor;
 
@@ -103,10 +103,10 @@ namespace Helium
             void DragOver( const Editor::DragArgs& args );
             void Drop( const Editor::DragArgs& args );
 
-            void SceneAdded( const Core::SceneChangeArgs& args );
-            void SceneRemoving( const Core::SceneChangeArgs& args );
-            void SceneLoadFinished( const Core::LoadArgs& args );
-            void SceneExecuted( const Core::ExecuteArgs& args );
+            void SceneAdded( const SceneGraph::SceneChangeArgs& args );
+            void SceneRemoving( const SceneGraph::SceneChangeArgs& args );
+            void SceneLoadFinished( const SceneGraph::LoadArgs& args );
+            void SceneExecuted( const SceneGraph::ExecuteArgs& args );
 
             bool DoOpen( const tstring& path );
 
@@ -136,7 +136,7 @@ namespace Helium
             void OnImport( wxCommandEvent& event );
             void OnExport( wxCommandEvent& event );
 
-            void OnSceneUndoCommand( const Core::UndoCommandArgs& command );
+            void OnSceneUndoCommand( const SceneGraph::UndoCommandArgs& command );
 
             void OnUndo( wxCommandEvent& event );
             void OnRedo( wxCommandEvent& event );
@@ -162,19 +162,19 @@ namespace Helium
 
             void OnPickWalk( wxCommandEvent& event );
 
-            void Executed( const Core::ExecuteArgs& args );
+            void Executed( const SceneGraph::ExecuteArgs& args );
 
-            void SelectionChanged( const Core::SelectionChangeArgs& selection );
+            void SelectionChanged( const SceneGraph::SelectionChangeArgs& selection );
 
-            void CurrentSceneChanged( const Core::SceneChangeArgs& args );
-            void CurrentSceneChanging( const Core::SceneChangeArgs& args );
+            void CurrentSceneChanged( const SceneGraph::SceneChangeArgs& args );
+            void CurrentSceneChanging( const SceneGraph::SceneChangeArgs& args );
             void OnToolSelected(wxCommandEvent& event);
-            void PickWorld( Core::PickArgs& args );
+            void PickWorld( SceneGraph::PickArgs& args );
             void DocumentModified( const DocumentChangedArgs& args );
             void DocumentClosed( const DocumentChangedArgs& args );
-            void ViewToolChanged( const Core::ToolChangeArgs& args );
-            void SceneStatusChanged( const Core::SceneStatusChangeArgs& args );
-            void SceneContextChanged( const Core::SceneContextChangeArgs& args );
+            void ViewToolChanged( const SceneGraph::ToolChangeArgs& args );
+            void SceneStatusChanged( const SceneGraph::SceneStatusChangeArgs& args );
+            void SceneContextChanged( const SceneGraph::SceneContextChangeArgs& args );
 
             void OnExit( wxCommandEvent& event );
             void OnExiting( wxCloseEvent& args );
@@ -193,25 +193,25 @@ namespace Helium
             void OnDuplicateTool( wxCommandEvent& event );
 
         private:
-            bool Copy( Core::Scene* scene );
-            bool Paste( Core::Scene* scene );
-            void Render( Core::RenderVisitor* render );
-            void Select( const Core::SelectArgs& args );
-            void SetHighlight( const Core::SetHighlightArgs& args );
-            void ClearHighlight( const Core::ClearHighlightArgs& args );
+            bool Copy( SceneGraph::Scene* scene );
+            bool Paste( SceneGraph::Scene* scene );
+            void Render( SceneGraph::RenderVisitor* render );
+            void Select( const SceneGraph::SelectArgs& args );
+            void SetHighlight( const SceneGraph::SetHighlightArgs& args );
+            void ClearHighlight( const SceneGraph::ClearHighlightArgs& args );
 
         private:
             void SelectItemInScene( wxCommandEvent& event );
             void SelectSimilarItemsInScene( wxCommandEvent& event );
 
-            void OpenManifestContextMenu( const Core::SelectArgs& args );
-            void OpenTypeContextMenu( const Core::SelectArgs& args );
+            void OpenManifestContextMenu( const SceneGraph::SelectArgs& args );
+            void OpenTypeContextMenu( const SceneGraph::SelectArgs& args );
 
-            void SetupTypeContextMenu( const Core::HM_StrToSceneNodeTypeSmartPtr& sceneNodeTypes,wxMenu& contextMenu,  u32& numMenuItems );
-            void SetupEntityTypeMenus( const Core::EntityType* entity, wxMenu* entityMenu, u32& numMenuItems );
+            void SetupTypeContextMenu( const SceneGraph::HM_StrToSceneNodeTypeSmartPtr& sceneNodeTypes,wxMenu& contextMenu,  u32& numMenuItems );
+            void SetupEntityTypeMenus( const SceneGraph::EntityType* entity, wxMenu* entityMenu, u32& numMenuItems );
 
-            static bool SortContextItemsByName( Core::SceneNode* lhs, Core::SceneNode* rhs ); 
-            static bool SortTypeItemsByName( Core::SceneNodeType* lhs, Core::SceneNodeType* rhs );
+            static bool SortContextItemsByName( SceneGraph::SceneNode* lhs, SceneGraph::SceneNode* rhs ); 
+            static bool SortTypeItemsByName( SceneGraph::SceneNodeType* lhs, SceneGraph::SceneNodeType* rhs );
         };
     }
 }

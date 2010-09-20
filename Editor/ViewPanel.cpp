@@ -13,9 +13,9 @@
 
 using namespace Helium;
 using namespace Helium::Editor;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
-ViewPanel::ViewPanel( Core::SettingsManager* settingsManager, wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style )
+ViewPanel::ViewPanel( SettingsManager* settingsManager, wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style )
 : ViewPanelGenerated( parent, id, pos, size, style )
 {
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )
@@ -131,10 +131,10 @@ void ViewPanel::RefreshButtonStates()
 {
     m_HighlightModeToggleButton->SetValue( m_ViewCanvas->GetViewport().IsHighlighting() );
 
-    m_OrbitCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Orbit );
-    m_FrontCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Front );
-    m_SideCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Side );
-    m_TopCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Top );
+    m_OrbitCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraModes::Orbit );
+    m_FrontCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraModes::Front );
+    m_SideCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraModes::Side );
+    m_TopCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraModes::Top );
 
     m_ShowAxesToggleButton->SetValue( m_ViewCanvas->GetViewport().IsAxesVisible() );
     m_ShowGridToggleButton->SetValue( m_ViewCanvas->GetViewport().IsGridVisible() );
@@ -144,8 +144,8 @@ void ViewPanel::RefreshButtonStates()
     m_FrustumCullingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->IsViewFrustumCulling() );
     m_BackfaceCullingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->IsBackFaceCulling() );
 
-    m_WireframeShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == Core::ShadingModes::Wireframe );
-    m_MaterialShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == Core::ShadingModes::Material );
+    m_WireframeShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == SceneGraph::ShadingModes::Wireframe );
+    m_MaterialShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == SceneGraph::ShadingModes::Material );
 }
 
 void ViewPanel::OnChar( wxKeyEvent& event )

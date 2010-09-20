@@ -12,7 +12,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         namespace ProjectionModes
         {

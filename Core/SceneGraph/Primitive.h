@@ -9,7 +9,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class PickVisitor;
 
@@ -42,7 +42,7 @@ namespace Helium
                 return m_Bounds;
             }
 
-            bool IsSolid(Core::Camera* camera) const;
+            bool IsSolid(SceneGraph::Camera* camera) const;
             bool IsSolid() const
             {
                 return m_IsSolid;
@@ -81,13 +81,13 @@ namespace Helium
         //
 
         template <class T>
-        class PrimitiveTemplate : public Core::Primitive
+        class PrimitiveTemplate : public SceneGraph::Primitive
         {
         protected:
             std::vector<T> m_Vertices;
 
             PrimitiveTemplate(ResourceTracker* tracker)
-                : Core::Primitive (tracker)
+                : SceneGraph::Primitive (tracker)
             {
 
             }

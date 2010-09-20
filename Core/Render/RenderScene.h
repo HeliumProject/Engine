@@ -10,7 +10,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace Render
     {
         class Renderer;
 

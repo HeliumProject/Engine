@@ -9,24 +9,24 @@
 #include "Core/SceneGraph/Pick.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 VolumeShape VolumeCreateTool::s_Shape = VolumeShapes::Cube;
 
-REFLECT_DEFINE_ABSTRACT(Core::VolumeCreateTool);
+REFLECT_DEFINE_ABSTRACT(SceneGraph::VolumeCreateTool);
 
 void VolumeCreateTool::InitializeType()
 {
-    Reflect::RegisterClassType< Core::VolumeCreateTool >( TXT( "Core::VolumeCreateTool" ) );
+    Reflect::RegisterClassType< SceneGraph::VolumeCreateTool >( TXT( "SceneGraph::VolumeCreateTool" ) );
 }
 
 void VolumeCreateTool::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::VolumeCreateTool >();
+    Reflect::UnregisterClassType< SceneGraph::VolumeCreateTool >();
 }
 
-VolumeCreateTool::VolumeCreateTool(Core::Scene* scene, PropertiesGenerator* generator)
-: Core::CreateTool (scene, generator)
+VolumeCreateTool::VolumeCreateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator)
+: SceneGraph::CreateTool (scene, generator)
 {
 
 }
@@ -36,7 +36,7 @@ VolumeCreateTool::~VolumeCreateTool()
 
 }
 
-Core::TransformPtr VolumeCreateTool::CreateNode()
+SceneGraph::TransformPtr VolumeCreateTool::CreateNode()
 {
 #ifdef SCENE_DEBUG_RUNTIME_DATA_SELECTION
 
@@ -44,7 +44,7 @@ Core::TransformPtr VolumeCreateTool::CreateNode()
 
     v->RectifyRuntimeData();
 
-    VolumePtr volume = new Core::Volume( m_Scene, v );
+    VolumePtr volume = new SceneGraph::Volume( m_Scene, v );
 
     m_Scene->AddObject( volume );
 
@@ -78,7 +78,7 @@ void VolumeCreateTool::CreateProperties()
         {
             m_Generator->AddLabel( TXT( "Shape" ) );
 
-            Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::VolumeCreateTool, int>(this, &VolumeCreateTool::GetVolumeShape, &VolumeCreateTool::SetVolumeShape) );
+            Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<SceneGraph::VolumeCreateTool, int>(this, &VolumeCreateTool::GetVolumeShape, &VolumeCreateTool::SetVolumeShape) );
             choice->a_IsDropDown.Set( true );
             std::vector< Inspect::ChoiceItem > items;
 

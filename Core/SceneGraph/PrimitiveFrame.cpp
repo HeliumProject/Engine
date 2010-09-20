@@ -6,7 +6,7 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 PrimitiveFrame::PrimitiveFrame(ResourceTracker* tracker)
 : PrimitiveTemplate(tracker)
@@ -15,7 +15,7 @@ PrimitiveFrame::PrimitiveFrame(ResourceTracker* tracker)
   SetElementType( ElementTypes::TransformedColored );
 
   m_BorderColor = D3DCOLOR_ARGB(255, 200, 200, 200);
-  m_InnerColor = Core::Color::BlendColor(m_BorderColor, D3DCOLOR_ARGB(0, 0, 0, 0), 0.5f);
+  m_InnerColor = SceneGraph::Color::BlendColor(m_BorderColor, D3DCOLOR_ARGB(0, 0, 0, 0), 0.5f);
 }
 
 void PrimitiveFrame::Update()

@@ -4,9 +4,9 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
-        class PrimitiveCone : public Core::PrimitiveTemplate<Position>
+        class PrimitiveCone : public SceneGraph::PrimitiveTemplate<Position>
         {
         private:
             mutable i32 m_WireVertCount;

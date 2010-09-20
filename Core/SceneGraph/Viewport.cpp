@@ -20,7 +20,7 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 D3DMATERIAL9 Viewport::s_LiveMaterial;
 D3DMATERIAL9 Viewport::s_SelectedMaterial;
@@ -37,59 +37,59 @@ D3DMATERIAL9 Viewport::s_BlueMaterial;
 void Viewport::InitializeType()
 {
     ZeroMemory( &s_LiveMaterial, sizeof( s_LiveMaterial ) );
-    s_LiveMaterial.Ambient = Core::Color::MAGENTA;
-    s_LiveMaterial.Diffuse = Core::Color::BLACK;
-    s_LiveMaterial.Specular = Core::Color::BLACK;
+    s_LiveMaterial.Ambient = SceneGraph::Color::MAGENTA;
+    s_LiveMaterial.Diffuse = SceneGraph::Color::BLACK;
+    s_LiveMaterial.Specular = SceneGraph::Color::BLACK;
 
     ZeroMemory( &s_SelectedMaterial, sizeof( s_SelectedMaterial ) );
-    s_SelectedMaterial.Ambient = Core::Color::SPRINGGREEN;
-    s_SelectedMaterial.Diffuse = Core::Color::BLACK;
-    s_SelectedMaterial.Specular = Core::Color::BLACK;
+    s_SelectedMaterial.Ambient = SceneGraph::Color::SPRINGGREEN;
+    s_SelectedMaterial.Diffuse = SceneGraph::Color::BLACK;
+    s_SelectedMaterial.Specular = SceneGraph::Color::BLACK;
 
     ZeroMemory( &s_RedMaterial, sizeof( s_RedMaterial ) );
-    s_RedMaterial.Ambient = Core::Color::RED;
-    s_RedMaterial.Diffuse = Core::Color::BLACK;
-    s_RedMaterial.Specular = Core::Color::BLACK;
+    s_RedMaterial.Ambient = SceneGraph::Color::RED;
+    s_RedMaterial.Diffuse = SceneGraph::Color::BLACK;
+    s_RedMaterial.Specular = SceneGraph::Color::BLACK;
 
     ZeroMemory( &s_YellowMaterial, sizeof( s_YellowMaterial ) );
-    s_YellowMaterial.Ambient = Core::Color::YELLOW;
-    s_YellowMaterial.Diffuse = Core::Color::BLACK;
-    s_YellowMaterial.Specular = Core::Color::BLACK;
+    s_YellowMaterial.Ambient = SceneGraph::Color::YELLOW;
+    s_YellowMaterial.Diffuse = SceneGraph::Color::BLACK;
+    s_YellowMaterial.Specular = SceneGraph::Color::BLACK;
 
     ZeroMemory( &s_GreenMaterial, sizeof( s_GreenMaterial ) );
-    s_GreenMaterial.Ambient = Core::Color::GREEN;
-    s_GreenMaterial.Diffuse = Core::Color::BLACK;
-    s_GreenMaterial.Specular = Core::Color::BLACK;
+    s_GreenMaterial.Ambient = SceneGraph::Color::GREEN;
+    s_GreenMaterial.Diffuse = SceneGraph::Color::BLACK;
+    s_GreenMaterial.Specular = SceneGraph::Color::BLACK;
 
     ZeroMemory( &s_ReactiveMaterial, sizeof( s_ReactiveMaterial ) );
-    s_ReactiveMaterial.Ambient = Core::Color::WHITE;
-    s_ReactiveMaterial.Diffuse = Core::Color::BLACK;
-    s_ReactiveMaterial.Specular = Core::Color::BLACK;
+    s_ReactiveMaterial.Ambient = SceneGraph::Color::WHITE;
+    s_ReactiveMaterial.Diffuse = SceneGraph::Color::BLACK;
+    s_ReactiveMaterial.Specular = SceneGraph::Color::BLACK;
 
     ZeroMemory( &s_HighlightedMaterial, sizeof( s_HighlightedMaterial ) );
-    s_HighlightedMaterial.Ambient = Core::Color::CYAN;
-    s_HighlightedMaterial.Diffuse = Core::Color::BLACK;
-    s_HighlightedMaterial.Specular = Core::Color::BLACK;
+    s_HighlightedMaterial.Ambient = SceneGraph::Color::CYAN;
+    s_HighlightedMaterial.Diffuse = SceneGraph::Color::BLACK;
+    s_HighlightedMaterial.Specular = SceneGraph::Color::BLACK;
 
     ZeroMemory( &s_UnselectableMaterial, sizeof( s_UnselectableMaterial ) );
-    s_UnselectableMaterial.Ambient = Core::Color::GRAY;
-    s_UnselectableMaterial.Diffuse = Core::Color::BLACK;
-    s_UnselectableMaterial.Specular = Core::Color::BLACK;
+    s_UnselectableMaterial.Ambient = SceneGraph::Color::GRAY;
+    s_UnselectableMaterial.Diffuse = SceneGraph::Color::BLACK;
+    s_UnselectableMaterial.Specular = SceneGraph::Color::BLACK;
 
     ZeroMemory( &s_ComponentMaterial, sizeof( s_ComponentMaterial ) );
-    s_ComponentMaterial.Ambient = Core::Color::MAGENTA;
-    s_ComponentMaterial.Diffuse = Core::Color::BLACK;
-    s_ComponentMaterial.Specular = Core::Color::BLACK;
+    s_ComponentMaterial.Ambient = SceneGraph::Color::MAGENTA;
+    s_ComponentMaterial.Diffuse = SceneGraph::Color::BLACK;
+    s_ComponentMaterial.Specular = SceneGraph::Color::BLACK;
 
     ZeroMemory( &s_SelectedComponentMaterial, sizeof( s_SelectedComponentMaterial ) );
-    s_SelectedComponentMaterial.Ambient = Core::Color::YELLOW;
-    s_SelectedComponentMaterial.Diffuse = Core::Color::BLACK;
-    s_SelectedComponentMaterial.Specular = Core::Color::BLACK;
+    s_SelectedComponentMaterial.Ambient = SceneGraph::Color::YELLOW;
+    s_SelectedComponentMaterial.Diffuse = SceneGraph::Color::BLACK;
+    s_SelectedComponentMaterial.Specular = SceneGraph::Color::BLACK;
 
     ZeroMemory( &s_BlueMaterial, sizeof( s_BlueMaterial ) );
-    s_BlueMaterial.Ambient = Core::Color::BLUE;
-    s_BlueMaterial.Diffuse = Core::Color::BLACK;
-    s_BlueMaterial.Specular = Core::Color::BLACK;
+    s_BlueMaterial.Ambient = SceneGraph::Color::BLUE;
+    s_BlueMaterial.Diffuse = SceneGraph::Color::BLACK;
+    s_BlueMaterial.Specular = SceneGraph::Color::BLACK;
 }
 
 void Viewport::CleanupType()
@@ -127,8 +127,8 @@ Viewport::~Viewport()
 {
     m_Cameras[ CameraModes::Orbit ].RemoveMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
 
-    m_DeviceManager.RemoveDeviceLostListener( DeviceStateSignature::Delegate( this, &Viewport::ReleaseResources ) );
-    m_DeviceManager.RemoveDeviceFoundListener( DeviceStateSignature::Delegate( this, &Viewport::AllocateResources ) );
+    m_DeviceManager.RemoveDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &Viewport::ReleaseResources ) );
+    m_DeviceManager.RemoveDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &Viewport::AllocateResources ) );
 
     for (u32 i=0; i<GlobalPrimitives::Count; i++)
         delete m_GlobalPrimitives[i];
@@ -151,23 +151,23 @@ void Viewport::Reset()
         m_Cameras[i].Reset();
     }
 
-    static_cast<Core::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->m_Length = 0.05f;
-    static_cast<Core::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->Update();
+    static_cast<SceneGraph::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->m_Length = 0.05f;
+    static_cast<SceneGraph::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->Update();
 
-    Core::PrimitiveAxes* transformAxes = static_cast< Core::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::TransformAxes] );
+    SceneGraph::PrimitiveAxes* transformAxes = static_cast< SceneGraph::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::TransformAxes] );
     transformAxes->m_Length = 0.10f;
     transformAxes->Update();
 
-    Core::PrimitiveAxes* transformAxesSelected = static_cast< Core::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::SelectedAxes] );
+    SceneGraph::PrimitiveAxes* transformAxesSelected = static_cast< SceneGraph::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::SelectedAxes] );
     transformAxesSelected->m_Length = 0.10f;
     transformAxesSelected->SetColor( D3DCOLOR_COLORVALUE( s_SelectedMaterial.Ambient.r, s_SelectedMaterial.Ambient.g, s_SelectedMaterial.Ambient.b, s_SelectedMaterial.Ambient.a ) );
     transformAxesSelected->Update();
 
-    Core::PrimitiveAxes* jointAxes = static_cast< Core::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::JointAxes] );
+    SceneGraph::PrimitiveAxes* jointAxes = static_cast< SceneGraph::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::JointAxes] );
     jointAxes->m_Length = 0.015f;
     jointAxes->Update();
 
-    Core::PrimitiveRings* jointRings = static_cast< Core::PrimitiveRings* >( m_GlobalPrimitives[GlobalPrimitives::JointRings] );
+    SceneGraph::PrimitiveRings* jointRings = static_cast< SceneGraph::PrimitiveRings* >( m_GlobalPrimitives[GlobalPrimitives::JointRings] );
     jointRings->m_Radius = 0.015f;
     jointRings->m_Steps = 18;
     jointRings->Update();
@@ -182,14 +182,14 @@ void Viewport::Reset()
 #endif
 }
 
-void Viewport::LoadSettings(Core::ViewportSettings* prefs)
+void Viewport::LoadSettings(SceneGraph::ViewportSettings* prefs)
 {
     // apply settings for all modes that we have... 
     for(size_t i = 0; i < prefs->m_CameraPrefs.size(); ++i)
     {
         CameraSettingsPtr cameraPrefs = prefs->m_CameraPrefs[i]; 
         CameraMode mode = cameraPrefs->m_CameraMode; 
-        Core::Camera* camera = GetCameraForMode(mode); 
+        SceneGraph::Camera* camera = GetCameraForMode(mode); 
         camera->LoadSettings(cameraPrefs); 
     }
 
@@ -202,7 +202,7 @@ void Viewport::LoadSettings(Core::ViewportSettings* prefs)
     SetStatisticsVisible( prefs->m_StatisticsVisible ); 
 }
 
-void Viewport::SaveSettings(Core::ViewportSettings* prefs)
+void Viewport::SaveSettings(SceneGraph::ViewportSettings* prefs)
 {
     // just blow away the previous preferences
     prefs->m_CameraPrefs.clear(); 
@@ -212,7 +212,7 @@ void Viewport::SaveSettings(Core::ViewportSettings* prefs)
         CameraMode mode = (CameraMode)i; 
         CameraSettingsPtr cameraPrefs = new CameraSettings(); 
         cameraPrefs->m_CameraMode = mode;
-        Core::Camera* camera = GetCameraForMode( mode ); 
+        SceneGraph::Camera* camera = GetCameraForMode( mode ); 
         camera->SaveSettings(cameraPrefs); 
         prefs->m_CameraPrefs.push_back( cameraPrefs ); 
     }
@@ -252,7 +252,7 @@ void Viewport::NextGeometryMode()
     SetGeometryMode((GeometryMode)((m_GeometryMode + 1) % GeometryModes::Count));
 }
 
-void Viewport::SetTool(Core::Tool* tool)
+void Viewport::SetTool(SceneGraph::Tool* tool)
 {
     if ( m_Tool != tool )
     {
@@ -284,9 +284,9 @@ void Viewport::SetHighlighting(bool highlight)
     }
 }
 
-Core::Primitive* Viewport::GetGlobalPrimitive( GlobalPrimitives::GlobalPrimitive which )
+SceneGraph::Primitive* Viewport::GetGlobalPrimitive( GlobalPrimitives::GlobalPrimitive which )
 {
-    Core::Primitive* prim = NULL;
+    SceneGraph::Primitive* prim = NULL;
     if ( which >= 0 && which < GlobalPrimitives::Count )
     {
         prim = m_GlobalPrimitives[which];
@@ -297,8 +297,8 @@ Core::Primitive* Viewport::GetGlobalPrimitive( GlobalPrimitives::GlobalPrimitive
 void Viewport::InitDevice( HWND wnd )
 {
     m_DeviceManager.Init( wnd, 64, 64 );
-    m_DeviceManager.AddDeviceLostListener( DeviceStateSignature::Delegate( this, &Viewport::ReleaseResources ) );
-    m_DeviceManager.AddDeviceFoundListener( DeviceStateSignature::Delegate( this, &Viewport::AllocateResources ) );
+    m_DeviceManager.AddDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &Viewport::ReleaseResources ) );
+    m_DeviceManager.AddDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &Viewport::AllocateResources ) );
     m_ResourceTracker = new ResourceTracker( GetDevice() );
 }
 
@@ -312,34 +312,34 @@ void Viewport::InitWidgets()
     // primitive API uses this, so init it first
     m_Statistics = new Statistics( m_ResourceTracker->GetDevice() );
 
-    m_GlobalPrimitives[GlobalPrimitives::ViewportAxes] = new Core::PrimitiveAxes (m_ResourceTracker);
+    m_GlobalPrimitives[GlobalPrimitives::ViewportAxes] = new SceneGraph::PrimitiveAxes (m_ResourceTracker);
     m_GlobalPrimitives[GlobalPrimitives::ViewportAxes]->Update();
 
-    m_GlobalPrimitives[GlobalPrimitives::StandardAxes] = new Core::PrimitiveAxes (m_ResourceTracker);
+    m_GlobalPrimitives[GlobalPrimitives::StandardAxes] = new SceneGraph::PrimitiveAxes (m_ResourceTracker);
     m_GlobalPrimitives[GlobalPrimitives::StandardAxes]->Update();
 
-    m_GlobalPrimitives[GlobalPrimitives::StandardGrid] = new Core::PrimitiveGrid (m_ResourceTracker);
+    m_GlobalPrimitives[GlobalPrimitives::StandardGrid] = new SceneGraph::PrimitiveGrid (m_ResourceTracker);
 
     m_SettingsManager->GetSettings< GridSettings >()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Viewport::OnGridSettingsChanged ));
 
     OnGridSettingsChanged( Reflect::ElementChangeArgs( NULL, NULL ) );
 
-    m_GlobalPrimitives[GlobalPrimitives::StandardRings] = new Core::PrimitiveRings (m_ResourceTracker);
+    m_GlobalPrimitives[GlobalPrimitives::StandardRings] = new SceneGraph::PrimitiveRings (m_ResourceTracker);
     m_GlobalPrimitives[GlobalPrimitives::StandardRings]->Update();
 
-    m_GlobalPrimitives[GlobalPrimitives::TransformAxes] = new Core::PrimitiveAxes (m_ResourceTracker);
+    m_GlobalPrimitives[GlobalPrimitives::TransformAxes] = new SceneGraph::PrimitiveAxes (m_ResourceTracker);
     m_GlobalPrimitives[GlobalPrimitives::TransformAxes]->Update();
 
-    m_GlobalPrimitives[GlobalPrimitives::SelectedAxes] = new Core::PrimitiveAxes (m_ResourceTracker);
+    m_GlobalPrimitives[GlobalPrimitives::SelectedAxes] = new SceneGraph::PrimitiveAxes (m_ResourceTracker);
     m_GlobalPrimitives[GlobalPrimitives::SelectedAxes]->Update();
 
-    m_GlobalPrimitives[GlobalPrimitives::JointAxes] = new Core::PrimitiveAxes (m_ResourceTracker);
+    m_GlobalPrimitives[GlobalPrimitives::JointAxes] = new SceneGraph::PrimitiveAxes (m_ResourceTracker);
     m_GlobalPrimitives[GlobalPrimitives::JointAxes]->Update();
 
-    m_GlobalPrimitives[GlobalPrimitives::JointRings] = new Core::PrimitiveRings (m_ResourceTracker);
+    m_GlobalPrimitives[GlobalPrimitives::JointRings] = new SceneGraph::PrimitiveRings (m_ResourceTracker);
     m_GlobalPrimitives[GlobalPrimitives::JointRings]->Update();
 
-    m_SelectionFrame = new Core::PrimitiveFrame ( m_ResourceTracker );
+    m_SelectionFrame = new SceneGraph::PrimitiveFrame ( m_ResourceTracker );
     m_SelectionFrame->Update();
 }
 
@@ -842,15 +842,15 @@ void Viewport::Draw()
         D3DCOLORVALUE specular;
         if ( m_Cameras[m_CameraMode].GetShadingMode() == ShadingModes::Wireframe )
         {
-            ambient = Core::Color::DIMGRAY;
-            diffuse = Core::Color::BLACK;
-            specular = Core::Color::BLACK;
+            ambient = SceneGraph::Color::DIMGRAY;
+            diffuse = SceneGraph::Color::BLACK;
+            specular = SceneGraph::Color::BLACK;
         }
         else
         {
-            ambient = Core::Color::DIMGRAY;
-            diffuse = Core::Color::SILVER;
-            specular = Core::Color::SILVER;
+            ambient = SceneGraph::Color::DIMGRAY;
+            diffuse = SceneGraph::Color::SILVER;
+            specular = SceneGraph::Color::SILVER;
         }
 
         Vector3 dir;
@@ -922,7 +922,7 @@ void Viewport::Draw()
 
         if (m_AxesVisible)
         {
-            static_cast<Core::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->DrawViewport( &args, &m_Cameras[m_CameraMode] );
+            static_cast<SceneGraph::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->DrawViewport( &args, &m_Cameras[m_CameraMode] );
         }
 
         if (m_Tool)
@@ -1071,19 +1071,19 @@ void Viewport::UpdateCameraHistory()
     m_CameraHistory[m_CameraMode].Push( new CameraMovedCommand( this, &m_Cameras[m_CameraMode] ) );
 }
 
-void Viewport::ReleaseResources( const DeviceStateArgs& args )
+void Viewport::ReleaseResources( const Render::DeviceStateArgs& args )
 {
     m_ResourceTracker->DeviceLost();
     m_Statistics->Delete();
 }
 
-void Viewport::AllocateResources( const DeviceStateArgs& args )
+void Viewport::AllocateResources( const Render::DeviceStateArgs& args )
 {
     m_ResourceTracker->DeviceReset();
     m_Statistics->Create();
 }
 
-void Viewport::CameraMoved( const Core::CameraMovedArgs& args )
+void Viewport::CameraMoved( const SceneGraph::CameraMovedArgs& args )
 {
     m_CameraMoved.Raise( args );  
 }
@@ -1091,7 +1091,7 @@ void Viewport::CameraMoved( const Core::CameraMovedArgs& args )
 void Viewport::OnGridSettingsChanged( const Reflect::ElementChangeArgs& args )
 {
     GridSettings* gridSettings = m_SettingsManager->GetSettings< GridSettings >();
-    Core::PrimitiveGrid* grid = (Core::PrimitiveGrid*) m_GlobalPrimitives[GlobalPrimitives::StandardGrid];
+    SceneGraph::PrimitiveGrid* grid = (SceneGraph::PrimitiveGrid*) m_GlobalPrimitives[GlobalPrimitives::StandardGrid];
 
     grid->m_Width = gridSettings->GetWidth();
     grid->m_Length = gridSettings->GetLength();

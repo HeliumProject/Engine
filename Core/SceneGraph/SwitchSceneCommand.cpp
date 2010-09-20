@@ -8,13 +8,13 @@
 #include "Foundation/Undo/Exceptions.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-SwitchSceneCommand::SwitchSceneCommand( Core::SceneManager* manager, Core::Scene* newScene )
-: Undo::PropertyCommand< Core::Scene* >( new Helium::MemberProperty< Core::SceneManager, Core::Scene* >( manager, &Core::SceneManager::GetCurrentScene, &Core::SceneManager::SetCurrentScene ) )
+SwitchSceneCommand::SwitchSceneCommand( SceneGraph::SceneManager* manager, SceneGraph::Scene* newScene )
+: Undo::PropertyCommand< SceneGraph::Scene* >( new Helium::MemberProperty< SceneGraph::SceneManager, SceneGraph::Scene* >( manager, &SceneGraph::SceneManager::GetCurrentScene, &SceneGraph::SceneManager::SetCurrentScene ) )
 , m_SceneManager( manager )
 , m_OldScene( manager->GetCurrentScene() )
 , m_NewScene( newScene )

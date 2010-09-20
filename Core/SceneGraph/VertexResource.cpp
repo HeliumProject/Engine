@@ -2,7 +2,7 @@
 #include "VertexResource.h" 
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 Profile::MemoryPoolHandle VertexResource::s_MemoryPool;
 

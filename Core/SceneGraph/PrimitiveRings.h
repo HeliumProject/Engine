@@ -4,9 +4,9 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
-        class PrimitiveRings : public Core::PrimitiveTemplate<Position>
+        class PrimitiveRings : public SceneGraph::PrimitiveTemplate<Position>
         {
         public:
             f32 m_Radius;

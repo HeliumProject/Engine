@@ -4,9 +4,9 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
-        class PrimitiveSphere : public Core::PrimitiveRadius
+        class PrimitiveSphere : public SceneGraph::PrimitiveRadius
         {
         private:
             mutable i32 m_WireVertCount;

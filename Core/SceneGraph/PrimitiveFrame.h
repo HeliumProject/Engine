@@ -4,9 +4,9 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
-        class PrimitiveFrame : public Core::PrimitiveTemplate<TransformedColored>
+        class PrimitiveFrame : public SceneGraph::PrimitiveTemplate<TransformedColored>
         {
         public:
             Math::Point m_Start;

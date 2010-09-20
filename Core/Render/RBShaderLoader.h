@@ -6,7 +6,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace Render
     {
         class TextureSettings;
 

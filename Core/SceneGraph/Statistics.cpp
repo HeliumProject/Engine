@@ -4,7 +4,7 @@
 #include "Foundation/Profile.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 Statistics::Statistics(IDirect3DDevice9* device)
 : m_Device (device)

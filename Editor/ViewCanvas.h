@@ -23,7 +23,7 @@ namespace Helium
         class ViewCanvas : public wxWindow
         {
         public:
-            ViewCanvas( Core::SettingsManager* settingsManager,
+            ViewCanvas( SettingsManager* settingsManager,
                 wxWindow *parent,
                 wxWindowID winid = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
@@ -48,14 +48,14 @@ namespace Helium
             void OnMouseLeave(wxMouseEvent& e);
             void OnMouseCaptureLost(wxMouseCaptureLostEvent& e);
 
-            Core::Viewport& GetViewport()
+            SceneGraph::Viewport& GetViewport()
             {
                 return m_Viewport;
             }
 
         private:
-            bool            m_Focused;
-            Core::Viewport  m_Viewport;
+            bool                    m_Focused;
+            SceneGraph::Viewport    m_Viewport;
         };
     }
 }

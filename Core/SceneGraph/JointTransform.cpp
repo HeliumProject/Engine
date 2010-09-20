@@ -12,7 +12,7 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 static D3DMATERIAL9 g_JointTransformMaterial;
 
@@ -28,9 +28,9 @@ void JointTransform::InitializeType()
     Reflect::RegisterClassType< JointTransform >( TXT( "JointTransform" ) );
 
     ZeroMemory(&g_JointTransformMaterial, sizeof(g_JointTransformMaterial));
-    g_JointTransformMaterial.Ambient = Core::Color::DARKGREEN;
-    g_JointTransformMaterial.Diffuse = Core::Color::BLACK;
-    g_JointTransformMaterial.Specular = Core::Color::BLACK;
+    g_JointTransformMaterial.Ambient = SceneGraph::Color::DARKGREEN;
+    g_JointTransformMaterial.Diffuse = SceneGraph::Color::BLACK;
+    g_JointTransformMaterial.Specular = SceneGraph::Color::BLACK;
 }
 
 void JointTransform::CleanupType()
@@ -41,7 +41,7 @@ void JointTransform::CleanupType()
 JointTransform::JointTransform()
 : m_SegmentScaleCompensate( false )
 {
-    Core::PrimitiveRings* rings = static_cast< Core::PrimitiveRings* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings ) );
+    SceneGraph::PrimitiveRings* rings = static_cast< SceneGraph::PrimitiveRings* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings ) );
     m_ObjectBounds.minimum = Math::Vector3(-rings->m_Radius, -rings->m_Radius, -rings->m_Radius);
     m_ObjectBounds.maximum = Math::Vector3(rings->m_Radius, rings->m_Radius, rings->m_Radius);
 }
@@ -78,12 +78,12 @@ void JointTransform::Render( RenderVisitor* render )
     }
 
     // don't call __super here, it will draw big ass axes
-    Core::HierarchyNode::Render( render );
+    SceneGraph::HierarchyNode::Render( render );
 }
 
 void JointTransform::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const Core::HierarchyNode* node = Reflect::ConstAssertCast<Core::HierarchyNode>( object );
+    const SceneGraph::HierarchyNode* node = Reflect::ConstAssertCast<SceneGraph::HierarchyNode>( object );
 
     const JointTransform* joint = Reflect::ConstAssertCast<JointTransform>( node );
 
@@ -95,7 +95,7 @@ void JointTransform::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const
 
 void JointTransform::DrawSelected( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const Core::HierarchyNode* node = Reflect::ConstAssertCast<Core::HierarchyNode>( object );
+    const SceneGraph::HierarchyNode* node = Reflect::ConstAssertCast<SceneGraph::HierarchyNode>( object );
 
     const JointTransform* joint = Reflect::ConstAssertCast<JointTransform>( node );
 
@@ -109,5 +109,5 @@ bool JointTransform::Pick( PickVisitor* pick )
 {
     pick->SetCurrentObject (this, pick->State().m_Matrix.Normalized());
 
-    return pick->PickPoint(Vector3::Zero, static_cast< Core::PrimitiveAxes* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointAxes ) )->m_Length);
+    return pick->PickPoint(Vector3::Zero, static_cast< SceneGraph::PrimitiveAxes* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointAxes ) )->m_Length);
 }

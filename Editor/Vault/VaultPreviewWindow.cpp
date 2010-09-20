@@ -13,7 +13,7 @@ END_EVENT_TABLE()
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-VaultPreviewWindow::VaultPreviewWindow( Core::SettingsManager* settingsManager, wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
+VaultPreviewWindow::VaultPreviewWindow( SettingsManager* settingsManager, wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
 : RenderWindow( parent, id, pos, size, style, name )
 , m_SettingsManager( settingsManager )
 , m_VaultPanel( NULL )

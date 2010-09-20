@@ -8,7 +8,7 @@
 #include "Core/SceneGraph/Scene.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT( Layer );
 
@@ -22,13 +22,13 @@ void Layer::EnumerateClass( Reflect::Compositor<Layer>& comp )
 
 void Layer::InitializeType()
 {
-    Reflect::RegisterClassType< Core::Layer >( TXT( "Core::Layer" ) );
+    Reflect::RegisterClassType< SceneGraph::Layer >( TXT( "SceneGraph::Layer" ) );
     PropertiesGenerator::InitializePanel( TXT( "Layer" ), CreatePanelSignature::Delegate( &Layer::CreatePanel ) );
 }
 
 void Layer::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::Layer >();
+    Reflect::UnregisterClassType< SceneGraph::Layer >();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -78,7 +78,7 @@ void Layer::Initialize()
     V_TUID memberIDs;
     for ( V_TUID::const_iterator itr = m_Members.begin(), end = m_Members.end(); itr != end; ++itr )
     {
-        Core::SceneNode* node = m_Owner->FindNode( *itr );
+        SceneGraph::SceneNode* node = m_Owner->FindNode( *itr );
         if ( node )
         {
             node->CreateDependency( this );
@@ -174,7 +174,7 @@ OS_SceneNodeDumbPtr Layer::GetMembers()
 {
     OS_SceneNodeDumbPtr members;
 
-    for each (Core::SceneNode* n in m_Descendants)
+    for each (SceneGraph::SceneNode* n in m_Descendants)
     {
         members.Append(n);
     }
@@ -182,7 +182,7 @@ OS_SceneNodeDumbPtr Layer::GetMembers()
     return members;
 }
 
-bool Layer::ContainsMember( Core::SceneNode* node ) const
+bool Layer::ContainsMember( SceneGraph::SceneNode* node ) const
 {
     return m_Descendants.find( node ) != m_Descendants.end();
 }
@@ -240,7 +240,7 @@ void Layer::Insert(Graph* g, V_SceneNodeDumbPtr& insertedNodes )
         for ( ; itr != end; ++itr )
         {
             const TUID& id = *itr;
-            Core::SceneNode* node = m_Owner->FindNode( id );
+            SceneGraph::SceneNode* node = m_Owner->FindNode( id );
             if ( node )
             {
                 ConnectDescendant( node );
@@ -290,7 +290,7 @@ void Layer::CreatePanel( CreatePanelArgs& args )
         {
             static const tstring helpText = TXT( "Determines the color of this layer." );
             args.m_Generator->AddLabel( TXT( "Color" ) )->a_HelpText.Set( helpText );
-            args.m_Generator->AddColorPicker< Core::Layer, Math::Color3 >( args.m_Selection, &Layer::GetColor, &Layer::SetColor )->a_HelpText.Set( helpText );
+            args.m_Generator->AddColorPicker< SceneGraph::Layer, Math::Color3 >( args.m_Selection, &Layer::GetColor, &Layer::SetColor )->a_HelpText.Set( helpText );
         }
         args.m_Generator->Pop();
 
@@ -372,7 +372,7 @@ void Layer::BuildUnionAndIntersection( PropertiesGenerator* generator, const OS_
             HM_SceneNodeDumbPtr layerMembers;
 
             // If it's a layer
-            Core::Layer* layer = Reflect::ObjectCast< Core::Layer >( *selItr );
+            SceneGraph::Layer* layer = Reflect::ObjectCast< SceneGraph::Layer >( *selItr );
             if ( layer )
             {
                 // Iterate over the layer's members (descendants)
@@ -434,7 +434,7 @@ void Layer::BuildUnionAndIntersection( PropertiesGenerator* generator, const OS_
         HM_SceneNodeDumbPtr::const_iterator intersectionEnd = mapIntersection.end();
         for ( ; intersectionItr != intersectionEnd; ++intersectionItr )
         {
-            Core::SceneNode* node = intersectionItr->second;
+            SceneGraph::SceneNode* node = intersectionItr->second;
             intersectionSet.insert( node->GetName() );
         }
 

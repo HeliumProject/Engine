@@ -8,14 +8,14 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 
 //
 //  PickVisitor HELIUM_ABSTRACT class
 //
 
-PickVisitor::PickVisitor(const Core::Camera* camera)
+PickVisitor::PickVisitor(const SceneGraph::Camera* camera)
 : m_Flags (0x0)
 , m_Camera (camera)
 , m_CurrentObject (NULL)
@@ -46,13 +46,13 @@ PickHit* PickVisitor::AddHit()
 //  LinePickVisitor
 // 
 
-LinePickVisitor::LinePickVisitor(const Core::Camera* camera, int x, int y)
+LinePickVisitor::LinePickVisitor(const SceneGraph::Camera* camera, int x, int y)
 : PickVisitor (camera)
 {
   camera->ViewportToLine((f32)x, (f32)y, m_WorldSpaceLine);
 }
 
-LinePickVisitor::LinePickVisitor(const Core::Camera* camera, const Math::Line& line)
+LinePickVisitor::LinePickVisitor(const SceneGraph::Camera* camera, const Math::Line& line)
 : PickVisitor (camera)
 , m_WorldSpaceLine (line)
 {
@@ -377,7 +377,7 @@ bool LinePickVisitor::AddHitBox(const Math::AlignedBox& box, Math::Vector3& inte
 //  LFrustumPickVisitoir
 //
 
-FrustumPickVisitor::FrustumPickVisitor(const Core::Camera* camera, const int pixelX, const int pixelY, const float pixelBoxSize)
+FrustumPickVisitor::FrustumPickVisitor(const SceneGraph::Camera* camera, const int pixelX, const int pixelY, const float pixelBoxSize)
 : PickVisitor (camera)
 {
   // the center of the pixel
@@ -390,7 +390,7 @@ FrustumPickVisitor::FrustumPickVisitor(const Core::Camera* camera, const int pix
   camera->ViewportToFrustum(pixelCenter.x - pixelOffset, pixelCenter.y - pixelOffset, pixelCenter.x + pixelOffset, pixelCenter.y + pixelOffset, m_WorldSpaceFrustum);
 }
 
-FrustumPickVisitor::FrustumPickVisitor(const Core::Camera* camera, const Math::Frustum& worldSpaceFrustum)
+FrustumPickVisitor::FrustumPickVisitor(const SceneGraph::Camera* camera, const Math::Frustum& worldSpaceFrustum)
 : PickVisitor (camera)
 , m_WorldSpaceFrustum (worldSpaceFrustum)
 {
@@ -578,7 +578,7 @@ bool FrustumPickVisitor::AddHitBox(const Math::AlignedBox& box)
 //  FrustumLinePickVisitor
 //
 
-FrustumLinePickVisitor::FrustumLinePickVisitor(const Core::Camera* camera, const int pixelX, const int pixelY, const float pixelBoxSize)
+FrustumLinePickVisitor::FrustumLinePickVisitor(const SceneGraph::Camera* camera, const int pixelX, const int pixelY, const float pixelBoxSize)
 : PickVisitor(camera)
 , LinePickVisitor (camera, pixelX, pixelY)
 , FrustumPickVisitor (camera, pixelX, pixelY, pixelBoxSize)
@@ -586,7 +586,7 @@ FrustumLinePickVisitor::FrustumLinePickVisitor(const Core::Camera* camera, const
 
 }
 
-FrustumLinePickVisitor::FrustumLinePickVisitor(const Core::Camera* camera, const Math::Line& line, const Math::Frustum& worldSpaceFrustum)
+FrustumLinePickVisitor::FrustumLinePickVisitor(const SceneGraph::Camera* camera, const Math::Line& line, const Math::Frustum& worldSpaceFrustum)
 : PickVisitor(camera)
 , LinePickVisitor (camera, line)
 , FrustumPickVisitor (camera, worldSpaceFrustum)
@@ -798,7 +798,7 @@ bool ComparePickDistanceThenCameraDistance( const SortKey& lhs, const SortKey& r
   }
 }
 
-void PickHit::Sort(Core::Camera* camera, const V_PickHitSmartPtr& hits, V_PickHitSmartPtr& sorted, PickSortType sortType)
+void PickHit::Sort(SceneGraph::Camera* camera, const V_PickHitSmartPtr& hits, V_PickHitSmartPtr& sorted, PickSortType sortType)
 {
   // early out if we have no hits
   if (hits.empty())

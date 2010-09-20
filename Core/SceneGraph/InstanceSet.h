@@ -5,10 +5,10 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class Instance;
-        typedef std::set< Core::Instance* > S_InstanceDumbPtr;
+        typedef std::set< SceneGraph::Instance* > S_InstanceDumbPtr;
 
         class InstanceSet;
 
@@ -16,10 +16,10 @@ namespace Helium
 
         struct InstanceSetChangeArgs
         {
-            Core::InstanceSet* m_InstanceSet;
-            Core::Instance* m_Instance;
+            SceneGraph::InstanceSet* m_InstanceSet;
+            SceneGraph::Instance* m_Instance;
 
-            InstanceSetChangeArgs( Core::InstanceSet* set, Core::Instance* entity )
+            InstanceSetChangeArgs( SceneGraph::InstanceSet* set, SceneGraph::Instance* entity )
                 : m_InstanceSet( set )
                 , m_Instance( entity )
             {
@@ -31,7 +31,7 @@ namespace Helium
         class InstanceSet : public Reflect::Object
         {
         protected:
-            Core::InstanceType* m_Type;
+            SceneGraph::InstanceType* m_Type;
             S_InstanceDumbPtr m_Instances;
 
         public:
@@ -40,17 +40,17 @@ namespace Helium
             static void CleanupType();
 
         public:
-            InstanceSet(Core::InstanceType* type);
+            InstanceSet(SceneGraph::InstanceType* type);
 
             virtual ~InstanceSet();
 
-            Core::InstanceType* GetInstanceType();
+            SceneGraph::InstanceType* GetInstanceType();
 
-            virtual void AddInstance(Core::Instance* i);
+            virtual void AddInstance(SceneGraph::Instance* i);
 
-            virtual void RemoveInstance(Core::Instance* i);
+            virtual void RemoveInstance(SceneGraph::Instance* i);
 
-            virtual bool ContainsInstance(Core::Instance* i);
+            virtual bool ContainsInstance(SceneGraph::Instance* i);
 
             virtual const S_InstanceDumbPtr& GetInstances() const;
 
@@ -86,7 +86,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::SmartPtr< Core::InstanceSet > InstanceSetPtr;
+        typedef Helium::SmartPtr< SceneGraph::InstanceSet > InstanceSetPtr;
         typedef std::map< tstring, InstanceSetPtr > M_InstanceSetSmartPtr;
     }
 }

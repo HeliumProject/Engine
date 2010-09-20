@@ -34,7 +34,7 @@ namespace Helium
             SettingsDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 644,375 ), long style = wxDEFAULT_DIALOG_STYLE );
             ~SettingsDialog();
 
-			virtual int ShowModal( Core::SettingsManager* settingsManager );
+			virtual int ShowModal( SettingsManager* settingsManager );
 
         private:
             void OnRestoreDefaults( wxCommandEvent& args );

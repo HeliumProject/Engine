@@ -6,9 +6,9 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
-CameraMovedCommand::CameraMovedCommand(Core::Viewport* view, Core::Camera* cam )
+CameraMovedCommand::CameraMovedCommand(SceneGraph::Viewport* view, SceneGraph::Camera* cam )
 : m_Camera( cam ),
 m_View( view )
 {

@@ -15,9 +15,9 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT( Core::Transform );
+REFLECT_DEFINE_ABSTRACT( SceneGraph::Transform );
 
 struct ScaleColorInfo
 {
@@ -40,14 +40,14 @@ void Transform::EnumerateClass( Reflect::Compositor<Transform>& comp )
 
 void Transform::InitializeType()
 {
-    Reflect::RegisterClassType< Core::Transform >( TXT( "Core::Transform" ) );
+    Reflect::RegisterClassType< SceneGraph::Transform >( TXT( "SceneGraph::Transform" ) );
 
     PropertiesGenerator::InitializePanel( TXT( "Transform" ), CreatePanelSignature::Delegate( &Transform::CreatePanel ));
 }
 
 void Transform::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::Transform >();
+    Reflect::UnregisterClassType< SceneGraph::Transform >();
 }
 
 Transform::Transform()
@@ -66,17 +66,17 @@ void Transform::Initialize()
 {
     __super::Initialize();
 
-    Core::PrimitiveAxes* axes = static_cast< Core::PrimitiveAxes* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes ) );
+    SceneGraph::PrimitiveAxes* axes = static_cast< SceneGraph::PrimitiveAxes* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes ) );
     m_ObjectBounds.minimum = Math::Vector3(-axes->m_Length, -axes->m_Length, -axes->m_Length);
     m_ObjectBounds.maximum = Math::Vector3(axes->m_Length, axes->m_Length, axes->m_Length);
 }
 
-Core::Transform* Transform::GetTransform()
+SceneGraph::Transform* Transform::GetTransform()
 {
     return this;
 }
 
-const Core::Transform* Transform::GetTransform() const
+const SceneGraph::Transform* Transform::GetTransform() const
 {
     return this;
 }
@@ -206,7 +206,7 @@ Math::Matrix4 Transform::GetTranslateComponent() const
 
 Undo::CommandPtr Transform::ResetTransform()
 {
-    Undo::CommandPtr command = new Undo::PropertyCommand<Math::Matrix4>( new Helium::MemberProperty<Core::Transform, Math::Matrix4> (this, &Transform::GetObjectTransform, &Transform::SetObjectTransform) );
+    Undo::CommandPtr command = new Undo::PropertyCommand<Math::Matrix4>( new Helium::MemberProperty<SceneGraph::Transform, Math::Matrix4> (this, &Transform::GetObjectTransform, &Transform::SetObjectTransform) );
 
     m_Scale = Scale::Identity;
     m_Rotate = EulerAngles::Zero;
@@ -360,14 +360,14 @@ void Transform::Render( RenderVisitor* render )
 
 void Transform::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const Core::HierarchyNode* node = Reflect::ConstAssertCast<Core::HierarchyNode>( object );
+    const SceneGraph::HierarchyNode* node = Reflect::ConstAssertCast<SceneGraph::HierarchyNode>( object );
 
     node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes )->Draw( args );
 }
 
 void Transform::DrawSelected( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const Core::HierarchyNode* node = Reflect::ConstAssertCast<Core::HierarchyNode>( object );
+    const SceneGraph::HierarchyNode* node = Reflect::ConstAssertCast<SceneGraph::HierarchyNode>( object );
 
     node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::SelectedAxes )->Draw( args );
 }
@@ -445,7 +445,7 @@ void Transform::CreatePanel(CreatePanelArgs& args)
         args.m_Generator->PushContainer();
         label = args.m_Generator->AddLabel( TXT( "Inherit Transform" ) );
         label->a_HelpText.Set( TXT( "Causes this node to inherit its transform from its parent node." ) );
-        Inspect::CheckBox* checkBox = args.m_Generator->AddCheckBox<Core::Transform, bool>(args.m_Selection, &Transform::GetInheritTransform, &Transform::SetInheritTransform);
+        Inspect::CheckBox* checkBox = args.m_Generator->AddCheckBox<SceneGraph::Transform, bool>(args.m_Selection, &Transform::GetInheritTransform, &Transform::SetInheritTransform);
         checkBox->a_HelpText.Set( TXT( "Causes this node to inherit its transform from its parent node." ) );
         args.m_Generator->Pop();
     }
@@ -455,13 +455,13 @@ void Transform::CreatePanel(CreatePanelArgs& args)
         label = args.m_Generator->AddLabel( TXT( "Scale" ) );
         label->a_HelpText.Set( TXT( "Controls the scaling of this node in the x, y and z dimensions." ) );
 
-        value = args.m_Generator->AddValue<Core::Transform, f32>(args.m_Selection, &Transform::GetScaleX, &Transform::SetScaleX);
+        value = args.m_Generator->AddValue<SceneGraph::Transform, f32>(args.m_Selection, &Transform::GetScaleX, &Transform::SetScaleX);
         value->a_HelpText.Set( TXT( "Constrols the scaling of this node in the x dimension." ) );
 
-        value = args.m_Generator->AddValue<Core::Transform, f32>(args.m_Selection, &Transform::GetScaleY, &Transform::SetScaleY);
+        value = args.m_Generator->AddValue<SceneGraph::Transform, f32>(args.m_Selection, &Transform::GetScaleY, &Transform::SetScaleY);
         value->a_HelpText.Set( TXT( "Constrols the scaling of this node in the y dimension." ) );
 
-        value = args.m_Generator->AddValue<Core::Transform, f32>(args.m_Selection, &Transform::GetScaleZ, &Transform::SetScaleZ);
+        value = args.m_Generator->AddValue<SceneGraph::Transform, f32>(args.m_Selection, &Transform::GetScaleZ, &Transform::SetScaleZ);
         value->a_HelpText.Set( TXT( "Constrols the scaling of this node in the z dimension." ) );
 
         args.m_Generator->Pop();
@@ -472,13 +472,13 @@ void Transform::CreatePanel(CreatePanelArgs& args)
         label = args.m_Generator->AddLabel( TXT( "Rotate" ) );
         label->a_HelpText.Set( TXT( "Controls the rotation of this node about its x, y and z axes." ) );
 
-        value = args.m_Generator->AddValue<Core::Transform, f32>(args.m_Selection, &Transform::GetRotateX, &Transform::SetRotateX);
+        value = args.m_Generator->AddValue<SceneGraph::Transform, f32>(args.m_Selection, &Transform::GetRotateX, &Transform::SetRotateX);
         value->a_HelpText.Set( TXT( "Controls the rotation of this node about its x axis." ) );
 
-        value = args.m_Generator->AddValue<Core::Transform, f32>(args.m_Selection, &Transform::GetRotateY, &Transform::SetRotateY);
+        value = args.m_Generator->AddValue<SceneGraph::Transform, f32>(args.m_Selection, &Transform::GetRotateY, &Transform::SetRotateY);
         value->a_HelpText.Set( TXT( "Controls the rotation of this node about its y axis." ) );
 
-        value = args.m_Generator->AddValue<Core::Transform, f32>(args.m_Selection, &Transform::GetRotateZ, &Transform::SetRotateZ);
+        value = args.m_Generator->AddValue<SceneGraph::Transform, f32>(args.m_Selection, &Transform::GetRotateZ, &Transform::SetRotateZ);
         value->a_HelpText.Set( TXT( "Controls the rotation of this node about its z axis." ) );
 
         args.m_Generator->Pop();
@@ -489,13 +489,13 @@ void Transform::CreatePanel(CreatePanelArgs& args)
         label = args.m_Generator->AddLabel( TXT( "Translate" ) );
         label->a_HelpText.Set( TXT( "Controls the location of this node in space with respect to the origin." ) );
 
-        value = args.m_Generator->AddValue<Core::Transform, f32>(args.m_Selection, &Transform::GetTranslateX, &Transform::SetTranslateX);
+        value = args.m_Generator->AddValue<SceneGraph::Transform, f32>(args.m_Selection, &Transform::GetTranslateX, &Transform::SetTranslateX);
         value->a_HelpText.Set( TXT( "Controls the offset of this node from the origin along the x axis." ) );
 
-        value = args.m_Generator->AddValue<Core::Transform, f32>(args.m_Selection, &Transform::GetTranslateY, &Transform::SetTranslateY);
+        value = args.m_Generator->AddValue<SceneGraph::Transform, f32>(args.m_Selection, &Transform::GetTranslateY, &Transform::SetTranslateY);
         value->a_HelpText.Set( TXT( "Controls the offset of this node from the origin along the y axis." ) );
 
-        value = args.m_Generator->AddValue<Core::Transform, f32>(args.m_Selection, &Transform::GetTranslateZ, &Transform::SetTranslateZ);
+        value = args.m_Generator->AddValue<SceneGraph::Transform, f32>(args.m_Selection, &Transform::GetTranslateZ, &Transform::SetTranslateZ);
         value->a_HelpText.Set( TXT( "Controls the offset of this node from the origin along the z axis." ) );
 
         args.m_Generator->Pop();

@@ -8,7 +8,6 @@
 #include "Editor/FileDialog.h"
 
 using namespace Helium;
-using namespace Helium::Core;
 using namespace Helium::Editor;
 
 void ProjectViewModel::SetProject( Project* project )

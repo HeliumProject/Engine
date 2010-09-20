@@ -15,35 +15,35 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT(Core::RotateManipulator);
+REFLECT_DEFINE_ABSTRACT(SceneGraph::RotateManipulator);
 
 void RotateManipulator::InitializeType()
 {
-    Reflect::RegisterClassType< Core::RotateManipulator >( TXT( "Core::RotateManipulator" ) );
+    Reflect::RegisterClassType< SceneGraph::RotateManipulator >( TXT( "SceneGraph::RotateManipulator" ) );
 }
 
 void RotateManipulator::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::RotateManipulator >();
+    Reflect::UnregisterClassType< SceneGraph::RotateManipulator >();
 }
 
-RotateManipulator::RotateManipulator( Core::SettingsManager* settingsManager, const ManipulatorMode mode, Core::Scene* scene, PropertiesGenerator* generator)
-: Core::TransformManipulator (mode, scene, generator)
+RotateManipulator::RotateManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator)
+: SceneGraph::TransformManipulator (mode, scene, generator)
 , m_SettingsManager( settingsManager )
 , m_Size( 0.3f )
 , m_Type (RotationTypes::None)
 , m_AxisSnap (false)
 , m_SnapDegrees (15.0f)
 {
-    Core::SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
+    SceneGraph::SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
     m_Size = settings->RotateManipulatorSize();
     m_AxisSnap = settings->RotateManipulatorAxisSnap();
     m_SnapDegrees = settings->RotateManipulatorSnapDegrees();
     m_Space = settings->RotateManipulatorSpace();
 
-    m_Ring = new Core::PrimitiveCircle (m_Scene->GetViewport()->GetResources());
+    m_Ring = new SceneGraph::PrimitiveCircle (m_Scene->GetViewport()->GetResources());
     m_Ring->m_RadiusSteps = 360;
     m_Ring->Update();
 }
@@ -167,7 +167,7 @@ void RotateManipulator::Draw( DrawArgs* args )
     m_Ring->DrawHiddenBack(args, m_View->GetCamera(), z);
 
     // render arcball sphere
-    m_AxisMaterial.Ambient = Core::Color::LIGHTGRAY;
+    m_AxisMaterial.Ambient = SceneGraph::Color::LIGHTGRAY;
     m_View->GetDevice()->SetMaterial(&m_AxisMaterial);
     m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&toCamera);
     m_Ring->Draw(args);
@@ -175,11 +175,11 @@ void RotateManipulator::Draw( DrawArgs* args )
     // render camera plane ring
     if (m_SelectedAxes == MultipleAxes::All && m_Type == RotationTypes::CameraPlane)
     {
-        m_AxisMaterial.Ambient = Core::Color::YELLOW;
+        m_AxisMaterial.Ambient = SceneGraph::Color::YELLOW;
     }
     else
     {
-        m_AxisMaterial.Ambient = Core::Color::SKYBLUE;
+        m_AxisMaterial.Ambient = SceneGraph::Color::SKYBLUE;
     }
 
     m_View->GetDevice()->SetMaterial(&m_AxisMaterial);
@@ -679,7 +679,7 @@ void RotateManipulator::MouseMove( const MouseMoveInput& e )
     Matrix4 parentMatrix;
     Matrix4 inverseParentMatrix;
 
-    Core::Transform* transform = primary->GetNode()->GetTransform();
+    SceneGraph::Transform* transform = primary->GetNode()->GetTransform();
     HELIUM_ASSERT(transform);
     if (transform)
     {
@@ -770,7 +770,7 @@ void RotateManipulator::CreateProperties()
         m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Size" ) );
-            Inspect::Slider* slider = m_Generator->AddSlider<f32>( new Helium::MemberProperty<Core::RotateManipulator, f32> (this, &RotateManipulator::GetSize, &RotateManipulator::SetSize) );
+            Inspect::Slider* slider = m_Generator->AddSlider<f32>( new Helium::MemberProperty<SceneGraph::RotateManipulator, f32> (this, &RotateManipulator::GetSize, &RotateManipulator::SetSize) );
             slider->a_Min.Set( 0.10f );
             slider->a_Max.Set( 0.5f );
         }
@@ -779,7 +779,7 @@ void RotateManipulator::CreateProperties()
         m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Space" ) );
-            Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Core::RotateManipulator, int> (this, &RotateManipulator::GetSpace, &RotateManipulator::SetSpace) );
+            Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<SceneGraph::RotateManipulator, int> (this, &RotateManipulator::GetSpace, &RotateManipulator::SetSpace) );
             choice->a_IsDropDown.Set( true );
             std::vector< Inspect::ChoiceItem > items;
 
@@ -808,14 +808,14 @@ void RotateManipulator::CreateProperties()
         m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Axis Snap" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Core::RotateManipulator, bool> (this, &RotateManipulator::GetAxisSnap, &RotateManipulator::SetAxisSnap) );
+            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::RotateManipulator, bool> (this, &RotateManipulator::GetAxisSnap, &RotateManipulator::SetAxisSnap) );
         }
         m_Generator->Pop();
 
         m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Snap Degrees" ) );
-            m_Generator->AddValue<float>( new Helium::MemberProperty<Core::RotateManipulator, f32> (this, &RotateManipulator::GetSnapDegrees, &RotateManipulator::SetSnapDegrees) );
+            m_Generator->AddValue<float>( new Helium::MemberProperty<SceneGraph::RotateManipulator, f32> (this, &RotateManipulator::GetSnapDegrees, &RotateManipulator::SetSnapDegrees) );
         }
         m_Generator->Pop();
     }

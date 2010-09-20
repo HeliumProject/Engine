@@ -17,7 +17,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         //
         // Enums
@@ -59,7 +59,7 @@ namespace Helium
         // Events
         //
 
-        typedef Helium::Signature< Core::RenderVisitor* > RenderSignature;
+        typedef Helium::Signature< SceneGraph::RenderVisitor* > RenderSignature;
 
         namespace SelectionModes
         {
@@ -123,7 +123,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< const Core::SelectArgs& > SelectSignature;
+        typedef Helium::Signature< const SceneGraph::SelectArgs& > SelectSignature;
 
         //
         // Highlight
@@ -142,7 +142,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< const Core::SetHighlightArgs& > SetHighlightSignature;
+        typedef Helium::Signature< const SceneGraph::SetHighlightArgs& > SetHighlightSignature;
 
         struct ClearHighlightArgs
         {
@@ -155,7 +155,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< const Core::ClearHighlightArgs& > ClearHighlightSignature;
+        typedef Helium::Signature< const SceneGraph::ClearHighlightArgs& > ClearHighlightSignature;
 
         // 
         // Tool 
@@ -165,15 +165,15 @@ namespace Helium
 
         struct ToolChangeArgs
         {
-            Core::Tool* m_NewTool;
+            SceneGraph::Tool* m_NewTool;
 
-            ToolChangeArgs( Core::Tool* newTool )
+            ToolChangeArgs( SceneGraph::Tool* newTool )
                 : m_NewTool( newTool )
             {
             }
         };
 
-        typedef Helium::Signature< const Core::ToolChangeArgs& > ToolChangeSignature;
+        typedef Helium::Signature< const SceneGraph::ToolChangeArgs& > ToolChangeSignature;
 
         struct CameraModeChangeArgs
         {
@@ -251,17 +251,17 @@ namespace Helium
                 return m_Statistics;
             }
 
-            Core::Camera* GetCamera()
+            SceneGraph::Camera* GetCamera()
             {
                 return &m_Cameras[m_CameraMode];
             }
 
-            const Core::Camera* GetCamera() const
+            const SceneGraph::Camera* GetCamera() const
             {
                 return &m_Cameras[m_CameraMode];
             }
 
-            Core::Camera* GetCameraForMode(CameraMode mode)
+            SceneGraph::Camera* GetCameraForMode(CameraMode mode)
             {
                 return &m_Cameras[mode]; 
             }
@@ -287,7 +287,7 @@ namespace Helium
 
             void NextGeometryMode();
 
-            Core::Tool* GetTool()
+            SceneGraph::Tool* GetTool()
             {
                 return m_Tool;
             }
@@ -337,7 +337,7 @@ namespace Helium
                 m_StatisticsVisible = visible;
             }
 
-            Core::Primitive* GetGlobalPrimitive( GlobalPrimitives::GlobalPrimitive which );
+            SceneGraph::Primitive* GetGlobalPrimitive( GlobalPrimitives::GlobalPrimitive which );
 
         private:
             void InitDevice( HWND wnd );
@@ -367,8 +367,8 @@ namespace Helium
 
         private:
             // callbacks
-            void ReleaseResources( const DeviceStateArgs& args );
-            void AllocateResources( const DeviceStateArgs& args );
+            void ReleaseResources( const Render::DeviceStateArgs& args );
+            void AllocateResources( const Render::DeviceStateArgs& args );
             void CameraMoved( const CameraMovedArgs& args );
 
             // 
@@ -473,7 +473,7 @@ namespace Helium
 
             SettingsManager*        m_SettingsManager;
 
-            DeviceManager           m_DeviceManager;
+            Render::DeviceManager   m_DeviceManager;
             ResourceTracker*        m_ResourceTracker;
             RenderVisitor           m_RenderVisitor;
 

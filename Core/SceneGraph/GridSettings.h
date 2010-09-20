@@ -7,7 +7,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         namespace GridUnits
         {

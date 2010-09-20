@@ -4,9 +4,9 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
-        class PrimitivePointer : public Core::PrimitiveTemplate<Position>
+        class PrimitivePointer : public SceneGraph::PrimitiveTemplate<Position>
         {
         public:
             PrimitivePointer(ResourceTracker* tracker);

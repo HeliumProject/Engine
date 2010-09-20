@@ -8,7 +8,7 @@
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 PropertiesManager::PropertiesManager( PropertiesGenerator* generator, CommandQueue* commandQueue )
 : m_Generator( generator )

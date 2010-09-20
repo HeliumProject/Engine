@@ -20,7 +20,7 @@ namespace Helium
         typedef Helium::SmartPtr< SceneAsset > SceneAssetPtr;
     }
 
-    namespace Core
+    namespace SceneGraph
     {
         // Forwards
         class HierarchyNode;
@@ -31,9 +31,9 @@ namespace Helium
 
         struct SceneChangeArgs
         {
-            Core::Scene* m_Scene;
+            SceneGraph::Scene* m_Scene;
 
-            SceneChangeArgs (Core::Scene* scene)
+            SceneChangeArgs (SceneGraph::Scene* scene)
                 : m_Scene (scene)
             {
             }
@@ -56,13 +56,13 @@ namespace Helium
 
             }
             
-            void SetScene( Core::Scene* scene )
+            void SetScene( SceneGraph::Scene* scene )
             {
               HELIUM_ASSERT( m_Scene == NULL );
               m_Scene = scene;
             }
             
-            Core::Scene* GetScene() const
+            SceneGraph::Scene* GetScene() const
             {
               HELIUM_ASSERT( m_Scene != NULL );
               return m_Scene;
@@ -71,7 +71,7 @@ namespace Helium
             virtual bool Save( tstring& error );
 
         private:
-            Core::Scene* m_Scene;
+            SceneGraph::Scene* m_Scene;
         };
 
         typedef Helium::SmartPtr< SceneDocument > SceneDocumentPtr;
@@ -92,13 +92,13 @@ namespace Helium
             M_AllocScene m_AllocatedScenes;
 
             // the current scene
-            Core::Scene* m_CurrentScene;
+            SceneGraph::Scene* m_CurrentScene;
 
         public:
             SceneManager( MessageSignature::Delegate message, FileDialogSignature::Delegate fileDialog );
 
-            ScenePtr NewScene( Core::Viewport* viewport, tstring path = TXT( "" ) );
-            ScenePtr OpenScene( Core::Viewport* viewport, const tstring& path, tstring& error );
+            ScenePtr NewScene( SceneGraph::Viewport* viewport, tstring path = TXT( "" ) );
+            ScenePtr OpenScene( SceneGraph::Viewport* viewport, const tstring& path, tstring& error );
 
             DocumentManager& GetDocumentManager()
             {
@@ -110,24 +110,24 @@ namespace Helium
                 return m_DocumentManager.AllowChanges( document );
             }
 
-            void AddScene( Core::Scene* scene );
-            void RemoveScene( Core::Scene* scene );
+            void AddScene( SceneGraph::Scene* scene );
+            void RemoveScene( SceneGraph::Scene* scene );
             void RemoveAllScenes();
 
             const M_SceneSmartPtr& GetScenes() const;
-            Core::Scene* GetScene( const tstring& path ) const;
+            SceneGraph::Scene* GetScene( const tstring& path ) const;
 
-            bool IsNestedScene( Core::Scene* scene ) const;
-            Core::Scene* AllocateNestedScene( Core::Viewport* viewport, const tstring& path, Core::Scene* parent );
-            void ReleaseNestedScene( Core::Scene*& scene );
+            bool IsNestedScene( SceneGraph::Scene* scene ) const;
+            SceneGraph::Scene* AllocateNestedScene( SceneGraph::Viewport* viewport, const tstring& path, SceneGraph::Scene* parent );
+            void ReleaseNestedScene( SceneGraph::Scene*& scene );
 
             static tstring GetUniqueFileName();
 
             bool HasCurrentScene() const;
-            bool IsCurrentScene( const Core::Scene* sceneToCompare ) const;
+            bool IsCurrentScene( const SceneGraph::Scene* sceneToCompare ) const;
 
-            Core::Scene* GetCurrentScene() const;
-            void SetCurrentScene( Core::Scene* scene );
+            SceneGraph::Scene* GetCurrentScene() const;
+            void SetCurrentScene( SceneGraph::Scene* scene );
 
             // Undo/redo support
             bool CanUndo();
@@ -137,7 +137,7 @@ namespace Helium
             void Push( Undo::Queue* queue );
 
         private:
-            Core::Scene* FindFirstNonNestedScene() const;
+            SceneGraph::Scene* FindFirstNonNestedScene() const;
             void OnSceneEditing( const SceneEditingArgs& args );
             void DocumentPathChanged( const DocumentPathChangedArgs& args );
             void DocumentClosed( const DocumentChangedArgs& args );

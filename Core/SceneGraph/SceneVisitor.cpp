@@ -8,9 +8,9 @@
 #include "HierarchyNodeType.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
-TraversalAction HierarchyChildTraverser::VisitHierarchyNode(Core::HierarchyNode* node)
+TraversalAction HierarchyChildTraverser::VisitHierarchyNode(SceneGraph::HierarchyNode* node)
 {
   OS_HierarchyNodeDumbPtr::Iterator itr = node->GetChildren().Begin();
   OS_HierarchyNodeDumbPtr::Iterator end = node->GetChildren().End();
@@ -28,7 +28,7 @@ HierarchyRenderTraverser::HierarchyRenderTraverser(RenderVisitor* renderVisitor)
 
 }
 
-TraversalAction HierarchyRenderTraverser::VisitHierarchyNode(Core::HierarchyNode* node)
+TraversalAction HierarchyRenderTraverser::VisitHierarchyNode(SceneGraph::HierarchyNode* node)
 {
   TraversalAction action;
 
@@ -64,7 +64,7 @@ HierarchyPickTraverser::HierarchyPickTraverser(PickVisitor* pickVisitor)
 
 }
 
-TraversalAction HierarchyPickTraverser::VisitHierarchyNode(Core::HierarchyNode* node)
+TraversalAction HierarchyPickTraverser::VisitHierarchyNode(SceneGraph::HierarchyNode* node)
 {
   TraversalAction action;
 

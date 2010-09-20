@@ -8,21 +8,21 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT(Core::TransformManipulator);
+REFLECT_DEFINE_ABSTRACT(SceneGraph::TransformManipulator);
 
 void TransformManipulator::InitializeType()
 {
-    Reflect::RegisterClassType< Core::TransformManipulator >( TXT( "Core::TransformManipulator" ) );
+    Reflect::RegisterClassType< SceneGraph::TransformManipulator >( TXT( "SceneGraph::TransformManipulator" ) );
 }
 
 void TransformManipulator::CleanupType()
 {
-    Reflect::UnregisterClassType< Core::TransformManipulator >();
+    Reflect::UnregisterClassType< SceneGraph::TransformManipulator >();
 }
 
-TransformManipulator::TransformManipulator(const ManipulatorMode mode, Core::Scene* scene, PropertiesGenerator* generator)
+TransformManipulator::TransformManipulator(const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator)
 : Tool(scene, generator)
 , m_Mode (mode)
 , m_SelectedAxes (MultipleAxes::None)
@@ -35,14 +35,14 @@ TransformManipulator::TransformManipulator(const ManipulatorMode mode, Core::Sce
 , m_Manipulated (false)
 {
     ZeroMemory(&m_AxisMaterial, sizeof(m_AxisMaterial));
-    m_AxisMaterial.Ambient = Core::Color::BLACK;
-    m_AxisMaterial.Diffuse = Core::Color::BLACK;
-    m_AxisMaterial.Specular = Core::Color::BLACK;
+    m_AxisMaterial.Ambient = SceneGraph::Color::BLACK;
+    m_AxisMaterial.Diffuse = SceneGraph::Color::BLACK;
+    m_AxisMaterial.Specular = SceneGraph::Color::BLACK;
 
     ZeroMemory(&m_SelectedAxisMaterial, sizeof(m_SelectedAxisMaterial));
-    m_SelectedAxisMaterial.Ambient = Core::Color::YELLOW;
-    m_SelectedAxisMaterial.Diffuse = Core::Color::BLACK;
-    m_SelectedAxisMaterial.Specular = Core::Color::BLACK;
+    m_SelectedAxisMaterial.Ambient = SceneGraph::Color::YELLOW;
+    m_SelectedAxisMaterial.Diffuse = SceneGraph::Color::BLACK;
+    m_SelectedAxisMaterial.Specular = SceneGraph::Color::BLACK;
 
     m_Scene->AddSelectionChangedListener( SelectionChangedSignature::Delegate (this, &TransformManipulator::SelectionChanged) );
 
@@ -67,7 +67,7 @@ void TransformManipulator::SelectionChanged(const SelectionChangeArgs& args)
     OS_SceneNodeDumbPtr::Iterator end = args.m_Selection.End();
     for ( ; itr != end; ++itr )
     {
-        Core::HierarchyNode* h = Reflect::ObjectCast< Core::HierarchyNode >( *itr );
+        SceneGraph::HierarchyNode* h = Reflect::ObjectCast< SceneGraph::HierarchyNode >( *itr );
         if ( h )
         {
             h->ConnectManipulator(this);
@@ -87,15 +87,15 @@ bool TransformManipulator::SetAxisMaterial(AxesFlags axes)
         switch (axes)
         {
         case MultipleAxes::X:
-            m_AxisMaterial.Ambient = Core::Color::RED;
+            m_AxisMaterial.Ambient = SceneGraph::Color::RED;
             break;
 
         case MultipleAxes::Y:
-            m_AxisMaterial.Ambient = Core::Color::GREEN;
+            m_AxisMaterial.Ambient = SceneGraph::Color::GREEN;
             break;
 
         case MultipleAxes::Z:
-            m_AxisMaterial.Ambient = Core::Color::BLUE;
+            m_AxisMaterial.Ambient = SceneGraph::Color::BLUE;
             break;
         }
 

@@ -6,7 +6,7 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class PrimitiveCircle;
 
@@ -23,7 +23,7 @@ namespace Helium
 
         typedef RotationTypes::RotationType RotationType;
 
-        class CORE_API RotateManipulator : public Core::TransformManipulator
+        class CORE_API RotateManipulator : public SceneGraph::TransformManipulator
         {
         private:
             SettingsManager* m_SettingsManager;
@@ -37,14 +37,14 @@ namespace Helium
             RotationType m_Type;
 
             // UI
-            Core::PrimitiveCircle* m_Ring;
+            SceneGraph::PrimitiveCircle* m_Ring;
 
-            REFLECT_DECLARE_ABSTRACT(Core::RotateManipulator, Core::TransformManipulator);
+            REFLECT_DECLARE_ABSTRACT(SceneGraph::RotateManipulator, SceneGraph::TransformManipulator);
             static void InitializeType();
             static void CleanupType();
 
         public:
-            RotateManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, Core::Scene* scene, PropertiesGenerator* generator);
+            RotateManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator);
 
             ~RotateManipulator();
 

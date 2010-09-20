@@ -9,13 +9,13 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class PickHit;
         typedef Helium::SmartPtr< PickHit > PickHitPtr;
         typedef std::vector< PickHitPtr > V_PickHitSmartPtr;
 
-        class CORE_API HierarchyNodeType : public Core::SceneNodeType
+        class CORE_API HierarchyNodeType : public SceneGraph::SceneNodeType
         {
         protected:
             // members
@@ -28,12 +28,12 @@ namespace Helium
             D3DMATERIAL9 m_SolidMaterial;
 
         public:
-            REFLECT_DECLARE_ABSTRACT( HierarchyNodeType, Core::SceneNodeType );
+            REFLECT_DECLARE_ABSTRACT( HierarchyNodeType, SceneGraph::SceneNodeType );
             static void InitializeType();
             static void CleanupType();
 
         public:
-            HierarchyNodeType( Core::Scene* scene, i32 instanceType );
+            HierarchyNodeType( SceneGraph::Scene* scene, i32 instanceType );
 
             virtual void Create();
             virtual void Delete();

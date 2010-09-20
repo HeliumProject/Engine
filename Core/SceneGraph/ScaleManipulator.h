@@ -6,22 +6,22 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class PrimitiveAxes;
         class PrimitiveCube;
 
-        class CORE_API ScaleManipulator : public Core::TransformManipulator
+        class CORE_API ScaleManipulator : public SceneGraph::TransformManipulator
         {
         private:
             // UI
-            Core::PrimitiveAxes* m_Axes;
-            Core::PrimitiveCube* m_Cube;
-            Core::PrimitiveCube* m_XCube;
+            SceneGraph::PrimitiveAxes* m_Axes;
+            SceneGraph::PrimitiveCube* m_Cube;
+            SceneGraph::PrimitiveCube* m_XCube;
             Math::Vector3 m_XPosition;
-            Core::PrimitiveCube* m_YCube;
+            SceneGraph::PrimitiveCube* m_YCube;
             Math::Vector3 m_YPosition;
-            Core::PrimitiveCube* m_ZCube;
+            SceneGraph::PrimitiveCube* m_ZCube;
             Math::Vector3 m_ZPosition;
 
             f32 m_Size;
@@ -30,12 +30,12 @@ namespace Helium
 
             SettingsManager* m_SettingsManager;
 
-            REFLECT_DECLARE_ABSTRACT(Core::ScaleManipulator, Core::TransformManipulator);
+            REFLECT_DECLARE_ABSTRACT(SceneGraph::ScaleManipulator, SceneGraph::TransformManipulator);
             static void InitializeType();
             static void CleanupType();
 
         public:
-            ScaleManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, Core::Scene* scene, PropertiesGenerator* generator);
+            ScaleManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator);
 
             ~ScaleManipulator();
 

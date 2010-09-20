@@ -4,7 +4,7 @@
 #include "Core/SceneGraph/Pick.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 PrimitiveLocator::PrimitiveLocator(ResourceTracker* tracker)
 : PrimitiveTemplate(tracker)

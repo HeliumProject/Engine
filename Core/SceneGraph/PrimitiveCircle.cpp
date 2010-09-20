@@ -5,7 +5,7 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 PrimitiveCircle::PrimitiveCircle(ResourceTracker* tracker)
 : PrimitiveRadius(tracker)
@@ -100,7 +100,7 @@ void PrimitiveCircle::DrawFill( DrawArgs* args ) const
   args->m_TriangleCount += m_RadiusSteps;
 }
 
-void PrimitiveCircle::DrawHiddenBack(DrawArgs* args, const Core::Camera* camera, const Matrix4& m) const
+void PrimitiveCircle::DrawHiddenBack(DrawArgs* args, const SceneGraph::Camera* camera, const Matrix4& m) const
 {
   if (!SetState())
     return;

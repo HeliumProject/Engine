@@ -2,18 +2,18 @@
 #include "Primitive.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT(Core::Primitive);
+REFLECT_DEFINE_ABSTRACT(SceneGraph::Primitive);
 
 void Primitive::InitializeType()
 {
-  Reflect::RegisterClassType< Core::Primitive >( TXT( "Core::Primitive" ) );
+  Reflect::RegisterClassType< SceneGraph::Primitive >( TXT( "SceneGraph::Primitive" ) );
 }
 
 void Primitive::CleanupType()
 {
-  Reflect::UnregisterClassType< Core::Primitive >();
+  Reflect::UnregisterClassType< SceneGraph::Primitive >();
 }
 
 Primitive::Primitive(ResourceTracker* tracker)
@@ -30,7 +30,7 @@ Primitive::~Primitive()
   Delete();
 }
 
-bool Primitive::IsSolid(Core::Camera* camera) const
+bool Primitive::IsSolid(SceneGraph::Camera* camera) const
 {
   if (m_IsUsingCameraShadingMode)
   {

@@ -8,21 +8,21 @@
 using Helium::Insert; 
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT(Core::InstanceSet);
+REFLECT_DEFINE_ABSTRACT(SceneGraph::InstanceSet);
 
 void InstanceSet::InitializeType()
 {
-  Reflect::RegisterClassType< Core::InstanceSet >( TXT( "Core::InstanceSet" ) );
+  Reflect::RegisterClassType< SceneGraph::InstanceSet >( TXT( "SceneGraph::InstanceSet" ) );
 }
 
-void Core::InstanceSet::CleanupType()
+void SceneGraph::InstanceSet::CleanupType()
 {
-  Reflect::UnregisterClassType< Core::InstanceSet >();
+  Reflect::UnregisterClassType< SceneGraph::InstanceSet >();
 }
 
-InstanceSet::InstanceSet(Core::InstanceType* type)
+InstanceSet::InstanceSet(SceneGraph::InstanceType* type)
 : m_Type (type)
 {
 
@@ -33,12 +33,12 @@ InstanceSet::~InstanceSet()
 
 }
 
-Core::InstanceType* InstanceSet::GetInstanceType()
+SceneGraph::InstanceType* InstanceSet::GetInstanceType()
 {
   return m_Type;
 }
 
-void InstanceSet::AddInstance(Core::Instance* i)
+void InstanceSet::AddInstance(SceneGraph::Instance* i)
 {
   if (m_Instances.empty())
   {
@@ -59,7 +59,7 @@ void InstanceSet::AddInstance(Core::Instance* i)
   }
 }
 
-void InstanceSet::RemoveInstance(Core::Instance* i)
+void InstanceSet::RemoveInstance(SceneGraph::Instance* i)
 {
   m_Instances.erase(i);
 
@@ -72,7 +72,7 @@ void InstanceSet::RemoveInstance(Core::Instance* i)
   }
 }
 
-bool InstanceSet::ContainsInstance(Core::Instance* i)
+bool InstanceSet::ContainsInstance(SceneGraph::Instance* i)
 {
   return m_Instances.find(i) != m_Instances.end();
 }

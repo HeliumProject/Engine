@@ -19,7 +19,7 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 using namespace Helium::Component;
 
 REFLECT_DEFINE_CLASS(EntityInstance);

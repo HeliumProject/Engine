@@ -107,11 +107,6 @@ bool Scene::IsEditable()
     return !args.m_Veto;
 }
 
-const Helium::Path& Scene::GetPath() const
-{
-    return m_Path;
-}
-
 const ToolPtr& Scene::GetTool()
 {
     return m_Tool;

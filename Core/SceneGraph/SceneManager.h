@@ -49,8 +49,8 @@ namespace Helium
         class SceneDocument : public Document
         {
         public:
-            SceneDocument( const tstring& file, const tstring& name = TXT( "" ) )
-                : Document( file, name )
+            SceneDocument( const Helium::Path& path )
+                : Document( path )
                 , m_Scene( NULL )
             {
 
@@ -68,7 +68,10 @@ namespace Helium
               return m_Scene;
             }
 
-            virtual bool Save( tstring& error );
+            virtual bool Save( tstring& error ) HELIUM_OVERRIDE
+            {
+                return m_Scene->Save();
+            }
 
         private:
             SceneGraph::Scene* m_Scene;
@@ -97,7 +100,7 @@ namespace Helium
         public:
             SceneManager( MessageSignature::Delegate message, FileDialogSignature::Delegate fileDialog );
 
-            ScenePtr NewScene( SceneGraph::Viewport* viewport, tstring path = TXT( "" ) );
+            ScenePtr NewScene( SceneGraph::Viewport* viewport, Path path = TXT( "" ) );
             ScenePtr OpenScene( SceneGraph::Viewport* viewport, const tstring& path, tstring& error );
 
             DocumentManager& GetDocumentManager()

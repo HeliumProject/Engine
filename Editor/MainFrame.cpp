@@ -1910,11 +1910,6 @@ void MainFrame::SceneStatusChanged( const SceneStatusChangeArgs& args )
 
 void MainFrame::SceneContextChanged( const SceneContextChangeArgs& args )
 {
-    if ( args.m_OldContext != SceneContexts::Normal )
-    {
-        wxEndBusyCursor();
-    }
-
     static wxCursor busyCursor;
     busyCursor = wxCursor( wxCURSOR_WAIT );
 
@@ -1924,6 +1919,7 @@ void MainFrame::SceneContextChanged( const SceneContextChangeArgs& args )
     switch ( args.m_NewContext )
     {
     case SceneContexts::Loading:
+    case SceneContexts::Saving:
         wxBeginBusyCursor( &busyCursor );
         break;
 
@@ -1933,6 +1929,7 @@ void MainFrame::SceneContextChanged( const SceneContextChangeArgs& args )
 
     case SceneContexts::Normal:
     default:
+        wxEndBusyCursor();
         wxSetCursor( wxCURSOR_ARROW );
         break;
     }

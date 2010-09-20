@@ -402,7 +402,14 @@ namespace Helium
             }
 
             // Path to the file that this scene is currently editing
-            const Helium::Path& GetPath() const;
+            const Helium::Path& GetPath() const
+            {
+                return m_Path;
+            }
+            void SetPath( const Path& path )
+            {
+                m_Path = path;
+            }
 
             // get the current tool in use in this scene
             const ToolPtr& GetTool();
@@ -624,7 +631,7 @@ namespace Helium
             // Save nodes to a file or to an xml string buffer.  Do not change the file
             // that this scene is pointing at.  Optionally export the entire scene or
             // just selected nodes.  Optionally maintain hiearchy or dependencies.
-            bool Export( const Helium::Path& path, const ExportArgs& args );
+            bool Export( const Path& path, const ExportArgs& args );
             bool ExportXML( tstring& xml, const ExportArgs& args );
             bool Export( Reflect::V_Element& elements, const ExportArgs& args, Undo::BatchCommand* changes );
 

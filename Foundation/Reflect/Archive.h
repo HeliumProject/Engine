@@ -153,7 +153,7 @@ namespace Helium
         // must line up with enum above
         const static tchar* s_ArchiveExtensions[] =
         {
-            TXT( "nrb" ),    // Binary
+            TXT( "hrb" ),   // Binary
             TXT( "xml" )    // XML
         };
 
@@ -406,7 +406,7 @@ namespace Helium
                 {
                     if ( i != 0 )
                     {
-                        filters.push_back( TXT(';') );
+                        filters.push_back( TXT('|') );
                     }
 
                     filters += tstring( s_ArchiveDescriptions[ i ] ) + TXT( " (*." ) + s_ArchiveExtensions[ i ] + TXT( ")|*." ) + s_ArchiveExtensions[ i ];

@@ -25,12 +25,6 @@ static tstring GetUniqueSceneName()
     return str.str();
 }
 
-bool SceneDocument::Save( tstring& error )
-{
-    return m_Scene->Save();
-}
-
-
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
@@ -44,15 +38,14 @@ SceneManager::SceneManager( MessageSignature::Delegate message, FileDialogSignat
 ///////////////////////////////////////////////////////////////////////////////
 // Create a new scene.  Pass in true if this should be the root scene.
 // 
-ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, tstring path )
+ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, Path path )
 {
-    tstring name;
     if ( path.empty() )
     {
-        name = GetUniqueSceneName();
+        path = GetUniqueSceneName();
     }
 
-    SceneDocumentPtr document = new SceneDocument( path, name );
+    SceneDocumentPtr document = new SceneDocument( path );
     document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &SceneManager::DocumentClosed ) );
     document->AddDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
 
@@ -64,7 +57,6 @@ ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, tstring path )
     HELIUM_ASSERT( result );
 
     AddScene( scene );
-
     return scene;
 }
 
@@ -337,17 +329,21 @@ void SceneManager::OnSceneEditing( const SceneEditingArgs& args )
 // 
 void SceneManager::DocumentPathChanged( const DocumentPathChangedArgs& args )
 {
-    const tstring pathOrName = !args.m_OldFilePath.empty() ? args.m_OldFilePath : args.m_OldFileName;
-    M_SceneSmartPtr::iterator found = m_Scenes.find( pathOrName );
+    M_SceneSmartPtr::iterator found = m_Scenes.find( args.m_OldPath );
     if ( found != m_Scenes.end() )
     {
         // Hold a reference to the scene while we re-add it to the list, otherwise
         // it will get deleted.
         ScenePtr scene = found->second;
 
+        // remove the scene
         m_Scenes.erase( found );
-        Helium::Insert<M_SceneSmartPtr>::Result inserted = 
-            m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
+
+        // change the path of the scene
+        scene->SetPath( args.m_Document->GetPath() );
+
+        // re-insert w/ new path
+        Helium::Insert<M_SceneSmartPtr>::Result inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
         HELIUM_ASSERT( inserted.second );
     }
 }

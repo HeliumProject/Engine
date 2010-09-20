@@ -2,8 +2,8 @@
 #include "RBObjectLoader.h"
 #include "RBShaderLoader.h"
 
-#include "Core/Scene/Mesh.h"
-#include "Core/Scene/Shader.h"
+#include "Core/SceneGraph/Mesh.h"
+#include "Core/SceneGraph/Shader.h"
 
 #include <map>
 #include <set>

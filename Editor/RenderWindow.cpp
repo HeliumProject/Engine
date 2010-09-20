@@ -4,7 +4,7 @@
 #include "Foundation/Math/Utils.h"
 #include "Editor/FileDialog.h"
 #include "Core/Render/RBObjectLoader.h"
-#include "Core/Scene/Camera.h"
+#include "Core/SceneGraph/Camera.h"
 #include "Editor/Input.h"
 
 using namespace Helium;

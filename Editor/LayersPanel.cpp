@@ -4,7 +4,7 @@
 #include "ArtProvider.h"
 #include "EditorIDs.h"
 
-#include "Core/Scene/DependencyCommand.h"
+#include "Core/SceneGraph/DependencyCommand.h"
 
 using namespace Helium;
 using namespace Helium::Core;

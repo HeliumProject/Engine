@@ -3,7 +3,7 @@
 #include "DirectoryPanel.h"
 
 #include "MainFrame.h"
-#include "Core/Scene/SceneManager.h"
+#include "Core/SceneGraph/SceneManager.h"
 #include "EditorIDs.h"
 
 using namespace Helium;

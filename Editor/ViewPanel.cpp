@@ -4,7 +4,7 @@
 #include "Editor/EditorIDs.h"
 #include "Editor/EditorGenerated.h"
 
-#include "Core/Scene/CameraSettings.h"
+#include "Core/SceneGraph/CameraSettings.h"
 
 #include "ViewPanel.h"
 #include "ArtProvider.h"

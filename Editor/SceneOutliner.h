@@ -2,9 +2,9 @@
 
 #include "Platform/Types.h"
 
-#include "Core/Scene/Scene.h"
-#include "Core/Scene/SceneManager.h"
-#include "Core/Scene/Selection.h"
+#include "Core/SceneGraph/Scene.h"
+#include "Core/SceneGraph/SceneManager.h"
+#include "Core/SceneGraph/Selection.h"
 #include "Foundation/Reflect/Object.h"
 
 #include "Editor/API.h"

@@ -3,7 +3,7 @@
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Core/Render/Renderer.h"
-#include "Core/Scene/Camera.h"
+#include "Core/SceneGraph/Camera.h"
 
 namespace Helium
 {

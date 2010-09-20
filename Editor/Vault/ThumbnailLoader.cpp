@@ -5,7 +5,7 @@
 #include "Core/Asset/AssetClass.h"
 #include "Core/Asset/Classes/ShaderAsset.h"
 #include "Core/Render/DeviceManager.h"
-#include "Core/Scene/Render.h"
+#include "Core/SceneGraph/Render.h"
 
 using namespace Helium;
 using namespace Helium::Core;

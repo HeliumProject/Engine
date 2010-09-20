@@ -3,10 +3,10 @@
 
 #include "Editor/ArtProvider.h"
 
-#include "Core/Scene/EntityInstance.h"
-#include "Core/Scene/EntityInstanceType.h"
-#include "Core/Scene/EntitySet.h"
-#include "Core/Scene/Scene.h"
+#include "Core/SceneGraph/EntityInstance.h"
+#include "Core/SceneGraph/EntityInstanceType.h"
+#include "Core/SceneGraph/EntitySet.h"
+#include "Core/SceneGraph/Scene.h"
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
 
 using namespace Helium;

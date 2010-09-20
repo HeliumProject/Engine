@@ -1,6 +1,6 @@
 #include "CoreInit.h"
 #include "Asset/AssetInit.h"
-#include "Core/Scene/SceneInit.h"
+#include "Core/SceneGraph/SceneInit.h"
 #include "Project.h"
 
 #include "Foundation/InitializerStack.h"

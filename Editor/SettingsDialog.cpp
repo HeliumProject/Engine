@@ -4,7 +4,7 @@
 #include <wx/wx.h>
 #include <wx/listbook.h>
 
-#include "Core/Scene/PropertiesGenerator.h"
+#include "Core/SceneGraph/PropertiesGenerator.h"
 
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 

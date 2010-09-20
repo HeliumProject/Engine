@@ -15,9 +15,9 @@
 
 #include "Core/SettingsManager.h"
 
-#include "Core/Scene/PropertiesManager.h"
-#include "Core/Scene/Scene.h"
-#include "Core/Scene/SceneManager.h"
+#include "Core/SceneGraph/PropertiesManager.h"
+#include "Core/SceneGraph/Scene.h"
+#include "Core/SceneGraph/SceneManager.h"
 
 #include "Editor/DragDrop/DropTarget.h"
 

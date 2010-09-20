@@ -10,8 +10,8 @@
 #include "Foundation/Undo/Command.h"
 #include "Editor/ArtProvider.h"
 
-#include "Core/Scene/Color.h"  // BARF! Should we move Color.h to Editor?
-#include "Core/Scene/Render.h" // BARF! Should we move Render.h to Editor?
+#include "Core/SceneGraph/Color.h"  // BARF! Should we move Color.h to Editor?
+#include "Core/SceneGraph/Render.h" // BARF! Should we move Render.h to Editor?
 
 #include <wx/dnd.h>
 #include <shellapi.h>

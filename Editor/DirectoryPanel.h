@@ -2,7 +2,7 @@
 
 #include "Editor/EditorGenerated.h"
 
-#include "Core/Scene/SceneManager.h"
+#include "Core/SceneGraph/SceneManager.h"
 #include "Editor/EntityAssetOutliner.h"
 #include "Editor/HierarchyOutliner.h"
 #include "Editor/NodeTypeOutliner.h"

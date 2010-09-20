@@ -4,8 +4,8 @@
 #include "Editor/SceneOutliner.h"
 
 #include "Foundation/Reflect/Object.h"
-#include "Core/Scene/EntityInstanceType.h"
-#include "Core/Scene/EntitySet.h"
+#include "Core/SceneGraph/EntityInstanceType.h"
+#include "Core/SceneGraph/EntitySet.h"
 
 namespace Helium
 {

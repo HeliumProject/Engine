@@ -5,7 +5,7 @@
 #include "Foundation/Container/Insert.h" 
 
 #include "Core/Scene/Color.h"
-#include "Core/Scene/SceneGraph.h"
+#include "Core/Scene/Graph.h"
 #include "Core/Scene/EntityInstance.h"
 #include "Core/Scene/EntitySet.h"
 #include "Core/Scene/HierarchyNodeType.h"

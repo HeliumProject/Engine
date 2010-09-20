@@ -39,7 +39,7 @@ namespace Helium
             bool ContainsMember( Core::SceneNode* node ) const;
 
             virtual void Prune( V_SceneNodeDumbPtr& prunedNodes ) HELIUM_OVERRIDE;
-            virtual void Insert(SceneGraph* g, V_SceneNodeDumbPtr& insertedNodes ) HELIUM_OVERRIDE;
+            virtual void Insert(Graph* g, V_SceneNodeDumbPtr& insertedNodes ) HELIUM_OVERRIDE;
 
             virtual bool ValidatePanel(const tstring& name) HELIUM_OVERRIDE;
 

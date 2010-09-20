@@ -29,7 +29,7 @@ namespace Helium
         class SceneNodeType;
         typedef Helium::SmartPtr< SceneNodeType > SceneNodeTypePtr;
 
-        class SceneGraph;
+        class Graph;
 
         typedef std::vector< SceneNode* > V_SceneNodeDumbPtr;
         typedef std::vector< SceneNodePtr > V_SceneNodeSmartPtr;
@@ -80,7 +80,7 @@ namespace Helium
         // Scene Node
         //  Editor application object that can have a dependencies on other objects.
         //   o Has an evaluate function that does work that is dependent on other objects being clean.
-        //   o Dependencies of this object are traversed by SceneGraph to compute the order of evaluation.
+        //   o Dependencies of this object are traversed by Graph to compute the order of evaluation.
         //
 
         class CORE_API SceneNode HELIUM_ABSTRACT : public Component::ComponentCollection
@@ -112,15 +112,15 @@ namespace Helium
                 m_NodeType = type;
             }
 
-            SceneGraph* GetGraph()
+            Graph* GetGraph()
             {
                 return m_Graph;
             }
-            const SceneGraph* GetGraph() const
+            const Graph* GetGraph() const
             {
                 return m_Graph;
             }
-            void SetGraph(SceneGraph* value)
+            void SetGraph(Graph* value)
             {
                 m_Graph = value;
             }
@@ -267,7 +267,7 @@ namespace Helium
             //
 
         public:
-            virtual void Insert( SceneGraph* graph, V_SceneNodeDumbPtr& insertedNodes );
+            virtual void Insert( Graph* graph, V_SceneNodeDumbPtr& insertedNodes );
             virtual void Prune( V_SceneNodeDumbPtr& prunedNodes );
 
             //
@@ -276,7 +276,7 @@ namespace Helium
 
         protected:
             // entry point from the graph
-            virtual void DoEvaluate(GraphDirection direction); friend SceneGraph;
+            virtual void DoEvaluate(GraphDirection direction); friend Graph;
 
         public:
             // Makes us Evaluate() on next graph evaluation
@@ -428,7 +428,7 @@ namespace Helium
             bool                    m_IsTransient;                          // is this a temp object?
 
             Scene*                  m_Owner;                                // the scene that owns us
-            SceneGraph*             m_Graph;                                // the graph that evaluates us
+            Graph*             m_Graph;                                // the graph that evaluates us
             SceneNodeType*          m_NodeType;                             // the type we are an instance of
             S_SceneNodeDumbPtr      m_Ancestors;                            // nodes that are evaluated before this Node
             S_SceneNodeSmartPtr     m_Descendants;                          // nodes that are evaluated after this Node

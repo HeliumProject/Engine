@@ -3,7 +3,7 @@
 
 #include "Core/Scene/SceneNodeType.h"
 #include "Core/Scene/SceneNodePanel.h"
-#include "Core/Scene/SceneGraph.h"
+#include "Core/Scene/Graph.h"
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/Layer.h"
 #include "Core/Scene/Transform.h"
@@ -212,7 +212,7 @@ void SceneNode::RemoveDependency(Core::SceneNode* ancestor)
     DisconnectAncestor( ancestor );
 }
 
-void SceneNode::Insert(SceneGraph* graph, V_SceneNodeDumbPtr& insertedNodes )
+void SceneNode::Insert(Graph* graph, V_SceneNodeDumbPtr& insertedNodes )
 {
     graph->AddNode(this);
 

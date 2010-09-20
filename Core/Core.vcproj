@@ -1021,6 +1021,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Scene\Graph.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Graph.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Scene\HierarchyNode.cpp"
 					>
 				</File>
@@ -1138,14 +1146,6 @@
 				</File>
 				<File
 					RelativePath=".\Scene\Scene.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\SceneGraph.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\SceneGraph.h"
 					>
 				</File>
 				<File

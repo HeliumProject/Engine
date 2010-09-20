@@ -20,7 +20,7 @@
 #include "Core/Asset/Classes/Entity.h"
 #include "Core/Asset/Manifests/SceneManifest.h"
 
-#include "Core/Scene/SceneGraph.h"
+#include "Core/Scene/Graph.h"
 #include "Core/Scene/Statistics.h"
 #include "Core/Scene/SceneNodeType.h"
 #include "Core/Scene/HierarchyNodeType.h"
@@ -69,7 +69,7 @@ Scene::Scene( Core::Viewport* viewport, const Helium::Path& path )
     m_Selection.AddChangedListener( SelectionChangedSignature::Delegate (this, &Scene::SelectionChanged) );
 
     // Evaluation
-    m_Graph = new SceneGraph();
+    m_Graph = new Graph();
 
     // Setup root node
     m_Root = new PivotTransform();

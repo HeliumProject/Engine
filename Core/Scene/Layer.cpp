@@ -225,7 +225,7 @@ void Layer::Prune( V_SceneNodeDumbPtr& prunedNodes )
 ///////////////////////////////////////////////////////////////////////////////
 // Inserting a layer needs to restore its members that were previously pruned.
 // 
-void Layer::Insert(SceneGraph* g, V_SceneNodeDumbPtr& insertedNodes )
+void Layer::Insert(Graph* g, V_SceneNodeDumbPtr& insertedNodes )
 {
     // Let the base class put the layer back into the graph
     __super::Insert( g, insertedNodes );

@@ -23,8 +23,8 @@ namespace Helium
         };
 
         // fwd
-        class SceneGraph;
-        typedef Helium::SmartPtr< SceneGraph > SceneGraphPtr;
+        class Graph;
+        typedef Helium::SmartPtr< Graph > SceneGraphPtr;
 
         //
         //  
@@ -49,15 +49,15 @@ namespace Helium
         // Evaluates dirty nodes when appropriate, and notifies interested listeners
         // that evaluation has occurred.
         // 
-        class CORE_API SceneGraph : public Reflect::Object
+        class CORE_API Graph : public Reflect::Object
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( SceneGraph, Reflect::Object );
+            REFLECT_DECLARE_ABSTRACT( Graph, Reflect::Object );
             static void InitializeType();
             static void CleanupType();
 
         public:
-            SceneGraph();
+            Graph();
 
             // deconstruct graph
             void Reset();

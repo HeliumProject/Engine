@@ -18,7 +18,7 @@
 #include "Tool.h"
 #include "SceneNode.h"
 #include "SceneNodeType.h"
-#include "SceneGraph.h"
+#include "Graph.h"
 #include "Transform.h"
 
 namespace Helium

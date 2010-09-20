@@ -1,5 +1,5 @@
 /*#include "Precompile.h"*/
-#include "SceneGraph.h"
+#include "Graph.h"
 #include "Core/Scene/SceneNode.h"
 
 //#define SCENE_DEBUG_EVALUATE
@@ -7,26 +7,26 @@
 using namespace Helium;
 using namespace Helium::Core;
 
-REFLECT_DEFINE_ABSTRACT( SceneGraph );
+REFLECT_DEFINE_ABSTRACT( Graph );
 
-void SceneGraph::InitializeType()
+void Graph::InitializeType()
 {
-  Reflect::RegisterClassType< SceneGraph >( TXT( "SceneGraph" ) );
+  Reflect::RegisterClassType< Graph >( TXT( "Graph" ) );
 }
 
-void SceneGraph::CleanupType()
+void Graph::CleanupType()
 {
-  Reflect::UnregisterClassType< SceneGraph >();
+  Reflect::UnregisterClassType< Graph >();
 }
 
-SceneGraph::SceneGraph()
+Graph::Graph()
 : m_NextID (1)
 , m_CurrentID (0)
 {
 
 }
 
-void SceneGraph::Reset()
+void Graph::Reset()
 {
   for each (Core::SceneNode* node in m_OriginalNodes)
   {
@@ -53,7 +53,7 @@ void SceneGraph::Reset()
   m_NextID = 1;
 }
 
-u32 SceneGraph::AssignVisitedID()
+u32 Graph::AssignVisitedID()
 {
   m_NextID++;
 
@@ -65,7 +65,7 @@ u32 SceneGraph::AssignVisitedID()
   return m_NextID;
 }
 
-void SceneGraph::ResetVisitedIDs()
+void Graph::ResetVisitedIDs()
 {
   for each (Core::SceneNode* n in m_OriginalNodes)
   {
@@ -83,7 +83,7 @@ void SceneGraph::ResetVisitedIDs()
   }
 }
 
-void SceneGraph::Classify(Core::SceneNode* n)
+void Graph::Classify(Core::SceneNode* n)
 {
   if (n->GetAncestors().empty())
   {
@@ -105,7 +105,7 @@ void SceneGraph::Classify(Core::SceneNode* n)
   }
 }
 
-void SceneGraph::AddNode(Core::SceneNode* n)
+void Graph::AddNode(Core::SceneNode* n)
 {
   // Track this node
   Classify(n);
@@ -120,7 +120,7 @@ void SceneGraph::AddNode(Core::SceneNode* n)
   n->SetVisitedID(0);
 }
 
-void SceneGraph::RemoveNode(Core::SceneNode* n)
+void Graph::RemoveNode(Core::SceneNode* n)
 {
   m_OriginalNodes.erase( n );
   m_IntermediateNodes.erase( n );
@@ -129,7 +129,7 @@ void SceneGraph::RemoveNode(Core::SceneNode* n)
   n->SetGraph( NULL );
 }
 
-u32 SceneGraph::DirtyNode( Core::SceneNode* node, GraphDirection direction )
+u32 Graph::DirtyNode( Core::SceneNode* node, GraphDirection direction )
 {
   u32 count = 0;
 
@@ -208,7 +208,7 @@ u32 SceneGraph::DirtyNode( Core::SceneNode* node, GraphDirection direction )
   return count;
 }
 
-EvaluateResult SceneGraph::EvaluateGraph(bool silent)
+EvaluateResult Graph::EvaluateGraph(bool silent)
 {
   EvaluateResult result;
 
@@ -245,7 +245,7 @@ EvaluateResult SceneGraph::EvaluateGraph(bool silent)
   return result;
 }
 
-void SceneGraph::Evaluate(Core::SceneNode* node, GraphDirection direction)
+void Graph::Evaluate(Core::SceneNode* node, GraphDirection direction)
 {
   switch (direction)
   {

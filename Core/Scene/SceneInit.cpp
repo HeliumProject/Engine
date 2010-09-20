@@ -84,7 +84,7 @@ void Core::SceneInitialize()
         g_InitializerStack.Push( RotateManipulator::InitializeType, RotateManipulator::CleanupType );
         g_InitializerStack.Push( ScaleManipulator::InitializeType, ScaleManipulator::CleanupType );
 
-        g_InitializerStack.Push( SceneGraph::InitializeType, SceneGraph::CleanupType );
+        g_InitializerStack.Push( Graph::InitializeType, Graph::CleanupType );
         g_InitializerStack.Push( SceneNode::InitializeType, SceneNode::CleanupType );
         g_InitializerStack.Push( SceneNodeType::InitializeType, SceneNodeType::CleanupType );
         g_InitializerStack.Push( HierarchyNode::InitializeType, HierarchyNode::CleanupType );

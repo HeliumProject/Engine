@@ -211,7 +211,7 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
     m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
     m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
-    m_InitializerStack.Push( Core::Initialize, Core::Cleanup );
+    m_InitializerStack.Push( CoreInitialize, CoreCleanup );
     m_InitializerStack.Push( TaskInitialize, TaskCleanup );
 
     // inspect

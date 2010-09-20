@@ -3,17 +3,16 @@
 #include "Foundation/InitializerStack.h"
 #include "Asset/AssetInit.h"
 
-#include "Core/SceneGraph/SceneInit.h"
+#include "Core/SceneGraph/SceneGraphInit.h"
 #include "Core/SettingsManager.h"
 #include "Core/Project.h"
 
 using namespace Helium;
-using namespace Helium::Core;
 
 static u32 g_InitCount = 0;
 static Helium::InitializerStack g_InitStack;
 
-void Core::Initialize()
+void Helium::CoreInitialize()
 {
     if ( ++g_InitCount == 1 )
     {
@@ -25,7 +24,7 @@ void Core::Initialize()
     }
 }
 
-void Core::Cleanup()
+void Helium::CoreCleanup()
 {
     if ( --g_InitCount == 0 )
     {

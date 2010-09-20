@@ -11,7 +11,6 @@
 #include "Core/SceneGraph/PrimitiveGrid.h"
 #include "Core/SceneGraph/PrimitiveRings.h"
 #include "Core/SceneGraph/Resource.h"
-#include "Core/SceneGraph/SceneInit.h"
 #include "Core/SceneGraph/SceneSettings.h"
 #include "Core/SceneGraph/Statistics.h"
 #include "Core/SceneGraph/Orientation.h"

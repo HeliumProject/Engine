@@ -30,8 +30,8 @@ namespace Helium
 
             // Helpers
         private:
-            void AddEntityType( SceneGraph::EntityType* entityType );
-            void RemoveEntityType( SceneGraph::EntityType* entityType );
+            void AddEntityType( SceneGraph::EntityInstanceType* entityType );
+            void RemoveEntityType( SceneGraph::EntityInstanceType* entityType );
             void AddEntitySet( SceneGraph::EntitySet* classSet );
             void RemoveEntitySet( SceneGraph::EntitySet* classSet );
             void AddEntityInstance( SceneGraph::EntityInstance* entityInstance );

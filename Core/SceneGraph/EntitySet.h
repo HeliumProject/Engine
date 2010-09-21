@@ -12,7 +12,7 @@ namespace Helium
     {
         class EntityInstance;
         class EntitySet;
-        class EntityType;
+        class EntityInstanceType;
         class PrimitiveCube;
         struct SharedFileChangeArgs;
 
@@ -55,7 +55,7 @@ namespace Helium
             static void CleanupType();
 
         public:
-            EntitySet( SceneGraph::EntityType* type, const Helium::Path& assetPath );
+            EntitySet( SceneGraph::EntityInstanceType* type, const Helium::Path& assetPath );
 
             virtual ~EntitySet();
 

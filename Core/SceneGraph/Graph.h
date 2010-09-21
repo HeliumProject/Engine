@@ -52,7 +52,7 @@ namespace Helium
         class CORE_API Graph : public Reflect::Object
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( Graph, Reflect::Object );
+            REFLECT_DECLARE_CLASS( Graph, Reflect::Object );
             static void InitializeType();
             static void CleanupType();
 

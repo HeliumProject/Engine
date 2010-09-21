@@ -23,7 +23,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT( Curve );
+REFLECT_DEFINE_CLASS( Curve );
 
 D3DMATERIAL9 Curve::s_Material;
 D3DMATERIAL9 Curve::s_HullMaterial;

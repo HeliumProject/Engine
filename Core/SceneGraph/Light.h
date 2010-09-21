@@ -12,10 +12,10 @@ namespace Helium
         class PrimitiveLocator;
         class PrimitiveSphere;
 
-        class CORE_API Light HELIUM_ABSTRACT : public Instance
+        class CORE_API Light : public Instance
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( Light, Instance );
+            REFLECT_DECLARE_CLASS( Light, Instance );
             static void EnumerateClass( Reflect::Compositor<Light>& comp );
             static void InitializeType();
             static void CleanupType();

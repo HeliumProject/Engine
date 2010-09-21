@@ -172,7 +172,7 @@ tstring EntityInstance::GetApplicationTypeName() const
 SceneNodeTypePtr EntityInstance::CreateNodeType( Scene* scene ) const
 {
     // Overridden to create an entity-specific type
-    EntityType* nodeType = new EntityType( scene, GetType() );
+    EntityInstanceType* nodeType = new EntityInstanceType( scene, GetType() );
 
     // Set the image index (usually this is handled by the base class, but we aren't calling the base)
     nodeType->SetImageIndex( GetImageIndex() );
@@ -292,7 +292,7 @@ void EntityInstance::Evaluate(GraphDirection direction)
             // merge type pointer into our bounding box
             if ( IsPointerVisible() )
             {
-                EntityType* type = Reflect::AssertCast<EntityType>(m_NodeType);
+                EntityInstanceType* type = Reflect::AssertCast<EntityInstanceType>(m_NodeType);
 
                 if ( type && type->GetPointer() )
                 {
@@ -387,7 +387,7 @@ void EntityInstance::DrawPointer( IDirect3DDevice9* device, DrawArgs* args, cons
 {
     const EntityInstance* entity = Reflect::ConstAssertCast<EntityInstance>( object );
 
-    const EntityType* type = Reflect::ConstAssertCast<EntityType>( entity->GetNodeType() );
+    const EntityInstanceType* type = Reflect::ConstAssertCast<EntityInstanceType>( entity->GetNodeType() );
 
     entity->SetMaterial( type->GetMaterial() );
 
@@ -399,7 +399,7 @@ void EntityInstance::DrawBounds( IDirect3DDevice9* device, DrawArgs* args, const
 {
     const EntityInstance* entity = Reflect::ConstAssertCast<EntityInstance>( object );
 
-    const EntityType* type = Reflect::ConstAssertCast<EntityType>( entity->GetNodeType() );
+    const EntityInstanceType* type = Reflect::ConstAssertCast<EntityInstanceType>( entity->GetNodeType() );
 
     const EntitySet* classSet = entity->GetClassSet();
 
@@ -413,7 +413,7 @@ bool EntityInstance::Pick( PickVisitor* pick )
 {
     bool result = false;
 
-    EntityType* type = Reflect::AssertCast<EntityType>(m_NodeType);
+    EntityInstanceType* type = Reflect::AssertCast<EntityInstanceType>(m_NodeType);
 
     pick->SetFlag( PickFlags::IgnoreVertex, true );
 

@@ -24,7 +24,6 @@ using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT(SceneGraph::TranslateManipulator);
 
-
 void TranslateManipulator::InitializeType()
 {
     Reflect::RegisterClassType< SceneGraph::TranslateManipulator >( TXT( "SceneGraph::TranslateManipulator" ) );

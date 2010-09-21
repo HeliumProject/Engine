@@ -111,7 +111,7 @@ void SceneGraph::Initialize()
         g_InitializerStack.Push( LocatorCreateTool::InitializeType, LocatorCreateTool::CleanupType );
         g_InitializerStack.Push( EntityInstance::InitializeType, EntityInstance::CleanupType );
         g_InitializerStack.Push( EntitySet::InitializeType, EntitySet::CleanupType );
-        g_InitializerStack.Push( EntityType::InitializeType, EntityType::CleanupType );
+        g_InitializerStack.Push( EntityInstanceType::InitializeType, EntityInstanceType::CleanupType );
         g_InitializerStack.Push( EntityInstanceCreateTool::InitializeType, EntityInstanceCreateTool::CleanupType );
         g_InitializerStack.Push( Light::InitializeType, Light::CleanupType );
 

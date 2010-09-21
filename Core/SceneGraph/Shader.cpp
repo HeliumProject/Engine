@@ -11,7 +11,7 @@ using namespace Helium::SceneGraph;
 
 Profile::MemoryPoolHandle g_ShaderTextureMemoryPool;
 
-REFLECT_DEFINE_ABSTRACT( Shader );
+REFLECT_DEFINE_CLASS( Shader );
 
 #pragma TODO("Data-hide public reflected fields")
 

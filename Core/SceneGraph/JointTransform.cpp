@@ -16,7 +16,7 @@ using namespace Helium::SceneGraph;
 
 static D3DMATERIAL9 g_JointTransformMaterial;
 
-REFLECT_DEFINE_ABSTRACT( JointTransform );
+REFLECT_DEFINE_CLASS( JointTransform );
 
 void JointTransform::EnumerateClass( Reflect::Compositor<JointTransform>& comp )
 {
@@ -41,14 +41,17 @@ void JointTransform::CleanupType()
 JointTransform::JointTransform()
 : m_SegmentScaleCompensate( false )
 {
-    SceneGraph::PrimitiveRings* rings = static_cast< SceneGraph::PrimitiveRings* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings ) );
-    m_ObjectBounds.minimum = Math::Vector3(-rings->m_Radius, -rings->m_Radius, -rings->m_Radius);
-    m_ObjectBounds.maximum = Math::Vector3(rings->m_Radius, rings->m_Radius, rings->m_Radius);
 }
 
 JointTransform::~JointTransform()
 {
+}
 
+void JointTransform::Initialize()
+{
+    SceneGraph::PrimitiveRings* rings = static_cast< SceneGraph::PrimitiveRings* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings ) );
+    m_ObjectBounds.minimum = Math::Vector3(-rings->m_Radius, -rings->m_Radius, -rings->m_Radius);
+    m_ObjectBounds.maximum = Math::Vector3(rings->m_Radius, rings->m_Radius, rings->m_Radius);
 }
 
 i32 JointTransform::GetImageIndex() const

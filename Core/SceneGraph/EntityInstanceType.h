@@ -6,21 +6,21 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class EntityType : public SceneGraph::InstanceType
+        class EntityInstanceType : public SceneGraph::InstanceType
         {
         private:
             // materials
             D3DMATERIAL9 m_Material;
 
         public:
-            REFLECT_DECLARE_ABSTRACT( SceneGraph::EntityType, SceneGraph::InstanceType );
+            REFLECT_DECLARE_ABSTRACT( SceneGraph::EntityInstanceType, SceneGraph::InstanceType );
             static void InitializeType();
             static void CleanupType();
 
         public:
-            EntityType( SceneGraph::Scene* scene, i32 instanceType );
+            EntityInstanceType( SceneGraph::Scene* scene, i32 instanceType );
 
-            virtual ~EntityType();
+            virtual ~EntityInstanceType();
 
             virtual void Reset() HELIUM_OVERRIDE;
             virtual void Create() HELIUM_OVERRIDE;

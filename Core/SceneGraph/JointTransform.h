@@ -12,7 +12,7 @@ namespace Helium
         class JointTransform : public Transform
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( JointTransform, Transform );
+            REFLECT_DECLARE_CLASS( JointTransform, Transform );
             static void EnumerateClass( Reflect::Compositor<JointTransform>& comp );
             static void InitializeType();
             static void CleanupType();
@@ -20,6 +20,8 @@ namespace Helium
         public:
             JointTransform();
             ~JointTransform();
+
+            virtual void Initialize() HELIUM_OVERRIDE;
 
             virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;

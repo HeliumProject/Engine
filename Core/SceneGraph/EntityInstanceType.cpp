@@ -18,19 +18,19 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT(SceneGraph::EntityType);
+REFLECT_DEFINE_ABSTRACT(SceneGraph::EntityInstanceType);
 
-void EntityType::InitializeType()
+void EntityInstanceType::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::EntityType >( TXT( "SceneGraph::EntityType" ) );
+    Reflect::RegisterClassType< SceneGraph::EntityInstanceType >( TXT( "SceneGraph::EntityInstanceType" ) );
 }
 
-void EntityType::CleanupType()
+void EntityInstanceType::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::EntityType >();
+    Reflect::UnregisterClassType< SceneGraph::EntityInstanceType >();
 }
 
-EntityType::EntityType( SceneGraph::Scene* scene, i32 instanceType )
+EntityInstanceType::EntityInstanceType( SceneGraph::Scene* scene, i32 instanceType )
 : SceneGraph::InstanceType( scene, instanceType )
 {
     ZeroMemory(&m_Material, sizeof(m_WireMaterial));
@@ -39,17 +39,17 @@ EntityType::EntityType( SceneGraph::Scene* scene, i32 instanceType )
     m_Material.Specular = SceneGraph::Color::BLACK;
 }
 
-EntityType::~EntityType()
+EntityInstanceType::~EntityInstanceType()
 {
 
 }
 
-void EntityType::Reset()
+void EntityInstanceType::Reset()
 {
     __super::Reset();
 }
 
-void EntityType::Create()
+void EntityInstanceType::Create()
 {
     __super::Create();
 
@@ -65,7 +65,7 @@ void EntityType::Create()
     }
 }
 
-void EntityType::Delete()
+void EntityInstanceType::Delete()
 {
     __super::Delete();
 
@@ -81,7 +81,7 @@ void EntityType::Delete()
     }
 }
 
-void EntityType::PopulateManifest(Asset::SceneManifest* manifest) const
+void EntityInstanceType::PopulateManifest(Asset::SceneManifest* manifest) const
 {
     // iterate over every set in the SceneGraph::EntityInstance type
     M_InstanceSetSmartPtr::const_iterator setItr = m_Sets.begin();

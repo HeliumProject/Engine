@@ -15,7 +15,7 @@ using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT(Volume);
+REFLECT_DEFINE_CLASS(Volume);
 
 void Volume::EnumerateClass( Reflect::Compositor<Volume>& comp )
 {

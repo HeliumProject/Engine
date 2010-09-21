@@ -208,7 +208,7 @@ namespace Helium
             void OpenTypeContextMenu( const SceneGraph::SelectArgs& args );
 
             void SetupTypeContextMenu( const SceneGraph::HM_StrToSceneNodeTypeSmartPtr& sceneNodeTypes,wxMenu& contextMenu,  u32& numMenuItems );
-            void SetupEntityTypeMenus( const SceneGraph::EntityType* entity, wxMenu* entityMenu, u32& numMenuItems );
+            void SetupEntityTypeMenus( const SceneGraph::EntityInstanceType* entity, wxMenu* entityMenu, u32& numMenuItems );
 
             static bool SortContextItemsByName( SceneGraph::SceneNode* lhs, SceneGraph::SceneNode* rhs ); 
             static bool SortTypeItemsByName( SceneGraph::SceneNodeType* lhs, SceneGraph::SceneNodeType* rhs );

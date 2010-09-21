@@ -45,12 +45,12 @@ void EntityAssetOutliner::AddEntityTypes()
             m_TreeCtrl->DisableSorting();
 
             // Iterate over the node types, looking for the entity types
-            EntityType* entityType = NULL;
+            EntityInstanceType* entityType = NULL;
             HM_StrToSceneNodeTypeSmartPtr::const_iterator typeItr = m_CurrentScene->GetNodeTypesByName().begin();
             HM_StrToSceneNodeTypeSmartPtr::const_iterator typeEnd = m_CurrentScene->GetNodeTypesByName().end();
             for ( ; typeItr != typeEnd; ++typeItr )
             {
-                entityType = Reflect::ObjectCast< SceneGraph::EntityType >( typeItr->second );
+                entityType = Reflect::ObjectCast< SceneGraph::EntityInstanceType >( typeItr->second );
                 if ( entityType )
                 {
                     AddEntityType( entityType );
@@ -68,7 +68,7 @@ void EntityAssetOutliner::AddEntityTypes()
 // Hooks up listeners to the entity type for changes and attempts to add any
 // existing entity class sets to the tree.
 // 
-void EntityAssetOutliner::AddEntityType( SceneGraph::EntityType* entityType )
+void EntityAssetOutliner::AddEntityType( SceneGraph::EntityInstanceType* entityType )
 {
     // Iterate over all the entity instances and add them to the tree
     M_InstanceSetSmartPtr::const_iterator classItr = entityType->GetSets().begin();
@@ -91,7 +91,7 @@ void EntityAssetOutliner::AddEntityType( SceneGraph::EntityType* entityType )
 // Unhooks listeners to the entity type and attempts to remove any existing
 // entity class sets from the tree.
 // 
-void EntityAssetOutliner::RemoveEntityType( SceneGraph::EntityType* entityType )
+void EntityAssetOutliner::RemoveEntityType( SceneGraph::EntityInstanceType* entityType )
 {
     // Iterate over all the entity instances and add them to the tree
     M_InstanceSetSmartPtr::const_iterator classItr = entityType->GetSets().begin();
@@ -313,25 +313,25 @@ void EntityAssetOutliner::EntityRemoved( const SceneGraph::InstanceSetChangeArgs
 
 ///////////////////////////////////////////////////////////////////////////////
 // Callback when a node type is added to the scene.  If the node type is an
-// Editor::EntityType, this class starts tracking it.
+// Editor::EntityInstanceType, this class starts tracking it.
 // 
 void EntityAssetOutliner::NodeTypeAdded( const SceneGraph::NodeTypeExistenceArgs& args )
 {
-    if ( args.m_NodeType->HasType( Reflect::GetType< SceneGraph::EntityType >() ) )
+    if ( args.m_NodeType->HasType( Reflect::GetType< SceneGraph::EntityInstanceType >() ) )
     {
-        AddEntityType( Reflect::DangerousCast< SceneGraph::EntityType >( args.m_NodeType ) );
+        AddEntityType( Reflect::DangerousCast< SceneGraph::EntityInstanceType >( args.m_NodeType ) );
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Callback when a node type is removed from the scene.  If the node type is
-// an Editor::EntityType, disconnect from it.
+// an Editor::EntityInstanceType, disconnect from it.
 // 
 void EntityAssetOutliner::NodeTypeRemoved( const SceneGraph::NodeTypeExistenceArgs& args )
 {
-    if ( args.m_NodeType->HasType( Reflect::GetType< SceneGraph::EntityType >() ) )
+    if ( args.m_NodeType->HasType( Reflect::GetType< SceneGraph::EntityInstanceType >() ) )
     {
-        RemoveEntityType( Reflect::DangerousCast< SceneGraph::EntityType >( args.m_NodeType ) );
+        RemoveEntityType( Reflect::DangerousCast< SceneGraph::EntityInstanceType >( args.m_NodeType ) );
     }
 }
 

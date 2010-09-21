@@ -29,7 +29,7 @@ void EntitySet::CleanupType()
     Reflect::UnregisterClassType< SceneGraph::EntitySet >();
 }
 
-EntitySet::EntitySet( SceneGraph::EntityType* type, const Helium::Path& assetPath )
+EntitySet::EntitySet( SceneGraph::EntityInstanceType* type, const Helium::Path& assetPath )
 : SceneGraph::InstanceSet (type)
 , m_AssetPath( assetPath )
 , m_ClassMissing (false)

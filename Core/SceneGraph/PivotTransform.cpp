@@ -11,7 +11,7 @@ using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT( PivotTransform );
+REFLECT_DEFINE_CLASS( PivotTransform );
 
 void PivotTransform::EnumerateClass( Reflect::Compositor<PivotTransform>& comp )
 {

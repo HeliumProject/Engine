@@ -17,7 +17,7 @@ using namespace Helium;
 using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT(Light);
+REFLECT_DEFINE_CLASS(Light);
 
 D3DMATERIAL9 Light::s_Material;
 

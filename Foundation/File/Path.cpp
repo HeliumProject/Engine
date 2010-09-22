@@ -289,6 +289,11 @@ const tstring& Path::Set( const tstring& path )
     return m_Path;
 }
 
+void Path::Clear()
+{
+    Set( TXT( "" ) );
+}
+
 void Path::TrimToExisting()
 {
     if ( !Exists() )

@@ -76,6 +76,7 @@ namespace Helium
             ToolbarPanel*               m_ToolbarPanel;
             DirectoryPanel*             m_DirectoryPanel;
             PropertiesPanel*            m_PropertiesPanel;
+
             VaultPanel*                 m_VaultPanel;
 
             Core::ProjectPtr            m_Project;
@@ -106,7 +107,6 @@ namespace Helium
             bool DoOpen( const tstring& path );
 
         private:
-
             void OnOpen( wxCommandEvent& event ) HELIUM_OVERRIDE;
             void OnMRUOpen( const MRUArgs& args );
 
@@ -120,6 +120,7 @@ namespace Helium
             virtual void OnClose( wxCommandEvent& event ) HELIUM_OVERRIDE;
             virtual void OnSaveAll( wxCommandEvent& event ) HELIUM_OVERRIDE;
 
+            void OpenVaultPanel();
             void OnSearchGoButtonClick( wxCommandEvent& event );
             void OnSearchTextEnter( wxCommandEvent& event );
 

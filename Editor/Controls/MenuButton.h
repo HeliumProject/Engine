@@ -16,7 +16,7 @@ namespace Helium
     {
         /// @class MenuButton
         /// @brief adds on to the Button class to add menu functionality through mouse interaction
-        class MenuButton : public wxButton
+        class MenuButton : public wxBitmapButton
         {
         public:
             // wxWidgets setup
@@ -33,12 +33,14 @@ namespace Helium
             /// @function HandleTimerEvents
             /// @brief this is the function that responds to timer events and displays the context menu
             /// @param event parameters that are passed to the handler
-            void    HandleTimerEvents( wxTimerEvent& event );
+            void HandleTimerEvents( wxTimerEvent& event );
 
         public:
             /// @function MenuButton
             /// @brief Constructor
-            MenuButton(void){ }
+            MenuButton(void)
+            {
+            }
 
             /// @function 
             /// @brief Constructor
@@ -49,7 +51,7 @@ namespace Helium
                 const wxSize& size = wxDefaultSize,
                 long style = wxBU_EXACTFIT,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxButtonNameStr) ;
+                const wxString& name = wxButtonNameStr);
 
             /// @function ~MenuButton
             /// @brief destructor
@@ -82,6 +84,8 @@ namespace Helium
             void    SetContextMenu( wxMenu * menu ) ;
 
         protected:
+            virtual void DoSetBitmap(const wxBitmap& bitmap, State which);
+
             /// @function OnRightMouseDown
             /// @brief Right mouse down event handler. Displays the menu
             /// @param event parameters that are passed to the handler

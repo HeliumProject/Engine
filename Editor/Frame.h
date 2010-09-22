@@ -46,6 +46,8 @@ namespace Helium
             Undo::Queue     m_UndoQueue;
             wxAuiManager    m_FrameManager;
 
+            std::set<wxString> m_ExcludeFromPanelsMenu;
+
             wxTimer*        m_HelpTimer;
             wxWindow*       m_HelpLastWindow;
 

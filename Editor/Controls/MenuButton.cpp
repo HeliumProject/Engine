@@ -1,6 +1,8 @@
 #include "Precompile.h"
 #include "MenuButton.h"
 
+#include "Editor/ArtProvider.h"
+
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -19,13 +21,11 @@ MenuButton::MenuButton(wxWindow *parent,
                        long style,
                        const wxValidator& validator,
                        const wxString& name ) 
-                       : wxButton( parent, id, wxEmptyString, pos, size, style, validator, name )
+                       : wxBitmapButton( parent, id, bitmap, pos, size, style, validator, name )
                        , m_contextMenu ( NULL )
                        , m_holdDelay( 0.5f )
                        , m_timerShowOnHold( this )
 {
-    SetBitmap( bitmap );
-
     Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( MenuButton::OnRightMouseDown ), NULL, this );
     Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( MenuButton::OnLeftMouseDown ), NULL, this );
     Connect( wxEVT_LEFT_UP, wxMouseEventHandler( MenuButton::OnLeftMouseUp ), NULL, this ); 
@@ -72,6 +72,48 @@ wxMenu* MenuButton::DetachContextMenu( )
 wxMenu* MenuButton::GetContextMenu( ) const 
 { 
     return m_contextMenu; 
+}
+
+void MenuButton::DoSetBitmap(const wxBitmap& bitmap, State which)
+{
+    if ( bitmap.IsOk() )
+    {
+        wxImage downArrowImage =  wxArtProvider::GetBitmap( ArtIDs::Verbs::Down, wxART_OTHER, wxSize( 8, 8 ) ).ConvertToImage();
+        
+        int separator = 4;
+        int width = bitmap.GetWidth() + downArrowImage.GetWidth() + separator;
+        int height = bitmap.GetHeight();
+        wxImage image( width, height, true );
+        image.InitAlpha();
+
+        // set to 0
+        for ( int x = 0; x < width; ++x )
+        {
+            for ( int y = 0; y < height; ++y )
+            {
+                image.SetAlpha( x, y, 0 );
+            }
+        }
+
+        if ( image.Ok() && downArrowImage.Ok() )
+        {
+            IconArtFile::Paste( image, bitmap.ConvertToImage(), 0, 0, true );
+
+
+            IconArtFile::Paste( image,
+                ( which == wxButtonBase::State_Disabled ? downArrowImage.ConvertToDisabled() : downArrowImage ),
+                ( width - downArrowImage.GetWidth() ),
+                ( height/2 - downArrowImage.GetHeight()/2 ),
+                true );
+            
+            wxBitmap newBitmap = wxBitmap( image );
+            __super::DoSetBitmap( newBitmap, which );
+
+            return;
+        }
+    }
+   
+    __super::DoSetBitmap( bitmap, which );
 }
 
 void MenuButton::OnRightMouseDown( wxMouseEvent& event )

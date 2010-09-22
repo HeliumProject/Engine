@@ -60,6 +60,8 @@ Frame::~Frame()
     delete m_HelpTimer;
 
     m_FrameManager.UnInit();
+
+    m_ExcludeFromPanelsMenu.clear();
 }
 
 void Frame::SetHelpText( const tchar* text )
@@ -118,7 +120,8 @@ u32 Frame::CreatePanelsMenu( wxMenu* menu )
     for ( size_t index = 0; index < numPanes; ++index )
     {
         wxAuiPaneInfo& pane = panes.Item( index );
-        if ( !pane.caption.empty() )
+        if ( !pane.caption.empty()
+            && m_ExcludeFromPanelsMenu.find( pane.name ) == m_ExcludeFromPanelsMenu.end() )
         {
             wxMenuItem* item = menu->AppendCheckItem( wxID_ANY, pane.caption );
             Connect( item->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( Frame::OnShowPanel ), NULL, this );
@@ -141,6 +144,12 @@ void Frame::UpdatePanelsMenu( wxMenu* menu )
     for ( size_t index = 0; index < numPanes; ++index )
     {
         const wxAuiPaneInfo& pane = panes.Item( index );
+        
+        if ( m_ExcludeFromPanelsMenu.find( pane.name ) != m_ExcludeFromPanelsMenu.end() )
+        {
+            continue;
+        }
+        
         i32 itemId = menu->FindItem( pane.caption );
         if ( itemId != wxNOT_FOUND )
         {

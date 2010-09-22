@@ -114,6 +114,7 @@ MainFrame::MainFrame( Core::SettingsManager* settingsManager, wxWindow* parent, 
 , m_TreeMonitor( &m_SceneManager )
 , m_MessageDisplayer( this )
 , m_SceneManager( MessageSignature::Delegate( &m_MessageDisplayer, &MessageDisplayer::DisplayMessage ), FileDialogSignature::Delegate( &m_FileDialogDisplayer, &FileDialogDisplayer::DisplayFileDialog ) )
+, m_VaultPanel( NULL )
 {
     wxIcon appIcon;
     appIcon.CopyFromBitmap( wxArtProvider::GetBitmap( ArtIDs::Helium, wxART_OTHER, wxSize( 32, 32 ) ) );
@@ -223,10 +224,6 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
 
     m_TypesPanel = new TypesPanel( &m_SceneManager, this );
     m_FrameManager.AddPane( m_TypesPanel, wxAuiPaneInfo().Name( wxT( "types" ) ).Caption( wxT( "Types" ) ).Right().Layer( 1 ).Position( 3 ) );
-
-    m_VaultPanel = new VaultPanel( this );
-    m_FrameManager.AddPane( m_VaultPanel, wxAuiPaneInfo().Name( wxT( "vault" ) ).Caption( wxT( "Asset Vault" ) ).Right().Layer( 1 ).Position( 4 ) );
-
 
     m_FrameManager.Update();
 
@@ -351,8 +348,12 @@ MainFrame::~MainFrame()
     m_DirectoryPanel->Destroy();
     m_LayersPanel->Destroy();
 
-    m_VaultPanel->Destroy();
-    m_VaultPanel=NULL;
+    if ( m_VaultPanel )
+    {
+        m_VaultPanel->SaveSettings();
+        m_VaultPanel->Destroy();
+        m_VaultPanel=NULL;
+    }
 }
 
 void MainFrame::SetHelpText( const tchar* text )
@@ -387,7 +388,11 @@ bool MainFrame::OpenProject( const Helium::Path& path )
 
             m_ProjectPanel->SetProject( m_Project );
 
-            m_VaultPanel->SetDirectory( path );
+            if ( m_VaultPanel )
+            {
+                m_VaultPanel->SetDirectory( path );
+            }
+
             wxGetApp().GetTracker()->SetDirectory( path );
             if ( !wxGetApp().GetTracker()->IsThreadRunning() )
             {
@@ -785,23 +790,52 @@ void MainFrame::OnSaveAll( wxCommandEvent& event )
     }
 }
 
-void MainFrame::OnSearchGoButtonClick( wxCommandEvent& event )
+void MainFrame::OpenVaultPanel()
 {
     wxString queryString = m_ToolbarPanel->m_VaultSearchBox->GetLineText(0);
     queryString.Trim(true);  // trim white-space right 
     queryString.Trim(false); // trim white-space left
 
+    if ( !m_VaultPanel )
+    {
+        m_VaultPanel = new VaultPanel( this );
+        wxAuiPaneInfo vaultPanelInfo = wxAuiPaneInfo().Name( wxT( "vault" ) ).Caption( wxT( "Asset Vault" ) ).Right().Layer( 1 ).Position( 4 );
+        m_FrameManager.AddPane( m_VaultPanel, vaultPanelInfo );
+        m_ExcludeFromPanelsMenu.insert( vaultPanelInfo.name );
+
+        m_VaultPanel->Show();
+        m_FrameManager.Update();
+    }
+
+    if ( !m_VaultPanel->IsShown() )
+    {
+        wxAuiPaneInfo& pane = m_FrameManager.GetPane( m_VaultPanel );
+        if ( pane.IsOk() )
+        {
+            pane.Show( !pane.IsShown() );
+            m_FrameManager.Update();
+        }
+    }
+
+    if ( !queryString.empty() )
+    {
+        wxAuiPaneInfo& pane = m_FrameManager.GetPane( m_VaultPanel );
+        pane.caption = wxT( "Vault Search: " );
+        pane.caption += queryString;
+    }
+
     m_VaultPanel->Search( queryString.wx_str() );
+}
+
+void MainFrame::OnSearchGoButtonClick( wxCommandEvent& event )
+{
+    OpenVaultPanel();
     event.Skip(false);
 }
 
 void MainFrame::OnSearchTextEnter( wxCommandEvent& event )
 {
-    wxString queryString = m_ToolbarPanel->m_VaultSearchBox->GetLineText(0);
-    queryString.Trim(true);  // trim white-space right 
-    queryString.Trim(false); // trim white-space left
-
-    m_VaultPanel->Search( queryString.wx_str() );
+    OpenVaultPanel();
     event.Skip(false);
 }
 

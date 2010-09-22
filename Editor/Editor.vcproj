@@ -854,14 +854,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Vault\VaultPreviewWindow.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\VaultPreviewWindow.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Vault\VaultSearch.cpp"
 				>
 			</File>

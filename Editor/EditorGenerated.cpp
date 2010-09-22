@@ -8,6 +8,7 @@
 #include "Precompile.h"
 
 
+#include "Editor/Controls/MenuButton.h"
 #include "Editor/Vault/ListResultsView.h"
 #include "wx/tglbtn.h"
 
@@ -770,11 +771,9 @@ VaultPanelGenerated::VaultPanelGenerated( wxWindow* parent, wxWindowID id, const
 	m_SearchCtrl->ShowCancelButton( true );
 	bSizer34->Add( m_SearchCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_OptionsButton = new wxBitmapButton( m_NavigationPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_OptionsButton->Hide();
+	m_OptionsButton = new Helium::Editor::MenuButton( m_NavigationPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_OptionsButton->SetToolTip( _("Vault Settings...") );
 	
-	m_OptionsButton->Hide();
 	m_OptionsButton->SetToolTip( _("Vault Settings...") );
 	
 	bSizer34->Add( m_OptionsButton, 0, wxALL, 5 );

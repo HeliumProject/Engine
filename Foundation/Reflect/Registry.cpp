@@ -499,7 +499,16 @@ ObjectPtr Registry::CreateInstance(int id) const
 
     if (type != m_TypesByID.end() && type->second->GetReflectionType() == ReflectionTypes::Class)
     {
-        return ReflectionCast<const Class>(type->second)->m_Create();
+        const Class* cls = ReflectionCast<const Class>(type->second);
+        HELIUM_ASSERT( cls->m_Create );
+        if ( cls->m_Create )
+        {
+            return cls->m_Create();
+        }
+        else
+        {
+            throw Reflect::TypeInformationException( TXT( "Class '%s' cannot be instanced, it is abstract" ), cls->m_FullName.c_str() );
+        }
     }
     else
     {

@@ -6,27 +6,24 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace Render
     {
-        namespace Render
+        class TextureSettings;
+
+        class CORE_API RBShaderLoader : public ShaderLoader
         {
-            class TextureSettings;
+        public:
+            RBShaderLoader();
+            virtual ~RBShaderLoader();
 
-            class CORE_API RBShaderLoader : public ShaderLoader
-            {
-            public:
-                RBShaderLoader();
-                virtual ~RBShaderLoader();
+            virtual RenderShader* ParseFile( const tchar* filename, ShaderManager* db );
 
-                virtual Render::Shader* ParseFile( const tchar* filename, Render::ShaderManager* db );
+            static void SetWrapUV( TextureSettings* settings, u32 wrapU, u32 wrapV );
+            static void SetFilter( TextureSettings* settings, u32 filter );
+            static void SetColorFormat( TextureSettings* settings, u32 colorFormat, u32 mode );
 
-                static void SetWrapUV( Render::TextureSettings* settings, u32 wrapU, u32 wrapV );
-                static void SetFilter( Render::TextureSettings* settings, u32 filter );
-                static void SetColorFormat( Render::TextureSettings* settings, u32 colorFormat, u32 mode );
-
-                static void UpdateShaderClass(Render::ShaderManager* db, const tchar* shaderFilename, u32 alphaMode);
-                static void UpdateShader(Render::Shader* sh, const Asset::ShaderAsset* shader );
-            };
-        }
+            static void UpdateShaderClass(ShaderManager* db, const tchar* shaderFilename, u32 alphaMode);
+            static void UpdateShader(RenderShader* sh, const Asset::ShaderAsset* shader );
+        };
     }
 }

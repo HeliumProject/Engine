@@ -4,9 +4,6 @@
 
 namespace Helium
 {
-    namespace Core
-    {
-        CORE_API void Initialize();
-        CORE_API void Cleanup();
-    }
+    CORE_API void CoreInitialize();
+    CORE_API void CoreCleanup();
 }

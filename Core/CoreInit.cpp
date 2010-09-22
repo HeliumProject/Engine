@@ -1,30 +1,30 @@
 #include "CoreInit.h"
-#include "Content/ContentInit.h"
-#include "Asset/AssetInit.h"
-#include "Core/Scene/SceneInit.h"
-#include "Project.h"
 
 #include "Foundation/InitializerStack.h"
+#include "Asset/AssetInit.h"
+
+#include "Core/SceneGraph/SceneGraphInit.h"
+#include "Core/SettingsManager.h"
+#include "Core/Project.h"
 
 using namespace Helium;
-using namespace Helium::Core;
 
 static u32 g_InitCount = 0;
 static Helium::InitializerStack g_InitStack;
 
-void Core::Initialize()
+void Helium::CoreInitialize()
 {
     if ( ++g_InitCount == 1 )
     {
-        g_InitStack.Push( &Content::Initialize,     &Content::Cleanup );
         g_InitStack.Push( &Asset::Initialize,       &Asset::Cleanup );
-        g_InitStack.Push( &Core::SceneInitialize,   &Core::SceneCleanup );
+        g_InitStack.Push( &SceneGraph::Initialize,  &SceneGraph::Cleanup );
 
-        g_InitStack.Push( Reflect::RegisterClassType<Core::Project>( TXT("Project") ) );
+        g_InitStack.Push( Reflect::RegisterClassType< Project >() );
+        g_InitStack.Push( Reflect::RegisterClassType< SettingsManager >() ); 
     }
 }
 
-void Core::Cleanup()
+void Helium::CoreCleanup()
 {
     if ( --g_InitCount == 0 )
     {

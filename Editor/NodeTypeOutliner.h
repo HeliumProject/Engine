@@ -2,11 +2,11 @@
 
 #include "Editor/API.h"
 #include "Editor/SceneOutliner.h"
-#include "Core/Scene/SceneNodeType.h"
+#include "Core/SceneGraph/SceneNodeType.h"
 
 namespace Helium
 {
-    namespace Core
+    namespace SceneGraph
     {
         class SceneNode;
         struct NodeChangeArgs;
@@ -27,30 +27,30 @@ namespace Helium
 
             // Public functions
         public:
-            NodeTypeOutliner( Core::SceneManager* sceneManager );
+            NodeTypeOutliner( SceneGraph::SceneManager* sceneManager );
             virtual ~NodeTypeOutliner();
             void AddNodeTypes();
 
             // Helpers
         private:
-            void AddNodeType( Core::SceneNodeType* nodeType );
-            void AddInstance( Core::SceneNode* instance );
-            void RemoveNodeType( Core::SceneNodeType* nodeType );
-            void RemoveInstance( Core::SceneNode* instance );
+            void AddNodeType( SceneGraph::SceneNodeType* nodeType );
+            void AddInstance( SceneGraph::SceneNode* instance );
+            void RemoveNodeType( SceneGraph::SceneNodeType* nodeType );
+            void RemoveInstance( SceneGraph::SceneNode* instance );
 
             // Overrides from SceneOutliner
             SortTreeCtrl* CreateTreeCtrl( wxWindow* parent, wxWindowID id ) HELIUM_OVERRIDE;
             virtual void Clear() HELIUM_OVERRIDE;
-            virtual void CurrentSceneChanged( Core::Scene* oldScene ) HELIUM_OVERRIDE;
+            virtual void CurrentSceneChanged( SceneGraph::Scene* oldScene ) HELIUM_OVERRIDE;
             virtual void ConnectSceneListeners() HELIUM_OVERRIDE;
             virtual void DisconnectSceneListeners() HELIUM_OVERRIDE;
 
             // Application callbacks
         private:
-            void NodeTypeAdded( const Core::NodeTypeExistenceArgs& args );
-            void NodeTypeRemoved( const Core::NodeTypeExistenceArgs& args );
-            void NodeAddedToType( const Core::NodeTypeChangeArgs& args );
-            void NodeRemovedFromType( const Core::NodeTypeChangeArgs& args );
+            void NodeTypeAdded( const SceneGraph::NodeTypeExistenceArgs& args );
+            void NodeTypeRemoved( const SceneGraph::NodeTypeExistenceArgs& args );
+            void NodeAddedToType( const SceneGraph::NodeTypeChangeArgs& args );
+            void NodeRemovedFromType( const SceneGraph::NodeTypeChangeArgs& args );
 
         private:
             // GUI callbacks

@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "NodeTypeOutliner.h"
-#include "Core/Scene/Scene.h"
+#include "Core/SceneGraph/Scene.h"
 
 #include "Foundation/Log.h"
 
@@ -8,12 +8,12 @@
 
 using namespace Helium;
 using namespace Helium::Editor;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-NodeTypeOutliner::NodeTypeOutliner( Core::SceneManager* sceneManager )
+NodeTypeOutliner::NodeTypeOutliner( SceneGraph::SceneManager* sceneManager )
 : SceneOutliner( sceneManager )
 , m_InvisibleRoot( NULL )
 {
@@ -44,8 +44,8 @@ void NodeTypeOutliner::AddNodeTypes()
             m_TreeCtrl->DisableSorting();
 
             // For each node type, add it to the tree
-            Core::HM_StrToSceneNodeTypeSmartPtr::const_iterator itr = m_CurrentScene->GetNodeTypesByName().begin();
-            Core::HM_StrToSceneNodeTypeSmartPtr::const_iterator end = m_CurrentScene->GetNodeTypesByName().end();
+            SceneGraph::HM_StrToSceneNodeTypeSmartPtr::const_iterator itr = m_CurrentScene->GetNodeTypesByName().begin();
+            SceneGraph::HM_StrToSceneNodeTypeSmartPtr::const_iterator end = m_CurrentScene->GetNodeTypesByName().end();
             for ( ; itr != end; ++itr )
             {
                 const SceneNodeTypePtr& nodeType = itr->second;
@@ -63,7 +63,7 @@ void NodeTypeOutliner::AddNodeTypes()
 // Adds the specified node type to the tree.  Any instances that are part of 
 // the node type are also added.
 // 
-void NodeTypeOutliner::AddNodeType( Core::SceneNodeType* nodeType )
+void NodeTypeOutliner::AddNodeType( SceneGraph::SceneNodeType* nodeType )
 {
     m_TreeCtrl->Freeze();
     bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
@@ -92,7 +92,7 @@ void NodeTypeOutliner::AddNodeType( Core::SceneNodeType* nodeType )
 // Adds an instance to the tree.  The instance will appear under the node type
 // that it belongs to.
 // 
-void NodeTypeOutliner::AddInstance( Core::SceneNode* instance )
+void NodeTypeOutliner::AddInstance( SceneGraph::SceneNode* instance )
 {
     EDITOR_SCOPE_TIMER( ("") );
 
@@ -112,7 +112,7 @@ void NodeTypeOutliner::AddInstance( Core::SceneNode* instance )
 // items of the tree.  The children of the node type should have already been
 // removed from the tree.
 // 
-void NodeTypeOutliner::RemoveNodeType( Core::SceneNodeType* nodeType )
+void NodeTypeOutliner::RemoveNodeType( SceneGraph::SceneNodeType* nodeType )
 {
     EDITOR_SCOPE_TIMER( ("") );
 #ifdef _DEBUG
@@ -133,7 +133,7 @@ void NodeTypeOutliner::RemoveNodeType( Core::SceneNodeType* nodeType )
 ///////////////////////////////////////////////////////////////////////////////
 // Removes the specified instance from the tree.
 // 
-void NodeTypeOutliner::RemoveInstance( Core::SceneNode* instance )
+void NodeTypeOutliner::RemoveInstance( SceneGraph::SceneNode* instance )
 {
     DeleteItem( instance );
 }
@@ -147,7 +147,7 @@ void NodeTypeOutliner::OnBeginLabelEdit( wxTreeEvent& args )
 
     // If a valid Object was not found, or if the the object is not
     // a dependency node, we won't allow it's name to be changed.
-    if ( !found || !found->HasType( Reflect::GetType<Core::HierarchyNode>() ) )
+    if ( !found || !found->HasType( Reflect::GetType<SceneGraph::HierarchyNode>() ) )
     {
         args.Veto();
     }
@@ -183,7 +183,7 @@ void NodeTypeOutliner::Clear()
 // Called when the base class has finished changing the current scene.  Loads
 // the node types into the tree control.
 // 
-void NodeTypeOutliner::CurrentSceneChanged( Core::Scene* oldScene )
+void NodeTypeOutliner::CurrentSceneChanged( SceneGraph::Scene* oldScene )
 {
     AddNodeTypes();
 }
@@ -241,7 +241,7 @@ void NodeTypeOutliner::DisconnectSceneListeners()
 // Callback for when a new node type is added to the scene.  Adds a root item
 // to the scene to represent the new node type.
 // 
-void NodeTypeOutliner::NodeTypeAdded( const Core::NodeTypeExistenceArgs& args )
+void NodeTypeOutliner::NodeTypeAdded( const SceneGraph::NodeTypeExistenceArgs& args )
 {
     AddNodeType( args.m_NodeType );
 
@@ -253,7 +253,7 @@ void NodeTypeOutliner::NodeTypeAdded( const Core::NodeTypeExistenceArgs& args )
 // Callback for when a node type is removed from the scene.  Removes the 
 // corresponding tree item from the view.
 // 
-void NodeTypeOutliner::NodeTypeRemoved( const Core::NodeTypeExistenceArgs& args )
+void NodeTypeOutliner::NodeTypeRemoved( const SceneGraph::NodeTypeExistenceArgs& args )
 {
     RemoveNodeType( args.m_NodeType );
 
@@ -265,7 +265,7 @@ void NodeTypeOutliner::NodeTypeRemoved( const Core::NodeTypeExistenceArgs& args 
 // Callback for when a scene node is added to a node type.  Adds a tree item
 // representing the scene node as a child its node type.
 // 
-void NodeTypeOutliner::NodeAddedToType( const Core::NodeTypeChangeArgs& args )
+void NodeTypeOutliner::NodeAddedToType( const SceneGraph::NodeTypeChangeArgs& args )
 {
     AddInstance( args.m_Node );
 }
@@ -274,7 +274,7 @@ void NodeTypeOutliner::NodeAddedToType( const Core::NodeTypeChangeArgs& args )
 // Callback for when a scene node is removed from a node type.  Removes the
 // corresponding tree item from the view.
 // 
-void NodeTypeOutliner::NodeRemovedFromType( const Core::NodeTypeChangeArgs& args )
+void NodeTypeOutliner::NodeRemovedFromType( const SceneGraph::NodeTypeChangeArgs& args )
 {
     RemoveInstance( args.m_Node );
 }

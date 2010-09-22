@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  4 2010)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -383,6 +383,14 @@ namespace Helium
 			private:
 			
 			protected:
+				enum
+				{
+					ID_OrbitCamera = 1000,
+					ID_FrontCamera,
+					ID_SideCamera,
+					ID_TopCamera,
+				};
+				
 				wxPanel* m_ToolPanel;
 				wxBitmapButton* m_FrameOriginButton;
 				wxBitmapButton* m_FrameSelectedButton;
@@ -420,8 +428,7 @@ namespace Helium
 				virtual void OnFrameSelected( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnPreviousView( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnNextView( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnHighlightMode( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnViewCameraChange( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnToggleHighlightMode( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnViewChange( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnColorMode( wxCommandEvent& event ) { event.Skip(); }
 				

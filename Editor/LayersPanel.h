@@ -6,9 +6,9 @@
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Container/OrderedSet.h"
 
-#include "Core/Scene/Scene.h"
-#include "Core/Scene/Layer.h"
-#include "Core/Scene/SceneManager.h"
+#include "Core/SceneGraph/Scene.h"
+#include "Core/SceneGraph/Layer.h"
+#include "Core/SceneGraph/SceneManager.h"
 
 namespace Helium
 {
@@ -25,7 +25,7 @@ namespace Helium
             class NameChangeInfo
             {
             public:
-                Core::Layer* m_Layer;
+                SceneGraph::Layer* m_Layer;
                 tstring m_OldName;
 
             public:
@@ -35,11 +35,11 @@ namespace Helium
             };
 
         public:
-            LayersPanel( Core::SceneManager* manager, wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+            LayersPanel( SceneGraph::SceneManager* manager, wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
             virtual ~LayersPanel();
 
-            bool AddLayer( Core::Layer* layer );
-            bool RemoveLayer( Core::Layer* layer );
+            bool AddLayer( SceneGraph::Layer* layer );
+            bool RemoveLayer( SceneGraph::Layer* layer );
             void BeginBatch();
             void EndBatch();
 
@@ -55,13 +55,13 @@ namespace Helium
 
             virtual void  UnlinkSelectedElements()              {}
             virtual void  SelectLinkedElements()                {}
-            virtual void  GenerateLayerName(Core::Layer* layer) {}
+            virtual void  GenerateLayerName(SceneGraph::Layer* layer) {}
             virtual void  CleanUpLayers()                       {}
 
         protected:
-            Core::SceneManager*     m_SceneManager;
-            Core::Scene*            m_Scene;
-            Core::M_LayerDumbPtr    m_Layers;
+            SceneGraph::SceneManager*     m_SceneManager;
+            SceneGraph::Scene*            m_Scene;
+            SceneGraph::M_LayerDumbPtr    m_Layers;
             Grid*                   m_Grid;
             NameChangeInfo          m_NameChangeInfo;
 
@@ -91,16 +91,16 @@ namespace Helium
             // Event callbacks
             // 
         private:
-            void SelectionChanged( const Core::SelectionChangeArgs& args );
-            void NameChanging( const Core::SceneNodeChangeArgs& args );
-            void NameChanged( const Core::SceneNodeChangeArgs& args );
+            void SelectionChanged( const SceneGraph::SelectionChangeArgs& args );
+            void NameChanging( const SceneGraph::SceneNodeChangeArgs& args );
+            void NameChanged( const SceneGraph::SceneNodeChangeArgs& args );
             void LayerVisibleChanged( const GridRowChangeArgs& args );
             void LayerSelectableChanged( const GridRowChangeArgs& args );
             void RowRenamed( const GridRowRenamedArgs& args );
-            void CurrentSceneChanging( const Core::SceneChangeArgs& args );
-            void CurrentSceneChanged( const Core::SceneChangeArgs& args );
-            void NodeAdded( const Core::NodeChangeArgs& args );
-            void NodeRemoved( const Core::NodeChangeArgs& args );
+            void CurrentSceneChanging( const SceneGraph::SceneChangeArgs& args );
+            void CurrentSceneChanged( const SceneGraph::SceneChangeArgs& args );
+            void NodeAdded( const SceneGraph::NodeChangeArgs& args );
+            void NodeRemoved( const SceneGraph::NodeChangeArgs& args );
         };
     }
 }

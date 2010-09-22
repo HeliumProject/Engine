@@ -4,6 +4,8 @@
 #include "Editor/EditorIDs.h"
 #include "Editor/EditorGenerated.h"
 
+#include "Core/SceneGraph/CameraSettings.h"
+
 #include "ViewPanel.h"
 #include "ArtProvider.h"
 
@@ -11,8 +13,9 @@
 
 using namespace Helium;
 using namespace Helium::Editor;
+using namespace Helium::SceneGraph;
 
-ViewPanel::ViewPanel( Core::SettingsManager* settingsManager, wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style )
+ViewPanel::ViewPanel( SettingsManager* settingsManager, wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style )
 : ViewPanelGenerated( parent, id, pos, size, style )
 {
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )
@@ -55,6 +58,14 @@ ViewPanel::ViewPanel( Core::SettingsManager* settingsManager, wxWindow *parent, 
         //Thaw();
     }
 
+#pragma TODO( "Remove this block when wxFormBuilder fully supports wxToggleButton" )
+    {
+        m_OrbitCameraToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+	    m_FrontCameraToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+	    m_SideCameraToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+	    m_TopCameraToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+    }
+
     m_FrameOriginButton->SetHelpText( TXT( "Frame the origin in the viewport." ) );
     m_FrameSelectedButton->SetHelpText( TXT( "Frame the selected item in the viewport." ) );
 
@@ -88,23 +99,7 @@ ViewPanel::ViewPanel( Core::SettingsManager* settingsManager, wxWindow *parent, 
     m_ViewCanvas = new Editor::ViewCanvas( settingsManager, m_ViewContainerPanel, -1, wxPoint(0,0), wxSize(150,250), wxNO_BORDER | wxWANTS_CHARS | wxEXPAND );
     m_ViewContainerPanel->GetSizer()->Add( m_ViewCanvas, 1, wxEXPAND | wxALL, 0 );
 
-    m_HighlightModeToggleButton->SetValue( m_ViewCanvas->GetViewport().IsHighlighting() );
-
-    m_OrbitCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Orbit );
-    m_FrontCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Front );
-    m_SideCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Side );
-    m_TopCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Core::CameraModes::Top );
-
-    m_ShowAxesToggleButton->SetValue( m_ViewCanvas->GetViewport().IsAxesVisible() );
-    m_ShowGridToggleButton->SetValue( m_ViewCanvas->GetViewport().IsGridVisible() );
-    m_ShowBoundsToggleButton->SetValue( m_ViewCanvas->GetViewport().IsBoundsVisible() );
-    m_ShowStatisticsToggleButton->SetValue( m_ViewCanvas->GetViewport().IsStatisticsVisible() );
-
-    m_FrustumCullingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->IsViewFrustumCulling() );
-    m_BackfaceCullingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->IsBackFaceCulling() );
-
-    m_WireframeShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == Core::ShadingModes::Wireframe );
-    m_MaterialShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == Core::ShadingModes::Material );
+    RefreshButtonStates();
 
     //ViewColorMode colorMode = MainFramePreferences()->GetViewPreferences()->GetColorMode();
     //M_IDToColorMode::const_iterator colorModeItr = m_ColorModeLookup.begin();
@@ -130,6 +125,27 @@ ViewPanel::ViewPanel( Core::SettingsManager* settingsManager, wxWindow *parent, 
     Connect( ViewPanelEvents::PreviousView, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnPreviousView ), NULL, this );
 
     Layout();
+}
+
+void ViewPanel::RefreshButtonStates()
+{
+    m_HighlightModeToggleButton->SetValue( m_ViewCanvas->GetViewport().IsHighlighting() );
+
+    m_OrbitCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraModes::Orbit );
+    m_FrontCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraModes::Front );
+    m_SideCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraModes::Side );
+    m_TopCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraModes::Top );
+
+    m_ShowAxesToggleButton->SetValue( m_ViewCanvas->GetViewport().IsAxesVisible() );
+    m_ShowGridToggleButton->SetValue( m_ViewCanvas->GetViewport().IsGridVisible() );
+    m_ShowBoundsToggleButton->SetValue( m_ViewCanvas->GetViewport().IsBoundsVisible() );
+    m_ShowStatisticsToggleButton->SetValue( m_ViewCanvas->GetViewport().IsStatisticsVisible() );
+
+    m_FrustumCullingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->IsViewFrustumCulling() );
+    m_BackfaceCullingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->IsBackFaceCulling() );
+
+    m_WireframeShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == SceneGraph::ShadingModes::Wireframe );
+    m_MaterialShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == SceneGraph::ShadingModes::Material );
 }
 
 void ViewPanel::OnChar( wxKeyEvent& event )
@@ -169,7 +185,7 @@ void ViewPanel::OnChar( wxKeyEvent& event )
         break;
 
     case WXK_DELETE:
-        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, wxID_DELETE) );
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_DELETE ) );
         event.Skip(false);
         break;
 
@@ -298,32 +314,127 @@ void ViewPanel::OnChar( wxKeyEvent& event )
 
 void ViewPanel::OnRenderMode( wxCommandEvent& event )
 {
+    switch ( event.GetId() )
+    {
+    case ViewPanelEvents::Wireframe:
+        {
+            m_ViewCanvas->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Wireframe );
+            Refresh();
+            event.Skip( false );
+            break;
+        }
+
+    case ViewPanelEvents::Material:
+        {
+            m_ViewCanvas->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Material );
+            Refresh();
+            event.Skip( false );
+            break;
+        }
+
+    case ViewPanelEvents::Texture:
+        {
+            m_ViewCanvas->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Texture );
+            Refresh();
+            event.Skip( false );
+            break;
+        }
+
+    default:
+        event.Skip();
+        event.ResumePropagation( wxEVENT_PROPAGATE_MAX );
+        break;
+    }
 }
 
 void ViewPanel::OnCamera( wxCommandEvent& event )
 {
+    switch ( event.GetId() )
+    {
+    case ViewPanelEvents::OrbitCamera:
+    case ID_OrbitCamera:
+        {
+            m_ViewCanvas->GetViewport().SetCameraMode( CameraModes::Orbit );
+            Refresh();
+            event.Skip( false );
+            break;
+        }
+
+    case ViewPanelEvents::FrontCamera:
+    case ID_FrontCamera:
+        {
+            m_ViewCanvas->GetViewport().SetCameraMode( CameraModes::Front );
+            Refresh();
+            event.Skip( false );
+            break;
+        }
+
+    case ViewPanelEvents::SideCamera:
+    case ID_SideCamera:
+        {
+            m_ViewCanvas->GetViewport().SetCameraMode( CameraModes::Side );
+            Refresh();
+            event.Skip( false );
+            break;
+        }
+
+    case ViewPanelEvents::TopCamera:
+    case ID_TopCamera:
+        {
+            m_ViewCanvas->GetViewport().SetCameraMode( CameraModes::Top );
+            Refresh();
+            event.Skip( false );
+            break;
+        }
+
+    default:
+        event.Skip();
+        event.ResumePropagation( wxEVENT_PROPAGATE_MAX );
+        break;
+    }
+
+    RefreshButtonStates();
 }
 
 void ViewPanel::OnFrameOrigin( wxCommandEvent& event )
 {
+    m_ViewCanvas->GetViewport().GetCamera()->Reset();
+    Refresh();
+    event.Skip( false );
 }
 
 void ViewPanel::OnFrameSelected( wxCommandEvent& event )
 {
+    if ( !wxGetApp().GetFrame()->GetSceneManager().HasCurrentScene() )
+    {
+        event.Skip();
+        event.ResumePropagation( wxEVENT_PROPAGATE_MAX );
+        return;
+    }
+
+    wxGetApp().GetFrame()->GetSceneManager().GetCurrentScene()->FrameSelected();
+    Refresh();
+    event.Skip( false );
 }
 
 void ViewPanel::OnToggleHighlightMode( wxCommandEvent& event )
 {
+    m_ViewCanvas->GetViewport().SetHighlighting( !m_ViewCanvas->GetViewport().IsHighlighting() );
+    m_HighlightModeToggleButton->SetValue( m_ViewCanvas->GetViewport().IsHighlighting() );
+    Refresh();
+    event.Skip( false );
 }
 
 void ViewPanel::OnNextView( wxCommandEvent& event )
 {
     m_ViewCanvas->GetViewport().NextCameraMode();
     Refresh();
+    RefreshButtonStates();
 }
 
 void ViewPanel::OnPreviousView( wxCommandEvent& event )
 {
     m_ViewCanvas->GetViewport().PreviousCameraMode();
     Refresh();
+    RefreshButtonStates();
 }

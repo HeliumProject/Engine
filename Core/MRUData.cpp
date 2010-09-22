@@ -4,7 +4,6 @@
 #include "Platform/Debug.h"
 
 using namespace Helium;
-using namespace Helium::Core;
 
 const std::vector< Helium::Path >& MRUData::GetPaths() const
 {

@@ -9,12 +9,11 @@ using namespace Helium;
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-Document::Document( const tstring& path, const tstring& name )
-: m_Name( name )
+Document::Document( const tstring& path )
+: m_Path( path )
 , m_IsModified( false )
 , m_AllowChanges( false )
 , m_Revision( -1 )
-, m_Path( path )
 {
     UpdateFileInfo();
 }
@@ -42,11 +41,6 @@ void Document::UpdateFileInfo()
 
             m_Revision = rcsFile.m_LocalRevision;
         }
-
-        if ( m_Name.empty() )
-        {
-            m_Name = m_Path.Filename();
-        }
     }
 }
 
@@ -61,29 +55,14 @@ Document::~Document()
 // Sets the path to this file.  The name of the file is also updated.  Notifies
 // any interested listeners about this event.
 // 
-void Document::SetPath( const Helium::Path& newFilePath, const tstring& newName )
+void Document::SetPath( const Helium::Path& newPath )
 {
-    Helium::Path    oldFilePath = m_Path.Get();
-    tstring         oldFileName = m_Name;
+    Helium::Path oldPath = m_Path.Get();
 
-    m_Path.Set( newFilePath );
-    m_Name = newName;
+    m_Path = newPath;
     UpdateFileInfo();
 
-    m_PathChanged.Raise( DocumentPathChangedArgs( this, oldFilePath, oldFileName ) );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the friendly name of the file.
-// 
-const tstring& Document::GetFileName() const
-{
-    return m_Name;
-}
-
-u64 Document::GetHash() const
-{
-    return m_Path.Hash();
+    m_PathChanged.Raise( DocumentPathChangedArgs( this, oldPath ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

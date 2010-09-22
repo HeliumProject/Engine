@@ -12,12 +12,12 @@ namespace Helium
     // Arguments for file open, close, etc.
     struct DocumentChangedArgs
     {
-        const Document* m_Document;
-
         DocumentChangedArgs( const Document* document )
             : m_Document( document )
         {
         }
+
+        const Document* m_Document;
     };
     // Event delegate for functions that take DocumentChangedArgs
     typedef Helium::Signature< const DocumentChangedArgs& > DocumentChangedSignature;
@@ -25,15 +25,13 @@ namespace Helium
     // Arguments for a file being renamed (contains the new and old names)
     struct DocumentPathChangedArgs : public DocumentChangedArgs
     {
-        const Helium::Path& m_OldFilePath;
-        const tstring&      m_OldFileName;
-
-        DocumentPathChangedArgs( Document* document, const Helium::Path& oldFilePath, const tstring& oldFileName )
+        DocumentPathChangedArgs( Document* document, const Helium::Path& oldPath )
             : DocumentChangedArgs( document )
-            , m_OldFilePath( oldFilePath )
-            , m_OldFileName( oldFileName )
+            , m_OldPath( oldPath )
         {
         }
+
+        const Helium::Path& m_OldPath;
     };
 
     // Event delegate for functions that take DocumentChangedArgs
@@ -46,27 +44,15 @@ namespace Helium
     class FOUNDATION_API Document : public Helium::RefCountBase< Document >
     {
     public:
-        Document( const tstring& path, const tstring& name = TXT( "" ) );
+        Document( const tstring& path );
         virtual ~Document();
 
         const Helium::Path& GetPath() const
         {
             return m_Path;
         }
-        void SetPath( const Helium::Path& path, const tstring& newName = TXT( "" ) );
+        void SetPath( const Helium::Path& path );
 
-        const tstring& GetFilePath() const
-        {
-            return m_Path.Get();
-        }
-        void SetFilePath( const tstring& newFilePath, const tstring& newName = TXT( "" ) )
-        {
-            SetPath( newFilePath, newName );
-        }
-
-        const tstring& GetFileName() const;
-
-        u64 GetHash() const;
         int GetRevision() const;
 
         virtual bool AllowChanges() const;
@@ -154,7 +140,6 @@ namespace Helium
 
     private:
         Helium::Path        m_Path;
-        tstring             m_Name;          // the friendly name (for dialogs)
         bool                m_IsModified;    // have we been changed since we saved?
         bool                m_AllowChanges;  // allows override of checkout (but you can't save)
         i32                 m_Revision;

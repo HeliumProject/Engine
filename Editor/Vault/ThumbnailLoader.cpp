@@ -5,10 +5,11 @@
 #include "Core/Asset/AssetClass.h"
 #include "Core/Asset/Classes/ShaderAsset.h"
 #include "Core/Render/DeviceManager.h"
-#include "Core/Scene/Render.h"
+#include "Core/SceneGraph/Render.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::Render;
+using namespace Helium::SceneGraph;
 using namespace Helium::Editor;
 
 void* ThumbnailLoader::LoadThread::Entry()
@@ -82,7 +83,7 @@ void* ThumbnailLoader::LoadThread::Entry()
         args.m_Path = &path;
         args.m_Cancelled = false;
 
-        if ( Core::IsSupportedTexture( path.Get() ) )
+        if ( SceneGraph::IsSupportedTexture( path.Get() ) )
         {
             IDirect3DTexture9* texture = NULL;
             if ( texture = LoadTexture( device, path.Get() ) )
@@ -119,7 +120,7 @@ void* ThumbnailLoader::LoadThread::Entry()
                     Asset::TexturePtr colorMap = Asset::AssetClass::LoadAssetClass< Asset::Texture >( shader->m_ColorMapPath );
                     if ( colorMap.ReferencesObject() )
                     {
-                        if ( colorMap->GetPath().Exists() && Core::IsSupportedTexture( colorMap->GetPath().Get() ) )
+                        if ( colorMap->GetPath().Exists() && SceneGraph::IsSupportedTexture( colorMap->GetPath().Get() ) )
                         {
                             IDirect3DTexture9* texture = NULL;
                             if ( texture = LoadTexture( device, colorMap->GetPath().Get() ) )
@@ -139,7 +140,7 @@ void* ThumbnailLoader::LoadThread::Entry()
     return NULL;
 }
 
-ThumbnailLoader::ThumbnailLoader( Render::DeviceManager* d3dManager, const tstring& thumbnailDirectory )
+ThumbnailLoader::ThumbnailLoader( DeviceManager* d3dManager, const tstring& thumbnailDirectory )
 : m_LoadThread( *this )
 , m_Quit( false )
 , m_ThumbnailDirectory( thumbnailDirectory )

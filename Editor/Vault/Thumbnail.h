@@ -13,8 +13,8 @@ namespace Helium
         class Thumbnail : public Helium::RefCountBase< Thumbnail >
         {
         public:
-            Thumbnail( Core::Render::DeviceManager* d3dManager );
-            Thumbnail( Core::Render::DeviceManager* d3dManager, IDirect3DTexture9* texture );
+            Thumbnail( Render::DeviceManager* d3dManager );
+            Thumbnail( Render::DeviceManager* d3dManager, IDirect3DTexture9* texture );
             virtual ~Thumbnail();
 
             bool FromIcon( HICON icon );
@@ -26,7 +26,7 @@ namespace Helium
             }
 
         private:
-            Core::Render::DeviceManager* m_DeviceManager;
+            Render::DeviceManager* m_DeviceManager;
             IDirect3DTexture9* m_Texture;
             bool m_IsFromIcon;
         };

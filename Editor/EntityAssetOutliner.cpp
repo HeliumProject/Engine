@@ -3,20 +3,20 @@
 
 #include "Editor/ArtProvider.h"
 
-#include "Core/Scene/EntityInstance.h"
-#include "Core/Scene/EntityInstanceType.h"
-#include "Core/Scene/EntitySet.h"
-#include "Core/Scene/Scene.h"
+#include "Core/SceneGraph/EntityInstance.h"
+#include "Core/SceneGraph/EntityInstanceType.h"
+#include "Core/SceneGraph/EntitySet.h"
+#include "Core/SceneGraph/Scene.h"
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-EntityAssetOutliner::EntityAssetOutliner( Core::SceneManager* sceneManager )
+EntityAssetOutliner::EntityAssetOutliner( SceneGraph::SceneManager* sceneManager )
 : SceneOutliner( sceneManager )
 , m_InvisibleRoot( NULL )
 {
@@ -45,12 +45,12 @@ void EntityAssetOutliner::AddEntityTypes()
             m_TreeCtrl->DisableSorting();
 
             // Iterate over the node types, looking for the entity types
-            EntityType* entityType = NULL;
+            EntityInstanceType* entityType = NULL;
             HM_StrToSceneNodeTypeSmartPtr::const_iterator typeItr = m_CurrentScene->GetNodeTypesByName().begin();
             HM_StrToSceneNodeTypeSmartPtr::const_iterator typeEnd = m_CurrentScene->GetNodeTypesByName().end();
             for ( ; typeItr != typeEnd; ++typeItr )
             {
-                entityType = Reflect::ObjectCast< Core::EntityType >( typeItr->second );
+                entityType = Reflect::ObjectCast< SceneGraph::EntityInstanceType >( typeItr->second );
                 if ( entityType )
                 {
                     AddEntityType( entityType );
@@ -68,14 +68,14 @@ void EntityAssetOutliner::AddEntityTypes()
 // Hooks up listeners to the entity type for changes and attempts to add any
 // existing entity class sets to the tree.
 // 
-void EntityAssetOutliner::AddEntityType( Core::EntityType* entityType )
+void EntityAssetOutliner::AddEntityType( SceneGraph::EntityInstanceType* entityType )
 {
     // Iterate over all the entity instances and add them to the tree
     M_InstanceSetSmartPtr::const_iterator classItr = entityType->GetSets().begin();
     M_InstanceSetSmartPtr::const_iterator classEnd = entityType->GetSets().end();
     for ( ; classItr != classEnd; ++classItr )
     {
-        EntitySet* set = Reflect::ObjectCast< Core::EntitySet >( classItr->second );
+        EntitySet* set = Reflect::ObjectCast< SceneGraph::EntitySet >( classItr->second );
         if (set)
         {
             AddEntitySet( set );
@@ -91,14 +91,14 @@ void EntityAssetOutliner::AddEntityType( Core::EntityType* entityType )
 // Unhooks listeners to the entity type and attempts to remove any existing
 // entity class sets from the tree.
 // 
-void EntityAssetOutliner::RemoveEntityType( Core::EntityType* entityType )
+void EntityAssetOutliner::RemoveEntityType( SceneGraph::EntityInstanceType* entityType )
 {
     // Iterate over all the entity instances and add them to the tree
     M_InstanceSetSmartPtr::const_iterator classItr = entityType->GetSets().begin();
     M_InstanceSetSmartPtr::const_iterator classEnd = entityType->GetSets().end();
     for ( ; classItr != classEnd; ++classItr )
     {
-        EntitySet* set = Reflect::ObjectCast< Core::EntitySet >( classItr->second );
+        EntitySet* set = Reflect::ObjectCast< SceneGraph::EntitySet >( classItr->second );
         if (set)
         {
             RemoveEntitySet( set );
@@ -113,7 +113,7 @@ void EntityAssetOutliner::RemoveEntityType( Core::EntityType* entityType )
 // Adds the specified entity class set to the tree (including the instances
 // that belong to the set).
 // 
-void EntityAssetOutliner::AddEntitySet( Core::EntitySet* classSet )
+void EntityAssetOutliner::AddEntitySet( SceneGraph::EntitySet* classSet )
 {
     if ( m_CurrentScene )
     {
@@ -138,7 +138,7 @@ void EntityAssetOutliner::AddEntitySet( Core::EntitySet* classSet )
         S_InstanceDumbPtr::const_iterator entityEnd = classSet->GetInstances().end();
         for ( ; entityItr != entityEnd; ++entityItr )
         {
-            AddEntityInstance( Reflect::AssertCast< Core::EntityInstance >(*entityItr) );
+            AddEntityInstance( Reflect::AssertCast< SceneGraph::EntityInstance >(*entityItr) );
         }
 
         m_TreeCtrl->EnableSorting( isSortingEnabled );
@@ -152,7 +152,7 @@ void EntityAssetOutliner::AddEntitySet( Core::EntitySet* classSet )
 // Removes the entity class set from the tree (all instances of this set should
 // have already been removed).
 // 
-void EntityAssetOutliner::RemoveEntitySet( Core::EntitySet* classSet )
+void EntityAssetOutliner::RemoveEntitySet( SceneGraph::EntitySet* classSet )
 {
     M_TreeItems::const_iterator found = m_Items.find( classSet );
     if ( found != m_Items.end() )
@@ -173,7 +173,7 @@ void EntityAssetOutliner::RemoveEntitySet( Core::EntitySet* classSet )
 // Adds the specified entity to the tree.  The entity will be parented under
 // its class set.
 // 
-void EntityAssetOutliner::AddEntityInstance( Core::EntityInstance* entityInstance )
+void EntityAssetOutliner::AddEntityInstance( SceneGraph::EntityInstance* entityInstance )
 {
     EDITOR_SCOPE_TIMER( ("") );
 
@@ -196,7 +196,7 @@ void EntityAssetOutliner::AddEntityInstance( Core::EntityInstance* entityInstanc
 ///////////////////////////////////////////////////////////////////////////////
 // Removes the specified entity instance from the tree.
 // 
-void EntityAssetOutliner::RemoveEntityInstance( Core::EntityInstance* entityInstance )
+void EntityAssetOutliner::RemoveEntityInstance( SceneGraph::EntityInstance* entityInstance )
 {
     EDITOR_SCOPE_TIMER( ("") );
 
@@ -234,7 +234,7 @@ void EntityAssetOutliner::Clear()
 // Called when the base class has finished changing the current scene.  Loads
 // the entity class sets into the tree control.
 // 
-void EntityAssetOutliner::CurrentSceneChanged( Core::Scene* oldScene )
+void EntityAssetOutliner::CurrentSceneChanged( SceneGraph::Scene* oldScene )
 {
     AddEntityTypes();
 }
@@ -274,11 +274,11 @@ void EntityAssetOutliner::DisconnectSceneListeners()
 // Callback for when an entity set is added to an entity type.  If the set is
 // an entity class set, it will be added to the tree.
 // 
-void EntityAssetOutliner::SetAdded( const Core::InstanceTypeChangeArgs& args )
+void EntityAssetOutliner::SetAdded( const SceneGraph::InstanceTypeChangeArgs& args )
 {
-    if ( args.m_InstanceSet->HasType( Reflect::GetType< Core::EntitySet >() ) )
+    if ( args.m_InstanceSet->HasType( Reflect::GetType< SceneGraph::EntitySet >() ) )
     {
-        AddEntitySet( Reflect::DangerousCast< Core::EntitySet >( args.m_InstanceSet ) );
+        AddEntitySet( Reflect::DangerousCast< SceneGraph::EntitySet >( args.m_InstanceSet ) );
     }
 }
 
@@ -286,52 +286,52 @@ void EntityAssetOutliner::SetAdded( const Core::InstanceTypeChangeArgs& args )
 // Callback for when an entity set is removed from an entity type.  If the set
 // is an entity class set, it will be removed from the tree.
 // 
-void EntityAssetOutliner::SetRemoved( const Core::InstanceTypeChangeArgs& args )
+void EntityAssetOutliner::SetRemoved( const SceneGraph::InstanceTypeChangeArgs& args )
 {
-    if ( args.m_InstanceSet->HasType( Reflect::GetType< Core::EntitySet >() ) )
+    if ( args.m_InstanceSet->HasType( Reflect::GetType< SceneGraph::EntitySet >() ) )
     {
-        RemoveEntitySet( Reflect::DangerousCast< Core::EntitySet >( args.m_InstanceSet ) );
+        RemoveEntitySet( Reflect::DangerousCast< SceneGraph::EntitySet >( args.m_InstanceSet ) );
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Callback for when an entity is added to the scene.  Updates the tree control.
 // 
-void EntityAssetOutliner::EntityAdded( const Core::InstanceSetChangeArgs& args )
+void EntityAssetOutliner::EntityAdded( const SceneGraph::InstanceSetChangeArgs& args )
 {
-    AddEntityInstance( Reflect::AssertCast< Core::EntityInstance >(args.m_Instance) );
+    AddEntityInstance( Reflect::AssertCast< SceneGraph::EntityInstance >(args.m_Instance) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Callback for when an entity is removed from the scene.  Updates the tree 
 // control.
 // 
-void EntityAssetOutliner::EntityRemoved( const Core::InstanceSetChangeArgs& args )
+void EntityAssetOutliner::EntityRemoved( const SceneGraph::InstanceSetChangeArgs& args )
 {
-    RemoveEntityInstance( Reflect::AssertCast< Core::EntityInstance >(args.m_Instance) );
+    RemoveEntityInstance( Reflect::AssertCast< SceneGraph::EntityInstance >(args.m_Instance) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Callback when a node type is added to the scene.  If the node type is an
-// Editor::EntityType, this class starts tracking it.
+// Editor::EntityInstanceType, this class starts tracking it.
 // 
-void EntityAssetOutliner::NodeTypeAdded( const Core::NodeTypeExistenceArgs& args )
+void EntityAssetOutliner::NodeTypeAdded( const SceneGraph::NodeTypeExistenceArgs& args )
 {
-    if ( args.m_NodeType->HasType( Reflect::GetType< Core::EntityType >() ) )
+    if ( args.m_NodeType->HasType( Reflect::GetType< SceneGraph::EntityInstanceType >() ) )
     {
-        AddEntityType( Reflect::DangerousCast< Core::EntityType >( args.m_NodeType ) );
+        AddEntityType( Reflect::DangerousCast< SceneGraph::EntityInstanceType >( args.m_NodeType ) );
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Callback when a node type is removed from the scene.  If the node type is
-// an Editor::EntityType, disconnect from it.
+// an Editor::EntityInstanceType, disconnect from it.
 // 
-void EntityAssetOutliner::NodeTypeRemoved( const Core::NodeTypeExistenceArgs& args )
+void EntityAssetOutliner::NodeTypeRemoved( const SceneGraph::NodeTypeExistenceArgs& args )
 {
-    if ( args.m_NodeType->HasType( Reflect::GetType< Core::EntityType >() ) )
+    if ( args.m_NodeType->HasType( Reflect::GetType< SceneGraph::EntityInstanceType >() ) )
     {
-        RemoveEntityType( Reflect::DangerousCast< Core::EntityType >( args.m_NodeType ) );
+        RemoveEntityType( Reflect::DangerousCast< SceneGraph::EntityInstanceType >( args.m_NodeType ) );
     }
 }
 
@@ -345,7 +345,7 @@ void EntityAssetOutliner::OnBeginLabelEdit( wxTreeEvent& args )
 
     // If a valid Object was not found, or if the the object is not
     // an entity node, we won't allow it's name to be changed.
-    if ( !found || !found->HasType( Reflect::GetType< Core::EntityInstance >() ) )
+    if ( !found || !found->HasType( Reflect::GetType< SceneGraph::EntityInstance >() ) )
     {
         args.Veto();
     }

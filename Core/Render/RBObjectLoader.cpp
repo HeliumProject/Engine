@@ -2,19 +2,17 @@
 #include "RBObjectLoader.h"
 #include "RBShaderLoader.h"
 
-#include "Core/Content/ContentInit.h"
-#include "Core/Content/Nodes/ContentMesh.h"
-#include "Core/Content/Nodes/ContentShader.h"
+#include "Core/SceneGraph/Mesh.h"
+#include "Core/SceneGraph/Shader.h"
 
 #include <map>
 #include <set>
 
 using namespace Helium;
-using namespace Helium::Core;
-using namespace Helium::Core::Render;
+using namespace Helium::Render;
 
 RBObjectLoader::RBObjectLoader()
-: Render::ObjectLoader()
+: ObjectLoader()
 {
 
 }
@@ -26,12 +24,12 @@ RBObjectLoader::~RBObjectLoader()
 
 u32 RBObjectLoader::ParseFile( const tchar* filename, bool winding )
 {
-    Content::V_Mesh meshes;
+    std::vector< SceneGraph::Mesh* > meshes;
 
     HELIUM_ASSERT( false );
 
 #ifdef CONTENT_REFACTOR
-    Content::Scene scene;
+    Scene scene;
 
     try
     {
@@ -40,11 +38,11 @@ u32 RBObjectLoader::ParseFile( const tchar* filename, bool winding )
     catch( Helium::Exception& e )
     {
         Log::Warning( e.What() );
-        m_parse_error = Render::PARSE_FILE_FAILED;
-        return Render::PARSE_FILE_FAILED;
+        m_parse_error = PARSE_FILE_FAILED;
+        return PARSE_FILE_FAILED;
     }
 
-    scene.GetAll< Content::Mesh >( meshes );
+    scene.GetAll< Mesh >( meshes );
 #endif
 
     std::map<u64,u32> frag_finder;
@@ -54,7 +52,7 @@ u32 RBObjectLoader::ParseFile( const tchar* filename, bool winding )
     u32 mesh_count = (u32)meshes.size();
     for ( u32 m=0;m<mesh_count;m++)
     {
-        Content::Mesh* mesh = meshes[m];
+        SceneGraph::Mesh* mesh = meshes[m];
 
         u32 master_base_position = (u32)m_positions.size()/m_posSize;
         u32 master_base_normal = (u32)m_normals.size()/3;
@@ -114,12 +112,12 @@ u32 RBObjectLoader::ParseFile( const tchar* filename, bool winding )
             if (i == frag_finder.end())
             {
                 //A fragment with this shader ID does not exist, create a new fragment        
-                Render::ShaderFrag new_frag;  
+                ShaderFrag new_frag;  
 
-                Content::Shader* shader = NULL;
+                SceneGraph::Shader* shader = NULL;
 
 #ifdef CONTENT_REFACTOR
-                shader = scene.Get< Content::Shader >( (*shaderItr ) );
+                shader = scene.Get< Shader >( (*shaderItr ) );
 #endif
 
                 if ( shader )
@@ -145,7 +143,7 @@ u32 RBObjectLoader::ParseFile( const tchar* filename, bool winding )
             // there is no way we should not be able to find the fragment, we just added them all above
             HELIUM_ASSERT(frag_idx!=frag_finder.end());
 
-            Render::ShaderFrag& frag = m_fragments[ (*frag_idx).second ];
+            ShaderFrag& frag = m_fragments[ (*frag_idx).second ];
 
             frag.m_pIndex.push_back( mesh->m_TriangleVertexIndices[f*3+0]+master_base_position );
             frag.m_pIndex.push_back( mesh->m_TriangleVertexIndices[f*3+1]+master_base_position );
@@ -183,6 +181,6 @@ u32 RBObjectLoader::ParseFile( const tchar* filename, bool winding )
         }
     }
 
-    m_parse_error = m_parse_warnings?Render::PARSE_FILE_FIXUP:Render::PARSE_FILE_OK;;
+    m_parse_error = m_parse_warnings?PARSE_FILE_FIXUP:PARSE_FILE_OK;;
     return m_parse_error;
 }

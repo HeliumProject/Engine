@@ -5,16 +5,13 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace Render
     {
-        namespace Render
+        class CORE_API OBJObjectLoader : public ObjectLoader
         {
-            class CORE_API OBJObjectLoader : public ObjectLoader
-            {
-            public:
-                u32 ParseFile(const tchar* fname, bool winding = false);
-            };
-        }
+        public:
+            u32 ParseFile(const tchar* fname, bool winding = false);
+        };
     }
 }
 

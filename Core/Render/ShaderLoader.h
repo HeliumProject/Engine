@@ -6,23 +6,20 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace Render
     {
-        namespace Render
+        class RenderShader;
+        class ShaderManager;
+
+        class CORE_API ShaderLoader : public Helium::RefCountBase<ShaderLoader>
         {
-            class Shader;
-            class ShaderManager;
+        public:
+            ShaderLoader();
+            virtual ~ShaderLoader();
 
-            class CORE_API ShaderLoader: public Helium::RefCountBase<ShaderLoader>
-            {
-            public:
-                ShaderLoader();
-                virtual ~ShaderLoader();
+            virtual RenderShader* ParseFile( const tchar* filename, ShaderManager* db ) = 0;
+        };
 
-                virtual Shader* ParseFile( const tchar* filename, ShaderManager* db ) = 0;
-            };
-
-            typedef Helium::SmartPtr<ShaderLoader> ShaderLoaderPtr;
-        }
+        typedef Helium::SmartPtr<ShaderLoader> ShaderLoaderPtr;
     }
 }

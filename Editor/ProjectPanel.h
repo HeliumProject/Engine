@@ -13,7 +13,7 @@ namespace Helium
         class ProjectViewModel : public wxDataViewModel
         {
         public:
-            void SetProject( Helium::Core::Project* project );
+            void SetProject( Project* project );
 
             void PathAdded( const Path& path );
             void PathRemoved( const Path& path );
@@ -31,7 +31,7 @@ namespace Helium
             bool IsContainer(const wxDataViewItem &) const HELIUM_OVERRIDE;
 
         protected:
-            Helium::Core::ProjectPtr    m_Project;
+            ProjectPtr    m_Project;
         };
 
         class ProjectPanel : public ProjectPanelGenerated
@@ -40,7 +40,7 @@ namespace Helium
             ProjectPanel( wxWindow* parent );
             virtual ~ProjectPanel();
 
-            void SetProject( Helium::Core::Project* project );
+            void SetProject( Project* project );
 
             // UI event handlers
 			virtual void OnAddPath( wxCommandEvent& event ) HELIUM_OVERRIDE;
@@ -49,10 +49,10 @@ namespace Helium
             virtual void OnDroppedFiles( const FileDroppedArgs& args );
 
         protected:
-            Helium::Core::ProjectPtr                            m_Project;
-            wxObjectDataPtr< ProjectViewModel >                 m_Model;
-            Helium::OrderedSet< Path* >                         m_Selected;
-            FileDropTarget*                                     m_DropTarget;
+            ProjectPtr                          m_Project;
+            wxObjectDataPtr< ProjectViewModel > m_Model;
+            OrderedSet< Path* >                 m_Selected;
+            FileDropTarget*                     m_DropTarget;
         };
     }
 }

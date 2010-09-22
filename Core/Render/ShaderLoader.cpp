@@ -2,12 +2,12 @@
 #include "ShaderLoader.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::Render;
 
-Render::ShaderLoader::ShaderLoader()
+ShaderLoader::ShaderLoader()
 {
 }
 
-Render::ShaderLoader::~ShaderLoader()
+ShaderLoader::~ShaderLoader()
 {
 }

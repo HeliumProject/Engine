@@ -6,7 +6,7 @@
 
 #include "Foundation/TimerThread.h"
 
-#include "Core/Scene/SceneManager.h"
+#include "Core/SceneGraph/SceneManager.h"
 
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
 
@@ -28,7 +28,7 @@ namespace Helium
         private:
             typedef std::set< SortTreeCtrl* > S_Trees;
 
-            Core::SceneManager* m_SceneManager;
+            SceneGraph::SceneManager* m_SceneManager;
             S_Trees m_Trees;
 
             u32 m_FreezeTreeSorting;
@@ -38,7 +38,7 @@ namespace Helium
             bool m_SelfFrozen;
 
         public:
-            TreeMonitor( Core::SceneManager* sceneManager );
+            TreeMonitor( SceneGraph::SceneManager* sceneManager );
             virtual ~TreeMonitor();
 
             void AddTree( SortTreeCtrl* tree );
@@ -50,11 +50,11 @@ namespace Helium
             bool IsFrozen() const;
 
         private:
-            void OnSceneAdded( const Core::SceneChangeArgs& args );
-            void OnSceneRemoving( const Core::SceneChangeArgs& args );
-            void OnNodeAdded( const Core::NodeChangeArgs& args );
-            void OnNodeRemoved( const Core::NodeChangeArgs& args );
-            void OnNodeRenamed( const Core::SceneNodeChangeArgs& args );
+            void OnSceneAdded( const SceneGraph::SceneChangeArgs& args );
+            void OnSceneRemoving( const SceneGraph::SceneChangeArgs& args );
+            void OnNodeAdded( const SceneGraph::NodeChangeArgs& args );
+            void OnNodeRemoved( const SceneGraph::NodeChangeArgs& args );
+            void OnNodeRenamed( const SceneGraph::SceneNodeChangeArgs& args );
             void OnThawTimer( const TimerTickArgs& args );
         };
     }

@@ -3,7 +3,7 @@
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Core/Render/Renderer.h"
-#include "Core/Scene/Camera.h"
+#include "Core/SceneGraph/Camera.h"
 
 namespace Helium
 {
@@ -11,7 +11,7 @@ namespace Helium
     {
         struct D3DEventArgs;
 
-        typedef std::vector< Core::Render::Scene* > V_Scene;
+        typedef std::vector< Render::RenderScene* > V_Scene;
 
         class RenderWindow : public wxWindow
         {
@@ -29,12 +29,12 @@ namespace Helium
             virtual void Frame();
 
         protected:
-            virtual void SetupLighting( Core::Render::Scene* scene );
+            virtual void SetupLighting( Render::RenderScene* scene );
             virtual void Draw();
             virtual void Resize( const wxSize& size );
             virtual void ShowContextMenu( const wxPoint& pos );
 
-            bool RenderScene();
+            bool DrawScene();
 
         private:
             void OnSize( wxSizeEvent& args );
@@ -52,9 +52,9 @@ namespace Helium
             void OnChangeAxisDisplay( wxCommandEvent& args );
 
         protected:
-            Core::Render::Renderer m_Render;
-            Core::Render::Scene* m_Scene;
-            Core::Camera m_Camera;
+            Render::Renderer m_Render;
+            Render::RenderScene* m_Scene;
+            SceneGraph::Camera m_Camera;
 
             bool m_IsDeviceLost;
             bool m_DisplayAxis;

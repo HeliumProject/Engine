@@ -67,7 +67,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib OpenGL32.lib glu32.lib"
 				AdditionalLibraryDirectories="$(DirectX)\lib\x86"
 				GenerateDebugInformation="true"
 			/>
@@ -143,7 +143,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib OpenGL32.lib glu32.lib"
 				AdditionalLibraryDirectories="$(DirectX)\lib\x64"
 				GenerateDebugInformation="true"
 			/>
@@ -216,7 +216,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib OpenGL32.lib glu32.lib"
 				AdditionalLibraryDirectories="$(DirectX)\lib\x86"
 				GenerateDebugInformation="true"
 			/>
@@ -290,7 +290,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib OpenGL32.lib glu32.lib"
 				AdditionalLibraryDirectories="$(DirectX)\lib\x64"
 				GenerateDebugInformation="true"
 			/>
@@ -365,7 +365,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib OpenGL32.lib glu32.lib"
 				AdditionalLibraryDirectories="$(DirectX)\lib\x86"
 				GenerateDebugInformation="true"
 			/>
@@ -441,7 +441,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib OpenGL32.lib glu32.lib"
 				AdditionalLibraryDirectories="$(DirectX)\lib\x64"
 				GenerateDebugInformation="true"
 			/>
@@ -514,7 +514,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib OpenGL32.lib glu32.lib"
 				AdditionalLibraryDirectories="$(DirectX)\lib\x86"
 				GenerateDebugInformation="true"
 			/>
@@ -588,7 +588,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib OpenGL32.lib glu32.lib"
 				AdditionalLibraryDirectories="$(DirectX)\lib\x64"
 				GenerateDebugInformation="true"
 			/>
@@ -630,182 +630,6 @@
 		/>
 	</References>
 	<Files>
-		<Filter
-			Name="Content"
-			>
-			<File
-				RelativePath=".\Content\ContentInit.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Content\ContentInit.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Content\NodeVisibility.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Content\NodeVisibility.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Content\SceneVisibility.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Content\SceneVisibility.h"
-				>
-			</File>
-			<Filter
-				Name="Nodes"
-				>
-				<File
-					RelativePath=".\Content\Nodes\ContentCamera.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentCamera.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentCurve.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentCurve.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentEntityInstance.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentEntityInstance.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentHierarchyNode.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentHierarchyNode.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentInfluence.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentInfluence.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentInstance.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentInstance.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentJointTransform.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentJointTransform.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentLayer.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentLayer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentLight.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentLight.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentLocator.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentLocator.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentMesh.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentMesh.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentPivotTransform.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentPivotTransform.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentPoint.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentPoint.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentSceneNode.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentSceneNode.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentShader.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentShader.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentSkin.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentSkin.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentTransform.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentTransform.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentVolume.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\ContentVolume.h"
-					>
-				</File>
-			</Filter>
-		</Filter>
 		<Filter
 			Name="Asset"
 			>
@@ -1003,117 +827,113 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="Scene"
+			Name="SceneGraph"
 			>
 			<File
-				RelativePath=".\Scene\PropertiesGenerator.cpp"
+				RelativePath=".\SceneGraph\PropertiesGenerator.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\PropertiesGenerator.h"
+				RelativePath=".\SceneGraph\PropertiesGenerator.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\PropertiesManager.cpp"
+				RelativePath=".\SceneGraph\PropertiesManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\PropertiesManager.h"
+				RelativePath=".\SceneGraph\PropertiesManager.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\SceneInit.cpp"
+				RelativePath=".\SceneGraph\SceneGraphInit.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\SceneInit.h"
+				RelativePath=".\SceneGraph\SceneGraphInit.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\SceneManager.cpp"
+				RelativePath=".\SceneGraph\SceneManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\SceneManager.h"
+				RelativePath=".\SceneGraph\SceneManager.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\SceneSettings.cpp"
+				RelativePath=".\SceneGraph\SceneSettings.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\SceneSettings.h"
+				RelativePath=".\SceneGraph\SceneSettings.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\Selection.cpp"
+				RelativePath=".\SceneGraph\Selection.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\Selection.h"
+				RelativePath=".\SceneGraph\Selection.h"
 				>
 			</File>
 			<Filter
-				Name="Tools"
+				Name="Tools/Manipulators"
 				>
 				<File
-					RelativePath=".\Scene\DuplicateTool.cpp"
+					RelativePath=".\SceneGraph\DuplicateTool.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\DuplicateTool.h"
+					RelativePath=".\SceneGraph\DuplicateTool.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Tool.cpp"
+					RelativePath=".\SceneGraph\Manipulator.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Tool.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Manipulators"
-				>
-				<File
-					RelativePath=".\Scene\Manipulator.cpp"
+					RelativePath=".\SceneGraph\Manipulator.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Manipulator.h"
+					RelativePath=".\SceneGraph\RotateManipulator.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\RotateManipulator.cpp"
+					RelativePath=".\SceneGraph\RotateManipulator.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\RotateManipulator.h"
+					RelativePath=".\SceneGraph\ScaleManipulator.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\ScaleManipulator.cpp"
+					RelativePath=".\SceneGraph\ScaleManipulator.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\ScaleManipulator.h"
+					RelativePath=".\SceneGraph\Tool.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\TransformManipulator.cpp"
+					RelativePath=".\SceneGraph\Tool.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\TransformManipulator.h"
+					RelativePath=".\SceneGraph\TransformManipulator.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\TranslateManipulator.cpp"
+					RelativePath=".\SceneGraph\TransformManipulator.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\TranslateManipulator.h"
+					RelativePath=".\SceneGraph\TranslateManipulator.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SceneGraph\TranslateManipulator.h"
 					>
 				</File>
 			</Filter>
@@ -1121,291 +941,291 @@
 				Name="Scene Graph"
 				>
 				<File
-					RelativePath=".\Scene\CreateTool.cpp"
+					RelativePath=".\SceneGraph\CreateTool.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\CreateTool.h"
+					RelativePath=".\SceneGraph\CreateTool.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Curve.cpp"
+					RelativePath=".\SceneGraph\Curve.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Curve.h"
+					RelativePath=".\SceneGraph\Curve.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\CurveCreateTool.cpp"
+					RelativePath=".\SceneGraph\CurveControlPoint.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\CurveCreateTool.h"
+					RelativePath=".\SceneGraph\CurveControlPoint.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\CurveEditTool.cpp"
+					RelativePath=".\SceneGraph\CurveCreateTool.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\CurveEditTool.h"
+					RelativePath=".\SceneGraph\CurveCreateTool.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\EntityInstance.cpp"
+					RelativePath=".\SceneGraph\CurveEditTool.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\EntityInstance.h"
+					RelativePath=".\SceneGraph\CurveEditTool.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\EntityInstanceCreateTool.cpp"
+					RelativePath=".\SceneGraph\EntityInstance.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\EntityInstanceCreateTool.h"
+					RelativePath=".\SceneGraph\EntityInstance.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\EntityInstancePanel.cpp"
+					RelativePath=".\SceneGraph\EntityInstanceCreateTool.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\EntityInstancePanel.h"
+					RelativePath=".\SceneGraph\EntityInstanceCreateTool.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\EntityInstanceType.cpp"
+					RelativePath=".\SceneGraph\EntityInstancePanel.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\EntityInstanceType.h"
+					RelativePath=".\SceneGraph\EntityInstancePanel.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\EntitySet.cpp"
+					RelativePath=".\SceneGraph\EntityInstanceType.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\EntitySet.h"
+					RelativePath=".\SceneGraph\EntityInstanceType.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\HierarchyNode.cpp"
+					RelativePath=".\SceneGraph\EntitySet.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\HierarchyNode.h"
+					RelativePath=".\SceneGraph\EntitySet.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\HierarchyNodeType.cpp"
+					RelativePath=".\SceneGraph\Graph.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\HierarchyNodeType.h"
+					RelativePath=".\SceneGraph\Graph.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Instance.cpp"
+					RelativePath=".\SceneGraph\HierarchyNode.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Instance.h"
+					RelativePath=".\SceneGraph\HierarchyNode.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\InstancePanel.cpp"
+					RelativePath=".\SceneGraph\HierarchyNodeType.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\InstancePanel.h"
+					RelativePath=".\SceneGraph\HierarchyNodeType.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\InstanceSet.cpp"
+					RelativePath=".\SceneGraph\Instance.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\InstanceSet.h"
+					RelativePath=".\SceneGraph\Instance.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\InstanceType.cpp"
+					RelativePath=".\SceneGraph\InstancePanel.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\InstanceType.h"
+					RelativePath=".\SceneGraph\InstancePanel.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\JointTransform.cpp"
+					RelativePath=".\SceneGraph\InstanceSet.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\JointTransform.h"
+					RelativePath=".\SceneGraph\InstanceSet.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Layer.cpp"
+					RelativePath=".\SceneGraph\InstanceType.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Layer.h"
+					RelativePath=".\SceneGraph\InstanceType.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Light.cpp"
+					RelativePath=".\SceneGraph\JointTransform.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Light.h"
+					RelativePath=".\SceneGraph\JointTransform.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Locator.cpp"
+					RelativePath=".\SceneGraph\Layer.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Locator.h"
+					RelativePath=".\SceneGraph\Layer.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\LocatorCreateTool.cpp"
+					RelativePath=".\SceneGraph\Light.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\LocatorCreateTool.h"
+					RelativePath=".\SceneGraph\Light.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\LocatorType.cpp"
+					RelativePath=".\SceneGraph\Locator.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\LocatorType.h"
+					RelativePath=".\SceneGraph\Locator.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Mesh.cpp"
+					RelativePath=".\SceneGraph\LocatorCreateTool.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Mesh.h"
+					RelativePath=".\SceneGraph\LocatorCreateTool.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\PivotTransform.cpp"
+					RelativePath=".\SceneGraph\LocatorType.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\PivotTransform.h"
+					RelativePath=".\SceneGraph\LocatorType.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Point.cpp"
+					RelativePath=".\SceneGraph\Mesh.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Point.h"
+					RelativePath=".\SceneGraph\Mesh.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Scene.cpp"
+					RelativePath=".\SceneGraph\PivotTransform.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Scene.h"
+					RelativePath=".\SceneGraph\PivotTransform.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\SceneGraph.cpp"
+					RelativePath=".\SceneGraph\Scene.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\SceneGraph.h"
+					RelativePath=".\SceneGraph\Scene.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\SceneNode.cpp"
+					RelativePath=".\SceneGraph\SceneNode.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\SceneNode.h"
+					RelativePath=".\SceneGraph\SceneNode.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\SceneNodePanel.cpp"
+					RelativePath=".\SceneGraph\SceneNodePanel.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\SceneNodePanel.h"
+					RelativePath=".\SceneGraph\SceneNodePanel.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\SceneNodeType.cpp"
+					RelativePath=".\SceneGraph\SceneNodeType.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\SceneNodeType.h"
+					RelativePath=".\SceneGraph\SceneNodeType.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\SceneVisitor.cpp"
+					RelativePath=".\SceneGraph\SceneVisitor.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\SceneVisitor.h"
+					RelativePath=".\SceneGraph\SceneVisitor.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Shader.cpp"
+					RelativePath=".\SceneGraph\Shader.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Shader.h"
+					RelativePath=".\SceneGraph\Shader.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Skin.cpp"
+					RelativePath=".\SceneGraph\Skin.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Skin.h"
+					RelativePath=".\SceneGraph\Skin.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Transform.cpp"
+					RelativePath=".\SceneGraph\Transform.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Transform.h"
+					RelativePath=".\SceneGraph\Transform.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Volume.cpp"
+					RelativePath=".\SceneGraph\Volume.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Volume.h"
+					RelativePath=".\SceneGraph\Volume.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\VolumeCreateTool.cpp"
+					RelativePath=".\SceneGraph\VolumeCreateTool.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\VolumeCreateTool.h"
+					RelativePath=".\SceneGraph\VolumeCreateTool.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\VolumeType.cpp"
+					RelativePath=".\SceneGraph\VolumeType.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\VolumeType.h"
+					RelativePath=".\SceneGraph\VolumeType.h"
 					>
 				</File>
 			</Filter>
@@ -1413,43 +1233,43 @@
 				Name="Camera/Viewport"
 				>
 				<File
-					RelativePath=".\Scene\Camera.cpp"
+					RelativePath=".\SceneGraph\Camera.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Camera.h"
+					RelativePath=".\SceneGraph\Camera.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\CameraMovedCommand.cpp"
+					RelativePath=".\SceneGraph\CameraMovedCommand.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\CameraMovedCommand.h"
+					RelativePath=".\SceneGraph\CameraMovedCommand.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\CameraSettings.cpp"
+					RelativePath=".\SceneGraph\CameraSettings.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\CameraSettings.h"
+					RelativePath=".\SceneGraph\CameraSettings.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Viewport.cpp"
+					RelativePath=".\SceneGraph\Viewport.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Viewport.h"
+					RelativePath=".\SceneGraph\Viewport.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\ViewportSettings.cpp"
+					RelativePath=".\SceneGraph\ViewportSettings.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\ViewportSettings.h"
+					RelativePath=".\SceneGraph\ViewportSettings.h"
 					>
 				</File>
 			</Filter>
@@ -1457,35 +1277,35 @@
 				Name="Commands"
 				>
 				<File
-					RelativePath=".\Scene\DependencyCommand.cpp"
+					RelativePath=".\SceneGraph\DependencyCommand.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\DependencyCommand.h"
+					RelativePath=".\SceneGraph\DependencyCommand.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\ParentCommand.cpp"
+					RelativePath=".\SceneGraph\ParentCommand.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\ParentCommand.h"
+					RelativePath=".\SceneGraph\ParentCommand.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\ReverseChildrenCommand.cpp"
+					RelativePath=".\SceneGraph\ReverseChildrenCommand.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\ReverseChildrenCommand.h"
+					RelativePath=".\SceneGraph\ReverseChildrenCommand.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\SwitchSceneCommand.cpp"
+					RelativePath=".\SceneGraph\SwitchSceneCommand.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\SwitchSceneCommand.h"
+					RelativePath=".\SceneGraph\SwitchSceneCommand.h"
 					>
 				</File>
 			</Filter>
@@ -1493,197 +1313,197 @@
 				Name="Rendering/Picking"
 				>
 				<File
-					RelativePath=".\Scene\Color.cpp"
+					RelativePath=".\SceneGraph\Color.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Color.h"
+					RelativePath=".\SceneGraph\Color.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\GridSettings.cpp"
+					RelativePath=".\SceneGraph\GridSettings.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\GridSettings.h"
+					RelativePath=".\SceneGraph\GridSettings.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\IndexResource.cpp"
+					RelativePath=".\SceneGraph\IndexResource.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\IndexResource.h"
+					RelativePath=".\SceneGraph\IndexResource.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Orientation.cpp"
+					RelativePath=".\SceneGraph\Orientation.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Orientation.h"
+					RelativePath=".\SceneGraph\Orientation.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Pick.cpp"
+					RelativePath=".\SceneGraph\Pick.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Pick.h"
+					RelativePath=".\SceneGraph\Pick.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Render.cpp"
+					RelativePath=".\SceneGraph\Render.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Render.h"
+					RelativePath=".\SceneGraph\Render.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Resource.cpp"
+					RelativePath=".\SceneGraph\Resource.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Resource.h"
+					RelativePath=".\SceneGraph\Resource.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Statistics.cpp"
+					RelativePath=".\SceneGraph\Statistics.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Statistics.h"
+					RelativePath=".\SceneGraph\Statistics.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\VertexResource.cpp"
+					RelativePath=".\SceneGraph\VertexResource.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\VertexResource.h"
+					RelativePath=".\SceneGraph\VertexResource.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\Visitor.h"
+					RelativePath=".\SceneGraph\Visitor.h"
 					>
 				</File>
-			</Filter>
-			<Filter
-				Name="Primitives"
-				>
-				<File
-					RelativePath=".\Scene\Primitive.cpp"
+				<Filter
+					Name="Primitives"
 					>
-				</File>
-				<File
-					RelativePath=".\Scene\Primitive.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveAxes.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveAxes.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCapsule.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCapsule.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCircle.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCircle.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCone.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCone.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCube.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCube.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCylinder.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveCylinder.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveFrame.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveFrame.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveGrid.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveGrid.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveLocator.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveLocator.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitivePointer.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitivePointer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveRadius.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveRadius.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveRings.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveRings.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveSphere.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\PrimitiveSphere.h"
-					>
-				</File>
+					<File
+						RelativePath=".\SceneGraph\Primitive.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\Primitive.h"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveAxes.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveAxes.h"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveCapsule.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveCapsule.h"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveCircle.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveCircle.h"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveCone.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveCone.h"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveCube.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveCube.h"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveCylinder.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveCylinder.h"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveFrame.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveFrame.h"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveGrid.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveGrid.h"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveLocator.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveLocator.h"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitivePointer.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitivePointer.h"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveRadius.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveRadius.h"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveRings.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveRings.h"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveSphere.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SceneGraph\PrimitiveSphere.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
@@ -1695,14 +1515,6 @@
 			</File>
 			<File
 				RelativePath=".\Render\DeviceManager.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\Environment.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\Environment.h"
 				>
 			</File>
 			<File
@@ -1735,6 +1547,14 @@
 			</File>
 			<File
 				RelativePath=".\Render\RBShaderLoader.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Render\RenderEnvironment.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Render\RenderEnvironment.h"
 				>
 			</File>
 			<File
@@ -3135,6 +2955,34 @@
 					</File>
 				</Filter>
 			</Filter>
+		</Filter>
+		<Filter
+			Name="GL"
+			>
+			<File
+				RelativePath=".\GL\GLSourceMesh.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GL\GLSourceMesh.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GL\GLTexture.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GL\GLTexture.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GL\GLUtil.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GL\OpenGL.h"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\API.h"

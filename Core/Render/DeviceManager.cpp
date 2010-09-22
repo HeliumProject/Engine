@@ -5,21 +5,21 @@
 #include "Pipeline/Image/Formats/TGA.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::Render;
 
-bool                            Render::DeviceManager::m_unique = false;
-u32                             Render::DeviceManager::m_master_count = 0;
-IDirect3D9*                     Render::DeviceManager::m_master_d3d = 0;
-IDirect3DDevice9*               Render::DeviceManager::m_master_device = 0;
-D3DFORMAT                       Render::DeviceManager::m_back_buffer_format = D3DFMT_UNKNOWN;
-D3DPRESENT_PARAMETERS           Render::DeviceManager::m_master_pp = {0};
-IDirect3DVertexShader9*         Render::DeviceManager::m_vertex_shaders[__VERTEX_SHADER_LAST__] = {0};
-IDirect3DPixelShader9*          Render::DeviceManager::m_pixel_shaders[__PIXEL_SHADER_LAST__] = {0};
-IDirect3DVertexDeclaration9*    Render::DeviceManager::m_vertex_dec[__VERTEX_DECL_LAST__] = {0};
-Render::DeviceManager*          Render::DeviceManager::m_clients[__MAX_CLIENTS__] = {0};
+bool                            DeviceManager::m_unique = false;
+u32                             DeviceManager::m_master_count = 0;
+IDirect3D9*                     DeviceManager::m_master_d3d = 0;
+IDirect3DDevice9*               DeviceManager::m_master_device = 0;
+D3DFORMAT                       DeviceManager::m_back_buffer_format = D3DFMT_UNKNOWN;
+D3DPRESENT_PARAMETERS           DeviceManager::m_master_pp = {0};
+IDirect3DVertexShader9*         DeviceManager::m_vertex_shaders[__VERTEX_SHADER_LAST__] = {0};
+IDirect3DPixelShader9*          DeviceManager::m_pixel_shaders[__PIXEL_SHADER_LAST__] = {0};
+IDirect3DVertexDeclaration9*    DeviceManager::m_vertex_dec[__VERTEX_DECL_LAST__] = {0};
+DeviceManager*                  DeviceManager::m_clients[__MAX_CLIENTS__] = {0};
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-Render::DeviceManager::DeviceManager()
+DeviceManager::DeviceManager()
 : m_IsLost( false )
 {
     m_d3d=0;
@@ -53,7 +53,7 @@ Render::DeviceManager::DeviceManager()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-Render::DeviceManager::~DeviceManager()
+DeviceManager::~DeviceManager()
 {
     m_master_count--;  
 
@@ -111,7 +111,7 @@ Render::DeviceManager::~DeviceManager()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void Render::DeviceManager::SetUnique()
+void DeviceManager::SetUnique()
 {
     if (m_master_d3d==0)
     {
@@ -120,7 +120,7 @@ void Render::DeviceManager::SetUnique()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT Render::DeviceManager::Init(HWND hwnd,u32 back_buffer_width, u32 back_buffer_height, u32 init_flags)
+HRESULT DeviceManager::Init(HWND hwnd,u32 back_buffer_width, u32 back_buffer_height, u32 init_flags)
 {
     HRESULT hr;
 
@@ -258,7 +258,7 @@ HRESULT Render::DeviceManager::Init(HWND hwnd,u32 back_buffer_width, u32 back_bu
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT Render::DeviceManager::ResizeSwapChain(u32 width, u32 height)
+HRESULT DeviceManager::ResizeSwapChain(u32 width, u32 height)
 {
     // we always have a back buffer pointer, release it
     if (m_back_buffer)
@@ -304,7 +304,7 @@ HRESULT Render::DeviceManager::ResizeSwapChain(u32 width, u32 height)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT Render::DeviceManager::ResizeDevice(u32 width, u32 height)
+HRESULT DeviceManager::ResizeDevice(u32 width, u32 height)
 {
     // release the default pool
     HandleClientDefaultPool(DEFPOOL_RELEASE);
@@ -353,7 +353,7 @@ HRESULT Render::DeviceManager::ResizeDevice(u32 width, u32 height)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT Render::DeviceManager::Resize(u32 width, u32 height)
+HRESULT DeviceManager::Resize(u32 width, u32 height)
 {
     if (m_swapchain)
     {
@@ -367,7 +367,7 @@ HRESULT Render::DeviceManager::Resize(u32 width, u32 height)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT Render::DeviceManager::Display(HWND target,RECT* src, RECT* dst)
+HRESULT DeviceManager::Display(HWND target,RECT* src, RECT* dst)
 {  
     HRESULT hr;
 
@@ -387,7 +387,7 @@ HRESULT Render::DeviceManager::Display(HWND target,RECT* src, RECT* dst)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT Render::DeviceManager::Reset()
+HRESULT DeviceManager::Reset()
 {
     HRESULT hr = S_OK;
 
@@ -467,7 +467,7 @@ HRESULT Render::DeviceManager::Reset()
     return hr;
 }
 
-bool Render::DeviceManager::TestDeviceReady()
+bool DeviceManager::TestDeviceReady()
 {
   IDirect3DDevice9* device = GetD3DDevice();
   if ( !device )
@@ -493,7 +493,7 @@ bool Render::DeviceManager::TestDeviceReady()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-IDirect3DSurface9* Render::DeviceManager::GetBufferData()
+IDirect3DSurface9* DeviceManager::GetBufferData()
 {
     D3DSURFACE_DESC desc;
     m_back_buffer->GetDesc(&desc);
@@ -516,7 +516,7 @@ IDirect3DSurface9* Render::DeviceManager::GetBufferData()
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool Render::DeviceManager::SaveTGA(const tchar* fname)
+bool DeviceManager::SaveTGA(const tchar* fname)
 {
     IDirect3DSurface9* surface = GetBufferData();
     if (surface==0)
@@ -601,7 +601,7 @@ bool Render::DeviceManager::SaveTGA(const tchar* fname)
 #include "texture_a_ps.h"
 #include "sky_ps.h"
 
-static const BYTE* g_compiled_vertex_shaders[Render::__VERTEX_SHADER_LAST__] = 
+static const BYTE* g_compiled_vertex_shaders[__VERTEX_SHADER_LAST__] = 
 {
     g_screenspace_vs,
     g_basicworldspace_vs,
@@ -614,7 +614,7 @@ static const BYTE* g_compiled_vertex_shaders[Render::__VERTEX_SHADER_LAST__] =
     g_mesh_debug_uv_vs,
 };
 
-static const BYTE* g_compiled_pixel_shaders[Render::__PIXEL_SHADER_LAST__] = 
+static const BYTE* g_compiled_pixel_shaders[__PIXEL_SHADER_LAST__] = 
 {
     g_diffuse_ps,
     g_diffuse_gpi_ps,
@@ -654,9 +654,9 @@ static D3DVERTEXELEMENT9 g_VertexDec_Mesh[] =  // total size 64
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void Render::DeviceManager::CreateBaseResources()
+void DeviceManager::CreateBaseResources()
 {
-    for (u32 vs=0;vs<Render::__VERTEX_SHADER_LAST__;vs++)
+    for (u32 vs=0;vs<__VERTEX_SHADER_LAST__;vs++)
     {
         if (FAILED(m_device->CreateVertexShader((const DWORD*)g_compiled_vertex_shaders[vs],&m_vertex_shaders[vs])))
         {
@@ -680,7 +680,7 @@ void Render::DeviceManager::CreateBaseResources()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void Render::DeviceManager::FreeBaseResources()
+void DeviceManager::FreeBaseResources()
 {
     // delete all the shaders and vertex decls
     for (u32 s=0;s<__VERTEX_SHADER_LAST__;s++)

@@ -42,7 +42,7 @@ namespace Helium
             void SaveSettings();
             void LoadSettings();
 
-            Core::SettingsManagerPtr& GetSettingsManager()
+            SettingsManagerPtr& GetSettingsManager()
             {
                 return m_SettingsManager;
             }
@@ -68,7 +68,7 @@ namespace Helium
             tstring m_AppName;
             tstring m_AppVerName;           
             
-            Core::SettingsManagerPtr m_SettingsManager;
+            SettingsManagerPtr m_SettingsManager;
             MainFrame* m_Frame;
             Tracker m_Tracker;
         };

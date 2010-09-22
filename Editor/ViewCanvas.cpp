@@ -7,10 +7,10 @@
 
 using namespace Helium;
 using namespace Helium::Math;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 using namespace Helium::Editor;
 
-ViewCanvas::ViewCanvas( Core::SettingsManager* settingsManager, wxWindow *parent, wxWindowID winid, const wxPoint& pos, const wxSize& size, long style, const wxString& name)
+ViewCanvas::ViewCanvas( SettingsManager* settingsManager, wxWindow *parent, wxWindowID winid, const wxPoint& pos, const wxSize& size, long style, const wxString& name)
 : wxWindow (parent, winid, pos, size, style, name)
 , m_Focused (false)
 , m_Viewport ( GetHWND(), settingsManager )

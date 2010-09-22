@@ -5,7 +5,7 @@
 #include "EditorIDs.h"
 
 using namespace Helium;
-using namespace Helium::Core;
+using namespace Helium::SceneGraph;
 using namespace Helium::Editor;
 
 TypesPanel::TypesPanel( SceneManager* manager, wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style )
@@ -40,7 +40,7 @@ TypesPanel::~TypesPanel()
 ///////////////////////////////////////////////////////////////////////////////
 // Adds a specific node type to be displayed in the grid.
 // 
-bool TypesPanel::AddType( Core::HierarchyNodeType* type )
+bool TypesPanel::AddType( SceneGraph::HierarchyNodeType* type )
 {
     m_NodeTypes.insert( M_HierarchyNodeTypeDumbPtr::value_type( type->GetName(), type ) );
     return m_Grid->AddRow( type->GetName(), type->IsVisible(), type->IsSelectable(), type->GetImageIndex() );
@@ -49,7 +49,7 @@ bool TypesPanel::AddType( Core::HierarchyNodeType* type )
 ///////////////////////////////////////////////////////////////////////////////
 // Removes a node type that is being displayed in the grid.
 // 
-bool TypesPanel::RemoveType( Core::HierarchyNodeType* type )
+bool TypesPanel::RemoveType( SceneGraph::HierarchyNodeType* type )
 {
     m_NodeTypes.erase( type->GetName() );
     return m_Grid->RemoveRow( type->GetName() );
@@ -60,9 +60,9 @@ bool TypesPanel::RemoveType( Core::HierarchyNodeType* type )
 //  callback from scene
 void TypesPanel::AddNodeType( const NodeTypeExistenceArgs& args )
 {
-    if ( args.m_NodeType->HasType( Reflect::GetType<Core::HierarchyNodeType>() ) )
+    if ( args.m_NodeType->HasType( Reflect::GetType<SceneGraph::HierarchyNodeType>() ) )
     {
-        AddType( Reflect::DangerousCast< Core::HierarchyNodeType >( args.m_NodeType ) );
+        AddType( Reflect::DangerousCast< SceneGraph::HierarchyNodeType >( args.m_NodeType ) );
     }
 }
 
@@ -71,9 +71,9 @@ void TypesPanel::AddNodeType( const NodeTypeExistenceArgs& args )
 //  callback from scene
 void TypesPanel::RemoveNodeType( const NodeTypeExistenceArgs& args )
 {
-    if ( args.m_NodeType->HasType( Reflect::GetType<Core::HierarchyNodeType>() ) )
+    if ( args.m_NodeType->HasType( Reflect::GetType<SceneGraph::HierarchyNodeType>() ) )
     {
-        RemoveType( Reflect::DangerousCast< Core::HierarchyNodeType >( args.m_NodeType ) );
+        RemoveType( Reflect::DangerousCast< SceneGraph::HierarchyNodeType >( args.m_NodeType ) );
     }
 }
 
@@ -88,7 +88,7 @@ void TypesPanel::VisibilityChanged( const GridRowChangeArgs& args )
     M_HierarchyNodeTypeDumbPtr::const_iterator typeItr = m_NodeTypes.find( typeName );
     if ( typeItr != m_NodeTypes.end() )
     {
-        Core::HierarchyNodeType* nodeType = typeItr->second;
+        SceneGraph::HierarchyNodeType* nodeType = typeItr->second;
         nodeType->SetVisible( m_Grid->IsRowVisibleChecked( args.m_RowNumber ) );
         m_Scene->Execute( false );
     }
@@ -110,7 +110,7 @@ void TypesPanel::SelectabilityChanged( const GridRowChangeArgs& args )
     M_HierarchyNodeTypeDumbPtr::const_iterator typeItr = m_NodeTypes.find( typeName );
     if ( typeItr != m_NodeTypes.end() )
     {
-        Core::HierarchyNodeType* nodeType = typeItr->second;
+        SceneGraph::HierarchyNodeType* nodeType = typeItr->second;
         bool selectable = m_Grid->IsRowSelectableChecked( args.m_RowNumber );
 
         nodeType->SetSelectable( selectable );
@@ -124,7 +124,7 @@ void TypesPanel::SelectabilityChanged( const GridRowChangeArgs& args )
             OS_SceneNodeDumbPtr::Iterator end = selection.End();
             for ( ; itr != end; ++itr )
             {
-                Core::HierarchyNode* node = Reflect::ObjectCast<Core::HierarchyNode>( *itr );
+                SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>( *itr );
 
                 if (!node || node->GetNodeType() != nodeType)
                 {

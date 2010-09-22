@@ -67,7 +67,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib OpenGL32.lib glu32.lib"
 				AdditionalLibraryDirectories="$(DirectX)\lib\x86"
 				GenerateDebugInformation="true"
 			/>
@@ -143,7 +143,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib OpenGL32.lib glu32.lib"
 				AdditionalLibraryDirectories="$(DirectX)\lib\x64"
 				GenerateDebugInformation="true"
 			/>
@@ -216,7 +216,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib OpenGL32.lib glu32.lib"
 				AdditionalLibraryDirectories="$(DirectX)\lib\x86"
 				GenerateDebugInformation="true"
 			/>
@@ -290,7 +290,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib OpenGL32.lib glu32.lib"
 				AdditionalLibraryDirectories="$(DirectX)\lib\x64"
 				GenerateDebugInformation="true"
 			/>
@@ -365,7 +365,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib OpenGL32.lib glu32.lib"
 				AdditionalLibraryDirectories="$(DirectX)\lib\x86"
 				GenerateDebugInformation="true"
 			/>
@@ -441,7 +441,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib OpenGL32.lib glu32.lib"
 				AdditionalLibraryDirectories="$(DirectX)\lib\x64"
 				GenerateDebugInformation="true"
 			/>
@@ -514,7 +514,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib OpenGL32.lib glu32.lib"
 				AdditionalLibraryDirectories="$(DirectX)\lib\x86"
 				GenerateDebugInformation="true"
 			/>
@@ -588,7 +588,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib"
+				AdditionalDependencies="d3d9.lib d3dx9.lib OpenGL32.lib glu32.lib"
 				AdditionalLibraryDirectories="$(DirectX)\lib\x64"
 				GenerateDebugInformation="true"
 			/>
@@ -2955,6 +2955,34 @@
 					</File>
 				</Filter>
 			</Filter>
+		</Filter>
+		<Filter
+			Name="GL"
+			>
+			<File
+				RelativePath=".\GL\GLSourceMesh.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GL\GLSourceMesh.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GL\GLTexture.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GL\GLTexture.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GL\GLUtil.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GL\OpenGL.h"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\API.h"

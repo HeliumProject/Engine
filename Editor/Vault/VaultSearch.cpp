@@ -128,7 +128,7 @@ namespace Helium
         {
         private:
             VaultSearch* m_VaultSearch;
-            i32            m_SearchID;
+            i32 m_SearchID;
 
         public:
             // Detached threads delete themselves once they have completed,
@@ -159,8 +159,7 @@ namespace Helium
 /// VaultSearch
 /////////////////////////////////////////////////////////////////////////////
 VaultSearch::VaultSearch()
-: m_TrackerDB(TXT("sqlite3"), TXT("database=trackerDBGenerated.db"))
-, m_SearchResults( NULL )
+: m_SearchResults( NULL )
 , m_StopSearching( true )
 , m_DummyWindow( NULL )
 , m_CurrentSearchID( -1 )
@@ -180,6 +179,12 @@ VaultSearch::~VaultSearch()
     m_CurrentSearchQuery = NULL;
     m_SearchResults = NULL;
     m_FoundPaths.clear();
+
+    if ( m_DummyWindow )
+    {
+        delete m_DummyWindow;
+        m_DummyWindow = NULL;
+    }
 }
 
 void VaultSearch::SetDirectory( const Helium::Path& directory )
@@ -279,8 +284,11 @@ void VaultSearch::OnSearchResultsAvailable( const Editor::DummyWindowArgs& args 
 
     Helium::TakeMutex mutex (m_SearchResultsMutex);
 
-    if ( m_SearchResults->GetSearchID() != m_CurrentSearchID )
+    if ( m_SearchResults
+        && m_SearchResults->GetSearchID() != m_CurrentSearchID )
+    {
         return;
+    }
 
     // "Publish" these results, null our pointer, and clear FoundFilesIDs to continue searching
     u32 searchID = m_SearchResults->GetSearchID();
@@ -296,7 +304,9 @@ void VaultSearch::OnSearchResultsAvailable( const Editor::DummyWindowArgs& args 
 void VaultSearch::OnEndSearchThread( const Editor::DummyWindowArgs& args )
 {
     if ( args.m_ThreadID != m_CurrentSearchID )
+    {
         return;
+    }
 
     m_SearchThreadCompleteListeners.Raise( SearchThreadCompleteArgs( m_CurrentSearchQuery ) );
 }
@@ -317,21 +327,26 @@ void VaultSearch::SearchThreadProc( i32 searchID )
 {
     SearchThreadEnter( searchID );
 
+    TrackerDBGenerated trackerDB( TXT( "sqlite3" ), TXT( "database=trackerDBGenerated.db" ) );
 
     // create tables, sequences and indexes
-    m_TrackerDB.verbose = true;
+    trackerDB.verbose = true;
+    #pragma TODO( "Test if the database already existed" )
     try
     {
-        m_TrackerDB.create();
+        trackerDB.create();
     }
     catch( const litesql::SQLError& )
     {
-        m_TrackerDB.upgrade();
+    }
+
+    if ( trackerDB.needsUpgrade() )
+    {
+        trackerDB.upgrade();
     }
 
     //-------------------------------------------
     // Path
-
     if ( m_CurrentSearchQuery->GetSearchType() == SearchTypes::File
         || m_CurrentSearchQuery->GetSearchType() == SearchTypes::Directory )
     {
@@ -355,7 +370,7 @@ void VaultSearch::SearchThreadProc( i32 searchID )
     // CacheDB
     if ( m_CurrentSearchQuery->GetSearchType() == SearchTypes::CacheDB )
     {
-        std::vector<TrackedFile> assetFiles = litesql::select<TrackedFile>( m_TrackerDB, TrackedFile::MPath.like( m_CurrentSearchQuery->GetSQLQueryString().c_str() ) ).all();
+        std::vector<TrackedFile> assetFiles = litesql::select<TrackedFile>( trackerDB, TrackedFile::MPath.like( m_CurrentSearchQuery->GetSQLQueryString().c_str() ) ).all();
 
         for ( std::vector<TrackedFile>::const_iterator itr = assetFiles.begin(), end = assetFiles.end(); itr != end; ++itr )
         {
@@ -363,16 +378,23 @@ void VaultSearch::SearchThreadProc( i32 searchID )
 
             Helium::Path path = itr->mPath.value();
             Helium::Insert<std::set< Helium::Path >>::Result inserted = m_FoundPaths.insert( path );
-            if ( inserted.second )
+            if ( m_SearchResults && inserted.second )
             {
                 m_SearchResults->AddPath( path );
             }
 
             if ( CheckSearchThreadLeave( searchID ) )
             {
-                return;
+                break;
             }
         }
+
+        assetFiles.clear();
+    }
+
+    if ( CheckSearchThreadLeave( searchID ) )
+    {
+        return;
     }
 
     SearchThreadLeave( searchID );
@@ -450,7 +472,7 @@ u32 VaultSearch::AddPath( const Helium::Path& path, i32 searchID )
     Helium::TakeMutex mutex (m_SearchResultsMutex);
 
     Helium::Insert<std::set< Helium::Path >>::Result inserted = m_FoundPaths.insert( path );
-    if ( inserted.second )
+    if ( m_SearchResults && inserted.second )
     {
         m_SearchResults->AddPath( path );
         ++numFilesAdded;

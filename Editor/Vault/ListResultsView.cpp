@@ -100,6 +100,13 @@ ListResultsView::ListResultsView( wxWindow* parent, wxWindowID id, const wxPoint
 
 ListResultsView::~ListResultsView()
 {
+    m_ListCtrl->ClearAll();
+    m_ListCtrl->Destroy();
+    m_ListCtrl = NULL;
+
+    m_Results = NULL;
+    m_DetailsColumns.clear();
+    m_DetailsColumnList.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -6,22 +6,28 @@
 #include "ListResultsView.h"
 #include "ThumbnailView.h"
 
+#include "Editor/App.h"
+#include "Editor/Controls/MenuButton.h"
+#include "Editor/Vault/VaultSettings.h"
+
 using namespace Helium;
 using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
 : VaultPanelGenerated( parent, id, pos, size, style )
+, m_VaultSettings( NULL )
 , m_CurrentView( NULL )
 {
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )
     {
         Freeze();
 
-        m_OptionsButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Options ) );
+        m_OptionsButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Options, wxART_OTHER, wxSize( 16, 16 ) ) );
+        m_OptionsButton->SetMargins( 3, 3 );
 
         m_CurrentView = m_ListResultsView;
-        m_CurrentMode = VaultViewModes::Details;
+        m_CurrentViewMode = VaultViewModes::Details;
         m_ListResultsView->Show();
 
         m_ListResultsView->InitResults();
@@ -30,11 +36,90 @@ VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
         Thaw();
     }
 
+    {
+        m_OptionsMenu = new wxMenu();
+
+        wxMenuItem* detailsMenuItem = new wxMenuItem(
+            m_OptionsMenu,
+            VaultMenu::ViewResultDetails,
+            VaultMenu::Label( VaultMenu::ViewResultDetails ),
+            VaultMenu::Label( VaultMenu::ViewResultDetails ).c_str(),
+            wxITEM_RADIO );
+        m_OptionsMenu->Append( detailsMenuItem );
+        Connect( VaultMenu::ViewResultDetails, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( VaultPanel::OnOptionsMenuSelect ), NULL, this );
+
+        wxMenuItem* listMenuItem = new wxMenuItem(
+            m_OptionsMenu,
+            VaultMenu::ViewResultList,
+            VaultMenu::Label( VaultMenu::ViewResultList ),
+            VaultMenu::Label( VaultMenu::ViewResultList ).c_str(),
+            wxITEM_RADIO );
+        m_OptionsMenu->Append( listMenuItem );
+        Connect( VaultMenu::ViewResultList, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( VaultPanel::OnOptionsMenuSelect ), NULL, this );
+
+        wxMenuItem* smallMenuItem = new wxMenuItem(
+            m_OptionsMenu,
+            VaultMenu::ViewThumbnailsSmall,
+            VaultMenu::Label( VaultMenu::ViewThumbnailsSmall ) + std::string( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Small ),
+            VaultMenu::Label( VaultMenu::ViewThumbnailsSmall ).c_str(),
+            wxITEM_RADIO );
+        smallMenuItem->Enable( false );
+        m_OptionsMenu->Append( smallMenuItem );
+        Connect( VaultMenu::ViewThumbnailsSmall, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( VaultPanel::OnOptionsMenuSelect ), NULL, this );
+
+        wxMenuItem* mediumMenuItem = new wxMenuItem( 
+            m_OptionsMenu, 
+            VaultMenu::ViewThumbnailsMedium, 
+            VaultMenu::Label( VaultMenu::ViewThumbnailsMedium ) + std::string( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Medium ),
+            VaultMenu::Label( VaultMenu::ViewThumbnailsMedium ),
+            wxITEM_RADIO );
+        mediumMenuItem->Enable( false );
+        m_OptionsMenu->Append( mediumMenuItem );
+        Connect( VaultMenu::ViewThumbnailsMedium, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( VaultPanel::OnOptionsMenuSelect ), NULL, this );
+
+        wxMenuItem* largeMenuItem = new wxMenuItem(
+            m_OptionsMenu,
+            VaultMenu::ViewThumbnailsLarge,
+            VaultMenu::Label( VaultMenu::ViewThumbnailsLarge ) + std::string( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Large ),
+            VaultMenu::Label( VaultMenu::ViewThumbnailsLarge ),
+            wxITEM_RADIO );
+        largeMenuItem->Enable( false );
+        m_OptionsMenu->Append( largeMenuItem );
+        Connect( VaultMenu::ViewThumbnailsLarge, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( VaultPanel::OnOptionsMenuSelect ), NULL, this );
+    }
+
+    m_OptionsButton->SetContextMenu( m_OptionsMenu );
+    m_OptionsButton->SetHoldDelay( 0.0f );
+    m_OptionsButton->Connect( wxEVT_MENU_OPEN, wxMenuEventHandler( VaultPanel::OnOptionsMenuOpen ), NULL, this );
+    m_OptionsButton->Connect( wxEVT_MENU_CLOSE, wxMenuEventHandler( VaultPanel::OnOptionsMenuClose ), NULL, this );
+    m_OptionsButton->Enable( true );
+
+    // settings
+    m_VaultSettings = wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >();
+    if ( m_VaultSettings )
+    {
+        m_CurrentViewMode = m_VaultSettings->m_VaultViewMode;
+        m_CurrentThumbnailSize = m_VaultSettings->m_ThumbnailSize;
+        Math::Clamp( m_CurrentThumbnailSize, VaultThumbnailsSizes::Small, VaultThumbnailsSizes::Large );
+        //m_VaultSettings->m_WindowSettings->ApplyToWindow( this, m_FrameManager, true );
+    }
+    
     m_VaultSearch.AddSearchResultsAvailableListener( Editor::SearchResultsAvailableSignature::Delegate( this, &VaultPanel::OnSearchResultsAvailable ) );
 }
 
 VaultPanel::~VaultPanel()
 {
+    Disconnect( VaultMenu::ViewResultDetails, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( VaultPanel::OnOptionsMenuSelect ), NULL, this );
+    Disconnect( VaultMenu::ViewResultList, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( VaultPanel::OnOptionsMenuSelect ), NULL, this );
+    Disconnect( VaultMenu::ViewThumbnailsSmall, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( VaultPanel::OnOptionsMenuSelect ), NULL, this );
+    Disconnect( VaultMenu::ViewThumbnailsMedium, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( VaultPanel::OnOptionsMenuSelect ), NULL, this );
+    Disconnect( VaultMenu::ViewThumbnailsLarge, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( VaultPanel::OnOptionsMenuSelect ), NULL, this );
+
+    m_OptionsButton->Disconnect( wxEVT_MENU_OPEN, wxMenuEventHandler( VaultPanel::OnOptionsMenuOpen ), NULL, this );
+    m_OptionsButton->Disconnect( wxEVT_MENU_CLOSE, wxMenuEventHandler( VaultPanel::OnOptionsMenuClose ), NULL, this );
+
+    m_VaultSettings = NULL;
+
     m_VaultSearch.AddSearchResultsAvailableListener( Editor::SearchResultsAvailableSignature::Delegate( this, &VaultPanel::OnSearchResultsAvailable ) );
 }
 
@@ -58,12 +143,6 @@ void VaultPanel::Search( const tstring& queryString )
         return;
     }
 
-    if ( !IsShown() )
-    {
-        Show();
-        GetParent()->Update();
-    }
-
     m_SearchCtrl->Clear();
     m_SearchCtrl->SetValue( queryString.c_str() );
 
@@ -84,37 +163,61 @@ void VaultPanel::Search( const tstring& queryString )
 ///////////////////////////////////////////////////////////////////////////////
 void VaultPanel::SetViewMode( VaultViewMode view )
 {
-    if ( view != m_CurrentMode )
+    if ( view != m_CurrentViewMode )
     {
         // Detach
         if ( m_CurrentView )
         {
             m_CurrentView->Hide();
-            GetSizer()->Detach( m_CurrentView );
+            //GetSizer()->Detach( m_CurrentView );
             m_CurrentView = NULL;
         }
 
         // Switch
-        m_CurrentMode = view;
-        switch ( m_CurrentMode )
+        m_CurrentViewMode = view;
+        switch ( m_CurrentViewMode )
         {
         default:
         case VaultViewModes::Details:
+            {
+                m_ListResultsView->ShowDetails( true );
+                m_CurrentView = m_ListResultsView;
+            }
+            break;
+
         case VaultViewModes::List:
-            m_ListResultsView->ShowDetails( m_CurrentMode == VaultViewModes::Details ? true : false );
-            m_CurrentView = m_ListResultsView;
+            {
+                m_ListResultsView->ShowDetails( false );
+                m_CurrentView = m_ListResultsView;
+            }
             break;
 
         case VaultViewModes::ThumbnailsSmall:
-            //m_ThumbnailView->SetZoom( VaultThumbnailsSizes::Small );
+            {
+                m_CurrentThumbnailSize = VaultThumbnailsSizes::Small;
+                //m_ThumbnailView->SetZoom( VaultThumbnailsSizes::Small );
+                //m_CurrentView = m_ThumbnailView;
+            }
+            break;
         case VaultViewModes::ThumbnailsMedium:
-            //m_ThumbnailView->SetZoom( VaultThumbnailsSizes::Medium );
+            {
+                m_CurrentThumbnailSize = VaultThumbnailsSizes::Medium;
+                //m_ThumbnailView->SetZoom( VaultThumbnailsSizes::Medium );
+                //m_CurrentView = m_ThumbnailView;
+            }
+            break;
         case VaultViewModes::ThumbnailsLarge:
-            //m_ThumbnailView->SetZoom( VaultThumbnailsSizes::Large );
+            {
+                m_CurrentThumbnailSize = VaultThumbnailsSizes::Large;
+                //m_ThumbnailView->SetZoom( VaultThumbnailsSizes::Large );
+                //m_CurrentView = m_ThumbnailView;
+            }
+            break;
         case VaultViewModes::ThumbnailsCustom:
-            //m_ThumbnailView->SetZoom( m_CustomThumbnailSize );
-
-            //m_CurrentView = m_ThumbnailView;
+            {
+                //m_ThumbnailView->SetZoom( m_CurrentThumbnailSize );
+                //m_CurrentView = m_ThumbnailView;
+            }
             break;
         }
 
@@ -124,7 +227,7 @@ void VaultPanel::SetViewMode( VaultViewMode view )
             m_CurrentView->Show();
             m_CurrentView->Layout();
 
-            GetSizer()->Add( m_CurrentView, 1, wxALL | wxEXPAND, 0 );
+            //GetSizer()->Add( m_CurrentView, 1, wxALL | wxEXPAND, 0 );
             GetSizer()->FitInside( this );
             Layout();
         }
@@ -134,34 +237,32 @@ void VaultPanel::SetViewMode( VaultViewMode view )
 ///////////////////////////////////////////////////////////////////////////////
 VaultViewMode VaultPanel::GetViewMode() const
 {
-    return m_CurrentMode;
+    return m_CurrentViewMode;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void VaultPanel::SetResults( VaultSearchResults* results )
 {
-    m_ListResultsView->SetResults( results );
-
     //std::vector< tstring > unused;
     //ResultChangeArgs args;
 
-    //switch ( m_CurrentMode )
-    //{
-    //default:
-    //case VaultViewModes::Details:
-    //case VaultViewModes::List:
-    //    m_ListResultsView->SetResults( results );
-    //    break;
+    switch ( m_CurrentViewMode )
+    {
+    default:
+    case VaultViewModes::Details:
+    case VaultViewModes::List:
+        m_ListResultsView->SetResults( results );
+        break;
 
-    //case VaultViewModes::ThumbnailsSmall:
-    //case VaultViewModes::ThumbnailsMedium:
-    //case VaultViewModes::ThumbnailsLarge:
-    //case VaultViewModes::ThumbnailsCustom:
-    //    //m_ThumbnailView->SetResults( results );
-    //    //args.m_NumSelected = m_ThumbnailView->GetSelectedPaths( unused );
-    //    //args.m_HighlightPath = m_ThumbnailView->GetHighlightedPath();
-    //    break;
-    //}
+        //case VaultViewModes::ThumbnailsSmall:
+        //case VaultViewModes::ThumbnailsMedium:
+        //case VaultViewModes::ThumbnailsLarge:
+        //case VaultViewModes::ThumbnailsCustom:
+        //    //m_ThumbnailView->SetResults( results );
+        //    //args.m_NumSelected = m_ThumbnailView->GetSelectedPaths( unused );
+        //    //args.m_HighlightPath = m_ThumbnailView->GetHighlightedPath();
+        //    break;
+    }
 
     //m_ResultsChanged.Raise( args );
 }
@@ -169,7 +270,7 @@ void VaultPanel::SetResults( VaultSearchResults* results )
 ///////////////////////////////////////////////////////////////////////////////
 void VaultPanel::ClearResults()
 {
-    switch ( m_CurrentMode )
+    switch ( m_CurrentViewMode )
     {
     default:
     case VaultViewModes::Details:
@@ -192,7 +293,7 @@ void VaultPanel::ClearResults()
 ///////////////////////////////////////////////////////////////////////////////
 void VaultPanel::SelectPath( const Helium::Path& path )
 {
-    switch ( m_CurrentMode )
+    switch ( m_CurrentViewMode )
     {
     default:
     case VaultViewModes::Details:
@@ -212,7 +313,7 @@ void VaultPanel::SelectPath( const Helium::Path& path )
 ///////////////////////////////////////////////////////////////////////////////
 u32 VaultPanel::GetSelectedPaths( std::set< Helium::Path >& paths )
 {
-    switch ( m_CurrentMode )
+    switch ( m_CurrentViewMode )
     {
     default:
     case VaultViewModes::Details:
@@ -233,9 +334,31 @@ u32 VaultPanel::GetSelectedPaths( std::set< Helium::Path >& paths )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+void VaultPanel::SaveSettings()
+{
+    if ( m_VaultSettings )
+    {
+        m_VaultSettings->m_VaultViewMode = m_CurrentViewMode;
+        m_VaultSettings->m_ThumbnailSize = m_CurrentThumbnailSize;
+        Math::Clamp( m_VaultSettings->m_ThumbnailSize, VaultThumbnailsSizes::Small, VaultThumbnailsSizes::Large );
+        //m_VaultSettings->m_WindowSettings->SetFromWindow( this, m_FrameManager );
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
 void VaultPanel::OnSearchResultsAvailable( const Editor::SearchResultsAvailableArgs& args )
 {
     SetResults( args.m_SearchResults );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+void VaultPanel::StartSearchFromField()
+{
+    wxString queryString = m_SearchCtrl->GetLineText(0);
+    queryString.Trim(true);  // trim white-space right 
+    queryString.Trim(false); // trim white-space left
+
+    Search( queryString.wx_str() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -247,25 +370,73 @@ void VaultPanel::OnSearchCancelButtonClick( wxCommandEvent& event )
 
 void VaultPanel::OnSearchGoButtonClick( wxCommandEvent& event )
 {
-    wxString queryString = m_SearchCtrl->GetLineText(0);
-    queryString.Trim(true);  // trim white-space right 
-    queryString.Trim(false); // trim white-space left
-
-    Search( queryString.wx_str() );
+    StartSearchFromField();
     event.Skip(false);
 }
 
 void VaultPanel::OnSearchTextEnter( wxCommandEvent& event )
 {
-    wxString queryString = m_SearchCtrl->GetLineText(0);
-    queryString.Trim(true);  // trim white-space right 
-    queryString.Trim(false); // trim white-space left
-
-    Search( queryString.wx_str() );
+    StartSearchFromField();
     event.Skip(false);
 }
 
 void VaultPanel::OnVaultSettingsButtonClick( wxCommandEvent& event )
 {
     event.Skip();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+void VaultPanel::OnOptionsMenuOpen( wxMenuEvent& event )
+{
+    event.Skip();
+    if ( event.GetMenu() == m_OptionsMenu )
+    {
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+void VaultPanel::OnOptionsMenuClose( wxMenuEvent& event )
+{
+    m_SearchCtrl->SetFocus();
+    event.Skip();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+void VaultPanel::OnOptionsMenuSelect( wxCommandEvent& event )
+{
+    event.Skip();
+
+    VaultViewMode id = VaultViewModes::Details;
+
+    switch( event.GetId() )
+    {
+    default:
+    case VaultMenu::ViewResultDetails:
+        id = VaultViewModes::Details;
+        break;
+
+    case VaultMenu::ViewResultList:
+        id = VaultViewModes::List;
+        break;
+
+    case VaultMenu::ViewThumbnailsSmall:
+        id = VaultViewModes::ThumbnailsSmall;
+        break;
+
+    case VaultMenu::ViewThumbnailsMedium:
+        id = VaultViewModes::ThumbnailsMedium;
+        break;
+
+    case VaultMenu::ViewThumbnailsLarge:
+        id = VaultViewModes::ThumbnailsLarge;
+        break;
+    };
+
+    SetViewMode( id );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+void VaultPanel::OnClose( wxCloseEvent& event )
+{
+    SaveSettings();
 }

@@ -113,8 +113,7 @@ namespace Helium
             friend class VaultSearchThread;
 
         private:
-            Helium::Path       m_Directory;
-            TrackerDBGenerated      m_TrackerDB;
+            Helium::Path            m_Directory;
 
             //----------DO NOT ACCESS outside of m_SearchResultsMutex---------//
             // VaultSearchResults and Status

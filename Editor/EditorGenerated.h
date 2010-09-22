@@ -13,6 +13,7 @@
 class wxBitmapToggleButton;
 namespace Helium{ namespace Editor{ class Frame; } }
 namespace Helium{ namespace Editor{ class ListResultsView; } }
+namespace Helium{ namespace Editor{ class MenuButton; } }
 
 #include "Editor/Frame.h"
 #include <wx/string.h>
@@ -356,7 +357,7 @@ namespace Helium
 			protected:
 				wxPanel* m_NavigationPanel;
 				wxSearchCtrl* m_SearchCtrl;
-				wxBitmapButton* m_OptionsButton;
+				Helium::Editor::MenuButton* m_OptionsButton;
 				wxPanel* m_ResultsPanel;
 				Helium::Editor::ListResultsView* m_ListResultsView;
 				

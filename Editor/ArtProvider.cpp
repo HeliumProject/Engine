@@ -113,7 +113,7 @@ void IconArtFile::CalculatePlacement( wxImage &target_image, const wxImage &sour
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void IconArtFile::Paste( wxImage &target_image, const wxImage &source_image, int &x, int &y, bool blendAlpha )
+void IconArtFile::Paste( wxImage &target_image, const wxImage &source_image, int x, int y, bool blendAlpha )
 {
 
     // add offset to adjust for negative insertion point
@@ -361,6 +361,7 @@ void ArtProvider::Create()
         m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Verbs::Select, IconArtFile( TXT( "overlay/sel.png" ) ) ) );
         m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Verbs::Refresh, IconArtFile( TXT( "overlay/refresh.png" ) ) ) );
         m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Verbs::Find, IconArtFile( TXT( "overlay/find.png" ) ) ) );
+        m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Verbs::Down, IconArtFile( TXT( "overlay/arrow_down.png" ) ) ) );
 
         // Statuses
         m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Statuses::Lockable, IconArtFile( TXT( "overlay/lockable.png" ) ) ) );

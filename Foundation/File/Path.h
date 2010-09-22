@@ -53,6 +53,7 @@ namespace Helium
 
         const tstring& Get() const;
         const tstring& Set( const tstring& path );
+        void Clear();
 
         void TrimToExisting();
 

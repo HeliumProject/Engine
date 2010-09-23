@@ -30,9 +30,11 @@ namespace Helium
             bool            m_Override;
         };
 
-        class CheckBoxWidget : public Reflect::ConcreteInheritor< CheckBoxWidget, Widget >
+        class CheckBoxWidget : public Widget
         {
         public:
+            REFLECT_DECLARE_CLASS( CheckBoxWidget, Widget );
+
             CheckBoxWidget()
                 : m_CheckBoxControl( NULL )
                 , m_CheckBoxWindow( NULL )

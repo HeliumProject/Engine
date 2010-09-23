@@ -7,9 +7,11 @@ namespace Helium
 {
     namespace Inspect
     {
-        class FOUNDATION_API CheckBox : public Reflect::ConcreteInheritor< CheckBox, Control >
+        class FOUNDATION_API CheckBox : public Control
         {
         public:
+            REFLECT_DECLARE_CLASS( CheckBox, Control );
+
             CheckBox();
 
         protected:

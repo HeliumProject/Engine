@@ -228,30 +228,14 @@ void BuildCommand::Except( const Helium::Exception& ex, const Asset::AssetClassP
     // for this option if it becomes useful.
     Debug::ProcessException( ex );
 
-    tstring type;
-    try
-    {
-        type = typeid(ex).name();
-
-        size_t pos = type.find_first_of(" ");
-        if (pos != tstring::npos && pos < type.length()-1)
-        {
-            type = type.substr( pos+1 );
-        }
-    }
-    catch ( const std::exception& ) // we catch std::exception here to handle call to typeid failing above
-    {
-        type = "Exception";
-    }
-
     tostringstream message;
     if (assetClass.ReferencesObject())
     {
-        message << type << " while building '" << assetClass->GetFullName() << "': " << ex.What() << std::endl;
+        message << "Exception while building '" << assetClass->GetFullName() << "': " << ex.What() << std::endl;
     }
     else
     {
-        message << type << ": " << ex.What() << std::endl;
+        message << "Exception: " << ex.What() << std::endl;
     }
 
     Log::Error( "%s", message.str().c_str() );

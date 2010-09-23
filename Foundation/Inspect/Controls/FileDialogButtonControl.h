@@ -45,9 +45,11 @@ namespace Helium
         ///////////////////////////////////////////////////////////////////////////
         // Button control that opens a file browser dialog.
         // 
-        class FOUNDATION_API FileDialogButton : public Reflect::ConcreteInheritor< FileDialogButton, Inspect::Button >
+        class FOUNDATION_API FileDialogButton : public Inspect::Button
         {
         public:
+            REFLECT_DECLARE_CLASS( FileDialogButton, Inspect::Button );
+
             FileDialogButton( const FileDialogType& type = FileDialogTypes::OpenFile, const tstring& caption = TXT( "Open" ), const tstring& filter = TXT( "All files (*.*)|*.*" ) )
             {
                 a_Type.Set( type );

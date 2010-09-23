@@ -9,12 +9,10 @@ namespace Helium
     {
         class List;
 
-        class ClientDataFilter : public Reflect::AbstractInheritor< ClientDataFilter, ClientData >
+        class ClientDataFilter : public ClientData
         {
         public:
-            List*       m_List;
-            i32         m_ClassType;
-            tstring     m_FileFilter;
+            REFLECT_DECLARE_ABSTRACT( ClientDataFilter, ClientData );
 
             ClientDataFilter( List* list, i32 classType, const tstring& filter )
                 : m_List( list )
@@ -24,10 +22,9 @@ namespace Helium
 
             }
 
-            virtual ~ClientDataFilter()
-            {
-
-            }
+            List*       m_List;
+            i32         m_ClassType;
+            tstring     m_FileFilter;
         };
     }
 

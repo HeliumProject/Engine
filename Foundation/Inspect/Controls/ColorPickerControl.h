@@ -11,9 +11,11 @@ namespace Helium
 {
     namespace Inspect
     {
-        class FOUNDATION_API ColorPicker : public Reflect::ConcreteInheritor< ColorPicker, Control >
+        class FOUNDATION_API ColorPicker : public Control
         {
         public:
+            REFLECT_DECLARE_CLASS( ColorPicker, Control );
+
             ColorPicker();
 
         protected:

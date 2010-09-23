@@ -9,9 +9,11 @@ namespace Helium
     {
         const static tchar LABEL_ATTR_TEXT[] = TXT( "text" );
 
-        class FOUNDATION_API Label : public Reflect::ConcreteInheritor<Label, Control>
+        class FOUNDATION_API Label : public Control
         {
         public:
+            REFLECT_DECLARE_CLASS( Label, Control );
+
             Label();
 
             virtual bool Process(const tstring& key, const tstring& value);

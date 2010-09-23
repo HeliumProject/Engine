@@ -24,9 +24,11 @@ namespace Helium
         class DocumentElement;
         typedef Helium::SmartPtr< DocumentElement > DocumentElementPtr;
 
-        class FOUNDATION_API DocumentNode : public Reflect::AbstractInheritor< DocumentNode, Reflect::Element >
+        class FOUNDATION_API DocumentNode : public Reflect::Element
         {
         public:
+            REFLECT_DECLARE_ABSTRACT( DocumentNode, Element );
+
             DocumentNode()
                 : m_Document( NULL )
                 , m_Parent( NULL )
@@ -88,9 +90,11 @@ namespace Helium
             }
         };
 
-        class FOUNDATION_API DocumentAttribute : public Reflect::ConcreteInheritor< DocumentAttribute, DocumentNode >
+        class FOUNDATION_API DocumentAttribute : public DocumentNode
         {
         public:
+            REFLECT_DECLARE_CLASS( DocumentAttribute, DocumentNode );
+
             virtual const tstring& GetName()
             {
                 return m_Name;
@@ -164,9 +168,11 @@ namespace Helium
         typedef Helium::Signature< const DocumentHierarchyChangingArgs& > DocumentHierarchyChangingSignature;
         typedef Helium::Signature< const DocumentHierarchyChangeArgs& > DocumentHierarchyChangedSignature;
 
-        class FOUNDATION_API DocumentElement : public Reflect::ConcreteInheritor< DocumentElement, DocumentNode >
+        class FOUNDATION_API DocumentElement : public DocumentNode
         {
         public:
+            REFLECT_DECLARE_CLASS( DocumentElement, DocumentNode );
+
             DocumentElement()
             {
 
@@ -260,9 +266,11 @@ namespace Helium
             }
         };
 
-        class FOUNDATION_API Document : public Reflect::ConcreteInheritor< Document, DocumentElement >
+        class FOUNDATION_API Document : public DocumentElement
         {
         public:
+            REFLECT_DECLARE_CLASS( Document, DocumentElement );
+
             void Initialize()
             {
                 Base::Initialize( this, this, NULL, NULL );

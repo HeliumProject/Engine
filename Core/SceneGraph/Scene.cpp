@@ -468,6 +468,7 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
     V_SceneNodeSmartPtr::const_iterator end = createdNodes.end();
     for ( ; itr != end; ++itr )
     {
+        (*itr)->SetOwner( this );
         (*itr)->Initialize();
 
         if ( importFlags & ImportFlags::Select )

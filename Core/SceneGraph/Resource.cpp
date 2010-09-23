@@ -19,15 +19,15 @@ using namespace Helium::SceneGraph;
 ResourceTracker::ResourceTracker(IDirect3DDevice9* device)
 : m_Device (device)
 {
-  if (!IndexResource::s_MemoryPool.Valid())
-  {
-    IndexResource::s_MemoryPool = Profile::Memory::CreatePool( TXT( "Direct3D Index Data" ) );
-  }
+    if (!IndexResource::s_MemoryPool.Valid())
+    {
+        IndexResource::s_MemoryPool = Profile::Memory::CreatePool( TXT( "Direct3D Index Data" ) );
+    }
 
-  if (!VertexResource::s_MemoryPool.Valid())
-  {
-    VertexResource::s_MemoryPool = Profile::Memory::CreatePool( TXT( "Direct3D Vertex Data" ) );
-  }
+    if (!VertexResource::s_MemoryPool.Valid())
+    {
+        VertexResource::s_MemoryPool = Profile::Memory::CreatePool( TXT( "Direct3D Vertex Data" ) );
+    }
 }
 
 ResourceTracker::~ResourceTracker()
@@ -37,115 +37,110 @@ ResourceTracker::~ResourceTracker()
 
 void ResourceTracker::ResetState()
 {
-  m_Indices = NULL;
-  m_Vertices = NULL;
-  m_VertexFormat = ElementFormats[ ElementTypes::Unknown ];
+    m_Indices = NULL;
+    m_Vertices = NULL;
+    m_VertexFormat = ElementFormats[ ElementTypes::Unknown ];
 }
 
 void ResourceTracker::Register(Resource* resource)
 {
-  Insert<S_Resource>::Result inserted = m_Resources.insert( resource );
-  HELIUM_ASSERT(inserted.second);
+    Insert<S_Resource>::Result inserted = m_Resources.insert( resource );
+    HELIUM_ASSERT(inserted.second);
 }
 
 void ResourceTracker::Release(Resource* resource)
 {
-  m_Resources.erase( resource );
+    m_Resources.erase( resource );
 }
 
 void ResourceTracker::DeviceLost()
 {
-  S_Resource::const_iterator itr = m_Resources.begin();
-  S_Resource::const_iterator end = m_Resources.end();
-  for ( ; itr != end ; ++itr )
-  {
-    if ( !(*itr)->IsManaged() )
+    S_Resource::const_iterator itr = m_Resources.begin();
+    S_Resource::const_iterator end = m_Resources.end();
+    for ( ; itr != end ; ++itr )
     {
-      (*itr)->Delete();
+        if ( !(*itr)->IsManaged() )
+        {
+            (*itr)->Delete();
+        }
     }
-  }
 }
 
 void ResourceTracker::DeviceReset()
 {
-  S_Resource::const_iterator itr = m_Resources.begin();
-  S_Resource::const_iterator end = m_Resources.end();
-  for ( ; itr != end ; ++itr )
-  {
-    if ( !(*itr)->IsManaged() )
+    S_Resource::const_iterator itr = m_Resources.begin();
+    S_Resource::const_iterator end = m_Resources.end();
+    for ( ; itr != end ; ++itr )
     {
-      (*itr)->Create();
+        if ( !(*itr)->IsManaged() )
+        {
+            (*itr)->Create();
+        }
     }
-  }
 }
 
 void Resource::Create()
 {
-  if ( !m_IsCreated )
-  {
-    m_IsCreated = true;
-
-    if (Allocate())
+    if ( !m_IsCreated )
     {
-      Populate();
+        m_IsCreated = true;
+
+        if (Allocate())
+        {
+            Populate();
+        }
     }
-  }
 }
 
 void Resource::Delete()
 {
-  if ( m_IsCreated )
-  {
-    m_IsCreated = false;
+    if ( m_IsCreated )
+    {
+        m_IsCreated = false;
 
-    Release();
-  }
+        Release();
+    }
 }
 
 void Resource::Update()
 {
-  if (m_IsCreated)
-  {
-    if (m_IsDirty || IsManaged())
+    if (m_IsCreated)
     {
-      if (!m_IsDirty && IsManaged())
-      {
-        Log::Debug( TXT( "Re-creating non-default resource '%s'...\n" ), typeid(*this).name() );
-      }
-
-      Delete();
-      Create();
+        if (m_IsDirty || IsManaged())
+        {
+            Delete();
+            Create();
+        }
+        else
+        {
+            Populate();
+        }
     }
     else
     {
-      Populate();
+        Create();
     }
-  }
-  else
-  {
-    Create();
-  }
 }
 
 void Resource::Populate()
 {
-  if (m_Populator.Valid())
-  {
-    PopulateArgs args ( m_Type, m_BaseIndex = 0, Lock() );
-
-    if (args.m_Buffer)
+    if (m_Populator.Valid())
     {
-      u32 offset = args.m_Offset;
+        PopulateArgs args ( m_Type, m_BaseIndex = 0, Lock() );
 
-      m_Populator.Invoke( &args );
+        if (args.m_Buffer)
+        {
+            u32 offset = args.m_Offset;
 
-      HELIUM_ASSERT( args.m_Offset == ( offset + ElementSizes[ m_ElementType ] * m_ElementCount ) );
+            m_Populator.Invoke( &args );
 
-      Unlock();
+            HELIUM_ASSERT( args.m_Offset == ( offset + ElementSizes[ m_ElementType ] * m_ElementCount ) );
+
+            Unlock();
+        }
+        else
+        {
+            HELIUM_BREAK(); // this is BAD
+        }
     }
-    else
-    {
-      HELIUM_BREAK(); // this is BAD
-    }
-  }
 }

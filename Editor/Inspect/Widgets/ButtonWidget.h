@@ -24,9 +24,11 @@ namespace Helium
             ButtonWidget* m_ButtonWidget;
         };
 
-        class ButtonWidget : public Reflect::ConcreteInheritor< ButtonWidget, Widget >
+        class ButtonWidget : public Widget
         {
         public:
+            REFLECT_DECLARE_CLASS( ButtonWidget, Widget );
+
             ButtonWidget()
                 : m_ButtonControl( NULL )
                 , m_ButtonWindow( NULL )

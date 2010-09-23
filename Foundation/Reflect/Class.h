@@ -108,60 +108,6 @@ namespace Helium
 
         typedef Helium::SmartPtr< Class > ClassPtr;
         typedef Helium::SmartPtr< const Class > ConstClassPtr;
-
-        //
-        // AbstractInheritor injects virtual API for all reflection types
-        //
-
-        template<class D, class B>
-        class AbstractInheritor : public B
-        {
-        public:
-            typedef B Base;
-            typedef D This;
-
-            virtual i32 GetType() const HELIUM_OVERRIDE
-            {
-                // this function caches a static in our translation unit
-                return Reflect::GetType<D>();
-            }
-
-            virtual bool HasType(i32 id) const HELIUM_OVERRIDE
-            {
-                // this function caches a static in our translation unit
-                return id == Reflect::GetType<D>() || B::HasType(id);
-            }
-
-            virtual const Reflect::Class* GetClass() const HELIUM_OVERRIDE
-            {
-                // this function caches a static in our translation unit
-                return Reflect::GetClass<D>();
-            }
-
-            static Reflect::Class* CreateClass(const tstring& shortName = TXT( "" ) )
-            {
-                return Reflect::Class::Create<D>(typeid(B).name(), shortName);
-            }
-        };
-
-        //
-        // ConcreteInheritor adds creation factory support to AbstractInheritor
-        //
-
-        template<class D, class B>
-        class ConcreteInheritor : public AbstractInheritor<D, B>
-        {
-        public:
-            static Reflect::Object* CreateObject()
-            {
-                return new D;
-            }
-
-            static Reflect::Class* CreateClass(const tstring& shortName = TXT( "" ) )
-            {
-                return Reflect::Class::Create<D>(typeid(B).name(), shortName, &CreateObject);
-            }
-        };
     }
 }
 

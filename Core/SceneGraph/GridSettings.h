@@ -25,9 +25,11 @@ namespace Helium
         }
         typedef GridUnits::GridUnit GridUnit;
 
-        class CORE_API GridSettings : public Reflect::ConcreteInheritor< GridSettings, Reflect::Element >
+        class CORE_API GridSettings : public Reflect::Element
         {
         public:
+            REFLECT_DECLARE_CLASS( GridSettings, Reflect::Element );
+
             GridSettings( const tstring& version = TXT( "" ),
                 GridUnit units = GridUnits::Meters,
                 u32 width = 12,

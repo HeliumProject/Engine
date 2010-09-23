@@ -8,9 +8,11 @@ namespace Helium
 {
     namespace Editor
     {
-        class StripCanvas : public Reflect::ConcreteInheritor< StripCanvas, Canvas >
+        class StripCanvas : public Canvas
         {
         public:
+            REFLECT_DECLARE_CLASS( StripCanvas, Canvas );
+
             // this is where tree-specific wx code happens
             StripCanvas();
 

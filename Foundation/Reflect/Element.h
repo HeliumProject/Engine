@@ -64,10 +64,12 @@ namespace Helium
         // Reflect::Element is the abstract base class of a serializable unit
         //
 
-        class FOUNDATION_API Element HELIUM_ABSTRACT : public AbstractInheritor<Element, Object>
+        class FOUNDATION_API Element HELIUM_ABSTRACT : public Object
         {
         protected:
-            Element ();
+            REFLECT_DECLARE_ABSTRACT( Element, Object );
+
+            Element();
 
         public:
             // Reflection prototypes

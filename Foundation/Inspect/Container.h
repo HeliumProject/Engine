@@ -13,11 +13,13 @@ namespace Helium
         // Contains other controls and distributes layout logic
         //
 
-        class FOUNDATION_API Container : public Reflect::ConcreteInheritor<Container, Control>
+        class FOUNDATION_API Container : public Control
         {
         public:
+            REFLECT_DECLARE_CLASS( Container, Control );
+
             Container();
-            virtual ~Container();
+            ~Container();
 
             const V_Control& GetChildren() const
             {

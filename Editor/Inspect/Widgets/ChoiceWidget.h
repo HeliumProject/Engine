@@ -32,9 +32,11 @@ namespace Helium
             bool            m_Override;
         };
 
-        class ChoiceWidget : public Reflect::ConcreteInheritor< ChoiceWidget, Widget >
+        class ChoiceWidget : public Widget
         {
         public:
+            REFLECT_DECLARE_CLASS( ChoiceWidget, Widget );
+
             ChoiceWidget()
                 : m_ChoiceControl( NULL )
                 , m_ChoiceWindow( NULL )

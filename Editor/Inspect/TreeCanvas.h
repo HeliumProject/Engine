@@ -8,9 +8,11 @@ namespace Helium
 {
     namespace Editor
     {
-        class TreeCanvas : public Reflect::ConcreteInheritor< TreeCanvas, Canvas >
+        class TreeCanvas : public Canvas
         {
         public:
+            REFLECT_DECLARE_CLASS( TreeCanvas, Canvas );
+
             TreeCanvas();
             ~TreeCanvas();
 

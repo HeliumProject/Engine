@@ -9,9 +9,11 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class CORE_API SceneSettings : public Reflect::ConcreteInheritor< SceneSettings, Reflect::Element >
+        class CORE_API SceneSettings : public Reflect::Element
         {
         public:
+            REFLECT_DECLARE_CLASS( SceneSettings, Reflect::Element );
+
             SceneSettings();
 
             MRUData* GetMRU();

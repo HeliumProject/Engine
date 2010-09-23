@@ -29,9 +29,11 @@ namespace Helium
             TreeCanvasWidget* m_Widget;
         };
 
-        class TreeCanvasWidget : public Reflect::ConcreteInheritor<TreeCanvasWidget, Widget>
+        class TreeCanvasWidget : public Widget
         {
         public:
+            REFLECT_DECLARE_CLASS( TreeCanvasWidget, Widget );
+
             TreeCanvasWidget()
                 : m_ContainerControl( NULL )
                 , m_TreeWndCtrl( NULL )

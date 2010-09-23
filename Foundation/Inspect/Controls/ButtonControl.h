@@ -25,9 +25,11 @@ namespace Helium
         };
         typedef Helium::Signature< const ButtonClickedArgs& > ButtonClickedSignature;
 
-        class FOUNDATION_API Button : public Reflect::ConcreteInheritor< Button, Control >
+        class FOUNDATION_API Button : public Control
         {
         public:
+            REFLECT_DECLARE_CLASS( Button, Control );
+
             Button();
 
             ButtonClickedSignature::Event& ButtonClickedEvent()

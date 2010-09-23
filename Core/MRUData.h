@@ -7,9 +7,11 @@
 
 namespace Helium
 {
-    class CORE_API MRUData : public Reflect::ConcreteInheritor< MRUData, Reflect::Element >
+    class CORE_API MRUData : public Reflect::Element
     {
     public:
+        REFLECT_DECLARE_CLASS( MRUData, Reflect::Element );
+
         const std::vector< Helium::Path >& GetPaths() const;
         void SetPaths( const std::vector< Helium::Path >& paths );
 

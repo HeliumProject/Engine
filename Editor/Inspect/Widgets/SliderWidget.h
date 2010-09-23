@@ -36,9 +36,11 @@ namespace Helium
             bool            m_Override;
         };
 
-        class SliderWidget : public Reflect::ConcreteInheritor< SliderWidget, Widget >
+        class SliderWidget : public Widget
         {
         public:
+            REFLECT_DECLARE_CLASS( SliderWidget, Widget );
+
             SliderWidget()
                 : m_SliderControl( NULL )
                 , m_SliderWindow( NULL )

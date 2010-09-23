@@ -11,11 +11,12 @@ namespace Helium
 {
     namespace Editor
     {
-        class VaultSettings : public Reflect::ConcreteInheritor< VaultSettings, Reflect::Element >
+        class VaultSettings : public Reflect::Element
         {
         public:
-            VaultSettings( VaultViewMode viewVaultMode = VaultViewModes::Details,
-                u32 thumbnailSize = VaultThumbnailsSizes::Medium );
+            REFLECT_DECLARE_CLASS( VaultSettings, Reflect::Element );
+
+            VaultSettings( VaultViewMode viewVaultMode = VaultViewModes::Details, u32 thumbnailSize = VaultThumbnailsSizes::Medium );
             ~VaultSettings();
 
         public:

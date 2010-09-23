@@ -30,9 +30,11 @@ namespace Helium
             bool            m_Override;
         };
 
-        class ValueWidget : public Reflect::ConcreteInheritor< ValueWidget, Widget >
+        class ValueWidget : public Widget
         {
         public:
+            REFLECT_DECLARE_CLASS( ValueWidget, Widget );
+
             ValueWidget()
                 : m_ValueControl( NULL )
                 , m_ValueWindow( NULL )

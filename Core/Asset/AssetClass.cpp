@@ -25,10 +25,9 @@ std::map< tstring, AssetFactory* > AssetClass::s_AssetFactories;
 REFLECT_DEFINE_ABSTRACT( AssetClass );
 void AssetClass::EnumerateClass( Reflect::Compositor<AssetClass>& comp )
 {
-    comp.AddField( &AssetClass::m_Description, "m_Description" );
-    comp.AddField( &AssetClass::m_Tags, "m_Tags" );
-
-    comp.AddField( &AssetClass::m_Path, "m_Path", Reflect::FieldFlags::Hide );
+    comp.AddField( &AssetClass::m_Description,  "m_Description" );
+    comp.AddField( &AssetClass::m_Tags,         "m_Tags" );
+    comp.AddField( &AssetClass::m_Path,         "m_Path", Reflect::FieldFlags::Hide );
 }
 
 AssetClass::AssetClass()

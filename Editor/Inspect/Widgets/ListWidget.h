@@ -23,9 +23,11 @@ namespace Helium
             ListWidget* m_ListWidget;
         };
 
-        class ListWidget : public Reflect::ConcreteInheritor< ListWidget, Widget >
+        class ListWidget : public Widget
         {
         public:
+            REFLECT_DECLARE_CLASS( ListWidget, Widget );
+
             ListWidget()
                 : m_ListControl( NULL )
                 , m_ListWindow( NULL )

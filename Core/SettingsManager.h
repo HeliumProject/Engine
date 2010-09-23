@@ -13,9 +13,11 @@ namespace Helium
 
     typedef std::map< Reflect::TypeID, Reflect::ElementPtr > M_Settings;
 
-    class CORE_API SettingsManager : public Reflect::ConcreteInheritor< SettingsManager, Reflect::Element >
+    class CORE_API SettingsManager : public Reflect::Element
     {
     public:
+        REFLECT_DECLARE_CLASS( SettingsManager, Reflect::Element );
+
         SettingsManager()
         {
         }

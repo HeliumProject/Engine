@@ -22,9 +22,11 @@ namespace Helium
         };
         typedef Justifications::Justification Justification;
 
-        class FOUNDATION_API Value : public Reflect::ConcreteInheritor<Value, Control>
+        class FOUNDATION_API Value : public Control
         {
         public:
+            REFLECT_DECLARE_CLASS( Value, Control );
+
             Value();
 
         protected:

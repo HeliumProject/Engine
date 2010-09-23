@@ -51,9 +51,11 @@ namespace Helium
 
         typedef ShadingModes::ShadingMode ShadingMode;
 
-        class CORE_API CameraSettings : public Reflect::ConcreteInheritor< CameraSettings, Reflect::Element >
+        class CORE_API CameraSettings : public Reflect::Element
         {
-        public: 
+        public:
+            REFLECT_DECLARE_CLASS( CameraSettings, Reflect::Element );
+
             CameraSettings(); 
 
         public: 

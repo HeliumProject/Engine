@@ -12,9 +12,11 @@ namespace Helium
         class WindowSettings;
         typedef Helium::SmartPtr< WindowSettings > WindowSettingsPtr;
 
-        class WindowSettings : public Reflect::ConcreteInheritor< WindowSettings, Reflect::Element >
+        class WindowSettings : public Reflect::Element
         {
         public:
+            REFLECT_DECLARE_CLASS( WindowSettings, Reflect::Element );
+
             WindowSettings( wxPoint pos = wxDefaultPosition, wxSize size = wxDefaultSize );
 
             void SetFromWindow( const wxWindow* window, wxAuiManager* manager = NULL );

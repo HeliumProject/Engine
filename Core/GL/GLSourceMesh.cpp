@@ -117,7 +117,7 @@ static Group* AddGroup( SourceMesh* mesh, const tstring& name )
     Group* group = FindGroup( mesh, name );
     if ( !group )
     {
-        group = (Group*)malloc( sizeof( Group ) );
+        group = new Group();
         group->m_Name = name;
         group->m_TriangleCount = 0;
         group->m_Triangles = NULL;
@@ -227,7 +227,7 @@ static void ReadMTL( SourceMesh* mesh, const tstring& name )
 
     rewind(file);
 
-    mesh->m_Materials = (Material*)malloc(sizeof(Material) * mesh->m_MaterialCount);
+    mesh->m_Materials = new Material[ mesh->m_MaterialCount ];
 
     /* set the default material */
     for (GLuint i = 0; i < mesh->m_MaterialCount; i++)
@@ -1232,6 +1232,7 @@ void SourceMesh::ReadOBJ( const Path& path )
     }
 
     Reset();
+    m_Path = path;
 
     /* make a first pass through the file to get a count of the number
     of m_Vertices, m_Normals, m_UVs & m_Triangles */
@@ -1239,7 +1240,7 @@ void SourceMesh::ReadOBJ( const Path& path )
 
     /* allocate memory */
     m_Vertices = (GLfloat*)malloc(sizeof(GLfloat) * 3 * (m_VertexCount + 1));
-    m_Triangles = (Triangle*)malloc(sizeof(Triangle) * m_TriangleCount);
+    m_Triangles = new Triangle[ m_TriangleCount ];
 
     if (m_NormalCount)
     {

@@ -13,7 +13,7 @@ REFLECT_DEFINE_CLASS( SceneAsset );
 void SceneAsset::EnumerateClass( Reflect::Compositor<SceneAsset>& comp )
 {
   comp.GetComposite().m_UIName = TXT( "Scene" );
-  comp.GetComposite().SetProperty( AssetProperties::LongDescription, "A level groups together various zones to make a level in the game.  The level asset will be associated with a world file (*.world.nrb), which is the file that can be edited in the Scene Editor." );
+  comp.GetComposite().SetProperty( AssetProperties::LongDescription, "A Scene locates objects in space." );
   comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.level.*" );
 
   Reflect::Field* fieldNearClipDist = comp.AddField( &SceneAsset::m_NearClipDist, "m_NearClipDist" );

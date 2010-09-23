@@ -177,7 +177,7 @@ void Tracker::TrackEverything()
                     Log::Debug( TXT("Caught litesql::NotFound excption when selecting file from DB" ));
                 }
 
-                if ( assetFilePath.FullExtension() == TXT( "nrb" ) )
+                if ( assetFilePath.FullExtension() == TXT( "hrb" ) )
                 {
                     const Asset::AssetClassPtr assetClass = Asset::AssetClass::LoadAssetClass( assetFilePath );
                     if ( assetClass.ReferencesObject() )

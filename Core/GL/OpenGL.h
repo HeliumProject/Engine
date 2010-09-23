@@ -12,6 +12,7 @@
 # define Core_OPENGL
 # endif
 #else
+# include <windows.h> //this sadly seems necessary to get gl.h to work
 # include <GL/gl.h>
 # include <GL/glu.h>
 # define Core_OPENGL

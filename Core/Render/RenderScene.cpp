@@ -374,7 +374,7 @@ u32 RenderScene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int bang
         tchar shader_name[ MAX_PATH ];
         Helium::Path shaderPath( loader->m_fragments[ f ].m_shader );
 
-        if ( shaderPath.Extension() == TXT( "nrb" ) )
+        if ( shaderPath.Extension() == TXT( "hrb" ) )
         {
             _stprintf( shader_name, TXT( "%s" ), shaderPath.c_str() );
         }

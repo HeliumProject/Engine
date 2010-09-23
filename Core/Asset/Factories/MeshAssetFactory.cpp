@@ -7,13 +7,15 @@
 
 #include "Core/Asset/Components/MeshProcessingComponent.h"
 
+#include "Core/GL/GLSourceMesh.h"
+
 using namespace Helium;
 using namespace Helium::Asset;
 
 AssetClassPtr MeshAssetFactory::Create( const Helium::Path& path )
 {
     Helium::Path assetPath = path;
-    assetPath.ReplaceExtension( TXT( "entity.nrb" ) );
+    assetPath.ReplaceExtension( TXT( "entity.hrb" ) );
 
     if ( assetPath.Exists() )
     {
@@ -36,6 +38,10 @@ AssetClassPtr MeshAssetFactory::Create( const Helium::Path& path )
         delete entity;
         return NULL;
     }
+
+    // let's try to cache the mesh
+    Core::GL::SourceMesh sourceMesh;
+    sourceMesh.ReadOBJ( path );
 
     return entity;
 }

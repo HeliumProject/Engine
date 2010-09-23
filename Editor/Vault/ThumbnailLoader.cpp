@@ -112,7 +112,7 @@ void* ThumbnailLoader::LoadThread::Entry()
             }
 
             // Include the color map of a shader as a possible thumbnail image
-            if ( path.FullExtension() == TXT( "shader.nrb" ) )
+            if ( path.FullExtension() == TXT( "shader.hrb" ) )
             {
                 Asset::ShaderAssetPtr shader = Asset::AssetClass::LoadAssetClass< Asset::ShaderAsset >( path );
                 if ( shader )

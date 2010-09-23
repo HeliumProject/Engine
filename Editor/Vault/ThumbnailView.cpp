@@ -121,7 +121,7 @@ ThumbnailView::ThumbnailView( wxWindow *parent, wxWindowID id, const wxPoint& po
     m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.shader.*" ), D3DCOLOR_ARGB( 0xff, 57, 143, 202 ) ) );
 
     m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.fbx" ), D3DCOLOR_ARGB( 0xff, 215, 15, 10 ) ) );
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.nrb" ), D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.hrb" ), D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
     m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.tga" ), D3DCOLOR_ARGB( 0xff, 0, 130, 132 ) ) ); 
 
     IDirect3DDevice9* device = m_DeviceManager.GetD3DDevice();
@@ -131,7 +131,7 @@ ThumbnailView::ThumbnailView( wxWindow *parent, wxWindowID id, const wxPoint& po
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.shader.*" ), TXT( "enginetype_shader" ) );
 
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.fbx" ), TXT( "maya" ) );
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.nrb" ), TXT( "moon" ) );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.hrb" ), TXT( "moon" ) );
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.tga" ), TXT( "fileType_tga" ) );
 
     // Connect Listeners

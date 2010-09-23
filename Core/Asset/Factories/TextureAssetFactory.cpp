@@ -13,7 +13,7 @@ using namespace Helium::Asset;
 AssetClassPtr TextureAssetFactory::Create( const Helium::Path& path )
 {
     Helium::Path assetPath = path;
-    assetPath.ReplaceExtension( TXT( "texture.nrb" ) );
+    assetPath.ReplaceExtension( TXT( "texture.hrb" ) );
 
     if ( assetPath.Exists() )
     {

@@ -95,10 +95,8 @@ void SimpleSerializer<T>::Serialize(const Helium::BasicBufferPtr& buffer, const 
 template <class T>
 tostream& SimpleSerializer<T>::operator>> (tostream& stream) const
 {
-    if (!TranslateOutput( stream ))
-    {
-        stream << m_Data.Get();
-    }
+    stream << m_Data.Get();
+
     return stream;
 }
 
@@ -128,16 +126,14 @@ void SimpleSerializer<T>::Deserialize(Archive& archive)
 template <class T>
 tistream& SimpleSerializer<T>::operator<< (tistream& stream)
 {
-    if (!TranslateInput( stream ))
-    {
-        stream >> m_Data.Ref();
+    stream >> m_Data.Ref();
 
-        if ( m_Instance && m_Field && m_Field->m_Type->GetReflectionType() == ReflectionTypes::Class )
-        {
-            Element* element = (Element*)m_Instance;
-            element->RaiseChanged( m_Field );
-        }
+    if ( m_Instance && m_Field && m_Field->m_Type->GetReflectionType() == ReflectionTypes::Class )
+    {
+        Element* element = (Element*)m_Instance;
+        element->RaiseChanged( m_Field );
     }
+
     return stream;
 }
 
@@ -201,22 +197,18 @@ void StringSerializer::Deserialize(Archive& archive)
 template<>
 tostream& StringSerializer::operator>> (tostream& stream) const
 {
-    if (!TranslateOutput( stream ))
-    {
-        stream << m_Data.Get();
-    }
+    stream << m_Data.Get();
+
     return stream;
 }
 
 template<>
 tistream& StringSerializer::operator<< (tistream& stream)
 {
-    if (!TranslateInput( stream ))
-    {
-        std::streamsize size = stream.rdbuf()->in_avail();
-        m_Data->resize( (size_t) size);
-        stream.read(const_cast<tchar*>(m_Data.Get().c_str()), size);
-    }
+    std::streamsize size = stream.rdbuf()->in_avail();
+    m_Data->resize( (size_t) size);
+    stream.read(const_cast<tchar*>(m_Data.Get().c_str()), size);
+
     return stream;
 }
 
@@ -273,23 +265,19 @@ void U8Serializer::Deserialize(Archive& archive)
 template<>
 tostream& U8Serializer::operator>> (tostream& stream) const
 {
-    if (!TranslateOutput( stream ))
-    {
-        u16 val = m_Data.Get();
-        stream << val;
-    }
+    u16 val = m_Data.Get();
+    stream << val;
+
     return stream;
 }
 
 template<>
 tistream& U8Serializer::operator<< (tistream& stream)
 {
-    if (!TranslateInput( stream ))
-    {
-        u16 val;
-        stream >> val;
-        m_Data.Set( (u8)val );
-    }
+    u16 val;
+    stream >> val;
+    m_Data.Set( (u8)val );
+
     return stream;
 }
 
@@ -346,23 +334,19 @@ void I8Serializer::Deserialize(Archive& archive)
 template<>
 tostream& I8Serializer::operator>> (tostream& stream) const
 {
-    if (!TranslateOutput( stream ))
-    {
-        i16 val = m_Data.Get();
-        stream << val;
-    }
+    i16 val = m_Data.Get();
+    stream << val;
+
     return stream;
 }
 
 template<>
 tistream& I8Serializer::operator<< (tistream& stream)
 {
-    if (!TranslateInput( stream ))
-    {
-        i16 val;
-        stream >> val;
-        m_Data.Set( (u8)val );
-    }
+    i16 val;
+    stream >> val;
+    m_Data.Set( (u8)val );
+
     return stream;
 }
 

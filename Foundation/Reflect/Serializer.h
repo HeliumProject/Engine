@@ -26,47 +26,6 @@ namespace Helium
 
         typedef SerializerFlags::SerializerFlag SerializerFlag;
 
-        struct TranslateEventArgs
-        {
-            // the serialier to read/write from
-            Serializer* m_Serializer;
-
-            TranslateEventArgs( Serializer* serializer )
-                : m_Serializer (serializer)
-            {
-
-            }
-        };
-
-        struct TranslateInputEventArgs : TranslateEventArgs
-        {
-            // the stream to read from
-            tistream& m_Stream;
-
-            TranslateInputEventArgs( Serializer* serializer, tistream& stream )
-                : TranslateEventArgs (serializer)
-                , m_Stream (stream)
-            {
-
-            }
-        };
-        typedef Helium::Signature< TranslateInputEventArgs&, Helium::AtomicRefCountBase > TranslateInputSignature;
-
-        struct TranslateOutputEventArgs : TranslateEventArgs
-        {
-            // the stream to write to
-            tostream& m_Stream;
-
-            TranslateOutputEventArgs( Serializer* serializer, tostream& stream )
-                : TranslateEventArgs (serializer)
-                , m_Stream (stream)
-            {
-
-            }
-        };
-        typedef Helium::Signature< TranslateOutputEventArgs&, Helium::AtomicRefCountBase > TranslateOutputSignature;
-
-
         //
         // A Serializer is an Element that knows how to read/write data
         //  from any kind of support Archive type (XML and Binary), given
@@ -375,29 +334,6 @@ namespace Helium
             {
                 // by default, don't do anything as it will all have to be special cased in derived classes
             }
-
-
-            //
-            // Translate
-            //
-
-        protected:
-            TranslateOutputSignature::Delegate m_TranslateOutput;
-            TranslateInputSignature::Delegate m_TranslateInput;
-
-        public:
-            void SetTranslateInputListener( const TranslateInputSignature::Delegate& listener )
-            {
-                m_TranslateInput = listener;
-            }
-            void SetTranslateOutputListener( const TranslateOutputSignature::Delegate& listener )
-            {
-                m_TranslateOutput = listener;
-            }
-
-        protected:
-            bool TranslateOutput( tostream& stream ) const;
-            bool TranslateInput( tistream& stream );
         };
 
 

@@ -17,7 +17,9 @@ namespace Helium
             REFLECT_DECLARE_CLASS( EnumerationSerializer, Serializer )
 
             EnumerationSerializer ();
-            virtual ~EnumerationSerializer();
+            ~EnumerationSerializer();
+
+            virtual bool IsCompact() const HELIUM_OVERRIDE { return true; }
 
             virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
             virtual void ConnectField(Helium::HybridPtr<Element> instance, const Field* field, uintptr offsetInField = 0) HELIUM_OVERRIDE;

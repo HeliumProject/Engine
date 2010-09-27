@@ -16,7 +16,7 @@ namespace Helium
             REFLECT_DECLARE_CLASS( PointerSerializer, Reflect::Serializer );
 
             PointerSerializer ();
-            virtual ~PointerSerializer();
+            ~PointerSerializer();
 
             virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
 

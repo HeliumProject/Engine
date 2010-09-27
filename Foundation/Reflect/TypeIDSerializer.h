@@ -14,8 +14,10 @@ namespace Helium
 
             REFLECT_DECLARE_CLASS( TypeIDSerializer, Reflect::Serializer );
 
-            TypeIDSerializer ();
-            virtual ~TypeIDSerializer();
+            TypeIDSerializer();
+            ~TypeIDSerializer();
+
+            virtual bool IsCompact() const HELIUM_OVERRIDE { return true; }
 
             virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
 

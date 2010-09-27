@@ -330,7 +330,7 @@ namespace Helium
             // Visit
             //
 
-            virtual void Host (Visitor& visitor) HELIUM_OVERRIDE
+            virtual void Accept(Visitor& visitor) HELIUM_OVERRIDE
             {
                 // by default, don't do anything as it will all have to be special cased in derived classes
             }

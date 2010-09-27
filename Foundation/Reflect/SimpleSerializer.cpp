@@ -20,12 +20,6 @@ SimpleSerializer<T>::~SimpleSerializer()
 }
 
 template <class T>
-bool SimpleSerializer<T>::IsCompact() const
-{ 
-    return true; 
-}
-
-template <class T>
 void SimpleSerializer<T>::ConnectData(Helium::HybridPtr<void> data)
 {
     __super::ConnectData( data );

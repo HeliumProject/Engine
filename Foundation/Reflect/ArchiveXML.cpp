@@ -376,22 +376,12 @@ void ArchiveXML::SerializeHeader(const ElementPtr& element)
     // End header
     //
 
-    if (element->IsCompact())
-    {
-        *m_Stream << ">";
-    }
-    else
-    {
-        *m_Stream << ">\n";
-    }
+    *m_Stream << ">\n";
 }
 
 void ArchiveXML::SerializeFooter(const ElementPtr& element)
 {
-    if (!element->IsCompact())
-    {
-        m_Indent.Get(*m_Stream);
-    }
+    m_Indent.Get(*m_Stream);
 
     *m_Stream << "</Element>\n";
 

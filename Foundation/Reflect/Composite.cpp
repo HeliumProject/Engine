@@ -346,7 +346,7 @@ void Composite::Visit(Element* element, Visitor& visitor)
 
             serializer->ConnectField( element, field );
 
-            serializer->Host( visitor );
+            serializer->Accept( visitor );
 
             serializer->Disconnect();
         }

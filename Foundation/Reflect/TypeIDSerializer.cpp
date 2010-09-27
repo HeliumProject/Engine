@@ -17,11 +17,6 @@ TypeIDSerializer::~TypeIDSerializer()
 
 }
 
-bool TypeIDSerializer::IsCompact() const
-{ 
-    return true; 
-}
-
 void TypeIDSerializer::ConnectData(Helium::HybridPtr<void> data)
 {
     __super::ConnectData( data );

@@ -37,8 +37,6 @@ namespace Helium
             SimpleSerializer ();
             virtual ~SimpleSerializer();
 
-            virtual bool IsCompact() const HELIUM_OVERRIDE;
-
             virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
 
             virtual bool Set(const Serializer* src, u32 flags = 0) HELIUM_OVERRIDE;

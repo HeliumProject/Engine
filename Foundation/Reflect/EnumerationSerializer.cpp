@@ -19,11 +19,6 @@ EnumerationSerializer::~EnumerationSerializer()
 
 }
 
-bool EnumerationSerializer::IsCompact () const 
-{ 
-    return true; 
-}
-
 void EnumerationSerializer::ConnectData(Helium::HybridPtr<void> data)
 {
     __super::ConnectData( data );

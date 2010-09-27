@@ -42,7 +42,7 @@ void Element::ToFile(const tstring& file, const VersionPtr& version) const
     Archive::ToFile(this, file, version);
 }
 
-void Element::Host(Visitor& visitor)
+void Element::Accept(Visitor& visitor)
 {
     Composite::Visit(this, visitor);
 }

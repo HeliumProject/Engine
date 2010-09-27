@@ -207,7 +207,7 @@ namespace Helium
                     const Reflect::V_Element& vals = arraySerializer->m_Data.Ref();
                     for ( Reflect::V_Element::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
                     {
-                        (*itr)->Host( *this );
+                        (*itr)->Accept( *this );
                     }
 
                     return false;
@@ -229,7 +229,7 @@ namespace Helium
                     Reflect::ElementMapSerializer::V_ConstValueType::const_iterator end = data.end();
                     for ( ; itr != end; ++itr )
                     {
-                        (*itr->second)->Host( *this );
+                        (*itr->second)->Accept( *this );
                     }
 
                     return false;
@@ -247,7 +247,7 @@ namespace Helium
                     const Reflect::ElementSetSerializer::DataType& vals = setSerializer->m_Data.Ref();
                     for ( Reflect::ElementSetSerializer::DataType::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
                     {
-                        (*itr)->Host( *this );
+                        (*itr)->Accept( *this );
                     }
 
                     return false;
@@ -263,7 +263,7 @@ namespace Helium
 void AssetClass::GetFileReferences( std::set< Helium::Path >& fileReferences )
 {
     AssetDependencyVisitor assetDepVisitor( fileReferences );
-    this->Host( assetDepVisitor );
+    this->Accept( assetDepVisitor );
 
     //__super::GetFileReferences( fileReferences );
 

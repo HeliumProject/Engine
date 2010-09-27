@@ -78,9 +78,6 @@ namespace Helium
             // Returns the string to use as the title of this element in UI (uses the UI name of the type info by default)
             virtual const tstring&      GetTitle() const { return GetClass()->m_UIName; }
 
-            // Specifies if the value is directly between the start and end short name
-            virtual bool                IsCompact() const { return false; }
-
             // This the process callback for sub and primitive elements to have thier data be aggregated into the parent instance
             virtual bool                ProcessComponent(ElementPtr element, const tstring& fieldName);
 
@@ -108,7 +105,7 @@ namespace Helium
 
         public:
             // Visitor introspection support, should never ever change an object (but the visitor may)
-            virtual void                Host(Visitor& visitor);
+            virtual void                Accept(Visitor& visitor);
 
             // Do comparison logic against other object, checks type and field data
             virtual bool                Equals(const ElementPtr& rhs) const;

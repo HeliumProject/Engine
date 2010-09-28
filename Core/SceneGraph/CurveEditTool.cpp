@@ -118,7 +118,7 @@ bool CurveEditTool::MouseDown( const MouseButtonInput& e )
                 u32 index = points.first > points.second ? points.first : points.second;
 
                 CurveControlPointPtr point = new CurveControlPoint();
-                point->SetOwner( curve->GetOwner() );
+                point->Initialize( curve->GetOwner() );
 
                 curve->GetOwner()->Push( curve->InsertControlPointAtIndex( index, point ) );
                 break;

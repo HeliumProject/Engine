@@ -23,8 +23,7 @@ namespace Helium
             virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
 
-            virtual void Initialize() HELIUM_OVERRIDE;
-            virtual void Pack() HELIUM_OVERRIDE;
+            virtual void Initialize(Scene* scene) HELIUM_OVERRIDE;
 
             bool IsVisible() const HELIUM_OVERRIDE;
             void SetVisible( bool visible );
@@ -38,8 +37,11 @@ namespace Helium
             OS_SceneNodeDumbPtr GetMembers();
             bool ContainsMember( SceneGraph::SceneNode* node ) const;
 
-            virtual void Prune( V_SceneNodeDumbPtr& prunedNodes ) HELIUM_OVERRIDE;
+            virtual void ConnectDescendant( SceneGraph::SceneNode* descendant ) HELIUM_OVERRIDE;
+            virtual void DisconnectDescendant( SceneGraph::SceneNode* descendant ) HELIUM_OVERRIDE;
+
             virtual void Insert(Graph* g, V_SceneNodeDumbPtr& insertedNodes ) HELIUM_OVERRIDE;
+            virtual void Prune( V_SceneNodeDumbPtr& prunedNodes ) HELIUM_OVERRIDE;
 
             virtual bool ValidatePanel(const tstring& name) HELIUM_OVERRIDE;
 
@@ -51,7 +53,7 @@ namespace Helium
             // Reflected
             bool                        m_Visible;
             bool                        m_Selectable;
-            V_TUID                      m_Members;
+            S_TUID                      m_Members;
             Math::Color3                m_Color;
         };
 

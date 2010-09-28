@@ -46,9 +46,9 @@ Skin::~Skin()
 {
 }
 
-void Skin::Initialize()
+void Skin::Initialize(Scene* scene)
 {
-    __super::Initialize();
+    __super::Initialize(scene);
 
     m_Mesh = Reflect::ObjectCast< Mesh > ( m_Owner->FindNode( m_MeshID ) );
 

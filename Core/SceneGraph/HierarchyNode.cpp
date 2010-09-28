@@ -71,39 +71,20 @@ SceneNodeTypePtr HierarchyNode::CreateNodeType( SceneGraph::Scene* scene ) const
     return nodeType;
 }
 
-void HierarchyNode::InitializeHierarchy()
+void HierarchyNode::InitializeHierarchy(Scene* scene)
 {
-    Initialize();
+    Initialize(scene);
 
     for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
     {
         SceneGraph::HierarchyNode* child = *itr;
-        child->InitializeHierarchy();
+        child->InitializeHierarchy(scene);
     }
 }
 
 void HierarchyNode::Reset()
 {
     m_Children.Clear();
-}
-
-void HierarchyNode::Pack()
-{
-    __super::Pack();
-
-    TUID parentID( TUID::Null );
-
-    if ( GetParent() != NULL && GetParent() != m_Owner->GetRoot() )
-    {
-        parentID = GetParent()->GetID();
-    }
-
-    m_ParentID = parentID;
-}
-
-void HierarchyNode::Unpack()
-{
-    __super::Unpack();
 }
 
 void HierarchyNode::SetTransient( bool isTransient )
@@ -262,9 +243,11 @@ void HierarchyNode::SetParent( SceneGraph::HierarchyNode* value )
             {
                 m_Parent->RemoveChild(this);
                 m_Parent = NULL;
+                m_ParentID = 0x0;
             }
 
             m_Parent = value;
+            m_ParentID = value->GetID();
 
             if ( m_Parent )
             {
@@ -322,9 +305,6 @@ void HierarchyNode::ReverseChildren()
 
 HierarchyNodePtr HierarchyNode::Duplicate()
 {
-    // update persistent data of this object
-    Pack();
-
     // clone the persistent data into a new instance of content data
     HierarchyNodePtr duplicate = Reflect::AssertCast< HierarchyNode > ( Clone() );
 

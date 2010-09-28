@@ -19,6 +19,7 @@
 #include "Core/Asset/Components/MeshProcessingComponent.h"
 #include "Core/Asset/Components/TextureProcessingComponent.h"
 #include "Core/Asset/Components/TransformComponent.h"
+#include "Core/Asset/Components/BoundingBoxComponent.h"
 
 #include "Core/Asset/Factories/MeshAssetFactory.h"
 #include "Core/Asset/Factories/TextureAssetFactory.h"
@@ -116,6 +117,7 @@ void Asset::Initialize()
         g_AssetInitializerStack.Push( Reflect::RegisterEnumType<TextureDataFormat>( &TextureDataFormats::TextureDataFormatEnumerateEnum, TXT("TextureDataFormat") ) );
         g_AssetInitializerStack.Push( Reflect::RegisterClassType<TextureProcessingComponent>( TXT( "TextureProcessingComponent" ) ) );
         g_AssetInitializerStack.Push( Reflect::RegisterClassType<TransformComponent>( TXT( "TransformComponent" ) ) );
+        g_AssetInitializerStack.Push( Reflect::RegisterClassType< BoundingBoxComponent >( TXT( "BoundingBoxComponent" ) ) );
 
 
         //

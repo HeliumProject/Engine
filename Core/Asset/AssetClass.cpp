@@ -27,7 +27,7 @@ void AssetClass::EnumerateClass( Reflect::Compositor<AssetClass>& comp )
 {
     comp.AddField( &AssetClass::m_Description,  "m_Description" );
     comp.AddField( &AssetClass::m_Tags,         "m_Tags" );
-    comp.AddField( &AssetClass::m_Path,         "m_Path", Reflect::FieldFlags::Hide );
+    comp.AddField( &AssetClass::m_ContentPath,  "m_ContentPath" );
 }
 
 AssetClass::AssetClass()
@@ -42,7 +42,7 @@ AssetClassPtr AssetClass::LoadAssetClass( const tchar* path )
         Helium::Path filePath( path );
 
         assetClass = Reflect::Archive::FromFile< AssetClass >( filePath );
-        assetClass->SetSerializationPath( filePath );
+        assetClass->SetSourcePath( filePath );
         assetClass->LoadFinished();
     }
     catch ( const Helium::Exception& exception )
@@ -58,19 +58,19 @@ Helium::Path AssetClass::GetBuiltDirectory()
 {
 #pragma TODO( "make human-readable built directories" )
     tstringstream str;
-    str << TUID_HEX_FORMAT << m_Path.Hash();
+    str << TUID_HEX_FORMAT << m_SourcePath.Hash();
     Helium::Path builtDirectory( s_BaseBuiltDirectory + TXT( "/" ) + str.str() );
     return builtDirectory;
 }
 
 tstring AssetClass::GetFullName() const
 {
-    return m_Path.Get();
+    return m_SourcePath.Get();
 }
 
 tstring AssetClass::GetShortName() const
 {
-    return m_Path.Basename();
+    return m_SourcePath.Basename();
 }
 
 void AssetClass::GatherSearchableProperties( Helium::SearchableProperties* properties ) const
@@ -267,7 +267,7 @@ void AssetClass::GetFileReferences( std::set< Helium::Path >& fileReferences )
 
     //__super::GetFileReferences( fileReferences );
 
-    fileReferences.erase( m_Path );
+    fileReferences.insert( m_ContentPath );
 }
 
 void AssetClass::ComponentChanged( const Component::ComponentBase* component )
@@ -288,7 +288,7 @@ bool AssetClass::RemoveComponent( i32 typeID )
 void AssetClass::Serialize()
 {
     Reflect::Version version( TXT( "Pipeline" ), ASSET_VERSION );
-    Reflect::Archive::ToFile( this, m_Path, &version );
+    Reflect::Archive::ToFile( this, m_SourcePath, &version );
 
     m_Modified = false;
 }

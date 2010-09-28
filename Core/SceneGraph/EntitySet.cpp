@@ -43,7 +43,6 @@ EntitySet::EntitySet( SceneGraph::EntityInstanceType* type, const Helium::Path& 
 EntitySet::~EntitySet()
 {
     delete m_Shape;
-    delete m_AssetPath;
 }
 
 void EntitySet::LoadAssetClass()
@@ -58,7 +57,7 @@ void EntitySet::LoadAssetClass()
     {
         m_Name = m_Class->GetFullName();
 
-        if ( !m_Class->GetPath().empty() )
+        if ( !m_Class->GetContentPath().empty() )
         {
             SceneGraph::PrimitiveCube* cube;
             if ( !m_Shape )
@@ -93,12 +92,12 @@ void EntitySet::LoadAssetClass()
             }
             else
             {
-                Path meshPath = m_Class->GetPath();
+                Path meshPath = m_Class->GetContentPath().GetAbsolutePath( m_Class->GetSourcePath() );
                 meshPath.ReplaceExtension( TXT( "mesh.hrb" ) );
 
                 if ( meshPath.Exists() )
                 {
-                    SceneGraph::Mesh* mesh = NULL;
+                    SceneGraph::MeshPtr mesh;
                     try
                     {
                         mesh = Reflect::Archive::FromFile< SceneGraph::Mesh >( meshPath );
@@ -114,7 +113,6 @@ void EntitySet::LoadAssetClass()
                         mesh->GetAlignedBoundingBox( box );
                         cube->SetBounds( box );
                         cube->Update();
-                        delete mesh;
                     }
                 }
             }

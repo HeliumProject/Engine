@@ -534,10 +534,12 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_S
 {
     CORE_SCOPE_TIMER( ("ImportSceneNode: %s", element->GetClass()->m_ShortName.c_str()) );
 
-    SceneNodePtr createdNode = NULL;
+    SceneNodePtr sceneNode = Reflect::ObjectCast< SceneNode >( element );
 
-    if( importReflectType == Reflect::ReservedTypes::Invalid )
+    if ( importReflectType == Reflect::ReservedTypes::Invalid )
+    {
         importReflectType = Reflect::GetType< SceneNode >();
+    }
 
     // 
     // Merging Nodes / Duplicate ID check
@@ -578,18 +580,18 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_S
 
     if ( convertNode )
     {
-        if ( createdNode.ReferencesObject() )
+        if ( sceneNode.ReferencesObject() )
         {
             // update ui
             tostringstream str;
-            str << TXT( "Loading: " ) + createdNode->GetName();
+            str << TXT( "Loading: " ) + sceneNode->GetName();
             e_StatusChanged.Raise( str.str() );
 
             // save it in the list of created nodes
-            createdNodes.push_back( createdNode );
+            createdNodes.push_back( sceneNode );
 
             // add object to the scene
-            return new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, this, createdNode );
+            return new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, this, sceneNode );
         }
     }
 
@@ -1235,6 +1237,8 @@ void Scene::RemoveObject( const SceneNodePtr& node )
 
 void Scene::AddSceneNode( const SceneNodePtr& node )
 {
+    HELIUM_ASSERT( node->IsInitialized() );
+
     {
         CORE_SCOPE_TIMER( ("Insert in node list") );
 

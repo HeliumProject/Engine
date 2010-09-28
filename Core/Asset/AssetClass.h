@@ -35,8 +35,8 @@ namespace Helium
         {
         private:
 
-            Helium::Path m_SerializationPath; // optional path where this asset was deserialized from
-            Helium::Path m_Path; // path to the asset's backing/art file
+            Helium::Path m_SourcePath;   // optional path where this asset was deserialized from
+            Helium::Path m_ContentPath; // path to the asset's backing/art file
 
             tstring m_Description;
             std::set< tstring > m_Tags;
@@ -137,23 +137,23 @@ namespace Helium
 
         public:
 
-            void SetSerializationPath( const Helium::Path& path )
+            void SetSourcePath( const Helium::Path& path )
             {
-                m_SerializationPath = path;
+                m_SourcePath = path;
             }
 
-            const Helium::Path& GetSerializationPath()
+            const Helium::Path& GetSourcePath()
             {
-                return m_SerializationPath;
+                return m_SourcePath;
             }
 
-            void SetPath( const Helium::Path& path )
+            void SetContentPath( const Helium::Path& path )
             {
-                m_Path = path;
+                m_ContentPath = path;
             }
-            const Helium::Path& GetPath()
+            const Helium::Path& GetContentPath()
             {
-                return m_Path;
+                return m_ContentPath;
             }
 
             Helium::Path GetBuiltDirectory();

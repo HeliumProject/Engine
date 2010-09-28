@@ -13,9 +13,10 @@ using namespace Helium;
 
 struct Triangle
 {
-    std::vector< u32 > m_VertIndices;
-    std::vector< u32 > m_NormalIndices;
-    std::vector< u32 > m_TexCoordIndices;
+    std::vector< u32 >  m_VertIndices;
+    std::vector< u32 >  m_NormalIndices;
+    std::vector< u32 >  m_TexCoordIndices;
+    u32                 m_ShaderIndex;
 };
 
 /* ReadMTL: read a wavefront material library file
@@ -384,11 +385,25 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path )
                     fgets( buf, sizeof( buf ), file );
                 }
 
+                for ( std::vector< i32 >::const_iterator itr = faceVertexIndices.begin(), end = faceVertexIndices.end(); itr != end; ++itr )
+                {
+                    mesh->m_WireframeVertexIndices.push_back( (*itr) );
+                    if ( itr != ( end - 1 ) )
+                    {
+                        mesh->m_WireframeVertexIndices.push_back( (*itr + 1 ) );
+                    }
+                    else
+                    {
+                        mesh->m_WireframeVertexIndices.push_back( faceVertexIndices.front() );
+                    }
+                }
+
                 u32 numTris = faceVertexIndices.size() - 2;
 
                 for ( u32 i = 0; i < numTris; ++i )
                 {
                     Triangle t;
+                    t.m_ShaderIndex = curShaderIndex;
                     t.m_VertIndices.push_back( faceVertexIndices[ 0 ] );
                     t.m_VertIndices.push_back( faceVertexIndices[ 1 + i ] );
                     t.m_VertIndices.push_back( faceVertexIndices[ 2 + i ] );
@@ -425,10 +440,13 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path )
     mesh->m_Positions = vertices;
     mesh->m_Normals.resize( mesh->m_Positions.size() );
     mesh->m_BaseUVs.resize( mesh->m_Positions.size() );
+    mesh->m_ShaderTriangleCounts.resize( mesh->m_ShaderIDs.size() );
 
     for ( u32 i = 0; i < triangles.size(); ++i )
     {
         HELIUM_ASSERT( triangles[ i ].m_VertIndices.size() == 3 );
+
+        mesh->m_ShaderTriangleCounts[ triangles[ i ].m_ShaderIndex ]++;
 
         u32 base = mesh->m_TriangleVertexIndices.size();
 

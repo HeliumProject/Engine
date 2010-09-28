@@ -120,10 +120,10 @@ void* ThumbnailLoader::LoadThread::Entry()
                     Asset::TexturePtr colorMap = Asset::AssetClass::LoadAssetClass< Asset::Texture >( shader->m_ColorMapPath );
                     if ( colorMap.ReferencesObject() )
                     {
-                        if ( colorMap->GetPath().Exists() && SceneGraph::IsSupportedTexture( colorMap->GetPath().Get() ) )
+                        if ( colorMap->GetContentPath().Exists() && SceneGraph::IsSupportedTexture( colorMap->GetContentPath().Get() ) )
                         {
                             IDirect3DTexture9* texture = NULL;
-                            if ( texture = LoadTexture( device, colorMap->GetPath().Get() ) )
+                            if ( texture = LoadTexture( device, colorMap->GetContentPath().Get() ) )
                             {
                                 ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_DeviceManager, texture );
                                 args.m_Textures.push_back( thumbnail );

@@ -155,7 +155,7 @@ RenderShader* RBShaderLoader::ParseFile( const tchar* fname, ShaderManager* db )
     Asset::TexturePtr textureClass = Asset::AssetClass::LoadAssetClass< Asset::Texture >( shaderClass->m_ColorMapPath );
     if( textureClass.ReferencesObject() )
     {
-        settings.m_Path = textureClass->GetPath().Get();
+        settings.m_Path = textureClass->GetContentPath().Get();
         settings.m_Anisotropy = 0;
         settings.m_Filter = TextureFilterMode( textureClass->GetFilter() );
         settings.m_Format = GetD3DColorFormat( textureClass->GetFormat() );
@@ -196,7 +196,7 @@ RenderShader* RBShaderLoader::ParseFile( const tchar* fname, ShaderManager* db )
 
         if ( normalMap.ReferencesObject() )
         {
-            settings.m_Path = normalMap->GetPath().Get();
+            settings.m_Path = normalMap->GetContentPath().Get();
             settings.m_Anisotropy = 0;
             settings.m_Filter = TextureFilterMode( normalMap->GetFilter() );
             settings.m_Format = GetD3DColorFormat( normalMap->GetFormat() );
@@ -235,7 +235,7 @@ RenderShader* RBShaderLoader::ParseFile( const tchar* fname, ShaderManager* db )
     Asset::TexturePtr gpiMap = Asset::AssetClass::LoadAssetClass< Asset::Texture >( shaderClass->m_GPIMapPath );
     if( gpiMap.ReferencesObject() )
     {
-        settings.m_Path = gpiMap->GetPath().Get();
+        settings.m_Path = gpiMap->GetContentPath().Get();
         settings.m_Anisotropy = 0;
         settings.m_Filter = TextureFilterMode( gpiMap->GetFilter() );
         settings.m_Format = GetD3DColorFormat( gpiMap->GetFormat() );

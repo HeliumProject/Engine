@@ -2564,14 +2564,14 @@ void MainFrame::SetupEntityTypeMenus( const SceneGraph::EntityInstanceType* enti
         for( ;itr != end; ++itr )
         {
             const SceneGraph::EntitySet* art = Reflect::ObjectCast< SceneGraph::EntitySet >( itr->second );
-            if (art && art->GetEntity() && !art->GetEntity()->GetPath().empty())
+            if (art && art->GetEntity() && !art->GetEntity()->GetSourcePath().empty())
             {
                 ContextCallbackData* data = new ContextCallbackData;
                 data->m_ContextCallbackType = ContextCallbackTypes::Instance;
                 data->m_InstanceSet = art;
 
                 GetEventHandler()->Connect( EventIds::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnTypeContextMenu ), data, this );
-                menu->Append( EventIds::ID_SelectContextMenu + numMenuItems, art->GetEntity()->GetPath().c_str() );
+                menu->Append( EventIds::ID_SelectContextMenu + numMenuItems, art->GetEntity()->GetSourcePath().c_str() );
                 ++numMenuItems;
                 added = true;
             }

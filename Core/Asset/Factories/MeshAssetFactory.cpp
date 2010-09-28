@@ -21,7 +21,7 @@ AssetClassPtr MeshAssetFactory::Create( const Helium::Path& path )
     {
 
         EntityPtr entity = new Entity();
-        entity->SetPath( path.Filename() ); // we're dropping this guy relative to the data file
+        entity->SetContentPath( path.Filename() ); // we're dropping this guy relative to the data file
 
         MeshProcessingComponentPtr meshProcessingComponent = new MeshProcessingComponent();
         entity->SetComponent( meshProcessingComponent );
@@ -29,7 +29,7 @@ AssetClassPtr MeshAssetFactory::Create( const Helium::Path& path )
         try
         {
             Reflect::Archive::ToFile( entity, assetPath );
-            entity->SetSerializationPath( assetPath );
+            entity->SetSourcePath( assetPath );
         }
         catch( Helium::Exception& )
         {

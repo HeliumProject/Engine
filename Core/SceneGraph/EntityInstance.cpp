@@ -270,7 +270,7 @@ Scene* EntityInstance::GetNestedScene()
             
             if ( entity )
             {
-                Path meshPath = entity->GetPath();
+                Path meshPath = entity->GetContentPath().GetAbsolutePath( entity->GetSourcePath() );
                 meshPath.ReplaceExtension( TXT( "mesh.hrb" ) );
 
                 ResolveSceneArgs args( m_Owner->GetViewport(), meshPath );

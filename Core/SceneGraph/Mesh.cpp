@@ -81,9 +81,9 @@ tstring Mesh::GetApplicationTypeName() const
     return TXT( "Mesh" );
 }
 
-void Mesh::Initialize()
+void Mesh::Initialize(Scene* scene)
 {
-    __super::Initialize();
+    __super::Initialize(scene);
 
     //
     // Dereference Shaders

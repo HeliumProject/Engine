@@ -553,7 +553,12 @@ void CreateTool::AddToScene()
     {
         CORE_SCOPE_TIMER( ("Initialize Instance") );
 
-        m_Instance->Initialize();
+        if ( !m_Instance->IsInitialized() )
+        {
+            m_Instance->Initialize( m_Scene );
+        }
+
+        HELIUM_ASSERT( m_Instance->GetOwner() == m_Scene );
     }
 
     {

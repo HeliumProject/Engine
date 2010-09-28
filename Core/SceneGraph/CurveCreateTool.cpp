@@ -63,14 +63,14 @@ void CurveCreateTool::CreateInstance( const Math::Vector3& position )
     }
 
     m_Instance = new Curve();
-    m_Instance->SetOwner( m_Scene );
+    m_Instance->Initialize( m_Scene );
     m_Instance->SetSelected( true );
     m_Instance->SetTransient( true );
     m_Instance->SetCurveType( s_CurveType );
     m_Scene->AddObject( m_Instance );
 
     CurveControlPointPtr point = new CurveControlPoint();
-    point->SetOwner( m_Scene );
+    point->Initialize( m_Scene );
     point->SetParent( m_Instance );
     point->SetPosition( position );
     point->SetTransient( true );
@@ -173,7 +173,7 @@ void CurveCreateTool::AddToScene()
     batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Scene, m_Instance ) );
 
     // initialize
-    m_Instance->Initialize();
+    m_Instance->Initialize( m_Scene );
 
     // center origin
     m_Instance->CenterTransform();
@@ -202,7 +202,7 @@ bool CurveCreateTool::MouseDown( const MouseButtonInput& e )
         PickPosition( e.GetPosition().x, e.GetPosition().y, position );
 
         CurveControlPointPtr point = new CurveControlPoint();
-        point->SetOwner( m_Scene );
+        point->Initialize( m_Scene );
         point->SetParent( m_Instance );
         point->SetTransient( true );
         point->SetPosition( position );

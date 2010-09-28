@@ -63,7 +63,7 @@ SceneGraph::TransformPtr VolumeCreateTool::CreateNode()
 #else
 
     VolumePtr volume = new Volume();
-    volume->SetOwner( m_Scene );
+    volume->Initialize( m_Scene );
     volume->SetShape( s_Shape );
     return volume;
 

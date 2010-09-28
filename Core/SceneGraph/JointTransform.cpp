@@ -47,8 +47,10 @@ JointTransform::~JointTransform()
 {
 }
 
-void JointTransform::Initialize()
+void JointTransform::Initialize(Scene* scene)
 {
+    __super::Initialize( scene );
+
     SceneGraph::PrimitiveRings* rings = static_cast< SceneGraph::PrimitiveRings* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings ) );
     m_ObjectBounds.minimum = Math::Vector3(-rings->m_Radius, -rings->m_Radius, -rings->m_Radius);
     m_ObjectBounds.maximum = Math::Vector3(rings->m_Radius, rings->m_Radius, rings->m_Radius);

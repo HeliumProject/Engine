@@ -69,14 +69,16 @@ tstring Layer::GetApplicationTypeName() const
 // dependency graph (representing what objects are members of the layer) from
 // the list of ids stored on the persistent data.
 // 
-void Layer::Initialize()
+void Layer::Initialize(Scene* scene)
 {
-    __super::Initialize();
+    __super::Initialize(scene);
 
     m_Descendants.clear();
 
-    V_TUID memberIDs;
-    for ( V_TUID::const_iterator itr = m_Members.begin(), end = m_Members.end(); itr != end; ++itr )
+    // this we be the list of valid members, which will be trimmed to not include missing objects after the following loop
+    S_TUID memberIDs;
+
+    for ( S_TUID::const_iterator itr = m_Members.begin(), end = m_Members.end(); itr != end; ++itr )
     {
         SceneGraph::SceneNode* node = m_Owner->FindNode( *itr );
         if ( node )
@@ -86,7 +88,7 @@ void Layer::Initialize()
             // The ID might not be the same as what we requested (like
             // in the case of copy/paste), so save off all the IDs
             // and update the persistent data when we are done.
-            memberIDs.push_back( node->GetID() );
+            memberIDs.insert( node->GetID() );
         }
         else
         {
@@ -97,26 +99,6 @@ void Layer::Initialize()
     }
 
     m_Members = memberIDs;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Called just before the scene is serialized.  Traverses the layer's dependency
-// graph and stores the id of each descendant in the persistent data for this
-// class.
-// 
-void Layer::Pack()
-{
-    __super::Pack();
-
-#pragma TODO("Keep members list up to date as dependencies change instead of updating it in Pack()")
-    m_Members.clear();
-    m_Members.resize( m_Descendants.size() );
-    S_SceneNodeSmartPtr::const_iterator itr = m_Descendants.begin();
-    S_SceneNodeSmartPtr::const_iterator end = m_Descendants.end();
-    for ( size_t index = 0; itr != end; ++itr, ++index )
-    {
-        m_Members[index] = (*itr)->GetID();
-    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -187,39 +169,20 @@ bool Layer::ContainsMember( SceneGraph::SceneNode* node ) const
     return m_Descendants.find( node ) != m_Descendants.end();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Pruning a layer does not prune the layer's members.
-// 
-void Layer::Prune( V_SceneNodeDumbPtr& prunedNodes )
+void Layer::ConnectDescendant( SceneGraph::SceneNode* descendant )
 {
-    // Iterate over the layer members, update the persistent data as we do so,
-    // and build a local list of the members.  We have to build a list locally
-    // because disconnecting at this point would change the list that we are
-    // trying to iterate over.
-    V_SceneNodeDumbPtr members;
-    members.resize( m_Descendants.size() );
-    m_Members.clear();
-    m_Members.resize( m_Descendants.size() );
-    S_SceneNodeSmartPtr::const_iterator itr = m_Descendants.begin();
-    S_SceneNodeSmartPtr::const_iterator end = m_Descendants.end();
-    for ( size_t index = 0; itr != end; ++itr, ++index )
-    {
-        const SceneNodePtr& member = (*itr);
+    __super::ConnectDescendant( descendant );
 
-        m_Members[index] = member->GetID();
-        members[index] = member.Ptr();
-    }
+    HELIUM_ASSERT( m_Members.find( descendant->GetID() ) == m_Members.end() );
+    m_Members.insert( descendant->GetID() );
+}
 
-    // Iterate over the local member list and disconnect each one
-    V_SceneNodeDumbPtr::const_iterator memberItr = members.begin();
-    V_SceneNodeDumbPtr::const_iterator memberEnd = members.end();
-    for ( ; memberItr != memberEnd; ++memberItr )
-    {
-        DisconnectDescendant( *memberItr );
-    }
+void Layer::DisconnectDescendant( SceneGraph::SceneNode* descendant )
+{
+    __super::DisconnectDescendant( descendant );
 
-    // Let the base class take care of the rest
-    __super::Prune( prunedNodes );
+    HELIUM_ASSERT( m_Members.find( descendant->GetID() ) != m_Members.end() );
+    m_Members.erase( descendant->GetID() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -235,9 +198,7 @@ void Layer::Insert(Graph* g, V_SceneNodeDumbPtr& insertedNodes )
     if ( IsInitialized() )
     {
         HELIUM_ASSERT( m_Descendants.empty() );
-        V_TUID::const_iterator itr = m_Members.begin();
-        V_TUID::const_iterator end = m_Members.end();
-        for ( ; itr != end; ++itr )
+        for ( S_TUID::const_iterator itr = m_Members.begin(), end = m_Members.end(); itr != end; ++itr )
         {
             const TUID& id = *itr;
             SceneGraph::SceneNode* node = m_Owner->FindNode( id );
@@ -253,6 +214,23 @@ void Layer::Insert(Graph* g, V_SceneNodeDumbPtr& insertedNodes )
             }
         }
     }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Pruning a layer does not prune the layer's members.
+// 
+void Layer::Prune( V_SceneNodeDumbPtr& prunedNodes )
+{
+    S_TUID members = m_Members;
+
+    while ( !m_Descendants.empty() )
+    {
+        DisconnectDescendant( *m_Descendants.begin() );
+    }
+
+    m_Members = members;
+
+    __super::Prune( prunedNodes );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -59,6 +59,13 @@ EntityInstance::~EntityInstance()
     RemoveComponentRemovedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &EntityInstance::OnComponentRemoved ) );
 }
 
+void EntityInstance::Initialize( Scene* scene )
+{
+    __super::Initialize( scene );
+
+    CheckSets();
+}
+
 bool EntityInstance::ValidatePersistent( const Component::ComponentPtr& attr ) const
 {
     Asset::EntityPtr entityClass = GetEntity();

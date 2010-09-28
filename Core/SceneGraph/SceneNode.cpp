@@ -133,8 +133,11 @@ void SceneNode::Reset()
     m_Descendants.clear();
 }
 
-void SceneNode::Initialize()
+void SceneNode::Initialize(Scene* scene)
 {
+    HELIUM_ASSERT( m_Owner == NULL );
+    m_Owner = scene;
+
     // we start out dirty, of course
     Dirty();
 
@@ -470,8 +473,6 @@ void SceneNode::Execute(bool interactively)
 
 void SceneNode::GetState( Reflect::ElementPtr& state ) const
 {
-    const_cast<SceneNode*>(this)->Pack();
-
     state = const_cast<SceneNode*>(this)->Clone();
 }
 
@@ -480,7 +481,7 @@ void SceneNode::SetState( const Reflect::ElementPtr& state )
     if ( !state->Equals( this ) )
     {
         state->CopyTo( this );
-        Unpack();
+        Dirty();
         RaiseChanged();
     }
 }

@@ -73,7 +73,7 @@ Scene::Scene( SceneGraph::Viewport* viewport, const Helium::Path& path )
 
     // Setup root node
     m_Root = new PivotTransform();
-    m_Root->SetOwner( this );
+    m_Root->Initialize( this );
     m_Root->SetName( TXT( "Root" ) );
     m_Root->Evaluate( GraphDirections::Downstream );
     m_Graph->AddNode( m_Root.Ptr() );
@@ -468,8 +468,7 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
     V_SceneNodeSmartPtr::const_iterator end = createdNodes.end();
     for ( ; itr != end; ++itr )
     {
-        (*itr)->SetOwner( this );
-        (*itr)->Initialize();
+        (*itr)->Initialize( this );
 
         if ( importFlags & ImportFlags::Select )
         {
@@ -559,7 +558,6 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_S
                 {
                     SceneGraph::SceneNode* dependNode = find->second;
                     element->CopyTo( dependNode );
-                    dependNode->Unpack();
                     dependNode->Dirty();
                 }    
             }
@@ -583,8 +581,6 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_S
     {
         if ( createdNode.ReferencesObject() )
         {
-            createdNode->Unpack();
-
             // update ui
             tostringstream str;
             str << TXT( "Loading: " ) + createdNode->GetName();
@@ -775,7 +771,6 @@ void Scene::ExportSceneNode( SceneGraph::SceneNode* node, Reflect::V_Element& el
                 changes->Push( new ParentCommand( transformNode, GetRoot() ) );
             }
 
-            node->Pack();
             elements.push_back( node );
             exported.insert( node->GetID() );
 
@@ -2567,7 +2562,7 @@ Undo::CommandPtr Scene::GroupSelected()
 
     // Create the new group
     SceneGraph::PivotTransform* group = new SceneGraph::PivotTransform();
-    group->SetOwner( this );
+    group->Initialize( this );
 
     // Get a decent name
     group->Rename( TXT( "group1" ) );
@@ -2722,7 +2717,7 @@ Undo::CommandPtr Scene::DuplicateSelected()
         duplicate->SetParent( node->GetParent() );
 
         // make sure the new nodes are initialized
-        duplicate->InitializeHierarchy();
+        duplicate->InitializeHierarchy( node->GetOwner() );
     }
 
     // setting the selection will invalidate the flag for having a valid smart duplicate matrix
@@ -2789,7 +2784,7 @@ Undo::CommandPtr Scene::SmartDuplicateSelected()
     batch->Push( new Undo::PropertyCommand<Math::Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Math::Matrix4> (transform, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), matrix ) );
 
     // make sure the new nodes are initialized
-    duplicate->InitializeHierarchy();
+    duplicate->InitializeHierarchy( node->GetOwner() );
 
     // setting the selection will invalidate the flag for having a valid smart duplicate matrix
     batch->Push( m_Selection.SetItem(duplicate) );

@@ -482,11 +482,11 @@ void MainFrame::SceneAdded( const SceneChangeArgs& args )
     if ( !m_SceneManager.IsNestedScene( args.m_Scene ) )
     {
         // Only listen to zone and world files.
-        args.m_Scene->AddStatusChangedListener( SceneStatusChangeSignature::Delegate( this, &MainFrame::SceneStatusChanged ) );
-        args.m_Scene->AddSceneContextChangedListener( SceneContextChangedSignature::Delegate( this, &MainFrame::SceneContextChanged ) );
-        args.m_Scene->AddLoadFinishedListener( LoadSignature::Delegate( this, & MainFrame::SceneLoadFinished ) );
-        args.m_Scene->UndoCommandDelegate().Set( UndoCommandSignature::Delegate( this, &MainFrame::OnSceneUndoCommand ) );
-        args.m_Scene->AddExecutedListener( ExecuteSignature::Delegate( this, &MainFrame::SceneExecuted ) );
+        args.m_Scene->e_StatusChanged.Add( SceneStatusChangeSignature::Delegate( this, &MainFrame::SceneStatusChanged ) );
+        args.m_Scene->e_SceneContextChanged.Add( SceneContextChangedSignature::Delegate( this, &MainFrame::SceneContextChanged ) );
+        args.m_Scene->e_LoadFinished.Add( LoadSignature::Delegate( this, & MainFrame::SceneLoadFinished ) );
+        args.m_Scene->d_UndoCommand.Set( UndoCommandSignature::Delegate( this, &MainFrame::OnSceneUndoCommand ) );
+        args.m_Scene->e_Executed.Add( ExecuteSignature::Delegate( this, &MainFrame::SceneExecuted ) );
 
         m_ViewPanel->GetViewCanvas()->GetViewport().AddRenderListener( RenderSignature::Delegate( args.m_Scene, &Scene::Render ) );
 
@@ -501,11 +501,11 @@ void MainFrame::SceneAdded( const SceneChangeArgs& args )
 
 void MainFrame::SceneRemoving( const SceneChangeArgs& args )
 {
-    args.m_Scene->RemoveStatusChangedListener( SceneStatusChangeSignature::Delegate ( this, &MainFrame::SceneStatusChanged ) );
-    args.m_Scene->RemoveSceneContextChangedListener( SceneContextChangedSignature::Delegate ( this, &MainFrame::SceneContextChanged ) );
-    args.m_Scene->RemoveLoadFinishedListener( LoadSignature::Delegate( this, & MainFrame::SceneLoadFinished ) );
-    args.m_Scene->UndoCommandDelegate().Clear();
-    args.m_Scene->RemoveExecutedListener( ExecuteSignature::Delegate( this, &MainFrame::SceneExecuted ) );
+    args.m_Scene->e_StatusChanged.Remove( SceneStatusChangeSignature::Delegate ( this, &MainFrame::SceneStatusChanged ) );
+    args.m_Scene->e_SceneContextChanged.Remove( SceneContextChangedSignature::Delegate ( this, &MainFrame::SceneContextChanged ) );
+    args.m_Scene->e_LoadFinished.Remove( LoadSignature::Delegate( this, & MainFrame::SceneLoadFinished ) );
+    args.m_Scene->d_UndoCommand.Clear();
+    args.m_Scene->e_Executed.Remove( ExecuteSignature::Delegate( this, &MainFrame::SceneExecuted ) );
 
     m_ViewPanel->GetViewCanvas()->GetViewport().RemoveRenderListener( RenderSignature::Delegate( args.m_Scene, &Scene::Render ) );
 
@@ -1267,9 +1267,9 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
         m_ToolbarPanel->GetToolsPanel()->Refresh();
 
         // Hook our event handlers
-        args.m_Scene->AddStatusChangedListener( SceneStatusChangeSignature::Delegate ( this, &MainFrame::SceneStatusChanged ) );
-        args.m_Scene->AddSceneContextChangedListener( SceneContextChangedSignature::Delegate ( this, &MainFrame::SceneContextChanged ) );
-        args.m_Scene->AddExecutedListener( ExecuteSignature::Delegate ( this, &MainFrame::Executed ) );
+        args.m_Scene->e_StatusChanged.Add( SceneStatusChangeSignature::Delegate ( this, &MainFrame::SceneStatusChanged ) );
+        args.m_Scene->e_SceneContextChanged.Add( SceneContextChangedSignature::Delegate ( this, &MainFrame::SceneContextChanged ) );
+        args.m_Scene->e_Executed.Add( ExecuteSignature::Delegate ( this, &MainFrame::Executed ) );
 
         // Selection event handlers
         args.m_Scene->AddSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &MainFrame::SelectionChanged ) );
@@ -1351,9 +1351,9 @@ void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
     }
 
     // Unhook our event handlers
-    args.m_Scene->RemoveStatusChangedListener( SceneStatusChangeSignature::Delegate ( this, &MainFrame::SceneStatusChanged ) );
-    args.m_Scene->RemoveSceneContextChangedListener( SceneContextChangedSignature::Delegate ( this, &MainFrame::SceneContextChanged ) );
-    args.m_Scene->RemoveExecutedListener( ExecuteSignature::Delegate ( this, &MainFrame::Executed ) );
+    args.m_Scene->e_StatusChanged.Remove( SceneStatusChangeSignature::Delegate ( this, &MainFrame::SceneStatusChanged ) );
+    args.m_Scene->e_SceneContextChanged.Remove( SceneContextChangedSignature::Delegate ( this, &MainFrame::SceneContextChanged ) );
+    args.m_Scene->e_Executed.Remove( ExecuteSignature::Delegate ( this, &MainFrame::Executed ) );
 
     // Selection event handlers
     args.m_Scene->RemoveSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &MainFrame::SelectionChanged ) );
@@ -2564,21 +2564,14 @@ void MainFrame::SetupEntityTypeMenus( const SceneGraph::EntityInstanceType* enti
         for( ;itr != end; ++itr )
         {
             const SceneGraph::EntitySet* art = Reflect::ObjectCast< SceneGraph::EntitySet >( itr->second );
-            if (art && !art->GetContentFile().empty())
+            if (art && art->GetEntity() && !art->GetEntity()->GetPath().empty())
             {
-                tstring artPath( art->GetContentFile() );
-
-#pragma TODO( "We need make the artPath relative to the entity file" )
-
-                // Why is the art path blank?
-                HELIUM_ASSERT(!artPath.empty());
-
                 ContextCallbackData* data = new ContextCallbackData;
                 data->m_ContextCallbackType = ContextCallbackTypes::Instance;
                 data->m_InstanceSet = art;
 
                 GetEventHandler()->Connect( EventIds::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnTypeContextMenu ), data, this );
-                menu->Append( EventIds::ID_SelectContextMenu + numMenuItems, artPath.c_str() );
+                menu->Append( EventIds::ID_SelectContextMenu + numMenuItems, art->GetEntity()->GetPath().c_str() );
                 ++numMenuItems;
                 added = true;
             }

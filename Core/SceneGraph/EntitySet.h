@@ -30,7 +30,6 @@ namespace Helium
         class EntitySet : public SceneGraph::InstanceSet
         {
         protected:
-            // file resolver id
             Helium::Path m_AssetPath;
             bool m_ClassMissing;
 
@@ -39,9 +38,6 @@ namespace Helium
 
             // manifest information exported from the content
             Asset::EntityManifestPtr m_Manifest;
-
-            // the master file from the content attribute
-            tstring m_ArtFile;
 
             // shape to render with
             SceneGraph::Primitive* m_Shape;
@@ -67,11 +63,6 @@ namespace Helium
             Asset::Entity* GetEntity() const
             {
                 return m_Class;
-            }
-
-            const tstring& GetContentFile() const
-            {
-                return m_ArtFile;
             }
 
             SceneGraph::Primitive* GetShape()

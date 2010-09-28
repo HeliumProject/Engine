@@ -7,7 +7,6 @@
 #include "Core/SceneGraph/Scene.h"
 #include "Core/SceneGraph/EntityInstance.h"
 #include "Core/SceneGraph/EntityInstanceType.h"
-#include "Core/SceneGraph/EntitySet.h"
 #include "Core/SceneGraph/Pick.h"
 #include "Core/Asset/AssetInit.h"
 #include "Core/Asset/Classes/Entity.h"

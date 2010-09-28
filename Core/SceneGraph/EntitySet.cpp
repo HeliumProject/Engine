@@ -13,6 +13,7 @@
 #include "Core/SceneGraph/PrimitiveSphere.h"
 #include "Core/SceneGraph/PrimitiveCylinder.h"
 #include "Core/SceneGraph/PrimitiveCapsule.h"
+#include "Core/SceneGraph/Mesh.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
@@ -33,7 +34,8 @@ EntitySet::EntitySet( SceneGraph::EntityInstanceType* type, const Helium::Path& 
 : SceneGraph::InstanceSet (type)
 , m_AssetPath( assetPath )
 , m_ClassMissing (false)
-, m_Shape (NULL)
+, m_Shape( NULL )
+, m_Class( NULL )
 {
     LoadAssetClass();
 }
@@ -46,7 +48,6 @@ EntitySet::~EntitySet()
 
 void EntitySet::LoadAssetClass()
 {
-
     m_Class = Asset::AssetClass::LoadAssetClass<Asset::Entity>( m_AssetPath );
 
     if ( !m_Class.ReferencesObject() )
@@ -57,9 +58,7 @@ void EntitySet::LoadAssetClass()
     {
         m_Name = m_Class->GetFullName();
 
-        m_ArtFile = m_Class->GetPath().Get();
-
-        if (!m_ArtFile.empty())
+        if ( !m_Class->GetPath().empty() )
         {
             SceneGraph::PrimitiveCube* cube;
             if ( !m_Shape )
@@ -92,21 +91,31 @@ void EntitySet::LoadAssetClass()
                     cube->Update();
                 }
             }
-            else if ( Helium::Path( m_ArtFile ).Exists() )
+            else
             {
-                try
-                {
-                    m_Manifest = Reflect::Archive::FromFile<Asset::EntityManifest>( m_ArtFile );
-                }
-                catch ( const Reflect::Exception& e )
-                {
-                    Log::Error( TXT( "Error loading %s (%s)\n" ), m_ArtFile.c_str(), e.What());
-                }
+                Path meshPath = m_Class->GetPath();
+                meshPath.ReplaceExtension( TXT( "mesh.hrb" ) );
 
-                if (m_Manifest.ReferencesObject())
+                if ( meshPath.Exists() )
                 {
-                    cube->SetBounds( m_Manifest->m_BoundingBoxMin, m_Manifest->m_BoundingBoxMax );
-                    cube->Update();
+                    SceneGraph::Mesh* mesh = NULL;
+                    try
+                    {
+                        mesh = Reflect::Archive::FromFile< SceneGraph::Mesh >( meshPath );
+                    }
+                    catch ( const Reflect::Exception& e )
+                    {
+                        Log::Error( TXT( "Error loading %s (%s)\n" ), meshPath.c_str(), e.What());
+                    }
+
+                    if ( mesh )
+                    {
+                        Math::AlignedBox box;
+                        mesh->GetAlignedBoundingBox( box );
+                        cube->SetBounds( box );
+                        cube->Update();
+                        delete mesh;
+                    }
                 }
             }
         }

@@ -121,7 +121,7 @@ namespace Helium
             SceneGraph::Scene* GetScene( const tstring& path ) const;
 
             bool IsNestedScene( SceneGraph::Scene* scene ) const;
-            SceneGraph::Scene* AllocateNestedScene( SceneGraph::Viewport* viewport, const tstring& path, SceneGraph::Scene* parent );
+            void AllocateNestedScene( const ResolveSceneArgs& args );
             void ReleaseNestedScene( SceneGraph::Scene*& scene );
 
             static tstring GetUniqueFileName();

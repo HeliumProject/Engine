@@ -165,8 +165,8 @@ void HierarchyOutliner::ConnectSceneListeners()
 
     if ( m_CurrentScene )
     {
-        m_CurrentScene->AddNodeAddedListener( NodeChangeSignature::Delegate ( this, &HierarchyOutliner::NodeAdded ) );
-        m_CurrentScene->AddNodeRemovedListener( NodeChangeSignature::Delegate ( this, &HierarchyOutliner::NodeRemoved ) );
+        m_CurrentScene->e_NodeAdded.Add( NodeChangeSignature::Delegate ( this, &HierarchyOutliner::NodeAdded ) );
+        m_CurrentScene->e_NodeRemoved.Add( NodeChangeSignature::Delegate ( this, &HierarchyOutliner::NodeRemoved ) );
     }
 }
 
@@ -180,8 +180,8 @@ void HierarchyOutliner::DisconnectSceneListeners()
 
     if ( m_CurrentScene )
     {
-        m_CurrentScene->RemoveNodeAddedListener( NodeChangeSignature::Delegate ( this, &HierarchyOutliner::NodeAdded ) );
-        m_CurrentScene->RemoveNodeRemovedListener( NodeChangeSignature::Delegate ( this, &HierarchyOutliner::NodeRemoved ) );
+        m_CurrentScene->e_NodeAdded.Remove( NodeChangeSignature::Delegate ( this, &HierarchyOutliner::NodeAdded ) );
+        m_CurrentScene->e_NodeRemoved.Remove( NodeChangeSignature::Delegate ( this, &HierarchyOutliner::NodeRemoved ) );
     }
 }
 

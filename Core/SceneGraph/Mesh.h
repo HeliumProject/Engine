@@ -151,6 +151,8 @@ namespace Helium
             void MergeVertToClosest(u32 vert_id);
             void PunchCubeHole(Math::Matrix4& mat, Math::Matrix4& inv_mat, f32 vert_merge_threshold);
 
+            u32 AddShader( Shader* shader );
+
             // temp hack
             friend class Skin;
 

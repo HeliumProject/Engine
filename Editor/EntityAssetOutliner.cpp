@@ -249,8 +249,8 @@ void EntityAssetOutliner::ConnectSceneListeners()
     if ( m_CurrentScene )
     {
         // Connect listeners
-        m_CurrentScene->AddNodeTypeAddedListener( NodeTypeExistenceSignature::Delegate ( this, &EntityAssetOutliner::NodeTypeAdded ) );
-        m_CurrentScene->AddNodeTypeRemovedListener( NodeTypeExistenceSignature::Delegate ( this, &EntityAssetOutliner::NodeTypeRemoved ) );
+        m_CurrentScene->e_NodeTypeCreated.Add( NodeTypeExistenceSignature::Delegate ( this, &EntityAssetOutliner::NodeTypeAdded ) );
+        m_CurrentScene->e_NodeTypeDeleted.Add( NodeTypeExistenceSignature::Delegate ( this, &EntityAssetOutliner::NodeTypeRemoved ) );
     }
 }
 
@@ -263,8 +263,8 @@ void EntityAssetOutliner::DisconnectSceneListeners()
     if ( m_CurrentScene )
     {
         // Disconnect listeners
-        m_CurrentScene->RemoveNodeTypeAddedListener( NodeTypeExistenceSignature::Delegate ( this, &EntityAssetOutliner::NodeTypeAdded ) );
-        m_CurrentScene->RemoveNodeTypeRemovedListener( NodeTypeExistenceSignature::Delegate ( this, &EntityAssetOutliner::NodeTypeRemoved ) );
+        m_CurrentScene->e_NodeTypeCreated.Remove( NodeTypeExistenceSignature::Delegate ( this, &EntityAssetOutliner::NodeTypeAdded ) );
+        m_CurrentScene->e_NodeTypeDeleted.Remove( NodeTypeExistenceSignature::Delegate ( this, &EntityAssetOutliner::NodeTypeRemoved ) );
     }
 
     __super::DisconnectSceneListeners();

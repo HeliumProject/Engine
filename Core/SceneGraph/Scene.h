@@ -134,14 +134,16 @@ namespace Helium
 
         struct ResolveSceneArgs
         {
-            ResolveSceneArgs( const Helium::Path& path )
-                : m_Path( path )
+            ResolveSceneArgs( SceneGraph::Viewport* viewport, const Helium::Path& path )
+                : m_Viewport( viewport )
+                , m_Path( path )
                 , m_Scene( NULL )
             {
             }
 
-            Helium::Path    m_Path;
-            mutable Scene*  m_Scene;
+            SceneGraph::Viewport* m_Viewport;
+            Helium::Path          m_Path;
+            mutable Scene*        m_Scene;
         };
         typedef Helium::Signature< const ResolveSceneArgs& > ResolveSceneSignature;
 
@@ -792,153 +794,20 @@ namespace Helium
             // Events
             //
 
-        private:
-            UndoCommandSignature::Delegate m_UndoCommandDelegate;
         public:
-            UndoCommandSignature::Delegate& UndoCommandDelegate()
-            {
-                return m_UndoCommandDelegate;
-            }
-
-        private:
-            ResolveSceneSignature::Delegate m_ResolveDelegate;
-        public:
-            ResolveSceneSignature::Delegate& ResolveSceneDelegate()
-            {
-                return m_ResolveDelegate;
-            }
-
-        private:
-            SceneEditingSignature::Delegate m_EditingDelegate;
-        public:
-            void SetEditingDelegate( const SceneEditingSignature::Delegate& listener )
-            {
-                m_EditingDelegate.Set( listener );
-            }
-            void RemoveEditingDelegate()
-            {
-                m_EditingDelegate.Clear();
-            }
-
-        private:
-            SceneStatusChangeSignature::Event m_StatusChanged;
-        public:
-            void AddStatusChangedListener( const SceneStatusChangeSignature::Delegate& listener )
-            {
-                m_StatusChanged.Add( listener );
-            }
-            void RemoveStatusChangedListener( const SceneStatusChangeSignature::Delegate& listener )
-            {
-                m_StatusChanged.Remove( listener );
-            }
-
-        private:
-            SceneContextChangedSignature::Event m_SceneContextChanged;
-        public:
-            void AddSceneContextChangedListener( const SceneContextChangedSignature::Delegate& listener )
-            {
-                m_SceneContextChanged.Add( listener );
-            }
-            void RemoveSceneContextChangedListener( const SceneContextChangedSignature::Delegate& listener )
-            {
-                m_SceneContextChanged.Remove( listener );
-            }
-
-        private:
-            NodeTypeExistenceSignature::Event m_NodeTypeCreated;
-        public:
-            void AddNodeTypeAddedListener( const NodeTypeExistenceSignature::Delegate& listener )
-            {
-                m_NodeTypeCreated.Add( listener );
-            }
-            void RemoveNodeTypeAddedListener( const NodeTypeExistenceSignature::Delegate& listener )
-            {
-                m_NodeTypeCreated.Remove( listener );
-            }
-
-        private:
-            NodeTypeExistenceSignature::Event m_NodeTypeDeleted;
-        public:
-            void AddNodeTypeRemovedListener( const NodeTypeExistenceSignature::Delegate& listener )
-            {
-                m_NodeTypeDeleted.Add( listener );
-            }
-            void RemoveNodeTypeRemovedListener( const NodeTypeExistenceSignature::Delegate& listener )
-            {
-                m_NodeTypeDeleted.Remove( listener );
-            }
-
-        private:
-            NodeChangeSignature::Event m_NodeAdded;
-        public:
-            void AddNodeAddedListener( const NodeChangeSignature::Delegate& listener )
-            {
-                m_NodeAdded.Add( listener );
-            }
-            void RemoveNodeAddedListener( const NodeChangeSignature::Delegate& listener )
-            {
-                m_NodeAdded.Remove( listener );
-            }
-
-        private:
-            NodeChangeSignature::Event m_NodeRemoved;
-        public:
-            void AddNodeRemovedListener( const NodeChangeSignature::Delegate& listener )
-            {
-                m_NodeRemoved.Add( listener );
-            }
-            void RemoveNodeRemovedListener( const NodeChangeSignature::Delegate& listener )
-            {
-                m_NodeRemoved.Remove( listener );
-            }
-
-        private:
-            NodeChangeSignature::Event m_NodeRemoving;
-        public:
-            void AddNodeRemovingListener( const NodeChangeSignature::Delegate& listener )
-            {
-                m_NodeRemoving.Add( listener );
-            }
-            void RemoveNodeRemovingListener( const NodeChangeSignature::Delegate& listener )
-            {
-                m_NodeRemoving.Remove( listener );
-            }
-
-        private:
-            LoadSignature::Event m_LoadStarted;
-        public:
-            void AddLoadStartedListener( const LoadSignature::Delegate& listener )
-            {
-                m_LoadStarted.Add( listener );
-            }
-            void RemoveLoadStartedListener( const LoadSignature::Delegate& listener )
-            {
-                m_LoadStarted.Remove( listener );
-            }
-
-        private:
-            LoadSignature::Event m_LoadFinished;
-        public:
-            void AddLoadFinishedListener( const LoadSignature::Delegate& listener )
-            {
-                m_LoadFinished.Add( listener );
-            }
-            void RemoveLoadFinishedListener( const LoadSignature::Delegate& listener )
-            {
-                m_LoadFinished.Remove( listener );
-            }
-
-        private:
-            ExecuteSignature::Event m_Executed;
-        public:
-            void AddExecutedListener( const ExecuteSignature::Delegate& listener )
-            {
-                m_Executed.Add( listener );
-            }
-            void RemoveExecutedListener( const ExecuteSignature::Delegate& listener )
-            {
-                m_Executed.Remove( listener );
-            }
+            UndoCommandSignature::Delegate d_UndoCommand;
+            ResolveSceneSignature::Delegate d_ResolveScene;
+            SceneEditingSignature::Delegate d_Editing;
+            SceneStatusChangeSignature::Event e_StatusChanged;
+            SceneContextChangedSignature::Event e_SceneContextChanged;
+            NodeTypeExistenceSignature::Event e_NodeTypeCreated;
+            NodeTypeExistenceSignature::Event e_NodeTypeDeleted;
+            NodeChangeSignature::Event e_NodeAdded;
+            NodeChangeSignature::Event e_NodeRemoved;
+            NodeChangeSignature::Event e_NodeRemoving;
+            LoadSignature::Event e_LoadStarted;
+            LoadSignature::Event e_LoadFinished;
+            ExecuteSignature::Event e_Executed;
         };
 
         typedef Helium::SmartPtr< SceneGraph::Scene > ScenePtr;

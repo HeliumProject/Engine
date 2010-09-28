@@ -176,8 +176,8 @@ void LayersPanel::ConnectSceneListeners()
     if ( m_Scene )
     {
         // Add listeners for when layers are added/removed from a the scene
-        m_Scene->AddNodeAddedListener( NodeChangeSignature::Delegate ( this, &LayersPanel::NodeAdded ) );
-        m_Scene->AddNodeRemovedListener( NodeChangeSignature::Delegate ( this, &LayersPanel::NodeRemoved ) );
+        m_Scene->e_NodeAdded.Add( NodeChangeSignature::Delegate ( this, &LayersPanel::NodeAdded ) );
+        m_Scene->e_NodeRemoved.Add( NodeChangeSignature::Delegate ( this, &LayersPanel::NodeRemoved ) );
 
         // Listen for changes to the scene's selection
         m_Scene->AddSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &LayersPanel::SelectionChanged ) );
@@ -192,8 +192,8 @@ void LayersPanel::DisconnectSceneListeners()
     if ( m_Scene )
     {
         // Remove layer creation listeners on the scene
-        m_Scene->RemoveNodeAddedListener( NodeChangeSignature::Delegate ( this, &LayersPanel::NodeAdded ) );
-        m_Scene->RemoveNodeRemovedListener( NodeChangeSignature::Delegate ( this, &LayersPanel::NodeRemoved ) );
+        m_Scene->e_NodeAdded.Remove( NodeChangeSignature::Delegate ( this, &LayersPanel::NodeAdded ) );
+        m_Scene->e_NodeRemoved.Remove( NodeChangeSignature::Delegate ( this, &LayersPanel::NodeRemoved ) );
 
         // Remove selection change listener on scene
         m_Scene->RemoveSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &LayersPanel::SelectionChanged ) );

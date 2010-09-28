@@ -7,7 +7,6 @@
 #include "Core/SceneGraph/Color.h"
 #include "Core/SceneGraph/Graph.h"
 #include "Core/SceneGraph/EntityInstance.h"
-#include "Core/SceneGraph/EntitySet.h"
 #include "Core/SceneGraph/HierarchyNodeType.h"
 #include "Core/SceneGraph/Layer.h"
 #include "Core/SceneGraph/Transform.h"

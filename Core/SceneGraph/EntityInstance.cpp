@@ -180,13 +180,24 @@ SceneNodeTypePtr EntityInstance::CreateNodeType( Scene* scene ) const
     return nodeType;
 }
 
-Scene* EntityInstance::GetNestedScene( GeometryMode mode, bool load_on_demand ) const
+Scene* EntityInstance::GetNestedScene()
 {
-    if (m_ClassSet->GetEntity())
+    if ( !m_Scene )
     {
-        ResolveSceneArgs args ( m_ClassSet->GetContentFile() );
-        m_Owner->ResolveSceneDelegate().Invoke( args );
-        m_Scene = args.m_Scene;
+        if ( m_ClassSet )
+        {
+            Asset::Entity* entity = m_ClassSet->GetEntity();
+            
+            if ( entity )
+            {
+                Path meshPath = entity->GetPath();
+                meshPath.ReplaceExtension( TXT( "mesh.hrb" ) );
+
+                ResolveSceneArgs args( m_Owner->GetViewport(), meshPath );
+                m_Owner->d_ResolveScene.Invoke( args );
+                m_Scene = args.m_Scene;
+            }
+        }
     }
 
     return m_Scene;
@@ -323,7 +334,7 @@ void EntityInstance::Evaluate(GraphDirection direction)
             if ( IsGeometryVisible() )
             {
                 // merge nested scene into our bounding box
-                const Scene* nested = GetNestedScene( m_Scene->GetViewport()->GetGeometryMode() );
+                const Scene* nested = GetNestedScene();
 
                 if (nested)
                 {
@@ -363,7 +374,7 @@ void EntityInstance::Render( RenderVisitor* render )
 
     if (IsGeometryVisible())
     {
-        Scene* nested = GetNestedScene( render->GetViewport()->GetGeometryMode() );
+        Scene* nested = GetNestedScene();
 
         VisitorState state ( render->State().m_Matrix,
             render->State().m_Highlighted || (m_Scene->IsFocused() && IsHighlighted()),
@@ -443,7 +454,7 @@ bool EntityInstance::Pick( PickVisitor* pick )
         pick->PushState( VisitorState (pick->State().m_Matrix, IsHighlighted(), IsSelected(), IsLive(), IsSelectable()) );
 
         // retrieve nested scene
-        const Scene* scene = GetNestedScene(GetOwner()->GetViewport()->GetGeometryMode());
+        const Scene* scene = GetNestedScene();
 
         // hit test the entire nested scene
         if (scene && scene->Pick(pick))

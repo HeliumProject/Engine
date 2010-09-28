@@ -2005,3 +2005,24 @@ void Mesh::PunchCubeHole(Math::Matrix4& mat, Math::Matrix4& inv_mat, f32 vert_me
         WeldMeshVerts(0.001f);
     }
 }
+
+u32 Mesh::AddShader( Shader* shader )
+{
+    u32 index = 0;
+    for ( V_ShaderDumbPtr::const_iterator itr = m_Shaders.begin(), end = m_Shaders.end(); itr != end; ++itr, ++index )
+    {
+        if ( *itr == shader )
+        {
+            return index;
+        }
+    }
+
+    if ( m_Owner )
+    {
+        m_Owner->AddObject( shader );
+    }
+
+    m_Shaders.push_back( shader );
+    m_ShaderIDs.push_back( shader->GetID() );
+    return m_Shaders.size() - 1;
+}

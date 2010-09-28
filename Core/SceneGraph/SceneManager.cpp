@@ -81,7 +81,8 @@ ScenePtr SceneManager::OpenScene( SceneGraph::Viewport* viewport, const tstring&
 // 
 void SceneManager::AddScene(SceneGraph::Scene* scene)
 {
-    scene->SetEditingDelegate( SceneEditingSignature::Delegate( this, &SceneManager::OnSceneEditing ) );
+    scene->d_Editing.Set( SceneEditingSignature::Delegate( this, &SceneManager::OnSceneEditing ) );
+    scene->d_ResolveScene.Set( ResolveSceneSignature::Delegate( this, &SceneManager::AllocateNestedScene ) );
 
     Helium::Insert<M_SceneSmartPtr>::Result inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
     HELIUM_ASSERT(inserted.second);
@@ -101,7 +102,8 @@ void SceneManager::RemoveScene(SceneGraph::Scene* scene)
     m_DocumentManager.FindDocument( scene->GetPath() )->RemoveDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
     m_SceneRemoving.Raise( scene );
 
-    scene->RemoveEditingDelegate();
+    scene->d_Editing.Clear();
+    scene->d_ResolveScene.Clear();
 
     M_SceneSmartPtr::iterator found = m_Scenes.find( scene->GetPath().Get() );
     HELIUM_ASSERT( found != m_Scenes.end() );
@@ -188,33 +190,31 @@ bool SceneManager::IsNestedScene( SceneGraph::Scene* scene ) const
 // there was a problem loading the scene, it will be empty.  If you allocate a
 // scene, you must call ReleaseNestedScene to free it.
 // 
-SceneGraph::Scene* SceneManager::AllocateNestedScene( SceneGraph::Viewport* viewport, const tstring& path, SceneGraph::Scene* parent )
+void SceneManager::AllocateNestedScene( const ResolveSceneArgs& args )
 {
-    SceneGraph::Scene* scene = GetScene( path );
+    args.m_Scene = GetScene( args.m_Path );
 
-    if ( !scene )
+    if ( !args.m_Scene )
     {
         // Try to load nested scene.
-        parent->ChangeStatus( TXT("Loading ") + path + TXT( "..." ) );
+        //parent->ChangeStatus( TXT("Loading ") + path + TXT( "..." ) );
 
-        ScenePtr scenePtr = NewScene( viewport, path );
-        if ( !scenePtr->Load( path ) )
+        ScenePtr scenePtr = NewScene( args.m_Viewport, args.m_Path );
+        if ( !scenePtr->Load( args.m_Path ) )
         {
-            Log::Error( TXT( "Failed to load scene from %s\n" ), path.c_str() );
+            Log::Error( TXT( "Failed to load scene from %s\n" ), args.m_Path.c_str() );
         }
 
-        parent->ChangeStatus( TXT( "Ready" ) );
-        scene = scenePtr;
+        //parent->ChangeStatus( TXT( "Ready" ) );
+        args.m_Scene = scenePtr;
     }
 
-    if ( scene )
+    if ( args.m_Scene )
     {
         // Increment the reference count on the nested scene.
-        i32& referenceCount = m_AllocatedScenes.insert( M_AllocScene::value_type( scene, 0 ) ).first->second;
+        i32& referenceCount = m_AllocatedScenes.insert( M_AllocScene::value_type( args.m_Scene, 0 ) ).first->second;
         ++referenceCount;
     }
-
-    return scene;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

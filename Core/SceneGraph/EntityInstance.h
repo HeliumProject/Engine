@@ -44,7 +44,7 @@ namespace Helium
             virtual SceneNodeTypePtr CreateNodeType( Scene* scene ) const HELIUM_OVERRIDE;
 
             // retrieve the nested scene from the scene manager
-            Scene* GetNestedScene(GeometryMode mode, bool load_on_demand = true) const;
+            Scene* GetNestedScene();
 
             tstring GetEntityPath() const;
             void SetEntityPath( const tstring& path );

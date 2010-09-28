@@ -248,7 +248,7 @@ void SimpleElementMapSerializer<KeyT>::Deserialize(Archive& archive)
 }
 
 template < class KeyT >
-void SimpleElementMapSerializer<KeyT>::Host(Visitor& visitor)
+void SimpleElementMapSerializer<KeyT>::Accept(Visitor& visitor)
 {
     DataType::iterator itr = const_cast<Serializer::DataPtr<DataType>&>(m_Data)->begin();
     DataType::iterator end = const_cast<Serializer::DataPtr<DataType>&>(m_Data)->end();
@@ -264,7 +264,7 @@ void SimpleElementMapSerializer<KeyT>::Host(Visitor& visitor)
             continue;
         }
 
-        itr->second->Host( visitor );
+        itr->second->Accept( visitor );
     }
 }
 

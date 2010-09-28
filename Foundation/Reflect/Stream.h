@@ -65,8 +65,8 @@ namespace Helium
         // Stream object, read and write data to/from a buffer
         //
 
-        template< class C >
-        class Stream : public Helium::RefCountBase< Stream< C > >
+        template< class StreamCharT >
+        class Stream : public Helium::RefCountBase< Stream< StreamCharT > >
         {
         public: 
             Stream()
@@ -76,7 +76,7 @@ namespace Helium
 
             }
 
-            Stream( std::basic_iostream< C, std::char_traits<C> >* stream, bool ownStream = false )
+            Stream( std::basic_iostream< StreamCharT, std::char_traits< StreamCharT > >* stream, bool ownStream = false )
                 : m_Stream( stream )
                 , m_OwnStream( ownStream )
             {
@@ -154,7 +154,7 @@ namespace Helium
             {
                 PROFILE_SCOPE_ACCUM(g_StreamRead); 
 
-                m_Stream->read((C*)t, streamElementCount); 
+                m_Stream->read((StreamCharT*)t, streamElementCount); 
 
                 if (m_Stream->fail() && !m_Stream->eof())
                 {
@@ -164,19 +164,19 @@ namespace Helium
                 return *this; 
             }
 
-            template <typename T>
-            inline Stream& Read(T* ptr)
+            template <typename PointerT>
+            inline Stream& Read(PointerT* ptr)
             {
                 // amount to read must align with stream element size
-                HELIUM_COMPILE_ASSERT( sizeof(T) % sizeof(C) == 0  );
-                return ReadBuffer( (C*)ptr, sizeof(T) / sizeof(C) ); 
+                HELIUM_COMPILE_ASSERT( sizeof(PointerT) % sizeof(StreamCharT) == 0  );
+                return ReadBuffer( (StreamCharT*)ptr, sizeof(PointerT) / sizeof(StreamCharT) ); 
             }
 
             Stream& WriteBuffer(const void* t, std::streamsize streamElementCount)
             {
                 PROFILE_SCOPE_ACCUM(g_StreamWrite); 
 
-                m_Stream->write((const C*)t, streamElementCount); 
+                m_Stream->write((const StreamCharT*)t, streamElementCount); 
 
                 if (m_Stream->fail())
                 {
@@ -186,12 +186,12 @@ namespace Helium
                 return *this;
             }
 
-            template <typename T>
-            inline Stream& Write(const T* ptr)
+            template <typename PointerT>
+            inline Stream& Write(const PointerT* ptr)
             {
                 // amount to write must align with stream element size
-                HELIUM_COMPILE_ASSERT( sizeof(T) % sizeof(C) == 0  );
-                return WriteBuffer( (const C*)ptr, sizeof(T) / sizeof(C) ); 
+                HELIUM_COMPILE_ASSERT( sizeof(PointerT) % sizeof(StreamCharT) == 0  );
+                return WriteBuffer( (const StreamCharT*)ptr, sizeof(PointerT) / sizeof(StreamCharT) ); 
             }
 
             Stream& Flush()
@@ -210,18 +210,18 @@ namespace Helium
                 return m_Stream->eof(); 
             }
 
-            std::basic_iostream< C, std::char_traits<C> >& GetInternal()
+            std::basic_iostream< StreamCharT, std::char_traits< StreamCharT > >& GetInternal()
             {
                 return *m_Stream;
             } 
 
         protected: 
-            std::basic_iostream< C, std::char_traits<C> >*  m_Stream; 
-            bool                                            m_OwnStream; 
+            std::basic_iostream< StreamCharT, std::char_traits< StreamCharT > >*    m_Stream; 
+            bool                                                                    m_OwnStream; 
         };
 
-        template <class T, class C>
-        Stream<C>& operator>>(Stream<C>& stream, T& val)
+        template <class T, class StreamCharT>
+        Stream< StreamCharT >& operator>>(Stream< StreamCharT >& stream, T& val)
         {
             stream.GetInternal() >> val;
 
@@ -233,8 +233,8 @@ namespace Helium
             return stream; 
         }
 
-        template <class T, class C>
-        Stream<C>& operator<<(Stream<C>& stream, const T& val)
+        template <class T, class StreamCharT>
+        Stream< StreamCharT >& operator<<(Stream< StreamCharT >& stream, const T& val)
         {
             stream.GetInternal() << val; 
 
@@ -383,8 +383,8 @@ namespace Helium
         // FileStream, a stream object backed by file data
         //
 
-        template< class C >
-        class FileStream : public Stream< C >
+        template< class StreamCharT >
+        class FileStream : public Stream< StreamCharT >
         {
         public: 
             FileStream(const tstring& filename, bool write)
@@ -412,7 +412,7 @@ namespace Helium
                     fmode |= std::ios_base::in;
                 }
 
-                std::basic_fstream< C, std::char_traits< C > >* fstream = new std::basic_fstream< C, std::char_traits< C > >(); 
+                std::basic_fstream< StreamCharT, std::char_traits< StreamCharT > >* fstream = new std::basic_fstream< StreamCharT, std::char_traits< StreamCharT > >(); 
 
 #ifdef UNICODE
                 fstream->imbue( std::locale( std::locale::classic(), new null_codecvt )) ;
@@ -431,7 +431,7 @@ namespace Helium
 
             virtual void Close() HELIUM_OVERRIDE
             {
-                std::basic_fstream< C, std::char_traits< C > >* fstream = static_cast< std::basic_fstream< C, std::char_traits< C > > *>( &GetInternal() );
+                std::basic_fstream< StreamCharT, std::char_traits< StreamCharT > >* fstream = static_cast< std::basic_fstream< StreamCharT, std::char_traits< StreamCharT > > *>( &GetInternal() );
 
                 fstream->close();
                 if (fstream->is_open())

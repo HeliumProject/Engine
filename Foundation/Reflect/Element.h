@@ -108,7 +108,7 @@ namespace Helium
 
         public:
             // Visitor introspection support, should never ever change an object (but the visitor may)
-            virtual void                Host(Visitor& visitor);
+            virtual void                Accept(Visitor& visitor);
 
             // Do comparison logic against other object, checks type and field data
             virtual bool                Equals(const ElementPtr& rhs) const;

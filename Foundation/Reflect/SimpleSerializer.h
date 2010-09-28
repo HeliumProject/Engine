@@ -35,9 +35,9 @@ namespace Helium
             REFLECT_DECLARE_CLASS( SimpleSerializerT, Serializer );
 
             SimpleSerializer ();
-            virtual ~SimpleSerializer();
+            ~SimpleSerializer();
 
-            virtual bool IsCompact() const HELIUM_OVERRIDE;
+            virtual bool IsCompact() const HELIUM_OVERRIDE { return true; }
 
             virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
 

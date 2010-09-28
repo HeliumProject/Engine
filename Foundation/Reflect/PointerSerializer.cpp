@@ -66,7 +66,7 @@ bool PointerSerializer::Equals(const Reflect::Serializer* s) const
     return m_Data.Get()->Equals( rhs->m_Data.Get() );
 }
 
-void PointerSerializer::Host(Reflect::Visitor& visitor)
+void PointerSerializer::Accept(Reflect::Visitor& visitor)
 {
     if (!visitor.VisitPointer(*(Reflect::ElementPtr*)(m_Data.Ptr())))
     {
@@ -75,7 +75,7 @@ void PointerSerializer::Host(Reflect::Visitor& visitor)
 
     if ( m_Data.Get() )
     {
-        m_Data.Get()->Host( visitor );
+        m_Data.Get()->Accept( visitor );
     }
 }
 

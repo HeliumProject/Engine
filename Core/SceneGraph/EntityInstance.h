@@ -42,6 +42,8 @@ namespace Helium
             virtual tstring GenerateName() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
             virtual SceneNodeTypePtr CreateNodeType( Scene* scene ) const HELIUM_OVERRIDE;
+            virtual void CheckNodeType() HELIUM_OVERRIDE;
+            void CheckSets();
 
             // retrieve the nested scene from the scene manager
             Scene* GetNestedScene();

@@ -180,6 +180,79 @@ SceneNodeTypePtr EntityInstance::CreateNodeType( Scene* scene ) const
     return nodeType;
 }
 
+void EntityInstance::CheckNodeType()
+{
+    Base::CheckNodeType();
+
+    CheckSets();
+}
+
+void EntityInstance::CheckSets()
+{
+    const Helium::Path& path = GetEntityPath();
+
+    Asset::EntityPtr entity;
+    try
+    {
+        entity = GetEntity();
+    }
+    catch ( const Helium::Exception& ex )
+    {
+        Log::Warning( TXT("%s\n"), ex.What() );
+    }
+
+    if ( !entity && !path.empty() )
+    {
+        tstringstream str;
+        str << TXT("Failed to load entity class for entity ") << GetName() << TXT(".") << std::endl;
+        str << TXT("The entity '") << path.c_str() << TXT("' has moved or been deleted.") << std::endl;
+        Log::Error( str.str().c_str() );
+    }
+
+    const tstring& currentClassSet = path.Get();
+
+    EntityInstanceType* type = Reflect::AssertCast<EntityInstanceType>( m_NodeType );
+    if (type)
+    {
+        // find the set
+        M_InstanceSetSmartPtr::const_iterator found = type->GetSets().find(currentClassSet);
+
+        // if we found it, and it contains us, and we are using it
+        if (found != type->GetSets().end() && found->second->ContainsInstance(this) && m_ClassSet == found->second.Ptr())
+        {
+            // we are GTG
+            return;
+        }
+
+        // the set we are entering
+        EntitySet* newClassSet = NULL;
+
+        // create new class object if it does not already exist
+        if (found == type->GetSets().end())
+        {
+            // create
+            newClassSet = new EntitySet (type, path);
+
+            // save
+            type->AddSet( newClassSet );
+        }
+        else
+        {
+            // existing
+            newClassSet = Reflect::AssertCast<EntitySet>( found->second );
+        }
+
+        // check previous membership
+        if (m_ClassSet)
+        {
+            m_ClassSet->RemoveInstance(this);
+        }
+
+        // add to the new class collection
+        newClassSet->AddInstance(this);
+    }
+}
+
 Scene* EntityInstance::GetNestedScene()
 {
     if ( !m_Scene )
@@ -210,18 +283,16 @@ tstring EntityInstance::GetEntityPath() const
 
 void EntityInstance::SetEntityPath( const tstring& path )
 {
-    Helium::Path oldPath = m_Path;
-    Helium::Path newPath = path;
+    m_ClassChanging.Raise( EntityAssetChangeArgs( this, m_Path, path ) );
 
-    m_ClassChanging.Raise( EntityAssetChangeArgs( this, oldPath, newPath ) );
-
+    Path oldPath = m_Path;
     m_Path = path;
 
     // since our entity class is criteria used for deducing object type,
     //  ensure we are a member of the correct type
     CheckNodeType();
 
-    m_ClassChanged.Raise( EntityAssetChangeArgs( this, oldPath, newPath ) );
+    m_ClassChanged.Raise( EntityAssetChangeArgs( this, oldPath, m_Path ) );
 
     Dirty();
 }

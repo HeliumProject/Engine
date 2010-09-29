@@ -1237,8 +1237,6 @@ void Scene::RemoveObject( const SceneNodePtr& node )
 
 void Scene::AddSceneNode( const SceneNodePtr& node )
 {
-    HELIUM_ASSERT( node->IsInitialized() );
-
     {
         CORE_SCOPE_TIMER( ("Insert in node list") );
 
@@ -1255,12 +1253,40 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
     }
 
     {
-
         SceneGraph::SceneNodeType* t = node->GetNodeType();
         if ( t == NULL )
         {
             CORE_SCOPE_TIMER( ("Deduce node type") );
-            t = node->DeduceNodeType();
+
+            SceneNodeTypePtr nodeType;
+
+            // this string will be the encoded type information for this node
+            const tstring name = node->GetApplicationTypeName();
+
+            // attempt to find a "natural" simple type for this object in the scene (matches compile-time type)
+            HM_StrToSceneNodeTypeSmartPtr::const_iterator found = m_NodeTypesByName.find( name );
+
+            // did we find it?
+            if ( found != m_NodeTypesByName.end() )
+            {
+                // this is our type
+                nodeType = found->second;
+            }
+
+            // second attempt failed, this must be the first object of a new type, ask the object to create a type for it
+            if (!nodeType)
+            {
+                // create it
+                nodeType = node->CreateNodeType( this );
+
+                // set its name
+                nodeType->SetName( name );
+
+                // add it to the scene
+                AddNodeType( nodeType );
+            }
+
+            t = nodeType;
         }
 
         {
@@ -1279,6 +1305,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
 
     {
         CORE_SCOPE_TIMER( ("Create") );
+
         // (re)creates disposable resources in object
         node->Create();
     }
@@ -1318,11 +1345,7 @@ void Scene::RemoveSceneNode( const SceneNodePtr& node )
     m_Nodes.erase( node->GetID() );
 
     SceneGraph::SceneNodeType* t = node->GetNodeType();
-    if ( t == NULL )
-    {
-        t = node->DeduceNodeType();
-    }
-
+    HELIUM_ASSERT( t );
     t->RemoveInstance( node );
 
     // cleanup name

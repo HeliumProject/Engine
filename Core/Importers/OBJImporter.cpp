@@ -398,7 +398,7 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path )
                     }
                 }
 
-                u32 numTris = faceVertexIndices.size() - 2;
+                u32 numTris = (u32)faceVertexIndices.size() - 2;
 
                 for ( u32 i = 0; i < numTris; ++i )
                 {
@@ -448,7 +448,7 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path )
 
         mesh->m_ShaderTriangleCounts[ triangles[ i ].m_ShaderIndex ]++;
 
-        u32 base = mesh->m_TriangleVertexIndices.size();
+        u32 base = (u32)mesh->m_TriangleVertexIndices.size();
 
         mesh->m_TriangleVertexIndices.push_back( triangles[ i ].m_VertIndices[ 0 ] );
         mesh->m_TriangleVertexIndices.push_back( triangles[ i ].m_VertIndices[ 1 ] );

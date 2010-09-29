@@ -144,11 +144,13 @@ void Mesh::Initialize(Scene* scene)
     m_Indices->SetElementType( ElementTypes::Unsigned32 );
     m_Indices->SetElementCount( (u32)(m_WireframeVertexIndices.size() + m_TriangleVertexIndices.size()) );
     m_Indices->SetPopulator( PopulateSignature::Delegate( this, &Mesh::Populate ) );
+    m_Indices->Create();
 
     m_Vertices = new VertexResource ( m_Owner->GetViewport()->GetResources() );
     m_Vertices->SetElementType( ElementTypes::StandardVertex );
     m_Vertices->SetElementCount( (u32)m_Positions.size() );
     m_Vertices->SetPopulator( PopulateSignature::Delegate( this, &Mesh::Populate ) );
+    m_Vertices->Create();
 }
 
 void Mesh::Create()
@@ -2024,5 +2026,5 @@ u32 Mesh::AddShader( Shader* shader )
 
     m_Shaders.push_back( shader );
     m_ShaderIDs.push_back( shader->GetID() );
-    return m_Shaders.size() - 1;
+    return (u32)m_Shaders.size() - 1;
 }

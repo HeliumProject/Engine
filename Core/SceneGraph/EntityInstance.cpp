@@ -187,13 +187,6 @@ SceneNodeTypePtr EntityInstance::CreateNodeType( Scene* scene ) const
     return nodeType;
 }
 
-void EntityInstance::CheckNodeType()
-{
-    Base::CheckNodeType();
-
-    CheckSets();
-}
-
 void EntityInstance::CheckSets()
 {
     const Helium::Path& path = GetEntityPath();
@@ -295,9 +288,7 @@ void EntityInstance::SetEntityPath( const tstring& path )
     Path oldPath = m_Path;
     m_Path = path;
 
-    // since our entity class is criteria used for deducing object type,
-    //  ensure we are a member of the correct type
-    CheckNodeType();
+    CheckSets();
 
     m_ClassChanged.Raise( EntityAssetChangeArgs( this, oldPath, m_Path ) );
 
@@ -452,18 +443,16 @@ void EntityInstance::Render( RenderVisitor* render )
 
     if (IsGeometryVisible())
     {
-        Scene* nested = GetNestedScene();
-
-        VisitorState state ( render->State().m_Matrix,
-            render->State().m_Highlighted || (m_Scene->IsFocused() && IsHighlighted()),
-            render->State().m_Selected || (m_Scene->IsFocused() && IsSelected()),
-            render->State().m_Live || (m_Scene->IsFocused() && IsLive()),
-            render->State().m_Selectable || (m_Scene->IsFocused() && IsSelectable()) );
-
-        if (nested)
+        if (m_Scene)
         {
+            VisitorState state ( render->State().m_Matrix,
+                render->State().m_Highlighted || (m_Scene->IsFocused() && IsHighlighted()),
+                render->State().m_Selected || (m_Scene->IsFocused() && IsSelected()),
+                render->State().m_Live || (m_Scene->IsFocused() && IsLive()),
+                render->State().m_Selectable || (m_Scene->IsFocused() && IsSelectable()) );
+
             render->PushState( state );
-            nested->Render( render );
+            m_Scene->Render( render );
             render->PopState();
         }
     }

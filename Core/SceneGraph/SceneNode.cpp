@@ -141,9 +141,6 @@ void SceneNode::Initialize(Scene* scene)
     // we start out dirty, of course
     Dirty();
 
-    // check type for this node, inserting into appropriate runtime type
-    CheckNodeType();
-
     // we are now initialized
     m_IsInitialized = true;
 }
@@ -389,60 +386,6 @@ SceneNodeTypePtr SceneNode::CreateNodeType( SceneGraph::Scene* scene ) const
     nodeType->SetImageIndex( GetImageIndex() );
 
     return nodeType;
-}
-
-void SceneNode::ChangeNodeType( SceneGraph::SceneNodeType* type )
-{
-    if (m_NodeType != type)
-    {
-        if (m_NodeType != NULL)
-        {
-            m_NodeType->RemoveInstance(this);
-        }
-
-        m_NodeType = type;
-
-        type->AddInstance(this);
-    }
-}
-
-SceneGraph::SceneNodeType* SceneNode::DeduceNodeType()
-{
-    SceneNodeTypePtr nodeType;
-
-    // this string will be the encoded type information for this node
-    const tstring name = GetApplicationTypeName();
-
-    // attempt to find a "natural" simple type for this object in the scene (matches compile-time type)
-    const HM_StrToSceneNodeTypeSmartPtr& nodeTypes = m_Owner->GetNodeTypesByName();
-    HM_StrToSceneNodeTypeSmartPtr::const_iterator found = nodeTypes.find( name );
-
-    // did we find it?
-    if ( found != nodeTypes.end() )
-    {
-        // this is our type
-        nodeType = found->second;
-    }
-
-    // second attempt failed, this must be the first object of a new type, ask the object to create a type for it
-    if (!nodeType)
-    {
-        // create it
-        nodeType = CreateNodeType( m_Owner );
-
-        // set its name
-        nodeType->SetName( name );
-
-        // add it to the scene
-        m_Owner->AddNodeType( nodeType );
-    }
-
-    return nodeType;
-}
-
-void SceneNode::CheckNodeType()
-{
-    ChangeNodeType( DeduceNodeType() );
 }
 
 void SceneNode::PopulateManifest( Asset::SceneManifest* manifest ) const

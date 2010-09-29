@@ -7,10 +7,11 @@ REFLECT_DEFINE_CLASS( MeshProcessingComponent );
 
 void MeshProcessingComponent::EnumerateClass( Reflect::Compositor< MeshProcessingComponent >& comp )
 {
-  comp.GetComposite().m_UIName = TXT( "Mesh Processing" );
+    comp.GetComposite().m_UIName = TXT( "Mesh Processing" );
 
-  comp.AddField( &MeshProcessingComponent::m_ScalingFactor, "m_ScalingFactor" );
-  comp.AddEnumerationField( &MeshProcessingComponent::m_MeshCompressionFactor, "m_MeshCompressionFactor" );
+    comp.AddField( &MeshProcessingComponent::a_ScalingFactor, "a_ScalingFactor" );
+    comp.AddEnumerationField( &MeshProcessingComponent::a_MeshCompressionFactor, "a_MeshCompressionFactor" );
+    comp.AddField( &MeshProcessingComponent::a_FlipWinding, "a_FlipWinding" );
 }
 
 Component::ComponentUsage MeshProcessingComponent::GetComponentUsage() const

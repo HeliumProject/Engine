@@ -376,6 +376,13 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path )
                         vertexIndex = ( vertexIndex > 0 ) ? ( vertexIndex - 1 ) : ( (int)vertices.size() + vertexIndex );
 
                         faceVertexIndices.push_back( vertexIndex );
+
+                        // but we default to having normals?
+                        if ( !normals.empty() )
+                        {
+                            faceNormalIndices.push_back( vertexIndex );
+                        }
+
                     } while ( fscanf( file, "%d", &vertexIndex ) == 1 );
                 }
                 else 
@@ -448,8 +455,6 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path )
 
         mesh->m_ShaderTriangleCounts[ triangles[ i ].m_ShaderIndex ]++;
 
-        u32 base = mesh->m_TriangleVertexIndices.size();
-
         mesh->m_TriangleVertexIndices.push_back( triangles[ i ].m_VertIndices[ 0 ] );
         mesh->m_TriangleVertexIndices.push_back( triangles[ i ].m_VertIndices[ 1 ] );
         mesh->m_TriangleVertexIndices.push_back( triangles[ i ].m_VertIndices[ 2 ] );
@@ -457,17 +462,17 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path )
         if ( !triangles[ i ].m_NormalIndices.empty() )
         {
             HELIUM_ASSERT( triangles[ i ].m_NormalIndices.size() == 3 );
-            mesh->m_Normals[ base ] = normals[ triangles[ i ].m_NormalIndices[ 0 ] ];
-            mesh->m_Normals[ base + 1 ] = normals[ triangles[ i ].m_NormalIndices[ 1 ] ];
-            mesh->m_Normals[ base + 2 ] = normals[ triangles[ i ].m_NormalIndices[ 2 ] ];
+            mesh->m_Normals[ triangles[ i ].m_VertIndices[ 0 ] ] = normals[ triangles[ i ].m_NormalIndices[ 0 ] ];
+            mesh->m_Normals[ triangles[ i ].m_VertIndices[ 1 ] ] = normals[ triangles[ i ].m_NormalIndices[ 1 ] ];
+            mesh->m_Normals[ triangles[ i ].m_VertIndices[ 2 ] ] = normals[ triangles[ i ].m_NormalIndices[ 2 ] ];
         }
 
         if ( !triangles[ i ].m_TexCoordIndices.empty() )
         {
             HELIUM_ASSERT( triangles[ i ].m_TexCoordIndices.size() == 3 );
-            mesh->m_BaseUVs[ base ] = texCoords[ triangles[ i ].m_TexCoordIndices[ 0 ] ];
-            mesh->m_BaseUVs[ base + 1 ] = texCoords[ triangles[ i ].m_TexCoordIndices[ 1 ] ];
-            mesh->m_BaseUVs[ base + 2 ] = texCoords[ triangles[ i ].m_TexCoordIndices[ 2 ] ];
+            mesh->m_BaseUVs[ triangles[ i ].m_VertIndices[ 0 ] ] = texCoords[ triangles[ i ].m_TexCoordIndices[ 0 ] ];
+            mesh->m_BaseUVs[ triangles[ i ].m_VertIndices[ 1 ] ] = texCoords[ triangles[ i ].m_TexCoordIndices[ 1 ] ];
+            mesh->m_BaseUVs[ triangles[ i ].m_VertIndices[ 2 ] ] = texCoords[ triangles[ i ].m_TexCoordIndices[ 2 ] ];
         }
     }
 

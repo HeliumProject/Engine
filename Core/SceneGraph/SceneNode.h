@@ -291,15 +291,6 @@ namespace Helium
             // creates our node type object (we don't have a configured type when we call this)
             virtual SceneNodeTypePtr CreateNodeType( SceneGraph::Scene* scene ) const;
 
-            // transition to another node type
-            virtual void ChangeNodeType( SceneGraph::SceneNodeType* type );
-
-            // take a stab at deducing what node type you should be
-            virtual SceneGraph::SceneNodeType* DeduceNodeType();
-
-            // check that you are a member of the type that best suits you
-            virtual void CheckNodeType();
-
             // used for manifest generation during save
             virtual void PopulateManifest( Asset::SceneManifest* manifest ) const;
 

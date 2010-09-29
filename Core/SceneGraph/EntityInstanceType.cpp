@@ -81,6 +81,14 @@ void EntityInstanceType::Delete()
     }
 }
 
+void EntityInstanceType::AddInstance(SceneNodePtr n)
+{
+    __super::AddInstance( n );
+
+    EntityInstance* entityInstance = Reflect::AssertCast< EntityInstance >( n );
+    entityInstance->CheckSets();
+}
+
 void EntityInstanceType::PopulateManifest(Asset::SceneManifest* manifest) const
 {
     // iterate over every set in the SceneGraph::EntityInstance type

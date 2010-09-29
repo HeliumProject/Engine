@@ -32,6 +32,7 @@ static SceneGraph::Shader* ReadMTL( const Path& path )
     if ( !file )
     {
         Log::Error( TXT( "ReadMTL() failed: can't open material file \"%s\"." ), path.c_str() );
+        return NULL;
     }
 
     SceneGraph::Shader* shader = NULL;
@@ -405,7 +406,7 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path )
                     }
                 }
 
-                u32 numTris = faceVertexIndices.size() - 2;
+                u32 numTris = (u32)faceVertexIndices.size() - 2;
 
                 for ( u32 i = 0; i < numTris; ++i )
                 {

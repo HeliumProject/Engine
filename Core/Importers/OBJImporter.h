@@ -9,6 +9,6 @@ namespace Helium
 {
     namespace Importers
     {
-        CORE_API SceneGraph::Mesh* ImportOBJ( const Path& path );
+        CORE_API SceneGraph::Mesh* ImportOBJ( const Path& path, bool flipWinding = false );
     }
 }

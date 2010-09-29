@@ -166,7 +166,7 @@ static SceneGraph::Shader* ReadMTL( const Path& path )
     return shader;
 }
 
-SceneGraph::Mesh* Importers::ImportOBJ( const Path& path )
+SceneGraph::Mesh* Importers::ImportOBJ( const Path& path, bool flipWinding )
 {
     FILE* file;
 
@@ -412,22 +412,50 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path )
                 {
                     Triangle t;
                     t.m_ShaderIndex = curShaderIndex;
-                    t.m_VertIndices.push_back( faceVertexIndices[ 0 ] );
-                    t.m_VertIndices.push_back( faceVertexIndices[ 1 + i ] );
-                    t.m_VertIndices.push_back( faceVertexIndices[ 2 + i ] );
+
+                    if ( flipWinding )
+                    {
+                        t.m_VertIndices.push_back( faceVertexIndices[ 2 + i ] );
+                        t.m_VertIndices.push_back( faceVertexIndices[ 1 + i ] );
+                        t.m_VertIndices.push_back( faceVertexIndices[ 0 ] );
+                    }
+                    else
+                    {
+                        t.m_VertIndices.push_back( faceVertexIndices[ 0 ] );
+                        t.m_VertIndices.push_back( faceVertexIndices[ 1 + i ] );
+                        t.m_VertIndices.push_back( faceVertexIndices[ 2 + i ] );
+                    }
 
                     if ( !faceNormalIndices.empty() )
                     {
-                        t.m_NormalIndices.push_back( faceNormalIndices[ 0 ] );
-                        t.m_NormalIndices.push_back( faceNormalIndices[ 1 + i ] );
-                        t.m_NormalIndices.push_back( faceNormalIndices[ 2 + i ] );
+                        if ( flipWinding )
+                        {
+                            t.m_NormalIndices.push_back( faceNormalIndices[ 2 + i ] );
+                            t.m_NormalIndices.push_back( faceNormalIndices[ 1 + i ] );
+                            t.m_NormalIndices.push_back( faceNormalIndices[ 0 ] );
+                        }
+                        else
+                        {
+                            t.m_NormalIndices.push_back( faceNormalIndices[ 0 ] );
+                            t.m_NormalIndices.push_back( faceNormalIndices[ 1 + i ] );
+                            t.m_NormalIndices.push_back( faceNormalIndices[ 2 + i ] );
+                        }
                     }
 
                     if ( !faceTexCoordIndices.empty() )
                     {
-                        t.m_TexCoordIndices.push_back( faceTexCoordIndices[ 0 ] );
-                        t.m_TexCoordIndices.push_back( faceTexCoordIndices[ 1 + i ] );
-                        t.m_TexCoordIndices.push_back( faceTexCoordIndices[ 2 + i ] );
+                        if ( flipWinding )
+                        {
+                            t.m_TexCoordIndices.push_back( faceTexCoordIndices[ 2 + i ] );
+                            t.m_TexCoordIndices.push_back( faceTexCoordIndices[ 1 + i ] );
+                            t.m_TexCoordIndices.push_back( faceTexCoordIndices[ 0 ] );
+                        }
+                        else
+                        {
+                            t.m_TexCoordIndices.push_back( faceTexCoordIndices[ 0 ] );
+                            t.m_TexCoordIndices.push_back( faceTexCoordIndices[ 1 + i ] );
+                            t.m_TexCoordIndices.push_back( faceTexCoordIndices[ 2 + i ] );
+                        }
                     }
 
                     triangles.push_back( t );

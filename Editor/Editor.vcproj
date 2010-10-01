@@ -2175,6 +2175,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\ProjectViewModel.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ProjectViewModel.h"
+			>
+		</File>
+		<File
 			RelativePath=".\PropertiesPanel.cpp"
 			>
 		</File>

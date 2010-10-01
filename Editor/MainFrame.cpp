@@ -117,7 +117,7 @@ MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWind
 , m_VaultPanel( NULL )
 {
     wxIcon appIcon;
-    appIcon.CopyFromBitmap( wxArtProvider::GetBitmap( ArtIDs::Helium, wxART_OTHER, wxSize( 32, 32 ) ) );
+    appIcon.CopyFromBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::Helium, wxART_OTHER, wxSize( 32, 32 ) ) );
     SetIcon( appIcon );
 
     SetLabel( TXT("Helium Editor") );
@@ -732,8 +732,9 @@ void MainFrame::OnNewEntity( wxCommandEvent& event )
 void MainFrame::OnNewProject( wxCommandEvent& event )
 {
     m_Project = new Project ();
-    m_Project->a_Path.Set( TXT("New Project") );
+    m_Project->a_Path.Set( TXT("New Project.project.hrb") );
     m_ProjectPanel->SetProject( m_Project );
+    m_ProjectPanel->Refresh();
 }
 
 bool MainFrame::DoOpen( const tstring& path )

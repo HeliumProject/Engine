@@ -26,9 +26,9 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
     {
         Freeze();
 
-        m_PlayButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Play ) );
-        m_PauseButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Pause ) );
-        m_StopButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Stop ) );
+        m_PlayButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Play ) );
+        m_PauseButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Pause ) );
+        m_StopButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Stop ) );
 
         Layout();
         Thaw();

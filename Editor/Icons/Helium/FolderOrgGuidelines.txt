@@ -1,0 +1,120 @@
+actions/ - Icons which are generally used in menus and dialogs for interacting with the user.
+    add.png
+    arrow_down.png
+    copy.png
+    create.png
+    cut.png
+    debug.png
+    delete.png
+    edit.png
+    find.png
+    next.png
+    open.png
+    options.png
+    paste.png
+    pause.png
+    play.png
+    prefernces.png
+    previous.png
+    redo.png
+    refresh.png
+    save.png
+    save_all.png
+    save_as.png
+    select.png
+    select_all.png
+    stop.png
+    undo.png
+    
+editor/ - Icons specific to the Helium editor.
+    axis.png
+    backculling.png
+    bounds.png
+    camera.png
+    collection.png
+    color_mode_layers.png
+    color_mode_scene.png
+    color_mode_type.png
+    duplicate.png
+    editor.png
+    entity.png
+    frame_origin.png
+    frame_selected.png
+    frustum_culling.png
+    grid.png
+    highlight.png
+    layer.png
+    layer_add.png
+    layer_delete.png
+    layer_member.png
+    layer_new_from_selection.png
+    layers.png
+    locator.png
+    materials.png
+    navmesh.png
+    project.png
+    project_folder.png
+    rotate.png
+    scale.png
+    scene.png
+    stats.png
+    task.png
+    view_front.png
+    view_next.png
+    view_perspective.png
+    view_previous.png
+    view_side.png
+    view_top.png
+    translate.png
+    vault.png
+    volume.png
+    wire.png
+    
+devices/ - Icons for hardware that is contained within or connected to the computer or console.
+    <Currently contains nothing>
+
+filesystem/ - Icons for files and folder on the computer.
+    folder.png
+    file.png
+
+mimetypes/ - Icons for different types of data, such as audio or image files.
+    binary.png
+    txt.png
+
+rcs/ - Icons for the Revision Control System
+    active.png
+    changelist.png
+    check_in.png
+    check_out.png
+    checked_out.png
+    checked_out_by_someone_else.png
+    history.png
+    outofdate.png
+    merge.png
+    revert.png
+    submit.png
+    unknown.png
+    user.png
+
+status/ - Icons for busy, warning and error dialogs.
+    busy.png
+    error.png
+    lockable.png
+    locked.png
+    info.png
+    ok.png
+    outofdate.png
+    unknown.png
+    warning.png
+    
+spinner/
+    s1.png
+    s2.png
+    s3.png
+    s4.png
+    s5.png
+    s6.png
+    s7.png
+    s8.png
+
+    

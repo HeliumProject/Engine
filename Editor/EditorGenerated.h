@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version May  4 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -262,12 +262,12 @@ namespace Helium
 			protected:
 				wxPanel* m_ProjectManagementPanel;
 				wxBitmapButton* m_AddFile;
-				wxBitmapButton* m_Delete;
+				wxBitmapButton* m_DeleteFile;
 				wxDataViewCtrl* m_DataViewCtrl;
 				
 				// Virtual event handlers, overide them in your derived class
-				virtual void OnAddPath( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnDelete( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnAddFile( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnDeleteFile( wxCommandEvent& event ) { event.Skip(); }
 				
 			
 			public:

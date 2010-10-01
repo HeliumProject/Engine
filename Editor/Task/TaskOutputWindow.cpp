@@ -73,8 +73,8 @@ TaskOutputWindow::TaskOutputWindow( wxWindow* parent, const tstring& title, int 
   bSizer1->Add( bSizer4, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 
   wxIconBundle iconBundle;
-  iconBundle.AddIcon( wxArtProvider::GetIcon( ArtIDs::TaskWindow, wxART_OTHER, wxSize( 32, 32 ) ) );
-  iconBundle.AddIcon( wxArtProvider::GetIcon( ArtIDs::TaskWindow ) );
+  iconBundle.AddIcon( wxArtProvider::GetIcon( ArtIDs::Editor::TaskWindow, wxART_OTHER, wxSize( 32, 32 ) ) );
+  iconBundle.AddIcon( wxArtProvider::GetIcon( ArtIDs::Editor::TaskWindow ) );
   SetIcons( iconBundle );
 
   this->SetSizer( bSizer1 );

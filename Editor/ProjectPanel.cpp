@@ -10,115 +10,20 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-void ProjectViewModel::SetProject( Project* project )
-{
-    m_Project = project;
-    m_Project->e_PathAdded.AddMethod( this, &ProjectViewModel::PathAdded );
-    m_Project->e_PathRemoved.AddMethod( this, &ProjectViewModel::PathRemoved );
-}
-
-void ProjectViewModel::PathAdded( const Path& path )
-{
-#pragma TODO( "Auto-build relevant tree for this path" )
-    //    ItemAdded( args.m_NewParent, args.m_Node );
-}
-
-void ProjectViewModel::PathRemoved( const Path& path )
-{
-#pragma TODO( "Remove unnecessary tree nodes given the removal of this path" )
-    //ItemDeleted( args.m_OldParent, args.m_Node );
-}
-
-unsigned int ProjectViewModel::GetColumnCount() const
-{
-    return 2;
-}
-
-wxString ProjectViewModel::GetColumnType(unsigned int type) const
-{
-    switch ( type )
-    {
-    case 0:
-        return TXT("Name");
-
-    case 1:
-        return TXT("Details");
-    }
-
-    return TXT("Unknown");
-}
-
-void ProjectViewModel::GetValue(wxVariant& value, const wxDataViewItem& item, unsigned int column) const
-{
-    Path* node = static_cast< Path* >( item.GetID() );
-
-    if ( node )
-    {
-        switch ( column )
-        {
-        case 0:
-            value = node->Get().c_str();
-            break;
-
-        case 1:
-            break;
-        }
-    }
-    else
-    {
-        Project* project = static_cast< Project* >( item.GetID() );
-        if ( project )
-        {
-            switch ( column )
-            {
-            case 0:
-                value = project->a_Path.Get().c_str();
-                break;
-
-            case 1:
-                break;
-            }
-        }
-    }
-}
-
-bool ProjectViewModel::SetValue(const wxVariant& value, const wxDataViewItem& item, unsigned int column)
-{
-    return true;
-}
-
-wxDataViewItem ProjectViewModel::GetParent(const wxDataViewItem& item) const
-{
-#pragma TODO( "Get the parent node of a path" )
-    return NULL;
-}
-
-unsigned int ProjectViewModel::GetChildren(const wxDataViewItem& item, wxDataViewItemArray& items) const
-{
-#pragma TODO( "Get the children of a directory node" )
-    return 0;
-}
-
-bool ProjectViewModel::IsContainer(const wxDataViewItem& item) const
-{
-    Path* path = static_cast< Path* >( item.GetID() );
-
-    if ( path )
-    {
-        return false;
-    }
-
-    return true;
-}
-
 ProjectPanel::ProjectPanel( wxWindow *parent )
 : ProjectPanelGenerated( parent )
 {
     SetHelpText( TXT( "This is the project outliner.  Manage what's included in your project here." ) );
 
-    wxDataViewTextRenderer *render0 = new wxDataViewTextRenderer( "string", wxDATAVIEW_CELL_INERT );
+    //wxDataViewTextRenderer *render0 = new wxDataViewTextRenderer( "string", wxDATAVIEW_CELL_INERT );
+    wxDataViewIconTextRenderer *render0 = new wxDataViewIconTextRenderer();
     wxDataViewColumn *column0 = new wxDataViewColumn( "Name", render0, 0, 100, wxALIGN_LEFT, wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_RESIZABLE );
     m_DataViewCtrl->AppendColumn( column0 );
+
+    //GetStore()->AppendColumn( wxT("wxDataViewIconText") );
+    //wxDataViewIconTextRenderer *render = new wxDataViewIconTextRenderer( wxT("wxDataViewIconText"), mode )
+    //wxDataViewColumn *ret = new wxDataViewColumn( label, render, GetStore()->GetColumnCount()-1, width, align, flags );
+    //wxDataViewCtrl::AppendColumn( ret );
 
     wxDataViewTextRenderer *render1 = new wxDataViewTextRenderer( "string", wxDATAVIEW_CELL_INERT );
     wxDataViewColumn *column1 = new wxDataViewColumn( "Details", render1, 1, 150, wxALIGN_LEFT, wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
@@ -136,8 +41,8 @@ ProjectPanel::ProjectPanel( wxWindow *parent )
         Freeze();
 
 #pragma TODO( "Use overlays for the add/create icons below" )
-        m_AddFile->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::File ) );
-        m_Delete->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Delete ) );
+        m_AddFile->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::FileAdd ) );
+        m_DeleteFile->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::FileDelete ) );
 
         m_ProjectManagementPanel->Layout();
 
@@ -154,13 +59,14 @@ ProjectPanel::~ProjectPanel()
 void ProjectPanel::SetProject( Project* project )
 {
     m_Project = project;
-    m_Model = new ProjectViewModel ();
+    m_Model = new ProjectViewModel();
     m_Model->SetProject( project );
-    m_DataViewCtrl->AssociateModel( m_Model.get() ); // the ctrl will now hold ownership via reference count
-    m_Model->ItemAdded( NULL, m_Project.Ptr() );
+
+    // the ctrl will now hold ownership via reference count
+    m_DataViewCtrl->AssociateModel( m_Model.get() );
 }
 
-void ProjectPanel::OnAddPath( wxCommandEvent& event )
+void ProjectPanel::OnAddFile( wxCommandEvent& event )
 {
     if ( m_Project )
     {
@@ -174,7 +80,7 @@ void ProjectPanel::OnAddPath( wxCommandEvent& event )
     }
 }
 
-void ProjectPanel::OnDelete( wxCommandEvent& event )
+void ProjectPanel::OnDeleteFile( wxCommandEvent& event )
 {
     if ( m_Project )
     {

@@ -78,7 +78,7 @@ void MenuButton::DoSetBitmap(const wxBitmap& bitmap, State which)
 {
     if ( bitmap.IsOk() )
     {
-        wxImage downArrowImage =  wxArtProvider::GetBitmap( ArtIDs::Verbs::Down, wxART_OTHER, wxSize( 8, 8 ) ).ConvertToImage();
+        wxImage downArrowImage =  wxArtProvider::GetBitmap( ArtIDs::Actions::Down, wxART_OTHER, wxSize( 8, 8 ) ).ConvertToImage();
         
         int separator = 4;
         int width = bitmap.GetWidth() + downArrowImage.GetWidth() + separator;

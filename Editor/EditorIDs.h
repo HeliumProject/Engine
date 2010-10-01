@@ -178,17 +178,17 @@ namespace Helium
 
         static ToolInfo ToolInfos[] =
         {
-            { ToolModes::Select,        ToolTypes::Manipulator,    wxT("Select"),          ArtIDs::SelectTool,    wxT("Select items from the workspace") },
-            { ToolModes::Translate,     ToolTypes::Manipulator,    wxT("Translate"),       ArtIDs::TranslateTool, wxT("Translate items") },
-            { ToolModes::Rotate,        ToolTypes::Manipulator,    wxT("Rotate"),          ArtIDs::RotateTool,    wxT("Rotate selected items") },
-            { ToolModes::Scale,         ToolTypes::Manipulator,    wxT("Scale"),           ArtIDs::ScaleTool,     wxT("Scale selected items") },
-            { ToolModes::Duplicate,     ToolTypes::Creator,        wxT("Duplicate"),       ArtIDs::DuplicateTool, wxT("Duplicate the selected object numerous times") },
-            { ToolModes::LocatorCreate, ToolTypes::Creator,        wxT("Create Locator"),  ArtIDs::Locator,       wxT("Place locator objects (such as bug locators)") },
-            { ToolModes::VolumeCreate,  ToolTypes::Creator,        wxT("Create Volume"),   ArtIDs::Volume,        wxT("Place volume objects (items for setting up gameplay)") },
-            { ToolModes::EntityCreate,  ToolTypes::Creator,        wxT("Create Entity"),   ArtIDs::Entity,        wxT("Place entity objects (such as art instances or characters)") },
-            { ToolModes::CurveCreate,   ToolTypes::Creator,        wxT("Create Curve"),    ArtIDs::Curve,         wxT("Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)") },
+            { ToolModes::Select,        ToolTypes::Manipulator,    wxT("Select"),          ArtIDs::Editor::SelectTool,    wxT("Select items from the workspace") },
+            { ToolModes::Translate,     ToolTypes::Manipulator,    wxT("Translate"),       ArtIDs::Editor::TranslateTool, wxT("Translate items") },
+            { ToolModes::Rotate,        ToolTypes::Manipulator,    wxT("Rotate"),          ArtIDs::Editor::RotateTool,    wxT("Rotate selected items") },
+            { ToolModes::Scale,         ToolTypes::Manipulator,    wxT("Scale"),           ArtIDs::Editor::ScaleTool,     wxT("Scale selected items") },
+            { ToolModes::Duplicate,     ToolTypes::Creator,        wxT("Duplicate"),       ArtIDs::Editor::DuplicateTool, wxT("Duplicate the selected object numerous times") },
+            { ToolModes::LocatorCreate, ToolTypes::Creator,        wxT("Create Locator"),  ArtIDs::Editor::Locator,       wxT("Place locator objects (such as bug locators)") },
+            { ToolModes::VolumeCreate,  ToolTypes::Creator,        wxT("Create Volume"),   ArtIDs::Editor::Volume,        wxT("Place volume objects (items for setting up gameplay)") },
+            { ToolModes::EntityCreate,  ToolTypes::Creator,        wxT("Create Entity"),   ArtIDs::Editor::Entity,        wxT("Place entity objects (such as art instances or characters)") },
+            { ToolModes::CurveCreate,   ToolTypes::Creator,        wxT("Create Curve"),    ArtIDs::Editor::Curve,         wxT("Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)") },
 #pragma TODO( "Add an overlay to the curve tool for editing" )
-            { ToolModes::CurveEdit,     ToolTypes::Editor,         wxT("Edit Curve"),      ArtIDs::Curve,         wxT("Edit created curves (modify or create/delete control points)") },
+            { ToolModes::CurveEdit,     ToolTypes::Editor,         wxT("Edit Curve"),      ArtIDs::Editor::Curve,         wxT("Edit created curves (modify or create/delete control points)") },
         };
 
         HELIUM_COMPILE_ASSERT( sizeof(ToolInfos) == EventIds::ID_ToolsCount * sizeof(ToolInfo) );

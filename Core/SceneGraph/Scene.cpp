@@ -598,9 +598,9 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_S
     return NULL;
 }
 
-void Scene::ArchiveStatus(Reflect::StatusInfo& info)
+void Scene::ArchiveStatus( Reflect::StatusInfo& info )
 {
-    switch (info.m_Action)
+    switch (info.m_ArchiveState)
     {
     case Reflect::ArchiveStates::ArchiveStarting:
         {
@@ -884,7 +884,8 @@ bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
     {
         try
         {
-            Reflect::Archive::ToFile( spool, path.Get(), NULL, this );
+            Reflect::Archive(
+            Reflect::Archive::ToFile( spool, path.Get() );
         }
         catch ( Helium::Exception& ex )
         {

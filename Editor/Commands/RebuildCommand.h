@@ -50,6 +50,8 @@ namespace Helium
 
             virtual bool Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) HELIUM_OVERRIDE;
 
+            void ArchiveStatus( const Reflect::StatusInfo& info );
+
         private:
             int ProcessFile(const tstring& input, const tstring& output);
         };

@@ -226,7 +226,6 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
 
         if ( Helium::IsDebuggerPresent() )
         {
-            Reflect::PrintStatus status;
             Archive::FromFile( input, elements, &status );
         }
         else
@@ -377,3 +376,72 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
     return REBUILD_SUCCESS;
 }
 
+void RebuildCommand::ArchiveStatus( const Reflect::StatusInfo& info )
+{
+    switch ( info.m_Type )
+    {
+    case Reflect::StatusTypes::Debug:
+        Log::Debug( info.m_Info );
+        return;
+    case Reflect::StatusTypes::Warning:
+        Log::Warning( info.m_Info );
+        return;
+    default:
+        break;
+    }
+
+    switch ( info.m_ArchiveState )
+    {
+    case Reflect::ArchiveStates::Starting:
+        {
+            m_Timer = Helium::TimerGetClock();
+
+            const char* verb = info.m_Archive.GetMode() == ArchiveModes::Read ? "Reading" : "Writing";
+            const char* type = info.m_Archive.GetType() == ArchiveTypes::XML ? "XML" : "Binary";
+
+            if (info.m_Archive.GetPath().empty())
+            {
+                m_Bullet.reset( new Log::Bullet( TXT( "%s %s stream\n" ), verb, type) );
+            }
+            else
+            {
+                m_Bullet.reset( new Log::Bullet( TXT( "%s %s file '%s'\n" ), verb, type, info.m_Archive.GetPath().c_str()) );
+
+                if (info.m_Archive.GetMode() == ArchiveModes::Read)
+                {
+                    u64 size = info.m_Archive.GetPath().Size();
+                    if ( size > 1000)
+                    {
+                        Log::Bullet bullet( TXT( "Size: %dk\n" ),  size / 1000);
+                    }
+                    else
+                    {
+                        Log::Bullet bullet( TXT( "Size: %d\n" ), size );
+                    }
+                }
+            }
+
+            m_Start = true;
+
+            break;
+        }
+
+    case Reflect::ArchiveStates::PostProcessing:
+        {
+            Log::Bullet bullet( TXT( "Processing...\n" ) );
+            break;
+        }
+
+    case Reflect::ArchiveStates::Complete:
+        {
+            Log::Bullet bullet( TXT( "Completed in %.2f ms\n" ), Helium::CyclesToMillis(Helium::TimerGetClock() - m_Timer));
+            break;
+        }
+
+    case Reflect::ArchiveStates::Publishing:
+        {
+            Log::Bullet bullet( TXT( "Publishing to %s\n" ), info.m_DestinationFile.c_str());
+            break;
+        }
+    }
+}

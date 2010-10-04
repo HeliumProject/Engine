@@ -3,6 +3,8 @@
 #include "Indent.h"
 #include "Archive.h"
 
+#include "Foundation/File/Path.h"
+
 //  
 //    Reflect Binary Format:
 //  
@@ -115,7 +117,7 @@ namespace Helium
             std::stack<WriteFields> m_FieldStack;
 
         private:
-            ArchiveBinary (StatusHandler* status = NULL);
+            ArchiveBinary();
 
         public:
             // Stream access
@@ -142,8 +144,8 @@ namespace Helium
                 return ArchiveTypes::Binary;
             }
 
-            virtual void OpenFile(const tstring& file, bool write = false);
-            void OpenStream(CharStream* stream, bool write = false);
+            virtual void OpenFile( const Path& path, bool write = false ) HELIUM_OVERRIDE;
+            void OpenStream( CharStream* stream, bool write = false );
             virtual void Close(); 
 
             // Begins parsing the InputStream
@@ -160,13 +162,13 @@ namespace Helium
 
         public:
             // Serialize
-            virtual void Serialize(const ElementPtr& element);
-            virtual void Serialize(const V_Element& elements, u32 flags = 0);
+            virtual void Serialize( const ElementPtr& element );
+            virtual void Serialize( const V_Element& elements, u32 flags = 0 );
 
         protected:
             // Helpers
-            void SerializeFields(const ElementPtr& element);
-            void SerializeField(const ElementPtr& element, const Field* field);
+            void SerializeFields( const ElementPtr& element );
+            void SerializeField( const ElementPtr& element, const Field* field );
 
         private:
             // pulls an element from the head of the stream
@@ -174,28 +176,28 @@ namespace Helium
 
         public:
             // pulls from the stream, or deserializes into a freshly allocated instance
-            virtual void Deserialize(ElementPtr& element);
-            virtual void Deserialize(V_Element& elements, u32 flags = 0);
+            virtual void Deserialize( ElementPtr& element );
+            virtual void Deserialize( V_Element& elements, u32 flags = 0 );
 
         protected:
             // Helpers
-            void DeserializeFields(const ElementPtr& element);
-            void DeserializeField(const ElementPtr& element, const Field* latent_field);
+            void DeserializeFields( const ElementPtr& element );
+            void DeserializeField( const ElementPtr& element, const Field* latent_field );
 
             // Reflection Helpers
-            void SerializeComposite(const Composite* composite);
-            bool DeserializeComposite(Composite* composite);
-            void SerializeField(const Field* field);
-            bool DeserializeField(Field* field);
+            void SerializeComposite( const Composite* composite );
+            bool DeserializeComposite( Composite* composite );
+            void SerializeField( const Field* field );
+            bool DeserializeField( Field* field );
 
         public:
             // Reading and writing single element via binary
-            static void       ToStream(const ElementPtr& element, std::iostream& stream, StatusHandler* status = NULL);
-            static ElementPtr FromStream(std::iostream& stream, int searchType = Reflect::ReservedTypes::Any, StatusHandler* status = NULL);
+            static void       ToStream( const ElementPtr& element, std::iostream& stream );
+            static ElementPtr FromStream( std::iostream& stream, int searchType = Reflect::ReservedTypes::Any );
 
             // Reading and writing multiple elements via binary
-            static void       ToStream(const V_Element& elements, std::iostream& stream, StatusHandler* status = NULL);
-            static void       FromStream(std::iostream& stream, V_Element& elements, StatusHandler* status = NULL);
+            static void       ToStream( const V_Element& elements, std::iostream& stream );
+            static void       FromStream( std::iostream& stream, V_Element& elements );
         };
     }
 }

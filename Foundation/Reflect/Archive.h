@@ -45,29 +45,38 @@ namespace Helium
                 Publishing,
             };
         }
-
         typedef ArchiveStates::ArchiveState ArchiveState;
 
-        class FOUNDATION_API StatusInfo
+        namespace StatusTypes
         {
-        public:
+            enum StatusType
+            {
+                General,
+                Debug,
+                Warning,
+            };
+        }
+        typedef StatusTypes::StatusType StatusType;
+
+        struct StatusInfo
+        {
+            StatusType m_Type;
             const Archive& m_Archive;
-
-            int m_Action;
+            ArchiveState m_ArchiveState;
             int m_Progress;
-            tstring m_DestinationFile;
-
             bool m_Abort;
+            tstring m_Info;
 
-            StatusInfo( const Archive& archive, ArchiveState action )
-                : m_Archive ( archive )
-                , m_Action ( action )
+            StatusInfo( const Archive& archive, const ArchiveState& state, const StatusType& type = StatusTypes::General )
+                : m_Archive( archive )
+                , m_ArchiveState( state )
+                , m_Type( type )
                 , m_Progress ( 0 )
                 , m_Abort ( false )
             {
-
             }
         };
+        typedef Helium::Signature< const StatusInfo& > StatusSignature;
 
         namespace ExceptionActions
         {
@@ -82,9 +91,8 @@ namespace Helium
 
         typedef void (Element::*ElementCallback)();
 
-        class FOUNDATION_API ExceptionInfo
+        struct ExceptionInfo
         {
-        public:
             const Archive& m_Archive;
 
             Element* m_Element;
@@ -100,40 +108,9 @@ namespace Helium
                 , m_Exception ( exception )
                 , m_Action ( ExceptionActions::Unknown )
             {
-
             }
         };
-
-        class FOUNDATION_API StatusHandler
-        {
-        public:
-            virtual void ArchiveStatus( StatusInfo& info );
-            virtual void ArchiveException( ExceptionInfo& info );
-            virtual void ArchiveWarning( const tstring& warning );
-            virtual void ArchiveDebug( const tstring& debug );
-        };
-
-        class FOUNDATION_API PrintStatus : public StatusHandler
-        {
-        public:
-            bool m_Start;
-            u64  m_Timer;
-            int  m_Progress;
-            std::auto_ptr<Log::Bullet> m_Bullet;
-
-            PrintStatus()
-                : m_Start (true)
-                , m_Timer (0)
-                , m_Progress (0)
-                , m_Bullet (NULL)
-            {
-
-            }
-
-            virtual void ArchiveStatus(StatusInfo& info) HELIUM_OVERRIDE;
-            virtual void ArchiveWarning(const tstring& warning) HELIUM_OVERRIDE;
-            virtual void ArchiveDebug(const tstring& debug) HELIUM_OVERRIDE;
-        };
+        typedef Helium::Signature< const ExceptionInfo& > ExceptionSignature;
 
 
         //
@@ -218,45 +195,6 @@ namespace Helium
         }
         typedef FileOperations::FileOperation FileOperation;
 
-        struct FileAccessArgs
-        {
-            const tstring& m_File;
-            FileOperation m_Operation;
-
-            FileAccessArgs( const tstring& file, FileOperation operation )
-                : m_File (file)
-                , m_Operation (operation)
-            {
-
-            }
-        };
-        typedef Helium::Signature< const FileAccessArgs&, Helium::AtomicRefCountBase> FileAccessSignature;
-
-        struct SerializeArgs
-        {
-            V_ArchiveVisitor& m_Visitors;
-
-            SerializeArgs(V_ArchiveVisitor& visitors)
-                : m_Visitors (visitors)
-            {
-
-            }
-        };
-        typedef Helium::Signature< SerializeArgs&, Helium::AtomicRefCountBase> SerializeSignature;
-
-        struct DeserializeArgs
-        {
-            V_ArchiveVisitor& m_Visitors;
-
-            DeserializeArgs(V_ArchiveVisitor& visitors)
-                : m_Visitors (visitors)
-            {
-
-            }
-        };
-        typedef Helium::Signature< DeserializeArgs&, Helium::AtomicRefCountBase> DeserializeSignature;
-
-
         //
         // Archive Base Class
         //
@@ -275,9 +213,6 @@ namespace Helium
         protected:
             // The number of bytes Parsed so far
             unsigned m_Progress;
-
-            // The target function pointer for static function processing
-            StatusHandler* m_Status;
 
             // The file we are working with
             Helium::Path m_Path;
@@ -304,7 +239,7 @@ namespace Helium
             bool m_Abort;
 
         protected:
-            Archive (StatusHandler* status = NULL);
+            Archive();
 
         public:
             virtual ~Archive();
@@ -328,13 +263,13 @@ namespace Helium
             }
 
             // Peek the type of file
-            static bool GetFileType( const tstring& file, ArchiveType& type );
+            static bool GetFileType( const Path& path, ArchiveType& type );
 
             // Get the type of this archive
             virtual ArchiveType GetType() const = 0;
 
             // File Open/Close
-            virtual void OpenFile(const tstring& file, bool write = false) = 0;
+            virtual void OpenFile( const Path& path, bool write = false ) = 0;
             virtual void Close() = 0; 
 
             // Begins parsing the InputStream
@@ -349,13 +284,6 @@ namespace Helium
             // Write the file footer
             virtual void Finish() = 0;
 
-            // Emit a warning
-            void Warning(const tchar* fmt, ...);
-
-            // Emit an debug
-            void Debug(const tchar* fmt, ...);
-
-
             //
             // Stream management
             //
@@ -363,17 +291,17 @@ namespace Helium
             // Opens a file
         protected:
             // Get parser for a file
-            static Archive* GetArchive(ArchiveType type, StatusHandler* handler = NULL);
-            static Archive* GetArchive(const tstring& file, StatusHandler* handler = NULL);
+            static Archive* GetArchive( ArchiveType type );
+            static Archive* GetArchive( const Path& path );
 
             //
             // Serialization
             //
         public:
-            virtual void Serialize(const ElementPtr& element) = 0;
-            virtual void Serialize(const V_Element& elements, u32 flags = 0) = 0;
-            virtual void Deserialize(ElementPtr& element) = 0;
-            virtual void Deserialize(V_Element& elements, u32 flags = 0) = 0;
+            virtual void Serialize( const ElementPtr& element ) = 0;
+            virtual void Serialize( const V_Element& elements, u32 flags = 0 ) = 0;
+            virtual void Deserialize( ElementPtr& element ) = 0;
+            virtual void Deserialize( V_Element& elements, u32 flags = 0 ) = 0;
 
         public:
             static const tchar* GetExtension( ArchiveType t )
@@ -417,54 +345,26 @@ namespace Helium
             //
             // Event API
             //
-
-        private:
-            static FileAccessSignature::Event s_FileAccess;
         public:
-            static void AddFileAccessListener(FileAccessSignature::Delegate& delegate)
-            {
-                s_FileAccess.Add( delegate );
-            }
-            static void RemoveFileAccessListener(FileAccessSignature::Delegate& delegate)
-            {
-                s_FileAccess.Remove( delegate );
-            }
+            StatusSignature::Event e_Status;
+            ExceptionSignature::Delegate d_Exception;
 
-        private:
-            static SerializeSignature::Event s_Serialize;
+            //
+            // Serialization
+            //
         public:
-            static void AddSerializeListener(SerializeSignature::Delegate& delegate)
-            {
-                s_Serialize.Add( delegate );
-            }
-            static void RemoveSerializeListener(SerializeSignature::Delegate& delegate)
-            {
-                s_Serialize.Remove( delegate );
-            }
-
-        private:
-            static DeserializeSignature::Event s_Deserialize;
-        public:
-            static void AddDeserializeListener(DeserializeSignature::Delegate& delegate)
-            {
-                s_Deserialize.Add( delegate );
-            }
-            static void RemoveDeserializeListener(DeserializeSignature::Delegate& delegate)
-            {
-                s_Deserialize.Remove( delegate );
-            }
 
             // Archive-level processing (visitor setup and append generation)
             void PreSerialize();
-            void PostSerialize(V_Element& append);
+            void PostSerialize( V_Element& append );
 
             // Archive-level processing (visitor setup and append processing)
             void PreDeserialize();
             void PostDeserialize(V_Element& append);
 
             // Instance-level processing (visit calls and type tracking)
-            void PreSerialize(const ElementPtr& element, const Field* field = NULL);
-            void PostDeserialize(const ElementPtr& element, const Field* field = NULL);
+            void PreSerialize( const ElementPtr& element, const Field* field = NULL );
+            void PostDeserialize( const ElementPtr& element, const Field* field = NULL );
 
             // Shared code for doing per-element pre and post serialize work with exception handling
             bool TryElementCallback( Element* element, ElementCallback callback );
@@ -474,19 +374,16 @@ namespace Helium
             // Serialize/Deserialize API
             //
 
-            // Reading and writing single element from a file
-            static void       ToFile(const ElementPtr& element, const tstring& file);
-            static void       ToFile(const ElementPtr& element, const tstring& file, VersionPtr version, StatusHandler* status = NULL);
-            static ElementPtr FromFile(const tstring& file, int searchType = Reflect::ReservedTypes::Any, StatusHandler* status = NULL);
+            // Reading and writing from/to a file
+            void Save();
+            ElementPtr FromFile( const tstring& file, int searchType = Reflect::ReservedTypes::Any );
 
             // Reading and writing multiple elements from a file
-            static void       ToFile(const V_Element& elements, const tstring& file);
-            static void       ToFile(const V_Element& elements, const tstring& file, VersionPtr version, StatusHandler* status = NULL);
-            static void       FromFile(const tstring& file, V_Element& elements, StatusHandler* status = NULL);
+            static void       FromFile( const tstring& file, V_Element& elements );
 
             // Get all elements of the specified type in the archive ( not optimal if you need to get lots of different types at once )
             template< class T >
-            static void FromFile( const tstring& file, std::vector< Helium::SmartPtr<T> >& elements, StatusHandler* status = NULL )
+            static void FromFile( const tstring& file, std::vector< Helium::SmartPtr<T> >& elements )
             {
                 V_Element archiveElements;
                 FromFile( file, archiveElements, status );
@@ -508,7 +405,7 @@ namespace Helium
 
             // Fancy template version
             template <class T>
-            static Helium::SmartPtr<T> FromFile(const tstring& file, StatusHandler* status = NULL)
+            static Helium::SmartPtr<T> FromFile( const tstring& file )
             {
                 ElementPtr found = FromFile(file, Reflect::GetType<T>(), status);
 

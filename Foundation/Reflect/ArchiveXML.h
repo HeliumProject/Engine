@@ -102,7 +102,7 @@ namespace Helium
             V_Element* m_Target;
 
         private:
-            ArchiveXML(StatusHandler* status = NULL);
+            ArchiveXML();
             ~ArchiveXML();
 
         public:
@@ -119,7 +119,7 @@ namespace Helium
                 return ArchiveTypes::XML;
             }
 
-            virtual void OpenFile(const tstring& file, bool write = false);
+            virtual void OpenFile( const Path& path, bool write = false) HELIUM_OVERRIDE;
             void OpenStream(TCharStream* stream, bool write = false);
             virtual void Close(); 
 
@@ -191,12 +191,12 @@ namespace Helium
 
         public:
             // Reading and writing single element from string data
-            static void       ToString(const ElementPtr& element, tstring& xml, StatusHandler* status = NULL);
-            static ElementPtr FromString(const tstring& xml, int searchType = Reflect::ReservedTypes::Any, StatusHandler* status = NULL);
+            static void       ToString( const ElementPtr& element, tstring& xml );
+            static ElementPtr FromString( const tstring& xml, int searchType = Reflect::ReservedTypes::Any );
 
             // Reading and writing multiple elements from string data
-            static void       ToString(const V_Element& elements, tstring& xml, StatusHandler* status = NULL);
-            static void       FromString(const tstring& xml, V_Element& elements, StatusHandler* status = NULL);
+            static void       ToString( const V_Element& elements, tstring& xml );
+            static void       FromString( const tstring& xml, V_Element& elements );
         };
     }
 }

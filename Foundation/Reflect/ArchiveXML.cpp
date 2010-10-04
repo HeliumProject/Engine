@@ -9,6 +9,7 @@
 #include <strstream>
 #include <expat.h>
 
+using namespace Helium;
 using namespace Helium::Reflect;
 
 char Indent<char>::m_Space = ' ';
@@ -21,8 +22,8 @@ const u32 ArchiveXML::CURRENT_VERSION                               = 3;
 const u32 ArchiveXML::FIRST_VERSION_WITH_POINTER_SERIALIZER         = 2; 
 const u32 ArchiveXML::FIRST_VERSION_WITH_NAMESPACE_SUPPORT          = 3; 
 
-ArchiveXML::ArchiveXML(StatusHandler* status)
-: Archive(status)
+ArchiveXML::ArchiveXML()
+: Archive()
 , m_Version (CURRENT_VERSION)
 , m_Target (&m_Spool)
 {
@@ -43,15 +44,15 @@ ArchiveXML::~ArchiveXML()
     m_Parser = NULL;
 }
 
-void ArchiveXML::OpenFile( const tstring& file, bool write )
+void ArchiveXML::OpenFile( const Path& path, bool write )
 {
-    m_Path.Set( file );
+    m_Path = path;
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
     Debug(TXT("Opening file '%s'\n"), file.c_str());
 #endif
 
-    Reflect::TCharStreamPtr stream = new FileStream<tchar>(file, write);
+    Reflect::TCharStreamPtr stream = new FileStream<tchar>( path, write );
     OpenStream( stream, write );
 }
 
@@ -91,11 +92,8 @@ void ArchiveXML::Read()
 {
     REFLECT_SCOPE_TIMER(( "Reflect - XML Read" ));
 
-    if (m_Status != NULL)
-    {
-        StatusInfo info (*this, ArchiveStates::Starting);
-        m_Status->ArchiveStatus(info);
-    }
+    StatusInfo info( *this, ArchiveStates::Starting );
+    e_Status.Raise( info );
 
     m_Abort = false;
 
@@ -134,32 +132,23 @@ void ArchiveXML::Read()
         }
     }
 
-    if (m_Status != NULL)
-    {
-        StatusInfo info (*this, ArchiveStates::ElementProcessed);
-        info.m_Progress = 100;
-        m_Status->ArchiveStatus(info);
-    }
+    info.m_ArchiveState = ArchiveStates::ElementProcessed;
+    info.m_Progress = 100;
+    e_Status.Raise( info );
 
     // tell visitors to process append
     PostDeserialize(m_Append);
 
-    if (m_Status != NULL)
-    {
-        StatusInfo info (*this, ArchiveStates::Complete);
-        m_Status->ArchiveStatus(info);
-    }
+    info.m_ArchiveState = ArchiveStates::Complete;
+    e_Status.Raise( info );
 }
 
 void ArchiveXML::Write()
 {
     REFLECT_SCOPE_TIMER(( "Reflect - XML Write" ));
 
-    if (m_Status != NULL)
-    {
-        StatusInfo info (*this, ArchiveStates::Starting);
-        m_Status->ArchiveStatus(info);
-    }
+    StatusInfo info( *this, ArchiveStates::Starting );
+    e_Status.Raise( info );
 
     // setup visitors
     PreSerialize();
@@ -182,11 +171,8 @@ void ArchiveXML::Write()
         Serialize(append);
     }
 
-    if (m_Status != NULL)
-    {
-        StatusInfo info (*this, ArchiveStates::Complete);
-        m_Status->ArchiveStatus(info);
-    }
+    info.m_ArchiveState = ArchiveStates::Complete;
+    e_Status.Raise( info );
 }
 
 void ArchiveXML::Start()
@@ -247,19 +233,19 @@ void ArchiveXML::Serialize(const V_Element& elements, u32 flags)
     {
         Serialize(*itr);
 
-        if (flags & ArchiveFlags::Status && m_Status != NULL)
+        if ( flags & ArchiveFlags::Status )
         {
-            StatusInfo info (*this, ArchiveStates::ElementProcessed);
+            StatusInfo info( *this, ArchiveStates::ElementProcessed );
             info.m_Progress = (int)(((float)(index) / (float)elements.size()) * 100.0f);
-            m_Status->ArchiveStatus(info);
+            e_Status.Raise( info );
         }
     }
 
-    if (flags & ArchiveFlags::Status && m_Status != NULL)
+    if ( flags & ArchiveFlags::Status )
     {
-        StatusInfo info (*this, ArchiveStates::ElementProcessed);
+        StatusInfo info( *this, ArchiveStates::ElementProcessed );
         info.m_Progress = 100;
-        m_Status->ArchiveStatus(info);
+        e_Status.Raise( info );
     }
 
     m_FieldNames.pop();
@@ -651,7 +637,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
 
             tstringstream stream (topState->m_Buffer);
 
-            ArchiveXML xml (m_Status);
+            ArchiveXML xml;
             xml.m_Stream = new Reflect::TCharStream (&stream); 
             xml.m_Components = topState->m_Components;
             serializer->Deserialize(xml);
@@ -719,32 +705,29 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
         // we've reached the top of the processed stack, send off to client for processing
         m_Target->push_back( topState->m_Element );
 
-        if (m_Status != NULL)
-        {
-            StatusInfo info (*this, ArchiveStates::ElementProcessed);
-            info.m_Progress = m_Progress;
-            m_Status->ArchiveStatus(info);
+        StatusInfo info( *this, ArchiveStates::ElementProcessed );
+        info.m_Progress = m_Progress;
+        e_Status.Raise( info );
 
-            m_Abort |= info.m_Abort;
-        }
+        m_Abort |= info.m_Abort;
     }
 }
 
-void ArchiveXML::ToString(const ElementPtr& element, tstring& xml, StatusHandler* status)
+void ArchiveXML::ToString(const ElementPtr& element, tstring& xml )
 {
     V_Element elements(1);
     elements[0] = element;
-    return ToString( elements, xml, status );
+    return ToString( elements, xml );
 }
 
-ElementPtr ArchiveXML::FromString(const tstring& xml, int searchType, StatusHandler* status)
+ElementPtr ArchiveXML::FromString( const tstring& xml, int searchType )
 {
     if (searchType == Reflect::ReservedTypes::Any)
     {
         searchType = Reflect::GetType<Element>();
     }
 
-    ArchiveXML archive (status);
+    ArchiveXML archive;
     archive.m_SearchType = searchType;
 
     tstringstream strStream;
@@ -765,25 +748,25 @@ ElementPtr ArchiveXML::FromString(const tstring& xml, int searchType, StatusHand
     return NULL;
 }
 
-void ArchiveXML::ToString(const V_Element& elements, tstring& xml, StatusHandler* status)
+void ArchiveXML::ToString( const V_Element& elements, tstring& xml )
 {
-    ArchiveXML archive (status);
+    ArchiveXML archive;
     tstringstream strStream;
 
-    archive.m_Stream = new Reflect::TCharStream(&strStream); 
+    archive.m_Stream = new Reflect::TCharStream( &strStream ); 
     archive.m_Spool  = elements;
     archive.Write();
 
     xml = strStream.str();
 }
 
-void ArchiveXML::FromString(const tstring& xml, V_Element& elements, StatusHandler* status)
+void ArchiveXML::FromString( const tstring& xml, V_Element& elements )
 {
-    ArchiveXML archive (status);
+    ArchiveXML archive;
     tstringstream strStream;
     strStream << "<?xml version=\"1.0\"?><Reflect FileFormatVersion=\""<<ArchiveXML::CURRENT_VERSION<<"\">" << xml << "</Reflect>";
 
-    archive.m_Stream = new Reflect::TCharStream(&strStream); 
+    archive.m_Stream = new Reflect::TCharStream( &strStream );
     archive.Read();
 
     elements = archive.m_Spool;

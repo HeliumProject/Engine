@@ -5,6 +5,8 @@
 
 #include "Platform/Assert.h"
 
+#include "Foundation/File/Path.h"
+
 #ifdef UNICODE
 
 // http://www.codeproject.com/KB/stl/upgradingstlappstounicode.aspx
@@ -387,8 +389,8 @@ namespace Helium
         class FileStream : public Stream< StreamCharT >
         {
         public: 
-            FileStream(const tstring& filename, bool write)
-                : m_Filename(filename)
+            FileStream( const Path& path, bool write )
+                : m_Path( path )
                 , m_OpenForWrite(write)
             {
 
@@ -418,11 +420,11 @@ namespace Helium
                 fstream->imbue( std::locale( std::locale::classic(), new null_codecvt )) ;
 #endif
 
-                fstream->open(m_Filename.c_str(), fmode);
+                fstream->open( m_Path.c_str(), fmode );
                 if (!fstream->is_open())
                 {
                     delete fstream;
-                    throw Reflect::StreamException( TXT( "Unable to open '%s' for %s" ) , m_Filename.c_str(), m_OpenForWrite ? TXT( "write" ) : TXT( "read" ));
+                    throw Reflect::StreamException( TXT( "Unable to open '%s' for %s" ) , m_Path.c_str(), m_OpenForWrite ? TXT( "write" ) : TXT( "read" ));
                 }
 
                 m_Stream    = fstream; 
@@ -436,13 +438,13 @@ namespace Helium
                 fstream->close();
                 if (fstream->is_open())
                 {
-                    throw Reflect::StreamException( TXT( "Unable to close '%s' after %s" ), m_Filename.c_str(), m_OpenForWrite ? TXT( "write" ) : TXT( "read" ));
+                    throw Reflect::StreamException( TXT( "Unable to close '%s' after %s" ), m_Path.c_str(), m_OpenForWrite ? TXT( "write" ) : TXT( "read" ));
                 }
             }
 
         protected: 
-            tstring     m_Filename; 
-            bool        m_OpenForWrite; 
+            Path  m_Path; 
+            bool  m_OpenForWrite; 
         };
     }
 }

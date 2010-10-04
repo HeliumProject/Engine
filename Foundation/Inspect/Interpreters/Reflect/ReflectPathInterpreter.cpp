@@ -6,7 +6,6 @@
 #include "Foundation/Inspect/Controls/ButtonControl.h"
 #include "Foundation/Inspect/Controls/ValueControl.h"
 
-#include "Core/Asset/AssetClass.h"
 #include "Foundation/Log.h"
 #include "Foundation/String/Wildcard.h"
 #include "Foundation/String/Tokenize.h"

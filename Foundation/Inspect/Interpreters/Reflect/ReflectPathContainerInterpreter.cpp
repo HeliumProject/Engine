@@ -9,7 +9,6 @@
 #include "Foundation/Inspect/Inspect.h"
 #include "Foundation/Inspect/Interpreters/Reflect/InspectReflectInit.h"
 
-#include "Core/Asset/AssetClass.h"
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/Log.h"
 

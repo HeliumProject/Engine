@@ -21,7 +21,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
+			InheritedPropertySheets="..\Windows.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="0"
@@ -104,7 +104,7 @@
 		<Configuration
 			Name="Debug|x64"
 			ConfigurationType="4"
-			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
+			InheritedPropertySheets="..\Windows.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="0"
@@ -187,7 +187,7 @@
 		<Configuration
 			Name="Release|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
+			InheritedPropertySheets="..\Windows.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="0"
@@ -269,7 +269,7 @@
 		<Configuration
 			Name="Release|x64"
 			ConfigurationType="4"
-			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
+			InheritedPropertySheets="..\Windows.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="0"
@@ -351,7 +351,7 @@
 		<Configuration
 			Name="Debug Unicode|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
+			InheritedPropertySheets="..\Windows.vsprops;..\Unicode.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="0"
@@ -434,7 +434,7 @@
 		<Configuration
 			Name="Debug Unicode|x64"
 			ConfigurationType="4"
-			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
+			InheritedPropertySheets="..\Windows.vsprops;..\Unicode.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="0"
@@ -517,7 +517,7 @@
 		<Configuration
 			Name="Release Unicode|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
+			InheritedPropertySheets="..\Windows.vsprops;..\Unicode.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="0"
@@ -599,7 +599,7 @@
 		<Configuration
 			Name="Release Unicode|x64"
 			ConfigurationType="4"
-			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
+			InheritedPropertySheets="..\Windows.vsprops;..\Unicode.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="0"

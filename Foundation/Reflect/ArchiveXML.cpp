@@ -556,7 +556,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
 
         if (newState->m_Element == NULL)
         {
-            Debug( TXT( "Unable to create element with short name: %s\n" ), elementType);
+            Log::Debug( TXT( "Unable to create element with short name: %s\n" ), elementType);
         }
     }
 
@@ -686,7 +686,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
                     // we are a component, so send us up to be processed by container
                     if (container && !container->ProcessComponent(topState->m_Element, topState->m_Field->m_Name))
                     {
-                        Debug( TXT( "%s did not process %s, discarding\n" ), container->GetClass()->m_ShortName.c_str(), topState->m_Element->GetClass()->m_ShortName.c_str());
+                        Log::Debug( TXT( "%s did not process %s, discarding\n" ), container->GetClass()->m_ShortName.c_str(), topState->m_Element->GetClass()->m_ShortName.c_str());
                     }
                 }
             }

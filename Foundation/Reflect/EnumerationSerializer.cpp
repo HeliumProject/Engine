@@ -134,7 +134,7 @@ void EnumerationSerializer::Deserialize(Archive& archive)
             {
                 if (m_Enumeration && !m_Enumeration->GetElementValue(buf, m_Data.Ref()))
                 {
-                    xml.Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), m_Enumeration->m_ShortName.c_str(), buf.c_str() );
+                    Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), m_Enumeration->m_ShortName.c_str(), buf.c_str() );
                 }
                 else
                 {
@@ -157,7 +157,7 @@ void EnumerationSerializer::Deserialize(Archive& archive)
 
                 if (m_Enumeration && !m_Enumeration->GetElementValue(str, m_Data.Ref()))
                 {
-                    binary.Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), m_Enumeration->m_ShortName.c_str(), str.c_str() );
+                    Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), m_Enumeration->m_ShortName.c_str(), str.c_str() );
                 }
                 else
                 {

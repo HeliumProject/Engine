@@ -373,7 +373,8 @@ bool MainFrame::OpenProject( const Helium::Path& path )
         tstring error;
         try
         {
-            m_Project = Reflect::Archive::FromFile< Project >( path );
+            Reflect::Archive archive( path );
+            m_Project = archive.Get< Project >();
         }
         catch ( const Helium::Exception& ex )
         {
@@ -1205,7 +1206,10 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
                         try
                         {
-                            Reflect::Archive::ToFile( elements, file.c_str(), NULL, m_SceneManager.GetCurrentScene() );
+                            Reflect::Archive archive( file, elements );
+                            archive.e_Status.AddMethod( m_SceneManager.GetCurrentScene(), &Scene::ArchiveStatus );
+                            archive.d_Exception.Set( m_SceneManager.GetCurrentScene(), &Scene::ArchiveException );
+                            archive.Save();
                         }
                         catch ( Helium::Exception& ex )
                         {
@@ -1224,7 +1228,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
                         try
                         {
-                            Reflect::ArchiveXML::ToString( elements, xml, m_SceneManager.GetCurrentScene() );
+                            Reflect::ArchiveXML::ToString( elements, xml );
                         }
                         catch ( Helium::Exception& ex )
                         {

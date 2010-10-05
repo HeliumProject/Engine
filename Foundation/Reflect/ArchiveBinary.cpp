@@ -794,7 +794,7 @@ ElementPtr ArchiveBinary::Allocate()
             // if you see this, then data is being lost because:
             //  1 - a type was completely removed from the codebase
             //  2 - a type was not found because its type library is not registered
-            Debug( TXT( "Unable to create object of type '%s', size %d, skipping...\n" ), str.c_str(), length);
+            Log::Debug( TXT( "Unable to create object of type '%s', size %d, skipping...\n" ), str.c_str(), length);
         }
         else
         {
@@ -975,7 +975,7 @@ void ArchiveBinary::DeserializeFields(const ElementPtr& element)
 
             if (type == NULL)
             {
-                Debug( TXT( "Unable to resolve type from short name '%s'\n" ), element->GetClass()->m_ShortName.c_str());
+                Log::Debug( TXT( "Unable to resolve type from short name '%s'\n" ), element->GetClass()->m_ShortName.c_str());
             }
 
             // while we haven't hit the terminator
@@ -1138,7 +1138,7 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
             }
             catch (Reflect::LogisticException& ex)
             {
-                Debug( TXT( "Unable to deserialize %s::%s into component (%s), discarding\n" ), type->m_ShortName.c_str(), latent_field->m_Name.c_str(), ex.What());
+                Log::Debug( TXT( "Unable to deserialize %s::%s into component (%s), discarding\n" ), type->m_ShortName.c_str(), latent_field->m_Name.c_str(), ex.What());
             }
         }
     }
@@ -1148,7 +1148,7 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
         // attempt processing
         if (!element->ProcessComponent(component, latent_field->m_Name))
         {
-            Debug( TXT( "%s did not process %s, discarding\n" ), element->GetClass()->m_ShortName.c_str(), component->GetClass()->m_ShortName.c_str());
+            Log::Debug( TXT( "%s did not process %s, discarding\n" ), element->GetClass()->m_ShortName.c_str(), component->GetClass()->m_ShortName.c_str());
         }
     }
 }
@@ -1326,18 +1326,7 @@ void ArchiveBinary::ToStream( const V_Element& elements, std::iostream& stream )
     ArchiveBinary archive;
 
     // fix the spool
-    archive.m_Spool.clear();
-    archive.m_Spool.reserve( elements.size() );
-
-    V_Element::const_iterator iter = elements.begin();
-    V_Element::const_iterator end  = elements.end();
-    for ( ; iter != end; ++iter )
-    {
-        if ( !(*iter)->HasType(Reflect::GetType<Version>()) )
-        {
-            archive.m_Spool.push_back( (*iter) );
-        }
-    }
+    archive.m_Spool = elements;
 
     Reflect::CharStreamPtr charStream = new Reflect::Stream<char>(&stream); 
     archive.OpenStream( charStream, true );

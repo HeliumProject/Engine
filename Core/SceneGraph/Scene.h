@@ -609,10 +609,6 @@ namespace Helium
 
             Undo::CommandPtr ImportSceneNode( const Reflect::ElementPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, u32 importFlags, i32 importReflectType = Reflect::ReservedTypes::Invalid  );
 
-            // for status and error reporting from Reflect::Archive events
-            void ArchiveStatus( Reflect::StatusInfo& info );
-            void ArchiveException( Reflect::ExceptionInfo& info );
-
             /// @brief If this node has been remapped from another node, return the source nodes ID
             /// When we copy elements, we give them a new UniqueID. If we need information related
             /// to the original node, we need a way to gather the id of the original node.
@@ -625,6 +621,10 @@ namespace Helium
             //
 
         public:
+            // for status and error reporting from Reflect::Archive events
+            void ArchiveStatus( const Reflect::StatusInfo& info );
+            void ArchiveException( const Reflect::ExceptionInfo& info );
+
             // Saves this scene to its current file location. 
             // (get and change the scene editor file to switch the destination)
             bool Save();

@@ -25,7 +25,39 @@ using namespace Helium::Reflect;
 //
 
 Archive::Archive()
-: m_Progress( 0 )
+: m_ParsingArchive( NULL )
+, m_Progress( 0 )
+, m_SearchType( Reflect::ReservedTypes::Invalid )
+, m_Abort( false )
+, m_Mode( ArchiveModes::Read )
+{
+}
+
+Archive::Archive( const Path& path )
+: m_Path( path )
+, m_ParsingArchive( NULL )
+, m_Progress( 0 )
+, m_SearchType( Reflect::ReservedTypes::Invalid )
+, m_Abort( false )
+, m_Mode( ArchiveModes::Read )
+{
+}
+
+Archive::Archive( const Path& path, const ElementPtr& element )
+: m_Path( path )
+, m_ParsingArchive( NULL )
+, m_Progress( 0 )
+, m_SearchType( Reflect::ReservedTypes::Invalid )
+, m_Abort( false )
+, m_Mode( ArchiveModes::Read )
+{
+    m_Spool.push_back( element );
+}
+
+Archive::Archive( const Path& path, const V_Element& elements )
+: m_Path( path )
+, m_Spool( elements )
+, m_Progress( 0 )
 , m_SearchType( Reflect::ReservedTypes::Invalid )
 , m_Abort( false )
 , m_Mode( ArchiveModes::Read )
@@ -229,64 +261,24 @@ bool Archive::TryElementCallback( Element* element, ElementCallback callback )
     return true;
 }
 
-ElementPtr Archive::FromFile( const tstring& file, int searchType )
+ElementPtr Archive::Get( int searchType )
 {
-    if (searchType == Reflect::ReservedTypes::Any)
+    REFLECT_SCOPE_TIMER( ( "%s", m_Path.c_str() ) );
+
+    V_Element elements;
+    Get( elements );
+
+    if ( searchType == Reflect::ReservedTypes::Any )
     {
-        searchType = Reflect::GetType<Element>();
+        searchType = Reflect::GetType< Element >();
     }
 
-    REFLECT_SCOPE_TIMER(("%s", file.c_str()));
-
-    tchar print[512];
-    _sntprintf(print, sizeof(print), TXT( "Parsing '%s'" ), file.c_str());
-#pragma TODO("Profiler support for wide strings")
-    PROFILE_SCOPE_ACCUM_VERBOSE(g_ParseAccum, ""/*print*/);
-
-    std::auto_ptr<Archive> archive( GetArchive( file ) );
-    archive->m_SearchType = searchType;
-    StatusInfo info( *archive, ArchiveStates::Starting, StatusTypes::Debug );
-    info.m_Info = print;
-    archive->e_Status.Raise( info );
-
-    if ( Helium::IsDebuggerPresent() )
-    {
-        archive->OpenFile( file );
-        archive->Read();
-        archive->Close(); 
-    }
-    else
-    {
-        try
-        {
-            archive->OpenFile( file );
-
-            try
-            {
-                archive->Read();
-            }
-            catch (...)
-            {
-                archive->Close(); 
-                throw;
-            }
-
-            archive->Close(); 
-        }
-        catch ( Helium::Exception& ex )
-        {
-            tstringstream str;
-            str << "While reading '" << file << "': " << ex.Get();
-            ex.Set( str.str() );
-            throw;
-        }
-    }
-
-    V_Element::iterator itr = archive->m_Spool.begin();
-    V_Element::iterator end = archive->m_Spool.end();
+    ElementPtr result = NULL;
+    V_Element::iterator itr = elements.begin();
+    V_Element::iterator end = elements.end();
     for ( ; itr != end; ++itr )
     {
-        if ((*itr)->HasType(searchType))
+        if ( (*itr)->HasType( searchType ) )
         {
             return *itr;
         }
@@ -295,14 +287,68 @@ ElementPtr Archive::FromFile( const tstring& file, int searchType )
     return NULL;
 }
 
+void Archive::Get( V_Element& elements )
+{
+    REFLECT_SCOPE_TIMER( ( "%s", m_Path.c_str() ) );
+
+    Log::Debug( TXT( "Parsing '%s'" ), m_Path.c_str() );
+
+    HELIUM_ASSERT( m_ParsingArchive == NULL );
+    m_ParsingArchive = GetArchive( m_Path );
+    m_ParsingArchive->e_Status = e_Status;
+    m_ParsingArchive->d_Exception = d_Exception;
+
+    if ( Helium::IsDebuggerPresent() )
+    {
+        m_ParsingArchive->OpenFile( m_Path );
+        m_ParsingArchive->Read();
+        m_ParsingArchive->Close(); 
+    }
+    else
+    {
+        try
+        {
+            m_ParsingArchive->OpenFile( m_Path );
+
+            try
+            {
+                m_ParsingArchive->Read();
+            }
+            catch (...)
+            {
+                m_ParsingArchive->Close();
+
+                delete m_ParsingArchive;
+                m_ParsingArchive = NULL;
+
+                throw;
+            }
+
+            m_ParsingArchive->Close(); 
+        }
+        catch (Helium::Exception& ex)
+        {
+            delete m_ParsingArchive;
+            m_ParsingArchive = NULL;
+
+            tstringstream str;
+            str << "While reading '" << m_Path.c_str() << "': " << ex.Get();
+            ex.Set( str.str() );
+            throw;
+        }
+    }
+
+    elements = m_ParsingArchive->m_Spool;
+    delete m_ParsingArchive;
+    m_ParsingArchive = NULL;
+}
+
+
 void Archive::Save()
 {
     HELIUM_ASSERT( !m_Path.empty() );
 
     REFLECT_SCOPE_TIMER(("%s", path.c_str()));
-
-    StatusInfo info( *this, ArchiveStates::Publishing, StatusTypes::Debug );
-    e_Status.Raise( info );
 
     m_Path.MakePath();
 
@@ -310,12 +356,20 @@ void Archive::Save()
     Helium::Path safetyPath( m_Path.Directory() + Helium::GetProcessString() );
     safetyPath.ReplaceExtension( m_Path.Extension() );
 
+    HELIUM_ASSERT( m_ParsingArchive == NULL );
+    m_ParsingArchive = GetArchive( m_Path );
+    m_ParsingArchive->e_Status = e_Status;
+    m_ParsingArchive->d_Exception = d_Exception;
+
+    // eh, this is pretty crappy, causing a copy
+    m_ParsingArchive->m_Spool = m_Spool;
+
     // generate the file to the safety location
     if ( Helium::IsDebuggerPresent() )
     {
-        OpenFile( safetyPath.Get(), true );
-        Write();
-        Close(); 
+        m_ParsingArchive->OpenFile( safetyPath.Get(), true );
+        m_ParsingArchive->Write();
+        m_ParsingArchive->Close(); 
     }
     else
     {
@@ -323,10 +377,10 @@ void Archive::Save()
 
         try
         {
-            OpenFile( safetyPath.Get(), true );
+            m_ParsingArchive->OpenFile( safetyPath.Get(), true );
             open = true;
-            Write();
-            Close(); 
+            m_ParsingArchive->Write();
+            m_ParsingArchive->Close(); 
         }
         catch ( Helium::Exception& ex )
         {
@@ -336,8 +390,11 @@ void Archive::Save()
 
             if ( open )
             {
-                Close();
+                m_ParsingArchive->Close();
             }
+
+            delete m_ParsingArchive;
+            m_ParsingArchive = NULL;
 
             safetyPath.Delete();
             throw;
@@ -346,17 +403,23 @@ void Archive::Save()
         {
             if ( open )
             {
-                Close();
+                m_ParsingArchive->Close();
             }
+
+            delete m_ParsingArchive;
+            m_ParsingArchive = NULL;
 
             safetyPath.Delete();
             throw;
         }
     }
 
+    delete m_ParsingArchive;
+    m_ParsingArchive = NULL;
+
     try
     {
-        info.m_ArchiveState = ArchiveStates::Publishing;
+        StatusInfo info( *this, ArchiveStates::Publishing );
         e_Status.Raise( info );
 
         // delete the destination file
@@ -375,55 +438,4 @@ void Archive::Save()
 
         throw;
     }
-}
-
-void Archive::FromFile(const tstring& file, V_Element& elements )
-{
-    REFLECT_SCOPE_TIMER(("%s", file.c_str()));
-
-    tchar print[512];
-    _sntprintf(print, sizeof(print), TXT( "Parsing '%s'" ), file.c_str());
-#pragma TODO("Profiler support for wide strings")
-    PROFILE_SCOPE_ACCUM_VERBOSE(g_ParseAccum, ""/*print*/);
-
-    std::auto_ptr<Archive> archive ( GetArchive( file ) );
-
-    StatusInfo info( *archive.get(), ArchiveStates::Starting, StatusTypes::Debug );
-    info.m_Info = print;
-    archive->e_Status.Raise( info );
-
-    if ( Helium::IsDebuggerPresent() )
-    {
-        archive->OpenFile( file );
-        archive->Read();
-        archive->Close(); 
-    }
-    else
-    {
-        try
-        {
-            archive->OpenFile( file );
-
-            try
-            {
-                archive->Read();
-            }
-            catch (...)
-            {
-                archive->Close(); 
-                throw;
-            }
-
-            archive->Close(); 
-        }
-        catch (Helium::Exception& ex)
-        {
-            tstringstream str;
-            str << "While reading '" << file << "': " << ex.Get();
-            ex.Set( str.str() );
-            throw;
-        }
-    }
-
-    elements = archive->m_Spool;
 }

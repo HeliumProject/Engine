@@ -28,7 +28,8 @@ AssetClassPtr MeshAssetFactory::Create( const Helium::Path& path )
 
         try
         {
-            Reflect::Archive::ToFile( entity, assetPath );
+            Reflect::Archive archive( assetPath, entity );
+            archive.Save();
             entity->SetSourcePath( assetPath );
         }
         catch( Helium::Exception& )
@@ -47,7 +48,8 @@ AssetClassPtr MeshAssetFactory::Create( const Helium::Path& path )
         {
             // let's try to cache the mesh
             SceneGraph::Mesh* mesh = Importers::ImportOBJ( path );
-            Reflect::Archive::ToFile( mesh, meshPath );
+            Reflect::Archive archive( meshPath, mesh );
+            archive.Save();
         }
     }
 

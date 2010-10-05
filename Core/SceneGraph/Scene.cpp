@@ -216,7 +216,10 @@ Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u
 
     try
     {
-        Reflect::Archive::FromFile( path, elements );
+        Reflect::Archive archive( path );
+        archive.e_Status.AddMethod( this, &Scene::ArchiveStatus );
+        archive.d_Exception.Set( this, &Scene::ArchiveException );
+        archive.Get( elements );
     }
     catch ( const Helium::Exception& exception )
     {
@@ -598,7 +601,7 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_S
     return NULL;
 }
 
-void Scene::ArchiveStatus( Reflect::StatusInfo& info )
+void Scene::ArchiveStatus( const Reflect::StatusInfo& info )
 {
     switch (info.m_ArchiveState)
     {
@@ -651,7 +654,7 @@ void Scene::ArchiveStatus( Reflect::StatusInfo& info )
     }
 }
 
-void Scene::ArchiveException(Reflect::ExceptionInfo& info)
+void Scene::ArchiveException( const Reflect::ExceptionInfo& info )
 {
 #pragma TODO( "Sub default assets?" )
 }
@@ -884,8 +887,10 @@ bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
     {
         try
         {
-            Reflect::Archive(
-            Reflect::Archive::ToFile( spool, path.Get() );
+            Reflect::Archive archive( path, spool );
+            archive.e_Status.AddMethod( this, &Scene::ArchiveStatus );
+            archive.d_Exception.Set( this, &Scene::ArchiveException );
+            archive.Save();
         }
         catch ( Helium::Exception& ex )
         {
@@ -940,7 +945,7 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
     {
         try
         {
-            Reflect::ArchiveXML::ToString( spool, xml, this );
+            Reflect::ArchiveXML::ToString( spool, xml );
         }
         catch ( Helium::Exception& ex )
         {

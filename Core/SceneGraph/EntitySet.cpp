@@ -47,7 +47,7 @@ EntitySet::~EntitySet()
 
 void EntitySet::LoadAssetClass()
 {
-    m_Class = Asset::AssetClass::LoadAssetClass<Asset::Entity>( m_AssetPath );
+    m_Class = m_AssetPath.empty() ? NULL : Asset::AssetClass::LoadAssetClass<Asset::Entity>( m_AssetPath );
 
     if ( !m_Class.ReferencesObject() )
     {
@@ -100,7 +100,8 @@ void EntitySet::LoadAssetClass()
                     SceneGraph::MeshPtr mesh;
                     try
                     {
-                        mesh = Reflect::Archive::FromFile< SceneGraph::Mesh >( meshPath );
+                        Reflect::Archive meshArchive( meshPath );
+                        mesh = meshArchive.Get< SceneGraph::Mesh >();
                     }
                     catch ( const Reflect::Exception& e )
                     {

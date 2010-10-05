@@ -312,13 +312,15 @@ void App::SaveSettings()
     tstring error;
     if ( Helium::IsDebuggerPresent() )
     {
-        Reflect::Archive::ToFile( m_SettingsManager, path );
+        Reflect::Archive archive( path, m_SettingsManager );
+        archive.Save();
     }
     else
     {
         try
         {
-            Reflect::Archive::ToFile( m_SettingsManager, path );
+            Reflect::Archive archive( path, m_SettingsManager );
+            archive.Save();
         }
         catch ( const Helium::Exception& ex )
         {
@@ -347,14 +349,16 @@ void App::LoadSettings()
 
     if ( Helium::IsDebuggerPresent() )
     {
-		settingsManager = Reflect::Archive::FromFile< SettingsManager >( path );
+        Reflect::Archive archive( path );
+		settingsManager = archive.Get< SettingsManager >();
     }
     else
     {
         tstring error;
         try
         {
-			settingsManager = Reflect::Archive::FromFile< SettingsManager >( path );
+            Reflect::Archive archive( path );
+			settingsManager = archive.Get< SettingsManager >();
         }
         catch ( const Helium::Exception& ex )
         {

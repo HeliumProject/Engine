@@ -47,30 +47,17 @@ namespace Helium
         }
         typedef ArchiveStates::ArchiveState ArchiveState;
 
-        namespace StatusTypes
-        {
-            enum StatusType
-            {
-                General,
-                Debug,
-                Warning,
-            };
-        }
-        typedef StatusTypes::StatusType StatusType;
-
         struct StatusInfo
         {
-            StatusType m_Type;
             const Archive& m_Archive;
             ArchiveState m_ArchiveState;
             int m_Progress;
-            bool m_Abort;
+            mutable bool m_Abort;
             tstring m_Info;
 
-            StatusInfo( const Archive& archive, const ArchiveState& state, const StatusType& type = StatusTypes::General )
+            StatusInfo( const Archive& archive, const ArchiveState& state )
                 : m_Archive( archive )
                 , m_ArchiveState( state )
-                , m_Type( type )
                 , m_Progress ( 0 )
                 , m_Abort ( false )
             {
@@ -99,7 +86,7 @@ namespace Helium
             ElementCallback m_Callback;
             const Helium::Exception& m_Exception;
 
-            ExceptionAction m_Action;
+            mutable ExceptionAction m_Action;
 
             ExceptionInfo( const Archive& archive, Element* element, ElementCallback callback, const Helium::Exception& exception )
                 : m_Archive ( archive )
@@ -123,6 +110,7 @@ namespace Helium
             {
                 Binary,
                 XML,
+                Base
             };
         }
         typedef ArchiveTypes::ArchiveType ArchiveType;
@@ -211,6 +199,8 @@ namespace Helium
         class FOUNDATION_API Archive
         {
         protected:
+            Archive* m_ParsingArchive;
+
             // The number of bytes Parsed so far
             unsigned m_Progress;
 
@@ -242,6 +232,9 @@ namespace Helium
             Archive();
 
         public:
+            Archive( const Path& path );
+            Archive( const Path& path, const ElementPtr& element );
+            Archive( const Path& path, const V_Element& elements );
             virtual ~Archive();
 
         public:
@@ -266,23 +259,31 @@ namespace Helium
             static bool GetFileType( const Path& path, ArchiveType& type );
 
             // Get the type of this archive
-            virtual ArchiveType GetType() const = 0;
+            virtual ArchiveType GetType() const
+            {
+                return ArchiveTypes::Base;
+            }
+
+            //
+            // Virutal functionality, meant to be overridden by Binary/XML/etc. archives
+            //
 
             // File Open/Close
-            virtual void OpenFile( const Path& path, bool write = false ) = 0;
-            virtual void Close() = 0; 
+            virtual void OpenFile( const Path& path, bool write = false ) { HELIUM_BREAK(); }
+
+            virtual void Close() { HELIUM_BREAK(); }
 
             // Begins parsing the InputStream
-            virtual void Read() = 0;
+            virtual void Read() { HELIUM_BREAK();  }
 
             // Write to the OutputStream
-            virtual void Write() = 0;
+            virtual void Write() { HELIUM_BREAK(); }
 
             // Write the file header
-            virtual void Start() = 0;
+            virtual void Start() { HELIUM_BREAK(); }
 
             // Write the file footer
-            virtual void Finish() = 0;
+            virtual void Finish() { HELIUM_BREAK(); }
 
             //
             // Stream management
@@ -298,10 +299,10 @@ namespace Helium
             // Serialization
             //
         public:
-            virtual void Serialize( const ElementPtr& element ) = 0;
-            virtual void Serialize( const V_Element& elements, u32 flags = 0 ) = 0;
-            virtual void Deserialize( ElementPtr& element ) = 0;
-            virtual void Deserialize( V_Element& elements, u32 flags = 0 ) = 0;
+            virtual void Serialize( const ElementPtr& element ) { HELIUM_BREAK(); }
+            virtual void Serialize( const V_Element& elements, u32 flags = 0 ) { HELIUM_BREAK(); }
+            virtual void Deserialize( ElementPtr& element ) { HELIUM_BREAK(); }
+            virtual void Deserialize( V_Element& elements, u32 flags = 0 ) { HELIUM_BREAK(); }
 
         public:
             static const tchar* GetExtension( ArchiveType t )
@@ -374,40 +375,20 @@ namespace Helium
             // Serialize/Deserialize API
             //
 
-            // Reading and writing from/to a file
+            // save the archive to a file
             void Save();
-            ElementPtr FromFile( const tstring& file, int searchType = Reflect::ReservedTypes::Any );
 
-            // Reading and writing multiple elements from a file
-            static void       FromFile( const tstring& file, V_Element& elements );
+            //
+            // Get elements from the file
+            //
 
-            // Get all elements of the specified type in the archive ( not optimal if you need to get lots of different types at once )
-            template< class T >
-            static void FromFile( const tstring& file, std::vector< Helium::SmartPtr<T> >& elements )
-            {
-                V_Element archiveElements;
-                FromFile( file, archiveElements, status );
+            ElementPtr Get( int searchType = Reflect::ReservedTypes::Any );
+            void Get( V_Element& elements );
 
-                V_Element::iterator itor = archiveElements.begin();
-                V_Element::iterator end = archiveElements.end();
-
-                for( ; itor != end; ++itor )
-                {
-                    if( (*itor)->HasType( Reflect::GetType<T>() ) ) 
-                    {
-
-
-                        elements.push_back( Reflect::DangerousCast< T >( *itor )  );
-                    }
-
-                }
-            }
-
-            // Fancy template version
             template <class T>
-            static Helium::SmartPtr<T> FromFile( const tstring& file )
+            Helium::SmartPtr<T> Get()
             {
-                ElementPtr found = FromFile(file, Reflect::GetType<T>(), status);
+                ElementPtr found = Get( Reflect::GetType<T>() );
 
                 if (found.ReferencesObject())
                 {
@@ -416,6 +397,25 @@ namespace Helium
                 else
                 {
                     return NULL;
+                }
+            }
+
+            // Get all elements of the specified type in the archive ( not optimal if you need to get lots of different types at once )
+            template< class T >
+            void Get( std::vector< Helium::SmartPtr<T> >& elements )
+            {
+                V_Element archiveElements;
+                Get( archiveElements );
+
+                V_Element::iterator itor = archiveElements.begin();
+                V_Element::iterator end = archiveElements.end();
+
+                for( ; itor != end; ++itor )
+                {
+                    if( (*itor)->HasType( Reflect::GetType<T>() ) ) 
+                    {
+                        elements.push_back( Reflect::DangerousCast< T >( *itor )  );
+                    }
                 }
             }
         };

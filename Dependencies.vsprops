@@ -23,43 +23,43 @@
 	/>
 	<UserMacro
 		Name="Expat"
-		Value="$(SolutionDir)Dependencies\Expat"
+		Value="..\Dependencies\Expat"
 	/>
 	<UserMacro
 		Name="LiteSQL"
-		Value="$(SolutionDir)Dependencies\LiteSQL"
+		Value="..\Dependencies\LiteSQL"
 	/>
 	<UserMacro
 		Name="lua"
-		Value="$(SolutionDir)Dependencies\lua"
+		Value="..\Dependencies\lua"
 	/>
 	<UserMacro
 		Name="MySQL"
-		Value="$(SolutionDir)Dependencies\MySQL"
+		Value="..\Dependencies\MySQL"
 	/>
 	<UserMacro
 		Name="nvtt"
-		Value="$(SolutionDir)Dependencies\nvtt"
+		Value="..\Dependencies\nvtt"
 	/>
 	<UserMacro
 		Name="p4api"
-		Value="$(SolutionDir)Dependencies\p4api"
+		Value="..\Dependencies\p4api"
 	/>
 	<UserMacro
 		Name="SQLite"
-		Value="$(SolutionDir)Dependencies\SQLite"
+		Value="..\Dependencies\SQLite"
 	/>
 	<UserMacro
 		Name="squish"
-		Value="$(SolutionDir)Dependencies\squish"
+		Value="..\Dependencies\squish"
 	/>
 	<UserMacro
 		Name="tiff"
-		Value="$(SolutionDir)Dependencies\tiff"
+		Value="..\Dependencies\tiff"
 	/>
 	<UserMacro
 		Name="wxWidgets"
-		Value="$(SolutionDir)Dependencies\wxWidgets"
+		Value="..\Dependencies\wxWidgets"
 	/>
 	<UserMacro
 		Name="wxWidgetsBuildFlags"
@@ -71,6 +71,6 @@
 	/>
 	<UserMacro
 		Name="zlib"
-		Value="$(SolutionDir)Dependencies\zlib"
+		Value="..\Dependencies\zlib"
 	/>
 </VisualStudioPropertySheet>

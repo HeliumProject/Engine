@@ -98,6 +98,7 @@ namespace Helium
                 static const wxChar* CreateNewLayer = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_CREATE_NEW_LAYER );
                 static const wxChar* CreateNewLayerFromSelection = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_CREATE_NEW_LAYER_FROM_SELECTION );
                 static const wxChar* Curve = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_CURVE );
+                static const wxChar* CurveEdit = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_CURVE_EDIT );
                 static const wxChar* DeleteSelectedLayers = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_DELETE_SELECTED_LAYERS );
                 static const wxChar* DuplicateTool = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_DUPLICATE_TOOL );
                 static const wxChar* EditorIcon = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_EDITOR_ICON );

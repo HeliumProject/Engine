@@ -23,7 +23,7 @@ VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
     {
         Freeze();
 
-        m_OptionsButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Options, wxART_OTHER, wxSize( 16, 16 ) ) );
+        m_OptionsButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Options, wxART_OTHER, wxSize(16, 16) ) );
         m_OptionsButton->SetMargins( 3, 3 );
 
         m_CurrentView = m_ListResultsView;
@@ -380,17 +380,13 @@ void VaultPanel::OnSearchTextEnter( wxCommandEvent& event )
     event.Skip(false);
 }
 
-void VaultPanel::OnVaultSettingsButtonClick( wxCommandEvent& event )
-{
-    event.Skip();
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 void VaultPanel::OnOptionsMenuOpen( wxMenuEvent& event )
 {
     event.Skip();
     if ( event.GetMenu() == m_OptionsMenu )
     {
+        // refresh menu's view toggles
     }
 }
 

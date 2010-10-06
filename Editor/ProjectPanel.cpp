@@ -6,6 +6,7 @@
 #include "Core/Asset/AssetClass.h"
 
 #include "Editor/FileDialog.h"
+#include "Editor/Controls/MenuButton.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -13,29 +14,6 @@ using namespace Helium::Editor;
 ProjectPanel::ProjectPanel( wxWindow *parent )
 : ProjectPanelGenerated( parent )
 {
-    SetHelpText( TXT( "This is the project outliner.  Manage what's included in your project here." ) );
-
-    //wxDataViewTextRenderer *render0 = new wxDataViewTextRenderer( "string", wxDATAVIEW_CELL_INERT );
-    wxDataViewIconTextRenderer *render0 = new wxDataViewIconTextRenderer();
-    wxDataViewColumn *column0 = new wxDataViewColumn( "Name", render0, 0, 100, wxALIGN_LEFT, wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_RESIZABLE );
-    m_DataViewCtrl->AppendColumn( column0 );
-
-    //GetStore()->AppendColumn( wxT("wxDataViewIconText") );
-    //wxDataViewIconTextRenderer *render = new wxDataViewIconTextRenderer( wxT("wxDataViewIconText"), mode )
-    //wxDataViewColumn *ret = new wxDataViewColumn( label, render, GetStore()->GetColumnCount()-1, width, align, flags );
-    //wxDataViewCtrl::AppendColumn( ret );
-
-    wxDataViewTextRenderer *render1 = new wxDataViewTextRenderer( "string", wxDATAVIEW_CELL_INERT );
-    wxDataViewColumn *column1 = new wxDataViewColumn( "Details", render1, 1, 150, wxALIGN_LEFT, wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
-    m_DataViewCtrl->AppendColumn( column1 );
-
-    std::set< tstring > extension;
-    Asset::AssetClass::GetExtensions( extension );
-
-    m_DropTarget = new FileDropTarget( extension );
-    m_DropTarget->AddListener( FileDroppedSignature::Delegate( this, &ProjectPanel::OnDroppedFiles ) );
-    SetDropTarget( m_DropTarget );
-
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )
     {
         Freeze();
@@ -44,23 +22,59 @@ ProjectPanel::ProjectPanel( wxWindow *parent )
         m_AddFile->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::FileAdd ) );
         m_DeleteFile->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::FileDelete ) );
 
+        m_OptionsButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Options, wxART_OTHER, wxSize(16, 16) ) );
+        m_OptionsButton->SetMargins( 3, 3 );
+
         m_ProjectManagementPanel->Layout();
 
         Layout();
         Thaw();
     }
+
+    SetHelpText( TXT( "This is the project outliner.  Manage what's included in your project here." ) );
+
+
+    std::set< tstring > extension;
+    Asset::AssetClass::GetExtensions( extension );
+    m_DropTarget = new FileDropTarget( extension );
+    m_DropTarget->AddListener( FileDroppedSignature::Delegate( this, &ProjectPanel::OnDroppedFiles ) );
+    SetDropTarget( m_DropTarget );
+
+
+    m_OptionsMenu = new wxMenu();
+    {
+        //wxMenuItem* detailsMenuItem = new wxMenuItem(
+        //    m_OptionsMenu,
+        //    VaultMenu::ViewResultDetails,
+        //    VaultMenu::Label( VaultMenu::ViewResultDetails ),
+        //    VaultMenu::Label( VaultMenu::ViewResultDetails ).c_str(),
+        //    wxITEM_RADIO );
+        //m_OptionsMenu->Append( detailsMenuItem );
+        //Connect( VaultMenu::ViewResultDetails, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ProjectPanel::OnOptionsMenuSelect ), NULL, this );
+    }
+    m_OptionsButton->SetContextMenu( m_OptionsMenu );
+    m_OptionsButton->SetHoldDelay( 0.0f );
+    m_OptionsButton->Connect( wxEVT_MENU_OPEN, wxMenuEventHandler( ProjectPanel::OnOptionsMenuOpen ), NULL, this );
+    m_OptionsButton->Connect( wxEVT_MENU_CLOSE, wxMenuEventHandler( ProjectPanel::OnOptionsMenuClose ), NULL, this );
+    m_OptionsButton->Enable( true );
 }
 
 ProjectPanel::~ProjectPanel()
 {
+    m_OptionsButton->Disconnect( wxEVT_MENU_OPEN, wxMenuEventHandler( ProjectPanel::OnOptionsMenuOpen ), NULL, this );
+    m_OptionsButton->Disconnect( wxEVT_MENU_CLOSE, wxMenuEventHandler( ProjectPanel::OnOptionsMenuClose ), NULL, this );
 }
-
 
 void ProjectPanel::SetProject( Project* project )
 {
     m_Project = project;
     m_Model = new ProjectViewModel();
+
     m_Model->SetProject( project );
+
+    m_Model->ResetColumns();
+    m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Name ) );
+    m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Details ) );
 
     // the ctrl will now hold ownership via reference count
     m_DataViewCtrl->AssociateModel( m_Model.get() );
@@ -89,6 +103,32 @@ void ProjectPanel::OnDeleteFile( wxCommandEvent& event )
             m_Project->RemovePath( *(*itr) );
         }
     }
+}
+
+void ProjectPanel::OnOptionsMenuOpen( wxMenuEvent& event )
+{
+    event.Skip();
+    if ( event.GetMenu() == m_OptionsMenu )
+    {
+        // refresh menu's view toggles
+    }
+}
+
+void ProjectPanel::OnOptionsMenuClose( wxMenuEvent& event )
+{
+    m_DataViewCtrl->SetFocus();
+    event.Skip();
+}
+
+void ProjectPanel::OnOptionsMenuSelect( wxCommandEvent& event )
+{
+    event.Skip();
+
+    //switch( event.GetId() )
+    //{
+    //default:
+    //    break;
+    //};
 }
 
 void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )

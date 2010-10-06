@@ -15,12 +15,14 @@ using namespace Helium;
 using namespace Helium::Editor;
 using namespace Helium::SceneGraph;
 
+wxSize ViewPanel::DefaultIconSize( 16, 16 );
+
 ViewPanel::ViewPanel( SettingsManager* settingsManager, wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style )
 : ViewPanelGenerated( parent, id, pos, size, style )
 {
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )
     {
-        //        Freeze();
+        //Freeze();
 
         m_FrameOriginButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::FrameOrigin ) );
         m_FrameSelectedButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::FrameSelected ) );

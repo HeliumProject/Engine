@@ -24,13 +24,18 @@ namespace Helium
 			virtual void OnAddFile( wxCommandEvent& event ) HELIUM_OVERRIDE;
 			virtual void OnDeleteFile( wxCommandEvent& event ) HELIUM_OVERRIDE;
 
+            void OnOptionsMenuOpen( wxMenuEvent& event );
+            void OnOptionsMenuClose( wxMenuEvent& event );
+            void OnOptionsMenuSelect( wxCommandEvent& event );
+
             virtual void OnDroppedFiles( const FileDroppedArgs& args );
 
         protected:
-            ProjectPtr                          m_Project;
+            ProjectPtr m_Project;
             wxObjectDataPtr< ProjectViewModel > m_Model;
-            OrderedSet< Path* >                 m_Selected;
-            FileDropTarget*                     m_DropTarget;
+            OrderedSet< Path* > m_Selected;
+            FileDropTarget* m_DropTarget;
+            wxMenu* m_OptionsMenu;
         };
     }
 }

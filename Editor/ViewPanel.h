@@ -85,6 +85,8 @@ namespace Helium
                 return m_ViewCanvas;
             }
 
+            static wxSize DefaultIconSize;
+
         private:
             void RefreshButtonStates();
 

@@ -163,20 +163,22 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     Connect( EventIds::ID_ToolsCurveCreate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
     Connect( EventIds::ID_ToolsCurveEdit, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
 
-    //
-    // Tools
-    //
+    // Help menu
+    wxString caption = wxT( "About " );
+    caption += wxGetApp().AppVerName().c_str();
+    caption += wxT( "..." );
+    wxMenuItem* aboutMenuItem = m_MenuHelp->FindItem( ID_About );
+    aboutMenuItem->SetText( caption );
+
+    // Tool Bar
     m_ToolbarPanel = new ToolbarPanel( this );
     m_FrameManager.AddPane( m_ToolbarPanel, wxAuiPaneInfo().Name( wxT( "tools" ) ).Top().Layer( 5 ).Position( 1 ).CaptionVisible( false ).PaneBorder( false ).Gripper( false ).CloseButton( false ).MaximizeButton( false ).MinimizeButton( false ).PinButton( false ).Movable( false ).MinSize( wxSize( -1, 52 ) ) );
-    m_ToolbarPanel->GetToolsPanel()->Disable();
-    m_ToolbarPanel->GetToolsPanel()->Refresh();
+    m_ToolbarPanel->EnableTools( false );
 
     m_ToolbarPanel->m_VaultSearchBox->Connect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( MainFrame::OnSearchGoButtonClick ), NULL, this );
 	m_ToolbarPanel->m_VaultSearchBox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MainFrame::OnSearchTextEnter ), NULL, this );
 
-    //
     // View panel area
-    //
     m_ViewPanel = new ViewPanel( m_SettingsManager, this );
     m_ViewPanel->GetViewCanvas()->GetViewport().AddRenderListener( RenderSignature::Delegate ( this, &MainFrame::Render ) );
     m_ViewPanel->GetViewCanvas()->GetViewport().AddSelectListener( SelectSignature::Delegate ( this, &MainFrame::Select ) ); 
@@ -185,37 +187,29 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     m_ViewPanel->GetViewCanvas()->GetViewport().AddToolChangedListener( ToolChangeSignature::Delegate ( this, &MainFrame::ViewToolChanged ) );
     m_FrameManager.AddPane( m_ViewPanel, wxAuiPaneInfo().Name( wxT( "view" ) ).CenterPane() );
 
-    //
-    // Help menu
-    //
-    wxString caption = wxT( "About " );
-    caption += wxGetApp().AppVerName().c_str();
-    caption += wxT( "..." );
-    wxMenuItem* aboutMenuItem = m_MenuHelp->FindItem( ID_About );
-    aboutMenuItem->SetText( caption );
-
-    //
-    // Project/Help area
-    //
+    // Project
     m_ProjectPanel = new ProjectPanel( this );
     wxAuiPaneInfo projectPaneInfo = wxAuiPaneInfo().Name( wxT( "project" ) ).Caption( wxT( "Project" ) ).Left().Layer( 2 ).Position( 1 ).BestSize( 200, 700 );
     projectPaneInfo.dock_proportion = 30000;
     m_FrameManager.AddPane( m_ProjectPanel, projectPaneInfo );
 
+    // Vault
+    m_VaultPanel = new VaultPanel( this );
+    wxAuiPaneInfo vaultPanelInfo = wxAuiPaneInfo().Name( wxT( "vault" ) ).Caption( wxT( "Asset Vault" ) ).Right().Layer( 1 ).Position( 4 );
+    m_FrameManager.AddPane( m_VaultPanel, vaultPanelInfo );
+    //m_ExcludeFromPanelsMenu.insert( vaultPanelInfo.name );
+
+    // Help
     m_HelpPanel = new HelpPanel( this );
     wxAuiPaneInfo helpPaneInfo = wxAuiPaneInfo().Name( wxT( "help" ) ).Caption( wxT( "Help" ) ).Left().Layer( 2 ).Position( 2 ).MinSize( 200, 200 ).BestSize( wxSize( 200, 200 ) );
     helpPaneInfo.dock_proportion = 10000;
     m_FrameManager.AddPane( m_HelpPanel, helpPaneInfo );
 
-    //
-    // Directory area
-    //
+    // Directory
     m_DirectoryPanel = new DirectoryPanel( &m_SceneManager, &m_TreeMonitor, this );
     m_FrameManager.AddPane( m_DirectoryPanel, wxAuiPaneInfo().Name( wxT( "directory" ) ).Caption( wxT( "Directory" ) ).Left().Layer( 1 ).Position( 1 ).BestSize( wxSize( 200, 900 ) ) );
 
-    //
     // Properties/Layers/Types area
-    //
     m_PropertiesPanel = new PropertiesPanel( this );
     m_FrameManager.AddPane( m_PropertiesPanel, wxAuiPaneInfo().Name( wxT( "properties" ) ).Caption( wxT( "Properties" ) ).Right().Layer( 1 ).Position( 1 ) );
 
@@ -229,22 +223,16 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
 
     CreatePanelsMenu( m_MenuPanels );
 
-    //
     // Restore layout if any
-    //
-
     wxGetApp().GetSettingsManager()->GetSettings< WindowSettings >()->ApplyToWindow( this, &m_FrameManager, true );
     m_ViewPanel->GetViewCanvas()->GetViewport().LoadSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
 
-    //
+
     // Disable accelerators, we'll handle them ourselves
-    //
     m_MainMenuBar->SetAcceleratorTable( wxAcceleratorTable() );
 
-    //
-    // Attach event handlers
-    //
 
+    // Attach event handlers
     m_SceneManager.AddCurrentSceneChangingListener( SceneChangeSignature::Delegate (this, &MainFrame::CurrentSceneChanging) );
     m_SceneManager.AddCurrentSceneChangedListener( SceneChangeSignature::Delegate (this, &MainFrame::CurrentSceneChanged) );
     m_SceneManager.AddSceneAddedListener( SceneChangeSignature::Delegate( this, &MainFrame::SceneAdded ) );
@@ -802,7 +790,7 @@ void MainFrame::OpenVaultPanel()
         m_VaultPanel = new VaultPanel( this );
         wxAuiPaneInfo vaultPanelInfo = wxAuiPaneInfo().Name( wxT( "vault" ) ).Caption( wxT( "Asset Vault" ) ).Right().Layer( 1 ).Position( 4 );
         m_FrameManager.AddPane( m_VaultPanel, vaultPanelInfo );
-        m_ExcludeFromPanelsMenu.insert( vaultPanelInfo.name );
+        //m_ExcludeFromPanelsMenu.insert( vaultPanelInfo.name );
 
         m_VaultPanel->Show();
         m_FrameManager.Update();
@@ -1264,8 +1252,7 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
 {
     if ( args.m_Scene )
     {
-        m_ToolbarPanel->GetToolsPanel()->Enable();
-        m_ToolbarPanel->GetToolsPanel()->Refresh();
+        m_ToolbarPanel->EnableTools();
 
         // Hook our event handlers
         args.m_Scene->AddStatusChangedListener( SceneStatusChangeSignature::Delegate ( this, &MainFrame::SceneStatusChanged ) );
@@ -1380,8 +1367,7 @@ void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
     args.m_Scene->SetTool( NULL );
     m_ViewPanel->GetViewCanvas()->GetViewport().SetTool( NULL );
 
-    m_ToolbarPanel->GetToolsPanel()->Disable();
-    m_ToolbarPanel->GetToolsPanel()->Refresh();
+    m_ToolbarPanel->EnableTools( false );
 }
 
 void MainFrame::OnToolSelected( wxCommandEvent& event )

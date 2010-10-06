@@ -366,7 +366,7 @@ void ArtProvider::Create()
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Find, IconArtFile( TXT( "actions/find.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Next, IconArtFile( TXT( "editor/view_next.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Open, IconArtFile( TXT( "actions/open.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Options, IconArtFile( TXT( "actions/option.png" ) ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Options, IconArtFile( TXT( "actions/options.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Paste, IconArtFile( TXT( "actions/paste.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Pause, IconArtFile( TXT( "actions/pause.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Play, IconArtFile( TXT( "actions/play.png" ) ) ) );
@@ -378,7 +378,7 @@ void ArtProvider::Create()
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::SaveAs, IconArtFile( TXT( "actions/save_as.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Select, IconArtFile( TXT( "actions/select.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::SelectAll, IconArtFile( TXT( "actions/select_all.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Settings, IconArtFile( TXT( "actions/option.png" ) ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Settings, IconArtFile( TXT( "actions/preferences.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Stop, IconArtFile( TXT( "actions/stop.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Undo, IconArtFile( TXT( "actions/undo.png" ) ) ) );
 
@@ -396,7 +396,8 @@ void ArtProvider::Create()
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ColorModeScene, IconArtFile( TXT( "editor/color_mode_scene.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::CreateNewLayer, IconArtFile( TXT( "editor/layers.png" ) ).AddOverlay( TXT( "actions/create.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::CreateNewLayerFromSelection, IconArtFile( TXT( "editor/layer_new_from_selection.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Curve, IconArtFile( TXT( "status/unknown.png" ) ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Curve, IconArtFile( TXT( "status/unknown.png" ) ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::CurveEdit, IconArtFile( TXT( "status/unknown.png" ) ).AddOverlay( TXT( "actions/edit.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::DeleteSelectedLayers, IconArtFile( TXT( "editor/layers.png" ) ).AddOverlay( TXT( "actions/delete.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::DuplicateTool, IconArtFile( TXT( "editor/duplicate.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::EditorIcon, IconArtFile( TXT( "editor/editor.png" ) ) ) );

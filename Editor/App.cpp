@@ -25,6 +25,7 @@
 
 #include "Editor/ArtProvider.h"
 #include "Editor/Perforce/Perforce.h"
+#include "Editor/ProjectViewModel.h"
 #include "Editor/WindowSettings.h"
 
 #include "Editor/Tracker/Tracker.h"
@@ -240,6 +241,8 @@ bool App::OnInit()
     
     m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::VaultViewModes::VaultViewMode>( &Editor::VaultViewModes::VaultViewModeEnumerateEnum, TXT( "VaultViewMode" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClassType< VaultSettings >( TXT( "Editor::VaultSettings" ) ) );
+
+    m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::ProjectMenuIDs::ProjectMenuID>( &Editor::ProjectMenuIDs::ProjectMenuIDsEnumerateEnum, TXT( "ProjectMenuID" ) ) );
 
     LoadSettings();
 

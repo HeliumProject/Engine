@@ -16,7 +16,7 @@ namespace Helium
             enum ProjectModelColumn
             {
                 Name = 0,
-                //Details,
+                Details,
 
                 COUNT //Do not use: must be last
             };
@@ -24,7 +24,7 @@ namespace Helium
             static const tchar* s_Labels[COUNT+1] = 
             {
                 TXT( "Name" ),
-                //TXT( "Details" ),
+                TXT( "Details" ),
 
                 TXT( "Unknown" ), //COUNT
             };
@@ -35,8 +35,58 @@ namespace Helium
                 HELIUM_ASSERT( id < COUNT );
                 return s_Labels[id];
             }
+
+            static const u32 s_Widths[COUNT+1] = 
+            {
+                200,
+                300,
+
+                0, //COUNT
+            };
+
+            inline u32 Width( u32 id )
+            {
+                HELIUM_ASSERT( id >= 0 );
+                HELIUM_ASSERT( id < COUNT );
+                return s_Widths[id];
+            }
         }
         typedef ProjectModelColumns::ProjectModelColumn ProjectModelColumn;
+
+
+        ///////////////////////////////////////////////////////////////////////
+        namespace ProjectMenuIDs
+        {
+            enum ProjectMenuID
+            {
+                Filename = 0,
+                FullPath,
+                RelativePath,
+
+                COUNT //Do not use: must be last
+            };
+            static void ProjectMenuIDsEnumerateEnum( Reflect::Enumeration* info )
+            {
+                info->AddElement( Filename, TXT( "Filename" ) );
+                info->AddElement( FullPath, TXT( "FullPath" ) );
+                info->AddElement( RelativePath, TXT( "RelativePath" ) );
+            }
+
+            static const tchar* s_Labels[COUNT] = 
+            {
+                TXT( "Filename" ),
+                TXT( "Full Path" ),
+                TXT( "Relative Path" ),
+            };
+
+            inline const tchar* Label( u32 id )
+            {
+                HELIUM_ASSERT( id >= 0 );
+                HELIUM_ASSERT( id < COUNT );
+                return s_Labels[id];
+            }
+        }
+        typedef ProjectMenuIDs::ProjectMenuID ProjectMenuID;
 
 
         ///////////////////////////////////////////////////////////////////////
@@ -47,69 +97,42 @@ namespace Helium
         class ProjectViewModelNode : public Helium::RefCountBase< ProjectViewModelNode >
         {
         public:
+            ProjectViewModelNode( ProjectViewModelNode* parent,
+                const Helium::Path& path,
+                const bool isContainer = false );
+            virtual ~ProjectViewModelNode();
+
+            ProjectViewModelNode* GetParent();
+            S_ProjectViewModelNodeChildren& GetChildren();
+
+            bool IsContainer() const;
+
+            void SetPath( const Helium::Path& path );
+            const Helium::Path& GetPath();
+            void PathChanged( const Attribute< Helium::Path >::ChangeArgs& text );
+
+            const wxString& GetName() const;
+            const wxString& GetDetails() const;
+
+            inline bool operator<( const ProjectViewModelNode& rhs ) const
+            {
+                return ( _tcsicmp( m_Path.c_str(), rhs.m_Path.c_str() ) < 0 );
+            }
+
+            inline bool operator==( const ProjectViewModelNode& rhs ) const
+            {
+                return ( _tcsicmp( m_Path.c_str(), rhs.m_Path.c_str() ) == 0 );
+            }
+
+        private:
             ProjectViewModelNode* m_ParentNode;
             S_ProjectViewModelNodeChildren m_ChildNodes;
             bool m_IsContainer;
 
             Helium::Path m_Path;
 
-            wxString m_Name;
-            //wxString m_Details;
-
-        public:
-            ProjectViewModelNode( ProjectViewModelNode* parent, const Helium::Path& path )
-                : m_ParentNode( parent )
-                , m_Path( path )
-                , m_IsContainer( false )
-                , m_Name( path.Basename() )
-            {
-            }
-
-            virtual ~ProjectViewModelNode()
-            {
-                m_ParentNode = NULL;
-                m_ChildNodes.clear();
-            }
-
-            bool operator<( const ProjectViewModelNode& rhs ) const
-            {
-                return ( _tcsicmp( m_Path.c_str(), rhs.m_Path.c_str() ) < 0 );
-            }
-
-            bool operator==( const ProjectViewModelNode& rhs ) const
-            {
-                return ( _tcsicmp( m_Path.c_str(), rhs.m_Path.c_str() ) == 0 );
-            }
-
-            ProjectViewModelNode* GetParent()
-            {
-                return m_ParentNode;
-            }
-
-            S_ProjectViewModelNodeChildren& GetChildren()
-            {
-                return m_ChildNodes;
-            }
-
-            bool IsContainer() const
-            {
-                // TODO: OR the file is a scene file, reflect file with manifest
-                return ( m_IsContainer || m_ChildNodes.size() > 0 || m_Path.IsDirectory() || m_ParentNode ) ? true : false;
-            }
-
-            void SetPath( const Helium::Path& path )
-            {
-                if ( _tcsicmp( m_Path.c_str(), path.c_str() ) != 0 )
-                {
-                    m_Path = path;
-                    m_Name = path.Basename();
-                }
-            }
-
-            void PathChanged( const Attribute< Helium::Path >::ChangeArgs& text )
-            {
-                SetPath( text.m_NewValue );
-            }
+            mutable wxString m_Name;
+            mutable wxString m_Details;
         };
 
 
@@ -119,6 +142,12 @@ namespace Helium
         public:
             ProjectViewModel();
             virtual ~ProjectViewModel();
+
+            // This returns a column that can be added to wxDataViewCtrl
+            // it also updates the m_ColumnLookupTable to associate the column
+            // to the ProjectModelColumns
+            wxDataViewColumn* CreateColumn( u32 id );
+            void ResetColumns();
 
             void SetProject( Project* project );
             
@@ -147,6 +176,9 @@ namespace Helium
         protected:
             ProjectPtr m_Project;
             ProjectViewModelNodePtr m_RootNode;
+
+            typedef std::vector< u32 > M_ColumnLookupTable;
+            M_ColumnLookupTable m_ColumnLookupTable;
         };
     }
 }

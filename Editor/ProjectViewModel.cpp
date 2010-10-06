@@ -7,6 +7,80 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
+///////////////////////////////////////////////////////////////////////////////
+ProjectViewModelNode::ProjectViewModelNode( ProjectViewModelNode* parent, const Helium::Path& path, const bool isContainer )
+: m_ParentNode( parent )
+, m_Path( path )
+, m_IsContainer( isContainer )
+, m_Name( path.Basename() )
+{
+}
+
+ProjectViewModelNode::~ProjectViewModelNode()
+{
+    m_ParentNode = NULL;
+    m_ChildNodes.clear();
+}
+
+ProjectViewModelNode* ProjectViewModelNode::GetParent()
+{
+    return m_ParentNode;
+}
+
+S_ProjectViewModelNodeChildren& ProjectViewModelNode::GetChildren()
+{
+    return m_ChildNodes;
+}
+
+bool ProjectViewModelNode::IsContainer() const
+{
+    // TODO: OR the file is a scene file, reflect file with manifest
+    return ( m_IsContainer || m_ChildNodes.size() > 0 || m_Path.IsDirectory() ) ? true : false;
+}
+
+void ProjectViewModelNode::SetPath( const Helium::Path& path )
+{
+    if ( _tcsicmp( m_Path.c_str(), path.c_str() ) != 0 )
+    {
+        m_Path = path;
+        m_Name = path.Basename();
+    }
+}
+
+const Helium::Path& ProjectViewModelNode::GetPath()
+{
+    return m_Path;
+}
+
+void ProjectViewModelNode::PathChanged( const Attribute< Helium::Path >::ChangeArgs& text )
+{
+    SetPath( text.m_NewValue );
+}
+
+const wxString& ProjectViewModelNode::GetName() const
+{
+    if ( m_Name.empty() )
+    {
+        if ( m_Path.IsDirectory() )
+        {
+            m_Name = m_Path.Get();
+        }
+        else
+        {
+            m_Name = m_Path.Basename();
+        }
+    }
+    return m_Name;
+}
+
+const wxString& ProjectViewModelNode::GetDetails() const
+{
+    if ( m_Details.empty() )
+    {
+    }
+    return m_Details;
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 ProjectViewModel::ProjectViewModel()
@@ -17,7 +91,63 @@ ProjectViewModel::ProjectViewModel()
 
 ProjectViewModel::~ProjectViewModel()
 {
-    //SetProject( NULL );
+    SetProject( NULL );
+    ResetColumns();
+}
+
+wxDataViewColumn* ProjectViewModel::CreateColumn( u32 id )
+{
+    switch( id )
+    {
+    default:
+        {
+            return NULL;
+        }
+        break;
+
+    case ProjectModelColumns::Name:
+        {
+            wxDataViewIconTextRenderer *render = new wxDataViewIconTextRenderer();
+
+            wxDataViewColumn *column = new wxDataViewColumn(
+                ProjectModelColumns::Label( ProjectModelColumns::Name ),
+                render,
+                m_ColumnLookupTable.size(),
+                ProjectModelColumns::Width( ProjectModelColumns::Name ),
+                wxALIGN_LEFT,
+                wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_RESIZABLE );
+
+            m_ColumnLookupTable.push_back( id );
+
+            return column;
+        }
+        break;
+
+    case ProjectModelColumns::Details:
+        {
+            wxDataViewTextRenderer *render = new wxDataViewTextRenderer( "string", wxDATAVIEW_CELL_INERT );
+
+            wxDataViewColumn *column = new wxDataViewColumn(
+                ProjectModelColumns::Label( ProjectModelColumns::Details ),
+                render,
+                m_ColumnLookupTable.size(),
+                ProjectModelColumns::Width( ProjectModelColumns::Details ),
+                wxALIGN_LEFT,
+                wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
+
+            m_ColumnLookupTable.push_back( id );
+
+            return column;
+        }
+        break;
+    }
+
+    return NULL;
+}
+
+void ProjectViewModel::ResetColumns()
+{
+    m_ColumnLookupTable.clear();
 }
 
 void ProjectViewModel::SetProject( Project* project )
@@ -30,15 +160,15 @@ void ProjectViewModel::SetProject( Project* project )
     // Cleanup the old view
     if ( m_Project )
     {
+        if ( m_RootNode )
+        {
+            m_Project->a_Path.Changed().RemoveMethod( m_RootNode.Ptr(), &ProjectViewModelNode::PathChanged );
+            m_RootNode = NULL;
+        }
+
         m_Project->e_PathAdded.RemoveMethod( this, &ProjectViewModel::OnPathAdded );
         m_Project->e_PathRemoved.RemoveMethod( this, &ProjectViewModel::OnPathRemoved );
         m_Project = NULL;
-    }
-
-    if ( m_RootNode )
-    {
-        m_Project->a_Path.Changed().RemoveMethod( m_RootNode.Ptr(), &ProjectViewModelNode::PathChanged );
-        m_RootNode = NULL;
     }
 
     // Setup the new project view
@@ -48,11 +178,11 @@ void ProjectViewModel::SetProject( Project* project )
         m_Project->e_PathAdded.AddMethod( this, &ProjectViewModel::OnPathAdded );
         m_Project->e_PathRemoved.AddMethod( this, &ProjectViewModel::OnPathRemoved );
 
-        m_RootNode = new ProjectViewModelNode( NULL, m_Project->a_Path.Get() );
-        m_RootNode->m_IsContainer = true;
+        m_RootNode = new ProjectViewModelNode( NULL, m_Project->a_Path.Get(), true );
         m_Project->a_Path.Changed().AddMethod( m_RootNode.Ptr(), &ProjectViewModelNode::PathChanged );
 
         AddChild( wxDataViewItem( (void*) m_RootNode.Ptr() ), Helium::Path( TXT( "Test Child.txt" ) ) );
+        AddChild( wxDataViewItem( (void*) m_RootNode.Ptr() ), Helium::Path( TXT( "C:/Projects/github/nocturnal/Helium/Editor/Icons/" ) ) );
     }
 }
 
@@ -87,7 +217,7 @@ bool ProjectViewModel::RemoveChild( const wxDataViewItem& item, const Helium::Pa
         end = parentNode->GetChildren().end(); itr != end; ++itr )
 
     {
-        if ( _tcsicmp( (*itr)->m_Path.Get().c_str(), path.Get().c_str() ) == 0 )
+        if ( _tcsicmp( (*itr)->GetPath().Get().c_str(), path.Get().c_str() ) == 0 )
         {
             foundChild = itr;
             break;
@@ -163,7 +293,7 @@ void ProjectViewModel::GetValue( wxVariant& variant, const wxDataViewItem& item,
 {
     if ( !item.IsOk()
         || ( column < 0 )
-        || ( column >= ProjectModelColumns::COUNT ) )
+        || ( column >= m_ColumnLookupTable.size() ) )
     {
         return;
     }
@@ -173,22 +303,24 @@ void ProjectViewModel::GetValue( wxVariant& variant, const wxDataViewItem& item,
     {
         return;
     }
-    
-    switch( column )
+
+    switch( m_ColumnLookupTable.at( column ) )
     {
     default:
         break;
 
     case ProjectModelColumns::Name:
-        //m_DataViewCtrl->SetImageList( GlobalFileIconsTable().GetSmallImageList() );
-        //variant = node->m_Name;
-        i32 imageID = GlobalFileIconsTable().GetIconIDFromPath( node->m_Path );
-        variant << wxDataViewIconText( node->m_Name, GlobalFileIconsTable().GetSmallImageList()->GetIcon( imageID ) );
+        {
+            i32 imageID = GlobalFileIconsTable().GetIconIDFromPath( node->GetPath() );
+            variant << wxDataViewIconText( node->GetName(), GlobalFileIconsTable().GetSmallImageList()->GetIcon( imageID ) );
+        }
         break;
 
-    //case ProjectModelColumns::Details:
-    //    variant = node->m_Details;
-    //    break;
+    case ProjectModelColumns::Details:
+        {
+            variant = node->GetDetails();
+        }
+        break;
     }
 }
 
@@ -196,7 +328,7 @@ bool ProjectViewModel::SetValue( const wxVariant& variant, const wxDataViewItem&
 {
     if ( !item.IsOk()
         || ( column < 0 )
-        || ( column >= ProjectModelColumns::COUNT ) )
+        || ( column >= m_ColumnLookupTable.size() ) )
     {
         return false;
     }
@@ -206,20 +338,28 @@ bool ProjectViewModel::SetValue( const wxVariant& variant, const wxDataViewItem&
     {
         return false;
     }
-    
-    switch( column )
+
+    switch( m_ColumnLookupTable.at( column ) )
     {
     default:
-        return false;
+        {
+            return false;
+        }
         break;
 
     case ProjectModelColumns::Name:
-        node->m_Name = variant.GetString();
+        {
+            //wxDataViewIconText iconText;
+            //iconText << variant;
+            //node->m_Name = iconText.GetText();
+        }
         break;
 
-    //case ProjectModelColumns::Details:
-    //    node->m_Details = variant.GetString();
-    //    break;
+    case ProjectModelColumns::Details:
+        {
+            //node->m_Details = variant.GetString();
+        }
+        break;
     }
 
     return true;
@@ -235,7 +375,7 @@ wxDataViewItem ProjectViewModel::GetParent( const wxDataViewItem& item ) const
     ProjectViewModelNode *childNode = static_cast< ProjectViewModelNode* >( item.GetID() );
     if ( !childNode
         || childNode == m_RootNode 
-        || !childNode->m_ParentNode )
+        || !childNode->GetParent() )
     {
         return wxDataViewItem( 0 );
     }

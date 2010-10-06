@@ -22,7 +22,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="0"
-			InheritedPropertySheets="$(SolutionDir)Dependencies.vsprops"
+			InheritedPropertySheets="..\Dependencies.vsprops"
 			>
 			<Tool
 				Name="VCNMakeTool"
@@ -41,7 +41,7 @@
 		<Configuration
 			Name="Debug|x64"
 			ConfigurationType="0"
-			InheritedPropertySheets="$(SolutionDir)Dependencies.vsprops"
+			InheritedPropertySheets="..\Dependencies.vsprops"
 			>
 			<Tool
 				Name="VCNMakeTool"
@@ -60,7 +60,7 @@
 		<Configuration
 			Name="Release|Win32"
 			ConfigurationType="0"
-			InheritedPropertySheets="$(SolutionDir)Dependencies.vsprops"
+			InheritedPropertySheets="..\Dependencies.vsprops"
 			>
 			<Tool
 				Name="VCNMakeTool"
@@ -79,7 +79,7 @@
 		<Configuration
 			Name="Release|x64"
 			ConfigurationType="0"
-			InheritedPropertySheets="$(SolutionDir)Dependencies.vsprops"
+			InheritedPropertySheets="..\Dependencies.vsprops"
 			>
 			<Tool
 				Name="VCNMakeTool"
@@ -98,7 +98,7 @@
 		<Configuration
 			Name="Debug Unicode|Win32"
 			ConfigurationType="0"
-			InheritedPropertySheets="$(SolutionDir)Dependencies.vsprops"
+			InheritedPropertySheets="..\Dependencies.vsprops"
 			>
 			<Tool
 				Name="VCNMakeTool"
@@ -117,7 +117,7 @@
 		<Configuration
 			Name="Debug Unicode|x64"
 			ConfigurationType="0"
-			InheritedPropertySheets="$(SolutionDir)Dependencies.vsprops"
+			InheritedPropertySheets="..\Dependencies.vsprops"
 			>
 			<Tool
 				Name="VCNMakeTool"
@@ -136,7 +136,7 @@
 		<Configuration
 			Name="Release Unicode|Win32"
 			ConfigurationType="0"
-			InheritedPropertySheets="$(SolutionDir)Dependencies.vsprops"
+			InheritedPropertySheets="..\Dependencies.vsprops"
 			>
 			<Tool
 				Name="VCNMakeTool"
@@ -155,7 +155,7 @@
 		<Configuration
 			Name="Release Unicode|x64"
 			ConfigurationType="0"
-			InheritedPropertySheets="$(SolutionDir)Dependencies.vsprops"
+			InheritedPropertySheets="..\Dependencies.vsprops"
 			>
 			<Tool
 				Name="VCNMakeTool"

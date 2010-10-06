@@ -28,6 +28,10 @@ namespace Helium
             void OnOptionsMenuClose( wxMenuEvent& event );
             void OnOptionsMenuSelect( wxCommandEvent& event );
 
+            void OnBeginDrag( wxDataViewEvent& event );
+            void OnDropPossible( wxDataViewEvent& event );
+            void OnDrop( wxDataViewEvent& event );
+
             virtual void OnDroppedFiles( const FileDroppedArgs& args );
 
         protected:

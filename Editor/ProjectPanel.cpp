@@ -33,14 +33,6 @@ ProjectPanel::ProjectPanel( wxWindow *parent )
 
     SetHelpText( TXT( "This is the project outliner.  Manage what's included in your project here." ) );
 
-
-    std::set< tstring > extension;
-    Asset::AssetClass::GetExtensions( extension );
-    m_DropTarget = new FileDropTarget( extension );
-    m_DropTarget->AddListener( FileDroppedSignature::Delegate( this, &ProjectPanel::OnDroppedFiles ) );
-    SetDropTarget( m_DropTarget );
-
-
     m_OptionsMenu = new wxMenu();
     {
         //wxMenuItem* detailsMenuItem = new wxMenuItem(
@@ -57,12 +49,28 @@ ProjectPanel::ProjectPanel( wxWindow *parent )
     m_OptionsButton->Connect( wxEVT_MENU_OPEN, wxMenuEventHandler( ProjectPanel::OnOptionsMenuOpen ), NULL, this );
     m_OptionsButton->Connect( wxEVT_MENU_CLOSE, wxMenuEventHandler( ProjectPanel::OnOptionsMenuClose ), NULL, this );
     m_OptionsButton->Enable( true );
+
+    m_DataViewCtrl->EnableDragSource( wxDF_UNICODETEXT );
+    m_DataViewCtrl->EnableDropTarget( wxDF_UNICODETEXT );
+    m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG, wxDataViewEventHandler( ProjectPanel::OnBeginDrag ), NULL, this );
+    m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, wxDataViewEventHandler( ProjectPanel::OnDropPossible ), NULL, this );
+    m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_DROP, wxDataViewEventHandler( ProjectPanel::OnDrop ), NULL, this );
+
+    std::set< tstring > extension;
+    Asset::AssetClass::GetExtensions( extension );
+    m_DropTarget = new FileDropTarget( extension );
+    m_DropTarget->AddListener( FileDroppedSignature::Delegate( this, &ProjectPanel::OnDroppedFiles ) );
+    SetDropTarget( m_DropTarget );
 }
 
 ProjectPanel::~ProjectPanel()
 {
     m_OptionsButton->Disconnect( wxEVT_MENU_OPEN, wxMenuEventHandler( ProjectPanel::OnOptionsMenuOpen ), NULL, this );
     m_OptionsButton->Disconnect( wxEVT_MENU_CLOSE, wxMenuEventHandler( ProjectPanel::OnOptionsMenuClose ), NULL, this );
+
+    m_DataViewCtrl->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG, wxDataViewEventHandler( ProjectPanel::OnBeginDrag ), NULL, this );
+    m_DataViewCtrl->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, wxDataViewEventHandler( ProjectPanel::OnDropPossible ), NULL, this );
+    m_DataViewCtrl->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_DROP, wxDataViewEventHandler( ProjectPanel::OnDrop ), NULL, this );
 }
 
 void ProjectPanel::SetProject( Project* project )
@@ -129,6 +137,58 @@ void ProjectPanel::OnOptionsMenuSelect( wxCommandEvent& event )
     //default:
     //    break;
     //};
+}
+
+void ProjectPanel::OnBeginDrag( wxDataViewEvent& event )
+{
+    wxDataViewItem item( event.GetItem() );
+
+    //// only allow drags for item, not containers
+    //if (m_music_model->IsContainer( item ) )
+    //{
+    //    event.Veto();
+    //    return;
+    //}
+
+    //MyMusicTreeModelNode *node = (MyMusicTreeModelNode*) item.GetID();
+    //wxTextDataObject *obj = new wxTextDataObject;
+    //obj->SetText( node->m_title );
+    //event.SetDataObject( obj );
+}
+
+void ProjectPanel::OnDropPossible( wxDataViewEvent& event )
+{
+    wxDataViewItem item( event.GetItem() );
+
+    //// only allow drags for item, not containers
+    //if (m_music_model->IsContainer( item ) )
+    //    event.Veto();
+
+    //if (event.GetDataFormat() != wxDF_UNICODETEXT)
+    //    event.Veto();
+}
+
+void ProjectPanel::OnDrop( wxDataViewEvent& event )
+{
+    wxDataViewItem item( event.GetItem() );
+
+    //// only allow drops for item, not containers
+    //if (m_music_model->IsContainer( item ) )
+    //{
+    //    event.Veto();
+    //    return;
+    //}
+
+    //if (event.GetDataFormat() != wxDF_UNICODETEXT)
+    //{
+    //    event.Veto();
+    //    return;
+    //}
+
+    //wxTextDataObject obj;
+    //obj.SetData( wxDF_UNICODETEXT, event.GetDataSize(), event.GetDataBuffer() );
+
+    //wxLogMessage( "Text dropped: %s", obj.GetText() );
 }
 
 void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )

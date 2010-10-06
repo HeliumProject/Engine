@@ -23,89 +23,14 @@ using namespace Helium;
 using namespace Helium::Editor;
 using Helium::Insert; 
 
-static int g_InitCount = 0;
 
-#if wxUSE_DIRDLG || wxUSE_FILEDLG
-
-// ----------------------------------------------------------------------------
-// FileIconsTable icons
-// ----------------------------------------------------------------------------
-
-#ifndef __WXGTK24__
-/* Computer (c) Julian Smart */
-static const char * file_icons_tbl_computer_xpm[] = {
-/* columns rows colors chars-per-pixel */
-"16 16 42 1",
-"r c #4E7FD0",
-"$ c #7198D9",
-"; c #DCE6F6",
-"q c #FFFFFF",
-"u c #4A7CCE",
-"# c #779DDB",
-"w c #95B2E3",
-"y c #7FA2DD",
-"f c #3263B4",
-"= c #EAF0FA",
-"< c #B1C7EB",
-"% c #6992D7",
-"9 c #D9E4F5",
-"o c #9BB7E5",
-"6 c #F7F9FD",
-", c #BED0EE",
-"3 c #F0F5FC",
-"1 c #A8C0E8",
-"  c None",
-"0 c #FDFEFF",
-"4 c #C4D5F0",
-"@ c #81A4DD",
-"e c #4377CD",
-"- c #E2EAF8",
-"i c #9FB9E5",
-"> c #CCDAF2",
-"+ c #89A9DF",
-"s c #5584D1",
-"t c #5D89D3",
-": c #D2DFF4",
-"5 c #FAFCFE",
-"2 c #F5F8FD",
-"8 c #DFE8F7",
-"& c #5E8AD4",
-"X c #638ED5",
-"a c #CEDCF2",
-"p c #90AFE2",
-"d c #2F5DA9",
-"* c #5282D0",
-"7 c #E5EDF9",
-". c #A2BCE6",
-"O c #8CACE0",
-/* pixels */
-"                ",
-"  .XXXXXXXXXXX  ",
-"  oXO++@#$%&*X  ",
-"  oX=-;:>,<1%X  ",
-"  oX23=-;:4,$X  ",
-"  oX5633789:@X  ",
-"  oX05623=78+X  ",
-"  oXqq05623=OX  ",
-"  oX,,,,,<<<$X  ",
-"  wXXXXXXXXXXe  ",
-"  XrtX%$$y@+O,, ",
-"  uyiiiiiiiii@< ",
-" ouiiiiiiiiiip<a",
-" rustX%$$y@+Ow,,",
-" dfffffffffffffd",
-"                "
-};
-#endif // GTK+ < 2.4
-
-// ----------------------------------------------------------------------------
-// FileIconsTable & friends
-// ----------------------------------------------------------------------------
-
+///////////////////////////////////////////////////////////////////////////////
+// GlobalFileIconsTable (using wxModule FileIconsTableModule)
 namespace Helium
 {
     namespace Editor
     {
+        ///////////////////////////////////////////////////////////////////////
         // global instance of a FileIconsTable
         static FileIconsTable* g_GlobalFileIconsTable = NULL;
 
@@ -119,6 +44,7 @@ namespace Helium
             return *g_GlobalFileIconsTable;
         }
 
+        ///////////////////////////////////////////////////////////////////////
         // A module to allow icons table cleanup
         class FileIconsTableModule: public wxModule
         {
@@ -145,20 +71,10 @@ namespace Helium
             }
         };
         IMPLEMENT_DYNAMIC_CLASS(FileIconsTableModule, wxModule)
-
-        class FileIconEntry : public wxObject
-        {
-        public:
-            int id;
-
-            FileIconEntry( int i )
-            {
-                id = i;
-            }        
-        };
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////
 FileIconsTable::FileIconsTable()
 : m_HashTable( NULL )
 , m_NormalImageList( NULL )
@@ -169,23 +85,23 @@ FileIconsTable::FileIconsTable()
 
 FileIconsTable::~FileIconsTable()
 {
-    if (m_HashTable)
+    if ( m_HashTable )
     {
         WX_CLEAR_HASH_TABLE(*m_HashTable);
         delete m_HashTable;
     }
 
-    if (m_NormalImageList)
+    if ( m_NormalImageList )
     {
         delete m_NormalImageList;
     }
 
-    if (m_SmallImageList)
+    if ( m_SmallImageList )
     {
         delete m_SmallImageList;
     }
 
-    if (m_StateImageList)
+    if ( m_StateImageList )
     {
         delete m_StateImageList;
     }
@@ -208,7 +124,7 @@ void FileIconsTable::Create()
         ::GetModuleFileName( 0, module, MAX_PATH );
 
         Helium::Path exePath( module );
-        Helium::Path iconFolder( exePath.Directory() + TXT( "Icons/16x16/" ) );
+        Helium::Path iconFolder( exePath.Directory() + TXT( "Icons/16x16/mimetypes/" ) );
 
         std::set< Helium::Path > artFiles;
         Helium::Directory::GetFiles( iconFolder, artFiles, TXT( "*.png" ), true );
@@ -218,97 +134,75 @@ void FileIconsTable::Create()
         {
             numImages = 0;
         }
-        numImages += 10;
+        numImages += wxFileIconsTable::executable + 1;
 
         m_SmallImageList = new wxImageList( 16, 16, true, numImages );
 
         // folder:
-        m_SmallImageList->Add(wxArtProvider::GetBitmap(wxART_FOLDER,
-            wxART_CMN_DIALOG,
-            wxSize(16, 16)));
+        m_SmallImageList->Add( wxArtProvider::GetBitmap(wxART_FOLDER,
+            wxART_CMN_DIALOG, wxSize(16, 16)) );
+
         // folder_open
-        m_SmallImageList->Add(wxArtProvider::GetBitmap(wxART_FOLDER_OPEN,
-            wxART_CMN_DIALOG,
-            wxSize(16, 16)));
+        m_SmallImageList->Add( wxArtProvider::GetBitmap(wxART_FOLDER_OPEN,
+            wxART_CMN_DIALOG, wxSize(16, 16)) );
+
         // computer
-#ifdef __WXGTK24__
-        // GTK24 uses this icon in the file open dialog
-        m_SmallImageList->Add(wxArtProvider::GetBitmap(wxART_HARDDISK,
-            wxART_CMN_DIALOG,
-            wxSize(16, 16)));
-#else
-        m_SmallImageList->Add(wxIcon(file_icons_tbl_computer_xpm));
-#endif
+        m_SmallImageList->Add( wxArtProvider::GetBitmap(wxART_HARDDISK,
+            wxART_CMN_DIALOG, wxSize(16, 16)) );
+
         // drive
-        m_SmallImageList->Add(wxArtProvider::GetBitmap(wxART_HARDDISK,
-            wxART_CMN_DIALOG,
-            wxSize(16, 16)));
+        m_SmallImageList->Add( wxArtProvider::GetBitmap(wxART_HARDDISK,
+            wxART_CMN_DIALOG, wxSize(16, 16)) );
+
         // cdrom
-        m_SmallImageList->Add(wxArtProvider::GetBitmap(wxART_CDROM,
-            wxART_CMN_DIALOG,
-            wxSize(16, 16)));
+        m_SmallImageList->Add( wxArtProvider::GetBitmap(wxART_CDROM,
+            wxART_CMN_DIALOG, wxSize(16, 16)) );
+
         // floppy
-        m_SmallImageList->Add(wxArtProvider::GetBitmap(wxART_FLOPPY,
-            wxART_CMN_DIALOG,
-            wxSize(16, 16)));
+        m_SmallImageList->Add( wxArtProvider::GetBitmap(wxART_FLOPPY,
+            wxART_CMN_DIALOG, wxSize(16, 16)) );
+
         // removeable
-        m_SmallImageList->Add(wxArtProvider::GetBitmap(wxART_REMOVABLE,
-            wxART_CMN_DIALOG,
-            wxSize(16, 16)));
+        m_SmallImageList->Add( wxArtProvider::GetBitmap(wxART_REMOVABLE,
+            wxART_CMN_DIALOG, wxSize(16, 16)) );
+
         // file
-        m_SmallImageList->Add(wxArtProvider::GetBitmap(wxART_NORMAL_FILE,
-            wxART_CMN_DIALOG,
-            wxSize(16, 16)));
+        m_SmallImageList->Add( wxArtProvider::GetBitmap(wxART_NORMAL_FILE,
+            wxART_CMN_DIALOG, wxSize(16, 16)) );
+
         // executable
-        if (GetIconID(wxEmptyString, _T("application/x-executable")) == wxFileIconsTable::file)
+        if ( GetIconID( wxEmptyString, TXT( "application/x-executable" ) ) == wxFileIconsTable::file )
         {
-            m_SmallImageList->Add(wxArtProvider::GetBitmap(wxART_EXECUTABLE_FILE,
+            m_SmallImageList->Add( wxArtProvider::GetBitmap(wxART_EXECUTABLE_FILE,
                 wxART_CMN_DIALOG,
-                wxSize(16, 16)));
-            delete m_HashTable->Get(_T("exe"));
-            m_HashTable->Delete(_T("exe"));
-            m_HashTable->Put(_T("exe"), new FileIconEntry( wxFileIconsTable::executable ) );
+                wxSize(16, 16)) );
+            delete m_HashTable->Get( TXT( "exe" ) );
+            m_HashTable->Delete( TXT( "exe" ) );
+            m_HashTable->Put( TXT( "exe" ), new FileIconEntry( wxFileIconsTable::executable ) );
         }
-        /* else put into list by GetIconID
-        (KDE defines application/x-executable for *.exe and has nice icon)
-        */
 
-        std::set< Helium::Path >::const_iterator fileItr = artFiles.begin();
-        std::set< Helium::Path >::const_iterator fileEnd = artFiles.end();
-        for ( ; fileItr != fileEnd; ++fileItr )
-        {
-            const Helium::Path& filePath = (*fileItr);
+        // other file types
+        int id;
 
-            if ( !filePath.Exists() || filePath.Size() <= 0 )
-            {
-                Log::Warning( TXT( "Unable to load empty image file %s\n" ), filePath.Get().c_str() );
-                continue;
-            }
+        id = m_SmallImageList->Add( wxArtProvider::GetBitmap( ArtIDs::MimeTypes::Binary,
+            wxART_OTHER,
+            wxSize(16, 16)) );
+        m_HashTable->Put( TXT( "bin" ), new FileIconEntry( id ) );
 
-            Log::Debug( TXT("Loading %s...\n"), filePath.Get().c_str() );
+        id = m_SmallImageList->Add( wxArtProvider::GetBitmap( ArtIDs::MimeTypes::Binary,
+            wxART_OTHER,
+            wxSize(16, 16)) );
+        m_HashTable->Put( TXT( "dat" ), new FileIconEntry( id ) );
 
-            wxImage image;
-            if ( !image.LoadFile( filePath.Get().c_str(), wxBITMAP_TYPE_PNG ) )
-            {
-                Log::Warning( TXT( "Unable to load GUI image %s\n" ), filePath.Get().c_str() );
-                continue;
-            }
-            else
-            {
-                wxString token = filePath.Filename();
-                // strip: iconFolder
-                size_t findDot = token.find( TXT( "." ) );
-                if ( findDot != wxString::npos )
-                    token.erase( findDot );
+        id = m_SmallImageList->Add( wxArtProvider::GetBitmap( ArtIDs::MimeTypes::ReflectBinary,
+            wxART_OTHER,
+            wxSize(16, 16)) );
+        m_HashTable->Put( TXT( "hrb" ), new FileIconEntry( id ) );
 
-#pragma TODO("really we should just be inserting a column of alpha or something, scaling is lame -Geoff")
-                image.Rescale( 16, 16 );
-
-                // The file was loaded, add it to the image list and store a mapping of file name to index
-                int index = m_SmallImageList->Add( wxBitmap( image ) );
-                m_HashTable->Put( token, new FileIconEntry( index ) );
-            }
-        }
+        id = m_SmallImageList->Add( wxArtProvider::GetBitmap( ArtIDs::MimeTypes::Text,
+            wxART_OTHER,
+            wxSize(16, 16)) );
+        m_HashTable->Put( TXT( "txt" ), new FileIconEntry( id ) );
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -348,7 +242,6 @@ wxImageList* FileIconsTable::GetImageList( int which )
 #if wxUSE_MIMETYPE && wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
 // VS: we don't need this function w/o wxMimeTypesManager because we'll only have
 //     one icon and we won't resize it
-
 static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
 {
     const unsigned int size = 16;
@@ -356,8 +249,8 @@ static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
     wxImage smallimg (size, size);
     unsigned char *p1, *p2, *ps;
     unsigned char mr = img.GetMaskRed(),
-                  mg = img.GetMaskGreen(),
-                  mb = img.GetMaskBlue();
+        mg = img.GetMaskGreen(),
+        mb = img.GetMaskBlue();
 
     unsigned x, y;
     unsigned sr, sg, sb, smask;
@@ -402,58 +295,106 @@ static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
 
     return wxBitmap(smallimg);
 }
-
 #endif // wxUSE_MIMETYPE
 
-int FileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
-{
-    if (!m_SmallImageList)
-        Create();
-
-#if wxUSE_MIMETYPE
-    if (!extension.empty())
+int FileIconsTable::GetIconIDFromPath( const Helium::Path& path )
+{ 
+    wxString extension = path.FullExtension();
+    if ( extension.empty() )
     {
-        FileIconEntry *entry = (FileIconEntry*) m_HashTable->Get(extension);
-        if (entry) return (entry -> id);
+        return wxFileIconsTable::file;
     }
 
-    wxFileType *ft = (mime.empty()) ?
-                   wxTheMimeTypesManager -> GetFileTypeFromExtension(extension) :
-                   wxTheMimeTypesManager -> GetFileTypeFromMimeType(mime);
+    FileIconEntry *entry = (FileIconEntry*) m_HashTable->Get( extension );
+    if ( entry )
+    {
+        return entry->id;
+    }
+
+    // try just the end extension
+    if ( _tcsicmp( path.Extension().c_str(), extension.c_str() ) != 0 )
+    {
+        extension = path.Extension();
+        if ( extension.empty() )
+        {
+            return wxFileIconsTable::file;
+        }
+
+        FileIconEntry *entry = (FileIconEntry*) m_HashTable->Get( extension );
+        if ( entry )
+        {
+            return entry->id;
+        }
+    }
+
+    return wxFileIconsTable::file;
+}
+
+int FileIconsTable::GetIconID( const wxString& extension, const wxString& mime )
+{
+    if ( !m_SmallImageList )
+    {
+        Create();
+    }
+
+#if wxUSE_MIMETYPE
+    if ( !extension.empty() )
+    {
+        FileIconEntry *entry = (FileIconEntry*) m_HashTable->Get(extension);
+        if ( entry )
+        {
+            return (entry->id);
+        }
+    }
+
+    wxFileType *ft = NULL;
+    if ( !mime.empty() )
+    {
+        wxTheMimeTypesManager->GetFileTypeFromMimeType( mime );
+    }
+    else if ( !extension.empty() )
+    {
+        wxTheMimeTypesManager->GetFileTypeFromExtension( extension );
+    }
 
     wxIconLocation iconLoc;
     wxIcon ic;
+    if ( ft )
     {
         wxLogNull logNull;
         if ( ft && ft->GetIcon(&iconLoc) )
         {
             ic = wxIcon( iconLoc );
         }
+        delete ft;
     }
-
-    delete ft;
 
     if ( !ic.Ok() )
     {
         int newid = wxFileIconsTable::file;
-        m_HashTable->Put(extension, new FileIconEntry(newid));
+        if ( !extension.empty() )
+        {
+            m_HashTable->Put(extension, new FileIconEntry(newid) );
+        }
         return newid;
     }
 
     wxBitmap bmp;
-    bmp.CopyFromIcon(ic);
-
+    bmp.CopyFromIcon( ic );
     if ( !bmp.Ok() )
     {
         int newid = wxFileIconsTable::file;
-        m_HashTable->Put(extension, new FileIconEntry(newid));
+        if ( !extension.empty() )
+        {
+            m_HashTable->Put(extension, new FileIconEntry(newid) );
+        }
         return newid;
     }
 
     const unsigned int size = 16;
 
     int id = m_SmallImageList->GetImageCount();
-    if ((bmp.GetWidth() == (int) size) && (bmp.GetHeight() == (int) size))
+    if ( (bmp.GetWidth() == (int) size) && (bmp.GetHeight() == (int) size) )
     {
         m_SmallImageList->Add(bmp);
     }
@@ -463,24 +404,32 @@ int FileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
         wxImage img = bmp.ConvertToImage();
 
         if ((img.GetWidth() != size*2) || (img.GetHeight() != size*2))
-//            m_SmallImageList->Add(CreateAntialiasedBitmap(CutEmptyBorders(img).Rescale(size*2, size*2)));
-            m_SmallImageList->Add(CreateAntialiasedBitmap(img.Rescale(size*2, size*2)));
+        {
+            //m_SmallImageList->Add(CreateAntialiasedBitmap(CutEmptyBorders(img).Rescale(size*2, size*2)) );
+            m_SmallImageList->Add( CreateAntialiasedBitmap( img.Rescale( size*2, size*2 ) ) );
+        }
         else
-            m_SmallImageList->Add(CreateAntialiasedBitmap(img));
+        {
+            m_SmallImageList->Add(CreateAntialiasedBitmap(img) );
+        }
     }
 #endif // wxUSE_IMAGE
 
-    m_HashTable->Put(extension, new FileIconEntry(id));
+    if ( !extension.empty() )
+    {
+        m_HashTable->Put(extension, new FileIconEntry(id) );
+    }
     return id;
-
 #else // !wxUSE_MIMETYPE
 
     wxUnusedVar(mime);
     if (extension == wxT("exe"))
+    {
         return executable;
+    }
     else
+    {
         return file;
+    }
 #endif // wxUSE_MIMETYPE/!wxUSE_MIMETYPE
 }
-
-#endif // wxUSE_DIRDLG || wxUSE_FILEDLG

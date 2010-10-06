@@ -21,11 +21,7 @@ namespace Helium
             void OnToggleToolButton( wxCommandEvent& );
 
             void ToggleTool( i32 selectedTool );
-
-            wxPanel* GetToolsPanel()
-            {
-                return m_ToolsPanel;
-            }
+            void EnableTools( const bool enable = true );
 
             wxPanel* GetToolsPropertiesPanel()
             {

@@ -41,8 +41,6 @@ namespace Helium
             virtual void OnSearchGoButtonClick( wxCommandEvent& event ) HELIUM_OVERRIDE;
             virtual void OnSearchTextEnter( wxCommandEvent& event ) HELIUM_OVERRIDE;
 
-            virtual void OnVaultSettingsButtonClick( wxCommandEvent& event ) HELIUM_OVERRIDE;
-
             void OnOptionsMenuOpen( wxMenuEvent& event );
             void OnOptionsMenuClose( wxMenuEvent& event );
             void OnOptionsMenuSelect( wxCommandEvent& event );

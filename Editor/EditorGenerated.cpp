@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version May  4 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -222,40 +222,40 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	m_MainStatusBar = this->CreateStatusBar( 1, wxST_SIZEGRIP, wxID_ANY );
 	
 	// Connect Events
-	this->Connect( m_ItemFileNewScene->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewScene ) );
-	this->Connect( m_ItemFileNewEntity->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewEntity ) );
-	this->Connect( m_ItemFileNewProject->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewProject ) );
-	this->Connect( m_ItemOpen->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnOpen ) );
-	this->Connect( m_ItemClose->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnClose ) );
-	this->Connect( m_ItemSaveAll->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSaveAll ) );
-	this->Connect( m_ItemImport->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnImport ) );
-	this->Connect( m_ItemImportFromClipboard->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnImport ) );
-	this->Connect( m_ItemExport->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExport ) );
-	this->Connect( m_ItemExportToClipboard->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExport ) );
-	this->Connect( m_ItemExit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExit ) );
-	this->Connect( m_ItemUndo->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUndo ) );
-	this->Connect( m_ItemRedo->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnRedo ) );
-	this->Connect( m_ItemCut->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCut ) );
-	this->Connect( m_ItemCopy->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCopy ) );
-	this->Connect( m_ItemPaste->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPaste ) );
-	this->Connect( m_ItemDelete->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDelete ) );
-	this->Connect( m_ItemSelectAll->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSelectAll ) );
-	this->Connect( m_ItemInvertSelection->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnInvertSelection ) );
-	this->Connect( m_ItemParent->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnParent ) );
-	this->Connect( m_ItemUnparent->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUnparent ) );
-	this->Connect( m_ItemGroup->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnGroup ) );
-	this->Connect( m_ItemUngroup->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUngroup ) );
-	this->Connect( m_ItemCenter->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCenter ) );
-	this->Connect( m_ItemDuplicate->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDuplicate ) );
-	this->Connect( m_ItemSmartDuplicate->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSmartDuplicate ) );
-	this->Connect( m_ItemCopyTransform->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCopyTransform ) );
-	this->Connect( m_ItemPasteTransform->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPasteTransform ) );
-	this->Connect( m_ItemSnapToCamera->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapToCamera ) );
-	this->Connect( m_ItemSnapCameraTo->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapCameraTo ) );
-	this->Connect( m_ItemWalkUp->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
-	this->Connect( m_ItemWalkForward->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
-	this->Connect( m_ItemSettings->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSettings ) );
-	this->Connect( m_ItemAbout->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnAbout ) );
+	this->Connect( ID_NewScene, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewScene ) );
+	this->Connect( ID_NewEntity, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewEntity ) );
+	this->Connect( ID_NewProject, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewProject ) );
+	this->Connect( ID_Open, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnOpen ) );
+	this->Connect( ID_Close, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnClose ) );
+	this->Connect( ID_SaveAll, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSaveAll ) );
+	this->Connect( ID_Import, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnImport ) );
+	this->Connect( ID_ImportFromClipboard, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnImport ) );
+	this->Connect( ID_Export, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExport ) );
+	this->Connect( ID_ExportToClipboard, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExport ) );
+	this->Connect( ID_Exit, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExit ) );
+	this->Connect( wxID_UNDO, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUndo ) );
+	this->Connect( wxID_REDO, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnRedo ) );
+	this->Connect( wxID_CUT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCut ) );
+	this->Connect( wxID_COPY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCopy ) );
+	this->Connect( wxID_PASTE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPaste ) );
+	this->Connect( wxID_DELETE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDelete ) );
+	this->Connect( ID_SelectAll, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSelectAll ) );
+	this->Connect( ID_InvertSelection, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnInvertSelection ) );
+	this->Connect( ID_Parent, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnParent ) );
+	this->Connect( ID_Unparent, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUnparent ) );
+	this->Connect( ID_Group, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnGroup ) );
+	this->Connect( ID_Ungroup, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUngroup ) );
+	this->Connect( ID_Center, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCenter ) );
+	this->Connect( ID_Duplicate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDuplicate ) );
+	this->Connect( ID_SmartDuplicate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSmartDuplicate ) );
+	this->Connect( ID_CopyTransform, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCopyTransform ) );
+	this->Connect( ID_PasteTransform, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPasteTransform ) );
+	this->Connect( ID_SnapToCamera, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapToCamera ) );
+	this->Connect( ID_SnapCameraTo, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapCameraTo ) );
+	this->Connect( ID_WalkUp, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
+	this->Connect( ID_WalkForward, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
+	this->Connect( ID_Settings, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSettings ) );
+	this->Connect( ID_About, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnAbout ) );
 }
 
 MainFrameGenerated::~MainFrameGenerated()
@@ -608,8 +608,18 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	m_AddFile = new wxBitmapButton( m_ProjectManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer36->Add( m_AddFile, 0, wxALL, 2 );
 	
-	m_Delete = new wxBitmapButton( m_ProjectManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer36->Add( m_Delete, 0, wxALL, 2 );
+	m_DeleteFile = new wxBitmapButton( m_ProjectManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer36->Add( m_DeleteFile, 0, wxALL, 2 );
+	
+	
+	bSizer36->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_OptionsButton = new Helium::Editor::MenuButton( m_ProjectManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_OptionsButton->SetToolTip( _("Vault Settings...") );
+	
+	m_OptionsButton->SetToolTip( _("Vault Settings...") );
+	
+	bSizer36->Add( m_OptionsButton, 0, wxALL, 2 );
 	
 	m_ProjectManagementPanel->SetSizer( bSizer36 );
 	m_ProjectManagementPanel->Layout();
@@ -623,15 +633,15 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	this->Layout();
 	
 	// Connect Events
-	m_AddFile->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnAddPath ), NULL, this );
-	m_Delete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnDelete ), NULL, this );
+	m_AddFile->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnAddFile ), NULL, this );
+	m_DeleteFile->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnDeleteFile ), NULL, this );
 }
 
 ProjectPanelGenerated::~ProjectPanelGenerated()
 {
 	// Disconnect Events
-	m_AddFile->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnAddPath ), NULL, this );
-	m_Delete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnDelete ), NULL, this );
+	m_AddFile->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnAddFile ), NULL, this );
+	m_DeleteFile->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnDeleteFile ), NULL, this );
 	
 }
 
@@ -686,26 +696,77 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer27;
 	bSizer27 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_ToolsPanel = new wxPanel( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* m_ToolsPanelSizer;
-	m_ToolsPanelSizer = new wxBoxSizer( wxHORIZONTAL );
+	m_SelectButton = new wxBitmapToggleButton( m_MainPanel, ID_Select, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_SelectButton, 0, wxALL, 2 );
 	
-	m_ToolsPanel->SetSizer( m_ToolsPanelSizer );
-	m_ToolsPanel->Layout();
-	m_ToolsPanelSizer->Fit( m_ToolsPanel );
-	bSizer27->Add( m_ToolsPanel, 1, wxEXPAND | wxALL, 0 );
+	m_TranslateButton = new wxBitmapToggleButton( m_MainPanel, ID_Translate, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_TranslateButton, 0, wxALL, 2 );
+	
+	m_RotateButton = new wxBitmapToggleButton( m_MainPanel, ID_Rotate, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_RotateButton, 0, wxALL, 2 );
+	
+	m_ScaleButton = new wxBitmapToggleButton( m_MainPanel, ID_Scale, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_ScaleButton, 0, wxALL, 2 );
+	
+	wxStaticLine* m_staticline16;
+	m_staticline16 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer27->Add( m_staticline16, 0, wxEXPAND | wxALL, 2 );
+	
+	m_DuplicateToolButton = new wxBitmapToggleButton( m_MainPanel, ID_Duplicate, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_DuplicateToolButton, 0, wxALL, 2 );
+	
+	m_LocatorToolButton = new wxBitmapToggleButton( m_MainPanel, ID_Locator, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_LocatorToolButton, 0, wxALL, 2 );
+	
+	m_VolumeToolButton = new wxBitmapToggleButton( m_MainPanel, ID_Volume, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_VolumeToolButton, 0, wxALL, 2 );
+	
+	m_EntityToolButton = new wxBitmapToggleButton( m_MainPanel, ID_Entity, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_EntityToolButton, 0, wxALL, 2 );
+	
+	m_CurveToolLocator = new wxBitmapToggleButton( m_MainPanel, ID_Curve, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_CurveToolLocator, 0, wxALL, 2 );
+	
+	m_CurveEditToolButton = new wxBitmapToggleButton( m_MainPanel, ID_CurveEdit, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_CurveEditToolButton, 0, wxALL, 2 );
+	
+	wxStaticLine* m_staticline15;
+	m_staticline15 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer27->Add( m_staticline15, 0, wxALL|wxEXPAND, 2 );
+	
+	wxStaticText* m_staticText10;
+	m_staticText10 = new wxStaticText( m_MainPanel, wxID_ANY, _("Game:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText10->Wrap( -1 );
+	bSizer27->Add( m_staticText10, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_PlayButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_PlayButton->Enable( false );
+	
+	m_PlayButton->Enable( false );
+	
 	bSizer27->Add( m_PlayButton, 0, wxALL, 2 );
 	
 	m_PauseButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_PauseButton->Enable( false );
+	
+	m_PauseButton->Enable( false );
+	
 	bSizer27->Add( m_PauseButton, 0, wxALL, 2 );
 	
 	m_StopButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_StopButton->Enable( false );
+	
+	m_StopButton->Enable( false );
+	
 	bSizer27->Add( m_StopButton, 0, wxALL, 2 );
 	
 	
 	bSizer27->Add( 20, 0, 1, wxEXPAND, 5 );
+	
+	wxStaticText* m_staticText12;
+	m_staticText12 = new wxStaticText( m_MainPanel, wxID_ANY, _("Vault:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText12->Wrap( -1 );
+	bSizer27->Add( m_staticText12, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_VaultSearchBox = new wxSearchCtrl( m_MainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 400,-1 ), wxTE_PROCESS_ENTER );
 	#ifndef __WXMAC__
@@ -715,6 +776,9 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	m_VaultSearchBox->SetMinSize( wxSize( 300,-1 ) );
 	
 	bSizer27->Add( m_VaultSearchBox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 2 );
+	
+	
+	bSizer27->Add( 5, 0, 0, wxEXPAND, 5 );
 	
 	m_MainPanel->SetSizer( bSizer27 );
 	m_MainPanel->Layout();
@@ -807,7 +871,6 @@ VaultPanelGenerated::VaultPanelGenerated( wxWindow* parent, wxWindowID id, const
 	m_SearchCtrl->Connect( wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, wxCommandEventHandler( VaultPanelGenerated::OnSearchCancelButtonClick ), NULL, this );
 	m_SearchCtrl->Connect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( VaultPanelGenerated::OnSearchGoButtonClick ), NULL, this );
 	m_SearchCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( VaultPanelGenerated::OnSearchTextEnter ), NULL, this );
-	m_OptionsButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( VaultPanelGenerated::OnVaultSettingsButtonClick ), NULL, this );
 }
 
 VaultPanelGenerated::~VaultPanelGenerated()
@@ -816,7 +879,6 @@ VaultPanelGenerated::~VaultPanelGenerated()
 	m_SearchCtrl->Disconnect( wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, wxCommandEventHandler( VaultPanelGenerated::OnSearchCancelButtonClick ), NULL, this );
 	m_SearchCtrl->Disconnect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( VaultPanelGenerated::OnSearchGoButtonClick ), NULL, this );
 	m_SearchCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( VaultPanelGenerated::OnSearchTextEnter ), NULL, this );
-	m_OptionsButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( VaultPanelGenerated::OnVaultSettingsButtonClick ), NULL, this );
 	
 }
 
@@ -835,8 +897,16 @@ ViewPanelGenerated::ViewPanelGenerated( wxWindow* parent, wxWindowID id, const w
 	m_FrameSelectedButton = new wxBitmapButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer35->Add( m_FrameSelectedButton, 0, wxALL, 2 );
 	
+	wxStaticLine* m_staticline3;
+	m_staticline3 = new wxStaticLine( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer35->Add( m_staticline3, 0, wxALL|wxEXPAND, 2 );
 	
-	bSizer35->Add( 10, 0, 0, wxEXPAND, 0 );
+	m_HighlightModeToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer35->Add( m_HighlightModeToggleButton, 0, wxALL, 2 );
+	
+	wxStaticLine* m_staticline4;
+	m_staticline4 = new wxStaticLine( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer35->Add( m_staticline4, 0, wxALL|wxEXPAND, 2 );
 	
 	m_PreviousViewButton = new wxBitmapButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer35->Add( m_PreviousViewButton, 0, wxALL, 2 );
@@ -844,14 +914,9 @@ ViewPanelGenerated::ViewPanelGenerated( wxWindow* parent, wxWindowID id, const w
 	m_NextViewButton = new wxBitmapButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer35->Add( m_NextViewButton, 0, wxALL, 2 );
 	
-	
-	bSizer35->Add( 10, 0, 0, wxEXPAND, 0 );
-	
-	m_HighlightModeToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer35->Add( m_HighlightModeToggleButton, 0, wxALL, 2 );
-	
-	
-	bSizer35->Add( 10, 0, 0, wxEXPAND, 0 );
+	wxStaticLine* m_staticline5;
+	m_staticline5 = new wxStaticLine( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer35->Add( m_staticline5, 0, wxALL|wxEXPAND, 2 );
 	
 	m_OrbitCameraToggleButton = new wxBitmapToggleButton( m_ToolPanel, ID_OrbitCamera, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer35->Add( m_OrbitCameraToggleButton, 0, wxALL, 2 );
@@ -865,8 +930,9 @@ ViewPanelGenerated::ViewPanelGenerated( wxWindow* parent, wxWindowID id, const w
 	m_TopCameraToggleButton = new wxBitmapToggleButton( m_ToolPanel, ID_TopCamera, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer35->Add( m_TopCameraToggleButton, 0, wxALL, 2 );
 	
-	
-	bSizer35->Add( 10, 0, 0, wxEXPAND, 0 );
+	wxStaticLine* m_staticline51;
+	m_staticline51 = new wxStaticLine( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer35->Add( m_staticline51, 0, wxEXPAND | wxALL, 2 );
 	
 	m_ShowAxesToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer35->Add( m_ShowAxesToggleButton, 0, wxALL, 2 );
@@ -880,8 +946,9 @@ ViewPanelGenerated::ViewPanelGenerated( wxWindow* parent, wxWindowID id, const w
 	m_ShowStatisticsToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer35->Add( m_ShowStatisticsToggleButton, 0, wxALL, 2 );
 	
-	
-	bSizer35->Add( 10, 0, 0, wxEXPAND, 0 );
+	wxStaticLine* m_staticline52;
+	m_staticline52 = new wxStaticLine( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer35->Add( m_staticline52, 0, wxEXPAND | wxALL, 2 );
 	
 	m_FrustumCullingToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer35->Add( m_FrustumCullingToggleButton, 0, wxALL, 2 );
@@ -889,8 +956,9 @@ ViewPanelGenerated::ViewPanelGenerated( wxWindow* parent, wxWindowID id, const w
 	m_BackfaceCullingToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer35->Add( m_BackfaceCullingToggleButton, 0, wxALL, 2 );
 	
-	
-	bSizer35->Add( 10, 0, 0, wxEXPAND, 0 );
+	wxStaticLine* m_staticline53;
+	m_staticline53 = new wxStaticLine( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer35->Add( m_staticline53, 0, wxEXPAND | wxALL, 2 );
 	
 	m_WireframeShadingToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer35->Add( m_WireframeShadingToggleButton, 0, wxALL, 2 );
@@ -898,8 +966,9 @@ ViewPanelGenerated::ViewPanelGenerated( wxWindow* parent, wxWindowID id, const w
 	m_MaterialShadingToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer35->Add( m_MaterialShadingToggleButton, 0, wxALL, 2 );
 	
-	
-	bSizer35->Add( 10, 0, 0, wxEXPAND, 0 );
+	wxStaticLine* m_staticline54;
+	m_staticline54 = new wxStaticLine( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer35->Add( m_staticline54, 0, wxEXPAND | wxALL, 2 );
 	
 	m_ColorModeSceneToggleButton = new wxBitmapToggleButton( m_ToolPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer35->Add( m_ColorModeSceneToggleButton, 0, wxALL, 2 );
@@ -936,9 +1005,9 @@ ViewPanelGenerated::ViewPanelGenerated( wxWindow* parent, wxWindowID id, const w
 	// Connect Events
 	m_FrameOriginButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameOrigin ), NULL, this );
 	m_FrameSelectedButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameSelected ), NULL, this );
+	m_HighlightModeToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnToggleHighlightMode ), NULL, this );
 	m_PreviousViewButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnPreviousView ), NULL, this );
 	m_NextViewButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnNextView ), NULL, this );
-	m_HighlightModeToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnToggleHighlightMode ), NULL, this );
 	m_ShowAxesToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
 	m_ShowGridToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
 	m_ShowBoundsToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
@@ -959,9 +1028,9 @@ ViewPanelGenerated::~ViewPanelGenerated()
 	// Disconnect Events
 	m_FrameOriginButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameOrigin ), NULL, this );
 	m_FrameSelectedButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameSelected ), NULL, this );
+	m_HighlightModeToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnToggleHighlightMode ), NULL, this );
 	m_PreviousViewButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnPreviousView ), NULL, this );
 	m_NextViewButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnNextView ), NULL, this );
-	m_HighlightModeToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnToggleHighlightMode ), NULL, this );
 	m_ShowAxesToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
 	m_ShowGridToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
 	m_ShowBoundsToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );

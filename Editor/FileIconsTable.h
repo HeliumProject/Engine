@@ -1,6 +1,10 @@
 #pragma once
 
 #include "Editor/API.h"
+#include "Editor/ArtProvider.h"
+
+#include "Platform/Types.h"
+#include "Foundation/File/Path.h"
 
 #include <map>
 
@@ -9,40 +13,34 @@
 #include <wx/imaglist.h>
 #include <wx/generic/dirctrlg.h>
 
-#include "Platform/Types.h"
-#include "Foundation/File/Path.h"
-
-
 namespace Helium
 {
     namespace Editor
     {
-
-#if wxUSE_DIRDLG || wxUSE_FILEDLG
-
         // The global fileicons table
         class FileIconsTable& GlobalFileIconsTable();
 
         class FileIconsTable //: public wxFileIconsTable
         {
         public:
-            enum iconId_Type
-            {
-                //folder,
-                //folder_open,
-                //computer,
-                //drive,
-                //cdrom,
-                //floppy,
-                //removeable,
-                //file,
-                //executable,
-                FIRST_ID = wxFileIconsTable::executable,
-            };
+            //enum iconId_Type
+            //{
+            //    folder,
+            //    folder_open,
+            //    computer,
+            //    drive,
+            //    cdrom,
+            //    floppy,
+            //    removeable,
+            //    file,
+            //    executable,
+            //    FIRST_ID = wxFileIconsTable::executable,
+            //};
 
             FileIconsTable();
             virtual ~FileIconsTable();
 
+            int GetIconIDFromPath( const Helium::Path& path );
             int GetIconID( const wxString& extension, const wxString& mime = wxEmptyString );
 
             // which is wxIMAGE_LIST_NORMAL, wxIMAGE_LIST_SMALL, or wxIMAGE_LIST_STATE
@@ -54,13 +52,24 @@ namespace Helium
             void Create();
 
         private:
+            class FileIconEntry : public wxObject
+            {
+            public:
+                int id;
+
+                FileIconEntry( int i )
+                {
+                    id = i;
+                }        
+            };
+
+            typedef std::map< wxString, const wxChar* > M_ExtensionArtIDs;
+            M_ExtensionArtIDs m_ExtensionArtIDs;
+
             wxHashTable* m_HashTable;
             wxImageList* m_NormalImageList;
             wxImageList* m_SmallImageList;
             wxImageList* m_StateImageList;
         };
-
-#endif // wxUSE_DIRDLG || wxUSE_FILEDLG
-
     }
 }

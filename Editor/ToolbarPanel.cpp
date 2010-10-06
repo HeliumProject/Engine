@@ -26,54 +26,85 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
     {
         Freeze();
 
-        m_PlayButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Play ) );
-        m_PauseButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Pause ) );
-        m_StopButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Stop ) );
+        m_SelectButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::Editor::SelectTool ) );
+        m_TranslateButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::Editor::TranslateTool ) );
+        m_RotateButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::Editor::RotateTool ) );
+        m_ScaleButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::Editor::ScaleTool ) );
+        
+        m_DuplicateToolButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::Editor::DuplicateTool ) );
+        m_LocatorToolButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::Editor::Locator ) );
+        m_VolumeToolButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::Editor::Volume ) );
+        m_EntityToolButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::Editor::Entity ) );
+        m_CurveToolLocator->SetLabel( wxArtProvider::GetBitmap( ArtIDs::Editor::Curve ) );
+        m_CurveEditToolButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::Editor::CurveEdit ) );
+
+        m_PlayButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Play ) );
+        m_PauseButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Pause ) );
+        m_StopButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Stop ) );
 
         Layout();
         Thaw();
     }
 
+    m_SelectButton->SetHelpText( TXT ( "Select\n\nSelect items from the workspace" ) );
+    m_TranslateButton->SetHelpText( TXT ( "Translate\n\nTranslate items" ) );
+    m_RotateButton->SetHelpText( TXT ( "Rotate\n\nRotate selected items" ) );
+    m_ScaleButton->SetHelpText( TXT ( "nScale\n\nScale selected items" ) );
+    
+    m_DuplicateToolButton->SetHelpText( TXT ( "Duplicate\n\nDuplicate the selected object numerous times" ) );
+    m_LocatorToolButton->SetHelpText( TXT ( "Locator\n\nPlace locator objects (such as bug locators)" ) );
+    m_VolumeToolButton->SetHelpText( TXT ( "Volume\n\nPlace volume objects (items for setting up gameplay)" ) );
+    m_EntityToolButton->SetHelpText( TXT ( "Entity\n\nPlace entity objects (such as art instances or characters)" ) );
+    m_CurveToolLocator->SetHelpText( TXT ( "Curve\n\nCreate curve objects (Linear, B-Spline, or Catmull-Rom Spline)" ) );
+    m_CurveEditToolButton->SetHelpText( TXT ( "Edit Curve\n\nEdit created curves (modify or create/delete control points)" ) );
+
     m_PlayButton->SetHelpText( TXT( "Play\n\nClicking this will start the game in the editing window." ) );
     m_PauseButton->SetHelpText( TXT( "Pause\n\nClicking this will pause a currently running game session." ) );
     m_StopButton->SetHelpText( TXT( "Stop\n\nClicking this will stop a currently running game session." ) );
 
-    std::map< ToolType, wxPanel* > toolTypePanels;
-    for ( i32 i=0; i < ToolModes::Count; ++i )
-    {
-        ToolInfo* info = &ToolInfos[ i ];
-
-        std::map< ToolType, wxPanel* >::iterator itr = toolTypePanels.find( info->m_Type );
-
-        wxPanel* typePanel = NULL;
-
-        if ( itr == toolTypePanels.end() )
-        {
-            typePanel = new wxPanel( m_ToolsPanel );
-            typePanel->SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
-            toolTypePanels[ info->m_Type ] = typePanel;
-            m_ToolsPanel->GetSizer()->Add( typePanel, 0, wxALL | wxALIGN_CENTER_VERTICAL | wxEXPAND, 0 );
-            //m_ToolsPanel->GetSizer()->Add( new wxStaticLine( m_ToolsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL ), 0, wxEXPAND | wxALL, 2 );
-            m_ToolsPanel->GetSizer()->Add( 20, 0 ); // add spacer to the right of the panel
-        }
-
-        if ( !typePanel )
-        {
-            typePanel = (*itr).second;
-        }
-
-        wxBitmapToggleButton* btn = new wxBitmapToggleButton( typePanel, info->m_ID, wxArtProvider::GetBitmap( info->m_Bitmap, wxART_OTHER, ArtProvider::DefaultIconSize ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-        btn->SetHelpText( info->m_Description );
-
-        // connect its event handler to us
-        btn->Connect( btn->GetId(), wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ToolbarPanel::OnToggleToolButton ), NULL, this );
-
-        typePanel->GetSizer()->Add( btn, 0, wxALL | wxALIGN_CENTER_VERTICAL, 2 );
-        m_ToolsButtons.push_back( btn );
-    }
-
     m_VaultSearchBox->SetHelpText( TXT( "This is the Vault search box.  Entering text here and pressing enter will search the Asset Vault." ) );
     m_ToolsPropertiesPanel->SetHelpText( TXT( "This is the tools properties area.  Depending on the tool you have selected, this will show its options." ) );
+
+    m_ToolsButtons.push_back( m_SelectButton );
+    m_ToolsButtons.push_back( m_TranslateButton );
+    m_ToolsButtons.push_back( m_RotateButton );
+    m_ToolsButtons.push_back( m_ScaleButton );
+    m_ToolsButtons.push_back( m_DuplicateToolButton );
+    m_ToolsButtons.push_back( m_LocatorToolButton );
+    m_ToolsButtons.push_back( m_VolumeToolButton );
+    m_ToolsButtons.push_back( m_EntityToolButton );
+    m_ToolsButtons.push_back( m_CurveToolLocator );
+    m_ToolsButtons.push_back( m_CurveEditToolButton );
+
+    m_SelectButton->SetId( EventIds::ID_ToolsSelect );
+    m_SelectButton->Connect( EventIds::ID_ToolsSelect, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ToolbarPanel::OnToggleToolButton ), NULL, this );
+    
+    m_TranslateButton->SetId( EventIds::ID_ToolsTranslate );
+    m_TranslateButton->Connect( EventIds::ID_ToolsTranslate, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ToolbarPanel::OnToggleToolButton ), NULL, this );
+    
+    m_RotateButton->SetId( EventIds::ID_ToolsRotate );
+    m_RotateButton->Connect( EventIds::ID_ToolsRotate, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ToolbarPanel::OnToggleToolButton ), NULL, this );
+    
+    m_ScaleButton->SetId( EventIds::ID_ToolsScale );
+    m_ScaleButton->Connect( EventIds::ID_ToolsScale, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ToolbarPanel::OnToggleToolButton ), NULL, this );
+    
+    m_DuplicateToolButton->SetId( EventIds::ID_ToolsDuplicate );
+    m_DuplicateToolButton->Connect( EventIds::ID_ToolsDuplicate, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ToolbarPanel::OnToggleToolButton ), NULL, this );
+    
+    m_LocatorToolButton->SetId( EventIds::ID_ToolsLocatorCreate );
+    m_LocatorToolButton->Connect( EventIds::ID_ToolsLocatorCreate, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ToolbarPanel::OnToggleToolButton ), NULL, this );
+    
+    m_VolumeToolButton->SetId( EventIds::ID_ToolsVolumeCreate );
+    m_VolumeToolButton->Connect( EventIds::ID_ToolsVolumeCreate, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ToolbarPanel::OnToggleToolButton ), NULL, this );
+    
+    m_EntityToolButton->SetId( EventIds::ID_ToolsEntityCreate );
+    m_EntityToolButton->Connect( EventIds::ID_ToolsEntityCreate, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ToolbarPanel::OnToggleToolButton ), NULL, this );
+    
+    m_CurveToolLocator->SetId( EventIds::ID_ToolsCurveCreate );
+    m_CurveToolLocator->Connect( EventIds::ID_ToolsCurveCreate, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ToolbarPanel::OnToggleToolButton ), NULL, this );
+    
+    m_CurveEditToolButton->SetId( EventIds::ID_ToolsCurveEdit );
+    m_CurveEditToolButton->Connect( EventIds::ID_ToolsCurveEdit, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ToolbarPanel::OnToggleToolButton ), NULL, this );
 
     Layout();
 }
@@ -84,6 +115,23 @@ void ToolbarPanel::ToggleTool( i32 selectedTool )
     {
         (*itr)->SetValue( (*itr)->GetId() == selectedTool );
     }
+}
+
+void ToolbarPanel::EnableTools( const bool enable )
+{
+    m_SelectButton->Enable( enable );
+    m_TranslateButton->Enable( enable );
+    m_RotateButton->Enable( enable );
+    m_ScaleButton->Enable( enable );
+
+    m_DuplicateToolButton->Enable( enable );
+    m_LocatorToolButton->Enable( enable );
+    m_VolumeToolButton->Enable( enable );
+    m_EntityToolButton->Enable( enable );
+    m_CurveToolLocator->Enable( enable );
+    m_CurveEditToolButton->Enable( enable );
+
+    Refresh();
 }
 
 void ToolbarPanel::OnToggleToolButton( wxCommandEvent& event )

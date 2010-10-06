@@ -61,9 +61,11 @@ namespace Helium
             bool                    m_Override;
         };
 
-        class ColorPickerWidget : public Reflect::ConcreteInheritor< ColorPickerWidget, Widget >
+        class ColorPickerWidget : public Widget
         {
         public:
+            REFLECT_DECLARE_CLASS( ColorPickerWidget, Widget );
+
             ColorPickerWidget()
                 : m_ColorPickerControl( NULL )
                 , m_ColorPickerWindow( NULL )

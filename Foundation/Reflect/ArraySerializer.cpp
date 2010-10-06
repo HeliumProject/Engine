@@ -340,20 +340,18 @@ void SimpleArraySerializer<T>::Deserialize(Archive& archive)
 template < class T >
 tostream& SimpleArraySerializer<T>::operator>> (tostream& stream) const
 {
-    if (!TranslateOutput( stream ))
+    DataType::const_iterator itr = m_Data->begin();
+    DataType::const_iterator end = m_Data->end();
+    for ( ; itr != end; ++itr )
     {
-        DataType::const_iterator itr = m_Data->begin();
-        DataType::const_iterator end = m_Data->end();
-        for ( ; itr != end; ++itr )
+        if ( itr != m_Data->begin() )
         {
-            if ( itr != m_Data->begin() )
-            {
-                stream << s_ContainerItemDelimiter;
-            }
-
-            stream << *itr;
+            stream << s_ContainerItemDelimiter;
         }
+
+        stream << *itr;
     }
+
     return stream;
 }
 
@@ -362,15 +360,13 @@ tistream& SimpleArraySerializer<T>::operator<< (tistream& stream)
 {
     m_Data->clear();
 
-    if (!TranslateInput( stream ))
-    {
-        tstring str;
-        std::streamsize size = stream.rdbuf()->in_avail();
-        str.resize( (size_t) size );
-        stream.read( const_cast< tchar* >( str.c_str() ), size );
+    tstring str;
+    std::streamsize size = stream.rdbuf()->in_avail();
+    str.resize( (size_t) size );
+    stream.read( const_cast< tchar* >( str.c_str() ), size );
 
-        Tokenize<T, T>( str, m_Data.Ref(), s_ContainerItemDelimiter );
-    }
+    Tokenize<T, T>( str, m_Data.Ref(), s_ContainerItemDelimiter );
+
     return stream;
 }
 
@@ -507,15 +503,13 @@ tistream& SimpleArraySerializer<u8>::operator<< (tistream& stream)
 {
     m_Data->clear();
 
-    if (!TranslateInput( stream ))
-    {
-        tstring str;
-        std::streamsize size = stream.rdbuf()->in_avail();
-        str.resize( (size_t) size );
-        stream.read(const_cast< tchar* >( str.c_str() ), size );
+    tstring str;
+    std::streamsize size = stream.rdbuf()->in_avail();
+    str.resize( (size_t) size );
+    stream.read(const_cast< tchar* >( str.c_str() ), size );
 
-        Tokenize<u8, u16>( str, m_Data.Ref(), s_ContainerItemDelimiter );
-    }
+    Tokenize<u8, u16>( str, m_Data.Ref(), s_ContainerItemDelimiter );
+
     return stream;
 }
 
@@ -524,15 +518,13 @@ tistream& SimpleArraySerializer<i8>::operator<< (tistream& stream)
 {
     m_Data->clear();
 
-    if (!TranslateInput( stream ))
-    {
-        tstring str;
-        std::streamsize size = stream.rdbuf()->in_avail();
-        str.resize( (size_t) size );
-        stream.read(const_cast< tchar* >( str.c_str() ), size );
+    tstring str;
+    std::streamsize size = stream.rdbuf()->in_avail();
+    str.resize( (size_t) size );
+    stream.read(const_cast< tchar* >( str.c_str() ), size );
 
-        Tokenize<i8, i16>( str, m_Data.Ref(), s_ContainerItemDelimiter );
-    }
+    Tokenize<i8, i16>( str, m_Data.Ref(), s_ContainerItemDelimiter );
+
     return stream;
 }
 #endif // UNICODE

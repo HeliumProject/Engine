@@ -81,9 +81,9 @@ tstring Mesh::GetApplicationTypeName() const
     return TXT( "Mesh" );
 }
 
-void Mesh::Initialize()
+void Mesh::Initialize(Scene* scene)
 {
-    __super::Initialize();
+    __super::Initialize(scene);
 
     //
     // Dereference Shaders
@@ -144,11 +144,13 @@ void Mesh::Initialize()
     m_Indices->SetElementType( ElementTypes::Unsigned32 );
     m_Indices->SetElementCount( (u32)(m_WireframeVertexIndices.size() + m_TriangleVertexIndices.size()) );
     m_Indices->SetPopulator( PopulateSignature::Delegate( this, &Mesh::Populate ) );
+    m_Indices->Create();
 
     m_Vertices = new VertexResource ( m_Owner->GetViewport()->GetResources() );
     m_Vertices->SetElementType( ElementTypes::StandardVertex );
     m_Vertices->SetElementCount( (u32)m_Positions.size() );
     m_Vertices->SetPopulator( PopulateSignature::Delegate( this, &Mesh::Populate ) );
+    m_Vertices->Create();
 }
 
 void Mesh::Create()
@@ -2004,4 +2006,25 @@ void Mesh::PunchCubeHole(Math::Matrix4& mat, Math::Matrix4& inv_mat, f32 vert_me
         DeleteTris(tris_to_be_deleted);
         WeldMeshVerts(0.001f);
     }
+}
+
+u32 Mesh::AddShader( Shader* shader )
+{
+    u32 index = 0;
+    for ( V_ShaderDumbPtr::const_iterator itr = m_Shaders.begin(), end = m_Shaders.end(); itr != end; ++itr, ++index )
+    {
+        if ( *itr == shader )
+        {
+            return index;
+        }
+    }
+
+    if ( m_Owner )
+    {
+        m_Owner->AddObject( shader );
+    }
+
+    m_Shaders.push_back( shader );
+    m_ShaderIDs.push_back( shader->GetID() );
+    return (u32)m_Shaders.size() - 1;
 }

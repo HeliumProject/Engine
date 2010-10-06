@@ -17,9 +17,11 @@ namespace Helium
             LabelWidget*    m_LabelWidget;
         };
 
-        class LabelWidget : public Reflect::ConcreteInheritor< LabelWidget, Widget >
+        class LabelWidget : public Widget
         {
         public:
+            REFLECT_DECLARE_CLASS( LabelWidget, Widget );
+
             LabelWidget()
                 : m_LabelControl( NULL )
                 , m_LabelWindow( NULL )

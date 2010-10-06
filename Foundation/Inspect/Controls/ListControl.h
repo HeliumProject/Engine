@@ -27,9 +27,11 @@ namespace Helium
         };
         typedef Helium::Signature< const AddItemArgs& > AddItemSignature;
 
-        class FOUNDATION_API List : public Reflect::ConcreteInheritor<List, Control>
+        class FOUNDATION_API List : public Control
         {
         public:
+            REFLECT_DECLARE_CLASS( List, Control );
+
             List();
 
             virtual bool Process(const tstring& key, const tstring& value) HELIUM_OVERRIDE;

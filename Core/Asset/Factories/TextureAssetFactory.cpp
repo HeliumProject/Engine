@@ -13,7 +13,7 @@ using namespace Helium::Asset;
 AssetClassPtr TextureAssetFactory::Create( const Helium::Path& path )
 {
     Helium::Path assetPath = path;
-    assetPath.ReplaceExtension( TXT( "texture.nrb" ) );
+    assetPath.ReplaceExtension( TXT( "texture.hrb" ) );
 
     if ( assetPath.Exists() )
     {
@@ -21,7 +21,7 @@ AssetClassPtr TextureAssetFactory::Create( const Helium::Path& path )
     }
 
     TexturePtr texture = new Texture();
-    texture->SetPath( path.Filename() ); // we're dropping this guy relative to the data file
+    texture->SetContentPath( path.Filename() ); // we're dropping this guy relative to the data file
 
     TextureProcessingComponentPtr textureProcessingComponent = new TextureProcessingComponent();
     texture->SetComponent( textureProcessingComponent );
@@ -29,7 +29,7 @@ AssetClassPtr TextureAssetFactory::Create( const Helium::Path& path )
     try
     {
         Reflect::Archive::ToFile( texture, assetPath );
-        texture->SetSerializationPath( assetPath );
+        texture->SetSourcePath( assetPath );
     }
     catch( Helium::Exception& )
     {

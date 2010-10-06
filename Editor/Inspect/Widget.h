@@ -6,9 +6,11 @@ namespace Helium
 {
     namespace Editor
     {
-        class Widget : public Reflect::AbstractInheritor< Widget, Inspect::Widget >, public wxEvtHandler
+        class Widget : public Inspect::Widget, public wxEvtHandler
         {
         public:
+            REFLECT_DECLARE_ABSTRACT( Widget, Inspect::Widget );
+
             Widget()
                 : m_Window( NULL )
             {

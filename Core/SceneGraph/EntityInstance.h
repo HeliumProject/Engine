@@ -35,6 +35,8 @@ namespace Helium
             EntityInstance();
             ~EntityInstance();
 
+            virtual void Initialize( Scene* scene ) HELIUM_OVERRIDE;
+
             virtual bool ValidatePersistent( const Component::ComponentPtr& attr ) const HELIUM_OVERRIDE;
             virtual const Component::ComponentPtr& GetComponent( i32 typeID ) const HELIUM_OVERRIDE;
             virtual bool SetComponent( const Component::ComponentPtr& component, bool validate = true, tstring* error = NULL ) HELIUM_OVERRIDE;
@@ -42,9 +44,10 @@ namespace Helium
             virtual tstring GenerateName() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
             virtual SceneNodeTypePtr CreateNodeType( Scene* scene ) const HELIUM_OVERRIDE;
+            void CheckSets();
 
             // retrieve the nested scene from the scene manager
-            Scene* GetNestedScene(GeometryMode mode, bool load_on_demand = true) const;
+            Scene* GetNestedScene();
 
             tstring GetEntityPath() const;
             void SetEntityPath( const tstring& path );

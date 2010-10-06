@@ -11,8 +11,8 @@ namespace Helium
         public:
             REFLECT_DECLARE_CLASS( BitfieldSerializer, EnumerationSerializer )
 
-                BitfieldSerializer ();
-            virtual ~BitfieldSerializer();
+            BitfieldSerializer ();
+            ~BitfieldSerializer();
 
             virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;
             virtual void Deserialize(Archive& archive) HELIUM_OVERRIDE;

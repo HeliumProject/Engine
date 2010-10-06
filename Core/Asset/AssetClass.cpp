@@ -25,10 +25,9 @@ std::map< tstring, AssetFactory* > AssetClass::s_AssetFactories;
 REFLECT_DEFINE_ABSTRACT( AssetClass );
 void AssetClass::EnumerateClass( Reflect::Compositor<AssetClass>& comp )
 {
-    comp.AddField( &AssetClass::m_Description, "m_Description" );
-    comp.AddField( &AssetClass::m_Tags, "m_Tags" );
-
-    comp.AddField( &AssetClass::m_Path, "m_Path", Reflect::FieldFlags::Hide );
+    comp.AddField( &AssetClass::m_Description,  "m_Description" );
+    comp.AddField( &AssetClass::m_Tags,         "m_Tags" );
+    comp.AddField( &AssetClass::m_ContentPath,  "m_ContentPath" );
 }
 
 AssetClass::AssetClass()
@@ -43,7 +42,7 @@ AssetClassPtr AssetClass::LoadAssetClass( const tchar* path )
         Helium::Path filePath( path );
 
         assetClass = Reflect::Archive::FromFile< AssetClass >( filePath );
-        assetClass->SetSerializationPath( filePath );
+        assetClass->SetSourcePath( filePath );
         assetClass->LoadFinished();
     }
     catch ( const Helium::Exception& exception )
@@ -59,19 +58,19 @@ Helium::Path AssetClass::GetBuiltDirectory()
 {
 #pragma TODO( "make human-readable built directories" )
     tstringstream str;
-    str << TUID_HEX_FORMAT << m_Path.Hash();
+    str << TUID_HEX_FORMAT << m_SourcePath.Hash();
     Helium::Path builtDirectory( s_BaseBuiltDirectory + TXT( "/" ) + str.str() );
     return builtDirectory;
 }
 
 tstring AssetClass::GetFullName() const
 {
-    return m_Path.Get();
+    return m_SourcePath.Get();
 }
 
 tstring AssetClass::GetShortName() const
 {
-    return m_Path.Basename();
+    return m_SourcePath.Basename();
 }
 
 void AssetClass::GatherSearchableProperties( Helium::SearchableProperties* properties ) const
@@ -208,7 +207,7 @@ namespace Helium
                     const Reflect::V_Element& vals = arraySerializer->m_Data.Ref();
                     for ( Reflect::V_Element::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
                     {
-                        (*itr)->Host( *this );
+                        (*itr)->Accept( *this );
                     }
 
                     return false;
@@ -230,7 +229,7 @@ namespace Helium
                     Reflect::ElementMapSerializer::V_ConstValueType::const_iterator end = data.end();
                     for ( ; itr != end; ++itr )
                     {
-                        (*itr->second)->Host( *this );
+                        (*itr->second)->Accept( *this );
                     }
 
                     return false;
@@ -248,7 +247,7 @@ namespace Helium
                     const Reflect::ElementSetSerializer::DataType& vals = setSerializer->m_Data.Ref();
                     for ( Reflect::ElementSetSerializer::DataType::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
                     {
-                        (*itr)->Host( *this );
+                        (*itr)->Accept( *this );
                     }
 
                     return false;
@@ -264,11 +263,11 @@ namespace Helium
 void AssetClass::GetFileReferences( std::set< Helium::Path >& fileReferences )
 {
     AssetDependencyVisitor assetDepVisitor( fileReferences );
-    this->Host( assetDepVisitor );
+    this->Accept( assetDepVisitor );
 
     //__super::GetFileReferences( fileReferences );
 
-    fileReferences.erase( m_Path );
+    fileReferences.insert( m_ContentPath );
 }
 
 void AssetClass::ComponentChanged( const Component::ComponentBase* component )
@@ -289,7 +288,7 @@ bool AssetClass::RemoveComponent( i32 typeID )
 void AssetClass::Serialize()
 {
     Reflect::Version version( TXT( "Pipeline" ), ASSET_VERSION );
-    Reflect::Archive::ToFile( this, m_Path, &version );
+    Reflect::Archive::ToFile( this, m_SourcePath, &version );
 
     m_Modified = false;
 }

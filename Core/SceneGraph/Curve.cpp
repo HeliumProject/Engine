@@ -91,9 +91,9 @@ tstring Curve::GetApplicationTypeName() const
     return TXT( "Curve" );
 }
 
-void Curve::Initialize()
+void Curve::Initialize(Scene* scene)
 {
-    __super::Initialize();
+    __super::Initialize(scene);
 
     OS_HierarchyNodeDumbPtr::Iterator childItr = GetChildren().Begin();
     OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();

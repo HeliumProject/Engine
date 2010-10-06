@@ -6,9 +6,11 @@
 
 namespace Helium
 {
-    class CORE_API Project : public Reflect::ConcreteInheritor< Project, Reflect::Element >
+    class CORE_API Project : public Reflect::Element
     {
     public:
+        REFLECT_DECLARE_CLASS( Project, Reflect::Element );
+
         Project( const Path& path = TXT( "" ) );
         virtual ~Project();
 

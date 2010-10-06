@@ -37,7 +37,6 @@
 #include "Core/SceneGraph/InstanceType.h"
 #include "Core/SceneGraph/EntityInstance.h"
 #include "Core/SceneGraph/EntityInstanceType.h"
-#include "Core/SceneGraph/EntitySet.h"
 #include "Core/SceneGraph/Volume.h"
 #include "Core/SceneGraph/Locator.h"
 #include "Core/SceneGraph/Light.h"
@@ -73,7 +72,7 @@ Scene::Scene( SceneGraph::Viewport* viewport, const Helium::Path& path )
 
     // Setup root node
     m_Root = new PivotTransform();
-    m_Root->SetOwner( this );
+    m_Root->Initialize( this );
     m_Root->SetName( TXT( "Root" ) );
     m_Root->Evaluate( GraphDirections::Downstream );
     m_Graph->AddNode( m_Root.Ptr() );
@@ -103,7 +102,7 @@ Scene::~Scene()
 bool Scene::IsEditable()
 {
     SceneEditingArgs args ( this );
-    m_EditingDelegate.Invoke( args );
+    d_Editing.Invoke( args );
     return !args.m_Veto;
 }
 
@@ -135,7 +134,7 @@ void Scene::SetTool(const ToolPtr& tool)
     // cancel pick, if any
     if (m_PickData.ReferencesObject())
     {
-        m_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Picking, SceneContexts::Normal ) );
+        e_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Picking, SceneContexts::Normal ) );
         m_PickData = NULL;
     }
 }
@@ -190,7 +189,7 @@ Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u
         return NULL;
     }
 
-    m_LoadStarted.Raise( LoadArgs( this ) );
+    e_LoadStarted.Raise( LoadArgs( this ) );
 
     if ( !importRoot )
     {
@@ -207,7 +206,7 @@ Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u
 
     tostringstream str;
     str << "Loading File: " << path.c_str();
-    m_StatusChanged.Raise( str.str() );
+    e_StatusChanged.Raise( str.str() );
 
     // read data
     m_Progress = 0;
@@ -234,7 +233,7 @@ Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u
     }
 
     m_ImportRoot = m_Root;
-    m_LoadFinished.Raise( LoadArgs( this, success ) );
+    e_LoadFinished.Raise( LoadArgs( this, success ) );
 
     return command;
 }
@@ -243,7 +242,7 @@ Undo::CommandPtr Scene::ImportXML( const tstring& xml, u32 importFlags, SceneGra
 {
     CORE_SCOPE_TIMER( ("") );
 
-    m_LoadStarted.Raise( LoadArgs( this ) );
+    e_LoadStarted.Raise( LoadArgs( this ) );
 
     if ( xml.empty() )
     {
@@ -260,7 +259,7 @@ Undo::CommandPtr Scene::ImportXML( const tstring& xml, u32 importFlags, SceneGra
 
     tostringstream str;
     str << "Parsing XML...";
-    m_StatusChanged.Raise( str.str() );
+    e_StatusChanged.Raise( str.str() );
 
     // read data
     m_Progress = 0;
@@ -287,7 +286,7 @@ Undo::CommandPtr Scene::ImportXML( const tstring& xml, u32 importFlags, SceneGra
     }
 
     m_ImportRoot = m_Root;
-    m_LoadFinished.Raise( LoadArgs( this, success ) );
+    e_LoadFinished.Raise( LoadArgs( this, success ) );
 
     return command;
 }
@@ -347,8 +346,8 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
     // 
 
     m_Importing = true;
-    m_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Normal, SceneContexts::Loading ) );
-    m_StatusChanged.Raise( tstring( TXT("Loading Objects") ) );
+    e_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Normal, SceneContexts::Loading ) );
+    e_StatusChanged.Raise( tstring( TXT("Loading Objects") ) );
 
     m_RemappedIDs.clear();
 
@@ -458,17 +457,17 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
     // 
 
     // evaluate the graph to build global transforms
-    m_StatusChanged.Raise( tstring( TXT("Evaluating Objects...") ) );
+    e_StatusChanged.Raise( tstring( TXT("Evaluating Objects...") ) );
     Evaluate(true);
 
     // initialize each object after initial evaluation is complete
     V_HierarchyNodeDumbPtr newNodes;
-    m_StatusChanged.Raise( tstring( TXT("Initializing Objects...") ) );
+    e_StatusChanged.Raise( tstring( TXT("Initializing Objects...") ) );
     V_SceneNodeSmartPtr::const_iterator itr = createdNodes.begin();
     V_SceneNodeSmartPtr::const_iterator end = createdNodes.end();
     for ( ; itr != end; ++itr )
     {
-        (*itr)->Initialize();
+        (*itr)->Initialize( this );
 
         if ( importFlags & ImportFlags::Select )
         {
@@ -513,7 +512,7 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
         V_SceneNodeSmartPtr::iterator end = createdNodes.end();
         for ( ; itr != end; ++itr )
         {
-            m_NodeAdded.Raise( NodeChangeArgs( *itr ) );
+            e_NodeAdded.Raise( NodeChangeArgs( *itr ) );
         }
     }
 
@@ -521,11 +520,11 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
     tostringstream str;
     str.precision( 2 );
     str << "Scene Loading Complete: " << std::fixed << Helium::CyclesToMillis( Helium::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
-    m_StatusChanged.Raise( str.str() );
+    e_StatusChanged.Raise( str.str() );
 
     // done
-    m_StatusChanged.Raise( tstring( TXT("Ready") ) );
-    m_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Loading, SceneContexts::Normal ) );
+    e_StatusChanged.Raise( tstring( TXT("Ready") ) );
+    e_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Loading, SceneContexts::Normal ) );
     m_Importing = false;
 
     return command;
@@ -535,10 +534,12 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_S
 {
     CORE_SCOPE_TIMER( ("ImportSceneNode: %s", element->GetClass()->m_ShortName.c_str()) );
 
-    SceneNodePtr createdNode = NULL;
+    SceneNodePtr sceneNode = Reflect::ObjectCast< SceneNode >( element );
 
-    if( importReflectType == Reflect::ReservedTypes::Invalid )
+    if ( importReflectType == Reflect::ReservedTypes::Invalid )
+    {
         importReflectType = Reflect::GetType< SceneNode >();
+    }
 
     // 
     // Merging Nodes / Duplicate ID check
@@ -558,7 +559,6 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_S
                 {
                     SceneGraph::SceneNode* dependNode = find->second;
                     element->CopyTo( dependNode );
-                    dependNode->Unpack();
                     dependNode->Dirty();
                 }    
             }
@@ -580,20 +580,18 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_S
 
     if ( convertNode )
     {
-        if ( createdNode.ReferencesObject() )
+        if ( sceneNode.ReferencesObject() )
         {
-            createdNode->Unpack();
-
             // update ui
             tostringstream str;
-            str << TXT( "Loading: " ) + createdNode->GetName();
-            m_StatusChanged.Raise( str.str() );
+            str << TXT( "Loading: " ) + sceneNode->GetName();
+            e_StatusChanged.Raise( str.str() );
 
             // save it in the list of created nodes
-            createdNodes.push_back( createdNode );
+            createdNodes.push_back( sceneNode );
 
             // add object to the scene
-            return new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, this, createdNode );
+            return new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, this, sceneNode );
         }
     }
 
@@ -611,7 +609,7 @@ void Scene::ArchiveStatus(Reflect::StatusInfo& info)
 
             tostringstream str;
             str << verb << " " << type << " File: " << info.m_Archive.GetPath();
-            m_StatusChanged.Raise( str.str() );
+            e_StatusChanged.Raise( str.str() );
             break;
         }
 
@@ -626,7 +624,7 @@ void Scene::ArchiveStatus(Reflect::StatusInfo& info)
 
                     tostringstream str;
                     str << verb << ": " << info.m_Archive.GetPath() << " (" << m_Progress << "%)";
-                    m_StatusChanged.Raise( str.str() );
+                    e_StatusChanged.Raise( str.str() );
                 }
             }
 
@@ -639,7 +637,7 @@ void Scene::ArchiveStatus(Reflect::StatusInfo& info)
 
             tostringstream str;
             str << "Completed " << verb << ": " << info.m_Archive.GetPath();
-            m_StatusChanged.Raise( str.str() );
+            e_StatusChanged.Raise( str.str() );
             break;
         }
 
@@ -647,7 +645,7 @@ void Scene::ArchiveStatus(Reflect::StatusInfo& info)
         {
             tostringstream str;
             str << "Processing: " << info.m_Archive.GetPath();
-            m_StatusChanged.Raise( str.str() );
+            e_StatusChanged.Raise( str.str() );
             break;
         }
     }
@@ -774,7 +772,6 @@ void Scene::ExportSceneNode( SceneGraph::SceneNode* node, Reflect::V_Element& el
                 changes->Push( new ParentCommand( transformNode, GetRoot() ) );
             }
 
-            node->Pack();
             elements.push_back( node );
             exported.insert( node->GetID() );
 
@@ -868,14 +865,14 @@ bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
 
     bool result = false;
 
-    m_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Normal, SceneContexts::Saving ) );
+    e_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Normal, SceneContexts::Saving ) );
 
     m_Progress = 0;
 
     {
         tostringstream str;
         str << "Preparing to save: " << path.c_str();
-        m_StatusChanged.Raise( str.str() );
+        e_StatusChanged.Raise( str.str() );
     }
 
     Undo::BatchCommandPtr changes = new Undo::BatchCommand();
@@ -898,13 +895,13 @@ bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
 
     changes->Undo();
 
-    m_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Saving, SceneContexts::Normal ) );
+    e_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Saving, SceneContexts::Normal ) );
 
     {
         tostringstream str;
         str.precision( 2 );
         str << "Saving Complete: " << std::fixed << Helium::CyclesToMillis( Helium::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
-        m_StatusChanged.Raise( str.str() );
+        e_StatusChanged.Raise( str.str() );
     }
 
     return result;
@@ -923,14 +920,14 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
 
     u64 startTimer = Helium::TimerGetClock();
 
-    m_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Normal, SceneContexts::Saving ) );
+    e_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Normal, SceneContexts::Saving ) );
 
     m_Progress = 0;
 
     {
         tostringstream str;
         str << "Preparing to export";
-        m_StatusChanged.Raise( str.str() );
+        e_StatusChanged.Raise( str.str() );
     }
 
     Undo::BatchCommandPtr changes = new Undo::BatchCommand();
@@ -954,13 +951,13 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
 
     changes->Undo();
 
-    m_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Saving, SceneContexts::Normal ) );
+    e_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Saving, SceneContexts::Normal ) );
 
     {
         tostringstream str;
         str.precision( 2 );
         str << "Export Complete: " << std::fixed << Helium::CyclesToMillis( Helium::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
-        m_StatusChanged.Raise( str.str() );
+        e_StatusChanged.Raise( str.str() );
     }
 
     return result;
@@ -1166,7 +1163,7 @@ void Scene::AddNodeType(const SceneNodeTypePtr& nodeType)
         baseTypeSet.first->second.insert( nodeType );
     }
 
-    m_NodeTypeCreated.Raise( nodeType.Ptr() );
+    e_NodeTypeCreated.Raise( nodeType.Ptr() );
 }
 
 void Scene::RemoveNodeType(const SceneNodeTypePtr& nodeType)
@@ -1197,7 +1194,7 @@ void Scene::RemoveNodeType(const SceneNodeTypePtr& nodeType)
         }
     }
 
-    m_NodeTypeDeleted.Raise( nodeType.Ptr() );
+    e_NodeTypeDeleted.Raise( nodeType.Ptr() );
 }
 
 void Scene::AddObject( const SceneNodePtr& node )
@@ -1256,12 +1253,40 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
     }
 
     {
-
         SceneGraph::SceneNodeType* t = node->GetNodeType();
         if ( t == NULL )
         {
             CORE_SCOPE_TIMER( ("Deduce node type") );
-            t = node->DeduceNodeType();
+
+            SceneNodeTypePtr nodeType;
+
+            // this string will be the encoded type information for this node
+            const tstring name = node->GetApplicationTypeName();
+
+            // attempt to find a "natural" simple type for this object in the scene (matches compile-time type)
+            HM_StrToSceneNodeTypeSmartPtr::const_iterator found = m_NodeTypesByName.find( name );
+
+            // did we find it?
+            if ( found != m_NodeTypesByName.end() )
+            {
+                // this is our type
+                nodeType = found->second;
+            }
+
+            // second attempt failed, this must be the first object of a new type, ask the object to create a type for it
+            if (!nodeType)
+            {
+                // create it
+                nodeType = node->CreateNodeType( this );
+
+                // set its name
+                nodeType->SetName( name );
+
+                // add it to the scene
+                AddNodeType( nodeType );
+            }
+
+            t = nodeType;
         }
 
         {
@@ -1280,6 +1305,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
 
     {
         CORE_SCOPE_TIMER( ("Create") );
+
         // (re)creates disposable resources in object
         node->Create();
     }
@@ -1301,7 +1327,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
         CORE_SCOPE_TIMER( ("Raise events if not transient") );
         if ( !node->IsTransient() && !m_Importing )
         {
-            m_NodeAdded.Raise( NodeChangeArgs( node.Ptr() ) );
+            e_NodeAdded.Raise( NodeChangeArgs( node.Ptr() ) );
         }
     }
 }
@@ -1312,18 +1338,14 @@ void Scene::RemoveSceneNode( const SceneNodePtr& node )
 
     if ( !node->IsTransient() )
     {
-        m_NodeRemoving.Raise( NodeChangeArgs( node.Ptr() ) );
+        e_NodeRemoving.Raise( NodeChangeArgs( node.Ptr() ) );
     }
 
     // remove shortcuts to node and children
     m_Nodes.erase( node->GetID() );
 
     SceneGraph::SceneNodeType* t = node->GetNodeType();
-    if ( t == NULL )
-    {
-        t = node->DeduceNodeType();
-    }
-
+    HELIUM_ASSERT( t );
     t->RemoveInstance( node );
 
     // cleanup name
@@ -1334,7 +1356,7 @@ void Scene::RemoveSceneNode( const SceneNodePtr& node )
 
     if ( !node->IsTransient() )
     {
-        m_NodeRemoved.Raise( NodeChangeArgs( node.Ptr() ) );
+        e_NodeRemoved.Raise( NodeChangeArgs( node.Ptr() ) );
     }
 }
 
@@ -1356,7 +1378,7 @@ void Scene::Execute(bool interactively)
     // update data
     Evaluate();
 
-    m_Executed.Raise( ExecuteArgs (this, interactively) );
+    e_Executed.Raise( ExecuteArgs (this, interactively) );
 }
 
 void Scene::Create()
@@ -1518,7 +1540,7 @@ void Scene::Select( const SelectArgs& args )
 
 void Scene::PickLink( const Inspect::PickLinkArgs& args )
 {
-    m_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Normal, SceneContexts::Picking ) );
+    e_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Normal, SceneContexts::Picking ) );
     m_PickData = args.m_Data;
 }
 
@@ -1689,13 +1711,13 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
             status += TXT(" (") + desc + TXT( ")" );
         }
 
-        m_StatusChanged.Raise( status );
+        e_StatusChanged.Raise( status );
     }
     else if (m_Highlighted.Size() > 1)
     {
         tostringstream str;
         str << m_Highlighted.Size() << " items";
-        m_StatusChanged.Raise( str.str() );
+        e_StatusChanged.Raise( str.str() );
     }
 }
 
@@ -1739,7 +1761,7 @@ bool Scene::Push(const Undo::CommandPtr& command)
     }
 
     UndoCommandArgs args ( command );
-    m_UndoCommandDelegate.Invoke( args );
+    d_UndoCommand.Invoke( args );
     return true;
 }
 
@@ -1820,7 +1842,7 @@ SceneGraph::SceneNode* Scene::FindNode(const tstring& name)
 
 void Scene::ChangeStatus(const tstring& status)
 {
-    m_StatusChanged.Raise( status );
+    e_StatusChanged.Raise( status );
 }
 
 void Scene::RefreshSelection()
@@ -1886,7 +1908,7 @@ void Scene::SelectionChanging( const SelectionChangingArgs& args )
             }
         }
 
-        m_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Picking, SceneContexts::Normal ) );
+        e_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Picking, SceneContexts::Normal ) );
         m_PickData = NULL;
     }
 
@@ -1909,7 +1931,7 @@ void Scene::SelectionChanged( const SelectionChangeArgs& args )
         str << "Selected " << args.m_Selection.Size() << " objects";
     }
 
-    m_StatusChanged.Raise( str.str() );
+    e_StatusChanged.Raise( str.str() );
 
     Execute(false);
 }
@@ -2566,7 +2588,7 @@ Undo::CommandPtr Scene::GroupSelected()
 
     // Create the new group
     SceneGraph::PivotTransform* group = new SceneGraph::PivotTransform();
-    group->SetOwner( this );
+    group->Initialize( this );
 
     // Get a decent name
     group->Rename( TXT( "group1" ) );
@@ -2721,7 +2743,7 @@ Undo::CommandPtr Scene::DuplicateSelected()
         duplicate->SetParent( node->GetParent() );
 
         // make sure the new nodes are initialized
-        duplicate->InitializeHierarchy();
+        duplicate->InitializeHierarchy( node->GetOwner() );
     }
 
     // setting the selection will invalidate the flag for having a valid smart duplicate matrix
@@ -2788,7 +2810,7 @@ Undo::CommandPtr Scene::SmartDuplicateSelected()
     batch->Push( new Undo::PropertyCommand<Math::Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Math::Matrix4> (transform, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), matrix ) );
 
     // make sure the new nodes are initialized
-    duplicate->InitializeHierarchy();
+    duplicate->InitializeHierarchy( node->GetOwner() );
 
     // setting the selection will invalidate the flag for having a valid smart duplicate matrix
     batch->Push( m_Selection.SetItem(duplicate) );
@@ -2925,11 +2947,11 @@ void Scene::MeasureDistance()
 
         str << first->GetName() << " is " << distance << " meters from " << second->GetName();
 
-        m_StatusChanged.Raise( SceneStatusChangeArgs (str.str()) );
+        e_StatusChanged.Raise( SceneStatusChangeArgs (str.str()) );
     }
     else
     {
-        m_StatusChanged.Raise( SceneStatusChangeArgs( TXT( "Please select 2 placed objects and try again" ) ) );
+        e_StatusChanged.Raise( SceneStatusChangeArgs( TXT( "Please select 2 placed objects and try again" ) ) );
     }
 }
 

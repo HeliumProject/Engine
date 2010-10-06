@@ -10,9 +10,11 @@ namespace Helium
         const static tchar SLIDER_ATTR_MIN[] = TXT( "min" );
         const static tchar SLIDER_ATTR_MAX[] = TXT( "max" );
 
-        class FOUNDATION_API Slider : public Reflect::ConcreteInheritor<Slider, Control>
+        class FOUNDATION_API Slider : public Control
         {
         public:
+            REFLECT_DECLARE_CLASS( Slider, Control );
+
             Slider();
 
             virtual bool Process( const tstring& key, const tstring& value );

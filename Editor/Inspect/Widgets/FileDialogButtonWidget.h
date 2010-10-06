@@ -17,9 +17,11 @@ namespace Helium
             FileDialogButtonWindow( wxWindow* parent, FileDialogButtonWidget* buttonWidget );
         };
 
-        class FileDialogButtonWidget : public Reflect::ConcreteInheritor< FileDialogButtonWidget, ButtonWidget >
+        class FileDialogButtonWidget : public ButtonWidget
         {
         public:
+            REFLECT_DECLARE_CLASS( FileDialogButtonWidget, ButtonWidget );
+
             FileDialogButtonWidget()
             {
 

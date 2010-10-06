@@ -7,7 +7,6 @@
 #include "Core/SceneGraph/Scene.h"
 #include "Core/SceneGraph/EntityInstance.h"
 #include "Core/SceneGraph/EntityInstanceType.h"
-#include "Core/SceneGraph/EntitySet.h"
 #include "Core/SceneGraph/Pick.h"
 #include "Core/Asset/AssetInit.h"
 #include "Core/Asset/Classes/Entity.h"
@@ -96,7 +95,8 @@ SceneGraph::TransformPtr EntityInstanceCreateTool::CreateNode()
         }
 
         EntityInstancePtr entityInstance = new EntityInstance ();
-        entityInstance->SetOwner( m_Scene );
+        entityInstance->Initialize( m_Scene );
+        entityInstance->SetEntityPath( entityClassPath );
         entityInstance->SetPointerVisible( s_PointerVisible );
         entityInstance->SetBoundsVisible( s_BoundsVisible );
         entityInstance->SetGeometryVisible( s_GeometryVisible );

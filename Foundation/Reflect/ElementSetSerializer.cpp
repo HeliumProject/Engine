@@ -126,7 +126,7 @@ void ElementSetSerializer::Deserialize(Archive& archive)
     }
 }
 
-void ElementSetSerializer::Host(Visitor& visitor)
+void ElementSetSerializer::Accept(Visitor& visitor)
 {
     DataType::iterator itr = const_cast<Serializer::DataPtr<DataType>&>(m_Data)->begin();
     DataType::iterator end = const_cast<Serializer::DataPtr<DataType>&>(m_Data)->end();
@@ -146,6 +146,6 @@ void ElementSetSerializer::Host(Visitor& visitor)
             continue;
         }
 
-        (*itr)->Host( visitor );
+        (*itr)->Accept( visitor );
     }
 }

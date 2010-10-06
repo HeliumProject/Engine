@@ -67,7 +67,12 @@ void Shader::Create()
 {
     __super::Create();
 
-#pragma TODO("Load texture data from shader asset")
+    if ( m_AssetPath.Exists() )
+    {
+        //m_BaseTexture = SceneGraph::LoadTexture( m_Scene->GetView()->GetDevice(), file, &m_BaseTextureSize, &m_Alpha );
+
+        //Profile::Memory::Allocate( g_ShaderTextureMemoryPool, m_BaseTextureSize );
+    }
 }
 
 void Shader::Delete()

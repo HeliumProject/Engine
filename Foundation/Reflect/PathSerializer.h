@@ -17,9 +17,9 @@ namespace Helium
             REFLECT_DECLARE_CLASS( PathSerializer, Serializer );
 
             PathSerializer();
-            virtual ~PathSerializer();
+            ~PathSerializer();
 
-            virtual bool IsCompact () const  HELIUM_OVERRIDE;
+            virtual bool IsCompact() const HELIUM_OVERRIDE { return true; }
 
             virtual void ConnectData( Helium::HybridPtr< void > data ) HELIUM_OVERRIDE;
 

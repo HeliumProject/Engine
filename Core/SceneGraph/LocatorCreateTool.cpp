@@ -63,7 +63,7 @@ TransformPtr LocatorCreateTool::CreateNode()
 #else
 
     TransformPtr node = new Locator ();
-    node->SetOwner( m_Scene );
+    node->Initialize( m_Scene );
     return node;
 
 #endif

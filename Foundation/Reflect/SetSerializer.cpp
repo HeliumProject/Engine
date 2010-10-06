@@ -232,20 +232,18 @@ void SimpleSetSerializer<DataT, DataSer>::Deserialize(Archive& archive)
 template < class DataT, class DataSer >
 tostream& SimpleSetSerializer<DataT, DataSer>::operator>> (tostream& stream) const
 {
-    if (!TranslateOutput( stream ))
+    DataType::const_iterator itr = m_Data->begin();
+    DataType::const_iterator end = m_Data->end();
+    for ( ; itr != end; ++itr )
     {
-        DataType::const_iterator itr = m_Data->begin();
-        DataType::const_iterator end = m_Data->end();
-        for ( ; itr != end; ++itr )
+        if ( itr != m_Data->begin() )
         {
-            if ( itr != m_Data->begin() )
-            {
-                stream << s_ContainerItemDelimiter;
-            }
-
-            stream << *itr;
+            stream << s_ContainerItemDelimiter;
         }
+
+        stream << *itr;
     }
+
     return stream;
 }
 
@@ -254,15 +252,13 @@ tistream& SimpleSetSerializer<DataT, DataSer>::operator<< (tistream& stream)
 {
     m_Data->clear();
 
-    if (!TranslateInput( stream ))
-    {
-        tstring str;
-        std::streamsize size = stream.rdbuf()->in_avail();
-        str.resize( (size_t) size);
-        stream.read( const_cast< tchar* >( str.c_str() ), size );
+    tstring str;
+    std::streamsize size = stream.rdbuf()->in_avail();
+    str.resize( (size_t) size);
+    stream.read( const_cast< tchar* >( str.c_str() ), size );
 
-        Tokenize< DataT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
-    }
+    Tokenize< DataT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
+
     return stream;
 }  
 

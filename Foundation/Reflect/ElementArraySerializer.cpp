@@ -104,7 +104,7 @@ void ElementArraySerializer::Deserialize(Archive& archive)
     archive.Deserialize(m_Data.Ref());
 }
 
-void ElementArraySerializer::Host(Visitor& visitor)
+void ElementArraySerializer::Accept(Visitor& visitor)
 {
     V_Element::iterator itr = const_cast<Serializer::DataPtr<DataType>&>(m_Data)->begin();
     V_Element::iterator end = const_cast<Serializer::DataPtr<DataType>&>(m_Data)->end();
@@ -120,6 +120,6 @@ void ElementArraySerializer::Host(Visitor& visitor)
             continue;
         }
 
-        (*itr)->Host( visitor );
+        (*itr)->Accept( visitor );
     }
 }

@@ -16,11 +16,6 @@ PathSerializer::~PathSerializer()
 {
 }
 
-bool PathSerializer::IsCompact() const 
-{ 
-    return true;
-}
-
 void PathSerializer::ConnectData( Helium::HybridPtr< void > data )
 {
     __super::ConnectData( data );

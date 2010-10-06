@@ -2984,6 +2984,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Importers"
+			>
+			<File
+				RelativePath=".\Importers\OBJImporter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Importers\OBJImporter.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\API.h"
 			>

@@ -64,10 +64,12 @@ namespace Helium
         // Reflect::Element is the abstract base class of a serializable unit
         //
 
-        class FOUNDATION_API Element HELIUM_ABSTRACT : public AbstractInheritor<Element, Object>
+        class FOUNDATION_API Element HELIUM_ABSTRACT : public Object
         {
         protected:
-            Element ();
+            REFLECT_DECLARE_ABSTRACT( Element, Object );
+
+            Element();
 
         public:
             // Reflection prototypes
@@ -106,7 +108,7 @@ namespace Helium
 
         public:
             // Visitor introspection support, should never ever change an object (but the visitor may)
-            virtual void                Host(Visitor& visitor);
+            virtual void                Accept(Visitor& visitor);
 
             // Do comparison logic against other object, checks type and field data
             virtual bool                Equals(const ElementPtr& rhs) const;

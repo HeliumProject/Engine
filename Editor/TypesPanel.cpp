@@ -158,8 +158,8 @@ void TypesPanel::CurrentSceneChanging( const SceneChangeArgs& args )
 
     if (args.m_Scene)
     {
-        args.m_Scene->RemoveNodeTypeAddedListener( NodeTypeExistenceSignature::Delegate (this, &TypesPanel::AddNodeType) );
-        args.m_Scene->RemoveNodeTypeRemovedListener( NodeTypeExistenceSignature::Delegate (this, &TypesPanel::RemoveNodeType) );
+        args.m_Scene->e_NodeTypeCreated.Remove( NodeTypeExistenceSignature::Delegate (this, &TypesPanel::AddNodeType) );
+        args.m_Scene->e_NodeTypeDeleted.Remove( NodeTypeExistenceSignature::Delegate (this, &TypesPanel::RemoveNodeType) );
     }
 }
 
@@ -176,7 +176,7 @@ void TypesPanel::CurrentSceneChanged( const SceneChangeArgs& args )
 
     if ( args.m_Scene )
     {
-        args.m_Scene->AddNodeTypeAddedListener( NodeTypeExistenceSignature::Delegate (this, &TypesPanel::AddNodeType) );
-        args.m_Scene->AddNodeTypeRemovedListener( NodeTypeExistenceSignature::Delegate (this, &TypesPanel::RemoveNodeType) );
+        args.m_Scene->e_NodeTypeCreated.Add( NodeTypeExistenceSignature::Delegate (this, &TypesPanel::AddNodeType) );
+        args.m_Scene->e_NodeTypeDeleted.Add( NodeTypeExistenceSignature::Delegate (this, &TypesPanel::RemoveNodeType) );
     }
 }

@@ -25,7 +25,7 @@ namespace Helium
             Transform();
             ~Transform();
 
-            virtual void Initialize() HELIUM_OVERRIDE;
+            virtual void Initialize(Scene* scene) HELIUM_OVERRIDE;
 
             virtual SceneGraph::Transform* GetTransform() HELIUM_OVERRIDE;
             virtual const SceneGraph::Transform* GetTransform() const HELIUM_OVERRIDE;

@@ -56,9 +56,11 @@ namespace Helium
         // ClientData, this could be toolkit OR interpreter client data, there are two pointer in Control
         //
 
-        class FOUNDATION_API ClientData : public Reflect::AbstractInheritor< ClientData, Reflect::Object >
+        class FOUNDATION_API ClientData : public Reflect::Object
         {
         public:
+            REFLECT_DECLARE_ABSTRACT( ClientData, Reflect::Object );
+
             ClientData( Control* control = NULL )
                 : m_Control ( control )
             {
@@ -94,9 +96,11 @@ namespace Helium
         // Widget, a base class for a GUI system implementation-specific Widget classes
         //
 
-        class FOUNDATION_API Widget : public Reflect::AbstractInheritor<Widget, Reflect::Object>
+        class FOUNDATION_API Widget : public Reflect::Object
         {
         public:
+            REFLECT_DECLARE_ABSTRACT( Widget, Reflect::Object );
+
             Widget()
                 : m_Control( NULL )
             {
@@ -128,9 +132,10 @@ namespace Helium
         //  Widgets are allocated to a Control when Realized, and deleted when Unrealized
         //
 
-        class FOUNDATION_API Control : public Reflect::AbstractInheritor<Control, Reflect::Object>
+        class FOUNDATION_API Control : public Reflect::Object
         {
         public:
+            REFLECT_DECLARE_ABSTRACT( Control, Reflect::Object );
             Control();
             virtual ~Control();
 

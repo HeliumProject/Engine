@@ -407,19 +407,16 @@ void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Deserialize(Archive& a
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 tostream& SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::operator>> (tostream& stream) const
 {
-    if (!TranslateOutput( stream ))
+    DataType::const_iterator itr = m_Data->begin();
+    DataType::const_iterator end = m_Data->end();
+    for ( ; itr != end; ++itr )
     {
-        DataType::const_iterator itr = m_Data->begin();
-        DataType::const_iterator end = m_Data->end();
-        for ( ; itr != end; ++itr )
+        if ( itr != m_Data->begin() )
         {
-            if ( itr != m_Data->begin() )
-            {
-                stream << s_ContainerItemDelimiter;
-            }
-
-            stream << itr->first << s_ContainerItemDelimiter << itr->second;
+            stream << s_ContainerItemDelimiter;
         }
+
+        stream << itr->first << s_ContainerItemDelimiter << itr->second;
     }
 
     return stream;
@@ -430,15 +427,13 @@ tistream& SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::operator<< (tistr
 {
     m_Data->clear();
 
-    if (!TranslateInput( stream ))
-    {
-        tstring str;
-        std::streamsize size = stream.rdbuf()->in_avail();
-        str.resize( (size_t) size);
-        stream.read( const_cast< tchar* >( str.c_str() ), size );
+    tstring str;
+    std::streamsize size = stream.rdbuf()->in_avail();
+    str.resize( (size_t) size);
+    stream.read( const_cast< tchar* >( str.c_str() ), size );
 
-        Tokenize< KeyT, ValueT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
-    }
+    Tokenize< KeyT, ValueT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
+
     return stream;
 }  
 

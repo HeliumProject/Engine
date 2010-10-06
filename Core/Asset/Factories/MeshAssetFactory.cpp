@@ -7,35 +7,49 @@
 
 #include "Core/Asset/Components/MeshProcessingComponent.h"
 
+#include "Core/Importers/OBJImporter.h"
+
 using namespace Helium;
 using namespace Helium::Asset;
 
 AssetClassPtr MeshAssetFactory::Create( const Helium::Path& path )
 {
     Helium::Path assetPath = path;
-    assetPath.ReplaceExtension( TXT( "entity.nrb" ) );
+    assetPath.ReplaceExtension( TXT( "entity.hrb" ) );
 
-    if ( assetPath.Exists() )
+    if ( !assetPath.Exists() )
     {
-        return AssetClass::LoadAssetClass( assetPath );
+
+        EntityPtr entity = new Entity();
+        entity->SetContentPath( path.Filename() ); // we're dropping this guy relative to the data file
+
+        MeshProcessingComponentPtr meshProcessingComponent = new MeshProcessingComponent();
+        entity->SetComponent( meshProcessingComponent );
+
+        try
+        {
+            Reflect::Archive::ToFile( entity, assetPath );
+            entity->SetSourcePath( assetPath );
+        }
+        catch( Helium::Exception& )
+        {
+            delete entity;
+            return NULL;
+        }
     }
 
-    EntityPtr entity = new Entity();
-    entity->SetPath( path.Filename() ); // we're dropping this guy relative to the data file
+    Path meshPath = path;
+    meshPath.ReplaceExtension( TXT( "mesh.hrb" ) );
 
-    MeshProcessingComponentPtr meshProcessingComponent = new MeshProcessingComponent();
-    entity->SetComponent( meshProcessingComponent );
-
-    try
+    if ( !meshPath.Exists() )
     {
-        Reflect::Archive::ToFile( entity, assetPath );
-        entity->SetSerializationPath( assetPath );
-    }
-    catch( Helium::Exception& )
-    {
-        delete entity;
-        return NULL;
+        if ( path.Extension() == TXT( "obj" ) )
+        {
+            // let's try to cache the mesh
+            SceneGraph::Mesh* mesh = Importers::ImportOBJ( path );
+            Reflect::Archive::ToFile( mesh, meshPath );
+        }
     }
 
-    return entity;
+    return AssetClass::LoadAssetClass( assetPath );
 }

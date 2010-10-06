@@ -59,6 +59,13 @@ EntityInstance::~EntityInstance()
     RemoveComponentRemovedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &EntityInstance::OnComponentRemoved ) );
 }
 
+void EntityInstance::Initialize( Scene* scene )
+{
+    __super::Initialize( scene );
+
+    CheckSets();
+}
+
 bool EntityInstance::ValidatePersistent( const Component::ComponentPtr& attr ) const
 {
     Asset::EntityPtr entityClass = GetEntity();
@@ -180,13 +187,90 @@ SceneNodeTypePtr EntityInstance::CreateNodeType( Scene* scene ) const
     return nodeType;
 }
 
-Scene* EntityInstance::GetNestedScene( GeometryMode mode, bool load_on_demand ) const
+void EntityInstance::CheckSets()
 {
-    if (m_ClassSet->GetEntity())
+    const Helium::Path& path = GetEntityPath();
+
+    Asset::EntityPtr entity;
+    try
     {
-        ResolveSceneArgs args ( m_ClassSet->GetContentFile() );
-        m_Owner->ResolveSceneDelegate().Invoke( args );
-        m_Scene = args.m_Scene;
+        entity = GetEntity();
+    }
+    catch ( const Helium::Exception& ex )
+    {
+        Log::Warning( TXT("%s\n"), ex.What() );
+    }
+
+    if ( !entity && !path.empty() )
+    {
+        tstringstream str;
+        str << TXT("Failed to load entity class for entity ") << GetName() << TXT(".") << std::endl;
+        str << TXT("The entity '") << path.c_str() << TXT("' has moved or been deleted.") << std::endl;
+        Log::Error( str.str().c_str() );
+    }
+
+    const tstring& currentClassSet = path.Get();
+
+    EntityInstanceType* type = Reflect::AssertCast<EntityInstanceType>( m_NodeType );
+    if (type)
+    {
+        // find the set
+        M_InstanceSetSmartPtr::const_iterator found = type->GetSets().find(currentClassSet);
+
+        // if we found it, and it contains us, and we are using it
+        if (found != type->GetSets().end() && found->second->ContainsInstance(this) && m_ClassSet == found->second.Ptr())
+        {
+            // we are GTG
+            return;
+        }
+
+        // the set we are entering
+        EntitySet* newClassSet = NULL;
+
+        // create new class object if it does not already exist
+        if (found == type->GetSets().end())
+        {
+            // create
+            newClassSet = new EntitySet (type, path);
+
+            // save
+            type->AddSet( newClassSet );
+        }
+        else
+        {
+            // existing
+            newClassSet = Reflect::AssertCast<EntitySet>( found->second );
+        }
+
+        // check previous membership
+        if (m_ClassSet)
+        {
+            m_ClassSet->RemoveInstance(this);
+        }
+
+        // add to the new class collection
+        newClassSet->AddInstance(this);
+    }
+}
+
+Scene* EntityInstance::GetNestedScene()
+{
+    if ( !m_Scene )
+    {
+        if ( m_ClassSet )
+        {
+            Asset::Entity* entity = m_ClassSet->GetEntity();
+            
+            if ( entity )
+            {
+                Path meshPath = entity->GetContentPath().GetAbsolutePath( entity->GetSourcePath() );
+                meshPath.ReplaceExtension( TXT( "mesh.hrb" ) );
+
+                ResolveSceneArgs args( m_Owner->GetViewport(), meshPath );
+                m_Owner->d_ResolveScene.Invoke( args );
+                m_Scene = args.m_Scene;
+            }
+        }
     }
 
     return m_Scene;
@@ -199,18 +283,14 @@ tstring EntityInstance::GetEntityPath() const
 
 void EntityInstance::SetEntityPath( const tstring& path )
 {
-    Helium::Path oldPath = m_Path;
-    Helium::Path newPath = path;
+    m_ClassChanging.Raise( EntityAssetChangeArgs( this, m_Path, path ) );
 
-    m_ClassChanging.Raise( EntityAssetChangeArgs( this, oldPath, newPath ) );
-
+    Path oldPath = m_Path;
     m_Path = path;
 
-    // since our entity class is criteria used for deducing object type,
-    //  ensure we are a member of the correct type
-    CheckNodeType();
+    CheckSets();
 
-    m_ClassChanged.Raise( EntityAssetChangeArgs( this, oldPath, newPath ) );
+    m_ClassChanged.Raise( EntityAssetChangeArgs( this, oldPath, m_Path ) );
 
     Dirty();
 }
@@ -323,7 +403,7 @@ void EntityInstance::Evaluate(GraphDirection direction)
             if ( IsGeometryVisible() )
             {
                 // merge nested scene into our bounding box
-                const Scene* nested = GetNestedScene( m_Scene->GetViewport()->GetGeometryMode() );
+                const Scene* nested = GetNestedScene();
 
                 if (nested)
                 {
@@ -363,18 +443,16 @@ void EntityInstance::Render( RenderVisitor* render )
 
     if (IsGeometryVisible())
     {
-        Scene* nested = GetNestedScene( render->GetViewport()->GetGeometryMode() );
-
-        VisitorState state ( render->State().m_Matrix,
-            render->State().m_Highlighted || (m_Scene->IsFocused() && IsHighlighted()),
-            render->State().m_Selected || (m_Scene->IsFocused() && IsSelected()),
-            render->State().m_Live || (m_Scene->IsFocused() && IsLive()),
-            render->State().m_Selectable || (m_Scene->IsFocused() && IsSelectable()) );
-
-        if (nested)
+        if (m_Scene)
         {
+            VisitorState state ( render->State().m_Matrix,
+                render->State().m_Highlighted || (m_Scene->IsFocused() && IsHighlighted()),
+                render->State().m_Selected || (m_Scene->IsFocused() && IsSelected()),
+                render->State().m_Live || (m_Scene->IsFocused() && IsLive()),
+                render->State().m_Selectable || (m_Scene->IsFocused() && IsSelectable()) );
+
             render->PushState( state );
-            nested->Render( render );
+            m_Scene->Render( render );
             render->PopState();
         }
     }
@@ -443,7 +521,7 @@ bool EntityInstance::Pick( PickVisitor* pick )
         pick->PushState( VisitorState (pick->State().m_Matrix, IsHighlighted(), IsSelected(), IsLive(), IsSelectable()) );
 
         // retrieve nested scene
-        const Scene* scene = GetNestedScene(GetOwner()->GetViewport()->GetGeometryMode());
+        const Scene* scene = GetNestedScene();
 
         // hit test the entire nested scene
         if (scene && scene->Pick(pick))

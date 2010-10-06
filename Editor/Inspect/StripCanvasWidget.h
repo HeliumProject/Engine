@@ -11,9 +11,11 @@ namespace Helium
     {
         class StripCanvasWidget;
 
-        class StripCanvasWidget : public Reflect::ConcreteInheritor<StripCanvasWidget, Widget>
+        class StripCanvasWidget : public Widget
         {
         public:
+            REFLECT_DECLARE_CLASS( StripCanvasWidget, Widget );
+
             StripCanvasWidget()
                 : m_ContainerControl( NULL )
                 , m_ContainerWindow( NULL )

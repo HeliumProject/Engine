@@ -125,17 +125,9 @@ namespace Helium
                 m_Graph = value;
             }
 
-            SceneGraph::Scene* GetOwner()
+            SceneGraph::Scene* GetOwner() const
             {
                 return m_Owner;
-            }
-            const SceneGraph::Scene* GetOwner() const
-            {
-                return m_Owner;
-            }
-            void SetOwner( Scene* scene )
-            {
-                m_Owner = scene;
             }
 
             virtual bool IsTransient() const
@@ -227,7 +219,7 @@ namespace Helium
             virtual void Reset();
 
             // Callback after new scene data is loaded, and initial evaluation is complete
-            virtual void Initialize();
+            virtual void Initialize(Scene* scene);
 
             // Check for initialization state
             bool IsInitialized()
@@ -299,15 +291,6 @@ namespace Helium
             // creates our node type object (we don't have a configured type when we call this)
             virtual SceneNodeTypePtr CreateNodeType( SceneGraph::Scene* scene ) const;
 
-            // transition to another node type
-            virtual void ChangeNodeType( SceneGraph::SceneNodeType* type );
-
-            // take a stab at deducing what node type you should be
-            virtual SceneGraph::SceneNodeType* DeduceNodeType();
-
-            // check that you are a member of the type that best suits you
-            virtual void CheckNodeType();
-
             // used for manifest generation during save
             virtual void PopulateManifest( Asset::SceneManifest* manifest ) const;
 
@@ -324,12 +307,6 @@ namespace Helium
 
             // Make object dirty and iterate world
             virtual void Execute(bool interactively);
-
-            // Pack any application-cached data into the packed data
-            virtual void Pack() {}
-
-            // Unpack data from the packed information into the application object
-            virtual void Unpack() {}
 
             //
             // Undo/Redo Snapshot

@@ -75,7 +75,7 @@ namespace Helium
             virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
 
-            virtual void Initialize() HELIUM_OVERRIDE;
+            virtual void Initialize(Scene* scene) HELIUM_OVERRIDE;
             virtual void Create() HELIUM_OVERRIDE;
             virtual void Delete() HELIUM_OVERRIDE;
             virtual void Populate( PopulateArgs* args );
@@ -151,6 +151,8 @@ namespace Helium
             void MergeVertToClosest(u32 vert_id);
             void PunchCubeHole(Math::Matrix4& mat, Math::Matrix4& inv_mat, f32 vert_merge_threshold);
 
+            u32 AddShader( Shader* shader );
+
             // temp hack
             friend class Skin;
 
@@ -224,5 +226,6 @@ namespace Helium
             IndexResourcePtr    m_Indices;
             VertexResourcePtr   m_Vertices;
         };
+        typedef Helium::SmartPtr< Mesh > MeshPtr;
     }
 }

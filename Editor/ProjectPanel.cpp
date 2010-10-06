@@ -139,10 +139,9 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
 
     if ( asset.ReferencesObject() )
     {
-        if ( asset->GetSerializationPath().Exists() )
+        if ( asset->GetSourcePath().Exists() )
         {
-            asset->SetSerializationPath( asset->GetSerializationPath().GetRelativePath( m_Project->a_Path.Get() ) );
-            m_Project->AddPath( asset->GetSerializationPath() );
+            m_Project->AddPath( asset->GetSourcePath().GetRelativePath( m_Project->a_Path.Get() ) );
         }
     }
 }

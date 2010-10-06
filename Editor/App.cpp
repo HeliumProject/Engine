@@ -38,6 +38,9 @@
 #include "Editor/Commands/ProfileDumpCommand.h"
 #include "Editor/Commands/RebuildCommand.h"
 
+#include "Editor/Clipboard/ClipboardDataWrapper.h"
+#include "Editor/Clipboard/ClipboardFileList.h"
+
 #include "Editor/Inspect/Widgets/LabelWidget.h"
 #include "Editor/Inspect/Widgets/ValueWidget.h"
 #include "Editor/Inspect/Widgets/SliderWidget.h"
@@ -231,6 +234,11 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::RegisterClassType< TreeCanvasWidget >() );
     m_InitializerStack.Push( Reflect::RegisterClassType< StripCanvas >() );
     m_InitializerStack.Push( Reflect::RegisterClassType< StripCanvasWidget >() );
+
+    // clipboard
+    m_InitializerStack.Push( Reflect::RegisterClassType< ReflectClipboardData >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< ClipboardDataWrapper >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< ClipboardFileList >() );
 
     // vault
     m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::SearchTypes::SearchType>( &Editor::SearchTypes::SearchTypesEnumerateEnum, TXT( "SearchType" ) ) );

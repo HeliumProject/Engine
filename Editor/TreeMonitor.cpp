@@ -140,8 +140,8 @@ bool TreeMonitor::IsFrozen() const
 // 
 void TreeMonitor::OnSceneAdded( const SceneChangeArgs& args )
 {
-    args.m_Scene->AddNodeAddedListener( NodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeAdded ) );
-    args.m_Scene->AddNodeRemovedListener( NodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeRemoved ) );
+    args.m_Scene->e_NodeAdded.Add( NodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeAdded ) );
+    args.m_Scene->e_NodeRemoved.Add( NodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeRemoved ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -150,8 +150,8 @@ void TreeMonitor::OnSceneAdded( const SceneChangeArgs& args )
 // 
 void TreeMonitor::OnSceneRemoving( const SceneChangeArgs& args )
 {
-    args.m_Scene->RemoveNodeAddedListener( NodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeAdded ) );
-    args.m_Scene->RemoveNodeRemovedListener( NodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeRemoved ) );
+    args.m_Scene->e_NodeAdded.Remove( NodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeAdded ) );
+    args.m_Scene->e_NodeRemoved.Remove( NodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeRemoved ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

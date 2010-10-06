@@ -62,9 +62,11 @@ namespace Helium
             tstring m_Data;
         };
 
-        class FOUNDATION_API Choice : public Reflect::ConcreteInheritor<Choice, Control>
+        class FOUNDATION_API Choice : public Control
         {
         public:
+            REFLECT_DECLARE_CLASS( Choice, Control );
+
             Choice();
 
             virtual bool Process(const tstring& key, const tstring& value) HELIUM_OVERRIDE;

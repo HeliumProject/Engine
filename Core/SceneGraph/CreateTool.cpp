@@ -77,8 +77,8 @@ CreateTool::CreateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator)
 , m_PaintJitter (NULL)
 , m_PaintTimer( "CreateToolPaintTimer", 1000 / s_PaintSpeed )
 {
-    m_Scene->AddNodeAddedListener( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeAdded ) );
-    m_Scene->AddNodeRemovedListener( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeRemoved ) );
+    m_Scene->e_NodeAdded.Add( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeAdded ) );
+    m_Scene->e_NodeRemoved.Add( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeRemoved ) );
 
     m_PaintTimer.AddTickListener( TimerTickSignature::Delegate( this, &CreateTool::TimerCallback ) );
 }
@@ -87,8 +87,8 @@ CreateTool::~CreateTool()
 {
     m_PaintTimer.RemoveTickListener( TimerTickSignature::Delegate( this, &CreateTool::TimerCallback ) );
 
-    m_Scene->RemoveNodeAddedListener( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeAdded ) );
-    m_Scene->RemoveNodeRemovedListener( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeRemoved ) );
+    m_Scene->e_NodeAdded.Remove( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeAdded ) );
+    m_Scene->e_NodeRemoved.Remove( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeRemoved ) );
 
     if (m_Instance.ReferencesObject())
     {
@@ -553,7 +553,12 @@ void CreateTool::AddToScene()
     {
         CORE_SCOPE_TIMER( ("Initialize Instance") );
 
-        m_Instance->Initialize();
+        if ( !m_Instance->IsInitialized() )
+        {
+            m_Instance->Initialize( m_Scene );
+        }
+
+        HELIUM_ASSERT( m_Instance->GetOwner() == m_Scene );
     }
 
     {

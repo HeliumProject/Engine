@@ -207,8 +207,8 @@ void NodeTypeOutliner::ConnectSceneListeners()
         }
 
         // Connect listeners
-        m_CurrentScene->AddNodeTypeAddedListener( NodeTypeExistenceSignature::Delegate ( this, &NodeTypeOutliner::NodeTypeAdded ) );
-        m_CurrentScene->AddNodeTypeRemovedListener( NodeTypeExistenceSignature::Delegate ( this, &NodeTypeOutliner::NodeTypeRemoved ) );
+        m_CurrentScene->e_NodeTypeCreated.Add( NodeTypeExistenceSignature::Delegate ( this, &NodeTypeOutliner::NodeTypeAdded ) );
+        m_CurrentScene->e_NodeTypeDeleted.Add( NodeTypeExistenceSignature::Delegate ( this, &NodeTypeOutliner::NodeTypeRemoved ) );
     }
 }
 
@@ -230,8 +230,8 @@ void NodeTypeOutliner::DisconnectSceneListeners()
         }
 
         // Disconnect listeners
-        m_CurrentScene->RemoveNodeTypeAddedListener( NodeTypeExistenceSignature::Delegate ( this, &NodeTypeOutliner::NodeTypeAdded ) );
-        m_CurrentScene->RemoveNodeTypeRemovedListener( NodeTypeExistenceSignature::Delegate ( this, &NodeTypeOutliner::NodeTypeRemoved ) );
+        m_CurrentScene->e_NodeTypeCreated.Remove( NodeTypeExistenceSignature::Delegate ( this, &NodeTypeOutliner::NodeTypeAdded ) );
+        m_CurrentScene->e_NodeTypeDeleted.Remove( NodeTypeExistenceSignature::Delegate ( this, &NodeTypeOutliner::NodeTypeRemoved ) );
     }
 
     __super::DisconnectSceneListeners();

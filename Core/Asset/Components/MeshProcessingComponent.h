@@ -3,6 +3,8 @@
 #include "Core/API.h"
 #include "Foundation/Component/Component.h"
 
+#include "Foundation/Automation/Attribute.h"
+
 namespace Helium
 {
     namespace Asset
@@ -29,9 +31,10 @@ namespace Helium
 
         class CORE_API MeshProcessingComponent : public Component::ComponentBase
         {
-        private:
-            f32                   m_ScalingFactor;
-            MeshCompressionFactor m_MeshCompressionFactor;
+        public:
+            Helium::Attribute< f32 >                   a_ScalingFactor;
+            Helium::Attribute< MeshCompressionFactor > a_MeshCompressionFactor;
+            Helium::Attribute< bool >                  a_FlipWinding;
 
         public:
 
@@ -41,9 +44,10 @@ namespace Helium
 
         public:
             MeshProcessingComponent()
-                : m_ScalingFactor( 1.0f )
-                , m_MeshCompressionFactor( MeshCompressionFactors::None )
             {
+                a_ScalingFactor.Set( 1.0f );
+                a_MeshCompressionFactor.Set( MeshCompressionFactors::None );
+                a_FlipWinding.Set( false );
             }
 
             virtual ~MeshProcessingComponent()
@@ -52,26 +56,6 @@ namespace Helium
 
         public:
             virtual Component::ComponentUsage GetComponentUsage() const HELIUM_OVERRIDE;
-
-        public:
-
-            f32 GetScalingFactor() const
-            {
-                return m_ScalingFactor;
-            }
-            void SetScalingFactor( const f32 scalingFactor )
-            {
-                m_ScalingFactor = scalingFactor;
-            }
-
-            MeshCompressionFactor GetMeshCompressionFactor() const
-            {
-                return m_MeshCompressionFactor;
-            }
-            void SetMeshCompressionFactor( const MeshCompressionFactor& meshCompressionFactor )
-            {
-                m_MeshCompressionFactor = meshCompressionFactor;
-            }
 
         };
 

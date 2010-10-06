@@ -17,16 +17,14 @@ namespace Helium
             static void InitializeType();
             static void CleanupType();
 
-        public:
             EntityInstanceType( SceneGraph::Scene* scene, i32 instanceType );
-
-            virtual ~EntityInstanceType();
+            ~EntityInstanceType();
 
             virtual void Reset() HELIUM_OVERRIDE;
             virtual void Create() HELIUM_OVERRIDE;
             virtual void Delete() HELIUM_OVERRIDE;
 
-        public:
+            virtual void AddInstance(SceneNodePtr n) HELIUM_OVERRIDE;
             virtual void PopulateManifest( Asset::SceneManifest* manifest ) const HELIUM_OVERRIDE;
         };
     }

@@ -32,7 +32,7 @@ namespace Helium
             virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;
             virtual void Deserialize(Archive& archive) HELIUM_OVERRIDE;
 
-            virtual void Host(Visitor& visitor) HELIUM_OVERRIDE;
+            virtual void Accept(Visitor& visitor) HELIUM_OVERRIDE;
         };
         typedef Helium::SmartPtr< ElementArraySerializer > ElementArraySerializerPtr;
 

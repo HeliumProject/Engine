@@ -22,7 +22,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
+			InheritedPropertySheets="..\Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
 			>
@@ -97,7 +97,7 @@
 		<Configuration
 			Name="Debug|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
+			InheritedPropertySheets="..\Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
 			>
@@ -173,7 +173,7 @@
 		<Configuration
 			Name="Release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
+			InheritedPropertySheets="..\Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
 			>
@@ -246,7 +246,7 @@
 		<Configuration
 			Name="Release|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
+			InheritedPropertySheets="..\Windows.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
 			>
@@ -320,7 +320,7 @@
 		<Configuration
 			Name="Debug Unicode|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
+			InheritedPropertySheets="..\Windows.vsprops;..\Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
 			>
@@ -395,7 +395,7 @@
 		<Configuration
 			Name="Debug Unicode|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
+			InheritedPropertySheets="..\Windows.vsprops;..\Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
 			>
@@ -471,7 +471,7 @@
 		<Configuration
 			Name="Release Unicode|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
+			InheritedPropertySheets="..\Windows.vsprops;..\Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
 			>
@@ -544,7 +544,7 @@
 		<Configuration
 			Name="Release Unicode|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
+			InheritedPropertySheets="..\Windows.vsprops;..\Unicode.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="0"
 			>

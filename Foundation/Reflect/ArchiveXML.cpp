@@ -22,6 +22,23 @@ const u32 ArchiveXML::CURRENT_VERSION                               = 3;
 const u32 ArchiveXML::FIRST_VERSION_WITH_POINTER_SERIALIZER         = 2; 
 const u32 ArchiveXML::FIRST_VERSION_WITH_NAMESPACE_SUPPORT          = 3; 
 
+ArchiveXML::ArchiveXML( const Path& path )
+: Archive()
+, m_Path( path )
+, m_Version( CURRENT_VERSION )
+, m_Target( &m_Spool )
+{
+    m_Parser = XML_ParserCreate( Helium::GetEncoding().c_str() );
+
+    // set the user data used in callbacks
+    XML_SetUserData(m_Parser, (void*)this);
+
+    // attach callbacks, will call back to 'this' via user data pointer
+    XML_SetStartElementHandler(m_Parser, &StartElementHandler);
+    XML_SetEndElementHandler(m_Parser, &EndElementHandler);
+    XML_SetCharacterDataHandler(m_Parser, &CharacterDataHandler);
+}
+
 ArchiveXML::ArchiveXML()
 : Archive()
 , m_Version (CURRENT_VERSION)

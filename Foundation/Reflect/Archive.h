@@ -196,10 +196,9 @@ namespace Helium
             };
         }
 
-        class FOUNDATION_API Archive
+        class FOUNDATION_API Archive : public Helium::RefCountBase< Archive >
         {
         protected:
-            Archive* m_ParsingArchive;
 
             // The number of bytes Parsed so far
             unsigned m_Progress;
@@ -230,11 +229,6 @@ namespace Helium
 
         protected:
             Archive();
-
-        public:
-            Archive( const Path& path );
-            Archive( const Path& path, const ElementPtr& element );
-            Archive( const Path& path, const V_Element& elements );
             virtual ~Archive();
 
         public:
@@ -255,9 +249,6 @@ namespace Helium
                 return m_Mode;
             }
 
-            // Peek the type of file
-            static bool GetFileType( const Path& path, ArchiveType& type );
-
             // Get the type of this archive
             virtual ArchiveType GetType() const
             {
@@ -269,40 +260,29 @@ namespace Helium
             //
 
             // File Open/Close
-            virtual void OpenFile( const Path& path, bool write = false ) { HELIUM_BREAK(); }
-
-            virtual void Close() { HELIUM_BREAK(); }
+            virtual void Open( bool write = false ) = 0;
+            virtual void Close() = 0;
 
             // Begins parsing the InputStream
-            virtual void Read() { HELIUM_BREAK();  }
+            virtual void Read() = 0;
 
             // Write to the OutputStream
-            virtual void Write() { HELIUM_BREAK(); }
+            virtual void Write() = 0;
 
             // Write the file header
-            virtual void Start() { HELIUM_BREAK(); }
+            virtual void Start() = 0;
 
             // Write the file footer
-            virtual void Finish() { HELIUM_BREAK(); }
-
-            //
-            // Stream management
-            //
-
-            // Opens a file
-        protected:
-            // Get parser for a file
-            static Archive* GetArchive( ArchiveType type );
-            static Archive* GetArchive( const Path& path );
+            virtual void Finish() = 0;
 
             //
             // Serialization
             //
         public:
-            virtual void Serialize( const ElementPtr& element ) { HELIUM_BREAK(); }
-            virtual void Serialize( const V_Element& elements, u32 flags = 0 ) { HELIUM_BREAK(); }
-            virtual void Deserialize( ElementPtr& element ) { HELIUM_BREAK(); }
-            virtual void Deserialize( V_Element& elements, u32 flags = 0 ) { HELIUM_BREAK(); }
+            virtual void Serialize( const ElementPtr& element ) = 0;
+            virtual void Serialize( const V_Element& elements, u32 flags = 0 ) = 0;
+            virtual void Deserialize( ElementPtr& element ) = 0;
+            virtual void Deserialize( V_Element& elements, u32 flags = 0 ) = 0;
 
         public:
             static const tchar* GetExtension( ArchiveType t )
@@ -370,17 +350,12 @@ namespace Helium
             // Shared code for doing per-element pre and post serialize work with exception handling
             bool TryElementCallback( Element* element, ElementCallback callback );
 
-
-            //
-            // Serialize/Deserialize API
-            //
-
-            // save the archive to a file
-            void Save();
-
             //
             // Get elements from the file
             //
+
+            void Put( const ElementPtr& element );
+            void Put( const V_Element& elements );
 
             ElementPtr Get( int searchType = Reflect::ReservedTypes::Any );
             void Get( V_Element& elements );
@@ -419,5 +394,13 @@ namespace Helium
                 }
             }
         };
+
+        typedef Helium::SmartPtr< Archive > ArchivePtr;
+
+        // Peek the type of file
+        FOUNDATION_API bool GetFileType( const Path& path, ArchiveType& type );
+        
+        // Get parser for a file
+        FOUNDATION_API ArchivePtr GetArchive( const Path& path );
     }
 }

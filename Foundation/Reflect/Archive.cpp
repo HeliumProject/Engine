@@ -33,87 +33,8 @@ Archive::Archive()
 {
 }
 
-Archive::Archive( const Path& path )
-: m_Path( path )
-, m_ParsingArchive( NULL )
-, m_Progress( 0 )
-, m_SearchType( Reflect::ReservedTypes::Invalid )
-, m_Abort( false )
-, m_Mode( ArchiveModes::Read )
-{
-}
-
-Archive::Archive( const Path& path, const ElementPtr& element )
-: m_Path( path )
-, m_ParsingArchive( NULL )
-, m_Progress( 0 )
-, m_SearchType( Reflect::ReservedTypes::Invalid )
-, m_Abort( false )
-, m_Mode( ArchiveModes::Read )
-{
-    m_Spool.push_back( element );
-}
-
-Archive::Archive( const Path& path, const V_Element& elements )
-: m_Path( path )
-, m_Spool( elements )
-, m_Progress( 0 )
-, m_SearchType( Reflect::ReservedTypes::Invalid )
-, m_Abort( false )
-, m_Mode( ArchiveModes::Read )
-{
-}
-
 Archive::~Archive()
 {
-}
-
-bool Archive::GetFileType( const Path& path, ArchiveType& type )
-{
-    tstring ext = path.Extension();
-
-    if ( ext == Archive::GetExtension( ArchiveTypes::XML ) )
-    {
-        type = ArchiveTypes::XML;
-        return true;
-    }
-    else if ( ext == Archive::GetExtension( ArchiveTypes::Binary ) )
-    {
-        type = ArchiveTypes::Binary;
-        return true;
-    }
-
-    return false;
-}
-
-Archive* Archive::GetArchive( ArchiveType type )
-{
-    switch (type)
-    {
-    case ArchiveTypes::Binary:
-        return new ArchiveBinary();
-
-    case ArchiveTypes::XML:
-        return new ArchiveXML();
-
-    default:
-        throw Reflect::StreamException( TXT( "Unknown archive type" ) );
-    }
-
-    return NULL;
-}
-
-Archive* Archive::GetArchive( const Path& path )
-{
-    HELIUM_ASSERT( !path.empty() );
-
-    Reflect::ArchiveType archiveType;
-    if ( GetFileType( path, archiveType ) )
-    {
-        return GetArchive( archiveType );
-    }
-
-    return NULL;
 }
 
 void Archive::PreSerialize()
@@ -293,44 +214,32 @@ void Archive::Get( V_Element& elements )
 
     Log::Debug( TXT( "Parsing '%s'" ), m_Path.c_str() );
 
-    HELIUM_ASSERT( m_ParsingArchive == NULL );
-    m_ParsingArchive = GetArchive( m_Path );
-    m_ParsingArchive->e_Status = e_Status;
-    m_ParsingArchive->d_Exception = d_Exception;
-
     if ( Helium::IsDebuggerPresent() )
     {
-        m_ParsingArchive->OpenFile( m_Path );
-        m_ParsingArchive->Read();
-        m_ParsingArchive->Close(); 
+        Open();
+        Read();
+        Close(); 
     }
     else
     {
         try
         {
-            m_ParsingArchive->OpenFile( m_Path );
+            Open();
 
             try
             {
-                m_ParsingArchive->Read();
+                Read();
             }
             catch (...)
             {
-                m_ParsingArchive->Close();
-
-                delete m_ParsingArchive;
-                m_ParsingArchive = NULL;
-
+                Close();
                 throw;
             }
 
-            m_ParsingArchive->Close(); 
+            Close(); 
         }
         catch (Helium::Exception& ex)
         {
-            delete m_ParsingArchive;
-            m_ParsingArchive = NULL;
-
             tstringstream str;
             str << "While reading '" << m_Path.c_str() << "': " << ex.Get();
             ex.Set( str.str() );
@@ -338,13 +247,11 @@ void Archive::Get( V_Element& elements )
         }
     }
 
-    elements = m_ParsingArchive->m_Spool;
-    delete m_ParsingArchive;
-    m_ParsingArchive = NULL;
+    elements = m_Spool;
 }
 
 
-void Archive::Save()
+void Archive::Close()
 {
     HELIUM_ASSERT( !m_Path.empty() );
 
@@ -356,20 +263,12 @@ void Archive::Save()
     Helium::Path safetyPath( m_Path.Directory() + Helium::GetProcessString() );
     safetyPath.ReplaceExtension( m_Path.Extension() );
 
-    HELIUM_ASSERT( m_ParsingArchive == NULL );
-    m_ParsingArchive = GetArchive( m_Path );
-    m_ParsingArchive->e_Status = e_Status;
-    m_ParsingArchive->d_Exception = d_Exception;
-
-    // eh, this is pretty crappy, causing a copy
-    m_ParsingArchive->m_Spool = m_Spool;
-
     // generate the file to the safety location
     if ( Helium::IsDebuggerPresent() )
     {
-        m_ParsingArchive->OpenFile( safetyPath.Get(), true );
-        m_ParsingArchive->Write();
-        m_ParsingArchive->Close(); 
+        Open( true );
+        Write();
+        Close(); 
     }
     else
     {
@@ -377,10 +276,10 @@ void Archive::Save()
 
         try
         {
-            m_ParsingArchive->OpenFile( safetyPath.Get(), true );
+            Open( true );
             open = true;
-            m_ParsingArchive->Write();
-            m_ParsingArchive->Close(); 
+            Write();
+            Close(); 
         }
         catch ( Helium::Exception& ex )
         {
@@ -390,11 +289,8 @@ void Archive::Save()
 
             if ( open )
             {
-                m_ParsingArchive->Close();
+                Close();
             }
-
-            delete m_ParsingArchive;
-            m_ParsingArchive = NULL;
 
             safetyPath.Delete();
             throw;
@@ -403,19 +299,13 @@ void Archive::Save()
         {
             if ( open )
             {
-                m_ParsingArchive->Close();
+                Close();
             }
-
-            delete m_ParsingArchive;
-            m_ParsingArchive = NULL;
 
             safetyPath.Delete();
             throw;
         }
     }
-
-    delete m_ParsingArchive;
-    m_ParsingArchive = NULL;
 
     try
     {
@@ -438,4 +328,45 @@ void Archive::Save()
 
         throw;
     }
+}
+
+bool Reflect::GetFileType( const Path& path, ArchiveType& type )
+{
+    tstring ext = path.Extension();
+
+    if ( ext == Archive::GetExtension( ArchiveTypes::XML ) )
+    {
+        type = ArchiveTypes::XML;
+        return true;
+    }
+    else if ( ext == Archive::GetExtension( ArchiveTypes::Binary ) )
+    {
+        type = ArchiveTypes::Binary;
+        return true;
+    }
+
+    return false;
+}
+
+ArchivePtr Reflect::GetArchive( const Path& path )
+{
+    HELIUM_ASSERT( !path.empty() );
+
+    Reflect::ArchiveType archiveType;
+    if ( GetFileType( path, archiveType ) )
+    {
+        switch ( archiveType )
+        {
+        case ArchiveTypes::Binary:
+            return new ArchiveBinary( path );
+
+        case ArchiveTypes::XML:
+            return new ArchiveXML( path );
+
+        default:
+            throw Reflect::StreamException( TXT( "Unknown archive type" ) );
+        }
+    }
+
+    return NULL;
 }

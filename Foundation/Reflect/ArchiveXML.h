@@ -100,6 +100,8 @@ namespace Helium
 
             // The container to decode elements to
             V_Element* m_Target;
+        public:
+            ArchiveXML( const Path& path );
 
         private:
             ArchiveXML();

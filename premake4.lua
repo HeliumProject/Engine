@@ -15,7 +15,8 @@ solution "Helium"
 	
     platforms
     {
-		"native"
+		"x32",
+		"x64"
 	}
 
 	configurations
@@ -36,18 +37,17 @@ solution "Helium"
 		"."
 	}
 	
-	configuration "Debug"
-		targetdir "Bin/Debug"
-
-	configuration "Debug Unicode"
-		targetdir "Bin/Debug Unicode"
-
-	configuration "Release"
-		targetdir "Bin/Release"
-
-	configuration "Release Unicode"
-		targetdir "Bin/Release Unicode"
-		
+--[[
+		Iterate through our platforms and configurations and set them up with appropriate
+		target directories (that have both the configuration and platform built into them)
+--]]
+	for i, platform in ipairs( platforms() ) do
+		for j, config in ipairs( configurations() ) do
+			configuration( { config, platform } )
+				targetdir ( "Bin/" .. config .. "/" .. platform )
+		end
+	end
+			
 	configuration "windows"
 		defines
 		{

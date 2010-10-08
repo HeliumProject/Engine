@@ -2,7 +2,10 @@
 #include "EntitySet.h"
 
 #include "Foundation/Log.h"
+#include "Foundation/Reflect/Archive.h"
+
 #include "Foundation/Component/ComponentHandle.h"
+
 #include "Core/Asset/Classes/Entity.h"
 #include "Core/Asset/Components/BoundingBoxComponent.h"
 
@@ -100,8 +103,7 @@ void EntitySet::LoadAssetClass()
                     SceneGraph::MeshPtr mesh;
                     try
                     {
-                        Reflect::Archive meshArchive( meshPath );
-                        mesh = meshArchive.Get< SceneGraph::Mesh >();
+                        mesh = Reflect::FromArchive< SceneGraph::Mesh >( meshPath );
                     }
                     catch ( const Reflect::Exception& e )
                     {

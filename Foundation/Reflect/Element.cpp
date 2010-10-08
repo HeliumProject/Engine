@@ -39,8 +39,9 @@ void Element::ToBinary(std::iostream& stream) const
 
 void Element::ToFile( const Path& path ) const
 {
-    Archive archive( path, this );
-    archive.Save();
+    ArchivePtr archive = GetArchive( path );
+    archive->Put( this );
+    archive->Close();
 }
 
 void Element::Accept(Visitor& visitor)

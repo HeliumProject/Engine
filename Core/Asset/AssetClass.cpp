@@ -36,20 +36,14 @@ AssetClass::AssetClass()
 
 AssetClassPtr AssetClass::LoadAssetClass( const Path& path )
 {
-    AssetClassPtr assetClass = NULL;
-    try
+    AssetClassPtr assetClass = Reflect::FromArchive< AssetClass >( path );
+
+    if ( assetClass )
     {
-        Reflect::Archive archive( path );
-        assetClass = archive.Get< AssetClass >();
         assetClass->SetSourcePath( path );
         assetClass->LoadFinished();
     }
-    catch ( const Helium::Exception& exception )
-    {
-        Log::Warning( TXT( "%s\n" ), exception.What() );
-    }
 
-    // success
     return assetClass;
 }
 
@@ -284,12 +278,12 @@ bool AssetClass::RemoveComponent( i32 typeID )
     return __super::RemoveComponent( typeID );
 }
 
-void AssetClass::Serialize()
+bool AssetClass::Serialize()
 {
-    Reflect::Archive archive( m_SourcePath, this );
-    archive.Save();
+    bool result = Reflect::ToArchive( m_SourcePath, this );
 
-    m_Modified = false;
+    m_Modified = !result;
+    return result;
 }
 
 /////////////////////////////////////////////////////////////////////////////

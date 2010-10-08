@@ -116,6 +116,9 @@ namespace Helium
             // The stack of fields we are writing
             std::stack<WriteFields> m_FieldStack;
 
+        public:
+            ArchiveBinary( const Path& path );
+
         private:
             ArchiveBinary();
 
@@ -144,7 +147,7 @@ namespace Helium
                 return ArchiveTypes::Binary;
             }
 
-            virtual void OpenFile( const Path& path, bool write = false ) HELIUM_OVERRIDE;
+            virtual void Open( bool write = false ) HELIUM_OVERRIDE;
             void OpenStream( CharStream* stream, bool write = false );
             virtual void Close(); 
 

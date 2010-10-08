@@ -216,10 +216,10 @@ Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u
 
     try
     {
-        Reflect::Archive archive( path );
-        archive.e_Status.AddMethod( this, &Scene::ArchiveStatus );
-        archive.d_Exception.Set( this, &Scene::ArchiveException );
-        archive.Get( elements );
+        Reflect::ArchivePtr archive = Reflect::GetArchive( path );
+        archive->e_Status.AddMethod( this, &Scene::ArchiveStatus );
+        archive->d_Exception.Set( this, &Scene::ArchiveException );
+        archive->Get( elements );
     }
     catch ( const Helium::Exception& exception )
     {
@@ -887,10 +887,11 @@ bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
     {
         try
         {
-            Reflect::Archive archive( path, spool );
-            archive.e_Status.AddMethod( this, &Scene::ArchiveStatus );
-            archive.d_Exception.Set( this, &Scene::ArchiveException );
-            archive.Save();
+            Reflect::ArchivePtr archive = Reflect::GetArchive( path );
+            archive->e_Status.AddMethod( this, &Scene::ArchiveStatus );
+            archive->d_Exception.Set( this, &Scene::ArchiveException );
+            archive->Put( spool );
+            archive->Close();
         }
         catch ( Helium::Exception& ex )
         {

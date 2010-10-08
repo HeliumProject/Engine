@@ -315,23 +315,13 @@ void App::SaveSettings()
     tstring error;
     if ( Helium::IsDebuggerPresent() )
     {
-        Reflect::Archive archive( path, m_SettingsManager );
-        archive.Save();
+        Reflect::ToArchive( path, m_SettingsManager );
     }
     else
     {
-        try
+        if ( !Reflect::ToArchive( path, m_SettingsManager ) )
         {
-            Reflect::Archive archive( path, m_SettingsManager );
-            archive.Save();
-        }
-        catch ( const Helium::Exception& ex )
-        {
-            error = ex.What();
-        }
-
-        if ( error.size() )
-        {
+            error = tstring( TXT( "Could not save '" ) ) + path.c_str() + TXT( "'." );
             wxMessageBox( error.c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
         }
     }
@@ -348,31 +338,7 @@ void App::LoadSettings()
 		return;
 	}
 
-    SettingsManagerPtr settingsManager = NULL;
-
-    if ( Helium::IsDebuggerPresent() )
-    {
-        Reflect::Archive archive( path );
-		settingsManager = archive.Get< SettingsManager >();
-    }
-    else
-    {
-        tstring error;
-        try
-        {
-            Reflect::Archive archive( path );
-			settingsManager = archive.Get< SettingsManager >();
-        }
-        catch ( const Helium::Exception& ex )
-        {
-            error = ex.What();
-        }
-
-        if ( error.size() )
-        {
-            wxMessageBox( error.c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
-        }
-    }
+    SettingsManagerPtr settingsManager = Reflect::FromArchive< SettingsManager >( path );
 
     if ( settingsManager.ReferencesObject() )
     {

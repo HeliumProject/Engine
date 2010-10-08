@@ -23,8 +23,7 @@ const u32 ArchiveXML::FIRST_VERSION_WITH_POINTER_SERIALIZER         = 2;
 const u32 ArchiveXML::FIRST_VERSION_WITH_NAMESPACE_SUPPORT          = 3; 
 
 ArchiveXML::ArchiveXML( const Path& path )
-: Archive()
-, m_Path( path )
+: Archive( path )
 , m_Version( CURRENT_VERSION )
 , m_Target( &m_Spool )
 {
@@ -40,9 +39,9 @@ ArchiveXML::ArchiveXML( const Path& path )
 }
 
 ArchiveXML::ArchiveXML()
-: Archive()
-, m_Version (CURRENT_VERSION)
-, m_Target (&m_Spool)
+: Archive( TXT( "" ) )
+, m_Version( CURRENT_VERSION )
+, m_Target( &m_Spool )
 {
     m_Parser = XML_ParserCreate( Helium::GetEncoding().c_str() );
 
@@ -61,15 +60,13 @@ ArchiveXML::~ArchiveXML()
     m_Parser = NULL;
 }
 
-void ArchiveXML::OpenFile( const Path& path, bool write )
+void ArchiveXML::Open( bool write )
 {
-    m_Path = path;
-
 #ifdef REFLECT_ARCHIVE_VERBOSE
     Debug(TXT("Opening file '%s'\n"), file.c_str());
 #endif
 
-    Reflect::TCharStreamPtr stream = new FileStream<tchar>( path, write );
+    Reflect::TCharStreamPtr stream = new FileStream<tchar>( m_Path, write );
     OpenStream( stream, write );
 }
 
@@ -96,7 +93,9 @@ void ArchiveXML::OpenStream( TCharStream* stream, bool write )
 
 void ArchiveXML::Close()
 {
-    if (m_Mode == ArchiveModes::Write)
+    HELIUM_ASSERT( m_Stream );
+
+    if ( m_Mode == ArchiveModes::Write )
     {
         Finish(); 
     }

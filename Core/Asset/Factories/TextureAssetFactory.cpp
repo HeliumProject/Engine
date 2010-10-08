@@ -28,8 +28,9 @@ AssetClassPtr TextureAssetFactory::Create( const Helium::Path& path )
 
     try
     {
-        Reflect::Archive archive( assetPath, texture );
-        archive.Save();
+        Reflect::ArchivePtr archive = Reflect::GetArchive( assetPath );
+        archive->Put( texture );
+        archive->Close();
         texture->SetSourcePath( assetPath );
     }
     catch( Helium::Exception& )

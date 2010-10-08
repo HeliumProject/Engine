@@ -102,10 +102,10 @@ namespace Helium
             V_Element* m_Target;
         public:
             ArchiveXML( const Path& path );
+            ~ArchiveXML();
 
         private:
             ArchiveXML();
-            ~ArchiveXML();
 
         public:
             // Stream access
@@ -121,7 +121,7 @@ namespace Helium
                 return ArchiveTypes::XML;
             }
 
-            virtual void OpenFile( const Path& path, bool write = false) HELIUM_OVERRIDE;
+            virtual void Open( bool write = false) HELIUM_OVERRIDE;
             void OpenStream(TCharStream* stream, bool write = false);
             virtual void Close(); 
 

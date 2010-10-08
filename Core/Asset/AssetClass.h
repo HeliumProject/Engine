@@ -194,8 +194,8 @@ namespace Helium
 
 
         public:
-            // write to the location on disk backed by the file manager id
-            virtual void Serialize();
+            // write to the location on disk
+            virtual bool Serialize();
 
             // callback when this AssetClass has finished loading off disk
             virtual void LoadFinished();

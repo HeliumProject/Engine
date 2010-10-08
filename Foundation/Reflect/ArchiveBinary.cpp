@@ -48,6 +48,14 @@ namespace Helium
 // Binary Archive implements our own custom serialization technique
 //
 
+ArchiveBinary::ArchiveBinary( const Path& path )
+: Archive( path )
+, m_Version( CURRENT_VERSION )
+, m_Size( 0 )
+, m_Skip( false )
+{
+}
+
 ArchiveBinary::ArchiveBinary()
 : Archive()
 , m_Version( CURRENT_VERSION )
@@ -56,15 +64,13 @@ ArchiveBinary::ArchiveBinary()
 {
 }
 
-void ArchiveBinary::OpenFile( const Path& path, bool write )
+void ArchiveBinary::Open( bool write )
 {
-    m_Path = path;
-
 #ifdef REFLECT_ARCHIVE_VERBOSE
     Debug(TXT("Opening file '%s'\n"), path.c_str());
 #endif
 
-    Reflect::CharStreamPtr stream = new FileStream<char>( path, write ); 
+    Reflect::CharStreamPtr stream = new FileStream<char>( m_Path, write ); 
     OpenStream( stream, write );
 }
 

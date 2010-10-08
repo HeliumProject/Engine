@@ -26,17 +26,13 @@ AssetClassPtr MeshAssetFactory::Create( const Helium::Path& path )
         MeshProcessingComponentPtr meshProcessingComponent = new MeshProcessingComponent();
         entity->SetComponent( meshProcessingComponent );
 
-        try
-        {
-            Reflect::Archive archive( assetPath, entity );
-            archive.Save();
-            entity->SetSourcePath( assetPath );
-        }
-        catch( Helium::Exception& )
+        if ( !Reflect::ToArchive( assetPath, entity ) )
         {
             delete entity;
             return NULL;
         }
+
+        entity->SetSourcePath( assetPath );
     }
 
     Path meshPath = path;
@@ -48,8 +44,11 @@ AssetClassPtr MeshAssetFactory::Create( const Helium::Path& path )
         {
             // let's try to cache the mesh
             SceneGraph::Mesh* mesh = Importers::ImportOBJ( path );
-            Reflect::Archive archive( meshPath, mesh );
-            archive.Save();
+
+            if ( mesh )
+            {
+                Reflect::ToArchive( meshPath, mesh );
+            }
         }
     }
 

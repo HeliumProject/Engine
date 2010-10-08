@@ -228,6 +228,7 @@ namespace Helium
             bool m_Abort;
 
         protected:
+            Archive( const Path& path );
             Archive();
             virtual ~Archive();
 
@@ -341,7 +342,7 @@ namespace Helium
 
             // Archive-level processing (visitor setup and append processing)
             void PreDeserialize();
-            void PostDeserialize(V_Element& append);
+            void PostDeserialize( V_Element& append );
 
             // Instance-level processing (visit calls and type tracking)
             void PreSerialize( const ElementPtr& element, const Field* field = NULL );
@@ -402,5 +403,22 @@ namespace Helium
         
         // Get parser for a file
         FOUNDATION_API ArchivePtr GetArchive( const Path& path );
+
+        FOUNDATION_API bool ToArchive( const Path& path, ElementPtr element, tstring* error = NULL );
+        FOUNDATION_API bool ToArchive( const Path& path, const V_Element& elements, tstring* error = NULL );
+
+        template <class T>
+        Helium::SmartPtr<T> FromArchive( const Path& path )
+        {
+            ArchivePtr archive = GetArchive( path );
+            return archive->Get< T >();
+        }
+
+        template< class T >
+        void FromArchive( const Path& path, std::vector< Helium::SmartPtr<T> >& elements )
+        {
+            ArchivePtr archive = GetArchive( path );
+            archive->Get< T >( elements );
+        }
     }
 }

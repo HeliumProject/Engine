@@ -24,8 +24,17 @@ using namespace Helium::Reflect;
 // Archive is a std set of static and non-static archive related functions
 //
 
+Archive::Archive( const Path& path )
+: m_Path( path )
+, m_Progress( 0 )
+, m_SearchType( Reflect::ReservedTypes::Invalid )
+, m_Abort( false )
+, m_Mode( ArchiveModes::Read )
+{
+}
+
 Archive::Archive()
-: m_ParsingArchive( NULL )
+: m_Path( TXT( "" ) )
 , m_Progress( 0 )
 , m_SearchType( Reflect::ReservedTypes::Invalid )
 , m_Abort( false )
@@ -182,6 +191,18 @@ bool Archive::TryElementCallback( Element* element, ElementCallback callback )
     return true;
 }
 
+void Archive::Put( const ElementPtr& element )
+{
+    m_Spool.push_back( element );
+}
+
+void Archive::Put( const V_Element& elements )
+{
+    m_Spool.reserve( m_Spool.size() + elements.size() );
+    m_Spool.insert( m_Spool.end(), elements.begin(), elements.end() );
+}
+
+
 ElementPtr Archive::Get( int searchType )
 {
     REFLECT_SCOPE_TIMER( ( "%s", m_Path.c_str() ) );
@@ -250,86 +271,6 @@ void Archive::Get( V_Element& elements )
     elements = m_Spool;
 }
 
-
-void Archive::Close()
-{
-    HELIUM_ASSERT( !m_Path.empty() );
-
-    REFLECT_SCOPE_TIMER(("%s", path.c_str()));
-
-    m_Path.MakePath();
-
-    // build a path to a unique file for this process
-    Helium::Path safetyPath( m_Path.Directory() + Helium::GetProcessString() );
-    safetyPath.ReplaceExtension( m_Path.Extension() );
-
-    // generate the file to the safety location
-    if ( Helium::IsDebuggerPresent() )
-    {
-        Open( true );
-        Write();
-        Close(); 
-    }
-    else
-    {
-        bool open = false;
-
-        try
-        {
-            Open( true );
-            open = true;
-            Write();
-            Close(); 
-        }
-        catch ( Helium::Exception& ex )
-        {
-            tstringstream str;
-            str << "While writing '" << m_Path.c_str() << "': " << ex.Get();
-            ex.Set( str.str() );
-
-            if ( open )
-            {
-                Close();
-            }
-
-            safetyPath.Delete();
-            throw;
-        }
-        catch ( ... )
-        {
-            if ( open )
-            {
-                Close();
-            }
-
-            safetyPath.Delete();
-            throw;
-        }
-    }
-
-    try
-    {
-        StatusInfo info( *this, ArchiveStates::Publishing );
-        e_Status.Raise( info );
-
-        // delete the destination file
-        m_Path.Delete();
-
-        // move the written file to the destination location
-        safetyPath.Move( m_Path );
-    }
-    catch ( Helium::Exception& ex )
-    {
-        tstringstream str;
-        str << "While moving '" << safetyPath.c_str() << "' to '" << m_Path.c_str() << "': " << ex.Get();
-        ex.Set( str.str() );
-
-        safetyPath.Delete();
-
-        throw;
-    }
-}
-
 bool Reflect::GetFileType( const Path& path, ArchiveType& type )
 {
     tstring ext = path.Extension();
@@ -369,4 +310,90 @@ ArchivePtr Reflect::GetArchive( const Path& path )
     }
 
     return NULL;
+}
+
+bool Reflect::ToArchive( const Path& path, ElementPtr element, tstring* error )
+{
+    V_Element elements;
+    elements.push_back( element );
+    return ToArchive( path, elements, error );
+}
+
+bool Reflect::ToArchive( const Path& path, const V_Element& elements, tstring* error )
+{
+    HELIUM_ASSERT( !path.empty() );
+    HELIUM_ASSERT( elements.size() > 0 );
+
+    REFLECT_SCOPE_TIMER( ( "%s", path.c_str() ) );
+
+    path.MakePath();
+
+    // build a path to a unique file for this process
+    Path safetyPath( path.Directory() + Helium::GetProcessString() );
+    safetyPath.ReplaceExtension( path.Extension() );
+
+    ArchivePtr archive = GetArchive( safetyPath );
+    archive->Put( elements );
+
+    // generate the file to the safety location
+    if ( Helium::IsDebuggerPresent() )
+    {
+        archive->Open( true );
+        archive->Write();
+        archive->Close();
+    }
+    else
+    {
+        bool open = false;
+
+        try
+        {
+            archive->Open( true );
+            open = true;
+            archive->Write();
+            archive->Close(); 
+        }
+        catch ( Helium::Exception& ex )
+        {
+            tstringstream str;
+            str << "While writing '" << path.c_str() << "': " << ex.Get();
+            
+            if ( error )
+            {
+                *error = str.str();
+            }
+
+            if ( open )
+            {
+                archive->Close();
+            }
+
+            safetyPath.Delete();
+            return false;
+        }
+    }
+
+    try
+    {
+        // delete the destination file
+        path.Delete();
+
+        // move the written file to the destination location
+        safetyPath.Move( path );
+    }
+    catch ( Helium::Exception& ex )
+    {
+        tstringstream str;
+        str << "While moving '" << safetyPath.c_str() << "' to '" << path.c_str() << "': " << ex.Get();
+        
+        if ( error )
+        {
+            *error = str.str();
+        }
+
+        safetyPath.Delete();
+        return false;
+    }
+
+    return true;
 }

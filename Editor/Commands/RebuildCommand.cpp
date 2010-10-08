@@ -227,17 +227,17 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
 
         if ( Helium::IsDebuggerPresent() )
         {
-            Reflect::Archive archive( input );
-            archive.e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
-            archive.Get( elements );
+            Reflect::ArchivePtr archive = Reflect::GetArchive( input );
+            archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
+            archive->Get( elements );
         }
         else
         {
             try
             {
-                Reflect::Archive archive( input );
-                archive.e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
-                archive.Get( elements );
+                Reflect::ArchivePtr archive = Reflect::GetArchive( input );
+                archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
+                archive->Get( elements );
             }
             catch (Helium::Exception& ex)
             {
@@ -260,17 +260,17 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
 
     if ( Helium::IsDebuggerPresent() )
     {
-        Reflect::Archive archive( input );
-        archive.e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
-        archive.Get( spool );
+        Reflect::ArchivePtr archive = Reflect::GetArchive( input );
+        archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
+        archive->Get( spool );
     }
     else
     {
         try
         {
-            Reflect::Archive archive( input );
-            archive.e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
-            archive.Get( spool );
+            Reflect::ArchivePtr archive = Reflect::GetArchive( input );
+            archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
+            archive->Get( spool );
         }
         catch (Helium::Exception& ex)
         {
@@ -312,17 +312,19 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
 
     if ( Helium::IsDebuggerPresent() )
     {
-        Reflect::Archive archive( absolute, spool );
-        archive.e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
-        archive.Save();
+        Reflect::ArchivePtr archive = Reflect::GetArchive( absolute );
+        archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
+        archive->Put( spool );
+        archive->Close();
     }
     else
     {
         try
         {
-            Reflect::Archive archive( absolute, spool );
-            archive.e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
-            archive.Save();
+            Reflect::ArchivePtr archive = Reflect::GetArchive( absolute );
+            archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
+            archive->Put( spool );
+            archive->Close();
         }
         catch (Helium::Exception& ex)
         {
@@ -341,18 +343,18 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
         if ( Helium::IsDebuggerPresent() )
         {
             V_Element duplicates;
-            Reflect::Archive archive( absolute );
-            archive.e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
-            archive.Get( duplicates );
+            Reflect::ArchivePtr archive = Reflect::GetArchive( absolute );
+            archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
+            archive->Get( duplicates );
         }
         else
         {
             try
             {
                 V_Element duplicates;
-                Reflect::Archive archive( absolute );
-                archive.e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
-                archive.Get( duplicates );
+                Reflect::ArchivePtr archive = Reflect::GetArchive( absolute );
+                archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
+                archive->Get( duplicates );
             }
             catch (Helium::Exception& ex)
             {

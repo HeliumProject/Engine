@@ -1,9 +1,13 @@
--- notes:
---  * keep in mind that solution-wide settings should be defined
---    before ever mentioning configuratin-specific settings because
---    the indentation in this file is for humans (not premake), and
---    premake might infer conditionals when walking the graph of 
---    solutions/configurations/projects
+--[[
+
+Notes:
+* keep in mind that solution-wide settings should be defined
+  before ever mentioning configuration-specific settings because
+  the indentation in this file is for humans (not premake), and
+  premake might infer conditionals when walking the graph of 
+  solutions/configurations/projects -Geoff
+
+--]]
 
 solution "Helium"
 
@@ -54,9 +58,10 @@ solution "Helium"
 		kind "SharedLib"
 		language "C++"
 		files { "Platform/*.h", "Platform/*.cpp" }
-		
+				
 		configuration "windows"
 			files{ "Platform/Windows/*.h", "Platform/Windows/*.cpp" }
+			links { "ws2_32" }
 
 		configuration "macosx"
 			files{ "Platform/POSIX/*.h", "Platform/POSIX/*.cpp" }
@@ -71,6 +76,25 @@ solution "Helium"
 		kind "SharedLib"
 		language "C++"
 		files { "Foundation/**.h", "Foundation/**.cpp" }
+		links { "Platform" }
+
+	project "Core"
+		kind "SharedLib"
+		language "C++"
+		files { "Core/**.h", "Core/**.cpp" }
+		links { "Foundation", "Platform" }
+
+	project "Pipeline"
+		kind "SharedLib"
+		language "C++"
+		files { "Pipeline/**.h", "Pipeline/**.cpp" }
+		links { "Foundation", "Platform" }
+
+	project "Editor"
+		kind "ConsoleApp"
+		language "C++"
+		files { "Editor/**.h", "Editor/**.cpp" }
+		links { "Pipeline", "Core", "Foundation", "Platform" }
 
 	configuration "Debug*"
 		defines { "_DEBUG", "DEBUG" }

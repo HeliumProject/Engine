@@ -191,6 +191,8 @@ bool Archive::TryElementCallback( Element* element, ElementCallback callback )
     return true;
 }
 
+#pragma TODO( "Add support for writing objects piecemeal into the archive in Put" )
+
 void Archive::Put( const ElementPtr& element )
 {
     m_Spool.push_back( element );

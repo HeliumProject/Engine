@@ -15,7 +15,8 @@ solution "Helium"
 	
     platforms
     {
-		"native"
+		"x32",
+		"x64"
 	}
 
 	configurations
@@ -47,7 +48,7 @@ solution "Helium"
 
 	configuration "Release Unicode"
 		targetdir "Bin/Release Unicode"
-		
+
 	configuration "windows"
 		defines
 		{
@@ -58,7 +59,7 @@ solution "Helium"
 		kind "SharedLib"
 		language "C++"
 		files { "Platform/*.h", "Platform/*.cpp" }
-				
+
 		configuration "windows"
 			files{ "Platform/Windows/*.h", "Platform/Windows/*.cpp" }
 			links { "ws2_32" }
@@ -102,7 +103,7 @@ solution "Helium"
 
 	configuration "Release*"
 		defines { "NDEBUG" }
-		flags { "Optimize" }
+		flags { "Symbols", "Optimize" }
 
 	configuration "*Unicode"
 		defines { "UNICODE=1" }

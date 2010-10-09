@@ -261,8 +261,8 @@ namespace Helium
 			
 			protected:
 				wxPanel* m_ProjectManagementPanel;
-				wxBitmapButton* m_AddFile;
-				wxBitmapButton* m_DeleteFile;
+				wxBitmapButton* m_AddFileButton;
+				wxBitmapButton* m_DeleteFileButton;
 				
 				Helium::Editor::MenuButton* m_OptionsButton;
 				wxDataViewCtrl* m_DataViewCtrl;

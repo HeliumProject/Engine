@@ -766,6 +766,10 @@
 			Name="Vault"
 			>
 			<File
+				RelativePath=".\Icons\Helium\16x16\actions\debug.texture.hrb"
+				>
+			</File>
+			<File
 				RelativePath=".\Vault\ListResultsView.cpp"
 				>
 			</File>

@@ -24,10 +24,14 @@ namespace Helium
             enum OverlayQuadrant
             {
                 TopLeft     = 0,
+                TopCenter,
                 TopRight,
+                CenterLeft,
+                Centered,
+                CenterRight,
                 BottomLeft,
+                BottomCenter,
                 BottomRight,
-                Center,
             };
         }
         typedef OverlayQuadrants::OverlayQuadrant OverlayQuadrant;

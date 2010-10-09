@@ -17,6 +17,7 @@ namespace Helium
             {
                 Name = 0,
                 Details,
+                FileSize,
 
                 COUNT //Do not use: must be last
             };
@@ -25,6 +26,7 @@ namespace Helium
             {
                 TXT( "Name" ),
                 TXT( "Details" ),
+                TXT( "Size" ),
 
                 TXT( "Unknown" ), //COUNT
             };
@@ -38,8 +40,9 @@ namespace Helium
 
             static const u32 s_Widths[COUNT+1] = 
             {
-                200,
-                300,
+                200, // Name
+                300, // Details
+                50,  // FileSize
 
                 0, //COUNT
             };
@@ -99,20 +102,22 @@ namespace Helium
         public:
             ProjectViewModelNode( ProjectViewModelNode* parent,
                 const Helium::Path& path,
-                const bool isContainer = false );
+                const bool canBeContainer = false );
             virtual ~ProjectViewModelNode();
 
             ProjectViewModelNode* GetParent();
             S_ProjectViewModelNodeChildren& GetChildren();
 
             bool IsContainer() const;
+            bool CanBeContainer() const;
 
             void SetPath( const Helium::Path& path );
             const Helium::Path& GetPath();
             void PathChanged( const Attribute< Helium::Path >::ChangeArgs& text );
 
-            const wxString& GetName() const;
-            const wxString& GetDetails() const;
+            tstring GetName() const;
+            tstring GetDetails() const;
+            tstring GetFileSize() const;
 
             inline bool operator<( const ProjectViewModelNode& rhs ) const
             {
@@ -124,15 +129,12 @@ namespace Helium
                 return ( _tcsicmp( m_Path.c_str(), rhs.m_Path.c_str() ) == 0 );
             }
 
-        private:
+        public:
             ProjectViewModelNode* m_ParentNode;
             S_ProjectViewModelNodeChildren m_ChildNodes;
-            bool m_IsContainer;
+            bool m_CanBeContainer;
 
             Helium::Path m_Path;
-
-            mutable wxString m_Name;
-            mutable wxString m_Details;
         };
 
 
@@ -159,6 +161,10 @@ namespace Helium
             // Project events
             void OnPathAdded( const Helium::Path& path );
             void OnPathRemoved( const Helium::Path& path );
+
+            void OnBeginDrag( wxDataViewEvent& event );
+            void OnDropPossible( wxDataViewEvent& event );
+            void OnDrop( wxDataViewEvent& event );
 
         public:
             // wxDataViewModel pure virtual interface

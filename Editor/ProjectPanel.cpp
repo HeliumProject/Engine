@@ -53,7 +53,6 @@ ProjectPanel::ProjectPanel( wxWindow *parent )
     m_OptionsButton->Enable( true );
     m_OptionsButton->Hide();
 
-    //m_DataViewCtrl->EnableDragSource( wxDF_UNICODETEXT );
     m_DataViewCtrl->EnableDropTarget( wxDF_FILENAME );
 
     m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( ProjectPanel::OnSelectionChanged ), NULL, this );
@@ -227,6 +226,49 @@ void ProjectPanel::OnSelectionChanged( wxDataViewEvent& event )
 //        // populate the folder
 //    }
 //}
+
+void ProjectPanel::OnBeginDrag( wxDataViewEvent& event )
+{
+    if ( m_Model )
+    {
+        m_Model->OnBeginDrag( event );
+    }
+}
+
+void ProjectPanel::OnDropPossible( wxDataViewEvent& event )
+{
+    wxDataViewItem item( event.GetItem() );
+
+    //// only allow drags for item, not containers
+    //if (m_music_model->IsContainer( item ) )
+    //    event.Veto();
+
+    //if (event.GetDataFormat() != wxDF_UNICODETEXT)
+    //    event.Veto();
+}
+
+void ProjectPanel::OnDrop( wxDataViewEvent& event )
+{
+    wxDataViewItem item( event.GetItem() );
+
+    //// only allow drops for item, not containers
+    //if (m_music_model->IsContainer( item ) )
+    //{
+    //    event.Veto();
+    //    return;
+    //}
+
+    //if (event.GetDataFormat() != wxDF_UNICODETEXT)
+    //{
+    //    event.Veto();
+    //    return;
+    //}
+
+    //wxTextDataObject obj;
+    //obj.SetData( wxDF_UNICODETEXT, event.GetDataSize(), event.GetDataBuffer() );
+
+    //wxLogMessage( "Text dropped: %s", obj.GetText() );
+}
 
 //void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
 //{

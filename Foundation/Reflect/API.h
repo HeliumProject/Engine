@@ -63,10 +63,6 @@ namespace Helium
         typedef Helium::SmartPtr<const Serializer> ConstSerializerPtr;
         typedef std::vector<ConstSerializerPtr> V_ConstSerializer;
 
-        class Version;
-        typedef Helium::SmartPtr<Version> VersionPtr;
-        typedef Helium::SmartPtr<const Version> ConstVersionPtr;
-
         // function type for creating object instances
         typedef Object* (*CreateObjectFunc)();
 

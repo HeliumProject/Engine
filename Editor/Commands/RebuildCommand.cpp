@@ -16,6 +16,7 @@
 #include "Foundation/Startup.h"
 #include "Foundation/RCS/RCS.h"
 
+using namespace Helium;
 using namespace Helium::Editor;
 using namespace Helium::CommandLine;
 using namespace Helium::Reflect;
@@ -226,15 +227,17 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
 
         if ( Helium::IsDebuggerPresent() )
         {
-            Reflect::PrintStatus status;
-            Archive::FromFile( input, elements, &status );
+            Reflect::ArchivePtr archive = Reflect::GetArchive( input );
+            archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
+            archive->Get( elements );
         }
         else
         {
             try
             {
-                Reflect::PrintStatus status;
-                Archive::FromFile( input, elements, &status );
+                Reflect::ArchivePtr archive = Reflect::GetArchive( input );
+                archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
+                archive->Get( elements );
             }
             catch (Helium::Exception& ex)
             {
@@ -257,15 +260,17 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
 
     if ( Helium::IsDebuggerPresent() )
     {
-        Reflect::PrintStatus status;
-        Archive::FromFile( input, spool, &status );
+        Reflect::ArchivePtr archive = Reflect::GetArchive( input );
+        archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
+        archive->Get( spool );
     }
     else
     {
         try
         {
-            Reflect::PrintStatus status;
-            Archive::FromFile( input, spool, &status );
+            Reflect::ArchivePtr archive = Reflect::GetArchive( input );
+            archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
+            archive->Get( spool );
         }
         catch (Helium::Exception& ex)
         {
@@ -281,25 +286,6 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
 
 
     //
-    // Reset version
-    //
-
-    VersionPtr version = NULL;
-
-    if ( spool.front()->HasType(Reflect::GetType<Version>()) )
-    {
-        version = Reflect::DangerousCast<Version>(spool[0]);
-        spool.erase(spool.begin());
-    }
-    else
-    {
-        version = new Version ();
-    }
-
-    version->m_Source = TXT( "rebuild" );
-
-
-    //
     // Write output
     //
 
@@ -309,7 +295,7 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
 
     if (m_RCS)
     {
-        if (RCS::PathIsManaged( absolute ))
+        if ( RCS::PathIsManaged( absolute ) )
         {
             try
             {
@@ -326,15 +312,19 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
 
     if ( Helium::IsDebuggerPresent() )
     {
-        Reflect::PrintStatus status;
-        Archive::ToFile( spool, absolute, version, &status );
+        Reflect::ArchivePtr archive = Reflect::GetArchive( absolute );
+        archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
+        archive->Put( spool );
+        archive->Close();
     }
     else
     {
         try
         {
-            Reflect::PrintStatus status;
-            Archive::ToFile( spool, absolute, version, &status );
+            Reflect::ArchivePtr archive = Reflect::GetArchive( absolute );
+            archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
+            archive->Put( spool );
+            archive->Close();
         }
         catch (Helium::Exception& ex)
         {
@@ -353,16 +343,18 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
         if ( Helium::IsDebuggerPresent() )
         {
             V_Element duplicates;
-            Reflect::PrintStatus status;
-            Archive::FromFile( absolute, duplicates, &status );
+            Reflect::ArchivePtr archive = Reflect::GetArchive( absolute );
+            archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
+            archive->Get( duplicates );
         }
         else
         {
             try
             {
                 V_Element duplicates;
-                Reflect::PrintStatus status;
-                Archive::FromFile( absolute, duplicates, &status );
+                Reflect::ArchivePtr archive = Reflect::GetArchive( absolute );
+                archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
+                archive->Get( duplicates );
             }
             catch (Helium::Exception& ex)
             {
@@ -377,3 +369,58 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
     return REBUILD_SUCCESS;
 }
 
+void RebuildCommand::ArchiveStatus( const Reflect::StatusInfo& info )
+{
+    switch ( info.m_ArchiveState )
+    {
+    case Reflect::ArchiveStates::Starting:
+        {
+            m_Timer = Helium::TimerGetClock();
+
+            const char* verb = info.m_Archive.GetMode() == ArchiveModes::Read ? "Reading" : "Writing";
+            const char* type = info.m_Archive.GetType() == ArchiveTypes::XML ? "XML" : "Binary";
+
+            if (info.m_Archive.GetPath().empty())
+            {
+                Log::Bullet bullet( TXT( "%s %s stream\n" ), verb, type );
+            }
+            else
+            {
+                Log::Bullet bullet( TXT( "%s %s file '%s'\n" ), verb, type, info.m_Archive.GetPath().c_str() );
+
+                if (info.m_Archive.GetMode() == ArchiveModes::Read)
+                {
+                    u64 size = info.m_Archive.GetPath().Size();
+                    if ( size > 1000)
+                    {
+                        Log::Bullet bullet( TXT( "Size: %dk\n" ),  size / 1000);
+                    }
+                    else
+                    {
+                        Log::Bullet bullet( TXT( "Size: %d\n" ), size );
+                    }
+                }
+            }
+
+            break;
+        }
+
+    case Reflect::ArchiveStates::PostProcessing:
+        {
+            Log::Bullet bullet( TXT( "Processing...\n" ) );
+            break;
+        }
+
+    case Reflect::ArchiveStates::Complete:
+        {
+            Log::Bullet bullet( TXT( "Completed in %.2f ms\n" ), Helium::CyclesToMillis(Helium::TimerGetClock() - m_Timer));
+            break;
+        }
+
+    case Reflect::ArchiveStates::Publishing:
+        {
+            Log::Bullet bullet( TXT( "Publishing to %s\n" ), info.m_Archive.GetPath().c_str());
+            break;
+        }
+    }
+}

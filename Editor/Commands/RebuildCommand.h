@@ -26,6 +26,7 @@ namespace Helium
             tstring m_Batch;
             tstring m_Input;
             tstring m_Output;
+            u64 m_Timer;
 
             enum RebuildCodes
             {
@@ -49,6 +50,8 @@ namespace Helium
             virtual void Cleanup() HELIUM_OVERRIDE;
 
             virtual bool Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) HELIUM_OVERRIDE;
+
+            void ArchiveStatus( const Reflect::StatusInfo& info );
 
         private:
             int ProcessFile(const tstring& input, const tstring& output);

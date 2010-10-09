@@ -275,7 +275,6 @@ namespace Helium
         // This manages all the objects in a scene (typically Reflected in a file on disk)
         //  Scenes are primarily used as partitions of a level, and as a point of nesting for nested instanced types
         //  Scene implements the ObjectManager interface to facilitate undo/redo for the creation and deletion of its objects
-        //  Scene implements the StatusHandler interface to update the UI as its loads data through Reflect (its means of serialzation)
         //  Scene instances are reference counted and owned by the scene manager
         //
 
@@ -302,7 +301,7 @@ namespace Helium
 
         typedef stdext::hash_map< tstring, SceneGraph::SceneNode*, NameHasher > HM_NameToSceneNodeDumbPtr;
 
-        class CORE_API Scene : public Reflect::Object, public Reflect::StatusHandler
+        class CORE_API Scene : public Reflect::Object
         {
             //
             // Members
@@ -610,10 +609,6 @@ namespace Helium
 
             Undo::CommandPtr ImportSceneNode( const Reflect::ElementPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, u32 importFlags, i32 importReflectType = Reflect::ReservedTypes::Invalid  );
 
-            // Reflect::Archive overrides for status and error reporting
-            void ArchiveStatus(Reflect::StatusInfo& info)HELIUM_OVERRIDE;
-            void ArchiveException(Reflect::ExceptionInfo& info) HELIUM_OVERRIDE;
-
             /// @brief If this node has been remapped from another node, return the source nodes ID
             /// When we copy elements, we give them a new UniqueID. If we need information related
             /// to the original node, we need a way to gather the id of the original node.
@@ -626,6 +621,10 @@ namespace Helium
             //
 
         public:
+            // for status and error reporting from Reflect::Archive events
+            void ArchiveStatus( const Reflect::StatusInfo& info );
+            void ArchiveException( const Reflect::ExceptionInfo& info );
+
             // Saves this scene to its current file location. 
             // (get and change the scene editor file to switch the destination)
             bool Save();

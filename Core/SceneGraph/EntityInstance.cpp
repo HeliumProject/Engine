@@ -297,6 +297,11 @@ void EntityInstance::SetEntityPath( const tstring& path )
 
 Asset::EntityPtr EntityInstance::GetEntity() const
 {
+    if ( m_Path.empty() )
+    {
+        return NULL;
+    }
+
     return Asset::AssetClass::LoadAssetClass< Asset::Entity >( m_Path );
 }
 

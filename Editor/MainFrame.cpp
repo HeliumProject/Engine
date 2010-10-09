@@ -313,7 +313,6 @@ MainFrame::~MainFrame()
 
     wxGetApp().GetSettingsManager()->GetSettings< WindowSettings >()->SetFromWindow( this, &m_FrameManager );
     m_ViewPanel->GetViewCanvas()->GetViewport().SaveSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
-    wxGetApp().SaveSettings();
 
     //
     // Detach event handlers
@@ -361,7 +360,7 @@ bool MainFrame::OpenProject( const Helium::Path& path )
         tstring error;
         try
         {
-            m_Project = Reflect::Archive::FromFile< Project >( path );
+            m_Project = Reflect::FromArchive< Project >( path );
         }
         catch ( const Helium::Exception& ex )
         {
@@ -1194,7 +1193,11 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
                         try
                         {
-                            Reflect::Archive::ToFile( elements, file.c_str(), NULL, m_SceneManager.GetCurrentScene() );
+                            Reflect::ArchivePtr archive = Reflect::GetArchive( file );
+                            archive->e_Status.AddMethod( m_SceneManager.GetCurrentScene(), &Scene::ArchiveStatus );
+                            archive->d_Exception.Set( m_SceneManager.GetCurrentScene(), &Scene::ArchiveException );
+                            archive->Put( elements );
+                            archive->Close();
                         }
                         catch ( Helium::Exception& ex )
                         {
@@ -1213,7 +1216,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
                         try
                         {
-                            Reflect::ArchiveXML::ToString( elements, xml, m_SceneManager.GetCurrentScene() );
+                            Reflect::ArchiveXML::ToString( elements, xml );
                         }
                         catch ( Helium::Exception& ex )
                         {

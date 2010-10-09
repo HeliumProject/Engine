@@ -58,32 +58,12 @@ namespace Helium
                 s_BaseBuiltDirectory = path;
             }
 
-            static AssetClassPtr LoadAssetClass( const tchar* path );
-            static AssetClassPtr LoadAssetClass( const tstring& path )
-            {
-                return LoadAssetClass( path.c_str() );
-            }
-            static AssetClassPtr LoadAssetClass( const Helium::Path& path )
-            {
-                return LoadAssetClass( path.Get().c_str() );
-            }
+            static AssetClassPtr LoadAssetClass( const Path& path );
 
             template <class T>
-            static Helium::SmartPtr<T> LoadAssetClass( const tchar* path )
+            static Helium::SmartPtr<T> LoadAssetClass( const Path& path )
             {
                 return Reflect::TryCast<T>( LoadAssetClass( path ) );
-            }
-
-            template <class T>
-            static Helium::SmartPtr<T> LoadAssetClass( const tstring& path )
-            {
-                return Reflect::TryCast<T>( LoadAssetClass( path.c_str() ) );
-            }
-
-            template <class T>
-            static Helium::SmartPtr<T> LoadAssetClass( const Helium::Path& path )
-            {
-                return Reflect::TryCast<T>( LoadAssetClass( path.Get().c_str() ) );
             }
 
         public:
@@ -214,8 +194,8 @@ namespace Helium
 
 
         public:
-            // write to the location on disk backed by the file manager id
-            virtual void Serialize();
+            // write to the location on disk
+            virtual bool Serialize();
 
             // callback when this AssetClass has finished loading off disk
             virtual void LoadFinished();

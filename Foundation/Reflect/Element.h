@@ -93,7 +93,7 @@ namespace Helium
             // Serialize to a particular data target, just works on this
             void                        ToXML(tstring& xml) const;
             void                        ToBinary(std::iostream& stream) const;
-            void                        ToFile(const tstring& file, const VersionPtr& version = NULL) const;
+            void                        ToFile( const Path& path ) const;
 
             // Callbacks are executed at the appropriate time by the archive and cloning APIs
             virtual void                PreSerialize() { }

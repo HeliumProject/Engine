@@ -34,23 +34,16 @@ AssetClass::AssetClass()
 {
 }
 
-AssetClassPtr AssetClass::LoadAssetClass( const tchar* path )
+AssetClassPtr AssetClass::LoadAssetClass( const Path& path )
 {
-    AssetClassPtr assetClass = NULL;
-    try
-    {
-        Helium::Path filePath( path );
+    AssetClassPtr assetClass = Reflect::FromArchive< AssetClass >( path );
 
-        assetClass = Reflect::Archive::FromFile< AssetClass >( filePath );
-        assetClass->SetSourcePath( filePath );
+    if ( assetClass )
+    {
+        assetClass->SetSourcePath( path );
         assetClass->LoadFinished();
     }
-    catch ( const Helium::Exception& exception )
-    {
-        Log::Warning( TXT( "%s\n" ), exception.What() );
-    }
 
-    // success
     return assetClass;
 }
 
@@ -285,12 +278,12 @@ bool AssetClass::RemoveComponent( i32 typeID )
     return __super::RemoveComponent( typeID );
 }
 
-void AssetClass::Serialize()
+bool AssetClass::Serialize()
 {
-    Reflect::Version version( TXT( "Pipeline" ), ASSET_VERSION );
-    Reflect::Archive::ToFile( this, m_SourcePath, &version );
+    bool result = Reflect::ToArchive( m_SourcePath, this );
 
-    m_Modified = false;
+    m_Modified = !result;
+    return result;
 }
 
 /////////////////////////////////////////////////////////////////////////////

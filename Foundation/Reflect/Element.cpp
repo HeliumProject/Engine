@@ -37,9 +37,11 @@ void Element::ToBinary(std::iostream& stream) const
     ArchiveBinary::ToStream(this, stream);
 }
 
-void Element::ToFile(const tstring& file, const VersionPtr& version) const
+void Element::ToFile( const Path& path ) const
 {
-    Archive::ToFile(this, file, version);
+    ArchivePtr archive = GetArchive( path );
+    archive->Put( this );
+    archive->Close();
 }
 
 void Element::Accept(Visitor& visitor)

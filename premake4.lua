@@ -58,7 +58,7 @@ solution "Helium"
 		kind "SharedLib"
 		language "C++"
 		files { "Platform/*.h", "Platform/*.cpp" }
-				
+
 		configuration "windows"
 			files{ "Platform/Windows/*.h", "Platform/Windows/*.cpp" }
 			links { "ws2_32" }
@@ -102,7 +102,7 @@ solution "Helium"
 
 	configuration "Release*"
 		defines { "NDEBUG" }
-		flags { "Optimize" }
+		flags { "Symbols", "Optimize" }
 
 	configuration "*Unicode"
 		defines { "UNICODE=1" }

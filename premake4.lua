@@ -139,6 +139,134 @@ solution "Dependencies"
 			"Dependencies/LiteSQL/src/generator/xmlparser.hpp",
 		}
 
+	project "Lua"
+		kind "StaticLib"
+		language "C++"
+		files
+		{
+			"Dependencies/lua/src/*.h",
+			"Dependencies/lua/src/*.c",
+		}
+		excludes
+		{
+			"Dependencies/lua/src/luac.c",
+		}
+		
+	project "nvtt"
+		kind "StaticLib"
+		language "C++"
+		defines
+		{
+			"__SSE2__",
+			"__SSE__",
+			"__MMX__",
+		}
+		includedirs
+		{
+			"Dependencies/nvtt/src",
+		}
+		files
+		{
+			"Dependencies/nvtt/src/nvmath/*.h",
+			"Dependencies/nvtt/src/nvmath/*.cpp",
+			"Dependencies/nvtt/src/nvcore/*.h",
+			"Dependencies/nvtt/src/nvcore/*.cpp",
+			"Dependencies/nvtt/src/nvimage/*.h",
+			"Dependencies/nvtt/src/nvimage/*.cpp",
+		}
+		excludes
+		{
+			"Dependencies/nvtt/src/nvcore/Tokenizer.h",
+			"Dependencies/nvtt/src/nvcore/Tokenizer.cpp",
+			"Dependencies/nvtt/src/nvimage/ConeMap.h",
+			"Dependencies/nvtt/src/nvimage/ConeMap.cpp",
+		}
+		
+		configuration "windows"
+			includedirs
+			{
+				"Dependencies/nvtt/project/vc8",
+			}
+
+	project "squish"
+		kind "StaticLib"
+		language "C++"
+		includedirs
+		{
+			"Dependencies/squish",
+		}
+		files
+		{
+			"Dependencies/squish/*.h",
+			"Dependencies/squish/*.inl",
+			"Dependencies/squish/*.cpp",
+		}
+
+	project "tiff"
+		kind "StaticLib"
+		language "C++"
+		includedirs
+		{
+			"Dependencies/tiff",
+			"Dependencies/tiff/libtiff",
+		}
+		files
+		{
+			"Dependencies/tiff/libtiff/*.h",
+			"Dependencies/tiff/libtiff/*.c",
+		}
+		
+		configuration "windows"
+			excludes
+			{
+				"Dependencies/tiff/libtiff/tif_acorn.c",
+				"Dependencies/tiff/libtiff/tif_atari.c",
+				"Dependencies/tiff/libtiff/tif_apple.c",
+				"Dependencies/tiff/libtiff/tif_next.c",
+				"Dependencies/tiff/libtiff/tif_msdos.c",
+				"Dependencies/tiff/libtiff/tif_unix.c",
+				"Dependencies/tiff/libtiff/tif_win3.c",
+			}
+
+		configuration "macosx"
+			excludes
+			{
+				"Dependencies/tiff/libtiff/tif_acorn.c",
+				"Dependencies/tiff/libtiff/tif_atari.c",
+				"Dependencies/tiff/libtiff/tif_next.c",
+				"Dependencies/tiff/libtiff/tif_msdos.c",
+				"Dependencies/tiff/libtiff/tif_unix.c",
+				"Dependencies/tiff/libtiff/tif_win3.c",
+				"Dependencies/tiff/libtiff/tif_win32.c",
+			}
+
+		configuration "linux"
+			excludes
+			{
+				"Dependencies/tiff/libtiff/tif_acorn.c",
+				"Dependencies/tiff/libtiff/tif_atari.c",
+				"Dependencies/tiff/libtiff/tif_apple.c",
+				"Dependencies/tiff/libtiff/tif_next.c",
+				"Dependencies/tiff/libtiff/tif_msdos.c",
+				"Dependencies/tiff/libtiff/tif_win3.c",
+				"Dependencies/tiff/libtiff/tif_win32.c",
+			}
+
+	project "zlib"
+		kind "StaticLib"
+		language "C++"
+		files
+		{
+			"Dependencies/zlib/*.h",
+			"Dependencies/zlib/*.c",
+		}
+		excludes
+		{
+			"Dependencies/zlib/gz*.h",
+			"Dependencies/zlib/gz*.c",
+			"Dependencies/zlib/minigzip.c",
+		}
+
 solution "Helium"
 
 	defines
@@ -184,13 +312,6 @@ solution "Helium"
 			}
 			
 		configuration "linux"
-			files
-			{
-				"Platform/POSIX/*.h",
-				"Platform/POSIX/*.cpp",
-			}
-			
-		configuration "bsd"
 			files
 			{
 				"Platform/POSIX/*.h",

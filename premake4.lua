@@ -35,15 +35,16 @@ function DoDefaultSolutionSetup()
 	solutions/configurations/projects -Geoff
 --]]
 
-	flags
-	{
-		"NoMinimalRebuild"
-	}
-	
 	configuration "windows"
 		defines
 		{
-			"WIN32=1",
+			"_WIN32",
+			"WIN32",
+			"_CRT_SECURE_NO_DEPRECATE"
+		}
+		flags
+		{
+			"NoMinimalRebuild"
 		}
 
 	configuration "Debug*"
@@ -64,7 +65,6 @@ function DoDefaultSolutionSetup()
 		}
 		flags
 		{
-			"Symbols",
 			"Optimize"
 		}
 
@@ -87,16 +87,25 @@ solution "Dependencies"
 	project "Expat"
 		kind "StaticLib"
 		language "C++"
-		files { "Dependencies/Expat/*.h", "Dependencies/Expat/*.cpp" }
+		defines { "COMPILED_FROM_DSP" }
+		files { "Dependencies/Expat/*.h", "Dependencies/Expat/*.c" }
 
 solution "Helium"
 
-	DoDefaultSolutionSetup()
+	defines
+	{
+		"PLATFORM_DLL=1",
+		"FOUNDATION_DLL=1",
+		"PIPELINE_DLL=1",
+		"CORE_DLL=1"
+	}
 
 	includedirs
 	{
 		"."
 	}
+
+	DoDefaultSolutionSetup()
 
 	project "Platform"
 		kind "SharedLib"

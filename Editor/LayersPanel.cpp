@@ -40,13 +40,13 @@ LayersPanel::LayersPanel( SceneManager* manager, wxWindow* parent, wxWindowID id
     {
         Freeze();
 
-        m_CreateNewLayerButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::CreateNewLayer ) );
-        m_CreateNewLayerFromSelectionButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::CreateNewLayerFromSelection ) );
-        m_DeleteSelectedLayersButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::DeleteSelectedLayers ) );
-        m_AddSelectionToLayerButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::AddSelectionToLayers ) );
-        m_RemoveSelectionFromLayerButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::RemoveSelectionFromLayers ) );
-        m_SelectLayerMembersButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::SelectLayerMembers ) );
-        m_SelectLayersButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::SelectLayers ) );
+        m_CreateNewLayerButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::CreateNewLayer ) );
+        m_CreateNewLayerFromSelectionButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::CreateNewLayerFromSelection ) );
+        m_DeleteSelectedLayersButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::DeleteSelectedLayers ) );
+        m_AddSelectionToLayerButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::AddSelectionToLayers ) );
+        m_RemoveSelectionFromLayerButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::RemoveSelectionFromLayers ) );
+        m_SelectLayerMembersButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::SelectLayerMembers ) );
+        m_SelectLayersButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::SelectLayers ) );
 
         m_LayerManagementPanel->Layout();
 

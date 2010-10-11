@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version May  4 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -262,12 +262,14 @@ namespace Helium
 			protected:
 				wxPanel* m_ProjectManagementPanel;
 				wxBitmapButton* m_AddFile;
-				wxBitmapButton* m_Delete;
+				wxBitmapButton* m_DeleteFile;
+				
+				Helium::Editor::MenuButton* m_OptionsButton;
 				wxDataViewCtrl* m_DataViewCtrl;
 				
 				// Virtual event handlers, overide them in your derived class
-				virtual void OnAddPath( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnDelete( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnAddFile( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnDeleteFile( wxCommandEvent& event ) { event.Skip(); }
 				
 			
 			public:
@@ -310,11 +312,35 @@ namespace Helium
 			private:
 			
 			protected:
+				enum
+				{
+					ID_Select = 1000,
+					ID_Translate,
+					ID_Rotate,
+					ID_Scale,
+					ID_Duplicate,
+					ID_Locator,
+					ID_Volume,
+					ID_Entity,
+					ID_Curve,
+					ID_CurveEdit,
+				};
+				
 				wxPanel* m_MainPanel;
-				wxPanel* m_ToolsPanel;
+				wxBitmapToggleButton* m_SelectButton;
+				wxBitmapToggleButton* m_TranslateButton;
+				wxBitmapToggleButton* m_RotateButton;
+				wxBitmapToggleButton* m_ScaleButton;
+				wxBitmapToggleButton* m_DuplicateToolButton;
+				wxBitmapToggleButton* m_LocatorToolButton;
+				wxBitmapToggleButton* m_VolumeToolButton;
+				wxBitmapToggleButton* m_EntityToolButton;
+				wxBitmapToggleButton* m_CurveToolLocator;
+				wxBitmapToggleButton* m_CurveEditToolButton;
 				wxBitmapButton* m_PlayButton;
 				wxBitmapButton* m_PauseButton;
 				wxBitmapButton* m_StopButton;
+				
 				
 				wxPanel* m_ToolsPropertiesPanel;
 				
@@ -365,7 +391,6 @@ namespace Helium
 				virtual void OnSearchCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnSearchGoButtonClick( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnSearchTextEnter( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnVaultSettingsButtonClick( wxCommandEvent& event ) { event.Skip(); }
 				
 			
 			public:
@@ -394,28 +419,21 @@ namespace Helium
 				wxPanel* m_ToolPanel;
 				wxBitmapButton* m_FrameOriginButton;
 				wxBitmapButton* m_FrameSelectedButton;
-				
+				wxBitmapToggleButton* m_HighlightModeToggleButton;
 				wxBitmapButton* m_PreviousViewButton;
 				wxBitmapButton* m_NextViewButton;
-				
-				wxBitmapToggleButton* m_HighlightModeToggleButton;
-				
 				wxBitmapToggleButton* m_OrbitCameraToggleButton;
 				wxBitmapToggleButton* m_FrontCameraToggleButton;
 				wxBitmapToggleButton* m_SideCameraToggleButton;
 				wxBitmapToggleButton* m_TopCameraToggleButton;
-				
 				wxBitmapToggleButton* m_ShowAxesToggleButton;
 				wxBitmapToggleButton* m_ShowGridToggleButton;
 				wxBitmapToggleButton* m_ShowBoundsToggleButton;
 				wxBitmapToggleButton* m_ShowStatisticsToggleButton;
-				
 				wxBitmapToggleButton* m_FrustumCullingToggleButton;
 				wxBitmapToggleButton* m_BackfaceCullingToggleButton;
-				
 				wxBitmapToggleButton* m_WireframeShadingToggleButton;
 				wxBitmapToggleButton* m_MaterialShadingToggleButton;
-				
 				wxBitmapToggleButton* m_ColorModeSceneToggleButton;
 				wxBitmapToggleButton* m_ColorModeLayerToggleButton;
 				wxBitmapToggleButton* m_ColorModeNodeTypeToggleButton;
@@ -426,9 +444,9 @@ namespace Helium
 				// Virtual event handlers, overide them in your derived class
 				virtual void OnFrameOrigin( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnFrameSelected( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnToggleHighlightMode( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnPreviousView( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnNextView( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnToggleHighlightMode( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnViewChange( wxCommandEvent& event ) { event.Skip(); }
 				virtual void OnColorMode( wxCommandEvent& event ) { event.Skip(); }
 				

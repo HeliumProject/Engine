@@ -20,7 +20,6 @@ PathContainerInterpreter::PathContainerInterpreter (Container* labelContainer)
 : ReflectFieldInterpreter (labelContainer)
 , m_List( NULL )
 {
-
 }
 
 void PathContainerInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Element*>& instances, Container* parent)

@@ -2,7 +2,10 @@
 #include "EntitySet.h"
 
 #include "Foundation/Log.h"
+#include "Foundation/Reflect/Archive.h"
+
 #include "Foundation/Component/ComponentHandle.h"
+
 #include "Core/Asset/Classes/Entity.h"
 #include "Core/Asset/Components/BoundingBoxComponent.h"
 
@@ -47,7 +50,7 @@ EntitySet::~EntitySet()
 
 void EntitySet::LoadAssetClass()
 {
-    m_Class = Asset::AssetClass::LoadAssetClass<Asset::Entity>( m_AssetPath );
+    m_Class = m_AssetPath.empty() ? NULL : Asset::AssetClass::LoadAssetClass<Asset::Entity>( m_AssetPath );
 
     if ( !m_Class.ReferencesObject() )
     {
@@ -100,7 +103,7 @@ void EntitySet::LoadAssetClass()
                     SceneGraph::MeshPtr mesh;
                     try
                     {
-                        mesh = Reflect::Archive::FromFile< SceneGraph::Mesh >( meshPath );
+                        mesh = Reflect::FromArchive< SceneGraph::Mesh >( meshPath );
                     }
                     catch ( const Reflect::Exception& e )
                     {

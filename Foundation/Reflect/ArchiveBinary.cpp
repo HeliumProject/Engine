@@ -9,6 +9,7 @@
 #include "Foundation/Checksum/CRC32.h"
 
 using Helium::Insert;
+using namespace Helium;
 using namespace Helium::Reflect; 
 
 //#define REFLECT_DEBUG_BINARY_CRC
@@ -47,24 +48,29 @@ namespace Helium
 // Binary Archive implements our own custom serialization technique
 //
 
-ArchiveBinary::ArchiveBinary (StatusHandler* status)
-: Archive (status)
-, m_Version (CURRENT_VERSION)
-, m_Size (0)
-, m_Skip (false)
+ArchiveBinary::ArchiveBinary( const Path& path )
+: Archive( path )
+, m_Version( CURRENT_VERSION )
+, m_Size( 0 )
+, m_Skip( false )
 {
-
 }
 
-void ArchiveBinary::OpenFile( const tstring& file, bool write )
+ArchiveBinary::ArchiveBinary()
+: Archive()
+, m_Version( CURRENT_VERSION )
+, m_Size( 0 )
+, m_Skip( false )
 {
-    m_Path.Set( file );
+}
 
+void ArchiveBinary::Open( bool write )
+{
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Debug(TXT("Opening file '%s'\n"), file.c_str());
+    Debug(TXT("Opening file '%s'\n"), path.c_str());
 #endif
 
-    Reflect::CharStreamPtr stream = new FileStream<char>(file, write); 
+    Reflect::CharStreamPtr stream = new FileStream<char>( m_Path, write ); 
     OpenStream( stream, write );
 }
 
@@ -104,11 +110,8 @@ void ArchiveBinary::Read()
 {
     REFLECT_SCOPE_TIMER( ("Reflect - Binary Read") );
 
-    if (m_Status != NULL)
-    {
-        StatusInfo info (*this, ArchiveStates::Starting);
-        m_Status->ArchiveStatus(info);
-    }
+    StatusInfo info( *this, ArchiveStates::Starting );
+    e_Status.Raise( info );
 
     m_Abort = false;
 
@@ -315,22 +318,16 @@ void ArchiveBinary::Read()
     // tell visitors to process append
     PostDeserialize(append);
 
-    if (m_Status != NULL)
-    {
-        StatusInfo info (*this, ArchiveStates::Complete);
-        m_Status->ArchiveStatus(info);
-    }
+    info.m_ArchiveState = ArchiveStates::Complete;
+    e_Status.Raise( info );
 }
 
 void ArchiveBinary::Write()
 {
     REFLECT_SCOPE_TIMER( ("Reflect - Binary Write") );
 
-    if (m_Status != NULL)
-    {
-        StatusInfo info (*this, ArchiveStates::Starting);
-        m_Status->ArchiveStatus(info);
-    }
+    StatusInfo info( *this, ArchiveStates::Starting );
+    e_Status.Raise( info );
 
     // setup visitors
     PreSerialize();
@@ -495,11 +492,8 @@ void ArchiveBinary::Write()
     Debug("File written with size %d, crc 0x%08x\n", m_Stream->TellWrite(), crc);
 #endif
 
-    if (m_Status != NULL)
-    {
-        StatusInfo info (*this, ArchiveStates::Complete);
-        m_Status->ArchiveStatus(info);
-    }
+    info.m_ArchiveState = ArchiveStates::Complete;
+    e_Status.Raise( info );
 }
 
 void ArchiveBinary::Start()
@@ -618,19 +612,19 @@ void ArchiveBinary::Serialize(const V_Element& elements, u32 flags)
     {
         Serialize(*itr);
 
-        if (flags & ArchiveFlags::Status && m_Status != NULL)
+        if ( flags & ArchiveFlags::Status )
         {
-            StatusInfo info (*this, ArchiveStates::ElementProcessed);
+            StatusInfo info( *this, ArchiveStates::ElementProcessed );
             info.m_Progress = (int)(((float)(index) / (float)elements.size()) * 100.0f);
-            m_Status->ArchiveStatus(info);
+            e_Status.Raise( info );
         }
     }
 
-    if (flags & ArchiveFlags::Status && m_Status != NULL)
+    if ( flags & ArchiveFlags::Status )
     {
-        StatusInfo info (*this, ArchiveStates::ElementProcessed);
+        StatusInfo info( *this, ArchiveStates::ElementProcessed );
         info.m_Progress = 100;
-        m_Status->ArchiveStatus(info);
+        e_Status.Raise( info );
     }
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -641,7 +635,7 @@ void ArchiveBinary::Serialize(const V_Element& elements, u32 flags)
     m_Stream->Write(&terminator); 
 }
 
-void ArchiveBinary::SerializeFields(const ElementPtr& element)
+void ArchiveBinary::SerializeFields( const ElementPtr& element )
 {
     //
     // Serialize fields
@@ -806,7 +800,7 @@ ElementPtr ArchiveBinary::Allocate()
             // if you see this, then data is being lost because:
             //  1 - a type was completely removed from the codebase
             //  2 - a type was not found because its type library is not registered
-            Debug( TXT( "Unable to create object of type '%s', size %d, skipping...\n" ), str.c_str(), length);
+            Log::Debug( TXT( "Unable to create object of type '%s', size %d, skipping...\n" ), str.c_str(), length);
         }
         else
         {
@@ -909,13 +903,13 @@ void ArchiveBinary::Deserialize(V_Element& elements, u32 flags)
                     m_Skip = true;
                 }
 
-                if (flags & ArchiveFlags::Status && m_Status != NULL)
+                if ( flags & ArchiveFlags::Status )
                 {
                     u32 current = (u32)m_Stream->TellRead();
 
-                    StatusInfo info (*this, ArchiveStates::ElementProcessed);
+                    StatusInfo info( *this, ArchiveStates::ElementProcessed );
                     info.m_Progress = (int)(((float)(current - start_offset) / (float)m_Size) * 100.0f);
-                    m_Status->ArchiveStatus(info);
+                    e_Status.Raise( info );
 
                     m_Abort |= info.m_Abort;
                 }
@@ -943,11 +937,11 @@ void ArchiveBinary::Deserialize(V_Element& elements, u32 flags)
         }
     }
 
-    if (flags & ArchiveFlags::Status && m_Status != NULL)
+    if ( flags & ArchiveFlags::Status )
     {
-        StatusInfo info (*this, ArchiveStates::ElementProcessed);
+        StatusInfo info( *this, ArchiveStates::ElementProcessed );
         info.m_Progress = 100;
-        m_Status->ArchiveStatus(info);
+        e_Status.Raise( info );
     }
 }
 
@@ -987,7 +981,7 @@ void ArchiveBinary::DeserializeFields(const ElementPtr& element)
 
             if (type == NULL)
             {
-                Debug( TXT( "Unable to resolve type from short name '%s'\n" ), element->GetClass()->m_ShortName.c_str());
+                Log::Debug( TXT( "Unable to resolve type from short name '%s'\n" ), element->GetClass()->m_ShortName.c_str());
             }
 
             // while we haven't hit the terminator
@@ -1150,7 +1144,7 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
             }
             catch (Reflect::LogisticException& ex)
             {
-                Debug( TXT( "Unable to deserialize %s::%s into component (%s), discarding\n" ), type->m_ShortName.c_str(), latent_field->m_Name.c_str(), ex.What());
+                Log::Debug( TXT( "Unable to deserialize %s::%s into component (%s), discarding\n" ), type->m_ShortName.c_str(), latent_field->m_Name.c_str(), ex.What());
             }
         }
     }
@@ -1160,7 +1154,7 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
         // attempt processing
         if (!element->ProcessComponent(component, latent_field->m_Name))
         {
-            Debug( TXT( "%s did not process %s, discarding\n" ), element->GetClass()->m_ShortName.c_str(), component->GetClass()->m_ShortName.c_str());
+            Log::Debug( TXT( "%s did not process %s, discarding\n" ), element->GetClass()->m_ShortName.c_str(), component->GetClass()->m_ShortName.c_str());
         }
     }
 }
@@ -1298,21 +1292,21 @@ bool ArchiveBinary::DeserializeField(Field* field)
     return !m_Stream->Fail();
 }
 
-void ArchiveBinary::ToStream(const ElementPtr& element, std::iostream& stream, StatusHandler* status)
+void ArchiveBinary::ToStream( const ElementPtr& element, std::iostream& stream )
 {
     V_Element elements(1);
     elements[0] = element;
-    ToStream( elements, stream, status );
+    ToStream( elements, stream );
 }
 
-ElementPtr ArchiveBinary::FromStream(std::iostream& stream, int searchType, StatusHandler* status)
+ElementPtr ArchiveBinary::FromStream( std::iostream& stream, int searchType )
 {
     if (searchType == Reflect::ReservedTypes::Any)
     {
         searchType = Reflect::GetType<Element>();
     }
 
-    ArchiveBinary archive ( status );
+    ArchiveBinary archive;
     archive.m_SearchType = searchType;
 
     Reflect::CharStreamPtr charStream = new Reflect::Stream<char>( &stream ); 
@@ -1333,23 +1327,12 @@ ElementPtr ArchiveBinary::FromStream(std::iostream& stream, int searchType, Stat
     return NULL;
 }
 
-void ArchiveBinary::ToStream(const V_Element& elements, std::iostream& stream, StatusHandler* status)
+void ArchiveBinary::ToStream( const V_Element& elements, std::iostream& stream )
 {
-    ArchiveBinary archive ( status );
+    ArchiveBinary archive;
 
     // fix the spool
-    archive.m_Spool.clear();
-    archive.m_Spool.reserve( elements.size() );
-
-    V_Element::const_iterator iter = elements.begin();
-    V_Element::const_iterator end  = elements.end();
-    for ( ; iter != end; ++iter )
-    {
-        if ( !(*iter)->HasType(Reflect::GetType<Version>()) )
-        {
-            archive.m_Spool.push_back( (*iter) );
-        }
-    }
+    archive.m_Spool = elements;
 
     Reflect::CharStreamPtr charStream = new Reflect::Stream<char>(&stream); 
     archive.OpenStream( charStream, true );
@@ -1357,9 +1340,9 @@ void ArchiveBinary::ToStream(const V_Element& elements, std::iostream& stream, S
     archive.Close(); 
 }
 
-void ArchiveBinary::FromStream(std::iostream& stream, V_Element& elements, StatusHandler* status)
+void ArchiveBinary::FromStream( std::iostream& stream, V_Element& elements )
 {
-    ArchiveBinary archive (status);
+    ArchiveBinary archive;
 
     Reflect::CharStreamPtr charStream = new Reflect::Stream<char>(&stream); 
     archive.OpenStream( charStream, false );

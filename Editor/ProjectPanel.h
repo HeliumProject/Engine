@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ProjectViewModel.h"
+
 #include "Foundation/Container/OrderedSet.h"
 #include "Core/Project.h"
 
@@ -10,30 +12,6 @@ namespace Helium
 {
     namespace Editor
     {
-        class ProjectViewModel : public wxDataViewModel
-        {
-        public:
-            void SetProject( Project* project );
-
-            void PathAdded( const Path& path );
-            void PathRemoved( const Path& path );
-
-            // wxDataModel virtual interface
-            unsigned int GetColumnCount() const HELIUM_OVERRIDE;
-            wxString GetColumnType(unsigned int) const HELIUM_OVERRIDE;
-
-            void GetValue(wxVariant &,const wxDataViewItem &,unsigned int) const HELIUM_OVERRIDE;
-            bool SetValue(const wxVariant &,const wxDataViewItem &,unsigned int) HELIUM_OVERRIDE;
-
-            wxDataViewItem GetParent(const wxDataViewItem &) const HELIUM_OVERRIDE;
-            unsigned int GetChildren(const wxDataViewItem &,wxDataViewItemArray &) const HELIUM_OVERRIDE;
-
-            bool IsContainer(const wxDataViewItem &) const HELIUM_OVERRIDE;
-
-        protected:
-            ProjectPtr    m_Project;
-        };
-
         class ProjectPanel : public ProjectPanelGenerated
         {
         public:
@@ -43,16 +21,25 @@ namespace Helium
             void SetProject( Project* project );
 
             // UI event handlers
-			virtual void OnAddPath( wxCommandEvent& event ) HELIUM_OVERRIDE;
-			virtual void OnDelete( wxCommandEvent& event ) HELIUM_OVERRIDE;
+			virtual void OnAddFile( wxCommandEvent& event ) HELIUM_OVERRIDE;
+			virtual void OnDeleteFile( wxCommandEvent& event ) HELIUM_OVERRIDE;
+
+            void OnOptionsMenuOpen( wxMenuEvent& event );
+            void OnOptionsMenuClose( wxMenuEvent& event );
+            void OnOptionsMenuSelect( wxCommandEvent& event );
+
+            void OnBeginDrag( wxDataViewEvent& event );
+            void OnDropPossible( wxDataViewEvent& event );
+            void OnDrop( wxDataViewEvent& event );
 
             virtual void OnDroppedFiles( const FileDroppedArgs& args );
 
         protected:
-            ProjectPtr                          m_Project;
+            ProjectPtr m_Project;
             wxObjectDataPtr< ProjectViewModel > m_Model;
-            OrderedSet< Path* >                 m_Selected;
-            FileDropTarget*                     m_DropTarget;
+            OrderedSet< Path* > m_Selected;
+            FileDropTarget* m_DropTarget;
+            wxMenu* m_OptionsMenu;
         };
     }
 }

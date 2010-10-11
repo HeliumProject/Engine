@@ -15,260 +15,57 @@
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
 
+using namespace Helium;
 using namespace Helium::Reflect;
 
-//
-// Standard
-//
-
-void StatusHandler::ArchiveStatus( StatusInfo& info )
-{
-    // by default we don't care...
-}
-
-void StatusHandler::ArchiveException( ExceptionInfo& info )
-{
-    // by default we cannot handle any exception
-}
-
-void StatusHandler::ArchiveWarning(const tstring& warning)
-{
-    Log::Warning( TXT( "%s" ), warning.c_str());
-}
-
-void StatusHandler::ArchiveDebug(const tstring& debug)
-{
-    Log::Debug( TXT( "%s" ), debug.c_str());
-}
-
-void PrintStatus::ArchiveStatus(StatusInfo& info)
-{
-    switch (info.m_Action)
-    {
-    case Reflect::ArchiveStates::Starting:
-        {
-            m_Timer = Helium::TimerGetClock();
-
-            const char* verb = info.m_Archive.GetMode() == ArchiveModes::Read ? "Reading" : "Writing";
-            const char* type = info.m_Archive.GetType() == ArchiveTypes::XML ? "XML" : "Binary";
-
-            if (info.m_Archive.GetPath().empty())
-            {
-                m_Bullet.reset( new Log::Bullet( TXT( "%s %s stream\n" ), verb, type) );
-            }
-            else
-            {
-                m_Bullet.reset( new Log::Bullet( TXT( "%s %s file '%s'\n" ), verb, type, info.m_Archive.GetPath().c_str()) );
-
-                if (info.m_Archive.GetMode() == ArchiveModes::Read)
-                {
-                    u64 size = info.m_Archive.GetPath().Size();
-                    if ( size > 1000)
-                    {
-                        Log::Bullet bullet( TXT( "Size: %dk\n" ),  size / 1000);
-                    }
-                    else
-                    {
-                        Log::Bullet bullet( TXT( "Size: %d\n" ), size );
-                    }
-                }
-            }
-
-            m_Start = true;
-
-            break;
-        }
-
-    case Reflect::ArchiveStates::PostProcessing:
-        {
-            Log::Bullet bullet( TXT( "Processing...\n" ) );
-            break;
-        }
-
-    case Reflect::ArchiveStates::Complete:
-        {
-            Log::Bullet bullet( TXT( "Completed in %.2f ms\n" ), Helium::CyclesToMillis(Helium::TimerGetClock() - m_Timer));
-            break;
-        }
-
-    case Reflect::ArchiveStates::Publishing:
-        {
-            Log::Bullet bullet( TXT( "Publishing to %s\n" ), info.m_DestinationFile.c_str());
-            break;
-        }
-    }
-}
-
-void PrintStatus::ArchiveWarning(const tstring& warning)
-{
-    if (m_Progress >= 0 && !m_Start)
-    {
-        Log::Warning( TXT( "\n" ) );
-        m_Start = true;
-    }
-    __super::ArchiveWarning( warning );
-}
-
-void PrintStatus::ArchiveDebug(const tstring& debug)
-{
-    if (m_Progress >= 0 && !m_Start)
-    {
-        Log::Debug( TXT( "\n" ) );
-        m_Start = true;
-    }
-    __super::ArchiveDebug( debug );
-}
 
 
 //
 // Archive is a std set of static and non-static archive related functions
 //
 
-FileAccessSignature::Event Archive::s_FileAccess;
-SerializeSignature::Event Archive::s_Serialize;
-DeserializeSignature::Event Archive::s_Deserialize;
-
-Archive::Archive(StatusHandler* status)
-: m_Progress (0)
-, m_Status (status)
-, m_SearchType (Reflect::ReservedTypes::Invalid)
-, m_Abort (false)
-, m_Mode (ArchiveModes::Read)
+Archive::Archive( const Path& path )
+: m_Path( path )
+, m_Progress( 0 )
+, m_SearchType( Reflect::ReservedTypes::Invalid )
+, m_Abort( false )
+, m_Mode( ArchiveModes::Read )
 {
+}
 
+Archive::Archive()
+: m_Path( TXT( "" ) )
+, m_Progress( 0 )
+, m_SearchType( Reflect::ReservedTypes::Invalid )
+, m_Abort( false )
+, m_Mode( ArchiveModes::Read )
+{
 }
 
 Archive::~Archive()
 {
-
-}
-
-bool Archive::GetFileType( const tstring& file, ArchiveType& type )
-{
-    Helium::Path filePath( file );
-    tstring ext = filePath.Extension();
-
-    if ( ext == Archive::GetExtension( ArchiveTypes::XML ) )
-    {
-        type = ArchiveTypes::XML;
-        return true;
-    }
-    else if ( ext == Archive::GetExtension( ArchiveTypes::Binary ) )
-    {
-        type = ArchiveTypes::Binary;
-        return true;
-    }
-
-    return false;
-}
-
-void Archive::Warning(const tchar* fmt, ...)
-{
-    static tchar buff[512];
-
-    va_list args;
-    va_start(args, fmt); 
-    int size = _vsntprintf(buff, sizeof(buff), fmt, args);
-    buff[ sizeof(buff) - 1] = 0; 
-    va_end(args);      
-
-    if (m_Status)
-    {
-        m_Status->ArchiveWarning( buff );
-    }
-    else
-    {
-        Log::Warning( TXT( "%s" ), buff);
-    }
-}
-
-void Archive::Debug(const tchar* fmt, ...)
-{
-    static tchar buff[512];
-
-    va_list args;
-    va_start(args, fmt); 
-    int size = _vsntprintf(buff, sizeof(buff), fmt, args);
-    buff[ sizeof(buff)-1] = 0; 
-    va_end(args);      
-
-    if (m_Status)
-    {
-        m_Status->ArchiveDebug( buff );
-    }
-    else
-    {
-        Log::Debug( TXT( "%s" ), buff);
-    }
-}
-
-Archive* Archive::GetArchive(ArchiveType type, StatusHandler* handler)
-{
-    switch (type)
-    {
-    case ArchiveTypes::Binary:
-        return new ArchiveBinary (handler);
-
-    case ArchiveTypes::XML:
-        return new ArchiveXML (handler);
-
-    default:
-        throw Reflect::StreamException( TXT( "Unknown archive type" ) );
-    }
-
-    return NULL;
-}
-
-Archive* Archive::GetArchive(const tstring& file, StatusHandler* handler)
-{
-    if ( file.empty() )
-    {
-        throw Reflect::StreamException( TXT( "File path is empty" ) );
-    }
-
-    Reflect::ArchiveType archiveType;
-    if ( GetFileType( file, archiveType ) )
-    {
-        return GetArchive( archiveType, handler);
-    }
-
-    return NULL;
 }
 
 void Archive::PreSerialize()
 {
-    if (m_Status != NULL)
-    {
-        m_Status->ArchiveStatus( StatusInfo (*this, ArchiveStates::PreProcessing) );
-    }
+    StatusInfo info( *this, ArchiveStates::PreProcessing );
+    e_Status.Raise( info );
 
-    {
-        PROFILE_SCOPE_ACCUM(g_PreSerializeAccum); 
+    // we used to raise an event here for serialization, no one used it
 
-        s_Serialize.Raise( SerializeArgs (m_Visitors) );
-    }
-
-    if (m_Status != NULL)
-    {
-        StatusInfo info (*this, ArchiveStates::ArchiveStarting);
-        info.m_Progress = m_Progress = 0;
-        m_Status->ArchiveStatus(info);
-    }
+    info.m_ArchiveState = ArchiveStates::ArchiveStarting;
+    info.m_Progress = m_Progress = 0;
+    e_Status.Raise( info );
 }
 
 void Archive::PostSerialize(V_Element& append)
 {
-    if (m_Status != NULL)
-    {
-        StatusInfo info (*this, ArchiveStates::ArchiveComplete);
-        info.m_Progress = m_Progress = 100;
-        m_Status->ArchiveStatus(info);
-    }
+    StatusInfo info( *this, ArchiveStates::ArchiveComplete );
+    info.m_Progress = m_Progress = 100;
+    e_Status.Raise( info );
 
-    if (m_Status != NULL)
-    {
-        m_Status->ArchiveStatus( StatusInfo (*this, ArchiveStates::PostProcessing) );
-    }
+    info.m_ArchiveState = ArchiveStates::PostProcessing;
+    e_Status.Raise( info );
 
     {
         PROFILE_SCOPE_ACCUM(g_PostSerializeAccum); 
@@ -284,38 +81,24 @@ void Archive::PostSerialize(V_Element& append)
 
 void Archive::PreDeserialize()
 {
-    if (m_Status != NULL)
-    {
-        m_Status->ArchiveStatus( StatusInfo (*this, ArchiveStates::PreProcessing) );
-    }
+    StatusInfo info( *this, ArchiveStates::PreProcessing );
+    e_Status.Raise( info );
 
-    {
-        PROFILE_SCOPE_ACCUM(g_PreDeserializeAccum); 
+    // we used to raise an event here for deserialization, no one was using it
 
-        s_Deserialize.Raise( DeserializeArgs (m_Visitors) );
-    }
-
-    if (m_Status != NULL)
-    {
-        StatusInfo info (*this, ArchiveStates::ArchiveStarting);
-        info.m_Progress = m_Progress = 0;
-        m_Status->ArchiveStatus(info);
-    }
+    info.m_ArchiveState = ArchiveStates::ArchiveStarting;
+    info.m_Progress = m_Progress = 0;
+    e_Status.Raise( info );
 }
 
 void Archive::PostDeserialize(V_Element& append)
 {
-    if (m_Status != NULL)
-    {
-        StatusInfo info (*this, ArchiveStates::ArchiveComplete);
-        info.m_Progress = m_Progress = 100;
-        m_Status->ArchiveStatus(info);
-    }
+    StatusInfo info( *this, ArchiveStates::ArchiveComplete );
+    info.m_Progress = m_Progress = 100;
+    e_Status.Raise( info );
 
-    if (m_Status != NULL)
-    {
-        m_Status->ArchiveStatus( StatusInfo (*this, ArchiveStates::PostProcessing) );
-    }
+    info.m_ArchiveState = ArchiveStates::PostProcessing;
+    e_Status.Raise( info );
 
     {
         PROFILE_SCOPE_ACCUM(g_PostDeserializeAccum); 
@@ -381,33 +164,26 @@ bool Archive::TryElementCallback( Element* element, ElementCallback callback )
         }
         catch ( const Helium::Exception& exception )
         {
-            if ( m_Status )
+            ExceptionInfo info( *this, element, callback, exception );
+
+            d_Exception.Invoke( info );
+
+            switch ( info.m_Action )
             {
-                ExceptionInfo info ( *this, element, callback, exception );
-
-                m_Status->ArchiveException( info );
-
-                switch ( info.m_Action )
+            case ExceptionActions::Unknown:
                 {
-                case ExceptionActions::Unknown:
-                    {
-                        throw;
-                    }
-
-                case ExceptionActions::Accept:
-                    {
-                        return true;
-                    }
-
-                case ExceptionActions::Reject:
-                    {
-                        return false;
-                    }
+                    throw;
                 }
-            }
-            else
-            {
-                throw;
+
+            case ExceptionActions::Accept:
+                {
+                    return true;
+                }
+
+            case ExceptionActions::Reject:
+                {
+                    return false;
+                }
             }
         }
     }
@@ -415,78 +191,38 @@ bool Archive::TryElementCallback( Element* element, ElementCallback callback )
     return true;
 }
 
-void Archive::ToFile(const ElementPtr& element, const tstring& file)
+#pragma TODO( "Add support for writing objects piecemeal into the archive in Put" )
+
+void Archive::Put( const ElementPtr& element )
 {
-    ToFile( element, file, NULL, NULL );
+    m_Spool.push_back( element );
 }
 
-void Archive::ToFile(const ElementPtr& element, const tstring& file, VersionPtr version, StatusHandler* status)
+void Archive::Put( const V_Element& elements )
 {
-    V_Element elements(1);
-    elements[0] = element;
-    ToFile( elements, file, version, status );
+    m_Spool.reserve( m_Spool.size() + elements.size() );
+    m_Spool.insert( m_Spool.end(), elements.begin(), elements.end() );
 }
 
-ElementPtr Archive::FromFile(const tstring& file, int searchType, StatusHandler* status)
+
+ElementPtr Archive::Get( int searchType )
 {
-    if (searchType == Reflect::ReservedTypes::Any)
+    REFLECT_SCOPE_TIMER( ( "%s", m_Path.c_str() ) );
+
+    V_Element elements;
+    Get( elements );
+
+    if ( searchType == Reflect::ReservedTypes::Any )
     {
-        searchType = Reflect::GetType<Element>();
+        searchType = Reflect::GetType< Element >();
     }
 
-    REFLECT_SCOPE_TIMER(("%s", file.c_str()));
-
-    tchar print[512];
-    _sntprintf(print, sizeof(print), TXT( "Parsing '%s'" ), file.c_str());
-#pragma TODO("Profiler support for wide strings")
-    PROFILE_SCOPE_ACCUM_VERBOSE(g_ParseAccum, ""/*print*/);
-
-    std::auto_ptr<Archive> archive (GetArchive(file, status));
-    archive->m_SearchType = searchType;
-    archive->Debug( TXT( "%s\n" ), print);
-
-    s_FileAccess.Raise( FileAccessArgs( file, FileOperations::PreRead ) );
-
-    if ( Helium::IsDebuggerPresent() )
-    {
-        archive->OpenFile( file );
-        archive->Read();
-        archive->Close(); 
-    }
-    else
-    {
-        try
-        {
-            archive->OpenFile( file );
-
-            try
-            {
-                archive->Read();
-            }
-            catch (...)
-            {
-                archive->Close(); 
-                throw;
-            }
-
-            archive->Close(); 
-        }
-        catch (Helium::Exception& ex)
-        {
-            tstringstream str;
-            str << "While reading '" << file << "': " << ex.Get();
-            ex.Set( str.str() );
-            throw;
-        }
-    }
-
-    s_FileAccess.Raise( FileAccessArgs( file, FileOperations::PostRead ) );
-
-    V_Element::iterator itr = archive->m_Spool.begin();
-    V_Element::iterator end = archive->m_Spool.end();
+    ElementPtr result = NULL;
+    V_Element::iterator itr = elements.begin();
+    V_Element::iterator end = elements.end();
     for ( ; itr != end; ++itr )
     {
-        if ((*itr)->HasType(searchType))
+        if ( (*itr)->HasType( searchType ) )
         {
             return *itr;
         }
@@ -495,71 +231,126 @@ ElementPtr Archive::FromFile(const tstring& file, int searchType, StatusHandler*
     return NULL;
 }
 
-void Archive::ToFile(const V_Element& elements, const tstring& file)
+void Archive::Get( V_Element& elements )
 {
-    ToFile( elements, file, NULL, NULL );
-}
+    REFLECT_SCOPE_TIMER( ( "%s", m_Path.c_str() ) );
 
-void Archive::ToFile(const V_Element& elements, const tstring& file, VersionPtr version, StatusHandler* status)
-{
-    REFLECT_SCOPE_TIMER(("%s", file.c_str()));
+    Log::Debug( TXT( "Parsing '%s'" ), m_Path.c_str() );
 
-    tchar print[512];
-    _sntprintf(print, sizeof(print), TXT( "Authoring '%s'" ), file.c_str());
-#pragma TODO("Profiler support for wide strings")
-    PROFILE_SCOPE_ACCUM_VERBOSE(g_AuthorAccum, ""/*print*/);
-
-    std::auto_ptr<Archive> archive( GetArchive(file, status) );
-    if ( archive.get() == NULL )
+    if ( Helium::IsDebuggerPresent() )
     {
-        throw Helium::Exception( TXT( "Could not create an archive for the given filename.  Perhaps we do not support the archive type (based on the file extension)?" ) );
+        Open();
+        Read();
+        Close(); 
     }
-
-    archive->Debug( TXT( "%s\n" ), print);
-
-    s_FileAccess.Raise( FileAccessArgs( file, FileOperations::PreWrite ) );
-    Helium::Path outputPath( file );
-    outputPath.MakePath();
-
-    // alloc a version object if we don't have one
-    if ( !version.ReferencesObject() )
+    else
     {
-        version = new Version();
-    }
-
-    // fix the spool
-    archive->m_Spool.clear();
-    archive->m_Spool.reserve( 1 + elements.size() );
-    archive->m_Spool.push_back( version );
-
-    V_Element::const_iterator iter = elements.begin();
-    V_Element::const_iterator end  = elements.end();
-    for ( ; iter != end; ++iter )
-    {
-        if ( !(*iter)->HasType(Reflect::GetType<Version>()) )
+        try
         {
-            archive->m_Spool.push_back( (*iter) );
+            Open();
+
+            try
+            {
+                Read();
+            }
+            catch (...)
+            {
+                Close();
+                throw;
+            }
+
+            Close(); 
+        }
+        catch (Helium::Exception& ex)
+        {
+            tstringstream str;
+            str << "While reading '" << m_Path.c_str() << "': " << ex.Get();
+            ex.Set( str.str() );
+            throw;
         }
     }
 
+    elements = m_Spool;
+}
+
+bool Reflect::GetFileType( const Path& path, ArchiveType& type )
+{
+    tstring ext = path.Extension();
+
+    if ( ext == Archive::GetExtension( ArchiveTypes::XML ) )
+    {
+        type = ArchiveTypes::XML;
+        return true;
+    }
+    else if ( ext == Archive::GetExtension( ArchiveTypes::Binary ) )
+    {
+        type = ArchiveTypes::Binary;
+        return true;
+    }
+
+    return false;
+}
+
+ArchivePtr Reflect::GetArchive( const Path& path )
+{
+    HELIUM_ASSERT( !path.empty() );
+
+    Reflect::ArchiveType archiveType;
+    if ( GetFileType( path, archiveType ) )
+    {
+        switch ( archiveType )
+        {
+        case ArchiveTypes::Binary:
+            return new ArchiveBinary( path );
+
+        case ArchiveTypes::XML:
+            return new ArchiveXML( path );
+
+        default:
+            throw Reflect::StreamException( TXT( "Unknown archive type" ) );
+        }
+    }
+
+    return NULL;
+}
+
+bool Reflect::ToArchive( const Path& path, ElementPtr element, tstring* error )
+{
+    V_Element elements;
+    elements.push_back( element );
+    return ToArchive( path, elements, error );
+}
+
+bool Reflect::ToArchive( const Path& path, const V_Element& elements, tstring* error )
+{
+    HELIUM_ASSERT( !path.empty() );
+    HELIUM_ASSERT( elements.size() > 0 );
+
+    REFLECT_SCOPE_TIMER( ( "%s", path.c_str() ) );
+
+    path.MakePath();
+
     // build a path to a unique file for this process
-    Helium::Path safetyPath( outputPath.Directory() + Helium::GetProcessString() );
-    safetyPath.ReplaceExtension( outputPath.Extension() );
+    Path safetyPath( path.Directory() + Helium::GetProcessString() );
+    safetyPath.ReplaceExtension( path.Extension() );
+
+    ArchivePtr archive = GetArchive( safetyPath );
+    archive->Put( elements );
 
     // generate the file to the safety location
     if ( Helium::IsDebuggerPresent() )
     {
-        archive->OpenFile( safetyPath.Get(), true );
+        archive->Open( true );
         archive->Write();
-        archive->Close(); 
+        archive->Close();
     }
     else
-     {
+    {
         bool open = false;
 
         try
         {
-            archive->OpenFile( safetyPath.Get(), true );
+            archive->Open( true );
             open = true;
             archive->Write();
             archive->Close(); 
@@ -567,8 +358,12 @@ void Archive::ToFile(const V_Element& elements, const tstring& file, VersionPtr 
         catch ( Helium::Exception& ex )
         {
             tstringstream str;
-            str << "While writing '" << file << "': " << ex.Get();
-            ex.Set( str.str() );
+            str << "While writing '" << path.c_str() << "': " << ex.Get();
+            
+            if ( error )
+            {
+                *error = str.str();
+            }
 
             if ( open )
             {
@@ -576,97 +371,31 @@ void Archive::ToFile(const V_Element& elements, const tstring& file, VersionPtr 
             }
 
             safetyPath.Delete();
-            throw;
-        }
-        catch ( ... )
-        {
-            if ( open )
-            {
-                archive->Close();
-            }
-
-            safetyPath.Delete();
-            throw;
+            return false;
         }
     }
 
     try
     {
-        if ( status )
-        {
-            StatusInfo info ( *archive.get(), ArchiveStates::Publishing );
-            info.m_DestinationFile = file;
-            status->ArchiveStatus( info );
-        }
-
         // delete the destination file
-        outputPath.Delete();
+        path.Delete();
 
         // move the written file to the destination location
-        safetyPath.Move( outputPath );
+        safetyPath.Move( path );
     }
     catch ( Helium::Exception& ex )
     {
         tstringstream str;
-        str << "While moving '" << safetyPath.c_str() << "' to '" << file << "': " << ex.Get();
-        ex.Set( str.str() );
+        str << "While moving '" << safetyPath.c_str() << "' to '" << path.c_str() << "': " << ex.Get();
+        
+        if ( error )
+        {
+            *error = str.str();
+        }
 
         safetyPath.Delete();
-
-        throw;
+        return false;
     }
 
-    s_FileAccess.Raise( FileAccessArgs( file, FileOperations::PostWrite ) );
-}
-
-void Archive::FromFile(const tstring& file, V_Element& elements, StatusHandler* status)
-{
-    REFLECT_SCOPE_TIMER(("%s", file.c_str()));
-
-    tchar print[512];
-    _sntprintf(print, sizeof(print), TXT( "Parsing '%s'" ), file.c_str());
-#pragma TODO("Profiler support for wide strings")
-    PROFILE_SCOPE_ACCUM_VERBOSE(g_ParseAccum, ""/*print*/);
-
-    std::auto_ptr<Archive> archive (GetArchive(file, status));
-    archive->Debug( TXT( "%s\n" ), print);
-
-    s_FileAccess.Raise( FileAccessArgs( file, FileOperations::PreRead ) );
-
-    if ( Helium::IsDebuggerPresent() )
-    {
-        archive->OpenFile( file );
-        archive->Read();
-        archive->Close(); 
-    }
-    else
-    {
-        try
-        {
-            archive->OpenFile( file );
-
-            try
-            {
-                archive->Read();
-            }
-            catch (...)
-            {
-                archive->Close(); 
-                throw;
-            }
-
-            archive->Close(); 
-        }
-        catch (Helium::Exception& ex)
-        {
-            tstringstream str;
-            str << "While reading '" << file << "': " << ex.Get();
-            ex.Set( str.str() );
-            throw;
-        }
-    }
-
-    s_FileAccess.Raise( FileAccessArgs( file, FileOperations::PostRead ) );
-
-    elements = archive->m_Spool;
+    return true;
 }

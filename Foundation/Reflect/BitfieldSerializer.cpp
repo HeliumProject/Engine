@@ -88,7 +88,7 @@ void BitfieldSerializer::Deserialize(Archive& archive)
             xml.GetStream() >> buf;
             if (m_Enumeration && !m_Enumeration->GetBitfieldValue(buf, m_Data.Ref()))
             {
-                xml.Debug( TXT( "Unable to deserialize bitfield %s values '%s'\n" ), m_Enumeration->m_ShortName.c_str(), buf );
+                Log::Debug( TXT( "Unable to deserialize bitfield %s values '%s'\n" ), m_Enumeration->m_ShortName.c_str(), buf );
             }
             else
             {
@@ -128,7 +128,7 @@ void BitfieldSerializer::Deserialize(Archive& archive)
 
             if (m_Enumeration && !m_Enumeration->GetBitfieldValue(strs, m_Data.Ref()))
             {
-                archive.Debug( TXT( "Unable to deserialize bitfield %s values '%s'\n" ), m_Enumeration->m_ShortName.c_str(), str.c_str() );
+                Log::Debug( TXT( "Unable to deserialize bitfield %s values '%s'\n" ), m_Enumeration->m_ShortName.c_str(), str.c_str() );
             }
             else
             {

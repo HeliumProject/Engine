@@ -25,6 +25,7 @@
 
 #include "Editor/ArtProvider.h"
 #include "Editor/Perforce/Perforce.h"
+#include "Editor/ProjectViewModel.h"
 #include "Editor/WindowSettings.h"
 
 #include "Editor/Tracker/Tracker.h"
@@ -249,6 +250,8 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::VaultViewModes::VaultViewMode>( &Editor::VaultViewModes::VaultViewModeEnumerateEnum, TXT( "VaultViewMode" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClassType< VaultSettings >( TXT( "Editor::VaultSettings" ) ) );
 
+    m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::ProjectMenuIDs::ProjectMenuID>( &Editor::ProjectMenuIDs::ProjectMenuIDsEnumerateEnum, TXT( "ProjectMenuID" ) ) );
+
     LoadSettings();
 
     if ( Log::GetErrorCount() )
@@ -312,21 +315,13 @@ void App::SaveSettings()
     tstring error;
     if ( Helium::IsDebuggerPresent() )
     {
-        Reflect::Archive::ToFile( m_SettingsManager, path );
+        Reflect::ToArchive( path, m_SettingsManager );
     }
     else
     {
-        try
+        if ( !Reflect::ToArchive( path, m_SettingsManager ) )
         {
-            Reflect::Archive::ToFile( m_SettingsManager, path );
-        }
-        catch ( const Helium::Exception& ex )
-        {
-            error = ex.What();
-        }
-
-        if ( error.size() )
-        {
+            error = tstring( TXT( "Could not save '" ) ) + path.c_str() + TXT( "'." );
             wxMessageBox( error.c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
         }
     }
@@ -343,29 +338,7 @@ void App::LoadSettings()
 		return;
 	}
 
-    SettingsManagerPtr settingsManager = NULL;
-
-    if ( Helium::IsDebuggerPresent() )
-    {
-		settingsManager = Reflect::Archive::FromFile< SettingsManager >( path );
-    }
-    else
-    {
-        tstring error;
-        try
-        {
-			settingsManager = Reflect::Archive::FromFile< SettingsManager >( path );
-        }
-        catch ( const Helium::Exception& ex )
-        {
-            error = ex.What();
-        }
-
-        if ( error.size() )
-        {
-            wxMessageBox( error.c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
-        }
-    }
+    SettingsManagerPtr settingsManager = Reflect::FromArchive< SettingsManager >( path );
 
     if ( settingsManager.ReferencesObject() )
     {

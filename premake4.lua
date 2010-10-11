@@ -1,15 +1,4 @@
---[[
-
-Notes:
-* keep in mind that solution-wide settings should be defined
-  before ever mentioning configuration-specific settings because
-  the indentation in this file is for humans (not premake), and
-  premake might infer conditionals when walking the graph of 
-  solutions/configurations/projects -Geoff
-
---]]
-
-solution "Helium"
+function DoDefaultSolutionSetup()
 
 	location "Premake"
 	
@@ -34,18 +23,21 @@ solution "Helium"
 	for i, platform in ipairs( platforms() ) do
 		for j, config in ipairs( configurations() ) do
 			configuration( { config, platform } )
-				targetdir ( "Bin/" .. config .. "/" .. platform )
+				targetdir( "Bin/" .. config .. "/" .. platform )
 		end
 	end
-			
+
+--[[
+	Keep in mind that solution-wide settings should be defined
+	before ever mentioning configuration-specific settings because
+	the indentation in this file is for humans (not premake), and
+	premake might infer conditionals when walking the graph of 
+	solutions/configurations/projects -Geoff
+--]]
+
 	flags
 	{
 		"NoMinimalRebuild"
-	}
-	
-	includedirs
-	{
-		"."
 	}
 	
 	configuration "windows"
@@ -85,7 +77,27 @@ solution "Helium"
 		{
 			"Unicode"
 		}
-		    
+
+end
+
+solution "Dependencies"
+
+	DoDefaultSolutionSetup()
+	
+	project "Expat"
+		kind "StaticLib"
+		language "C++"
+		files { "Dependencies/Expat/*.h", "Dependencies/Expat/*.cpp" }
+
+solution "Helium"
+
+	DoDefaultSolutionSetup()
+
+	includedirs
+	{
+		"."
+	}
+
 	project "Platform"
 		kind "SharedLib"
 		language "C++"

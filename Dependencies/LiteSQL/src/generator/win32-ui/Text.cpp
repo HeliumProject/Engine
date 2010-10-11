@@ -10,10 +10,10 @@
 // CViewText functions
 CViewText::CViewText()
 {
-	m_hRichEdit = ::LoadLibrary(_T( LiteSQL_L( "Riched20.dll" ))); // RichEdit ver 2.0
+	m_hRichEdit = ::LoadLibrary(_T( LITESQL_L( "Riched20.dll" ))); // RichEdit ver 2.0
     if (!m_hRichEdit)
     {
-		::MessageBox(NULL,_T( LiteSQL_L( "CRichView::CRichView  Failed to load Riched20.dll" )), _T( LiteSQL_L( "" )), MB_ICONWARNING);
+		::MessageBox(NULL,_T( LITESQL_L( "CRichView::CRichView  Failed to load Riched20.dll" )), _T( LITESQL_L( "" )), MB_ICONWARNING);
     }
 }
 
@@ -25,7 +25,7 @@ CViewText::~CViewText(void)
 
 void CViewText::OnInitialUpdate()
 {
-	SetWindowText(_T( LiteSQL_L( "Text Edit Window\r\n\r\n You can type some text here ..." )));
+	SetWindowText(_T( LITESQL_L( "Text Edit Window\r\n\r\n You can type some text here ..." )));
 }
 
 void CViewText::PreCreate(CREATESTRUCT &cs)
@@ -41,8 +41,8 @@ void CViewText::PreCreate(CREATESTRUCT &cs)
 // CContainText functions
 CContainText::CContainText()
 {	 
-	SetDockCaption (_T( LiteSQL_L( "Text View - Docking container" )));
-	SetTabText(_T( LiteSQL_L( "Text" )));
+	SetDockCaption (_T( LITESQL_L( "Text View - Docking container" )));
+	SetTabText(_T( LITESQL_L( "Text" )));
 	SetTabIcon(IDI_VIEW /*IDI_TEXT*/);
 	SetView(m_ViewText);
 } 

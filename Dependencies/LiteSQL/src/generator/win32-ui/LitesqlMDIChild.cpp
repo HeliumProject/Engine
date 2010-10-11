@@ -27,7 +27,7 @@ public:
   {};
   //		virtual ~ModelTreeItemData();
 
-  virtual LPSTR GetText() {return  LiteSQL_L( "field" ); };
+  virtual LPSTR GetText() {return  LITESQL_L( "field" ); };
   //  private:
   Field* m_pField;
 };  //class TreeItemData
@@ -43,7 +43,7 @@ public:
     }
   };
   
-  virtual LPSTR GetText() {return  LiteSQL_L( "object" ); };
+  virtual LPSTR GetText() {return  LITESQL_L( "object" ); };
   //  private:
   Object* m_pObject;
 };  //class TreeItemData
@@ -59,7 +59,7 @@ public:
     }
   };
 
-  virtual LPSTR GetText() {return  LiteSQL_L( "model" ); };
+  virtual LPSTR GetText() {return  LITESQL_L( "model" ); };
   //  private:
   ObjectModel* m_pModel;
 };  //class TreeItemData
@@ -68,7 +68,7 @@ class RootItemData : public CModelTreeView::TreeItemData
 {
 public:
   RootItemData():modelItem(NULL) {};
-  virtual LPSTR GetText() {return  LiteSQL_L( "root" ); };
+  virtual LPSTR GetText() {return  LITESQL_L( "root" ); };
   
   ModelTreeItemData* modelItem; 
 };  //class TreeItemData
@@ -83,7 +83,7 @@ CLitesqlView::CLitesqlView(LitesqlDocument* pDoc)
 }
 
 // CSimpleMDIChild definitions
-CSimpleMDIChild::CSimpleMDIChild(const LiteSQL_Char* pszFilename)
+CSimpleMDIChild::CSimpleMDIChild(const LITESQL_Char* pszFilename)
 : m_Document(pszFilename),m_View(&m_Document)
 {
 
@@ -92,7 +92,7 @@ CSimpleMDIChild::CSimpleMDIChild(const LiteSQL_Char* pszFilename)
 
 
   // Set the menu for this MDI child
-  SetChildMenu(_T( LiteSQL_L( "MdiMenuView" )));
+  SetChildMenu(_T( LITESQL_L( "MdiMenuView" )));
 }
 
 CSimpleMDIChild::~CSimpleMDIChild()
@@ -101,7 +101,7 @@ CSimpleMDIChild::~CSimpleMDIChild()
 
 void CSimpleMDIChild::OnInitialUpdate()
 {
-  LiteSQL_String title = _T( LiteSQL_L( "Litesql Gen Project - " ));
+  LITESQL_String title = _T( LITESQL_L( "Litesql Gen Project - " ));
   title.append(m_Document.getFilename());
   // Set the window caption
   ::SetWindowText(m_hWnd, title.c_str());
@@ -113,8 +113,8 @@ void CSimpleMDIChild::OnInitialUpdate()
 
 CFilesTab::CFilesTab()
 { 
-  AddTabPage(new CViewText, LiteSQL_L( "Cpp" )); 
-  AddTabPage(new CViewText, LiteSQL_L( "hpp" ));
+  AddTabPage(new CViewText, LITESQL_L( "Cpp" )); 
+  AddTabPage(new CViewText, LITESQL_L( "hpp" ));
 };
 
 void CModelTreeView::setObjectModel(ObjectModel* pModel)
@@ -149,8 +149,8 @@ void CModelTreeView::DoContextMenu(CPoint& ptScreen)
   //ScreenToClient(m_hWnd, &m);
   //HMENU hPopupMenu = LoadMenu(GetApp()->GetResourceHandle(),MAKEINTRESOURCE(IDM_MODELTREE_VIEW));
   HMENU hPopup = CreatePopupMenu();
-  AppendMenu(hPopup,MF_STRING,IDM_ADD_OBJECT,_T( LiteSQL_L( "Add Object" )));
-  AppendMenu(hPopup,MF_STRING,IDM_REMOVE_OBJECT,_T( LiteSQL_L( "Remove Object" )));
+  AppendMenu(hPopup,MF_STRING,IDM_ADD_OBJECT,_T( LITESQL_L( "Add Object" )));
+  AppendMenu(hPopup,MF_STRING,IDM_REMOVE_OBJECT,_T( LITESQL_L( "Remove Object" )));
 
   UINT idCmd = ::TrackPopupMenu(hPopup, TPM_LEFTALIGN | TPM_RETURNCMD | TPM_RIGHTBUTTON ,
 							ptScreen.x, ptScreen.y, 0, m_hWnd, NULL);
@@ -158,7 +158,7 @@ void CModelTreeView::DoContextMenu(CPoint& ptScreen)
   switch (idCmd)
   {
   case IDM_ADD_OBJECT:
-    m_pModel->objects.push_back(new xml::Object( LiteSQL_L( "newObject" ), LiteSQL_L( "" )));
+    m_pModel->objects.push_back(new xml::Object( LITESQL_L( "newObject" ), LITESQL_L( "" )));
     loadTree();
     break;
   case IDM_REMOVE_OBJECT:
@@ -220,7 +220,7 @@ LRESULT CModelTreeView::OnNotifyReflect(WPARAM /*wParam*/, LPARAM lParam)
       }
       else
       {
-        lpdi->item.pszText =  LiteSQL_L( "NULL" );
+        lpdi->item.pszText =  LITESQL_L( "NULL" );
         lpdi->item.cChildren = I_CHILDRENCALLBACK;
       }
 

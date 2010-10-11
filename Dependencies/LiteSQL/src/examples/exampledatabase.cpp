@@ -10,9 +10,9 @@ PersonPersonRelationMother::Row::Row(const litesql::Database& db, const litesql:
         person1 = rec[0];
     }
 }
-const LiteSQL_String PersonPersonRelationMother::table__( LiteSQL_L( "Person_Person_Mother" ));
-const litesql::FieldType PersonPersonRelationMother::Person1( LiteSQL_L( "Person1" ), LiteSQL_L( "INTEGER" ),table__);
-const litesql::FieldType PersonPersonRelationMother::Person2( LiteSQL_L( "Person2" ), LiteSQL_L( "INTEGER" ),table__);
+const LITESQL_String PersonPersonRelationMother::table__( LITESQL_L( "Person_Person_Mother" ));
+const litesql::FieldType PersonPersonRelationMother::Person1( LITESQL_L( "Person1" ), LITESQL_L( "INTEGER" ),table__);
+const litesql::FieldType PersonPersonRelationMother::Person2( LITESQL_L( "Person2" ), LITESQL_L( "INTEGER" ),table__);
 void PersonPersonRelationMother::link(const litesql::Database& db, const example::Person& o0, const example::Person& o1) {
     Record values;
     Split fields;
@@ -59,9 +59,9 @@ PersonPersonRelationFather::Row::Row(const litesql::Database& db, const litesql:
         person1 = rec[0];
     }
 }
-const LiteSQL_String PersonPersonRelationFather::table__( LiteSQL_L( "Person_Person_Father" ));
-const litesql::FieldType PersonPersonRelationFather::Person1( LiteSQL_L( "Person1" ), LiteSQL_L( "INTEGER" ),table__);
-const litesql::FieldType PersonPersonRelationFather::Person2( LiteSQL_L( "Person2" ), LiteSQL_L( "INTEGER" ),table__);
+const LITESQL_String PersonPersonRelationFather::table__( LITESQL_L( "Person_Person_Father" ));
+const litesql::FieldType PersonPersonRelationFather::Person1( LITESQL_L( "Person1" ), LITESQL_L( "INTEGER" ),table__);
+const litesql::FieldType PersonPersonRelationFather::Person2( LITESQL_L( "Person2" ), LITESQL_L( "INTEGER" ),table__);
 void PersonPersonRelationFather::link(const litesql::Database& db, const example::Person& o0, const example::Person& o1) {
     Record values;
     Split fields;
@@ -108,9 +108,9 @@ PersonPersonRelationSiblings::Row::Row(const litesql::Database& db, const litesq
         person1 = rec[0];
     }
 }
-const LiteSQL_String PersonPersonRelationSiblings::table__( LiteSQL_L( "Person_Person_Siblings" ));
-const litesql::FieldType PersonPersonRelationSiblings::Person1( LiteSQL_L( "Person1" ), LiteSQL_L( "INTEGER" ),table__);
-const litesql::FieldType PersonPersonRelationSiblings::Person2( LiteSQL_L( "Person2" ), LiteSQL_L( "INTEGER" ),table__);
+const LITESQL_String PersonPersonRelationSiblings::table__( LITESQL_L( "Person_Person_Siblings" ));
+const litesql::FieldType PersonPersonRelationSiblings::Person1( LITESQL_L( "Person1" ), LITESQL_L( "INTEGER" ),table__);
+const litesql::FieldType PersonPersonRelationSiblings::Person2( LITESQL_L( "Person2" ), LITESQL_L( "INTEGER" ),table__);
 void PersonPersonRelationSiblings::link(const litesql::Database& db, const example::Person& o0, const example::Person& o1) {
     Record values;
     Split fields;
@@ -165,9 +165,9 @@ PersonPersonRelationChildren::Row::Row(const litesql::Database& db, const litesq
         person1 = rec[0];
     }
 }
-const LiteSQL_String PersonPersonRelationChildren::table__( LiteSQL_L( "Person_Person_Children" ));
-const litesql::FieldType PersonPersonRelationChildren::Person1( LiteSQL_L( "Person1" ), LiteSQL_L( "INTEGER" ),table__);
-const litesql::FieldType PersonPersonRelationChildren::Person2( LiteSQL_L( "Person2" ), LiteSQL_L( "INTEGER" ),table__);
+const LITESQL_String PersonPersonRelationChildren::table__( LITESQL_L( "Person_Person_Children" ));
+const litesql::FieldType PersonPersonRelationChildren::Person1( LITESQL_L( "Person1" ), LITESQL_L( "INTEGER" ),table__);
+const litesql::FieldType PersonPersonRelationChildren::Person2( LITESQL_L( "Person2" ), LITESQL_L( "INTEGER" ),table__);
 void PersonPersonRelationChildren::link(const litesql::Database& db, const example::Person& o0, const example::Person& o1) {
     Record values;
     Split fields;
@@ -214,9 +214,9 @@ RoleRelation::Row::Row(const litesql::Database& db, const litesql::Record& rec)
         person = rec[0];
     }
 }
-const LiteSQL_String RoleRelation::table__( LiteSQL_L( "Person_Role_Roles" ));
-const litesql::FieldType RoleRelation::Person( LiteSQL_L( "Person1" ), LiteSQL_L( "INTEGER" ),table__);
-const litesql::FieldType RoleRelation::Role( LiteSQL_L( "Role2" ), LiteSQL_L( "INTEGER" ),table__);
+const LITESQL_String RoleRelation::table__( LITESQL_L( "Person_Role_Roles" ));
+const litesql::FieldType RoleRelation::Person( LITESQL_L( "Person1" ), LITESQL_L( "INTEGER" ),table__);
+const litesql::FieldType RoleRelation::Role( LITESQL_L( "Role2" ), LITESQL_L( "INTEGER" ),table__);
 void RoleRelation::link(const litesql::Database& db, const example::Person& o0, const example::Role& o1) {
     Record values;
     Split fields;
@@ -263,9 +263,9 @@ SchoolStudentRelation::Row::Row(const litesql::Database& db, const litesql::Reco
         school = rec[0];
     }
 }
-const LiteSQL_String SchoolStudentRelation::table__( LiteSQL_L( "School_Student_" ));
-const litesql::FieldType SchoolStudentRelation::School( LiteSQL_L( "School1" ), LiteSQL_L( "INTEGER" ),table__);
-const litesql::FieldType SchoolStudentRelation::Student( LiteSQL_L( "Student2" ), LiteSQL_L( "INTEGER" ),table__);
+const LITESQL_String SchoolStudentRelation::table__( LITESQL_L( "School_Student_" ));
+const litesql::FieldType SchoolStudentRelation::School( LITESQL_L( "School1" ), LITESQL_L( "INTEGER" ),table__);
+const litesql::FieldType SchoolStudentRelation::Student( LITESQL_L( "Student2" ), LITESQL_L( "INTEGER" ),table__);
 void SchoolStudentRelation::link(const litesql::Database& db, const example::School& o0, const example::Student& o1) {
     Record values;
     Split fields;
@@ -312,9 +312,9 @@ EmployeeOfficeRelation::Row::Row(const litesql::Database& db, const litesql::Rec
         employee = rec[0];
     }
 }
-const LiteSQL_String EmployeeOfficeRelation::table__( LiteSQL_L( "Employee_Office_" ));
-const litesql::FieldType EmployeeOfficeRelation::Employee( LiteSQL_L( "Employee1" ), LiteSQL_L( "INTEGER" ),table__);
-const litesql::FieldType EmployeeOfficeRelation::Office( LiteSQL_L( "Office2" ), LiteSQL_L( "INTEGER" ),table__);
+const LITESQL_String EmployeeOfficeRelation::table__( LITESQL_L( "Employee_Office_" ));
+const litesql::FieldType EmployeeOfficeRelation::Employee( LITESQL_L( "Employee1" ), LITESQL_L( "INTEGER" ),table__);
+const litesql::FieldType EmployeeOfficeRelation::Office( LITESQL_L( "Office2" ), LITESQL_L( "INTEGER" ),table__);
 void EmployeeOfficeRelation::link(const litesql::Database& db, const example::Employee& o0, const example::Office& o1) {
     Record values;
     Split fields;
@@ -352,14 +352,14 @@ template <> litesql::DataSource<example::Office> EmployeeOfficeRelation::get(con
     sel.where(srcExpr);
     return DataSource<example::Office>(db, example::Office::Id.in(sel) && expr);
 }
-const litesql::FieldType user::Own::Id( LiteSQL_L( "id_" ), LiteSQL_L( "INTEGER" ), LiteSQL_L( "user_" ));
-const LiteSQL_String user::type__( LiteSQL_L( "user" ));
-const LiteSQL_String user::table__( LiteSQL_L( "user_" ));
-const LiteSQL_String user::sequence__( LiteSQL_L( "user_seq" ));
-const litesql::FieldType user::Id( LiteSQL_L( "id_" ), LiteSQL_L( "INTEGER" ),table__);
-const litesql::FieldType user::Type( LiteSQL_L( "type_" ), LiteSQL_L( "TEXT" ),table__);
-const litesql::FieldType user::Name( LiteSQL_L( "name_" ), LiteSQL_L( "TEXT" ),table__);
-const litesql::FieldType user::Passwd( LiteSQL_L( "passwd_" ), LiteSQL_L( "TEXT" ),table__);
+const litesql::FieldType user::Own::Id( LITESQL_L( "id_" ), LITESQL_L( "INTEGER" ), LITESQL_L( "user_" ));
+const LITESQL_String user::type__( LITESQL_L( "user" ));
+const LITESQL_String user::table__( LITESQL_L( "user_" ));
+const LITESQL_String user::sequence__( LITESQL_L( "user_seq" ));
+const litesql::FieldType user::Id( LITESQL_L( "id_" ), LITESQL_L( "INTEGER" ),table__);
+const litesql::FieldType user::Type( LITESQL_L( "type_" ), LITESQL_L( "TEXT" ),table__);
+const litesql::FieldType user::Name( LITESQL_L( "name_" ), LITESQL_L( "TEXT" ),table__);
+const litesql::FieldType user::Passwd( LITESQL_L( "passwd_" ), LITESQL_L( "TEXT" ),table__);
 void user::defaults() {
     id = 0;
 }
@@ -372,13 +372,13 @@ user::user(const litesql::Database& db, const litesql::Record& rec)
     defaults();
     size_t size = (rec.size() > 4) ? 4 : rec.size();
     switch(size) {
-    case 4: passwd = convert<const LiteSQL_String&, LiteSQL_String>(rec[3]);
+    case 4: passwd = convert<const LITESQL_String&, LITESQL_String>(rec[3]);
         passwd.setModified(false);
-    case 3: name = convert<const LiteSQL_String&, LiteSQL_String>(rec[2]);
+    case 3: name = convert<const LITESQL_String&, LITESQL_String>(rec[2]);
         name.setModified(false);
-    case 2: type = convert<const LiteSQL_String&, LiteSQL_String>(rec[1]);
+    case 2: type = convert<const LITESQL_String&, LITESQL_String>(rec[1]);
         type.setModified(false);
-    case 1: id = convert<const LiteSQL_String&, int>(rec[0]);
+    case 1: id = convert<const LITESQL_String&, int>(rec[0]);
         id.setModified(false);
     }
 }
@@ -395,7 +395,7 @@ const user& user::operator=(const user& obj) {
     litesql::Persistent::operator=(obj);
     return *this;
 }
-LiteSQL_String user::insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs) {
+LITESQL_String user::insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs) {
     tables.push_back(table__);
     litesql::Record fields;
     litesql::Record values;
@@ -420,7 +420,7 @@ void user::create() {
     litesql::Records fieldRecs;
     litesql::Records valueRecs;
     type = type__;
-    LiteSQL_String newID = insert(tables, fieldRecs, valueRecs);
+    LITESQL_String newID = insert(tables, fieldRecs, valueRecs);
     if (id == 0)
         id = newID;
 }
@@ -485,19 +485,19 @@ std::auto_ptr<user> user::upcastCopy() {
     np->inDatabase = inDatabase;
     return std::auto_ptr<user>(np);
 }
-LiteSQL_oStream & operator<<(LiteSQL_oStream& os, user o) {
-    os <<  LiteSQL_L( "-------------------------------------" ) << std::endl;
-    os << o.id.name() <<  LiteSQL_L( " = " ) << o.id << std::endl;
-    os << o.type.name() <<  LiteSQL_L( " = " ) << o.type << std::endl;
-    os << o.name.name() <<  LiteSQL_L( " = " ) << o.name << std::endl;
-    os << o.passwd.name() <<  LiteSQL_L( " = " ) << o.passwd << std::endl;
-    os <<  LiteSQL_L( "-------------------------------------" ) << std::endl;
+LITESQL_oStream & operator<<(LITESQL_oStream& os, user o) {
+    os <<  LITESQL_L( "-------------------------------------" ) << std::endl;
+    os << o.id.name() <<  LITESQL_L( " = " ) << o.id << std::endl;
+    os << o.type.name() <<  LITESQL_L( " = " ) << o.type << std::endl;
+    os << o.name.name() <<  LITESQL_L( " = " ) << o.name << std::endl;
+    os << o.passwd.name() <<  LITESQL_L( " = " ) << o.passwd << std::endl;
+    os <<  LITESQL_L( "-------------------------------------" ) << std::endl;
     return os;
 }
-const litesql::FieldType Person::Own::Id( LiteSQL_L( "id_" ), LiteSQL_L( "INTEGER" ), LiteSQL_L( "Person_" ));
+const litesql::FieldType Person::Own::Id( LITESQL_L( "id_" ), LITESQL_L( "INTEGER" ), LITESQL_L( "Person_" ));
 const int Person::SexType::Male(0);
 const int Person::SexType::Female(1);
-Person::SexType::SexType(const LiteSQL_String& n, const LiteSQL_String& t, const LiteSQL_String& tbl, const litesql::FieldType::Values& vals)
+Person::SexType::SexType(const LITESQL_String& n, const LITESQL_String& t, const LITESQL_String& tbl, const litesql::FieldType::Values& vals)
          : litesql::FieldType(n,t,tbl,vals) {
 }
 const int Person::Sex::Male(0);
@@ -592,21 +592,21 @@ litesql::DataSource<Role> Person::RolesHandle::get(const litesql::Expr& expr, co
 litesql::DataSource<RoleRelation::Row> Person::RolesHandle::getRows(const litesql::Expr& expr) {
     return RoleRelation::getRows(owner->getDatabase(), expr && (RoleRelation::Person == owner->id));
 }
-const LiteSQL_String Person::type__( LiteSQL_L( "Person" ));
-const LiteSQL_String Person::table__( LiteSQL_L( "Person_" ));
-const LiteSQL_String Person::sequence__( LiteSQL_L( "Person_seq" ));
-const litesql::FieldType Person::Id( LiteSQL_L( "id_" ), LiteSQL_L( "INTEGER" ),table__);
-const litesql::FieldType Person::Type( LiteSQL_L( "type_" ), LiteSQL_L( "TEXT" ),table__);
-const litesql::FieldType Person::Name( LiteSQL_L( "name_" ), LiteSQL_L( "TEXT" ),table__);
-const litesql::FieldType Person::Age( LiteSQL_L( "age_" ), LiteSQL_L( "INTEGER" ),table__);
-const litesql::FieldType Person::Image( LiteSQL_L( "image_" ), LiteSQL_L( "BLOB" ),table__);
-const litesql::FieldType Person::ADoubleValue( LiteSQL_L( "aDoubleValue_" ), LiteSQL_L( "DOUBLE" ),table__);
-std::vector < std::pair< LiteSQL_String, LiteSQL_String > > Person::sex_values;
-const Person::SexType Person::Sex( LiteSQL_L( "sex_" ), LiteSQL_L( "INTEGER" ),table__,sex_values);
+const LITESQL_String Person::type__( LITESQL_L( "Person" ));
+const LITESQL_String Person::table__( LITESQL_L( "Person_" ));
+const LITESQL_String Person::sequence__( LITESQL_L( "Person_seq" ));
+const litesql::FieldType Person::Id( LITESQL_L( "id_" ), LITESQL_L( "INTEGER" ),table__);
+const litesql::FieldType Person::Type( LITESQL_L( "type_" ), LITESQL_L( "TEXT" ),table__);
+const litesql::FieldType Person::Name( LITESQL_L( "name_" ), LITESQL_L( "TEXT" ),table__);
+const litesql::FieldType Person::Age( LITESQL_L( "age_" ), LITESQL_L( "INTEGER" ),table__);
+const litesql::FieldType Person::Image( LITESQL_L( "image_" ), LITESQL_L( "BLOB" ),table__);
+const litesql::FieldType Person::ADoubleValue( LITESQL_L( "aDoubleValue_" ), LITESQL_L( "DOUBLE" ),table__);
+std::vector < std::pair< LITESQL_String, LITESQL_String > > Person::sex_values;
+const Person::SexType Person::Sex( LITESQL_L( "sex_" ), LITESQL_L( "INTEGER" ),table__,sex_values);
 void Person::initValues() {
     sex_values.clear();
-    sex_values.push_back(make_pair<LiteSQL_String, LiteSQL_String>( LiteSQL_L( "Male" ), LiteSQL_L( "0" )));
-    sex_values.push_back(make_pair<LiteSQL_String, LiteSQL_String>( LiteSQL_L( "Female" ), LiteSQL_L( "1" )));
+    sex_values.push_back(make_pair<LITESQL_String, LITESQL_String>( LITESQL_L( "Male" ), LITESQL_L( "0" )));
+    sex_values.push_back(make_pair<LITESQL_String, LITESQL_String>( LITESQL_L( "Female" ), LITESQL_L( "1" )));
 }
 void Person::defaults() {
     id = 0;
@@ -624,19 +624,19 @@ Person::Person(const litesql::Database& db, const litesql::Record& rec)
     defaults();
     size_t size = (rec.size() > 7) ? 7 : rec.size();
     switch(size) {
-    case 7: sex = convert<const LiteSQL_String&, int>(rec[6]);
+    case 7: sex = convert<const LITESQL_String&, int>(rec[6]);
         sex.setModified(false);
-    case 6: aDoubleValue = convert<const LiteSQL_String&, double>(rec[5]);
+    case 6: aDoubleValue = convert<const LITESQL_String&, double>(rec[5]);
         aDoubleValue.setModified(false);
-    case 5: image = convert<const LiteSQL_String&, litesql::Blob>(rec[4]);
+    case 5: image = convert<const LITESQL_String&, litesql::Blob>(rec[4]);
         image.setModified(false);
-    case 4: age = convert<const LiteSQL_String&, int>(rec[3]);
+    case 4: age = convert<const LITESQL_String&, int>(rec[3]);
         age.setModified(false);
-    case 3: name = convert<const LiteSQL_String&, LiteSQL_String>(rec[2]);
+    case 3: name = convert<const LITESQL_String&, LITESQL_String>(rec[2]);
         name.setModified(false);
-    case 2: type = convert<const LiteSQL_String&, LiteSQL_String>(rec[1]);
+    case 2: type = convert<const LITESQL_String&, LITESQL_String>(rec[1]);
         type.setModified(false);
-    case 1: id = convert<const LiteSQL_String&, int>(rec[0]);
+    case 1: id = convert<const LITESQL_String&, int>(rec[0]);
         id.setModified(false);
     }
 }
@@ -671,7 +671,7 @@ Person::ChildrenHandle Person::children() {
 Person::RolesHandle Person::roles() {
     return Person::RolesHandle(*this);
 }
-LiteSQL_String Person::insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs) {
+LITESQL_String Person::insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs) {
     tables.push_back(table__);
     litesql::Record fields;
     litesql::Record values;
@@ -705,7 +705,7 @@ void Person::create() {
     litesql::Records fieldRecs;
     litesql::Records valueRecs;
     type = type__;
-    LiteSQL_String newID = insert(tables, fieldRecs, valueRecs);
+    LITESQL_String newID = insert(tables, fieldRecs, valueRecs);
     if (id == 0)
         id = newID;
 }
@@ -784,19 +784,19 @@ std::auto_ptr<Person> Person::upcastCopy() {
     np->inDatabase = inDatabase;
     return std::auto_ptr<Person>(np);
 }
-LiteSQL_oStream & operator<<(LiteSQL_oStream& os, Person o) {
-    os <<  LiteSQL_L( "-------------------------------------" ) << std::endl;
-    os << o.id.name() <<  LiteSQL_L( " = " ) << o.id << std::endl;
-    os << o.type.name() <<  LiteSQL_L( " = " ) << o.type << std::endl;
-    os << o.name.name() <<  LiteSQL_L( " = " ) << o.name << std::endl;
-    os << o.age.name() <<  LiteSQL_L( " = " ) << o.age << std::endl;
-    os << o.image.name() <<  LiteSQL_L( " = " ) << o.image << std::endl;
-    os << o.aDoubleValue.name() <<  LiteSQL_L( " = " ) << o.aDoubleValue << std::endl;
-    os << o.sex.name() <<  LiteSQL_L( " = " ) << o.sex << std::endl;
-    os <<  LiteSQL_L( "-------------------------------------" ) << std::endl;
+LITESQL_oStream & operator<<(LITESQL_oStream& os, Person o) {
+    os <<  LITESQL_L( "-------------------------------------" ) << std::endl;
+    os << o.id.name() <<  LITESQL_L( " = " ) << o.id << std::endl;
+    os << o.type.name() <<  LITESQL_L( " = " ) << o.type << std::endl;
+    os << o.name.name() <<  LITESQL_L( " = " ) << o.name << std::endl;
+    os << o.age.name() <<  LITESQL_L( " = " ) << o.age << std::endl;
+    os << o.image.name() <<  LITESQL_L( " = " ) << o.image << std::endl;
+    os << o.aDoubleValue.name() <<  LITESQL_L( " = " ) << o.aDoubleValue << std::endl;
+    os << o.sex.name() <<  LITESQL_L( " = " ) << o.sex << std::endl;
+    os <<  LITESQL_L( "-------------------------------------" ) << std::endl;
     return os;
 }
-const litesql::FieldType Role::Own::Id( LiteSQL_L( "id_" ), LiteSQL_L( "INTEGER" ), LiteSQL_L( "Role_" ));
+const litesql::FieldType Role::Own::Id( LITESQL_L( "id_" ), LITESQL_L( "INTEGER" ), LITESQL_L( "Role_" ));
 Role::PersonHandle::PersonHandle(const Role& owner)
          : litesql::RelationHandle<Role>(owner) {
 }
@@ -815,11 +815,11 @@ litesql::DataSource<Person> Role::PersonHandle::get(const litesql::Expr& expr, c
 litesql::DataSource<RoleRelation::Row> Role::PersonHandle::getRows(const litesql::Expr& expr) {
     return RoleRelation::getRows(owner->getDatabase(), expr && (RoleRelation::Role == owner->id));
 }
-const LiteSQL_String Role::type__( LiteSQL_L( "Role" ));
-const LiteSQL_String Role::table__( LiteSQL_L( "Role_" ));
-const LiteSQL_String Role::sequence__( LiteSQL_L( "Role_seq" ));
-const litesql::FieldType Role::Id( LiteSQL_L( "id_" ), LiteSQL_L( "INTEGER" ),table__);
-const litesql::FieldType Role::Type( LiteSQL_L( "type_" ), LiteSQL_L( "TEXT" ),table__);
+const LITESQL_String Role::type__( LITESQL_L( "Role" ));
+const LITESQL_String Role::table__( LITESQL_L( "Role_" ));
+const LITESQL_String Role::sequence__( LITESQL_L( "Role_seq" ));
+const litesql::FieldType Role::Id( LITESQL_L( "id_" ), LITESQL_L( "INTEGER" ),table__);
+const litesql::FieldType Role::Type( LITESQL_L( "type_" ), LITESQL_L( "TEXT" ),table__);
 void Role::defaults() {
     id = 0;
 }
@@ -832,9 +832,9 @@ Role::Role(const litesql::Database& db, const litesql::Record& rec)
     defaults();
     size_t size = (rec.size() > 2) ? 2 : rec.size();
     switch(size) {
-    case 2: type = convert<const LiteSQL_String&, LiteSQL_String>(rec[1]);
+    case 2: type = convert<const LITESQL_String&, LITESQL_String>(rec[1]);
         type.setModified(false);
-    case 1: id = convert<const LiteSQL_String&, int>(rec[0]);
+    case 1: id = convert<const LITESQL_String&, int>(rec[0]);
         id.setModified(false);
     }
 }
@@ -852,7 +852,7 @@ const Role& Role::operator=(const Role& obj) {
 Role::PersonHandle Role::person() {
     return Role::PersonHandle(*this);
 }
-LiteSQL_String Role::insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs) {
+LITESQL_String Role::insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs) {
     tables.push_back(table__);
     litesql::Record fields;
     litesql::Record values;
@@ -871,7 +871,7 @@ void Role::create() {
     litesql::Records fieldRecs;
     litesql::Records valueRecs;
     type = type__;
-    LiteSQL_String newID = insert(tables, fieldRecs, valueRecs);
+    LITESQL_String newID = insert(tables, fieldRecs, valueRecs);
     if (id == 0)
         id = newID;
 }
@@ -930,23 +930,23 @@ std::auto_ptr<Role> Role::upcast() {
 }
 std::auto_ptr<Role> Role::upcastCopy() {
     Role* np = NULL;
-    if (type ==  LiteSQL_L( "Student" ))
+    if (type ==  LITESQL_L( "Student" ))
         np = new Student(*db);
-    if (type ==  LiteSQL_L( "Employee" ))
+    if (type ==  LITESQL_L( "Employee" ))
         np = new Employee(*db);
     np->id = id;
     np->type = type;
     np->inDatabase = inDatabase;
     return std::auto_ptr<Role>(np);
 }
-LiteSQL_oStream & operator<<(LiteSQL_oStream& os, Role o) {
-    os <<  LiteSQL_L( "-------------------------------------" ) << std::endl;
-    os << o.id.name() <<  LiteSQL_L( " = " ) << o.id << std::endl;
-    os << o.type.name() <<  LiteSQL_L( " = " ) << o.type << std::endl;
-    os <<  LiteSQL_L( "-------------------------------------" ) << std::endl;
+LITESQL_oStream & operator<<(LITESQL_oStream& os, Role o) {
+    os <<  LITESQL_L( "-------------------------------------" ) << std::endl;
+    os << o.id.name() <<  LITESQL_L( " = " ) << o.id << std::endl;
+    os << o.type.name() <<  LITESQL_L( " = " ) << o.type << std::endl;
+    os <<  LITESQL_L( "-------------------------------------" ) << std::endl;
     return os;
 }
-const litesql::FieldType Student::Own::Id( LiteSQL_L( "id_" ), LiteSQL_L( "INTEGER" ), LiteSQL_L( "Student_" ));
+const litesql::FieldType Student::Own::Id( LITESQL_L( "id_" ), LITESQL_L( "INTEGER" ), LITESQL_L( "Student_" ));
 Student::SchoolHandle::SchoolHandle(const Student& owner)
          : litesql::RelationHandle<Student>(owner) {
 }
@@ -965,8 +965,8 @@ litesql::DataSource<School> Student::SchoolHandle::get(const litesql::Expr& expr
 litesql::DataSource<SchoolStudentRelation::Row> Student::SchoolHandle::getRows(const litesql::Expr& expr) {
     return SchoolStudentRelation::getRows(owner->getDatabase(), expr && (SchoolStudentRelation::Student == owner->id));
 }
-const LiteSQL_String Student::type__( LiteSQL_L( "Student" ));
-const LiteSQL_String Student::table__( LiteSQL_L( "Student_" ));
+const LITESQL_String Student::type__( LITESQL_L( "Student" ));
+const LITESQL_String Student::table__( LITESQL_L( "Student_" ));
 Student::Student(const litesql::Database& db)
      : Role(db) {
 }
@@ -983,11 +983,11 @@ const Student& Student::operator=(const Student& obj) {
 Student::SchoolHandle Student::school() {
     return Student::SchoolHandle(*this);
 }
-LiteSQL_String Student::insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs) {
+LITESQL_String Student::insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs) {
     tables.push_back(table__);
     litesql::Record fields;
     litesql::Record values;
-    fields.push_back( LiteSQL_L( "id_" ));
+    fields.push_back( LITESQL_L( "id_" ));
     values.push_back(id);
     fieldRecs.push_back(fields);
     valueRecs.push_back(values);
@@ -998,7 +998,7 @@ void Student::create() {
     litesql::Records fieldRecs;
     litesql::Records valueRecs;
     type = type__;
-    LiteSQL_String newID = insert(tables, fieldRecs, valueRecs);
+    LITESQL_String newID = insert(tables, fieldRecs, valueRecs);
     if (id == 0)
         id = newID;
 }
@@ -1059,14 +1059,14 @@ std::auto_ptr<Student> Student::upcastCopy() {
     np->inDatabase = inDatabase;
     return std::auto_ptr<Student>(np);
 }
-LiteSQL_oStream & operator<<(LiteSQL_oStream& os, Student o) {
-    os <<  LiteSQL_L( "-------------------------------------" ) << std::endl;
-    os << o.id.name() <<  LiteSQL_L( " = " ) << o.id << std::endl;
-    os << o.type.name() <<  LiteSQL_L( " = " ) << o.type << std::endl;
-    os <<  LiteSQL_L( "-------------------------------------" ) << std::endl;
+LITESQL_oStream & operator<<(LITESQL_oStream& os, Student o) {
+    os <<  LITESQL_L( "-------------------------------------" ) << std::endl;
+    os << o.id.name() <<  LITESQL_L( " = " ) << o.id << std::endl;
+    os << o.type.name() <<  LITESQL_L( " = " ) << o.type << std::endl;
+    os <<  LITESQL_L( "-------------------------------------" ) << std::endl;
     return os;
 }
-const litesql::FieldType Employee::Own::Id( LiteSQL_L( "id_" ), LiteSQL_L( "INTEGER" ), LiteSQL_L( "Employee_" ));
+const litesql::FieldType Employee::Own::Id( LITESQL_L( "id_" ), LITESQL_L( "INTEGER" ), LITESQL_L( "Employee_" ));
 Employee::OfficeHandle::OfficeHandle(const Employee& owner)
          : litesql::RelationHandle<Employee>(owner) {
 }
@@ -1085,8 +1085,8 @@ litesql::DataSource<Office> Employee::OfficeHandle::get(const litesql::Expr& exp
 litesql::DataSource<EmployeeOfficeRelation::Row> Employee::OfficeHandle::getRows(const litesql::Expr& expr) {
     return EmployeeOfficeRelation::getRows(owner->getDatabase(), expr && (EmployeeOfficeRelation::Employee == owner->id));
 }
-const LiteSQL_String Employee::type__( LiteSQL_L( "Employee" ));
-const LiteSQL_String Employee::table__( LiteSQL_L( "Employee_" ));
+const LITESQL_String Employee::type__( LITESQL_L( "Employee" ));
+const LITESQL_String Employee::table__( LITESQL_L( "Employee_" ));
 Employee::Employee(const litesql::Database& db)
      : Role(db) {
 }
@@ -1103,11 +1103,11 @@ const Employee& Employee::operator=(const Employee& obj) {
 Employee::OfficeHandle Employee::office() {
     return Employee::OfficeHandle(*this);
 }
-LiteSQL_String Employee::insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs) {
+LITESQL_String Employee::insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs) {
     tables.push_back(table__);
     litesql::Record fields;
     litesql::Record values;
-    fields.push_back( LiteSQL_L( "id_" ));
+    fields.push_back( LITESQL_L( "id_" ));
     values.push_back(id);
     fieldRecs.push_back(fields);
     valueRecs.push_back(values);
@@ -1118,7 +1118,7 @@ void Employee::create() {
     litesql::Records fieldRecs;
     litesql::Records valueRecs;
     type = type__;
-    LiteSQL_String newID = insert(tables, fieldRecs, valueRecs);
+    LITESQL_String newID = insert(tables, fieldRecs, valueRecs);
     if (id == 0)
         id = newID;
 }
@@ -1179,14 +1179,14 @@ std::auto_ptr<Employee> Employee::upcastCopy() {
     np->inDatabase = inDatabase;
     return std::auto_ptr<Employee>(np);
 }
-LiteSQL_oStream & operator<<(LiteSQL_oStream& os, Employee o) {
-    os <<  LiteSQL_L( "-------------------------------------" ) << std::endl;
-    os << o.id.name() <<  LiteSQL_L( " = " ) << o.id << std::endl;
-    os << o.type.name() <<  LiteSQL_L( " = " ) << o.type << std::endl;
-    os <<  LiteSQL_L( "-------------------------------------" ) << std::endl;
+LITESQL_oStream & operator<<(LITESQL_oStream& os, Employee o) {
+    os <<  LITESQL_L( "-------------------------------------" ) << std::endl;
+    os << o.id.name() <<  LITESQL_L( " = " ) << o.id << std::endl;
+    os << o.type.name() <<  LITESQL_L( " = " ) << o.type << std::endl;
+    os <<  LITESQL_L( "-------------------------------------" ) << std::endl;
     return os;
 }
-const litesql::FieldType School::Own::Id( LiteSQL_L( "id_" ), LiteSQL_L( "INTEGER" ), LiteSQL_L( "School_" ));
+const litesql::FieldType School::Own::Id( LITESQL_L( "id_" ), LITESQL_L( "INTEGER" ), LITESQL_L( "School_" ));
 School::StudentsHandle::StudentsHandle(const School& owner)
          : litesql::RelationHandle<School>(owner) {
 }
@@ -1205,12 +1205,12 @@ litesql::DataSource<Student> School::StudentsHandle::get(const litesql::Expr& ex
 litesql::DataSource<SchoolStudentRelation::Row> School::StudentsHandle::getRows(const litesql::Expr& expr) {
     return SchoolStudentRelation::getRows(owner->getDatabase(), expr && (SchoolStudentRelation::School == owner->id));
 }
-const LiteSQL_String School::type__( LiteSQL_L( "School" ));
-const LiteSQL_String School::table__( LiteSQL_L( "School_" ));
-const LiteSQL_String School::sequence__( LiteSQL_L( "School_seq" ));
-const litesql::FieldType School::Id( LiteSQL_L( "id_" ), LiteSQL_L( "INTEGER" ),table__);
-const litesql::FieldType School::Type( LiteSQL_L( "type_" ), LiteSQL_L( "TEXT" ),table__);
-const litesql::FieldType School::Name( LiteSQL_L( "name_" ), LiteSQL_L( "TEXT" ),table__);
+const LITESQL_String School::type__( LITESQL_L( "School" ));
+const LITESQL_String School::table__( LITESQL_L( "School_" ));
+const LITESQL_String School::sequence__( LITESQL_L( "School_seq" ));
+const litesql::FieldType School::Id( LITESQL_L( "id_" ), LITESQL_L( "INTEGER" ),table__);
+const litesql::FieldType School::Type( LITESQL_L( "type_" ), LITESQL_L( "TEXT" ),table__);
+const litesql::FieldType School::Name( LITESQL_L( "name_" ), LITESQL_L( "TEXT" ),table__);
 void School::defaults() {
     id = 0;
 }
@@ -1223,11 +1223,11 @@ School::School(const litesql::Database& db, const litesql::Record& rec)
     defaults();
     size_t size = (rec.size() > 3) ? 3 : rec.size();
     switch(size) {
-    case 3: name = convert<const LiteSQL_String&, LiteSQL_String>(rec[2]);
+    case 3: name = convert<const LITESQL_String&, LITESQL_String>(rec[2]);
         name.setModified(false);
-    case 2: type = convert<const LiteSQL_String&, LiteSQL_String>(rec[1]);
+    case 2: type = convert<const LITESQL_String&, LITESQL_String>(rec[1]);
         type.setModified(false);
-    case 1: id = convert<const LiteSQL_String&, int>(rec[0]);
+    case 1: id = convert<const LITESQL_String&, int>(rec[0]);
         id.setModified(false);
     }
 }
@@ -1246,7 +1246,7 @@ const School& School::operator=(const School& obj) {
 School::StudentsHandle School::students() {
     return School::StudentsHandle(*this);
 }
-LiteSQL_String School::insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs) {
+LITESQL_String School::insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs) {
     tables.push_back(table__);
     litesql::Record fields;
     litesql::Record values;
@@ -1268,7 +1268,7 @@ void School::create() {
     litesql::Records fieldRecs;
     litesql::Records valueRecs;
     type = type__;
-    LiteSQL_String newID = insert(tables, fieldRecs, valueRecs);
+    LITESQL_String newID = insert(tables, fieldRecs, valueRecs);
     if (id == 0)
         id = newID;
 }
@@ -1331,15 +1331,15 @@ std::auto_ptr<School> School::upcastCopy() {
     np->inDatabase = inDatabase;
     return std::auto_ptr<School>(np);
 }
-LiteSQL_oStream & operator<<(LiteSQL_oStream& os, School o) {
-    os <<  LiteSQL_L( "-------------------------------------" ) << std::endl;
-    os << o.id.name() <<  LiteSQL_L( " = " ) << o.id << std::endl;
-    os << o.type.name() <<  LiteSQL_L( " = " ) << o.type << std::endl;
-    os << o.name.name() <<  LiteSQL_L( " = " ) << o.name << std::endl;
-    os <<  LiteSQL_L( "-------------------------------------" ) << std::endl;
+LITESQL_oStream & operator<<(LITESQL_oStream& os, School o) {
+    os <<  LITESQL_L( "-------------------------------------" ) << std::endl;
+    os << o.id.name() <<  LITESQL_L( " = " ) << o.id << std::endl;
+    os << o.type.name() <<  LITESQL_L( " = " ) << o.type << std::endl;
+    os << o.name.name() <<  LITESQL_L( " = " ) << o.name << std::endl;
+    os <<  LITESQL_L( "-------------------------------------" ) << std::endl;
     return os;
 }
-const litesql::FieldType Office::Own::Id( LiteSQL_L( "id_" ), LiteSQL_L( "INTEGER" ), LiteSQL_L( "Office_" ));
+const litesql::FieldType Office::Own::Id( LITESQL_L( "id_" ), LITESQL_L( "INTEGER" ), LITESQL_L( "Office_" ));
 Office::EmployeesHandle::EmployeesHandle(const Office& owner)
          : litesql::RelationHandle<Office>(owner) {
 }
@@ -1358,11 +1358,11 @@ litesql::DataSource<Employee> Office::EmployeesHandle::get(const litesql::Expr& 
 litesql::DataSource<EmployeeOfficeRelation::Row> Office::EmployeesHandle::getRows(const litesql::Expr& expr) {
     return EmployeeOfficeRelation::getRows(owner->getDatabase(), expr && (EmployeeOfficeRelation::Office == owner->id));
 }
-const LiteSQL_String Office::type__( LiteSQL_L( "Office" ));
-const LiteSQL_String Office::table__( LiteSQL_L( "Office_" ));
-const LiteSQL_String Office::sequence__( LiteSQL_L( "Office_seq" ));
-const litesql::FieldType Office::Id( LiteSQL_L( "id_" ), LiteSQL_L( "INTEGER" ),table__);
-const litesql::FieldType Office::Type( LiteSQL_L( "type_" ), LiteSQL_L( "TEXT" ),table__);
+const LITESQL_String Office::type__( LITESQL_L( "Office" ));
+const LITESQL_String Office::table__( LITESQL_L( "Office_" ));
+const LITESQL_String Office::sequence__( LITESQL_L( "Office_seq" ));
+const litesql::FieldType Office::Id( LITESQL_L( "id_" ), LITESQL_L( "INTEGER" ),table__);
+const litesql::FieldType Office::Type( LITESQL_L( "type_" ), LITESQL_L( "TEXT" ),table__);
 void Office::defaults() {
     id = 0;
 }
@@ -1375,9 +1375,9 @@ Office::Office(const litesql::Database& db, const litesql::Record& rec)
     defaults();
     size_t size = (rec.size() > 2) ? 2 : rec.size();
     switch(size) {
-    case 2: type = convert<const LiteSQL_String&, LiteSQL_String>(rec[1]);
+    case 2: type = convert<const LITESQL_String&, LITESQL_String>(rec[1]);
         type.setModified(false);
-    case 1: id = convert<const LiteSQL_String&, int>(rec[0]);
+    case 1: id = convert<const LITESQL_String&, int>(rec[0]);
         id.setModified(false);
     }
 }
@@ -1395,7 +1395,7 @@ const Office& Office::operator=(const Office& obj) {
 Office::EmployeesHandle Office::employees() {
     return Office::EmployeesHandle(*this);
 }
-LiteSQL_String Office::insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs) {
+LITESQL_String Office::insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs) {
     tables.push_back(table__);
     litesql::Record fields;
     litesql::Record values;
@@ -1414,7 +1414,7 @@ void Office::create() {
     litesql::Records fieldRecs;
     litesql::Records valueRecs;
     type = type__;
-    LiteSQL_String newID = insert(tables, fieldRecs, valueRecs);
+    LITESQL_String newID = insert(tables, fieldRecs, valueRecs);
     if (id == 0)
         id = newID;
 }
@@ -1474,63 +1474,63 @@ std::auto_ptr<Office> Office::upcastCopy() {
     np->inDatabase = inDatabase;
     return std::auto_ptr<Office>(np);
 }
-LiteSQL_oStream & operator<<(LiteSQL_oStream& os, Office o) {
-    os <<  LiteSQL_L( "-------------------------------------" ) << std::endl;
-    os << o.id.name() <<  LiteSQL_L( " = " ) << o.id << std::endl;
-    os << o.type.name() <<  LiteSQL_L( " = " ) << o.type << std::endl;
-    os <<  LiteSQL_L( "-------------------------------------" ) << std::endl;
+LITESQL_oStream & operator<<(LITESQL_oStream& os, Office o) {
+    os <<  LITESQL_L( "-------------------------------------" ) << std::endl;
+    os << o.id.name() <<  LITESQL_L( " = " ) << o.id << std::endl;
+    os << o.type.name() <<  LITESQL_L( " = " ) << o.type << std::endl;
+    os <<  LITESQL_L( "-------------------------------------" ) << std::endl;
     return os;
 }
-ExampleDatabase::ExampleDatabase(LiteSQL_String backendType, LiteSQL_String connInfo)
+ExampleDatabase::ExampleDatabase(LITESQL_String backendType, LITESQL_String connInfo)
      : litesql::Database(backendType, connInfo) {
     initialize();
 }
 std::vector<litesql::Database::SchemaItem> ExampleDatabase::getSchema() const {
     std::vector<Database::SchemaItem> res;
-    res.push_back(Database::SchemaItem( LiteSQL_L( "schema_" ), LiteSQL_L( "table" ), LiteSQL_L( "CREATE TABLE schema_ (name_ TEXT, type_ TEXT, sql_ TEXT);" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "schema_" ), LITESQL_L( "table" ), LITESQL_L( "CREATE TABLE schema_ (name_ TEXT, type_ TEXT, sql_ TEXT);" )));
     if (backend->supportsSequences()) {
-        res.push_back(Database::SchemaItem( LiteSQL_L( "user_seq" ), LiteSQL_L( "sequence" ), LiteSQL_L( "CREATE SEQUENCE user_seq START 1 INCREMENT 1" )));
-        res.push_back(Database::SchemaItem( LiteSQL_L( "Person_seq" ), LiteSQL_L( "sequence" ), LiteSQL_L( "CREATE SEQUENCE Person_seq START 1 INCREMENT 1" )));
-        res.push_back(Database::SchemaItem( LiteSQL_L( "Role_seq" ), LiteSQL_L( "sequence" ), LiteSQL_L( "CREATE SEQUENCE Role_seq START 1 INCREMENT 1" )));
-        res.push_back(Database::SchemaItem( LiteSQL_L( "School_seq" ), LiteSQL_L( "sequence" ), LiteSQL_L( "CREATE SEQUENCE School_seq START 1 INCREMENT 1" )));
-        res.push_back(Database::SchemaItem( LiteSQL_L( "Office_seq" ), LiteSQL_L( "sequence" ), LiteSQL_L( "CREATE SEQUENCE Office_seq START 1 INCREMENT 1" )));
+        res.push_back(Database::SchemaItem( LITESQL_L( "user_seq" ), LITESQL_L( "sequence" ), LITESQL_L( "CREATE SEQUENCE user_seq START 1 INCREMENT 1" )));
+        res.push_back(Database::SchemaItem( LITESQL_L( "Person_seq" ), LITESQL_L( "sequence" ), LITESQL_L( "CREATE SEQUENCE Person_seq START 1 INCREMENT 1" )));
+        res.push_back(Database::SchemaItem( LITESQL_L( "Role_seq" ), LITESQL_L( "sequence" ), LITESQL_L( "CREATE SEQUENCE Role_seq START 1 INCREMENT 1" )));
+        res.push_back(Database::SchemaItem( LITESQL_L( "School_seq" ), LITESQL_L( "sequence" ), LITESQL_L( "CREATE SEQUENCE School_seq START 1 INCREMENT 1" )));
+        res.push_back(Database::SchemaItem( LITESQL_L( "Office_seq" ), LITESQL_L( "sequence" ), LITESQL_L( "CREATE SEQUENCE Office_seq START 1 INCREMENT 1" )));
     }
-    res.push_back(Database::SchemaItem( LiteSQL_L( "user_" ), LiteSQL_L( "table" ), LiteSQL_L( "CREATE TABLE user_ (id_ " ) + backend->getRowIDType() +  LiteSQL_L( ",type_ TEXT,name_ TEXT,passwd_ TEXT)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Person_" ), LiteSQL_L( "table" ), LiteSQL_L( "CREATE TABLE Person_ (id_ " ) + backend->getRowIDType() +  LiteSQL_L( ",type_ TEXT,name_ TEXT,age_ INTEGER,image_ BLOB,aDoubleValue_ DOUBLE,sex_ INTEGER)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Role_" ), LiteSQL_L( "table" ), LiteSQL_L( "CREATE TABLE Role_ (id_ " ) + backend->getRowIDType() +  LiteSQL_L( ",type_ TEXT)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Student_" ), LiteSQL_L( "table" ), LiteSQL_L( "CREATE TABLE Student_ (id_ " ) + backend->getRowIDType() +  LiteSQL_L( ")" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Employee_" ), LiteSQL_L( "table" ), LiteSQL_L( "CREATE TABLE Employee_ (id_ " ) + backend->getRowIDType() +  LiteSQL_L( ")" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "School_" ), LiteSQL_L( "table" ), LiteSQL_L( "CREATE TABLE School_ (id_ " ) + backend->getRowIDType() +  LiteSQL_L( ",type_ TEXT,name_ TEXT)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Office_" ), LiteSQL_L( "table" ), LiteSQL_L( "CREATE TABLE Office_ (id_ " ) + backend->getRowIDType() +  LiteSQL_L( ",type_ TEXT)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Person_Person_Mother" ), LiteSQL_L( "table" ), LiteSQL_L( "CREATE TABLE Person_Person_Mother (Person1 INTEGER UNIQUE,Person2 INTEGER)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Person_Person_Father" ), LiteSQL_L( "table" ), LiteSQL_L( "CREATE TABLE Person_Person_Father (Person1 INTEGER UNIQUE,Person2 INTEGER)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Person_Person_Siblings" ), LiteSQL_L( "table" ), LiteSQL_L( "CREATE TABLE Person_Person_Siblings (Person1 INTEGER,Person2 INTEGER)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Person_Person_Children" ), LiteSQL_L( "table" ), LiteSQL_L( "CREATE TABLE Person_Person_Children (Person1 INTEGER,Person2 INTEGER)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Person_Role_Roles" ), LiteSQL_L( "table" ), LiteSQL_L( "CREATE TABLE Person_Role_Roles (Person1 INTEGER,Role2 INTEGER UNIQUE)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "School_Student_" ), LiteSQL_L( "table" ), LiteSQL_L( "CREATE TABLE School_Student_ (School1 INTEGER,Student2 INTEGER UNIQUE)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Employee_Office_" ), LiteSQL_L( "table" ), LiteSQL_L( "CREATE TABLE Employee_Office_ (Employee1 INTEGER,Office2 INTEGER)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Person__name_age_idx" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE UNIQUE INDEX Person__name_age_idx ON Person_ (name_,age_)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Person_Person_MotherPerson1idx" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX Person_Person_MotherPerson1idx ON Person_Person_Mother (Person1)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Person_Person_MotherPerson2idx" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX Person_Person_MotherPerson2idx ON Person_Person_Mother (Person2)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Person_Person_Mother_all_idx" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX Person_Person_Mother_all_idx ON Person_Person_Mother (Person1,Person2)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Person_Person_FatherPerson1idx" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX Person_Person_FatherPerson1idx ON Person_Person_Father (Person1)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Person_Person_FatherPerson2idx" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX Person_Person_FatherPerson2idx ON Person_Person_Father (Person2)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Person_Person_Father_all_idx" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX Person_Person_Father_all_idx ON Person_Person_Father (Person1,Person2)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "_fc4501d1c1e9cc173fbe356a08a9d12f" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX _fc4501d1c1e9cc173fbe356a08a9d12f ON Person_Person_Siblings (Person1)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "_29908e51ecc673e39c38238d4abe5b3b" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX _29908e51ecc673e39c38238d4abe5b3b ON Person_Person_Siblings (Person2)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Person_Person_Siblings_all_idx" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX Person_Person_Siblings_all_idx ON Person_Person_Siblings (Person1,Person2)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "_c77a0c252bbee950ec06bda52dd09648" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX _c77a0c252bbee950ec06bda52dd09648 ON Person_Person_Children (Person1)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "_64f9014350ce47b5d0f7606b127df7c3" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX _64f9014350ce47b5d0f7606b127df7c3 ON Person_Person_Children (Person2)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Person_Person_Children_all_idx" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX Person_Person_Children_all_idx ON Person_Person_Children (Person1,Person2)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Person_Role_RolesPerson1idx" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX Person_Role_RolesPerson1idx ON Person_Role_Roles (Person1)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Person_Role_RolesRole2idx" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX Person_Role_RolesRole2idx ON Person_Role_Roles (Role2)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Person_Role_Roles_all_idx" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX Person_Role_Roles_all_idx ON Person_Role_Roles (Person1,Role2)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "School_Student_School1idx" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX School_Student_School1idx ON School_Student_ (School1)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "School_Student_Student2idx" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX School_Student_Student2idx ON School_Student_ (Student2)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "School_Student__all_idx" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX School_Student__all_idx ON School_Student_ (School1,Student2)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Employee_Office_Employee1idx" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX Employee_Office_Employee1idx ON Employee_Office_ (Employee1)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Employee_Office_Office2idx" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX Employee_Office_Office2idx ON Employee_Office_ (Office2)" )));
-    res.push_back(Database::SchemaItem( LiteSQL_L( "Employee_Office__all_idx" ), LiteSQL_L( "index" ), LiteSQL_L( "CREATE INDEX Employee_Office__all_idx ON Employee_Office_ (Employee1,Office2)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "user_" ), LITESQL_L( "table" ), LITESQL_L( "CREATE TABLE user_ (id_ " ) + backend->getRowIDType() +  LITESQL_L( ",type_ TEXT,name_ TEXT,passwd_ TEXT)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Person_" ), LITESQL_L( "table" ), LITESQL_L( "CREATE TABLE Person_ (id_ " ) + backend->getRowIDType() +  LITESQL_L( ",type_ TEXT,name_ TEXT,age_ INTEGER,image_ BLOB,aDoubleValue_ DOUBLE,sex_ INTEGER)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Role_" ), LITESQL_L( "table" ), LITESQL_L( "CREATE TABLE Role_ (id_ " ) + backend->getRowIDType() +  LITESQL_L( ",type_ TEXT)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Student_" ), LITESQL_L( "table" ), LITESQL_L( "CREATE TABLE Student_ (id_ " ) + backend->getRowIDType() +  LITESQL_L( ")" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Employee_" ), LITESQL_L( "table" ), LITESQL_L( "CREATE TABLE Employee_ (id_ " ) + backend->getRowIDType() +  LITESQL_L( ")" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "School_" ), LITESQL_L( "table" ), LITESQL_L( "CREATE TABLE School_ (id_ " ) + backend->getRowIDType() +  LITESQL_L( ",type_ TEXT,name_ TEXT)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Office_" ), LITESQL_L( "table" ), LITESQL_L( "CREATE TABLE Office_ (id_ " ) + backend->getRowIDType() +  LITESQL_L( ",type_ TEXT)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Person_Person_Mother" ), LITESQL_L( "table" ), LITESQL_L( "CREATE TABLE Person_Person_Mother (Person1 INTEGER UNIQUE,Person2 INTEGER)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Person_Person_Father" ), LITESQL_L( "table" ), LITESQL_L( "CREATE TABLE Person_Person_Father (Person1 INTEGER UNIQUE,Person2 INTEGER)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Person_Person_Siblings" ), LITESQL_L( "table" ), LITESQL_L( "CREATE TABLE Person_Person_Siblings (Person1 INTEGER,Person2 INTEGER)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Person_Person_Children" ), LITESQL_L( "table" ), LITESQL_L( "CREATE TABLE Person_Person_Children (Person1 INTEGER,Person2 INTEGER)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Person_Role_Roles" ), LITESQL_L( "table" ), LITESQL_L( "CREATE TABLE Person_Role_Roles (Person1 INTEGER,Role2 INTEGER UNIQUE)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "School_Student_" ), LITESQL_L( "table" ), LITESQL_L( "CREATE TABLE School_Student_ (School1 INTEGER,Student2 INTEGER UNIQUE)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Employee_Office_" ), LITESQL_L( "table" ), LITESQL_L( "CREATE TABLE Employee_Office_ (Employee1 INTEGER,Office2 INTEGER)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Person__name_age_idx" ), LITESQL_L( "index" ), LITESQL_L( "CREATE UNIQUE INDEX Person__name_age_idx ON Person_ (name_,age_)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Person_Person_MotherPerson1idx" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX Person_Person_MotherPerson1idx ON Person_Person_Mother (Person1)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Person_Person_MotherPerson2idx" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX Person_Person_MotherPerson2idx ON Person_Person_Mother (Person2)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Person_Person_Mother_all_idx" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX Person_Person_Mother_all_idx ON Person_Person_Mother (Person1,Person2)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Person_Person_FatherPerson1idx" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX Person_Person_FatherPerson1idx ON Person_Person_Father (Person1)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Person_Person_FatherPerson2idx" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX Person_Person_FatherPerson2idx ON Person_Person_Father (Person2)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Person_Person_Father_all_idx" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX Person_Person_Father_all_idx ON Person_Person_Father (Person1,Person2)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "_fc4501d1c1e9cc173fbe356a08a9d12f" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX _fc4501d1c1e9cc173fbe356a08a9d12f ON Person_Person_Siblings (Person1)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "_29908e51ecc673e39c38238d4abe5b3b" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX _29908e51ecc673e39c38238d4abe5b3b ON Person_Person_Siblings (Person2)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Person_Person_Siblings_all_idx" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX Person_Person_Siblings_all_idx ON Person_Person_Siblings (Person1,Person2)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "_c77a0c252bbee950ec06bda52dd09648" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX _c77a0c252bbee950ec06bda52dd09648 ON Person_Person_Children (Person1)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "_64f9014350ce47b5d0f7606b127df7c3" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX _64f9014350ce47b5d0f7606b127df7c3 ON Person_Person_Children (Person2)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Person_Person_Children_all_idx" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX Person_Person_Children_all_idx ON Person_Person_Children (Person1,Person2)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Person_Role_RolesPerson1idx" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX Person_Role_RolesPerson1idx ON Person_Role_Roles (Person1)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Person_Role_RolesRole2idx" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX Person_Role_RolesRole2idx ON Person_Role_Roles (Role2)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Person_Role_Roles_all_idx" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX Person_Role_Roles_all_idx ON Person_Role_Roles (Person1,Role2)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "School_Student_School1idx" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX School_Student_School1idx ON School_Student_ (School1)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "School_Student_Student2idx" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX School_Student_Student2idx ON School_Student_ (Student2)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "School_Student__all_idx" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX School_Student__all_idx ON School_Student_ (School1,Student2)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Employee_Office_Employee1idx" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX Employee_Office_Employee1idx ON Employee_Office_ (Employee1)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Employee_Office_Office2idx" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX Employee_Office_Office2idx ON Employee_Office_ (Office2)" )));
+    res.push_back(Database::SchemaItem( LITESQL_L( "Employee_Office__all_idx" ), LITESQL_L( "index" ), LITESQL_L( "CREATE INDEX Employee_Office__all_idx ON Employee_Office_ (Employee1,Office2)" )));
     return res;
 }
 void ExampleDatabase::initialize() {

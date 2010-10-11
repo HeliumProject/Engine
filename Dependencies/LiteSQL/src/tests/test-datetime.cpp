@@ -14,28 +14,28 @@
 */
 using namespace litesql;
 
-int main(int argc, LiteSQL_Char *argv[]) {
+int main(int argc, LITESQL_Char *argv[]) {
     // TC1 for DateTime
    DateTime dt;
-   LiteSQL_String dtstring = dt.asString();
+   LITESQL_String dtstring = dt.asString();
 
-   DateTime dt2 = convert<const LiteSQL_String&, DateTime>(dtstring);
+   DateTime dt2 = convert<const LITESQL_String&, DateTime>(dtstring);
    
    assert(dt.timeStamp() == dt2.timeStamp()); 
 
    // TC1 for Date
    Date d;
-   LiteSQL_String dstring = d.asString();
+   LITESQL_String dstring = d.asString();
 
-   Date d2 = convert<const LiteSQL_String&, Date>(dstring);
+   Date d2 = convert<const LITESQL_String&, Date>(dstring);
    
    assert(d.timeStamp() == d2.timeStamp()); 
 
    // TC1 for Time
    Time t;
-   LiteSQL_String tstring = t.asString();
+   LITESQL_String tstring = t.asString();
 
-   Time t2 = convert<const LiteSQL_String&, Time>(tstring);
+   Time t2 = convert<const LITESQL_String&, Time>(tstring);
    
    assert(t.secs() == t2.secs()); 
 

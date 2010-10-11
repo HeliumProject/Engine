@@ -24,8 +24,9 @@ using namespace Helium::Reflect;
 // Archive is a std set of static and non-static archive related functions
 //
 
-Archive::Archive( const Path& path )
+Archive::Archive( const Path& path, ByteOrder byteOrder )
 : m_Path( path )
+, m_ByteOrder( byteOrder )
 , m_Progress( 0 )
 , m_SearchType( Reflect::ReservedTypes::Invalid )
 , m_Abort( false )
@@ -35,6 +36,7 @@ Archive::Archive( const Path& path )
 
 Archive::Archive()
 : m_Path( TXT( "" ) )
+, m_ByteOrder( ByteOrders::LittleEndian )
 , m_Progress( 0 )
 , m_SearchType( Reflect::ReservedTypes::Invalid )
 , m_Abort( false )

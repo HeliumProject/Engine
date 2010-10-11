@@ -35,19 +35,6 @@ namespace Helium
     typedef std::pair< u32, SmartBuffer* >              DumbBufferLocation;
     typedef Helium::OrderedSet< DumbBufferLocation >    S_DumbBufferLocation;
 
-    namespace ByteOrders
-    {
-        enum ByteOrder
-        {
-            LittleEndian = 0,   // little endian
-            BigEndian,          // big endian
-            Count
-        };
-    }
-    typedef ByteOrders::ByteOrder ByteOrder;
-
-    const ByteOrder DEFAULT_BYTE_ORDER = ByteOrders::LittleEndian;
-
     typedef Helium::SmartPtr<class Fixup> FixupPtr;
 
     namespace FixupTypes

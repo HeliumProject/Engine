@@ -10,8 +10,6 @@ extern "C"
 	#include "Editor/Graph/expr.h"
 }
 
-#include "base64.h"
-
 #include "Editor/Graph/Debug.h"
 #include "Editor/Graph/Base64Encode.h"
 

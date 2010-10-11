@@ -27,6 +27,17 @@ solution "Helium"
 		"Release Unicode"
 	}
 
+--[[
+	Iterate through our platforms and configurations and set them up with appropriate
+	target directories (that have both the configuration and platform built into them)
+--]]
+	for i, platform in ipairs( platforms() ) do
+		for j, config in ipairs( configurations() ) do
+			configuration( { config, platform } )
+				targetdir ( "Bin/" .. config .. "/" .. platform )
+		end
+	end
+			
 	flags
 	{
 		"NoMinimalRebuild"
@@ -37,23 +48,44 @@ solution "Helium"
 		"."
 	}
 	
---[[
-		Iterate through our platforms and configurations and set them up with appropriate
-		target directories (that have both the configuration and platform built into them)
---]]
-	for i, platform in ipairs( platforms() ) do
-		for j, config in ipairs( configurations() ) do
-			configuration( { config, platform } )
-				targetdir ( "Bin/" .. config .. "/" .. platform )
-		end
-	end
-			
 	configuration "windows"
 		defines
 		{
 			"WIN32=1",
 		}
-    
+
+	configuration "Debug*"
+		defines
+		{
+			"_DEBUG",
+			"DEBUG"
+		}
+		flags
+		{
+			"Symbols"
+		}
+
+	configuration "Release*"
+		defines
+		{
+			"NDEBUG"
+		}
+		flags
+		{
+			"Symbols",
+			"Optimize"
+		}
+
+	configuration "*Unicode"
+		defines
+		{
+			"UNICODE=1"
+		}
+		flags
+		{
+			"Unicode"
+		}
+		    
 	project "Platform"
 		kind "SharedLib"
 		language "C++"
@@ -95,14 +127,3 @@ solution "Helium"
 		language "C++"
 		files { "Editor/**.h", "Editor/**.cpp" }
 		links { "Pipeline", "Core", "Foundation", "Platform" }
-
-	configuration "Debug*"
-		defines { "_DEBUG", "DEBUG" }
-		flags { "Symbols" }
-
-	configuration "Release*"
-		defines { "NDEBUG" }
-		flags { "Symbols", "Optimize" }
-
-	configuration "*Unicode"
-		defines { "UNICODE=1" }

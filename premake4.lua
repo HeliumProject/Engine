@@ -103,6 +103,63 @@ function BuildWxWidgets()
 		os.execute( "start \"Release ASCII 64-bit  \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=release UNICODE=0\"" )
 		os.execute( "start \"Release UNICODE 64-bit\" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"" )
 
+		os.chdir( "../.." )
+
+		local files = {}
+		files[0] = { dir="lib/vc_dll", 			file="wxmsw291d_vc_custom",		built="../../Bin/Debug/x32" }
+		files[1] = { dir="lib/vc_dll", 			file="wxmsw291ud_vc_custom",	built="../../Bin/Debug Unicode/x32" }
+		files[2] = { dir="lib/vc_dll", 			file="wxmsw291_vc_custom",		built="../../Bin/Release/x32" }
+		files[3] = { dir="lib/vc_dll", 			file="wxmsw291u_vc_custom",		built="../../Bin/Release Unicode/x32" }
+		files[4] = { dir="lib/vc_amd64_dll", 	file="wxmsw291d_vc_custom",		built="../../Bin/Debug/x64" }
+		files[5] = { dir="lib/vc_amd64_dll", 	file="wxmsw291ud_vc_custom",	built="../../Bin/Debug Unicode/x64" }
+		files[6] = { dir="lib/vc_amd64_dll", 	file="wxmsw291_vc_custom",		built="../../Bin/Release/x64" }
+		files[7] = { dir="lib/vc_amd64_dll", 	file="wxmsw291u_vc_custom",		built="../../Bin/Release Unicode/x64" }
+
+		local quit = 0
+		while quit == 0 do
+			local found = 0
+			for i,v in ipairs(files) do
+				if v then
+				
+					-- we still have files to process
+					found = found + 1					
+
+					-- mkpath the target folder
+					os.mkdir( v.built )
+					
+					local dllBuiltPath = v.built .. "/" .. v.file .. ".dll"
+					local pdbBuiltPath = v.built .. "/" .. v.file .. ".pdb"
+					
+					print( dllBuiltPath .. "\n" )
+					print( pdbBuiltPath .. "\n" )
+
+					-- cull existing files
+					if os.isfile( dllBuiltPath ) then
+						os.execute( "del /q \"" .. string.gsub( dllBuiltPath, "/", "\\" ) .. "\"" )
+					end
+					if os.isfile( pdbBuiltPath ) then
+						os.execute( "del /q \"" .. string.gsub( pdbBuiltPath, "/", "\\" ) .. "\"" )
+					end
+
+					local dllDirPath = v.dir .. "/" .. v.file .. ".dll"
+					local pdbDirPath = v.dir .. "/" .. v.file .. ".pdb"
+
+					-- do the file copy
+					local dllResult = os.execute( "mklink /h \"" .. dllBuiltPath .. "\" \"" .. dllDirPath .. "\"" )
+					local pdbResult = os.execute( "mklink /h \"" .. pdbBuiltPath .. "\" \"" .. pdbDirPath .. "\"" )
+
+					-- the files were copied, complete this entry
+					if dllResult == 0 and pdbResult == 0 then
+						files[ i ] = nil
+					end
+				end
+			end
+			quit = found == 0
+			os.execute("sleep 1")
+		end
+
+		print( "\n" )
+
 	else
 	
 		print("Implement support for " .. os.get() .. " to BuildWxWidgets()")

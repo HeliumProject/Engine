@@ -115,56 +115,60 @@ function BuildWxWidgets()
 		files[6] = { dir="lib/vc_amd64_dll", 	file="wxmsw291_vc_custom",		built="../../Bin/Release/x64" }
 		files[7] = { dir="lib/vc_amd64_dll", 	file="wxmsw291u_vc_custom",		built="../../Bin/Release Unicode/x64" }
 
-		local quit = 0
-		while quit == 0 do
+		print( "Waiting for build results..." )
+		local quit = false
+		while quit == false do
 			local found = 0
 			for i,v in ipairs(files) do
 				if v then
-				
 					-- we still have files to process
 					found = found + 1					
 
 					-- mkpath the target folder
 					os.mkdir( v.built )
 					
-					local dllBuiltPath = v.built .. "/" .. v.file .. ".dll"
-					local pdbBuiltPath = v.built .. "/" .. v.file .. ".pdb"
+					local dllPath = v.dir .. "/" .. v.file .. ".dll"
+					local pdbPath = v.dir .. "/" .. v.file .. ".pdb"
 					
-					print( dllBuiltPath .. "\n" )
-					print( pdbBuiltPath .. "\n" )
+					local dllExists = os.isfile( dllPath )
+					local pdbExists = os.isfile( pdbPath )
+					
+					if dllExists == true and pdbExists == true then
+						local dllBuiltPath = v.built .. "/" .. v.file .. ".dll"
+						local pdbBuiltPath = v.built .. "/" .. v.file .. ".pdb"
 
-					-- cull existing files
-					if os.isfile( dllBuiltPath ) then
-						os.execute( "del /q \"" .. string.gsub( dllBuiltPath, "/", "\\" ) .. "\"" )
-					end
-					if os.isfile( pdbBuiltPath ) then
-						os.execute( "del /q \"" .. string.gsub( pdbBuiltPath, "/", "\\" ) .. "\"" )
-					end
+						-- cull existing files
+						if os.isfile( dllBuiltPath ) then
+							os.execute( "del /q \"" .. string.gsub( dllBuiltPath, "/", "\\" ) .. "\"" )
+						end
+						if os.isfile( pdbBuiltPath ) then
+							os.execute( "del /q \"" .. string.gsub( pdbBuiltPath, "/", "\\" ) .. "\"" )
+						end
 
-					local dllDirPath = v.dir .. "/" .. v.file .. ".dll"
-					local pdbDirPath = v.dir .. "/" .. v.file .. ".pdb"
+						-- do the file copy
+						local dllResult = os.execute( "mklink /h \"" .. dllBuiltPath .. "\" \"" .. dllPath .. "\"" )
+						local pdbResult = os.execute( "mklink /h \"" .. pdbBuiltPath .. "\" \"" .. pdbPath .. "\"" )
 
-					-- do the file copy
-					local dllResult = os.execute( "mklink /h \"" .. dllBuiltPath .. "\" \"" .. dllDirPath .. "\"" )
-					local pdbResult = os.execute( "mklink /h \"" .. pdbBuiltPath .. "\" \"" .. pdbDirPath .. "\"" )
-
-					-- the files were copied, complete this entry
-					if dllResult == 0 and pdbResult == 0 then
-						files[ i ] = nil
+						-- the files were copied, complete this entry
+						if dllResult == 0 and pdbResult == 0 then
+							files[ i ] = nil
+						else
+							print("... Failed to copy to " .. dllBuiltPath .. " ...")
+						end						
+					else
+						print("... Waiting for " .. dllPath .. " ...")
 					end
 				end
 			end
+			
 			quit = found == 0
+			
 			os.execute("sleep 1")
 		end
-
-		print( "\n" )
-
+		print( "Build results published..." )
 	else
-	
 		print("Implement support for " .. os.get() .. " to BuildWxWidgets()")
 		os.exit(1)
-
 	end
 
 	os.chdir( cwd );

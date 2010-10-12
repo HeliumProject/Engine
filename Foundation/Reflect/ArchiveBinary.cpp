@@ -48,8 +48,8 @@ namespace Helium
 // Binary Archive implements our own custom serialization technique
 //
 
-ArchiveBinary::ArchiveBinary( const Path& path )
-: Archive( path )
+ArchiveBinary::ArchiveBinary( const Path& path, ByteOrder byteOrder )
+: Archive( path, byteOrder )
 , m_Version( CURRENT_VERSION )
 , m_Size( 0 )
 , m_Skip( false )

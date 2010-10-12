@@ -117,7 +117,7 @@ namespace Helium
             std::stack<WriteFields> m_FieldStack;
 
         public:
-            ArchiveBinary( const Path& path );
+            ArchiveBinary( const Path& path, ByteOrder byteOrder = ByteOrders::Unknown );
 
         private:
             ArchiveBinary();

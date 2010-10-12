@@ -22,8 +22,8 @@ const u32 ArchiveXML::CURRENT_VERSION                               = 3;
 const u32 ArchiveXML::FIRST_VERSION_WITH_POINTER_SERIALIZER         = 2; 
 const u32 ArchiveXML::FIRST_VERSION_WITH_NAMESPACE_SUPPORT          = 3; 
 
-ArchiveXML::ArchiveXML( const Path& path )
-: Archive( path )
+ArchiveXML::ArchiveXML( const Path& path, ByteOrder byteOrder )
+: Archive( path, byteOrder )
 , m_Version( CURRENT_VERSION )
 , m_Target( &m_Spool )
 {

@@ -112,7 +112,8 @@ namespace Helium
         {
             LittleEndian = 0,   // little endian
             BigEndian,          // big endian
-            Count
+            Count,              // used for loops and allocations
+            Unknown             // used to indicate that we do not yet know a byte order, not counted towards the 'Count'
         };
     }
     typedef ByteOrders::ByteOrder ByteOrder;

@@ -293,7 +293,7 @@ bool Reflect::GetFileType( const Path& path, ArchiveType& type )
     return false;
 }
 
-ArchivePtr Reflect::GetArchive( const Path& path )
+ArchivePtr Reflect::GetArchive( const Path& path, ByteOrder byteOrder )
 {
     HELIUM_ASSERT( !path.empty() );
 
@@ -303,10 +303,10 @@ ArchivePtr Reflect::GetArchive( const Path& path )
         switch ( archiveType )
         {
         case ArchiveTypes::Binary:
-            return new ArchiveBinary( path );
+            return new ArchiveBinary( path, byteOrder );
 
         case ArchiveTypes::XML:
-            return new ArchiveXML( path );
+            return new ArchiveXML( path, byteOrder );
 
         default:
             throw Reflect::StreamException( TXT( "Unknown archive type" ) );
@@ -316,17 +316,18 @@ ArchivePtr Reflect::GetArchive( const Path& path )
     return NULL;
 }
 
-bool Reflect::ToArchive( const Path& path, ElementPtr element, tstring* error )
+bool Reflect::ToArchive( const Path& path, ElementPtr element, tstring* error, ByteOrder byteOrder )
 {
     V_Element elements;
     elements.push_back( element );
-    return ToArchive( path, elements, error );
+    return ToArchive( path, elements, error, byteOrder );
 }
 
-bool Reflect::ToArchive( const Path& path, const V_Element& elements, tstring* error )
+bool Reflect::ToArchive( const Path& path, const V_Element& elements, tstring* error, ByteOrder byteOrder )
 {
     HELIUM_ASSERT( !path.empty() );
     HELIUM_ASSERT( elements.size() > 0 );
+    HELIUM_ASSERT( byteOrder < ByteOrders::Count ); // should be a known byteorder (not ByteOrders::Unknown, for example)
 
     REFLECT_SCOPE_TIMER( ( "%s", path.c_str() ) );
 
@@ -336,7 +337,7 @@ bool Reflect::ToArchive( const Path& path, const V_Element& elements, tstring* e
     Path safetyPath( path.Directory() + Helium::GetProcessString() );
     safetyPath.ReplaceExtension( path.Extension() );
 
-    ArchivePtr archive = GetArchive( safetyPath );
+    ArchivePtr archive = GetArchive( safetyPath, byteOrder );
     archive->Put( elements );
 
     // generate the file to the safety location

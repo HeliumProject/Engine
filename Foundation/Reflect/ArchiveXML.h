@@ -101,7 +101,7 @@ namespace Helium
             // The container to decode elements to
             V_Element* m_Target;
         public:
-            ArchiveXML( const Path& path );
+            ArchiveXML( const Path& path, ByteOrder byteOrder = ByteOrders::Unknown );
             ~ArchiveXML();
 
         private:

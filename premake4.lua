@@ -93,21 +93,21 @@ function BuildWxWidgets()
 		local make
 		local base = "nmake.exe -f makefile.vc SHARED=1 MONOLITHIC=1 DEBUG_INFO=1"
 
-		make = "cmd.exe /c " .. cwd .. "\\vc32.bat " .. base	
-		os.execute( make .. " BUILD=debug UNICODE=0" )
-		os.execute( make .. " BUILD=debug UNICODE=1" )
-		os.execute( make .. " BUILD=release UNICODE=0" )
-		os.execute( make .. " BUILD=release UNICODE=1" )
-		
-		make = "cmd.exe /c " .. cwd .. "\\vc64.bat " .. base
-		os.execute( make .. " BUILD=debug TARGET_CPU=AMD64 UNICODE=0" )
-		os.execute( make .. " BUILD=debug TARGET_CPU=AMD64 UNICODE=1" )
-		os.execute( make .. " BUILD=release TARGET_CPU=AMD64 UNICODE=0" )
-		os.execute( make .. " BUILD=release TARGET_CPU=AMD64 UNICODE=1" )
+		os.execute( "start \"\" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=debug UNICODE=0\"" )
+		os.execute( "start \"\" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=debug UNICODE=1\"" )
+		os.execute( "start \"\" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=release UNICODE=0\"" )
+		os.execute( "start \"\" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=release UNICODE=1\"" )
+
+		os.execute( "start \"\" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=0\"" )
+		os.execute( "start \"\" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=1\"" )
+		os.execute( "start \"\" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=release UNICODE=0\"" )
+		os.execute( "start \"\" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"" )
 
 	else
-		print("Add support for " .. os.get() .. " to BuildWxWidgets()")
+	
+		print("Implement support for " .. os.get() .. " to BuildWxWidgets()")
 		os.exit(1)
+
 	end
 
 	os.chdir( cwd );

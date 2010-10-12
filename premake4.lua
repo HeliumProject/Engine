@@ -82,7 +82,41 @@ function DoDefaultSolutionSetup()
 
 end
 
+function BuildWxWidgets()
+
+	local cwd = os.getcwd()
+
+	if os.get() == "windows" then
+
+		os.chdir( "Dependencies/wxWidgets/build/msw" );
+
+		local make
+		local base = "nmake.exe -f makefile.vc SHARED=1 MONOLITHIC=1 DEBUG_INFO=1"
+
+		make = "cmd.exe /c " .. cwd .. "\\vc32.bat " .. base	
+		os.execute( make .. " BUILD=debug UNICODE=0" )
+		os.execute( make .. " BUILD=debug UNICODE=1" )
+		os.execute( make .. " BUILD=release UNICODE=0" )
+		os.execute( make .. " BUILD=release UNICODE=1" )
+		
+		make = "cmd.exe /c " .. cwd .. "\\vc64.bat " .. base
+		os.execute( make .. " BUILD=debug TARGET_CPU=AMD64 UNICODE=0" )
+		os.execute( make .. " BUILD=debug TARGET_CPU=AMD64 UNICODE=1" )
+		os.execute( make .. " BUILD=release TARGET_CPU=AMD64 UNICODE=0" )
+		os.execute( make .. " BUILD=release TARGET_CPU=AMD64 UNICODE=1" )
+
+	else
+		print("Add support for " .. os.get() .. " to BuildWxWidgets()")
+		os.exit(1)
+	end
+
+	os.chdir( cwd );
+
+end
+
 solution "Dependencies"
+
+	BuildWxWidgets()
 
 	DoDefaultSolutionSetup()
 	
@@ -275,14 +309,32 @@ solution "Helium"
 		"FOUNDATION_DLL=1",
 		"PIPELINE_DLL=1",
 		"CORE_DLL=1",
+		"XML_STATIC=1",
+		"WXUSINGDLL=1",
+		"wxUSE_UNICODE=0",
+		"wxNO_EXPAT_LIB=1",
+		"wxNO_JPEG_LIB=1",
+		"wxNO_PNG_LIB=1",
+		"wxNO_TIFF_LIB=1",
+		"wxNO_ZLIB_LIB=1",
 	}
 
 	includedirs
 	{
 		".",
 	}
-
+	
 	DoDefaultSolutionSetup()
+
+--[[
+	We build monolithic wx, so ignore all the legacy non-monolithic
+	#pragma comment directives (on windows only)
+--]]
+	configuration "windows"
+		buildoptions
+		{
+			"/NODEFAULTLIB wxbase29ud;wxbase29d;wxbase29u;wxbase29;wxbase29ud_net;wxbase29d_net;wxbase29u_net;wxbase29_net;wxbase29ud_xml;wxbase29d_xml;wxbase29u_xml;wxbase29_xml;wxmsw29ud_core;wxmsw29d_core;wxmsw29u_core;wxmsw29_core;wxmsw29ud_adv;wxmsw29d_adv;wxmsw29u_adv;wxmsw29_adv;wxmsw29ud_html;wxmsw29d_html;wxmsw29u_html;wxmsw29_html;wxmsw29ud_qa;wxmsw29d_qa;wxmsw29u_qa;wxmsw29_qa;wxmsw29ud_xrc;wxmsw29d_xrc;wxmsw29u_xrc;wxmsw29_xrc;wxmsw29ud_aui;wxmsw29d_aui;wxmsw29u_aui;wxmsw29_aui;wxmsw29ud_propgrid;wxmsw29d_propgrid;wxmsw29u_propgrid;wxmsw29_propgrid;wxmsw29ud_ribbon;wxmsw29d_ribbon;wxmsw29u_ribbon;wxmsw29_ribbon;wxmsw29ud_richtext;wxmsw29d_richtext;wxmsw29u_richtext;wxmsw29_richtext;wxmsw29ud_media;wxmsw29d_media;wxmsw29u_media;wxmsw29_media;wxmsw29ud_stc;wxmsw29d_stc;wxmsw29u_stc;wxmsw29_stc",
+		}
 
 	project "Platform"
 		kind "SharedLib"

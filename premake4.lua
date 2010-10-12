@@ -177,7 +177,9 @@ end
 
 solution "Dependencies"
 
-	BuildWxWidgets()
+	if _ACTION ~= "clean" then
+		BuildWxWidgets()
+	end
 
 	DoDefaultSolutionSetup()
 	

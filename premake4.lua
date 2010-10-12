@@ -86,13 +86,13 @@ function BuildWxWidgets()
 
 	local cwd = os.getcwd()
 
+	local files = {}
+	
 	if os.get() == "windows" then
-
-		os.chdir( "Dependencies/wxWidgets/build/msw" );
-
 		local make
 		local base = "nmake.exe -f makefile.vc SHARED=1 MONOLITHIC=1 DEBUG_INFO=1"
 
+		os.chdir( "Dependencies/wxWidgets/build/msw" );
 		os.execute( "start \"Debug ASCII 32-bit    \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=debug UNICODE=0\"" )
 		os.execute( "start \"Debug UNICODE 32-bit  \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=debug UNICODE=1\"" )
 		os.execute( "start \"Release ASCII 32-bit  \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=release UNICODE=0\"" )
@@ -103,75 +103,72 @@ function BuildWxWidgets()
 		os.execute( "start \"Release ASCII 64-bit  \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=release UNICODE=0\"" )
 		os.execute( "start \"Release UNICODE 64-bit\" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"" )
 
-		os.chdir( "../.." )
-
-		local files = {}
-		files[0] = { dir="lib/vc_dll", 			file="wxmsw291d_vc_custom",		built="../../Bin/Debug/x32" }
-		files[1] = { dir="lib/vc_dll", 			file="wxmsw291ud_vc_custom",	built="../../Bin/Debug Unicode/x32" }
-		files[2] = { dir="lib/vc_dll", 			file="wxmsw291_vc_custom",		built="../../Bin/Release/x32" }
-		files[3] = { dir="lib/vc_dll", 			file="wxmsw291u_vc_custom",		built="../../Bin/Release Unicode/x32" }
-		files[4] = { dir="lib/vc_amd64_dll", 	file="wxmsw291d_vc_custom",		built="../../Bin/Debug/x64" }
-		files[5] = { dir="lib/vc_amd64_dll", 	file="wxmsw291ud_vc_custom",	built="../../Bin/Debug Unicode/x64" }
-		files[6] = { dir="lib/vc_amd64_dll", 	file="wxmsw291_vc_custom",		built="../../Bin/Release/x64" }
-		files[7] = { dir="lib/vc_amd64_dll", 	file="wxmsw291u_vc_custom",		built="../../Bin/Release Unicode/x64" }
-
-		print( "Waiting for build results..." )
-		local quit = false
-		while quit == false do
-			local found = 0
-			for i,v in ipairs(files) do
-				if v then
-					-- we still have files to process
-					found = found + 1					
-
-					-- mkpath the target folder
-					os.mkdir( v.built )
-					
-					local dllPath = v.dir .. "/" .. v.file .. ".dll"
-					local pdbPath = v.dir .. "/" .. v.file .. ".pdb"
-					
-					local dllExists = os.isfile( dllPath )
-					local pdbExists = os.isfile( pdbPath )
-					
-					if dllExists == true and pdbExists == true then
-						local dllBuiltPath = v.built .. "/" .. v.file .. ".dll"
-						local pdbBuiltPath = v.built .. "/" .. v.file .. ".pdb"
-
-						-- cull existing files
-						if os.isfile( dllBuiltPath ) then
-							os.execute( "del /q \"" .. string.gsub( dllBuiltPath, "/", "\\" ) .. "\"" )
-						end
-						if os.isfile( pdbBuiltPath ) then
-							os.execute( "del /q \"" .. string.gsub( pdbBuiltPath, "/", "\\" ) .. "\"" )
-						end
-
-						-- do the file copy
-						local dllResult = os.execute( "mklink /h \"" .. dllBuiltPath .. "\" \"" .. dllPath .. "\"" )
-						local pdbResult = os.execute( "mklink /h \"" .. pdbBuiltPath .. "\" \"" .. pdbPath .. "\"" )
-
-						-- the files were copied, complete this entry
-						if dllResult == 0 and pdbResult == 0 then
-							files[ i ] = nil
-						else
-							print("... Failed to copy to " .. dllBuiltPath .. " ...")
-						end						
-					else
-						print("... Waiting for " .. dllPath .. " ...")
-					end
-				end
-			end
-			
-			quit = found == 0
-			
-			os.execute("sleep 1")
-		end
-		print( "Build results published..." )
+		files[0]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291d_vc_custom.dll",		built="Bin/Debug/x32" }
+		files[1]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291d_vc_custom.pdb",		built="Bin/Debug/x32" }
+		files[2]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291ud_vc_custom.dll",	built="Bin/Debug Unicode/x32" }
+		files[3]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291ud_vc_custom.pdb",	built="Bin/Debug Unicode/x32" }
+		files[4]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291_vc_custom.dll",		built="Bin/Release/x32" }
+		files[5]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291_vc_custom.pdb",		built="Bin/Release/x32" }
+		files[6]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291u_vc_custom.dll",		built="Bin/Release Unicode/x32" }
+		files[7]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291u_vc_custom.pdb",		built="Bin/Release Unicode/x32" }
+		files[8]  = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291d_vc_custom.dll",		built="Bin/Debug/x64" }
+		files[9]  = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291d_vc_custom.pdb",		built="Bin/Debug/x64" }
+		files[10] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291ud_vc_custom.dll",	built="Bin/Debug Unicode/x64" }
+		files[11] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291ud_vc_custom.pdb",	built="Bin/Debug Unicode/x64" }
+		files[12] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291_vc_custom.dll",		built="Bin/Release/x64" }
+		files[13] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291_vc_custom.pdb",		built="Bin/Release/x64" }
+		files[14] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291u_vc_custom.dll",		built="Bin/Release Unicode/x64" }
+		files[15] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291u_vc_custom.pdb",		built="Bin/Release Unicode/x64" }
 	else
 		print("Implement support for " .. os.get() .. " to BuildWxWidgets()")
 		os.exit(1)
 	end
 
 	os.chdir( cwd );
+	
+	print( "Waiting for build results..." )
+	local quit = false
+	while quit == false do
+		local found = 0
+		for i,v in ipairs(files) do
+			if v then
+				-- we still have files to process
+				found = found + 1					
+
+				-- mkpath the target folder
+				os.mkdir( v.built )
+				
+				local path = v.dir .. "/" .. v.file			
+				local exists = os.isfile( path )
+				
+				if exists then
+					local destination = v.built .. "/" .. v.file
+
+					-- cull existing files
+					if os.isfile( destination ) then
+						os.execute( "del /q \"" .. string.gsub( destination, "/", "\\" ) .. "\"" )
+					end
+
+					-- do the file copy
+					local dllResult = os.execute( "mklink /h \"" .. destination .. "\" \"" .. path .. "\"" )
+
+					-- the files were copied, complete this entry
+					if dllResult == 0 then
+						files[ i ] = nil
+					else
+						print("... Failed to copy to " .. destination .. " ...")
+					end						
+				else
+					print("... Waiting for " .. path .. " ...")
+				end
+			end
+		end
+		
+		quit = found == 0
+		
+		os.execute("sleep 1")
+	end
+	print( "Build results published..." )
 
 end
 

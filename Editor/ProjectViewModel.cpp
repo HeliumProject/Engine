@@ -287,6 +287,18 @@ void ProjectViewModel::Delete( const wxDataViewItem& item )
     ItemDeleted( parentItem, item );
 }
 
+bool ProjectViewModel::IsDropPossible( const wxDataViewItem& item )
+{
+    ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
+    if ( !node
+        || node == m_RootNode.Ptr() )
+    {
+        return true;
+    }
+
+    return false;
+}
+
 void ProjectViewModel::OnPathAdded( const Helium::Path& path )
 {
     if ( m_RootNode )
@@ -301,58 +313,6 @@ void ProjectViewModel::OnPathRemoved( const Helium::Path& path )
     {
         RemoveChild( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
     }
-}
-
-void ProjectViewModel::OnBeginDrag( wxDataViewEvent& event )
-{
-    wxDataViewItem item( event.GetItem() );
-
-    //// only allow drags for item, not containers
-    //if (m_music_model->IsContainer( item ) )
-    //{
-    //    event.Veto();
-    //    return;
-    //}
-
-    //MyMusicTreeModelNode *node = (MyMusicTreeModelNode*) item.GetID();
-    //wxTextDataObject *obj = new wxTextDataObject;
-    //obj->SetText( node->m_title );
-    //event.SetDataObject( obj );
-}
-
-void ProjectViewModel::OnDropPossible( wxDataViewEvent& event )
-{
-    wxDataViewItem item( event.GetItem() );
-
-    //// only allow drags for item, not containers
-    //if (m_music_model->IsContainer( item ) )
-    //    event.Veto();
-
-    //if (event.GetDataFormat() != wxDF_UNICODETEXT)
-    //    event.Veto();
-}
-
-void ProjectViewModel::OnDrop( wxDataViewEvent& event )
-{
-    wxDataViewItem item( event.GetItem() );
-
-    //// only allow drops for item, not containers
-    //if (m_music_model->IsContainer( item ) )
-    //{
-    //    event.Veto();
-    //    return;
-    //}
-
-    //if (event.GetDataFormat() != wxDF_UNICODETEXT)
-    //{
-    //    event.Veto();
-    //    return;
-    //}
-
-    //wxTextDataObject obj;
-    //obj.SetData( wxDF_UNICODETEXT, event.GetDataSize(), event.GetDataBuffer() );
-
-    //wxLogMessage( "Text dropped: %s", obj.GetText() );
 }
 
 unsigned int ProjectViewModel::GetColumnCount() const
@@ -475,7 +435,7 @@ wxDataViewItem ProjectViewModel::GetParent( const wxDataViewItem& item ) const
 
     ProjectViewModelNode *childNode = static_cast< ProjectViewModelNode* >( item.GetID() );
     if ( !childNode
-        || childNode == m_RootNode 
+        || childNode == m_RootNode.Ptr() 
         || !childNode->GetParent() )
     {
         return wxDataViewItem( 0 );

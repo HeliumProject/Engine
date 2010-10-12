@@ -158,13 +158,11 @@ namespace Helium
 
             void Delete( const wxDataViewItem& item );
 
+            bool IsDropPossible( const wxDataViewItem& item );
+
             // Project events
             void OnPathAdded( const Helium::Path& path );
             void OnPathRemoved( const Helium::Path& path );
-
-            void OnBeginDrag( wxDataViewEvent& event );
-            void OnDropPossible( wxDataViewEvent& event );
-            void OnDrop( wxDataViewEvent& event );
 
         public:
             // wxDataViewModel pure virtual interface

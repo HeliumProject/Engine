@@ -58,9 +58,9 @@ ProjectPanel::ProjectPanel( wxWindow *parent )
     m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( ProjectPanel::OnSelectionChanged ), NULL, this );
     //m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, wxDataViewEventHandler( ProjectPanel::OnItemExpanding ), NULL, this );
 
-    m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG, wxDataViewEventHandler( ProjectPanel::OnBeginDrag ), NULL, this );
-    m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, wxDataViewEventHandler( ProjectPanel::OnDropPossible ), NULL, this );
-    m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_DROP, wxDataViewEventHandler( ProjectPanel::OnDrop ), NULL, this );
+    //m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG, wxDataViewEventHandler( ProjectPanel::OnBeginDrag ), NULL, this );
+    //m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, wxDataViewEventHandler( ProjectPanel::OnDropPossible ), NULL, this );
+    //m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_DROP, wxDataViewEventHandler( ProjectPanel::OnDrop ), NULL, this );
 
     std::set< tstring > extension;
     Asset::AssetClass::GetExtensions( extension );
@@ -68,13 +68,13 @@ ProjectPanel::ProjectPanel( wxWindow *parent )
 #pragma TODO("Why isn't hrb part of the AssetClass extensions?")
     extension.insert( TXT( "hrb" ) );
 
-    //m_DropTarget = new FileDropTarget( extension );
-    //m_DropTarget->AddDroppedListener( FileDroppedSignature::Delegate( this, &ProjectPanel::OnDroppedFiles ) );
+    m_DropTarget = new FileDropTarget( extension );
+    m_DropTarget->AddDroppedListener( FileDroppedSignature::Delegate( this, &ProjectPanel::OnDroppedFiles ) );
     //m_DropTarget->AddDragOverListener( FileDragEnterSignature::Delegate( this, &ProjectPanel::DragEnter ) );
     //m_DropTarget->AddDragOverListener( FileDragOverSignature::Delegate( this, &ProjectPanel::DragOver ) );
     //m_DropTarget->AddDragLeaveListener( FileDragLeaveSignature::Delegate( this, &ProjectPanel::DragLeave ) );
     //m_DropTarget->AddDropListener( FileDroppedSignature::Delegate( this, &ProjectPanel::Drop ) );
-    //m_DataViewCtrl->SetDropTarget( m_DropTarget );
+    m_DataViewCtrl->SetDropTarget( m_DropTarget );
 }
 
 ProjectPanel::~ProjectPanel()
@@ -229,78 +229,78 @@ void ProjectPanel::OnSelectionChanged( wxDataViewEvent& event )
 
 void ProjectPanel::OnBeginDrag( wxDataViewEvent& event )
 {
-    if ( m_Model )
-    {
-        m_Model->OnBeginDrag( event );
-    }
+    // Nothing can be dragged around here
+    event.Veto();
 }
 
 void ProjectPanel::OnDropPossible( wxDataViewEvent& event )
 {
-    wxDataViewItem item( event.GetItem() );
+    if ( m_Model )
+    {
+        wxDataViewItem item( event.GetItem() );
+        if ( m_Model->IsDropPossible( item ) )
+        {
+            event.Allow();
+            return;
+        }
+    }
 
-    //// only allow drags for item, not containers
-    //if (m_music_model->IsContainer( item ) )
-    //    event.Veto();
-
-    //if (event.GetDataFormat() != wxDF_UNICODETEXT)
-    //    event.Veto();
+    event.Veto();
 }
 
 void ProjectPanel::OnDrop( wxDataViewEvent& event )
 {
-    wxDataViewItem item( event.GetItem() );
+    if ( m_Model )
+    {
+        wxDataViewItem item( event.GetItem() );
+        if ( m_Model->IsDropPossible( item ) )
+        {
+            //wxFileDataObject *fileDataObj = static_cast< wxFileDataObject* >( event.GetDataObject() );
+            wxFileDataObject fileDataObj;
+            fileDataObj.SetData( event.GetDataSize(), event.GetDataBuffer() );
+            const wxArrayString& filenames = fileDataObj.GetFilenames();
 
-    //// only allow drops for item, not containers
-    //if (m_music_model->IsContainer( item ) )
-    //{
-    //    event.Veto();
-    //    return;
-    //}
+            FileDroppedArgs args( (const wxChar*)filenames[ 0 ].c_str() );
 
-    //if (event.GetDataFormat() != wxDF_UNICODETEXT)
-    //{
-    //    event.Veto();
-    //    return;
-    //}
+            OnDroppedFiles( args );
+            return;
+        }
+    }
 
-    //wxTextDataObject obj;
-    //obj.SetData( wxDF_UNICODETEXT, event.GetDataSize(), event.GetDataBuffer() );
-
-    //wxLogMessage( "Text dropped: %s", obj.GetText() );
+    event.Veto();
 }
 
-//void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
-//{
-//    Path path( args.m_Path );
-//
-//    // it's a project file
-//    if ( _tcsicmp( path.FullExtension().c_str(), TXT( "project.hrb" ) ) == 0 ) 
-//    {
-//#pragma TODO("Close the current project and open the dropped one")
-//        //(MainFrame*)GetParent()->OpenProject( path );
-//    }
-//    else if ( m_Project )
-//    {
-//        Asset::AssetClassPtr asset;
-//        if ( _tcsicmp( path.Extension().c_str(), TXT( "hrb" ) ) == 0 )
-//        {
-//            asset = Asset::AssetClass::LoadAssetClass( path );
-//        }
-//        else
-//        {
-//            asset = Asset::AssetClass::Create( path );
-//        }
-//
-//        if ( asset.ReferencesObject() )
-//        {
-//            m_Project->AddPath( asset->GetSourcePath() );
-//        }
-//    }
-//    else
-//    {
-//    }
-//}
+void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
+{
+    Path path( args.m_Path );
+
+    // it's a project file
+    if ( _tcsicmp( path.FullExtension().c_str(), TXT( "project.hrb" ) ) == 0 ) 
+    {
+#pragma TODO("Close the current project and open the dropped one")
+        //(MainFrame*)GetParent()->OpenProject( path );
+    }
+    else if ( m_Project )
+    {
+        Asset::AssetClassPtr asset;
+        if ( _tcsicmp( path.Extension().c_str(), TXT( "hrb" ) ) == 0 )
+        {
+            asset = Asset::AssetClass::LoadAssetClass( path );
+        }
+        else
+        {
+            asset = Asset::AssetClass::Create( path );
+        }
+
+        if ( asset.ReferencesObject() )
+        {
+            m_Project->AddPath( asset->GetSourcePath() );
+        }
+    }
+    else
+    {
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 //wxDataViewItem ProjectPanel::DragHitTest( wxPoint point )

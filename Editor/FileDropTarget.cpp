@@ -120,7 +120,7 @@ bool FileDropTarget::OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& fil
         return false;
     }
 
-    FileDroppedArgs args( x, y, wxDragNone, (const wxChar*)filenames[ 0 ].c_str() );
+    FileDroppedArgs args( (const wxChar*)filenames[ 0 ].c_str() );//, x, y, wxDragNone );
     if ( TestExtension( args.m_Path.Extension().c_str() ) )
     {
         m_DroppedEvent.Raise( args );
@@ -142,7 +142,7 @@ bool FileDropTarget::OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& fil
 //        wxFileDataObject *fileDataObj = static_cast< wxFileDataObject* >( GetDataObject() );
 //        const wxArrayString& filenames = fileDataObj->GetFilenames();
 //
-//        FileDroppedArgs args( x, y, def, (const wxChar*)filenames[ 0 ].c_str() );
+//        FileDroppedArgs args( (const wxChar*)filenames[ 0 ].c_str() ); //x, y, def );
 //        if ( TestExtension( args.m_Path.Extension().c_str() ) )
 //        {
 //            m_DragEnterEvent.Raise( args );
@@ -155,32 +155,32 @@ bool FileDropTarget::OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& fil
 ///////////////////////////////////////////////////////////////////////////////
 // Notifies listener that a drag over event has occurred.
 // 
-wxDragResult FileDropTarget::OnDragOver( wxCoord x, wxCoord y, wxDragResult def )
-{
-    wxDragResult result = def; //wxDragNone;
-    //if ( m_DragOverEvent.Count() > 0 )
-    {
-        GetData();
-
-#pragma TODO( "Get and return result OnDragOver" )
-        //std::vector< wxDragResult > results( m_DragOverEvent.Count() );
-
-        wxFileDataObject *fileDataObj = static_cast< wxFileDataObject* >( GetDataObject() );
-        const wxArrayString& filenames = fileDataObj->GetFilenames();
-
-        FileDroppedArgs args( x, y, def, (const wxChar*)filenames[ 0 ].c_str() );
-        if ( TestExtension( args.m_Path.Extension().c_str() ) )
-        {
-            m_DragOverEvent.Raise( args ); //, &results.front(), (u32)results.size() );
-            //if ( results.size() > 0 )
-            //{
-            //  result = results.front();
-            //}
-        }
-
-    }
-    return result;
-}
+//wxDragResult FileDropTarget::OnDragOver( wxCoord x, wxCoord y, wxDragResult def )
+//{
+//    wxDragResult result = def; //wxDragNone;
+//    //if ( m_DragOverEvent.Count() > 0 )
+//    {
+//        GetData();
+//
+//#pragma TODO( "Get and return result OnDragOver" )
+//        //std::vector< wxDragResult > results( m_DragOverEvent.Count() );
+//
+//        wxFileDataObject *fileDataObj = static_cast< wxFileDataObject* >( GetDataObject() );
+//        const wxArrayString& filenames = fileDataObj->GetFilenames();
+//
+//        FileDroppedArgs args( (const wxChar*)filenames[ 0 ].c_str() ); //x, y, def );
+//        if ( TestExtension( args.m_Path.Extension().c_str() ) )
+//        {
+//            m_DragOverEvent.Raise( args ); //, &results.front(), (u32)results.size() );
+//            //if ( results.size() > 0 )
+//            //{
+//            //  result = results.front();
+//            //}
+//        }
+//
+//    }
+//    return result;
+//}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Notifies listener that a drop event has occurred.
@@ -203,7 +203,7 @@ wxDragResult FileDropTarget::OnDragOver( wxCoord x, wxCoord y, wxDragResult def 
 //        wxFileDataObject *fileDataObj = static_cast< wxFileDataObject* >( GetDataObject() );
 //        const wxArrayString& filenames = fileDataObj->GetFilenames();
 //
-//        FileDroppedArgs args( x, y, def, (const wxChar*)filenames[ 0 ].c_str() );
+//        FileDroppedArgs args( (const wxChar*)filenames[ 0 ].c_str() ); //x, y, def );
 //        if ( TestExtension( args.m_Path.Extension().c_str() ) )
 //        {
 //            m_DropEvent.Raise( args ); //, &results.front(), (u32)results.size() );

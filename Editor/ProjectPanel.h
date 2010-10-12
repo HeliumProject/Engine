@@ -36,7 +36,7 @@ namespace Helium
             void OnDropPossible( wxDataViewEvent& event );
             void OnDrop( wxDataViewEvent& event );
 
-            //virtual void OnDroppedFiles( const FileDroppedArgs& args );
+            virtual void OnDroppedFiles( const FileDroppedArgs& args );
 
             //wxDataViewItem DragHitTest( wxPoint point );
             //void DragEnter( const FileDroppedArgs& args );

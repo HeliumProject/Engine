@@ -16,25 +16,25 @@ namespace Helium
         ///////////////////////////////////////////////////////////////////////
         struct FileDroppedArgs
         {
-            wxCoord m_X;
-            wxCoord m_Y;
-            wxDragResult m_DragResult;
             Helium::Path m_Path;
+            //wxCoord m_X;
+            //wxCoord m_Y;
+            //wxDragResult m_DragResult;
 
-            FileDroppedArgs( wxCoord x, wxCoord y, wxDragResult result, const tstring& path = TXT( "" ) )
-                : m_X( x )
-                , m_Y( y )
-                , m_DragResult( result )
-                , m_Path( path )
+            FileDroppedArgs( const tstring& path )//, wxCoord x, wxCoord y, wxDragResult result )
+                : m_Path( path )
+                //, m_X( x )
+                //, m_Y( y )
+                //, m_DragResult( result )
             {
             }
         };
         typedef Helium::Signature< const FileDroppedArgs& > FileDroppedSignature;
 
-        typedef Helium::Signature< const FileDroppedArgs& > FileDragEnterSignature;
-        typedef Helium::Signature< const FileDroppedArgs& > FileDragOverSignature;
-        typedef Helium::Signature< Helium::Void > FileDragLeaveSignature;
-        typedef Helium::Signature< const FileDroppedArgs& > FileDropSignature;
+        //typedef Helium::Signature< const FileDroppedArgs& > FileDragEnterSignature;
+        //typedef Helium::Signature< const FileDroppedArgs& > FileDragOverSignature;
+        //typedef Helium::Signature< Helium::Void > FileDragLeaveSignature;
+        //typedef Helium::Signature< const FileDroppedArgs& > FileDropSignature;
 
 
         ///////////////////////////////////////////////////////////////////////
@@ -48,7 +48,7 @@ namespace Helium
             void RemoveDroppedListener( FileDroppedSignature::Delegate& listener );
 
             //void AddDragEnterListener( const FileDragEnterSignature::Delegate& listener );
-            void AddDragOverListener( const FileDragOverSignature::Delegate& listener );
+            //void AddDragOverListener( const FileDragOverSignature::Delegate& listener );
             //void AddDragLeaveListener( const FileDragLeaveSignature::Delegate& listener );
             //void AddDropListener( const FileDropSignature::Delegate& listener );
 
@@ -58,7 +58,7 @@ namespace Helium
             virtual bool OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& filenames ) HELIUM_OVERRIDE;
 
             //virtual wxDragResult OnEnter( wxCoord x, wxCoord y, wxDragResult def ) HELIUM_OVERRIDE;
-            virtual wxDragResult OnDragOver( wxCoord x, wxCoord y, wxDragResult def ) HELIUM_OVERRIDE;
+            //virtual wxDragResult OnDragOver( wxCoord x, wxCoord y, wxDragResult def ) HELIUM_OVERRIDE;
             //virtual void OnLeave();
             //virtual wxDragResult OnData( wxCoord x, wxCoord y, wxDragResult def ) HELIUM_OVERRIDE;
 
@@ -68,7 +68,7 @@ namespace Helium
             FileDroppedSignature::Event m_DroppedEvent;
 
             //FileDragEnterSignature::Event m_DragEnterEvent;
-            FileDragOverSignature::Event m_DragOverEvent;
+            //FileDragOverSignature::Event m_DragOverEvent;
             //FileDragLeaveSignature::Event m_DragLeaveEvent;
             //FileDropSignature::Event m_DropEvent;
         };

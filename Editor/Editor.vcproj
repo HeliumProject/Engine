@@ -1702,6 +1702,10 @@
 			Name="Clipboard"
 			>
 			<File
+				RelativePath=".\Icons\Helium\32x32\actions\add.png"
+				>
+			</File>
+			<File
 				RelativePath=".\Clipboard\ClipboardDataObject.cpp"
 				>
 			</File>

@@ -26,18 +26,13 @@ AssetClassPtr TextureAssetFactory::Create( const Helium::Path& path )
     TextureProcessingComponentPtr textureProcessingComponent = new TextureProcessingComponent();
     texture->SetComponent( textureProcessingComponent );
 
-    try
-    {
-        Reflect::ArchivePtr archive = Reflect::GetArchive( assetPath );
-        archive->Put( texture );
-        archive->Close();
-        texture->SetSourcePath( assetPath );
-    }
-    catch( Helium::Exception& )
+    if ( !Reflect::ToArchive( assetPath, texture ) )
     {
         delete texture;
         return NULL;
     }
+
+    texture->SetSourcePath( assetPath );
 
     return texture;
 }

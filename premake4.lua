@@ -318,7 +318,6 @@ solution "Dependencies"
 				"Dependencies/tiff/libtiff/tif_acorn.c",
 				"Dependencies/tiff/libtiff/tif_atari.c",
 				"Dependencies/tiff/libtiff/tif_apple.c",
-				"Dependencies/tiff/libtiff/tif_next.c",
 				"Dependencies/tiff/libtiff/tif_msdos.c",
 				"Dependencies/tiff/libtiff/tif_unix.c",
 				"Dependencies/tiff/libtiff/tif_win3.c",
@@ -329,7 +328,6 @@ solution "Dependencies"
 			{
 				"Dependencies/tiff/libtiff/tif_acorn.c",
 				"Dependencies/tiff/libtiff/tif_atari.c",
-				"Dependencies/tiff/libtiff/tif_next.c",
 				"Dependencies/tiff/libtiff/tif_msdos.c",
 				"Dependencies/tiff/libtiff/tif_unix.c",
 				"Dependencies/tiff/libtiff/tif_win3.c",
@@ -342,7 +340,6 @@ solution "Dependencies"
 				"Dependencies/tiff/libtiff/tif_acorn.c",
 				"Dependencies/tiff/libtiff/tif_atari.c",
 				"Dependencies/tiff/libtiff/tif_apple.c",
-				"Dependencies/tiff/libtiff/tif_next.c",
 				"Dependencies/tiff/libtiff/tif_msdos.c",
 				"Dependencies/tiff/libtiff/tif_win3.c",
 				"Dependencies/tiff/libtiff/tif_win32.c",
@@ -530,6 +527,18 @@ solution "Helium"
 		{
 			"PIPELINE_EXPORTS",
 		}
+		includedirs
+		{
+			"Dependencies/squish",
+			"Dependencies/nvtt",
+			"Dependencies/nvtt/src",
+			"Dependencies/tiff",
+			"Dependencies/tiff/libtiff",
+		}
+		configuration "windows" includedirs
+		{
+			"Dependencies/nvtt/project/vc8",
+		}
 		files
 		{
 			"Pipeline/**.h",
@@ -539,6 +548,9 @@ solution "Helium"
 		{
 			"Platform",
 			"Foundation",
+			"squish",
+			"nvtt",
+			"tiff",
 		}
 
 	project "Core"

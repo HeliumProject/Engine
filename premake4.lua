@@ -11,9 +11,9 @@ function DoDefaultSolutionSetup()
 	configurations
 	{
 		"Debug",
-		"Debug Unicode",
+		"DebugUnicode",
 		"Release",
-		"Release Unicode",
+		"ReleaseUnicode",
 	}
 
 --[[
@@ -23,7 +23,7 @@ function DoDefaultSolutionSetup()
 	for i, platform in ipairs( platforms() ) do
 		for j, config in ipairs( configurations() ) do
 			configuration( { config, platform } )
-				targetdir( "Bin/" .. config .. "/" .. platform )
+				targetdir( "Bin/" .. platform .. "/" .. config )
 		end
 	end
 
@@ -82,6 +82,14 @@ function DoDefaultSolutionSetup()
 
 end
 
+function Sleep( seconds )
+	if os.get() == "windows" then
+		os.execute("ping 127.0.0.1 -n " .. seconds + 1 .. " -w 1000 >:nul 2>&1")
+	else
+		os.execute("sleep " .. seconds)
+	end
+end
+
 function BuildWxWidgets()
 
 	local cwd = os.getcwd()
@@ -105,20 +113,20 @@ function BuildWxWidgets()
 
 		files[0]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291d_vc_custom.dll",		built="Bin/Debug/x32" }
 		files[1]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291d_vc_custom.pdb",		built="Bin/Debug/x32" }
-		files[2]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291ud_vc_custom.dll",	built="Bin/Debug Unicode/x32" }
-		files[3]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291ud_vc_custom.pdb",	built="Bin/Debug Unicode/x32" }
+		files[2]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291ud_vc_custom.dll",	built="Bin/DebugUnicode/x32" }
+		files[3]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291ud_vc_custom.pdb",	built="Bin/DebugUnicode/x32" }
 		files[4]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291_vc_custom.dll",		built="Bin/Release/x32" }
 		files[5]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291_vc_custom.pdb",		built="Bin/Release/x32" }
-		files[6]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291u_vc_custom.dll",		built="Bin/Release Unicode/x32" }
-		files[7]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291u_vc_custom.pdb",		built="Bin/Release Unicode/x32" }
+		files[6]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291u_vc_custom.dll",		built="Bin/ReleaseUnicode/x32" }
+		files[7]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291u_vc_custom.pdb",		built="Bin/ReleaseUnicode/x32" }
 		files[8]  = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291d_vc_custom.dll",		built="Bin/Debug/x64" }
 		files[9]  = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291d_vc_custom.pdb",		built="Bin/Debug/x64" }
-		files[10] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291ud_vc_custom.dll",	built="Bin/Debug Unicode/x64" }
-		files[11] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291ud_vc_custom.pdb",	built="Bin/Debug Unicode/x64" }
+		files[10] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291ud_vc_custom.dll",	built="Bin/DebugUnicode/x64" }
+		files[11] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291ud_vc_custom.pdb",	built="Bin/DebugUnicode/x64" }
 		files[12] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291_vc_custom.dll",		built="Bin/Release/x64" }
 		files[13] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291_vc_custom.pdb",		built="Bin/Release/x64" }
-		files[14] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291u_vc_custom.dll",		built="Bin/Release Unicode/x64" }
-		files[15] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291u_vc_custom.pdb",		built="Bin/Release Unicode/x64" }
+		files[14] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291u_vc_custom.dll",		built="Bin/ReleaseUnicode/x64" }
+		files[15] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291u_vc_custom.pdb",		built="Bin/ReleaseUnicode/x64" }
 	else
 		print("Implement support for " .. os.get() .. " to BuildWxWidgets()")
 		os.exit(1)
@@ -130,10 +138,10 @@ function BuildWxWidgets()
 	local quit = false
 	while quit == false do
 		local found = 0
-		for i,v in ipairs(files) do
+		for i,v in pairs(files) do
 			if v then
 				-- we still have files to process
-				found = found + 1					
+				found = found + 1
 
 				-- mkpath the target folder
 				os.mkdir( v.built )
@@ -150,23 +158,17 @@ function BuildWxWidgets()
 					end
 
 					-- do the file copy
-					local dllResult = os.execute( "mklink /h \"" .. destination .. "\" \"" .. path .. "\"" )
+					local result = os.execute( "mklink \"" .. destination .. "\" \"" .. path .. "\"" )
 
 					-- the files were copied, complete this entry
-					if dllResult == 0 then
+					if result == 0 then
 						files[ i ] = nil
-					else
-						print("... Failed to copy to " .. destination .. " ...")
 					end						
-				else
-					print("... Waiting for " .. path .. " ...")
 				end
 			end
 		end
-		
 		quit = found == 0
-		
-		os.execute("sleep 1")
+		Sleep(1)
 	end
 	print( "Build results published..." )
 
@@ -384,6 +386,13 @@ solution "Helium"
 		".",
 	}
 	
+	buildoptions
+	{
+		-- Class 'foo<>' needs to have dll-interface to be used by clients of class 'bar'
+		--  This is a non-issue so long as debug/release and CRT is not mixed b/t modules
+		"/wd4251",
+	}
+	
 	DoDefaultSolutionSetup()
 
 --[[
@@ -391,14 +400,73 @@ solution "Helium"
 	#pragma comment directives (on windows only)
 --]]
 	configuration "windows"
-		buildoptions
+		linkoptions
 		{
-			"/NODEFAULTLIB wxbase29ud;wxbase29d;wxbase29u;wxbase29;wxbase29ud_net;wxbase29d_net;wxbase29u_net;wxbase29_net;wxbase29ud_xml;wxbase29d_xml;wxbase29u_xml;wxbase29_xml;wxmsw29ud_core;wxmsw29d_core;wxmsw29u_core;wxmsw29_core;wxmsw29ud_adv;wxmsw29d_adv;wxmsw29u_adv;wxmsw29_adv;wxmsw29ud_html;wxmsw29d_html;wxmsw29u_html;wxmsw29_html;wxmsw29ud_qa;wxmsw29d_qa;wxmsw29u_qa;wxmsw29_qa;wxmsw29ud_xrc;wxmsw29d_xrc;wxmsw29u_xrc;wxmsw29_xrc;wxmsw29ud_aui;wxmsw29d_aui;wxmsw29u_aui;wxmsw29_aui;wxmsw29ud_propgrid;wxmsw29d_propgrid;wxmsw29u_propgrid;wxmsw29_propgrid;wxmsw29ud_ribbon;wxmsw29d_ribbon;wxmsw29u_ribbon;wxmsw29_ribbon;wxmsw29ud_richtext;wxmsw29d_richtext;wxmsw29u_richtext;wxmsw29_richtext;wxmsw29ud_media;wxmsw29d_media;wxmsw29u_media;wxmsw29_media;wxmsw29ud_stc;wxmsw29d_stc;wxmsw29u_stc;wxmsw29_stc",
+			"/NODEFAULTLIB:wxbase29ud",
+			"/NODEFAULTLIB:wxbase29d",
+			"/NODEFAULTLIB:wxbase29u",
+			"/NODEFAULTLIB:wxbase29",
+			"/NODEFAULTLIB:wxbase29ud_net",
+			"/NODEFAULTLIB:wxbase29d_net",
+			"/NODEFAULTLIB:wxbase29u_net",
+			"/NODEFAULTLIB:wxbase29_net",
+			"/NODEFAULTLIB:wxbase29ud_xml",
+			"/NODEFAULTLIB:wxbase29d_xml",
+			"/NODEFAULTLIB:wxbase29u_xml",
+			"/NODEFAULTLIB:wxbase29_xml",
+			"/NODEFAULTLIB:wxmsw29ud_core",
+			"/NODEFAULTLIB:wxmsw29d_core",
+			"/NODEFAULTLIB:wxmsw29u_core",
+			"/NODEFAULTLIB:wxmsw29_core",
+			"/NODEFAULTLIB:wxmsw29ud_adv",
+			"/NODEFAULTLIB:wxmsw29d_adv",
+			"/NODEFAULTLIB:wxmsw29u_adv",
+			"/NODEFAULTLIB:wxmsw29_adv",
+			"/NODEFAULTLIB:wxmsw29ud_html",
+			"/NODEFAULTLIB:wxmsw29d_html",
+			"/NODEFAULTLIB:wxmsw29u_html",
+			"/NODEFAULTLIB:wxmsw29_html",
+			"/NODEFAULTLIB:wxmsw29ud_qa",
+			"/NODEFAULTLIB:wxmsw29d_qa",
+			"/NODEFAULTLIB:wxmsw29u_qa",
+			"/NODEFAULTLIB:wxmsw29_qa",
+			"/NODEFAULTLIB:wxmsw29ud_xrc",
+			"/NODEFAULTLIB:wxmsw29d_xrc",
+			"/NODEFAULTLIB:wxmsw29u_xrc",
+			"/NODEFAULTLIB:wxmsw29_xrc",
+			"/NODEFAULTLIB:wxmsw29ud_aui",
+			"/NODEFAULTLIB:wxmsw29d_aui",
+			"/NODEFAULTLIB:wxmsw29u_aui",
+			"/NODEFAULTLIB:wxmsw29_aui",
+			"/NODEFAULTLIB:wxmsw29ud_propgrid",
+			"/NODEFAULTLIB:wxmsw29d_propgrid",
+			"/NODEFAULTLIB:wxmsw29u_propgrid",
+			"/NODEFAULTLIB:wxmsw29_propgrid",
+			"/NODEFAULTLIB:wxmsw29ud_ribbon",
+			"/NODEFAULTLIB:wxmsw29d_ribbon",
+			"/NODEFAULTLIB:wxmsw29u_ribbon",
+			"/NODEFAULTLIB:wxmsw29_ribbon",
+			"/NODEFAULTLIB:wxmsw29ud_richtext",
+			"/NODEFAULTLIB:wxmsw29d_richtext",
+			"/NODEFAULTLIB:wxmsw29u_richtext",
+			"/NODEFAULTLIB:wxmsw29_richtext",
+			"/NODEFAULTLIB:wxmsw29ud_media",
+			"/NODEFAULTLIB:wxmsw29d_media",
+			"/NODEFAULTLIB:wxmsw29u_media",
+			"/NODEFAULTLIB:wxmsw29_media",
+			"/NODEFAULTLIB:wxmsw29ud_stc",
+			"/NODEFAULTLIB:wxmsw29d_stc",
+			"/NODEFAULTLIB:wxmsw29u_stc",
+			"/NODEFAULTLIB:wxmsw29_stc",
 		}
 
 	project "Platform"
 		kind "SharedLib"
 		language "C++"
+		defines
+		{
+			"PLATFORM_EXPORTS",
+		}
 		files
 		{
 			"Platform/*.h",
@@ -433,6 +501,15 @@ solution "Helium"
 	project "Foundation"
 		kind "SharedLib"
 		language "C++"
+		defines
+		{
+			"FOUNDATION_EXPORTS",
+		}
+		includedirs
+		{
+			"Dependencies/Expat",
+			"Dependencies/zlib",
+		}
 		files
 		{
 			"Foundation/**.h",
@@ -441,11 +518,18 @@ solution "Helium"
 		links
 		{
 			"Platform",
+			"ws2_32",
+			"Expat",
+			"zlib",
 		}
 
 	project "Pipeline"
 		kind "SharedLib"
 		language "C++"
+		defines
+		{
+			"PIPELINE_EXPORTS",
+		}
 		files
 		{
 			"Pipeline/**.h",
@@ -460,6 +544,10 @@ solution "Helium"
 	project "Core"
 		kind "SharedLib"
 		language "C++"
+		defines
+		{
+			"CORE_EXPORTS",
+		}
 		files
 		{
 			"Core/**.h",

@@ -142,10 +142,10 @@ function BuildWxWidgets()
 		local base = "nmake.exe -f makefile.vc SHARED=1 MONOLITHIC=1 DEBUG_INFO=1"
 
 		os.chdir( "Dependencies/wxWidgets/build/msw" );
-		os.execute( "start \"Debug ASCII 32-bit    \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=debug UNICODE=0\"" )
-		os.execute( "start \"Release ASCII 32-bit  \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=release UNICODE=0\"" )
-		os.execute( "start \"Debug ASCII 64-bit    \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=0\"" )
-		os.execute( "start \"Release ASCII 64-bit  \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=release UNICODE=0\"" )
+		os.execute( "start \"Debug ASCII 32-bit    \" /MIN cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=debug UNICODE=0\"" )
+		os.execute( "start \"Release ASCII 32-bit  \" /MIN cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=release UNICODE=0\"" )
+		os.execute( "start \"Debug ASCII 64-bit    \" /MIN cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=0\"" )
+		os.execute( "start \"Release ASCII 64-bit  \" /MIN cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=release UNICODE=0\"" )
 		files[0] = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291d_vc_custom.dll",		built="Bin/Debug/x32" }
 		files[1] = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291d_vc_custom.pdb",		built="Bin/Debug/x32" }
 		files[2] = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291_vc_custom.dll",		built="Bin/Release/x32" }
@@ -158,10 +158,10 @@ function BuildWxWidgets()
 		WaitForResults( files )
 
 		os.chdir( "Dependencies/wxWidgets/build/msw" );
-		os.execute( "start \"Debug UNICODE 32-bit  \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=debug UNICODE=1\"" )
-		os.execute( "start \"Release UNICODE 32-bit\" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=release UNICODE=1\"" )
-		os.execute( "start \"Debug UNICODE 64-bit  \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=1\"" )
-		os.execute( "start \"Release UNICODE 64-bit\" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"" )
+		os.execute( "start \"Debug UNICODE 32-bit  \" /MIN cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=debug UNICODE=1\"" )
+		os.execute( "start \"Release UNICODE 32-bit\" /MIN cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=release UNICODE=1\"" )
+		os.execute( "start \"Debug UNICODE 64-bit  \" /MIN cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=1\"" )
+		os.execute( "start \"Release UNICODE 64-bit\" /MIN cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"" )
 		files[0] = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291ud_vc_custom.dll",	built="Bin/DebugUnicode/x32" }
 		files[1] = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291ud_vc_custom.pdb",	built="Bin/DebugUnicode/x32" }
 		files[2] = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291u_vc_custom.dll",		built="Bin/ReleaseUnicode/x32" }
@@ -214,6 +214,7 @@ solution "Dependencies"
 		{
 			"Dependencies/LiteSQL/include/**.h",
 			"Dependencies/LiteSQL/include/**.hpp",
+			"Dependencies/LiteSQL/src/library/**.c",
 			"Dependencies/LiteSQL/src/library/**.cpp",
 			"Dependencies/LiteSQL/src/library/**.h",
 			"Dependencies/LiteSQL/src/library/**.hpp",
@@ -582,17 +583,17 @@ solution "Helium"
 		configuration "windows"
 			includedirs
 			{
-				os.getenv( "DXSDK_DIR" ) .. "/include"
+				os.getenv( "DXSDK_DIR" ) .. "/include",
 			}
 		configuration { "windows", "x32" }
 			libdirs
 			{
-				os.getenv( "DXSDK_DIR" ) .. "/lib/x86"
+				os.getenv( "DXSDK_DIR" ) .. "/lib/x86",
 			}
 		configuration { "windows", "x64" }
 			libdirs
 			{
-				os.getenv( "DXSDK_DIR" ) .. "/lib/x64"
+				os.getenv( "DXSDK_DIR" ) .. "/lib/x64",
 			}
 
 	project "Editor"
@@ -601,7 +602,16 @@ solution "Helium"
 		files
 		{
 			"Editor/**.h",
+			"Editor/**.c",
 			"Editor/**.cpp",
+		}
+		includedirs
+		{
+			"Editor",
+			"Dependencies/wxWidgets/include",
+			"Dependencies/litesql/include",
+			"Dependencies/p4api/include",
+			"Dependencies/lua/src",
 		}
 		links
 		{
@@ -609,20 +619,77 @@ solution "Helium"
 			"Foundation",
 			"Pipeline",
 			"Core",
+			"litesql",
+			"libclient",
+			"librpc",
+			"libsupp",
+			"lua",
+			"d3d9",
+			"d3dx9",
+			"ws2_32",
 		}
 
 		configuration "windows"
 			includedirs
 			{
-				os.getenv( "DXSDK_DIR" ) .. "/include"
+				"Dependencies/wxWidgets/include/msvc",
+				os.getenv( "DXSDK_DIR" ) .. "/include",
 			}
+			
+		-- per architecture
 		configuration { "windows", "x32" }
 			libdirs
 			{
-				os.getenv( "DXSDK_DIR" ) .. "/lib/x86"
+				"Dependencies/wxWidgets/lib/vc_dll",
+				os.getenv( "DXSDK_DIR" ) .. "/lib/x86",
 			}
 		configuration { "windows", "x64" }
 			libdirs
 			{
+				"Dependencies/wxWidgets/lib/vc_amd64_dll",
 				os.getenv( "DXSDK_DIR" ) .. "/lib/x64"
+			}
+			
+		-- per configuration
+		configuration { "windows", "Debug" }
+			links
+			{
+				"wxmsw29d"
+			}
+		configuration { "windows", "Release" }
+			links
+			{
+				"wxmsw29"
+			}
+		configuration { "windows", "DebugUnicode" }
+			links
+			{
+				"wxmsw29ud"
+			}
+		configuration { "windows", "ReleaseUnicode" }
+			links
+			{
+				"wxmsw29u"
+			}
+			
+		-- per architecture, per configuration
+		configuration { "windows", "x32", "Debug" }
+			libdirs
+			{
+				"Dependencies/p4api/lib/Win32/Debug",
+			}
+		configuration { "windows", "x32", "Release" }
+			libdirs
+			{
+				"Dependencies/p4api/lib/Win32/Release",
+			}
+		configuration { "windows", "x64", "Debug" }
+			libdirs
+			{
+				"Dependencies/p4api/lib/x64/Debug",
+			}
+		configuration { "windows", "x64", "Release" }
+			libdirs
+			{
+				"Dependencies/p4api/lib/x64/Release",
 			}

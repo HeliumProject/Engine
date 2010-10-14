@@ -51,7 +51,6 @@ function DoDefaultSolutionSetup()
 		defines
 		{
 			"_DEBUG",
-			"DEBUG",
 		}
 		flags
 		{
@@ -90,50 +89,8 @@ function Sleep( seconds )
 	end
 end
 
-function BuildWxWidgets()
+function WaitForResults( files )
 
-	local cwd = os.getcwd()
-
-	local files = {}
-	
-	if os.get() == "windows" then
-		local make
-		local base = "nmake.exe -f makefile.vc SHARED=1 MONOLITHIC=1 DEBUG_INFO=1"
-
-		os.chdir( "Dependencies/wxWidgets/build/msw" );
-		os.execute( "start \"Debug ASCII 32-bit    \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=debug UNICODE=0\"" )
-		os.execute( "start \"Debug UNICODE 32-bit  \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=debug UNICODE=1\"" )
-		os.execute( "start \"Release ASCII 32-bit  \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=release UNICODE=0\"" )
-		os.execute( "start \"Release UNICODE 32-bit\" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=release UNICODE=1\"" )
-
-		os.execute( "start \"Debug ASCII 64-bit    \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=0\"" )
-		os.execute( "start \"Debug UNICODE 64-bit  \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=1\"" )
-		os.execute( "start \"Release ASCII 64-bit  \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=release UNICODE=0\"" )
-		os.execute( "start \"Release UNICODE 64-bit\" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"" )
-
-		files[0]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291d_vc_custom.dll",		built="Bin/Debug/x32" }
-		files[1]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291d_vc_custom.pdb",		built="Bin/Debug/x32" }
-		files[2]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291ud_vc_custom.dll",	built="Bin/DebugUnicode/x32" }
-		files[3]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291ud_vc_custom.pdb",	built="Bin/DebugUnicode/x32" }
-		files[4]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291_vc_custom.dll",		built="Bin/Release/x32" }
-		files[5]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291_vc_custom.pdb",		built="Bin/Release/x32" }
-		files[6]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291u_vc_custom.dll",		built="Bin/ReleaseUnicode/x32" }
-		files[7]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291u_vc_custom.pdb",		built="Bin/ReleaseUnicode/x32" }
-		files[8]  = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291d_vc_custom.dll",		built="Bin/Debug/x64" }
-		files[9]  = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291d_vc_custom.pdb",		built="Bin/Debug/x64" }
-		files[10] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291ud_vc_custom.dll",	built="Bin/DebugUnicode/x64" }
-		files[11] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291ud_vc_custom.pdb",	built="Bin/DebugUnicode/x64" }
-		files[12] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291_vc_custom.dll",		built="Bin/Release/x64" }
-		files[13] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291_vc_custom.pdb",		built="Bin/Release/x64" }
-		files[14] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291u_vc_custom.dll",		built="Bin/ReleaseUnicode/x64" }
-		files[15] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291u_vc_custom.pdb",		built="Bin/ReleaseUnicode/x64" }
-	else
-		print("Implement support for " .. os.get() .. " to BuildWxWidgets()")
-		os.exit(1)
-	end
-
-	os.chdir( cwd );
-	
 	print( "Waiting for build results..." )
 	local quit = false
 	while quit == false do
@@ -171,6 +128,55 @@ function BuildWxWidgets()
 		Sleep(1)
 	end
 	print( "Build results published..." )
+	
+end
+
+function BuildWxWidgets()
+
+	local cwd = os.getcwd()
+
+	local files = {}
+	
+	if os.get() == "windows" then
+		local make
+		local base = "nmake.exe -f makefile.vc SHARED=1 MONOLITHIC=1 DEBUG_INFO=1"
+
+		os.chdir( "Dependencies/wxWidgets/build/msw" );
+		os.execute( "start \"Debug ASCII 32-bit    \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=debug UNICODE=0\"" )
+		os.execute( "start \"Release ASCII 32-bit  \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=release UNICODE=0\"" )
+		os.execute( "start \"Debug ASCII 64-bit    \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=0\"" )
+		os.execute( "start \"Release ASCII 64-bit  \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=release UNICODE=0\"" )
+		files[0] = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291d_vc_custom.dll",		built="Bin/Debug/x32" }
+		files[1] = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291d_vc_custom.pdb",		built="Bin/Debug/x32" }
+		files[2] = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291_vc_custom.dll",		built="Bin/Release/x32" }
+		files[3] = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291_vc_custom.pdb",		built="Bin/Release/x32" }
+		files[4] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291d_vc_custom.dll",		built="Bin/Debug/x64" }
+		files[5] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291d_vc_custom.pdb",		built="Bin/Debug/x64" }
+		files[6] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291_vc_custom.dll",		built="Bin/Release/x64" }
+		files[7] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291_vc_custom.pdb",		built="Bin/Release/x64" }
+		os.chdir( cwd )
+		WaitForResults( files )
+
+		os.chdir( "Dependencies/wxWidgets/build/msw" );
+		os.execute( "start \"Debug UNICODE 32-bit  \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=debug UNICODE=1\"" )
+		os.execute( "start \"Release UNICODE 32-bit\" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=release UNICODE=1\"" )
+		os.execute( "start \"Debug UNICODE 64-bit  \" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=1\"" )
+		os.execute( "start \"Release UNICODE 64-bit\" cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"" )
+		files[0] = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291ud_vc_custom.dll",	built="Bin/DebugUnicode/x32" }
+		files[1] = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291ud_vc_custom.pdb",	built="Bin/DebugUnicode/x32" }
+		files[2] = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291u_vc_custom.dll",		built="Bin/ReleaseUnicode/x32" }
+		files[3] = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291u_vc_custom.pdb",		built="Bin/ReleaseUnicode/x32" }
+		files[4] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291ud_vc_custom.dll",	built="Bin/DebugUnicode/x64" }
+		files[5] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291ud_vc_custom.pdb",	built="Bin/DebugUnicode/x64" }
+		files[6] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291u_vc_custom.dll",		built="Bin/ReleaseUnicode/x64" }
+		files[7] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291u_vc_custom.pdb",		built="Bin/ReleaseUnicode/x64" }
+		os.chdir( cwd )
+		WaitForResults( files )
+
+	else
+		print("Implement support for " .. os.get() .. " to BuildWxWidgets()")
+		os.exit(1)
+	end
 
 end
 
@@ -322,7 +328,6 @@ solution "Dependencies"
 				"Dependencies/tiff/libtiff/tif_unix.c",
 				"Dependencies/tiff/libtiff/tif_win3.c",
 			}
-
 		configuration "macosx"
 			excludes
 			{
@@ -333,7 +338,6 @@ solution "Dependencies"
 				"Dependencies/tiff/libtiff/tif_win3.c",
 				"Dependencies/tiff/libtiff/tif_win32.c",
 			}
-
 		configuration "linux"
 			excludes
 			{
@@ -480,14 +484,12 @@ solution "Helium"
 			{
 				"ws2_32",
 			}
-
 		configuration "macosx"
 			files
 			{
 				"Platform/POSIX/*.h",
 				"Platform/POSIX/*.cpp",
 			}
-			
 		configuration "linux"
 			files
 			{
@@ -535,10 +537,6 @@ solution "Helium"
 			"Dependencies/tiff",
 			"Dependencies/tiff/libtiff",
 		}
-		configuration "windows" includedirs
-		{
-			"Dependencies/nvtt/project/vc8",
-		}
 		files
 		{
 			"Pipeline/**.h",
@@ -552,6 +550,12 @@ solution "Helium"
 			"nvtt",
 			"tiff",
 		}
+
+		configuration "windows"
+			includedirs
+			{
+				"Dependencies/nvtt/project/vc8",
+			}
 
 	project "Core"
 		kind "SharedLib"
@@ -569,7 +573,27 @@ solution "Helium"
 		{
 			"Foundation",
 			"Platform",
-		}
+			"opengl32",
+			"glu32",
+			"d3d9",
+			"d3dx9",
+		}	
+
+		configuration "windows"
+			includedirs
+			{
+				os.getenv( "DXSDK_DIR" ) .. "/include"
+			}
+		configuration { "windows", "x32" }
+			libdirs
+			{
+				os.getenv( "DXSDK_DIR" ) .. "/lib/x86"
+			}
+		configuration { "windows", "x64" }
+			libdirs
+			{
+				os.getenv( "DXSDK_DIR" ) .. "/lib/x64"
+			}
 
 	project "Editor"
 		kind "ConsoleApp"
@@ -586,3 +610,19 @@ solution "Helium"
 			"Pipeline",
 			"Core",
 		}
+
+		configuration "windows"
+			includedirs
+			{
+				os.getenv( "DXSDK_DIR" ) .. "/include"
+			}
+		configuration { "windows", "x32" }
+			libdirs
+			{
+				os.getenv( "DXSDK_DIR" ) .. "/lib/x86"
+			}
+		configuration { "windows", "x64" }
+			libdirs
+			{
+				os.getenv( "DXSDK_DIR" ) .. "/lib/x64"
+			}

@@ -581,6 +581,8 @@ bool DeviceManager::SaveTGA(const tchar* fname)
     return true;
 }
 
+#if PRECOMPILED_SHADERS
+
 // vertex shaders
 #include "screenspace_vs.h"
 #include "basicworldspace_vs.h"
@@ -601,8 +603,11 @@ bool DeviceManager::SaveTGA(const tchar* fname)
 #include "texture_a_ps.h"
 #include "sky_ps.h"
 
+#endif
+
 static const BYTE* g_compiled_vertex_shaders[__VERTEX_SHADER_LAST__] = 
 {
+#if PRECOMPILED_SHADERS
     g_screenspace_vs,
     g_basicworldspace_vs,
     g_basicobjspace_vs,
@@ -612,10 +617,22 @@ static const BYTE* g_compiled_vertex_shaders[__VERTEX_SHADER_LAST__] =
     g_mesh_debug_vertnormal_vs,
     g_mesh_debug_verttangent_vs,
     g_mesh_debug_uv_vs,
+#endif
+
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
 };
 
 static const BYTE* g_compiled_pixel_shaders[__PIXEL_SHADER_LAST__] = 
 {
+#if PRECOMPILED_SHADERS
     g_diffuse_ps,
     g_diffuse_gpi_ps,
     g_color_ps,
@@ -623,6 +640,15 @@ static const BYTE* g_compiled_pixel_shaders[__PIXEL_SHADER_LAST__] =
     g_texture_g_ps,
     g_texture_a_ps,
     g_sky_ps,
+#endif
+
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
 };
 
 static D3DVERTEXELEMENT9 g_VertexDec_Screenspace[] = 

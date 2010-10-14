@@ -35,8 +35,7 @@ changes by Geoff Evans:
 #include "Platform/String.h"
 
 using namespace Helium;
-using namespace Helium::Core;
-using namespace Helium::Core::GL;
+using namespace Helium::GL;
 
 /* Max: returns the maximum of two floats */
 inline static GLfloat Max(GLfloat a, GLfloat b) 
@@ -883,7 +882,7 @@ static void SecondPass(SourceMesh* mesh, FILE* file)
     }
 
     /* announce the memory requirements */
-    DBG( Warning(" Memory: %d bytes",
+    DBG( Log::Warning( TXT(" Memory: %d bytes"),
         numvertices  * 3*sizeof(GLfloat) +
         numnormals   * 3*sizeof(GLfloat) * (numnormals ? 1 : 0) +
         numuvs * 3*sizeof(GLfloat) * (numuvs ? 1 : 0) +
@@ -1147,7 +1146,7 @@ void SourceMesh::GenerateLinearTexCoords()
         group = group->m_Next;
     }
 
-    DBG( Warning("GenerateLinearTexCoords(): generated %d linear texture coordinates", m_UVCount) );
+    DBG( Log::Warning( TXT("GenerateLinearTexCoords(): generated %d linear texture coordinates"), m_UVCount) );
 }
 
 void SourceMesh::GenerateSphericalTexCoords()

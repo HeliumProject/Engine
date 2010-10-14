@@ -14,10 +14,10 @@ void LitesqlDocument::setModified(bool bModified)
 bool LitesqlDocument::isModified() 
 { return m_bModified; }
 
-const LiteSQL_String& LitesqlDocument::getFilename()
+const LITESQL_String& LitesqlDocument::getFilename()
 { return m_filename; }
 
-void LitesqlDocument::setFilename(const LiteSQL_String& filename)
+void LitesqlDocument::setFilename(const LITESQL_String& filename)
 { m_filename = filename; }
 
 ObjectModel& LitesqlDocument::getModel()
@@ -33,7 +33,7 @@ bool LitesqlDocument::Load(LPCTSTR pszFilename)
     }
     else
     {
-      m_filename =  LiteSQL_L( "Unbekannt.lsl" );
+      m_filename =  LITESQL_L( "Unbekannt.lsl" );
     }
     setModified(false);
     return m_model.loadFromFile(m_filename);

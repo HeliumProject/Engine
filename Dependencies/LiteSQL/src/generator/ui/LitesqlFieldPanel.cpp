@@ -36,7 +36,7 @@ m_pField(pField)
 
 void LitesqlFieldPanel::OnAddValue( wxCommandEvent& event )
 {
-  m_listValues->AppendString(_( LiteSQL_L( "newValue" )));
+  m_listValues->AppendString(_( LITESQL_L( "newValue" )));
 }
 
 void LitesqlFieldPanel::OnRemoveValue( wxCommandEvent& event )
@@ -45,16 +45,16 @@ void LitesqlFieldPanel::OnRemoveValue( wxCommandEvent& event )
 // FieldTypeValidator implementation
 /****************************************************************************/
 const wxString FTSTRING[] = { 
-               _( LiteSQL_L( "" )),
-               _( LiteSQL_L( "boolean" )),
-               _( LiteSQL_L( "integer" )),
-               _( LiteSQL_L( "LiteSQL_String" )),
-               _( LiteSQL_L( "float" )),
-               _( LiteSQL_L( "double" )),
-               _( LiteSQL_L( "time" )),
-               _( LiteSQL_L( "date" )),
-               _( LiteSQL_L( "datetime" )),
-               _( LiteSQL_L( "blob" )) 
+               _( LITESQL_L( "" )),
+               _( LITESQL_L( "boolean" )),
+               _( LITESQL_L( "integer" )),
+               _( LITESQL_L( "LITESQL_String" )),
+               _( LITESQL_L( "float" )),
+               _( LITESQL_L( "double" )),
+               _( LITESQL_L( "time" )),
+               _( LITESQL_L( "date" )),
+               _( LITESQL_L( "datetime" )),
+               _( LITESQL_L( "blob" )) 
 };  
 
 const wxArrayString FieldTypeValidator::FIELDTYPES(sizeof(FTSTRING)/sizeof(FTSTRING[0]),FTSTRING);
@@ -231,7 +231,7 @@ bool FieldValuesValidator::TransferFromWindow()
     size_t i = 0;
     for (wxArrayString::const_iterator it = values.begin(); it != values.end();it++)
     {
-      LiteSQL_String name = (*it).ToUTF8();
+      LITESQL_String name = (*it).ToUTF8();
       xml::Value v(name,toString<int>(i++));
       m_pField->values.push_back( v );
     }

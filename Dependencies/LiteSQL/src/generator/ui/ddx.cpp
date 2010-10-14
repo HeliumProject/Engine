@@ -3,7 +3,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(StdStringValidator,wxTextValidator)
 
-StdStringValidator::StdStringValidator(long style, LiteSQL_String *val)
+StdStringValidator::StdStringValidator(long style, LITESQL_String *val)
 : pValue(val), 
 value(*val),
 wxTextValidator(style,&value)

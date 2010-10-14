@@ -12,7 +12,7 @@
 
 using namespace Helium;
 
-GLuint Core::GL::LoadTexture( const tstring& filename, GLboolean alpha, GLboolean repeat, GLboolean filtering, GLboolean mipmaps )
+GLuint GL::LoadTexture( const tstring& filename, GLboolean alpha, GLboolean repeat, GLboolean filtering, GLboolean mipmaps )
 {
     GLuint tex = 0;
     GLubyte *data = NULL;
@@ -89,7 +89,7 @@ GLuint Core::GL::LoadTexture( const tstring& filename, GLboolean alpha, GLboolea
         xSize2 = 1 << ixPow2;
         ySize2 = 1 << iyPow2;
 
-        DBG(Warning("gl_max_texture_size=%d / width=%d / xSize2=%d / height=%d / ySize2 = %d", gl_max_texture_size, width, xSize2, height, ySize2));
+        DBG( Log::Warning( TXT("gl_max_texture_size=%d / width=%d / xSize2=%d / height=%d / ySize2 = %d"), gl_max_texture_size, width, xSize2, height, ySize2) );
         if((width != xSize2) || (height != ySize2))
         {
 #ifdef Core_OPENGLES
@@ -98,7 +98,7 @@ GLuint Core::GL::LoadTexture( const tstring& filename, GLboolean alpha, GLboolea
 
 #ifdef Core_OPENGL
             /* TODO: use glTexSubImage2D instead */
-            DBG(Warning("scaling texture"));
+            DBG( Log::Warning( TXT("scaling texture")) );
             GLubyte* rdata = (GLubyte*)malloc(sizeof(GLubyte) * xSize2 * ySize2 * pixelsize);
             if (!rdata)
                 return 0;
@@ -115,7 +115,7 @@ GLuint Core::GL::LoadTexture( const tstring& filename, GLboolean alpha, GLboolea
 
         glGenTextures(1, &tex);		/* Generate texture ID */
         glBindTexture(GL_TEXTURE_2D, tex);
-        DBG(Warning("building texture %d",tex));
+        DBG( Log::Warning( TXT("building texture %d"),tex) );
 
         if(filtering)
         {

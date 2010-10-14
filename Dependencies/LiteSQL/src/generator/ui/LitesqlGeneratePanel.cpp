@@ -21,28 +21,28 @@ m_pModel(pModel)
 
 void LitesqlGeneratePanel::OnRunClick( wxCommandEvent& event )
 {
-  m_gaugeRunProgress->SetLabel(_( LiteSQL_L( "Running" )));
+  m_gaugeRunProgress->SetLabel(_( LITESQL_L( "Running" )));
 
 struct options_t {
-  LiteSQL_String output_dir;
-  LiteSQL_String output_sources;
-  LiteSQL_String output_includes;
+  LITESQL_String output_dir;
+  LITESQL_String output_sources;
+  LITESQL_String output_includes;
   bool refresh;
-  std::vector<LiteSQL_String> targets;
+  std::vector<LITESQL_String> targets;
 };
 
-  options_t options = { LiteSQL_L( "" ), LiteSQL_L( "" ), LiteSQL_L( "" ),true};
-  options.targets.push_back( LiteSQL_L( "c++" ));
+  options_t options = { LITESQL_L( "" ), LITESQL_L( "" ), LITESQL_L( "" ),true};
+  options.targets.push_back( LITESQL_L( "c++" ));
 
   CompositeGenerator generator;
     
   generator.setOutputDirectory(options.output_dir);
   
   
-  for (std::vector<LiteSQL_String>::const_iterator target= options.targets.begin(); target!=options.targets.end();target++)
+  for (std::vector<LITESQL_String>::const_iterator target= options.targets.begin(); target!=options.targets.end();target++)
   {
 
-    if (*target ==  LiteSQL_L( "c++" )) 
+    if (*target ==  LITESQL_L( "c++" )) 
     {
       CppGenerator* pCppGen = new CppGenerator();
       pCppGen->setOutputSourcesDirectory(options.output_sources);
@@ -50,21 +50,21 @@ struct options_t {
 
       generator.add(pCppGen);
     }    
-    else if (*target ==  LiteSQL_L( "graphviz" )) 
+    else if (*target ==  LITESQL_L( "graphviz" )) 
     {
       generator.add(new GraphvizGenerator());
     }
-    else if (*target ==  LiteSQL_L( "ruby-activerecord" )) 
+    else if (*target ==  LITESQL_L( "ruby-activerecord" )) 
     {
       generator.add(new RubyActiveRecordGenerator());
     }
     else 
     {
-      throw litesql::Except( LiteSQL_L( "unsupported target: " ) + *target);
+      throw litesql::Except( LITESQL_L( "unsupported target: " ) + *target);
     }
   }
 
-  wxString s (generator.generateCode(  m_pModel) ? _( LiteSQL_L( "Success" )) : _( LiteSQL_L( "Fail" )) );
+  wxString s (generator.generateCode(  m_pModel) ? _( LITESQL_L( "Success" )) : _( LITESQL_L( "Fail" )) );
   wxMessageBox(s);
 
 }

@@ -6,11 +6,8 @@
 
 namespace Helium
 {
-    namespace Core
+    namespace GL
     {
-        namespace GL
-        {
-            GLuint LoadTexture( const tstring& filename, GLboolean alpha, GLboolean repeat, GLboolean filtering, GLboolean mipmaps );
-        }
+        GLuint LoadTexture( const tstring& filename, GLboolean alpha, GLboolean repeat, GLboolean filtering, GLboolean mipmaps );
     }
 }

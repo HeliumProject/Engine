@@ -682,6 +682,7 @@ static D3DVERTEXELEMENT9 g_VertexDec_Mesh[] =  // total size 64
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void DeviceManager::CreateBaseResources()
 {
+#ifdef PRECOMPILED_SHADERS
     for (u32 vs=0;vs<__VERTEX_SHADER_LAST__;vs++)
     {
         if (FAILED(m_device->CreateVertexShader((const DWORD*)g_compiled_vertex_shaders[vs],&m_vertex_shaders[vs])))
@@ -699,6 +700,7 @@ void DeviceManager::CreateBaseResources()
             m_pixel_shaders[ps]=0;
         }
     }
+#endif
 
     m_device->CreateVertexDeclaration(g_VertexDec_Debug,&m_vertex_dec[VERTEX_DECL_DEBUG]);
     m_device->CreateVertexDeclaration(g_VertexDec_Mesh,&m_vertex_dec[VERTEX_DECL_MESH]);

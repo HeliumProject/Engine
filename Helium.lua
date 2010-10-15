@@ -212,6 +212,7 @@ solution "Dependencies"
 		}
 		files
 		{
+			"Dependencies/LiteSQL/include/**.cpp",
 			"Dependencies/LiteSQL/include/**.h",
 			"Dependencies/LiteSQL/include/**.hpp",
 			"Dependencies/LiteSQL/src/library/**.c",
@@ -682,22 +683,22 @@ solution "Helium"
 			}
 			
 		-- per architecture, per configuration
-		configuration { "windows", "x32", "Debug" }
+		configuration { "windows", "x32", "Debug*" }
 			libdirs
 			{
 				"Dependencies/p4api/lib/Win32/Debug",
 			}
-		configuration { "windows", "x32", "Release" }
+		configuration { "windows", "x32", "Release*" }
 			libdirs
 			{
 				"Dependencies/p4api/lib/Win32/Release",
 			}
-		configuration { "windows", "x64", "Debug" }
+		configuration { "windows", "x64", "Debug*" }
 			libdirs
 			{
 				"Dependencies/p4api/lib/x64/Debug",
 			}
-		configuration { "windows", "x64", "Release" }
+		configuration { "windows", "x64", "Release*" }
 			libdirs
 			{
 				"Dependencies/p4api/lib/x64/Release",

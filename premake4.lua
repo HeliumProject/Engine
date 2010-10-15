@@ -139,6 +139,11 @@ function BuildWxWidgets()
 		local make
 		local base = "nmake.exe -f makefile.vc SHARED=1 MONOLITHIC=1 DEBUG_INFO=1"
 
+		if not os.getenv("VCINSTALLDIR") then
+			print("VCINSTALLDIR is not detected in your environment")
+			os.exit(1)
+		end
+				
 		os.chdir( "Dependencies/wxWidgets/build/msw" );
 		os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=debug UNICODE=0\"" )
 		os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=release UNICODE=0\"" )

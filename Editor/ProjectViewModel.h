@@ -102,14 +102,13 @@ namespace Helium
         public:
             ProjectViewModelNode( ProjectViewModelNode* parent,
                 const Helium::Path& path,
-                const bool canBeContainer = false );
+                const bool isContainer = false );
             virtual ~ProjectViewModelNode();
 
             ProjectViewModelNode* GetParent();
             S_ProjectViewModelNodeChildren& GetChildren();
 
             bool IsContainer() const;
-            bool CanBeContainer() const;
 
             void SetPath( const Helium::Path& path );
             const Helium::Path& GetPath();
@@ -132,7 +131,7 @@ namespace Helium
         public:
             ProjectViewModelNode* m_ParentNode;
             S_ProjectViewModelNodeChildren m_ChildNodes;
-            bool m_CanBeContainer;
+            bool m_IsContainer;
 
             Helium::Path m_Path;
         };
@@ -177,7 +176,7 @@ namespace Helium
 
             virtual bool IsContainer( const wxDataViewItem& item ) const HELIUM_OVERRIDE;
 
-        protected:
+        public:
             ProjectPtr m_Project;
             ProjectViewModelNodePtr m_RootNode;
 

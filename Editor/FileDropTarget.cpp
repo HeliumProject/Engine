@@ -20,18 +20,6 @@ FileDropTarget::FileDropTarget( const tstring& extensions, const tstring& delims
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void FileDropTarget::AddDroppedListener( FileDroppedSignature::Delegate& listener )
-{
-    m_DroppedEvent.Add( listener );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void FileDropTarget::RemoveDroppedListener( FileDroppedSignature::Delegate& listener )
-{
-    m_DroppedEvent.Remove( listener );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // Allows you to set the callback for when a drag enters the target.
 // 
 //void FileDropTarget::AddDragEnterListener( const FileDragEnterSignature::Delegate& listener )
@@ -49,17 +37,17 @@ void FileDropTarget::RemoveDroppedListener( FileDroppedSignature::Delegate& list
 ///////////////////////////////////////////////////////////////////////////////
 // Allows you to set the callback for when a drag event over the target occurs.
 // 
-//void FileDropTarget::AddDragOverListener( const FileDragOverSignature::Delegate& listener )
-//{
-//    if ( m_DragOverEvent.Count() == 0 )
-//    {
-//        m_DragOverEvent.Add( listener );
-//    }
-//    else
-//    {
-//        throw Helium::Exception( TXT( "Only one callback for 'drag over' events is valid in FileDropTarget." ) );
-//    }
-//}
+void FileDropTarget::AddDragOverListener( const FileDragOverSignature::Delegate& listener )
+{
+    if ( m_DragOverEvent.Count() == 0 )
+    {
+        m_DragOverEvent.Add( listener );
+    }
+    else
+    {
+        throw Helium::Exception( TXT( "Only one callback for 'drag over' events is valid in FileDropTarget." ) );
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Allows you to set the callback for when a drag leaves the target.
@@ -78,18 +66,11 @@ void FileDropTarget::RemoveDroppedListener( FileDroppedSignature::Delegate& list
 
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the callback to occur during a drop operation (can only be called once).
-// 
-//void FileDropTarget::AddDropListener( const FileDropSignature::Delegate& listener )
-//{
-//    if ( m_DropEvent.Count() == 0 )
-//    {
-//        m_DropEvent.Add( listener );
-//    }
-//    else
-//    {
-//        throw Helium::Exception( TXT( "Only one callback for 'drop' events is valid in FileDropTarget." ) );
-//    }
-//}
+//
+void FileDropTarget::AddDroppedListener( FileDroppedSignature::Delegate& listener )
+{
+    m_DroppedEvent.Add( listener );
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 bool FileDropTarget::TestExtension( const tchar* testExt )
@@ -110,24 +91,6 @@ bool FileDropTarget::TestExtension( const tchar* testExt )
 
     // if there are no extensions always take the drop
     return true;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-bool FileDropTarget::OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& filenames )
-{
-    if ( filenames.size() != 1 )
-    {
-        return false;
-    }
-
-    FileDroppedArgs args( (const wxChar*)filenames[ 0 ].c_str() );//, x, y, wxDragNone );
-    if ( TestExtension( args.m_Path.Extension().c_str() ) )
-    {
-        m_DroppedEvent.Raise( args );
-        return true;
-    }
-
-    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -155,32 +118,33 @@ bool FileDropTarget::OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& fil
 ///////////////////////////////////////////////////////////////////////////////
 // Notifies listener that a drag over event has occurred.
 // 
-//wxDragResult FileDropTarget::OnDragOver( wxCoord x, wxCoord y, wxDragResult def )
-//{
-//    wxDragResult result = def; //wxDragNone;
-//    //if ( m_DragOverEvent.Count() > 0 )
-//    {
-//        GetData();
-//
-//#pragma TODO( "Get and return result OnDragOver" )
-//        //std::vector< wxDragResult > results( m_DragOverEvent.Count() );
-//
-//        wxFileDataObject *fileDataObj = static_cast< wxFileDataObject* >( GetDataObject() );
-//        const wxArrayString& filenames = fileDataObj->GetFilenames();
-//
-//        FileDroppedArgs args( (const wxChar*)filenames[ 0 ].c_str() ); //x, y, def );
-//        if ( TestExtension( args.m_Path.Extension().c_str() ) )
-//        {
-//            m_DragOverEvent.Raise( args ); //, &results.front(), (u32)results.size() );
-//            //if ( results.size() > 0 )
-//            //{
-//            //  result = results.front();
-//            //}
-//        }
-//
-//    }
-//    return result;
-//}
+wxDragResult FileDropTarget::OnDragOver( wxCoord x, wxCoord y, wxDragResult def )
+{
+    wxDragResult result = def; //wxDragNone;
+    //if ( m_DragOverEvent.Count() > 0 )
+    {
+        GetData();
+
+#pragma TODO( "Get and return result OnDragOver" )
+        //std::vector< wxDragResult > results( m_DragOverEvent.Count() );
+
+        wxFileDataObject *fileDataObj = static_cast< wxFileDataObject* >( GetDataObject() );
+        const wxArrayString& filenames = fileDataObj->GetFilenames();
+
+        FileDroppedArgs args( (const wxChar*)filenames[ 0 ].c_str(), x, y, def );
+        if ( TestExtension( args.m_Path.Extension().c_str() ) )
+        {
+            m_DragOverEvent.Raise( args ); //, &results.front(), (u32)results.size() );
+            //if ( results.size() > 0 )
+            //{
+            //  result = results.front();
+            //}
+            result = args.m_DragResult;
+        }
+
+    }
+    return result;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Notifies listener that a drop event has occurred.
@@ -215,6 +179,24 @@ bool FileDropTarget::OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& fil
 //    }
 //    return result;
 //}
+
+///////////////////////////////////////////////////////////////////////////////
+bool FileDropTarget::OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& filenames )
+{
+    if ( filenames.size() != 1 )
+    {
+        return false;
+    }
+
+    FileDroppedArgs args( (const wxChar*)filenames[ 0 ].c_str(), x, y );
+    if ( TestExtension( args.m_Path.Extension().c_str() ) )
+    {
+        m_DroppedEvent.Raise( args );
+        return true;
+    }
+
+    return false;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Notifies listener that the drag has left the target area.

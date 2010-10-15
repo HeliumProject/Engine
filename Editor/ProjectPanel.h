@@ -30,19 +30,9 @@ namespace Helium
             void OnOptionsMenuSelect( wxCommandEvent& event );
 
             void OnSelectionChanged( wxDataViewEvent& event );
-            //void OnItemExpanding( wxDataViewEvent& event );
 
-            void OnBeginDrag( wxDataViewEvent& event );
-            void OnDropPossible( wxDataViewEvent& event );
-            void OnDrop( wxDataViewEvent& event );
-
+            void OnDragOver( FileDroppedArgs& args );
             virtual void OnDroppedFiles( const FileDroppedArgs& args );
-
-            //wxDataViewItem DragHitTest( wxPoint point );
-            //void DragEnter( const FileDroppedArgs& args );
-            //void DragOver( const FileDroppedArgs& args );
-            //void Drop( const FileDroppedArgs& args );
-            //void DragLeave( Helium::Void );
 
         protected:
             ProjectPtr m_Project;
@@ -52,7 +42,6 @@ namespace Helium
             OrderedSet< Path* > m_Selected;
             
             FileDropTarget* m_DropTarget;
-            //wxDataViewItem m_DragOverItem;
         };
     }
 }

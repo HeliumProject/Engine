@@ -51,42 +51,30 @@ ProjectPanel::ProjectPanel( wxWindow *parent )
     m_OptionsButton->Connect( wxEVT_MENU_OPEN, wxMenuEventHandler( ProjectPanel::OnOptionsMenuOpen ), NULL, this );
     m_OptionsButton->Connect( wxEVT_MENU_CLOSE, wxMenuEventHandler( ProjectPanel::OnOptionsMenuClose ), NULL, this );
     m_OptionsButton->Enable( true );
-    m_OptionsButton->Hide();
-
-    m_DataViewCtrl->EnableDropTarget( wxDF_FILENAME );
+    m_OptionsButton->Hide();    
 
     m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( ProjectPanel::OnSelectionChanged ), NULL, this );
-    //m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, wxDataViewEventHandler( ProjectPanel::OnItemExpanding ), NULL, this );
-
-    //m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG, wxDataViewEventHandler( ProjectPanel::OnBeginDrag ), NULL, this );
-    //m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, wxDataViewEventHandler( ProjectPanel::OnDropPossible ), NULL, this );
-    //m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_DROP, wxDataViewEventHandler( ProjectPanel::OnDrop ), NULL, this );
 
     std::set< tstring > extension;
     Asset::AssetClass::GetExtensions( extension );
 
 #pragma TODO("Why isn't hrb part of the AssetClass extensions?")
     extension.insert( TXT( "hrb" ) );
+    extension.insert( TXT( "obj" ) );
 
+    m_DataViewCtrl->EnableDropTarget( wxDF_FILENAME );
     m_DropTarget = new FileDropTarget( extension );
-    m_DropTarget->AddDroppedListener( FileDroppedSignature::Delegate( this, &ProjectPanel::OnDroppedFiles ) );
     //m_DropTarget->AddDragOverListener( FileDragEnterSignature::Delegate( this, &ProjectPanel::DragEnter ) );
-    //m_DropTarget->AddDragOverListener( FileDragOverSignature::Delegate( this, &ProjectPanel::DragOver ) );
+    m_DropTarget->AddDragOverListener( FileDragOverSignature::Delegate( this, &ProjectPanel::OnDragOver ) );
     //m_DropTarget->AddDragLeaveListener( FileDragLeaveSignature::Delegate( this, &ProjectPanel::DragLeave ) );
-    //m_DropTarget->AddDropListener( FileDroppedSignature::Delegate( this, &ProjectPanel::Drop ) );
-    m_DataViewCtrl->SetDropTarget( m_DropTarget );
+    m_DropTarget->AddDroppedListener( FileDroppedSignature::Delegate( this, &ProjectPanel::OnDroppedFiles ) );
+    m_DataViewCtrl->GetMainWindow()->SetDropTarget( m_DropTarget );
 }
 
 ProjectPanel::~ProjectPanel()
 {
     m_OptionsButton->Disconnect( wxEVT_MENU_OPEN, wxMenuEventHandler( ProjectPanel::OnOptionsMenuOpen ), NULL, this );
     m_OptionsButton->Disconnect( wxEVT_MENU_CLOSE, wxMenuEventHandler( ProjectPanel::OnOptionsMenuClose ), NULL, this );
-
-    m_DataViewCtrl->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG, wxDataViewEventHandler( ProjectPanel::OnBeginDrag ), NULL, this );
-    m_DataViewCtrl->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, wxDataViewEventHandler( ProjectPanel::OnDropPossible ), NULL, this );
-    m_DataViewCtrl->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_DROP, wxDataViewEventHandler( ProjectPanel::OnDrop ), NULL, this );
-
-    //m_DropTarget->RemoveDroppedListener( FileDroppedSignature::Delegate( this, &ProjectPanel::OnDroppedFiles ) );    
 }
 
 void ProjectPanel::SetProject( Project* project )
@@ -210,65 +198,48 @@ void ProjectPanel::OnSelectionChanged( wxDataViewEvent& event )
     m_DeleteFileButton->Enable( numSeleted > 0 ? true : false );
 }
 
-//void ProjectPanel::OnItemExpanding( wxDataViewEvent& event )
+///////////////////////////////////////////////////////////////////////////////
+//void ProjectPanel::DragEnter( const FileDroppedArgs& args )
 //{
-//    wxDataViewItem item( event.GetItem() );
 //
-//    ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
-//    if ( !node )
-//    {
-//        return;
-//    }
-//
-//    if( node->GetChildren().size() < 1
-//        && node->m_Path.IsDirectory() )
-//    {
-//        // populate the folder
-//    }
 //}
 
-void ProjectPanel::OnBeginDrag( wxDataViewEvent& event )
+///////////////////////////////////////////////////////////////////////////////
+void ProjectPanel::OnDragOver( FileDroppedArgs& args )
 {
-    // Nothing can be dragged around here
-    event.Veto();
-}
+    //int xx = args.m_X;
+    //int yy = args.m_Y;
+    //m_DataViewCtrl->CalcUnscrolledPosition( xx, yy, &xx, &yy );
+    //unsigned int row = m_DataViewCtrl->GetLineAt( yy );
 
-void ProjectPanel::OnDropPossible( wxDataViewEvent& event )
-{
-    if ( m_Model )
+    //if ((row >= GetRowCount()) || (yy > m_DataViewCtrl->GetEndOfLastCol()))
+    //    return wxDragNone;
+
+
+    //wxDataViewItem item = m_DataViewCtrl->GetItemByRow( row );
+
+    wxDataViewItem item;
+    wxDataViewColumn* column;
+    m_DataViewCtrl->HitTest( wxPoint( args.m_X, args.m_Y ), item, column );
+
+    if ( item.IsOk() && !m_Model->IsDropPossible( item ) )
     {
-        wxDataViewItem item( event.GetItem() );
-        if ( m_Model->IsDropPossible( item ) )
-        {
-            event.Allow();
-            return;
-        }
-    }
-
-    event.Veto();
+        args.m_DragResult = wxDragNone;
+    }    
 }
 
-void ProjectPanel::OnDrop( wxDataViewEvent& event )
-{
-    if ( m_Model )
-    {
-        wxDataViewItem item( event.GetItem() );
-        if ( m_Model->IsDropPossible( item ) )
-        {
-            //wxFileDataObject *fileDataObj = static_cast< wxFileDataObject* >( event.GetDataObject() );
-            wxFileDataObject fileDataObj;
-            fileDataObj.SetData( event.GetDataSize(), event.GetDataBuffer() );
-            const wxArrayString& filenames = fileDataObj.GetFilenames();
-
-            FileDroppedArgs args( (const wxChar*)filenames[ 0 ].c_str() );
-
-            OnDroppedFiles( args );
-            return;
-        }
-    }
-
-    event.Veto();
-}
+///////////////////////////////////////////////////////////////////////////////
+// Callback for when a drag operation leaves this control.  Clears the 
+// highlighted drop item.
+// 
+//void ProjectPanel::DragLeave( Helium::Void )
+//{
+//  if ( m_DragOverItem.IsOk() )
+//  {
+//    //m_DataViewCtrl->SetItemDropHighlight( m_DragOverItem, false );
+//    m_DragOverItem = wxDataViewItem( 0 );
+//  }
+//}
 
 void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
 {
@@ -296,45 +267,12 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
         {
             m_Project->AddPath( asset->GetSourcePath() );
         }
+        else
+        {
+#pragma TODO("Error")
+        }
     }
     else
     {
     }
 }
-
-///////////////////////////////////////////////////////////////////////////////
-//wxDataViewItem ProjectPanel::DragHitTest( wxPoint point )
-//{
-//    return wxDataViewItem( 0 );
-//}
-
-///////////////////////////////////////////////////////////////////////////////
-//void ProjectPanel::DragEnter( const FileDroppedArgs& args )
-//{
-//
-//}
-
-///////////////////////////////////////////////////////////////////////////////
-//void ProjectPanel::DragOver( const FileDroppedArgs& args )
-//{
-//
-//}
-
-///////////////////////////////////////////////////////////////////////////////
-//void ProjectPanel::Drop( const FileDroppedArgs& args )
-//{
-//
-//}
-
-///////////////////////////////////////////////////////////////////////////////
-// Callback for when a drag operation leaves this control.  Clears the 
-// highlighted drop item.
-// 
-//void ProjectPanel::DragLeave( Helium::Void )
-//{
-//  if ( m_DragOverItem.IsOk() )
-//  {
-//    //m_DataViewCtrl->SetItemDropHighlight( m_DragOverItem, false );
-//    m_DragOverItem = wxDataViewItem( 0 );
-//  }
-//}

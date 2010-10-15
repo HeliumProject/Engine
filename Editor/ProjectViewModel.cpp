@@ -9,10 +9,10 @@ using namespace Helium;
 using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
-ProjectViewModelNode::ProjectViewModelNode( ProjectViewModelNode* parent, const Helium::Path& path, const bool canBeContainer )
+ProjectViewModelNode::ProjectViewModelNode( ProjectViewModelNode* parent, const Helium::Path& path, const bool isContainer )
 : m_ParentNode( parent )
 , m_Path( path )
-, m_CanBeContainer( canBeContainer )
+, m_IsContainer( isContainer )
 {
 }
 
@@ -34,13 +34,8 @@ S_ProjectViewModelNodeChildren& ProjectViewModelNode::GetChildren()
 
 bool ProjectViewModelNode::IsContainer() const
 {
-    // TODO: OR the file is a scene file, reflect file with manifest
-    return ( m_ChildNodes.size() > 0 || m_Path.IsDirectory() ) ? true : false;
-}
-
-bool ProjectViewModelNode::CanBeContainer() const
-{
-    return ( m_CanBeContainer || m_Path.IsDirectory() ) ? true : false;
+#pragma TODO ( "OR the file is a scene file, reflect file with manifest" )
+    return ( m_IsContainer || m_ChildNodes.size() > 0 || m_Path.IsDirectory() ) ? true : false;
 }
 
 void ProjectViewModelNode::SetPath( const Helium::Path& path )
@@ -210,8 +205,8 @@ void ProjectViewModel::SetProject( Project* project )
         m_RootNode = new ProjectViewModelNode( NULL, m_Project->a_Path.Get(), true );
         m_Project->a_Path.Changed().AddMethod( m_RootNode.Ptr(), &ProjectViewModelNode::PathChanged );
 
-        AddChild( wxDataViewItem( (void*) m_RootNode.Ptr() ), Helium::Path( TXT( "Test Child.txt" ) ) );
-        AddChild( wxDataViewItem( (void*) m_RootNode.Ptr() ), Helium::Path( TXT( "C:/Projects/github/nocturnal/Helium/Editor/Icons/" ) ) );
+        //AddChild( wxDataViewItem( (void*) m_RootNode.Ptr() ), Helium::Path( TXT( "Test Child.txt" ) ) );
+        //AddChild( wxDataViewItem( (void*) m_RootNode.Ptr() ), Helium::Path( TXT( "C:/Projects/github/nocturnal/Helium/Editor/Icons/" ) ) );
     }
 }
 

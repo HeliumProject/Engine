@@ -2,7 +2,7 @@
 // C++ code generated with wxFormBuilder (version Apr 16 2008)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO  LiteSQL_L( "NOT" ) EDIT THIS FILE!
+// PLEASE DO  LITESQL_L( "NOT" ) EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "ui.h"
@@ -31,14 +31,14 @@ ObjectPanel::ObjectPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, c
 	gSizer1->SetFlexibleDirection( wxBOTH );
 	gSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	lblName = new wxStaticText( this, wxID_ANY, _( LiteSQL_L( "Name" )), wxDefaultPosition, wxDefaultSize, 0 );
+	lblName = new wxStaticText( this, wxID_ANY, _( LITESQL_L( "Name" )), wxDefaultPosition, wxDefaultSize, 0 );
 	lblName->Wrap( -1 );
 	gSizer1->Add( lblName, 1, wxALL|wxEXPAND, 5 );
 	
 	m_textCtrlName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	gSizer1->Add( m_textCtrlName, 2, wxALL|wxFIXED_MINSIZE|wxEXPAND, 5 );
 	
-	lblInherits = new wxStaticText( this, wxID_ANY, _( LiteSQL_L( "Inherit From" )), wxDefaultPosition, wxDefaultSize, 0 );
+	lblInherits = new wxStaticText( this, wxID_ANY, _( LITESQL_L( "Inherit From" )), wxDefaultPosition, wxDefaultSize, 0 );
 	lblInherits->Wrap( -1 );
 	gSizer1->Add( lblInherits, 0, wxALL|wxEXPAND, 5 );
 	
@@ -67,14 +67,14 @@ FieldPanel::FieldPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
 	gSizer1->SetFlexibleDirection( wxBOTH );
 	gSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	lblName = new wxStaticText( this, wxID_ANY, _( LiteSQL_L( "Name" )), wxDefaultPosition, wxDefaultSize, 0 );
+	lblName = new wxStaticText( this, wxID_ANY, _( LITESQL_L( "Name" )), wxDefaultPosition, wxDefaultSize, 0 );
 	lblName->Wrap( -1 );
 	gSizer1->Add( lblName, 1, wxALL, 5 );
 	
 	m_textCtrlName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	gSizer1->Add( m_textCtrlName, 1, wxALL|wxEXPAND, 5 );
 	
-	lblFieldtype = new wxStaticText( this, wxID_ANY, _( LiteSQL_L( "Fieldtype" )), wxDefaultPosition, wxDefaultSize, 0 );
+	lblFieldtype = new wxStaticText( this, wxID_ANY, _( LITESQL_L( "Fieldtype" )), wxDefaultPosition, wxDefaultSize, 0 );
 	lblFieldtype->Wrap( -1 );
 	gSizer1->Add( lblFieldtype, 1, wxALL, 5 );
 	
@@ -85,14 +85,14 @@ FieldPanel::FieldPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
 	
 	gSizer1->Add( m_choiceFieldtype, 1, wxALL|wxEXPAND, 5 );
 	
-	lblDefault = new wxStaticText( this, wxID_ANY, _( LiteSQL_L( "Default Value:" )), wxDefaultPosition, wxDefaultSize, 0 );
+	lblDefault = new wxStaticText( this, wxID_ANY, _( LITESQL_L( "Default Value:" )), wxDefaultPosition, wxDefaultSize, 0 );
 	lblDefault->Wrap( -1 );
 	gSizer1->Add( lblDefault, 1, wxALL, 5 );
 	
 	m_textCtrlDefaultValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	gSizer1->Add( m_textCtrlDefaultValue, 1, wxALL|wxEXPAND, 5 );
 	
-	lblIndexed = new wxStaticText( this, wxID_ANY, _( LiteSQL_L( "Indexed" )), wxDefaultPosition, wxDefaultSize, 0 );
+	lblIndexed = new wxStaticText( this, wxID_ANY, _( LITESQL_L( "Indexed" )), wxDefaultPosition, wxDefaultSize, 0 );
 	lblIndexed->Wrap( -1 );
 	gSizer1->Add( lblIndexed, 1, wxALL, 5 );
 	
@@ -100,7 +100,7 @@ FieldPanel::FieldPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
 	
 	gSizer1->Add( m_checkBoxIndexed, 0, wxALL, 5 );
 	
-	lblUnique = new wxStaticText( this, wxID_ANY, _( LiteSQL_L( "Unique" )), wxDefaultPosition, wxDefaultSize, 0 );
+	lblUnique = new wxStaticText( this, wxID_ANY, _( LITESQL_L( "Unique" )), wxDefaultPosition, wxDefaultSize, 0 );
 	lblUnique->Wrap( -1 );
 	gSizer1->Add( lblUnique, 1, wxALL, 5 );
 	
@@ -108,7 +108,7 @@ FieldPanel::FieldPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
 	
 	gSizer1->Add( m_checkBoxUnique, 0, wxALL, 5 );
 	
-	lblValues = new wxStaticText( this, wxID_ANY, _( LiteSQL_L( "Values" )), wxDefaultPosition, wxDefaultSize, 0 );
+	lblValues = new wxStaticText( this, wxID_ANY, _( LITESQL_L( "Values" )), wxDefaultPosition, wxDefaultSize, 0 );
 	lblValues->Wrap( -1 );
 	gSizer1->Add( lblValues, 0, wxALL, 5 );
 	
@@ -122,10 +122,10 @@ FieldPanel::FieldPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_btnAdd = new wxButton( this, wxID_ANY, _( LiteSQL_L( "+" )), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	m_btnAdd = new wxButton( this, wxID_ANY, _( LITESQL_L( "+" )), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bSizer2->Add( m_btnAdd, 0, wxALL, 5 );
 	
-	m_btnRemove = new wxButton( this, wxID_ANY, _( LiteSQL_L( "-" )), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	m_btnRemove = new wxButton( this, wxID_ANY, _( LITESQL_L( "-" )), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bSizer2->Add( m_btnRemove, 0, wxALL, 5 );
 	
 	gSizer1->Add( bSizer2, 1, wxEXPAND, 5 );
@@ -155,7 +155,7 @@ MethodPanel::MethodPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, c
 	gSizer1->SetFlexibleDirection( wxBOTH );
 	gSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	lblName = new wxStaticText( this, wxID_ANY, _( LiteSQL_L( "Name" )), wxDefaultPosition, wxDefaultSize, 0 );
+	lblName = new wxStaticText( this, wxID_ANY, _( LITESQL_L( "Name" )), wxDefaultPosition, wxDefaultSize, 0 );
 	lblName->Wrap( -1 );
 	gSizer1->Add( lblName, 0, wxALL, 5 );
 	
@@ -180,14 +180,14 @@ RelationPanel::RelationPanel( wxWindow* parent, wxWindowID id, const wxPoint& po
 	gSizer1->SetFlexibleDirection( wxBOTH );
 	gSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	lblName = new wxStaticText( this, wxID_ANY, _( LiteSQL_L( "Name" )), wxDefaultPosition, wxDefaultSize, 0 );
+	lblName = new wxStaticText( this, wxID_ANY, _( LITESQL_L( "Name" )), wxDefaultPosition, wxDefaultSize, 0 );
 	lblName->Wrap( -1 );
 	gSizer1->Add( lblName, 0, wxALL|wxEXPAND, 5 );
 	
 	m_textCtrlName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	gSizer1->Add( m_textCtrlName, 0, wxALL|wxEXPAND, 5 );
 	
-	lblObject1 = new wxStaticText( this, wxID_ANY, _( LiteSQL_L( "Object 1" )), wxDefaultPosition, wxDefaultSize, 0 );
+	lblObject1 = new wxStaticText( this, wxID_ANY, _( LITESQL_L( "Object 1" )), wxDefaultPosition, wxDefaultSize, 0 );
 	lblObject1->Wrap( -1 );
 	gSizer1->Add( lblObject1, 1, wxALL, 5 );
 	
@@ -198,7 +198,7 @@ RelationPanel::RelationPanel( wxWindow* parent, wxWindowID id, const wxPoint& po
 	
 	gSizer1->Add( m_choiceObject1, 0, wxALL|wxEXPAND, 5 );
 	
-	lblObject2 = new wxStaticText( this, wxID_ANY, _( LiteSQL_L( "Object 2" )), wxDefaultPosition, wxDefaultSize, 0 );
+	lblObject2 = new wxStaticText( this, wxID_ANY, _( LITESQL_L( "Object 2" )), wxDefaultPosition, wxDefaultSize, 0 );
 	lblObject2->Wrap( -1 );
 	gSizer1->Add( lblObject2, 1, wxALL, 5 );
 	
@@ -227,21 +227,21 @@ DatabasePanel::DatabasePanel( wxWindow* parent, wxWindowID id, const wxPoint& po
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
 	
-	m_staticName = new wxStaticText( this, wxID_ANY, _( LiteSQL_L( "Name" )), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticName = new wxStaticText( this, wxID_ANY, _( LITESQL_L( "Name" )), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticName->Wrap( -1 );
 	fgSizer1->Add( m_staticName, 0, wxALL, 5 );
 	
 	m_textName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_textName, 1, wxALL|wxEXPAND, 5 );
 	
-	m_staticNamespace = new wxStaticText( this, wxID_ANY, _( LiteSQL_L( "Namespace" )), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticNamespace = new wxStaticText( this, wxID_ANY, _( LITESQL_L( "Namespace" )), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticNamespace->Wrap( -1 );
 	fgSizer1->Add( m_staticNamespace, 0, wxALL, 5 );
 	
 	m_textNamespace = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_textNamespace, 1, wxALL|wxEXPAND, 5 );
 	
-	m_staticInclude = new wxStaticText( this, wxID_ANY, _( LiteSQL_L( "additional Include" )), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticInclude = new wxStaticText( this, wxID_ANY, _( LITESQL_L( "additional Include" )), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticInclude->Wrap( -1 );
 	fgSizer1->Add( m_staticInclude, 0, wxALL, 5 );
 	
@@ -263,15 +263,15 @@ AboutDialog::AboutDialog( wxWindow* parent, wxWindowID id, const wxString& title
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText4 = new wxStaticText( this, wxID_ANY, _( LiteSQL_L( "Visual-Litesql" )), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
+	m_staticText4 = new wxStaticText( this, wxID_ANY, _( LITESQL_L( "Visual-Litesql" )), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
 	m_staticText4->Wrap( -1 );
 	bSizer4->Add( m_staticText4, 1, wxALL|wxEXPAND, 5 );
 	
-	m_staticText5 = new wxStaticText( this, wxID_ANY, _( LiteSQL_L( "Version" )), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
+	m_staticText5 = new wxStaticText( this, wxID_ANY, _( LITESQL_L( "Version" )), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
 	m_staticText5->Wrap( -1 );
 	bSizer4->Add( m_staticText5, 0, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_btnClose = new wxButton( this, wxID_OK, _( LiteSQL_L( "Close" )), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnClose = new wxButton( this, wxID_OK, _( LITESQL_L( "Close" )), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer4->Add( m_btnClose, 0, wxALL|wxEXPAND, 5 );
 	
 	this->SetSizer( bSizer4 );
@@ -292,14 +292,14 @@ GeneratePanel::GeneratePanel( wxWindow* parent, wxWindowID id, const wxPoint& po
 	panelSizer->SetFlexibleDirection( wxBOTH );
 	panelSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
 	
-	m_staticOutputDir = new wxStaticText( this, wxID_ANY, _( LiteSQL_L( "Output Directory" )), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticOutputDir = new wxStaticText( this, wxID_ANY, _( LITESQL_L( "Output Directory" )), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticOutputDir->Wrap( -1 );
 	panelSizer->Add( m_staticOutputDir, 0, wxALL, 5 );
 	
-	m_dirPickerOutputDir = new wxDirPickerCtrl( this, wxID_ANY, wxEmptyString, _( LiteSQL_L( "Select a folder" )), wxDefaultPosition, wxDefaultSize, wxDIRP_DEFAULT_STYLE|wxDIRP_DIR_MUST_EXIST );
+	m_dirPickerOutputDir = new wxDirPickerCtrl( this, wxID_ANY, wxEmptyString, _( LITESQL_L( "Select a folder" )), wxDefaultPosition, wxDefaultSize, wxDIRP_DEFAULT_STYLE|wxDIRP_DIR_MUST_EXIST );
 	panelSizer->Add( m_dirPickerOutputDir, 1, wxALL|wxEXPAND, 5 );
 	
-	m_staticGenerators = new wxStaticText( this, wxID_ANY, _( LiteSQL_L( "Select generators" )), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticGenerators = new wxStaticText( this, wxID_ANY, _( LITESQL_L( "Select generators" )), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticGenerators->Wrap( -1 );
 	panelSizer->Add( m_staticGenerators, 0, wxALL, 5 );
 	
@@ -309,7 +309,7 @@ GeneratePanel::GeneratePanel( wxWindow* parent, wxWindowID id, const wxPoint& po
 	
 	panelSizer->Add( m_checkListGenerators, 10, wxALL|wxEXPAND, 5 );
 	
-	m_buttonRun = new wxButton( this, wxID_ANY, _( LiteSQL_L( "Run" )), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonRun = new wxButton( this, wxID_ANY, _( LITESQL_L( "Run" )), wxDefaultPosition, wxDefaultSize, 0 );
 	panelSizer->Add( m_buttonRun, 0, wxALL, 5 );
 	
 	m_gaugeRunProgress = new wxGauge( this, wxID_ANY, 100, wxDefaultPosition, wxSize( -1,20 ), wxGA_HORIZONTAL );

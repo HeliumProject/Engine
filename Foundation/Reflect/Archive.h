@@ -204,7 +204,9 @@ namespace Helium
             unsigned m_Progress;
 
             // The file we are working with
-            Helium::Path m_Path;
+            Path m_Path;
+
+            ByteOrder m_ByteOrder;
 
             // The array of elements that we've found
             V_Element m_Spool;
@@ -228,7 +230,7 @@ namespace Helium
             bool m_Abort;
 
         protected:
-            Archive( const Path& path );
+            Archive( const Path& path, ByteOrder byteOrder = ByteOrders::LittleEndian );
             Archive();
             virtual ~Archive();
 

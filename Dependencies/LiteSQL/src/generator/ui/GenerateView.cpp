@@ -1,4 +1,4 @@
-// For compilers that support precompilation, includes  LiteSQL_L( "wx/wx.h" ).
+// For compilers that support precompilation, includes  LITESQL_L( "wx/wx.h" ).
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
@@ -37,7 +37,7 @@ GenerateView::~GenerateView()
 bool GenerateView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
 {
     frame = wxGetApp().CreateChildFrame(doc,this);
-    frame->SetTitle(_T( LiteSQL_L( "GenerateView" )));
+    frame->SetTitle(_T( LITESQL_L( "GenerateView" )));
 
 #ifdef __X__
     // X seems to require a forced resize

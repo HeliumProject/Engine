@@ -17,7 +17,7 @@ public:
         litesql::Field<int> person1;
         Row(const litesql::Database& db, const litesql::Record& rec=litesql::Record());
     };
-    static const LiteSQL_String table__;
+    static const LITESQL_String table__;
     static const litesql::FieldType Person1;
     static const litesql::FieldType Person2;
     static void link(const litesql::Database& db, const example::Person& o0, const example::Person& o1);
@@ -35,7 +35,7 @@ public:
         litesql::Field<int> person1;
         Row(const litesql::Database& db, const litesql::Record& rec=litesql::Record());
     };
-    static const LiteSQL_String table__;
+    static const LITESQL_String table__;
     static const litesql::FieldType Person1;
     static const litesql::FieldType Person2;
     static void link(const litesql::Database& db, const example::Person& o0, const example::Person& o1);
@@ -53,7 +53,7 @@ public:
         litesql::Field<int> person1;
         Row(const litesql::Database& db, const litesql::Record& rec=litesql::Record());
     };
-    static const LiteSQL_String table__;
+    static const LITESQL_String table__;
     static const litesql::FieldType Person1;
     static const litesql::FieldType Person2;
     static void link(const litesql::Database& db, const example::Person& o0, const example::Person& o1);
@@ -71,7 +71,7 @@ public:
         litesql::Field<int> person1;
         Row(const litesql::Database& db, const litesql::Record& rec=litesql::Record());
     };
-    static const LiteSQL_String table__;
+    static const LITESQL_String table__;
     static const litesql::FieldType Person1;
     static const litesql::FieldType Person2;
     static void link(const litesql::Database& db, const example::Person& o0, const example::Person& o1);
@@ -89,7 +89,7 @@ public:
         litesql::Field<int> person;
         Row(const litesql::Database& db, const litesql::Record& rec=litesql::Record());
     };
-    static const LiteSQL_String table__;
+    static const LITESQL_String table__;
     static const litesql::FieldType Person;
     static const litesql::FieldType Role;
     static void link(const litesql::Database& db, const example::Person& o0, const example::Role& o1);
@@ -108,7 +108,7 @@ public:
         litesql::Field<int> school;
         Row(const litesql::Database& db, const litesql::Record& rec=litesql::Record());
     };
-    static const LiteSQL_String table__;
+    static const LITESQL_String table__;
     static const litesql::FieldType School;
     static const litesql::FieldType Student;
     static void link(const litesql::Database& db, const example::School& o0, const example::Student& o1);
@@ -127,7 +127,7 @@ public:
         litesql::Field<int> employee;
         Row(const litesql::Database& db, const litesql::Record& rec=litesql::Record());
     };
-    static const LiteSQL_String table__;
+    static const LITESQL_String table__;
     static const litesql::FieldType Employee;
     static const litesql::FieldType Office;
     static void link(const litesql::Database& db, const example::Employee& o0, const example::Office& o1);
@@ -144,17 +144,17 @@ public:
     public:
         static const litesql::FieldType Id;
     };
-    static const LiteSQL_String type__;
-    static const LiteSQL_String table__;
-    static const LiteSQL_String sequence__;
+    static const LITESQL_String type__;
+    static const LITESQL_String table__;
+    static const LITESQL_String sequence__;
     static const litesql::FieldType Id;
     litesql::Field<int> id;
     static const litesql::FieldType Type;
-    litesql::Field<LiteSQL_String> type;
+    litesql::Field<LITESQL_String> type;
     static const litesql::FieldType Name;
-    litesql::Field<LiteSQL_String> name;
+    litesql::Field<LITESQL_String> name;
     static const litesql::FieldType Passwd;
-    litesql::Field<LiteSQL_String> passwd;
+    litesql::Field<LITESQL_String> passwd;
 protected:
     void defaults();
 public:
@@ -164,7 +164,7 @@ public:
     const user& operator=(const user& obj);
     virtual void sayHello();
 protected:
-    LiteSQL_String insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs);
+    LITESQL_String insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs);
     void create();
     virtual void addUpdates(Updates& updates);
     virtual void addIDUpdates(Updates& updates);
@@ -180,7 +180,7 @@ public:
     std::auto_ptr<user> upcast();
     std::auto_ptr<user> upcastCopy();
 };
-LiteSQL_oStream & operator<<(LiteSQL_oStream& os, user o);
+LITESQL_oStream & operator<<(LITESQL_oStream& os, user o);
 class Person : public litesql::Persistent {
 public:
     class Own {
@@ -191,7 +191,7 @@ public:
     public:
         static const int Male;
         static const int Female;
-        SexType(const LiteSQL_String& n, const LiteSQL_String& t, const LiteSQL_String& tbl, const litesql::FieldType::Values& vals=Values());
+        SexType(const LITESQL_String& n, const LITESQL_String& t, const LITESQL_String& tbl, const litesql::FieldType::Values& vals=Values());
     };
     class Sex {
     public:
@@ -243,15 +243,15 @@ public:
         litesql::DataSource<Role> get(const litesql::Expr& expr=litesql::Expr(), const litesql::Expr& srcExpr=litesql::Expr());
         litesql::DataSource<RoleRelation::Row> getRows(const litesql::Expr& expr=litesql::Expr());
     };
-    static const LiteSQL_String type__;
-    static const LiteSQL_String table__;
-    static const LiteSQL_String sequence__;
+    static const LITESQL_String type__;
+    static const LITESQL_String table__;
+    static const LITESQL_String sequence__;
     static const litesql::FieldType Id;
     litesql::Field<int> id;
     static const litesql::FieldType Type;
-    litesql::Field<LiteSQL_String> type;
+    litesql::Field<LITESQL_String> type;
     static const litesql::FieldType Name;
-    litesql::Field<LiteSQL_String> name;
+    litesql::Field<LITESQL_String> name;
     static const litesql::FieldType Age;
     litesql::Field<int> age;
     static const litesql::FieldType Image;
@@ -259,7 +259,7 @@ public:
     static const litesql::FieldType ADoubleValue;
     litesql::Field<double> aDoubleValue;
 protected:
-    static std::vector < std::pair< LiteSQL_String, LiteSQL_String > > sex_values;
+    static std::vector < std::pair< LITESQL_String, LITESQL_String > > sex_values;
 public:
     static const Person::SexType Sex;
     litesql::Field<int> sex;
@@ -278,7 +278,7 @@ public:
     Person::RolesHandle roles();
     virtual void sayHello();
 protected:
-    LiteSQL_String insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs);
+    LITESQL_String insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs);
     void create();
     virtual void addUpdates(Updates& updates);
     virtual void addIDUpdates(Updates& updates);
@@ -294,7 +294,7 @@ public:
     std::auto_ptr<Person> upcast();
     std::auto_ptr<Person> upcastCopy();
 };
-LiteSQL_oStream & operator<<(LiteSQL_oStream& os, Person o);
+LITESQL_oStream & operator<<(LITESQL_oStream& os, Person o);
 class Role : public litesql::Persistent {
 public:
     class Own {
@@ -310,13 +310,13 @@ public:
         litesql::DataSource<Person> get(const litesql::Expr& expr=litesql::Expr(), const litesql::Expr& srcExpr=litesql::Expr());
         litesql::DataSource<RoleRelation::Row> getRows(const litesql::Expr& expr=litesql::Expr());
     };
-    static const LiteSQL_String type__;
-    static const LiteSQL_String table__;
-    static const LiteSQL_String sequence__;
+    static const LITESQL_String type__;
+    static const LITESQL_String table__;
+    static const LITESQL_String sequence__;
     static const litesql::FieldType Id;
     litesql::Field<int> id;
     static const litesql::FieldType Type;
-    litesql::Field<LiteSQL_String> type;
+    litesql::Field<LITESQL_String> type;
 protected:
     void defaults();
 public:
@@ -326,7 +326,7 @@ public:
     const Role& operator=(const Role& obj);
     Role::PersonHandle person();
 protected:
-    LiteSQL_String insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs);
+    LITESQL_String insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs);
     void create();
     virtual void addUpdates(Updates& updates);
     virtual void addIDUpdates(Updates& updates);
@@ -342,7 +342,7 @@ public:
     std::auto_ptr<Role> upcast();
     std::auto_ptr<Role> upcastCopy();
 };
-LiteSQL_oStream & operator<<(LiteSQL_oStream& os, Role o);
+LITESQL_oStream & operator<<(LITESQL_oStream& os, Role o);
 class Student : public Role {
 public:
     class Own {
@@ -358,15 +358,15 @@ public:
         litesql::DataSource<School> get(const litesql::Expr& expr=litesql::Expr(), const litesql::Expr& srcExpr=litesql::Expr());
         litesql::DataSource<SchoolStudentRelation::Row> getRows(const litesql::Expr& expr=litesql::Expr());
     };
-    static const LiteSQL_String type__;
-    static const LiteSQL_String table__;
+    static const LITESQL_String type__;
+    static const LITESQL_String table__;
     Student(const litesql::Database& db);
     Student(const litesql::Database& db, const litesql::Record& rec);
     Student(const Student& obj);
     const Student& operator=(const Student& obj);
     Student::SchoolHandle school();
 protected:
-    LiteSQL_String insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs);
+    LITESQL_String insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs);
     void create();
     virtual void addUpdates(Updates& updates);
     virtual void addIDUpdates(Updates& updates);
@@ -382,7 +382,7 @@ public:
     std::auto_ptr<Student> upcast();
     std::auto_ptr<Student> upcastCopy();
 };
-LiteSQL_oStream & operator<<(LiteSQL_oStream& os, Student o);
+LITESQL_oStream & operator<<(LITESQL_oStream& os, Student o);
 class Employee : public Role {
 public:
     class Own {
@@ -398,15 +398,15 @@ public:
         litesql::DataSource<Office> get(const litesql::Expr& expr=litesql::Expr(), const litesql::Expr& srcExpr=litesql::Expr());
         litesql::DataSource<EmployeeOfficeRelation::Row> getRows(const litesql::Expr& expr=litesql::Expr());
     };
-    static const LiteSQL_String type__;
-    static const LiteSQL_String table__;
+    static const LITESQL_String type__;
+    static const LITESQL_String table__;
     Employee(const litesql::Database& db);
     Employee(const litesql::Database& db, const litesql::Record& rec);
     Employee(const Employee& obj);
     const Employee& operator=(const Employee& obj);
     Employee::OfficeHandle office();
 protected:
-    LiteSQL_String insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs);
+    LITESQL_String insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs);
     void create();
     virtual void addUpdates(Updates& updates);
     virtual void addIDUpdates(Updates& updates);
@@ -422,7 +422,7 @@ public:
     std::auto_ptr<Employee> upcast();
     std::auto_ptr<Employee> upcastCopy();
 };
-LiteSQL_oStream & operator<<(LiteSQL_oStream& os, Employee o);
+LITESQL_oStream & operator<<(LITESQL_oStream& os, Employee o);
 class School : public litesql::Persistent {
 public:
     class Own {
@@ -438,15 +438,15 @@ public:
         litesql::DataSource<Student> get(const litesql::Expr& expr=litesql::Expr(), const litesql::Expr& srcExpr=litesql::Expr());
         litesql::DataSource<SchoolStudentRelation::Row> getRows(const litesql::Expr& expr=litesql::Expr());
     };
-    static const LiteSQL_String type__;
-    static const LiteSQL_String table__;
-    static const LiteSQL_String sequence__;
+    static const LITESQL_String type__;
+    static const LITESQL_String table__;
+    static const LITESQL_String sequence__;
     static const litesql::FieldType Id;
     litesql::Field<int> id;
     static const litesql::FieldType Type;
-    litesql::Field<LiteSQL_String> type;
+    litesql::Field<LITESQL_String> type;
     static const litesql::FieldType Name;
-    litesql::Field<LiteSQL_String> name;
+    litesql::Field<LITESQL_String> name;
 protected:
     void defaults();
 public:
@@ -456,7 +456,7 @@ public:
     const School& operator=(const School& obj);
     School::StudentsHandle students();
 protected:
-    LiteSQL_String insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs);
+    LITESQL_String insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs);
     void create();
     virtual void addUpdates(Updates& updates);
     virtual void addIDUpdates(Updates& updates);
@@ -472,7 +472,7 @@ public:
     std::auto_ptr<School> upcast();
     std::auto_ptr<School> upcastCopy();
 };
-LiteSQL_oStream & operator<<(LiteSQL_oStream& os, School o);
+LITESQL_oStream & operator<<(LITESQL_oStream& os, School o);
 class Office : public litesql::Persistent {
 public:
     class Own {
@@ -488,13 +488,13 @@ public:
         litesql::DataSource<Employee> get(const litesql::Expr& expr=litesql::Expr(), const litesql::Expr& srcExpr=litesql::Expr());
         litesql::DataSource<EmployeeOfficeRelation::Row> getRows(const litesql::Expr& expr=litesql::Expr());
     };
-    static const LiteSQL_String type__;
-    static const LiteSQL_String table__;
-    static const LiteSQL_String sequence__;
+    static const LITESQL_String type__;
+    static const LITESQL_String table__;
+    static const LITESQL_String sequence__;
     static const litesql::FieldType Id;
     litesql::Field<int> id;
     static const litesql::FieldType Type;
-    litesql::Field<LiteSQL_String> type;
+    litesql::Field<LITESQL_String> type;
 protected:
     void defaults();
 public:
@@ -504,7 +504,7 @@ public:
     const Office& operator=(const Office& obj);
     Office::EmployeesHandle employees();
 protected:
-    LiteSQL_String insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs);
+    LITESQL_String insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs);
     void create();
     virtual void addUpdates(Updates& updates);
     virtual void addIDUpdates(Updates& updates);
@@ -520,10 +520,10 @@ public:
     std::auto_ptr<Office> upcast();
     std::auto_ptr<Office> upcastCopy();
 };
-LiteSQL_oStream & operator<<(LiteSQL_oStream& os, Office o);
+LITESQL_oStream & operator<<(LITESQL_oStream& os, Office o);
 class ExampleDatabase : public litesql::Database {
 public:
-    ExampleDatabase(LiteSQL_String backendType, LiteSQL_String connInfo);
+    ExampleDatabase(LITESQL_String backendType, LITESQL_String connInfo);
 protected:
     virtual std::vector<litesql::Database::SchemaItem> getSchema() const;
     static void initialize();

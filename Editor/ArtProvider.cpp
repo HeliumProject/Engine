@@ -90,13 +90,16 @@ void IconArtFile::CalculatePlacement( wxImage &target_image, const wxImage &sour
     switch ( quadrant )
     {
     default:
-    case OverlayQuadrants::BottomRight:
-        x = target_image.GetWidth() - source_image.GetWidth();
-        y = target_image.GetHeight() - source_image.GetHeight();
+        HELIUM_BREAK();
         break;
 
     case OverlayQuadrants::TopLeft:
         x = 0;
+        y = 0;
+        break;
+
+    case OverlayQuadrants::TopCenter:
+        x = ( target_image.GetWidth() / 2 ) - ( source_image.GetWidth() / 2 );
         y = 0;
         break;
 
@@ -105,14 +108,34 @@ void IconArtFile::CalculatePlacement( wxImage &target_image, const wxImage &sour
         y = 0;
         break;
 
+    case OverlayQuadrants::CenterLeft:
+        x = 0;
+        y = ( target_image.GetHeight() / 2 ) - ( source_image.GetHeight() / 2 );
+        break;
+
+    case OverlayQuadrants::Centered:
+        x = ( target_image.GetWidth() / 2 ) - ( source_image.GetWidth() / 2 );
+        y = ( target_image.GetHeight() / 2 ) - ( source_image.GetHeight() / 2 );
+        break;
+
+    case OverlayQuadrants::CenterRight:
+        x = target_image.GetWidth() - source_image.GetWidth();
+        y = ( target_image.GetHeight() / 2 ) - ( source_image.GetHeight() / 2 );
+        break;
+
     case OverlayQuadrants::BottomLeft:
         x = 0;
         y = target_image.GetHeight() - source_image.GetHeight();
         break;
 
-    case OverlayQuadrants::Center:
+    case OverlayQuadrants::BottomCenter:
         x = ( target_image.GetWidth() / 2 ) - ( source_image.GetWidth() / 2 );
-        y = ( target_image.GetHeight() / 2 ) - ( source_image.GetHeight() / 2 );
+        y = target_image.GetHeight() - source_image.GetHeight();
+        break;
+
+    case OverlayQuadrants::BottomRight:
+        x = target_image.GetWidth() - source_image.GetWidth();
+        y = target_image.GetHeight() - source_image.GetHeight();
         break;
     }
 }
@@ -450,7 +473,7 @@ void ArtProvider::Create()
     // MimeTypes
     //
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::Binary, IconArtFile( TXT( "mimetypes/binary.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::ReflectBinary, IconArtFile( TXT( "filesystem/file.png" ) ).AddOverlay( TXT( "editor/editor.png" ), OverlayQuadrants::Center ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::ReflectBinary, IconArtFile( TXT( "filesystem/file.png" ) ).AddOverlay( TXT( "editor/editor.png" ), OverlayQuadrants::Centered ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::Text, IconArtFile( TXT( "mimetypes/txt.png" ) ) ) );
 
 

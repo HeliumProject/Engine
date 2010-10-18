@@ -17,6 +17,7 @@ namespace Helium
             {
                 Name = 0,
                 Details,
+                FileSize,
 
                 COUNT //Do not use: must be last
             };
@@ -25,6 +26,7 @@ namespace Helium
             {
                 TXT( "Name" ),
                 TXT( "Details" ),
+                TXT( "Size" ),
 
                 TXT( "Unknown" ), //COUNT
             };
@@ -38,8 +40,9 @@ namespace Helium
 
             static const u32 s_Widths[COUNT+1] = 
             {
-                200,
-                300,
+                200, // Name
+                300, // Details
+                50,  // FileSize
 
                 0, //COUNT
             };
@@ -111,8 +114,9 @@ namespace Helium
             const Helium::Path& GetPath();
             void PathChanged( const Attribute< Helium::Path >::ChangeArgs& text );
 
-            const wxString& GetName() const;
-            const wxString& GetDetails() const;
+            tstring GetName() const;
+            tstring GetDetails() const;
+            tstring GetFileSize() const;
 
             inline bool operator<( const ProjectViewModelNode& rhs ) const
             {
@@ -124,15 +128,12 @@ namespace Helium
                 return ( _tcsicmp( m_Path.c_str(), rhs.m_Path.c_str() ) == 0 );
             }
 
-        private:
+        public:
             ProjectViewModelNode* m_ParentNode;
             S_ProjectViewModelNodeChildren m_ChildNodes;
             bool m_IsContainer;
 
             Helium::Path m_Path;
-
-            mutable wxString m_Name;
-            mutable wxString m_Details;
         };
 
 
@@ -156,6 +157,8 @@ namespace Helium
 
             void Delete( const wxDataViewItem& item );
 
+            bool IsDropPossible( const wxDataViewItem& item );
+
             // Project events
             void OnPathAdded( const Helium::Path& path );
             void OnPathRemoved( const Helium::Path& path );
@@ -173,7 +176,7 @@ namespace Helium
 
             virtual bool IsContainer( const wxDataViewItem& item ) const HELIUM_OVERRIDE;
 
-        protected:
+        public:
             ProjectPtr m_Project;
             ProjectViewModelNodePtr m_RootNode;
 

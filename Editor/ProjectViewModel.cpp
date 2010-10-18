@@ -3,6 +3,7 @@
 #include "ProjectViewModel.h"
 
 #include "Editor/FileIconsTable.h"
+#include "Foundation/String/Units.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -12,7 +13,6 @@ ProjectViewModelNode::ProjectViewModelNode( ProjectViewModelNode* parent, const 
 : m_ParentNode( parent )
 , m_Path( path )
 , m_IsContainer( isContainer )
-, m_Name( path.Basename() )
 {
 }
 
@@ -34,7 +34,7 @@ S_ProjectViewModelNodeChildren& ProjectViewModelNode::GetChildren()
 
 bool ProjectViewModelNode::IsContainer() const
 {
-    // TODO: OR the file is a scene file, reflect file with manifest
+#pragma TODO ( "OR the file is a scene file, reflect file with manifest" )
     return ( m_IsContainer || m_ChildNodes.size() > 0 || m_Path.IsDirectory() ) ? true : false;
 }
 
@@ -43,7 +43,6 @@ void ProjectViewModelNode::SetPath( const Helium::Path& path )
     if ( _tcsicmp( m_Path.c_str(), path.c_str() ) != 0 )
     {
         m_Path = path;
-        m_Name = path.Basename();
     }
 }
 
@@ -57,30 +56,37 @@ void ProjectViewModelNode::PathChanged( const Attribute< Helium::Path >::ChangeA
     SetPath( text.m_NewValue );
 }
 
-const wxString& ProjectViewModelNode::GetName() const
+tstring ProjectViewModelNode::GetName() const
 {
-    if ( m_Name.empty() )
+    if ( m_Path.IsDirectory() )
     {
-        if ( m_Path.IsDirectory() )
-        {
-            m_Name = m_Path.Get();
-        }
-        else
-        {
-            m_Name = m_Path.Basename();
-        }
+        return m_Path.Get();
     }
-    return m_Name;
+    else
+    {
+        return m_Path.Basename();
+    }
 }
 
-const wxString& ProjectViewModelNode::GetDetails() const
+tstring ProjectViewModelNode::GetDetails() const
 {
-    if ( m_Details.empty() )
-    {
-    }
-    return m_Details;
+    return tstring( TXT( "" ) );
 }
 
+tstring ProjectViewModelNode::GetFileSize() const
+{
+    if ( m_Path.IsDirectory() )
+    {
+        return tstring( TXT( "" ) );
+    }
+    else if ( m_Path.IsFile() )
+    {
+        u64 size = m_Path.Size();
+        return BytesToString( size );
+    }
+    
+    return tstring( TXT( "" ) );
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 ProjectViewModel::ProjectViewModel()
@@ -140,6 +146,24 @@ wxDataViewColumn* ProjectViewModel::CreateColumn( u32 id )
             return column;
         }
         break;
+
+    case ProjectModelColumns::FileSize:
+        {
+            wxDataViewTextRenderer *render = new wxDataViewTextRenderer( "string", wxDATAVIEW_CELL_INERT );
+
+            wxDataViewColumn *column = new wxDataViewColumn(
+                ProjectModelColumns::Label( ProjectModelColumns::FileSize ),
+                render,
+                m_ColumnLookupTable.size(),
+                ProjectModelColumns::Width( ProjectModelColumns::FileSize ),
+                wxALIGN_LEFT,
+                wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
+
+            m_ColumnLookupTable.push_back( id );
+
+            return column;
+        }
+        break;
     }
 
     return NULL;
@@ -181,8 +205,8 @@ void ProjectViewModel::SetProject( Project* project )
         m_RootNode = new ProjectViewModelNode( NULL, m_Project->a_Path.Get(), true );
         m_Project->a_Path.Changed().AddMethod( m_RootNode.Ptr(), &ProjectViewModelNode::PathChanged );
 
-        AddChild( wxDataViewItem( (void*) m_RootNode.Ptr() ), Helium::Path( TXT( "Test Child.txt" ) ) );
-        AddChild( wxDataViewItem( (void*) m_RootNode.Ptr() ), Helium::Path( TXT( "C:/Projects/github/nocturnal/Helium/Editor/Icons/" ) ) );
+        //AddChild( wxDataViewItem( (void*) m_RootNode.Ptr() ), Helium::Path( TXT( "Test Child.txt" ) ) );
+        //AddChild( wxDataViewItem( (void*) m_RootNode.Ptr() ), Helium::Path( TXT( "C:/Projects/github/nocturnal/Helium/Editor/Icons/" ) ) );
     }
 }
 
@@ -191,10 +215,11 @@ bool ProjectViewModel::AddChild( const wxDataViewItem& item, const Helium::Path&
     ProjectViewModelNode *parentNode = static_cast< ProjectViewModelNode* >( item.GetID() );
     if ( !parentNode )
     {
-        return false;
+        parentNode = m_RootNode.Ptr();
     }
 
     Helium::Insert<S_ProjectViewModelNodeChildren>::Result inserted = parentNode->GetChildren().insert( new ProjectViewModelNode( parentNode, path ) );
+#pragma TODO( "Add the file dependency to the parent node" )
 
     if ( inserted.second )
     {
@@ -209,13 +234,12 @@ bool ProjectViewModel::RemoveChild( const wxDataViewItem& item, const Helium::Pa
     ProjectViewModelNode *parentNode = static_cast< ProjectViewModelNode* >( item.GetID() );
     if ( !parentNode )
     {
-        return false;
+        parentNode = m_RootNode.Ptr();
     }
 
     S_ProjectViewModelNodeChildren::const_iterator foundChild = parentNode->GetChildren().end();
     for ( S_ProjectViewModelNodeChildren::const_iterator itr = parentNode->GetChildren().begin(),
         end = parentNode->GetChildren().end(); itr != end; ++itr )
-
     {
         if ( _tcsicmp( (*itr)->GetPath().Get().c_str(), path.Get().c_str() ) == 0 )
         {
@@ -248,11 +272,26 @@ void ProjectViewModel::Delete( const wxDataViewItem& item )
         return;
     }
 
+#pragma TODO( "Remove the file dependency from teh parent node" )
+    //m_Project->RemovePath( childNode->m_Path );
+
     // this should free the childNode if there are no more references to it
     parentNode->GetChildren().erase( childNode );
 
     wxDataViewItem parentItem( (void*) parentNode );
     ItemDeleted( parentItem, item );
+}
+
+bool ProjectViewModel::IsDropPossible( const wxDataViewItem& item )
+{
+    ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
+    if ( !node
+        || node == m_RootNode.Ptr() )
+    {
+        return true;
+    }
+
+    return false;
 }
 
 void ProjectViewModel::OnPathAdded( const Helium::Path& path )
@@ -321,48 +360,65 @@ void ProjectViewModel::GetValue( wxVariant& variant, const wxDataViewItem& item,
             variant = node->GetDetails();
         }
         break;
+
+    case ProjectModelColumns::FileSize:
+        {
+            variant = node->GetFileSize();
+        }
+        break;
     }
 }
 
 bool ProjectViewModel::SetValue( const wxVariant& variant, const wxDataViewItem& item, unsigned int column )
 {
-    if ( !item.IsOk()
-        || ( column < 0 )
-        || ( column >= m_ColumnLookupTable.size() ) )
-    {
-        return false;
-    }
+    // nothing should be setting column values yet!
+    HELIUM_BREAK();
+    return false;
 
-    ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
-    if ( !node )
-    {
-        return false;
-    }
 
-    switch( m_ColumnLookupTable.at( column ) )
-    {
-    default:
-        {
-            return false;
-        }
-        break;
+    //if ( !item.IsOk()
+    //    || ( column < 0 )
+    //    || ( column >= m_ColumnLookupTable.size() ) )
+    //{
+    //    return false;
+    //}
 
-    case ProjectModelColumns::Name:
-        {
-            //wxDataViewIconText iconText;
-            //iconText << variant;
-            //node->m_Name = iconText.GetText();
-        }
-        break;
+    //ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
+    //if ( !node )
+    //{
+    //    return false;
+    //}
 
-    case ProjectModelColumns::Details:
-        {
-            //node->m_Details = variant.GetString();
-        }
-        break;
-    }
+    //switch( m_ColumnLookupTable.at( column ) )
+    //{
+    //default:
+    //    {
+    //        return false;
+    //    }
+    //    break;
 
-    return true;
+    //case ProjectModelColumns::Name:
+    //    {
+    //        //wxDataViewIconText iconText;
+    //        //iconText << variant;
+    //        //node->m_Name = iconText.GetText();
+    //    }
+    //    break;
+
+    //case ProjectModelColumns::Details:
+    //    {
+    //        //node->m_Details = variant.GetString();
+    //    }
+    //    break;
+
+    //case ProjectModelColumns::Size:
+    //    {
+    //        //node->m_Details = variant.GetString();
+    //    }
+    //    break;
+    //}
+
+    //return true;
 }
 
 wxDataViewItem ProjectViewModel::GetParent( const wxDataViewItem& item ) const
@@ -374,7 +430,7 @@ wxDataViewItem ProjectViewModel::GetParent( const wxDataViewItem& item ) const
 
     ProjectViewModelNode *childNode = static_cast< ProjectViewModelNode* >( item.GetID() );
     if ( !childNode
-        || childNode == m_RootNode 
+        || childNode == m_RootNode.Ptr() 
         || !childNode->GetParent() )
     {
         return wxDataViewItem( 0 );
@@ -400,7 +456,6 @@ unsigned int ProjectViewModel::GetChildren( const wxDataViewItem& item, wxDataVi
     u32 numAdded = 0;
     for ( S_ProjectViewModelNodeChildren::const_iterator itr = parentNode->GetChildren().begin(),
         end = parentNode->GetChildren().end(); itr != end; ++itr, ++numAdded )
-
     {
         items.Add( wxDataViewItem( (void*) (*itr).Ptr() ) );
     }

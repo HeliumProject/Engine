@@ -5,27 +5,34 @@
 #include <string>
 #include <stdio.h>
 
+#define BYTE_TO_STR_BUF_SIZE 32
+
 namespace Helium
 {
     inline tstring BytesToString( u64 bytes )
     {
-        tchar buf[ 32 ];
-        if ( bytes >= 1024 * 1024 * 1024 )
+        tchar buf[ BYTE_TO_STR_BUF_SIZE ];
+
+        if ( bytes < 1024 )
         {
-            _snprintf( buf, 32, "%0.2f GB", bytes / (f32) ( 1024 * 1024 * 1024 ) );
-        }      
-        else if ( bytes >= 1024 * 1024 )
+            _sntprintf( buf, BYTE_TO_STR_BUF_SIZE, TXT( "%.0lf B" ), (f64) bytes );
+        } 
+        else if ( bytes < ( 1024 * 1024 ) )
         {
-            _snprintf( buf, 32, "%0.2f MB", bytes / (f32) ( 1024 * 1024 ) );
-        }      
-        else if ( bytes >= 1024 )
+            _sntprintf( buf, BYTE_TO_STR_BUF_SIZE, TXT( "%.1lf KB" ), bytes / (f64) ( 1024.0f ) );
+        }    
+        else if ( bytes < ( 1024 * 1024 * 1024 ) )
         {
-            _snprintf( buf, 32, "%0.2f KB", bytes / (f32) ( 1024 ) );
-        }      
+            _sntprintf( buf, BYTE_TO_STR_BUF_SIZE, TXT( "%.1lf MB" ), bytes / (f64) ( 1024.0f * 1024.0f ) );
+        }
+        else if ( bytes < ( (u64) 1024 * 1024 * 1024 * 1024 ) )
+        {
+            _sntprintf( buf, BYTE_TO_STR_BUF_SIZE, TXT( "%.1lf GB" ), bytes / (f64) ( 1024.0f * 1024.0f * 1024.0f ) );
+        }
         else
         {
-            _snprintf( buf, 32, "%0.2f B", bytes );
-        }
+            _sntprintf( buf, BYTE_TO_STR_BUF_SIZE, TXT( "%.1lf TB" ), bytes / (f64) ( 1024.0f * 1024.0f * 1024.0f * 1024.0f ) );
+        } 
 
         return buf;
     }

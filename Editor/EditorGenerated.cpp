@@ -605,19 +605,31 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer36;
 	bSizer36 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_AddFile = new wxBitmapButton( m_ProjectManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer36->Add( m_AddFile, 0, wxALL, 2 );
+	m_AddFileButton = new wxBitmapButton( m_ProjectManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_AddFileButton->Enable( false );
+	m_AddFileButton->SetToolTip( _("Add File to Project") );
 	
-	m_DeleteFile = new wxBitmapButton( m_ProjectManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer36->Add( m_DeleteFile, 0, wxALL, 2 );
+	m_AddFileButton->Enable( false );
+	m_AddFileButton->SetToolTip( _("Add File to Project") );
+	
+	bSizer36->Add( m_AddFileButton, 0, wxALL, 2 );
+	
+	m_DeleteFileButton = new wxBitmapButton( m_ProjectManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_DeleteFileButton->Enable( false );
+	m_DeleteFileButton->SetToolTip( _("Delete Selected Items") );
+	
+	m_DeleteFileButton->Enable( false );
+	m_DeleteFileButton->SetToolTip( _("Delete Selected Items") );
+	
+	bSizer36->Add( m_DeleteFileButton, 0, wxALL, 2 );
 	
 	
 	bSizer36->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_OptionsButton = new Helium::Editor::MenuButton( m_ProjectManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_OptionsButton->SetToolTip( _("Vault Settings...") );
+	m_OptionsButton->SetToolTip( _("Project View Settings...") );
 	
-	m_OptionsButton->SetToolTip( _("Vault Settings...") );
+	m_OptionsButton->SetToolTip( _("Project View Settings...") );
 	
 	bSizer36->Add( m_OptionsButton, 0, wxALL, 2 );
 	
@@ -633,15 +645,15 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	this->Layout();
 	
 	// Connect Events
-	m_AddFile->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnAddFile ), NULL, this );
-	m_DeleteFile->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnDeleteFile ), NULL, this );
+	m_AddFileButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnAddFile ), NULL, this );
+	m_DeleteFileButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnDeleteFile ), NULL, this );
 }
 
 ProjectPanelGenerated::~ProjectPanelGenerated()
 {
 	// Disconnect Events
-	m_AddFile->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnAddFile ), NULL, this );
-	m_DeleteFile->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnDeleteFile ), NULL, this );
+	m_AddFileButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnAddFile ), NULL, this );
+	m_DeleteFileButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnDeleteFile ), NULL, this );
 	
 }
 
@@ -697,15 +709,31 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	bSizer27 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_SelectButton = new wxBitmapToggleButton( m_MainPanel, ID_Select, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_SelectButton->SetToolTip( _("Select") );
+	
+	m_SelectButton->SetToolTip( _("Select") );
+	
 	bSizer27->Add( m_SelectButton, 0, wxALL, 2 );
 	
 	m_TranslateButton = new wxBitmapToggleButton( m_MainPanel, ID_Translate, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_TranslateButton->SetToolTip( _("Translate") );
+	
+	m_TranslateButton->SetToolTip( _("Translate") );
+	
 	bSizer27->Add( m_TranslateButton, 0, wxALL, 2 );
 	
 	m_RotateButton = new wxBitmapToggleButton( m_MainPanel, ID_Rotate, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_RotateButton->SetToolTip( _("Rotate") );
+	
+	m_RotateButton->SetToolTip( _("Rotate") );
+	
 	bSizer27->Add( m_RotateButton, 0, wxALL, 2 );
 	
 	m_ScaleButton = new wxBitmapToggleButton( m_MainPanel, ID_Scale, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_ScaleButton->SetToolTip( _("Scale") );
+	
+	m_ScaleButton->SetToolTip( _("Scale") );
+	
 	bSizer27->Add( m_ScaleButton, 0, wxALL, 2 );
 	
 	wxStaticLine* m_staticline16;
@@ -713,21 +741,45 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	bSizer27->Add( m_staticline16, 0, wxEXPAND | wxALL, 2 );
 	
 	m_DuplicateToolButton = new wxBitmapToggleButton( m_MainPanel, ID_Duplicate, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_DuplicateToolButton->SetToolTip( _("Duplicate") );
+	
+	m_DuplicateToolButton->SetToolTip( _("Duplicate") );
+	
 	bSizer27->Add( m_DuplicateToolButton, 0, wxALL, 2 );
 	
 	m_LocatorToolButton = new wxBitmapToggleButton( m_MainPanel, ID_Locator, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_LocatorToolButton->SetToolTip( _("Locator") );
+	
+	m_LocatorToolButton->SetToolTip( _("Locator") );
+	
 	bSizer27->Add( m_LocatorToolButton, 0, wxALL, 2 );
 	
 	m_VolumeToolButton = new wxBitmapToggleButton( m_MainPanel, ID_Volume, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_VolumeToolButton->SetToolTip( _("Volume") );
+	
+	m_VolumeToolButton->SetToolTip( _("Volume") );
+	
 	bSizer27->Add( m_VolumeToolButton, 0, wxALL, 2 );
 	
 	m_EntityToolButton = new wxBitmapToggleButton( m_MainPanel, ID_Entity, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_EntityToolButton->SetToolTip( _("Entity") );
+	
+	m_EntityToolButton->SetToolTip( _("Entity") );
+	
 	bSizer27->Add( m_EntityToolButton, 0, wxALL, 2 );
 	
 	m_CurveToolLocator = new wxBitmapToggleButton( m_MainPanel, ID_Curve, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_CurveToolLocator->SetToolTip( _("Curve") );
+	
+	m_CurveToolLocator->SetToolTip( _("Curve") );
+	
 	bSizer27->Add( m_CurveToolLocator, 0, wxALL, 2 );
 	
 	m_CurveEditToolButton = new wxBitmapToggleButton( m_MainPanel, ID_CurveEdit, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_CurveEditToolButton->SetToolTip( _("Edit Curve") );
+	
+	m_CurveEditToolButton->SetToolTip( _("Edit Curve") );
+	
 	bSizer27->Add( m_CurveEditToolButton, 0, wxALL, 2 );
 	
 	wxStaticLine* m_staticline15;
@@ -741,22 +793,28 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	
 	m_PlayButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_PlayButton->Enable( false );
+	m_PlayButton->SetToolTip( _("Play") );
 	
 	m_PlayButton->Enable( false );
+	m_PlayButton->SetToolTip( _("Play") );
 	
 	bSizer27->Add( m_PlayButton, 0, wxALL, 2 );
 	
 	m_PauseButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_PauseButton->Enable( false );
+	m_PauseButton->SetToolTip( _("Pause") );
 	
 	m_PauseButton->Enable( false );
+	m_PauseButton->SetToolTip( _("Pause") );
 	
 	bSizer27->Add( m_PauseButton, 0, wxALL, 2 );
 	
 	m_StopButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_StopButton->Enable( false );
+	m_StopButton->SetToolTip( _("Stop") );
 	
 	m_StopButton->Enable( false );
+	m_StopButton->SetToolTip( _("Stop") );
 	
 	bSizer27->Add( m_StopButton, 0, wxALL, 2 );
 	
@@ -773,6 +831,7 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	m_VaultSearchBox->ShowSearchButton( true );
 	#endif
 	m_VaultSearchBox->ShowCancelButton( false );
+	m_VaultSearchBox->SetToolTip( _("Vault Search Box") );
 	m_VaultSearchBox->SetMinSize( wxSize( 300,-1 ) );
 	
 	bSizer27->Add( m_VaultSearchBox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 2 );

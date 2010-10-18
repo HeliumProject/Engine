@@ -90,43 +90,29 @@ function Sleep( seconds )
 end
 
 function Publish( files )
+	for i,v in pairs(files) do
+		-- mkpath the target folder
+		os.mkdir( v.built )
+		
+		local path = v.dir .. "/" .. v.file			
+		local exists = os.isfile( path )
+		local destination = v.built .. "/" .. v.file
 
-	local quit = false
-	while quit == false do
-		local found = 0
-		for i,v in pairs(files) do
-			if v then
-				-- we still have files to process
-				found = found + 1
-
-				-- mkpath the target folder
-				os.mkdir( v.built )
-				
-				local path = v.dir .. "/" .. v.file			
-				local exists = os.isfile( path )
-				
-				if exists then
-					local destination = v.built .. "/" .. v.file
-
-					-- cull existing files
-					if os.isfile( destination ) then
-						os.execute( "del /q \"" .. string.gsub( destination, "/", "\\" ) .. "\"" )
-					end
-
-					-- do the file copy
-					local result = os.execute( "mklink /h \"" .. destination .. "\" \"" .. path .. "\"" )
-
-					-- the files were copied, complete this entry
-					if result == 0 then
-						files[ i ] = nil
-					end						
-				end
-			end
+		-- cull existing files
+		if os.isfile( destination ) then
+			os.execute( "del /q \"" .. string.gsub( destination, "/", "\\" ) .. "\"" )
 		end
-		quit = found == 0
-		Sleep(1)
+
+		-- do the file copy
+		local result = os.execute( "mklink /h \"" .. destination .. "\" \"" .. path .. "\"" )
+
+		-- the files were copied, complete this entry
+		if result == 0 then
+			files[ i ] = nil
+		else
+			os.exit( 1 )
+		end						
 	end
-	
 end
 
 function BuildWxWidgets()
@@ -136,8 +122,7 @@ function BuildWxWidgets()
 	local files = {}
 	
 	if os.get() == "windows" then
-		local make
-		local base = "nmake.exe -f makefile.vc SHARED=1 MONOLITHIC=1 DEBUG_INFO=1"
+		local make = "nmake.exe -f makefile.vc SHARED=1 MONOLITHIC=1 DEBUG_INFO=1"
 
 		if not os.getenv("VCINSTALLDIR") then
 			print("VCINSTALLDIR is not detected in your environment")
@@ -145,14 +130,24 @@ function BuildWxWidgets()
 		end
 				
 		os.chdir( "Dependencies/wxWidgets/build/msw" );
-		os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=debug UNICODE=0\"" )
-		os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=release UNICODE=0\"" )
-		os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=0\"" )
-		os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=release UNICODE=0\"" )
-		os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=debug UNICODE=1\"" )
-		os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. base .. " BUILD=release UNICODE=1\"" )
-		os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=1\"" )
-		os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. base .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"" )
+
+		local result
+		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=0\"" )
+		if result ~= 0 then os.exit( 1 ) end
+		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release UNICODE=0\"" )
+		if result ~= 0 then os.exit( 1 ) end
+		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=0\"" )
+		if result ~= 0 then os.exit( 1 ) end
+		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release UNICODE=0\"" )
+		if result ~= 0 then os.exit( 1 ) end
+		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=1\"" )
+		if result ~= 0 then os.exit( 1 ) end
+		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release UNICODE=1\"" )
+		if result ~= 0 then os.exit( 1 ) end
+		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=1\"" )
+		if result ~= 0 then os.exit( 1 ) end
+		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"" )
+		if result ~= 0 then os.exit( 1 ) end
 
 		os.chdir( cwd )
 		files[1]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291d_vc_custom.dll",		built="Bin/x32/Debug" }
@@ -161,20 +156,59 @@ function BuildWxWidgets()
 		files[4]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291_vc_custom.pdb",		built="Bin/x32/Release" }
 		files[5]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291ud_vc_custom.dll",	built="Bin/x32/DebugUnicode" }
 		files[6]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291ud_vc_custom.pdb",	built="Bin/x32/DebugUnicode" }
-		files[7] = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291u_vc_custom.dll",		built="Bin/x32/ReleaseUnicode" }
-		files[8] = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291u_vc_custom.pdb",		built="Bin/x32/ReleaseUnicode" }
+		files[7]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291u_vc_custom.dll",		built="Bin/x32/ReleaseUnicode" }
+		files[8]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291u_vc_custom.pdb",		built="Bin/x32/ReleaseUnicode" }
 		files[9]  = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291d_vc_custom.dll",		built="Bin/x64/Debug" }
-		files[10]  = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291d_vc_custom.pdb",		built="Bin/x64/Debug" }
-		files[11]  = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291_vc_custom.dll",		built="Bin/x64/Release" }
-		files[12]  = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291_vc_custom.pdb",		built="Bin/x64/Release" }
+		files[10] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291d_vc_custom.pdb",		built="Bin/x64/Debug" }
+		files[11] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291_vc_custom.dll",		built="Bin/x64/Release" }
+		files[12] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291_vc_custom.pdb",		built="Bin/x64/Release" }
 		files[13] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291ud_vc_custom.dll",	built="Bin/x64/DebugUnicode" }
 		files[14] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291ud_vc_custom.pdb",	built="Bin/x64/DebugUnicode" }
 		files[15] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291u_vc_custom.dll",		built="Bin/x64/ReleaseUnicode" }
 		files[16] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291u_vc_custom.pdb",		built="Bin/x64/ReleaseUnicode" }
 		Publish( files )
-
 	else
 		print("Implement support for " .. os.get() .. " to BuildWxWidgets()")
+		os.exit(1)
+	end
+
+end
+
+function CleanWxWidgets()
+
+	local cwd = os.getcwd()
+
+	local files = {}
+	
+	if os.get() == "windows" then
+		local make = "nmake.exe -f makefile.vc clean SHARED=1 MONOLITHIC=1 DEBUG_INFO=1"
+
+		if not os.getenv("VCINSTALLDIR") then
+			print("VCINSTALLDIR is not detected in your environment")
+			os.exit(1)
+		end
+				
+		os.chdir( "Dependencies/wxWidgets/build/msw" );
+
+		local result
+		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=0\"" )
+		if result ~= 0 then os.exit( 1 ) end
+		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release UNICODE=0\"" )
+		if result ~= 0 then os.exit( 1 ) end
+		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=0\"" )
+		if result ~= 0 then os.exit( 1 ) end
+		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release UNICODE=0\"" )
+		if result ~= 0 then os.exit( 1 ) end
+		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=1\"" )
+		if result ~= 0 then os.exit( 1 ) end
+		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release UNICODE=1\"" )
+		if result ~= 0 then os.exit( 1 ) end
+		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=1\"" )
+		if result ~= 0 then os.exit( 1 ) end
+		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"" )
+		if result ~= 0 then os.exit( 1 ) end
+	else
+		print("Implement support for " .. os.get() .. " to CleanWxWidgets()")
 		os.exit(1)
 	end
 
@@ -184,6 +218,8 @@ solution "Dependencies"
 
 	if _ACTION ~= "clean" then
 		BuildWxWidgets()
+	else
+		CleanWxWidgets()
 	end
 
 	DoDefaultSolutionSetup()

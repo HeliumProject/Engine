@@ -5,6 +5,7 @@ use File::Basename;
 use Getopt::Long;
 
 # flags
+my $autobuild = 0;
 my $help      = 0;
 my $clean     = 0;
 my $git_clean = 0;
@@ -14,7 +15,8 @@ my $config    = '';
 # result
 my $result = 0;
 
-if ( !GetOptions( "clean"      => \$clean,
+if ( !GetOptions( "autobuild"  => \$autobuild,
+                  "clean"      => \$clean,
                   "git_clean"  => \$git_clean,
                   "verbose"    => \$verbose,
                   "c|config=s" => \$config,
@@ -31,27 +33,30 @@ if ( !GetOptions( "clean"      => \$clean,
 }
 
 my $git_command;
-if ( $git_clean )
+if( !$autobuild ) # dont mess with source control status if its an autobuild
 {
-  $git_command = 'git clean -fdx';
-  $result = _Do( $git_command, "Git Clean" );
-}
-$git_command = 'git pull';
-$result += _Do( $git_command, "Git Pull" );
-
-if ( $result )
-{
-  my $prompt = _PromptYesNo("\nError during Git commands, continue (y/n)? ");
-  if ( !$prompt )
+  if( $git_clean )
   {
-    print("\nError during Git commands - Aborting script.\n");
-    exit( 1 );
+    $git_command = 'git clean -fdx';
+    $result = _Do( $git_command, "Git Clean" );
+  }
+  $git_command = 'git pull';
+  $result += _Do( $git_command, "Git Pull" );
+
+  if ( $result )
+  {
+    my $prompt = _PromptYesNo("\nError during Git commands, continue (y/n)? ");
+    if ( !$prompt )
+    {
+      print("\nError during Git commands - Aborting script.\n");
+      exit( 1 );
+    }
   }
 }
 
-
-my $dep_command    = 'perl.exe ' . File::Spec->catfile( dirname( $0 ), "build.pl Dependencies.sln" );
-my $helium_command = 'perl.exe ' . File::Spec->catfile( dirname( $0 ), "build.pl Helium.sln" );
+my $premake_command = 'premake4 vs2008';
+my $dep_command     = 'perl.exe ' . File::Spec->catfile( dirname( $0 ), "build.pl Premake//Dependencies.sln" );
+my $helium_command  = 'perl.exe ' . File::Spec->catfile( dirname( $0 ), "build.pl Premake//Helium.sln" );
 
 if($config)
 {
@@ -69,6 +74,7 @@ if($verbose)
   $helium_command .= ' -verbose';
 }
 
+$result += _Do( $premake_command, "Running Premake" );
 $result += _Do( $dep_command, "Build Dependencies" );
 $result += _Do( $helium_command, "Build Helium" );
 

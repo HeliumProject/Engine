@@ -39,19 +39,13 @@ const tchar* Helium::TraceFile::GetFilePath()
     tchar buf[MAX_PATH];
     GetModuleFileName(NULL, buf, MAX_PATH);
 
-    tchar modulename[MAX_PATH];
-    _tsplitpath(buf, NULL, NULL, modulename, NULL);
+    tchar drive[ MAX_PATH ];
+    tchar dir[ MAX_PATH ];
+    tchar modulename[ MAX_PATH ];
+    _tsplitpath( buf, drive, dir, modulename, NULL );
 
-    static tchar file[MAX_PATH];
-    const tchar* root = _tgetenv( TXT("HELIUM_Root") );
-    if ( root )
-    {
-        _stprintf(file, TXT("%s\\log\\profile_%s_%.5X_%.5X.bin"), root, modulename, GetCurrentProcessId(), GetCurrentThreadId() );
-    }
-    else
-    {
-        _stprintf( TXT("%s is not defined in the environment, cannot open profile output\n"), TXT("HELIUM_Root") );
-    }
+    static tchar file[ MAX_PATH ];
+    _sntprintf_s( file, sizeof( file ), MAX_PATH, TXT("%s\\%s\\log\\profile_%s_%.5X_%.5X.bin"), drive, dir, modulename, GetCurrentProcessId(), GetCurrentThreadId() );
 
     return file;
 }

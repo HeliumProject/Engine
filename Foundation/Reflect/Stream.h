@@ -73,13 +73,15 @@ namespace Helium
         public: 
             Stream()
                 : m_Stream( NULL )
+                , m_ByteOrder( ByteOrders::LittleEndian )
                 , m_OwnStream( false )
             {
 
             }
 
-            Stream( std::basic_iostream< StreamCharT, std::char_traits< StreamCharT > >* stream, bool ownStream = false )
+            Stream( std::basic_iostream< StreamCharT, std::char_traits< StreamCharT > >* stream, ByteOrder byteOrder = ByteOrders::LittleEndian, bool ownStream = false )
                 : m_Stream( stream )
+                , m_ByteOrder( byteOrder )
                 , m_OwnStream( ownStream )
             {
 
@@ -178,7 +180,22 @@ namespace Helium
             {
                 PROFILE_SCOPE_ACCUM(g_StreamWrite); 
 
-                m_Stream->write((const StreamCharT*)t, streamElementCount); 
+#pragma TODO( "This behavior should be different depending on the platform we're running on" )
+                switch ( m_ByteOrder )
+                {
+                case ByteOrders::LittleEndian:
+                    m_Stream->write( (const StreamCharT*)t, streamElementCount );
+                    break;
+                case ByteOrders::BigEndian:
+                    for( size_t i = 0; i < (size_t)streamElementCount; ++i )
+                    {
+                        m_Stream->write( ConvertEndian( *(t + ( i * sizeof( StreamCharT ) )), true ), 1 )
+                    }
+                default:
+                    // someone set the byte order to the incorrect value
+                    HELIUM_BREAK();
+                    break;
+                }
 
                 if (m_Stream->fail())
                 {
@@ -219,7 +236,8 @@ namespace Helium
 
         protected: 
             std::basic_iostream< StreamCharT, std::char_traits< StreamCharT > >*    m_Stream; 
-            bool                                                                    m_OwnStream; 
+            ByteOrder                                                               m_ByteOrder;
+            bool                                                                    m_OwnStream;
         };
 
         template <class T, class StreamCharT>

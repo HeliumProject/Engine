@@ -1,11 +1,9 @@
 require "Base"
 
-Helium.BuildWxWidgets = function()
+Helium.BuildWxWidgets = function( root )
 
 	local cwd = os.getcwd()
 
-	local files = {}
-	
 	if os.get() == "windows" then
 		local make = "nmake.exe -f makefile.vc SHARED=1 MONOLITHIC=1 DEBUG_INFO=1"
 
@@ -14,7 +12,7 @@ Helium.BuildWxWidgets = function()
 			os.exit(1)
 		end
 				
-		os.chdir( "Dependencies/wxWidgets/build/msw" );
+		os.chdir( root .. "/Dependencies/wxWidgets/build/msw" );
 
 		local result
 		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=0\"" )
@@ -35,23 +33,26 @@ Helium.BuildWxWidgets = function()
 		if result ~= 0 then os.exit( 1 ) end
 
 		os.chdir( cwd )
-		files[1]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291d_vc_custom.dll",		built="Bin/x32/Debug" }
-		files[2]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291d_vc_custom.pdb",		built="Bin/x32/Debug" }
-		files[3]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291_vc_custom.dll",		built="Bin/x32/Release" }
-		files[4]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291_vc_custom.pdb",		built="Bin/x32/Release" }
-		files[5]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291ud_vc_custom.dll",	built="Bin/x32/DebugUnicode" }
-		files[6]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291ud_vc_custom.pdb",	built="Bin/x32/DebugUnicode" }
-		files[7]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291u_vc_custom.dll",		built="Bin/x32/ReleaseUnicode" }
-		files[8]  = { dir="Dependencies/wxWidgets/lib/vc_dll", 			file="wxmsw291u_vc_custom.pdb",		built="Bin/x32/ReleaseUnicode" }
-		files[9]  = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291d_vc_custom.dll",		built="Bin/x64/Debug" }
-		files[10] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291d_vc_custom.pdb",		built="Bin/x64/Debug" }
-		files[11] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291_vc_custom.dll",		built="Bin/x64/Release" }
-		files[12] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291_vc_custom.pdb",		built="Bin/x64/Release" }
-		files[13] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291ud_vc_custom.dll",	built="Bin/x64/DebugUnicode" }
-		files[14] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291ud_vc_custom.pdb",	built="Bin/x64/DebugUnicode" }
-		files[15] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291u_vc_custom.dll",		built="Bin/x64/ReleaseUnicode" }
-		files[16] = { dir="Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291u_vc_custom.pdb",		built="Bin/x64/ReleaseUnicode" }
+
+		local files = {}
+		files[1]  = { dir=root .. "/Dependencies/wxWidgets/lib/vc_dll", 		file="wxmsw291d_vc_custom.dll",		built="Bin/x32/Debug" }
+		files[2]  = { dir=root .. "/Dependencies/wxWidgets/lib/vc_dll", 		file="wxmsw291d_vc_custom.pdb",		built="Bin/x32/Debug" }
+		files[3]  = { dir=root .. "/Dependencies/wxWidgets/lib/vc_dll", 		file="wxmsw291_vc_custom.dll",		built="Bin/x32/Release" }
+		files[4]  = { dir=root .. "/Dependencies/wxWidgets/lib/vc_dll", 		file="wxmsw291_vc_custom.pdb",		built="Bin/x32/Release" }
+		files[5]  = { dir=root .. "/Dependencies/wxWidgets/lib/vc_dll", 		file="wxmsw291ud_vc_custom.dll",	built="Bin/x32/DebugUnicode" }
+		files[6]  = { dir=root .. "/Dependencies/wxWidgets/lib/vc_dll", 		file="wxmsw291ud_vc_custom.pdb",	built="Bin/x32/DebugUnicode" }
+		files[7]  = { dir=root .. "/Dependencies/wxWidgets/lib/vc_dll", 		file="wxmsw291u_vc_custom.dll",		built="Bin/x32/ReleaseUnicode" }
+		files[8]  = { dir=root .. "/Dependencies/wxWidgets/lib/vc_dll", 		file="wxmsw291u_vc_custom.pdb",		built="Bin/x32/ReleaseUnicode" }
+		files[9]  = { dir=root .. "/Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291d_vc_custom.dll",		built="Bin/x64/Debug" }
+		files[10] = { dir=root .. "/Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291d_vc_custom.pdb",		built="Bin/x64/Debug" }
+		files[11] = { dir=root .. "/Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291_vc_custom.dll",		built="Bin/x64/Release" }
+		files[12] = { dir=root .. "/Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291_vc_custom.pdb",		built="Bin/x64/Release" }
+		files[13] = { dir=root .. "/Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291ud_vc_custom.dll",	built="Bin/x64/DebugUnicode" }
+		files[14] = { dir=root .. "/Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291ud_vc_custom.pdb",	built="Bin/x64/DebugUnicode" }
+		files[15] = { dir=root .. "/Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291u_vc_custom.dll",		built="Bin/x64/ReleaseUnicode" }
+		files[16] = { dir=root .. "/Dependencies/wxWidgets/lib/vc_amd64_dll", 	file="wxmsw291u_vc_custom.pdb",		built="Bin/x64/ReleaseUnicode" }
 		Helium.Publish( files )
+
 	else
 		print("Implement support for " .. os.get() .. " to BuildWxWidgets()")
 		os.exit(1)
@@ -59,7 +60,7 @@ Helium.BuildWxWidgets = function()
 
 end
 
-Helium.CleanWxWidgets = function ()
+Helium.CleanWxWidgets = function( root )
 
 	local cwd = os.getcwd()
 
@@ -73,7 +74,7 @@ Helium.CleanWxWidgets = function ()
 			os.exit(1)
 		end
 				
-		os.chdir( "Dependencies/wxWidgets/build/msw" );
+		os.chdir( root .. "/Dependencies/wxWidgets/build/msw" );
 
 		local result
 		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=0\"" )
@@ -97,12 +98,6 @@ Helium.CleanWxWidgets = function ()
 		os.exit(1)
 	end
 
-end
-
-if _ACTION ~= "clean" then
-	Helium.BuildWxWidgets()
-else
-	Helium.CleanWxWidgets()
 end
 
 project "Expat"

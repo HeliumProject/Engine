@@ -16,14 +16,16 @@ Helium.Publish = function( files )
 		local path = v.dir .. "/" .. v.file			
 		local exists = os.isfile( path )
 		local destination = v.built .. "/" .. v.file
-
+		
 		-- cull existing files
 		if os.isfile( destination ) then
-			os.execute( "del /q \"" .. string.gsub( destination, "/", "\\" ) .. "\"" )
+			local delCommand = "del /q \"" .. string.gsub( destination, "/", "\\" ) .. "\""
+			os.execute( delCommand )
 		end
 
 		-- do the file copy
-		local result = os.execute( "mklink /h \"" .. destination .. "\" \"" .. path .. "\"" )
+		local linkCommand = "mklink /h \"" .. destination .. "\" \"" .. path .. "\""
+		local result = os.execute( linkCommand )
 
 		-- the files were copied, complete this entry
 		if result == 0 then

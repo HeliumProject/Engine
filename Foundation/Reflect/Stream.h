@@ -6,6 +6,7 @@
 #include "Platform/Assert.h"
 
 #include "Foundation/File/Path.h"
+#include "Foundation/Memory/Endian.h"
 
 #ifdef UNICODE
 
@@ -180,22 +181,7 @@ namespace Helium
             {
                 PROFILE_SCOPE_ACCUM(g_StreamWrite); 
 
-#pragma TODO( "This behavior should be different depending on the platform we're running on" )
-                switch ( m_ByteOrder )
-                {
-                case ByteOrders::LittleEndian:
-                    m_Stream->write( (const StreamCharT*)t, streamElementCount );
-                    break;
-                case ByteOrders::BigEndian:
-                    for( size_t i = 0; i < (size_t)streamElementCount; ++i )
-                    {
-                        m_Stream->write( ConvertEndian( *(t + ( i * sizeof( StreamCharT ) )), true ), 1 )
-                    }
-                default:
-                    // someone set the byte order to the incorrect value
-                    HELIUM_BREAK();
-                    break;
-                }
+                m_Stream->write( (const StreamCharT*)t, streamElementCount );
 
                 if (m_Stream->fail())
                 {
@@ -210,7 +196,9 @@ namespace Helium
             {
                 // amount to write must align with stream element size
                 HELIUM_COMPILE_ASSERT( sizeof(PointerT) % sizeof(StreamCharT) == 0  );
-                return WriteBuffer( (const StreamCharT*)ptr, sizeof(PointerT) / sizeof(StreamCharT) ); 
+                PointerT temp = *ptr;
+                Swizzle( temp, m_ByteOrder != Helium::PlatformByteOrder );
+                return WriteBuffer( (const StreamCharT*)&temp, sizeof(PointerT) / sizeof(StreamCharT) ); 
             }
 
             Stream& Flush()

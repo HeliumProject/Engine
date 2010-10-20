@@ -406,8 +406,8 @@ namespace Helium
         // Get parser for a file
         FOUNDATION_API ArchivePtr GetArchive( const Path& path, ByteOrder byteOrder = ByteOrders::Unknown );
 
-        FOUNDATION_API bool ToArchive( const Path& path, ElementPtr element, tstring* error = NULL, ByteOrder byteOrder = Helium::DEFAULT_BYTE_ORDER );
-        FOUNDATION_API bool ToArchive( const Path& path, const V_Element& elements, tstring* error = NULL, ByteOrder byteOrder = Helium::DEFAULT_BYTE_ORDER );
+        FOUNDATION_API bool ToArchive( const Path& path, ElementPtr element, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
+        FOUNDATION_API bool ToArchive( const Path& path, const V_Element& elements, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
         template <class T>
         Helium::SmartPtr<T> FromArchive( const Path& path )

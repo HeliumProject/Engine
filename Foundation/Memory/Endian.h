@@ -2,9 +2,31 @@
 
 #include "Platform/Types.h"
 #include "Platform/Assert.h"
+#include "Platform/Compiler.h"
+
 
 namespace Helium
 {
+    namespace ByteOrders
+    {
+        enum ByteOrder
+        {
+            LittleEndian = 0,   // little endian
+            BigEndian,          // big endian
+            Unknown             // used to indicate that we do not yet know a byte order, not counted towards the 'Count'
+        };
+    }
+    typedef ByteOrders::ByteOrder ByteOrder;
+
+#ifdef LITTLE_ENDIAN
+    const ByteOrder PlatformByteOrder = ByteOrders::LittleEndian;
+#else
+#  ifdef BIG_ENDIAN
+    const ByteOrder PlatformByteOrder = ByteOrders::BigEndian;
+#  else
+#       error "Unknown byte order"
+#  endif
+#endif
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     union U64F64

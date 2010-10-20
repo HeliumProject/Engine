@@ -99,24 +99,3 @@ typedef std::basic_fstream<tchar, std::char_traits<tchar> > tfstream;
 typedef std::basic_istringstream<tchar, std::char_traits<tchar>, std::allocator<tchar> > tistringstream;
 typedef std::basic_ostringstream<tchar, std::char_traits<tchar>, std::allocator<tchar> > tostringstream;
 typedef std::basic_stringstream<tchar, std::char_traits<tchar>, std::allocator<tchar> > tstringstream;
-
-//
-// Byte Ordering
-//
-
-namespace Helium
-{
-    namespace ByteOrders
-    {
-        enum ByteOrder
-        {
-            LittleEndian = 0,   // little endian
-            BigEndian,          // big endian
-            Count,              // used for loops and allocations
-            Unknown             // used to indicate that we do not yet know a byte order, not counted towards the 'Count'
-        };
-    }
-    typedef ByteOrders::ByteOrder ByteOrder;
-
-    const ByteOrder DEFAULT_BYTE_ORDER = ByteOrders::LittleEndian;
-}

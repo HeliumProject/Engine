@@ -327,7 +327,7 @@ bool Reflect::ToArchive( const Path& path, const V_Element& elements, tstring* e
 {
     HELIUM_ASSERT( !path.empty() );
     HELIUM_ASSERT( elements.size() > 0 );
-    HELIUM_ASSERT( byteOrder < ByteOrders::Count ); // should be a known byteorder (not ByteOrders::Unknown, for example)
+    HELIUM_ASSERT( byteOrder == ByteOrders::BigEndian || byteOrder == ByteOrders::LittleEndian ); // should be a known byteorder
 
     REFLECT_SCOPE_TIMER( ( "%s", path.c_str() ) );
 

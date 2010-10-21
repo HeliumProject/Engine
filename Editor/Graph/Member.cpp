@@ -247,10 +247,10 @@ wxXmlNode *
 Member::Serialize() const
 {
 	wxXmlNode *root = NEW(wxXmlNode, (wxXML_ELEMENT_NODE, GetClassName()));
-	root->AddProperty(wxT("name"), m_name);
+	root->AddAttribute(wxT("name"), m_name);
 	if (m_id != m_name)
 	{
-		root->AddProperty(wxT("id"), m_id);
+		root->AddAttribute(wxT("id"), m_id);
 	}
 	wxString type;
 	switch (m_type)
@@ -274,7 +274,7 @@ Member::Serialize() const
 		type = wxT("rect");
 		break;
 	}
-	root->AddProperty(wxT("type"), type);
+	root->AddAttribute(wxT("type"), type);
 	wxXmlNode *value = new wxXmlNode(root, wxXML_ELEMENT_NODE, wxT("value"));
 	/*if (m_cdata)
 	{

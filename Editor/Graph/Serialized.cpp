@@ -36,7 +36,7 @@ void
 Serialized::CreateObjects(const wxXmlNode& root)
 {
 	wxString uid;
-	if (root.GetPropVal(wxT("uid"), &uid))
+	if (root.GetAttribute(wxT("uid"), &uid))
 	{
 		if (m_Objects.find(uid) == m_Objects.end())
 		{
@@ -63,7 +63,7 @@ Serialized::DeserializeObject(const wxXmlNode& root, Serialized *obj)
 {
 	m_Objects.clear();
 	wxString uid;
-	if (!root.GetPropVal(wxT("uid"), &uid))
+	if (!root.GetAttribute(wxT("uid"), &uid))
 	{
 		return (Serialized *)NULL;
 	}

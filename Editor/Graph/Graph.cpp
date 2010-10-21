@@ -785,7 +785,7 @@ Graph::SaveGroup()
 	else
 	{
 		wxXmlNode *root = group->Serialize();
-		root->AddProperty(wxT("type"), type);
+		root->AddAttribute(wxT("type"), type);
 		if (NodeLibrary::SaveGroup(root))
 		{
 			wxMessageBox(wxT("Node saved."), wxT("Info"), wxOK | wxICON_INFORMATION, Project::GetProject()->GetPanel());

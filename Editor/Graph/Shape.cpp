@@ -201,7 +201,7 @@ wxXmlNode *
 Shape::Serialize() const
 {
 	wxXmlNode *root = NEW(wxXmlNode, (wxXML_ELEMENT_NODE, GetClassName()));
-	root->AddProperty(wxT("uid"), wxString::Format(wxT("%p"), this));
+	root->AddAttribute( wxT("uid"), wxString::Format(wxT("%p"), this) );
 	root->AddChild(SerializeMembers());
 	root->AddChild(SerializeChildren());
 	root->AddChild(SerializeConnections());
@@ -278,13 +278,13 @@ Shape::SerializeConnections() const
 	for (List<Shape *>::Iterator i = m_sources.Iterate(); !i; i++)
 	{
 		wxXmlNode *source = NEW(wxXmlNode, (wxXML_ELEMENT_NODE, wxT("source")));
-		source->AddProperty(wxT("ref"), wxString::Format(wxT("%p"), *i));
+		source->AddAttribute(wxT("ref"), wxString::Format(wxT("%p"), *i));
 		conn->AddChild(source);
 	}
 	for (List<Shape *>::Iterator i = m_targets.Iterate(); !i; i++)
 	{
 		wxXmlNode *target = NEW(wxXmlNode, (wxXML_ELEMENT_NODE, wxT("target")));
-		target->AddProperty(wxT("ref"), wxString::Format(wxT("%p"), *i));
+		target->AddAttribute(wxT("ref"), wxString::Format(wxT("%p"), *i));
 		conn->AddChild(target);
 	}
 	return conn;
@@ -314,7 +314,7 @@ Shape::DeserializeMembers(const wxXmlNode& root)
 		if (name == wxT("member"))
 		{
 			wxString id;
-			if (!child->GetPropVal(wxT("id"), &id))
+			if (!child->GetAttribute(wxT("id"), &id))
 			{
 				id = Util::ToID(XML::GetStringAttribute(*child, wxT("name")));
 			}

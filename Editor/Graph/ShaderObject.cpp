@@ -106,8 +106,8 @@ ShaderObject::SerializeMethods() const
 		wxString name = key.Left(colon);
 		wxString target = key.Right(key.Len() - colon - 1);
 		wxXmlNode *child = i->second->Serialize();
-		child->AddProperty(wxT("name"), name);
-		child->AddProperty(wxT("target"), target);
+		child->AddAttribute(wxT("name"), name);
+		child->AddAttribute(wxT("target"), target);
 		root->AddChild(child);
 	}
 	return root;

@@ -47,17 +47,17 @@ namespace XML
 		}
 	}
 
-	wxXmlProperty *
+	wxXmlAttribute *
 	FindAttribute(const wxXmlNode& node, const wxString& name)
 	{
-		wxXmlProperty *prop = node.GetProperties();
-		while (prop != NULL)
+        wxXmlAttribute *attrs = node.GetAttributes();
+		while ( attrs != NULL )
 		{
-			if (prop->GetName() == name)
+			if ( attrs->GetName() == name )
 			{
-				return prop;
+				return attrs;
 			}
-			prop = prop->GetNext();
+			attrs = attrs->GetNext();
 		}
 		return NULL;
 	}
@@ -65,24 +65,24 @@ namespace XML
 	void
 	DeleteAttribute(wxXmlNode& node, const wxString& name)
 	{
-		wxXmlProperty *prop = node.GetProperties();
-		wxXmlProperty *prev = NULL;
-		while (prop != NULL)
+		wxXmlAttribute *attr = node.GetAttributes();
+		wxXmlAttribute *prev = NULL;
+		while ( attr != NULL )
 		{
-			if (prop->GetName() == name)
+			if ( attr->GetName() == name )
 			{
-				if (prev == NULL)
+				if ( prev == NULL )
 				{
-					node.SetProperties(prop->GetNext());
+					node.SetAttributes( attr->GetNext() );
 				}
 				else
 				{
-					prev->SetNext(prop->GetNext());
+					prev->SetNext( attr->GetNext() );
 				}
-				DESTROY(prop);
+				DESTROY( attr );
 				return;
 			}
-			prop = prop->GetNext();
+			attr = attr->GetNext();
 		}
 	}
 
@@ -90,9 +90,9 @@ namespace XML
 	GetStringAttribute(const wxXmlNode& node, const wxString& name, const wxString& def)
 	{
 		wxString value;
-		if (!node.GetPropVal(name, &value))
+		if ( !node.GetAttribute( name, &value ) )
 		{
-			if (def == wxEmptyString)
+			if ( def == wxEmptyString )
 			{
 				THROW(TXT("Couldn't find attribute \"%s\" in element <%s>."), name.c_str(), node.GetName().c_str());
 			}

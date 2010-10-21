@@ -36,13 +36,13 @@ Property::Serialize() const
 	if (m_validator != NULL)
 	{
 		wxXmlNode *n = m_validator->Serialize();
-		n->AddProperty(wxT("name"), wxT("validator"));
+		n->AddAttribute(wxT("name"), wxT("validator"));
 		root->AddChild(n);
 	}
 	if (m_onchanged != NULL)
 	{
 		wxXmlNode *n = m_onchanged->Serialize();
-		n->AddProperty(wxT("name"), wxT("on-changed"));
+		n->AddAttribute(wxT("name"), wxT("on-changed"));
 		root->AddChild(n);
 	}
 	return root;
@@ -108,7 +108,7 @@ ListProperty::Serialize() const
 		const wxString value = m_values.GetLabel(i);
 		wxXmlNode *option = NEW(wxXmlNode, (wxXML_ELEMENT_NODE, wxT("option")));
 		option->AddChild(NEW(wxXmlNode, (wxXML_TEXT_NODE, wxT(""), label)));
-		option->AddProperty(NEW(wxXmlProperty, (wxT("value"), value)));
+		option->AddAttribute(NEW(wxXmlProperty, (wxT("value"), value)));
 		/*if (i == (unsigned int)m_int)
 		{
 			child->AddProperty(NEW(wxXmlProperty, (wxT("selected"), wxT("true"))));

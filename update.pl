@@ -35,11 +35,12 @@ if ( !GetOptions( "autobuild"  => \$autobuild,
 my $git_command;
 if( !$autobuild ) # dont mess with source control status if its an autobuild
 {
-  if( $git_clean )
+  if ( $git_clean )
   {
     $git_command = 'git clean -fdx';
     $result = _Do( $git_command, "Git Clean" );
   }
+
   $git_command = 'git pull';
   $result += _Do( $git_command, "Git Pull" );
 

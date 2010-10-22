@@ -70,7 +70,7 @@ void ArchiveBinary::Open( bool write )
     Debug(TXT("Opening file '%s'\n"), path.c_str());
 #endif
 
-    Reflect::CharStreamPtr stream = new FileStream<char>( m_Path, write ); 
+    Reflect::CharStreamPtr stream = new FileStream<char>( m_Path, write, m_ByteOrder ); 
     OpenStream( stream, write );
 }
 

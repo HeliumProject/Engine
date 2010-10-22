@@ -201,6 +201,28 @@ namespace Helium
                 return WriteBuffer( (const StreamCharT*)&temp, sizeof(PointerT) / sizeof(StreamCharT) ); 
             }
 
+            template <typename PointerT>
+            inline Stream& ReadArray( PointerT* elements, size_t count )
+            {
+                for ( int i = 0; i < count; ++i )
+                {
+                    Read( elements[ i ] );
+                }
+
+                return *this;
+            }
+
+            template <typename PointerT>
+            inline Stream& WriteArray( const PointerT* elements, size_t count )
+            {
+                for ( int i = 0; i < count; ++i )
+                {
+                    Write( elements[ i ] );
+                }
+
+                return *this;
+            }
+
             Stream& Flush()
             {
                 m_Stream->flush(); 
@@ -395,11 +417,11 @@ namespace Helium
         class FileStream : public Stream< StreamCharT >
         {
         public: 
-            FileStream( const Path& path, bool write )
+            FileStream( const Path& path, bool write, const ByteOrder byteOrder = Helium::PlatformByteOrder )
                 : m_Path( path )
                 , m_OpenForWrite(write)
             {
-
+                m_ByteOrder = byteOrder;
             }
 
             ~FileStream()

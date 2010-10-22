@@ -315,7 +315,7 @@ void App::SaveSettings()
     tstring error;
     if ( Helium::IsDebuggerPresent() )
     {
-        Reflect::ToArchive( path, m_SettingsManager, NULL, ByteOrders::BigEndian );
+        Reflect::ToArchive( path, m_SettingsManager );
     }
     else
     {

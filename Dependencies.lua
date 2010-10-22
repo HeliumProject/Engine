@@ -165,6 +165,7 @@ project "Lua"
 	}
 	excludes
 	{
+		"Dependencies/lua/src/lua.c",
 		"Dependencies/lua/src/luac.c",
 	}
 	

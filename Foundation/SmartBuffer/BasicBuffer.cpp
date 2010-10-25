@@ -93,7 +93,7 @@ void BasicBuffer::DumpDebugInfo(FILE* file)
 {
     if ( file )
     {
-        fprintf(file, "ByteOrder   : %s\n", m_ByteOrder==ByteOrders::LittleEndian?"PC":"PS3");
+        fprintf(file, "ByteOrder   : %s\n", m_ByteOrder==ByteOrders::LittleEndian ? "LittleEndian" : "BigEndian" );
 
         for (BasicBufferDebugInfoVector::iterator i=m_DebugInfo.begin(); i!=m_DebugInfo.end(); i++)
         {

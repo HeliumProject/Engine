@@ -149,7 +149,7 @@ void ArchiveBinary::Read()
         throw Reflect::StreamException( TXT( "Input stream version is higher than what is supported (input: %d, current: %d)\n" ), m_Version, CURRENT_VERSION); 
     }
 
-    ByteOrder byteOrder = ByteOrders::LittleEndian;
+    ByteOrder byteOrder = Helium::PlatformByteOrder;
     CharacterEncoding encoding = CharacterEncodings::ASCII;
     if ( m_Version >= ArchiveBinary::FIRST_VERSION_WITH_UNICODE_SUPPORT )
     {
@@ -333,14 +333,7 @@ void ArchiveBinary::Write()
     PreSerialize();
 
     // save byte order
-    u8 byteOrder;
-#ifdef LITTLE_ENDIAN
-    byteOrder = (u8)ByteOrders::LittleEndian;
-#elif BIG_ENDIAN
-    byteOrder = (u8)ByteOrders::BigEndian;
-#else
-# error Unknown byte order!
-#endif
+    u8 byteOrder = (u8)m_Stream->GetByteOrder();
     m_Stream->Write(&byteOrder);
 
     // save character encoding value

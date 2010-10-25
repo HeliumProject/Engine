@@ -174,7 +174,8 @@ namespace Helium
             {
                 // amount to read must align with stream element size
                 HELIUM_COMPILE_ASSERT( sizeof(PointerT) % sizeof(StreamCharT) == 0  );
-                return ReadBuffer( (StreamCharT*)ptr, sizeof(PointerT) / sizeof(StreamCharT) ); 
+                return ReadBuffer( (StreamCharT*)ptr, sizeof(PointerT) / sizeof(StreamCharT) );
+                Swizzle( ptr, m_ByteOrder != Helium::PlatformByteOrder );
             }
 
             Stream& WriteBuffer(const void* t, std::streamsize streamElementCount)
@@ -244,6 +245,11 @@ namespace Helium
                 return *m_Stream;
             } 
 
+            const ByteOrder& GetByteOrder()
+            {
+                return m_ByteOrder;
+            }
+
         protected: 
             std::basic_iostream< StreamCharT, std::char_traits< StreamCharT > >*    m_Stream; 
             ByteOrder                                                               m_ByteOrder;
@@ -253,6 +259,7 @@ namespace Helium
         template <class T, class StreamCharT>
         Stream< StreamCharT >& operator>>(Stream< StreamCharT >& stream, T& val)
         {
+            HELIUM_ASSERT( stream.GetByteOrder() == Helium::PlatformByteOrder );
             stream.GetInternal() >> val;
 
             if(stream.Fail() && !stream.Done())
@@ -266,7 +273,8 @@ namespace Helium
         template <class T, class StreamCharT>
         Stream< StreamCharT >& operator<<(Stream< StreamCharT >& stream, const T& val)
         {
-            stream.GetInternal() << val; 
+            HELIUM_ASSERT( stream.GetByteOrder() == Helium::PlatformByteOrder );
+            stream.GetInternal() << val;
 
             if(stream.Fail())
             {

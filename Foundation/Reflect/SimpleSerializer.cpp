@@ -145,7 +145,7 @@ void StringSerializer::Serialize(Archive& archive) const
         {
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
-            xml.GetStream() << "<![CDATA[" << m_Data.Get() << "]]>";
+            xml.GetStream() << TXT( "<![CDATA[" ) << m_Data.Get() << TXT( "]]>" );
             break;
         }
 

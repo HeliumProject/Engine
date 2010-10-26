@@ -276,11 +276,6 @@ project "Editor"
 			"Dependencies/wxWidgets/include/msvc",
 			os.getenv( "DXSDK_DIR" ) .. "/include",
 		}
-		postbuildcommands
-		{
-			"robocopy /MIR /MT \"..\\Editor\\Icons\\Helium\" \"$(OutDir)\\Icons\"",
-			"exit /B 0",
-		}			
 		
 	-- per architecture
 	configuration { "windows", "x32" }

@@ -8,6 +8,7 @@
 *.LOCAL.*
 *.REMOTE.*
 Bin/*
+Intermediate/*
 Dependencies/LiteSQL/0.3.8/build/*
 Dependencies/wxWidgets/build/msw/vc_*
 Dependencies/wxWidgets/lib/vc_*

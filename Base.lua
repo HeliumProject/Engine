@@ -54,13 +54,14 @@ Helium.DoDefaultSolutionSettings = function()
 		"ReleaseUnicode",
 	}
 
---[[
-	Keep in mind that solution-wide settings should be defined
-	before ever mentioning configuration-specific settings because
-	the indentation in this file is for humans (not premake), and
-	premake might infer conditionals when walking the graph of 
-	solutions/configurations/projects -Geoff
---]]
+	for i, platform in ipairs( platforms() ) do
+		for j, config in ipairs( configurations() ) do
+			configuration( { config, platform } )
+				objdir( "Intermediate" ) -- premake seems to automatically add the platform and config name
+			configuration( { config, platform } )
+				targetdir( "Bin/" .. platform .. "/" .. config )
+		end
+	end
 
 	configuration "windows"
 		defines

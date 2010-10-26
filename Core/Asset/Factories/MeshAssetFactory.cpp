@@ -26,7 +26,7 @@ AssetClassPtr MeshAssetFactory::Create( const Helium::Path& path )
         MeshProcessingComponentPtr meshProcessingComponent = new MeshProcessingComponent();
         entity->SetComponent( meshProcessingComponent );
 
-        if ( !Reflect::ToArchive( assetPath, entity, NULL, ByteOrder::BigEndian ) )
+        if ( !Reflect::ToArchive( assetPath, entity ) )
         {
             delete entity;
             return NULL;
@@ -47,7 +47,7 @@ AssetClassPtr MeshAssetFactory::Create( const Helium::Path& path )
 
             if ( mesh )
             {
-                Reflect::ToArchive( meshPath, mesh, NULL, ByteOrder::BigEndian );
+                Reflect::ToArchive( meshPath, mesh );
             }
         }
     }

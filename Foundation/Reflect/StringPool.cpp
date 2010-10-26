@@ -212,14 +212,7 @@ void StringPool::Deserialize( ArchiveBinary* archive, CharacterEncoding encoding
 
     Reflect::CharStream& stream = archive->GetStream(); 
 
-    if( archive->GetVersion() >= ArchiveBinary::FIRST_VERSION_WITH_STRINGPOOL_COMPRESSION )
-    {
-        return DeserializeCompressed( stream, encoding ); 
-    }
-    else
-    {
-        return DeserializeDirect( stream, encoding ); 
-    }
+    return DeserializeCompressed( stream, encoding ); 
 
     HELIUM_ASSERT( m_Strings.size() == m_Indices.size() );
 }

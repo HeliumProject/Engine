@@ -7,6 +7,7 @@
 #include "Foundation/SmartBuffer/SmartBuffer.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Checksum/CRC32.h"
+#include "Foundation/Memory/Endian.h"
 
 using Helium::Insert;
 using namespace Helium;
@@ -16,11 +17,7 @@ using namespace Helium::Reflect;
 //#define REFLECT_DISABLE_BINARY_CRC
 
 // version / feature management 
-const u32 ArchiveBinary::CURRENT_VERSION                            = 6;
-const u32 ArchiveBinary::FIRST_VERSION_WITH_ARRAY_COMPRESSION       = 3; 
-const u32 ArchiveBinary::FIRST_VERSION_WITH_STRINGPOOL_COMPRESSION  = 4; 
-const u32 ArchiveBinary::FIRST_VERSION_WITH_POINTER_SERIALIZER      = 5; 
-const u32 ArchiveBinary::FIRST_VERSION_WITH_UNICODE_SUPPORT         = 6; 
+const u32 ArchiveBinary::CURRENT_VERSION                            = 7;
 
 // our ORIGINAL version id was '!', don't ever re-use that byte
 HELIUM_COMPILE_ASSERT( (ArchiveBinary::CURRENT_VERSION & 0xff) != 33 );
@@ -88,7 +85,7 @@ void ArchiveBinary::OpenStream( CharStream* stream, bool write )
     // Setup stream
     m_Stream = stream; 
 
-    // Header
+    // Header:
     if (write)
     {
         Start();
@@ -129,6 +126,30 @@ void ArchiveBinary::Read()
     // setup visitors
     PreDeserialize();
 
+    // read byte order
+    ByteOrder byteOrder = Helium::PlatformByteOrder;
+    u16 byteOrderMarker = 0;
+    m_Stream->Read( &byteOrderMarker );
+    switch ( byteOrderMarker )
+    {
+    case 0xfeff:
+        byteOrder = Helium::PlatformByteOrder;
+        break;
+    case 0xfffe:
+        switch ( Helium::PlatformByteOrder )
+        {
+        case ByteOrders::LittleEndian:
+            byteOrder = ByteOrders::BigEndian;
+            break;
+        case ByteOrders::BigEndian:
+            byteOrder = ByteOrders::LittleEndian;
+            break;
+        }
+        break;
+    default:
+        throw Helium::Exception( TXT( "Unknown byte order read from file: %s" ), m_Path.c_str() );
+    }
+
     // read version
     u8 key = 0;
     m_Stream->Read(&key);
@@ -149,23 +170,14 @@ void ArchiveBinary::Read()
         throw Reflect::StreamException( TXT( "Input stream version is higher than what is supported (input: %d, current: %d)\n" ), m_Version, CURRENT_VERSION); 
     }
 
-    ByteOrder byteOrder = Helium::PlatformByteOrder;
     CharacterEncoding encoding = CharacterEncodings::ASCII;
-    if ( m_Version >= ArchiveBinary::FIRST_VERSION_WITH_UNICODE_SUPPORT )
+    // character encoding
+    u8 encodingByte;
+    m_Stream->Read(&encodingByte);
+    encoding = (CharacterEncoding)encodingByte;
+    if ( encoding != CharacterEncodings::ASCII && encoding != CharacterEncodings::UTF_16 )
     {
-        // byte order
-        u8 byteOrderByte;
-        m_Stream->Read(&byteOrderByte); 
-        byteOrder = (ByteOrder)byteOrderByte;
-
-        // character encoding
-        u8 encodingByte;
-        m_Stream->Read(&encodingByte);
-        encoding = (CharacterEncoding)encodingByte;
-        if ( encoding != CharacterEncodings::ASCII && encoding != CharacterEncodings::UTF_16 )
-        {
-            throw Reflect::StreamException( TXT( "Input stream contains an unknown character encoding: %d\n" ), encoding); 
-        }
+        throw Reflect::StreamException( TXT( "Input stream contains an unknown character encoding: %d\n" ), encoding); 
     }
 
     // read and verify CRC
@@ -332,10 +344,6 @@ void ArchiveBinary::Write()
     // setup visitors
     PreSerialize();
 
-    // save byte order
-    u8 byteOrder = (u8)m_Stream->GetByteOrder();
-    m_Stream->Write(&byteOrder);
-
     // save character encoding value
     CharacterEncoding encoding;
 #ifdef UNICODE
@@ -491,6 +499,9 @@ void ArchiveBinary::Write()
 
 void ArchiveBinary::Start()
 {
+    u16 feff = 0xfeff;
+    m_Stream->Write( &feff ); // byte order mark
+
     // just for good measure
     m_Version = CURRENT_VERSION;
     m_Stream->Write(&m_Version); 
@@ -1039,106 +1050,80 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
         current_field = found->second;
     }
 
-    if ( GetVersion() < ArchiveBinary::FIRST_VERSION_WITH_POINTER_SERIALIZER && latent_field->m_SerializerID == Reflect::GetType<PointerSerializer>() )
+    if ( current_field.ReferencesObject() )
     {
-        // the address of a pointer to an element
-        ElementPtr* elementLocation = &component;
+        // pull and element and downcast to serializer
+        SerializerPtr latent_serializer = ObjectCast<Serializer>( Allocate() );
 
-        // if we still have a pointer field, use it
-        if (current_field.ReferencesObject())
+        if (!latent_serializer.ReferencesObject())
         {
-            SerializerPtr serializer = current_field->CreateSerializer( element );
-            PointerSerializer* pointerSerializer = ObjectCast<PointerSerializer>( serializer );
-            if ( pointerSerializer )
-            {
-                elementLocation = &pointerSerializer->m_Data.Ref();
-                *elementLocation = NULL;
-            }
+            // this should never happen, the type id read from the file is bogus
+            throw Reflect::TypeInformationException( TXT( "Invalid type id for field '%s'" ), latent_field->m_Name.c_str() );
         }
 
-        // process
-        Deserialize( *elementLocation );
-
-        // post process
-        PostDeserialize( element, current_field );
-    }
-    else
-    {
-        if ( current_field.ReferencesObject() )
+        // keep in mind that m_SerializerID of latent field is the current type id that matches the latent short name
+        if (current_field->m_SerializerID == latent_field->m_SerializerID)
         {
-            // pull and element and downcast to serializer
-            SerializerPtr latent_serializer = ObjectCast<Serializer>( Allocate() );
+            // set data pointer
+            latent_serializer->ConnectField( element.Ptr(), current_field );
 
-            if (!latent_serializer.ReferencesObject())
-            {
-                // this should never happen, the type id read from the file is bogus
-                throw Reflect::TypeInformationException( TXT( "Invalid type id for field '%s'" ), latent_field->m_Name.c_str() );
-            }
+            // process natively
+            Deserialize( (ElementPtr&)latent_serializer );
 
-            // keep in mind that m_SerializerID of latent field is the current type id that matches the latent short name
-            if (current_field->m_SerializerID == latent_field->m_SerializerID)
-            {
-                // set data pointer
-                latent_serializer->ConnectField( element.Ptr(), current_field );
+            // post process
+            PostDeserialize( element, current_field );
 
-                // process natively
-                Deserialize( (ElementPtr&)latent_serializer );
-
-                // post process
-                PostDeserialize( element, current_field );
-
-                // disconnect
-                latent_serializer->Disconnect();
-            }
-            else
-            {
-                REFLECT_SCOPE_TIMER(("Casting"));
-
-                // construct current serialization object
-                ElementPtr current_element;
-                m_Cache.Create( current_field->m_SerializerID, current_element );
-
-                // downcast to serializer
-                SerializerPtr current_serializer = ObjectCast<Serializer>(current_element);
-                if (!current_serializer.ReferencesObject())
-                {
-                    // this should never happen, the type id in the rtti data is bogus
-                    throw Reflect::TypeInformationException( TXT( "Invalid type id for field '%s'" ), current_field->m_Name.c_str() );
-                }
-
-                // process into temporary memory
-                current_serializer->ConnectField(element.Ptr(), current_field);
-
-                // process natively
-                Deserialize( (ElementPtr&)latent_serializer );
-
-                // attempt cast data into new definition
-                if (!Serializer::CastValue( latent_serializer, current_serializer, SerializerFlags::Shallow ))
-                {
-                    // to the component block!
-                    component = latent_serializer;
-                }
-                else
-                {
-                    // post process
-                    PostDeserialize( element, current_field );
-                }
-
-                // disconnect
-                current_serializer->Disconnect();
-            }
+            // disconnect
+            latent_serializer->Disconnect();
         }
         else
         {
-            try
+            REFLECT_SCOPE_TIMER(("Casting"));
+
+            // construct current serialization object
+            ElementPtr current_element;
+            m_Cache.Create( current_field->m_SerializerID, current_element );
+
+            // downcast to serializer
+            SerializerPtr current_serializer = ObjectCast<Serializer>(current_element);
+            if (!current_serializer.ReferencesObject())
             {
-                // attempt to process our lost component natively
-                Deserialize( component );
+                // this should never happen, the type id in the rtti data is bogus
+                throw Reflect::TypeInformationException( TXT( "Invalid type id for field '%s'" ), current_field->m_Name.c_str() );
             }
-            catch (Reflect::LogisticException& ex)
+
+            // process into temporary memory
+            current_serializer->ConnectField(element.Ptr(), current_field);
+
+            // process natively
+            Deserialize( (ElementPtr&)latent_serializer );
+
+            // attempt cast data into new definition
+            if (!Serializer::CastValue( latent_serializer, current_serializer, SerializerFlags::Shallow ))
             {
-                Log::Debug( TXT( "Unable to deserialize %s::%s into component (%s), discarding\n" ), type->m_ShortName.c_str(), latent_field->m_Name.c_str(), ex.What());
+                // to the component block!
+                component = latent_serializer;
             }
+            else
+            {
+                // post process
+                PostDeserialize( element, current_field );
+            }
+
+            // disconnect
+            current_serializer->Disconnect();
+        }
+    }
+    else
+    {
+        try
+        {
+            // attempt to process our lost component natively
+            Deserialize( component );
+        }
+        catch (Reflect::LogisticException& ex)
+        {
+            Log::Debug( TXT( "Unable to deserialize %s::%s into component (%s), discarding\n" ), type->m_ShortName.c_str(), latent_field->m_Name.c_str(), ex.What());
         }
     }
 
@@ -1247,18 +1232,6 @@ bool ArchiveBinary::DeserializeField(Field* field)
     // field name
     m_Stream->Read(&string_index); 
     field->m_Name = m_Strings.Get(string_index);
-
-    if ( GetVersion() < ArchiveBinary::FIRST_VERSION_WITH_POINTER_SERIALIZER )
-    {
-        // field type
-        i32 fieldType = -1;
-        m_Stream->Read(&fieldType); 
-
-        if ( fieldType == 0 )
-        {
-            field->m_SerializerID = Reflect::GetType<Reflect::PointerSerializer>();
-        }
-    }
 
     // field type id short name
     m_Stream->Read(&string_index); 

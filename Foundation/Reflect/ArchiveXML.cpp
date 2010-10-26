@@ -18,9 +18,7 @@ wchar_t Indent<wchar_t>::m_Space = L' ';
 // uncomment to display parse stack progress
 //#define REFLECT_DISPLAY_PARSE_STACK
 
-const u32 ArchiveXML::CURRENT_VERSION                               = 3;
-const u32 ArchiveXML::FIRST_VERSION_WITH_POINTER_SERIALIZER         = 2; 
-const u32 ArchiveXML::FIRST_VERSION_WITH_NAMESPACE_SUPPORT          = 3; 
+const u32 ArchiveXML::CURRENT_VERSION                               = 4;
 
 ArchiveXML::ArchiveXML( const Path& path, ByteOrder byteOrder )
 : Archive( path, byteOrder )
@@ -467,12 +465,6 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     //
 
     tstring elementType;
-
-    if ( m_Version < FIRST_VERSION_WITH_NAMESPACE_SUPPORT )
-    {
-        bool converted = Helium::ConvertString( pszName, elementType );
-        HELIUM_ASSERT( converted );
-    }
 
     if ( elementType.empty() )
     {

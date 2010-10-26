@@ -168,8 +168,8 @@ namespace Helium
     public:
         typedef std::map< u32, FixupPtr >           M_OffsetToFixup;
 
-        static const u32 s_PointerSizes[ ByteOrders::Count ];
-        static const bool s_BigEndian[ ByteOrders::Count ];
+        static const u32 s_PointerSizes[ 2 ]; // big and little endian
+        static const bool s_BigEndian[ 2 ];
 
         static Profile::MemoryPoolHandle s_ObjectPool;
         static Profile::MemoryPoolHandle s_DataPool;
@@ -207,9 +207,9 @@ namespace Helium
         {
             return m_ByteOrder;
         }
-        void SetByteOrder(ByteOrder platform)
+        void SetByteOrder( ByteOrder platform )
         {
-            HELIUM_ASSERT( m_ByteOrder >= 0 && m_ByteOrder < ByteOrders::Count );
+            HELIUM_ASSERT( platform == ByteOrders::LittleEndian || platform == ByteOrders::BigEndian );
             m_ByteOrder = platform;
         }
 

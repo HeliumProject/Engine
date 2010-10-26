@@ -230,7 +230,7 @@ NodeDefinition::ParseProperty(Node *node, const wxXmlNode& root)
 		wxXmlProperty *p = XML::FindAttribute(*onchanged, wxT("method"));
 		if (p == NULL)
 		{
-			onchanged->AddProperty(wxT("method"), wxT("lua"));
+			onchanged->AddAttribute(wxT("method"), wxT("lua"));
 		}
 		else
 		{

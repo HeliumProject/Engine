@@ -51,17 +51,17 @@ namespace Helium
             M_StringToIndex         m_Indices; 
             std::vector< tstring >  m_Strings;
 
-            i32 Insert(const tstring& str);
-            const tstring& Get(i32 index);
+            i32 Insert( const tstring& str );
+            const tstring& Get( i32 index );
 
-            void SerializeDirect(CharStream& stream); 
-            void DeserializeDirect(CharStream& stream, CharacterEncoding encoding); 
+            void SerializeDirect( CharStream& stream ); 
+            void DeserializeDirect( CharStream& stream, CharacterEncoding encoding ); 
 
-            void SerializeCompressed(CharStream& stream); 
-            void DeserializeCompressed(CharStream& stream, CharacterEncoding encoding); 
+            void SerializeCompressed( CharStream& stream ); 
+            void DeserializeCompressed( CharStream& stream, CharacterEncoding encoding ); 
 
-            void Serialize(class ArchiveBinary* archive); 
-            void Deserialize(class ArchiveBinary* archive, CharacterEncoding encoding); 
+            void Serialize( class ArchiveBinary* archive );
+            void Deserialize( class ArchiveBinary* archive, CharacterEncoding encoding );
         };
     }
 }

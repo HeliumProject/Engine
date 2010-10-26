@@ -18,7 +18,7 @@ Profile::Accumulator BufferSerializer::s_WriteAccum ( "BufferSerializer Data Wri
 #endif
 
 BufferSerializer::BufferSerializer()
-: m_ByteOrder( DEFAULT_BYTE_ORDER )
+: m_ByteOrder( Helium::PlatformByteOrder )
 {
 }
 

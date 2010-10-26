@@ -18,8 +18,6 @@ namespace Helium
         {
         public: 
             static const u32 CURRENT_VERSION; 
-            static const u32 FIRST_VERSION_WITH_POINTER_SERIALIZER; 
-            static const u32 FIRST_VERSION_WITH_NAMESPACE_SUPPORT;
 
         private:
             friend class Archive;
@@ -101,7 +99,7 @@ namespace Helium
             // The container to decode elements to
             V_Element* m_Target;
         public:
-            ArchiveXML( const Path& path );
+            ArchiveXML( const Path& path, ByteOrder byteOrder = ByteOrders::Unknown );
             ~ArchiveXML();
 
         private:

@@ -69,10 +69,6 @@ namespace Helium
         {
         public: 
             static const u32 CURRENT_VERSION; 
-            static const u32 FIRST_VERSION_WITH_ARRAY_COMPRESSION; 
-            static const u32 FIRST_VERSION_WITH_STRINGPOOL_COMPRESSION; 
-            static const u32 FIRST_VERSION_WITH_POINTER_SERIALIZER; 
-            static const u32 FIRST_VERSION_WITH_UNICODE_SUPPORT; 
 
         private:
             friend class Archive;
@@ -117,7 +113,7 @@ namespace Helium
             std::stack<WriteFields> m_FieldStack;
 
         public:
-            ArchiveBinary( const Path& path );
+            ArchiveBinary( const Path& path, ByteOrder byteOrder = ByteOrders::Unknown );
 
         private:
             ArchiveBinary();

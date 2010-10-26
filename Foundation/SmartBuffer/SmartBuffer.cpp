@@ -8,8 +8,8 @@
 using namespace Helium;
 
 // These are project specific, and in the order of PC, PS3
-const u32 SmartBuffer::s_PointerSizes[ ByteOrders::Count ] = { 4, 4 };
-const bool SmartBuffer::s_BigEndian[ ByteOrders::Count ] = { false, true };
+const u32 SmartBuffer::s_PointerSizes[ 2 ] = { 4, 4 }; // big and little endian
+const bool SmartBuffer::s_BigEndian[ 2 ] = { false, true };
 
 // For profiling memory usage
 Profile::MemoryPoolHandle SmartBuffer::s_ObjectPool;
@@ -268,11 +268,11 @@ SmartBuffer::SmartBuffer()
 , m_MaxSize( 0 )
 , m_Capacity( 0 )
 , m_OwnsData( true )
-, m_ByteOrder( DEFAULT_BYTE_ORDER )
+, m_ByteOrder( Helium::PlatformByteOrder )
 , m_Virtual( false )
 , m_Data ( NULL )
 {
-    HELIUM_ASSERT( m_ByteOrder >= 0 && m_ByteOrder < ByteOrders::Count );
+    HELIUM_ASSERT( m_ByteOrder == ByteOrders::LittleEndian || m_ByteOrder == ByteOrders::BigEndian );
 }
 
 SmartBuffer::~SmartBuffer()

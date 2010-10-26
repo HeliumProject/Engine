@@ -317,19 +317,12 @@ void SimpleArraySerializer<T>::Deserialize(Archive& archive)
                 // otherwise, read count * sizeof(T) bytes 
                 // 
                 ArchiveBinary* archiveBinary = static_cast<ArchiveBinary*>(&archive); 
-                if(archiveBinary->GetVersion() >= ArchiveBinary::FIRST_VERSION_WITH_ARRAY_COMPRESSION)
+                i32 inputBytes; 
+                binary.GetStream().Read(&inputBytes); 
+                i32 bytesInflated = DecompressFromStream(binary.GetStream(), inputBytes, (char*) &(m_Data->front()), sizeof(T) * count); 
+                if(bytesInflated != sizeof(T) * count)
                 {
-                    i32 inputBytes; 
-                    binary.GetStream().Read(&inputBytes); 
-                    i32 bytesInflated = DecompressFromStream(binary.GetStream(), inputBytes, (char*) &(m_Data->front()), sizeof(T) * count); 
-                    if(bytesInflated != sizeof(T) * count)
-                    {
-                        throw Reflect::StreamException( TXT( "Compressed Array size mismatch" ) ); 
-                    }
-                }
-                else
-                {
-                    binary.GetStream().ReadBuffer(&(m_Data->front()), sizeof(T) * count );
+                    throw Reflect::StreamException( TXT( "Compressed Array size mismatch" ) ); 
                 }
             }
             break;

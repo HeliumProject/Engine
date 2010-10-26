@@ -18,12 +18,10 @@ wchar_t Indent<wchar_t>::m_Space = L' ';
 // uncomment to display parse stack progress
 //#define REFLECT_DISPLAY_PARSE_STACK
 
-const u32 ArchiveXML::CURRENT_VERSION                               = 3;
-const u32 ArchiveXML::FIRST_VERSION_WITH_POINTER_SERIALIZER         = 2; 
-const u32 ArchiveXML::FIRST_VERSION_WITH_NAMESPACE_SUPPORT          = 3; 
+const u32 ArchiveXML::CURRENT_VERSION                               = 4;
 
-ArchiveXML::ArchiveXML( const Path& path )
-: Archive( path )
+ArchiveXML::ArchiveXML( const Path& path, ByteOrder byteOrder )
+: Archive( path, byteOrder )
 , m_Version( CURRENT_VERSION )
 , m_Target( &m_Spool )
 {
@@ -66,7 +64,7 @@ void ArchiveXML::Open( bool write )
     Debug(TXT("Opening file '%s'\n"), file.c_str());
 #endif
 
-    Reflect::TCharStreamPtr stream = new FileStream<tchar>( m_Path, write );
+    Reflect::TCharStreamPtr stream = new FileStream<tchar>( m_Path, write, m_ByteOrder );
     OpenStream( stream, write );
 }
 
@@ -198,13 +196,13 @@ void ArchiveXML::Start()
     m_Stream->Write( &feff ); // byte order mark
 #endif
 
-    *m_Stream << "<?xml version=\"1.0\" encoding=\"" << Helium::GetEncoding() << "\"?>\n";
-    *m_Stream << "<Reflect FileFormatVersion=\"" << m_Version << "\">\n";
+    *m_Stream << TXT( "<?xml version=\"1.0\" encoding=\"" ) << Helium::GetEncoding() << TXT( "\"?>\n" );
+    *m_Stream << TXT( "<Reflect FileFormatVersion=\"" ) << m_Version << TXT( "\">\n" );
 }
 
 void ArchiveXML::Finish()
 {
-    *m_Stream << "</Reflect>\n";
+    *m_Stream << TXT( "</Reflect>\n" );
 }
 
 void ArchiveXML::Serialize(const ElementPtr& element)
@@ -362,7 +360,7 @@ void ArchiveXML::SerializeHeader(const ElementPtr& element)
 
     m_Indent.Push();
     m_Indent.Get( *m_Stream );
-    *m_Stream << "<Element Type=\"" << element->GetClass()->m_ShortName << "\"";
+    *m_Stream << TXT( "<Element Type=\"" ) << element->GetClass()->m_ShortName << TXT( "\"" );
 
     //
     // Field name
@@ -371,7 +369,7 @@ void ArchiveXML::SerializeHeader(const ElementPtr& element)
     if (!m_FieldNames.empty() && !m_FieldNames.top().empty())
     {
         // our link back to the field we are nested in
-        *m_Stream << " Name=\"" << m_FieldNames.top() << "\"";
+        *m_Stream << TXT( " Name=\"" ) << m_FieldNames.top() << TXT( "\"" );
     }
 
     //
@@ -380,11 +378,11 @@ void ArchiveXML::SerializeHeader(const ElementPtr& element)
 
     if ( element->IsCompact() )
     {
-        *m_Stream << ">";
+        *m_Stream << TXT( ">" );
     }
     else
     {
-        *m_Stream << ">\n";
+        *m_Stream << TXT( ">\n" );
     }
 }
 
@@ -395,7 +393,7 @@ void ArchiveXML::SerializeFooter(const ElementPtr& element)
         m_Indent.Get(*m_Stream);
     }
 
-    *m_Stream << "</Element>\n";
+    *m_Stream << TXT( "</Element>\n" );
 
     m_Indent.Pop();
 }
@@ -467,12 +465,6 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     //
 
     tstring elementType;
-
-    if ( m_Version < FIRST_VERSION_WITH_NAMESPACE_SUPPORT )
-    {
-        bool converted = Helium::ConvertString( pszName, elementType );
-        HELIUM_ASSERT( converted );
-    }
 
     if ( elementType.empty() )
     {
@@ -747,7 +739,7 @@ ElementPtr ArchiveXML::FromString( const tstring& xml, int searchType )
     archive.m_SearchType = searchType;
 
     tstringstream strStream;
-    strStream << "<?xml version=\"1.0\"?><Reflect FileFormatVersion=\""<<ArchiveXML::CURRENT_VERSION<<"\">" << xml << "</Reflect>";
+    strStream << TXT( "<?xml version=\"1.0\"?><Reflect FileFormatVersion=\"" ) << ArchiveXML::CURRENT_VERSION << TXT( "\">" ) << xml << TXT( "</Reflect>" );
     archive.m_Stream = new Reflect::TCharStream(&strStream); 
     archive.Read();
 
@@ -780,7 +772,7 @@ void ArchiveXML::FromString( const tstring& xml, V_Element& elements )
 {
     ArchiveXML archive;
     tstringstream strStream;
-    strStream << "<?xml version=\"1.0\"?><Reflect FileFormatVersion=\""<<ArchiveXML::CURRENT_VERSION<<"\">" << xml << "</Reflect>";
+    strStream << TXT( "<?xml version=\"1.0\"?><Reflect FileFormatVersion=\"" ) << ArchiveXML::CURRENT_VERSION << TXT( "\">" ) << xml << TXT( "</Reflect>" );
 
     archive.m_Stream = new Reflect::TCharStream( &strStream );
     archive.Read();

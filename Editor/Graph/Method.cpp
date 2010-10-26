@@ -16,7 +16,7 @@ wxXmlNode *
 Method::Serialize() const
 {
 	wxXmlNode *root = NEW(wxXmlNode, (wxXML_ELEMENT_NODE, wxT("method")));
-	root->AddProperty(wxT("type"), GetClassName());
+	root->AddAttribute(wxT("type"), GetClassName());
 	return root;
 }
 

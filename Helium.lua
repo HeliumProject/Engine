@@ -265,6 +265,10 @@ project "Editor"
 		"d3dx9",
 		"ws2_32",
 	}
+	flags
+	{
+        "WinMain"
+    }
 
 	configuration "windows"
 		includedirs

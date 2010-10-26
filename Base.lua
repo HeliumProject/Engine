@@ -11,11 +11,11 @@ end
 Helium.Publish = function( files )
 	for i,v in pairs(files) do
 		-- mkpath the target folder
-		os.mkdir( v.built )
+		os.mkdir( v.target )
 		
-		local path = v.dir .. "/" .. v.file			
+		local path = v.source .. "/" .. v.file			
 		local exists = os.isfile( path )
-		local destination = v.built .. "/" .. v.file
+		local destination = v.target .. "/" .. v.file
 		
 		-- cull existing files
 		if os.isfile( destination ) then
@@ -53,17 +53,6 @@ Helium.DoDefaultSolutionSettings = function()
 		"Release",
 		"ReleaseUnicode",
 	}
-
---[[
-	Iterate through our platforms and configurations and set them up with appropriate
-	target directories (that have both the configuration and platform built into them)
---]]
-	for i, platform in ipairs( platforms() ) do
-		for j, config in ipairs( configurations() ) do
-			configuration( { config, platform } )
-				targetdir( "Bin/" .. platform .. "/" .. config )
-		end
-	end
 
 --[[
 	Keep in mind that solution-wide settings should be defined

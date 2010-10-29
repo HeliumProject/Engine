@@ -3,7 +3,6 @@
 #include "Matrix3.h"
 #include "AngleAxis.h"
 #include "EulerAngles.h"
-#include "Quaternion.h"
 
 using namespace Helium;
 
@@ -41,16 +40,6 @@ Matrix4::Matrix4(const AngleAxis& v)
 }
 
 Matrix4& Matrix4::operator=(const AngleAxis& v)
-{
-    return *this = Matrix3(v);
-}
-
-Matrix4::Matrix4(const Quaternion& v)
-{
-    (*this) = v;
-}
-
-Matrix4& Matrix4::operator=(const Quaternion& v)
 {
     return *this = Matrix3(v);
 }

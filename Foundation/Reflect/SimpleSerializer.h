@@ -6,7 +6,6 @@
 #include "Foundation/Math/Vector4.h"
 #include "Foundation/Math/Matrix3.h"
 #include "Foundation/Math/Matrix4.h"
-#include "Foundation/Math/Quaternion.h"
 #include "Foundation/Math/Color3.h"
 #include "Foundation/Math/Color4.h"
 #include "Foundation/Math/HDRColor3.h"
@@ -72,7 +71,6 @@ namespace Helium
         typedef SimpleSerializer<Vector4> Vector4Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Vector4Serializer );
         typedef SimpleSerializer<Matrix3> Matrix3Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Matrix3Serializer );
         typedef SimpleSerializer<Matrix4> Matrix4Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Matrix4Serializer );
-        typedef SimpleSerializer<Quaternion> QuaternionSerializer;        REFLECT_SPECIALIZE_SERIALIZER( QuaternionSerializer );
 
         typedef SimpleSerializer<Color3> Color3Serializer;                REFLECT_SPECIALIZE_SERIALIZER( Color3Serializer );
         typedef SimpleSerializer<Color4> Color4Serializer;                REFLECT_SPECIALIZE_SERIALIZER( Color4Serializer );

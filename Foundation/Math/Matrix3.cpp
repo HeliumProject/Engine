@@ -3,7 +3,6 @@
 #include "Matrix4.h"
 #include "AngleAxis.h"
 #include "EulerAngles.h"
-#include "Quaternion.h"
 
 using namespace Helium;
 
@@ -110,44 +109,7 @@ Matrix3& Matrix3::operator=(const AngleAxis& v)
     return *this;
 }
 
-Matrix3::Matrix3(const Quaternion& v)
-{
-    (*this) = v;
-}
-
-Matrix3& Matrix3::operator=(const Quaternion& v)
-{
-    float32_t xs, ys, zs, wx, wy, wz, xx, xy, xz, yy, yz, zz;
-
-    float32_t xv = v.values.x;
-    float32_t yv = v.values.y;
-    float32_t zv = v.values.z;
-    float32_t wv = v.values.w;
-
-    float32_t Nq = (xv * xv) + (yv * yv) + (zv * zv) + (wv * wv);
-    float32_t s  = (Nq > 0.0f) ? (2.0f / Nq) : 0.0f;
-
-    xs = xv * s;  ys = yv * s;  zs = zv * s;
-    wx = wv * xs; wy = wv * ys; wz = wv * zs;
-    xx = xv * xs; xy = xv * ys; xz = xv * zs;
-    yy = yv * ys; yz = yv * zs; zz = zv * zs;
-
-    x[0] = 1.0f - (yy + zz);
-    x[1] = xy + wz;
-    x[2] = xz - wy;
-
-    y[0] = xy - wz;
-    y[1] = 1.0f - (xx + zz);
-    y[2] = yz + wx;
-
-    z[0] = xz + wy;
-    z[1] = yz - wx;
-    z[2] = 1.0f - (xx + yy);
-
-    return *this;
-}
-
-Matrix3 Matrix3::RotateX(float32_t theta)
+Matrix3 Matrix3::RotateX( float32_t theta )
 {
     Matrix3 m = Identity;
     m[1][1] = m[2][2] = cos(theta);

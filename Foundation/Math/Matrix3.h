@@ -15,7 +15,6 @@ namespace Helium
     class Matrix4;
     class EulerAngles;
     class AngleAxis;
-    class Quaternion;
 
     class FOUNDATION_API Matrix3
     {
@@ -65,9 +64,6 @@ namespace Helium
 
         explicit Matrix3      (const AngleAxis& v);
         Matrix3&              operator= (const AngleAxis& v);
-
-        explicit Matrix3      (const Quaternion& v);
-        Matrix3&              operator= (const Quaternion& v);
 
         Matrix3&              operator= (const Matrix3& v)
         {

@@ -121,23 +121,6 @@ EulerAngles& EulerAngles::operator=(const AngleAxis& v)
     return *this = Matrix3(v);
 }
 
-EulerAngles::EulerAngles(const Quaternion& v)
-{
-    order = EulerOrders::XYZs;
-    (*this) = v;
-}
-
-EulerAngles::EulerAngles(const Quaternion& v, const EulerOrder& o)
-{
-    order = o;
-    (*this) = v;
-}
-
-EulerAngles& EulerAngles::operator=(const Quaternion& v)
-{
-    return *this = Matrix3(v);
-}
-
 EulerAngles& EulerAngles::Reorder(EulerOrder v)
 {
     Matrix3 m (*this);

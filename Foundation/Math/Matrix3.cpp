@@ -109,7 +109,7 @@ Matrix3& Matrix3::operator=(const AngleAxis& v)
     return *this;
 }
 
-Matrix3 Matrix3::RotateX(f32 theta)
+Matrix3 Matrix3::RotateX( float32_t theta )
 {
     Matrix3 m = Identity;
     m[1][1] = m[2][2] = cos(theta);

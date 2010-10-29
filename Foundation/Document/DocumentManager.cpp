@@ -154,7 +154,7 @@ bool DocumentManager::SaveDocument( DocumentPtr document, tstring& error )
 
     if ( document->Save( error ) )
     {
-        document->SetModified( false );
+        document->HasChanged( false );
         return true;
     }
 
@@ -313,7 +313,8 @@ bool DocumentManager::CloseDocument( DocumentPtr document, bool prompt )
 
     if ( shouldClose )
     {
-        document->RaiseClosed();
+#pragma TODO ("WIP: Document Close")
+        //document->RaiseClosed();
         wasClosed = true;
     }
 
@@ -328,7 +329,7 @@ bool DocumentManager::CloseDocument( DocumentPtr document, bool prompt )
 // 
 bool DocumentManager::QueryAllowChanges( Document* document ) const
 {
-    if ( !document->AllowChanges() && !IsCheckedOut( document ) )
+    if ( !document->AllowUnsavableChanges() && !IsCheckedOut( document ) )
     {
         QueryCheckOut( document );
         if ( !IsCheckedOut( document ) )
@@ -342,12 +343,12 @@ bool DocumentManager::QueryAllowChanges( Document* document ) const
 
             if ( MessageResults::Yes == args.m_Result )
             {
-                document->SetAllowChanges( true );
+                document->AllowUnsavableChanges( true );
             }
         }
     }
 
-    return document->AllowChanges() || IsCheckedOut( document );
+    return document->AllowUnsavableChanges() || IsCheckedOut( document );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -357,7 +358,7 @@ bool DocumentManager::QueryAllowChanges( Document* document ) const
 // 
 bool DocumentManager::AllowChanges( Document* document ) const
 {
-    if ( IsCheckedOut( document ) || document->AllowChanges() )
+    if ( IsCheckedOut( document ) || document->AllowUnsavableChanges() )
     {
         return true;
     }
@@ -458,7 +459,8 @@ bool DocumentManager::CheckOut( Document* document ) const
         return false;
     }
 
-    document->RaiseCheckedOut();
+#pragma TODO ("WIP: Document CheckedOut")
+    //document->RaiseCheckedOut();
 
     return true;
 }
@@ -587,7 +589,7 @@ bool DocumentManager::QueryAdd( Document* document ) const
 // 
 SaveAction DocumentManager::QueryCloseAll( Document* document ) const
 {
-    if ( document->IsModified() )
+    if ( document->HasChanged() )
     {
         bool attemptCheckOut = false;
         SaveActions::SaveAction action = SaveActions::Save;
@@ -644,7 +646,7 @@ SaveAction DocumentManager::QueryCloseAll( Document* document ) const
 // 
 SaveAction DocumentManager::QueryClose( Document* document ) const
 {
-    if ( !document->IsModified() )
+    if ( !document->HasChanged() )
     {
         return SaveActions::Skip;
     }
@@ -681,7 +683,7 @@ SaveAction DocumentManager::QueryClose( Document* document ) const
 // 
 SaveAction DocumentManager::QuerySave( Document* document ) const
 {
-    if ( !document->IsModified() )
+    if ( !document->HasChanged() )
     {
         return SaveActions::Skip;
     }
@@ -693,7 +695,7 @@ SaveAction DocumentManager::QuerySave( Document* document ) const
 
     if ( !IsCheckedOut( document ) )
     {
-        if ( document->IsModified() )
+        if ( document->HasChanged() )
         {
             tstring msg;
 
@@ -791,7 +793,7 @@ bool DocumentManager::AddDocument( const DocumentPtr& document )
 {
     if ( m_Documents.Append( document ) )
     {
-        document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &DocumentManager::DocumentClosed ) );
+        document->e_Closed.Add( DocumentEventSignature::Delegate( this, &DocumentManager::DocumentClosed ) );
         return true;
     }
 
@@ -805,7 +807,7 @@ bool DocumentManager::AddDocument( const DocumentPtr& document )
 // 
 bool DocumentManager::RemoveDocument( const DocumentPtr& document )
 {
-    document->RemoveDocumentClosedListener( DocumentChangedSignature::Delegate( this, &DocumentManager::DocumentClosed ) );
+    document->e_Closed.Remove( DocumentEventSignature::Delegate( this, &DocumentManager::DocumentClosed ) );
     if ( m_Documents.Remove( document ) )
     {
         return true;
@@ -818,7 +820,7 @@ bool DocumentManager::RemoveDocument( const DocumentPtr& document )
 // Callback for when a document is closed.  Removes the document from the list
 // managed by this class.
 // 
-void DocumentManager::DocumentClosed( const DocumentChangedArgs& args )
+void DocumentManager::DocumentClosed( const DocumentEventArgs& args )
 {
     RemoveDocument( args.m_Document );
 }

@@ -1794,8 +1794,8 @@ void Scene::UndoQueueCommandPushed( const Undo::QueueChangeArgs& args )
 {
     if ( args.m_Command->IsSignificant() )
     {
-#pragma TODO( "Raise an event so the SceneDocument knows this file has been modified" )
-        //m_File->SetModified( true );
+#pragma TODO( "Raise an event so the Document knows this file has been modified" )
+        //m_File->HasChanged( true );
     }
 }
 

@@ -68,7 +68,7 @@ namespace Helium
     private:
         bool                AddDocument( const DocumentPtr& document );
         bool                RemoveDocument( const DocumentPtr& document );
-        void                DocumentClosed( const DocumentChangedArgs& args );
+        void                DocumentClosed( const DocumentEventArgs& args );
 
         OS_DocumentSmartPtr             m_Documents;
         MessageSignature::Delegate      m_Message;

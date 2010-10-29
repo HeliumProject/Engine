@@ -299,9 +299,9 @@ MainFrame::~MainFrame()
     OS_DocumentSmartPtr::Iterator docEnd = m_SceneManager.GetDocumentManager().GetDocuments().End();
     for ( ; docItr != docEnd; ++docItr )
     {
-        ( *docItr )->RemoveDocumentModifiedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
-        ( *docItr )->RemoveDocumentSavedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
-        ( *docItr )->RemoveDocumentClosedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
+        ( *docItr )->e_Changed.Remove( DocumentEventSignature::Delegate( this, &MainFrame::DocumentChanged ) );
+        ( *docItr )->e_Saved.Remove( DocumentEventSignature::Delegate( this, &MainFrame::DocumentChanged ) );
+        ( *docItr )->e_Closed.Remove( DocumentEventSignature::Delegate( this, &MainFrame::DocumentChanged ) );
     }
 
     // Save preferences and MRU
@@ -480,9 +480,9 @@ void MainFrame::SceneAdded( const SceneChangeArgs& args )
         m_PropertiesPanel->GetPropertiesGenerator().PopulateLink().Add( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &SceneGraph::Scene::PopulateLink) );
 
         Document* document = m_SceneManager.GetDocumentManager().FindDocument( args.m_Scene->GetPath() );
-        document->AddDocumentModifiedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
-        document->AddDocumentSavedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
-        document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
+        document->e_Changed.Add( DocumentEventSignature::Delegate( this, &MainFrame::DocumentChanged ) );
+        document->e_Saved.Add( DocumentEventSignature::Delegate( this, &MainFrame::DocumentChanged ) );
+        document->e_Closed.Add( DocumentEventSignature::Delegate( this, &MainFrame::DocumentChanged ) );
     }
 }
 
@@ -507,7 +507,7 @@ void MainFrame::SceneLoadFinished( const LoadArgs& args )
 {
     m_ViewPanel->GetViewCanvas()->Refresh();
     Document* document = m_SceneManager.GetDocumentManager().FindDocument( args.m_Scene->GetPath() );
-    DocumentModified( DocumentChangedArgs( document ) );
+    DocumentChanged( DocumentEventArgs( document ) );
 }
 
 void MainFrame::SceneExecuted( const ExecuteArgs& args )
@@ -706,7 +706,7 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
     if ( m_SceneManager.GetDocumentManager().CloseAll() )
     {
         ScenePtr scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport() );
-        m_SceneManager.GetDocumentManager().FindDocument( scene->GetPath() )->SetModified( true );
+        m_SceneManager.GetDocumentManager().FindDocument( scene->GetPath() )->HasChanged( true );
         m_SceneManager.SetCurrentScene( scene );
     }
 }
@@ -1526,14 +1526,14 @@ void MainFrame::PickWorld( PickArgs& args )
 #pragma TODO("Pick the project's root scene -Geoff")
 }
 
-void MainFrame::DocumentModified( const DocumentChangedArgs& args )
+void MainFrame::DocumentChanged( const DocumentEventArgs& args )
 {
     bool doAnyDocsNeedSaved = false;
     OS_DocumentSmartPtr::Iterator docItr = m_SceneManager.GetDocumentManager().GetDocuments().Begin();
     OS_DocumentSmartPtr::Iterator docEnd = m_SceneManager.GetDocumentManager().GetDocuments().End();
     for ( ; docItr != docEnd; ++docItr )
     {
-        if ( ( *docItr )->IsModified() || !( *docItr )->GetPath().Exists() )
+        if ( ( *docItr )->HasChanged() || !( *docItr )->GetPath().Exists() )
         {
             doAnyDocsNeedSaved = true;
             break;
@@ -1543,13 +1543,13 @@ void MainFrame::DocumentModified( const DocumentChangedArgs& args )
     m_MenuFile->Enable( ID_SaveAll, doAnyDocsNeedSaved );
 }
 
-void MainFrame::DocumentClosed( const DocumentChangedArgs& args )
+void MainFrame::DocumentClosed( const DocumentEventArgs& args )
 {
-    DocumentModified( args );
+    DocumentChanged( args );
 
-    args.m_Document->RemoveDocumentModifiedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
-    args.m_Document->RemoveDocumentSavedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
-    args.m_Document->RemoveDocumentClosedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
+    args.m_Document->e_Changed.Remove( DocumentEventSignature::Delegate( this, &MainFrame::DocumentChanged ) );
+    args.m_Document->e_Saved.Remove( DocumentEventSignature::Delegate( this, &MainFrame::DocumentChanged ) );
+    args.m_Document->e_Closed.Remove( DocumentEventSignature::Delegate( this, &MainFrame::DocumentChanged ) );
 }
 
 void MainFrame::ViewToolChanged( const ToolChangeArgs& args )

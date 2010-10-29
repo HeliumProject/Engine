@@ -271,7 +271,7 @@ project "Editor"
 		"libclient",
 		"librpc",
 		"libsupp",
-		"Lua",
+		"lua",
 		"d3d9",
 		"d3dx9",
 		"ws2_32",

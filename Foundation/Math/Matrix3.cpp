@@ -3,7 +3,6 @@
 #include "Matrix4.h"
 #include "AngleAxis.h"
 #include "EulerAngles.h"
-#include "Quaternion.h"
 
 using namespace Helium;
 
@@ -106,43 +105,6 @@ Matrix3& Matrix3::operator=(const AngleAxis& v)
     z[0] = ((v1*v3) * (1.0f-cosTheta))  + (v2*sinTheta);
     z[1] = ((v2*v3) * (1.0f-cosTheta))  - (v1*sinTheta);
     z[2] = v3s + ((1.0f-v3s) * cosTheta);
-
-    return *this;
-}
-
-Matrix3::Matrix3(const Quaternion& v)
-{
-    (*this) = v;
-}
-
-Matrix3& Matrix3::operator=(const Quaternion& v)
-{
-    f32 xs, ys, zs, wx, wy, wz, xx, xy, xz, yy, yz, zz;
-
-    f32 xv = v.values.x;
-    f32 yv = v.values.y;
-    f32 zv = v.values.z;
-    f32 wv = v.values.w;
-
-    f32 Nq = (xv * xv) + (yv * yv) + (zv * zv) + (wv * wv);
-    f32 s  = (Nq > 0.0f) ? (2.0f / Nq) : 0.0f;
-
-    xs = xv * s;  ys = yv * s;  zs = zv * s;
-    wx = wv * xs; wy = wv * ys; wz = wv * zs;
-    xx = xv * xs; xy = xv * ys; xz = xv * zs;
-    yy = yv * ys; yz = yv * zs; zz = zv * zs;
-
-    x[0] = 1.0f - (yy + zz);
-    x[1] = xy + wz;
-    x[2] = xz - wy;
-
-    y[0] = xy - wz;
-    y[1] = 1.0f - (xx + zz);
-    y[2] = yz + wx;
-
-    z[0] = xz + wy;
-    z[1] = yz - wx;
-    z[2] = 1.0f - (xx + yy);
 
     return *this;
 }

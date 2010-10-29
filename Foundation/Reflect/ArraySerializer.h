@@ -84,7 +84,6 @@ namespace Helium
         typedef SimpleArraySerializer<Vector4> Vector4ArraySerializer;            REFLECT_SPECIALIZE_SERIALIZER( Vector4ArraySerializer );
         typedef SimpleArraySerializer<Matrix3> Matrix3ArraySerializer;            REFLECT_SPECIALIZE_SERIALIZER( Matrix3ArraySerializer );
         typedef SimpleArraySerializer<Matrix4> Matrix4ArraySerializer;            REFLECT_SPECIALIZE_SERIALIZER( Matrix4ArraySerializer );
-        typedef SimpleArraySerializer<Quaternion> QuaternionArraySerializer;      REFLECT_SPECIALIZE_SERIALIZER( QuaternionArraySerializer );
 
         typedef SimpleArraySerializer<Color3> Color3ArraySerializer;              REFLECT_SPECIALIZE_SERIALIZER( Color3ArraySerializer );
         typedef SimpleArraySerializer<Color4> Color4ArraySerializer;              REFLECT_SPECIALIZE_SERIALIZER( Color4ArraySerializer );

@@ -362,7 +362,6 @@ template SimpleSerializer<Helium::TUID>;
 template SimpleSerializer<Vector2>;
 template SimpleSerializer<Vector3>;
 template SimpleSerializer<Vector4>;
-template SimpleSerializer<Quaternion>;
 
 template SimpleSerializer<Matrix3>;
 template SimpleSerializer<Matrix4>;
@@ -392,7 +391,6 @@ REFLECT_DEFINE_CLASS(Vector3Serializer);
 REFLECT_DEFINE_CLASS(Vector4Serializer);
 REFLECT_DEFINE_CLASS(Matrix3Serializer);
 REFLECT_DEFINE_CLASS(Matrix4Serializer);
-REFLECT_DEFINE_CLASS(QuaternionSerializer);
 
 REFLECT_DEFINE_CLASS(Color3Serializer);
 REFLECT_DEFINE_CLASS(Color4Serializer);

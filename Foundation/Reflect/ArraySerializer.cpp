@@ -543,7 +543,6 @@ template SimpleArraySerializer<Vector3>;
 template SimpleArraySerializer<Vector4>;
 template SimpleArraySerializer<Matrix3>;
 template SimpleArraySerializer<Matrix4>;
-template SimpleArraySerializer<Quaternion>;
 
 template SimpleArraySerializer<Color3>;
 template SimpleArraySerializer<Color4>;
@@ -571,7 +570,6 @@ REFLECT_DEFINE_CLASS(Vector3ArraySerializer);
 REFLECT_DEFINE_CLASS(Vector4ArraySerializer);
 REFLECT_DEFINE_CLASS(Matrix3ArraySerializer);
 REFLECT_DEFINE_CLASS(Matrix4ArraySerializer);
-REFLECT_DEFINE_CLASS(QuaternionArraySerializer);
 
 REFLECT_DEFINE_CLASS(Color3ArraySerializer);
 REFLECT_DEFINE_CLASS(Color4ArraySerializer);

@@ -108,7 +108,6 @@ void Reflect::Initialize()
         g_Registry->RegisterType(Vector4Serializer::CreateClass( TXT( "Vector4" ) ));
         g_Registry->RegisterType(Matrix3Serializer::CreateClass( TXT( "Matrix3" ) ));
         g_Registry->RegisterType(Matrix4Serializer::CreateClass( TXT( "Matrix4" ) ));
-        g_Registry->RegisterType(QuaternionSerializer::CreateClass( TXT( "Quaternion" ) ));
         g_Registry->RegisterType(Color3Serializer::CreateClass( TXT( "Color3" ) ));
         g_Registry->RegisterType(Color4Serializer::CreateClass( TXT( "Color4" ) ));
         g_Registry->RegisterType(HDRColor3Serializer::CreateClass( TXT( "HDRColor3" ) ));
@@ -136,7 +135,6 @@ void Reflect::Initialize()
         g_Registry->RegisterType(Vector4ArraySerializer::CreateClass( TXT( "Vector4Array" ) ));
         g_Registry->RegisterType(Matrix3ArraySerializer::CreateClass( TXT( "Matrix3Array" ) ));
         g_Registry->RegisterType(Matrix4ArraySerializer::CreateClass( TXT( "Matrix4Array" ) ));
-        g_Registry->RegisterType(QuaternionArraySerializer::CreateClass( TXT( "QuaternionArray" ) ));
         g_Registry->RegisterType(Color3ArraySerializer::CreateClass( TXT( "Color3Array" ) ));
         g_Registry->RegisterType(Color4ArraySerializer::CreateClass( TXT( "Color4Array" ) ));
         g_Registry->RegisterType(HDRColor3ArraySerializer::CreateClass( TXT( "HDRColor3Array" ) ));

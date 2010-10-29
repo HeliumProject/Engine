@@ -33,7 +33,7 @@ CurveControlPoint::~CurveControlPoint()
 {
 }
 
-i32 CurveControlPoint::GetImageIndex() const
+int32_t CurveControlPoint::GetImageIndex() const
 {
     return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "point" ) );
 }
@@ -43,49 +43,49 @@ tstring CurveControlPoint::GetApplicationTypeName() const
     return TXT( "CurveControlPoint" );
 }
 
-const Math::Vector3& CurveControlPoint::GetPosition() const
+const Vector3& CurveControlPoint::GetPosition() const
 {
     return m_Position;
 }
 
-void CurveControlPoint::SetPosition( const Math::Vector3& value )
+void CurveControlPoint::SetPosition( const Vector3& value )
 {
     m_Position = value;
     Dirty();
 }
 
-f32 CurveControlPoint::GetPositionX() const
+float32_t CurveControlPoint::GetPositionX() const
 {
     return GetPosition().x;
 }
 
-void CurveControlPoint::SetPositionX( f32 value )
+void CurveControlPoint::SetPositionX( float32_t value )
 {
-    Math::Vector3 pos = GetPosition();
+    Vector3 pos = GetPosition();
     pos.x = value;
     SetPosition( pos );
 }
 
-f32 CurveControlPoint::GetPositionY() const
+float32_t CurveControlPoint::GetPositionY() const
 {
     return GetPosition().y;
 }
 
-void CurveControlPoint::SetPositionY( f32 value )
+void CurveControlPoint::SetPositionY( float32_t value )
 {
-    Math::Vector3 pos = GetPosition();
+    Vector3 pos = GetPosition();
     pos.y = value;
     SetPosition( pos );
 }
 
-f32 CurveControlPoint::GetPositionZ() const
+float32_t CurveControlPoint::GetPositionZ() const
 {
     return GetPosition().z;
 }
 
-void CurveControlPoint::SetPositionZ( f32 value )
+void CurveControlPoint::SetPositionZ( float32_t value )
 {
-    Math::Vector3 pos = GetPosition();
+    Vector3 pos = GetPosition();
     pos.z = value;
     SetPosition( pos );
 }
@@ -124,9 +124,9 @@ void CurveControlPoint::CreatePanel( CreatePanelArgs& args )
         args.m_Generator->PushContainer();
         static const tstring helpText = TXT( "Sets the position of this point in 3d space." );
         args.m_Generator->AddLabel( TXT( "Position" ) )->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<CurveControlPoint, f32>( args.m_Selection, &CurveControlPoint::GetPositionX, &CurveControlPoint::SetPositionX )->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<CurveControlPoint, f32>( args.m_Selection, &CurveControlPoint::GetPositionY, &CurveControlPoint::SetPositionY )->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<CurveControlPoint, f32>( args.m_Selection, &CurveControlPoint::GetPositionZ, &CurveControlPoint::SetPositionZ )->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<CurveControlPoint, float32_t>( args.m_Selection, &CurveControlPoint::GetPositionX, &CurveControlPoint::SetPositionX )->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<CurveControlPoint, float32_t>( args.m_Selection, &CurveControlPoint::GetPositionY, &CurveControlPoint::SetPositionY )->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<CurveControlPoint, float32_t>( args.m_Selection, &CurveControlPoint::GetPositionZ, &CurveControlPoint::SetPositionZ )->a_HelpText.Set( helpText );
         args.m_Generator->Pop();
     }
     args.m_Generator->Pop();
@@ -145,20 +145,20 @@ void CurveControlPoint::Evaluate( GraphDirection direction )
     {
     case GraphDirections::Downstream:
         {
-            m_ObjectBounds.minimum = GetPosition() - Math::Vector3 (1.f,1.f,1.f);
-            m_ObjectBounds.maximum = GetPosition() + Math::Vector3 (1.f,1.f,1.f);
+            m_ObjectBounds.minimum = GetPosition() - Vector3 (1.f,1.f,1.f);
+            m_ObjectBounds.maximum = GetPosition() + Vector3 (1.f,1.f,1.f);
             break;
         }
     }
 }
 
-Math::Matrix4 CurveControlPointTranslateManipulatorAdapter::GetFrame(ManipulatorSpace space)
+Matrix4 CurveControlPointTranslateManipulatorAdapter::GetFrame(ManipulatorSpace space)
 {
     // base object manip frame
-    Math::Matrix4 m = m_Point->GetTransform()->GetGlobalTransform();
+    Matrix4 m = m_Point->GetTransform()->GetGlobalTransform();
 
     // if we are pivoting then just use the value
-    m = Math::Matrix4 (GetValue()) * m;
+    m = Matrix4 (GetValue()) * m;
 
     if (space == ManipulatorSpaces::Object)
     {
@@ -166,7 +166,7 @@ Math::Matrix4 CurveControlPointTranslateManipulatorAdapter::GetFrame(Manipulator
     }
     else
     {
-        Math::Matrix4 frame = Math::Matrix4::Identity;
+        Matrix4 frame = Matrix4::Identity;
 
         frame.t.x = m.t.x;
         frame.t.y = m.t.y;
@@ -176,12 +176,12 @@ Math::Matrix4 CurveControlPointTranslateManipulatorAdapter::GetFrame(Manipulator
     }
 }
 
-Math::Matrix4 CurveControlPointTranslateManipulatorAdapter::GetObjectMatrix()
+Matrix4 CurveControlPointTranslateManipulatorAdapter::GetObjectMatrix()
 {
     return GetNode()->GetTransform()->GetGlobalTransform();
 }
 
-Math::Matrix4 CurveControlPointTranslateManipulatorAdapter::GetParentMatrix()
+Matrix4 CurveControlPointTranslateManipulatorAdapter::GetParentMatrix()
 {
     return GetNode()->GetTransform()->GetGlobalTransform();
 }

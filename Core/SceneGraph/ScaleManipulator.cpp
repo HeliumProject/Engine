@@ -14,7 +14,6 @@
 #include "SceneSettings.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT(SceneGraph::ScaleManipulator);
@@ -226,10 +225,10 @@ void ScaleManipulator::Draw( DrawArgs* args )
 
     Scale inverse (1.0f / offset.x, 1.0f / offset.y, 1.0f / offset.z);
 
-    AxesFlags parallelAxis = m_View->GetCamera()->ParallelAxis(frame, Math::CriticalDotProduct);
+    AxesFlags parallelAxis = m_View->GetCamera()->ParallelAxis(frame, CriticalDotProduct);
 
     m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&frame);
-    m_Axes->DrawAxes(args, (Math::AxesFlags)(~parallelAxis & MultipleAxes::All));
+    m_Axes->DrawAxes(args, (AxesFlags)(~parallelAxis & MultipleAxes::All));
 
     if (m_SelectedAxes == MultipleAxes::All)
     {
@@ -283,7 +282,7 @@ bool ScaleManipulator::Pick( PickVisitor* pick )
     linePick->SetCurrentObject (this, frame);
     linePick->ClearHits();
 
-    AxesFlags parallelAxis = m_View->GetCamera()->ParallelAxis(frame, Math::CriticalDotProduct);
+    AxesFlags parallelAxis = m_View->GetCamera()->ParallelAxis(frame, CriticalDotProduct);
 
     if (m_Cube->Pick(linePick))
     {
@@ -377,7 +376,7 @@ bool ScaleManipulator::Pick( PickVisitor* pick )
 
 bool ScaleManipulator::MouseDown( const MouseButtonInput& e )
 {
-    Math::AxesFlags previous = m_SelectedAxes;
+    AxesFlags previous = m_SelectedAxes;
 
     LinePickVisitor pick (m_View->GetCamera(), e.GetPosition().x, e.GetPosition().y);
 
@@ -463,11 +462,11 @@ void ScaleManipulator::MouseMove( const MouseMoveInput& e )
 
     // Pick ray from our starting location
     Line startRay;
-    m_View->GetCamera()->ViewportToLine( (f32)sX, (f32)sY, startRay);
+    m_View->GetCamera()->ViewportToLine( (float32_t)sX, (float32_t)sY, startRay);
 
     // Pick ray from our current location
     Line endRay;
-    m_View->GetCamera()->ViewportToLine( (f32)eX, (f32)eY, endRay);
+    m_View->GetCamera()->ViewportToLine( (float32_t)eX, (float32_t)eY, endRay);
 
     // start and end points of the drag in world space, on the line or on the plane
     Vector3 p1, p2;
@@ -584,7 +583,7 @@ void ScaleManipulator::MouseMove( const MouseMoveInput& e )
         {
             if ( m_SelectedAxes == MultipleAxes::X )
             {
-                f32 delta = result.x - start.m_StartValue.x;
+                float32_t delta = result.x - start.m_StartValue.x;
                 delta /= m_Distance;
                 delta = Round( delta );
                 delta *= m_Distance;
@@ -597,7 +596,7 @@ void ScaleManipulator::MouseMove( const MouseMoveInput& e )
             }
             else if ( m_SelectedAxes == MultipleAxes::Y )
             {
-                f32 delta = result.y - start.m_StartValue.y;
+                float32_t delta = result.y - start.m_StartValue.y;
                 delta /= m_Distance;
                 delta = Round( delta );
                 delta *= m_Distance;
@@ -610,7 +609,7 @@ void ScaleManipulator::MouseMove( const MouseMoveInput& e )
             }
             else if ( m_SelectedAxes == MultipleAxes::Z )
             {
-                f32 delta = result.z - start.m_StartValue.z;
+                float32_t delta = result.z - start.m_StartValue.z;
                 delta /= m_Distance;
                 delta = Round( delta );
                 delta *= m_Distance;
@@ -656,12 +655,12 @@ void ScaleManipulator::CreateProperties()
     m_Generator->Pop();
 }
 
-f32 ScaleManipulator::GetSize() const
+float32_t ScaleManipulator::GetSize() const
 {
     return m_Size;
 }
 
-void ScaleManipulator::SetSize( f32 size )
+void ScaleManipulator::SetSize( float32_t size )
 {
     m_Size = size;
 

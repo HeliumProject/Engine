@@ -105,12 +105,12 @@ class DummyThread : public wxThread
 {
 private:
     ThreadMechanism* m_ThreadMechanism;
-    i32 m_ThreadID;
+    int32_t m_ThreadID;
 
 public:
     // Detached threads delete themselves once they have completed,
     // and thus must be created on the heap
-    DummyThread( ThreadMechanism* threadMechanism, i32 id )
+    DummyThread( ThreadMechanism* threadMechanism, int32_t id )
         : wxThread( wxTHREAD_DETACHED )
         , m_ThreadMechanism( threadMechanism )
         , m_ThreadID( id )
@@ -229,7 +229,7 @@ void ThreadMechanism::StopThread()
 // ThreadProc Helper Functions
 // Used in ThreadProc() to create begin and end events
 //
-void ThreadMechanism::ThreadEnter( i32 threadID )
+void ThreadMechanism::ThreadEnter( int32_t threadID )
 {
     ::ResetEvent( m_EndThreadEvent );
 
@@ -242,7 +242,7 @@ void ThreadMechanism::ThreadEnter( i32 threadID )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void ThreadMechanism::ThreadPostResults( i32 threadID )
+void ThreadMechanism::ThreadPostResults( int32_t threadID )
 {
     wxCommandEvent evt( nocEVT_UPDATE_THREAD, m_DummyWindow->GetId() );
     evt.SetInt( threadID );
@@ -250,7 +250,7 @@ void ThreadMechanism::ThreadPostResults( i32 threadID )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool ThreadMechanism::CheckThreadLeave( i32 threadID )
+bool ThreadMechanism::CheckThreadLeave( int32_t threadID )
 {
     if ( m_StopThread || !IsCurrentThread( threadID ) )
     {
@@ -261,7 +261,7 @@ bool ThreadMechanism::CheckThreadLeave( i32 threadID )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void ThreadMechanism::ThreadLeave( i32 threadID )
+void ThreadMechanism::ThreadLeave( int32_t threadID )
 {
     ThreadPostResults( threadID );
 

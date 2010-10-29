@@ -1,7 +1,7 @@
 #include "Vector3.h"
 #include "Scale.h"
 
-using namespace Helium::Math;
+using namespace Helium;
 
 const Vector3 Vector3::Zero;
 const Vector3 Vector3::Unit   (1.0, 1.0, 1.0);
@@ -13,9 +13,9 @@ Vector3  Vector3::operator* (const Scale& v) const { return Vector3 (x * v.x, y 
 
 using namespace Helium;
 
-i32 Math::LookupPosInArray( const Vector3& pos, i32 min_key, i32 max_key, V_Vector3& pos_array, MM_i32& pos_lookup , f32 threshold)
+int32_t Helium::LookupPosInArray( const Vector3& pos, int32_t min_key, int32_t max_key, V_Vector3& pos_array, MM_i32& pos_lookup , float32_t threshold)
 {
-    for (i32 key = min_key; key <= max_key; ++key)
+    for (int32_t key = min_key; key <= max_key; ++key)
     {
         // lookup the first element with this key in the multi-map
         MM_i32::iterator ipos = pos_lookup.lower_bound( key );

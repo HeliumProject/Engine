@@ -6,7 +6,6 @@
 #include "Editor/App.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 using namespace Helium::Editor;
 

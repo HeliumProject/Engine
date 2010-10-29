@@ -5,7 +5,7 @@
 #include "EulerAngles.h"
 #include "Quaternion.h"
 
-using namespace Helium::Math;
+using namespace Helium;
 
 const Matrix3 Matrix3::Identity (Vector3 (1, 0, 0), Vector3 (0, 1, 0), Vector3 (0, 0, 1));
 const Matrix3 Matrix3::Zero (Vector3 (0, 0, 0), Vector3 (0, 0, 0), Vector3 (0, 0, 0));
@@ -31,10 +31,10 @@ Matrix3::Matrix3(const EulerAngles& v)
 
 Matrix3& Matrix3::operator=(const EulerAngles& v)
 {
-    f32 ri, rj, rh;
-    f32 ci, cj, ch, si, sj, sh; 
-    f32 cc, cs, sc, ss;
-    u32 i, j, k, h, n, s, f;
+    float32_t ri, rj, rh;
+    float32_t ci, cj, ch, si, sj, sh; 
+    float32_t cc, cs, sc, ss;
+    uint32_t i, j, k, h, n, s, f;
     Matrix3 &m = *this;
 
     EulGetOrd(v.order.o,i,j,k,h,n,s,f);
@@ -90,10 +90,10 @@ Matrix3::Matrix3(const AngleAxis& v)
 
 Matrix3& Matrix3::operator=(const AngleAxis& v)
 {
-    f32 v1 = v.axis.x, v2 = v.axis.y, v3 = v.axis.z;
-    f32 v1s = v1*v1, v2s = v2*v2, v3s = v3*v3;
+    float32_t v1 = v.axis.x, v2 = v.axis.y, v3 = v.axis.z;
+    float32_t v1s = v1*v1, v2s = v2*v2, v3s = v3*v3;
 
-    f32 cosTheta  = cos((f32)v.angle), sinTheta  = sin((f32)v.angle);
+    float32_t cosTheta  = cos((float32_t)v.angle), sinTheta  = sin((float32_t)v.angle);
 
     x[0] = v1s + ((1.0f-v1s) * cosTheta);
     x[1] = ((v1*v2) * (1.0f-cosTheta))  + (v3*sinTheta);
@@ -117,15 +117,15 @@ Matrix3::Matrix3(const Quaternion& v)
 
 Matrix3& Matrix3::operator=(const Quaternion& v)
 {
-    f32 xs, ys, zs, wx, wy, wz, xx, xy, xz, yy, yz, zz;
+    float32_t xs, ys, zs, wx, wy, wz, xx, xy, xz, yy, yz, zz;
 
-    f32 xv = v.values.x;
-    f32 yv = v.values.y;
-    f32 zv = v.values.z;
-    f32 wv = v.values.w;
+    float32_t xv = v.values.x;
+    float32_t yv = v.values.y;
+    float32_t zv = v.values.z;
+    float32_t wv = v.values.w;
 
-    f32 Nq = (xv * xv) + (yv * yv) + (zv * zv) + (wv * wv);
-    f32 s  = (Nq > 0.0f) ? (2.0f / Nq) : 0.0f;
+    float32_t Nq = (xv * xv) + (yv * yv) + (zv * zv) + (wv * wv);
+    float32_t s  = (Nq > 0.0f) ? (2.0f / Nq) : 0.0f;
 
     xs = xv * s;  ys = yv * s;  zs = zv * s;
     wx = wv * xs; wy = wv * ys; wz = wv * zs;
@@ -147,7 +147,7 @@ Matrix3& Matrix3::operator=(const Quaternion& v)
     return *this;
 }
 
-Matrix3 Matrix3::RotateX(f32 theta)
+Matrix3 Matrix3::RotateX(float32_t theta)
 {
     Matrix3 m = Identity;
     m[1][1] = m[2][2] = cos(theta);
@@ -156,7 +156,7 @@ Matrix3 Matrix3::RotateX(f32 theta)
     return m;
 }
 
-Matrix3 Matrix3::RotateY(f32 theta)
+Matrix3 Matrix3::RotateY(float32_t theta)
 {
     Matrix3 m = Identity;
     m[0][0] = m[2][2] = cos(theta);
@@ -165,7 +165,7 @@ Matrix3 Matrix3::RotateY(f32 theta)
     return m;
 }
 
-Matrix3 Matrix3::RotateZ(f32 theta)
+Matrix3 Matrix3::RotateZ(float32_t theta)
 {
     Matrix3 m = Identity;
     m[0][0] = m[1][1] = cos(theta);

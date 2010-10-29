@@ -34,11 +34,11 @@ namespace Helium
             };
 
             // Masks
-            static const i32 DefaultOpen   = ( Open | FileMustExist );
-            static const i32 DefaultSave   = ( Save | CreateFolder | OverwritePrompt );
+            static const int32_t DefaultOpen   = ( Open | FileMustExist );
+            static const int32_t DefaultSave   = ( Save | CreateFolder | OverwritePrompt );
 
         }
-        typedef i32 FileDialogStyle;
+        typedef int32_t FileDialogStyle;
 
 
         /////////////////////////////////////////////////////////////////////////////

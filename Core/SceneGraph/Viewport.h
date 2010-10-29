@@ -226,7 +226,7 @@ namespace Helium
             void LoadSettings(ViewportSettings* prefs);
             void SaveSettings(ViewportSettings* prefs);
 
-            void SetSize( Math::Point size )
+            void SetSize( Point size )
             {
                 m_Size = size;
             }
@@ -345,7 +345,7 @@ namespace Helium
             void InitCameras();
 
         public:
-            void SetSize(u32 x, u32 y);
+            void SetSize(uint32_t x, uint32_t y);
             void SetFocused(bool focused);
 
             void KeyDown( const Helium::KeyboardInput& input );
@@ -468,7 +468,7 @@ namespace Helium
 
         private:
             HWND                    m_Window;
-            Math::Point             m_Size;
+            Point             m_Size;
             bool                    m_Focused;
 
             SettingsManager*        m_SettingsManager;
@@ -485,8 +485,8 @@ namespace Helium
             GeometryMode            m_GeometryMode;
 
             DragMode                m_DragMode;
-            Math::Point             m_Start;
-            Math::Point             m_End;
+            Point             m_Start;
+            Point             m_End;
 
             bool                    m_Highlighting;
             bool                    m_AxesVisible;

@@ -10,9 +10,9 @@ namespace Helium
         class CORE_API TransformComponent : public Component::ComponentBase
         {
         private:
-            Math::Vector3 m_Translation;
-            Math::Vector3 m_Rotation;
-            Math::Vector3 m_Scale;
+            Vector3 m_Translation;
+            Vector3 m_Rotation;
+            Vector3 m_Scale;
 
         public:
 
@@ -34,13 +34,13 @@ namespace Helium
 
         public:
 
-            const Math::Vector3& GetTranslation() const;
-            const Math::Vector3& GetRotation() const;
-            const Math::Vector3& GetScale() const;
+            const Vector3& GetTranslation() const;
+            const Vector3& GetRotation() const;
+            const Vector3& GetScale() const;
 
-            void SetTranslation( const Math::Vector3& translation );
-            void SetRotation( const Math::Vector3& rotation );
-            void SetScale( const Math::Vector3& scale );
+            void SetTranslation( const Vector3& translation );
+            void SetRotation( const Vector3& rotation );
+            void SetScale( const Vector3& scale );
 
         };
     }

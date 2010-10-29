@@ -24,7 +24,7 @@ void TypeIDSerializer::ConnectData(Helium::HybridPtr<void> data)
     m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
-bool TypeIDSerializer::Set(const Reflect::Serializer* s, u32 flags)
+bool TypeIDSerializer::Set(const Reflect::Serializer* s, uint32_t flags)
 {
     const TypeIDSerializer* rhs = Reflect::ConstObjectCast<TypeIDSerializer>(s);
     if (!rhs)
@@ -70,7 +70,7 @@ void TypeIDSerializer::Serialize(Archive& archive) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            i32 index = binary.GetStrings().Insert( type ? type->m_ShortName : TXT("") );
+            int32_t index = binary.GetStrings().Insert( type ? type->m_ShortName : TXT("") );
             binary.GetStream().Write(&index); 
             break;
         }
@@ -97,7 +97,7 @@ void TypeIDSerializer::Deserialize(Archive& archive)
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            i32 index;
+            int32_t index;
             binary.GetStream().Read(&index); 
             str = binary.GetStrings().Get(index);
             break;

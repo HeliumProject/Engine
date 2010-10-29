@@ -93,7 +93,7 @@ namespace Helium
         class MultiFStatCommand : public FStatCommand
         {
         public:
-            MultiFStatCommand( Provider* provider, const tstring& folder, RCS::V_File* files, bool recursive, u32 fileData = RCS::FileData::All, u32 actionData = RCS::ActionData::All )
+            MultiFStatCommand( Provider* provider, const tstring& folder, RCS::V_File* files, bool recursive, uint32_t fileData = RCS::FileData::All, uint32_t actionData = RCS::ActionData::All )
                 : FStatCommand ( provider, TXT( "fstat" ), NULL )
                 , m_Folder ( folder )
                 , m_Files ( files )
@@ -111,8 +111,8 @@ namespace Helium
             tstring m_Folder;
             RCS::V_File* m_Files;
             bool m_Recursive;
-            u32 m_FileData;
-            u32 m_ActionData;
+            uint32_t m_FileData;
+            uint32_t m_ActionData;
         };
 
         class FileLogCommand : public Command

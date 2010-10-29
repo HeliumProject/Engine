@@ -19,7 +19,7 @@ namespace Helium
             Instance();
             ~Instance();
 
-            virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
+            virtual int32_t GetImageIndex() const HELIUM_OVERRIDE;
             virtual SceneNodeTypePtr CreateNodeType( Scene* scene ) const HELIUM_OVERRIDE;
 
             virtual bool ValidatePanel(const tstring& name) HELIUM_OVERRIDE;

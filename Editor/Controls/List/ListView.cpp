@@ -160,7 +160,7 @@ void ListView::RemoveSelectionChangedListener( const ListSelectionChangedSignatu
 
 IMPLEMENT_DYNAMIC_CLASS( SortableListView, ListView )
 
-typedef std::map< i32, tstring > M_i32ToString;
+typedef std::map< int32_t, tstring > M_i32ToString;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Structure for passing additional information into the static sort function.
@@ -168,10 +168,10 @@ typedef std::map< i32, tstring > M_i32ToString;
 struct SortData
 {
     SortableListView* m_List;
-    i32 m_Column;
+    int32_t m_Column;
     M_i32ToString m_Cache;
 
-    SortData( SortableListView* list, i32 column )
+    SortData( SortableListView* list, int32_t column )
         : m_List( list )
         , m_Column( column )
     {

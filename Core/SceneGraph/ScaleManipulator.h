@@ -18,15 +18,15 @@ namespace Helium
             SceneGraph::PrimitiveAxes* m_Axes;
             SceneGraph::PrimitiveCube* m_Cube;
             SceneGraph::PrimitiveCube* m_XCube;
-            Math::Vector3 m_XPosition;
+            Vector3 m_XPosition;
             SceneGraph::PrimitiveCube* m_YCube;
-            Math::Vector3 m_YPosition;
+            Vector3 m_YPosition;
             SceneGraph::PrimitiveCube* m_ZCube;
-            Math::Vector3 m_ZPosition;
+            Vector3 m_ZPosition;
 
-            f32 m_Size;
+            float32_t m_Size;
             bool m_GridSnap;
-            f32 m_Distance;
+            float32_t m_Distance;
 
             SettingsManager* m_SettingsManager;
 
@@ -57,8 +57,8 @@ namespace Helium
 
             virtual void CreateProperties() HELIUM_OVERRIDE;
 
-            f32 GetSize() const;
-            void SetSize( f32 size );
+            float32_t GetSize() const;
+            void SetSize( float32_t size );
 
             bool GetGridSnap() const;
             void SetGridSnap( bool gridSnap );

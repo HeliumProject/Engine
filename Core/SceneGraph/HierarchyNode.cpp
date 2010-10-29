@@ -351,11 +351,11 @@ HierarchyNodePtr HierarchyNode::Duplicate()
     return duplicate;
 }
 
-Math::AlignedBox HierarchyNode::GetGlobalBounds() const
+AlignedBox HierarchyNode::GetGlobalBounds() const
 {
     const SceneGraph::Transform* transform = GetTransform();
 
-    Math::AlignedBox bounds;
+    AlignedBox bounds;
 
     // reset to local HierarchyBounds
     bounds.Merge( m_ObjectBounds );
@@ -369,11 +369,11 @@ Math::AlignedBox HierarchyNode::GetGlobalBounds() const
     return bounds;
 }
 
-Math::AlignedBox HierarchyNode::GetGlobalHierarchyBounds() const
+AlignedBox HierarchyNode::GetGlobalHierarchyBounds() const
 {
     const SceneGraph::Transform* transform = GetTransform();
 
-    Math::AlignedBox bounds;
+    AlignedBox bounds;
 
     // reset to local HierarchyBounds
     bounds.Merge( m_ObjectHierarchyBounds );
@@ -630,9 +630,9 @@ bool HierarchyNode::ComputeSelectability() const
     return isSelectable;
 }
 
-u32 HierarchyNode::Dirty()
+uint32_t HierarchyNode::Dirty()
 {
-    u32 count = 0;
+    uint32_t count = 0;
 
     if (m_Graph)
     {
@@ -678,7 +678,7 @@ void HierarchyNode::Evaluate(GraphDirection direction)
                 SceneGraph::HierarchyNode* child = *itr;
 
                 // get the hierarchical bounds for that child
-                Math::AlignedBox bounds = child->GetObjectHierarchyBounds();
+                AlignedBox bounds = child->GetObjectHierarchyBounds();
 
                 // get the child's transform
                 SceneGraph::Transform* childTransform = child->GetTransform();
@@ -701,11 +701,11 @@ void HierarchyNode::Evaluate(GraphDirection direction)
     __super::Evaluate(direction);
 }
 
-bool HierarchyNode::BoundsCheck(const Math::Matrix4& instanceMatrix) const
+bool HierarchyNode::BoundsCheck(const Matrix4& instanceMatrix) const
 {
     SceneGraph::Camera* camera = m_Owner->GetViewport()->GetCamera();
 
-    Math::AlignedBox bounds (m_ObjectHierarchyBounds);
+    AlignedBox bounds (m_ObjectHierarchyBounds);
 
     bounds.Transform( instanceMatrix );
 
@@ -730,14 +730,14 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
     case ViewColorModes::Layer:
         if ( m_LayerColor )
         {
-            const Math::Color3& color = m_LayerColor->GetColor();
+            const Color3& color = m_LayerColor->GetColor();
             material.Ambient = SceneGraph::Color::ColorToColorValue( (DWORD)defaultMaterial.Ambient.a, color.r, color.g, color.b );
         }
         break;
 
     case ViewColorModes::Scene:
         {
-            const Math::Color3& color = m_Owner->GetColor();
+            const Color3& color = m_Owner->GetColor();
             material.Ambient = SceneGraph::Color::ColorToColorValue( (DWORD)defaultMaterial.Ambient.a, color.r, color.g, color.b );
         }
         break;
@@ -821,8 +821,8 @@ void HierarchyNode::Render( RenderVisitor* render )
 
     if ( transform && IsSelected() && m_Owner->IsFocused() && render->GetViewport()->IsBoundsVisible() )
     {
-        Math::V_Vector3 vertices;
-        Math::V_Vector3 lineList;
+        V_Vector3 vertices;
+        V_Vector3 lineList;
 
         D3DMATERIAL9 material;
         ZeroMemory(&material, sizeof(material));
@@ -835,16 +835,16 @@ void HierarchyNode::Render( RenderVisitor* render )
         //
 
         {
-            Math::Matrix4 matrix = render->State().m_Matrix;
+            Matrix4 matrix = render->State().m_Matrix;
 
             m_Owner->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
 
             vertices.clear();
             m_ObjectBounds.GetVertices(vertices);
-            Math::AlignedBox::GetWireframe( vertices, lineList );
+            AlignedBox::GetWireframe( vertices, lineList );
             material.Ambient = SceneGraph::Color::ColorToColorValue( 1, 255, 0, 0 );
             m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
-            m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
+            m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
         }
 
 
@@ -853,16 +853,16 @@ void HierarchyNode::Render( RenderVisitor* render )
         //
 
         {
-            Math::Matrix4 matrix = render->ParentState().m_Matrix;
+            Matrix4 matrix = render->ParentState().m_Matrix;
 
             m_Owner->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
 
             vertices.clear();
             GetGlobalBounds().GetVertices(vertices);
-            Math::AlignedBox::GetWireframe( vertices, lineList );
+            AlignedBox::GetWireframe( vertices, lineList );
             material.Ambient = SceneGraph::Color::ColorToColorValue( 1, 255, 128, 128 );
             m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
-            m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
+            m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
         }
 
 
@@ -871,16 +871,16 @@ void HierarchyNode::Render( RenderVisitor* render )
         //
 
         {
-            Math::Matrix4 matrix = render->State().m_Matrix;
+            Matrix4 matrix = render->State().m_Matrix;
 
             m_Owner->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
 
             vertices.clear();
             m_ObjectHierarchyBounds.GetVertices(vertices);
-            Math::AlignedBox::GetWireframe( vertices, lineList );
+            AlignedBox::GetWireframe( vertices, lineList );
             material.Ambient = SceneGraph::Color::ColorToColorValue( 1, 0, 0, 255 );
             m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
-            m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
+            m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
         }
 
 
@@ -889,16 +889,16 @@ void HierarchyNode::Render( RenderVisitor* render )
         //
 
         {
-            Math::Matrix4 matrix = render->ParentState().m_Matrix;
+            Matrix4 matrix = render->ParentState().m_Matrix;
 
             m_Owner->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
 
             vertices.clear();
             GetGlobalHierarchyBounds().GetVertices(vertices);
-            Math::AlignedBox::GetWireframe( vertices, lineList );
+            AlignedBox::GetWireframe( vertices, lineList );
             material.Ambient = SceneGraph::Color::ColorToColorValue( 1, 128, 128, 255 );
             m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
-            m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
+            m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
         }
 
         m_Owner->GetViewport()->GetResources()->ResetState();

@@ -41,7 +41,7 @@ void BitfieldSerializer::Serialize(Archive& archive) const
 
     case ArchiveTypes::Binary:
         {
-            i32 index = -1;
+            int32_t index = -1;
             std::vector< tstring > strs;
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
@@ -101,7 +101,7 @@ void BitfieldSerializer::Deserialize(Archive& archive)
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            i32 index = -1;
+            int32_t index = -1;
             binary.GetStream().Read(&index); 
 
             std::vector< tstring > strs;

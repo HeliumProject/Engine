@@ -33,7 +33,7 @@ namespace Helium
             static void CleanupType();
 
         public:
-            HierarchyNodeType( SceneGraph::Scene* scene, i32 instanceType );
+            HierarchyNodeType( SceneGraph::Scene* scene, int32_t instanceType );
 
             virtual void Create();
             virtual void Delete();

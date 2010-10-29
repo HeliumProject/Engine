@@ -32,7 +32,7 @@ namespace Helium
         class CORE_API MeshProcessingComponent : public Component::ComponentBase
         {
         public:
-            Helium::Attribute< f32 >                   a_ScalingFactor;
+            Helium::Attribute< float32_t >                   a_ScalingFactor;
             Helium::Attribute< MeshCompressionFactor > a_MeshCompressionFactor;
             Helium::Attribute< bool >                  a_FlipWinding;
 

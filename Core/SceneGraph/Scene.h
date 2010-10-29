@@ -63,7 +63,7 @@ namespace Helium
                 Default = None,
             };
 
-            static bool HasFlag( u32 flags, ImportFlag singleFlag )
+            static bool HasFlag( uint32_t flags, ImportFlag singleFlag )
             {
                 return ( flags & singleFlag ) == singleFlag;
             }
@@ -87,18 +87,18 @@ namespace Helium
                 Default = MaintainHierarchy | MaintainDependencies,
             };
 
-            static bool HasFlag( u32 flags, ExportFlag singleFlag )
+            static bool HasFlag( uint32_t flags, ExportFlag singleFlag )
             {
                 return ( flags & singleFlag ) == singleFlag;
             }
         }
         typedef ExportFlags::ExportFlag ExportFlag;
 
-        typedef std::vector< Math::AlignedBox > V_AlignedBox;
+        typedef std::vector< AlignedBox > V_AlignedBox;
 
         struct ExportArgs
         {
-            u32 m_Flags;
+            uint32_t m_Flags;
             V_AlignedBox m_Bounds;
 
             ExportArgs()
@@ -107,7 +107,7 @@ namespace Helium
 
             }
 
-            ExportArgs( u32 flags )
+            ExportArgs( uint32_t flags )
                 : m_Flags ( flags )
             {
 
@@ -313,7 +313,7 @@ namespace Helium
             Helium::TUID m_Id;
 
             // load
-            i32 m_Progress;
+            int32_t m_Progress;
             Helium::HM_TUID m_RemappedIDs;
             SceneGraph::HierarchyNode* m_ImportRoot;
             bool m_Importing;
@@ -355,7 +355,7 @@ namespace Helium
             ToolPtr m_Tool;
 
             // offset matrix for smart duplicate
-            Math::Matrix4 m_SmartDuplicateMatrix;
+            Matrix4 m_SmartDuplicateMatrix;
 
             // flag that the smart duplicate matrix is valid
             bool m_ValidSmartDuplicateMatrix;
@@ -365,7 +365,7 @@ namespace Helium
 
             // set by the zone that this scene belongs to, and used for 
             // the 3D view's "color modes"
-            Math::Color3 m_Color;
+            Color3 m_Color;
 
             bool m_IsFocused;
 
@@ -417,8 +417,8 @@ namespace Helium
             void SetTool(const ToolPtr& tool);
 
             // support for zone color
-            const Math::Color3& GetColor() const;
-            void SetColor( const Math::Color3& color );
+            const Color3& GetColor() const;
+            void SetColor( const Color3& color );
 
             //
             // Selection
@@ -553,7 +553,7 @@ namespace Helium
             }
 
             template< class T >
-            void GetAllPackages( std::vector< T* >& objects, i32 attributeType = -1, bool pack = false ) const
+            void GetAllPackages( std::vector< T* >& objects, int32_t attributeType = -1, bool pack = false ) const
             {
                 HM_SceneNodeDumbPtr::const_iterator itor = m_Nodes.begin();
                 HM_SceneNodeDumbPtr::const_iterator end  = m_Nodes.end();
@@ -599,15 +599,15 @@ namespace Helium
             bool Load( const Helium::Path& path ); 
 
             // Import data into this scene, possibly merging with existing nodes.
-            Undo::CommandPtr Import( const Helium::Path& path, ImportAction action = ImportActions::Import, u32 importFlags = ImportFlags::None, SceneGraph::HierarchyNode* parent = NULL, i32 importReflectType = Reflect::ReservedTypes::Invalid );
-            Undo::CommandPtr ImportXML( const tstring& xml, u32 importFlags = ImportFlags::None, SceneGraph::HierarchyNode* parent = NULL );
-            Undo::CommandPtr ImportSceneNodes( Reflect::V_Element& elements, ImportAction action, u32 importFlags, i32 importReflectType = Reflect::ReservedTypes::Invalid );
+            Undo::CommandPtr Import( const Helium::Path& path, ImportAction action = ImportActions::Import, uint32_t importFlags = ImportFlags::None, SceneGraph::HierarchyNode* parent = NULL, int32_t importReflectType = Reflect::ReservedTypes::Invalid );
+            Undo::CommandPtr ImportXML( const tstring& xml, uint32_t importFlags = ImportFlags::None, SceneGraph::HierarchyNode* parent = NULL );
+            Undo::CommandPtr ImportSceneNodes( Reflect::V_Element& elements, ImportAction action, uint32_t importFlags, int32_t importReflectType = Reflect::ReservedTypes::Invalid );
 
         private:
             // loading helpers
             void Reset();
 
-            Undo::CommandPtr ImportSceneNode( const Reflect::ElementPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, u32 importFlags, i32 importReflectType = Reflect::ReservedTypes::Invalid  );
+            Undo::CommandPtr ImportSceneNode( const Reflect::ElementPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, int32_t importReflectType = Reflect::ReservedTypes::Invalid  );
 
             /// @brief If this node has been remapped from another node, return the source nodes ID
             /// When we copy elements, we give them a new UniqueID. If we need information related
@@ -759,8 +759,8 @@ namespace Helium
             void GetFlattenedSelection(OS_SceneNodeDumbPtr& selection);
             void GetFlattenedHierarchy(SceneGraph::HierarchyNode* node, OS_HierarchyNodeDumbPtr& items);
 
-            void GetSelectedTransforms( Math::V_Matrix4& transforms );
-            Undo::CommandPtr SetSelectedTransforms( const Math::V_Matrix4& transforms );
+            void GetSelectedTransforms( V_Matrix4& transforms );
+            Undo::CommandPtr SetSelectedTransforms( const V_Matrix4& transforms );
 
             Undo::CommandPtr SetHiddenSelected( bool hidden );
             Undo::CommandPtr SetHiddenUnrelated( bool hidden );
@@ -812,7 +812,7 @@ namespace Helium
         typedef Helium::SmartPtr< SceneGraph::Scene > ScenePtr;
         typedef std::set< ScenePtr > S_SceneSmartPtr;
         typedef std::map< tstring, ScenePtr > M_SceneSmartPtr;
-        typedef std::map< Scene*, i32 > M_AllocScene;
+        typedef std::map< Scene*, int32_t > M_AllocScene;
 
         /////////////////////////////////////////////////////////////////////////////
         // Command for adding and removing nodes from a scene.
@@ -832,7 +832,7 @@ namespace Helium
         class SceneImportCommand : public Undo::Command
         {
         public:
-            SceneImportCommand( SceneGraph::Scene* scene, const Helium::Path& path, ImportAction importAction = ImportActions::Import, u32 importFlags = ImportFlags::None, SceneGraph::HierarchyNode* importRoot = NULL, i32 importReflectType = Reflect::ReservedTypes::Invalid )
+            SceneImportCommand( SceneGraph::Scene* scene, const Helium::Path& path, ImportAction importAction = ImportActions::Import, uint32_t importFlags = ImportFlags::None, SceneGraph::HierarchyNode* importRoot = NULL, int32_t importReflectType = Reflect::ReservedTypes::Invalid )
                 : m_Scene( scene )
                 , m_Path( path )
                 , m_ImportAction( importAction )
@@ -869,10 +869,10 @@ namespace Helium
             SceneGraph::Scene*           m_Scene;
             Helium::Path             m_Path;
             ImportAction             m_ImportAction;
-            u32                      m_ImportFlags;
+            uint32_t                      m_ImportFlags;
             SceneGraph::HierarchyNode*   m_ImportRoot;
             Undo::CommandPtr         m_UndoCommand;
-            i32                      m_ImportReflectType;
+            int32_t                      m_ImportReflectType;
         };
 
 

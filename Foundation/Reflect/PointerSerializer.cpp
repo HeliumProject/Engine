@@ -23,7 +23,7 @@ void PointerSerializer::ConnectData(Helium::HybridPtr<void> data)
     m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
-bool PointerSerializer::Set(const Reflect::Serializer* s, u32 flags)
+bool PointerSerializer::Set(const Reflect::Serializer* s, uint32_t flags)
 {
     const PointerSerializer* rhs = Reflect::ConstObjectCast<PointerSerializer>(s);
     if (!rhs)

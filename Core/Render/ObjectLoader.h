@@ -24,8 +24,8 @@ namespace Helium
             virtual ~ObjectLoader();
 
             // returns of the above error codes, error code is also put in m_parse_error
-            virtual u32 ParseFile( const tchar* filename,bool winding=false ) = 0;
-            virtual u32 GetNumFragments( int bangleIndex = -1 );
+            virtual uint32_t ParseFile( const tchar* filename,bool winding=false ) = 0;
+            virtual uint32_t GetNumFragments( int bangleIndex = -1 );
 
             void Compile(bool flip=false);
             void ComputeTangents();
@@ -56,8 +56,8 @@ namespace Helium
             int m_cOffset;
             int m_vtxSize;
 
-            u32 m_parse_error;
-            u32 m_parse_warnings;
+            uint32_t m_parse_error;
+            uint32_t m_parse_warnings;
         };
 
         typedef Helium::SmartPtr<ObjectLoader> ObjectLoaderPtr;

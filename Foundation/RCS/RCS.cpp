@@ -21,7 +21,7 @@ Provider*     g_Provider = NULL;
 Changeset     g_DefaultChangeset;
 std::vector< tstring >      g_ManagedPaths;
 std::vector< tstring >      g_IgnoredPaths;
-u64           g_SyncTimestamp = 0;
+uint64_t           g_SyncTimestamp = 0;
 
 ///////////////////////////////////////////////////////////////////
 // Utility methods
@@ -92,7 +92,7 @@ bool RCS::PathIsManaged( const tstring &path )
   return _IsSubdir( path, g_ManagedPaths );
 }
 
-void RCS::SetSyncTimestamp( const u64 timestamp )
+void RCS::SetSyncTimestamp( const uint64_t timestamp )
 {
   if ( timestamp == SyncTimes::Now )
   {
@@ -106,7 +106,7 @@ void RCS::SetSyncTimestamp( const u64 timestamp )
   }
 }
 
-u64 RCS::GetSyncTimestamp()
+uint64_t RCS::GetSyncTimestamp()
 {
   return g_SyncTimestamp;
 }
@@ -173,7 +173,7 @@ void RCS::GetInfo( V_File& files, GetInfoFlag flags )
   }
 }
 
-void RCS::GetInfo( const tstring& folder, V_File& files, bool recursive, u32 fileData, u32 actionData )
+void RCS::GetInfo( const tstring& folder, V_File& files, bool recursive, uint32_t fileData, uint32_t actionData )
 {
   g_Provider->GetInfo( folder, files, recursive, fileData, actionData );
 }

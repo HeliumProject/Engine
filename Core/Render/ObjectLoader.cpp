@@ -16,11 +16,11 @@ namespace Helium
     {
         struct IdxSet 
         {
-            u32 pIndex;
-            u32 nIndex;
-            u32 tIndex;
-            u32 tanIndex;
-            u32 cIndex;
+            uint32_t pIndex;
+            uint32_t nIndex;
+            uint32_t tIndex;
+            uint32_t tanIndex;
+            uint32_t cIndex;
 
             bool operator< ( const IdxSet &rhs) const 
             {
@@ -71,18 +71,18 @@ void ObjectLoader::Compile(bool flip)
     //SetNoTangents();
 
     //merge the points
-    std::map<IdxSet, u32> pts;
+    std::map<IdxSet, uint32_t> pts;
 
     //find whether a position is unique
-    std::set<u32> ptSet;
+    std::set<uint32_t> ptSet;
 
-    for (u32 f=0;f<(u32)m_fragments.size();f++)
+    for (uint32_t f=0;f<(uint32_t)m_fragments.size();f++)
     {
-        std::vector<u32>::iterator pit = m_fragments[f].m_pIndex.begin();
-        std::vector<u32>::iterator nit = m_fragments[f].m_nIndex.begin();
-        std::vector<u32>::iterator tit = m_fragments[f].m_tIndex.begin();
-        std::vector<u32>::iterator tanit = m_fragments[f].m_tanIndex.begin();
-        std::vector<u32>::iterator cit = m_fragments[f].m_cIndex.begin();
+        std::vector<uint32_t>::iterator pit = m_fragments[f].m_pIndex.begin();
+        std::vector<uint32_t>::iterator nit = m_fragments[f].m_nIndex.begin();
+        std::vector<uint32_t>::iterator tit = m_fragments[f].m_tIndex.begin();
+        std::vector<uint32_t>::iterator tanit = m_fragments[f].m_tanIndex.begin();
+        std::vector<uint32_t>::iterator cit = m_fragments[f].m_cIndex.begin();
 
         while ( pit < m_fragments[f].m_pIndex.end()) 
         {
@@ -95,13 +95,13 @@ void ObjectLoader::Compile(bool flip)
 
             //      Log::Print( TXT( "p idx = %d, n idx = %d, t idx = %d, tan idx = %d, c idx = %d\n" ), idx.pIndex, idx.nIndex, idx.tIndex, idx.tanIndex, idx.cIndex);
 
-            std::map<IdxSet,u32>::iterator mit = pts.find(idx);
+            std::map<IdxSet,uint32_t>::iterator mit = pts.find(idx);
 
             if (mit == pts.end()) 
             {
                 //        Log::Print( TXT( "New vertex\n" ) );
-                m_fragments[f].m_indices.push_back( (u32)pts.size());
-                pts.insert( std::map<IdxSet,u32>::value_type(idx, (u32)pts.size()));
+                m_fragments[f].m_indices.push_back( (uint32_t)pts.size());
+                pts.insert( std::map<IdxSet,uint32_t>::value_type(idx, (uint32_t)pts.size()));
 
                 //position
                 m_vertices.push_back( m_positions[idx.pIndex*m_posSize]);
@@ -173,7 +173,7 @@ void ObjectLoader::InsertColors()
     m_colors.push_back(1.0f);
     m_colors.push_back(1.0f);     // flip factor
 
-    for (u32 f=0;f<(u32)m_fragments.size();f++)
+    for (uint32_t f=0;f<(uint32_t)m_fragments.size();f++)
     {
         //for every position index we have a color index of zero
         for (int ii = 0; ii < (int)m_fragments[f].m_pIndex.size(); ii++) 
@@ -194,7 +194,7 @@ void ObjectLoader::InsertTexCoords()
     m_tcSize = 2;
 
     // for each normal generate a texture coordinate
-    for (u32 n=0;n<m_normals.size();n+=3)
+    for (uint32_t n=0;n<m_normals.size();n+=3)
     {
         float x = m_normals[n];
         float y = m_normals[n+1];
@@ -205,7 +205,7 @@ void ObjectLoader::InsertTexCoords()
     }
 
     // for each fragment duplicate the normal index array into the texture coordinate index
-    for (u32 f=0;f<(u32)m_fragments.size();f++)
+    for (uint32_t f=0;f<(uint32_t)m_fragments.size();f++)
     {
         m_fragments[f].m_tIndex.clear();
         m_fragments[f].m_tIndex = m_fragments[f].m_nIndex;
@@ -224,7 +224,7 @@ void ObjectLoader::SetNoTangents()
     m_sTangents.push_back(0.0f);
     m_sTangents.push_back(1.0f);
 
-    for (u32 f=0;f<(u32)m_fragments.size();f++)
+    for (uint32_t f=0;f<(uint32_t)m_fragments.size();f++)
     {
         //for every position index we have a tangent index of zero
         for (int ii = 0; ii < (int)m_fragments[f].m_pIndex.size(); ii++) 
@@ -250,18 +250,18 @@ void ObjectLoader::ComputeTangents()
     }
 
     m_sTangents.resize( (m_texcoords.size() / m_tcSize) * 4, 0.0f);
-    for (u32 i=0;i<(m_texcoords.size() / m_tcSize) * 4;i++)
+    for (uint32_t i=0;i<(m_texcoords.size() / m_tcSize) * 4;i++)
     {
         m_sTangents[i]=0.0f;
     }
 
-    for (u32 f=0;f<(u32)m_fragments.size();f++)
+    for (uint32_t f=0;f<(uint32_t)m_fragments.size();f++)
     {
         //alloc memory and initialize to 0
         m_fragments[f].m_tanIndex.reserve( m_fragments[f].m_pIndex.size());
 
         // the collision map records any alternate locations for the tangents
-        std::multimap< u32, u32> collisionMap;
+        std::multimap< uint32_t, uint32_t> collisionMap;
 
         //process each face, compute the tangent and try to add it
         for (int ii = 0; ii < (int)m_fragments[f].m_pIndex.size(); ii += 3) 
@@ -303,7 +303,7 @@ void ObjectLoader::ComputeTangents()
             //loop over the vertices, to update the tangents
             for (int jj = 0; jj < 3; jj++) 
             {
-                u32 tan_idx = m_fragments[f].m_tIndex[ii + jj];
+                uint32_t tan_idx = m_fragments[f].m_tIndex[ii + jj];
 
                 //get the present accumulated tangnet
                 D3DXVECTOR4 curTan(&m_sTangents[tan_idx*4]);
@@ -329,7 +329,7 @@ void ObjectLoader::ComputeTangents()
                     // if we are within range and have a matching flip factor
                     bool flip_equal = (curTan[3]==factor);
                     float dot = D3DXVec3Dot( (D3DXVECTOR3*)&curTan, &sTan);
-                    //Log::Print( TXT( "Flip Equal = %d, dot3(face tan, cur tan) = %.3f\n" ),(u32)flip_equal,dot);
+                    //Log::Print( TXT( "Flip Equal = %d, dot3(face tan, cur tan) = %.3f\n" ),(uint32_t)flip_equal,dot);
 
                     if ( flip_equal && dot >= cosf( 3.1415926f * 0.333333f))
                     {
@@ -345,7 +345,7 @@ void ObjectLoader::ComputeTangents()
                     else 
                     {
                         //tangents disagree, this vertex must be split in tangent space 
-                        std::multimap< u32, u32>::iterator it = collisionMap.find(tan_idx);
+                        std::multimap< uint32_t, uint32_t>::iterator it = collisionMap.find(tan_idx);
 
                         //loop through all the previous hits on this index, until one agrees
                         while ( it != collisionMap.end() && it->first == tan_idx) 
@@ -373,7 +373,7 @@ void ObjectLoader::ComputeTangents()
                         else 
                         {
                             //we don't match any previous tangent used by this vertex, create a new tangent
-                            u32 target = (u32)m_sTangents.size() / 4;
+                            uint32_t target = (uint32_t)m_sTangents.size() / 4;
 
                             m_sTangents.push_back( sTan[0]);
                             m_sTangents.push_back( sTan[1]);
@@ -383,7 +383,7 @@ void ObjectLoader::ComputeTangents()
                             m_fragments[f].m_tanIndex.push_back( target);
 
                             //Log::Print( TXT( "Split vertex, adding new index %d\n" ),target);
-                            collisionMap.insert( std::multimap< u32, u32>::value_type( tan_idx, target));
+                            collisionMap.insert( std::multimap< uint32_t, uint32_t>::value_type( tan_idx, target));
                         }
                     }
                 }
@@ -417,17 +417,17 @@ void ObjectLoader::ComputeNormals()
     m_normals.resize( (m_positions.size() / m_posSize) * 3, 0.0f);
 
     // the collision map records any alternate locations for the normals
-    std::multimap< u32, u32> collisionMap;
+    std::multimap< uint32_t, uint32_t> collisionMap;
 
     //iterate over the faces, computing the face normal and summing it them
-    for (u32 f=0;f<(u32)m_fragments.size();f++)
+    for (uint32_t f=0;f<(uint32_t)m_fragments.size();f++)
     {
         m_fragments[f].m_nIndex.clear();
         m_fragments[f].m_nIndex.reserve( m_fragments[f].m_pIndex.size());
 
         for ( int ii = 0; ii < (int)m_fragments[f].m_pIndex.size(); ii += 3) 
         {
-            u32 i1,i2,i3;
+            uint32_t i1,i2,i3;
             i1 = m_fragments[f].m_pIndex[ii];
             i2 = m_fragments[f].m_pIndex[ii+1];
             i3 = m_fragments[f].m_pIndex[ii+2];
@@ -454,7 +454,7 @@ void ObjectLoader::ComputeNormals()
             //iterate over the vertices, adding the face normal influence to each
             for ( int jj = 0; jj < 3; jj++) 
             {
-                u32 idx = m_fragments[f].m_pIndex[ii + jj];
+                uint32_t idx = m_fragments[f].m_pIndex[ii + jj];
 
                 // get the current normal from the default location (index shared with position) 
                 D3DXVECTOR3 cnormal( &m_normals[idx*3]);
@@ -490,7 +490,7 @@ void ObjectLoader::ComputeNormals()
                     else 
                     {
                         //normals disagree, this vertex must be along a facet edge 
-                        std::multimap< u32, u32>::iterator it = collisionMap.find( m_fragments[f].m_pIndex[ii + jj]);
+                        std::multimap< uint32_t, uint32_t>::iterator it = collisionMap.find( m_fragments[f].m_pIndex[ii + jj]);
 
                         //loop through all hits on this index, until one agrees
                         while ( it != collisionMap.end() && it->first == m_fragments[f].m_pIndex[ii + jj]) 
@@ -514,12 +514,12 @@ void ObjectLoader::ComputeNormals()
                         else 
                         {
                             //we have a new collision, create a new normal
-                            u32 target = (u32)m_normals.size() / 3;
+                            uint32_t target = (uint32_t)m_normals.size() / 3;
                             m_normals.push_back( fnormal[0]);
                             m_normals.push_back( fnormal[1]);
                             m_normals.push_back( fnormal[2]);
                             m_fragments[f].m_nIndex.push_back( target);
-                            collisionMap.insert( std::multimap< u32, u32>::value_type( m_fragments[f].m_pIndex[ii + jj], target));
+                            collisionMap.insert( std::multimap< uint32_t, uint32_t>::value_type( m_fragments[f].m_pIndex[ii + jj], target));
                         }
                     } // else ( if normal agrees)
                 } // else (if normal is uninitialized)
@@ -586,14 +586,14 @@ void ObjectLoader::Rescale( float radius, D3DXVECTOR3& r, D3DXVECTOR3& center)
 }
 
 //////////////////////////////////////////////////////////////////////
-u32 ObjectLoader::GetNumFragments( int bangleIndex )
+uint32_t ObjectLoader::GetNumFragments( int bangleIndex )
 {
     if ( bangleIndex < 0 )
     {
-        return (u32) m_fragments.size();
+        return (uint32_t) m_fragments.size();
     }
 
-    u32 numFragments = 0;
+    uint32_t numFragments = 0;
     for ( std::vector<ShaderFrag>::iterator fragItr = m_fragments.begin(), fragEnd = m_fragments.end(); fragItr != fragEnd; ++fragItr )
     {
         if ( (*fragItr).m_bangle_index == bangleIndex )

@@ -56,7 +56,7 @@ namespace Helium
 {
     namespace Reflect
     {
-        i32         g_InitCount = 0;
+        int32_t         g_InitCount = 0;
         Registry*   g_Registry = NULL;
     }
 }
@@ -800,7 +800,7 @@ void Tracker::Dump()
     FILE* f = _tfopen( (path + TXT("ReflectDump.log")).c_str(), TXT("w") );
     if ( f != NULL )
     {
-        typedef std::map< u32, std::pair< tstring, u32 > > ObjectLogger;
+        typedef std::map< uint32_t, std::pair< tstring, uint32_t > > ObjectLogger;
         ObjectLogger objectLog;
 
         {
@@ -814,7 +814,7 @@ void Tracker::Dump()
                 ObjectLogger::iterator iter = objectLog.find( (*c_current).second.m_Type );
                 if ( iter == objectLog.end() )
                 {
-                    objectLog.insert( ObjectLogger::value_type( (*c_current).second.m_Type, std::pair< tstring, u32 >( (*c_current).second.m_ShortName, 1 ) ) );
+                    objectLog.insert( ObjectLogger::value_type( (*c_current).second.m_Type, std::pair< tstring, uint32_t >( (*c_current).second.m_ShortName, 1 ) ) );
                 }
                 else
                 {
@@ -832,7 +832,7 @@ void Tracker::Dump()
                 ObjectLogger::iterator iter = objectLog.find( (*d_current).second.m_Type );
                 if ( iter == objectLog.end() )
                 {
-                    objectLog.insert( ObjectLogger::value_type( (*d_current).second.m_Type, std::pair< tstring, u32 >( (*d_current).second.m_ShortName, 1 ) ) );
+                    objectLog.insert( ObjectLogger::value_type( (*d_current).second.m_Type, std::pair< tstring, uint32_t >( (*d_current).second.m_ShortName, 1 ) ) );
                 }
                 else
                 {

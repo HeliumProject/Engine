@@ -58,8 +58,8 @@ void Container::RemoveChild(Control* control)
         control->SetParent( NULL );
 
         // remove our reference to the control
-        const i32 numControls = static_cast< i32 >( m_Children.size() ) - 1;
-        for ( i32 controlIndex = numControls; controlIndex > -1; --controlIndex )
+        const int32_t numControls = static_cast< int32_t >( m_Children.size() ) - 1;
+        for ( int32_t controlIndex = numControls; controlIndex > -1; --controlIndex )
         {
             if ( control == m_Children.at( controlIndex ) )
             {

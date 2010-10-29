@@ -12,7 +12,6 @@
 #include "Core/SceneGraph/PrimitivePointer.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_CLASS(Volume);
@@ -47,7 +46,7 @@ Volume::~Volume()
 
 }
 
-i32 Volume::GetImageIndex() const
+int32_t Volume::GetImageIndex() const
 {
     return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "volume" ) );
 }
@@ -96,15 +95,15 @@ void Volume::Evaluate(GraphDirection direction)
 
                 if ( IsPointerVisible() )
                 {
-                    Math::AlignedBox box (type->GetPointer()->GetBounds());
+                    AlignedBox box (type->GetPointer()->GetBounds());
 
-                    Math::Scale scale;
-                    Math::Matrix3 rotate;
-                    Math::Vector3 translate;
+                    Scale scale;
+                    Matrix3 rotate;
+                    Vector3 translate;
                     m_InverseGlobalTransform.Decompose (scale, rotate, translate);
 
                     //  this will compensate for the normalized render of the pointer
-                    box.Transform (Math::Matrix4 (scale));
+                    box.Transform (Matrix4 (scale));
 
                     m_ObjectBounds.Merge( box );
                 }

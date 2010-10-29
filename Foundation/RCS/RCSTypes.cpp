@@ -4,7 +4,7 @@
 
 using namespace Helium;
 
-tstring RCS::GetChangesetIdAsString( const u64 changesetId )
+tstring RCS::GetChangesetIdAsString( const uint64_t changesetId )
 {
   tstringstream str;
   if ( changesetId == DefaultChangesetId )

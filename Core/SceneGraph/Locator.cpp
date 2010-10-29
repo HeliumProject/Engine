@@ -9,7 +9,6 @@
 #include "Core/SceneGraph/PrimitiveCube.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_CLASS(Locator);
@@ -43,7 +42,7 @@ Locator::~Locator()
 
 }
 
-i32 Locator::GetImageIndex() const
+int32_t Locator::GetImageIndex() const
 {
 #pragma TODO( "Fix this up somehow" )
     return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "locator" ) );

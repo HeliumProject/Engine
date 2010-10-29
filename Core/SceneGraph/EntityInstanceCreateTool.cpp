@@ -220,7 +220,7 @@ void EntityInstanceCreateTool::AddEntityAsset( const tstring& value )
 
     m_Generator->GetContainer()->GetCanvas()->Read();
 
-    Place(Math::Matrix4::Identity);
+    Place(Matrix4::Identity);
 }
 
 bool EntityInstanceCreateTool::GetPointerVisible() const
@@ -232,7 +232,7 @@ void EntityInstanceCreateTool::SetPointerVisible(bool show)
 {
     s_PointerVisible = show;
 
-    Place( Math::Matrix4::Identity );
+    Place( Matrix4::Identity );
 }
 
 bool EntityInstanceCreateTool::GetBoundsVisible() const
@@ -244,7 +244,7 @@ void EntityInstanceCreateTool::SetBoundsVisible(bool show)
 {
     s_BoundsVisible = show;
 
-    Place( Math::Matrix4::Identity );
+    Place( Matrix4::Identity );
 }
 
 bool EntityInstanceCreateTool::GetGeometryVisible() const
@@ -256,7 +256,7 @@ void EntityInstanceCreateTool::SetGeometryVisible(bool show)
 {
     s_GeometryVisible = show;
 
-    Place( Math::Matrix4::Identity );
+    Place( Matrix4::Identity );
 }
 
 tstring EntityInstanceCreateTool::GetRandomEntity() const
@@ -295,7 +295,7 @@ void EntityInstanceCreateTool::OnDeleteClass( const Inspect::ButtonClickedArgs& 
         if ( m_ClassPath.Hash() == entityInfo.m_ClassPath.Hash() )
         {
             m_ClassPath.Set( TXT( "" ) );
-            Place( Math::Matrix4::Identity );
+            Place( Matrix4::Identity );
         }
 
         m_RandomEntityInfo.erase( m_RandomEntityInfo.begin() + *itr );
@@ -338,7 +338,7 @@ void EntityInstanceCreateTool::OnNormalize( const Inspect::ButtonClickedArgs& ar
 
 void EntityInstanceCreateTool::OnModify( const Inspect::ButtonClickedArgs& args )
 {
-    std::map< u64, u64 > selectedHashes;
+    std::map< uint64_t, uint64_t > selectedHashes;
 
 #ifdef INSPECT_REFACTOR
     const std::vector< tstring >& selectedItems = m_RandomEntityList->GetSelectedItems();
@@ -376,7 +376,7 @@ void EntityInstanceCreateTool::OnModify( const Inspect::ButtonClickedArgs& args 
         return;
     }
 
-    f32 newPercentage = _tstof( input.c_str() ) / 100.0f;
+    float32_t newPercentage = _tstof( input.c_str() ) / 100.0f;
     V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin();
     V_EntityRowInfo::iterator end = m_RandomEntityInfo.end();
     for ( ; itr != end; ++itr )

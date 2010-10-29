@@ -118,7 +118,7 @@ namespace Helium
     private:
         mutable bool m_HasChanged;  //<! have we been changed since we opened or last saved?
         Helium::Path m_Path;
-        i32 m_Revision;
+        int32_t                 m_Revision;
         
         bool m_AllowUnsavableChanges;        //<! allows override of checkout (but you can't save)
 

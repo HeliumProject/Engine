@@ -10,7 +10,7 @@ namespace Helium
         class CORE_API ColorComponent : public Component::ComponentBase
         {
         private:
-            Math::HDRColor4 m_ColorHDR;
+            HDRColor4 m_ColorHDR;
 
             bool m_Alpha;
             bool m_HDR;
@@ -35,12 +35,12 @@ namespace Helium
 
         public:
 
-            void GetColor( Math::Color3& color ) const;
-            void GetColor( Math::Color4& color ) const;
-            void GetColor( Math::HDRColor3& color ) const;
-            void GetColor( Math::HDRColor4& color ) const;
+            void GetColor( Color3& color ) const;
+            void GetColor( Color4& color ) const;
+            void GetColor( HDRColor3& color ) const;
+            void GetColor( HDRColor4& color ) const;
 
-            void SetColor( const Math::HDRColor4& color );
+            void SetColor( const HDRColor4& color );
 
             bool Alpha() const;
             void SetAlpha( bool alpha );

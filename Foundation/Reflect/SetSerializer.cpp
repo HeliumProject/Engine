@@ -1,7 +1,7 @@
 #include "SetSerializer.h"
 
+using namespace Helium;
 using namespace Helium::Reflect;
-using namespace Helium::Math;
 
 REFLECT_DEFINE_ABSTRACT(SetSerializer)
 
@@ -94,7 +94,7 @@ void SimpleSetSerializer<DataT, DataSer>::Clear()
 }
 
 template < class DataT, class DataSer >
-i32 SimpleSetSerializer<DataT, DataSer>::GetItemType() const
+int32_t SimpleSetSerializer<DataT, DataSer>::GetItemType() const
 {
     return Reflect::GetType<DataT>();
 }
@@ -136,7 +136,7 @@ bool SimpleSetSerializer<DataT, DataSer>::ContainsItem(const Serializer* value) 
 }
 
 template < class DataT, class DataSer >
-bool SimpleSetSerializer<DataT, DataSer>::Set(const Serializer* src, u32 flags)
+bool SimpleSetSerializer<DataT, DataSer>::Set(const Serializer* src, uint32_t flags)
 {
     const SetSerializerT* rhs = ConstObjectCast<SetSerializerT>(src);
     if (!rhs)
@@ -263,9 +263,9 @@ tistream& SimpleSetSerializer<DataT, DataSer>::operator<< (tistream& stream)
 }  
 
 template SimpleSetSerializer< tstring, StringSerializer >;
-template SimpleSetSerializer< u32, U32Serializer >;
-template SimpleSetSerializer< u64, U64Serializer >;
-template SimpleSetSerializer< f32, F32Serializer >;
+template SimpleSetSerializer< uint32_t, U32Serializer >;
+template SimpleSetSerializer< uint64_t, U64Serializer >;
+template SimpleSetSerializer< float32_t, F32Serializer >;
 template SimpleSetSerializer< Helium::GUID, GUIDSerializer >;
 template SimpleSetSerializer< Helium::TUID, TUIDSerializer >;
 template SimpleSetSerializer< Helium::Path, PathSerializer >;

@@ -31,7 +31,7 @@ ThumbnailManager::~ThumbnailManager()
 // 
 void ThumbnailManager::Reset()
 {
-    Helium::Locker< std::map< u64, Helium::Path* > >::Handle list = m_AllRequests.Lock();
+    Helium::Locker< std::map< uint64_t, Helium::Path* > >::Handle list = m_AllRequests.Lock();
     list->clear();
 }
 
@@ -67,14 +67,14 @@ void ThumbnailManager::DetachFromWindow()
 // 
 void ThumbnailManager::OnThumbnailLoaded( const ThumbnailLoader::ResultArgs& args )
 {
-    Helium::Locker< std::map< u64, Helium::Path* > >::Handle list = m_AllRequests.Lock();
+    Helium::Locker< std::map< uint64_t, Helium::Path* > >::Handle list = m_AllRequests.Lock();
     if ( args.m_Cancelled )
     {
         list->erase( args.m_Path->Hash() );
     }
     else
     {
-        Helium::Insert< std::map< u64, Helium::Path* > >::Result inserted = list->insert( std::make_pair( args.m_Path->Hash(), args.m_Path ) );
+        Helium::Insert< std::map< uint64_t, Helium::Path* > >::Result inserted = list->insert( std::make_pair( args.m_Path->Hash(), args.m_Path ) );
         if ( inserted.second )
         {
             // Only post to the window if we still have a pointer

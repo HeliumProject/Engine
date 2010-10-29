@@ -12,8 +12,8 @@ namespace Helium
         class CORE_API AssetManifest : public Reflect::Element
         {
         public:
-            Math::Vector3 m_BoundingBoxMin;
-            Math::Vector3 m_BoundingBoxMax;
+            Vector3 m_BoundingBoxMin;
+            Vector3 m_BoundingBoxMax;
 
             REFLECT_DECLARE_ABSTRACT(AssetManifest, Reflect::Element);
 

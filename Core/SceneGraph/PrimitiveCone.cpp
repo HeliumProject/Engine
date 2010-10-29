@@ -4,7 +4,6 @@
 #include "Core/SceneGraph/Pick.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 PrimitiveCone::PrimitiveCone(ResourceTracker* m_Tracker)
@@ -20,7 +19,7 @@ PrimitiveCone::PrimitiveCone(ResourceTracker* m_Tracker)
   m_Bounds.maximum = Vector3 (m_Radius, m_Radius, m_Length);
 }
 
-u32 PrimitiveCone::GetWireVertCount() const
+uint32_t PrimitiveCone::GetWireVertCount() const
 {
   if (m_Steps == 0)
   {
@@ -32,7 +31,7 @@ u32 PrimitiveCone::GetWireVertCount() const
   }
 }
 
-u32 PrimitiveCone::GetPolyVertCount() const
+uint32_t PrimitiveCone::GetPolyVertCount() const
 {
   if (m_Steps == 0)
   {
@@ -52,7 +51,7 @@ void PrimitiveCone::Update()
   SetElementCount( GetWireVertCount() + GetPolyVertCount() );
   m_Vertices.clear();
 
-  float stepAngle = (f32)(Math::Pi)*2.0f / (f32)(m_Steps);
+  float stepAngle = (float32_t)(Pi)*2.0f / (float32_t)(m_Steps);
 
 
   //
@@ -60,21 +59,21 @@ void PrimitiveCone::Update()
   //
 
   m_Vertices.push_back(Position (0.0f, 0.0f, m_Length/2.0f));
-  m_Vertices.push_back(Position ((f32)(cos(0.f)) * m_Radius, (f32)(sin(0.f)) * m_Radius, -m_Length/2.0f));
+  m_Vertices.push_back(Position ((float32_t)(cos(0.f)) * m_Radius, (float32_t)(sin(0.f)) * m_Radius, -m_Length/2.0f));
 
   m_Vertices.push_back(Position (0.0f, 0.0f, m_Length/2.0f));
-  m_Vertices.push_back(Position ((f32)(cos(Math::HalfPi)) * m_Radius, (f32)(sin(Math::HalfPi)) * m_Radius, -m_Length/2.0f));
+  m_Vertices.push_back(Position ((float32_t)(cos(HalfPi)) * m_Radius, (float32_t)(sin(HalfPi)) * m_Radius, -m_Length/2.0f));
 
   m_Vertices.push_back(Position (0.0f, 0.0f, m_Length/2.0f));
-  m_Vertices.push_back(Position ((f32)(cos(Math::Pi)) * m_Radius, (f32)(sin(Math::Pi)) * m_Radius, -m_Length/2.0f));
+  m_Vertices.push_back(Position ((float32_t)(cos(Pi)) * m_Radius, (float32_t)(sin(Pi)) * m_Radius, -m_Length/2.0f));
 
   m_Vertices.push_back(Position (0.0f, 0.0f, m_Length/2.0f));
-  m_Vertices.push_back(Position ((f32)(cos(-Math::HalfPi)) * m_Radius, (f32)(sin(-Math::HalfPi)) * m_Radius, -m_Length/2.0f));
+  m_Vertices.push_back(Position ((float32_t)(cos(-HalfPi)) * m_Radius, (float32_t)(sin(-HalfPi)) * m_Radius, -m_Length/2.0f));
 
   for (int x=0; x<=m_Steps; x++)
   {
-    float theta = (f32)(x) * stepAngle;
-    m_Vertices.push_back(Position ((f32)(cos(theta)) * m_Radius, (f32)(sin(theta)) * m_Radius, -m_Length/2.0f));
+    float theta = (float32_t)(x) * stepAngle;
+    m_Vertices.push_back(Position ((float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius, -m_Length/2.0f));
   }
 
 
@@ -85,15 +84,15 @@ void PrimitiveCone::Update()
   m_Vertices.push_back(Position (0.0f, 0.0f, m_Length/2.0f));
   for (int x=0; x<=m_Steps; x++)
   {
-    float theta = (f32)(x) * stepAngle;
-    m_Vertices.push_back(Position ((f32)(cos(theta)) * m_Radius, (f32)(sin(theta)) * m_Radius, -m_Length/2.0f));
+    float theta = (float32_t)(x) * stepAngle;
+    m_Vertices.push_back(Position ((float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius, -m_Length/2.0f));
   }
 
   m_Vertices.push_back(Position (0.0f, 0.0f, -m_Length/2.0f));
   for (int x=m_Steps; x>=0; x--)
   {
-    float theta = (f32)(x) * stepAngle;
-    m_Vertices.push_back(Position ((f32)(cos(theta)) * m_Radius, (f32)(sin(theta)) * m_Radius, -m_Length/2.0f));
+    float theta = (float32_t)(x) * stepAngle;
+    m_Vertices.push_back(Position ((float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius, -m_Length/2.0f));
   }
 
   __super::Update();
@@ -138,7 +137,7 @@ void PrimitiveCone::Draw( DrawArgs* args, const bool* solid, const bool* transpa
 
 bool PrimitiveCone::Pick( PickVisitor* pick, const bool* solid ) const
 {
-  float stepAngle = (f32)(Math::Pi)*2.0f / (f32)(m_Steps);
+  float stepAngle = (float32_t)(Pi)*2.0f / (float32_t)(m_Steps);
   float sf=0, u=0, v=0;
 
   Vector3 v0, v1, v2;
@@ -146,11 +145,11 @@ bool PrimitiveCone::Pick( PickVisitor* pick, const bool* solid ) const
   // cone
   for (int i=0; i<m_Steps; i++)
   {
-    float theta = (f32)(i) * stepAngle;
+    float theta = (float32_t)(i) * stepAngle;
 
     v0 = Vector3 (0.0f, 0.0f, m_Length/2.0f);
-    v1 = Vector3 ((f32)(cos(theta)) * m_Radius, (f32)(sin(theta)) * m_Radius, -m_Length/2.0f);
-    v2 = Vector3 ((f32)(cos(theta+stepAngle)) * m_Radius, (f32)(sin(theta+stepAngle)) * m_Radius, -m_Length/2.0f);
+    v1 = Vector3 ((float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius, -m_Length/2.0f);
+    v2 = Vector3 ((float32_t)(cos(theta+stepAngle)) * m_Radius, (float32_t)(sin(theta+stepAngle)) * m_Radius, -m_Length/2.0f);
 
     if (pick->PickTriangle(v0, v1, v2))
     {

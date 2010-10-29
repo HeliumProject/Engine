@@ -49,11 +49,30 @@ Helium.DoDefaultSolutionSettings = function()
 	configurations
 	{
 		"Debug",
-		"DebugUnicode",
+		"Intermediate",
+		"Profile",
 		"Release",
-		"ReleaseUnicode",
 	}
-
+	
+	configuration {}
+		flags
+		{
+			"EnableSSE",
+			"NoMinimalRebuild",
+		}
+	
+	configuration "not no-unicode"
+		defines
+		{
+			"UNICODE=1",
+			"LITESQL_UNICODE=1",
+			"XML_UNICODE_WCHAR_T=1",
+		}
+		flags
+		{
+			"Unicode",
+		}
+	
 	for i, platform in ipairs( platforms() ) do
 		for j, config in ipairs( configurations() ) do
 			configuration( { config, platform } )
@@ -70,12 +89,8 @@ Helium.DoDefaultSolutionSettings = function()
 			"WIN32",
 			"_CRT_SECURE_NO_DEPRECATE",
 		}
-		flags
-		{
-			"NoMinimalRebuild",
-		}
 
-	configuration "Debug*"
+	configuration "Debug"
 		defines
 		{
 			"_DEBUG",
@@ -84,27 +99,34 @@ Helium.DoDefaultSolutionSettings = function()
 		{
 			"Symbols",
 		}
-
-	configuration "Release*"
+		
+	configuration "Intermediate"
+		flags
+		{
+			"OptimizeSpeed",
+			"Symbols",
+		}
+		
+	configuration "Profile"
 		defines
 		{
 			"NDEBUG",
 		}
 		flags
 		{
-			"Optimize",
+			"NoFramePointer",
+			"OptimizeSpeed",
 		}
 
-	configuration "*Unicode"
+	configuration "Release"
 		defines
 		{
-			"UNICODE=1",
-			"LITESQL_UNICODE=1",
-			"XML_UNICODE_WCHAR_T=1",
+			"NDEBUG",
 		}
 		flags
 		{
-			"Unicode",
+			"NoFramePointer",
+			"OptimizeSpeed",
 		}
 
 end

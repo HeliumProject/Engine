@@ -10,7 +10,7 @@ using namespace Helium;
 DecodeMips::DecodeMips(MipSet* mips)
 {
   m_levels = 0;
-  for (u32 i=0;i<MAX_TEXTURE_MIPS;i++)
+  for (uint32_t i=0;i<MAX_TEXTURE_MIPS;i++)
   {
     m_images[i] = 0;
   }
@@ -21,7 +21,7 @@ DecodeMips::DecodeMips(MipSet* mips)
 
 DecodeMips::~DecodeMips()
 {
-  for (u32 i=0;i<m_levels;i++)
+  for (uint32_t i=0;i<m_levels;i++)
   {
     delete m_images[i];
   }
@@ -31,12 +31,12 @@ void DecodeMips::Decode(MipSet* mips)
 {
   m_levels = mips->m_levels_used;
 
-  for (u32 i=0;i<m_levels;i++)
+  for (uint32_t i=0;i<m_levels;i++)
   {
     if (mips->m_levels[0][i].m_data)
     {
-      u32 width = mips->m_levels[0][i].m_width;
-      u32 height = mips->m_levels[0][i].m_height;
+      uint32_t width = mips->m_levels[0][i].m_width;
+      uint32_t height = mips->m_levels[0][i].m_height;
       m_images[i] = new Image( width,height,CF_ARGB8888);
 
       ColorFormat cf = CompatibleColorFormat(mips->m_format);
@@ -45,13 +45,13 @@ void DecodeMips::Decode(MipSet* mips)
         if (mips->m_format == OUTPUT_CF_DUDV)
         {
           // we need to convert DUDV back into a 3 byte vector
-          i8*   src_data  = (i8*)mips->m_levels[0][i].m_data;
-          f32*  r_ptr     = m_images[i]->m_Channels[0][Helium::Image::R];
-          f32*  g_ptr     = m_images[i]->m_Channels[0][Helium::Image::G];
-          f32*  b_ptr     = m_images[i]->m_Channels[0][Helium::Image::B];
-          f32*  a_ptr     = m_images[i]->m_Channels[0][Helium::Image::A];
+          int8_t*   src_data  = (int8_t*)mips->m_levels[0][i].m_data;
+          float32_t*  r_ptr     = m_images[i]->m_Channels[0][Helium::Image::R];
+          float32_t*  g_ptr     = m_images[i]->m_Channels[0][Helium::Image::G];
+          float32_t*  b_ptr     = m_images[i]->m_Channels[0][Helium::Image::B];
+          float32_t*  a_ptr     = m_images[i]->m_Channels[0][Helium::Image::A];
 
-          for (u32 p=0;p<width*height;p++)
+          for (uint32_t p=0;p<width*height;p++)
           {
             float nx = ((float)src_data[0])/128.0f;
             float ny = ((float)src_data[1])/128.0f;
@@ -66,7 +66,7 @@ void DecodeMips::Decode(MipSet* mips)
         }
         else
         {
-          u32 flags = squish::kDxt1;
+          uint32_t flags = squish::kDxt1;
           if (mips->m_format == OUTPUT_CF_DXT3)
           {
             flags = squish::kDxt3;
@@ -76,8 +76,8 @@ void DecodeMips::Decode(MipSet* mips)
             flags = squish::kDxt5;
           }
 
-          u8* src_data  = (u8*)mips->m_levels[0][i].m_data;
-          u8* src_rgba  = new u8[m_images[i]->m_Width*m_images[i]->m_Height*4];
+          uint8_t* src_data  = (uint8_t*)mips->m_levels[0][i].m_data;
+          uint8_t* src_rgba  = new uint8_t[m_images[i]->m_Width*m_images[i]->m_Height*4];
           squish::DecompressImage(src_rgba, m_images[i]->m_Width,  m_images[i]->m_Height,  src_data, flags);
           m_images[i]->FillFaceData(0, CF_ARGB8888, src_rgba);
           delete[] src_rgba;

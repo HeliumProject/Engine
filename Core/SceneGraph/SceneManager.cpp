@@ -18,7 +18,7 @@ using namespace Helium::SceneGraph;
 // 
 static tstring GetUniqueSceneName()
 {
-    static i32 number = 1;
+    static int32_t number = 1;
 
     tostringstream str;
     str << "Scene" << number++;
@@ -223,7 +223,7 @@ void SceneManager::AllocateNestedScene( const ResolveSceneArgs& args )
     if ( args.m_Scene )
     {
         // Increment the reference count on the nested scene.
-        i32& referenceCount = m_AllocatedScenes.insert( M_AllocScene::value_type( args.m_Scene, 0 ) ).first->second;
+        int32_t& referenceCount = m_AllocatedScenes.insert( M_AllocScene::value_type( args.m_Scene, 0 ) ).first->second;
         ++referenceCount;
     }
 }
@@ -237,7 +237,7 @@ void SceneManager::ReleaseNestedScene( SceneGraph::Scene*& scene )
     M_AllocScene::iterator found = m_AllocatedScenes.find( scene );
     if ( found != m_AllocatedScenes.end() )
     {
-        i32& referenceCount = found->second;
+        int32_t& referenceCount = found->second;
         if ( --referenceCount == 0 )
         {
             m_AllocatedScenes.erase( found );

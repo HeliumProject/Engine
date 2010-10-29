@@ -81,7 +81,7 @@ tstring ProjectViewModelNode::GetFileSize() const
     }
     else if ( m_Path.IsFile() )
     {
-        u64 size = m_Path.Size();
+        uint64_t size = m_Path.Size();
         return BytesToString( size );
     }
     
@@ -101,7 +101,7 @@ ProjectViewModel::~ProjectViewModel()
     ResetColumns();
 }
 
-wxDataViewColumn* ProjectViewModel::CreateColumn( u32 id )
+wxDataViewColumn* ProjectViewModel::CreateColumn( uint32_t id )
 {
     switch( id )
     {
@@ -350,7 +350,7 @@ void ProjectViewModel::GetValue( wxVariant& variant, const wxDataViewItem& item,
 
     case ProjectModelColumns::Name:
         {
-            i32 imageID = GlobalFileIconsTable().GetIconIDFromPath( node->GetPath() );
+            int32_t imageID = GlobalFileIconsTable().GetIconIDFromPath( node->GetPath() );
             variant << wxDataViewIconText( node->GetName(), GlobalFileIconsTable().GetSmallImageList()->GetIcon( imageID ) );
         }
         break;
@@ -453,7 +453,7 @@ unsigned int ProjectViewModel::GetChildren( const wxDataViewItem& item, wxDataVi
         return 0;
     }
 
-    u32 numAdded = 0;
+    uint32_t numAdded = 0;
     for ( S_ProjectViewModelNodeChildren::const_iterator itr = parentNode->GetChildren().begin(),
         end = parentNode->GetChildren().end(); itr != end; ++itr, ++numAdded )
     {

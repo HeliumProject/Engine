@@ -13,7 +13,7 @@
 #include "Foundation/API.h"
 #include "Foundation/Memory/Endian.h"
 
-typedef u64 tuid;
+typedef uint64_t tuid;
 
 namespace Helium
 {
@@ -27,10 +27,10 @@ namespace Helium
         // The null ID
         static const GUID Null;
 
-        u32 Data1;
-        u16 Data2;
-        u16 Data3;
-        u8 Data4[ 8 ];
+        uint32_t Data1;
+        uint16_t Data2;
+        uint16_t Data3;
+        uint8_t Data4[ 8 ];
 
 
         GUID(); // Null ID
@@ -110,7 +110,7 @@ namespace Helium
     };
 
     typedef stdext::hash_map< GUID, GUID, GUIDHasher > HM_GUID;
-    typedef stdext::hash_map< GUID, u32, GUIDHasher > HM_GUIDU32;
+    typedef stdext::hash_map< GUID, uint32_t, GUIDHasher > HM_GUIDU32;
     typedef std::vector< GUID > V_GUID;
     typedef std::set< GUID > S_GUID;  
 

@@ -23,7 +23,7 @@ void PathSerializer::ConnectData( Helium::HybridPtr< void > data )
     m_Data.Connect( Helium::HybridPtr< Helium::Path >( data.Address(), data.State() ) );
 }
 
-bool PathSerializer::Set( const Serializer* src, u32 flags )
+bool PathSerializer::Set( const Serializer* src, uint32_t flags )
 {
     if ( GetType() != src->GetType() )
     {
@@ -68,7 +68,7 @@ void PathSerializer::Serialize( Archive& archive ) const
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
             // get string pool index
-            i32 index = binary.GetStrings().Insert( data );
+            int32_t index = binary.GetStrings().Insert( data );
 
             // write that index
             binary.GetStream().Write( &index ); 
@@ -97,7 +97,7 @@ void PathSerializer::Deserialize( Archive& archive )
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            i32 index = -1;
+            int32_t index = -1;
             binary.GetStream().Read( &index ); 
 
             if ( index >= 0 )

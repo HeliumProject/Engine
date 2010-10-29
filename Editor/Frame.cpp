@@ -112,9 +112,9 @@ void Frame::Push( const Undo::CommandPtr& command )
 // toggle its visibility.  Provided as a convenience function so that the base
 // classes can just drop this menu on their menu bar.
 // 
-u32 Frame::CreatePanelsMenu( wxMenu* menu )
+uint32_t Frame::CreatePanelsMenu( wxMenu* menu )
 {
-    u32 numMenuOptionsAdded = 0;
+    uint32_t numMenuOptionsAdded = 0;
     wxAuiPaneInfoArray& panes = m_FrameManager.GetAllPanes();
     const size_t numPanes = panes.Count();
     for ( size_t index = 0; index < numPanes; ++index )
@@ -150,7 +150,7 @@ void Frame::UpdatePanelsMenu( wxMenu* menu )
             continue;
         }
         
-        i32 itemId = menu->FindItem( pane.caption );
+        int32_t itemId = menu->FindItem( pane.caption );
         if ( itemId != wxNOT_FOUND )
         {
             menu->Check( itemId, pane.IsShown() );

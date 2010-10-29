@@ -60,7 +60,7 @@ namespace Helium
 
                 COUNT_PLUS_START // Do not use: must be last
             };
-            static const u32 s_Count = COUNT_PLUS_START - START;
+            static const uint32_t s_Count = COUNT_PLUS_START - START;
 
             ///////////////////////////////////////////////////////////////////////////
             static const tstring s_Labels[s_Count] = 
@@ -110,7 +110,7 @@ namespace Helium
                 TXT( "Customize Settings..." ),
             };
 
-            inline const tstring& Label( i32 id )
+            inline const tstring& Label( int32_t id )
             {
                 HELIUM_ASSERT( id > START );
                 HELIUM_ASSERT( id < COUNT_PLUS_START );

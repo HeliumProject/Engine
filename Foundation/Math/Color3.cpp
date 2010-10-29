@@ -1,7 +1,7 @@
 #include "Color3.h"
 #include "Color4.h"
 
-using namespace Helium::Math;
+using namespace Helium;
 
 Color3& Color3::operator=( const Color4& v )
 {

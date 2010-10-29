@@ -2,7 +2,7 @@
 
 using namespace Helium::Reflect;
 
-EnumerationElement::EnumerationElement( u32 value, const tstring& name, const tstring& label, const tstring& helpText )
+EnumerationElement::EnumerationElement( uint32_t value, const tstring& name, const tstring& label, const tstring& helpText )
 : m_Value( value )
 , m_Name( name )
 , m_Label( label )
@@ -19,7 +19,7 @@ EnumerationElement::~EnumerationElement()
 
 }
 
-EnumerationElement* EnumerationElement::Create( u32 value, const tstring& name, const tstring& label, const tstring& helpText )
+EnumerationElement* EnumerationElement::Create( uint32_t value, const tstring& name, const tstring& label, const tstring& helpText )
 {
     return new EnumerationElement( value, name, label, helpText );
 }
@@ -70,7 +70,7 @@ Enumeration* Enumeration::Create()
     return new Enumeration();
 }
 
-void Enumeration::AddElement( u32 value, const tstring& name, const tstring& label, const tstring& helpText )
+void Enumeration::AddElement( uint32_t value, const tstring& name, const tstring& label, const tstring& helpText )
 {
     HELIUM_ASSERT(m_ElementsByName.find(name) == m_ElementsByName.end());
     HELIUM_ASSERT(m_ElementsByLabel.find( label.empty() ? name : label ) == m_ElementsByLabel.end());
@@ -83,7 +83,7 @@ void Enumeration::AddElement( u32 value, const tstring& name, const tstring& lab
     m_ElementsByValue[ value ] = elem;
 }
 
-bool Enumeration::GetElementValue(const tstring& label, u32& value) const
+bool Enumeration::GetElementValue(const tstring& label, uint32_t& value) const
 {
     M_StrEnumerationElement::const_iterator found = m_ElementsByLabel.find(label);
 
@@ -104,7 +104,7 @@ bool Enumeration::GetElementValue(const tstring& label, u32& value) const
     return false;
 }
 
-bool Enumeration::GetElementLabel(const u32 value, tstring& label) const
+bool Enumeration::GetElementLabel(const uint32_t value, tstring& label) const
 {
     M_ValueEnumerationElement::const_iterator found = m_ElementsByValue.find(value);
 
@@ -117,7 +117,7 @@ bool Enumeration::GetElementLabel(const u32 value, tstring& label) const
     return true;
 }
 
-bool Enumeration::GetBitfieldValue(const tstring& str, u32& value) const
+bool Enumeration::GetBitfieldValue(const tstring& str, uint32_t& value) const
 {
     if ( str.length() >= 1024 )
     {
@@ -143,7 +143,7 @@ bool Enumeration::GetBitfieldValue(const tstring& str, u32& value) const
     return GetBitfieldValue(strs, value);
 }
 
-bool Enumeration::GetBitfieldValue(const std::vector< tstring >& strs, u32& value) const
+bool Enumeration::GetBitfieldValue(const std::vector< tstring >& strs, uint32_t& value) const
 {
     value = 0;
 
@@ -151,18 +151,18 @@ bool Enumeration::GetBitfieldValue(const std::vector< tstring >& strs, u32& valu
     std::vector< tstring >::const_iterator end = strs.end();
     for ( ; itr != end; ++itr )
     {
-        u32 flags;
+        uint32_t flags;
         if (GetElementValue(*itr, flags))
         {
             // set the bitfield value
-            SetFlags( value, static_cast<u32>(flags) );
+            SetFlags( value, static_cast<uint32_t>(flags) );
         }
     }
 
     return value == 0 || !strs.empty();
 }
 
-bool Enumeration::GetBitfieldString(const u32 value, tstring& str) const
+bool Enumeration::GetBitfieldString(const uint32_t value, tstring& str) const
 {
     bool first = true;
 
@@ -195,7 +195,7 @@ bool Enumeration::GetBitfieldString(const u32 value, tstring& str) const
     return !first;
 }
 
-bool Enumeration::GetBitfieldStrings(const u32 value, std::vector< tstring >& strs) const
+bool Enumeration::GetBitfieldStrings(const uint32_t value, std::vector< tstring >& strs) const
 {
     // search the map
     V_EnumerationElement::const_iterator itr = m_Elements.begin();

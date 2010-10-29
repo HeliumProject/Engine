@@ -20,24 +20,24 @@ namespace Helium
         {
             struct DebugInfoStruct
             {
-                u16 Type;
-                u16 CreatorBackTraceIndex;
+                uint16_t Type;
+                uint16_t CreatorBackTraceIndex;
                 struct Handle *CriticalSection;
                 struct ListEntryStruct
                 {
                     struct ListEntryStruct *Flink;
                     struct ListEntryStruct *Blink;
                 } ProcessLocksList;
-                u32 EntryCount;
-                u32 ContentionCount;
-                u32 Spare[ 2 ];
+                uint32_t EntryCount;
+                uint32_t ContentionCount;
+                uint32_t Spare[ 2 ];
             } *DebugInfo;
 
-            i32 LockCount;
-            i32 RecursionCount;
+            int32_t LockCount;
+            int32_t RecursionCount;
             void* OwningThread;
             void* LockSemaphore;
-            u32* SpinCount;
+            uint32_t* SpinCount;
         };
 #else
 #  pragma TODO( "Emit an error here..." )

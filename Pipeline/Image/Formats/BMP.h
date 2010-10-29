@@ -4,10 +4,10 @@
 
 namespace Helium
 {
-  const u32 BMP_COMPRESSION_RGB       = 0;
-  const u32 BMP_COMPRESSION_RLE8      = 1;
-  const u32 BMP_COMPRESSION_RLE4      = 2;
-  const u32 BMP_COMPRESSION_BITFIELDS = 3;
+  const uint32_t BMP_COMPRESSION_RGB       = 0;
+  const uint32_t BMP_COMPRESSION_RLE8      = 1;
+  const uint32_t BMP_COMPRESSION_RLE4      = 2;
+  const uint32_t BMP_COMPRESSION_BITFIELDS = 3;
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   //
@@ -16,26 +16,26 @@ namespace Helium
   ////////////////////////////////////////////////////////////////////////////////////////////////
   struct BMPRGB
   {
-    u8   blue;
-    u8   green;
-    u8   red;
-    u8   unused;
+    uint8_t   blue;
+    uint8_t   green;
+    uint8_t   red;
+    uint8_t   unused;
   };
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   struct BMPHeader
   {
-      u32     size;                      // Size of the structure up until the palette info
-      i32     width; 
-      i32     height;                    // negative height for top down BMPs
-      u16     planes;
-      u16     bitCount;
-      u32     compression;
-      u32     sizeImage;
-      i32     xPelsPerMeter;
-      i32     yPelsPerMeter;
-      u32     clrUsed;
-      u32     clrImportant;
+      uint32_t     size;                      // Size of the structure up until the palette info
+      int32_t     width; 
+      int32_t     height;                    // negative height for top down BMPs
+      uint16_t     planes;
+      uint16_t     bitCount;
+      uint32_t     compression;
+      uint32_t     sizeImage;
+      int32_t     xPelsPerMeter;
+      int32_t     yPelsPerMeter;
+      uint32_t     clrUsed;
+      uint32_t     clrImportant;
       BMPRGB  colors[1];
   };
 
@@ -51,11 +51,11 @@ namespace Helium
   #pragma pack(push,2)
   struct BMPFileHeader
   {
-      u16   type;
-      u32   size;
-      u16   reserved1;
-      u16   reserved2;
-      u32   offset;
+      uint16_t   type;
+      uint32_t   size;
+      uint16_t   reserved1;
+      uint16_t   reserved2;
+      uint32_t   offset;
   };
   #pragma pack(pop)
 }

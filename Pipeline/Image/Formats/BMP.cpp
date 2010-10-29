@@ -5,7 +5,7 @@ using namespace Helium;
 
 Image* Image::LoadBMP(const void* filedata, bool convert_to_linear)
 {
-  BMPHeader* bmp = (BMPHeader*)((u8*)filedata+sizeof(BMPFileHeader));
+  BMPHeader* bmp = (BMPHeader*)((uint8_t*)filedata+sizeof(BMPFileHeader));
 
   // validate the bmp
   if ((bmp->compression != BMP_COMPRESSION_RGB) || (bmp->planes  != 1))
@@ -14,13 +14,13 @@ Image* Image::LoadBMP(const void* filedata, bool convert_to_linear)
   }
 
   BMPRGB*                      palette_data;
-  u8*                          bits;      // pointer to the start of the picture bits
+  uint8_t*                          bits;      // pointer to the start of the picture bits
   ColorFormat                  format;
-  i32                          line_stride;
+  int32_t                          line_stride;
   bool                         palette;
-  u32                          bitsperpixel;
+  uint32_t                          bitsperpixel;
 
-  palette_data = (BMPRGB*)((u8*)bmp+(u32)(bmp->size));
+  palette_data = (BMPRGB*)((uint8_t*)bmp+(uint32_t)(bmp->size));
 
   // Get the source bit depth
   switch (bmp->bitCount)
@@ -29,7 +29,7 @@ Image* Image::LoadBMP(const void* filedata, bool convert_to_linear)
     palette         = true;
     format          = CF_ARGB8888;
     bitsperpixel    = 8;
-    bits            = ( ((u8*)bmp->colors)+((bmp->clrUsed==0?256:bmp->clrUsed)*sizeof(BMPRGB)) );
+    bits            = ( ((uint8_t*)bmp->colors)+((bmp->clrUsed==0?256:bmp->clrUsed)*sizeof(BMPRGB)) );
     line_stride     = (bmp->width + 3) & ~0x00000003;
     break;
 
@@ -37,7 +37,7 @@ Image* Image::LoadBMP(const void* filedata, bool convert_to_linear)
     palette         = false;
     format          = CF_ARGB1555;
     bitsperpixel    = 16;
-    bits            = ( ((u8*)bmp->colors)+(bmp->clrUsed*sizeof(BMPRGB)) );
+    bits            = ( ((uint8_t*)bmp->colors)+(bmp->clrUsed*sizeof(BMPRGB)) );
     line_stride     = ((bmp->width*2) + 3) & ~0x00000003;       // A BMP line is always a multiple of a 32 bit dword long
     break;
 
@@ -45,7 +45,7 @@ Image* Image::LoadBMP(const void* filedata, bool convert_to_linear)
     palette         = false;
     format          = CF_ARGB8888;
     bitsperpixel    = 32;
-    bits            = ( ((u8*)bmp->colors)+(bmp->clrUsed*sizeof(BMPRGB)) );
+    bits            = ( ((uint8_t*)bmp->colors)+(bmp->clrUsed*sizeof(BMPRGB)) );
     line_stride     = ((bmp->width*3) + 3) & ~0x00000003;
     break;
 
@@ -53,7 +53,7 @@ Image* Image::LoadBMP(const void* filedata, bool convert_to_linear)
     palette         = false;
     format          = CF_ARGB8888;
     bitsperpixel    = 32;
-    bits            = ( ((u8*)bmp->colors)+(bmp->clrUsed*sizeof(BMPRGB)) );
+    bits            = ( ((uint8_t*)bmp->colors)+(bmp->clrUsed*sizeof(BMPRGB)) );
     line_stride     = bmp->width*4;
     break;
 
@@ -62,42 +62,42 @@ Image* Image::LoadBMP(const void* filedata, bool convert_to_linear)
   }
 
   //Bottom up BMP
-  u32 height = (bmp->height<0)?(u32)(-bmp->height):(u32)bmp->height;
+  uint32_t height = (bmp->height<0)?(uint32_t)(-bmp->height):(uint32_t)bmp->height;
   if (bmp->height>0)
   {
     bits += ((height-1)*line_stride);
     line_stride = -line_stride;
   }
 
-  u32      read_width  = bmp->width;
-  u32      read_height = height;
-  u32      dest_stride = (read_width*(bitsperpixel/8));
-  u8*      dest_mem    = new u8[read_width*read_height*4];
-  u8*      dest_line   = dest_mem;
+  uint32_t      read_width  = bmp->width;
+  uint32_t      read_height = height;
+  uint32_t      dest_stride = (read_width*(bitsperpixel/8));
+  uint8_t*      dest_mem    = new uint8_t[read_width*read_height*4];
+  uint8_t*      dest_line   = dest_mem;
 
   // copy and convert the palette
   if (palette)
   {
-    u32    pal_data[256];
+    uint32_t    pal_data[256];
 
     // Allocate the memory for the palette
-    u32 p_entries = bmp->clrUsed==0?256:bmp->clrUsed;
+    uint32_t p_entries = bmp->clrUsed==0?256:bmp->clrUsed;
 
     // copy the color entries and convert to the correct palette entry pixel format
-    for (u32 ce = 0;ce<p_entries;ce++)
+    for (uint32_t ce = 0;ce<p_entries;ce++)
     {
-      u32 col = *(u32*)(palette_data+ce);
+      uint32_t col = *(uint32_t*)(palette_data+ce);
       pal_data[ce] = col | 0xff000000;
     }
 
     // used when copying RGB 24 bit to 32 bit
     // read the source bitmap
-    for (u32 y=0;y<read_height;y++)
+    for (uint32_t y=0;y<read_height;y++)
     {
-      u8* src = bits;
-      for (u32 x=0;x<read_width;x++)
+      uint8_t* src = bits;
+      for (uint32_t x=0;x<read_width;x++)
       {
-        ((u32*)dest_line)[x] = pal_data[*src];
+        ((uint32_t*)dest_line)[x] = pal_data[*src];
         src++;
       }
       // mode to the next scan line
@@ -108,7 +108,7 @@ Image* Image::LoadBMP(const void* filedata, bool convert_to_linear)
   else if (bmp->bitCount!=24)
   {
     // read the source bitmap
-    for (u32 y=0;y<read_height;y++)
+    for (uint32_t y=0;y<read_height;y++)
     {
       memcpy(dest_line,bits,read_width*bmp->bitCount>>3);
       // mode to the next scan line
@@ -120,12 +120,12 @@ Image* Image::LoadBMP(const void* filedata, bool convert_to_linear)
   {
     // used when copying RGB 24 bit to 32 bit
     // read the source bitmap
-    for (u32 y=0;y<read_height;y++)
+    for (uint32_t y=0;y<read_height;y++)
     {
-      u8* src = bits;
-      for (u32 x=0;x<read_width;x++)
+      uint8_t* src = bits;
+      for (uint32_t x=0;x<read_width;x++)
       {
-        ((u32*)dest_line)[x]= (*(u32*)src) | 0xff000000;
+        ((uint32_t*)dest_line)[x]= (*(uint32_t*)src) | 0xff000000;
         src+=3;
       }
       // mode to the next scan line

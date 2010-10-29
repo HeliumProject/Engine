@@ -13,7 +13,7 @@ namespace Helium
     // CRC adjustments for each byte value
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    static const u32 g_CRC32Table[256] =
+    static const uint32_t g_CRC32Table[256] =
     {
         0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA,
         0x076DC419, 0x706AF48F, 0xE963A535, 0x9E6495A3,
@@ -84,12 +84,12 @@ namespace Helium
         0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D,
     };
 
-    inline u32 Crc32(u32 crc, const void* data, u32 count)
+    inline uint32_t Crc32(uint32_t crc, const void* data, uint32_t count)
     {
-        u8* d = (u8*)data;
+        uint8_t* d = (uint8_t*)data;
         while (count)
         {
-            u8 byte = *d++;
+            uint8_t byte = *d++;
 
             crc = (crc >> 8) ^ g_CRC32Table[(byte) ^ ((crc) & 0x000000FF)];
 
@@ -106,17 +106,17 @@ namespace Helium
         return crc;
     }
 
-    inline u32 Crc32(const void* data, u32 count)
+    inline uint32_t Crc32(const void* data, uint32_t count)
     {
         return Crc32(0xffffffff, data, count);
     }
 
-    inline u32 StringCrc32(const tchar* str)
+    inline uint32_t StringCrc32(const tchar* str)
     {
-      return Crc32(str, (u32)(_tcslen(str) * sizeof(tchar)));
+      return Crc32(str, (uint32_t)(_tcslen(str) * sizeof(tchar)));
     }
 
-    inline u32 FileCrc32(const tstring& filePath, u32 packetSize = 4096)
+    inline uint32_t FileCrc32(const tstring& filePath, uint32_t packetSize = 4096)
     {
         FILE* f = _tfopen(filePath.c_str(), TXT( "rb" ) );
         if (f==0)
@@ -128,8 +128,8 @@ namespace Helium
         size_t size = ftell(f);
         fseek(f,0,SEEK_SET);
 
-        u32 crc = 0xffffffff;
-        u8* data = new u8[ packetSize ];
+        uint32_t crc = 0xffffffff;
+        uint8_t* data = new uint8_t[ packetSize ];
         while ( size )
         {
             size_t read = fread(data,1,packetSize,f);

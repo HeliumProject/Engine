@@ -17,65 +17,65 @@ namespace Helium
         }
 
         template<>
-        inline void Swizzle<u8>(u8* data)
+        inline void Swizzle<uint8_t>(uint8_t* data)
         {
 #ifdef WIN32
             Helium::Swizzle(*data, true);
 #endif
         }
-        template<> inline void Swizzle(i8* data)
-        {
-#ifdef WIN32
-            Helium::Swizzle(*data, true);
-#endif
-        }
-
-        template<> inline void Swizzle(u16* data)
-        {
-#ifdef WIN32
-            Helium::Swizzle(*data, true);
-#endif
-        }
-        template<> inline void Swizzle(i16* data)
+        template<> inline void Swizzle(int8_t* data)
         {
 #ifdef WIN32
             Helium::Swizzle(*data, true);
 #endif
         }
 
-        template<> inline void Swizzle(u32* data)
+        template<> inline void Swizzle(uint16_t* data)
         {
 #ifdef WIN32
             Helium::Swizzle(*data, true);
 #endif
         }
-        template<> inline void Swizzle(i32* data)
-        {
-#ifdef WIN32
-            Helium::Swizzle(*data, true);
-#endif
-        }
-
-        template<> inline void Swizzle(u64* data)
-        {
-#ifdef WIN32
-            Helium::Swizzle(*data, true);
-#endif
-        }
-        template<> inline void Swizzle(i64* data)
+        template<> inline void Swizzle(int16_t* data)
         {
 #ifdef WIN32
             Helium::Swizzle(*data, true);
 #endif
         }
 
-        template<> inline void Swizzle(f32* data)
+        template<> inline void Swizzle(uint32_t* data)
         {
 #ifdef WIN32
             Helium::Swizzle(*data, true);
 #endif
         }
-        template<> inline void Swizzle(f64* data)
+        template<> inline void Swizzle(int32_t* data)
+        {
+#ifdef WIN32
+            Helium::Swizzle(*data, true);
+#endif
+        }
+
+        template<> inline void Swizzle(uint64_t* data)
+        {
+#ifdef WIN32
+            Helium::Swizzle(*data, true);
+#endif
+        }
+        template<> inline void Swizzle(int64_t* data)
+        {
+#ifdef WIN32
+            Helium::Swizzle(*data, true);
+#endif
+        }
+
+        template<> inline void Swizzle(float32_t* data)
+        {
+#ifdef WIN32
+            Helium::Swizzle(*data, true);
+#endif
+        }
+        template<> inline void Swizzle(float64_t* data)
         {
 #ifdef WIN32
             Helium::Swizzle(*data, true);

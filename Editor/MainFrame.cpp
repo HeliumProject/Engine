@@ -1072,7 +1072,7 @@ void MainFrame::OnImport(wxCommandEvent& event)
 
         if ( dlg.ShowModal() == wxID_OK && currentScene->IsEditable() )
         {
-            u32 flags = ImportFlags::Select;
+            uint32_t flags = ImportFlags::Select;
             if ( update )
             {
                 flags |= ImportFlags::Merge;
@@ -1155,7 +1155,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
             args.m_Flags |= ExportFlags::SelectedNodes;
 
-            u64 startTimer = Helium::TimerGetClock();
+            uint64_t startTimer = Helium::TimerGetClock();
 
             SetCursor( wxCursor( wxCURSOR_WAIT ) );
 
@@ -1554,7 +1554,7 @@ void MainFrame::DocumentClosed( const DocumentEventArgs& args )
 
 void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
 {
-    i32 selectedTool = EventIds::ID_ToolsSelect;
+    int32_t selectedTool = EventIds::ID_ToolsSelect;
     if ( args.m_NewTool )
     {
         if ( args.m_NewTool->HasType( Reflect::GetType< SceneGraph::TransformManipulator >() ) )
@@ -1828,7 +1828,7 @@ void MainFrame::OnCopyTransform(wxCommandEvent& event)
 {
     if ( m_SceneManager.HasCurrentScene() )
     {
-        Math::V_Matrix4 transforms;
+        V_Matrix4 transforms;
         m_SceneManager.GetCurrentScene()->GetSelectedTransforms(transforms);
 
         Helium::SmartPtr<Reflect::Matrix4ArraySerializer> data = new Reflect::Matrix4ArraySerializer();
@@ -2026,7 +2026,7 @@ void MainFrame::OnManifestContextMenu(wxCommandEvent& event)
 {
     if( !m_OrderedContextItems.empty() )
     { 
-        u32 selectionIndex = event.GetId() - EventIds::ID_SelectContextMenu;
+        uint32_t selectionIndex = event.GetId() - EventIds::ID_SelectContextMenu;
 
         SceneGraph::HierarchyNode* selection = m_OrderedContextItems[ selectionIndex ];
 
@@ -2370,7 +2370,7 @@ void MainFrame::OpenManifestContextMenu(const SelectArgs& args)
             std::sort( itr, end, SortContextItemsByName);
 
             // append items to the context menu
-            u32 index = 0;
+            uint32_t index = 0;
             for( ;itr != end; ++itr, ++index )
             {
                 tstring str = (*itr)->GetName();
@@ -2386,9 +2386,9 @@ void MainFrame::OpenManifestContextMenu(const SelectArgs& args)
             }
 
             contextMenu.SetEventHandler( GetEventHandler() );
-            GetEventHandler()->Connect( EventIds::ID_SelectContextMenu, EventIds::ID_SelectContextMenu +  (u32)m_OrderedContextItems.size(),wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnManifestContextMenu ), NULL, this );
+            GetEventHandler()->Connect( EventIds::ID_SelectContextMenu, EventIds::ID_SelectContextMenu +  (uint32_t)m_OrderedContextItems.size(),wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnManifestContextMenu ), NULL, this );
             PopupMenu( &contextMenu );
-            GetEventHandler()->Disconnect( EventIds::ID_SelectContextMenu, EventIds::ID_SelectContextMenu +  (u32)m_OrderedContextItems.size(),wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnManifestContextMenu ), NULL, this ); 
+            GetEventHandler()->Disconnect( EventIds::ID_SelectContextMenu, EventIds::ID_SelectContextMenu +  (uint32_t)m_OrderedContextItems.size(),wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnManifestContextMenu ), NULL, this ); 
             m_OrderedContextItems.clear();
         }
     }
@@ -2400,7 +2400,7 @@ void MainFrame::OpenManifestContextMenu(const SelectArgs& args)
 void MainFrame::OpenTypeContextMenu( const SelectArgs& args )
 {
     wxMenu contextMenu;
-    u32 numMenuItems = 0;
+    uint32_t numMenuItems = 0;
 
     // simple select functionality
     if (m_SceneManager.GetCurrentScene()->HasHighlighted())
@@ -2437,7 +2437,7 @@ void MainFrame::OpenTypeContextMenu( const SelectArgs& args )
     PopupMenu( &contextMenu );
 
     // this must be done piecemeal because the range version of Disconnect() will only disconnect the ranged version Connect()
-    for ( u32 i = EventIds::ID_SelectContextMenu; i < EventIds::ID_SelectContextMenu + numMenuItems; i++ )
+    for ( uint32_t i = EventIds::ID_SelectContextMenu; i < EventIds::ID_SelectContextMenu + numMenuItems; i++ )
     {
         // clean up, disconnect any id that was set up for any of the items
         GetEventHandler()->Disconnect( i, wxEVT_COMMAND_MENU_SELECTED );
@@ -2447,7 +2447,7 @@ void MainFrame::OpenTypeContextMenu( const SelectArgs& args )
 ///////////////////////////////////////////////////////////////////////////////
 // Populates the context menu with selections from the various types
 //
-void MainFrame::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sceneNodeTypes, wxMenu& contextMenu, u32& numMenuItems )
+void MainFrame::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sceneNodeTypes, wxMenu& contextMenu, uint32_t& numMenuItems )
 {
     V_SceneNodeTypeDumbPtr orderedTypes;
 
@@ -2539,7 +2539,7 @@ void MainFrame::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& scene
     }
 }
 
-void MainFrame::SetupEntityTypeMenus( const SceneGraph::EntityInstanceType* entity, wxMenu* subMenu, u32& numMenuItems )
+void MainFrame::SetupEntityTypeMenus( const SceneGraph::EntityInstanceType* entity, wxMenu* subMenu, uint32_t& numMenuItems )
 {
     const M_InstanceSetSmartPtr& sets = entity->GetSets();
 

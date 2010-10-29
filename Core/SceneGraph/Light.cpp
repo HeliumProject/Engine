@@ -14,7 +14,6 @@
 #include "Core/SceneGraph/PrimitiveCylinder.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_CLASS(Light);
@@ -50,7 +49,7 @@ Light::~Light()
 
 }
 
-i32 Light::GetImageIndex() const
+int32_t Light::GetImageIndex() const
 {
     return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "light" ) );
 }
@@ -74,15 +73,15 @@ void Light::Evaluate(GraphDirection direction)
             if ( m_NodeType )
             {
                 InstanceType* type = Reflect::AssertCast<InstanceType>(m_NodeType);
-                Math::AlignedBox box (type->GetPointer()->GetBounds());
+                AlignedBox box (type->GetPointer()->GetBounds());
 
-                Math::Scale scale;
-                Math::Matrix3 rotate;
-                Math::Vector3 translate;
+                Scale scale;
+                Matrix3 rotate;
+                Vector3 translate;
                 m_InverseGlobalTransform.Decompose (scale, rotate, translate);
 
                 // this will compensate for the normalized render of the pointer
-                box.Transform (Math::Matrix4 (scale));
+                box.Transform (Matrix4 (scale));
                 m_ObjectBounds.Merge( box );
             }
             break;

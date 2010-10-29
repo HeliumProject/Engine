@@ -14,21 +14,21 @@
 using namespace Helium;
 
 //-----------------------------------------------------------------------------
-static const u8 JPGZig1[64] =
+static const uint8_t JPGZig1[64] =
 {
   0,0,1,2,1,0,0,1,2,3,4,3,2,1,0,0,1,2,3,4,5,6,5,4,3,2,1,0,0,1,2,3,
   4,5,6,7,7,6,5,4,3,2,1,2,3,4,5,6,7,7,6,5,4,3,4,5,6,7,7,6,5,6,7,7
 };
 
 //-----------------------------------------------------------------------------
-static const u8 JPGZig2[64] =
+static const uint8_t JPGZig2[64] =
 {
   0,1,0,0,1,2,3,2,1,0,0,1,2,3,4,5,4,3,2,1,0,0,1,2,3,4,5,6,7,6,5,4,
   3,2,1,0,1,2,3,4,5,6,7,7,6,5,4,3,2,3,4,5,6,7,7,6,5,4,5,6,7,7,6,7
 };
 
 //-----------------------------------------------------------------------------
-static const u16 aanscales[64] =
+static const uint16_t aanscales[64] =
 {
   // precomputed values scaled up by 14 bits
   16384, 22725, 21407, 19266, 16384, 12873,  8867,  4520,
@@ -42,44 +42,44 @@ static const u16 aanscales[64] =
 };
 
 //-----------------------------------------------------------------------------
-static u8 *jpgdata = NULL;
-static u8 *vram = NULL;
-static u32 findex;
-static u16 DCTables;
-static u16 ACTables;
-static u16 QTables;
-static u8 curByte;
-static u8 curBits;
-static u8 EOI;
+static uint8_t *jpgdata = NULL;
+static uint8_t *vram = NULL;
+static uint32_t findex;
+static uint16_t DCTables;
+static uint16_t ACTables;
+static uint16_t QTables;
+static uint8_t curByte;
+static uint8_t curBits;
+static uint8_t EOI;
 static struct JPGHuffmanEntry HuffmanDC0[256];
 static struct JPGHuffmanEntry HuffmanDC1[256];
 static struct JPGHuffmanEntry HuffmanAC0[256];
 static struct JPGHuffmanEntry HuffmanAC1[256];
-static u16 QuantTable[2][8][8];    // 2 quantization tables (Y, CbCr)
+static uint16_t QuantTable[2][8][8];    // 2 quantization tables (Y, CbCr)
 static struct JpegType JpegImage;
 
 //-----------------------------------------------------------------------------
-void JPGToRGB (i16 y0, i16 cb0, i16 cr0, i16 *r0, i16 *g0, i16 *b0);
-i16 JPGReceiveBits (u16 cat);
+void JPGToRGB (int16_t y0, int16_t cb0, int16_t cr0, int16_t *r0, int16_t *g0, int16_t *b0);
+int16_t JPGReceiveBits (uint16_t cat);
 
 //-----------------------------------------------------------------------------
-static inline u32 RGB32(u32 r, u32 g, u32 b)
+static inline uint32_t RGB32(uint32_t r, uint32_t g, uint32_t b)
 {
-  return (u32) ((255<<24)+(r<<16)+(g<<8)+b);
+  return (uint32_t) ((255<<24)+(r<<16)+(g<<8)+b);
 }
 
 //-----------------------------------------------------------------------------
-static inline void gfxPixel (i16 x, i16 y, u32 pixel, u8* vram)
+static inline void gfxPixel (int16_t x, int16_t y, uint32_t pixel, uint8_t* vram)
 {
-  u32 *dst = (u32 *) vram;
+  uint32_t *dst = (uint32_t *) vram;
   dst[(y*JpegImage.Cols)+x] = pixel;
 }
 
 //-----------------------------------------------------------------------------
-static inline u32 JPGpower2(u16 pwr)
+static inline uint32_t JPGpower2(uint16_t pwr)
 {
-  u8 i;
-  u16 total = 1;
+  uint8_t i;
+  uint16_t total = 1;
 
   if (pwr>0xff)
     return 0;
@@ -89,26 +89,26 @@ static inline u32 JPGpower2(u16 pwr)
 }
 
 //-----------------------------------------------------------------------------
-static inline u8 JPGGetByte()
+static inline uint8_t JPGGetByte()
 {
   return (jpgdata[findex++]);
 }
 
 //-----------------------------------------------------------------------------
-static inline u16 JPGGetWord()
+static inline uint16_t JPGGetWord()
 {
-  u16 a = (u16) (JPGGetByte()<<8);
-  a = (u16) (a+JPGGetByte());
+  uint16_t a = (uint16_t) (JPGGetByte()<<8);
+  a = (uint16_t) (a+JPGGetByte());
   return a;
 }
 
 //-----------------------------------------------------------------------------
-static inline u8 JPGNextBit (void)
+static inline uint8_t JPGNextBit (void)
 {
-  u8 NextBit;
+  uint8_t NextBit;
 
   curBits >>= 1;
-  NextBit = (u8) ((curByte >> 7) & 1);
+  NextBit = (uint8_t) ((curByte >> 7) & 1);
   curByte <<= 1;
   if (curBits == 0)
   {
@@ -128,11 +128,11 @@ static inline u8 JPGNextBit (void)
 
 
 //-----------------------------------------------------------------------------
-static i16 JPGDecode(struct JPGHuffmanEntry inArray[256])
+static int16_t JPGDecode(struct JPGHuffmanEntry inArray[256])
 {
-  u16 n1; u16 n2; u16 i; u16 l;
-  i32 CurVal;
-  i16 MatchFound;
+  uint16_t n1; uint16_t n2; uint16_t i; uint16_t l;
+  int32_t CurVal;
+  int16_t MatchFound;
 
   if (JPGGetByte() == 255)
   {
@@ -140,7 +140,7 @@ static i16 JPGDecode(struct JPGHuffmanEntry inArray[256])
     findex -= 2;
     if ((n1 >= 0xd0) && (n1 <= 0xd7))
     {
-      n2 = (u16) (curBits - 1);
+      n2 = (uint16_t) (curBits - 1);
       if ((curByte & n2) == n2)     // if the remaining bits are 1
       {
         EOI = 1;
@@ -178,16 +178,16 @@ static i16 JPGDecode(struct JPGHuffmanEntry inArray[256])
 }
 
 //-----------------------------------------------------------------------------
-static void jpeg_idct_ifast (i16 inarray[8][8], i16 outarray[8][8], u16 QuantNum)
+static void jpeg_idct_ifast (int16_t inarray[8][8], int16_t outarray[8][8], uint16_t QuantNum)
 {
   // The following variables only need 16bits precision
-  // but the resulting code is smaller if you use i32.
-  i32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
-  i32 tmp10, tmp11, tmp12, tmp13;
-  i32 z5, z10, z11, z12, z13;
+  // but the resulting code is smaller if you use int32_t.
+  int32_t tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
+  int32_t tmp10, tmp11, tmp12, tmp13;
+  int32_t z5, z10, z11, z12, z13;
 
-  u32 ctr;
-  i16 warray[8][8];
+  uint32_t ctr;
+  int16_t warray[8][8];
 
   /* Pass 1: process columns from input, store into work array. */
 
@@ -208,7 +208,7 @@ static void jpeg_idct_ifast (i16 inarray[8][8], i16 outarray[8][8], u16 QuantNum
       inarray[7][ctr] == 0)
     {
       /* AC terms all zero */
-      i16 dcval = (i16) (inarray[0][ctr] * QuantTable[QuantNum][0][ctr]);
+      int16_t dcval = (int16_t) (inarray[0][ctr] * QuantTable[QuantNum][0][ctr]);
 
       warray[0][ctr] = dcval;
       warray[1][ctr] = dcval;
@@ -263,14 +263,14 @@ static void jpeg_idct_ifast (i16 inarray[8][8], i16 outarray[8][8], u16 QuantNum
     tmp5 = tmp11 - tmp6;
     tmp4 = tmp10 + tmp5;
 
-    warray[0][ctr] = (i16) (tmp0 + tmp7);
-    warray[7][ctr] = (i16) (tmp0 - tmp7);
-    warray[1][ctr] = (i16) (tmp1 + tmp6);
-    warray[6][ctr] = (i16) (tmp1 - tmp6);
-    warray[2][ctr] = (i16) (tmp2 + tmp5);
-    warray[5][ctr] = (i16) (tmp2 - tmp5);
-    warray[4][ctr] = (i16) (tmp3 + tmp4);
-    warray[3][ctr] = (i16) (tmp3 - tmp4);
+    warray[0][ctr] = (int16_t) (tmp0 + tmp7);
+    warray[7][ctr] = (int16_t) (tmp0 - tmp7);
+    warray[1][ctr] = (int16_t) (tmp1 + tmp6);
+    warray[6][ctr] = (int16_t) (tmp1 - tmp6);
+    warray[2][ctr] = (int16_t) (tmp2 + tmp5);
+    warray[5][ctr] = (int16_t) (tmp2 - tmp5);
+    warray[4][ctr] = (int16_t) (tmp3 + tmp4);
+    warray[3][ctr] = (int16_t) (tmp3 - tmp4);
   }
 
   /* Pass 2: process rows from work array, store into output array. */
@@ -291,7 +291,7 @@ static void jpeg_idct_ifast (i16 inarray[8][8], i16 outarray[8][8], u16 QuantNum
       warray[ctr][5] == 0 && warray[ctr][6] == 0 && warray[ctr][7] == 0)
     {
       /* AC terms all zero */
-      i16 dcval = (i16) ((warray[ctr][0] >> 5)+128);
+      int16_t dcval = (int16_t) ((warray[ctr][0] >> 5)+128);
       if (dcval<0) dcval = 0;
       if (dcval>255) dcval = 255;
 
@@ -339,35 +339,35 @@ static void jpeg_idct_ifast (i16 inarray[8][8], i16 outarray[8][8], u16 QuantNum
 
     /* Final output stage: scale down by a factor of 8 and range-limit */
 
-    outarray[ctr][0] = (i16) (((tmp0 + tmp7) >> 5)+128);
+    outarray[ctr][0] = (int16_t) (((tmp0 + tmp7) >> 5)+128);
     if ((outarray[ctr][0])<0)  outarray[ctr][0] = 0;
     if ((outarray[ctr][0])>255) outarray[ctr][0] = 255;
 
-    outarray[ctr][7] = (i16) (((tmp0 - tmp7) >> 5)+128);
+    outarray[ctr][7] = (int16_t) (((tmp0 - tmp7) >> 5)+128);
     if ((outarray[ctr][7])<0)  outarray[ctr][7] = 0;
     if ((outarray[ctr][7])>255) outarray[ctr][7] = 255;
 
-    outarray[ctr][1] = (i16) (((tmp1 + tmp6) >> 5)+128);
+    outarray[ctr][1] = (int16_t) (((tmp1 + tmp6) >> 5)+128);
     if ((outarray[ctr][1])<0)  outarray[ctr][1] = 0;
     if ((outarray[ctr][1])>255) outarray[ctr][1] = 255;
 
-    outarray[ctr][6] = (i16) (((tmp1 - tmp6) >> 5)+128);
+    outarray[ctr][6] = (int16_t) (((tmp1 - tmp6) >> 5)+128);
     if ((outarray[ctr][6])<0)  outarray[ctr][6] = 0;
     if ((outarray[ctr][6])>255) outarray[ctr][6] = 255;
 
-    outarray[ctr][2] = (i16) (((tmp2 + tmp5) >> 5)+128);
+    outarray[ctr][2] = (int16_t) (((tmp2 + tmp5) >> 5)+128);
     if ((outarray[ctr][2])<0)  outarray[ctr][2] = 0;
     if ((outarray[ctr][2])>255) outarray[ctr][2] = 255;
 
-    outarray[ctr][5] = (i16) (((tmp2 - tmp5) >> 5)+128);
+    outarray[ctr][5] = (int16_t) (((tmp2 - tmp5) >> 5)+128);
     if ((outarray[ctr][5])<0)  outarray[ctr][5] = 0;
     if ((outarray[ctr][5])>255) outarray[ctr][5] = 255;
 
-    outarray[ctr][4] = (i16) (((tmp3 + tmp4) >> 5)+128);
+    outarray[ctr][4] = (int16_t) (((tmp3 + tmp4) >> 5)+128);
     if ((outarray[ctr][4])<0)  outarray[ctr][4] = 0;
     if ((outarray[ctr][4])>255) outarray[ctr][4] = 255;
 
-    outarray[ctr][3] = (i16) (((tmp3 - tmp4) >> 5)+128);
+    outarray[ctr][3] = (int16_t) (((tmp3 - tmp4) >> 5)+128);
     if ((outarray[ctr][3])<0)  outarray[ctr][3] = 0;
     if ((outarray[ctr][3])>255) outarray[ctr][3] = 255;
 
@@ -375,14 +375,14 @@ static void jpeg_idct_ifast (i16 inarray[8][8], i16 outarray[8][8], u16 QuantNum
 }
 
 //-----------------------------------------------------------------------------
-static void JPGGetBlock(i16 vector[8][8], u16 HuffDCNum, u16 HuffACNum, u16 QuantNum, i16 *dcCoef)
+static void JPGGetBlock(int16_t vector[8][8], uint16_t HuffDCNum, uint16_t HuffACNum, uint16_t QuantNum, int16_t *dcCoef)
 {
-  i16 array2[8][8];
-  i32 d; u16 XPos; u16 YPos;
-  u16 bits; u16 zeros; i32 bitVal; u16 ACCount;
-  u16 x; u16 y;
-  i16 temp0;
-  u16 ZigIndex;
+  int16_t array2[8][8];
+  int32_t d; uint16_t XPos; uint16_t YPos;
+  uint16_t bits; uint16_t zeros; int32_t bitVal; uint16_t ACCount;
+  uint16_t x; uint16_t y;
+  int16_t temp0;
+  uint16_t ZigIndex;
 
   EOI = 0;
 
@@ -395,7 +395,7 @@ static void JPGGetBlock(i16 vector[8][8], u16 HuffDCNum, u16 HuffACNum, u16 Quan
   else
     temp0 = JPGDecode(HuffmanDC0);   // Get the DC coefficient
 
-  *dcCoef = (i16) (*dcCoef + JPGReceiveBits(temp0));
+  *dcCoef = (int16_t) (*dcCoef + JPGReceiveBits(temp0));
   array2[0][0] = *dcCoef;//* Quant[QuantNum][0][0];
 
   XPos = 0; YPos = 0;
@@ -408,14 +408,14 @@ static void JPGGetBlock(i16 vector[8][8], u16 HuffDCNum, u16 HuffACNum, u16 Quan
     else
       d = JPGDecode(HuffmanAC0);
 
-    zeros = (u16) (d >> 4);
-    bits = (u16) (d & 15);
+    zeros = (uint16_t) (d >> 4);
+    bits = (uint16_t) (d & 15);
     bitVal = JPGReceiveBits(bits);
 
     if (bits)
     {
-      ZigIndex = (u16) (ZigIndex+zeros);
-      ACCount = (u16) (ACCount+zeros);
+      ZigIndex = (uint16_t) (ZigIndex+zeros);
+      ACCount = (uint16_t) (ACCount+zeros);
       if (ACCount >= 64) break;
 
       XPos = JPGZig1[ZigIndex];
@@ -423,7 +423,7 @@ static void JPGGetBlock(i16 vector[8][8], u16 HuffDCNum, u16 HuffACNum, u16 Quan
       ZigIndex++;
 
       //Read(XPos, YPos);
-      array2[XPos][YPos] = (i16) bitVal; // * Quant[QuantNum][XPos][YPos];
+      array2[XPos][YPos] = (int16_t) bitVal; // * Quant[QuantNum][XPos][YPos];
       ACCount++;
     }
     else
@@ -441,19 +441,19 @@ static void JPGGetBlock(i16 vector[8][8], u16 HuffDCNum, u16 HuffACNum, u16 Quan
 }
 
 //-----------------------------------------------------------------------------
-static u16 JPGGetHuffTables (void)
+static uint16_t JPGGetHuffTables (void)
 {
-  u16 HuffAmount[17]; //1-16
-  u32 l0;
-  u16 c0;
-  u16 temp0;
-  i16 temp1;
-  u16 total;
-  u16 i;
-  u16 t0;
-  i32 CurNum;
-  u16 CurIndex;
-  u16 j;
+  uint16_t HuffAmount[17]; //1-16
+  uint32_t l0;
+  uint16_t c0;
+  uint16_t temp0;
+  int16_t temp1;
+  uint16_t total;
+  uint16_t i;
+  uint16_t t0;
+  int32_t CurNum;
+  uint16_t CurIndex;
+  uint16_t j;
 
   l0 = JPGGetWord();
   c0 = 2;
@@ -461,7 +461,7 @@ static u16 JPGGetHuffTables (void)
   {
     temp0 = JPGGetByte();
     c0++;
-    t0 = (u16) ((temp0 & 16) >> 4);
+    t0 = (uint16_t) ((temp0 & 16) >> 4);
     temp0 &= 15;
     switch (t0)
     {
@@ -471,7 +471,7 @@ static u16 JPGGetHuffTables (void)
       {
         temp1 = JPGGetByte();
         c0++;
-        total = (i16) (total+temp1);
+        total = (int16_t) (total+temp1);
         HuffAmount[i] = temp1;
       }
       for (i=0; i<total; i++)
@@ -483,7 +483,7 @@ static u16 JPGGetHuffTables (void)
         c0++;
       }
       CurNum = 0;
-      CurIndex = (u16) -1;
+      CurIndex = (uint16_t) -1;
       for (i=1; i<16+1; i++)
       {
         for (j=1; j<HuffAmount[i]+1; j++)
@@ -491,13 +491,13 @@ static u16 JPGGetHuffTables (void)
           CurIndex++;
           if (temp0)
           {
-            HuffmanDC1[CurIndex].Index = (u16) CurNum;
-            HuffmanDC1[CurIndex].Length = (u16) i;
+            HuffmanDC1[CurIndex].Index = (uint16_t) CurNum;
+            HuffmanDC1[CurIndex].Length = (uint16_t) i;
           }
           else
           {
-            HuffmanDC0[CurIndex].Index = (u16) CurNum;
-            HuffmanDC0[CurIndex].Length = (u16) i;
+            HuffmanDC0[CurIndex].Index = (uint16_t) CurNum;
+            HuffmanDC0[CurIndex].Length = (uint16_t) i;
           }
           CurNum++;
         }
@@ -511,7 +511,7 @@ static u16 JPGGetHuffTables (void)
       {
         temp1 = JPGGetByte();
         c0++;
-        total = (u16) (total+temp1);
+        total = (uint16_t) (total+temp1);
         HuffAmount[i] = temp1;
       }
       for (i=0; i<total; i++)
@@ -524,7 +524,7 @@ static u16 JPGGetHuffTables (void)
       }
 
       CurNum = 0;
-      CurIndex = (u16) -1;
+      CurIndex = (uint16_t) -1;
       for (i=1; i<16+1; i++)
       {
         for (j=1; j<HuffAmount[i]+1; j++)
@@ -532,13 +532,13 @@ static u16 JPGGetHuffTables (void)
           CurIndex++;
           if (temp0)
           {
-            HuffmanAC1[CurIndex].Index = (u16) CurNum;
-            HuffmanAC1[CurIndex].Length = (u16) i;
+            HuffmanAC1[CurIndex].Index = (uint16_t) CurNum;
+            HuffmanAC1[CurIndex].Length = (uint16_t) i;
           }
           else
           {
-            HuffmanAC0[CurIndex].Index = (u16) CurNum;
-            HuffmanAC0[CurIndex].Length = (u16) i;
+            HuffmanAC0[CurIndex].Index = (uint16_t) CurNum;
+            HuffmanAC0[CurIndex].Length = (uint16_t) i;
           }
           CurNum++;
         }
@@ -554,13 +554,13 @@ static u16 JPGGetHuffTables (void)
 }
 
 //-----------------------------------------------------------------------------
-static u16 JPGGetImageAttr (void)
+static uint16_t JPGGetImageAttr (void)
 {
-  u32 temp4;
-  u16 temp0;
-  u16 temp1;
-  u16 i;
-  u16 id;
+  uint32_t temp4;
+  uint16_t temp0;
+  uint16_t temp1;
+  uint16_t i;
+  uint16_t id;
 
   temp4 = JPGGetWord();          //Length of segment
   temp0 = JPGGetByte();          // Data precision
@@ -578,13 +578,13 @@ static u16 JPGGetImageAttr (void)
     {
     case 1:
       temp1 = JPGGetByte();
-      JpegImage.SamplesY = (u16) ((temp1 & 15) * (temp1 >> 4));
+      JpegImage.SamplesY = (uint16_t) ((temp1 & 15) * (temp1 >> 4));
       JpegImage.QuantTableY = JPGGetByte();
       break;
     case 2:
     case 3:
       temp1 = JPGGetByte();
-      JpegImage.SamplesCbCr = (u16) ((temp1 & 15) * (temp1 >> 4));
+      JpegImage.SamplesCbCr = (uint16_t) ((temp1 & 15) * (temp1 >> 4));
       JpegImage.QuantTableCbCr = JPGGetByte();
       break;
     }
@@ -594,15 +594,15 @@ static u16 JPGGetImageAttr (void)
 }
 
 //-----------------------------------------------------------------------------
-static u8 JPGGetQuantTables(void)
+static uint8_t JPGGetQuantTables(void)
 {
-  u32 l0 = JPGGetWord();
-  u16 c0 = 2;
-  u16 temp0;
-  u16 xp;
-  u16 yp;
-  u16 i;
-  u16 ZigIndex;
+  uint32_t l0 = JPGGetWord();
+  uint16_t c0 = 2;
+  uint16_t temp0;
+  uint16_t xp;
+  uint16_t yp;
+  uint16_t i;
+  uint16_t ZigIndex;
 
   do
   {
@@ -625,7 +625,7 @@ static u8 JPGGetQuantTables(void)
       *   scalefactor[0] = 1
       *   scalefactor[k] = cos(k*PI/16) * sqrt(2)    for k=1..7
       */
-      QuantTable[temp0][xp][yp] = (u16) ((JPGGetByte() * aanscales[(xp<<3) + yp]) >> 12);
+      QuantTable[temp0][xp][yp] = (uint16_t) ((JPGGetByte() * aanscales[(xp<<3) + yp]) >> 12);
       c0++;
     }
     QTables++;
@@ -636,13 +636,13 @@ static u8 JPGGetQuantTables(void)
 }
 
 //-----------------------------------------------------------------------------
-static u16 JPGGetSOS (void)
+static uint16_t JPGGetSOS (void)
 {
-  u32 temp4;
-  u16 temp0;
-  u16 temp1;
-  u16 temp2;
-  u16 i;
+  uint32_t temp4;
+  uint16_t temp0;
+  uint16_t temp1;
+  uint16_t temp2;
+  uint16_t i;
 
   temp4 = JPGGetWord();
   temp0 = JPGGetByte();
@@ -657,18 +657,18 @@ static u16 JPGGetSOS (void)
     {
     case 1:
       temp2 = JPGGetByte();
-      JpegImage.HuffACTableY = (u16) (temp2 & 15);
-      JpegImage.HuffDCTableY = (u16) (temp2 >> 4);
+      JpegImage.HuffACTableY = (uint16_t) (temp2 & 15);
+      JpegImage.HuffDCTableY = (uint16_t) (temp2 >> 4);
       break;
     case 2:
       temp2 = JPGGetByte();
-      JpegImage.HuffACTableCbCr = (u16) (temp2 & 15);
-      JpegImage.HuffDCTableCbCr = (u16) (temp2 >> 4);
+      JpegImage.HuffACTableCbCr = (uint16_t) (temp2 & 15);
+      JpegImage.HuffDCTableCbCr = (uint16_t) (temp2 >> 4);
       break;
     case 3:
       temp2 = JPGGetByte();
-      JpegImage.HuffACTableCbCr = (u16) (temp2 & 15);
-      JpegImage.HuffDCTableCbCr = (u16) (temp2 >> 4);
+      JpegImage.HuffACTableCbCr = (uint16_t) (temp2 & 15);
+      JpegImage.HuffDCTableCbCr = (uint16_t) (temp2 >> 4);
       break;
     default:
       return(0);
@@ -679,28 +679,28 @@ static u16 JPGGetSOS (void)
 }
 
 //-----------------------------------------------------------------------------
-static inline i16 JPGReceiveBits(u16 cat)
+static inline int16_t JPGReceiveBits(uint16_t cat)
 {
-  u32 temp0 = 0;
-  u16 i;
-  i32 ReceiveBits;
+  uint32_t temp0 = 0;
+  uint16_t i;
+  int32_t ReceiveBits;
 
   for (i=0; i<cat; i++)
     temp0 = temp0 * 2 + JPGNextBit();
   if ((temp0*2) >= (JPGpower2(cat)) )
     ReceiveBits = temp0;
   else
-    ReceiveBits = (i32) (-(i32) (JPGpower2(cat) - 1) + temp0);
-  return (i16) ReceiveBits;
+    ReceiveBits = (int32_t) (-(int32_t) (JPGpower2(cat) - 1) + temp0);
+  return (int16_t) ReceiveBits;
 }
 
 //-----------------------------------------------------------------------------
-static inline void JPGToRGB (i16 y0, i16 cb0, i16 cr0, i16 *r0, i16 *g0, i16 *b0)
+static inline void JPGToRGB (int16_t y0, int16_t cb0, int16_t cr0, int16_t *r0, int16_t *g0, int16_t *b0)
 {
   // Do color space conversion from YCbCr to RGB
-  *r0 = (i16) ((y0) + (((cr0-128) * 45) >> 5));
-  *g0 = (i16) ((y0) - (((cb0-128) * 11) >> 5) - (((cr0-128) * 23) >> 5));
-  *b0 = (i16) ((y0) + (((cb0-128) * 57) >> 5));
+  *r0 = (int16_t) ((y0) + (((cr0-128) * 45) >> 5));
+  *g0 = (int16_t) ((y0) - (((cb0-128) * 11) >> 5) - (((cr0-128) * 23) >> 5));
+  *b0 = (int16_t) ((y0) + (((cb0-128) * 57) >> 5));
   if (*r0 > 255) *r0 = 255;
   if (*r0 < 0) *r0 = 0;
   if (*g0 > 255) *g0 = 255;
@@ -712,31 +712,31 @@ static inline void JPGToRGB (i16 y0, i16 cb0, i16 cr0, i16 *r0, i16 *g0, i16 *b0
 //-----------------------------------------------------------------------------
 Image* Image::LoadJPG(const void *src, bool convert_to_linear)
 {
-  u8 x0 = 0;
-  u8 y0 = 0;
-  u8 exit = 1;
-  i16 y;
-  u32 size = 0;
-  u16 Restart = 0;
-  u16 XPos; u16 YPos;
-  i16 dcY; i16 dcCb; i16 dcCr;
-  u16 xindex; u16 yindex;
-  u16 mcu;
-  i16 YVector1[8][8];              // 4 vectors for Y attribute
-  i16 YVector2[8][8];              // (not all may be needed)
-  i16 YVector3[8][8];
-  i16 YVector4[8][8];
-  i16 CbVector[8][8];              // 1 vector for Cb attribute
-  i16 CrVector[8][8];              // 1 vector for Cr attribute
+  uint8_t x0 = 0;
+  uint8_t y0 = 0;
+  uint8_t exit = 1;
+  int16_t y;
+  uint32_t size = 0;
+  uint16_t Restart = 0;
+  uint16_t XPos; uint16_t YPos;
+  int16_t dcY; int16_t dcCb; int16_t dcCr;
+  uint16_t xindex; uint16_t yindex;
+  uint16_t mcu;
+  int16_t YVector1[8][8];              // 4 vectors for Y attribute
+  int16_t YVector2[8][8];              // (not all may be needed)
+  int16_t YVector3[8][8];
+  int16_t YVector4[8][8];
+  int16_t CbVector[8][8];              // 1 vector for Cb attribute
+  int16_t CrVector[8][8];              // 1 vector for Cr attribute
 
-  u16 i,j;
-  u16 i2; u16 j2;
-  i16 cb; i16 cr;
-  u16 xj;
-  u16 yi;
-  i16 r; i16 g; i16 b;
+  uint16_t i,j;
+  uint16_t i2; uint16_t j2;
+  int16_t cb; int16_t cr;
+  uint16_t xj;
+  uint16_t yi;
+  int16_t r; int16_t g; int16_t b;
 
-  jpgdata = (u8*)src;
+  jpgdata = (uint8_t*)src;
 
   QTables = 0;     // Initialize some checkpoint variables
   ACTables = 0;
@@ -818,8 +818,8 @@ Image* Image::LoadJPG(const void *src, bool convert_to_linear)
   xindex = 0; yindex = 0; mcu = 0;
   r = 0; g = 0; b = 0;
 
-  size      = JpegImage.Cols*JpegImage.Rows*sizeof(u32);
-  u8* vram  = new u8[size];
+  size      = JpegImage.Cols*JpegImage.Rows*sizeof(uint32_t);
+  uint8_t* vram  = new uint8_t[size];
 
   curBits = 128;                // Start with the seventh bit
   curByte = JPGGetByte();       // Of the first byte
@@ -846,57 +846,57 @@ Image* Image::LoadJPG(const void *src, bool convert_to_linear)
             for (j=0; j<8; j++)
             {
               y = YVector1[i][j];
-              i2 = (u16) (i >> 1);
-              j2 = (u16) (j >> 1);
+              i2 = (uint16_t) (i >> 1);
+              j2 = (uint16_t) (j >> 1);
               cb = CbVector[i2][j2];
               cr = CrVector[i2][j2];
               JPGToRGB (y, cb, cr, &r, &g, &b);
-              xj = (u16) (xindex + j);
-              yi = (u16) (yindex + i);
+              xj = (uint16_t) (xindex + j);
+              yi = (uint16_t) (yindex + i);
               if ( (xj < JpegImage.Cols) && (yi < JpegImage.Rows) )
-                gfxPixel ((i16) (xj + x0), (i16) (yi + y0), (u32) RGB32(r, g, b), vram);
+                gfxPixel ((int16_t) (xj + x0), (int16_t) (yi + y0), (uint32_t) RGB32(r, g, b), vram);
             }
             for (i=0; i<8; i++)  // Draw top right 8x8 pixels
               for (j=8; j<16; j++)
               {
                 y = YVector2[i][j - 8];
-                i2 = (u16) (i >> 1);
-                j2 = (u16) (j >> 1);
+                i2 = (uint16_t) (i >> 1);
+                j2 = (uint16_t) (j >> 1);
                 cb = CbVector[i2][j2];
                 cr = CrVector[i2][j2];
                 JPGToRGB (y, cb, cr, &r, &g, &b);
-                xj = (u16) (xindex + j);
-                yi = (u16) (yindex + i);
+                xj = (uint16_t) (xindex + j);
+                yi = (uint16_t) (yindex + i);
                 if ((xj < JpegImage.Cols) && (yi < JpegImage.Rows))
-                  gfxPixel ((i16) (xj + x0), (i16) (yi + y0), (u32) RGB32(r, g, b), vram);
+                  gfxPixel ((int16_t) (xj + x0), (int16_t) (yi + y0), (uint32_t) RGB32(r, g, b), vram);
               }
               for (i=8; i<16; i++)  // Draw bottom left 8x8 pixels
                 for (j=0; j<8; j++)
                 {
                   y = YVector3[i - 8][j];
-                  i2 = (u16) (i >> 1);
-                  j2 = (u16) (j >> 1);
+                  i2 = (uint16_t) (i >> 1);
+                  j2 = (uint16_t) (j >> 1);
                   cb = CbVector[i2][j2];
                   cr = CrVector[i2][j2];
                   JPGToRGB (y, cb, cr, &r, &g, &b);
-                  xj = (u16) (xindex + j);
-                  yi = (u16) (yindex + i);
+                  xj = (uint16_t) (xindex + j);
+                  yi = (uint16_t) (yindex + i);
                   if ((xj < JpegImage.Cols) && (yi < JpegImage.Rows))
-                    gfxPixel ((i16) (xj + x0), (i16) (yi + y0), (u32) RGB32(r, g, b), vram);
+                    gfxPixel ((int16_t) (xj + x0), (int16_t) (yi + y0), (uint32_t) RGB32(r, g, b), vram);
                 }
                 for (i=8; i<16; i++)          // Draw bottom right 8x8 pixels
                   for (j=8; j<16; j++)
                   {
                     y = YVector4[i - 8][j - 8];
-                    i2 = (u16) (i >> 1);
-                    j2 = (u16) (j >> 1);
+                    i2 = (uint16_t) (i >> 1);
+                    j2 = (uint16_t) (j >> 1);
                     cb = CbVector[i2][j2];
                     cr = CrVector[i2][j2];
                     JPGToRGB (y, cb, cr, &r, &g, &b);
-                    xj = (u16) (xindex + j);
-                    yi = (u16) (yindex + i);
+                    xj = (uint16_t) (xindex + j);
+                    yi = (uint16_t) (yindex + i);
                     if ((xj < JpegImage.Cols) && (yi < JpegImage.Rows))
-                      gfxPixel ((i16) (xj + x0), (i16) (yi + y0), (u32) RGB32(r, g, b), vram);
+                      gfxPixel ((int16_t) (xj + x0), (int16_t) (yi + y0), (uint32_t) RGB32(r, g, b), vram);
                   }
                   xindex += 16;
                   if (xindex >= JpegImage.Cols)
@@ -926,30 +926,30 @@ Image* Image::LoadJPG(const void *src, bool convert_to_linear)
             for (j=0; j<8; j++)
             {
               y = YVector1[i][j];
-              i2 = (u16) (i >> 1);
-              j2 = (u16) (j >> 1);
+              i2 = (uint16_t) (i >> 1);
+              j2 = (uint16_t) (j >> 1);
               cb = CbVector[i2][j2];
               cr = CrVector[i2][j2];
               JPGToRGB (y, cb, cr, &r, &g, &b);
-              xj = (u16) (xindex + j);
-              yi = (u16) (yindex + i);
+              xj = (uint16_t) (xindex + j);
+              yi = (uint16_t) (yindex + i);
               if ((xj < JpegImage.Cols) && (yi < JpegImage.Rows))
-                gfxPixel ((i16) (xj + x0), (i16) (yi + y0), (u32) RGB32(r, g, b), vram);
+                gfxPixel ((int16_t) (xj + x0), (int16_t) (yi + y0), (uint32_t) RGB32(r, g, b), vram);
             }
 
             for (i=0; i<8; i++)       // Draw right 8x8 pixels
               for (j=8; j<16; j++)
               {
                 y = YVector2[i][j - 8];
-                i2 = (u16) (i >> 1);
-                j2 = (u16) (j >> 1);
+                i2 = (uint16_t) (i >> 1);
+                j2 = (uint16_t) (j >> 1);
                 cb = CbVector[i2][j2];
                 cr = CrVector[i2][j2];
                 JPGToRGB (y, cb, cr, &r, &g, &b);
-                xj = (u16) (xindex + j);
-                yi = (u16) (yindex + i);
+                xj = (uint16_t) (xindex + j);
+                yi = (uint16_t) (yindex + i);
                 if ((xj < JpegImage.Cols) && (yi < JpegImage.Rows))
-                  gfxPixel ((i16) (xj + x0), (i16)(yi + y0), (u32) RGB32(r, g, b), vram);
+                  gfxPixel ((int16_t) (xj + x0), (int16_t)(yi + y0), (uint32_t) RGB32(r, g, b), vram);
               }
               xindex += 16;
               if (xindex >= JpegImage.Cols)
@@ -977,15 +977,15 @@ Image* Image::LoadJPG(const void *src, bool convert_to_linear)
             for (j=0; j<8; j++)
             {
               y = YVector1[i][j];
-              i2 = (u16) (i >> 1);
-              j2 = (u16) (j >> 1);
+              i2 = (uint16_t) (i >> 1);
+              j2 = (uint16_t) (j >> 1);
               cb = CbVector[i2][j2];
               cr = CrVector[i2][j2];
               JPGToRGB (y, cb, cr, &r, &g, &b);
-              xj = (u16) (xindex + j);
-              yi = (u16) (yindex + i);
+              xj = (uint16_t) (xindex + j);
+              yi = (uint16_t) (yindex + i);
               if ((xj < JpegImage.Cols) && (yi < JpegImage.Rows))
-                gfxPixel ((i16) (xj + x0), (i16) (yi + y0), (u32) RGB32(r, g, b), vram);
+                gfxPixel ((int16_t) (xj + x0), (int16_t) (yi + y0), (uint32_t) RGB32(r, g, b), vram);
             }
 
             xindex += 8;
@@ -1016,10 +1016,10 @@ Image* Image::LoadJPG(const void *src, bool convert_to_linear)
           y = YVector1[i][j];
           if (y < 0) y = 0;
           if (y > 255) y = 255;
-          xj = (u16) (xindex + j);
-          yi = (u16) (yindex + i);
+          xj = (uint16_t) (xindex + j);
+          yi = (uint16_t) (yindex + i);
           if ((xj < JpegImage.Cols) && (yi < JpegImage.Rows))
-            gfxPixel ((i16) (xj + x0), (i16) (yi + y0), (u32) RGB32(y, y, y), vram);
+            gfxPixel ((int16_t) (xj + x0), (int16_t) (yi + y0), (uint32_t) RGB32(y, y, y), vram);
         }
         xindex += 8;
         if (xindex >= JpegImage.Cols)

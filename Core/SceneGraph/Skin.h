@@ -16,10 +16,10 @@ namespace Helium
         {
         public:
             // The object ID indices of the transforms that influence this vertex
-            std::vector< u32 > m_Objects;
+            std::vector< uint32_t > m_Objects;
 
             // The weights of the transforms that influence this vertex (CORRESPONDS TO objects)
-            std::vector< f32 > m_Weights;
+            std::vector< float32_t > m_Weights;
 
             REFLECT_DECLARE_CLASS(Influence, Reflect::Element);
 
@@ -44,20 +44,20 @@ namespace Helium
             virtual void Evaluate(GraphDirection direction) HELIUM_OVERRIDE;
 
         private:
-            void BlendMatrix(const Transform* transform, const Influence* influence, Math::Matrix4& matrix);
+            void BlendMatrix(const Transform* transform, const Influence* influence, Matrix4& matrix);
 
         protected:
             // Reflected
             Helium::TUID        m_MeshID;               // The mesh we are skinning
             V_Influence         m_Influences;           // The influence data for each vertex of the mesh
             Helium::V_TUID      m_InfluenceObjectIDs;   // The influence objects required to deform this mesh, indexed by each influence item above
-            std::vector< u32 >  m_InfluenceIndices;     // The influence to use for each vertex (CORRESPONDS TO m_Positions Indices in the referenced mesh)
+            std::vector< uint32_t >  m_InfluenceIndices;     // The influence to use for each vertex (CORRESPONDS TO m_Positions Indices in the referenced mesh)
 
             // Non-reflected
             Mesh*               m_Mesh;
             V_TransformDumbPtr  m_InfluenceObjects;
-            Math::V_Matrix4     m_DeformMatrices;
-            Math::V_Matrix4     m_SkinMatrices;
+            V_Matrix4     m_DeformMatrices;
+            V_Matrix4     m_SkinMatrices;
         };
     }
 }

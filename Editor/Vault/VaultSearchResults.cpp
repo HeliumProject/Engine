@@ -9,7 +9,7 @@ using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Ctor/Dtor
-VaultSearchResults::VaultSearchResults( u32 vaultSearchID )
+VaultSearchResults::VaultSearchResults( uint32_t vaultSearchID )
 : m_VaultSearchID( vaultSearchID )
 {
 }
@@ -39,15 +39,15 @@ bool VaultSearchResults::HasResults() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-const std::map< u64, Helium::Path >& VaultSearchResults::GetPathsMap() const
+const std::map< uint64_t, Helium::Path >& VaultSearchResults::GetPathsMap() const
 {
     return m_Paths;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-const Helium::Path* VaultSearchResults::Find( const u64& hash ) const
+const Helium::Path* VaultSearchResults::Find( const uint64_t& hash ) const
 {
-    std::map< u64, Helium::Path >::const_iterator found = m_Paths.find( hash );
+    std::map< uint64_t, Helium::Path >::const_iterator found = m_Paths.find( hash );
     if ( found != m_Paths.end() )
     {
         return &( found->second );
@@ -59,7 +59,7 @@ const Helium::Path* VaultSearchResults::Find( const u64& hash ) const
 ///////////////////////////////////////////////////////////////////////////////
 bool VaultSearchResults::AddPath( const Helium::Path& path )
 {
-    Helium::Insert< std::map< u64, Helium::Path > >::Result inserted = m_Paths.insert( std::map< u64, Helium::Path >::value_type( path.Hash(), path ) );
+    Helium::Insert< std::map< uint64_t, Helium::Path > >::Result inserted = m_Paths.insert( std::map< uint64_t, Helium::Path >::value_type( path.Hash(), path ) );
     return inserted.second;
 }
 

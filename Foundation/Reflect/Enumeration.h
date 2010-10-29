@@ -13,25 +13,25 @@ namespace Helium
         class FOUNDATION_API EnumerationElement : public Helium::AtomicRefCountBase
         {
         public:
-            u32         m_Value;    // the value of the element
+            uint32_t         m_Value;    // the value of the element
             tstring     m_Name;     // the name of the element
             tstring     m_Label;    // the label (friendly name) of the element
             tstring     m_HelpText; // the help text for the element
 
         protected:
             // for where the friendly name (used for UI AND serialization) is not the real name
-            EnumerationElement( u32 value, const tstring& name, const tstring& label, const tstring& helpText = TXT( "FIXME: SET THE HELP TEXT FOR THIS ENUMERATION ELEMENT" ) );
+            EnumerationElement( uint32_t value, const tstring& name, const tstring& label, const tstring& helpText = TXT( "FIXME: SET THE HELP TEXT FOR THIS ENUMERATION ELEMENT" ) );
             virtual ~EnumerationElement();
 
         public:
             // protect external allocation to keep inlined code in this dll
-            static EnumerationElement* Create( u32 value, const tstring& name, const tstring& label, const tstring& helpText = TXT( "FIXME: SET THE HELP TEXT FOR THIS ENUMERATION ELEMENT" ) );
+            static EnumerationElement* Create( uint32_t value, const tstring& name, const tstring& label, const tstring& helpText = TXT( "FIXME: SET THE HELP TEXT FOR THIS ENUMERATION ELEMENT" ) );
         };
 
         typedef Helium::SmartPtr<EnumerationElement> EnumerationElementPtr;
         typedef std::vector<EnumerationElementPtr>                    V_EnumerationElement; // order of declaration
         typedef stdext::hash_map<tstring, EnumerationElementPtr>      M_StrEnumerationElement; // sorted by name
-        typedef stdext::hash_map<i32, EnumerationElementPtr>          M_ValueEnumerationElement; // sorted by value
+        typedef stdext::hash_map<int32_t, EnumerationElementPtr>          M_ValueEnumerationElement; // sorted by value
 
         class FOUNDATION_API Enumeration;
         typedef Helium::SmartPtr<Enumeration> EnumerationPtr;
@@ -79,27 +79,27 @@ namespace Helium
             // Element data
             //
 
-            void AddElement(u32 value, const tstring& name, const tstring& label = TXT(""), const tstring& helpText = TXT( "FIXME: SET THE HELP TEXT FOR THIS ENUMERATION ELEMENT" ) );
+            void AddElement(uint32_t value, const tstring& name, const tstring& label = TXT(""), const tstring& helpText = TXT( "FIXME: SET THE HELP TEXT FOR THIS ENUMERATION ELEMENT" ) );
 
-            bool GetElementValue(const tstring& label, u32& value) const;
-            bool GetElementLabel(const u32 value, tstring& label) const;
+            bool GetElementValue(const tstring& label, uint32_t& value) const;
+            bool GetElementLabel(const uint32_t value, tstring& label) const;
 
             //
             // Support for using 'enum' as a bitfield
             //
 
-            bool GetBitfieldValue(const tstring& str, u32& value) const;
-            bool GetBitfieldValue(const std::vector< tstring >& strs, u32& value) const;
+            bool GetBitfieldValue(const tstring& str, uint32_t& value) const;
+            bool GetBitfieldValue(const std::vector< tstring >& strs, uint32_t& value) const;
 
-            bool GetBitfieldString(const u32 value, tstring& str) const;
-            bool GetBitfieldStrings(const u32 value, std::vector< tstring >& strs) const;
+            bool GetBitfieldString(const uint32_t value, tstring& str) const;
+            bool GetBitfieldStrings(const uint32_t value, std::vector< tstring >& strs) const;
 
-            inline static bool IsFlagSet(u32 value, u32 flag)
+            inline static bool IsFlagSet(uint32_t value, uint32_t flag)
             {
                 return ((value & flag) == flag);
             }
 
-            inline static void SetFlags(u32& value, u32 flags)
+            inline static void SetFlags(uint32_t& value, uint32_t flags)
             {
                 value |= flags;
             }

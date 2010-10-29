@@ -99,9 +99,9 @@ ThumbnailIteratorPtr ThumbnailSorter::GetIterator( ThumbnailTile* startingTile )
 // Returns +1 if first comes after second.
 // Returns 0 if the tiles are equivalent.
 // 
-i32 ThumbnailSorter::Compare( const ThumbnailTile* first, const ThumbnailTile* second ) const
+int32_t ThumbnailSorter::Compare( const ThumbnailTile* first, const ThumbnailTile* second ) const
 {
-  i32 result = 0;
+  int32_t result = 0;
 
   bool firstBeforeSecond = false;
   bool secondBeforeFirst = false;
@@ -158,7 +158,7 @@ bool ThumbnailSorter::SortAlphabeticalByName( const ThumbnailTile* first, const 
   // else: both are the same type
 
   // 2. Compare only the tile labels
-  i32 result = strinatcmp( first->GetLabel().c_str(), second->GetLabel().c_str() );
+  int32_t result = strinatcmp( first->GetLabel().c_str(), second->GetLabel().c_str() );
   if ( result == 0 )
   {
     // 3. Labels are the same, look at the full path
@@ -173,7 +173,7 @@ bool ThumbnailSorter::SortAlphabeticalByName( const ThumbnailTile* first, const 
 // 
 bool ThumbnailSorter::SortAlphabeticalByType( const ThumbnailTile* first, const ThumbnailTile* second )
 {
-  i32 result = _tcsicmp( first->GetTypeLabel().c_str(), second->GetTypeLabel().c_str() );
+  int32_t result = _tcsicmp( first->GetTypeLabel().c_str(), second->GetTypeLabel().c_str() );
   if ( result == 0 )
   {
     return SortAlphabeticalByName( first, second );

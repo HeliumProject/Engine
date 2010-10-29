@@ -56,9 +56,9 @@ namespace Helium
 
         struct CameraMovedArgs
         {
-            Math::Matrix4 m_Transform;
+            Matrix4 m_Transform;
 
-            CameraMovedArgs( const Math::Matrix4& transform )
+            CameraMovedArgs( const Matrix4& transform )
                 : m_Transform( transform )
             {
 
@@ -76,29 +76,29 @@ namespace Helium
         {
         private:
             // total control size
-            Math::Point m_Size;
+            Point m_Size;
 
             // projection information
             ProjectionMode m_ProjectionMode;
-            Math::Matrix4 m_Projection;
-            Math::Matrix4 m_InverseProjection;
+            Matrix4 m_Projection;
+            Matrix4 m_InverseProjection;
 
             // view information
-            Math::Matrix4 m_View;
-            Math::Matrix4 m_InverseView;
-            Math::Frustum m_ViewFrustum;
+            Matrix4 m_View;
+            Matrix4 m_InverseView;
+            Frustum m_ViewFrustum;
 
             // current movement mode
             MovementMode m_MovementMode;
 
             // movement members
-            Math::Vector3 m_Pivot;
+            Vector3 m_Pivot;
             float m_Offset;
             float m_Sensitivity;
-            Math::Matrix4 m_Orientation;
+            Matrix4 m_Orientation;
 
             // previous 2d coordinates of mouse
-            Math::Point m_Prev;
+            Point m_Prev;
 
             // surface rendering
             bool m_WireframeOnMesh;
@@ -129,9 +129,9 @@ namespace Helium
             void LoadSettings(CameraSettings* prefs);
             void SaveSettings(CameraSettings* prefs);
 
-            void Setup(ProjectionMode mode = ProjectionModes::Perspective, const Math::Vector3& dir = Math::Vector3::Zero, const Math::Vector3& up = Math::Vector3::Zero);
+            void Setup(ProjectionMode mode = ProjectionModes::Perspective, const Vector3& dir = Vector3::Zero, const Vector3& up = Vector3::Zero);
 
-            Math::Point GetSize() const
+            Point GetSize() const
             {
                 return m_Size;
             }
@@ -160,12 +160,12 @@ namespace Helium
                 m_ProjectionMode = mode;
             }
 
-            const Math::Matrix4& GetProjection() const
+            const Matrix4& GetProjection() const
             {
                 return m_Projection;
             }
 
-            const Math::Matrix4& GetInverseProjection() const
+            const Matrix4& GetInverseProjection() const
             {
                 return m_InverseProjection;
             }
@@ -176,11 +176,11 @@ namespace Helium
             //
 
             // the center point and rotation m_Pivot of the camera
-            const Math::Vector3& GetPivot() const
+            const Vector3& GetPivot() const
             {
                 return m_Pivot;
             }
-            void SetPivot(const Math::Vector3& value)
+            void SetPivot(const Vector3& value)
             {
                 m_Pivot = value;
             }
@@ -205,7 +205,7 @@ namespace Helium
                 m_Sensitivity = value;
             }
 
-            const Math::Matrix4 GetOrientation() const
+            const Matrix4 GetOrientation() const
             {
                 return m_Orientation;
             }
@@ -215,17 +215,17 @@ namespace Helium
             // Viewport
             //
 
-            const Math::Matrix4& GetViewport() const
+            const Matrix4& GetViewport() const
             {
                 return m_View;
             }
 
-            const Math::Matrix4& GetInverseView() const
+            const Matrix4& GetInverseView() const
             {
                 return m_InverseView;
             }
 
-            const Math::Frustum& GetViewFrustum() const
+            const Frustum& GetViewFrustum() const
             {
                 return m_ViewFrustum;
             }
@@ -293,16 +293,16 @@ namespace Helium
 
             void Reset();
 
-            void GetUpAxisTransform(Math::Matrix4& m) const;
+            void GetUpAxisTransform(Matrix4& m) const;
 
-            Math::Matrix4& SetProjection(int w, int h);
-            void GetPerspectiveProjection(Math::Matrix4& m) const;
-            void GetOrthographicProjection(Math::Matrix4& m) const;
+            Matrix4& SetProjection(int w, int h);
+            void GetPerspectiveProjection(Matrix4& m) const;
+            void GetOrthographicProjection(Matrix4& m) const;
 
-            void GetDirection(Math::Vector3& dir) const;
-            void GetPosition(Math::Vector3& pos) const;
+            void GetDirection(Vector3& dir) const;
+            void GetPosition(Vector3& pos) const;
 
-            float ScalingTo(const Math::Vector3& pos) const;
+            float ScalingTo(const Vector3& pos) const;
 
             void MouseDown( const MouseButtonInput& e );
             void MouseUp( const MouseButtonInput& e );
@@ -311,21 +311,21 @@ namespace Helium
 
             void Update( bool updateRemote = false );
 
-            void WorldToScreen(const Math::Vector3& v, float& x, float& y);
+            void WorldToScreen(const Vector3& v, float& x, float& y);
 
-            void ViewportToScreen(const Math::Vector3& v, float& x, float& y);
-            void ScreenToViewport(float x, float y, Math::Vector3& v) const;
+            void ViewportToScreen(const Vector3& v, float& x, float& y);
+            void ScreenToViewport(float x, float y, Vector3& v) const;
 
-            void ViewportToWorldVertex(float x, float y, Math::Vector3& v) const;
-            void ViewportToWorldNormal(float x, float y, Math::Vector3& n) const;
-            void ViewportToPlaneVertex(float x, float y, IntersectionPlane p, Math::Vector3& v) const;
-            void ViewportToLine(float x, float y, Math::Line& l) const;
-            bool ViewportToFrustum(float startx, float starty, float endx, float endy, Math::Frustum& f) const;
+            void ViewportToWorldVertex(float x, float y, Vector3& v) const;
+            void ViewportToWorldNormal(float x, float y, Vector3& n) const;
+            void ViewportToPlaneVertex(float x, float y, IntersectionPlane p, Vector3& v) const;
+            void ViewportToLine(float x, float y, Line& l) const;
+            bool ViewportToFrustum(float startx, float starty, float endx, float endy, Frustum& f) const;
 
-            Math::AxesFlags ParallelAxis(const Math::Matrix4& m, float criticalDotProduct) const;
+            AxesFlags ParallelAxis(const Matrix4& m, float criticalDotProduct) const;
 
-            void Frame(const Math::AlignedBox& box);
-            void SetTransform( const Math::Matrix4& transform );
+            void Frame(const AlignedBox& box);
+            void SetTransform( const Matrix4& transform );
 
             MovementMode GetMovementMode() const
             {

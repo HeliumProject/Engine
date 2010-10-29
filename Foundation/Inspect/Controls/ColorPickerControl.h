@@ -26,8 +26,8 @@ namespace Helium
             Attribute< bool >             a_Highlight;
 
             Attribute< bool >             a_Alpha;
-            Attribute< Math::Color3 >     a_Color3;
-            Attribute< Math::Color4 >     a_Color4;
+            Attribute< Color3 >     a_Color3;
+            Attribute< Color4 >     a_Color4;
         };
 
         typedef Helium::SmartPtr< ColorPicker > ColorPickerPtr;

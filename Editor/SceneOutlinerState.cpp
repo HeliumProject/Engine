@@ -32,7 +32,7 @@ void SceneOutlinerState::Reset()
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the position of the horizonal scroll bar in the tree control.
 // 
-i32 SceneOutlinerState::GetHorizontalScrollBarPos() const
+int32_t SceneOutlinerState::GetHorizontalScrollBarPos() const
 {
   return m_HorizScrollPos;
 }
@@ -40,7 +40,7 @@ i32 SceneOutlinerState::GetHorizontalScrollBarPos() const
 ///////////////////////////////////////////////////////////////////////////////
 // Saves the specified value as the horizontal scroll bar postion.
 // 
-void SceneOutlinerState::SetHorizontalScrollBarPos( i32 pos )
+void SceneOutlinerState::SetHorizontalScrollBarPos( int32_t pos )
 {
   m_HorizScrollPos = pos;
 }
@@ -48,7 +48,7 @@ void SceneOutlinerState::SetHorizontalScrollBarPos( i32 pos )
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the position of the vertical scroll bar in the tree control.
 // 
-i32 SceneOutlinerState::GetVerticalScrollBarPos() const
+int32_t SceneOutlinerState::GetVerticalScrollBarPos() const
 {
   return m_VertScrollPos;
 }
@@ -56,7 +56,7 @@ i32 SceneOutlinerState::GetVerticalScrollBarPos() const
 ///////////////////////////////////////////////////////////////////////////////
 // Saves the specified value as the vertical scroll bar postion.
 // 
-void SceneOutlinerState::SetVerticalScrollBarPos( i32 pos )
+void SceneOutlinerState::SetVerticalScrollBarPos( int32_t pos )
 {
   m_VertScrollPos = pos;
 }

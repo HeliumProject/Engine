@@ -98,7 +98,7 @@ void Skin::Evaluate(GraphDirection direction)
             // We only need to globalize deformation matrices of skins that were not frozen at rig time
             //
 
-            bool fullTransform = transform->GetGlobalTransform() != Math::Matrix4::Identity;
+            bool fullTransform = transform->GetGlobalTransform() != Matrix4::Identity;
 
 
             //
@@ -110,7 +110,7 @@ void Skin::Evaluate(GraphDirection direction)
                 const Transform* influence = m_InfluenceObjects[i];
 
                 // build the current deformation transformation in global space
-                Math::Matrix4 deformMat = influence->GetInverseBindTransform() * influence->GetGlobalTransform();
+                Matrix4 deformMat = influence->GetInverseBindTransform() * influence->GetGlobalTransform();
 
                 if ( fullTransform )
                 {
@@ -133,15 +133,15 @@ void Skin::Evaluate(GraphDirection direction)
 
                 V_Polygon::const_iterator itr = m_Mesh->m_Polygons.begin();
                 V_Polygon::const_iterator end = m_Mesh->m_Polygons.end();
-                for ( u32 i = 0; itr != end; ++itr, ++i )
+                for ( uint32_t i = 0; itr != end; ++itr, ++i )
                 {
                     Matrix4 matrix;
 
                     const PolygonPtr& polygon (*itr);
 
-                    std::vector< u32 >::const_iterator normalItr = polygon->m_Normals.begin();
-                    std::vector< u32 >::const_iterator normalEnd = polygon->m_Normals.end();
-                    for ( u32 j = 0; normalItr != normalEnd; ++normalItr, ++j )
+                    std::vector< uint32_t >::const_iterator normalItr = polygon->m_Normals.begin();
+                    std::vector< uint32_t >::const_iterator normalEnd = polygon->m_Normals.end();
+                    for ( uint32_t j = 0; normalItr != normalEnd; ++normalItr, ++j )
                     {
                         if ( j > 2 )
                         {
@@ -170,28 +170,28 @@ void Skin::Evaluate(GraphDirection direction)
 
                 V_Polygon::const_iterator itr = m_Mesh->m_Polygons.begin();
                 V_Polygon::const_iterator end = m_Mesh->m_Polygons.end();
-                for ( u32 i = 0; itr != end; ++itr, ++i )
+                for ( uint32_t i = 0; itr != end; ++itr, ++i )
                 {
                     const PolygonPtr& polygon (*itr);
 
-                    std::vector< u32 >::const_iterator vertexItr = polygon->m_Vertices.begin();
-                    std::vector< u32 >::const_iterator vertexEnd = polygon->m_Vertices.end();
-                    for ( u32 j = 0; vertexItr != vertexEnd; ++vertexItr, ++j )
+                    std::vector< uint32_t >::const_iterator vertexItr = polygon->m_Vertices.begin();
+                    std::vector< uint32_t >::const_iterator vertexEnd = polygon->m_Vertices.end();
+                    for ( uint32_t j = 0; vertexItr != vertexEnd; ++vertexItr, ++j )
                     {
                         if ( j > 2 )
                         {
-                            Math::Vector3& triVertex1 (m_Mesh->m_TriangleVertices[count]);
+                            Vector3& triVertex1 (m_Mesh->m_TriangleVertices[count]);
                             triVertex1 = m_Mesh->m_Vertices[ *vertexItr ];
                             m_SkinMatrices[polygon->m_Vertices[0]].TransformVertex( triVertex1 );
                             count++;
 
-                            Math::Vector3& triVertex2 (m_Mesh->m_TriangleVertices[count]);
+                            Vector3& triVertex2 (m_Mesh->m_TriangleVertices[count]);
                             triVertex2 = m_Mesh->m_Vertices[ *vertexItr ];
                             m_SkinMatrices[polygon->m_Vertices[j-1]].TransformVertex( triVertex2 );
                             count++;
                         }
 
-                        Math::Vector3& triVertex (m_Mesh->m_TriangleVertices[count]);
+                        Vector3& triVertex (m_Mesh->m_TriangleVertices[count]);
                         triVertex = m_Mesh->m_Vertices[ *vertexItr ];
                         m_SkinMatrices[polygon->m_Vertices[j]].TransformVertex( triVertex );
                         count++;
@@ -204,28 +204,28 @@ void Skin::Evaluate(GraphDirection direction)
 
                 V_Polygon::const_iterator itr = m_Mesh->m_Polygons.begin();
                 V_Polygon::const_iterator end = m_Mesh->m_Polygons.end();
-                for ( u32 i = 0; itr != end; ++itr, ++i )
+                for ( uint32_t i = 0; itr != end; ++itr, ++i )
                 {
                     const PolygonPtr& polygon (*itr);
 
-                    std::vector< u32 >::const_iterator normalItr = polygon->m_Normals.begin();
-                    std::vector< u32 >::const_iterator normalEnd = polygon->m_Normals.end();
-                    for ( u32 j = 0; normalItr != normalEnd; ++normalItr, ++j )
+                    std::vector< uint32_t >::const_iterator normalItr = polygon->m_Normals.begin();
+                    std::vector< uint32_t >::const_iterator normalEnd = polygon->m_Normals.end();
+                    for ( uint32_t j = 0; normalItr != normalEnd; ++normalItr, ++j )
                     {
                         if ( j > 2 )
                         {
-                            Math::Vector3& triNormal1 (m_Mesh->m_TriangleNormals[count]);
+                            Vector3& triNormal1 (m_Mesh->m_TriangleNormals[count]);
                             triNormal1 = m_Mesh->m_Normals[ *normalItr ];
                             m_SkinMatrices[polygon->m_Vertices[0]].TransformNormal( triNormal1 );
                             count++;
 
-                            Math::Vector3& triNormal2 (m_Mesh->m_TriangleNormals[count]);
+                            Vector3& triNormal2 (m_Mesh->m_TriangleNormals[count]);
                             triNormal2 = m_Mesh->m_Normals[ *normalItr ];
                             m_SkinMatrices[polygon->m_Vertices[j-1]].TransformNormal( triNormal2 );
                             count++;
                         }
 
-                        Math::Vector3& triNormal (m_Mesh->m_TriangleNormals[count]);
+                        Vector3& triNormal (m_Mesh->m_TriangleNormals[count]);
                         triNormal = m_Mesh->m_Normals[ *normalItr ];
                         m_SkinMatrices[polygon->m_Vertices[j]].TransformNormal( triNormal );
                         count++;
@@ -240,7 +240,7 @@ void Skin::Evaluate(GraphDirection direction)
     __super::Evaluate(direction);
 }
 
-void Skin::BlendMatrix(const Transform* transform, const Influence* influence, Math::Matrix4& matrix)
+void Skin::BlendMatrix(const Transform* transform, const Influence* influence, Matrix4& matrix)
 {
     //
     // Blend influence deformation matrices together
@@ -248,8 +248,8 @@ void Skin::BlendMatrix(const Transform* transform, const Influence* influence, M
 
     matrix = ( m_DeformMatrices[influence->m_Objects[0]] * influence->m_Weights[0] );
 
-    const u32 numInf = static_cast< u32 >( influence->m_Objects.size() );
-    for ( u32 j = 1; j < numInf; j++ )
+    const uint32_t numInf = static_cast< uint32_t >( influence->m_Objects.size() );
+    for ( uint32_t j = 1; j < numInf; j++ )
     {
         matrix += ( m_DeformMatrices[influence->m_Objects[j]] * influence->m_Weights[j] );
     }

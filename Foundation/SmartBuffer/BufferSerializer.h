@@ -55,7 +55,7 @@ namespace Helium
         }
 
         template< typename T >
-        Helium::SmartPtr< ObjectBuffer<T> > CreateObject( u32 type )
+        Helium::SmartPtr< ObjectBuffer<T> > CreateObject( uint32_t type )
         {
             Helium::SmartPtr< ObjectBuffer<T> > return_val = new ObjectBuffer<T>;
             return_val->SetType( type );
@@ -65,13 +65,13 @@ namespace Helium
         }
 
         template< typename T >
-        Helium::SmartPtr< ObjectArrayBuffer<T> > CreateObjectArray(u32 size)
+        Helium::SmartPtr< ObjectArrayBuffer<T> > CreateObjectArray(uint32_t size)
         {
             return CreateObjectArray<T>( size, -1 );
         }
 
         template< typename T >
-        Helium::SmartPtr< ObjectArrayBuffer<T> > CreateObjectArray( u32 size, u32 type )
+        Helium::SmartPtr< ObjectArrayBuffer<T> > CreateObjectArray( uint32_t size, uint32_t type )
         {
             Helium::SmartPtr< ObjectArrayBuffer<T> > return_val = new ObjectArrayBuffer<T>( size );
             return_val->SetType( type );
@@ -81,13 +81,13 @@ namespace Helium
         }
 
     public:
-        BasicBufferPtr CreateBasic( u32 type = 0xffffffff, bool track = true );
+        BasicBufferPtr CreateBasic( uint32_t type = 0xffffffff, bool track = true );
 
         void AddBuffer( const SmartBufferPtr& buffer );
         void AddBuffers( const BufferSerializer& serializer );
 
     public:
-        u32 ComputeSize() const;
+        uint32_t ComputeSize() const;
         bool WriteToFile( const tchar* filename ) const;
         bool WriteToStream( tostream& strm ) const;
         bool ReadFromFile( const tchar* filename );

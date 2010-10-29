@@ -6,7 +6,6 @@
 #include "Orientation.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 PrimitiveCapsule::PrimitiveCapsule(ResourceTracker* tracker)
@@ -100,13 +99,13 @@ void PrimitiveCapsule::Update()
 
     for (int theta=0; theta<=360-dtheta; theta+=dtheta)
     {
-      float sinTheta = (f32)(sin(theta * Math::DegToRad));
-      float sinTheta2 = (f32)(sin((theta+dtheta) * Math::DegToRad));
-      float cosTheta = (f32)(cos(theta * Math::DegToRad));
-      float cosTheta2 = (f32)(cos((theta+dtheta) * Math::DegToRad));
+      float sinTheta = (float32_t)(sin(theta * DegToRad));
+      float sinTheta2 = (float32_t)(sin((theta+dtheta) * DegToRad));
+      float cosTheta = (float32_t)(cos(theta * DegToRad));
+      float cosTheta2 = (float32_t)(cos((theta+dtheta) * DegToRad));
 
-      float sinPhi = (f32)(sin(phi * Math::DegToRad));
-      float cosPhi = (f32)(cos(phi * Math::DegToRad));
+      float sinPhi = (float32_t)(sin(phi * DegToRad));
+      float cosPhi = (float32_t)(cos(phi * DegToRad));
 
       m_Vertices.push_back(Position(SetupVector(sinTheta * cosPhi * m_Radius,
                                                 sinPhi * m_Radius + (MATH_SIGN(phi) * m_Length / 2.0f),
@@ -118,22 +117,22 @@ void PrimitiveCapsule::Update()
     }
   }
 
-  float stepAngle = (f32)(Math::Pi)*2.0f / (f32)(m_RadiusSteps);
-  float stepLength = m_Length/(f32)(m_LengthSteps-1);
+  float stepAngle = (float32_t)(Pi)*2.0f / (float32_t)(m_RadiusSteps);
+  float stepLength = m_Length/(float32_t)(m_LengthSteps-1);
 
   for (int l=0; l<m_LengthSteps; l++)
   {
     for (int s=0; s<m_RadiusSteps; s++)
     {
-      float theta = (f32)(s) * stepAngle;
+      float theta = (float32_t)(s) * stepAngle;
 
-      m_Vertices.push_back(Position(SetupVector((f32)(sin(theta)) * m_Radius,
-                                                -m_Length/2.0f + stepLength*(f32)(l),
-                                                (f32)(cos(theta)) * m_Radius)));
+      m_Vertices.push_back(Position(SetupVector((float32_t)(sin(theta)) * m_Radius,
+                                                -m_Length/2.0f + stepLength*(float32_t)(l),
+                                                (float32_t)(cos(theta)) * m_Radius)));
 
-      m_Vertices.push_back(Position(SetupVector((f32)(sin(theta + stepAngle)) * m_Radius,
-                                                -m_Length/2.0f + stepLength*(f32)(l),
-                                                (f32)(cos(theta + stepAngle)) * m_Radius)));
+      m_Vertices.push_back(Position(SetupVector((float32_t)(sin(theta + stepAngle)) * m_Radius,
+                                                -m_Length/2.0f + stepLength*(float32_t)(l),
+                                                (float32_t)(cos(theta + stepAngle)) * m_Radius)));
     }
   }
 
@@ -158,15 +157,15 @@ void PrimitiveCapsule::Update()
 
       for (int phi=0; phi<=360-dphi; phi+=dphi)
       {
-        float sinTheta = (f32)(sin(theta * Math::DegToRad));
-        float sinTheta2 = (f32)(sin((theta+dtheta) * Math::DegToRad));
-        float cosTheta = (f32)(cos(theta * Math::DegToRad));
-        float cosTheta2 = (f32)(cos((theta+dtheta) * Math::DegToRad));
+        float sinTheta = (float32_t)(sin(theta * DegToRad));
+        float sinTheta2 = (float32_t)(sin((theta+dtheta) * DegToRad));
+        float cosTheta = (float32_t)(cos(theta * DegToRad));
+        float cosTheta2 = (float32_t)(cos((theta+dtheta) * DegToRad));
 
-        float sinPhi = (f32)(sin(phi * Math::DegToRad));
-        float sinPhi2 = (f32)(sin((phi+dphi) * Math::DegToRad));
-        float cosPhi = (f32)(cos(phi * Math::DegToRad));
-        float cosPhi2 = (f32)(cos((phi+dphi) * Math::DegToRad));
+        float sinPhi = (float32_t)(sin(phi * DegToRad));
+        float sinPhi2 = (float32_t)(sin((phi+dphi) * DegToRad));
+        float cosPhi = (float32_t)(cos(phi * DegToRad));
+        float cosPhi2 = (float32_t)(cos((phi+dphi) * DegToRad));
 
         Vector3 a = SetupVector(cosTheta * sinPhi * m_Radius,
                                 (sinTheta * m_Radius) + offset,
@@ -200,15 +199,15 @@ void PrimitiveCapsule::Update()
     // midsection
     for (int x=0; x<=m_RadiusSteps; x++)
     {
-      float theta = (f32)(x) * stepAngle;
+      float theta = (float32_t)(x) * stepAngle;
 
-      m_Vertices.push_back(Position (SetupVector((f32)(sin(theta)) * m_Radius,
+      m_Vertices.push_back(Position (SetupVector((float32_t)(sin(theta)) * m_Radius,
                                                  m_Length/2.0f,
-                                                 (f32)(cos(theta)) * m_Radius)));
+                                                 (float32_t)(cos(theta)) * m_Radius)));
 
-      m_Vertices.push_back(Position (SetupVector((f32)(sin(theta)) * m_Radius,
+      m_Vertices.push_back(Position (SetupVector((float32_t)(sin(theta)) * m_Radius,
                                                  -m_Length/2.0f,
-                                                 (f32)(cos(theta)) * m_Radius)));
+                                                 (float32_t)(cos(theta)) * m_Radius)));
     }
   }
 

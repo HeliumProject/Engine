@@ -1,14 +1,14 @@
 #include "half.h"
 
-using namespace Helium::Math;
+using namespace Helium;
 
 //-------------------------------------------------------------
-// Lookup tables for half-to-f32 and f32-to-half conversion
+// Lookup tables for half-to-float32_t and float32_t-to-half conversion
 //-------------------------------------------------------------
 const half::uif half::_toFloat[1 << 16] =
 #include "Halftofloat.h"
 
-const u16 half::_eLut[1 << 9] =
+const uint16_t half::_eLut[1 << 9] =
 {
     0,     0,     0,     0,     0,     0,     0,     0, 
     0,     0,     0,     0,     0,     0,     0,     0, 
@@ -77,15 +77,15 @@ const u16 half::_eLut[1 << 9] =
 };
 
 //-----------------------------------------------
-// Overflow handler for f32-to-half conversion;
+// Overflow handler for float32_t-to-half conversion;
 // generates a hardware floating-point overflow,
 // which may be trapped by the operating system.
 //-----------------------------------------------
-f32 half::overflow()
+float32_t half::overflow()
 {
-    volatile f32 f = 1e10;
+    volatile float32_t f = 1e10;
 
-    for (i32 i = 0; i < 10; i++)	
+    for (int32_t i = 0; i < 10; i++)	
         f *= f;				// this will overflow before the for­loop terminates
     return f;
 }
@@ -94,7 +94,7 @@ f32 half::overflow()
 // Float-to-half conversion -- general case, including
 // zeroes, denormalized numbers and exponent overflows.
 //-----------------------------------------------------
-i16 half::convert(i32 i)
+int16_t half::convert(int32_t i)
 {
     //
     // Our floating point number, f, is represented by the bit
@@ -103,12 +103,12 @@ i16 half::convert(i32 i)
     // Shift s into the position where it will go in in the
     // resulting half number.
     // Adjust e, accounting for the different exponent bias
-    // of f32 and half (127 versus 15).
+    // of float32_t and half (127 versus 15).
     //
 
-    i32 s =  (i >> 16) & 0x00008000;
-    i32 e = ((i >> 23) & 0x000000ff) - (127 - 15);
-    i32 m =   i        & 0x007fffff;
+    int32_t s =  (i >> 16) & 0x00008000;
+    int32_t e = ((i >> 23) & 0x000000ff) - (127 - 15);
+    int32_t m =   i        & 0x007fffff;
 
     //
     // Now reassemble s, e and m into a half:
@@ -121,7 +121,7 @@ i16 half::convert(i32 i)
             //
             // E is less than -10.  The absolute value of f is
             // less than HALF_MIN (f may be a small normalized
-            // f32, a denormalized f32 or a zero).
+            // float32_t, a denormalized float32_t or a zero).
             //
             // We convert f to a half zero.
             //
@@ -130,7 +130,7 @@ i16 half::convert(i32 i)
         }
 
         //
-        // E is between -10 and 0.  F is a normalized f32,
+        // E is between -10 and 0.  F is a normalized float32_t,
         // whose magnitude is less than HALF_NRM_MIN.
         //
         // We convert f to a denormalized half.
@@ -181,7 +181,7 @@ i16 half::convert(i32 i)
     else
     {
         //
-        // E is greater than zero.  F is a normalized f32.
+        // E is greater than zero.  F is a normalized float32_t.
         // We try to convert f to a normalized half.
         //
 
@@ -224,9 +224,9 @@ i16 half::convert(i32 i)
 //---------------------------------------
 void half::createBitString(tchar c[19], half h)
 {
-    u16 b = h.bits();
+    uint16_t b = h.bits();
 
-    for (i32 i = 15, j = 0; i >= 0; i--, j++)
+    for (int32_t i = 15, j = 0; i >= 0; i--, j++)
     {
         c[j] = (((b >> i) & 1)? '1': '0');
         if (i == 15 || i == 10)
@@ -236,11 +236,11 @@ void half::createBitString(tchar c[19], half h)
 }
 
 
-void half::createBitString(tchar c[35], f32 f)
+void half::createBitString(tchar c[35], float32_t f)
 {
     half::uif x;
     x.f = f;
-    for (i32 i = 31, j = 0; i >= 0; i--, j++)
+    for (int32_t i = 31, j = 0; i >= 0; i--, j++)
     {
         c[j] = (((x.i >> i) & 1)? '1': '0');
 

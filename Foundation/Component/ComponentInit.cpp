@@ -8,7 +8,7 @@
 
 using namespace Helium;
 
-i32 g_ComponentInitCount = 0; 
+int32_t g_ComponentInitCount = 0; 
 Helium::InitializerStack g_ComponentRegisteredTypes;
 Helium::InitializerStack g_ComponentInitializerStack;
 

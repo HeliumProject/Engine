@@ -19,7 +19,7 @@ void SceneNodeType::CleanupType()
     Reflect::UnregisterClassType< SceneGraph::SceneNodeType >();
 }
 
-SceneNodeType::SceneNodeType(SceneGraph::Scene* scene, i32 instanceType)
+SceneNodeType::SceneNodeType(SceneGraph::Scene* scene, int32_t instanceType)
 : m_Scene( scene )
 , m_InstanceType ( instanceType )
 , m_ImageIndex( -1 )
@@ -47,12 +47,12 @@ void SceneNodeType::SetName( const tstring& name )
     m_Name = name;
 }
 
-i32 SceneNodeType::GetImageIndex() const
+int32_t SceneNodeType::GetImageIndex() const
 {
     return m_ImageIndex;
 }
 
-void SceneNodeType::SetImageIndex( i32 index )
+void SceneNodeType::SetImageIndex( int32_t index )
 {
     m_ImageIndex = index;
 }
@@ -92,7 +92,7 @@ const HM_SceneNodeSmartPtr& SceneNodeType::GetInstances() const
     return m_Instances;
 }
 
-i32 SceneNodeType::GetInstanceType() const
+int32_t SceneNodeType::GetInstanceType() const
 {
     return m_InstanceType;
 }

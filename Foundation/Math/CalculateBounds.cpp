@@ -11,10 +11,9 @@
 #include "Macros.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 
-static const f32 epsilon = 1.0e-10F;
-static const i32 sweeps = 32;
+static const float32_t epsilon = 1.0e-10F;
+static const int32_t sweeps = 32;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,7 +27,7 @@ static const i32 sweeps = 32;
 //  destroy the class and recreate it with the new vertex set.
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-BoundingVolumeGenerator::BoundingVolumeGenerator(Math::Vector3* points, i32 point_count, VolumeGenerateMethod method )
+BoundingVolumeGenerator::BoundingVolumeGenerator(Vector3* points, int32_t point_count, VolumeGenerateMethod method )
 {
     m_volumeGenerationMethod  = method;
     m_PointCnt        = point_count;
@@ -52,16 +51,16 @@ BoundingVolumeGenerator::BoundingVolumeGenerator(Math::Vector3* points, i32 poin
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-BoundingVolumeGenerator::BoundingVolumeGenerator(BSphere* bspheres, i32 bsphere_count)
+BoundingVolumeGenerator::BoundingVolumeGenerator(BSphere* bspheres, int32_t bsphere_count)
 {
 
     m_volumeGenerationMethod = BoundingVolumeGenerator::DEFAULT;
     m_BsphereCenters  = new Vector3 [bsphere_count];
-    m_BsphereRads     = new f32 [bsphere_count];
+    m_BsphereRads     = new float32_t [bsphere_count];
     m_PointCnt        = bsphere_count;
     m_Points          = m_BsphereCenters;
 
-    for(i32 i = 0; i < bsphere_count; i++)
+    for(int32_t i = 0; i < bsphere_count; i++)
     {
         m_BsphereCenters[i] = bspheres[i].m_Center;
         m_BsphereRads[i]    = bspheres[i].m_Radius;
@@ -109,15 +108,15 @@ void BoundingVolumeGenerator::CalculateSystem()
 
     // First Calculate the average Position
     m_Mean = Vector3(0,0,0);
-    for (i32 i=0;i<m_PointCnt;i++)
+    for (int32_t i=0;i<m_PointCnt;i++)
     {
         m_Mean+=m_Points[i];
     }
-    m_Mean/=(f32)m_PointCnt;
+    m_Mean/=(float32_t)m_PointCnt;
 
     // Calculate the covariance matrix  
     m_Covariant = Matrix3(Vector3 (0, 0, 0), Vector3 (0, 0, 0), Vector3 (0, 0, 0));
-    for (i32 i=0;i<m_PointCnt;i++)
+    for (int32_t i=0;i<m_PointCnt;i++)
     {
         m_Covariant[0].x += (m_Points[i].x - m_Mean.x)*(m_Points[i].x - m_Mean.x);
         m_Covariant[1].y += (m_Points[i].y - m_Mean.y)*(m_Points[i].y - m_Mean.y);
@@ -134,7 +133,7 @@ void BoundingVolumeGenerator::CalculateSystem()
     m_Covariant[2].y = m_Covariant[1].z;
 
     // divide the matrix by the point count
-    m_Covariant/=(f32)m_PointCnt;
+    m_Covariant/=(float32_t)m_PointCnt;
 
     CalculateEigenSystem();
 }
@@ -154,16 +153,16 @@ void BoundingVolumeGenerator::CalculateSystem()
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void BoundingVolumeGenerator::CalculateEigenSystem()
 {
-    f32 m11 = m_Covariant(0,0);
-    f32 m12 = m_Covariant(0,1);
-    f32 m13 = m_Covariant(0,2);
-    f32 m22 = m_Covariant(1,1);
-    f32 m23 = m_Covariant(1,2);
-    f32 m33 = m_Covariant(2,2);
+    float32_t m11 = m_Covariant(0,0);
+    float32_t m12 = m_Covariant(0,1);
+    float32_t m13 = m_Covariant(0,2);
+    float32_t m22 = m_Covariant(1,1);
+    float32_t m23 = m_Covariant(1,2);
+    float32_t m33 = m_Covariant(2,2);
 
     m_EigenVectors = Matrix3::Identity;
 
-    for (i32 a = 0; a < sweeps; a++)
+    for (int32_t a = 0; a < sweeps; a++)
     {
         // stop if off-diagonal entries small enough
         if ((fabs(m12) < epsilon) && (fabs(m13) < epsilon) &&
@@ -171,25 +170,25 @@ void BoundingVolumeGenerator::CalculateEigenSystem()
 
         if (m12 != 0.0F)
         {
-            f32 u = (m22 - m11) * 0.5F / m12;
-            f32 u2 = u * u;
-            f32 u2p1 = u2 + 1.0F;
-            f32 t = (u2p1 != u2) ?
+            float32_t u = (m22 - m11) * 0.5F / m12;
+            float32_t u2 = u * u;
+            float32_t u2p1 = u2 + 1.0F;
+            float32_t t = (u2p1 != u2) ?
                 ((u < 0.0F) ? -1.0F : 1.0F) * (sqrt(u2p1) - fabs(u)) : 0.5F / u;
-            f32 c = 1.0F / sqrt(t * t + 1.0F);
-            f32 s = c * t;
+            float32_t c = 1.0F / sqrt(t * t + 1.0F);
+            float32_t s = c * t;
 
             m11 -= t * m12;
             m22 += t * m12;
             m12 = 0.0F;
 
-            f32 temp = c * m13 - s * m23;
+            float32_t temp = c * m13 - s * m23;
             m23 = s * m13 + c * m23;
             m13 = temp;
 
-            for (i32 i = 0; i < 3; i++)
+            for (int32_t i = 0; i < 3; i++)
             {
-                f32 temp = c * m_EigenVectors(i,0) - s * m_EigenVectors(i,1);
+                float32_t temp = c * m_EigenVectors(i,0) - s * m_EigenVectors(i,1);
                 m_EigenVectors(i,1) = s * m_EigenVectors(i,0) + c * m_EigenVectors(i,1);
                 m_EigenVectors(i,0) = temp;
             }
@@ -197,25 +196,25 @@ void BoundingVolumeGenerator::CalculateEigenSystem()
 
         if (m13 != 0.0F)
         {
-            f32 u = (m33 - m11) * 0.5F / m13;
-            f32 u2 = u * u;
-            f32 u2p1 = u2 + 1.0F;
-            f32 t = (u2p1 != u2) ?
+            float32_t u = (m33 - m11) * 0.5F / m13;
+            float32_t u2 = u * u;
+            float32_t u2p1 = u2 + 1.0F;
+            float32_t t = (u2p1 != u2) ?
                 ((u < 0.0F) ? -1.0F : 1.0F) * (sqrt(u2p1) - fabs(u)) : 0.5F / u;
-            f32 c = 1.0F / sqrt(t * t + 1.0F);
-            f32 s = c * t;
+            float32_t c = 1.0F / sqrt(t * t + 1.0F);
+            float32_t s = c * t;
 
             m11 -= t * m13;
             m33 += t * m13;
             m13 = 0.0F;
 
-            f32 temp = c * m12 - s * m23;
+            float32_t temp = c * m12 - s * m23;
             m23 = s * m12 + c * m23;
             m12 = temp;
 
-            for (i32 i = 0; i < 3; i++)
+            for (int32_t i = 0; i < 3; i++)
             {
-                f32 temp = c * m_EigenVectors(i,0) - s * m_EigenVectors(i,2);
+                float32_t temp = c * m_EigenVectors(i,0) - s * m_EigenVectors(i,2);
                 m_EigenVectors(i,2) = s * m_EigenVectors(i,0) + c * m_EigenVectors(i,2);
                 m_EigenVectors(i,0) = temp;
             }
@@ -223,25 +222,25 @@ void BoundingVolumeGenerator::CalculateEigenSystem()
 
         if (m23 != 0.0F)
         {
-            f32 u = (m33 - m22) * 0.5F / m23;
-            f32 u2 = u * u;
-            f32 u2p1 = u2 + 1.0F;
-            f32 t = (u2p1 != u2) ?
+            float32_t u = (m33 - m22) * 0.5F / m23;
+            float32_t u2 = u * u;
+            float32_t u2p1 = u2 + 1.0F;
+            float32_t t = (u2p1 != u2) ?
                 ((u < 0.0F) ? -1.0F : 1.0F) * (sqrt(u2p1) - fabs(u)) : 0.5F / u;
-            f32 c = 1.0F / sqrt(t * t + 1.0F);
-            f32 s = c * t;
+            float32_t c = 1.0F / sqrt(t * t + 1.0F);
+            float32_t s = c * t;
 
             m22 -= t * m23;
             m33 += t * m23;
             m23 = 0.0F;
 
-            f32 temp = c * m12 - s * m13;
+            float32_t temp = c * m12 - s * m13;
             m13 = s * m12 + c * m13;
             m12 = temp;
 
-            for (i32 i = 0; i < 3; i++)
+            for (int32_t i = 0; i < 3; i++)
             {
-                f32 temp = c * m_EigenVectors(i,1) - s * m_EigenVectors(i,2);
+                float32_t temp = c * m_EigenVectors(i,1) - s * m_EigenVectors(i,2);
                 m_EigenVectors(i,2) = s * m_EigenVectors(i,1) + c * m_EigenVectors(i,2);
                 m_EigenVectors(i,1) = temp;
             }
@@ -277,32 +276,32 @@ BoundingVolumeGenerator::OBB BoundingVolumeGenerator::GetPrincipleAxisOBB()
     // cloud in the PCA axis, this gives us the bounds of the bounding
     // box. From this we can calculate the center of the bounding box
     // which is all the info we need.
-    f32 mina,maxa;
-    f32 minb,maxb;
-    f32 minc,maxc;
+    float32_t mina,maxa;
+    float32_t minb,maxb;
+    float32_t minc,maxc;
     mina = maxa = m_Points[0].Dot(m_EigenVectors[0]);
     minb = maxb = m_Points[0].Dot(m_EigenVectors[1]);
     minc = maxc = m_Points[0].Dot(m_EigenVectors[2]);
 
-    for (i32 i=1;i<m_PointCnt;i++)
+    for (int32_t i=1;i<m_PointCnt;i++)
     {
-        f32 a = m_Points[i].Dot(m_EigenVectors[0]);
+        float32_t a = m_Points[i].Dot(m_EigenVectors[0]);
         mina = MIN(mina,a);
         maxa = MAX(maxa,a);
 
-        f32 b = m_Points[i].Dot(m_EigenVectors[1]);
+        float32_t b = m_Points[i].Dot(m_EigenVectors[1]);
         minb = MIN(minb,b);
         maxb = MAX(maxb,b);
 
-        f32 c = m_Points[i].Dot(m_EigenVectors[2]);
+        float32_t c = m_Points[i].Dot(m_EigenVectors[2]);
         minc = MIN(minc,c);
         maxc = MAX(maxc,c);
     }
 
     // calculate the average extents to get the center point
-    f32 a = (mina+maxa)/2.0f;
-    f32 b = (minb+maxb)/2.0f;
-    f32 c = (minc+maxc)/2.0f;
+    float32_t a = (mina+maxa)/2.0f;
+    float32_t b = (minb+maxb)/2.0f;
+    float32_t c = (minc+maxc)/2.0f;
     result.m_Center = (m_EigenVectors[0]*a) + (m_EigenVectors[1]*b) + (m_EigenVectors[2]*c);
 
     // calculate the half of the total extent for the cube axis
@@ -345,14 +344,14 @@ BoundingVolumeGenerator::BSphere BoundingVolumeGenerator::GetPrincipleAxisBoundi
     if (m_BsphereCenters == NULL)
     {
         // using the primary priciple axis calculate the extents of the point cloud along that axis
-        f32 mina,maxa;
-        i32 max_idx = 0;
-        i32 min_idx = 0;
+        float32_t mina,maxa;
+        int32_t max_idx = 0;
+        int32_t min_idx = 0;
         mina = maxa = m_Points[0].Dot(m_EigenVectors[0]);
 
-        for (i32 i=1;i<m_PointCnt;i++)
+        for (int32_t i=1;i<m_PointCnt;i++)
         {
-            f32 a = m_Points[i].Dot(m_EigenVectors[0]);
+            float32_t a = m_Points[i].Dot(m_EigenVectors[0]);
             if (a<mina)
             {
                 mina = a;
@@ -373,7 +372,7 @@ BoundingVolumeGenerator::BSphere BoundingVolumeGenerator::GetPrincipleAxisBoundi
 
         // This sphere may not enclose all points, for points that fall inside the current sphere we
         // accept as they are, for points that are outside we try to optimally adjust the sphere
-        for (i32 i=0;i<m_PointCnt;i++)
+        for (int32_t i=0;i<m_PointCnt;i++)
         {
             if ( (m_Points[i] - result.m_Center).LengthSquared()>result.m_Radius*result.m_Radius)
             {
@@ -392,19 +391,19 @@ BoundingVolumeGenerator::BSphere BoundingVolumeGenerator::GetPrincipleAxisBoundi
     {
         // using the primary priciple axis calculate the extents of the point cloud along that axis
         Vector3 principal_axis = m_EigenVectors[0];
-        f32     mina           =  9999.0f;
-        f32     maxa           = -9999.0f;
+        float32_t     mina           =  9999.0f;
+        float32_t     maxa           = -9999.0f;
         Vector3 min_pt( 9999.0f,  9999.0f,  9999.0f);
         Vector3 max_pt(-9999.0f, -9999.0f, -9999.0f);
 
-        for(i32 i = 0; i < m_PointCnt; i++)
+        for(int32_t i = 0; i < m_PointCnt; i++)
         {
             const Vector3&  p  = m_BsphereCenters[i];
             Vector3         d  = (principal_axis * m_BsphereRads[i]);
             Vector3         p1 = (p - d);
             Vector3         p2 = (p + d);
-            f32             a1 = p1.Dot(principal_axis);
-            f32             a2 = p2.Dot(principal_axis);
+            float32_t             a1 = p1.Dot(principal_axis);
+            float32_t             a2 = p2.Dot(principal_axis);
 
             if (a1 < mina) { mina = a1; min_pt = p1; }
             if (a1 > maxa) { maxa = a1; max_pt = p1; }
@@ -419,11 +418,11 @@ BoundingVolumeGenerator::BSphere BoundingVolumeGenerator::GetPrincipleAxisBoundi
 
         // This sphere may not enclose all points, for points that fall inside the current sphere we
         // accept as they are, for points that are outside we try to optimally adjust the sphere
-        for(i32 i = 0; i < m_PointCnt; i++)
+        for(int32_t i = 0; i < m_PointCnt; i++)
         {
-            f32             res_r2  = (result.m_Radius * result.m_Radius);
+            float32_t             res_r2  = (result.m_Radius * result.m_Radius);
             const Vector3&  p       = m_BsphereCenters[i];
-            f32             rad     = m_BsphereRads[i];
+            float32_t             rad     = m_BsphereRads[i];
             Vector3         dp      = (p - result.m_Center).Normalize();
             Vector3         pa      = (p - (dp * rad));
             Vector3         pb      = (p + (dp * rad));
@@ -466,14 +465,14 @@ BoundingVolumeGenerator::AABB BoundingVolumeGenerator::GetAABB()
 
     AABB result;
 
-    f32 minx,maxx;
-    f32 miny,maxy;
-    f32 minz,maxz;
+    float32_t minx,maxx;
+    float32_t miny,maxy;
+    float32_t minz,maxz;
     minx = maxx = m_Points[0].x;
     miny = maxy = m_Points[0].y;
     minz = maxz = m_Points[0].z;
 
-    for (i32 i=1;i<m_PointCnt;i++)
+    for (int32_t i=1;i<m_PointCnt;i++)
     {
         minx = MIN(minx,m_Points[i].x);
         maxx = MAX(maxx,m_Points[i].x);
@@ -514,8 +513,8 @@ bool BoundingVolumeGenerator::SphereInside(Vector3 &v)
 {
     if (m_RadSqr >= 0.0)
     {
-        f32 lhs = (v - m_Center).LengthSquared();
-        f32 rhs = m_RadSqr + (m_RadSqr * 0.000001f);
+        float32_t lhs = (v - m_Center).LengthSquared();
+        float32_t rhs = m_RadSqr + (m_RadSqr * 0.000001f);
 
         return (lhs <= rhs);
     }
@@ -564,12 +563,12 @@ void BoundingVolumeGenerator::SphereInit(Vector3 &v0, Vector3 &v1)
 void BoundingVolumeGenerator::SphereInitSafe(Vector3 &v0, Vector3 &v1, Vector3 &v2)
 {
     // compute aabb around points and derive bsphere from this
-    f32 min_x = MIN( MIN( v0.x, v1.x ), v2.x );
-    f32 min_y = MIN( MIN( v0.y, v1.y ), v2.y );
-    f32 min_z = MIN( MIN( v0.z, v1.z ), v2.z );
-    f32 max_x = MAX( MAX( v0.x, v1.x ), v2.x );
-    f32 max_y = MAX( MAX( v0.y, v1.y ), v2.y );
-    f32 max_z = MAX( MAX( v0.z, v1.z ), v2.z );
+    float32_t min_x = MIN( MIN( v0.x, v1.x ), v2.x );
+    float32_t min_y = MIN( MIN( v0.y, v1.y ), v2.y );
+    float32_t min_z = MIN( MIN( v0.z, v1.z ), v2.z );
+    float32_t max_x = MAX( MAX( v0.x, v1.x ), v2.x );
+    float32_t max_y = MAX( MAX( v0.y, v1.y ), v2.y );
+    float32_t max_z = MAX( MAX( v0.z, v1.z ), v2.z );
 
     m_Center.x = (min_x + max_x) * 0.5f;
     m_Center.y = (min_y + max_y) * 0.5f;
@@ -683,9 +682,9 @@ void BoundingVolumeGenerator::SphereInit(Vector3 &v0, Vector3 &v1, Vector3 &v2)
 
     double t = ((px * crx) + (py * cry) + (pz * crz)) / crzdot;
 
-    m_Center.x = f32(pabx + (nabx * t));
-    m_Center.y = f32(paby + (naby * t));
-    m_Center.z = f32(pabz + (nabz * t));
+    m_Center.x = float32_t(pabx + (nabx * t));
+    m_Center.y = float32_t(paby + (naby * t));
+    m_Center.z = float32_t(pabz + (nabz * t));
 
     m_RadSqr = (v0 - m_Center).LengthSquared();
 }
@@ -748,18 +747,18 @@ void BoundingVolumeGenerator::SphereInit(Vector3 &v0, Vector3 &v1, Vector3 &v2, 
     double ny = nabz * nbcx - nabx * nbcz;
     double nz = nabx * nbcy - naby * nbcx;
 
-    //  f32 d = n.Dot(ncd);
+    //  float32_t d = n.Dot(ncd);
     double d = (nx * ncdx) + (ny * ncdy) + (nz * ncdz);
 
     if (d < 1.0e-5)
     {
         // compute aabb around points and derive bsphere from this
-        f32 min_x = MIN( MIN( MIN( v0.x, v1.x ), v2.x ), v3.x );
-        f32 min_y = MIN( MIN( MIN( v0.y, v1.y ), v2.y ), v3.y );
-        f32 min_z = MIN( MIN( MIN( v0.z, v1.z ), v2.z ), v3.z );
-        f32 max_x = MAX( MAX( MAX( v0.x, v1.x ), v2.x ), v3.x );
-        f32 max_y = MAX( MAX( MAX( v0.y, v1.y ), v2.y ), v3.y );
-        f32 max_z = MAX( MAX( MAX( v0.z, v1.z ), v2.z ), v3.z );
+        float32_t min_x = MIN( MIN( MIN( v0.x, v1.x ), v2.x ), v3.x );
+        float32_t min_y = MIN( MIN( MIN( v0.y, v1.y ), v2.y ), v3.y );
+        float32_t min_z = MIN( MIN( MIN( v0.z, v1.z ), v2.z ), v3.z );
+        float32_t max_x = MAX( MAX( MAX( v0.x, v1.x ), v2.x ), v3.x );
+        float32_t max_y = MAX( MAX( MAX( v0.y, v1.y ), v2.y ), v3.y );
+        float32_t max_z = MAX( MAX( MAX( v0.z, v1.z ), v2.z ), v3.z );
 
         m_Center.x = (min_x + max_x) * 0.5f;
         m_Center.y = (min_y + max_y) * 0.5f;
@@ -786,7 +785,7 @@ void BoundingVolumeGenerator::SphereInit(Vector3 &v0, Vector3 &v1, Vector3 &v2, 
     double pcdy = (v2y + v3y) * 0.5;
     double pcdz = (v2z + v3z) * 0.5;
 
-    //  f32 f;
+    //  float32_t f;
     double f;
     double cx, cy, cz;
 
@@ -824,9 +823,9 @@ void BoundingVolumeGenerator::SphereInit(Vector3 &v0, Vector3 &v1, Vector3 &v2, 
     cz += nz * f;
 
     //  m_Center /= d;
-    m_Center.x = f32(cx / d);
-    m_Center.y = f32(cy / d);
-    m_Center.z = f32(cz / d);
+    m_Center.x = float32_t(cx / d);
+    m_Center.y = float32_t(cy / d);
+    m_Center.z = float32_t(cz / d);
 
     m_RadSqr = (v0 - m_Center).LengthSquared();
 }
@@ -836,11 +835,11 @@ void BoundingVolumeGenerator::SphereInit(Vector3 &v0, Vector3 &v1, Vector3 &v2, 
 *  BoundingVolumeGenerator::MiniSphere()
 *   - compute the smallest enclosing sphere for first c m_PointList (v0, v1, v2 must lie on boundary)
 ***********************************************************************************************************************/
-void BoundingVolumeGenerator::MiniSphere(i32 c, Vector3 &v0, Vector3 &v1, Vector3 &v2)
+void BoundingVolumeGenerator::MiniSphere(int32_t c, Vector3 &v0, Vector3 &v1, Vector3 &v2)
 {
     SphereInit(v0, v1, v2);
 
-    for (i32 i = 0; i < c; i++)
+    for (int32_t i = 0; i < c; i++)
     {
         if (!SphereInside(m_PointList[i]))
         {
@@ -854,11 +853,11 @@ void BoundingVolumeGenerator::MiniSphere(i32 c, Vector3 &v0, Vector3 &v1, Vector
 *  BoundingVolumeGenerator::MiniSphere()
 *   - compute the smallest enclosing sphere for first c m_PointList (v0, v1 must lie on boundary)
 ***********************************************************************************************************************/
-void BoundingVolumeGenerator::MiniSphere(i32 c, Vector3 &v0, Vector3 &v1)
+void BoundingVolumeGenerator::MiniSphere(int32_t c, Vector3 &v0, Vector3 &v1)
 {
     SphereInit(v0, v1);
 
-    for (i32 i = 0; i < c; i++)
+    for (int32_t i = 0; i < c; i++)
     {
         if (!SphereInside(m_PointList[i]))
         {
@@ -872,12 +871,12 @@ void BoundingVolumeGenerator::MiniSphere(i32 c, Vector3 &v0, Vector3 &v1)
 *  BoundingVolumeGenerator::MiniSphere()
 *   - compute the smallest enclosing sphere for first c m_PointList (v must lie on boundary)
 ***********************************************************************************************************************/
-void BoundingVolumeGenerator::MiniSphere(i32 c, Vector3 &v)
+void BoundingVolumeGenerator::MiniSphere(int32_t c, Vector3 &v)
 {
     if (c >= 1)
     {
         SphereInit(v, m_PointList[0]);
-        for (i32 i = 1; i < c; i++)
+        for (int32_t i = 1; i < c; i++)
         {
             if (!SphereInside(m_PointList[i]))
             {
@@ -898,12 +897,12 @@ void BoundingVolumeGenerator::MiniSphere(i32 c, Vector3 &v)
 ***********************************************************************************************************************/
 void BoundingVolumeGenerator::MiniSphere(void)
 {
-    i32 c = (i32)m_PointList.size();
+    int32_t c = (int32_t)m_PointList.size();
 
     if (c >= 2)
     {
         SphereInit(m_PointList[0], m_PointList[1]);
-        for (i32 i = 2; i < c; i++)
+        for (int32_t i = 2; i < c; i++)
         {
             if (!SphereInside(m_PointList[i]))
             {
@@ -921,9 +920,9 @@ void BoundingVolumeGenerator::MiniSphere(void)
     }
 
     // safety -- make sure bsphere fully encompasses the geometry
-    for (i32 i = 0; i < c; i++)
+    for (int32_t i = 0; i < c; i++)
     {
-        f32 distsqr = (m_PointList[i] - m_Center).LengthSquared();
+        float32_t distsqr = (m_PointList[i] - m_Center).LengthSquared();
         m_RadSqr = MAX( m_RadSqr, distsqr );
     }
 }
@@ -940,16 +939,16 @@ void BoundingVolumeGenerator::CalculateSystemMethod2(void)
     Vector3 brick_min, brick_max;
 
     // determine a pseudo-random (but still deterministic) order for the points to be added
-    u32* pointOrder = (u32*)malloc( sizeof(u32) * m_PointCnt );
-    u32 pointOrderCnt = m_PointCnt;
-    for(i32 i = 0; i < m_PointCnt; i++)
+    uint32_t* pointOrder = (uint32_t*)malloc( sizeof(uint32_t) * m_PointCnt );
+    uint32_t pointOrderCnt = m_PointCnt;
+    for(int32_t i = 0; i < m_PointCnt; i++)
     {
         pointOrder[i] = i;
     }
 
     // reorder the points because this supposedly helps the algorithm avoid worst-case performance
-    i32 pointOrderIndex = 0;
-    for (i32 i = 0; i < m_PointCnt; i++)
+    int32_t pointOrderIndex = 0;
+    for (int32_t i = 0; i < m_PointCnt; i++)
     {
         pointOrderIndex = (pointOrderIndex + 104729) % pointOrderCnt; // increment by the 10000th smallest prime number
 
@@ -972,17 +971,17 @@ void BoundingVolumeGenerator::AverageSphere(void)
 {
     SphereInit( );
 
-    for( i32 i = 0; i < m_PointCnt; i++ )
+    for( int32_t i = 0; i < m_PointCnt; i++ )
     {
         m_Center += m_Points[i];
     }
 
-    m_Center *= ( 1.0f/(f32)m_PointCnt);    // get the avg, divide by number of points
+    m_Center *= ( 1.0f/(float32_t)m_PointCnt);    // get the avg, divide by number of points
 
     // make sure bsphere fully encompasses the geometry
-    for (i32 i = 0; i < m_PointCnt; i++)
+    for (int32_t i = 0; i < m_PointCnt; i++)
     {
-        f32 distsqr = (m_Points[i] - m_Center).LengthSquared();
+        float32_t distsqr = (m_Points[i] - m_Center).LengthSquared();
         m_RadSqr = MAX( m_RadSqr, distsqr );
     }
 }

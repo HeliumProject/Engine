@@ -4,7 +4,7 @@
 #include "AngleAxis.h"
 #include "Matrix3.h"
 
-using namespace Helium::Math;
+using namespace Helium;
 
 const Quaternion Quaternion::Zero ( 0.0f, 0.0f, 0.0f, 0.0f );
 const Quaternion Quaternion::Identity ( 0.0f, 0.0f, 0.0f, 1.0f );

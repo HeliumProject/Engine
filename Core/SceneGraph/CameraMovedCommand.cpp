@@ -5,7 +5,6 @@
 #include "Core/SceneGraph/Viewport.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 CameraMovedCommand::CameraMovedCommand(SceneGraph::Viewport* view, SceneGraph::Camera* cam )

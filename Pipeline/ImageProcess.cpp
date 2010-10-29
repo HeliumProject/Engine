@@ -130,7 +130,7 @@ bool ImageProcess::Bank::AdjustImages()
     if ((*i)->m_texture && (*i)->m_force_power_of_2)
     {
       // first process for being a power of 2
-      if ( !Math::IsPowerOfTwo((*i)->m_texture->m_Width) || !Math::IsPowerOfTwo((*i)->m_texture->m_Height) )
+      if ( !IsPowerOfTwo((*i)->m_texture->m_Width) || !IsPowerOfTwo((*i)->m_texture->m_Height) )
       {
         // this texture is not a power of 2 so rescale it to fix it
         Log::Warning( TXT( "Rescaling texture '%s', it is not a power of 2 (%d x %d)\n" ),(*i)->m_texture_file.c_str(),(*i)->m_texture->m_Width,(*i)->m_texture->m_Height);
@@ -174,7 +174,7 @@ bool ImageProcess::Bank::CompressImages()
     if ((*i)->m_texture)
     {
       Helium::MipGenOptions m;
-      if ( (*i)->m_force_single_mip_level || !Math::IsPowerOfTwo((*i)->m_texture->m_Width) || !Math::IsPowerOfTwo((*i)->m_texture->m_Height) )
+      if ( (*i)->m_force_single_mip_level || !IsPowerOfTwo((*i)->m_texture->m_Width) || !IsPowerOfTwo((*i)->m_texture->m_Height) )
       {
         // NP2 textures get only 1 mip level
         m.m_Levels  = 1;

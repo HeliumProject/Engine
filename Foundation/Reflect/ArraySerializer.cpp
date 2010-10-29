@@ -538,17 +538,17 @@ template SimpleArraySerializer<Helium::GUID>;
 template SimpleArraySerializer<Helium::TUID>;
 template SimpleArraySerializer< Helium::Path >;
 
-template SimpleArraySerializer<Math::Vector2>;
-template SimpleArraySerializer<Math::Vector3>;
-template SimpleArraySerializer<Math::Vector4>;
-template SimpleArraySerializer<Math::Matrix3>;
-template SimpleArraySerializer<Math::Matrix4>;
-template SimpleArraySerializer<Math::Quaternion>;
+template SimpleArraySerializer<Vector2>;
+template SimpleArraySerializer<Vector3>;
+template SimpleArraySerializer<Vector4>;
+template SimpleArraySerializer<Matrix3>;
+template SimpleArraySerializer<Matrix4>;
+template SimpleArraySerializer<Quaternion>;
 
-template SimpleArraySerializer<Math::Color3>;
-template SimpleArraySerializer<Math::Color4>;
-template SimpleArraySerializer<Math::HDRColor3>;
-template SimpleArraySerializer<Math::HDRColor4>;
+template SimpleArraySerializer<Color3>;
+template SimpleArraySerializer<Color4>;
+template SimpleArraySerializer<HDRColor3>;
+template SimpleArraySerializer<HDRColor4>;
 
 REFLECT_DEFINE_CLASS(StringArraySerializer);
 REFLECT_DEFINE_CLASS(BoolArraySerializer);

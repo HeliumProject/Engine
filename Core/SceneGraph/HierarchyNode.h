@@ -179,19 +179,19 @@ namespace Helium
             // Bounds
             //
 
-            const Math::AlignedBox& GetObjectBounds() const
+            const AlignedBox& GetObjectBounds() const
             {
                 return m_ObjectBounds;
             }
 
-            Math::AlignedBox GetGlobalBounds() const;
+            AlignedBox GetGlobalBounds() const;
 
-            const Math::AlignedBox& GetObjectHierarchyBounds() const
+            const AlignedBox& GetObjectHierarchyBounds() const
             {
                 return m_ObjectHierarchyBounds;
             }
 
-            Math::AlignedBox GetGlobalHierarchyBounds() const;
+            AlignedBox GetGlobalHierarchyBounds() const;
 
             //
             // Hierarchy Modifiers, use by commands only
@@ -246,7 +246,7 @@ namespace Helium
 
         public:
             // do bounds check
-            virtual bool BoundsCheck(const Math::Matrix4& instanceMatrix) const;
+            virtual bool BoundsCheck(const Matrix4& instanceMatrix) const;
 
             // set the material on the device based upon this object's selection state
             virtual void SetMaterial( const D3DMATERIAL9& defaultMaterial ) const;
@@ -335,8 +335,8 @@ namespace Helium
             HierarchyNode*              m_Next;
             OS_HierarchyNodeDumbPtr     m_Children;
             Layer*                      m_LayerColor;               // cached pointers to use for switching color modes in the 3D view
-            Math::AlignedBox            m_ObjectBounds;             // bounds
-            Math::AlignedBox            m_ObjectHierarchyBounds;
+            AlignedBox            m_ObjectBounds;             // bounds
+            AlignedBox            m_ObjectHierarchyBounds;
         };
     }
 }

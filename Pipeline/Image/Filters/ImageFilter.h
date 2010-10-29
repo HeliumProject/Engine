@@ -47,7 +47,7 @@ namespace Helium
 
   protected:
     // Checks if the pixel specified by color is considered an undefined pixel
-    bool isNullPixel(const Math::Vector4& color) const;
+    bool isNullPixel(const Vector4& color) const;
 
     Helium::Image*       input;            // input image
     Helium::Image*       output;           // output image
@@ -56,11 +56,11 @@ namespace Helium
     unsigned int        opFlags;              // flags for normalizing, etc.
 
     // Normalizes pixel specified by color for normal maps
-    void normalizeNormal(Math::Vector4& color) const;
+    void normalizeNormal(Vector4& color) const;
 
     // Given a image coordinate, generate filtered pixel. Overriden by subclasses which define the specific
     // filtering operation.
-    virtual Math::Vector4 generateFilteredPixel(unsigned int x, unsigned int y) = NULL;
+    virtual Vector4 generateFilteredPixel(unsigned int x, unsigned int y) = NULL;
 
     const tchar*       outputPath;         // file to write output image to
   };
@@ -84,10 +84,10 @@ namespace Helium
 
   private:
     // Given a image coordinate, generate filtered pixel.
-    virtual Math::Vector4 generateFilteredPixel(unsigned int x, unsigned int y);
+    virtual Vector4 generateFilteredPixel(unsigned int x, unsigned int y);
 
     // Accumulates valid pixel samples given a yoffset and absolute xoffset from basex and basey
-    void accumulateSamples(int basex, int basey, int yoffset, int absxoffset, Math::Vector4& accumcolor, unsigned int& numvalid) const;
+    void accumulateSamples(int basex, int basey, int yoffset, int absxoffset, Vector4& accumcolor, unsigned int& numvalid) const;
   };
 
 
@@ -110,7 +110,7 @@ namespace Helium
 
   private:
     // Given a image coordinate, generate filtered pixel.
-    virtual Math::Vector4 generateFilteredPixel(unsigned int x, unsigned int y);
+    virtual Vector4 generateFilteredPixel(unsigned int x, unsigned int y);
 
     // Fill in helper arrays for pixel at x and y
     void fillValues(int x, int y);
@@ -120,7 +120,7 @@ namespace Helium
     void applyPrefilter(void);
 
     // Actually does the box filter based on valid pixels only
-    Math::Vector4 applyBoxFilter(void) const;
+    Vector4 applyBoxFilter(void) const;
 
     // A bunch of helper functions which checks if pixels are separated from the pixel at the center of the
     // filter base by undefined pixels or from the closest valid pixel to the center if it is invalid
@@ -146,7 +146,7 @@ namespace Helium
     unsigned int getIndex(int x, int y) const { return (numRows * y + x); }
 
     bool*           valid;            // array of pixel valid indicators
-    Math::Vector4*        values;           // array of pixel values
+    Vector4*        values;           // array of pixel values
 
     unsigned int        numRows;          // number of rows of pixels based on filter width
     unsigned int        numElems;         // number of pixels based on filter width

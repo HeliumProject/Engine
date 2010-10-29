@@ -9,7 +9,6 @@
 #include "Core/SceneGraph/PrimitiveCube.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_CLASS(Locator);

@@ -1,6 +1,6 @@
 #include "Vector4.h"
 
-using namespace Helium::Math;
+using namespace Helium;
 
 const Vector4 Vector4::Zero;
 const Vector4 Vector4::Point (0.0, 0.0, 0.0, 1.0);

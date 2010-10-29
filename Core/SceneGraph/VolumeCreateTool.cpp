@@ -124,5 +124,5 @@ void VolumeCreateTool::SetVolumeShape(int value)
 {
     s_Shape = static_cast< VolumeShape > (value);
 
-    Place(Math::Matrix4::Identity);
+    Place(Matrix4::Identity);
 }

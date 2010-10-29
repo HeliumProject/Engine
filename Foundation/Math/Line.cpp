@@ -4,7 +4,7 @@
 #include "Matrix4.h"
 #include "Plane.h"
 
-using namespace Helium::Math;
+using namespace Helium;
 
 #define EPSILON (0.00001f)
 
@@ -468,7 +468,7 @@ bool Line::IntersectsPlane(const Plane& plane, Vector3* intersection) const
 
     float32_t den = (plane.A() * (m_Origin.x - m_Point.x)) + (plane.B() * (m_Origin.y - m_Point.y)) + (plane.C() * (m_Origin.z - m_Point.z));
 
-    if (abs(den) < Math::ValueNearZero)
+    if (abs(den) < ValueNearZero)
     {
         return false;
     }
@@ -630,7 +630,7 @@ void Line::ProjectPointOnSegment( const Vector3& point, Vector3& projectedPoint 
 
 float32_t Line::DistanceSqrToPoint( const Vector3& point ) const
 {
-    Math::Vector3 projectedPoint;
+    Vector3 projectedPoint;
 
     ProjectPointOnSegment( point, projectedPoint );
 

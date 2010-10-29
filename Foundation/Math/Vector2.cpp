@@ -1,6 +1,6 @@
 #include "Vector2.h"
 
-using namespace Helium::Math;
+using namespace Helium;
 
 const Vector2 Vector2::Zero;
 const Vector2 Vector2::BasisX (1.0, 0.0);

@@ -74,13 +74,13 @@ namespace Helium
             Helium::Path m_GPIMapPath;
 
             bool          m_EnableColorMapTint;
-            Math::Color3  m_ColorMapTint;
+            Color3  m_ColorMapTint;
 
             float32_t m_NormalMapScaling;
 
             bool m_GlossMapEnabled;
             float32_t  m_GlossMapScaling;
-            Math::Color3 m_GlossMapTint;
+            Color3 m_GlossMapTint;
             float32_t  m_GlossMapDirtiness;
             float32_t  m_SpecularPower;
 

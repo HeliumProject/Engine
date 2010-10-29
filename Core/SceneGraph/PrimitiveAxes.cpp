@@ -6,7 +6,6 @@
 #include "Orientation.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 PrimitiveAxes::PrimitiveAxes(ResourceTracker* tracker)
@@ -154,7 +153,7 @@ bool PrimitiveAxes::Pick( PickVisitor* pick, const bool* solid ) const
   return false;
 }
 
-AxesFlags PrimitiveAxes::PickAxis(const Math::Matrix4& transform, Line pick, float err)
+AxesFlags PrimitiveAxes::PickAxis(const Matrix4& transform, Line pick, float err)
 {
   Vector3 offset;
   float minX = m_Length, minY = m_Length, minZ = m_Length;

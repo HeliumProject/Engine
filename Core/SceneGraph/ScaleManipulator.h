@@ -18,11 +18,11 @@ namespace Helium
             SceneGraph::PrimitiveAxes* m_Axes;
             SceneGraph::PrimitiveCube* m_Cube;
             SceneGraph::PrimitiveCube* m_XCube;
-            Math::Vector3 m_XPosition;
+            Vector3 m_XPosition;
             SceneGraph::PrimitiveCube* m_YCube;
-            Math::Vector3 m_YPosition;
+            Vector3 m_YPosition;
             SceneGraph::PrimitiveCube* m_ZCube;
-            Math::Vector3 m_ZPosition;
+            Vector3 m_ZPosition;
 
             float32_t m_Size;
             bool m_GridSnap;

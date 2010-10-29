@@ -1,7 +1,7 @@
 #include "SetSerializer.h"
 
+using namespace Helium;
 using namespace Helium::Reflect;
-using namespace Helium::Math;
 
 REFLECT_DEFINE_ABSTRACT(SetSerializer)
 

@@ -6,7 +6,6 @@
 #include "Orientation.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 PrimitiveCapsule::PrimitiveCapsule(ResourceTracker* tracker)
@@ -100,13 +99,13 @@ void PrimitiveCapsule::Update()
 
     for (int theta=0; theta<=360-dtheta; theta+=dtheta)
     {
-      float sinTheta = (float32_t)(sin(theta * Math::DegToRad));
-      float sinTheta2 = (float32_t)(sin((theta+dtheta) * Math::DegToRad));
-      float cosTheta = (float32_t)(cos(theta * Math::DegToRad));
-      float cosTheta2 = (float32_t)(cos((theta+dtheta) * Math::DegToRad));
+      float sinTheta = (float32_t)(sin(theta * DegToRad));
+      float sinTheta2 = (float32_t)(sin((theta+dtheta) * DegToRad));
+      float cosTheta = (float32_t)(cos(theta * DegToRad));
+      float cosTheta2 = (float32_t)(cos((theta+dtheta) * DegToRad));
 
-      float sinPhi = (float32_t)(sin(phi * Math::DegToRad));
-      float cosPhi = (float32_t)(cos(phi * Math::DegToRad));
+      float sinPhi = (float32_t)(sin(phi * DegToRad));
+      float cosPhi = (float32_t)(cos(phi * DegToRad));
 
       m_Vertices.push_back(Position(SetupVector(sinTheta * cosPhi * m_Radius,
                                                 sinPhi * m_Radius + (MATH_SIGN(phi) * m_Length / 2.0f),
@@ -118,7 +117,7 @@ void PrimitiveCapsule::Update()
     }
   }
 
-  float stepAngle = (float32_t)(Math::Pi)*2.0f / (float32_t)(m_RadiusSteps);
+  float stepAngle = (float32_t)(Pi)*2.0f / (float32_t)(m_RadiusSteps);
   float stepLength = m_Length/(float32_t)(m_LengthSteps-1);
 
   for (int l=0; l<m_LengthSteps; l++)
@@ -158,15 +157,15 @@ void PrimitiveCapsule::Update()
 
       for (int phi=0; phi<=360-dphi; phi+=dphi)
       {
-        float sinTheta = (float32_t)(sin(theta * Math::DegToRad));
-        float sinTheta2 = (float32_t)(sin((theta+dtheta) * Math::DegToRad));
-        float cosTheta = (float32_t)(cos(theta * Math::DegToRad));
-        float cosTheta2 = (float32_t)(cos((theta+dtheta) * Math::DegToRad));
+        float sinTheta = (float32_t)(sin(theta * DegToRad));
+        float sinTheta2 = (float32_t)(sin((theta+dtheta) * DegToRad));
+        float cosTheta = (float32_t)(cos(theta * DegToRad));
+        float cosTheta2 = (float32_t)(cos((theta+dtheta) * DegToRad));
 
-        float sinPhi = (float32_t)(sin(phi * Math::DegToRad));
-        float sinPhi2 = (float32_t)(sin((phi+dphi) * Math::DegToRad));
-        float cosPhi = (float32_t)(cos(phi * Math::DegToRad));
-        float cosPhi2 = (float32_t)(cos((phi+dphi) * Math::DegToRad));
+        float sinPhi = (float32_t)(sin(phi * DegToRad));
+        float sinPhi2 = (float32_t)(sin((phi+dphi) * DegToRad));
+        float cosPhi = (float32_t)(cos(phi * DegToRad));
+        float cosPhi2 = (float32_t)(cos((phi+dphi) * DegToRad));
 
         Vector3 a = SetupVector(cosTheta * sinPhi * m_Radius,
                                 (sinTheta * m_Radius) + offset,

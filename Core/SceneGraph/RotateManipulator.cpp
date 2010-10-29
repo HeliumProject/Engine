@@ -14,7 +14,6 @@
 #include "Foundation/Math/AngleAxis.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT(SceneGraph::RotateManipulator);
@@ -155,13 +154,13 @@ void RotateManipulator::Draw( DrawArgs* args )
     m_Ring->DrawHiddenBack(args, m_View->GetCamera(), x);
 
     // render y
-    Matrix4 y = Matrix4::RotateZ((float)(Math::HalfPi)) * frame;
+    Matrix4 y = Matrix4::RotateZ((float)(HalfPi)) * frame;
     m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)(&y));
     SetAxisMaterial(MultipleAxes::Y);
     m_Ring->DrawHiddenBack(args, m_View->GetCamera(), y);
 
     // render z
-    Matrix4 z = Matrix4::RotateY(-(float)(Math::HalfPi)) * frame;
+    Matrix4 z = Matrix4::RotateY(-(float)(HalfPi)) * frame;
     m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)(&z));
     SetAxisMaterial(MultipleAxes::Z);
     m_Ring->DrawHiddenBack(args, m_View->GetCamera(), z);
@@ -215,7 +214,7 @@ bool RotateManipulator::Pick( PickVisitor* pick )
     if (m_SelectedAxes == MultipleAxes::None)
     {
         float dist, min = m_Ring->m_Radius * 1.2f;
-        float stepAngle = (float)(Math::TwoPi) / (float)(m_Ring->m_RadiusSteps);
+        float stepAngle = (float)(TwoPi) / (float)(m_Ring->m_RadiusSteps);
 
         // rotation from the circle axis to the camera direction
         Vector3 cameraPosition;
@@ -298,8 +297,8 @@ AxesFlags RotateManipulator::PickRing(PickVisitor* pick, float err)
     }
 
     float radius = m_Ring->m_Radius;
-    float dist = 0.0f, minX = Math::BigFloat, minY = Math::BigFloat, minZ = Math::BigFloat;
-    float stepAngle = (float)Math::TwoPi / (float)(m_Ring->m_RadiusSteps);
+    float dist = 0.0f, minX = BigFloat, minY = BigFloat, minZ = BigFloat;
+    float stepAngle = (float)TwoPi / (float)(m_Ring->m_RadiusSteps);
 
     Matrix4 frame = primary->GetFrame(m_Space).Normalized();
     Vector3 position = Vector3 (frame.t.x, frame.t.y, frame.t.z);
@@ -425,7 +424,7 @@ AxesFlags RotateManipulator::PickRing(PickVisitor* pick, float err)
 
 bool RotateManipulator::MouseDown( const MouseButtonInput& e )
 {
-    Math::AxesFlags previous = m_SelectedAxes;
+    AxesFlags previous = m_SelectedAxes;
 
     LinePickVisitor pick (m_View->GetCamera(), e.GetPosition().x, e.GetPosition().y);
     if (!Pick(&pick))
@@ -657,7 +656,7 @@ void RotateManipulator::MouseMove( const MouseMoveInput& e )
     case MultipleAxes::Z:
         if ( m_AxisSnap )
         {
-            float minAngle = m_SnapDegrees * Math::DegToRad;
+            float minAngle = m_SnapDegrees * DegToRad;
             float absAngle = fabs( angle );
             int count = (int)( absAngle / minAngle );
             if ( angle < 0.0f )

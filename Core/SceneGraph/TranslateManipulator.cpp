@@ -19,7 +19,6 @@
 #include "Foundation/Math/Utils.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT(SceneGraph::TranslateManipulator);
@@ -196,7 +195,7 @@ void TranslateManipulator::SetResult()
 void TranslateManipulator::DrawPoints(AxesFlags axis)
 {
     // this would probably cause a div by zero
-    if ( m_Distance <= Math::ValueNearZero )
+    if ( m_Distance <= ValueNearZero )
     {
         return;
     }
@@ -299,7 +298,7 @@ void TranslateManipulator::DrawPoints(AxesFlags axis)
         case MultipleAxes::X:
             {
                 float32_t length = frame.x.Length();
-                if ( !Math::IsValid( length ) || Math::Equal( length, 0.0f ) || next.x >= m_Factor / length )
+                if ( !IsValid( length ) || Equal( length, 0.0f ) || next.x >= m_Factor / length )
                 {
                     done = true;
                 }
@@ -315,7 +314,7 @@ void TranslateManipulator::DrawPoints(AxesFlags axis)
         case MultipleAxes::Y:
             {
                 float32_t length = frame.y.Length();
-                if ( !Math::IsValid( length ) || Math::Equal( length, 0.0f ) || next.y >= m_Factor / length )
+                if ( !IsValid( length ) || Equal( length, 0.0f ) || next.y >= m_Factor / length )
                 {
                     done = true;
                 }
@@ -331,7 +330,7 @@ void TranslateManipulator::DrawPoints(AxesFlags axis)
         case MultipleAxes::Z:
             {
                 float32_t length = frame.z.Length();
-                if ( !Math::IsValid( length ) || Math::Equal( length, 0.0f ) || next.z >= m_Factor / length )
+                if ( !IsValid( length ) || Equal( length, 0.0f ) || next.z >= m_Factor / length )
                 {
                     done = true;
                 }
@@ -382,11 +381,11 @@ void TranslateManipulator::Draw( DrawArgs* args )
     Matrix4 frame = primary->GetFrame(m_Space).Normalized();
     Vector3 position = Vector3 (frame.t.x, frame.t.y, frame.t.z);
 
-    AxesFlags parallelAxis = m_View->GetCamera()->ParallelAxis(frame, Math::CriticalDotProduct);
+    AxesFlags parallelAxis = m_View->GetCamera()->ParallelAxis(frame, CriticalDotProduct);
 
     m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&frame);
 
-    m_Axes->DrawAxes(args, (Math::AxesFlags)(~parallelAxis & MultipleAxes::All));
+    m_Axes->DrawAxes(args, (AxesFlags)(~parallelAxis & MultipleAxes::All));
 
     if (parallelAxis != MultipleAxes::X)
     {
@@ -399,7 +398,7 @@ void TranslateManipulator::Draw( DrawArgs* args )
 
         if (m_ShowCones)
         {
-            m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&(Matrix4::RotateY(Math::HalfPi) * Matrix4 (m_XPosition) * frame));
+            m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&(Matrix4::RotateY(HalfPi) * Matrix4 (m_XPosition) * frame));
             m_XCone->Draw(args);
         }
     }
@@ -415,7 +414,7 @@ void TranslateManipulator::Draw( DrawArgs* args )
 
         if (m_ShowCones)
         {
-            m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&(Matrix4::RotateX(-Math::HalfPi) * Matrix4 (m_YPosition) * frame));
+            m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&(Matrix4::RotateX(-HalfPi) * Matrix4 (m_YPosition) * frame));
             m_YCone->Draw(args);
         }
     }
@@ -472,7 +471,7 @@ bool TranslateManipulator::Pick( PickVisitor* pick )
     linePick->SetCurrentObject (this, frame);
     linePick->ClearHits();
 
-    AxesFlags parallelAxis = m_View->GetCamera()->ParallelAxis(frame, Math::CriticalDotProduct);
+    AxesFlags parallelAxis = m_View->GetCamera()->ParallelAxis(frame, CriticalDotProduct);
 
     if (linePick->PickPoint(Vector3::Zero, m_Ring->m_Radius))
     {
@@ -518,14 +517,14 @@ bool TranslateManipulator::Pick( PickVisitor* pick )
 
         if (m_SelectedAxes == MultipleAxes::None && m_ShowCones)
         {
-            linePick->SetCurrentObject( this, Matrix4::RotateY(-Math::HalfPi) * Matrix4 (m_XPosition) * frame );
+            linePick->SetCurrentObject( this, Matrix4::RotateY(-HalfPi) * Matrix4 (m_XPosition) * frame );
             if (parallelAxis != MultipleAxes::X && m_XCone->Pick(pick))
             {
                 m_SelectedAxes = MultipleAxes::X;
             }
             else
             {
-                linePick->SetCurrentObject( this, Matrix4::RotateX(Math::HalfPi) * Matrix4 (m_YPosition) * frame );
+                linePick->SetCurrentObject( this, Matrix4::RotateX(HalfPi) * Matrix4 (m_YPosition) * frame );
                 if (parallelAxis != MultipleAxes::Y && m_YCone->Pick(pick))
                 {
                     m_SelectedAxes = MultipleAxes::Y;
@@ -569,7 +568,7 @@ bool TranslateManipulator::Pick( PickVisitor* pick )
 
 bool TranslateManipulator::MouseDown( const MouseButtonInput& e )
 {
-    Math::AxesFlags previous = m_SelectedAxes;
+    AxesFlags previous = m_SelectedAxes;
 
     LinePickVisitor pick (m_View->GetCamera(), e.GetPosition().x, e.GetPosition().y);
     if (!Pick(&pick))
@@ -814,7 +813,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
     // Set Value
     //
 
-    if ( drag.LengthSquared() > Math::ValueNearZero * Math::ValueNearZero )
+    if ( drag.LengthSquared() > ValueNearZero * ValueNearZero )
     {
         Vector3 startValue = m_ManipulationStart.find(primary)->second.m_StartValue;
         Vector3 targetValue = startValue;

@@ -34,12 +34,12 @@ namespace Helium
             virtual bool ValidatePanel(const tstring& name) HELIUM_OVERRIDE;
             static void CreatePanel( CreatePanelArgs& args );
 
-            Math::Color3 GetColor() const;
-            void SetColor( Math::Color3 color );
+            Color3 GetColor() const;
+            void SetColor( Color3 color );
 
         protected:
             // Reflected
-            Math::HDRColor3         m_Color;
+            HDRColor3         m_Color;
 
             // Non-reflected
             static D3DMATERIAL9     s_Material;

@@ -138,12 +138,12 @@ void Layer::SetSelectable( bool selectable )
     Dirty();
 }
 
-const Math::Color3& Layer::GetColor() const
+const Color3& Layer::GetColor() const
 {
     return m_Color;
 }
 
-void Layer::SetColor( const Math::Color3& color )
+void Layer::SetColor( const Color3& color )
 {
     if ( color != m_Color )
     {
@@ -268,7 +268,7 @@ void Layer::CreatePanel( CreatePanelArgs& args )
         {
             static const tstring helpText = TXT( "Determines the color of this layer." );
             args.m_Generator->AddLabel( TXT( "Color" ) )->a_HelpText.Set( helpText );
-            args.m_Generator->AddColorPicker< SceneGraph::Layer, Math::Color3 >( args.m_Selection, &Layer::GetColor, &Layer::SetColor )->a_HelpText.Set( helpText );
+            args.m_Generator->AddColorPicker< SceneGraph::Layer, Color3 >( args.m_Selection, &Layer::GetColor, &Layer::SetColor )->a_HelpText.Set( helpText );
         }
         args.m_Generator->Pop();
 

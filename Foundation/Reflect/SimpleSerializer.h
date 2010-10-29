@@ -67,16 +67,16 @@ namespace Helium
         typedef SimpleSerializer<Helium::GUID> GUIDSerializer;                 REFLECT_SPECIALIZE_SERIALIZER( GUIDSerializer );
         typedef SimpleSerializer<Helium::TUID> TUIDSerializer;                 REFLECT_SPECIALIZE_SERIALIZER( TUIDSerializer );
 
-        typedef SimpleSerializer<Math::Vector2> Vector2Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Vector2Serializer );
-        typedef SimpleSerializer<Math::Vector3> Vector3Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Vector3Serializer );
-        typedef SimpleSerializer<Math::Vector4> Vector4Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Vector4Serializer );
-        typedef SimpleSerializer<Math::Matrix3> Matrix3Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Matrix3Serializer );
-        typedef SimpleSerializer<Math::Matrix4> Matrix4Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Matrix4Serializer );
-        typedef SimpleSerializer<Math::Quaternion> QuaternionSerializer;        REFLECT_SPECIALIZE_SERIALIZER( QuaternionSerializer );
+        typedef SimpleSerializer<Vector2> Vector2Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Vector2Serializer );
+        typedef SimpleSerializer<Vector3> Vector3Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Vector3Serializer );
+        typedef SimpleSerializer<Vector4> Vector4Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Vector4Serializer );
+        typedef SimpleSerializer<Matrix3> Matrix3Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Matrix3Serializer );
+        typedef SimpleSerializer<Matrix4> Matrix4Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Matrix4Serializer );
+        typedef SimpleSerializer<Quaternion> QuaternionSerializer;        REFLECT_SPECIALIZE_SERIALIZER( QuaternionSerializer );
 
-        typedef SimpleSerializer<Math::Color3> Color3Serializer;                REFLECT_SPECIALIZE_SERIALIZER( Color3Serializer );
-        typedef SimpleSerializer<Math::Color4> Color4Serializer;                REFLECT_SPECIALIZE_SERIALIZER( Color4Serializer );
-        typedef SimpleSerializer<Math::HDRColor3> HDRColor3Serializer;          REFLECT_SPECIALIZE_SERIALIZER( HDRColor3Serializer );
-        typedef SimpleSerializer<Math::HDRColor4> HDRColor4Serializer;          REFLECT_SPECIALIZE_SERIALIZER( HDRColor4Serializer );
+        typedef SimpleSerializer<Color3> Color3Serializer;                REFLECT_SPECIALIZE_SERIALIZER( Color3Serializer );
+        typedef SimpleSerializer<Color4> Color4Serializer;                REFLECT_SPECIALIZE_SERIALIZER( Color4Serializer );
+        typedef SimpleSerializer<HDRColor3> HDRColor3Serializer;          REFLECT_SPECIALIZE_SERIALIZER( HDRColor3Serializer );
+        typedef SimpleSerializer<HDRColor4> HDRColor4Serializer;          REFLECT_SPECIALIZE_SERIALIZER( HDRColor4Serializer );
     }
 }

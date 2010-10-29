@@ -31,8 +31,8 @@ namespace Helium
             bool IsSelectable() const;
             void SetSelectable( bool selectable );
 
-            const Math::Color3& GetColor() const;
-            void SetColor( const Math::Color3& color );
+            const Color3& GetColor() const;
+            void SetColor( const Color3& color );
 
             OS_SceneNodeDumbPtr GetMembers();
             bool ContainsMember( SceneGraph::SceneNode* node ) const;
@@ -54,7 +54,7 @@ namespace Helium
             bool                        m_Visible;
             bool                        m_Selectable;
             S_TUID                      m_Members;
-            Math::Color3                m_Color;
+            Color3                m_Color;
         };
 
         typedef Helium::SmartPtr< SceneGraph::Layer > LayerPtr;

@@ -14,7 +14,6 @@
 #include "SceneSettings.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT(SceneGraph::ScaleManipulator);
@@ -226,10 +225,10 @@ void ScaleManipulator::Draw( DrawArgs* args )
 
     Scale inverse (1.0f / offset.x, 1.0f / offset.y, 1.0f / offset.z);
 
-    AxesFlags parallelAxis = m_View->GetCamera()->ParallelAxis(frame, Math::CriticalDotProduct);
+    AxesFlags parallelAxis = m_View->GetCamera()->ParallelAxis(frame, CriticalDotProduct);
 
     m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&frame);
-    m_Axes->DrawAxes(args, (Math::AxesFlags)(~parallelAxis & MultipleAxes::All));
+    m_Axes->DrawAxes(args, (AxesFlags)(~parallelAxis & MultipleAxes::All));
 
     if (m_SelectedAxes == MultipleAxes::All)
     {
@@ -283,7 +282,7 @@ bool ScaleManipulator::Pick( PickVisitor* pick )
     linePick->SetCurrentObject (this, frame);
     linePick->ClearHits();
 
-    AxesFlags parallelAxis = m_View->GetCamera()->ParallelAxis(frame, Math::CriticalDotProduct);
+    AxesFlags parallelAxis = m_View->GetCamera()->ParallelAxis(frame, CriticalDotProduct);
 
     if (m_Cube->Pick(linePick))
     {
@@ -377,7 +376,7 @@ bool ScaleManipulator::Pick( PickVisitor* pick )
 
 bool ScaleManipulator::MouseDown( const MouseButtonInput& e )
 {
-    Math::AxesFlags previous = m_SelectedAxes;
+    AxesFlags previous = m_SelectedAxes;
 
     LinePickVisitor pick (m_View->GetCamera(), e.GetPosition().x, e.GetPosition().y);
 

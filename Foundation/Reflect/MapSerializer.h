@@ -88,11 +88,11 @@ namespace Helium
         typedef SimpleMapSerializer<uint64_t, U64Serializer, tstring, StringSerializer> U64StringMapSerializer;                          REFLECT_SPECIALIZE_SERIALIZER(U64StringMapSerializer);
         typedef SimpleMapSerializer<uint64_t, U64Serializer, uint32_t, U32Serializer> U64U32MapSerializer;                                    REFLECT_SPECIALIZE_SERIALIZER(U64U32MapSerializer);
         typedef SimpleMapSerializer<uint64_t, U64Serializer, uint64_t, U64Serializer> U64U64MapSerializer;                                    REFLECT_SPECIALIZE_SERIALIZER(U64U64MapSerializer);
-        typedef SimpleMapSerializer<uint64_t, U64Serializer, Math::Matrix4, Matrix4Serializer> U64Matrix4MapSerializer;                  REFLECT_SPECIALIZE_SERIALIZER(U64Matrix4MapSerializer);
+        typedef SimpleMapSerializer<uint64_t, U64Serializer, Matrix4, Matrix4Serializer> U64Matrix4MapSerializer;                  REFLECT_SPECIALIZE_SERIALIZER(U64Matrix4MapSerializer);
 
         typedef SimpleMapSerializer<Helium::GUID, GUIDSerializer, uint32_t, U32Serializer> GUIDU32MapSerializer;                      REFLECT_SPECIALIZE_SERIALIZER(GUIDU32MapSerializer);
-        typedef SimpleMapSerializer<Helium::GUID, GUIDSerializer, Math::Matrix4, Matrix4Serializer> GUIDMatrix4MapSerializer;    REFLECT_SPECIALIZE_SERIALIZER(GUIDMatrix4MapSerializer);
+        typedef SimpleMapSerializer<Helium::GUID, GUIDSerializer, Matrix4, Matrix4Serializer> GUIDMatrix4MapSerializer;    REFLECT_SPECIALIZE_SERIALIZER(GUIDMatrix4MapSerializer);
         typedef SimpleMapSerializer<Helium::TUID, TUIDSerializer, uint32_t, U32Serializer> TUIDU32MapSerializer;                      REFLECT_SPECIALIZE_SERIALIZER(TUIDU32MapSerializer);
-        typedef SimpleMapSerializer<Helium::TUID, TUIDSerializer, Math::Matrix4, Matrix4Serializer> TUIDMatrix4MapSerializer;    REFLECT_SPECIALIZE_SERIALIZER(TUIDMatrix4MapSerializer);
+        typedef SimpleMapSerializer<Helium::TUID, TUIDSerializer, Matrix4, Matrix4Serializer> TUIDMatrix4MapSerializer;    REFLECT_SPECIALIZE_SERIALIZER(TUIDMatrix4MapSerializer);
     }
 }

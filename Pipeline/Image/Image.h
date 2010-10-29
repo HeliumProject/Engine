@@ -357,8 +357,8 @@ namespace Helium
     ////////////////////////////////////////////////////////////////////////////////////////////////
     Image* ScaleUpNextPowerOfTwo(ColorFormat new_format, FilterType filter)
     {
-      uint32_t new_x = Math::NextPowerOfTwo(m_Width);
-      uint32_t new_y = Math::NextPowerOfTwo(m_Height);
+      uint32_t new_x = NextPowerOfTwo(m_Width);
+      uint32_t new_y = NextPowerOfTwo(m_Height);
       return ScaleImage(new_x, new_y, new_format, filter);
     }
 
@@ -372,8 +372,8 @@ namespace Helium
     ////////////////////////////////////////////////////////////////////////////////////////////////
     Image* ScaleDownNextPowerOfTwo(ColorFormat new_format, FilterType filter)
     {
-      uint32_t new_x = Math::PreviousPowerOfTwo(m_Width);
-      uint32_t new_y = Math::PreviousPowerOfTwo(m_Height);
+      uint32_t new_x = PreviousPowerOfTwo(m_Width);
+      uint32_t new_y = PreviousPowerOfTwo(m_Height);
       return ScaleImage(new_x, new_y, new_format, filter);
     }
 

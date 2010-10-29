@@ -107,7 +107,7 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
 
                     uintptr fieldAddress = (uintptr)(*itr) + field->m_Offset;
 
-                    Math::Color4* col = (Math::Color4*)fieldAddress;
+                    Color4* col = (Color4*)fieldAddress;
                     intptr offsetInField = (intptr)( &col->a ) - fieldAddress;
                     s->ConnectField( *itr, field, offsetInField );
 
@@ -146,14 +146,14 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
 
                     if ( color3 )
                     {
-                        Math::HDRColor3* col = (Math::HDRColor3*)fieldAddress;
+                        HDRColor3* col = (HDRColor3*)fieldAddress;
                         intptr offsetInField = (intptr)( &col->s ) - fieldAddress;
                         s->ConnectField( *itr, field, offsetInField );
                     }
 
                     if ( color4 )
                     {
-                        Math::HDRColor4* col = (Math::HDRColor4*)fieldAddress;
+                        HDRColor4* col = (HDRColor4*)fieldAddress;
                         intptr offsetInField = (intptr)( &col->s ) - fieldAddress;
                         s->ConnectField( *itr, field, offsetInField );
                     }

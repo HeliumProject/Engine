@@ -4,7 +4,6 @@
 #include "Core/SceneGraph/Pick.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 PrimitiveCube::PrimitiveCube(ResourceTracker* tracker)

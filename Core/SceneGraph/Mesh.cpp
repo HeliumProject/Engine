@@ -9,7 +9,6 @@
 #include "Core/SceneGraph/HierarchyNodeType.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 D3DMATERIAL9 Mesh::s_WireMaterial;
@@ -121,7 +120,7 @@ void Mesh::Initialize(Scene* scene)
     {
         if ( m_Colors.size() == 1 )
         {
-            m_HasColor = m_Colors[0] != Math::Vector4( 0, 0, 0, 1.0 );
+            m_HasColor = m_Colors[0] != Vector4( 0, 0, 0, 1.0 );
         }
         else
         {
@@ -635,17 +634,17 @@ bool Mesh::ComputeTNB( uint32_t triIndex )
     uint32_t idx1 = m_TriangleVertexIndices[ triIndex + 1 ];
     uint32_t idx2 = m_TriangleVertexIndices[ triIndex + 2 ];
 
-    Math::Vector3 v0 = m_Positions[ idx0 ];
-    Math::Vector3 v1 = m_Positions[ idx1 ];
-    Math::Vector3 v2 = m_Positions[ idx2 ];
+    Vector3 v0 = m_Positions[ idx0 ];
+    Vector3 v1 = m_Positions[ idx1 ];
+    Vector3 v2 = m_Positions[ idx2 ];
 
-    Math::Vector2 uv0 = m_BaseUVs[ idx0 ];
-    Math::Vector2 uv1 = m_BaseUVs[ idx1 ];
-    Math::Vector2 uv2 = m_BaseUVs[ idx2 ];
+    Vector2 uv0 = m_BaseUVs[ idx0 ];
+    Vector2 uv1 = m_BaseUVs[ idx1 ];
+    Vector2 uv2 = m_BaseUVs[ idx2 ];
 
-    Math::Vector3 triNormal;
-    Math::Vector3 triTangent;
-    Math::Vector3 triBinormal;
+    Vector3 triNormal;
+    Vector3 triTangent;
+    Vector3 triBinormal;
 
     triNormal = ( v1 - v0 ).Cross( (v2 - v0 ) );
 
@@ -656,10 +655,10 @@ bool Mesh::ComputeTNB( uint32_t triIndex )
     triNormal.Normalize();
 
     float interp;
-    Math::Vector3 interp_vec;
-    Math::Vector2 interpuv;
-    Math::Vector3 tempCoord;
-    Math::Vector2 tempuv;
+    Vector3 interp_vec;
+    Vector2 interpuv;
+    Vector3 tempCoord;
+    Vector2 tempuv;
 
     // COMPUTE TANGENT VECTOR
     //sort verts by their v in uv
@@ -791,7 +790,7 @@ bool Mesh::ComputeTNB( uint32_t triIndex )
     dot = triBinormal.Dot( triNormal );
     triBinormal = triBinormal - (triNormal*dot);
 
-    if ( triBinormal.Equal( Math::Vector3::Zero ) )
+    if ( triBinormal.Equal( Vector3::Zero ) )
     {
         triBinormal = triTangent.Cross( triNormal );
     }
@@ -816,7 +815,7 @@ bool Mesh::ComputeTNB( uint32_t triIndex )
     return true;
 }
 
-void Mesh::GetAlignedBoundingBox( Math::AlignedBox& box ) const
+void Mesh::GetAlignedBoundingBox( AlignedBox& box ) const
 {
     V_Vector3::const_iterator itr = m_Positions.begin();
     V_Vector3::const_iterator end = m_Positions.end();
@@ -827,13 +826,13 @@ void Mesh::GetAlignedBoundingBox( Math::AlignedBox& box ) const
     }
 }
 
-void Mesh::GetBoundingSphere( Math::BoundingVolumeGenerator::BSphere& bsphere ) const
+void Mesh::GetBoundingSphere( BoundingVolumeGenerator::BSphere& bsphere ) const
 {
-    Math::BoundingVolumeGenerator generator( (Math::Vector3*)&m_Positions.front(), (int32_t)m_Positions.size() );
+    BoundingVolumeGenerator generator( (Vector3*)&m_Positions.front(), (int32_t)m_Positions.size() );
     bsphere = generator.GetPrincipleAxisBoundingSphere();
 }
 
-float32_t Mesh::SurfaceArea( Math::Scale* scale ) const
+float32_t Mesh::SurfaceArea( Scale* scale ) const
 {
     HELIUM_ASSERT( m_TriangleVertexIndices.size()%3 == 0 );
 
@@ -875,12 +874,12 @@ float32_t Mesh::SurfaceArea( Math::Scale* scale ) const
     return area;
 }
 
-float32_t Mesh::SurfaceAreaComponents( Math::Vector3& areaVec ) const
+float32_t Mesh::SurfaceAreaComponents( Vector3& areaVec ) const
 {
     /*
-    static const Math::Vector3 xAxis(1.0f, 0.0f, 0.0f );
-    static const Math::Vector3 yAxis(0.0f, 1.0f, 0.0f );
-    static const Math::Vector3 zAxis(0.0f, 0.0f, 1.0f );
+    static const Vector3 xAxis(1.0f, 0.0f, 0.0f );
+    static const Vector3 yAxis(0.0f, 1.0f, 0.0f );
+    static const Vector3 zAxis(0.0f, 0.0f, 1.0f );
 
     float32_t area = 0.0f;
 
@@ -888,9 +887,9 @@ float32_t Mesh::SurfaceAreaComponents( Math::Vector3& areaVec ) const
     std::vector< uint32_t >::const_iterator end  = m_TriangleVertexIndices.end();
     for( ; itr != end; itr+=3 )
     {
-    const Math::Vector3& v0 = m_Positions[*itr];
-    const Math::Vector3& v1 = m_Positions[*(itr+1)];
-    const Math::Vector3& v2 = m_Positions[*(itr+2)];
+    const Vector3& v0 = m_Positions[*itr];
+    const Vector3& v1 = m_Positions[*(itr+1)];
+    const Vector3& v2 = m_Positions[*(itr+2)];
 
     float32_t a = (v0 - v1).Length();
     float32_t b = (v1 - v2).Length();
@@ -908,7 +907,7 @@ float32_t Mesh::SurfaceAreaComponents( Math::Vector3& areaVec ) const
 
     float32_t d = (xMag + yMag + zMag )/triArea;     
 
-    Math::Vector3 triAreaVec( xMag, yMag, zMag );
+    Vector3 triAreaVec( xMag, yMag, zMag );
     triAreaVec /= d;
 
     area += triArea;
@@ -917,13 +916,13 @@ float32_t Mesh::SurfaceAreaComponents( Math::Vector3& areaVec ) const
     }
     return area;
     */
-    static const Math::Vector3 xAxis(1.0f, 0.0f, 0.0f );
-    static const Math::Vector3 yAxis(0.0f, 1.0f, 0.0f );
-    static const Math::Vector3 zAxis(0.0f, 0.0f, 1.0f );
+    static const Vector3 xAxis(1.0f, 0.0f, 0.0f );
+    static const Vector3 yAxis(0.0f, 1.0f, 0.0f );
+    static const Vector3 zAxis(0.0f, 0.0f, 1.0f );
 
     float32_t area = 0.0f;
 
-    Math::Scale scale( 1.5f, 0.5f, 0.5f );
+    Scale scale( 1.5f, 0.5f, 0.5f );
 
     std::vector< uint32_t >::const_iterator itr = m_TriangleVertexIndices.begin();
     std::vector< uint32_t >::const_iterator end  = m_TriangleVertexIndices.end();
@@ -931,9 +930,9 @@ float32_t Mesh::SurfaceAreaComponents( Math::Vector3& areaVec ) const
     {
         float32_t triArea = 0.0f;
 
-        const Math::Vector3& v0 = m_Positions[*itr];
-        const Math::Vector3& v1 = m_Positions[*(itr+1)];
-        const Math::Vector3& v2 = m_Positions[*(itr+2)];
+        const Vector3& v0 = m_Positions[*itr];
+        const Vector3& v1 = m_Positions[*(itr+1)];
+        const Vector3& v2 = m_Positions[*(itr+2)];
 
         {
 
@@ -947,9 +946,9 @@ float32_t Mesh::SurfaceAreaComponents( Math::Vector3& areaVec ) const
         }
 
         float32_t scaledTriArea = 0.0f;
-        const Math::Vector3& ScaledV0 = m_Positions[*itr] * scale;
-        const Math::Vector3& ScaledV1 = m_Positions[*(itr+1)] * scale;
-        const Math::Vector3& ScaledV2 = m_Positions[*(itr+2)] * scale;
+        const Vector3& ScaledV0 = m_Positions[*itr] * scale;
+        const Vector3& ScaledV1 = m_Positions[*(itr+1)] * scale;
+        const Vector3& ScaledV2 = m_Positions[*(itr+2)] * scale;
 
         {
             float32_t a = (ScaledV0 - ScaledV1).Length();
@@ -969,11 +968,11 @@ float32_t Mesh::SurfaceAreaComponents( Math::Vector3& areaVec ) const
 
             //float32_t d = (xMag + yMag + zMag )/triArea;     
 
-            //Math::Vector3 triAreaVec( xMag/triArea, yMag/triArea, zMag/triArea );
+            //Vector3 triAreaVec( xMag/triArea, yMag/triArea, zMag/triArea );
             // triAreaVec /= d;
 
             float32_t magSum = xMag + yMag + zMag;
-            Math::Vector3 triAreaVec( xMag/magSum, yMag/magSum, zMag/magSum );
+            Vector3 triAreaVec( xMag/magSum, yMag/magSum, zMag/magSum );
 
             float32_t sqrtTriArea = sqrt(triArea);
 
@@ -984,7 +983,7 @@ float32_t Mesh::SurfaceAreaComponents( Math::Vector3& areaVec ) const
     return area;
 }
 
-void Mesh::GetTriangle( uint32_t triIndex, Math::Vector3& v0, Math::Vector3& v1, Math::Vector3& v2, Math::Matrix4* transform )
+void Mesh::GetTriangle( uint32_t triIndex, Vector3& v0, Vector3& v1, Vector3& v2, Matrix4* transform )
 {
     HELIUM_ASSERT( m_TriangleVertexIndices.size()%3 == 0 );
     HELIUM_ASSERT( triIndex < GetTriangleCount() );
@@ -1009,7 +1008,7 @@ void Mesh::GetTriangle( uint32_t triIndex, Math::Vector3& v0, Math::Vector3& v1,
 /////////////////////////////////////////////////////////////
 void Mesh::WeldMeshVerts(const float32_t vertex_merge_threshold)
 {
-    Math::V_Vector3  pos_array;
+    V_Vector3  pos_array;
     MM_i32 pos_lookup;
 
     std::vector< int32_t > old_to_new_vert_mapping;
@@ -1018,7 +1017,7 @@ void Mesh::WeldMeshVerts(const float32_t vertex_merge_threshold)
     pos_array.reserve(m_Positions.size());
     old_to_new_vert_mapping.reserve(m_Positions.size());
 
-    for (Math::V_Vector3::iterator ivert = m_Positions.begin(); ivert != m_Positions.end(); ++ivert, ++iv)
+    for (V_Vector3::iterator ivert = m_Positions.begin(); ivert != m_Positions.end(); ++ivert, ++iv)
     {
         // compute a min and max key based on vertex position
         float fkey = (ivert->x + ivert->y + ivert->z) * 100.0f;
@@ -1026,7 +1025,7 @@ void Mesh::WeldMeshVerts(const float32_t vertex_merge_threshold)
         int32_t max_key = (int32_t)( fkey + 0.1f );
 
         // check if this vertex position is very similar to one already in the vertex position array
-        int32_t match_idx = Math::LookupPosInArray(*ivert, min_key, max_key, pos_array, pos_lookup, vertex_merge_threshold );
+        int32_t match_idx = LookupPosInArray(*ivert, min_key, max_key, pos_array, pos_lookup, vertex_merge_threshold );
 
         // add there was no matching vertex position in the array...
         if (match_idx < 0)
@@ -1113,11 +1112,11 @@ void Mesh::AddTri(uint32_t vert_a, uint32_t vert_b, uint32_t vert_c)
 //   - n:              normal
 //   - dpp:            (v0->pp) -- this value is modified and returned as the result
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-uint32_t NearestPointInTri(Math::Vector3 dv1, Math::Vector3 dv2, Math::Vector3 normal, Math::Vector3& dpp)
+uint32_t NearestPointInTri(Vector3 dv1, Vector3 dv2, Vector3 normal, Vector3& dpp)
 {
-    Math::Vector3 snap_a, snap_b;
+    Vector3 snap_a, snap_b;
     // check pp against edge (v0->v1)
-    Math::Vector3 edge = dpp.Cross(dv1);
+    Vector3 edge = dpp.Cross(dv1);
     if ( edge.Dot(normal) < 0.0f)
     {
         snap_a.Set(0.0f, 0.0f, 0.0f);
@@ -1135,8 +1134,8 @@ uint32_t NearestPointInTri(Math::Vector3 dv1, Math::Vector3 dv2, Math::Vector3 n
         else
         {
             // check pp against edge (v1->v2)
-            Math::Vector3 ev2 = dv2 - dv1;
-            Math::Vector3 epp = dpp - dv1;
+            Vector3 ev2 = dv2 - dv1;
+            Vector3 epp = dpp - dv1;
 
             edge = epp.Cross(ev2);
             if ( edge.Dot(normal) < 0.0f)
@@ -1153,8 +1152,8 @@ uint32_t NearestPointInTri(Math::Vector3 dv1, Math::Vector3 dv2, Math::Vector3 n
     }
     // snap to nearest point on line segment if pp is outside triangle 
     {
-        Math::Vector3 lvb  = snap_b - snap_a;
-        Math::Vector3 lpp  = dpp - snap_a;
+        Vector3 lvb  = snap_b - snap_a;
+        Vector3 lpp  = dpp - snap_a;
         float32_t  dotn = lpp.Dot(lvb);
         float32_t  dotd = lvb.Dot(lvb);
         float32_t  t    = (dotn / dotd);
@@ -1167,20 +1166,20 @@ uint32_t NearestPointInTri(Math::Vector3 dv1, Math::Vector3 dv2, Math::Vector3 n
     }
 }
 
-uint32_t Mesh::GetClosestTri(const Math::Vector3& sphere_pos, const float32_t& sphere_rad)
+uint32_t Mesh::GetClosestTri(const Vector3& sphere_pos, const float32_t& sphere_rad)
 {
     uint32_t res_tri_id = 0xFFFFFFFF;
     float32_t   best_dist_sq = sphere_rad * sphere_rad;
     for (uint32_t i=0; i< ((uint32_t)m_TriangleVertexIndices.size()/3); ++i)
     {
-        Math::Vector3 tri_verts[3];
+        Vector3 tri_verts[3];
         tri_verts[0] = m_Positions[m_TriangleVertexIndices[3*i]];
         tri_verts[1] = m_Positions[m_TriangleVertexIndices[3*i+1]];
         tri_verts[2] = m_Positions[m_TriangleVertexIndices[3*i+2]];
-        Math::Vector3 dv1 = tri_verts[1] - tri_verts[0];
-        Math::Vector3 dv2 = tri_verts[2] - tri_verts[0];
-        Math::Vector3 dp  = sphere_pos - tri_verts[0];
-        Math::Vector3 normal = dv2.Cross(dv1);
+        Vector3 dv1 = tri_verts[1] - tri_verts[0];
+        Vector3 dv2 = tri_verts[2] - tri_verts[0];
+        Vector3 dp  = sphere_pos - tri_verts[0];
+        Vector3 normal = dv2.Cross(dv1);
         float32_t dotn = dp.Dot(normal);
         /* //IF we need to not include the back faced tris then uncomment this block
         if (dotn < 0.0f)
@@ -1195,7 +1194,7 @@ uint32_t Mesh::GetClosestTri(const Math::Vector3& sphere_pos, const float32_t& s
             continue;
         }
         float32_t t = (dotn / dotd);
-        Math::Vector3 dpp = normal * (-t);
+        Vector3 dpp = normal * (-t);
         dpp = dpp + dp;
         // abort if nearest-point on plane is farther than radius
         float32_t dsq = normal.LengthSquared() * t * t;
@@ -1204,7 +1203,7 @@ uint32_t Mesh::GetClosestTri(const Math::Vector3& sphere_pos, const float32_t& s
             continue;
         }
         NearestPointInTri(dv1, dv2, normal, dpp);
-        Math::Vector3 ip_to_closest_pt = dpp - dp;
+        Vector3 ip_to_closest_pt = dpp - dp;
         dsq = ip_to_closest_pt.LengthSquared();
         if (best_dist_sq < dsq)
         {
@@ -1365,19 +1364,19 @@ void Mesh::DeleteEdges( const std::vector< uint32_t >& ip_edges )
     PruneVertsNotInTris();
 }
 
-uint32_t Mesh::GetClosestVert(const Math::Vector3& sphere_start_pos, const float32_t& sphere_rad, const Math::Vector3& swept_dir, const float32_t& len)
+uint32_t Mesh::GetClosestVert(const Vector3& sphere_start_pos, const float32_t& sphere_rad, const Vector3& swept_dir, const float32_t& len)
 {
     uint32_t res_vert_index = 0xFFFFFFFF;
     float32_t min_dist = len + 2.0f*sphere_rad;
     float32_t sphere_rad_sqr = sphere_rad*sphere_rad;
     uint32_t i=0;
-    for (Math::V_Vector3::const_iterator iter = m_Positions.begin(); iter != m_Positions.end(); ++iter, ++i)
+    for (V_Vector3::const_iterator iter = m_Positions.begin(); iter != m_Positions.end(); ++iter, ++i)
     {
-        Math::Vector3 vec_to_pt = *iter - sphere_start_pos;
+        Vector3 vec_to_pt = *iter - sphere_start_pos;
         float32_t dot = vec_to_pt.Dot(swept_dir);
         dot = Clamp(dot, 0.0f, len);
-        Math::Vector3 closest_pt_on_axis = swept_dir*dot;
-        Math::Vector3 closest_pt_to_pos = closest_pt_on_axis - vec_to_pt;
+        Vector3 closest_pt_on_axis = swept_dir*dot;
+        Vector3 closest_pt_to_pos = closest_pt_on_axis - vec_to_pt;
         float32_t dist_sqr = closest_pt_to_pos.LengthSquared();
         if ( dist_sqr < sphere_rad_sqr)
         {
@@ -1391,14 +1390,14 @@ uint32_t Mesh::GetClosestVert(const Math::Vector3& sphere_start_pos, const float
     return res_vert_index;
 }
 
-uint32_t Mesh::GetClosestVert(const Math::Matrix4& view_proj_mat, const float32_t porj_space_threshold_sqr, Math::Vector2 proj_pt)
+uint32_t Mesh::GetClosestVert(const Matrix4& view_proj_mat, const float32_t porj_space_threshold_sqr, Vector2 proj_pt)
 {
     uint32_t res_vert_index = 0xFFFFFFFF;
     float32_t min_z = 1.0f;
     uint32_t i=0;
-    for (Math::V_Vector3::const_iterator iter = m_Positions.begin(); iter != m_Positions.end(); ++iter, ++i)
+    for (V_Vector3::const_iterator iter = m_Positions.begin(); iter != m_Positions.end(); ++iter, ++i)
     {
-        Math::Vector4 v ( iter->x, iter->y, iter->z, 1.f );
+        Vector4 v ( iter->x, iter->y, iter->z, 1.f );
         view_proj_mat.Transform( v );
         v /= (v.w);
 
@@ -1406,7 +1405,7 @@ uint32_t Mesh::GetClosestVert(const Math::Matrix4& view_proj_mat, const float32_
         {
             continue;
         }
-        Math::Vector2 v_pt;
+        Vector2 v_pt;
         v_pt.x = v.x;
         v_pt.y = v.y;
         v_pt -= proj_pt;
@@ -1420,18 +1419,18 @@ uint32_t Mesh::GetClosestVert(const Math::Matrix4& view_proj_mat, const float32_
     return res_vert_index;
 }
 
-void ClosestPtsOnLinesegVsLineseg(const Math::Vector3& line_a_start, const Math::Vector3& line_a_end,
-                                  const Math::Vector3& line_b_start, const Math::Vector3& line_b_end,
-                                  Math::Vector3& closest_pt_on_line_a, Math::Vector3& closest_pt_on_line_b, float32_t& linea_a_t, float32_t& line_b_t)
+void ClosestPtsOnLinesegVsLineseg(const Vector3& line_a_start, const Vector3& line_a_end,
+                                  const Vector3& line_b_start, const Vector3& line_b_end,
+                                  Vector3& closest_pt_on_line_a, Vector3& closest_pt_on_line_b, float32_t& linea_a_t, float32_t& line_b_t)
 {
 
-    Math::Vector3 l0 = line_a_end - line_a_start;
-    Math::Vector3 l1 = line_b_end - line_b_start;
-    Math::Vector3 ds = line_b_start - line_a_start;
+    Vector3 l0 = line_a_end - line_a_start;
+    Vector3 l1 = line_b_end - line_b_start;
+    Vector3 ds = line_b_start - line_a_start;
 
-    Math::Vector3 c  = l0.Cross(l1);
-    Math::Vector3 c0 = ds.Cross(l1);
-    Math::Vector3 c1 = ds.Cross(l0);
+    Vector3 c  = l0.Cross(l1);
+    Vector3 c0 = ds.Cross(l1);
+    Vector3 c1 = ds.Cross(l0);
 
     float32_t t0 = c0.Dot(c) / c.Dot(c);
     float32_t t1 = c1.Dot(c) / c.Dot(c);
@@ -1451,12 +1450,12 @@ void ClosestPtsOnLinesegVsLineseg(const Math::Vector3& line_a_start, const Math:
     closest_pt_on_line_a = line_a_start + l0*linea_a_t;
     closest_pt_on_line_b = line_b_start + l1*line_b_t;
 }
-uint32_t Mesh::GetClosestEdge(const Math::Vector3& sphere_start_pos, const float32_t& sphere_rad, const Math::Vector3& swept_dir, const float32_t& len)
+uint32_t Mesh::GetClosestEdge(const Vector3& sphere_start_pos, const float32_t& sphere_rad, const Vector3& swept_dir, const float32_t& len)
 {
     uint32_t res_edge_index = 0xFFFFFFFF;
     float32_t min_dist = len;
     float32_t sphere_rad_sqr = sphere_rad*sphere_rad;
-    Math::Vector3 ss_end = sphere_start_pos + swept_dir*len;
+    Vector3 ss_end = sphere_start_pos + swept_dir*len;
     uint32_t i=0;
 
     std::vector< uint32_t >::const_iterator iter =  m_WireframeVertexIndices.begin();
@@ -1468,12 +1467,12 @@ uint32_t Mesh::GetClosestEdge(const Math::Vector3& sphere_start_pos, const float
         ++iter;
         vert_ids[1] = *iter;
         ++iter;
-        Math::Vector3& edge_verts_0 = m_Positions[vert_ids[0]];
-        Math::Vector3& edge_verts_1 = m_Positions[vert_ids[1]];
-        Math::Vector3 closest_pt_ss, closest_pt_edge;
+        Vector3& edge_verts_0 = m_Positions[vert_ids[0]];
+        Vector3& edge_verts_1 = m_Positions[vert_ids[1]];
+        Vector3 closest_pt_ss, closest_pt_edge;
         float32_t ss_t, edge_t;
         ClosestPtsOnLinesegVsLineseg(sphere_start_pos, ss_end, edge_verts_0, edge_verts_1, closest_pt_ss, closest_pt_edge, ss_t, edge_t);
-        Math::Vector3 diff = closest_pt_edge - closest_pt_ss;
+        Vector3 diff = closest_pt_edge - closest_pt_ss;
         if (diff.LengthSquared() < sphere_rad_sqr)
         {
             float32_t d = ss_t * len;
@@ -1487,12 +1486,12 @@ uint32_t Mesh::GetClosestEdge(const Math::Vector3& sphere_start_pos, const float
     return res_edge_index;
 }
 
-uint32_t Mesh::GetClosestTri(const Math::Vector3& sphere_start_pos, const float32_t& sphere_rad, const Math::Vector3& swept_dir, const float32_t& len)
+uint32_t Mesh::GetClosestTri(const Vector3& sphere_start_pos, const float32_t& sphere_rad, const Vector3& swept_dir, const float32_t& len)
 {
     uint32_t res_tri_index = 0xFFFFFFFF;
     float32_t min_dist = len;
     float32_t sphere_rad_sqr = sphere_rad*sphere_rad;
-    Math::Vector3 ss_end = sphere_start_pos + swept_dir*len;
+    Vector3 ss_end = sphere_start_pos + swept_dir*len;
 
     std::vector< uint32_t >::const_iterator iter =  m_TriangleVertexIndices.begin();
     uint32_t tri_id = 0;
@@ -1505,13 +1504,13 @@ uint32_t Mesh::GetClosestTri(const Math::Vector3& sphere_start_pos, const float3
         ++iter;
         vert_ids[2] = *iter;
         ++iter;
-        Math::Vector3 v[3];
+        Vector3 v[3];
         v[0] = m_Positions[vert_ids[0]];
         v[1] = m_Positions[vert_ids[1]];
         v[2] = m_Positions[vert_ids[2]];
-        Math::Vector3 dv1 = v[1] - v[0];
-        Math::Vector3 dv2 = v[2] - v[0];
-        Math::Vector3 plane_normal = dv2.Cross(dv1);
+        Vector3 dv1 = v[1] - v[0];
+        Vector3 dv2 = v[2] - v[0];
+        Vector3 plane_normal = dv2.Cross(dv1);
         plane_normal = plane_normal.Normalize();
         float32_t plane_d = plane_normal.Dot(v[0]);
         float32_t temp_dot = swept_dir.Dot(plane_normal);
@@ -1521,14 +1520,14 @@ uint32_t Mesh::GetClosestTri(const Math::Vector3& sphere_start_pos, const float3
         }
         float32_t t = plane_d - sphere_start_pos.Dot(plane_normal);
         t = t/temp_dot;
-        Math::Vector3 pt_on_plane = sphere_start_pos + swept_dir*t;
+        Vector3 pt_on_plane = sphere_start_pos + swept_dir*t;
         //see if the pt is inside the tri
         bool outside = false;
         for (uint32_t j=0; j<3; ++j)
         {
-            Math::Vector3 v_to_pt = pt_on_plane - v[j];
-            Math::Vector3 edge = v[(j+1)%3] - v[j];
-            Math::Vector3 cross_p = v_to_pt.Cross(edge);
+            Vector3 v_to_pt = pt_on_plane - v[j];
+            Vector3 edge = v[(j+1)%3] - v[j];
+            Vector3 cross_p = v_to_pt.Cross(edge);
             if (cross_p.Dot(plane_normal) < 0.0f)
             {
                 outside = true;
@@ -1579,7 +1578,7 @@ bool ValidFloat(float f_)
 }
 #pragma warning (default:4056)
 #pragma warning (default:4756)
-bool ValidVec3(const Math::Vector3& v_) //need to move this some where
+bool ValidVec3(const Vector3& v_) //need to move this some where
 {
     return ( ValidFloat(v_.x) && ValidFloat(v_.y) && ValidFloat(v_.z) );
 }
@@ -1598,13 +1597,13 @@ void Mesh::PruneInvalidTris()
         ++iter;
         vert_ids[2] = *iter;
         ++iter;
-        Math::Vector3 v[3];
+        Vector3 v[3];
         v[0] = m_Positions[vert_ids[0]];
         v[1] = m_Positions[vert_ids[1]];
         v[2] = m_Positions[vert_ids[2]];
-        Math::Vector3 dv1 = v[1] - v[0];
-        Math::Vector3 dv2 = v[2] - v[0];
-        Math::Vector3 plane_normal = dv2.Cross(dv1);
+        Vector3 dv1 = v[1] - v[0];
+        Vector3 dv2 = v[2] - v[0];
+        Vector3 plane_normal = dv2.Cross(dv1);
         float32_t area =  plane_normal.Length()/2.0f;
         if (area < ZER_AREA || (!ValidVec3(v[0])) || (!ValidVec3(v[1])) || (!ValidVec3(v[2])))
         {
@@ -1619,14 +1618,14 @@ void Mesh::MergeVertToClosest(uint32_t ip_vert_id)
     uint32_t closest_vert_id = 0xFFFFFFFF;
     float32_t min_dist_sqr = 10000.0f;//ok this should be big enough ever else one is screwing some thing bad
     uint32_t i=0;
-    Math::Vector3 input_vert_pos = m_Positions[ip_vert_id];
-    for (Math::V_Vector3::const_iterator iter = m_Positions.begin(); iter != m_Positions.end(); ++iter, ++i)
+    Vector3 input_vert_pos = m_Positions[ip_vert_id];
+    for (V_Vector3::const_iterator iter = m_Positions.begin(); iter != m_Positions.end(); ++iter, ++i)
     {
         if (i == ip_vert_id)
         {
             continue;
         }
-        Math::Vector3 diff = *iter - input_vert_pos;
+        Vector3 diff = *iter - input_vert_pos;
         float32_t diff_len_sqr = diff.LengthSquared();
         if ( diff_len_sqr < min_dist_sqr)
         {
@@ -1706,30 +1705,30 @@ void Mesh::MergeVertToClosest(uint32_t ip_vert_id)
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-float32_t CrossVectorXZ(const Math::Vector3& v1, const Math::Vector3& v2)
+float32_t CrossVectorXZ(const Vector3& v1, const Vector3& v2)
 {
     return(v2.x * v1.z - v1.x * v2.z);
 }
 
-void LerpVector3(Math::Vector3& r, const Math::Vector3& v1, const Math::Vector3& v2, float32_t t)
+void LerpVector3(Vector3& r, const Vector3& v1, const Vector3& v2, float32_t t)
 {
     r.x = v1.x + (v2.x - v1.x) * t;
     r.y = v1.y + (v2.y - v1.y) * t;
     r.z = v1.z + (v2.z - v1.z) * t;
 }
 
-int32_t SenseOfTriangle(Math::Vector3 &v0, Math::Vector3 &v1, Math::Vector3 &v2)
+int32_t SenseOfTriangle(Vector3 &v0, Vector3 &v1, Vector3 &v2)
 {
-    Math::Vector3 dv0, dv1;
+    Vector3 dv0, dv1;
     dv0 = v1 - v0;
     dv1 = v2 - v1;
     float32_t c = CrossVectorXZ(dv0, dv1);
     return (c >= 0.0f) ? 1 : -1;
 }
 
-uint32_t TriMinusPoly(Math::Vector3 *out, Math::Vector3 *tri, Math::Vector3 *poly, uint32_t nverts)
+uint32_t TriMinusPoly(Vector3 *out, Vector3 *tri, Vector3 *poly, uint32_t nverts)
 {
-    Math::Vector3 vP0, vP1, vP2, dvP, vT0, vT1, dvT, dv0, dv1, dv2, *p_in, *p_out, *p_end, vP0_prev, vP1_prev, vP2_prev;
+    Vector3 vP0, vP1, vP2, dvP, vT0, vT1, dvT, dv0, dv1, dv2, *p_in, *p_out, *p_end, vP0_prev, vP1_prev, vP2_prev;
     // determine anticlockwise / clockwise sense of tri and poly
     float32_t sense_of_source_tri  = (float32_t)SenseOfTriangle(poly[0], poly[1], poly[2]);
     int32_t sense_of_source_poly = SenseOfTriangle(tri[0],  tri[1],  tri[2]);
@@ -1918,13 +1917,13 @@ uint32_t TriMinusPoly(Math::Vector3 *out, Math::Vector3 *tri, Math::Vector3 *pol
     return (uint32_t)((p_out - out) / 3);
 }
 
-void Mesh::PunchCubeHole(Math::Matrix4& mat, Math::Matrix4& inv_mat, float32_t vert_merge_threshold)
+void Mesh::PunchCubeHole(Matrix4& mat, Matrix4& inv_mat, float32_t vert_merge_threshold)
 {
     AlignedBox unit_box;
     unit_box.minimum.Set(-1.0f, -1.0f, -1.0f);
     unit_box.maximum.Set(1.0f, 1.0f, 1.0f);
-    Math::Frustum frustom(unit_box);
-    Math::V_Vector3 new_tri_verts;
+    Frustum frustom(unit_box);
+    V_Vector3 new_tri_verts;
     //swap verts in the tris which have just the input vert and not the closest vert and delete the ones which have both
     std::vector< uint32_t > tris_to_be_deleted;//ones with both vert_id and closest_vert_id
     {
@@ -1939,22 +1938,22 @@ void Mesh::PunchCubeHole(Math::Matrix4& mat, Math::Matrix4& inv_mat, float32_t v
             ++iter;
             vert_ids[2] = *iter;
             ++iter;
-            Math::Vector3 v[3];
+            Vector3 v[3];
             v[0] = m_Positions[vert_ids[0]];
             v[1] = m_Positions[vert_ids[1]]; 
             v[2] = m_Positions[vert_ids[2]];
             inv_mat.TransformVertex(v[0]);
             inv_mat.TransformVertex(v[1]);
             inv_mat.TransformVertex(v[2]);
-            Math::Vector3 tri_normal;
-            Math::Vector3 tri_edge_0 = v[1] - v[0];
-            Math::Vector3 tri_edge_1 = v[2] - v[0];
+            Vector3 tri_normal;
+            Vector3 tri_edge_0 = v[1] - v[0];
+            Vector3 tri_edge_1 = v[2] - v[0];
             tri_normal = tri_edge_0.Cross(tri_edge_1);
             tri_normal.Normalize();
 
             if (tri_normal.y < 0.0f)
             {
-                Math::Vector3 temp = v[2];
+                Vector3 temp = v[2];
                 v[2] = v[1];
                 v[1] = temp;
                 tri_normal *= -1.0f;
@@ -1967,8 +1966,8 @@ void Mesh::PunchCubeHole(Math::Matrix4& mat, Math::Matrix4& inv_mat, float32_t v
             {
                 v[0].y = v[1].y = v[2].y = 0.0f;
                 tris_to_be_deleted.push_back(tri_id);
-                Math::Vector3 out_put_verts[21];
-                Math::Vector3 convex_poly[4];
+                Vector3 out_put_verts[21];
+                Vector3 convex_poly[4];
                 convex_poly[0].x = 1.0f;
                 convex_poly[0].z = 1.0f;
                 convex_poly[0].y = 0.0f;
@@ -1984,7 +1983,7 @@ void Mesh::PunchCubeHole(Math::Matrix4& mat, Math::Matrix4& inv_mat, float32_t v
                 uint32_t num_clipped_tris = TriMinusPoly(out_put_verts, v, convex_poly, 4);
                 for (uint32_t n_v=0; n_v<3*num_clipped_tris; ++n_v)
                 {
-                    Math::Vector3& new_v = out_put_verts[n_v];
+                    Vector3& new_v = out_put_verts[n_v];
                     new_v.y = (plane_w - new_v.Dot(tri_normal))/tri_normal.y;
                     mat.TransformVertex(new_v);
                     new_tri_verts.push_back(new_v);

@@ -6,7 +6,6 @@
 #include "Orientation.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 PrimitiveGrid::PrimitiveGrid(ResourceTracker* tracker)

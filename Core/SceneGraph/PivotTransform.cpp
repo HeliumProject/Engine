@@ -8,7 +8,6 @@
 #include "Core/SceneGraph/Scene.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_CLASS( PivotTransform );
@@ -51,50 +50,50 @@ tstring PivotTransform::GetApplicationTypeName() const
     return TXT( "Group" );
 }
 
-Math::Shear PivotTransform::GetShear() const
+Shear PivotTransform::GetShear() const
 {
     return m_Shear;
 }
 
-void PivotTransform::SetShear(const Math::Shear& value)
+void PivotTransform::SetShear(const Shear& value)
 {
     m_Shear = value;
 
     Dirty();
 }
 
-Math::Vector3 PivotTransform::GetScalePivot() const
+Vector3 PivotTransform::GetScalePivot() const
 {
-    Math::Vector3 result = m_ScalePivot;
+    Vector3 result = m_ScalePivot;
     (GetScaleComponent() * GetRotateComponent()).TransformVertex( result );
     return result;
 }
 
-void PivotTransform::SetScalePivot(const Math::Vector3& value)
+void PivotTransform::SetScalePivot(const Vector3& value)
 {
     SetScalePivot(value, true);
 }
 
-void PivotTransform::SetScalePivot(const Math::Vector3& value, bool snapSiblings)
+void PivotTransform::SetScalePivot(const Vector3& value, bool snapSiblings)
 {
-    Math::Vector3 v = value;
+    Vector3 v = value;
     (GetScaleComponent() * GetRotateComponent()).Inverted().TransformVertex( v );
 
     // old pivot sample
-    Math::Vector3 a = Math::Vector3::Zero;
+    Vector3 a = Vector3::Zero;
 
     // new pivot sample
-    Math::Vector3 b = Math::Vector3::Zero;
+    Vector3 b = Vector3::Zero;
 
     // build total scale with old pivot
-    Math::Matrix4 scaleA = GetScaleComponent();
+    Matrix4 scaleA = GetScaleComponent();
     scaleA.TransformVertex(a);
 
     // set the new pivot value
     m_ScalePivot = v;
 
     // build total scale with new pivot
-    Math::Matrix4 scaleB = GetScaleComponent();
+    Matrix4 scaleB = GetScaleComponent();
     scaleB.TransformVertex(b);
 
     // compensate for the delta
@@ -109,50 +108,50 @@ void PivotTransform::SetScalePivot(const Math::Vector3& value, bool snapSiblings
     Dirty();
 }
 
-Math::Vector3 PivotTransform::GetScalePivotTranslate() const
+Vector3 PivotTransform::GetScalePivotTranslate() const
 {
     return m_ScalePivotTranslate;
 }
 
-void PivotTransform::SetScalePivotTranslate(const Math::Vector3& value)
+void PivotTransform::SetScalePivotTranslate(const Vector3& value)
 {
     m_ScalePivotTranslate = value;
 
     Dirty();
 }
 
-Math::Vector3 PivotTransform::GetRotatePivot() const
+Vector3 PivotTransform::GetRotatePivot() const
 {
-    Math::Vector3 result = m_RotatePivot;
+    Vector3 result = m_RotatePivot;
     GetRotateComponent().TransformVertex( result );
     return result;
 }
 
-void PivotTransform::SetRotatePivot(const Math::Vector3& value)
+void PivotTransform::SetRotatePivot(const Vector3& value)
 {
     SetRotatePivot(value, true);
 }
 
-void PivotTransform::SetRotatePivot(const Math::Vector3& value, bool snapSiblings)
+void PivotTransform::SetRotatePivot(const Vector3& value, bool snapSiblings)
 {
-    Math::Vector3 v = value;
+    Vector3 v = value;
     GetRotateComponent().Inverted().TransformVertex( v );
 
     // old pivot sample
-    Math::Vector3 a = Math::Vector3::Zero;
+    Vector3 a = Vector3::Zero;
 
     // new pivot sample
-    Math::Vector3 b = Math::Vector3::Zero;
+    Vector3 b = Vector3::Zero;
 
     // build total rotation with old pivot
-    Math::Matrix4 rotateA = GetRotateComponent();
+    Matrix4 rotateA = GetRotateComponent();
     rotateA.TransformVertex(a);
 
     // set the new pivot value
     m_RotatePivot = v;
 
     // build total rotation with new pivot
-    Math::Matrix4 rotateB = GetRotateComponent();
+    Matrix4 rotateB = GetRotateComponent();
     rotateB.TransformVertex(b);
 
     // compensate for the delta
@@ -167,29 +166,29 @@ void PivotTransform::SetRotatePivot(const Math::Vector3& value, bool snapSibling
     Dirty();
 }
 
-Math::Vector3 PivotTransform::GetRotatePivotTranslate() const
+Vector3 PivotTransform::GetRotatePivotTranslate() const
 {
     return m_RotatePivotTranslate;
 }
 
-void PivotTransform::SetRotatePivotTranslate(const Math::Vector3& value)
+void PivotTransform::SetRotatePivotTranslate(const Vector3& value)
 {
     m_RotatePivotTranslate = value;
 
     Dirty();
 }
 
-Math::Vector3 PivotTransform::GetTranslatePivot() const
+Vector3 PivotTransform::GetTranslatePivot() const
 {
     return m_TranslatePivot;
 }
 
-void PivotTransform::SetTranslatePivot(const Math::Vector3& value)
+void PivotTransform::SetTranslatePivot(const Vector3& value)
 {
     SetTranslatePivot(value, true);
 }
 
-void PivotTransform::SetTranslatePivot(const Math::Vector3& value, bool snapSiblings)
+void PivotTransform::SetTranslatePivot(const Vector3& value, bool snapSiblings)
 {
     m_TranslatePivot = value;
 
@@ -212,24 +211,24 @@ void PivotTransform::SetSnapPivots(bool value)
     m_SnapPivots = value;
 }
 
-Math::Matrix4 PivotTransform::GetScaleComponent() const
+Matrix4 PivotTransform::GetScaleComponent() const
 {
-    Math::Matrix4 spi( m_ScalePivot * -1.0f );
-    Math::Matrix4 sh( m_Shear );
-    Math::Matrix4 sp( m_ScalePivot + m_ScalePivotTranslate );
+    Matrix4 spi( m_ScalePivot * -1.0f );
+    Matrix4 sh( m_Shear );
+    Matrix4 sp( m_ScalePivot + m_ScalePivotTranslate );
 
     return spi * __super::GetScaleComponent() * sh * sp;
 }
 
-Math::Matrix4 PivotTransform::GetRotateComponent() const
+Matrix4 PivotTransform::GetRotateComponent() const
 {
-    Math::Matrix4 rpi( m_RotatePivot * -1.0f );
-    Math::Matrix4 rp( m_RotatePivot + m_RotatePivotTranslate );
+    Matrix4 rpi( m_RotatePivot * -1.0f );
+    Matrix4 rp( m_RotatePivot + m_RotatePivotTranslate );
 
     return rpi * __super::GetRotateComponent() * rp;
 }
 
-Math::Matrix4 PivotTransform::GetTranslateComponent() const
+Matrix4 PivotTransform::GetTranslateComponent() const
 {
     return __super::GetTranslateComponent();
 }
@@ -242,27 +241,27 @@ Undo::CommandPtr PivotTransform::ResetTransform()
     // disregard the base class' command, its not complete
     __super::ResetTransform ();
 
-    m_Shear = Math::Shear::Identity;
+    m_Shear = Shear::Identity;
 
-    m_ScalePivot = Math::Vector3::Zero;
-    m_ScalePivotTranslate = Math::Vector3::Zero;
+    m_ScalePivot = Vector3::Zero;
+    m_ScalePivotTranslate = Vector3::Zero;
 
-    m_RotatePivot = Math::Vector3::Zero;
-    m_RotatePivotTranslate = Math::Vector3::Zero;
+    m_RotatePivot = Vector3::Zero;
+    m_RotatePivotTranslate = Vector3::Zero;
 
-    m_TranslatePivot = Math::Vector3::Zero;
+    m_TranslatePivot = Vector3::Zero;
 
     return command;
 }
 
 // outputs
-void MatrixDecomposeFixedPivots(Math::Scale& scale, Math::Shear& shear, 
-                                Math::EulerAngles& rotate, Math::Vector3& translate, 
+void MatrixDecomposeFixedPivots(Scale& scale, Shear& shear, 
+                                EulerAngles& rotate, Vector3& translate, 
                                 // inputs 
-                                const Math:: Matrix4& totalMatrix, 
-                                const Math::Vector3& scalePivot, const Math::Vector3& scalePivotTranslate, 
-                                const Math::Vector3& rotatePivot, const Math::Vector3& rotatePivotTranslate, 
-                                const Math::Vector3& translatePivot)
+                                const  Matrix4& totalMatrix, 
+                                const Vector3& scalePivot, const Vector3& scalePivotTranslate, 
+                                const Vector3& rotatePivot, const Vector3& rotatePivotTranslate, 
+                                const Vector3& translatePivot)
 {
     // [tfm] = [Sp]-1x[S]x[Sh]x[Sp]x[Spt]x[Rp]-1x[R]x[Rp]x[Rpt]x[T]
 
@@ -276,10 +275,10 @@ void MatrixDecomposeFixedPivots(Math::Scale& scale, Math::Shear& shear,
     //    M1 = [S]x[Sh]x[Sp]x[Spt]x[Rp]-1x[R]x[Rp]x[Rpt]x[T]
     //    M1 = [S]x[Sh]x[M2]; 
 
-    Math::Shear   localShear; 
-    Math::Scale   localScale; 
-    Math::Matrix3 localRot; 
-    Math::Vector3 localTrans; 
+    Shear   localShear; 
+    Scale   localScale; 
+    Matrix3 localRot; 
+    Vector3 localTrans; 
 
     //    M1 = [S]x[Sh]x[localRot]x[localTrans]
     // 
@@ -303,28 +302,28 @@ void MatrixDecomposeFixedPivots(Math::Scale& scale, Math::Shear& shear,
     //   [M3']xM2 = [M5]; 
     Matrix4 M3_inv = Matrix4(rotatePivot) * Matrix4(scalePivotTranslate * -1.0f) * Matrix4(scalePivot * -1.0f); 
 
-    Math::Shear   noShear; 
-    Math::Scale   noScale; 
-    Math::Matrix3 finalRot; 
-    Math::Vector3 M4_trans; 
+    Shear   noShear; 
+    Scale   noScale; 
+    Matrix3 finalRot; 
+    Vector3 M4_trans; 
 
-    Math::Matrix4 M5 = M3_inv * M2; 
+    Matrix4 M5 = M3_inv * M2; 
 
     // recall: [M5] = [R]x[M4]
 
     M5.Decompose(noScale, noShear, finalRot, M4_trans); 
 
     // recall: [M4] = [Rp]x[Rpt]x[T] -- just translation in all of those
-    Math::Matrix4 M4(M4_trans); 
+    Matrix4 M4(M4_trans); 
 
     // therefore: [Rpt']x[Rp']x[Rp]x[Rpt]x[T] = [T]
     //            [Rpt']x[Rp']x[M4] = [T]
 
-    Math::Matrix4 T = Matrix4(rotatePivotTranslate * -1.0f) * Matrix4(rotatePivot*-1.0f) * M4; 
+    Matrix4 T = Matrix4(rotatePivotTranslate * -1.0f) * Matrix4(rotatePivot*-1.0f) * M4; 
 
     // that's our final translation
     // 
-    Math::Vector3 finalTrans(T.t.x, T.t.y, T.t.z); 
+    Vector3 finalTrans(T.t.x, T.t.y, T.t.z); 
 
     shear = localShear; 
     scale = localScale; 
@@ -343,11 +342,11 @@ Undo::CommandPtr PivotTransform::ComputeObjectComponents()
     // Save pivots into locals and transform them
     //
 
-    Math::Vector3 scalePivot = m_ScalePivot;
-    Math::Vector3 rotatePivot = m_RotatePivot;
-    Math::Vector3 translatePivot = m_TranslatePivot;
-    Math::Vector3 scalePivotTranslate = m_ScalePivotTranslate; 
-    Math::Vector3 rotatePivotTranslate = m_RotatePivotTranslate; 
+    Vector3 scalePivot = m_ScalePivot;
+    Vector3 rotatePivot = m_RotatePivot;
+    Vector3 translatePivot = m_TranslatePivot;
+    Vector3 scalePivotTranslate = m_ScalePivotTranslate; 
+    Vector3 rotatePivotTranslate = m_RotatePivotTranslate; 
 
     // take from the base class, but we don't use the base class because we are 
     // decomposing to include shear 
@@ -355,10 +354,10 @@ Undo::CommandPtr PivotTransform::ComputeObjectComponents()
 
     Undo::CommandPtr command = ResetTransform();
 
-    Math::Scale scale;
-    Math::Shear shear; 
-    Math::EulerAngles rotate;
-    Math::Vector3 translate;
+    Scale scale;
+    Shear shear; 
+    EulerAngles rotate;
+    Vector3 translate;
 
     Matrix4 nextLocalMatrix; 
 
@@ -416,7 +415,7 @@ Undo::CommandPtr PivotTransform::CenterTransform()
         return batch;
     }
 
-    Math::Vector3 pos;
+    Vector3 pos;
     float w = 1.0f / m_Children.Size();
     for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
     {
@@ -426,14 +425,14 @@ Undo::CommandPtr PivotTransform::CenterTransform()
         HELIUM_ASSERT( transform );
         if ( transform )
         {
-            const Math::Matrix4& globalTransform = transform->GetGlobalTransform();
-            Math::Vector3 p = Math::Vector3( globalTransform.t.x, globalTransform.t.y, globalTransform.t.z );
+            const Matrix4& globalTransform = transform->GetGlobalTransform();
+            Vector3 p = Vector3( globalTransform.t.x, globalTransform.t.y, globalTransform.t.z );
             p *= w;
             pos += p;
         }
     }
 
-    batch->Push( new Undo::PropertyCommand<Math::Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Math::Matrix4> (this, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), Matrix4 (pos) ) );
+    batch->Push( new Undo::PropertyCommand<Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Matrix4> (this, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), Matrix4 (pos) ) );
 
     Evaluate(GraphDirections::Downstream);
 
@@ -548,7 +547,7 @@ float32_t PivotTransform::GetShearYZ() const
 
 void PivotTransform::SetShearYZ(float32_t shear)
 {
-    Math::Shear s = GetShear();
+    Shear s = GetShear();
     s.yz = shear;
     SetShear(s);
 }
@@ -560,7 +559,7 @@ float32_t PivotTransform::GetShearXZ() const
 
 void PivotTransform::SetShearXZ(float32_t shear)
 {
-    Math::Shear s = GetShear();
+    Shear s = GetShear();
     s.xz = shear;
     SetShear(s);
 }
@@ -572,7 +571,7 @@ float32_t PivotTransform::GetShearXY() const
 
 void PivotTransform::SetShearXY(float32_t shear)
 {
-    Math::Shear s = GetShear();
+    Shear s = GetShear();
     s.xy = shear;
     SetShear(s);
 }
@@ -584,7 +583,7 @@ float32_t PivotTransform::GetScalePivotX() const
 
 void PivotTransform::SetScalePivotX(float32_t translate)
 {
-    Math::Vector3 s = GetScalePivot();
+    Vector3 s = GetScalePivot();
     s.x = translate;
     SetScalePivot(s);
 }
@@ -596,7 +595,7 @@ float32_t PivotTransform::GetScalePivotY() const
 
 void PivotTransform::SetScalePivotY(float32_t translate)
 {
-    Math::Vector3 s = GetScalePivot();
+    Vector3 s = GetScalePivot();
     s.y = translate;
     SetScalePivot(s);
 }
@@ -608,7 +607,7 @@ float32_t PivotTransform::GetScalePivotZ() const
 
 void PivotTransform::SetScalePivotZ(float32_t translate)
 {
-    Math::Vector3 s = GetScalePivot();
+    Vector3 s = GetScalePivot();
     s.z = translate;
     SetScalePivot(s);
 }
@@ -620,7 +619,7 @@ float32_t PivotTransform::GetScalePivotTranslateX() const
 
 void PivotTransform::SetScalePivotTranslateX(float32_t translate)
 {
-    Math::Vector3 s = GetScalePivotTranslate();
+    Vector3 s = GetScalePivotTranslate();
     s.x = translate;
     SetScalePivotTranslate(s);
 }
@@ -632,7 +631,7 @@ float32_t PivotTransform::GetScalePivotTranslateY() const
 
 void PivotTransform::SetScalePivotTranslateY(float32_t translate)
 {
-    Math::Vector3 s = GetScalePivotTranslate();
+    Vector3 s = GetScalePivotTranslate();
     s.y = translate;
     SetScalePivotTranslate(s);
 }
@@ -644,7 +643,7 @@ float32_t PivotTransform::GetScalePivotTranslateZ() const
 
 void PivotTransform::SetScalePivotTranslateZ(float32_t translate)
 {
-    Math::Vector3 s = GetScalePivotTranslate();
+    Vector3 s = GetScalePivotTranslate();
     s.z = translate;
     SetScalePivotTranslate(s);
 }
@@ -655,7 +654,7 @@ float32_t PivotTransform::GetRotatePivotX() const
 
 void PivotTransform::SetRotatePivotX(float32_t translate)
 {
-    Math::Vector3 s = GetRotatePivot();
+    Vector3 s = GetRotatePivot();
     s.x = translate;
     SetRotatePivot(s);
 }
@@ -667,7 +666,7 @@ float32_t PivotTransform::GetRotatePivotY() const
 
 void PivotTransform::SetRotatePivotY(float32_t translate)
 {
-    Math::Vector3 s = GetRotatePivot();
+    Vector3 s = GetRotatePivot();
     s.y = translate;
     SetRotatePivot(s);
 }
@@ -679,7 +678,7 @@ float32_t PivotTransform::GetRotatePivotZ() const
 
 void PivotTransform::SetRotatePivotZ(float32_t translate)
 {
-    Math::Vector3 s = GetRotatePivot();
+    Vector3 s = GetRotatePivot();
     s.z = translate;
     SetRotatePivot(s);
 }
@@ -691,7 +690,7 @@ float32_t PivotTransform::GetRotatePivotTranslateX() const
 
 void PivotTransform::SetRotatePivotTranslateX(float32_t translate)
 {
-    Math::Vector3 s = GetRotatePivotTranslate();
+    Vector3 s = GetRotatePivotTranslate();
     s.x = translate;
     SetRotatePivotTranslate(s);
 }
@@ -703,7 +702,7 @@ float32_t PivotTransform::GetRotatePivotTranslateY() const
 
 void PivotTransform::SetRotatePivotTranslateY(float32_t translate)
 {
-    Math::Vector3 s = GetRotatePivotTranslate();
+    Vector3 s = GetRotatePivotTranslate();
     s.y = translate;
     SetRotatePivotTranslate(s);
 }
@@ -715,7 +714,7 @@ float32_t PivotTransform::GetRotatePivotTranslateZ() const
 
 void PivotTransform::SetRotatePivotTranslateZ(float32_t translate)
 {
-    Math::Vector3 s = GetRotatePivotTranslate();
+    Vector3 s = GetRotatePivotTranslate();
     s.z = translate;
     SetRotatePivotTranslate(s);
 }
@@ -727,7 +726,7 @@ float32_t PivotTransform::GetTranslatePivotX() const
 
 void PivotTransform::SetTranslatePivotX(float32_t translate)
 {
-    Math::Vector3 s = GetTranslatePivot();
+    Vector3 s = GetTranslatePivot();
     s.x = translate;
     SetTranslatePivot(s);
 }
@@ -739,7 +738,7 @@ float32_t PivotTransform::GetTranslatePivotY() const
 
 void PivotTransform::SetTranslatePivotY(float32_t translate)
 {
-    Math::Vector3 s = GetTranslatePivot();
+    Vector3 s = GetTranslatePivot();
     s.y = translate;
     SetTranslatePivot(s);
 }
@@ -751,7 +750,7 @@ float32_t PivotTransform::GetTranslatePivotZ() const
 
 void PivotTransform::SetTranslatePivotZ(float32_t translate)
 {
-    Math::Vector3 s = GetTranslatePivot();
+    Vector3 s = GetTranslatePivot();
     s.z = translate;
     SetTranslatePivot(s);
 }

@@ -117,25 +117,25 @@ namespace Helium
             void ComputeTNBs();
             bool ComputeTNB( uint32_t triIndex );
 
-            void GetAlignedBoundingBox( Math::AlignedBox& box ) const;
-            void GetBoundingSphere( Math::BoundingVolumeGenerator::BSphere& bsphere ) const;
+            void GetAlignedBoundingBox( AlignedBox& box ) const;
+            void GetBoundingSphere( BoundingVolumeGenerator::BSphere& bsphere ) const;
 
             // surface area of the mesh in m^2
-            float32_t SurfaceArea( Math::Scale* scale = NULL ) const;
+            float32_t SurfaceArea( Scale* scale = NULL ) const;
 
             // can multiply each component by that component's scale^2 and sum to get scaled area
             // scaledArea = (areaVec.x * scale.x^2) + (areaVec.y * scale.y^2) + (areaVec.z * scale.z^2)
-            float32_t SurfaceAreaComponents( Math::Vector3& areaVec ) const;
+            float32_t SurfaceAreaComponents( Vector3& areaVec ) const;
 
             // verts-per-meter
             float32_t VertDensity() const;
 
             void GetEdges( S_MeshEdge& edges ) const;
-            void GetTriangle( uint32_t triIndex, Math::Vector3& v0, Math::Vector3& v1, Math::Vector3& v2, Math::Matrix4* transform = NULL );
+            void GetTriangle( uint32_t triIndex, Vector3& v0, Vector3& v1, Vector3& v2, Matrix4* transform = NULL );
             void WeldMeshVerts(const float32_t vertex_merge_threshold);
             uint32_t  GetEdgeIdForVerts(uint32_t vert_a, uint32_t vert_b);
             void AddTri(uint32_t vert_a, uint32_t vert_b, uint32_t vert_c);
-            uint32_t  GetClosestTri(const Math::Vector3& sphere_pos, const float32_t& sphere_rad);
+            uint32_t  GetClosestTri(const Vector3& sphere_pos, const float32_t& sphere_rad);
             void NopTrisByTriList(const std::vector< uint32_t >& ip_tris);
             void NopTrisByVertList(const std::vector< uint32_t >& ip_verts);
             void NopTrisByEdgeList( const std::vector< uint32_t >& ip_edges );
@@ -143,13 +143,13 @@ namespace Helium
             void DeleteTris(const std::vector< uint32_t >& ip_tris);
             void DeleteVerts(const std::vector< uint32_t >& ip_verts);
             void DeleteEdges( const std::vector< uint32_t >& ip_edges );
-            uint32_t  GetClosestVert(const Math::Vector3& sphere_start_pos, const float32_t& sphere_Rad, const Math::Vector3& swept_dir, const float32_t& len);
-            uint32_t  GetClosestVert(const Math::Matrix4& view_proj_mat, const float32_t porj_space_threshold_sqr, Math::Vector2 proj_pt);
-            uint32_t  GetClosestEdge(const Math::Vector3& sphere_start_pos, const float32_t& sphere_Rad, const Math::Vector3& swept_dir, const float32_t& len);
-            uint32_t  GetClosestTri(const Math::Vector3& sphere_start_pos, const float32_t& sphere_rad, const Math::Vector3& swept_dir, const float32_t& len);
+            uint32_t  GetClosestVert(const Vector3& sphere_start_pos, const float32_t& sphere_Rad, const Vector3& swept_dir, const float32_t& len);
+            uint32_t  GetClosestVert(const Matrix4& view_proj_mat, const float32_t porj_space_threshold_sqr, Vector2 proj_pt);
+            uint32_t  GetClosestEdge(const Vector3& sphere_start_pos, const float32_t& sphere_Rad, const Vector3& swept_dir, const float32_t& len);
+            uint32_t  GetClosestTri(const Vector3& sphere_start_pos, const float32_t& sphere_rad, const Vector3& swept_dir, const float32_t& len);
             void PruneInvalidTris();
             void MergeVertToClosest(uint32_t vert_id);
-            void PunchCubeHole(Math::Matrix4& mat, Math::Matrix4& inv_mat, float32_t vert_merge_threshold);
+            void PunchCubeHole(Matrix4& mat, Matrix4& inv_mat, float32_t vert_merge_threshold);
 
             uint32_t AddShader( Shader* shader );
 
@@ -164,22 +164,22 @@ namespace Helium
             //
 
             // The vertices that define the geometry of the mesh
-            Math::V_Vector3     m_Positions;
+            V_Vector3     m_Positions;
 
             // The vertex normals (disjoint from m_Vertices)
-            Math::V_Vector3     m_Normals;
+            V_Vector3     m_Normals;
 
             // vertex tangents -- these are not currently serialized
-            Math::V_Vector3     m_Tangents;
+            V_Vector3     m_Tangents;
 
             // vertex binormals -- these are not currently serialized
-            Math::V_Vector3     m_Binormals;
+            V_Vector3     m_Binormals;
 
             // The vertex colors
-            Math::V_Vector4     m_Colors;
+            V_Vector4     m_Colors;
 
             // The uv values for the base uv set
-            Math::V_Vector2     m_BaseUVs;
+            V_Vector2     m_BaseUVs;
 
             //
             // Indexed mesh data, indexes into above data

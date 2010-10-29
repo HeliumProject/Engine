@@ -4,80 +4,77 @@
 
 namespace Helium
 {
-    namespace Math
+    class Matrix4;
+
+    class FOUNDATION_API AlignedBox
     {
-        class Matrix4;
+    public:
+        Vector3 minimum;
+        Vector3 maximum;
+        bool seeded;
 
-        class FOUNDATION_API AlignedBox
+        const static AlignedBox Unit;
+        const static AlignedBox Singular;
+
+        AlignedBox      ()
         {
-        public:
-            Vector3 minimum;
-            Vector3 maximum;
-            bool seeded;
+            Reset();
+        }
 
-            const static AlignedBox Unit;
-            const static AlignedBox Singular;
+        AlignedBox      (const Vector3& min, const Vector3& max)
+            : minimum (min)
+            , maximum (max)
+            , seeded (false)
+        {
 
-            AlignedBox      ()
-            {
-                Reset();
-            }
+        }
 
-            AlignedBox      (const Vector3& min, const Vector3& max)
-                : minimum (min)
-                , maximum (max)
-                , seeded (false)
-            {
+        void            Reset ()
+        {
+            minimum = Vector3::Zero;
+            maximum = Vector3::Zero;
+            seeded = false;
+        }
 
-            }
+        bool            IsSingular () const
+        {
+            return (minimum == Vector3::Zero) && (maximum == Vector3::Zero);
+        }
 
-            void            Reset ()
-            {
-                minimum = Vector3::Zero;
-                maximum = Vector3::Zero;
-                seeded = false;
-            }
+        float32_t             Width () const
+        {
+            return maximum.x - minimum.x;
+        }
 
-            bool            IsSingular () const
-            {
-                return (minimum == Vector3::Zero) && (maximum == Vector3::Zero);
-            }
+        float32_t             Length () const
+        {
+            return maximum.y - minimum.y;
+        }
 
-            float32_t             Width () const
-            {
-                return maximum.x - minimum.x;
-            }
+        float32_t             Height () const
+        {
+            return maximum.z - minimum.z;
+        }
 
-            float32_t             Length () const
-            {
-                return maximum.y - minimum.y;
-            }
+        Vector3         Center () const
+        {
+            return (minimum + maximum) * 0.5f;
+        }
 
-            float32_t             Height () const
-            {
-                return maximum.z - minimum.z;
-            }
+        Vector3         ClosestCorner( const Vector3& v ) const;
 
-            Vector3         Center () const
-            {
-                return (minimum + maximum) * 0.5f;
-            }
+        Vector3 Test(Vector3 vertex);
 
-            Vector3         ClosestCorner( const Vector3& v ) const;
+        void Merge(const AlignedBox& box);
+        void Merge(const Vector3& position);
 
-            Vector3 Test(Vector3 vertex);
+        void Transform(const Matrix4& matrix);
+        void GetVertices(V_Vector3& vertices) const;
 
-            void Merge(const AlignedBox& box);
-            void Merge(const Vector3& position);
+        static void GetWireframe(const V_Vector3& vertices, V_Vector3& lineList, bool clear = true);
+        static void GetTriangulated(const V_Vector3& vertices, V_Vector3& triangleList, bool clear = true);
 
-            void Transform(const Matrix4& matrix);
-            void GetVertices(V_Vector3& vertices) const;
-
-            static void GetWireframe(const V_Vector3& vertices, V_Vector3& lineList, bool clear = true);
-            static void GetTriangulated(const V_Vector3& vertices, V_Vector3& triangleList, bool clear = true);
-
-            bool IntersectsSphere( const Vector3& pos, const float32_t radius ) const;
-            bool IntersectsBox( const AlignedBox& box ) const;
-        };
-    }
+        bool IntersectsSphere( const Vector3& pos, const float32_t radius ) const;
+        bool IntersectsBox( const AlignedBox& box ) const;
+    };
 }

@@ -57,7 +57,7 @@ project "LiteSQL"
 		"Dependencies/LiteSQL/src/generator/xmlparser.hpp",
 	}
 
-project "Lua"
+project "lua"
 	kind "StaticLib"
 	language "C++"
 	files

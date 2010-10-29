@@ -100,7 +100,7 @@ VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
     {
         m_CurrentViewMode = m_VaultSettings->m_VaultViewMode;
         m_CurrentThumbnailSize = m_VaultSettings->m_ThumbnailSize;
-        Math::Clamp( m_CurrentThumbnailSize, VaultThumbnailsSizes::Small, VaultThumbnailsSizes::Large );
+        Clamp( m_CurrentThumbnailSize, VaultThumbnailsSizes::Small, VaultThumbnailsSizes::Large );
         //m_VaultSettings->m_WindowSettings->ApplyToWindow( this, m_FrameManager, true );
     }
     
@@ -340,7 +340,7 @@ void VaultPanel::SaveSettings()
     {
         m_VaultSettings->m_VaultViewMode = m_CurrentViewMode;
         m_VaultSettings->m_ThumbnailSize = m_CurrentThumbnailSize;
-        Math::Clamp( m_VaultSettings->m_ThumbnailSize, VaultThumbnailsSizes::Small, VaultThumbnailsSizes::Large );
+        Clamp( m_VaultSettings->m_ThumbnailSize, VaultThumbnailsSizes::Small, VaultThumbnailsSizes::Large );
         //m_VaultSettings->m_WindowSettings->SetFromWindow( this, m_FrameManager );
     }
 }

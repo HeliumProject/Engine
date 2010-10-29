@@ -4,11 +4,8 @@
 
 namespace Helium
 {
-    namespace Math
-    {
-        class Vector3; 
-        class Vector4; 
-    }
+    class Vector3; 
+    class Vector4; 
 
     class BasicBuffer;
     typedef Helium::SmartPtr<BasicBuffer> BasicBufferPtr;
@@ -112,9 +109,9 @@ namespace Helium
         uint32_t AddF32(float32_t val, const tchar* dbgStr = NULL, ...);
         uint32_t AddF64(float64_t val, const tchar* dbgStr = NULL, ...);
 
-        uint32_t AddVector3( const Math::Vector3& v, const tchar* debugStr = NULL);
-        uint32_t AddVector4( const Math::Vector4& v, const tchar* debugStr = NULL);
-        uint32_t AddVector4( const Math::Vector3& v, float32_t w, const tchar* debugStr = NULL);
+        uint32_t AddVector3( const Vector3& v, const tchar* debugStr = NULL);
+        uint32_t AddVector4( const Vector4& v, const tchar* debugStr = NULL);
+        uint32_t AddVector4( const Vector3& v, float32_t w, const tchar* debugStr = NULL);
         uint32_t AddVector4( float32_t x, float32_t y, float32_t z, float32_t w, const tchar* debugStr = NULL);
 
         void AddAtLocI8(int8_t val, const BufferLocation& destination);

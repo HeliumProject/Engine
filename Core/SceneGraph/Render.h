@@ -38,15 +38,15 @@ namespace Helium
 
         struct Position
         {
-            Math::Vector3 m_Position;
+            Vector3 m_Position;
 
             Position()
-                : m_Position (Math::Vector3::Zero)
+                : m_Position (Vector3::Zero)
             {
 
             }
 
-            Position(const Math::Vector3& p)
+            Position(const Vector3& p)
                 : m_Position (p)
             {
 
@@ -61,24 +61,24 @@ namespace Helium
 
         struct PositionNormal
         {
-            Math::Vector3 m_Position;
-            Math::Vector3 m_Normal;
+            Vector3 m_Position;
+            Vector3 m_Normal;
 
             PositionNormal()
-                : m_Position (Math::Vector3::Zero)
-                , m_Normal (Math::Vector3::Zero)
+                : m_Position (Vector3::Zero)
+                , m_Normal (Vector3::Zero)
             {
 
             }
 
-            PositionNormal(const Math::Vector3& p)
+            PositionNormal(const Vector3& p)
                 : m_Position (p)
-                , m_Normal (Math::Vector3::Zero)
+                , m_Normal (Vector3::Zero)
             {
 
             }
 
-            PositionNormal(const Math::Vector3& p, const Math::Vector3& n)
+            PositionNormal(const Vector3& p, const Vector3& n)
                 : m_Position (p)
                 , m_Normal (n)
             {
@@ -87,7 +87,7 @@ namespace Helium
 
             PositionNormal(float32_t x, float32_t y, float32_t z)
                 : m_Position (x, y, z)
-                , m_Normal (Math::Vector3::Zero)
+                , m_Normal (Vector3::Zero)
             {
 
             }
@@ -102,24 +102,24 @@ namespace Helium
 
         struct PositionColored
         {
-            Math::Vector3 m_Position;
+            Vector3 m_Position;
             uint32_t m_Color;
 
             PositionColored()
-                : m_Position (Math::Vector3::Zero)
+                : m_Position (Vector3::Zero)
                 , m_Color (0)
             {
 
             }
 
-            PositionColored(const Math::Vector3& p)
+            PositionColored(const Vector3& p)
                 : m_Position (p)
                 , m_Color (0)
             {
 
             }
 
-            PositionColored(const Math::Vector3& p, uint32_t c)
+            PositionColored(const Vector3& p, uint32_t c)
                 : m_Position (p)
                 , m_Color (c)
             {
@@ -143,24 +143,24 @@ namespace Helium
 
         struct TransformedColored
         {
-            Math::Vector4 m_Position;
+            Vector4 m_Position;
             uint32_t m_Color;
 
             TransformedColored()
-                : m_Position (Math::Vector3::Zero)
+                : m_Position (Vector3::Zero)
                 , m_Color (0)
             {
 
             }
 
-            TransformedColored(const Math::Vector3& p)
+            TransformedColored(const Vector3& p)
                 : m_Position (p)
                 , m_Color (0)
             {
 
             }
 
-            TransformedColored(const Math::Vector3& p, uint32_t c)
+            TransformedColored(const Vector3& p, uint32_t c)
                 : m_Position (p)
                 , m_Color (c)
             {
@@ -184,21 +184,21 @@ namespace Helium
 
         struct StandardVertex
         {
-            Math::Vector3 m_Position;
-            Math::Vector3 m_Normal;
+            Vector3 m_Position;
+            Vector3 m_Normal;
             uint32_t           m_Diffuse;
-            Math::Vector2 m_BaseUV;
+            Vector2 m_BaseUV;
 
             StandardVertex()
-                : m_Position( Math::Vector3::Zero )
-                , m_Normal( Math::Vector3::Zero )
+                : m_Position( Vector3::Zero )
+                , m_Normal( Vector3::Zero )
                 , m_Diffuse( D3DCOLOR_ARGB(1, 0, 0, 0) )
-                , m_BaseUV( Math::Vector2::Zero )
+                , m_BaseUV( Vector2::Zero )
             {
 
             }
 
-            StandardVertex( const Math::Vector3& pos, const Math::Vector3& norm, uint32_t diffuse, const Math::Vector2& baseUV )
+            StandardVertex( const Vector3& pos, const Vector3& norm, uint32_t diffuse, const Vector2& baseUV )
                 : m_Position( pos )
                 , m_Normal( norm )
                 , m_Diffuse( diffuse )
@@ -210,10 +210,10 @@ namespace Helium
 
         struct PositionUV
         {
-            Math::Vector3 m_Position;
-            Math::Vector2 m_BaseUV;
+            Vector3 m_Position;
+            Vector2 m_BaseUV;
 
-            PositionUV( const Math::Vector3& pos = Math::Vector3::Zero, const Math::Vector2& uv = Math::Vector2::Zero )
+            PositionUV( const Vector3& pos = Vector3::Zero, const Vector2& uv = Vector2::Zero )
                 : m_Position( pos )
                 , m_BaseUV( uv )
             {
@@ -327,10 +327,10 @@ namespace Helium
             uint32_t m_Flags;
 
             // the centroid of the object
-            Math::Vector3 m_Center;
+            Vector3 m_Center;
 
             // the instance matrix for the object to draw
-            Math::Matrix4 m_Location;
+            Matrix4 m_Location;
 
             // called before and after instances of the same node is drawing
             SceneNodeFunction m_ObjectSetup;

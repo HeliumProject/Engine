@@ -42,7 +42,7 @@ void EnumerationSerializer::ConnectField(Helium::HybridPtr<Element> instance, co
     m_Enumeration = enumField->m_Enumeration;
 }
 
-bool EnumerationSerializer::Set(const Serializer* src, u32 flags)
+bool EnumerationSerializer::Set(const Serializer* src, uint32_t flags)
 {
     if (GetType() != src->GetType())
     {
@@ -105,7 +105,7 @@ void EnumerationSerializer::Serialize(Archive& archive) const
             }
 
             // get string pool index
-            i32 index = binary.GetStrings().Insert(label);
+            int32_t index = binary.GetStrings().Insert(label);
 
             // write that index
             binary.GetStream().Write(&index); 
@@ -148,7 +148,7 @@ void EnumerationSerializer::Deserialize(Archive& archive)
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            i32 index = -1;
+            int32_t index = -1;
             binary.GetStream().Read(&index); 
 
             if (index >= 0)

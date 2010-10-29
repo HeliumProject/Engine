@@ -11,7 +11,7 @@ using namespace Helium;
 using namespace Helium::SceneGraph;
 using namespace Helium::Editor;
 
-static const f32 g_MinTimeBetweenSceneEvents = 1000.0f;
+static const float32_t g_MinTimeBetweenSceneEvents = 1000.0f;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

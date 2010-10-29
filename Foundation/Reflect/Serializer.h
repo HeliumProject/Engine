@@ -184,7 +184,7 @@ namespace Helium
             template <class T>
             static SerializerPtr Create()
             {
-                i32 type = Reflect::GetType<T>();
+                int32_t type = Reflect::GetType<T>();
 
                 HELIUM_ASSERT( type != Reflect::ReservedTypes::Invalid );
 
@@ -251,13 +251,13 @@ namespace Helium
             //
 
             // check to see if a cast is supported
-            static bool CastSupported(i32 srcType, i32 destType);
+            static bool CastSupported(int32_t srcType, int32_t destType);
 
             // convert value data from one serializer to another
-            static bool CastValue(const Serializer* src, Serializer* dest, u32 flags = 0);
+            static bool CastValue(const Serializer* src, Serializer* dest, uint32_t flags = 0);
 
             // copies value data from one serializer to another
-            virtual bool Set(const Serializer* src, u32 flags = 0) = 0;
+            virtual bool Set(const Serializer* src, uint32_t flags = 0) = 0;
 
             // assign
             Serializer& operator=(const Serializer* rhs)
@@ -462,7 +462,7 @@ namespace Helium
 
 #define REFLECT_SPECIALIZE_SERIALIZER(Name) \
 typedef Helium::SmartPtr< Name > ##Name##Ptr; \
-template<> static inline i32 Reflect::GetType<Name::DataType>() \
+template<> static inline int32_t Reflect::GetType<Name::DataType>() \
 { \
     return Reflect::GetType<Name>(); \
 } \

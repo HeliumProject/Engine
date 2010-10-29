@@ -48,7 +48,7 @@ namespace Helium
         {
         protected:
             // flags
-            u32 m_Flags;
+            uint32_t m_Flags;
 
             // required for construction
             const SceneGraph::Camera* m_Camera;
@@ -74,22 +74,22 @@ namespace Helium
         public:
             virtual const PickTypes::PickType GetPickType() const = 0;
 
-            u32 GetFlags() const
+            uint32_t GetFlags() const
             {
                 return m_Flags;
             }
 
-            bool HasFlags(u32 flags) const
+            bool HasFlags(uint32_t flags) const
             {
                 return (m_Flags & flags) != 0;
             }
 
-            void SetFlags(u32 flags)
+            void SetFlags(uint32_t flags)
             {
                 m_Flags = flags;
             }
 
-            void SetFlag(u32 flag, bool value)
+            void SetFlag(uint32_t flag, bool value)
             {
                 if (value)
                 {
@@ -223,8 +223,8 @@ namespace Helium
         protected:
             // hit adding functions
             bool AddHitPoint(const Vector3& p, Vector3& offset);
-            bool AddHitSegment(const Vector3& p1,const Vector3& p2, f32 mu, Vector3& offset);
-            bool AddHitTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, f32 u, f32 v, bool interior, Vector3& vertex, Vector3& intersection, float distance);
+            bool AddHitSegment(const Vector3& p1,const Vector3& p2, float32_t mu, Vector3& offset);
+            bool AddHitTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, float32_t u, float32_t v, bool interior, Vector3& vertex, Vector3& intersection, float distance);
             bool AddHitTriangleClosestPoint(const Vector3& v0,const Vector3& v1,const Vector3& v2, const Vector3& point);
             bool AddHitBox(const AlignedBox& box, Vector3& intersection);
         };
@@ -377,7 +377,7 @@ namespace Helium
 
         private:
             bool m_HasVertex;
-            f32 m_VertexDistance;
+            float32_t m_VertexDistance;
             Vector3 m_Vertex;
 
         public:
@@ -386,7 +386,7 @@ namespace Helium
                 return m_HasVertex;
             }
 
-            f32 GetVertexDistance() const
+            float32_t GetVertexDistance() const
             {
                 return m_VertexDistance;
             }
@@ -397,7 +397,7 @@ namespace Helium
                 return m_Vertex;
             }
 
-            void SetVertex(const Vector3& value, f32 distance = BigFloat)
+            void SetVertex(const Vector3& value, float32_t distance = BigFloat)
             {
                 m_HasVertex = true;
                 m_VertexDistance = distance;
@@ -411,7 +411,7 @@ namespace Helium
 
         private:
             bool m_HasIntersection;
-            f32 m_IntersectionDistance;
+            float32_t m_IntersectionDistance;
             Vector3 m_Intersection;
 
         public:
@@ -420,7 +420,7 @@ namespace Helium
                 return m_HasIntersection;
             }
 
-            f32 GetIntersectionDistance() const
+            float32_t GetIntersectionDistance() const
             {
                 return m_IntersectionDistance;
             }
@@ -431,7 +431,7 @@ namespace Helium
                 return m_Intersection;
             }
 
-            void SetIntersection(const Vector3& value, f32 distance = BigFloat)
+            void SetIntersection(const Vector3& value, float32_t distance = BigFloat)
             {
                 m_Intersection = value;
                 m_IntersectionDistance = distance;

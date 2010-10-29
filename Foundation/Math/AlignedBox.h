@@ -41,17 +41,17 @@ namespace Helium
             return (minimum == Vector3::Zero) && (maximum == Vector3::Zero);
         }
 
-        f32             Width () const
+        float32_t             Width () const
         {
             return maximum.x - minimum.x;
         }
 
-        f32             Length () const
+        float32_t             Length () const
         {
             return maximum.y - minimum.y;
         }
 
-        f32             Height () const
+        float32_t             Height () const
         {
             return maximum.z - minimum.z;
         }
@@ -74,7 +74,7 @@ namespace Helium
         static void GetWireframe(const V_Vector3& vertices, V_Vector3& lineList, bool clear = true);
         static void GetTriangulated(const V_Vector3& vertices, V_Vector3& triangleList, bool clear = true);
 
-        bool IntersectsSphere( const Vector3& pos, const f32 radius ) const;
+        bool IntersectsSphere( const Vector3& pos, const float32_t radius ) const;
         bool IntersectsBox( const AlignedBox& box ) const;
     };
 }

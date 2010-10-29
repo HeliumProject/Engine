@@ -31,9 +31,9 @@ namespace Helium
 
         struct PopulateLinkArgs
         {
-            PopulateLinkArgs(u32 type) : m_Type (type) {}
+            PopulateLinkArgs(uint32_t type) : m_Type (type) {}
 
-            u32             m_Type;
+            uint32_t             m_Type;
             V_PopulateItem  m_Items;
         };
         typedef Helium::Signature< PopulateLinkArgs&> PopulateLinkSignature;

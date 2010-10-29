@@ -11,7 +11,7 @@ tstring Event::Dump() const
   if (IsValid())
   {
     // tuid          m_Id;
-    // u64           m_Created;
+    // uint64_t           m_Created;
     // tstring   m_Username;
     // tstring   m_Data;
     tostringstream str;

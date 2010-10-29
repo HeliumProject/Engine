@@ -184,7 +184,7 @@ void Matrix4::Decompose (Scale& scale, Shear& shear, EulerAngles& rotate, Vector
     rotate = rotateMatrix;
 }
 
-Matrix4 Matrix4::RotateX(f32 theta)
+Matrix4 Matrix4::RotateX(float32_t theta)
 {
     Matrix4 m = Identity;
     m[1][1] = m[2][2] = cos(theta);
@@ -193,7 +193,7 @@ Matrix4 Matrix4::RotateX(f32 theta)
     return m;
 }
 
-Matrix4 Matrix4::RotateY(f32 theta)
+Matrix4 Matrix4::RotateY(float32_t theta)
 {
     Matrix4 m = Identity;
     m[0][0] = m[2][2] = cos(theta);
@@ -202,7 +202,7 @@ Matrix4 Matrix4::RotateY(f32 theta)
     return m;
 }
 
-Matrix4 Matrix4::RotateZ(f32 theta)
+Matrix4 Matrix4::RotateZ(float32_t theta)
 {
     Matrix4 m = Identity;
     m[0][0] = m[1][1] = cos(theta);

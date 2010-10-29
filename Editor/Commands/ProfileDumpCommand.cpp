@@ -12,7 +12,7 @@ using namespace Helium;
 using namespace Helium::Profile;
 using namespace Helium::Editor;
 
-static u32 g_Indent = 0; 
+static uint32_t g_Indent = 0; 
 
 ProfileDumpCommand::ProfileDumpCommand()
 : Command( TXT( "profile-dump" ), TXT( "[<INPUT>]" ), TXT( "Dump text information about a profile data file" ) )
@@ -22,7 +22,7 @@ ProfileDumpCommand::ProfileDumpCommand()
 
 static void PrintIndent()
 {
-    for(u32 i = 0; i < g_Indent; ++i)
+    for(uint32_t i = 0; i < g_Indent; ++i)
     {
         Log::Print( TXT( " " ) ); 
     }
@@ -36,8 +36,8 @@ static void ParseAndPrintBlock(char* buffer)
     {
         UberPacket* uberPacket = (UberPacket*) currentByte; 
 
-        u16 cmd = uberPacket->m_Header.m_Command; 
-        u16 size = uberPacket->m_Header.m_Size; 
+        uint16_t cmd = uberPacket->m_Header.m_Command; 
+        uint16_t size = uberPacket->m_Header.m_Size; 
 
         const char* packet_names[] = { "INIT       ", 
             "SCOPE_ENTER", 
@@ -110,7 +110,7 @@ bool ProfileDumpCommand::Process( std::vector< tstring >::const_iterator& argsBe
     long filesize = ftell(file); 
     fseek(file, 0, SEEK_SET); 
 
-    u32 blockCount = filesize / PROFILE_PACKET_BLOCK_SIZE; 
+    uint32_t blockCount = filesize / PROFILE_PACKET_BLOCK_SIZE; 
 
     if( filesize % PROFILE_PACKET_BLOCK_SIZE != 0)
     {
@@ -124,7 +124,7 @@ bool ProfileDumpCommand::Process( std::vector< tstring >::const_iterator& argsBe
 
     char* buffer = new char[PROFILE_PACKET_BLOCK_SIZE]; 
 
-    for(u32 i = 0; i < blockCount; ++i)
+    for(uint32_t i = 0; i < blockCount; ++i)
     {
         size_t bytesRead = fread(buffer, 1, PROFILE_PACKET_BLOCK_SIZE, file); 
 

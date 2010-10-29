@@ -11,7 +11,7 @@ namespace Helium
 {
     namespace Log
     {
-        const static u32 MAX_PRINT_SIZE = 8192;
+        const static uint32_t MAX_PRINT_SIZE = 8192;
 
 
         //
@@ -63,7 +63,7 @@ namespace Helium
             };
         }
 
-        typedef u32 Stream; 
+        typedef uint32_t Stream; 
 
         //
         // Verbosity levels, these speak to the quantitative value of the print:
@@ -166,17 +166,17 @@ namespace Helium
         //
 
         // the trace file gets everything Console delivers to the console and more
-        FOUNDATION_API bool AddTraceFile( const tstring& fileName, Stream stream, u32 threadId = -1, bool append = false );
+        FOUNDATION_API bool AddTraceFile( const tstring& fileName, Stream stream, uint32_t threadId = -1, bool append = false );
         FOUNDATION_API void RemoveTraceFile( const tstring& fileName );
 
-        template <bool (*AddFunc)(const tstring& fileName, Stream stream, u32 threadId, bool append), void (*RemoveFunc)(const tstring& fileName)>
+        template <bool (*AddFunc)(const tstring& fileName, Stream stream, uint32_t threadId, bool append), void (*RemoveFunc)(const tstring& fileName)>
         class FileHandle
         {
         private:
             tstring m_File;
 
         public:
-            FileHandle(const tstring& file, Stream stream, u32 threadId = -1, bool append = false )
+            FileHandle(const tstring& file, Stream stream, uint32_t threadId = -1, bool append = false )
                 : m_File (file)
             {
                 if (!m_File.empty())
@@ -251,13 +251,13 @@ namespace Helium
             Color color = Colors::Auto,        // the color to use (None for auto)
             int indent = -1,                   // the amount to indent
             tchar* output = NULL,               // the buffer to copy the result string to
-            u32 outputSize = 0);               // the size of the output buffer
+            uint32_t outputSize = 0);               // the size of the output buffer
 
         // print a persisted print statment
         FOUNDATION_API void PrintStatement(const Statement& statement);
 
         // print several statements
-        FOUNDATION_API void PrintStatements(const V_Statement& statements, u32 streams = Streams::All);
+        FOUNDATION_API void PrintStatements(const V_Statement& statements, uint32_t streams = Streams::All);
 
         // simple way to print a particular color
         FOUNDATION_API void PrintColor(Color color, const tchar* fmt, ...);
@@ -329,24 +329,24 @@ namespace Helium
         class FOUNDATION_API Listener
         {
         public:
-            Listener( u32 throttle = Log::Streams::All, u32* errorCount = NULL, u32* warningCount = NULL, Log::V_Statement* consoleOutput = NULL );
+            Listener( uint32_t throttle = Log::Streams::All, uint32_t* errorCount = NULL, uint32_t* warningCount = NULL, Log::V_Statement* consoleOutput = NULL );
             ~Listener();
 
             void Start();
             void Stop();
             void Dump(bool stop = true);
 
-            u32 GetWarningCount();
-            u32 GetErrorCount();
+            uint32_t GetWarningCount();
+            uint32_t GetErrorCount();
 
         private:
             void Print( Log::PrintingArgs& args );
 
         private:
-            u32                   m_Thread;
-            u32                   m_Throttle;
-            u32*                  m_ErrorCount;
-            u32*                  m_WarningCount;
+            uint32_t                   m_Thread;
+            uint32_t                   m_Throttle;
+            uint32_t*                  m_ErrorCount;
+            uint32_t*                  m_WarningCount;
             Log::V_Statement*     m_LogOutput;
         };
     }

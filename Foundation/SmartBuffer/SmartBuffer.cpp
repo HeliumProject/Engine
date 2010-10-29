@@ -8,7 +8,7 @@
 using namespace Helium;
 
 // These are project specific, and in the order of PC, PS3
-const u32 SmartBuffer::s_PointerSizes[ 2 ] = { 4, 4 }; // big and little endian
+const uint32_t SmartBuffer::s_PointerSizes[ 2 ] = { 4, 4 }; // big and little endian
 const bool SmartBuffer::s_BigEndian[ 2 ] = { false, true };
 
 // For profiling memory usage
@@ -25,7 +25,7 @@ Fixup::~Fixup()
     HELIUM_ASSERT( m_RefCount == 0 );
 }
 
-PointerFixup::PointerFixup(u32 size)
+PointerFixup::PointerFixup(uint32_t size)
 : Fixup()
 , m_HasReference ( false )
 , m_Size (size)
@@ -82,7 +82,7 @@ bool PointerFixup::DoFixup( const DumbBufferLocation& source_location )
     HELIUM_ASSERT( source_location.second != NULL );
     HELIUM_ASSERT( source_location.first <= source_location.second->GetSize() );
 
-    u32          source_offset = source_location.first;
+    uint32_t          source_offset = source_location.first;
     SmartBuffer* source_buffer = source_location.second;
     void**       source_addr   = (void**)(source_buffer->GetData() + source_offset);
 
@@ -93,7 +93,7 @@ bool PointerFixup::DoFixup( const DumbBufferLocation& source_location )
         HELIUM_ASSERT( m_Destination.first <= m_Destination.second->GetSize() );
 
         // get the destination offset & buffer
-        u32          destination_offset = m_Destination.first;
+        uint32_t          destination_offset = m_Destination.first;
         SmartBuffer* destination_buffer = m_Destination.second;
 
         // set the correct value
@@ -187,12 +187,12 @@ bool OffsetFixup::DoFixup( const DumbBufferLocation& source_location )
     HELIUM_ASSERT( source_location.second != NULL );
     HELIUM_ASSERT( source_location.first <= source_location.second->GetSize() );
 
-    u32          source_offset = source_location.first;
+    uint32_t          source_offset = source_location.first;
     SmartBuffer* source_buffer = source_location.second;
     void**       source_addr   = (void**)(source_buffer->GetData() + source_offset);
 
     // set a temporary value
-    *(i32*)source_addr = 0;
+    *(int32_t*)source_addr = 0;
 
     if ( m_Destination.second != NULL )
     {
@@ -201,12 +201,12 @@ bool OffsetFixup::DoFixup( const DumbBufferLocation& source_location )
         HELIUM_ASSERT( m_Destination.first <= m_Destination.second->GetSize() );
 
         // get the destination offset & buffer
-        u32          destination_offset = m_Destination.first;
+        uint32_t          destination_offset = m_Destination.first;
         SmartBuffer* destination_buffer = m_Destination.second;
 
         if ( destination_buffer == source_buffer )
         {
-            *(i32*)source_addr = destination_offset - source_offset;
+            *(int32_t*)source_addr = destination_offset - source_offset;
         }
 
         // insert the fixups into our hashes
@@ -237,7 +237,7 @@ bool OffsetFixup::DoFixup( const DumbBufferLocation& source_location )
     }
 }
 
-VTableFixup::VTableFixup( u32 class_index, u32 size )
+VTableFixup::VTableFixup( uint32_t class_index, uint32_t size )
 : Fixup()
 , m_ClassIndex ( class_index )
 , m_Size ( size )
@@ -250,12 +250,12 @@ bool VTableFixup::DoFixup( const DumbBufferLocation& source_location )
     HELIUM_ASSERT( source_location.second != NULL );
     HELIUM_ASSERT( source_location.first <= source_location.second->GetSize() );
 
-    u32          source_offset = source_location.first;
+    uint32_t          source_offset = source_location.first;
     SmartBuffer* source_buffer = source_location.second;
     void*        source_addr   = (void*)(source_buffer->GetData() + source_offset);
 
     // set our index into the buffer
-    *(u32*)source_addr = m_ClassIndex;
+    *(uint32_t*)source_addr = m_ClassIndex;
 
     // win
     return true;
@@ -316,7 +316,7 @@ void* SmartBuffer::operator new (size_t bytes)
         initialized = true;
     }
 
-    Profile::Memory::Allocate( s_ObjectPool, (u32)bytes );
+    Profile::Memory::Allocate( s_ObjectPool, (uint32_t)bytes );
 
     return ::malloc(bytes);
 }
@@ -325,7 +325,7 @@ void SmartBuffer::operator delete (void *ptr, size_t bytes)
 {
     ::free(ptr);
 
-    Profile::Memory::Deallocate( s_ObjectPool, (u32)bytes );
+    Profile::Memory::Deallocate( s_ObjectPool, (uint32_t)bytes );
 }
 
 void SmartBuffer::Reset()
@@ -369,7 +369,7 @@ void SmartBuffer::Reset()
     m_Capacity = 0;
 }
 
-void SmartBuffer::TakeData( u32& size, u8*& data )
+void SmartBuffer::TakeData( uint32_t& size, uint8_t*& data )
 {
     HELIUM_ASSERT( m_OwnsData );
     if ( m_OwnsData )
@@ -388,7 +388,7 @@ void SmartBuffer::TakeData( u32& size, u8*& data )
     }
 }
 
-void SmartBuffer::SetMaxSize(u32 max)
+void SmartBuffer::SetMaxSize(uint32_t max)
 {
     HELIUM_ASSERT( m_OwnsData );
     HELIUM_ASSERT( m_Size == 0 );
@@ -397,7 +397,7 @@ void SmartBuffer::SetMaxSize(u32 max)
     m_MaxSize = max;
 }
 
-void SmartBuffer::SetVirtual(u32 size)
+void SmartBuffer::SetVirtual(uint32_t size)
 {
     // cannot set virtual on a buffer which is not owned or has been used
     HELIUM_ASSERT( m_OwnsData );
@@ -411,7 +411,7 @@ void SmartBuffer::SetVirtual(u32 size)
     size = (size+4095) & ~4095;
 
     // allocate
-    m_Data = (u8*)::VirtualAlloc(0,size,MEM_RESERVE,PAGE_READWRITE);
+    m_Data = (uint8_t*)::VirtualAlloc(0,size,MEM_RESERVE,PAGE_READWRITE);
     if (m_Data==0)
     {
         throw Helium::Exception( TXT( "Out of virtual memory." ) );
@@ -425,7 +425,7 @@ void SmartBuffer::SetVirtual(u32 size)
     SetMaxSize(size);
 }
 
-void SmartBuffer::GrowBy(u32 size)
+void SmartBuffer::GrowBy(uint32_t size)
 {
     HELIUM_ASSERT( m_OwnsData );
 
@@ -440,7 +440,7 @@ void SmartBuffer::GrowBy(u32 size)
             }
 
             // calculate how may new bytes we need to allocate and align that to a page boundary
-            u32 difference = size - (m_Capacity - m_Size);
+            uint32_t difference = size - (m_Capacity - m_Size);
             difference = (difference + 4095) &~ 4095;
 
             // profiler keeps the allocation count so deallocate our old size and allocate our new total
@@ -458,7 +458,7 @@ void SmartBuffer::GrowBy(u32 size)
                 throw Helium::Exception( TXT( "Exceeded max size of SmartBuffer (id 0x%x)" ), m_Type);
             }
 
-            u32 difference = m_Size + size - m_Capacity;
+            uint32_t difference = m_Size + size - m_Capacity;
 
             // profiler keeps the allocation count so deallocate our old size and allocate our new total
             Profile::Memory::Deallocate( s_DataPool, m_Capacity );
@@ -481,13 +481,13 @@ void SmartBuffer::GrowBy(u32 size)
             m_Capacity += difference;
 
             // set the additional memory to 0
-            memset( (void*)((u8*)ptr + m_Size), 0, m_Capacity - m_Size );
+            memset( (void*)((uint8_t*)ptr + m_Size), 0, m_Capacity - m_Size );
 
             // if realloc changes our ptr, we need to redo fixups
             if ( ptr != m_Data )
             {
                 // cache the pointer
-                m_Data = (u8*)ptr;
+                m_Data = (uint8_t*)ptr;
 
                 // Fix incoming pointers
                 if ( !m_IncomingFixups.Empty() )
@@ -511,7 +511,7 @@ void SmartBuffer::GrowBy(u32 size)
     }
 }
 
-void SmartBuffer::Resize(u32 size)
+void SmartBuffer::Resize(uint32_t size)
 {
     if ( m_OwnsData && m_Size == 0 && m_Capacity == 0 )
     {
@@ -525,7 +525,7 @@ void SmartBuffer::Resize(u32 size)
     }
 }
 
-void SmartBuffer::Reserve(u32 size)
+void SmartBuffer::Reserve(uint32_t size)
 {
     if ( m_OwnsData && m_Size == 0 && m_Capacity == 0 )
     {
@@ -594,7 +594,7 @@ void SmartBuffer::CollectChildren( S_SmartBufferPtr& buffers )
     }
 }
 
-void SmartBuffer::InheritFixups( const SmartBufferPtr& buffer, u32 offset )
+void SmartBuffer::InheritFixups( const SmartBufferPtr& buffer, uint32_t offset )
 {
     // inherit all the incoming fixups
     if ( !buffer->GetIncomingFixups().Empty() )
@@ -742,7 +742,7 @@ bool SmartBuffer::AddOffsetFixup( const BufferLocation& source, const BufferLoca
     HELIUM_ASSERT( source.first <= source.second->m_Size );
 
     // get the source offset, buffer, & address
-    u32          source_offset = source.first;
+    uint32_t          source_offset = source.first;
     SmartBuffer* source_buffer = source.second.Ptr();
 
     // find the offset within our data
@@ -754,14 +754,14 @@ bool SmartBuffer::AddOffsetFixup( const BufferLocation& source, const BufferLoca
     return AddFixup( source_location, new_fixup );
 }
 
-bool SmartBuffer::AddPointerFixup( const BufferLocation& source, const BufferLocation& destination, u32 size )
+bool SmartBuffer::AddPointerFixup( const BufferLocation& source, const BufferLocation& destination, uint32_t size )
 {
     // double check the source data
     HELIUM_ASSERT( source.second != NULL );
     HELIUM_ASSERT( source.first <= source.second->m_Size );
 
     // get the source offset, buffer, & address
-    u32          source_offset = source.first;
+    uint32_t          source_offset = source.first;
     SmartBuffer* source_buffer = source.second.Ptr();
 
     // find the offset within our data
@@ -778,14 +778,14 @@ bool SmartBuffer::AddPointerFixup( const BufferLocation& source, const BufferLoc
     return AddFixup( source_location, new_fixup );
 }
 
-bool SmartBuffer::AddVTableFixup( const BufferLocation& source, u32 class_index, u32 size )
+bool SmartBuffer::AddVTableFixup( const BufferLocation& source, uint32_t class_index, uint32_t size )
 {  
     // double check the source data
     HELIUM_ASSERT( source.second != NULL );
     HELIUM_ASSERT( source.first <= source.second->m_Size );
 
     // get the source offset, buffer, & address
-    u32          source_offset = source.first;
+    uint32_t          source_offset = source.first;
     SmartBuffer* source_buffer = source.second.Ptr();
 
     // find the offset within our data
@@ -801,76 +801,76 @@ bool SmartBuffer::AddVTableFixup( const BufferLocation& source, u32 class_index,
     return AddFixup( source_location, new_fixup );
 }
 
-void SmartBuffer::Write(const BufferLocation& pointer,const void* src,u32 size)
+void SmartBuffer::Write(const BufferLocation& pointer,const void* src,uint32_t size)
 {
     HELIUM_ASSERT( pointer.second != NULL );
     HELIUM_ASSERT( pointer.first <= pointer.second->m_Size );
 
-    u32          p_offset = pointer.first;
+    uint32_t          p_offset = pointer.first;
     SmartBuffer* p_buffer = pointer.second.Ptr();
 
     // the new data cannot go outside the existing buffer
     HELIUM_ASSERT( p_buffer->m_OwnsData );
     HELIUM_ASSERT( p_buffer->GetSize() >= p_offset + size );
 
-    u8* dst = p_buffer->m_Data+p_offset;
+    uint8_t* dst = p_buffer->m_Data+p_offset;
     memcpy(dst,src,size);
 }
 
-void SmartBuffer::WriteI8(const BufferLocation& pointer,i8 val)
+void SmartBuffer::WriteI8(const BufferLocation& pointer,int8_t val)
 {
-    Write(pointer,&val,sizeof(i8));
+    Write(pointer,&val,sizeof(int8_t));
 }
 
-void SmartBuffer::WriteU8(const BufferLocation& pointer,u8 val)
+void SmartBuffer::WriteU8(const BufferLocation& pointer,uint8_t val)
 {
-    Write(pointer,&val,sizeof(u8));
+    Write(pointer,&val,sizeof(uint8_t));
 }
 
-void SmartBuffer::WriteI16(const BufferLocation& pointer,i16 val)
+void SmartBuffer::WriteI16(const BufferLocation& pointer,int16_t val)
 {
     val = ConvertEndian(val,pointer.second->IsPlatformBigEndian());
-    Write(pointer,&val,sizeof(i16));
+    Write(pointer,&val,sizeof(int16_t));
 }
 
-void SmartBuffer::WriteU16(const BufferLocation& pointer,u16 val)
+void SmartBuffer::WriteU16(const BufferLocation& pointer,uint16_t val)
 {
     val = ConvertEndian(val,pointer.second->IsPlatformBigEndian());
-    Write(pointer,&val,sizeof(u16));
+    Write(pointer,&val,sizeof(uint16_t));
 }
 
-void SmartBuffer::WriteI32(const BufferLocation& pointer,i32 val)
+void SmartBuffer::WriteI32(const BufferLocation& pointer,int32_t val)
 {
     val = ConvertEndian(val,pointer.second->IsPlatformBigEndian());
-    Write(pointer,&val,sizeof(i32));
+    Write(pointer,&val,sizeof(int32_t));
 }
 
-void SmartBuffer::WriteU32(const BufferLocation& pointer,u32 val)
+void SmartBuffer::WriteU32(const BufferLocation& pointer,uint32_t val)
 {
     val = ConvertEndian(val,pointer.second->IsPlatformBigEndian());
-    Write(pointer,&val,sizeof(u32));
+    Write(pointer,&val,sizeof(uint32_t));
 }
 
-void SmartBuffer::WriteI64(const BufferLocation& pointer,i64 val)
+void SmartBuffer::WriteI64(const BufferLocation& pointer,int64_t val)
 {
     val = ConvertEndian(val,pointer.second->IsPlatformBigEndian());
-    Write(pointer,&val,sizeof(i64));
+    Write(pointer,&val,sizeof(int64_t));
 }
 
-void SmartBuffer::WriteU64(const BufferLocation& pointer,u64 val)
+void SmartBuffer::WriteU64(const BufferLocation& pointer,uint64_t val)
 {
     val = ConvertEndian(val,pointer.second->IsPlatformBigEndian());
-    Write(pointer,&val,sizeof(u64));
+    Write(pointer,&val,sizeof(uint64_t));
 }
 
-void SmartBuffer::WriteF32(const BufferLocation& pointer,f32 val)
+void SmartBuffer::WriteF32(const BufferLocation& pointer,float32_t val)
 {
-    u32 v = ConvertEndianFloatToU32(val,pointer.second->IsPlatformBigEndian());
+    uint32_t v = ConvertEndianFloatToU32(val,pointer.second->IsPlatformBigEndian());
     Write(pointer,&v,sizeof(v));
 }
 
-void SmartBuffer::WriteF64(const BufferLocation& pointer,f64 val)
+void SmartBuffer::WriteF64(const BufferLocation& pointer,float64_t val)
 {
-    u64 v = ConvertEndianDoubleToU64(val,pointer.second->IsPlatformBigEndian());
+    uint64_t v = ConvertEndianDoubleToU64(val,pointer.second->IsPlatformBigEndian());
     Write(pointer,&v,sizeof(v));
 }

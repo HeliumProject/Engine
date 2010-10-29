@@ -151,7 +151,7 @@ namespace Helium
 
             bool ValidPosition( const AlignedBox& bounds, const Vector3& translation, float minDistance );
 
-            void CalculateInstanceRadiusAndBounds( f32& instanceRadius, AlignedBox& bounds );
+            void CalculateInstanceRadiusAndBounds( float32_t& instanceRadius, AlignedBox& bounds );
 
         protected:
             void RefreshInstance( void );

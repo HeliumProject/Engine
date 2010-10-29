@@ -17,9 +17,9 @@ namespace Helium
             std::set< Helium::Path > m_BlendTextures;
             std::set< Helium::Path > m_LooseTextures;
 
-            u32 m_TriangleCount;
+            uint32_t m_TriangleCount;
 
-            u32 m_MentalRayShaderCount;
+            uint32_t m_MentalRayShaderCount;
 
             bool m_LightMapped;
 

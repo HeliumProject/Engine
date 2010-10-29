@@ -23,7 +23,7 @@ namespace Helium
 
             virtual void Initialize(Scene* scene) HELIUM_OVERRIDE;
 
-            virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
+            virtual int32_t GetImageIndex() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
 
             virtual void Render( RenderVisitor* render ) HELIUM_OVERRIDE;

@@ -21,8 +21,8 @@ namespace Helium
         class SceneOutlinerState
         {
         protected:
-            i32 m_HorizScrollPos;
-            i32 m_VertScrollPos;
+            int32_t m_HorizScrollPos;
+            int32_t m_VertScrollPos;
             std::set< Reflect::Object* > m_ExpandedObjects;
 
         public:
@@ -30,10 +30,10 @@ namespace Helium
             virtual ~SceneOutlinerState();
             void Reset();
 
-            i32 GetHorizontalScrollBarPos() const;
-            void SetHorizontalScrollBarPos( i32 pos );
-            i32 GetVerticalScrollBarPos() const;
-            void SetVerticalScrollBarPos( i32 pos );
+            int32_t GetHorizontalScrollBarPos() const;
+            void SetHorizontalScrollBarPos( int32_t pos );
+            int32_t GetVerticalScrollBarPos() const;
+            void SetVerticalScrollBarPos( int32_t pos );
             void AddExpandedObject( Reflect::Object* object );
             void RemoveExpandedObject( Reflect::Object* object );
             bool IsExpanded( Reflect::Object* object );

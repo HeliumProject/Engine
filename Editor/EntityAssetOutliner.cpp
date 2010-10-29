@@ -121,7 +121,7 @@ void EntityAssetOutliner::AddEntitySet( SceneGraph::EntitySet* classSet )
         bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
         m_TreeCtrl->DisableSorting();
 
-        const i32 image = GlobalFileIconsTable().GetIconID( TXT( "folder" ) );
+        const int32_t image = GlobalFileIconsTable().GetIconID( TXT( "folder" ) );
         wxTreeItemId classItem = AddItem( m_InvisibleRoot, 
             classSet->GetName(), 
             image, 

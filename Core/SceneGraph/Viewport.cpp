@@ -128,7 +128,7 @@ Viewport::~Viewport()
     m_DeviceManager.RemoveDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &Viewport::ReleaseResources ) );
     m_DeviceManager.RemoveDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &Viewport::AllocateResources ) );
 
-    for (u32 i=0; i<GlobalPrimitives::Count; i++)
+    for (uint32_t i=0; i<GlobalPrimitives::Count; i++)
         delete m_GlobalPrimitives[i];
 
     delete m_Statistics;
@@ -144,7 +144,7 @@ void Viewport::Reset()
         return;
     }
 
-    for (u32 i=0; i<CameraModes::Count; i++)
+    for (uint32_t i=0; i<CameraModes::Count; i++)
     {
         m_Cameras[i].Reset();
     }
@@ -358,7 +358,7 @@ void Viewport::InitCameras()
     m_Cameras[ CameraModes::Orbit ].AddMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
 }
 
-void Viewport::SetSize(u32 x, u32 y)
+void Viewport::SetSize(uint32_t x, uint32_t y)
 {
     m_Size.x = x;
     m_Size.y = y;
@@ -503,12 +503,12 @@ void Viewport::MouseUp( const Helium::MouseButtonInput& input )
                 else 
                 {
                     Frustum worldSpaceFrustum;
-                    if ( m_Cameras[m_CameraMode].ViewportToFrustum( (f32)m_SelectionFrame->m_Start.x, (f32)m_SelectionFrame->m_Start.y, (f32)m_SelectionFrame->m_End.x, (f32)m_SelectionFrame->m_End.y, worldSpaceFrustum) )
+                    if ( m_Cameras[m_CameraMode].ViewportToFrustum( (float32_t)m_SelectionFrame->m_Start.x, (float32_t)m_SelectionFrame->m_Start.y, (float32_t)m_SelectionFrame->m_End.x, (float32_t)m_SelectionFrame->m_End.y, worldSpaceFrustum) )
                     {
                         Point center ( m_SelectionFrame->m_Start + m_SelectionFrame->m_End / 2 );
 
                         Line line;
-                        m_Cameras[m_CameraMode].ViewportToLine( (f32)center.x, (f32)center.y, line);
+                        m_Cameras[m_CameraMode].ViewportToLine( (float32_t)center.x, (float32_t)center.y, line);
 
                         pick = new FrustumLinePickVisitor(&m_Cameras[m_CameraMode], line, worldSpaceFrustum );
                         targetMode = SelectionTargetModes::Multiple;
@@ -550,12 +550,12 @@ void Viewport::MouseUp( const Helium::MouseButtonInput& input )
                 {
                     Frustum worldSpaceFrustum;
 
-                    if ( m_Cameras[m_CameraMode].ViewportToFrustum( (f32)m_SelectionFrame->m_Start.x, (f32)m_SelectionFrame->m_Start.y, (f32)m_SelectionFrame->m_End.x, (f32)m_SelectionFrame->m_End.y, worldSpaceFrustum) )
+                    if ( m_Cameras[m_CameraMode].ViewportToFrustum( (float32_t)m_SelectionFrame->m_Start.x, (float32_t)m_SelectionFrame->m_Start.y, (float32_t)m_SelectionFrame->m_End.x, (float32_t)m_SelectionFrame->m_End.y, worldSpaceFrustum) )
                     {
                         Point center ( m_SelectionFrame->m_Start + m_SelectionFrame->m_End / 2 );
 
                         Line line;
-                        m_Cameras[m_CameraMode].ViewportToLine( (f32)center.x, (f32)center.y, line);
+                        m_Cameras[m_CameraMode].ViewportToLine( (float32_t)center.x, (float32_t)center.y, line);
 
                         pick = new FrustumLinePickVisitor (&m_Cameras[m_CameraMode], line, worldSpaceFrustum); 
                         targetMode = SelectionTargetModes::Multiple;
@@ -728,12 +728,12 @@ void Viewport::MouseMove( const Helium::MouseMoveInput& input )
         {
             Frustum worldSpaceFrustum;
 
-            if ( m_Cameras[m_CameraMode].ViewportToFrustum( (f32)highlightStartX, (f32)highlightStartY, (f32)highlightEndX, (f32)highlightEndY, worldSpaceFrustum) )
+            if ( m_Cameras[m_CameraMode].ViewportToFrustum( (float32_t)highlightStartX, (float32_t)highlightStartY, (float32_t)highlightEndX, (float32_t)highlightEndY, worldSpaceFrustum) )
             {
                 Point center ( Point (highlightStartX, highlightStartY) + Point (highlightEndX, highlightEndY) / 2 );
 
                 Line line;
-                m_Cameras[m_CameraMode].ViewportToLine( (f32)center.x, (f32)center.y, line);
+                m_Cameras[m_CameraMode].ViewportToLine( (float32_t)center.x, (float32_t)center.y, line);
 
                 pick = new FrustumLinePickVisitor( &m_Cameras[m_CameraMode], line, worldSpaceFrustum );
                 targetMode = SelectionTargetModes::Multiple;
@@ -770,7 +770,7 @@ void Viewport::Draw()
 
     CORE_RENDER_SCOPE_TIMER( ("") );
 
-    u64 start = Helium::TimerGetClock();
+    uint64_t start = Helium::TimerGetClock();
 
     DrawArgs args;
 
@@ -934,7 +934,7 @@ void Viewport::Draw()
             unsigned x = m_Size.x;
             unsigned y = m_Size.y;
 
-            u32 color = D3DCOLOR_ARGB(255, 200, 200, 200);
+            uint32_t color = D3DCOLOR_ARGB(255, 200, 200, 200);
 
             std::vector< TransformedColored > vertices;
 

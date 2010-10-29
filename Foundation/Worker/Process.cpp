@@ -206,7 +206,7 @@ IPC::Message* Process::Receive(bool wait)
     return msg;
 }
 
-bool Process::Send(u32 id, u32 size, const u8* data)
+bool Process::Send(uint32_t id, uint32_t size, const uint8_t* data)
 {
     // mutex from kill
     Helium::TakeMutex mutex ( m_KillMutex );

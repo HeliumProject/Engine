@@ -133,15 +133,15 @@ void Skin::Evaluate(GraphDirection direction)
 
                 V_Polygon::const_iterator itr = m_Mesh->m_Polygons.begin();
                 V_Polygon::const_iterator end = m_Mesh->m_Polygons.end();
-                for ( u32 i = 0; itr != end; ++itr, ++i )
+                for ( uint32_t i = 0; itr != end; ++itr, ++i )
                 {
                     Matrix4 matrix;
 
                     const PolygonPtr& polygon (*itr);
 
-                    std::vector< u32 >::const_iterator normalItr = polygon->m_Normals.begin();
-                    std::vector< u32 >::const_iterator normalEnd = polygon->m_Normals.end();
-                    for ( u32 j = 0; normalItr != normalEnd; ++normalItr, ++j )
+                    std::vector< uint32_t >::const_iterator normalItr = polygon->m_Normals.begin();
+                    std::vector< uint32_t >::const_iterator normalEnd = polygon->m_Normals.end();
+                    for ( uint32_t j = 0; normalItr != normalEnd; ++normalItr, ++j )
                     {
                         if ( j > 2 )
                         {
@@ -170,13 +170,13 @@ void Skin::Evaluate(GraphDirection direction)
 
                 V_Polygon::const_iterator itr = m_Mesh->m_Polygons.begin();
                 V_Polygon::const_iterator end = m_Mesh->m_Polygons.end();
-                for ( u32 i = 0; itr != end; ++itr, ++i )
+                for ( uint32_t i = 0; itr != end; ++itr, ++i )
                 {
                     const PolygonPtr& polygon (*itr);
 
-                    std::vector< u32 >::const_iterator vertexItr = polygon->m_Vertices.begin();
-                    std::vector< u32 >::const_iterator vertexEnd = polygon->m_Vertices.end();
-                    for ( u32 j = 0; vertexItr != vertexEnd; ++vertexItr, ++j )
+                    std::vector< uint32_t >::const_iterator vertexItr = polygon->m_Vertices.begin();
+                    std::vector< uint32_t >::const_iterator vertexEnd = polygon->m_Vertices.end();
+                    for ( uint32_t j = 0; vertexItr != vertexEnd; ++vertexItr, ++j )
                     {
                         if ( j > 2 )
                         {
@@ -204,13 +204,13 @@ void Skin::Evaluate(GraphDirection direction)
 
                 V_Polygon::const_iterator itr = m_Mesh->m_Polygons.begin();
                 V_Polygon::const_iterator end = m_Mesh->m_Polygons.end();
-                for ( u32 i = 0; itr != end; ++itr, ++i )
+                for ( uint32_t i = 0; itr != end; ++itr, ++i )
                 {
                     const PolygonPtr& polygon (*itr);
 
-                    std::vector< u32 >::const_iterator normalItr = polygon->m_Normals.begin();
-                    std::vector< u32 >::const_iterator normalEnd = polygon->m_Normals.end();
-                    for ( u32 j = 0; normalItr != normalEnd; ++normalItr, ++j )
+                    std::vector< uint32_t >::const_iterator normalItr = polygon->m_Normals.begin();
+                    std::vector< uint32_t >::const_iterator normalEnd = polygon->m_Normals.end();
+                    for ( uint32_t j = 0; normalItr != normalEnd; ++normalItr, ++j )
                     {
                         if ( j > 2 )
                         {
@@ -248,8 +248,8 @@ void Skin::BlendMatrix(const Transform* transform, const Influence* influence, M
 
     matrix = ( m_DeformMatrices[influence->m_Objects[0]] * influence->m_Weights[0] );
 
-    const u32 numInf = static_cast< u32 >( influence->m_Objects.size() );
-    for ( u32 j = 1; j < numInf; j++ )
+    const uint32_t numInf = static_cast< uint32_t >( influence->m_Objects.size() );
+    for ( uint32_t j = 1; j < numInf; j++ )
     {
         matrix += ( m_DeformMatrices[influence->m_Objects[j]] * influence->m_Weights[j] );
     }

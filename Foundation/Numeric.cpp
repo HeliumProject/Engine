@@ -6,67 +6,67 @@ static void Test( bool clamp )
 {
     // 32->32 int
     {
-        i32 source = NumericLimits<i32>::Maximum;
-        u32 dest = 0;
+        int32_t source = NumericLimits<int32_t>::Maximum;
+        uint32_t dest = 0;
         RangeCast( source, dest, clamp );
-        HELIUM_ASSERT( dest == NumericLimits<i32>::Maximum );
+        HELIUM_ASSERT( dest == NumericLimits<int32_t>::Maximum );
     }
 
     // 32->32 int
     {
-        u32 source = NumericLimits<u32>::Maximum;
-        i32 dest = 0;
+        uint32_t source = NumericLimits<uint32_t>::Maximum;
+        int32_t dest = 0;
         RangeCast( source, dest, clamp );
-        HELIUM_ASSERT( clamp ? dest == NumericLimits<i32>::Maximum : dest == 0 );
+        HELIUM_ASSERT( clamp ? dest == NumericLimits<int32_t>::Maximum : dest == 0 );
     }
 
     // 32->64 int
     {
-        i32 source = NumericLimits<i32>::Maximum;
-        i64 dest = 0;
+        int32_t source = NumericLimits<int32_t>::Maximum;
+        int64_t dest = 0;
         RangeCast( source, dest, clamp );
-        HELIUM_ASSERT( dest == NumericLimits<i32>::Maximum );
+        HELIUM_ASSERT( dest == NumericLimits<int32_t>::Maximum );
     }
 
     // 32->64 float
     {
-        f32 source = NumericLimits<f32>::Maximum;
-        f64 dest = 0;
+        float32_t source = NumericLimits<float32_t>::Maximum;
+        float64_t dest = 0;
         RangeCast( source, dest, clamp );
-        HELIUM_ASSERT( dest == NumericLimits<f32>::Maximum );
+        HELIUM_ASSERT( dest == NumericLimits<float32_t>::Maximum );
     }
 
     // 64->32 int
     {
-        i64 source = NumericLimits<i64>::Maximum;
-        i32 dest = 0;
+        int64_t source = NumericLimits<int64_t>::Maximum;
+        int32_t dest = 0;
         RangeCast( source, dest, clamp );
-        HELIUM_ASSERT( clamp ? dest == NumericLimits<i32>::Maximum : dest == 0 );
+        HELIUM_ASSERT( clamp ? dest == NumericLimits<int32_t>::Maximum : dest == 0 );
     }
 
     // 64->32 float
     {
-        f64 source = NumericLimits<f64>::Maximum;
-        f32 dest = 0;
+        float64_t source = NumericLimits<float64_t>::Maximum;
+        float32_t dest = 0;
         RangeCast( source, dest, clamp );
-        HELIUM_ASSERT( clamp ? dest == NumericLimits<f32>::Maximum : dest == 0 );
+        HELIUM_ASSERT( clamp ? dest == NumericLimits<float32_t>::Maximum : dest == 0 );
     }
 
-    // i64->f32
+    // int64_t->float32_t
     {
-        i64 source = NumericLimits<i64>::Maximum;
-        f32 dest = 0;
+        int64_t source = NumericLimits<int64_t>::Maximum;
+        float32_t dest = 0;
         RangeCast( source, dest, clamp );
-        f32 test = (f32)NumericLimits<i64>::Maximum;
+        float32_t test = (float32_t)NumericLimits<int64_t>::Maximum;
         HELIUM_ASSERT( dest == test );
     }
 
-    // f64->i32
+    // float64_t->int32_t
     {
-        f64 source = NumericLimits<f64>::Maximum;
-        i32 dest = 0;
+        float64_t source = NumericLimits<float64_t>::Maximum;
+        int32_t dest = 0;
         RangeCast( source, dest, clamp );
-        HELIUM_ASSERT( clamp ? dest == NumericLimits<i32>::Maximum : dest == 0 );
+        HELIUM_ASSERT( clamp ? dest == NumericLimits<int32_t>::Maximum : dest == 0 );
     }
 }
 

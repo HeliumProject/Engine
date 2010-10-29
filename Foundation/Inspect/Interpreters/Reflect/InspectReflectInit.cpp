@@ -21,7 +21,7 @@ namespace Helium
 {
     namespace InspectReflect
     {
-        i32 g_InitCount = 0;
+        int32_t g_InitCount = 0;
     }
 }
 

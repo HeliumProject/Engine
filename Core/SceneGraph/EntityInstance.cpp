@@ -86,7 +86,7 @@ bool EntityInstance::ValidatePersistent( const Component::ComponentPtr& attr ) c
     return __super::ValidatePersistent(attr);
 }
 
-const ComponentPtr& EntityInstance::GetComponent(i32 typeID) const
+const ComponentPtr& EntityInstance::GetComponent(int32_t typeID) const
 {
     // try to get the attribute from the Entity
     const ComponentPtr &instAttr = __super::GetComponent( typeID );

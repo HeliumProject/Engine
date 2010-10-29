@@ -127,7 +127,7 @@ void CurveCreateTool::PickPosition(int x, int y, Vector3 &position)
     if (!set)
     {
         // place the object on the camera plane
-        m_Scene->GetViewport()->GetCamera()->ViewportToPlaneVertex( (f32)x, (f32)y, SceneGraph::CreateTool::s_PlaneSnap, position);
+        m_Scene->GetViewport()->GetCamera()->ViewportToPlaneVertex( (float32_t)x, (float32_t)y, SceneGraph::CreateTool::s_PlaneSnap, position);
     }
 }
 
@@ -143,7 +143,7 @@ void CurveCreateTool::AddToScene()
         return;
     }
 
-    u32 countControlPoints = m_Instance->GetNumberControlPoints();
+    uint32_t countControlPoints = m_Instance->GetNumberControlPoints();
     if ( countControlPoints > 2 ) 
     {
         m_Instance->RemoveControlPointAtIndex( countControlPoints - 1 );
@@ -219,7 +219,7 @@ void CurveCreateTool::MouseMove( const MouseMoveInput& e )
 {
     if ( m_Instance.ReferencesObject() )
     {
-        u32 countControlPoints = m_Instance->GetNumberControlPoints();
+        uint32_t countControlPoints = m_Instance->GetNumberControlPoints();
 
         if ( countControlPoints > 0 )
         {

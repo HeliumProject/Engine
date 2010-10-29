@@ -16,13 +16,13 @@ namespace Helium
 
             }
 
-            TypeID( i32 id )
+            TypeID( int32_t id )
                 : m_ID ( id )
             {
 
             }
 
-            i32 GetID() const
+            int32_t GetID() const
             {
                 return m_ID;
             }
@@ -42,13 +42,13 @@ namespace Helium
                 return m_ID < rhs.m_ID;
             }
 
-            operator i32() const
+            operator int32_t() const
             {
                 return m_ID;
             }
 
         private:
-            i32 m_ID;
+            int32_t m_ID;
         };
     }
 }

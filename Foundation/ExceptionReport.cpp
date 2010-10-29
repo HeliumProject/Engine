@@ -274,7 +274,7 @@ static void HandleException( const Helium::Debug::ExceptionArgs& args )
     }
 }
 
-static i32 g_InitCount = 0;
+static int32_t g_InitCount = 0;
 
 void Debug::InitializeExceptionListener()
 {

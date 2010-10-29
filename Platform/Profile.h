@@ -41,10 +41,10 @@ namespace Helium
         static const tchar* GetFilePath();
     };
 
-    PLATFORM_API u64 TimerGetClock();
-    PLATFORM_API float CyclesToMillis(u64 cycles);
-    PLATFORM_API float TimeTaken(u64 start_time);
-    PLATFORM_API void ReportTime(const tchar* segment, u64 start_time, double& total_millis);
+    PLATFORM_API uint64_t TimerGetClock();
+    PLATFORM_API float CyclesToMillis(uint64_t cycles);
+    PLATFORM_API float TimeTaken(uint64_t start_time);
+    PLATFORM_API void ReportTime(const tchar* segment, uint64_t start_time, double& total_millis);
 
-    PLATFORM_API u64 GetTotalMemory();
+    PLATFORM_API uint64_t GetTotalMemory();
 }

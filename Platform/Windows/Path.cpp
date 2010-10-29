@@ -12,7 +12,7 @@ const tchar Helium::PathSeparator = TXT('\\');
 bool Helium::GetFullPath( const tchar* path, tstring& fullPath )
 {
     tchar* full = new tchar[ PLATFORM_PATH_MAX ];
-    u32 result = ::GetFullPathName( path, PLATFORM_PATH_MAX, full, NULL );
+    uint32_t result = ::GetFullPathName( path, PLATFORM_PATH_MAX, full, NULL );
 
     if ( result > PLATFORM_PATH_MAX )
     {

@@ -52,7 +52,7 @@ namespace Helium
 
             }
 
-            Position(f32 x, f32 y, f32 z)
+            Position(float32_t x, float32_t y, float32_t z)
                 : m_Position (x, y, z)
             {
 
@@ -85,14 +85,14 @@ namespace Helium
 
             }
 
-            PositionNormal(f32 x, f32 y, f32 z)
+            PositionNormal(float32_t x, float32_t y, float32_t z)
                 : m_Position (x, y, z)
                 , m_Normal (Vector3::Zero)
             {
 
             }
 
-            PositionNormal(f32 xp, f32 yp, f32 zp, f32 xn, f32 yn, f32 zn)
+            PositionNormal(float32_t xp, float32_t yp, float32_t zp, float32_t xn, float32_t yn, float32_t zn)
                 : m_Position (xp, yp, zp)
                 , m_Normal (xn, yn, zn)
             {
@@ -103,7 +103,7 @@ namespace Helium
         struct PositionColored
         {
             Vector3 m_Position;
-            u32 m_Color;
+            uint32_t m_Color;
 
             PositionColored()
                 : m_Position (Vector3::Zero)
@@ -119,21 +119,21 @@ namespace Helium
 
             }
 
-            PositionColored(const Vector3& p, u32 c)
+            PositionColored(const Vector3& p, uint32_t c)
                 : m_Position (p)
                 , m_Color (c)
             {
 
             }
 
-            PositionColored(f32 x, f32 y, f32 z)
+            PositionColored(float32_t x, float32_t y, float32_t z)
                 : m_Position (x, y, z)
                 , m_Color (0)
             {
 
             }
 
-            PositionColored(f32 x, f32 y, f32 z, u32 c)
+            PositionColored(float32_t x, float32_t y, float32_t z, uint32_t c)
                 : m_Position (x, y, z)
                 , m_Color (c)
             {
@@ -144,7 +144,7 @@ namespace Helium
         struct TransformedColored
         {
             Vector4 m_Position;
-            u32 m_Color;
+            uint32_t m_Color;
 
             TransformedColored()
                 : m_Position (Vector3::Zero)
@@ -160,21 +160,21 @@ namespace Helium
 
             }
 
-            TransformedColored(const Vector3& p, u32 c)
+            TransformedColored(const Vector3& p, uint32_t c)
                 : m_Position (p)
                 , m_Color (c)
             {
 
             }
 
-            TransformedColored(f32 x, f32 y, f32 z)
+            TransformedColored(float32_t x, float32_t y, float32_t z)
                 : m_Position (x, y, z, 1)
                 , m_Color (0)
             {
 
             }
 
-            TransformedColored(f32 x, f32 y, f32 z, u32 c)
+            TransformedColored(float32_t x, float32_t y, float32_t z, uint32_t c)
                 : m_Position (x, y, z, 1)
                 , m_Color (c)
             {
@@ -186,7 +186,7 @@ namespace Helium
         {
             Vector3 m_Position;
             Vector3 m_Normal;
-            u32           m_Diffuse;
+            uint32_t           m_Diffuse;
             Vector2 m_BaseUV;
 
             StandardVertex()
@@ -198,7 +198,7 @@ namespace Helium
 
             }
 
-            StandardVertex( const Vector3& pos, const Vector3& norm, u32 diffuse, const Vector2& baseUV )
+            StandardVertex( const Vector3& pos, const Vector3& norm, uint32_t diffuse, const Vector2& baseUV )
                 : m_Position( pos )
                 , m_Normal( norm )
                 , m_Diffuse( diffuse )
@@ -220,10 +220,10 @@ namespace Helium
             }
         };
 
-        static u32 ElementSizes[] =
+        static uint32_t ElementSizes[] =
         {
             0x0,                          // Unknown
-            sizeof(u32),                  // Unsigned32
+            sizeof(uint32_t),                  // Unsigned32
             sizeof(Position),             // Position
             sizeof(PositionNormal),       // PositionNormal
             sizeof(PositionColored),      // PositionColored
@@ -232,9 +232,9 @@ namespace Helium
             sizeof(PositionUV),           // PositionUV
         };
 
-        HELIUM_COMPILE_ASSERT(sizeof(ElementSizes) / sizeof(u32) == ElementTypes::Count);
+        HELIUM_COMPILE_ASSERT(sizeof(ElementSizes) / sizeof(uint32_t) == ElementTypes::Count);
 
-        static u32 ElementFormats[] =
+        static uint32_t ElementFormats[] =
         {
             0x0,                                                        // Unknown
             D3DFMT_INDEX32,                                             // Unsigned32
@@ -246,7 +246,7 @@ namespace Helium
             D3DFVF_XYZ | D3DFVF_TEX1,                                   // PositionUV
         };
 
-        HELIUM_COMPILE_ASSERT(sizeof(ElementFormats) / sizeof(u32) == ElementTypes::Count);
+        HELIUM_COMPILE_ASSERT(sizeof(ElementFormats) / sizeof(uint32_t) == ElementTypes::Count);
 
 
         //
@@ -256,14 +256,14 @@ namespace Helium
 
         struct DrawArgs
         {
-            f32 m_WalkTime;
-            f32 m_SortTime;
-            f32 m_CompareTime;
-            f32 m_DrawTime;
+            float32_t m_WalkTime;
+            float32_t m_SortTime;
+            float32_t m_CompareTime;
+            float32_t m_DrawTime;
 
-            u32 m_EntryCount;
-            u32 m_TriangleCount;
-            u32 m_LineCount;
+            uint32_t m_EntryCount;
+            uint32_t m_TriangleCount;
+            uint32_t m_LineCount;
 
             DrawArgs()
             {
@@ -320,11 +320,11 @@ namespace Helium
             const SceneNode* m_SceneNode;
 
             // a distance value from the camera to the object (squared)
-            f32 m_Distance;
+            float32_t m_Distance;
 
         public:
             // the flags for this object
-            u32 m_Flags;
+            uint32_t m_Flags;
 
             // the centroid of the object
             Vector3 m_Center;
@@ -396,10 +396,10 @@ namespace Helium
             IDirect3DDevice9* m_Device;
 
             // profile start time
-            u64 m_StartTime;
+            uint64_t m_StartTime;
 
             // compare time for sorting
-            u64 m_CompareTime;
+            uint64_t m_CompareTime;
 
         public:
             RenderVisitor();
@@ -409,9 +409,9 @@ namespace Helium
                 return m_View;
             }
 
-            u32 GetSize() const
+            uint32_t GetSize() const
             {
-                return (u32)m_EntryData.size();
+                return (uint32_t)m_EntryData.size();
             }
 
             void Reset( DrawArgs* args, const SceneGraph::Viewport* view );
@@ -422,6 +422,6 @@ namespace Helium
         };
 
         CORE_API bool IsSupportedTexture( const tstring& file );
-        CORE_API IDirect3DTexture9* LoadTexture( IDirect3DDevice9* device, const tstring& file, u32* textureSize = NULL, bool* hasAlpha = NULL, D3DPOOL pool = D3DPOOL_MANAGED );
+        CORE_API IDirect3DTexture9* LoadTexture( IDirect3DDevice9* device, const tstring& file, uint32_t* textureSize = NULL, bool* hasAlpha = NULL, D3DPOOL pool = D3DPOOL_MANAGED );
     }
 }

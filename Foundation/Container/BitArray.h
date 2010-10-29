@@ -240,7 +240,7 @@ namespace Helium
 
     public:
 
-        typedef u32 store_type;
+        typedef uint32_t store_type;
 
         enum
         {
@@ -251,23 +251,23 @@ namespace Helium
 
         store_type        *mpStore;  
         store_type         mSingleWord; // Use this buffer when mLength is 1
-        u32           mLength;     // Length of mpStore in units of store_type
-        u32           mNumBits;
+        uint32_t           mLength;     // Length of mpStore in units of store_type
+        uint32_t           mNumBits;
 
     private:
 
         // Get the index and bit offset for a given bit number.
-        static u32 GetIndex(unsigned bit_num)
+        static uint32_t GetIndex(unsigned bit_num)
         {
             return bit_num / cell_size;
         }
 
-        static u32 GetOffset(unsigned bit_num)
+        static uint32_t GetOffset(unsigned bit_num)
         {
             return bit_num % cell_size;
         }
 
-        void Init(u32 size)
+        void Init(uint32_t size)
         {
             mNumBits = size;
 

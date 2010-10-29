@@ -43,25 +43,25 @@ namespace Helium
             tstring                       m_FullName;           // the fully qualified name of this type in the codebase (this is super-long if its a template type)
             tstring                       m_UIName;             // the friendly name for the field, its optional (will use the short name if not specified)
 
-            i32                           m_TypeID;             // the unique id of this type
-            u32                           m_Size;               // the size of the object in bytes
+            int32_t                           m_TypeID;             // the unique id of this type
+            uint32_t                           m_Size;               // the size of the object in bytes
 
             mutable std::vector<void**>   m_Pointers;           // cached pointers to this type
-            mutable std::vector<i32*>     m_IDs;                // cached ids to this type
+            mutable std::vector<int32_t*>     m_IDs;                // cached ids to this type
 
         protected:
             Type();
             virtual ~Type();
 
             // assign unique type id
-            static i32 AssignTypeID();
+            static int32_t AssignTypeID();
 
         public:
             void TrackPointer(void** pointer) const;
             void RemovePointer(void** pointer) const;
 
-            void TrackID(i32* id) const;
-            void RemoveID(i32* id) const;
+            void TrackID(int32_t* id) const;
+            void RemoveID(int32_t* id) const;
         };
 
         template <class T>
@@ -120,7 +120,7 @@ namespace Helium
 
             }
 
-            void Set( const Type* type, i32* data )
+            void Set( const Type* type, int32_t* data )
             {
                 m_Type = type; 
                 m_Data = data; 
@@ -134,7 +134,7 @@ namespace Helium
 
         private:
             const Type* m_Type;
-            i32* m_Data;
+            int32_t* m_Data;
         };
     }
 }

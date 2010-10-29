@@ -19,13 +19,13 @@ ThumbnailTile::~ThumbnailTile()
 {
 }
 
-void ThumbnailTile::GetRowColumn( u32& row, u32& col ) const
+void ThumbnailTile::GetRowColumn( uint32_t& row, uint32_t& col ) const
 {
     row = m_Row;
     col = m_Column;
 }
 
-void ThumbnailTile::SetRowColumn( u32 row, u32 col )
+void ThumbnailTile::SetRowColumn( uint32_t row, uint32_t col )
 {
     m_Row = row;
     m_Column = col;

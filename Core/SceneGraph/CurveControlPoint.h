@@ -20,20 +20,20 @@ namespace Helium
             CurveControlPoint();
             ~CurveControlPoint();
 
-            virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
+            virtual int32_t GetImageIndex() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
 
             const Vector3& GetPosition() const;
             void SetPosition( const Vector3& value );
 
-            f32 GetPositionX() const;
-            void SetPositionX( f32 value );
+            float32_t GetPositionX() const;
+            void SetPositionX( float32_t value );
 
-            f32 GetPositionY() const;
-            void SetPositionY( f32 value );
+            float32_t GetPositionY() const;
+            void SetPositionY( float32_t value );
 
-            f32 GetPositionZ() const;
-            void SetPositionZ( f32 value );
+            float32_t GetPositionZ() const;
+            void SetPositionZ( float32_t value );
 
             virtual void ConnectManipulator( ManiuplatorAdapterCollection* collection ) HELIUM_OVERRIDE;
             virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;

@@ -239,7 +239,7 @@ namespace Helium
 
         public:
             // this makes the graph go dirty in both directions
-            virtual u32 Dirty() HELIUM_OVERRIDE;
+            virtual uint32_t Dirty() HELIUM_OVERRIDE;
 
             // update our global bounding volume for culling
             virtual void Evaluate(GraphDirection direction) HELIUM_OVERRIDE;

@@ -14,14 +14,14 @@ void File::GetInfo( const GetInfoFlag flags )
   GetProvider()->GetInfo( *this, flags );
 }
 
-void File::Sync( const u64 timestamp )
+void File::Sync( const uint64_t timestamp )
 {
-  u64 syncTime = timestamp ? timestamp : GetSyncTimestamp();
+  uint64_t syncTime = timestamp ? timestamp : GetSyncTimestamp();
 
   GetProvider()->Sync( *this, syncTime );
 }
 
-void File::Add( const OpenFlag flags, const u64 changesetId )
+void File::Add( const OpenFlag flags, const uint64_t changesetId )
 {
   GetInfo();
 
@@ -42,7 +42,7 @@ void File::Add( const OpenFlag flags, const u64 changesetId )
   GetProvider()->Add( *this );
 }
 
-void File::Edit( const OpenFlag flags, const u64 changesetId )
+void File::Edit( const OpenFlag flags, const uint64_t changesetId )
 {
   GetInfo();
 
@@ -76,7 +76,7 @@ void File::Edit( const OpenFlag flags, const u64 changesetId )
   GetProvider()->Edit( *this );
 }
 
-void File::Delete( const OpenFlag flags, const u64 changesetId )
+void File::Delete( const OpenFlag flags, const uint64_t changesetId )
 {
   GetInfo();
 
@@ -116,7 +116,7 @@ void File::Reopen( const Changeset& changeset, const OpenFlag flags )
   GetProvider()->Reopen( *this );
 }
 
-void File::Copy( File& target, const OpenFlag flags, const u64 changesetId )
+void File::Copy( File& target, const OpenFlag flags, const uint64_t changesetId )
 {
   GetInfo();
   target.GetInfo();
@@ -139,7 +139,7 @@ void File::Copy( File& target, const OpenFlag flags, const u64 changesetId )
   GetProvider()->Integrate( *this, target );
 }
 
-void File::Rename( File& target, const OpenFlag flags, const u64 changesetId )
+void File::Rename( File& target, const OpenFlag flags, const uint64_t changesetId )
 {
   GetInfo();
   target.GetInfo();
@@ -219,7 +219,7 @@ static void _EnsureExistence( const tstring &path )
   }
 }
 
-void File::Open( const OpenFlag flags, const u64 changesetId )
+void File::Open( const OpenFlag flags, const uint64_t changesetId )
 {
   if ( !PathIsManaged( m_LocalPath ) )
   {
@@ -264,7 +264,7 @@ void File::Open( const OpenFlag flags, const u64 changesetId )
   Add( flags, changesetId );
 }
 
-bool File::QueryOpen( const OpenFlag flags, const u64 changesetId )
+bool File::QueryOpen( const OpenFlag flags, const uint64_t changesetId )
 {
   tstring message;
 

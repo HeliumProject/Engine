@@ -21,10 +21,10 @@
 using namespace Helium;
 using namespace Helium::Profile;
 
-static u32           g_AccumulatorCount = 0;
+static uint32_t           g_AccumulatorCount = 0;
 static Accumulator*  g_Accumulators[ PROFILE_ACCUMULATOR_MAX ];
 
-static u32           g_ContextCount = 0; 
+static uint32_t           g_ContextCount = 0; 
 static Context*      g_Contexts[ PROFILE_CONTEXTS_MAX ];
 
 static bool          g_Enabled = false;
@@ -41,7 +41,7 @@ void Profile::Initialize()
 
 void Profile::Cleanup()
 {
-    for(u32 i = 0; i < g_ContextCount; ++i)
+    for(uint32_t i = 0; i < g_ContextCount; ++i)
     {
         g_Contexts[i]->FlushFile(); 
         delete(g_Contexts[i]); 
@@ -148,7 +148,7 @@ int CompareAccumulatorPtr( const void* ptr1, const void* ptr2 )
 void Accumulator::ReportAll()
 {
     float totalTime = 0.f;
-    for ( u32 i = 0; i < g_AccumulatorCount; i++ )
+    for ( uint32_t i = 0; i < g_AccumulatorCount; i++ )
     {
         if (g_Accumulators[i])
         {
@@ -162,7 +162,7 @@ void Accumulator::ReportAll()
 
         qsort( g_Accumulators, g_AccumulatorCount, sizeof(Accumulator*), &CompareAccumulatorPtr );
 
-        for ( u32 i = 0; i < g_AccumulatorCount; i++ )
+        for ( uint32_t i = 0; i < g_AccumulatorCount; i++ )
         {
             if (g_Accumulators[i] && g_Accumulators[i]->m_TotalMillis > 0.f)
             {
@@ -174,7 +174,7 @@ void Accumulator::ReportAll()
 
 Helium::ThreadLocalPointer g_ProfileContext;
 
-ScopeTimer::ScopeTimer(Accumulator* accum, const char* func, u32 line, const char* desc)
+ScopeTimer::ScopeTimer(Accumulator* accum, const char* func, uint32_t line, const char* desc)
 {
     HELIUM_ASSERT(func); 
     m_Description[0] = '\0'; 
@@ -232,9 +232,9 @@ ScopeTimer::ScopeTimer(Accumulator* accum, const char* func, u32 line, const cha
 
 ScopeTimer::~ScopeTimer()
 {
-    u64 stopTicks = Helium::TimerGetClock();  
+    uint64_t stopTicks = Helium::TimerGetClock();  
 
-    u64   taken  = stopTicks - m_StartTicks; 
+    uint64_t   taken  = stopTicks - m_StartTicks; 
     float millis = Helium::CyclesToMillis(taken); 
 
     if ( m_Print && m_Description[0] != '\0' )
@@ -293,7 +293,7 @@ Context::~Context()
 
 void Context::FlushFile()
 {
-    u64 startTicks = Helium::TimerGetClock(); 
+    uint64_t startTicks = Helium::TimerGetClock(); 
 
     // make a scope enter packet for flushing the file
     ScopeEnterPacket* enter = (ScopeEnterPacket*) (m_PacketBuffer + m_PacketBufferOffset); 

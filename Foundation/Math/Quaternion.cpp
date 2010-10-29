@@ -26,17 +26,17 @@ Quaternion Quaternion::operator- () const
 
 Quaternion& Quaternion::operator=(const Matrix3& m)
 {
-    static i32 next[3] = { QY,QZ,QX };
+    static int32_t next[3] = { QY,QZ,QX };
     Quaternion &q = *this;
 
-    f32 tr,s;
-    register i32 i,j,k;
+    float32_t tr,s;
+    register int32_t i,j,k;
 
     tr = m[0][0] + m[1][1] + m[2][2];
 
     if (tr > 0.0)
     {
-        s = (f32)sqrt(tr + 1.0f);
+        s = (float32_t)sqrt(tr + 1.0f);
         q[QW] = s * 0.5f;
 
         s = 0.5f / s;
@@ -57,7 +57,7 @@ Quaternion& Quaternion::operator=(const Matrix3& m)
         j = next[i];
         k = next[j];
 
-        s = sqrt((f32) ( (m[i][i] - (m[j][j]+m[k][k])) + 1.0) );
+        s = sqrt((float32_t) ( (m[i][i] - (m[j][j]+m[k][k])) + 1.0) );
         q[i] = s * 0.5f;
 
         s = 0.5f / s;
@@ -82,22 +82,22 @@ Quaternion::Quaternion(const EulerAngles& v)
 Quaternion& Quaternion::operator=(const EulerAngles& v)
 {
     Vector3  a;
-    f32 ti, tj, th, ci, cj, ch, si, sj, sh, cc, cs, sc, ss;
-    u32 i, j, k, h, n, s, f;
+    float32_t ti, tj, th, ci, cj, ch, si, sj, sh, cc, cs, sc, ss;
+    uint32_t i, j, k, h, n, s, f;
 
     EulGetOrd(v.order.o,i,j,k,h,n,s,f);
 
     if (f == EulFrmR) 
     {
-        ti = (f32)v.angles.z * 0.5f; 
-        tj = (f32)v.angles.y * 0.5f; 
-        th = (f32)v.angles.x * 0.5f;
+        ti = (float32_t)v.angles.z * 0.5f; 
+        tj = (float32_t)v.angles.y * 0.5f; 
+        th = (float32_t)v.angles.x * 0.5f;
     }
     else
     {
-        ti = (f32)v.angles.x * 0.5f; 
-        tj = (f32)v.angles.y * 0.5f; 
-        th = (f32)v.angles.z * 0.5f;
+        ti = (float32_t)v.angles.x * 0.5f; 
+        tj = (float32_t)v.angles.y * 0.5f; 
+        th = (float32_t)v.angles.z * 0.5f;
     }
 
     if (n==EulParOdd) 
@@ -139,8 +139,8 @@ Quaternion::Quaternion(const AngleAxis& v)
 
 Quaternion& Quaternion::operator=(const AngleAxis& v)
 {
-    f32 theta = ((f32)v.angle)/2.0f;
-    f32 sinTheta = sin(theta);
+    float32_t theta = ((float32_t)v.angle)/2.0f;
+    float32_t sinTheta = sin(theta);
     Vector3 axis(v.axis);
 
     axis.Normalize();

@@ -95,7 +95,7 @@ wxPoint WindowSettings::GetPosition() const
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the window position.
 // 
-void WindowSettings::SetPosition( i32 x, i32 y )
+void WindowSettings::SetPosition( int32_t x, int32_t y )
 {
     m_PosX = x;
     m_PosY = y;
@@ -112,7 +112,7 @@ wxSize WindowSettings::GetSize() const
 ///////////////////////////////////////////////////////////////////////////////
 // Set the window size.  
 // 
-void WindowSettings::SetSize( i32 width, i32 height )
+void WindowSettings::SetSize( int32_t width, int32_t height )
 {
     m_Width = width;
     m_Height = height;

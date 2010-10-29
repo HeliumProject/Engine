@@ -53,7 +53,7 @@ Shader::~Shader()
 
 }
 
-i32 Shader::GetImageIndex() const
+int32_t Shader::GetImageIndex() const
 {
     return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "shader" ) );
 }

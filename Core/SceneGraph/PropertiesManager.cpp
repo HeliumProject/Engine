@@ -356,7 +356,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
     class Presenter
     {
     public:
-        Presenter( PropertiesManager* propertiesManager, u32 selectionId, const Inspect::V_Control& controls ) 
+        Presenter( PropertiesManager* propertiesManager, uint32_t selectionId, const Inspect::V_Control& controls ) 
             : m_PropertiesManager( propertiesManager )
             , m_SelectionId( selectionId )
             , m_Controls( controls )
@@ -371,7 +371,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
 
     private:
         PropertiesManager*  m_PropertiesManager;
-        u32                 m_SelectionId;
+        uint32_t                 m_SelectionId;
         Inspect::V_Control  m_Controls;
     };
 
@@ -384,7 +384,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
     m_CommandQueue->Post( VoidSignature::Delegate( presenter, &Presenter::Finalize ) );
 }
 
-void PropertiesManager::Present( u32 selectionId, const Inspect::V_Control& controls )
+void PropertiesManager::Present( uint32_t selectionId, const Inspect::V_Control& controls )
 {
     if ( selectionId != m_SelectionId )
     {

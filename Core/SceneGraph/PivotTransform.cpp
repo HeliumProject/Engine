@@ -40,7 +40,7 @@ PivotTransform::PivotTransform()
 {
 }
 
-i32 PivotTransform::GetImageIndex() const
+int32_t PivotTransform::GetImageIndex() const
 {
     return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "transform" ) );
 }
@@ -473,9 +473,9 @@ void PivotTransform::CreatePanel(CreatePanelArgs& args)
         args.m_Generator->PushContainer();
         static const tstring helpText = TXT( "FIXME: NEEDS HELP" );   
         args.m_Generator->AddLabel( TXT( "Shear" ) )->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearYZ, &PivotTransform::SetShearYZ)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearXZ, &PivotTransform::SetShearXZ)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearXY, &PivotTransform::SetShearXY)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, float32_t>(args.m_Selection, &PivotTransform::GetShearYZ, &PivotTransform::SetShearYZ)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, float32_t>(args.m_Selection, &PivotTransform::GetShearXZ, &PivotTransform::SetShearXZ)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, float32_t>(args.m_Selection, &PivotTransform::GetShearXY, &PivotTransform::SetShearXY)->a_HelpText.Set( helpText );
         args.m_Generator->Pop();
     }
 
@@ -483,9 +483,9 @@ void PivotTransform::CreatePanel(CreatePanelArgs& args)
         args.m_Generator->PushContainer();
         static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
         args.m_Generator->AddLabel( TXT( "Scale Pivot" ) )->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotX, &PivotTransform::SetScalePivotX)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotY, &PivotTransform::SetScalePivotY)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotZ, &PivotTransform::SetScalePivotZ)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, float32_t>(args.m_Selection, &PivotTransform::GetScalePivotX, &PivotTransform::SetScalePivotX)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, float32_t>(args.m_Selection, &PivotTransform::GetScalePivotY, &PivotTransform::SetScalePivotY)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, float32_t>(args.m_Selection, &PivotTransform::GetScalePivotZ, &PivotTransform::SetScalePivotZ)->a_HelpText.Set( helpText );
         args.m_Generator->Pop();
     }
 
@@ -493,9 +493,9 @@ void PivotTransform::CreatePanel(CreatePanelArgs& args)
         args.m_Generator->PushContainer();
         static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
         args.m_Generator->AddLabel( TXT( "Scale Pivot Translate" ) )->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateX, &PivotTransform::SetScalePivotTranslateX)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateY, &PivotTransform::SetScalePivotTranslateY)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateZ, &PivotTransform::SetScalePivotTranslateZ)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, float32_t>(args.m_Selection, &PivotTransform::GetScalePivotTranslateX, &PivotTransform::SetScalePivotTranslateX)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, float32_t>(args.m_Selection, &PivotTransform::GetScalePivotTranslateY, &PivotTransform::SetScalePivotTranslateY)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, float32_t>(args.m_Selection, &PivotTransform::GetScalePivotTranslateZ, &PivotTransform::SetScalePivotTranslateZ)->a_HelpText.Set( helpText );
         args.m_Generator->Pop();
     }
 
@@ -503,9 +503,9 @@ void PivotTransform::CreatePanel(CreatePanelArgs& args)
         args.m_Generator->PushContainer();
         static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
         args.m_Generator->AddLabel( TXT( "Rotate Pivot" ) )->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotX, &PivotTransform::SetRotatePivotX)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotY, &PivotTransform::SetRotatePivotY)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotZ, &PivotTransform::SetRotatePivotZ)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, float32_t>(args.m_Selection, &PivotTransform::GetRotatePivotX, &PivotTransform::SetRotatePivotX)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, float32_t>(args.m_Selection, &PivotTransform::GetRotatePivotY, &PivotTransform::SetRotatePivotY)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, float32_t>(args.m_Selection, &PivotTransform::GetRotatePivotZ, &PivotTransform::SetRotatePivotZ)->a_HelpText.Set( helpText );
         args.m_Generator->Pop();
     }
 
@@ -513,9 +513,9 @@ void PivotTransform::CreatePanel(CreatePanelArgs& args)
         args.m_Generator->PushContainer();
         static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
         args.m_Generator->AddLabel( TXT( "Rotate Pivot Translate" ) )->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateX, &PivotTransform::SetRotatePivotTranslateX)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateY, &PivotTransform::SetRotatePivotTranslateY)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateZ, &PivotTransform::SetRotatePivotTranslateZ)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, float32_t>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateX, &PivotTransform::SetRotatePivotTranslateX)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, float32_t>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateY, &PivotTransform::SetRotatePivotTranslateY)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, float32_t>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateZ, &PivotTransform::SetRotatePivotTranslateZ)->a_HelpText.Set( helpText );
         args.m_Generator->Pop();
     }
 
@@ -523,9 +523,9 @@ void PivotTransform::CreatePanel(CreatePanelArgs& args)
         args.m_Generator->PushContainer();
         static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
         args.m_Generator->AddLabel( TXT( "Translate Pivot" ) )->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotX, &PivotTransform::SetTranslatePivotX)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotY, &PivotTransform::SetTranslatePivotY)->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<SceneGraph::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotZ, &PivotTransform::SetTranslatePivotZ)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, float32_t>(args.m_Selection, &PivotTransform::GetTranslatePivotX, &PivotTransform::SetTranslatePivotX)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, float32_t>(args.m_Selection, &PivotTransform::GetTranslatePivotY, &PivotTransform::SetTranslatePivotY)->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<SceneGraph::PivotTransform, float32_t>(args.m_Selection, &PivotTransform::GetTranslatePivotZ, &PivotTransform::SetTranslatePivotZ)->a_HelpText.Set( helpText );
         args.m_Generator->Pop();
     }
 
@@ -540,215 +540,215 @@ void PivotTransform::CreatePanel(CreatePanelArgs& args)
     args.m_Generator->Pop();
 }
 
-f32 PivotTransform::GetShearYZ() const
+float32_t PivotTransform::GetShearYZ() const
 {
     return GetShear().yz;
 }
 
-void PivotTransform::SetShearYZ(f32 shear)
+void PivotTransform::SetShearYZ(float32_t shear)
 {
     Shear s = GetShear();
     s.yz = shear;
     SetShear(s);
 }
 
-f32 PivotTransform::GetShearXZ() const
+float32_t PivotTransform::GetShearXZ() const
 {
     return GetShear().xz;
 }
 
-void PivotTransform::SetShearXZ(f32 shear)
+void PivotTransform::SetShearXZ(float32_t shear)
 {
     Shear s = GetShear();
     s.xz = shear;
     SetShear(s);
 }
 
-f32 PivotTransform::GetShearXY() const
+float32_t PivotTransform::GetShearXY() const
 {
     return GetShear().xy;
 }
 
-void PivotTransform::SetShearXY(f32 shear)
+void PivotTransform::SetShearXY(float32_t shear)
 {
     Shear s = GetShear();
     s.xy = shear;
     SetShear(s);
 }
 
-f32 PivotTransform::GetScalePivotX() const
+float32_t PivotTransform::GetScalePivotX() const
 {
     return GetScalePivot().x;
 }
 
-void PivotTransform::SetScalePivotX(f32 translate)
+void PivotTransform::SetScalePivotX(float32_t translate)
 {
     Vector3 s = GetScalePivot();
     s.x = translate;
     SetScalePivot(s);
 }
 
-f32 PivotTransform::GetScalePivotY() const
+float32_t PivotTransform::GetScalePivotY() const
 {
     return GetScalePivot().y;
 }
 
-void PivotTransform::SetScalePivotY(f32 translate)
+void PivotTransform::SetScalePivotY(float32_t translate)
 {
     Vector3 s = GetScalePivot();
     s.y = translate;
     SetScalePivot(s);
 }
 
-f32 PivotTransform::GetScalePivotZ() const
+float32_t PivotTransform::GetScalePivotZ() const
 {
     return GetScalePivot().z;
 }
 
-void PivotTransform::SetScalePivotZ(f32 translate)
+void PivotTransform::SetScalePivotZ(float32_t translate)
 {
     Vector3 s = GetScalePivot();
     s.z = translate;
     SetScalePivot(s);
 }
 
-f32 PivotTransform::GetScalePivotTranslateX() const
+float32_t PivotTransform::GetScalePivotTranslateX() const
 {
     return GetScalePivotTranslate().x;
 }
 
-void PivotTransform::SetScalePivotTranslateX(f32 translate)
+void PivotTransform::SetScalePivotTranslateX(float32_t translate)
 {
     Vector3 s = GetScalePivotTranslate();
     s.x = translate;
     SetScalePivotTranslate(s);
 }
 
-f32 PivotTransform::GetScalePivotTranslateY() const
+float32_t PivotTransform::GetScalePivotTranslateY() const
 {
     return GetScalePivotTranslate().y;
 }
 
-void PivotTransform::SetScalePivotTranslateY(f32 translate)
+void PivotTransform::SetScalePivotTranslateY(float32_t translate)
 {
     Vector3 s = GetScalePivotTranslate();
     s.y = translate;
     SetScalePivotTranslate(s);
 }
 
-f32 PivotTransform::GetScalePivotTranslateZ() const
+float32_t PivotTransform::GetScalePivotTranslateZ() const
 {
     return GetScalePivotTranslate().z;
 }
 
-void PivotTransform::SetScalePivotTranslateZ(f32 translate)
+void PivotTransform::SetScalePivotTranslateZ(float32_t translate)
 {
     Vector3 s = GetScalePivotTranslate();
     s.z = translate;
     SetScalePivotTranslate(s);
 }
-f32 PivotTransform::GetRotatePivotX() const
+float32_t PivotTransform::GetRotatePivotX() const
 {
     return GetRotatePivot().x;
 }
 
-void PivotTransform::SetRotatePivotX(f32 translate)
+void PivotTransform::SetRotatePivotX(float32_t translate)
 {
     Vector3 s = GetRotatePivot();
     s.x = translate;
     SetRotatePivot(s);
 }
 
-f32 PivotTransform::GetRotatePivotY() const
+float32_t PivotTransform::GetRotatePivotY() const
 {
     return GetRotatePivot().y;
 }
 
-void PivotTransform::SetRotatePivotY(f32 translate)
+void PivotTransform::SetRotatePivotY(float32_t translate)
 {
     Vector3 s = GetRotatePivot();
     s.y = translate;
     SetRotatePivot(s);
 }
 
-f32 PivotTransform::GetRotatePivotZ() const
+float32_t PivotTransform::GetRotatePivotZ() const
 {
     return GetRotatePivot().z;
 }
 
-void PivotTransform::SetRotatePivotZ(f32 translate)
+void PivotTransform::SetRotatePivotZ(float32_t translate)
 {
     Vector3 s = GetRotatePivot();
     s.z = translate;
     SetRotatePivot(s);
 }
 
-f32 PivotTransform::GetRotatePivotTranslateX() const
+float32_t PivotTransform::GetRotatePivotTranslateX() const
 {
     return GetRotatePivotTranslate().x;
 }
 
-void PivotTransform::SetRotatePivotTranslateX(f32 translate)
+void PivotTransform::SetRotatePivotTranslateX(float32_t translate)
 {
     Vector3 s = GetRotatePivotTranslate();
     s.x = translate;
     SetRotatePivotTranslate(s);
 }
 
-f32 PivotTransform::GetRotatePivotTranslateY() const
+float32_t PivotTransform::GetRotatePivotTranslateY() const
 {
     return GetRotatePivotTranslate().y;
 }
 
-void PivotTransform::SetRotatePivotTranslateY(f32 translate)
+void PivotTransform::SetRotatePivotTranslateY(float32_t translate)
 {
     Vector3 s = GetRotatePivotTranslate();
     s.y = translate;
     SetRotatePivotTranslate(s);
 }
 
-f32 PivotTransform::GetRotatePivotTranslateZ() const
+float32_t PivotTransform::GetRotatePivotTranslateZ() const
 {
     return GetRotatePivotTranslate().z;
 }
 
-void PivotTransform::SetRotatePivotTranslateZ(f32 translate)
+void PivotTransform::SetRotatePivotTranslateZ(float32_t translate)
 {
     Vector3 s = GetRotatePivotTranslate();
     s.z = translate;
     SetRotatePivotTranslate(s);
 }
 
-f32 PivotTransform::GetTranslatePivotX() const
+float32_t PivotTransform::GetTranslatePivotX() const
 {
     return GetTranslatePivot().x;
 }
 
-void PivotTransform::SetTranslatePivotX(f32 translate)
+void PivotTransform::SetTranslatePivotX(float32_t translate)
 {
     Vector3 s = GetTranslatePivot();
     s.x = translate;
     SetTranslatePivot(s);
 }
 
-f32 PivotTransform::GetTranslatePivotY() const
+float32_t PivotTransform::GetTranslatePivotY() const
 {
     return GetTranslatePivot().y;
 }
 
-void PivotTransform::SetTranslatePivotY(f32 translate)
+void PivotTransform::SetTranslatePivotY(float32_t translate)
 {
     Vector3 s = GetTranslatePivot();
     s.y = translate;
     SetTranslatePivot(s);
 }
 
-f32 PivotTransform::GetTranslatePivotZ() const
+float32_t PivotTransform::GetTranslatePivotZ() const
 {
     return GetTranslatePivot().z;
 }
 
-void PivotTransform::SetTranslatePivotZ(f32 translate)
+void PivotTransform::SetTranslatePivotZ(float32_t translate)
 {
     Vector3 s = GetTranslatePivot();
     s.z = translate;

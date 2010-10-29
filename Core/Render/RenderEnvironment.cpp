@@ -11,7 +11,7 @@ RenderEnvironment::RenderEnvironment(const tchar* fname)
     m_load_count = 0;
     m_filename = fname;
     m_crc = Helium::StringCrc32(fname);
-    m_timestamp = (u64)-1L;
+    m_timestamp = (uint64_t)-1L;
     m_env_texture = 0;
     m_clearcolor = 0;
     m_env_bias = 0.0f;

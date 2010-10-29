@@ -311,7 +311,7 @@ void VaultPanel::SelectPath( const Helium::Path& path )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-u32 VaultPanel::GetSelectedPaths( std::set< Helium::Path >& paths )
+uint32_t VaultPanel::GetSelectedPaths( std::set< Helium::Path >& paths )
 {
     switch ( m_CurrentViewMode )
     {
@@ -330,7 +330,7 @@ u32 VaultPanel::GetSelectedPaths( std::set< Helium::Path >& paths )
         break;
     }
 
-    return static_cast< u32 >( paths.size() );
+    return static_cast< uint32_t >( paths.size() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

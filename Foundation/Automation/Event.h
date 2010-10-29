@@ -335,9 +335,9 @@ namespace Helium
     public:
         typedef Helium::Delegate< ArgsType, RefCountBaseType > Delegate;
 
-        u32 Count() const
+        uint32_t Count() const
         {
-            return m_Impl.ReferencesObject() ? (u32)m_Impl->Count() : 0;
+            return m_Impl.ReferencesObject() ? (uint32_t)m_Impl->Count() : 0;
         }
 
         bool Valid() const
@@ -469,9 +469,9 @@ namespace Helium
             // Query for count
             //
 
-            u32 Count() const
+            uint32_t Count() const
             {
-                return (u32)m_Delegates.size();
+                return (uint32_t)m_Delegates.size();
             }
 
             //
@@ -484,7 +484,7 @@ namespace Helium
                 {
                     typename std::vector<Delegate>::iterator itr = m_Delegates.begin();
                     typename std::vector<Delegate>::iterator end = m_Delegates.end();
-                    for ( u32 slotsLeft = m_EmptySlots; itr != end && slotsLeft; ++itr )
+                    for ( uint32_t slotsLeft = m_EmptySlots; itr != end && slotsLeft; ++itr )
                     {
                         if ( !itr->Valid() )
                         {
@@ -659,8 +659,8 @@ namespace Helium
 
         private:
             std::vector<Delegate>   m_Delegates;
-            u32                     m_EntryCount;
-            u32                     m_EmptySlots;
+            uint32_t                     m_EntryCount;
+            uint32_t                     m_EmptySlots;
         };
 
         Helium::SmartPtr< EventImpl > m_Impl;

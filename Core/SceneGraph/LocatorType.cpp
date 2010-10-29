@@ -23,7 +23,7 @@ void LocatorType::CleanupType()
     Reflect::UnregisterClassType< LocatorType >();
 }
 
-LocatorType::LocatorType( Scene* scene, i32 instanceType )
+LocatorType::LocatorType( Scene* scene, int32_t instanceType )
 : InstanceType( scene, instanceType )
 {
     m_Locator = new PrimitiveLocator( scene->GetViewport()->GetResources() );

@@ -14,11 +14,11 @@
 #include "Foundation/API.h"
 #include "Foundation/Memory/Endian.h"
 
-typedef u64 tuid;
+typedef uint64_t tuid;
 typedef std::set< tuid > S_tuid;
 typedef std::vector< tuid > V_tuid;
 typedef std::map< tuid, tuid > M_tuid;
-typedef std::map< tuid, u32 > M_tuidu32;
+typedef std::map< tuid, uint32_t > M_tuidu32;
 
 #define TUID_HEX_FORMAT TXT( "0x%016I64X" )
 #define TUID_INT_FORMAT TXT( "%I64u" )
@@ -159,22 +159,22 @@ namespace Helium
     // Hashing class for storing UIDs as keys to a hash_map.
     // 
 
-    class TUIDHasher : public stdext::hash_compare< u64 >
+    class TUIDHasher : public stdext::hash_compare< uint64_t >
     {
     public:
         size_t operator()( const TUID& tuid ) const
         {
-            return stdext::hash_compare< u64 >::operator()( 0 );
+            return stdext::hash_compare< uint64_t >::operator()( 0 );
         }
 
         bool operator()( const TUID& tuid1, const TUID& tuid2 ) const
         {
-            return stdext::hash_compare< u64 >::operator()( tuid1, tuid2 );
+            return stdext::hash_compare< uint64_t >::operator()( tuid1, tuid2 );
         }
     };
 
     typedef stdext::hash_map< TUID, TUID, TUIDHasher > HM_TUID;
-    typedef stdext::hash_map< TUID, u32, TUIDHasher > HM_TUIDU32;
+    typedef stdext::hash_map< TUID, uint32_t, TUIDHasher > HM_TUIDU32;
     typedef std::vector<TUID> V_TUID;
     typedef std::set<TUID> S_TUID;
 

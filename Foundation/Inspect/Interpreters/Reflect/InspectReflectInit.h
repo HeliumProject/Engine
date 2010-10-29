@@ -14,7 +14,7 @@ namespace Helium
         public:
             REFLECT_DECLARE_ABSTRACT( ClientDataFilter, ClientData );
 
-            ClientDataFilter( List* list, i32 classType, const tstring& filter )
+            ClientDataFilter( List* list, int32_t classType, const tstring& filter )
                 : m_List( list )
                 , m_ClassType( classType )
                 , m_FileFilter( filter )
@@ -23,7 +23,7 @@ namespace Helium
             }
 
             List*       m_List;
-            i32         m_ClassType;
+            int32_t         m_ClassType;
             tstring     m_FileFilter;
         };
     }

@@ -29,24 +29,24 @@ namespace Helium
             tstring             m_shader;
             ShaderLoaderPtr     m_shader_loader;
 
-            std::vector<u32>    m_pIndex;
-            std::vector<u32>    m_nIndex;
-            std::vector<u32>    m_tIndex;
-            std::vector<u32>    m_tanIndex;
-            std::vector<u32>    m_cIndex;
+            std::vector<uint32_t>    m_pIndex;
+            std::vector<uint32_t>    m_nIndex;
+            std::vector<uint32_t>    m_tIndex;
+            std::vector<uint32_t>    m_tanIndex;
+            std::vector<uint32_t>    m_cIndex;
 
             //data structures optimized for rendering, compiled model
-            std::vector<u32>    m_indices;
+            std::vector<uint32_t>    m_indices;
 
             //bangle index for this shader fragment
-            u32                 m_bangle_index;
+            uint32_t                 m_bangle_index;
         };
 
         struct CORE_API Fragment
         {
-            u32     m_orig_shader;
-            u32     m_prim_count;
-            u32     m_base_index;
+            uint32_t     m_orig_shader;
+            uint32_t     m_prim_count;
+            uint32_t     m_base_index;
         };
 
         class CORE_API RenderMesh
@@ -56,18 +56,18 @@ namespace Helium
             virtual ~RenderMesh();
 
             tstring                   m_filename;       
-            u32                       m_crc;            // crc of the filename
-            u64                       m_timestamp;      // -1 if the mesh is a local mesh
-            u32                       m_load_count;
+            uint32_t                       m_crc;            // crc of the filename
+            uint64_t                       m_timestamp;      // -1 if the mesh is a local mesh
+            uint32_t                       m_load_count;
 
             IDirect3DVertexBuffer9*   m_dbg_normal;
             IDirect3DVertexBuffer9*   m_dbg_tangent;
             IDirect3DVertexBuffer9*   m_verts;
             IDirect3DIndexBuffer9*    m_indices;
-            u32                       m_vert_count;
-            u32                       m_vert_size;
-            u32                       m_index_count;
-            u32                       m_fragment_count;
+            uint32_t                       m_vert_count;
+            uint32_t                       m_vert_size;
+            uint32_t                       m_index_count;
+            uint32_t                       m_fragment_count;
             Fragment*                 m_fragments;
 
             // bounding info
@@ -75,7 +75,7 @@ namespace Helium
             D3DXVECTOR3       m_min;
             D3DXVECTOR3       m_max;
 
-            u32 DecrementUsage()
+            uint32_t DecrementUsage()
             {
                 if (m_load_count>0)
                 {

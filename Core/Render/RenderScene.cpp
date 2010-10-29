@@ -12,19 +12,19 @@ using namespace Helium::Render;
 
 static std::vector<RenderMesh*>         g_loaded_meshes;
 static std::vector<RenderEnvironment*>  g_loaded_environments;
-static u32 g_init_count = 0;
+static uint32_t g_init_count = 0;
 
 // fwd
 void CreateDefaultMeshes(Renderer* render);
 void CreateDefaultEnvironments(Renderer* render);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-RenderMesh* RenderScene::ResolveMeshHandle( u32 handle )
+RenderMesh* RenderScene::ResolveMeshHandle( uint32_t handle )
 {
     return g_loaded_meshes[handle];
 }
 
-RenderEnvironment* RenderScene::ResolveEnvironmentHandle( u32 handle )
+RenderEnvironment* RenderScene::ResolveEnvironmentHandle( uint32_t handle )
 {
     return g_loaded_environments[handle];
 }
@@ -99,7 +99,7 @@ RenderScene::~RenderScene()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void RenderScene::SetMeshHandle(u32 handle)
+void RenderScene::SetMeshHandle(uint32_t handle)
 {
     if (m_mesh_handle!=0xffffffff)
     {
@@ -129,7 +129,7 @@ void RenderScene::SetMeshHandle(u32 handle)
     m_shader_table.resize(g_loaded_meshes[handle]->m_fragment_count);
 
     // fill the scene level shader table
-    for (u32 s=0;s<g_loaded_meshes[handle]->m_fragment_count;s++)
+    for (uint32_t s=0;s<g_loaded_meshes[handle]->m_fragment_count;s++)
     {
         m_shader_table[s]=g_loaded_meshes[handle]->m_fragments[s].m_orig_shader;
     }
@@ -141,7 +141,7 @@ void RenderScene::SetMeshHandle(u32 handle)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-void RenderScene::SetEnvironmentHandle(u32 handle)
+void RenderScene::SetEnvironmentHandle(uint32_t handle)
 {
     if (m_environment!=0xffffffff)
     {
@@ -160,7 +160,7 @@ void RenderScene::SetEnvironmentHandle(u32 handle)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-u32 RenderScene::LoadNewMesh( const tchar* fname, ObjectLoaderPtr loader, int bangleIndex )
+uint32_t RenderScene::LoadNewMesh( const tchar* fname, ObjectLoaderPtr loader, int bangleIndex )
 {
     Helium::Path path( fname );
 
@@ -213,13 +213,13 @@ u32 RenderScene::LoadNewMesh( const tchar* fname, ObjectLoaderPtr loader, int ba
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-u32 RenderScene::LoadMesh(const tchar* fname,ObjectLoaderPtr loader, int bangleIndex)
+uint32_t RenderScene::LoadMesh(const tchar* fname,ObjectLoaderPtr loader, int bangleIndex)
 {
-    u32 crc = Helium::StringCrc32(fname);
+    uint32_t crc = Helium::StringCrc32(fname);
 
-    u32 mesh_count = (u32)g_loaded_meshes.size();
-    u32 handle = 0xffffffff;
-    for (u32 i=0;i<mesh_count;i++)
+    uint32_t mesh_count = (uint32_t)g_loaded_meshes.size();
+    uint32_t handle = 0xffffffff;
+    for (uint32_t i=0;i<mesh_count;i++)
     {
         if (g_loaded_meshes[i])
         {
@@ -241,7 +241,7 @@ u32 RenderScene::LoadMesh(const tchar* fname,ObjectLoaderPtr loader, int bangleI
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-u32 RenderScene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int bangleIndex)
+uint32_t RenderScene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int bangleIndex)
 {
     tchar meshName[ 1024 ];
     const tchar* fname = name;
@@ -253,7 +253,7 @@ u32 RenderScene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int bang
         fname = meshName;
     }
 
-    u32 frag_count = (u32)loader->m_fragments.size();
+    uint32_t frag_count = (uint32_t)loader->m_fragments.size();
 
     RenderMesh* result = new RenderMesh(fname);
 
@@ -261,28 +261,28 @@ u32 RenderScene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int bang
     D3DXVECTOR3 r = 0.5f*(result->m_max - result->m_min);
     result->m_origin = result->m_min + r;
 
-    u32 total_indices = 0;
-    for (u32 f=0;f<frag_count;f++)
+    uint32_t total_indices = 0;
+    for (uint32_t f=0;f<frag_count;f++)
     {
         if ( ( bangleIndex >= 0 ) && ( loader->m_fragments[ f ].m_bangle_index != bangleIndex ) )
         {
             continue;
         }
 
-        total_indices += (u32)loader->m_fragments[f].m_indices.size();
+        total_indices += (uint32_t)loader->m_fragments[f].m_indices.size();
     }
 
     Log::Print( TXT( "Building D3D vertex data\n" ) );
-    result->m_vert_count = (u32)loader->m_vertices.size()/loader->m_vtxSize;  // size is in floats
+    result->m_vert_count = (uint32_t)loader->m_vertices.size()/loader->m_vtxSize;  // size is in floats
     result->m_index_count = total_indices;
 
-    u32 bytes = result->m_vert_count*sizeof(MeshVertex);
+    uint32_t bytes = result->m_vert_count*sizeof(MeshVertex);
     if ( bytes == 0 )
     {
         Log::Warning( TXT( "Possible legacy file. '%s'\n" ),fname);
         return 0xffffffff;
     }
-    u32 vec_bytes = result->m_vert_count*sizeof(VertexDebug)*2;
+    uint32_t vec_bytes = result->m_vert_count*sizeof(VertexDebug)*2;
 
     IDirect3DDevice9* device = m_renderer->GetD3DDevice();
 
@@ -303,7 +303,7 @@ u32 RenderScene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int bang
     memcpy(p,&loader->m_vertices[0],bytes);  
 
     /*  tchar buff[1024];
-    for (u32 v=0;v<result->m_vert_count;v++)
+    for (uint32_t v=0;v<result->m_vert_count;v++)
     {
     MeshVertex* mv = (MeshVertex*)&loader->m_vertices[v*16];
     sprintf(buff,"Vertex %d\n",v);
@@ -326,7 +326,7 @@ u32 RenderScene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int bang
 
     VertexDebug* dv;
     result->m_dbg_normal->Lock(0,0,(void**)&dv,0);  
-    for (u32 v=0;v<result->m_vert_count;v++)
+    for (uint32_t v=0;v<result->m_vert_count;v++)
     {
         dv[v*2+0].m_pos.x = loader->m_vertices[v*loader->m_vtxSize+0];
         dv[v*2+0].m_pos.y = loader->m_vertices[v*loader->m_vtxSize+1];
@@ -341,7 +341,7 @@ u32 RenderScene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int bang
     result->m_dbg_normal->Unlock();
 
     result->m_dbg_tangent->Lock(0,0,(void**)&dv,0);  
-    for (u32 v=0;v<result->m_vert_count;v++)
+    for (uint32_t v=0;v<result->m_vert_count;v++)
     {
         dv[v*2+0].m_pos.x = loader->m_vertices[v*loader->m_vtxSize+0];
         dv[v*2+0].m_pos.y = loader->m_vertices[v*loader->m_vtxSize+1];
@@ -359,12 +359,12 @@ u32 RenderScene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int bang
     result->m_fragment_count = loader->GetNumFragments( bangleIndex );
     result->m_fragments = new Fragment[result->m_fragment_count];
 
-    u16 *idx;
+    uint16_t *idx;
     result->m_indices->Lock(0,0,(void**)&idx,0);    
 
-    u32 currentFragment = 0;
-    u32 pos=0;
-    for (u32 f=0;f<frag_count;f++)
+    uint32_t currentFragment = 0;
+    uint32_t pos=0;
+    for (uint32_t f=0;f<frag_count;f++)
     {
         if ( ( bangleIndex >= 0 ) && ( loader->m_fragments[ f ].m_bangle_index != bangleIndex ) )
         {
@@ -383,7 +383,7 @@ u32 RenderScene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int bang
             _stprintf( shader_name, TXT( "%s.xml" ), loader->m_fragments[f].m_shader.c_str() );
         }
 
-        u32 idx_count = (u32)loader->m_fragments[f].m_indices.size();
+        uint32_t idx_count = (uint32_t)loader->m_fragments[f].m_indices.size();
         result->m_fragments[currentFragment].m_orig_shader = m_renderer->m_shader_manager.LoadShader(shader_name, true, loader->m_fragments[ f ].m_shader_loader);
         if (result->m_fragments[currentFragment].m_orig_shader==0xffffffff)
         {
@@ -393,14 +393,14 @@ u32 RenderScene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int bang
         result->m_fragments[currentFragment].m_prim_count = idx_count/3;
 
         /*    Log::Print( TXT( "Fragment %d [base idx = %d, index count = %d]\n" ),f,result->m_fragments[currentFragment].m_base_index,idx_count);
-        for (u32 t=0;t<result->m_fragments[currentFragment].m_prim_count;t++)
+        for (uint32_t t=0;t<result->m_fragments[currentFragment].m_prim_count;t++)
         {
         Log::Print( TXT( "  Triangle %d: %d, %d, %d\n" ),t, loader->m_fragments[f].m_indices[t*3+0],loader->m_fragments[f].m_indices[t*3+1],loader->m_fragments[f].m_indices[t*3+2]);
         }*/
 
-        for (u32 i=0;i<idx_count;i++)
+        for (uint32_t i=0;i<idx_count;i++)
         {
-            idx[pos]=(u16)loader->m_fragments[f].m_indices[i];
+            idx[pos]=(uint16_t)loader->m_fragments[f].m_indices[i];
             pos++;
         }
 
@@ -413,11 +413,11 @@ u32 RenderScene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int bang
 
     Log::Print( TXT( "Done\n" ) );
 
-    return (u32)g_loaded_meshes.size()-1;
+    return (uint32_t)g_loaded_meshes.size()-1;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-u32 RenderScene::LoadNewEnvironment(const tchar* fname,u32 clear_color)
+uint32_t RenderScene::LoadNewEnvironment(const tchar* fname,uint32_t clear_color)
 {
     float r[9];
     float g[9];
@@ -446,7 +446,7 @@ u32 RenderScene::LoadNewEnvironment(const tchar* fname,u32 clear_color)
     env->m_env_texture = cube_tex;
     env->m_clearcolor = clear_color;
 
-    for (u32 sh=0;sh<9;sh++)
+    for (uint32_t sh=0;sh<9;sh++)
     {
         env->m_sh[sh].x = r1[sh];
         env->m_sh[sh].y = g1[sh];
@@ -456,17 +456,17 @@ u32 RenderScene::LoadNewEnvironment(const tchar* fname,u32 clear_color)
 
     g_loaded_environments.push_back(env);
 
-    return (u32)g_loaded_environments.size()-1;
+    return (uint32_t)g_loaded_environments.size()-1;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-u32 RenderScene::LoadEnvironment(const tchar* fname, u32 clear_color)
+uint32_t RenderScene::LoadEnvironment(const tchar* fname, uint32_t clear_color)
 {
-    u32 crc = Helium::StringCrc32(fname);
+    uint32_t crc = Helium::StringCrc32(fname);
 
-    u32 env_count = (u32)g_loaded_environments.size();
-    u32 handle = 0xffffffff;
-    for (u32 i=0;i<env_count;i++)
+    uint32_t env_count = (uint32_t)g_loaded_environments.size();
+    uint32_t handle = 0xffffffff;
+    for (uint32_t i=0;i<env_count;i++)
     {
         if (g_loaded_environments[i])
         {
@@ -663,7 +663,7 @@ inline D3DXVECTOR3 deriv_uv(D3DXVECTOR3 (*f)(float,float), float u, float v)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-RenderMesh* InitMesh(Renderer* render,const tchar* name,D3DXVECTOR3 (*func)(float,float),i32 num_u, i32 num_v)
+RenderMesh* InitMesh(Renderer* render,const tchar* name,D3DXVECTOR3 (*func)(float,float),int32_t num_u, int32_t num_v)
 {
     RenderMesh* result = new RenderMesh(name);
 
@@ -680,8 +680,8 @@ RenderMesh* InitMesh(Renderer* render,const tchar* name,D3DXVECTOR3 (*func)(floa
         MeshVertex *p;
         result->m_verts->Lock(0,0,(void**)&p,0);
 
-        for (i32 j = 0; j <= num_v; j++)
-            for (i32 i = 0; i <= num_u; i++)
+        for (int32_t j = 0; j <= num_v; j++)
+            for (int32_t i = 0; i <= num_u; i++)
             {
                 float u = float(i) / num_u;
                 float v = float(j) / num_v;
@@ -724,8 +724,8 @@ RenderMesh* InitMesh(Renderer* render,const tchar* name,D3DXVECTOR3 (*func)(floa
 
     // indices
     {
-        i32 i, j, k;
-        u16 *p;
+        int32_t i, j, k;
+        uint16_t *p;
 
         result->m_indices->Lock(0,0,(void**)&p,0);    
         for (j = 0; j < num_v; j++)
@@ -733,14 +733,14 @@ RenderMesh* InitMesh(Renderer* render,const tchar* name,D3DXVECTOR3 (*func)(floa
             k = j * (num_u + 1);
             for (i = 0; i < num_u; i++, k++)
             {
-                *p++ = (u16)(k);
-                *p++ = (u16)(k + (num_u + 1));
-                *p++ = (u16)(k + 1);
+                *p++ = (uint16_t)(k);
+                *p++ = (uint16_t)(k + (num_u + 1));
+                *p++ = (uint16_t)(k + 1);
 
 
-                *p++ = (u16)(k + (num_u + 1) + 1);
-                *p++ = (u16)(k + 1);
-                *p++ = (u16)(k + (num_u + 1));
+                *p++ = (uint16_t)(k + (num_u + 1) + 1);
+                *p++ = (uint16_t)(k + 1);
+                *p++ = (uint16_t)(k + (num_u + 1));
 
             }
         }
@@ -777,8 +777,8 @@ void CreateDefaultMeshes(Renderer* render)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void RenderScene::RemoveAllMeshes()
 {
-    u32 count = (u32)g_loaded_meshes.size();
-    for (u32 i=0;i<count;i++)
+    uint32_t count = (uint32_t)g_loaded_meshes.size();
+    for (uint32_t i=0;i<count;i++)
     {
         // There should only be default meshes left in the list
         HELIUM_ASSERT( g_loaded_meshes[i] ? g_loaded_meshes[i]->m_filename.substr( 0, 2 ).compare( TXT( "@@" ) ) == 0 : true );
@@ -787,16 +787,16 @@ void RenderScene::RemoveAllMeshes()
     }
 }
 
-static void FillCubeTexture(IDirect3DCubeTexture9* tex, D3DCUBEMAP_FACES face, u32 val)
+static void FillCubeTexture(IDirect3DCubeTexture9* tex, D3DCUBEMAP_FACES face, uint32_t val)
 {
     D3DLOCKED_RECT rect;
 
     tex->LockRect(face,0,&rect,0,0);
 
-    for (u32 y=0;y<16;y++)
+    for (uint32_t y=0;y<16;y++)
     {
-        u32* line_data = (u32*) (((u8*)rect.pBits)+(y*rect.Pitch));
-        for (u32 x=0;x<16;x++)
+        uint32_t* line_data = (uint32_t*) (((uint8_t*)rect.pBits)+(y*rect.Pitch));
+        for (uint32_t x=0;x<16;x++)
             line_data[x]=val;
     }
     tex->UnlockRect(face,0);
@@ -851,7 +851,7 @@ void CreateDefaultEnvironments(Renderer* render)
     D3DXSHRotate(g1,3,&mat,g);
     D3DXSHRotate(b1,3,&mat,b);
 
-    for (u32 sh=0;sh<9;sh++)
+    for (uint32_t sh=0;sh<9;sh++)
     {
         env->m_sh[sh].x = r1[sh];
         env->m_sh[sh].y = g1[sh];
@@ -867,8 +867,8 @@ void CreateDefaultEnvironments(Renderer* render)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void RenderScene::RemoveAllEnvironments()
 {
-    u32 count = (u32)g_loaded_environments.size();
-    for (u32 i=0;i<count;i++)
+    uint32_t count = (uint32_t)g_loaded_environments.size();
+    for (uint32_t i=0;i<count;i++)
     {
         delete g_loaded_environments[i];
         g_loaded_environments[i] = 0;

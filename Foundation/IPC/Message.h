@@ -12,10 +12,10 @@ namespace Helium
         class FOUNDATION_API MessageHeader
         {
         public:
-            u32 m_ID;
-            i32 m_TRN;
-            u32 m_Size;
-            u32 m_Type;
+            uint32_t m_ID;
+            int32_t m_TRN;
+            uint32_t m_Size;
+            uint32_t m_Type;
 
             MessageHeader()
             {
@@ -28,7 +28,7 @@ namespace Helium
                 }
             }
 
-            MessageHeader(u32 id, i32 trn, u32 size, u32 type)
+            MessageHeader(uint32_t id, int32_t trn, uint32_t size, uint32_t type)
             {
                 if (this)
                 {
@@ -47,53 +47,53 @@ namespace Helium
 
         private:
             Message*  m_Next;
-            u32       m_Number;
-            u8*       m_Data;
+            uint32_t       m_Number;
+            uint8_t*       m_Data;
 
         private:
-            Message(u32 id, i32 trans, u32 size, u32 type);
+            Message(uint32_t id, int32_t trans, uint32_t size, uint32_t type);
 
         public:
             ~Message();
 
-            u32 GetNumber() const
+            uint32_t GetNumber() const
             {
                 return m_Number;
             }
 
-            void SetNumber(u32 n)
+            void SetNumber(uint32_t n)
             {
                 m_Number = n;
             }
 
-            u32 GetID() const
+            uint32_t GetID() const
             {
                 return m_ID;
             }
 
-            i32 GetTransaction() const
+            int32_t GetTransaction() const
             {
                 return m_TRN;
             }
 
-            u32 GetSize() const
+            uint32_t GetSize() const
             {
                 return m_Size;
             }
 
-            u32 GetType() const
+            uint32_t GetType() const
             {
                 return m_Type;
             }
 
-            u8* GetData() const
+            uint8_t* GetData() const
             {
                 return m_Data;
             }
 
-            u8* TakeData()
+            uint8_t* TakeData()
             {
-                u8* data = m_Data;
+                uint8_t* data = m_Data;
                 m_Data = NULL;
                 return data;
             }
@@ -104,8 +104,8 @@ namespace Helium
         private:
             Message* m_Head;    // pointer to head message 
             Message* m_Tail;    // pointer to tail message 
-            u32 m_Count;        // number of messages in queue
-            u32 m_Total;        // number of messages that have passed through the queue since clear
+            uint32_t m_Count;        // number of messages in queue
+            uint32_t m_Total;        // number of messages that have passed through the queue since clear
 
             Helium::Mutex m_Mutex;      // mutex to control access to the queue
             Helium::Semaphore m_Append; // semaphore that increments on add, decrements on remove
@@ -117,8 +117,8 @@ namespace Helium
             void Add(Message*);
             Message* Remove();
             void Clear();
-            u32 Count();
-            u32 Total();
+            uint32_t Count();
+            uint32_t Total();
             void Wait();
         };
     }

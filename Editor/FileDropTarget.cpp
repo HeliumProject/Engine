@@ -134,7 +134,7 @@ wxDragResult FileDropTarget::OnDragOver( wxCoord x, wxCoord y, wxDragResult def 
         FileDroppedArgs args( (const wxChar*)filenames[ 0 ].c_str(), x, y, def );
         if ( TestExtension( args.m_Path.Extension().c_str() ) )
         {
-            m_DragOverEvent.Raise( args ); //, &results.front(), (u32)results.size() );
+            m_DragOverEvent.Raise( args ); //, &results.front(), (uint32_t)results.size() );
             //if ( results.size() > 0 )
             //{
             //  result = results.front();
@@ -170,7 +170,7 @@ wxDragResult FileDropTarget::OnDragOver( wxCoord x, wxCoord y, wxDragResult def 
 //        FileDroppedArgs args( (const wxChar*)filenames[ 0 ].c_str() ); //x, y, def );
 //        if ( TestExtension( args.m_Path.Extension().c_str() ) )
 //        {
-//            m_DropEvent.Raise( args ); //, &results.front(), (u32)results.size() );
+//            m_DropEvent.Raise( args ); //, &results.front(), (uint32_t)results.size() );
 //            //if ( results.size() > 0 )
 //            //{
 //            //  result = results.front();

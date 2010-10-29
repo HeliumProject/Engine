@@ -39,7 +39,7 @@ namespace Helium
             tchar       m_String[0];
         };
 
-        const static u32 ConsoleOutputMessage = 0;
+        const static uint32_t ConsoleOutputMessage = 0;
 #pragma warning ( default: 4200 )
 
         class FOUNDATION_API Process : public Helium::RefCountBase<Process>
@@ -83,7 +83,7 @@ namespace Helium
             IPC::Message* Receive( bool wait = true );
 
             // a copy is made into the IPC connection system
-            bool Send(u32 id, u32 size = -1, const u8* data = NULL);
+            bool Send(uint32_t id, uint32_t size = -1, const uint8_t* data = NULL);
 
             // test to see if its still running
             bool Running();

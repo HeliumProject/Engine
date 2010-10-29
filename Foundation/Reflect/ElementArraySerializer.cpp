@@ -31,7 +31,7 @@ void ElementArraySerializer::Clear()
     return m_Data->clear(); 
 }
 
-bool ElementArraySerializer::Set(const Serializer* src, u32 flags)
+bool ElementArraySerializer::Set(const Serializer* src, uint32_t flags)
 {
     const ElementArraySerializer* rhs = ConstObjectCast<ElementArraySerializer>(src);
     if (!rhs)

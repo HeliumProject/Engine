@@ -50,7 +50,7 @@ const tchar* Helium::TraceFile::GetFilePath()
     return file;
 }
 
-u64 Helium::TimerGetClock()
+uint64_t Helium::TimerGetClock()
 {
     return __rdtsc();
 }
@@ -100,26 +100,26 @@ inline double GetClockSpeed()
     return (float)(clockSpeed = d_clock_freq);
 }
 
-float Helium::CyclesToMillis(u64 cycles)
+float Helium::CyclesToMillis(uint64_t cycles)
 {
     return (float)((1000.0 * (double)cycles) / GetClockSpeed());
 }
 
-float Helium::TimeTaken(u64 start_time)
+float Helium::TimeTaken(uint64_t start_time)
 {
-    u64 time = TimerGetClock() - start_time;
+    uint64_t time = TimerGetClock() - start_time;
     return CyclesToMillis(time);
 }
 
-void Helium::ReportTime(const tchar* segment, u64 start_time, double& total_millis)
+void Helium::ReportTime(const tchar* segment, uint64_t start_time, double& total_millis)
 {
-    u64 time = TimerGetClock() - start_time;
+    uint64_t time = TimerGetClock() - start_time;
     double millis = CyclesToMillis(time);
     Helium::Print(TXT("%s took %f ms\n"), segment, millis);
     total_millis += millis;
 }
 
-u64 Helium::GetTotalMemory()
+uint64_t Helium::GetTotalMemory()
 {
     MemoryStatus status;
     GetMemoryStatus( &status );

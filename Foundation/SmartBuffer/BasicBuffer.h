@@ -78,7 +78,7 @@ namespace Helium
     {
         friend class BufferCollection;
 
-        const static u32 s_BlockSize = 2048;
+        const static uint32_t s_BlockSize = 2048;
 
         BasicBufferDebugInfoVector m_DebugInfo;
 
@@ -87,50 +87,50 @@ namespace Helium
         void AddDebugInfo(BasicBufferDebugInfo::BlockType blockType, unsigned int blockSize, const tchar *dbgStr, va_list argptr, tchar ignore_next);
         void DumpDebugInfo(FILE* file);
 
-        u32 AddBuffer( const u8* buffer, u32 size, const tchar* dbgStr = NULL, ... );
-        u32 AddBuffer( const SmartBufferPtr& buffer,bool add_fixups );
+        uint32_t AddBuffer( const uint8_t* buffer, uint32_t size, const tchar* dbgStr = NULL, ... );
+        uint32_t AddBuffer( const SmartBufferPtr& buffer,bool add_fixups );
 
-        u32 AddFile( const tchar* filename );
-        u32 AddFile( const tstring& filename );
+        uint32_t AddFile( const tchar* filename );
+        uint32_t AddFile( const tstring& filename );
 
-        u32 AddI8(i8 val, const tchar* dbgStr = NULL, ...);
-        u32 AddU8(u8 val, const tchar* dbgStr = NULL, ...);
+        uint32_t AddI8(int8_t val, const tchar* dbgStr = NULL, ...);
+        uint32_t AddU8(uint8_t val, const tchar* dbgStr = NULL, ...);
 
-        u32 AddI16(i16 val, const tchar* dbgStr = NULL, ...);
-        u32 AddU16(u16 val, const tchar* dbgStr = NULL, ...);
+        uint32_t AddI16(int16_t val, const tchar* dbgStr = NULL, ...);
+        uint32_t AddU16(uint16_t val, const tchar* dbgStr = NULL, ...);
 
-        u32 AddI32(i32 val, const tchar* dbgStr = NULL, ...);
-        u32 AddU32(u32 val, const tchar* dbgStr = NULL, ...);
+        uint32_t AddI32(int32_t val, const tchar* dbgStr = NULL, ...);
+        uint32_t AddU32(uint32_t val, const tchar* dbgStr = NULL, ...);
 
-        u32 AddI64(i64 val, const tchar* dbgStr = NULL, ...);
-        u32 AddU64(u64 val, const tchar* dbgStr = NULL, ...);
+        uint32_t AddI64(int64_t val, const tchar* dbgStr = NULL, ...);
+        uint32_t AddU64(uint64_t val, const tchar* dbgStr = NULL, ...);
 
-        u32 AddF16(f32 val, const tchar* dbgStr = NULL, ...);
-        u32 AddF32(f32 val, const tchar* dbgStr = NULL, ...);
-        u32 AddF64(f64 val, const tchar* dbgStr = NULL, ...);
+        uint32_t AddF16(float32_t val, const tchar* dbgStr = NULL, ...);
+        uint32_t AddF32(float32_t val, const tchar* dbgStr = NULL, ...);
+        uint32_t AddF64(float64_t val, const tchar* dbgStr = NULL, ...);
 
-        u32 AddVector3( const Vector3& v, const tchar* debugStr = NULL);
-        u32 AddVector4( const Vector4& v, const tchar* debugStr = NULL);
-        u32 AddVector4( const Vector3& v, f32 w, const tchar* debugStr = NULL);
-        u32 AddVector4( f32 x, f32 y, f32 z, f32 w, const tchar* debugStr = NULL);
+        uint32_t AddVector3( const Vector3& v, const tchar* debugStr = NULL);
+        uint32_t AddVector4( const Vector4& v, const tchar* debugStr = NULL);
+        uint32_t AddVector4( const Vector3& v, float32_t w, const tchar* debugStr = NULL);
+        uint32_t AddVector4( float32_t x, float32_t y, float32_t z, float32_t w, const tchar* debugStr = NULL);
 
-        void AddAtLocI8(i8 val, const BufferLocation& destination);
-        void AddAtLocU8(u8 val, const BufferLocation& destination);
+        void AddAtLocI8(int8_t val, const BufferLocation& destination);
+        void AddAtLocU8(uint8_t val, const BufferLocation& destination);
 
-        void AddAtLocI16(i16 val, const BufferLocation& destination);
-        void AddAtLocU16(u16 val, const BufferLocation& destination);
+        void AddAtLocI16(int16_t val, const BufferLocation& destination);
+        void AddAtLocU16(uint16_t val, const BufferLocation& destination);
 
-        void AddAtLocI32(i32 val, const BufferLocation& destination);
-        void AddAtLocU32(u32 val, const BufferLocation& destination);
+        void AddAtLocI32(int32_t val, const BufferLocation& destination);
+        void AddAtLocU32(uint32_t val, const BufferLocation& destination);
 
-        void AddAtLocI64(i64 val, const BufferLocation& destination);
-        void AddAtLocU64(u64 val, const BufferLocation& destination);
+        void AddAtLocI64(int64_t val, const BufferLocation& destination);
+        void AddAtLocU64(uint64_t val, const BufferLocation& destination);
 
-        void AddAtLocF32(f32 val, const BufferLocation& destination);
-        void AddAtLocF64(f64 val, const BufferLocation& destination);
+        void AddAtLocF32(float32_t val, const BufferLocation& destination);
+        void AddAtLocF64(float64_t val, const BufferLocation& destination);
 
-        void AddPad ( u32 pad_length );
-        void PadToArb ( u32 align_size );
+        void AddPad ( uint32_t pad_length );
+        void PadToArb ( uint32_t align_size );
         void PadToBlock()
         {
             PadToArb( s_BlockSize );
@@ -138,21 +138,21 @@ namespace Helium
 
         void PadToWord()
         {
-            PadToArb( sizeof( u32 ) );
+            PadToArb( sizeof( uint32_t ) );
         }
 
         /// Sets maximum capacity for buffer, reallocating if necessary.
-        void SetCapacity(u32 capacity);
+        void SetCapacity(uint32_t capacity);
 
         /// Reserves 'size' space in the buffer and returns a BufferLocation object, advances the write location
-        BufferLocation Reserve(u32 size, const tchar* dbgStr = NULL, ...);
-        void Reserve(BufferLocation& loc, u32 size, const tchar* dbgStr = NULL, ...);
+        BufferLocation Reserve(uint32_t size, const tchar* dbgStr = NULL, ...);
+        void Reserve(BufferLocation& loc, uint32_t size, const tchar* dbgStr = NULL, ...);
 
         /// Reserves space for a pointer in the buffer and returns a BufferLocation object, advances the write location
         // if size is zero an automatically sized pointer is reserved based on the platform otherwise size
         // must be 4 or 8 and in either case a pointer of this size will be created
-        BufferLocation ReservePointer(u32 size, const tchar* dbgStr = NULL, ... );
-        void ReservePointer(BufferLocation& loc, u32 size, const tchar* dbgStr = NULL, ... );
+        BufferLocation ReservePointer(uint32_t size, const tchar* dbgStr = NULL, ... );
+        void ReservePointer(BufferLocation& loc, uint32_t size, const tchar* dbgStr = NULL, ... );
 
         /// Reserves space for an offset in the buffer and returns a BufferLocation object, advances the write location
         BufferLocation ReserveOffset(const tchar* dbgStr = NULL, ... );

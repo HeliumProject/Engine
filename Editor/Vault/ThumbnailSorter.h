@@ -29,7 +29,7 @@ namespace Helium
 
             ThumbnailIteratorPtr GetIterator( ThumbnailTile* startingTile = NULL ) const;
 
-            i32 Compare( const ThumbnailTile* first, const ThumbnailTile* second ) const;
+            int32_t Compare( const ThumbnailTile* first, const ThumbnailTile* second ) const;
 
         private:
             typedef bool( *SortFunction )( const ThumbnailTile*, const ThumbnailTile* );

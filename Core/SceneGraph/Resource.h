@@ -117,7 +117,7 @@ namespace Helium
 
         struct PopulateArgs
         {
-            PopulateArgs(ResourceType t, u32 o, u8* b)
+            PopulateArgs(ResourceType t, uint32_t o, uint8_t* b)
                 : m_Type (t)
                 , m_Buffer (b)
                 , m_Offset (o)
@@ -126,8 +126,8 @@ namespace Helium
             }
 
             ResourceType m_Type;
-            u32 m_Offset;
-            u8* m_Buffer;
+            uint32_t m_Offset;
+            uint8_t* m_Buffer;
         };
         typedef Helium::Signature< PopulateArgs*> PopulateSignature;
 
@@ -162,8 +162,8 @@ namespace Helium
             bool m_IsDynamic;
 
             // data
-            u32 m_BaseIndex;
-            u32 m_ElementCount;
+            uint32_t m_BaseIndex;
+            uint32_t m_ElementCount;
             ElementType m_ElementType;
 
         public:
@@ -224,16 +224,16 @@ namespace Helium
                 }
             }
 
-            u32 GetBaseIndex() const
+            uint32_t GetBaseIndex() const
             {
                 return m_BaseIndex;
             }
 
-            u32 GetElementCount() const
+            uint32_t GetElementCount() const
             {
                 return m_ElementCount;
             }
-            void SetElementCount(u32 size)
+            void SetElementCount(uint32_t size)
             {
                 m_ElementCount = size;
                 m_IsDirty = true;
@@ -272,7 +272,7 @@ namespace Helium
 
         protected:
             // lock resource memory
-            virtual u8* Lock() = 0;
+            virtual uint8_t* Lock() = 0;
 
             // unlock resource memory
             virtual void Unlock() = 0;

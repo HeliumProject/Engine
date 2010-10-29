@@ -26,7 +26,7 @@ namespace Helium
             tstring m_Batch;
             tstring m_Input;
             tstring m_Output;
-            u64 m_Timer;
+            uint64_t m_Timer;
 
             enum RebuildCodes
             {

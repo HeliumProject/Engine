@@ -8,7 +8,7 @@ using namespace Helium;
 using namespace Helium::Render;
 
 bool                            DeviceManager::m_unique = false;
-u32                             DeviceManager::m_master_count = 0;
+uint32_t                             DeviceManager::m_master_count = 0;
 IDirect3D9*                     DeviceManager::m_master_d3d = 0;
 IDirect3DDevice9*               DeviceManager::m_master_device = 0;
 D3DFORMAT                       DeviceManager::m_back_buffer_format = D3DFMT_UNKNOWN;
@@ -35,7 +35,7 @@ DeviceManager::DeviceManager()
     //record the this pointer in the client array so we can call back to free/recreate default pool resources
     // first look for empty entries in the client array
     bool done = false;
-    for (u32 c=0;c<m_master_count;c++)
+    for (uint32_t c=0;c<m_master_count;c++)
     {
         if (m_clients[c]==0)
         {
@@ -100,7 +100,7 @@ DeviceManager::~DeviceManager()
     }
 
     // go through all the clients and remove ourself
-    for (u32 c=0;c<m_master_count;c++)
+    for (uint32_t c=0;c<m_master_count;c++)
     {
         if (m_clients[c]==this)
         {
@@ -120,7 +120,7 @@ void DeviceManager::SetUnique()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT DeviceManager::Init(HWND hwnd,u32 back_buffer_width, u32 back_buffer_height, u32 init_flags)
+HRESULT DeviceManager::Init(HWND hwnd,uint32_t back_buffer_width, uint32_t back_buffer_height, uint32_t init_flags)
 {
     HRESULT hr;
 
@@ -258,7 +258,7 @@ HRESULT DeviceManager::Init(HWND hwnd,u32 back_buffer_width, u32 back_buffer_hei
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT DeviceManager::ResizeSwapChain(u32 width, u32 height)
+HRESULT DeviceManager::ResizeSwapChain(uint32_t width, uint32_t height)
 {
     // we always have a back buffer pointer, release it
     if (m_back_buffer)
@@ -304,7 +304,7 @@ HRESULT DeviceManager::ResizeSwapChain(u32 width, u32 height)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT DeviceManager::ResizeDevice(u32 width, u32 height)
+HRESULT DeviceManager::ResizeDevice(uint32_t width, uint32_t height)
 {
     // release the default pool
     HandleClientDefaultPool(DEFPOOL_RELEASE);
@@ -353,7 +353,7 @@ HRESULT DeviceManager::ResizeDevice(u32 width, u32 height)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT DeviceManager::Resize(u32 width, u32 height)
+HRESULT DeviceManager::Resize(uint32_t width, uint32_t height)
 {
     if (m_swapchain)
     {
@@ -392,7 +392,7 @@ HRESULT DeviceManager::Reset()
     HRESULT hr = S_OK;
 
     // step 1, go through all the clients and release their default pool resources
-    for (u32 c=0;c<m_master_count;c++)
+    for (uint32_t c=0;c<m_master_count;c++)
     {
         if (m_clients[c])
         {
@@ -401,7 +401,7 @@ HRESULT DeviceManager::Reset()
     }
 
     // step 2, go through all the clients and destroy their depth buffers and swap chains
-    for (u32 c=0;c<m_master_count;c++)
+    for (uint32_t c=0;c<m_master_count;c++)
     {
         if (m_clients[c])
         {
@@ -429,7 +429,7 @@ HRESULT DeviceManager::Reset()
     m_device->Reset(&m_master_pp);
 
     // step 4, go through all the clients and recreate the depth buffer and swap chains based on the local parameters
-    for (u32 c=0;c<m_master_count;c++)
+    for (uint32_t c=0;c<m_master_count;c++)
     {
         if (m_clients[c])
         {
@@ -456,7 +456,7 @@ HRESULT DeviceManager::Reset()
     }
 
     // step 5, go through all the clients and create their default pool resources
-    for (u32 c=0;c<m_master_count;c++)
+    for (uint32_t c=0;c<m_master_count;c++)
     {
         if (m_clients[c])
         {
@@ -536,8 +536,8 @@ bool DeviceManager::SaveTGA(const tchar* fname)
 
     surface->LockRect(&lr,0,0);
 
-    u8* pixels = (u8*)lr.pBits;
-    u32 stride = lr.Pitch;
+    uint8_t* pixels = (uint8_t*)lr.pBits;
+    uint32_t stride = lr.Pitch;
 
     FILE * texture_file = _tfopen(fname, TXT( "wb" ) );
     if (!texture_file)
@@ -557,14 +557,14 @@ bool DeviceManager::SaveTGA(const tchar* fname)
     tga.colorMapBits = 0;
     tga.xOrigin = 0;
     tga.yOrigin = 0;
-    tga.width = (u16)desc.Width;
-    tga.height = (u16)desc.Height;
+    tga.width = (uint16_t)desc.Width;
+    tga.height = (uint16_t)desc.Height;
 
     fwrite(&tga,sizeof(tga),1,texture_file);
 
-    for (u32 y=0;y<desc.Height;y++)
+    for (uint32_t y=0;y<desc.Height;y++)
     {
-        for (u32 x=0;x<desc.Width;x++)
+        for (uint32_t x=0;x<desc.Width;x++)
         {
             // write RGB24 bits
             fwrite(pixels + (4*x),3,1,texture_file);
@@ -683,7 +683,7 @@ static D3DVERTEXELEMENT9 g_VertexDec_Mesh[] =  // total size 64
 void DeviceManager::CreateBaseResources()
 {
 #ifdef PRECOMPILED_SHADERS
-    for (u32 vs=0;vs<__VERTEX_SHADER_LAST__;vs++)
+    for (uint32_t vs=0;vs<__VERTEX_SHADER_LAST__;vs++)
     {
         if (FAILED(m_device->CreateVertexShader((const DWORD*)g_compiled_vertex_shaders[vs],&m_vertex_shaders[vs])))
         {
@@ -692,7 +692,7 @@ void DeviceManager::CreateBaseResources()
         }
     }
 
-    for (u32 ps=0;ps<__PIXEL_SHADER_LAST__;ps++)
+    for (uint32_t ps=0;ps<__PIXEL_SHADER_LAST__;ps++)
     {
         if (FAILED(m_device->CreatePixelShader((const DWORD*)g_compiled_pixel_shaders[ps],&m_pixel_shaders[ps])))
         {
@@ -711,17 +711,17 @@ void DeviceManager::CreateBaseResources()
 void DeviceManager::FreeBaseResources()
 {
     // delete all the shaders and vertex decls
-    for (u32 s=0;s<__VERTEX_SHADER_LAST__;s++)
+    for (uint32_t s=0;s<__VERTEX_SHADER_LAST__;s++)
     {
         if (m_vertex_shaders[s])
             m_vertex_shaders[s]->Release();
     }
-    for (u32 s=0;s<__PIXEL_SHADER_LAST__;s++)
+    for (uint32_t s=0;s<__PIXEL_SHADER_LAST__;s++)
     {
         if (m_pixel_shaders[s])
             m_pixel_shaders[s]->Release();
     }
-    for (u32 s=0;s<__VERTEX_DECL_LAST__;s++)
+    for (uint32_t s=0;s<__VERTEX_DECL_LAST__;s++)
     {
         if (m_vertex_dec[s])
             m_vertex_dec[s]->Release();

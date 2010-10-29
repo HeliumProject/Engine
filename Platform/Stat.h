@@ -23,11 +23,11 @@ namespace Helium
 
     struct PLATFORM_API Stat
     {
-        u16 m_Mode;
-        i64 m_Size;
-        u64 m_AccessTime;
-        u64 m_ModifiedTime;
-        u64 m_CreatedTime;
+        uint16_t m_Mode;
+        int64_t m_Size;
+        uint64_t m_AccessTime;
+        uint64_t m_ModifiedTime;
+        uint64_t m_CreatedTime;
 
         Stat()
             : m_Mode( 0 )

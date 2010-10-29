@@ -114,13 +114,13 @@ GridWithIcons::~GridWithIcons()
 ///////////////////////////////////////////////////////////////////////////////
 // Adds a row to the grid.
 // 
-bool GridWithIcons::AddRow( const tstring& name, bool visible, bool selectable, i32 imageIndex )
+bool GridWithIcons::AddRow( const tstring& name, bool visible, bool selectable, int32_t imageIndex )
 {
   bool isOk = false;
   if ( AddRow( name, visible, selectable ) )
   {
     // Find the row we just inserted
-    i32 row = GetRowNumber( name );
+    int32_t row = GetRowNumber( name );
 
     if ( row >= 0 )
     {
@@ -150,10 +150,10 @@ void GridWithIcons::ResizeColumns()
   wxSize gridSize = m_Grid->GetSize();
   wxSize gridWindowSize = m_Grid->GetGridWindow()->GetSize();
   bool isVScrollbarShowing = ( gridWindowSize.x != gridSize.x );
-  const i32 scrollGutter = isVScrollbarShowing ? wxSystemSettings::GetMetric( wxSYS_VSCROLL_X ) : 0;
-  const i32 startWidth = m_Grid->GetColSize( m_ColumnViz ) + m_Grid->GetColSize( m_ColumnSel ) + m_Grid->GetColSize( m_ColumnIcon );
-  const i32 totalWidth = m_Panel->GetSize().x;
-  const i32 pad = m_Grid->GetScrollLineX() + scrollGutter;
-  const i32 width = totalWidth - startWidth - pad;
+  const int32_t scrollGutter = isVScrollbarShowing ? wxSystemSettings::GetMetric( wxSYS_VSCROLL_X ) : 0;
+  const int32_t startWidth = m_Grid->GetColSize( m_ColumnViz ) + m_Grid->GetColSize( m_ColumnSel ) + m_Grid->GetColSize( m_ColumnIcon );
+  const int32_t totalWidth = m_Panel->GetSize().x;
+  const int32_t pad = m_Grid->GetScrollLineX() + scrollGutter;
+  const int32_t width = totalWidth - startWidth - pad;
   m_Grid->SetColSize( m_ColumnName, width );
 }

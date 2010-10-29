@@ -13,7 +13,7 @@ namespace Helium
         class FOUNDATION_API Changeset : public Helium::RefCountBase< Changeset >
         {
         public:
-            u64                m_Id;
+            uint64_t                m_Id;
             tstring            m_Description;
             V_File             m_Files;
 

@@ -65,20 +65,20 @@ namespace Helium
 
     struct LoadRAWInfo
     {
-      u32  m_RawFormat;
-      u32  m_Width;
-      u32  m_Height;
+      uint32_t  m_RawFormat;
+      uint32_t  m_Width;
+      uint32_t  m_Height;
       bool m_FlipVertical;
     };
 
   public:
     ColorFormat  m_NativeFormat;      // Native format of surface
-    u32          m_Width;             // Width of surface
-    u32          m_Height;            // Height of surface
-    u32          m_Depth;             // Depth of surface (1 for 2D and 0 for cube maps, N for volume maps)
-    u32          m_DataSize;          // Size in bytes of the textureData (all faces are the same size)
+    uint32_t          m_Width;             // Width of surface
+    uint32_t          m_Height;            // Height of surface
+    uint32_t          m_Depth;             // Depth of surface (1 for 2D and 0 for cube maps, N for volume maps)
+    uint32_t          m_DataSize;          // Size in bytes of the textureData (all faces are the same size)
 
-    f32*         m_Channels[CUBE_NUM_FACES][NUM_TEXTURE_CHANNELS];    // Image data bits (2D and volume maps only use entry 0, cube maps use all CUBE_NUM_FACES)
+    float32_t*         m_Channels[CUBE_NUM_FACES][NUM_TEXTURE_CHANNELS];    // Image data bits (2D and volume maps only use entry 0, cube maps use all CUBE_NUM_FACES)
 
   public:
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,7 +95,7 @@ namespace Helium
     // Create a 2D texture in the specified format
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    Image(u32 width, u32 height, ColorFormat native_fmt);
+    Image(uint32_t width, uint32_t height, ColorFormat native_fmt);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -107,7 +107,7 @@ namespace Helium
     // For a volume texture specify depth as requried
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    Image(u32 width, u32 height, u32 depth, ColorFormat native_fmt);
+    Image(uint32_t width, uint32_t height, uint32_t depth, ColorFormat native_fmt);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -126,7 +126,7 @@ namespace Helium
     // converts the data in in_data from fmt to float and places it in face
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void  FillFaceData(u32 face, ColorFormat fmt, const void* in_data);
+    void  FillFaceData(uint32_t face, ColorFormat fmt, const void* in_data);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -145,7 +145,7 @@ namespace Helium
     // The user is responsible for cleaning up the data he acquired
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    static  u8* GenerateFormatData(const Image* src_tex, ColorFormat data_format, u32 face, bool convert_to_srgb);
+    static  uint8_t* GenerateFormatData(const Image* src_tex, ColorFormat data_format, uint32_t face, bool convert_to_srgb);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -155,7 +155,7 @@ namespace Helium
     // a single face/slice is extracted and returned as a 2D texture
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    Image* CloneFace(u32 face=0) const;
+    Image* CloneFace(uint32_t face=0) const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -167,7 +167,7 @@ namespace Helium
     // This function can convert a 2D texture into a cube map
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool InsertFace(Image* tex,u32 face);
+    bool InsertFace(Image* tex,uint32_t face);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -177,17 +177,17 @@ namespace Helium
     // which face (cubemap) or slice (volume map) is written.
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool WriteTGA(const tchar* fname, u32 face, bool convert_to_srgb) const;
+    bool WriteTGA(const tchar* fname, uint32_t face, bool convert_to_srgb) const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
     // WriteRAW()
     //
-    // Writes raw data for a given face with a simple header(u32 width,u32 height, u32 format)
+    // Writes raw data for a given face with a simple header(uint32_t width,uint32_t height, uint32_t format)
     // which face (cubemap) or slice (volume map) is written.
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool WriteRAW(const tchar* fname, void* data, u32 size, u32 face, bool convert_to_srgb) const;
+    bool WriteRAW(const tchar* fname, void* data, uint32_t size, uint32_t face, bool convert_to_srgb) const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -220,7 +220,7 @@ namespace Helium
     // to flip
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void FlipVertical(u32 face=0);
+    void FlipVertical(uint32_t face=0);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -231,7 +231,7 @@ namespace Helium
     // to flip
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void FlipHorizontal(u32 face=0);
+    void FlipHorizontal(uint32_t face=0);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -247,21 +247,21 @@ namespace Helium
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void InvertColors(u32 face = 0);
-    void DoubleContrast(u32 face = 0);
+    void InvertColors(uint32_t face = 0);
+    void DoubleContrast(uint32_t face = 0);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool BlendImageFace(const Image* blend_source, float blend_strength, bool* channel_masks = NULL, u32 src_face = 0, u32 dst_face = 0);
-    bool OverlayBlendImageFace(const Image* base_source, const Image* overlay_source, const bool* channel_masks = NULL, u32 face = 0, u32 base_face = 0, u32 overlay_face = 0);
+    bool BlendImageFace(const Image* blend_source, float blend_strength, bool* channel_masks = NULL, uint32_t src_face = 0, uint32_t dst_face = 0);
+    bool OverlayBlendImageFace(const Image* base_source, const Image* overlay_source, const bool* channel_masks = NULL, uint32_t face = 0, uint32_t base_face = 0, uint32_t overlay_face = 0);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void  HighPassFilterImage(const bool* channel_mask, u32 face, UVAddressMode u_wrap_mode, UVAddressMode v_wrap_mode);
+    void  HighPassFilterImage(const bool* channel_mask, uint32_t face, UVAddressMode u_wrap_mode, UVAddressMode v_wrap_mode);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    Image*  FilterImageFace(const PostMipImageFilter *filters, u32 face, u32 mip_index = 0) const;
+    Image*  FilterImageFace(const PostMipImageFilter *filters, uint32_t face, uint32_t mip_index = 0) const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -271,8 +271,8 @@ namespace Helium
     //       The filter is applied to all the color channels.
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    Image* ScaleImage(u32           width,
-                        u32           height, 
+    Image* ScaleImage(uint32_t           width,
+                        uint32_t           height, 
                         ColorFormat   new_format, 
                         FilterType    filter, 
                         UVAddressMode u_wrap_mode = UV_CLAMP,
@@ -289,8 +289,8 @@ namespace Helium
     //       The fourth filter is applied to the alpha channel.
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    Image* ScaleImage(u32               width, 
-                        u32               height, 
+    Image* ScaleImage(uint32_t               width, 
+                        uint32_t               height, 
                         ColorFormat       new_format, 
                         const FilterType* filters,
                         UVAddressMode     u_wrap_mode = UV_CLAMP,
@@ -304,9 +304,9 @@ namespace Helium
     //       The filter is applied to all the color channels.
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    Image* ScaleImageFace(u32           width, 
-                            u32           height, 
-                            u32           face, 
+    Image* ScaleImageFace(uint32_t           width, 
+                            uint32_t           height, 
+                            uint32_t           face, 
                             ColorFormat   new_format,
                             FilterType    filter,
                             UVAddressMode u_wrap_mode = UV_CLAMP,
@@ -323,9 +323,9 @@ namespace Helium
     //       The fourth filter is applied to the alpha channel.
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    Image* ScaleImageFace(u32               width, 
-                            u32               height, 
-                            u32               face, 
+    Image* ScaleImageFace(uint32_t               width, 
+                            uint32_t               height, 
+                            uint32_t               face, 
                             ColorFormat       new_format, 
                             const FilterType* filters,                      
                             UVAddressMode     u_wrap_mode = UV_CLAMP,
@@ -342,8 +342,8 @@ namespace Helium
     Image* RelativeScaleImage(float scale_x, float scale_y, ColorFormat new_format, FilterType filter) const
     {
       // scale by the amount specified and round to the nearest pixel
-      u32 new_x = (u32)(((float)m_Width*scale_x)+0.5f);
-      u32 new_y = (u32)(((float)m_Height*scale_y)+0.5f);
+      uint32_t new_x = (uint32_t)(((float)m_Width*scale_x)+0.5f);
+      uint32_t new_y = (uint32_t)(((float)m_Height*scale_y)+0.5f);
       return ScaleImage(new_x, new_y, new_format, filter);
     }
 
@@ -357,8 +357,8 @@ namespace Helium
     ////////////////////////////////////////////////////////////////////////////////////////////////
     Image* ScaleUpNextPowerOfTwo(ColorFormat new_format, FilterType filter)
     {
-      u32 new_x = NextPowerOfTwo(m_Width);
-      u32 new_y = NextPowerOfTwo(m_Height);
+      uint32_t new_x = NextPowerOfTwo(m_Width);
+      uint32_t new_y = NextPowerOfTwo(m_Height);
       return ScaleImage(new_x, new_y, new_format, filter);
     }
 
@@ -372,8 +372,8 @@ namespace Helium
     ////////////////////////////////////////////////////////////////////////////////////////////////
     Image* ScaleDownNextPowerOfTwo(ColorFormat new_format, FilterType filter)
     {
-      u32 new_x = PreviousPowerOfTwo(m_Width);
-      u32 new_y = PreviousPowerOfTwo(m_Height);
+      uint32_t new_x = PreviousPowerOfTwo(m_Width);
+      uint32_t new_y = PreviousPowerOfTwo(m_Height);
       return ScaleImage(new_x, new_y, new_format, filter);
     }
 
@@ -480,10 +480,10 @@ namespace Helium
     // the specified location
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void Read(u32 x,u32 y, float& r, float& g, float& b, float& a, u32 face=0) const
+    void Read(uint32_t x,uint32_t y, float& r, float& g, float& b, float& a, uint32_t face=0) const
     {
       HELIUM_ASSERT(m_Channels[face][R]);
-      u32 pixel_idx = y*m_Width + x;
+      uint32_t pixel_idx = y*m_Width + x;
       r = m_Channels[face][R][pixel_idx];
       g = m_Channels[face][G][pixel_idx];
       b = m_Channels[face][B][pixel_idx];
@@ -499,10 +499,10 @@ namespace Helium
     // to write.
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool Write(u32 x,u32 y, float r, float g, float b, float a, u32 face=0)
+    bool Write(uint32_t x,uint32_t y, float r, float g, float b, float a, uint32_t face=0)
     {
       HELIUM_ASSERT(m_Channels[face][R]);
-      u32 pixel_idx = y*m_Width + x;
+      uint32_t pixel_idx = y*m_Width + x;
       m_Channels[face][R][pixel_idx] = r;
       m_Channels[face][G][pixel_idx] = g;
       m_Channels[face][B][pixel_idx] = b;
@@ -524,7 +524,7 @@ namespace Helium
     // Returns true if any pixel satisfies the < or > check against the threshold value
     // (based off of ShaderGenerator::IsTexChannelDataValid)
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool IsChannelDataSet( u32 face, u32 channel, f32 threshold_value, bool valid_if_greater ) const;
+    bool IsChannelDataSet( uint32_t face, uint32_t channel, float32_t threshold_value, bool valid_if_greater ) const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -552,9 +552,9 @@ namespace Helium
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    f32* GetFacePtr(u32 face, u32 channel) const
+    float32_t* GetFacePtr(uint32_t face, uint32_t channel) const
     {
-      f32* texture_data;
+      float32_t* texture_data;
 
       if (m_Depth==0)
       {
@@ -631,8 +631,8 @@ namespace Helium
     // Depending on the SAMPLE_NORMALIZED flag the UVs are either normalized or not
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    static const u32 SAMPLE_NORMALIZED = 0x00000001;
-    void Sample2D(float u, float v, float& r, float& g, float& b, float& a, u32 face, u32 flags=0) const;
+    static const uint32_t SAMPLE_NORMALIZED = 0x00000001;
+    void Sample2D(float u, float v, float& r, float& g, float& b, float& a, uint32_t face, uint32_t flags=0) const;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -661,14 +661,14 @@ namespace Helium
                                     const bool                        is_detail_map );
 
   private:
-    inline  void  FixUpChannels(u32 face)
+    inline  void  FixUpChannels(uint32_t face)
     {
       if(m_Depth == 0)
       {
         HELIUM_ASSERT(face < CUBE_NUM_FACES);
         if(m_Channels[face][R])
         {
-          u32 channel_f32_size  = m_Width*m_Height;
+          uint32_t channel_f32_size  = m_Width*m_Height;
           m_Channels[face][G]   = m_Channels[face][R] + channel_f32_size;
           m_Channels[face][B]   = m_Channels[face][G] + channel_f32_size;
           m_Channels[face][A]   = m_Channels[face][B] + channel_f32_size;
@@ -684,7 +684,7 @@ namespace Helium
       {
         HELIUM_ASSERT(m_Channels[0][R]);
 
-        u32 channel_f32_size    = m_Width*m_Height*m_Depth;
+        uint32_t channel_f32_size    = m_Width*m_Height*m_Depth;
         m_Channels[0][G]        = m_Channels[0][R] + channel_f32_size;
         m_Channels[0][B]        = m_Channels[0][G] + channel_f32_size;
         m_Channels[0][A]        = m_Channels[0][B] + channel_f32_size;
@@ -693,9 +693,9 @@ namespace Helium
 
     void  FilterImage(const PostMipImageFilter*  filters,
                       const Image*             src,
-                      u32                        dst_face,
-                      u32                        src_face,
-                      u32                        mip_index = 0);
+                      uint32_t                        dst_face,
+                      uint32_t                        src_face,
+                      uint32_t                        mip_index = 0);
 
   public:
     ////////////////////////////////////////////////////////////////////////////////////////////////

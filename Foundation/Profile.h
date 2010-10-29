@@ -51,10 +51,10 @@ namespace Helium
         class FOUNDATION_API Accumulator
         {
         public:
-            u32   m_Hits; 
+            uint32_t   m_Hits; 
             float m_TotalMillis; 
 
-            i32   m_Index;
+            int32_t   m_Index;
             char  m_Name[MAX_DESCRIPTION];
 
             Accumulator(); 
@@ -77,13 +77,13 @@ namespace Helium
         class FOUNDATION_API ScopeTimer
         {
         public: 
-            ScopeTimer(Accumulator* accum, const char* func, u32 line, const char* desc = NULL); 
+            ScopeTimer(Accumulator* accum, const char* func, uint32_t line, const char* desc = NULL); 
             ~ScopeTimer(); 
 
             char         m_Description[MAX_DESCRIPTION]; 
-            u64          m_StartTicks; 
+            uint64_t          m_StartTicks; 
             Accumulator* m_Accum; 
-            u32          m_UniqueID; 
+            uint32_t          m_UniqueID; 
             bool         m_Print; 
 
         private: 
@@ -93,25 +93,25 @@ namespace Helium
 
         struct Header
         {
-            u16 m_Command; 
-            u16 m_Size; 
+            uint16_t m_Command; 
+            uint16_t m_Size; 
         }; 
 
         struct InitPacket 
         {
             Header m_Header; 
-            u32    m_Version; 
-            u32    m_Signature; 
-            f32    m_Conversion; // PROFILE_CYCLES_FOR_CONVERSION cycles -> how many millis?
+            uint32_t    m_Version; 
+            uint32_t    m_Signature; 
+            float32_t    m_Conversion; // PROFILE_CYCLES_FOR_CONVERSION cycles -> how many millis?
         }; 
 
         struct ScopeEnterPacket
         {
             Header m_Header; 
-            u32    m_UniqueID; 
-            u32    m_StackDepth; 
-            u32    m_Line; 
-            u64    m_StartTicks; 
+            uint32_t    m_UniqueID; 
+            uint32_t    m_StackDepth; 
+            uint32_t    m_Line; 
+            uint64_t    m_StartTicks; 
             char   m_Description[PROFILE_PACKET_STRING_BUFSIZE]; 
             char   m_Function[PROFILE_PACKET_STRING_BUFSIZE]; 
         }; 
@@ -119,9 +119,9 @@ namespace Helium
         struct ScopeExitPacket 
         {
             Header m_Header;
-            u32    m_UniqueID;   
-            u32    m_StackDepth; 
-            u64    m_Duration; 
+            uint32_t    m_UniqueID;   
+            uint32_t    m_StackDepth; 
+            uint64_t    m_Duration; 
         }; 
 
         struct BlockEndPacket
@@ -141,11 +141,11 @@ namespace Helium
         {
         public:
             Helium::TraceFile m_TraceFile; 
-            u32               m_UniqueID; 
-            u32               m_StackDepth; 
-            u32               m_PacketBufferOffset; 
-            u8                m_PacketBuffer[PROFILE_PACKET_BLOCK_SIZE]; 
-            u32               m_AccumStack[PROFILE_ACCUMULATOR_MAX]; 
+            uint32_t               m_UniqueID; 
+            uint32_t               m_StackDepth; 
+            uint32_t               m_PacketBufferOffset; 
+            uint8_t                m_PacketBuffer[PROFILE_PACKET_BLOCK_SIZE]; 
+            uint32_t               m_AccumStack[PROFILE_ACCUMULATOR_MAX]; 
 
             Context(); 
             ~Context(); 
@@ -153,9 +153,9 @@ namespace Helium
             void FlushFile(); 
 
             template <class T>
-            T* AllocPacket(u32 cmd)
+            T* AllocPacket(uint32_t cmd)
             {
-                u32 spaceNeeded = sizeof(T) + sizeof(BlockEndPacket) + sizeof(ScopeEnterPacket); 
+                uint32_t spaceNeeded = sizeof(T) + sizeof(BlockEndPacket) + sizeof(ScopeEnterPacket); 
 
                 if (m_PacketBufferOffset + spaceNeeded >= PROFILE_PACKET_BLOCK_SIZE)
                 {

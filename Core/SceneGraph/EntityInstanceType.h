@@ -17,7 +17,7 @@ namespace Helium
             static void InitializeType();
             static void CleanupType();
 
-            EntityInstanceType( SceneGraph::Scene* scene, i32 instanceType );
+            EntityInstanceType( SceneGraph::Scene* scene, int32_t instanceType );
             ~EntityInstanceType();
 
             virtual void Reset() HELIUM_OVERRIDE;

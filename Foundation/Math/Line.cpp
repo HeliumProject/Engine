@@ -17,18 +17,18 @@ void Line::Transform(const Matrix4& m)
 }
 
 // http://astronomy.swin.edu.au/~pbourke/geometry/pointline/
-bool Line::IntersectsPoint(const Vector3& pos, const f32 err, f32* mu, Vector3* offset) const
+bool Line::IntersectsPoint(const Vector3& pos, const float32_t err, float32_t* mu, Vector3* offset) const
 {
     MATH_FUNCTION_TIMER();
 
-    f32 length = (m_Origin - m_Point).Length();
+    float32_t length = (m_Origin - m_Point).Length();
 
     if( fabs(length) < EPSILON )
     {
         return false;
     }
 
-    f32 u = (((pos.x - m_Origin.x) * (m_Point.x - m_Origin.x)) + ((pos.y - m_Origin.y) * (m_Point.y - m_Origin.y)) + ((pos.z - m_Origin.z) * (m_Point.z - m_Origin.z))) / (length * length);
+    float32_t u = (((pos.x - m_Origin.x) * (m_Point.x - m_Origin.x)) + ((pos.y - m_Origin.y) * (m_Point.y - m_Origin.y)) + ((pos.z - m_Origin.z) * (m_Point.z - m_Origin.z))) / (length * length);
 
     // closest m_Point does not fall within the line segment
     if(u < 0.0f || u > 1.0f)
@@ -72,8 +72,8 @@ bool Line::IntersectsLine(const Vector3& p1, const Vector3& p2, Vector3* locatio
     Vector3 p4 = m_Point;
 
     Vector3 p13, p43, p21;
-    f32 d1343, d4321, d1321, d4343, d2121;
-    f32 numer, denom, mua, mub;
+    float32_t d1343, d4321, d1321, d4343, d2121;
+    float32_t numer, denom, mua, mub;
 
     p13.x = p1.x - p3.x;
     p13.y = p1.y - p3.y;
@@ -123,7 +123,7 @@ bool Line::IntersectsLine(const Vector3& p1, const Vector3& p2, Vector3* locatio
 }
 
 // http://astronomy.swin.edu.au/~pbourke/geometry/lineline3d/
-bool Line::IntersectsSegment(const Vector3& p1, const Vector3& p2, const f32 err, f32* mu, Vector3* offset) const
+bool Line::IntersectsSegment(const Vector3& p1, const Vector3& p2, const float32_t err, float32_t* mu, Vector3* offset) const
 {
     MATH_FUNCTION_TIMER();
 
@@ -131,8 +131,8 @@ bool Line::IntersectsSegment(const Vector3& p1, const Vector3& p2, const f32 err
     Vector3 p4 = m_Point;
 
     Vector3 p13, p43, p21;
-    f32 d1343, d4321, d1321, d4343, d2121;
-    f32 numer, denom, ua, ub;
+    float32_t d1343, d4321, d1321, d4343, d2121;
+    float32_t numer, denom, ua, ub;
 
     p13.x = p1.x - p3.x;
     p13.y = p1.y - p3.y;
@@ -215,7 +215,7 @@ bool Line::IntersectSegmentTriangle( const Vector3& v0, const Vector3& v1, const
     Vector3 kNormal = kEdge1.Cross(kEdge2);
     Vector3 direction = m_Point - m_Origin;
 
-    f32 extent = direction.Length() * 0.5f;
+    float32_t extent = direction.Length() * 0.5f;
     direction.Normalize();
 
     // Solve Q + t*D = b1*E1 + b2*E2 (Q = kDiff, D = segment direction,
@@ -223,8 +223,8 @@ bool Line::IntersectSegmentTriangle( const Vector3& v0, const Vector3& v1, const
     //   |Dot(D,N)|*b1 = sign(Dot(D,N))*Dot(D,Cross(Q,E2))
     //   |Dot(D,N)|*b2 = sign(Dot(D,N))*Dot(D,Cross(E1,Q))
     //   |Dot(D,N)|*t = -sign(Dot(D,N))*Dot(Q,N)
-    f32 fDdN = direction.Dot(kNormal);
-    f32 fSign;
+    float32_t fDdN = direction.Dot(kNormal);
+    float32_t fSign;
     if (fDdN > EPSILON)
     {
         fSign = 1.0f;
@@ -241,17 +241,17 @@ bool Line::IntersectSegmentTriangle( const Vector3& v0, const Vector3& v1, const
         return false;
     }
 
-    f32 fDdQxE2 = fSign*direction.Dot(kDiff.Cross(kEdge2));
+    float32_t fDdQxE2 = fSign*direction.Dot(kDiff.Cross(kEdge2));
     if (fDdQxE2 >= 0.0f)
     {
-        f32 fDdE1xQ = fSign*direction.Dot(kEdge1.Cross(kDiff));
+        float32_t fDdE1xQ = fSign*direction.Dot(kEdge1.Cross(kDiff));
         if (fDdE1xQ >= 0.0f)
         {
             if (fDdQxE2 + fDdE1xQ <= fDdN)
             {
                 // line intersects triangle, check if segment does
-                f32 fQdN = -fSign*kDiff.Dot(kNormal);
-                f32 fExtDdN = extent*fDdN;
+                float32_t fQdN = -fSign*kDiff.Dot(kNormal);
+                float32_t fExtDdN = extent*fDdN;
                 if (-fExtDdN <= fQdN && fQdN <= fExtDdN)
                 {
                     // segment intersects triangle
@@ -284,15 +284,15 @@ bool Line::IntersectRayTriangle( const Vector3& v0, const Vector3& v1, const Vec
     //   |Dot(D,N)|*b1 = sign(Dot(D,N))*Dot(D,Cross(Q,E2))
     //   |Dot(D,N)|*b2 = sign(Dot(D,N))*Dot(D,Cross(E1,Q))
     //   |Dot(D,N)|*t = -sign(Dot(D,N))*Dot(Q,N)
-    f32 fDdN = direction.Dot(kNormal);
-    f32 fSign;
+    float32_t fDdN = direction.Dot(kNormal);
+    float32_t fSign;
     if (fDdN > EPSILON)
     {
-        fSign = (f32)1.0;
+        fSign = (float32_t)1.0;
     }
     else if (fDdN < -EPSILON)
     {
-        fSign = (f32)-1.0;
+        fSign = (float32_t)-1.0;
         fDdN = -fDdN;
     }
     else
@@ -302,17 +302,17 @@ bool Line::IntersectRayTriangle( const Vector3& v0, const Vector3& v1, const Vec
         return false;
     }
 
-    f32 fDdQxE2 = fSign*direction.Dot(kDiff.Cross(kEdge2));
-    if (fDdQxE2 >= (f32)0.0)
+    float32_t fDdQxE2 = fSign*direction.Dot(kDiff.Cross(kEdge2));
+    if (fDdQxE2 >= (float32_t)0.0)
     {
-        f32 fDdE1xQ = fSign*direction.Dot(kEdge1.Cross(kDiff));
-        if (fDdE1xQ >= (f32)0.0)
+        float32_t fDdE1xQ = fSign*direction.Dot(kEdge1.Cross(kDiff));
+        if (fDdE1xQ >= (float32_t)0.0)
         {
             if (fDdQxE2 + fDdE1xQ <= fDdN)
             {
                 // line intersects triangle, check if ray does
-                f32 fQdN = -fSign*kDiff.Dot(kNormal);
-                if (fQdN >= (f32)0.0)
+                float32_t fQdN = -fSign*kDiff.Dot(kNormal);
+                if (fQdN >= (float32_t)0.0)
                 {
                     // ray intersects triangle
                     return true;
@@ -331,11 +331,11 @@ bool Line::IntersectRayTriangle( const Vector3& v0, const Vector3& v1, const Vec
 // From Microsoft's Pick example...
 //  sf is the scaling of dir to intersection m_Point
 //  u and v are v0's and v1's barycentric coordinates
-bool Line::IntersectsTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, f32* bary0, f32* bary1, f32* scale) const
+bool Line::IntersectsTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, float32_t* bary0, float32_t* bary1, float32_t* scale) const
 {
     MATH_FUNCTION_TIMER();
 
-    f32 u, v;
+    float32_t u, v;
 
     // transform and copy m_Origin
     Vector3 orig = m_Origin;
@@ -351,7 +351,7 @@ bool Line::IntersectsTriangle(const Vector3& v0, const Vector3& v1, const Vector
     Vector3 pvec = direction.Cross(edge2);
 
     // If determinant is near zero, ray lies in plane of triangle
-    f32 det = edge1.Dot(pvec);
+    float32_t det = edge1.Dot(pvec);
 
     Vector3 tvec;
 
@@ -391,7 +391,7 @@ bool Line::IntersectsTriangle(const Vector3& v0, const Vector3& v1, const Vector
 
     if (bary0 || bary1 || scale)
     {
-        f32 invDet = 1.0f / det;
+        float32_t invDet = 1.0f / det;
 
         if (bary0)
         {
@@ -413,17 +413,17 @@ bool Line::IntersectsTriangle(const Vector3& v0, const Vector3& v1, const Vector
 }
 
 // http://astronomy.swin.edu.au/~pbourke/geometry/sphereline/
-bool Line::IntersectsSphere(const Vector3& pos, const f32 radius, V_Vector3* intersections) const
+bool Line::IntersectsSphere(const Vector3& pos, const float32_t radius, V_Vector3* intersections) const
 {
     MATH_FUNCTION_TIMER();
 
     // polynomial coefficients
-    f32 a = SQR(m_Point.x - m_Origin.x) + SQR(m_Point.y - m_Origin.y) + SQR(m_Point.z - m_Origin.z);
-    f32 b = 2 * ((m_Point.x - m_Origin.x)*(m_Origin.x - pos.x) + (m_Point.y - m_Origin.y)*(m_Origin.y - pos.y) + (m_Point.z - m_Origin.z)*(m_Origin.z - pos.z)) ;
-    f32 c = SQR(pos.x) + SQR(pos.y) + SQR(pos.z) + SQR(m_Origin.x) + SQR(m_Origin.y) + SQR(m_Origin.z) - 2 * (pos.x*m_Origin.x + pos.y*m_Origin.y + pos.z*m_Origin.z) - SQR(radius);
+    float32_t a = SQR(m_Point.x - m_Origin.x) + SQR(m_Point.y - m_Origin.y) + SQR(m_Point.z - m_Origin.z);
+    float32_t b = 2 * ((m_Point.x - m_Origin.x)*(m_Origin.x - pos.x) + (m_Point.y - m_Origin.y)*(m_Origin.y - pos.y) + (m_Point.z - m_Origin.z)*(m_Origin.z - pos.z)) ;
+    float32_t c = SQR(pos.x) + SQR(pos.y) + SQR(pos.z) + SQR(m_Origin.x) + SQR(m_Origin.y) + SQR(m_Origin.z) - 2 * (pos.x*m_Origin.x + pos.y*m_Origin.y + pos.z*m_Origin.z) - SQR(radius);
 
     // discriminant
-    f32 i = b * b - 4 * a * c ;
+    float32_t i = b * b - 4 * a * c ;
 
     if (i == 0.0)
     {
@@ -432,7 +432,7 @@ bool Line::IntersectsSphere(const Vector3& pos, const f32 radius, V_Vector3* int
             // one intersection
             intersections->resize(1);
 
-            f32 mu = -b/(2*a);
+            float32_t mu = -b/(2*a);
 
             (*intersections)[0] = Vector3 (m_Origin.x + mu*(m_Point.x-m_Origin.x), m_Origin.y + mu*(m_Point.y-m_Origin.y), m_Origin.z + mu*(m_Point.z-m_Origin.z));
         }
@@ -447,11 +447,11 @@ bool Line::IntersectsSphere(const Vector3& pos, const f32 radius, V_Vector3* int
             intersections->resize(2);
 
             // first intersection
-            f32 mu = (-b + static_cast<f32>(sqrt(SQR(b) - 4*a*c))) / (2*a);
+            float32_t mu = (-b + static_cast<float32_t>(sqrt(SQR(b) - 4*a*c))) / (2*a);
             (*intersections)[0] = Vector3 (m_Origin.x + mu*(m_Point.x-m_Origin.x), m_Origin.y + mu*(m_Point.y-m_Origin.y), m_Origin.z + mu*(m_Point.z-m_Origin.z));
 
             // second intersection
-            mu = (-b - static_cast<f32>(sqrt(SQR(b) - 4*a*c))) / (2*a);
+            mu = (-b - static_cast<float32_t>(sqrt(SQR(b) - 4*a*c))) / (2*a);
             (*intersections)[1] = Vector3 (m_Origin.x + mu*(m_Point.x-m_Origin.x), m_Origin.y + mu*(m_Point.y-m_Origin.y), m_Origin.z + mu*(m_Point.z-m_Origin.z));
         }
 
@@ -466,7 +466,7 @@ bool Line::IntersectsPlane(const Plane& plane, Vector3* intersection) const
 {
     MATH_FUNCTION_TIMER();
 
-    f32 den = (plane.A() * (m_Origin.x - m_Point.x)) + (plane.B() * (m_Origin.y - m_Point.y)) + (plane.C() * (m_Origin.z - m_Point.z));
+    float32_t den = (plane.A() * (m_Origin.x - m_Point.x)) + (plane.B() * (m_Origin.y - m_Point.y)) + (plane.C() * (m_Origin.z - m_Point.z));
 
     if (abs(den) < ValueNearZero)
     {
@@ -476,7 +476,7 @@ bool Line::IntersectsPlane(const Plane& plane, Vector3* intersection) const
     {
         if (intersection)
         {
-            f32 mu = ( (plane.A() * m_Origin.x) + (plane.B() * m_Origin.y) + (plane.C() * m_Origin.z) + plane.D() ) / den;
+            float32_t mu = ( (plane.A() * m_Origin.x) + (plane.B() * m_Origin.y) + (plane.C() * m_Origin.z) + plane.D() ) / den;
 
             (*intersection) = m_Origin + (m_Point - m_Origin) * mu;
         }
@@ -490,15 +490,15 @@ bool Line::IntersectsBox(const AlignedBox& box, Vector3* intersection) const
     MATH_FUNCTION_TIMER();
 
     bool inside = true;
-    i32 i;
+    int32_t i;
 
     // Plane selection
-    i32 whichPlane;
+    int32_t whichPlane;
 
     // Plane division values
-    const i32 LEFT = 0;
-    const i32 RIGHT = 1;
-    const i32 MIDDLE = 2;
+    const int32_t LEFT = 0;
+    const int32_t RIGHT = 1;
+    const int32_t MIDDLE = 2;
 
     // AABB values
     const Vector3& min = box.minimum;
@@ -519,19 +519,19 @@ bool Line::IntersectsBox(const AlignedBox& box, Vector3* intersection) const
     {
         if(m_Origin[i] < min[i])
         {
-            quadrant[i] = (f32)LEFT;
+            quadrant[i] = (float32_t)LEFT;
             candidatePlane[i] = min[i];
             inside = false;
         }
         else if (m_Origin[i] > max[i])
         {
-            quadrant[i] = (f32)RIGHT;
+            quadrant[i] = (float32_t)RIGHT;
             candidatePlane[i] = max[i];
             inside = false;
         }
         else
         {
-            quadrant[i] = (f32)MIDDLE;
+            quadrant[i] = (float32_t)MIDDLE;
         }
     }
 
@@ -605,10 +605,10 @@ void Line::ProjectPointOnSegment( const Vector3& point, Vector3& projectedPoint 
 {
     Vector3 diff = point - m_Origin;
     Vector3 direction = m_Point - m_Origin;
-    f32 extent = direction.Length();
+    float32_t extent = direction.Length();
     direction.Normalize();
 
-    f32 segmentParam = direction.Dot(diff);
+    float32_t segmentParam = direction.Dot(diff);
 
     if ( -extent < segmentParam )
     {
@@ -628,7 +628,7 @@ void Line::ProjectPointOnSegment( const Vector3& point, Vector3& projectedPoint 
 }
 
 
-f32 Line::DistanceSqrToPoint( const Vector3& point ) const
+float32_t Line::DistanceSqrToPoint( const Vector3& point ) const
 {
     Vector3 projectedPoint;
 
@@ -637,7 +637,7 @@ f32 Line::DistanceSqrToPoint( const Vector3& point ) const
     return (projectedPoint - point).LengthSquared();
 }
 
-f32 Line::DistanceToPoint( const Vector3& point ) const
+float32_t Line::DistanceToPoint( const Vector3& point ) const
 {
     return sqrt( DistanceSqrToPoint( point ) );
 }

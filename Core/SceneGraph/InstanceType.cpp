@@ -26,7 +26,7 @@ void InstanceType::CleanupType()
     Reflect::UnregisterClassType< SceneGraph::InstanceType >();
 }
 
-InstanceType::InstanceType( SceneGraph::Scene* scene, i32 instanceType )
+InstanceType::InstanceType( SceneGraph::Scene* scene, int32_t instanceType )
 : SceneGraph::HierarchyNodeType( scene, instanceType )
 , m_Pointer( NULL )
 {

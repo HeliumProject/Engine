@@ -9,8 +9,8 @@ namespace Helium
         class PrimitiveRings : public SceneGraph::PrimitiveTemplate<Position>
         {
         public:
-            f32 m_Radius;
-            u32 m_Steps;
+            float32_t m_Radius;
+            uint32_t m_Steps;
 
         public:
             PrimitiveRings(ResourceTracker* tracker);

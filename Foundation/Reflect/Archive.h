@@ -218,13 +218,13 @@ namespace Helium
             Cache m_Cache;
 
             // The types used
-            std::set< i32 > m_Types;
+            std::set< int32_t > m_Types;
 
             // The visitors to use
             V_ArchiveVisitor m_Visitors;
 
             // The type to serach for
-            i32 m_SearchType;
+            int32_t m_SearchType;
 
             // The abort status
             bool m_Abort;
@@ -283,9 +283,9 @@ namespace Helium
             //
         public:
             virtual void Serialize( const ElementPtr& element ) = 0;
-            virtual void Serialize( const V_Element& elements, u32 flags = 0 ) = 0;
+            virtual void Serialize( const V_Element& elements, uint32_t flags = 0 ) = 0;
             virtual void Deserialize( ElementPtr& element ) = 0;
-            virtual void Deserialize( V_Element& elements, u32 flags = 0 ) = 0;
+            virtual void Deserialize( V_Element& elements, uint32_t flags = 0 ) = 0;
 
         public:
             static const tchar* GetExtension( ArchiveType t )

@@ -111,5 +111,5 @@ void LocatorCreateTool::SetLocatorShape(int value)
 {
     s_Shape = static_cast< LocatorShape > (value);
 
-    Place(Math::Matrix4::Identity);
+    Place(Matrix4::Identity);
 }

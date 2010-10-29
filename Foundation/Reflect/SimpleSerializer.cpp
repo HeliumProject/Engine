@@ -359,18 +359,18 @@ template SimpleSerializer<f64>;
 template SimpleSerializer<Helium::GUID>;
 template SimpleSerializer<Helium::TUID>;
 
-template SimpleSerializer<Math::Vector2>;
-template SimpleSerializer<Math::Vector3>;
-template SimpleSerializer<Math::Vector4>;
-template SimpleSerializer<Math::Quaternion>;
+template SimpleSerializer<Vector2>;
+template SimpleSerializer<Vector3>;
+template SimpleSerializer<Vector4>;
+template SimpleSerializer<Quaternion>;
 
-template SimpleSerializer<Math::Matrix3>;
-template SimpleSerializer<Math::Matrix4>;
+template SimpleSerializer<Matrix3>;
+template SimpleSerializer<Matrix4>;
 
-template SimpleSerializer<Math::Color3>;
-template SimpleSerializer<Math::HDRColor3>;
-template SimpleSerializer<Math::Color4>;
-template SimpleSerializer<Math::HDRColor4>;
+template SimpleSerializer<Color3>;
+template SimpleSerializer<HDRColor3>;
+template SimpleSerializer<Color4>;
+template SimpleSerializer<HDRColor4>;
 
 REFLECT_DEFINE_CLASS(StringSerializer);
 REFLECT_DEFINE_CLASS(BoolSerializer);

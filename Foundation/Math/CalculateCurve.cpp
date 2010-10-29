@@ -1,26 +1,26 @@
-#include "Curve.h"
+#include "CalculateCurve.h"
 #include "Matrix4.h"
 
-using namespace Helium::Math;
+using namespace Helium;
 
 const static Matrix4 CatmullRomBasis ( Vector4 (0.0f, -1.0f,  2.0f, -1.0f) / 2.0f,
                                       Vector4 (2.0f,  0.0f, -5.0f,  3.0f) / 2.0f,
                                       Vector4 (0.0f,  1.0f,  4.0f, -3.0f) / 2.0f,
                                       Vector4 (0.0f,  0.0f, -1.0f,  1.0f) / 2.0f );
 
-const static Matrix4 BSplineBasis (    Vector4 (-1.0f,  3.0f, -3.0f,  1.0f) / 6.0f,
+const static Matrix4 BSplineBasis ( Vector4 (-1.0f,  3.0f, -3.0f,  1.0f) / 6.0f,
                                    Vector4 ( 3.0f, -6.0f,  0.0f,  4.0f) / 6.0f,
                                    Vector4 (-3.0f,  3.0f,  3.0f,  1.0f) / 6.0f,
                                    Vector4 ( 1.0f,  0.0f,  0.0f,  0.0f) / 6.0f );
 
 // computes the vector parameter factor
-static Vector4 ComputeParam(f32 t, const Curve::Type type);
+static Vector4 ComputeParam(f32 t, const CurveGenerator::Type type);
 
 // retrieves the basis matrix for curve type
-static const Matrix4& ComputeBasis( const Curve::Type type );
+static const Matrix4& ComputeBasis( const CurveGenerator::Type type );
 
 // computes a curve point
-static Vector3 ComputePoint(f32 param, const Vector3& a, const Vector3& b, const Vector3& c, const Vector3& d, const Curve::Type type );
+static Vector3 ComputePoint(f32 param, const Vector3& a, const Vector3& b, const Vector3& c, const Vector3& d, const CurveGenerator::Type type );
 
 // compputes B and Catmull Rom splines, respectively
 static void ComputeBSpline( V_Vector3& controlPoints, const u32 resolution, const bool closed, V_Vector3& points  );
@@ -29,7 +29,7 @@ static void ComputeCatmullRom( V_Vector3& controlPoints, const u32 resolution, c
 static void MakeContinuous(V_Vector3& cvs);
 static void MakeClosed(V_Vector3& cvs);
 
-bool Curve::ComputeCurve( const V_Vector3& controlPoints, const u32 resolution, const bool closed, const Type type, V_Vector3& points )
+bool CurveGenerator::ComputeCurve( const V_Vector3& controlPoints, const u32 resolution, const bool closed, const Type type, V_Vector3& points )
 {
     bool success = false;
 
@@ -53,19 +53,19 @@ bool Curve::ComputeCurve( const V_Vector3& controlPoints, const u32 resolution, 
 
     switch( type )
     {
-    case Curve::kLinear:
+    case CurveGenerator::kLinear:
         {
             points = tempControlPoints;
             break;
         }
 
-    case Curve::kBSpline:
+    case CurveGenerator::kBSpline:
         {
             ComputeBSpline( tempControlPoints, resolution, closed, points );
             break;
         }
 
-    case Curve::kCatmullRom:
+    case CurveGenerator::kCatmullRom:
         {
             ComputeCatmullRom( tempControlPoints, resolution, closed, points );
             break;
@@ -103,18 +103,18 @@ static void MakeClosed(V_Vector3& cvs)
     cvs.push_back(cvs[3]);
 }
 
-Vector4 ComputeParam(f32 t, const Curve::Type type )
+Vector4 ComputeParam(f32 t, const CurveGenerator::Type type )
 {
     switch (type)
     {
-    case Curve::kLinear:
+    case CurveGenerator::kLinear:
         break;
 
-    case Curve::kBSpline:
+    case CurveGenerator::kBSpline:
         return Vector4 (t*t*t, t*t, t, 1);
         break;
 
-    case Curve::kCatmullRom:
+    case CurveGenerator::kCatmullRom:
         return Vector4 (1, t, t*t, t*t*t);
         break;
 
@@ -125,18 +125,18 @@ Vector4 ComputeParam(f32 t, const Curve::Type type )
     return Vector4::Zero;
 }
 
-const Matrix4& ComputeBasis( const Curve::Type type )
+const Matrix4& ComputeBasis( const CurveGenerator::Type type )
 {
     switch (type)
     {
-    case Curve::kLinear:
+    case CurveGenerator::kLinear:
         break;
 
-    case Curve::kBSpline:
+    case CurveGenerator::kBSpline:
         return BSplineBasis;
         break;
 
-    case Curve::kCatmullRom:
+    case CurveGenerator::kCatmullRom:
         return CatmullRomBasis;
         break;
 
@@ -147,7 +147,7 @@ const Matrix4& ComputeBasis( const Curve::Type type )
     return Matrix4::Zero;
 }
 
-Vector3 ComputePoint(f32 param, const Vector3& a, const Vector3& b, const Vector3& c, const Vector3& d, const Curve::Type type )
+Vector3 ComputePoint(f32 param, const Vector3& a, const Vector3& b, const Vector3& c, const Vector3& d, const CurveGenerator::Type type )
 {
     Vector4 v = ComputeParam( param, type );
     const Matrix4& curveBasis = ComputeBasis( type );
@@ -198,7 +198,7 @@ void ComputeBSpline( V_Vector3& controlPoints, const u32 resolution, const bool 
 
         for( u32 j = start; j < end; ++j )
         {
-            points.push_back( ComputePoint( t, cp0, cp1, cp2, cp3, Curve::kBSpline ) );
+            points.push_back( ComputePoint( t, cp0, cp1, cp2, cp3, CurveGenerator::kBSpline ) );
             t += step;
         }
     }
@@ -238,7 +238,7 @@ void ComputeCatmullRom( V_Vector3& controlPoints, const u32 resolution, const bo
 
         for( u32 j = start; j < end; ++j )
         {
-            points.push_back( ComputePoint( t, cp0, cp1, cp2, cp3, Curve::kCatmullRom ) );
+            points.push_back( ComputePoint( t, cp0, cp1, cp2, cp3, CurveGenerator::kCatmullRom ) );
             t += step;
         }
     }

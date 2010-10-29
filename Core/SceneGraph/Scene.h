@@ -94,7 +94,7 @@ namespace Helium
         }
         typedef ExportFlags::ExportFlag ExportFlag;
 
-        typedef std::vector< Math::AlignedBox > V_AlignedBox;
+        typedef std::vector< AlignedBox > V_AlignedBox;
 
         struct ExportArgs
         {
@@ -355,7 +355,7 @@ namespace Helium
             ToolPtr m_Tool;
 
             // offset matrix for smart duplicate
-            Math::Matrix4 m_SmartDuplicateMatrix;
+            Matrix4 m_SmartDuplicateMatrix;
 
             // flag that the smart duplicate matrix is valid
             bool m_ValidSmartDuplicateMatrix;
@@ -365,7 +365,7 @@ namespace Helium
 
             // set by the zone that this scene belongs to, and used for 
             // the 3D view's "color modes"
-            Math::Color3 m_Color;
+            Color3 m_Color;
 
             bool m_IsFocused;
 
@@ -417,8 +417,8 @@ namespace Helium
             void SetTool(const ToolPtr& tool);
 
             // support for zone color
-            const Math::Color3& GetColor() const;
-            void SetColor( const Math::Color3& color );
+            const Color3& GetColor() const;
+            void SetColor( const Color3& color );
 
             //
             // Selection
@@ -759,8 +759,8 @@ namespace Helium
             void GetFlattenedSelection(OS_SceneNodeDumbPtr& selection);
             void GetFlattenedHierarchy(SceneGraph::HierarchyNode* node, OS_HierarchyNodeDumbPtr& items);
 
-            void GetSelectedTransforms( Math::V_Matrix4& transforms );
-            Undo::CommandPtr SetSelectedTransforms( const Math::V_Matrix4& transforms );
+            void GetSelectedTransforms( V_Matrix4& transforms );
+            Undo::CommandPtr SetSelectedTransforms( const V_Matrix4& transforms );
 
             Undo::CommandPtr SetHiddenSelected( bool hidden );
             Undo::CommandPtr SetHiddenUnrelated( bool hidden );

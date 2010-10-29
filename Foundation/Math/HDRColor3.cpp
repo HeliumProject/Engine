@@ -1,7 +1,7 @@
 #include "HDRColor3.h"
 #include "HDRColor4.h"
 
-using namespace Helium::Math;
+using namespace Helium;
 
 HDRColor3& HDRColor3::operator=( const HDRColor4& v )
 {

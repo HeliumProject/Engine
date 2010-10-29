@@ -36,9 +36,9 @@ namespace Helium
                 u32 length = 12,
                 f32 majorStep = 5.0f,
                 f32 minorStep = 1.0f,
-                Math::Color3 axisColor = Math::Color3( Math::Vector3( 0.0f, 0.0f, 0.0f ) ),
-                Math::Color3 majorColor = Math::Color3( Math::Vector3( 0.5f, 0.5f, 0.5f ) ),
-                Math::Color3 minorColor = Math::Color3( Math::Vector3( 0.5f, 0.5f, 0.5f ) ) );
+                Color3 axisColor = Color3( Vector3( 0.0f, 0.0f, 0.0f ) ),
+                Color3 majorColor = Color3( Vector3( 0.5f, 0.5f, 0.5f ) ),
+                Color3 minorColor = Color3( Vector3( 0.5f, 0.5f, 0.5f ) ) );
             ~GridSettings();
 
             virtual void PostDeserialize();
@@ -47,9 +47,9 @@ namespace Helium
             u32 GetLength();
             f32 GetMajorStep();
             f32 GetMinorStep();
-            const Math::Color3& GetAxisColor();
-            const Math::Color3& GetMajorColor();
-            const Math::Color3& GetMinorColor();
+            const Color3& GetAxisColor();
+            const Color3& GetMajorColor();
+            const Color3& GetMinorColor();
 
         private:
             void OnChanged( const Reflect::ElementChangeArgs& args );
@@ -64,9 +64,9 @@ namespace Helium
             u32 m_Length;
             f32 m_MajorStep;
             f32 m_MinorStep;
-            Math::Color3 m_AxisColor;
-            Math::Color3 m_MajorColor;
-            Math::Color3 m_MinorColor;
+            Color3 m_AxisColor;
+            Color3 m_MajorColor;
+            Color3 m_MinorColor;
 
         public:
             static void EnumerateClass( Reflect::Compositor< GridSettings >& comp )

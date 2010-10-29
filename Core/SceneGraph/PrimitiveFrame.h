@@ -9,8 +9,8 @@ namespace Helium
         class PrimitiveFrame : public SceneGraph::PrimitiveTemplate<TransformedColored>
         {
         public:
-            Math::Point m_Start;
-            Math::Point m_End;
+            Point m_Start;
+            Point m_End;
 
             u32 m_InnerColor;
             u32 m_BorderColor;

@@ -26,7 +26,7 @@ void ListWidget::Create(wxWindow* parent)
     // add listeners
 
     // layout metrics
-    wxSize size( m_Control->GetCanvas()->GetDefaultSize( Math::SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( Math::SingleAxes::Y ) );
+    wxSize size( m_Control->GetCanvas()->GetDefaultSize( SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( SingleAxes::Y ) );
     m_Window->SetSize( size );
     m_Window->SetMinSize( size );
 

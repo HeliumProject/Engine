@@ -54,11 +54,11 @@ namespace Helium
             SceneGraph::PrimitiveAxes* m_Axes;
             SceneGraph::PrimitiveCircle* m_Ring;
             SceneGraph::PrimitiveCone* m_XCone;
-            Math::Vector3 m_XPosition;
+            Vector3 m_XPosition;
             SceneGraph::PrimitiveCone* m_YCone;
-            Math::Vector3 m_YPosition;
+            Vector3 m_YPosition;
             SceneGraph::PrimitiveCone* m_ZCone;
-            Math::Vector3 m_ZPosition;
+            Vector3 m_ZPosition;
 
             REFLECT_DECLARE_ABSTRACT(SceneGraph::TranslateManipulator, SceneGraph::TransformManipulator);
             static void InitializeType();
@@ -77,7 +77,7 @@ namespace Helium
         protected:
             virtual void SetResult() HELIUM_OVERRIDE;
 
-            void DrawPoints(Math::AxesFlags axis);
+            void DrawPoints(AxesFlags axis);
 
         public:
             virtual void Draw( DrawArgs* args ) HELIUM_OVERRIDE;

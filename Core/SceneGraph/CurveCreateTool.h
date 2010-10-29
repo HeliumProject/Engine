@@ -39,8 +39,8 @@ namespace Helium
             CurveCreateTool( SceneGraph::Scene* scene, PropertiesGenerator* generator );
             virtual ~CurveCreateTool();
 
-            void CreateInstance( const Math::Vector3& position );
-            void PickPosition( int x, int y, Math::Vector3& position );
+            void CreateInstance( const Vector3& position );
+            void PickPosition( int x, int y, Vector3& position );
 
         private:
             void AddToScene();

@@ -78,16 +78,16 @@ void EntitySet::LoadAssetClass()
             Asset::BoundingBoxComponentPtr boundingBox = m_Class->GetComponent< Asset::BoundingBoxComponent >();
             if ( boundingBox.ReferencesObject() )
             {
-                if ( boundingBox->GetMinima() != Math::Vector3::Zero || boundingBox->GetMaxima() != Math::Vector3::Zero )
+                if ( boundingBox->GetMinima() != Vector3::Zero || boundingBox->GetMaxima() != Vector3::Zero )
                 {
                     cube->SetBounds( boundingBox->GetMinima(), boundingBox->GetMaxima() );
                     cube->Update();
                 }
-                else if ( boundingBox->GetExtents() != Math::Vector3::Zero )
+                else if ( boundingBox->GetExtents() != Vector3::Zero )
                 {
-                    Math::Vector3 minima = -(boundingBox->GetExtents() / 2.f) + boundingBox->GetOffset();
+                    Vector3 minima = -(boundingBox->GetExtents() / 2.f) + boundingBox->GetOffset();
                     minima.y += boundingBox->GetExtents().y / 2.f;
-                    Math::Vector3 maxima = (boundingBox->GetExtents() / 2.f) + boundingBox->GetOffset();
+                    Vector3 maxima = (boundingBox->GetExtents() / 2.f) + boundingBox->GetOffset();
                     maxima.y += boundingBox->GetExtents().y / 2.f;
                     cube->SetBounds( minima, maxima );
                     cube->Update();
@@ -112,7 +112,7 @@ void EntitySet::LoadAssetClass()
 
                     if ( mesh )
                     {
-                        Math::AlignedBox box;
+                        AlignedBox box;
                         mesh->GetAlignedBoundingBox( box );
                         cube->SetBounds( box );
                         cube->Update();

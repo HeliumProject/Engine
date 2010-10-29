@@ -39,7 +39,7 @@ namespace Helium
             bool                m_WrapV;
             float               m_RepeatU;
             float               m_RepeatV;
-            Math::Vector4       m_BaseColor;
+            Vector4       m_BaseColor;
             Helium::Path        m_AssetPath;
 
         protected:

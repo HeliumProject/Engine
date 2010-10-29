@@ -15,9 +15,9 @@ GridSettings::GridSettings( const tstring& version,
                                   u32 length,
                                   f32 majorStep,
                                   f32 minorStep,
-                                  Math::Color3 axisColor,
-                                  Math::Color3 majorColor,
-                                  Math::Color3 minorColor )
+                                  Color3 axisColor,
+                                  Color3 majorColor,
+                                  Color3 minorColor )
 : m_Units( units )
 , m_PreviousUnits( units )
 , m_Width( width )
@@ -61,17 +61,17 @@ f32 GridSettings::GetMinorStep()
   return ConvertUnits( m_MinorStep, m_Units, GridUnits::Meters );
 }
 
-const Math::Color3& GridSettings::GetAxisColor()
+const Color3& GridSettings::GetAxisColor()
 {
   return m_AxisColor;
 }
 
-const Math::Color3& GridSettings::GetMajorColor()
+const Color3& GridSettings::GetMajorColor()
 {
   return m_MajorColor;
 }
 
-const Math::Color3& GridSettings::GetMinorColor()
+const Color3& GridSettings::GetMinorColor()
 {
   return m_MinorColor;
 }

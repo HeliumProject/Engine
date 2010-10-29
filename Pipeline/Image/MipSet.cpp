@@ -227,7 +227,7 @@ bool Helium::MipSet::Swizzle()
   if(m_depth > 1)
   {
     // none power of 2 textures cannot be swizzled
-    if(!Math::IsPowerOfTwo(m_depth))
+    if(!IsPowerOfTwo(m_depth))
     {
       m_swizzled = false;
     }
@@ -248,7 +248,7 @@ bool Helium::MipSet::Swizzle()
     return m_swizzled;
   }
 
-  if (!Math::IsPowerOfTwo(m_width) || !Math::IsPowerOfTwo(m_height))
+  if (!IsPowerOfTwo(m_width) || !IsPowerOfTwo(m_height))
   {
     // none power of 2 textures cannot be swizzled
     m_swizzled = false;

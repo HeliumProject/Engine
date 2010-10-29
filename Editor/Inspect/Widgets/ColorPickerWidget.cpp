@@ -41,7 +41,7 @@ void ColorPickerWidget::Create( wxWindow* parent )
     SetWindow( m_ColorPickerWindow = new ColorPickerWindow( parent, this ) );
 
     // init layout metrics
-    wxSize size( m_Control->GetCanvas()->GetDefaultSize( Math::SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( Math::SingleAxes::Y ) );
+    wxSize size( m_Control->GetCanvas()->GetDefaultSize( SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( SingleAxes::Y ) );
     m_ColorPickerWindow->SetSize( size );
     m_ColorPickerWindow->SetMinSize( size );
 
@@ -76,7 +76,7 @@ void ColorPickerWidget::Read()
 
     if ( m_ColorPickerControl->a_Alpha.Get() )
     {
-        Math::Color4 color4;
+        Color4 color4;
         stream >> color4;
         m_ColorPickerControl->a_Color4.Set( color4 );
         // Update the UI
@@ -84,7 +84,7 @@ void ColorPickerWidget::Read()
     }
     else
     {
-        Math::Color3 color3;
+        Color3 color3;
         stream >> color3;
         m_ColorPickerControl->a_Color3.Set( color3 );
         // Update the UI
@@ -98,13 +98,13 @@ bool ColorPickerWidget::Write()
 
     if ( m_ColorPickerControl->a_Alpha.Get() )
     {
-        Math::Color4 color;
+        Color4 color;
         m_ColorPickerWindow->GetColor( color );
         m_ColorPickerControl->a_Color4.Set( color );
     }
     else
     {
-        Math::Color3 color;
+        Color3 color;
         m_ColorPickerWindow->GetColor( color );
         m_ColorPickerControl->a_Color3.Set( color );
     }

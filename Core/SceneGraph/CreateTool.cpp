@@ -14,7 +14,6 @@
 #include "PrimitiveCircle.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT(SceneGraph::CreateTool);
@@ -99,7 +98,7 @@ CreateTool::~CreateTool()
     m_Scene->Push( m_Scene->GetSelection().SetItems( m_Selection ) );
 }
 
-void CreateTool::Place(const Math::Matrix4& position)
+void CreateTool::Place(const Matrix4& position)
 {
     if (m_Instance.ReferencesObject())
     {
@@ -127,7 +126,7 @@ void CreateTool::Place(const Math::Matrix4& position)
     }
 }
 
-void CreateTool::DetermineTranslationAndNormal( int x, int y, Math::Vector3& t, Math::Vector3& n )
+void CreateTool::DetermineTranslationAndNormal( int x, int y, Vector3& t, Vector3& n )
 {
     FrustumLinePickVisitor pick( m_Scene->GetViewport()->GetCamera(), x, y );
     if ( !DetermineTranslationAndNormal( pick, t, n ) )
@@ -137,7 +136,7 @@ void CreateTool::DetermineTranslationAndNormal( int x, int y, Math::Vector3& t, 
     }
 }
 
-bool CreateTool::DetermineTranslationAndNormal( PickVisitor& pick, Math::Vector3& t, Math::Vector3& n )
+bool CreateTool::DetermineTranslationAndNormal( PickVisitor& pick, Vector3& t, Vector3& n )
 {
     // pick in the world
     m_PickWorld.Raise( PickArgs( &pick ) );
@@ -205,7 +204,7 @@ bool CreateTool::DetermineTranslationAndNormal( PickVisitor& pick, Math::Vector3
     return set;
 }
 
-void CreateTool::GenerateInstanceOffsets( PlacementStyle style, float radius, float instanceRadius, Math::V_Vector3& positions )
+void CreateTool::GenerateInstanceOffsets( PlacementStyle style, float radius, float instanceRadius, V_Vector3& positions )
 {
     switch ( style )
     {
@@ -221,7 +220,7 @@ void CreateTool::GenerateInstanceOffsets( PlacementStyle style, float radius, fl
                 {
                     if ( x * x + y * y < radiusSquared )
                     {
-                        Math::Vector3 v = ( SceneGraph::UpVector * x ) + ( SceneGraph::OutVector * y );
+                        Vector3 v = ( SceneGraph::UpVector * x ) + ( SceneGraph::OutVector * y );
                         positions.push_back( v );
                     }
                 }
@@ -235,23 +234,23 @@ void CreateTool::GenerateInstanceOffsets( PlacementStyle style, float radius, fl
             float currentRadius = 0.0f;
             while ( currentRadius < radius )
             {
-                float circumference = 2.0f * Math::Pi * currentRadius;
+                float circumference = 2.0f * Pi * currentRadius;
                 int numInstances = MAX( 1, (int) ( circumference / ( 2.0f * instanceRadius ) ) );
 
-                float deltaAngle = 2.0f * Math::Pi / numInstances;
-                float currentAngle = 2.0f * Math::Pi * rand() / ( (float) RAND_MAX + 1.0f );
+                float deltaAngle = 2.0f * Pi / numInstances;
+                float currentAngle = 2.0f * Pi * rand() / ( (float) RAND_MAX + 1.0f );
 
                 for ( int i = 0; i < numInstances; ++i )
                 {
                     float x = currentRadius * cos( currentAngle );
                     float y = currentRadius * sin( currentAngle );
-                    Math::Vector3 v = ( SceneGraph::UpVector * x ) + ( SceneGraph::OutVector * y );
+                    Vector3 v = ( SceneGraph::UpVector * x ) + ( SceneGraph::OutVector * y );
                     positions.push_back( v );
 
                     currentAngle += deltaAngle;
-                    while ( currentAngle > ( 2.0f * Math::Pi ) )
+                    while ( currentAngle > ( 2.0f * Pi ) )
                     {
-                        currentAngle -= ( 2.0f * Math::Pi );
+                        currentAngle -= ( 2.0f * Pi );
                     }
                 }
 
@@ -262,13 +261,13 @@ void CreateTool::GenerateInstanceOffsets( PlacementStyle style, float radius, fl
     }
 }
 
-void CreateTool::SelectInstanceOffsets( DistributionStyle style, float radius, Math::V_Vector3& offsets )
+void CreateTool::SelectInstanceOffsets( DistributionStyle style, float radius, V_Vector3& offsets )
 {
-    Math::V_Vector3 selectedOffsets;
+    V_Vector3 selectedOffsets;
     selectedOffsets.reserve( offsets.size() );
 
-    Math::V_Vector3::iterator itr = offsets.begin();
-    Math::V_Vector3::iterator end = offsets.end();
+    V_Vector3::iterator itr = offsets.begin();
+    V_Vector3::iterator end = offsets.end();
     for ( ; itr != end; ++itr )
     {
         switch ( style )
@@ -324,18 +323,18 @@ void CreateTool::SelectInstanceOffsets( DistributionStyle style, float radius, M
     }
 }
 
-void CreateTool::JitterInstanceOffsets( float instanceRadius, float maxJitter, Math::V_Vector3& offsets )
+void CreateTool::JitterInstanceOffsets( float instanceRadius, float maxJitter, V_Vector3& offsets )
 {
-    Math::V_Vector3 jitterVectors;
+    V_Vector3 jitterVectors;
     jitterVectors.push_back( SceneGraph::UpVector );
     jitterVectors.push_back( SceneGraph::OutVector );
 
-    Math::V_Vector3::iterator itr = offsets.begin();
-    Math::V_Vector3::iterator end = offsets.end();
+    V_Vector3::iterator itr = offsets.begin();
+    V_Vector3::iterator end = offsets.end();
     for ( ; itr != end; ++itr )
     {
-        Math::V_Vector3::const_iterator jitterItr = jitterVectors.begin();
-        Math::V_Vector3::const_iterator jitterEnd = jitterVectors.end();
+        V_Vector3::const_iterator jitterItr = jitterVectors.begin();
+        V_Vector3::const_iterator jitterEnd = jitterVectors.end();
         for ( ; jitterItr != jitterEnd; ++jitterItr )
         {
             int searchTries = 10;
@@ -355,27 +354,27 @@ void CreateTool::JitterInstanceOffsets( float instanceRadius, float maxJitter, M
     }
 }
 
-void CreateTool::RandomizeInstanceOffsets( Math::V_Vector3& offsets )
+void CreateTool::RandomizeInstanceOffsets( V_Vector3& offsets )
 {
-    Math::V_Vector3 newOffsets;
+    V_Vector3 newOffsets;
     newOffsets.reserve( offsets.size() );
 
     while ( offsets.size() )
     {
-        Math::V_Vector3::iterator itr = offsets.begin() + ( rand() % offsets.size() );
+        V_Vector3::iterator itr = offsets.begin() + ( rand() % offsets.size() );
         newOffsets.push_back( *itr );
         offsets.erase( itr );
     }
 
-    Math::V_Vector3::iterator itr = newOffsets.begin();
-    Math::V_Vector3::iterator end = newOffsets.end();
+    V_Vector3::iterator itr = newOffsets.begin();
+    V_Vector3::iterator end = newOffsets.end();
     for ( ; itr != end; ++itr )
     {
         offsets.push_back( *itr );
     }
 }
 
-void CreateTool::FinalizeOrientation(Math::Matrix4& position, const Math::Vector3& t, const Math::Vector3& n)
+void CreateTool::FinalizeOrientation(Matrix4& position, const Vector3& t, const Vector3& n)
 {
     // randomize the scale
     if ( s_RandomizeScale )
@@ -387,14 +386,14 @@ void CreateTool::FinalizeOrientation(Math::Matrix4& position, const Math::Vector
         scale = (scale * (s_ScaleMax - s_ScaleMin)) + s_ScaleMin;
 
         // scale
-        position *= Math::Matrix4 ( Math::Scale ( scale, scale, scale ) );
+        position *= Matrix4 ( Scale ( scale, scale, scale ) );
     }
 
     // seed the normal
-    if ( n != Math::Vector3::Zero )
+    if ( n != Vector3::Zero )
     {
         // rotate by the normal (we are currently orthogonal)
-        position *= Math::Matrix4 ( Math::AngleAxis::Rotation( SceneGraph::UpVector, n ) );
+        position *= Matrix4 ( AngleAxis::Rotation( SceneGraph::UpVector, n ) );
     }
 
     // randomize the rotation
@@ -417,16 +416,16 @@ void CreateTool::FinalizeOrientation(Math::Matrix4& position, const Math::Vector
         }
 
         // convert to radians
-        angle *= Math::DegToRad;
+        angle *= DegToRad;
 
         // pick a random vector
-        Math::Vector3 axis (rand()/(float(RAND_MAX)+1) - 0.5f, rand()/(float(RAND_MAX)+1) - 0.5f, rand()/(float(RAND_MAX)+1) - 0.5f);
+        Vector3 axis (rand()/(float(RAND_MAX)+1) - 0.5f, rand()/(float(RAND_MAX)+1) - 0.5f, rand()/(float(RAND_MAX)+1) - 0.5f);
 
         // make sure its 1.0f in length
         axis.Normalize();
 
         // rotate
-        position *= Math::Matrix4 ( Math::AngleAxis ( angle, axis ) );
+        position *= Matrix4 ( AngleAxis ( angle, axis ) );
     }
 
     // randomize the rotation
@@ -449,21 +448,21 @@ void CreateTool::FinalizeOrientation(Math::Matrix4& position, const Math::Vector
         }
 
         // convert to radians
-        angle *= Math::DegToRad;
+        angle *= DegToRad;
 
         // rotate
-        position = Math::Matrix4 ( Math::AngleAxis ( angle, UpVector ) ) * position;
+        position = Matrix4 ( AngleAxis ( angle, UpVector ) ) * position;
     }
 
     // set the translation
     position.t = t;
 }
 
-bool CreateTool::ValidPosition( const Math::AlignedBox& bounds, const Math::Vector3& translation, float minDistance )
+bool CreateTool::ValidPosition( const AlignedBox& bounds, const Vector3& translation, float minDistance )
 {
     SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>( m_Instance );
 
-    FrustumPickVisitor frustumPick( m_Scene->GetViewport()->GetCamera(), Math::Frustum( bounds ) );
+    FrustumPickVisitor frustumPick( m_Scene->GetViewport()->GetCamera(), Frustum( bounds ) );
     m_Scene->Pick( &frustumPick );
 
     V_PickHitSmartPtr::const_iterator resultsItr = frustumPick.GetHits().begin();
@@ -479,8 +478,8 @@ bool CreateTool::ValidPosition( const Math::AlignedBox& bounds, const Math::Vect
                 return false;
             }
 
-            Math::Vector3 position( transform->GetGlobalTransform().t.x, transform->GetGlobalTransform().t.y, transform->GetGlobalTransform().t.z );
-            Math::Vector3 differenceVector = translation - position;
+            Vector3 position( transform->GetGlobalTransform().t.x, transform->GetGlobalTransform().t.y, transform->GetGlobalTransform().t.z );
+            Vector3 differenceVector = translation - position;
             if ( differenceVector.Length() < minDistance )
             {
                 return false;
@@ -491,20 +490,20 @@ bool CreateTool::ValidPosition( const Math::AlignedBox& bounds, const Math::Vect
     return true;
 }
 
-void CreateTool::CalculateInstanceRadiusAndBounds( f32& instanceRadius, Math::AlignedBox& bounds )
+void CreateTool::CalculateInstanceRadiusAndBounds( f32& instanceRadius, AlignedBox& bounds )
 {
     SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>( m_Instance );
     bounds = node->GetObjectBounds();
 
-    Math::Vector3 boundVector = bounds.maximum - bounds.minimum;
-    Math::Vector3 out = boundVector * SceneGraph::OutVector;
-    Math::Vector3 side = boundVector * SceneGraph::SideVector;
+    Vector3 boundVector = bounds.maximum - bounds.minimum;
+    Vector3 out = boundVector * SceneGraph::OutVector;
+    Vector3 side = boundVector * SceneGraph::SideVector;
     instanceRadius = MAX( out.Length(), side.Length() ) / 2.0f;
 }
 
 void CreateTool::RefreshInstance( void )
 {
-    Math::Matrix4 orientation;
+    Matrix4 orientation;
     FinalizeOrientation( orientation, m_InstanceTranslation, m_InstanceNormal );
     Place( orientation );
 }
@@ -577,7 +576,7 @@ void CreateTool::AddToScene()
         CORE_SCOPE_TIMER( ("Place New Instance At Origin") );
 
         m_Instance = NULL;
-        Place( Math::Matrix4::Identity );
+        Place( Matrix4::Identity );
     }
 }
 
@@ -598,15 +597,15 @@ void CreateTool::Draw( DrawArgs* args )
         return;
     }
 
-    Math::Matrix4 ringTransform;
+    Matrix4 ringTransform;
 
-    if ( m_InstanceNormal != Math::Vector3::Zero )
+    if ( m_InstanceNormal != Vector3::Zero )
     {
-        ringTransform *= Math::Matrix4( Math::AngleAxis::Rotation( SceneGraph::SideVector, m_InstanceNormal ) );
+        ringTransform *= Matrix4( AngleAxis::Rotation( SceneGraph::SideVector, m_InstanceNormal ) );
     }
     else
     {
-        ringTransform *= Math::Matrix4( Math::AngleAxis::Rotation( SceneGraph::SideVector, SceneGraph::UpVector ) );
+        ringTransform *= Matrix4( AngleAxis::Rotation( SceneGraph::SideVector, SceneGraph::UpVector ) );
     }
 
     ringTransform.t.x = m_InstanceTranslation.x;
@@ -631,8 +630,8 @@ bool CreateTool::MouseDown( const MouseButtonInput& e )
 {
     if ( e.MiddleDown() )
     {
-        Math::Vector3 translation;
-        Math::Vector3 normal;
+        Vector3 translation;
+        Vector3 normal;
 
         {
             CORE_SCOPE_TIMER( ( "Pick Location For Instance" ) );
@@ -678,20 +677,20 @@ void CreateTool::MouseMove( const MouseMoveInput& e )
     }
 
     // get position
-    Math::Vector3 translation;
-    Math::Vector3 normal;
+    Vector3 translation;
+    Vector3 normal;
     DetermineTranslationAndNormal( e.GetPosition().x, e.GetPosition().y, translation, normal );
 
-    Math::Matrix4 position;
+    Matrix4 position;
     FinalizeOrientation( position, translation, normal );
 
     m_InstanceTranslation = translation;
-    m_InstanceNormal = ( normal == Math::Vector3::Zero ) ? SceneGraph::UpVector : normal;
+    m_InstanceNormal = ( normal == Vector3::Zero ) ? SceneGraph::UpVector : normal;
 
     // hide the temporary object when painting and moving
     if ( m_PaintTimer.IsAlive() )
     {
-        position *= Math::Matrix4( Math::Scale( 0.0f, 0.0f, 0.0f ) );
+        position *= Matrix4( Scale( 0.0f, 0.0f, 0.0f ) );
     }
 
     // set position
@@ -723,7 +722,7 @@ void CreateTool::KeyPress( const KeyboardInput& e )
         AddToScene();
 
         // create new at position
-        Place(Math::Matrix4::Identity);
+        Place(Matrix4::Identity);
 
         // render
         m_Scene->Execute(true);
@@ -738,7 +737,7 @@ void CreateTool::CreateProperties()
 {
     __super::CreateProperties();
 
-    Place(Math::Matrix4::Identity);
+    Place(Matrix4::Identity);
 
     Inspect::CheckBox* checkBox;
 
@@ -1082,7 +1081,7 @@ void CreateTool::CreateProperties()
     m_PaintJitter->a_IsEnabled.Set(s_PaintMode);
 }
 
-void CreateTool::SetupInstanceOffsets( float instanceRadius, Math::V_Vector3& instanceOffsets )
+void CreateTool::SetupInstanceOffsets( float instanceRadius, V_Vector3& instanceOffsets )
 {
     instanceOffsets.clear();
     instanceOffsets.reserve( 256 );
@@ -1095,9 +1094,9 @@ void CreateTool::SetupInstanceOffsets( float instanceRadius, Math::V_Vector3& in
     RandomizeInstanceOffsets( instanceOffsets );
 }
 
-void CreateTool::CreateSingleObject( const Math::Vector3& translation, const Math::Vector3& normal, bool checkValid )
+void CreateTool::CreateSingleObject( const Vector3& translation, const Vector3& normal, bool checkValid )
 {
-    Math::Matrix4 orientation;
+    Matrix4 orientation;
 
     {
         CORE_SCOPE_TIMER( ( "Finalize Instance Orientation" ) );
@@ -1109,10 +1108,10 @@ void CreateTool::CreateSingleObject( const Math::Vector3& translation, const Mat
         float adjustedInstanceRadius = m_InstanceRadius / s_PaintDensity;
         float minDistance = 2.0f * adjustedInstanceRadius;
         float scale = minDistance / m_InstanceRadius;
-        Math::Matrix4 scaledOrientation( Math::Scale( minDistance, minDistance, minDistance ) );
+        Matrix4 scaledOrientation( Scale( minDistance, minDistance, minDistance ) );
         scaledOrientation *= orientation;
 
-        Math::AlignedBox instanceBounds = m_InstanceBounds;
+        AlignedBox instanceBounds = m_InstanceBounds;
         instanceBounds.Transform( scaledOrientation );
 
         if ( !ValidPosition( instanceBounds, translation, minDistance ) )
@@ -1143,7 +1142,7 @@ void CreateTool::CreateSingleObject( const Math::Vector3& translation, const Mat
         CORE_SCOPE_TIMER( ( "Update Temporary Instance At Location" ) );
         if ( m_PaintTimer.IsAlive() )
         {
-            orientation *= Math::Matrix4( Math::Scale( 0.0f, 0.0f, 0.0f ) );
+            orientation *= Matrix4( Scale( 0.0f, 0.0f, 0.0f ) );
         }
 
         m_Instance->SetObjectTransform( orientation );
@@ -1169,25 +1168,25 @@ void CreateTool::CreateMultipleObjects( bool stamp )
 
     f32 maxTime = 100.0f;
     Timer instanceTimer;
-    Math::Vector3 instanceNormalOffset = m_InstanceNormal.Normalize() * 2.0f * s_PaintRadius;
+    Vector3 instanceNormalOffset = m_InstanceNormal.Normalize() * 2.0f * s_PaintRadius;
 
     while ( m_InstanceOffsets.size() && ( stamp || ( instanceTimer.Elapsed() < maxTime ) ) )
     {
-        Math::V_Vector3::iterator itr = m_InstanceOffsets.begin();
+        V_Vector3::iterator itr = m_InstanceOffsets.begin();
 
-        Math::Matrix4 instanceTransform;
-        instanceTransform.t = Math::Vector4( *itr );
-        instanceTransform *= Math::Matrix4( Math::AngleAxis::Rotation( SceneGraph::SideVector, m_InstanceNormal ) );
-        instanceTransform.t += Math::Vector4( m_InstanceTranslation );
+        Matrix4 instanceTransform;
+        instanceTransform.t = Vector4( *itr );
+        instanceTransform *= Matrix4( AngleAxis::Rotation( SceneGraph::SideVector, m_InstanceNormal ) );
+        instanceTransform.t += Vector4( m_InstanceTranslation );
 
-        Math::Vector3 point = Math::Vector3( instanceTransform.t.x, instanceTransform.t.y, instanceTransform.t.z );
-        LinePickVisitor pick( m_Scene->GetViewport()->GetCamera(), Math::Line( point + instanceNormalOffset, point - instanceNormalOffset ) );
+        Vector3 point = Vector3( instanceTransform.t.x, instanceTransform.t.y, instanceTransform.t.z );
+        LinePickVisitor pick( m_Scene->GetViewport()->GetCamera(), Line( point + instanceNormalOffset, point - instanceNormalOffset ) );
 
-        Math::Vector3 instanceTranslation;
-        Math::Vector3 instanceNormal;
+        Vector3 instanceTranslation;
+        Vector3 instanceNormal;
         if ( DetermineTranslationAndNormal( pick, instanceTranslation, instanceNormal ) )
         {
-            point = Math::Vector3( instanceTranslation.x - m_InstanceTranslation.x, instanceTranslation.y - m_InstanceTranslation.y, instanceTranslation.z - m_InstanceTranslation.z );
+            point = Vector3( instanceTranslation.x - m_InstanceTranslation.x, instanceTranslation.y - m_InstanceTranslation.y, instanceTranslation.z - m_InstanceTranslation.z );
             if ( point.Length() <= s_PaintRadius )
             {
                 CreateSingleObject( instanceTranslation, instanceNormal, true );

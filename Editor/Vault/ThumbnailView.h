@@ -57,7 +57,7 @@ namespace Helium
         typedef std::map< tstring, DWORD > M_FileTypeColors;
         typedef std::map< tstring, ThumbnailPtr > M_FileTypeIcons;
 
-        typedef std::vector< Math::Vector3 > V_TileCorners;
+        typedef std::vector< Vector3 > V_TileCorners;
         typedef std::map< DWORD, V_TileCorners > M_RibbonColorTileCorners;
         typedef std::map< Thumbnail*, V_TileCorners > M_FileTypeTileCorners;
 
@@ -150,10 +150,10 @@ namespace Helium
             void CreateResources();
             void DeleteResources();
 
-            void WorldToScreen( const Math::Vector3& p, float& x, float& y );
-            void ViewportToScreen( const Math::Vector3& v, float& x, float& y );
-            void ScreenToViewport( float x, float y, Math::Vector3& v ) const;
-            void ViewportToWorldVertex( float x, float y, Math::Vector3& v ) const;
+            void WorldToScreen( const Vector3& p, float& x, float& y );
+            void ViewportToScreen( const Vector3& v, float& x, float& y );
+            void ScreenToViewport( float x, float y, Vector3& v ) const;
+            void ViewportToWorldVertex( float x, float y, Vector3& v ) const;
 
             void CalculateTotalItemSize();
             void CalculateTotalVisibleItems();
@@ -183,7 +183,7 @@ namespace Helium
                 BottomLeft = LabelBottomLeft,
                 BottomRight = LabelBottomRight,
             };
-            void GetTileCorners( ThumbnailTile* tile, Math::Vector3 corners[] ) const;
+            void GetTileCorners( ThumbnailTile* tile, Vector3 corners[] ) const;
 
             void EditTileLabel( ThumbnailTile* tile );
 
@@ -242,7 +242,7 @@ namespace Helium
 
             static const DWORD s_TextColorDark;
             static const float s_SpaceBetweenTileAndLabel;
-            static const Math::Vector2 s_GapBetweenTiles;
+            static const Vector2 s_GapBetweenTiles;
             static const float s_ThumbnailSize;
             static const float s_MinThumbnailSize;
             static const float s_MaxThumbnailSize;
@@ -294,15 +294,15 @@ namespace Helium
             ThumbnailTile* m_RangeSelectTile;
             bool m_CtrlOnMouseDown;
 
-            Math::Vector2 m_TotalItemSize;
+            Vector2 m_TotalItemSize;
 
             wxSize m_TotalVisibleItems; // Total number of items that can be displayed in x and y directions
 
-            Math::Matrix4 m_World;
-            Math::Matrix4 m_Orientation;
-            Math::Matrix4 m_Projection;
-            Math::Matrix4 m_ViewMatrix;
-            Math::Frustum m_ViewFrustum;
+            Matrix4 m_World;
+            Matrix4 m_Orientation;
+            Matrix4 m_Projection;
+            Matrix4 m_ViewMatrix;
+            Frustum m_ViewFrustum;
             float m_Scale;
 
             //VaultPanel* m_VaultPanel;

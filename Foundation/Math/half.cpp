@@ -1,6 +1,6 @@
 #include "half.h"
 
-using namespace Helium::Math;
+using namespace Helium;
 
 //-------------------------------------------------------------
 // Lookup tables for half-to-f32 and f32-to-half conversion

@@ -10,7 +10,7 @@ namespace Helium
     {
         struct VisitorState
         {
-            Math::Matrix4 m_Matrix;
+            Matrix4 m_Matrix;
             bool m_Highlighted;
             bool m_Selected;
             bool m_Live;
@@ -25,7 +25,7 @@ namespace Helium
 
             }
 
-            VisitorState(const Math::Matrix4& matrix)
+            VisitorState(const Matrix4& matrix)
                 : m_Matrix (matrix)
                 , m_Highlighted (false)
                 , m_Selected (false)
@@ -35,7 +35,7 @@ namespace Helium
 
             }
 
-            VisitorState(const Math::Matrix4& matrix, bool highlighted, bool selected, bool live, bool selectable)
+            VisitorState(const Matrix4& matrix, bool highlighted, bool selected, bool live, bool selectable)
                 : m_Matrix (matrix)
                 , m_Highlighted (highlighted)
                 , m_Selected (selected)
@@ -55,7 +55,7 @@ namespace Helium
         public:
             Visitor()
             {
-                m_States.push_back( VisitorState (Math::Matrix4::Identity) );
+                m_States.push_back( VisitorState (Matrix4::Identity) );
             }
 
             virtual ~Visitor()

@@ -196,10 +196,10 @@ void RenderWindow::Frame()
 {
     if ( m_MeshHandle != s_InvalidMesh && m_Scene )
     {
-        const Math::Vector3& min = *( const Math::Vector3* )( &m_Scene->m_min );
-        const Math::Vector3& max = *( const Math::Vector3* )( &m_Scene->m_max );
+        const Vector3& min = *( const Vector3* )( &m_Scene->m_min );
+        const Vector3& max = *( const Vector3* )( &m_Scene->m_max );
 
-        Math::AlignedBox box;
+        AlignedBox box;
         box.Merge( min );
         box.Merge( max );
 

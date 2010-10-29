@@ -6,7 +6,6 @@
 #include "Orientation.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 PrimitiveRings::PrimitiveRings(ResourceTracker* tracker)
@@ -29,7 +28,7 @@ void PrimitiveRings::Update()
   SetElementCount( m_Steps*6 );
   m_Vertices.clear();
 
-  float stepAngle = (f32)(Math::Pi)*2.0f / (f32)(m_Steps);
+  float stepAngle = (f32)(Pi)*2.0f / (f32)(m_Steps);
 
   for (u32 x=0; x<m_Steps; x++)
   {

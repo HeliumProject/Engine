@@ -8,7 +8,6 @@
 #include "Core/SceneGraph/Scene.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT(Instance);

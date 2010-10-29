@@ -14,7 +14,6 @@
 #include "Color.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT( SceneGraph::Transform );
@@ -67,8 +66,8 @@ void Transform::Initialize(Scene* scene)
     __super::Initialize(scene);
 
     SceneGraph::PrimitiveAxes* axes = static_cast< SceneGraph::PrimitiveAxes* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes ) );
-    m_ObjectBounds.minimum = Math::Vector3(-axes->m_Length, -axes->m_Length, -axes->m_Length);
-    m_ObjectBounds.maximum = Math::Vector3(axes->m_Length, axes->m_Length, axes->m_Length);
+    m_ObjectBounds.minimum = Vector3(-axes->m_Length, -axes->m_Length, -axes->m_Length);
+    m_ObjectBounds.maximum = Vector3(axes->m_Length, axes->m_Length, axes->m_Length);
 }
 
 SceneGraph::Transform* Transform::GetTransform()
@@ -81,77 +80,77 @@ const SceneGraph::Transform* Transform::GetTransform() const
     return this;
 }
 
-Math::Scale Transform::GetScale() const
+Scale Transform::GetScale() const
 {
     return m_Scale;
 }
 
-void Transform::SetScale( const Math::Scale& value )
+void Transform::SetScale( const Scale& value )
 {
     m_Scale = value;
 
     Dirty();
 }
 
-Math::Vector3 Transform::GetScalePivot() const 
+Vector3 Transform::GetScalePivot() const 
 {
-    return Math::Vector3::Zero;
+    return Vector3::Zero;
 }
 
-void Transform::SetScalePivot( const Math::Vector3& value )
+void Transform::SetScalePivot( const Vector3& value )
 {
 
 }
 
-Math::EulerAngles Transform::GetRotate() const
+EulerAngles Transform::GetRotate() const
 {
     return m_Rotate;
 }
 
-void Transform::SetRotate( const Math::EulerAngles& value )
+void Transform::SetRotate( const EulerAngles& value )
 {
     m_Rotate = value;
 
     Dirty();
 }
 
-Math::Vector3 Transform::GetRotatePivot() const
+Vector3 Transform::GetRotatePivot() const
 {
-    return Math::Vector3::Zero;
+    return Vector3::Zero;
 }
 
-void Transform::SetRotatePivot( const Math::Vector3& value )
+void Transform::SetRotatePivot( const Vector3& value )
 {
 
 }
 
-Math::Vector3 Transform::GetTranslate() const
+Vector3 Transform::GetTranslate() const
 {
     return m_Translate;
 }
 
-void Transform::SetTranslate( const Math::Vector3& value )
+void Transform::SetTranslate( const Vector3& value )
 {
     m_Translate = value;
 
     Dirty();
 }
 
-Math::Vector3 Transform::GetTranslatePivot() const
+Vector3 Transform::GetTranslatePivot() const
 {
-    return Math::Vector3::Zero;
+    return Vector3::Zero;
 }
 
-void Transform::SetTranslatePivot( const Math::Vector3& value )
+void Transform::SetTranslatePivot( const Vector3& value )
 {
 
 }
 
-void Transform::SetObjectTransform( const Math::Matrix4& transform )
+void Transform::SetObjectTransform( const Matrix4& transform )
 {
-    Math::Scale scale;
-    Math::EulerAngles rotate;
-    Math::Vector3 translate;
+    Scale scale;
+    EulerAngles rotate;
+    Vector3 translate;
     transform.Decompose( scale, rotate, translate );
 
     m_Scale = scale;
@@ -160,19 +159,19 @@ void Transform::SetObjectTransform( const Math::Matrix4& transform )
     m_ObjectTransform = transform;
 }
 
-void Transform::SetGlobalTransform( const Math::Matrix4& transform )
+void Transform::SetGlobalTransform( const Matrix4& transform )
 {
     m_GlobalTransform = transform;
 
     ComputeObjectComponents();
 }
 
-Math::Matrix4 Transform::GetBindTransform() const
+Matrix4 Transform::GetBindTransform() const
 {
     return m_BindTransform;
 }
 
-Math::Matrix4 Transform::GetInverseBindTransform() const
+Matrix4 Transform::GetInverseBindTransform() const
 {
     return m_InverseBindTransform;
 }
@@ -189,24 +188,24 @@ void Transform::SetInheritTransform(bool inherit)
     ComputeObjectComponents();
 }
 
-Math::Matrix4 Transform::GetScaleComponent() const
+Matrix4 Transform::GetScaleComponent() const
 {
-    return Math::Matrix4 (m_Scale);
+    return Matrix4 (m_Scale);
 }
 
-Math::Matrix4 Transform::GetRotateComponent() const
+Matrix4 Transform::GetRotateComponent() const
 {
-    return Math::Matrix4 (m_Rotate);
+    return Matrix4 (m_Rotate);
 }
 
-Math::Matrix4 Transform::GetTranslateComponent() const
+Matrix4 Transform::GetTranslateComponent() const
 {
-    return Math::Matrix4 (m_Translate);
+    return Matrix4 (m_Translate);
 }
 
 Undo::CommandPtr Transform::ResetTransform()
 {
-    Undo::CommandPtr command = new Undo::PropertyCommand<Math::Matrix4>( new Helium::MemberProperty<SceneGraph::Transform, Math::Matrix4> (this, &Transform::GetObjectTransform, &Transform::SetObjectTransform) );
+    Undo::CommandPtr command = new Undo::PropertyCommand<Matrix4>( new Helium::MemberProperty<SceneGraph::Transform, Matrix4> (this, &Transform::GetObjectTransform, &Transform::SetObjectTransform) );
 
     m_Scale = Scale::Identity;
     m_Rotate = EulerAngles::Zero;
@@ -221,9 +220,9 @@ Undo::CommandPtr Transform::ComputeObjectComponents()
 {
     Undo::CommandPtr command = ResetTransform();
 
-    Math::Scale scale;
-    Math::EulerAngles rotate;
-    Math::Vector3 translate;
+    Scale scale;
+    EulerAngles rotate;
+    Vector3 translate;
     if (GetInheritTransform())
     {
         // compute the new object space transform from our global transform and our parent's inverse
@@ -511,7 +510,7 @@ f32 Transform::GetScaleX() const
 
 void Transform::SetScaleX(f32 scale)
 {
-    Math::Scale s = GetScale();
+    Scale s = GetScale();
     s.x = scale;
     SetScale(s);
 }
@@ -523,7 +522,7 @@ f32 Transform::GetScaleY() const
 
 void Transform::SetScaleY(f32 scale)
 {
-    Math::Scale s = GetScale();
+    Scale s = GetScale();
     s.y = scale;
     SetScale(s);
 }
@@ -535,44 +534,44 @@ f32 Transform::GetScaleZ() const
 
 void Transform::SetScaleZ(f32 scale)
 {
-    Math::Scale s = GetScale();
+    Scale s = GetScale();
     s.z = scale;
     SetScale(s);
 }
 
 f32 Transform::GetRotateX() const
 {
-    return GetRotate().angles.x * Math::RadToDeg;
+    return GetRotate().angles.x * RadToDeg;
 }
 
 void Transform::SetRotateX(f32 rotate)
 {
-    Math::Vector3 s = GetRotate().angles;
-    s.x = rotate * Math::DegToRad;
+    Vector3 s = GetRotate().angles;
+    s.x = rotate * DegToRad;
     SetRotate(EulerAngles (s, m_Rotate.order));
 }
 
 f32 Transform::GetRotateY() const
 {
-    return GetRotate().angles.y * Math::RadToDeg;
+    return GetRotate().angles.y * RadToDeg;
 }
 
 void Transform::SetRotateY(f32 rotate)
 {
-    Math::Vector3 s = GetRotate().angles;
-    s.y = rotate * Math::DegToRad;
+    Vector3 s = GetRotate().angles;
+    s.y = rotate * DegToRad;
     SetRotate(EulerAngles (s, m_Rotate.order));
 }
 
 f32 Transform::GetRotateZ() const
 {
-    return GetRotate().angles.z * Math::RadToDeg;
+    return GetRotate().angles.z * RadToDeg;
 }
 
 void Transform::SetRotateZ(f32 rotate)
 {
-    Math::Vector3 s = GetRotate().angles;
-    s.z = rotate * Math::DegToRad;
+    Vector3 s = GetRotate().angles;
+    s.z = rotate * DegToRad;
     SetRotate(EulerAngles (s, m_Rotate.order));
 }
 
@@ -583,7 +582,7 @@ f32 Transform::GetTranslateX() const
 
 void Transform::SetTranslateX(f32 translate)
 {
-    Math::Vector3 s = GetTranslate();
+    Vector3 s = GetTranslate();
     s.x = translate;
     SetTranslate(s);
 }
@@ -595,7 +594,7 @@ f32 Transform::GetTranslateY() const
 
 void Transform::SetTranslateY(f32 translate)
 {
-    Math::Vector3 s = GetTranslate();
+    Vector3 s = GetTranslate();
     s.y = translate;
     SetTranslate(s);
 }
@@ -607,7 +606,7 @@ f32 Transform::GetTranslateZ() const
 
 void Transform::SetTranslateZ(f32 translate)
 {
-    Math::Vector3 s = GetTranslate();
+    Vector3 s = GetTranslate();
     s.z = translate;
     SetTranslate(s);
 }
@@ -652,12 +651,12 @@ Matrix4 TransformScaleManipulatorAdapter::GetFrame(ManipulatorSpace space)
     return frame;
 }
 
-Math::Matrix4 TransformScaleManipulatorAdapter::GetObjectMatrix()
+Matrix4 TransformScaleManipulatorAdapter::GetObjectMatrix()
 {
     return m_Transform->GetObjectTransform();
 }
 
-Math::Matrix4 TransformScaleManipulatorAdapter::GetParentMatrix()
+Matrix4 TransformScaleManipulatorAdapter::GetParentMatrix()
 {
     return m_Transform->GetParentTransform();
 }
@@ -702,12 +701,12 @@ Matrix4 TransformScalePivotManipulatorAdapter::GetFrame(ManipulatorSpace space)
     return frame;
 }
 
-Math::Matrix4 TransformScalePivotManipulatorAdapter::GetObjectMatrix()
+Matrix4 TransformScalePivotManipulatorAdapter::GetObjectMatrix()
 {
     return Matrix4::Identity;
 }
 
-Math::Matrix4 TransformScalePivotManipulatorAdapter::GetParentMatrix()
+Matrix4 TransformScalePivotManipulatorAdapter::GetParentMatrix()
 {
     return m_Transform->GetTranslateComponent() * m_Transform->GetParentTransform();
 }
@@ -752,12 +751,12 @@ Matrix4 TransformRotateManipulatorAdapter::GetFrame(ManipulatorSpace space)
     return frame;
 }
 
-Math::Matrix4 TransformRotateManipulatorAdapter::GetObjectMatrix()
+Matrix4 TransformRotateManipulatorAdapter::GetObjectMatrix()
 {
     return m_Transform->GetObjectTransform();
 }
 
-Math::Matrix4 TransformRotateManipulatorAdapter::GetParentMatrix()
+Matrix4 TransformRotateManipulatorAdapter::GetParentMatrix()
 {
     return m_Transform->GetParentTransform();
 }
@@ -802,12 +801,12 @@ Matrix4 TransformRotatePivotManipulatorAdapter::GetFrame(ManipulatorSpace space)
     return frame;
 }
 
-Math::Matrix4 TransformRotatePivotManipulatorAdapter::GetObjectMatrix()
+Matrix4 TransformRotatePivotManipulatorAdapter::GetObjectMatrix()
 {
     return Matrix4::Identity;
 }
 
-Math::Matrix4 TransformRotatePivotManipulatorAdapter::GetParentMatrix()
+Matrix4 TransformRotatePivotManipulatorAdapter::GetParentMatrix()
 {
     return m_Transform->GetTranslateComponent() * m_Transform->GetParentTransform();
 }
@@ -852,12 +851,12 @@ Matrix4 TransformTranslateManipulatorAdapter::GetFrame(ManipulatorSpace space)
     return frame;
 }
 
-Math::Matrix4 TransformTranslateManipulatorAdapter::GetObjectMatrix()
+Matrix4 TransformTranslateManipulatorAdapter::GetObjectMatrix()
 {
     return m_Transform->GetObjectTransform();
 }
 
-Math::Matrix4 TransformTranslateManipulatorAdapter::GetParentMatrix()
+Matrix4 TransformTranslateManipulatorAdapter::GetParentMatrix()
 {
     return m_Transform->GetParentTransform();
 }
@@ -902,12 +901,12 @@ Matrix4 TransformTranslatePivotManipulatorAdapter::GetFrame(ManipulatorSpace spa
     return frame;
 }
 
-Math::Matrix4 TransformTranslatePivotManipulatorAdapter::GetObjectMatrix()
+Matrix4 TransformTranslatePivotManipulatorAdapter::GetObjectMatrix()
 {
     return Matrix4::Identity;
 }
 
-Math::Matrix4 TransformTranslatePivotManipulatorAdapter::GetParentMatrix()
+Matrix4 TransformTranslatePivotManipulatorAdapter::GetParentMatrix()
 {
     return m_Transform->GetTranslateComponent() * m_Transform->GetParentTransform();
 }

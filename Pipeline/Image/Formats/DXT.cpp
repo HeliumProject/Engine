@@ -62,10 +62,10 @@ bool FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dep
         for(i32 i=0;i<width*height;i++)
         {
             // order of components in input data is BGRA
-            dst[0] = Math::FloatToHalf(src[2]);
-            dst[1] = Math::FloatToHalf(src[1]);
-            dst[2] = Math::FloatToHalf(src[0]);
-            dst[3] = Math::FloatToHalf(src[3]);
+            dst[0] = FloatToHalf(src[2]);
+            dst[1] = FloatToHalf(src[1]);
+            dst[2] = FloatToHalf(src[0]);
+            dst[3] = FloatToHalf(src[3]);
             dst+=4;
             src+=4;
         }
@@ -131,7 +131,7 @@ bool FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dep
         {
             // order of components in input data is BGRA
             // OUTPUT IS GRAY
-            dst[0] = Math::FloatToHalf(0.212671f * src[2] + 0.715160f * src[1] + 0.072169f * src[0]);
+            dst[0] = FloatToHalf(0.212671f * src[2] + 0.715160f * src[1] + 0.072169f * src[0]);
             dst+=1;
             src+=4;
         }
@@ -147,8 +147,8 @@ bool FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dep
         for(i32 i=0;i<width*height;i++)
         {
             // d3d is in GR order
-            dst[0] = Math::FloatToHalf(src[1]);
-            dst[1] = Math::FloatToHalf(src[0]);
+            dst[0] = FloatToHalf(src[1]);
+            dst[1] = FloatToHalf(src[0]);
             dst+=2;
             src+=4;
         }

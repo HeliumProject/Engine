@@ -547,8 +547,8 @@ Image* Image::LoadFile( const tchar* p_path, bool convert_to_linear, LoadRAWInfo
 
             if(!curr_depth) // Init the volume texture based on the first frame
             {
-                frame_width = ::Math::NextPowerOfTwo(p_frame_texture->m_Width);
-                frame_height = ::Math::NextPowerOfTwo(p_frame_texture->m_Height);
+                frame_width = ::NextPowerOfTwo(p_frame_texture->m_Width);
+                frame_height = ::NextPowerOfTwo(p_frame_texture->m_Height);
                 frame_format = p_frame_texture->m_NativeFormat;
             }
 
@@ -577,7 +577,7 @@ Image* Image::LoadFile( const tchar* p_path, bool convert_to_linear, LoadRAWInfo
 
     // We only support volume texture with a power of two depth due to swizzling and DXT compression limitations
     // TODO: Impement depth scaling?
-    if( !curr_depth || (curr_depth != ::Math::NextPowerOfTwo(curr_depth)) )
+    if( !curr_depth || (curr_depth != ::NextPowerOfTwo(curr_depth)) )
     {
         delete p_anim_texture;
         p_anim_texture = NULL;
@@ -1286,7 +1286,7 @@ void Image::DoubleContrast(u32 face)
         for (u32 i = 0; i < m_Width * m_Height; i++)
         {
             float color = mean + ((curr_data[i] - mean) * 2.0f);
-            curr_data[i] = Math::Clamp(color, 0.0f, 1.0f);
+            curr_data[i] = Clamp(color, 0.0f, 1.0f);
         }
     }
 }
@@ -1670,7 +1670,7 @@ Image* Image::ScaleImageFace(u32               width,
 ////////////////////////////////////////////////////////////////////////////////////////////////
 Image* Image::AdjustToNextPowerOf2() const
 {
-    if (Math::IsPowerOfTwo(m_Width) && Math::IsPowerOfTwo(m_Height))
+    if (IsPowerOfTwo(m_Width) && IsPowerOfTwo(m_Height))
     {
         return Clone();
     }
@@ -1678,8 +1678,8 @@ Image* Image::AdjustToNextPowerOf2() const
     if (IsVolumeImage())
         return 0;
 
-    u32 width = Math::NextPowerOfTwo(m_Width);
-    u32 height = Math::NextPowerOfTwo(m_Height);
+    u32 width = NextPowerOfTwo(m_Width);
+    u32 height = NextPowerOfTwo(m_Height);
 
     // make a new texture
     Image* text = new Image(width,height,m_Depth,m_NativeFormat);
@@ -1770,7 +1770,7 @@ void Image::PrepareFor2ChannelNormalMap(bool is_detail_map, bool is_detail_map_o
                     blue = blue * 2.f - 1.f;
                 }
 
-                Math::Vector3 normal(red, green, blue);
+                Vector3 normal(red, green, blue);
                 normal.Normalize();
 
                 if(is_detail_map)
@@ -1786,10 +1786,10 @@ void Image::PrepareFor2ChannelNormalMap(bool is_detail_map, bool is_detail_map_o
                     }
 
                     normal /= -normal.z;
-                    normal *= Math::Vector3(0.5f);
-                    normal += Math::Vector3(0.5f);
-                    normal.x = Math::Clamp(normal.x, 0.f, 1.f);
-                    normal.y = Math::Clamp(normal.y, 0.f, 1.f);
+                    normal *= Vector3(0.5f);
+                    normal += Vector3(0.5f);
+                    normal.x = Clamp(normal.x, 0.f, 1.f);
+                    normal.y = Clamp(normal.y, 0.f, 1.f);
 
                     if(is_detail_map_only == true)
                     {
@@ -1841,8 +1841,8 @@ void Image::PrepareFor2ChannelNormalMap(bool is_detail_map, bool is_detail_map_o
 
                     float para_x = (normal.x * t) * 0.5f + 0.5f;
                     float para_y = (normal.y * t) * 0.5f + 0.5f;
-                    para_x = Math::Clamp(para_x, 0.f, 1.f);
-                    para_y = Math::Clamp(para_y, 0.f, 1.f);
+                    para_x = Clamp(para_x, 0.f, 1.f);
+                    para_y = Clamp(para_y, 0.f, 1.f);
 
                     *r_ptr = para_y;
                     *g_ptr = para_y;
@@ -2105,7 +2105,7 @@ MipSet* Image::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet::R
             // if the dimensions are not a power of 2
             // then expand to a power of 2 and compress that, later on we will extract
             // the compression blocks manually.
-            if (!Math::IsPowerOfTwo(m_Width) || !Math::IsPowerOfTwo(m_Height))
+            if (!IsPowerOfTwo(m_Width) || !IsPowerOfTwo(m_Height))
             {
                 // calculate a valid original width/height, this is what will be extracted from the final
                 o_width   = m_Width;
@@ -2161,14 +2161,14 @@ MipSet* Image::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet::R
 static inline void AdjustWidthAndHeight(u32& width, u32& height, const u32 max_size)
 {
     //Adjust width and height
-    if (!Math::IsPowerOfTwo(width))
+    if (!IsPowerOfTwo(width))
     {
-        width = Math::NextPowerOfTwo(width);
+        width = NextPowerOfTwo(width);
     }
 
-    if (!Math::IsPowerOfTwo(height))
+    if (!IsPowerOfTwo(height))
     {
-        height = Math::NextPowerOfTwo(height);
+        height = NextPowerOfTwo(height);
     }
 
     //Clamp width and height
@@ -2483,7 +2483,7 @@ f32 CurveEvaluate(f32 input, const u8* lookup_table)
         return input;
     }
     //Make sure we are in the 0.0-1.0 range
-    input   = Math::Clamp(input, 0.0f, 1.0f);
+    input   = Clamp(input, 0.0f, 1.0f);
     //Generate the entry index
     u32 idx =  u32(input*255.0f + 0.5f);
 

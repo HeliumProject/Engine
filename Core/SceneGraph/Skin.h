@@ -44,7 +44,7 @@ namespace Helium
             virtual void Evaluate(GraphDirection direction) HELIUM_OVERRIDE;
 
         private:
-            void BlendMatrix(const Transform* transform, const Influence* influence, Math::Matrix4& matrix);
+            void BlendMatrix(const Transform* transform, const Influence* influence, Matrix4& matrix);
 
         protected:
             // Reflected
@@ -56,8 +56,8 @@ namespace Helium
             // Non-reflected
             Mesh*               m_Mesh;
             V_TransformDumbPtr  m_InfluenceObjects;
-            Math::V_Matrix4     m_DeformMatrices;
-            Math::V_Matrix4     m_SkinMatrices;
+            V_Matrix4     m_DeformMatrices;
+            V_Matrix4     m_SkinMatrices;
         };
     }
 }

@@ -21,7 +21,7 @@ static void ConvertMouseEvent( wxMouseEvent& event, MouseInput& input )
 
     input.SetButtons( buttons );
 
-    input.SetPosition( Math::Point( event.GetX(), event.GetY() ) );
+    input.SetPosition( Point( event.GetX(), event.GetY() ) );
 }
 
 void Helium::ConvertEvent( wxMouseEvent& event, MouseMoveInput& input )

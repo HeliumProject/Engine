@@ -79,16 +79,16 @@ namespace Helium
         typedef SimpleArraySerializer<Helium::TUID> TUIDArraySerializer;             REFLECT_SPECIALIZE_SERIALIZER( TUIDArraySerializer );
         typedef SimpleArraySerializer<Helium::Path> PathArraySerializer;             REFLECT_SPECIALIZE_SERIALIZER( PathArraySerializer );
 
-        typedef SimpleArraySerializer<Math::Vector2> Vector2ArraySerializer;            REFLECT_SPECIALIZE_SERIALIZER( Vector2ArraySerializer );
-        typedef SimpleArraySerializer<Math::Vector3> Vector3ArraySerializer;            REFLECT_SPECIALIZE_SERIALIZER( Vector3ArraySerializer );
-        typedef SimpleArraySerializer<Math::Vector4> Vector4ArraySerializer;            REFLECT_SPECIALIZE_SERIALIZER( Vector4ArraySerializer );
-        typedef SimpleArraySerializer<Math::Matrix3> Matrix3ArraySerializer;            REFLECT_SPECIALIZE_SERIALIZER( Matrix3ArraySerializer );
-        typedef SimpleArraySerializer<Math::Matrix4> Matrix4ArraySerializer;            REFLECT_SPECIALIZE_SERIALIZER( Matrix4ArraySerializer );
-        typedef SimpleArraySerializer<Math::Quaternion> QuaternionArraySerializer;      REFLECT_SPECIALIZE_SERIALIZER( QuaternionArraySerializer );
+        typedef SimpleArraySerializer<Vector2> Vector2ArraySerializer;            REFLECT_SPECIALIZE_SERIALIZER( Vector2ArraySerializer );
+        typedef SimpleArraySerializer<Vector3> Vector3ArraySerializer;            REFLECT_SPECIALIZE_SERIALIZER( Vector3ArraySerializer );
+        typedef SimpleArraySerializer<Vector4> Vector4ArraySerializer;            REFLECT_SPECIALIZE_SERIALIZER( Vector4ArraySerializer );
+        typedef SimpleArraySerializer<Matrix3> Matrix3ArraySerializer;            REFLECT_SPECIALIZE_SERIALIZER( Matrix3ArraySerializer );
+        typedef SimpleArraySerializer<Matrix4> Matrix4ArraySerializer;            REFLECT_SPECIALIZE_SERIALIZER( Matrix4ArraySerializer );
+        typedef SimpleArraySerializer<Quaternion> QuaternionArraySerializer;      REFLECT_SPECIALIZE_SERIALIZER( QuaternionArraySerializer );
 
-        typedef SimpleArraySerializer<Math::Color3> Color3ArraySerializer;              REFLECT_SPECIALIZE_SERIALIZER( Color3ArraySerializer );
-        typedef SimpleArraySerializer<Math::Color4> Color4ArraySerializer;              REFLECT_SPECIALIZE_SERIALIZER( Color4ArraySerializer );
-        typedef SimpleArraySerializer<Math::HDRColor3> HDRColor3ArraySerializer;        REFLECT_SPECIALIZE_SERIALIZER( HDRColor3ArraySerializer );
-        typedef SimpleArraySerializer<Math::HDRColor4> HDRColor4ArraySerializer;        REFLECT_SPECIALIZE_SERIALIZER( HDRColor4ArraySerializer );
+        typedef SimpleArraySerializer<Color3> Color3ArraySerializer;              REFLECT_SPECIALIZE_SERIALIZER( Color3ArraySerializer );
+        typedef SimpleArraySerializer<Color4> Color4ArraySerializer;              REFLECT_SPECIALIZE_SERIALIZER( Color4ArraySerializer );
+        typedef SimpleArraySerializer<HDRColor3> HDRColor3ArraySerializer;        REFLECT_SPECIALIZE_SERIALIZER( HDRColor3ArraySerializer );
+        typedef SimpleArraySerializer<HDRColor4> HDRColor4ArraySerializer;        REFLECT_SPECIALIZE_SERIALIZER( HDRColor4ArraySerializer );
     }
 }

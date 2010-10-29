@@ -298,7 +298,7 @@ void TranslateManipulator::DrawPoints(AxesFlags axis)
         {
         case MultipleAxes::X:
             {
-                f32 length = frame.x.Length();
+                float32_t length = frame.x.Length();
                 if ( !Math::IsValid( length ) || Math::Equal( length, 0.0f ) || next.x >= m_Factor / length )
                 {
                     done = true;
@@ -314,7 +314,7 @@ void TranslateManipulator::DrawPoints(AxesFlags axis)
 
         case MultipleAxes::Y:
             {
-                f32 length = frame.y.Length();
+                float32_t length = frame.y.Length();
                 if ( !Math::IsValid( length ) || Math::Equal( length, 0.0f ) || next.y >= m_Factor / length )
                 {
                     done = true;
@@ -330,7 +330,7 @@ void TranslateManipulator::DrawPoints(AxesFlags axis)
 
         case MultipleAxes::Z:
             {
-                f32 length = frame.z.Length();
+                float32_t length = frame.z.Length();
                 if ( !Math::IsValid( length ) || Math::Equal( length, 0.0f ) || next.z >= m_Factor / length )
                 {
                     done = true;
@@ -755,11 +755,11 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
 
         // Pick ray from our starting location
         Line startRay;
-        m_View->GetCamera()->ViewportToLine( (f32)m_StartX, (f32)m_StartY, startRay);
+        m_View->GetCamera()->ViewportToLine( (float32_t)m_StartX, (float32_t)m_StartY, startRay);
 
         // Pick ray from our current location
         Line endRay;
-        m_View->GetCamera()->ViewportToLine( (f32)e.GetPosition().x, (f32)e.GetPosition().y, endRay);
+        m_View->GetCamera()->ViewportToLine( (float32_t)e.GetPosition().x, (float32_t)e.GetPosition().y, endRay);
 
         // start and end points of the drag in world space, on the line or on the plane
         Vector3 p1, p2;
@@ -972,7 +972,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
                 }
 
                 // fudge the drag normal vector's length to be a multiple of the distance to offset
-                f32 length = drag.Length();
+                float32_t length = drag.Length();
                 length /= m_Distance;
                 length = Round(length);
                 length *= m_Distance;
@@ -1349,12 +1349,12 @@ void TranslateManipulator::CreateProperties()
     m_Generator->Pop();
 }
 
-f32 TranslateManipulator::GetSize() const
+float32_t TranslateManipulator::GetSize() const
 {
     return m_Size;
 }
 
-void TranslateManipulator::SetSize( f32 size )
+void TranslateManipulator::SetSize( float32_t size )
 {
     m_Size = size;
 

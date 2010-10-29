@@ -12,7 +12,7 @@ namespace Helium
         class FOUNDATION_API Shear
         {
         public:
-            f32 yz, xz, xy;
+            float32_t yz, xz, xy;
 
             const static Shear Identity;
 
@@ -24,7 +24,7 @@ namespace Helium
 
             }
 
-            explicit Shear	(f32 vyz, f32 vxz, f32 vxy)
+            explicit Shear	(float32_t vyz, float32_t vxz, float32_t vxy)
                 : yz(vyz)
                 , xz(vxz)
                 , xy(vxy)
@@ -56,14 +56,14 @@ namespace Helium
                 return *this;
             }
 
-            f32&				    operator[] (const u32 i)
+            float32_t&				    operator[] (const uint32_t i)
             {
                 HELIUM_ASSERT( i >= 0 );
                 HELIUM_ASSERT( i <= 2 );
                 return (&yz)[i];
             }
 
-            const f32&	    operator[] (const u32 i) const
+            const float32_t&	    operator[] (const uint32_t i) const
             {
                 HELIUM_ASSERT( i >= 0 );
                 HELIUM_ASSERT( i <= 2 );
@@ -80,7 +80,7 @@ namespace Helium
                 return !(yz == v.yz && xz == v.xz && xy == v.xy);
             }
 
-            bool				    Equal (const Shear& v, f32 error = 0) const
+            bool				    Equal (const Shear& v, float32_t error = 0) const
             {
                 return fabs(yz - v.yz) < error && fabs(xz - v.xz) < error && fabs(xy - v.xy) < error;
             }

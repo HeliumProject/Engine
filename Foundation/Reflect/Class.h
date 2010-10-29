@@ -130,12 +130,12 @@ public:                                                                         
 typedef __Base Base;                                                                                                \
 typedef __Class This;                                                                                               \
 \
-virtual i32 GetType() const HELIUM_OVERRIDE                                                                         \
+virtual int32_t GetType() const HELIUM_OVERRIDE                                                                         \
 {                                                                                                                   \
     return Reflect::GetType<__Class>();                                                                             \
 }                                                                                                                   \
 \
-virtual bool HasType(i32 id) const HELIUM_OVERRIDE                                                                  \
+virtual bool HasType(int32_t id) const HELIUM_OVERRIDE                                                                  \
 {                                                                                                                   \
     return Reflect::GetType<__Class>() == id || __Base::HasType(id);                                                \
 }                                                                                                                   \

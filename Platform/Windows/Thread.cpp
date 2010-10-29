@@ -89,7 +89,7 @@ void Thread::Close()
     m_Handle = NULL;
 }
 
-Thread::Return Thread::Wait(u32 timeout)
+Thread::Return Thread::Wait(uint32_t timeout)
 {
     if ( !Valid() )
     {
@@ -154,14 +154,14 @@ void ThreadLocalPointer::SetPointer(void* pointer)
     TlsSetValue(m_Key, pointer); 
 }
 
-u32 g_MainThreadID = (u32)::GetCurrentThreadId();
+uint32_t g_MainThreadID = (uint32_t)::GetCurrentThreadId();
 
-u32 Helium::GetMainThreadID()
+uint32_t Helium::GetMainThreadID()
 {
     return g_MainThreadID;
 }
 
-u32 Helium::GetCurrentThreadID()
+uint32_t Helium::GetCurrentThreadID()
 {
-    return (u32)::GetCurrentThreadId();
+    return (uint32_t)::GetCurrentThreadId();
 }

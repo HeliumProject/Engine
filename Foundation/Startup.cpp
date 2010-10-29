@@ -48,7 +48,7 @@ using namespace Helium;
 _timeb g_StartTime;
 
 // are we initialized
-static i32 g_InitCount = 0;
+static int32_t g_InitCount = 0;
 
 // the event we raise when we shutdown
 ShutdownSignature::Event Helium::g_ShuttingDown;
@@ -112,7 +112,7 @@ void Helium::Startup( int argc, const tchar** argv )
 
         if ( Helium::GetCmdLineFlag( StartupArgs::Attach ) )
         {
-            i32 timeout = 300; // 5min
+            int32_t timeout = 300; // 5min
 
             Localization::Statement stmt( "Helium", "WaitingDebuggerAttach" );
             stmt.ReplaceKey( TXT( "MINUTES" ), timeout / 60 );

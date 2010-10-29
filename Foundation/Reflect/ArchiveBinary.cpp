@@ -17,19 +17,19 @@ using namespace Helium::Reflect;
 //#define REFLECT_DISABLE_BINARY_CRC
 
 // version / feature management 
-const u32 ArchiveBinary::CURRENT_VERSION                            = 7;
+const uint32_t ArchiveBinary::CURRENT_VERSION                            = 7;
 
 // our ORIGINAL version id was '!', don't ever re-use that byte
 HELIUM_COMPILE_ASSERT( (ArchiveBinary::CURRENT_VERSION & 0xff) != 33 );
 
 // CRC
-const u32 CRC_DEFAULT = 0x10101010;
-const u32 CRC_INVALID = 0xffffffff;
+const uint32_t CRC_DEFAULT = 0x10101010;
+const uint32_t CRC_INVALID = 0xffffffff;
 
 #ifdef REFLECT_DEBUG_BINARY_CRC
-const u32 CRC_BLOCK_SIZE = 4;
+const uint32_t CRC_BLOCK_SIZE = 4;
 #else
-const u32 CRC_BLOCK_SIZE = 4096;
+const uint32_t CRC_BLOCK_SIZE = 4096;
 #endif
 
 // this is sneaky, but in general people shouldn't use this
@@ -128,7 +128,7 @@ void ArchiveBinary::Read()
 
     // read byte order
     ByteOrder byteOrder = Helium::PlatformByteOrder;
-    u16 byteOrderMarker = 0;
+    uint16_t byteOrderMarker = 0;
     m_Stream->Read( &byteOrderMarker );
     switch ( byteOrderMarker )
     {
@@ -151,7 +151,7 @@ void ArchiveBinary::Read()
     }
 
     // read version
-    u8 key = 0;
+    uint8_t key = 0;
     m_Stream->Read(&key);
     if (key == '!')
     {
@@ -160,7 +160,7 @@ void ArchiveBinary::Read()
     }
     else
     {
-        // new versions have a u32 version number
+        // new versions have a uint32_t version number
         m_Stream->SeekRead(0, std::ios_base::beg);
         m_Stream->Read(&m_Version); 
     }
@@ -172,7 +172,7 @@ void ArchiveBinary::Read()
 
     CharacterEncoding encoding = CharacterEncodings::ASCII;
     // character encoding
-    u8 encodingByte;
+    uint8_t encodingByte;
     m_Stream->Read(&encodingByte);
     encoding = (CharacterEncoding)encodingByte;
     if ( encoding != CharacterEncodings::ASCII && encoding != CharacterEncodings::UTF_16 )
@@ -181,8 +181,8 @@ void ArchiveBinary::Read()
     }
 
     // read and verify CRC
-    u32 crc = CRC_DEFAULT;
-    u32 current_crc = crc;
+    uint32_t crc = CRC_DEFAULT;
+    uint32_t current_crc = crc;
     m_Stream->Read(&crc); 
 
 #ifdef REFLECT_DISABLE_BINARY_CRC
@@ -196,13 +196,13 @@ void ArchiveBinary::Read()
 
         PROFILE_SCOPE_ACCUM(g_ChecksumAccum);
 
-        u32 count = 0;
-        u8 block[CRC_BLOCK_SIZE];
+        uint32_t count = 0;
+        uint8_t block[CRC_BLOCK_SIZE];
         memset(block, 0, CRC_BLOCK_SIZE);
         HELIUM_ASSERT(current_crc == CRC_DEFAULT);
 
         // snapshot our starting location
-        u32 start = (u32)m_Stream->TellRead();
+        uint32_t start = (uint32_t)m_Stream->TellRead();
 
         // roll through file
         while (!m_Stream->Done())
@@ -211,13 +211,13 @@ void ArchiveBinary::Read()
             m_Stream->ReadBuffer(block, CRC_BLOCK_SIZE);
 
             // how much we got
-            u32 got = (u32) m_Stream->ElementsRead();
+            uint32_t got = (uint32_t) m_Stream->ElementsRead();
 
             // crc block
             current_crc = Helium::Crc32(current_crc, block, got);
 
 #ifdef REFLECT_DEBUG_BINARY_CRC
-            Log::Print("CRC %d (length %d) for datum 0x%08x is 0x%08x\n", count++, got, *(u32*)block, current_crc);
+            Log::Print("CRC %d (length %d) for datum 0x%08x is 0x%08x\n", count++, got, *(uint32_t*)block, current_crc);
 #endif
         }
 
@@ -242,11 +242,11 @@ void ArchiveBinary::Read()
     }
 
     // load some offsets
-    u32 type_offset;
+    uint32_t type_offset;
     m_Stream->Read(&type_offset); 
-    u32 string_offset;
+    uint32_t string_offset;
     m_Stream->Read(&string_offset);
-    u32 element_offset = (u32)m_Stream->TellRead();
+    uint32_t element_offset = (uint32_t)m_Stream->TellRead();
 
     // deserialize string pool
     {
@@ -264,7 +264,7 @@ void ArchiveBinary::Read()
 
         m_Stream->SeekRead(type_offset, std::ios_base::beg);
 
-        i32 type_count = -1;
+        int32_t type_count = -1;
         m_Stream->Read(&type_count); 
         HELIUM_ASSERT(type_count >= 0);
 
@@ -285,7 +285,7 @@ void ArchiveBinary::Read()
             m_ClassesByShortName[ c->m_ShortName ] = c;
         }
 
-        i32 terminator = -1;
+        int32_t terminator = -1;
         m_Stream->Read(&terminator);
 
         if (terminator != -1)
@@ -308,7 +308,7 @@ void ArchiveBinary::Read()
     }
 
     // invalidate the search type and abort flags so we process the append block
-    i32 searchType = m_SearchType;
+    int32_t searchType = m_SearchType;
     if ( m_SearchType != Reflect::ReservedTypes::Invalid )
     {
         m_SearchType = Reflect::ReservedTypes::Invalid;
@@ -353,20 +353,20 @@ void ArchiveBinary::Write()
     encoding = CharacterEncodings::ASCII;
     HELIUM_COMPILE_ASSERT( sizeof(char) == 1 );
 #endif
-    u8 encodingByte = (u8)encoding;
+    uint8_t encodingByte = (uint8_t)encoding;
     m_Stream->Write(&encodingByte);
 
     // always start with the invalid crc, incase we don't make it to the end
-    u32 crc = CRC_INVALID;
+    uint32_t crc = CRC_INVALID;
 
     // save the offset and write the invalid crc to the stream
-    u32 crc_offset = (u32)m_Stream->TellWrite();
+    uint32_t crc_offset = (uint32_t)m_Stream->TellWrite();
     m_Stream->Write(&crc);
 
     // save some offsets to write offsets to
-    u32 type_offset = (u32)m_Stream->TellWrite();
+    uint32_t type_offset = (uint32_t)m_Stream->TellWrite();
     m_Stream->Write(&type_offset); 
-    u32 string_offset = (u32)m_Stream->TellWrite();
+    uint32_t string_offset = (uint32_t)m_Stream->TellWrite();
     m_Stream->Write(&string_offset);
 
     // serialize main file elements
@@ -392,7 +392,7 @@ void ArchiveBinary::Write()
         REFLECT_SCOPE_TIMER( ("RTTI Write") );
 
         // write our current location back at our offset
-        u32 type_location = (u32)m_Stream->TellWrite();
+        uint32_t type_location = (uint32_t)m_Stream->TellWrite();
         m_Stream->SeekWrite(type_offset, std::ios_base::beg);
         m_Stream->Write(&type_location);
         m_Stream->SeekWrite(0, std::ios_base::end);
@@ -402,11 +402,11 @@ void ArchiveBinary::Write()
             Debug(TXT("Serializing %d types\n"), m_Types.size());
 #endif
 
-            i32 count = (int)m_Types.size();
+            int32_t count = (int)m_Types.size();
             m_Stream->Write(&count); 
 
-            std::set< i32 >::iterator itr = m_Types.begin();
-            std::set< i32 >::iterator end = m_Types.end();
+            std::set< int32_t >::iterator itr = m_Types.begin();
+            std::set< int32_t >::iterator end = m_Types.end();
             for ( ; itr != end; ++itr )
             {
                 const Class* type = Reflect::Registry::GetInstance()->GetClass(*itr);
@@ -417,7 +417,7 @@ void ArchiveBinary::Write()
             m_Types.clear();
         }
 
-        const static i32 terminator = -1;
+        const static int32_t terminator = -1;
         m_Stream->Write(&terminator); 
     }
 
@@ -426,7 +426,7 @@ void ArchiveBinary::Write()
         REFLECT_SCOPE_TIMER( ("String Pool Write") );
 
         // write our current location back at our offset
-        u32 string_location = (u32)m_Stream->TellWrite();
+        uint32_t string_location = (uint32_t)m_Stream->TellWrite();
         m_Stream->SeekWrite(string_offset, std::ios_base::beg);
         m_Stream->Write(&string_location); 
         m_Stream->SeekWrite(0, std::ios_base::end);
@@ -439,8 +439,8 @@ void ArchiveBinary::Write()
     {
         REFLECT_SCOPE_TIMER( ("CRC Build") );
 
-        u32 count = 0;
-        u8 block[CRC_BLOCK_SIZE];
+        uint32_t count = 0;
+        uint8_t block[CRC_BLOCK_SIZE];
         memset(&block, 0, CRC_BLOCK_SIZE);
 
         // make damn sure this didn't change
@@ -459,13 +459,13 @@ void ArchiveBinary::Write()
             m_Stream->ReadBuffer(block, CRC_BLOCK_SIZE);
 
             // how much we got
-            u32 got = (u32) m_Stream->ElementsRead();
+            uint32_t got = (uint32_t) m_Stream->ElementsRead();
 
             // crc block
             crc = Helium::Crc32(crc, block, got);
 
 #ifdef REFLECT_DEBUG_BINARY_CRC
-            Log::Print("CRC %d (length %d) for datum 0x%08x is 0x%08x\n", count++, got, *(u32*)block, crc);
+            Log::Print("CRC %d (length %d) for datum 0x%08x is 0x%08x\n", count++, got, *(uint32_t*)block, crc);
 #endif
         }
 
@@ -499,7 +499,7 @@ void ArchiveBinary::Write()
 
 void ArchiveBinary::Start()
 {
-    u16 feff = 0xfeff;
+    uint16_t feff = 0xfeff;
     m_Stream->Write( &feff ); // byte order mark
 
     // just for good measure
@@ -517,11 +517,11 @@ void ArchiveBinary::Serialize(const ElementPtr& element)
     REFLECT_SCOPE_TIMER_INST( ("Serialize %s", element->GetClass()->m_ShortName.c_str()) );
 
     // use the string pool index for this type's short name
-    i32 index = m_Strings.Insert(element->GetClass()->m_ShortName);
+    int32_t index = m_Strings.Insert(element->GetClass()->m_ShortName);
     m_Stream->Write(&index); 
 
     // get and stub out the start offset where we are now (will become length after writing is done)
-    u32 start_offset = (u32)m_Stream->TellWrite();
+    uint32_t start_offset = (uint32_t)m_Stream->TellWrite();
     m_Stream->Write(&start_offset); 
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -558,7 +558,7 @@ void ArchiveBinary::Serialize(const ElementPtr& element)
         SerializeFields(element);
 
         // write our terminator
-        const static i32 terminator = -1;
+        const static int32_t terminator = -1;
         m_Stream->Write(&terminator); 
 
         // seek back and write our count
@@ -578,13 +578,13 @@ void ArchiveBinary::Serialize(const ElementPtr& element)
     }
 
     // save our end offset to substract the start from
-    u32 end_offset = (u32)m_Stream->TellWrite();
+    uint32_t end_offset = (uint32_t)m_Stream->TellWrite();
 
     // seek back to the start offset
     m_Stream->SeekWrite(start_offset, std::ios_base::beg);
 
     // compute amound written
-    u32 length = end_offset - start_offset;
+    uint32_t length = end_offset - start_offset;
 
     // write written amount at start offset
     m_Stream->Write(&length); 
@@ -597,11 +597,11 @@ void ArchiveBinary::Serialize(const ElementPtr& element)
 #endif
 }
 
-void ArchiveBinary::Serialize(const V_Element& elements, u32 flags)
+void ArchiveBinary::Serialize(const V_Element& elements, uint32_t flags)
 {
     REFLECT_SCOPE_TIMER_INST( "" )
 
-        i32 size = (i32)elements.size();
+        int32_t size = (int32_t)elements.size();
     m_Stream->Write(&size); 
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -635,7 +635,7 @@ void ArchiveBinary::Serialize(const V_Element& elements, u32 flags)
     m_Indent.Pop();
 #endif
 
-    const static i32 terminator = -1;
+    const static int32_t terminator = -1;
     m_Stream->Write(&terminator); 
 }
 
@@ -748,12 +748,12 @@ ElementPtr ArchiveBinary::Allocate()
     ElementPtr element;
 
     // read type string
-    i32 index = -1;
+    int32_t index = -1;
     m_Stream->Read(&index); 
     const tstring& str = m_Strings.Get(index);
 
     // read length info if we have it
-    u32 length = 0;
+    uint32_t length = 0;
     if (m_Version > 1)
     {
         m_Stream->Read(&length);
@@ -761,7 +761,7 @@ ElementPtr ArchiveBinary::Allocate()
         if (m_Skip)
         {
             // skip it, but account for already reading the length from the stream
-            m_Stream->SeekRead(length - sizeof(u32), std::ios_base::cur);
+            m_Stream->SeekRead(length - sizeof(uint32_t), std::ios_base::cur);
 
             // we should just keep processing even though we return null
             return NULL;
@@ -799,7 +799,7 @@ ElementPtr ArchiveBinary::Allocate()
         if (m_Version > 1)
         {
             // skip it, but account for already reading the length from the stream
-            m_Stream->SeekRead(length - sizeof(u32), std::ios_base::cur);
+            m_Stream->SeekRead(length - sizeof(uint32_t), std::ios_base::cur);
 
             // if you see this, then data is being lost because:
             //  1 - a type was completely removed from the codebase
@@ -878,11 +878,11 @@ void ArchiveBinary::Deserialize(ElementPtr& element)
     }
 }
 
-void ArchiveBinary::Deserialize(V_Element& elements, u32 flags)
+void ArchiveBinary::Deserialize(V_Element& elements, uint32_t flags)
 {
-    u32 start_offset = (u32)m_Stream->TellRead();
+    uint32_t start_offset = (uint32_t)m_Stream->TellRead();
 
-    i32 element_count = -1;
+    int32_t element_count = -1;
     m_Stream->Read(&element_count); 
 
     REFLECT_SCOPE_TIMER_INST( "" )
@@ -909,7 +909,7 @@ void ArchiveBinary::Deserialize(V_Element& elements, u32 flags)
 
                 if ( flags & ArchiveFlags::Status )
                 {
-                    u32 current = (u32)m_Stream->TellRead();
+                    uint32_t current = (uint32_t)m_Stream->TellRead();
 
                     StatusInfo info( *this, ArchiveStates::ElementProcessed );
                     info.m_Progress = (int)(((float)(current - start_offset) / (float)m_Size) * 100.0f);
@@ -932,7 +932,7 @@ void ArchiveBinary::Deserialize(V_Element& elements, u32 flags)
 
     if (!m_Abort)
     {
-        i32 terminator = -1;
+        int32_t terminator = -1;
         m_Stream->Read(&terminator);
 
         if (terminator != -1)
@@ -951,7 +951,7 @@ void ArchiveBinary::Deserialize(V_Element& elements, u32 flags)
 
 void ArchiveBinary::DeserializeFields(const ElementPtr& element)
 {
-    i32 field_count = -1;
+    int32_t field_count = -1;
     m_Stream->Read(&field_count); 
 
     REFLECT_SCOPE_TIMER_INST( "" )
@@ -991,7 +991,7 @@ void ArchiveBinary::DeserializeFields(const ElementPtr& element)
             // while we haven't hit the terminator
             for (int i=0; i<field_count; i++)
             {
-                i32 field_id = -1;
+                int32_t field_id = -1;
                 m_Stream->Read(&field_id); 
 
                 if (type != NULL)
@@ -1015,7 +1015,7 @@ void ArchiveBinary::DeserializeFields(const ElementPtr& element)
             }
         }
 
-        i32 terminator = -1;
+        int32_t terminator = -1;
         m_Stream->Read(&terminator); 
 
         if (terminator != -1)
@@ -1143,11 +1143,11 @@ void ArchiveBinary::SerializeComposite(const Composite* composite)
     Log::Debug(TXT(" Serializing %s (%d fields)\n"), composite->m_ShortName.c_str(), composite->m_FieldIDToInfo.size());
 #endif
 
-    i32 string_index = m_Strings.Insert(composite->m_ShortName);
+    int32_t string_index = m_Strings.Insert(composite->m_ShortName);
     m_Stream->Write(&string_index); 
     m_Stream->Write(&composite->m_TypeID); 
 
-    i32 field_count = (i32)composite->m_FieldIDToInfo.size();
+    int32_t field_count = (int32_t)composite->m_FieldIDToInfo.size();
     m_Stream->Write(&field_count);
 
     M_FieldIDToInfo::const_iterator itr = composite->m_FieldIDToInfo.begin();
@@ -1157,26 +1157,26 @@ void ArchiveBinary::SerializeComposite(const Composite* composite)
         SerializeField(itr->second);
     }
 
-    const static i32 terminator = -1;
+    const static int32_t terminator = -1;
     m_Stream->Write(&terminator); 
 }
 
 bool ArchiveBinary::DeserializeComposite(Composite* composite)
 {
-    i32 string_index = -1;
+    int32_t string_index = -1;
     m_Stream->Read(&string_index); 
     composite->m_ShortName = m_Strings.Get(string_index);
 
     m_Stream->Read(&composite->m_TypeID); 
 
-    i32 field_count = -1;
+    int32_t field_count = -1;
     m_Stream->Read(&field_count); 
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
     Log::Debug(TXT(" Deserializing %s (%d fields)\n"), composite->m_ShortName.c_str(), field_count);
 #endif
 
-    for ( i32 i=0; i<field_count; ++i )
+    for ( int32_t i=0; i<field_count; ++i )
     {
         FieldPtr field = Field::Create(composite);
 
@@ -1191,7 +1191,7 @@ bool ArchiveBinary::DeserializeComposite(Composite* composite)
         composite->m_FieldNameToInfo[ field->m_Name ] = field;
     }
 
-    i32 terminator = -1;
+    int32_t terminator = -1;
     m_Stream->Read(&terminator); 
 
     if (terminator != -1)
@@ -1205,7 +1205,7 @@ bool ArchiveBinary::DeserializeComposite(Composite* composite)
 void ArchiveBinary::SerializeField(const Field* field)
 {
     // field name
-    i32 string_index = m_Strings.Insert(field->m_Name);
+    int32_t string_index = m_Strings.Insert(field->m_Name);
     m_Stream->Write(&string_index); 
 
     // field type id short name
@@ -1227,7 +1227,7 @@ void ArchiveBinary::SerializeField(const Field* field)
 
 bool ArchiveBinary::DeserializeField(Field* field)
 {
-    i32 string_index = -1;
+    int32_t string_index = -1;
 
     // field name
     m_Stream->Read(&string_index); 

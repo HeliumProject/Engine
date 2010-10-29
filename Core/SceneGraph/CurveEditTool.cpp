@@ -86,7 +86,7 @@ bool CurveEditTool::MouseDown( const MouseButtonInput& e )
         {
         case CurveEditModes::Insert:
             {
-                std::pair<u32, u32> points;
+                std::pair<uint32_t, uint32_t> points;
                 if ( !curve->ClosestControlPoints( &pick, points ) )
                 {
                     return false;
@@ -115,7 +115,7 @@ bool CurveEditTool::MouseDown( const MouseButtonInput& e )
                     p = ( a + b ) * 0.5f;
                 }
 
-                u32 index = points.first > points.second ? points.first : points.second;
+                uint32_t index = points.first > points.second ? points.first : points.second;
 
                 CurveControlPointPtr point = new CurveControlPoint();
                 point->Initialize( curve->GetOwner() );
@@ -126,7 +126,7 @@ bool CurveEditTool::MouseDown( const MouseButtonInput& e )
 
         case CurveEditModes::Remove:
             {
-                i32 index = curve->ClosestControlPoint( &pick );
+                int32_t index = curve->ClosestControlPoint( &pick );
 
                 if ( index < 0 )
                 {
@@ -184,7 +184,7 @@ void CurveEditTool::KeyPress( const KeyboardInput& e )
         return;
     }
 
-    i32 keyCode = e.GetKeyCode();
+    int32_t keyCode = e.GetKeyCode();
 
     if ( keyCode == KeyCodes::Left || keyCode == KeyCodes::Up || keyCode == KeyCodes::Right || keyCode == KeyCodes::Down )
     {
@@ -209,14 +209,14 @@ void CurveEditTool::KeyPress( const KeyboardInput& e )
             return;
         }
 
-        i32 index =  curve->GetIndexForControlPoint( point );
+        int32_t index =  curve->GetIndexForControlPoint( point );
 
         if ( index == -1 )
         {
             return;
         }
 
-        u32 countControlPoints = curve->GetNumberControlPoints();
+        uint32_t countControlPoints = curve->GetNumberControlPoints();
         if ( keyCode == KeyCodes::Left || keyCode == KeyCodes::Down )
         {
             index--;

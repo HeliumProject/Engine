@@ -59,12 +59,12 @@ namespace Helium
             bool m_IsDeviceLost;
             bool m_DisplayAxis;
 
-            u32 m_MeshHandle;
+            uint32_t m_MeshHandle;
 
             wxMenu m_ContextMenu;
             wxMenu* m_AxisSubMenu;
-            i32 m_AxisOnMenuID;
-            i32 m_AxisOffMenuID;
+            int32_t m_AxisOnMenuID;
+            int32_t m_AxisOffMenuID;
 
         private:
             DECLARE_EVENT_TABLE();

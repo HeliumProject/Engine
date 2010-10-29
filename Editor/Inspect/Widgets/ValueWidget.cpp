@@ -18,7 +18,7 @@ ValueWindow::ValueWindow( wxWindow* parent, ValueWidget* valueWidget )
 : m_ValueWidget( valueWidget )
 , m_Override( false )
 {
-    i32 flags = wxTE_PROCESS_ENTER;
+    int32_t flags = wxTE_PROCESS_ENTER;
 
 #pragma TODO("Figure out how to properly support text controls whose read only state can change")
     if ( m_ValueWidget->GetControl()->a_IsReadOnly.Get() )

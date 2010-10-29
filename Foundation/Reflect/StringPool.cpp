@@ -60,14 +60,14 @@ void StringPool::SerializeDirect( CharStream& stream )
     Log::Debug( TXT( "Serializing %d strings\n" ), m_Strings.size() );
 #endif
 
-    i32 size = (i32)m_Strings.size();
+    int32_t size = (int32_t)m_Strings.size();
     stream.Write( &size ); 
 
     std::vector< tstring >::iterator itr = m_Strings.begin();
     std::vector< tstring >::iterator end = m_Strings.end();
     for ( int index=0; itr != end; ++itr, ++index )
     {
-        size = (i32)itr->length();
+        size = (int32_t)itr->length();
         const tstring& str( *itr );
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -84,7 +84,7 @@ void StringPool::SerializeDirect( CharStream& stream )
 
 void StringPool::DeserializeDirect( CharStream& stream, CharacterEncoding encoding )
 {
-    i32 stringCount = 0;
+    int32_t stringCount = 0;
     stream.Read( &stringCount );
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -92,9 +92,9 @@ void StringPool::DeserializeDirect( CharStream& stream, CharacterEncoding encodi
 #endif
 
     m_Strings.resize( stringCount );
-    for ( i32 i=0; i < stringCount; ++i )
+    for ( int32_t i=0; i < stringCount; ++i )
     {
-        i32 stringLength = 0;
+        int32_t stringLength = 0;
         stream.Read( &stringLength );
 
         tstring& outputString = m_Strings[ i ]; 
@@ -147,8 +147,8 @@ void StringPool::DeserializeDirect( CharStream& stream, CharacterEncoding encodi
 void StringPool::SerializeCompressed( CharStream& stream )
 {
     // in bytes... 
-    u32 originalSize = 0; 
-    u32 compressedSize = 0; 
+    uint32_t originalSize = 0; 
+    uint32_t compressedSize = 0; 
 
     // save a place for the originalSize and compressedSize
     std::streamoff startOffset = stream.TellWrite(); 
@@ -161,7 +161,7 @@ void StringPool::SerializeCompressed( CharStream& stream )
     SerializeDirect( tempStream ); 
 
     // get the pointer
-    originalSize   = (u32) memoryStream.tellp(); 
+    originalSize   = (uint32_t) memoryStream.tellp(); 
     compressedSize = CompressToStream( stream, memoryStream.str().c_str(), originalSize ); 
 
     // go back and record the size information in the stream. 
@@ -173,8 +173,8 @@ void StringPool::SerializeCompressed( CharStream& stream )
 
 void StringPool::DeserializeCompressed( CharStream& stream, CharacterEncoding encoding )
 {
-    u32 originalSize = 0; 
-    u32 compressedSize = 0; 
+    uint32_t originalSize = 0; 
+    uint32_t compressedSize = 0; 
 
     stream.Read( &originalSize ); 
     stream.Read( &compressedSize ); 

@@ -27,24 +27,24 @@ namespace Helium
                 p.w = -(normal.Dot(point));
             }
 
-            f32         A () const      { return p.x; }
-            void        A (f32 value)   { p.x = value; }
+            float32_t         A () const      { return p.x; }
+            void        A (float32_t value)   { p.x = value; }
 
-            f32         B () const      { return p.y; }
-            void        B (f32 value)   { p.y = value; }
+            float32_t         B () const      { return p.y; }
+            void        B (float32_t value)   { p.y = value; }
 
-            f32         C () const      { return p.z; }
-            void        C (f32 value)   { p.z = value; }
+            float32_t         C () const      { return p.z; }
+            void        C (float32_t value)   { p.z = value; }
 
-            f32         D () const      { return p.w; }
-            void        D (f32 value)   { p.w = value; }
+            float32_t         D () const      { return p.w; }
+            void        D (float32_t value)   { p.w = value; }
 
-            f32&        operator[] ( const u32 index )
+            float32_t&        operator[] ( const uint32_t index )
             {
                 return p[index];
             }
 
-            const f32&  operator[] ( const u32 index ) const
+            const float32_t&  operator[] ( const uint32_t index ) const
             {
                 return p[index];
             }
@@ -74,7 +74,7 @@ namespace Helium
                 p = m * p;
             }
 
-            f32         DistanceAbove (const Vector3& p) const
+            float32_t         DistanceAbove (const Vector3& p) const
             {
                 return (p.x*A()) + (p.y*B()) + (p.z*C()) + D();
             }

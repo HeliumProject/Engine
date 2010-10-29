@@ -22,11 +22,11 @@ Profile::Accumulator g_DecompressAccum ("DXT Decompress");
 // Used to be: nvDXT lib callback for mip map generation
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool FinalizeMips_HDR( void *data, int mip_level, int width, int height, int depth, u32 mip_size, DXTOptions* dxt_options )
+bool FinalizeMips_HDR( void *data, int mip_level, int width, int height, int depth, uint32_t mip_size, DXTOptions* dxt_options )
 {
     HELIUM_ASSERT(dxt_options->m_mips);
     MipSet* p_mips  = dxt_options->m_mips;
-    u32 face        = dxt_options->m_face;
+    uint32_t face        = dxt_options->m_face;
     MipSet::MipInfo* p_curr_mip = &p_mips->m_levels[face][mip_level];
 
     HELIUM_ASSERT_MSG(depth <= 1, ("Support for HDR volume textures not fully implimented"));
@@ -36,12 +36,12 @@ bool FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dep
     if (output_format == Helium::OUTPUT_CF_FLOATMAP)
     {
         // input is RGBA in floating point
-        p_curr_mip->m_data = new u8[width*height*sizeof(float)*4];
+        p_curr_mip->m_data = new uint8_t[width*height*sizeof(float)*4];
         p_mips->m_datasize[mip_level] = width*height*sizeof(float)*4;
         float* dst = (float*)p_curr_mip->m_data;
         float* src = (float*)data;
 
-        for(i32 i=0;i<width*height;i++)
+        for(int32_t i=0;i<width*height;i++)
         {
             // order of components in input data is BGRA
             dst[0] = src[2];
@@ -55,11 +55,11 @@ bool FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dep
     else if (output_format == Helium::OUTPUT_CF_HALFMAP)
     {
         // input is RGBA in floating point
-        p_curr_mip->m_data = new u8[width*height*sizeof(i16)*4];
-        p_mips->m_datasize[mip_level] = width*height*sizeof(i16)*4;
-        i16* dst = (i16*)p_curr_mip->m_data;
+        p_curr_mip->m_data = new uint8_t[width*height*sizeof(int16_t)*4];
+        p_mips->m_datasize[mip_level] = width*height*sizeof(int16_t)*4;
+        int16_t* dst = (int16_t*)p_curr_mip->m_data;
         float* src = (float*)data;
-        for(i32 i=0;i<width*height;i++)
+        for(int32_t i=0;i<width*height;i++)
         {
             // order of components in input data is BGRA
             dst[0] = Math::FloatToHalf(src[2]);
@@ -73,12 +73,12 @@ bool FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dep
     else if (output_format == Helium::OUTPUT_CF_F32F32)
     {
         // input is RGBA in floating point
-        p_curr_mip->m_data = new u8[width*height*sizeof(float)*2];
+        p_curr_mip->m_data = new uint8_t[width*height*sizeof(float)*2];
         p_mips->m_datasize[mip_level] = width*height*sizeof(float)*2;
         float* dst = (float*)p_curr_mip->m_data;
         float* src = (float*)data;
 
-        for(i32 i=0;i<width*height;i++)
+        for(int32_t i=0;i<width*height;i++)
         {
             // order of components in input data is BGRA
             dst[0] = src[2];
@@ -90,12 +90,12 @@ bool FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dep
     else if (output_format == Helium::OUTPUT_CF_F32)
     {
         // input is RGBA in floating point
-        p_curr_mip->m_data = new u8[width*height*sizeof(float)];
+        p_curr_mip->m_data = new uint8_t[width*height*sizeof(float)];
         p_mips->m_datasize[mip_level] = width*height*sizeof(float);
         float* dst = (float*)p_curr_mip->m_data;
         float* src = (float*)data;
 
-        for(i32 i=0;i<width*height;i++)
+        for(int32_t i=0;i<width*height;i++)
         {
             // order of components in input data is BGRA
             dst[0] = (0.212671f * src[2] + 0.715160f * src[1] + 0.072169f * src[0]);
@@ -106,12 +106,12 @@ bool FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dep
     else if (output_format == Helium::OUTPUT_CF_RGBE)
     {
         // input is RGBA in floating point
-        p_curr_mip->m_data = new u8[width*height*sizeof(u32)];
-        p_mips->m_datasize[mip_level] = width*height*sizeof(u32);
-        u32* dst = (u32*)p_curr_mip->m_data;
+        p_curr_mip->m_data = new uint8_t[width*height*sizeof(uint32_t)];
+        p_mips->m_datasize[mip_level] = width*height*sizeof(uint32_t);
+        uint32_t* dst = (uint32_t*)p_curr_mip->m_data;
         float* src = (float*)data;
 
-        for(i32 i=0;i<width*height;i++)
+        for(int32_t i=0;i<width*height;i++)
         {
             // order of components in input data is BGRA
             *dst = ColorFormatCreateRGBE(src[2],src[1],src[0]);
@@ -122,12 +122,12 @@ bool FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dep
     else if (output_format == Helium::OUTPUT_CF_F16)
     {
         // input is RGBA in floating point
-        p_curr_mip->m_data = new u8[width*height*sizeof(i16)];
-        p_mips->m_datasize[mip_level] = width*height*sizeof(i16);
-        i16* dst = (i16*)p_curr_mip->m_data;
+        p_curr_mip->m_data = new uint8_t[width*height*sizeof(int16_t)];
+        p_mips->m_datasize[mip_level] = width*height*sizeof(int16_t);
+        int16_t* dst = (int16_t*)p_curr_mip->m_data;
         float* src = (float*)data;
 
-        for(i32 i=0;i<width*height;i++)
+        for(int32_t i=0;i<width*height;i++)
         {
             // order of components in input data is BGRA
             // OUTPUT IS GRAY
@@ -139,12 +139,12 @@ bool FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dep
     else if (output_format == Helium::OUTPUT_CF_F16F16)
     {
         // input is RGBA in floating point
-        p_curr_mip->m_data = new u8[width*height*sizeof(i16)*2];
-        p_mips->m_datasize[mip_level] = width*height*sizeof(i16)*2;
-        i16* dst = (i16*)p_curr_mip->m_data;
+        p_curr_mip->m_data = new uint8_t[width*height*sizeof(int16_t)*2];
+        p_mips->m_datasize[mip_level] = width*height*sizeof(int16_t)*2;
+        int16_t* dst = (int16_t*)p_curr_mip->m_data;
         float* src = (float*)data;
 
-        for(i32 i=0;i<width*height;i++)
+        for(int32_t i=0;i<width*height;i++)
         {
             // d3d is in GR order
             dst[0] = Math::FloatToHalf(src[1]);
@@ -177,16 +177,16 @@ bool FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dep
 // Used to be: nvDXT lib callback for LDR mip map generation
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-u32 FinalizeMips_LDR( void *data, int mip_level, int width, int height, int depth, u32 mip_size, DXTOptions* dxt_options )
+uint32_t FinalizeMips_LDR( void *data, int mip_level, int width, int height, int depth, uint32_t mip_size, DXTOptions* dxt_options )
 {
     HELIUM_ASSERT(dxt_options->m_mips);
     MipSet* p_mips  = dxt_options->m_mips;
-    u32 face        = dxt_options->m_face;
+    uint32_t face        = dxt_options->m_face;
     MipSet::MipInfo* p_curr_mip = &p_mips->m_levels[face][mip_level];
-    u32 mip_depth = MAX(1, depth);
+    uint32_t mip_depth = MAX(1, depth);
 
-    u32 data_size = mip_size * mip_depth;
-    p_curr_mip->m_data  = new u8[data_size];
+    uint32_t data_size = mip_size * mip_depth;
+    p_curr_mip->m_data  = new uint8_t[data_size];
     p_mips->m_datasize[mip_level] = data_size;
 
     memcpy(p_curr_mip->m_data, data, data_size);
@@ -210,10 +210,10 @@ u32 FinalizeMips_LDR( void *data, int mip_level, int width, int height, int dept
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-inline u32 ImageByteSize(OutputColorFormat format, u32 width, u32 height)
+inline uint32_t ImageByteSize(OutputColorFormat format, uint32_t width, uint32_t height)
 {
-    f32 total_size  = (f32)width*height*4;
-    f32 multiplier  = 1.0f;
+    float32_t total_size  = (float32_t)width*height*4;
+    float32_t multiplier  = 1.0f;
 
     switch(format)
     {
@@ -242,7 +242,7 @@ inline u32 ImageByteSize(OutputColorFormat format, u32 width, u32 height)
         HELIUM_ASSERT(!"WTF");
     }
 
-    return u32(total_size*multiplier);
+    return uint32_t(total_size*multiplier);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -266,7 +266,7 @@ inline bool ShouldAllocateWorkBuffer(OutputColorFormat format)
 //
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void ProcessMip(const Image* mip, u32 mip_level, u32 face, OutputColorFormat format, DXTOptions* dxt_options, u8* work_buffer, bool convert_to_srgb)
+void ProcessMip(const Image* mip, uint32_t mip_level, uint32_t face, OutputColorFormat format, DXTOptions* dxt_options, uint8_t* work_buffer, bool convert_to_srgb)
 {
     ColorFormat conversion_format = CF_ARGB8888; // default used by dxt compressor
     bool        hdr               = false;
@@ -305,25 +305,25 @@ void ProcessMip(const Image* mip, u32 mip_level, u32 face, OutputColorFormat for
     }
 
     HELIUM_ASSERT( (face == 0) || (mip->m_Depth == 0) ); // Make sure we're not both a cube and volume texture somehow
-    u8* native_data = Image::GenerateFormatData(mip, conversion_format, face, convert_to_srgb);
+    uint8_t* native_data = Image::GenerateFormatData(mip, conversion_format, face, convert_to_srgb);
 
-    u32 depth = MAX(1, mip->m_Depth);
+    uint32_t depth = MAX(1, mip->m_Depth);
 
-    u32 mip_size = ImageByteSize(format, mip->m_Width, mip->m_Height);
+    uint32_t mip_size = ImageByteSize(format, mip->m_Width, mip->m_Height);
 
     if (dxt_compress)
     {
         // force alpha to 1 in the source buffer before doing dxt1 compression
         if (format == Helium::OUTPUT_CF_DXT1)
         {
-            for (u32 a_idx = 0; a_idx < mip->m_Width*mip->m_Height*depth; ++a_idx)
+            for (uint32_t a_idx = 0; a_idx < mip->m_Width*mip->m_Height*depth; ++a_idx)
             {
                 native_data[(a_idx << 2) + 3] = 0xFF;
             }
         }
 
         // set up squish flags
-        u32 squish_flags = (squish::kColourClusterFit | squish::kColourIterativeClusterFit);
+        uint32_t squish_flags = (squish::kColourClusterFit | squish::kColourIterativeClusterFit);
 
         switch (format)
         {
@@ -346,15 +346,15 @@ void ProcessMip(const Image* mip, u32 mip_level, u32 face, OutputColorFormat for
 
 
         // loop through layers (if it's not a volume texture there will be only one layer)
-        u32 native_pixel_size = (ColorFormatBits(conversion_format) >> 3);
-        u32 native_layer_size = mip->m_Width * mip->m_Height * native_pixel_size;
-        u8* p_curr_native_data = native_data;
-        u8* p_curr_work_buffer = work_buffer;
-        for(u32 curr_depth = 0; curr_depth < depth; curr_depth++)
+        uint32_t native_pixel_size = (ColorFormatBits(conversion_format) >> 3);
+        uint32_t native_layer_size = mip->m_Width * mip->m_Height * native_pixel_size;
+        uint8_t* p_curr_native_data = native_data;
+        uint8_t* p_curr_work_buffer = work_buffer;
+        for(uint32_t curr_depth = 0; curr_depth < depth; curr_depth++)
         {
             PROFILE_SCOPE_ACCUM(g_CompressAccum);
 
-            u32 size = squish::GetStorageRequirements(mip->m_Width, mip->m_Height, squish_flags);
+            uint32_t size = squish::GetStorageRequirements(mip->m_Width, mip->m_Height, squish_flags);
             void* data = malloc(size);
             squish::CompressImage(p_curr_native_data, mip->m_Width, mip->m_Height, data, squish_flags);
             memcpy(p_curr_work_buffer, data, size);
@@ -406,9 +406,9 @@ bool Helium::DXTGenerateMipSet(const Image* top_mip, DXTOptions* dxt_options)
     //Should convert to SRGB
     const bool              c_convert_to_srgb =  c_mip_gen_opts[Image::R]->m_ConvertToSrgb;
     //Current face
-    u32                     face              = dxt_options->m_face;
+    uint32_t                     face              = dxt_options->m_face;
     //Size limit
-    u32                     pixel_size_limit  = 1;
+    uint32_t                     pixel_size_limit  = 1;
 
     //Since DXT compression works on 4 x 4 pixel blocks, don't go below size 4 for those formats
     if((output_format  == Helium::OUTPUT_CF_DXT1) ||
@@ -434,13 +434,13 @@ bool Helium::DXTGenerateMipSet(const Image* top_mip, DXTOptions* dxt_options)
         }
     }
 
-    u32                     top_width         = top_mip->m_Width;
-    u32                     top_height        = top_mip->m_Height;
-    u32                     top_depth         = MAX(1, top_mip->m_Depth);
+    uint32_t                     top_width         = top_mip->m_Width;
+    uint32_t                     top_height        = top_mip->m_Height;
+    uint32_t                     top_depth         = MAX(1, top_mip->m_Depth);
 
     //Allocate work space data
-    u32 work_space_size = ImageByteSize(output_format, top_width, top_height) * top_depth;
-    u8* work_space_data = ShouldAllocateWorkBuffer(output_format) ? new u8[work_space_size] : NULL;
+    uint32_t work_space_size = ImageByteSize(output_format, top_width, top_height) * top_depth;
+    uint8_t* work_space_data = ShouldAllocateWorkBuffer(output_format) ? new uint8_t[work_space_size] : NULL;
 
     //Process the top mip
     ProcessMip(top_mip, 0, face, output_format, dxt_options, work_space_data, c_convert_to_srgb);
@@ -466,20 +466,20 @@ bool Helium::DXTGenerateMipSet(const Image* top_mip, DXTOptions* dxt_options)
     const UVAddressMode       c_v_wrap_mode         =  c_mip_gen_opts[Image::R]->m_VAddressMode;
 
     //Determine if we need to apply the mips' post filters
-    u32 use_mip_post_filters  = c_mip_post_filters[Image::R] +  c_mip_post_filters[Image::G] +
+    uint32_t use_mip_post_filters  = c_mip_post_filters[Image::R] +  c_mip_post_filters[Image::G] +
         c_mip_post_filters[Image::B] +  c_mip_post_filters[Image::A];
 
     //Determine how many mip levels to generate (volume texture currently don't support mip maps)
-    u32 mip_count             = top_mip->IsVolumeImage() ? 1 : c_mip_gen_opts[Image::R]->m_Levels;
+    uint32_t mip_count             = top_mip->IsVolumeImage() ? 1 : c_mip_gen_opts[Image::R]->m_Levels;
 
     if(mip_count == 0)
     {
-        u32 mip_count_w = 1;
-        u32 mip_count_h = 1;
+        uint32_t mip_count_w = 1;
+        uint32_t mip_count_h = 1;
 
         //Width
         {
-            u32 w = top_mip->m_Width;
+            uint32_t w = top_mip->m_Width;
             while(w > pixel_size_limit)
             {
                 w >>= 1;
@@ -489,7 +489,7 @@ bool Helium::DXTGenerateMipSet(const Image* top_mip, DXTOptions* dxt_options)
 
         //Height
         {
-            u32 h = top_mip->m_Height;
+            uint32_t h = top_mip->m_Height;
             while(h > pixel_size_limit)
             {
                 h >>= 1;
@@ -502,11 +502,11 @@ bool Helium::DXTGenerateMipSet(const Image* top_mip, DXTOptions* dxt_options)
     }
 
     //Generate the rest of the mip-maps
-    for(u32 i = 1; i < mip_count; ++i)
+    for(uint32_t i = 1; i < mip_count; ++i)
     {
-        u32 curr_mip_height = MAX(pixel_size_limit, (prev_mip->m_Height  >> 1));
-        u32 curr_mip_width  = MAX(pixel_size_limit, (prev_mip->m_Width   >> 1));
-        u32 curr_face       = (i == 1) ? face : 0;
+        uint32_t curr_mip_height = MAX(pixel_size_limit, (prev_mip->m_Height  >> 1));
+        uint32_t curr_mip_width  = MAX(pixel_size_limit, (prev_mip->m_Width   >> 1));
+        uint32_t curr_face       = (i == 1) ? face : 0;
 
         //Generate the source image
         curr_mip      = prev_mip->ScaleImageFace( curr_mip_width, 
@@ -545,7 +545,7 @@ bool Helium::DXTGenerateMipSet(const Image* top_mip, DXTOptions* dxt_options)
         }
 
         //Check if we need to apply any of the filters to the channels of the mip
-        u32 pass_sum  = c_mip_gen_opts[Image::R]->m_ApplyPostFilter[i] +
+        uint32_t pass_sum  = c_mip_gen_opts[Image::R]->m_ApplyPostFilter[i] +
             c_mip_gen_opts[Image::G]->m_ApplyPostFilter[i] +
             c_mip_gen_opts[Image::B]->m_ApplyPostFilter[i] +
             c_mip_gen_opts[Image::A]->m_ApplyPostFilter[i];

@@ -9,7 +9,7 @@ namespace Helium
         class FOUNDATION_API Point
         {
         public:
-            i32 x, y;
+            int32_t x, y;
 
             Point ()
                 : x(0)
@@ -65,37 +65,37 @@ namespace Helium
                 return *this;
             }
 
-            Point             operator* (i32 v) const
+            Point             operator* (int32_t v) const
             {
                 return Point (x * v, y * v);
             }
 
-            Point&            operator*= (i32 v)
+            Point&            operator*= (int32_t v)
             {
                 x *= v;
                 y *= v;
                 return *this;
             }
 
-            Point             operator/ (i32 v) const
+            Point             operator/ (int32_t v) const
             {
                 return Point (x / v, y / v);
             }
 
-            Point&            operator/= (i32 v)
+            Point&            operator/= (int32_t v)
             {
                 x /= v;
                 y /= v;
                 return *this;
             }
 
-            i32&              operator[] (const unsigned i)
+            int32_t&              operator[] (const unsigned i)
             {
                 HELIUM_ASSERT(i < 2);
                 return (&x)[i];
             }
 
-            const i32&        operator[] (const unsigned i) const
+            const int32_t&        operator[] (const unsigned i) const
             {
                 HELIUM_ASSERT(i < 2);
                 return (&x)[i];

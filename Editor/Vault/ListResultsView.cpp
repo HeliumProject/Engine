@@ -40,7 +40,7 @@ tstring DetailsColumn::Directory( const Helium::Path& path )
 ///////////////////////////////////////////////////////////////////////////////
 tstring DetailsColumn::Size( const Helium::Path& path )
 {
-    i64 size = path.Size();
+    int64_t size = path.Size();
 
     tstringstream printSize;
     if ( size == 0 )
@@ -146,14 +146,14 @@ void ListResultsView::SetResults( VaultSearchResults* results )
         {
             m_ListCtrl->EnableSorting( false );
 
-            const std::map< u64, Helium::Path >& foundFiles = results->GetPathsMap();
-            for ( std::map< u64, Helium::Path >::const_iterator itr = foundFiles.begin(), end = foundFiles.end(); itr != end; ++itr )
+            const std::map< uint64_t, Helium::Path >& foundFiles = results->GetPathsMap();
+            for ( std::map< uint64_t, Helium::Path >::const_iterator itr = foundFiles.begin(), end = foundFiles.end(); itr != end; ++itr )
             {
                 //AddResult( file );
                 const Helium::Path& foundFile = itr->second;
 
                 // File Icon
-                i32 imageIndex = wxFileIconsTable::file;
+                int32_t imageIndex = wxFileIconsTable::file;
                 tstring fileExtension = foundFile.Extension();
                 if ( !fileExtension.empty() )
                 {
@@ -163,7 +163,7 @@ void ListResultsView::SetResults( VaultSearchResults* results )
                 // Basename
                 wxString buf;
                 buf.Printf( wxT( "%s" ), foundFile.Get().c_str() );
-                i32 rowIndex = m_ListCtrl->InsertItem( m_CurrentFileIndex, buf, imageIndex );
+                int32_t rowIndex = m_ListCtrl->InsertItem( m_CurrentFileIndex, buf, imageIndex );
                 if ( rowIndex == -1 )
                 {
                     // FIXME: report error?
@@ -241,7 +241,7 @@ VaultSortMethod ListResultsView::GetSortMethod() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void ListResultsView::Sort( VaultSortMethod method, u32 sortOptions )
+void ListResultsView::Sort( VaultSortMethod method, uint32_t sortOptions )
 {
     // Only sort if we are being forced to, or if the sort method is actually changing
     if ( method != m_SortMethod || ( sortOptions & VaultSortOptions::Force ) )

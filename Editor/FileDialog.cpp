@@ -192,10 +192,10 @@ void FileDialog::SetFilter( const tstring& filter )
 /////////////////////////////////////////////////////////////////////////////
 void FileDialog::SetFilterIndex( const tstring& filter )
 {
-    i32 index = 0;
+    int32_t index = 0;
     OS_string::Iterator itr = m_Filters.Begin();
     OS_string::Iterator end = m_Filters.End();
-    for ( i32 count = 0; itr != end; ++itr, ++count )
+    for ( int32_t count = 0; itr != end; ++itr, ++count )
     {
         const tstring& current = *itr;
         if ( current == filter )

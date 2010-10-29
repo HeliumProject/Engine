@@ -36,7 +36,7 @@ void* Object::operator new(size_t bytes)
 {
     if (Reflect::MemoryPool().Valid())
     {
-        Profile::Memory::Allocate( Reflect::MemoryPool(), (u32)bytes );
+        Profile::Memory::Allocate( Reflect::MemoryPool(), (uint32_t)bytes );
     }
 
     return ::malloc( bytes );
@@ -46,18 +46,18 @@ void Object::operator delete(void *ptr, size_t bytes)
 {
     if (Reflect::MemoryPool().Valid())
     {
-        Profile::Memory::Deallocate( Reflect::MemoryPool(), (u32)bytes );
+        Profile::Memory::Deallocate( Reflect::MemoryPool(), (uint32_t)bytes );
     }
 
     ::free(ptr);
 }
 
-i32 Object::GetType() const
+int32_t Object::GetType() const
 {
     return -1;
 }
 
-bool Object::HasType(i32 type) const
+bool Object::HasType(int32_t type) const
 {
     return false;
 }

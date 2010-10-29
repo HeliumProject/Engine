@@ -17,9 +17,9 @@ namespace Helium
             float m_MajorStep;
             float m_MinorStep;
 
-            void SetAxisColor( u8 r, u8 g, u8 b, u8 a );
-            void SetMajorColor( u8 r, u8 g, u8 b, u8 a );
-            void SetMinorColor( u8 r, u8 g, u8 b, u8 a );
+            void SetAxisColor( uint8_t r, uint8_t g, uint8_t b, uint8_t a );
+            void SetMajorColor( uint8_t r, uint8_t g, uint8_t b, uint8_t a );
+            void SetMinorColor( uint8_t r, uint8_t g, uint8_t b, uint8_t a );
 
         public:
             PrimitiveGrid(ResourceTracker* tracker);

@@ -35,9 +35,9 @@
 #define EulSafe "\000\001\002\000"
 #define EulNext "\001\002\000\001"
 
-#define EulAxI(ord) ((i32)(EulSafe[(((unsigned)(ord)>>3)&3)]))
-#define EulAxJ(ord) ((i32)(EulNext[EulAxI(ord)+(EulPar(ord)==EulParOdd)]))
-#define EulAxK(ord) ((i32)(EulNext[EulAxI(ord)+(EulPar(ord)!=EulParOdd)]))
+#define EulAxI(ord) ((int32_t)(EulSafe[(((unsigned)(ord)>>3)&3)]))
+#define EulAxJ(ord) ((int32_t)(EulNext[EulAxI(ord)+(EulPar(ord)==EulParOdd)]))
+#define EulAxK(ord) ((int32_t)(EulNext[EulAxI(ord)+(EulPar(ord)!=EulParOdd)]))
 #define EulAxH(ord) ((EulRep(ord)==EulRepNo)?EulAxK(ord):EulAxI(ord))
 
 /* EulGetOrd unpacks all useful information about order simultaneously. */
@@ -137,22 +137,22 @@ namespace Helium
                 return (!(*this == v));
             }
 
-            u32    					I () const
+            uint32_t    					I () const
             {
                 return EulAxI(o);
             }
 
-            u32    					J () const
+            uint32_t    					J () const
             {
                 return EulAxJ(o);
             }
 
-            u32    					K () const
+            uint32_t    					K () const
             {
                 return EulAxK(o);
             }
 
-            u32    					H () const
+            uint32_t    					H () const
             {
                 return EulAxH(o);
             }

@@ -18,7 +18,7 @@ You can use this free for any purpose.  It has no warranty.
 namespace Helium
 {
 
-#define hashsize(n) ((u64)1<<(n))
+#define hashsize(n) ((uint64_t)1<<(n))
 #define hashmask(n) (hashsize(n)-1)
 
     /*
@@ -72,7 +72,7 @@ namespace Helium
     h = (h & hashmask(10));
     In which case, the hash table should have hashsize(10) elements.
 
-    If you are hashing n strings (u8 **)k, do it like this:
+    If you are hashing n strings (uint8_t **)k, do it like this:
     for (i=0, h=0; i<n; ++i) h = hash( k[i], len[i], h);
 
     By Bob Jenkins, Jan 4 1997.  bob_jenkins@burtleburtle.net.  You may
@@ -98,9 +98,9 @@ namespace Helium
     // key = the stream of input bytes
     // length = length of the stream of input bytes
     // level = the previous hash or any arbitrary value
-    inline u64 hash64( u8* k, u32 length, u64 level)
+    inline uint64_t hash64( uint8_t* k, uint32_t length, uint64_t level)
     {
-        register u64 a,b,c,len;
+        register uint64_t a,b,c,len;
 
         /* Set up the internal state */
         len = length;
@@ -112,12 +112,12 @@ namespace Helium
         {
             while (len >= 24)
             {
-                a += (k[0]        +((u64)k[ 1]<< 8)+((u64)k[ 2]<<16)+((u64)k[ 3]<<24)
-                    +((u64)k[4 ]<<32)+((u64)k[ 5]<<40)+((u64)k[ 6]<<48)+((u64)k[ 7]<<56));
-                b += (k[8]        +((u64)k[ 9]<< 8)+((u64)k[10]<<16)+((u64)k[11]<<24)
-                    +((u64)k[12]<<32)+((u64)k[13]<<40)+((u64)k[14]<<48)+((u64)k[15]<<56));
-                c += (k[16]       +((u64)k[17]<< 8)+((u64)k[18]<<16)+((u64)k[19]<<24)
-                    +((u64)k[20]<<32)+((u64)k[21]<<40)+((u64)k[22]<<48)+((u64)k[23]<<56));
+                a += (k[0]        +((uint64_t)k[ 1]<< 8)+((uint64_t)k[ 2]<<16)+((uint64_t)k[ 3]<<24)
+                    +((uint64_t)k[4 ]<<32)+((uint64_t)k[ 5]<<40)+((uint64_t)k[ 6]<<48)+((uint64_t)k[ 7]<<56));
+                b += (k[8]        +((uint64_t)k[ 9]<< 8)+((uint64_t)k[10]<<16)+((uint64_t)k[11]<<24)
+                    +((uint64_t)k[12]<<32)+((uint64_t)k[13]<<40)+((uint64_t)k[14]<<48)+((uint64_t)k[15]<<56));
+                c += (k[16]       +((uint64_t)k[17]<< 8)+((uint64_t)k[18]<<16)+((uint64_t)k[19]<<24)
+                    +((uint64_t)k[20]<<32)+((uint64_t)k[21]<<40)+((uint64_t)k[22]<<48)+((uint64_t)k[23]<<56));
                 mix64(a,b,c);
                 k += 24; len -= 24;
             }
@@ -126,9 +126,9 @@ namespace Helium
         {
             while (len >= 24)    /* aligned */
             {
-                a += *(u64 *)(k+0);
-                b += *(u64 *)(k+8);
-                c += *(u64 *)(k+16);
+                a += *(uint64_t *)(k+0);
+                b += *(uint64_t *)(k+8);
+                c += *(uint64_t *)(k+16);
                 mix64(a,b,c);
                 k += 24; len -= 24;
             }
@@ -138,30 +138,30 @@ namespace Helium
         c += length;
         switch(len)              /* all the case statements fall through */
         {
-        case 23: c+=((u64)k[22]<<56);
-        case 22: c+=((u64)k[21]<<48);
-        case 21: c+=((u64)k[20]<<40);
-        case 20: c+=((u64)k[19]<<32);
-        case 19: c+=((u64)k[18]<<24);
-        case 18: c+=((u64)k[17]<<16);
-        case 17: c+=((u64)k[16]<<8);
+        case 23: c+=((uint64_t)k[22]<<56);
+        case 22: c+=((uint64_t)k[21]<<48);
+        case 21: c+=((uint64_t)k[20]<<40);
+        case 20: c+=((uint64_t)k[19]<<32);
+        case 19: c+=((uint64_t)k[18]<<24);
+        case 18: c+=((uint64_t)k[17]<<16);
+        case 17: c+=((uint64_t)k[16]<<8);
             /* the first byte of c is reserved for the length */
-        case 16: b+=((u64)k[15]<<56);
-        case 15: b+=((u64)k[14]<<48);
-        case 14: b+=((u64)k[13]<<40);
-        case 13: b+=((u64)k[12]<<32);
-        case 12: b+=((u64)k[11]<<24);
-        case 11: b+=((u64)k[10]<<16);
-        case 10: b+=((u64)k[ 9]<<8);
-        case  9: b+=((u64)k[ 8]);
-        case  8: a+=((u64)k[ 7]<<56);
-        case  7: a+=((u64)k[ 6]<<48);
-        case  6: a+=((u64)k[ 5]<<40);
-        case  5: a+=((u64)k[ 4]<<32);
-        case  4: a+=((u64)k[ 3]<<24);
-        case  3: a+=((u64)k[ 2]<<16);
-        case  2: a+=((u64)k[ 1]<<8);
-        case  1: a+=((u64)k[ 0]);
+        case 16: b+=((uint64_t)k[15]<<56);
+        case 15: b+=((uint64_t)k[14]<<48);
+        case 14: b+=((uint64_t)k[13]<<40);
+        case 13: b+=((uint64_t)k[12]<<32);
+        case 12: b+=((uint64_t)k[11]<<24);
+        case 11: b+=((uint64_t)k[10]<<16);
+        case 10: b+=((uint64_t)k[ 9]<<8);
+        case  9: b+=((uint64_t)k[ 8]);
+        case  8: a+=((uint64_t)k[ 7]<<56);
+        case  7: a+=((uint64_t)k[ 6]<<48);
+        case  6: a+=((uint64_t)k[ 5]<<40);
+        case  5: a+=((uint64_t)k[ 4]<<32);
+        case  4: a+=((uint64_t)k[ 3]<<24);
+        case  3: a+=((uint64_t)k[ 2]<<16);
+        case  2: a+=((uint64_t)k[ 1]<<8);
+        case  1: a+=((uint64_t)k[ 0]);
             /* case 0: nothing left to add */
         }
         mix64(a,b,c);
@@ -182,14 +182,14 @@ namespace Helium
 
     inline tstring hash64( tstring in )
     {
-        u8* bytes = (u8*)&(in[0]);
+        uint8_t* bytes = (uint8_t*)&(in[0]);
 
-        u64 hash_val = hash64( bytes, (u32)in.size(), 0x123456789ABCDEFL );
+        uint64_t hash_val = hash64( bytes, (uint32_t)in.size(), 0x123456789ABCDEFL );
 
         tstring ret;
-        for (u32 i = 0; i < 16; i++)
+        for (uint32_t i = 0; i < 16; i++)
         {
-            u64 digit = (hash_val >> (i * 4)) & 0xF;
+            uint64_t digit = (hash_val >> (i * 4)) & 0xF;
 
             tchar buf[2];
             _stprintf( buf, "%x", digit);

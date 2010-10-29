@@ -12,7 +12,7 @@ namespace Helium
 {
     namespace Editor
     {
-        typedef std::map< i32, wxWindow* > M_MenuIdToPanel;
+        typedef std::map< int32_t, wxWindow* > M_MenuIdToPanel;
 
         class Frame HELIUM_ABSTRACT : public wxFrame
         {
@@ -30,7 +30,7 @@ namespace Helium
             virtual void Push( const Undo::CommandPtr& command );
 
         protected:
-            u32 CreatePanelsMenu( wxMenu* menu );
+            uint32_t CreatePanelsMenu( wxMenu* menu );
             void UpdatePanelsMenu( wxMenu* menu );
 
             // UI event handlers

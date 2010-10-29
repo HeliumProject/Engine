@@ -61,7 +61,7 @@ int FileTreeCtrl::OnCompareItems( const wxTreeItemId& lhsItem, const wxTreeItemI
 ///////////////////////////////////////////////////////////////////////////////
 // Create's the image list for the file tree view
 //
-//void FileTreeCtrl::CreateImageList( i32 iconSize )
+//void FileTreeCtrl::CreateImageList( int32_t iconSize )
 //{
 //  if ( iconSize == -1 )
 //  {

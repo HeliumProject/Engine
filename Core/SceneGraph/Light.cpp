@@ -50,7 +50,7 @@ Light::~Light()
 
 }
 
-i32 Light::GetImageIndex() const
+int32_t Light::GetImageIndex() const
 {
     return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "light" ) );
 }

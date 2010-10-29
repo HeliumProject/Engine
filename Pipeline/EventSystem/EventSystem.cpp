@@ -22,7 +22,7 @@ using namespace Helium::ES;
 
 #define TIME_SIZE 32
 
-typedef i32 RecordCount;
+typedef int32_t RecordCount;
 
 static const tchar* s_HandledEventsFilename = TXT( "handled_events.txt" );
 
@@ -71,7 +71,7 @@ EventPtr EventSystem::CreateEvent( const tstring &eventData, const tstring& user
     // get the current time
     __timeb64 now;
     _ftime64_s( &now );
-    u64 createdTime = ( now.time * 1000 ) + now.millitm;
+    uint64_t createdTime = ( now.time * 1000 ) + now.millitm;
 
   return new Event( TUID::Generate(), createdTime, username, eventData ); 
 }
@@ -228,7 +228,7 @@ void EventSystem::ReadBinaryEventsFile( const tstring& eventsFile, V_EventPtr& l
         tuid id;
         isReadOk = isReadOk && !recordsFile.read( ( char * ) &id, sizeof( id ) ).fail();
 
-        u64 created;
+        uint64_t created;
         isReadOk = isReadOk && !recordsFile.read( ( char * ) &created, sizeof( created ) ).fail();
 
         // no errors yet, read the event computerName
@@ -305,7 +305,7 @@ void EventSystem::ReadTextEventsFile( const tstring& eventsFile, V_EventPtr& lis
 
         /////////////////////////////////////////////
         // parse the event string
-        // Event: <string created>|<i64 id>|<i64 created>|<string username>|<int data string size>
+        // Event: <string created>|<int64_t id>|<int64_t created>|<string username>|<int data string size>
         //
         // Example:
         // "Event: Thu Mar 27 14:16:19 2008|7301583699290099363|1206652579300|rachel-RMARK_PC|35"
@@ -321,9 +321,9 @@ void EventSystem::ReadTextEventsFile( const tstring& eventsFile, V_EventPtr& lis
         }
 
         tuid id = ( tuid ) Helium::MatchResult<tuid>(eventResultAttr, 1); 
-        u64 created = ( u64 ) Helium::MatchResult<u64>(eventResultAttr, 2); 
+        uint64_t created = ( uint64_t ) Helium::MatchResult<uint64_t>(eventResultAttr, 2); 
         tstring username = Helium::MatchResultAsString(eventResultAttr, 3); 
-        i32 eventLength = ( i32 ) Helium::MatchResult<i32>(eventResultAttr, 4); 
+        int32_t eventLength = ( int32_t ) Helium::MatchResult<int32_t>(eventResultAttr, 4); 
 
         /////////////////////////////////////////////
         // parse the event data
@@ -518,7 +518,7 @@ void EventSystem::WriteTextEventsFile( const tstring& eventsFile, const V_EventP
         // build the event string
         tstringstream eventTextStr;
 
-        // Event: <string created>|<i64 id>|<i64 created>|<string username>|<int data string size>
+        // Event: <string created>|<int64_t id>|<int64_t created>|<string username>|<int data string size>
         eventTextStr << TXT( "Event: " );
 
         // try to get a printer friendly version of the dates

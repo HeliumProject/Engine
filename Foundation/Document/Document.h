@@ -142,7 +142,7 @@ namespace Helium
         Helium::Path        m_Path;
         bool                m_IsModified;    // have we been changed since we saved?
         bool                m_AllowChanges;  // allows override of checkout (but you can't save)
-        i32                 m_Revision;
+        int32_t                 m_Revision;
     };
     typedef Helium::SmartPtr< Document > DocumentPtr;
 }

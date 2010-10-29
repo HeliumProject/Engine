@@ -10,7 +10,7 @@
 #  pragma TODO( "Emit an error here..." )
 #endif
 
-const static u32 IPC_PIPE_BUFFER_SIZE = 8192;
+const static uint32_t IPC_PIPE_BUFFER_SIZE = 8192;
 
 namespace Helium
 {
@@ -24,6 +24,6 @@ namespace Helium
     PLATFORM_API bool ConnectPipe(Pipe& pipe, Condition& terminate);
     PLATFORM_API void DisconnectPipe(Pipe& pipe);
 
-    PLATFORM_API bool ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Condition& terminate);
-    PLATFORM_API bool WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Condition& terminate);
+    PLATFORM_API bool ReadPipe(Pipe& pipe, void* buffer, uint32_t bytes, uint32_t& read, Condition& terminate);
+    PLATFORM_API bool WritePipe(Pipe& pipe, void* buffer, uint32_t bytes, uint32_t& wrote, Condition& terminate);
 }

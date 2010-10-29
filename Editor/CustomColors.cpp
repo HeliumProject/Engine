@@ -26,7 +26,7 @@ tstring CustomColors::Save( wxColourData& colorData )
 {
     tostringstream result;
 
-    for ( i32 colorIndex = 0; colorIndex < NumColors; ++colorIndex )
+    for ( int32_t colorIndex = 0; colorIndex < NumColors; ++colorIndex )
     {
         if ( colorIndex > 0 )
         {
@@ -58,17 +58,17 @@ void CustomColors::Load( wxColourData& colorData, const tstring& info )
 
         std::vector< tstring >::const_iterator colorItr = colors.begin();
         std::vector< tstring >::const_iterator colorEnd = colors.end();
-        for ( i32 colorIndex = 0; colorItr != colorEnd && colorIndex < NumColors; ++colorItr, ++colorIndex )
+        for ( int32_t colorIndex = 0; colorItr != colorEnd && colorIndex < NumColors; ++colorItr, ++colorIndex )
         {
             const tstring& colorStr = *colorItr;
             if ( colorStr.length() >= 6 )
             {
-                u32 red = 0;
-                u32 green = 0;
-                u32 blue = 0;
+                uint32_t red = 0;
+                uint32_t green = 0;
+                uint32_t blue = 0;
                 _stscanf( colorStr.c_str(), TXT( "%02X%02X%02X" ), &red, &green, &blue );
 
-                colorData.SetCustomColour( colorIndex, wxColour( (u8)red, (u8)green, (u8)blue ) );
+                colorData.SetCustomColour( colorIndex, wxColour( (uint8_t)red, (uint8_t)green, (uint8_t)blue ) );
             }
         }
     }

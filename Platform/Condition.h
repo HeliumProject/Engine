@@ -53,6 +53,6 @@ namespace Helium
 
         void Signal();
         void Reset();
-        bool Wait(u32 timeout = 0xffffffff);
+        bool Wait(uint32_t timeout = 0xffffffff);
     };
 }

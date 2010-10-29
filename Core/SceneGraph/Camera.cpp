@@ -291,9 +291,9 @@ void Camera::MouseMove( const MouseMoveInput& e )
     case MovementModes::Track:
     {
       Vector3 p1;
-      ViewportToPlaneVertex( (f32)m_Prev.x, (f32)m_Prev.y, IntersectionPlanes::Viewport, p1);
+      ViewportToPlaneVertex( (float32_t)m_Prev.x, (float32_t)m_Prev.y, IntersectionPlanes::Viewport, p1);
       Vector3 p2;
-      ViewportToPlaneVertex( (f32)e.GetPosition().x, (f32)e.GetPosition().y, IntersectionPlanes::Viewport, p2);
+      ViewportToPlaneVertex( (float32_t)e.GetPosition().x, (float32_t)e.GetPosition().y, IntersectionPlanes::Viewport, p2);
 
       // Track vector is the translation of the m_Pivot from the starting planar intersection to the current planar intersection
       m_Pivot += p1 - p2;
@@ -304,7 +304,7 @@ void Camera::MouseMove( const MouseMoveInput& e )
     case MovementModes::Dolly:
     {
       // Dolly distance is the mouse distance traveled
-      float dolly = (f32)(-deltaX) + (f32)(-deltaY);
+      float dolly = (float32_t)(-deltaX) + (float32_t)(-deltaY);
 
       // Factor dolly distance by the distance to our pivot point
       dolly *= m_Offset / 200.0f;

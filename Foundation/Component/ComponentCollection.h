@@ -54,7 +54,7 @@ namespace Helium
             const M_Component& GetComponents() const;
 
             // retrieve attribute from a slot
-            virtual const ComponentPtr& GetComponent(i32 slotID) const;
+            virtual const ComponentPtr& GetComponent(int32_t slotID) const;
 
             // casting helper will get you what you need, baby ;)
             template <class T>
@@ -76,10 +76,10 @@ namespace Helium
             virtual bool SetComponent(const ComponentPtr& attr, bool validate = true, tstring* error = NULL );
 
             // remove attribute from a slot
-            virtual bool RemoveComponent( i32 slotID );
+            virtual bool RemoveComponent( int32_t slotID );
 
             // queries the container for the existence of the specified attribute
-            virtual bool ContainsComponent( i32 slotID ) const;
+            virtual bool ContainsComponent( int32_t slotID ) const;
 
             // Validates the attribute for add to this attribute collection.  If the addition is
             // not valid, the return value will be false and "error" will have additional info about

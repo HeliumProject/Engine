@@ -103,7 +103,7 @@ void SimpleArraySerializer<T>::Clear()
 }
 
 template < class T >
-i32 SimpleArraySerializer<T>::GetItemType() const
+int32_t SimpleArraySerializer<T>::GetItemType() const
 {
     return Reflect::GetType<T>();
 }
@@ -193,7 +193,7 @@ void SimpleArraySerializer<T>::MoveDown( std::set< size_t >& selectedIndices )
 }
 
 template < class T >
-bool SimpleArraySerializer<T>::Set(const Serializer* src, u32 flags)
+bool SimpleArraySerializer<T>::Set(const Serializer* src, uint32_t flags)
 {
     const SimpleArraySerializer<T>* rhs = ConstObjectCast<SimpleArraySerializer<T>>(src);
     if (!rhs)
@@ -250,14 +250,14 @@ void SimpleArraySerializer<T>::Serialize(Archive& archive) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            i32 count = (i32)m_Data->size();
+            int32_t count = (int32_t)m_Data->size();
             binary.GetStream().Write(&count); 
 
             if(count > 0)
             {
                 // current offset in stream... 
-                i32 offset       = (i32) binary.GetStream().TellWrite(); 
-                i32 bytesWritten = 0; 
+                int32_t offset       = (int32_t) binary.GetStream().TellWrite(); 
+                int32_t bytesWritten = 0; 
                 binary.GetStream().Write(&bytesWritten); 
 
                 const T& front = m_Data->front();
@@ -306,7 +306,7 @@ void SimpleArraySerializer<T>::Deserialize(Archive& archive)
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            i32 count = -1;
+            int32_t count = -1;
             binary.GetStream().Read(&count); 
 
             m_Data->resize(count);
@@ -317,9 +317,9 @@ void SimpleArraySerializer<T>::Deserialize(Archive& archive)
                 // otherwise, read count * sizeof(T) bytes 
                 // 
                 ArchiveBinary* archiveBinary = static_cast<ArchiveBinary*>(&archive); 
-                i32 inputBytes; 
+                int32_t inputBytes; 
                 binary.GetStream().Read(&inputBytes); 
-                i32 bytesInflated = DecompressFromStream(binary.GetStream(), inputBytes, (char*) &(m_Data->front()), sizeof(T) * count); 
+                int32_t bytesInflated = DecompressFromStream(binary.GetStream(), inputBytes, (char*) &(m_Data->front()), sizeof(T) * count); 
                 if(bytesInflated != sizeof(T) * count)
                 {
                     throw Reflect::StreamException( TXT( "Compressed Array size mismatch" ) ); 
@@ -403,12 +403,12 @@ void StringArraySerializer::Serialize(Archive& archive) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            i32 size = (i32)m_Data->size();
+            int32_t size = (int32_t)m_Data->size();
             binary.GetStream().Write(&size); 
 
             for (size_t i=0; i<m_Data->size(); i++)
             {
-                i32 index = binary.GetStrings().Insert(m_Data.Get()[i]);
+                int32_t index = binary.GetStrings().Insert(m_Data.Get()[i]);
                 binary.GetStream().Write(&index); 
             }
 
@@ -468,13 +468,13 @@ void StringArraySerializer::Deserialize(Archive& archive)
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            i32 size = (i32)m_Data->size();
+            int32_t size = (int32_t)m_Data->size();
             binary.GetStream().Read(&size); 
 
             m_Data->resize(size);
-            for (i32 i=0; i<size; i++)
+            for (int32_t i=0; i<size; i++)
             {
-                i32 index;
+                int32_t index;
                 binary.GetStream().Read(&index); 
                 m_Data.Ref()[i] = binary.GetStrings().Get(index);
             }
@@ -487,12 +487,12 @@ void StringArraySerializer::Deserialize(Archive& archive)
 #ifdef UNICODE
 
 //
-// When unicode is active the XML streams are made of wchar_t, and C++ stdlib won't do the conversion for u8/i8
-//  So we explicitly specialize some functions to to the conversion via a u16/i16
+// When unicode is active the XML streams are made of wchar_t, and C++ stdlib won't do the conversion for uint8_t/int8_t
+//  So we explicitly specialize some functions to to the conversion via a uint16_t/int16_t
 //
 
 template <>
-tistream& SimpleArraySerializer<u8>::operator<< (tistream& stream)
+tistream& SimpleArraySerializer<uint8_t>::operator<< (tistream& stream)
 {
     m_Data->clear();
 
@@ -501,13 +501,13 @@ tistream& SimpleArraySerializer<u8>::operator<< (tistream& stream)
     str.resize( (size_t) size );
     stream.read(const_cast< tchar* >( str.c_str() ), size );
 
-    Tokenize<u8, u16>( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize<uint8_t, uint16_t>( str, m_Data.Ref(), s_ContainerItemDelimiter );
 
     return stream;
 }
 
 template <>
-tistream& SimpleArraySerializer<i8>::operator<< (tistream& stream)
+tistream& SimpleArraySerializer<int8_t>::operator<< (tistream& stream)
 {
     m_Data->clear();
 
@@ -516,7 +516,7 @@ tistream& SimpleArraySerializer<i8>::operator<< (tistream& stream)
     str.resize( (size_t) size );
     stream.read(const_cast< tchar* >( str.c_str() ), size );
 
-    Tokenize<i8, i16>( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize<int8_t, int16_t>( str, m_Data.Ref(), s_ContainerItemDelimiter );
 
     return stream;
 }
@@ -524,16 +524,16 @@ tistream& SimpleArraySerializer<i8>::operator<< (tistream& stream)
 
 template SimpleArraySerializer<tstring>;
 template SimpleArraySerializer<bool>;
-template SimpleArraySerializer<u8>;
-template SimpleArraySerializer<i8>;
-template SimpleArraySerializer<u16>;
-template SimpleArraySerializer<i16>;
-template SimpleArraySerializer<u32>;
-template SimpleArraySerializer<i32>;
-template SimpleArraySerializer<u64>;
-template SimpleArraySerializer<i64>;
-template SimpleArraySerializer<f32>;
-template SimpleArraySerializer<f64>;
+template SimpleArraySerializer<uint8_t>;
+template SimpleArraySerializer<int8_t>;
+template SimpleArraySerializer<uint16_t>;
+template SimpleArraySerializer<int16_t>;
+template SimpleArraySerializer<uint32_t>;
+template SimpleArraySerializer<int32_t>;
+template SimpleArraySerializer<uint64_t>;
+template SimpleArraySerializer<int64_t>;
+template SimpleArraySerializer<float32_t>;
+template SimpleArraySerializer<float64_t>;
 template SimpleArraySerializer<Helium::GUID>;
 template SimpleArraySerializer<Helium::TUID>;
 template SimpleArraySerializer< Helium::Path >;

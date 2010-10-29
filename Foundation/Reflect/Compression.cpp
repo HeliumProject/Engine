@@ -6,7 +6,7 @@
 using namespace Helium;
 using namespace Helium::Reflect;
 
-static const u32 ZLIB_BUFFER_SIZE = 16 * 1024; 
+static const uint32_t ZLIB_BUFFER_SIZE = 16 * 1024; 
 
 // helper struct to make zlib deflate initialization exception-safe: 
 //
@@ -58,11 +58,11 @@ struct zlibInputStream : public z_stream
 
 // returns the size of the compressed data. 
 // 
-int Reflect::CompressToStream(CharStream& reflectStream, const char* data, u32 size)
+int Reflect::CompressToStream(CharStream& reflectStream, const char* data, uint32_t size)
 {
     REFLECT_SCOPE_TIMER((""));
 
-    const u32 compressBufferSize = ZLIB_BUFFER_SIZE;
+    const uint32_t compressBufferSize = ZLIB_BUFFER_SIZE;
     char      compressBuffer[compressBufferSize]; 
 
     zlibOutputStream zStream; 
@@ -105,7 +105,7 @@ int Reflect::DecompressFromStream(CharStream& reflectStream, int inputBytes, cha
 {
     REFLECT_SCOPE_TIMER((""));
 
-    const u32 fileBufferSize = ZLIB_BUFFER_SIZE;
+    const uint32_t fileBufferSize = ZLIB_BUFFER_SIZE;
     char      fileBuffer[fileBufferSize]; 
 
     zlibInputStream zStream; 
@@ -120,7 +120,7 @@ int Reflect::DecompressFromStream(CharStream& reflectStream, int inputBytes, cha
     // 
     while(1)
     {
-        int bytesRead = std::min<i32>(bytesRemaining, fileBufferSize); 
+        int bytesRead = std::min<int32_t>(bytesRemaining, fileBufferSize); 
 
         if(bytesRead > 0)
         {

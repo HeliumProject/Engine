@@ -16,12 +16,12 @@ namespace Helium
             Texture(const tchar* fname);
             ~Texture();
 
-            u32 IncrementUsage()
+            uint32_t IncrementUsage()
             {
                 return ++m_load_count;
             }
 
-            u32 DecrementUsage()
+            uint32_t DecrementUsage()
             {
                 if (m_load_count>0)
                 {
@@ -32,17 +32,17 @@ namespace Helium
             }
 
             tstring         m_filename;
-            u64                 m_timestamp;
-            u32                 m_crc;
+            uint64_t                 m_timestamp;
+            uint32_t                 m_crc;
 
             // a load count of zero means the shader is valid and can be used, its simply not currently used by any loaded mesh (the UI should indicate this)
-            u32                 m_load_count;         // we don't use D3D ref-counts because they will go to zero and delete themselves
+            uint32_t                 m_load_count;         // we don't use D3D ref-counts because they will go to zero and delete themselves
 
             IDirect3DTexture9*  m_d3d_texture;
-            u32                 m_wrap_u;
-            u32                 m_wrap_v;
-            u32                 m_filter;
-            u32                 m_aniso;
+            uint32_t                 m_wrap_u;
+            uint32_t                 m_wrap_v;
+            uint32_t                 m_filter;
+            uint32_t                 m_aniso;
             D3DFORMAT           m_format;
             float               m_mip_bias;
 
@@ -71,11 +71,11 @@ namespace Helium
         public:
             tstring m_Path;
             D3DFORMAT   m_Format;
-            u32         m_Levels;
-            u32         m_WrapU;
-            u32         m_WrapV;
-            u32         m_Filter;
-            u32         m_Anisotropy;
+            uint32_t         m_Levels;
+            uint32_t         m_WrapU;
+            uint32_t         m_WrapV;
+            uint32_t         m_Filter;
+            uint32_t         m_Anisotropy;
             float       m_MipBias;
 
             TextureSettings()
@@ -105,12 +105,12 @@ namespace Helium
             RenderShader(class ShaderManager* sd, const tchar* fname);
             ~RenderShader();
 
-            u32 IncrementUsage()
+            uint32_t IncrementUsage()
             {
                 return ++m_load_count;
             }
 
-            u32 DecrementUsage()
+            uint32_t DecrementUsage()
             {
                 if (m_load_count>0)
                 {
@@ -121,20 +121,20 @@ namespace Helium
             }
 
             // replace a texture in the shader
-            void ReplaceTexture(u32 texture_handle, u32 texture_slot);
+            void ReplaceTexture(uint32_t texture_handle, uint32_t texture_slot);
 
             tstring   m_filename;
-            u64           m_timestamp;
-            u32           m_crc;
-            u32           m_load_count;
-            u32           m_flags;
+            uint64_t           m_timestamp;
+            uint32_t           m_crc;
+            uint32_t           m_load_count;
+            uint32_t           m_flags;
 
             // Use ReplaceTexture() to modify these so the ref counting works
             class ShaderManager*  m_sd;
-            u32                   m_textures[Texture::__SAMPLER_LAST__];
+            uint32_t                   m_textures[Texture::__SAMPLER_LAST__];
 
             // These values can be modified directly by the UI
-            u32           m_alpha_type;
+            uint32_t           m_alpha_type;
             float         m_basetint[4];
             float         m_glosstint[4];
             float         m_gloss_scale;
@@ -165,33 +165,33 @@ namespace Helium
             void Init( IDirect3DDevice9* device );
 
         private:
-            u32 AddShader(RenderShader* sh); // assign a new shader to a handle
-            u32 LoadNewShader(const tchar* fname, ShaderLoaderPtr loader = NULL);
+            uint32_t AddShader(RenderShader* sh); // assign a new shader to a handle
+            uint32_t LoadNewShader(const tchar* fname, ShaderLoaderPtr loader = NULL);
 
         public:
             // return the handle to the specified shader, the handle returned will either be new or it will
             // be the handle of an existing copy of that shader.
-            u32 LoadShader(const tchar* fname, bool inc=false, ShaderLoaderPtr loader = NULL);
+            uint32_t LoadShader(const tchar* fname, bool inc=false, ShaderLoaderPtr loader = NULL);
 
             // return the handle of the shader with the given name (0xffffffff if it cannot be found)
-            u32 FindShader(const tchar* fname);
+            uint32_t FindShader(const tchar* fname);
 
             // Duplicate an existing shader (to create an empty shader duplicate the default)
-            u32 DuplicateShader(u32 handle, const tchar* new_shader);
+            uint32_t DuplicateShader(uint32_t handle, const tchar* new_shader);
 
             // load a single texture, get the handle
-            u32 LoadTexture(const tchar* fname,D3DFORMAT fmt,u32 levels=0,bool inc=false);
-            bool LoadTextureWithSettings(const TextureSettings& textureSettings, RenderShader* shader, u32 sampler);
-            void UpdateTextureSettings(u32 handle, const TextureSettings& textureSettings);
+            uint32_t LoadTexture(const tchar* fname,D3DFORMAT fmt,uint32_t levels=0,bool inc=false);
+            bool LoadTextureWithSettings(const TextureSettings& textureSettings, RenderShader* shader, uint32_t sampler);
+            void UpdateTextureSettings(uint32_t handle, const TextureSettings& textureSettings);
             bool ReloadTexture( const tchar* fname );
 
             // return the handle of the texture with the given name (0xffffffff if it cannot be found)
-            u32 FindTexture(const tchar* fname);
-            Texture* ResolveTexture(u32 handle);
-            RenderShader* ResolveShader(u32 handle);
+            uint32_t FindTexture(const tchar* fname);
+            Texture* ResolveTexture(uint32_t handle);
+            RenderShader* ResolveShader(uint32_t handle);
 
-            void SetShaderDefaultTexture( const tchar* shaderFilename, u32 textureIndex );
-            void UpdateShaderTexture( const tchar* shaderFilename, u32 textureIndex, const TextureSettings& settings );
+            void SetShaderDefaultTexture( const tchar* shaderFilename, uint32_t textureIndex );
+            void UpdateShaderTexture( const tchar* shaderFilename, uint32_t textureIndex, const TextureSettings& settings );
             void GetShaderFilenames( std::vector< tstring >& filenames );
             void GetTextureFilenames( std::vector< tstring >& filenames );
 

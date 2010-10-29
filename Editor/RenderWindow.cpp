@@ -12,7 +12,7 @@ using namespace Helium::Render;
 using namespace Helium::SceneGraph;
 using namespace Helium::Editor;
 
-static const u32 s_InvalidMesh = (u32)(-1);
+static const uint32_t s_InvalidMesh = (uint32_t)(-1);
 
 BEGIN_EVENT_TABLE( RenderWindow, wxWindow )
 EVT_SIZE( RenderWindow::OnSize )
@@ -109,7 +109,7 @@ bool RenderWindow::LoadScene( const tstring& path )
                     continue;
                 }
 
-                u32 meshHandle = scene->ExtractMesh( path.c_str(), &loader, itr->first );
+                uint32_t meshHandle = scene->ExtractMesh( path.c_str(), &loader, itr->first );
                 if ( meshHandle == s_InvalidMesh )
                 {
                     delete scene;

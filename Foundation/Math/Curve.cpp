@@ -14,22 +14,22 @@ const static Matrix4 BSplineBasis (    Vector4 (-1.0f,  3.0f, -3.0f,  1.0f) / 6.
                                    Vector4 ( 1.0f,  0.0f,  0.0f,  0.0f) / 6.0f );
 
 // computes the vector parameter factor
-static Vector4 ComputeParam(f32 t, const Curve::Type type);
+static Vector4 ComputeParam(float32_t t, const Curve::Type type);
 
 // retrieves the basis matrix for curve type
 static const Matrix4& ComputeBasis( const Curve::Type type );
 
 // computes a curve point
-static Vector3 ComputePoint(f32 param, const Vector3& a, const Vector3& b, const Vector3& c, const Vector3& d, const Curve::Type type );
+static Vector3 ComputePoint(float32_t param, const Vector3& a, const Vector3& b, const Vector3& c, const Vector3& d, const Curve::Type type );
 
 // compputes B and Catmull Rom splines, respectively
-static void ComputeBSpline( V_Vector3& controlPoints, const u32 resolution, const bool closed, V_Vector3& points  );
-static void ComputeCatmullRom( V_Vector3& controlPoints, const u32 resolution, const bool closed, V_Vector3& points  );
+static void ComputeBSpline( V_Vector3& controlPoints, const uint32_t resolution, const bool closed, V_Vector3& points  );
+static void ComputeCatmullRom( V_Vector3& controlPoints, const uint32_t resolution, const bool closed, V_Vector3& points  );
 
 static void MakeContinuous(V_Vector3& cvs);
 static void MakeClosed(V_Vector3& cvs);
 
-bool Curve::ComputeCurve( const V_Vector3& controlPoints, const u32 resolution, const bool closed, const Type type, V_Vector3& points )
+bool Curve::ComputeCurve( const V_Vector3& controlPoints, const uint32_t resolution, const bool closed, const Type type, V_Vector3& points )
 {
     bool success = false;
 
@@ -103,7 +103,7 @@ static void MakeClosed(V_Vector3& cvs)
     cvs.push_back(cvs[3]);
 }
 
-Vector4 ComputeParam(f32 t, const Curve::Type type )
+Vector4 ComputeParam(float32_t t, const Curve::Type type )
 {
     switch (type)
     {
@@ -147,7 +147,7 @@ const Matrix4& ComputeBasis( const Curve::Type type )
     return Matrix4::Zero;
 }
 
-Vector3 ComputePoint(f32 param, const Vector3& a, const Vector3& b, const Vector3& c, const Vector3& d, const Curve::Type type )
+Vector3 ComputePoint(float32_t param, const Vector3& a, const Vector3& b, const Vector3& c, const Vector3& d, const Curve::Type type )
 {
     Vector4 v = ComputeParam( param, type );
     const Matrix4& curveBasis = ComputeBasis( type );
@@ -166,17 +166,17 @@ Vector3 ComputePoint(f32 param, const Vector3& a, const Vector3& b, const Vector
 
 
 
-void ComputeBSpline( V_Vector3& controlPoints, const u32 resolution, const bool closed, V_Vector3& points  )
+void ComputeBSpline( V_Vector3& controlPoints, const uint32_t resolution, const bool closed, V_Vector3& points  )
 {
-    f32 t = 0.0f;
-    u32 start = 0;
-    u32 end   = resolution;
+    float32_t t = 0.0f;
+    uint32_t start = 0;
+    uint32_t end   = resolution;
 
-    u32 countControlPoints = (u32)( controlPoints.size( ) - 3 );
+    uint32_t countControlPoints = (uint32_t)( controlPoints.size( ) - 3 );
 
-    f32 step = 1.0f/static_cast<f32>( resolution );
+    float32_t step = 1.0f/static_cast<float32_t>( resolution );
 
-    for( u32 i = 0; i < countControlPoints; ++i )
+    for( uint32_t i = 0; i < countControlPoints; ++i )
     {
         t = 0.0f;
         end = resolution;
@@ -196,7 +196,7 @@ void ComputeBSpline( V_Vector3& controlPoints, const u32 resolution, const bool 
         const Vector3& cp2 = controlPoints[ i + 2 ];
         const Vector3& cp3 = controlPoints[ i + 3 ];
 
-        for( u32 j = start; j < end; ++j )
+        for( uint32_t j = start; j < end; ++j )
         {
             points.push_back( ComputePoint( t, cp0, cp1, cp2, cp3, Curve::kBSpline ) );
             t += step;
@@ -204,17 +204,17 @@ void ComputeBSpline( V_Vector3& controlPoints, const u32 resolution, const bool 
     }
 }
 
-void ComputeCatmullRom( V_Vector3& controlPoints, const u32 resolution, const bool closed, V_Vector3& points  )
+void ComputeCatmullRom( V_Vector3& controlPoints, const uint32_t resolution, const bool closed, V_Vector3& points  )
 {
-    f32 t = 0.0f;
-    u32 start = 0;
-    u32 end   = resolution;// + 1;//for Catmull Rom
+    float32_t t = 0.0f;
+    uint32_t start = 0;
+    uint32_t end   = resolution;// + 1;//for Catmull Rom
 
-    u32 countControlPoints = u32( controlPoints.size( ) - 3 );
+    uint32_t countControlPoints = uint32_t( controlPoints.size( ) - 3 );
 
-    f32 step = 1.0f/static_cast<f32>( resolution );
+    float32_t step = 1.0f/static_cast<float32_t>( resolution );
 
-    for( u32 i = 0; i < countControlPoints; ++i )
+    for( uint32_t i = 0; i < countControlPoints; ++i )
     {
         t = 0.0f;
         end = resolution; 
@@ -236,7 +236,7 @@ void ComputeCatmullRom( V_Vector3& controlPoints, const u32 resolution, const bo
         const Vector3& cp2 = controlPoints[ i + 2 ];
         const Vector3& cp3 = controlPoints[ i + 3 ];
 
-        for( u32 j = start; j < end; ++j )
+        for( uint32_t j = start; j < end; ++j )
         {
             points.push_back( ComputePoint( t, cp0, cp1, cp2, cp3, Curve::kCatmullRom ) );
             t += step;

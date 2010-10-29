@@ -133,7 +133,7 @@ void CreateTool::DetermineTranslationAndNormal( int x, int y, Math::Vector3& t, 
     if ( !DetermineTranslationAndNormal( pick, t, n ) )
     {
         // place the object on the selected plane
-        m_Scene->GetViewport()->GetCamera()->ViewportToPlaneVertex( (f32)x, (f32)y, s_PlaneSnap, t );
+        m_Scene->GetViewport()->GetCamera()->ViewportToPlaneVertex( (float32_t)x, (float32_t)y, s_PlaneSnap, t );
     }
 }
 
@@ -381,7 +381,7 @@ void CreateTool::FinalizeOrientation(Math::Matrix4& position, const Math::Vector
     if ( s_RandomizeScale )
     {
         // random float b/t 0.0f and 1.0f
-        f32 scale = rand()/(float(RAND_MAX)+1);
+        float32_t scale = rand()/(float(RAND_MAX)+1);
 
         // multiply by the range and add the base to set the bounds
         scale = (scale * (s_ScaleMax - s_ScaleMin)) + s_ScaleMin;
@@ -401,7 +401,7 @@ void CreateTool::FinalizeOrientation(Math::Matrix4& position, const Math::Vector
     if ( s_RandomizeDirection )
     {
         // random float b/t -1.0f and 1.0f
-        f32 angle = rand()/(float(RAND_MAX)+1) * 2.0f - 1.0f;
+        float32_t angle = rand()/(float(RAND_MAX)+1) * 2.0f - 1.0f;
 
         // multiply by the range
         angle = (angle * (s_DirectionMax - s_DirectionMin));
@@ -433,7 +433,7 @@ void CreateTool::FinalizeOrientation(Math::Matrix4& position, const Math::Vector
     if ( s_RandomizeAzimuth )
     {
         // random float b/t -1.0f and 1.0f
-        f32 angle = rand()/(float(RAND_MAX)+1) * 2.0f - 1.0f;
+        float32_t angle = rand()/(float(RAND_MAX)+1) * 2.0f - 1.0f;
 
         // multiply by the range
         angle = (angle * (s_AzimuthMax - s_AzimuthMin));
@@ -491,7 +491,7 @@ bool CreateTool::ValidPosition( const Math::AlignedBox& bounds, const Math::Vect
     return true;
 }
 
-void CreateTool::CalculateInstanceRadiusAndBounds( f32& instanceRadius, Math::AlignedBox& bounds )
+void CreateTool::CalculateInstanceRadiusAndBounds( float32_t& instanceRadius, Math::AlignedBox& bounds )
 {
     SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>( m_Instance );
     bounds = node->GetObjectBounds();
@@ -1167,7 +1167,7 @@ void CreateTool::CreateMultipleObjects( bool stamp )
         m_InstanceUpdateOffsets = false;
     }
 
-    f32 maxTime = 100.0f;
+    float32_t maxTime = 100.0f;
     Timer instanceTimer;
     Math::Vector3 instanceNormalOffset = m_InstanceNormal.Normalize() * 2.0f * s_PaintRadius;
 

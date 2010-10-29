@@ -20,7 +20,7 @@ namespace Helium
         // Valid
         //
 
-        inline bool IsValid(f64 val)
+        inline bool IsValid(float64_t val)
         {
             return _finite(val) != 0;
         }
@@ -28,7 +28,7 @@ namespace Helium
         //
         // Clamp
         //
-        inline i32 Clamp(i32& val, i32 min, i32 max)
+        inline int32_t Clamp(int32_t& val, int32_t min, int32_t max)
         {
             if (val < min)
                 val = min;
@@ -40,7 +40,7 @@ namespace Helium
         //
         // Clamp
         //
-        inline u32 Clamp(u32& val, u32 min, u32 max)
+        inline uint32_t Clamp(uint32_t& val, uint32_t min, uint32_t max)
         {
             if (val < min)
                 val = min;
@@ -52,7 +52,7 @@ namespace Helium
         //
         // Clamp
         //
-        inline f32 Clamp(f32& val, f32 min, f32 max)
+        inline float32_t Clamp(float32_t& val, float32_t min, float32_t max)
         {
             if (val < min)
                 val = min;
@@ -64,7 +64,7 @@ namespace Helium
         //
         // Clamp
         //
-        inline f64 Clamp(f64& val, f64 min, f64 max)
+        inline float64_t Clamp(float64_t& val, float64_t min, float64_t max)
         {
             if (val < min)
                 val = min;
@@ -76,7 +76,7 @@ namespace Helium
         //
         // ClampAngle
         //
-        inline f32 ClampAngle(f32& v)
+        inline float32_t ClampAngle(float32_t& v)
         {
             while (v < -Pi)
                 v += TwoPi;
@@ -88,7 +88,7 @@ namespace Helium
         //
         // Limit (non ref clamp)
         //
-        inline i32 Limit(i32 min, i32 val, i32 max)
+        inline int32_t Limit(int32_t min, int32_t val, int32_t max)
         {
             if (val < min)
                 val = min;
@@ -100,7 +100,7 @@ namespace Helium
         //
         // LimitAngle
         //
-        inline f32 LimitAngle(f32 v, f32 low, f32 high)
+        inline float32_t LimitAngle(float32_t v, float32_t low, float32_t high)
         {
             if (v < low)
                 v += (high - low);
@@ -113,11 +113,11 @@ namespace Helium
         //
         // Round
         //
-        inline f32 Round(f32 d)
+        inline float32_t Round(float32_t d)
         {
             return floor(d + 0.5f);
         }
-        inline f64 Round(f64 d)
+        inline float64_t Round(float64_t d)
         {
             return floor(d + 0.5);
         }
@@ -125,17 +125,17 @@ namespace Helium
         //
         // Ran
         //
-        inline i32 Ran(i32 low, i32 high)
+        inline int32_t Ran(int32_t low, int32_t high)
         {
-            return (i32)Round((((f64)rand() / (f64) RAND_MAX) * (f64)(high - low)) + low);
+            return (int32_t)Round((((float64_t)rand() / (float64_t) RAND_MAX) * (float64_t)(high - low)) + low);
         }
 
         //
         // Ran
         //
-        inline f64 Ran(f64 low, f64 high)
+        inline float64_t Ran(float64_t low, float64_t high)
         {
-            return (((f64)rand() / (f64) RAND_MAX) * (high - low)) + low;
+            return (((float64_t)rand() / (float64_t) RAND_MAX) * (high - low)) + low;
         }
 
         //
@@ -143,9 +143,9 @@ namespace Helium
         //
         // Return the log2 of the input, effectively this is the position of the highest bit set (signed)
         //
-        inline i32 Log2(i32 val)
+        inline int32_t Log2(int32_t val)
         {
-            i32 log = 0;
+            int32_t log = 0;
             for (; val > 1; log++)
                 val = val >> 1;
             return (log);
@@ -156,7 +156,7 @@ namespace Helium
         //
         // Return the log2 of the input, effectively this is the position of the highest bit set
         //
-        inline u32 Log2(u32 v)
+        inline uint32_t Log2(uint32_t v)
         {
 #ifdef _MSC_VER
 # ifdef _M_IX86
@@ -165,7 +165,7 @@ namespace Helium
                 bsr eax,v
             }
 # else
-            u32 result = 0;
+            uint32_t result = 0;
             _BitScanReverse((unsigned long*)&result, v);
             return result;
 # endif
@@ -177,7 +177,7 @@ namespace Helium
         //
         // LogBase2
         //
-        inline f64 LogBase2(f64 v)
+        inline float64_t LogBase2(float64_t v)
         {
             v = log10(v);
             v = v * 3.3219282;
@@ -190,7 +190,7 @@ namespace Helium
         // Return the next power of two, if the number is already a power of two then
         // the input is returned.
         //
-        inline u32 NextPowerOfTwo(u32 in)
+        inline uint32_t NextPowerOfTwo(uint32_t in)
         {
             in -= 1;
 
@@ -209,7 +209,7 @@ namespace Helium
         // Return the number rounded down to the previous power of two, if the input is already a power
         // of two it is returned unmodified.
         //
-        inline u32 PreviousPowerOfTwo(u32 in)
+        inline uint32_t PreviousPowerOfTwo(uint32_t in)
         {
             return 1<<Log2(in);
         }
@@ -219,7 +219,7 @@ namespace Helium
         //
         // Returns true if the input is a power of 2
         //
-        inline bool IsPowerOfTwo(u32 in)
+        inline bool IsPowerOfTwo(uint32_t in)
         {
             return (in & (in-1))==0;
         }
@@ -227,9 +227,9 @@ namespace Helium
         //
         // IsWholeNumber
         //
-        inline bool IsWholeNumber(f64 d, f64 error)
+        inline bool IsWholeNumber(float64_t d, float64_t error)
         {
-            f64 i = Round(d);
+            float64_t i = Round(d);
             if (fabs(d - i) <= error)
                 return true;
             return false;
@@ -238,7 +238,7 @@ namespace Helium
         //
         // Equal
         // 
-        inline bool Equal( f32 a, f32 b, f32 err = ValueNearZero )
+        inline bool Equal( float32_t a, float32_t b, float32_t err = ValueNearZero )
         {
             return ( fabs( a - b ) <= err ); 
         }

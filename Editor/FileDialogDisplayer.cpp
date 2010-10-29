@@ -9,7 +9,7 @@ using namespace Helium::Editor;
 
 void FileDialogDisplayer::DisplayFileDialog( const Helium::FileDialogArgs& args )
 {
-    i32 style = 0;
+    int32_t style = 0;
 
     switch ( args.m_Type )
     {

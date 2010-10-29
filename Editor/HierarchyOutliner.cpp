@@ -58,7 +58,7 @@ void HierarchyOutliner::AddHierarchyNodes()
         RecurseAddHierarchyNode( m_CurrentScene->GetRoot(), true );
 
         // The root item gets a special icon
-        i32 image = GlobalFileIconsTable().GetIconID( TXT( "world" ) );
+        int32_t image = GlobalFileIconsTable().GetIconID( TXT( "world" ) );
         m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Normal );
         m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Expanded );
         m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Selected );

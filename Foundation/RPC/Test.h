@@ -10,8 +10,8 @@ namespace Helium
         {
             struct TestArgs : RPC::Args
             {
-                u8 m_char;
-                u32 m_integer;
+                uint8_t m_char;
+                uint32_t m_integer;
             };
             typedef Helium::Signature< TestArgs&>::Delegate TestDelegate;
 

@@ -21,7 +21,7 @@ namespace Helium
 
         public:
             // parses script data and binds controls to data
-            static bool Parse(const tstring& script, Interpreter* interpreter, Canvas* canvas, Container* output, u32 fieldFlags = 0);
+            static bool Parse(const tstring& script, Interpreter* interpreter, Canvas* canvas, Container* output, uint32_t fieldFlags = 0);
         };
     }
 }

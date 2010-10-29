@@ -46,7 +46,7 @@ void Condition::Reset()
     }
 }
 
-bool Condition::Wait(u32 timeout)
+bool Condition::Wait(uint32_t timeout)
 {
     DWORD result = ::WaitForSingleObject(m_Handle, timeout);
 

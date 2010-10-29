@@ -161,26 +161,26 @@ namespace Helium
             // creator
             static void CreatePanel(CreatePanelArgs& args);
 
-            f32 GetScaleX() const;
-            void SetScaleX(f32 scale);
-            f32 GetScaleY() const;
-            void SetScaleY(f32 scale);
-            f32 GetScaleZ() const;
-            void SetScaleZ(f32 scale);
+            float32_t GetScaleX() const;
+            void SetScaleX(float32_t scale);
+            float32_t GetScaleY() const;
+            void SetScaleY(float32_t scale);
+            float32_t GetScaleZ() const;
+            void SetScaleZ(float32_t scale);
 
-            f32 GetRotateX() const;
-            void SetRotateX(f32 rotate);
-            f32 GetRotateY() const;
-            void SetRotateY(f32 rotate);
-            f32 GetRotateZ() const;
-            void SetRotateZ(f32 rotate);
+            float32_t GetRotateX() const;
+            void SetRotateX(float32_t rotate);
+            float32_t GetRotateY() const;
+            void SetRotateY(float32_t rotate);
+            float32_t GetRotateZ() const;
+            void SetRotateZ(float32_t rotate);
 
-            f32 GetTranslateX() const;
-            void SetTranslateX(f32 translate);
-            f32 GetTranslateY() const;
-            void SetTranslateY(f32 translate);
-            f32 GetTranslateZ() const;
-            void SetTranslateZ(f32 translate);
+            float32_t GetTranslateX() const;
+            void SetTranslateX(float32_t translate);
+            float32_t GetTranslateY() const;
+            void SetTranslateY(float32_t translate);
+            float32_t GetTranslateZ() const;
+            void SetTranslateZ(float32_t translate);
 
         protected:
             // Reflected

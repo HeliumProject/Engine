@@ -23,8 +23,8 @@ struct ScaleColorInfo
 {
     D3DCOLORVALUE m_StartColor;
     D3DCOLORVALUE m_EndColor;
-    f32 m_ScaleMin;
-    f32 m_ScaleMax;
+    float32_t m_ScaleMin;
+    float32_t m_ScaleMax;
 };
 
 void Transform::EnumerateClass( Reflect::Compositor<Transform>& comp )
@@ -455,13 +455,13 @@ void Transform::CreatePanel(CreatePanelArgs& args)
         label = args.m_Generator->AddLabel( TXT( "Scale" ) );
         label->a_HelpText.Set( TXT( "Controls the scaling of this node in the x, y and z dimensions." ) );
 
-        value = args.m_Generator->AddValue<SceneGraph::Transform, f32>(args.m_Selection, &Transform::GetScaleX, &Transform::SetScaleX);
+        value = args.m_Generator->AddValue<SceneGraph::Transform, float32_t>(args.m_Selection, &Transform::GetScaleX, &Transform::SetScaleX);
         value->a_HelpText.Set( TXT( "Constrols the scaling of this node in the x dimension." ) );
 
-        value = args.m_Generator->AddValue<SceneGraph::Transform, f32>(args.m_Selection, &Transform::GetScaleY, &Transform::SetScaleY);
+        value = args.m_Generator->AddValue<SceneGraph::Transform, float32_t>(args.m_Selection, &Transform::GetScaleY, &Transform::SetScaleY);
         value->a_HelpText.Set( TXT( "Constrols the scaling of this node in the y dimension." ) );
 
-        value = args.m_Generator->AddValue<SceneGraph::Transform, f32>(args.m_Selection, &Transform::GetScaleZ, &Transform::SetScaleZ);
+        value = args.m_Generator->AddValue<SceneGraph::Transform, float32_t>(args.m_Selection, &Transform::GetScaleZ, &Transform::SetScaleZ);
         value->a_HelpText.Set( TXT( "Constrols the scaling of this node in the z dimension." ) );
 
         args.m_Generator->Pop();
@@ -472,13 +472,13 @@ void Transform::CreatePanel(CreatePanelArgs& args)
         label = args.m_Generator->AddLabel( TXT( "Rotate" ) );
         label->a_HelpText.Set( TXT( "Controls the rotation of this node about its x, y and z axes." ) );
 
-        value = args.m_Generator->AddValue<SceneGraph::Transform, f32>(args.m_Selection, &Transform::GetRotateX, &Transform::SetRotateX);
+        value = args.m_Generator->AddValue<SceneGraph::Transform, float32_t>(args.m_Selection, &Transform::GetRotateX, &Transform::SetRotateX);
         value->a_HelpText.Set( TXT( "Controls the rotation of this node about its x axis." ) );
 
-        value = args.m_Generator->AddValue<SceneGraph::Transform, f32>(args.m_Selection, &Transform::GetRotateY, &Transform::SetRotateY);
+        value = args.m_Generator->AddValue<SceneGraph::Transform, float32_t>(args.m_Selection, &Transform::GetRotateY, &Transform::SetRotateY);
         value->a_HelpText.Set( TXT( "Controls the rotation of this node about its y axis." ) );
 
-        value = args.m_Generator->AddValue<SceneGraph::Transform, f32>(args.m_Selection, &Transform::GetRotateZ, &Transform::SetRotateZ);
+        value = args.m_Generator->AddValue<SceneGraph::Transform, float32_t>(args.m_Selection, &Transform::GetRotateZ, &Transform::SetRotateZ);
         value->a_HelpText.Set( TXT( "Controls the rotation of this node about its z axis." ) );
 
         args.m_Generator->Pop();
@@ -489,13 +489,13 @@ void Transform::CreatePanel(CreatePanelArgs& args)
         label = args.m_Generator->AddLabel( TXT( "Translate" ) );
         label->a_HelpText.Set( TXT( "Controls the location of this node in space with respect to the origin." ) );
 
-        value = args.m_Generator->AddValue<SceneGraph::Transform, f32>(args.m_Selection, &Transform::GetTranslateX, &Transform::SetTranslateX);
+        value = args.m_Generator->AddValue<SceneGraph::Transform, float32_t>(args.m_Selection, &Transform::GetTranslateX, &Transform::SetTranslateX);
         value->a_HelpText.Set( TXT( "Controls the offset of this node from the origin along the x axis." ) );
 
-        value = args.m_Generator->AddValue<SceneGraph::Transform, f32>(args.m_Selection, &Transform::GetTranslateY, &Transform::SetTranslateY);
+        value = args.m_Generator->AddValue<SceneGraph::Transform, float32_t>(args.m_Selection, &Transform::GetTranslateY, &Transform::SetTranslateY);
         value->a_HelpText.Set( TXT( "Controls the offset of this node from the origin along the y axis." ) );
 
-        value = args.m_Generator->AddValue<SceneGraph::Transform, f32>(args.m_Selection, &Transform::GetTranslateZ, &Transform::SetTranslateZ);
+        value = args.m_Generator->AddValue<SceneGraph::Transform, float32_t>(args.m_Selection, &Transform::GetTranslateZ, &Transform::SetTranslateZ);
         value->a_HelpText.Set( TXT( "Controls the offset of this node from the origin along the z axis." ) );
 
         args.m_Generator->Pop();
@@ -504,108 +504,108 @@ void Transform::CreatePanel(CreatePanelArgs& args)
     args.m_Generator->Pop();
 }
 
-f32 Transform::GetScaleX() const
+float32_t Transform::GetScaleX() const
 {
     return GetScale().x;
 }
 
-void Transform::SetScaleX(f32 scale)
+void Transform::SetScaleX(float32_t scale)
 {
     Math::Scale s = GetScale();
     s.x = scale;
     SetScale(s);
 }
 
-f32 Transform::GetScaleY() const
+float32_t Transform::GetScaleY() const
 {
     return GetScale().y;
 }
 
-void Transform::SetScaleY(f32 scale)
+void Transform::SetScaleY(float32_t scale)
 {
     Math::Scale s = GetScale();
     s.y = scale;
     SetScale(s);
 }
 
-f32 Transform::GetScaleZ() const
+float32_t Transform::GetScaleZ() const
 {
     return GetScale().z;
 }
 
-void Transform::SetScaleZ(f32 scale)
+void Transform::SetScaleZ(float32_t scale)
 {
     Math::Scale s = GetScale();
     s.z = scale;
     SetScale(s);
 }
 
-f32 Transform::GetRotateX() const
+float32_t Transform::GetRotateX() const
 {
     return GetRotate().angles.x * Math::RadToDeg;
 }
 
-void Transform::SetRotateX(f32 rotate)
+void Transform::SetRotateX(float32_t rotate)
 {
     Math::Vector3 s = GetRotate().angles;
     s.x = rotate * Math::DegToRad;
     SetRotate(EulerAngles (s, m_Rotate.order));
 }
 
-f32 Transform::GetRotateY() const
+float32_t Transform::GetRotateY() const
 {
     return GetRotate().angles.y * Math::RadToDeg;
 }
 
-void Transform::SetRotateY(f32 rotate)
+void Transform::SetRotateY(float32_t rotate)
 {
     Math::Vector3 s = GetRotate().angles;
     s.y = rotate * Math::DegToRad;
     SetRotate(EulerAngles (s, m_Rotate.order));
 }
 
-f32 Transform::GetRotateZ() const
+float32_t Transform::GetRotateZ() const
 {
     return GetRotate().angles.z * Math::RadToDeg;
 }
 
-void Transform::SetRotateZ(f32 rotate)
+void Transform::SetRotateZ(float32_t rotate)
 {
     Math::Vector3 s = GetRotate().angles;
     s.z = rotate * Math::DegToRad;
     SetRotate(EulerAngles (s, m_Rotate.order));
 }
 
-f32 Transform::GetTranslateX() const
+float32_t Transform::GetTranslateX() const
 {
     return GetTranslate().x;
 }
 
-void Transform::SetTranslateX(f32 translate)
+void Transform::SetTranslateX(float32_t translate)
 {
     Math::Vector3 s = GetTranslate();
     s.x = translate;
     SetTranslate(s);
 }
 
-f32 Transform::GetTranslateY() const
+float32_t Transform::GetTranslateY() const
 {
     return GetTranslate().y;
 }
 
-void Transform::SetTranslateY(f32 translate)
+void Transform::SetTranslateY(float32_t translate)
 {
     Math::Vector3 s = GetTranslate();
     s.y = translate;
     SetTranslate(s);
 }
 
-f32 Transform::GetTranslateZ() const
+float32_t Transform::GetTranslateZ() const
 {
     return GetTranslate().z;
 }
 
-void Transform::SetTranslateZ(f32 translate)
+void Transform::SetTranslateZ(float32_t translate)
 {
     Math::Vector3 s = GetTranslate();
     s.z = translate;

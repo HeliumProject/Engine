@@ -12,16 +12,16 @@
 //
 //  struct Field
 //  {
-//      i32 name;               // string pool index of the name of this field
-//      i32 serializer_id;      // string pool index of the short name of the serializer type
+//      int32_t name;               // string pool index of the name of this field
+//      int32_t serializer_id;      // string pool index of the short name of the serializer type
 //  };
 //
 //  struct Composite
 //  {
-//      i32 short_name;         // string pool index of the short name for this type
-//      i32 count;              // number of field infos to follow
+//      int32_t short_name;         // string pool index of the short name for this type
+//      int32_t count;              // number of field infos to follow
 //      Field[] fields;         // field rtti data
-//      i32 term;               // -1
+//      int32_t term;               // -1
 //  };
 //
 
@@ -63,9 +63,9 @@ namespace Helium
             M_FieldIDToInfo       m_FieldIDToInfo;      // maps field id to field info block
             M_FieldOffsetToInfo   m_FieldOffsetToInfo;  // maps offset (through pointer to member reference) to field info block
 
-            i32                   m_FirstFieldID;       // first field id of this class's fields (exclusive of base and derived class's fields)
-            i32                   m_LastFieldID;        // last field id of this class's fields (exclusive of base and derived class's fields)
-            i32                   m_NextFieldID;        // id used for the next field (as we are enumerating)
+            int32_t                   m_FirstFieldID;       // first field id of this class's fields (exclusive of base and derived class's fields)
+            int32_t                   m_LastFieldID;        // last field id of this class's fields (exclusive of base and derived class's fields)
+            int32_t                   m_NextFieldID;        // id used for the next field (as we are enumerating)
 
         protected:
             Composite();
@@ -142,9 +142,9 @@ namespace Helium
             // Add fields to the composite
             //
 
-            Reflect::Field* AddField ( Element& instance, const std::string& name, const u32 offset, u32 size, i32 serializerID, i32 flags = 0 );
-            Reflect::ElementField* AddElementField ( Element& instance, const std::string& name, const u32 offset, u32 size, i32 serializerID, i32 typeID, i32 flags = 0 );
-            Reflect::EnumerationField* AddEnumerationField ( Element& instance, const std::string& name, const u32 offset, u32 size, i32 serializerID, const std::string& enumName, i32 flags = 0 );
+            Reflect::Field* AddField ( Element& instance, const std::string& name, const uint32_t offset, uint32_t size, int32_t serializerID, int32_t flags = 0 );
+            Reflect::ElementField* AddElementField ( Element& instance, const std::string& name, const uint32_t offset, uint32_t size, int32_t serializerID, int32_t typeID, int32_t flags = 0 );
+            Reflect::EnumerationField* AddEnumerationField ( Element& instance, const std::string& name, const uint32_t offset, uint32_t size, int32_t serializerID, const std::string& enumName, int32_t flags = 0 );
 
             //
             // Report information to stdout
@@ -156,7 +156,7 @@ namespace Helium
             // Test for type of this or it base classes
             //
 
-            bool HasType(i32 type) const;
+            bool HasType(int32_t type) const;
 
             // 
             // Name utilities
@@ -170,7 +170,7 @@ namespace Helium
 
             const Field* FindFieldByName(const tstring& name) const;
 
-            const Field* FindFieldByOffset(u32 offset) const;
+            const Field* FindFieldByOffset(uint32_t offset) const;
 
             // 
             // Finds the field info given a pointer to a member variable on a class.
@@ -258,13 +258,13 @@ namespace Helium
             }
 
             template <class FieldT>
-            static inline u32 GetOffset( FieldT T::* field )
+            static inline uint32_t GetOffset( FieldT T::* field )
             {
-                return (u32) (uintptr) &( ((T*)NULL)->*field); 
+                return (uint32_t) (uintptr) &( ((T*)NULL)->*field); 
             }
 
             template <class FieldT>
-            inline Reflect::Field* AddField( FieldT T::* field, const std::string& name, i32 flags = 0, i32 serializerType = -1 )
+            inline Reflect::Field* AddField( FieldT T::* field, const std::string& name, int32_t flags = 0, int32_t serializerType = -1 )
             {
                 return m_Composite.AddField(
                     m_Instance,
@@ -276,7 +276,7 @@ namespace Helium
             }
 
             template <class FieldT>
-            inline Reflect::Field* AddField( Attribute<FieldT> T::* field, const std::string& name, i32 flags = 0, i32 serializerType = -1 )
+            inline Reflect::Field* AddField( Attribute<FieldT> T::* field, const std::string& name, int32_t flags = 0, int32_t serializerType = -1 )
             {
                 return m_Composite.AddField(
                     m_Instance,
@@ -288,7 +288,7 @@ namespace Helium
             }
 
             template <class ElementT>
-            inline Reflect::ElementField* AddField( SmartPtr< ElementT > T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::ElementField* AddField( SmartPtr< ElementT > T::* field, const std::string& name, int32_t flags = 0 )
             {
                 return m_Composite.AddElementField(
                     m_Instance,
@@ -301,7 +301,7 @@ namespace Helium
             }
 
             template <class ElementT>
-            inline Reflect::ElementField* AddField( Attribute< SmartPtr< ElementT > > T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::ElementField* AddField( Attribute< SmartPtr< ElementT > > T::* field, const std::string& name, int32_t flags = 0 )
             {
                 return m_Composite.AddElementField(
                     m_Instance,
@@ -314,7 +314,7 @@ namespace Helium
             }
 
             template <class ElementT>
-            inline Reflect::ElementField* AddField( std::vector< SmartPtr< ElementT > > T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::ElementField* AddField( std::vector< SmartPtr< ElementT > > T::* field, const std::string& name, int32_t flags = 0 )
             {
                 return m_Composite.AddElementField(
                     m_Instance,
@@ -327,7 +327,7 @@ namespace Helium
             }
 
             template <class ElementT>
-            inline Reflect::ElementField* AddField( Attribute< std::vector< SmartPtr< ElementT > > > T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::ElementField* AddField( Attribute< std::vector< SmartPtr< ElementT > > > T::* field, const std::string& name, int32_t flags = 0 )
             {
                 return m_Composite.AddElementField(
                     m_Instance,
@@ -340,7 +340,7 @@ namespace Helium
             }
 
             template <class ElementT>
-            inline Reflect::ElementField* AddField( std::set< SmartPtr< ElementT > > T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::ElementField* AddField( std::set< SmartPtr< ElementT > > T::* field, const std::string& name, int32_t flags = 0 )
             {
                 return m_Composite.AddElementField(
                     m_Instance,
@@ -353,7 +353,7 @@ namespace Helium
             }
 
             template <class ElementT>
-            inline Reflect::ElementField* AddField( Attribute< std::set< SmartPtr< ElementT > > > T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::ElementField* AddField( Attribute< std::set< SmartPtr< ElementT > > > T::* field, const std::string& name, int32_t flags = 0 )
             {
                 return m_Composite.AddElementField(
                     m_Instance,
@@ -366,7 +366,7 @@ namespace Helium
             }
 
             template <class KeyT, class ElementT>
-            inline Reflect::ElementField* AddField( std::map< KeyT, SmartPtr< ElementT > > T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::ElementField* AddField( std::map< KeyT, SmartPtr< ElementT > > T::* field, const std::string& name, int32_t flags = 0 )
             {
                 return m_Composite.AddElementField( 
                     m_Instance, 
@@ -379,7 +379,7 @@ namespace Helium
             }
 
             template <class KeyT, class ElementT>
-            inline Reflect::ElementField* AddField( Attribute< std::map< KeyT, SmartPtr< ElementT > > > T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::ElementField* AddField( Attribute< std::map< KeyT, SmartPtr< ElementT > > > T::* field, const std::string& name, int32_t flags = 0 )
             {
                 return m_Composite.AddElementField( 
                     m_Instance, 
@@ -392,7 +392,7 @@ namespace Helium
             }
 
             template <class FieldT>
-            inline Reflect::EnumerationField* AddEnumerationField( FieldT T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::EnumerationField* AddEnumerationField( FieldT T::* field, const std::string& name, int32_t flags = 0 )
             {
                 return m_Composite.AddEnumerationField(
                     m_Instance,
@@ -405,7 +405,7 @@ namespace Helium
             }
 
             template <class FieldT>
-            inline Reflect::EnumerationField* AddEnumerationField( Attribute< FieldT > T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::EnumerationField* AddEnumerationField( Attribute< FieldT > T::* field, const std::string& name, int32_t flags = 0 )
             {
                 return m_Composite.AddEnumerationField(
                     m_Instance,
@@ -418,7 +418,7 @@ namespace Helium
             }
 
             template <class EnumT, class FieldT>
-            inline Reflect::EnumerationField* AddBitfieldField( FieldT T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::EnumerationField* AddBitfieldField( FieldT T::* field, const std::string& name, int32_t flags = 0 )
             {
                 return m_Composite.AddEnumerationField(
                     m_Instance,
@@ -431,7 +431,7 @@ namespace Helium
             }
 
             template <class EnumT, class FieldT>
-            inline Reflect::EnumerationField* AddBitfieldField( Attribute< FieldT > T::* field, const std::string& name, i32 flags = 0 )
+            inline Reflect::EnumerationField* AddBitfieldField( Attribute< FieldT > T::* field, const std::string& name, int32_t flags = 0 )
             {
                 return m_Composite.AddEnumerationField(
                     m_Instance,

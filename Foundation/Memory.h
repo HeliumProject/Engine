@@ -16,9 +16,9 @@ namespace Helium
         struct MemoryPool
         {
             const tchar* m_Name;
-            u32         m_Count;
-            u64         m_Size;
-            u64         m_Previous;
+            uint32_t         m_Count;
+            uint64_t         m_Size;
+            uint64_t         m_Previous;
 
             MemoryPool()
                 : m_Name (NULL)
@@ -32,7 +32,7 @@ namespace Helium
 
         struct MemoryPoolHandle
         {
-            i32 m_Index;
+            int32_t m_Index;
 
             MemoryPoolHandle()
                 : m_Index (-1)
@@ -49,7 +49,7 @@ namespace Helium
         class FOUNDATION_API Memory
         {
         private:
-            static u32 s_InitCount;
+            static uint32_t s_InitCount;
 
         public:
             static bool Initialize();
@@ -57,8 +57,8 @@ namespace Helium
 
             static MemoryPoolHandle CreatePool(const tchar* name);
 
-            static void Allocate(MemoryPoolHandle pool, u32 size);
-            static void Deallocate(MemoryPoolHandle pool, u32 size);
+            static void Allocate(MemoryPoolHandle pool, uint32_t size);
+            static void Deallocate(MemoryPoolHandle pool, uint32_t size);
         };
     }
 

@@ -80,7 +80,7 @@ namespace Helium
             Helium::Image*                 m_texture;
             Helium::MipSet*                  m_mips;
             Helium::MipSet::RuntimeSettings  m_runtime;
-            u32                          m_mip_levels;
+            uint32_t                          m_mip_levels;
 
             // user data
             void*                        m_user_data;

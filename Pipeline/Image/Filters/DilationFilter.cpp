@@ -84,9 +84,9 @@ void DilationFilter::filter(void)
     //  1.0 = original valid texels - don't touch
     //
 
-    for( u32 y = 0; y < input->m_Height; ++y )
+    for( uint32_t y = 0; y < input->m_Height; ++y )
     {
-        for( u32 x = 0; x < input->m_Width; ++x )
+        for( uint32_t x = 0; x < input->m_Width; ++x )
         {
             float r, g, b, a;
             input->Read(x, y, r, g, b, a);
@@ -110,9 +110,9 @@ void DilationFilter::filter(void)
 
     // clear out alpha channel to aid potential compression
     // alternatively, we may want to leave a mask of the original valid texels...
-    for( u32 y = 0; y < input->m_Height; ++y )
+    for( uint32_t y = 0; y < input->m_Height; ++y )
     {
-        for( u32 x = 0; x < input->m_Width; ++x )
+        for( uint32_t x = 0; x < input->m_Width; ++x )
         {
             float r, g, b, a;
             input->Read(x, y, r, g, b, a);
@@ -132,9 +132,9 @@ bool DilationFilter::DilateHorizontal(Helium::Image *dst, Helium::Image *src)
 {
     bool finished = true;
 
-    for( u32 y = 0; y < dst->m_Height; ++y )
+    for( uint32_t y = 0; y < dst->m_Height; ++y )
     {
-        for( u32 x = 0; x < dst->m_Width; ++x )
+        for( uint32_t x = 0; x < dst->m_Width; ++x )
         {
             float r, g, b, a;
             src->Read(x, y, r, g, b, a);
@@ -151,7 +151,7 @@ bool DilationFilter::DilateHorizontal(Helium::Image *dst, Helium::Image *src)
                 {
                     if( dx >= 0 && dx < int(dst->m_Width) )
                     {
-                        src->Read(u32(dx), y, r, g, b, a);
+                        src->Read(uint32_t(dx), y, r, g, b, a);
                         if( a > 0.4999f )
                         {
                             int weight_idx = int(x) - dx;
@@ -189,9 +189,9 @@ bool DilationFilter::DilateVertical(Helium::Image *dst, Helium::Image *src)
 {
     bool finished = true;
 
-    for( u32 y = 0; y < dst->m_Height; ++y )
+    for( uint32_t y = 0; y < dst->m_Height; ++y )
     {
-        for( u32 x = 0; x < dst->m_Width; ++x )
+        for( uint32_t x = 0; x < dst->m_Width; ++x )
         {
             float r, g, b, a;
             src->Read(x, y, r, g, b, a);
@@ -208,7 +208,7 @@ bool DilationFilter::DilateVertical(Helium::Image *dst, Helium::Image *src)
                 {
                     if( dy >= 0 && dy < int(dst->m_Height) )
                     {
-                        src->Read(x, u32(dy), r, g, b, a);
+                        src->Read(x, uint32_t(dy), r, g, b, a);
                         if( a > 0.4999f )
                         {
                             int weight_idx = int(y) - dy;
@@ -246,9 +246,9 @@ void DilationFilter::Normalize(Helium::Image *tex)
 {
     HELIUM_ASSERT(tex)
 
-        for( u32 y = 0; y < tex->m_Height; ++y )
+        for( uint32_t y = 0; y < tex->m_Height; ++y )
         {
-            for( u32 x = 0; x < tex->m_Width; ++x )
+            for( uint32_t x = 0; x < tex->m_Width; ++x )
             {
                 float r, g, b, a;
                 tex->Read(x, y, r, g, b, a);

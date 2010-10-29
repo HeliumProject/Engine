@@ -51,7 +51,7 @@ Layer::~Layer()
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the image index to use in the GUI for instances of this class.
 // 
-i32 Layer::GetImageIndex() const
+int32_t Layer::GetImageIndex() const
 {
     return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "layer" ) );
 }

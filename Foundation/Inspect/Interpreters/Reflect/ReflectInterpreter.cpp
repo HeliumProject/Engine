@@ -19,14 +19,14 @@ ReflectInterpreter::ReflectInterpreter (Container* container)
 
 }
 
-void ReflectInterpreter::Interpret(const std::vector<Reflect::Element*>& instances, i32 includeFlags, i32 excludeFlags, bool expandPanel)
+void ReflectInterpreter::Interpret(const std::vector<Reflect::Element*>& instances, int32_t includeFlags, int32_t excludeFlags, bool expandPanel)
 {
     m_Instances = instances;
 
     InterpretType(instances, m_Container, includeFlags, excludeFlags, expandPanel);
 }
 
-void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& instances, Container* parent, i32 includeFlags, i32 excludeFlags, bool expandPanel)
+void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& instances, Container* parent, int32_t includeFlags, int32_t excludeFlags, bool expandPanel)
 {
     const Class* typeInfo = instances[0]->GetClass();
 
@@ -315,12 +315,12 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
 }
 
 
-void ReflectFieldInterpreterFactory::Register(i32 type, u32 mask, Creator creator)
+void ReflectFieldInterpreterFactory::Register(int32_t type, uint32_t mask, Creator creator)
 {
     m_Map[ type ].push_back( std::make_pair(mask, creator) );
 }
 
-void ReflectFieldInterpreterFactory::Unregister(i32 type, u32 mask, Creator creator)
+void ReflectFieldInterpreterFactory::Unregister(int32_t type, uint32_t mask, Creator creator)
 {
     M_Creator::iterator found = m_Map.find( type );
     if ( found != m_Map.end() )
@@ -329,14 +329,14 @@ void ReflectFieldInterpreterFactory::Unregister(i32 type, u32 mask, Creator crea
     }
 }
 
-ReflectFieldInterpreterPtr ReflectFieldInterpreterFactory::Create(i32 type, u32 flags, Container* container)
+ReflectFieldInterpreterPtr ReflectFieldInterpreterFactory::Create(int32_t type, uint32_t flags, Container* container)
 {
     Creator creator = NULL;
 
     M_Creator::const_iterator found = m_Map.find( type );
     if ( found != m_Map.end() )
     {
-        std::map<u32, Creator> results;
+        std::map<uint32_t, Creator> results;
 
         V_Creator::const_iterator itr = found->second.begin();
         V_Creator::const_iterator end = found->second.end();
@@ -348,10 +348,10 @@ ReflectFieldInterpreterPtr ReflectFieldInterpreterFactory::Create(i32 type, u32 
             }
             else if ( flags && (flags & itr->first) != 0 ) // it has flags, and at least on flag is in the mask
             {
-                u32 value = flags & itr->first;
+                uint32_t value = flags & itr->first;
 
                 // count the number of bits set
-                u32 bits = 0;
+                uint32_t bits = 0;
                 while (value)
                 {
                     value = value & (value - 1);

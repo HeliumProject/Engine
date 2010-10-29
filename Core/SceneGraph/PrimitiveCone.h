@@ -9,19 +9,19 @@ namespace Helium
         class PrimitiveCone : public SceneGraph::PrimitiveTemplate<Position>
         {
         private:
-            mutable i32 m_WireVertCount;
-            mutable i32 m_PolyVertCount;
+            mutable int32_t m_WireVertCount;
+            mutable int32_t m_PolyVertCount;
 
         public:
-            f32 m_Length;
-            f32 m_Radius;
-            i32 m_Steps;
+            float32_t m_Length;
+            float32_t m_Radius;
+            int32_t m_Steps;
 
         public:
             PrimitiveCone(ResourceTracker* tracker);
 
-            u32 GetWireVertCount() const;
-            u32 GetPolyVertCount() const;
+            uint32_t GetWireVertCount() const;
+            uint32_t GetPolyVertCount() const;
 
             virtual void Update() HELIUM_OVERRIDE;
             virtual void Draw( DrawArgs* args, const bool* solid = NULL, const bool* transparent = NULL ) const HELIUM_OVERRIDE;

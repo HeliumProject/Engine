@@ -45,7 +45,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-static i32 g_InitCount = 0;
+static int32_t g_InitCount = 0;
 static Helium::InitializerStack g_InitializerStack;
 
 void SceneGraph::Initialize()

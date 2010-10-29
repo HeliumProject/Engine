@@ -76,7 +76,7 @@ const M_Component& ComponentCollection::GetComponents() const
     return m_Components;
 }
 
-const ComponentPtr& ComponentCollection::GetComponent(i32 slotID) const
+const ComponentPtr& ComponentCollection::GetComponent(int32_t slotID) const
 {
     static const ComponentPtr kNull;
     const M_Component::const_iterator end = m_Components.end();
@@ -148,7 +148,7 @@ bool ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
     return true;
 }
 
-bool ComponentCollection::RemoveComponent( i32 slotID )
+bool ComponentCollection::RemoveComponent( int32_t slotID )
 {
     HELIUM_ASSERT( slotID != Reflect::ReservedTypes::Invalid );
 
@@ -179,7 +179,7 @@ bool ComponentCollection::RemoveComponent( i32 slotID )
     return true;
 }
 
-bool ComponentCollection::ContainsComponent( i32 slotID ) const
+bool ComponentCollection::ContainsComponent( int32_t slotID ) const
 {
     HELIUM_ASSERT( slotID != Reflect::ReservedTypes::Invalid );
 

@@ -72,7 +72,7 @@ void TreeCanvasWidget::Create( wxWindow* parent )
         wxSizer* sizer = m_Window->GetSizer();
 
         std::vector< wxSizer* > sizerList;
-        std::vector< i32 > proportionList;
+        std::vector< int32_t > proportionList;
 
         int proportionMultiplier = 1000;
         int remainingProportion = proportionMultiplier;
@@ -87,7 +87,7 @@ void TreeCanvasWidget::Create( wxWindow* parent )
 
             if ( c->a_ProportionalWidth.Get() > 0.0f )
             {
-                int proportion = (int) ( c->a_ProportionalWidth.Get() * (f32) proportionMultiplier );
+                int proportion = (int) ( c->a_ProportionalWidth.Get() * (float32_t) proportionMultiplier );
                 remainingProportion -= proportion;
 
                 sizerList.push_back( new wxBoxSizer( wxHORIZONTAL ) );
@@ -109,7 +109,7 @@ void TreeCanvasWidget::Create( wxWindow* parent )
 
         if ( numRemainingProportions > 1 )
         {
-            remainingProportion = (int) ( (f32) remainingProportion / (f32) numRemainingProportions + 0.5f );
+            remainingProportion = (int) ( (float32_t) remainingProportion / (float32_t) numRemainingProportions + 0.5f );
         }
 
         int spacing = m_ContainerControl->GetCanvas()->GetPad();

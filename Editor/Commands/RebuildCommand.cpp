@@ -390,7 +390,7 @@ void RebuildCommand::ArchiveStatus( const Reflect::StatusInfo& info )
 
                 if (info.m_Archive.GetMode() == ArchiveModes::Read)
                 {
-                    u64 size = info.m_Archive.GetPath().Size();
+                    uint64_t size = info.m_Archive.GetPath().Size();
                     if ( size > 1000)
                     {
                         Log::Bullet bullet( TXT( "Size: %dk\n" ),  size / 1000);

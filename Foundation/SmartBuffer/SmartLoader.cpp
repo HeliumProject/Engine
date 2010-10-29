@@ -6,7 +6,7 @@
 
 using namespace Helium;
 
-bool Helium::LoadChunkHeaders( ChunkFile& chunk_file, void* data, u32 data_size )
+bool Helium::LoadChunkHeaders( ChunkFile& chunk_file, void* data, uint32_t data_size )
 {
     HELIUM_ASSERT_MSG( data_size >= sizeof( ChunkFileHeader ), 
         ( "Insufficient data in buffer!\n" ) );
@@ -35,12 +35,12 @@ bool Helium::LoadChunkHeaders( ChunkFile& chunk_file, void* data, u32 data_size 
     }
 
     // fix the pointers
-    chunk_file.m_ChunkHeaders = (ChunkHeader*)( (u8*)data + sizeof( ChunkFileHeader ) );
+    chunk_file.m_ChunkHeaders = (ChunkHeader*)( (uint8_t*)data + sizeof( ChunkFileHeader ) );
 
     return true;
 }
 
-bool Helium::ParseChunkedData( ChunkFile& chunk_file, void* data, u32 data_size, void* data_to_fixup, u32 data_to_fixup_size )
+bool Helium::ParseChunkedData( ChunkFile& chunk_file, void* data, uint32_t data_size, void* data_to_fixup, uint32_t data_to_fixup_size )
 {
     // first try to load the headers
     if ( !LoadChunkHeaders( chunk_file, data, data_size ) )
@@ -56,7 +56,7 @@ bool Helium::ParseChunkedData( ChunkFile& chunk_file, void* data, u32 data_size,
     {
         // no chunks?  then both the pointer was NULL.. 
         patch_addr = 
-            ( (u8*)chunk_file.m_ChunkHeaders + sizeof( chunk_file.m_ChunkHeaders ) );
+            ( (uint8_t*)chunk_file.m_ChunkHeaders + sizeof( chunk_file.m_ChunkHeaders ) );
     }
     else
     {
@@ -64,21 +64,21 @@ bool Helium::ParseChunkedData( ChunkFile& chunk_file, void* data, u32 data_size,
         ChunkHeader& last_header = chunk_file.m_ChunkHeaders[ chunk_file.m_FileHeader->m_ChunkCount - 1 ];
 
         patch_addr = 
-            (u8*)data + 
+            (uint8_t*)data + 
             last_header.m_Offset + 
             last_header.m_Size +
             ( ( last_header.m_Size & (chunk_file.m_FileAlignment - 1) ) != 0 ? chunk_file.m_FileAlignment - ( last_header.m_Size & (chunk_file.m_FileAlignment - 1) ) : 0 );
     }
 
     // all of our patches assume there is a full header on the data, so take that into account here
-    u32 offset_bias = sizeof ( ChunkFileHeader ) + sizeof ( ChunkHeader ) * chunk_file.m_FileHeader->m_ChunkCount;
+    uint32_t offset_bias = sizeof ( ChunkFileHeader ) + sizeof ( ChunkHeader ) * chunk_file.m_FileHeader->m_ChunkCount;
 
     // process the fixups
     ChunkFilePatches* patches = (ChunkFilePatches*)( patch_addr );
-    for ( u32 patch_index = 0; patch_index < patches->m_PatchCount; ++patch_index ) 
+    for ( uint32_t patch_index = 0; patch_index < patches->m_PatchCount; ++patch_index ) 
     {
-        HELIUM_ASSERT( (u8*)&patches[ patch_index ] >= data && (u8*)&patches->m_Patch[patch_index] < (u8*)data + data_size );
-        u32 patch_offset = patches->m_Patch[patch_index];
+        HELIUM_ASSERT( (uint8_t*)&patches[ patch_index ] >= data && (uint8_t*)&patches->m_Patch[patch_index] < (uint8_t*)data + data_size );
+        uint32_t patch_offset = patches->m_Patch[patch_index];
 
         // make sure we can apply the bias
         if ( patch_offset < offset_bias )
@@ -98,8 +98,8 @@ bool Helium::ParseChunkedData( ChunkFile& chunk_file, void* data, u32 data_size,
         }
 
         // find the correct pointer to fix
-        u32 *pointer = (u32*)((u8*)data_to_fixup + patch_offset);
-        HELIUM_ASSERT( (u8*)pointer >= data_to_fixup && (u8*)pointer < (u8*)data_to_fixup + data_to_fixup_size );
+        uint32_t *pointer = (uint32_t*)((uint8_t*)data_to_fixup + patch_offset);
+        HELIUM_ASSERT( (uint8_t*)pointer >= data_to_fixup && (uint8_t*)pointer < (uint8_t*)data_to_fixup + data_to_fixup_size );
 
         // handle the null pointer case
         if ( *pointer != 0 )
@@ -111,27 +111,27 @@ bool Helium::ParseChunkedData( ChunkFile& chunk_file, void* data, u32 data_size,
 
             // make sure it is in a valid range 
             HELIUM_ASSERT( *pointer <= data_to_fixup_size );
-            *pointer += (u32)(uintptr)(data_to_fixup);
+            *pointer += (uint32_t)(uintptr)(data_to_fixup);
         }
     }
 
     // skip past the count var
-    u8* end = ((u8*)patches) + sizeof(patches->m_PatchCount);
+    uint8_t* end = ((uint8_t*)patches) + sizeof(patches->m_PatchCount);
 
     // if we have elements in our zero sized array
     if (patches->m_PatchCount > 0)
     {
         // skip past the elements
-        end += (sizeof(i32) * patches->m_PatchCount);
+        end += (sizeof(int32_t) * patches->m_PatchCount);
     }
     else
     {
         // skip past our ghost
-        end += sizeof(i32);
+        end += sizeof(int32_t);
     }
 
     // this should only hit if we are not out of buffer to parse
-    HELIUM_ASSERT( end != (u8*)data + data_size);
+    HELIUM_ASSERT( end != (uint8_t*)data + data_size);
 
     // process the fixups
     patches = (ChunkFilePatches*)( end );
@@ -140,7 +140,7 @@ bool Helium::ParseChunkedData( ChunkFile& chunk_file, void* data, u32 data_size,
     return true;
 }   
 
-bool Helium::ParseChunkedData( ChunkFile& chunk_file, void* data, u32 data_size )
+bool Helium::ParseChunkedData( ChunkFile& chunk_file, void* data, uint32_t data_size )
 {
     // first try to load the headers
     if ( !LoadChunkHeaders( chunk_file, data, data_size ) )
@@ -149,7 +149,7 @@ bool Helium::ParseChunkedData( ChunkFile& chunk_file, void* data, u32 data_size 
     }
 
     // now figure out if there are any patches
-    u32 data_to_fixup_size = 0;
+    uint32_t data_to_fixup_size = 0;
     void *data_to_fixup = NULL;
 
     if ( chunk_file.m_FileHeader->m_ChunkCount )
@@ -158,17 +158,17 @@ bool Helium::ParseChunkedData( ChunkFile& chunk_file, void* data, u32 data_size 
         ChunkHeader& last_header  = chunk_file.m_ChunkHeaders[ chunk_file.m_FileHeader->m_ChunkCount - 1 ];
 
         data_to_fixup_size = ( last_header.m_Offset - first_header.m_Offset ) + last_header.m_Size;
-        data_to_fixup      = (u8*)data + first_header.m_Offset;
+        data_to_fixup      = (uint8_t*)data + first_header.m_Offset;
     }
 
     return ParseChunkedData( chunk_file, data, data_size, data_to_fixup, data_to_fixup_size );
 }   
 
-bool Helium::FindChunkHeader( const ChunkFile& chunk_file, ChunkHeader*& chunk_header, u32 chunk_type )
+bool Helium::FindChunkHeader( const ChunkFile& chunk_file, ChunkHeader*& chunk_header, uint32_t chunk_type )
 {
     HELIUM_ASSERT( chunk_file.m_FileHeader );
 
-    for ( u32 index = 0; index < chunk_file.m_FileHeader->m_ChunkCount; ++index )
+    for ( uint32_t index = 0; index < chunk_file.m_FileHeader->m_ChunkCount; ++index )
     {
         ChunkHeader& cheader = chunk_file.m_ChunkHeaders[index];
         if ( cheader.m_Type == chunk_type )

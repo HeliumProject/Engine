@@ -210,13 +210,13 @@ void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::ConnectData(Helium::Hy
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
-i32 SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetKeyType() const
+int32_t SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetKeyType() const
 {
     return Reflect::GetType<KeyT>();
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
-i32 SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetValueType() const
+int32_t SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetValueType() const
 {
     return Reflect::GetType<ValueT>();
 }
@@ -299,7 +299,7 @@ void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::RemoveItem(const Seria
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
-bool SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Set(const Serializer* src, u32 flags)
+bool SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Set(const Serializer* src, uint32_t flags)
 {
     const MapSerializerT* rhs = ConstObjectCast<MapSerializerT>(src);
     if (!rhs)
@@ -439,27 +439,27 @@ tistream& SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::operator<< (tistr
 
 template SimpleMapSerializer<tstring, StringSerializer, tstring, StringSerializer>;
 template SimpleMapSerializer<tstring, StringSerializer, bool, BoolSerializer>;
-template SimpleMapSerializer<tstring, StringSerializer, u32, U32Serializer>;
-template SimpleMapSerializer<tstring, StringSerializer, i32, I32Serializer>;
+template SimpleMapSerializer<tstring, StringSerializer, uint32_t, U32Serializer>;
+template SimpleMapSerializer<tstring, StringSerializer, int32_t, I32Serializer>;
 
-template SimpleMapSerializer<u32, U32Serializer, tstring, StringSerializer>;
-template SimpleMapSerializer<u32, U32Serializer, u32, U32Serializer>;
-template SimpleMapSerializer<u32, U32Serializer, i32, I32Serializer>;
-template SimpleMapSerializer<u32, U32Serializer, u64, U64Serializer>;
+template SimpleMapSerializer<uint32_t, U32Serializer, tstring, StringSerializer>;
+template SimpleMapSerializer<uint32_t, U32Serializer, uint32_t, U32Serializer>;
+template SimpleMapSerializer<uint32_t, U32Serializer, int32_t, I32Serializer>;
+template SimpleMapSerializer<uint32_t, U32Serializer, uint64_t, U64Serializer>;
 
-template SimpleMapSerializer<i32, I32Serializer, tstring, StringSerializer>;
-template SimpleMapSerializer<i32, I32Serializer, u32, U32Serializer>;
-template SimpleMapSerializer<i32, I32Serializer, i32, I32Serializer>;
-template SimpleMapSerializer<i32, I32Serializer, u64, U64Serializer>;
+template SimpleMapSerializer<int32_t, I32Serializer, tstring, StringSerializer>;
+template SimpleMapSerializer<int32_t, I32Serializer, uint32_t, U32Serializer>;
+template SimpleMapSerializer<int32_t, I32Serializer, int32_t, I32Serializer>;
+template SimpleMapSerializer<int32_t, I32Serializer, uint64_t, U64Serializer>;
 
-template SimpleMapSerializer<u64, U64Serializer, tstring, StringSerializer>;
-template SimpleMapSerializer<u64, U64Serializer, u32, U32Serializer>;
-template SimpleMapSerializer<u64, U64Serializer, u64, U64Serializer>;
-template SimpleMapSerializer<u64, U64Serializer, Math::Matrix4, Matrix4Serializer>;
+template SimpleMapSerializer<uint64_t, U64Serializer, tstring, StringSerializer>;
+template SimpleMapSerializer<uint64_t, U64Serializer, uint32_t, U32Serializer>;
+template SimpleMapSerializer<uint64_t, U64Serializer, uint64_t, U64Serializer>;
+template SimpleMapSerializer<uint64_t, U64Serializer, Math::Matrix4, Matrix4Serializer>;
 
-template SimpleMapSerializer<Helium::GUID, GUIDSerializer, u32, U32Serializer>;
+template SimpleMapSerializer<Helium::GUID, GUIDSerializer, uint32_t, U32Serializer>;
 template SimpleMapSerializer<Helium::GUID, GUIDSerializer, Math::Matrix4, Matrix4Serializer>;
-template SimpleMapSerializer<Helium::TUID, TUIDSerializer, u32, U32Serializer>;
+template SimpleMapSerializer<Helium::TUID, TUIDSerializer, uint32_t, U32Serializer>;
 template SimpleMapSerializer<Helium::TUID, TUIDSerializer, Math::Matrix4, Matrix4Serializer>;
 
 REFLECT_DEFINE_CLASS(StringStringMapSerializer);

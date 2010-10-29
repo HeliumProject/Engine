@@ -170,7 +170,7 @@ namespace Helium
             void AtomicGetType(const tstring& str, const Type** addr) const;
 
             // class lookup
-            inline const Class* GetClass(i32 id) const
+            inline const Class* GetClass(int32_t id) const
             {
                 return ReflectionCast<const Class>(GetType( id ));
             }
@@ -180,7 +180,7 @@ namespace Helium
             }
 
             // enumeration lookup
-            inline const Enumeration* GetEnumeration(i32 id) const
+            inline const Enumeration* GetEnumeration(int32_t id) const
             {
                 return ReflectionCast<const Enumeration>(GetType( id ));
             }
@@ -222,9 +222,9 @@ namespace Helium
         //
 
         template<class T>
-        inline i32 GetType()
+        inline int32_t GetType()
         {
-            static i32 cached = ReservedTypes::Invalid;
+            static int32_t cached = ReservedTypes::Invalid;
 
             if ( cached != ReservedTypes::Invalid )
             {

@@ -102,16 +102,16 @@ void BasicBuffer::DumpDebugInfo(FILE* file)
             switch(i->m_BlockType)
             {
             case BasicBufferDebugInfo::BLOCK_TYPE_BUFFER:  blockTypeStr = TXT( "Buffer" ); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_I8:      blockTypeStr = TXT( "i8" ); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_U8:      blockTypeStr = TXT( "u8" ); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_I16:     blockTypeStr = TXT( "i16" ); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_U16:     blockTypeStr = TXT( "u16" ); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_I32:     blockTypeStr = TXT( "i32" ); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_U32:     blockTypeStr = TXT( "u32" ); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_I64:     blockTypeStr = TXT( "i64" ); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_U64:     blockTypeStr = TXT( "u64" ); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_F32:     blockTypeStr = TXT( "f32" ); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_F64:     blockTypeStr = TXT( "f64" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_I8:      blockTypeStr = TXT( "int8_t" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_U8:      blockTypeStr = TXT( "uint8_t" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_I16:     blockTypeStr = TXT( "int16_t" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_U16:     blockTypeStr = TXT( "uint16_t" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_I32:     blockTypeStr = TXT( "int32_t" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_U32:     blockTypeStr = TXT( "uint32_t" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_I64:     blockTypeStr = TXT( "int64_t" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_U64:     blockTypeStr = TXT( "uint64_t" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_F32:     blockTypeStr = TXT( "float32_t" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_F64:     blockTypeStr = TXT( "float64_t" ); break;
             case BasicBufferDebugInfo::BLOCK_TYPE_RESERVE: blockTypeStr = TXT( "Reserve" ); break;
             case BasicBufferDebugInfo::BLOCK_TYPE_POINTER: blockTypeStr = TXT( "Pointer" ); break;
             case BasicBufferDebugInfo::BLOCK_TYPE_OFFSET:  blockTypeStr = TXT( "Offset" ); break;
@@ -123,31 +123,31 @@ void BasicBuffer::DumpDebugInfo(FILE* file)
             fprintf(file, "Block BufferLocation: 0x%08X\n", i->m_FileSize);
             fprintf(file, "Contents      : ");
 
-            u8* data = m_Data + i->m_FileSize;
+            uint8_t* data = m_Data + i->m_FileSize;
 
             switch(i->m_BlockType)
             {
-            case BasicBufferDebugInfo::BLOCK_TYPE_I8:      fprintf(file, "%02X\n",*((i8*)data)); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_U8:      fprintf(file, "%02X\n",*((u8*)data)); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_I16:     fprintf(file, "%04X\n",ConvertEndian( *((i16*)data),IsPlatformBigEndian())); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_U16:     fprintf(file, "%04X\n",ConvertEndian( *((u16*)data),IsPlatformBigEndian())); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_I32:     fprintf(file, "%08X\n",ConvertEndian( *((i32*)data),IsPlatformBigEndian())); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_U32:     fprintf(file, "%08X\n",ConvertEndian( *((u32*)data),IsPlatformBigEndian())); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_I64:     fprintf(file, "0x%I64x\n",ConvertEndian( *((u64*)data),IsPlatformBigEndian())); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_U64:     fprintf(file, "0x%I64x\n",ConvertEndian( *((u64*)data),IsPlatformBigEndian())); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_F32:     fprintf(file, "%.3f\n",ConvertEndian( *((f32*)data),IsPlatformBigEndian())); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_F64:     fprintf(file, "%.3f\n",ConvertEndian( *((f64*)data),IsPlatformBigEndian())); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_OFFSET:  fprintf(file, "0x%08x\n", *((u32*)data)); break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_POINTER: if (GetPlatformPtrSize() == 8) fprintf(file, "0x%I64x\n", *((u64*)data)); else fprintf(file, "0x%08x\n", *((u32*)data)); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_I8:      fprintf(file, "%02X\n",*((int8_t*)data)); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_U8:      fprintf(file, "%02X\n",*((uint8_t*)data)); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_I16:     fprintf(file, "%04X\n",ConvertEndian( *((int16_t*)data),IsPlatformBigEndian())); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_U16:     fprintf(file, "%04X\n",ConvertEndian( *((uint16_t*)data),IsPlatformBigEndian())); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_I32:     fprintf(file, "%08X\n",ConvertEndian( *((int32_t*)data),IsPlatformBigEndian())); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_U32:     fprintf(file, "%08X\n",ConvertEndian( *((uint32_t*)data),IsPlatformBigEndian())); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_I64:     fprintf(file, "0x%I64x\n",ConvertEndian( *((uint64_t*)data),IsPlatformBigEndian())); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_U64:     fprintf(file, "0x%I64x\n",ConvertEndian( *((uint64_t*)data),IsPlatformBigEndian())); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_F32:     fprintf(file, "%.3f\n",ConvertEndian( *((float32_t*)data),IsPlatformBigEndian())); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_F64:     fprintf(file, "%.3f\n",ConvertEndian( *((float64_t*)data),IsPlatformBigEndian())); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_OFFSET:  fprintf(file, "0x%08x\n", *((uint32_t*)data)); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_POINTER: if (GetPlatformPtrSize() == 8) fprintf(file, "0x%I64x\n", *((uint64_t*)data)); else fprintf(file, "0x%08x\n", *((uint32_t*)data)); break;
             case BasicBufferDebugInfo::BLOCK_TYPE_RESERVE:
                 {
                     bool handled = false;
 
                     switch (i->m_BlockSize) 
                     {
-                    case 1: handled = true; fprintf(file, "%d\n", *((u8*)data)); break;
-                    case 2: handled = true; fprintf(file, "%d\n", *((u16*)data)); break;
-                    case 4: handled = true; fprintf(file, "%d\n", *((u32*)data)); break;
+                    case 1: handled = true; fprintf(file, "%d\n", *((uint8_t*)data)); break;
+                    case 2: handled = true; fprintf(file, "%d\n", *((uint16_t*)data)); break;
+                    case 4: handled = true; fprintf(file, "%d\n", *((uint32_t*)data)); break;
                     }
 
                     if ( handled )
@@ -203,7 +203,7 @@ void BasicBuffer::DumpDebugInfo(FILE* file)
     }
 }
 
-u32 BasicBuffer::AddBuffer( const u8* buffer, u32 size, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddBuffer( const uint8_t* buffer, uint32_t size, const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO(BasicBufferDebugInfo::BLOCK_TYPE_BUFFER, size);
 
@@ -218,13 +218,13 @@ u32 BasicBuffer::AddBuffer( const u8* buffer, u32 size, const tchar* dbgStr, ...
     return ( m_Size - size );
 }
 
-u32 BasicBuffer::AddBuffer( const SmartBufferPtr& buffer, bool add_fixups )
+uint32_t BasicBuffer::AddBuffer( const SmartBufferPtr& buffer, bool add_fixups )
 {
     // platform types have to match
     HELIUM_ASSERT(buffer->GetByteOrder() == m_ByteOrder);
 
     // first bring in all the data from the incoming buffer
-    u32 return_val = AddBuffer( buffer->GetData(), buffer->GetSize() );
+    uint32_t return_val = AddBuffer( buffer->GetData(), buffer->GetSize() );
 
     if (add_fixups)
     {
@@ -235,12 +235,12 @@ u32 BasicBuffer::AddBuffer( const SmartBufferPtr& buffer, bool add_fixups )
     return return_val;
 }
 
-u32 BasicBuffer::AddFile( const tstring& filename )
+uint32_t BasicBuffer::AddFile( const tstring& filename )
 {
     return AddFile( filename.c_str() );
 }
 
-u32 BasicBuffer::AddFile( const tchar* filename )
+uint32_t BasicBuffer::AddFile( const tchar* filename )
 {
     FILE *pfile = _tfopen( filename, TXT( "rb" ) );
     if ( pfile == NULL )
@@ -268,89 +268,89 @@ u32 BasicBuffer::AddFile( const tchar* filename )
 
     fclose(pfile);
 
-    m_Size += (u32)file_read;
-    return m_Size - (u32)file_read;
+    m_Size += (uint32_t)file_read;
+    return m_Size - (uint32_t)file_read;
 }
 
-u32 BasicBuffer::AddI8( i8 val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddI8( int8_t val, const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_I8, 1);
 
-    return AddBuffer( (u8*)&val, sizeof( i8 ) );
+    return AddBuffer( (uint8_t*)&val, sizeof( int8_t ) );
 }
 
-u32 BasicBuffer::AddU8( u8 val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddU8( uint8_t val, const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_U8, 1);
 
-    return AddBuffer( (u8*)&val, sizeof( u8 ) );
+    return AddBuffer( (uint8_t*)&val, sizeof( uint8_t ) );
 }
 
-u32 BasicBuffer::AddU16( u16 val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddU16( uint16_t val, const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_U16, 2);
 
     val = ConvertEndian(val,IsPlatformBigEndian());
-    return AddBuffer( (u8*)&val, sizeof( u16 ) );
+    return AddBuffer( (uint8_t*)&val, sizeof( uint16_t ) );
 }
 
-u32 BasicBuffer::AddI16( i16 val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddI16( int16_t val, const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_I16, 2);
 
     val = ConvertEndian(val,IsPlatformBigEndian());
-    return AddBuffer( (u8*)&val, sizeof( i16 ) );
+    return AddBuffer( (uint8_t*)&val, sizeof( int16_t ) );
 }
 
-u32 BasicBuffer::AddI32( i32 val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddI32( int32_t val, const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_I32, 4);
 
     val = ConvertEndian(val,IsPlatformBigEndian());
-    return AddBuffer( (u8*)&val, sizeof( i32 ) );
+    return AddBuffer( (uint8_t*)&val, sizeof( int32_t ) );
 }
 
-u32 BasicBuffer::AddU32( u32 val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddU32( uint32_t val, const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_U32, 4);
 
     val = ConvertEndian(val,IsPlatformBigEndian());
-    return AddBuffer( (u8*)&val, sizeof( u32 ) );
+    return AddBuffer( (uint8_t*)&val, sizeof( uint32_t ) );
 }
 
-u32 BasicBuffer::AddI64( i64 val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddI64( int64_t val, const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_I64, 8);
 
     val = ConvertEndian(val,IsPlatformBigEndian());
-    return AddBuffer( (u8*)&val, sizeof( i64 ) );
+    return AddBuffer( (uint8_t*)&val, sizeof( int64_t ) );
 }
 
-u32 BasicBuffer::AddU64( u64 val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddU64( uint64_t val, const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_U64, 8);
 
     val = ConvertEndian(val,IsPlatformBigEndian());
-    return AddBuffer( (u8*)&val, sizeof( u64 ) );
+    return AddBuffer( (uint8_t*)&val, sizeof( uint64_t ) );
 }
 
-u32 BasicBuffer::AddF16( f32 val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddF16( float32_t val, const tchar* dbgStr, ... )
 {
-    i16 half = Math::FloatToHalf( val );
+    int16_t half = Math::FloatToHalf( val );
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_I16, 2);
 
     half = ConvertEndian(half,IsPlatformBigEndian());
-    return AddBuffer( (u8*)&half, sizeof( i16 ) );
+    return AddBuffer( (uint8_t*)&half, sizeof( int16_t ) );
 }
 
-u32 BasicBuffer::AddF32( f32 val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddF32( float32_t val, const tchar* dbgStr, ... )
 {
-    u32 i = *(reinterpret_cast<u32 *>(&val));
+    uint32_t i = *(reinterpret_cast<uint32_t *>(&val));
 
     // handle case for "negative" zero..  this was
     // causing diffs to vary between reflect/non-xml
     //
-    // IEEE format for a f32 is this:
+    // IEEE format for a float32_t is this:
     // Sign   Exponent  Fraction
     //    0   00000000  00000000000000000000000
     //Bit 31 [30 -- 23] [22 -- 0]
@@ -364,14 +364,14 @@ u32 BasicBuffer::AddF32( f32 val, const tchar* dbgStr, ... )
     return AddU32( i );
 }
 
-u32 BasicBuffer::AddF64( f64 val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddF64( float64_t val, const tchar* dbgStr, ... )
 {
-    u64 i = *(reinterpret_cast<u64 *>(&val));
+    uint64_t i = *(reinterpret_cast<uint64_t *>(&val));
 
     // handle case for "negative" zero..  this was
     // causing diffs to vary between reflect/non-xml
     //
-    // IEEE format for a f32 is this:
+    // IEEE format for a float32_t is this:
     // Sign   Exponent  Fraction
     //Bit 64 [63 -- 56] [55 -- 0]
     if ( (i & 0x7FFFFFFFFFFFFFFF) == 0x0 )
@@ -384,95 +384,95 @@ u32 BasicBuffer::AddF64( f64 val, const tchar* dbgStr, ... )
     return AddU64( i );
 }
 
-u32 BasicBuffer::AddVector3( const Math::Vector3& v, const tchar* debugStr )
+uint32_t BasicBuffer::AddVector3( const Math::Vector3& v, const tchar* debugStr )
 {
-    u32 ret = AddF32(v.x, debugStr);
+    uint32_t ret = AddF32(v.x, debugStr);
     AddF32(v.y, debugStr);
     AddF32(v.z, debugStr);
     return ret;
 }
 
-u32 BasicBuffer::AddVector4( const Math::Vector4& v, const tchar* debugStr )
+uint32_t BasicBuffer::AddVector4( const Math::Vector4& v, const tchar* debugStr )
 {
-    u32 ret = AddF32(v.x, debugStr);
+    uint32_t ret = AddF32(v.x, debugStr);
     AddF32(v.y, debugStr);
     AddF32(v.z, debugStr);
     AddF32(v.w, debugStr);
     return ret;
 }
 
-u32 BasicBuffer::AddVector4( const Math::Vector3& v, f32 w, const tchar* debugStr )
+uint32_t BasicBuffer::AddVector4( const Math::Vector3& v, float32_t w, const tchar* debugStr )
 {
-    u32 ret = AddF32(v.x, debugStr);
+    uint32_t ret = AddF32(v.x, debugStr);
     AddF32(v.y, debugStr);
     AddF32(v.z, debugStr);
     AddF32(w, debugStr);
     return ret;
 }
 
-u32 BasicBuffer::AddVector4( f32 x, f32 y, f32 z, f32 w, const tchar* debugStr )
+uint32_t BasicBuffer::AddVector4( float32_t x, float32_t y, float32_t z, float32_t w, const tchar* debugStr )
 {
-    u32 ret = AddF32(x, debugStr);
+    uint32_t ret = AddF32(x, debugStr);
     AddF32(y, debugStr);
     AddF32(z, debugStr);
     AddF32(w, debugStr);
     return ret;
 }
 
-void BasicBuffer::AddAtLocI8( i8 val, const BufferLocation& destination )
+void BasicBuffer::AddAtLocI8( int8_t val, const BufferLocation& destination )
 {
-    Write( destination, (u8*)&val, sizeof( i8 ) );
+    Write( destination, (uint8_t*)&val, sizeof( int8_t ) );
 }
 
-void BasicBuffer::AddAtLocU8( u8 val, const BufferLocation& destination )
+void BasicBuffer::AddAtLocU8( uint8_t val, const BufferLocation& destination )
 {
-    Write( destination, (u8*)&val, sizeof( u8 ) );
+    Write( destination, (uint8_t*)&val, sizeof( uint8_t ) );
 }
 
-void BasicBuffer::AddAtLocI16( i16 val, const BufferLocation& destination )
+void BasicBuffer::AddAtLocI16( int16_t val, const BufferLocation& destination )
 {
     val = ConvertEndian(val,IsPlatformBigEndian());
-    Write( destination, (u8*)&val, sizeof( i16 ) );
+    Write( destination, (uint8_t*)&val, sizeof( int16_t ) );
 }
 
-void BasicBuffer::AddAtLocU16( u16 val, const BufferLocation& destination )
+void BasicBuffer::AddAtLocU16( uint16_t val, const BufferLocation& destination )
 {
     val = ConvertEndian(val,IsPlatformBigEndian());
-    Write( destination, (u8*)&val, sizeof( u16 ) );
+    Write( destination, (uint8_t*)&val, sizeof( uint16_t ) );
 }
 
-void BasicBuffer::AddAtLocI32( i32 val, const BufferLocation& destination )
+void BasicBuffer::AddAtLocI32( int32_t val, const BufferLocation& destination )
 {
     val = ConvertEndian(val,IsPlatformBigEndian());
-    Write( destination, (u8*)&val, sizeof( i32 ) );
+    Write( destination, (uint8_t*)&val, sizeof( int32_t ) );
 }
 
-void BasicBuffer::AddAtLocU32( u32 val, const BufferLocation& destination )
+void BasicBuffer::AddAtLocU32( uint32_t val, const BufferLocation& destination )
 {
     val = ConvertEndian(val,IsPlatformBigEndian());
-    Write( destination, (u8*)&val, sizeof( u32 ) );
+    Write( destination, (uint8_t*)&val, sizeof( uint32_t ) );
 }
 
-void BasicBuffer::AddAtLocI64( i64 val, const BufferLocation& destination )
+void BasicBuffer::AddAtLocI64( int64_t val, const BufferLocation& destination )
 {
     val = ConvertEndian(val,IsPlatformBigEndian());
-    Write( destination, (u8*)&val, sizeof( i64 ) );
+    Write( destination, (uint8_t*)&val, sizeof( int64_t ) );
 }
 
-void BasicBuffer::AddAtLocU64( u64 val, const BufferLocation& destination )
+void BasicBuffer::AddAtLocU64( uint64_t val, const BufferLocation& destination )
 {
     val = ConvertEndian(val,IsPlatformBigEndian());
-    Write( destination, (u8*)&val, sizeof( u64 ) );
+    Write( destination, (uint8_t*)&val, sizeof( uint64_t ) );
 }
 
-void BasicBuffer::AddAtLocF32( f32 val, const BufferLocation& destination )
+void BasicBuffer::AddAtLocF32( float32_t val, const BufferLocation& destination )
 {
-    u32 i = *(reinterpret_cast<u32 *>(&val));
+    uint32_t i = *(reinterpret_cast<uint32_t *>(&val));
 
     // handle case for "negative" zero..  this was
     // causing diffs to vary between reflect/non-xml
     //
-    // IEEE format for a f32 is this:
+    // IEEE format for a float32_t is this:
     // Sign   Exponent  Fraction
     //    0   00000000  00000000000000000000000
     //Bit 31 [30 -- 23] [22 -- 0]
@@ -484,14 +484,14 @@ void BasicBuffer::AddAtLocF32( f32 val, const BufferLocation& destination )
     AddAtLocU32( i, destination );
 }
 
-void BasicBuffer::AddAtLocF64( f64 val, const BufferLocation& destination )
+void BasicBuffer::AddAtLocF64( float64_t val, const BufferLocation& destination )
 {
-    u64 i = *(reinterpret_cast<u64 *>(&val));
+    uint64_t i = *(reinterpret_cast<uint64_t *>(&val));
 
     // handle case for "negative" zero..  this was
     // causing diffs to vary between reflect/non-xml
     //
-    // IEEE format for a f32 is this:
+    // IEEE format for a float32_t is this:
     // Sign   Exponent  Fraction
     //Bit 64 [63 -- 56] [55 -- 0]
     if ( (i & 0x7FFFFFFFFFFFFFFF) == 0x0 )
@@ -502,30 +502,30 @@ void BasicBuffer::AddAtLocF64( f64 val, const BufferLocation& destination )
     AddAtLocU64( i, destination );
 }
 
-void BasicBuffer::AddPad( u32 pad_length )
+void BasicBuffer::AddPad( uint32_t pad_length )
 {
     if ( (pad_length + m_Size) > m_Capacity )
     {
         GrowBy( pad_length );
     }
 
-    for ( u32 i = 0; i < pad_length; ++i )
+    for ( uint32_t i = 0; i < pad_length; ++i )
     {
         AddU8( 0 );
     }
 }
 
-void BasicBuffer::PadToArb( u32 align_size )
+void BasicBuffer::PadToArb( uint32_t align_size )
 {
-    i32 pad_length = (i32)align_size - ( m_Size % align_size );
+    int32_t pad_length = (int32_t)align_size - ( m_Size % align_size );
     if ( pad_length != align_size )
     {
         HELIUM_ASSERT( pad_length > 0 );
-        AddPad( (u32)pad_length );
+        AddPad( (uint32_t)pad_length );
     }
 }
 
-void BasicBuffer::SetCapacity(u32 capacity)
+void BasicBuffer::SetCapacity(uint32_t capacity)
 {
     if (capacity > m_Capacity)
     {
@@ -533,7 +533,7 @@ void BasicBuffer::SetCapacity(u32 capacity)
     }  
 }
 
-BufferLocation BasicBuffer::Reserve(u32 size, const tchar* dbgStr, ...)
+BufferLocation BasicBuffer::Reserve(uint32_t size, const tchar* dbgStr, ...)
 {
     ADD_DEBUG_INFO(BasicBufferDebugInfo::BLOCK_TYPE_RESERVE, size);
 
@@ -551,7 +551,7 @@ BufferLocation BasicBuffer::Reserve(u32 size, const tchar* dbgStr, ...)
     return return_val;
 }
 
-void BasicBuffer::Reserve(BufferLocation& loc, u32 size, const tchar* dbgStr, ...)
+void BasicBuffer::Reserve(BufferLocation& loc, uint32_t size, const tchar* dbgStr, ...)
 {
 #if BASIC_BUFFER_DEBUG_INFO
     {
@@ -569,7 +569,7 @@ void BasicBuffer::Reserve(BufferLocation& loc, u32 size, const tchar* dbgStr, ..
     loc = Reserve(size, dbgStr);
 }
 
-BufferLocation BasicBuffer::ReservePointer(u32 size, const tchar* dbgStr, ... )
+BufferLocation BasicBuffer::ReservePointer(uint32_t size, const tchar* dbgStr, ... )
 {
     if (size==0)
     {
@@ -587,7 +587,7 @@ BufferLocation BasicBuffer::ReservePointer(u32 size, const tchar* dbgStr, ... )
     return Reserve( size );
 }
 
-void BasicBuffer::ReservePointer(BufferLocation& loc, u32 size, const tchar* dbgStr, ... )
+void BasicBuffer::ReservePointer(BufferLocation& loc, uint32_t size, const tchar* dbgStr, ... )
 {
 #if BASIC_BUFFER_DEBUG_INFO
     {

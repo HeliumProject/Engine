@@ -12,7 +12,7 @@ namespace Helium
         private:
             IDirect3DDevice9* m_Device;
             ID3DXFont* m_Font;
-            u64 m_Previous;
+            uint64_t m_Previous;
 
         public:
 
@@ -20,45 +20,45 @@ namespace Helium
             // Render
             //
 
-            u32 m_FrameNumber;
-            u32 m_FrameCount;
-            u32 m_FramesPerSecondResult;
-            u32 m_FrameRateResult;
+            uint32_t m_FrameNumber;
+            uint32_t m_FrameCount;
+            uint32_t m_FramesPerSecondResult;
+            uint32_t m_FrameRateResult;
 
-            f32 m_RenderTimeResult;
-            f32 m_RenderTime;
+            float32_t m_RenderTimeResult;
+            float32_t m_RenderTime;
 
-            f32 m_RenderWalkTimeResult;
-            f32 m_RenderWalkTime;
+            float32_t m_RenderWalkTimeResult;
+            float32_t m_RenderWalkTime;
 
-            f32 m_RenderSortTimeResult;
-            f32 m_RenderSortTime;
+            float32_t m_RenderSortTimeResult;
+            float32_t m_RenderSortTime;
 
-            f32 m_RenderCompareTimeResult;
-            f32 m_RenderCompareTime;
+            float32_t m_RenderCompareTimeResult;
+            float32_t m_RenderCompareTime;
 
-            f32 m_RenderDrawTimeResult;
-            f32 m_RenderDrawTime;
+            float32_t m_RenderDrawTimeResult;
+            float32_t m_RenderDrawTime;
 
-            u32 m_EntryCountResult;
-            u32 m_EntryCount;
+            uint32_t m_EntryCountResult;
+            uint32_t m_EntryCount;
 
-            u32 m_TriangleCountResult;
-            u32 m_TriangleCount;
+            uint32_t m_TriangleCountResult;
+            uint32_t m_TriangleCount;
 
-            u32 m_LineCountResult;
-            u32 m_LineCount;
+            uint32_t m_LineCountResult;
+            uint32_t m_LineCount;
 
 
             //
             // Evaluate
             //
 
-            f32 m_EvaluateTimeResult;
-            f32 m_EvaluateTime;
+            float32_t m_EvaluateTimeResult;
+            float32_t m_EvaluateTime;
 
-            i32 m_NodeCountResult;
-            i32 m_NodeCount;
+            int32_t m_NodeCountResult;
+            int32_t m_NodeCount;
 
         public:
             Statistics(IDirect3DDevice9* device);

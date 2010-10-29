@@ -182,7 +182,7 @@ namespace Helium
             virtual bool SetComponent( const Component::ComponentPtr& component, bool validate = true, tstring* error = NULL ) HELIUM_OVERRIDE;
 
             // remove attribute from a slot
-            virtual bool RemoveComponent( i32 typeID ) HELIUM_OVERRIDE;
+            virtual bool RemoveComponent( int32_t typeID ) HELIUM_OVERRIDE;
 
         public:
 

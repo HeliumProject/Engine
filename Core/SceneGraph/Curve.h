@@ -66,7 +66,7 @@ namespace Helium
             Curve();
             ~Curve();
 
-            virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
+            virtual int32_t GetImageIndex() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
 
             virtual void Initialize(Scene* scene) HELIUM_OVERRIDE;
@@ -80,8 +80,8 @@ namespace Helium
             void SetClosed( bool value );
 
             // Curve resolution
-            u32 GetResolution() const;
-            void SetResolution( u32 value );
+            uint32_t GetResolution() const;
+            void SetResolution( uint32_t value );
 
             // Control point labeling
             int GetControlPointLabel() const;
@@ -91,35 +91,35 @@ namespace Helium
             int ClosestControlPoint( PickVisitor* pick );
 
             // the two closest control points
-            bool ClosestControlPoints(PickVisitor* pick, std::pair<u32, u32>& result);
+            bool ClosestControlPoints(PickVisitor* pick, std::pair<uint32_t, uint32_t>& result);
 
             // the closest point on the computed curve
-            i32 ClosestPoint( PickVisitor* pick );
+            int32_t ClosestPoint( PickVisitor* pick );
 
             // the closest point on the computed curve to the provided point
-            i32 ClosestPoint(Math::Vector3& pos);
+            int32_t ClosestPoint(Math::Vector3& pos);
 
             // the number of control points the determine the computed curve
-            u32 GetNumberControlPoints() const;
+            uint32_t GetNumberControlPoints() const;
 
             // get control point by index
-            CurveControlPoint* GetControlPointByIndex( u32 index );
+            CurveControlPoint* GetControlPointByIndex( uint32_t index );
 
             // linear seach for the index of a particular point
-            i32 GetIndexForControlPoint( CurveControlPoint* pc );
+            int32_t GetIndexForControlPoint( CurveControlPoint* pc );
 
             // insert new control point
-            Undo::CommandPtr InsertControlPointAtIndex( u32 index, CurveControlPoint* pc );
+            Undo::CommandPtr InsertControlPointAtIndex( uint32_t index, CurveControlPoint* pc );
 
             // remove existing control point
-            Undo::CommandPtr RemoveControlPointAtIndex( u32 index );
+            Undo::CommandPtr RemoveControlPointAtIndex( uint32_t index );
 
             // reverse curve direction
             Undo::CommandPtr ReverseControlPoints();
 
             void ProjectPointOnCurve( const Math::Vector3& point, Math::Vector3& projectedPoint ) const;
-            f32 DistanceSqrToCurve( const Math::Vector3& point ) const;
-            f32 DistanceToCurve( const Math::Vector3& point ) const;
+            float32_t DistanceSqrToCurve( const Math::Vector3& point ) const;
+            float32_t DistanceToCurve( const Math::Vector3& point ) const;
 
             //
             // Resources
@@ -137,7 +137,7 @@ namespace Helium
             virtual Undo::CommandPtr CenterTransform() HELIUM_OVERRIDE;
 
             virtual void Evaluate( GraphDirection direction ) HELIUM_OVERRIDE;
-            f32 CalculateCurveLength() const;
+            float32_t CalculateCurveLength() const;
 
             virtual void Render( RenderVisitor* render ) HELIUM_OVERRIDE;
             static void Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
@@ -159,7 +159,7 @@ namespace Helium
             // Reflected
             bool                    m_Closed;               // Is the curve closed?
             CurveType               m_Type;                 // The degree of the curve basis function
-            u32                     m_Resolution;           // The resolution of the points to compute
+            uint32_t                     m_Resolution;           // The resolution of the points to compute
             ControlPointLabel       m_ControlPointLabel;    // How to display labels for control points
             Math::V_Vector3         m_Points;               // The 3D locations of the computed curve points
 

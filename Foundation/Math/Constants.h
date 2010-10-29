@@ -55,37 +55,37 @@ namespace Helium
         // Constants
         //
 
-        const f32 ValueNearZero = 1e-20f;
-        const f32 DivisorNearZero = 1e-15f;//(0.00005f);
-        const f32 AngleNearZero = 1e-7f;
+        const float32_t ValueNearZero = 1e-20f;
+        const float32_t DivisorNearZero = 1e-15f;//(0.00005f);
+        const float32_t AngleNearZero = 1e-7f;
 
-        const f32 TwoPi = (6.283185307179586476925286766559f);
-        const f32 Pi = (3.141592653589793238462643383279f);
-        const f32 HalfPi = (1.570796326794896619231321691639f);
+        const float32_t TwoPi = (6.283185307179586476925286766559f);
+        const float32_t Pi = (3.141592653589793238462643383279f);
+        const float32_t HalfPi = (1.570796326794896619231321691639f);
 
-        const f32 DegToRad = Pi / 180.0f;
-        const f32 RadToDeg = 180.0f / Pi;
+        const float32_t DegToRad = Pi / 180.0f;
+        const float32_t RadToDeg = 180.0f / Pi;
 
-        const f32 CentimetersToMeters = 0.01f;
-        const f32 MetersToCentimeters = 100.0f;
+        const float32_t CentimetersToMeters = 0.01f;
+        const float32_t MetersToCentimeters = 100.0f;
 
-        const f32 CriticalDotProduct = 0.98f;
-        const f32 PointOnPlaneError = 0.00001f;
-        const f32 LinearIntersectionError = 0.05f;
+        const float32_t CriticalDotProduct = 0.98f;
+        const float32_t PointOnPlaneError = 0.00001f;
+        const float32_t LinearIntersectionError = 0.05f;
 
-        const i64 BigInt = 0x40000000;
-        const f32 BigFloat = 1000000000000.0f;
-        const f64 BigDouble = 1000000000000.0;
+        const int64_t BigInt = 0x40000000;
+        const float32_t BigFloat = 1000000000000.0f;
+        const float64_t BigDouble = 1000000000000.0;
 
         //
         // from http://en.wikipedia.org/wiki/Luminance_(relative)
         // these luminance weights assume the input color is linearly encoded
         //
-        const f32 LuminanceR = 0.2126f;
-        const f32 LuminanceG = 0.7152f;
-        const f32 LuminanceB = 0.0722f;
-        const f32 InverseLuminanceR = (1.0f / LuminanceR);
-        const f32 InverseLuminanceG = (1.0f / LuminanceG);
-        const f32 InverseLuminanceB = (1.0f / LuminanceB);
+        const float32_t LuminanceR = 0.2126f;
+        const float32_t LuminanceG = 0.7152f;
+        const float32_t LuminanceB = 0.0722f;
+        const float32_t InverseLuminanceR = (1.0f / LuminanceR);
+        const float32_t InverseLuminanceG = (1.0f / LuminanceG);
+        const float32_t InverseLuminanceB = (1.0f / LuminanceB);
     }
 }

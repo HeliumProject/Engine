@@ -86,40 +86,40 @@ namespace Helium
         //
 
         template<>
-        inline void Extract(tistream& stream, u8* val)
+        inline void Extract(tistream& stream, uint8_t* val)
         {
-            u16 tmp;
+            uint16_t tmp;
             stream >> tmp;
 
             if (!stream.fail())
             {
-                *val = (u8)tmp;
+                *val = (uint8_t)tmp;
             }
         }
 
         template<>
-        inline void Insert(tostream& stream, const u8* val)
+        inline void Insert(tostream& stream, const uint8_t* val)
         {
-            u16 tmp = *val;
+            uint16_t tmp = *val;
             stream << tmp;
         }
 
         template<>
-        inline void Extract(tistream& stream, i8* val)
+        inline void Extract(tistream& stream, int8_t* val)
         {
-            i16 tmp;
+            int16_t tmp;
             stream >> tmp;
 
             if (!stream.fail())
             {
-                *val = (u8)tmp;
+                *val = (uint8_t)tmp;
             }
         }
 
         template<>
-        inline void Insert(tostream& stream, const i8* val)
+        inline void Insert(tostream& stream, const int8_t* val)
         {
-            i16 tmp = *val;
+            int16_t tmp = *val;
             stream << tmp;
         }
 
@@ -128,16 +128,16 @@ namespace Helium
         //
 
         template<>
-        inline void Insert(tostream& stream, const f32* val)
+        inline void Insert(tostream& stream, const float32_t* val)
         {
-            f32 tmp = *val;
+            float32_t tmp = *val;
             stream << std::fixed << std::setprecision(6) << tmp;
         }
 
         template<>
-        inline void Insert(tostream& stream, const f64* val)
+        inline void Insert(tostream& stream, const float64_t* val)
         {
-            f64 tmp = *val;
+            float64_t tmp = *val;
             stream << std::fixed << std::setprecision(6) << tmp;
         }
 

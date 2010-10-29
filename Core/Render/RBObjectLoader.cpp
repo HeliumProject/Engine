@@ -22,7 +22,7 @@ RBObjectLoader::~RBObjectLoader()
 
 }
 
-u32 RBObjectLoader::ParseFile( const tchar* filename, bool winding )
+uint32_t RBObjectLoader::ParseFile( const tchar* filename, bool winding )
 {
     std::vector< SceneGraph::Mesh* > meshes;
 
@@ -45,20 +45,20 @@ u32 RBObjectLoader::ParseFile( const tchar* filename, bool winding )
     scene.GetAll< Mesh >( meshes );
 #endif
 
-    std::map<u64,u32> frag_finder;
+    std::map<uint64_t,uint32_t> frag_finder;
 
     m_parse_warnings = 0;
 
-    u32 mesh_count = (u32)meshes.size();
-    for ( u32 m=0;m<mesh_count;m++)
+    uint32_t mesh_count = (uint32_t)meshes.size();
+    for ( uint32_t m=0;m<mesh_count;m++)
     {
         SceneGraph::Mesh* mesh = meshes[m];
 
-        u32 master_base_position = (u32)m_positions.size()/m_posSize;
-        u32 master_base_normal = (u32)m_normals.size()/3;
-        u32 master_base_uv = (u32)m_texcoords.size()/m_tcSize;
-        u32 master_base_color = (u32)m_colors.size()/4;
-        u32 master_base_tangent = (u32)m_sTangents.size()/4;
+        uint32_t master_base_position = (uint32_t)m_positions.size()/m_posSize;
+        uint32_t master_base_normal = (uint32_t)m_normals.size()/3;
+        uint32_t master_base_uv = (uint32_t)m_texcoords.size()/m_tcSize;
+        uint32_t master_base_color = (uint32_t)m_colors.size()/4;
+        uint32_t master_base_tangent = (uint32_t)m_sTangents.size()/4;
 
         // for a mesh such as this all the master base values should be the same
 
@@ -107,7 +107,7 @@ u32 RBObjectLoader::ParseFile( const tchar* filename, bool winding )
         // exists the use the existing fragment for that shader.
         for ( V_TUID::const_iterator shaderItr = mesh->m_ShaderIDs.begin(), shaderEnd = mesh->m_ShaderIDs.end(); shaderItr != shaderEnd; ++shaderItr )
         {
-            std::map<u64,u32>::iterator i = frag_finder.find((u64) (*shaderItr));
+            std::map<uint64_t,uint32_t>::iterator i = frag_finder.find((uint64_t) (*shaderItr));
 
             if (i == frag_finder.end())
             {
@@ -128,17 +128,17 @@ u32 RBObjectLoader::ParseFile( const tchar* filename, bool winding )
                 }
 
                 m_fragments.push_back( new_frag );
-                frag_finder[(u64) (*shaderItr)] = (u32)m_fragments.size()-1;
+                frag_finder[(uint64_t) (*shaderItr)] = (uint32_t)m_fragments.size()-1;
             }
         }
 
         // handle faces
-        u32 faces = (u32)mesh->m_TriangleVertexIndices.size()/3;    
-        for ( u32 f=0;f<faces;f++ )
+        uint32_t faces = (uint32_t)mesh->m_TriangleVertexIndices.size()/3;    
+        for ( uint32_t f=0;f<faces;f++ )
         {
-            u32 shader_idx = mesh->m_ShaderIndices[f];
-            u64 shader_turd = mesh->m_ShaderIDs[shader_idx];
-            std::map<u64,u32>::iterator frag_idx = frag_finder.find(shader_turd);
+            uint32_t shader_idx = mesh->m_ShaderIndices[f];
+            uint64_t shader_turd = mesh->m_ShaderIDs[shader_idx];
+            std::map<uint64_t,uint32_t>::iterator frag_idx = frag_finder.find(shader_turd);
 
             // there is no way we should not be able to find the fragment, we just added them all above
             HELIUM_ASSERT(frag_idx!=frag_finder.end());

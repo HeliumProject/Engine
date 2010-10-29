@@ -153,7 +153,7 @@ void Connection::SetState(ConnectionState state)
     }
 }
 
-Message* Connection::CreateMessage(u32 id, u32 size, i32 trans, u32 type)
+Message* Connection::CreateMessage(uint32_t id, uint32_t size, int32_t trans, uint32_t type)
 {
     HELIUM_ASSERT(m_NextTransaction != 0);
 
@@ -185,7 +185,7 @@ Message* Connection::CreateMessage(u32 id, u32 size, i32 trans, u32 type)
     return msg;
 }
 
-bool Connection::CreatedMessage(i32 transaction)
+bool Connection::CreatedMessage(int32_t transaction)
 {
     if (m_Server)
     {
@@ -446,7 +446,7 @@ void Connection::ProcessProtocolMessage( Message* msg )
     }
 }
 
-void Connection::SendProtocolMessage( u32 message )
+void Connection::SendProtocolMessage( uint32_t message )
 {
     Message* msg = CreateMessage( ProtocolMessageIDs::Disconnect, 0, 0, message );
     if (msg)
@@ -458,7 +458,7 @@ void Connection::SendProtocolMessage( u32 message )
 
 bool Connection::ReadHostType()
 {
-    u8 byte;
+    uint8_t byte;
 
     if (!Read(&byte, sizeof(byte)))
     {
@@ -476,7 +476,7 @@ bool Connection::ReadHostType()
 
 bool Connection::WriteHostType()
 {
-    u8 byte = (u8)Helium::Platform::GetType();
+    uint8_t byte = (uint8_t)Helium::Platform::GetType();
     if (!Write(&byte, sizeof(byte)))
     {
         Localization::Statement stmt( "Helium::IPC::Connection", "RemotePlatformTypeWriteFailed" );

@@ -273,7 +273,7 @@ bool AssetClass::SetComponent( const Component::ComponentPtr& component, bool va
     return __super::SetComponent( component, validate, error );
 }
 
-bool AssetClass::RemoveComponent( i32 typeID )
+bool AssetClass::RemoveComponent( int32_t typeID )
 {
     return __super::RemoveComponent( typeID );
 }

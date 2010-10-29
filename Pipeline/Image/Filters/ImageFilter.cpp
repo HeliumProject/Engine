@@ -254,7 +254,7 @@ void FillImageFilter::accumulateSamples(int basex, int basey, int yoffset, int a
       {
         Math::Vector4 color;
 
-        input->Read((u32) currentx, (u32) currenty, color.x, color.y, color.z, color.w);
+        input->Read((uint32_t) currentx, (uint32_t) currenty, color.x, color.y, color.z, color.w);
         if (!isNullPixel(color))
         {
           accumcolor += color;

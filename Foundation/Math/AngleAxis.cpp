@@ -48,9 +48,9 @@ AngleAxis& AngleAxis::operator=(const Quaternion& v)
     Quaternion aQuat(v);
     aQuat.Normalize();
 
-    f32 cos_a = aQuat.values.w;
+    float32_t cos_a = aQuat.values.w;
     angle = (acos(cos_a) * 2.0f);
-    f32 sin_a = sqrt(1.0f - cos_a * cos_a);
+    float32_t sin_a = sqrt(1.0f - cos_a * cos_a);
 
     if (fabs(sin_a) < 0.0005f) sin_a = 1.0f;
 

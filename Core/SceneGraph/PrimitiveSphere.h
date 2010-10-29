@@ -9,8 +9,8 @@ namespace Helium
         class PrimitiveSphere : public SceneGraph::PrimitiveRadius
         {
         private:
-            mutable i32 m_WireVertCount;
-            mutable i32 m_PolyVertCount;
+            mutable int32_t m_WireVertCount;
+            mutable int32_t m_PolyVertCount;
 
         public:
             int m_LengthSteps;

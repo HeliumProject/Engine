@@ -41,7 +41,7 @@ namespace Helium
             SettingsManager* m_SettingsManager;
 
             // Properties
-            f32 m_Size;
+            float32_t m_Size;
             ManipulatorSpace m_Space;
             TranslateSnappingMode m_SnappingMode;
             float m_Distance;
@@ -92,8 +92,8 @@ namespace Helium
 
             virtual void CreateProperties() HELIUM_OVERRIDE;
 
-            f32 GetSize() const;
-            void SetSize( f32 size );
+            float32_t GetSize() const;
+            void SetSize( float32_t size );
 
             int GetSpace() const;
             void SetSpace(int space);

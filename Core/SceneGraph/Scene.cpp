@@ -172,7 +172,7 @@ bool Scene::Load( const Helium::Path& path )
     return Import( path, ImportActions::Load, NULL ).ReferencesObject();
 }
 
-Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u32 importFlags, SceneGraph::HierarchyNode* importRoot, i32 importReflectType )
+Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, uint32_t importFlags, SceneGraph::HierarchyNode* importRoot, int32_t importReflectType )
 {
     CORE_SCOPE_TIMER( ( "%s", path.c_str() ) );
 
@@ -241,7 +241,7 @@ Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u
     return command;
 }
 
-Undo::CommandPtr Scene::ImportXML( const tstring& xml, u32 importFlags, SceneGraph::HierarchyNode* importRoot )
+Undo::CommandPtr Scene::ImportXML( const tstring& xml, uint32_t importFlags, SceneGraph::HierarchyNode* importRoot )
 {
     CORE_SCOPE_TIMER( ("") );
 
@@ -338,11 +338,11 @@ void Scene::Reset()
     }
 }
 
-Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAction action, u32 importFlags, i32 importReflectType )
+Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAction action, uint32_t importFlags, int32_t importReflectType )
 {
     CORE_SCOPE_TIMER( ("") );
 
-    u64 startTimer = Helium::TimerGetClock();
+    uint64_t startTimer = Helium::TimerGetClock();
 
     // 
     // Initialize
@@ -533,7 +533,7 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
     return command;
 }
 
-Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, u32 importFlags, i32 importReflectType )
+Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, int32_t importReflectType )
 {
     CORE_SCOPE_TIMER( ("ImportSceneNode: %s", element->GetClass()->m_ShortName.c_str()) );
 
@@ -864,7 +864,7 @@ bool Scene::Save()
 
 bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
 {
-    u64 startTimer = Helium::TimerGetClock();
+    uint64_t startTimer = Helium::TimerGetClock();
 
     bool result = false;
 
@@ -925,7 +925,7 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
 
     bool result = false;
 
-    u64 startTimer = Helium::TimerGetClock();
+    uint64_t startTimer = Helium::TimerGetClock();
 
     e_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Normal, SceneContexts::Saving ) );
 
@@ -1607,7 +1607,7 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
     // Map engine internal type to luna internal type
     //
 
-    i32 typeID = Reflect::GetType<SceneGraph::SceneNode>();
+    int32_t typeID = Reflect::GetType<SceneGraph::SceneNode>();
 
     HMS_TypeToSceneNodeTypeDumbPtr::const_iterator found = m_NodeTypesByType.find( typeID );
     if (found != m_NodeTypesByType.end())

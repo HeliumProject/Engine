@@ -20,7 +20,7 @@ namespace Helium
             Event
                 (
                 const tuid id = TUID::Null,
-                u64 created = 0,
+                uint64_t created = 0,
                 const tstring& username = TXT( "" ),
                 const tstring& data = TXT( "" )
                 )
@@ -40,7 +40,7 @@ namespace Helium
 
         public:
             tuid          m_Id;       // Events's unique id
-            u64           m_Created;  // time of Event record creation
+            uint64_t           m_Created;  // time of Event record creation
             tstring   m_Username; // username@computer
             tstring   m_Data;           
         };

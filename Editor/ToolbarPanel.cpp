@@ -109,7 +109,7 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
     Layout();
 }
 
-void ToolbarPanel::ToggleTool( i32 selectedTool )
+void ToolbarPanel::ToggleTool( int32_t selectedTool )
 {
     for ( std::vector< wxBitmapToggleButton* >::const_iterator itr = m_ToolsButtons.begin(), end = m_ToolsButtons.end(); itr != end; ++itr )
     {

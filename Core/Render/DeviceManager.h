@@ -89,13 +89,13 @@ namespace Helium
             virtual ~DeviceManager();
 
             static void SetUnique(); // call before init
-            HRESULT Init(HWND hwnd,u32 back_buffer_width, u32 back_buffer_height, u32 init_flags=0);
+            HRESULT Init(HWND hwnd,uint32_t back_buffer_width, uint32_t back_buffer_height, uint32_t init_flags=0);
 
         private:
-            HRESULT ResizeSwapChain(u32 width, u32 height);
-            HRESULT ResizeDevice(u32 width, u32 height);
+            HRESULT ResizeSwapChain(uint32_t width, uint32_t height);
+            HRESULT ResizeDevice(uint32_t width, uint32_t height);
         public:
-            HRESULT Resize(u32 width, u32 height);
+            HRESULT Resize(uint32_t width, uint32_t height);
             HRESULT Display(HWND target,RECT* src=0, RECT* dst=0);      // if display fails, call reset
             HRESULT Reset();
 
@@ -135,34 +135,34 @@ namespace Helium
                 return m_depth_buffer;
             }
 
-            inline IDirect3DVertexShader9* GetStockVS(u32 idx)
+            inline IDirect3DVertexShader9* GetStockVS(uint32_t idx)
             {
                 return m_vertex_shaders[idx];
             }
 
-            inline IDirect3DPixelShader9* GetStockPS(u32 idx)
+            inline IDirect3DPixelShader9* GetStockPS(uint32_t idx)
             {
                 return m_pixel_shaders[idx];
             }
 
-            inline IDirect3DVertexDeclaration9* GetStockDecl(u32 idx)
+            inline IDirect3DVertexDeclaration9* GetStockDecl(uint32_t idx)
             {
                 return m_vertex_dec[idx];
             }
 
-            inline u32 GetWidth()
+            inline uint32_t GetWidth()
             {
                 return m_width;
             }
 
-            inline u32 GetHeight()
+            inline uint32_t GetHeight()
             {
                 return m_height;
             }
 
             // call up to the parent class to handle their default pool (this will be called for every client)
             // this is called for a number of reasons
-            HRESULT HandleClientDefaultPool(u32 reason)
+            HRESULT HandleClientDefaultPool(uint32_t reason)
             {
                 if ( reason == DEFPOOL_RELEASE )
                 {
@@ -212,11 +212,11 @@ namespace Helium
             IDirect3DSwapChain9*                  m_swapchain;
             bool                                  m_using_swapchain;
             D3DPRESENT_PARAMETERS                 m_d3dpp;
-            u32                                   m_width;
-            u32                                   m_height;
+            uint32_t                                   m_width;
+            uint32_t                                   m_height;
 
             static bool                           m_unique;
-            static u32                            m_master_count;
+            static uint32_t                            m_master_count;
             static IDirect3D9*                    m_master_d3d;                   // Used to create the D3DDevice
             static IDirect3DDevice9*              m_master_device;                // rendering device 
             static D3DFORMAT                      m_back_buffer_format;
@@ -231,7 +231,7 @@ namespace Helium
         struct VertexDebug
         {
             D3DXVECTOR3 m_pos;
-            u32         m_color;
+            uint32_t         m_color;
         }; //size 16
 
         // a basic screen space vertex with a few texture params

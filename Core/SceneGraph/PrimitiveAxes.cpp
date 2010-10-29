@@ -25,7 +25,7 @@ PrimitiveAxes::PrimitiveAxes(ResourceTracker* tracker)
   m_Bounds.maximum = Vector3 (m_Length, m_Length, m_Length);
 }
 
-void PrimitiveAxes::SetColor(AxesFlags axes, u32 c)
+void PrimitiveAxes::SetColor(AxesFlags axes, uint32_t c)
 {
   if ((axes & MultipleAxes::X) == MultipleAxes::X)
     m_ColorX = c;
@@ -37,7 +37,7 @@ void PrimitiveAxes::SetColor(AxesFlags axes, u32 c)
     m_ColorZ = c;
 }
 
-void PrimitiveAxes::SetColor(u32 c)
+void PrimitiveAxes::SetColor(uint32_t c)
 {
   m_ColorX = c;
   m_ColorY = c;
@@ -167,7 +167,7 @@ AxesFlags PrimitiveAxes::PickAxis(const Math::Matrix4& transform, Line pick, flo
 
   if (pick.IntersectsSegment (axisOrigin, axisEnd, err, NULL, &offset))
   {
-    f32 dist = offset.Length();
+    float32_t dist = offset.Length();
     if (dist > 0.0f && dist < minX)
     {
       minX = dist;
@@ -179,7 +179,7 @@ AxesFlags PrimitiveAxes::PickAxis(const Math::Matrix4& transform, Line pick, flo
 
   if (pick.IntersectsSegment (axisOrigin, axisEnd, err, NULL, &offset))
   {
-    f32 dist = offset.Length();
+    float32_t dist = offset.Length();
     if (dist > 0.0f && dist < minY)
     {
       minY = dist;
@@ -191,7 +191,7 @@ AxesFlags PrimitiveAxes::PickAxis(const Math::Matrix4& transform, Line pick, flo
 
   if (pick.IntersectsSegment (axisOrigin, axisEnd, err, NULL, &offset))
   {
-    f32 dist = offset.Length();
+    float32_t dist = offset.Length();
     if (dist > 0.0f && dist < minZ)
     {
       minZ = dist;

@@ -345,7 +345,7 @@ namespace Helium
             void InitCameras();
 
         public:
-            void SetSize(u32 x, u32 y);
+            void SetSize(uint32_t x, uint32_t y);
             void SetFocused(bool focused);
 
             void KeyDown( const Helium::KeyboardInput& input );

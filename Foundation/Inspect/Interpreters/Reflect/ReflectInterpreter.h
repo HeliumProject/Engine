@@ -14,8 +14,8 @@ namespace Helium
         public:
             ReflectInterpreter (Container* container);
 
-            void Interpret(const std::vector<Reflect::Element*>& instances, i32 includeFlags = 0xFFFFFFFF, i32 excludeFlags = 0x0, bool expandPanel = true);
-            void InterpretType(const std::vector<Reflect::Element*>& instances, Container* parent, i32 includeFlags = 0xFFFFFFFF, i32 excludeFlags = 0x0, bool expandPanel = true);
+            void Interpret(const std::vector<Reflect::Element*>& instances, int32_t includeFlags = 0xFFFFFFFF, int32_t excludeFlags = 0x0, bool expandPanel = true);
+            void InterpretType(const std::vector<Reflect::Element*>& instances, Container* parent, int32_t includeFlags = 0xFFFFFFFF, int32_t excludeFlags = 0x0, bool expandPanel = true);
 
         private:
             std::vector<Reflect::Element*> m_Instances;
@@ -35,26 +35,26 @@ namespace Helium
             }
 
             typedef ReflectFieldInterpreterPtr (*Creator)(Container* container);
-            typedef std::vector< std::pair<u32, Creator> > V_Creator;
-            typedef std::map< i32, V_Creator > M_Creator;
+            typedef std::vector< std::pair<uint32_t, Creator> > V_Creator;
+            typedef std::map< int32_t, V_Creator > M_Creator;
 
-            static void Register(i32 type, u32 mask, Creator creator);
+            static void Register(int32_t type, uint32_t mask, Creator creator);
 
             template< class T >
-            static void Register(i32 type, u32 mask = 0x0)
+            static void Register(int32_t type, uint32_t mask = 0x0)
             {
                 Register( type, mask, &CreateInterpreter<T> );
             }
 
-            static void Unregister(i32 type, u32 mask, Creator creator);
+            static void Unregister(int32_t type, uint32_t mask, Creator creator);
 
             template< class T >
-            static void Unregister(i32 type, u32 mask = 0x0)
+            static void Unregister(int32_t type, uint32_t mask = 0x0)
             {
                 Unregister( type, mask, &CreateInterpreter<T> );
             }
 
-            static ReflectFieldInterpreterPtr Create(i32 type, u32 flags, Container* container);
+            static ReflectFieldInterpreterPtr Create(int32_t type, uint32_t flags, Container* container);
             static void Clear();
 
         private:

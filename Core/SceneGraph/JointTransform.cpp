@@ -56,7 +56,7 @@ void JointTransform::Initialize(Scene* scene)
     m_ObjectBounds.maximum = Math::Vector3(rings->m_Radius, rings->m_Radius, rings->m_Radius);
 }
 
-i32 JointTransform::GetImageIndex() const
+int32_t JointTransform::GetImageIndex() const
 {
     return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "joint" ) );
 }

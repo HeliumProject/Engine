@@ -19,14 +19,14 @@ namespace Helium
         class FOUNDATION_API HDRColor3 : public Color3
         {
         public:
-            f32 s; // scale, for HDR
+            float32_t s; // scale, for HDR
 
             HDRColor3           () : s(1.0) {}
             HDRColor3           ( const Color3& c ) : Color3( c ), s(1.0) {}
             HDRColor3           ( const Vector3& v ) { FromFloat( v.x, v.y, v.z ); }
-            explicit HDRColor3  ( u8 vr, u8 vg, u8 vb, f32 vs ) : Color3( vr, vg, vb ), s(vs) {}
-            explicit HDRColor3  ( u8 val ) : Color3( val ), s(1.0) {}
-            explicit HDRColor3  ( f32 r, f32 g, f32 b ) { FromFloat( r, g, b ); }
+            explicit HDRColor3  ( uint8_t vr, uint8_t vg, uint8_t vb, float32_t vs ) : Color3( vr, vg, vb ), s(vs) {}
+            explicit HDRColor3  ( uint8_t val ) : Color3( val ), s(1.0) {}
+            explicit HDRColor3  ( float32_t r, float32_t g, float32_t b ) { FromFloat( r, g, b ); }
 
             HDRColor3&          operator= (const Color3& v) { r = v.r; g = v.g; b = v.b; return *this; }
             HDRColor3&          operator= (const HDRColor3& v) { r = v.r; g = v.g; b = v.b; s = v.s; return *this; }
@@ -35,38 +35,38 @@ namespace Helium
             HDRColor3&          operator+= (const HDRColor3& v) { r += v.r; g += v.g; b += v.b; return *this; }
             HDRColor3&          operator-= (const HDRColor3& v) { r -= v.r; g -= v.g; b -= v.b; return *this; }
             HDRColor3&          operator*= (const HDRColor3& v) { r *= v.r; g *= v.g; b *= v.b; return *this; }
-            HDRColor3&          operator*= (const u8 v) { r *= v; g *= v; b *= v; return *this; }
+            HDRColor3&          operator*= (const uint8_t v) { r *= v; g *= v; b *= v; return *this; }
             HDRColor3&          operator/= (const HDRColor3& v) { r /= v.r; g /= v.g; b /= v.b; return *this; }
-            HDRColor3&          operator/= (const u8 v) { r /= v; g /= v; b /= v; return *this; }
+            HDRColor3&          operator/= (const uint8_t v) { r /= v; g /= v; b /= v; return *this; }
 
             HDRColor3           operator+ (const HDRColor3& v) const { return HDRColor3 (r + v.r, g + v.g, b + v.b, s); }
             HDRColor3           operator- (const HDRColor3& v) const { return HDRColor3 (r - v.r, g - v.g, b - v.b, s); }
             HDRColor3           operator* (const HDRColor3& v) const { return HDRColor3 (r * v.r, g * v.g, b * v.b, s); }
-            HDRColor3           operator* (const u8 v) const { return HDRColor3 (r * v, g * v, b * v, s); }
+            HDRColor3           operator* (const uint8_t v) const { return HDRColor3 (r * v, g * v, b * v, s); }
             HDRColor3           operator/ (const HDRColor3& v) const { return HDRColor3 (r / v.r, g / v.g, b / v.b, s); }
-            HDRColor3           operator/ (const u8 v) const { return HDRColor3 (r / v, g / v, b / v, s); }
+            HDRColor3           operator/ (const uint8_t v) const { return HDRColor3 (r / v, g / v, b / v, s); }
 
-            u8&                 operator[] (const u32 i) {  HELIUM_ASSERT(i < 3); return (&r)[i]; }
-            const u8&           operator[] (const u32 i) const {  HELIUM_ASSERT(i < 3); return (&r)[i]; }
+            uint8_t&                 operator[] (const uint32_t i) {  HELIUM_ASSERT(i < 3); return (&r)[i]; }
+            const uint8_t&           operator[] (const uint32_t i) const {  HELIUM_ASSERT(i < 3); return (&r)[i]; }
 
             bool                operator== (const HDRColor3& v) const { return (r == v.r && g == v.g && b == v.b && s == v.s); }
             bool                operator!= (const HDRColor3& v) const { return !(r == v.r && g == v.g && b == v.b && s == v.s); }
 
             operator HDRColor4();
 
-            void Set( u8 vr, u8 vg, u8 vb )
+            void Set( uint8_t vr, uint8_t vg, uint8_t vb )
             {
                 r = vr; g = vg; b = vb;
             }
 
-            void Set( u8 vr, u8 vg, u8 vb, f32 vs )
+            void Set( uint8_t vr, uint8_t vg, uint8_t vb, float32_t vs )
             {
                 r = vr; g = vg; b = vb; s = vs;
             }
 
-            void FromFloat( f32 r, f32 g, f32 b );
-            void ToFloat( f32& r, f32& g, f32& b ) const;
-            void ToLinearFloat( f32& r, f32& g, f32& b ) const;
+            void FromFloat( float32_t r, float32_t g, float32_t b );
+            void ToFloat( float32_t& r, float32_t& g, float32_t& b ) const;
+            void ToLinearFloat( float32_t& r, float32_t& g, float32_t& b ) const;
             void Clamp ( const HDRColor3 &min, const HDRColor3 &mar );
 
             friend FOUNDATION_API tostream& operator<<(tostream& outStream, const HDRColor3& color);
@@ -76,7 +76,7 @@ namespace Helium
         typedef std::vector< HDRColor3 > V_HDRColor3;
         typedef std::vector< V_Color3 > VV_HDRColor3;
 
-        inline void HDRColor3::FromFloat( f32 r, f32 g, f32 b )
+        inline void HDRColor3::FromFloat( float32_t r, float32_t g, float32_t b )
         {
             s = (r > g)? r:g;
             s = (s > b)? s:b;
@@ -88,23 +88,23 @@ namespace Helium
             g = g / s;
             b = b / s;
 
-            this->r = (u8)(r * 255.0f);
-            this->g = (u8)(g * 255.0f);
-            this->b = (u8)(b * 255.0f);
+            this->r = (uint8_t)(r * 255.0f);
+            this->g = (uint8_t)(g * 255.0f);
+            this->b = (uint8_t)(b * 255.0f);
         }
 
-        inline void HDRColor3::ToFloat( f32& red, f32& green, f32& blue ) const
+        inline void HDRColor3::ToFloat( float32_t& red, float32_t& green, float32_t& blue ) const
         {
-            red   = f32(r)/255.f * s;
-            green = f32(g)/255.f * s;
-            blue  = f32(b)/255.f * s;
+            red   = float32_t(r)/255.f * s;
+            green = float32_t(g)/255.f * s;
+            blue  = float32_t(b)/255.f * s;
         }
 
-        inline void HDRColor3::ToLinearFloat( f32& red, f32& green, f32& blue ) const
+        inline void HDRColor3::ToLinearFloat( float32_t& red, float32_t& green, float32_t& blue ) const
         {
-            red   = SRGBToLinear(f32(r)/255.f) * s;
-            green = SRGBToLinear(f32(g)/255.f) * s;
-            blue  = SRGBToLinear(f32(b)/255.f) * s;
+            red   = SRGBToLinear(float32_t(r)/255.f) * s;
+            green = SRGBToLinear(float32_t(g)/255.f) * s;
+            blue  = SRGBToLinear(float32_t(b)/255.f) * s;
         }
 
         inline void HDRColor3::Clamp( const HDRColor3 &min, const HDRColor3 &mar )
@@ -116,25 +116,25 @@ namespace Helium
 
         inline tostream& operator<<(tostream& outStream, const HDRColor3& color)
         {
-            outStream << (u16)color.r << ", " << (u16)color.g << ", " << (u16)color.b << ", " << color.s;
+            outStream << (uint16_t)color.r << ", " << (uint16_t)color.g << ", " << (uint16_t)color.b << ", " << color.s;
 
             return outStream;
         }
 
         inline tistream& operator>>(tistream& inStream, HDRColor3& color)
         {
-            u32 r = 0;
-            u32 g = 0;
-            u32 b = 0;
-            f32 s = 0.f;
+            uint32_t r = 0;
+            uint32_t g = 0;
+            uint32_t b = 0;
+            float32_t s = 0.f;
 
             tstring line;
             std::getline( inStream, line );
             if (4 == _stscanf( line.c_str(), TXT("%u, %u, %u, %f"), &r, &g, &b, &s))
             {
-                color.r = (u8)r;
-                color.g = (u8)g;
-                color.b = (u8)b;
+                color.r = (uint8_t)r;
+                color.g = (uint8_t)g;
+                color.b = (uint8_t)b;
                 color.s = s;
             }
 

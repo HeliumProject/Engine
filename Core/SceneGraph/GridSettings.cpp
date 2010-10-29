@@ -11,10 +11,10 @@ REFLECT_DEFINE_CLASS( GridSettings );
 
 GridSettings::GridSettings( const tstring& version,
                                   GridUnit units,
-                                  u32 width,
-                                  u32 length,
-                                  f32 majorStep,
-                                  f32 minorStep,
+                                  uint32_t width,
+                                  uint32_t length,
+                                  float32_t majorStep,
+                                  float32_t minorStep,
                                   Math::Color3 axisColor,
                                   Math::Color3 majorColor,
                                   Math::Color3 minorColor )
@@ -41,22 +41,22 @@ void GridSettings::PostDeserialize()
   m_PreviousUnits = m_Units;
 }
 
-u32 GridSettings::GetWidth()
+uint32_t GridSettings::GetWidth()
 {
   return m_Width;
 }
 
-u32 GridSettings::GetLength()
+uint32_t GridSettings::GetLength()
 {
   return m_Length;
 }
 
-f32 GridSettings::GetMajorStep()
+float32_t GridSettings::GetMajorStep()
 {
   return ConvertUnits( m_MajorStep, m_Units, GridUnits::Meters );
 }
 
-f32 GridSettings::GetMinorStep()
+float32_t GridSettings::GetMinorStep()
 {
   return ConvertUnits( m_MinorStep, m_Units, GridUnits::Meters );
 }
@@ -90,7 +90,7 @@ void GridSettings::OnChanged( const Reflect::ElementChangeArgs& args )
   RaiseChanged();
 }
 
-f32 GridSettings::GetConversionFactor( GridUnit units )
+float32_t GridSettings::GetConversionFactor( GridUnit units )
 {
   switch ( units )
   {
@@ -101,9 +101,9 @@ f32 GridSettings::GetConversionFactor( GridUnit units )
   return 1.0f;
 }
 
-f32 GridSettings::ConvertUnits( f32 sourceValue, GridUnit sourceUnits, GridUnit destinationUnits )
+float32_t GridSettings::ConvertUnits( float32_t sourceValue, GridUnit sourceUnits, GridUnit destinationUnits )
 {
-  f32 sourceConversion = GetConversionFactor( sourceUnits );
-  f32 destinationConversion = GetConversionFactor( destinationUnits );
+  float32_t sourceConversion = GetConversionFactor( sourceUnits );
+  float32_t destinationConversion = GetConversionFactor( destinationUnits );
   return sourceValue * sourceConversion / destinationConversion;
 }

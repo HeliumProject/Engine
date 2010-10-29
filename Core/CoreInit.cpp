@@ -9,7 +9,7 @@
 
 using namespace Helium;
 
-static u32 g_InitCount = 0;
+static uint32_t g_InitCount = 0;
 static Helium::InitializerStack g_InitStack;
 
 void Helium::CoreInitialize()

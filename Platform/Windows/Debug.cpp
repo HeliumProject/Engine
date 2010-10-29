@@ -327,7 +327,7 @@ bool Debug::GetStackTrace(LPCONTEXT context, std::vector<uintptr>& stack, unsign
     }
 
     // this is for handling stack overflows
-    std::map<i64, u32> visited;
+    std::map<int64_t, uint32_t> visited;
 
     // setup the stack frame to use for traversal
     STACKFRAME64 frame;
@@ -398,7 +398,7 @@ void Debug::TranslateStackTrace(const std::vector<uintptr>& trace, tstring& buff
     }
 }
 
-const tchar* Debug::GetExceptionClass(u32 exceptionCode)
+const tchar* Debug::GetExceptionClass(uint32_t exceptionCode)
 {
     const tchar* ex_name = NULL;
 

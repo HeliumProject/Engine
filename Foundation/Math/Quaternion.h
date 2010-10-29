@@ -33,7 +33,7 @@ namespace Helium
             Quaternion            () : values(0, 0, 0, 1) {}
 
             explicit Quaternion   (Vector4 v) : values(v) {}
-            explicit Quaternion   (f32 vx, f32 vy, f32 vz, f32 vw) : values(vx, vy, vz, vw) {}
+            explicit Quaternion   (float32_t vx, float32_t vy, float32_t vz, float32_t vw) : values(vx, vy, vz, vw) {}
 
             explicit Quaternion   (const Matrix3& v);
             Quaternion&           operator= (const Matrix3& v);
@@ -55,8 +55,8 @@ namespace Helium
             Quaternion            operator* ( const Vector4& rhs ) const;
             Quaternion            operator+ ( const Quaternion &rhs ) const;
 
-            f32&                  operator[] (const u32 i) { return values[i]; }
-            const f32&            operator[] (const u32 i) const { return values[i]; }
+            float32_t&                  operator[] (const uint32_t i) { return values[i]; }
+            const float32_t&            operator[] (const uint32_t i) const { return values[i]; }
 
             bool                  operator== (const Quaternion& v) const { return (values == v.values); }
             bool                  operator!= (const Quaternion& v) const { return !(values == v.values); }
@@ -87,16 +87,16 @@ namespace Helium
                 return Quaternion (values.Normalized());
             }
 
-            Quaternion            Slerp (Quaternion& q2, f32 param);
+            Quaternion            Slerp (Quaternion& q2, float32_t param);
 
-            f32                   Dot ( const Quaternion& q2 ) const;
-            bool                  Equal( const Quaternion &q2, f32 error = 0.0f ) const;
+            float32_t                   Dot ( const Quaternion& q2 ) const;
+            bool                  Equal( const Quaternion &q2, float32_t error = 0.0f ) const;
 
             friend FOUNDATION_API tostream& operator<<(tostream& outStream, const Quaternion& quaternion);
             friend FOUNDATION_API tistream& operator>>(tistream& inStream, Quaternion& quaternion);
         };
 
-        inline bool Quaternion::Equal( const Quaternion& q2, f32 error ) const
+        inline bool Quaternion::Equal( const Quaternion& q2, float32_t error ) const
         {
             Quaternion q1 ( *this );
             return (fabs( q1[QX] - q2[QX] ) <= error && fabs( q1[QY] - q2[QY] ) <= error && fabs( q1[QZ] - q2[QZ] ) <= error && fabs( q1[QW] - q2[QW] ) <= error );
@@ -152,7 +152,7 @@ namespace Helium
             return result;
         }
 
-        inline Quaternion Quaternion::Slerp(Quaternion& q2, f32 param)
+        inline Quaternion Quaternion::Slerp(Quaternion& q2, float32_t param)
         {
             //
             // Quaternion Interpolation With Extra Spins, pp. 96f, 461f
@@ -161,9 +161,9 @@ namespace Helium
 
             Quaternion qt;
 
-            f32 alpha, beta;
-            f32 cosom = this->values.x*q2.values.x + this->values.y*q2.values.y + this->values.z*q2.values.z + this->values.w*q2.values.w; 
-            f32 slerp_epsilon = 0.00001f;
+            float32_t alpha, beta;
+            float32_t cosom = this->values.x*q2.values.x + this->values.y*q2.values.y + this->values.z*q2.values.z + this->values.w*q2.values.w; 
+            float32_t slerp_epsilon = 0.00001f;
 
             bool flip;
 
@@ -172,29 +172,29 @@ namespace Helium
 
             if ((1.0 - cosom) > slerp_epsilon)
             {
-                f32 omega = acos (cosom);
-                f32 sinom = sin (omega);
-                alpha = (f32)(sin((1.0 - param) * omega) / sinom);
-                beta = (f32)(sin(param * omega) / sinom);
+                float32_t omega = acos (cosom);
+                float32_t sinom = sin (omega);
+                alpha = (float32_t)(sin((1.0 - param) * omega) / sinom);
+                beta = (float32_t)(sin(param * omega) / sinom);
             }
             else
             {
-                alpha = (f32)(1.0 - param);
-                beta = (f32)param;
+                alpha = (float32_t)(1.0 - param);
+                beta = (float32_t)param;
             }
 
             if (flip)
                 beta = -beta;
 
-            qt.values.x = (f32) (alpha*this->values.x + beta*q2.values.x);
-            qt.values.y = (f32) (alpha*this->values.y + beta*q2.values.y);
-            qt.values.z = (f32) (alpha*this->values.z + beta*q2.values.z);
-            qt.values.w = (f32) (alpha*this->values.w + beta*q2.values.w);
+            qt.values.x = (float32_t) (alpha*this->values.x + beta*q2.values.x);
+            qt.values.y = (float32_t) (alpha*this->values.y + beta*q2.values.y);
+            qt.values.z = (float32_t) (alpha*this->values.z + beta*q2.values.z);
+            qt.values.w = (float32_t) (alpha*this->values.w + beta*q2.values.w);
 
             return qt;
         }
 
-        inline f32 Quaternion::Dot( const Quaternion& q2 ) const
+        inline float32_t Quaternion::Dot( const Quaternion& q2 ) const
         {
             return ( ( values.x * q2.values.x ) + ( values.y * q2.values.y ) + ( values.z * q2.values.z ) + ( values.w * q2.values.w ) );
         }

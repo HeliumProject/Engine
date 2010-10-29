@@ -4,7 +4,7 @@
 
 using namespace Helium;
 
-u32 GetWin32MoveMethod( FileOffset offsetType )
+uint32_t GetWin32MoveMethod( FileOffset offsetType )
 {
     switch( offsetType )
     {
@@ -72,7 +72,7 @@ void FileHandle::Close()
     }
 }
 
-u32 FileHandle::Read( u8* buffer, size_t amount )
+uint32_t FileHandle::Read( uint8_t* buffer, size_t amount )
 {
     DWORD read = 0;
 
@@ -84,7 +84,7 @@ u32 FileHandle::Read( u8* buffer, size_t amount )
     return read;
 }
 
-void FileHandle::Write( u8* buffer, size_t amount )
+void FileHandle::Write( uint8_t* buffer, size_t amount )
 {
     DWORD written = 0;
 

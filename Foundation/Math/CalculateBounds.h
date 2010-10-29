@@ -72,7 +72,7 @@ namespace Helium
             struct BSphere
             {
                 Vector3   m_Center;
-                f32     	m_Radius;
+                float32_t     	m_Radius;
             };
 
             ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,8 +86,8 @@ namespace Helium
             //  destroy the class and recreate it with the new vertex set.
             //
             ////////////////////////////////////////////////////////////////////////////////////////////////
-            BoundingVolumeGenerator(Vector3* points, i32 point_count, VolumeGenerateMethod method = BoundingVolumeGenerator::DEFAULT);
-            BoundingVolumeGenerator(BSphere* bspheres, i32 bsphere_count);
+            BoundingVolumeGenerator(Vector3* points, int32_t point_count, VolumeGenerateMethod method = BoundingVolumeGenerator::DEFAULT);
+            BoundingVolumeGenerator(BSphere* bspheres, int32_t bsphere_count);
             ~BoundingVolumeGenerator();
 
 
@@ -99,11 +99,11 @@ namespace Helium
             void CalculateSystem();
             void CalculateEigenSystem();
 
-            i32       m_PointCnt;
+            int32_t       m_PointCnt;
             Vector3*  m_Points;
 
             Vector3*  m_BsphereCenters;
-            f32*    	m_BsphereRads;
+            float32_t*    	m_BsphereRads;
 
             Vector3   m_Mean;
             Matrix3   m_Covariant;
@@ -114,7 +114,7 @@ namespace Helium
             VolumeGenerateMethod    m_volumeGenerationMethod;    // 
             V_Vector3               m_PointList;                 //  VolumeGenerateMethod::BSPHERE_OPTIMIZED
             Vector3                 m_Center;
-            f32                     m_RadSqr;
+            float32_t                     m_RadSqr;
 
             void    CalculateSystemMethod2(void);
 
@@ -127,9 +127,9 @@ namespace Helium
             void    SphereInit            (Vector3 &v0, Vector3 &v1, Vector3 &v2, Vector3 &v3);
             void    SphereInitSafe        (Vector3 &v0, Vector3 &v1, Vector3 &v2);
 
-            void    MiniSphere            (i32 c, Vector3 &v0, Vector3 &v1, Vector3 &v2);
-            void    MiniSphere            (i32 c, Vector3 &v0, Vector3 &v1);
-            void    MiniSphere            (i32 c, Vector3 &v);
+            void    MiniSphere            (int32_t c, Vector3 &v0, Vector3 &v1, Vector3 &v2);
+            void    MiniSphere            (int32_t c, Vector3 &v0, Vector3 &v1);
+            void    MiniSphere            (int32_t c, Vector3 &v);
             void    MiniSphere            (void);
 
             void    AverageSphere         (void);

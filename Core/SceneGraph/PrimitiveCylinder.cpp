@@ -42,24 +42,24 @@ void PrimitiveCylinder::Update()
   // Wire
   //
 
-  float stepAngle = (f32)(Math::Pi)*2.0f / (f32)(m_RadiusSteps);
-  float stepLength = m_Length/(f32)(m_LengthSteps-1);
+  float stepAngle = (float32_t)(Math::Pi)*2.0f / (float32_t)(m_RadiusSteps);
+  float stepLength = m_Length/(float32_t)(m_LengthSteps-1);
 
   for (int l=0; l<m_LengthSteps; l++)
   {
     for (int s=0; s<m_RadiusSteps; s++)
     {
-      float theta = (f32)(s) * stepAngle;
+      float theta = (float32_t)(s) * stepAngle;
 
-      sideValue = m_VerticalOrientation ? (f32)(sin(theta)) * m_Radius : -m_Length/2.0f + stepLength*(f32)(l);
-      upValue   = m_VerticalOrientation ? -m_Length/2.0f + stepLength*(f32)(l) : (f32)(sin(theta)) * m_Radius;
+      sideValue = m_VerticalOrientation ? (float32_t)(sin(theta)) * m_Radius : -m_Length/2.0f + stepLength*(float32_t)(l);
+      upValue   = m_VerticalOrientation ? -m_Length/2.0f + stepLength*(float32_t)(l) : (float32_t)(sin(theta)) * m_Radius;
 
-      m_Vertices.push_back(Position(SetupVector( sideValue, upValue, (f32)(cos(theta)) * m_Radius)) );
+      m_Vertices.push_back(Position(SetupVector( sideValue, upValue, (float32_t)(cos(theta)) * m_Radius)) );
 
-      sideValue = m_VerticalOrientation ? (f32)(sin(theta + stepAngle)) * m_Radius : -m_Length/2.0f + stepLength*(f32)(l);
-      upValue   = m_VerticalOrientation ? -m_Length/2.0f + stepLength*(f32)(l) : (f32)(sin(theta + stepAngle)) * m_Radius;
+      sideValue = m_VerticalOrientation ? (float32_t)(sin(theta + stepAngle)) * m_Radius : -m_Length/2.0f + stepLength*(float32_t)(l);
+      upValue   = m_VerticalOrientation ? -m_Length/2.0f + stepLength*(float32_t)(l) : (float32_t)(sin(theta + stepAngle)) * m_Radius;
 
-      m_Vertices.push_back(Position(SetupVector( sideValue, upValue, (f32)(cos(theta + stepAngle)) * m_Radius)));
+      m_Vertices.push_back(Position(SetupVector( sideValue, upValue, (float32_t)(cos(theta + stepAngle)) * m_Radius)));
     }
   }
 
@@ -70,41 +70,41 @@ void PrimitiveCylinder::Update()
   // sides
   for (int x=0; x<=m_RadiusSteps; x++)
   {
-    float theta = (f32)(x) * stepAngle;
+    float theta = (float32_t)(x) * stepAngle;
 
-    sideValue = m_VerticalOrientation ? (f32)(sin(theta)) * m_Radius : m_Length/2.0f;
-    upValue   = m_VerticalOrientation ? m_Length/2.0f : (f32)(sin(theta)) * m_Radius;
+    sideValue = m_VerticalOrientation ? (float32_t)(sin(theta)) * m_Radius : m_Length/2.0f;
+    upValue   = m_VerticalOrientation ? m_Length/2.0f : (float32_t)(sin(theta)) * m_Radius;
 
-    m_Vertices.push_back(Position (SetupVector( sideValue, upValue, (f32)(cos(theta)) * m_Radius)));
+    m_Vertices.push_back(Position (SetupVector( sideValue, upValue, (float32_t)(cos(theta)) * m_Radius)));
 
-    sideValue = m_VerticalOrientation ? (f32)(sin(theta)) * m_Radius : -m_Length/2.0f;
-    upValue   = m_VerticalOrientation ? -m_Length/2.0f : (f32)(sin(theta)) * m_Radius;
+    sideValue = m_VerticalOrientation ? (float32_t)(sin(theta)) * m_Radius : -m_Length/2.0f;
+    upValue   = m_VerticalOrientation ? -m_Length/2.0f : (float32_t)(sin(theta)) * m_Radius;
 
-    m_Vertices.push_back(Position (SetupVector( sideValue, upValue, (f32)(cos(theta)) * m_Radius)));
+    m_Vertices.push_back(Position (SetupVector( sideValue, upValue, (float32_t)(cos(theta)) * m_Radius)));
   }
 
   // top
   m_Vertices.push_back(Position (SetupVector(m_Length/2.0f, 0.0f, 0.0f)));
   for (int x=0; x<=m_RadiusSteps; x++)
   {
-    float theta = (f32)(x) * stepAngle;
+    float theta = (float32_t)(x) * stepAngle;
 
-    sideValue = m_VerticalOrientation ? (f32)(sin(theta)) * m_Radius : m_Length/2.0f;
-    upValue   = m_VerticalOrientation ?  m_Length/2.0f : (f32)(sin(theta)) * m_Radius;
+    sideValue = m_VerticalOrientation ? (float32_t)(sin(theta)) * m_Radius : m_Length/2.0f;
+    upValue   = m_VerticalOrientation ?  m_Length/2.0f : (float32_t)(sin(theta)) * m_Radius;
 
-    m_Vertices.push_back(Position (SetupVector( sideValue, upValue, (f32)(cos(theta)) * m_Radius)));
+    m_Vertices.push_back(Position (SetupVector( sideValue, upValue, (float32_t)(cos(theta)) * m_Radius)));
   }
 
   // bottom, construct backward to wrap polys correctly
   m_Vertices.push_back(Position (SetupVector(-m_Length/2.0f, 0.0f, 0.0f)));
   for (int x=m_RadiusSteps; x>=0; x--)
   {
-    float theta = (f32)(x) * stepAngle;
+    float theta = (float32_t)(x) * stepAngle;
 
-    sideValue = m_VerticalOrientation ? (f32)(sin(theta)) * m_Radius : -m_Length/2.0f;
-    upValue   = m_VerticalOrientation ?  -m_Length/2.0f : (f32)(sin(theta)) * m_Radius;
+    sideValue = m_VerticalOrientation ? (float32_t)(sin(theta)) * m_Radius : -m_Length/2.0f;
+    upValue   = m_VerticalOrientation ?  -m_Length/2.0f : (float32_t)(sin(theta)) * m_Radius;
 
-    m_Vertices.push_back(Position (SetupVector( sideValue, upValue, (f32)(cos(theta)) * m_Radius)));
+    m_Vertices.push_back(Position (SetupVector( sideValue, upValue, (float32_t)(cos(theta)) * m_Radius)));
   }
 
   __super::Update();

@@ -24,7 +24,7 @@ typedef ClipCodes::ClipCode ClipCode;
 // Cohen-Sutherland clipping code
 inline static ClipCode GetClipCode(const Frustum& f, const Vector3& p)
 {
-    i32 c = ClipCodes::None;
+    int32_t c = ClipCodes::None;
 
     if (f.top.DistanceAbove(p) < -PointOnPlaneError)
         c = c | ClipCodes::Top;
@@ -141,7 +141,7 @@ void Frustum::Transform(const Matrix4& m)
     back.Transform(inv);
 }
 
-bool Frustum::IntersectsPoint(const Vector3& p, const f32 distanceFromPlane) const
+bool Frustum::IntersectsPoint(const Vector3& p, const float32_t distanceFromPlane) const
 {
     MATH_FUNCTION_TIMER();
 
@@ -149,7 +149,7 @@ bool Frustum::IntersectsPoint(const Vector3& p, const f32 distanceFromPlane) con
     bool above = true;
 
     // for each plane
-    for (i32 j=0; j<6 && above; j++)
+    for (int32_t j=0; j<6 && above; j++)
     {
         // we need this vert to be above each plane
         above &= (*this)[j].DistanceAbove(p) >= -distanceFromPlane;
@@ -173,7 +173,7 @@ bool Frustum::IntersectsSegment(const Vector3& point1, const Vector3& point2) co
     c1 = GetClipCode (*this, p1);
     c2 = GetClipCode (*this, p2);
 
-    i32 count = 0;
+    int32_t count = 0;
     while (++count < 16)
     {
         // if both points are not clipped by any planes
@@ -264,7 +264,7 @@ bool Frustum::IntersectsTriangle(const Vector3& v0, const Vector3& v1, const Vec
     StaticPolygon<Math::Vector3, 9> polygon (v0, v1, v2);
 
     // for each clipping plane (the frustum)
-    for (i32 i=0; i<6; i++)
+    for (int32_t i=0; i<6; i++)
     {
         // the clipping plane to use for this iteration
         const Plane& clipPlane = (*this)[i];
@@ -279,7 +279,7 @@ bool Frustum::IntersectsTriangle(const Vector3& v0, const Vector3& v1, const Vec
         Vector3 s = polygon.m_Vertices[polygon.m_Size-1];
 
         // for each edge in polygon
-        for (i32 j=0; j<polygon.m_Size; j++)
+        for (int32_t j=0; j<polygon.m_Size; j++)
         {
             // get next edge vert
             p = polygon.m_Vertices[j];
@@ -348,11 +348,11 @@ bool Frustum::IntersectsBox(const AlignedBox& box, bool precise) const
     }
     else
     {
-        f32 m, n;
+        float32_t m, n;
         Vector3 c = box.Center();
         Vector3 d = box.maximum - c;
 
-        for (i32 i=0; i<6; i++)
+        for (int32_t i=0; i<6; i++)
         {
             const Plane& p = (*this)[i];
 
@@ -401,7 +401,7 @@ bool Frustum::Contains(const AlignedBox& box) const
     for (size_t i=0; i<verts.size(); i++)
     {
         // for each plane
-        for (i32 j=0; j<6; j++)
+        for (int32_t j=0; j<6; j++)
         {
             const Plane& p = (*this)[j];
 

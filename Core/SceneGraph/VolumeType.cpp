@@ -25,7 +25,7 @@ void VolumeType::CleanupType()
     Reflect::UnregisterClassType< VolumeType >();
 }
 
-VolumeType::VolumeType( Scene* scene, i32 instanceType )
+VolumeType::VolumeType( Scene* scene, int32_t instanceType )
 : InstanceType( scene, instanceType )
 {
     m_Cube = new PrimitiveCube( scene->GetViewport()->GetResources() );

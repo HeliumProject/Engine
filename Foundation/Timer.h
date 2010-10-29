@@ -12,7 +12,7 @@ namespace Helium
     class FOUNDATION_API Timer
     {
     private:
-        u64 m_StartTime;
+        uint64_t m_StartTime;
 
     public:
         Timer()

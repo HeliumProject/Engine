@@ -630,9 +630,9 @@ bool HierarchyNode::ComputeSelectability() const
     return isSelectable;
 }
 
-u32 HierarchyNode::Dirty()
+uint32_t HierarchyNode::Dirty()
 {
-    u32 count = 0;
+    uint32_t count = 0;
 
     if (m_Graph)
     {

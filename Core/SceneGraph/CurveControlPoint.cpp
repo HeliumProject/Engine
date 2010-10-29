@@ -33,7 +33,7 @@ CurveControlPoint::~CurveControlPoint()
 {
 }
 
-i32 CurveControlPoint::GetImageIndex() const
+int32_t CurveControlPoint::GetImageIndex() const
 {
     return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "point" ) );
 }
@@ -54,36 +54,36 @@ void CurveControlPoint::SetPosition( const Math::Vector3& value )
     Dirty();
 }
 
-f32 CurveControlPoint::GetPositionX() const
+float32_t CurveControlPoint::GetPositionX() const
 {
     return GetPosition().x;
 }
 
-void CurveControlPoint::SetPositionX( f32 value )
+void CurveControlPoint::SetPositionX( float32_t value )
 {
     Math::Vector3 pos = GetPosition();
     pos.x = value;
     SetPosition( pos );
 }
 
-f32 CurveControlPoint::GetPositionY() const
+float32_t CurveControlPoint::GetPositionY() const
 {
     return GetPosition().y;
 }
 
-void CurveControlPoint::SetPositionY( f32 value )
+void CurveControlPoint::SetPositionY( float32_t value )
 {
     Math::Vector3 pos = GetPosition();
     pos.y = value;
     SetPosition( pos );
 }
 
-f32 CurveControlPoint::GetPositionZ() const
+float32_t CurveControlPoint::GetPositionZ() const
 {
     return GetPosition().z;
 }
 
-void CurveControlPoint::SetPositionZ( f32 value )
+void CurveControlPoint::SetPositionZ( float32_t value )
 {
     Math::Vector3 pos = GetPosition();
     pos.z = value;
@@ -124,9 +124,9 @@ void CurveControlPoint::CreatePanel( CreatePanelArgs& args )
         args.m_Generator->PushContainer();
         static const tstring helpText = TXT( "Sets the position of this point in 3d space." );
         args.m_Generator->AddLabel( TXT( "Position" ) )->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<CurveControlPoint, f32>( args.m_Selection, &CurveControlPoint::GetPositionX, &CurveControlPoint::SetPositionX )->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<CurveControlPoint, f32>( args.m_Selection, &CurveControlPoint::GetPositionY, &CurveControlPoint::SetPositionY )->a_HelpText.Set( helpText );
-        args.m_Generator->AddValue<CurveControlPoint, f32>( args.m_Selection, &CurveControlPoint::GetPositionZ, &CurveControlPoint::SetPositionZ )->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<CurveControlPoint, float32_t>( args.m_Selection, &CurveControlPoint::GetPositionX, &CurveControlPoint::SetPositionX )->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<CurveControlPoint, float32_t>( args.m_Selection, &CurveControlPoint::GetPositionY, &CurveControlPoint::SetPositionY )->a_HelpText.Set( helpText );
+        args.m_Generator->AddValue<CurveControlPoint, float32_t>( args.m_Selection, &CurveControlPoint::GetPositionZ, &CurveControlPoint::SetPositionZ )->a_HelpText.Set( helpText );
         args.m_Generator->Pop();
     }
     args.m_Generator->Pop();

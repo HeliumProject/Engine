@@ -10,45 +10,45 @@
 //  
 //    struct Serializer
 //    {
-//      i32 type;             // string pool index of the short name of the serializer
+//      int32_t type;             // string pool index of the short name of the serializer
 //      byte[] data;          // serialized data
 //    };
 //  
 //    struct Field
 //    {
-//      i32 field_id;         // latent RTTI field index (id)
+//      int32_t field_id;         // latent RTTI field index (id)
 //      Serializer ser;       // serializer instance data
 //    };
 //  
 //    struct Element
 //    {
-//      i32 type;             // string pool index of the short name of the element
-//      i32 field_count;      // number of serialized fields
+//      int32_t type;             // string pool index of the short name of the element
+//      int32_t field_count;      // number of serialized fields
 //      Field[] fields;       // field instance data
-//      i32 term;             // -1
+//      int32_t term;             // -1
 //    };
 //  
 //    struct Array
 //    {
-//      i32 count;            // count of contained elements
+//      int32_t count;            // count of contained elements
 //      Element[] elements;   // element instance data
-//      i32 term;             // -1
+//      int32_t term;             // -1
 //    };
 //  
 //    struct File
 //    {
 //      char file_id;         // '!'
 //  
-//      u32 crc;              // crc of all bytes following the crc value itself
-//    |-i32 type_offet;       // offset into file for the beginning of the rtti block
-//  |-+-i32 string_offset;    // offset into file for the beginning of the global string pool
+//      uint32_t crc;              // crc of all bytes following the crc value itself
+//    |-int32_t type_offet;       // offset into file for the beginning of the rtti block
+//  |-+-int32_t string_offset;    // offset into file for the beginning of the global string pool
 //  | |
 //  | | Array spool;          // spooled data from client
 //  | | Array append;         // appended session data
 //  | |
-//  | ->i32 type_count;       // number of types stored
+//  | ->int32_t type_count;       // number of types stored
 //  |   Structure[] types;    // see Class.h for details
-//  |   i32 type_term;        // -1
+//  |   int32_t type_term;        // -1
 //  |
 //  --->StringPool strings;   // see StringPool.h for details
 //    };
@@ -68,7 +68,7 @@ namespace Helium
         class FOUNDATION_API ArchiveBinary : public Archive
         {
         public: 
-            static const u32 CURRENT_VERSION; 
+            static const uint32_t CURRENT_VERSION; 
 
         private:
             friend class Archive;
@@ -94,7 +94,7 @@ namespace Helium
             std::map< tstring, tstring > m_ShortNameMapping;
 
             // File format version
-            u32 m_Version;
+            uint32_t m_Version;
 
             // File size
             long m_Size;
@@ -105,7 +105,7 @@ namespace Helium
             // Data for the current field we are writing
             struct WriteFields
             {
-                i32            m_Count;
+                int32_t            m_Count;
                 std::streamoff m_CountOffset;
             };
 
@@ -131,7 +131,7 @@ namespace Helium
                 return m_Strings;
             }
 
-            u32 GetVersion()
+            uint32_t GetVersion()
             {
                 return m_Version; 
             }
@@ -162,7 +162,7 @@ namespace Helium
         public:
             // Serialize
             virtual void Serialize( const ElementPtr& element );
-            virtual void Serialize( const V_Element& elements, u32 flags = 0 );
+            virtual void Serialize( const V_Element& elements, uint32_t flags = 0 );
 
         protected:
             // Helpers
@@ -176,7 +176,7 @@ namespace Helium
         public:
             // pulls from the stream, or deserializes into a freshly allocated instance
             virtual void Deserialize( ElementPtr& element );
-            virtual void Deserialize( V_Element& elements, u32 flags = 0 );
+            virtual void Deserialize( V_Element& elements, uint32_t flags = 0 );
 
         protected:
             // Helpers

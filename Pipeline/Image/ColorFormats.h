@@ -392,10 +392,10 @@ namespace Helium
       {
         i16* ptr = (i16*)dst;
         START_BATCH_LOOP
-          *ptr++ = Math::FloatToHalf(r[p]);
-          *ptr++ = Math::FloatToHalf(g[p]);
-          *ptr++ = Math::FloatToHalf(b[p]);
-          *ptr++ = Math::FloatToHalf(a[p]);
+          *ptr++ = FloatToHalf(r[p]);
+          *ptr++ = FloatToHalf(g[p]);
+          *ptr++ = FloatToHalf(b[p]);
+          *ptr++ = FloatToHalf(a[p]);
         END_BATCH_LOOP
         return true;
       }
@@ -428,7 +428,7 @@ namespace Helium
       {
         i16* ptr = (i16*)dst;
         START_BATCH_LOOP
-          ptr[p] = Math::FloatToHalf(0.212671f * r[p] + 0.715160f * g[p] + 0.072169f * b[p]);
+          ptr[p] = FloatToHalf(0.212671f * r[p] + 0.715160f * g[p] + 0.072169f * b[p]);
         END_BATCH_LOOP
         return true;
       }
@@ -436,8 +436,8 @@ namespace Helium
       {
         i16* ptr = (i16*)dst;
         START_BATCH_LOOP
-          *ptr++ = Math::FloatToHalf(r[p]);
-          *ptr++ = Math::FloatToHalf(g[p]);
+          *ptr++ = FloatToHalf(r[p]);
+          *ptr++ = FloatToHalf(g[p]);
         END_BATCH_LOOP
         return true;
       }
@@ -606,10 +606,10 @@ namespace Helium
       case CF_RGBAHALFMAP:
       {
         i16* ptr = (i16*)color;
-        r = Math::HalfToFloat(ptr[0]);
-        g = Math::HalfToFloat(ptr[1]);
-        b = Math::HalfToFloat(ptr[2]);
-        a = Math::HalfToFloat(ptr[3]);
+        r = HalfToFloat(ptr[0]);
+        g = HalfToFloat(ptr[1]);
+        b = HalfToFloat(ptr[2]);
+        a = HalfToFloat(ptr[3]);
         return true;
       }
       case CF_RGBE:
@@ -640,15 +640,15 @@ namespace Helium
       case CF_F16:
       {
         i16* ptr = (i16*)color;
-        r = g = b = Math::HalfToFloat(ptr[0]);
+        r = g = b = HalfToFloat(ptr[0]);
         a = 1.0f;
         return true;
       }
       case CF_F16F16:
       {
         i16* ptr = (i16*)color;
-        r = Math::HalfToFloat(ptr[0]);
-        g = Math::HalfToFloat(ptr[1]);
+        r = HalfToFloat(ptr[0]);
+        g = HalfToFloat(ptr[1]);
         b = 0.0f;
         a = 1.0f;
         return true;
@@ -735,12 +735,12 @@ namespace Helium
     green = (green / 255.f) * 2.f - 1.f;
     blue  = (blue  / 255.f) * 2.f - 1.f;
 
-    Math::Vector3 normal(red, green, blue);
+    Vector3 normal(red, green, blue);
     normal.Normalize();
 
     // convert range 0 -> 1
-    normal *= Math::Vector3(0.5f);
-    normal += Math::Vector3(0.5f);
+    normal *= Vector3(0.5f);
+    normal += Vector3(0.5f);
 
     u32 result;
 

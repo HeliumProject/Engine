@@ -98,7 +98,7 @@ void Skin::Evaluate(GraphDirection direction)
             // We only need to globalize deformation matrices of skins that were not frozen at rig time
             //
 
-            bool fullTransform = transform->GetGlobalTransform() != Math::Matrix4::Identity;
+            bool fullTransform = transform->GetGlobalTransform() != Matrix4::Identity;
 
 
             //
@@ -110,7 +110,7 @@ void Skin::Evaluate(GraphDirection direction)
                 const Transform* influence = m_InfluenceObjects[i];
 
                 // build the current deformation transformation in global space
-                Math::Matrix4 deformMat = influence->GetInverseBindTransform() * influence->GetGlobalTransform();
+                Matrix4 deformMat = influence->GetInverseBindTransform() * influence->GetGlobalTransform();
 
                 if ( fullTransform )
                 {
@@ -180,18 +180,18 @@ void Skin::Evaluate(GraphDirection direction)
                     {
                         if ( j > 2 )
                         {
-                            Math::Vector3& triVertex1 (m_Mesh->m_TriangleVertices[count]);
+                            Vector3& triVertex1 (m_Mesh->m_TriangleVertices[count]);
                             triVertex1 = m_Mesh->m_Vertices[ *vertexItr ];
                             m_SkinMatrices[polygon->m_Vertices[0]].TransformVertex( triVertex1 );
                             count++;
 
-                            Math::Vector3& triVertex2 (m_Mesh->m_TriangleVertices[count]);
+                            Vector3& triVertex2 (m_Mesh->m_TriangleVertices[count]);
                             triVertex2 = m_Mesh->m_Vertices[ *vertexItr ];
                             m_SkinMatrices[polygon->m_Vertices[j-1]].TransformVertex( triVertex2 );
                             count++;
                         }
 
-                        Math::Vector3& triVertex (m_Mesh->m_TriangleVertices[count]);
+                        Vector3& triVertex (m_Mesh->m_TriangleVertices[count]);
                         triVertex = m_Mesh->m_Vertices[ *vertexItr ];
                         m_SkinMatrices[polygon->m_Vertices[j]].TransformVertex( triVertex );
                         count++;
@@ -214,18 +214,18 @@ void Skin::Evaluate(GraphDirection direction)
                     {
                         if ( j > 2 )
                         {
-                            Math::Vector3& triNormal1 (m_Mesh->m_TriangleNormals[count]);
+                            Vector3& triNormal1 (m_Mesh->m_TriangleNormals[count]);
                             triNormal1 = m_Mesh->m_Normals[ *normalItr ];
                             m_SkinMatrices[polygon->m_Vertices[0]].TransformNormal( triNormal1 );
                             count++;
 
-                            Math::Vector3& triNormal2 (m_Mesh->m_TriangleNormals[count]);
+                            Vector3& triNormal2 (m_Mesh->m_TriangleNormals[count]);
                             triNormal2 = m_Mesh->m_Normals[ *normalItr ];
                             m_SkinMatrices[polygon->m_Vertices[j-1]].TransformNormal( triNormal2 );
                             count++;
                         }
 
-                        Math::Vector3& triNormal (m_Mesh->m_TriangleNormals[count]);
+                        Vector3& triNormal (m_Mesh->m_TriangleNormals[count]);
                         triNormal = m_Mesh->m_Normals[ *normalItr ];
                         m_SkinMatrices[polygon->m_Vertices[j]].TransformNormal( triNormal );
                         count++;
@@ -240,7 +240,7 @@ void Skin::Evaluate(GraphDirection direction)
     __super::Evaluate(direction);
 }
 
-void Skin::BlendMatrix(const Transform* transform, const Influence* influence, Math::Matrix4& matrix)
+void Skin::BlendMatrix(const Transform* transform, const Influence* influence, Matrix4& matrix)
 {
     //
     // Blend influence deformation matrices together

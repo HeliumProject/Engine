@@ -10,7 +10,6 @@
 #include "Foundation/String/Tokenize.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 RenderVisitor::RenderVisitor()

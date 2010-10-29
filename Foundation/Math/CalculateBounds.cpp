@@ -11,7 +11,6 @@
 #include "Macros.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 
 static const f32 epsilon = 1.0e-10F;
 static const i32 sweeps = 32;
@@ -28,7 +27,7 @@ static const i32 sweeps = 32;
 //  destroy the class and recreate it with the new vertex set.
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-BoundingVolumeGenerator::BoundingVolumeGenerator(Math::Vector3* points, i32 point_count, VolumeGenerateMethod method )
+BoundingVolumeGenerator::BoundingVolumeGenerator(Vector3* points, i32 point_count, VolumeGenerateMethod method )
 {
     m_volumeGenerationMethod  = method;
     m_PointCnt        = point_count;

@@ -3,7 +3,7 @@
 #include "Matrix4.h"
 #include "Frustum.h"
 
-using namespace Helium::Math;
+using namespace Helium;
 
 const AlignedBox AlignedBox::Unit = AlignedBox ( Vector3 (-0.5f, -0.5f, -0.5f),
                                                 Vector3 ( 0.5f,  0.5f,  0.5f) );
@@ -177,15 +177,15 @@ void AlignedBox::Merge(const Vector3& position)
 void AlignedBox::Transform(const Matrix4& matrix)
 {
     // get the currents sample bounds
-    Math::V_Vector3 vertices;
+    V_Vector3 vertices;
     GetVertices( vertices );
 
     // reseed this box
     Reset();
 
     // iterate and resample the bounds
-    Math::V_Vector3::iterator itr = vertices.begin();
-    Math::V_Vector3::iterator end = vertices.end();
+    V_Vector3::iterator itr = vertices.begin();
+    V_Vector3::iterator end = vertices.end();
     for ( ; itr != end; ++itr )
     {
         // transform the sample

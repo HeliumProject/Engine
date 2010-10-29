@@ -93,7 +93,7 @@ static SceneGraph::Shader* ReadMTL( const Path& path )
                 {
                 case 'a':
                     {
-                        Math::Color3 ambient;
+                        Color3 ambient;
                         fscanf( file, "%f %f %f", &ambient.r, &ambient.g, &ambient.b );
                         Log::Warning( TXT( "Discarding ambient, unsupported" ) );
                         break;
@@ -101,7 +101,7 @@ static SceneGraph::Shader* ReadMTL( const Path& path )
 
                 case 'd':
                     {
-                        Math::Color3 diffuse;
+                        Color3 diffuse;
                         fscanf( file, "%f %f %f", &diffuse.r, &diffuse.g, &diffuse.b );
                         Log::Warning( TXT( "Discarding diffuse, unsupported" ) );
                         break;
@@ -109,7 +109,7 @@ static SceneGraph::Shader* ReadMTL( const Path& path )
 
                 case 's':
                     {
-                        Math::Color3 specular;
+                        Color3 specular;
                         fscanf( file, "%f %f %f", &specular.r, &specular.g, &specular.b );
                         Log::Warning( TXT( "Discarding specular, unsupported" ) );
                         break;
@@ -187,13 +187,13 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path, bool flipWinding )
 
     u32 match = 0;
 
-    Math::Vector3 vertex;
-    Math::Vector3 normal;
-    Math::Vector2 texCoord;
+    Vector3 vertex;
+    Vector3 normal;
+    Vector2 texCoord;
 
-    std::vector< Math::Vector3 > vertices;
-    std::vector< Math::Vector3 > normals;
-    std::vector< Math::Vector2 > texCoords;
+    std::vector< Vector3 > vertices;
+    std::vector< Vector3 > normals;
+    std::vector< Vector2 > texCoords;
 
     std::vector< Triangle > triangles;
 
@@ -226,7 +226,7 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path, bool flipWinding )
                 }
                 else
                 {
-                    vertices.push_back( Math::Vector3() );
+                    vertices.push_back( Vector3() );
                     Log::Warning( TXT( "Invalid position, setting to origin. (File: %s, pos: %d, curpos: %d)" ), path.c_str(), fpos, currpos );
                 }
                 break;
@@ -240,7 +240,7 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path, bool flipWinding )
                 }
                 else
                 {
-                    normals.push_back( Math::Vector3( 0.0f, 0.0f, 1.0f ) );
+                    normals.push_back( Vector3( 0.0f, 0.0f, 1.0f ) );
                     Log::Warning( TXT( "Invalid position, setting to (0,0,1). (File: %s, pos: %d, curpos: %d)" ), path.c_str(), fpos, currpos );
                 }
                 break;
@@ -256,7 +256,7 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path, bool flipWinding )
                     }
                     else
                     {
-                        texCoords.push_back( Math::Vector2() );
+                        texCoords.push_back( Vector2() );
                         Log::Warning( TXT( "Invalid texture coordinate, setting to (0,0). (File: %s, pos: %d, curpos: %d)" ), path.c_str(), fpos, currpos );
                     }
 

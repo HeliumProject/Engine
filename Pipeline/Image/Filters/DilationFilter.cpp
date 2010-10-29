@@ -90,7 +90,7 @@ void DilationFilter::filter(void)
         {
             float r, g, b, a;
             input->Read(x, y, r, g, b, a);
-            Math::Vector4 color(r, g, b, a);
+            Vector4 color(r, g, b, a);
             if(!isNullPixel(color))
             {
                 input->Write(x, y, r, g, b, 1.f);
@@ -254,7 +254,7 @@ void DilationFilter::Normalize(Helium::Image *tex)
                 tex->Read(x, y, r, g, b, a);
                 if(a > 0.f)
                 {
-                    Math::Vector4 color(r, g, b, 0.f);
+                    Vector4 color(r, g, b, 0.f);
                     normalizeNormal(color);
                     tex->Write(x, y, color.x, color.y, color.z, a);
                 }

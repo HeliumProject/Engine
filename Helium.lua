@@ -246,7 +246,7 @@ project "Editor"
 	{
 		"Editor",
 		"Dependencies/wxWidgets/include",
-		"Dependencies/litesql/include",
+		"Dependencies/LiteSQL/include",
 		"Dependencies/p4api/include",
 		"Dependencies/lua/src",
 	}
@@ -256,7 +256,7 @@ project "Editor"
 		"Foundation",
 		"Pipeline",
 		"Core",
-		"litesql",
+		"LiteSQL",
 		"libclient",
 		"librpc",
 		"libsupp",

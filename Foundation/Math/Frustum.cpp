@@ -2,7 +2,7 @@
 #include "Polygon.h"
 #include "Line.h"
 
-using namespace Helium::Math;
+using namespace Helium;
 
 namespace ClipCodes
 {
@@ -261,7 +261,7 @@ bool Frustum::IntersectsTriangle(const Vector3& v0, const Vector3& v1, const Vec
     MATH_FUNCTION_TIMER();
 
     // this is the source polygon and it will glow as we clip each plane in the frustum
-    StaticPolygon<Math::Vector3, 9> polygon (v0, v1, v2);
+    StaticPolygon<Vector3, 9> polygon (v0, v1, v2);
 
     // for each clipping plane (the frustum)
     for (i32 i=0; i<6; i++)
@@ -270,7 +270,7 @@ bool Frustum::IntersectsTriangle(const Vector3& v0, const Vector3& v1, const Vec
         const Plane& clipPlane = (*this)[i];
 
         // this is the clipping target for this plane
-        StaticPolygon<Math::Vector3, 9> clipped;
+        StaticPolygon<Vector3, 9> clipped;
 
         // first edge vert
         Vector3 p;

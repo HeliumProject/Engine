@@ -63,7 +63,7 @@ u32 RBObjectLoader::ParseFile( const tchar* filename, bool winding )
         // for a mesh such as this all the master base values should be the same
 
         // verts
-        for ( Math::V_Vector3::const_iterator posItr = mesh->m_Positions.begin(), posEnd = mesh->m_Positions.end(); posItr != posEnd; ++posItr )
+        for ( V_Vector3::const_iterator posItr = mesh->m_Positions.begin(), posEnd = mesh->m_Positions.end(); posItr != posEnd; ++posItr )
         {
             m_positions.push_back( (*posItr).x*-1.0f );
             m_positions.push_back( (*posItr).y );
@@ -71,7 +71,7 @@ u32 RBObjectLoader::ParseFile( const tchar* filename, bool winding )
         }
 
         // normals
-        for ( Math::V_Vector3::const_iterator normalItr = mesh->m_Normals.begin(), normalEnd = mesh->m_Normals.end(); normalItr != normalEnd; ++normalItr )
+        for ( V_Vector3::const_iterator normalItr = mesh->m_Normals.begin(), normalEnd = mesh->m_Normals.end(); normalItr != normalEnd; ++normalItr )
         {
             m_normals.push_back( (*normalItr).x );
             m_normals.push_back( (*normalItr).y );
@@ -79,14 +79,14 @@ u32 RBObjectLoader::ParseFile( const tchar* filename, bool winding )
         }
 
         // uvs
-        for ( Math::V_Vector2::const_iterator uvItr = mesh->m_BaseUVs.begin(), uvEnd = mesh->m_BaseUVs.end(); uvItr != uvEnd; ++uvItr )
+        for ( V_Vector2::const_iterator uvItr = mesh->m_BaseUVs.begin(), uvEnd = mesh->m_BaseUVs.end(); uvItr != uvEnd; ++uvItr )
         {
             m_texcoords.push_back( (*uvItr).x );
             m_texcoords.push_back( -((*uvItr).y)+1 );
         }
 
         // colors
-        for ( Math::V_Vector4::const_iterator colItr = mesh->m_Colors.begin(), colEnd = mesh->m_Colors.end(); colItr != colEnd; ++colItr )
+        for ( V_Vector4::const_iterator colItr = mesh->m_Colors.begin(), colEnd = mesh->m_Colors.end(); colItr != colEnd; ++colItr )
         {
             m_colors.push_back( (*colItr).x );
             m_colors.push_back( (*colItr).y );
@@ -95,7 +95,7 @@ u32 RBObjectLoader::ParseFile( const tchar* filename, bool winding )
         }
 
         // tangents
-        for ( Math::V_Vector3::const_iterator tanItr = mesh->m_Tangents.begin(), tanEnd = mesh->m_Tangents.end(); tanItr != tanEnd; ++tanItr )
+        for ( V_Vector3::const_iterator tanItr = mesh->m_Tangents.begin(), tanEnd = mesh->m_Tangents.end(); tanItr != tanEnd; ++tanItr )
         {
             m_sTangents.push_back( (*tanItr).x );
             m_sTangents.push_back( (*tanItr).y );

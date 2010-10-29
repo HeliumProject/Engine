@@ -220,7 +220,7 @@ void EntityInstanceCreateTool::AddEntityAsset( const tstring& value )
 
     m_Generator->GetContainer()->GetCanvas()->Read();
 
-    Place(Math::Matrix4::Identity);
+    Place(Matrix4::Identity);
 }
 
 bool EntityInstanceCreateTool::GetPointerVisible() const
@@ -232,7 +232,7 @@ void EntityInstanceCreateTool::SetPointerVisible(bool show)
 {
     s_PointerVisible = show;
 
-    Place( Math::Matrix4::Identity );
+    Place( Matrix4::Identity );
 }
 
 bool EntityInstanceCreateTool::GetBoundsVisible() const
@@ -244,7 +244,7 @@ void EntityInstanceCreateTool::SetBoundsVisible(bool show)
 {
     s_BoundsVisible = show;
 
-    Place( Math::Matrix4::Identity );
+    Place( Matrix4::Identity );
 }
 
 bool EntityInstanceCreateTool::GetGeometryVisible() const
@@ -256,7 +256,7 @@ void EntityInstanceCreateTool::SetGeometryVisible(bool show)
 {
     s_GeometryVisible = show;
 
-    Place( Math::Matrix4::Identity );
+    Place( Matrix4::Identity );
 }
 
 tstring EntityInstanceCreateTool::GetRandomEntity() const
@@ -295,7 +295,7 @@ void EntityInstanceCreateTool::OnDeleteClass( const Inspect::ButtonClickedArgs& 
         if ( m_ClassPath.Hash() == entityInfo.m_ClassPath.Hash() )
         {
             m_ClassPath.Set( TXT( "" ) );
-            Place( Math::Matrix4::Identity );
+            Place( Matrix4::Identity );
         }
 
         m_RandomEntityInfo.erase( m_RandomEntityInfo.begin() + *itr );

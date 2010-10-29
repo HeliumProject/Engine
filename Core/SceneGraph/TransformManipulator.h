@@ -18,9 +18,9 @@ namespace Helium
     {
         struct ManipulationStart
         {
-            Math::Vector3 m_StartValue;
-            Math::Matrix4 m_StartFrame;
-            Math::Matrix4 m_InverseStartFrame;    
+            Vector3 m_StartValue;
+            Matrix4 m_StartFrame;
+            Matrix4 m_InverseStartFrame;    
         };
 
         typedef std::map<ManipulatorAdapter*, ManipulationStart> M_ManipulationStart;
@@ -34,7 +34,7 @@ namespace Helium
             const ManipulatorMode m_Mode;
 
             // Axes to manipulate
-            Math::AxesFlags m_SelectedAxes;
+            AxesFlags m_SelectedAxes;
 
             // Mouse input
             bool m_Left;
@@ -84,10 +84,10 @@ namespace Helium
             virtual void SelectionChanged(const SelectionChangeArgs& args);
 
             // setup the material in the render device for teh applicable axes
-            virtual bool SetAxisMaterial(Math::AxesFlags axes);
+            virtual bool SetAxisMaterial(AxesFlags axes);
 
             // get the normal to the provided axes, or camera direction if all
-            virtual Math::Vector3 GetAxesNormal(Math::AxesFlags axes);
+            virtual Vector3 GetAxesNormal(AxesFlags axes);
 
             // set the final result into the object with undo/redo support
             virtual void SetResult() = 0;

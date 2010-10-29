@@ -18,7 +18,6 @@
 #include "Core/SceneGraph/GridSettings.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 D3DMATERIAL9 Viewport::s_LiveMaterial;
@@ -460,8 +459,8 @@ void Viewport::MouseDown(const Helium::MouseButtonInput& input)
         m_DragMode = DragModes::Select;
 
         // reset point trackers
-        m_Start = Math::Point (input.GetPosition().x, input.GetPosition().y);
-        m_End = Math::Point (input.GetPosition().x, input.GetPosition().y);
+        m_Start = Point (input.GetPosition().x, input.GetPosition().y);
+        m_End = Point (input.GetPosition().x, input.GetPosition().y);
 
         // reset selection frame
         m_SelectionFrame->m_Start = m_Start;
@@ -488,7 +487,7 @@ void Viewport::MouseUp( const Helium::MouseButtonInput& input )
         {
             if (!m_Tool && input.RightUp())
             {
-                m_End = Math::Point (input.GetPosition().x, input.GetPosition().y);
+                m_End = Point (input.GetPosition().x, input.GetPosition().y);
                 m_SelectionFrame->m_End = m_End;
                 m_SelectionFrame->Update();
 
@@ -506,9 +505,9 @@ void Viewport::MouseUp( const Helium::MouseButtonInput& input )
                     Frustum worldSpaceFrustum;
                     if ( m_Cameras[m_CameraMode].ViewportToFrustum( (f32)m_SelectionFrame->m_Start.x, (f32)m_SelectionFrame->m_Start.y, (f32)m_SelectionFrame->m_End.x, (f32)m_SelectionFrame->m_End.y, worldSpaceFrustum) )
                     {
-                        Math::Point center ( m_SelectionFrame->m_Start + m_SelectionFrame->m_End / 2 );
+                        Point center ( m_SelectionFrame->m_Start + m_SelectionFrame->m_End / 2 );
 
-                        Math::Line line;
+                        Line line;
                         m_Cameras[m_CameraMode].ViewportToLine( (f32)center.x, (f32)center.y, line);
 
                         pick = new FrustumLinePickVisitor(&m_Cameras[m_CameraMode], line, worldSpaceFrustum );
@@ -534,7 +533,7 @@ void Viewport::MouseUp( const Helium::MouseButtonInput& input )
         {
             if (input.LeftUp() || input.MiddleUp())
             {
-                m_End = Math::Point (input.GetPosition().x, input.GetPosition().y);
+                m_End = Point (input.GetPosition().x, input.GetPosition().y);
                 m_SelectionFrame->m_End = m_End;
                 m_SelectionFrame->Update();
 
@@ -553,9 +552,9 @@ void Viewport::MouseUp( const Helium::MouseButtonInput& input )
 
                     if ( m_Cameras[m_CameraMode].ViewportToFrustum( (f32)m_SelectionFrame->m_Start.x, (f32)m_SelectionFrame->m_Start.y, (f32)m_SelectionFrame->m_End.x, (f32)m_SelectionFrame->m_End.y, worldSpaceFrustum) )
                     {
-                        Math::Point center ( m_SelectionFrame->m_Start + m_SelectionFrame->m_End / 2 );
+                        Point center ( m_SelectionFrame->m_Start + m_SelectionFrame->m_End / 2 );
 
-                        Math::Line line;
+                        Line line;
                         m_Cameras[m_CameraMode].ViewportToLine( (f32)center.x, (f32)center.y, line);
 
                         pick = new FrustumLinePickVisitor (&m_Cameras[m_CameraMode], line, worldSpaceFrustum); 
@@ -667,7 +666,7 @@ void Viewport::MouseMove( const Helium::MouseMoveInput& input )
 
     case DragModes::Select:
         {
-            m_End = Math::Point (input.GetPosition().x, input.GetPosition().y);
+            m_End = Point (input.GetPosition().x, input.GetPosition().y);
             m_SelectionFrame->m_End = m_End;
             m_SelectionFrame->Update();
 
@@ -731,9 +730,9 @@ void Viewport::MouseMove( const Helium::MouseMoveInput& input )
 
             if ( m_Cameras[m_CameraMode].ViewportToFrustum( (f32)highlightStartX, (f32)highlightStartY, (f32)highlightEndX, (f32)highlightEndY, worldSpaceFrustum) )
             {
-                Math::Point center ( Point (highlightStartX, highlightStartY) + Point (highlightEndX, highlightEndY) / 2 );
+                Point center ( Point (highlightStartX, highlightStartY) + Point (highlightEndX, highlightEndY) / 2 );
 
-                Math::Line line;
+                Line line;
                 m_Cameras[m_CameraMode].ViewportToLine( (f32)center.x, (f32)center.y, line);
 
                 pick = new FrustumLinePickVisitor( &m_Cameras[m_CameraMode], line, worldSpaceFrustum );
@@ -789,7 +788,7 @@ void Viewport::Draw()
         device->SetRenderTarget( 0, m_DeviceManager.GetBackBuffer() );
         device->SetDepthStencilSurface( m_DeviceManager.GetDepthBuffer() );
         device->Clear(NULL, NULL, D3DCLEAR_TARGET | D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(255, 80, 80, 80), 1.0f, 0);
-        device->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&Math::Matrix4::Identity);
+        device->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&Matrix4::Identity);
 
         m_ResourceTracker->ResetState();
     }

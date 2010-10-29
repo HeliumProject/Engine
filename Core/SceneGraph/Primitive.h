@@ -17,7 +17,7 @@ namespace Helium
         {
         protected:
             // the bounds of the primitive
-            Math::AlignedBox m_Bounds;
+            AlignedBox m_Bounds;
 
             // are we filled or wireframe?
             bool m_IsSolid;
@@ -37,7 +37,7 @@ namespace Helium
             Primitive(ResourceTracker* tracker);
             virtual ~Primitive();
 
-            const Math::AlignedBox& GetBounds() const
+            const AlignedBox& GetBounds() const
             {
                 return m_Bounds;
             }

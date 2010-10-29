@@ -79,9 +79,9 @@ namespace Helium
                 return false;
             }
 
-            virtual Math::Matrix4 GetFrame(ManipulatorSpace space) = 0;
-            virtual Math::Matrix4 GetObjectMatrix() = 0;
-            virtual Math::Matrix4 GetParentMatrix() = 0;
+            virtual Matrix4 GetFrame(ManipulatorSpace space) = 0;
+            virtual Matrix4 GetObjectMatrix() = 0;
+            virtual Matrix4 GetParentMatrix() = 0;
         };
 
         typedef Helium::SmartPtr<ManipulatorAdapter> ManipulatorAdapterPtr;
@@ -97,11 +97,11 @@ namespace Helium
                 return ManipulatorAdapterTypes::ScaleManipulatorAdapter;
             }
 
-            virtual Math::Vector3 GetPivot() = 0;
+            virtual Vector3 GetPivot() = 0;
 
-            virtual Math::Scale GetValue() = 0;
+            virtual Scale GetValue() = 0;
 
-            virtual Undo::CommandPtr SetValue(const Math::Scale& v) = 0;
+            virtual Undo::CommandPtr SetValue(const Scale& v) = 0;
         };
 
         class CORE_API RotateManipulatorAdapter : public ManipulatorAdapter
@@ -114,11 +114,11 @@ namespace Helium
                 return ManipulatorAdapterTypes::RotateManipulatorAdapter;
             }
 
-            virtual Math::Vector3 GetPivot() = 0;
+            virtual Vector3 GetPivot() = 0;
 
-            virtual Math::EulerAngles GetValue() = 0;
+            virtual EulerAngles GetValue() = 0;
 
-            virtual Undo::CommandPtr SetValue(const Math::EulerAngles& v) = 0;
+            virtual Undo::CommandPtr SetValue(const EulerAngles& v) = 0;
         };
 
         class CORE_API TranslateManipulatorAdapter : public ManipulatorAdapter
@@ -131,11 +131,11 @@ namespace Helium
                 return ManipulatorAdapterTypes::TranslateManipulatorAdapter;
             }
 
-            virtual Math::Vector3 GetPivot() = 0;
+            virtual Vector3 GetPivot() = 0;
 
-            virtual Math::Vector3 GetValue() = 0;
+            virtual Vector3 GetValue() = 0;
 
-            virtual Undo::CommandPtr SetValue(const Math::Vector3& v) = 0;
+            virtual Undo::CommandPtr SetValue(const Vector3& v) = 0;
         };
 
         class CORE_API ManiuplatorAdapterCollection HELIUM_ABSTRACT

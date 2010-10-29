@@ -80,12 +80,12 @@ namespace Helium
             m_Buttons = states;
         }
 
-        Math::Point GetPosition() const
+        Point GetPosition() const
         {
             return m_Position;
         }
 
-        void SetPosition( const Math::Point& p )
+        void SetPosition( const Point& p )
         {
             m_Position = p;
         }
@@ -121,7 +121,7 @@ namespace Helium
 
     protected:
         u32         m_Buttons;  // the states of all the buttons (always set)
-        Math::Point m_Position; // the position of the cursor on the screen (always set)
+        Point m_Position; // the position of the cursor on the screen (always set)
     };
 
     class FOUNDATION_API MouseMoveInput : public MouseInput

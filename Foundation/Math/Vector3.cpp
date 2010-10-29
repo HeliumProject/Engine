@@ -1,7 +1,7 @@
 #include "Vector3.h"
 #include "Scale.h"
 
-using namespace Helium::Math;
+using namespace Helium;
 
 const Vector3 Vector3::Zero;
 const Vector3 Vector3::Unit   (1.0, 1.0, 1.0);
@@ -13,7 +13,7 @@ Vector3  Vector3::operator* (const Scale& v) const { return Vector3 (x * v.x, y 
 
 using namespace Helium;
 
-i32 Math::LookupPosInArray( const Vector3& pos, i32 min_key, i32 max_key, V_Vector3& pos_array, MM_i32& pos_lookup , f32 threshold)
+i32 Helium::LookupPosInArray( const Vector3& pos, i32 min_key, i32 max_key, V_Vector3& pos_array, MM_i32& pos_lookup , f32 threshold)
 {
     for (i32 key = min_key; key <= max_key; ++key)
     {

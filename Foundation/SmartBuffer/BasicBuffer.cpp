@@ -336,7 +336,7 @@ u32 BasicBuffer::AddU64( u64 val, const tchar* dbgStr, ... )
 
 u32 BasicBuffer::AddF16( f32 val, const tchar* dbgStr, ... )
 {
-    i16 half = Math::FloatToHalf( val );
+    i16 half = FloatToHalf( val );
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_I16, 2);
 
     half = ConvertEndian(half,IsPlatformBigEndian());
@@ -384,7 +384,7 @@ u32 BasicBuffer::AddF64( f64 val, const tchar* dbgStr, ... )
     return AddU64( i );
 }
 
-u32 BasicBuffer::AddVector3( const Math::Vector3& v, const tchar* debugStr )
+u32 BasicBuffer::AddVector3( const Vector3& v, const tchar* debugStr )
 {
     u32 ret = AddF32(v.x, debugStr);
     AddF32(v.y, debugStr);
@@ -392,7 +392,7 @@ u32 BasicBuffer::AddVector3( const Math::Vector3& v, const tchar* debugStr )
     return ret;
 }
 
-u32 BasicBuffer::AddVector4( const Math::Vector4& v, const tchar* debugStr )
+u32 BasicBuffer::AddVector4( const Vector4& v, const tchar* debugStr )
 {
     u32 ret = AddF32(v.x, debugStr);
     AddF32(v.y, debugStr);
@@ -401,7 +401,7 @@ u32 BasicBuffer::AddVector4( const Math::Vector4& v, const tchar* debugStr )
     return ret;
 }
 
-u32 BasicBuffer::AddVector4( const Math::Vector3& v, f32 w, const tchar* debugStr )
+u32 BasicBuffer::AddVector4( const Vector3& v, f32 w, const tchar* debugStr )
 {
     u32 ret = AddF32(v.x, debugStr);
     AddF32(v.y, debugStr);

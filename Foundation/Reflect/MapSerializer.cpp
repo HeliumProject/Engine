@@ -2,7 +2,6 @@
 
 using namespace Helium;
 using namespace Helium::Reflect;
-using namespace Helium::Math;
 
 REFLECT_DEFINE_ABSTRACT(MapSerializer)
 
@@ -455,12 +454,12 @@ template SimpleMapSerializer<i32, I32Serializer, u64, U64Serializer>;
 template SimpleMapSerializer<u64, U64Serializer, tstring, StringSerializer>;
 template SimpleMapSerializer<u64, U64Serializer, u32, U32Serializer>;
 template SimpleMapSerializer<u64, U64Serializer, u64, U64Serializer>;
-template SimpleMapSerializer<u64, U64Serializer, Math::Matrix4, Matrix4Serializer>;
+template SimpleMapSerializer<u64, U64Serializer, Matrix4, Matrix4Serializer>;
 
 template SimpleMapSerializer<Helium::GUID, GUIDSerializer, u32, U32Serializer>;
-template SimpleMapSerializer<Helium::GUID, GUIDSerializer, Math::Matrix4, Matrix4Serializer>;
+template SimpleMapSerializer<Helium::GUID, GUIDSerializer, Matrix4, Matrix4Serializer>;
 template SimpleMapSerializer<Helium::TUID, TUIDSerializer, u32, U32Serializer>;
-template SimpleMapSerializer<Helium::TUID, TUIDSerializer, Math::Matrix4, Matrix4Serializer>;
+template SimpleMapSerializer<Helium::TUID, TUIDSerializer, Matrix4, Matrix4Serializer>;
 
 REFLECT_DEFINE_CLASS(StringStringMapSerializer);
 REFLECT_DEFINE_CLASS(StringBoolMapSerializer);

@@ -57,12 +57,12 @@ namespace Helium
         protected:
             virtual void SetResult() HELIUM_OVERRIDE;
 
-            bool ClosestSphericalIntersection(Math::Line line, Math::Vector3 spherePosition, float sphereRadius, Math::Vector3 cameraPosition, Math::Vector3& intersection);
+            bool ClosestSphericalIntersection(Line line, Vector3 spherePosition, float sphereRadius, Vector3 cameraPosition, Vector3& intersection);
 
         public:
             virtual void Draw( DrawArgs* args ) HELIUM_OVERRIDE;
             virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
-            virtual Math::AxesFlags PickRing(PickVisitor* pick, float err);
+            virtual AxesFlags PickRing(PickVisitor* pick, float err);
 
             virtual bool MouseDown( const MouseButtonInput& e ) HELIUM_OVERRIDE;
             virtual void MouseUp( const MouseButtonInput& e ) HELIUM_OVERRIDE;

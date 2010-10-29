@@ -7,11 +7,8 @@
 
 namespace Helium
 {
-    namespace Math
-    {
-        class Vector3;
-        class Matrix4;
-    }
+    class Vector3;
+    class Matrix4;
 
     namespace SceneGraph
     {
@@ -97,7 +94,7 @@ namespace Helium
             i32 ClosestPoint( PickVisitor* pick );
 
             // the closest point on the computed curve to the provided point
-            i32 ClosestPoint(Math::Vector3& pos);
+            i32 ClosestPoint(Vector3& pos);
 
             // the number of control points the determine the computed curve
             u32 GetNumberControlPoints() const;
@@ -117,9 +114,9 @@ namespace Helium
             // reverse curve direction
             Undo::CommandPtr ReverseControlPoints();
 
-            void ProjectPointOnCurve( const Math::Vector3& point, Math::Vector3& projectedPoint ) const;
-            f32 DistanceSqrToCurve( const Math::Vector3& point ) const;
-            f32 DistanceToCurve( const Math::Vector3& point ) const;
+            void ProjectPointOnCurve( const Vector3& point, Vector3& projectedPoint ) const;
+            f32 DistanceSqrToCurve( const Vector3& point ) const;
+            f32 DistanceToCurve( const Vector3& point ) const;
 
             //
             // Resources
@@ -161,7 +158,7 @@ namespace Helium
             CurveType               m_Type;                 // The degree of the curve basis function
             u32                     m_Resolution;           // The resolution of the points to compute
             ControlPointLabel       m_ControlPointLabel;    // How to display labels for control points
-            Math::V_Vector3         m_Points;               // The 3D locations of the computed curve points
+            V_Vector3         m_Points;               // The 3D locations of the computed curve points
 
             // Non-reflected
             PrimitiveLocator* m_Locator;

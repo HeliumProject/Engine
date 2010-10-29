@@ -2,7 +2,7 @@
 #include "Curve.h"
 
 #include "Foundation/Log.h"
-#include "Foundation/Math/Curve.h"
+#include "Foundation/Math/CalculateCurve.h"
 #include "Foundation/Math/AngleAxis.h"
 
 #include "Foundation/Undo/PropertyCommand.h"
@@ -181,7 +181,7 @@ int Curve::ClosestControlPoint( PickVisitor* pick )
         CurveControlPoint* point = Reflect::ObjectCast< CurveControlPoint >( *itr );
         if ( point )
         {
-            if ( pick->PickPoint( point->GetPosition(), Math::BigFloat ) )
+            if ( pick->PickPoint( point->GetPosition(), BigFloat ) )
             {
                 distance = pick->GetHits().back()->GetIntersectionDistance();
 
@@ -226,8 +226,8 @@ bool Curve::ClosestControlPoints( PickVisitor* pick, std::pair<u32, u32>& result
             currentIndex = index;
             if ( previous )
             {
-                Math::Vector3 point1 = previous->GetPosition();
-                Math::Vector3 point2 = current->GetPosition();
+                Vector3 point1 = previous->GetPosition();
+                Vector3 point2 = current->GetPosition();
 
                 if ( pick->PickSegment( point1, point2, -1.0f ) )
                 {
@@ -261,9 +261,9 @@ bool Curve::ClosestControlPoints( PickVisitor* pick, std::pair<u32, u32>& result
 i32 Curve::ClosestPoint( PickVisitor* pick )
 {
     i32 bestIndex = -1;
-    f32 distance = Math::BigFloat;
-    f32 bestDistance = Math::BigFloat;
-    Math::Vector3 point;
+    f32 distance = BigFloat;
+    f32 bestDistance = BigFloat;
+    Vector3 point;
 
     pick->SetCurrentObject ( this, GetGlobalTransform(), GetInverseGlobalTransform() );
 
@@ -272,7 +272,7 @@ i32 Curve::ClosestPoint( PickVisitor* pick )
     {
         point = m_Points[i];  
 
-        if ( pick->PickPoint (point, Math::BigFloat ) )
+        if ( pick->PickPoint (point, BigFloat ) )
         {
             distance = pick->GetHits().back()->GetIntersectionDistance();
 
@@ -287,17 +287,17 @@ i32 Curve::ClosestPoint( PickVisitor* pick )
     return bestIndex;
 }
 
-i32 Curve::ClosestPoint(Math::Vector3& pos)
+i32 Curve::ClosestPoint(Vector3& pos)
 {
     int bestIndex = -1;
     float distance = 0.0f;
     float bestDistance = 0.0f;
-    Math::Vector3 point;
+    Vector3 point;
 
-    const Math::Matrix4& globalTransform = this->GetGlobalTransform();
+    const Matrix4& globalTransform = this->GetGlobalTransform();
 
-    Math::V_Vector3::iterator itr = m_Points.begin();
-    Math::V_Vector3::iterator end = m_Points.end();
+    V_Vector3::iterator itr = m_Points.begin();
+    V_Vector3::iterator end = m_Points.end();
     for ( u32 i = 0; itr != end; ++itr, ++i )
     {
         point = *itr;
@@ -433,14 +433,14 @@ Undo::CommandPtr Curve::ReverseControlPoints()
     return new ReverseChildrenCommand( this );
 }
 
-void Curve::ProjectPointOnCurve( const Math::Vector3& point, Math::Vector3& projectedPoint ) const
+void Curve::ProjectPointOnCurve( const Vector3& point, Vector3& projectedPoint ) const
 {
-    Math::Vector3 closestPoint;
+    Vector3 closestPoint;
 
     u32 size = (u32)m_Points.size();
     HELIUM_ASSERT( size >= 2 );
 
-    Math::Line segment( m_Points[0], m_Points[1] );
+    Line segment( m_Points[0], m_Points[1] );
     segment.Transform( m_GlobalTransform );
     segment.ProjectPointOnSegment( point, closestPoint );
     f32 closestDistSqr = ( point - closestPoint ).LengthSquared();
@@ -478,15 +478,15 @@ void Curve::ProjectPointOnCurve( const Math::Vector3& point, Math::Vector3& proj
     projectedPoint = closestPoint;
 }
 
-f32 Curve::DistanceSqrToCurve( const Math::Vector3& point ) const
+f32 Curve::DistanceSqrToCurve( const Vector3& point ) const
 {
-    Math::Vector3 projectedPoint;
+    Vector3 projectedPoint;
     ProjectPointOnCurve( point, projectedPoint );
 
     return (point - projectedPoint).LengthSquared();
 }
 
-f32 Curve::DistanceToCurve( const Math::Vector3& point ) const
+f32 Curve::DistanceToCurve( const Vector3& point ) const
 {
     return sqrt( DistanceSqrToCurve(point) );
 }
@@ -605,7 +605,7 @@ Undo::CommandPtr Curve::CenterTransform()
     // Compute the centered position
     //
 
-    Math::Vector3 position = Math::Vector3::Zero;
+    Vector3 position = Vector3::Zero;
 
     {
         u32 controlPointCount = 0;
@@ -630,7 +630,7 @@ Undo::CommandPtr Curve::CenterTransform()
     // Offset the control points
     //
 
-    Math::Matrix4 m = m_GlobalTransform;
+    Matrix4 m = m_GlobalTransform;
 
     m.t = position;
 
@@ -644,11 +644,11 @@ Undo::CommandPtr Curve::CenterTransform()
             CurveControlPoint* point = Reflect::ObjectCast< CurveControlPoint >( *childItr );
             if ( point )
             {
-                Math::Vector3 p = point->GetPosition();
+                Vector3 p = point->GetPosition();
 
                 m.TransformVertex( p );
 
-                batch->Push( new Undo::PropertyCommand< Math::Vector3 >( new Helium::MemberProperty< CurveControlPoint, Math::Vector3 >( point, &CurveControlPoint::GetPosition, &CurveControlPoint::SetPosition ), p ) );
+                batch->Push( new Undo::PropertyCommand< Vector3 >( new Helium::MemberProperty< CurveControlPoint, Vector3 >( point, &CurveControlPoint::GetPosition, &CurveControlPoint::SetPosition ), p ) );
             }
         }
     }
@@ -689,13 +689,13 @@ Undo::CommandPtr Curve::CenterTransform()
 
 f32 Curve::CalculateCurveLength() const
 {
-    const Math::Matrix4& globalTransform = this->GetGlobalTransform();
-    Math::V_Vector3 points = m_Points;
+    const Matrix4& globalTransform = this->GetGlobalTransform();
+    V_Vector3 points = m_Points;
     f32 curveLength = 0.f;
     for ( u32 i = 1; i < points.size() ; ++i )
     {
-        Math::Vector3 endPoint = points[i];
-        Math::Vector3 startPoint = points[i-1];
+        Vector3 endPoint = points[i];
+        Vector3 startPoint = points[i-1];
         globalTransform.TransformVertex( endPoint );
         globalTransform.TransformVertex( startPoint );
         curveLength += (endPoint - startPoint).Length();
@@ -706,7 +706,7 @@ f32 Curve::CalculateCurveLength() const
 void Curve::Evaluate( GraphDirection direction )
 {
     u32 controlCount = 0;
-    Math::V_Vector3 points;
+    V_Vector3 points;
     {
         OS_HierarchyNodeDumbPtr::Iterator childItr = GetChildren().Begin();
         OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
@@ -727,11 +727,11 @@ void Curve::Evaluate( GraphDirection direction )
     }
     else if ( m_Type == CurveTypes::BSpline )
     {
-        Math::Curve::ComputeCurve( points, m_Resolution, m_Closed, Math::Curve::kBSpline, m_Points ); 
+        CurveGenerator::ComputeCurve( points, m_Resolution, m_Closed, CurveGenerator::kBSpline, m_Points ); 
     }
     else if ( m_Type == CurveTypes::CatmullRom )
     {
-        Math::Curve::ComputeCurve( points, m_Resolution, m_Closed, Math::Curve::kCatmullRom, m_Points ); 
+        CurveGenerator::ComputeCurve( points, m_Resolution, m_Closed, CurveGenerator::kCatmullRom, m_Points ); 
     }
     else
     {
@@ -791,29 +791,29 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
 
     curve->SetMaterial( curve->s_Material );
 
-    const Math::Matrix4& globalTransform = curve->GetGlobalTransform();
+    const Matrix4& globalTransform = curve->GetGlobalTransform();
 
     if ( !curve->m_Closed )
     {
-        Math::Matrix4 m;
+        Matrix4 m;
 
         if ( countCurvePoints > 0 )
         {
-            m = Math::Matrix4( curve->m_Points[ 0 ] ) * globalTransform;
+            m = Matrix4( curve->m_Points[ 0 ] ) * globalTransform;
             device->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&m );
             curve->m_Locator->Draw( args );
         }
 
         if ( countCurvePoints > 1 )
         {
-            m = Math::Matrix4( curve->m_Points[ countCurvePoints - 1 ] ) * globalTransform;
+            m = Matrix4( curve->m_Points[ countCurvePoints - 1 ] ) * globalTransform;
             device->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&m );
             curve->m_Locator->Draw( args );
 
-            Math::Vector3 p1 = curve->m_Points[ countCurvePoints - 2 ];
-            Math::Vector3 p2 = curve->m_Points[ countCurvePoints - 1 ];
-            Math::Vector3 dir = (p2 - p1).Normalized();
-            m = Math::Matrix4 ( Math::AngleAxis::Rotation( OutVector, dir ) );
+            Vector3 p1 = curve->m_Points[ countCurvePoints - 2 ];
+            Vector3 p2 = curve->m_Points[ countCurvePoints - 1 ];
+            Vector3 dir = (p2 - p1).Normalized();
+            m = Matrix4 ( AngleAxis::Rotation( OutVector, dir ) );
             m.t = p2 - (dir * (curve->m_Cone->m_Length / 2.0f));
             m *= globalTransform;
 
@@ -891,8 +891,8 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
         //
         {
             Camera* camera = curve->GetOwner()->GetViewport()->GetCamera();
-            const Math::Matrix4& viewMatrix = camera->GetViewport();
-            const Math::Matrix4& projMatrix = camera->GetProjection();
+            const Matrix4& viewMatrix = camera->GetViewport();
+            const Matrix4& projMatrix = camera->GetProjection();
             ID3DXFont* font = curve->GetOwner()->GetViewport()->GetStatistics()->GetFont();
             DWORD color = D3DCOLOR_ARGB(255, 255, 255, 255);
 
@@ -923,7 +923,7 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
                             break;
                         }
 
-                        Math::Vector3 position ( point->GetPosition() );
+                        Vector3 position ( point->GetPosition() );
 
                         // local to global
                         curve->GetGlobalTransform().TransformVertex( position );
@@ -982,7 +982,7 @@ bool Curve::Pick( PickVisitor* pick )
 {  
     bool pickHit = false;
 
-    Math::Vector3 normal ( UpVector );
+    Vector3 normal ( UpVector );
     pick->State().m_Matrix.TransformNormal( normal );
 
     pick->SetCurrentObject (this, pick->State().m_Matrix);
@@ -1015,17 +1015,17 @@ bool Curve::Pick( PickVisitor* pick )
 
         if ( !pickHit )
         {
-            Math::Vector3 startLocator (m_Points[ 0 ]);
+            Vector3 startLocator (m_Points[ 0 ]);
             pick->State().m_Matrix.TransformVertex (startLocator);
-            pick->SetCurrentObject (this, Math::Matrix4 (startLocator));
+            pick->SetCurrentObject (this, Matrix4 (startLocator));
             pickHit = m_Locator->Pick (pick);
         }
 
         if ( !pickHit )
         {
-            Math::Vector3 endLocator (m_Points[ m_Points.size() - 1 ]);
+            Vector3 endLocator (m_Points[ m_Points.size() - 1 ]);
             pick->State().m_Matrix.TransformVertex (endLocator);
-            pick->SetCurrentObject (this, Math::Matrix4 (endLocator));
+            pick->SetCurrentObject (this, Matrix4 (endLocator));
             pickHit = m_Locator->Pick (pick);
         }
     }

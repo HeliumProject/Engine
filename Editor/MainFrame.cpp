@@ -1828,7 +1828,7 @@ void MainFrame::OnCopyTransform(wxCommandEvent& event)
 {
     if ( m_SceneManager.HasCurrentScene() )
     {
-        Math::V_Matrix4 transforms;
+        V_Matrix4 transforms;
         m_SceneManager.GetCurrentScene()->GetSelectedTransforms(transforms);
 
         Helium::SmartPtr<Reflect::Matrix4ArraySerializer> data = new Reflect::Matrix4ArraySerializer();

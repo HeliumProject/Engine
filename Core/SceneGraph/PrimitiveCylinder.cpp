@@ -6,7 +6,6 @@
 #include "Orientation.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 PrimitiveCylinder::PrimitiveCylinder(ResourceTracker* tracker)
@@ -42,7 +41,7 @@ void PrimitiveCylinder::Update()
   // Wire
   //
 
-  float stepAngle = (f32)(Math::Pi)*2.0f / (f32)(m_RadiusSteps);
+  float stepAngle = (f32)(Pi)*2.0f / (f32)(m_RadiusSteps);
   float stepLength = m_Length/(f32)(m_LengthSteps-1);
 
   for (int l=0; l<m_LengthSteps; l++)

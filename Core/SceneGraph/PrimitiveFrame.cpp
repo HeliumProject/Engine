@@ -5,7 +5,6 @@
 #include "Color.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 PrimitiveFrame::PrimitiveFrame(ResourceTracker* tracker)

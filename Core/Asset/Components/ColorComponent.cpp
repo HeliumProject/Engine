@@ -20,27 +20,27 @@ Component::ComponentUsage ColorComponent::GetComponentUsage() const
     return Component::ComponentUsages::Overridable;
 }
 
-void ColorComponent::GetColor( Math::Color3& color ) const
+void ColorComponent::GetColor( Color3& color ) const
 {
     color = m_ColorHDR;
 }
 
-void ColorComponent::GetColor( Math::Color4& color ) const
+void ColorComponent::GetColor( Color4& color ) const
 {
     color = m_ColorHDR;
 }
 
-void ColorComponent::GetColor( Math::HDRColor3& color ) const
+void ColorComponent::GetColor( HDRColor3& color ) const
 {
     color = m_ColorHDR;
 }
 
-void ColorComponent::GetColor( Math::HDRColor4& color ) const
+void ColorComponent::GetColor( HDRColor4& color ) const
 {
     color = m_ColorHDR;
 }
 
-void ColorComponent::SetColor( const Math::HDRColor4& color )
+void ColorComponent::SetColor( const HDRColor4& color )
 {
     m_ColorHDR = color;
 }

@@ -119,7 +119,7 @@ namespace Helium
             // VaultSearchResults and Status
             // 
             Helium::Mutex           m_SearchResultsMutex;
-            i32                     m_CurrentSearchID;   // Used for debugging to track a search through the system
+            int32_t                     m_CurrentSearchID;   // Used for debugging to track a search through the system
             VaultSearchQueryPtr     m_CurrentSearchQuery;
             VaultSearchResultsPtr   m_SearchResults;     // The results to populate and pass to SearchResultsAvailableArgs
             std::set< Helium::Path > m_FoundPaths;       // The *complete* list of found files from this section
@@ -143,13 +143,13 @@ namespace Helium
             //
             // VaultSearchThread
             //
-            void SearchThreadProc( i32 searchID );
-            void SearchThreadEnter( i32 searchID );
-            void SearchThreadPostResults( i32 searchID );
-            bool CheckSearchThreadLeave( i32 searchID );
-            void SearchThreadLeave( i32 searchID );
+            void SearchThreadProc( int32_t searchID );
+            void SearchThreadEnter( int32_t searchID );
+            void SearchThreadPostResults( int32_t searchID );
+            bool CheckSearchThreadLeave( int32_t searchID );
+            void SearchThreadLeave( int32_t searchID );
 
-            u32 AddPath( const Helium::Path& path, i32 searchID );
+            uint32_t AddPath( const Helium::Path& path, int32_t searchID );
 
             // 
             // Events

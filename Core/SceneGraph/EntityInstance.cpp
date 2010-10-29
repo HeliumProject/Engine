@@ -18,7 +18,6 @@
 #include "Foundation/Log.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 using namespace Helium::Component;
 
@@ -87,7 +86,7 @@ bool EntityInstance::ValidatePersistent( const Component::ComponentPtr& attr ) c
     return __super::ValidatePersistent(attr);
 }
 
-const ComponentPtr& EntityInstance::GetComponent(i32 typeID) const
+const ComponentPtr& EntityInstance::GetComponent(int32_t typeID) const
 {
     // try to get the attribute from the Entity
     const ComponentPtr &instAttr = __super::GetComponent( typeID );
@@ -381,15 +380,15 @@ void EntityInstance::Evaluate(GraphDirection direction)
 
                 if ( type && type->GetPointer() )
                 {
-                    Math::AlignedBox box (type->GetPointer()->GetBounds());
+                    AlignedBox box (type->GetPointer()->GetBounds());
 
-                    Math::Scale scale;
-                    Math::Matrix3 rotate;
-                    Math::Vector3 translate;
+                    Scale scale;
+                    Matrix3 rotate;
+                    Vector3 translate;
                     m_InverseGlobalTransform.Decompose (scale, rotate, translate);
 
                     // this will compensate for the normalized render of the pointer
-                    box.Transform (Math::Matrix4 (scale));
+                    box.Transform (Matrix4 (scale));
 
                     m_ObjectBounds.Merge( box );
                 }

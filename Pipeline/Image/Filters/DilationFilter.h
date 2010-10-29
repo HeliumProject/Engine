@@ -19,7 +19,7 @@ namespace Helium
     void Normalize(Helium::Image *input);
 
     // was pure virtual in base class...
-    virtual Math::Vector4 generateFilteredPixel(unsigned int x, unsigned int y) { return Math::Vector4::Zero; };
+    virtual Vector4 generateFilteredPixel(unsigned int x, unsigned int y) { return Vector4::Zero; };
 
     Helium::ColorFormat outputFormat;
     bool m_smoothSeams;

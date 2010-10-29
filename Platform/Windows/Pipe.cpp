@@ -190,7 +190,7 @@ void Helium::DisconnectPipe(Pipe& pipe)
     }
 }
 
-bool Helium::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Condition& terminate)
+bool Helium::ReadPipe(Pipe& pipe, void* buffer, uint32_t bytes, uint32_t& read, Condition& terminate)
 {
     if (bytes == 0)
     {
@@ -235,12 +235,12 @@ bool Helium::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Condition&
         }
     }
 
-    read = (u32)read_local;
+    read = (uint32_t)read_local;
 
     return true;
 }
 
-bool Helium::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Condition& terminate)
+bool Helium::WritePipe(Pipe& pipe, void* buffer, uint32_t bytes, uint32_t& wrote, Condition& terminate)
 {
     if (bytes == 0)
     {
@@ -285,7 +285,7 @@ bool Helium::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Conditio
         }
     }
 
-    wrote = (u32)wrote_local;
+    wrote = (uint32_t)wrote_local;
 
     return true;
 }

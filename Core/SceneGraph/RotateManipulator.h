@@ -28,7 +28,7 @@ namespace Helium
         private:
             SettingsManager* m_SettingsManager;
 
-            f32 m_Size;
+            float32_t m_Size;
             ManipulatorSpace m_Space;
             bool m_AxisSnap;
             float m_SnapDegrees;
@@ -57,12 +57,12 @@ namespace Helium
         protected:
             virtual void SetResult() HELIUM_OVERRIDE;
 
-            bool ClosestSphericalIntersection(Math::Line line, Math::Vector3 spherePosition, float sphereRadius, Math::Vector3 cameraPosition, Math::Vector3& intersection);
+            bool ClosestSphericalIntersection(Line line, Vector3 spherePosition, float sphereRadius, Vector3 cameraPosition, Vector3& intersection);
 
         public:
             virtual void Draw( DrawArgs* args ) HELIUM_OVERRIDE;
             virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
-            virtual Math::AxesFlags PickRing(PickVisitor* pick, float err);
+            virtual AxesFlags PickRing(PickVisitor* pick, float err);
 
             virtual bool MouseDown( const MouseButtonInput& e ) HELIUM_OVERRIDE;
             virtual void MouseUp( const MouseButtonInput& e ) HELIUM_OVERRIDE;
@@ -70,8 +70,8 @@ namespace Helium
 
             virtual void CreateProperties() HELIUM_OVERRIDE;
 
-            f32 GetSize() const;
-            void SetSize( f32 size );
+            float32_t GetSize() const;
+            void SetSize( float32_t size );
 
             int GetSpace() const;
             void SetSpace(int space);
@@ -79,7 +79,7 @@ namespace Helium
             bool GetAxisSnap() const;
             void SetAxisSnap(bool axisSnap);
 
-            f32 GetSnapDegrees() const;
+            float32_t GetSnapDegrees() const;
             void SetSnapDegrees(float snapDegrees);
         };
     }

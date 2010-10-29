@@ -9,117 +9,114 @@
 
 namespace Helium
 {
-    namespace Math
+    class Matrix3;
+    class Matrix4;
+    class AngleAxis;
+    class Quaternion;
+
+    class FOUNDATION_API EulerAngles
     {
-        class Matrix3;
-        class Matrix4;
-        class AngleAxis;
-        class Quaternion;
+    public:
+        Vector3 angles;
+        EulerOrder order;
 
-        class FOUNDATION_API EulerAngles
+        const static EulerAngles Zero;
+
+        EulerAngles           ()
+            : order (EulerOrders::XYZs)
         {
-        public:
-            Vector3 angles;
-            EulerOrder order;
 
-            const static EulerAngles Zero;
+        }
 
-            EulerAngles           ()
-                : order (EulerOrders::XYZs)
-            {
+        explicit EulerAngles  (const Vector3& v)
+            : order (EulerOrders::XYZs)
+            , angles (v)
+        {
 
-            }
+        }
 
-            explicit EulerAngles  (const Vector3& v)
-                : order (EulerOrders::XYZs)
-                , angles (v)
-            {
+        explicit EulerAngles  (const Vector3& v, const EulerOrder& o)
+            : order (o)
+            , angles (v)
+        {
 
-            }
+        }
 
-            explicit EulerAngles  (const Vector3& v, const EulerOrder& o)
-                : order (o)
-                , angles (v)
-            {
+        explicit EulerAngles  (const float32_t& rx, const float32_t& ry, const float32_t& rz)
+            : order (EulerOrders::XYZs)
+            , angles (rx, ry, rz)
+        {
 
-            }
+        }
 
-            explicit EulerAngles  (const f32& rx, const f32& ry, const f32& rz)
-                : order (EulerOrders::XYZs)
-                , angles (rx, ry, rz)
-            {
+        explicit EulerAngles  (const float32_t& rx, const float32_t& ry, const float32_t& rz, const EulerOrder& o)
+            : order (o)
+            , angles (rx, ry, rz)
+        {
 
-            }
+        }
 
-            explicit EulerAngles  (const f32& rx, const f32& ry, const f32& rz, const EulerOrder& o)
-                : order (o)
-                , angles (rx, ry, rz)
-            {
+        explicit EulerAngles  (const Matrix3& v);
+        explicit EulerAngles  (const Matrix3& v, const EulerOrder& order);
+        EulerAngles&          operator= (const Matrix3& v);
 
-            }
+        explicit EulerAngles  (const Matrix4& v);
+        explicit EulerAngles  (const Matrix4& v, const EulerOrder& order);
+        EulerAngles&          operator= (const Matrix4& v);
 
-            explicit EulerAngles  (const Matrix3& v);
-            explicit EulerAngles  (const Matrix3& v, const EulerOrder& order);
-            EulerAngles&          operator= (const Matrix3& v);
+        explicit EulerAngles  (const AngleAxis& v);
+        explicit EulerAngles  (const AngleAxis& v, const EulerOrder& order);
+        EulerAngles&          operator= (const AngleAxis& v);
 
-            explicit EulerAngles  (const Matrix4& v);
-            explicit EulerAngles  (const Matrix4& v, const EulerOrder& order);
-            EulerAngles&          operator= (const Matrix4& v);
+        explicit EulerAngles  (const Quaternion& v);
+        explicit EulerAngles  (const Quaternion& v, const EulerOrder& order);
+        EulerAngles&          operator= (const Quaternion& v);
 
-            explicit EulerAngles  (const AngleAxis& v);
-            explicit EulerAngles  (const AngleAxis& v, const EulerOrder& order);
-            EulerAngles&          operator= (const AngleAxis& v);
+        bool                  operator== (const EulerAngles& v) const
+        {
+            return (angles == v.angles && order == v.order); 
+        }
 
-            explicit EulerAngles  (const Quaternion& v);
-            explicit EulerAngles  (const Quaternion& v, const EulerOrder& order);
-            EulerAngles&          operator= (const Quaternion& v);
+        bool                  operator!= (const EulerAngles& v) const
+        {
+            return !(angles == v.angles && order == v.order);
+        }
 
-            bool                  operator== (const EulerAngles& v) const
-            {
-                return (angles == v.angles && order == v.order); 
-            }
+        bool                  Valid()
+        {
+            return angles.Valid();
+        }
 
-            bool                  operator!= (const EulerAngles& v) const
-            {
-                return !(angles == v.angles && order == v.order);
-            }
+        float32_t                 	I ()
+        {
+            return angles[order.I()];
+        }
 
-            bool                  Valid()
-            {
-                return angles.Valid();
-            }
+        void                  I (float32_t v)
+        {
+            angles[order.I()] = v;
+        }
 
-            f32                 	I ()
-            {
-                return angles[order.I()];
-            }
+        float32_t                 	J ()
+        {
+            return angles[order.J()];
+        }
 
-            void                  I (f32 v)
-            {
-                angles[order.I()] = v;
-            }
+        void                  J (float32_t v)
+        {
+            angles[order.J()] = v;
+        }
 
-            f32                 	J ()
-            {
-                return angles[order.J()];
-            }
+        float32_t                 	H ()
+        {
+            return angles[order.H()];
+        }
 
-            void                  J (f32 v)
-            {
-                angles[order.J()] = v;
-            }
+        void                  H (float32_t v)
+        {
+            angles[order.H()] = v;
+        }
 
-            f32                 	H ()
-            {
-                return angles[order.H()];
-            }
-
-            void                  H (f32 v)
-            {
-                angles[order.H()] = v;
-            }
-
-            EulerAngles&          Reorder (EulerOrder v);
-        };
-    }
+        EulerAngles&          Reorder (EulerOrder v);
+    };
 }

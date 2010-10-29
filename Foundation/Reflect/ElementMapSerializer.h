@@ -22,7 +22,7 @@ namespace Helium
             typedef std::pair< ConstSerializerPtr, const ElementPtr* > ConstValueType;
             typedef std::vector< ConstValueType > V_ConstValueType;
 
-            virtual i32 GetKeyType() const = 0;
+            virtual int32_t GetKeyType() const = 0;
             virtual void GetItems(V_ValueType& items) = 0;
             virtual void GetItems(V_ConstValueType& items) const = 0;
             virtual ElementPtr* GetItem(const Serializer* key) = 0;
@@ -49,7 +49,7 @@ namespace Helium
             virtual size_t GetSize() const HELIUM_OVERRIDE;
             virtual void Clear() HELIUM_OVERRIDE;
 
-            virtual i32 GetKeyType() const HELIUM_OVERRIDE;
+            virtual int32_t GetKeyType() const HELIUM_OVERRIDE;
             virtual void GetItems(V_ValueType& items) HELIUM_OVERRIDE;
             virtual void GetItems(V_ConstValueType& items) const HELIUM_OVERRIDE;
             virtual ElementPtr* GetItem(const Serializer* key) HELIUM_OVERRIDE;
@@ -57,7 +57,7 @@ namespace Helium
             virtual void SetItem(const Serializer* key, const Element* value) HELIUM_OVERRIDE;
             virtual void RemoveItem(const Serializer* key) HELIUM_OVERRIDE;
 
-            virtual bool Set(const Serializer* src, u32 flags = 0) HELIUM_OVERRIDE;
+            virtual bool Set(const Serializer* src, uint32_t flags = 0) HELIUM_OVERRIDE;
             virtual bool Equals(const Serializer* s) const HELIUM_OVERRIDE;
 
             virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;
@@ -68,10 +68,10 @@ namespace Helium
 
         typedef SimpleElementMapSerializer<TypeID> TypeIDElementMapSerializer;              REFLECT_SPECIALIZE_SERIALIZER(TypeIDElementMapSerializer);
         typedef SimpleElementMapSerializer<std::string> StringElementMapSerializer;         REFLECT_SPECIALIZE_SERIALIZER(StringElementMapSerializer);
-        typedef SimpleElementMapSerializer<u32> U32ElementMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(U32ElementMapSerializer);
-        typedef SimpleElementMapSerializer<i32> I32ElementMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(I32ElementMapSerializer);
-        typedef SimpleElementMapSerializer<u64> U64ElementMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(U64ElementMapSerializer);
-        typedef SimpleElementMapSerializer<i64> I64ElementMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(I64ElementMapSerializer);
+        typedef SimpleElementMapSerializer<uint32_t> U32ElementMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(U32ElementMapSerializer);
+        typedef SimpleElementMapSerializer<int32_t> I32ElementMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(I32ElementMapSerializer);
+        typedef SimpleElementMapSerializer<uint64_t> U64ElementMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(U64ElementMapSerializer);
+        typedef SimpleElementMapSerializer<int64_t> I64ElementMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(I64ElementMapSerializer);
         typedef SimpleElementMapSerializer<Helium::GUID> GUIDElementMapSerializer;  REFLECT_SPECIALIZE_SERIALIZER(GUIDElementMapSerializer);
         typedef SimpleElementMapSerializer<Helium::TUID> TUIDElementMapSerializer;  REFLECT_SPECIALIZE_SERIALIZER(TUIDElementMapSerializer);
     }

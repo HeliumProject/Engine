@@ -201,12 +201,12 @@ namespace Helium
             // VisitedID tracks which eval traversal we were last visited on
             //
 
-            u32 GetVisitedID() const
+            uint32_t GetVisitedID() const
             {
                 return m_VisitedID;
             }
 
-            void SetVisitedID(u32 id)
+            void SetVisitedID(uint32_t id)
             {
                 m_VisitedID = id;
             }
@@ -272,7 +272,7 @@ namespace Helium
 
         public:
             // Makes us Evaluate() on next graph evaluation
-            virtual u32 Dirty();
+            virtual uint32_t Dirty();
 
             // overridable method for derived classes
             virtual void Evaluate(GraphDirection direction);
@@ -283,7 +283,7 @@ namespace Helium
 
         public:
             // the image index for use in the UI (in the scene outliner for example)
-            virtual i32 GetImageIndex() const;
+            virtual int32_t GetImageIndex() const;
 
             // the user interface name for this compile-time class, used to matching object's type
             virtual tstring GetApplicationTypeName() const;
@@ -410,7 +410,7 @@ namespace Helium
             S_SceneNodeDumbPtr      m_Ancestors;                            // nodes that are evaluated before this Node
             S_SceneNodeSmartPtr     m_Descendants;                          // nodes that are evaluated after this Node
             NodeState               m_NodeStates[ GraphDirections::Count ]; // our current state
-            u32                     m_VisitedID;                            // data cached for evaluation
+            uint32_t                     m_VisitedID;                            // data cached for evaluation
        };
     }
 }

@@ -33,7 +33,7 @@ namespace Helium
     }
     typedef FileOffsets::FileOffset FileOffset;
 
-    typedef i64 FileLocation;
+    typedef int64_t FileLocation;
 
     class FOUNDATION_API FileHandle : public Helium::RefCountBase< FileHandle >
     {
@@ -54,8 +54,8 @@ namespace Helium
         bool Open();
         void Close();
 
-        u32 Read( u8* buffer, size_t amount );
-        void Write( u8* buffer, size_t amount );
+        uint32_t Read( uint8_t* buffer, size_t amount );
+        void Write( uint8_t* buffer, size_t amount );
 
         FileLocation Tell();
         void Seek( FileLocation location, FileOffset offsetType = FileOffsets::Beginning );
@@ -76,7 +76,7 @@ namespace Helium
         }
 
     private:
-        u32  m_OpenCount;
+        uint32_t  m_OpenCount;
         Path m_Path;
         const tchar* m_Mode;
         FILE* m_FileHandle;

@@ -34,58 +34,58 @@ namespace Helium
             // Scale
             //
 
-            virtual Math::Scale GetScale() const;
-            virtual void SetScale( const Math::Scale& value );
+            virtual Scale GetScale() const;
+            virtual void SetScale( const Scale& value );
 
-            virtual Math::Vector3 GetScalePivot() const;
-            virtual void SetScalePivot( const Math::Vector3& value );
+            virtual Vector3 GetScalePivot() const;
+            virtual void SetScalePivot( const Vector3& value );
 
             //
             // Rotate
             //
 
-            virtual Math::EulerAngles GetRotate() const;
-            virtual void SetRotate( const Math::EulerAngles& value );
+            virtual EulerAngles GetRotate() const;
+            virtual void SetRotate( const EulerAngles& value );
 
-            virtual Math::Vector3 GetRotatePivot() const;
-            virtual void SetRotatePivot( const Math::Vector3& value );
+            virtual Vector3 GetRotatePivot() const;
+            virtual void SetRotatePivot( const Vector3& value );
 
             //
             // Translate
             //
 
-            virtual Math::Vector3 GetTranslate() const;
-            virtual void SetTranslate( const Math::Vector3& value );
+            virtual Vector3 GetTranslate() const;
+            virtual void SetTranslate( const Vector3& value );
 
-            virtual Math::Vector3 GetTranslatePivot() const;
-            virtual void SetTranslatePivot( const Math::Vector3& value );
+            virtual Vector3 GetTranslatePivot() const;
+            virtual void SetTranslatePivot( const Vector3& value );
 
             //
             // Object Transform (transformation of object coordinates into local space)
             //
 
-            Math::Matrix4 GetObjectTransform() const
+            Matrix4 GetObjectTransform() const
             {
                 return m_ObjectTransform;
             }
 
-            Math::Matrix4 GetInverseObjectTransform() const
+            Matrix4 GetInverseObjectTransform() const
             {
                 return m_InverseObjectTransform;
             }
 
-            void SetObjectTransform( const Math::Matrix4& transform );
+            void SetObjectTransform( const Matrix4& transform );
 
             //
             // Parent Transform (transformation of the frame this object is within into world space)
             //
 
-            Math::Matrix4 GetParentTransform() const
+            Matrix4 GetParentTransform() const
             {
                 return m_InverseObjectTransform * m_GlobalTransform;
             }
 
-            Math::Matrix4 GetInverseParentTransform() const
+            Matrix4 GetInverseParentTransform() const
             {
                 return m_InverseGlobalTransform * m_ObjectTransform;
             }
@@ -94,24 +94,24 @@ namespace Helium
             // Global Transform (transformation of object coordinates into world space)
             //
 
-            Math::Matrix4 GetGlobalTransform() const
+            Matrix4 GetGlobalTransform() const
             {
                 return m_GlobalTransform;
             }
 
-            Math::Matrix4 GetInverseGlobalTransform() const
+            Matrix4 GetInverseGlobalTransform() const
             {
                 return m_InverseGlobalTransform;
             }
 
-            void SetGlobalTransform( const Math::Matrix4& transform );
+            void SetGlobalTransform( const Matrix4& transform );
 
             //
             // Binding Matrices
             //
 
-            virtual Math::Matrix4 GetBindTransform() const;
-            virtual Math::Matrix4 GetInverseBindTransform() const;
+            virtual Matrix4 GetBindTransform() const;
+            virtual Matrix4 GetInverseBindTransform() const;
 
             //
             // Inherit Transform
@@ -122,13 +122,13 @@ namespace Helium
 
         public:
             // compute scaling component
-            virtual Math::Matrix4 GetScaleComponent() const;
+            virtual Matrix4 GetScaleComponent() const;
 
             // compute rotation component
-            virtual Math::Matrix4 GetRotateComponent() const;
+            virtual Matrix4 GetRotateComponent() const;
 
             // compute translation component
-            virtual Math::Matrix4 GetTranslateComponent() const;
+            virtual Matrix4 GetTranslateComponent() const;
 
             // resets transform to identity
             virtual Undo::CommandPtr ResetTransform();
@@ -161,42 +161,42 @@ namespace Helium
             // creator
             static void CreatePanel(CreatePanelArgs& args);
 
-            f32 GetScaleX() const;
-            void SetScaleX(f32 scale);
-            f32 GetScaleY() const;
-            void SetScaleY(f32 scale);
-            f32 GetScaleZ() const;
-            void SetScaleZ(f32 scale);
+            float32_t GetScaleX() const;
+            void SetScaleX(float32_t scale);
+            float32_t GetScaleY() const;
+            void SetScaleY(float32_t scale);
+            float32_t GetScaleZ() const;
+            void SetScaleZ(float32_t scale);
 
-            f32 GetRotateX() const;
-            void SetRotateX(f32 rotate);
-            f32 GetRotateY() const;
-            void SetRotateY(f32 rotate);
-            f32 GetRotateZ() const;
-            void SetRotateZ(f32 rotate);
+            float32_t GetRotateX() const;
+            void SetRotateX(float32_t rotate);
+            float32_t GetRotateY() const;
+            void SetRotateY(float32_t rotate);
+            float32_t GetRotateZ() const;
+            void SetRotateZ(float32_t rotate);
 
-            f32 GetTranslateX() const;
-            void SetTranslateX(f32 translate);
-            f32 GetTranslateY() const;
-            void SetTranslateY(f32 translate);
-            f32 GetTranslateZ() const;
-            void SetTranslateZ(f32 translate);
+            float32_t GetTranslateX() const;
+            void SetTranslateX(float32_t translate);
+            float32_t GetTranslateY() const;
+            void SetTranslateY(float32_t translate);
+            float32_t GetTranslateZ() const;
+            void SetTranslateZ(float32_t translate);
 
         protected:
             // Reflected
-            Math::Scale         m_Scale;
-            Math::EulerAngles   m_Rotate;
-            Math::Vector3       m_Translate;
-            Math::Matrix4       m_ObjectTransform;
-            Math::Matrix4       m_GlobalTransform;
+            Scale         m_Scale;
+            EulerAngles   m_Rotate;
+            Vector3       m_Translate;
+            Matrix4       m_ObjectTransform;
+            Matrix4       m_GlobalTransform;
             bool                m_InheritTransform;     // Do we transform with our parent?
 
             // Non-reflected
-            Math::Matrix4       m_InverseObjectTransform;
-            Math::Matrix4       m_InverseGlobalTransform;
+            Matrix4       m_InverseObjectTransform;
+            Matrix4       m_InverseGlobalTransform;
             bool                m_BindIsDirty;
-            Math::Matrix4       m_BindTransform;
-            Math::Matrix4       m_InverseBindTransform;
+            Matrix4       m_BindTransform;
+            Matrix4       m_InverseBindTransform;
         };
 
         class TransformScaleManipulatorAdapter : public ScaleManipulatorAdapter
@@ -216,23 +216,23 @@ namespace Helium
                 return m_Transform;
             }
 
-            virtual Math::Matrix4 GetFrame(ManipulatorSpace space) HELIUM_OVERRIDE;
-            virtual Math::Matrix4 GetObjectMatrix() HELIUM_OVERRIDE;
-            virtual Math::Matrix4 GetParentMatrix() HELIUM_OVERRIDE;
+            virtual Matrix4 GetFrame(ManipulatorSpace space) HELIUM_OVERRIDE;
+            virtual Matrix4 GetObjectMatrix() HELIUM_OVERRIDE;
+            virtual Matrix4 GetParentMatrix() HELIUM_OVERRIDE;
 
-            virtual Math::Vector3 GetPivot() HELIUM_OVERRIDE
+            virtual Vector3 GetPivot() HELIUM_OVERRIDE
             {
                 return m_Transform->GetScalePivot();
             }
 
-            virtual Math::Scale GetValue() HELIUM_OVERRIDE
+            virtual Scale GetValue() HELIUM_OVERRIDE
             {
                 return m_Transform->GetScale();
             }
 
-            virtual Undo::CommandPtr SetValue(const Math::Scale& v) HELIUM_OVERRIDE
+            virtual Undo::CommandPtr SetValue(const Scale& v) HELIUM_OVERRIDE
             {
-                return new Undo::PropertyCommand<Math::Scale> ( new Helium::MemberProperty<SceneGraph::Transform, Math::Scale> (m_Transform, &SceneGraph::Transform::GetScale, &SceneGraph::Transform::SetScale), v );
+                return new Undo::PropertyCommand<Scale> ( new Helium::MemberProperty<SceneGraph::Transform, Scale> (m_Transform, &SceneGraph::Transform::GetScale, &SceneGraph::Transform::SetScale), v );
             }
         };
 
@@ -258,23 +258,23 @@ namespace Helium
                 return true;
             }
 
-            virtual Math::Matrix4 GetFrame(ManipulatorSpace space) HELIUM_OVERRIDE;
-            virtual Math::Matrix4 GetObjectMatrix() HELIUM_OVERRIDE;
-            virtual Math::Matrix4 GetParentMatrix() HELIUM_OVERRIDE;
+            virtual Matrix4 GetFrame(ManipulatorSpace space) HELIUM_OVERRIDE;
+            virtual Matrix4 GetObjectMatrix() HELIUM_OVERRIDE;
+            virtual Matrix4 GetParentMatrix() HELIUM_OVERRIDE;
 
-            virtual Math::Vector3 GetPivot() HELIUM_OVERRIDE
+            virtual Vector3 GetPivot() HELIUM_OVERRIDE
             {
-                return Math::Vector3::Zero;
+                return Vector3::Zero;
             }
 
-            virtual Math::Vector3 GetValue() HELIUM_OVERRIDE
+            virtual Vector3 GetValue() HELIUM_OVERRIDE
             {
                 return m_Transform->GetScalePivot();
             }
 
-            virtual Undo::CommandPtr SetValue(const Math::Vector3& v) HELIUM_OVERRIDE
+            virtual Undo::CommandPtr SetValue(const Vector3& v) HELIUM_OVERRIDE
             {
-                return new Undo::PropertyCommand<Math::Vector3> ( new Helium::MemberProperty<SceneGraph::Transform, Math::Vector3> (m_Transform, &SceneGraph::Transform::GetScalePivot, &SceneGraph::Transform::SetScalePivot), v );
+                return new Undo::PropertyCommand<Vector3> ( new Helium::MemberProperty<SceneGraph::Transform, Vector3> (m_Transform, &SceneGraph::Transform::GetScalePivot, &SceneGraph::Transform::SetScalePivot), v );
             }
         };
 
@@ -295,23 +295,23 @@ namespace Helium
                 return m_Transform;
             }
 
-            virtual Math::Matrix4 GetFrame(ManipulatorSpace space) HELIUM_OVERRIDE;
-            virtual Math::Matrix4 GetObjectMatrix() HELIUM_OVERRIDE;
-            virtual Math::Matrix4 GetParentMatrix() HELIUM_OVERRIDE;
+            virtual Matrix4 GetFrame(ManipulatorSpace space) HELIUM_OVERRIDE;
+            virtual Matrix4 GetObjectMatrix() HELIUM_OVERRIDE;
+            virtual Matrix4 GetParentMatrix() HELIUM_OVERRIDE;
 
-            virtual Math::Vector3 GetPivot() HELIUM_OVERRIDE
+            virtual Vector3 GetPivot() HELIUM_OVERRIDE
             {
                 return m_Transform->GetRotatePivot();
             }
 
-            virtual Math::EulerAngles GetValue() HELIUM_OVERRIDE
+            virtual EulerAngles GetValue() HELIUM_OVERRIDE
             {
                 return m_Transform->GetRotate();
             }
 
-            virtual Undo::CommandPtr SetValue(const Math::EulerAngles& v) HELIUM_OVERRIDE
+            virtual Undo::CommandPtr SetValue(const EulerAngles& v) HELIUM_OVERRIDE
             {
-                return new Undo::PropertyCommand<Math::EulerAngles> ( new Helium::MemberProperty<SceneGraph::Transform, Math::EulerAngles> (m_Transform, &SceneGraph::Transform::GetRotate, &SceneGraph::Transform::SetRotate), v );
+                return new Undo::PropertyCommand<EulerAngles> ( new Helium::MemberProperty<SceneGraph::Transform, EulerAngles> (m_Transform, &SceneGraph::Transform::GetRotate, &SceneGraph::Transform::SetRotate), v );
             }
         };
 
@@ -337,23 +337,23 @@ namespace Helium
                 return true;
             }
 
-            virtual Math::Matrix4 GetFrame(ManipulatorSpace space) HELIUM_OVERRIDE;
-            virtual Math::Matrix4 GetObjectMatrix() HELIUM_OVERRIDE;
-            virtual Math::Matrix4 GetParentMatrix() HELIUM_OVERRIDE;
+            virtual Matrix4 GetFrame(ManipulatorSpace space) HELIUM_OVERRIDE;
+            virtual Matrix4 GetObjectMatrix() HELIUM_OVERRIDE;
+            virtual Matrix4 GetParentMatrix() HELIUM_OVERRIDE;
 
-            virtual Math::Vector3 GetPivot() HELIUM_OVERRIDE
+            virtual Vector3 GetPivot() HELIUM_OVERRIDE
             {
-                return Math::Vector3::Zero;
+                return Vector3::Zero;
             }
 
-            virtual Math::Vector3 GetValue() HELIUM_OVERRIDE
+            virtual Vector3 GetValue() HELIUM_OVERRIDE
             {
                 return m_Transform->GetRotatePivot();
             }
 
-            virtual Undo::CommandPtr SetValue(const Math::Vector3& v) HELIUM_OVERRIDE
+            virtual Undo::CommandPtr SetValue(const Vector3& v) HELIUM_OVERRIDE
             {
-                return new Undo::PropertyCommand<Math::Vector3> ( new Helium::MemberProperty<SceneGraph::Transform, Math::Vector3> (m_Transform, &SceneGraph::Transform::GetRotatePivot, &SceneGraph::Transform::SetRotatePivot), v );
+                return new Undo::PropertyCommand<Vector3> ( new Helium::MemberProperty<SceneGraph::Transform, Vector3> (m_Transform, &SceneGraph::Transform::GetRotatePivot, &SceneGraph::Transform::SetRotatePivot), v );
             }
         };
 
@@ -374,23 +374,23 @@ namespace Helium
                 return m_Transform;
             }
 
-            virtual Math::Matrix4 GetFrame(ManipulatorSpace space) HELIUM_OVERRIDE;
-            virtual Math::Matrix4 GetObjectMatrix() HELIUM_OVERRIDE;
-            virtual Math::Matrix4 GetParentMatrix() HELIUM_OVERRIDE;
+            virtual Matrix4 GetFrame(ManipulatorSpace space) HELIUM_OVERRIDE;
+            virtual Matrix4 GetObjectMatrix() HELIUM_OVERRIDE;
+            virtual Matrix4 GetParentMatrix() HELIUM_OVERRIDE;
 
-            virtual Math::Vector3 GetPivot() HELIUM_OVERRIDE
+            virtual Vector3 GetPivot() HELIUM_OVERRIDE
             {
                 return m_Transform->GetTranslatePivot();
             }
 
-            virtual Math::Vector3 GetValue() HELIUM_OVERRIDE
+            virtual Vector3 GetValue() HELIUM_OVERRIDE
             {
                 return m_Transform->GetTranslate();
             }
 
-            virtual Undo::CommandPtr SetValue(const Math::Vector3& v) HELIUM_OVERRIDE
+            virtual Undo::CommandPtr SetValue(const Vector3& v) HELIUM_OVERRIDE
             {
-                return new Undo::PropertyCommand<Math::Vector3> ( new Helium::MemberProperty<SceneGraph::Transform, Math::Vector3> (m_Transform, &SceneGraph::Transform::GetTranslate, &SceneGraph::Transform::SetTranslate), v );
+                return new Undo::PropertyCommand<Vector3> ( new Helium::MemberProperty<SceneGraph::Transform, Vector3> (m_Transform, &SceneGraph::Transform::GetTranslate, &SceneGraph::Transform::SetTranslate), v );
             }
         };
 
@@ -416,23 +416,23 @@ namespace Helium
                 return true;
             }
 
-            virtual Math::Matrix4 GetFrame(ManipulatorSpace space) HELIUM_OVERRIDE;
-            virtual Math::Matrix4 GetObjectMatrix() HELIUM_OVERRIDE;
-            virtual Math::Matrix4 GetParentMatrix() HELIUM_OVERRIDE;
+            virtual Matrix4 GetFrame(ManipulatorSpace space) HELIUM_OVERRIDE;
+            virtual Matrix4 GetObjectMatrix() HELIUM_OVERRIDE;
+            virtual Matrix4 GetParentMatrix() HELIUM_OVERRIDE;
 
-            virtual Math::Vector3 GetPivot() HELIUM_OVERRIDE
+            virtual Vector3 GetPivot() HELIUM_OVERRIDE
             {
-                return Math::Vector3::Zero;
+                return Vector3::Zero;
             }
 
-            virtual Math::Vector3 GetValue() HELIUM_OVERRIDE
+            virtual Vector3 GetValue() HELIUM_OVERRIDE
             {
                 return m_Transform->GetTranslatePivot();
             }
 
-            virtual Undo::CommandPtr SetValue(const Math::Vector3& v) HELIUM_OVERRIDE
+            virtual Undo::CommandPtr SetValue(const Vector3& v) HELIUM_OVERRIDE
             {
-                return new Undo::PropertyCommand<Math::Vector3> ( new Helium::MemberProperty<SceneGraph::Transform, Math::Vector3> (m_Transform, &SceneGraph::Transform::GetTranslatePivot, &SceneGraph::Transform::SetTranslatePivot), v );
+                return new Undo::PropertyCommand<Vector3> ( new Helium::MemberProperty<SceneGraph::Transform, Vector3> (m_Transform, &SceneGraph::Transform::GetTranslatePivot, &SceneGraph::Transform::SetTranslatePivot), v );
             }
         };
     }

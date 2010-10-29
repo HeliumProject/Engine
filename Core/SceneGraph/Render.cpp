@@ -10,7 +10,6 @@
 #include "Foundation/String/Tokenize.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 RenderVisitor::RenderVisitor()
@@ -46,7 +45,7 @@ int RenderEntry::Compare( const void* ptr1, const void* ptr2 )
 
   struct CompareTimer
   {
-    u64 m_Start;
+    uint64_t m_Start;
     RenderVisitor* m_Visitor;
 
     CompareTimer(RenderVisitor* visitor)
@@ -175,7 +174,7 @@ void RenderVisitor::Draw()
     {
       CORE_RENDER_SCOPE_TIMER( ("Sort") );
 
-      u64 start = Helium::TimerGetClock();
+      uint64_t start = Helium::TimerGetClock();
       m_CompareTime = 0x0;
 
       qsort( &m_EntryPointers.front(), m_EntryPointers.size(), sizeof(RenderEntry*), &RenderEntry::Compare );
@@ -187,7 +186,7 @@ void RenderVisitor::Draw()
     {
       CORE_RENDER_SCOPE_TIMER( ("Draw") );
 
-      u64 start = Helium::TimerGetClock();
+      uint64_t start = Helium::TimerGetClock();
 
       DrawFunction draw = NULL;
       DeviceFunction drawReset = NULL;
@@ -293,7 +292,7 @@ bool SceneGraph::IsSupportedTexture( const tstring& file )
   return false;
 }
 
-IDirect3DTexture9* SceneGraph::LoadTexture( IDirect3DDevice9* device, const tstring& file, u32* textureSize, bool* hasAlpha, D3DPOOL pool )
+IDirect3DTexture9* SceneGraph::LoadTexture( IDirect3DDevice9* device, const tstring& file, uint32_t* textureSize, bool* hasAlpha, D3DPOOL pool )
 {
   IDirect3DTexture9* texture = NULL;
   bool alpha = false;
@@ -330,12 +329,12 @@ IDirect3DTexture9* SceneGraph::LoadTexture( IDirect3DDevice9* device, const tstr
         D3DSURFACE_DESC desc; 
         tempTexture->GetLevelDesc(0, &desc); 
 
-        for(u32 r = 0; r < desc.Height && textureFormat == D3DFMT_DXT1; r++)
+        for(uint32_t r = 0; r < desc.Height && textureFormat == D3DFMT_DXT1; r++)
         {
-          u32* pixels = (u32*) (((u8*)lockedRect.pBits) + lockedRect.Pitch * r); 
-          for(u32 c = 0; c < desc.Width; c++)
+          uint32_t* pixels = (uint32_t*) (((uint8_t*)lockedRect.pBits) + lockedRect.Pitch * r); 
+          for(uint32_t c = 0; c < desc.Width; c++)
           {
-            u32 masked = pixels[c] & 0xFF000000; 
+            uint32_t masked = pixels[c] & 0xFF000000; 
             if(masked != 0xFF000000)
             {
               alpha = true; 
@@ -403,7 +402,7 @@ IDirect3DTexture9* SceneGraph::LoadTexture( IDirect3DDevice9* device, const tstr
         if ( textureSize )
         {
           *textureSize = 0; 
-          for(u32 i = 0; i < texture->GetLevelCount(); i++)
+          for(uint32_t i = 0; i < texture->GetLevelCount(); i++)
           {
             D3DSURFACE_DESC desc; 
             texture->GetLevelDesc(i, &desc); 

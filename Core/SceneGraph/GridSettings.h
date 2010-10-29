@@ -32,41 +32,41 @@ namespace Helium
 
             GridSettings( const tstring& version = TXT( "" ),
                 GridUnit units = GridUnits::Meters,
-                u32 width = 12,
-                u32 length = 12,
-                f32 majorStep = 5.0f,
-                f32 minorStep = 1.0f,
-                Math::Color3 axisColor = Math::Color3( Math::Vector3( 0.0f, 0.0f, 0.0f ) ),
-                Math::Color3 majorColor = Math::Color3( Math::Vector3( 0.5f, 0.5f, 0.5f ) ),
-                Math::Color3 minorColor = Math::Color3( Math::Vector3( 0.5f, 0.5f, 0.5f ) ) );
+                uint32_t width = 12,
+                uint32_t length = 12,
+                float32_t majorStep = 5.0f,
+                float32_t minorStep = 1.0f,
+                Color3 axisColor = Color3( Vector3( 0.0f, 0.0f, 0.0f ) ),
+                Color3 majorColor = Color3( Vector3( 0.5f, 0.5f, 0.5f ) ),
+                Color3 minorColor = Color3( Vector3( 0.5f, 0.5f, 0.5f ) ) );
             ~GridSettings();
 
             virtual void PostDeserialize();
 
-            u32 GetWidth();
-            u32 GetLength();
-            f32 GetMajorStep();
-            f32 GetMinorStep();
-            const Math::Color3& GetAxisColor();
-            const Math::Color3& GetMajorColor();
-            const Math::Color3& GetMinorColor();
+            uint32_t GetWidth();
+            uint32_t GetLength();
+            float32_t GetMajorStep();
+            float32_t GetMinorStep();
+            const Color3& GetAxisColor();
+            const Color3& GetMajorColor();
+            const Color3& GetMinorColor();
 
         private:
             void OnChanged( const Reflect::ElementChangeArgs& args );
 
-            static f32 GetConversionFactor( GridUnit units );
-            static f32 ConvertUnits( f32 sourceValue, GridUnit sourceUnits, GridUnit destinationUnits );
+            static float32_t GetConversionFactor( GridUnit units );
+            static float32_t ConvertUnits( float32_t sourceValue, GridUnit sourceUnits, GridUnit destinationUnits );
 
         private:
             GridUnit m_Units;
             GridUnit m_PreviousUnits;
-            u32 m_Width;
-            u32 m_Length;
-            f32 m_MajorStep;
-            f32 m_MinorStep;
-            Math::Color3 m_AxisColor;
-            Math::Color3 m_MajorColor;
-            Math::Color3 m_MinorColor;
+            uint32_t m_Width;
+            uint32_t m_Length;
+            float32_t m_MajorStep;
+            float32_t m_MinorStep;
+            Color3 m_AxisColor;
+            Color3 m_MajorColor;
+            Color3 m_MinorColor;
 
         public:
             static void EnumerateClass( Reflect::Compositor< GridSettings >& comp )

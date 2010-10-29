@@ -48,7 +48,7 @@ namespace Helium
         {
         protected:
             // flags
-            u32 m_Flags;
+            uint32_t m_Flags;
 
             // required for construction
             const SceneGraph::Camera* m_Camera;
@@ -62,8 +62,8 @@ namespace Helium
             // matrices to map to and from world space and local space 
             //  - testing is performed in local space
             //  - results are stored in global space)
-            Math::Matrix4 m_CurrentWorldTransform;
-            Math::Matrix4 m_CurrentInverseWorldTransform;
+            Matrix4 m_CurrentWorldTransform;
+            Matrix4 m_CurrentInverseWorldTransform;
 
         public: 
             PickVisitor(const SceneGraph::Camera* camera);
@@ -74,22 +74,22 @@ namespace Helium
         public:
             virtual const PickTypes::PickType GetPickType() const = 0;
 
-            u32 GetFlags() const
+            uint32_t GetFlags() const
             {
                 return m_Flags;
             }
 
-            bool HasFlags(u32 flags) const
+            bool HasFlags(uint32_t flags) const
             {
                 return (m_Flags & flags) != 0;
             }
 
-            void SetFlags(u32 flags)
+            void SetFlags(uint32_t flags)
             {
                 m_Flags = flags;
             }
 
-            void SetFlag(u32 flag, bool value)
+            void SetFlag(uint32_t flag, bool value)
             {
                 if (value)
                 {
@@ -146,7 +146,7 @@ namespace Helium
                 m_CurrentObject = object;
             }
 
-            void SetCurrentObject(Reflect::Object* object, const Math::Matrix4& worldSpaceTransform)
+            void SetCurrentObject(Reflect::Object* object, const Matrix4& worldSpaceTransform)
             {
                 m_CurrentObject = object;
                 m_CurrentWorldTransform = worldSpaceTransform;
@@ -156,7 +156,7 @@ namespace Helium
                 Transform(); 
             }
 
-            void SetCurrentObject(Reflect::Object* object, const Math::Matrix4& worldSpaceTransform, const Math::Matrix4& inverseWorldSpaceTransform)
+            void SetCurrentObject(Reflect::Object* object, const Matrix4& worldSpaceTransform, const Matrix4& inverseWorldSpaceTransform)
             {
                 m_CurrentObject = object;
                 m_CurrentWorldTransform = worldSpaceTransform;
@@ -169,25 +169,25 @@ namespace Helium
             virtual void Transform() = 0;
 
             // picking functions (produce hits)
-            virtual bool PickPoint(const Math::Vector3& p, const float err = Math::LinearIntersectionError) = 0;
-            virtual bool PickSegment(const Math::Vector3& p1,const Math::Vector3& p2, const float err = Math::LinearIntersectionError) = 0;
-            virtual bool PickTriangle(const Math::Vector3& v0,const Math::Vector3& v1,const Math::Vector3& v2, const float err = Math::LinearIntersectionError) = 0;
-            virtual bool PickSphere(const Math::Vector3& center, const float radius) = 0;
-            virtual bool PickBox(const Math::AlignedBox& box) = 0;
+            virtual bool PickPoint(const Vector3& p, const float err = LinearIntersectionError) = 0;
+            virtual bool PickSegment(const Vector3& p1,const Vector3& p2, const float err = LinearIntersectionError) = 0;
+            virtual bool PickTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, const float err = LinearIntersectionError) = 0;
+            virtual bool PickSphere(const Vector3& center, const float radius) = 0;
+            virtual bool PickBox(const AlignedBox& box) = 0;
 
             // testing functions (no hits)
-            virtual bool IntersectsBox(const Math::AlignedBox& box) const = 0;
+            virtual bool IntersectsBox(const AlignedBox& box) const = 0;
         };
 
         class LinePickVisitor : virtual public PickVisitor
         {
         protected:
-            Math::Line m_PickSpaceLine;
-            Math::Line m_WorldSpaceLine;
+            Line m_PickSpaceLine;
+            Line m_WorldSpaceLine;
 
         public:
             LinePickVisitor(const SceneGraph::Camera* camera, const int x, const int y);
-            LinePickVisitor(const SceneGraph::Camera* camera, const Math::Line& line);
+            LinePickVisitor(const SceneGraph::Camera* camera, const Line& line);
 
         protected:
             LinePickVisitor(const LinePickVisitor& rhs) : PickVisitor (rhs) { }
@@ -198,12 +198,12 @@ namespace Helium
                 return PickTypes::Line;
             }
 
-            const Math::Line& GetPickSpaceLine() const
+            const Line& GetPickSpaceLine() const
             {
                 return m_PickSpaceLine;
             }
 
-            const Math::Line& GetWorldSpaceLine() const
+            const Line& GetWorldSpaceLine() const
             {
                 return m_WorldSpaceLine;
             }
@@ -211,33 +211,33 @@ namespace Helium
             virtual void Transform() HELIUM_OVERRIDE;
 
             // picking functions (produce hits)
-            virtual bool PickPoint(const Math::Vector3& p, const float err = Math::LinearIntersectionError) HELIUM_OVERRIDE;
-            virtual bool PickSegment(const Math::Vector3& p1,const Math::Vector3& p2, const float err = Math::LinearIntersectionError) HELIUM_OVERRIDE;
-            virtual bool PickTriangle(const Math::Vector3& v0,const Math::Vector3& v1,const Math::Vector3& v2, const float err = Math::LinearIntersectionError) HELIUM_OVERRIDE;
-            virtual bool PickSphere(const Math::Vector3& center, const float radius) HELIUM_OVERRIDE;
-            virtual bool PickBox(const Math::AlignedBox& box) HELIUM_OVERRIDE;
+            virtual bool PickPoint(const Vector3& p, const float err = LinearIntersectionError) HELIUM_OVERRIDE;
+            virtual bool PickSegment(const Vector3& p1,const Vector3& p2, const float err = LinearIntersectionError) HELIUM_OVERRIDE;
+            virtual bool PickTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, const float err = LinearIntersectionError) HELIUM_OVERRIDE;
+            virtual bool PickSphere(const Vector3& center, const float radius) HELIUM_OVERRIDE;
+            virtual bool PickBox(const AlignedBox& box) HELIUM_OVERRIDE;
 
             // testing functions (no hits)
-            virtual bool IntersectsBox(const Math::AlignedBox& box) const HELIUM_OVERRIDE;
+            virtual bool IntersectsBox(const AlignedBox& box) const HELIUM_OVERRIDE;
 
         protected:
             // hit adding functions
-            bool AddHitPoint(const Math::Vector3& p, Math::Vector3& offset);
-            bool AddHitSegment(const Math::Vector3& p1,const Math::Vector3& p2, f32 mu, Math::Vector3& offset);
-            bool AddHitTriangle(const Math::Vector3& v0,const Math::Vector3& v1,const Math::Vector3& v2, f32 u, f32 v, bool interior, Math::Vector3& vertex, Math::Vector3& intersection, float distance);
-            bool AddHitTriangleClosestPoint(const Math::Vector3& v0,const Math::Vector3& v1,const Math::Vector3& v2, const Math::Vector3& point);
-            bool AddHitBox(const Math::AlignedBox& box, Math::Vector3& intersection);
+            bool AddHitPoint(const Vector3& p, Vector3& offset);
+            bool AddHitSegment(const Vector3& p1,const Vector3& p2, float32_t mu, Vector3& offset);
+            bool AddHitTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, float32_t u, float32_t v, bool interior, Vector3& vertex, Vector3& intersection, float distance);
+            bool AddHitTriangleClosestPoint(const Vector3& v0,const Vector3& v1,const Vector3& v2, const Vector3& point);
+            bool AddHitBox(const AlignedBox& box, Vector3& intersection);
         };
 
         class FrustumPickVisitor : virtual public PickVisitor
         {
         protected:
-            Math::Frustum m_PickSpaceFrustum;
-            Math::Frustum m_WorldSpaceFrustum;
+            Frustum m_PickSpaceFrustum;
+            Frustum m_WorldSpaceFrustum;
 
         public:
             FrustumPickVisitor(const SceneGraph::Camera* camera, const int pixelX, const int pixelY, const float pixelBoxSize = -1.0f);
-            FrustumPickVisitor(const SceneGraph::Camera* camera, const Math::Frustum& worldSpaceFrustum);
+            FrustumPickVisitor(const SceneGraph::Camera* camera, const Frustum& worldSpaceFrustum);
 
         protected:
             FrustumPickVisitor(const FrustumPickVisitor& rhs) : PickVisitor (rhs) { }
@@ -248,12 +248,12 @@ namespace Helium
                 return PickTypes::Frustum;
             }
 
-            const Math::Frustum& GetPickSpaceFrustum() const
+            const Frustum& GetPickSpaceFrustum() const
             {
                 return m_PickSpaceFrustum;
             }
 
-            const Math::Frustum& GetWorldSpaceFrustum() const
+            const Frustum& GetWorldSpaceFrustum() const
             {
                 return m_WorldSpaceFrustum;
             }
@@ -261,29 +261,29 @@ namespace Helium
             virtual void Transform() HELIUM_OVERRIDE;
 
             // picking functions (produce hits)
-            virtual bool PickPoint(const Math::Vector3& p, const float err = Math::LinearIntersectionError) HELIUM_OVERRIDE;
-            virtual bool PickSegment(const Math::Vector3& p1,const Math::Vector3& p2, const float err = Math::LinearIntersectionError) HELIUM_OVERRIDE;
-            virtual bool PickTriangle(const Math::Vector3& v0,const Math::Vector3& v1,const Math::Vector3& v2, const float err = Math::LinearIntersectionError) HELIUM_OVERRIDE;
-            virtual bool PickSphere(const Math::Vector3& center, const float radius) HELIUM_OVERRIDE;
-            virtual bool PickBox(const Math::AlignedBox& box) HELIUM_OVERRIDE;
+            virtual bool PickPoint(const Vector3& p, const float err = LinearIntersectionError) HELIUM_OVERRIDE;
+            virtual bool PickSegment(const Vector3& p1,const Vector3& p2, const float err = LinearIntersectionError) HELIUM_OVERRIDE;
+            virtual bool PickTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, const float err = LinearIntersectionError) HELIUM_OVERRIDE;
+            virtual bool PickSphere(const Vector3& center, const float radius) HELIUM_OVERRIDE;
+            virtual bool PickBox(const AlignedBox& box) HELIUM_OVERRIDE;
 
             // testing functions (no hits)
-            virtual bool IntersectsBox(const Math::AlignedBox& box) const HELIUM_OVERRIDE;
+            virtual bool IntersectsBox(const AlignedBox& box) const HELIUM_OVERRIDE;
 
         protected:
             // hit adding functions
-            bool AddHitPoint(const Math::Vector3& p);
-            bool AddHitSegment(const Math::Vector3& p1,const Math::Vector3& p2);
-            bool AddHitTriangle(const Math::Vector3& v0,const Math::Vector3& v1,const Math::Vector3& v2);
-            bool AddHitSphere(const Math::Vector3& center);
-            bool AddHitBox(const Math::AlignedBox& box);
+            bool AddHitPoint(const Vector3& p);
+            bool AddHitSegment(const Vector3& p1,const Vector3& p2);
+            bool AddHitTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2);
+            bool AddHitSphere(const Vector3& center);
+            bool AddHitBox(const AlignedBox& box);
         };
 
         class FrustumLinePickVisitor : virtual public LinePickVisitor, virtual public FrustumPickVisitor
         {
         public:
             FrustumLinePickVisitor(const SceneGraph::Camera* camera, const int pixelX, const int pixelY, const float pixelBoxSize = -1.0f);
-            FrustumLinePickVisitor(const SceneGraph::Camera* camera, const Math::Line& line, const Math::Frustum& worldSpaceFrustum); 
+            FrustumLinePickVisitor(const SceneGraph::Camera* camera, const Line& line, const Frustum& worldSpaceFrustum); 
 
         protected:
             FrustumLinePickVisitor(const FrustumLinePickVisitor& rhs) : PickVisitor (rhs), LinePickVisitor (rhs), FrustumPickVisitor(rhs) { }
@@ -297,14 +297,14 @@ namespace Helium
             virtual void Transform() HELIUM_OVERRIDE;
 
             // picking functions (produce hits)
-            virtual bool PickPoint(const Math::Vector3& p, const float err = Math::LinearIntersectionError) HELIUM_OVERRIDE;
-            virtual bool PickSegment(const Math::Vector3& p1,const Math::Vector3& p2, const float err = Math::LinearIntersectionError) HELIUM_OVERRIDE;
-            virtual bool PickTriangle(const Math::Vector3& v0,const Math::Vector3& v1,const Math::Vector3& v2, const float err = Math::LinearIntersectionError) HELIUM_OVERRIDE;
-            virtual bool PickSphere(const Math::Vector3& center, const float radius) HELIUM_OVERRIDE;
-            virtual bool PickBox(const Math::AlignedBox& box) HELIUM_OVERRIDE;
+            virtual bool PickPoint(const Vector3& p, const float err = LinearIntersectionError) HELIUM_OVERRIDE;
+            virtual bool PickSegment(const Vector3& p1,const Vector3& p2, const float err = LinearIntersectionError) HELIUM_OVERRIDE;
+            virtual bool PickTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, const float err = LinearIntersectionError) HELIUM_OVERRIDE;
+            virtual bool PickSphere(const Vector3& center, const float radius) HELIUM_OVERRIDE;
+            virtual bool PickBox(const AlignedBox& box) HELIUM_OVERRIDE;
 
             // testing functions (no hits)
-            virtual bool IntersectsBox(const Math::AlignedBox& box) const HELIUM_OVERRIDE;
+            virtual bool IntersectsBox(const AlignedBox& box) const HELIUM_OVERRIDE;
         };
 
 
@@ -351,7 +351,7 @@ namespace Helium
 
         private:
             bool m_HasNormal;
-            Math::Vector3 m_Normal;
+            Vector3 m_Normal;
 
         public:
             bool HasNormal() const
@@ -359,12 +359,12 @@ namespace Helium
                 return m_HasNormal;
             }
 
-            Math::Vector3 GetNormal() const
+            Vector3 GetNormal() const
             {
                 return m_Normal;
             }
 
-            void SetNormal(const Math::Vector3& value)
+            void SetNormal(const Vector3& value)
             {
                 m_Normal = value;
                 m_HasNormal = true;
@@ -377,8 +377,8 @@ namespace Helium
 
         private:
             bool m_HasVertex;
-            f32 m_VertexDistance;
-            Math::Vector3 m_Vertex;
+            float32_t m_VertexDistance;
+            Vector3 m_Vertex;
 
         public:
             bool HasVertex() const
@@ -386,18 +386,18 @@ namespace Helium
                 return m_HasVertex;
             }
 
-            f32 GetVertexDistance() const
+            float32_t GetVertexDistance() const
             {
                 return m_VertexDistance;
             }
 
-            const Math::Vector3& GetVertex() const
+            const Vector3& GetVertex() const
             {
                 HELIUM_ASSERT(m_HasVertex);
                 return m_Vertex;
             }
 
-            void SetVertex(const Math::Vector3& value, f32 distance = Math::BigFloat)
+            void SetVertex(const Vector3& value, float32_t distance = BigFloat)
             {
                 m_HasVertex = true;
                 m_VertexDistance = distance;
@@ -411,8 +411,8 @@ namespace Helium
 
         private:
             bool m_HasIntersection;
-            f32 m_IntersectionDistance;
-            Math::Vector3 m_Intersection;
+            float32_t m_IntersectionDistance;
+            Vector3 m_Intersection;
 
         public:
             bool HasIntersection() const
@@ -420,18 +420,18 @@ namespace Helium
                 return m_HasIntersection;
             }
 
-            f32 GetIntersectionDistance() const
+            float32_t GetIntersectionDistance() const
             {
                 return m_IntersectionDistance;
             }
 
-            Math::Vector3 GetIntersection() const
+            Vector3 GetIntersection() const
             {
                 HELIUM_ASSERT(m_HasIntersection);
                 return m_Intersection;
             }
 
-            void SetIntersection(const Math::Vector3& value, f32 distance = Math::BigFloat)
+            void SetIntersection(const Vector3& value, float32_t distance = BigFloat)
             {
                 m_Intersection = value;
                 m_IntersectionDistance = distance;
@@ -447,9 +447,9 @@ namespace Helium
                 : m_HitObject (o)
                 , m_HasNormal (false)
                 , m_HasVertex (false)
-                , m_VertexDistance ((float)Math::BigFloat)
+                , m_VertexDistance ((float)BigFloat)
                 , m_HasIntersection (false)
-                , m_IntersectionDistance ((float)Math::BigFloat)
+                , m_IntersectionDistance ((float)BigFloat)
             {
 
             }

@@ -17,7 +17,7 @@ namespace Helium
         {
         protected:
             // the bounds of the primitive
-            Math::AlignedBox m_Bounds;
+            AlignedBox m_Bounds;
 
             // are we filled or wireframe?
             bool m_IsSolid;
@@ -37,7 +37,7 @@ namespace Helium
             Primitive(ResourceTracker* tracker);
             virtual ~Primitive();
 
-            const Math::AlignedBox& GetBounds() const
+            const AlignedBox& GetBounds() const
             {
                 return m_Bounds;
             }
@@ -102,7 +102,7 @@ namespace Helium
                         HELIUM_ASSERT(sizeof(T) == ElementSizes[ GetElementType() ]);
 
                         memcpy(args->m_Buffer + args->m_Offset, &(*m_Vertices.begin()), m_Vertices.size() * sizeof(T));
-                        args->m_Offset += (u32)m_Vertices.size() * sizeof(T);
+                        args->m_Offset += (uint32_t)m_Vertices.size() * sizeof(T);
 
                         break;
                     }

@@ -17,8 +17,8 @@ PrimitiveLocator::PrimitiveLocator(ResourceTracker* tracker)
 
 void PrimitiveLocator::Update()
 {
-  m_Bounds.minimum = Math::Vector3 (-m_Length, -m_Length, -m_Length);
-  m_Bounds.maximum = Math::Vector3 (m_Length, m_Length, m_Length);
+  m_Bounds.minimum = Vector3 (-m_Length, -m_Length, -m_Length);
+  m_Bounds.maximum = Vector3 (m_Length, m_Length, m_Length);
 
   m_Vertices.clear();
 

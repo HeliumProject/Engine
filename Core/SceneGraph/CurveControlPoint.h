@@ -20,20 +20,20 @@ namespace Helium
             CurveControlPoint();
             ~CurveControlPoint();
 
-            virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
+            virtual int32_t GetImageIndex() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
 
-            const Math::Vector3& GetPosition() const;
-            void SetPosition( const Math::Vector3& value );
+            const Vector3& GetPosition() const;
+            void SetPosition( const Vector3& value );
 
-            f32 GetPositionX() const;
-            void SetPositionX( f32 value );
+            float32_t GetPositionX() const;
+            void SetPositionX( float32_t value );
 
-            f32 GetPositionY() const;
-            void SetPositionY( f32 value );
+            float32_t GetPositionY() const;
+            void SetPositionY( float32_t value );
 
-            f32 GetPositionZ() const;
-            void SetPositionZ( f32 value );
+            float32_t GetPositionZ() const;
+            void SetPositionZ( float32_t value );
 
             virtual void ConnectManipulator( ManiuplatorAdapterCollection* collection ) HELIUM_OVERRIDE;
             virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
@@ -42,7 +42,7 @@ namespace Helium
             static void CreatePanel( CreatePanelArgs& args );
 
         protected:
-            Math::Vector3 m_Position;
+            Vector3 m_Position;
         };
 
         typedef SmartPtr< CurveControlPoint > CurveControlPointPtr;
@@ -64,23 +64,23 @@ namespace Helium
                 return m_Point;
             }
 
-            virtual Math::Matrix4 GetFrame(ManipulatorSpace space) override;
-            virtual Math::Matrix4 GetObjectMatrix() override;
-            virtual Math::Matrix4 GetParentMatrix() override;
+            virtual Matrix4 GetFrame(ManipulatorSpace space) override;
+            virtual Matrix4 GetObjectMatrix() override;
+            virtual Matrix4 GetParentMatrix() override;
 
-            virtual Math::Vector3 GetPivot() override
+            virtual Vector3 GetPivot() override
             {
                 return m_Point->GetPosition();
             }
 
-            virtual Math::Vector3 GetValue() override
+            virtual Vector3 GetValue() override
             {
                 return m_Point->GetPosition();
             }
 
-            virtual Undo::CommandPtr SetValue( const Math::Vector3& v ) override
+            virtual Undo::CommandPtr SetValue( const Vector3& v ) override
             {
-                return new Undo::PropertyCommand<Math::Vector3> ( new Helium::MemberProperty<CurveControlPoint, Math::Vector3> (m_Point, &CurveControlPoint::GetPosition, &CurveControlPoint::SetPosition), v);
+                return new Undo::PropertyCommand<Vector3> ( new Helium::MemberProperty<CurveControlPoint, Vector3> (m_Point, &CurveControlPoint::GetPosition, &CurveControlPoint::SetPosition), v);
             }
         };
 

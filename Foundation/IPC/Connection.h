@@ -47,9 +47,9 @@ namespace Helium
             Helium::Condition       m_Terminate;          // used to wake up sleeping threads for when we want to terminate
 
             ConnectionState         m_State;              // current status, do not change outside of m_Mutex 
-            u32                     m_ConnectCount;       // track the number of connection that have occured
+            uint32_t                     m_ConnectCount;       // track the number of connection that have occured
             Helium::Platform::Type  m_RemotePlatform;     // the platform of the end point on the other side
-            i32                     m_NextTransaction;    // next transaction id for this connection endpoint
+            int32_t                     m_NextTransaction;    // next transaction id for this connection endpoint
 
             Helium::Mutex           m_Mutex;              // mutex to protect access to this class
             MessageQueue            m_ReadQueue;          // incoming messages
@@ -97,7 +97,7 @@ namespace Helium
                 return m_RemotePlatform;
             }
 
-            u32 GetConnectCount()
+            uint32_t GetConnectCount()
             {
                 return m_ConnectCount;
             }
@@ -110,10 +110,10 @@ namespace Helium
 
         public:
             // create a message to reply to a transaction
-            Message* CreateMessage(u32 id, u32 size, i32 trans = 0, u32 type = MessageTypes::User);
+            Message* CreateMessage(uint32_t id, uint32_t size, int32_t trans = 0, uint32_t type = MessageTypes::User);
 
             // did this endpoint create the specified transaction
-            bool CreatedMessage(i32 transaction);
+            bool CreatedMessage(int32_t transaction);
 
             // wait in the calling thread for a message
             void Wait();
@@ -156,8 +156,8 @@ namespace Helium
             virtual bool WriteMessage(Message* msg) = 0;
 
             // These synchronously read or write data through the connection
-            virtual bool Read(void* buffer, u32 bytes) = 0;
-            virtual bool Write(void* buffer, u32 bytes) = 0;
+            virtual bool Read(void* buffer, uint32_t bytes) = 0;
+            virtual bool Write(void* buffer, uint32_t bytes) = 0;
 
             // ReadPump blocks on incoming data for message creation
             bool ReadPump();
@@ -179,7 +179,7 @@ namespace Helium
             void ProcessProtocolMessage(Message* msg);
 
             // Send the disconnect message
-            void SendProtocolMessage(u32 message);
+            void SendProtocolMessage(uint32_t message);
 
             // Send host type message
             bool WriteHostType();

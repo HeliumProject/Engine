@@ -30,8 +30,8 @@ namespace Helium
             // Status update functions
             bool InitialIndexingCompleted() const;
             bool DidIndexingFail() const;
-            u32 GetCurrentProgress() const;
-            u32 GetTrackingTotal() const;
+            uint32_t GetCurrentProgress() const;
+            uint32_t GetTrackingTotal() const;
 
         protected:
             Helium::Thread m_Thread;
@@ -43,8 +43,8 @@ namespace Helium
             // Status update
             bool m_InitialIndexingCompleted;
             bool m_IndexingFailed;
-            u32 m_CurrentProgress;
-            u32 m_Total;
+            uint32_t m_CurrentProgress;
+            uint32_t m_Total;
 
         protected:
             static int s_InitCount;

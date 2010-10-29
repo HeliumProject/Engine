@@ -268,7 +268,7 @@ void FStatCommand::OutputStat( StrDict *dict )
                     StrPtr* size = dict->GetVar( g_FileSizeTag );
                     if ( size )
                     {
-                        m_File->m_Size = (u64) size->Atoi64();
+                        m_File->m_Size = (uint64_t) size->Atoi64();
                     }
                 }
             }
@@ -396,9 +396,9 @@ void FileLogCommand::OutputStat( StrDict *dict )
     StrPtr* latestRevision = dict->GetVar( g_RevisionTag, 0 );
     if ( latestRevision )
     {
-        u32 numRevisions = latestRevision->Atoi();
+        uint32_t numRevisions = latestRevision->Atoi();
 
-        for( u32 i = 0; i < numRevisions; ++i )
+        for( uint32_t i = 0; i < numRevisions; ++i )
         {
             RCS::Revision* revision = new RCS::Revision();
 
@@ -440,7 +440,7 @@ void FileLogCommand::OutputStat( StrDict *dict )
             converted = Helium::ConvertString( dict->GetVar( g_DescriptionTag, i )->Text(), revision->m_Description );
             HELIUM_ASSERT( converted );
 
-            for ( u32 target = 0; target < PERFORCE_MAX_DICT_ENTRIES; ++target )
+            for ( uint32_t target = 0; target < PERFORCE_MAX_DICT_ENTRIES; ++target )
             {
                 StrPtr* how = dict->GetVar( g_HowTag, i, target );
                 if ( !how )

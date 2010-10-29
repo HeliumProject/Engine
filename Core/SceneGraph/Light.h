@@ -23,7 +23,7 @@ namespace Helium
             Light();
             ~Light();
 
-            virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
+            virtual int32_t GetImageIndex() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
 
             virtual void Evaluate(GraphDirection direction) HELIUM_OVERRIDE;
@@ -34,12 +34,12 @@ namespace Helium
             virtual bool ValidatePanel(const tstring& name) HELIUM_OVERRIDE;
             static void CreatePanel( CreatePanelArgs& args );
 
-            Math::Color3 GetColor() const;
-            void SetColor( Math::Color3 color );
+            Color3 GetColor() const;
+            void SetColor( Color3 color );
 
         protected:
             // Reflected
-            Math::HDRColor3         m_Color;
+            HDRColor3         m_Color;
 
             // Non-reflected
             static D3DMATERIAL9     s_Material;

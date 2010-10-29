@@ -11,7 +11,6 @@
 #include "Core/SceneGraph/Scene.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 static D3DMATERIAL9 g_JointTransformMaterial;
@@ -52,11 +51,11 @@ void JointTransform::Initialize(Scene* scene)
     __super::Initialize( scene );
 
     SceneGraph::PrimitiveRings* rings = static_cast< SceneGraph::PrimitiveRings* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings ) );
-    m_ObjectBounds.minimum = Math::Vector3(-rings->m_Radius, -rings->m_Radius, -rings->m_Radius);
-    m_ObjectBounds.maximum = Math::Vector3(rings->m_Radius, rings->m_Radius, rings->m_Radius);
+    m_ObjectBounds.minimum = Vector3(-rings->m_Radius, -rings->m_Radius, -rings->m_Radius);
+    m_ObjectBounds.maximum = Vector3(rings->m_Radius, rings->m_Radius, rings->m_Radius);
 }
 
-i32 JointTransform::GetImageIndex() const
+int32_t JointTransform::GetImageIndex() const
 {
     return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "joint" ) );
 }

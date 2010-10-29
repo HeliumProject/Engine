@@ -221,7 +221,7 @@ void SceneNode::Insert(Graph* graph, V_SceneNodeDumbPtr& insertedNodes )
         return;
     }
 
-    u32 id = m_Graph->AssignVisitedID();
+    uint32_t id = m_Graph->AssignVisitedID();
 
     std::stack<SceneGraph::SceneNode*> stack;
 
@@ -279,7 +279,7 @@ void SceneNode::Insert(Graph* graph, V_SceneNodeDumbPtr& insertedNodes )
 
 void SceneNode::Prune( V_SceneNodeDumbPtr& prunedNodes )
 {
-    u32 id = m_Graph->AssignVisitedID();
+    uint32_t id = m_Graph->AssignVisitedID();
 
     if (!m_Ancestors.empty() || !m_Descendants.empty())
     {
@@ -351,9 +351,9 @@ void SceneNode::DoEvaluate(GraphDirection direction)
     m_NodeStates[direction] = NodeStates::Clean;
 }
 
-u32 SceneNode::Dirty()
+uint32_t SceneNode::Dirty()
 {
-    u32 count = 0;
+    uint32_t count = 0;
 
     if ( m_Graph )
     {
@@ -369,7 +369,7 @@ void SceneNode::Evaluate(GraphDirection direction)
 
 }
 
-i32 SceneNode::GetImageIndex() const
+int32_t SceneNode::GetImageIndex() const
 {
     return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "null" ) );
 }

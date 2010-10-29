@@ -38,8 +38,8 @@ namespace Helium
 
             virtual bool ReadMessage(Message** msg);
             virtual bool WriteMessage(Message* msg);
-            virtual bool Read(void* buffer, u32 bytes);
-            virtual bool Write(void* buffer, u32 bytes);
+            virtual bool Read(void* buffer, uint32_t bytes);
+            virtual bool Write(void* buffer, uint32_t bytes);
         };
     }
 }

@@ -30,7 +30,7 @@ namespace Helium
         {
         private:
             bool              m_Compressed;
-            u32               m_SampleRate;
+            uint32_t               m_SampleRate;
             AnimationClipMode m_Mode;
 
         public:

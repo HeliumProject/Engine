@@ -29,7 +29,7 @@ namespace Helium
         public:
             REFLECT_DECLARE_ABSTRACT( ElementContainerSerializer, ContainerSerializer );
 
-            i32 m_TypeID;
+            int32_t m_TypeID;
 
             ElementContainerSerializer();
         };

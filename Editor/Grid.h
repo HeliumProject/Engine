@@ -15,9 +15,9 @@ namespace Helium
         // Arguments for events dealing with changes to a row in the grid.
         struct GridRowChangeArgs
         {
-            u32 m_RowNumber;  // Row number that was changed (zero-based index)
+            uint32_t m_RowNumber;  // Row number that was changed (zero-based index)
 
-            GridRowChangeArgs( u32 row )
+            GridRowChangeArgs( uint32_t row )
                 : m_RowNumber( row )
             {
             }
@@ -31,7 +31,7 @@ namespace Helium
             tstring m_OldName;
             tstring m_NewName;
 
-            GridRowRenamedArgs( u32 row, const tstring& oldName, const tstring& newName )
+            GridRowRenamedArgs( uint32_t row, const tstring& oldName, const tstring& newName )
                 : GridRowChangeArgs( row )
                 , m_OldName( oldName )
                 , m_NewName( newName )
@@ -72,9 +72,9 @@ namespace Helium
             GridRowRenamedSignature::Event m_RowRenamed;
             bool m_IsCellChanging;
             wxSizer* m_Sizer;
-            u32 m_ColumnViz;
-            u32 m_ColumnSel;
-            u32 m_ColumnName;
+            uint32_t m_ColumnViz;
+            uint32_t m_ColumnSel;
+            uint32_t m_ColumnName;
 
         public:
             Grid( wxWindow* parent, wxWindowID gridID, bool allowRename = false, bool showColLabels = true );
@@ -86,27 +86,27 @@ namespace Helium
             void AddRowRenamedListener( const GridRowRenamedSignature::Delegate& listener );
             void RemoveRowRenamedListener( const GridRowRenamedSignature::Delegate& listener );
             wxPanel* GetPanel() const;
-            i32 GetRowNumber( const tstring& name ) const;
-            const tstring& GetRowName( u32 row ) const;
+            int32_t GetRowNumber( const tstring& name ) const;
+            const tstring& GetRowName( uint32_t row ) const;
             bool SetRowName( const tstring& oldName, const tstring& newName );
-            bool IsRowVisibleChecked( u32 row );
-            void SetRowVisibleState( u32 row, bool checked );
-            bool IsRowSelectableChecked( u32 row );
-            void SetRowSelectableSate( u32 row, bool checked );
+            bool IsRowVisibleChecked( uint32_t row );
+            void SetRowVisibleState( uint32_t row, bool checked );
+            bool IsRowSelectableChecked( uint32_t row );
+            void SetRowSelectableSate( uint32_t row, bool checked );
             virtual bool AddRow( const tstring& name, bool visible, bool selectable );
-            bool RemoveRow( u32 index );
+            bool RemoveRow( uint32_t index );
             bool RemoveRow( const tstring& name );
             bool RemoveAllRows();
             bool IsAnythingSelected() const;
             bool IsSelected( const tstring& name ) const;
-            void SelectRow( u32 row, bool addToSelection );
+            void SelectRow( uint32_t row, bool addToSelection );
             void DeselectAllRows();
-            std::set< u32 > GetSelectedRows() const;
+            std::set< uint32_t > GetSelectedRows() const;
             void BeginBatch();
             void EndBatch();
 
         protected:
-            i32 InsertName( const tstring& name );
+            int32_t InsertName( const tstring& name );
             virtual void ResizeColumns();
             void OnSize( wxSizeEvent& event );
             void OnMouseLeftDown( wxMouseEvent& event );

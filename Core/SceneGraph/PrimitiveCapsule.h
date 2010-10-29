@@ -9,17 +9,17 @@ namespace Helium
         class PrimitiveCapsule : public SceneGraph::PrimitiveTemplate<Position>
         {
         private:
-            mutable i32 m_WireVertCount;
-            mutable i32 m_PolyVertCount;
-            mutable i32 m_CapVertCount;
-            mutable i32 m_ShaftVertCount;
+            mutable int32_t m_WireVertCount;
+            mutable int32_t m_PolyVertCount;
+            mutable int32_t m_CapVertCount;
+            mutable int32_t m_ShaftVertCount;
 
         public:
-            f32 m_Radius;
-            i32 m_RadiusSteps;
+            float32_t m_Radius;
+            int32_t m_RadiusSteps;
 
-            f32 m_Length;
-            i32 m_LengthSteps;
+            float32_t m_Length;
+            int32_t m_LengthSteps;
 
         public:
             SceneGraph::PrimitiveCapsule(ResourceTracker* tracker);

@@ -36,13 +36,13 @@ void ThumbnailTileCreator::InitData()
     m_Results = new VaultSearchResults( m_View->GetResults() );
 }
 
-void ThumbnailTileCreator::ThreadProc( i32 threadID )
+void ThumbnailTileCreator::ThreadProc( int32_t threadID )
 {
     ThreadEnter( threadID );
 
     if ( m_Results && m_Results->HasResults() )
     {
-        for ( std::map< u64, Helium::Path >::const_iterator itr = m_Results->GetPathsMap().begin(), end = m_Results->GetPathsMap().end(); itr != end; ++itr )
+        for ( std::map< uint64_t, Helium::Path >::const_iterator itr = m_Results->GetPathsMap().begin(), end = m_Results->GetPathsMap().end(); itr != end; ++itr )
         {
             if ( CheckThreadLeave( threadID ) )
             {

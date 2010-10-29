@@ -35,7 +35,7 @@ namespace Helium
 {
     namespace Editor
     {
-        typedef std::map< i32, i32 > M_IDToColorMode; // Maps wx ID for menu items to our ViewColorMode enum
+        typedef std::map< int32_t, int32_t > M_IDToColorMode; // Maps wx ID for menu items to our ViewColorMode enum
 
         class MainFrame : public MainFrameGenerated
         {
@@ -208,8 +208,8 @@ namespace Helium
             void OpenManifestContextMenu( const SceneGraph::SelectArgs& args );
             void OpenTypeContextMenu( const SceneGraph::SelectArgs& args );
 
-            void SetupTypeContextMenu( const SceneGraph::HM_StrToSceneNodeTypeSmartPtr& sceneNodeTypes,wxMenu& contextMenu,  u32& numMenuItems );
-            void SetupEntityTypeMenus( const SceneGraph::EntityInstanceType* entity, wxMenu* entityMenu, u32& numMenuItems );
+            void SetupTypeContextMenu( const SceneGraph::HM_StrToSceneNodeTypeSmartPtr& sceneNodeTypes,wxMenu& contextMenu,  uint32_t& numMenuItems );
+            void SetupEntityTypeMenus( const SceneGraph::EntityInstanceType* entity, wxMenu* entityMenu, uint32_t& numMenuItems );
 
             static bool SortContextItemsByName( SceneGraph::SceneNode* lhs, SceneGraph::SceneNode* rhs ); 
             static bool SortTypeItemsByName( SceneGraph::SceneNodeType* lhs, SceneGraph::SceneNodeType* rhs );

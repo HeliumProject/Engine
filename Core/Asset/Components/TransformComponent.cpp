@@ -20,32 +20,32 @@ Component::ComponentUsage TransformComponent::GetComponentUsage() const
 }
 
 
-const Math::Vector3& TransformComponent::GetTranslation() const
+const Vector3& TransformComponent::GetTranslation() const
 {
     return m_Translation;
 }
 
-const Math::Vector3& TransformComponent::GetRotation() const
+const Vector3& TransformComponent::GetRotation() const
 {
     return m_Rotation;
 }
 
-const Math::Vector3& TransformComponent::GetScale() const
+const Vector3& TransformComponent::GetScale() const
 {
     return m_Scale;
 }
 
-void TransformComponent::SetTranslation( const Math::Vector3& translation )
+void TransformComponent::SetTranslation( const Vector3& translation )
 {
     m_Translation = translation;
 }
 
-void TransformComponent::SetRotation( const Math::Vector3& rotation )
+void TransformComponent::SetRotation( const Vector3& rotation )
 {
     m_Rotation = rotation;
 }
 
-void TransformComponent::SetScale( const Math::Vector3& scale )
+void TransformComponent::SetScale( const Vector3& scale )
 {
     m_Scale = scale;
 }

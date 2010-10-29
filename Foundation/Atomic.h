@@ -11,7 +11,7 @@ namespace Helium
     class FOUNDATION_API AtomicRefCountBase HELIUM_ABSTRACT : public Helium::IRefCount<AtomicRefCountBase>
     {
     private:
-        mutable i32 m_RefCount;
+        mutable int32_t m_RefCount;
 
     protected:
         AtomicRefCountBase();

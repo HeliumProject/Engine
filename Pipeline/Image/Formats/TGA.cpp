@@ -14,7 +14,7 @@ Image* Image::LoadTGA(const void* filedata, bool convert_to_linear)
 
   // Now load the TGA into the surface
   TGAHeader* tga    = (TGAHeader*)filedata;
-  u8* data = (u8*)filedata;
+  uint8_t* data = (uint8_t*)filedata;
 
   if( tga->colormapType & ~0x01 )
   {
@@ -33,7 +33,7 @@ Image* Image::LoadTGA(const void* filedata, bool convert_to_linear)
 
   // Assume it is a good TGA
   bool                palette=false;
-  u32                 palette_data[256];
+  uint32_t                 palette_data[256];
   ColorFormat         pixelfmt=CF_ARGB8888;
   ColorFormat         palfmt;
 
@@ -116,8 +116,8 @@ Image* Image::LoadTGA(const void* filedata, bool convert_to_linear)
     return 0;
   }
 
-  u32 color_map_bytes;
-  u32 file_pixel_bytes;
+  uint32_t color_map_bytes;
+  uint32_t file_pixel_bytes;
 
   if (pixelfmt==CF_L8) // gray TGAs do not set nice numbers in the header of the gray foramt
   {
@@ -126,11 +126,11 @@ Image* Image::LoadTGA(const void* filedata, bool convert_to_linear)
   }
   else
   {
-    color_map_bytes = ((u32) tga->colorMapBits + 7) >> 3;
-    file_pixel_bytes = ((u32) tga->pixelDepth + 7) >> 3;
+    color_map_bytes = ((uint32_t) tga->colorMapBits + 7) >> 3;
+    file_pixel_bytes = ((uint32_t) tga->pixelDepth + 7) >> 3;
   }
 
-  // i32 line_stride     = tga->width * file_pixel_bytes;
+  // int32_t line_stride     = tga->width * file_pixel_bytes;
 
   bool rle           = (tga->imageType & 0x08) != 0;
   bool top_to_bottom = 0x20 == (tga->imageDescriptor & 0x20);
@@ -142,7 +142,7 @@ Image* Image::LoadTGA(const void* filedata, bool convert_to_linear)
   data += tga->idLength;
 
   // Color map
-  u32 color_map_size = (u32) tga->colorMapLength * color_map_bytes;
+  uint32_t color_map_size = (uint32_t) tga->colorMapLength * color_map_bytes;
 
   if (palette)
   {
@@ -151,23 +151,23 @@ Image* Image::LoadTGA(const void* filedata, bool convert_to_linear)
       return 0;
     }
 
-    u8 *pb = data;
-    u32 *pColor = palette_data + tga->colorMapIndex;
-    u32 *pColorLim = pColor + tga->colorMapLength;
+    uint8_t *pb = data;
+    uint32_t *pColor = palette_data + tga->colorMapIndex;
+    uint32_t *pColorLim = pColor + tga->colorMapLength;
 
     while(pColor < pColorLim)
     {
-      u32 u=0xff00ff00;
+      uint32_t u=0xff00ff00;
 
       switch(tga->colorMapBits)
       {
       case 15:
-        u = *((u16*) pb);     // need to convert 16bit color to 32 bit
+        u = *((uint16_t*) pb);     // need to convert 16bit color to 32 bit
         pb += 2;
         {
-          u32 r;
-          u32 g;
-          u32 b;
+          uint32_t r;
+          uint32_t g;
+          uint32_t b;
 
           // 555 RGB, set dest alpha to 0xff
           b=u&0xf;
@@ -182,13 +182,13 @@ Image* Image::LoadTGA(const void* filedata, bool convert_to_linear)
         break;
 
       case 16:
-        u = *((u16*) pb);     // need to convert 16bit color to 32 bit
+        u = *((uint16_t*) pb);     // need to convert 16bit color to 32 bit
         pb += 2;
         {
-          u32 r;
-          u32 g;
-          u32 b;
-          u32 a;
+          uint32_t r;
+          uint32_t g;
+          uint32_t b;
+          uint32_t a;
 
           // 1555 RGB, set dest alpha to 0 or 0xff
           // TODO: Is there any change a 16bit TGA is 565 with no alpha??
@@ -208,13 +208,13 @@ Image* Image::LoadTGA(const void* filedata, bool convert_to_linear)
         break;
 
       case 24:
-        u = *((u32*) pb);
+        u = *((uint32_t*) pb);
         u|=0xff000000;        // set alpha to be solid
         pb += 3;
         break;
 
       case 32:
-        u = *((u32*) pb);
+        u = *((uint32_t*) pb);
         pb += 4;
         break;
       }
@@ -226,22 +226,22 @@ Image* Image::LoadTGA(const void* filedata, bool convert_to_linear)
   data += color_map_size;
 
   // required bytes of image data
-  //u32 cbImage = (u32) tga->width * (u32) tga->height * file_pixel_bytes;
+  //uint32_t cbImage = (uint32_t) tga->width * (uint32_t) tga->height * file_pixel_bytes;
 
-  u32 stride    = tga->width*(ColorFormatBits(pixelfmt)>>3);
-  u8* tga_data  = new u8[tga->width*tga->height*4];
-  u8* dest_line;
+  uint32_t stride    = tga->width*(ColorFormatBits(pixelfmt)>>3);
+  uint8_t* tga_data  = new uint8_t[tga->width*tga->height*4];
+  uint8_t* dest_line;
 
   dest_line = top_to_bottom ? tga_data : (tga_data + (tga->height - 1) * stride);
 
-  for(u32 y = 0; y < tga->height; y++)
+  for(uint32_t y = 0; y < tga->height; y++)
   {
-    u8* dest_x = left_to_right ? dest_line : (dest_line + stride - (ColorFormatBits(pixelfmt)>>3));
+    uint8_t* dest_x = left_to_right ? dest_line : (dest_line + stride - (ColorFormatBits(pixelfmt)>>3));
 
-    for(u32 x = 0; x < tga->width; )
+    for(uint32_t x = 0; x < tga->width; )
     {
       bool run_length;
-      u32 uCount;
+      uint32_t uCount;
 
       if (rle)
       {
@@ -264,24 +264,24 @@ Image* Image::LoadTGA(const void* filedata, bool convert_to_linear)
         {
           if (palette)
           {
-            *((u32*)dest_x) = palette_data[ *(u8*)data ];
+            *((uint32_t*)dest_x) = palette_data[ *(uint8_t*)data ];
           }
           else
           {
-            *((u8*)dest_x) = *(u8*)data;
+            *((uint8_t*)dest_x) = *(uint8_t*)data;
           }
         }
         else if (file_pixel_bytes == 2)
         {
-          *((u16*)dest_x) = *(u16*)data;
+          *((uint16_t*)dest_x) = *(uint16_t*)data;
         }
         else if (file_pixel_bytes == 3)
         {
-          *((u32*)dest_x) = (*(u32*)data) | 0xff000000;
+          *((uint32_t*)dest_x) = (*(uint32_t*)data) | 0xff000000;
         }
         else
         {
-          *((u32*)dest_x) = *(u32*)data;
+          *((uint32_t*)dest_x) = *(uint32_t*)data;
         }
 
         if(!run_length)
@@ -322,9 +322,9 @@ Image* Image::LoadTGA(const void* filedata, bool convert_to_linear)
 
 
 //-----------------------------------------------------------------------------
-bool Image::WriteTGA(const tchar* fname, u32 face, bool convert_to_srgb) const
+bool Image::WriteTGA(const tchar* fname, uint32_t face, bool convert_to_srgb) const
 {
-  const f32* r = GetFacePtr(face, R);
+  const float32_t* r = GetFacePtr(face, R);
 
   if (r == 0)
   {
@@ -352,7 +352,7 @@ bool Image::WriteTGA(const tchar* fname, u32 face, bool convert_to_srgb) const
   // write header
   TGAHeader   tga;
   tga.idLength = 0;
-  tga.colormapType = 0;         // u8 : 1 = palette included, 0 = no palette
+  tga.colormapType = 0;         // uint8_t : 1 = palette included, 0 = no palette
   if (valid_format==CF_L8)
   {
     tga.imageType = 0x03;
@@ -363,8 +363,8 @@ bool Image::WriteTGA(const tchar* fname, u32 face, bool convert_to_srgb) const
     tga.colorMapBits = 0;
     tga.xOrigin = 0;
     tga.yOrigin = 0;
-    tga.width = (u16)m_Width;
-    tga.height = (u16)m_Height;
+    tga.width = (uint16_t)m_Width;
+    tga.height = (uint16_t)m_Height;
   }
   else if (valid_format==CF_L16)  // not many apps will load this one!
   {
@@ -376,8 +376,8 @@ bool Image::WriteTGA(const tchar* fname, u32 face, bool convert_to_srgb) const
     tga.colorMapBits = 0;
     tga.xOrigin = 0;
     tga.yOrigin = 0;
-    tga.width = (u16)m_Width;
-    tga.height = (u16)m_Height;
+    tga.width = (uint16_t)m_Width;
+    tga.height = (uint16_t)m_Height;
   }
   else if (valid_format==CF_ARGB8888)
   {
@@ -389,8 +389,8 @@ bool Image::WriteTGA(const tchar* fname, u32 face, bool convert_to_srgb) const
     tga.colorMapBits = 0;
     tga.xOrigin = 0;
     tga.yOrigin = 0;
-    tga.width = (u16)m_Width;
-    tga.height = (u16)m_Height;
+    tga.width = (uint16_t)m_Width;
+    tga.height = (uint16_t)m_Height;
   }
   else if (valid_format==CF_ARGB1555)
   {
@@ -402,8 +402,8 @@ bool Image::WriteTGA(const tchar* fname, u32 face, bool convert_to_srgb) const
     tga.colorMapBits = 0;
     tga.xOrigin = 0;
     tga.yOrigin = 0;
-    tga.width = (u16)m_Width;
-    tga.height = (u16)m_Height;
+    tga.width = (uint16_t)m_Width;
+    tga.height = (uint16_t)m_Height;
   }
   else
   {
@@ -415,7 +415,7 @@ bool Image::WriteTGA(const tchar* fname, u32 face, bool convert_to_srgb) const
   fwrite(&tga,sizeof(tga),1,textureFile);
 
   //Generate the native data
-  u8* native_data = Image::GenerateFormatData(this, valid_format, face, convert_to_srgb);
+  uint8_t* native_data = Image::GenerateFormatData(this, valid_format, face, convert_to_srgb);
   if(native_data)
   {
     // write image bits

@@ -23,12 +23,12 @@ namespace Helium
         class Revision : public Helium::RefCountBase< Revision >
         {
         public:
-            i32          m_Revision;
-            i32          m_ChangesetId;
+            int32_t          m_Revision;
+            int32_t          m_ChangesetId;
             Operation    m_Operation;
             FileType     m_FileType;
             time_t       m_Time;
-            u64          m_Size;
+            uint64_t          m_Size;
 
             tstring  m_Username;
             tstring  m_Client;
@@ -81,14 +81,14 @@ namespace Helium
         {
         public:
             // this gates which of the fields below are populated when info is gathered explicitly
-            u32           m_ActionData;
+            uint32_t           m_ActionData;
 
             Operation     m_Operation;
             tstring       m_Username;
             tstring       m_Client;
-            u32           m_ChangesetId;
+            uint32_t           m_ChangesetId;
 
-            Action( u32 data = ActionData::All )
+            Action( uint32_t data = ActionData::All )
                 : m_ActionData ( data )
                 , m_Operation( Operations::None )
                 , m_Username( TXT( "" ) )
@@ -140,21 +140,21 @@ namespace Helium
         {
         public:
             // this gates which of the fields below are populated when info is gathered explicitly
-            u32           m_FileData;
-            u32           m_ActionData;
+            uint32_t           m_FileData;
+            uint32_t           m_ActionData;
 
             tstring       m_DepotPath;
             tstring       m_LocalPath;
             tstring       m_Digest;
 
-            u64           m_Size;
+            uint64_t           m_Size;
 
             Operation     m_Operation;
-            u32           m_State;
-            u32           m_Flags;
+            uint32_t           m_State;
+            uint32_t           m_Flags;
 
-            i32           m_LocalRevision;
-            i32           m_HeadRevision;
+            int32_t           m_LocalRevision;
+            int32_t           m_HeadRevision;
 
             time_t        m_HeadTime;
             time_t        m_HeadModTime;
@@ -162,7 +162,7 @@ namespace Helium
             tstring       m_Username;
             tstring       m_Client;
 
-            u64           m_ChangesetId;
+            uint64_t           m_ChangesetId;
 
             V_ActionPtr   m_Actions;
             V_RevisionPtr m_Revisions;
@@ -171,7 +171,7 @@ namespace Helium
 
             bool          m_Exclusive;
 
-            File( const tstring& localPath = TXT( "" ), u32 fileData = FileData::All, u32 actionData = ActionData::All )
+            File( const tstring& localPath = TXT( "" ), uint32_t fileData = FileData::All, uint32_t actionData = ActionData::All )
                 : m_FileData ( fileData )
                 , m_ActionData ( actionData )
                 , m_DepotPath( TXT( "" ) )
@@ -203,21 +203,21 @@ namespace Helium
 
             void GetInfo( const GetInfoFlag flags = GetInfoFlags::Default );
 
-            void Sync( const u64 timestamp = 0 );
+            void Sync( const uint64_t timestamp = 0 );
 
-            void Open( const OpenFlag flags = OpenFlags::Default, const u64 changesetId = DefaultChangesetId );
-            void Add( const OpenFlag flags = OpenFlags::Default, const u64 changesetId = DefaultChangesetId );
-            void Edit( const OpenFlag flags = OpenFlags::Default, const u64 changesetId = DefaultChangesetId );
-            void Delete( const OpenFlag flags = OpenFlags::Default, const u64 changesetId = DefaultChangesetId );
+            void Open( const OpenFlag flags = OpenFlags::Default, const uint64_t changesetId = DefaultChangesetId );
+            void Add( const OpenFlag flags = OpenFlags::Default, const uint64_t changesetId = DefaultChangesetId );
+            void Edit( const OpenFlag flags = OpenFlags::Default, const uint64_t changesetId = DefaultChangesetId );
+            void Delete( const OpenFlag flags = OpenFlags::Default, const uint64_t changesetId = DefaultChangesetId );
             void Reopen( const class Changeset& changeset, const OpenFlag flags = OpenFlags::Default );
 
             void Revert( const OpenFlag flags = OpenFlags::Default );
 
             // Like above, but will use ::MessageBox-style GUI to prompt for common handling in a program
-            bool QueryOpen( const OpenFlag flags = OpenFlags::Default, const u64 changesetId = DefaultChangesetId );
+            bool QueryOpen( const OpenFlag flags = OpenFlags::Default, const uint64_t changesetId = DefaultChangesetId );
 
-            void Copy( RCS::File& target, const OpenFlag flags = OpenFlags::Default, const u64 changesetId = DefaultChangesetId );
-            void Rename( RCS::File& target, const OpenFlag flags = OpenFlags::Default, const u64 changesetId = DefaultChangesetId );
+            void Copy( RCS::File& target, const OpenFlag flags = OpenFlags::Default, const uint64_t changesetId = DefaultChangesetId );
+            void Rename( RCS::File& target, const OpenFlag flags = OpenFlags::Default, const uint64_t changesetId = DefaultChangesetId );
 
             void Commit( const tstring& description );
 
@@ -270,7 +270,7 @@ namespace Helium
                 return ( m_State & FileStates::LocalDeleted ) != 0;
             }
 
-            inline u64 GetChangesetId() const
+            inline uint64_t GetChangesetId() const
             {
                 return m_ChangesetId;
             }

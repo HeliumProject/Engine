@@ -1,5 +1,5 @@
-dofile "Base.lua"
-dofile "WxWidgets.lua"
+require "Base"
+require "WxWidgets"
 
 local wx = "Dependencies/wxWidgets"
 
@@ -20,6 +20,12 @@ if os.get() == "windows" then
 	os.execute("robocopy /MIR /MT \"Editor\\Icons\\Helium\" \"Bin\\x64\\DebugUnicode\\Icons\" *.png")
 	os.execute("robocopy /MIR /MT \"Editor\\Icons\\Helium\" \"Bin\\x64\\ReleaseUnicode\\Icons\" *.png")
 end
+
+newoption
+{
+	trigger = "no-unicode",
+	description = "Disable Unicode support"
+}
 
 solution "Dependencies"
 Helium.DoDefaultSolutionSettings()

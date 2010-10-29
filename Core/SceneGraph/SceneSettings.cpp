@@ -28,7 +28,7 @@ MRUData* SceneSettings::GetMRU()
     return m_MRU;
 }
 
-f32 SceneSettings::ScaleManipulatorSize() const
+float32_t SceneSettings::ScaleManipulatorSize() const
 {
     return m_ScaleManipulatorSize;
 }
@@ -38,12 +38,12 @@ bool SceneSettings::ScaleManipulatorGridSnap() const
     return m_ScaleManipulatorGridSnap;
 }
 
-f32 SceneSettings::ScaleManipulatorDistance() const
+float32_t SceneSettings::ScaleManipulatorDistance() const
 {
     return m_ScaleManipulatorDistance;
 }
 
-f32 SceneSettings::RotateManipulatorSize() const
+float32_t SceneSettings::RotateManipulatorSize() const
 {
     return m_RotateManipulatorSize;
 }
@@ -53,7 +53,7 @@ bool SceneSettings::RotateManipulatorAxisSnap() const
     return m_RotateManipulatorAxisSnap;
 }
 
-f32 SceneSettings::RotateManipulatorSnapDegrees() const
+float32_t SceneSettings::RotateManipulatorSnapDegrees() const
 {
     return m_RotateManipulatorSnapDegrees;
 }
@@ -63,7 +63,7 @@ ManipulatorSpace SceneSettings::RotateManipulatorSpace() const
     return m_RotateManipulatorSpace;
 }
 
-f32 SceneSettings::TranslateManipulatorSize() const
+float32_t SceneSettings::TranslateManipulatorSize() const
 {
     return m_TranslateManipulatorSize;
 }
@@ -78,7 +78,7 @@ TranslateSnappingMode SceneSettings::TranslateManipulatorSnappingMode() const
     return m_TranslateManipulatorSnappingMode;
 }
 
-f32 SceneSettings::TranslateManipulatorDistance() const
+float32_t SceneSettings::TranslateManipulatorDistance() const
 {
     return m_TranslateManipulatorDistance;
 }

@@ -22,7 +22,7 @@ namespace Helium
         public:
             PivotTransform();
 
-            virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
+            virtual int32_t GetImageIndex() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
 
             virtual bool IsGroup()
@@ -34,46 +34,46 @@ namespace Helium
             // Shear
             //
 
-            Math::Shear GetShear() const;
-            void SetShear(const Math::Shear& value);
+            Shear GetShear() const;
+            void SetShear(const Shear& value);
 
             //
             // ScalePivot
             //
 
-            virtual Math::Vector3 GetScalePivot() const HELIUM_OVERRIDE;
-            virtual void SetScalePivot(const Math::Vector3& value) HELIUM_OVERRIDE;
-            void SetScalePivot(const Math::Vector3& value, bool snapSiblings);
+            virtual Vector3 GetScalePivot() const HELIUM_OVERRIDE;
+            virtual void SetScalePivot(const Vector3& value) HELIUM_OVERRIDE;
+            void SetScalePivot(const Vector3& value, bool snapSiblings);
 
             //
             // ScalePivotTranslate
             //
 
-            Math::Vector3 GetScalePivotTranslate() const;
-            void SetScalePivotTranslate(const Math::Vector3& value);
+            Vector3 GetScalePivotTranslate() const;
+            void SetScalePivotTranslate(const Vector3& value);
 
             //
             // RotatePivot
             //
 
-            virtual Math::Vector3 GetRotatePivot() const HELIUM_OVERRIDE;
-            virtual void SetRotatePivot(const Math::Vector3& value) HELIUM_OVERRIDE;
-            void SetRotatePivot(const Math::Vector3& value, bool snapSiblings);
+            virtual Vector3 GetRotatePivot() const HELIUM_OVERRIDE;
+            virtual void SetRotatePivot(const Vector3& value) HELIUM_OVERRIDE;
+            void SetRotatePivot(const Vector3& value, bool snapSiblings);
 
             //
             // RotatePivotTranslate
             //
 
-            Math::Vector3 GetRotatePivotTranslate() const;
-            void SetRotatePivotTranslate(const Math::Vector3& value);
+            Vector3 GetRotatePivotTranslate() const;
+            void SetRotatePivotTranslate(const Vector3& value);
 
             //
             // TranslatePivot
             //
 
-            virtual Math::Vector3 GetTranslatePivot() const HELIUM_OVERRIDE;
-            virtual void SetTranslatePivot(const Math::Vector3& value) HELIUM_OVERRIDE;
-            void SetTranslatePivot(const Math::Vector3& value, bool snapSiblings);
+            virtual Vector3 GetTranslatePivot() const HELIUM_OVERRIDE;
+            virtual void SetTranslatePivot(const Vector3& value) HELIUM_OVERRIDE;
+            void SetTranslatePivot(const Vector3& value, bool snapSiblings);
 
             //
             // SnapPivots
@@ -83,9 +83,9 @@ namespace Helium
             void SetSnapPivots(bool value);
 
         public:
-            virtual Math::Matrix4 GetScaleComponent() const HELIUM_OVERRIDE;
-            virtual Math::Matrix4 GetRotateComponent() const HELIUM_OVERRIDE;
-            virtual Math::Matrix4 GetTranslateComponent() const HELIUM_OVERRIDE;
+            virtual Matrix4 GetScaleComponent() const HELIUM_OVERRIDE;
+            virtual Matrix4 GetRotateComponent() const HELIUM_OVERRIDE;
+            virtual Matrix4 GetTranslateComponent() const HELIUM_OVERRIDE;
 
             // resets transform to identity
             virtual Undo::CommandPtr ResetTransform() HELIUM_OVERRIDE;
@@ -102,55 +102,55 @@ namespace Helium
             // creator
             static void CreatePanel(CreatePanelArgs& args);
 
-            f32 GetShearYZ() const;
-            void SetShearYZ(f32 translate);
-            f32 GetShearXZ() const;
-            void SetShearXZ(f32 translate);
-            f32 GetShearXY() const;
-            void SetShearXY(f32 translate);
+            float32_t GetShearYZ() const;
+            void SetShearYZ(float32_t translate);
+            float32_t GetShearXZ() const;
+            void SetShearXZ(float32_t translate);
+            float32_t GetShearXY() const;
+            void SetShearXY(float32_t translate);
 
-            f32 GetScalePivotX() const;
-            void SetScalePivotX(f32 translate);
-            f32 GetScalePivotY() const;
-            void SetScalePivotY(f32 translate);
-            f32 GetScalePivotZ() const;
-            void SetScalePivotZ(f32 translate);
+            float32_t GetScalePivotX() const;
+            void SetScalePivotX(float32_t translate);
+            float32_t GetScalePivotY() const;
+            void SetScalePivotY(float32_t translate);
+            float32_t GetScalePivotZ() const;
+            void SetScalePivotZ(float32_t translate);
 
-            f32 GetScalePivotTranslateX() const;
-            void SetScalePivotTranslateX(f32 translate);
-            f32 GetScalePivotTranslateY() const;
-            void SetScalePivotTranslateY(f32 translate);
-            f32 GetScalePivotTranslateZ() const;
-            void SetScalePivotTranslateZ(f32 translate);
+            float32_t GetScalePivotTranslateX() const;
+            void SetScalePivotTranslateX(float32_t translate);
+            float32_t GetScalePivotTranslateY() const;
+            void SetScalePivotTranslateY(float32_t translate);
+            float32_t GetScalePivotTranslateZ() const;
+            void SetScalePivotTranslateZ(float32_t translate);
 
-            f32 GetRotatePivotX() const;
-            void SetRotatePivotX(f32 translate);
-            f32 GetRotatePivotY() const;
-            void SetRotatePivotY(f32 translate);
-            f32 GetRotatePivotZ() const;
-            void SetRotatePivotZ(f32 translate);
+            float32_t GetRotatePivotX() const;
+            void SetRotatePivotX(float32_t translate);
+            float32_t GetRotatePivotY() const;
+            void SetRotatePivotY(float32_t translate);
+            float32_t GetRotatePivotZ() const;
+            void SetRotatePivotZ(float32_t translate);
 
-            f32 GetRotatePivotTranslateX() const;
-            void SetRotatePivotTranslateX(f32 translate);
-            f32 GetRotatePivotTranslateY() const;
-            void SetRotatePivotTranslateY(f32 translate);
-            f32 GetRotatePivotTranslateZ() const;
-            void SetRotatePivotTranslateZ(f32 translate);
+            float32_t GetRotatePivotTranslateX() const;
+            void SetRotatePivotTranslateX(float32_t translate);
+            float32_t GetRotatePivotTranslateY() const;
+            void SetRotatePivotTranslateY(float32_t translate);
+            float32_t GetRotatePivotTranslateZ() const;
+            void SetRotatePivotTranslateZ(float32_t translate);
 
-            f32 GetTranslatePivotX() const;
-            void SetTranslatePivotX(f32 translate);
-            f32 GetTranslatePivotY() const;
-            void SetTranslatePivotY(f32 translate);
-            f32 GetTranslatePivotZ() const;
-            void SetTranslatePivotZ(f32 translate);
+            float32_t GetTranslatePivotX() const;
+            void SetTranslatePivotX(float32_t translate);
+            float32_t GetTranslatePivotY() const;
+            void SetTranslatePivotY(float32_t translate);
+            float32_t GetTranslatePivotZ() const;
+            void SetTranslatePivotZ(float32_t translate);
 
         protected:
-            Math::Shear         m_Shear;                    // shear values
-            Math::Vector3       m_ScalePivot;               // scale pivot translation vector
-            Math::Vector3       m_ScalePivotTranslate;      // compensation vector for preserving the transform when the scale pivot it moved
-            Math::Vector3       m_RotatePivot;              // rotation pivot translation vector
-            Math::Vector3       m_RotatePivotTranslate;     // compensation vector for preserving the transform when the rotation pivot it moved
-            Math::Vector3       m_TranslatePivot;           // translate pivot translation vector
+            Shear         m_Shear;                    // shear values
+            Vector3       m_ScalePivot;               // scale pivot translation vector
+            Vector3       m_ScalePivotTranslate;      // compensation vector for preserving the transform when the scale pivot it moved
+            Vector3       m_RotatePivot;              // rotation pivot translation vector
+            Vector3       m_RotatePivotTranslate;     // compensation vector for preserving the transform when the rotation pivot it moved
+            Vector3       m_TranslatePivot;           // translate pivot translation vector
             bool                m_SnapPivots;               // if this is true, use m_RotatePivot
         };
 

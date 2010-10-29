@@ -39,7 +39,7 @@ Helium::MipSet::MipSet()
 ////////////////////////////////////////////////////////////////////////////////////////////////
 Helium::MipSet::~MipSet()
 {
-  for (u32 i=0;i<MAX_TEXTURE_MIPS;i++)
+  for (uint32_t i=0;i<MAX_TEXTURE_MIPS;i++)
   {
     delete [] m_levels[0][i].m_data;
     delete [] m_levels[1][i].m_data;
@@ -138,7 +138,7 @@ bool MipSet::RuntimeSettings::operator == (const RuntimeSettings& rhs)
 // Removes the specified number of mips from the tail of the mip set (removes the N smallest mips).
 // There has to be at least a single mip level remaining after levels have been removed.
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool Helium::MipSet::RemoveFromTail(u32 levels)
+bool Helium::MipSet::RemoveFromTail(uint32_t levels)
 {
   if (levels>=m_levels_used)
   {
@@ -147,9 +147,9 @@ bool Helium::MipSet::RemoveFromTail(u32 levels)
   }
 
   // remove the mips
-  for (u32 l=m_levels_used-levels;l<m_levels_used;l++)
+  for (uint32_t l=m_levels_used-levels;l<m_levels_used;l++)
   {
-    for (u32 m=0;m<6;m++)
+    for (uint32_t m=0;m<6;m++)
     {
       delete [] m_levels[m][l].m_data;
       m_levels[m][l].m_data = 0;
@@ -168,7 +168,7 @@ bool Helium::MipSet::RemoveFromTail(u32 levels)
 // Removes the specified number of mips from the head of the mip set (removes the N biggest mips).
 // There has to be at least a single mip level remaining after levels have been removed.
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool Helium::MipSet::RemoveFromHead(u32 levels)
+bool Helium::MipSet::RemoveFromHead(uint32_t levels)
 {
   if (levels>=m_levels_used)
   {
@@ -177,18 +177,18 @@ bool Helium::MipSet::RemoveFromHead(u32 levels)
   }
 
   // delete the top mips
-  for (u32 l=0;l<levels;l++)
+  for (uint32_t l=0;l<levels;l++)
   {
-    for (u32 m=0;m<6;m++)
+    for (uint32_t m=0;m<6;m++)
     {
       delete [] m_levels[m][l].m_data;
     }
   }
 
   // move the mips up N positions
-  for (u32 l=levels;l<m_levels_used;l++)
+  for (uint32_t l=levels;l<m_levels_used;l++)
   {
-    for (u32 m=0;m<6;m++)
+    for (uint32_t m=0;m<6;m++)
     {
       m_levels[m][l-levels] = m_levels[m][l];
       m_levels[m][l].m_data = 0;
@@ -227,7 +227,7 @@ bool Helium::MipSet::Swizzle()
   if(m_depth > 1)
   {
     // none power of 2 textures cannot be swizzled
-    if(!Math::IsPowerOfTwo(m_depth))
+    if(!IsPowerOfTwo(m_depth))
     {
       m_swizzled = false;
     }
@@ -248,14 +248,14 @@ bool Helium::MipSet::Swizzle()
     return m_swizzled;
   }
 
-  if (!Math::IsPowerOfTwo(m_width) || !Math::IsPowerOfTwo(m_height))
+  if (!IsPowerOfTwo(m_width) || !IsPowerOfTwo(m_height))
   {
     // none power of 2 textures cannot be swizzled
     m_swizzled = false;
     return false;
   }
 
-  u32 bytes_per_pixel = (ColorFormatBits( CompatibleColorFormat( m_format ) )>>3);
+  uint32_t bytes_per_pixel = (ColorFormatBits( CompatibleColorFormat( m_format ) )>>3);
   if (bytes_per_pixel==0)
   {
     // not a format that has a meaning full bytes per pixel
@@ -265,14 +265,14 @@ bool Helium::MipSet::Swizzle()
 
   // go through all the mip levels and swizzle them, we might need to adjust the size while we
   // are doing it.
-  for (u32 l=0;l<m_levels_used;l++)
+  for (uint32_t l=0;l<m_levels_used;l++)
   {
-    for (u32 m=0;m<6;m++)
+    for (uint32_t m=0;m<6;m++)
     {
       if (m_levels[m][l].m_data)
       {
         // this face is present, swizzle it
-        u8* swizzle_level = new u8[m_datasize[l]];
+        uint8_t* swizzle_level = new uint8_t[m_datasize[l]];
         SwizzleBox(m_levels[m][l].m_data,swizzle_level,m_levels[m][l].m_width,m_levels[m][l].m_height,m_levels[m][l].m_depth,bytes_per_pixel);
         delete [] m_levels[m][l].m_data;
         m_levels[m][l].m_data = swizzle_level;
@@ -293,33 +293,33 @@ bool Helium::MipSet::VTCSwizzle()
   HELIUM_ASSERT(m_depth > 1);
   HELIUM_ASSERT_MSG(m_levels_used == 1, ("Mipmap support not yet implimented for volume textures"));
 
-  u8* p_data = m_levels[0][0].m_data;
+  uint8_t* p_data = m_levels[0][0].m_data;
   if(!p_data)
   {
     return false;
   }
 
-  u32 block_width = m_width / 4;
-  u32 block_height = m_height / 4;
-  u32 num_layer_blocks = block_width * block_height;
+  uint32_t block_width = m_width / 4;
+  uint32_t block_height = m_height / 4;
+  uint32_t num_layer_blocks = block_width * block_height;
 
-  u32 block_size = (m_format == Helium::OUTPUT_CF_DXT1) ? 8 : 16;
-  u32 layer_size = num_layer_blocks * block_size;
+  uint32_t block_size = (m_format == Helium::OUTPUT_CF_DXT1) ? 8 : 16;
+  uint32_t layer_size = num_layer_blocks * block_size;
 
-  u32 num_layer_sets = m_depth / 4;
+  uint32_t num_layer_sets = m_depth / 4;
 
-  u8* p_vtc = new u8[m_datasize[0]];
+  uint8_t* p_vtc = new uint8_t[m_datasize[0]];
   HELIUM_ASSERT(p_vtc);
-  u8* p_dest = p_vtc;
-  for(u32 layer_set = 0; layer_set < num_layer_sets; layer_set++)
+  uint8_t* p_dest = p_vtc;
+  for(uint32_t layer_set = 0; layer_set < num_layer_sets; layer_set++)
   {
-    u8* first_layer_offset = p_data + (layer_size * (layer_set * 4));
-    u8* p_src_1 = first_layer_offset;
-    u8* p_src_2 = first_layer_offset + (layer_size * 1);
-    u8* p_src_3 = first_layer_offset + (layer_size * 2);
-    u8* p_src_4 = first_layer_offset + (layer_size * 3);
+    uint8_t* first_layer_offset = p_data + (layer_size * (layer_set * 4));
+    uint8_t* p_src_1 = first_layer_offset;
+    uint8_t* p_src_2 = first_layer_offset + (layer_size * 1);
+    uint8_t* p_src_3 = first_layer_offset + (layer_size * 2);
+    uint8_t* p_src_4 = first_layer_offset + (layer_size * 3);
 
-    for(u32 block = 0; block < num_layer_blocks; block++)
+    for(uint32_t block = 0; block < num_layer_blocks; block++)
     {
       memcpy(p_dest+(block_size*0), p_src_1, block_size);
       memcpy(p_dest+(block_size*1), p_src_2, block_size);
@@ -335,12 +335,12 @@ bool Helium::MipSet::VTCSwizzle()
 
   // Copy over leftover layers unswizzled
   //if( (num_layer_sets*4) < m_depth )
-  u32 swizzled_size = (u32)(p_dest - p_vtc);
+  uint32_t swizzled_size = (uint32_t)(p_dest - p_vtc);
   HELIUM_ASSERT( swizzled_size == (num_layer_sets * 4 * layer_size) );
   if( swizzled_size < m_datasize[0] )
   {
-    u32 unswizzled_size = m_datasize[0] - swizzled_size;
-    u8* p_unswizzled_start = p_data + swizzled_size;
+    uint32_t unswizzled_size = m_datasize[0] - swizzled_size;
+    uint8_t* p_unswizzled_start = p_data + swizzled_size;
     memcpy(p_dest, p_unswizzled_start, unswizzled_size);
   }
 
@@ -351,7 +351,7 @@ bool Helium::MipSet::VTCSwizzle()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool Helium::MipSet::ExtractNonePowerOfTwo(u32 width, u32 height, u32 depth)
+bool Helium::MipSet::ExtractNonePowerOfTwo(uint32_t width, uint32_t height, uint32_t depth)
 {
   // we do not currently support extracting volume data
   if (m_texture_type==Helium::Image::VOLUME)
@@ -368,23 +368,23 @@ bool Helium::MipSet::ExtractNonePowerOfTwo(u32 width, u32 height, u32 depth)
     return false;
   }
 
-  u32 dst_x_blocks = ((width+3)&~3)>>2;
-  u32 dst_y_blocks = ((height+3)&~3)>>2;
-  u32 dst_stride = dst_x_blocks*((m_format==OUTPUT_CF_DXT1)?8:16);
+  uint32_t dst_x_blocks = ((width+3)&~3)>>2;
+  uint32_t dst_y_blocks = ((height+3)&~3)>>2;
+  uint32_t dst_stride = dst_x_blocks*((m_format==OUTPUT_CF_DXT1)?8:16);
 
-  for (u32 f=0;f<6;f++)
+  for (uint32_t f=0;f<6;f++)
   {
     if (m_levels[f][0].m_data)
     {
-      u32 src_x_blocks = m_levels[f][0].m_width>>2;
-      u32 src_y_blocks = m_levels[f][0].m_height>>2;
-      u32 src_stride = src_x_blocks*16;
+      uint32_t src_x_blocks = m_levels[f][0].m_width>>2;
+      uint32_t src_y_blocks = m_levels[f][0].m_height>>2;
+      uint32_t src_stride = src_x_blocks*16;
       if (m_format==OUTPUT_CF_DXT1)
         src_stride>>=1;
 
-      u8* dst = m_levels[f][0].m_data + dst_stride;
-      u8* src = m_levels[f][0].m_data + src_stride;
-      for (u32 y=0;y<dst_y_blocks-1;y++)
+      uint8_t* dst = m_levels[f][0].m_data + dst_stride;
+      uint8_t* src = m_levels[f][0].m_data + src_stride;
+      for (uint32_t y=0;y<dst_y_blocks-1;y++)
       {
         memcpy(dst,src,dst_stride);
         dst+=dst_stride;

@@ -9,7 +9,7 @@ namespace Helium
         class SyncCommand : public Command
         {
         public:
-            SyncCommand( Provider* provider, RCS::File* file = NULL, const u64 timestamp = 0 )
+            SyncCommand( Provider* provider, RCS::File* file = NULL, const uint64_t timestamp = 0 )
                 : Command ( provider, TXT( "sync" ) )
                 , m_File ( file )
                 , m_SyncTime( timestamp )
@@ -22,7 +22,7 @@ namespace Helium
 
         protected:
             RCS::File* m_File;
-            u64 m_SyncTime;
+            uint64_t m_SyncTime;
         };
 
         class OpenCommand : public Command

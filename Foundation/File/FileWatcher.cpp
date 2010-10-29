@@ -81,13 +81,13 @@ bool FileWatcher::Watch( int timeout )
     //    FILE_NOTIFY_INFORMATION notificationInformation[1024];
     FileWatch* watches[ MAXIMUM_WAIT_OBJECTS ];
 
-    for ( u32 i = 0; i < MAXIMUM_WAIT_OBJECTS; ++i )
+    for ( uint32_t i = 0; i < MAXIMUM_WAIT_OBJECTS; ++i )
     {
         changeHandles[ i ] = NULL;
         watches[ i ] = NULL;
     }
 
-    u32 handleIndex = 0;
+    uint32_t handleIndex = 0;
     for ( M_PathToFileWatch::iterator itr = m_Watches.begin(), end = m_Watches.end(); itr != end; ++itr )
     {
         changeHandles[ handleIndex ] = (*itr).second.m_ChangeHandle;

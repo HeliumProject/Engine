@@ -9,7 +9,7 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-typedef std::map< i32, tstring> M_MenuItemIDToString;
+typedef std::map< int32_t, tstring> M_MenuItemIDToString;
 
 class MenuMRUEvtHandler : public wxEvtHandler
 {
@@ -79,7 +79,7 @@ public:
 // Constructor
 // maxItems - The total number of items to maintain in the list.
 // 
-MenuMRU::MenuMRU( i32 maxItems, wxWindow* owner )
+MenuMRU::MenuMRU( int32_t maxItems, wxWindow* owner )
 : MRU< tstring >( maxItems )
 , m_Owner( owner )
 {

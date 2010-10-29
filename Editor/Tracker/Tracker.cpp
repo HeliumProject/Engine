@@ -11,11 +11,11 @@ using namespace Helium::Editor;
 ///////////////////////////////////////////////////////////////////////////////
 // Sleep between runs and yield to other threads
 // The complex loop is to prevent Editor from hanging on exit (max hang will be "increments" seconds)
-inline void SleepBetweenTracking( bool* cancel = NULL, const u32 minutes = 1 )
+inline void SleepBetweenTracking( bool* cancel = NULL, const uint32_t minutes = 1 )
 {
-    const u32 increments = 5;
-    u32 totalSeconds = 60 * minutes;
-    for ( u32 seconds = 0; seconds < totalSeconds; seconds += increments )
+    const uint32_t increments = 5;
+    uint32_t totalSeconds = 60 * minutes;
+    for ( uint32_t seconds = 0; seconds < totalSeconds; seconds += increments )
     {
         Sleep( increments * 1000 );
 
@@ -140,10 +140,10 @@ void Tracker::TrackEverything()
 
         // for each file
         m_CurrentProgress = 0;
-        m_Total = (u32)assetFiles.size();
+        m_Total = (uint32_t)assetFiles.size();
 
         Timer timer;
-        Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, TXT("Tracker: Scanning %d asset file(s) for changes...\n"), (u32)assetFiles.size() );
+        Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, TXT("Tracker: Scanning %d asset file(s) for changes...\n"), (uint32_t)assetFiles.size() );
 
         for( std::set< Helium::Path >::const_iterator assetFileItr = assetFiles.begin(), assetFileItrEnd = assetFiles.end();
             !m_StopTracking && assetFileItr != assetFileItrEnd; ++assetFileItr )
@@ -219,7 +219,7 @@ void Tracker::TrackEverything()
                 
                 // update LastModified
                 assetTrackedFile.mPath = assetFilePath.Get();
-                assetTrackedFile.mSize = (i32) assetFilePath.Size();
+                assetTrackedFile.mSize = (int32_t) assetFilePath.Size();
                 assetTrackedFile.mLastModified = litesql::DateTime( assetFilePath.ModifiedTime() );
                 assetTrackedFile.update();
             }
@@ -235,7 +235,7 @@ void Tracker::TrackEverything()
 
         if ( m_StopTracking )
         {
-            u32 percentComplete = (u32)(((f32)m_CurrentProgress/(f32)m_Total) * 100);
+            uint32_t percentComplete = (uint32_t)(((float32_t)m_CurrentProgress/(float32_t)m_Total) * 100);
             Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, TXT("Tracker: Indexing (%d%% complete) pre-empted after %.2fm\n"), percentComplete, timer.Elapsed() / 1000.f / 60.f );
         }
         else if ( !m_InitialIndexingCompleted )
@@ -272,12 +272,12 @@ bool Tracker::DidIndexingFail() const
     return m_IndexingFailed;
 }
 
-u32 Tracker::GetCurrentProgress() const
+uint32_t Tracker::GetCurrentProgress() const
 {
     return m_CurrentProgress;
 }
 
-u32 Tracker::GetTrackingTotal() const 
+uint32_t Tracker::GetTrackingTotal() const 
 {
     return m_Total;
 }

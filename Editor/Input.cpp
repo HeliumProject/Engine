@@ -7,7 +7,7 @@ using namespace Helium;
 
 static void ConvertMouseEvent( wxMouseEvent& event, MouseInput& input )
 {
-    u32 buttons = 0x0;
+    uint32_t buttons = 0x0;
 
     buttons |= event.LeftIsDown() ? MouseButtons::Left : 0x0;
     buttons |= event.MiddleIsDown() ? MouseButtons::Middle : 0x0;
@@ -21,7 +21,7 @@ static void ConvertMouseEvent( wxMouseEvent& event, MouseInput& input )
 
     input.SetButtons( buttons );
 
-    input.SetPosition( Math::Point( event.GetX(), event.GetY() ) );
+    input.SetPosition( Point( event.GetX(), event.GetY() ) );
 }
 
 void Helium::ConvertEvent( wxMouseEvent& event, MouseMoveInput& input )

@@ -39,7 +39,7 @@ static void ObjError(FILE* fp, int fpos, int currpos,const char* error)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-u32 OBJObjectLoader::ParseFile(const tchar* fname, bool winding)
+uint32_t OBJObjectLoader::ParseFile(const tchar* fname, bool winding)
 {
     //winding = true;
     FILE *fp;
@@ -60,7 +60,7 @@ u32 OBJObjectLoader::ParseFile(const tchar* fname, bool winding)
     bool hasTC = false;
     bool hasNormals = false;
     bool fixup=false;
-    u32 fragid=-1;
+    uint32_t fragid=-1;
 
     m_parse_warnings = 0;
     while ( 1 ) 
@@ -158,7 +158,7 @@ u32 OBJObjectLoader::ParseFile(const tchar* fname, bool winding)
 
                 // got through the shader array and see if this shader already exists, if it does use the same frag ID
                 fragid = 0xffffffff;
-                for (u32 fr=0;fr<(u32)m_fragments.size();fr++)
+                for (uint32_t fr=0;fr<(uint32_t)m_fragments.size();fr++)
                 {
                     if (m_fragments[fr].m_shader == shader_name)
                     {
@@ -172,7 +172,7 @@ u32 OBJObjectLoader::ParseFile(const tchar* fname, bool winding)
                     ShaderFrag frag;
                     frag.m_shader = shader_name;
                     m_fragments.push_back(frag);
-                    fragid = (u32)m_fragments.size()-1;
+                    fragid = (uint32_t)m_fragments.size()-1;
                 }
             }
             break;
@@ -187,7 +187,7 @@ u32 OBJObjectLoader::ParseFile(const tchar* fname, bool winding)
                 ShaderFrag frag;
                 frag.m_shader = TXT( "default" );
                 m_fragments.push_back(frag);
-                fragid = (u32)m_fragments.size()-1;
+                fragid = (uint32_t)m_fragments.size()-1;
             }
 
             //determine the type, and read the initial vertex, all entries in a face must have the same format

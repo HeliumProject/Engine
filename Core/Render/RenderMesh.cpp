@@ -12,7 +12,7 @@ RenderMesh::RenderMesh(const tchar* name)
     m_filename = name;
     m_crc = Helium::StringCrc32(name);
     m_load_count = 0;
-    m_timestamp = (u64)-1;
+    m_timestamp = (uint64_t)-1;
     m_verts = 0;
     m_indices = 0;
     m_vert_count = 0;

@@ -22,11 +22,11 @@ namespace Helium
         class Interface;
         class Host;
 
-        const u32 MAX_STACK = 64;
-        const u32 MAX_INVOKERS = 32;
-        const u32 MAX_INTERFACES = 32;
-        const i32 TIMEOUT_DEFAULT = 1000;
-        const i32 TIMEOUT_FOREVER = -1;
+        const uint32_t MAX_STACK = 64;
+        const uint32_t MAX_INVOKERS = 32;
+        const uint32_t MAX_INTERFACES = 32;
+        const int32_t TIMEOUT_DEFAULT = 1000;
+        const int32_t TIMEOUT_FOREVER = -1;
 
 
         //
@@ -46,10 +46,10 @@ namespace Helium
         struct FOUNDATION_API Args
         {
             Host* m_Host;
-            u32   m_Flags;
+            uint32_t   m_Flags;
 
             void* m_Payload;
-            u32   m_PayloadSize;
+            uint32_t   m_PayloadSize;
         };
         typedef Helium::Signature< RPC::Args&>::Delegate ArgsDelegate;
 
@@ -75,12 +75,12 @@ namespace Helium
 
             }
 
-            virtual u32 GetArgsSize()
+            virtual uint32_t GetArgsSize()
             {
                 return 0;
             }
 
-            virtual void Invoke(u8* data, u32 size) = 0;
+            virtual void Invoke(uint8_t* data, uint32_t size) = 0;
 
             const char* GetName()
             {
@@ -136,7 +136,7 @@ namespace Helium
             const char*   m_Name;
             Host*         m_Host;
             InvokerPtr    m_Invokers[MAX_INVOKERS];
-            u32           m_InvokerCount;
+            uint32_t           m_InvokerCount;
         };
 
 
@@ -168,23 +168,23 @@ namespace Helium
             void SetConnection(IPC::Connection* con);
 
             // set the timeout for blocking operations
-            void SetTimeout(i32 timeout);
+            void SetTimeout(int32_t timeout);
 
             //
             // Invoker dispatching
             //
 
             // create message to send
-            IPC::Message* Create(Invoker* invoker, u32 size, i32 transaction = 0);
+            IPC::Message* Create(Invoker* invoker, uint32_t size, int32_t transaction = 0);
 
             // helper function to send a single data block
-            void Emit(Invoker* invoker, Args* args = NULL, u32 size = 0, SwizzleFunc swizzler = NULL);
+            void Emit(Invoker* invoker, Args* args = NULL, uint32_t size = 0, SwizzleFunc swizzler = NULL);
 
             // process data from the other side
             bool Invoke(IPC::Message* msg);
 
             // take the message data (call from within an interface function)
-            u8* TakeData();
+            uint8_t* TakeData();
 
             // Are we connected and ready to do work?
             bool Connected();
@@ -206,10 +206,10 @@ namespace Helium
                 bool              m_MessageTaken;
 
                 bool              m_Replied;
-                u32               m_ReplyID;
-                u8*               m_ReplyData;
-                u32               m_ReplySize;
-                i32               m_ReplyTransaction;
+                uint32_t               m_ReplyID;
+                uint8_t*               m_ReplyData;
+                uint32_t               m_ReplySize;
+                int32_t               m_ReplyTransaction;
             };
 
             class FOUNDATION_API Stack
@@ -217,22 +217,22 @@ namespace Helium
             public:
                 Stack();
                 void Reset();
-                i32 Size();
+                int32_t Size();
                 Frame* Push();
                 Frame* Top();
                 void Pop();
 
             private:
                 Frame             m_Frames[MAX_STACK];
-                u32               m_Size;
+                uint32_t               m_Size;
             };
 
             IPC::Connection*    m_Connection;
-            u32                 m_ConnectionCount;
-            i32                 m_Timeout;
+            uint32_t                 m_ConnectionCount;
+            int32_t                 m_Timeout;
             Stack               m_Stack;
             Interface*          m_Interfaces[MAX_INTERFACES];
-            u32                 m_InterfaceCount;
+            uint32_t                 m_InterfaceCount;
         };
 
         template<class ArgsType>
@@ -249,12 +249,12 @@ namespace Helium
 
             }
 
-            virtual u32 GetArgsSize()
+            virtual uint32_t GetArgsSize()
             {
                 return sizeof(ArgsType);
             }
 
-            virtual void Invoke(u8* data, u32 size)
+            virtual void Invoke(uint8_t* data, uint32_t size)
             {
                 if (size)
                 {
@@ -275,7 +275,7 @@ namespace Helium
                 }
             }
 
-            void Emit(ArgsType* args, void* payload = NULL, u32 size = 0)
+            void Emit(ArgsType* args, void* payload = NULL, uint32_t size = 0)
             {
                 args->m_Payload = payload;
                 args->m_PayloadSize = size;

@@ -147,12 +147,12 @@ void Widget::IsHiddenChanged( const Attribute<bool>::ChangeArgs& args )
     }
 }
 
-void Widget::ForegroundColorChanged( const Attribute<u32>::ChangeArgs& args )
+void Widget::ForegroundColorChanged( const Attribute<uint32_t>::ChangeArgs& args )
 {
     m_Window->SetForegroundColour( args.m_NewValue );
 }
 
-void Widget::BackgroundColorChanged( const Attribute<u32>::ChangeArgs& args )
+void Widget::BackgroundColorChanged( const Attribute<uint32_t>::ChangeArgs& args )
 {
     m_Window->SetBackgroundColour( args.m_NewValue );
 }
@@ -168,7 +168,7 @@ void Widget::OnContextMenu( wxContextMenuEvent& event )
 
     std::vector< tstring >::const_iterator itr = m_Control->GetContextMenu()->GetItems().begin();
     std::vector< tstring >::const_iterator end = m_Control->GetContextMenu()->GetItems().end();
-    for ( i32 count = 0; itr != end; ++itr, ++count )
+    for ( int32_t count = 0; itr != end; ++itr, ++count )
     {
         if ( *itr == TXT( "-" ) )
         {

@@ -7,7 +7,7 @@ namespace Helium
 {
     namespace Asset
     {
-        static u64 s_MaxTextureResolution;
+        static uint64_t s_MaxTextureResolution;
 
         namespace TextureDataFormats
         {
@@ -41,7 +41,7 @@ namespace Helium
         class CORE_API TextureProcessingComponent : public Component::ComponentBase
         {
         private:
-            u64               m_MaxTextureResolution;
+            uint64_t               m_MaxTextureResolution;
             TextureDataFormat m_TextureDataFormat;
             bool              m_GenerateMipMaps;
             bool              m_GenerateBumpMap;
@@ -70,11 +70,11 @@ namespace Helium
 
         public:
 
-            u64 GetMaxTextureResolution() const
+            uint64_t GetMaxTextureResolution() const
             {
                 return m_MaxTextureResolution;
             }
-            void SetMaxTextureResolution( u64 maxTextureResolution )
+            void SetMaxTextureResolution( uint64_t maxTextureResolution )
             {
                 m_MaxTextureResolution = maxTextureResolution;
             }

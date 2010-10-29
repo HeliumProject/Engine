@@ -135,7 +135,7 @@ void Debug::ProcessException(const std::exception& exception, bool print, bool f
     }
 }
 
-u32 Debug::ProcessException(LPEXCEPTION_POINTERS info, bool print, bool fatal)
+uint32_t Debug::ProcessException(LPEXCEPTION_POINTERS info, bool print, bool fatal)
 {
     SetUnhandledExceptionFilter( NULL );
 

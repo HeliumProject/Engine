@@ -13,10 +13,10 @@ using namespace Helium;
 
 struct Triangle
 {
-    std::vector< u32 >  m_VertIndices;
-    std::vector< u32 >  m_NormalIndices;
-    std::vector< u32 >  m_TexCoordIndices;
-    u32                 m_ShaderIndex;
+    std::vector< uint32_t >  m_VertIndices;
+    std::vector< uint32_t >  m_NormalIndices;
+    std::vector< uint32_t >  m_TexCoordIndices;
+    uint32_t                 m_ShaderIndex;
 };
 
 /* ReadMTL: read a wavefront material library file
@@ -93,7 +93,7 @@ static SceneGraph::Shader* ReadMTL( const Path& path )
                 {
                 case 'a':
                     {
-                        Math::Color3 ambient;
+                        Color3 ambient;
                         fscanf( file, "%f %f %f", &ambient.r, &ambient.g, &ambient.b );
                         Log::Warning( TXT( "Discarding ambient, unsupported" ) );
                         break;
@@ -101,7 +101,7 @@ static SceneGraph::Shader* ReadMTL( const Path& path )
 
                 case 'd':
                     {
-                        Math::Color3 diffuse;
+                        Color3 diffuse;
                         fscanf( file, "%f %f %f", &diffuse.r, &diffuse.g, &diffuse.b );
                         Log::Warning( TXT( "Discarding diffuse, unsupported" ) );
                         break;
@@ -109,7 +109,7 @@ static SceneGraph::Shader* ReadMTL( const Path& path )
 
                 case 's':
                     {
-                        Math::Color3 specular;
+                        Color3 specular;
                         fscanf( file, "%f %f %f", &specular.r, &specular.g, &specular.b );
                         Log::Warning( TXT( "Discarding specular, unsupported" ) );
                         break;
@@ -183,17 +183,17 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path, bool flipWinding )
     SceneGraph::Mesh* mesh = new SceneGraph::Mesh();
     std::map< tstring, SceneGraph::Shader* > shaders;
     SceneGraph::Shader* curShader = NULL;
-    u32 curShaderIndex = 0xffffffff;
+    uint32_t curShaderIndex = 0xffffffff;
 
-    u32 match = 0;
+    uint32_t match = 0;
 
-    Math::Vector3 vertex;
-    Math::Vector3 normal;
-    Math::Vector2 texCoord;
+    Vector3 vertex;
+    Vector3 normal;
+    Vector2 texCoord;
 
-    std::vector< Math::Vector3 > vertices;
-    std::vector< Math::Vector3 > normals;
-    std::vector< Math::Vector2 > texCoords;
+    std::vector< Vector3 > vertices;
+    std::vector< Vector3 > normals;
+    std::vector< Vector2 > texCoords;
 
     std::vector< Triangle > triangles;
 
@@ -226,7 +226,7 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path, bool flipWinding )
                 }
                 else
                 {
-                    vertices.push_back( Math::Vector3() );
+                    vertices.push_back( Vector3() );
                     Log::Warning( TXT( "Invalid position, setting to origin. (File: %s, pos: %d, curpos: %d)" ), path.c_str(), fpos, currpos );
                 }
                 break;
@@ -240,7 +240,7 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path, bool flipWinding )
                 }
                 else
                 {
-                    normals.push_back( Math::Vector3( 0.0f, 0.0f, 1.0f ) );
+                    normals.push_back( Vector3( 0.0f, 0.0f, 1.0f ) );
                     Log::Warning( TXT( "Invalid position, setting to (0,0,1). (File: %s, pos: %d, curpos: %d)" ), path.c_str(), fpos, currpos );
                 }
                 break;
@@ -248,7 +248,7 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path, bool flipWinding )
             case 't':
                 {
                     //texcoord, 2 or 3 components
-                    f32 discard;
+                    float32_t discard;
                     match = fscanf( file, "%f %f %f", &texCoord.x, &texCoord.y, &discard );
                     if ( match==2 || match==3 )
                     {
@@ -256,7 +256,7 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path, bool flipWinding )
                     }
                     else
                     {
-                        texCoords.push_back( Math::Vector2() );
+                        texCoords.push_back( Vector2() );
                         Log::Warning( TXT( "Invalid texture coordinate, setting to (0,0). (File: %s, pos: %d, curpos: %d)" ), path.c_str(), fpos, currpos );
                     }
 
@@ -296,13 +296,13 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path, bool flipWinding )
             fscanf( file, "%s", buf);
 
             {
-                std::vector< i32 > faceVertexIndices;
-                std::vector< i32 > faceNormalIndices;
-                std::vector< i32 > faceTexCoordIndices;
+                std::vector< int32_t > faceVertexIndices;
+                std::vector< int32_t > faceNormalIndices;
+                std::vector< int32_t > faceTexCoordIndices;
 
-                i32 vertexIndex;
-                i32 normalIndex;
-                i32 texCoordIndex;
+                int32_t vertexIndex;
+                int32_t normalIndex;
+                int32_t texCoordIndex;
 
                 // no material has been defined so we need to allocate a fragment
                 if ( !curShader )
@@ -393,7 +393,7 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path, bool flipWinding )
                     fgets( buf, sizeof( buf ), file );
                 }
 
-                for ( std::vector< i32 >::const_iterator itr = faceVertexIndices.begin(), end = faceVertexIndices.end(); itr != end; ++itr )
+                for ( std::vector< int32_t >::const_iterator itr = faceVertexIndices.begin(), end = faceVertexIndices.end(); itr != end; ++itr )
                 {
                     mesh->m_WireframeVertexIndices.push_back( (*itr) );
                     if ( itr != ( end - 1 ) )
@@ -406,9 +406,9 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path, bool flipWinding )
                     }
                 }
 
-                u32 numTris = (u32)faceVertexIndices.size() - 2;
+                uint32_t numTris = (uint32_t)faceVertexIndices.size() - 2;
 
-                for ( u32 i = 0; i < numTris; ++i )
+                for ( uint32_t i = 0; i < numTris; ++i )
                 {
                     Triangle t;
                     t.m_ShaderIndex = curShaderIndex;
@@ -478,7 +478,7 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path, bool flipWinding )
     mesh->m_BaseUVs.resize( mesh->m_Positions.size() );
     mesh->m_ShaderTriangleCounts.resize( mesh->m_ShaderIDs.size() );
 
-    for ( u32 i = 0; i < triangles.size(); ++i )
+    for ( uint32_t i = 0; i < triangles.size(); ++i )
     {
         HELIUM_ASSERT( triangles[ i ].m_VertIndices.size() == 3 );
 

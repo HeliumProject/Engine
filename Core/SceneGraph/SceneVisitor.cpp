@@ -32,7 +32,7 @@ TraversalAction HierarchyRenderTraverser::VisitHierarchyNode(SceneGraph::Hierarc
 {
   TraversalAction action;
 
-  Math::Matrix4 matrix = m_RenderVisitor->State().m_Matrix;
+  Matrix4 matrix = m_RenderVisitor->State().m_Matrix;
 
   m_RenderVisitor->State().m_Matrix = node->GetTransform()->GetGlobalTransform() * m_RenderVisitor->State().m_Matrix;
 
@@ -68,7 +68,7 @@ TraversalAction HierarchyPickTraverser::VisitHierarchyNode(SceneGraph::Hierarchy
 {
   TraversalAction action;
 
-  Math::Matrix4 matrix = m_PickVisitor->State().m_Matrix;
+  Matrix4 matrix = m_PickVisitor->State().m_Matrix;
 
   m_PickVisitor->State().m_Matrix = node->GetTransform()->GetGlobalTransform() * m_PickVisitor->State().m_Matrix;
   

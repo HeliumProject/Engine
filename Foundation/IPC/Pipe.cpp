@@ -216,7 +216,7 @@ bool PipeConnection::ReadMessage(Message** msg)
         return true;
     }
 
-    u8* data = message->GetData();
+    uint8_t* data = message->GetData();
 
     // out of memory condition #2
     if ( m_ReadHeader.m_Size > 0 && data == NULL )
@@ -284,18 +284,18 @@ bool PipeConnection::WriteMessage(Message* msg)
     return true; 
 }
 
-bool PipeConnection::Read(void* buffer, u32 bytes)
+bool PipeConnection::Read(void* buffer, uint32_t bytes)
 {  
 #ifdef IPC_PIPE_DEBUG_PIPES_CHUNKS
     Helium::Print("%s: Starting read of %d bytes\n", m_Name, bytes);
 #endif
 
-    u32 bytes_left = bytes;
-    u32 bytes_got = 0;
+    uint32_t bytes_left = bytes;
+    uint32_t bytes_got = 0;
 
     while (bytes_left>0)
     {
-        u32 count = std::min(bytes_left, IPC_PIPE_BUFFER_SIZE);
+        uint32_t count = std::min(bytes_left, IPC_PIPE_BUFFER_SIZE);
 
 #ifdef IPC_PIPE_DEBUG_PIPES_CHUNKS
         Helium::Print(" %s: Receiving %d bytes...\n", m_Name, count);
@@ -312,7 +312,7 @@ bool PipeConnection::Read(void* buffer, u32 bytes)
         }
 
         bytes_left -= bytes_got;
-        buffer = ((u8*)buffer) + bytes_got;
+        buffer = ((uint8_t*)buffer) + bytes_got;
 
 #ifdef IPC_PIPE_DEBUG_PIPES_CHUNKS
         Helium::Print(" %s: Got %d bytes, %d bytes to go\n", m_Name, bytes_got, bytes_left);
@@ -326,18 +326,18 @@ bool PipeConnection::Read(void* buffer, u32 bytes)
     return true;
 }
 
-bool PipeConnection::Write(void* buffer, u32 bytes)
+bool PipeConnection::Write(void* buffer, uint32_t bytes)
 {
 #ifdef IPC_PIPE_DEBUG_PIPES_CHUNKS
     Helium::Print("%s: Starting write of %d bytes\n", m_Name, bytes);
 #endif
 
-    u32 bytes_left = bytes;
-    u32 bytes_put = 0;
+    uint32_t bytes_left = bytes;
+    uint32_t bytes_put = 0;
 
     while (bytes_left>0)
     {
-        u32 count = std::min(bytes_left, IPC_PIPE_BUFFER_SIZE);
+        uint32_t count = std::min(bytes_left, IPC_PIPE_BUFFER_SIZE);
 
 #ifdef IPC_PIPE_DEBUG_PIPES_CHUNKS
         Helium::Print(" %s: Sending %d bytes...\n", m_Name, count);
@@ -354,7 +354,7 @@ bool PipeConnection::Write(void* buffer, u32 bytes)
         }
 
         bytes_left -= bytes_put;
-        buffer = ((u8*)buffer) + bytes_put;
+        buffer = ((uint8_t*)buffer) + bytes_put;
 
 #ifdef IPC_PIPE_DEBUG_PIPES_CHUNKS
         Helium::Print(" %s: Put %d bytes, %d bytes to go\n", m_Name, bytes_put, bytes_left);

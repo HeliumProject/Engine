@@ -10,7 +10,6 @@ defines
 	"CORE_DLL=1",
 	"XML_STATIC=1",
 	"WXUSINGDLL=1",
-	"wxUSE_UNICODE=0",
 	"wxNO_EXPAT_LIB=1",
 	"wxNO_JPEG_LIB=1",
 	"wxNO_PNG_LIB=1",
@@ -97,6 +96,18 @@ configuration "windows"
 		"/NODEFAULTLIB:wxmsw29d_gl",
 		"/NODEFAULTLIB:wxmsw29u_gl",
 		"/NODEFAULTLIB:wxmsw29_gl",
+	}
+	
+configuration "no-unicode"
+	defines
+	{
+		"wxUSE_UNICODE=0",
+	}
+	
+configuration "not no-unicode"
+	defines
+	{
+		"wxUSE_UNICODE=1",
 	}
 
 project "Platform"
@@ -246,7 +257,7 @@ project "Editor"
 	{
 		"Editor",
 		"Dependencies/wxWidgets/include",
-		"Dependencies/litesql/include",
+		"Dependencies/LiteSQL/include",
 		"Dependencies/p4api/include",
 		"Dependencies/lua/src",
 	}
@@ -256,7 +267,7 @@ project "Editor"
 		"Foundation",
 		"Pipeline",
 		"Core",
-		"litesql",
+		"LiteSQL",
 		"libclient",
 		"librpc",
 		"libsupp",
@@ -292,44 +303,44 @@ project "Editor"
 		}
 		
 	-- per configuration
-	configuration { "windows", "Debug" }
+	configuration { "windows", "Debug", "no-unicode" }
 		links
 		{
 			"wxmsw29d"
 		}
-	configuration { "windows", "Release" }
+	configuration { "windows", "not Debug", "no-unicode" }
 		links
 		{
 			"wxmsw29"
 		}
-	configuration { "windows", "DebugUnicode" }
+	configuration { "windows", "Debug", "not no-unicode" }
 		links
 		{
 			"wxmsw29ud"
 		}
-	configuration { "windows", "ReleaseUnicode" }
+	configuration { "windows", "not Debug", "not no-unicode" }
 		links
 		{
 			"wxmsw29u"
 		}
 		
 	-- per architecture, per configuration
-	configuration { "windows", "x32", "Debug*" }
+	configuration { "windows", "x32", "Debug" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/Win32/Debug",
 		}
-	configuration { "windows", "x32", "Release*" }
+	configuration { "windows", "x32", "not Debug" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/Win32/Release",
 		}
-	configuration { "windows", "x64", "Debug*" }
+	configuration { "windows", "x64", "Debug" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/x64/Debug",
 		}
-	configuration { "windows", "x64", "Release*" }
+	configuration { "windows", "x64", "not Debug" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/x64/Release",

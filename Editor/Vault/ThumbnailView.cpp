@@ -26,13 +26,13 @@ const float ThumbnailView::s_FarClipDistance( 10000.0f );
 const DWORD ThumbnailView::s_TextColorDefault( D3DCOLOR_ARGB( 255, 255, 255, 255 ) );
 const DWORD ThumbnailView::s_TextColorBGSelected( D3DCOLOR_ARGB( 255, 49, 106, 197 ) );
 const DWORD ThumbnailView::s_TextColorDark( D3DCOLOR_ARGB( 255, 15, 15, 15 ) );
-const Math::Vector2 ThumbnailView::s_GapBetweenTiles( 0.06f, 0.2f );
+const Vector2 ThumbnailView::s_GapBetweenTiles( 0.06f, 0.2f );
 const float ThumbnailView::s_SpaceBetweenTileAndLabel( 0.05f );
 const float ThumbnailView::s_ThumbnailSize( 1.0f );
 const float ThumbnailView::s_MinThumbnailSize( 16 );
 const float ThumbnailView::s_MaxThumbnailSize( 256 );
-const u32 s_ScrollBarIncrement = 5; // in pixels
-const u32 s_MouseTolerance = 3; // in pixels, how far the mouse must move before causing a drag
+const uint32_t s_ScrollBarIncrement = 5; // in pixels
+const uint32_t s_MouseTolerance = 3; // in pixels, how far the mouse must move before causing a drag
 
 static inline bool FloatIsEqual( float f0, float f1, float tolerance )
 {
@@ -90,18 +90,18 @@ ThumbnailView::ThumbnailView( wxWindow *parent, wxWindowID id, const wxPoint& po
     EnableScrolling( false, false );
 
     // Set up camera orientation (orthographic)
-    const Math::Vector3 dir = Math::Vector3::BasisZ * -1.f;
-    const Math::Vector3 up = Math::Vector3::BasisY;
-    m_Orientation.SetBasis( Math::SingleAxes::Y, Math::Vector4( up ) );
-    m_Orientation.SetBasis( Math::SingleAxes::X, Math::Vector4( dir.Cross( up ) ) );
-    m_Orientation.SetBasis( Math::SingleAxes::Z, Math::Vector4( Math::Vector3::Zero - dir ) );
+    const Vector3 dir = Vector3::BasisZ * -1.f;
+    const Vector3 up = Vector3::BasisY;
+    m_Orientation.SetBasis( SingleAxes::Y, Vector4( up ) );
+    m_Orientation.SetBasis( SingleAxes::X, Vector4( dir.Cross( up ) ) );
+    m_Orientation.SetBasis( SingleAxes::Z, Vector4( Vector3::Zero - dir ) );
     m_Orientation.Invert();
 
-    m_World = Math::Matrix4( Math::Scale( m_Scale, m_Scale, m_Scale ) );
+    m_World = Matrix4( Scale( m_Scale, m_Scale, m_Scale ) );
 
     // Set up camera view matrix
-    const Math::Vector3 pivot( 0, 0, 0 );
-    m_ViewMatrix = Math::Matrix4( pivot * -1 ) * m_Orientation * Math::Matrix4( Math::Vector3::BasisZ * ( -s_FarClipDistance / 2.0f ) );
+    const Vector3 pivot( 0, 0, 0 );
+    m_ViewMatrix = Matrix4( pivot * -1 ) * m_Orientation * Matrix4( Vector3::BasisZ * ( -s_FarClipDistance / 2.0f ) );
 
     m_DeviceManager.Init( GetHwnd(), 64, 64 );
     m_DeviceManager.AddDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
@@ -245,14 +245,14 @@ const VaultSearchResults* ThumbnailView::GetResults() const
 void ThumbnailView::SelectPath( const tstring& path )
 {
     // Figure out where the tile is so we can scroll to it
-    u32 count = 0;
+    uint32_t count = 0;
     ThumbnailTile* found = NULL;
 
     for ( ThumbnailIteratorPtr tileItr = m_Sorter.GetIterator(); !tileItr->IsDone() && !found; tileItr->Next(), ++count )
     {
         ThumbnailTile* tile = tileItr->GetCurrentTile();
-        u32 row = count / m_TotalVisibleItems.x;
-        u32 col = count % m_TotalVisibleItems.x;
+        uint32_t row = count / m_TotalVisibleItems.x;
+        uint32_t col = count % m_TotalVisibleItems.x;
         tile->SetRowColumn( row, col );
         if ( tile->GetPath().IsFile() && ( tile->GetPath().Get() == path ) )
         {
@@ -304,10 +304,10 @@ tstring ThumbnailView::GetHighlightedPath() const
 // thumbnails will appear as 128x128 in the view.
 // The scale factor will be clamped between s_MinThumbnailSize and s_MaxThumbnailSize.
 // 
-void ThumbnailView::SetZoom( u16 zoom )
+void ThumbnailView::SetZoom( uint16_t zoom )
 {
     float scale = zoom;
-    Math::Clamp( scale, s_MinThumbnailSize, s_MaxThumbnailSize );
+    Clamp( scale, s_MinThumbnailSize, s_MaxThumbnailSize );
 
     if ( scale != m_Scale )
     {
@@ -335,12 +335,12 @@ void ThumbnailView::SetZoom( u16 zoom )
             // recalculate the row and column for all the tiles up to the one we
             // actually care about.
             bool found = false;
-            u32 count = 0;
+            uint32_t count = 0;
             for ( ThumbnailIteratorPtr tileItr = m_Sorter.GetIterator(); !tileItr->IsDone() && !found; tileItr->Next(), ++count )
             {
                 ThumbnailTile* tile = tileItr->GetCurrentTile();
-                u32 row = count / m_TotalVisibleItems.x;
-                u32 col = count % m_TotalVisibleItems.x;
+                uint32_t row = count / m_TotalVisibleItems.x;
+                uint32_t col = count % m_TotalVisibleItems.x;
                 tile->SetRowColumn( row, col );
                 found = tile == firstVisible;
             }
@@ -368,7 +368,7 @@ VaultSortMethod ThumbnailView::GetSortMethod() const
 ///////////////////////////////////////////////////////////////////////////////
 // Sorts the view and optionally refreshes it.
 // 
-void ThumbnailView::Sort( VaultSortMethod method, u32 sortOptions )
+void ThumbnailView::Sort( VaultSortMethod method, uint32_t sortOptions )
 {
     // Only sort if we are being forced to, or if the sort method is actually changing
     if ( method != GetSortMethod() || ( sortOptions & VaultSortOptions::Force ) )
@@ -545,11 +545,11 @@ bool ThumbnailView::IsVisible( ThumbnailTile* tile )
         return true;
     }
 
-    Math::Vector3 itemSizePixels( 0.0f, m_TotalItemSize.y + s_GapBetweenTiles.y, 0.0f );
+    Vector3 itemSizePixels( 0.0f, m_TotalItemSize.y + s_GapBetweenTiles.y, 0.0f );
     m_World.TransformVertex( itemSizePixels );
     float tilePosY = itemSizePixels.y * ( float )( tile->GetRow() );
 
-    u32 scrollPosY = GetScrollPos( wxVERTICAL );
+    uint32_t scrollPosY = GetScrollPos( wxVERTICAL );
     float viewTop = scrollPosY * s_ScrollBarIncrement;
     float viewBottom = viewTop + GetSize().y;
 
@@ -561,10 +561,10 @@ bool ThumbnailView::IsVisible( ThumbnailTile* tile )
 // 
 void ThumbnailView::EnsureVisible( ThumbnailTile* tile )
 {
-    Math::Vector3 itemSizePixels( 0.0f, m_TotalItemSize.y + s_GapBetweenTiles.y, 0.0f );
+    Vector3 itemSizePixels( 0.0f, m_TotalItemSize.y + s_GapBetweenTiles.y, 0.0f );
     m_World.TransformVertex( itemSizePixels );
     float tilePosY = itemSizePixels.y * ( float )( tile->GetRow() );
-    u32 scrollPosY = Math::Round( tilePosY / ( float )s_ScrollBarIncrement );
+    uint32_t scrollPosY = Round( tilePosY / ( float )s_ScrollBarIncrement );
     SetScrollPos( wxVERTICAL, scrollPosY, false );
     AdjustScrollBar( true );
     Refresh();
@@ -577,13 +577,13 @@ void ThumbnailView::UpdateProjectionMatrix()
 {
     HELIUM_ASSERT( GetSize().x > 0 && GetSize().y > 0 );
 
-    m_Projection = Math::Matrix4::Identity;
-    m_Projection.x = Math::Vector3::BasisX;
-    m_Projection.y = Math::Vector3::BasisY;
-    m_Projection.z = Math::Vector3::BasisZ;
+    m_Projection = Matrix4::Identity;
+    m_Projection.x = Vector3::BasisX;
+    m_Projection.y = Vector3::BasisY;
+    m_Projection.z = Vector3::BasisZ;
     m_Projection.Invert();
 
-    Math::Matrix4 ortho;
+    Matrix4 ortho;
     D3DXMatrixOrthoOffCenterRH( (D3DXMATRIX*)&ortho, 0, GetSize().x, -GetSize().y, 0, s_NearClipDistance, s_FarClipDistance );
 
     m_Projection *= ortho;
@@ -733,9 +733,9 @@ void ThumbnailView::DeleteResources()
 // Convert a point in world space to a screen x, y coordinate (useful for 
 // drawing text at a location in 3D).
 // 
-void ThumbnailView::WorldToScreen( const Math::Vector3& p, float& x, float& y )
+void ThumbnailView::WorldToScreen( const Vector3& p, float& x, float& y )
 {
-    Math::Vector4 v( p.x, p.y, p.z, 1.f );
+    Vector4 v( p.x, p.y, p.z, 1.f );
 
     // global to camera
     m_ViewMatrix.Transform( v );
@@ -744,13 +744,13 @@ void ThumbnailView::WorldToScreen( const Math::Vector3& p, float& x, float& y )
     m_Projection.Transform( v );
 
     // apply projection from w component
-    ViewportToScreen( Math::Vector3( v.x / v.w, v.y / v.w, v.z / v.w ), x, y );
+    ViewportToScreen( Vector3( v.x / v.w, v.y / v.w, v.z / v.w ), x, y );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Converts a viewport coordinate into screen space.
 // 
-void ThumbnailView::ViewportToScreen( const Math::Vector3& v, float& x, float& y )
+void ThumbnailView::ViewportToScreen( const Vector3& v, float& x, float& y )
 {
     x = ( (v.x + 1) * GetSize().x ) / 2.0f;
     y = ( (-v.y + 1) * GetSize().y ) / 2.0f;
@@ -759,7 +759,7 @@ void ThumbnailView::ViewportToScreen( const Math::Vector3& v, float& x, float& y
 ///////////////////////////////////////////////////////////////////////////////
 // Converts a screen coordinate into the viewport space.
 // 
-void ThumbnailView::ScreenToViewport( float x, float y, Math::Vector3& v ) const
+void ThumbnailView::ScreenToViewport( float x, float y, Vector3& v ) const
 {
     v.x = (((2.0f * x) / GetSize().x) - 1);
     v.y = -(((2.0f * y) / GetSize().y) - 1);
@@ -768,7 +768,7 @@ void ThumbnailView::ScreenToViewport( float x, float y, Math::Vector3& v ) const
 ///////////////////////////////////////////////////////////////////////////////
 // Converts a viewport coordinate into a point in world space.
 // 
-void ThumbnailView::ViewportToWorldVertex( float x, float y, Math::Vector3& v ) const
+void ThumbnailView::ViewportToWorldVertex( float x, float y, Vector3& v ) const
 {
     ScreenToViewport( x, y, v );
 
@@ -776,12 +776,12 @@ void ThumbnailView::ViewportToWorldVertex( float x, float y, Math::Vector3& v ) 
     v.z = 0.0f;
 
     // unproject our screen space coordinate
-    Math::Matrix4 inverseProjection = m_Projection;
+    Matrix4 inverseProjection = m_Projection;
     inverseProjection.Invert();
     inverseProjection.TransformVertex( v );
 
     // orient the view vector
-    Math::Matrix4 inverseView = m_ViewMatrix;
+    Matrix4 inverseView = m_ViewMatrix;
     inverseView.Invert();
     inverseView.TransformVertex( v );
 }
@@ -793,16 +793,16 @@ void ThumbnailView::ViewportToWorldVertex( float x, float y, Math::Vector3& v ) 
 // 
 void ThumbnailView::CalculateTotalItemSize()
 {
-    Math::Matrix4 inverseWorld( m_World );
+    Matrix4 inverseWorld( m_World );
     inverseWorld.Invert();
 
-    Math::Vector3 screenOrigin( 0, 0, 0 );
-    Math::Vector3 worldUpperLeft;
+    Vector3 screenOrigin( 0, 0, 0 );
+    Vector3 worldUpperLeft;
     inverseWorld.TransformVertex( screenOrigin );
     ViewportToWorldVertex( screenOrigin.x, screenOrigin.y, worldUpperLeft );
 
-    Math::Vector3 screenFontHeight( 0, m_LabelFontHeight, 0 );
-    Math::Vector3 worldFontHeight;
+    Vector3 screenFontHeight( 0, m_LabelFontHeight, 0 );
+    Vector3 worldFontHeight;
     inverseWorld.TransformVertex( screenFontHeight );
     ViewportToWorldVertex( screenFontHeight.x, screenFontHeight.y, worldFontHeight );
 
@@ -819,13 +819,13 @@ void ThumbnailView::CalculateTotalVisibleItems()
 {
     const wxSize size = GetSize();
 
-    m_TotalVisibleItems.x = ( u32 )( size.x / ( m_Scale * ( m_TotalItemSize.x + s_GapBetweenTiles.x ) ) );
+    m_TotalVisibleItems.x = ( uint32_t )( size.x / ( m_Scale * ( m_TotalItemSize.x + s_GapBetweenTiles.x ) ) );
     if ( m_TotalVisibleItems.x == 0 )
     {
         m_TotalVisibleItems.x = 1;
     }
 
-    m_TotalVisibleItems.y = ( u32 )( size.y / ( m_Scale * ( m_TotalItemSize.y + s_GapBetweenTiles.y ) ) );
+    m_TotalVisibleItems.y = ( uint32_t )( size.y / ( m_Scale * ( m_TotalItemSize.y + s_GapBetweenTiles.y ) ) );
     if ( m_TotalVisibleItems.y == 0 )
     {
         m_TotalVisibleItems.y = 1;
@@ -842,18 +842,18 @@ void ThumbnailView::AdjustScrollBar( bool maintainScrollPos )
 {
     // Do the math
     size_t totalItems = m_Results ? m_Results->GetPathsMap().size() : 0;
-    u32 totalItemsY = (u32)( ceil( ( float )totalItems / ( float )m_TotalVisibleItems.x ) );
-    Math::Vector3 itemSizePixels( 0.0f, m_TotalItemSize.y + s_GapBetweenTiles.y, 0.0f );
+    uint32_t totalItemsY = (uint32_t)( ceil( ( float )totalItems / ( float )m_TotalVisibleItems.x ) );
+    Vector3 itemSizePixels( 0.0f, m_TotalItemSize.y + s_GapBetweenTiles.y, 0.0f );
     m_World.TransformVertex( itemSizePixels );
-    u32 pixelsY = totalItemsY * itemSizePixels.y;
-    const u32 extraToPreventLastRowFromBeingChopped = 5;
-    u32 logicalStepsY = Math::Round( ( float )pixelsY / ( float )s_ScrollBarIncrement ) + extraToPreventLastRowFromBeingChopped;
+    uint32_t pixelsY = totalItemsY * itemSizePixels.y;
+    const uint32_t extraToPreventLastRowFromBeingChopped = 5;
+    uint32_t logicalStepsY = Round( ( float )pixelsY / ( float )s_ScrollBarIncrement ) + extraToPreventLastRowFromBeingChopped;
     int scrollPosY = 0;
     if ( HasScrollbar( wxVERTICAL ) && maintainScrollPos )
     {
         scrollPosY = GetScrollPos( wxVERTICAL );
     }
-    Math::Clamp( scrollPosY, 0, logicalStepsY );
+    Clamp( scrollPosY, 0, logicalStepsY );
 
     // Keep the view in line with what we are about to set on the scrollbar
     m_ViewMatrix.t.y = scrollPosY * s_ScrollBarIncrement;
@@ -939,7 +939,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
             sortMenu->AppendCheckItem( ID_SortByType, VaultMenu::Label( ID_SortByType ) );
             sortMenu->AppendSeparator();
             sortMenu->Append( ID_Sort, VaultMenu::Label( ID_Sort ) );
-            i32 sortMenuId = menu.AppendSubMenu( sortMenu, TXT( "Arrange Icons By" ) )->GetId();
+            int32_t sortMenuId = menu.AppendSubMenu( sortMenu, TXT( "Arrange Icons By" ) )->GetId();
 
             sortMenu->Check( ID_SortByName, GetSortMethod() == VaultSortMethods::AlphabeticalByName );
             sortMenu->Check( ID_SortByType, GetSortMethod() == VaultSortMethods::AlphabeticalByType );
@@ -1020,16 +1020,16 @@ ThumbnailTile* ThumbnailView::FindTile( const Helium::Path& path ) const
 // array is CORNER_COUNT long.  The tile must have a row and column and the
 // CalculateTotalItemSize function must have already been called.
 // 
-void ThumbnailView::GetTileCorners( ThumbnailTile* tile, Math::Vector3 corners[] ) const
+void ThumbnailView::GetTileCorners( ThumbnailTile* tile, Vector3 corners[] ) const
 {
-    corners[ThumbnailTopLeft] = Math::Vector3( tile->GetColumn() * ( m_TotalItemSize.x + s_GapBetweenTiles.x ) + s_GapBetweenTiles.x,  -1.0f * tile->GetRow() * ( m_TotalItemSize.y + s_GapBetweenTiles.y ) - s_GapBetweenTiles.y, 0.0f );
-    corners[ThumbnailTopRight] = corners[ThumbnailTopLeft] + Math::Vector3( s_ThumbnailSize, 0.0f, 0.0f );
-    corners[ThumbnailBottomLeft] = corners[ThumbnailTopLeft] + Math::Vector3( 0.0f, -s_ThumbnailSize, 0.0f );
-    corners[ThumbnailBottomRight] = corners[ThumbnailTopLeft] + Math::Vector3( s_ThumbnailSize, -s_ThumbnailSize, 0.0f );
-    corners[LabelTopLeft] = corners[ThumbnailBottomLeft] + Math::Vector3( 0.0f, -s_SpaceBetweenTileAndLabel, 0.0f );
-    corners[LabelTopRight] = corners[LabelTopLeft] + Math::Vector3( s_ThumbnailSize, 0.0f, 0.0f );
-    corners[LabelBottomLeft] = corners[ThumbnailTopLeft] + Math::Vector3( 0.0f, -m_TotalItemSize.y, 0.0f );
-    corners[LabelBottomRight] = corners[LabelBottomLeft] + Math::Vector3( s_ThumbnailSize, 0.0f, 0.0f );
+    corners[ThumbnailTopLeft] = Vector3( tile->GetColumn() * ( m_TotalItemSize.x + s_GapBetweenTiles.x ) + s_GapBetweenTiles.x,  -1.0f * tile->GetRow() * ( m_TotalItemSize.y + s_GapBetweenTiles.y ) - s_GapBetweenTiles.y, 0.0f );
+    corners[ThumbnailTopRight] = corners[ThumbnailTopLeft] + Vector3( s_ThumbnailSize, 0.0f, 0.0f );
+    corners[ThumbnailBottomLeft] = corners[ThumbnailTopLeft] + Vector3( 0.0f, -s_ThumbnailSize, 0.0f );
+    corners[ThumbnailBottomRight] = corners[ThumbnailTopLeft] + Vector3( s_ThumbnailSize, -s_ThumbnailSize, 0.0f );
+    corners[LabelTopLeft] = corners[ThumbnailBottomLeft] + Vector3( 0.0f, -s_SpaceBetweenTileAndLabel, 0.0f );
+    corners[LabelTopRight] = corners[LabelTopLeft] + Vector3( s_ThumbnailSize, 0.0f, 0.0f );
+    corners[LabelBottomLeft] = corners[ThumbnailTopLeft] + Vector3( 0.0f, -m_TotalItemSize.y, 0.0f );
+    corners[LabelBottomRight] = corners[LabelBottomLeft] + Vector3( s_ThumbnailSize, 0.0f, 0.0f );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1038,13 +1038,13 @@ void ThumbnailView::GetTileCorners( ThumbnailTile* tile, Math::Vector3 corners[]
 // 
 void ThumbnailView::EditTileLabel( ThumbnailTile* tile )
 {
-    Math::Vector3 corners[CORNER_COUNT];
+    Vector3 corners[CORNER_COUNT];
     GetTileCorners( tile, corners );
     float left = 0.0f;
     float top = 0.0f;
-    Math::Vector4 topLeft( corners[LabelTopLeft].x, corners[LabelTopLeft].y, corners[LabelTopLeft].z, 1.0f );
+    Vector4 topLeft( corners[LabelTopLeft].x, corners[LabelTopLeft].y, corners[LabelTopLeft].z, 1.0f );
     m_World.Transform( topLeft );
-    WorldToScreen( Math::Vector3( topLeft.x, topLeft.y, topLeft.z ), left, top );
+    WorldToScreen( Vector3( topLeft.x, topLeft.y, topLeft.z ), left, top );
 
     m_EditCtrl->SetValue( tile->GetEditableName() );
     m_EditCtrl->Move( left, top );
@@ -1062,10 +1062,10 @@ void ThumbnailView::Pick( wxPoint mousePos1, wxPoint mousePos2, OS_ThumbnailTile
 #pragma TODO( "ThumbnailView::Pick - Support rubber-band selection, actually use mousePos2, return more than 1 hit in that case" )
 
     // Convert mouse position from the screen to object (local space)
-    Math::Vector3 localMouse1;
+    Vector3 localMouse1;
     ViewportToWorldVertex( mousePos1.x, mousePos1.y, localMouse1 );
 
-    Math::Matrix4 inverseWorld( m_World );
+    Matrix4 inverseWorld( m_World );
     inverseWorld.Invert();
     inverseWorld.TransformVertex( localMouse1 );
 
@@ -1078,7 +1078,7 @@ void ThumbnailView::Pick( wxPoint mousePos1, wxPoint mousePos2, OS_ThumbnailTile
     {
         ThumbnailTile* tile = *tileItr;
 
-        Math::Vector3 tileCorners[CORNER_COUNT];
+        Vector3 tileCorners[CORNER_COUNT];
         GetTileCorners( tile, tileCorners );
         if 
             ( 
@@ -1136,7 +1136,7 @@ bool ThumbnailView::Draw()
 
     // Visibility testing
     m_VisibleTiles.Clear();
-    m_ViewFrustum = Math::Frustum( m_World * m_ViewMatrix * m_Projection );
+    m_ViewFrustum = Frustum( m_World * m_ViewMatrix * m_Projection );
 
     m_VisibleTileCorners.clear();
     m_HighlighedTileCorners.clear();
@@ -1145,12 +1145,12 @@ bool ThumbnailView::Draw()
     m_FileTypeTileCorners.clear();
 
     // If there are any tiles, draw the visible ones
-    u32 count = 0;
+    uint32_t count = 0;
     for ( ThumbnailIteratorPtr tileItr = m_Sorter.GetIterator(); !tileItr->IsDone(); tileItr->Next(), ++count )
     {
         ThumbnailTile* tile = tileItr->GetCurrentTile();
-        u32 row = count / m_TotalVisibleItems.x;
-        u32 col = count % m_TotalVisibleItems.x;
+        uint32_t row = count / m_TotalVisibleItems.x;
+        uint32_t col = count % m_TotalVisibleItems.x;
         tile->SetRowColumn( row, col );
         DrawTile( device, tile );
     }
@@ -1211,18 +1211,18 @@ bool ThumbnailView::Draw()
 void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, bool overlayOnly )
 {
     // Calculate position
-    Math::Vector3 tileCorners[CORNER_COUNT];
+    Vector3 tileCorners[CORNER_COUNT];
     GetTileCorners( tile, tileCorners );
     PositionUV corners[4] =
     {
-        PositionUV( tileCorners[ThumbnailBottomLeft],   Math::Vector2( 0, 1 ) ),
-        PositionUV( tileCorners[ThumbnailTopLeft],      Math::Vector2( 0, 0 ) ),
-        PositionUV( tileCorners[ThumbnailBottomRight],  Math::Vector2( 1, 1 ) ),
-        PositionUV( tileCorners[ThumbnailTopRight],     Math::Vector2( 1, 0 ) ),
+        PositionUV( tileCorners[ThumbnailBottomLeft],   Vector2( 0, 1 ) ),
+        PositionUV( tileCorners[ThumbnailTopLeft],      Vector2( 0, 0 ) ),
+        PositionUV( tileCorners[ThumbnailBottomRight],  Vector2( 1, 1 ) ),
+        PositionUV( tileCorners[ThumbnailTopRight],     Vector2( 1, 0 ) ),
     };
 
     // Decide if we really need to draw this tile
-    Math::AlignedBox box( corners[0].m_Position, corners[3].m_Position );
+    AlignedBox box( corners[0].m_Position, corners[3].m_Position );
     if ( m_ViewFrustum.IntersectsBox( box ) )
     {
         // Draw screenshot
@@ -1291,15 +1291,15 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
         {
             float left = 0.0f;
             float top = 0.0f;
-            Math::Vector4 topLeft( tileCorners[LabelTopLeft].x, tileCorners[LabelTopLeft].y, tileCorners[LabelTopLeft].z, 1.0f );
+            Vector4 topLeft( tileCorners[LabelTopLeft].x, tileCorners[LabelTopLeft].y, tileCorners[LabelTopLeft].z, 1.0f );
             m_World.Transform( topLeft );
-            WorldToScreen( Math::Vector3( topLeft.x, topLeft.y, topLeft.z ), left, top );
+            WorldToScreen( Vector3( topLeft.x, topLeft.y, topLeft.z ), left, top );
 
             float right = 0.0f;
             float unused = 0.0f;
-            Math::Vector4 bottomRight( tileCorners[LabelBottomRight].x, tileCorners[LabelBottomRight].y, tileCorners[LabelBottomRight].z, 1.0f );
+            Vector4 bottomRight( tileCorners[LabelBottomRight].x, tileCorners[LabelBottomRight].y, tileCorners[LabelBottomRight].z, 1.0f );
             m_World.Transform( bottomRight );
-            WorldToScreen( Math::Vector3( bottomRight.x, bottomRight.y, bottomRight.z ), right, unused );
+            WorldToScreen( Vector3( bottomRight.x, bottomRight.y, bottomRight.z ), right, unused );
 
             RECT rect;
             rect.top = top;
@@ -1317,7 +1317,7 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
 
             //tile->IsSelected() ? s_TextColorBGSelected : s_TextColorDefault
             m_LabelFont->DrawText( sprite, label.c_str(), -1, &calcRect, DT_CALCRECT, s_TextColorDefault );
-            u32 flags = 0;
+            uint32_t flags = 0;
             if ( calcRect.right <= rect.right )
             {
                 flags = DT_CENTER;
@@ -1332,15 +1332,15 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
         {
             float left = 0.0f;
             float top = 0.0f;
-            Math::Vector4 topLeft( tileCorners[ThumbnailTopLeft].x, tileCorners[ThumbnailTopLeft].y, tileCorners[ThumbnailTopLeft].z, 1.0f );
+            Vector4 topLeft( tileCorners[ThumbnailTopLeft].x, tileCorners[ThumbnailTopLeft].y, tileCorners[ThumbnailTopLeft].z, 1.0f );
             m_World.Transform( topLeft );
-            WorldToScreen( Math::Vector3( topLeft.x, topLeft.y, topLeft.z ), left, top );
+            WorldToScreen( Vector3( topLeft.x, topLeft.y, topLeft.z ), left, top );
 
             float right = 0.0f;
             float bottom = 0.0f;
-            Math::Vector4 bottomRight( tileCorners[ThumbnailBottomRight].x, tileCorners[ThumbnailBottomRight].y, tileCorners[ThumbnailBottomRight].z, 1.0f );
+            Vector4 bottomRight( tileCorners[ThumbnailBottomRight].x, tileCorners[ThumbnailBottomRight].y, tileCorners[ThumbnailBottomRight].z, 1.0f );
             m_World.Transform( bottomRight );
-            WorldToScreen( Math::Vector3( bottomRight.x, bottomRight.y, bottomRight.z ), right, bottom );
+            WorldToScreen( Vector3( bottomRight.x, bottomRight.y, bottomRight.z ), right, bottom );
 
             RECT rect;
             rect.top = top + 2;
@@ -1368,14 +1368,14 @@ void ThumbnailView::DrawTileOverlays( IDirect3DDevice9* device, V_TileCorners& t
     for ( V_TileCorners::iterator cornerItr = tileCorners.begin(), cornerEnd = tileCorners.end();
         cornerItr != cornerEnd; ++cornerItr )
     {
-        Math::Vector3 thumbnailTopLeft = (*cornerItr);
+        Vector3 thumbnailTopLeft = (*cornerItr);
 
         PositionUV corners[4] =
         {
-            PositionUV( thumbnailTopLeft + Math::Vector3( 0.0f, -s_ThumbnailSize, 0.0f ), Math::Vector2( 0, 1 ) ),            // BottomLeft
-            PositionUV( thumbnailTopLeft, Math::Vector2( 0, 0 ) ),                                                            // TopLeft
-            PositionUV( thumbnailTopLeft + Math::Vector3( s_ThumbnailSize, -s_ThumbnailSize, 0.0f ), Math::Vector2( 1, 1 ) ), // BottomRight
-            PositionUV( thumbnailTopLeft + Math::Vector3( s_ThumbnailSize, 0.0f, 0.0f ), Math::Vector2( 1, 0 ) ),             // TopRight
+            PositionUV( thumbnailTopLeft + Vector3( 0.0f, -s_ThumbnailSize, 0.0f ), Vector2( 0, 1 ) ),            // BottomLeft
+            PositionUV( thumbnailTopLeft, Vector2( 0, 0 ) ),                                                            // TopLeft
+            PositionUV( thumbnailTopLeft + Vector3( s_ThumbnailSize, -s_ThumbnailSize, 0.0f ), Vector2( 1, 1 ) ), // BottomRight
+            PositionUV( thumbnailTopLeft + Vector3( s_ThumbnailSize, 0.0f, 0.0f ), Vector2( 1, 0 ) ),             // TopRight
         };
         result = device->DrawPrimitiveUP( D3DPT_TRIANGLESTRIP, 2, &corners[0], ElementSizes[ ElementTypes::PositionUV ] );
         //HELIUM_ASSERT( SUCCEEDED( result ) );
@@ -1393,13 +1393,13 @@ void ThumbnailView::DrawTileRibbons( IDirect3DDevice9* device, V_TileCorners& ti
     for ( V_TileCorners::iterator cornerItr = tileCorners.begin(), cornerEnd = tileCorners.end();
         cornerItr != cornerEnd; ++cornerItr )
     {
-        Math::Vector3 thumbnailTopLeft = (*cornerItr);
+        Vector3 thumbnailTopLeft = (*cornerItr);
 
         PositionColored vertices[3] =
         {
-            PositionColored( thumbnailTopLeft + Math::Vector3( 0.0f, -s_ThumbnailSize, 0.0f ) + Math::Vector3( s_ThumbnailSize * 0.75f, 0.0f, 0.0f ), color ), // BottomLeft
-            PositionColored( thumbnailTopLeft + Math::Vector3( s_ThumbnailSize, 0.0f, 0.0f ) + Math::Vector3( 0.0f, -s_ThumbnailSize * 0.75f, 0.0f ), color ), // TopRight
-            PositionColored( thumbnailTopLeft + Math::Vector3( s_ThumbnailSize, -s_ThumbnailSize, 0.0f ), color ), // BottomRight
+            PositionColored( thumbnailTopLeft + Vector3( 0.0f, -s_ThumbnailSize, 0.0f ) + Vector3( s_ThumbnailSize * 0.75f, 0.0f, 0.0f ), color ), // BottomLeft
+            PositionColored( thumbnailTopLeft + Vector3( s_ThumbnailSize, 0.0f, 0.0f ) + Vector3( 0.0f, -s_ThumbnailSize * 0.75f, 0.0f ), color ), // TopRight
+            PositionColored( thumbnailTopLeft + Vector3( s_ThumbnailSize, -s_ThumbnailSize, 0.0f ), color ), // BottomRight
         };
         result = device->DrawPrimitiveUP( D3DPT_TRIANGLESTRIP, 1, &vertices[0], ElementSizes[ ElementTypes::PositionColored ] );
         //HELIUM_ASSERT( SUCCEEDED( result ) );
@@ -1420,34 +1420,34 @@ void ThumbnailView::DrawTileFileType( IDirect3DDevice9* device, V_TileCorners& t
 
 
     // conver hieght
-    Math::Matrix4 inverseWorld( m_World );
+    Matrix4 inverseWorld( m_World );
     inverseWorld.Invert();
 
-    Math::Vector3 paddingWidth( 3.0f, 0.0f, 0.0f );
+    Vector3 paddingWidth( 3.0f, 0.0f, 0.0f );
     inverseWorld.TransformVertex( paddingWidth );
 
     float padding = s_ThumbnailSize * 0.05f;
-    Math::Vector3 bottomRightOffset = Math::Vector3( s_ThumbnailSize, -s_ThumbnailSize, 0.0f ) + Math::Vector3( -padding, padding, 0.0f ) + Math::Vector3( paddingWidth.x, 0.0f, 0.0f );
+    Vector3 bottomRightOffset = Vector3( s_ThumbnailSize, -s_ThumbnailSize, 0.0f ) + Vector3( -padding, padding, 0.0f ) + Vector3( paddingWidth.x, 0.0f, 0.0f );
 
     // File Overlay
     {
-        Math::Vector3 emptyFileSize( 32.0f, 32.0f, 0.0f );
+        Vector3 emptyFileSize( 32.0f, 32.0f, 0.0f );
         inverseWorld.TransformVertex( emptyFileSize );
 
         device->SetTexture( 0, m_TextureBlankFile->GetTexture() );
         for ( V_TileCorners::iterator cornerItr = tileCorners.begin(), cornerEnd = tileCorners.end();
             cornerItr != cornerEnd; ++cornerItr )
         {
-            Math::Vector3 thumbnailTopLeft = (*cornerItr);
-            Math::Vector3 thumbnailBottomRight = thumbnailTopLeft + bottomRightOffset;
+            Vector3 thumbnailTopLeft = (*cornerItr);
+            Vector3 thumbnailBottomRight = thumbnailTopLeft + bottomRightOffset;
 
             // we're going to calculate everything from the bottom right:
             PositionUV corners[4] =
             {
-                PositionUV( thumbnailBottomRight + Math::Vector3( -emptyFileSize.x, 0.0f, 0.0f ), Math::Vector2( 0, 1 ) ), // BottomLeft
-                PositionUV( thumbnailBottomRight + Math::Vector3( -emptyFileSize.x, emptyFileSize.y, 0.0f ), Math::Vector2( 0, 0 ) ), // TopLeft
-                PositionUV( thumbnailBottomRight, Math::Vector2( 1, 1 ) ), // BottomRight
-                PositionUV( thumbnailBottomRight + Math::Vector3( 0.0f, emptyFileSize.y, 0.0f ), Math::Vector2( 1, 0 ) ), // TopRight
+                PositionUV( thumbnailBottomRight + Vector3( -emptyFileSize.x, 0.0f, 0.0f ), Vector2( 0, 1 ) ), // BottomLeft
+                PositionUV( thumbnailBottomRight + Vector3( -emptyFileSize.x, emptyFileSize.y, 0.0f ), Vector2( 0, 0 ) ), // TopLeft
+                PositionUV( thumbnailBottomRight, Vector2( 1, 1 ) ), // BottomRight
+                PositionUV( thumbnailBottomRight + Vector3( 0.0f, emptyFileSize.y, 0.0f ), Vector2( 1, 0 ) ), // TopRight
             };
 
             result = device->DrawPrimitiveUP( D3DPT_TRIANGLESTRIP, 2, &corners[0], ElementSizes[ ElementTypes::PositionUV ] );
@@ -1459,25 +1459,25 @@ void ThumbnailView::DrawTileFileType( IDirect3DDevice9* device, V_TileCorners& t
 
     // FileType Icon Overlay
     {
-        Math::Vector3 fileTypeHeight( 16.0f, 16.0f, 0.0f );
+        Vector3 fileTypeHeight( 16.0f, 16.0f, 0.0f );
         inverseWorld.TransformVertex( fileTypeHeight );
 
-        Math::Vector3 fileTypeBottomRightOffset = bottomRightOffset + Math::Vector3( -fileTypeHeight.x * 0.5f, fileTypeHeight.y * 0.5f, 0.0f );
+        Vector3 fileTypeBottomRightOffset = bottomRightOffset + Vector3( -fileTypeHeight.x * 0.5f, fileTypeHeight.y * 0.5f, 0.0f );
 
         device->SetTexture( 0, thumbnail->GetTexture() );
         for ( V_TileCorners::iterator cornerItr = tileCorners.begin(), cornerEnd = tileCorners.end();
             cornerItr != cornerEnd; ++cornerItr )
         {
-            Math::Vector3 thumbnailTopLeft = (*cornerItr);
-            Math::Vector3 thumbnailBottomRight = thumbnailTopLeft + fileTypeBottomRightOffset;
+            Vector3 thumbnailTopLeft = (*cornerItr);
+            Vector3 thumbnailBottomRight = thumbnailTopLeft + fileTypeBottomRightOffset;
 
             // we're going to calculate everything from the bottom right:
             PositionUV corners[4] =
             {
-                PositionUV( thumbnailBottomRight + Math::Vector3( -fileTypeHeight.x, 0.0f, 0.0f ), Math::Vector2( 0, 1 ) ), // BottomLeft
-                PositionUV( thumbnailBottomRight + Math::Vector3( -fileTypeHeight.x, fileTypeHeight.y, 0.0f ), Math::Vector2( 0, 0 ) ), // TopLeft
-                PositionUV( thumbnailBottomRight, Math::Vector2( 1, 1 ) ), // BottomRight
-                PositionUV( thumbnailBottomRight + Math::Vector3( 0.0f, fileTypeHeight.y, 0.0f ), Math::Vector2( 1, 0 ) ), // TopRight
+                PositionUV( thumbnailBottomRight + Vector3( -fileTypeHeight.x, 0.0f, 0.0f ), Vector2( 0, 1 ) ), // BottomLeft
+                PositionUV( thumbnailBottomRight + Vector3( -fileTypeHeight.x, fileTypeHeight.y, 0.0f ), Vector2( 0, 0 ) ), // TopLeft
+                PositionUV( thumbnailBottomRight, Vector2( 1, 1 ) ), // BottomRight
+                PositionUV( thumbnailBottomRight + Vector3( 0.0f, fileTypeHeight.y, 0.0f ), Vector2( 1, 0 ) ), // TopRight
             };
 
             result = device->DrawPrimitiveUP( D3DPT_TRIANGLESTRIP, 2, &corners[0], ElementSizes[ ElementTypes::PositionUV ] );
@@ -1827,12 +1827,12 @@ void ThumbnailView::OnScrollEvent( wxScrollWinEvent& args )
     }
 
     // Figure out how much to scroll by and scroll
-    i32 amount = GetScrollHelper()->CalcScrollInc( args );
+    int32_t amount = GetScrollHelper()->CalcScrollInc( args );
     if ( amount != 0 )
     {
-        i32 current = GetScrollPos( wxVERTICAL );
+        int32_t current = GetScrollPos( wxVERTICAL );
         amount += current;
-        Math::Clamp( amount, 0, amount );
+        Clamp( amount, 0, amount );
         Scroll( 0, amount );
     }
 }
@@ -1886,7 +1886,7 @@ void ThumbnailView::OnFileProperties( wxCommandEvent& args )
         {
             tstringstream message;
             message << TXT( "Are you sure that you want to show the properties for all " ) << paths.size() << TXT( " selected paths?" );
-            i32 result = wxMessageBox( message.str(), TXT( "Show Details?" ), wxCENTER | wxYES_NO | wxICON_QUESTION, this );
+            int32_t result = wxMessageBox( message.str(), TXT( "Show Details?" ), wxCENTER | wxYES_NO | wxICON_QUESTION, this );
             if ( result != wxYES )
             {
                 return;

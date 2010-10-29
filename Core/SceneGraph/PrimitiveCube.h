@@ -13,8 +13,8 @@ namespace Helium
 
             void SetRadius( float radius )
             {
-                m_Bounds.minimum = Math::Vector3 (-radius, -radius, -radius);
-                m_Bounds.maximum = Math::Vector3 (radius, radius, radius);
+                m_Bounds.minimum = Vector3 (-radius, -radius, -radius);
+                m_Bounds.maximum = Vector3 (radius, radius, radius);
             }
 
             void ScaleRadius( float scale )
@@ -23,12 +23,12 @@ namespace Helium
                 m_Bounds.maximum *= scale;
             }
 
-            void SetBounds( const Math::AlignedBox& box )
+            void SetBounds( const AlignedBox& box )
             {
                 m_Bounds = box;
             }
 
-            void SetBounds( const Math::Vector3& min, const Math::Vector3& max )
+            void SetBounds( const Vector3& min, const Vector3& max )
             {
                 m_Bounds.minimum = min;
                 m_Bounds.maximum = max;

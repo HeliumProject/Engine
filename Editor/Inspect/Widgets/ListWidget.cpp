@@ -26,7 +26,7 @@ void ListWidget::Create(wxWindow* parent)
     // add listeners
 
     // layout metrics
-    wxSize size( m_Control->GetCanvas()->GetDefaultSize( Math::SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( Math::SingleAxes::Y ) );
+    wxSize size( m_Control->GetCanvas()->GetDefaultSize( SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( SingleAxes::Y ) );
     m_Window->SetSize( size );
     m_Window->SetMinSize( size );
 
@@ -79,8 +79,8 @@ bool ListWidget::Write()
     bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, delimiter );
     HELIUM_ASSERT( converted );
 
-    const i32 total = m_ListWindow->GetCount();
-    for ( i32 index = 0; index < total; ++index )
+    const int32_t total = m_ListWindow->GetCount();
+    for ( int32_t index = 0; index < total; ++index )
     {
         if ( !delimited.empty() )
         {

@@ -76,7 +76,7 @@ namespace Helium
         tstring Absolute() const;
         tstring Normalized() const;
 
-        u64 Hash() const;
+        uint64_t Hash() const;
         tstring Signature();
 
         bool Exists() const;
@@ -87,11 +87,11 @@ namespace Helium
         bool IsDirectory() const;
         bool Writable() const;
         bool Readable() const;
-        bool ChangedSince( u64 lastTime ) const;
-        u64 ModifiedTime() const;
-        u64 CreatedTime() const;
-        u64 AccessTime() const;
-        i64 Size() const;
+        bool ChangedSince( uint64_t lastTime ) const;
+        uint64_t ModifiedTime() const;
+        uint64_t CreatedTime() const;
+        uint64_t AccessTime() const;
+        int64_t Size() const;
 
         bool MakePath() const;
         bool Create() const;

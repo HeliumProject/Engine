@@ -112,7 +112,7 @@ void ImageFilter::filter(void)
           adjustY = 0;
         }
 
-        Math::Vector4 color = generateFilteredPixel(lookupX - adjustX, lookupY - adjustY);
+        Vector4 color = generateFilteredPixel(lookupX - adjustX, lookupY - adjustY);
         if (opFlags & NORMAL_NORMALIZE)
         {
           if (!isNullPixel(color))
@@ -129,7 +129,7 @@ void ImageFilter::filter(void)
 
 // Checks if the pixel specified by color is considered an undefined pixel.
 
-bool ImageFilter::isNullPixel(const Math::Vector4& color) const
+bool ImageFilter::isNullPixel(const Vector4& color) const
 {
   if (color.w != 0 || color.x != 0 || color.y != 0 || color.z != 0)
   {
@@ -144,7 +144,7 @@ bool ImageFilter::isNullPixel(const Math::Vector4& color) const
 // Normalizes pixel specified by color for normal maps. The pixel is scaled and offset to [-1.0, 1.0] before
 // normalizing and then returned to [0.0, 1.0] after normalizing.
 
-void ImageFilter::normalizeNormal(Math::Vector4& color) const
+void ImageFilter::normalizeNormal(Vector4& color) const
 {
   color.x = 2.0f * color.x - 1.0f;
   color.y = 2.0f * color.y - 1.0f;
@@ -167,9 +167,9 @@ void ImageFilter::normalizeNormal(Math::Vector4& color) const
 // 4 2 1 2 4
 // 5 4 3 4 5
 
-Math::Vector4 FillImageFilter::generateFilteredPixel(unsigned int x, unsigned int y)
+Vector4 FillImageFilter::generateFilteredPixel(unsigned int x, unsigned int y)
 {
-  Math::Vector4 color;
+  Vector4 color;
   input->Read(x, y, color.x, color.y, color.z, color.w);
 
   if (filterWidth == 1 || !isNullPixel(color))
@@ -187,7 +187,7 @@ Math::Vector4 FillImageFilter::generateFilteredPixel(unsigned int x, unsigned in
     // are any valid pixels.
     for (int combinedoffset = maxoffset; combinedoffset <= maxcombinedoffset; combinedoffset++)
     {
-      Math::Vector4 accumcolor;
+      Vector4 accumcolor;
       unsigned int numvalid = 0;
 
       for (int yoffset = -maxoffset; yoffset <= maxoffset; yoffset += maxoffset)
@@ -228,7 +228,7 @@ Math::Vector4 FillImageFilter::generateFilteredPixel(unsigned int x, unsigned in
 
 // Accumulates valid pixel samples given a yoffset and absolute xoffset from basex and basey.
 
-void FillImageFilter::accumulateSamples(int basex, int basey, int yoffset, int absxoffset, Math::Vector4& accumcolor, unsigned int& numvalid) const
+void FillImageFilter::accumulateSamples(int basex, int basey, int yoffset, int absxoffset, Vector4& accumcolor, unsigned int& numvalid) const
 {
   int currenty = basey + yoffset;
 
@@ -252,9 +252,9 @@ void FillImageFilter::accumulateSamples(int basex, int basey, int yoffset, int a
       // Only proceed if currentx is in the input image
       if (currentx >= 0 && currentx < (int) input->m_Width)
       {
-        Math::Vector4 color;
+        Vector4 color;
 
-        input->Read((u32) currentx, (u32) currenty, color.x, color.y, color.z, color.w);
+        input->Read((uint32_t) currentx, (uint32_t) currenty, color.x, color.y, color.z, color.w);
         if (!isNullPixel(color))
         {
           accumcolor += color;
@@ -274,7 +274,7 @@ BoxImageFilter::BoxImageFilter(const tchar* inputfile, const tchar* outputfile, 
   numElems = numRows * numRows;
 
   valid = new bool[numElems];
-  values = new Math::Vector4[numElems];
+  values = new Vector4[numElems];
 }
 
 BoxImageFilter::~BoxImageFilter(void)
@@ -287,13 +287,13 @@ BoxImageFilter::~BoxImageFilter(void)
 // center of the filter base by invalid pixels or from the closest valid pixel to the center if it is invalid and averaging
 // valid pixels.
 
-Math::Vector4 BoxImageFilter::generateFilteredPixel(unsigned int x, unsigned int y)
+Vector4 BoxImageFilter::generateFilteredPixel(unsigned int x, unsigned int y)
 {
   fillValues((int) x, (int) y);
 
   applyPrefilter();
 
-  Math::Vector4 color = applyBoxFilter();
+  Vector4 color = applyBoxFilter();
 
   return color;
 }
@@ -388,9 +388,9 @@ void BoxImageFilter::applyPrefilter(void)
 
 // Averages valid pixels
 
-Math::Vector4 BoxImageFilter::applyBoxFilter(void) const
+Vector4 BoxImageFilter::applyBoxFilter(void) const
 {
-  Math::Vector4 color;
+  Vector4 color;
   unsigned int numvalid = 0;
 
   for (unsigned int i = 0; i < numElems; i++)

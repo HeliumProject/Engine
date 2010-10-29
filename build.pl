@@ -14,14 +14,14 @@ use Timer;
 use ScopeTimer;
 use Accumulator;
 
-my $g_Config = 'DebugUnicode';
+my $g_Config = 'Debug';
 my $g_Clean = 0;
 my $g_Verbose = 0;
 my $g_Incred = 0;
 my $g_NoPrompt = 0;
 my $g_Architecture = 'x64';
 
-my @supportedConfigs = ( 'Debug', 'DebugUnicode', 'Release', 'ReleaseUnicode' ); 
+my @supportedConfigs = ( 'Debug', 'Intermediate', 'Profile', 'Release' ); 
 
 # look in their path for the incredibuild executable, use it if they have it, can still be disabled using -noincred
 map { $g_Incred = 1 if ( -x File::Spec->catfile( $_, 'BuildConsole.exe' ) ) } split( ';', $ENV{PATH} );

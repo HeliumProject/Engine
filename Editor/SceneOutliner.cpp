@@ -188,7 +188,7 @@ void SceneOutliner::Clear()
 ///////////////////////////////////////////////////////////////////////////////
 // Adds the specified tree item as a child of root.
 // 
-wxTreeItemId SceneOutliner::AddItem( const wxTreeItemId& parent, const tstring& name, i32 image, SceneOutlinerItemData* data, bool isSelected, bool countable)
+wxTreeItemId SceneOutliner::AddItem( const wxTreeItemId& parent, const tstring& name, int32_t image, SceneOutlinerItemData* data, bool isSelected, bool countable)
 {
     EDITOR_SCOPE_TIMER( ("") );
     HELIUM_ASSERT(data); 

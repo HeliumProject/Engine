@@ -61,7 +61,7 @@ void ChoiceWidget::Create( wxWindow* parent )
 {
     HELIUM_ASSERT( !m_ChoiceWindow );
 
-    u32 style = 0;
+    uint32_t style = 0;
     
     if ( m_ChoiceControl->a_IsDropDown.Get() )
     {

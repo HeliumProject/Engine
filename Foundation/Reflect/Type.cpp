@@ -27,8 +27,8 @@ Type::~Type ()
     }
 
     {
-        std::vector<i32*>::const_iterator itr = m_IDs.begin();
-        std::vector<i32*>::const_iterator end = m_IDs.end();
+        std::vector<int32_t*>::const_iterator itr = m_IDs.begin();
+        std::vector<int32_t*>::const_iterator end = m_IDs.end();
         for ( ; itr != end; ++itr )
         {
             *(*itr) = ReservedTypes::Invalid; // release the cached id
@@ -36,9 +36,9 @@ Type::~Type ()
     }
 }
 
-i32 Type::AssignTypeID()
+int32_t Type::AssignTypeID()
 {
-    static i32 nextID = ReservedTypes::First;
+    static int32_t nextID = ReservedTypes::First;
 
     return nextID++;
 }
@@ -57,14 +57,14 @@ void Type::RemovePointer(void** pointer) const
     m_Pointers.erase( std::remove( m_Pointers.begin(), m_Pointers.end(), pointer ), m_Pointers.end() );
 }
 
-void Type::TrackID(i32* id) const
+void Type::TrackID(int32_t* id) const
 {
     Helium::TakeMutex mutex (g_TypeMutex);
 
     m_IDs.push_back( id );
 }
 
-void Type::RemoveID(i32* id) const
+void Type::RemoveID(int32_t* id) const
 {
     Helium::TakeMutex mutex (g_TypeMutex);
 

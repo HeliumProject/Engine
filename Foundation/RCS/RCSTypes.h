@@ -11,10 +11,10 @@ namespace Helium
 {
     namespace RCS
     {
-        static const u64 InvalidChangesetId = 0xFFFFFFFFFFFFFFFF;
-        static const u64 DefaultChangesetId = 0x0;
+        static const uint64_t InvalidChangesetId = 0xFFFFFFFFFFFFFFFF;
+        static const uint64_t DefaultChangesetId = 0x0;
 
-        FOUNDATION_API tstring GetChangesetIdAsString( const u64 changesetId );
+        FOUNDATION_API tstring GetChangesetIdAsString( const uint64_t changesetId );
 
         namespace FileStates
         {

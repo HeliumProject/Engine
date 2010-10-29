@@ -1,5 +1,5 @@
 #include "Shear.h"
 
-using namespace Helium::Math;
+using namespace Helium;
 
 const Shear Shear::Identity;

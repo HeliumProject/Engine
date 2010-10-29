@@ -10,12 +10,11 @@
 #include <d3dx9.h>
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 const float Camera::NearClipDistance = 0.05f;
 const float Camera::FarClipDistance = 10000.0f;
-const float Camera::FieldOfView = 72.0f * Math::DegToRad;
+const float Camera::FieldOfView = 72.0f * DegToRad;
 
 REFLECT_DEFINE_ABSTRACT(Camera);
 
@@ -235,13 +234,13 @@ float Camera::ScalingTo(const Vector3& location) const
 void Camera::MouseDown( const MouseButtonInput& e )
 {
   // we have changed movement mode, so reset our delta
-  m_Prev = Math::Point (e.GetPosition().x, e.GetPosition().y);
+  m_Prev = Point (e.GetPosition().x, e.GetPosition().y);
 }
 
 void Camera::MouseUp( const MouseButtonInput& e )
 {
   // we have changed movement mode, so reset our delta
-  m_Prev = Math::Point (e.GetPosition().x, e.GetPosition().y);
+  m_Prev = Point (e.GetPosition().x, e.GetPosition().y);
 }
 
 void Camera::MouseMove( const MouseMoveInput& e )
@@ -291,9 +290,9 @@ void Camera::MouseMove( const MouseMoveInput& e )
     case MovementModes::Track:
     {
       Vector3 p1;
-      ViewportToPlaneVertex( (f32)m_Prev.x, (f32)m_Prev.y, IntersectionPlanes::Viewport, p1);
+      ViewportToPlaneVertex( (float32_t)m_Prev.x, (float32_t)m_Prev.y, IntersectionPlanes::Viewport, p1);
       Vector3 p2;
-      ViewportToPlaneVertex( (f32)e.GetPosition().x, (f32)e.GetPosition().y, IntersectionPlanes::Viewport, p2);
+      ViewportToPlaneVertex( (float32_t)e.GetPosition().x, (float32_t)e.GetPosition().y, IntersectionPlanes::Viewport, p2);
 
       // Track vector is the translation of the m_Pivot from the starting planar intersection to the current planar intersection
       m_Pivot += p1 - p2;
@@ -304,7 +303,7 @@ void Camera::MouseMove( const MouseMoveInput& e )
     case MovementModes::Dolly:
     {
       // Dolly distance is the mouse distance traveled
-      float dolly = (f32)(-deltaX) + (f32)(-deltaY);
+      float dolly = (float32_t)(-deltaX) + (float32_t)(-deltaY);
 
       // Factor dolly distance by the distance to our pivot point
       dolly *= m_Offset / 200.0f;
@@ -329,7 +328,7 @@ void Camera::MouseMove( const MouseMoveInput& e )
 
   Update( true );
 
-  m_Prev = Math::Point(e.GetPosition().x, e.GetPosition().y);
+  m_Prev = Point(e.GetPosition().x, e.GetPosition().y);
 }
 
 void Camera::MouseScroll( const MouseScrollInput& e )
@@ -409,9 +408,9 @@ void Camera::Update( bool updateRemote )
   }
 }
 
-void Camera::WorldToScreen(const Math::Vector3& p, float& x, float& y)
+void Camera::WorldToScreen(const Vector3& p, float& x, float& y)
 {
-  Math::Vector4 v ( p.x, p.y, p.z, 1.f );
+  Vector4 v ( p.x, p.y, p.z, 1.f );
                                               
   // global to camera
   m_View.Transform( v );
@@ -420,16 +419,16 @@ void Camera::WorldToScreen(const Math::Vector3& p, float& x, float& y)
   m_Projection.Transform( v );
 
   // apply projection from w component
-  ViewportToScreen( Math::Vector3 ( v.x / v.w, v.y / v.w, v.z / v.w ), x, y );
+  ViewportToScreen( Vector3 ( v.x / v.w, v.y / v.w, v.z / v.w ), x, y );
 }
 
-void Camera::ViewportToScreen(const Math::Vector3& v, float& x, float& y)
+void Camera::ViewportToScreen(const Vector3& v, float& x, float& y)
 {
   x = ( (v.x + 1) * m_Size.x ) / 2.0f;
   y = ( (-v.y + 1) * m_Size.y ) / 2.0f;
 }
 
-void Camera::ScreenToViewport(float x, float y, Math::Vector3& v) const
+void Camera::ScreenToViewport(float x, float y, Vector3& v) const
 {
   v.x = (((2.0f * x) / m_Size.x) - 1);
   v.y = -(((2.0f * y) / m_Size.y) - 1);
@@ -607,7 +606,7 @@ bool Camera::ViewportToFrustum(float startx, float starty, float endx, float end
     max.y = endy;
 
   // degenerate case, fall back to line pick
-  if ( (fabs(min.x - max.x) < Math::ValueNearZero) || (fabs(min.y - max.y) < Math::ValueNearZero))
+  if ( (fabs(min.x - max.x) < ValueNearZero) || (fabs(min.y - max.y) < ValueNearZero))
     return false;
 
   switch (m_ProjectionMode)
@@ -720,7 +719,7 @@ AxesFlags Camera::ParallelAxis(const Matrix4& m, float criticalDotProduct) const
   return MultipleAxes::None;
 }
 
-void Camera::Frame(const Math::AlignedBox& box)
+void Camera::Frame(const AlignedBox& box)
 {
   SetPivot(box.Center());
   SetOffset((box.maximum - box.minimum).Length());

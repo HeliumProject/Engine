@@ -18,7 +18,7 @@ namespace Helium
             SceneGraph::Camera*         m_Camera;
             SceneGraph::Viewport*           m_View;
 
-            Math::Matrix4    m_PreviousTransform;
+            Matrix4    m_PreviousTransform;
         public:
             CameraMovedCommand(SceneGraph::Viewport* view, SceneGraph::Camera* cam );
             virtual ~CameraMovedCommand();

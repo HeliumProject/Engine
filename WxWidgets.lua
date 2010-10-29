@@ -85,20 +85,36 @@ Helium.PublishWxWidgets = function( wx )
 	local files = {}
 	files[1]  = { file="wxmsw291d_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Debug" }
 	files[2]  = { file="wxmsw291d_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Debug" }
-	files[3]  = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Release" }
-	files[4]  = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Release" }
-	files[5]  = { file="wxmsw291ud_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/DebugUnicode" }
-	files[6]  = { file="wxmsw291ud_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/DebugUnicode" }
-	files[7]  = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/ReleaseUnicode" }
-	files[8]  = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/ReleaseUnicode" }
-	files[9]  = { file="wxmsw291d_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Debug" }
-	files[10] = { file="wxmsw291d_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Debug" }
-	files[11] = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Release" }
-	files[12] = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Release" }
-	files[13] = { file="wxmsw291ud_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/DebugUnicode" }
-	files[14] = { file="wxmsw291ud_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/DebugUnicode" }
-	files[15] = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/ReleaseUnicode" }
-	files[16] = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/ReleaseUnicode" }
+	files[3]  = { file="wxmsw291ud_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Debug" }
+	files[4]  = { file="wxmsw291ud_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Debug" }
+	files[5]  = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Intermediate" }
+	files[6]  = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Intermediate" }
+	files[7]  = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Intermediate" }
+	files[8]  = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Intermediate" }
+	files[9]  = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Profile" }
+	files[10] = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Profile" }
+	files[11] = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Profile" }
+	files[12] = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Profile" }
+	files[13] = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Release" }
+	files[14] = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Release" }
+	files[15] = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Release" }
+	files[16] = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Release" }
+	files[17] = { file="wxmsw291d_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Debug" }
+	files[18] = { file="wxmsw291d_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Debug" }
+	files[19] = { file="wxmsw291ud_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Debug" }
+	files[20] = { file="wxmsw291ud_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Debug" }
+	files[21] = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Intermediate" }
+	files[22] = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Intermediate" }
+	files[23] = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Intermediate" }
+	files[24] = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Intermediate" }
+	files[25] = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Profile" }
+	files[26] = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Profile" }
+	files[27] = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Profile" }
+	files[28] = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Profile" }
+	files[29] = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Release" }
+	files[30] = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Release" }
+	files[31] = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Release" }
+	files[32] = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Release" }
 	Helium.Publish( files )
 
 end

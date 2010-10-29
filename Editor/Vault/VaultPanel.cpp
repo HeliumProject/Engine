@@ -100,7 +100,7 @@ VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
     {
         m_CurrentViewMode = m_VaultSettings->m_VaultViewMode;
         m_CurrentThumbnailSize = m_VaultSettings->m_ThumbnailSize;
-        Math::Clamp( m_CurrentThumbnailSize, VaultThumbnailsSizes::Small, VaultThumbnailsSizes::Large );
+        Clamp( m_CurrentThumbnailSize, VaultThumbnailsSizes::Small, VaultThumbnailsSizes::Large );
         //m_VaultSettings->m_WindowSettings->ApplyToWindow( this, m_FrameManager, true );
     }
     
@@ -311,7 +311,7 @@ void VaultPanel::SelectPath( const Helium::Path& path )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-u32 VaultPanel::GetSelectedPaths( std::set< Helium::Path >& paths )
+uint32_t VaultPanel::GetSelectedPaths( std::set< Helium::Path >& paths )
 {
     switch ( m_CurrentViewMode )
     {
@@ -330,7 +330,7 @@ u32 VaultPanel::GetSelectedPaths( std::set< Helium::Path >& paths )
         break;
     }
 
-    return static_cast< u32 >( paths.size() );
+    return static_cast< uint32_t >( paths.size() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -340,7 +340,7 @@ void VaultPanel::SaveSettings()
     {
         m_VaultSettings->m_VaultViewMode = m_CurrentViewMode;
         m_VaultSettings->m_ThumbnailSize = m_CurrentThumbnailSize;
-        Math::Clamp( m_VaultSettings->m_ThumbnailSize, VaultThumbnailsSizes::Small, VaultThumbnailsSizes::Large );
+        Clamp( m_VaultSettings->m_ThumbnailSize, VaultThumbnailsSizes::Small, VaultThumbnailsSizes::Large );
         //m_VaultSettings->m_WindowSettings->SetFromWindow( this, m_FrameManager );
     }
 }

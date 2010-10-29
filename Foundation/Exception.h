@@ -72,7 +72,7 @@ namespace Helium
             bool fatal = false );
 
         // prepare and dispatch a report for an SEH exception such as divide by zero, page fault from a invalid memory access, or even breakpoint instructions
-        FOUNDATION_API u32 ProcessException( LPEXCEPTION_POINTERS info,
+        FOUNDATION_API uint32_t ProcessException( LPEXCEPTION_POINTERS info,
             bool print = false,
             bool fatal = false );
     };

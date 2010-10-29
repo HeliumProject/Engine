@@ -98,10 +98,10 @@ namespace Helium
 
             virtual const char* GetName() HELIUM_OVERRIDE;
 
-            virtual void Sync( RCS::File& file, const u64 timestamp = 0 ) HELIUM_OVERRIDE;
+            virtual void Sync( RCS::File& file, const uint64_t timestamp = 0 ) HELIUM_OVERRIDE;
 
             virtual void GetInfo( RCS::File& file, const RCS::GetInfoFlag flags = RCS::GetInfoFlags::Default ) HELIUM_OVERRIDE;
-            virtual void GetInfo( const tstring& folder, RCS::V_File& files, bool recursive = false, u32 fileData = RCS::FileData::All, u32 actionData = RCS::ActionData::All ) HELIUM_OVERRIDE;
+            virtual void GetInfo( const tstring& folder, RCS::V_File& files, bool recursive = false, uint32_t fileData = RCS::FileData::All, uint32_t actionData = RCS::ActionData::All ) HELIUM_OVERRIDE;
 
             virtual void Add( RCS::File& file ) HELIUM_OVERRIDE;
             virtual void Edit( RCS::File& file ) HELIUM_OVERRIDE;
@@ -126,9 +126,9 @@ namespace Helium
             bool                  m_IsEnabled;
             bool                  m_IsConnected;
             Timer                 m_ConnectTimer;
-            u32                   m_ConnectionTestTimeout;        // the time we are willing to wait to test if the server is running
-            u32                   m_ForegroundExecuteTimeout;     // the timeout in the foreground thread before we open the wait dialog
-            u32                   m_BackgroundExecuteTimeout;     // this is lame and we should consider opening a new connection per-calling thread?
+            uint32_t                   m_ConnectionTestTimeout;        // the time we are willing to wait to test if the server is running
+            uint32_t                   m_ForegroundExecuteTimeout;     // the timeout in the foreground thread before we open the wait dialog
+            uint32_t                   m_BackgroundExecuteTimeout;     // this is lame and we should consider opening a new connection per-calling thread?
 
             bool                  m_Abort;
             ClientApi             m_Client;

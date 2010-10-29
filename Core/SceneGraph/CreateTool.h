@@ -37,13 +37,13 @@ namespace Helium
 
         struct Vector3Compare
         {
-            bool operator()( const Math::Vector3& rhs, const Math::Vector3& lhs ) const
+            bool operator()( const Vector3& rhs, const Vector3& lhs ) const
             {
                 return ( lhs.Length() < rhs.Length() );
             }
         };
 
-        typedef std::map< Math::Vector3, Math::V_Vector3, Vector3Compare > M_Vector3;
+        typedef std::map< Vector3, V_Vector3, Vector3Compare > M_Vector3;
 
         class CORE_API CreateTool : public Tool
         {
@@ -57,11 +57,11 @@ namespace Helium
             // The instance we are creating
             bool m_InstanceUpdateOffsets;
             SceneGraph::TransformPtr m_Instance;
-            Math::Vector3 m_InstanceTranslation;
-            Math::Vector3 m_InstanceNormal;
-            Math::AlignedBox m_InstanceBounds;
+            Vector3 m_InstanceTranslation;
+            Vector3 m_InstanceNormal;
+            AlignedBox m_InstanceBounds;
             float m_InstanceRadius;
-            Math::V_Vector3 m_InstanceOffsets;
+            V_Vector3 m_InstanceOffsets;
 
             TimerThread m_PaintTimer;
 
@@ -133,25 +133,25 @@ namespace Helium
 
             virtual SceneGraph::TransformPtr CreateNode() = 0;
 
-            void Place(const Math::Matrix4& position);
+            void Place(const Matrix4& position);
 
-            void DetermineTranslationAndNormal( int x, int y, Math::Vector3& t, Math::Vector3& n );
+            void DetermineTranslationAndNormal( int x, int y, Vector3& t, Vector3& n );
 
-            bool DetermineTranslationAndNormal( PickVisitor& pick, Math::Vector3& t, Math::Vector3& n );
+            bool DetermineTranslationAndNormal( PickVisitor& pick, Vector3& t, Vector3& n );
 
-            void GenerateInstanceOffsets( PlacementStyle style, float radius, float instanceRadius, Math::V_Vector3& positions );
+            void GenerateInstanceOffsets( PlacementStyle style, float radius, float instanceRadius, V_Vector3& positions );
 
-            void SelectInstanceOffsets( DistributionStyle style, float radius, Math::V_Vector3& offsets );
+            void SelectInstanceOffsets( DistributionStyle style, float radius, V_Vector3& offsets );
 
-            void JitterInstanceOffsets( float instanceRadius, float maxJitter, Math::V_Vector3& offsets );
+            void JitterInstanceOffsets( float instanceRadius, float maxJitter, V_Vector3& offsets );
 
-            void RandomizeInstanceOffsets( Math::V_Vector3& offsets );
+            void RandomizeInstanceOffsets( V_Vector3& offsets );
 
-            void FinalizeOrientation( Math::Matrix4& position, const Math::Vector3& t, const Math::Vector3& n );
+            void FinalizeOrientation( Matrix4& position, const Vector3& t, const Vector3& n );
 
-            bool ValidPosition( const Math::AlignedBox& bounds, const Math::Vector3& translation, float minDistance );
+            bool ValidPosition( const AlignedBox& bounds, const Vector3& translation, float minDistance );
 
-            void CalculateInstanceRadiusAndBounds( f32& instanceRadius, Math::AlignedBox& bounds );
+            void CalculateInstanceRadiusAndBounds( float32_t& instanceRadius, AlignedBox& bounds );
 
         protected:
             void RefreshInstance( void );
@@ -176,9 +176,9 @@ namespace Helium
 
             virtual void CreateProperties() HELIUM_OVERRIDE;
 
-            void SetupInstanceOffsets( float instanceRadius, Math::V_Vector3& instanceOffsets );
+            void SetupInstanceOffsets( float instanceRadius, V_Vector3& instanceOffsets );
 
-            void CreateSingleObject( const Math::Vector3& translation, const Math::Vector3& normal, bool checkValid = false );
+            void CreateSingleObject( const Vector3& translation, const Vector3& normal, bool checkValid = false );
             void CreateMultipleObjects( bool stamp = false );
 
             void TimerCallback( const TimerTickArgs& args );

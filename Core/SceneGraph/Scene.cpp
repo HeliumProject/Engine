@@ -44,7 +44,6 @@
 #define snprintf _snprintf
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 Scene::Scene( SceneGraph::Viewport* viewport, const Helium::Path& path )
@@ -53,7 +52,7 @@ Scene::Scene( SceneGraph::Viewport* viewport, const Helium::Path& path )
 , m_Progress( 0 )
 , m_Importing( false )
 , m_View( viewport )
-, m_SmartDuplicateMatrix(Math::Matrix4::Identity)
+, m_SmartDuplicateMatrix(Matrix4::Identity)
 , m_ValidSmartDuplicateMatrix( false )
 , m_Color( 255 )
 , m_IsFocused( false )
@@ -139,12 +138,12 @@ void Scene::SetTool(const ToolPtr& tool)
     }
 }
 
-const Math::Color3& Scene::GetColor() const
+const Color3& Scene::GetColor() const
 {
     return m_Color;
 }
 
-void Scene::SetColor( const Math::Color3& color )
+void Scene::SetColor( const Color3& color )
 {
     if ( m_Color != color )
     {
@@ -172,7 +171,7 @@ bool Scene::Load( const Helium::Path& path )
     return Import( path, ImportActions::Load, NULL ).ReferencesObject();
 }
 
-Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u32 importFlags, SceneGraph::HierarchyNode* importRoot, i32 importReflectType )
+Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, uint32_t importFlags, SceneGraph::HierarchyNode* importRoot, int32_t importReflectType )
 {
     CORE_SCOPE_TIMER( ( "%s", path.c_str() ) );
 
@@ -241,7 +240,7 @@ Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u
     return command;
 }
 
-Undo::CommandPtr Scene::ImportXML( const tstring& xml, u32 importFlags, SceneGraph::HierarchyNode* importRoot )
+Undo::CommandPtr Scene::ImportXML( const tstring& xml, uint32_t importFlags, SceneGraph::HierarchyNode* importRoot )
 {
     CORE_SCOPE_TIMER( ("") );
 
@@ -338,11 +337,11 @@ void Scene::Reset()
     }
 }
 
-Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAction action, u32 importFlags, i32 importReflectType )
+Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAction action, uint32_t importFlags, int32_t importReflectType )
 {
     CORE_SCOPE_TIMER( ("") );
 
-    u64 startTimer = Helium::TimerGetClock();
+    uint64_t startTimer = Helium::TimerGetClock();
 
     // 
     // Initialize
@@ -533,7 +532,7 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
     return command;
 }
 
-Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, u32 importFlags, i32 importReflectType )
+Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, int32_t importReflectType )
 {
     CORE_SCOPE_TIMER( ("ImportSceneNode: %s", element->GetClass()->m_ShortName.c_str()) );
 
@@ -864,7 +863,7 @@ bool Scene::Save()
 
 bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
 {
-    u64 startTimer = Helium::TimerGetClock();
+    uint64_t startTimer = Helium::TimerGetClock();
 
     bool result = false;
 
@@ -925,7 +924,7 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
 
     bool result = false;
 
-    u64 startTimer = Helium::TimerGetClock();
+    uint64_t startTimer = Helium::TimerGetClock();
 
     e_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Normal, SceneContexts::Saving ) );
 
@@ -1607,7 +1606,7 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
     // Map engine internal type to luna internal type
     //
 
-    i32 typeID = Reflect::GetType<SceneGraph::SceneNode>();
+    int32_t typeID = Reflect::GetType<SceneGraph::SceneNode>();
 
     HMS_TypeToSceneNodeTypeDumbPtr::const_iterator found = m_NodeTypesByType.find( typeID );
     if (found != m_NodeTypesByType.end())
@@ -2170,7 +2169,7 @@ void Scene::GetFlattenedHierarchy(SceneGraph::HierarchyNode* node, OS_HierarchyN
     }
 }
 
-void Scene::GetSelectedTransforms( Math::V_Matrix4& transforms )
+void Scene::GetSelectedTransforms( V_Matrix4& transforms )
 {
     OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
     OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
@@ -2185,7 +2184,7 @@ void Scene::GetSelectedTransforms( Math::V_Matrix4& transforms )
     }
 }
 
-Undo::CommandPtr Scene::SetSelectedTransforms( const Math::V_Matrix4& transforms )
+Undo::CommandPtr Scene::SetSelectedTransforms( const V_Matrix4& transforms )
 {
     if (m_Selection.GetItems().Empty())
     {
@@ -2582,12 +2581,12 @@ Undo::CommandPtr Scene::GroupSelected()
 
     Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-    Math::Vector3 pos;
+    Vector3 pos;
     const SceneGraph::Transform* transform = selectedHierarchyNodes.back()->GetTransform();
     HELIUM_ASSERT( transform );
     if ( transform )
     {
-        const Math::Matrix4& globalTransform = transform->GetGlobalTransform();
+        const Matrix4& globalTransform = transform->GetGlobalTransform();
         pos.x = globalTransform.t.x;
         pos.y = globalTransform.t.y;
         pos.z = globalTransform.t.z;
@@ -2802,7 +2801,7 @@ Undo::CommandPtr Scene::SmartDuplicateSelected()
     Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
     // transform the duplicate based off of the previous duplicate matrix
-    Math::Matrix4 matrix = transform->GetGlobalTransform() * m_SmartDuplicateMatrix.Inverted() * transform->GetGlobalTransform();
+    Matrix4 matrix = transform->GetGlobalTransform() * m_SmartDuplicateMatrix.Inverted() * transform->GetGlobalTransform();
 
     // save this for the next smart transform matrix
     m_SmartDuplicateMatrix = transform->GetGlobalTransform();
@@ -2814,7 +2813,7 @@ Undo::CommandPtr Scene::SmartDuplicateSelected()
     batch->Push( new ParentCommand( duplicate, node->GetParent() ) );
 
     // set the global transform for the duplicate object
-    batch->Push( new Undo::PropertyCommand<Math::Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Math::Matrix4> (transform, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), matrix ) );
+    batch->Push( new Undo::PropertyCommand<Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Matrix4> (transform, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), matrix ) );
 
     // make sure the new nodes are initialized
     duplicate->InitializeHierarchy( node->GetOwner() );
@@ -2837,7 +2836,7 @@ Undo::CommandPtr Scene::SnapSelectedToCamera()
 
     Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-    Matrix4 m = Matrix4 ( AngleAxis( Math::Pi, Vector3::BasisY ) ) * m_View->GetCamera()->GetInverseView();
+    Matrix4 m = Matrix4 ( AngleAxis( Pi, Vector3::BasisY ) ) * m_View->GetCamera()->GetInverseView();
 
     OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
     OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
@@ -2847,7 +2846,7 @@ Undo::CommandPtr Scene::SnapSelectedToCamera()
 
         if (transform)
         {
-            batch->Push( new Undo::PropertyCommand<Math::Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Math::Matrix4> (transform, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), m ) );
+            batch->Push( new Undo::PropertyCommand<Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Matrix4> (transform, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), m ) );
         }
     }
 
@@ -2868,7 +2867,7 @@ Undo::CommandPtr Scene::SnapCameraToSelected()
 
     if (transform)
     {
-        Matrix4 m = Matrix4 ( AngleAxis( Math::Pi, Vector3::BasisY ) ) * transform->GetGlobalTransform();
+        Matrix4 m = Matrix4 ( AngleAxis( Pi, Vector3::BasisY ) ) * transform->GetGlobalTransform();
 
         m_View->GetCamera()->SetTransform( m );
     }
@@ -2882,7 +2881,7 @@ Undo::CommandPtr Scene::SnapCameraToSelected()
 void Scene::FrameSelected()
 {
     bool found = false;
-    Math::AlignedBox box;
+    AlignedBox box;
 
     OS_SceneNodeDumbPtr::Iterator itr = GetSelection().GetItems().Begin();
     OS_SceneNodeDumbPtr::Iterator end = GetSelection().GetItems().End();
@@ -2899,7 +2898,7 @@ void Scene::FrameSelected()
         CurveControlPoint* point = Reflect::ObjectCast<CurveControlPoint>(*itr);
         if (point)
         {
-            Math::Vector3 p = point->GetPosition();
+            Vector3 p = point->GetPosition();
             point->GetTransform()->GetGlobalTransform().TransformVertex(p);
             box.Merge(p);
             found = true;

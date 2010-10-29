@@ -45,7 +45,7 @@ void Statistics::Reset()
 void Statistics::Update()
 {
   // update every second
-  u64 ticks = Helium::TimerGetClock();
+  uint64_t ticks = Helium::TimerGetClock();
 
   float elapsed = Helium::CyclesToMillis(ticks - m_Previous);
 
@@ -57,7 +57,7 @@ void Statistics::Update()
     }
 
     m_FramesPerSecondResult = m_FrameCount;
-    m_FrameRateResult = (u32)(1.0f / m_RenderTimeResult * 1000.f);
+    m_FrameRateResult = (uint32_t)(1.0f / m_RenderTimeResult * 1000.f);
 
     m_RenderTimeResult = m_RenderTime / (float)(m_FrameCount);
     m_RenderWalkTimeResult = m_RenderWalkTime / (float)(m_FrameCount);

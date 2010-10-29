@@ -10,10 +10,10 @@ namespace Helium
         class CORE_API BoundingBoxComponent : public Component::ComponentBase
         {
         private:
-            Math::Vector3 m_Extents;
-            Math::Vector3 m_Offset;
-            Math::Vector3 m_Minima;
-            Math::Vector3 m_Maxima;
+            Vector3 m_Extents;
+            Vector3 m_Offset;
+            Vector3 m_Minima;
+            Vector3 m_Maxima;
 
         public:
 
@@ -35,38 +35,38 @@ namespace Helium
 
         public:
 
-            const Math::Vector3& GetExtents() const
+            const Vector3& GetExtents() const
             {
                 return m_Extents;
             }
-            void SetExtents( const Math::Vector3& extents )
+            void SetExtents( const Vector3& extents )
             {
                 m_Extents = extents;
             }
 
-            const Math::Vector3& GetOffset() const
+            const Vector3& GetOffset() const
             {
                 return m_Offset;
             }
-            void SetOffset( const Math::Vector3& offset )
+            void SetOffset( const Vector3& offset )
             {
                 m_Offset = offset;
             }
 
-            const Math::Vector3& GetMinima() const
+            const Vector3& GetMinima() const
             {
                 return m_Minima;
             }
-            void SetMinima( const Math::Vector3& minima )
+            void SetMinima( const Vector3& minima )
             {
                 m_Minima = minima;
             }
 
-            const Math::Vector3& GetMaxima() const
+            const Vector3& GetMaxima() const
             {
                 return m_Maxima;
             }
-            void SetMaxima( const Math::Vector3& maxima )
+            void SetMaxima( const Vector3& maxima )
             {
                 m_Maxima = maxima;
             }

@@ -11,7 +11,7 @@ namespace Helium
 {
   struct DXTOptions
   {
-    u32                   m_face;
+    uint32_t                   m_face;
     bool                  m_count;
     Image*                m_texture;
     MipSet*               m_mips;

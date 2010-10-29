@@ -2,7 +2,7 @@
 
 #include "Matrix3.h"
 
-using namespace Helium::Math;
+using namespace Helium;
 
 const EulerAngles EulerAngles::Zero ( 0, 0, 0 );
 
@@ -19,43 +19,43 @@ EulerAngles::EulerAngles(const Matrix3& v, const EulerOrder& o)
 
 EulerAngles& EulerAngles::operator=(const Matrix3& m)
 {
-    u32 i, j, k, h, n, s, f;
-    f32 ri, rj, rh;
-    f32 sy, cy;
+    uint32_t i, j, k, h, n, s, f;
+    float32_t ri, rj, rh;
+    float32_t sy, cy;
 
     EulGetOrd (order.o,i,j,k,h,n,s,f);
 
     if (s == EulRepYes) 
     {
-        sy = sqrt( (f32) (m[j][i]*m[j][i] + m[k][i]*m[k][i]) );
+        sy = sqrt( (float32_t) (m[j][i]*m[j][i] + m[k][i]*m[k][i]) );
 
         if (sy > 16*FLT_EPSILON)
         {
-            ri = atan2((f32)m[j][i],  (f32)m[k][i]);
-            rj = atan2(sy, (f32)m[i][i]);
-            rh = atan2((f32)m[i][j],  (f32)-m[i][k]);
+            ri = atan2((float32_t)m[j][i],  (float32_t)m[k][i]);
+            rj = atan2(sy, (float32_t)m[i][i]);
+            rh = atan2((float32_t)m[i][j],  (float32_t)-m[i][k]);
         } 
         else
         {
-            ri = atan2((f32)-m[k][j], (f32)m[j][j]);
-            rj = atan2(sy, (f32)m[i][i]);
+            ri = atan2((float32_t)-m[k][j], (float32_t)m[j][j]);
+            rj = atan2(sy, (float32_t)m[i][i]);
             rh = 0;
         }
     } 
     else 
     {
-        cy = sqrt( (f32) (m[i][i]*m[i][i] + m[i][j]*m[i][j]) );
+        cy = sqrt( (float32_t) (m[i][i]*m[i][i] + m[i][j]*m[i][j]) );
 
         if (cy > 16*FLT_EPSILON) 
         {
-            ri = atan2((f32)m[j][k], (f32)m[k][k]);
-            rj = atan2((f32)-m[i][k], cy);
-            rh = atan2((f32)m[i][j], (f32)m[i][i]);
+            ri = atan2((float32_t)m[j][k], (float32_t)m[k][k]);
+            rj = atan2((float32_t)-m[i][k], cy);
+            rh = atan2((float32_t)m[i][j], (float32_t)m[i][i]);
         } 
         else 
         {
-            ri = atan2((f32)-m[k][j], (f32)m[j][j]);
-            rj = atan2((f32)-m[i][k], cy);
+            ri = atan2((float32_t)-m[k][j], (float32_t)m[j][j]);
+            rj = atan2((float32_t)-m[i][k], cy);
             rh = 0;
         }
     }

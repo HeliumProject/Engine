@@ -37,7 +37,7 @@ bool ImageProcess::Bank::LoadImages()
 {
   Log::Bullet bullet( TXT( "Loading...\n" ) );
 
-  u32 c=0;
+  uint32_t c=0;
   for (V_Definition::iterator i=m_textures.begin();i!=m_textures.end();++i)
   {
     tstring filename = (*i)->m_texture_file;
@@ -130,7 +130,7 @@ bool ImageProcess::Bank::AdjustImages()
     if ((*i)->m_texture && (*i)->m_force_power_of_2)
     {
       // first process for being a power of 2
-      if ( !Math::IsPowerOfTwo((*i)->m_texture->m_Width) || !Math::IsPowerOfTwo((*i)->m_texture->m_Height) )
+      if ( !IsPowerOfTwo((*i)->m_texture->m_Width) || !IsPowerOfTwo((*i)->m_texture->m_Height) )
       {
         // this texture is not a power of 2 so rescale it to fix it
         Log::Warning( TXT( "Rescaling texture '%s', it is not a power of 2 (%d x %d)\n" ),(*i)->m_texture_file.c_str(),(*i)->m_texture->m_Width,(*i)->m_texture->m_Height);
@@ -168,13 +168,13 @@ bool ImageProcess::Bank::CompressImages()
 {
   Log::Bullet bullet( TXT( "Compressing...\n" ) );
 
-  u32 count=0;
+  uint32_t count=0;
   for (V_Definition::iterator i=m_textures.begin();i!=m_textures.end();i++)
   {
     if ((*i)->m_texture)
     {
       Helium::MipGenOptions m;
-      if ( (*i)->m_force_single_mip_level || !Math::IsPowerOfTwo((*i)->m_texture->m_Width) || !Math::IsPowerOfTwo((*i)->m_texture->m_Height) )
+      if ( (*i)->m_force_single_mip_level || !IsPowerOfTwo((*i)->m_texture->m_Width) || !IsPowerOfTwo((*i)->m_texture->m_Height) )
       {
         // NP2 textures get only 1 mip level
         m.m_Levels  = 1;
@@ -211,8 +211,8 @@ bool ImageProcess::Bank::CompressImages()
         throw Helium::Exception( TXT( "Failed to generate mips, aborting" ) );
       }
 
-      u32 size = 0;
-      for (u32 level=0; level<mips->m_levels_used; level++)
+      uint32_t size = 0;
+      for (uint32_t level=0; level<mips->m_levels_used; level++)
         size += mips->m_datasize[level];
 
       Log::Print( Log::Levels::Verbose, TXT( "%8.02f kb used by '%s'\n" ), (float)(size) / 1024.f, (*i)->m_texture_file.c_str() );

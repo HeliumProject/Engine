@@ -21,19 +21,19 @@ namespace Helium
                 m_Override = override;
             }
 
-            void SetColor( const Math::Color4& color )
+            void SetColor( const Color4& color )
             {
                 HELIUM_ASSERT( m_ColorPicker );
                 m_ColorPicker->SetColour( wxColor( color.r, color.g, color.b, color.a ) );
             }
 
-            void SetColor( const Math::Color3& color )
+            void SetColor( const Color3& color )
             {
                 HELIUM_ASSERT( m_ColorPicker );
                 m_ColorPicker->SetColour( wxColor( color.r, color.g, color.b ) );
             }
 
-            void GetColor( Math::Color4& color )
+            void GetColor( Color4& color )
             {
                 HELIUM_ASSERT( m_ColorPicker );
                 wxColour value = m_ColorPicker->GetColour();
@@ -43,7 +43,7 @@ namespace Helium
                 color.a = value.Alpha();
             }
 
-            void GetColor( Math::Color3 color )
+            void GetColor( Color3 color )
             {
                 HELIUM_ASSERT( m_ColorPicker );
                 wxColour value = m_ColorPicker->GetColour();

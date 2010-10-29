@@ -289,9 +289,9 @@ namespace Helium
         //
 
         template <>
-        inline Stream<wchar_t>& operator>>(Stream<wchar_t>& stream, u8& val)
+        inline Stream<wchar_t>& operator>>(Stream<wchar_t>& stream, uint8_t& val)
         {
-            u16 temp;
+            uint16_t temp;
             stream.GetInternal() >> temp;
 
             if(stream.Fail() && !stream.Done())
@@ -299,15 +299,15 @@ namespace Helium
                 throw Reflect::StreamException( TXT( "General read failure" ) ); 
             }
 
-            val = (u8)temp;
+            val = (uint8_t)temp;
 
             return stream; 
         }
 
         template <>
-        inline Stream<wchar_t>& operator<<(Stream<wchar_t>& stream, const u8& val)
+        inline Stream<wchar_t>& operator<<(Stream<wchar_t>& stream, const uint8_t& val)
         {
-            u16 temp = val;
+            uint16_t temp = val;
             stream.GetInternal() << temp; 
 
             if(stream.Fail())
@@ -319,9 +319,9 @@ namespace Helium
         }
 
         template <>
-        inline Stream<char>& operator>>(Stream<char>& stream, u8& val)
+        inline Stream<char>& operator>>(Stream<char>& stream, uint8_t& val)
         {
-            u16 temp;
+            uint16_t temp;
             stream.GetInternal() >> temp;
 
             if(stream.Fail() && !stream.Done())
@@ -329,15 +329,15 @@ namespace Helium
                 throw Reflect::StreamException( TXT( "General read failure" ) ); 
             }
 
-            val = (u8)temp;
+            val = (uint8_t)temp;
 
             return stream; 
         }
 
         template <>
-        inline Stream<char>& operator<<(Stream<char>& stream, const u8& val)
+        inline Stream<char>& operator<<(Stream<char>& stream, const uint8_t& val)
         {
-            u16 temp = val;
+            uint16_t temp = val;
             stream.GetInternal() << temp; 
 
             if(stream.Fail())
@@ -349,9 +349,9 @@ namespace Helium
         }
 
         template <>
-        inline Stream<wchar_t>& operator>>(Stream<wchar_t>& stream, i8& val)
+        inline Stream<wchar_t>& operator>>(Stream<wchar_t>& stream, int8_t& val)
         {
-            u16 temp;
+            uint16_t temp;
             stream.GetInternal() >> temp;
 
             if(stream.Fail() && !stream.Done())
@@ -359,15 +359,15 @@ namespace Helium
                 throw Reflect::StreamException( TXT( "General read failure" ) ); 
             }
 
-            val = (i8)temp;
+            val = (int8_t)temp;
 
             return stream; 
         }
 
         template <>
-        inline Stream<wchar_t>& operator<<(Stream<wchar_t>& stream, const i8& val)
+        inline Stream<wchar_t>& operator<<(Stream<wchar_t>& stream, const int8_t& val)
         {
-            u16 temp = val;
+            uint16_t temp = val;
             stream.GetInternal() << temp; 
 
             if(stream.Fail())
@@ -379,9 +379,9 @@ namespace Helium
         }
 
         template <>
-        inline Stream<char>& operator>>(Stream<char>& stream, i8& val)
+        inline Stream<char>& operator>>(Stream<char>& stream, int8_t& val)
         {
-            u16 temp;
+            uint16_t temp;
             stream.GetInternal() >> temp;
 
             if(stream.Fail() && !stream.Done())
@@ -389,15 +389,15 @@ namespace Helium
                 throw Reflect::StreamException( TXT( "General read failure" ) ); 
             }
 
-            val = (i8)temp;
+            val = (int8_t)temp;
 
             return stream; 
         }
 
         template <>
-        inline Stream<char>& operator<<(Stream<char>& stream, const i8& val)
+        inline Stream<char>& operator<<(Stream<char>& stream, const int8_t& val)
         {
-            u16 temp = val;
+            uint16_t temp = val;
             stream.GetInternal() << temp; 
 
             if(stream.Fail())

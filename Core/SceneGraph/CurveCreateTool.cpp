@@ -9,7 +9,6 @@
 #include "Core/SceneGraph/HierarchyNodeType.h"
 
 using namespace Helium;
-using namespace Helium::Math;
 using namespace Helium::SceneGraph;
 
 CurveType CurveCreateTool::s_CurveType = CurveTypes::BSpline;
@@ -33,7 +32,7 @@ CurveCreateTool::CurveCreateTool( SceneGraph::Scene* scene, PropertiesGenerator*
 , m_Instance( NULL )
 , m_Created( false )
 {
-    CreateInstance( Math::Vector3::Zero );
+    CreateInstance( Vector3::Zero );
 }
 
 CurveCreateTool::~CurveCreateTool()
@@ -54,7 +53,7 @@ CurveCreateTool::~CurveCreateTool()
     m_Scene->Push( m_Scene->GetSelection().SetItems( m_Selection ) );
 }
 
-void CurveCreateTool::CreateInstance( const Math::Vector3& position )
+void CurveCreateTool::CreateInstance( const Vector3& position )
 {
     if (m_Instance.ReferencesObject())
     {
@@ -79,7 +78,7 @@ void CurveCreateTool::CreateInstance( const Math::Vector3& position )
     m_Instance->Evaluate( GraphDirections::Downstream );
 }
 
-void CurveCreateTool::PickPosition(int x, int y, Math::Vector3 &position)
+void CurveCreateTool::PickPosition(int x, int y, Vector3 &position)
 {
     FrustumLinePickVisitor pick (m_Scene->GetViewport()->GetCamera(), x, y);
 
@@ -128,7 +127,7 @@ void CurveCreateTool::PickPosition(int x, int y, Math::Vector3 &position)
     if (!set)
     {
         // place the object on the camera plane
-        m_Scene->GetViewport()->GetCamera()->ViewportToPlaneVertex( (f32)x, (f32)y, SceneGraph::CreateTool::s_PlaneSnap, position);
+        m_Scene->GetViewport()->GetCamera()->ViewportToPlaneVertex( (float32_t)x, (float32_t)y, SceneGraph::CreateTool::s_PlaneSnap, position);
     }
 }
 
@@ -144,7 +143,7 @@ void CurveCreateTool::AddToScene()
         return;
     }
 
-    u32 countControlPoints = m_Instance->GetNumberControlPoints();
+    uint32_t countControlPoints = m_Instance->GetNumberControlPoints();
     if ( countControlPoints > 2 ) 
     {
         m_Instance->RemoveControlPointAtIndex( countControlPoints - 1 );
@@ -186,7 +185,7 @@ void CurveCreateTool::AddToScene()
     m_Scene->Execute( false );
 
     m_Instance = NULL;
-    CreateInstance( Math::Vector3::Zero );
+    CreateInstance( Vector3::Zero );
 }
 
 bool CurveCreateTool::AllowSelection()
@@ -198,7 +197,7 @@ bool CurveCreateTool::MouseDown( const MouseButtonInput& e )
 {
     if ( m_Instance.ReferencesObject() && m_Scene->IsEditable() )
     {
-        Math::Vector3 position;
+        Vector3 position;
         PickPosition( e.GetPosition().x, e.GetPosition().y, position );
 
         CurveControlPointPtr point = new CurveControlPoint();
@@ -220,11 +219,11 @@ void CurveCreateTool::MouseMove( const MouseMoveInput& e )
 {
     if ( m_Instance.ReferencesObject() )
     {
-        u32 countControlPoints = m_Instance->GetNumberControlPoints();
+        uint32_t countControlPoints = m_Instance->GetNumberControlPoints();
 
         if ( countControlPoints > 0 )
         {
-            Math::Vector3 position;
+            Vector3 position;
             PickPosition( e.GetPosition().x, e.GetPosition().y, position );
 
             CurveControlPoint* current = m_Instance->GetControlPointByIndex( countControlPoints - 1 );

@@ -15,10 +15,10 @@ VertexResource::VertexResource( ResourceTracker* tracker )
 }
 
 
-u8* VertexResource::Lock() 
+uint8_t* VertexResource::Lock() 
 {
-    u8* data = NULL;
-    u32 lockFlags = (!IsManaged() && IsDynamic()) ? D3DLOCK_DISCARD : 0;
+    uint8_t* data = NULL;
+    uint32_t lockFlags = (!IsManaged() && IsDynamic()) ? D3DLOCK_DISCARD : 0;
     HRESULT result = m_Buffer->Lock(0, 0, (void**)&data, lockFlags);
     HELIUM_ASSERT(SUCCEEDED(result));
 

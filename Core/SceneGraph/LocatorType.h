@@ -25,7 +25,7 @@ namespace Helium
             static void CleanupType();
 
         public:
-            LocatorType( Scene* scene, i32 instanceType );
+            LocatorType( Scene* scene, int32_t instanceType );
 
             virtual ~LocatorType();
 

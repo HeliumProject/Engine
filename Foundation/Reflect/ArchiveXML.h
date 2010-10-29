@@ -17,7 +17,7 @@ namespace Helium
         class FOUNDATION_API ArchiveXML : public Archive
         {
         public: 
-            static const u32 CURRENT_VERSION; 
+            static const uint32_t CURRENT_VERSION; 
 
         private:
             friend class Archive;
@@ -82,7 +82,7 @@ namespace Helium
             Indent<tchar> m_Indent;
 
             // File format version
-            u32 m_Version;
+            uint32_t m_Version;
 
             // The nesting stack of parsing state
             std::stack<ParsingStatePtr> m_StateStack;
@@ -145,7 +145,7 @@ namespace Helium
         public:
             // Serialize
             virtual void Serialize(const ElementPtr& element);
-            virtual void Serialize(const V_Element& elements, u32 flags = 0);
+            virtual void Serialize(const V_Element& elements, uint32_t flags = 0);
 
         protected:
             // Helpers
@@ -159,7 +159,7 @@ namespace Helium
         public:
             // For handling components
             virtual void Deserialize(ElementPtr& element);
-            virtual void Deserialize(V_Element& elements, u32 flags = 0);
+            virtual void Deserialize(V_Element& elements, uint32_t flags = 0);
 
         private:
             static void StartElementHandler(void *pUserData, const tchar* pszName, const tchar **papszAttrs)

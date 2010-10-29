@@ -13,9 +13,9 @@ namespace Helium
 
     struct FOUNDATION_API TimerTickArgs
     {
-        f32 m_Elapsed;
+        float32_t m_Elapsed;
 
-        TimerTickArgs( f32 elapsed )
+        TimerTickArgs( float32_t elapsed )
             : m_Elapsed( elapsed )
         {
         }
@@ -25,7 +25,7 @@ namespace Helium
     class FOUNDATION_API TimerThread
     {
     public:
-        TimerThread( const std::string& timerName, i32 intervalInMilliseconds, bool singleShot = false )
+        TimerThread( const std::string& timerName, int32_t intervalInMilliseconds, bool singleShot = false )
             : m_Name( timerName )
             , m_Interval( intervalInMilliseconds )
             , m_SingleShot( singleShot )
@@ -34,11 +34,11 @@ namespace Helium
         }
         virtual ~TimerThread();
 
-        void SetInterval( i32 interval )
+        void SetInterval( int32_t interval )
         {
             m_Interval = interval;
         }
-        i32 GetInterval()
+        int32_t GetInterval()
         {
             return m_Interval;
         }
@@ -65,9 +65,9 @@ namespace Helium
         struct TimerThreadArgs
         {
             TimerThread* m_TimerInstance;
-            i32 m_Interval;
+            int32_t m_Interval;
             
-            TimerThreadArgs( TimerThread* instance = NULL, i32 interval = -1 )
+            TimerThreadArgs( TimerThread* instance = NULL, int32_t interval = -1 )
                 : m_TimerInstance( instance )
                 , m_Interval( interval )
             {
@@ -79,7 +79,7 @@ namespace Helium
 
     private:
         std::string m_Name;
-        i32 m_Interval;
+        int32_t m_Interval;
         bool m_SingleShot;
 
         TimerTickSignature::Event m_TimerTickEvent;

@@ -12,6 +12,6 @@ namespace Helium
         void CORE_API Cleanup();
 
         // List of all asset class type ids
-        extern CORE_API std::vector< i32 > g_AssetClassTypes;
+        extern CORE_API std::vector< int32_t > g_AssetClassTypes;
     }
 }

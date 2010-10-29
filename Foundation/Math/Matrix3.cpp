@@ -30,10 +30,10 @@ Matrix3::Matrix3(const EulerAngles& v)
 
 Matrix3& Matrix3::operator=(const EulerAngles& v)
 {
-    f32 ri, rj, rh;
-    f32 ci, cj, ch, si, sj, sh; 
-    f32 cc, cs, sc, ss;
-    u32 i, j, k, h, n, s, f;
+    float32_t ri, rj, rh;
+    float32_t ci, cj, ch, si, sj, sh; 
+    float32_t cc, cs, sc, ss;
+    uint32_t i, j, k, h, n, s, f;
     Matrix3 &m = *this;
 
     EulGetOrd(v.order.o,i,j,k,h,n,s,f);
@@ -89,10 +89,10 @@ Matrix3::Matrix3(const AngleAxis& v)
 
 Matrix3& Matrix3::operator=(const AngleAxis& v)
 {
-    f32 v1 = v.axis.x, v2 = v.axis.y, v3 = v.axis.z;
-    f32 v1s = v1*v1, v2s = v2*v2, v3s = v3*v3;
+    float32_t v1 = v.axis.x, v2 = v.axis.y, v3 = v.axis.z;
+    float32_t v1s = v1*v1, v2s = v2*v2, v3s = v3*v3;
 
-    f32 cosTheta  = cos((f32)v.angle), sinTheta  = sin((f32)v.angle);
+    float32_t cosTheta  = cos((float32_t)v.angle), sinTheta  = sin((float32_t)v.angle);
 
     x[0] = v1s + ((1.0f-v1s) * cosTheta);
     x[1] = ((v1*v2) * (1.0f-cosTheta))  + (v3*sinTheta);
@@ -118,7 +118,7 @@ Matrix3 Matrix3::RotateX(f32 theta)
     return m;
 }
 
-Matrix3 Matrix3::RotateY(f32 theta)
+Matrix3 Matrix3::RotateY(float32_t theta)
 {
     Matrix3 m = Identity;
     m[0][0] = m[2][2] = cos(theta);
@@ -127,7 +127,7 @@ Matrix3 Matrix3::RotateY(f32 theta)
     return m;
 }
 
-Matrix3 Matrix3::RotateZ(f32 theta)
+Matrix3 Matrix3::RotateZ(float32_t theta)
 {
     Matrix3 m = Identity;
     m[0][0] = m[1][1] = cos(theta);

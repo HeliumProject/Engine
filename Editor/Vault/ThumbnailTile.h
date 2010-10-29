@@ -19,18 +19,18 @@ namespace Helium
         public:
             const Helium::Path& GetPath() const;
 
-            inline u32 GetRow() const
+            inline uint32_t GetRow() const
             {
                 return m_Row;
             }
 
-            inline u32 GetColumn() const
+            inline uint32_t GetColumn() const
             {
                 return m_Column;
             }
 
-            void GetRowColumn( u32& row, u32& col ) const;
-            void SetRowColumn( u32 row, u32 col );
+            void GetRowColumn( uint32_t& row, uint32_t& col ) const;
+            void SetRowColumn( uint32_t row, uint32_t col );
 
             inline bool IsSelected() const 
             {
@@ -64,8 +64,8 @@ namespace Helium
         private:
             Helium::Path m_Path;
 
-            u32 m_Row;
-            u32 m_Column;
+            uint32_t m_Row;
+            uint32_t m_Column;
 
             bool m_IsSelected;
             bool m_IsHighlighted;

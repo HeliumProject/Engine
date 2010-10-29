@@ -14,7 +14,7 @@ namespace Helium
     class FOUNDATION_API AngleAxis
     {
     public:
-        f32 angle;
+        float32_t angle;
         Vector3 axis;
 
         const static AngleAxis Zero;
@@ -27,14 +27,14 @@ namespace Helium
 
         }
 
-        explicit AngleAxis      (const f32& angle, const Vector3& axis)
+        explicit AngleAxis      (const float32_t& angle, const Vector3& axis)
             : angle(angle)
             , axis(axis)
         {
 
         }
 
-        explicit AngleAxis      (const f32& angle, const f32& x, const f32& y, const f32& z)
+        explicit AngleAxis      (const float32_t& angle, const float32_t& x, const float32_t& y, const float32_t& z)
             : angle(angle)
             , axis(x,y,z)
         {
@@ -80,7 +80,7 @@ namespace Helium
             a.Normalize();
             b.Normalize();
 
-            f32 angle = acos((f32)(a.Dot(b)));
+            float32_t angle = acos((float32_t)(a.Dot(b)));
             Vector3 axis = a.Cross(b).Normalize();
 
             return AngleAxis (angle, axis);

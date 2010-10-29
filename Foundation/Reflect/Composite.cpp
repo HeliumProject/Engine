@@ -24,7 +24,7 @@ Composite::~Composite()
 
 }
 
-Reflect::Field* Composite::AddField(Element& instance, const std::string& name, const u32 offset, u32 size, i32 serializerID, i32 flags)
+Reflect::Field* Composite::AddField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, int32_t serializerID, int32_t flags)
 {
     tstring convertedName;
     {
@@ -70,7 +70,7 @@ Reflect::Field* Composite::AddField(Element& instance, const std::string& name, 
     return fieldInfo;
 }
 
-Reflect::ElementField* Composite::AddElementField(Element& instance, const std::string& name, const u32 offset, u32 size, i32 serializerID, i32 typeID, i32 flags)
+Reflect::ElementField* Composite::AddElementField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, int32_t serializerID, int32_t typeID, int32_t flags)
 {
     tstring convertedName;
     {
@@ -117,7 +117,7 @@ Reflect::ElementField* Composite::AddElementField(Element& instance, const std::
     return fieldInfo;
 }
 
-Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, const std::string& name, const u32 offset, u32 size, i32 serializerID, const std::string& enumName, i32 flags)
+Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, int32_t serializerID, const std::string& enumName, int32_t flags)
 {
     tstring convertedName;
     {
@@ -184,7 +184,7 @@ void Composite::Report() const
 
     Log::Debug(Log::Levels::Verbose,  buf );
 
-    u32 computedSize = 0;
+    uint32_t computedSize = 0;
     M_FieldIDToInfo::const_iterator itr = m_FieldIDToInfo.begin();
     M_FieldIDToInfo::const_iterator end = m_FieldIDToInfo.end();
     for ( ; itr != end; ++itr )
@@ -199,7 +199,7 @@ void Composite::Report() const
     }
 }
 
-bool Composite::HasType(i32 type) const
+bool Composite::HasType(int32_t type) const
 {
     const Composite* typeInfo = this;
 
@@ -247,7 +247,7 @@ const Field* Composite::FindFieldByName(const tstring& name) const
     return NULL;
 }
 
-const Field* Composite::FindFieldByOffset(u32 offset) const
+const Field* Composite::FindFieldByOffset(uint32_t offset) const
 {
     M_FieldOffsetToInfo::const_iterator found = m_FieldOffsetToInfo.find( offset );
     if ( found != m_FieldOffsetToInfo.end() )

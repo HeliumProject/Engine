@@ -5,12 +5,12 @@
 
 namespace Helium
 {
-    template <class V, i32 S>
+    template <class V, int32_t S>
     class StaticPolygon
     {
     public:
         V m_Vertices[S];
-        i32 m_Size;
+        int32_t m_Size;
 
         StaticPolygon()
             : m_Size (0)
@@ -39,7 +39,7 @@ namespace Helium
             }
         }
 
-        inline void Insert(const V& v, i32 index)
+        inline void Insert(const V& v, int32_t index)
         {
             // bounds check
             if (index <= m_Size++)
@@ -51,7 +51,7 @@ namespace Helium
                 m_Vertices[index] = v;
 
                 // for each additional one
-                for ( i32 i=index+1; i<m_Size; i++ )
+                for ( int32_t i=index+1; i<m_Size; i++ )
                 {
                     // propagate previous
                     m_Vertices[i] = temp;
@@ -66,7 +66,7 @@ namespace Helium
             }
         }
 
-        inline void Remove(i32 index)
+        inline void Remove(int32_t index)
         {
             // bounds check
             if (index < m_Size--)
@@ -75,7 +75,7 @@ namespace Helium
                 if ( index != m_Size )
                 {
                     // for each subsequent one
-                    for ( i32 i=index; i<m_Size; i++ )
+                    for ( int32_t i=index; i<m_Size; i++ )
                     {
                         // propagate subsequent
                         m_Vertices[i] = m_Vertices[i+1];
@@ -91,7 +91,7 @@ namespace Helium
         //http://local.wasp.uwa.edu.au/~pbourke/geometry/insidepoly/InsidePolygonWithBounds.cpp
         // returns false if the point is one of the poly's verts or on the bounds
         // only works in 2D
-        inline bool PointInPolygon( V& point, bool returnValIfOnBounds = false, f32 epsilon = 0.0f )
+        inline bool PointInPolygon( V& point, bool returnValIfOnBounds = false, float32_t epsilon = 0.0f )
         {
 
             //cross points count of x
@@ -217,13 +217,13 @@ namespace Helium
             m_Vertices.push_back(v);
         }
 
-        void Insert(const V& v, i32 index)
+        void Insert(const V& v, int32_t index)
         {
             // insert
             m_Vertices.insert(index, v);
         }
 
-        void Remove(i32 index)
+        void Remove(int32_t index)
         {
             // erase
             m_Vertices.erase(index);

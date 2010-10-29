@@ -53,7 +53,7 @@ void Graph::Reset()
   m_NextID = 1;
 }
 
-u32 Graph::AssignVisitedID()
+uint32_t Graph::AssignVisitedID()
 {
   m_NextID++;
 
@@ -129,9 +129,9 @@ void Graph::RemoveNode(SceneGraph::SceneNode* n)
   n->SetGraph( NULL );
 }
 
-u32 Graph::DirtyNode( SceneGraph::SceneNode* node, GraphDirection direction )
+uint32_t Graph::DirtyNode( SceneGraph::SceneNode* node, GraphDirection direction )
 {
-  u32 count = 0;
+  uint32_t count = 0;
 
   node->SetNodeState(direction, NodeStates::Dirty);
   count++;
@@ -214,7 +214,7 @@ EvaluateResult Graph::EvaluateGraph(bool silent)
 
   CORE_EVALUATE_SCOPE_TIMER( ("") );
 
-  u64 start = Helium::TimerGetClock();
+  uint64_t start = Helium::TimerGetClock();
 
   m_EvaluatedNodes.clear();
 

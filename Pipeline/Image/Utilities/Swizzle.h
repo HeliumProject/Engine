@@ -68,19 +68,19 @@ namespace Helium
   {
   public:
     // Dimensions of the texture
-    u32 m_width;                      //width of the texture this instance of the class has been initialized for
-    u32 m_height;                     //height of the texture this instance of the class has been initialized for
-    u32 m_depth;                      //depth of the texture this instance of the class has been initialized for
+    uint32_t m_width;                      //width of the texture this instance of the class has been initialized for
+    uint32_t m_height;                     //height of the texture this instance of the class has been initialized for
+    uint32_t m_depth;                      //depth of the texture this instance of the class has been initialized for
 
     // Internal mask for each coordinate
-    u32 m_masku;                      //internal mask for u coordinate
-    u32 m_maskv;                      //internal mask for v coordinate
-    u32 m_maskw;                      //internal mask for w coordinate
+    uint32_t m_masku;                      //internal mask for u coordinate
+    uint32_t m_maskv;                      //internal mask for v coordinate
+    uint32_t m_maskw;                      //internal mask for w coordinate
 
     // Swizzled texture coordinates
-    u32 m_u;                          //texture map (converted) u coordinate
-    u32 m_v;                          //texture map (converted) v coordinate
-    u32 m_w;                          //texture map (converted) w coordinate
+    uint32_t m_u;                          //texture map (converted) u coordinate
+    uint32_t m_v;                          //texture map (converted) v coordinate
+    uint32_t m_w;                          //texture map (converted) w coordinate
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     Swizzler(): m_width(0), m_height(0), m_depth(0),
@@ -92,13 +92,13 @@ namespace Helium
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Initializes the swizzler
-    Swizzler(u32 width, u32 height, u32 depth)
+    Swizzler(uint32_t width, uint32_t height, uint32_t depth)
     { 
       Init(width, height, depth);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void Init(u32 width, u32 height, u32 depth)
+    void Init(uint32_t width, uint32_t height, uint32_t depth)
     {
       m_width = width; 
       m_height = height; 
@@ -110,9 +110,9 @@ namespace Helium
       m_v = 0;
       m_w = 0;
 
-      u32 i = 1;
-      u32 j = 1;
-      u32 k;
+      uint32_t i = 1;
+      uint32_t j = 1;
+      uint32_t k;
 
       do 
       {
@@ -142,11 +142,11 @@ namespace Helium
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // converts num to an intermediate value that can be used to modify the u coordinate
-    u32 SwizzleU(u32 num)
+    uint32_t SwizzleU(uint32_t num)
     {
-      u32 r = 0;
+      uint32_t r = 0;
 
-      for (u32 i = 1; i <= m_masku; i <<= 1) 
+      for (uint32_t i = 1; i <= m_masku; i <<= 1) 
       {
         if (m_masku & i) 
         {
@@ -163,11 +163,11 @@ namespace Helium
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // converts num to an intermediate value that can be used to modify the v coordinate
-    u32 SwizzleV(u32 num)
+    uint32_t SwizzleV(uint32_t num)
     {
-      u32 r = 0;
+      uint32_t r = 0;
 
-      for (u32 i = 1; i <= m_maskv; i <<= 1) 
+      for (uint32_t i = 1; i <= m_maskv; i <<= 1) 
       {
         if (m_maskv & i)
         {
@@ -184,11 +184,11 @@ namespace Helium
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // converts num to an intermediate value that can be used to modify the w coordinate
-    u32 SwizzleW(u32 num)
+    uint32_t SwizzleW(uint32_t num)
     {
-      u32 r = 0;
+      uint32_t r = 0;
 
-      for (u32 i = 1; i <= m_maskw; i <<= 1) 
+      for (uint32_t i = 1; i <= m_maskw; i <<= 1) 
       {
         if (m_maskw & i)
         {
@@ -205,17 +205,17 @@ namespace Helium
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // converts u,v,w to an intermediate value that can be used to modify all the coordinates
-    u32 Swizzle(u32 u, u32 v, u32 w)
+    uint32_t Swizzle(uint32_t u, uint32_t v, uint32_t w)
     {
       return SwizzleU(u) | SwizzleV(v) | SwizzleW(w);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //takes an index to the swizzled texture,  and extracts & returns the u coordinate
-    u32 UnswizzleU(u32 num)
+    uint32_t UnswizzleU(uint32_t num)
     {
-      u32 r = 0;
-      for (u32 i = 1, j = 1; i; i <<= 1) 
+      uint32_t r = 0;
+      for (uint32_t i = 1, j = 1; i; i <<= 1) 
       {
         if (m_masku & i)  
         {   
@@ -232,11 +232,11 @@ namespace Helium
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //takes an index to the swizzled texture,  and extracts & returns the v coordinate
-    u32 UnswizzleV(u32 num)
+    uint32_t UnswizzleV(uint32_t num)
     {
-      u32 r = 0;
+      uint32_t r = 0;
 
-      for (u32 i = 1, j = 1; i; i <<= 1) 
+      for (uint32_t i = 1, j = 1; i; i <<= 1) 
       {
         if (m_maskv & i)  
         {   
@@ -254,11 +254,11 @@ namespace Helium
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //takes an index to the swizzled texture,  and extracts & returns the w coordinate
-    u32 UnswizzleW(u32 num)
+    uint32_t UnswizzleW(uint32_t num)
     {
-      u32 r = 0;
+      uint32_t r = 0;
 
-      for (u32 i = 1, j = 1; i; i <<= 1) 
+      for (uint32_t i = 1, j = 1; i; i <<= 1) 
       {
         if (m_maskw & i)  
         {   
@@ -276,60 +276,60 @@ namespace Helium
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Sets a texture coordinate
-    __forceinline u32 SetU(u32 num) { return m_u = num  & m_masku ; }
-    __forceinline u32 SetV(u32 num) { return m_v = num  & m_maskv ; }
-    __forceinline u32 SetW(u32 num) { return m_w = num  & m_maskw ; }
+    __forceinline uint32_t SetU(uint32_t num) { return m_u = num  & m_masku ; }
+    __forceinline uint32_t SetV(uint32_t num) { return m_v = num  & m_maskv ; }
+    __forceinline uint32_t SetW(uint32_t num) { return m_w = num  & m_maskw ; }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Adds a value to a texture coordinate
-    __forceinline u32 AddU(u32 num) { return m_u = ( m_u - ( (0-num) & m_masku ) ) & m_masku; }
-    __forceinline u32 AddV(u32 num) { return m_v = ( m_v - ( (0-num) & m_maskv ) ) & m_maskv; }
-    __forceinline u32 AddW(u32 num) { return m_w = ( m_w - ( (0-num) & m_maskw ) ) & m_maskw; }
+    __forceinline uint32_t AddU(uint32_t num) { return m_u = ( m_u - ( (0-num) & m_masku ) ) & m_masku; }
+    __forceinline uint32_t AddV(uint32_t num) { return m_v = ( m_v - ( (0-num) & m_maskv ) ) & m_maskv; }
+    __forceinline uint32_t AddW(uint32_t num) { return m_w = ( m_w - ( (0-num) & m_maskw ) ) & m_maskw; }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Subtracts a value from a texture coordinate
-    __forceinline u32 SubU(u32 num) { return m_u = ( m_u - num & m_masku ) & m_masku; }
-    __forceinline u32 SubV(u32 num) { return m_v = ( m_v - num & m_maskv ) & m_maskv; }
-    __forceinline u32 SubW(u32 num) { return m_w = ( m_w - num & m_maskw ) & m_maskw; }
+    __forceinline uint32_t SubU(uint32_t num) { return m_u = ( m_u - num & m_masku ) & m_masku; }
+    __forceinline uint32_t SubV(uint32_t num) { return m_v = ( m_v - num & m_maskv ) & m_maskv; }
+    __forceinline uint32_t SubW(uint32_t num) { return m_w = ( m_w - num & m_maskw ) & m_maskw; }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Increments a texture coordinate
-    __forceinline u32 IncU()        { return m_u = ( m_u - m_masku ) & m_masku; }
-    __forceinline u32 IncV()        { return m_v = ( m_v - m_maskv ) & m_maskv; }
-    __forceinline u32 IncW()        { return m_w = ( m_w - m_maskw ) & m_maskw; }
+    __forceinline uint32_t IncU()        { return m_u = ( m_u - m_masku ) & m_masku; }
+    __forceinline uint32_t IncV()        { return m_v = ( m_v - m_maskv ) & m_maskv; }
+    __forceinline uint32_t IncW()        { return m_w = ( m_w - m_maskw ) & m_maskw; }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Decrements a texture coordinate
-    __forceinline u32 DecU()        { return m_u = ( m_u - 1 ) & m_masku; }
-    __forceinline u32 DecV()        { return m_v = ( m_v - 1 ) & m_maskv; }
-    __forceinline u32 DecW()        { return m_w = ( m_w - 1 ) & m_maskw; }
+    __forceinline uint32_t DecU()        { return m_u = ( m_u - 1 ) & m_masku; }
+    __forceinline uint32_t DecV()        { return m_v = ( m_v - 1 ) & m_maskv; }
+    __forceinline uint32_t DecW()        { return m_w = ( m_w - 1 ) & m_maskw; }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Gets the current swizzled address for a 2D or 3D texture
-    __forceinline u32 Get2D()      { return m_u | m_v; }
-    __forceinline u32 Get3D()      { return m_u | m_v | m_w; }
+    __forceinline uint32_t Get2D()      { return m_u | m_v; }
+    __forceinline uint32_t Get3D()      { return m_u | m_v | m_w; }
   };
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   PIPELINE_API void UnswizzleBox
     (
-    u8*       src,          // The source buffer (swizzled data)
-    u8*       dst,          // The destination buffer
-    u32       Width,        // The width of the entire texture
-    u32       Height,       // The height of the entire texture (1 for 1D)
-    u32       Depth,        // The depth of the entire texture (1 for 2D)
-    u32       BytesPerPixel // Bytes per pixel of the texture format
+    uint8_t*       src,          // The source buffer (swizzled data)
+    uint8_t*       dst,          // The destination buffer
+    uint32_t       Width,        // The width of the entire texture
+    uint32_t       Height,       // The height of the entire texture (1 for 1D)
+    uint32_t       Depth,        // The depth of the entire texture (1 for 2D)
+    uint32_t       BytesPerPixel // Bytes per pixel of the texture format
     );
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   PIPELINE_API void SwizzleBox
     (
-    u8*         src,          // The source buffer (linear data)
-    u8*         dst,          // The destination buffer (swizzled data)
-    u32         Width,        // The width of the entire texture
-    u32         Height,       // The height of the entire texture (1 for 1D)
-    u32         Depth,        // The depth of the entire texture (1 for 2D)
-    u32         BytesPerPixel // Bytes per pixel of the texture format
+    uint8_t*         src,          // The source buffer (linear data)
+    uint8_t*         dst,          // The destination buffer (swizzled data)
+    uint32_t         Width,        // The width of the entire texture
+    uint32_t         Height,       // The height of the entire texture (1 for 1D)
+    uint32_t         Depth,        // The depth of the entire texture (1 for 2D)
+    uint32_t         BytesPerPixel // Bytes per pixel of the texture format
     );
 }
 

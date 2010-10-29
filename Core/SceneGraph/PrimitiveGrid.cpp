@@ -22,18 +22,18 @@ PrimitiveGrid::PrimitiveGrid(ResourceTracker* tracker)
   m_MajorStep = 0.5f;
 }
 
-void PrimitiveGrid::SetAxisColor( u8 r, u8 g, u8 b, u8 a )
+void PrimitiveGrid::SetAxisColor( uint8_t r, uint8_t g, uint8_t b, uint8_t a )
 {
   m_AxisColor = D3DCOLOR_ARGB( a, r, g, b );
 }
 
 
-void PrimitiveGrid::SetMajorColor( u8 r, u8 g, u8 b, u8 a )
+void PrimitiveGrid::SetMajorColor( uint8_t r, uint8_t g, uint8_t b, uint8_t a )
 {
   m_MajorColor = D3DCOLOR_ARGB( a, r, g, b );
 }
 
-void PrimitiveGrid::SetMinorColor( u8 r, u8 g, u8 b, u8 a )
+void PrimitiveGrid::SetMinorColor( uint8_t r, uint8_t g, uint8_t b, uint8_t a )
 {
   m_MinorColor = D3DCOLOR_ARGB( a, r, g, b );
 }
@@ -125,7 +125,7 @@ void PrimitiveGrid::Update()
     }
   }
   
-  SetElementCount( (u32) m_Vertices.size() );
+  SetElementCount( (uint32_t) m_Vertices.size() );
 
   __super::Update();
 }
@@ -139,7 +139,7 @@ void PrimitiveGrid::Draw( DrawArgs* args, const bool* solid, const bool* transpa
 
   m_Device->SetRenderState( D3DRS_LIGHTING, FALSE );
 
-  u32 lineCount = ( (u32) m_Vertices.size() ) / 2;
+  uint32_t lineCount = ( (uint32_t) m_Vertices.size() ) / 2;
   m_Device->DrawPrimitive( D3DPT_LINELIST, (UINT)GetBaseIndex(), lineCount );
   args->m_LineCount += lineCount;
 

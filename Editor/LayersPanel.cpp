@@ -263,7 +263,7 @@ void LayersPanel::LayerSelectedItems( bool addToLayer )
 
     // If there are selected nodes in the scene, and selected rows in this control...
     const OS_SceneNodeDumbPtr& selectedNodes = m_Scene->GetSelection().GetItems();
-    std::set< u32 > selectedRows = m_Grid->GetSelectedRows();
+    std::set< uint32_t > selectedRows = m_Grid->GetSelectedRows();
     if ( selectedNodes.Size() > 0 && selectedRows.size() > 0 )
     {
         //Log::Debug( "LayerSelectedItems\n" );
@@ -271,8 +271,8 @@ void LayersPanel::LayerSelectedItems( bool addToLayer )
 
         OS_SceneNodeDumbPtr::Iterator nodeItr = selectedNodes.Begin();
         OS_SceneNodeDumbPtr::Iterator nodeEnd = selectedNodes.End();
-        std::set< u32 >::const_iterator rowItr;
-        const std::set< u32 >::const_iterator rowEnd = selectedRows.end();
+        std::set< uint32_t >::const_iterator rowItr;
+        const std::set< uint32_t >::const_iterator rowEnd = selectedRows.end();
         const M_LayerDumbPtr::const_iterator layerEnd = m_Layers.end();
 
         // For each node in the scene's selection list...
@@ -352,7 +352,7 @@ void LayersPanel::DebugDumpSelection()
 {
 #ifdef _DEBUG
     Log::Debug( TXT( "Dumping grid selection.\n" ) );
-    std::set< u32 > selection = m_Grid->GetSelectedRows();
+    std::set< uint32_t > selection = m_Grid->GetSelectedRows();
     const size_t numSelected = selection.size();
     if ( numSelected == 0 )
     {
@@ -361,8 +361,8 @@ void LayersPanel::DebugDumpSelection()
     else
     {
         Log::Debug( TXT( "\t%d item%s selected.\n" ), numSelected, ( numSelected == 1 ) ? TXT( "" ) : TXT( "s" ) );
-        std::set< u32 >::const_iterator rowItr = selection.begin();
-        std::set< u32 >::const_iterator rowEnd = selection.end();
+        std::set< uint32_t >::const_iterator rowItr = selection.begin();
+        std::set< uint32_t >::const_iterator rowEnd = selection.end();
         for ( ; rowItr != rowEnd; ++rowItr )
         {
             const tstring& name = m_Grid->GetRowName( *rowItr );
@@ -459,9 +459,9 @@ void LayersPanel::DeleteSelectedLayers()
         // This makes sure that removing an item doesn't change the row number of another
         // item that will be removed later in the loop.  If we don't do this, we run the
         // risk of invalidating the selection array as we iterate over it.
-        const std::set< u32 >& selection = m_Grid->GetSelectedRows();
-        std::set< u32 >::const_reverse_iterator rowItr = selection.rbegin();
-        std::set< u32 >::const_reverse_iterator rowEnd = selection.rend();
+        const std::set< uint32_t >& selection = m_Grid->GetSelectedRows();
+        std::set< uint32_t >::const_reverse_iterator rowItr = selection.rbegin();
+        std::set< uint32_t >::const_reverse_iterator rowEnd = selection.rend();
         for ( ; rowItr != rowEnd; ++rowItr )
         {
             M_LayerDumbPtr::iterator layerItr = m_Layers.find( m_Grid->GetRowName( *rowItr ) );
@@ -572,9 +572,9 @@ void LayersPanel::OnSelectLayer( wxCommandEvent& event )
     {
         OS_SceneNodeDumbPtr newSelection;
 
-        const std::set< u32 >& selection = m_Grid->GetSelectedRows();
-        std::set< u32 >::const_iterator rowItr = selection.begin();
-        std::set< u32 >::const_iterator rowEnd = selection.end();
+        const std::set< uint32_t >& selection = m_Grid->GetSelectedRows();
+        std::set< uint32_t >::const_iterator rowItr = selection.begin();
+        std::set< uint32_t >::const_iterator rowEnd = selection.end();
         for ( ; rowItr != rowEnd; ++rowItr )
         {
             M_LayerDumbPtr::iterator layerItr = m_Layers.find( m_Grid->GetRowName( *rowItr ) );
@@ -600,7 +600,7 @@ void LayersPanel::SelectionChanged( const SelectionChangeArgs& args )
 {
     if ( args.m_Selection.Size() > 0 )
     {
-        u32 numLayersInSelection = 0;
+        uint32_t numLayersInSelection = 0;
         OS_SceneNodeDumbPtr::Iterator itr = args.m_Selection.Begin();
         OS_SceneNodeDumbPtr::Iterator end = args.m_Selection.End();
         for ( ; itr != end; ++itr )
@@ -620,7 +620,7 @@ void LayersPanel::SelectionChanged( const SelectionChangeArgs& args )
                     m_Grid->DeselectAllRows();
                 }
 
-                i32 row = m_Grid->GetRowNumber( lunaLayer->GetName() );
+                int32_t row = m_Grid->GetRowNumber( lunaLayer->GetName() );
                 HELIUM_ASSERT( row >= 0 );
                 if ( row >= 0 )
                 {

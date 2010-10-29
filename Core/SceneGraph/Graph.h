@@ -11,8 +11,8 @@ namespace Helium
     {
         struct CORE_API EvaluateResult
         {
-            f32 m_TotalTime;
-            u32 m_NodeCount;
+            float32_t m_TotalTime;
+            uint32_t m_NodeCount;
 
             EvaluateResult()
                 : m_TotalTime (0.f)
@@ -63,7 +63,7 @@ namespace Helium
             void Reset();
 
             // assign traversal id
-            u32 AssignVisitedID();
+            uint32_t AssignVisitedID();
 
             // Resets visited values
             void ResetVisitedIDs();
@@ -78,7 +78,7 @@ namespace Helium
             void RemoveNode(SceneGraph::SceneNode* n);
 
             // Propagates dirty status down the graph
-            u32 DirtyNode(SceneGraph::SceneNode* n, GraphDirection direction);
+            uint32_t DirtyNode(SceneGraph::SceneNode* n, GraphDirection direction);
 
             // do setup and traversal work to make all dirty nodes clean
             EvaluateResult EvaluateGraph(bool silent = false);
@@ -113,10 +113,10 @@ namespace Helium
             S_SceneNodeDumbPtr m_CleanupRoots;
 
             // id for assignment
-            u32 m_NextID;
+            uint32_t m_NextID;
 
             // id for evaluating
-            u32 m_CurrentID;
+            uint32_t m_CurrentID;
 
             // number of nodes evaluated
             S_SceneNodeDumbPtr m_EvaluatedNodes;

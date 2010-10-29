@@ -25,7 +25,7 @@ namespace Helium
     void Decode(MipSet* mips);
 
   public:
-    u32       m_levels;
+    uint32_t       m_levels;
     Image*  m_images[MAX_TEXTURE_MIPS];
   };
 }

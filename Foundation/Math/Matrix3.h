@@ -21,8 +21,8 @@ namespace Helium
     public:
         union
         {
-            f32 array1d[9];
-            f32 array2d[3][3];
+            float32_t array1d[9];
+            float32_t array2d[3][3];
             struct
             { 
                 Vector3 x;
@@ -31,9 +31,9 @@ namespace Helium
             };
             struct
             {
-                f32 xx, xy, xz;
-                f32 yx, yy, yz;
-                f32 zx, zy, zz;
+                float32_t xx, xy, xz;
+                float32_t yx, yy, yz;
+                float32_t zx, zy, zz;
             };
         };
 
@@ -79,7 +79,7 @@ namespace Helium
         Matrix3               operator* (const Matrix3& v) const;
         Vector3               operator* (const Vector3& v) const;
 
-        Matrix3&              operator*= (const f32 v)
+        Matrix3&              operator*= (const float32_t v)
         {
             x *= v;
             y *= v;
@@ -87,12 +87,12 @@ namespace Helium
             return *this;
         }
 
-        Matrix3               operator* (const f32 v) const
+        Matrix3               operator* (const float32_t v) const
         {
             return Matrix3 (x * v, y * v, z * v);
         }
 
-        Matrix3&              operator/= (const f32 v)
+        Matrix3&              operator/= (const float32_t v)
         {
             x /= v;
             y /= v;
@@ -100,29 +100,29 @@ namespace Helium
             return *this;
         }
 
-        Matrix3               operator/ (const f32 v) const
+        Matrix3               operator/ (const float32_t v) const
         {
             return Matrix3 (x / v, y / v, z / v);
         }
 
-        Vector3&              operator[] (const u32 i)
+        Vector3&              operator[] (const uint32_t i)
         {
             HELIUM_ASSERT(i < 3);
             return (&x)[i];
         }
 
-        const Vector3&        operator[] (const u32 i) const
+        const Vector3&        operator[] (const uint32_t i) const
         {
             HELIUM_ASSERT(i < 3);
             return (&x)[i];
         }
 
-        f32&                  operator()(const u32 i, const u32 j)
+        float32_t&                  operator()(const uint32_t i, const uint32_t j)
         {
             return (array2d[j][i]);
         }
 
-        const f32&            operator()(const u32 i, const u32 j) const
+        const float32_t&            operator()(const uint32_t i, const uint32_t j) const
         {
             return (array2d[j][i]);
         }
@@ -142,7 +142,7 @@ namespace Helium
             return x.Valid() && y.Valid() && z.Valid();
         }
 
-        f32                   Determinant () const;
+        float32_t                   Determinant () const;
 
         Matrix3&              Invert ();
         Matrix3               Inverted () const;
@@ -157,9 +157,9 @@ namespace Helium
         Matrix3&              SetBasis(Axis axis, const Vector3& v);
         Matrix3&              Orthogonalize (Axis first = SingleAxes::Y, Axis second = SingleAxes::X, Axis third = SingleAxes::Z);
 
-        static Matrix3        RotateX (f32 theta);
-        static Matrix3        RotateY (f32 theta);
-        static Matrix3        RotateZ (f32 theta);
+        static Matrix3        RotateX (float32_t theta);
+        static Matrix3        RotateY (float32_t theta);
+        static Matrix3        RotateZ (float32_t theta);
 
         friend FOUNDATION_API tostream& operator<<(tostream& outStream, const Matrix3& vector);
         friend FOUNDATION_API tistream& operator>>(tistream& inStream, Matrix3& vector);
@@ -230,13 +230,13 @@ namespace Helium
             (m[0][2]*v[0]) + (m[1][2]*v[1]) + (m[2][2]*v[2]));
     }
 
-    inline f32 Matrix3::Determinant() const
+    inline float32_t Matrix3::Determinant() const
     {
         const Matrix3 &m = *this;
 
-        auto f32 det1 = ((m[1][1] * m[2][2]) - (m[1][2] * m[2][1]));
-        auto f32 det2 = ((m[0][2] * m[2][1]) - (m[0][1] * m[2][2]));
-        auto f32 det3 = ((m[0][1] * m[1][2]) - (m[0][2] * m[1][1]));
+        auto float32_t det1 = ((m[1][1] * m[2][2]) - (m[1][2] * m[2][1]));
+        auto float32_t det2 = ((m[0][2] * m[2][1]) - (m[0][1] * m[2][2]));
+        auto float32_t det3 = ((m[0][1] * m[1][2]) - (m[0][2] * m[1][1]));
 
         return (m[0][0] * det1) + (m[1][0] * det2) + (m[2][0] * det3);
     }
@@ -246,11 +246,11 @@ namespace Helium
         Matrix3 m = *this;
         Matrix3 &result = *this;
 
-        f32 det1 = ((m[1][1] * m[2][2]) - (m[1][2] * m[2][1]));
-        f32 det2 = ((m[0][2] * m[2][1]) - (m[0][1] * m[2][2]));
-        f32 det3 = ((m[0][1] * m[1][2]) - (m[0][2] * m[1][1]));
+        float32_t det1 = ((m[1][1] * m[2][2]) - (m[1][2] * m[2][1]));
+        float32_t det2 = ((m[0][2] * m[2][1]) - (m[0][1] * m[2][2]));
+        float32_t det3 = ((m[0][1] * m[1][2]) - (m[0][2] * m[1][1]));
 
-        f32 det = (m[0][0] * det1) + (m[1][0] * det2) + (m[2][0] * det3);
+        float32_t det = (m[0][0] * det1) + (m[1][0] * det2) + (m[2][0] * det3);
 
         if (det != 0)
         {
@@ -286,7 +286,7 @@ namespace Helium
 
     inline Matrix3& Matrix3::Transpose()
     {
-        f32 temp;
+        float32_t temp;
 
         temp = x[1];  x[1] = y[0];  y[0] = temp;
         temp = x[2];  x[2] = z[0];  z[0] = temp;

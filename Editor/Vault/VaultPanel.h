@@ -28,7 +28,7 @@ namespace Helium
             void ClearResults();
 
             void SelectPath( const Helium::Path& path );
-            u32 GetSelectedPaths( std::set< Helium::Path >& paths );
+            uint32_t GetSelectedPaths( std::set< Helium::Path >& paths );
 
             void SaveSettings();
             void OnSearchResultsAvailable( const Editor::SearchResultsAvailableArgs& args );
@@ -54,7 +54,7 @@ namespace Helium
             Helium::Path m_TempPath;
 
             VaultViewMode m_CurrentViewMode;
-            u32 m_CurrentThumbnailSize;
+            uint32_t m_CurrentThumbnailSize;
             wxWindow* m_CurrentView;
 
             wxMenu* m_OptionsMenu;

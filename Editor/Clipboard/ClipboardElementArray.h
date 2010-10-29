@@ -22,8 +22,8 @@ namespace Helium
             ClipboardElementArray();
             virtual ~ClipboardElementArray();
 
-            i32 GetCommonBaseTypeID() const;
-            void SetCommonBaseTypeID( i32 typeID );
+            int32_t GetCommonBaseTypeID() const;
+            void SetCommonBaseTypeID( int32_t typeID );
             bool Add( const Reflect::ElementPtr& item );
             virtual bool Merge( const ReflectClipboardData* source ) HELIUM_OVERRIDE;
 

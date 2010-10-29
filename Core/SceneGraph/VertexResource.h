@@ -20,7 +20,7 @@ namespace Helium
                 return m_Buffer;
             }
 
-            virtual u8* Lock() HELIUM_OVERRIDE; 
+            virtual uint8_t* Lock() HELIUM_OVERRIDE; 
             virtual void Unlock() HELIUM_OVERRIDE; 
             virtual bool SetState() const HELIUM_OVERRIDE; 
 
@@ -28,7 +28,7 @@ namespace Helium
             virtual bool Allocate() HELIUM_OVERRIDE;
             virtual void Release() HELIUM_OVERRIDE;
 
-            u8* m_LockedVerts; 
+            uint8_t* m_LockedVerts; 
 
         };
 

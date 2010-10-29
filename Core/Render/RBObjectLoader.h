@@ -13,7 +13,7 @@ namespace Helium
             RBObjectLoader();
             virtual ~RBObjectLoader();
 
-            u32 ParseFile(const tchar* fname,bool winding);
+            uint32_t ParseFile(const tchar* fname,bool winding);
         };
     }
 }

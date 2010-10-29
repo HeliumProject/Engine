@@ -12,14 +12,14 @@ namespace Helium
         void* m_Handle;
         struct Overlapped
         {
-            u32* Internal;
-            u32* InternalHigh;
+            uint32_t* Internal;
+            uint32_t* InternalHigh;
             union
             {
                 struct
                 {
-                    u32 Offset;
-                    u32 OffsetHigh;
+                    uint32_t Offset;
+                    uint32_t OffsetHigh;
                 };
 
                 void* Pointer;

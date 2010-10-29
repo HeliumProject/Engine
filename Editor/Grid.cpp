@@ -183,9 +183,9 @@ wxPanel* Grid::GetPanel() const
 // Returns the row number for the row with the specified name, or -1 if no
 // row with that name was found.
 // 
-i32 Grid::GetRowNumber( const tstring& name ) const
+int32_t Grid::GetRowNumber( const tstring& name ) const
 {
-  i32 row = -1;
+  int32_t row = -1;
   S_NaturalOrderString::const_iterator found = m_Names.find( name );
   if ( found != m_Names.end() )
   {
@@ -199,11 +199,11 @@ i32 Grid::GetRowNumber( const tstring& name ) const
 // Returns the name of the specified row, or an empty string if the specified
 // row was larger than the number of layers contained in the grid.
 // 
-const tstring& Grid::GetRowName( u32 row ) const
+const tstring& Grid::GetRowName( uint32_t row ) const
 {
   static const tstring emptyString( TXT( "" ) );
 
-  if ( row >= static_cast< u32 >( m_Names.size() ) )
+  if ( row >= static_cast< uint32_t >( m_Names.size() ) )
   {
     return emptyString;
   }
@@ -222,7 +222,7 @@ bool Grid::SetRowName( const tstring& oldName, const tstring& newName )
 {
   bool isOk = false;
 
-  i32 oldRow = GetRowNumber( oldName );
+  int32_t oldRow = GetRowNumber( oldName );
   if ( oldRow >= 0 )
   {
     // Save the state of the old row (including whether or not it was selected).
@@ -248,7 +248,7 @@ bool Grid::SetRowName( const tstring& oldName, const tstring& newName )
       // Restore selection if necessary
       if ( isSelected )
       {
-        i32 newRow = GetRowNumber( newName );
+        int32_t newRow = GetRowNumber( newName );
         HELIUM_ASSERT( newRow >= 0 );
         SelectRow( newRow, true );
       }
@@ -263,7 +263,7 @@ bool Grid::SetRowName( const tstring& oldName, const tstring& newName )
 // Returns true if the "Visiblity" column for the specified row has a checkmark
 // in it.
 // 
-bool Grid::IsRowVisibleChecked( u32 row )
+bool Grid::IsRowVisibleChecked( uint32_t row )
 {
   return m_Grid->GetCellValue( row, m_ColumnViz ) == BOOL_TRUE;
 }
@@ -273,7 +273,7 @@ bool Grid::IsRowVisibleChecked( u32 row )
 // No events are generated since this is not in response to a user interaction
 // (such as clicking on the checkbox with a mouse).
 // 
-void Grid::SetRowVisibleState( u32 row, bool checked )
+void Grid::SetRowVisibleState( uint32_t row, bool checked )
 {
   m_Grid->SetCellValue( row, m_ColumnViz, checked ? BOOL_TRUE : BOOL_FALSE );
 }
@@ -282,7 +282,7 @@ void Grid::SetRowVisibleState( u32 row, bool checked )
 // Returns true if the "selectable" column for the specified row has a checkmark
 // in it.
 // 
-bool Grid::IsRowSelectableChecked( u32 row )
+bool Grid::IsRowSelectableChecked( uint32_t row )
 {
   return m_Grid->GetCellValue( row, m_ColumnSel ) == BOOL_TRUE;
 }
@@ -292,7 +292,7 @@ bool Grid::IsRowSelectableChecked( u32 row )
 // No events are generated since this is not in response to a user interaction
 // (such as clicking on the checkbox with a mouse).
 // 
-void Grid::SetRowSelectableSate( u32 row, bool checked )
+void Grid::SetRowSelectableSate( uint32_t row, bool checked )
 {
   m_Grid->SetCellValue( row, m_ColumnSel, checked ? BOOL_TRUE : BOOL_FALSE );
 }
@@ -305,7 +305,7 @@ void Grid::SetRowSelectableSate( u32 row, bool checked )
 bool Grid::AddRow( const tstring& name, bool visible, bool selectable )
 {
   bool isOk = false;
-  i32 row = InsertName( name );
+  int32_t row = InsertName( name );
   if ( row >= 0 && m_Grid->InsertRows( row, 1 ) )
   {
     m_Grid->SetCellValue( name.c_str(), row, m_ColumnName );
@@ -325,7 +325,7 @@ bool Grid::AddRow( const tstring& name, bool visible, bool selectable )
 ///////////////////////////////////////////////////////////////////////////////
 // Removes the layer at the specified row index in the grid.
 // 
-bool Grid::RemoveRow( u32 row )
+bool Grid::RemoveRow( uint32_t row )
 {
   bool isOk = false;
   if ( row < m_Names.size() )
@@ -346,7 +346,7 @@ bool Grid::RemoveRow( u32 row )
 bool Grid::RemoveRow( const tstring& name )
 {
   bool isOk = false;
-  i32 row = GetRowNumber( name );
+  int32_t row = GetRowNumber( name );
   if ( row >= 0 )
   {
     isOk = RemoveRow( row );
@@ -386,7 +386,7 @@ bool Grid::IsAnythingSelected() const
 bool Grid::IsSelected( const tstring& name ) const
 {
   bool isSelected = false;
-  i32 row = GetRowNumber( name );
+  int32_t row = GetRowNumber( name );
   if ( row >= 0 )
   {
     isSelected = m_Grid->IsInSelection( row, m_ColumnName );
@@ -400,7 +400,7 @@ bool Grid::IsSelected( const tstring& name ) const
 // selected rows.  Otherwise, the selection is cleared and only the specified
 // row will be selected when this function returns.
 // 
-void Grid::SelectRow( u32 row, bool addToSelection )
+void Grid::SelectRow( uint32_t row, bool addToSelection )
 {
   // Seems to be some weirdness with row selection in wxGrid.  For example,
   // I would have thought that we could just call:
@@ -424,26 +424,26 @@ void Grid::DeselectAllRows()
 // Returns a set of all the rows that are currently selected, in ascending 
 // order by row number.
 // 
-std::set< u32 > Grid::GetSelectedRows() const
+std::set< uint32_t > Grid::GetSelectedRows() const
 {
   // NOTE: m_Grid->GetSelectedRows() only reports rows that are selected by clicking on the
   // row header (or calling SelectRows directly).  This does us no good since we don't have
   // row headers.  We have to calculate the row selection manually.
   //wxArrayInt selection = m_Grid->GetSelectedRows();
 
-  std::set< u32 > selection;
+  std::set< uint32_t > selection;
   wxGridCellCoordsArray topLeftArray = m_Grid->GetSelectionBlockTopLeft();
   wxGridCellCoordsArray bottomRightArray = m_Grid->GetSelectionBlockBottomRight();
   HELIUM_ASSERT( topLeftArray.GetCount() == bottomRightArray.GetCount() );
 
-  u32 currentTop = 0;
-  u32 currentBottom = 0;
+  uint32_t currentTop = 0;
+  uint32_t currentBottom = 0;
   const size_t numCells = topLeftArray.GetCount();
   for ( ; currentTop < numCells; ++currentTop, ++currentBottom )
   {
-    u32 firstRow = topLeftArray[currentTop].GetRow();
-    u32 lastRow = bottomRightArray[currentBottom].GetRow();
-    for ( u32 currentRow = firstRow; currentRow <= lastRow; ++currentRow )
+    uint32_t firstRow = topLeftArray[currentTop].GetRow();
+    uint32_t lastRow = bottomRightArray[currentBottom].GetRow();
+    for ( uint32_t currentRow = firstRow; currentRow <= lastRow; ++currentRow )
     {
       selection.insert( currentRow );
     }
@@ -478,9 +478,9 @@ void Grid::EndBatch()
 // not be inserted into the list for some reason (perhaps it was already
 // in the list?).
 // 
-i32 Grid::InsertName( const tstring& name )
+int32_t Grid::InsertName( const tstring& name )
 {
-  i32 row = -1;
+  int32_t row = -1;
 
   // The name should be unique, so add it to our list
   Insert<S_NaturalOrderString>::Result inserted = m_Names.insert( name );
@@ -522,11 +522,11 @@ void Grid::ResizeColumns()
   // prevent the horizontal scrollbar from also showing up.  This control does not ever
   // allow the horizontal scrollbar to be present.
   bool isVScrollbarShowing = ( gridWindowSize.x != gridSize.x );
-  const i32 scrollGutter = isVScrollbarShowing ? wxSystemSettings::GetMetric( wxSYS_VSCROLL_X ) : 0;
-  const i32 startWidth = m_Grid->GetColSize( m_ColumnViz ) + m_Grid->GetColSize( m_ColumnSel );
-  const i32 totalWidth = m_Panel->GetSize().x;
-  const i32 pad = m_Grid->GetScrollLineX() + scrollGutter;
-  const i32 width = totalWidth - startWidth - pad;
+  const int32_t scrollGutter = isVScrollbarShowing ? wxSystemSettings::GetMetric( wxSYS_VSCROLL_X ) : 0;
+  const int32_t startWidth = m_Grid->GetColSize( m_ColumnViz ) + m_Grid->GetColSize( m_ColumnSel );
+  const int32_t totalWidth = m_Panel->GetSize().x;
+  const int32_t pad = m_Grid->GetScrollLineX() + scrollGutter;
+  const int32_t width = totalWidth - startWidth - pad;
   m_Grid->SetColSize( m_ColumnName, width );
 }
 
@@ -605,7 +605,7 @@ void Grid::OnMouseLeftUp( wxMouseEvent& event )
 void Grid::OnCellChange( wxGridEvent& event )
 {
   event.Skip();
-  if ( !m_IsCellChanging && event.GetCol() == m_ColumnName && event.GetRow() >= 0 && event.GetRow() < static_cast< i32 >( m_Names.size() ) )
+  if ( !m_IsCellChanging && event.GetCol() == m_ColumnName && event.GetRow() >= 0 && event.GetRow() < static_cast< int32_t >( m_Names.size() ) )
   {
     // Protect this function from being re-entered
     m_IsCellChanging = true;
@@ -633,7 +633,7 @@ void Grid::OnCellChange( wxGridEvent& event )
       m_RowRenamed.Raise( GridRowRenamedArgs( event.GetRow(), oldName, newName ) );
     }
 
-    i32 newRow = GetRowNumber( newName );
+    int32_t newRow = GetRowNumber( newName );
     if ( newRow >= 0 && !m_Grid->IsVisible( newRow, m_ColumnName, false ) )
     {
       m_Grid->MakeCellVisible( newRow, m_ColumnName );

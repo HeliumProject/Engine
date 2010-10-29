@@ -43,9 +43,9 @@ Instance::~Instance()
 {
 }
 
-i32 Instance::GetImageIndex() const
+int32_t Instance::GetImageIndex() const
 {
-    i32 image = -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "null" ) );
+    int32_t image = -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "null" ) );
 
     if ( GetNodeType() )
     {

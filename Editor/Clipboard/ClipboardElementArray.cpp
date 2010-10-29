@@ -27,7 +27,7 @@ ClipboardElementArray::~ClipboardElementArray()
 // Returns the type ID of the base class that all elements in this collection
 // must derive from.
 // 
-i32 ClipboardElementArray::GetCommonBaseTypeID() const
+int32_t ClipboardElementArray::GetCommonBaseTypeID() const
 {
     return Reflect::Registry::GetInstance()->GetClass( m_CommonBaseClass )->m_TypeID;
 }
@@ -35,7 +35,7 @@ i32 ClipboardElementArray::GetCommonBaseTypeID() const
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the base class that all elements in this collection must derive from.
 // 
-void ClipboardElementArray::SetCommonBaseTypeID( i32 typeID )
+void ClipboardElementArray::SetCommonBaseTypeID( int32_t typeID )
 {
     bool converted = Helium::ConvertString( Reflect::Registry::GetInstance()->GetClass( typeID )->m_FullName, m_CommonBaseClass );
     HELIUM_ASSERT( converted );

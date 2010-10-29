@@ -37,7 +37,7 @@ bool ImageProcess::Bank::LoadImages()
 {
   Log::Bullet bullet( TXT( "Loading...\n" ) );
 
-  u32 c=0;
+  uint32_t c=0;
   for (V_Definition::iterator i=m_textures.begin();i!=m_textures.end();++i)
   {
     tstring filename = (*i)->m_texture_file;
@@ -168,7 +168,7 @@ bool ImageProcess::Bank::CompressImages()
 {
   Log::Bullet bullet( TXT( "Compressing...\n" ) );
 
-  u32 count=0;
+  uint32_t count=0;
   for (V_Definition::iterator i=m_textures.begin();i!=m_textures.end();i++)
   {
     if ((*i)->m_texture)
@@ -211,8 +211,8 @@ bool ImageProcess::Bank::CompressImages()
         throw Helium::Exception( TXT( "Failed to generate mips, aborting" ) );
       }
 
-      u32 size = 0;
-      for (u32 level=0; level<mips->m_levels_used; level++)
+      uint32_t size = 0;
+      for (uint32_t level=0; level<mips->m_levels_used; level++)
         size += mips->m_datasize[level];
 
       Log::Print( Log::Levels::Verbose, TXT( "%8.02f kb used by '%s'\n" ), (float)(size) / 1024.f, (*i)->m_texture_file.c_str() );

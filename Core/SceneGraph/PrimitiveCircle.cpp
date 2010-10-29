@@ -22,21 +22,21 @@ void PrimitiveCircle::Update()
   SetElementCount( m_RadiusSteps*2 + (m_RadiusSteps + 2) );
   m_Vertices.clear();
 
-  float stepAngle = (f32)(Pi)*2.0f / (f32)(m_RadiusSteps);
+  float stepAngle = (float32_t)(Pi)*2.0f / (float32_t)(m_RadiusSteps);
 
   for (int x=0; x<m_RadiusSteps; x++)
   {
-    float theta = (f32)(x) * stepAngle;
+    float theta = (float32_t)(x) * stepAngle;
 
     if( !m_HackyRotateFlag )
     {
-      m_Vertices.push_back(Position (0.0f, (f32)(cos(theta)) * m_Radius, (f32)(sin(theta)) * m_Radius));
-      m_Vertices.push_back(Position (0.0f, (f32)(cos(theta + stepAngle)) * m_Radius, (f32)(sin(theta + stepAngle)) * m_Radius));
+      m_Vertices.push_back(Position (0.0f, (float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius));
+      m_Vertices.push_back(Position (0.0f, (float32_t)(cos(theta + stepAngle)) * m_Radius, (float32_t)(sin(theta + stepAngle)) * m_Radius));
     }
     else
     {
-      m_Vertices.push_back(Position ((f32)(sin(theta)) * m_Radius, (f32)(cos(theta)) * m_Radius, 0.0f ) );
-      m_Vertices.push_back(Position ((f32)(sin(theta + stepAngle)) * m_Radius, (f32)(cos(theta + stepAngle)) * m_Radius, 0.0f ) );
+      m_Vertices.push_back(Position ((float32_t)(sin(theta)) * m_Radius, (float32_t)(cos(theta)) * m_Radius, 0.0f ) );
+      m_Vertices.push_back(Position ((float32_t)(sin(theta + stepAngle)) * m_Radius, (float32_t)(cos(theta + stepAngle)) * m_Radius, 0.0f ) );
     }    
   }
 
@@ -44,26 +44,26 @@ void PrimitiveCircle::Update()
 
   for (int x=0; x<m_RadiusSteps; x++)
   {
-    float theta = (f32)(x) * stepAngle;
+    float theta = (float32_t)(x) * stepAngle;
 
     if( !m_HackyRotateFlag )
     {
-      m_Vertices.push_back(Position (0.0f, (f32)(cos(theta)) * m_Radius, (f32)(sin(theta)) * m_Radius));
+      m_Vertices.push_back(Position (0.0f, (float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius));
     }
     else
     {
-      m_Vertices.push_back(Position ((f32)(sin(theta)) * m_Radius, (f32)(cos(theta)) * m_Radius, 0.0f ) );
+      m_Vertices.push_back(Position ((float32_t)(sin(theta)) * m_Radius, (float32_t)(cos(theta)) * m_Radius, 0.0f ) );
     }
 
     if (x+1 >= m_RadiusSteps)
     {
       if( !m_HackyRotateFlag )
       {
-        m_Vertices.push_back(Position (0.0f, (f32)(cos(theta + stepAngle)) * m_Radius, (f32)(sin(theta + stepAngle)) * m_Radius));
+        m_Vertices.push_back(Position (0.0f, (float32_t)(cos(theta + stepAngle)) * m_Radius, (float32_t)(sin(theta + stepAngle)) * m_Radius));
       }
       else
       {
-        m_Vertices.push_back(Position ((f32)(sin(theta + stepAngle)) * m_Radius, (f32)(cos(theta + stepAngle)) * m_Radius, 0.0f  ) );
+        m_Vertices.push_back(Position ((float32_t)(sin(theta + stepAngle)) * m_Radius, (float32_t)(cos(theta + stepAngle)) * m_Radius, 0.0f  ) );
       }
     }
   }
@@ -105,7 +105,7 @@ void PrimitiveCircle::DrawHiddenBack(DrawArgs* args, const SceneGraph::Camera* c
     return;
 
   int i = 0, count = 0;
-  float stepAngle = (f32)(Pi)*2.0f / (f32)(m_RadiusSteps);
+  float stepAngle = (float32_t)(Pi)*2.0f / (float32_t)(m_RadiusSteps);
   
   Vector3 position (m.t.x, m.t.y, m.t.z);
 
@@ -116,13 +116,13 @@ void PrimitiveCircle::DrawHiddenBack(DrawArgs* args, const SceneGraph::Camera* c
 
   for (int x=0; x<m_RadiusSteps; x++)
   {
-    float theta = (f32)(x) * stepAngle;
+    float theta = (float32_t)(x) * stepAngle;
 
     // circle point 1
-    Vector3 v1 (0.0f, (f32)(cos(theta)) * m_Radius, (f32)(sin(theta)) * m_Radius);
+    Vector3 v1 (0.0f, (float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius);
 
     // circle point 2
-    Vector3 v2 (0.0f, (f32)(cos(theta + stepAngle)) * m_Radius, (f32)(sin(theta + stepAngle)) * m_Radius);
+    Vector3 v2 (0.0f, (float32_t)(cos(theta + stepAngle)) * m_Radius, (float32_t)(sin(theta + stepAngle)) * m_Radius);
 
     // middle point of circle segment
     Vector3 v = (v1 + v2) * 0.5f;

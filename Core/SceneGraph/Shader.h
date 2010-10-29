@@ -24,7 +24,7 @@ namespace Helium
             Shader();
             ~Shader();
 
-            virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
+            virtual int32_t GetImageIndex() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
 
             virtual void Create() HELIUM_OVERRIDE;
@@ -45,7 +45,7 @@ namespace Helium
         protected:
             // Non-reflected
             bool                m_Alpha;
-            u32                 m_BaseTextureSize;
+            uint32_t                 m_BaseTextureSize;
             IDirect3DTexture9*  m_BaseTexture;
         };
     }

@@ -13,26 +13,26 @@ namespace Helium
         class VaultSearchResults : public Helium::RefCountBase< VaultSearchResults >
         {
         public:
-            VaultSearchResults( u32 vaultSearchID = 0 );
+            VaultSearchResults( uint32_t vaultSearchID = 0 );
             VaultSearchResults( const VaultSearchResults* results );
             virtual ~VaultSearchResults();
 
             void Clear();
             bool HasResults() const;
 
-            const std::map< u64, Helium::Path >& GetPathsMap() const;
+            const std::map< uint64_t, Helium::Path >& GetPathsMap() const;
             bool AddPath( const Helium::Path& path );
             bool RemovePath( const Helium::Path& path );
 
-            i32 GetSearchID() { return m_VaultSearchID; }
+            int32_t GetSearchID() { return m_VaultSearchID; }
 
         private:
             // This is the ID of the VaultSearch that created these results, for easy of debugging
-            i32 m_VaultSearchID;
+            int32_t m_VaultSearchID;
             
-            std::map< u64, Helium::Path > m_Paths;
+            std::map< uint64_t, Helium::Path > m_Paths;
 
-            const Helium::Path* Find( const u64& hash ) const;
+            const Helium::Path* Find( const uint64_t& hash ) const;
         };
         typedef Helium::SmartPtr< VaultSearchResults > VaultSearchResultsPtr;
     }

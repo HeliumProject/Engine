@@ -5,7 +5,7 @@
 
 using namespace Helium;
 
-static inline u32 GetLineStride(u32 bits_per_pixel, u32 width)
+static inline uint32_t GetLineStride(uint32_t bits_per_pixel, uint32_t width)
 {
 #if ALIGN_DDS_STRIDE_TO_4_BYTE_BOUNDARIES
   return (((bits_per_pixel * width) >> 3) + 3) & 0xfffffffc;	// align up to 4 byte boundary
@@ -14,7 +14,7 @@ static inline u32 GetLineStride(u32 bits_per_pixel, u32 width)
 #endif
 }
 
-static u32  GetFourCC(Helium::OutputColorFormat format)
+static uint32_t  GetFourCC(Helium::OutputColorFormat format)
 {
   switch(format)
   {
@@ -33,7 +33,7 @@ static u32  GetFourCC(Helium::OutputColorFormat format)
   return 0;
 }
 
-static u32  GetLinearSize(Helium::OutputColorFormat format, u32 width, u32 height)
+static uint32_t  GetLinearSize(Helium::OutputColorFormat format, uint32_t width, uint32_t height)
 {
   switch(format)
   {
@@ -61,7 +61,7 @@ static u32  GetLinearSize(Helium::OutputColorFormat format, u32 width, u32 heigh
   return (width*height);
 }
 
-static u32  GetPitchOrLinearSize(Helium::OutputColorFormat format, u32 width, u32 height)
+static uint32_t  GetPitchOrLinearSize(Helium::OutputColorFormat format, uint32_t width, uint32_t height)
 {
   switch(format)
   {
@@ -80,7 +80,7 @@ static u32  GetPitchOrLinearSize(Helium::OutputColorFormat format, u32 width, u3
   return 0;
 }
 
-static u32  GetPixelFormatFlag(Helium::OutputColorFormat format)
+static uint32_t  GetPixelFormatFlag(Helium::OutputColorFormat format)
 {
   switch(format)
   {
@@ -117,7 +117,7 @@ static u32  GetPixelFormatFlag(Helium::OutputColorFormat format)
   return 0;
 }
 
-static u32  GetRedMask(Helium::OutputColorFormat format)
+static uint32_t  GetRedMask(Helium::OutputColorFormat format)
 {
   switch(format)
   {
@@ -142,7 +142,7 @@ static u32  GetRedMask(Helium::OutputColorFormat format)
   return 0;
 }
 
-static u32  GetGreenMask(Helium::OutputColorFormat format)
+static uint32_t  GetGreenMask(Helium::OutputColorFormat format)
 {
   switch(format)
   {
@@ -163,7 +163,7 @@ static u32  GetGreenMask(Helium::OutputColorFormat format)
   return 0;
 }
 
-static u32  GetBlueMask(Helium::OutputColorFormat format)
+static uint32_t  GetBlueMask(Helium::OutputColorFormat format)
 {
   switch(format)
   {
@@ -184,7 +184,7 @@ static u32  GetBlueMask(Helium::OutputColorFormat format)
   return 0;
 }
 
-static u32  GetAlphaMask(Helium::OutputColorFormat format)
+static uint32_t  GetAlphaMask(Helium::OutputColorFormat format)
 {
   switch(format)
   {
@@ -208,7 +208,7 @@ static u32  GetAlphaMask(Helium::OutputColorFormat format)
   return 0;
 }
 
-static u32  GetBitCount(Helium::OutputColorFormat format)
+static uint32_t  GetBitCount(Helium::OutputColorFormat format)
 {
   switch(format)
   {
@@ -251,7 +251,7 @@ static u32  GetBitCount(Helium::OutputColorFormat format)
 // Returns bits per pixel for 4cc pixel formats that can be found in DDS files
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-static u32 GetFourCCPixelSize(u32 cc)
+static uint32_t GetFourCCPixelSize(uint32_t cc)
 {
   switch (cc)
   {
@@ -474,7 +474,7 @@ static Helium::OutputColorFormat GetOutputCompatibleColorFormat(Helium::DDSPixel
 // Get the bits per pixel of the pixels in the DDS files
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-static u32 GetBitsPerPixel(Helium::DDSPixelFormat* pf)
+static uint32_t GetBitsPerPixel(Helium::DDSPixelFormat* pf)
 {
   if (pf->m_flags & DDS_PF_FLAGS_FOURCC)
   {
@@ -493,15 +493,15 @@ static u32 GetBitsPerPixel(Helium::DDSPixelFormat* pf)
 // CalculateImageAndMipSize()
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-u32 CalculateImageAndMipSize(u32 pixel_size,u32 width,u32 height,u32 depth,u32 mip_count)
+uint32_t CalculateImageAndMipSize(uint32_t pixel_size,uint32_t width,uint32_t height,uint32_t depth,uint32_t mip_count)
 {
   if (depth==0)
     depth=1;
 
-  u32 size = 0;
-  for (u32 m=0;m<mip_count;m++)
+  uint32_t size = 0;
+  for (uint32_t m=0;m<mip_count;m++)
   {
-    u32 line_stride = GetLineStride(pixel_size, width);
+    uint32_t line_stride = GetLineStride(pixel_size, width);
     size = size + (line_stride*height*depth);
     width = MAX(1,width>>1);
     height = MAX(1,height>>1);
@@ -542,18 +542,18 @@ bool IsDXTC(Helium::DDSPixelFormat* pf)
 // Calculates the number of bytes to the next image in the source data
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-u32 CalculateImageSize(Helium::DDSPixelFormat* pf,u32 width,u32 height,u32 depth)
+uint32_t CalculateImageSize(Helium::DDSPixelFormat* pf,uint32_t width,uint32_t height,uint32_t depth)
 {
   if (depth==0)
     depth=1;
 
-  u32 bits = GetBitsPerPixel(pf);
+  uint32_t bits = GetBitsPerPixel(pf);
   if (IsDXTC(pf))
   {
     return (MAX(1,width>>2)*MAX(1,height>>2)*bits*16)>>3;
   }
 
-  u32 line_stride = GetLineStride(bits, width);
+  uint32_t line_stride = GetLineStride(bits, width);
 
   return (line_stride*height*depth);
 }
@@ -573,13 +573,13 @@ Image* Image::LoadDDS(const void* ddsadr, bool convert_to_linear)
 {
   DDSHeader* header = (DDSHeader*)ddsadr;
 
-  u32 width;
-  u32 height;
-  u32 depth;
-  u32 line_stride;
-  u32 levels;
-  u32 pixel_size;
-  u8* image_data = (u8*)(header+1);
+  uint32_t width;
+  uint32_t height;
+  uint32_t depth;
+  uint32_t line_stride;
+  uint32_t levels;
+  uint32_t pixel_size;
+  uint8_t* image_data = (uint8_t*)(header+1);
 
   bool faces[6];
 
@@ -614,8 +614,8 @@ Image* Image::LoadDDS(const void* ddsadr, bool convert_to_linear)
     depth = 0;    // signal that this is a cubemap
 
     // scan the flags to see which cube faces are present
-    u32 mask = DDS_CAPS2_CUBEMAP_POSX;
-    for (u32 f=0;f<6;f++)
+    uint32_t mask = DDS_CAPS2_CUBEMAP_POSX;
+    for (uint32_t f=0;f<6;f++)
     {
       faces[f] = (header->m_caps.m_caps2 & mask)!=0;
       mask<<=1;
@@ -674,23 +674,23 @@ Image* Image::LoadDDS(const void* ddsadr, bool convert_to_linear)
   }
 
   Image*  result     = new Image(width,height,depth,fmt);
-  u32       image_size = CalculateImageAndMipSize(pixel_size,width,height,depth,levels);
-  u32 d = depth;
+  uint32_t       image_size = CalculateImageAndMipSize(pixel_size,width,height,depth,levels);
+  uint32_t d = depth;
 
   if (d==0)
   {
     d = 1;
   }
 
-  for (u32 f=0;f<6;f++)
+  for (uint32_t f=0;f<6;f++)
   {
     if (faces[f])
     {
-      u8* face_data = image_data;
+      uint8_t* face_data = image_data;
 
       if (fmt == CF_UNKNOWN)
       {
-        u32 flags;
+        uint32_t flags;
         if (header->m_pixel_format.m_fourcc == Helium::DDS_CC_D3DFMT_DXT1)
         {
           flags = squish::kDxt1;
@@ -710,7 +710,7 @@ Image* Image::LoadDDS(const void* ddsadr, bool convert_to_linear)
           return NULL;
         }
 
-        u8* src_rgba  = new u8[width*height*4];
+        uint8_t* src_rgba  = new uint8_t[width*height*4];
         squish::DecompressImage(src_rgba, width,  height,  face_data, flags);
         result->FillFaceData(f, CF_ARGB8888, src_rgba);
         result->m_NativeFormat  = CF_ARGB8888;
@@ -749,9 +749,9 @@ MipSet* Image::LoadDDSToMipSet(const void* ddsadr)
 {
   DDSHeader* header = (DDSHeader*)ddsadr;
 
-  u32 levels=1;
-  u32 pixel_size;
-  u8* image_data = (u8*)(header+1);
+  uint32_t levels=1;
+  uint32_t pixel_size;
+  uint8_t* image_data = (uint8_t*)(header+1);
 
   bool faces[6];
 
@@ -806,8 +806,8 @@ MipSet* Image::LoadDDSToMipSet(const void* ddsadr)
     mips->m_texture_type = Image::CUBE;
 
     // scan the flags to see which cube faces are present
-    u32 mask = DDS_CAPS2_CUBEMAP_POSX;
-    for (u32 f=0;f<6;f++)
+    uint32_t mask = DDS_CAPS2_CUBEMAP_POSX;
+    for (uint32_t f=0;f<6;f++)
     {
       faces[f] = (header->m_caps.m_caps2 & mask)!=0;
       mask<<=1;
@@ -845,25 +845,25 @@ MipSet* Image::LoadDDSToMipSet(const void* ddsadr)
   }
 
 
-  for (u32 f=0;f<6;f++)
+  for (uint32_t f=0;f<6;f++)
   {
-    u8* face_data = image_data;
+    uint8_t* face_data = image_data;
     if (faces[f])
     {
-      u32 w  = mips->m_width;
-      u32 h  = mips->m_height;
-      u32 d = mips->m_depth;
+      uint32_t w  = mips->m_width;
+      uint32_t h  = mips->m_height;
+      uint32_t d = mips->m_depth;
       if (d==0)
         d=1;
 
-      for (u32 level=0;level<levels;level++)
+      for (uint32_t level=0;level<levels;level++)
       {
-        u32 bytes = CalculateImageSize(&header->m_pixel_format,w,h,d);
+        uint32_t bytes = CalculateImageSize(&header->m_pixel_format,w,h,d);
         mips->m_datasize[level] = bytes;
         mips->m_levels[f][level].m_width = w;
         mips->m_levels[f][level].m_height = h;
         mips->m_levels[f][level].m_depth = d;
-        mips->m_levels[f][level].m_data = new u8[bytes];
+        mips->m_levels[f][level].m_data = new uint8_t[bytes];
 
         memcpy(mips->m_levels[f][level].m_data,face_data,bytes);
         face_data+=bytes;
@@ -950,14 +950,14 @@ bool Helium::MipSet::WriteDDS(const tchar* fname) const
 
   fwrite(&header, sizeof(header), 1, file);
 
-  u32 num_levels = m_levels_used;
+  uint32_t num_levels = m_levels_used;
 
-  for(u32 face = 0; face < 6; ++face)
+  for(uint32_t face = 0; face < 6; ++face)
   {
-    for(u32 level = 0; level < num_levels; ++level)
+    for(uint32_t level = 0; level < num_levels; ++level)
     {
       const Helium::MipSet::MipInfo*  face_data       = &m_levels[face][level];
-      const u32                   dds_linear_size = GetLinearSize(m_format, face_data->m_width, face_data->m_height);
+      const uint32_t                   dds_linear_size = GetLinearSize(m_format, face_data->m_width, face_data->m_height);
       fwrite(face_data->m_data, dds_linear_size, 1, file);
     }
 

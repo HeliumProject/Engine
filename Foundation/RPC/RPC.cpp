@@ -37,7 +37,7 @@ void Interface::AddInvoker(InvokerPtr invoker)
 
 Invoker* Interface::GetInvoker(const char* name)
 {
-    for ( u32 i=0; i<m_InvokerCount; i++ )
+    for ( uint32_t i=0; i<m_InvokerCount; i++ )
     {
         if ( !strcmp( m_Invokers[i]->GetName(), name ) )
         {
@@ -59,7 +59,7 @@ void Host::Stack::Reset()
     m_Size = 0;
 }
 
-i32 Host::Stack::Size()
+int32_t Host::Stack::Size()
 {
     return m_Size;
 }
@@ -121,7 +121,7 @@ void Host::AddInterface(Interface* interface)
 
 Interface* Host::GetInterface(const char* name)
 {
-    for ( u32 i=0; i<m_InterfaceCount; i++ )
+    for ( uint32_t i=0; i<m_InterfaceCount; i++ )
     {
         if ( !strcmp( m_Interfaces[i]->GetName(), name ) )
         {
@@ -138,12 +138,12 @@ void Host::SetConnection(IPC::Connection* con)
     m_ConnectionCount = m_Connection->GetConnectCount();
 }
 
-void Host::SetTimeout(i32 timeout)
+void Host::SetTimeout(int32_t timeout)
 {
     m_Timeout = timeout;
 }
 
-IPC::Message* Host::Create(Invoker* invoker, u32 size, i32 transaction)
+IPC::Message* Host::Create(Invoker* invoker, uint32_t size, int32_t transaction)
 {
 #pragma TODO("Pack the invoker and interface name into the message data")
     invoker->GetName();
@@ -159,7 +159,7 @@ IPC::Message* Host::Create(Invoker* invoker, u32 size, i32 transaction)
     }
 }
 
-void Host::Emit(Invoker* invoker, Args* args, u32 size, SwizzleFunc swizzler)
+void Host::Emit(Invoker* invoker, Args* args, uint32_t size, SwizzleFunc swizzler)
 {
     if (Connected())
     {
@@ -172,7 +172,7 @@ void Host::Emit(Invoker* invoker, Args* args, u32 size, SwizzleFunc swizzler)
             m_Stack.Reset();
         }
 
-        u32 size = 0;
+        uint32_t size = 0;
 
         if (args != NULL)
         {
@@ -188,7 +188,7 @@ void Host::Emit(Invoker* invoker, Args* args, u32 size, SwizzleFunc swizzler)
 
         IPC::Message* message = Create(invoker, size);
 
-        u8* ptr = message->GetData();
+        uint8_t* ptr = message->GetData();
 
         if (args != NULL)
         {
@@ -212,14 +212,14 @@ void Host::Emit(Invoker* invoker, Args* args, u32 size, SwizzleFunc swizzler)
             ptr += args->m_PayloadSize;
         }
 
-        HELIUM_ASSERT((u32)(ptr - message->GetData()) == size);
+        HELIUM_ASSERT((uint32_t)(ptr - message->GetData()) == size);
 
 #ifdef RPC_DEBUG_MSG
-        u32 msg_id = message->GetID();
-        u32 msg_size = message->GetSize();
+        uint32_t msg_id = message->GetID();
+        uint32_t msg_size = message->GetSize();
 #endif
 
-        i32 msg_transaction = message->GetTransaction();
+        int32_t msg_transaction = message->GetTransaction();
         if (m_Connection->Send(message)!=IPC::ConnectionStates::Active)
         {
             delete message;
@@ -378,13 +378,13 @@ bool Host::Invoke(IPC::Message* msg)
     if (msg->GetSize() > 0 && args->m_Flags & (RPC::Flags::ReplyWithArgs | RPC::Flags::ReplyWithPayload))
     {
         // total size of reply
-        u32 size = 0;
+        uint32_t size = 0;
 
         // size of args section
-        u32 argSize = invoker->GetArgsSize();
+        uint32_t argSize = invoker->GetArgsSize();
 
         // size of payload section
-        u32 payload_size = msg->GetSize() - argSize;
+        uint32_t payload_size = msg->GetSize() - argSize;
 
         // if we have a ref args
         if (args->m_Flags & RPC::Flags::ReplyWithArgs)
@@ -404,7 +404,7 @@ bool Host::Invoke(IPC::Message* msg)
         reply = Create(invoker, size, msg->GetTransaction());
 
         // where to write
-        u8* ptr = reply->GetData();
+        uint8_t* ptr = reply->GetData();
 
         // if we have a ref args
         if (args->m_Flags & RPC::Flags::ReplyWithArgs)
@@ -432,7 +432,7 @@ bool Host::Invoke(IPC::Message* msg)
         }
 
         // assert we did not overrun message size
-        HELIUM_ASSERT((u32)(ptr - reply->GetData()) == size);
+        HELIUM_ASSERT((uint32_t)(ptr - reply->GetData()) == size);
     }
     else // no data, or no ref args or payload
     {
@@ -457,7 +457,7 @@ bool Host::Invoke(IPC::Message* msg)
     return true;
 }
 
-u8* Host::TakeData()
+uint8_t* Host::TakeData()
 {
     Frame* frame = m_Stack.Top();
 
@@ -557,7 +557,7 @@ bool Host::Process(bool wait)
             }
             else // else this is not a reply, meaning this is a new invocation
             {
-                i32 size HELIUM_ASSERT_ONLY = m_Stack.Size();
+                int32_t size HELIUM_ASSERT_ONLY = m_Stack.Size();
 
                 // allocate a frame for this local call
                 Frame* frame = m_Stack.Push();

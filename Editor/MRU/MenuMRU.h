@@ -35,7 +35,7 @@ namespace Helium
         class MenuMRU : public MRU< tstring >
         {
         public:
-            MenuMRU( i32 maxItems, wxWindow* owner );
+            MenuMRU( int32_t maxItems, wxWindow* owner );
             virtual ~MenuMRU();
 
             void RemoveInvalidItems( bool tuidRequired = false );

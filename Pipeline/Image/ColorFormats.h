@@ -9,7 +9,7 @@
 
 namespace Helium
 {
-  const u32 RGBE_EXPONENT_BIAS=128;
+  const uint32_t RGBE_EXPONENT_BIAS=128;
 
   //-----------------------------------------------------------------------------
   // Color formats supported by the texture loaders
@@ -63,7 +63,7 @@ namespace Helium
 
   //-----------------------------------------------------------------------------
   // returns the raw storage bits per pixel of a given pixel format
-  inline u32 ColorFormatBits(ColorFormat format)
+  inline uint32_t ColorFormatBits(ColorFormat format)
   {
     switch (format)
     {
@@ -268,7 +268,7 @@ namespace Helium
   }
 
   //-----------------------------------------------------------------------------
-  inline void ClampColor(i32 &r,i32 &g,i32 &b,i32 &a)
+  inline void ClampColor(int32_t &r,int32_t &g,int32_t &b,int32_t &a)
   {
     if (r>255)
         r=255;
@@ -292,12 +292,12 @@ namespace Helium
   }
 
   //-----------------------------------------------------------------------------
-  inline void ColorFormatExpandRGBE(u32 hdr, float& r, float& g,float& b)
+  inline void ColorFormatExpandRGBE(uint32_t hdr, float& r, float& g,float& b)
   {
     r = ((hdr & 0x000000ff))*0.0039215686f;
     g = ((hdr & 0x0000ff00)>>8)*0.0039215686f;
     b = ((hdr & 0x00ff0000)>>16)*0.0039215686f;
-    i32 e = ((hdr & 0xff000000)>>24);
+    int32_t e = ((hdr & 0xff000000)>>24);
     if (e==0)
     {
       r=0.0f;
@@ -315,7 +315,7 @@ namespace Helium
   }
 
   //-----------------------------------------------------------------------------
-  inline u32 ColorFormatCreateRGBE(float red, float grn,float blu)
+  inline uint32_t ColorFormatCreateRGBE(float red, float grn,float blu)
   {
     // First clamp the values to 0
     if (red < 0.0f) red = 0.0f;
@@ -334,10 +334,10 @@ namespace Helium
     // Compute the exponent factor
     int exp;
     float expFactor = frexp(max, &exp) / max;
-    i32 r = (i32)(((red * expFactor)*255.0f)+0.5f);
-    i32 g = (i32)(((grn * expFactor)*255.0f)+0.5f);
-    i32 b = (i32)(((blu * expFactor)*255.0f)+0.5f);
-    i32 a = (exp + 128);
+    int32_t r = (int32_t)(((red * expFactor)*255.0f)+0.5f);
+    int32_t g = (int32_t)(((grn * expFactor)*255.0f)+0.5f);
+    int32_t b = (int32_t)(((blu * expFactor)*255.0f)+0.5f);
+    int32_t a = (exp + 128);
 
     ClampColor(r,g,b,a);
 
@@ -367,10 +367,10 @@ namespace Helium
   //-----------------------------------------------------------------------------
 
   // only integer destination formats are converted to srgb if flag is set
-  inline bool MakeColorFormatBatch(void* dst, u32 pixel_count, ColorFormat fmt, f32 *r, f32 *g, f32 *b, f32 *a, bool convert_to_srgb)
+  inline bool MakeColorFormatBatch(void* dst, uint32_t pixel_count, ColorFormat fmt, float32_t *r, float32_t *g, float32_t *b, float32_t *a, bool convert_to_srgb)
   {
   #ifndef START_BATCH_LOOP
-    #define START_BATCH_LOOP  for(u32 p = 0; p < pixel_count; ++p)\
+    #define START_BATCH_LOOP  for(uint32_t p = 0; p < pixel_count; ++p)\
                               {
     #define END_BATCH_LOOP    }
   #endif
@@ -390,7 +390,7 @@ namespace Helium
       }
       case CF_RGBAHALFMAP:
       {
-        i16* ptr = (i16*)dst;
+        int16_t* ptr = (int16_t*)dst;
         START_BATCH_LOOP
           *ptr++ = FloatToHalf(r[p]);
           *ptr++ = FloatToHalf(g[p]);
@@ -401,7 +401,7 @@ namespace Helium
       }
       case CF_RGBE:
       {
-        u32* ptr = (u32*)dst;
+        uint32_t* ptr = (uint32_t*)dst;
         START_BATCH_LOOP
           ptr[p] = ColorFormatCreateRGBE(r[p],g[p],b[p]);
         END_BATCH_LOOP
@@ -426,7 +426,7 @@ namespace Helium
       }
       case CF_F16:
       {
-        i16* ptr = (i16*)dst;
+        int16_t* ptr = (int16_t*)dst;
         START_BATCH_LOOP
           ptr[p] = FloatToHalf(0.212671f * r[p] + 0.715160f * g[p] + 0.072169f * b[p]);
         END_BATCH_LOOP
@@ -434,7 +434,7 @@ namespace Helium
       }
       case CF_F16F16:
       {
-        i16* ptr = (i16*)dst;
+        int16_t* ptr = (int16_t*)dst;
         START_BATCH_LOOP
           *ptr++ = FloatToHalf(r[p]);
           *ptr++ = FloatToHalf(g[p]);
@@ -444,7 +444,7 @@ namespace Helium
 
       case CF_ARGB4444:
       {
-        u16* ptr = (u16*)dst;
+        uint16_t* ptr = (uint16_t*)dst;
         START_BATCH_LOOP
           float fl_r = r[p];
           float fl_g = g[p];
@@ -452,10 +452,10 @@ namespace Helium
           float fl_a = a[p];
           ClampColor(fl_r,fl_g,fl_b,fl_a);
           CONV_TO_SRGB(fl_r,fl_g,fl_b);
-          u32  red    = (i32)(fl_r*15.0f + 0.5f);
-          u32  green  = (i32)(fl_g*15.0f + 0.5f);
-          u32  blue   = (i32)(fl_b*15.0f + 0.5f);
-          u32  alpha  = (i32)(fl_a*15.0f + 0.5f);
+          uint32_t  red    = (int32_t)(fl_r*15.0f + 0.5f);
+          uint32_t  green  = (int32_t)(fl_g*15.0f + 0.5f);
+          uint32_t  blue   = (int32_t)(fl_b*15.0f + 0.5f);
+          uint32_t  alpha  = (int32_t)(fl_a*15.0f + 0.5f);
           ptr[p] = ((alpha<<12) | (red<<8) | (green<<4) | (blue<<0));
         END_BATCH_LOOP
         return true;
@@ -463,7 +463,7 @@ namespace Helium
 
       case CF_RGB565:
       {
-        u16* ptr = (u16*)dst;
+        uint16_t* ptr = (uint16_t*)dst;
         START_BATCH_LOOP
           float fl_r = r[p];
           float fl_g = g[p];
@@ -471,9 +471,9 @@ namespace Helium
           float fl_a = a[p];
           ClampColor(fl_r,fl_g,fl_b,fl_a);
           CONV_TO_SRGB(fl_r,fl_g,fl_b);
-          u32  red = (u32)(fl_r*31.0f + 0.5f);
-          u32  green = (u32)(g[p]*63.0f + 0.5f);
-          u32  blue = (u32)(b[p]*31.0f + 0.5f);
+          uint32_t  red = (uint32_t)(fl_r*31.0f + 0.5f);
+          uint32_t  green = (uint32_t)(g[p]*63.0f + 0.5f);
+          uint32_t  blue = (uint32_t)(b[p]*31.0f + 0.5f);
           ptr[p] = ( (red<<11) | (green<<5) | (blue<<0) );
         END_BATCH_LOOP
         return true;
@@ -481,7 +481,7 @@ namespace Helium
 
       case CF_ARGB8888:
       {
-        u32* ptr = (u32*)dst;
+        uint32_t* ptr = (uint32_t*)dst;
         START_BATCH_LOOP
           float fl_r = r[p];
           float fl_g = g[p];
@@ -489,17 +489,17 @@ namespace Helium
           float fl_a = a[p];
           ClampColor(fl_r,fl_g,fl_b,fl_a);
           CONV_TO_SRGB(fl_r,fl_g,fl_b);
-          i32  red    = (i32)(fl_r*255.0f + 0.5f);
-          i32  green  = (i32)(fl_g*255.0f + 0.5f);
-          i32  blue   = (i32)(fl_b*255.0f + 0.5f);
-          i32  alpha  = (i32)(fl_a*255.0f + 0.5f);
+          int32_t  red    = (int32_t)(fl_r*255.0f + 0.5f);
+          int32_t  green  = (int32_t)(fl_g*255.0f + 0.5f);
+          int32_t  blue   = (int32_t)(fl_b*255.0f + 0.5f);
+          int32_t  alpha  = (int32_t)(fl_a*255.0f + 0.5f);
           ptr[p] = ((alpha<<24) | (red<<16) | (green<<8) | (blue<<0));
         END_BATCH_LOOP
         return true;
       }
       case CF_ARGB1555:
       {
-        u16* ptr = (u16*)dst;
+        uint16_t* ptr = (uint16_t*)dst;
         START_BATCH_LOOP
           float fl_r = r[p];
           float fl_g = g[p];
@@ -507,10 +507,10 @@ namespace Helium
           float fl_a = a[p];
           ClampColor(fl_r,fl_g,fl_b,fl_a);
           CONV_TO_SRGB(fl_r,fl_g,fl_b);
-          i32  red    = (i32)(fl_r*31.0f + 0.5f);
-          i32  green  = (i32)(fl_g*31.0f + 0.5f);
-          i32  blue   = (i32)(fl_b*31.0f + 0.5f);
-          i32  alpha  = (i32)(fl_a+0.5);
+          int32_t  red    = (int32_t)(fl_r*31.0f + 0.5f);
+          int32_t  green  = (int32_t)(fl_g*31.0f + 0.5f);
+          int32_t  blue   = (int32_t)(fl_b*31.0f + 0.5f);
+          int32_t  alpha  = (int32_t)(fl_a+0.5);
           ptr[p] = ((alpha<<15) | (red<<10) | (green<<5) | (blue<<0));
         END_BATCH_LOOP
         return true;
@@ -520,8 +520,8 @@ namespace Helium
         START_BATCH_LOOP
           float fl_a = a[p];
           ClampColor(fl_a,fl_a,fl_a,fl_a);
-          u32  alpha = (u32)(fl_a*255.0f + 0.5f);
-          *((u8*)dst + p) = (u8)alpha;
+          uint32_t  alpha = (uint32_t)(fl_a*255.0f + 0.5f);
+          *((uint8_t*)dst + p) = (uint8_t)alpha;
         END_BATCH_LOOP
         return true;
       }
@@ -535,10 +535,10 @@ namespace Helium
           float fl_a = a[p];
           ClampColor(fl_r,fl_g,fl_b,fl_a);
           CONV_TO_SRGB(fl_r,fl_g,fl_b);
-          u32  alpha = (u32)(fl_a*255.0f + 0.5f);
-          u32 gray = (u32)((0.212671f * fl_r + 0.715160f * fl_g + 0.072169f * fl_b)*255.0f + 0.5f);
+          uint32_t  alpha = (uint32_t)(fl_a*255.0f + 0.5f);
+          uint32_t gray = (uint32_t)((0.212671f * fl_r + 0.715160f * fl_g + 0.072169f * fl_b)*255.0f + 0.5f);
           HELIUM_ASSERT(gray <= 255);
-          *((u16*)dst + p) = ((u16)(alpha<<8))|(u8)gray;
+          *((uint16_t*)dst + p) = ((uint16_t)(alpha<<8))|(uint8_t)gray;
         END_BATCH_LOOP
         return true;
       }
@@ -551,9 +551,9 @@ namespace Helium
           float fl_a = a[p];
           ClampColor(fl_r,fl_g,fl_b,fl_a);
           CONV_TO_SRGB(fl_r,fl_g,fl_b);
-          i32 gray = (i32)((0.212671f * fl_r + 0.715160f * fl_g + 0.072169f * fl_b)*255.0f + 0.5f);
+          int32_t gray = (int32_t)((0.212671f * fl_r + 0.715160f * fl_g + 0.072169f * fl_b)*255.0f + 0.5f);
           HELIUM_ASSERT(gray <= 255);
-          *((u8*)dst + p) = (u8)gray;
+          *((uint8_t*)dst + p) = (uint8_t)gray;
         END_BATCH_LOOP
         return true;
       }
@@ -565,9 +565,9 @@ namespace Helium
           float fl_b = b[p];
           float fl_a = a[p];
           ClampColor(fl_r,fl_g,fl_b,fl_a);
-          i32 gray = (i32)((0.212671f * fl_r + 0.715160f * fl_g + 0.072169f * fl_b)*65535.0f + 0.5f);
+          int32_t gray = (int32_t)((0.212671f * fl_r + 0.715160f * fl_g + 0.072169f * fl_b)*65535.0f + 0.5f);
           HELIUM_ASSERT(gray <= 65535);
-          *((u16*)dst + p) = (u16)gray;
+          *((uint16_t*)dst + p) = (uint16_t)gray;
         END_BATCH_LOOP
         return true;
       }
@@ -605,7 +605,7 @@ namespace Helium
       }
       case CF_RGBAHALFMAP:
       {
-        i16* ptr = (i16*)color;
+        int16_t* ptr = (int16_t*)color;
         r = HalfToFloat(ptr[0]);
         g = HalfToFloat(ptr[1]);
         b = HalfToFloat(ptr[2]);
@@ -614,7 +614,7 @@ namespace Helium
       }
       case CF_RGBE:
       {
-        u32* ptr = (u32*)color;
+        uint32_t* ptr = (uint32_t*)color;
         ColorFormatExpandRGBE(*ptr,r,g,b);
         a=1.0f;
         return true;
@@ -639,14 +639,14 @@ namespace Helium
       }
       case CF_F16:
       {
-        i16* ptr = (i16*)color;
+        int16_t* ptr = (int16_t*)color;
         r = g = b = HalfToFloat(ptr[0]);
         a = 1.0f;
         return true;
       }
       case CF_F16F16:
       {
-        i16* ptr = (i16*)color;
+        int16_t* ptr = (int16_t*)color;
         r = HalfToFloat(ptr[0]);
         g = HalfToFloat(ptr[1]);
         b = 0.0f;
@@ -656,7 +656,7 @@ namespace Helium
 
       case CF_ARGB8888:
       {
-        u32  val = *(u32*)color;
+        uint32_t  val = *(uint32_t*)color;
         a = ((float)((val & 0xff000000)>>24))/255.0f;
         r = ((float)((val & 0x00ff0000)>>16))/255.0f;
         g = ((float)((val & 0x0000ff00)>>8))/255.0f;
@@ -665,7 +665,7 @@ namespace Helium
       }
       case CF_ARGB1555:
       {
-        u16  val = *(u16*)color;
+        uint16_t  val = *(uint16_t*)color;
         a = ((float)((val & 0x8000)>>15));
         r = ((float)((val & 0x7c00)>>10))/31.0f;
         g = ((float)((val & 0x03e0)>>5))/31.0f;
@@ -674,7 +674,7 @@ namespace Helium
       }
       case CF_ARGB4444:
       {
-        u16  val = *(u16*)color;
+        uint16_t  val = *(uint16_t*)color;
         a = ((float)((val & 0xf000)>>12))/15.0f;
         r = ((float)((val & 0x0f00)>>8))/15.0f;
         g = ((float)((val & 0x00f0)>>4))/15.0f;
@@ -683,7 +683,7 @@ namespace Helium
       }
       case CF_RGB565:
       {
-        u16  val = *(u16*)color;
+        uint16_t  val = *(uint16_t*)color;
         a = 1.0f;
         r = ((float)((val & 0xf800)>>11))/31.0f;
         g = ((float)((val & 0x07E0)>>5))/63.0f;
@@ -692,28 +692,28 @@ namespace Helium
       }
       case CF_A8:
       {
-        u8 val = *(u8*)color;
+        uint8_t val = *(uint8_t*)color;
         r=g=b = 0.0f;
         a = ((float)(val))/255.0f;
         return true;
       }
       case CF_AL88:
       {
-        u16 val = *(u16*)color;
+        uint16_t val = *(uint16_t*)color;
         r=g=b = ((float)(val&0xff))/255.0f;
         a = ((float)((val>>8)&0xff))/255.0f;
         return true;
       }
       case CF_L8:
       {
-        u8  val = *(u8*)color;
+        uint8_t  val = *(uint8_t*)color;
         r=g=b = ((float)(val))/255.0f;
         a=1.0f;
         return true;
       }
       case CF_L16:
       {
-        u16  val = *(u16*)color;
+        uint16_t  val = *(uint16_t*)color;
         r=g=b = ((float)(val))/65535.0f;
         a = 1.0f;
         return true;
@@ -724,7 +724,7 @@ namespace Helium
 
   //-----------------------------------------------------------------------------
   // Given CF_ARGB8888 color, return a normalized version, 255 is put in the alpha channel.
-  inline u32 NormalizeARGBNormal(u32 const argb8888)
+  inline uint32_t NormalizeARGBNormal(uint32_t const argb8888)
   {
     float red   = float((argb8888 & 0x00ff0000)>>16);
     float green = float((argb8888 & 0x0000ff00)>>8);
@@ -742,7 +742,7 @@ namespace Helium
     normal *= Vector3(0.5f);
     normal += Vector3(0.5f);
 
-    u32 result;
+    uint32_t result;
 
     MakeColorFormatPixel(&result, CF_ARGB8888, normal.x, normal.y, normal.z, 1.f, false);
 

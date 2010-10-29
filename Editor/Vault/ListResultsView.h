@@ -109,7 +109,7 @@ namespace Helium
             void ShowDetails( bool showDetails = true );
 
             VaultSortMethod GetSortMethod() const;
-            void Sort( VaultSortMethod method = VaultSortMethods::AlphabeticalByName, u32 sortOptions = VaultSortOptions::Refresh | VaultSortOptions::Force );
+            void Sort( VaultSortMethod method = VaultSortMethods::AlphabeticalByName, uint32_t sortOptions = VaultSortOptions::Refresh | VaultSortOptions::Force );
 
         private:
             bool m_ShowDetails;
@@ -118,7 +118,7 @@ namespace Helium
             VaultSearchResultsPtr m_Results;
             VaultSortMethod m_SortMethod;
 
-            u32 m_CurrentFileIndex;
+            uint32_t m_CurrentFileIndex;
             M_DetailsColumn m_DetailsColumns;
             V_DetailsColumnType m_DetailsColumnList;
         };

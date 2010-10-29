@@ -18,37 +18,37 @@ namespace Helium
 
             MRUData* GetMRU();
 
-            f32 ScaleManipulatorSize() const;
+            float32_t ScaleManipulatorSize() const;
             bool ScaleManipulatorGridSnap() const;
-            f32 ScaleManipulatorDistance() const;
+            float32_t ScaleManipulatorDistance() const;
 
-            f32 RotateManipulatorSize() const;
+            float32_t RotateManipulatorSize() const;
             bool RotateManipulatorAxisSnap() const;
-            f32 RotateManipulatorSnapDegrees() const;
+            float32_t RotateManipulatorSnapDegrees() const;
             ManipulatorSpace RotateManipulatorSpace() const;
 
-            f32 TranslateManipulatorSize() const;
+            float32_t TranslateManipulatorSize() const;
             ManipulatorSpace TranslateManipulatorSpace() const;
             TranslateSnappingMode TranslateManipulatorSnappingMode() const;
-            f32 TranslateManipulatorDistance() const;
+            float32_t TranslateManipulatorDistance() const;
             bool TranslateManipulatorLiveObjectsOnly() const;
 
         private:
             MRUDataPtr m_MRU;
 
-            f32 m_ScaleManipulatorSize;
+            float32_t m_ScaleManipulatorSize;
             bool m_ScaleManipulatorGridSnap;
-            f32 m_ScaleManipulatorDistance;
+            float32_t m_ScaleManipulatorDistance;
 
-            f32 m_RotateManipulatorSize;
+            float32_t m_RotateManipulatorSize;
             bool m_RotateManipulatorAxisSnap;
-            f32 m_RotateManipulatorSnapDegrees;
+            float32_t m_RotateManipulatorSnapDegrees;
             ManipulatorSpace m_RotateManipulatorSpace;
 
-            f32 m_TranslateManipulatorSize;
+            float32_t m_TranslateManipulatorSize;
             ManipulatorSpace m_TranslateManipulatorSpace;
             TranslateSnappingMode m_TranslateManipulatorSnappingMode;
-            f32 m_TranslateManipulatorDistance;
+            float32_t m_TranslateManipulatorDistance;
             bool m_TranslateManipulatorLiveObjectsOnly;
 
         public:

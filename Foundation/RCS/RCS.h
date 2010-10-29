@@ -17,7 +17,7 @@ namespace Helium
     {
         namespace SyncTimes
         {
-            const u64 Now = 0xFFFFFFFFFFFFFFFF;
+            const uint64_t Now = 0xFFFFFFFFFFFFFFFF;
         }
 
         FOUNDATION_API Changeset& DefaultChangeset();
@@ -31,8 +31,8 @@ namespace Helium
         FOUNDATION_API void SetIgnoredPaths( const std::vector< tstring >& paths );
         FOUNDATION_API bool PathIsManaged( const tstring& path );
 
-        FOUNDATION_API void SetSyncTimestamp( const u64 timestamp = 0 );
-        FOUNDATION_API u64  GetSyncTimestamp();
+        FOUNDATION_API void SetSyncTimestamp( const uint64_t timestamp = 0 );
+        FOUNDATION_API uint64_t  GetSyncTimestamp();
 
         FOUNDATION_API void GetOpenedFiles( V_File& files );
 
@@ -40,6 +40,6 @@ namespace Helium
         FOUNDATION_API bool IsValidChangeset( const RCS::Changeset& changeset );
 
         FOUNDATION_API void GetInfo( V_File& files, const GetInfoFlag flags = GetInfoFlags::Default );
-        FOUNDATION_API void GetInfo( const tstring& folder, V_File& files, bool recursive = false, u32 fileData = FileData::All, u32 actionData = ActionData::All );
+        FOUNDATION_API void GetInfo( const tstring& folder, V_File& files, bool recursive = false, uint32_t fileData = FileData::All, uint32_t actionData = ActionData::All );
     }
 }

@@ -184,7 +184,7 @@ void BuildCommand::AssetBuilt( const AssetBuilder::AssetBuiltArgsPtr& args )
     //        return;
     //    }
 
-    //    Worker::Client::Send(0x1, (u32)stream.str().length(), (const u8*)stream.str().c_str());
+    //    Worker::Client::Send(0x1, (uint32_t)stream.str().length(), (const uint8_t*)stream.str().c_str());
     //}
 }
 

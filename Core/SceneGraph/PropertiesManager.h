@@ -25,7 +25,7 @@ namespace Helium
 
         struct ElementTypeFlags
         {
-            ElementTypeFlags( i32 type, i32 includeFlags, i32 excludeFlags )
+            ElementTypeFlags( int32_t type, int32_t includeFlags, int32_t excludeFlags )
                 : m_Type( type )
                 , m_IncludeFlags( includeFlags )
                 , m_ExcludeFlags( excludeFlags )
@@ -61,9 +61,9 @@ namespace Helium
                 return m_ExcludeFlags < rhs.m_ExcludeFlags;
             }
 
-            i32 m_Type;
-            i32 m_IncludeFlags;
-            i32 m_ExcludeFlags;
+            int32_t m_Type;
+            int32_t m_IncludeFlags;
+            int32_t m_ExcludeFlags;
         };
 
         typedef std::map< ElementTypeFlags, Reflect::Element* >                 M_ElementByType;
@@ -80,7 +80,7 @@ namespace Helium
 
             }
 
-            void EnumerateElement(Reflect::Element* element, i32 includeFlags = 0xFFFFFFFF, i32 excludeFlags = 0x0 )
+            void EnumerateElement(Reflect::Element* element, int32_t includeFlags = 0xFFFFFFFF, int32_t excludeFlags = 0x0 )
             {
                 // this will insert an empty map at the slot for the type of "element", or just make "b" false and return the iter at the existing one
                 Helium::Insert<M_ElementByType>::Result inserted = m_CurrentElements.insert( M_ElementByType::value_type (ElementTypeFlags ( element->GetType(), includeFlags, excludeFlags ), element) );
@@ -93,7 +93,7 @@ namespace Helium
 
         struct PropertiesCreatedArgs
         {
-            PropertiesCreatedArgs( PropertiesManager* propertiesManager, u32 selectionId, const Inspect::V_Control& controls )
+            PropertiesCreatedArgs( PropertiesManager* propertiesManager, uint32_t selectionId, const Inspect::V_Control& controls )
                 : m_PropertiesManager( propertiesManager )
                 , m_SelectionId( selectionId )
                 , m_Controls( controls )
@@ -101,7 +101,7 @@ namespace Helium
             }
 
             PropertiesManager*  m_PropertiesManager;
-            u32                 m_SelectionId;
+            uint32_t                 m_SelectionId;
             Inspect::V_Control  m_Controls;
         };
 
@@ -109,7 +109,7 @@ namespace Helium
 
         struct PropertiesThreadArgs
         {
-            PropertiesThreadArgs( PropertiesStyle setting, u32 selectionId, const u32* currentSelectionId, const OS_SceneNodeDumbPtr& selection )
+            PropertiesThreadArgs( PropertiesStyle setting, uint32_t selectionId, const uint32_t* currentSelectionId, const OS_SceneNodeDumbPtr& selection )
                 : m_SelectionId( selectionId )
                 , m_CurrentSelectionId( currentSelectionId )
                 , m_Style( setting )
@@ -121,8 +121,8 @@ namespace Helium
             }
 
             PropertiesStyle             m_Style;
-            u32                         m_SelectionId;
-            const u32*                  m_CurrentSelectionId;
+            uint32_t                         m_SelectionId;
+            const uint32_t*                  m_CurrentSelectionId;
             OrderedSet<SceneNodePtr>    m_Selection;
         };
 
@@ -149,7 +149,7 @@ namespace Helium
 
         public:
             // display the UI (in the main UI thread)
-            void Present( u32 selectionId, const Inspect::V_Control& controls );
+            void Present( uint32_t selectionId, const Inspect::V_Control& controls );
 
             // are any threads currently active?
             bool IsActive();
@@ -177,7 +177,7 @@ namespace Helium
             bool                            m_SelectionDirty;
 
             // thread info for generating properties
-            u32                             m_SelectionId;
+            uint32_t                             m_SelectionId;
 
             // thread count
             int                             m_ThreadCount;

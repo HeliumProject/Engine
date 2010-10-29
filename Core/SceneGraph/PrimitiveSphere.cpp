@@ -80,13 +80,13 @@ void PrimitiveSphere::Update()
   {
     for (int theta=0; theta<=360-dtheta; theta+=dtheta)
     {
-      float sinTheta = (f32)(sin(theta * DegToRad));
-      float sinTheta2 = (f32)(sin((theta+dtheta) * DegToRad));
-      float cosTheta = (f32)(cos(theta * DegToRad));
-      float cosTheta2 = (f32)(cos((theta+dtheta) * DegToRad));
+      float sinTheta = (float32_t)(sin(theta * DegToRad));
+      float sinTheta2 = (float32_t)(sin((theta+dtheta) * DegToRad));
+      float cosTheta = (float32_t)(cos(theta * DegToRad));
+      float cosTheta2 = (float32_t)(cos((theta+dtheta) * DegToRad));
 
-      float sinPhi = (f32)(sin(phi * DegToRad));
-      float cosPhi = (f32)(cos(phi * DegToRad));
+      float sinPhi = (float32_t)(sin(phi * DegToRad));
+      float cosPhi = (float32_t)(cos(phi * DegToRad));
 
       m_Vertices.push_back(Position(SetupVector(sinTheta * cosPhi * m_Radius,
         sinPhi * m_Radius,
@@ -112,15 +112,15 @@ void PrimitiveSphere::Update()
     {
       for (int phi=0; phi<=360-dphi; phi+=dphi)
       {
-        float sinTheta = (f32)(sin(theta * DegToRad));
-        float sinTheta2 = (f32)(sin((theta+dtheta) * DegToRad));
-        float cosTheta = (f32)(cos(theta * DegToRad));
-        float cosTheta2 = (f32)(cos((theta+dtheta) * DegToRad));
+        float sinTheta = (float32_t)(sin(theta * DegToRad));
+        float sinTheta2 = (float32_t)(sin((theta+dtheta) * DegToRad));
+        float cosTheta = (float32_t)(cos(theta * DegToRad));
+        float cosTheta2 = (float32_t)(cos((theta+dtheta) * DegToRad));
 
-        float sinPhi = (f32)(sin(phi * DegToRad));
-        float sinPhi2 = (f32)(sin((phi+dphi) * DegToRad));
-        float cosPhi = (f32)(cos(phi * DegToRad));
-        float cosPhi2 = (f32)(cos((phi+dphi) * DegToRad));
+        float sinPhi = (float32_t)(sin(phi * DegToRad));
+        float sinPhi2 = (float32_t)(sin((phi+dphi) * DegToRad));
+        float cosPhi = (float32_t)(cos(phi * DegToRad));
+        float cosPhi2 = (float32_t)(cos((phi+dphi) * DegToRad));
 
         Vector3 a = Vector3 (cosTheta * cosPhi * m_Radius, cosTheta * sinPhi * m_Radius, sinTheta * m_Radius);
         m_Vertices.push_back(Position (a));

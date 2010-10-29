@@ -73,7 +73,7 @@ namespace Helium
             tstring                 m_Dump;
 
             // SEH-specific info
-            u32                     m_SEHCode;
+            uint32_t                     m_SEHCode;
             tstring                 m_SEHClass;
             tstring                 m_SEHControlRegisters;
             tstring                 m_SEHIntegerRegisters;
@@ -105,7 +105,7 @@ namespace Helium
 
         // Query SEH exception pointers for full report, abbreviated name, or more details
         PLATFORM_API tstring GetExceptionInfo( LPEXCEPTION_POINTERS info );
-        PLATFORM_API const tchar* GetExceptionClass( u32 exceptionCode );
+        PLATFORM_API const tchar* GetExceptionClass( uint32_t exceptionCode );
         PLATFORM_API void GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args );
 
         // Core dumps (full dumps include process heaps)

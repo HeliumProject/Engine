@@ -275,12 +275,12 @@ namespace Helium
             Attribute< bool >                       a_IsReadOnly;             // are we writable?
             Attribute< bool >                       a_IsFrozen;               // is updating (polling, sorting, etc) disabled?
             Attribute< bool >                       a_IsHidden;               // is rendering disabled?
-            Attribute< u32 >                        a_ForegroundColor;        // our colors for appearange
-            Attribute< u32 >                        a_BackgroundColor;
+            Attribute< uint32_t >                        a_ForegroundColor;        // our colors for appearange
+            Attribute< uint32_t >                        a_BackgroundColor;
             Attribute< bool >                       a_IsFixedWidth;           // are we fixed along an axis?
             Attribute< bool >                       a_IsFixedHeight;
-            Attribute< f32 >                        a_ProportionalWidth;      // are we proportional along an axis?
-            Attribute< f32 >                        a_ProportionalHeight;
+            Attribute< float32_t >                        a_ProportionalWidth;      // are we proportional along an axis?
+            Attribute< float32_t >                        a_ProportionalHeight;
             Attribute< tstring >                    a_Default;                // the default value
             Attribute< tstring >                    a_HelpText;               // the help text for this control
             

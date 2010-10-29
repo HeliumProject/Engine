@@ -46,7 +46,7 @@ Volume::~Volume()
 
 }
 
-i32 Volume::GetImageIndex() const
+int32_t Volume::GetImageIndex() const
 {
     return -1; // Helium::GlobalFileIconsTable().GetIconID( TXT( "volume" ) );
 }

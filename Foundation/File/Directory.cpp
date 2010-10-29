@@ -14,7 +14,7 @@ Directory::Directory()
 
 }
 
-Directory::Directory(const tstring &path, const tstring &spec, u32 flags)
+Directory::Directory(const tstring &path, const tstring &spec, uint32_t flags)
 : m_Done( true )
 , m_Handle ( INVALID_HANDLE_VALUE )
 {
@@ -58,7 +58,7 @@ void Directory::Reset()
     Find(m_Path + m_Spec);
 }
 
-bool Directory::Open(const tstring &path, const tstring &spec /* = TXT( "" ) */, u32 flags /* = DirectoryFlags::Default */)
+bool Directory::Open(const tstring &path, const tstring &spec /* = TXT( "" ) */, uint32_t flags /* = DirectoryFlags::Default */)
 {
     Close();
 
@@ -236,7 +236,7 @@ void Directory::Close()
     m_Item.Clear(); 
 }
 
-void Helium::RecurseDirectories( DirectoryItemSignature::Delegate delegate, const tstring &path, const tstring &spec, u32 flags )
+void Helium::RecurseDirectories( DirectoryItemSignature::Delegate delegate, const tstring &path, const tstring &spec, uint32_t flags )
 {
     // contents
     for ( Directory dir ( path, spec, flags ); !dir.IsDone(); dir.Next() )

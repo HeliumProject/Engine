@@ -70,12 +70,12 @@ namespace Helium
 
         }
 
-        u32 GetButtons() const
+        uint32_t GetButtons() const
         {
             return m_Buttons;
         }
 
-        void SetButtons( u32 states )
+        void SetButtons( uint32_t states )
         {
             m_Buttons = states;
         }
@@ -92,17 +92,17 @@ namespace Helium
 
         // helpers
 
-        bool IsButtonDown( u32 button ) const
+        bool IsButtonDown( uint32_t button ) const
         {
             return (m_Buttons & button) != 0;
         }
 
-        bool IsButtonUp( u32 button ) const
+        bool IsButtonUp( uint32_t button ) const
         {
             return !IsButtonDown( button );
         }
 
-        bool IsOnlyButtonDown( u32 button ) const
+        bool IsOnlyButtonDown( uint32_t button ) const
         {
             return (m_Buttons & button) == button;
         }
@@ -120,7 +120,7 @@ namespace Helium
         bool ShiftIsDown() const    { return IsButtonDown( AcceleratorButtons::Shift ); }
 
     protected:
-        u32         m_Buttons;  // the states of all the buttons (always set)
+        uint32_t         m_Buttons;  // the states of all the buttons (always set)
         Point m_Position; // the position of the cursor on the screen (always set)
     };
 
@@ -153,12 +153,12 @@ namespace Helium
             m_Event = e;
         }
 
-        u32 GetButton() const
+        uint32_t GetButton() const
         {
             return m_Button;
         }
 
-        void SetButton( u32 button )
+        void SetButton( uint32_t button )
         {
             m_Button = button;
         }
@@ -179,7 +179,7 @@ namespace Helium
 
     private:
         MouseButtonEvent    m_Event;        // what happened?
-        u32                 m_Button;       // to which button?
+        uint32_t                 m_Button;       // to which button?
     };
 
     class FOUNDATION_API MouseScrollInput : public MouseInput
@@ -191,29 +191,29 @@ namespace Helium
         {
         }
 
-        f32 GetWheelRotation() const
+        float32_t GetWheelRotation() const
         {
             return m_WheelRotation;
         }
 
-        void SetWheelRotation( f32 wheelRotation )
+        void SetWheelRotation( float32_t wheelRotation )
         {
             m_WheelRotation = wheelRotation;
         }
 
-        f32 GetWheelDelta() const
+        float32_t GetWheelDelta() const
         {
             return m_WheelDelta;
         }
 
-        void SetWheelDelta( f32 wheelDelta )
+        void SetWheelDelta( float32_t wheelDelta )
         {
             m_WheelDelta = wheelDelta;
         }
 
     private:
-        f32 m_WheelRotation;    // wheel rotation amount
-        f32 m_WheelDelta;       // wheel rotation threshold of a notch
+        float32_t m_WheelRotation;    // wheel rotation amount
+        float32_t m_WheelDelta;       // wheel rotation threshold of a notch
     };
 
     namespace KeyCodes

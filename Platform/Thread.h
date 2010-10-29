@@ -15,13 +15,13 @@ namespace Helium
     public:
 #ifdef WIN32
         typedef void*               Handle;
-        typedef u32                 Return;
+        typedef uint32_t                 Return;
         typedef void*               Param;
         typedef Return              (*Entry)(Param);
 #else
         typedef sys_ppu_thread_t    Handle;
         typedef void                Return;
-        typedef u64                 Param;
+        typedef uint64_t                 Param;
         typedef Return              (*Entry)(Param);
 #endif
 
@@ -91,7 +91,7 @@ namespace Helium
         void Close();
 
         // wait for thread completion
-        Return Wait(u32 timeout = 0xffffffff);
+        Return Wait(uint32_t timeout = 0xffffffff);
 
         // are we running?
         bool Running();
@@ -110,11 +110,11 @@ namespace Helium
         void SetPointer(void* value);
 
     private:
-        u32 m_Key;
+        uint32_t m_Key;
     };
 
-    PLATFORM_API u32 GetMainThreadID();
-    PLATFORM_API u32 GetCurrentThreadID();
+    PLATFORM_API uint32_t GetMainThreadID();
+    PLATFORM_API uint32_t GetCurrentThreadID();
 
     inline bool IsMainThread()
     {

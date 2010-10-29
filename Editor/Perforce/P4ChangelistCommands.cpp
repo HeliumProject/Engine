@@ -55,14 +55,14 @@ void SubmitCommand::OutputStat( StrDict* dict )
     m_Changeset->m_Id = submittedChange->Atoi();
   }
 
-  u32 numFiles = 0;
+  uint32_t numFiles = 0;
   StrPtr* openFiles = dict->GetVar( g_OpenFilesTag );
   if ( openFiles )
   {
     numFiles = openFiles->Atoi();
   }
 
-  for( u32 i = 0; i < numFiles; ++i )
+  for( uint32_t i = 0; i < numFiles; ++i )
   {
     RCS::FilePtr file = new RCS::File();
 

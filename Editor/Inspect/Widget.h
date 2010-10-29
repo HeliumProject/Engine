@@ -39,8 +39,8 @@ namespace Helium
             virtual void IsReadOnlyChanged( const Attribute<bool>::ChangeArgs& args );
             virtual void IsFrozenChanged( const Attribute<bool>::ChangeArgs& args );
             virtual void IsHiddenChanged( const Attribute<bool>::ChangeArgs& args );
-            virtual void ForegroundColorChanged( const Attribute<u32>::ChangeArgs& args );
-            virtual void BackgroundColorChanged( const Attribute<u32>::ChangeArgs& args );
+            virtual void ForegroundColorChanged( const Attribute<uint32_t>::ChangeArgs& args );
+            virtual void BackgroundColorChanged( const Attribute<uint32_t>::ChangeArgs& args );
             virtual void HelpTextChanged( const Attribute<tstring>::ChangeArgs& args );
 
             void OnContextMenu( wxContextMenuEvent& event );

@@ -18,11 +18,11 @@ namespace Helium
 
             virtual RenderShader* ParseFile( const tchar* filename, ShaderManager* db );
 
-            static void SetWrapUV( TextureSettings* settings, u32 wrapU, u32 wrapV );
-            static void SetFilter( TextureSettings* settings, u32 filter );
-            static void SetColorFormat( TextureSettings* settings, u32 colorFormat, u32 mode );
+            static void SetWrapUV( TextureSettings* settings, uint32_t wrapU, uint32_t wrapV );
+            static void SetFilter( TextureSettings* settings, uint32_t filter );
+            static void SetColorFormat( TextureSettings* settings, uint32_t colorFormat, uint32_t mode );
 
-            static void UpdateShaderClass(ShaderManager* db, const tchar* shaderFilename, u32 alphaMode);
+            static void UpdateShaderClass(ShaderManager* db, const tchar* shaderFilename, uint32_t alphaMode);
             static void UpdateShader(RenderShader* sh, const Asset::ShaderAsset* shader );
         };
     }

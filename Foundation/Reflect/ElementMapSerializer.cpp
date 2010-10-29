@@ -35,7 +35,7 @@ void SimpleElementMapSerializer<KeyT>::Clear()
 }
 
 template < class KeyT >
-i32 SimpleElementMapSerializer<KeyT>::GetKeyType() const
+int32_t SimpleElementMapSerializer<KeyT>::GetKeyType() const
 {
     return Reflect::GetType<KeyT>();
 }
@@ -115,7 +115,7 @@ void SimpleElementMapSerializer<KeyT>::RemoveItem(const Serializer* key)
 }
 
 template < class KeyT >
-bool SimpleElementMapSerializer<KeyT>::Set(const Serializer* src, u32 flags)
+bool SimpleElementMapSerializer<KeyT>::Set(const Serializer* src, uint32_t flags)
 {
     const ElementMapSerializerT* rhs = ConstObjectCast<ElementMapSerializerT>(src);
     if (!rhs)
@@ -270,10 +270,10 @@ void SimpleElementMapSerializer<KeyT>::Accept(Visitor& visitor)
 
 template SimpleElementMapSerializer<TypeID>;
 template SimpleElementMapSerializer<std::string>;
-template SimpleElementMapSerializer<u32>;
-template SimpleElementMapSerializer<i32>;
-template SimpleElementMapSerializer<u64>;
-template SimpleElementMapSerializer<i64>;
+template SimpleElementMapSerializer<uint32_t>;
+template SimpleElementMapSerializer<int32_t>;
+template SimpleElementMapSerializer<uint64_t>;
+template SimpleElementMapSerializer<int64_t>;
 template SimpleElementMapSerializer<Helium::GUID>;
 template SimpleElementMapSerializer<Helium::TUID>;
 

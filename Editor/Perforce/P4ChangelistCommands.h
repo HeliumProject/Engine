@@ -48,13 +48,13 @@ namespace Helium
             {
             }
 
-            u64 GetChangelist()
+            uint64_t GetChangelist()
             {
                 return m_Changelist;
             }
 
         protected:
-            u64 m_Changelist;
+            uint64_t m_Changelist;
         };
 
         class OpenedCommand : public Command

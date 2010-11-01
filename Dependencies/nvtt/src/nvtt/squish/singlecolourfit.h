@@ -37,7 +37,9 @@ struct SingleColourLookup;
 class SingleColourFit : public ColourFit
 {
 public:
-	SingleColourFit( ColourSet const* colours, int flags );
+	SingleColourFit();
+
+    void SetColourSet( ColourSet const* colours, int flags );
 	
 private:
 	virtual void Compress3( void* block );

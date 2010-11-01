@@ -55,9 +55,13 @@ Helium.DoDefaultSolutionSettings = function()
 	}
 	
 	configuration {}
+		defines
+		{
+			"XML_STATIC=1",
+		}
 		flags
 		{
-			"EnableSSE",
+			"EnableSSE2",
 			"NoMinimalRebuild",
 		}
 	
@@ -127,6 +131,19 @@ Helium.DoDefaultSolutionSettings = function()
 		{
 			"NoFramePointer",
 			"OptimizeSpeed",
+		}
+
+	configuration { "windows", "Debug" }
+		buildoptions
+		{
+			"/Ob0",
+		}
+
+	configuration { "windows", "not Debug" }
+		buildoptions
+		{
+			"/Ob2",
+			"/Oi",
 		}
 
 end

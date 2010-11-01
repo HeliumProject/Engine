@@ -27,6 +27,10 @@ namespace nv
 
 
 // Override new/delete
+// XXX HELIUM BEGIN
+// Don't override new/delete, as it conflicts with our own new/delete overrides when consuming nvtt as a static library.
+#if HELIUM_USE_NVTT_NEW_DELETE
+// XXX HELIUM END
 
 inline void * operator new (size_t size) throw()
 {
@@ -47,6 +51,10 @@ inline void operator delete [] (void * p) throw()
 {
 	nv::mem::free(p); 
 }
+
+// XXX HELIUM BEGIN
+#endif  // HELIUM_USE_NVTT_NEW_DELETE
+// XXX HELIUM END
 
 /*
 #ifdef _DEBUG

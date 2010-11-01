@@ -74,15 +74,10 @@ project "lua"
 project "nvtt"
 	kind "StaticLib"
 	language "C++"
-	defines
-	{
-		"__SSE2__",
-		"__SSE__",
-		"__MMX__",
-	}
 	includedirs
 	{
 		"Dependencies/nvtt/src",
+		"Dependencies/nvtt/src/nvtt/squish",
 	}
 	files
 	{
@@ -92,6 +87,12 @@ project "nvtt"
 		"Dependencies/nvtt/src/nvcore/*.cpp",
 		"Dependencies/nvtt/src/nvimage/*.h",
 		"Dependencies/nvtt/src/nvimage/*.cpp",
+		"Dependencies/nvtt/src/nvtt/*.h",
+		"Dependencies/nvtt/src/nvtt/*.cpp",
+		"Dependencies/nvtt/src/nvtt/cuda/*.h",
+		"Dependencies/nvtt/src/nvtt/cuda/*.cpp",
+		"Dependencies/nvtt/src/nvtt/squish/*.h",
+		"Dependencies/nvtt/src/nvtt/squish/*.cpp",
 	}
 	excludes
 	{
@@ -99,6 +100,7 @@ project "nvtt"
 		"Dependencies/nvtt/src/nvcore/Tokenizer.cpp",
 		"Dependencies/nvtt/src/nvimage/ConeMap.h",
 		"Dependencies/nvtt/src/nvimage/ConeMap.cpp",
+		"Dependencies/nvtt/src/nvtt/squish/singlechannelfit.*",
 	}
 	
 	configuration "windows"
@@ -106,20 +108,6 @@ project "nvtt"
 		{
 			"Dependencies/nvtt/project/vc8",
 		}
-
-project "squish"
-	kind "StaticLib"
-	language "C++"
-	includedirs
-	{
-		"Dependencies/squish",
-	}
-	files
-	{
-		"Dependencies/squish/*.h",
-		"Dependencies/squish/*.inl",
-		"Dependencies/squish/*.cpp",
-	}
 
 project "tiff"
 	kind "StaticLib"

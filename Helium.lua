@@ -8,7 +8,6 @@ defines
 	"FOUNDATION_DLL=1",
 	"PIPELINE_DLL=1",
 	"CORE_DLL=1",
-	"XML_STATIC=1",
 	"WXUSINGDLL=1",
 	"wxNO_EXPAT_LIB=1",
 	"wxNO_JPEG_LIB=1",
@@ -180,9 +179,9 @@ project "Pipeline"
 	}
 	includedirs
 	{
-		"Dependencies/squish",
 		"Dependencies/nvtt",
 		"Dependencies/nvtt/src",
+		"Dependencies/nvtt/src/nvtt/squish",
 		"Dependencies/tiff",
 		"Dependencies/tiff/libtiff",
 	}
@@ -195,7 +194,6 @@ project "Pipeline"
 	{
 		"Platform",
 		"Foundation",
-		"squish",
 		"nvtt",
 		"tiff",
 	}

@@ -73,19 +73,23 @@ void Compress( u8 const* rgba, void* block, int flags )
 	if( colours.GetCount() == 1 )
 	{
 		// always do a single colour fit
-		SingleColourFit fit( &colours, flags );
+		SingleColourFit fit;
+        fit.SetColourSet( &colours, flags );
 		fit.Compress( colourBlock );
 	}
 	else if( ( flags & kColourRangeFit ) != 0 )
 	{
 		// do a range fit
-		RangeFit fit( &colours, flags );
+		RangeFit fit;
+        fit.SetColourSet( &colours, flags );
 		fit.Compress( colourBlock );
 	}
 	else
 	{
 		// default to a cluster fit
-		ClusterFit fit( &colours, flags );
+		ClusterFit fit;
+        fit.SetColourSet( &colours, flags );
+        fit.SetMetric( 1.0f, 1.0f, 1.0f );
 		fit.Compress( colourBlock );
 	}
 	

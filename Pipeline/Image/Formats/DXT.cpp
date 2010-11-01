@@ -323,7 +323,7 @@ void ProcessMip(const Image* mip, u32 mip_level, u32 face, OutputColorFormat for
         }
 
         // set up squish flags
-        u32 squish_flags = (squish::kColourClusterFit | squish::kColourIterativeClusterFit);
+        u32 squish_flags = (squish::kColourClusterFit /*| squish::kColourIterativeClusterFit*/);
 
         switch (format)
         {

@@ -149,7 +149,7 @@ sub _ProcessLogs
 {
   my $logBaseNames = shift;
   
-  my $logDir = File::Spec->catfile( "Build", "Logs" );
+  my $logDir = File::Spec->catfile( "Logs" );
   mkpath $logDir;
 
   foreach my $file (@{$logBaseNames})

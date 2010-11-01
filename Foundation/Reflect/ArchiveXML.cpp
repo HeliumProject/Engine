@@ -25,7 +25,7 @@ ArchiveXML::ArchiveXML( const Path& path, ByteOrder byteOrder )
 , m_Version( CURRENT_VERSION )
 , m_Target( &m_Spool )
 {
-    m_Parser = XML_ParserCreate( Helium::GetEncoding().c_str() );
+    m_Parser = XML_ParserCreate( NULL );
 
     // set the user data used in callbacks
     XML_SetUserData(m_Parser, (void*)this);

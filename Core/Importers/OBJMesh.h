@@ -1,7 +1,7 @@
 #pragma once
 
 /*    
-SourceMesh.h
+OBJMesh.h
 
 Adapted from glm by Nate Robins, 1997, 2000
 nate@pobox.com, http://www.pobox.com/~nate
@@ -13,13 +13,11 @@ preservation of edges, welding redundant vertices & texture
 coordinate generation (spheremap and planar projections) + more. 
 */
 
-#include "OpenGL.h"
-
 #include "Foundation/File/Path.h"
 
 namespace Helium
 {
-    namespace GL
+    namespace Importers
     {
         namespace Modes
         {
@@ -36,70 +34,69 @@ namespace Helium
         /* Material: Structure that defines a material in a mesh. */
         struct Material
         {
-            tstring m_Name;                   /* name of material */
-            GLfloat m_Diffuse[4];           /* diffuse component */
-            GLfloat m_Ambient[4];           /* ambient component */
-            GLfloat m_Specular[4];          /* specular component */
-            GLfloat m_Shininess;            /* specular exponent */
-            GLint   m_Texture;                /* color map */
+            tstring     m_Name;                 /* name of material */
+            float32_t   m_Diffuse[4];           /* diffuse component */
+            float32_t   m_Ambient[4];           /* ambient component */
+            float32_t   m_Specular[4];          /* specular component */
+            float32_t   m_Shininess;            /* specular exponent */
+            int32_t     m_Texture;              /* color map */
         };
 
         /* Triangle: Structure that defines a triangle in a mesh. */
         struct Triangle
         {
-            GLuint m_VIndices[3];           /* array of triangle vertex indices */
-            GLuint m_NIndices[3];           /* array of triangle normal indices */
-            GLuint m_TIndices[3];           /* array of triangle uv indices*/
-            GLuint m_Material;
+            uint32_t    m_VIndices[3];          /* array of triangle vertex indices */
+            uint32_t    m_NIndices[3];          /* array of triangle normal indices */
+            uint32_t    m_TIndices[3];          /* array of triangle uv indices*/
+            uint32_t    m_Material;
         };
 
         /* Texture: Structure that defines a texture in a mesh. */
         struct Texture
         {
-            tstring m_Name;
-            GLuint  m_ID;                    /* OpenGL texture ID */
+            tstring     m_Name;
         };
 
         /* Group: Structure that defines a group in a mesh. */
         struct Group
         {
-            tstring m_Name;           /* name of this group */
-            GLuint  m_TriangleCount;   /* number of triangles in this group */
-            GLuint* m_Triangles;      /* array of triangle indices */
-            Group*  m_Next;           /* pointer to next group in mesh */
+            tstring     m_Name;                 /* name of this group */
+            uint32_t    m_TriangleCount;        /* number of triangles in this group */
+            uint32_t*   m_Triangles;            /* array of triangle indices */
+            Group*      m_Next;                 /* pointer to next group in mesh */
         };
 
-        /* SourceMesh: Structure that defines a mesh. */
-        class SourceMesh
+        /* OBJMesh: Structure that defines a mesh. */
+        class OBJMesh
         {
         public:
-            Helium::Path m_Path;                /* path to this mesh */
-            tstring      m_MaterialLibraryName; /* name of the material library */
+            Path        m_Path;                 /* path to this mesh */
+            tstring     m_MaterialLibraryName;  /* name of the material library */
 
-            GLuint    m_VertexCount;     /* number of vertices in mesh */
-            GLfloat*  m_Vertices;        /* array of vertices  */
+            uint32_t    m_VertexCount;          /* number of vertices in mesh */
+            float32_t*  m_Vertices;             /* array of vertices  */
 
-            GLuint    m_NormalCount;      /* number of normals in mesh */
-            GLfloat*  m_Normals;         /* array of normals */
+            uint32_t    m_NormalCount;          /* number of normals in mesh */
+            float32_t*  m_Normals;              /* array of normals */
 
-            GLuint    m_UVCount;          /* number of uvs in mesh */
-            GLfloat*  m_UVs;             /* array of texture coordinates */
+            uint32_t    m_UVCount;              /* number of uvs in mesh */
+            float32_t*  m_UVs;                  /* array of texture coordinates */
 
-            GLuint    m_TriangleCount;    /* number of triangles in mesh */
-            Triangle* m_Triangles;       /* array of triangles */
+            uint32_t    m_TriangleCount;        /* number of triangles in mesh */
+            Triangle*   m_Triangles;            /* array of triangles */
 
-            GLuint    m_MaterialCount;    /* number of materials in mesh */
-            Material* m_Materials;       /* array of materials */
+            uint32_t    m_MaterialCount;        /* number of materials in mesh */
+            Material*   m_Materials;            /* array of materials */
 
-            GLuint    m_GroupCount;       /* number of groups in mesh */
-            Group*    m_Groups;          /* linked list of groups */
+            uint32_t    m_GroupCount;           /* number of groups in mesh */
+            Group*      m_Groups;               /* linked list of groups */
 
-            GLuint    m_TextureCount;     /* number of textures in mesh */
-            Texture*  m_Textures;        /* array of textures */
+            uint32_t    m_TextureCount;         /* number of textures in mesh */
+            Texture*  m_Textures;               /* array of textures */
 
             /* Construct/Destruct */
-            SourceMesh();
-            ~SourceMesh();
+            OBJMesh();
+            ~OBJMesh();
 
             /* Reset object and release all memory
             */
@@ -108,21 +105,21 @@ namespace Helium
             /* GetDimensions: Calculates the dimensions (width, height, depth) of
             * a mesh.
             *
-            * dimensions - array of 3 GLfloats (GLfloat dimensions[3])
+            * dimensions - array of 3 GLfloats (float32_t dimensions[3])
             */
-            void GetDimensions(GLfloat* dimensions);
+            void GetDimensions(float32_t* dimensions);
 
             /* Scale: Scales a mesh by a given amount.
             * 
             * scale - scalefactor (0.5 = half as large, 2.0 = twice as large)
             */
-            void Scale(GLfloat scale);
+            void Scale(float32_t scale);
 
             /* Unitize: "unitize" a mesh by translating it to the origin and
             * scaling it to fit in a unit cube around the origin.  Returns the
             * scalefactor used.
             */
-            GLfloat Unitize();
+            float32_t Unitize();
 
             /* ReverseWinding: Reverse the polygon winding for all polygons in
             * this mesh.  Default winding is counter-clockwise.  Also changes
@@ -164,7 +161,7 @@ namespace Helium
             *            Modes::Texture -  write texture coords
             *            Modes::Flat and Modes::Smooth should not both be specified.
             */
-            void WriteOBJ( const Path& path, GLuint mode = Modes::Default );
+            void WriteOBJ( const Path& path, uint32_t mode = Modes::Default );
         };
     }
 }

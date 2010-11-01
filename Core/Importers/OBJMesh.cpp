@@ -23,22 +23,21 @@ changes by Geoff Evans:
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include <windows.h> // ugh, need this to make windows GL work
+#include <windows.h> // ugh, need this to make windows Importers work
 
 #define MAX_SHININESS 100.0 /* for Poser */
 
-#include "GLSourceMesh.h"
-#include "GLTexture.h"
-#include "GLUtil.h"
+#include "OBJMesh.h"
 
 #include "Foundation/Log.h"
+#include "Foundation/Math/Constants.h"
 #include "Platform/String.h"
 
 using namespace Helium;
-using namespace Helium::GL;
+using namespace Helium::Importers;
 
 /* Max: returns the maximum of two floats */
-inline static GLfloat Max(GLfloat a, GLfloat b) 
+inline static float32_t Max(float32_t a, float32_t b) 
 {
     if (b > a)
         return b;
@@ -46,7 +45,7 @@ inline static GLfloat Max(GLfloat a, GLfloat b)
 }
 
 /* Abs: returns the absolute value of a float */
-inline static GLfloat Abs(GLfloat f)
+inline static float32_t Abs(float32_t f)
 {
     if (f < 0)
         return -f;
@@ -55,10 +54,10 @@ inline static GLfloat Abs(GLfloat f)
 
 /* Dot: compute the dot product of two vectors
 *
-* u - array of 3 GLfloats (GLfloat u[3])
-* v - array of 3 GLfloats (GLfloat v[3])
+* u - array of 3 GLfloats (float32_t u[3])
+* v - array of 3 GLfloats (float32_t v[3])
 */
-inline static GLfloat Dot(GLfloat* u, GLfloat* v)
+inline static float32_t Dot(float32_t* u, float32_t* v)
 {
     assert(u); assert(v);
 
@@ -67,11 +66,11 @@ inline static GLfloat Dot(GLfloat* u, GLfloat* v)
 
 /* Cross: compute the cross product of two vectors
 *
-* u - array of 3 GLfloats (GLfloat u[3])
-* v - array of 3 GLfloats (GLfloat v[3])
-* n - array of 3 GLfloats (GLfloat n[3]) to return the cross product in
+* u - array of 3 GLfloats (float32_t u[3])
+* v - array of 3 GLfloats (float32_t v[3])
+* n - array of 3 GLfloats (float32_t n[3]) to return the cross product in
 */
-inline static void Cross(GLfloat* u, GLfloat* v, GLfloat* n)
+inline static void Cross(float32_t* u, float32_t* v, float32_t* n)
 {
     assert(u); assert(v); assert(n);
 
@@ -82,20 +81,20 @@ inline static void Cross(GLfloat* u, GLfloat* v, GLfloat* n)
 
 /* Normalize: normalize a vector
 *
-* v - array of 3 GLfloats (GLfloat v[3]) to be normalized
+* v - array of 3 GLfloats (float32_t v[3]) to be normalized
 */
-inline static void Normalize(GLfloat* v)
+inline static void Normalize(float32_t* v)
 {
     assert(v);
 
-    GLfloat l = (GLfloat)sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+    float32_t l = (float32_t)sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
     v[0] /= l;
     v[1] /= l;
     v[2] /= l;
 }
 
 /* FindGroup: Find a group in the mesh */
-inline static Group* FindGroup( SourceMesh* mesh, const tstring& name )
+inline static Group* FindGroup( OBJMesh* mesh, const tstring& name )
 {
     HELIUM_ASSERT( mesh );
 
@@ -111,7 +110,7 @@ inline static Group* FindGroup( SourceMesh* mesh, const tstring& name )
 }
 
 /* AddGroup: Add a group to the mesh */
-static Group* AddGroup( SourceMesh* mesh, const tstring& name )
+static Group* AddGroup( OBJMesh* mesh, const tstring& name )
 {
     Group* group = FindGroup( mesh, name );
     if ( !group )
@@ -129,13 +128,13 @@ static Group* AddGroup( SourceMesh* mesh, const tstring& name )
 }
 
 /* FindGroup: Find a material in the mesh */
-static GLuint FindMaterial( SourceMesh* mesh, const tstring& name )
+static uint32_t FindMaterial( OBJMesh* mesh, const tstring& name )
 {
     HELIUM_ASSERT( !name.empty() );
 
     /* XXX doing a linear search on a string key'd list is pretty lame,
     but it works and is fast enough for now. */
-    for ( GLuint i = 0; i < mesh->m_MaterialCount; i++ )
+    for ( uint32_t i = 0; i < mesh->m_MaterialCount; i++ )
     {
         if ( mesh->m_Materials[ i ].m_Name == name )
         {
@@ -152,10 +151,10 @@ static GLuint FindMaterial( SourceMesh* mesh, const tstring& name )
 *
 * name  - name of the texture
 */
-static GLuint FindOrAddTexture(SourceMesh* mesh, const tstring& name)
+static uint32_t FindOrAddTexture(OBJMesh* mesh, const tstring& name)
 {
     /* XXX doing a linear search on a string key'd list is pretty lame, but it works and is fast enough for now. */
-    for ( GLuint i = 0; i < mesh->m_TextureCount; i++ )
+    for ( uint32_t i = 0; i < mesh->m_TextureCount; i++ )
     {
         if ( mesh->m_Textures[ i ].m_Name == name )
         {
@@ -167,10 +166,6 @@ static GLuint FindOrAddTexture(SourceMesh* mesh, const tstring& name)
     mesh->m_TextureCount++;
     mesh->m_Textures = (Texture*)realloc(mesh->m_Textures, sizeof(Texture)*mesh->m_TextureCount);
     mesh->m_Textures[ mesh->m_TextureCount - 1 ].m_Name = name;
-    Path texturePath( mesh->m_Path.Directory() + name );
-    mesh->m_Textures[ mesh->m_TextureCount - 1 ].m_ID = LoadTexture( texturePath.c_str(), GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
-
-    DBG( Log::Warning( TXT( "allocated texture %d (id=%d)" ),mesh->m_TextureCount - 1, mesh->m_Textures[ mesh->m_TextureCount - 1 ].m_ID ) );
 
     return mesh->m_TextureCount - 1;
 }
@@ -179,7 +174,7 @@ static GLuint FindOrAddTexture(SourceMesh* mesh, const tstring& name)
 *
 * name  - name of the material library
 */
-static void ReadMTL( SourceMesh* mesh, const tstring& name )
+static void ReadMTL( OBJMesh* mesh, const tstring& name )
 {
     FILE* file;
     char buf[128];
@@ -229,7 +224,7 @@ static void ReadMTL( SourceMesh* mesh, const tstring& name )
     mesh->m_Materials = new Material[ mesh->m_MaterialCount ];
 
     /* set the default material */
-    for (GLuint i = 0; i < mesh->m_MaterialCount; i++)
+    for (uint32_t i = 0; i < mesh->m_MaterialCount; i++)
     {
         mesh->m_Materials[i].m_Name = TXT( "" );
         mesh->m_Materials[i].m_Ambient[0] = 0.2f;
@@ -249,7 +244,7 @@ static void ReadMTL( SourceMesh* mesh, const tstring& name )
     }
     mesh->m_Materials[0].m_Name = TXT( "default" );
 
-    GLuint next_index = 0;
+    uint32_t next_index = 0;
     Material* current_material = NULL;
 
     /* now, read in the data */
@@ -385,15 +380,15 @@ static void ReadMTL( SourceMesh* mesh, const tstring& name )
 
 /* WriteMTL: write a wavefront material library file
 *
-* mesh   - properly initialized SourceMesh structure
+* mesh   - properly initialized OBJMesh structure
 * meshpath  - pathname of the mesh being written
 * mtllibname - name of the material library to be written
 */
-static void WriteMTL( SourceMesh* mesh, const Path& meshPath, const tstring& materialLibraryName )
+static void WriteMTL( OBJMesh* mesh, const Path& meshPath, const tstring& materialLibraryName )
 {
     FILE* file;
     Material* material;
-    GLuint i;
+    uint32_t i;
 
     Path materialLibraryPath( meshPath.Directory() + materialLibraryName );
     /* open the file */
@@ -433,12 +428,12 @@ static void WriteMTL( SourceMesh* mesh, const Path& meshPath, const tstring& mat
 *
 * file  - (fopen'd) file descriptor 
 */
-static void FirstPass(SourceMesh* mesh, FILE* file) 
+static void FirstPass(OBJMesh* mesh, FILE* file) 
 {
-    GLuint numvertices;        /* number of vertices in mesh */
-    GLuint numnormals;         /* number of normals in mesh */
-    GLuint numuvs;             /* number of uvs in mesh */
-    GLuint numtriangles;       /* number of triangles in mesh */
+    uint32_t numvertices;        /* number of vertices in mesh */
+    uint32_t numnormals;         /* number of normals in mesh */
+    uint32_t numuvs;             /* number of uvs in mesh */
+    uint32_t numtriangles;       /* number of triangles in mesh */
     Group* group;               /* current group */
     unsigned v, n, t;
     char buf[128];
@@ -615,7 +610,7 @@ static void FirstPass(SourceMesh* mesh, FILE* file)
     group = mesh->m_Groups;
     while( group )
     {
-        group->m_Triangles = (GLuint*)malloc( sizeof( GLuint ) * group->m_TriangleCount );
+        group->m_Triangles = (uint32_t*)malloc( sizeof( uint32_t ) * group->m_TriangleCount );
         group->m_TriangleCount = 0;
         group = group->m_Next;
     }
@@ -626,17 +621,17 @@ static void FirstPass(SourceMesh* mesh, FILE* file)
 *
 * file  - (fopen'd) file descriptor 
 */
-static void SecondPass(SourceMesh* mesh, FILE* file) 
+static void SecondPass(OBJMesh* mesh, FILE* file) 
 {
-    GLuint numvertices;   /* number of vertices in mesh */
-    GLuint numnormals;    /* number of normals in mesh */
-    GLuint numuvs;        /* number of uvs in mesh */
-    GLuint numtriangles;  /* number of triangles in mesh */
-    GLfloat* vertices;    /* array of vertices  */
-    GLfloat* normals;     /* array of normals */
-    GLfloat* uvs;         /* array of texture coordinates */
+    uint32_t numvertices;   /* number of vertices in mesh */
+    uint32_t numnormals;    /* number of normals in mesh */
+    uint32_t numuvs;        /* number of uvs in mesh */
+    uint32_t numtriangles;  /* number of triangles in mesh */
+    float32_t* vertices;    /* array of vertices  */
+    float32_t* normals;     /* array of normals */
+    float32_t* uvs;         /* array of texture coordinates */
     Group* group;         /* current group pointer */
-    GLuint material;      /* current material */
+    uint32_t material;      /* current material */
     unsigned int v, n, t;
     char buf[128];
 
@@ -882,14 +877,14 @@ static void SecondPass(SourceMesh* mesh, FILE* file)
     }
 
     /* announce the memory requirements */
-    DBG( Log::Warning( TXT(" Memory: %d bytes"),
-        numvertices  * 3*sizeof(GLfloat) +
-        numnormals   * 3*sizeof(GLfloat) * (numnormals ? 1 : 0) +
-        numuvs * 3*sizeof(GLfloat) * (numuvs ? 1 : 0) +
-        numtriangles * sizeof(Triangle)) );
+    Log::Print( TXT(" Memory: %d bytes"),
+        numvertices  * 3*sizeof(float32_t) +
+        numnormals   * 3*sizeof(float32_t) * (numnormals ? 1 : 0) +
+        numuvs * 3*sizeof(float32_t) * (numuvs ? 1 : 0) +
+        numtriangles * sizeof(Triangle));
 }
 
-SourceMesh::SourceMesh()
+OBJMesh::OBJMesh()
 : m_VertexCount( 0 )
 , m_Vertices( NULL )
 , m_NormalCount( 0 )
@@ -907,12 +902,12 @@ SourceMesh::SourceMesh()
 {
 }
 
-SourceMesh::~SourceMesh()
+OBJMesh::~OBJMesh()
 {
     Reset(); 
 }
 
-void SourceMesh::Reset()
+void OBJMesh::Reset()
 {
     m_Path.Clear();
     m_MaterialLibraryName = TXT( "" );
@@ -949,11 +944,6 @@ void SourceMesh::Reset()
 
     if ( m_Textures )
     {
-        for ( GLuint i = 0; i < m_TextureCount; ++i )
-        {
-            glDeleteTextures( 1, &m_Textures[ i ].m_ID );
-        }
-
         free( m_Textures );
         m_Textures = NULL;
     }
@@ -967,9 +957,9 @@ void SourceMesh::Reset()
     }
 }
 
-void SourceMesh::Scale( GLfloat scale )
+void OBJMesh::Scale( float32_t scale )
 {
-    for ( GLuint i = 1; i <= m_VertexCount; i++)
+    for ( uint32_t i = 1; i <= m_VertexCount; i++)
     {
         m_Vertices[3 * i + 0] *= scale;
         m_Vertices[3 * i + 1] *= scale;
@@ -977,12 +967,12 @@ void SourceMesh::Scale( GLfloat scale )
     }
 }
 
-GLfloat SourceMesh::Unitize()
+float32_t OBJMesh::Unitize()
 {
-    GLuint  i;
-    GLfloat maxx, minx, maxy, miny, maxz, minz;
-    GLfloat cx, cy, cz, w, h, d;
-    GLfloat scale;
+    uint32_t  i;
+    float32_t maxx, minx, maxy, miny, maxz, minz;
+    float32_t cx, cy, cz, w, h, d;
+    float32_t scale;
 
     assert(m_Vertices);
 
@@ -1035,10 +1025,10 @@ GLfloat SourceMesh::Unitize()
     return scale;
 }
 
-void SourceMesh::GetDimensions(GLfloat* dimensions)
+void OBJMesh::GetDimensions(float32_t* dimensions)
 {
-    GLuint i;
-    GLfloat maxx, minx, maxy, miny, maxz, minz;
+    uint32_t i;
+    float32_t maxx, minx, maxy, miny, maxz, minz;
 
     assert(m_Vertices);
     assert(dimensions);
@@ -1071,9 +1061,9 @@ void SourceMesh::GetDimensions(GLfloat* dimensions)
     dimensions[2] = Abs(maxz) + Abs(minz);
 }
 
-void SourceMesh::ReverseWinding()
+void OBJMesh::ReverseWinding()
 {
-    GLuint i, swap;
+    uint32_t i, swap;
 
     for (i = 0; i < m_TriangleCount; i++)
     {
@@ -1105,12 +1095,12 @@ void SourceMesh::ReverseWinding()
     }
 }
 
-void SourceMesh::GenerateLinearTexCoords()
+void OBJMesh::GenerateLinearTexCoords()
 {
     Group *group;
-    GLfloat dimensions[3];
-    GLfloat x, y, scalefactor;
-    GLuint i;
+    float32_t dimensions[3];
+    float32_t x, y, scalefactor;
+    uint32_t i;
 
     if (m_UVs)
     {
@@ -1118,7 +1108,7 @@ void SourceMesh::GenerateLinearTexCoords()
     }
 
     m_UVCount = m_VertexCount;
-    m_UVs=(GLfloat*)malloc(sizeof(GLfloat)*2*(m_UVCount+1));
+    m_UVs=(float32_t*)malloc(sizeof(float32_t)*2*(m_UVCount+1));
 
     GetDimensions(dimensions);
     scalefactor = 2.0f / Abs(Max(Max(dimensions[0], dimensions[1]), dimensions[2]));
@@ -1146,14 +1136,14 @@ void SourceMesh::GenerateLinearTexCoords()
         group = group->m_Next;
     }
 
-    DBG( Log::Warning( TXT("GenerateLinearTexCoords(): generated %d linear texture coordinates"), m_UVCount) );
+    Log::Warning( TXT("GenerateLinearTexCoords(): generated %d linear texture coordinates"), m_UVCount);
 }
 
-void SourceMesh::GenerateSphericalTexCoords()
+void OBJMesh::GenerateSphericalTexCoords()
 {
     Group* group;
-    GLfloat theta, phi, rho, x, y, z, r;
-    GLuint i;
+    float32_t theta, phi, rho, x, y, z, r;
+    uint32_t i;
 
     assert(m_Normals);
 
@@ -1163,7 +1153,7 @@ void SourceMesh::GenerateSphericalTexCoords()
     }
 
     m_UVCount = m_NormalCount;
-    m_UVs=(GLfloat*)malloc(sizeof(GLfloat)*2*(m_UVCount+1));
+    m_UVs=(float32_t*)malloc(sizeof(float32_t)*2*(m_UVCount+1));
 
     for (i = 1; i <= m_NormalCount; i++)
     {
@@ -1182,7 +1172,7 @@ void SourceMesh::GenerateSphericalTexCoords()
         {
             if(z == 0.0f)
             {
-                phi = GL_PI / 2.0f;
+                phi = Helium::Pi / 2.0f;
             }
             else
             {
@@ -1191,16 +1181,16 @@ void SourceMesh::GenerateSphericalTexCoords()
 
             if(y == 0.0f)
             {
-                theta = GL_PI / 2.0f;
+                theta = Helium::Pi / 2.0f;
             }
             else
             {
-                theta = asin(y / r) + (GL_PI / 2.0f);
+                theta = asin(y / r) + (Helium::Pi / 2.0f);
             }
         }
 
-        m_UVs[2 * i + 0] = theta / GL_PI;
-        m_UVs[2 * i + 1] = phi / GL_PI;
+        m_UVs[2 * i + 0] = theta / Helium::Pi;
+        m_UVs[2 * i + 1] = phi / Helium::Pi;
     }
 
     /* go through and put uv indices in all the m_Triangles */
@@ -1218,7 +1208,7 @@ void SourceMesh::GenerateSphericalTexCoords()
     }
 }
 
-void SourceMesh::ReadOBJ( const Path& path )
+void OBJMesh::ReadOBJ( const Path& path )
 {
     FILE* file;
     unsigned int i, j;
@@ -1238,17 +1228,17 @@ void SourceMesh::ReadOBJ( const Path& path )
     FirstPass( this, file );
 
     /* allocate memory */
-    m_Vertices = (GLfloat*)malloc(sizeof(GLfloat) * 3 * (m_VertexCount + 1));
+    m_Vertices = (float32_t*)malloc(sizeof(float32_t) * 3 * (m_VertexCount + 1));
     m_Triangles = new Triangle[ m_TriangleCount ];
 
     if (m_NormalCount)
     {
-        m_Normals = (GLfloat*)malloc(sizeof(GLfloat) * 3 * (m_NormalCount + 1));
+        m_Normals = (float32_t*)malloc(sizeof(float32_t) * 3 * (m_NormalCount + 1));
     }
 
     if (m_UVCount)
     {
-        m_UVs = (GLfloat*)malloc(sizeof(GLfloat) * 2 * (m_UVCount + 1));
+        m_UVs = (float32_t*)malloc(sizeof(float32_t) * 2 * (m_UVCount + 1));
     }
 
     /* rewind to beginning of file and read in the data this pass */
@@ -1283,12 +1273,12 @@ void SourceMesh::ReadOBJ( const Path& path )
     fclose(file);
 }
 
-void SourceMesh::WriteOBJ( const Path& path, GLuint mode)
+void OBJMesh::WriteOBJ( const Path& path, uint32_t mode)
 {
-    GLuint i;
+    uint32_t i;
     FILE* file;
     Group* group;
-    GLuint material = -1;
+    uint32_t material = -1;
 
     if (mode & Modes::Texture && !m_UVs)
     {

@@ -30,7 +30,7 @@ namespace Helium
             static void CleanupType();
 
         public:
-            VolumeType( Scene* scene, i32 instanceType );
+            VolumeType( Scene* scene, int32_t instanceType );
             virtual ~VolumeType();
 
             virtual void Create() HELIUM_OVERRIDE;

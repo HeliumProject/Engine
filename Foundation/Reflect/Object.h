@@ -21,7 +21,7 @@ namespace Helium
         class FOUNDATION_API Object HELIUM_ABSTRACT
         {
         private:
-            mutable i32 m_RefCount;
+            mutable int32_t m_RefCount;
 
         protected:
             Object();
@@ -46,10 +46,10 @@ namespace Helium
             //
 
             // Returns the type id for this instance
-            virtual i32 GetType() const;
+            virtual int32_t GetType() const;
 
             // Deduces type membership for this instance
-            virtual bool HasType(i32 type) const;
+            virtual bool HasType(int32_t type) const;
 
             // Retrieves the reflection data for this instance
             virtual const Reflect::Class* GetClass() const;

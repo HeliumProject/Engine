@@ -205,7 +205,7 @@ bool RotateManipulator::Pick( PickVisitor* pick )
     linePick->ClearHits();
 
     // amount of error allowed to cause a pick hit
-    f32 pickRingError = m_Ring->m_Radius / 10.f;
+    float32_t pickRingError = m_Ring->m_Radius / 10.f;
 
     // pick for a one of the axis ring using the pick transformed into the local space of the object
     m_SelectedAxes = PickRing(pick, pickRingError);
@@ -482,7 +482,7 @@ void RotateManipulator::MouseMove( const MouseMoveInput& e )
     primaryStart.m_StartFrame.TransformVertex(startPoint);
 
     Vector3 cameraPosition;
-    m_View->GetCamera()->ViewportToWorldVertex( (f32)e.GetPosition().x, (f32)e.GetPosition().y, cameraPosition);
+    m_View->GetCamera()->ViewportToWorldVertex( (float32_t)e.GetPosition().x, (float32_t)e.GetPosition().y, cameraPosition);
 
 
     //
@@ -512,11 +512,11 @@ void RotateManipulator::MouseMove( const MouseMoveInput& e )
 
     // Pick ray from our starting location
     Line startRay;
-    m_View->GetCamera()->ViewportToLine( (f32)m_StartX, (f32)m_StartY, startRay);
+    m_View->GetCamera()->ViewportToLine( (float32_t)m_StartX, (float32_t)m_StartY, startRay);
 
     // Pick ray from our current location
     Line endRay;
-    m_View->GetCamera()->ViewportToLine( (f32)e.GetPosition().x, (f32)e.GetPosition().y, endRay);
+    m_View->GetCamera()->ViewportToLine( (float32_t)e.GetPosition().x, (float32_t)e.GetPosition().y, endRay);
 
     // Our from and to vectors for angle axis rotation about a rotation plane
     Vector3 p1, p2;
@@ -769,7 +769,7 @@ void RotateManipulator::CreateProperties()
         m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Size" ) );
-            Inspect::Slider* slider = m_Generator->AddSlider<f32>( new Helium::MemberProperty<SceneGraph::RotateManipulator, f32> (this, &RotateManipulator::GetSize, &RotateManipulator::SetSize) );
+            Inspect::Slider* slider = m_Generator->AddSlider<float32_t>( new Helium::MemberProperty<SceneGraph::RotateManipulator, float32_t> (this, &RotateManipulator::GetSize, &RotateManipulator::SetSize) );
             slider->a_Min.Set( 0.10f );
             slider->a_Max.Set( 0.5f );
         }
@@ -814,19 +814,19 @@ void RotateManipulator::CreateProperties()
         m_Generator->PushContainer();
         {
             m_Generator->AddLabel( TXT( "Snap Degrees" ) );
-            m_Generator->AddValue<float>( new Helium::MemberProperty<SceneGraph::RotateManipulator, f32> (this, &RotateManipulator::GetSnapDegrees, &RotateManipulator::SetSnapDegrees) );
+            m_Generator->AddValue<float>( new Helium::MemberProperty<SceneGraph::RotateManipulator, float32_t> (this, &RotateManipulator::GetSnapDegrees, &RotateManipulator::SetSnapDegrees) );
         }
         m_Generator->Pop();
     }
     m_Generator->Pop();
 }
 
-f32 RotateManipulator::GetSize() const
+float32_t RotateManipulator::GetSize() const
 {
     return m_Size;
 }
 
-void RotateManipulator::SetSize( f32 size )
+void RotateManipulator::SetSize( float32_t size )
 {
     m_Size = size;
 
@@ -873,7 +873,7 @@ void RotateManipulator::SetAxisSnap(bool axisSnap)
     settings->RaiseChanged( settings->GetClass()->FindField( &RotateManipulator::m_AxisSnap ) );
 }
 
-f32 RotateManipulator::GetSnapDegrees() const
+float32_t RotateManipulator::GetSnapDegrees() const
 {
     return m_SnapDegrees;
 }

@@ -4,12 +4,12 @@
 
 using namespace Helium;
 
-u32 Helium::GetLastError()
+uint32_t Helium::GetLastError()
 {
     return ::GetLastError();
 }
 
-tstring Helium::GetErrorString( u32 errorOverride )
+tstring Helium::GetErrorString( uint32_t errorOverride )
 {
     // get the system error
     DWORD error = ( errorOverride != 0 ) ? errorOverride : ::GetLastError();

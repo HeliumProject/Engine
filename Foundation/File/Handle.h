@@ -44,7 +44,7 @@ namespace Helium
         }
 
     private:
-        u32  m_OpenCount;
+        uint32_t  m_OpenCount;
         tstring m_Path;
         const tchar* m_Mode;
         FILE* m_FileHandle;

@@ -35,9 +35,9 @@ namespace Helium
                 CommitButtons     = 1 << 3,  // Show the commit buttons
             };
 
-            static const u32 Default = ( ClientDetails | CommitButtons );
+            static const uint32_t Default = ( ClientDetails | CommitButtons );
         }
-        typedef u32 PanelStyle;
+        typedef uint32_t PanelStyle;
 
 
         ///////////////////////////////////////////////////////////////////////////////

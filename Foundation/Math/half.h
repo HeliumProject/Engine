@@ -50,9 +50,9 @@ namespace Helium
     //
     // Implementation --
     //
-    // Representation of a f32:
+    // Representation of a float32_t:
     //
-    //	We assume that a f32, f, is an IEEE 754 single-precision
+    //	We assume that a float32_t, f, is an IEEE 754 single-precision
     //	floating point number, whose bits are arranged as follows:
     //
     //	    31 (msb)
@@ -145,11 +145,11 @@ namespace Helium
     //
     // Conversion:
     //
-    //	Converting from a f32 to a half requires some non-trivial bit
+    //	Converting from a float32_t to a half requires some non-trivial bit
     //	manipulations.  In some cases, this makes conversion relatively
     //	slow, but the most common case is accelerated via table lookups.
     //
-    //	Converting back from a half to a f32 is easier because we don't
+    //	Converting back from a half to a float32_t is easier because we don't
     //	have to do any rounding.  In addition, there are only 65536
     //	different half numbers; we can convert each of those numbers once
     //	and store the results in a table.  Later, all conversions can be
@@ -170,7 +170,7 @@ namespace Helium
             _h = h._h;
         }
 
-        half (f32 f)
+        half (float32_t f)
         {
             if (f == 0)
             {
@@ -191,14 +191,14 @@ namespace Helium
                 // For all other cases (overflow, zeroes, denormalized numbers
                 // resulting from underflow, infinities and NANs), the table
                 // lookup returns zero, and we call a longer, non-inline function
-                // to do the f32-to-half conversion.
+                // to do the float32_t-to-half conversion.
                 //
 
                 uif x;
 
                 x.f = f;
 
-                register i32 e = (x.i >> 23) & 0x000001ff;
+                register int32_t e = (x.i >> 23) & 0x000001ff;
 
                 e = _eLut[e];
 
@@ -222,9 +222,9 @@ namespace Helium
         }
 
         //--------------------
-        // Conversion to f32
+        // Conversion to float32_t
         //--------------------
-        operator f32() const
+        operator float32_t() const
         {
             return _toFloat[_h].f;
         }
@@ -248,7 +248,7 @@ namespace Helium
             return *this;
         }
 
-        half operator = (f32 f)
+        half operator = (float32_t f)
         {
             *this = half (f);
             return *this;
@@ -256,49 +256,49 @@ namespace Helium
 
         half operator += (half  h)
         {
-            *this = half (f32 (*this) + f32 (h));
+            *this = half (float32_t (*this) + float32_t (h));
             return *this;
         }
 
-        half operator += (f32 f)
+        half operator += (float32_t f)
         {
-            *this = half (f32 (*this) + f);
+            *this = half (float32_t (*this) + f);
             return *this;
         }
 
         half operator -= (half  h)
         {
-            *this = half (f32 (*this) - f32 (h));
+            *this = half (float32_t (*this) - float32_t (h));
             return *this;
         }
 
-        half operator -= (f32 f)
+        half operator -= (float32_t f)
         {
-            *this = half (f32 (*this) - f);
+            *this = half (float32_t (*this) - f);
             return *this;
         }
 
         half operator *= (half  h)
         {
-            *this = half (f32 (*this) * f32 (h));
+            *this = half (float32_t (*this) * float32_t (h));
             return *this;
         }
 
-        half operator *= (f32 f)
+        half operator *= (float32_t f)
         {
-            *this = half (f32 (*this) * f);
+            *this = half (float32_t (*this) * f);
             return *this;
         }
 
         half operator /= (half  h)
         {
-            *this = half (f32 (*this) / f32 (h));
+            *this = half (float32_t (*this) / float32_t (h));
             return *this;
         }
 
-        half operator /= (f32 f)
+        half operator /= (float32_t f)
         {
-            *this = half (f32 (*this) / f);
+            *this = half (float32_t (*this) / f);
             return *this;
         }
 
@@ -307,7 +307,7 @@ namespace Helium
         // After rounding, the significand's 10-n least significant
         // bits will be zero.
         //---------------------------------------------------------
-        half round(u32 n) const
+        half round(uint32_t n) const
         {
             //
             // Parameter check.
@@ -321,8 +321,8 @@ namespace Helium
             // and the combined exponent and significand, e.
             //
 
-            u16 s = _h & 0x8000;
-            u16 e = _h & 0x7fff;
+            uint16_t s = _h & 0x8000;
+            uint16_t e = _h & 0x7fff;
 
             //
             // Round the exponent and significand to the nearest value
@@ -382,20 +382,20 @@ namespace Helium
         //--------------------------------------------------------------------
         bool isFinite() const
         {
-            u16 e = (_h >> 10) & 0x001f;
+            uint16_t e = (_h >> 10) & 0x001f;
             return e < 31;
         }
 
         bool isNormalized() const
         {
-            u16 e = (_h >> 10) & 0x001f;
+            uint16_t e = (_h >> 10) & 0x001f;
             return e > 0 && e < 31;
         }
 
         bool isDenormalized() const
         {
-            u16 e = (_h >> 10) & 0x001f;
-            u16 m =  _h & 0x3ff;
+            uint16_t e = (_h >> 10) & 0x001f;
+            uint16_t m =  _h & 0x3ff;
             return e == 0 && m != 0;
         }
 
@@ -406,15 +406,15 @@ namespace Helium
 
         bool isNan() const
         {
-            u16 e = (_h >> 10) & 0x001f;
-            u16 m =  _h & 0x3ff;
+            uint16_t e = (_h >> 10) & 0x001f;
+            uint16_t m =  _h & 0x3ff;
             return e == 31 && m != 0;
         }
 
         bool isInfinity() const
         {
-            u16 e = (_h >> 10) & 0x001f;
-            u16 m =  _h & 0x3ff;
+            uint16_t e = (_h >> 10) & 0x001f;
+            uint16_t m =  _h & 0x3ff;
             return e == 31 && m == 0;
         }
 
@@ -467,32 +467,32 @@ namespace Helium
         //--------------------------------------
         // Access to the internal representation
         //--------------------------------------
-        u16	bits() const
+        uint16_t	bits() const
         {
             return _h;
         }
 
-        void setBits(u16 bits)
+        void setBits(uint16_t bits)
         {
             _h = bits;
         }
 
         union uif
         {
-            u32	i;
-            f32		f;
+            uint32_t	i;
+            float32_t		f;
         };
 
         static void	createBitString(tchar c[19], half h);
-        static void	createBitString(tchar c[35], f32 f);
+        static void	createBitString(tchar c[35], float32_t f);
 
         static const uif _toFloat[1 << 16];
-        static const u16	_eLut[1 << 9];
+        static const uint16_t	_eLut[1 << 9];
 
     private:
-        static i16 convert(i32 i);
-        static f32 overflow();
-        u16 _h;
+        static int16_t convert(int32_t i);
+        static float32_t overflow();
+        uint16_t _h;
     };
 
     typedef half f16;
@@ -504,16 +504,16 @@ namespace Helium
     //
     //  written by: rob wyatt
     //
-    //  Convert a standard half to an IEEE f32.
+    //  Convert a standard half to an IEEE float32_t.
     //  Including handling all the exception cases such as zero, nan, inf
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    inline f32 HalfToFloat(i16 y)
+    inline float32_t HalfToFloat(int16_t y)
     {
-        i32 s = (y >> 15) & 0x00000001;
-        i32 e = (y >> 10) & 0x0000001f;
-        i32 m =  y        & 0x000003ff;
+        int32_t s = (y >> 15) & 0x00000001;
+        int32_t e = (y >> 10) & 0x0000001f;
+        int32_t m =  y        & 0x000003ff;
 
         if (e == 0)
         {
@@ -523,8 +523,8 @@ namespace Helium
                 // Plus or minus zero
                 //
 
-                u32 r = s << 31;
-                return *(f32*)&r;
+                uint32_t r = s << 31;
+                return *(float32_t*)&r;
             }
             else
             {
@@ -548,8 +548,8 @@ namespace Helium
                 // Positive or negative infinity
                 //
 
-                u32 r = (s << 31) | 0x7f800000;
-                return *(f32*)&r;
+                uint32_t r = (s << 31) | 0x7f800000;
+                return *(float32_t*)&r;
             }
             else
             {
@@ -557,8 +557,8 @@ namespace Helium
                 // Nan -- preserve sign and significand bits
                 //
 
-                u32 r = (s << 31) | 0x7f800000 | (m << 13);
-                return *(f32*)&r;
+                uint32_t r = (s << 31) | 0x7f800000 | (m << 13);
+                return *(float32_t*)&r;
             }
         }
 
@@ -573,8 +573,8 @@ namespace Helium
         // Assemble s, e and m.
         //
 
-        u32 r = (s << 31) | (e << 23) | m;
-        return *(f32*)&r;
+        uint32_t r = (s << 31) | (e << 23) | m;
+        return *(float32_t*)&r;
     }
 
 
@@ -584,19 +584,19 @@ namespace Helium
     //
     //  written by: rob wyatt
     //
-    //  Convert an IEEE f32 to half f32, including handling all the
+    //  Convert an IEEE float32_t to half float32_t, including handling all the
     //  exception cases such as zero, nan, inf
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    inline i16 FloatToHalf(f32 f)
+    inline int16_t FloatToHalf(float32_t f)
     {
-        // load f as an i32 bit pattern
-        i32 i = *(i32*)&f;
+        // load f as an int32_t bit pattern
+        int32_t i = *(int32_t*)&f;
 
-        i32 s =  (i >> 16) & 0x00008000;
-        i32 e = ((i >> 23) & 0x000000ff) - (127 - 15);
-        i32 m =   i        & 0x007fffff;
+        int32_t s =  (i >> 16) & 0x00008000;
+        int32_t e = ((i >> 23) & 0x000000ff) - (127 - 15);
+        int32_t m =   i        & 0x007fffff;
 
         //
         // Now reassemble s, e and m into a half:

@@ -20,27 +20,27 @@ namespace Helium
             RenderScene(Renderer* render);
             ~RenderScene();
 
-            void SetMeshHandle(u32 handle);
-            void SetEnvironmentHandle(u32 handle);
+            void SetMeshHandle(uint32_t handle);
+            void SetEnvironmentHandle(uint32_t handle);
 
-            void AddShader( const u32 shaderHandle )
+            void AddShader( const uint32_t shaderHandle )
             {
                 m_shader_table.push_back( shaderHandle );
             }
 
         private:
-            u32 LoadNewMesh(const tchar* name,ObjectLoaderPtr loader = NULL, int bangleIndex = -1);
+            uint32_t LoadNewMesh(const tchar* name,ObjectLoaderPtr loader = NULL, int bangleIndex = -1);
         public:
-            u32 LoadMesh(const tchar* name,ObjectLoaderPtr loader = NULL, int bangleIndex = -1);
-            u32 ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int bangleIndex);
+            uint32_t LoadMesh(const tchar* name,ObjectLoaderPtr loader = NULL, int bangleIndex = -1);
+            uint32_t ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int bangleIndex);
 
         private:
-            u32 LoadNewEnvironment(const tchar* fname,u32 clear_color);
+            uint32_t LoadNewEnvironment(const tchar* fname,uint32_t clear_color);
         public:
-            u32 LoadEnvironment(const tchar* name, u32 clear_color);
+            uint32_t LoadEnvironment(const tchar* name, uint32_t clear_color);
 
-            static RenderMesh*        ResolveMeshHandle( u32 handle );
-            static RenderEnvironment* ResolveEnvironmentHandle( u32 handle );
+            static RenderMesh*        ResolveMeshHandle( uint32_t handle );
+            static RenderEnvironment* ResolveEnvironmentHandle( uint32_t handle );
 
             static void RemoveAllMeshes();
             static void RemoveAllEnvironments();
@@ -49,13 +49,13 @@ namespace Helium
             Renderer*                   m_renderer;
 
             // handle to an environment
-            u32                         m_environment;
+            uint32_t                         m_environment;
 
             // the viewport area, where to render on the back buffer 
-            u32                         m_xpos;
-            u32                         m_ypos;
-            u32                         m_width;
-            u32                         m_height; 
+            uint32_t                         m_xpos;
+            uint32_t                         m_ypos;
+            uint32_t                         m_width;
+            uint32_t                         m_height; 
 
             float                       m_scene_scale;                // set before loading a mesh!
             float                       m_normalscale;                // set before loading a mesh
@@ -68,11 +68,11 @@ namespace Helium
             bool                        m_render_normals;
             bool                        m_render_tangents;
             bool                        m_render_env_cube;
-            u32                         m_draw_mode;                  // the main draw mode
+            uint32_t                         m_draw_mode;                  // the main draw mode
 
             // the index in the mesh array
-            u32                         m_mesh_handle;
-            std::vector< u32 >          m_shader_table;
+            uint32_t                         m_mesh_handle;
+            std::vector< uint32_t >          m_shader_table;
             std::vector< RenderLight* > m_lights;                     // these lights are accumualted into the env sh
             D3DXVECTOR4                 m_ambient;                    // this ambient is accumulated into the env sh
 

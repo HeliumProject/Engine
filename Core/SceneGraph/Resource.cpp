@@ -130,7 +130,7 @@ void Resource::Populate()
 
         if (args.m_Buffer)
         {
-            u32 offset = args.m_Offset;
+            uint32_t offset = args.m_Offset;
 
             m_Populator.Invoke( &args );
 

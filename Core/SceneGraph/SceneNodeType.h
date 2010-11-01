@@ -39,7 +39,7 @@ namespace Helium
             static void CleanupType();
 
         public:
-            SceneNodeType(SceneGraph::Scene* scene, i32 instanceType);
+            SceneNodeType(SceneGraph::Scene* scene, int32_t instanceType);
             virtual ~SceneNodeType();
 
             SceneGraph::Scene* GetScene();
@@ -47,8 +47,8 @@ namespace Helium
             const tstring& GetName() const;
             void SetName( const tstring& name );
 
-            i32 GetImageIndex() const;
-            void SetImageIndex( i32 index );
+            int32_t GetImageIndex() const;
+            void SetImageIndex( int32_t index );
 
             virtual void Reset();
 
@@ -56,7 +56,7 @@ namespace Helium
             virtual void RemoveInstance(SceneNodePtr n);
             const HM_SceneNodeSmartPtr& GetInstances() const;
 
-            i32 GetInstanceType() const;
+            int32_t GetInstanceType() const;
 
             virtual void PopulateManifest( Asset::SceneManifest* manifest ) const;
 
@@ -92,13 +92,13 @@ namespace Helium
             SceneGraph::Scene* m_Scene;
 
             // Index of image to use in the UI (from the 16x16 image list)
-            i32 m_ImageIndex;
+            int32_t m_ImageIndex;
 
             // the instances that have this type
             HM_SceneNodeSmartPtr m_Instances;
 
             // compile time type id of the instances
-            i32 m_InstanceType;
+            int32_t m_InstanceType;
         };
 
         typedef Helium::SmartPtr< SceneGraph::SceneNodeType > SceneNodeTypePtr;
@@ -106,7 +106,7 @@ namespace Helium
         typedef std::vector< SceneGraph::SceneNodeType* > V_SceneNodeTypeDumbPtr;
         typedef std::set< SceneGraph::SceneNodeType* > S_SceneNodeTypeDumbPtr;
 
-        typedef stdext::hash_map< i32, S_SceneNodeTypeDumbPtr > HMS_TypeToSceneNodeTypeDumbPtr;
+        typedef stdext::hash_map< int32_t, S_SceneNodeTypeDumbPtr > HMS_TypeToSceneNodeTypeDumbPtr;
         typedef stdext::hash_map< tstring, SceneNodeTypePtr > HM_StrToSceneNodeTypeSmartPtr;
     }
 }

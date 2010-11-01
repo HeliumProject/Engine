@@ -120,10 +120,10 @@ namespace Helium
 
             tstring GetHighlightedPath() const;
 
-            void SetZoom( u16 zoom );
+            void SetZoom( uint16_t zoom );
 
             VaultSortMethod GetSortMethod() const;
-            void Sort( VaultSortMethod method = VaultSortMethods::AlphabeticalByName, u32 sortOptions = VaultSortOptions::Refresh | VaultSortOptions::Force );
+            void Sort( VaultSortMethod method = VaultSortMethods::AlphabeticalByName, uint32_t sortOptions = VaultSortOptions::Refresh | VaultSortOptions::Force );
 
             virtual void Scroll( int x, int y ) HELIUM_OVERRIDE;
 

@@ -23,7 +23,7 @@ static void PrintedListener(Log::PrintedArgs& args)
 {
     if (g_Connection && g_Connection->GetState() == IPC::ConnectionStates::Active)
     {
-        u32 size = sizeof( Worker::ConsoleOutput ) + (u32)args.m_Statement.m_String.length() + 1;
+        uint32_t size = sizeof( Worker::ConsoleOutput ) + (uint32_t)args.m_Statement.m_String.length() + 1;
 
         IPC::Message* msg = g_Connection->CreateMessage( Worker::ConsoleOutputMessage, size );
 
@@ -140,7 +140,7 @@ IPC::Message* Client::Receive(bool wait)
     return msg;
 }
 
-bool Client::Send(u32 id, u32 size, const u8* data)
+bool Client::Send(uint32_t id, uint32_t size, const uint8_t* data)
 {
     if (g_Connection && g_Connection->GetState() == IPC::ConnectionStates::Active)
     {

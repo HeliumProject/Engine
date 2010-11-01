@@ -9,7 +9,7 @@ namespace Helium
         class FOUNDATION_API EnumerationSerializer : public Serializer
         {
         public:
-            typedef u32 DataType;
+            typedef uint32_t DataType;
             Serializer::DataPtr<DataType> m_Data;
             const Enumeration* m_Enumeration;
             tstring m_String;
@@ -24,7 +24,7 @@ namespace Helium
             virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
             virtual void ConnectField(Helium::HybridPtr<Element> instance, const Field* field, uintptr offsetInField = 0) HELIUM_OVERRIDE;
 
-            virtual bool Set(const Serializer* src, u32 flags = 0) HELIUM_OVERRIDE;
+            virtual bool Set(const Serializer* src, uint32_t flags = 0) HELIUM_OVERRIDE;
             virtual bool Equals(const Serializer* s) const HELIUM_OVERRIDE;
 
             virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;

@@ -12,7 +12,6 @@ namespace Helium
     class Matrix3;
     class Matrix4;
     class AngleAxis;
-    class Quaternion;
 
     class FOUNDATION_API EulerAngles
     {
@@ -42,14 +41,14 @@ namespace Helium
 
         }
 
-        explicit EulerAngles  (const f32& rx, const f32& ry, const f32& rz)
+        explicit EulerAngles  (const float32_t& rx, const float32_t& ry, const float32_t& rz)
             : order (EulerOrders::XYZs)
             , angles (rx, ry, rz)
         {
 
         }
 
-        explicit EulerAngles  (const f32& rx, const f32& ry, const f32& rz, const EulerOrder& o)
+        explicit EulerAngles  (const float32_t& rx, const float32_t& ry, const float32_t& rz, const EulerOrder& o)
             : order (o)
             , angles (rx, ry, rz)
         {
@@ -68,10 +67,6 @@ namespace Helium
         explicit EulerAngles  (const AngleAxis& v, const EulerOrder& order);
         EulerAngles&          operator= (const AngleAxis& v);
 
-        explicit EulerAngles  (const Quaternion& v);
-        explicit EulerAngles  (const Quaternion& v, const EulerOrder& order);
-        EulerAngles&          operator= (const Quaternion& v);
-
         bool                  operator== (const EulerAngles& v) const
         {
             return (angles == v.angles && order == v.order); 
@@ -87,32 +82,32 @@ namespace Helium
             return angles.Valid();
         }
 
-        f32                 	I ()
+        float32_t                 	I ()
         {
             return angles[order.I()];
         }
 
-        void                  I (f32 v)
+        void                  I (float32_t v)
         {
             angles[order.I()] = v;
         }
 
-        f32                 	J ()
+        float32_t                 	J ()
         {
             return angles[order.J()];
         }
 
-        void                  J (f32 v)
+        void                  J (float32_t v)
         {
             angles[order.J()] = v;
         }
 
-        f32                 	H ()
+        float32_t                 	H ()
         {
             return angles[order.H()];
         }
 
-        void                  H (f32 v)
+        void                  H (float32_t v)
         {
             angles[order.H()] = v;
         }

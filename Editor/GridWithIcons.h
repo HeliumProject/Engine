@@ -26,12 +26,12 @@ namespace Helium
             };
 
         protected:
-            u32 m_ColumnIcon;
+            uint32_t m_ColumnIcon;
 
         public:
             GridWithIcons( wxWindow* parent, wxWindowID gridID, bool allowRename = false, bool showColLabels = true );
             virtual ~GridWithIcons();
-            virtual bool AddRow( const tstring& name, bool visible, bool selectable, i32 imageIndex );
+            virtual bool AddRow( const tstring& name, bool visible, bool selectable, int32_t imageIndex );
 
         protected:
             virtual bool AddRow( const tstring& name, bool visible, bool selectable );

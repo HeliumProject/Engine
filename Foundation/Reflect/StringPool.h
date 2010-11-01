@@ -13,15 +13,15 @@
 //
 //  struct String
 //  {
-//      i32 size;           // string length
+//      int32_t size;           // string length
 //      char[] data;        // characters
 //  };
 //
 //  struct StringPool
 //  {
-//      i32 count;          // string count
+//      int32_t count;          // string count
 //      String[] strings;   // string data
-//      i32 term;           // -1
+//      int32_t term;           // -1
 //  };
 //
 
@@ -51,8 +51,8 @@ namespace Helium
             M_StringToIndex         m_Indices; 
             std::vector< tstring >  m_Strings;
 
-            i32 Insert( const tstring& str );
-            const tstring& Get( i32 index );
+            int32_t Insert( const tstring& str );
+            const tstring& Get( int32_t index );
 
             void SerializeDirect( CharStream& stream ); 
             void DeserializeDirect( CharStream& stream, CharacterEncoding encoding ); 

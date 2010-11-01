@@ -11,7 +11,7 @@ namespace Helium
     // Decode the last error string
     //
 
-    PLATFORM_API u32 GetLastError();
+    PLATFORM_API uint32_t GetLastError();
 
-    PLATFORM_API tstring GetErrorString( u32 errorOverride = 0 );
+    PLATFORM_API tstring GetErrorString( uint32_t errorOverride = 0 );
 }

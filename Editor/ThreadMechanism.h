@@ -20,8 +20,8 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         struct ThreadProcArgs
         {
-            i32 m_ThreadID;
-            ThreadProcArgs( i32 threadID )
+            int32_t m_ThreadID;
+            ThreadProcArgs( int32_t threadID )
                 : m_ThreadID( threadID )
             {
             }
@@ -46,19 +46,19 @@ namespace Helium
             // DO NO CHANGE OR ACCESS thread related data outside of UpdateMutex
             Helium::Mutex& GetUpdateMutex() { return m_UpdateMutex; }
 
-            i32 GetCurrentThreadID() const { return m_CurrentThreadID; }
-            bool IsCurrentThread( i32 threadID ) const { return threadID == GetCurrentThreadID(); }
+            int32_t GetCurrentThreadID() const { return m_CurrentThreadID; }
+            bool IsCurrentThread( int32_t threadID ) const { return threadID == GetCurrentThreadID(); }
 
         protected:
             // Called by DummyThread
             virtual void InitData() = 0; // called by StartThread
-            virtual void ThreadProc( i32 threadID ) = 0;
+            virtual void ThreadProc( int32_t threadID ) = 0;
 
             // Call these from within your ThreadProc
-            virtual void ThreadEnter( i32 threadID );
-            virtual void ThreadPostResults( i32 threadID );
-            virtual bool CheckThreadLeave( i32 threadID );
-            virtual void ThreadLeave( i32 threadID );
+            virtual void ThreadEnter( int32_t threadID );
+            virtual void ThreadPostResults( int32_t threadID );
+            virtual bool CheckThreadLeave( int32_t threadID );
+            virtual void ThreadLeave( int32_t threadID );
 
             // Uses wx events to callback to the main thread
             // Implement these callbaks to take special actions in the main thread
@@ -68,7 +68,7 @@ namespace Helium
 
         protected:
             bool             m_StopThread;
-            i32              m_CurrentThreadID;
+            int32_t              m_CurrentThreadID;
             Helium::Mutex  m_UpdateMutex;
 
             DummyWindow*     m_DummyWindow;

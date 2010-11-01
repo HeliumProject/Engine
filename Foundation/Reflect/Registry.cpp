@@ -56,7 +56,7 @@ namespace Helium
 {
     namespace Reflect
     {
-        i32         g_InitCount = 0;
+        int32_t         g_InitCount = 0;
         Registry*   g_Registry = NULL;
     }
 }
@@ -108,7 +108,6 @@ void Reflect::Initialize()
         g_Registry->RegisterType(Vector4Serializer::CreateClass( TXT( "Vector4" ) ));
         g_Registry->RegisterType(Matrix3Serializer::CreateClass( TXT( "Matrix3" ) ));
         g_Registry->RegisterType(Matrix4Serializer::CreateClass( TXT( "Matrix4" ) ));
-        g_Registry->RegisterType(QuaternionSerializer::CreateClass( TXT( "Quaternion" ) ));
         g_Registry->RegisterType(Color3Serializer::CreateClass( TXT( "Color3" ) ));
         g_Registry->RegisterType(Color4Serializer::CreateClass( TXT( "Color4" ) ));
         g_Registry->RegisterType(HDRColor3Serializer::CreateClass( TXT( "HDRColor3" ) ));
@@ -136,7 +135,6 @@ void Reflect::Initialize()
         g_Registry->RegisterType(Vector4ArraySerializer::CreateClass( TXT( "Vector4Array" ) ));
         g_Registry->RegisterType(Matrix3ArraySerializer::CreateClass( TXT( "Matrix3Array" ) ));
         g_Registry->RegisterType(Matrix4ArraySerializer::CreateClass( TXT( "Matrix4Array" ) ));
-        g_Registry->RegisterType(QuaternionArraySerializer::CreateClass( TXT( "QuaternionArray" ) ));
         g_Registry->RegisterType(Color3ArraySerializer::CreateClass( TXT( "Color3Array" ) ));
         g_Registry->RegisterType(Color4ArraySerializer::CreateClass( TXT( "Color4Array" ) ));
         g_Registry->RegisterType(HDRColor3ArraySerializer::CreateClass( TXT( "HDRColor3Array" ) ));
@@ -800,7 +798,7 @@ void Tracker::Dump()
     FILE* f = _tfopen( (path + TXT("ReflectDump.log")).c_str(), TXT("w") );
     if ( f != NULL )
     {
-        typedef std::map< u32, std::pair< tstring, u32 > > ObjectLogger;
+        typedef std::map< uint32_t, std::pair< tstring, uint32_t > > ObjectLogger;
         ObjectLogger objectLog;
 
         {
@@ -814,7 +812,7 @@ void Tracker::Dump()
                 ObjectLogger::iterator iter = objectLog.find( (*c_current).second.m_Type );
                 if ( iter == objectLog.end() )
                 {
-                    objectLog.insert( ObjectLogger::value_type( (*c_current).second.m_Type, std::pair< tstring, u32 >( (*c_current).second.m_ShortName, 1 ) ) );
+                    objectLog.insert( ObjectLogger::value_type( (*c_current).second.m_Type, std::pair< tstring, uint32_t >( (*c_current).second.m_ShortName, 1 ) ) );
                 }
                 else
                 {
@@ -832,7 +830,7 @@ void Tracker::Dump()
                 ObjectLogger::iterator iter = objectLog.find( (*d_current).second.m_Type );
                 if ( iter == objectLog.end() )
                 {
-                    objectLog.insert( ObjectLogger::value_type( (*d_current).second.m_Type, std::pair< tstring, u32 >( (*d_current).second.m_ShortName, 1 ) ) );
+                    objectLog.insert( ObjectLogger::value_type( (*d_current).second.m_Type, std::pair< tstring, uint32_t >( (*d_current).second.m_ShortName, 1 ) ) );
                 }
                 else
                 {

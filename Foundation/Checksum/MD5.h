@@ -490,7 +490,7 @@ inline void md5_finish(md5_state_t *pms, md5_byte_t digest[16])
 
 namespace Helium
 {
-    inline tstring MD5(const void* data, u32 count)
+    inline tstring MD5(const void* data, uint32_t count)
     {
         md5_state_t state;
         md5_init(&state);
@@ -511,10 +511,10 @@ namespace Helium
 
     inline tstring MD5(const tstring& data)
     {
-        return MD5( data.data(), (u32)data.length() );
+        return MD5( data.data(), (uint32_t)data.length() );
     }
 
-    inline tstring FileMD5(const tstring& filePath, u32 packetSize = 4096)
+    inline tstring FileMD5(const tstring& filePath, uint32_t packetSize = 4096)
     {
         FILE* f = _tfopen(filePath.c_str(), TXT( "rb" ) );
         if (f==0)
@@ -529,7 +529,7 @@ namespace Helium
         md5_state_t state;
         md5_init(&state);
 
-        u8* data = new u8[ packetSize ];
+        uint8_t* data = new uint8_t[ packetSize ];
         while ( size )
         {
             size_t read = fread(data,1,packetSize,f);

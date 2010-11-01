@@ -23,13 +23,13 @@ namespace Helium
             void ApplyToWindow( wxWindow* window, wxAuiManager* manager = NULL, bool updateAui = false );
 
             wxPoint GetPosition() const;
-            void SetPosition( i32 x, i32 y );
+            void SetPosition( int32_t x, int32_t y );
             void SetPosition( wxPoint pos ) { SetPosition( pos.x, pos.y ); }
 
             const Reflect::Field* Width() const;
             const Reflect::Field* Height() const;
             wxSize GetSize() const;
-            void SetSize( i32 width, i32 height );
+            void SetSize( int32_t width, int32_t height );
             void SetSize( wxSize size ) { SetSize( size.x, size.y ); }
 
             const Reflect::Field* Maximized() const;
@@ -50,12 +50,12 @@ namespace Helium
             bool m_IsMaximized;
 
             // Position of the window (upper left corner)
-            i32 m_PosX;
-            i32 m_PosY;
+            int32_t m_PosX;
+            int32_t m_PosY;
 
             // Size of the window
-            i32 m_Width;
-            i32 m_Height;
+            int32_t m_Width;
+            int32_t m_Height;
 
         public:
             static const tchar* s_Reset;

@@ -23,8 +23,8 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         struct DummyWindowArgs
         {
-            i32 m_ThreadID;
-            DummyWindowArgs( i32 threadID )
+            int32_t m_ThreadID;
+            DummyWindowArgs( int32_t threadID )
                 : m_ThreadID( threadID )
             {
             }
@@ -128,12 +128,12 @@ namespace Helium
         {
         private:
             VaultSearch* m_VaultSearch;
-            i32 m_SearchID;
+            int32_t m_SearchID;
 
         public:
             // Detached threads delete themselves once they have completed,
             // and thus must be created on the heap
-            VaultSearchThread( VaultSearch* browserSearch, i32 id )
+            VaultSearchThread( VaultSearch* browserSearch, int32_t id )
                 : wxThread( wxTHREAD_DETACHED )
                 , m_VaultSearch( browserSearch )
                 , m_SearchID( id )
@@ -291,7 +291,7 @@ void VaultSearch::OnSearchResultsAvailable( const Editor::DummyWindowArgs& args 
     }
 
     // "Publish" these results, null our pointer, and clear FoundFilesIDs to continue searching
-    u32 searchID = m_SearchResults->GetSearchID();
+    uint32_t searchID = m_SearchResults->GetSearchID();
     if ( m_SearchResults && m_SearchResults->HasResults() )
     {
         m_SearchResultsAvailableListeners.Raise( SearchResultsAvailableArgs( m_CurrentSearchQuery, m_SearchResults ) );
@@ -323,7 +323,7 @@ void VaultSearch::OnEndSearchThread( const Editor::DummyWindowArgs& args )
 // Called by VaultSearchThread
 // Fills out the VaultSearchResults structure to pass to SearchResultsAvailable event
 //
-void VaultSearch::SearchThreadProc( i32 searchID )
+void VaultSearch::SearchThreadProc( int32_t searchID )
 {
     SearchThreadEnter( searchID );
 
@@ -405,7 +405,7 @@ void VaultSearch::SearchThreadProc( i32 searchID )
 // SearchThreadProc Helper Functions
 // Used in Search() to create begin and end search events
 //
-inline void VaultSearch::SearchThreadEnter( i32 searchID )
+inline void VaultSearch::SearchThreadEnter( int32_t searchID )
 {
     ::ResetEvent( m_EndSearchEvent );
 
@@ -418,7 +418,7 @@ inline void VaultSearch::SearchThreadEnter( i32 searchID )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-inline void VaultSearch::SearchThreadPostResults( i32 searchID )
+inline void VaultSearch::SearchThreadPostResults( int32_t searchID )
 {
     Helium::TakeMutex mutex (m_SearchResultsMutex);
 
@@ -431,7 +431,7 @@ inline void VaultSearch::SearchThreadPostResults( i32 searchID )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-inline bool VaultSearch::CheckSearchThreadLeave( i32 searchID )
+inline bool VaultSearch::CheckSearchThreadLeave( int32_t searchID )
 {
     if ( m_StopSearching )
     {
@@ -441,7 +441,7 @@ inline bool VaultSearch::CheckSearchThreadLeave( i32 searchID )
     return false;
 }
 
-inline void VaultSearch::SearchThreadLeave( i32 searchID )
+inline void VaultSearch::SearchThreadLeave( int32_t searchID )
 {
     m_StopSearching = true;
 
@@ -465,9 +465,9 @@ inline void VaultSearch::SearchThreadLeave( i32 searchID )
 // SearchThreadProc Helper Functions - Wrangle VaultSearchResults
 /////////////////////////////////////////////////////////////////////////////
 
-u32 VaultSearch::AddPath( const Helium::Path& path, i32 searchID )
+uint32_t VaultSearch::AddPath( const Helium::Path& path, int32_t searchID )
 { 
-    u32 numFilesAdded = 0;
+    uint32_t numFilesAdded = 0;
 
     Helium::TakeMutex mutex (m_SearchResultsMutex);
 

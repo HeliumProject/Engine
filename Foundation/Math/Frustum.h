@@ -24,7 +24,7 @@ namespace Helium
 
         Frustum       (const AlignedBox& b);
 
-        Plane&        operator[] (const u32 index)
+        Plane&        operator[] (const uint32_t index)
         {
             switch (index)
             {
@@ -46,7 +46,7 @@ namespace Helium
             return null;
         }
 
-        const Plane&  operator[] (const u32 index) const
+        const Plane&  operator[] (const uint32_t index) const
         {
             switch (index)
             {
@@ -69,7 +69,7 @@ namespace Helium
 
         void Transform(const Matrix4& m);
 
-        bool IntersectsPoint(const Vector3& p, const f32 distanceFromPlane = PointOnPlaneError) const;
+        bool IntersectsPoint(const Vector3& p, const float32_t distanceFromPlane = PointOnPlaneError) const;
         bool IntersectsSegment(const Vector3& point1, const Vector3& point2) const;
         bool IntersectsTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2) const;
         bool IntersectsBox(const AlignedBox& box, bool precise = false) const;

@@ -14,7 +14,7 @@ namespace Helium
 {
     namespace Inspect
     {
-        i32 g_InitCount = 0;
+        int32_t g_InitCount = 0;
         Helium::InitializerStack g_InitializerStack;
     }
 }

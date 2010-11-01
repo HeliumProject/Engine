@@ -4,14 +4,14 @@
 
 using namespace Helium::IPC;
 
-Message::Message(u32 id, i32 trn, u32 size, u32 type)
+Message::Message(uint32_t id, int32_t trn, uint32_t size, uint32_t type)
 : MessageHeader( id, trn, size, type )
 , m_Next (NULL)
 , m_Number (0)
 {
     if (size)
     {
-        m_Data = new u8[size];
+        m_Data = new uint8_t[size];
     }
     else
     {
@@ -140,12 +140,12 @@ void MessageQueue::Clear()
     m_Append.Reset();
 }
 
-u32 MessageQueue::Count()
+uint32_t MessageQueue::Count()
 {
     return m_Count;
 }
 
-u32 MessageQueue::Total()
+uint32_t MessageQueue::Total()
 {
     return m_Total;
 }

@@ -7,20 +7,20 @@ namespace Helium
   #pragma pack(push,1)
   struct TGAHeader
   {
-      u8  idLength;
-      u8  colormapType;
-      u8  imageType;
+      uint8_t  idLength;
+      uint8_t  colormapType;
+      uint8_t  imageType;
 
-      u16 colorMapIndex;
-      u16 colorMapLength;
-      u8  colorMapBits;
+      uint16_t colorMapIndex;
+      uint16_t colorMapLength;
+      uint8_t  colorMapBits;
 
-      u16 xOrigin;
-      u16 yOrigin;
-      u16 width;
-      u16 height;
-      u8  pixelDepth;
-      u8  imageDescriptor;
+      uint16_t xOrigin;
+      uint16_t yOrigin;
+      uint16_t width;
+      uint16_t height;
+      uint8_t  pixelDepth;
+      uint8_t  imageDescriptor;
   };
   #pragma pack(pop)
 }

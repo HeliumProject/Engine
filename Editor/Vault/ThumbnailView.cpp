@@ -31,8 +31,8 @@ const float ThumbnailView::s_SpaceBetweenTileAndLabel( 0.05f );
 const float ThumbnailView::s_ThumbnailSize( 1.0f );
 const float ThumbnailView::s_MinThumbnailSize( 16 );
 const float ThumbnailView::s_MaxThumbnailSize( 256 );
-const u32 s_ScrollBarIncrement = 5; // in pixels
-const u32 s_MouseTolerance = 3; // in pixels, how far the mouse must move before causing a drag
+const uint32_t s_ScrollBarIncrement = 5; // in pixels
+const uint32_t s_MouseTolerance = 3; // in pixels, how far the mouse must move before causing a drag
 
 static inline bool FloatIsEqual( float f0, float f1, float tolerance )
 {
@@ -245,14 +245,14 @@ const VaultSearchResults* ThumbnailView::GetResults() const
 void ThumbnailView::SelectPath( const tstring& path )
 {
     // Figure out where the tile is so we can scroll to it
-    u32 count = 0;
+    uint32_t count = 0;
     ThumbnailTile* found = NULL;
 
     for ( ThumbnailIteratorPtr tileItr = m_Sorter.GetIterator(); !tileItr->IsDone() && !found; tileItr->Next(), ++count )
     {
         ThumbnailTile* tile = tileItr->GetCurrentTile();
-        u32 row = count / m_TotalVisibleItems.x;
-        u32 col = count % m_TotalVisibleItems.x;
+        uint32_t row = count / m_TotalVisibleItems.x;
+        uint32_t col = count % m_TotalVisibleItems.x;
         tile->SetRowColumn( row, col );
         if ( tile->GetPath().IsFile() && ( tile->GetPath().Get() == path ) )
         {
@@ -304,7 +304,7 @@ tstring ThumbnailView::GetHighlightedPath() const
 // thumbnails will appear as 128x128 in the view.
 // The scale factor will be clamped between s_MinThumbnailSize and s_MaxThumbnailSize.
 // 
-void ThumbnailView::SetZoom( u16 zoom )
+void ThumbnailView::SetZoom( uint16_t zoom )
 {
     float scale = zoom;
     Clamp( scale, s_MinThumbnailSize, s_MaxThumbnailSize );
@@ -335,12 +335,12 @@ void ThumbnailView::SetZoom( u16 zoom )
             // recalculate the row and column for all the tiles up to the one we
             // actually care about.
             bool found = false;
-            u32 count = 0;
+            uint32_t count = 0;
             for ( ThumbnailIteratorPtr tileItr = m_Sorter.GetIterator(); !tileItr->IsDone() && !found; tileItr->Next(), ++count )
             {
                 ThumbnailTile* tile = tileItr->GetCurrentTile();
-                u32 row = count / m_TotalVisibleItems.x;
-                u32 col = count % m_TotalVisibleItems.x;
+                uint32_t row = count / m_TotalVisibleItems.x;
+                uint32_t col = count % m_TotalVisibleItems.x;
                 tile->SetRowColumn( row, col );
                 found = tile == firstVisible;
             }
@@ -368,7 +368,7 @@ VaultSortMethod ThumbnailView::GetSortMethod() const
 ///////////////////////////////////////////////////////////////////////////////
 // Sorts the view and optionally refreshes it.
 // 
-void ThumbnailView::Sort( VaultSortMethod method, u32 sortOptions )
+void ThumbnailView::Sort( VaultSortMethod method, uint32_t sortOptions )
 {
     // Only sort if we are being forced to, or if the sort method is actually changing
     if ( method != GetSortMethod() || ( sortOptions & VaultSortOptions::Force ) )
@@ -549,7 +549,7 @@ bool ThumbnailView::IsVisible( ThumbnailTile* tile )
     m_World.TransformVertex( itemSizePixels );
     float tilePosY = itemSizePixels.y * ( float )( tile->GetRow() );
 
-    u32 scrollPosY = GetScrollPos( wxVERTICAL );
+    uint32_t scrollPosY = GetScrollPos( wxVERTICAL );
     float viewTop = scrollPosY * s_ScrollBarIncrement;
     float viewBottom = viewTop + GetSize().y;
 
@@ -564,7 +564,7 @@ void ThumbnailView::EnsureVisible( ThumbnailTile* tile )
     Vector3 itemSizePixels( 0.0f, m_TotalItemSize.y + s_GapBetweenTiles.y, 0.0f );
     m_World.TransformVertex( itemSizePixels );
     float tilePosY = itemSizePixels.y * ( float )( tile->GetRow() );
-    u32 scrollPosY = Round( tilePosY / ( float )s_ScrollBarIncrement );
+    uint32_t scrollPosY = Round( tilePosY / ( float )s_ScrollBarIncrement );
     SetScrollPos( wxVERTICAL, scrollPosY, false );
     AdjustScrollBar( true );
     Refresh();
@@ -819,13 +819,13 @@ void ThumbnailView::CalculateTotalVisibleItems()
 {
     const wxSize size = GetSize();
 
-    m_TotalVisibleItems.x = ( u32 )( size.x / ( m_Scale * ( m_TotalItemSize.x + s_GapBetweenTiles.x ) ) );
+    m_TotalVisibleItems.x = ( uint32_t )( size.x / ( m_Scale * ( m_TotalItemSize.x + s_GapBetweenTiles.x ) ) );
     if ( m_TotalVisibleItems.x == 0 )
     {
         m_TotalVisibleItems.x = 1;
     }
 
-    m_TotalVisibleItems.y = ( u32 )( size.y / ( m_Scale * ( m_TotalItemSize.y + s_GapBetweenTiles.y ) ) );
+    m_TotalVisibleItems.y = ( uint32_t )( size.y / ( m_Scale * ( m_TotalItemSize.y + s_GapBetweenTiles.y ) ) );
     if ( m_TotalVisibleItems.y == 0 )
     {
         m_TotalVisibleItems.y = 1;
@@ -842,12 +842,12 @@ void ThumbnailView::AdjustScrollBar( bool maintainScrollPos )
 {
     // Do the math
     size_t totalItems = m_Results ? m_Results->GetPathsMap().size() : 0;
-    u32 totalItemsY = (u32)( ceil( ( float )totalItems / ( float )m_TotalVisibleItems.x ) );
+    uint32_t totalItemsY = (uint32_t)( ceil( ( float )totalItems / ( float )m_TotalVisibleItems.x ) );
     Vector3 itemSizePixels( 0.0f, m_TotalItemSize.y + s_GapBetweenTiles.y, 0.0f );
     m_World.TransformVertex( itemSizePixels );
-    u32 pixelsY = totalItemsY * itemSizePixels.y;
-    const u32 extraToPreventLastRowFromBeingChopped = 5;
-    u32 logicalStepsY = Round( ( float )pixelsY / ( float )s_ScrollBarIncrement ) + extraToPreventLastRowFromBeingChopped;
+    uint32_t pixelsY = totalItemsY * itemSizePixels.y;
+    const uint32_t extraToPreventLastRowFromBeingChopped = 5;
+    uint32_t logicalStepsY = Round( ( float )pixelsY / ( float )s_ScrollBarIncrement ) + extraToPreventLastRowFromBeingChopped;
     int scrollPosY = 0;
     if ( HasScrollbar( wxVERTICAL ) && maintainScrollPos )
     {
@@ -939,7 +939,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
             sortMenu->AppendCheckItem( ID_SortByType, VaultMenu::Label( ID_SortByType ) );
             sortMenu->AppendSeparator();
             sortMenu->Append( ID_Sort, VaultMenu::Label( ID_Sort ) );
-            i32 sortMenuId = menu.AppendSubMenu( sortMenu, TXT( "Arrange Icons By" ) )->GetId();
+            int32_t sortMenuId = menu.AppendSubMenu( sortMenu, TXT( "Arrange Icons By" ) )->GetId();
 
             sortMenu->Check( ID_SortByName, GetSortMethod() == VaultSortMethods::AlphabeticalByName );
             sortMenu->Check( ID_SortByType, GetSortMethod() == VaultSortMethods::AlphabeticalByType );
@@ -1145,12 +1145,12 @@ bool ThumbnailView::Draw()
     m_FileTypeTileCorners.clear();
 
     // If there are any tiles, draw the visible ones
-    u32 count = 0;
+    uint32_t count = 0;
     for ( ThumbnailIteratorPtr tileItr = m_Sorter.GetIterator(); !tileItr->IsDone(); tileItr->Next(), ++count )
     {
         ThumbnailTile* tile = tileItr->GetCurrentTile();
-        u32 row = count / m_TotalVisibleItems.x;
-        u32 col = count % m_TotalVisibleItems.x;
+        uint32_t row = count / m_TotalVisibleItems.x;
+        uint32_t col = count % m_TotalVisibleItems.x;
         tile->SetRowColumn( row, col );
         DrawTile( device, tile );
     }
@@ -1317,7 +1317,7 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
 
             //tile->IsSelected() ? s_TextColorBGSelected : s_TextColorDefault
             m_LabelFont->DrawText( sprite, label.c_str(), -1, &calcRect, DT_CALCRECT, s_TextColorDefault );
-            u32 flags = 0;
+            uint32_t flags = 0;
             if ( calcRect.right <= rect.right )
             {
                 flags = DT_CENTER;
@@ -1827,10 +1827,10 @@ void ThumbnailView::OnScrollEvent( wxScrollWinEvent& args )
     }
 
     // Figure out how much to scroll by and scroll
-    i32 amount = GetScrollHelper()->CalcScrollInc( args );
+    int32_t amount = GetScrollHelper()->CalcScrollInc( args );
     if ( amount != 0 )
     {
-        i32 current = GetScrollPos( wxVERTICAL );
+        int32_t current = GetScrollPos( wxVERTICAL );
         amount += current;
         Clamp( amount, 0, amount );
         Scroll( 0, amount );
@@ -1886,7 +1886,7 @@ void ThumbnailView::OnFileProperties( wxCommandEvent& args )
         {
             tstringstream message;
             message << TXT( "Are you sure that you want to show the properties for all " ) << paths.size() << TXT( " selected paths?" );
-            i32 result = wxMessageBox( message.str(), TXT( "Show Details?" ), wxCENTER | wxYES_NO | wxICON_QUESTION, this );
+            int32_t result = wxMessageBox( message.str(), TXT( "Show Details?" ), wxCENTER | wxYES_NO | wxICON_QUESTION, this );
             if ( result != wxYES )
             {
                 return;

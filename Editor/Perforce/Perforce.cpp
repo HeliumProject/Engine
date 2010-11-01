@@ -7,7 +7,7 @@
 using namespace Helium;
 using namespace Helium::Perforce;
 
-static u32 g_InitCount = 0;
+static uint32_t g_InitCount = 0;
 Provider g_Provider;
 
 void Perforce::Initialize()

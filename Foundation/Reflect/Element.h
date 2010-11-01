@@ -146,7 +146,7 @@ namespace Helium
             void FieldChanged(FieldT* fieldAddress) const
             {
                 // the offset of the field is the address of the field minus the address of this element instance
-                uintptr_t fieldOffset = ((u32)fieldAddress - (u32)this);
+                uintptr_t fieldOffset = ((uint32_t)fieldAddress - (uint32_t)this);
 
                 // find the field in our reflection information
                 const Reflect::Field* field = GetClass()->FindFieldByOffset( fieldOffset );

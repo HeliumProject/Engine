@@ -17,16 +17,16 @@ using namespace Helium;
 
 const tuid TUID::Null = 0x0;
 
-static u64 s_CachedMacBits64 = 0; ///< cached 48-bit MAC address, centered in u64
-static u64 s_GUIDConvertConstant = 0xDEADDEADDEADDEAD;
+static uint64_t s_CachedMacBits64 = 0; ///< cached 48-bit MAC address, centered in uint64_t
+static uint64_t s_GUIDConvertConstant = 0xDEADDEADDEADDEAD;
 
 // GUID interop
 struct guid
 {
-    u32   data0;
-    u16   data1;
-    u16   data2;
-    u8    data3[8];
+    uint32_t   data0;
+    uint16_t   data1;
+    uint16_t   data2;
+    uint8_t    data3[8];
 
     guid()
     {
@@ -48,7 +48,7 @@ void TUID::ToGUID( Helium::GUID& id ) const
     }
     else
     {
-        u64* tempPtr = (u64*)&id;
+        uint64_t* tempPtr = (uint64_t*)&id;
 
         // set the 'high order' guid bytes to our constant so we can identify it later
         tempPtr[ 0 ] = s_GUIDConvertConstant;
@@ -75,7 +75,7 @@ void TUID::FromGUID( const Helium::GUID& id )
     }
     else
     {
-        u64* tempPtr = (u64*)&id;
+        uint64_t* tempPtr = (uint64_t*)&id;
 
         // if our GUID has been converted FROM a tuid (it has been upsampled)
         if ( tempPtr[ 0 ] == s_GUIDConvertConstant )
@@ -86,7 +86,7 @@ void TUID::FromGUID( const Helium::GUID& id )
         else
         {
             // we're going to xor the top and bottom halves of the guid into the tuid
-            m_ID = ( ( ( ( u64 ) id.Data1 ) << 32 ) | ( id.Data2 << 16 ) | ( id.Data3 ) ) ^ ( *(u64*)( &id.Data4 ) );
+            m_ID = ( ( ( ( uint64_t ) id.Data1 ) << 32 ) | ( id.Data2 << 16 ) | ( id.Data3 ) ) ^ ( *(uint64_t*)( &id.Data4 ) );
         }
     }
 }
@@ -150,9 +150,9 @@ void TUID::Generate( tuid& uid )
         }
 
         // cache the appropriate bits
-        u64 bits = 0;
-        u64 tempByte = 0;
-        for ( i32 address_byte = 5; address_byte >= 0; --address_byte )
+        uint64_t bits = 0;
+        uint64_t tempByte = 0;
+        for ( int32_t address_byte = 5; address_byte >= 0; --address_byte )
         {
             tempByte = adapterInfo[0].Address[ address_byte ];
             bits |= tempByte << ( 8 * address_byte );
@@ -163,7 +163,7 @@ void TUID::Generate( tuid& uid )
 
     uid |= s_CachedMacBits64;
 
-    u64 timeBits = 0;
+    uint64_t timeBits = 0;
 
     // get the clock ticks
     LARGE_INTEGER ticks;

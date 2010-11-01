@@ -17,15 +17,14 @@ namespace Helium
     class Matrix3;
     class EulerAngles;
     class AngleAxis;
-    class Quaternion;
 
     class FOUNDATION_API Matrix4
     {
     public: 
         union
         {
-            f32 array1d[16];
-            f32 array2d[4][4];
+            float32_t array1d[16];
+            float32_t array2d[4][4];
             struct
             {
                 Vector4 x;
@@ -35,10 +34,10 @@ namespace Helium
             };
             struct
             {
-                f32 xx, xy, xz, xw;
-                f32 yx, yy, yz, yw;
-                f32 zx, zy, zz, zw;
-                f32 wx, wy, wz, ww;
+                float32_t xx, xy, xz, xw;
+                float32_t yx, yy, yz, yw;
+                float32_t zx, zy, zz, zw;
+                float32_t wx, wy, wz, ww;
             };
         };
 
@@ -63,7 +62,7 @@ namespace Helium
 
         }
 
-        explicit Matrix4      (f32 vxx, f32 vxy, f32 vxz, f32 vxw, f32 vyx, f32 vyy, f32 vyz, f32 vyw, f32 vzx, f32 vzy, f32 vzz, f32 vzw, f32 vwx, f32 vwy, f32 vwz, f32 vww)
+        explicit Matrix4      (float32_t vxx, float32_t vxy, float32_t vxz, float32_t vxw, float32_t vyx, float32_t vyy, float32_t vyz, float32_t vyw, float32_t vzx, float32_t vzy, float32_t vzz, float32_t vzw, float32_t vwx, float32_t vwy, float32_t vwz, float32_t vww)
             : xx(vxx), xy(vxy), xz(vxz), xw(vxw)
             , yx(vyx), yy(vyy), yz(vyz), yw(vyw)
             , zx(vzx), zy(vzy), zz(vzz), zw(vzw)
@@ -80,9 +79,6 @@ namespace Helium
 
         explicit Matrix4      (const AngleAxis& v);
         Matrix4&              operator= (const AngleAxis& v);
-
-        explicit Matrix4      (const Quaternion& v);
-        Matrix4&              operator= (const Quaternion& v);
 
         explicit Matrix4      (const Scale& v);
         Matrix4&              operator= (const Scale& v);
@@ -127,7 +123,7 @@ namespace Helium
         Matrix4               operator* (const Matrix4& v) const;
         Vector4               operator* (const Vector4& v) const;
 
-        Matrix4&              operator*= (const f32 v)
+        Matrix4&              operator*= (const float32_t v)
         {
             x *= v;
             y *= v;
@@ -136,28 +132,28 @@ namespace Helium
             return *this;
         }
 
-        Matrix4               operator* (const f32 v) const
+        Matrix4               operator* (const float32_t v) const
         {
             return Matrix4 (x * v, y * v, z * v, t * v);
         }
 
-        Vector4&              operator[] (const u32 i)
+        Vector4&              operator[] (const uint32_t i)
         {
             HELIUM_ASSERT(i < 4);
             return (&x)[i];
         }
 
-        const Vector4&        operator[] (const u32 i) const
+        const Vector4&        operator[] (const uint32_t i) const
         {
             HELIUM_ASSERT(i < 4); return (&x)[i];
         }
 
-        f32&                  operator()(const u32 i, const u32 j)
+        float32_t&                  operator()(const uint32_t i, const uint32_t j)
         {
             return (array2d[j][i]);
         }
 
-        const f32&            operator()(const u32 i, const u32 j) const
+        const float32_t&            operator()(const uint32_t i, const uint32_t j) const
         {
             return (array2d[j][i]);
         }
@@ -177,7 +173,7 @@ namespace Helium
             return x.Valid() && y.Valid() && z.Valid() && t.Valid();
         }
 
-        f32                   Determinant() const;
+        float32_t                   Determinant() const;
 
         Matrix4&              Invert ();
         Matrix4               Inverted () const;
@@ -196,7 +192,7 @@ namespace Helium
         Matrix4&              Orthogonalize (Axis first = SingleAxes::Y, Axis second = SingleAxes::X, Axis third = SingleAxes::Z);
 
         void                  Transform(Vector4& v) const;
-        void                  Transform(Vector3& v, f32 w) const;
+        void                  Transform(Vector3& v, float32_t w) const;
         void                  TransformVertex (Vector3& v) const;
         void                  TransformNormal (Vector3& n) const;
 
@@ -206,9 +202,9 @@ namespace Helium
         void                  Decompose (Scale& scale, EulerAngles& rotate, Vector3& translate) const;
         void                  Decompose (Scale& scale, Shear& shear, EulerAngles& rotate, Vector3& translate) const;
 
-        static Matrix4        RotateX (f32 theta);
-        static Matrix4        RotateY (f32 theta);
-        static Matrix4        RotateZ (f32 theta);
+        static Matrix4        RotateX (float32_t theta);
+        static Matrix4        RotateY (float32_t theta);
+        static Matrix4        RotateZ (float32_t theta);
 
         Matrix4&              RowScale( const Vector4& scaleVector );
 
@@ -283,13 +279,13 @@ namespace Helium
             (m[0][3]*v[0]) + (m[1][3]*v[1]) + (m[2][3]*v[2]) + (m[3][3]*v[3]));
     }
 
-    inline f32 Matrix4::Determinant() const
+    inline float32_t Matrix4::Determinant() const
     {
         const Matrix4 &m = *this;
 
-        auto f32 det1 = ((m[1][1] * m[2][2]) - (m[1][2] * m[2][1]));
-        auto f32 det2 = ((m[0][2] * m[2][1]) - (m[0][1] * m[2][2]));
-        auto f32 det3 = ((m[0][1] * m[1][2]) - (m[0][2] * m[1][1]));
+        auto float32_t det1 = ((m[1][1] * m[2][2]) - (m[1][2] * m[2][1]));
+        auto float32_t det2 = ((m[0][2] * m[2][1]) - (m[0][1] * m[2][2]));
+        auto float32_t det3 = ((m[0][1] * m[1][2]) - (m[0][2] * m[1][1]));
 
         return (m[0][0] * det1) + (m[1][0] * det2) + (m[2][0] * det3);
     }
@@ -299,20 +295,20 @@ namespace Helium
         Matrix4 &a = *this;
         Matrix4 result;
 
-        f32 a0 = a.array1d[ 0]*a.array1d[ 5] - a.array1d[ 1]*a.array1d[ 4];
-        f32 a1 = a.array1d[ 0]*a.array1d[ 6] - a.array1d[ 2]*a.array1d[ 4];
-        f32 a2 = a.array1d[ 0]*a.array1d[ 7] - a.array1d[ 3]*a.array1d[ 4];
-        f32 a3 = a.array1d[ 1]*a.array1d[ 6] - a.array1d[ 2]*a.array1d[ 5];
-        f32 a4 = a.array1d[ 1]*a.array1d[ 7] - a.array1d[ 3]*a.array1d[ 5];
-        f32 a5 = a.array1d[ 2]*a.array1d[ 7] - a.array1d[ 3]*a.array1d[ 6];
-        f32 b0 = a.array1d[ 8]*a.array1d[13] - a.array1d[ 9]*a.array1d[12];
-        f32 b1 = a.array1d[ 8]*a.array1d[14] - a.array1d[10]*a.array1d[12];
-        f32 b2 = a.array1d[ 8]*a.array1d[15] - a.array1d[11]*a.array1d[12];
-        f32 b3 = a.array1d[ 9]*a.array1d[14] - a.array1d[10]*a.array1d[13];
-        f32 b4 = a.array1d[ 9]*a.array1d[15] - a.array1d[11]*a.array1d[13];
-        f32 b5 = a.array1d[10]*a.array1d[15] - a.array1d[11]*a.array1d[14];
+        float32_t a0 = a.array1d[ 0]*a.array1d[ 5] - a.array1d[ 1]*a.array1d[ 4];
+        float32_t a1 = a.array1d[ 0]*a.array1d[ 6] - a.array1d[ 2]*a.array1d[ 4];
+        float32_t a2 = a.array1d[ 0]*a.array1d[ 7] - a.array1d[ 3]*a.array1d[ 4];
+        float32_t a3 = a.array1d[ 1]*a.array1d[ 6] - a.array1d[ 2]*a.array1d[ 5];
+        float32_t a4 = a.array1d[ 1]*a.array1d[ 7] - a.array1d[ 3]*a.array1d[ 5];
+        float32_t a5 = a.array1d[ 2]*a.array1d[ 7] - a.array1d[ 3]*a.array1d[ 6];
+        float32_t b0 = a.array1d[ 8]*a.array1d[13] - a.array1d[ 9]*a.array1d[12];
+        float32_t b1 = a.array1d[ 8]*a.array1d[14] - a.array1d[10]*a.array1d[12];
+        float32_t b2 = a.array1d[ 8]*a.array1d[15] - a.array1d[11]*a.array1d[12];
+        float32_t b3 = a.array1d[ 9]*a.array1d[14] - a.array1d[10]*a.array1d[13];
+        float32_t b4 = a.array1d[ 9]*a.array1d[15] - a.array1d[11]*a.array1d[13];
+        float32_t b5 = a.array1d[10]*a.array1d[15] - a.array1d[11]*a.array1d[14];
 
-        f32 d = a0*b5-a1*b4+a2*b3+a3*b2-a4*b1+a5*b0;
+        float32_t d = a0*b5-a1*b4+a2*b3+a3*b2-a4*b1+a5*b0;
         if (fabs(d) <= 0.f)
         {
             return *this = Zero;
@@ -335,11 +331,11 @@ namespace Helium
         result[2][3] = - a.array1d[ 8]*a4 + a.array1d[ 9]*a2 - a.array1d[11]*a0;
         result[3][3] = + a.array1d[ 8]*a3 - a.array1d[ 9]*a1 + a.array1d[10]*a0;
 
-        f32 d_inverse = ((f32)1.0)/d;
+        float32_t d_inverse = ((float32_t)1.0)/d;
 
-        for (i32 row = 0; row < 4; row++)
+        for (int32_t row = 0; row < 4; row++)
         {
-            for (i32 col = 0; col < 4; col++)
+            for (int32_t col = 0; col < 4; col++)
             {
                 result[row][col] *= d_inverse;
             }
@@ -359,10 +355,10 @@ namespace Helium
         Matrix4 m = *this;
         Matrix4 &result = *this;
 
-        auto f32 det1 = ((m[1][1] * m[2][2]) - (m[1][2] * m[2][1]));
-        auto f32 det2 = ((m[0][2] * m[2][1]) - (m[0][1] * m[2][2]));
-        auto f32 det3 = ((m[0][1] * m[1][2]) - (m[0][2] * m[1][1]));
-        auto f32 det = (m[0][0] * det1) + (m[1][0] * det2) + (m[2][0] * det3);
+        auto float32_t det1 = ((m[1][1] * m[2][2]) - (m[1][2] * m[2][1]));
+        auto float32_t det2 = ((m[0][2] * m[2][1]) - (m[0][1] * m[2][2]));
+        auto float32_t det3 = ((m[0][1] * m[1][2]) - (m[0][2] * m[1][1]));
+        auto float32_t det = (m[0][0] * det1) + (m[1][0] * det2) + (m[2][0] * det3);
 
         if (det != 0)
         {
@@ -404,7 +400,7 @@ namespace Helium
 
     inline Matrix4& Matrix4::Transpose()
     {
-        auto f32 temp;
+        auto float32_t temp;
 
         temp = x[1]; x[1] = y[0]; y[0] = temp;
         temp = x[2]; x[2] = z[0]; z[0] = temp;
@@ -519,7 +515,7 @@ namespace Helium
         v = *this * v;
     }
 
-    inline void Matrix4::Transform(Vector3& v, f32 w) const
+    inline void Matrix4::Transform(Vector3& v, float32_t w) const
     {
         const Matrix4& m (*this);
 

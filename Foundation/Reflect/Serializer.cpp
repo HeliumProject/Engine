@@ -31,9 +31,9 @@ bool Cast(const Serializer* src, Serializer* dest)
 }
 
 template<>
-bool Cast<u64, Helium::TUID>(const Serializer* src, Serializer* dest)
+bool Cast<uint64_t, Helium::TUID>(const Serializer* src, Serializer* dest)
 {
-    const SimpleSerializer<u64>* source = static_cast<const SimpleSerializer<u64>*>(src);
+    const SimpleSerializer<uint64_t>* source = static_cast<const SimpleSerializer<uint64_t>*>(src);
     SimpleSerializer<Helium::TUID>* destination = static_cast<SimpleSerializer<Helium::TUID>*>(dest);
 
     destination->m_Data.Set( source->m_Data.Get() );
@@ -42,10 +42,10 @@ bool Cast<u64, Helium::TUID>(const Serializer* src, Serializer* dest)
 }
 
 template<>
-bool Cast<Helium::TUID, u64>(const Serializer* src, Serializer* dest)
+bool Cast<Helium::TUID, uint64_t>(const Serializer* src, Serializer* dest)
 {
     const SimpleSerializer<Helium::TUID>* source = static_cast<const SimpleSerializer<Helium::TUID>*>(src);
-    SimpleSerializer<u64>* destination = static_cast<SimpleSerializer<u64>*>(dest);
+    SimpleSerializer<uint64_t>* destination = static_cast<SimpleSerializer<uint64_t>*>(dest);
 
     destination->m_Data.Set( source->m_Data.Get() );
 
@@ -74,7 +74,7 @@ bool Cast<Helium::GUID, Helium::TUID>(const Serializer* src, Serializer* dest)
     return true;
 }
 
-typedef std::pair<i32, i32> P_i32;
+typedef std::pair<int32_t, int32_t> P_i32;
 typedef std::map<P_i32, bool (*)(const Serializer*, Serializer*)> M_CastingFuncs;
 
 M_CastingFuncs g_CastingFuncs;
@@ -103,58 +103,58 @@ void Serializer::Initialize()
     }
 
     // signed to unsigned, same size
-    MapCasts<i8, u8>();
-    MapCasts<i16, u16>();
-    MapCasts<i32, u32>();
-    MapCasts<i64, u64>();
+    MapCasts<int8_t, uint8_t>();
+    MapCasts<int16_t, uint16_t>();
+    MapCasts<int32_t, uint32_t>();
+    MapCasts<int64_t, uint64_t>();
 
     // signed to signed, different size / signed to unsigned, different size
-    MapCasts<i8, i16>(); MapCasts<i8, u16>();
-    MapCasts<i8, i32>(); MapCasts<i8, u32>();
-    MapCasts<i8, i64>(); MapCasts<i8, u64>();
+    MapCasts<int8_t, int16_t>(); MapCasts<int8_t, uint16_t>();
+    MapCasts<int8_t, int32_t>(); MapCasts<int8_t, uint32_t>();
+    MapCasts<int8_t, int64_t>(); MapCasts<int8_t, uint64_t>();
 
     // unsigned to signed, different size / unsigned to unsigned, different size
-    MapCasts<u8, i16>(); MapCasts<u8, u16>();
-    MapCasts<u8, i32>(); MapCasts<u8, u32>();
-    MapCasts<u8, i64>(); MapCasts<u8, u64>();
+    MapCasts<uint8_t, int16_t>(); MapCasts<uint8_t, uint16_t>();
+    MapCasts<uint8_t, int32_t>(); MapCasts<uint8_t, uint32_t>();
+    MapCasts<uint8_t, int64_t>(); MapCasts<uint8_t, uint64_t>();
 
     // signed to signed, different size / signed to unsigned, different size
-    MapCasts<i16, i32>(); MapCasts<i16, u32>();
-    MapCasts<i16, i64>(); MapCasts<i16, u64>();
+    MapCasts<int16_t, int32_t>(); MapCasts<int16_t, uint32_t>();
+    MapCasts<int16_t, int64_t>(); MapCasts<int16_t, uint64_t>();
 
     // unsigned to signed, different size / unsigned to unsigned, different size
-    MapCasts<u16, i32>(); MapCasts<u16, u32>();
-    MapCasts<u16, i64>(); MapCasts<u16, u64>();
+    MapCasts<uint16_t, int32_t>(); MapCasts<uint16_t, uint32_t>();
+    MapCasts<uint16_t, int64_t>(); MapCasts<uint16_t, uint64_t>();
 
     // signed to signed, different size / signed to unsigned, different size
-    MapCasts<i32, i64>(); MapCasts<i32, u64>();
+    MapCasts<int32_t, int64_t>(); MapCasts<int32_t, uint64_t>();
 
     // unsigned to signed, different size / unsigned to unsigned, different size
-    MapCasts<u32, i64>(); MapCasts<u32, u64>();
+    MapCasts<uint32_t, int64_t>(); MapCasts<uint32_t, uint64_t>();
 
     // 8^2 - 8 (don't cant to ourself)
     HELIUM_ASSERT(g_CastingFuncs.size() == 56);
 
     // float to double
-    MapCasts<f32, f64>();
+    MapCasts<float32_t, float64_t>();
 
     // float to signed / float to unsigned
-    MapCasts<f32, i8>(); MapCasts<f32, u8>();
-    MapCasts<f32, i16>(); MapCasts<f32, u16>();
-    MapCasts<f32, i32>(); MapCasts<f32, u32>();
-    MapCasts<f32, i64>(); MapCasts<f32, u64>();
+    MapCasts<float32_t, int8_t>(); MapCasts<float32_t, uint8_t>();
+    MapCasts<float32_t, int16_t>(); MapCasts<float32_t, uint16_t>();
+    MapCasts<float32_t, int32_t>(); MapCasts<float32_t, uint32_t>();
+    MapCasts<float32_t, int64_t>(); MapCasts<float32_t, uint64_t>();
 
     // double to signed / double to unsigned
-    MapCasts<f64, i8>(); MapCasts<f64, u8>();
-    MapCasts<f64, i16>(); MapCasts<f64, u16>();
-    MapCasts<f64, i32>(); MapCasts<f64, u32>();
-    MapCasts<f64, i64>(); MapCasts<f64, u64>();
+    MapCasts<float64_t, int8_t>(); MapCasts<float64_t, uint8_t>();
+    MapCasts<float64_t, int16_t>(); MapCasts<float64_t, uint16_t>();
+    MapCasts<float64_t, int32_t>(); MapCasts<float64_t, uint32_t>();
+    MapCasts<float64_t, int64_t>(); MapCasts<float64_t, uint64_t>();
 
-    // 8 * 4 (to and from f32 and f64 across 8 integer type)
+    // 8 * 4 (to and from float32_t and float64_t across 8 integer type)
     HELIUM_ASSERT(g_CastingFuncs.size() == 90);
 
-    // u64 to TUID and back
-    MapCasts<u64, Helium::TUID>();
+    // uint64_t to TUID and back
+    MapCasts<uint64_t, Helium::TUID>();
 
     // GUID to TUID and back
     MapCasts<Helium::GUID, Helium::TUID>();
@@ -168,7 +168,7 @@ void Serializer::Cleanup()
     }
 }
 
-bool Serializer::CastSupported(i32 srcType, i32 destType)
+bool Serializer::CastSupported(int32_t srcType, int32_t destType)
 {
     if (srcType == destType)
     {
@@ -186,7 +186,7 @@ bool Serializer::CastSupported(i32 srcType, i32 destType)
     }
 }
 
-bool Serializer::CastValue(const Serializer* src, Serializer* dest, u32 flags)
+bool Serializer::CastValue(const Serializer* src, Serializer* dest, uint32_t flags)
 {
     // if the types are a match, just do set value
     if (dest->HasType(src->GetType()) || src->HasType(dest->GetType()))

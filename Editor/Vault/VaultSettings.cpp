@@ -7,7 +7,7 @@ using namespace Helium;
 using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
-VaultSettings::VaultSettings( VaultViewMode viewVaultMode, u32 thumbnailSize )
+VaultSettings::VaultSettings( VaultViewMode viewVaultMode, uint32_t thumbnailSize )
 : m_VaultViewMode( viewVaultMode )
 , m_ThumbnailSize( thumbnailSize )
 //, m_WindowSettings( new WindowSettings() )

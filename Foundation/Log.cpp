@@ -21,7 +21,7 @@ using namespace Helium::Log;
 
 #define NTFS_PATH_MAX (0x7FFF)
 
-u32 g_LogFileCount = 20;
+uint32_t g_LogFileCount = 20;
 
 Helium::Mutex g_Mutex;
 
@@ -89,7 +89,7 @@ struct OutputFile
 {
     Stream      m_StreamType;
     int         m_RefCount;
-    u32         m_ThreadId;
+    uint32_t         m_ThreadId;
 
     OutputFile()
         : m_StreamType( Streams::Normal )
@@ -103,7 +103,7 @@ struct OutputFile
 typedef std::map< tstring, OutputFile > M_OutputFile;
 M_OutputFile g_TraceFiles;
 
-u32 g_Streams = Streams::Normal | Streams::Warning | Streams::Error;
+uint32_t g_Streams = Streams::Normal | Streams::Warning | Streams::Error;
 Level g_Level = Levels::Default;
 int g_WarningCount = 0;
 int g_ErrorCount = 0;
@@ -192,12 +192,12 @@ void Redirect(const tstring& fileName, const tchar* str, bool stampNewLine = tru
             _timeb currentTime;
             _ftime( &currentTime );
 
-            u32 time = (u32) currentTime.time;
-            u32 milli = currentTime.millitm;
-            u32 sec = time % 60; time /= 60;
-            u32 min = time % 60; time -= currentTime.timezone; time /= 60;
+            uint32_t time = (uint32_t) currentTime.time;
+            uint32_t milli = currentTime.millitm;
+            uint32_t sec = time % 60; time /= 60;
+            uint32_t min = time % 60; time -= currentTime.timezone; time /= 60;
             time += currentTime.dstflag ? 1 : 0;
-            u32 hour = time % 24;
+            uint32_t hour = time % 24;
 
             fprintf( f, "[%02d:%02d:%02d.%03d TID:%d] %s", hour, min, sec, milli, GetCurrentThreadId(), str );
         }
@@ -210,7 +210,7 @@ void Redirect(const tstring& fileName, const tchar* str, bool stampNewLine = tru
     }
 }
 
-bool AddFile( M_OutputFile& files, const tstring& fileName, Stream stream, u32 threadId, bool append )
+bool AddFile( M_OutputFile& files, const tstring& fileName, Stream stream, uint32_t threadId, bool append )
 {
     Helium::TakeMutex mutex (g_Mutex);
 
@@ -272,7 +272,7 @@ void RemoveFile( M_OutputFile& files, const tstring& fileName )
     }
 }
 
-bool Log::AddTraceFile( const tstring& fileName, Stream stream, u32 threadId, bool append )
+bool Log::AddTraceFile( const tstring& fileName, Stream stream, uint32_t threadId, bool append )
 {
     return AddFile( g_TraceFiles, fileName, stream, threadId, append );
 }
@@ -386,7 +386,7 @@ void Log::UnlockMutex()
     g_Mutex.Unlock();
 }
 
-void Log::PrintString(const tchar* string, Stream stream, Level level, Color color, int indent, tchar* output, u32 outputSize)
+void Log::PrintString(const tchar* string, Stream stream, Level level, Color color, int indent, tchar* output, uint32_t outputSize)
 {
     Helium::TakeMutex mutex (g_Mutex);
 
@@ -489,7 +489,7 @@ void Log::PrintStatement(const Statement& statement)
     PrintString( statement.m_String.c_str(), statement.m_Stream, statement.m_Level, GetStreamColor( statement.m_Stream ), statement.m_Indent );
 }
 
-void Log::PrintStatements(const V_Statement& statements, u32 streamFilter)
+void Log::PrintStatements(const V_Statement& statements, uint32_t streamFilter)
 {
     Helium::TakeMutex mutex (g_Mutex);
 
@@ -869,7 +869,7 @@ tstring Log::GetOutlineState()
     return state;
 }
 
-Listener::Listener( u32 throttle, u32* errorCount, u32* warningCount, Log::V_Statement* consoleOutput )
+Listener::Listener( uint32_t throttle, uint32_t* errorCount, uint32_t* warningCount, Log::V_Statement* consoleOutput )
 : m_Thread( GetCurrentThreadID() )
 , m_Throttle( throttle )
 , m_WarningCount( warningCount )
@@ -907,12 +907,12 @@ void Listener::Dump(bool stop)
     }
 }
 
-u32 Listener::GetWarningCount()
+uint32_t Listener::GetWarningCount()
 {
     return *m_WarningCount;
 }
 
-u32 Listener::GetErrorCount()
+uint32_t Listener::GetErrorCount()
 {
     return *m_ErrorCount;
 }

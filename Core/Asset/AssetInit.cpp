@@ -59,9 +59,9 @@ using namespace Helium;
 
 using namespace Asset;
 
-std::vector< i32 > Asset::g_AssetClassTypes;
+std::vector< int32_t > Asset::g_AssetClassTypes;
 
-i32 g_AssetInitCount = 0;
+int32_t g_AssetInitCount = 0;
 
 Helium::InitializerStack g_AssetInitializerStack;
 

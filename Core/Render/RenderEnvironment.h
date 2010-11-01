@@ -22,12 +22,12 @@ namespace Helium
         {
         public:
             tstring                     m_filename;       
-            u32                         m_crc;            // crc of the filename
-            u64                         m_timestamp;      // -1 if the mesh is a local mesh
-            u32                         m_load_count;
+            uint32_t                         m_crc;            // crc of the filename
+            uint64_t                         m_timestamp;      // -1 if the mesh is a local mesh
+            uint32_t                         m_load_count;
 
             D3DXVECTOR4                 m_sh[9];            // the spherical harmonic used for diffuse lighting and derived from the environment cubemap
-            u32                         m_clearcolor;
+            uint32_t                         m_clearcolor;
             IDirect3DCubeTexture9*      m_env_texture;    // if this is null the clear color is used
 
             // these parameters are used to extract hightlights from the env cube. They are specific to a given env and in some ways are specific to this appliction.
@@ -38,7 +38,7 @@ namespace Helium
             RenderEnvironment(const tchar* name);
             ~RenderEnvironment();
 
-            u32 DecrementUsage()
+            uint32_t DecrementUsage()
             {
                 if (m_load_count>0)
                 {

@@ -44,7 +44,7 @@ namespace Helium
             static void CleanupType();
 
         public:
-            InstanceType( SceneGraph::Scene* scene, i32 instanceType );
+            InstanceType( SceneGraph::Scene* scene, int32_t instanceType );
             virtual ~InstanceType();
 
             //

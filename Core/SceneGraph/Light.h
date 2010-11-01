@@ -23,7 +23,7 @@ namespace Helium
             Light();
             ~Light();
 
-            virtual i32 GetImageIndex() const HELIUM_OVERRIDE;
+            virtual int32_t GetImageIndex() const HELIUM_OVERRIDE;
             virtual tstring GetApplicationTypeName() const HELIUM_OVERRIDE;
 
             virtual void Evaluate(GraphDirection direction) HELIUM_OVERRIDE;

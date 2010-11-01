@@ -13,7 +13,7 @@
 #include "swizzle.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Helium::SwizzleBox(u8* src, u8* dst, u32 Width, u32 Height, u32 Depth, u32 BytesPerPixel)
+void Helium::SwizzleBox(uint8_t* src, uint8_t* dst, uint32_t Width, uint32_t Height, uint32_t Depth, uint32_t BytesPerPixel)
 {
   //PERF: swizzling/unswizzling 3D when Width==1 || Height==1 || Depth==1 is the same as 2d 
   //PERF: if 2 of the following are true: Width==2, Height==1, Depth==1: use memcpy
@@ -29,28 +29,28 @@ void Helium::SwizzleBox(u8* src, u8* dst, u32 Width, u32 Height, u32 Depth, u32 
     Width*=4;
   }
 
-  u32 RWidth = Width;
-  u32 RHeight = Height;
-  u32 RDepth = Depth;
+  uint32_t RWidth = Width;
+  uint32_t RHeight = Height;
+  uint32_t RDepth = Depth;
 
-  u32 UOffset = 0;
-  u32 VOffset = 0;
-  u32 WOffset = 0;
+  uint32_t UOffset = 0;
+  uint32_t VOffset = 0;
+  uint32_t WOffset = 0;
 
-  u32 RowPitch = Width * BytesPerPixel;
-  u32 SlicePitch = RowPitch * Height;
+  uint32_t RowPitch = Width * BytesPerPixel;
+  uint32_t SlicePitch = RowPitch * Height;
 
   unsigned int u, v, w;
   Swizzler swiz(Width, Height, Depth);
 
-  u32 SwizU = swiz.SwizzleU(UOffset);
-  u32 SwizV = swiz.SwizzleV(VOffset);
-  u32 SwizW = swiz.SwizzleW(WOffset);
+  uint32_t SwizU = swiz.SwizzleU(UOffset);
+  uint32_t SwizV = swiz.SwizzleV(VOffset);
+  uint32_t SwizW = swiz.SwizzleW(WOffset);
 
   swiz.SetW(SwizW);
 
-  u32 RowPitchAdjust = RowPitch - RWidth * BytesPerPixel;
-  u32 SlicePitchAdjust = SlicePitch - RHeight * RowPitch;
+  uint32_t RowPitchAdjust = RowPitch - RWidth * BytesPerPixel;
+  uint32_t SlicePitchAdjust = SlicePitch - RHeight * RowPitch;
 
   for (w = RDepth; w--;) 
   {
@@ -78,7 +78,7 @@ void Helium::SwizzleBox(u8* src, u8* dst, u32 Width, u32 Height, u32 Depth, u32 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // Unswizzle a box from a texture into a buffer.
-void Helium::UnswizzleBox(u8* src, u8* dst, u32 Width, u32 Height, u32 Depth, u32 BytesPerPixel)
+void Helium::UnswizzleBox(uint8_t* src, uint8_t* dst, uint32_t Width, uint32_t Height, uint32_t Depth, uint32_t BytesPerPixel)
 {
   //swizzling/unswizzling 3D when Width==1 || Height==1 || Depth==1 is the same as 2d 
   //if 2 of the following are true: Width==2, Height==1, Depth==1: use memcpy
@@ -94,28 +94,28 @@ void Helium::UnswizzleBox(u8* src, u8* dst, u32 Width, u32 Height, u32 Depth, u3
     Width*=4;
   }
 
-  u32 RWidth=Width;
-  u32 RHeight=Height;
-  u32 RDepth=Depth;
+  uint32_t RWidth=Width;
+  uint32_t RHeight=Height;
+  uint32_t RDepth=Depth;
 
-  u32 UOffset=0;
-  u32 VOffset=0;
-  u32 WOffset=0;
+  uint32_t UOffset=0;
+  uint32_t VOffset=0;
+  uint32_t WOffset=0;
 
-  u32 RowPitch = Width * BytesPerPixel;
-  u32 SlicePitch = RowPitch * Height;
+  uint32_t RowPitch = Width * BytesPerPixel;
+  uint32_t SlicePitch = RowPitch * Height;
 
   unsigned int u, v, w;
   Swizzler swiz(Width, Height, Depth);
 
-  u32 SwizU = swiz.SwizzleU(UOffset);
-  u32 SwizV = swiz.SwizzleV(VOffset);
-  u32 SwizW = swiz.SwizzleW(WOffset);
+  uint32_t SwizU = swiz.SwizzleU(UOffset);
+  uint32_t SwizV = swiz.SwizzleV(VOffset);
+  uint32_t SwizW = swiz.SwizzleW(WOffset);
 
   swiz.SetW(SwizW);
 
-  u32 RowPitchAdjust = RowPitch - RWidth * BytesPerPixel;
-  u32 SlicePitchAdjust = SlicePitch - RHeight * RowPitch;
+  uint32_t RowPitchAdjust = RowPitch - RWidth * BytesPerPixel;
+  uint32_t SlicePitchAdjust = SlicePitch - RHeight * RowPitch;
 
   for (w = RDepth; w--;) 
   {

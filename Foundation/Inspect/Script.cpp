@@ -214,7 +214,7 @@ void Script::ParseAttributes(tstring& attributes, Control* control)
   }
 }
 
-bool Script::Parse(const tstring& script, Interpreter* interpreter, Canvas* canvas, Container* output, u32 fieldFlags)
+bool Script::Parse(const tstring& script, Interpreter* interpreter, Canvas* canvas, Container* output, uint32_t fieldFlags)
 {
   INSPECT_SCOPE_TIMER( ("Attributes Script Parsing") );
 

@@ -7,12 +7,12 @@
 using namespace Helium;
 using namespace Helium::Render;
 
-static f32 fconst1 = (4.0f/17.0f);
-static f32 fconst2 = (8.0f/17.0f);
-static f32 fconst3 = (15.0f/17.0f);
-static f32 fconst4 = (5.0f/68.0f);
-static f32 fconst5 = (15.0f/68.0f);
-const u8 u16_to_rgb_map[] = { 15, 23, 31, 14, 22, 30, 13, 21, 29, 12, 20, 28, 11, 19, 27, 10 };
+static float32_t fconst1 = (4.0f/17.0f);
+static float32_t fconst2 = (8.0f/17.0f);
+static float32_t fconst3 = (15.0f/17.0f);
+static float32_t fconst4 = (5.0f/68.0f);
+static float32_t fconst5 = (15.0f/68.0f);
+const uint8_t u16_to_rgb_map[] = { 15, 23, 31, 14, 22, 30, 13, 21, 29, 12, 20, 28, 11, 19, 27, 10 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 inline void AddLightToSH(D3DXVECTOR4* sh, const D3DXVECTOR4& col, const D3DXVECTOR4& dirn)
@@ -64,21 +64,21 @@ inline void FinalizeSH(D3DXVECTOR4* sh)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-inline u32 HashU16ToRGB(u16 index)
+inline uint32_t HashU16ToRGB(uint16_t index)
 {  
-    u32 color = 0xff;
-    for (u32 i = 0; i < 16; ++i)
+    uint32_t color = 0xff;
+    for (uint32_t i = 0; i < 16; ++i)
     {
-        u32 bit = (index >> i) & 0x1;
+        uint32_t bit = (index >> i) & 0x1;
         color |= bit << u16_to_rgb_map[i];
     }
     return color;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-inline void HashU16ToRGB(u16 index, float& r, float& g, float& b, float& a)
+inline void HashU16ToRGB(uint16_t index, float& r, float& g, float& b, float& a)
 {
-    u32 color = HashU16ToRGB(index);
+    uint32_t color = HashU16ToRGB(index);
     r = ((color >> 24) & 0xFF) * (1.0f / 255.0f);
     g = ((color >> 16) & 0xFF) * (1.0f / 255.0f);
     b = ((color >> 8)  & 0xFF) * (1.0f / 255.0f);
@@ -86,12 +86,12 @@ inline void HashU16ToRGB(u16 index, float& r, float& g, float& b, float& a)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-inline u16 HashRGBToU16(u32 color)
+inline uint16_t HashRGBToU16(uint32_t color)
 {
-    u16 index = 0;
-    for (u32 i = 0; i < 16; i++)
+    uint16_t index = 0;
+    for (uint32_t i = 0; i < 16; i++)
     {
-        u32 bit = (color >> u16_to_rgb_map[i]) & 0x1;
+        uint32_t bit = (color >> u16_to_rgb_map[i]) & 0x1;
         index |= bit << i;
     }
     return index;
@@ -198,7 +198,7 @@ Renderer::~Renderer()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool Renderer::Init(HWND hwnd, u32 width, u32 height, u32 flags)
+bool Renderer::Init(HWND hwnd, uint32_t width, uint32_t height, uint32_t flags)
 {
     HRESULT hr = DeviceManager::Init(hwnd,width,height,flags);
     if (FAILED(hr))
@@ -267,7 +267,7 @@ void Renderer::DrawWireframe(RenderScene* scene,RenderMesh* mesh)
 
     device->SetRenderState(D3DRS_FILLMODE,D3DFILL_WIREFRAME);  
     static float bias = -0.0001f;
-    device->SetRenderState(D3DRS_DEPTHBIAS,*(u32*)&bias);
+    device->SetRenderState(D3DRS_DEPTHBIAS,*(uint32_t*)&bias);
     // set the shader state
     device->SetVertexDeclaration( GetStockDecl(VERTEX_DECL_MESH));
     device->SetVertexShader(GetStockVS(VERTEX_SHADER_MESH_DEBUG_COLOR));
@@ -277,7 +277,7 @@ void Renderer::DrawWireframe(RenderScene* scene,RenderMesh* mesh)
     device->SetIndices(mesh->m_indices);
     device->SetStreamSource(0,mesh->m_verts,0,mesh->m_vert_size);
 
-    for (u32 i=0;i<mesh->m_fragment_count;i++)
+    for (uint32_t i=0;i<mesh->m_fragment_count;i++)
     {
         if (mesh->m_fragments[i].m_prim_count)
             device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST,0,0,mesh->m_vert_count,mesh->m_fragments[i].m_base_index,mesh->m_fragments[i].m_prim_count);
@@ -285,7 +285,7 @@ void Renderer::DrawWireframe(RenderScene* scene,RenderMesh* mesh)
 
     device->SetRenderState(D3DRS_FILLMODE,D3DFILL_SOLID);  
     static float reset_bias = 0.0f;
-    device->SetRenderState(D3DRS_DEPTHBIAS,*(u32*)&reset_bias);
+    device->SetRenderState(D3DRS_DEPTHBIAS,*(uint32_t*)&reset_bias);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -315,7 +315,7 @@ void Renderer::DrawTangents(RenderScene* scene,RenderMesh* mesh)
         return;
 
     static float bias = -0.001f;
-    device->SetRenderState(D3DRS_DEPTHBIAS,*(u32*)&bias);
+    device->SetRenderState(D3DRS_DEPTHBIAS,*(uint32_t*)&bias);
 
     // set the shader state
     device->SetVertexDeclaration( GetStockDecl(VERTEX_DECL_DEBUG));
@@ -327,11 +327,11 @@ void Renderer::DrawTangents(RenderScene* scene,RenderMesh* mesh)
     device->DrawPrimitive(D3DPT_LINELIST,0,mesh->m_vert_count);
 
     static float reset_bias = 0.0f;
-    device->SetRenderState(D3DRS_DEPTHBIAS,*(u32*)&reset_bias);
+    device->SetRenderState(D3DRS_DEPTHBIAS,*(uint32_t*)&reset_bias);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-static void SetTexture(IDirect3DDevice9* device, Texture* tex,u32 sampler)
+static void SetTexture(IDirect3DDevice9* device, Texture* tex,uint32_t sampler)
 {
     //set the sampler state for the texture
     device->SetSamplerState(sampler,D3DSAMP_ADDRESSU,tex->m_wrap_u);
@@ -431,7 +431,7 @@ void Renderer::DrawDebug(RenderScene* scene,RenderMesh* mesh)
     device->SetIndices(mesh->m_indices);
     device->SetStreamSource(0,mesh->m_verts,0,mesh->m_vert_size);
 
-    for (u32 i=0;i<mesh->m_fragment_count;i++)
+    for (uint32_t i=0;i<mesh->m_fragment_count;i++)
     {
         RenderShader* sh = 0;
         if (scene->m_shader_table[i]!=0xffffffff)
@@ -595,7 +595,7 @@ void Renderer::DrawDebug(RenderScene* scene,RenderMesh* mesh)
             {
                 float col[4];
 
-                HashU16ToRGB((u16)i+7,col[0],col[1],col[2],col[3]);
+                HashU16ToRGB((uint16_t)i+7,col[0],col[1],col[2],col[3]);
                 device->SetVertexShaderConstantF(8,col,1);
                 break;
             }
@@ -664,7 +664,7 @@ void Renderer::DrawMesh(RenderScene* scene,RenderMesh* mesh)
     device->SetSamplerState(5,D3DSAMP_MIPFILTER,D3DTEXF_LINEAR);    
     device->SetTexture(5,cube);
 
-    for (u32 i=0;i<mesh->m_fragment_count;i++)
+    for (uint32_t i=0;i<mesh->m_fragment_count;i++)
     {
         // set the shader for this fragment
         RenderShader* sh = m_shader_manager.ResolveShader(scene->m_shader_table[i]);
@@ -802,7 +802,7 @@ void Renderer::DrawMesh(RenderScene* scene,RenderMesh* mesh)
 
     // don't write Z for alpha
     device->SetRenderState(D3DRS_ZWRITEENABLE,false);
-    for (u32 i=0;i<mesh->m_fragment_count;i++)
+    for (uint32_t i=0;i<mesh->m_fragment_count;i++)
     {
         // set the shader for this fragment
         RenderShader* sh = m_shader_manager.ResolveShader(scene->m_shader_table[i]);
@@ -1074,7 +1074,7 @@ void Renderer::DrawScenes(int num, RenderScene** scenes)
                 DrawEnvironment(scene,env,viewproj);
             }
 
-            for (u32 s=0;s<9;s++)
+            for (uint32_t s=0;s<9;s++)
                 final_sh[s]=env->m_sh[s];     // don't worry about the sh exposure here, it will be accounted for in the fragment program
         }
         else
@@ -1085,14 +1085,14 @@ void Renderer::DrawScenes(int num, RenderScene** scenes)
                 device->Clear(0,0,D3DCLEAR_TARGET|D3DCLEAR_STENCIL|D3DCLEAR_ZBUFFER,D3DCOLOR_ARGB(0xFF,0xB8,0xB8,0xB8),1.0f,0);
             }
 
-            for (u32 s=0;s<9;s++)
+            for (uint32_t s=0;s<9;s++)
                 final_sh[s]=D3DXVECTOR4(0,0,0,0);
         }
 
         AddAmbientToSH(final_sh, scene->m_ambient);
 
         // add the lights in the scene and finalize the sh
-        for (u32 l=0;l<(u32)scene->m_lights.size();l++)
+        for (uint32_t l=0;l<(uint32_t)scene->m_lights.size();l++)
         {
             AddLightToSH(final_sh, scene->m_lights[l]->m_color, scene->m_lights[l]->m_direction);
         }
@@ -1121,7 +1121,7 @@ void Renderer::DrawScenes(int num, RenderScene** scenes)
 
     DrawReferenceGrid( scenes[ 0 ] );
 
-    for ( u32 stage = 0; stage < 6; ++stage )
+    for ( uint32_t stage = 0; stage < 6; ++stage )
     {
         device->SetTexture( stage, NULL );
     }
@@ -1130,7 +1130,7 @@ void Renderer::DrawScenes(int num, RenderScene** scenes)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-u32 Renderer::GetPixel(u32 x, u32 y)
+uint32_t Renderer::GetPixel(uint32_t x, uint32_t y)
 {
     IDirect3DSurface9* surface = GetBufferData();
     if (surface==0)
@@ -1138,11 +1138,11 @@ u32 Renderer::GetPixel(u32 x, u32 y)
 
     D3DLOCKED_RECT lr;
 
-    u32 ret=0xffffffff;
+    uint32_t ret=0xffffffff;
     surface->LockRect(&lr,0,0);
 
-    u32* pixels = (u32*)lr.pBits;
-    u32 stride = lr.Pitch/4;
+    uint32_t* pixels = (uint32_t*)lr.pBits;
+    uint32_t stride = lr.Pitch/4;
 
     ret = pixels[(y*stride)+x];
 
@@ -1153,10 +1153,10 @@ u32 Renderer::GetPixel(u32 x, u32 y)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-u32 Renderer::GetIndex(u32 x, u32 y)
+uint32_t Renderer::GetIndex(uint32_t x, uint32_t y)
 {
-    u32 col = GetPixel(x,y);
+    uint32_t col = GetPixel(x,y);
     if (col==0)
         return 0xffffffff;
-    return (u16)(HashRGBToU16(col)-7);
+    return (uint16_t)(HashRGBToU16(col)-7);
 }

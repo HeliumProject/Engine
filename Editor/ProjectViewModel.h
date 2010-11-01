@@ -31,14 +31,14 @@ namespace Helium
                 TXT( "Unknown" ), //COUNT
             };
 
-            inline const tchar* Label( u32 id )
+            inline const tchar* Label( uint32_t id )
             {
                 HELIUM_ASSERT( id >= 0 );
                 HELIUM_ASSERT( id < COUNT );
                 return s_Labels[id];
             }
 
-            static const u32 s_Widths[COUNT+1] = 
+            static const uint32_t s_Widths[COUNT+1] = 
             {
                 200, // Name
                 300, // Details
@@ -47,7 +47,7 @@ namespace Helium
                 0, //COUNT
             };
 
-            inline u32 Width( u32 id )
+            inline uint32_t Width( uint32_t id )
             {
                 HELIUM_ASSERT( id >= 0 );
                 HELIUM_ASSERT( id < COUNT );
@@ -82,7 +82,7 @@ namespace Helium
                 TXT( "Relative Path" ),
             };
 
-            inline const tchar* Label( u32 id )
+            inline const tchar* Label( uint32_t id )
             {
                 HELIUM_ASSERT( id >= 0 );
                 HELIUM_ASSERT( id < COUNT );
@@ -147,7 +147,7 @@ namespace Helium
             // This returns a column that can be added to wxDataViewCtrl
             // it also updates the m_ColumnLookupTable to associate the column
             // to the ProjectModelColumns
-            wxDataViewColumn* CreateColumn( u32 id );
+            wxDataViewColumn* CreateColumn( uint32_t id );
             void ResetColumns();
 
             void SetProject( Project* project );
@@ -180,7 +180,7 @@ namespace Helium
             ProjectPtr m_Project;
             ProjectViewModelNodePtr m_RootNode;
 
-            typedef std::vector< u32 > M_ColumnLookupTable;
+            typedef std::vector< uint32_t > M_ColumnLookupTable;
             M_ColumnLookupTable m_ColumnLookupTable;
         };
     }

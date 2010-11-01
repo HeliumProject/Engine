@@ -16,7 +16,7 @@ namespace Helium
     class FOUNDATION_API Vector3
     {
     public:
-        f32 x, y, z;
+        float32_t x, y, z;
 
         const static Vector3 Zero;
         const static Vector3 Unit;
@@ -26,20 +26,20 @@ namespace Helium
 
         Vector3           () : x(0), y(0), z(0) {}
         explicit Vector3  ( const Vector2& v ) : x(v.x), y(v.y), z(0) {}
-        explicit Vector3  ( f32 vx, f32 vy, f32 vz ) : x(vx), y(vy), z(vz) {}
-        explicit Vector3  ( f32 val ) : x( val ), y( val ), z( val ) {}
+        explicit Vector3  ( float32_t vx, float32_t vy, float32_t vz ) : x(vx), y(vy), z(vz) {}
+        explicit Vector3  ( float32_t val ) : x( val ), y( val ), z( val ) {}
 
         // FIXME lame, replacement for old SetXYZ
-        inline   void     Set( f32 vx, f32 vy, f32 vz ) { x = vx; y = vy; z = vz; }
+        inline   void     Set( float32_t vx, float32_t vy, float32_t vz ) { x = vx; y = vy; z = vz; }
 
         Vector3&          operator= (const Vector3& v) { x = v.x; y = v.y; z = v.z; return *this; }
         Vector3&          operator= (const Vector2& v) { x = v.x; y = v.y; z = 0; return *this; }
         Vector3&          operator+= (const Vector3& v) { x += v.x; y += v.y; z += v.z; return *this; }
         Vector3&          operator-= (const Vector3& v) { x -= v.x; y -= v.y; z -= v.z; return *this; }
         Vector3&          operator*= (const Vector3& v) { x *= v.x; y *= v.y; z *= v.z; return *this; }
-        Vector3&          operator*= (const f32 v) { x *= v; y *= v; z *= v; return *this; }
+        Vector3&          operator*= (const float32_t v) { x *= v; y *= v; z *= v; return *this; }
         Vector3&          operator/= (const Vector3& v) { x /= v.x; y /= v.y; z /= v.z; return *this; }
-        Vector3&          operator/= (const f32 v) { x /= v; y /= v; z /= v; return *this; }
+        Vector3&          operator/= (const float32_t v) { x /= v; y /= v; z /= v; return *this; }
 
         // unary negation
         Vector3           operator- () const { return Vector3( -x, -y, -z ); }
@@ -47,26 +47,26 @@ namespace Helium
         Vector3           operator+ (const Vector3& v) const { return Vector3 (x + v.x, y + v.y, z + v.z); }
         Vector3           operator- (const Vector3& v) const { return Vector3 (x - v.x, y - v.y, z - v.z); }
         Vector3           operator* (const Vector3& v) const { return Vector3 (x * v.x, y * v.y, z * v.z); }
-        Vector3           operator* (const f32 v) const { return Vector3 (x * v, y * v, z * v); }
+        Vector3           operator* (const float32_t v) const { return Vector3 (x * v, y * v, z * v); }
         Vector3           operator* (const Scale& v) const;
         Vector3           operator/ (const Vector3& v) const { return Vector3 (x / v.x, y / v.y, z / v.z); }
-        Vector3           operator/ (const f32 v) const { return Vector3 (x / v, y / v, z / v); }
+        Vector3           operator/ (const float32_t v) const { return Vector3 (x / v, y / v, z / v); }
 
-        f32&              operator[] (const u32 i) {  HELIUM_ASSERT(i < 3); return (&x)[i]; }
-        const f32&        operator[] (const u32 i) const {  HELIUM_ASSERT(i < 3); return (&x)[i]; }
+        float32_t&              operator[] (const uint32_t i) {  HELIUM_ASSERT(i < 3); return (&x)[i]; }
+        const float32_t&        operator[] (const uint32_t i) const {  HELIUM_ASSERT(i < 3); return (&x)[i]; }
 
         bool              operator== (const Vector3& v) const { return (x == v.x && y == v.y && z == v.z); }
         bool              operator!= (const Vector3& v) const { return !(x == v.x && y == v.y && z == v.z); }
-        bool              Equal (const Vector3& v, f32 error = 0) const;
+        bool              Equal (const Vector3& v, float32_t error = 0) const;
         bool              Valid() { return IsValid(x) && IsValid(y) && IsValid(z); }
 
-        f32               LengthSquared () const { return x * x + y * y + z * z; }
-        f32               Length () const;
+        float32_t               LengthSquared () const { return x * x + y * y + z * z; }
+        float32_t               Length () const;
 
         Vector3&          Normalize ();
         Vector3           Normalized () const;
 
-        f32               Dot (const Vector3& v) const; 
+        float32_t               Dot (const Vector3& v) const; 
         Vector3           Cross (const Vector3& v) const;
         void              Clamp ( const Vector3 &min, const Vector3 &max );
 
@@ -77,14 +77,14 @@ namespace Helium
     typedef std::vector< Vector3 > V_Vector3;
     typedef std::vector< V_Vector3 > VV_Vector3;
 
-    inline bool Vector3::Equal(const Vector3& v, f32 error) const
+    inline bool Vector3::Equal(const Vector3& v, float32_t error) const
     {
         return (fabs(x-v.x) <= error && fabs(y-v.y) <= error && fabs(z-v.z) <= error);
     }
 
-    inline f32 Vector3::Length() const
+    inline float32_t Vector3::Length() const
     {
-        f32 lenSqr = this->LengthSquared();
+        float32_t lenSqr = this->LengthSquared();
 
         if (lenSqr <= 0)
         {
@@ -96,7 +96,7 @@ namespace Helium
 
     inline Vector3& Vector3::Normalize()
     { 
-        f32 len = Length();
+        float32_t len = Length();
 
         if (len > DivisorNearZero)
         {
@@ -114,7 +114,7 @@ namespace Helium
         return result.Normalize();
     }
 
-    inline f32 Vector3::Dot(const Vector3& v) const
+    inline float32_t Vector3::Dot(const Vector3& v) const
     {
         return (x * v.x + y * v.y + z * v.z);
     }
@@ -182,6 +182,6 @@ namespace Helium
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    typedef std::multimap<i32, i32> MM_i32;
-    i32 FOUNDATION_API LookupPosInArray( const Vector3& pos, i32 min_key, i32 max_key, V_Vector3& pos_array, MM_i32& pos_lookup , f32 threshold);
+    typedef std::multimap<int32_t, int32_t> MM_i32;
+    int32_t FOUNDATION_API LookupPosInArray( const Vector3& pos, int32_t min_key, int32_t max_key, V_Vector3& pos_array, MM_i32& pos_lookup , float32_t threshold);
 }

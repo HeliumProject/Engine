@@ -387,7 +387,7 @@ const char* Provider::GetName()
     return "Perforce";
 }
 
-void Provider::Sync( RCS::File& file, const u64 timestamp )
+void Provider::Sync( RCS::File& file, const uint64_t timestamp )
 {
     SyncCommand command( this, &file, timestamp );
 
@@ -406,7 +406,7 @@ void Provider::GetInfo( RCS::File& file, const RCS::GetInfoFlag flags )
     }
 }
 
-void Provider::GetInfo( const tstring& folder, RCS::V_File& files, bool recursive, u32 fileData, u32 actionData )
+void Provider::GetInfo( const tstring& folder, RCS::V_File& files, bool recursive, uint32_t fileData, uint32_t actionData )
 {
     MultiFStatCommand command( this, folder, &files, recursive, fileData, actionData );
     command.Run();

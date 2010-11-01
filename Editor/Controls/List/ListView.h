@@ -20,12 +20,12 @@ namespace Helium
         struct ListSelectionChangeArgs
         {
             ListView* m_List; // List that fired the event
-            i32 m_Index;      // Index/id of the item whose selection changed
-            i32 m_Data;       // Data attached to the list item whose selection changed
+            int32_t m_Index;      // Index/id of the item whose selection changed
+            int32_t m_Data;       // Data attached to the list item whose selection changed
             bool m_Select;    // True if a select event, otherwise a deselect event
             bool m_Veto;      // Callbacks should set this to true if the want to veto a selection changing event
 
-            ListSelectionChangeArgs( ListView* list, bool select, i32 index, i32 data, bool veto = false )
+            ListSelectionChangeArgs( ListView* list, bool select, int32_t index, int32_t data, bool veto = false )
                 : m_List( list )
                 , m_Index( index )
                 , m_Data( data )

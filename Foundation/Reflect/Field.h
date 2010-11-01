@@ -50,11 +50,11 @@ namespace Helium
             const Composite*    m_Type;         // the type we are a field of
             tstring             m_Name;         // name of this field
             tstring             m_UIName;       // friendly name
-            u32                 m_Size;         // the size of this field
+            uint32_t                 m_Size;         // the size of this field
             uintptr             m_Offset;       // the offset to the field
-            u32                 m_Flags;        // flags for special behavior
-            i32                 m_FieldID;      // the unique id of this field
-            i32                 m_SerializerID; // type id of the serializer to use
+            uint32_t                 m_Flags;        // flags for special behavior
+            int32_t                 m_FieldID;      // the unique id of this field
+            int32_t                 m_SerializerID; // type id of the serializer to use
             SerializerPtr       m_Default;      // the value of the default
             CreateObjectFunc    m_Create;       // function to create a new instance for this field (optional)
 
@@ -81,9 +81,9 @@ namespace Helium
 
         typedef Helium::SmartPtr< Field > FieldPtr;
         typedef Helium::SmartPtr< const Field > ConstFieldPtr;
-        typedef std::map< i32,          ConstFieldPtr > M_FieldIDToInfo;
+        typedef std::map< int32_t,          ConstFieldPtr > M_FieldIDToInfo;
         typedef std::map< tstring,      ConstFieldPtr > M_FieldNameToInfo;
-        typedef std::map< u32,          ConstFieldPtr > M_FieldOffsetToInfo;
+        typedef std::map< uint32_t,          ConstFieldPtr > M_FieldOffsetToInfo;
 
         //
         // ElementField store additional information the compile-time type of a pointer
@@ -94,7 +94,7 @@ namespace Helium
         public:
             REFLECTION_TYPE( ReflectionTypes::ElementField );
 
-            i32 m_TypeID;
+            int32_t m_TypeID;
 
         protected:
             ElementField(const Composite* type);

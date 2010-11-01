@@ -29,16 +29,16 @@ tchar* Image::p_volume_identifier_strings[VOLUME_NUM_IDENTIFIERS] =
 };
 
 //-----------------------------------------------------------------------------
-Image::Image(u32 w, u32 h, ColorFormat native_fmt)
+Image::Image(uint32_t w, uint32_t h, ColorFormat native_fmt)
 {
     // allocate memory for 2D texture
-    u32 channel_f32_size  = w*h;
-    m_Channels[0][R]      = new f32[channel_f32_size*4];
+    uint32_t channel_f32_size  = w*h;
+    m_Channels[0][R]      = new float32_t[channel_f32_size*4];
     m_Channels[0][G]      = m_Channels[0][R] + channel_f32_size;
     m_Channels[0][B]      = m_Channels[0][G] + channel_f32_size;
     m_Channels[0][A]      = m_Channels[0][B] + channel_f32_size;
 
-    for(u32 i = 1; i < CUBE_NUM_FACES; ++i)
+    for(uint32_t i = 1; i < CUBE_NUM_FACES; ++i)
     {
         m_Channels[i][R] = NULL;
         m_Channels[i][G] = NULL;
@@ -50,16 +50,16 @@ Image::Image(u32 w, u32 h, ColorFormat native_fmt)
     m_Width         = w;
     m_Height        = h;
     m_Depth         = TWO_D_DEPTH;
-    m_DataSize      = (channel_f32_size*4*sizeof(f32));
+    m_DataSize      = (channel_f32_size*4*sizeof(float32_t));
 }
 
 
 //-----------------------------------------------------------------------------
-Image::Image(u32 w, u32 h, u32 d, ColorFormat native_fmt)
+Image::Image(uint32_t w, uint32_t h, uint32_t d, ColorFormat native_fmt)
 {
     // Calculate the size of a surface with all the mips
-    u32 channel_f32_size  = w*h;
-    u32 cube = false;
+    uint32_t channel_f32_size  = w*h;
+    uint32_t cube = false;
     if (d==0)
     {
         cube  = true;
@@ -69,16 +69,16 @@ Image::Image(u32 w, u32 h, u32 d, ColorFormat native_fmt)
         channel_f32_size *= d;
     }
 
-    m_Channels[0][R] = new f32[channel_f32_size*4];
+    m_Channels[0][R] = new float32_t[channel_f32_size*4];
     m_Channels[0][G] = m_Channels[0][R] + channel_f32_size;
     m_Channels[0][B] = m_Channels[0][G] + channel_f32_size;
     m_Channels[0][A] = m_Channels[0][B] + channel_f32_size;
 
     if (cube)
     {
-        for(u32 i = 1; i < CUBE_NUM_FACES; ++i)
+        for(uint32_t i = 1; i < CUBE_NUM_FACES; ++i)
         {
-            m_Channels[i][R] = new f32[channel_f32_size*4];
+            m_Channels[i][R] = new float32_t[channel_f32_size*4];
             m_Channels[i][G] = m_Channels[i][R] + channel_f32_size;
             m_Channels[i][B] = m_Channels[i][G] + channel_f32_size;
             m_Channels[i][A] = m_Channels[i][B] + channel_f32_size;
@@ -86,7 +86,7 @@ Image::Image(u32 w, u32 h, u32 d, ColorFormat native_fmt)
     }
     else
     {
-        for(u32 i = 1; i < CUBE_NUM_FACES; ++i)
+        for(uint32_t i = 1; i < CUBE_NUM_FACES; ++i)
         {
             m_Channels[i][R] = NULL;
             m_Channels[i][G] = NULL;
@@ -99,7 +99,7 @@ Image::Image(u32 w, u32 h, u32 d, ColorFormat native_fmt)
     m_Width         = w;
     m_Height        = h;
     m_Depth         = d;
-    m_DataSize      = (channel_f32_size*4*sizeof(f32));
+    m_DataSize      = (channel_f32_size*4*sizeof(float32_t));
 }
 
 //-----------------------------------------------------------------------------
@@ -126,20 +126,20 @@ Image::~Image()
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-void  Image::FillFaceData(u32 face, ColorFormat fmt, const void* in_data)
+void  Image::FillFaceData(uint32_t face, ColorFormat fmt, const void* in_data)
 {
     HELIUM_ASSERT(face < CUBE_NUM_FACES);
     HELIUM_ASSERT(m_Channels[face][R] != NULL);
 
-    u32       color_fmt_bits  = ColorFormatBits(fmt);
-    const u8* native_data     = (const u8*)in_data;
+    uint32_t       color_fmt_bits  = ColorFormatBits(fmt);
+    const uint8_t* native_data     = (const uint8_t*)in_data;
 
-    for(u32 y = 0; y < m_Height; ++y)
+    for(uint32_t y = 0; y < m_Height; ++y)
     {
-        for(u32 x = 0; x < m_Width; ++x)
+        for(uint32_t x = 0; x < m_Width; ++x)
         {
-            u32 offset  = ((x*color_fmt_bits) + y*color_fmt_bits*m_Width)>>3;
-            u32 idx     = (x + y*m_Width);
+            uint32_t offset  = ((x*color_fmt_bits) + y*color_fmt_bits*m_Width)>>3;
+            uint32_t idx     = (x + y*m_Width);
             MakeHDRPixel( native_data + offset, fmt,
                 m_Channels[face][R][idx],
                 m_Channels[face][G][idx],
@@ -152,22 +152,22 @@ void  Image::FillFaceData(u32 face, ColorFormat fmt, const void* in_data)
 //-----------------------------------------------------------------------------
 void Image::ConvertGrayScale()
 {
-    u32 d=m_Depth;
+    uint32_t d=m_Depth;
     if (d==0)
     {
         d=1;
     }
     float gray;
 
-    for (u32 f=0;f<CUBE_NUM_FACES;f++)
+    for (uint32_t f=0;f<CUBE_NUM_FACES;f++)
     {
-        f32* r  = m_Channels[f][R];
-        f32* g  = m_Channels[f][G];
-        f32* b  = m_Channels[f][B];
+        float32_t* r  = m_Channels[f][R];
+        float32_t* g  = m_Channels[f][G];
+        float32_t* b  = m_Channels[f][B];
 
         if (r)
         {
-            for (u32 i=0;i <m_Width*m_Height*d;i++)
+            for (uint32_t i=0;i <m_Width*m_Height*d;i++)
             {
                 gray  = (0.212671f * r[i]) + (0.715160f * g[i]) + (0.072169f * b[i]);
                 r[i]  = gray;
@@ -179,12 +179,12 @@ void Image::ConvertGrayScale()
 }
 
 //-----------------------------------------------------------------------------
-bool Image::WriteRAW(const tchar* fname, void* data, u32 size, u32 face, bool convert_to_srgb) const
+bool Image::WriteRAW(const tchar* fname, void* data, uint32_t size, uint32_t face, bool convert_to_srgb) const
 {
     // size must be a multiple of 4
     HELIUM_ASSERT( (size&3)==0 );
 
-    f32* red_data = GetFacePtr(face, R);
+    float32_t* red_data = GetFacePtr(face, R);
 
     if (red_data == 0)
     {
@@ -215,7 +215,7 @@ bool Image::WriteRAW(const tchar* fname, void* data, u32 size, u32 face, bool co
     }
 
     //Generate the native data
-    u8* native_data = Image::GenerateFormatData(this, m_NativeFormat, face, convert_to_srgb);
+    uint8_t* native_data = Image::GenerateFormatData(this, m_NativeFormat, face, convert_to_srgb);
     if(native_data)
     {
         // write image bits
@@ -257,7 +257,7 @@ Image* Image::LoadTIFF(const tchar* fname, bool convert_to_linear)
         }
 
         //Allocate space for the native data
-        u8* native_data = new u8[img.width*img.height*sizeof(uint32)];
+        uint8_t* native_data = new uint8_t[img.width*img.height*sizeof(uint32)];
 
         if (TIFFRGBAImageGet(&img, (uint32*)native_data, img.width, img.height) == 0)
         {
@@ -317,7 +317,7 @@ Image* Image::LoadRAW(const void* rawadr, bool convert_to_linear, LoadRAWInfo* i
             float* b_dest = (float*)result->m_Channels[0][B];
             float* a_dest = (float*)result->m_Channels[0][A];
 
-            for (u32 i=0;i<result->m_Width*result->m_Height;i++)
+            for (uint32_t i=0;i<result->m_Width*result->m_Height;i++)
             {
                 *r_dest++ = src[0];
                 *g_dest++ = src[1];
@@ -352,7 +352,7 @@ Image* Image::LoadRAW(const void* rawadr, bool convert_to_linear, LoadRAWInfo* i
 }
 
 //-----------------------------------------------------------------------------
-static u8* PFMSkipWhiteSpace(u8* data)
+static uint8_t* PFMSkipWhiteSpace(uint8_t* data)
 {
     while(iswspace(*data))
     {
@@ -362,7 +362,7 @@ static u8* PFMSkipWhiteSpace(u8* data)
 }
 
 //-----------------------------------------------------------------------------
-static u8* PFMReadLine(u8* data,char* text)
+static uint8_t* PFMReadLine(uint8_t* data,char* text)
 {
     int count = 0;
     while(!iswspace(*data))
@@ -376,7 +376,7 @@ static u8* PFMReadLine(u8* data,char* text)
 }
 
 //-----------------------------------------------------------------------------
-static u8* ReadString(u8* data,char* text,i32 n)
+static uint8_t* ReadString(uint8_t* data,char* text,int32_t n)
 {
     int count = 0;
     while(*data!=0x0A && *data!=0x0D && count<n)
@@ -398,7 +398,7 @@ static u8* ReadString(u8* data,char* text,i32 n)
 //-----------------------------------------------------------------------------
 Image* Image::LoadPFM(const void* pfmadr)
 {
-    u8* data = (u8*)pfmadr;
+    uint8_t* data = (uint8_t*)pfmadr;
     data = PFMSkipWhiteSpace(data);
     if ((data[0]!='P' && data[0]!='p') && (data[1]!='F' && data[1]!='f'))
     {
@@ -411,12 +411,12 @@ Image* Image::LoadPFM(const void* pfmadr)
     // read the width
     data = PFMSkipWhiteSpace(data);
     data = PFMReadLine(data,buffer);
-    u32 width = atoi(buffer);
+    uint32_t width = atoi(buffer);
 
     // height
     data = PFMSkipWhiteSpace(data);
     data = PFMReadLine(data,buffer);
-    u32 height = atoi(buffer);
+    uint32_t height = atoi(buffer);
 
     // number of colors (-1.0 for pfm)
     data = PFMSkipWhiteSpace(data);
@@ -430,7 +430,7 @@ Image* Image::LoadPFM(const void* pfmadr)
     float* b_dest = (float*)result->m_Channels[0][B];
     float* a_dest = (float*)result->m_Channels[0][A];
 
-    for (u32 i=0;i<width*height;i++)
+    for (uint32_t i=0;i<width*height;i++)
     {
         *r_dest++  = src[0];    //R
         *g_dest++  = src[1];    //G
@@ -460,7 +460,7 @@ Image* Image::LoadFile( const tchar* p_path, bool convert_to_linear, LoadRAWInfo
 
     // Check for the file being a proxy for an animated texture
     bool is_volume_texture_set = false;
-    for(u32 id_index = 0; id_index < VOLUME_NUM_IDENTIFIERS; id_index++)
+    for(uint32_t id_index = 0; id_index < VOLUME_NUM_IDENTIFIERS; id_index++)
     {
         if(_tcsstr(p_filename, p_volume_identifier_strings[id_index]) == p_filename)
         {
@@ -484,7 +484,7 @@ Image* Image::LoadFile( const tchar* p_path, bool convert_to_linear, LoadRAWInfo
 
     tchar anim_folder[MAX_PATH];
     Image* p_anim_texture = NULL;
-    u32 curr_depth = 0;
+    uint32_t curr_depth = 0;
 
     // Truncate the file extension to get the folder name
     _tcscpy(anim_folder, p_path);
@@ -502,14 +502,14 @@ Image* Image::LoadFile( const tchar* p_path, bool convert_to_linear, LoadRAWInfo
     WIN32_FIND_DATA folder_files[VOLUME_MAX_DEPTH];
 
     // Only search for images of the same type as the proxy file
-    const u32 max_ext_chars = 5;
-    for(u32 ext_char = max_ext_chars; ext_char; ext_char--)
+    const uint32_t max_ext_chars = 5;
+    for(uint32_t ext_char = max_ext_chars; ext_char; ext_char--)
     {
         p_ext[ext_char] = p_ext[ext_char-1];
     }
     p_ext[0] = '*';
 
-    u32 num_files_found = 0;
+    uint32_t num_files_found = 0;
     h_folder_search = FindFirstFile(p_ext, &folder_search_info);
     if(h_folder_search != INVALID_HANDLE_VALUE)
     {
@@ -527,11 +527,11 @@ Image* Image::LoadFile( const tchar* p_path, bool convert_to_linear, LoadRAWInfo
     // Sort the files
     qsort(folder_files, num_files_found, sizeof(folder_files[0]), SortAnimFiles);
 
-    u32 frame_width = 0;
-    u32 frame_height = 0;
+    uint32_t frame_width = 0;
+    uint32_t frame_height = 0;
     ColorFormat frame_format = CF_ARGB8888;
     FilterType frame_filter = MIP_FILTER_CUBIC;
-    u32 file_index = 0;
+    uint32_t file_index = 0;
     for(; file_index < num_files_found; file_index++)
     {
         WIN32_FIND_DATA* p_curr_file = &folder_files[file_index];
@@ -602,10 +602,10 @@ Image* Image::LoadSingleFile(const tchar* filename, bool convert_to_linear, Load
     int size = ftell(f);
     fseek(f,0,SEEK_SET);
 
-    u8* data;
+    uint8_t* data;
     if (size>0)
     {
-        data = new u8[size];
+        data = new uint8_t[size];
         fread(data,size,1,f);
     }
     fclose(f);
@@ -673,7 +673,7 @@ Image* Image::LoadSingleFile(const tchar* filename, bool convert_to_linear, Load
 Image* Image::Clone() const
 {
     Image* result = new Image(m_Width,m_Height,m_Depth, m_NativeFormat);
-    for (u32 f=0;f<CUBE_NUM_FACES;f++)
+    for (uint32_t f=0;f<CUBE_NUM_FACES;f++)
     {
         if (m_Channels[f][R])
         {
@@ -701,9 +701,9 @@ Image* Image::Clone() const
 // a single face/slice is extracted and returned as a 2D texture
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Image* Image::CloneFace(u32 face) const
+Image* Image::CloneFace(uint32_t face) const
 {
-    f32* red_channel = GetFacePtr(face, R);
+    float32_t* red_channel = GetFacePtr(face, R);
     if (red_channel==0)
     {
         return 0;
@@ -724,7 +724,7 @@ Image* Image::CloneFace(u32 face) const
 // destination.
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool Image::InsertFace(Image* tex,u32 face)
+bool Image::InsertFace(Image* tex,uint32_t face)
 {
     HELIUM_ASSERT(tex);
 
@@ -738,8 +738,8 @@ bool Image::InsertFace(Image* tex,u32 face)
     {
         HELIUM_ASSERT(face < m_Depth);
 
-        f32* channel_data[NUM_TEXTURE_CHANNELS];
-        for(u32 channel_index = 0; channel_index < NUM_TEXTURE_CHANNELS; channel_index++)
+        float32_t* channel_data[NUM_TEXTURE_CHANNELS];
+        for(uint32_t channel_index = 0; channel_index < NUM_TEXTURE_CHANNELS; channel_index++)
         {
             channel_data[channel_index] = GetFacePtr(face, channel_index);
             if(!channel_data[channel_index])
@@ -748,8 +748,8 @@ bool Image::InsertFace(Image* tex,u32 face)
             }
         }
 
-        u32 channel_size = tex->m_DataSize / NUM_TEXTURE_CHANNELS;
-        for(u32 channel_index = 0; channel_index < NUM_TEXTURE_CHANNELS; channel_index++)
+        uint32_t channel_size = tex->m_DataSize / NUM_TEXTURE_CHANNELS;
+        for(uint32_t channel_index = 0; channel_index < NUM_TEXTURE_CHANNELS; channel_index++)
         {
             memcpy(channel_data[channel_index], tex->m_Channels[0][channel_index], channel_size);
         }
@@ -757,13 +757,13 @@ bool Image::InsertFace(Image* tex,u32 face)
         return true;
     }
 
-    f32* red_data = GetFacePtr(face, R);
+    float32_t* red_data = GetFacePtr(face, R);
     if (red_data ==0)
     {
         // this is either a bad face for the texture or it could be a missing face in a cube texture
 
         // this is a cube map with a missing face
-        m_Channels[face][R] = (f32*)(new u8[m_DataSize]);
+        m_Channels[face][R] = (float32_t*)(new uint8_t[m_DataSize]);
         red_data            = m_Channels[face][R];
 
         // we may of just converted a 2D map into a cube map
@@ -783,23 +783,23 @@ bool Image::InsertFace(Image* tex,u32 face)
 //-----------------------------------------------------------------------------
 void Image::CleanFloatData()
 {
-    u32 d = m_Depth;
+    uint32_t d = m_Depth;
     if (d==0)
     {
         d=1;
     }
 
 
-    for (u32 f=0;f<CUBE_NUM_FACES;f++)
+    for (uint32_t f=0;f<CUBE_NUM_FACES;f++)
     {
-        u32* data_r = (u32*)m_Channels[f][R];
+        uint32_t* data_r = (uint32_t*)m_Channels[f][R];
         if (data_r)
         {
-            u32* data_g = (u32*)m_Channels[f][G];
-            u32* data_b = (u32*)m_Channels[f][B];
-            u32* data_a = (u32*)m_Channels[f][A];
+            uint32_t* data_g = (uint32_t*)m_Channels[f][G];
+            uint32_t* data_b = (uint32_t*)m_Channels[f][B];
+            uint32_t* data_a = (uint32_t*)m_Channels[f][A];
 
-            for (u32 i=0;i<m_Width*m_Height*d;i++)
+            for (uint32_t i=0;i<m_Width*m_Height*d;i++)
             {
                 // this is an infinity or a NAN so replace it with zero
                 if ((*data_r & 0x7f000000) == 0x7f000000) { *data_r = 0; }
@@ -816,19 +816,19 @@ void Image::CleanFloatData()
 }
 
 //-----------------------------------------------------------------------------
-void Image::FlipVertical(u32 face)
+void Image::FlipVertical(uint32_t face)
 {
-    for(u32 c = 0; c < 4; ++c)
+    for(uint32_t c = 0; c < 4; ++c)
     {
-        u8* texture_data = (u8*)GetFacePtr(face, c);
+        uint8_t* texture_data = (uint8_t*)GetFacePtr(face, c);
         HELIUM_ASSERT(texture_data);
 
-        u32 line_bytes = (m_Width*4);
-        u8* top = texture_data;
-        u8* bottom = texture_data+(line_bytes*m_Height)-line_bytes;
-        u8* temp_line = new u8[line_bytes];
+        uint32_t line_bytes = (m_Width*4);
+        uint8_t* top = texture_data;
+        uint8_t* bottom = texture_data+(line_bytes*m_Height)-line_bytes;
+        uint8_t* temp_line = new uint8_t[line_bytes];
 
-        for (u32 i=0;i<m_Height/2;i++)
+        for (uint32_t i=0;i<m_Height/2;i++)
         {
             memcpy(temp_line,top,line_bytes);
             memcpy(top,bottom,line_bytes);
@@ -842,24 +842,24 @@ void Image::FlipVertical(u32 face)
 }
 
 //-----------------------------------------------------------------------------
-void Image::FlipHorizontal(u32 face)
+void Image::FlipHorizontal(uint32_t face)
 {
-    for(u32 c = 0; c < 4; ++c)
+    for(uint32_t c = 0; c < 4; ++c)
     {
-        u8* texture_data = (u8*)GetFacePtr(face, c);
+        uint8_t* texture_data = (uint8_t*)GetFacePtr(face, c);
 
         HELIUM_ASSERT(texture_data);
 
-        u32 pixel_bytes = 4;
-        u32 line_bytes  = (m_Width*4);
-        u8* temp_pixel  = new u8[pixel_bytes];
+        uint32_t pixel_bytes = 4;
+        uint32_t line_bytes  = (m_Width*4);
+        uint8_t* temp_pixel  = new uint8_t[pixel_bytes];
 
-        for (u32 y=0;y<m_Height;y++)
+        for (uint32_t y=0;y<m_Height;y++)
         {
-            u8* left = texture_data+(y*line_bytes);
-            u8* right = texture_data+((y+1)*line_bytes)-pixel_bytes;
+            uint8_t* left = texture_data+(y*line_bytes);
+            uint8_t* right = texture_data+((y+1)*line_bytes)-pixel_bytes;
 
-            for (u32 x=0;x<m_Width/2;x++)
+            for (uint32_t x=0;x<m_Width/2;x++)
             {
                 memcpy(temp_pixel,left,pixel_bytes);
                 memcpy(left,right,pixel_bytes);
@@ -874,7 +874,7 @@ void Image::FlipHorizontal(u32 face)
 }
 
 //-----------------------------------------------------------------------------
-void Image::Sample2D(float u, float v, float& r, float& g, float& b, float& a,u32 face, u32 flags) const
+void Image::Sample2D(float u, float v, float& r, float& g, float& b, float& a,uint32_t face, uint32_t flags) const
 {
     float w = (flags & SAMPLE_NORMALIZED)?m_Width:1.0f;
 
@@ -909,14 +909,14 @@ bool Image::AdjustExposure(float fstop)
 {
     float factor = powf(2.0f,fstop);
 
-    u32 d = m_Depth;
+    uint32_t d = m_Depth;
     if (d==0)
     {
         d=1;
     }
 
 
-    for (u32 f=0;f<CUBE_NUM_FACES;f++)
+    for (uint32_t f=0;f<CUBE_NUM_FACES;f++)
     {
         float* r = m_Channels[f][R];
         if (r)
@@ -924,7 +924,7 @@ bool Image::AdjustExposure(float fstop)
             float* g =  m_Channels[f][G];
             float* b =  m_Channels[f][B];
 
-            for (u32 i=0;i<m_Width*m_Height*d;i++)
+            for (uint32_t i=0;i<m_Width*m_Height*d;i++)
             {
                 *r++ *= factor;
                 *g++ *= factor;
@@ -939,13 +939,13 @@ bool Image::AdjustExposure(float fstop)
 //-----------------------------------------------------------------------------
 bool Image::AdjustGamma(float gamma)
 {
-    u32 d = m_Depth;
+    uint32_t d = m_Depth;
     if (d==0)
     {
         d=1;
     }
 
-    for (u32 f=0;f<CUBE_NUM_FACES;f++)
+    for (uint32_t f=0;f<CUBE_NUM_FACES;f++)
     {
         float* r = m_Channels[f][R];
         if (r)
@@ -953,7 +953,7 @@ bool Image::AdjustGamma(float gamma)
             float* g =  m_Channels[f][G];
             float* b =  m_Channels[f][B];
 
-            for (u32 i=0;i<m_Width*m_Height*d;i++)
+            for (uint32_t i=0;i<m_Width*m_Height*d;i++)
             {
                 *r = powf(*r, gamma);
                 *g = powf(*g, gamma);
@@ -973,13 +973,13 @@ bool Image::AdjustGamma(float gamma)
 
 void Image::ConvertSrgbToLinear()
 {
-    u32 d = m_Depth;
+    uint32_t d = m_Depth;
     if (d==0)
     {
         d=1;
     }
 
-    for (u32 f=0;f<CUBE_NUM_FACES;f++)
+    for (uint32_t f=0;f<CUBE_NUM_FACES;f++)
     {
         float* r = m_Channels[f][R];
         if (r)
@@ -987,7 +987,7 @@ void Image::ConvertSrgbToLinear()
             float* g =  m_Channels[f][G];
             float* b =  m_Channels[f][B];
 
-            for (u32 i=0;i<m_Width*m_Height*d;i++)
+            for (uint32_t i=0;i<m_Width*m_Height*d;i++)
             {
                 *r = SrgbToLinear(*r);
                 *g = SrgbToLinear(*g);
@@ -1002,13 +1002,13 @@ void Image::ConvertSrgbToLinear()
 
 void Image::ConvertLinearToSrgb()
 {
-    u32 d = m_Depth;
+    uint32_t d = m_Depth;
     if (d==0)
     {
         d=1;
     }
 
-    for (u32 f=0;f<CUBE_NUM_FACES;f++)
+    for (uint32_t f=0;f<CUBE_NUM_FACES;f++)
     {
         float* r = m_Channels[f][R];
         if (r)
@@ -1016,7 +1016,7 @@ void Image::ConvertLinearToSrgb()
             float* g =  m_Channels[f][G];
             float* b =  m_Channels[f][B];
 
-            for (u32 i=0;i<m_Width*m_Height*d;i++)
+            for (uint32_t i=0;i<m_Width*m_Height*d;i++)
             {
                 *r = LinearToSrgb(*r);
                 *g = LinearToSrgb(*g);
@@ -1032,7 +1032,7 @@ void Image::ConvertLinearToSrgb()
 //-----------------------------------------------------------------------------
 // Internal function: Convert RGBE to floating point, this is slightly different
 // to out RGBE format as the exponent bias is different.
-static inline void rgbe2float(float *red, float *green, float *blue, u8* rgbe)
+static inline void rgbe2float(float *red, float *green, float *blue, uint8_t* rgbe)
 {
     float f;
     if (rgbe[3])
@@ -1048,7 +1048,7 @@ static inline void rgbe2float(float *red, float *green, float *blue, u8* rgbe)
 
 //-----------------------------------------------------------------------------
 // Internal function: simple read routine for .HDR data
-static Image* ReadHDRPixels(u8* src, int numpixels, Image* tex)
+static Image* ReadHDRPixels(uint8_t* src, int numpixels, Image* tex)
 {
     float* red   = tex->m_Channels[0][Image::R];
     float* green = tex->m_Channels[0][Image::G];
@@ -1075,14 +1075,14 @@ Image* Image::LoadHDR(const void* data)
 {
     char text[128];
     float tempf;
-    i32 i;
+    int32_t i;
 
     float gamma = 1.0f;
     float exposure = 1.0f;
 
     bool found_format = false;
-    u8* header = (u8*)data;
-    header = ReadString((u8*)header,text,128);
+    uint8_t* header = (uint8_t*)data;
+    header = ReadString((uint8_t*)header,text,128);
 
     if ((text[0] != '#')||(text[1] != '?'))
     {
@@ -1113,8 +1113,8 @@ Image* Image::LoadHDR(const void* data)
         }
     }
 
-    i32 width;
-    i32 height;
+    int32_t width;
+    int32_t height;
     header = ReadString(header,text,128);
     if (sscanf(text,"-Y %d +X %d",&height,&width) < 2)
         return 0;
@@ -1122,8 +1122,8 @@ Image* Image::LoadHDR(const void* data)
     // We now have all the info we need to make the resulting texture class
     Image* result = new Image(width,height,CF_RGBAFLOATMAP);
 
-    u32 count;
-    u8 buf[128];
+    uint32_t count;
+    uint8_t buf[128];
 
     if ((width < 8)||(width > 0x7fff))
     {
@@ -1131,13 +1131,13 @@ Image* Image::LoadHDR(const void* data)
         return ReadHDRPixels(header,width*height,result);
     }
 
-    u8* src = header;
-    u8 rgbe[4];
+    uint8_t* src = header;
+    uint8_t rgbe[4];
     float*  red     = result->m_Channels[0][Image::R];
     float*  green   = result->m_Channels[0][Image::G];
     float*  blue    = result->m_Channels[0][Image::B];
     float*  alpha   = result->m_Channels[0][Image::A];
-    u8*     scanline_buffer = 0;
+    uint8_t*     scanline_buffer = 0;
 
     // read in each successive scanline
     while(height > 0)
@@ -1160,9 +1160,9 @@ Image* Image::LoadHDR(const void* data)
         }
 
         if (scanline_buffer == NULL)
-            scanline_buffer = new u8[4*width];
-        u8* ptr = scanline_buffer;
-        u8* ptr_end;
+            scanline_buffer = new uint8_t[4*width];
+        uint8_t* ptr = scanline_buffer;
+        uint8_t* ptr_end;
 
         // read each of the four channels for the scanline into the buffer
         for(i=0;i<4;i++)
@@ -1178,7 +1178,7 @@ Image* Image::LoadHDR(const void* data)
                 {
                     // a run of the same value
                     count = buf[0]-128;
-                    if ((count == 0)||((i32)count > ptr_end - ptr))
+                    if ((count == 0)||((int32_t)count > ptr_end - ptr))
                     {
                         delete result;
                         delete scanline_buffer;
@@ -1191,7 +1191,7 @@ Image* Image::LoadHDR(const void* data)
                 {
                     // a non-run
                     count = buf[0];
-                    if ((count == 0)||((i32)count > ptr_end - ptr))
+                    if ((count == 0)||((int32_t)count > ptr_end - ptr))
                     {
                         delete result;
                         delete scanline_buffer;
@@ -1249,15 +1249,15 @@ static inline nv::FloatImage::WrapMode ConvertIGWrapModeToNV(Helium::UVAddressMo
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Image::InvertColors(u32 face)
+void Image::InvertColors(uint32_t face)
 {
-    for (u32 c = 0; c < 4; ++c)
+    for (uint32_t c = 0; c < 4; ++c)
     {
-        f32* curr_data = GetFacePtr(face, c);
+        float32_t* curr_data = GetFacePtr(face, c);
         if (!curr_data)
             continue;
 
-        for (u32 i = 0; i < m_Width * m_Height; i++)
+        for (uint32_t i = 0; i < m_Width * m_Height; i++)
         {
             curr_data[i] = 1.0f - curr_data[i];
         }
@@ -1267,23 +1267,23 @@ void Image::InvertColors(u32 face)
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Image::DoubleContrast(u32 face)
+void Image::DoubleContrast(uint32_t face)
 {
-    for (u32 c = 0; c < 4; ++c)
+    for (uint32_t c = 0; c < 4; ++c)
     {
-        f32* curr_data = GetFacePtr(face, c);
+        float32_t* curr_data = GetFacePtr(face, c);
         if (!curr_data)
             continue;
 
         float total_color = 0.0f;
-        for (u32 i = 0; i < m_Width * m_Height; i++)
+        for (uint32_t i = 0; i < m_Width * m_Height; i++)
         {
             total_color += curr_data[i];
         }
 
         float mean = total_color / float(m_Width * m_Height);
 
-        for (u32 i = 0; i < m_Width * m_Height; i++)
+        for (uint32_t i = 0; i < m_Width * m_Height; i++)
         {
             float color = mean + ((curr_data[i] - mean) * 2.0f);
             curr_data[i] = Clamp(color, 0.0f, 1.0f);
@@ -1295,7 +1295,7 @@ void Image::DoubleContrast(u32 face)
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool Image::BlendImageFace(const Image* blend_source, float blend_strength, bool* channel_masks, u32 src_face, u32 dst_face)
+bool Image::BlendImageFace(const Image* blend_source, float blend_strength, bool* channel_masks, uint32_t src_face, uint32_t dst_face)
 {
     if (blend_source->m_Width != m_Width)
         return false;
@@ -1304,16 +1304,16 @@ bool Image::BlendImageFace(const Image* blend_source, float blend_strength, bool
     if (blend_strength == 0.0f)
         return false;
 
-    for (u32 c = 0; c < 4; ++c)
+    for (uint32_t c = 0; c < 4; ++c)
     {
-        f32* curr_data = GetFacePtr(dst_face, c);
-        f32* blend_data = blend_source->GetFacePtr(src_face, c);
+        float32_t* curr_data = GetFacePtr(dst_face, c);
+        float32_t* blend_data = blend_source->GetFacePtr(src_face, c);
         if (channel_masks && !channel_masks[c])
             continue;
         if (!curr_data || !blend_data)
             continue;
 
-        for (u32 i = 0; i < m_Width * m_Height; i++)
+        for (uint32_t i = 0; i < m_Width * m_Height; i++)
         {
             curr_data[i] = (blend_data[i] * blend_strength) + (curr_data[i] * (1.0f - blend_strength));
         }
@@ -1325,24 +1325,24 @@ bool Image::BlendImageFace(const Image* blend_source, float blend_strength, bool
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool Image::OverlayBlendImageFace(const Image* base_source, const Image* overlay_source, const bool* channel_masks, u32 face, u32 base_face, u32 overlay_face)
+bool Image::OverlayBlendImageFace(const Image* base_source, const Image* overlay_source, const bool* channel_masks, uint32_t face, uint32_t base_face, uint32_t overlay_face)
 {
     if ((base_source->m_Width != m_Width) || (base_source->m_Height != m_Height))
         return false;
     if ((overlay_source->m_Width != m_Width) || (overlay_source->m_Height != m_Height))
         return false;
 
-    for (u32 c = 0; c < 4; ++c)
+    for (uint32_t c = 0; c < 4; ++c)
     {
-        f32* curr_data = GetFacePtr(face, c);
-        f32* base_data = base_source->GetFacePtr(base_face, c);
-        f32* overlay_data = overlay_source->GetFacePtr(overlay_face, c);
+        float32_t* curr_data = GetFacePtr(face, c);
+        float32_t* base_data = base_source->GetFacePtr(base_face, c);
+        float32_t* overlay_data = overlay_source->GetFacePtr(overlay_face, c);
         if (channel_masks && !channel_masks[c])
             continue;
         if (!curr_data || !base_data || !overlay_data)
             continue;
 
-        for (u32 i = 0; i < m_Width * m_Height; i++)
+        for (uint32_t i = 0; i < m_Width * m_Height; i++)
         {
             float base_color = base_data[i];
             float overlay_color = overlay_data[i];
@@ -1500,8 +1500,8 @@ namespace nv
 //
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Image* Image::ScaleImage(u32           width,
-                         u32           height,
+Image* Image::ScaleImage(uint32_t           width,
+                         uint32_t           height,
                          ColorFormat   new_format,
                          FilterType    filter,
                          UVAddressMode u_wrap_mode,
@@ -1517,8 +1517,8 @@ Image* Image::ScaleImage(u32           width,
 //
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Image* Image::ScaleImage(u32               width,
-                         u32               height,
+Image* Image::ScaleImage(uint32_t               width,
+                         uint32_t               height,
                          ColorFormat       new_format,
                          const FilterType* filters,
                          UVAddressMode     u_wrap_mode,
@@ -1552,7 +1552,7 @@ Image* Image::ScaleImage(u32               width,
     nv::FloatImage::WrapMode  nv_u_wrap_mode  = ConvertIGWrapModeToNV(u_wrap_mode);
     nv::FloatImage::WrapMode  nv_v_wrap_mode  = ConvertIGWrapModeToNV(v_wrap_mode);
 
-    for (u32 f=0;f<CUBE_NUM_FACES;f++)
+    for (uint32_t f=0;f<CUBE_NUM_FACES;f++)
     {
         if (m_Channels[f][R])
         {
@@ -1583,9 +1583,9 @@ Image* Image::ScaleImage(u32               width,
 //
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Image* Image::ScaleImageFace(u32           width,
-                             u32           height,
-                             u32           face,
+Image* Image::ScaleImageFace(uint32_t           width,
+                             uint32_t           height,
+                             uint32_t           face,
                              ColorFormat   new_format,
                              FilterType    filter,
                              UVAddressMode u_wrap_mode,
@@ -1601,9 +1601,9 @@ Image* Image::ScaleImageFace(u32           width,
 //
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Image* Image::ScaleImageFace(u32               width,
-                             u32               height,
-                             u32               face,
+Image* Image::ScaleImageFace(uint32_t               width,
+                             uint32_t               height,
+                             uint32_t               face,
                              ColorFormat       new_format,
                              const FilterType* filters,
                              UVAddressMode     u_wrap_mode,
@@ -1620,7 +1620,7 @@ Image* Image::ScaleImageFace(u32               width,
     {
         //Switch the format
         Image* result = new Image(width, height, new_format);
-        result->FillFaceData(0, CF_RGBAFLOATMAP, (u8*)m_Channels[face]);
+        result->FillFaceData(0, CF_RGBAFLOATMAP, (uint8_t*)m_Channels[face]);
         return result;
     }
 
@@ -1637,7 +1637,7 @@ Image* Image::ScaleImageFace(u32               width,
     nv::FloatImage::WrapMode  nv_u_wrap_mode  = ConvertIGWrapModeToNV(u_wrap_mode);
     nv::FloatImage::WrapMode  nv_v_wrap_mode  = ConvertIGWrapModeToNV(v_wrap_mode);
 
-    f32* output = dest_img->GetFacePtr(0, R);
+    float32_t* output = dest_img->GetFacePtr(0, R);
 
     if ( output )
     {
@@ -1678,14 +1678,14 @@ Image* Image::AdjustToNextPowerOf2() const
     if (IsVolumeImage())
         return 0;
 
-    u32 width = NextPowerOfTwo(m_Width);
-    u32 height = NextPowerOfTwo(m_Height);
+    uint32_t width = NextPowerOfTwo(m_Width);
+    uint32_t height = NextPowerOfTwo(m_Height);
 
     // make a new texture
     Image* text = new Image(width,height,m_Depth,m_NativeFormat);
 
 
-    for (u32 f=0;f<CUBE_NUM_FACES;f++)
+    for (uint32_t f=0;f<CUBE_NUM_FACES;f++)
     {
         if (text->m_Channels[f][R] ==0)
         {
@@ -1694,10 +1694,10 @@ Image* Image::AdjustToNextPowerOf2() const
         // zero everything to black
         memset(text->m_Channels[f][R], 0,text->m_DataSize);
 
-        f32 r, g, b, a;
-        for (u32 y=0;y<m_Height;++y)
+        float32_t r, g, b, a;
+        for (uint32_t y=0;y<m_Height;++y)
         {
-            for (u32 x=0;x<m_Width;++x)
+            for (uint32_t x=0;x<m_Width;++x)
             {
                 Read(x, y, r, g, b, a, f);
                 text->Write(x, y, r, g, b, a, f);
@@ -1732,9 +1732,9 @@ void Image::PrepareFor2ChannelNormalMap(bool is_detail_map, bool is_detail_map_o
     //Fix up the flag
     is_detail_map_only = is_detail_map ? is_detail_map_only : false;
 
-    for (u32 f=0;f<CUBE_NUM_FACES;f++)
+    for (uint32_t f=0;f<CUBE_NUM_FACES;f++)
     {
-        const u32 num_texels = m_Width * m_Height;
+        const uint32_t num_texels = m_Width * m_Height;
 
         if (m_Channels[f][R])
         {
@@ -1743,7 +1743,7 @@ void Image::PrepareFor2ChannelNormalMap(bool is_detail_map, bool is_detail_map_o
             float* b_ptr = m_Channels[f][B];
             float* a_ptr = m_Channels[f][A];
 
-            for (u32 i = 0; i < num_texels; ++i)
+            for (uint32_t i = 0; i < num_texels; ++i)
             {
                 float red   = *r_ptr;
                 float green = *g_ptr;
@@ -1863,16 +1863,16 @@ void Image::PrepareFor2ChannelNormalMap(bool is_detail_map, bool is_detail_map_o
 // Returns true if any pixel satisfies the < or > check against the threshold value
 // (based off of ShaderGenerator::IsTexChannelDataValid)
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool Image::IsChannelDataSet( u32 face, u32 channel, f32 threshold_value, bool valid_if_greater ) const
+bool Image::IsChannelDataSet( uint32_t face, uint32_t channel, float32_t threshold_value, bool valid_if_greater ) const
 {
     HELIUM_ASSERT( (m_Depth == 0) || (face == 0) ); // either we're a cube map, or we're checking from the first depth layer
-    f32* color_channel = GetFacePtr(face, channel);
-    u32 depth = (m_Depth == 0) ? 1 : m_Depth;
-    u32 image_size = m_Width * m_Height * depth;
+    float32_t* color_channel = GetFacePtr(face, channel);
+    uint32_t depth = (m_Depth == 0) ? 1 : m_Depth;
+    uint32_t image_size = m_Width * m_Height * depth;
 
     if(valid_if_greater)
     {
-        for(u32 i = 0; i < image_size; i++)
+        for(uint32_t i = 0; i < image_size; i++)
         {
             if(color_channel[i] > threshold_value)
                 return true;
@@ -1880,7 +1880,7 @@ bool Image::IsChannelDataSet( u32 face, u32 channel, f32 threshold_value, bool v
     }
     else
     {
-        for(u32 i = 0; i < image_size; i++)
+        for(uint32_t i = 0; i < image_size; i++)
         {
             if(color_channel[i] < threshold_value)
                 return true;
@@ -1913,7 +1913,7 @@ MipSet* Image::GenerateMipSet(const MipGenOptions& options, const MipSet::Runtim
 ////////////////////////////////////////////////////////////////////////////////////////////////
 MipSet* Image::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet::RuntimeSettings& runtime) const
 {
-    const u32         num_channels = 4;
+    const uint32_t         num_channels = 4;
     MipGenOptions     mipgen_options[num_channels];
     OutputColorFormat outputFormat;
     DXTOptions        dxtOptions;
@@ -1922,7 +1922,7 @@ MipSet* Image::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet::R
     dxtOptions.m_texture                = 0;
 
     // Propagate the runtime wrap settings to those used to generate the mip maps
-    for(u32 options_index = 0; options_index < num_channels; options_index++)
+    for(uint32_t options_index = 0; options_index < num_channels; options_index++)
     {
         mipgen_options[options_index] = *options_rgb[options_index];
         mipgen_options[options_index].m_UAddressMode = runtime.m_wrap_u;
@@ -1932,7 +1932,7 @@ MipSet* Image::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet::R
     }
 
     dxtOptions.m_mips                   = new MipSet;
-    dxtOptions.m_mips->m_texture_type   = (u32)Type();
+    dxtOptions.m_mips->m_texture_type   = (uint32_t)Type();
     dxtOptions.m_mips->m_width          = m_Width;
     dxtOptions.m_mips->m_height         = m_Height;
     dxtOptions.m_mips->m_depth          = m_Depth;
@@ -1947,8 +1947,8 @@ MipSet* Image::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet::R
     const Image*  src_img       = this;
     bool            clone         = false;
     bool            np2_compress  = false;
-    u32             o_width;
-    u32             o_height;
+    uint32_t             o_width;
+    uint32_t             o_height;
 
     // if the output format is compressed
     if( (outputFormat == Helium::OUTPUT_CF_DXT1) ||
@@ -1958,19 +1958,19 @@ MipSet* Image::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet::R
         if( (outputFormat == Helium::OUTPUT_CF_DXT3) || (outputFormat == Helium::OUTPUT_CF_DXT5) )
         {
             // Check if the texture actually has alpha. If not, force to DXT1
-            const f32 upper_alpha_threshold = 0.99f;
-            const f32 lower_alpha_threshold = 0.01f;
+            const float32_t upper_alpha_threshold = 0.99f;
+            const float32_t lower_alpha_threshold = 0.01f;
 
             // 0 = don't force to DXT1
             // 1 = force to DXT1, set alpha to white
             // 2 = force to DXT1, set alpha to black
-            u32 force_to_dxt1 = 0;
+            uint32_t force_to_dxt1 = 0;
             if(m_Depth == 0) // cube map
             {
-                u32 num_white_faces = 0;
-                u32 num_black_faces = 0;
+                uint32_t num_white_faces = 0;
+                uint32_t num_black_faces = 0;
 
-                for(u32 face = 0; face < 6; face++)
+                for(uint32_t face = 0; face < 6; face++)
                 {
                     if(src_img->m_Channels[face][R])
                     {
@@ -2025,12 +2025,12 @@ MipSet* Image::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet::R
             else
             {
                 // Check for RGB being all 1, which means we can pack alpha into color of a dxt1 and swizzle
-                const f32 color_set_threshold = 0.99f;
+                const float32_t color_set_threshold = 0.99f;
 
                 bool force_to_swizzled_dxt1 = false;
                 if(m_Depth == 0) // cube map
                 {
-                    for(u32 face = 0; face < 6; face++)
+                    for(uint32_t face = 0; face < 6; face++)
                     {
                         if(src_img->m_Channels[face][R])
                         {
@@ -2058,18 +2058,18 @@ MipSet* Image::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet::R
                 {
                     Log::Bullet bullet ( Log::Streams::Normal, Log::Levels::Verbose, TXT( "Swizzled alpha only texture to DXT1\n" ) );
 
-                    u32 depth = (m_Depth == 0) ? 1 : m_Depth;
-                    u32 channel_size = m_Width * m_Height * depth * sizeof(f32);
+                    uint32_t depth = (m_Depth == 0) ? 1 : m_Depth;
+                    uint32_t channel_size = m_Width * m_Height * depth * sizeof(float32_t);
 
                     // Copy alpha to the color channels
-                    for(u32 face = 0; face < 6; face++)
+                    for(uint32_t face = 0; face < 6; face++)
                     {
                         if(src_img->m_Channels[face][R])
                         {
-                            f32* alpha_channel  = src_img->m_Channels[face][A];
-                            f32* red_channel    = src_img->m_Channels[face][R];
-                            f32* green_channel  = src_img->m_Channels[face][G];
-                            f32* blue_channel   = src_img->m_Channels[face][B];
+                            float32_t* alpha_channel  = src_img->m_Channels[face][A];
+                            float32_t* red_channel    = src_img->m_Channels[face][R];
+                            float32_t* green_channel  = src_img->m_Channels[face][G];
+                            float32_t* blue_channel   = src_img->m_Channels[face][B];
 
                             memcpy(red_channel, alpha_channel, channel_size);
                             memcpy(green_channel, alpha_channel, channel_size);
@@ -2121,7 +2121,7 @@ MipSet* Image::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet::R
 
     bool first  = true;
 
-    for (u32 f=0;f<CUBE_NUM_FACES;f++)
+    for (uint32_t f=0;f<CUBE_NUM_FACES;f++)
     {
         if (src_img->m_Channels[f][R])
         {
@@ -2158,7 +2158,7 @@ MipSet* Image::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet::R
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-static inline void AdjustWidthAndHeight(u32& width, u32& height, const u32 max_size)
+static inline void AdjustWidthAndHeight(uint32_t& width, uint32_t& height, const uint32_t max_size)
 {
     //Adjust width and height
     if (!IsPowerOfTwo(width))
@@ -2200,7 +2200,7 @@ MipSet* Image::GenerateMultiChannelSettingMipSet(const ImageGenerationSettings& 
     MipGenOptions         mip_opts[4];
     MipSet*               mips;
 
-    for(u32 i = 0; i < 4; ++i)
+    for(uint32_t i = 0; i < 4; ++i)
     {
         mip_opt_ptrs[i]              = &mip_opts[i];
         mip_opts[i].m_Filter         = settings.m_mip_filter[i];
@@ -2211,15 +2211,15 @@ MipSet* Image::GenerateMultiChannelSettingMipSet(const ImageGenerationSettings& 
         mip_opts[i].m_UAddressMode   = runtime_settings.m_wrap_u;
         mip_opts[i].m_VAddressMode   = runtime_settings.m_wrap_v;
 
-        for (u32 t=0;t<MAX_TEXTURE_MIPS;t++)
+        for (uint32_t t=0;t<MAX_TEXTURE_MIPS;t++)
         {
             mip_opts[i].m_ApplyPostFilter[t] = settings.m_ifilter_cnt[i][t];
         }
     }
 
     // perform any pre-scaling, and force the texture to be a power of 2
-    u32 width   = (u32)(m_Width   * settings.m_scale);
-    u32 height  = (u32)(m_Height  * settings.m_scale);
+    uint32_t width   = (uint32_t)(m_Width   * settings.m_scale);
+    uint32_t height  = (uint32_t)(m_Height  * settings.m_scale);
 
     //Adjust width and height
     AdjustWidthAndHeight(width, height, settings.m_max_size);
@@ -2294,15 +2294,15 @@ MipSet* Image::GenerateFinalizedMipSet(const ImageGenerationSettings&  settings,
     // for now, it all or nothing, this can be broken up if needed
     mip_opt.m_ConvertToSrgb = runtime_settings.ShouldConvertToSrgb();
 
-    for (u32 t=0;t<MAX_TEXTURE_MIPS;t++)
+    for (uint32_t t=0;t<MAX_TEXTURE_MIPS;t++)
     {
         mip_opt.m_ApplyPostFilter[t] = settings.m_ifilter_cnt[0][t];
     }
 
 
     // perform any pre-scaling, and force the texture to be a power of 2
-    u32 width   = (u32)(m_Width   * settings.m_scale);
-    u32 height  = (u32)(m_Height  * settings.m_scale);
+    uint32_t width   = (uint32_t)(m_Width   * settings.m_scale);
+    uint32_t height  = (uint32_t)(m_Height  * settings.m_scale);
 
     //Adjust width and height
     AdjustWidthAndHeight(width, height, settings.m_max_size);
@@ -2338,7 +2338,7 @@ MipSet* Image::GenerateFinalizedMipSet(const ImageGenerationSettings&  settings,
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Image*  Image::FilterImageFace(const PostMipImageFilter *filters, u32 face, u32 mip_index) const
+Image*  Image::FilterImageFace(const PostMipImageFilter *filters, uint32_t face, uint32_t mip_index) const
 {
     if(m_Channels[face][R] == NULL)
     {
@@ -2360,30 +2360,30 @@ Image*  Image::FilterImageFace(const PostMipImageFilter *filters, u32 face, u32 
 // The user is responsible for cleaning up the data he acquired
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-u8* Image::GenerateFormatData(const Image* src_tex, ColorFormat dest_fmt, u32 face, bool convert_to_srgb)
+uint8_t* Image::GenerateFormatData(const Image* src_tex, ColorFormat dest_fmt, uint32_t face, bool convert_to_srgb)
 {
     HELIUM_ASSERT(src_tex != NULL );
 
-    f32*  r =   src_tex->GetFacePtr(face, R);
+    float32_t*  r =   src_tex->GetFacePtr(face, R);
 
     if(r == NULL)
     {
         return NULL;
     }
 
-    f32*  g =   src_tex->GetFacePtr(face, G);
-    f32*  b =   src_tex->GetFacePtr(face, B);
-    f32*  a =   src_tex->GetFacePtr(face, A);
+    float32_t*  g =   src_tex->GetFacePtr(face, G);
+    float32_t*  b =   src_tex->GetFacePtr(face, B);
+    float32_t*  a =   src_tex->GetFacePtr(face, A);
 
-    u32 d= src_tex->m_Depth;
+    uint32_t d= src_tex->m_Depth;
     if (d==0)
     {
         d=1;
     }
 
-    u32 dest_fmt_pixel_byte_size  = (ColorFormatBits(dest_fmt) >> 3);
-    u32 space_required            = dest_fmt_pixel_byte_size * d * src_tex->m_Width * src_tex->m_Height;
-    u8* new_surface               = new u8[space_required];
+    uint32_t dest_fmt_pixel_byte_size  = (ColorFormatBits(dest_fmt) >> 3);
+    uint32_t space_required            = dest_fmt_pixel_byte_size * d * src_tex->m_Width * src_tex->m_Height;
+    uint8_t* new_surface               = new uint8_t[space_required];
     HELIUM_ASSERT(new_surface != NULL );
 
     MakeColorFormatBatch(new_surface, src_tex->m_Width*src_tex->m_Height*d, dest_fmt, r, g, b, a, convert_to_srgb);
@@ -2397,7 +2397,7 @@ u8* Image::GenerateFormatData(const Image* src_tex, ColorFormat dest_fmt, u32 fa
 //
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-const u8  c_more_contrast[] = {   0x00,0x00,0x01,0x01,0x02,0x02,0x02,0x03,0x03,0x04,0x04,0x05,0x05,0x06,0x06,0x07,
+const uint8_t  c_more_contrast[] = {   0x00,0x00,0x01,0x01,0x02,0x02,0x02,0x03,0x03,0x04,0x04,0x05,0x05,0x06,0x06,0x07,
 0x08,0x08,0x09,0x09,0x0a,0x0b,0x0b,0x0c,0x0d,0x0d,0x0e,0x0f,0x0f,0x10,0x11,0x12,
 0x12,0x13,0x14,0x15,0x16,0x17,0x17,0x18,0x19,0x1a,0x1b,0x1c,0x1d,0x1e,0x1e,0x1f,
 0x20,0x21,0x22,0x23,0x24,0x25,0x26,0x27,0x28,0x29,0x2a,0x2b,0x2c,0x2d,0x2e,0x30,
@@ -2414,7 +2414,7 @@ const u8  c_more_contrast[] = {   0x00,0x00,0x01,0x01,0x02,0x02,0x02,0x03,0x03,0
 0xed,0xee,0xef,0xf0,0xf0,0xf1,0xf2,0xf3,0xf3,0xf4,0xf5,0xf5,0xf6,0xf6,0xf7,0xf8,
 0xf8,0xf9,0xf9,0xfa,0xfa,0xfb,0xfb,0xfc,0xfc,0xfd,0xfd,0xfd,0xfe,0xfe,0xff,0xff };
 
-const u8  c_less_contrast[] = {   0x00,0x02,0x03,0x05,0x06,0x08,0x09,0x0b,0x0c,0x0e,0x0f,0x11,0x12,0x13,0x15,0x16,
+const uint8_t  c_less_contrast[] = {   0x00,0x02,0x03,0x05,0x06,0x08,0x09,0x0b,0x0c,0x0e,0x0f,0x11,0x12,0x13,0x15,0x16,
 0x18,0x19,0x1a,0x1c,0x1d,0x1e,0x20,0x21,0x22,0x23,0x25,0x26,0x27,0x28,0x2a,0x2b,
 0x2c,0x2d,0x2e,0x30,0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38,0x3a,0x3b,0x3c,0x3d,
 0x3e,0x3f,0x40,0x41,0x42,0x43,0x44,0x45,0x46,0x47,0x48,0x49,0x4a,0x4b,0x4b,0x4c,
@@ -2432,7 +2432,7 @@ const u8  c_less_contrast[] = {   0x00,0x02,0x03,0x05,0x06,0x08,0x09,0x0b,0x0c,0
 0xe8,0xea,0xeb,0xec,0xee,0xef,0xf1,0xf2,0xf4,0xf5,0xf7,0xf9,0xfa,0xfc,0xfd,0xff};
 
 
-const u8  c_lighten[] =       {   0x00,0x01,0x03,0x04,0x06,0x07,0x08,0x0a,0x0b,0x0d,0x0e,0x0f,0x11,0x12,0x13,0x15,
+const uint8_t  c_lighten[] =       {   0x00,0x01,0x03,0x04,0x06,0x07,0x08,0x0a,0x0b,0x0d,0x0e,0x0f,0x11,0x12,0x13,0x15,
 0x16,0x18,0x19,0x1a,0x1c,0x1d,0x1e,0x20,0x21,0x22,0x24,0x25,0x26,0x28,0x29,0x2a,
 0x2c,0x2d,0x2e,0x30,0x31,0x32,0x34,0x35,0x36,0x38,0x39,0x3a,0x3c,0x3d,0x3e,0x3f,
 0x41,0x42,0x43,0x45,0x46,0x47,0x48,0x4a,0x4b,0x4c,0x4d,0x4f,0x50,0x51,0x53,0x54,
@@ -2449,7 +2449,7 @@ const u8  c_lighten[] =       {   0x00,0x01,0x03,0x04,0x06,0x07,0x08,0x0a,0x0b,0
 0xee,0xee,0xef,0xef,0xf0,0xf1,0xf1,0xf2,0xf2,0xf3,0xf4,0xf4,0xf5,0xf5,0xf6,0xf6,
 0xf7,0xf8,0xf8,0xf9,0xf9,0xfa,0xfa,0xfb,0xfb,0xfc,0xfc,0xfd,0xfd,0xfe,0xff,0xff};
 
-const u8  c_darken[] =        {   0x00,0x01,0x01,0x02,0x03,0x03,0x04,0x05,0x06,0x06,0x07,0x08,0x08,0x09,0x0a,0x0a,
+const uint8_t  c_darken[] =        {   0x00,0x01,0x01,0x02,0x03,0x03,0x04,0x05,0x06,0x06,0x07,0x08,0x08,0x09,0x0a,0x0a,
 0x0b,0x0c,0x0d,0x0d,0x0e,0x0f,0x0f,0x10,0x11,0x12,0x12,0x13,0x14,0x14,0x15,0x16,
 0x17,0x17,0x18,0x19,0x1a,0x1a,0x1b,0x1c,0x1d,0x1d,0x1e,0x1f,0x20,0x20,0x21,0x22,
 0x23,0x23,0x24,0x25,0x26,0x26,0x27,0x28,0x29,0x2a,0x2a,0x2b,0x2c,0x2d,0x2d,0x2e,
@@ -2475,7 +2475,7 @@ const float c_sharpen_gradual[] = { 92.0f, 46.0f, 8.0f, 0.0f, 0.0f, 0.0f, 0.0f, 
 //
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-f32 CurveEvaluate(f32 input, const u8* lookup_table)
+float32_t CurveEvaluate(float32_t input, const uint8_t* lookup_table)
 {
     //If the lookup table is null, don't modify the input and return it as is
     if(lookup_table == NULL)
@@ -2485,16 +2485,16 @@ f32 CurveEvaluate(f32 input, const u8* lookup_table)
     //Make sure we are in the 0.0-1.0 range
     input   = Clamp(input, 0.0f, 1.0f);
     //Generate the entry index
-    u32 idx =  u32(input*255.0f + 0.5f);
+    uint32_t idx =  uint32_t(input*255.0f + 0.5f);
 
-    const f32 c_inv_255 = 1.0f/255.0f;
-    return f32(lookup_table[idx])*c_inv_255;
+    const float32_t c_inv_255 = 1.0f/255.0f;
+    return float32_t(lookup_table[idx])*c_inv_255;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void  Image::HighPassFilterImage(const bool*                channel_mask,
-                                 u32                        face,
+                                 uint32_t                        face,
                                  UVAddressMode              u_wrap_mode,
                                  UVAddressMode              v_wrap_mode)
 {
@@ -2511,7 +2511,7 @@ void  Image::HighPassFilterImage(const bool*                channel_mask,
     //
     // here we're trying to approximate the photoshop Gaussian blur with radius 0.7 by running the cubic filter twice
     //
-    for (u32 ic = 0; ic < 4; ic++)
+    for (uint32_t ic = 0; ic < 4; ic++)
         nv_filters[ic] = GetImageFilter(Helium::MIP_FILTER_QUADRATIC);
 
     Image* blur_tex = new Image(m_Width, m_Height, m_NativeFormat);
@@ -2526,7 +2526,7 @@ void  Image::HighPassFilterImage(const bool*                channel_mask,
         ConvertIGWrapModeToNV(u_wrap_mode),
         ConvertIGWrapModeToNV(v_wrap_mode) );
 
-    for (u32 ic = 0; ic < 4; ic++)
+    for (uint32_t ic = 0; ic < 4; ic++)
     {
         delete nv_filters[ic];
         nv_filters[ic] = GetImageFilter(Helium::MIP_FILTER_CUBIC);
@@ -2546,7 +2546,7 @@ void  Image::HighPassFilterImage(const bool*                channel_mask,
 
     delete blur_tex;
 
-    for (u32 ic = 0; ic < 4; ic++)
+    for (uint32_t ic = 0; ic < 4; ic++)
         delete nv_filters[ic];
 
     overlay_tex->InvertColors();
@@ -2562,20 +2562,20 @@ void  Image::HighPassFilterImage(const bool*                channel_mask,
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void  Image::FilterImage(const PostMipImageFilter*  filters,
                          const Image*             src_tex,
-                         u32                        dst_face,
-                         u32                        src_face,
-                         u32                        mip_index)
+                         uint32_t                        dst_face,
+                         uint32_t                        src_face,
+                         uint32_t                        mip_index)
 {
-    u32       kernel_sizes[4]      = {    0,    0,    0,    0 };
+    uint32_t       kernel_sizes[4]      = {    0,    0,    0,    0 };
 
-    f32       center_weight[4]     = { 1.0f, 1.0f, 1.0f, 1.0f };
-    f32       corner_weight[4]     = { 0.0f, 0.0f, 0.0f, 0.0f };
-    f32       side_weight[4]       = { 0.0f, 0.0f, 0.0f, 0.0f };
-    f32       lerp_coef[4]         = { 0.0f, 0.0f, 0.0f, 0.0f };
+    float32_t       center_weight[4]     = { 1.0f, 1.0f, 1.0f, 1.0f };
+    float32_t       corner_weight[4]     = { 0.0f, 0.0f, 0.0f, 0.0f };
+    float32_t       side_weight[4]       = { 0.0f, 0.0f, 0.0f, 0.0f };
+    float32_t       lerp_coef[4]         = { 0.0f, 0.0f, 0.0f, 0.0f };
 
-    const u8* color_curves[4]      = { NULL, NULL, NULL, NULL };
+    const uint8_t* color_curves[4]      = { NULL, NULL, NULL, NULL };
 
-    for(u32 i = 0; i < 4; ++i)
+    for(uint32_t i = 0; i < 4; ++i)
     {
         switch(filters[i])
         {
@@ -2665,19 +2665,19 @@ void  Image::FilterImage(const PostMipImageFilter*  filters,
     }
 
     //Setup
-    f32     src[4];
-    f32     final[4];
-    f32     channels[4];
-    f32     total_weights[4];
+    float32_t     src[4];
+    float32_t     final[4];
+    float32_t     channels[4];
+    float32_t     total_weights[4];
 
-    const i32 read_offsets[8][2]  = {  {-1,-1}, { 0,-1}, { 1,-1},
+    const int32_t read_offsets[8][2]  = {  {-1,-1}, { 0,-1}, { 1,-1},
     {-1, 0},          { 1, 0},
     {-1, 1}, { 0, 1}, { 1, 1} };
 
-    f32 read_weights[8][4];
-    u32 kernel_size       = 0;
+    float32_t read_weights[8][4];
+    uint32_t kernel_size       = 0;
 
-    for(u32 i = 0; i < 4; ++i)
+    for(uint32_t i = 0; i < 4; ++i)
     {
         read_weights[0][i] =  corner_weight[i];  read_weights[1][i] = side_weight[i]; read_weights[2][i] = corner_weight[i];
         read_weights[3][i] =  side_weight[i];                                         read_weights[4][i] = side_weight[i];
@@ -2685,15 +2685,15 @@ void  Image::FilterImage(const PostMipImageFilter*  filters,
         kernel_size        =  MAX(kernel_sizes[i], kernel_size);
     }
 
-    const  i32 y_min_limit  = 0;
-    const  i32 x_min_limit  = 0;
+    const  int32_t y_min_limit  = 0;
+    const  int32_t x_min_limit  = 0;
 
-    const  i32 y_max_limit  = m_Height - 1;
-    const  i32 x_max_limit  = m_Width  - 1;
+    const  int32_t y_max_limit  = m_Height - 1;
+    const  int32_t x_max_limit  = m_Width  - 1;
 
-    for(i32 y = 0; y < (i32)m_Height; ++y)
+    for(int32_t y = 0; y < (int32_t)m_Height; ++y)
     {
-        for(i32 x = 0; x < (i32)m_Width; ++x)
+        for(int32_t x = 0; x < (int32_t)m_Width; ++x)
         {
             //Center pixel
             src_tex->Read(x, y, src[R], src[G], src[B], src[A], src_face);
@@ -2717,7 +2717,7 @@ void  Image::FilterImage(const PostMipImageFilter*  filters,
             total_weights[A]  =  center_weight[A];
 
             //Neighboring pixels
-            for(u32 samp_idx = 0; samp_idx < kernel_size; ++samp_idx)
+            for(uint32_t samp_idx = 0; samp_idx < kernel_size; ++samp_idx)
             {
                 src_tex->Read(nv::clamp(x + read_offsets[samp_idx][0], x_min_limit, x_max_limit),
                     nv::clamp(y + read_offsets[samp_idx][1], y_min_limit, y_max_limit),

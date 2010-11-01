@@ -12,8 +12,8 @@ namespace Helium
             Point m_Start;
             Point m_End;
 
-            u32 m_InnerColor;
-            u32 m_BorderColor;
+            uint32_t m_InnerColor;
+            uint32_t m_BorderColor;
 
         public:
             PrimitiveFrame(ResourceTracker* tracker);

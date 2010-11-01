@@ -26,7 +26,7 @@ namespace Helium
             virtual size_t GetSize() const HELIUM_OVERRIDE;
             virtual void Clear() HELIUM_OVERRIDE;
 
-            virtual bool Set(const Serializer* src, u32 flags = 0) HELIUM_OVERRIDE;
+            virtual bool Set(const Serializer* src, uint32_t flags = 0) HELIUM_OVERRIDE;
             virtual bool Equals(const Serializer* s) const HELIUM_OVERRIDE;
 
             virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;

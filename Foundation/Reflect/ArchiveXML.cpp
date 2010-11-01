@@ -18,14 +18,14 @@ wchar_t Indent<wchar_t>::m_Space = L' ';
 // uncomment to display parse stack progress
 //#define REFLECT_DISPLAY_PARSE_STACK
 
-const u32 ArchiveXML::CURRENT_VERSION                               = 4;
+const uint32_t ArchiveXML::CURRENT_VERSION                               = 4;
 
 ArchiveXML::ArchiveXML( const Path& path, ByteOrder byteOrder )
 : Archive( path, byteOrder )
 , m_Version( CURRENT_VERSION )
 , m_Target( &m_Spool )
 {
-    m_Parser = XML_ParserCreate( Helium::GetEncoding().c_str() );
+    m_Parser = XML_ParserCreate( NULL );
 
     // set the user data used in callbacks
     XML_SetUserData(m_Parser, (void*)this);
@@ -41,7 +41,7 @@ ArchiveXML::ArchiveXML()
 , m_Version( CURRENT_VERSION )
 , m_Target( &m_Spool )
 {
-    m_Parser = XML_ParserCreate( Helium::GetEncoding().c_str() );
+    m_Parser = XML_ParserCreate( NULL );
 
     // set the user data used in callbacks
     XML_SetUserData(m_Parser, (void*)this);
@@ -192,7 +192,7 @@ void ArchiveXML::Write()
 void ArchiveXML::Start()
 {
 #ifdef UNICODE
-    u16 feff = 0xfeff;
+    uint16_t feff = 0xfeff;
     m_Stream->Write( &feff ); // byte order mark
 #endif
 
@@ -237,7 +237,7 @@ void ArchiveXML::Serialize(const ElementPtr& element)
     }
 }
 
-void ArchiveXML::Serialize(const V_Element& elements, u32 flags)
+void ArchiveXML::Serialize(const V_Element& elements, uint32_t flags)
 {
     m_FieldNames.push( tstring () );
 
@@ -413,7 +413,7 @@ void ArchiveXML::Deserialize(ElementPtr& element)
     }
 }
 
-void ArchiveXML::Deserialize(V_Element& elements, u32 flags)
+void ArchiveXML::Deserialize(V_Element& elements, uint32_t flags)
 {
     if (!m_Components.empty())
     {

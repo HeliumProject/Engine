@@ -338,7 +338,7 @@ void EntityInstanceCreateTool::OnNormalize( const Inspect::ButtonClickedArgs& ar
 
 void EntityInstanceCreateTool::OnModify( const Inspect::ButtonClickedArgs& args )
 {
-    std::map< u64, u64 > selectedHashes;
+    std::map< uint64_t, uint64_t > selectedHashes;
 
 #ifdef INSPECT_REFACTOR
     const std::vector< tstring >& selectedItems = m_RandomEntityList->GetSelectedItems();
@@ -376,7 +376,7 @@ void EntityInstanceCreateTool::OnModify( const Inspect::ButtonClickedArgs& args 
         return;
     }
 
-    f32 newPercentage = _tstof( input.c_str() ) / 100.0f;
+    float32_t newPercentage = _tstof( input.c_str() ) / 100.0f;
     V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin();
     V_EntityRowInfo::iterator end = m_RandomEntityInfo.end();
     for ( ; itr != end; ++itr )

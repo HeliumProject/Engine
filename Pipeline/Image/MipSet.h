@@ -147,13 +147,13 @@ namespace Helium
     , m_generate_mips(true)
     {
       //Defaults
-      for(u32 c = 0; c < TEXTURE_CHANNEL_NUM; ++c)
+      for(uint32_t c = 0; c < TEXTURE_CHANNEL_NUM; ++c)
       {
         m_image_filter[c]   = IMAGE_FILTER_NONE;
         m_mip_filter[c]     = MIP_FILTER_POINT;
 
         m_ifilter_cnt[c][0] = 0;
-        for (u32 i=1;i<MAX_TEXTURE_MIPS;i++)
+        for (uint32_t i=1;i<MAX_TEXTURE_MIPS;i++)
         {
           m_ifilter_cnt[c][i] = 1;
         }
@@ -167,7 +167,7 @@ namespace Helium
     Helium::PostMipImageFilter   m_image_filter[TEXTURE_CHANNEL_NUM];
 
     // The number of times to apply the image filter to each mip level (for now 2 are used since sepearate for color+alpha, AG and IP)
-    u32                      m_ifilter_cnt[TEXTURE_CHANNEL_NUM][MAX_TEXTURE_MIPS];
+    uint32_t                      m_ifilter_cnt[TEXTURE_CHANNEL_NUM][MAX_TEXTURE_MIPS];
 
     // Output format for this texture
     Helium::OutputColorFormat    m_output_format;
@@ -176,7 +176,7 @@ namespace Helium
     float                    m_scale;
 
     // Maximum size of the output texture, after the output scale factor has been applied
-    u32                      m_max_size;
+    uint32_t                      m_max_size;
 
     bool                     m_generate_mips;
 
@@ -187,7 +187,7 @@ namespace Helium
     // - runs through each channels mipsettings and calculates unique ones to process them together
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool CompareMipSettings(u32 id1, u32 id2) const
+    bool CompareMipSettings(uint32_t id1, uint32_t id2) const
     {
       if (m_mip_filter[id1] != m_mip_filter[id2])
       {
@@ -197,7 +197,7 @@ namespace Helium
       {
         return false;
       }
-      for (u32 i=0; i<MAX_TEXTURE_MIPS; i++)
+      for (uint32_t i=0; i<MAX_TEXTURE_MIPS; i++)
       {
         if (m_ifilter_cnt[id1][i] != m_ifilter_cnt[id2][i])
         {
@@ -216,10 +216,10 @@ namespace Helium
     ////////////////////////////////////////////////////////////////////////////////////////////////
     bool AreMipSettingsEqual() const
     {
-      u32 num_unique = 0;
-      for (u32 i=1; i<TEXTURE_CHANNEL_NUM; i++)
+      uint32_t num_unique = 0;
+      for (uint32_t i=1; i<TEXTURE_CHANNEL_NUM; i++)
       {
-        for (u32 j=0; j<i; j++)
+        for (uint32_t j=0; j<i; j++)
         {
           if (!CompareMipSettings(i, j))
           {
@@ -251,20 +251,20 @@ namespace Helium
       , m_VAddressMode(UV_WRAP)
     {
       m_ApplyPostFilter[0]  = 0;
-      for (u32 i=1;i<MAX_TEXTURE_MIPS;i++)
+      for (uint32_t i=1;i<MAX_TEXTURE_MIPS;i++)
       {
         m_ApplyPostFilter[i]=1;
       }
     }
 
-    u32                 m_Levels;
+    uint32_t                 m_Levels;
     OutputColorFormat   m_OutputFormat;
     PostMipImageFilter  m_PostFilter;
     UVAddressMode       m_UAddressMode;
     UVAddressMode       m_VAddressMode;
     FilterType          m_Filter;
     bool                m_ConvertToSrgb;
-    u32                 m_ApplyPostFilter[MAX_TEXTURE_MIPS];
+    uint32_t                 m_ApplyPostFilter[MAX_TEXTURE_MIPS];
   };
 
 
@@ -299,10 +299,10 @@ namespace Helium
   public:
     struct MipInfo
     {
-      u32 m_width;
-      u32 m_height;
-      u32 m_depth;
-      u8* m_data;
+      uint32_t m_width;
+      uint32_t m_height;
+      uint32_t m_depth;
+      uint8_t* m_data;
     };
 
     // currently this entire structure is ignored on the PC, all texture state is specified
@@ -349,14 +349,14 @@ namespace Helium
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Data members
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    u32                 m_width;
-    u32                 m_height;
-    u32                 m_depth;
-    u32                 m_texture_type;
-    u32                 m_levels_used;
+    uint32_t                 m_width;
+    uint32_t                 m_height;
+    uint32_t                 m_depth;
+    uint32_t                 m_texture_type;
+    uint32_t                 m_levels_used;
     OutputColorFormat   m_format;
     MipInfo             m_levels[6][MAX_TEXTURE_MIPS]; // 6 = Image::CUBE_NUM_FACES
-    u32                 m_datasize[MAX_TEXTURE_MIPS];
+    uint32_t                 m_datasize[MAX_TEXTURE_MIPS];
     RuntimeSettings     m_runtime;
     bool                m_swizzled;
 
@@ -377,7 +377,7 @@ namespace Helium
     // Removes the specified number of mips from the tail of the mip set (removes the N smallest mips).
     // There has to be at least a single mip level remaining after levels have been removed.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool RemoveFromTail(u32 levels);
+    bool RemoveFromTail(uint32_t levels);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -386,7 +386,7 @@ namespace Helium
     // Removes the specified number of mips from the head of the mip set (removes the N biggest mips).
     // There has to be at least a single mip level remaining after levels have been removed.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool RemoveFromHead(u32 levels);
+    bool RemoveFromHead(uint32_t levels);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -414,6 +414,6 @@ namespace Helium
     bool WriteDDS(const tchar* fname) const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool ExtractNonePowerOfTwo(u32 width, u32 height, u32 depth);
+    bool ExtractNonePowerOfTwo(uint32_t width, uint32_t height, uint32_t depth);
   };
 }

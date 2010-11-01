@@ -28,7 +28,7 @@ void SimpleSerializer<T>::ConnectData(Helium::HybridPtr<void> data)
 }
 
 template <class T>
-bool SimpleSerializer<T>::Set(const Serializer* src, u32 flags)
+bool SimpleSerializer<T>::Set(const Serializer* src, uint32_t flags)
 {
     const SimpleSerializerT* rhs = ConstObjectCast<SimpleSerializerT>(src);
     if (!rhs)
@@ -83,7 +83,7 @@ void SimpleSerializer<T>::Serialize(const Helium::BasicBufferPtr& buffer, const 
 
     Helium::Swizzle( val, buffer->GetByteOrder() != Helium::ByteOrders::LittleEndian );
 
-    buffer->AddBuffer( (const u8*)&val, sizeof(T), debugStr );
+    buffer->AddBuffer( (const uint8_t*)&val, sizeof(T), debugStr );
 }
 
 template <class T>
@@ -153,7 +153,7 @@ void StringSerializer::Serialize(Archive& archive) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            i32 index = binary.GetStrings().Insert(m_Data.Get());
+            int32_t index = binary.GetStrings().Insert(m_Data.Get());
             binary.GetStream().Write(&index); 
             break;
         }
@@ -180,7 +180,7 @@ void StringSerializer::Deserialize(Archive& archive)
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            i32 index;
+            int32_t index;
             binary.GetStream().Read(&index); 
             m_Data.Set( binary.GetStrings().Get(index) );
             break;
@@ -216,7 +216,7 @@ void U8Serializer::Serialize(Archive& archive) const
         {
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
-            u16 tmp = m_Data.Get();
+            uint16_t tmp = m_Data.Get();
             xml.GetStream() << tmp;
             break;
         }
@@ -240,7 +240,7 @@ void U8Serializer::Deserialize(Archive& archive)
         {
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
-            u16 tmp;
+            uint16_t tmp;
             xml.GetStream() >> tmp;
             m_Data.Set( (unsigned char)tmp );
             break;
@@ -259,7 +259,7 @@ void U8Serializer::Deserialize(Archive& archive)
 template<>
 tostream& U8Serializer::operator>> (tostream& stream) const
 {
-    u16 val = m_Data.Get();
+    uint16_t val = m_Data.Get();
     stream << val;
 
     return stream;
@@ -268,9 +268,9 @@ tostream& U8Serializer::operator>> (tostream& stream) const
 template<>
 tistream& U8Serializer::operator<< (tistream& stream)
 {
-    u16 val;
+    uint16_t val;
     stream >> val;
-    m_Data.Set( (u8)val );
+    m_Data.Set( (uint8_t)val );
 
     return stream;
 }
@@ -285,7 +285,7 @@ void I8Serializer::Serialize(Archive& archive) const
         {
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
-            i16 tmp = m_Data.Get();
+            int16_t tmp = m_Data.Get();
             xml.GetStream() << tmp;
             break;
         }
@@ -309,7 +309,7 @@ void I8Serializer::Deserialize(Archive& archive)
         {
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
-            i16 tmp;
+            int16_t tmp;
             xml.GetStream() >> tmp;
             m_Data.Set( (char)tmp );
             break;
@@ -328,7 +328,7 @@ void I8Serializer::Deserialize(Archive& archive)
 template<>
 tostream& I8Serializer::operator>> (tostream& stream) const
 {
-    i16 val = m_Data.Get();
+    int16_t val = m_Data.Get();
     stream << val;
 
     return stream;
@@ -337,32 +337,31 @@ tostream& I8Serializer::operator>> (tostream& stream) const
 template<>
 tistream& I8Serializer::operator<< (tistream& stream)
 {
-    i16 val;
+    int16_t val;
     stream >> val;
-    m_Data.Set( (u8)val );
+    m_Data.Set( (uint8_t)val );
 
     return stream;
 }
 
 template SimpleSerializer<tstring>;
 template SimpleSerializer<bool>;
-template SimpleSerializer<u8>;
-template SimpleSerializer<i8>;
-template SimpleSerializer<u16>;
-template SimpleSerializer<i16>;
-template SimpleSerializer<u32>;
-template SimpleSerializer<i32>;
-template SimpleSerializer<u64>;
-template SimpleSerializer<i64>;
-template SimpleSerializer<f32>;
-template SimpleSerializer<f64>;
+template SimpleSerializer<uint8_t>;
+template SimpleSerializer<int8_t>;
+template SimpleSerializer<uint16_t>;
+template SimpleSerializer<int16_t>;
+template SimpleSerializer<uint32_t>;
+template SimpleSerializer<int32_t>;
+template SimpleSerializer<uint64_t>;
+template SimpleSerializer<int64_t>;
+template SimpleSerializer<float32_t>;
+template SimpleSerializer<float64_t>;
 template SimpleSerializer<Helium::GUID>;
 template SimpleSerializer<Helium::TUID>;
 
 template SimpleSerializer<Vector2>;
 template SimpleSerializer<Vector3>;
 template SimpleSerializer<Vector4>;
-template SimpleSerializer<Quaternion>;
 
 template SimpleSerializer<Matrix3>;
 template SimpleSerializer<Matrix4>;
@@ -392,7 +391,6 @@ REFLECT_DEFINE_CLASS(Vector3Serializer);
 REFLECT_DEFINE_CLASS(Vector4Serializer);
 REFLECT_DEFINE_CLASS(Matrix3Serializer);
 REFLECT_DEFINE_CLASS(Matrix4Serializer);
-REFLECT_DEFINE_CLASS(QuaternionSerializer);
 
 REFLECT_DEFINE_CLASS(Color3Serializer);
 REFLECT_DEFINE_CLASS(Color4Serializer);

@@ -19,9 +19,9 @@
 using namespace Helium;
 using namespace Helium::Profile; 
 
-static const u32        g_MaxMemoryPools = 64;
+static const uint32_t        g_MaxMemoryPools = 64;
 static MemoryPool       g_MemoryPools[g_MaxMemoryPools];
-static u32              g_MemoryPoolCount = 0;
+static uint32_t              g_MemoryPoolCount = 0;
 static Helium::Thread g_MemoryReportThread;
 static bool             g_MemoryReportThreadTerminate = false;
 static bool             g_MemoryProfilingEnabled = false;
@@ -31,7 +31,7 @@ bool Profile::Settings::MemoryProfilingEnabled()
     return g_MemoryProfilingEnabled;
 }
 
-static const tchar* MemoryUnitConvert(f32& size)
+static const tchar* MemoryUnitConvert(float32_t& size)
 {
     if (size > 1 << 10)
     {
@@ -62,19 +62,19 @@ static const tchar* MemoryUnitConvert(f32& size)
 
 static Helium::Thread::Return MemoryReportThread(Helium::Thread::Param)
 {
-    u32 oldCount = g_MemoryPoolCount;
-    f32 oldTotal = (f32)Helium::GetTotalMemory();
+    uint32_t oldCount = g_MemoryPoolCount;
+    float32_t oldTotal = (float32_t)Helium::GetTotalMemory();
 
     while (!g_MemoryReportThreadTerminate)
     {
-        f32 total = (f32)Helium::GetTotalMemory();
+        float32_t total = (float32_t)Helium::GetTotalMemory();
 
         // report if we have different memory usage or more pools
         bool report = oldTotal != total || oldCount != g_MemoryPoolCount;
 
         // check for changed data in each pool
-        f32 profiled = 0;
-        for (u32 i=0; i<g_MemoryPoolCount; i++)
+        float32_t profiled = 0;
+        for (uint32_t i=0; i<g_MemoryPoolCount; i++)
         {
             profiled += g_MemoryPools[i].m_Size;
             report |= g_MemoryPools[i].m_Size != g_MemoryPools[i].m_Previous;
@@ -92,15 +92,15 @@ static Helium::Thread::Return MemoryReportThread(Helium::Thread::Param)
 
             Log::Profile( TXT( "Memory - Profiled: %.2f%s / Committed: %.2f%s / Accounted for: %.2f%%\n" ), profiled, profiledUnits, total, totalUnits, accountedFor);
 
-            for (u32 i=0; i<g_MemoryPoolCount; i++)
+            for (uint32_t i=0; i<g_MemoryPoolCount; i++)
             {
-                f32 size = (f32)g_MemoryPools[i].m_Size;
+                float32_t size = (float32_t)g_MemoryPools[i].m_Size;
                 const tchar* sizeUnits = MemoryUnitConvert( size );
 
-                f32 delta = (f32)abs64(g_MemoryPools[i].m_Size - g_MemoryPools[i].m_Previous);
+                float32_t delta = (float32_t)abs64(g_MemoryPools[i].m_Size - g_MemoryPools[i].m_Previous);
                 const tchar* deltaUnits = MemoryUnitConvert( delta );
 
-                tchar sign = ((i64)g_MemoryPools[i].m_Size - (i64)g_MemoryPools[i].m_Previous) >= 0 ? '+' : '-';
+                tchar sign = ((int64_t)g_MemoryPools[i].m_Size - (int64_t)g_MemoryPools[i].m_Previous) >= 0 ? '+' : '-';
 
                 Log::Profile( TXT( " %-30s: [%7d] %.2f%s (%c%.2f%s)\n" ), g_MemoryPools[i].m_Name, g_MemoryPools[i].m_Count, size, sizeUnits, sign, delta, deltaUnits );
 
@@ -119,7 +119,7 @@ static Helium::Thread::Return MemoryReportThread(Helium::Thread::Param)
     return Helium::Thread::Return(0);
 }
 
-u32 Memory::s_InitCount = 0;
+uint32_t Memory::s_InitCount = 0;
 
 //static
 bool Memory::Initialize()
@@ -169,7 +169,7 @@ MemoryPoolHandle Memory::CreatePool(const tchar* name)
 }
 
 //static
-void Memory::Allocate(MemoryPoolHandle pool, u32 size)
+void Memory::Allocate(MemoryPoolHandle pool, uint32_t size)
 {
     if (pool.m_Index >= 0 && size)
     {
@@ -179,7 +179,7 @@ void Memory::Allocate(MemoryPoolHandle pool, u32 size)
 }
 
 //static
-void Memory::Deallocate(MemoryPoolHandle pool, u32 size)
+void Memory::Deallocate(MemoryPoolHandle pool, uint32_t size)
 {
     if (pool.m_Index >= 0 && size)
     {

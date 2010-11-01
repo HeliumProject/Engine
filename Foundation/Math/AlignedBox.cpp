@@ -14,9 +14,9 @@ const AlignedBox AlignedBox::Singular = AlignedBox ( Vector3::Zero,
 Vector3 AlignedBox::ClosestCorner( const Vector3& v ) const
 {
     Vector3 winner;
-    f32 winnerDist = v.LengthSquared();
+    float32_t winnerDist = v.LengthSquared();
     Vector3 current;
-    f32 currentDist;
+    float32_t currentDist;
 
     current.Set(maximum.x, maximum.y, maximum.z);
     currentDist = (current - v).LengthSquared();
@@ -319,11 +319,11 @@ void AlignedBox::GetTriangulated(const V_Vector3& vertices, V_Vector3& triangleL
 }
 
 //http://www.geometrictools.com/LibFoundation/Intersection/Intersection.html
-bool AlignedBox::IntersectsSphere( const Vector3& pos, const f32 radius ) const
+bool AlignedBox::IntersectsSphere( const Vector3& pos, const float32_t radius ) const
 {
     Vector3 center;
     Vector3 axis[3];
-    f32 extent[3];
+    float32_t extent[3];
 
     V_Vector3 vertices;
     GetVertices( vertices );
@@ -346,12 +346,12 @@ bool AlignedBox::IntersectsSphere( const Vector3& pos, const f32 radius ) const
     // transforming the sphere into that coordinate system.
     Vector3 kCDiff = pos - center;
 
-    f32 fAx = fabs(kCDiff.Dot(axis[0]));
-    f32 fAy = fabs(kCDiff.Dot(axis[1]));
-    f32 fAz = fabs(kCDiff.Dot(axis[2]));
-    f32 fDx = fAx - extent[0];
-    f32 fDy = fAy - extent[1];
-    f32 fDz = fAz - extent[2];
+    float32_t fAx = fabs(kCDiff.Dot(axis[0]));
+    float32_t fAy = fabs(kCDiff.Dot(axis[1]));
+    float32_t fAz = fabs(kCDiff.Dot(axis[2]));
+    float32_t fDx = fAx - extent[0];
+    float32_t fDy = fAy - extent[1];
+    float32_t fDz = fAz - extent[2];
 
     if (fAx <= extent[0])
     {
@@ -379,7 +379,7 @@ bool AlignedBox::IntersectsSphere( const Vector3& pos, const f32 radius ) const
             {
                 // potential sphere-edge intersection with edge formed
                 // by faces y and z
-                f32 fRSqr = radius*radius;
+                float32_t fRSqr = radius*radius;
                 return fDy*fDy + fDz*fDz <= fRSqr;
             }
         }
@@ -397,7 +397,7 @@ bool AlignedBox::IntersectsSphere( const Vector3& pos, const f32 radius ) const
             {
                 // potential sphere-edge intersection with edge formed
                 // by faces x and z
-                f32 fRSqr = radius*radius;
+                float32_t fRSqr = radius*radius;
                 return fDx*fDx + fDz*fDz <= fRSqr;
             }
         }
@@ -407,14 +407,14 @@ bool AlignedBox::IntersectsSphere( const Vector3& pos, const f32 radius ) const
             {
                 // potential sphere-edge intersection with edge formed
                 // by faces x and y
-                f32 fRSqr = radius*radius;
+                float32_t fRSqr = radius*radius;
                 return fDx*fDx + fDy*fDy <= fRSqr;
             }
             else
             {
                 // potential sphere-vertex intersection at corner formed
                 // by faces x,y,z
-                f32 fRSqr = radius*radius;
+                float32_t fRSqr = radius*radius;
                 return fDx*fDx + fDy*fDy + fDz*fDz <= fRSqr;
             }
         }

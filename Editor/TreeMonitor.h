@@ -31,7 +31,7 @@ namespace Helium
             SceneGraph::SceneManager* m_SceneManager;
             S_Trees m_Trees;
 
-            u32 m_FreezeTreeSorting;
+            uint32_t m_FreezeTreeSorting;
             bool m_NeedsSorting;
             TimerThread m_ThawTimer;
             Timer m_SceneChangedTimer;

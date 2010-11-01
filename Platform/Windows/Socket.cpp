@@ -8,7 +8,7 @@
 
 using namespace Helium;
 
-HELIUM_COMPILE_ASSERT( sizeof( u32* ) == sizeof( SOCKET ) );
+HELIUM_COMPILE_ASSERT( sizeof( uint32_t* ) == sizeof( SOCKET ) );
 HELIUM_COMPILE_ASSERT( sizeof( Socket::Overlapped ) == sizeof( OVERLAPPED ) );
 
 // in milliseconds
@@ -16,7 +16,7 @@ HELIUM_COMPILE_ASSERT( sizeof( Socket::Overlapped ) == sizeof( OVERLAPPED ) );
 #define KEEPALIVE_INTERVAL 1000
 
 // globals
-i32 g_Count = 0;
+int32_t g_Count = 0;
 WSADATA g_WSAData;
 
 Socket::Socket(int)
@@ -100,7 +100,7 @@ bool Helium::CloseSocket(Socket& socket)
     return ::closesocket(socket) != SOCKET_ERROR;
 }
 
-bool Helium::BindSocket(Socket& socket, u16 port)
+bool Helium::BindSocket(Socket& socket, uint16_t port)
 {
     sockaddr_in service;
     service.sin_family = AF_INET;
@@ -147,7 +147,7 @@ int Helium::SelectSocket(int range, fd_set* read_set, fd_set* write_set,struct t
     return ::select(range, read_set, write_set, 0, timeout);
 }
 
-bool Helium::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Condition& terminate)
+bool Helium::ReadSocket(Socket& socket, void* buffer, uint32_t bytes, uint32_t& read, Condition& terminate)
 {
     if (bytes == 0)
     {
@@ -199,12 +199,12 @@ bool Helium::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Cond
         return false;
     }
 
-    read = (u32)read_local;
+    read = (uint32_t)read_local;
 
     return true;
 }
 
-bool Helium::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, Condition& terminate)
+bool Helium::WriteSocket(Socket& socket, void* buffer, uint32_t bytes, uint32_t& wrote, Condition& terminate)
 {
     if (bytes == 0)
     {
@@ -256,7 +256,7 @@ bool Helium::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, Co
         return false;
     }
 
-    wrote = (u32)wrote_local;
+    wrote = (uint32_t)wrote_local;
 
     return true;
 }

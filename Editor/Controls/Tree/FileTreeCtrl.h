@@ -55,11 +55,11 @@ namespace Helium
 
             virtual int OnCompareItems( const wxTreeItemId& lhsItem, const wxTreeItemId& rhsItem );
 
-            //virtual void CreateImageList( i32 iconSize = 16 );
+            //virtual void CreateImageList( int32_t iconSize = 16 );
 
         private:
 
-            i32 m_IconSize;
+            int32_t m_IconSize;
 
             // Required so that OnCompareItems will be called
             DECLARE_DYNAMIC_CLASS( FileTreeCtrl )

@@ -184,7 +184,7 @@ bool Path::Readable() const
     return ( stat.m_Mode & Helium::ModeFlags::Read ) == Helium::ModeFlags::Read;
 }
 
-bool Path::ChangedSince( u64 lastTime ) const
+bool Path::ChangedSince( uint64_t lastTime ) const
 {
     Helium::Stat stat;
     if ( !Helium::StatPath( Native().c_str(), stat ) )
@@ -195,7 +195,7 @@ bool Path::ChangedSince( u64 lastTime ) const
     return ( stat.m_ModifiedTime > lastTime );
 }
 
-u64 Path::ModifiedTime() const
+uint64_t Path::ModifiedTime() const
 {
     Helium::Stat stat;
     if ( Stat( stat ) )
@@ -206,7 +206,7 @@ u64 Path::ModifiedTime() const
     return 0;
 }
 
-u64 Path::CreatedTime() const
+uint64_t Path::CreatedTime() const
 {
     Helium::Stat stat;
     if ( Stat( stat ) )
@@ -217,7 +217,7 @@ u64 Path::CreatedTime() const
     return 0;
 }
 
-u64 Path::AccessTime() const
+uint64_t Path::AccessTime() const
 {
     Helium::Stat stat;
     if ( Stat( stat ) )
@@ -228,7 +228,7 @@ u64 Path::AccessTime() const
     return 0;
 }
 
-i64 Path::Size() const
+int64_t Path::Size() const
 {
     Helium::Stat stat;
     if ( Stat( stat ) )
@@ -490,7 +490,7 @@ tstring Path::Normalized() const
     return normalized;
 }
 
-u64 Path::Hash() const
+uint64_t Path::Hash() const
 {
     return Helium::MurmurHash2( m_Path );
 }
@@ -574,7 +574,7 @@ const tchar* Path::c_str() const
 
 tstring Path::FileCRC() const
 {
-    u32 crc = Helium::FileCrc32( m_Path.c_str() );
+    uint32_t crc = Helium::FileCrc32( m_Path.c_str() );
 
     tstringstream str;
     str << std::hex << std::uppercase << crc;

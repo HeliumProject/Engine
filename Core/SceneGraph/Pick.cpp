@@ -48,7 +48,7 @@ PickHit* PickVisitor::AddHit()
 LinePickVisitor::LinePickVisitor(const SceneGraph::Camera* camera, int x, int y)
 : PickVisitor (camera)
 {
-  camera->ViewportToLine((f32)x, (f32)y, m_WorldSpaceLine);
+  camera->ViewportToLine((float32_t)x, (float32_t)y, m_WorldSpaceLine);
 }
 
 LinePickVisitor::LinePickVisitor(const SceneGraph::Camera* camera, const Line& line)
@@ -78,7 +78,7 @@ bool LinePickVisitor::PickPoint(const Vector3& point, const float err)
 
 bool LinePickVisitor::PickSegment(const Vector3& p1, const Vector3& p2, const float err)
 {
-  f32 mu;
+  float32_t mu;
   Vector3 offset;
 
   if (m_PickSpaceLine.IntersectsSegment (p1, p2, err, &mu, &offset))
@@ -91,14 +91,14 @@ bool LinePickVisitor::PickSegment(const Vector3& p1, const Vector3& p2, const fl
 
 bool LinePickVisitor::PickTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, const float err)
 {
-  f32 u = 0.f;
-  f32 v = 0.f;
+  float32_t u = 0.f;
+  float32_t v = 0.f;
   bool interior = true;
   bool success = m_PickSpaceLine.IntersectsTriangle (v0, v1, v2, &u, &v);
 
   Vector3 vertex;
   Vector3 intersection;
-  f32 distance = (f32)BigFloat;
+  float32_t distance = (float32_t)BigFloat;
 
   if (!success)
   {
@@ -198,7 +198,7 @@ bool LinePickVisitor::AddHitPoint(const Vector3& p, Vector3& offset)
   return true;
 }
 
-bool LinePickVisitor::AddHitSegment(const Vector3& p1,const Vector3& p2, f32 mu, Vector3& offset)
+bool LinePickVisitor::AddHitSegment(const Vector3& p1,const Vector3& p2, float32_t mu, Vector3& offset)
 {
   // allocate a hit
   PickHit* hit = AddHit ();
@@ -229,9 +229,9 @@ bool LinePickVisitor::AddHitSegment(const Vector3& p1,const Vector3& p2, f32 mu,
   return true;
 }
 
-bool LinePickVisitor::AddHitTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, f32 u, f32 v, bool interior, Vector3& vertex, Vector3& intersection, float distance)
+bool LinePickVisitor::AddHitTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, float32_t u, float32_t v, bool interior, Vector3& vertex, Vector3& intersection, float distance)
 {
-  f32 dot = 0.f;
+  float32_t dot = 0.f;
   Vector3 normal ( (v1 - v0).Cross(v2 - v1) );
 
   if (m_Camera->GetShadingMode() != ShadingModes::Wireframe && m_Camera->IsBackFaceCulling())
@@ -250,9 +250,9 @@ bool LinePickVisitor::AddHitTriangle(const Vector3& v0,const Vector3& v1,const V
     if (interior)
     {
       // make BaryCentric coefficients
-      f32 a = 1.0f - u - v;
-      f32 b = u;
-      f32 c = v;
+      float32_t a = 1.0f - u - v;
+      float32_t b = u;
+      float32_t c = v;
 
       // triangulate intersection from BaryCentric
       intersection = v0*a + v1*b + v2*c;
@@ -310,7 +310,7 @@ bool LinePickVisitor::AddHitTriangle(const Vector3& v0,const Vector3& v1,const V
 
 bool LinePickVisitor::AddHitTriangleClosestPoint(const Vector3& v0,const Vector3& v1,const Vector3& v2, const Vector3& point)
 {
-  f32 dot = 0.f;
+  float32_t dot = 0.f;
   Vector3 normal ( (v2 - v1).Cross (v1 - v0) );
 
   if (m_Camera->GetShadingMode() != ShadingModes::Wireframe && m_Camera->IsBackFaceCulling())
@@ -383,7 +383,7 @@ FrustumPickVisitor::FrustumPickVisitor(const SceneGraph::Camera* camera, const i
   Vector2 pixelCenter (pixelX + 0.5f, pixelY + 0.5f);
 
   // the offset for the pixel integers
-  f32 pixelOffset = (pixelBoxSize < 1.f ? 16.0f : pixelBoxSize)/2.f;
+  float32_t pixelOffset = (pixelBoxSize < 1.f ? 16.0f : pixelBoxSize)/2.f;
 
   // if there is fuzziness in this selection window, then we will need to change to having mid pixel values
   camera->ViewportToFrustum(pixelCenter.x - pixelOffset, pixelCenter.y - pixelOffset, pixelCenter.x + pixelOffset, pixelCenter.y + pixelOffset, m_WorldSpaceFrustum);
@@ -499,7 +499,7 @@ bool FrustumPickVisitor::AddHitSegment(const Vector3& p1,const Vector3& p2)
 
 bool FrustumPickVisitor::AddHitTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2)
 {
-  f32 dot = 0.f;
+  float32_t dot = 0.f;
   Vector3 normal ( (v2 - v1).Cross (v1 - v0) );
 
   if (m_Camera->GetShadingMode() != ShadingModes::Wireframe && m_Camera->IsBackFaceCulling())
@@ -603,7 +603,7 @@ bool FrustumLinePickVisitor::PickPoint(const Vector3& point, const float err)
 {
   if (m_PickSpaceFrustum.IntersectsPoint(point))
   {
-    if (!LinePickVisitor::PickPoint(point, (f32)BigFloat))
+    if (!LinePickVisitor::PickPoint(point, (float32_t)BigFloat))
     {
       return FrustumPickVisitor::AddHitPoint(point);
     }
@@ -618,7 +618,7 @@ bool FrustumLinePickVisitor::PickSegment(const Vector3& p1,const Vector3& p2, co
 {
   if (m_PickSpaceFrustum.IntersectsSegment (p1, p2))
   {
-    if (!LinePickVisitor::PickSegment(p1, p2, (f32)BigFloat))
+    if (!LinePickVisitor::PickSegment(p1, p2, (float32_t)BigFloat))
     {
       return FrustumPickVisitor::AddHitSegment(p1, p2);
     }
@@ -630,12 +630,12 @@ bool FrustumLinePickVisitor::PickSegment(const Vector3& p1,const Vector3& p2, co
 }
 
 // returns dist_square to the closest pt
-f32 GetClosestPointOnEdge(const Vector3& edge_start, const Vector3& edge_end, const Vector3& pt, Vector3& closest_pt)
+float32_t GetClosestPointOnEdge(const Vector3& edge_start, const Vector3& edge_end, const Vector3& pt, Vector3& closest_pt)
 {
   Vector3 edge_dir = edge_end - edge_start;
   Vector3 edge_start_to_pt = pt - edge_start;
-  f32 edge_dir_len_sqr = edge_dir.LengthSquared();
-  f32 dot = (edge_dir.Dot(edge_start_to_pt))/edge_dir_len_sqr;
+  float32_t edge_dir_len_sqr = edge_dir.LengthSquared();
+  float32_t dot = (edge_dir.Dot(edge_start_to_pt))/edge_dir_len_sqr;
   if (dot < 0.0f) dot = 0.0f;
   if (dot > 1.0f) dot = 1.0f;
   closest_pt = edge_start + edge_dir*dot;
@@ -655,21 +655,21 @@ bool GetClosestPointOnTri(const Line& line, const Vector3& v0, const Vector3& v1
      {
        return false;
      }
-     f32 plane_w = normal.Dot(v0);
+     float32_t plane_w = normal.Dot(v0);
      //find the pt on tri
-     f32 origin_t = normal.Dot(line.m_Origin) - plane_w;
-     f32 end_t = normal.Dot(line.m_Point) - plane_w;
-     f32 plane_pt_t = origin_t/(origin_t-end_t);
+     float32_t origin_t = normal.Dot(line.m_Origin) - plane_w;
+     float32_t end_t = normal.Dot(line.m_Point) - plane_w;
+     float32_t plane_pt_t = origin_t/(origin_t-end_t);
      Vector3 pt_on_plane = line.m_Origin + line_dir*plane_pt_t;
      //now the pt is guaranteed to be not inside the lines so blindly i will find the closest pt on each edge and pick the one closest among the 3
      //better than doing a cross for each edge and directly narrow down which edge or vert it is closest to
      Vector3 closest_pt_on_edges[3];
-     f32 dist_sqr_to_closest_pt_on_edges[3];
+     float32_t dist_sqr_to_closest_pt_on_edges[3];
      dist_sqr_to_closest_pt_on_edges[0] = GetClosestPointOnEdge(v0, v1, pt_on_plane, closest_pt_on_edges[0]);
      dist_sqr_to_closest_pt_on_edges[1] = GetClosestPointOnEdge(v1, v2, pt_on_plane, closest_pt_on_edges[1]);
      dist_sqr_to_closest_pt_on_edges[2] = GetClosestPointOnEdge(v2, v0, pt_on_plane, closest_pt_on_edges[2]);
      result = closest_pt_on_edges[0];
-     f32 closest_dist_sqr = dist_sqr_to_closest_pt_on_edges[0];
+     float32_t closest_dist_sqr = dist_sqr_to_closest_pt_on_edges[0];
      if (closest_dist_sqr > dist_sqr_to_closest_pt_on_edges[1])
      {
        closest_dist_sqr = dist_sqr_to_closest_pt_on_edges[1];
@@ -693,7 +693,7 @@ bool FrustumLinePickVisitor::PickTriangle(const Vector3& v0,const Vector3& v1,co
 {
   if (m_PickSpaceFrustum.IntersectsTriangle (v0, v1, v2))
   {
-    if (!LinePickVisitor::PickTriangle(v0, v1, v2, (f32)BigFloat))
+    if (!LinePickVisitor::PickTriangle(v0, v1, v2, (float32_t)BigFloat))
     {
       Vector3 point;
       if (GetClosestPointOnTri(m_PickSpaceLine, v0, v1, v2, point))
@@ -715,7 +715,7 @@ bool FrustumLinePickVisitor::PickSphere(const Vector3& center, const float radiu
 {
   if (m_PickSpaceFrustum.IntersectsPoint(center, radius))
   {
-    if (!LinePickVisitor::PickSphere(center, (f32)BigFloat))
+    if (!LinePickVisitor::PickSphere(center, (float32_t)BigFloat))
     {
       return FrustumPickVisitor::AddHitSphere(center);
     }
@@ -760,7 +760,7 @@ struct SortKey
 
   }
 
-  SortKey( PickHitPtr hit, f32 distanceFromCamera, f32 distanceFromPick )
+  SortKey( PickHitPtr hit, float32_t distanceFromCamera, float32_t distanceFromPick )
     : m_Hit (hit)
     , m_DistanceFromCamera (distanceFromCamera)
     , m_DistanceFromPick (distanceFromPick)
@@ -769,8 +769,8 @@ struct SortKey
   }
 
   PickHitPtr  m_Hit;
-  f32         m_DistanceFromCamera;
-  f32         m_DistanceFromPick;
+  float32_t         m_DistanceFromCamera;
+  float32_t         m_DistanceFromPick;
 };
 
 typedef std::vector<SortKey> V_SortKey;
@@ -814,7 +814,7 @@ void PickHit::Sort(SceneGraph::Camera* camera, const V_PickHitSmartPtr& hits, V_
   {
     PickHitPtr hit = *itr;
     Vector3 intersection;
-    f32 pickDistance;
+    float32_t pickDistance;
 
     switch (sortType)
     {
@@ -846,7 +846,7 @@ void PickHit::Sort(SceneGraph::Camera* camera, const V_PickHitSmartPtr& hits, V_
       }
     }
 
-    f32 cameraDistance = (cameraPosition - intersection).LengthSquared();
+    float32_t cameraDistance = (cameraPosition - intersection).LengthSquared();
 
     sortKeys.push_back( SortKey (hit, cameraDistance, pickDistance) );
   }

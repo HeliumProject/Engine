@@ -30,7 +30,7 @@ void EntityInstanceType::CleanupType()
     Reflect::UnregisterClassType< SceneGraph::EntityInstanceType >();
 }
 
-EntityInstanceType::EntityInstanceType( SceneGraph::Scene* scene, i32 instanceType )
+EntityInstanceType::EntityInstanceType( SceneGraph::Scene* scene, int32_t instanceType )
 : SceneGraph::InstanceType( scene, instanceType )
 {
     ZeroMemory(&m_Material, sizeof(m_WireMaterial));

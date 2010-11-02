@@ -2,10 +2,10 @@
 #include "ThumbnailLoader.h"
 
 #include "Foundation/File/Directory.h"
-#include "Core/Asset/AssetClass.h"
-#include "Core/Asset/Classes/ShaderAsset.h"
-#include "Core/Render/DeviceManager.h"
-#include "Core/SceneGraph/Render.h"
+#include "Pipeline/Asset/AssetClass.h"
+#include "Pipeline/Asset/Classes/ShaderAsset.h"
+#include "Pipeline/Render/DeviceManager.h"
+#include "Pipeline/SceneGraph/Render.h"
 
 using namespace Helium;
 using namespace Helium::Render;

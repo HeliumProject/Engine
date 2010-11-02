@@ -6,9 +6,9 @@
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Container/OrderedSet.h"
 
-#include "Core/SceneGraph/Scene.h"
-#include "Core/SceneGraph/Layer.h"
-#include "Core/SceneGraph/SceneManager.h"
+#include "Pipeline/SceneGraph/Scene.h"
+#include "Pipeline/SceneGraph/Layer.h"
+#include "Pipeline/SceneGraph/SceneManager.h"
 
 namespace Helium
 {

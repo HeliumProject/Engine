@@ -2,7 +2,7 @@
 
 #include "Platform/Mutex.h"
 
-#include "Core/Render/DeviceManager.h"
+#include "Pipeline/Render/DeviceManager.h"
 
 #include "Editor/Vault/Thumbnail.h"
 #include "Editor/Vault/ThumbnailLoader.h"

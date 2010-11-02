@@ -13,11 +13,11 @@
 
 #include "Editor/Vault/VaultPanel.h"
 
-#include "Core/SettingsManager.h"
+#include "Pipeline/SettingsManager.h"
 
-#include "Core/SceneGraph/PropertiesManager.h"
-#include "Core/SceneGraph/Scene.h"
-#include "Core/SceneGraph/SceneManager.h"
+#include "Pipeline/SceneGraph/PropertiesManager.h"
+#include "Pipeline/SceneGraph/Scene.h"
+#include "Pipeline/SceneGraph/SceneManager.h"
 
 #include "Editor/DragDrop/DropTarget.h"
 
@@ -29,7 +29,7 @@
 #include "Editor/Inspect/TreeCanvas.h"
 #include "Editor/Inspect/StripCanvas.h"
 
-#include "Core/Project.h"
+#include "Pipeline/Project.h"
 
 namespace Helium
 {

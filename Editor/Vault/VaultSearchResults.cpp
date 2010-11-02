@@ -2,7 +2,7 @@
 
 #include "VaultSearchResults.h"
 
-#include "Core/Asset/AssetClass.h"
+#include "Pipeline/Asset/AssetClass.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

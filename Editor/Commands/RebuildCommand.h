@@ -6,8 +6,8 @@
 #include "Foundation/CommandLine/Command.h"
 #include "Foundation/File/Path.h"
 
-#include "Core/Asset/AssetInit.h"
-#include "Core/Asset/AssetClass.h"
+#include "Pipeline/Asset/AssetInit.h"
+#include "Pipeline/Asset/AssetClass.h"
 
 namespace Helium
 {

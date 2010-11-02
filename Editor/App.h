@@ -5,7 +5,7 @@
 
 #include "Foundation/Document/DocumentManager.h"
 
-#include "Core/SettingsManager.h"
+#include "Pipeline/SettingsManager.h"
 
 #include "Foundation/InitializerStack.h"
 

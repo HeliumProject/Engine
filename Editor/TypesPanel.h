@@ -2,9 +2,9 @@
 
 #include "Editor/EditorGenerated.h"
 
-#include "Core/SceneGraph/Scene.h"
-#include "Core/SceneGraph/SceneManager.h"
-#include "Core/SceneGraph/HierarchyNodeType.h"
+#include "Pipeline/SceneGraph/Scene.h"
+#include "Pipeline/SceneGraph/SceneManager.h"
+#include "Pipeline/SceneGraph/HierarchyNodeType.h"
 
 #include "GridWithIcons.h"
 

@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Tracker.h"
 
-#include "Core/Asset/AssetClass.h"
+#include "Pipeline/Asset/AssetClass.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/Component/SearchableProperties.h"
 

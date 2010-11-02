@@ -196,6 +196,8 @@ project "Pipeline"
 		"Foundation",
 		"nvtt",
 		"tiff",
+		"d3d9",
+		"d3dx9",
 	}
 
 	configuration "windows"
@@ -203,28 +205,6 @@ project "Pipeline"
 		{
 			"Dependencies/nvtt/project/vc8",
 		}
-
-project "Core"
-	kind "SharedLib"
-	language "C++"
-	defines
-	{
-		"CORE_EXPORTS",
-	}
-	files
-	{
-		"Core/**.h",
-		"Core/**.cpp",
-	}
-	links
-	{
-		"Foundation",
-		"Platform",
-		"opengl32",
-		"glu32",
-		"d3d9",
-		"d3dx9",
-	}	
 
 	configuration "windows"
 		includedirs
@@ -264,7 +244,6 @@ project "Editor"
 		"Platform",
 		"Foundation",
 		"Pipeline",
-		"Core",
 		"LiteSQL",
 		"libclient",
 		"librpc",

@@ -4,7 +4,7 @@
 
 #include "Foundation/Memory/SmartPtr.h"
 
-#include "Core/Render/DeviceManager.h"
+#include "Pipeline/Render/DeviceManager.h"
 
 namespace Helium
 {

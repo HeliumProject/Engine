@@ -3,7 +3,7 @@
 #include "ProjectViewModel.h"
 
 #include "Foundation/Container/OrderedSet.h"
-#include "Core/Project.h"
+#include "Pipeline/Project.h"
 
 #include "Editor/EditorGenerated.h"
 #include "Editor/FileDropTarget.h"

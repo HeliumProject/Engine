@@ -6,7 +6,7 @@
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/File/Path.h"
 
-#include "Core/Render/DeviceManager.h"
+#include "Pipeline/Render/DeviceManager.h"
 
 #include "Editor/Vault/Thumbnail.h"
 

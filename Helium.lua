@@ -109,6 +109,13 @@ configuration "not no-unicode"
 		"wxUSE_UNICODE=1",
 	}
 
+project "Core"
+	if corePrebuildCommands ~= nil then
+		prebuildcommands( corePrebuildCommands )
+	end
+
+	Helium.DoLunarModuleProjectSettings( "LUNAR", "Core", "CORE" )
+
 project "Platform"
 	kind "SharedLib"
 	language "C++"

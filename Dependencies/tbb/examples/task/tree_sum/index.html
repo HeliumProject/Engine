@@ -1,0 +1,75 @@
+<HTML>
+<BODY>
+
+<H2>Overview</H2>
+This directory contains a simple example that sums values in a tree.
+The example exhibits some speedup, but not a lot,  because it quickly saturates 
+the system bus on a multiprocessor.  For good speedup, there needs to be 
+more computation cycles per memory reference.  The point of the example 
+is to teach how to use the raw task interface, so the computation is
+deliberately trivial.
+<P>
+The performance of this example is better when objects are allocated
+by the Threading Building Blocks scalable_allocator instead of
+the default "operator new".  The reason is that the scalable_allocator typically
+packs small objects more tightly than the default "operator new", resulting in
+a smaller memory footprint, and thus more efficient use of cache and virtual memory.
+In addition, the scalable_allocator performs better for multi-threaded allocations.
+</P>
+<H2>Files</H2>
+<DL>
+<DT><A HREF="SerialSumTree.cpp">SerialSumTree.cpp</A>
+<DD>Sums sequentially.
+<DT><A HREF="SimpleParallelSumTree.cpp">SimpleParallelSumTree.cpp</A><DT>
+<DD>Sums in parallel without any fancy tricks.
+<DT><A HREF="OptimizedParallelSumTree.cpp">OptimizedParallelSumTree.cpp</A><DT>
+<DD>Sums in parallel, using "recycling" and "continuation-passing" tricks. 
+    In this case, it is only slightly faster than the simple version.  
+<DT><A HREF="common.h">common.h</A>
+<DD>Shared declarations.
+<DT><A HREF="main.cpp">main.cpp</A>
+<DD>Driver.
+<DT><A HREF="Makefile">Makefile</A>
+<DD>Makefile for building example.
+</DL>
+
+<H2>Directories</H2>
+<DL>
+<DT><A HREF="msvs">msvs</A>
+<DD>Contains Microsoft* Visual Studio* 2005 workspace for building and running the example.
+<DT><A HREF="xcode">xcode</A>
+<DD>Contains Xcode* IDE workspace for building and running the example.
+</DL>
+
+<H2>To Build</H2>
+General build directions can be found <A HREF=../../index.html#build>here</A>.
+<P></P>
+
+<H2>Usage</H2>
+<DL>
+<DT><TT>tree_sum [-stdmalloc] <I>S</I> <I>N</I></TT>
+<DD><I>S</I> is the problem size (the number of nodes in the tree).
+    <I>N</I> is the number of threads to be used.
+    <BR>
+    Passing "-stdmalloc" as the 1st parameter causes the default "operator new"
+    to be used for memory allocations instead of the TBB scalable_allocator.
+
+<DT>To run a short version of this example, e.g., for use with Intel&reg; Threading Tools:
+<DD>Build a <I>debug</I> version of the example
+    (see the <A HREF=../../index.html#build>build directions</A>).
+    <BR>Run it with a small problem size and the desired number of threads, e.g., <TT>tree_sum 100000 4</TT>.
+</DL>
+
+<HR>
+<A HREF="../index.html">Up to parent directory</A>
+<p></p>
+Copyright &copy; 2005-2010 Intel Corporation.  All Rights Reserved.
+<p></p>
+Intel, Pentium, Intel Xeon, Itanium, Intel XScale and VTune are 
+registered trademarks or trademarks of Intel Corporation or its 
+subsidiaries in the United States and other countries. 
+<p></p>
+* Other names and brands may be claimed as the property of others.
+</BODY>
+</HTML>
+

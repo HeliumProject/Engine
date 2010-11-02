@@ -1,0 +1,183 @@
+<?xml version="1.0" standalone="yes"?>
+<object class="NSIBObjectData">
+  <string name="targetFramework">IBCarbonFramework</string>
+  <object name="rootObject" class="NSCustomObject" id="1">
+    <string name="customClass">NSApplication</string>
+  </object>
+  <array count="22" name="allObjects">
+    <object class="IBCarbonMenu" id="29">
+      <string name="title">main</string>
+      <array count="3" name="items">
+        <object class="IBCarbonMenuItem" id="210">
+          <boolean name="updateSingleItem">TRUE</boolean>
+          <string name="title">PolygonOverlay</string>
+          <object name="submenu" class="IBCarbonMenu" id="211">
+            <string name="title">Seismic Simulation</string>
+            <array count="7" name="items">
+              <object class="IBCarbonMenuItem" id="215">
+                <boolean name="checked">TRUE</boolean>
+                <boolean name="dynamic">TRUE</boolean>
+                <boolean name="autoDisable">TRUE</boolean>
+                <boolean name="updateSingleItem">TRUE</boolean>
+                <string name="title">Parallel</string>
+                <ostype name="command">para</ostype>
+              </object>
+              <object class="IBCarbonMenuItem" id="214">
+                <boolean name="dynamic">TRUE</boolean>
+                <boolean name="autoDisable">TRUE</boolean>
+                <boolean name="updateSingleItem">TRUE</boolean>
+                <string name="title">Serial</string>
+                <ostype name="command">seri</ostype>
+              </object>
+              <object class="IBCarbonMenuItem" id="216">
+                <boolean name="separator">TRUE</boolean>
+                <boolean name="updateSingleItem">TRUE</boolean>
+              </object>
+              <object class="IBCarbonMenuItem" id="217">
+                <boolean name="checked">TRUE</boolean>
+                <boolean name="dynamic">TRUE</boolean>
+                <boolean name="autoDisable">TRUE</boolean>
+                <boolean name="updateSingleItem">TRUE</boolean>
+                <string name="title">Enable GUI</string>
+                <ostype name="command">egui</ostype>
+              </object>
+              <object class="IBCarbonMenuItem" id="218">
+                <boolean name="dynamic">TRUE</boolean>
+                <boolean name="autoDisable">TRUE</boolean>
+                <boolean name="updateSingleItem">TRUE</boolean>
+                <string name="title">Disable GUI</string>
+                <ostype name="command">dgui</ostype>
+              </object>
+              <object class="IBCarbonMenuItem" id="213">
+                <boolean name="separator">TRUE</boolean>
+                <boolean name="updateSingleItem">TRUE</boolean>
+              </object>
+              <object class="IBCarbonMenuItem" id="212">
+                <boolean name="updateSingleItem">TRUE</boolean>
+                <string name="title">About PolygonOverlay</string>
+                <int name="keyEquivalentModifier">0</int>
+                <ostype name="command">abou</ostype>
+              </object>
+            </array>
+            <string name="name">_NSAppleMenu</string>
+          </object>
+        </object>
+        <object class="IBCarbonMenuItem" id="127">
+          <string name="title">File</string>
+          <object name="submenu" class="IBCarbonMenu" id="131">
+            <string name="title">File</string>
+            <array count="1" name="items">
+              <object class="IBCarbonMenuItem" id="200">
+                <string name="title">Close</string>
+                <string name="keyEquivalent">w</string>
+                <ostype name="command">clos</ostype>
+              </object>
+            </array>
+          </object>
+        </object>
+        <object class="IBCarbonMenuItem" id="192">
+          <string name="title">Window</string>
+          <object name="submenu" class="IBCarbonMenu" id="195">
+            <string name="title">Window</string>
+            <array count="5" name="items">
+              <object class="IBCarbonMenuItem" id="190">
+                <boolean name="dynamic">TRUE</boolean>
+                <string name="title">Minimize</string>
+                <string name="keyEquivalent">m</string>
+                <ostype name="command">mini</ostype>
+              </object>
+              <object class="IBCarbonMenuItem" id="197">
+                <string name="title">Zoom</string>
+                <ostype name="command">zoom</ostype>
+              </object>
+              <object class="IBCarbonMenuItem" id="194">
+                <boolean name="separator">TRUE</boolean>
+              </object>
+              <object class="IBCarbonMenuItem" id="196">
+                <boolean name="dynamic">TRUE</boolean>
+                <string name="title">Bring All to Front</string>
+                <ostype name="command">bfrt</ostype>
+              </object>
+              <object class="IBCarbonMenuItem" id="193">
+                <boolean name="dynamic">TRUE</boolean>
+                <string name="title">Arrange in Front</string>
+                <int name="keyEquivalentModifier">1572864</int>
+                <ostype name="command">frnt</ostype>
+              </object>
+            </array>
+            <string name="name">_NSWindowsMenu</string>
+          </object>
+        </object>
+      </array>
+      <string name="name">_NSMainMenu</string>
+    </object>
+    <reference idRef="127"/>
+    <reference idRef="131"/>
+    <object class="IBCarbonWindow" id="166">
+      <string name="windowRect">338 353 698 833 </string>
+      <string name="title">PolygonOverlay</string>
+      <object name="rootControl" class="IBCarbonRootControl" id="167">
+        <string name="bounds">0 0 360 480 </string>
+        <string name="viewFrame">0 0 480 360 </string>
+      </object>
+      <boolean name="receiveUpdates">FALSE</boolean>
+      <boolean name="compositing">TRUE</boolean>
+      <int name="themeBrush">-1</int>
+      <boolean name="asyncDrag">TRUE</boolean>
+      <boolean name="doesNotCycle">TRUE</boolean>
+      <int name="WindowMinWidth">320</int>
+      <int name="WindowMinHeight">200</int>
+    </object>
+    <reference idRef="167"/>
+    <reference idRef="190"/>
+    <reference idRef="192"/>
+    <reference idRef="193"/>
+    <reference idRef="194"/>
+    <reference idRef="195"/>
+    <reference idRef="196"/>
+    <reference idRef="197"/>
+    <reference idRef="200"/>
+    <reference idRef="210"/>
+    <reference idRef="211"/>
+    <reference idRef="212"/>
+    <reference idRef="213"/>
+    <reference idRef="214"/>
+    <reference idRef="215"/>
+    <reference idRef="216"/>
+    <reference idRef="217"/>
+    <reference idRef="218"/>
+  </array>
+  <array count="22" name="allParents">
+    <reference idRef="1"/>
+    <reference idRef="29"/>
+    <reference idRef="127"/>
+    <reference idRef="1"/>
+    <reference idRef="166"/>
+    <reference idRef="195"/>
+    <reference idRef="29"/>
+    <reference idRef="195"/>
+    <reference idRef="195"/>
+    <reference idRef="192"/>
+    <reference idRef="195"/>
+    <reference idRef="195"/>
+    <reference idRef="131"/>
+    <reference idRef="29"/>
+    <reference idRef="210"/>
+    <reference idRef="211"/>
+    <reference idRef="211"/>
+    <reference idRef="211"/>
+    <reference idRef="211"/>
+    <reference idRef="211"/>
+    <reference idRef="211"/>
+    <reference idRef="211"/>
+  </array>
+  <dictionary count="3" name="nameTable">
+    <string>Files Owner</string>
+    <reference idRef="1"/>
+    <string>MainWindow</string>
+    <reference idRef="166"/>
+    <string>MenuBar</string>
+    <reference idRef="29"/>
+  </dictionary>
+  <unsigned_int name="nextObjectID">219</unsigned_int>
+</object>

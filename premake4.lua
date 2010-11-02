@@ -1,13 +1,18 @@
 require "Base"
+require "TBB"
 require "WxWidgets"
 
 local wx = "Dependencies/wxWidgets"
+local tbb = "Dependencies/tbb"
 
 if _ACTION ~= "clean" then
 	Helium.BuildWxWidgets( wx )
 	Helium.PublishWxWidgets( wx )
+	Helium.BuildTBB( tbb )
+	Helium.PublishTBB( tbb )
 else
 	Helium.CleanWxWidgets( wx )
+	Helium.CleanTBB( tbb )
 end
 
 if os.get() == "windows" then

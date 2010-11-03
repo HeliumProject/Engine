@@ -22,7 +22,7 @@ namespace Helium
         class CastException : public Reflect::Exception
         {
         public:
-            CastException( const tchar *msgFormat, ... )
+            CastException( const tchar_t *msgFormat, ... )
             {
                 va_list msgArgs;
                 va_start( msgArgs, msgFormat );
@@ -41,7 +41,7 @@ namespace Helium
         class LogisticException : public Reflect::Exception
         {
         public:
-            LogisticException( const tchar *msgFormat, ... )
+            LogisticException( const tchar_t *msgFormat, ... )
             {
                 va_list msgArgs;
                 va_start( msgArgs, msgFormat );
@@ -60,7 +60,7 @@ namespace Helium
         class TypeInformationException : public Reflect::LogisticException
         {
         public:
-            TypeInformationException( const tchar *msgFormat, ... )
+            TypeInformationException( const tchar_t *msgFormat, ... )
             {
                 va_list msgArgs;
                 va_start( msgArgs, msgFormat );
@@ -79,7 +79,7 @@ namespace Helium
         class DataFormatException : public Reflect::LogisticException
         {
         public:
-            DataFormatException( const tchar* msgFormat, ... )
+            DataFormatException( const tchar_t* msgFormat, ... )
             {
                 va_list msgArgs;
                 va_start( msgArgs, msgFormat );
@@ -98,7 +98,7 @@ namespace Helium
         class StreamException : public Reflect::Exception
         {
         public:
-            StreamException( const tchar* msgFormat, ... )
+            StreamException( const tchar_t* msgFormat, ... )
             {
                 va_list msgArgs;
                 va_start( msgArgs, msgFormat );
@@ -117,7 +117,7 @@ namespace Helium
         class ChecksumException : public Reflect::StreamException
         {
         public:
-            ChecksumException( const tchar* msgFormat, ... )
+            ChecksumException( const tchar_t* msgFormat, ... )
             {
                 va_list msgArgs;
                 va_start( msgArgs, msgFormat );

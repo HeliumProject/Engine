@@ -37,22 +37,22 @@ class Shape;
 namespace Debug
 {
 
-	const tchar *Format(const tchar *fmt, ...);
+	const tchar_t *Format(const tchar_t *fmt, ...);
 
 #ifdef _DEBUG
 
-	void *DumpHeap(const tchar *op, void *ptr, size_t size, const char *file, int line);
+	void *DumpHeap(const tchar_t *op, void *ptr, size_t size, const char *file, int line);
 	void Init(lua_State *L);
-	void Printf(const tchar *fmt, ...);
+	void Printf(const tchar_t *fmt, ...);
 	void DumpLuaStack(lua_State *L);
-	void Save(Shape *obj, const tchar *file);
+	void Save(Shape *obj, const tchar_t *file);
 
 #else
 
 	void Init(lua_State *L);
-	static inline void Printf(const tchar *fmt, ...) {}
+	static inline void Printf(const tchar_t *fmt, ...) {}
 	static inline void DumpLuaStack(lua_State *L) {}
-	static inline void Save(Shape *obj, const tchar *file) {}
+	static inline void Save(Shape *obj, const tchar_t *file) {}
 
 #endif
 

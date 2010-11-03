@@ -54,7 +54,7 @@ namespace Helium
                 CPP
             };
 
-            static const tchar* Strings[] =
+            static const tchar_t* Strings[] =
             {
                 TXT("SEH"),
                 TXT("C++"),
@@ -105,7 +105,7 @@ namespace Helium
 
         // Query SEH exception pointers for full report, abbreviated name, or more details
         PLATFORM_API tstring GetExceptionInfo( LPEXCEPTION_POINTERS info );
-        PLATFORM_API const tchar* GetExceptionClass( uint32_t exceptionCode );
+        PLATFORM_API const tchar_t* GetExceptionClass( uint32_t exceptionCode );
         PLATFORM_API void GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args );
 
         // Core dumps (full dumps include process heaps)

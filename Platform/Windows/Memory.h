@@ -51,6 +51,6 @@ namespace Helium
         //
 
         PLATFORM_API void GetMemoryStatus(MemoryStatus* status);
-        PLATFORM_API void GetMemoryStatus(tchar* buffer, size_t bufSize);
+        PLATFORM_API void GetMemoryStatus(tchar_t* buffer, size_t bufSize);
     }
 }

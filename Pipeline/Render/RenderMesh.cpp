@@ -7,7 +7,7 @@ using namespace Helium;
 using namespace Helium::Render;
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-RenderMesh::RenderMesh(const tchar* name)
+RenderMesh::RenderMesh(const tchar_t* name)
 {
     m_filename = name;
     m_crc = Helium::StringCrc32(name);

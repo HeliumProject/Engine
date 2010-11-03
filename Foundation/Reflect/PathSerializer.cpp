@@ -88,7 +88,7 @@ void PathSerializer::Deserialize( Archive& archive )
             tstring buf;
             std::streamsize size = xml.GetStream().ElementsAvailable(); 
             buf.resize( (size_t)size );
-            xml.GetStream().ReadBuffer( const_cast<tchar*>( buf.c_str() ), size );
+            xml.GetStream().ReadBuffer( const_cast<tchar_t*>( buf.c_str() ), size );
             m_Data.Ref().Set( buf );
             break;
         }
@@ -128,7 +128,7 @@ tistream& PathSerializer::operator<<( tistream& stream )
     tstring str;
     std::streamsize size = stream.rdbuf()->in_avail();
     str.resize( (size_t) size );
-    stream.read( const_cast<tchar*>( str.c_str() ), size );
+    stream.read( const_cast<tchar_t*>( str.c_str() ), size );
 
     if ( !str.empty() )
     {

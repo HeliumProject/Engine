@@ -17,7 +17,7 @@ namespace Helium
         {
         public:
             tstring m_ManifestVersion;
-            static const tchar* MANIFEST_VERSION;
+            static const tchar_t* MANIFEST_VERSION;
 
             REFLECT_DECLARE_CLASS(ManifestVersion, Reflect::Version);
 
@@ -25,7 +25,7 @@ namespace Helium
 
             ManifestVersion();
 
-            ManifestVersion(const tchar* source, const tchar* sourceVersion);
+            ManifestVersion(const tchar_t* source, const tchar_t* sourceVersion);
 
             virtual bool IsCurrent();
         };

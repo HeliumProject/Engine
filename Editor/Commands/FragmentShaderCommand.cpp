@@ -28,7 +28,7 @@ using namespace Helium;
 
 static void InitLibPath()
 {
-    tchar* project_data_path =  _tgetenv(TXT("IG_PROJECT_DATA"));
+    tchar_t* project_data_path =  _tgetenv(TXT("IG_PROJECT_DATA"));
     wxString common_path =  project_data_path;
 
     if(project_data_path)

@@ -73,7 +73,7 @@ int Helium::Execute( const tstring& command, tstring& output, bool showWindow )
 
     if( !CreateProcess(
         NULL,                                                 // filename
-        (tchar*) command.c_str(),                               // command line for child
+        (tchar_t*) command.c_str(),                           // command line for child
         NULL,                                                 // process security descriptor
         NULL,                                                 // thread security descriptor
         TRUE,                                                 // inherit handles?
@@ -92,7 +92,7 @@ int Helium::Execute( const tstring& command, tstring& output, bool showWindow )
     ::CloseHandle( hWritePipe );
 
     // read from the pipe until EOF condition reached
-    tchar buffer[80];
+    tchar_t buffer[80];
     unsigned long count;
     tstringstream stream;
     BOOL success = TRUE;
@@ -147,7 +147,7 @@ tstring Helium::GetProcessPath()
 {
     HMODULE moduleHandle = GetModuleHandle( NULL );
 
-    tchar module[ MAX_PATH + 1 ];
+    tchar_t module[ MAX_PATH + 1 ];
     GetModuleFileName( moduleHandle, module, MAX_PATH );
 
     return module;
@@ -157,10 +157,10 @@ tstring Helium::GetProcessName()
 {
     HMODULE moduleHandle = GetModuleHandle( NULL );
 
-    tchar module[ MAX_PATH + 1 ];
+    tchar_t module[ MAX_PATH + 1 ];
     GetModuleFileName( moduleHandle, module, MAX_PATH );
 
-    tchar file[ MAX_PATH + 1 ];
+    tchar_t file[ MAX_PATH + 1 ];
     _tsplitpath( module, NULL, NULL, file, NULL );
 
     return file;

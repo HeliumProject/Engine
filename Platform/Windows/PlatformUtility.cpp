@@ -94,7 +94,7 @@ Platform::Type Platform::GetType()
     return Types::Windows;
 }
 
-void Helium::Print(const tchar* fmt, ...)
+void Helium::Print(const tchar_t* fmt, ...)
 {
     va_list args;
     va_start(args, fmt);

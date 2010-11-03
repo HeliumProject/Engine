@@ -24,7 +24,7 @@ namespace Helium
             virtual ~ObjectLoader();
 
             // returns of the above error codes, error code is also put in m_parse_error
-            virtual uint32_t ParseFile( const tchar* filename,bool winding=false ) = 0;
+            virtual uint32_t ParseFile( const tchar_t* filename,bool winding=false ) = 0;
             virtual uint32_t GetNumFragments( int bangleIndex = -1 );
 
             void Compile(bool flip=false);

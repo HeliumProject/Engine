@@ -5,7 +5,7 @@
 
 using namespace Helium::CommandLine;
 
-Command::Command( const tchar* token, const tchar* usage, const tchar* shortHelp )
+Command::Command( const tchar_t* token, const tchar_t* usage, const tchar_t* shortHelp )
 : m_Token( token )
 , m_Usage( usage )
 , m_ShortHelp( shortHelp )

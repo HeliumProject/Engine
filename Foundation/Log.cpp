@@ -112,11 +112,11 @@ int g_Indent = 0;
 PrintingSignature::Event g_PrintingEvent;
 PrintedSignature::Event g_PrintedEvent;
 
-void Log::Statement::ApplyIndent( const tchar* string, tstring& output )
+void Log::Statement::ApplyIndent( const tchar_t* string, tstring& output )
 {
     if ( m_Indent > 0 )
     {
-        tchar m_IndentString[64] = TXT( "" );
+        tchar_t m_IndentString[64] = TXT( "" );
         if(m_Indent >= sizeof(m_IndentString))
         {
             m_Indent = sizeof(m_IndentString)-1;
@@ -129,8 +129,8 @@ void Log::Statement::ApplyIndent( const tchar* string, tstring& output )
         m_IndentString[m_Indent] = '\0';
 
         // insert the indtent string after newlines and before non-newlines
-        const tchar* pos = string;
-        tchar previous = '\n';
+        const tchar_t* pos = string;
+        tchar_t previous = '\n';
         for ( ; *pos != '\0'; previous = *pos++ )
         {
             if ( *pos == '\r' )
@@ -144,7 +144,7 @@ void Log::Statement::ApplyIndent( const tchar* string, tstring& output )
                 output += m_IndentString;
             }
 
-            // copy the tchar to the statement
+            // copy the tchar_t to the statement
             output += *pos;
         }
     }
@@ -182,7 +182,7 @@ void Log::RemovePrintedListener(const PrintedSignature::Delegate& listener)
     g_PrintedEvent.Remove(listener);
 }
 
-void Redirect(const tstring& fileName, const tchar* str, bool stampNewLine = true )
+void Redirect(const tstring& fileName, const tchar_t* str, bool stampNewLine = true )
 {
     FILE* f = g_FileManager.Find(fileName);
     if (f)
@@ -235,7 +235,7 @@ bool AddFile( M_OutputFile& files, const tstring& fileName, Stream stream, uint3
 
         if (fileName != TXT( "" ))
         {
-            tchar *mode = append ? TXT( "at+" ) : TXT( "wt+" );
+            tchar_t *mode = append ? TXT( "at+" ) : TXT( "wt+" );
 
             f = _tfopen( fileName.c_str(), mode );
         }
@@ -386,7 +386,7 @@ void Log::UnlockMutex()
     g_Mutex.Unlock();
 }
 
-void Log::PrintString(const tchar* string, Stream stream, Level level, Color color, int indent, tchar* output, uint32_t outputSize)
+void Log::PrintString(const tchar_t* string, Stream stream, Level level, Color color, int indent, tchar_t* output, uint32_t outputSize)
 {
     Helium::TakeMutex mutex (g_Mutex);
 
@@ -504,13 +504,13 @@ void Log::PrintStatements(const V_Statement& statements, uint32_t streamFilter)
     }
 }
 
-void Log::PrintColor(Log::Color color, const tchar* fmt, ...)
+void Log::PrintColor(Log::Color color, const tchar_t* fmt, ...)
 {
     Helium::TakeMutex mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
-    static tchar string[MAX_PRINT_SIZE];
+    static tchar_t string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
@@ -518,13 +518,13 @@ void Log::PrintColor(Log::Color color, const tchar* fmt, ...)
     va_end(args); 
 }
 
-void Log::Print(const tchar *fmt,...) 
+void Log::Print(const tchar_t *fmt,...) 
 {
     Helium::TakeMutex mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
-    static tchar string[MAX_PRINT_SIZE];
+    static tchar_t string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
@@ -533,13 +533,13 @@ void Log::Print(const tchar *fmt,...)
     va_end(args);      
 }
 
-void Log::Print(Level level, const tchar *fmt,...) 
+void Log::Print(Level level, const tchar_t *fmt,...) 
 {
     Helium::TakeMutex mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
-    static tchar string[MAX_PRINT_SIZE];
+    static tchar_t string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
@@ -548,13 +548,13 @@ void Log::Print(Level level, const tchar *fmt,...)
     va_end(args);       
 }
 
-void Log::Debug(const tchar *fmt,...) 
+void Log::Debug(const tchar_t *fmt,...) 
 {
     Helium::TakeMutex mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
-    static tchar string[MAX_PRINT_SIZE];
+    static tchar_t string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
@@ -563,13 +563,13 @@ void Log::Debug(const tchar *fmt,...)
     va_end(args);
 }
 
-void Log::Debug(Level level, const tchar *fmt,...) 
+void Log::Debug(Level level, const tchar_t *fmt,...) 
 {
     Helium::TakeMutex mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
-    static tchar string[MAX_PRINT_SIZE];
+    static tchar_t string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
@@ -578,13 +578,13 @@ void Log::Debug(Level level, const tchar *fmt,...)
     va_end(args);
 }
 
-void Log::Profile(const tchar *fmt,...) 
+void Log::Profile(const tchar_t *fmt,...) 
 {
     Helium::TakeMutex mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
-    static tchar string[MAX_PRINT_SIZE];
+    static tchar_t string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
@@ -593,13 +593,13 @@ void Log::Profile(const tchar *fmt,...)
     va_end(args);
 }
 
-void Log::Profile(Level level, const tchar *fmt,...) 
+void Log::Profile(Level level, const tchar_t *fmt,...) 
 {
     Helium::TakeMutex mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
-    static tchar string[MAX_PRINT_SIZE];
+    static tchar_t string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
@@ -608,17 +608,17 @@ void Log::Profile(Level level, const tchar *fmt,...)
     va_end(args);
 }
 
-void Log::Warning(const tchar *fmt,...) 
+void Log::Warning(const tchar_t *fmt,...) 
 {
     Helium::TakeMutex mutex (g_Mutex);
 
-    static tchar format[MAX_PRINT_SIZE];
+    static tchar_t format[MAX_PRINT_SIZE];
     _stprintf(format, TXT( "Warning (%d): " ), ++g_WarningCount);
     _tcscat(format, fmt);
 
     va_list args;
     va_start(args, fmt); 
-    static tchar string[MAX_PRINT_SIZE];
+    static tchar_t string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), format, args);
     string[ sizeof(string) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
@@ -627,11 +627,11 @@ void Log::Warning(const tchar *fmt,...)
     va_end(args);      
 }
 
-void Log::Warning(Level level, const tchar *fmt,...) 
+void Log::Warning(Level level, const tchar_t *fmt,...) 
 {
     Helium::TakeMutex mutex (g_Mutex);
 
-    static tchar format[MAX_PRINT_SIZE];
+    static tchar_t format[MAX_PRINT_SIZE];
     if (level == Levels::Default)
     {
         _stprintf(format, TXT( "Warning (%d): " ), ++g_WarningCount);
@@ -644,7 +644,7 @@ void Log::Warning(Level level, const tchar *fmt,...)
 
     va_list args;
     va_start(args, fmt); 
-    static tchar string[MAX_PRINT_SIZE];
+    static tchar_t string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), format, args);
     string[ sizeof(string) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
@@ -653,17 +653,17 @@ void Log::Warning(Level level, const tchar *fmt,...)
     va_end(args);      
 }
 
-void Log::Error(const tchar *fmt,...) 
+void Log::Error(const tchar_t *fmt,...) 
 {
     Helium::TakeMutex mutex (g_Mutex);
 
-    static tchar format[MAX_PRINT_SIZE];
+    static tchar_t format[MAX_PRINT_SIZE];
     _stprintf(format, TXT( "Error (%d): " ), ++g_ErrorCount);
     _tcscat(format, fmt);
 
     va_list args;
     va_start(args, fmt); 
-    static tchar string[MAX_PRINT_SIZE];
+    static tchar_t string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), format, args);
     string[ sizeof(string) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
@@ -672,11 +672,11 @@ void Log::Error(const tchar *fmt,...)
     va_end(args);
 }
 
-void Log::Error(Level level, const tchar *fmt,...) 
+void Log::Error(Level level, const tchar_t *fmt,...) 
 {
     Helium::TakeMutex mutex (g_Mutex);
 
-    static tchar format[MAX_PRINT_SIZE];
+    static tchar_t format[MAX_PRINT_SIZE];
     if (level == Levels::Default)
     {
         _stprintf(format, TXT( "Error (%d): " ), ++g_ErrorCount);
@@ -689,7 +689,7 @@ void Log::Error(Level level, const tchar *fmt,...)
 
     va_list args;
     va_start(args, fmt); 
-    static tchar string[MAX_PRINT_SIZE];
+    static tchar_t string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), format, args);
     string[ sizeof(string) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
@@ -698,14 +698,14 @@ void Log::Error(Level level, const tchar *fmt,...)
     va_end(args);
 }
 
-Log::Heading::Heading(const tchar *fmt, ...)
+Log::Heading::Heading(const tchar_t *fmt, ...)
 {
     Helium::TakeMutex mutex (g_Mutex);
 
     // do a basic print
     va_list args;
     va_start(args, fmt); 
-    static tchar string[MAX_PRINT_SIZE];
+    static tchar_t string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
@@ -727,7 +727,7 @@ Log::Heading::~Heading()
 
 std::vector<tstring> g_OutlineState;
 
-Log::Bullet::Bullet(const tchar *fmt, ...)
+Log::Bullet::Bullet(const tchar_t *fmt, ...)
 : m_Stream( Streams::Normal )
 , m_Level( Log::Levels::Default )
 , m_Valid( fmt != NULL )
@@ -743,7 +743,7 @@ Log::Bullet::Bullet(const tchar *fmt, ...)
     }
 }
 
-Log::Bullet::Bullet(Stream stream, Log::Level level, const tchar *fmt, ...)
+Log::Bullet::Bullet(Stream stream, Log::Level level, const tchar_t *fmt, ...)
 : m_Stream( stream )
 , m_Level( level )
 , m_Valid( fmt != NULL )
@@ -787,9 +787,9 @@ Log::Bullet::~Bullet()
     }
 }
 
-void Log::Bullet::CreateBullet(const tchar *fmt, va_list args)
+void Log::Bullet::CreateBullet(const tchar_t *fmt, va_list args)
 {
-    static tchar delims[] = { 'o', '*', '>', '-' };
+    static tchar_t delims[] = { 'o', '*', '>', '-' };
 
     // this gates the output to the console for streams and levels that the user did not elect to see on in the console
     bool print = ( ( g_Streams & m_Stream ) == m_Stream ) && ( m_Level <= g_Level );
@@ -807,7 +807,7 @@ void Log::Bullet::CreateBullet(const tchar *fmt, va_list args)
     }
 
     // build the format string
-    static tchar format[MAX_PRINT_SIZE];
+    static tchar_t format[MAX_PRINT_SIZE];
     if (g_Indent == 1)
     {
         format[0] = delims[ 0 ];
@@ -823,13 +823,13 @@ void Log::Bullet::CreateBullet(const tchar *fmt, va_list args)
     _tcscat(format, fmt);
 
     // format the bullet string
-    static tchar string[MAX_PRINT_SIZE];
+    static tchar_t string[MAX_PRINT_SIZE];
     int size = _vsntprintf(string, sizeof(string), format, args);
     string[ sizeof(string) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 
     // do the print and capture the output
-    static tchar output[MAX_PRINT_SIZE];
+    static tchar_t output[MAX_PRINT_SIZE];
     if (g_Indent == 1)
     {
         PrintString( TXT( "\n" ), m_Stream, m_Level, Log::GetStreamColor( m_Stream ), -1, output, sizeof( output ) );

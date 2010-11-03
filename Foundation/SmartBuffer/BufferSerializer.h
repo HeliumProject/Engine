@@ -88,9 +88,9 @@ namespace Helium
 
     public:
         uint32_t ComputeSize() const;
-        bool WriteToFile( const tchar* filename ) const;
+        bool WriteToFile( const tchar_t* filename ) const;
         bool WriteToStream( tostream& strm ) const;
-        bool ReadFromFile( const tchar* filename );
+        bool ReadFromFile( const tchar_t* filename );
         bool ReadFromStream( tistream& strm );
     };
 }

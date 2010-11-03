@@ -89,7 +89,7 @@ void TypeIDSerializer::Deserialize(Archive& archive)
 
             std::streamsize size = xml.GetStream().ElementsAvailable(); 
             str.resize( (size_t)size );
-            xml.GetStream().ReadBuffer(const_cast<tchar*>(str.c_str()), size);
+            xml.GetStream().ReadBuffer(const_cast<tchar_t*>(str.c_str()), size);
             break;
         }
 

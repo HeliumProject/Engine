@@ -14,14 +14,14 @@
 
 using namespace Helium;
 
-void Path::Init( const tchar* path )
+void Path::Init( const tchar_t* path )
 {
     m_Path = path;
 
     std::replace( m_Path.begin(), m_Path.end(), Helium::PathSeparator, s_InternalPathSeparator );
 }
 
-Path::Path( const tchar* path )
+Path::Path( const tchar_t* path )
 {
     Init( path );
 }
@@ -52,7 +52,7 @@ bool Path::operator<( const Path& rhs ) const
     return m_Path < rhs.m_Path;
 }
 
-Helium::Path Path::operator+( const tchar* rhs ) const
+Helium::Path Path::operator+( const tchar_t* rhs ) const
 {
     return Helium::Path( Get() + rhs );
 }
@@ -69,7 +69,7 @@ Helium::Path Path::operator+( const Helium::Path& rhs ) const
     return rhs.GetAbsolutePath( *this );
 }
 
-Helium::Path& Path::operator+=( const tchar* rhs )
+Helium::Path& Path::operator+=( const tchar_t* rhs )
 {
     Set( Get() + rhs );
     return *this;
@@ -567,7 +567,7 @@ bool Path::empty() const
     return m_Path.empty();
 }
 
-const tchar* Path::c_str() const
+const tchar_t* Path::c_str() const
 {
     return m_Path.c_str();
 }

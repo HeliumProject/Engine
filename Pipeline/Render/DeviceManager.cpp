@@ -516,7 +516,7 @@ IDirect3DSurface9* DeviceManager::GetBufferData()
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool DeviceManager::SaveTGA(const tchar* fname)
+bool DeviceManager::SaveTGA(const tchar_t* fname)
 {
     IDirect3DSurface9* surface = GetBufferData();
     if (surface==0)

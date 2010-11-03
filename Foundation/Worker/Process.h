@@ -25,9 +25,9 @@ namespace Helium
 
         struct FOUNDATION_API Args
         {
-            static const tchar* Worker;
-            static const tchar* Debug;
-            static const tchar* Wait;
+            static const tchar_t* Worker;
+            static const tchar_t* Debug;
+            static const tchar_t* Wait;
         };
 
 #pragma warning ( disable: 4200 )
@@ -36,7 +36,7 @@ namespace Helium
             Log::Stream m_Stream;
             Log::Level  m_Level;
             int         m_Indent;
-            tchar       m_String[0];
+            tchar_t       m_String[0];
         };
 
         const static uint32_t ConsoleOutputMessage = 0;

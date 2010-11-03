@@ -127,7 +127,7 @@ RBShaderLoader::~RBShaderLoader()
 
 }
 
-RenderShader* RBShaderLoader::ParseFile( const tchar* fname, ShaderManager* db )
+RenderShader* RBShaderLoader::ParseFile( const tchar_t* fname, ShaderManager* db )
 {
     Asset::ShaderAssetPtr shaderClass = Asset::AssetClass::LoadAssetClass< Asset::ShaderAsset >( fname );
     if ( !shaderClass.ReferencesObject() )
@@ -348,7 +348,7 @@ void RBShaderLoader::SetColorFormat( TextureSettings* settings, uint32_t colorFo
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void RBShaderLoader::UpdateShaderClass(ShaderManager* db, const tchar* shaderFilename, uint32_t alphaMode)
+void RBShaderLoader::UpdateShaderClass(ShaderManager* db, const tchar_t* shaderFilename, uint32_t alphaMode)
 {
     uint32_t shaderHandle = db->FindShader( shaderFilename );
     if ( shaderHandle == 0xffffffff )

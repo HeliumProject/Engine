@@ -160,7 +160,7 @@ void RenderScene::SetEnvironmentHandle(uint32_t handle)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-uint32_t RenderScene::LoadNewMesh( const tchar* fname, ObjectLoaderPtr loader, int bangleIndex )
+uint32_t RenderScene::LoadNewMesh( const tchar_t* fname, ObjectLoaderPtr loader, int bangleIndex )
 {
     Helium::Path path( fname );
 
@@ -213,7 +213,7 @@ uint32_t RenderScene::LoadNewMesh( const tchar* fname, ObjectLoaderPtr loader, i
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-uint32_t RenderScene::LoadMesh(const tchar* fname,ObjectLoaderPtr loader, int bangleIndex)
+uint32_t RenderScene::LoadMesh(const tchar_t* fname,ObjectLoaderPtr loader, int bangleIndex)
 {
     uint32_t crc = Helium::StringCrc32(fname);
 
@@ -241,10 +241,10 @@ uint32_t RenderScene::LoadMesh(const tchar* fname,ObjectLoaderPtr loader, int ba
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-uint32_t RenderScene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int bangleIndex)
+uint32_t RenderScene::ExtractMesh(const tchar_t* name, ObjectLoaderPtr loader, int bangleIndex)
 {
-    tchar meshName[ 1024 ];
-    const tchar* fname = name;
+    tchar_t meshName[ 1024 ];
+    const tchar_t* fname = name;
 
     if ( bangleIndex > 0 )
     {
@@ -302,7 +302,7 @@ uint32_t RenderScene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int
     result->m_verts->Lock(0,0,(void**)&p,0);
     memcpy(p,&loader->m_vertices[0],bytes);  
 
-    /*  tchar buff[1024];
+    /*  tchar_t buff[1024];
     for (uint32_t v=0;v<result->m_vert_count;v++)
     {
     MeshVertex* mv = (MeshVertex*)&loader->m_vertices[v*16];
@@ -371,7 +371,7 @@ uint32_t RenderScene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int
             continue;
         }
 
-        tchar shader_name[ MAX_PATH ];
+        tchar_t shader_name[ MAX_PATH ];
         Helium::Path shaderPath( loader->m_fragments[ f ].m_shader );
 
         if ( shaderPath.Extension() == TXT( "hrb" ) )
@@ -417,7 +417,7 @@ uint32_t RenderScene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-uint32_t RenderScene::LoadNewEnvironment(const tchar* fname,uint32_t clear_color)
+uint32_t RenderScene::LoadNewEnvironment(const tchar_t* fname,uint32_t clear_color)
 {
     float r[9];
     float g[9];
@@ -460,7 +460,7 @@ uint32_t RenderScene::LoadNewEnvironment(const tchar* fname,uint32_t clear_color
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-uint32_t RenderScene::LoadEnvironment(const tchar* fname, uint32_t clear_color)
+uint32_t RenderScene::LoadEnvironment(const tchar_t* fname, uint32_t clear_color)
 {
     uint32_t crc = Helium::StringCrc32(fname);
 
@@ -663,7 +663,7 @@ inline D3DXVECTOR3 deriv_uv(D3DXVECTOR3 (*f)(float,float), float u, float v)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-RenderMesh* InitMesh(Renderer* render,const tchar* name,D3DXVECTOR3 (*func)(float,float),int32_t num_u, int32_t num_v)
+RenderMesh* InitMesh(Renderer* render,const tchar_t* name,D3DXVECTOR3 (*func)(float,float),int32_t num_u, int32_t num_v)
 {
     RenderMesh* result = new RenderMesh(name);
 

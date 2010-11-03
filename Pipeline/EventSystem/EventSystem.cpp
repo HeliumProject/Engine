@@ -24,7 +24,7 @@ using namespace Helium::ES;
 
 typedef int32_t RecordCount;
 
-static const tchar* s_HandledEventsFilename = TXT( "handled_events.txt" );
+static const tchar_t* s_HandledEventsFilename = TXT( "handled_events.txt" );
 
 struct SortEvents
 {
@@ -335,7 +335,7 @@ void EventSystem::ReadTextEventsFile( const tstring& eventsFile, V_EventPtr& lis
         {
             data.resize( eventLength );
             tstring::iterator eventDataBegin = data.begin();
-            isReadOk = isReadOk && !recordsFile.read( ( tchar * ) &(*eventDataBegin), eventLength ).fail();
+            isReadOk = isReadOk && !recordsFile.read( ( tchar_t * ) &(*eventDataBegin), eventLength ).fail();
         }
 
         if ( !isReadOk )
@@ -412,7 +412,7 @@ void EventSystem::WriteBinaryEventsFile( const tstring& eventsFile, const V_Even
     {
         // read and increment the recordCount
         recordsFile.seekg( 0, std::ios::beg );
-        recordsFile.read( ( tchar * ) &recordCount, sizeof( RecordCount ) );
+        recordsFile.read( ( tchar_t * ) &recordCount, sizeof( RecordCount ) );
         recordsFile.clear();
     }
     else
@@ -429,7 +429,7 @@ void EventSystem::WriteBinaryEventsFile( const tstring& eventsFile, const V_Even
 
     // write the recordCount
     isWriteOk = isWriteOk && !recordsFile.seekp( 0, std::ios::beg ).fail();
-    isWriteOk = isWriteOk && !recordsFile.write( ( tchar * ) &recordCount, sizeof( RecordCount ) ).fail();
+    isWriteOk = isWriteOk && !recordsFile.write( ( tchar_t * ) &recordCount, sizeof( RecordCount ) ).fail();
 
     // Append the event to the end of the file
     isWriteOk = isWriteOk && !recordsFile.seekp( 0, std::ios::end ).fail();
@@ -440,15 +440,15 @@ void EventSystem::WriteBinaryEventsFile( const tstring& eventsFile, const V_Even
             break;
         }
 
-        isWriteOk = isWriteOk && !recordsFile.write( ( tchar * ) &event->m_Id, sizeof( event->m_Id ) ).fail();
-        isWriteOk = isWriteOk && !recordsFile.write( ( tchar * ) &event->m_Created, sizeof( event->m_Created ) ).fail();
+        isWriteOk = isWriteOk && !recordsFile.write( ( tchar_t * ) &event->m_Id, sizeof( event->m_Id ) ).fail();
+        isWriteOk = isWriteOk && !recordsFile.write( ( tchar_t * ) &event->m_Created, sizeof( event->m_Created ) ).fail();
 
         int userClientNameLength = ( int ) event->m_Username.length();
-        isWriteOk = isWriteOk && !recordsFile.write( ( tchar * ) &userClientNameLength, sizeof( userClientNameLength ) ).fail();
+        isWriteOk = isWriteOk && !recordsFile.write( ( tchar_t * ) &userClientNameLength, sizeof( userClientNameLength ) ).fail();
         isWriteOk = isWriteOk && !recordsFile.write( event->m_Username.c_str(), userClientNameLength ).fail();
 
         int dataLength = ( int ) event->m_Data.length();
-        isWriteOk = isWriteOk && !recordsFile.write( ( tchar * ) &dataLength, sizeof( dataLength ) ).fail();
+        isWriteOk = isWriteOk && !recordsFile.write( ( tchar_t * ) &dataLength, sizeof( dataLength ) ).fail();
         isWriteOk = isWriteOk && !recordsFile.write( event->m_Data.c_str(), dataLength ).fail();
     }
 
@@ -503,7 +503,7 @@ void EventSystem::WriteTextEventsFile( const tstring& eventsFile, const V_EventP
         }
     }
 
-    tchar timePrint[TIME_SIZE];
+    tchar_t timePrint[TIME_SIZE];
 
     // Write out the events
     bool isWriteOk = true;

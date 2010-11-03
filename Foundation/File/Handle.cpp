@@ -2,7 +2,7 @@
 
 using namespace Helium;
 
-Handle::Handle( const tstring& path, const tchar* mode )
+Handle::Handle( const tstring& path, const tchar_t* mode )
 : m_Path( path )
 , m_Mode( mode )
 , m_FileHandle( NULL )

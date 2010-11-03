@@ -500,7 +500,7 @@ namespace Helium
         md5_byte_t digest[16];
         md5_finish(&state, digest);
 
-        tchar hex_output[16*2 + 1];
+        tchar_t hex_output[16*2 + 1];
         for (int di = 0; di < 16; ++di)
         {
             _stprintf(hex_output + di * 2, TXT( "%02X" ), digest[di]);
@@ -542,7 +542,7 @@ namespace Helium
         md5_byte_t digest[16];
         md5_finish(&state, digest);
 
-        tchar hex_output[16*2 + 1];
+        tchar_t hex_output[16*2 + 1];
         for (int di = 0; di < 16; ++di)
         {
             _stprintf(hex_output + di * 2, TXT( "%02X" ), digest[di]);

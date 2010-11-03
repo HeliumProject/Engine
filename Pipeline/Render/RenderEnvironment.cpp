@@ -6,7 +6,7 @@
 using namespace Helium;
 using namespace Helium::Render;
 
-RenderEnvironment::RenderEnvironment(const tchar* fname)
+RenderEnvironment::RenderEnvironment(const tchar_t* fname)
 {
     m_load_count = 0;
     m_filename = fname;

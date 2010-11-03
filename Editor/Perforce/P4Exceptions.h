@@ -9,7 +9,7 @@ namespace Helium
         class Exception : public Helium::Exception
         {
         public:
-            Exception( const tchar *msgFormat, ... )
+            Exception( const tchar_t *msgFormat, ... )
             {
                 va_list msgArgs;
                 va_start( msgArgs, msgFormat );

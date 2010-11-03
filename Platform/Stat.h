@@ -39,5 +39,5 @@ namespace Helium
         }
     };
 
-    PLATFORM_API bool StatPath( const tchar* path, Stat& stat );
+    PLATFORM_API bool StatPath( const tchar_t* path, Stat& stat );
 }

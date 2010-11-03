@@ -18,7 +18,7 @@ namespace Helium
     template<class T>
     inline bool GetEnvironmentVariable( const tstring& variableName, T& value )
     {
-        tchar* stringValue;
+        tchar_t* stringValue;
         size_t requiredSize;
 
         _tgetenv_s( &requiredSize, NULL, 0, variableName.c_str() );
@@ -28,7 +28,7 @@ namespace Helium
             return false;
         }
 
-        stringValue = (tchar*) malloc( requiredSize * sizeof( tchar ) );
+        stringValue = (tchar_t*) malloc( requiredSize * sizeof( tchar_t ) );
         if ( !stringValue )
         {
             throw Helium::Exception( TXT( "Out of memory" ) );

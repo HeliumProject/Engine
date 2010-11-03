@@ -111,9 +111,9 @@ namespace Helium
         return Crc32(0xffffffff, data, count);
     }
 
-    inline uint32_t StringCrc32(const tchar* str)
+    inline uint32_t StringCrc32(const tchar_t* str)
     {
-      return Crc32(str, (uint32_t)(_tcslen(str) * sizeof(tchar)));
+      return Crc32(str, (uint32_t)(_tcslen(str) * sizeof(tchar_t)));
     }
 
     inline uint32_t FileCrc32(const tstring& filePath, uint32_t packetSize = 4096)

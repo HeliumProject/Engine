@@ -2,6 +2,9 @@
 
 #include "Platform/Platform.h"
 
+#include "boost/preprocessor/wstringize.hpp"
+#include "boost/preprocessor/stringize.hpp"
+
 //
 // Register types
 //
@@ -410,13 +413,16 @@ typedef double float64_t;
 #include <sstream>
 #include <strstream>
 
-#ifdef WIN32
+#if HELIUM_OS_WIN
 # include <tchar.h>
 #endif
 
 #ifdef _UNICODE
 # ifndef UNICODE
 #  define UNICODE
+# endif
+# ifndef HELIUM_UNICODE
+#  define HELIUM_UNICODE 1
 # endif
 #endif
 
@@ -426,24 +432,54 @@ typedef double float64_t;
 # endif
 #endif
 
-#ifdef UNICODE
-typedef wchar_t                 tchar;
-#define TXT(s) L##s
-#else
-typedef char                    tchar;
-#define TXT(s) s
-#endif
+/// Convert the expanded result of a macro to a char string.
+///
+/// @param[in] X  Macro to expand and stringize.
+#define HELIUM_STRINGIZE( X ) BOOST_PP_STRINGIZE( X )
 
-typedef std::basic_string<tchar> tstring;
+/// Convert the expanded result of a macro to a wchar_t string.
+///
+/// @param[in] X  Macro to expand and stringize.
+#define HELIUM_WSTRINGIZE( X ) BOOST_PP_WSTRINGIZE( X )
 
-typedef std::basic_istream<tchar, std::char_traits<tchar> > tistream;
-typedef std::basic_ostream<tchar, std::char_traits<tchar> > tostream;
-typedef std::basic_iostream<tchar, std::char_traits<tchar> > tiostream;
+#if HELIUM_UNICODE
 
-typedef std::basic_ifstream<tchar, std::char_traits<tchar> > tifstream;
-typedef std::basic_ofstream<tchar, std::char_traits<tchar> > tofstream;
-typedef std::basic_fstream<tchar, std::char_traits<tchar> > tfstream;
+/// Default character type.
+typedef wchar_t tchar_t;
 
-typedef std::basic_istringstream<tchar, std::char_traits<tchar>, std::allocator<tchar> > tistringstream;
-typedef std::basic_ostringstream<tchar, std::char_traits<tchar>, std::allocator<tchar> > tostringstream;
-typedef std::basic_stringstream<tchar, std::char_traits<tchar>, std::allocator<tchar> > tstringstream;
+/// Prefix for declaring string and character literals of the default character type.
+#define TXT( X ) L##X
+
+/// Convert the expanded result of a macro to a tchar_t string.
+///
+/// @param[in] X  Macro to expand and stringize.
+#define HELIUM_TSTRINGIZE( X ) HELIUM_WSTRINGIZE( X )
+
+#else  // HELIUM_UNICODE
+
+/// Default character type.
+typedef char tchar_t;
+
+/// Prefix for declaring string and character literals of the default character type.
+#define TXT( X ) X
+
+/// Convert the expanded result of a macro to a tchar_t string.
+///
+/// @param[in] X  Macro to expand and stringize.
+#define HELIUM_TSTRINGIZE( X ) HELIUM_STRINGIZE( X )
+
+#endif  // HELIUM_UNICODE
+
+typedef std::basic_string< tchar_t > tstring;
+
+typedef std::basic_istream< tchar_t, std::char_traits< tchar_t > > tistream;
+typedef std::basic_ostream< tchar_t, std::char_traits< tchar_t > > tostream;
+typedef std::basic_iostream< tchar_t, std::char_traits< tchar_t > > tiostream;
+
+typedef std::basic_ifstream< tchar_t, std::char_traits< tchar_t > > tifstream;
+typedef std::basic_ofstream< tchar_t, std::char_traits< tchar_t > > tofstream;
+typedef std::basic_fstream< tchar_t, std::char_traits< tchar_t > > tfstream;
+
+typedef std::basic_istringstream< tchar_t, std::char_traits< tchar_t >, std::allocator< tchar_t > > tistringstream;
+typedef std::basic_ostringstream< tchar_t, std::char_traits< tchar_t >, std::allocator< tchar_t > > tostringstream;
+typedef std::basic_stringstream< tchar_t, std::char_traits< tchar_t >, std::allocator< tchar_t > > tstringstream;

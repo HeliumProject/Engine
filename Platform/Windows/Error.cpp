@@ -29,7 +29,7 @@ tstring Helium::GetErrorString( uint32_t errorOverride )
 
     if (lpMsgBuf)
     {
-        result = (tchar*)lpMsgBuf;
+        result = (tchar_t*)lpMsgBuf;
 
         ::LocalFree( lpMsgBuf );
     }

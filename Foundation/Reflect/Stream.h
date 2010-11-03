@@ -410,12 +410,12 @@ namespace Helium
 
         typedef Stream<char> CharStream;
         typedef Stream<wchar_t> WCharStream;
-        typedef Stream<tchar> TCharStream;
+        typedef Stream<tchar_t> TCharStream;
 
         // pointer declaration. 
         typedef Helium::SmartPtr< Stream<char> >     CharStreamPtr; 
         typedef Helium::SmartPtr< Stream<wchar_t> >  WCharStreamPtr; 
-        typedef Helium::SmartPtr< Stream<tchar> >    TCharStreamPtr;
+        typedef Helium::SmartPtr< Stream<tchar_t> >    TCharStreamPtr;
 
         //
         // FileStream, a stream object backed by file data

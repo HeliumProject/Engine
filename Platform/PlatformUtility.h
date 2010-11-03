@@ -20,17 +20,17 @@ namespace Helium
                 Count,
             };
 
-            static const tchar* Strings[] = 
+            static const tchar_t* Strings[] = 
             {
                 TXT("Windows"),
                 TXT("PlayStation3"),
             };
 
-            HELIUM_COMPILE_ASSERT( Platform::Types::Count == sizeof(Strings) / sizeof(const tchar*) );
+            HELIUM_COMPILE_ASSERT( Platform::Types::Count == sizeof(Strings) / sizeof(const tchar_t*) );
         }
         typedef Types::Type Type;
 
-        inline const tchar* GetTypeName(Type t)
+        inline const tchar_t* GetTypeName(Type t)
         {
             if (t >= 0 && t<Types::Count)
             {
@@ -45,6 +45,6 @@ namespace Helium
         PLATFORM_API Type GetType();
     }
 
-    PLATFORM_API void Print(const tchar* fmt, ...);
+    PLATFORM_API void Print(const tchar_t* fmt, ...);
     PLATFORM_API void Sleep(int millis);
 }

@@ -30,7 +30,7 @@ TCPConnection::~TCPConnection()
     Cleanup();
 }
 
-bool TCPConnection::Initialize(bool server, const tchar* name, const tchar* server_ip, const uint16_t server_port)
+bool TCPConnection::Initialize(bool server, const tchar_t* name, const tchar_t* server_ip, const uint16_t server_port)
 {
     if (!Connection::Initialize( server, name ))
     {

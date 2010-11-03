@@ -34,7 +34,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         /// DummyWindow
         /////////////////////////////////////////////////////////////////////////////
-        static const tchar* s_DummyWindowName = TXT( "DummyWindowThread" );
+        static const tchar_t* s_DummyWindowName = TXT( "DummyWindowThread" );
 
         // Custom wxEventTypes for the VaultSearchThread to fire.
         DEFINE_EVENT_TYPE( EDITOR_EVT_BEGIN_SEARCH )
@@ -44,7 +44,7 @@ namespace Helium
         class DummyWindow : public wxFrame
         {
         public:
-            DummyWindow( const tchar* name = NULL )
+            DummyWindow( const tchar_t* name = NULL )
                 : wxFrame( NULL, wxID_ANY, s_DummyWindowName, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, s_DummyWindowName )
             {
                 Hide();

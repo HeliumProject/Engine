@@ -783,12 +783,12 @@ void Tracker::Dump()
 {
     Helium::TakeMutex mutex (g_TrackerMutex);
 
-    tchar module[MAX_PATH];
+    tchar_t module[MAX_PATH];
     GetModuleFileName( 0, module, MAX_PATH );
 
-    tchar drive[MAX_PATH];
-    tchar dir[MAX_PATH];
-    tchar name[MAX_PATH];
+    tchar_t drive[MAX_PATH];
+    tchar_t dir[MAX_PATH];
+    tchar_t name[MAX_PATH];
     _tsplitpath( module, drive, dir, name, NULL );
 
     tstring path = drive;
@@ -849,7 +849,7 @@ void Tracker::Dump()
                 max = std::max( (*iter).second.first.length(), max );
             }
 
-            tchar format[1024];
+            tchar_t format[1024];
             _stprintf( format, TXT("\nType: %%%ds, Count: %%d"), max );
 
             iter = objectLog.begin();

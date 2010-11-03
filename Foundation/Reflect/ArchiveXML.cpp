@@ -64,7 +64,7 @@ void ArchiveXML::Open( bool write )
     Debug(TXT("Opening file '%s'\n"), file.c_str());
 #endif
 
-    Reflect::TCharStreamPtr stream = new FileStream<tchar>( m_Path, write, m_ByteOrder );
+    Reflect::TCharStreamPtr stream = new FileStream<tchar_t>( m_Path, write, m_ByteOrder );
     OpenStream( stream, write );
 }
 
@@ -132,17 +132,17 @@ void ArchiveXML::Read()
     {
         m_Progress = (int)(((float)(step++ * bufferSizeInBytes) / (float)size) * 100.0f);
 
-        tchar* pszBuffer = (tchar*)XML_GetBuffer(m_Parser, bufferSizeInBytes); // REQUEST
+        tchar_t* pszBuffer = (tchar_t*)XML_GetBuffer(m_Parser, bufferSizeInBytes); // REQUEST
         HELIUM_ASSERT(pszBuffer != NULL);
 
         // divide by the character size so wide char builds don't override the allocation
         //  stream objects read characters, not byte-by-byte
-        m_Stream->ReadBuffer(pszBuffer, bufferSizeInBytes / sizeof(tchar));
+        m_Stream->ReadBuffer(pszBuffer, bufferSizeInBytes / sizeof(tchar_t));
 
         int last_read = static_cast<int>(m_Stream->ElementsRead());
-        if (!XML_ParseBuffer(m_Parser, last_read * sizeof(tchar), last_read == 0) != 0)
+        if (!XML_ParseBuffer(m_Parser, last_read * sizeof(tchar_t), last_read == 0) != 0)
         {
-            throw Reflect::DataFormatException( TXT( "XML parsing failure, buffer contents:\n%s" ), (const tchar*)pszBuffer);
+            throw Reflect::DataFormatException( TXT( "XML parsing failure, buffer contents:\n%s" ), (const tchar_t*)pszBuffer);
         }
     }
 
@@ -507,7 +507,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
         if ( parentTypeDefinition )
         {
             // look for the field name in the attributes
-            const tchar* fieldName = NULL;
+            const tchar_t* fieldName = NULL;
             for (int i=0; papszAttrs[i]; i+=2)
             {
                 if ( !_tcscmp( papszAttrs[i], TXT( "Name" ) ) )

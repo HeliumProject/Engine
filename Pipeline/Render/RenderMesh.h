@@ -52,7 +52,7 @@ namespace Helium
         class PIPELINE_API RenderMesh
         {
         public:
-            RenderMesh( const tchar* name );
+            RenderMesh( const tchar_t* name );
             virtual ~RenderMesh();
 
             tstring                   m_filename;       

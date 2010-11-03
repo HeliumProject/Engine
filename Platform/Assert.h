@@ -73,7 +73,7 @@
 // Compile time
 //
 
-#define HELIUM_COMPILE_ASSERT(exp) typedef tchar __HELIUM_COMPILE_ASSERT__[(exp)?1:-1]
+#define HELIUM_COMPILE_ASSERT(exp) typedef tchar_t __HELIUM_COMPILE_ASSERT__[(exp)?1:-1]
 
 
 //

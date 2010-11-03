@@ -28,7 +28,7 @@ namespace Helium
         class OpenCommand : public Command
         {
         public:
-            OpenCommand( Provider* provider, const tchar* command = TXT( "" ), RCS::File* file = NULL )
+            OpenCommand( Provider* provider, const tchar_t* command = TXT( "" ), RCS::File* file = NULL )
                 : Command ( provider, command )
                 , m_File ( file )
             {

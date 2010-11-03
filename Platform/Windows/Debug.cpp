@@ -39,9 +39,9 @@ using namespace Helium::Debug;
 static bool g_Initialized = false;
 
 // Utility to print to a string
-static void PrintString(tstring& buffer, const tchar* tstring, ...)
+static void PrintString(tstring& buffer, const tchar_t* tstring, ...)
 {
-    static tchar buf[4096];
+    static tchar_t buf[4096];
 
     va_list argptr;
     va_start(argptr, tstring);
@@ -103,11 +103,11 @@ bool Debug::Initialize(const tstring& pdbPaths)
 
         if ( pdbPaths.empty() )
         {
-            tchar module[MAX_PATH];
-            tchar drive[MAX_PATH];
-            tchar path[MAX_PATH];
-            tchar file[MAX_PATH];
-            tchar ext[MAX_PATH];
+            tchar_t module[MAX_PATH];
+            tchar_t drive[MAX_PATH];
+            tchar_t path[MAX_PATH];
+            tchar_t file[MAX_PATH];
+            tchar_t ext[MAX_PATH];
             GetModuleFileName(0,module,MAX_PATH);
             _tsplitpath(module,drive,path,file,ext);
 
@@ -157,24 +157,24 @@ tstring Debug::GetSymbolInfo(uintptr adr, bool enumLoadedModules)
     }
 
     // module image name "reflect.dll"
-    static tchar module[MAX_PATH];
+    static tchar_t module[MAX_PATH];
     ZeroMemory(&module, sizeof(module));
-    static tchar extension[MAX_PATH];
+    static tchar_t extension[MAX_PATH];
     ZeroMemory(&extension, sizeof(extension));
 
     // symbol name "Reflect::Class::AddSerializer + 0x16d"
-    static tchar symbol[MAX_SYM_NAME+16];
+    static tchar_t symbol[MAX_SYM_NAME+16];
     ZeroMemory(&symbol, sizeof(symbol));
 
     // source file name "typeinfo.cpp"
-    static tchar filename[MAX_PATH];
+    static tchar_t filename[MAX_PATH];
     ZeroMemory(&filename, sizeof(filename));
 
     // line number in source "246"
     DWORD line = 0xFFFFFFFF;
 
     // resulting line is worst case of all components
-    static tchar result[sizeof(module) + sizeof(symbol) + sizeof(filename) + 64];
+    static tchar_t result[sizeof(module) + sizeof(symbol) + sizeof(filename) + 64];
     ZeroMemory(&result, sizeof(result));
 
 
@@ -221,8 +221,8 @@ tstring Debug::GetSymbolInfo(uintptr adr, bool enumLoadedModules)
             {
                 // success, copy the source file name
                 _tcscpy(filename, l.FileName);
-                static tchar ext[MAX_PATH];
-                static tchar file[MAX_PATH];
+                static tchar_t ext[MAX_PATH];
+                static tchar_t file[MAX_PATH];
                 _tsplitpath(filename, NULL, NULL, file, ext);
 
                 _stprintf(result, TXT("%s, %s : %s%s(%d)"), module, symbol, file, ext, l.LineNumber);
@@ -296,7 +296,7 @@ bool Debug::GetStackTrace(std::vector<uintptr>& trace, unsigned omitFrames)
 
     CONTEXT context;
 
-    volatile tchar *p = 0;
+    volatile tchar_t *p = 0;
     __try
     {
         *p = 0;
@@ -398,9 +398,9 @@ void Debug::TranslateStackTrace(const std::vector<uintptr>& trace, tstring& buff
     }
 }
 
-const tchar* Debug::GetExceptionClass(uint32_t exceptionCode)
+const tchar_t* Debug::GetExceptionClass(uint32_t exceptionCode)
 {
-    const tchar* ex_name = NULL;
+    const tchar_t* ex_name = NULL;
 
     switch (exceptionCode)
     {
@@ -758,7 +758,7 @@ tstring Debug::GetExceptionInfo(LPEXCEPTION_POINTERS info)
 
 tstring Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
 {
-    tchar* tempDir = _tgetenv( TXT("HELIUM_PROJECT_TMP") );
+    tchar_t* tempDir = _tgetenv( TXT("HELIUM_PROJECT_TMP") );
     if ( tempDir == NULL )
     {
         _tprintf( TXT("Failed to write crash dump because the temporary directory (%s) to save the file to could not be determined.\n"), TXT("HELIUM_PROJECT_TMP") );
@@ -766,7 +766,7 @@ tstring Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
     }
 
     // Make sure that the directory exists
-    tchar directory[MAX_PATH] = { 0 };
+    tchar_t directory[MAX_PATH] = { 0 };
     _sntprintf( directory, sizeof( directory ) - 1, TXT("%s\\crashdumps"), tempDir );
     SHCreateDirectoryEx( NULL, directory, NULL );
 
@@ -774,12 +774,12 @@ tstring Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
     time_t now;
     time( &now );
 
-    tchar module[MAX_PATH];
-    tchar file[MAX_PATH];
+    tchar_t module[MAX_PATH];
+    tchar_t file[MAX_PATH];
     GetModuleFileName( 0, module, MAX_PATH );
     _tsplitpath( module, NULL, NULL, file, NULL );
 
-    tchar dmp_file[MAX_PATH] = { '\0' };
+    tchar_t dmp_file[MAX_PATH] = { '\0' };
     _sntprintf( dmp_file, sizeof( dmp_file ) - 1, TXT("%s\\%s_%ld.dmp"), directory, file, now );
 
     HANDLE dmp;

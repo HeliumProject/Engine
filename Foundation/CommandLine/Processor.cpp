@@ -8,7 +8,7 @@
 
 using namespace Helium::CommandLine;
 
-Processor::Processor( const tchar* token, const tchar* usage, const tchar* shortHelp )
+Processor::Processor( const tchar_t* token, const tchar_t* usage, const tchar_t* shortHelp )
 : m_Token( token )
 , m_Usage( usage )
 , m_ShortHelp( shortHelp )

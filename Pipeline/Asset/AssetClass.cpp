@@ -17,7 +17,7 @@ using namespace Helium;
 using namespace Helium::Reflect;
 using namespace Helium::Asset;
 
-const tchar* ASSET_VERSION = TXT( "1" );
+const tchar_t* ASSET_VERSION = TXT( "1" );
 
 tstring AssetClass::s_BaseBuiltDirectory = TXT( "" );
 std::map< tstring, AssetFactory* > AssetClass::s_AssetFactories;

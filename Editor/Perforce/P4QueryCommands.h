@@ -64,7 +64,7 @@ namespace Helium
         class FStatCommand : public Command
         {
         public:
-            FStatCommand( Provider* provider, const tchar* command = TXT( "" ), RCS::File* File = NULL )
+            FStatCommand( Provider* provider, const tchar_t* command = TXT( "" ), RCS::File* File = NULL )
                 : Command( provider, command )
                 , m_File ( File )
             {

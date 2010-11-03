@@ -43,7 +43,7 @@ ExceptionReport::ExceptionReport( const ExceptionArgs& args )
     m_CmdLineArgs.clear();
     {
         int cmdArgc;
-        const tchar** cmdArgv = Helium::GetCmdLine( cmdArgc );
+        const tchar_t** cmdArgv = Helium::GetCmdLine( cmdArgc );
         if ( cmdArgc > 1 )
         {
             for ( int i = 1; i < cmdArgc; ++i )
@@ -81,14 +81,14 @@ ExceptionReport::ExceptionReport( const ExceptionArgs& args )
 
     m_Environment.clear();
     // Get a pointer to the environment block. 
-    const tchar* env = (const tchar*)::GetEnvironmentStrings();
+    const tchar_t* env = (const tchar_t*)::GetEnvironmentStrings();
     if ( env )
     {
         // Variable strings are separated by NULL byte, and the block is terminated by a NULL byte. 
-        for (const tchar* var = (const tchar*)env; *var; var++) 
+        for (const tchar_t* var = (const tchar_t*)env; *var; var++) 
         {
             // Variable strings are separated by NULL byte, and the block is terminated by a NULL byte. 
-            for (const tchar* var = (const tchar*)env; *var; var++) 
+            for (const tchar_t* var = (const tchar_t*)env; *var; var++) 
             {
                 if (*var != '=')
                 {
@@ -102,7 +102,7 @@ ExceptionReport::ExceptionReport( const ExceptionArgs& args )
                 }
             }
 
-            ::FreeEnvironmentStrings((tchar*)env);
+            ::FreeEnvironmentStrings((tchar_t*)env);
         }
     }
 }
@@ -281,9 +281,9 @@ void Debug::InitializeExceptionListener()
     // init counting this API seems kind of silly, but we can actually get initialized from several places
     if ( ++g_InitCount == 1 )
     {
-        tchar module[MAX_PATH];
-        tchar drive[MAX_PATH];
-        tchar path[MAX_PATH];
+        tchar_t module[MAX_PATH];
+        tchar_t drive[MAX_PATH];
+        tchar_t path[MAX_PATH];
         GetModuleFileName( 0, module, MAX_PATH );
         _tsplitpath( module, drive, path, NULL, NULL );
 

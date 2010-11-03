@@ -58,8 +58,8 @@ namespace Helium
             int32_t m_Height;
 
         public:
-            static const tchar* s_Reset;
-            static const tchar* s_ResetLong;
+            static const tchar_t* s_Reset;
+            static const tchar_t* s_ResetLong;
 
             static void EnumerateClass( Reflect::Compositor<WindowSettings>& comp )
             {

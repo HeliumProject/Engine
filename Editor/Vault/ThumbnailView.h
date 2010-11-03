@@ -188,7 +188,7 @@ namespace Helium
 
             void Pick( wxPoint mousePos1, wxPoint mousePos2, OS_ThumbnailTiles& hits );
 
-            void InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const tstring& type, const tchar* fileName );
+            void InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const tstring& type, const tchar_t* fileName );
 
             bool Draw();
             void DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, bool overlayOnly = false );

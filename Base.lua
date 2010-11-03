@@ -54,16 +54,16 @@ Helium.DoDefaultSolutionSettings = function()
 		"Release",
 	}
 	
-	configuration {}
-		defines
-		{
-			"XML_STATIC=1",
-		}
-		flags
-		{
-			"EnableSSE2",
-			"NoMinimalRebuild",
-		}
+	defines
+	{
+		"XML_STATIC=1",
+	}
+
+	flags
+	{
+		"EnableSSE2",
+		"NoMinimalRebuild",
+	}
 
 	configuration "no-unicode"
 		defines
@@ -182,7 +182,6 @@ Helium.DoDefaultLunarProjectSettings = function()
 
 	includedirs
 	{
-		"Dependencies/boost",
 		"Dependencies/tbb/include",
 	}
 

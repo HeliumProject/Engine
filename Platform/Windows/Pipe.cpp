@@ -31,7 +31,7 @@ void Helium::CleanupPipes()
 
 }
 
-bool Helium::CreatePipe(const tchar* name, Pipe& pipe)
+bool Helium::CreatePipe(const tchar_t* name, Pipe& pipe)
 {
     //
     // We must retry here because quickly thrashing the pipe API can sometimes cause
@@ -74,7 +74,7 @@ bool Helium::CreatePipe(const tchar* name, Pipe& pipe)
     return true;
 }
 
-bool Helium::OpenPipe(const tchar* name, Pipe& pipe)
+bool Helium::OpenPipe(const tchar_t* name, Pipe& pipe)
 {
     if ( !::WaitNamedPipe(name, 0) ) 
     {

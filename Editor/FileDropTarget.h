@@ -48,7 +48,7 @@ namespace Helium
             void AddDroppedListener( FileDroppedSignature::Delegate& listener );
 
         protected:
-            bool TestExtension( const tchar* testExt );
+            bool TestExtension( const tchar_t* testExt );
 
             //virtual wxDragResult OnEnter( wxCoord x, wxCoord y, wxDragResult def ) HELIUM_OVERRIDE;
             virtual wxDragResult OnDragOver( wxCoord x, wxCoord y, wxDragResult def ) HELIUM_OVERRIDE;

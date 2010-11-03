@@ -74,7 +74,7 @@ void Profile::GetMemoryStatus(MemoryStatus* status)
     }
 }
 
-void Profile::GetMemoryStatus(tchar* buffer, size_t bufSize)
+void Profile::GetMemoryStatus(tchar_t* buffer, size_t bufSize)
 {
     MemoryStatus status;
     GetMemoryStatus(&status);

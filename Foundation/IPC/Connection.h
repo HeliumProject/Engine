@@ -41,7 +41,7 @@ namespace Helium
             static Localization::StringTable s_StringTable;
             static bool                      s_RegisteredStringTable;
 
-            tchar                   m_Name[256];          // friendly name for this connection
+            tchar_t                   m_Name[256];          // friendly name for this connection
             bool                    m_Server;             // are we the server side or the client side
             bool                    m_Terminating;        // used by the closedown code to signal it wants the threads to terminate
             Helium::Condition       m_Terminate;          // used to wake up sleeping threads for when we want to terminate
@@ -67,7 +67,7 @@ namespace Helium
             virtual ~Connection();
 
         protected:
-            bool Initialize(bool server, const tchar* name);
+            bool Initialize(bool server, const tchar_t* name);
 
         public:
             void Cleanup();

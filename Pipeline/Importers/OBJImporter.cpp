@@ -268,7 +268,7 @@ SceneGraph::Mesh* Importers::ImportOBJ( const Path& path, bool flipWinding )
         case 'u':
             if ( strncmp( buf,"usemtl",6 )==0 )
             {
-                tchar shader_name[256];
+                tchar_t shader_name[256];
                 _ftscanf( file, TXT( "%s" ) , shader_name );
 
                 std::map< tstring, SceneGraph::Shader* >::iterator itr = shaders.find( shader_name );

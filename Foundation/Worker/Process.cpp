@@ -15,9 +15,9 @@
 using namespace Helium;
 using namespace Helium::Worker;
 
-const tchar* Worker::Args::Worker  = TXT( "worker" );
-const tchar* Worker::Args::Debug   = TXT( "worker_debug" );
-const tchar* Worker::Args::Wait    = TXT( "worker_wait" );
+const tchar_t* Worker::Args::Worker  = TXT( "worker" );
+const tchar_t* Worker::Args::Debug   = TXT( "worker_debug" );
+const tchar_t* Worker::Args::Wait    = TXT( "worker_wait" );
 
 // the worker processes for a master application
 std::set< Helium::SmartPtr< Worker::Process > > g_Workers;

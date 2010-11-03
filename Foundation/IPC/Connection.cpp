@@ -25,7 +25,7 @@ namespace Helium
 // Debug printing
 //#define IPC_CONNECTION_DEBUG
 
-static const tchar* ConnectionStateNames[] = 
+static const tchar_t* ConnectionStateNames[] = 
 {
     TXT( "Waiting" ),
     TXT( "Active" ),
@@ -33,7 +33,7 @@ static const tchar* ConnectionStateNames[] =
     TXT( "Failed" ),
 };
 
-HELIUM_COMPILE_ASSERT( ConnectionStates::Count == (sizeof(ConnectionStateNames) / sizeof(const tchar*)) );
+HELIUM_COMPILE_ASSERT( ConnectionStates::Count == (sizeof(ConnectionStateNames) / sizeof(const tchar_t*)) );
 
 Localization::StringTable Connection::s_StringTable( "Helium::IPC::Connection" );
 bool Connection::s_RegisteredStringTable = false;
@@ -67,7 +67,7 @@ Connection::~Connection()
 {
 }
 
-bool Connection::Initialize(bool server, const tchar* name)
+bool Connection::Initialize(bool server, const tchar_t* name)
 {
     _tcscpy(m_Name, name);
     m_Server = server;

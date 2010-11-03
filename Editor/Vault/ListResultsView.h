@@ -41,7 +41,7 @@ namespace Helium
             {
             }
 
-            DetailsColumn( DetailsColumnType displayColType, const tchar* colName, int colWidth, GetFileInfoDataFunc getDataFunc )
+            DetailsColumn( DetailsColumnType displayColType, const tchar_t* colName, int colWidth, GetFileInfoDataFunc getDataFunc )
                 : m_DetailsColumnType( displayColType )
                 , m_ColumnName( colName )
                 , m_ColumnWidth( colWidth )

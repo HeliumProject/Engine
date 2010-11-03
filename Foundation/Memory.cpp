@@ -31,7 +31,7 @@ bool Profile::Settings::MemoryProfilingEnabled()
     return g_MemoryProfilingEnabled;
 }
 
-static const tchar* MemoryUnitConvert(float32_t& size)
+static const tchar_t* MemoryUnitConvert(float32_t& size)
 {
     if (size > 1 << 10)
     {
@@ -87,20 +87,20 @@ static Helium::Thread::Return MemoryReportThread(Helium::Thread::Param)
             oldTotal = total;
 
             float accountedFor = total > 0 ? ((float)profiled / (float)total * 100.f) : 0.f;
-            const tchar* profiledUnits = MemoryUnitConvert(profiled);
-            const tchar* totalUnits = MemoryUnitConvert(total);
+            const tchar_t* profiledUnits = MemoryUnitConvert(profiled);
+            const tchar_t* totalUnits = MemoryUnitConvert(total);
 
             Log::Profile( TXT( "Memory - Profiled: %.2f%s / Committed: %.2f%s / Accounted for: %.2f%%\n" ), profiled, profiledUnits, total, totalUnits, accountedFor);
 
             for (uint32_t i=0; i<g_MemoryPoolCount; i++)
             {
                 float32_t size = (float32_t)g_MemoryPools[i].m_Size;
-                const tchar* sizeUnits = MemoryUnitConvert( size );
+                const tchar_t* sizeUnits = MemoryUnitConvert( size );
 
                 float32_t delta = (float32_t)abs64(g_MemoryPools[i].m_Size - g_MemoryPools[i].m_Previous);
-                const tchar* deltaUnits = MemoryUnitConvert( delta );
+                const tchar_t* deltaUnits = MemoryUnitConvert( delta );
 
-                tchar sign = ((int64_t)g_MemoryPools[i].m_Size - (int64_t)g_MemoryPools[i].m_Previous) >= 0 ? '+' : '-';
+                tchar_t sign = ((int64_t)g_MemoryPools[i].m_Size - (int64_t)g_MemoryPools[i].m_Previous) >= 0 ? '+' : '-';
 
                 Log::Profile( TXT( " %-30s: [%7d] %.2f%s (%c%.2f%s)\n" ), g_MemoryPools[i].m_Name, g_MemoryPools[i].m_Count, size, sizeUnits, sign, delta, deltaUnits );
 
@@ -151,7 +151,7 @@ void Memory::Cleanup()
 }
 
 //static
-MemoryPoolHandle Memory::CreatePool(const tchar* name)
+MemoryPoolHandle Memory::CreatePool(const tchar_t* name)
 {
     MemoryPoolHandle pool;
 

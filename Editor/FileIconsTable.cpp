@@ -120,7 +120,7 @@ void FileIconsTable::Create()
 
     ///////////////////////////////////////////////////////////////////////////
     {
-        tchar module[MAX_PATH];
+        tchar_t module[MAX_PATH];
         ::GetModuleFileName( 0, module, MAX_PATH );
 
         Helium::Path exePath( module );

@@ -37,7 +37,7 @@ namespace Helium
         }
 
     public:
-        Exception( const tchar *msgFormat, ... )
+        Exception( const tchar_t *msgFormat, ... )
         {
             va_list msgArgs;
             va_start( msgArgs, msgFormat );
@@ -68,13 +68,13 @@ namespace Helium
         // This allow operation with std::exception case statements
         //
 
-        virtual const tchar* What() const
+        virtual const tchar_t* What() const
         {
             return m_Message.c_str();
         }
 
     protected:
-        void SetMessage( const tchar* msgFormat, ... )
+        void SetMessage( const tchar_t* msgFormat, ... )
         {
             va_list msgArgs;
             va_start( msgArgs, msgFormat );
@@ -82,9 +82,9 @@ namespace Helium
             va_end( msgArgs );
         }
 
-        void SetMessage( const tchar* msgFormat, va_list msgArgs )
+        void SetMessage( const tchar_t* msgFormat, va_list msgArgs )
         {
-            tchar msgBuffer[ERROR_STRING_BUF_SIZE];
+            tchar_t msgBuffer[ERROR_STRING_BUF_SIZE];
 
             _vsntprintf( msgBuffer, sizeof(msgBuffer), msgFormat, msgArgs );
             msgBuffer[sizeof(msgBuffer) - 1] = 0; 

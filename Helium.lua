@@ -19,13 +19,7 @@ defines
 includedirs
 {
 	".",
-}
-
-buildoptions
-{
-	-- Class 'foo<>' needs to have dll-interface to be used by clients of class 'bar'
-	--  This is a non-issue so long as debug/release and CRT is not mixed b/t modules
-	"/wd4251",
+	"Dependencies/boost",
 }
 
 --[[
@@ -108,13 +102,6 @@ configuration "not no-unicode"
 	{
 		"wxUSE_UNICODE=1",
 	}
-
-project "Core"
-	if corePrebuildCommands ~= nil then
-		prebuildcommands( corePrebuildCommands )
-	end
-
-	Helium.DoLunarModuleProjectSettings( "LUNAR", "Core", "CORE" )
 
 project "Platform"
 	kind "SharedLib"
@@ -332,3 +319,16 @@ project "Editor"
 		{
 			"Dependencies/p4api/lib/x64/Release",
 		}
+
+project "Core"
+	links
+	{
+		"Platform",
+		"Foundation",
+	}
+
+	if corePrebuildCommands ~= nil then
+		prebuildcommands( corePrebuildCommands )
+	end
+
+	Helium.DoLunarModuleProjectSettings( "LUNAR", "Core", "CORE" )

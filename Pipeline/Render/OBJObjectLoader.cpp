@@ -39,7 +39,7 @@ static void ObjError(FILE* fp, int fpos, int currpos,const char* error)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-uint32_t OBJObjectLoader::ParseFile(const tchar* fname, bool winding)
+uint32_t OBJObjectLoader::ParseFile(const tchar_t* fname, bool winding)
 {
     //winding = true;
     FILE *fp;
@@ -153,7 +153,7 @@ uint32_t OBJObjectLoader::ParseFile(const tchar* fname, bool winding)
         case 'u':
             if (strncmp(buf,"usemtl",6)==0)
             {
-                tchar shader_name[256];
+                tchar_t shader_name[256];
                 _ftscanf( fp, TXT( "%s" ) , shader_name);
 
                 // got through the shader array and see if this shader already exists, if it does use the same frag ID

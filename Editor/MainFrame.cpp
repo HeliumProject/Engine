@@ -343,7 +343,7 @@ MainFrame::~MainFrame()
     }
 }
 
-void MainFrame::SetHelpText( const tchar* text )
+void MainFrame::SetHelpText( const tchar_t* text )
 {
     m_HelpPanel->SetText( text );
 }

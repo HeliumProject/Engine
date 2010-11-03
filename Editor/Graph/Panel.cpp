@@ -371,7 +371,7 @@ void Panel::OnTreeSelChanged(wxTreeEvent& evt)
 		lua_getfield(g_FragmentShaderLuaState, -1, "get_node_help");
 		lua_pushstring(g_FragmentShaderLuaState, BuildNodePath(item).c_str());
 		LuaUtilities::Call(g_FragmentShaderLuaState, 1, 1);
-		const tchar *text = luaL_optstring(g_FragmentShaderLuaState, -1, "");
+		const tchar_t *text = luaL_optstring(g_FragmentShaderLuaState, -1, "");
 		m_Help->SetValue(text);
 		lua_pop(g_FragmentShaderLuaState, 2);
 		m_Ph->ChangeSelection(1);

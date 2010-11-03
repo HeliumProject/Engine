@@ -61,7 +61,7 @@ bool ImageProcess::Bank::LoadImages()
         tex->m_NativeFormat = Helium::CF_ARGB8888;
       }
 
-      tchar* type[] = { TXT( "2D TEXTURE" ), TXT( "CUBE MAP") , TXT( "VOLUME TEXTURE" ) };
+      tchar_t* type[] = { TXT( "2D TEXTURE" ), TXT( "CUBE MAP") , TXT( "VOLUME TEXTURE" ) };
       if (tex->Type()==Helium::Image::VOLUME)
       {
         Log::Print( Log::Levels::Verbose, TXT( "%s %d x %d x %d\n" ),type[tex->Type()],tex->m_Width,tex->m_Height,tex->m_Depth);
@@ -147,7 +147,7 @@ bool ImageProcess::Bank::AdjustImages()
 
     if ((*i)->m_texture == NULL)
     {
-      tchar buf[120];
+      tchar_t buf[120];
       _stprintf(buf, TXT( "Image %s has no pixel data, file may be missing or corrupted" ), (*i)->m_texture_file.c_str());
       throw Helium::Exception(buf);
     }
@@ -283,7 +283,7 @@ bool Bank::WriteDebugFile( const tstring& debug_file )
     return false;
   }
 
-  tchar* type[] = { TXT( "2D TEXTURE" ), TXT( "CUBE MAP" ), TXT( "VOLUME TEXTURE" )};
+  tchar_t* type[] = { TXT( "2D TEXTURE" ), TXT( "CUBE MAP" ), TXT( "VOLUME TEXTURE" )};
 
   V_Definition::iterator it = m_textures.begin();
   V_Definition::iterator end = m_textures.end();

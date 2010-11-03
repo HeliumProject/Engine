@@ -19,18 +19,18 @@ namespace Helium
 
     struct FOUNDATION_API StartupArgs
     {
-        static const tchar* Script;
-        static const tchar* Attach;
-        static const tchar* Profile;
-        static const tchar* Memory;
-        static const tchar* Verbose;
-        static const tchar* Extreme;
-        static const tchar* Debug;
+        static const tchar_t* Script;
+        static const tchar_t* Attach;
+        static const tchar_t* Profile;
+        static const tchar_t* Memory;
+        static const tchar_t* Verbose;
+        static const tchar_t* Extreme;
+        static const tchar_t* Debug;
 
 #ifdef _DEBUG
-        static const tchar* DisableDebugHeap;
-        static const tchar* DisableLeakCheck;
-        static const tchar* CheckHeap;
+        static const tchar_t* DisableDebugHeap;
+        static const tchar_t* DisableLeakCheck;
+        static const tchar_t* CheckHeap;
 #endif
     };
 
@@ -45,7 +45,7 @@ namespace Helium
     //  * Perform version checking (to validate execution)
     //  * Initialize Console printing system
     //  * Inherit automatic command line args from the environment
-    FOUNDATION_API void Startup( int argc = 0, const tchar** argv = NULL );
+    FOUNDATION_API void Startup( int argc = 0, const tchar_t** argv = NULL );
 
     // Shutdown your application
     //  * Cleans up global initializer stack to release memory so its not reported as memory leaks
@@ -110,7 +110,7 @@ namespace Helium
     //  }
     //
 
-    FOUNDATION_API int StandardMain( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv  );
+    FOUNDATION_API int StandardMain( int (*main)(int argc, const tchar_t** argv), int argc, const tchar_t** argv  );
 
     //
     // Main wrappers for windows applications

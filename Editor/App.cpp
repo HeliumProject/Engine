@@ -96,10 +96,10 @@ static void ShowBreakpointDialog(const Debug::BreakpointArgs& args )
             message += Debug::GetSymbolInfo( args.m_Info->ContextRecord->IPREG );
             message += TXT("\n\nWhat do you wish to do?");
 
-            const tchar* nothing = TXT( "Let the OS handle this as an exception" );
-            const tchar* thisOnce = TXT( "Skip this break point once" );
-            const tchar* thisDisable = TXT( "Skip this break point and disable it" );
-            const tchar* allDisable = TXT( "Skip all break points" );
+            const tchar_t* nothing = TXT( "Let the OS handle this as an exception" );
+            const tchar_t* thisOnce = TXT( "Skip this break point once" );
+            const tchar_t* thisDisable = TXT( "Skip this break point and disable it" );
+            const tchar_t* allDisable = TXT( "Skip all break points" );
 
             wxArrayString choices;
             choices.Add(nothing);
@@ -186,7 +186,7 @@ bool App::OnInit()
     wxUpdateUIEvent::SetMode( wxUPDATE_UI_PROCESS_SPECIFIED );
     wxIdleEvent::SetMode( wxIDLE_PROCESS_SPECIFIED );
 
-    tchar module[MAX_PATH];
+    tchar_t module[MAX_PATH];
     GetModuleFileName( 0, module, MAX_PATH );
 
     Helium::Path exePath( module );
@@ -351,7 +351,7 @@ void App::LoadSettings()
 }
 
 #pragma TODO("Apparently wxWidgets doesn't support unicode command lines, please to fix in wxWidgets 2.9.x")
-static int wxEntryWrapper(HINSTANCE hInstance, HINSTANCE hPrevInstance, tchar* pCmdLine, int nCmdShow)
+static int wxEntryWrapper(HINSTANCE hInstance, HINSTANCE hPrevInstance, tchar_t* pCmdLine, int nCmdShow)
 {
     std::string cmdLine;
     Helium::ConvertString( pCmdLine, cmdLine );
@@ -359,7 +359,7 @@ static int wxEntryWrapper(HINSTANCE hInstance, HINSTANCE hPrevInstance, tchar* p
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-int Main ( int argc, const tchar** argv )
+int Main ( int argc, const tchar_t** argv )
 {
     // print physical memory
     MEMORYSTATUSEX status;
@@ -509,7 +509,7 @@ int Main ( int argc, const tchar** argv )
 ///////////////////////////////////////////////////////////////////////////////
 // Main entry point for the application.
 //
-int _tmain( int argc, const tchar** argv )
+int _tmain( int argc, const tchar_t** argv )
 {
     Helium::InitializerStack initializerStack( true );
 

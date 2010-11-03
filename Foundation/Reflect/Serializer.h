@@ -300,7 +300,7 @@ namespace Helium
             //
 
             // data serialization (extract to smart buffer)
-            virtual void Serialize (const Helium::BasicBufferPtr& buffer, const tchar* debugStr) const
+            virtual void Serialize (const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const
             {
                 HELIUM_BREAK();
             }

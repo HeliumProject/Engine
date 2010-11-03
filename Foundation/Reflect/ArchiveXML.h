@@ -48,7 +48,7 @@ namespace Helium
                     kField  = 0x1 << 0,
                 };
 
-                ParsingState(const tchar* shortName)
+                ParsingState(const tchar_t* shortName)
                     : m_ShortName (shortName)
                     , m_Field (NULL) 
                     , m_Flags (0)
@@ -79,7 +79,7 @@ namespace Helium
             TCharStreamPtr m_Stream;
 
             // Indent helper
-            Indent<tchar> m_Indent;
+            Indent<tchar_t> m_Indent;
 
             // File format version
             uint32_t m_Version;
@@ -137,7 +137,7 @@ namespace Helium
 
         public:
             // Access indentation
-            Indent<tchar>& GetIndent()
+            Indent<tchar_t>& GetIndent()
             {
                 return m_Indent;
             }
@@ -162,32 +162,32 @@ namespace Helium
             virtual void Deserialize(V_Element& elements, uint32_t flags = 0);
 
         private:
-            static void StartElementHandler(void *pUserData, const tchar* pszName, const tchar **papszAttrs)
+            static void StartElementHandler(void *pUserData, const tchar_t* pszName, const tchar_t **papszAttrs)
             {
                 ArchiveXML *archive = (ArchiveXML *)pUserData;
                 archive->OnStartElement(pszName, papszAttrs);
             }
 
-            static void EndElementHandler(void *pUserData, const tchar* pszName)
+            static void EndElementHandler(void *pUserData, const tchar_t* pszName)
             {
                 ArchiveXML *archive = (ArchiveXML *)pUserData;
                 archive->OnEndElement(pszName);
             }
 
-            static void CharacterDataHandler(void *pUserData, const tchar* pszData, int nLength)
+            static void CharacterDataHandler(void *pUserData, const tchar_t* pszData, int nLength)
             {
                 ArchiveXML *archive = (ArchiveXML *)pUserData;
                 archive->OnCharacterData(pszData, nLength);
             }
 
             // Called on <element>
-            void OnStartElement(const tchar *pszName, const tchar **papszAttrs);
+            void OnStartElement(const tchar_t *pszName, const tchar_t **papszAttrs);
 
             // Called between <element> and </element>
-            void OnCharacterData(const tchar *pszData, int nLength);
+            void OnCharacterData(const tchar_t *pszData, int nLength);
 
             // Called after </element>
-            void OnEndElement(const tchar *pszName);
+            void OnEndElement(const tchar_t *pszName);
 
         public:
             // Reading and writing single element from string data

@@ -59,7 +59,7 @@ namespace Helium
             MainFrame( SettingsManager* settingsManager, wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1280,1024 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
             virtual ~MainFrame();
 
-            void SetHelpText( const tchar* text );
+            void SetHelpText( const tchar_t* text );
 
             bool OpenProject( const Helium::Path& path );
 

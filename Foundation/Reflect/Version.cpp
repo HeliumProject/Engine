@@ -20,7 +20,7 @@ Reflect::Version::Version()
     DetectVersion();
 }
 
-Reflect::Version::Version(const tchar* source, const tchar* sourceVersion)
+Reflect::Version::Version(const tchar_t* source, const tchar_t* sourceVersion)
 : m_Source (source)
 , m_SourceVersion (sourceVersion)
 {
@@ -78,7 +78,7 @@ void Reflect::Version::DetectVersion()
 {
     HMODULE moduleHandle = GetModuleHandle( NULL );
 
-    tchar exeFilename[ MAX_PATH + 1 ];
+    tchar_t exeFilename[ MAX_PATH + 1 ];
     GetModuleFileName( moduleHandle, exeFilename, MAX_PATH );
 
     m_Source = exeFilename;

@@ -32,6 +32,6 @@ tstring Helium::GetEncoding()
 {
     tstringstream str;
     str << TXT("UTF-");
-    str << sizeof(tchar) * 8;
+    str << sizeof(tchar_t) * 8;
     return str.str();
 }

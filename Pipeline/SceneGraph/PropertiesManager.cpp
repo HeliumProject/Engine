@@ -3,7 +3,7 @@
 
 #include "Platform/Atomic.h"
 #include "Platform/Thread.h"
-#include "Platform/Platform.h"
+#include "Platform/PlatformUtility.h"
 
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 

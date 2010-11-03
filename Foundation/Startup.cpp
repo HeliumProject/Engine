@@ -1,7 +1,7 @@
 #include "Startup.h"
 
 #include "Platform/Assert.h"
-#include "Platform/Platform.h"
+#include "Platform/PlatformUtility.h"
 #include "Platform/Process.h"
 #include "Platform/Debug.h"
 #include "Platform/Exception.h"

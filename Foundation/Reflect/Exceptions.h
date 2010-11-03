@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Platform/Compiler.h"
 #include "Platform/Exception.h"
 
 namespace Helium

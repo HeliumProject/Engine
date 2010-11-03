@@ -2,7 +2,6 @@
 
 #include "Foundation/RCS/RCS.h"
 #include "Foundation/RCS/Provider.h"
-#include "Platform/Compiler.h"
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Profile.h"
 #include "Platform/Condition.h"

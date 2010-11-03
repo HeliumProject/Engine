@@ -3,7 +3,7 @@
 #include "Timer.h"
 #include "Log.h"
 
-#include "Platform/Platform.h"
+#include "Platform/PlatformUtility.h"
 #include "Platform/Thread.h"
 #include "Platform/Assert.h"
 

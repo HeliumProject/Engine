@@ -1,7 +1,7 @@
 #include "Platform/Windows/Windows.h"
 #include "Platform/Error.h"
 #include "Platform/Condition.h"
-#include "Platform/Platform.h"
+#include "Platform/PlatformUtility.h"
 #include "Platform/Assert.h"
 
 using namespace Helium;

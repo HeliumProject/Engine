@@ -1,7 +1,7 @@
 #include "Platform/Windows/Windows.h"
 #include "Platform/Error.h"
 #include "Platform/Thread.h"
-#include "Platform/Platform.h"
+#include "Platform/PlatformUtility.h"
 #include "Platform/Assert.h"
 #include "Platform/String.h"
 

@@ -1,5 +1,5 @@
 #include "Platform/Windows/Windows.h"
-#include "Platform/Platform.h"
+#include "Platform/PlatformUtility.h"
 #include "Platform/Assert.h"
 
 #include <eh.h>

@@ -3,8 +3,6 @@
 #include "Foundation/API.h"
 #include "Foundation/CommandLine/Command.h"
 
-#include "Platform/Compiler.h"
-
 namespace Helium
 {
     namespace CommandLine

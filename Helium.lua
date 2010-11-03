@@ -127,6 +127,9 @@ project "Platform"
 	{
 		"Platform/*.h",
 		"Platform/*.cpp",
+		"Platform/Gcc/*",
+		"Platform/Msc/*",
+		"Platform/X86/*",
 	}
 
 	configuration "windows"

@@ -1,50 +1,52 @@
 #pragma once
 
-#include "API.h"
-#include "Types.h"
-#include "Assert.h"
+// Operating system (HELIUM_OS_*) macros:
+// - HELIUM_OS_PC: PC operating system (any)
+//   - HELIUM_OS_WIN: Windows (any architecture/version)
+//     - HELIUM_OS_WIN32: 32-bit Windows
+//     - HELIUM_OS_WIN64: 64-bit Windows
 
-namespace Helium
-{
-    namespace Platform
-    {
-        PLATFORM_API void Initialize();
-        PLATFORM_API void Cleanup();
+// CPU architecture (HELIUM_CPU_*) macros:
+// - HELIUM_CPU_X86: Intel x86-based (any architecture)
+//   - HELIUM_CPU_X86_32: 32-bit Intel x86
+//   - HELIUM_CPU_X86_64: 64-bit Intel x86
 
-        namespace Types
-        {
-            enum Type
-            {
-                Windows,
-                PlayStation3,
-                Count,
-            };
+// Compiler (HELIUM_CC_*) macros:
+// - HELIUM_CC_MSC: Microsoft Visual C++
+// - HELIUM_CC_GCC: GCC
 
-            static const tchar* Strings[] = 
-            {
-                TXT("Windows"),
-                TXT("PlayStation3"),
-            };
+#if defined( _WIN64 )
+#define HELIUM_OS_WIN 1
+#define HELIUM_OS_WIN64 1
+#define HELIUM_CPU_X86 1
+#define HELIUM_CPU_X86_64 1
+#elif defined( _WIN32 )
+#define HELIUM_OS_WIN 1
+#define HELIUM_OS_WIN32 1
+#define HELIUM_CPU_X86 1
+#define HELIUM_CPU_X86_32 1
+#else
+#error Unsupported platform.
+#endif
 
-            HELIUM_COMPILE_ASSERT( Platform::Types::Count == sizeof(Strings) / sizeof(const tchar*) );
-        }
-        typedef Types::Type Type;
+#if HELIUM_OS_WIN
+#define HELIUM_OS_PC 1
+#endif
 
-        inline const tchar* GetTypeName(Type t)
-        {
-            if (t >= 0 && t<Types::Count)
-            {
-                return Types::Strings[t];
-            }
-            else
-            {
-                return Types::Strings[0];
-            }
-        }
+#if defined( _MSC_VER )
+#define HELIUM_CC_MSC 1
+#elif defined( __GNUC__ )
+#define HELIUM_CC_GCC 1
+#else
+#error Unsupported compiler.
+#endif
 
-        PLATFORM_API Type GetType();
-    }
+#if HELIUM_CC_MSC
+#include "Platform/Msc/Compiler.h"
+#elif HELIUM_CC_GCC
+#include "Platform/Gcc/Compiler.h"
+#endif
 
-    PLATFORM_API void Print(const tchar* fmt, ...);
-    PLATFORM_API void Sleep(int millis);
-}
+#if HELIUM_CPU_X86
+#include "Platform/X86/Cpu.h"
+#endif

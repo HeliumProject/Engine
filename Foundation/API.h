@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Platform/Platform.h"  // Always make sure Platform.h gets included first.
 //#include "Foundation/Profile.h"
 
 #ifdef FOUNDATION_DLL

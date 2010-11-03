@@ -1,6 +1,6 @@
 #include "TimerThread.h"
 
-#include "Platform/Platform.h"
+#include "Platform/PlatformUtility.h"
 
 using namespace Helium;
 

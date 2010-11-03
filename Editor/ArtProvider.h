@@ -10,7 +10,6 @@
 
 #include "FileIconsTable.h"
 #include "Foundation/File/Path.h"
-#include "Platform/Compiler.h"
 #include "Platform/Types.h"
 
 namespace Helium

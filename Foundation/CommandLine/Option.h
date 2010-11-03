@@ -6,7 +6,6 @@
 #include <map>
 
 #include "Foundation/API.h"
-#include "Platform/Compiler.h"
 #include "Foundation/Memory/SmartPtr.h"
 
 namespace Helium

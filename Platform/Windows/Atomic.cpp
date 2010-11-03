@@ -24,7 +24,7 @@ void Helium::AtomicExchange( volatile int32_t* addr, int32_t value )
     ::InterlockedExchange( (volatile LONG*)addr, value );
 }
 
-#ifdef X64
+#if HELIUM_WORDSIZE == 64
 
 void Helium::AtomicIncrement( volatile int64_t* value )
 {

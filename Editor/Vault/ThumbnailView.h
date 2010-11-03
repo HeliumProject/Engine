@@ -8,7 +8,6 @@
 #include "ThumbnailSorter.h"
 #include "ThumbnailTileCreator.h"
 
-#include "Platform/Compiler.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Math/Matrix4.h"
 #include "Foundation/Math/Frustum.h"

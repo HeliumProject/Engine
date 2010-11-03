@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Error.h"
-#include "Compiler.h"
+#include "Platform.h"
 
 #include <stdio.h>
 #include <stdarg.h>

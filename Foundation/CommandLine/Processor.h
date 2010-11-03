@@ -4,8 +4,6 @@
 #include "Foundation/CommandLine/Option.h"
 #include "Foundation/CommandLine/Command.h"
 
-#include "Platform/Compiler.h"
-
 /******************************************************************************
 
 Option

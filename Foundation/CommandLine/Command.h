@@ -7,7 +7,6 @@
 
 #include "Foundation/API.h"
 #include "Foundation/CommandLine/Option.h"
-#include "Platform/Compiler.h"
 
 namespace Helium
 {

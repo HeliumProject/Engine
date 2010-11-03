@@ -3,7 +3,6 @@
 #include "Registry.h"
 #include "Serializers.h"
 
-#include "Platform/Compiler.h"
 #include "Foundation/SmartBuffer/SmartBuffer.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Checksum/CRC32.h"

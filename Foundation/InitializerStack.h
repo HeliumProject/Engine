@@ -3,7 +3,6 @@
 #include <stack>
 
 #include "Foundation/API.h"
-#include "Platform/Compiler.h"
 
 namespace Helium
 {

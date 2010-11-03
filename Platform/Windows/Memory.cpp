@@ -1,6 +1,6 @@
 #include "Memory.h"
 #include "Platform/Profile.h"
-#include "Platform/Platform.h"
+#include "Platform/PlatformUtility.h"
 #include "Platform/Windows/Windows.h"
 
 #include <exception>

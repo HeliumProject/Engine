@@ -64,10 +64,17 @@ Helium.DoDefaultSolutionSettings = function()
 			"EnableSSE2",
 			"NoMinimalRebuild",
 		}
+
+	configuration "no-unicode"
+		defines
+		{
+			"HELIUM_UNICODE=0",
+		}
 	
 	configuration "not no-unicode"
 		defines
 		{
+			"HELIUM_UNICODE=1",
 			"UNICODE=1",
 			"LITESQL_UNICODE=1",
 			"XML_UNICODE_WCHAR_T=1",
@@ -92,12 +99,15 @@ Helium.DoDefaultSolutionSettings = function()
 			"_WIN32",
 			"WIN32",
 			"_CRT_SECURE_NO_DEPRECATE",
+			"_CRT_NON_CONFORMING_SWPRINTFS",
 		}
 
 	configuration "Debug"
 		defines
 		{
+			"HELIUM_DEBUG=1",
 			"_DEBUG",
+			"HELIUM_SHARED=1",
 		}
 		flags
 		{
@@ -105,6 +115,11 @@ Helium.DoDefaultSolutionSettings = function()
 		}
 		
 	configuration "Intermediate"
+		defines
+		{
+			"HELIUM_INTERMEDIATE=1",
+			"HELIUM_STATIC=1",
+		}
 		flags
 		{
 			"OptimizeSpeed",
@@ -114,7 +129,9 @@ Helium.DoDefaultSolutionSettings = function()
 	configuration "Profile"
 		defines
 		{
+			"HELIUM_PROFILE=1",
 			"NDEBUG",
+			"HELIUM_STATIC=1",
 		}
 		flags
 		{
@@ -125,7 +142,9 @@ Helium.DoDefaultSolutionSettings = function()
 	configuration "Release"
 		defines
 		{
+			"HELIUM_RELEASE=1",
 			"NDEBUG",
+			"HELIUM_STATIC=1",
 		}
 		flags
 		{

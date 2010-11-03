@@ -5,8 +5,6 @@
 #include "Foundation/File/Path.h"
 #include "Foundation/Automation/Event.h"
 
-#include "Platform/Compiler.h"
-
 #include <wx/dnd.h>
 
 namespace Helium

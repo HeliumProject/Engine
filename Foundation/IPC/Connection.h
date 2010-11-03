@@ -2,7 +2,7 @@
 
 #include "Message.h"
 
-#include "Platform/Platform.h"
+#include "Platform/PlatformUtility.h"
 #include "Platform/Condition.h"
 #include "Platform/Thread.h"
 

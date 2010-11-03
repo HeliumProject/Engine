@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Platform/Platform.h"
+
 //
 // Register types
 //
@@ -8,12 +10,7 @@
 #define NULL (0)
 #endif
 
-#if defined( __GNUC__ ) || defined( __GCC__ ) || defined( __SNC__ )
-
-#include <inttypes.h>
-
-#elif defined( WIN32 )
-
+#if HELIUM_CC_MSC
 
 /// @defgroup inttypes Integer Types
 /// We use the integer types defined in stdint.h on platforms where it is available.  If it is not available, then we
@@ -385,7 +382,13 @@ typedef uint32_t uintptr;
 typedef int32_t  intptr;
 #endif
 
-#endif  // #ifdef WIN32
+#else  // HELIUM_CC_MSC
+
+// Use inttypes.h where available; we simply try to provide relevant type definitions for platforms that don't provide
+// it.
+#include <inttypes.h>
+
+#endif  // HELIUM_CC_MSC
 
 /// @defgroup floattypes Floating-point Types
 /// While these may not be particularly necessary, they do provide some level of consistency with the integer types.

@@ -25,8 +25,8 @@ MemoryProfiler::~MemoryProfiler()
     {
         MemoryStatus finish;
         GetMemoryStatus(&finish);
-        intptr delta = finish.m_TotalCommit - s_Last.m_TotalCommit;
-        intptr scope = finish.m_TotalCommit - m_Start.m_TotalCommit;
+        intptr_t delta = finish.m_TotalCommit - s_Last.m_TotalCommit;
+        intptr_t scope = finish.m_TotalCommit - m_Start.m_TotalCommit;
         Helium::Print(TXT("Memory Commit: %u M bytes (Delta: %i K, %i K within scope)\n"), (finish.m_TotalCommit) >> 20, (delta) >> 10, (scope) >> 10);
         s_Last = finish;
     }
@@ -39,8 +39,8 @@ void MemoryProfiler::EnableProfiling(bool enable)
 
 void Profile::GetMemoryStatus(MemoryStatus* status)
 {
-    uintptr base = 0;
-    uintptr res = 1;
+    uintptr_t base = 0;
+    uintptr_t res = 1;
     while (res)
     {
         MEMORY_BASIC_INFORMATION mem;

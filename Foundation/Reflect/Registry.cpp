@@ -208,7 +208,7 @@ void Reflect::Initialize()
     }
 
 #ifdef REFLECT_DEBUG_INIT_AND_CLEANUP
-    std::vector<uintptr> trace;
+    std::vector<uintptr_t> trace;
     Debug::GetStackTrace( trace );
 
     std::string str;
@@ -232,7 +232,7 @@ void Reflect::Cleanup()
     }
 
 #ifdef REFLECT_DEBUG_INIT_AND_CLEANUP
-    std::vector<uintptr> trace;
+    std::vector<uintptr_t> trace;
     Debug::GetStackTrace( trace );
 
     std::string str;
@@ -483,12 +483,12 @@ const Type* Registry::GetType(const tstring& str) const
 
 void Registry::AtomicGetType(int id, const Type** addr) const
 {
-    Helium::AtomicExchange( (intptr*)addr, (intptr)GetType(id) );
+    Helium::AtomicExchange( (intptr_t*)addr, (intptr_t)GetType(id) );
 }
 
 void Registry::AtomicGetType(const tstring& str, const Type** addr) const
 {
-    Helium::AtomicExchange( (intptr*)addr, (intptr)GetType(str) );
+    Helium::AtomicExchange( (intptr_t*)addr, (intptr_t)GetType(str) );
 }
 
 ObjectPtr Registry::CreateInstance(int id) const
@@ -542,7 +542,7 @@ ObjectPtr Registry::CreateInstance(const tstring& str) const
 void Registry::Created(Object* object)
 {
 #ifdef REFLECT_OBJECT_TRACKING
-    Registry::GetInstance()->TrackCreate((uintptr)object);
+    Registry::GetInstance()->TrackCreate((uintptr_t)object);
 #endif
 
     if (m_Created != NULL)
@@ -554,7 +554,7 @@ void Registry::Created(Object* object)
 void Registry::Destroyed(Object* object)
 {
 #ifdef REFLECT_OBJECT_TRACKING
-    Registry::GetInstance()->TrackDelete((uintptr)object);
+    Registry::GetInstance()->TrackDelete((uintptr_t)object);
 #endif
 
     if (m_Destroyed != NULL)
@@ -575,17 +575,17 @@ void Registry::SetDestroyedCallback(DestroyedFunc destroyed)
 
 #ifdef REFLECT_OBJECT_TRACKING
 
-void Registry::TrackCreate(uintptr ptr)
+void Registry::TrackCreate(uintptr_t ptr)
 {
     m_Tracker.Create( ptr );
 }
 
-void Registry::TrackDelete(uintptr ptr)
+void Registry::TrackDelete(uintptr_t ptr)
 {
     m_Tracker.Delete( ptr );
 }
 
-void Registry::TrackCheck(uintptr ptr)
+void Registry::TrackCheck(uintptr_t ptr)
 {
     m_Tracker.Check( ptr );
 }
@@ -614,7 +614,7 @@ CreationRecord::CreationRecord()
 
 }
 
-CreationRecord::CreationRecord(uintptr ptr)
+CreationRecord::CreationRecord(uintptr_t ptr)
 : m_Address (ptr)
 , m_Type (-1)
 {
@@ -667,7 +667,7 @@ StackRecordPtr Tracker::GetStack()
     return ptr;
 }
 
-void Tracker::Create(uintptr ptr)
+void Tracker::Create(uintptr_t ptr)
 {
     Helium::TakeMutex mutex (g_TrackerMutex);
 
@@ -703,7 +703,7 @@ void Tracker::Create(uintptr ptr)
     }
 }
 
-void Tracker::Delete(uintptr ptr)
+void Tracker::Delete(uintptr_t ptr)
 {
     Helium::TakeMutex mutex (g_TrackerMutex);
 
@@ -743,7 +743,7 @@ void Tracker::Delete(uintptr ptr)
     }
 }
 
-void Tracker::Check(uintptr ptr)
+void Tracker::Check(uintptr_t ptr)
 {
     Helium::TakeMutex mutex (g_TrackerMutex);
 

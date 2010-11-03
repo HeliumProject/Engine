@@ -32,7 +32,7 @@ void EnumerationSerializer::ConnectData(Helium::HybridPtr<void> data)
     }
 }
 
-void EnumerationSerializer::ConnectField(Helium::HybridPtr<Element> instance, const Field* field, uintptr offsetInField)
+void EnumerationSerializer::ConnectField(Helium::HybridPtr<Element> instance, const Field* field, uintptr_t offsetInField)
 {
     __super::ConnectField(instance, field, offsetInField);
 

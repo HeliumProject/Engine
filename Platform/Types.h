@@ -377,14 +377,6 @@ typedef uint64_t uint_fast64_t;
 
 //@}
 
-#ifdef _WIN64
-typedef uint64_t uintptr;
-typedef int64_t  intptr;
-#else
-typedef uint32_t uintptr;
-typedef int32_t  intptr;
-#endif
-
 #else  // HELIUM_CC_MSC
 
 // Use inttypes.h where available; we simply try to provide relevant type definitions for platforms that don't provide

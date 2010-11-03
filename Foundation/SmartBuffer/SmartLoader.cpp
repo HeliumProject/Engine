@@ -111,7 +111,7 @@ bool Helium::ParseChunkedData( ChunkFile& chunk_file, void* data, uint32_t data_
 
             // make sure it is in a valid range 
             HELIUM_ASSERT( *pointer <= data_to_fixup_size );
-            *pointer += (uint32_t)(uintptr)(data_to_fixup);
+            *pointer += (uint32_t)(uintptr_t)(data_to_fixup);
         }
     }
 

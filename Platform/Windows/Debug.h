@@ -94,14 +94,14 @@ namespace Helium
         PLATFORM_API bool IsInitialized();
 
         // Query information from a bare address (should be pretty safe to call)
-        PLATFORM_API tstring GetSymbolInfo( uintptr adr, bool enumLoadedModules = true );
-        PLATFORM_API Helium::Exception* GetHeliumException( uintptr addr );
-        PLATFORM_API std::exception* GetStandardException( uintptr addr );
+        PLATFORM_API tstring GetSymbolInfo( uintptr_t adr, bool enumLoadedModules = true );
+        PLATFORM_API Helium::Exception* GetHeliumException( uintptr_t addr );
+        PLATFORM_API std::exception* GetStandardException( uintptr_t addr );
 
         // Stack traces (capture with or without an explicit context, translate to string rep)
-        PLATFORM_API bool GetStackTrace( std::vector<uintptr>& trace, unsigned omitFrames = 0 );
-        PLATFORM_API bool GetStackTrace( LPCONTEXT context, std::vector<uintptr>& stack, unsigned omitFrames = 0 );
-        PLATFORM_API void TranslateStackTrace( const std::vector<uintptr>& trace, tstring& buffer );
+        PLATFORM_API bool GetStackTrace( std::vector<uintptr_t>& trace, unsigned omitFrames = 0 );
+        PLATFORM_API bool GetStackTrace( LPCONTEXT context, std::vector<uintptr_t>& stack, unsigned omitFrames = 0 );
+        PLATFORM_API void TranslateStackTrace( const std::vector<uintptr_t>& trace, tstring& buffer );
 
         // Query SEH exception pointers for full report, abbreviated name, or more details
         PLATFORM_API tstring GetExceptionInfo( LPEXCEPTION_POINTERS info );

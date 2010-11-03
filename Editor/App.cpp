@@ -70,7 +70,7 @@ using namespace Helium::CommandLine;
 
 static void ShowBreakpointDialog(const Debug::BreakpointArgs& args )
 {
-    static std::set<uintptr> disabled;
+    static std::set<uintptr_t> disabled;
     static bool skipAll = false;
     bool skip = skipAll;
 

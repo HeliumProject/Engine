@@ -25,7 +25,7 @@ namespace Helium
         class StackRecord : public Helium::RefCountBase<StackRecord>
         {
         public:
-            std::vector<uintptr>    m_Stack;
+            std::vector<uintptr_t>    m_Stack;
             tstring                 m_String;
             bool                    m_Converted;
 
@@ -40,7 +40,7 @@ namespace Helium
 
         typedef Helium::SmartPtr< StackRecord > StackRecordPtr;
         typedef std::vector< StackRecordPtr > V_StackRecordPtr;
-        typedef std::map< std::vector<uintptr>, StackRecordPtr > M_StackRecord;
+        typedef std::map< std::vector<uintptr_t>, StackRecordPtr > M_StackRecord;
 
 
         //
@@ -50,7 +50,7 @@ namespace Helium
         class CreationRecord
         {
         public:
-            uintptr         m_Address;
+            uintptr_t         m_Address;
             tstring         m_ShortName;
             int             m_Type;
 
@@ -58,12 +58,12 @@ namespace Helium
             StackRecordPtr m_DeleteStack;
 
             CreationRecord();
-            CreationRecord(uintptr ptr);
+            CreationRecord(uintptr_t ptr);
 
             void Dump(FILE* f);
         };
 
-        typedef std::map<uintptr, CreationRecord> M_CreationRecord;
+        typedef std::map<uintptr_t, CreationRecord> M_CreationRecord;
 
 
         //
@@ -84,13 +84,13 @@ namespace Helium
             StackRecordPtr GetStack();
 
             // save debug info during creation
-            void Create(uintptr ptr);
+            void Create(uintptr_t ptr);
 
             // callback on object delete
-            void Delete(uintptr ptr);
+            void Delete(uintptr_t ptr);
 
             // validate a pointer
-            void Check(uintptr ptr);
+            void Check(uintptr_t ptr);
 
             // dump all debug info
             void Dump();
@@ -209,9 +209,9 @@ namespace Helium
             void SetDestroyedCallback(DestroyedFunc destroyed);
 
 #ifdef REFLECT_OBJECT_TRACKING
-            void TrackCreate(uintptr ptr);
-            void TrackDelete(uintptr ptr);
-            void TrackCheck(uintptr ptr);
+            void TrackCreate(uintptr_t ptr);
+            void TrackDelete(uintptr_t ptr);
+            void TrackCheck(uintptr_t ptr);
             void TrackDump();
 #endif
         };

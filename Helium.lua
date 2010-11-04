@@ -116,6 +116,7 @@ project "Platform"
 		"Platform/*.cpp",
 		"Platform/Gcc/*",
 		"Platform/Lrbni/*",
+		"Platform/Math/*",
 		"Platform/Msc/*",
 		"Platform/Sse/*",
 		"Platform/X86/*",

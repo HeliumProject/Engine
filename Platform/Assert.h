@@ -68,6 +68,11 @@
 # define HELIUM_ASSERT_MSG(x, msg)
 #endif
 
+#ifdef HELIUM_ASSERT_ENABLED
+# define HELIUM_VERIFY(x) HELIUM_ASSERT(x)
+#else
+# define HELIUM_VERIFY(x) x
+#endif
 
 //
 // Compile time

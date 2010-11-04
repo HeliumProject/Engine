@@ -12,7 +12,7 @@ namespace Helium
 
 /// Load a SIMD vector from aligned memory.
 ///
-/// @param[in] pSource  Memory, aligned to L_SIMD_ALIGNMENT, from which to load.
+/// @param[in] pSource  Memory, aligned to HELIUM_SIMD_ALIGNMENT, from which to load.
 ///
 /// @return  SIMD vector.
 Helium::SimdVector Helium::Simd::LoadAligned( const void* pSource )
@@ -34,7 +34,7 @@ Helium::SimdVector Helium::Simd::LoadUnaligned( const void* pSource )
 
 /// Store the contents of a SIMD vector in aligned memory.
 ///
-/// @param[out] pDest  Memory, aligned to L_SIMD_ALIGNMENT, in which to store the data.
+/// @param[out] pDest  Memory, aligned to HELIUM_SIMD_ALIGNMENT, in which to store the data.
 /// @param[in]  vec    SIMD vector to store.
 void Helium::Simd::StoreAligned( void* pDest, Helium::SimdVector vec )
 {

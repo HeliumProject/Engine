@@ -4,12 +4,13 @@
 
 #include "Platform/Assert.h"
 
-#include "Platform/Atomic.h"
 #include "Platform/Windows/Windows.h"
 
 #ifdef _MANAGED
 # using <System.dll>
 #endif // _MANAGED
+
+using namespace Helium;
 
 /// Terminate the application on a fatal error.
 ///
@@ -28,8 +29,6 @@ void Helium::FatalExit( int exitCode )
 #define SPRINTF_S sprintf_s
 #define MESSAGE_BOX MessageBoxA
 #endif
-
-using namespace Helium;
 
 /// Handle an assertion.
 ///

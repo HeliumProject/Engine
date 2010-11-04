@@ -9,13 +9,13 @@
 #ifndef LUNAR_CORE_QUAT_H
 #define LUNAR_CORE_QUAT_H
 
-#include "Core/Simd.h"
+#include "Platform/Simd.h"
 #include "Core/MathCommon.h"
 
 namespace Lunar
 {
     /// Quaternion.  Note that this is aligned to 16 bytes for SIMD support.
-    L_ALIGN_PRE( 16 ) class LUNAR_CORE_API Quat
+    HELIUM_ALIGN_PRE( 16 ) class LUNAR_CORE_API Quat
     {
     public:
         /// Identity quaternion.
@@ -27,17 +27,17 @@ namespace Lunar
         inline Quat( float32_t x, float32_t y, float32_t z, float32_t w );
         inline Quat( const Vector3& rAxis, float32_t angle );
         inline Quat( float32_t pitch, float32_t yaw, float32_t roll );
-#if L_SIMD_SIZE == 16
-        inline explicit Quat( const SimdVector& rVector );
+#if HELIUM_SIMD_SIZE == 16
+        inline explicit Quat( const Helium::SimdVector& rVector );
 #endif
         //@}
 
         /// @name Data Access
         //@{
-#if L_SIMD_SIZE == 16
-        inline SimdVector& GetSimdVector();
-        inline const SimdVector& GetSimdVector() const;
-        inline void SetSimdVector( const SimdVector& rVector );
+#if HELIUM_SIMD_SIZE == 16
+        inline Helium::SimdVector& GetSimdVector();
+        inline const Helium::SimdVector& GetSimdVector() const;
+        inline void SetSimdVector( const Helium::SimdVector& rVector );
 #endif
 
         inline float32_t& GetElement( size_t index );
@@ -102,21 +102,21 @@ namespace Lunar
         //@}
 
     private:
-#if L_SIMD_SIZE == 16
+#if HELIUM_SIMD_SIZE == 16
         /// SIMD vector containing the quaternion values.
-        SimdVector m_quat;
+        Helium::SimdVector m_quat;
 #else
         /// Quaternion values.
         float32_t m_quat[ 4 ];
 #endif
-    } L_ALIGN_POST( 16 );
+    } HELIUM_ALIGN_POST( 16 );
 }
 
 #include "Core/Quat.inl"
 
-#if L_SIMD_LRBNI
+#if HELIUM_SIMD_LRBNI
 #include "Core/QuatLrbni.inl"
-#elif L_SIMD_SSE
+#elif HELIUM_SIMD_SSE
 #include "Core/QuatSse.inl"
 #endif
 

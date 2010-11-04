@@ -414,7 +414,7 @@ namespace Lunar
     //@}
 }
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 #include "AtomicWin.inl"
 #endif
 

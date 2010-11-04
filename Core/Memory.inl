@@ -66,7 +66,7 @@ namespace Lunar
     /// @return  Base address of the allocation if successful, null pointer if not.
     ///
     /// @see MemoryHeap::Allocate(), Reallocate(), Free()
-    L_FORCEINLINE void* DefaultAllocator::Allocate( size_t size )
+    HELIUM_FORCEINLINE void* DefaultAllocator::Allocate( size_t size )
     {
         return L_DEFAULT_HEAP.Allocate( size );
     }
@@ -85,7 +85,7 @@ namespace Lunar
     ///          if a valid pointer was returned or a zero-byte reallocation was requested.
     ///
     /// @see MemoryHeap::Reallocate(), Allocate(), Free()
-    L_FORCEINLINE void* DefaultAllocator::Reallocate( void* pMemory, size_t size )
+    HELIUM_FORCEINLINE void* DefaultAllocator::Reallocate( void* pMemory, size_t size )
     {
         return L_DEFAULT_HEAP.Reallocate( pMemory, size );
     }
@@ -98,7 +98,7 @@ namespace Lunar
     /// @return  Base address of the allocation if successful, null pointer if not.
     ///
     /// @see MemoryHeap::AllocateAligned(), Free()
-    L_FORCEINLINE void* DefaultAllocator::AllocateAligned( size_t alignment, size_t size )
+    HELIUM_FORCEINLINE void* DefaultAllocator::AllocateAligned( size_t alignment, size_t size )
     {
         return L_DEFAULT_HEAP.AllocateAligned( alignment, size );
     }
@@ -109,7 +109,7 @@ namespace Lunar
     ///                     performed.
     ///
     /// @see MemoryHeap::AllocateAligned(), Allocate(), Reallocate(), AllocateAligned()
-    L_FORCEINLINE void DefaultAllocator::Free( void* pMemory )
+    HELIUM_FORCEINLINE void DefaultAllocator::Free( void* pMemory )
     {
         L_DEFAULT_HEAP.Free( pMemory );
     }
@@ -119,7 +119,7 @@ namespace Lunar
     /// @param[in] pMemory  Base address of the allocation.
     ///
     /// @return  Allocation size in bytes.
-    L_FORCEINLINE size_t DefaultAllocator::GetMemorySize( void* pMemory )
+    HELIUM_FORCEINLINE size_t DefaultAllocator::GetMemorySize( void* pMemory )
     {
         return L_DEFAULT_HEAP.GetMemorySize( pMemory );
     }
@@ -140,10 +140,10 @@ namespace Lunar
         , m_defaultAlignment( Max< size_t >( defaultAlignment, 1 ) )
         , m_remainingBlockCount( Max< size_t >( blockCountMax, 1 ) )
     {
-        L_ASSERT( IsPowerOfTwo( m_defaultAlignment ) );
+        HELIUM_ASSERT( IsPowerOfTwo( m_defaultAlignment ) );
 
         Block* pBlock = AllocateBlock();
-        L_ASSERT( pBlock );
+        HELIUM_ASSERT( pBlock );
         pBlock->m_pPreviousBlock = NULL;
         pBlock->m_pNextBlock = NULL;
 
@@ -151,7 +151,7 @@ namespace Lunar
         m_pTailBlock = pBlock;
         m_pCurrentBlock = pBlock;
 
-        L_ASSERT( pBlock->m_pBuffer );
+        HELIUM_ASSERT( pBlock->m_pBuffer );
         m_pStackPointer = static_cast< uint8_t* >( pBlock->m_pBuffer ) + m_blockSize;
     }
 
@@ -169,7 +169,7 @@ namespace Lunar
             Block* pBlock = pNextBlock;
             pNextBlock = pBlock->m_pNextBlock;
 
-            L_ASSERT( pBlock->m_pBuffer );
+            HELIUM_ASSERT( pBlock->m_pBuffer );
             allocator.Free( pBlock->m_pBuffer );
         }
     }
@@ -185,7 +185,7 @@ namespace Lunar
     template< typename Allocator >
     void* StackMemoryHeap< Allocator >::Reallocate( void* /*pMemory*/, size_t /*size*/ )
     {
-        L_ASSERT_MESSAGE_FALSE( L_T( "Reallocate() not supported by StackMemoryHeap" ) );
+        HELIUM_ASSERT_MSG_FALSE( TXT( "Reallocate() not supported by StackMemoryHeap" ) );
 
         return NULL;
     }
@@ -194,17 +194,17 @@ namespace Lunar
     template< typename Allocator >
     void* StackMemoryHeap< Allocator >::AllocateAligned( size_t alignment, size_t size )
     {
-        L_ASSERT( IsPowerOfTwo( alignment ) );
+        HELIUM_ASSERT( IsPowerOfTwo( alignment ) );
 
         // Check whether the allocation will fit within the current block.
         Block* pBlock = m_pCurrentBlock;
-        L_ASSERT( pBlock );
+        HELIUM_ASSERT( pBlock );
 
         uint8_t* pBasePointer = static_cast< uint8_t* >( pBlock->m_pBuffer );
-        L_ASSERT( pBasePointer );
+        HELIUM_ASSERT( pBasePointer );
 
         uint8_t* pStackPointerAligned = Align( static_cast< uint8_t* >( m_pStackPointer ), alignment );
-        L_ASSERT( pStackPointerAligned );
+        HELIUM_ASSERT( pStackPointerAligned );
 
         size_t usedBlockSize = pStackPointerAligned - pBasePointer;
         if( usedBlockSize > m_blockSize || size > m_blockSize - usedBlockSize )
@@ -222,7 +222,7 @@ namespace Lunar
                 }
 
                 pBlock = AllocateBlock();
-                L_ASSERT( pBlock );
+                HELIUM_ASSERT( pBlock );
                 pBlock->m_pPreviousBlock = m_pTailBlock;
                 pBlock->m_pNextBlock = NULL;
 
@@ -239,7 +239,7 @@ namespace Lunar
             }
 
             pBasePointer = static_cast< uint8_t* >( pBlock->m_pBuffer );
-            L_ASSERT( pBasePointer );
+            HELIUM_ASSERT( pBasePointer );
 
             pStackPointerAligned = Align( pBasePointer, alignment );
 
@@ -269,7 +269,7 @@ namespace Lunar
         }
 
         // Check if the allocation exists in the current block.
-        L_ASSERT( m_pCurrentBlock );
+        HELIUM_ASSERT( m_pCurrentBlock );
         if( pMemory <= m_pStackPointer && pMemory >= m_pCurrentBlock->m_pBuffer )
         {
             // Allocation is in the current block, so we only need to adjust the stack pointer.
@@ -294,16 +294,16 @@ namespace Lunar
             pBlock = pBlock->m_pPreviousBlock;
         }
 
-        L_ASSERT_MESSAGE_FALSE(
-            L_T( "Allocation does not exist in the current stack (may have already been popped via another " )
-            L_T( "allocation)" ) );
+        HELIUM_ASSERT_MSG_FALSE(
+            TXT( "Allocation does not exist in the current stack (may have already been popped via another " )
+            TXT( "allocation)" ) );
     }
 
     // @copydoc GetMemorySize()
     template< typename Allocator >
     size_t StackMemoryHeap< Allocator >::GetMemorySize( void* /*pMemory*/ )
     {
-        L_ASSERT_MESSAGE_FALSE( L_T( "GetMemorySize() is not supported by StackMemoryHeap" ) );
+        HELIUM_ASSERT_MSG_FALSE( TXT( "GetMemorySize() is not supported by StackMemoryHeap" ) );
 
         return static_cast< size_t >( -1 ); 
     }
@@ -314,7 +314,7 @@ namespace Lunar
     template< typename Allocator >
     typename StackMemoryHeap< Allocator >::Block* StackMemoryHeap< Allocator >::AllocateBlock()
     {
-        L_ASSERT( m_remainingBlockCount != 0 );
+        HELIUM_ASSERT( m_remainingBlockCount != 0 );
         if( IsValid( m_remainingBlockCount ) )
         {
             --m_remainingBlockCount;
@@ -322,8 +322,8 @@ namespace Lunar
 
         size_t alignedBufferSize = Align( m_blockSize, boost::alignment_of< Block >::value );
 
-        void* pBuffer = Allocator().AllocateAligned( L_SIMD_ALIGNMENT, alignedBufferSize + sizeof( Block ) );
-        L_ASSERT( pBuffer );
+        void* pBuffer = Allocator().AllocateAligned( HELIUM_SIMD_ALIGNMENT, alignedBufferSize + sizeof( Block ) );
+        HELIUM_ASSERT( pBuffer );
 
         Block* pBlock = reinterpret_cast< Block* >( static_cast< uint8_t* >( pBuffer ) + alignedBufferSize );
         pBlock->m_pBuffer = pBuffer;
@@ -347,7 +347,7 @@ namespace Lunar
         : m_pHeap( &rHeap )
         , m_pStackPointer( rHeap.m_pStackPointer )
     {
-        L_ASSERT( m_pStackPointer );
+        HELIUM_ASSERT( m_pStackPointer );
     }
 
     /// Destructor.
@@ -382,7 +382,7 @@ namespace Lunar
     {
         if( m_pHeap )
         {
-            L_ASSERT( m_pStackPointer );
+            HELIUM_ASSERT( m_pStackPointer );
             m_pHeap->Free( m_pStackPointer );
 
             m_pHeap = NULL;
@@ -430,16 +430,16 @@ namespace Lunar
 
         // For allocations that may need to be SIMD-aligned, allocate aligned memory.
         void* pMemory;
-        if( sizeof( T ) >= L_SIMD_SIZE )
+        if( sizeof( T ) >= HELIUM_SIMD_SIZE )
         {
-            pMemory = rAllocator.AllocateAligned( L_SIMD_ALIGNMENT, size );
+            pMemory = rAllocator.AllocateAligned( HELIUM_SIMD_ALIGNMENT, size );
         }
         else
         {
             pMemory = rAllocator.Allocate( size );
         }
 
-        L_ASSERT( pMemory );
+        HELIUM_ASSERT( pMemory );
 
         return ArrayInPlaceConstruct< T >( pMemory, count );
     }
@@ -460,21 +460,21 @@ namespace Lunar
         // Since we need to worry about destruction of the array elements, we want to allocate some extra space to store
         // the number of elements that need to be deleted.  The array count will be stored in a size_t value stored
         // immediately before the allocation pointer we return to the application.  Note that for possible SIMD-aligned
-        // types, we need to allocate an extra L_SIMD_ALIGNMENT bytes instead of just sizeof( size_t ) to keep the
+        // types, we need to allocate an extra HELIUM_SIMD_ALIGNMENT bytes instead of just sizeof( size_t ) to keep the
         // address returned to the application properly aligned.
         void* pMemory;
-        if( sizeof( T ) >= L_SIMD_SIZE )
+        if( sizeof( T ) >= HELIUM_SIMD_SIZE )
         {
-            allocationOffset = L_SIMD_ALIGNMENT;
-            L_ASSERT( allocationOffset >= sizeof( size_t ) );
-            pMemory = rAllocator.AllocateAligned( L_SIMD_ALIGNMENT, size + L_SIMD_ALIGNMENT );
+            allocationOffset = HELIUM_SIMD_ALIGNMENT;
+            HELIUM_ASSERT( allocationOffset >= sizeof( size_t ) );
+            pMemory = rAllocator.AllocateAligned( HELIUM_SIMD_ALIGNMENT, size + HELIUM_SIMD_ALIGNMENT );
         }
         else
         {
             pMemory = rAllocator.Allocate( size + sizeof( size_t ) );
         }
 
-        L_ASSERT( pMemory );
+        HELIUM_ASSERT( pMemory );
 
         // Offset the allocation and store the array element count.
         if( pMemory )
@@ -528,9 +528,9 @@ namespace Lunar
 
             // Free the actual allocation, taking into account the offset applied by NewArrayHelper().
             size_t allocationOffset = sizeof( size_t );
-            if( sizeof( T ) >= L_SIMD_SIZE )
+            if( sizeof( T ) >= HELIUM_SIMD_SIZE )
             {
-                allocationOffset = L_SIMD_ALIGNMENT;
+                allocationOffset = HELIUM_SIMD_ALIGNMENT;
             }
 
             void* pMemory = reinterpret_cast< uint8_t* >( pArray ) - allocationOffset;
@@ -551,11 +551,11 @@ namespace Lunar
     /// @return  Pointer to the requested memory if allocation was successful, null pointer if allocation failed.
     template< typename Allocator > void* AllocateAlignmentHelper( Allocator& rAllocator, size_t size )
     {
-        L_ASSERT( size != 0 );
+        HELIUM_ASSERT( size != 0 );
 
-        if( size >= L_SIMD_SIZE )
+        if( size >= HELIUM_SIMD_SIZE )
         {
-            return rAllocator.AllocateAligned( L_SIMD_ALIGNMENT, size );
+            return rAllocator.AllocateAligned( HELIUM_SIMD_ALIGNMENT, size );
         }
 
         return rAllocator.Allocate( size );
@@ -563,7 +563,7 @@ namespace Lunar
 }
 
 #if !L_DEBUG
-#define L_NEW_DELETE_SPEC L_FORCEINLINE
+#define L_NEW_DELETE_SPEC HELIUM_FORCEINLINE
 #include "Core/NewDelete.h"
 #undef L_NEW_DELETE_SPEC
 #endif
@@ -577,7 +577,7 @@ namespace Lunar
 void* operator new( size_t size, Lunar::MemoryHeap& rHeap )
 {
     void* pMemory = Lunar::AllocateAlignmentHelper( rHeap, size );
-    L_ASSERT( pMemory );
+    HELIUM_ASSERT( pMemory );
 
     return pMemory;
 }

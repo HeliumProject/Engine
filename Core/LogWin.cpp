@@ -6,9 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "CorePch.h"
-#include "Core/Platform.h"
+#include "Platform/Platform.h"
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 
 #include "Core/Log.h"
 
@@ -29,9 +29,9 @@ namespace Lunar
     /// @param[in] pMessage  Message text.
     void WinDebugLog::OutputImpl( const tchar_t* pMessage )
     {
-        L_ASSERT( pMessage );
+        HELIUM_ASSERT( pMessage );
 
-#if L_UNICODE
+#if HELIUM_UNICODE
         OutputDebugStringW( pMessage );
 #else
         OutputDebugStringA( pMessage );
@@ -51,4 +51,4 @@ namespace Lunar
 #endif
 }
 
-#endif  // L_OS_WIN
+#endif  // HELIUM_OS_WIN

@@ -14,25 +14,25 @@
 namespace Lunar
 {
     /// SIMD-optimized structure-of-arrays quaternion.
-    L_SIMD_ALIGN_PRE class LUNAR_CORE_API QuatSoa
+    HELIUM_SIMD_ALIGN_PRE class LUNAR_CORE_API QuatSoa
     {
     public:
         /// Identity quaternion.
         static const QuatSoa IDENTITY;
 
         /// X components.
-        SimdVector m_x;
+        Helium::SimdVector m_x;
         /// Y components.
-        SimdVector m_y;
+        Helium::SimdVector m_y;
         /// Z components.
-        SimdVector m_z;
+        Helium::SimdVector m_z;
         /// W components.
-        SimdVector m_w;
+        Helium::SimdVector m_w;
 
         /// @name Construction/Destruction
         //@{
         inline QuatSoa();
-        inline QuatSoa( const SimdVector& rX, const SimdVector& rY, const SimdVector& rZ, const SimdVector& rW );
+        inline QuatSoa( const Helium::SimdVector& rX, const Helium::SimdVector& rY, const Helium::SimdVector& rZ, const Helium::SimdVector& rW );
         inline QuatSoa( const float32_t* pX, const float32_t* pY, const float32_t* pZ, const float32_t* pW );
         inline explicit QuatSoa( const Quat& rQuat );
         //@}
@@ -66,11 +66,11 @@ namespace Lunar
         inline void MultiplyComponentsSet( const QuatSoa& rQuat0, const QuatSoa& rQuat1 );
         inline void DivideComponentsSet( const QuatSoa& rQuat0, const QuatSoa& rQuat1 );
 
-        inline SimdVector GetMagnitude() const;
-        inline SimdVector GetMagnitudeSquared() const;
+        inline Helium::SimdVector GetMagnitude() const;
+        inline Helium::SimdVector GetMagnitudeSquared() const;
 
-        inline QuatSoa GetNormalized( const SimdVector& rEpsilon = Simd::EPSILON ) const;
-        inline void Normalize( const SimdVector& rEpsilon = Simd::EPSILON );
+        inline QuatSoa GetNormalized( const Helium::SimdVector& rEpsilon = Helium::Simd::EPSILON ) const;
+        inline void Normalize( const Helium::SimdVector& rEpsilon = Helium::Simd::EPSILON );
 
         inline void GetInverse( QuatSoa& rQuat ) const;
         inline QuatSoa GetInverse() const;
@@ -83,8 +83,8 @@ namespace Lunar
 
         /// @name Comparison
         //@{
-        inline SimdMask Equals( const QuatSoa& rQuat, const SimdVector& rEpsilon = Simd::EPSILON ) const;
-        inline SimdMask NotEquals( const QuatSoa& rQuat, const SimdVector& rEpsilon = Simd::EPSILON ) const;
+        inline Helium::SimdMask Equals( const QuatSoa& rQuat, const Helium::SimdVector& rEpsilon = Helium::Simd::EPSILON ) const;
+        inline Helium::SimdMask NotEquals( const QuatSoa& rQuat, const Helium::SimdVector& rEpsilon = Helium::Simd::EPSILON ) const;
         //@}
 
         /// @name Overloaded Operators
@@ -97,17 +97,17 @@ namespace Lunar
         inline QuatSoa& operator-=( const QuatSoa& rQuat );
         inline QuatSoa& operator*=( const QuatSoa& rQuat );
 
-        inline SimdMask operator==( const QuatSoa& rQuat ) const;
-        inline SimdMask operator!=( const QuatSoa& rQuat ) const;
+        inline Helium::SimdMask operator==( const QuatSoa& rQuat ) const;
+        inline Helium::SimdMask operator!=( const QuatSoa& rQuat ) const;
         //@}
-    } L_SIMD_ALIGN_POST;
+    } HELIUM_SIMD_ALIGN_POST;
 }
 
 #include "Core/QuatSoa.inl"
 
-#if L_SIMD_LRBNI
+#if HELIUM_SIMD_LRBNI
 #include "Core/QuatSoaLrbni.inl"
-#elif L_SIMD_SSE
+#elif HELIUM_SIMD_SSE
 #include "Core/QuatSoaSse.inl"
 #endif
 

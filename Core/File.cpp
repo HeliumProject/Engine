@@ -34,7 +34,7 @@ namespace Lunar
     FileStream* File::Open( const tchar_t* pPath, uint32_t modeFlags, bool bTruncate )
     {
         FileStream* pStream = CreateStream();
-        L_ASSERT( pStream );
+        HELIUM_ASSERT( pStream );
         if( !pStream->Open( pPath, modeFlags, bTruncate ) )
         {
             delete pStream;
@@ -110,7 +110,7 @@ namespace Lunar
     /// @return  Identifier for the result of the directory creation attempt.
     File::EDirectoryCreateResult File::CreateDirectory( const tchar_t* pPath, bool bRecursive )
     {
-        L_ASSERT( pPath );
+        HELIUM_ASSERT( pPath );
 
         if( !bRecursive )
         {
@@ -124,7 +124,7 @@ namespace Lunar
         size_t pathBufferSize = sizeof( tchar_t ) * ( pathLength + 1 );
 
         tchar_t* pPathCopy = static_cast< tchar_t* >( rStackHeap.Allocate( pathBufferSize ) );
-        L_ASSERT( pPathCopy );
+        HELIUM_ASSERT( pPathCopy );
         MemoryCopy( pPathCopy, pPath, pathBufferSize );
 
         return CreateDirectoryRecursive( pPathCopy, pathLength );
@@ -140,7 +140,7 @@ namespace Lunar
     File::EDirectoryCreateResult File::CreateDirectory( const String& rPath, bool bRecursive )
     {
         const tchar_t* pPath = *rPath;
-        L_ASSERT( pPath );
+        HELIUM_ASSERT( pPath );
 
         if( !bRecursive )
         {
@@ -154,7 +154,7 @@ namespace Lunar
         size_t pathBufferSize = sizeof( tchar_t ) * ( pathLength + 1 );
 
         tchar_t* pPathCopy = static_cast< tchar_t* >( rStackHeap.Allocate( pathBufferSize ) );
-        L_ASSERT( pPathCopy );
+        HELIUM_ASSERT( pPathCopy );
         MemoryCopy( pPathCopy, pPath, pathBufferSize );
 
         return CreateDirectoryRecursive( pPathCopy, pathLength );
@@ -206,7 +206,7 @@ namespace Lunar
         if( terminateOffset != 0 )
         {
             tchar_t character = pPath[ terminateOffset ];
-            pPath[ terminateOffset ] = L_T( '\0' );
+            pPath[ terminateOffset ] = TXT( '\0' );
 
             EDirectoryCreateResult parentCreateResult = CreateDirectoryRecursive( pPath, terminateOffset );
 

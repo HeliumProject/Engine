@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-#if L_SIMD_SSE
+#if HELIUM_SIMD_SSE
 
 namespace Lunar
 {
@@ -14,7 +14,7 @@ namespace Lunar
     /// @param[in] rMatrix  Matrix from which to set this matrix.
     void Matrix44Soa::Splat( const Matrix44& rMatrix )
     {
-        SimdVector rowVec;
+        Helium::SimdVector rowVec;
 
 #define SPLAT_ROW( Z, N, DATA ) \
         rowVec = rMatrix.GetSimdVector( N ); \
@@ -29,4 +29,4 @@ namespace Lunar
     }
 }
 
-#endif  // L_SIMD_SSE
+#endif  // HELIUM_SIMD_SSE

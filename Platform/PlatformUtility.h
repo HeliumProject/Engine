@@ -8,9 +8,6 @@ namespace Helium
 {
     namespace Platform
     {
-        PLATFORM_API void Initialize();
-        PLATFORM_API void Cleanup();
-
         namespace Types
         {
             enum Type
@@ -44,6 +41,8 @@ namespace Helium
 
         PLATFORM_API Type GetType();
     }
+
+    PLATFORM_API void EnableCPPErrorHandling( bool enable );
 
     PLATFORM_API void Print(const tchar_t* fmt, ...);
     PLATFORM_API void Sleep(int millis);

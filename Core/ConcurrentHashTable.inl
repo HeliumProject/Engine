@@ -54,7 +54,7 @@ namespace Lunar
     {
         if( m_pTable )
         {
-            L_ASSERT( m_pTable->m_pBuckets );
+            HELIUM_ASSERT( m_pTable->m_pBuckets );
             m_pTable->m_pBuckets[ m_bucketIndex ].lock.UnlockRead();
             m_pTable = NULL;
             m_bucketIndex = 0;
@@ -71,8 +71,8 @@ namespace Lunar
     const Value& ConstConcurrentHashTableAccessor<
         Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator*() const
     {
-        L_ASSERT( m_pTable );
-        L_ASSERT( m_pTable->m_pBuckets );
+        HELIUM_ASSERT( m_pTable );
+        HELIUM_ASSERT( m_pTable->m_pBuckets );
 
         return m_pTable->m_pBuckets[ m_bucketIndex ].entries[ m_elementIndex ];
     }
@@ -86,8 +86,8 @@ namespace Lunar
     const Value* ConstConcurrentHashTableAccessor<
         Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator->() const
     {
-        L_ASSERT( m_pTable );
-        L_ASSERT( m_pTable->m_pBuckets );
+        HELIUM_ASSERT( m_pTable );
+        HELIUM_ASSERT( m_pTable->m_pBuckets );
 
         return &m_pTable->m_pBuckets[ m_bucketIndex ].entries[ m_elementIndex ];
     }
@@ -101,12 +101,12 @@ namespace Lunar
     ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >&
         ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator++()
     {
-        L_ASSERT( m_pTable );
+        HELIUM_ASSERT( m_pTable );
 
         ++m_elementIndex;
 
         TableType::Bucket* pBuckets = m_pTable->m_pBuckets;
-        L_ASSERT( pBuckets );
+        HELIUM_ASSERT( pBuckets );
 
         TableType::Bucket& rCurrentBucket = pBuckets[ m_bucketIndex ];
         if( m_elementIndex >= rCurrentBucket.entries.GetSize() )
@@ -146,7 +146,7 @@ namespace Lunar
     ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >&
         ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator--()
     {
-        L_ASSERT( m_pTable );
+        HELIUM_ASSERT( m_pTable );
 
         if( m_elementIndex > 0 )
         {
@@ -156,7 +156,7 @@ namespace Lunar
         }
 
         TableType::Bucket* pBuckets = m_pTable->m_pBuckets;
-        L_ASSERT( pBuckets );
+        HELIUM_ASSERT( pBuckets );
 
         size_t bucketIndex = m_bucketIndex;
         pBuckets[ bucketIndex ].lock.UnlockRead();
@@ -236,7 +236,7 @@ namespace Lunar
         size_t bucketIndex,
         size_t elementIndex )
     {
-        L_ASSERT( m_pTable == NULL );
+        HELIUM_ASSERT( m_pTable == NULL );
 
         m_pTable = pTable;
         m_bucketIndex = bucketIndex;
@@ -291,7 +291,7 @@ namespace Lunar
     {
         if( m_pTable )
         {
-            L_ASSERT( m_pTable->m_pBuckets );
+            HELIUM_ASSERT( m_pTable->m_pBuckets );
             m_pTable->m_pBuckets[ m_bucketIndex ].lock.UnlockWrite();
             m_pTable = NULL;
             m_bucketIndex = 0;
@@ -307,8 +307,8 @@ namespace Lunar
         typename Allocator >
     Value& ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator*() const
     {
-        L_ASSERT( m_pTable );
-        L_ASSERT( m_pTable->m_pBuckets );
+        HELIUM_ASSERT( m_pTable );
+        HELIUM_ASSERT( m_pTable->m_pBuckets );
 
         return m_pTable->m_pBuckets[ m_bucketIndex ].entries[ m_elementIndex ];
     }
@@ -321,8 +321,8 @@ namespace Lunar
         typename Allocator >
     Value* ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator->() const
     {
-        L_ASSERT( m_pTable );
-        L_ASSERT( m_pTable->m_pBuckets );
+        HELIUM_ASSERT( m_pTable );
+        HELIUM_ASSERT( m_pTable->m_pBuckets );
 
         return &m_pTable->m_pBuckets[ m_bucketIndex ].entries[ m_elementIndex ];
     }
@@ -336,12 +336,12 @@ namespace Lunar
     ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >&
         ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator++()
     {
-        L_ASSERT( m_pTable );
+        HELIUM_ASSERT( m_pTable );
 
         ++m_elementIndex;
 
         TableType::Bucket* pBuckets = m_pTable->m_pBuckets;
-        L_ASSERT( pBuckets );
+        HELIUM_ASSERT( pBuckets );
 
         TableType::Bucket& rCurrentBucket = pBuckets[ m_bucketIndex ];
         if( m_elementIndex >= rCurrentBucket.entries.GetSize() )
@@ -381,7 +381,7 @@ namespace Lunar
     ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >&
         ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator--()
     {
-        L_ASSERT( m_pTable );
+        HELIUM_ASSERT( m_pTable );
 
         if( m_elementIndex > 0 )
         {
@@ -391,7 +391,7 @@ namespace Lunar
         }
 
         TableType::Bucket* pBuckets = m_pTable->m_pBuckets;
-        L_ASSERT( pBuckets );
+        HELIUM_ASSERT( pBuckets );
 
         size_t bucketIndex = m_bucketIndex;
         pBuckets[ bucketIndex ].lock.UnlockWrite();
@@ -471,7 +471,7 @@ namespace Lunar
         size_t bucketIndex,
         size_t elementIndex )
     {
-        L_ASSERT( m_pTable == NULL );
+        HELIUM_ASSERT( m_pTable == NULL );
 
         m_pTable = pTable;
         m_bucketIndex = bucketIndex;
@@ -639,7 +639,7 @@ namespace Lunar
         }
 
         // Search through the table for the first element.
-        L_ASSERT( m_pBuckets );
+        HELIUM_ASSERT( m_pBuckets );
         size_t bucketCount = m_bucketCount;
         for( size_t bucketIndex = 0; bucketIndex < bucketCount; ++bucketIndex )
         {
@@ -684,7 +684,7 @@ namespace Lunar
         }
 
         // Search through the table for the first element.
-        L_ASSERT( m_pBuckets );
+        HELIUM_ASSERT( m_pBuckets );
         size_t bucketCount = m_bucketCount;
         for( size_t bucketIndex = 0; bucketIndex < bucketCount; ++bucketIndex )
         {
@@ -728,7 +728,7 @@ namespace Lunar
         }
 
         // Search through the table for the last element.
-        L_ASSERT( m_pBuckets );
+        HELIUM_ASSERT( m_pBuckets );
         size_t bucketCount = m_bucketCount;
         while( bucketCount != 0 )
         {
@@ -776,7 +776,7 @@ namespace Lunar
         }
 
         // Search through the table for the last element.
-        L_ASSERT( m_pBuckets );
+        HELIUM_ASSERT( m_pBuckets );
         size_t bucketCount = m_bucketCount;
         while( bucketCount != 0 )
         {
@@ -817,7 +817,7 @@ namespace Lunar
 
         size_t bucketIndex = ( m_hasher( rKey ) % m_bucketCount );
 
-        L_ASSERT( m_pBuckets );
+        HELIUM_ASSERT( m_pBuckets );
         Bucket& rBucket = m_pBuckets[ bucketIndex ];
         rBucket.lock.LockWrite();
 
@@ -857,7 +857,7 @@ namespace Lunar
 
         size_t bucketIndex = ( m_hasher( rKey ) % m_bucketCount );
 
-        L_ASSERT( m_pBuckets );
+        HELIUM_ASSERT( m_pBuckets );
         Bucket& rBucket = m_pBuckets[ bucketIndex ];
         rBucket.lock.LockRead();
 
@@ -900,7 +900,7 @@ namespace Lunar
         const Key& rKey = m_extractKey( rValue );
         size_t bucketIndex = m_hasher( rKey ) % m_bucketCount;
 
-        L_ASSERT( m_pBuckets );
+        HELIUM_ASSERT( m_pBuckets );
         Bucket& rBucket = m_pBuckets[ bucketIndex ];
         rBucket.lock.LockRead();
 
@@ -951,7 +951,7 @@ namespace Lunar
                 // Entry still doesn't exist, so add a new entry.  Again, we can't set the accessor to it yet since we
                 // still need to switch back to a read-only lock.
                 rEntries.Add( rValue );
-                L_ASSERT( entryIndex == entryCount );
+                HELIUM_ASSERT( entryIndex == entryCount );
 
                 AtomicIncrementRelease( m_size );
 
@@ -994,7 +994,7 @@ namespace Lunar
         const Key& rKey = m_extractKey( rValue );
         size_t bucketIndex = m_hasher( rKey ) % m_bucketCount;
 
-        L_ASSERT( m_pBuckets );
+        HELIUM_ASSERT( m_pBuckets );
         Bucket& rBucket = m_pBuckets[ bucketIndex ];
         rBucket.lock.LockWrite();
 
@@ -1033,7 +1033,7 @@ namespace Lunar
         // Acquire a read-write lock on the target bucket.
         size_t bucketIndex = m_hasher( rKey ) % m_bucketCount;
 
-        L_ASSERT( m_pBuckets );
+        HELIUM_ASSERT( m_pBuckets );
         Bucket& rBucket = m_pBuckets[ bucketIndex ];
         rBucket.lock.LockWrite();
 
@@ -1072,17 +1072,17 @@ namespace Lunar
     bool ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::Remove( Accessor& rAccessor )
     {
         // Accessor must reference this table.
-        L_ASSERT( rAccessor.m_pTable == this );
+        HELIUM_ASSERT( rAccessor.m_pTable == this );
         if( rAccessor.m_pTable != this )
         {
             return false;
         }
 
         // Lock already exists, so just remove the entry.
-        L_ASSERT( m_pBuckets );
+        HELIUM_ASSERT( m_pBuckets );
         Bucket& rBucket = m_pBuckets[ rAccessor.m_bucketIndex ];
 
-        L_ASSERT( rAccessor.m_elementIndex < rBucket.entries.GetSize() );
+        HELIUM_ASSERT( rAccessor.m_elementIndex < rBucket.entries.GetSize() );
         rBucket.entries.RemoveSwap( rAccessor.m_elementIndex );
         AtomicIncrementRelease( rBucket.tag );
         AtomicDecrementRelease( m_size );
@@ -1123,10 +1123,10 @@ namespace Lunar
         size_t bucketCount = m_bucketCount;
 
         void* pBuffer = m_allocator.Allocate( sizeof( Bucket ) * bucketCount );
-        L_ASSERT( pBuffer );
+        HELIUM_ASSERT( pBuffer );
 
         Bucket* pBuckets = ArrayInPlaceConstruct< Bucket >( pBuffer, bucketCount );
-        L_ASSERT( pBuckets == pBuffer );
+        HELIUM_ASSERT( pBuckets == pBuffer );
         for( size_t bucketIndex = 0; bucketIndex < bucketCount; ++bucketIndex )
         {
             pBuckets[ bucketIndex ].tag = 0;

@@ -248,7 +248,7 @@ void Provider::RunCommand( Command* command )
 
     if ( command->m_ErrorCount )
     {
-        HELIUM_ASSERT_MSG( !command->m_ErrorString.empty(), ("No error string was captured from a failed perforce command, this indicates a command object is not properly interpreting the server's output") );
+        HELIUM_ASSERT_MSG( !command->m_ErrorString.empty(), TXT("No error string was captured from a failed perforce command, this indicates a command object is not properly interpreting the server's output") );
         throw Perforce::Exception( TXT( "%d error%s for command '%s':\n%s" ), command->m_ErrorCount, command->m_ErrorCount > 1 ? "s" : "", command->AsString().c_str(), command->m_ErrorString.c_str() );
     }
 }

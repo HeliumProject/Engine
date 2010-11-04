@@ -24,10 +24,10 @@ namespace Lunar
     {
         // Allocate the initial block.
         AllocateBlock();
-        L_ASSERT( m_ppFreeObjects );
-        L_ASSERT( m_freeObjectCount == m_blockSize );
-        L_ASSERT( m_pHeadBlock );
-        L_ASSERT( m_allocatedBlockCount == 1 );
+        HELIUM_ASSERT( m_ppFreeObjects );
+        HELIUM_ASSERT( m_freeObjectCount == m_blockSize );
+        HELIUM_ASSERT( m_pHeadBlock );
+        HELIUM_ASSERT( m_allocatedBlockCount == 1 );
     }
 
     /// Destructor.
@@ -76,7 +76,7 @@ namespace Lunar
                 --freeObjectCount;
 
                 T* pObject = m_ppFreeObjects[ freeObjectCount ];
-                L_ASSERT( pObject );
+                HELIUM_ASSERT( pObject );
 
                 m_freeObjectCount = freeObjectCount;
 
@@ -96,7 +96,7 @@ namespace Lunar
             --freeObjectCount;
 
             T* pObject = m_ppFreeObjects[ freeObjectCount ];
-            L_ASSERT( pObject );
+            HELIUM_ASSERT( pObject );
 
             m_freeObjectCount = freeObjectCount;
 
@@ -113,11 +113,11 @@ namespace Lunar
         AllocateBlock();
 
         freeObjectCount = m_freeObjectCount;
-        L_ASSERT( freeObjectCount != 0 );
+        HELIUM_ASSERT( freeObjectCount != 0 );
         --freeObjectCount;
 
         T* pObject = m_ppFreeObjects[ freeObjectCount ];
-        L_ASSERT( pObject );
+        HELIUM_ASSERT( pObject );
 
         m_freeObjectCount = freeObjectCount;
 
@@ -132,7 +132,7 @@ namespace Lunar
     template< typename T, typename Allocator >
     void ObjectPool< T, Allocator >::Release( T* pObject )
     {
-        L_ASSERT( pObject );
+        HELIUM_ASSERT( pObject );
 
         // Acquire a reader lock on the pool to synchronize block allocations.
         ScopeReadLock readLock( m_poolBlockAllocationLock );
@@ -143,11 +143,11 @@ namespace Lunar
         // Release the object to the pool.
         size_t freeObjectCount = m_freeObjectCount;
 
-        L_ASSERT( m_ppFreeObjects );
+        HELIUM_ASSERT( m_ppFreeObjects );
         m_ppFreeObjects[ freeObjectCount ] = pObject;
         ++freeObjectCount;
 
-        L_ASSERT( freeObjectCount <= m_blockSize * m_allocatedBlockCount );
+        HELIUM_ASSERT( freeObjectCount <= m_blockSize * m_allocatedBlockCount );
 
         m_freeObjectCount = freeObjectCount;
     }
@@ -162,7 +162,7 @@ namespace Lunar
     template< typename T, typename Allocator >
     size_t ObjectPool< T, Allocator >::GetIndex( T* pObject ) const
     {
-        L_ASSERT( pObject );
+        HELIUM_ASSERT( pObject );
 
         size_t blockSize = m_blockSize;
 
@@ -172,7 +172,7 @@ namespace Lunar
         for( Block* pBlock = m_pHeadBlock; pBlock != NULL; pBlock = pBlock->pNext )
         {
             T* pBlockObjects = pBlock->pObjects;
-            L_ASSERT( pBlockObjects );
+            HELIUM_ASSERT( pBlockObjects );
 
             if( pObject >= pBlockObjects && pObject < pBlockObjects + blockSize )
             {
@@ -196,7 +196,7 @@ namespace Lunar
     template< typename T, typename Allocator >
     T* ObjectPool< T, Allocator >::GetObject( size_t index ) const
     {
-        L_ASSERT( IsValid( index ) );
+        HELIUM_ASSERT( IsValid( index ) );
 
         size_t blockSize = m_blockSize;
 
@@ -206,7 +206,7 @@ namespace Lunar
         {
             if( index < blockSize )
             {
-                L_ASSERT( pBlock->pObjects );
+                HELIUM_ASSERT( pBlock->pObjects );
 
                 return pBlock->pObjects + index;
             }
@@ -225,7 +225,7 @@ namespace Lunar
 
         // Update the allocated block count.
         size_t allocatedBlockCount = m_allocatedBlockCount;
-        L_ASSERT( allocatedBlockCount != m_blockCountMax );
+        HELIUM_ASSERT( allocatedBlockCount != m_blockCountMax );
         ++allocatedBlockCount;
         m_allocatedBlockCount = allocatedBlockCount;
 
@@ -236,10 +236,10 @@ namespace Lunar
         size_t alignedBufferSize = Align( sizeof( T ) * blockSize, alignment );
 
         void* pBuffer = allocator.AllocateAligned( alignment, alignedBufferSize + sizeof( Block ) );
-        L_ASSERT( pBuffer );
+        HELIUM_ASSERT( pBuffer );
 
         T* pObjects = ArrayInPlaceConstruct< T >( pBuffer, blockSize );
-        L_ASSERT( pObjects );
+        HELIUM_ASSERT( pObjects );
 
         Block* pBlock = reinterpret_cast< Block* >( static_cast< uint8_t* >( pBuffer ) + alignedBufferSize );
         pBlock->pObjects = pObjects;
@@ -252,12 +252,12 @@ namespace Lunar
         ppFreeObjects = static_cast< T* volatile * >( allocator.Reallocate(
             const_cast< T** >( m_ppFreeObjects ),
             sizeof( T* ) * allocatedBlockCount * blockSize ) );
-        L_ASSERT( ppFreeObjects );
+        HELIUM_ASSERT( ppFreeObjects );
 
         m_ppFreeObjects = ppFreeObjects;
 
         // Add the new block of objects to the free list.
-        L_ASSERT( m_freeObjectCount == 0 );
+        HELIUM_ASSERT( m_freeObjectCount == 0 );
         m_freeObjectCount = blockSize;
 
         for( size_t objectIndex = 0; objectIndex < blockSize; ++objectIndex )

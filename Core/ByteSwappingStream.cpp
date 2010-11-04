@@ -58,13 +58,13 @@ namespace Lunar
     /// @copydoc Stream::Read()
     size_t ByteSwappingStream::Read( void* pBuffer, size_t size, size_t count )
     {
-        L_ASSERT( CanRead() );
+        HELIUM_ASSERT( CanRead() );
         if( !CanRead() || count == 0 )
         {
             return 0;
         }
 
-        L_ASSERT( m_pStream );
+        HELIUM_ASSERT( m_pStream );
 
         // Reduce the number of individual calls to Stream::Read() if reading only single-byte values.
         if( size == 1 )
@@ -92,13 +92,13 @@ namespace Lunar
     /// @copydoc Stream::Write()
     size_t ByteSwappingStream::Write( const void* pBuffer, size_t size, size_t count )
     {
-        L_ASSERT( CanWrite() );
+        HELIUM_ASSERT( CanWrite() );
         if( !CanWrite() || count == 0 )
         {
             return 0;
         }
 
-        L_ASSERT( m_pStream );
+        HELIUM_ASSERT( m_pStream );
 
         // Reduce the number of individual calls to Stream::Write() if writing only single-byte values.
         if( size == 1 )
@@ -138,13 +138,13 @@ namespace Lunar
     /// @copydoc Stream::Seek()
     int64_t ByteSwappingStream::Seek( int64_t offset, ESeekOrigin origin )
     {
-        L_ASSERT( CanSeek() );
+        HELIUM_ASSERT( CanSeek() );
         if( !CanSeek() )
         {
             return -1;
         }
 
-        L_ASSERT( m_pStream );
+        HELIUM_ASSERT( m_pStream );
         int64_t newOffset = m_pStream->Seek( offset, origin );
 
         return newOffset;

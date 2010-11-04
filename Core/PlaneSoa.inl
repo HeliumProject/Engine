@@ -26,7 +26,7 @@ namespace Lunar
     ///                normals).
     /// @param[in] rD  Plane equation constants (also the negative distances of each plane from the origin along the
     ///                directions of their normals).
-    PlaneSoa::PlaneSoa( const SimdVector& rA, const SimdVector& rB, const SimdVector& rC, const SimdVector& rD )
+    PlaneSoa::PlaneSoa( const Helium::SimdVector& rA, const Helium::SimdVector& rB, const Helium::SimdVector& rC, const Helium::SimdVector& rD )
         : m_a( rA )
         , m_b( rB )
         , m_c( rC )
@@ -56,7 +56,7 @@ namespace Lunar
     /// @param[in] rNormal    Plane normals.
     /// @param[in] rDistance  Distances of each plane from the origin along the plane normals, scaled by the magnitudes
     ///                       of each normal.
-    PlaneSoa::PlaneSoa( const Vector3Soa& rNormal, const SimdVector& rDistance )
+    PlaneSoa::PlaneSoa( const Vector3Soa& rNormal, const Helium::SimdVector& rDistance )
     {
         Set( rNormal, rDistance );
     }
@@ -110,10 +110,10 @@ namespace Lunar
     /// @param[in] pD  D components (must be SIMD aligned).
     void PlaneSoa::Load( const float32_t* pA, const float32_t* pB, const float32_t* pC, const float32_t* pD )
     {
-        m_a = Simd::LoadAligned( pA );
-        m_b = Simd::LoadAligned( pB );
-        m_c = Simd::LoadAligned( pC );
-        m_d = Simd::LoadAligned( pD );
+        m_a = Helium::Simd::LoadAligned( pA );
+        m_b = Helium::Simd::LoadAligned( pB );
+        m_c = Helium::Simd::LoadAligned( pC );
+        m_d = Helium::Simd::LoadAligned( pD );
     }
 
     /// Load 4 single-precision floating-point values for each plane component, splatting the values to fill.
@@ -127,10 +127,10 @@ namespace Lunar
     /// @param[in] pD  D components (must be aligned to a 16-byte boundary).
     void PlaneSoa::Load4Splat( const float32_t* pA, const float32_t* pB, const float32_t* pC, const float32_t* pD )
     {
-        m_a = Simd::LoadSplat128( pA );
-        m_b = Simd::LoadSplat128( pB );
-        m_c = Simd::LoadSplat128( pC );
-        m_d = Simd::LoadSplat128( pD );
+        m_a = Helium::Simd::LoadSplat128( pA );
+        m_b = Helium::Simd::LoadSplat128( pB );
+        m_c = Helium::Simd::LoadSplat128( pC );
+        m_d = Helium::Simd::LoadSplat128( pD );
     }
 
     /// Load 1 single-precision floating-point value for each plane component, splatting the value to fill.
@@ -141,10 +141,10 @@ namespace Lunar
     /// @param[in] pD  D components (must be aligned to a 4-byte boundary).
     void PlaneSoa::Load1Splat( const float32_t* pA, const float32_t* pB, const float32_t* pC, const float32_t* pD )
     {
-        m_a = Simd::LoadSplat32( pA );
-        m_b = Simd::LoadSplat32( pB );
-        m_c = Simd::LoadSplat32( pC );
-        m_d = Simd::LoadSplat32( pD );
+        m_a = Helium::Simd::LoadSplat32( pA );
+        m_b = Helium::Simd::LoadSplat32( pB );
+        m_c = Helium::Simd::LoadSplat32( pC );
+        m_d = Helium::Simd::LoadSplat32( pD );
     }
 
     /// Fully store the SIMD vectors from each vector component into memory.
@@ -155,10 +155,10 @@ namespace Lunar
     /// @param[out] pD  D components (must be SIMD aligned).
     void PlaneSoa::Store( float32_t* pA, float32_t* pB, float32_t* pC, float32_t* pD ) const
     {
-        Simd::StoreAligned( pA, m_a );
-        Simd::StoreAligned( pB, m_b );
-        Simd::StoreAligned( pC, m_c );
-        Simd::StoreAligned( pD, m_d );
+        Helium::Simd::StoreAligned( pA, m_a );
+        Helium::Simd::StoreAligned( pB, m_b );
+        Helium::Simd::StoreAligned( pC, m_c );
+        Helium::Simd::StoreAligned( pD, m_d );
     }
 
     /// Store the lowest 4 single-precision floating-point values from each plane component into memory.
@@ -172,10 +172,10 @@ namespace Lunar
     /// @param[out] pD  D components (must be aligned to a 16-byte boundary).
     void PlaneSoa::Store4( float32_t* pA, float32_t* pB, float32_t* pC, float32_t* pD ) const
     {
-        Simd::Store128( pA, m_a );
-        Simd::Store128( pB, m_b );
-        Simd::Store128( pC, m_c );
-        Simd::Store128( pD, m_d );
+        Helium::Simd::Store128( pA, m_a );
+        Helium::Simd::Store128( pB, m_b );
+        Helium::Simd::Store128( pC, m_c );
+        Helium::Simd::Store128( pD, m_d );
     }
 
     /// Store the lowest single-precision floating-point value from each vector component into memory.
@@ -186,10 +186,10 @@ namespace Lunar
     /// @param[out] pD  D components (must be aligned to a 4-byte boundary).
     void PlaneSoa::Store1( float32_t* pA, float32_t* pB, float32_t* pC, float32_t* pD ) const
     {
-        Simd::Store32( pA, m_a );
-        Simd::Store32( pB, m_b );
-        Simd::Store32( pC, m_c );
-        Simd::Store32( pD, m_d );
+        Helium::Simd::Store32( pA, m_a );
+        Helium::Simd::Store32( pB, m_b );
+        Helium::Simd::Store32( pC, m_c );
+        Helium::Simd::Store32( pD, m_d );
     }
 
     /// Set this plane set based on a set of vectors normal to each plane and the distances of each plane from the
@@ -198,15 +198,15 @@ namespace Lunar
     /// @param[in] rNormal    Plane normals.
     /// @param[in] rDistance  Distances of each plane from the origin along the plane normals, scaled by the magnitudes
     ///                       of each normal.
-    void PlaneSoa::Set( const Vector3Soa& rNormal, const SimdVector& rDistance )
+    void PlaneSoa::Set( const Vector3Soa& rNormal, const Helium::SimdVector& rDistance )
     {
-        SimdVector signFlip = Simd::SetSplatU32( 0x80000000 );
+        Helium::SimdVector signFlip = Helium::Simd::SetSplatU32( 0x80000000 );
 
         m_a = rNormal.m_x;
         m_b = rNormal.m_y;
         m_c = rNormal.m_z;
 
-        m_d = Simd::Xor( rDistance, signFlip );
+        m_d = Helium::Simd::Xor( rDistance, signFlip );
     }
 
     /// Constructor.
@@ -231,7 +231,7 @@ namespace Lunar
         normal.CrossSet( toPoint1, toPoint2 );
         normal.Normalize();
 
-        SimdVector normalDotPoint = normal.Dot( rPoint0 );
+        Helium::SimdVector normalDotPoint = normal.Dot( rPoint0 );
 
         Set( normal, normalDotPoint );
     }
@@ -247,20 +247,20 @@ namespace Lunar
     /// @return  Distances of each point from each plane, scaled by the magnitudes of each plane normal.
     ///
     /// @see GetNormalized(), Normalize()
-    SimdVector PlaneSoa::GetDistance( const Vector3Soa& rPoint ) const
+    Helium::SimdVector PlaneSoa::GetDistance( const Vector3Soa& rPoint ) const
     {
-#if L_SIMD_BUILTIN_MULTIPLY_ADD
-        SimdVector distance = Simd::MultiplyAddF32( m_a, rPoint.m_x, m_d );
-        distance = Simd::MultiplyAddF32( m_b, rPoint.m_y, distance );
-        distance = Simd::MultiplyAddF32( m_c, rPoint.m_z, distance );
+#if HELIUM_SIMD_BUILTIN_MULTIPLY_ADD
+        Helium::SimdVector distance = Helium::Simd::MultiplyAddF32( m_a, rPoint.m_x, m_d );
+        distance = Helium::Simd::MultiplyAddF32( m_b, rPoint.m_y, distance );
+        distance = Helium::Simd::MultiplyAddF32( m_c, rPoint.m_z, distance );
 #else
-        SimdVector normalPointX = Simd::MultiplyF32( m_a, rPoint.m_x );
-        SimdVector normalPointY = Simd::MultiplyF32( m_b, rPoint.m_y );
-        SimdVector normalPointZ = Simd::MultiplyF32( m_c, rPoint.m_z );
+        Helium::SimdVector normalPointX = Helium::Simd::MultiplyF32( m_a, rPoint.m_x );
+        Helium::SimdVector normalPointY = Helium::Simd::MultiplyF32( m_b, rPoint.m_y );
+        Helium::SimdVector normalPointZ = Helium::Simd::MultiplyF32( m_c, rPoint.m_z );
 
-        SimdVector distance = Simd::AddF32( normalPointX, normalPointY );
-        distance = Simd::AddF32( normalPointZ, distance );
-        distance = Simd::AddF32( m_d, distance );
+        Helium::SimdVector distance = Helium::Simd::AddF32( normalPointX, normalPointY );
+        distance = Helium::Simd::AddF32( normalPointZ, distance );
+        distance = Helium::Simd::AddF32( m_d, distance );
 #endif
 
         return distance;
@@ -277,7 +277,7 @@ namespace Lunar
     /// @return  Normalized copy of this plane set.
     ///
     /// @see Normalize()
-    PlaneSoa PlaneSoa::GetNormalized( const SimdVector& rEpsilon ) const
+    PlaneSoa PlaneSoa::GetNormalized( const Helium::SimdVector& rEpsilon ) const
     {
         PlaneSoa result = *this;
         result.Normalize( rEpsilon );
@@ -293,37 +293,37 @@ namespace Lunar
     /// @param[in] rEpsilon  Thresholds at which to test for zero-length plane normals.
     ///
     /// @see GetNormalized()
-    void PlaneSoa::Normalize( const SimdVector& rEpsilon )
+    void PlaneSoa::Normalize( const Helium::SimdVector& rEpsilon )
     {
-        SimdVector epsilonSquared = Simd::MultiplyF32( rEpsilon, rEpsilon );
+        Helium::SimdVector epsilonSquared = Helium::Simd::MultiplyF32( rEpsilon, rEpsilon );
 
-        SimdVector magnitudeSquared = Simd::MultiplyF32( m_a, m_a );
-#if L_SIMD_BUILTIN_MULTIPLY_ADD
-        magnitudeSquared = Simd::MultiplyAddF32( m_b, m_b, magnitudeSquared );
-        magnitudeSquared = Simd::MultiplyAddF32( m_c, m_c, magnitudeSquared );
+        Helium::SimdVector magnitudeSquared = Helium::Simd::MultiplyF32( m_a, m_a );
+#if HELIUM_SIMD_BUILTIN_MULTIPLY_ADD
+        magnitudeSquared = Helium::Simd::MultiplyAddF32( m_b, m_b, magnitudeSquared );
+        magnitudeSquared = Helium::Simd::MultiplyAddF32( m_c, m_c, magnitudeSquared );
 #else
-        SimdVector bSquared = Simd::MultiplyF32( m_b, m_b );
-        SimdVector cSquared = Simd::MultiplyF32( m_c, m_c );
+        Helium::SimdVector bSquared = Helium::Simd::MultiplyF32( m_b, m_b );
+        Helium::SimdVector cSquared = Helium::Simd::MultiplyF32( m_c, m_c );
 
-        magnitudeSquared = Simd::AddF32( magnitudeSquared, bSquared );
-        magnitudeSquared = Simd::AddF32( magnitudeSquared, cSquared );
+        magnitudeSquared = Helium::Simd::AddF32( magnitudeSquared, bSquared );
+        magnitudeSquared = Helium::Simd::AddF32( magnitudeSquared, cSquared );
 #endif
 
-        SimdMask thresholdMask = Simd::GreaterEqualsF32( magnitudeSquared, epsilonSquared );
+        Helium::SimdMask thresholdMask = Helium::Simd::GreaterEqualsF32( magnitudeSquared, epsilonSquared );
 
-        SimdVector invMagnitude = Simd::InverseSqrtF32( magnitudeSquared );
+        Helium::SimdVector invMagnitude = Helium::Simd::InverseSqrtF32( magnitudeSquared );
 
-        SimdVector normalizedA = Simd::MultiplyF32( m_a, invMagnitude );
-        SimdVector normalizedB = Simd::MultiplyF32( m_b, invMagnitude );
-        SimdVector normalizedC = Simd::MultiplyF32( m_c, invMagnitude );
-        SimdVector normalizedD = Simd::MultiplyF32( m_d, invMagnitude );
+        Helium::SimdVector normalizedA = Helium::Simd::MultiplyF32( m_a, invMagnitude );
+        Helium::SimdVector normalizedB = Helium::Simd::MultiplyF32( m_b, invMagnitude );
+        Helium::SimdVector normalizedC = Helium::Simd::MultiplyF32( m_c, invMagnitude );
+        Helium::SimdVector normalizedD = Helium::Simd::MultiplyF32( m_d, invMagnitude );
 
-        SimdVector oneVec = Simd::SetSplatF32( 1.0f );
+        Helium::SimdVector oneVec = Helium::Simd::SetSplatF32( 1.0f );
 
-        m_a = Simd::Select( oneVec, normalizedA, thresholdMask );
-        m_b = Simd::And( normalizedB, thresholdMask );
-        m_c = Simd::And( normalizedC, thresholdMask );
-        m_d = Simd::And( normalizedD, thresholdMask );
+        m_a = Helium::Simd::Select( oneVec, normalizedA, thresholdMask );
+        m_b = Helium::Simd::And( normalizedB, thresholdMask );
+        m_c = Helium::Simd::And( normalizedC, thresholdMask );
+        m_d = Helium::Simd::And( normalizedD, thresholdMask );
     }
 
     /// Test whether each component in this plane is equal to the corresponding component in another plane within a
@@ -333,27 +333,27 @@ namespace Lunar
     /// @param[in] rEpsilon  Comparison threshold.
     ///
     /// @return  SIMD mask with bits set for planes that are equal within the given threshold.
-    SimdMask PlaneSoa::Equals( const PlaneSoa& rPlane, const SimdVector& rEpsilon ) const
+    Helium::SimdMask PlaneSoa::Equals( const PlaneSoa& rPlane, const Helium::SimdVector& rEpsilon ) const
     {
-        SimdVector absMask = Simd::SetSplatU32( 0x7fffffff );
+        Helium::SimdVector absMask = Helium::Simd::SetSplatU32( 0x7fffffff );
 
-        SimdVector differenceA = Simd::SubtractF32( m_a, rPlane.m_a );
-        SimdVector differenceB = Simd::SubtractF32( m_b, rPlane.m_b );
-        SimdVector differenceC = Simd::SubtractF32( m_c, rPlane.m_c );
-        SimdVector differenceD = Simd::SubtractF32( m_d, rPlane.m_d );
+        Helium::SimdVector differenceA = Helium::Simd::SubtractF32( m_a, rPlane.m_a );
+        Helium::SimdVector differenceB = Helium::Simd::SubtractF32( m_b, rPlane.m_b );
+        Helium::SimdVector differenceC = Helium::Simd::SubtractF32( m_c, rPlane.m_c );
+        Helium::SimdVector differenceD = Helium::Simd::SubtractF32( m_d, rPlane.m_d );
 
-        differenceA = Simd::And( differenceA, absMask );
-        differenceB = Simd::And( differenceB, absMask );
-        differenceC = Simd::And( differenceC, absMask );
-        differenceD = Simd::And( differenceD, absMask );
+        differenceA = Helium::Simd::And( differenceA, absMask );
+        differenceB = Helium::Simd::And( differenceB, absMask );
+        differenceC = Helium::Simd::And( differenceC, absMask );
+        differenceD = Helium::Simd::And( differenceD, absMask );
 
-        SimdMask thresholdMaskA = Simd::LessEqualsF32( differenceA, rEpsilon );
-        SimdMask thresholdMaskB = Simd::LessEqualsF32( differenceB, rEpsilon );
-        SimdMask thresholdMaskC = Simd::LessEqualsF32( differenceC, rEpsilon );
-        SimdMask thresholdMaskD = Simd::LessEqualsF32( differenceD, rEpsilon );
+        Helium::SimdMask thresholdMaskA = Helium::Simd::LessEqualsF32( differenceA, rEpsilon );
+        Helium::SimdMask thresholdMaskB = Helium::Simd::LessEqualsF32( differenceB, rEpsilon );
+        Helium::SimdMask thresholdMaskC = Helium::Simd::LessEqualsF32( differenceC, rEpsilon );
+        Helium::SimdMask thresholdMaskD = Helium::Simd::LessEqualsF32( differenceD, rEpsilon );
 
-        return Simd::MaskAnd(
-            Simd::MaskAnd( Simd::MaskAnd( thresholdMaskA, thresholdMaskB ), thresholdMaskC ),
+        return Helium::Simd::MaskAnd(
+            Helium::Simd::MaskAnd( Helium::Simd::MaskAnd( thresholdMaskA, thresholdMaskB ), thresholdMaskC ),
             thresholdMaskD );
     }
 
@@ -364,27 +364,27 @@ namespace Lunar
     /// @param[in] rEpsilon  Comparison threshold.
     ///
     /// @return  SIMD mask with bits set for planes that are not equal within the given threshold.
-    SimdMask PlaneSoa::NotEquals( const PlaneSoa& rPlane, const SimdVector& rEpsilon ) const
+    Helium::SimdMask PlaneSoa::NotEquals( const PlaneSoa& rPlane, const Helium::SimdVector& rEpsilon ) const
     {
-        SimdVector absMask = Simd::SetSplatU32( 0x7fffffff );
+        Helium::SimdVector absMask = Helium::Simd::SetSplatU32( 0x7fffffff );
 
-        SimdVector differenceA = Simd::SubtractF32( m_a, rPlane.m_a );
-        SimdVector differenceB = Simd::SubtractF32( m_b, rPlane.m_b );
-        SimdVector differenceC = Simd::SubtractF32( m_c, rPlane.m_c );
-        SimdVector differenceD = Simd::SubtractF32( m_d, rPlane.m_d );
+        Helium::SimdVector differenceA = Helium::Simd::SubtractF32( m_a, rPlane.m_a );
+        Helium::SimdVector differenceB = Helium::Simd::SubtractF32( m_b, rPlane.m_b );
+        Helium::SimdVector differenceC = Helium::Simd::SubtractF32( m_c, rPlane.m_c );
+        Helium::SimdVector differenceD = Helium::Simd::SubtractF32( m_d, rPlane.m_d );
 
-        differenceA = Simd::And( differenceA, absMask );
-        differenceB = Simd::And( differenceB, absMask );
-        differenceC = Simd::And( differenceC, absMask );
-        differenceD = Simd::And( differenceD, absMask );
+        differenceA = Helium::Simd::And( differenceA, absMask );
+        differenceB = Helium::Simd::And( differenceB, absMask );
+        differenceC = Helium::Simd::And( differenceC, absMask );
+        differenceD = Helium::Simd::And( differenceD, absMask );
 
-        SimdMask thresholdMaskA = Simd::GreaterF32( differenceA, rEpsilon );
-        SimdMask thresholdMaskB = Simd::GreaterF32( differenceB, rEpsilon );
-        SimdMask thresholdMaskC = Simd::GreaterF32( differenceC, rEpsilon );
-        SimdMask thresholdMaskD = Simd::GreaterF32( differenceD, rEpsilon );
+        Helium::SimdMask thresholdMaskA = Helium::Simd::GreaterF32( differenceA, rEpsilon );
+        Helium::SimdMask thresholdMaskB = Helium::Simd::GreaterF32( differenceB, rEpsilon );
+        Helium::SimdMask thresholdMaskC = Helium::Simd::GreaterF32( differenceC, rEpsilon );
+        Helium::SimdMask thresholdMaskD = Helium::Simd::GreaterF32( differenceD, rEpsilon );
 
-        return Simd::MaskOr(
-            Simd::MaskOr( Simd::MaskOr( thresholdMaskA, thresholdMaskB ), thresholdMaskC ),
+        return Helium::Simd::MaskOr(
+            Helium::Simd::MaskOr( Helium::Simd::MaskOr( thresholdMaskA, thresholdMaskB ), thresholdMaskC ),
             thresholdMaskD );
     }
 
@@ -394,7 +394,7 @@ namespace Lunar
     /// @param[in] rPlane  Plane.
     ///
     /// @return  SIMD mask with bits set for planes that are equal within the given threshold.
-    SimdMask PlaneSoa::operator==( const PlaneSoa& rPlane ) const
+    Helium::SimdMask PlaneSoa::operator==( const PlaneSoa& rPlane ) const
     {
         return Equals( rPlane );
     }
@@ -405,7 +405,7 @@ namespace Lunar
     /// @param[in] rPlane  Plane.
     ///
     /// @return  SIMD mask with bits set for planes that are not equal within the given threshold.
-    SimdMask PlaneSoa::operator!=( const PlaneSoa& rPlane ) const
+    Helium::SimdMask PlaneSoa::operator!=( const PlaneSoa& rPlane ) const
     {
         return NotEquals( rPlane );
     }

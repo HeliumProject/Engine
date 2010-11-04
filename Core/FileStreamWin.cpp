@@ -7,11 +7,11 @@
 
 #include "CorePch.h"
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 
 #include "Core/FileStreamWin.h"
 
-#if L_UNICODE
+#if HELIUM_UNICODE
 #define _CREATE_FILE CreateFileW
 #else
 #define _CREATE_FILE CreateFileA
@@ -50,25 +50,25 @@ namespace Lunar
     /// @copydoc Stream::Read()
     size_t FileStreamWin::Read( void* pBuffer, size_t size, size_t count )
     {
-        L_ASSERT_MESSAGE( m_hFile != INVALID_HANDLE_VALUE, L_T( "File not open" ) );
-        L_ASSERT_MESSAGE( m_modeFlags & MODE_READ, L_T( "File not open for reading" ) );
+        HELIUM_ASSERT_MSG( m_hFile != INVALID_HANDLE_VALUE, TXT( "File not open" ) );
+        HELIUM_ASSERT_MSG( m_modeFlags & MODE_READ, TXT( "File not open for reading" ) );
         if( m_hFile == INVALID_HANDLE_VALUE || !( m_modeFlags & MODE_READ ) )
         {
             return 0;
         }
 
         size_t byteCount = size * count;
-        L_ASSERT_MESSAGE( byteCount <= MAXDWORD, L_T( "File read operations are limited to DWORD sizes" ) );
+        HELIUM_ASSERT_MSG( byteCount <= MAXDWORD, TXT( "File read operations are limited to DWORD sizes" ) );
         if( byteCount > MAXDWORD )
         {
             // Truncate to a multiple of "size" bytes.
             byteCount = ( MAXDWORD / size ) * size;
         }
 
-        L_ASSERT( pBuffer || byteCount == 0 );
+        HELIUM_ASSERT( pBuffer || byteCount == 0 );
 
         DWORD bytesRead = 0;
-        L_VERIFY( ReadFile( m_hFile, pBuffer, static_cast< DWORD >( byteCount ), &bytesRead, NULL ) );
+        HELIUM_VERIFY( ReadFile( m_hFile, pBuffer, static_cast< DWORD >( byteCount ), &bytesRead, NULL ) );
 
         return ( bytesRead / size );
     }
@@ -76,25 +76,25 @@ namespace Lunar
     /// @copydoc Stream::Write()
     size_t FileStreamWin::Write( const void* pBuffer, size_t size, size_t count )
     {
-        L_ASSERT_MESSAGE( m_hFile != INVALID_HANDLE_VALUE, L_T( "File not open" ) );
-        L_ASSERT_MESSAGE( m_modeFlags & MODE_WRITE, L_T( "File not open for writing" ) );
+        HELIUM_ASSERT_MSG( m_hFile != INVALID_HANDLE_VALUE, TXT( "File not open" ) );
+        HELIUM_ASSERT_MSG( m_modeFlags & MODE_WRITE, TXT( "File not open for writing" ) );
         if( m_hFile == INVALID_HANDLE_VALUE || !( m_modeFlags & MODE_WRITE ) )
         {
             return 0;
         }
 
         size_t byteCount = size * count;
-        L_ASSERT_MESSAGE( byteCount <= MAXDWORD, L_T( "File write operations are limited to DWORD sizes" ) );
+        HELIUM_ASSERT_MSG( byteCount <= MAXDWORD, TXT( "File write operations are limited to DWORD sizes" ) );
         if( byteCount > MAXDWORD )
         {
             // Truncate to a multiple of "size" bytes.
             byteCount = ( MAXDWORD / size ) * size;
         }
 
-        L_ASSERT( pBuffer || byteCount == 0 );
+        HELIUM_ASSERT( pBuffer || byteCount == 0 );
 
         DWORD bytesWritten = 0;
-        L_VERIFY( WriteFile( m_hFile, pBuffer, static_cast< DWORD >( byteCount ), &bytesWritten, NULL ) );
+        HELIUM_VERIFY( WriteFile( m_hFile, pBuffer, static_cast< DWORD >( byteCount ), &bytesWritten, NULL ) );
 
         return ( bytesWritten / size );
     }
@@ -102,12 +102,12 @@ namespace Lunar
     /// @copydoc Stream::Flush()
     void FileStreamWin::Flush()
     {
-        L_ASSERT_MESSAGE( m_hFile != INVALID_HANDLE_VALUE, L_T( "File not open" ) );
+        HELIUM_ASSERT_MSG( m_hFile != INVALID_HANDLE_VALUE, TXT( "File not open" ) );
 
         // Only files open for writing need to be flushed.
         if( m_hFile != INVALID_HANDLE_VALUE && ( m_modeFlags & MODE_WRITE ) )
         {
-            L_VERIFY( FlushFileBuffers( m_hFile ) );
+            HELIUM_VERIFY( FlushFileBuffers( m_hFile ) );
         }
     }
 
@@ -116,13 +116,13 @@ namespace Lunar
     {
         if( m_hFile == INVALID_HANDLE_VALUE )
         {
-            L_ASSERT_MESSAGE_FALSE( L_T( "File not open" ) );
+            HELIUM_ASSERT_MSG_FALSE( TXT( "File not open" ) );
             return -1;
         }
 
         if( static_cast< size_t >( origin ) >= static_cast< size_t >( SEEK_ORIGIN_MAX ) )
         {
-            L_ASSERT_MESSAGE_FALSE( L_T( "Invalid seek origin" ) );
+            HELIUM_ASSERT_MSG_FALSE( TXT( "Invalid seek origin" ) );
             return -1;
         }
 
@@ -138,7 +138,7 @@ namespace Lunar
         filePointer.QuadPart = 0;
 
         BOOL bResult = SetFilePointerEx( m_hFile, moveDistance, &filePointer, moveMethod );
-        L_ASSERT( bResult );
+        HELIUM_ASSERT( bResult );
 
         return ( bResult ? filePointer.QuadPart : -1 );
     }
@@ -148,7 +148,7 @@ namespace Lunar
     {
         if( m_hFile == INVALID_HANDLE_VALUE )
         {
-            L_ASSERT_MESSAGE_FALSE( L_T( "File not open" ) );
+            HELIUM_ASSERT_MSG_FALSE( TXT( "File not open" ) );
             return -1;
         }
 
@@ -159,7 +159,7 @@ namespace Lunar
         filePointer.QuadPart = 0;
 
         BOOL bResult = SetFilePointerEx( m_hFile, moveDistance, &filePointer, FILE_CURRENT );
-        L_ASSERT( bResult );
+        HELIUM_ASSERT( bResult );
 
         return ( bResult ? filePointer.QuadPart : -1 );
     }
@@ -169,7 +169,7 @@ namespace Lunar
     {
         if( m_hFile == INVALID_HANDLE_VALUE )
         {
-            L_ASSERT_MESSAGE_FALSE( L_T( "File not open" ) );
+            HELIUM_ASSERT_MSG_FALSE( TXT( "File not open" ) );
             return -1;
         }
 
@@ -177,7 +177,7 @@ namespace Lunar
         fileSize.QuadPart = 0;
 
         BOOL bResult = GetFileSizeEx( m_hFile, &fileSize );
-        L_ASSERT( bResult );
+        HELIUM_ASSERT( bResult );
 
         return ( bResult ? fileSize.QuadPart : -1 );
     }
@@ -185,8 +185,8 @@ namespace Lunar
     /// @copydoc FileStream::OpenActual()
     bool FileStreamWin::OpenActual( const tchar_t* pPath, uint32_t modeFlags, bool bTruncate )
     {
-        L_ASSERT( pPath );
-        L_ASSERT( m_hFile == INVALID_HANDLE_VALUE );
+        HELIUM_ASSERT( pPath );
+        HELIUM_ASSERT( m_hFile == INVALID_HANDLE_VALUE );
 
         DWORD desiredAccess = 0;
         if( modeFlags & MODE_READ )
@@ -225,4 +225,4 @@ namespace Lunar
     }
 }
 
-#endif  // L_OS_WIN
+#endif  // HELIUM_OS_WIN

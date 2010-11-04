@@ -205,22 +205,22 @@ typedef uint64_t uint_fast64_t;
 #define WPRIuSZ L"Iu"
 
 /// "tchar_t" string format macro for signed 8-bit integers.
-#define TPRId8 HELIUM_T( "hhd" )
+#define TPRId8 TXT( "hhd" )
 /// "tchar_t" string format macro for signed 16-bit integers.
-#define TPRId16 HELIUM_T( "hd" )
+#define TPRId16 TXT( "hd" )
 /// "tchar_t" string format macro for signed 32-bit integers.
-#define TPRId32 HELIUM_T( "I32d" )
+#define TPRId32 TXT( "I32d" )
 /// "tchar_t" string format macro for signed 64-bit integers.
-#define TPRId64 HELIUM_T( "I64d" )
+#define TPRId64 TXT( "I64d" )
 
 /// "tchar_t" string format macro for unsigned 8-bit integers.
-#define TPRIu8 HELIUM_T( "hhu" )
+#define TPRIu8 TXT( "hhu" )
 /// "tchar_t" string format macro for unsigned 16-bit integers.
-#define TPRIu16 HELIUM_T( "hu" )
+#define TPRIu16 TXT( "hu" )
 /// "tchar_t" string format macro for unsigned 32-bit integers.
-#define TPRIu32 HELIUM_T( "I32u" )
+#define TPRIu32 TXT( "I32u" )
 /// "tchar_t" string format macro for unsigned 64-bit integers.
-#define TPRIu64 HELIUM_T( "I64u" )
+#define TPRIu64 TXT( "I64u" )
 
 /// "tchar_t" string format macro for int_fast8_t.
 #define TPRIdFAST8 TPRId8
@@ -241,9 +241,9 @@ typedef uint64_t uint_fast64_t;
 #define TPRIuFAST64 TPRIu64
 
 /// "tchar_t" string format macro for ptrdiff_t.
-#define TPRIdPD HELIUM_T( "Id" )
+#define TPRIdPD TXT( "Id" )
 /// "tchar_t" string format macro for size_t.
-#define TPRIuSZ HELIUM_T( "Iu" )
+#define TPRIuSZ TXT( "Iu" )
 
 //@}
 
@@ -335,22 +335,22 @@ typedef uint64_t uint_fast64_t;
 #define WSCNuSZ L"Iu"
 
 /// "tchar_t" string format macro for signed 8-bit integers.
-#define TSCNd8 HELIUM_T( "hhd" )
+#define TSCNd8 TXT( "hhd" )
 /// "tchar_t" string format macro for signed 16-bit integers.
-#define TSCNd16 HELIUM_T( "hd" )
+#define TSCNd16 TXT( "hd" )
 /// "tchar_t" string format macro for signed 32-bit integers.
-#define TSCNd32 HELIUM_T( "I32d" )
+#define TSCNd32 TXT( "I32d" )
 /// "tchar_t" string format macro for signed 64-bit integers.
-#define TSCNd64 HELIUM_T( "I64d" )
+#define TSCNd64 TXT( "I64d" )
 
 /// "tchar_t" string format macro for unsigned 8-bit integers.
-#define TSCNu8 HELIUM_T( "hhu" )
+#define TSCNu8 TXT( "hhu" )
 /// "tchar_t" string format macro for unsigned 16-bit integers.
-#define TSCNu16 HELIUM_T( "hu" )
+#define TSCNu16 TXT( "hu" )
 /// "tchar_t" string format macro for unsigned 32-bit integers.
-#define TSCNu32 HELIUM_T( "I32u" )
+#define TSCNu32 TXT( "I32u" )
 /// "tchar_t" string format macro for unsigned 64-bit integers.
-#define TSCNu64 HELIUM_T( "I64u" )
+#define TSCNu64 TXT( "I64u" )
 
 /// "tchar_t" string format macro for int_fast8_t.
 #define TSCNdFAST8 TSCNd8
@@ -371,19 +371,11 @@ typedef uint64_t uint_fast64_t;
 #define TSCNuFAST64 TSCNu64
 
 /// "tchar_t" string format macro for ptrdiff_t.
-#define TSCNdPD HELIUM_T( "Id" )
+#define TSCNdPD TXT( "Id" )
 /// "tchar_t" string format macro for size_t.
-#define TSCNuSZ HELIUM_T( "Iu" )
+#define TSCNuSZ TXT( "Iu" )
 
 //@}
-
-#ifdef _WIN64
-typedef uint64_t uintptr;
-typedef int64_t  intptr;
-#else
-typedef uint32_t uintptr;
-typedef int32_t  intptr;
-#endif
 
 #else  // HELIUM_CC_MSC
 

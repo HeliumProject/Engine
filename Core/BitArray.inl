@@ -15,8 +15,8 @@ namespace Lunar
         : m_rElement( const_cast< uint32_t& >( rElement ) )
         , m_mask( mask )
     {
-        L_ASSERT( mask );
-        L_ASSERT( ( mask & ( mask - 1 ) ) == 0 );
+        HELIUM_ASSERT( mask );
+        HELIUM_ASSERT( ( mask & ( mask - 1 ) ) == 0 );
     }
 
     /// Get the current bit value.
@@ -137,9 +137,9 @@ namespace Lunar
         : m_pElement( const_cast< uint32_t* >( pElement ) )
         , m_mask( mask )
     {
-        L_ASSERT( pElement );
-        L_ASSERT( mask );
-        L_ASSERT( ( mask & ( mask - 1 ) ) == 0 );
+        HELIUM_ASSERT( pElement );
+        HELIUM_ASSERT( mask );
+        HELIUM_ASSERT( ( mask & ( mask - 1 ) ) == 0 );
     }
 
     /// Access the current bit.
@@ -560,8 +560,8 @@ namespace Lunar
             size_t byteCount = m_capacity / 8;
 
             m_pBuffer = static_cast< uint32_t* >( Allocator().Allocate( byteCount ) );
-            L_ASSERT( m_pBuffer );
-            L_ASSERT( rSource.m_pBuffer );
+            HELIUM_ASSERT( m_pBuffer );
+            HELIUM_ASSERT( rSource.m_pBuffer );
             MemoryCopy( m_pBuffer, rSource.m_pBuffer, byteCount );
         }
     }
@@ -644,7 +644,7 @@ namespace Lunar
             size_t byteCount = capacity / 8;
 
             m_pBuffer = static_cast< uint32_t* >( Allocator().Reallocate( m_pBuffer, byteCount ) );
-            L_ASSERT( m_pBuffer );
+            HELIUM_ASSERT( m_pBuffer );
             m_capacity = capacity;
         }
     }
@@ -662,7 +662,7 @@ namespace Lunar
             size_t byteCount = capacity / 8;
 
             m_pBuffer = static_cast< uint32_t* >( Allocator().Reallocate( m_pBuffer, byteCount ) );
-            L_ASSERT( m_pBuffer || capacity == 0 );
+            HELIUM_ASSERT( m_pBuffer || capacity == 0 );
             m_capacity = capacity;
         }
     }
@@ -735,8 +735,8 @@ namespace Lunar
     template< typename Allocator >
     typename BitArray< Allocator >::ReferenceType BitArray< Allocator >::GetElement( size_t index )
     {
-        L_ASSERT( index < m_size );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( index < m_size );
+        HELIUM_ASSERT( m_pBuffer );
 
         size_t elementIndex = index / ( sizeof( uint32_t ) * 8 );
         size_t bitIndex = index % ( sizeof( uint32_t ) * 8 );
@@ -752,8 +752,8 @@ namespace Lunar
     template< typename Allocator >
     void BitArray< Allocator >::SetElement( size_t index )
     {
-        L_ASSERT( index < m_size );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( index < m_size );
+        HELIUM_ASSERT( m_pBuffer );
 
         size_t elementIndex = index / ( sizeof( uint32_t ) * 8 );
         size_t bitIndex = index % ( sizeof( uint32_t ) * 8 );
@@ -769,8 +769,8 @@ namespace Lunar
     template< typename Allocator >
     void BitArray< Allocator >::UnsetElement( size_t index )
     {
-        L_ASSERT( index < m_size );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( index < m_size );
+        HELIUM_ASSERT( m_pBuffer );
 
         size_t elementIndex = index / ( sizeof( uint32_t ) * 8 );
         size_t bitIndex = index % ( sizeof( uint32_t ) * 8 );
@@ -786,8 +786,8 @@ namespace Lunar
     template< typename Allocator >
     void BitArray< Allocator >::ToggleElement( size_t index )
     {
-        L_ASSERT( index < m_size );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( index < m_size );
+        HELIUM_ASSERT( m_pBuffer );
 
         size_t elementIndex = index / ( sizeof( uint32_t ) * 8 );
         size_t bitIndex = index % ( sizeof( uint32_t ) * 8 );
@@ -803,8 +803,8 @@ namespace Lunar
     template< typename Allocator >
     typename BitArray< Allocator >::ConstReferenceType BitArray< Allocator >::GetElement( size_t index ) const
     {
-        L_ASSERT( index < m_size );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( index < m_size );
+        HELIUM_ASSERT( m_pBuffer );
 
         size_t elementIndex = index / ( sizeof( uint32_t ) * 8 );
         size_t bitIndex = index % ( sizeof( uint32_t ) * 8 );
@@ -846,7 +846,7 @@ namespace Lunar
         if( size )
         {
             size_t byteCount = ( size + 7 ) / 8;
-            L_ASSERT( m_pBuffer );
+            HELIUM_ASSERT( m_pBuffer );
             MemorySet( m_pBuffer, ( bValue ? 0xff : 0 ), byteCount );
         }
     }
@@ -861,7 +861,7 @@ namespace Lunar
         if( size )
         {
             size_t byteCount = ( size + 7 ) / 8;
-            L_ASSERT( m_pBuffer );
+            HELIUM_ASSERT( m_pBuffer );
             MemoryZero( m_pBuffer, byteCount );
         }
     }
@@ -875,7 +875,7 @@ namespace Lunar
         size_t size = m_size;
         if( size )
         {
-            L_ASSERT( m_pBuffer );
+            HELIUM_ASSERT( m_pBuffer );
 
             size_t elementCount = ( size + sizeof( uint32_t ) * 8 - 1 ) / ( sizeof( uint32_t ) * 8 );
             for( size_t elementIndex = 0; elementIndex < elementCount; ++elementIndex )
@@ -893,8 +893,8 @@ namespace Lunar
     template< typename Allocator >
     typename BitArray< Allocator >::ReferenceType BitArray< Allocator >::GetFirst()
     {
-        L_ASSERT( m_size != 0 );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( m_size != 0 );
+        HELIUM_ASSERT( m_pBuffer );
 
         return ReferenceType( *m_pBuffer, 1 );
     }
@@ -907,8 +907,8 @@ namespace Lunar
     template< typename Allocator >
     typename BitArray< Allocator >::ConstReferenceType BitArray< Allocator >::GetFirst() const
     {
-        L_ASSERT( m_size != 0 );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( m_size != 0 );
+        HELIUM_ASSERT( m_pBuffer );
 
         return ConstReferenceType( *m_pBuffer, 1 );
     }
@@ -921,8 +921,8 @@ namespace Lunar
     template< typename Allocator >
     typename BitArray< Allocator >::ReferenceType BitArray< Allocator >::GetLast()
     {
-        L_ASSERT( m_size != 0 );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( m_size != 0 );
+        HELIUM_ASSERT( m_pBuffer );
 
         size_t elementIndex = m_size / ( sizeof( uint32_t ) * 8 );
         size_t bitIndex = m_size % ( sizeof( uint32_t ) * 8 );
@@ -938,8 +938,8 @@ namespace Lunar
     template< typename Allocator >
     typename BitArray< Allocator >::ConstReferenceType BitArray< Allocator >::GetLast() const
     {
-        L_ASSERT( m_size != 0 );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( m_size != 0 );
+        HELIUM_ASSERT( m_pBuffer );
 
         size_t elementIndex = m_size / ( sizeof( uint32_t ) * 8 );
         size_t bitIndex = m_size % ( sizeof( uint32_t ) * 8 );
@@ -967,7 +967,7 @@ namespace Lunar
     template< typename Allocator >
     void BitArray< Allocator >::Pop()
     {
-        L_ASSERT( m_size != 0 );
+        HELIUM_ASSERT( m_size != 0 );
 
         Resize( m_size - 1 );
     }
@@ -1031,7 +1031,7 @@ namespace Lunar
     template< typename Allocator >
     size_t BitArray< Allocator >::GetGrowCapacity( size_t desiredCount ) const
     {
-        L_ASSERT( desiredCount > m_capacity );
+        HELIUM_ASSERT( desiredCount > m_capacity );
         return Align( Max< size_t >( desiredCount, m_capacity + m_capacity / 2 + 1 ), sizeof( uint32_t ) * 8 );
     }
 
@@ -1047,7 +1047,7 @@ namespace Lunar
             size_t byteCount = capacity / 8;
 
             m_pBuffer = static_cast< uint32_t* >( Allocator().Reallocate( m_pBuffer, byteCount ) );
-            L_ASSERT( m_pBuffer );
+            HELIUM_ASSERT( m_pBuffer );
 
             m_capacity = capacity;
         }
@@ -1076,8 +1076,8 @@ namespace Lunar
             {
                 size_t byteCount = m_capacity / 8;
                 m_pBuffer = static_cast< uint32_t* >( Allocator().Allocate( byteCount ) );
-                L_ASSERT( m_pBuffer );
-                L_ASSERT( rSource.m_pBuffer );
+                HELIUM_ASSERT( m_pBuffer );
+                HELIUM_ASSERT( rSource.m_pBuffer );
                 MemoryCopy( m_pBuffer, rSource.m_pBuffer, ( m_size + 7 ) / 8 );
             }
         }

@@ -17,7 +17,7 @@ namespace Lunar
     class Quat;
 
     /// Single-precision floating-point 4x4 matrix.  Note that this is SIMD aligned.
-    L_SIMD_ALIGN_PRE class LUNAR_CORE_API Matrix44
+    HELIUM_SIMD_ALIGN_PRE class LUNAR_CORE_API Matrix44
     {
     public:
         /// Identity matrix.
@@ -99,21 +99,21 @@ namespace Lunar
             EPerspectiveProjection, float32_t horizontalFovRadians, float32_t aspectRatio, float32_t nearClip );
         inline Matrix44(
             EOrthogonalProjection, float32_t width, float32_t height, float32_t nearClip, float32_t farClip );
-#if L_SIMD_SIZE == 16
+#if HELIUM_SIMD_SIZE == 16
         inline Matrix44(
-            const SimdVector& rXAxis, const SimdVector& rYAxis, const SimdVector& rZAxis,
-            const SimdVector& rTranslate );
-#elif L_SIMD_SIZE == 64
-        inline explicit Matrix44( const SimdVector& rMatrix );
+            const Helium::SimdVector& rXAxis, const Helium::SimdVector& rYAxis, const Helium::SimdVector& rZAxis,
+            const Helium::SimdVector& rTranslate );
+#elif HELIUM_SIMD_SIZE == 64
+        inline explicit Matrix44( const Helium::SimdVector& rMatrix );
 #endif
         //@}
 
         /// @name Data Access
         //@{
-#if L_SIMD_SIZE == 16 || L_SIMD_SIZE == 64
-        inline SimdVector& GetSimdVector( size_t index );
-        inline const SimdVector& GetSimdVector( size_t index ) const;
-        inline void SetSimdVector( size_t index, const SimdVector& rVector );
+#if HELIUM_SIMD_SIZE == 16 || HELIUM_SIMD_SIZE == 64
+        inline Helium::SimdVector& GetSimdVector( size_t index );
+        inline const Helium::SimdVector& GetSimdVector( size_t index ) const;
+        inline void SetSimdVector( size_t index, const Helium::SimdVector& rVector );
 #endif
 
         inline float32_t& GetElement( size_t index );
@@ -221,24 +221,24 @@ namespace Lunar
         //@}
 
     private:
-#if L_SIMD_SIZE == 16
+#if HELIUM_SIMD_SIZE == 16
         /// SIMD vectors containing the matrix values.
-        SimdVector m_matrix[ 4 ];
-#elif L_SIMD_SIZE == 64
+        Helium::SimdVector m_matrix[ 4 ];
+#elif HELIUM_SIMD_SIZE == 64
         /// SIMD vector containing the matrix values.
-        SimdVector m_matrix;
+        Helium::SimdVector m_matrix;
 #else
         /// Matrix values.
         float32_t m_matrix[ 4 ][ 4 ];
 #endif
-    } L_SIMD_ALIGN_POST;
+    } HELIUM_SIMD_ALIGN_POST;
 }
 
 #include "Core/Matrix44.inl"
 
-#if L_SIMD_LRBNI
+#if HELIUM_SIMD_LRBNI
 #include "Core/Matrix44Lrbni.inl"
-#elif L_SIMD_SSE
+#elif HELIUM_SIMD_SSE
 #include "Core/Matrix44Sse.inl"
 #endif
 

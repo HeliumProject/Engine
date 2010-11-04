@@ -6,9 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "CorePch.h"
-#include "Core/Simd.h"
+#include "Platform/Simd.h"
 
-#if L_SIMD_SSE
+#if HELIUM_SIMD_SSE
 
 #include "Core/Matrix44.h"
 
@@ -16,72 +16,72 @@
 
 namespace Lunar
 {
-    static L_FORCEINLINE SimdVector MultiplyResultRow(
-        const SimdVector& rMatrix0Row,
-        const SimdVector ( &rMatrix1Rows )[ 4 ] )
+    static HELIUM_FORCEINLINE Helium::SimdVector MultiplyResultRow(
+        const Helium::SimdVector& rMatrix0Row,
+        const Helium::SimdVector ( &rMatrix1Rows )[ 4 ] )
     {
-        SimdVector x = _mm_shuffle_ps( rMatrix0Row, rMatrix0Row, _MM_SHUFFLE( 0, 0, 0, 0 ) );
-        SimdVector y = _mm_shuffle_ps( rMatrix0Row, rMatrix0Row, _MM_SHUFFLE( 1, 1, 1, 1 ) );
-        SimdVector z = _mm_shuffle_ps( rMatrix0Row, rMatrix0Row, _MM_SHUFFLE( 2, 2, 2, 2 ) );
-        SimdVector w = _mm_shuffle_ps( rMatrix0Row, rMatrix0Row, _MM_SHUFFLE( 3, 3, 3, 3 ) );
+        Helium::SimdVector x = _mm_shuffle_ps( rMatrix0Row, rMatrix0Row, _MM_SHUFFLE( 0, 0, 0, 0 ) );
+        Helium::SimdVector y = _mm_shuffle_ps( rMatrix0Row, rMatrix0Row, _MM_SHUFFLE( 1, 1, 1, 1 ) );
+        Helium::SimdVector z = _mm_shuffle_ps( rMatrix0Row, rMatrix0Row, _MM_SHUFFLE( 2, 2, 2, 2 ) );
+        Helium::SimdVector w = _mm_shuffle_ps( rMatrix0Row, rMatrix0Row, _MM_SHUFFLE( 3, 3, 3, 3 ) );
 
-        x = Simd::MultiplyF32( x, rMatrix1Rows[ 0 ] );
-        y = Simd::MultiplyF32( y, rMatrix1Rows[ 1 ] );
-        z = Simd::MultiplyF32( z, rMatrix1Rows[ 2 ] );
-        w = Simd::MultiplyF32( w, rMatrix1Rows[ 3 ] );
+        x = Helium::Simd::MultiplyF32( x, rMatrix1Rows[ 0 ] );
+        y = Helium::Simd::MultiplyF32( y, rMatrix1Rows[ 1 ] );
+        z = Helium::Simd::MultiplyF32( z, rMatrix1Rows[ 2 ] );
+        w = Helium::Simd::MultiplyF32( w, rMatrix1Rows[ 3 ] );
 
-        SimdVector result = Simd::AddF32( x, y );
-        result = Simd::AddF32( result, z );
-        result = Simd::AddF32( result, w );
+        Helium::SimdVector result = Helium::Simd::AddF32( x, y );
+        result = Helium::Simd::AddF32( result, z );
+        result = Helium::Simd::AddF32( result, w );
 
         return result;
     }
 
-    static L_FORCEINLINE void ComputeDet22Helper(
-        const SimdVector& rRow0,
-        const SimdVector& rRow1,
-        SimdVector& rDet22Adj,
-        SimdVector& rDet22Opp )
+    static HELIUM_FORCEINLINE void ComputeDet22Helper(
+        const Helium::SimdVector& rRow0,
+        const Helium::SimdVector& rRow1,
+        Helium::SimdVector& rDet22Adj,
+        Helium::SimdVector& rDet22Opp )
     {
-        SimdVector row1Shift1 = _mm_shuffle_ps( rRow1, rRow1, _MM_SHUFFLE( 0, 3, 2, 1 ) );
-        SimdVector row1Shift2 = _mm_shuffle_ps( rRow1, rRow1, _MM_SHUFFLE( 1, 0, 3, 2 ) );
-        SimdVector row1Shift3 = _mm_shuffle_ps( rRow1, rRow1, _MM_SHUFFLE( 2, 1, 0, 3 ) );
+        Helium::SimdVector row1Shift1 = _mm_shuffle_ps( rRow1, rRow1, _MM_SHUFFLE( 0, 3, 2, 1 ) );
+        Helium::SimdVector row1Shift2 = _mm_shuffle_ps( rRow1, rRow1, _MM_SHUFFLE( 1, 0, 3, 2 ) );
+        Helium::SimdVector row1Shift3 = _mm_shuffle_ps( rRow1, rRow1, _MM_SHUFFLE( 2, 1, 0, 3 ) );
 
-        SimdVector prod01 = Simd::MultiplyF32( rRow0, row1Shift1 );
-        SimdVector prod02 = Simd::MultiplyF32( rRow0, row1Shift2 );
-        SimdVector prod03 = Simd::MultiplyF32( rRow0, row1Shift3 );
+        Helium::SimdVector prod01 = Helium::Simd::MultiplyF32( rRow0, row1Shift1 );
+        Helium::SimdVector prod02 = Helium::Simd::MultiplyF32( rRow0, row1Shift2 );
+        Helium::SimdVector prod03 = Helium::Simd::MultiplyF32( rRow0, row1Shift3 );
 
-        rDet22Adj = Simd::SubtractF32( prod01, _mm_shuffle_ps( prod03, prod03, _MM_SHUFFLE( 0, 3, 2, 1 ) ) );
-        rDet22Opp = Simd::SubtractF32( prod02, _mm_shuffle_ps( prod02, prod02, _MM_SHUFFLE( 1, 0, 3, 2 ) ) );
+        rDet22Adj = Helium::Simd::SubtractF32( prod01, _mm_shuffle_ps( prod03, prod03, _MM_SHUFFLE( 0, 3, 2, 1 ) ) );
+        rDet22Opp = Helium::Simd::SubtractF32( prod02, _mm_shuffle_ps( prod02, prod02, _MM_SHUFFLE( 1, 0, 3, 2 ) ) );
     }
 
-    static L_FORCEINLINE void ComputeDet33PartsHelper(
-        const SimdVector& rBaseRow,
-        const SimdVector& rDet22Adj,
-        const SimdVector& rDet22Opp,
-        SimdVector& rDet33Pre,
-        SimdVector& rDet33Split,
-        SimdVector& rDet33Post )
+    static HELIUM_FORCEINLINE void ComputeDet33PartsHelper(
+        const Helium::SimdVector& rBaseRow,
+        const Helium::SimdVector& rDet22Adj,
+        const Helium::SimdVector& rDet22Opp,
+        Helium::SimdVector& rDet33Pre,
+        Helium::SimdVector& rDet33Split,
+        Helium::SimdVector& rDet33Post )
     {
-        SimdVector baseRowShift3 = _mm_shuffle_ps( rBaseRow, rBaseRow, _MM_SHUFFLE( 2, 1, 0, 3 ) );
+        Helium::SimdVector baseRowShift3 = _mm_shuffle_ps( rBaseRow, rBaseRow, _MM_SHUFFLE( 2, 1, 0, 3 ) );
 
-        rDet33Pre = Simd::MultiplyF32( baseRowShift3, rDet22Adj );
-        rDet33Split = Simd::MultiplyF32(
+        rDet33Pre = Helium::Simd::MultiplyF32( baseRowShift3, rDet22Adj );
+        rDet33Split = Helium::Simd::MultiplyF32(
             baseRowShift3,
             _mm_shuffle_ps( rDet22Opp, rDet22Opp, _MM_SHUFFLE( 1, 0, 3, 2 ) ) );
-        rDet33Post = Simd::MultiplyF32(
+        rDet33Post = Helium::Simd::MultiplyF32(
             baseRowShift3,
             _mm_shuffle_ps( rDet22Adj, rDet22Adj, _MM_SHUFFLE( 0, 3, 2, 1 ) ) );
     }
 
-    static L_FORCEINLINE void DeterminantHelper(
-        const SimdVector ( &rMatrixRows )[ 4 ],
-        SimdVector& rDeterminant,
-        SimdVector& rLastRowsDet22Adj,
-        SimdVector& rLastRowsDet22Opp,
-        SimdVector& rLastRowsDet33Pre,
-        SimdVector& rLastRowsDet33Split,
-        SimdVector& rLastRowsDet33Post )
+    static HELIUM_FORCEINLINE void DeterminantHelper(
+        const Helium::SimdVector ( &rMatrixRows )[ 4 ],
+        Helium::SimdVector& rDeterminant,
+        Helium::SimdVector& rLastRowsDet22Adj,
+        Helium::SimdVector& rLastRowsDet22Opp,
+        Helium::SimdVector& rLastRowsDet33Pre,
+        Helium::SimdVector& rLastRowsDet33Split,
+        Helium::SimdVector& rLastRowsDet33Post )
     {
         ComputeDet22Helper( rMatrixRows[ 2 ], rMatrixRows[ 3 ], rLastRowsDet22Adj, rLastRowsDet22Opp );
 
@@ -93,34 +93,34 @@ namespace Lunar
             rLastRowsDet33Split,
             rLastRowsDet33Post );
 
-        SimdVector row0Shift2 = _mm_shuffle_ps( rMatrixRows[ 0 ], rMatrixRows[ 0 ], _MM_SHUFFLE( 1, 0, 3, 2 ) );
+        Helium::SimdVector row0Shift2 = _mm_shuffle_ps( rMatrixRows[ 0 ], rMatrixRows[ 0 ], _MM_SHUFFLE( 1, 0, 3, 2 ) );
 
-        rDeterminant = Simd::SubtractF32(
+        rDeterminant = Helium::Simd::SubtractF32(
             rLastRowsDet33Pre,
             _mm_shuffle_ps( rLastRowsDet33Split, rLastRowsDet33Split, _MM_SHUFFLE( 0, 3, 2, 1 ) ) );
-        rDeterminant = Simd::AddF32(
+        rDeterminant = Helium::Simd::AddF32(
             rDeterminant,
             _mm_shuffle_ps( rLastRowsDet33Post, rLastRowsDet33Post, _MM_SHUFFLE( 1, 0, 3, 2 ) ) );
-        rDeterminant = Simd::MultiplyF32( row0Shift2, rDeterminant );
+        rDeterminant = Helium::Simd::MultiplyF32( row0Shift2, rDeterminant );
 
-        rDeterminant = Simd::AddF32(
+        rDeterminant = Helium::Simd::AddF32(
             rDeterminant,
             _mm_shuffle_ps( rDeterminant, rDeterminant, _MM_SHUFFLE( 1, 0, 3, 2 ) ) );
-        rDeterminant = Simd::SubtractF32(
+        rDeterminant = Helium::Simd::SubtractF32(
             rDeterminant,
             _mm_shuffle_ps( rDeterminant, rDeterminant, _MM_SHUFFLE( 0, 3, 2, 1 ) ) );
     }
 
-    static L_FORCEINLINE SimdVector InverseRowHelper(
-        const SimdVector& rDet33Pre,
-        const SimdVector& rDet33Split,
-        const SimdVector& rDet33Post,
-        const SimdVector& rInvDeterminantScaler )
+    static HELIUM_FORCEINLINE Helium::SimdVector InverseRowHelper(
+        const Helium::SimdVector& rDet33Pre,
+        const Helium::SimdVector& rDet33Split,
+        const Helium::SimdVector& rDet33Post,
+        const Helium::SimdVector& rInvDeterminantScaler )
     {
-        SimdVector result = _mm_shuffle_ps( rDet33Pre, rDet33Pre, _MM_SHUFFLE( 1, 0, 3, 2 ) );
-        result = Simd::SubtractF32( result, _mm_shuffle_ps( rDet33Split, rDet33Split, _MM_SHUFFLE( 2, 1, 0, 3 ) ) );
-        result = Simd::AddF32( result, rDet33Post );
-        result = Simd::MultiplyF32( result, rInvDeterminantScaler );
+        Helium::SimdVector result = _mm_shuffle_ps( rDet33Pre, rDet33Pre, _MM_SHUFFLE( 1, 0, 3, 2 ) );
+        result = Helium::Simd::SubtractF32( result, _mm_shuffle_ps( rDet33Split, rDet33Split, _MM_SHUFFLE( 2, 1, 0, 3 ) ) );
+        result = Helium::Simd::AddF32( result, rDet33Post );
+        result = Helium::Simd::MultiplyF32( result, rInvDeterminantScaler );
 
         return result;
     }
@@ -185,17 +185,17 @@ namespace Lunar
     ///      SetRotationOnly(), SetTranslationOnly()
     void Matrix44::SetScaling( float32_t scaling )
     {
-        SimdVector scalingVec = _mm_set_ps1( scaling );
+        Helium::SimdVector scalingVec = _mm_set_ps1( scaling );
 
-        SimdVector x = IDENTITY.m_matrix[ 0 ];
-        SimdVector y = IDENTITY.m_matrix[ 1 ];
-        SimdVector z = IDENTITY.m_matrix[ 2 ];
+        Helium::SimdVector x = IDENTITY.m_matrix[ 0 ];
+        Helium::SimdVector y = IDENTITY.m_matrix[ 1 ];
+        Helium::SimdVector z = IDENTITY.m_matrix[ 2 ];
 
         m_matrix[ 3 ] = IDENTITY.m_matrix[ 3 ];
 
-        m_matrix[ 0 ] = Simd::MultiplyF32( x, scalingVec );
-        m_matrix[ 1 ] = Simd::MultiplyF32( y, scalingVec );
-        m_matrix[ 2 ] = Simd::MultiplyF32( z, scalingVec );
+        m_matrix[ 0 ] = Helium::Simd::MultiplyF32( x, scalingVec );
+        m_matrix[ 1 ] = Helium::Simd::MultiplyF32( y, scalingVec );
+        m_matrix[ 2 ] = Helium::Simd::MultiplyF32( z, scalingVec );
     }
 
     /// Set this matrix to a non-uniform scaling matrix.
@@ -208,21 +208,21 @@ namespace Lunar
     ///      SetRotationOnly(), SetTranslationOnly()
     void Matrix44::SetScaling( const Vector3& rScaling )
     {
-        SimdVector x = IDENTITY.m_matrix[ 0 ];
-        SimdVector y = IDENTITY.m_matrix[ 1 ];
-        SimdVector z = IDENTITY.m_matrix[ 2 ];
+        Helium::SimdVector x = IDENTITY.m_matrix[ 0 ];
+        Helium::SimdVector y = IDENTITY.m_matrix[ 1 ];
+        Helium::SimdVector z = IDENTITY.m_matrix[ 2 ];
 
         m_matrix[ 3 ] = IDENTITY.m_matrix[ 3 ];
 
-        SimdVector scalingVec = rScaling.GetSimdVector();
+        Helium::SimdVector scalingVec = rScaling.GetSimdVector();
 
-        SimdVector scaleX = _mm_shuffle_ps( scalingVec, scalingVec, _MM_SHUFFLE( 0, 0, 0, 0 ) );
-        SimdVector scaleY = _mm_shuffle_ps( scalingVec, scalingVec, _MM_SHUFFLE( 1, 1, 1, 1 ) );
-        SimdVector scaleZ = _mm_shuffle_ps( scalingVec, scalingVec, _MM_SHUFFLE( 2, 2, 2, 2 ) );
+        Helium::SimdVector scaleX = _mm_shuffle_ps( scalingVec, scalingVec, _MM_SHUFFLE( 0, 0, 0, 0 ) );
+        Helium::SimdVector scaleY = _mm_shuffle_ps( scalingVec, scalingVec, _MM_SHUFFLE( 1, 1, 1, 1 ) );
+        Helium::SimdVector scaleZ = _mm_shuffle_ps( scalingVec, scalingVec, _MM_SHUFFLE( 2, 2, 2, 2 ) );
 
-        m_matrix[ 0 ] = Simd::MultiplyF32( x, scaleX );
-        m_matrix[ 1 ] = Simd::MultiplyF32( y, scaleY );
-        m_matrix[ 2 ] = Simd::MultiplyF32( z, scaleZ );
+        m_matrix[ 0 ] = Helium::Simd::MultiplyF32( x, scaleX );
+        m_matrix[ 1 ] = Helium::Simd::MultiplyF32( y, scaleY );
+        m_matrix[ 2 ] = Helium::Simd::MultiplyF32( z, scaleZ );
     }
 
     /// Set this matrix to a rotation/translation matrix.
@@ -344,7 +344,7 @@ namespace Lunar
     ///      SetRotationTranslationScaling()
     void Matrix44::SetRotationOnly( const Quat& rRotation )
     {
-        L_SIMD_ALIGN_PRE const uint32_t componentMask[ 4 ] L_SIMD_ALIGN_POST =
+        HELIUM_SIMD_ALIGN_PRE const uint32_t componentMask[ 4 ] HELIUM_SIMD_ALIGN_POST =
         {
             0xffffffff,
             0xffffffff,
@@ -352,33 +352,33 @@ namespace Lunar
             0
         };
 
-        SimdVector oneVec = _mm_set_ps1( 1.0f );
+        Helium::SimdVector oneVec = _mm_set_ps1( 1.0f );
 
-        SimdVector xyz = rRotation.GetSimdVector();
-        SimdVector yzx = _mm_shuffle_ps( xyz, xyz, _MM_SHUFFLE( 3, 0, 2, 1 ) );
-        SimdVector zxy = _mm_shuffle_ps( xyz, xyz, _MM_SHUFFLE( 3, 1, 0, 2 ) );
-        SimdVector www = _mm_shuffle_ps( xyz, xyz, _MM_SHUFFLE( 3, 3, 3, 3 ) );
+        Helium::SimdVector xyz = rRotation.GetSimdVector();
+        Helium::SimdVector yzx = _mm_shuffle_ps( xyz, xyz, _MM_SHUFFLE( 3, 0, 2, 1 ) );
+        Helium::SimdVector zxy = _mm_shuffle_ps( xyz, xyz, _MM_SHUFFLE( 3, 1, 0, 2 ) );
+        Helium::SimdVector www = _mm_shuffle_ps( xyz, xyz, _MM_SHUFFLE( 3, 3, 3, 3 ) );
 
-        SimdVector product0, product1;
+        Helium::SimdVector product0, product1;
 
-        product0 = Simd::MultiplyF32( yzx, yzx );
-        product1 = Simd::MultiplyF32( zxy, zxy );
-        SimdVector valuesA = Simd::AddF32( product0, product1 );
-        valuesA = Simd::AddF32( valuesA, valuesA );
-        valuesA = Simd::SubtractF32( oneVec, valuesA );
+        product0 = Helium::Simd::MultiplyF32( yzx, yzx );
+        product1 = Helium::Simd::MultiplyF32( zxy, zxy );
+        Helium::SimdVector valuesA = Helium::Simd::AddF32( product0, product1 );
+        valuesA = Helium::Simd::AddF32( valuesA, valuesA );
+        valuesA = Helium::Simd::SubtractF32( oneVec, valuesA );
 
-        product0 = Simd::MultiplyF32( xyz, yzx );
-        product1 = Simd::MultiplyF32( zxy, www );
-        SimdVector valuesB = Simd::AddF32( product0, product1 );
-        valuesB = Simd::AddF32( valuesB, valuesB );
+        product0 = Helium::Simd::MultiplyF32( xyz, yzx );
+        product1 = Helium::Simd::MultiplyF32( zxy, www );
+        Helium::SimdVector valuesB = Helium::Simd::AddF32( product0, product1 );
+        valuesB = Helium::Simd::AddF32( valuesB, valuesB );
 
-        SimdVector loAB = _mm_unpacklo_ps( valuesA, valuesB );
-        SimdVector hiAB = _mm_unpackhi_ps( valuesA, valuesB );
+        Helium::SimdVector loAB = _mm_unpacklo_ps( valuesA, valuesB );
+        Helium::SimdVector hiAB = _mm_unpackhi_ps( valuesA, valuesB );
 
-        product0 = Simd::MultiplyF32( xyz, zxy );
-        product1 = Simd::MultiplyF32( yzx, www );
-        SimdVector valuesC = Simd::SubtractF32( product0, product1 );
-        valuesC = Simd::AddF32( valuesC, valuesC );
+        product0 = Helium::Simd::MultiplyF32( xyz, zxy );
+        product1 = Helium::Simd::MultiplyF32( yzx, www );
+        Helium::SimdVector valuesC = Helium::Simd::SubtractF32( product0, product1 );
+        valuesC = Helium::Simd::AddF32( valuesC, valuesC );
 
         m_matrix[ 0 ] = _mm_movelh_ps( loAB, valuesC );
 
@@ -388,10 +388,10 @@ namespace Lunar
         m_matrix[ 2 ] = _mm_shuffle_ps( hiAB, valuesC, _MM_SHUFFLE( 3, 2, 1, 0 ) );
         m_matrix[ 2 ] = _mm_shuffle_ps( m_matrix[ 2 ], m_matrix[ 2 ], _MM_SHUFFLE( 3, 0, 2, 1 ) );
 
-        SimdVector componentMaskVec = Simd::LoadAligned( componentMask );
-        m_matrix[ 0 ] = Simd::And( m_matrix[ 0 ], componentMaskVec );
-        m_matrix[ 1 ] = Simd::And( m_matrix[ 1 ], componentMaskVec );
-        m_matrix[ 2 ] = Simd::And( m_matrix[ 2 ], componentMaskVec );
+        Helium::SimdVector componentMaskVec = Helium::Simd::LoadAligned( componentMask );
+        m_matrix[ 0 ] = Helium::Simd::And( m_matrix[ 0 ], componentMaskVec );
+        m_matrix[ 1 ] = Helium::Simd::And( m_matrix[ 1 ], componentMaskVec );
+        m_matrix[ 2 ] = Helium::Simd::And( m_matrix[ 2 ], componentMaskVec );
     }
 
     /// Set the translation component of this matrix.
@@ -405,7 +405,7 @@ namespace Lunar
     ///      SetRotationTranslationScaling()
     void Matrix44::SetTranslationOnly( const Vector3& rTranslation )
     {
-        L_SIMD_ALIGN_PRE const uint32_t componentMask[ 4 ] L_SIMD_ALIGN_POST =
+        HELIUM_SIMD_ALIGN_PRE const uint32_t componentMask[ 4 ] HELIUM_SIMD_ALIGN_POST =
         {
             0xffffffff,
             0xffffffff,
@@ -413,12 +413,12 @@ namespace Lunar
             0
         };
 
-        SimdVector identityTranslation = IDENTITY.m_matrix[ 3 ];
-        SimdVector componentMaskVec = Simd::LoadAligned( componentMask );
+        Helium::SimdVector identityTranslation = IDENTITY.m_matrix[ 3 ];
+        Helium::SimdVector componentMaskVec = Helium::Simd::LoadAligned( componentMask );
 
-        SimdVector translationVec = rTranslation.GetSimdVector();
+        Helium::SimdVector translationVec = rTranslation.GetSimdVector();
 
-        m_matrix[ 3 ] = Simd::Or( Simd::And( componentMaskVec, translationVec ), identityTranslation );
+        m_matrix[ 3 ] = Helium::Simd::Or( Helium::Simd::And( componentMaskVec, translationVec ), identityTranslation );
     }
 
     /// Set the translation component of this matrix.
@@ -447,7 +447,7 @@ namespace Lunar
     /// @see TranslateLocal(), ScaleWorld(), ScaleLocal()
     void Matrix44::TranslateWorld( const Vector3& rTranslation )
     {
-        L_SIMD_ALIGN_PRE const uint32_t componentMask[ 4 ] L_SIMD_ALIGN_POST =
+        HELIUM_SIMD_ALIGN_PRE const uint32_t componentMask[ 4 ] HELIUM_SIMD_ALIGN_POST =
         {
             0xffffffff,
             0xffffffff,
@@ -455,9 +455,9 @@ namespace Lunar
             0
         };
 
-        SimdVector componentMaskVec = Simd::LoadAligned( componentMask );
+        Helium::SimdVector componentMaskVec = Helium::Simd::LoadAligned( componentMask );
 
-        m_matrix[ 3 ] = Simd::AddF32( Simd::And( componentMaskVec, rTranslation.GetSimdVector() ), m_matrix[ 3 ] );
+        m_matrix[ 3 ] = Helium::Simd::AddF32( Helium::Simd::And( componentMaskVec, rTranslation.GetSimdVector() ), m_matrix[ 3 ] );
     }
 
     /// Translate this matrix in local-space (pre-multiply).
@@ -467,19 +467,19 @@ namespace Lunar
     /// @see TranslateWorld(), ScaleWorld(), ScaleLocal()
     void Matrix44::TranslateLocal( const Vector3& rTranslation )
     {
-        SimdVector translationVec = rTranslation.GetSimdVector();
+        Helium::SimdVector translationVec = rTranslation.GetSimdVector();
 
-        SimdVector x = _mm_shuffle_ps( translationVec, translationVec, _MM_SHUFFLE( 0, 0, 0, 0 ) );
-        SimdVector y = _mm_shuffle_ps( translationVec, translationVec, _MM_SHUFFLE( 1, 1, 1, 1 ) );
-        SimdVector z = _mm_shuffle_ps( translationVec, translationVec, _MM_SHUFFLE( 2, 2, 2, 2 ) );
+        Helium::SimdVector x = _mm_shuffle_ps( translationVec, translationVec, _MM_SHUFFLE( 0, 0, 0, 0 ) );
+        Helium::SimdVector y = _mm_shuffle_ps( translationVec, translationVec, _MM_SHUFFLE( 1, 1, 1, 1 ) );
+        Helium::SimdVector z = _mm_shuffle_ps( translationVec, translationVec, _MM_SHUFFLE( 2, 2, 2, 2 ) );
 
-        x = Simd::MultiplyF32( x, m_matrix[ 0 ] );
-        y = Simd::MultiplyF32( y, m_matrix[ 1 ] );
-        z = Simd::MultiplyF32( z, m_matrix[ 2 ] );
+        x = Helium::Simd::MultiplyF32( x, m_matrix[ 0 ] );
+        y = Helium::Simd::MultiplyF32( y, m_matrix[ 1 ] );
+        z = Helium::Simd::MultiplyF32( z, m_matrix[ 2 ] );
 
-        SimdVector result = Simd::AddF32( x, y );
-        result = Simd::AddF32( result, z );
-        result = Simd::AddF32( result, m_matrix[ 3 ] );
+        Helium::SimdVector result = Helium::Simd::AddF32( x, y );
+        result = Helium::Simd::AddF32( result, z );
+        result = Helium::Simd::AddF32( result, m_matrix[ 3 ] );
 
         m_matrix[ 3 ] = result;
     }
@@ -491,12 +491,12 @@ namespace Lunar
     /// @see ScaleLocal(), TranslateWorld(), TranslateLocal()
     void Matrix44::ScaleWorld( float32_t scaling )
     {
-        SimdVector scalingVec = _mm_set_ps( 1.0f, scaling, scaling, scaling );
+        Helium::SimdVector scalingVec = _mm_set_ps( 1.0f, scaling, scaling, scaling );
 
-        m_matrix[ 0 ] = Simd::MultiplyF32( m_matrix[ 0 ], scalingVec );
-        m_matrix[ 1 ] = Simd::MultiplyF32( m_matrix[ 1 ], scalingVec );
-        m_matrix[ 2 ] = Simd::MultiplyF32( m_matrix[ 2 ], scalingVec );
-        m_matrix[ 3 ] = Simd::MultiplyF32( m_matrix[ 3 ], scalingVec );
+        m_matrix[ 0 ] = Helium::Simd::MultiplyF32( m_matrix[ 0 ], scalingVec );
+        m_matrix[ 1 ] = Helium::Simd::MultiplyF32( m_matrix[ 1 ], scalingVec );
+        m_matrix[ 2 ] = Helium::Simd::MultiplyF32( m_matrix[ 2 ], scalingVec );
+        m_matrix[ 3 ] = Helium::Simd::MultiplyF32( m_matrix[ 3 ], scalingVec );
     }
 
     /// Scale this matrix in world-space (post-multiply).
@@ -506,7 +506,7 @@ namespace Lunar
     /// @see ScaleLocal(), TranslateWorld(), TranslateLocal()
     void Matrix44::ScaleWorld( const Vector3& rScaling )
     {
-        L_SIMD_ALIGN_PRE const uint32_t componentMask[ 4 ] L_SIMD_ALIGN_POST =
+        HELIUM_SIMD_ALIGN_PRE const uint32_t componentMask[ 4 ] HELIUM_SIMD_ALIGN_POST =
         {
             0xffffffff,
             0xffffffff,
@@ -514,16 +514,16 @@ namespace Lunar
             0
         };
 
-        SimdVector componentMaskVec = Simd::LoadAligned( componentMask );
+        Helium::SimdVector componentMaskVec = Helium::Simd::LoadAligned( componentMask );
 
-        SimdVector scalingVec = Simd::Or(
-            Simd::And( rScaling.GetSimdVector(), componentMaskVec ),
+        Helium::SimdVector scalingVec = Helium::Simd::Or(
+            Helium::Simd::And( rScaling.GetSimdVector(), componentMaskVec ),
             IDENTITY.m_matrix[ 3 ] );
 
-        m_matrix[ 0 ] = Simd::MultiplyF32( m_matrix[ 0 ], scalingVec );
-        m_matrix[ 1 ] = Simd::MultiplyF32( m_matrix[ 1 ], scalingVec );
-        m_matrix[ 2 ] = Simd::MultiplyF32( m_matrix[ 2 ], scalingVec );
-        m_matrix[ 3 ] = Simd::MultiplyF32( m_matrix[ 3 ], scalingVec );
+        m_matrix[ 0 ] = Helium::Simd::MultiplyF32( m_matrix[ 0 ], scalingVec );
+        m_matrix[ 1 ] = Helium::Simd::MultiplyF32( m_matrix[ 1 ], scalingVec );
+        m_matrix[ 2 ] = Helium::Simd::MultiplyF32( m_matrix[ 2 ], scalingVec );
+        m_matrix[ 3 ] = Helium::Simd::MultiplyF32( m_matrix[ 3 ], scalingVec );
     }
 
     /// Scale this matrix in local-space (pre-multiply).
@@ -533,11 +533,11 @@ namespace Lunar
     /// @see ScaleWorld(), TranslateWorld(), TranslateLocal()
     void Matrix44::ScaleLocal( float32_t scaling )
     {
-        SimdVector scalingVec = _mm_set_ps1( scaling );
+        Helium::SimdVector scalingVec = _mm_set_ps1( scaling );
 
-        m_matrix[ 0 ] = Simd::MultiplyF32( m_matrix[ 0 ], scalingVec );
-        m_matrix[ 1 ] = Simd::MultiplyF32( m_matrix[ 1 ], scalingVec );
-        m_matrix[ 2 ] = Simd::MultiplyF32( m_matrix[ 2 ], scalingVec );
+        m_matrix[ 0 ] = Helium::Simd::MultiplyF32( m_matrix[ 0 ], scalingVec );
+        m_matrix[ 1 ] = Helium::Simd::MultiplyF32( m_matrix[ 1 ], scalingVec );
+        m_matrix[ 2 ] = Helium::Simd::MultiplyF32( m_matrix[ 2 ], scalingVec );
     }
 
     /// Scale this matrix in local-space (pre-multiply).
@@ -547,15 +547,15 @@ namespace Lunar
     /// @see ScaleWorld(), TranslateWorld(), TranslateLocal()
     void Matrix44::ScaleLocal( const Vector3& rScaling )
     {
-        SimdVector scalingVec = rScaling.GetSimdVector();
+        Helium::SimdVector scalingVec = rScaling.GetSimdVector();
 
-        SimdVector x = _mm_shuffle_ps( scalingVec, scalingVec, _MM_SHUFFLE( 0, 0, 0, 0 ) );
-        SimdVector y = _mm_shuffle_ps( scalingVec, scalingVec, _MM_SHUFFLE( 1, 1, 1, 1 ) );
-        SimdVector z = _mm_shuffle_ps( scalingVec, scalingVec, _MM_SHUFFLE( 2, 2, 2, 2 ) );
+        Helium::SimdVector x = _mm_shuffle_ps( scalingVec, scalingVec, _MM_SHUFFLE( 0, 0, 0, 0 ) );
+        Helium::SimdVector y = _mm_shuffle_ps( scalingVec, scalingVec, _MM_SHUFFLE( 1, 1, 1, 1 ) );
+        Helium::SimdVector z = _mm_shuffle_ps( scalingVec, scalingVec, _MM_SHUFFLE( 2, 2, 2, 2 ) );
 
-        m_matrix[ 0 ] = Simd::MultiplyF32( m_matrix[ 0 ], x );
-        m_matrix[ 1 ] = Simd::MultiplyF32( m_matrix[ 1 ], z );
-        m_matrix[ 2 ] = Simd::MultiplyF32( m_matrix[ 2 ], y );
+        m_matrix[ 0 ] = Helium::Simd::MultiplyF32( m_matrix[ 0 ], x );
+        m_matrix[ 1 ] = Helium::Simd::MultiplyF32( m_matrix[ 1 ], z );
+        m_matrix[ 2 ] = Helium::Simd::MultiplyF32( m_matrix[ 2 ], y );
     }
 
     /// Set this matrix to the product of two matrices.
@@ -578,7 +578,7 @@ namespace Lunar
     /// @return  Matrix determinant.
     float32_t Matrix44::GetDeterminant() const
     {
-        SimdVector determinant, det22Adj, det22Opp, det33Pre, det33Split, det33Post;
+        Helium::SimdVector determinant, det22Adj, det22Opp, det33Pre, det33Split, det33Post;
         DeterminantHelper( m_matrix, determinant, det22Adj, det22Opp, det33Pre, det33Split, det33Post );
 
         return reinterpret_cast< const float32_t* >( &determinant )[ 0 ];
@@ -591,21 +591,21 @@ namespace Lunar
     /// @see Invert()
     void Matrix44::GetInverse( Matrix44& rMatrix ) const
     {
-        SimdVector invDeterminantEven, det22Adj, det22Opp, det33Pre, det33Split, det33Post;
+        Helium::SimdVector invDeterminantEven, det22Adj, det22Opp, det33Pre, det33Split, det33Post;
         DeterminantHelper( m_matrix, invDeterminantEven, det22Adj, det22Opp, det33Pre, det33Split, det33Post );
 
-        invDeterminantEven = Simd::InverseF32( invDeterminantEven );
+        invDeterminantEven = Helium::Simd::InverseF32( invDeterminantEven );
 
-        SimdVector invDeterminantOdd = _mm_shuffle_ps(
+        Helium::SimdVector invDeterminantOdd = _mm_shuffle_ps(
             invDeterminantEven,
             invDeterminantEven,
             _MM_SHUFFLE( 0, 3, 2, 1 ) );
 
-        SimdVector row0 = InverseRowHelper( det33Pre, det33Split, det33Post, invDeterminantEven );
+        Helium::SimdVector row0 = InverseRowHelper( det33Pre, det33Split, det33Post, invDeterminantEven );
 
         ComputeDet33PartsHelper( m_matrix[ 0 ], det22Adj, det22Opp, det33Pre, det33Split, det33Post );
 
-        SimdVector row1 = InverseRowHelper( det33Pre, det33Split, det33Post, invDeterminantOdd );
+        Helium::SimdVector row1 = InverseRowHelper( det33Pre, det33Split, det33Post, invDeterminantOdd );
 
         ComputeDet22Helper( m_matrix[ 0 ], m_matrix[ 1 ], det22Adj, det22Opp );
 
@@ -631,10 +631,10 @@ namespace Lunar
     /// @see Transpose()
     void Matrix44::GetTranspose( Matrix44& rMatrix ) const
     {
-        SimdVector xyxy = _mm_unpacklo_ps( m_matrix[ 0 ], m_matrix[ 1 ] );
-        SimdVector xyzw = _mm_unpackhi_ps( m_matrix[ 0 ], m_matrix[ 1 ] );
-        SimdVector zwxy = _mm_unpacklo_ps( m_matrix[ 2 ], m_matrix[ 3 ] );
-        SimdVector zwzw = _mm_unpackhi_ps( m_matrix[ 2 ], m_matrix[ 3 ] );
+        Helium::SimdVector xyxy = _mm_unpacklo_ps( m_matrix[ 0 ], m_matrix[ 1 ] );
+        Helium::SimdVector xyzw = _mm_unpackhi_ps( m_matrix[ 0 ], m_matrix[ 1 ] );
+        Helium::SimdVector zwxy = _mm_unpacklo_ps( m_matrix[ 2 ], m_matrix[ 3 ] );
+        Helium::SimdVector zwzw = _mm_unpackhi_ps( m_matrix[ 2 ], m_matrix[ 3 ] );
 
         rMatrix.m_matrix[ 0 ] = _mm_movelh_ps( xyxy, zwxy );
         rMatrix.m_matrix[ 1 ] = _mm_movehl_ps( zwxy, xyxy );
@@ -643,4 +643,4 @@ namespace Lunar
     }
 }
 
-#endif  // L_SIMD_SSE
+#endif  // HELIUM_SIMD_SSE

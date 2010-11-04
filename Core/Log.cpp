@@ -32,7 +32,7 @@ namespace Lunar
     {
         ScopeLock< LwMutex > scopeLock( m_mutex );
 
-        L_ASSERT( static_cast< size_t >( level ) < static_cast< size_t >( LOG_MAX ) );
+        HELIUM_ASSERT( static_cast< size_t >( level ) < static_cast< size_t >( LOG_MAX ) );
         m_level = level;
     }
 
@@ -77,7 +77,7 @@ namespace Lunar
             if( messageLength != 0 )
             {
                 OutputImpl( pMessage );
-                m_bNewLine = ( pMessage[ messageLength - 1 ] == L_T( '\n' ) );
+                m_bNewLine = ( pMessage[ messageLength - 1 ] == TXT( '\n' ) );
             }
         }
     }
@@ -90,7 +90,7 @@ namespace Lunar
     ///                     been called on this as necessary).
     void Log::OutputVa( ELogLevel level, const tchar_t* pFormat, va_list argList )
     {
-        L_ASSERT( pFormat );
+        HELIUM_ASSERT( pFormat );
 
         ScopeLock< LwMutex > scopeLock( m_mutex );
 
@@ -115,7 +115,7 @@ namespace Lunar
         if( static_cast< unsigned int >( result ) < L_ARRAY_COUNT( buffer ) )
         {
             OutputImpl( buffer );
-            m_bNewLine = ( buffer[ result - 1 ] == L_T( '\n' ) );
+            m_bNewLine = ( buffer[ result - 1 ] == TXT( '\n' ) );
 
             return;
         }
@@ -124,22 +124,22 @@ namespace Lunar
         {
             argListTemp = argList;
             result = StringFormatVa( NULL, 0, pFormat, argListTemp );
-            L_ASSERT( result >= 0 );
+            HELIUM_ASSERT( result >= 0 );
         }
 
         size_t bufferSize = static_cast< size_t >( result ) + 1;
 
         DefaultAllocator allocator;
         tchar_t* pBuffer = static_cast< tchar_t* >( allocator.Allocate( sizeof( tchar_t ) * bufferSize ) );
-        L_ASSERT( pBuffer );
+        HELIUM_ASSERT( pBuffer );
         if( pBuffer )
         {
             argListTemp = argList;
             result = StringFormatVa( pBuffer, bufferSize, pFormat, argListTemp );
 
-            L_ASSERT( result == static_cast< int >( bufferSize - 1 ) );
+            HELIUM_ASSERT( result == static_cast< int >( bufferSize - 1 ) );
             OutputImpl( pBuffer );
-            m_bNewLine = ( pBuffer[ result - 1 ] == L_T( '\n' ) );
+            m_bNewLine = ( pBuffer[ result - 1 ] == TXT( '\n' ) );
 
             allocator.Free( pBuffer );
         }
@@ -152,31 +152,31 @@ namespace Lunar
     /// @return  Logging level string.
     const tchar_t* Log::GetLevelString( ELogLevel level )
     {
-        L_ASSERT( static_cast< size_t >( level ) < static_cast< size_t >( LOG_MAX ) );
+        HELIUM_ASSERT( static_cast< size_t >( level ) < static_cast< size_t >( LOG_MAX ) );
 
         switch( level )
         {
             case LOG_DEBUG:
             {
-                return L_T( "[D] " );
+                return TXT( "[D] " );
             }
 
             case LOG_INFO:
             {
-                return L_T( "[I] " );
+                return TXT( "[I] " );
             }
 
             case LOG_WARNING:
             {
-                return L_T( "[W] " );
+                return TXT( "[W] " );
             }
 
             case LOG_ERROR:
             {
-                return L_T( "[E] " );
+                return TXT( "[E] " );
             }
         }
 
-        return L_T( "[?] " );
+        return TXT( "[?] " );
     }
 }

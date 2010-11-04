@@ -26,12 +26,12 @@ namespace Lunar
             L_ARRAY_COUNT( pathBuffer ) );
         if( bufferSize == 0 )
         {
-            L_LOG( LOG_ERROR, L_T( "DynamicLibrary: Failed to retrieve DLL file path.\n" ) );
-            pathBuffer[ 0 ] = L_T( '\0' );
+            L_LOG( LOG_ERROR, TXT( "DynamicLibrary: Failed to retrieve DLL file path.\n" ) );
+            pathBuffer[ 0 ] = TXT( '\0' );
         }
         else
         {
-            pathBuffer[ L_ARRAY_COUNT( pathBuffer ) - 1 ] = L_T( '\0' );
+            pathBuffer[ L_ARRAY_COUNT( pathBuffer ) - 1 ] = TXT( '\0' );
         }
 
         String result( pathBuffer );
@@ -46,13 +46,13 @@ namespace Lunar
     DynamicLibrary::DynamicLibrary( void* pHandle )
         : m_pHandle( pHandle )
     {
-        L_ASSERT( pHandle );
+        HELIUM_ASSERT( pHandle );
     }
 
     /// Destructor.
     DynamicLibrary::~DynamicLibrary()
     {
-        L_LOG( LOG_DEBUG, L_T( "DynamicLibrary: Unloading \"%s\".\n" ), *GetDllPath( m_pHandle ) );
+        L_LOG( LOG_DEBUG, TXT( "DynamicLibrary: Unloading \"%s\".\n" ), *GetDllPath( m_pHandle ) );
 
         FreeLibrary( static_cast< HMODULE >( m_pHandle ) );
     }
@@ -64,10 +64,10 @@ namespace Lunar
     /// @return  Pointer to the function address if the function was found, null if the function was not found.
     void* DynamicLibrary::GetFunctionAddress( const char* pFunctionName ) const
     {
-        L_ASSERT( pFunctionName );
+        HELIUM_ASSERT( pFunctionName );
 
 #if L_ENABLE_LOGGING
-#if L_UNICODE
+#if HELIUM_UNICODE
         tchar_t functionNameT[ 1024 ];
         mbstowcs_s( NULL, functionNameT, pFunctionName, _TRUNCATE );
 #else
@@ -76,7 +76,7 @@ namespace Lunar
 
         L_LOG(
             LOG_DEBUG,
-            L_T( "DynamicLibrary: Locating function \"%s\" in library \"%s\".\n" ),
+            TXT( "DynamicLibrary: Locating function \"%s\" in library \"%s\".\n" ),
             functionNameT,
             *GetDllPath( m_pHandle ) );
 #endif
@@ -94,22 +94,22 @@ namespace Lunar
     ///          destroying the returned interface.
     DynamicLibrary* DynamicLibrary::Load( const tchar_t* pPath )
     {
-        L_ASSERT( pPath );
+        HELIUM_ASSERT( pPath );
 
-        L_LOG( LOG_DEBUG, L_T( "DynamicLibrary: Loading \"%s\".\n" ), pPath );
+        L_LOG( LOG_DEBUG, TXT( "DynamicLibrary: Loading \"%s\".\n" ), pPath );
 
         HMODULE hModule = LoadLibrary( pPath );
         if( !hModule )
         {
-            L_LOG( LOG_ERROR, L_T( "DynamicLibrary: Failed to load \"%s\".\n" ), pPath );
+            L_LOG( LOG_ERROR, TXT( "DynamicLibrary: Failed to load \"%s\".\n" ), pPath );
 
             return NULL;
         }
 
         DynamicLibrary* pLibrary = new DynamicLibrary( hModule );
-        L_ASSERT( pLibrary );
+        HELIUM_ASSERT( pLibrary );
 
-        L_LOG( LOG_DEBUG, L_T( "DynamicLibrary: Loaded \"%s\" successfully.\n" ), pPath );
+        L_LOG( LOG_DEBUG, TXT( "DynamicLibrary: Loaded \"%s\" successfully.\n" ), pPath );
 
         return pLibrary;
     }

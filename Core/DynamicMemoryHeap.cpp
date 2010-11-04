@@ -117,7 +117,7 @@ namespace Lunar
 
     static void VerboseTrackingUnlock()
     {
-        L_ASSERT( s_verboseTrackingCurrentThreadId == Thread::GetCurrentId() );
+        HELIUM_ASSERT( s_verboseTrackingCurrentThreadId == Thread::GetCurrentId() );
 
         s_verboseTrackingCurrentThreadId = Thread::INVALID_ID;
         GetVerboseTrackingMutex().Unlock();
@@ -174,8 +174,8 @@ namespace Lunar
     /// Write memory stats for all dynamic memory heap instances to the output log.
     void DynamicMemoryHeap::LogMemoryStats()
     {
-        L_LOG( LOG_DEBUG, L_T( "DynamicMemoryHeap stats:\n" ) );
-        L_LOG( LOG_DEBUG, L_T( "Heap name\tActive allocations\tBytes allocated\n" ) );
+        L_LOG( LOG_DEBUG, TXT( "DynamicMemoryHeap stats:\n" ) );
+        L_LOG( LOG_DEBUG, TXT( "Heap name\tActive allocations\tBytes allocated\n" ) );
 
         ScopeReadLock readLock( GetGlobalHeapListLock() );
 
@@ -187,7 +187,7 @@ namespace Lunar
 #endif
             if( !pName )
             {
-                pName = L_T( "(unnamed)" );
+                pName = TXT( "(unnamed)" );
             }
 
             size_t allocationCount = pHeap->GetAllocationCount();
@@ -195,13 +195,13 @@ namespace Lunar
 
             L_LOG(
                 LOG_DEBUG,
-                L_T( "%s\t%" ) TPRIuSZ L_T( "\t%" ) TPRIuSZ L_T( "\n" ),
+                TXT( "%s\t%" ) TPRIuSZ TXT( "\t%" ) TPRIuSZ TXT( "\n" ),
                 pName,
                 allocationCount,
                 bytesActual );
         }
 
-        L_LOG( LOG_DEBUG, L_T( "\n" ) );
+        L_LOG( LOG_DEBUG, TXT( "\n" ) );
 
 #if L_ENABLE_MEMORY_TRACKING_VERBOSE
         bool bLockedTracking = ConditionalVerboseTrackingLock();
@@ -209,7 +209,7 @@ namespace Lunar
         bool bOldDisableBacktraceTracking = sm_bDisableBacktraceTracking;
         sm_bDisableBacktraceTracking = true;
 
-        L_LOG( LOG_DEBUG, L_T( "DynamicMemoryHeap unfreed allocations:\n" ) );
+        L_LOG( LOG_DEBUG, TXT( "DynamicMemoryHeap unfreed allocations:\n" ) );
 
         size_t allocationIndex = 1;
 
@@ -231,7 +231,7 @@ namespace Lunar
                 {
                     L_LOG(
                         LOG_DEBUG,
-                        L_T( "%" ) TPRIuSZ L_T( ": 0x%p (%s)\n" ),
+                        TXT( "%" ) TPRIuSZ TXT( ": 0x%p (%s)\n" ),
                         allocationIndex,
                         iter->first,
                         pHeapName );
@@ -250,13 +250,13 @@ namespace Lunar
                         }
 
                         GetAddressSymbol( symbol, pAddress );
-                        L_LOG( LOG_DEBUG, L_T( "- 0x%p: %s\n" ), pAddress, *symbol );
+                        L_LOG( LOG_DEBUG, TXT( "- 0x%p: %s\n" ), pAddress, *symbol );
                     }
                 }
             }
         }
 
-        L_LOG( LOG_DEBUG, L_T( "\n" ) );
+        L_LOG( LOG_DEBUG, TXT( "\n" ) );
 
         sm_bDisableBacktraceTracking = bOldDisableBacktraceTracking;
 

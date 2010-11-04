@@ -69,14 +69,14 @@ namespace Lunar
 
             tchar_t* pTempString =
                 static_cast< tchar_t* >( rStackHeap.Allocate( sizeof( tchar_t ) * ( tempStringSize + 1 ) ) );
-            L_ASSERT( pTempString );
+            HELIUM_ASSERT( pTempString );
 
             MemoryCopy( pTempString, rPath.GetData(), sizeof( tchar_t ) * tempStringSize );
-            pTempString[ tempStringSize ] = L_T( '\0' );
+            pTempString[ tempStringSize ] = TXT( '\0' );
 
             if( !IsRootDirectory( pTempString ) )
             {
-                pTempString[ tempStringSize - 1 ] = L_T( '\0' );
+                pTempString[ tempStringSize - 1 ] = TXT( '\0' );
             }
 
             rOut = pTempString;
@@ -122,7 +122,7 @@ namespace Lunar
             rOut.Remove( 0, baseNameStartIndex );
             if( bStripExtension )
             {
-                size_t extensionIndex = rOut.FindReverse( L_T( '.' ) );
+                size_t extensionIndex = rOut.FindReverse( TXT( '.' ) );
                 if( IsValid( extensionIndex ) )
                 {
                     rOut.Remove( extensionIndex, rOut.GetSize() - extensionIndex );
@@ -136,7 +136,7 @@ namespace Lunar
             size_t baseNameSize = rPath.GetSize() - baseNameStartIndex;
             if( bStripExtension )
             {
-                size_t extensionIndex = rPath.FindReverse( L_T( '.' ) );
+                size_t extensionIndex = rPath.FindReverse( TXT( '.' ) );
                 if( IsValid( extensionIndex ) && extensionIndex >= baseNameStartIndex )
                 {
                     baseNameSize = extensionIndex - baseNameStartIndex;
@@ -148,10 +148,10 @@ namespace Lunar
 
             tchar_t* pTempString =
                 static_cast< tchar_t* >( rStackHeap.Allocate( sizeof( tchar_t ) * ( baseNameSize + 1 ) ) );
-            L_ASSERT( pTempString );
+            HELIUM_ASSERT( pTempString );
 
             MemoryCopy( pTempString, rPath.GetData() + baseNameStartIndex, sizeof( tchar_t ) * baseNameSize );
-            pTempString[ baseNameSize ] = L_T( '\0' );
+            pTempString[ baseNameSize ] = TXT( '\0' );
 
             rOut = pTempString;
 
@@ -166,8 +166,8 @@ namespace Lunar
     void Path::GetExtension( String& rOut, const String& rPath )
     {
         // Locate the last instance of either a dot for the extension or a path separator, whichever comes first.
-        size_t extensionIndex = rPath.FindAnyReverse( L_PATH_SEPARATOR_LIST L_T( "." ) );
-        if( IsInvalid( extensionIndex ) || rPath[ extensionIndex ] != L_T( '.' ) )
+        size_t extensionIndex = rPath.FindAnyReverse( L_PATH_SEPARATOR_LIST TXT( "." ) );
+        if( IsInvalid( extensionIndex ) || rPath[ extensionIndex ] != TXT( '.' ) )
         {
             rOut.Clear();
             return;
@@ -190,10 +190,10 @@ namespace Lunar
 
             tchar_t* pTempString =
                 static_cast< tchar_t* >( rStackHeap.Allocate( sizeof( tchar_t ) * ( extensionSize + 1 ) ) );
-            L_ASSERT( pTempString );
+            HELIUM_ASSERT( pTempString );
 
             MemoryCopy( pTempString, rPath.GetData() + extensionIndex, sizeof( tchar_t ) * extensionSize );
-            pTempString[ extensionSize ] = L_T( '\0' );
+            pTempString[ extensionSize ] = TXT( '\0' );
 
             rOut = pTempString;
 
@@ -239,10 +239,10 @@ namespace Lunar
         {
             // Output string and the second path are the same, so work with a copy of the second path.
             tchar_t* pNewPath = static_cast< tchar_t* >( rStackHeap.Allocate( sizeof( tchar_t ) * ( path1Size + 1 ) ) );
-            L_ASSERT( pNewPath );
+            HELIUM_ASSERT( pNewPath );
 
             MemoryCopy( pNewPath, pPath1, sizeof( tchar_t ) * path1Size );
-            pNewPath[ path1Size ] = L_T( '\0' );
+            pNewPath[ path1Size ] = TXT( '\0' );
 
             pPath1 = pNewPath;
         }

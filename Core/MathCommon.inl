@@ -133,8 +133,8 @@ namespace Lunar
     /// @return  Absolute value of the given value.
     int64_t Abs( int64_t value )
     {
-#if L_OS_WIN
-#if L_CC_MSC
+#if HELIUM_OS_WIN
+#if HELIUM_CC_MSC
         return ::_abs64( value );
 #else
         return llabs( value );
@@ -215,11 +215,11 @@ namespace Lunar
     /// @see Log2( uint64_t )
     size_t Log2( uint32_t value )
     {
-        L_ASSERT( value );
+        HELIUM_ASSERT( value );
 
-#if L_CC_MSC
+#if HELIUM_CC_MSC
         unsigned long bitIndex = 0;
-        L_VERIFY( _BitScanReverse( &bitIndex, value ) );
+        HELIUM_VERIFY( _BitScanReverse( &bitIndex, value ) );
 
         return bitIndex;
 #else
@@ -249,13 +249,13 @@ namespace Lunar
     /// @see Log2( uint32_t )
     size_t Log2( uint64_t value )
     {
-        L_ASSERT( value );
+        HELIUM_ASSERT( value );
 
-#if L_CC_MSC
+#if HELIUM_CC_MSC
         unsigned long bitIndex = 0;
 
-#if L_WORDSIZE == 64
-        L_VERIFY( _BitScanReverse64( &bitIndex, value ) );
+#if HELIUM_WORDSIZE == 64
+        HELIUM_VERIFY( _BitScanReverse64( &bitIndex, value ) );
 #else
         if( _BitScanReverse( &bitIndex, static_cast< uint32_t >( value >> 32 ) ) )
         {
@@ -263,7 +263,7 @@ namespace Lunar
         }
         else
         {
-            L_VERIFY( _BitScanReverse( &bitIndex, static_cast< uint32_t >( value ) ) );
+            HELIUM_VERIFY( _BitScanReverse( &bitIndex, static_cast< uint32_t >( value ) ) );
         }
 #endif
 

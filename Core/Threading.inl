@@ -29,7 +29,7 @@ namespace Lunar
     /// @see Lock(), TryLock(), IsLocked(), WaitForUnlock()
     void SpinLock::Unlock()
     {
-        L_ASSERT( m_counter != 0 );
+        HELIUM_ASSERT( m_counter != 0 );
         AtomicExchangeRelease( m_counter, 0 );
     }
 

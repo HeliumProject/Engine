@@ -26,9 +26,9 @@ namespace Lunar
         size_t destBufferSize,
         const char* pSourceString )
     {
-        L_ASSERT( pSourceString );
+        HELIUM_ASSERT( pSourceString );
 
-#if L_CC_MSC
+#if HELIUM_CC_MSC
         size_t charactersConverted = 0;
         errno_t result = mbstowcs_s(
             &charactersConverted,
@@ -156,9 +156,9 @@ namespace Lunar
         size_t destBufferSize,
         const wchar_t* pSourceString )
     {
-        L_ASSERT( pSourceString );
+        HELIUM_ASSERT( pSourceString );
 
-#if L_CC_MSC
+#if HELIUM_CC_MSC
         size_t charactersConverted = 0;
         errno_t result = wcstombs_s(
             &charactersConverted,
@@ -284,7 +284,7 @@ namespace Lunar
         size_t destBufferSize,
         const CharType* pSourceString )
     {
-        L_ASSERT( pSourceString );
+        HELIUM_ASSERT( pSourceString );
 
         size_t sourceLength = StringLength( pSourceString );
         if( !pDestString )
@@ -337,7 +337,7 @@ namespace Lunar
         StringBase< CharType, DestAllocator >& rDestString,
         const CharType* pSourceString )
     {
-        L_ASSERT( pSourceString );
+        HELIUM_ASSERT( pSourceString );
 
         rDestString = pSourceString;
 

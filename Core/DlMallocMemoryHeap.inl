@@ -57,7 +57,7 @@ static int PhysicalMemoryFree( void* pMemory, size_t size )
 /// @param[in] ...      Format arguments.
 static void PrintfWrapper( const char* pFormat, ... )
 {
-#if L_UNICODE
+#if HELIUM_UNICODE
     char message[ Lunar::Log::DEFAULT_MESSAGE_BUFFER_SIZE ];
 
     va_list argList;
@@ -86,7 +86,7 @@ static void PrintfWrapper( const char* pFormat, ... )
         ++pDestCharacter;
     }
 
-    L_LOG( Lunar::LOG_DEBUG, L_T( "%s" ), messageWide );
+    L_LOG( Lunar::LOG_DEBUG, TXT( "%s" ), messageWide );
 #else
     va_list argList;
     va_start( argList, pFormat );
@@ -105,8 +105,8 @@ static void PrintfWrapper( const char* pFormat, ... )
 #define REALLOC_ZERO_BYTES_FREES 1
 #define FOOTERS 1
 
-#define CORRUPTION_ERROR_ACTION( m ) L_ASSERT_MESSAGE_FALSE( L_T( "Memory corruption detected!" ) )
-#define USAGE_ERROR_ACTION( m, p ) L_ASSERT_MESSAGE_FALSE( L_T( "Incorrect realloc()/free() usage detected!" ) )
+#define CORRUPTION_ERROR_ACTION( m ) HELIUM_ASSERT_MSG_FALSE( TXT( "Memory corruption detected!" ) )
+#define USAGE_ERROR_ACTION( m, p ) HELIUM_ASSERT_MSG_FALSE( TXT( "Incorrect realloc()/free() usage detected!" ) )
 
 #if L_RELEASE
 #define INSECURE 1
@@ -197,7 +197,7 @@ namespace Lunar
         DynamicMemoryHeapVerboseTrackingData* pVerboseTrackingData = m_pVerboseTrackingData;
         m_pVerboseTrackingData = NULL;
 
-        L_ASSERT( pVerboseTrackingData->allocationBacktraceMap.empty() );
+        HELIUM_ASSERT( pVerboseTrackingData->allocationBacktraceMap.empty() );
         pVerboseTrackingData->~DynamicMemoryHeapVerboseTrackingData();
 
         size_t allocationSize = Align( sizeof( DynamicMemoryHeapVerboseTrackingData ), PhysicalMemory::GetPageSize() );
@@ -302,7 +302,7 @@ namespace Lunar
 #endif
 
             MEMORY_HEAP_CLASS_NAME* pHeap = GetAllocationHeap( pMemory );
-            L_ASSERT( pHeap );
+            HELIUM_ASSERT( pHeap );
             if( pHeap )
             {
                 pHeap->RemoveAllocation( pMemory );
@@ -327,7 +327,7 @@ namespace Lunar
 #endif
 
             MEMORY_HEAP_CLASS_NAME* pHeap = GetAllocationHeap( pMemory );
-            L_ASSERT( pHeap );
+            HELIUM_ASSERT( pHeap );
             if( pHeap )
             {
                 pHeap->AddAllocation( pMemory );
@@ -402,7 +402,7 @@ namespace Lunar
 #endif
 
             MEMORY_HEAP_CLASS_NAME* pHeap = GetAllocationHeap( pMemory );
-            L_ASSERT( pHeap );
+            HELIUM_ASSERT( pHeap );
             if( pHeap )
             {
                 pHeap->RemoveAllocation( pMemory );
@@ -454,7 +454,7 @@ namespace Lunar
         for( MEMORY_HEAP_CLASS_NAME* pHeap = sm_pGlobalHeapListHead; pHeap != NULL; pHeap = pHeap->m_pNextHeap )
         {
             void* pMspace = pHeap->m_pMspace;
-            L_ASSERT( pMspace );
+            HELIUM_ASSERT( pMspace );
             nedalloc::neddisablethreadcache( static_cast< nedalloc::nedpool* >( pMspace ) );
         }
 #endif
@@ -469,10 +469,10 @@ namespace Lunar
         // XXX TMC TODO: Add support for the target number of threads (either determined programatically and/or through
         // a parameter).
         m_pMspace = nedalloc::nedcreatepool( capacity, 0 );
-        L_ASSERT( m_pMspace );
+        HELIUM_ASSERT( m_pMspace );
 #else
         m_pMspace = create_mspace( capacity, 1 );
-        L_ASSERT( m_pMspace );
+        HELIUM_ASSERT( m_pMspace );
 
         // "extp" is unused, so we'll use it to point back to the heap instance.
         static_cast< mstate >( m_pMspace )->extp = this;
@@ -507,7 +507,7 @@ namespace Lunar
         size_t allocationSize = Align( sizeof( DynamicMemoryHeapVerboseTrackingData ), PhysicalMemory::GetPageSize() );
         DynamicMemoryHeapVerboseTrackingData* pVerboseTrackingData =
             static_cast< DynamicMemoryHeapVerboseTrackingData* >( PhysicalMemory::Allocate( allocationSize ) );
-        L_ASSERT( pVerboseTrackingData );
+        HELIUM_ASSERT( pVerboseTrackingData );
         new( pVerboseTrackingData ) DynamicMemoryHeapVerboseTrackingData;
 
         m_pVerboseTrackingData = pVerboseTrackingData;
@@ -632,20 +632,20 @@ namespace Lunar
     /// @return  Pointer to the heap to which the allocation belongs.
     MEMORY_HEAP_CLASS_NAME* MEMORY_HEAP_CLASS_NAME::GetAllocationHeap( void* pMemory )
     {
-        L_ASSERT( pMemory );
+        HELIUM_ASSERT( pMemory );
 
 #if USE_NEDMALLOC
         // Not yet implemented.
         return NULL;
 #elif FOOTERS
         mchunkptr pChunk = mem2chunk( pMemory );
-        L_ASSERT( pChunk );
+        HELIUM_ASSERT( pChunk );
 
         mstate pMstate = get_mstate_for( pChunk );
-        L_ASSERT( pMstate );
+        HELIUM_ASSERT( pMstate );
 
         MEMORY_HEAP_CLASS_NAME* pHeap = static_cast< MEMORY_HEAP_CLASS_NAME* >( pMstate->extp );
-        L_ASSERT( pHeap );
+        HELIUM_ASSERT( pHeap );
 
         return pHeap;
 #else
@@ -654,7 +654,7 @@ namespace Lunar
         for( MEMORY_HEAP_CLASS_NAME* pHeap = sm_pGlobalHeapListHead; pHeap != NULL; pHeap = pHeap->m_pNextHeap )
         {
             mstate* pMspace = pHeap->m_pMspace;
-            L_ASSERT( pMspace );
+            HELIUM_ASSERT( pMspace );
 
             for( msegmentptr pSegment = &pMspace->seg; pSegment != NULL; pSegment = pSegment->next )
             {

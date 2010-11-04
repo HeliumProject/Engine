@@ -10,7 +10,8 @@
 #define LUNAR_CORE_STRING_H
 
 #include "Core/Core.h"
-#include "Core/Char.h"
+
+#include "Platform/Types.h"
 #include "Core/DynArray.h"
 #include "Core/HashFunctions.h"
 
@@ -252,13 +253,13 @@ namespace Lunar
         size_t operator()( const WideString& rKey ) const;
     };
 
-#if L_UNICODE
+#if HELIUM_UNICODE
     /// Default string class.
     typedef WideString String;
-#else  // L_UNICODE
+#else  // HELIUM_UNICODE
     /// Default string class.
     typedef CharString String;
-#endif  // L_UNICODE
+#endif  // HELIUM_UNICODE
 }
 
 #include "Core/String.inl"

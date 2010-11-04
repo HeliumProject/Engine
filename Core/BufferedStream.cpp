@@ -32,7 +32,7 @@ namespace Lunar
         if( bufferSize != 0 )
         {
             m_pBuffer = DefaultAllocator().Allocate( bufferSize );
-            L_ASSERT( m_pBuffer );
+            HELIUM_ASSERT( m_pBuffer );
         }
 
         // Initialize the buffer seek offset if seeking is supported.
@@ -85,7 +85,7 @@ namespace Lunar
         if( bufferSize != m_bufferSize )
         {
             m_pBuffer = DefaultAllocator().Reallocate( m_pBuffer, bufferSize );
-            L_ASSERT( m_pBuffer || bufferSize == 0 );
+            HELIUM_ASSERT( m_pBuffer || bufferSize == 0 );
 
             m_bufferSize = 0;
         }
@@ -117,16 +117,16 @@ namespace Lunar
     /// @copydoc Stream::Read()
     size_t BufferedStream::Read( void* pBuffer, size_t size, size_t count )
     {
-        L_ASSERT( pBuffer || count == 0 );
+        HELIUM_ASSERT( pBuffer || count == 0 );
 
         // Make sure we can read from the stream.
-        L_ASSERT( CanRead() );
+        HELIUM_ASSERT( CanRead() );
         if( !CanRead() )
         {
             return 0;
         }
 
-        L_ASSERT( m_pStream );
+        HELIUM_ASSERT( m_pStream );
 
         bool bCanSeek = CanSeek();
 
@@ -202,16 +202,16 @@ namespace Lunar
     /// @copydoc Stream::Write()
     size_t BufferedStream::Write( const void* pBuffer, size_t size, size_t count )
     {
-        L_ASSERT( pBuffer || count == 0 );
+        HELIUM_ASSERT( pBuffer || count == 0 );
 
         // Make sure we can write from the stream.
-        L_ASSERT( CanWrite() );
+        HELIUM_ASSERT( CanWrite() );
         if( !CanWrite() )
         {
             return 0;
         }
 
-        L_ASSERT( m_pStream );
+        HELIUM_ASSERT( m_pStream );
 
         // Pass through if we have no buffer.
         if( m_bufferSize == 0 )
@@ -251,7 +251,7 @@ namespace Lunar
             if( m_bufferOffset >= m_bufferSize )
             {
                 Flush();
-                L_ASSERT( m_bufferOffset == 0 );
+                HELIUM_ASSERT( m_bufferOffset == 0 );
             }
 
             // Fill the buffer with data to write.
@@ -280,7 +280,7 @@ namespace Lunar
         // Commit any pending data to write.
         if( !m_bReadData && m_bufferOffset != 0 )
         {
-            L_ASSERT( CanWrite() );
+            HELIUM_ASSERT( CanWrite() );
 
             if( bCanSeek )
             {
@@ -307,8 +307,8 @@ namespace Lunar
     /// @copydoc Stream::Seek()
     int64_t BufferedStream::Seek( int64_t offset, ESeekOrigin origin )
     {
-        L_ASSERT( m_pStream );
-        L_ASSERT( CanSeek() );
+        HELIUM_ASSERT( m_pStream );
+        HELIUM_ASSERT( CanSeek() );
         if( !m_pStream || !CanSeek() )
         {
             return -1;

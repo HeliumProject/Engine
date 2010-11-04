@@ -146,7 +146,7 @@ bool Debug::IsInitialized()
     return g_Initialized;
 }
 
-tstring Debug::GetSymbolInfo(uintptr adr, bool enumLoadedModules)
+tstring Debug::GetSymbolInfo(uintptr_t adr, bool enumLoadedModules)
 {
     HELIUM_ASSERT( Debug::IsInitialized() );
 
@@ -243,7 +243,7 @@ tstring Debug::GetSymbolInfo(uintptr adr, bool enumLoadedModules)
     }
 }
 
-Helium::Exception* Debug::GetHeliumException(uintptr addr)
+Helium::Exception* Debug::GetHeliumException(uintptr_t addr)
 {
     Helium::Exception* cppException = (Helium::Exception*)addr;
 
@@ -266,7 +266,7 @@ Helium::Exception* Debug::GetHeliumException(uintptr addr)
     }
 }
 
-std::exception* Debug::GetStandardException(uintptr addr)
+std::exception* Debug::GetStandardException(uintptr_t addr)
 {
     std::exception* cppException = (std::exception*)addr;
 
@@ -289,7 +289,7 @@ std::exception* Debug::GetStandardException(uintptr addr)
     }
 }
 
-bool Debug::GetStackTrace(std::vector<uintptr>& trace, unsigned omitFrames)
+bool Debug::GetStackTrace(std::vector<uintptr_t>& trace, unsigned omitFrames)
 {
     //  Some techniques borrowed from Visual Leak Detector 1.9
     //   (http://www.codeproject.com/tools/visualleakdetector.asp)
@@ -309,7 +309,7 @@ bool Debug::GetStackTrace(std::vector<uintptr>& trace, unsigned omitFrames)
     return GetStackTrace(&context, trace, omitFrames+1);
 }
 
-bool Debug::GetStackTrace(LPCONTEXT context, std::vector<uintptr>& stack, unsigned omitFrames)
+bool Debug::GetStackTrace(LPCONTEXT context, std::vector<uintptr_t>& stack, unsigned omitFrames)
 {
     HELIUM_ASSERT( Debug::IsInitialized() );
 
@@ -377,7 +377,7 @@ bool Debug::GetStackTrace(LPCONTEXT context, std::vector<uintptr>& stack, unsign
 
         if (omitFrames == 0)
         {
-            stack.push_back( (uintptr)frame.AddrReturn.Offset );
+            stack.push_back( (uintptr_t)frame.AddrReturn.Offset );
         }
         else
         {
@@ -388,10 +388,10 @@ bool Debug::GetStackTrace(LPCONTEXT context, std::vector<uintptr>& stack, unsign
     return !stack.empty();
 }
 
-void Debug::TranslateStackTrace(const std::vector<uintptr>& trace, tstring& buffer)
+void Debug::TranslateStackTrace(const std::vector<uintptr_t>& trace, tstring& buffer)
 {
-    std::vector<uintptr>::const_iterator itr = trace.begin();
-    std::vector<uintptr>::const_iterator end = trace.end();
+    std::vector<uintptr_t>::const_iterator itr = trace.begin();
+    std::vector<uintptr_t>::const_iterator end = trace.end();
     for ( ; itr != end; ++itr )
     {
         PrintString(buffer, TXT("0x%08I64X - %s\n"), *itr, GetSymbolInfo(*itr, false).c_str() );
@@ -575,7 +575,7 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
 
             PrintString( args.m_Threads.back(), TXT("\nCallstack:\n") );
 
-            std::vector<uintptr> trace;
+            std::vector<uintptr_t> trace;
             if ( GetStackTrace( &context, trace ) )
             {
                 TranslateStackTrace( trace, args.m_Threads.back() );
@@ -680,7 +680,7 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
         }
     }
 
-    std::vector<uintptr> trace;
+    std::vector<uintptr_t> trace;
     if ( GetStackTrace( info->ContextRecord, trace ) )
     {
         TranslateStackTrace( trace, args.m_Callstack );

@@ -51,7 +51,7 @@ namespace Lunar
     /// @copydoc Stream::Read()
     size_t DynamicMemoryStream::Read( void* pBuffer, size_t size, size_t count )
     {
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( m_pBuffer );
         if( !m_pBuffer )
         {
             return 0;
@@ -69,7 +69,7 @@ namespace Lunar
     /// @copydoc Stream::Write()
     size_t DynamicMemoryStream::Write( const void* pBuffer, size_t size, size_t count )
     {
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( m_pBuffer );
         if( !m_pBuffer )
         {
             return 0;
@@ -102,13 +102,13 @@ namespace Lunar
     /// @copydoc Stream::Seek()
     int64_t DynamicMemoryStream::Seek( int64_t offset, ESeekOrigin origin )
     {
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( m_pBuffer );
         if( !m_pBuffer )
         {
             return -1;
         }
 
-        L_ASSERT( static_cast< size_t >( origin ) < static_cast< size_t >( SEEK_ORIGIN_MAX ) );
+        HELIUM_ASSERT( static_cast< size_t >( origin ) < static_cast< size_t >( SEEK_ORIGIN_MAX ) );
 
         size_t referenceOffset;
         switch( origin )
@@ -136,7 +136,7 @@ namespace Lunar
 
             default:
             {
-                L_LOG( LOG_ERROR, L_T( "DynamicMemoryStream::Seek(): Invalid seek origin specified.\n" ) );
+                L_LOG( LOG_ERROR, TXT( "DynamicMemoryStream::Seek(): Invalid seek origin specified.\n" ) );
 
                 return static_cast< int64_t >( m_offset );
             }
@@ -145,12 +145,12 @@ namespace Lunar
         if( offset < 0 )
         {
             uint64_t absOffset = static_cast< uint64_t >( -offset );
-            L_ASSERT( absOffset <= static_cast< uint64_t >( referenceOffset ) );
+            HELIUM_ASSERT( absOffset <= static_cast< uint64_t >( referenceOffset ) );
             if( absOffset > static_cast< uint64_t >( referenceOffset ) )
             {
                 L_LOG(
                     LOG_ERROR,
-                    L_T( "DynamicMemoryStream::Seek(): Attempted to seek before the start of the memory stream.\n" ) );
+                    TXT( "DynamicMemoryStream::Seek(): Attempted to seek before the start of the memory stream.\n" ) );
             }
             else
             {
@@ -160,13 +160,13 @@ namespace Lunar
         else
         {
             uint64_t absOffset = static_cast< uint64_t >( offset );
-            L_ASSERT( absOffset <= static_cast< uint64_t >( static_cast< size_t >( -1 ) - referenceOffset ) );
+            HELIUM_ASSERT( absOffset <= static_cast< uint64_t >( static_cast< size_t >( -1 ) - referenceOffset ) );
             if( absOffset >= static_cast< uint64_t >( static_cast< size_t >( -1 ) - referenceOffset ) )
             {
                 L_LOG(
                     LOG_ERROR,
-                    ( L_T( "DynamicMemoryStream::Seek(): Attempted to seek outside the maximum buffer size supported " )
-                      L_T( "by the current platform.\n" ) ) );
+                    ( TXT( "DynamicMemoryStream::Seek(): Attempted to seek outside the maximum buffer size supported " )
+                      TXT( "by the current platform.\n" ) ) );
             }
             else
             {

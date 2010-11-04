@@ -37,7 +37,7 @@ namespace Lunar
     /// @see RayToVector4(), Vector3ToVector4(), Vector4ToVector3()
     Vector4 PointToVector4( const Vector3& rVector )
     {
-        L_SIMD_ALIGN_PRE const uint32_t componentMask[ 4 ] L_SIMD_ALIGN_POST =
+        HELIUM_SIMD_ALIGN_PRE const uint32_t componentMask[ 4 ] HELIUM_SIMD_ALIGN_POST =
         {
             0xffffffff,
             0xffffffff,
@@ -45,14 +45,14 @@ namespace Lunar
             0
         };
 
-        L_SIMD_ALIGN_PRE const float32_t one[ 4 ] L_SIMD_ALIGN_POST = { 0.0f, 0.0f, 0.0f, 1.0f };
+        HELIUM_SIMD_ALIGN_PRE const float32_t one[ 4 ] HELIUM_SIMD_ALIGN_POST = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-        SimdVector componentMaskVector = Simd::LoadAligned( componentMask );
-        SimdVector oneVector = Simd::LoadAligned( one );
+        Helium::SimdVector componentMaskVector = Helium::Simd::LoadAligned( componentMask );
+        Helium::SimdVector oneVector = Helium::Simd::LoadAligned( one );
 
-        SimdVector vector3Masked = Simd::And( rVector.GetSimdVector(), componentMaskVector );
+        Helium::SimdVector vector3Masked = Helium::Simd::And( rVector.GetSimdVector(), componentMaskVector );
 
-        return Vector4( Simd::Or( vector3Masked, oneVector ) );
+        return Vector4( Helium::Simd::Or( vector3Masked, oneVector ) );
     }
 
     /// Convert a Vector3 to a Vector4, setting the w-component to 0.
@@ -69,7 +69,7 @@ namespace Lunar
     /// @see PointToVector4(), Vector3ToVector4(), Vector4ToVector3()
     Vector4 RayToVector4( const Vector3& rVector )
     {
-        L_SIMD_ALIGN_PRE const uint32_t componentMask[ 4 ] L_SIMD_ALIGN_POST =
+        HELIUM_SIMD_ALIGN_PRE const uint32_t componentMask[ 4 ] HELIUM_SIMD_ALIGN_POST =
         {
             0xffffffff,
             0xffffffff,
@@ -77,9 +77,9 @@ namespace Lunar
             0
         };
 
-        SimdVector componentMaskVector = Simd::LoadAligned( componentMask );
+        Helium::SimdVector componentMaskVector = Helium::Simd::LoadAligned( componentMask );
 
-        return Vector4( Simd::And( rVector.GetSimdVector(), componentMaskVector ) );
+        return Vector4( Helium::Simd::And( rVector.GetSimdVector(), componentMaskVector ) );
     }
 
     /// Convert a Vector4 to a Vector3.

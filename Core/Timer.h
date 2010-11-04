@@ -11,7 +11,7 @@
 
 #include "Core/Core.h"
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 #include "Core/TimerWin.h"
 #endif
 

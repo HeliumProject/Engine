@@ -13,106 +13,106 @@
 namespace Lunar
 {
     const Matrix44Soa Matrix44Soa::IDENTITY(
-        Simd::SetSplatF32( 1.0f ), Simd::LoadZeros(),         Simd::LoadZeros(),         Simd::LoadZeros(),
-        Simd::LoadZeros(),         Simd::SetSplatF32( 1.0f ), Simd::LoadZeros(),         Simd::LoadZeros(),
-        Simd::LoadZeros(),         Simd::LoadZeros(),         Simd::SetSplatF32( 1.0f ), Simd::LoadZeros(),
-        Simd::LoadZeros(),         Simd::LoadZeros(),         Simd::LoadZeros(),         Simd::SetSplatF32( 1.0f ) );
+        Helium::Simd::SetSplatF32( 1.0f ), Helium::Simd::LoadZeros(),         Helium::Simd::LoadZeros(),         Helium::Simd::LoadZeros(),
+        Helium::Simd::LoadZeros(),         Helium::Simd::SetSplatF32( 1.0f ), Helium::Simd::LoadZeros(),         Helium::Simd::LoadZeros(),
+        Helium::Simd::LoadZeros(),         Helium::Simd::LoadZeros(),         Helium::Simd::SetSplatF32( 1.0f ), Helium::Simd::LoadZeros(),
+        Helium::Simd::LoadZeros(),         Helium::Simd::LoadZeros(),         Helium::Simd::LoadZeros(),         Helium::Simd::SetSplatF32( 1.0f ) );
 
     struct Determinant22Cache
     {
-        SimdVector det01;
-        SimdVector det02;
-        SimdVector det03;
-        SimdVector det12;
-        SimdVector det13;
-        SimdVector det23;
+        Helium::SimdVector det01;
+        Helium::SimdVector det02;
+        Helium::SimdVector det03;
+        Helium::SimdVector det12;
+        Helium::SimdVector det13;
+        Helium::SimdVector det23;
     };
 
     struct Determinant33Cache
     {
-        SimdVector detSubmat0;
-        SimdVector detSubmat1;
-        SimdVector detSubmat2;
-        SimdVector detSubmat3;
+        Helium::SimdVector detSubmat0;
+        Helium::SimdVector detSubmat1;
+        Helium::SimdVector detSubmat2;
+        Helium::SimdVector detSubmat3;
     };
 
-    static L_FORCEINLINE void MultiplyResultRow(
-        SimdVector ( &rResultRow )[ 4 ],
-        const SimdVector ( &rMatrix0Row )[ 4 ],
+    static HELIUM_FORCEINLINE void MultiplyResultRow(
+        Helium::SimdVector ( &rResultRow )[ 4 ],
+        const Helium::SimdVector ( &rMatrix0Row )[ 4 ],
         const Matrix44Soa& rMatrix1 )
     {
-        SimdVector temp;
-        SimdVector res0, res1, res2, res3;
+        Helium::SimdVector temp;
+        Helium::SimdVector res0, res1, res2, res3;
 
         temp = rMatrix0Row[ 0 ];
-        res0 = Simd::MultiplyF32( temp, rMatrix1.m_matrix[ 0 ][ 0 ] );
-        res1 = Simd::MultiplyF32( temp, rMatrix1.m_matrix[ 0 ][ 1 ] );
-        res2 = Simd::MultiplyF32( temp, rMatrix1.m_matrix[ 0 ][ 2 ] );
-        res3 = Simd::MultiplyF32( temp, rMatrix1.m_matrix[ 0 ][ 3 ] );
+        res0 = Helium::Simd::MultiplyF32( temp, rMatrix1.m_matrix[ 0 ][ 0 ] );
+        res1 = Helium::Simd::MultiplyF32( temp, rMatrix1.m_matrix[ 0 ][ 1 ] );
+        res2 = Helium::Simd::MultiplyF32( temp, rMatrix1.m_matrix[ 0 ][ 2 ] );
+        res3 = Helium::Simd::MultiplyF32( temp, rMatrix1.m_matrix[ 0 ][ 3 ] );
         temp = rMatrix0Row[ 1 ];
-        res0 = Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 1 ][ 0 ], res0 );
-        res1 = Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 1 ][ 1 ], res1 );
-        res2 = Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 1 ][ 2 ], res2 );
-        res3 = Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 1 ][ 3 ], res3 );
+        res0 = Helium::Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 1 ][ 0 ], res0 );
+        res1 = Helium::Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 1 ][ 1 ], res1 );
+        res2 = Helium::Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 1 ][ 2 ], res2 );
+        res3 = Helium::Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 1 ][ 3 ], res3 );
         temp = rMatrix0Row[ 2 ];
-        res0 = Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 2 ][ 0 ], res0 );
-        res1 = Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 2 ][ 1 ], res1 );
-        res2 = Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 2 ][ 2 ], res2 );
-        res3 = Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 2 ][ 3 ], res3 );
+        res0 = Helium::Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 2 ][ 0 ], res0 );
+        res1 = Helium::Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 2 ][ 1 ], res1 );
+        res2 = Helium::Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 2 ][ 2 ], res2 );
+        res3 = Helium::Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 2 ][ 3 ], res3 );
         temp = rMatrix0Row[ 3 ];
-        rResultRow[ 0 ] = Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 3 ][ 0 ], res0 );
-        rResultRow[ 1 ] = Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 3 ][ 1 ], res1 );
-        rResultRow[ 2 ] = Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 3 ][ 2 ], res2 );
-        rResultRow[ 3 ] = Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 3 ][ 3 ], res3 );
+        rResultRow[ 0 ] = Helium::Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 3 ][ 0 ], res0 );
+        rResultRow[ 1 ] = Helium::Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 3 ][ 1 ], res1 );
+        rResultRow[ 2 ] = Helium::Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 3 ][ 2 ], res2 );
+        rResultRow[ 3 ] = Helium::Simd::MultiplyAddF32( temp, rMatrix1.m_matrix[ 3 ][ 3 ], res3 );
     }
 
-    static L_FORCEINLINE void ComputeDet22Helper(
-        const SimdVector ( &rRow0 )[ 4 ],
-        const SimdVector ( &rRow1 )[ 4 ],
+    static HELIUM_FORCEINLINE void ComputeDet22Helper(
+        const Helium::SimdVector ( &rRow0 )[ 4 ],
+        const Helium::SimdVector ( &rRow1 )[ 4 ],
         Determinant22Cache& rCache )
     {
-        rCache.det01 = Simd::MultiplyF32( rRow0[ 0 ], rRow1[ 1 ] );
-        rCache.det01 = Simd::MultiplySubtractReverseF32( rRow0[ 1 ], rRow1[ 0 ], rCache.det01 );
+        rCache.det01 = Helium::Simd::MultiplyF32( rRow0[ 0 ], rRow1[ 1 ] );
+        rCache.det01 = Helium::Simd::MultiplySubtractReverseF32( rRow0[ 1 ], rRow1[ 0 ], rCache.det01 );
 
-        rCache.det02 = Simd::MultiplyF32( rRow0[ 0 ], rRow1[ 2 ] );
-        rCache.det02 = Simd::MultiplySubtractReverseF32( rRow0[ 2 ], rRow1[ 0 ], rCache.det02 );
+        rCache.det02 = Helium::Simd::MultiplyF32( rRow0[ 0 ], rRow1[ 2 ] );
+        rCache.det02 = Helium::Simd::MultiplySubtractReverseF32( rRow0[ 2 ], rRow1[ 0 ], rCache.det02 );
 
-        rCache.det03 = Simd::MultiplyF32( rRow0[ 0 ], rRow1[ 3 ] );
-        rCache.det03 = Simd::MultiplySubtractReverseF32( rRow0[ 3 ], rRow1[ 0 ], rCache.det03 );
+        rCache.det03 = Helium::Simd::MultiplyF32( rRow0[ 0 ], rRow1[ 3 ] );
+        rCache.det03 = Helium::Simd::MultiplySubtractReverseF32( rRow0[ 3 ], rRow1[ 0 ], rCache.det03 );
 
-        rCache.det12 = Simd::MultiplyF32( rRow0[ 1 ], rRow1[ 2 ] );
-        rCache.det12 = Simd::MultiplySubtractReverseF32( rRow0[ 2 ], rRow1[ 1 ], rCache.det12 );
+        rCache.det12 = Helium::Simd::MultiplyF32( rRow0[ 1 ], rRow1[ 2 ] );
+        rCache.det12 = Helium::Simd::MultiplySubtractReverseF32( rRow0[ 2 ], rRow1[ 1 ], rCache.det12 );
 
-        rCache.det13 = Simd::MultiplyF32( rRow0[ 1 ], rRow1[ 3 ] );
-        rCache.det13 = Simd::MultiplySubtractReverseF32( rRow0[ 3 ], rRow1[ 1 ], rCache.det13 );
+        rCache.det13 = Helium::Simd::MultiplyF32( rRow0[ 1 ], rRow1[ 3 ] );
+        rCache.det13 = Helium::Simd::MultiplySubtractReverseF32( rRow0[ 3 ], rRow1[ 1 ], rCache.det13 );
 
-        rCache.det23 = Simd::MultiplyF32( rRow0[ 2 ], rRow1[ 3 ] );
-        rCache.det23 = Simd::MultiplySubtractReverseF32( rRow0[ 3 ], rRow1[ 2 ], rCache.det23 );
+        rCache.det23 = Helium::Simd::MultiplyF32( rRow0[ 2 ], rRow1[ 3 ] );
+        rCache.det23 = Helium::Simd::MultiplySubtractReverseF32( rRow0[ 3 ], rRow1[ 2 ], rCache.det23 );
     }
 
-    static L_FORCEINLINE void ComputeDet33Helper(
-        const SimdVector ( &rRow )[ 4 ],
+    static HELIUM_FORCEINLINE void ComputeDet33Helper(
+        const Helium::SimdVector ( &rRow )[ 4 ],
         const Determinant22Cache& rCache22,
         Determinant33Cache& rCache33 )
     {
-        rCache33.detSubmat0 = Simd::MultiplyF32( rRow[ 1 ], rCache22.det23 );
-        rCache33.detSubmat0 = Simd::MultiplySubtractReverseF32( rRow[ 2 ], rCache22.det13, rCache33.detSubmat0 );
-        rCache33.detSubmat0 = Simd::MultiplyAddF32( rRow[ 3 ], rCache22.det12, rCache33.detSubmat0 );
+        rCache33.detSubmat0 = Helium::Simd::MultiplyF32( rRow[ 1 ], rCache22.det23 );
+        rCache33.detSubmat0 = Helium::Simd::MultiplySubtractReverseF32( rRow[ 2 ], rCache22.det13, rCache33.detSubmat0 );
+        rCache33.detSubmat0 = Helium::Simd::MultiplyAddF32( rRow[ 3 ], rCache22.det12, rCache33.detSubmat0 );
 
-        rCache33.detSubmat1 = Simd::MultiplyF32( rRow[ 0 ], rCache22.det23 );
-        rCache33.detSubmat1 = Simd::MultiplySubtractReverseF32( rRow[ 2 ], rCache22.det03, rCache33.detSubmat1 );
-        rCache33.detSubmat1 = Simd::MultiplyAddF32( rRow[ 3 ], rCache22.det02, rCache33.detSubmat1 );
+        rCache33.detSubmat1 = Helium::Simd::MultiplyF32( rRow[ 0 ], rCache22.det23 );
+        rCache33.detSubmat1 = Helium::Simd::MultiplySubtractReverseF32( rRow[ 2 ], rCache22.det03, rCache33.detSubmat1 );
+        rCache33.detSubmat1 = Helium::Simd::MultiplyAddF32( rRow[ 3 ], rCache22.det02, rCache33.detSubmat1 );
 
-        rCache33.detSubmat2 = Simd::MultiplyF32( rRow[ 0 ], rCache22.det13 );
-        rCache33.detSubmat2 = Simd::MultiplySubtractReverseF32( rRow[ 1 ], rCache22.det03, rCache33.detSubmat2 );
-        rCache33.detSubmat2 = Simd::MultiplyAddF32( rRow[ 3 ], rCache22.det01, rCache33.detSubmat2 );
+        rCache33.detSubmat2 = Helium::Simd::MultiplyF32( rRow[ 0 ], rCache22.det13 );
+        rCache33.detSubmat2 = Helium::Simd::MultiplySubtractReverseF32( rRow[ 1 ], rCache22.det03, rCache33.detSubmat2 );
+        rCache33.detSubmat2 = Helium::Simd::MultiplyAddF32( rRow[ 3 ], rCache22.det01, rCache33.detSubmat2 );
 
-        rCache33.detSubmat3 = Simd::MultiplyF32( rRow[ 0 ], rCache22.det12 );
-        rCache33.detSubmat3 = Simd::MultiplySubtractReverseF32( rRow[ 1 ], rCache22.det02, rCache33.detSubmat3 );
-        rCache33.detSubmat3 = Simd::MultiplyAddF32( rRow[ 2 ], rCache22.det01, rCache33.detSubmat3 );
+        rCache33.detSubmat3 = Helium::Simd::MultiplyF32( rRow[ 0 ], rCache22.det12 );
+        rCache33.detSubmat3 = Helium::Simd::MultiplySubtractReverseF32( rRow[ 1 ], rCache22.det02, rCache33.detSubmat3 );
+        rCache33.detSubmat3 = Helium::Simd::MultiplyAddF32( rRow[ 2 ], rCache22.det01, rCache33.detSubmat3 );
     }
 
-    static L_FORCEINLINE SimdVector CalculateDeterminant(
+    static HELIUM_FORCEINLINE Helium::SimdVector CalculateDeterminant(
         const Matrix44Soa& rMatrix,
         Determinant22Cache& rRow23Cache,
         Determinant33Cache& rRow0SubmatCache )
@@ -120,13 +120,13 @@ namespace Lunar
         ComputeDet22Helper( rMatrix.m_matrix[ 2 ], rMatrix.m_matrix[ 3 ], rRow23Cache );
         ComputeDet33Helper( rMatrix.m_matrix[ 1 ], rRow23Cache, rRow0SubmatCache );
 
-        SimdVector determinant = Simd::MultiplyF32( rMatrix.m_matrix[ 0 ][ 0 ], rRow0SubmatCache.detSubmat0 );
-        determinant = Simd::MultiplySubtractReverseF32(
+        Helium::SimdVector determinant = Helium::Simd::MultiplyF32( rMatrix.m_matrix[ 0 ][ 0 ], rRow0SubmatCache.detSubmat0 );
+        determinant = Helium::Simd::MultiplySubtractReverseF32(
             rMatrix.m_matrix[ 0 ][ 1 ],
             rRow0SubmatCache.detSubmat1,
             determinant );
-        determinant = Simd::MultiplyAddF32( rMatrix.m_matrix[ 0 ][ 2 ], rRow0SubmatCache.detSubmat2, determinant );
-        determinant = Simd::MultiplySubtractReverseF32(
+        determinant = Helium::Simd::MultiplyAddF32( rMatrix.m_matrix[ 0 ][ 2 ], rRow0SubmatCache.detSubmat2, determinant );
+        determinant = Helium::Simd::MultiplySubtractReverseF32(
             rMatrix.m_matrix[ 0 ][ 3 ],
             rRow0SubmatCache.detSubmat3,
             determinant );
@@ -134,13 +134,13 @@ namespace Lunar
         return determinant;
     }
 
-    static L_FORCEINLINE void CopyTransposedVectors(
+    static HELIUM_FORCEINLINE void CopyTransposedVectors(
         const Matrix44Soa& rSource,
         Matrix44Soa& rDest,
         size_t indexA,
         size_t indexB )
     {
-        SimdVector temp = rSource.m_matrix[ indexA ][ indexB ];
+        Helium::SimdVector temp = rSource.m_matrix[ indexA ][ indexB ];
         rDest.m_matrix[ indexA ][ indexB ] = rSource.m_matrix[ indexB ][ indexA ];
         rDest.m_matrix[ indexB ][ indexA ] = temp;
     }
@@ -157,11 +157,11 @@ namespace Lunar
     {
         SetRotationOnly( rRotation );
 
-        SimdVector zeroVec = Simd::LoadZeros();
+        Helium::SimdVector zeroVec = Helium::Simd::LoadZeros();
         m_matrix[ 3 ][ 0 ] = zeroVec;
         m_matrix[ 3 ][ 1 ] = zeroVec;
         m_matrix[ 3 ][ 2 ] = zeroVec;
-        m_matrix[ 3 ][ 3 ] = Simd::SetSplatF32( 1.0f );
+        m_matrix[ 3 ][ 3 ] = Helium::Simd::SetSplatF32( 1.0f );
     }
 
     /// Set this matrix to a translation matrix.
@@ -174,8 +174,8 @@ namespace Lunar
     ///      SetTranslationOnly()
     void Matrix44Soa::SetTranslation( const Vector3Soa& rTranslation )
     {
-        SimdVector zeroVec = Simd::LoadZeros();
-        SimdVector oneVec = Simd::SetSplatF32( 1.0f );
+        Helium::SimdVector zeroVec = Helium::Simd::LoadZeros();
+        Helium::SimdVector oneVec = Helium::Simd::SetSplatF32( 1.0f );
         m_matrix[ 0 ][ 0 ] = oneVec;
         m_matrix[ 0 ][ 1 ] = zeroVec;
         m_matrix[ 0 ][ 2 ] = zeroVec;
@@ -204,8 +204,8 @@ namespace Lunar
     ///      SetTranslationOnly()
     void Matrix44Soa::SetTranslation( const Vector4Soa& rTranslation )
     {
-        SimdVector zeroVec = Simd::LoadZeros();
-        SimdVector oneVec = Simd::SetSplatF32( 1.0f );
+        Helium::SimdVector zeroVec = Helium::Simd::LoadZeros();
+        Helium::SimdVector oneVec = Helium::Simd::SetSplatF32( 1.0f );
         m_matrix[ 0 ][ 0 ] = oneVec;
         m_matrix[ 0 ][ 1 ] = zeroVec;
         m_matrix[ 0 ][ 2 ] = zeroVec;
@@ -230,9 +230,9 @@ namespace Lunar
     ///
     /// @see SetRotation(), SetTranslation(), SetRotationTranslation(), SetRotationTranslationScaling(),
     ///      SetRotationOnly(), SetTranslationOnly()
-    void Matrix44Soa::SetScaling( const SimdVector& rScaling )
+    void Matrix44Soa::SetScaling( const Helium::SimdVector& rScaling )
     {
-        SimdVector zeroVec = Simd::LoadZeros();
+        Helium::SimdVector zeroVec = Helium::Simd::LoadZeros();
 
         m_matrix[ 0 ][ 0 ] = rScaling;
         m_matrix[ 0 ][ 1 ] = zeroVec;
@@ -249,7 +249,7 @@ namespace Lunar
         m_matrix[ 3 ][ 0 ] = zeroVec;
         m_matrix[ 3 ][ 1 ] = zeroVec;
         m_matrix[ 3 ][ 2 ] = zeroVec;
-        m_matrix[ 3 ][ 3 ] = Simd::SetSplatF32( 1.0f );
+        m_matrix[ 3 ][ 3 ] = Helium::Simd::SetSplatF32( 1.0f );
     }
 
     /// Set this matrix to a non-uniform scaling matrix.
@@ -262,7 +262,7 @@ namespace Lunar
     ///      SetRotationOnly(), SetTranslationOnly()
     void Matrix44Soa::SetScaling( const Vector3Soa& rScaling )
     {
-        SimdVector zeroVec = Simd::LoadZeros();
+        Helium::SimdVector zeroVec = Helium::Simd::LoadZeros();
 
         m_matrix[ 0 ][ 0 ] = rScaling.m_x;
         m_matrix[ 0 ][ 1 ] = zeroVec;
@@ -279,7 +279,7 @@ namespace Lunar
         m_matrix[ 3 ][ 0 ] = zeroVec;
         m_matrix[ 3 ][ 1 ] = zeroVec;
         m_matrix[ 3 ][ 2 ] = zeroVec;
-        m_matrix[ 3 ][ 3 ] = Simd::SetSplatF32( 1.0f );
+        m_matrix[ 3 ][ 3 ] = Helium::Simd::SetSplatF32( 1.0f );
     }
 
     /// Set this matrix to a rotation/translation matrix.
@@ -321,7 +321,7 @@ namespace Lunar
     void Matrix44Soa::SetRotationTranslationScaling(
         const QuatSoa& rRotation,
         const Vector3Soa& rTranslation,
-        const SimdVector& rScaling )
+        const Helium::SimdVector& rScaling )
     {
         SetRotationOnly( rRotation );
         SetTranslationOnly( rTranslation );
@@ -342,7 +342,7 @@ namespace Lunar
     void Matrix44Soa::SetRotationTranslationScaling(
         const QuatSoa& rRotation,
         const Vector4Soa& rTranslation,
-        const SimdVector& rScaling )
+        const Helium::SimdVector& rScaling )
     {
         SetRotationOnly( rRotation );
         SetTranslationOnly( rTranslation );
@@ -401,48 +401,48 @@ namespace Lunar
     ///      SetRotationTranslationScaling()
     void Matrix44Soa::SetRotationOnly( const QuatSoa& rRotation )
     {
-        SimdVector xx = Simd::MultiplyF32( rRotation.m_x, rRotation.m_x );
-        SimdVector xy = Simd::MultiplyF32( rRotation.m_x, rRotation.m_y );
-        SimdVector xz = Simd::MultiplyF32( rRotation.m_x, rRotation.m_z );
-        SimdVector xw = Simd::MultiplyF32( rRotation.m_x, rRotation.m_w );
-        SimdVector yy = Simd::MultiplyF32( rRotation.m_y, rRotation.m_y );
-        SimdVector yz = Simd::MultiplyF32( rRotation.m_y, rRotation.m_z );
-        SimdVector yw = Simd::MultiplyF32( rRotation.m_y, rRotation.m_w );
-        SimdVector zz = Simd::MultiplyF32( rRotation.m_z, rRotation.m_z );
-        SimdVector zw = Simd::MultiplyF32( rRotation.m_z, rRotation.m_w );
+        Helium::SimdVector xx = Helium::Simd::MultiplyF32( rRotation.m_x, rRotation.m_x );
+        Helium::SimdVector xy = Helium::Simd::MultiplyF32( rRotation.m_x, rRotation.m_y );
+        Helium::SimdVector xz = Helium::Simd::MultiplyF32( rRotation.m_x, rRotation.m_z );
+        Helium::SimdVector xw = Helium::Simd::MultiplyF32( rRotation.m_x, rRotation.m_w );
+        Helium::SimdVector yy = Helium::Simd::MultiplyF32( rRotation.m_y, rRotation.m_y );
+        Helium::SimdVector yz = Helium::Simd::MultiplyF32( rRotation.m_y, rRotation.m_z );
+        Helium::SimdVector yw = Helium::Simd::MultiplyF32( rRotation.m_y, rRotation.m_w );
+        Helium::SimdVector zz = Helium::Simd::MultiplyF32( rRotation.m_z, rRotation.m_z );
+        Helium::SimdVector zw = Helium::Simd::MultiplyF32( rRotation.m_z, rRotation.m_w );
 
-        SimdVector oneVec = Simd::SetSplatF32( 1.0f );
+        Helium::SimdVector oneVec = Helium::Simd::SetSplatF32( 1.0f );
 
-        SimdVector temp;
+        Helium::SimdVector temp;
 
-        temp = Simd::AddF32( yy, zz );
-        m_matrix[ 0 ][ 0 ] = Simd::SubtractF32( oneVec, Simd::AddF32( temp, temp ) );
+        temp = Helium::Simd::AddF32( yy, zz );
+        m_matrix[ 0 ][ 0 ] = Helium::Simd::SubtractF32( oneVec, Helium::Simd::AddF32( temp, temp ) );
 
-        temp = Simd::AddF32( xy, zw );
-        m_matrix[ 0 ][ 1 ] = Simd::AddF32( temp, temp );
+        temp = Helium::Simd::AddF32( xy, zw );
+        m_matrix[ 0 ][ 1 ] = Helium::Simd::AddF32( temp, temp );
 
-        temp = Simd::SubtractF32( xz, yw );
-        m_matrix[ 0 ][ 2 ] = Simd::AddF32( temp, temp );
+        temp = Helium::Simd::SubtractF32( xz, yw );
+        m_matrix[ 0 ][ 2 ] = Helium::Simd::AddF32( temp, temp );
 
-        temp = Simd::SubtractF32( xy, zw );
-        m_matrix[ 1 ][ 0 ] = Simd::AddF32( temp, temp );
+        temp = Helium::Simd::SubtractF32( xy, zw );
+        m_matrix[ 1 ][ 0 ] = Helium::Simd::AddF32( temp, temp );
 
-        temp = Simd::AddF32( xx, zz );
-        m_matrix[ 1 ][ 1 ] = Simd::SubtractF32( oneVec, Simd::AddF32( temp, temp ) );
+        temp = Helium::Simd::AddF32( xx, zz );
+        m_matrix[ 1 ][ 1 ] = Helium::Simd::SubtractF32( oneVec, Helium::Simd::AddF32( temp, temp ) );
 
-        temp = Simd::AddF32( yz, xw );
-        m_matrix[ 1 ][ 2 ] = Simd::AddF32( temp, temp );
+        temp = Helium::Simd::AddF32( yz, xw );
+        m_matrix[ 1 ][ 2 ] = Helium::Simd::AddF32( temp, temp );
 
-        temp = Simd::AddF32( xz, yw );
-        m_matrix[ 2 ][ 0 ] = Simd::AddF32( temp, temp );
+        temp = Helium::Simd::AddF32( xz, yw );
+        m_matrix[ 2 ][ 0 ] = Helium::Simd::AddF32( temp, temp );
 
-        temp = Simd::SubtractF32( yz, xw );
-        m_matrix[ 2 ][ 1 ] = Simd::AddF32( temp, temp );
+        temp = Helium::Simd::SubtractF32( yz, xw );
+        m_matrix[ 2 ][ 1 ] = Helium::Simd::AddF32( temp, temp );
 
-        temp = Simd::AddF32( xx, yy );
-        m_matrix[ 2 ][ 2 ] = Simd::SubtractF32( oneVec, Simd::AddF32( temp, temp ) );
+        temp = Helium::Simd::AddF32( xx, yy );
+        m_matrix[ 2 ][ 2 ] = Helium::Simd::SubtractF32( oneVec, Helium::Simd::AddF32( temp, temp ) );
 
-        SimdVector zeroVec = Simd::LoadZeros();
+        Helium::SimdVector zeroVec = Helium::Simd::LoadZeros();
         m_matrix[ 0 ][ 3 ] = zeroVec;
         m_matrix[ 1 ][ 3 ] = zeroVec;
         m_matrix[ 2 ][ 3 ] = zeroVec;
@@ -462,7 +462,7 @@ namespace Lunar
         m_matrix[ 3 ][ 0 ] = rTranslation.m_x;
         m_matrix[ 3 ][ 1 ] = rTranslation.m_y;
         m_matrix[ 3 ][ 2 ] = rTranslation.m_z;
-        m_matrix[ 3 ][ 3 ] = Simd::SetSplatF32( 1.0f );
+        m_matrix[ 3 ][ 3 ] = Helium::Simd::SetSplatF32( 1.0f );
     }
 
     /// Set the translation component of this matrix.
@@ -494,9 +494,9 @@ namespace Lunar
     /// @see TranslateLocal(), ScaleWorld(), ScaleLocal()
     void Matrix44Soa::TranslateWorld( const Vector3Soa& rTranslation )
     {
-        m_matrix[ 3 ][ 0 ] = Simd::AddF32( m_matrix[ 3 ][ 0 ], rTranslation.m_x );
-        m_matrix[ 3 ][ 1 ] = Simd::AddF32( m_matrix[ 3 ][ 1 ], rTranslation.m_y );
-        m_matrix[ 3 ][ 2 ] = Simd::AddF32( m_matrix[ 3 ][ 2 ], rTranslation.m_z );
+        m_matrix[ 3 ][ 0 ] = Helium::Simd::AddF32( m_matrix[ 3 ][ 0 ], rTranslation.m_x );
+        m_matrix[ 3 ][ 1 ] = Helium::Simd::AddF32( m_matrix[ 3 ][ 1 ], rTranslation.m_y );
+        m_matrix[ 3 ][ 2 ] = Helium::Simd::AddF32( m_matrix[ 3 ][ 2 ], rTranslation.m_z );
     }
 
     /// Translate this matrix in local-space (pre-multiply).
@@ -506,19 +506,19 @@ namespace Lunar
     /// @see TranslateWorld(), ScaleWorld(), ScaleLocal()
     void Matrix44Soa::TranslateLocal( const Vector3Soa& rTranslation )
     {
-        SimdVector temp;
+        Helium::SimdVector temp;
 
-        temp = Simd::MultiplyAddF32( m_matrix[ 0 ][ 0 ], rTranslation.m_x, m_matrix[ 3 ][ 0 ] );
-        temp = Simd::MultiplyAddF32( m_matrix[ 1 ][ 0 ], rTranslation.m_y, temp );
-        m_matrix[ 3 ][ 0 ] = Simd::MultiplyAddF32( m_matrix[ 2 ][ 0 ], rTranslation.m_z, temp );
+        temp = Helium::Simd::MultiplyAddF32( m_matrix[ 0 ][ 0 ], rTranslation.m_x, m_matrix[ 3 ][ 0 ] );
+        temp = Helium::Simd::MultiplyAddF32( m_matrix[ 1 ][ 0 ], rTranslation.m_y, temp );
+        m_matrix[ 3 ][ 0 ] = Helium::Simd::MultiplyAddF32( m_matrix[ 2 ][ 0 ], rTranslation.m_z, temp );
 
-        temp = Simd::MultiplyAddF32( m_matrix[ 0 ][ 1 ], rTranslation.m_x, m_matrix[ 3 ][ 1 ] );
-        temp = Simd::MultiplyAddF32( m_matrix[ 1 ][ 1 ], rTranslation.m_y, temp );
-        m_matrix[ 3 ][ 1 ] = Simd::MultiplyAddF32( m_matrix[ 2 ][ 1 ], rTranslation.m_z, temp );
+        temp = Helium::Simd::MultiplyAddF32( m_matrix[ 0 ][ 1 ], rTranslation.m_x, m_matrix[ 3 ][ 1 ] );
+        temp = Helium::Simd::MultiplyAddF32( m_matrix[ 1 ][ 1 ], rTranslation.m_y, temp );
+        m_matrix[ 3 ][ 1 ] = Helium::Simd::MultiplyAddF32( m_matrix[ 2 ][ 1 ], rTranslation.m_z, temp );
 
-        temp = Simd::MultiplyAddF32( m_matrix[ 0 ][ 2 ], rTranslation.m_x, m_matrix[ 3 ][ 2 ] );
-        temp = Simd::MultiplyAddF32( m_matrix[ 1 ][ 2 ], rTranslation.m_y, temp );
-        m_matrix[ 3 ][ 2 ] = Simd::MultiplyAddF32( m_matrix[ 2 ][ 2 ], rTranslation.m_z, temp );
+        temp = Helium::Simd::MultiplyAddF32( m_matrix[ 0 ][ 2 ], rTranslation.m_x, m_matrix[ 3 ][ 2 ] );
+        temp = Helium::Simd::MultiplyAddF32( m_matrix[ 1 ][ 2 ], rTranslation.m_y, temp );
+        m_matrix[ 3 ][ 2 ] = Helium::Simd::MultiplyAddF32( m_matrix[ 2 ][ 2 ], rTranslation.m_z, temp );
     }
 
     /// Scale this matrix in world-space (post-multiply).
@@ -526,20 +526,20 @@ namespace Lunar
     /// @param[in] rScaling  Amount by which to scale.
     ///
     /// @see ScaleLocal(), TranslateWorld(), TranslateLocal()
-    void Matrix44Soa::ScaleWorld( const SimdVector& rScaling )
+    void Matrix44Soa::ScaleWorld( const Helium::SimdVector& rScaling )
     {
-        m_matrix[ 0 ][ 0 ] = Simd::MultiplyF32( m_matrix[ 0 ][ 0 ], rScaling );
-        m_matrix[ 0 ][ 1 ] = Simd::MultiplyF32( m_matrix[ 0 ][ 1 ], rScaling );
-        m_matrix[ 0 ][ 2 ] = Simd::MultiplyF32( m_matrix[ 0 ][ 2 ], rScaling );
-        m_matrix[ 1 ][ 0 ] = Simd::MultiplyF32( m_matrix[ 1 ][ 0 ], rScaling );
-        m_matrix[ 1 ][ 1 ] = Simd::MultiplyF32( m_matrix[ 1 ][ 1 ], rScaling );
-        m_matrix[ 1 ][ 2 ] = Simd::MultiplyF32( m_matrix[ 1 ][ 2 ], rScaling );
-        m_matrix[ 2 ][ 0 ] = Simd::MultiplyF32( m_matrix[ 2 ][ 0 ], rScaling );
-        m_matrix[ 2 ][ 1 ] = Simd::MultiplyF32( m_matrix[ 2 ][ 1 ], rScaling );
-        m_matrix[ 2 ][ 2 ] = Simd::MultiplyF32( m_matrix[ 2 ][ 2 ], rScaling );
-        m_matrix[ 3 ][ 0 ] = Simd::MultiplyF32( m_matrix[ 3 ][ 0 ], rScaling );
-        m_matrix[ 3 ][ 1 ] = Simd::MultiplyF32( m_matrix[ 3 ][ 1 ], rScaling );
-        m_matrix[ 3 ][ 2 ] = Simd::MultiplyF32( m_matrix[ 3 ][ 2 ], rScaling );
+        m_matrix[ 0 ][ 0 ] = Helium::Simd::MultiplyF32( m_matrix[ 0 ][ 0 ], rScaling );
+        m_matrix[ 0 ][ 1 ] = Helium::Simd::MultiplyF32( m_matrix[ 0 ][ 1 ], rScaling );
+        m_matrix[ 0 ][ 2 ] = Helium::Simd::MultiplyF32( m_matrix[ 0 ][ 2 ], rScaling );
+        m_matrix[ 1 ][ 0 ] = Helium::Simd::MultiplyF32( m_matrix[ 1 ][ 0 ], rScaling );
+        m_matrix[ 1 ][ 1 ] = Helium::Simd::MultiplyF32( m_matrix[ 1 ][ 1 ], rScaling );
+        m_matrix[ 1 ][ 2 ] = Helium::Simd::MultiplyF32( m_matrix[ 1 ][ 2 ], rScaling );
+        m_matrix[ 2 ][ 0 ] = Helium::Simd::MultiplyF32( m_matrix[ 2 ][ 0 ], rScaling );
+        m_matrix[ 2 ][ 1 ] = Helium::Simd::MultiplyF32( m_matrix[ 2 ][ 1 ], rScaling );
+        m_matrix[ 2 ][ 2 ] = Helium::Simd::MultiplyF32( m_matrix[ 2 ][ 2 ], rScaling );
+        m_matrix[ 3 ][ 0 ] = Helium::Simd::MultiplyF32( m_matrix[ 3 ][ 0 ], rScaling );
+        m_matrix[ 3 ][ 1 ] = Helium::Simd::MultiplyF32( m_matrix[ 3 ][ 1 ], rScaling );
+        m_matrix[ 3 ][ 2 ] = Helium::Simd::MultiplyF32( m_matrix[ 3 ][ 2 ], rScaling );
     }
 
     /// Scale this matrix in world-space (post-multiply).
@@ -549,18 +549,18 @@ namespace Lunar
     /// @see ScaleLocal(), TranslateWorld(), TranslateLocal()
     void Matrix44Soa::ScaleWorld( const Vector3Soa& rScaling )
     {
-        m_matrix[ 0 ][ 0 ] = Simd::MultiplyF32( m_matrix[ 0 ][ 0 ], rScaling.m_x );
-        m_matrix[ 0 ][ 1 ] = Simd::MultiplyF32( m_matrix[ 0 ][ 1 ], rScaling.m_y );
-        m_matrix[ 0 ][ 2 ] = Simd::MultiplyF32( m_matrix[ 0 ][ 2 ], rScaling.m_z );
-        m_matrix[ 1 ][ 0 ] = Simd::MultiplyF32( m_matrix[ 1 ][ 0 ], rScaling.m_x );
-        m_matrix[ 1 ][ 1 ] = Simd::MultiplyF32( m_matrix[ 1 ][ 1 ], rScaling.m_y );
-        m_matrix[ 1 ][ 2 ] = Simd::MultiplyF32( m_matrix[ 1 ][ 2 ], rScaling.m_z );
-        m_matrix[ 2 ][ 0 ] = Simd::MultiplyF32( m_matrix[ 2 ][ 0 ], rScaling.m_x );
-        m_matrix[ 2 ][ 1 ] = Simd::MultiplyF32( m_matrix[ 2 ][ 1 ], rScaling.m_y );
-        m_matrix[ 2 ][ 2 ] = Simd::MultiplyF32( m_matrix[ 2 ][ 2 ], rScaling.m_z );
-        m_matrix[ 3 ][ 0 ] = Simd::MultiplyF32( m_matrix[ 3 ][ 0 ], rScaling.m_x );
-        m_matrix[ 3 ][ 1 ] = Simd::MultiplyF32( m_matrix[ 3 ][ 1 ], rScaling.m_y );
-        m_matrix[ 3 ][ 2 ] = Simd::MultiplyF32( m_matrix[ 3 ][ 2 ], rScaling.m_z );
+        m_matrix[ 0 ][ 0 ] = Helium::Simd::MultiplyF32( m_matrix[ 0 ][ 0 ], rScaling.m_x );
+        m_matrix[ 0 ][ 1 ] = Helium::Simd::MultiplyF32( m_matrix[ 0 ][ 1 ], rScaling.m_y );
+        m_matrix[ 0 ][ 2 ] = Helium::Simd::MultiplyF32( m_matrix[ 0 ][ 2 ], rScaling.m_z );
+        m_matrix[ 1 ][ 0 ] = Helium::Simd::MultiplyF32( m_matrix[ 1 ][ 0 ], rScaling.m_x );
+        m_matrix[ 1 ][ 1 ] = Helium::Simd::MultiplyF32( m_matrix[ 1 ][ 1 ], rScaling.m_y );
+        m_matrix[ 1 ][ 2 ] = Helium::Simd::MultiplyF32( m_matrix[ 1 ][ 2 ], rScaling.m_z );
+        m_matrix[ 2 ][ 0 ] = Helium::Simd::MultiplyF32( m_matrix[ 2 ][ 0 ], rScaling.m_x );
+        m_matrix[ 2 ][ 1 ] = Helium::Simd::MultiplyF32( m_matrix[ 2 ][ 1 ], rScaling.m_y );
+        m_matrix[ 2 ][ 2 ] = Helium::Simd::MultiplyF32( m_matrix[ 2 ][ 2 ], rScaling.m_z );
+        m_matrix[ 3 ][ 0 ] = Helium::Simd::MultiplyF32( m_matrix[ 3 ][ 0 ], rScaling.m_x );
+        m_matrix[ 3 ][ 1 ] = Helium::Simd::MultiplyF32( m_matrix[ 3 ][ 1 ], rScaling.m_y );
+        m_matrix[ 3 ][ 2 ] = Helium::Simd::MultiplyF32( m_matrix[ 3 ][ 2 ], rScaling.m_z );
     }
 
     /// Scale this matrix in local-space (pre-multiply).
@@ -568,20 +568,20 @@ namespace Lunar
     /// @param[in] rScaling  Amount by which to scale.
     ///
     /// @see ScaleWorld(), TranslateWorld(), TranslateLocal()
-    void Matrix44Soa::ScaleLocal( const SimdVector& rScaling )
+    void Matrix44Soa::ScaleLocal( const Helium::SimdVector& rScaling )
     {
-        m_matrix[ 0 ][ 0 ] = Simd::MultiplyF32( m_matrix[ 0 ][ 0 ], rScaling );
-        m_matrix[ 0 ][ 1 ] = Simd::MultiplyF32( m_matrix[ 0 ][ 1 ], rScaling );
-        m_matrix[ 0 ][ 2 ] = Simd::MultiplyF32( m_matrix[ 0 ][ 2 ], rScaling );
-        m_matrix[ 0 ][ 3 ] = Simd::MultiplyF32( m_matrix[ 0 ][ 3 ], rScaling );
-        m_matrix[ 1 ][ 0 ] = Simd::MultiplyF32( m_matrix[ 1 ][ 0 ], rScaling );
-        m_matrix[ 1 ][ 1 ] = Simd::MultiplyF32( m_matrix[ 1 ][ 1 ], rScaling );
-        m_matrix[ 1 ][ 2 ] = Simd::MultiplyF32( m_matrix[ 1 ][ 2 ], rScaling );
-        m_matrix[ 1 ][ 3 ] = Simd::MultiplyF32( m_matrix[ 1 ][ 3 ], rScaling );
-        m_matrix[ 2 ][ 0 ] = Simd::MultiplyF32( m_matrix[ 2 ][ 0 ], rScaling );
-        m_matrix[ 2 ][ 1 ] = Simd::MultiplyF32( m_matrix[ 2 ][ 1 ], rScaling );
-        m_matrix[ 2 ][ 2 ] = Simd::MultiplyF32( m_matrix[ 2 ][ 2 ], rScaling );
-        m_matrix[ 2 ][ 3 ] = Simd::MultiplyF32( m_matrix[ 2 ][ 3 ], rScaling );
+        m_matrix[ 0 ][ 0 ] = Helium::Simd::MultiplyF32( m_matrix[ 0 ][ 0 ], rScaling );
+        m_matrix[ 0 ][ 1 ] = Helium::Simd::MultiplyF32( m_matrix[ 0 ][ 1 ], rScaling );
+        m_matrix[ 0 ][ 2 ] = Helium::Simd::MultiplyF32( m_matrix[ 0 ][ 2 ], rScaling );
+        m_matrix[ 0 ][ 3 ] = Helium::Simd::MultiplyF32( m_matrix[ 0 ][ 3 ], rScaling );
+        m_matrix[ 1 ][ 0 ] = Helium::Simd::MultiplyF32( m_matrix[ 1 ][ 0 ], rScaling );
+        m_matrix[ 1 ][ 1 ] = Helium::Simd::MultiplyF32( m_matrix[ 1 ][ 1 ], rScaling );
+        m_matrix[ 1 ][ 2 ] = Helium::Simd::MultiplyF32( m_matrix[ 1 ][ 2 ], rScaling );
+        m_matrix[ 1 ][ 3 ] = Helium::Simd::MultiplyF32( m_matrix[ 1 ][ 3 ], rScaling );
+        m_matrix[ 2 ][ 0 ] = Helium::Simd::MultiplyF32( m_matrix[ 2 ][ 0 ], rScaling );
+        m_matrix[ 2 ][ 1 ] = Helium::Simd::MultiplyF32( m_matrix[ 2 ][ 1 ], rScaling );
+        m_matrix[ 2 ][ 2 ] = Helium::Simd::MultiplyF32( m_matrix[ 2 ][ 2 ], rScaling );
+        m_matrix[ 2 ][ 3 ] = Helium::Simd::MultiplyF32( m_matrix[ 2 ][ 3 ], rScaling );
     }
 
     /// Scale this matrix in local-space (pre-multiply).
@@ -591,18 +591,18 @@ namespace Lunar
     /// @see ScaleWorld(), TranslateWorld(), TranslateLocal()
     void Matrix44Soa::ScaleLocal( const Vector3Soa& rScaling )
     {
-        m_matrix[ 0 ][ 0 ] = Simd::MultiplyF32( m_matrix[ 0 ][ 0 ], rScaling.m_x );
-        m_matrix[ 0 ][ 1 ] = Simd::MultiplyF32( m_matrix[ 0 ][ 1 ], rScaling.m_x );
-        m_matrix[ 0 ][ 2 ] = Simd::MultiplyF32( m_matrix[ 0 ][ 2 ], rScaling.m_x );
-        m_matrix[ 0 ][ 3 ] = Simd::MultiplyF32( m_matrix[ 0 ][ 3 ], rScaling.m_x );
-        m_matrix[ 1 ][ 0 ] = Simd::MultiplyF32( m_matrix[ 1 ][ 0 ], rScaling.m_y );
-        m_matrix[ 1 ][ 1 ] = Simd::MultiplyF32( m_matrix[ 1 ][ 1 ], rScaling.m_y );
-        m_matrix[ 1 ][ 2 ] = Simd::MultiplyF32( m_matrix[ 1 ][ 2 ], rScaling.m_y );
-        m_matrix[ 1 ][ 3 ] = Simd::MultiplyF32( m_matrix[ 1 ][ 3 ], rScaling.m_y );
-        m_matrix[ 2 ][ 0 ] = Simd::MultiplyF32( m_matrix[ 2 ][ 0 ], rScaling.m_z );
-        m_matrix[ 2 ][ 1 ] = Simd::MultiplyF32( m_matrix[ 2 ][ 1 ], rScaling.m_z );
-        m_matrix[ 2 ][ 2 ] = Simd::MultiplyF32( m_matrix[ 2 ][ 2 ], rScaling.m_z );
-        m_matrix[ 2 ][ 3 ] = Simd::MultiplyF32( m_matrix[ 2 ][ 3 ], rScaling.m_z );
+        m_matrix[ 0 ][ 0 ] = Helium::Simd::MultiplyF32( m_matrix[ 0 ][ 0 ], rScaling.m_x );
+        m_matrix[ 0 ][ 1 ] = Helium::Simd::MultiplyF32( m_matrix[ 0 ][ 1 ], rScaling.m_x );
+        m_matrix[ 0 ][ 2 ] = Helium::Simd::MultiplyF32( m_matrix[ 0 ][ 2 ], rScaling.m_x );
+        m_matrix[ 0 ][ 3 ] = Helium::Simd::MultiplyF32( m_matrix[ 0 ][ 3 ], rScaling.m_x );
+        m_matrix[ 1 ][ 0 ] = Helium::Simd::MultiplyF32( m_matrix[ 1 ][ 0 ], rScaling.m_y );
+        m_matrix[ 1 ][ 1 ] = Helium::Simd::MultiplyF32( m_matrix[ 1 ][ 1 ], rScaling.m_y );
+        m_matrix[ 1 ][ 2 ] = Helium::Simd::MultiplyF32( m_matrix[ 1 ][ 2 ], rScaling.m_y );
+        m_matrix[ 1 ][ 3 ] = Helium::Simd::MultiplyF32( m_matrix[ 1 ][ 3 ], rScaling.m_y );
+        m_matrix[ 2 ][ 0 ] = Helium::Simd::MultiplyF32( m_matrix[ 2 ][ 0 ], rScaling.m_z );
+        m_matrix[ 2 ][ 1 ] = Helium::Simd::MultiplyF32( m_matrix[ 2 ][ 1 ], rScaling.m_z );
+        m_matrix[ 2 ][ 2 ] = Helium::Simd::MultiplyF32( m_matrix[ 2 ][ 2 ], rScaling.m_z );
+        m_matrix[ 2 ][ 3 ] = Helium::Simd::MultiplyF32( m_matrix[ 2 ][ 3 ], rScaling.m_z );
     }
 
     /// Set this matrix to the product of two matrices.
@@ -624,11 +624,11 @@ namespace Lunar
     /// Compute the determinant of this matrix.
     ///
     /// @return  Matrix determinant.
-    SimdVector Matrix44Soa::GetDeterminant() const
+    Helium::SimdVector Matrix44Soa::GetDeterminant() const
     {
         Determinant22Cache det22Cache;
         Determinant33Cache det33Cache;
-        SimdVector determinant = CalculateDeterminant( *this, det22Cache, det33Cache );
+        Helium::SimdVector determinant = CalculateDeterminant( *this, det22Cache, det33Cache );
 
         return determinant;
     }
@@ -642,38 +642,38 @@ namespace Lunar
     {
         Determinant22Cache det22Cache;
         Determinant33Cache det33Cache;
-        SimdVector determinant = CalculateDeterminant( *this, det22Cache, det33Cache );
+        Helium::SimdVector determinant = CalculateDeterminant( *this, det22Cache, det33Cache );
 
-        SimdVector invDeterminantEven = Simd::InverseF32( determinant );
-        SimdVector invDeterminantOdd = Simd::Xor( invDeterminantEven, Simd::SetSplatU32( 0x80000000 ) );
+        Helium::SimdVector invDeterminantEven = Helium::Simd::InverseF32( determinant );
+        Helium::SimdVector invDeterminantOdd = Helium::Simd::Xor( invDeterminantEven, Helium::Simd::SetSplatU32( 0x80000000 ) );
 
-        SimdVector result00 = Simd::MultiplyF32( det33Cache.detSubmat0, invDeterminantEven );
-        SimdVector result10 = Simd::MultiplyF32( det33Cache.detSubmat1, invDeterminantOdd );
-        SimdVector result20 = Simd::MultiplyF32( det33Cache.detSubmat2, invDeterminantEven );
-        SimdVector result30 = Simd::MultiplyF32( det33Cache.detSubmat3, invDeterminantOdd );
+        Helium::SimdVector result00 = Helium::Simd::MultiplyF32( det33Cache.detSubmat0, invDeterminantEven );
+        Helium::SimdVector result10 = Helium::Simd::MultiplyF32( det33Cache.detSubmat1, invDeterminantOdd );
+        Helium::SimdVector result20 = Helium::Simd::MultiplyF32( det33Cache.detSubmat2, invDeterminantEven );
+        Helium::SimdVector result30 = Helium::Simd::MultiplyF32( det33Cache.detSubmat3, invDeterminantOdd );
 
         ComputeDet33Helper( m_matrix[ 0 ], det22Cache, det33Cache );
 
-        SimdVector result01 = Simd::MultiplyF32( det33Cache.detSubmat0, invDeterminantOdd );
-        SimdVector result11 = Simd::MultiplyF32( det33Cache.detSubmat1, invDeterminantEven );
-        SimdVector result21 = Simd::MultiplyF32( det33Cache.detSubmat2, invDeterminantOdd );
-        SimdVector result31 = Simd::MultiplyF32( det33Cache.detSubmat3, invDeterminantEven );
+        Helium::SimdVector result01 = Helium::Simd::MultiplyF32( det33Cache.detSubmat0, invDeterminantOdd );
+        Helium::SimdVector result11 = Helium::Simd::MultiplyF32( det33Cache.detSubmat1, invDeterminantEven );
+        Helium::SimdVector result21 = Helium::Simd::MultiplyF32( det33Cache.detSubmat2, invDeterminantOdd );
+        Helium::SimdVector result31 = Helium::Simd::MultiplyF32( det33Cache.detSubmat3, invDeterminantEven );
 
         ComputeDet22Helper( m_matrix[ 0 ], m_matrix[ 1 ], det22Cache );
 
         ComputeDet33Helper( m_matrix[ 3 ], det22Cache, det33Cache );
 
-        SimdVector result02 = Simd::MultiplyF32( det33Cache.detSubmat0, invDeterminantEven );
-        SimdVector result12 = Simd::MultiplyF32( det33Cache.detSubmat1, invDeterminantOdd );
-        SimdVector result22 = Simd::MultiplyF32( det33Cache.detSubmat2, invDeterminantEven );
-        SimdVector result32 = Simd::MultiplyF32( det33Cache.detSubmat3, invDeterminantOdd );
+        Helium::SimdVector result02 = Helium::Simd::MultiplyF32( det33Cache.detSubmat0, invDeterminantEven );
+        Helium::SimdVector result12 = Helium::Simd::MultiplyF32( det33Cache.detSubmat1, invDeterminantOdd );
+        Helium::SimdVector result22 = Helium::Simd::MultiplyF32( det33Cache.detSubmat2, invDeterminantEven );
+        Helium::SimdVector result32 = Helium::Simd::MultiplyF32( det33Cache.detSubmat3, invDeterminantOdd );
 
         ComputeDet33Helper( m_matrix[ 2 ], det22Cache, det33Cache );
 
-        SimdVector result03 = Simd::MultiplyF32( det33Cache.detSubmat0, invDeterminantOdd );
-        SimdVector result13 = Simd::MultiplyF32( det33Cache.detSubmat1, invDeterminantEven );
-        SimdVector result23 = Simd::MultiplyF32( det33Cache.detSubmat2, invDeterminantOdd );
-        SimdVector result33 = Simd::MultiplyF32( det33Cache.detSubmat3, invDeterminantEven );
+        Helium::SimdVector result03 = Helium::Simd::MultiplyF32( det33Cache.detSubmat0, invDeterminantOdd );
+        Helium::SimdVector result13 = Helium::Simd::MultiplyF32( det33Cache.detSubmat1, invDeterminantEven );
+        Helium::SimdVector result23 = Helium::Simd::MultiplyF32( det33Cache.detSubmat2, invDeterminantOdd );
+        Helium::SimdVector result33 = Helium::Simd::MultiplyF32( det33Cache.detSubmat3, invDeterminantEven );
 
         rMatrix.m_matrix[ 0 ][ 0 ] = result00;
         rMatrix.m_matrix[ 0 ][ 1 ] = result01;

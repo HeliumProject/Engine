@@ -14,10 +14,10 @@ namespace Helium
         class PLATFORM_API MemoryStatus
         {
         public:
-            uintptr m_TotalReserve;
-            uintptr m_TotalCommit;
-            uintptr m_TotalFree;
-            uintptr m_LargestFree;
+            uintptr_t m_TotalReserve;
+            uintptr_t m_TotalCommit;
+            uintptr_t m_TotalFree;
+            uintptr_t m_LargestFree;
 
             MemoryStatus()
                 : m_TotalReserve (0)

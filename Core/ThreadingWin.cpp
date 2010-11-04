@@ -6,9 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "CorePch.h"
-#include "Core/Platform.h"
+#include "Platform/Platform.h"
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 
 #include "Core/Threading.h"
 
@@ -43,7 +43,7 @@ namespace Lunar
     /// Destructor.
     Thread::~Thread()
     {
-        L_VERIFY( Join() );
+        HELIUM_VERIFY( Join() );
     }
 
     /// Set the runnable instance that this thread is set to execute.
@@ -53,7 +53,7 @@ namespace Lunar
     /// @param[in] pRunnable  Runnable instance to execute.
     void Thread::SetRunnable( Runnable* pRunnable )
     {
-        L_ASSERT( m_thread == 0 );
+        HELIUM_ASSERT( m_thread == 0 );
         m_pRunnable = pRunnable;
     }
 
@@ -66,7 +66,7 @@ namespace Lunar
     /// @see GetName()
     void Thread::SetName( const String& rName )
     {
-        L_ASSERT( m_thread == 0 );
+        HELIUM_ASSERT( m_thread == 0 );
         m_name = rName;
     }
 
@@ -80,7 +80,7 @@ namespace Lunar
     bool Thread::Start()
     {
         // Make sure a thread hasn't already been started.
-        L_ASSERT( m_thread == 0 );
+        HELIUM_ASSERT( m_thread == 0 );
         if( m_thread != 0 )
         {
             return false;
@@ -90,7 +90,7 @@ namespace Lunar
         // starting).
         uint32_t threadId;
         m_thread = _beginthreadex( NULL, 0, ThreadCallback, this, CREATE_SUSPENDED, &threadId );
-        L_ASSERT( m_thread != 0 );
+        HELIUM_ASSERT( m_thread != 0 );
         if( m_thread != 0 )
         {
             // Assign the thread name.
@@ -102,7 +102,7 @@ namespace Lunar
                 nameInfo.dwThreadId = threadId;
                 nameInfo.dwFlags = 0;
 
-#if L_UNICODE
+#if HELIUM_UNICODE
                 // Perform a direct conversion from Unicode to single-byte characters by casting.
                 char name[ 128 ];
                 charCount = Min( charCount, L_ARRAY_COUNT( name ) - 1 );
@@ -119,7 +119,7 @@ namespace Lunar
                 nameInfo.szName = name;
 #else
                 nameInfo.szName = m_name.GetData();
-                L_ASSERT( nameInfo.szName );
+                HELIUM_ASSERT( nameInfo.szName );
 #endif
 
                 __try
@@ -137,7 +137,7 @@ namespace Lunar
 
             // Start the thread.
             DWORD resumeResult = ResumeThread( reinterpret_cast< HANDLE >( m_thread ) );
-            L_ASSERT( resumeResult != static_cast< DWORD >( -1 ) );
+            HELIUM_ASSERT( resumeResult != static_cast< DWORD >( -1 ) );
             L_UNREF( resumeResult );
         }
 
@@ -156,13 +156,13 @@ namespace Lunar
             DWORD waitResult = WaitForSingleObject(
                 reinterpret_cast< HANDLE >( m_thread ),
                 ( timeOutMilliseconds != 0 ? timeOutMilliseconds : INFINITE ) );
-            L_ASSERT( waitResult == WAIT_OBJECT_0 || waitResult == WAIT_TIMEOUT );
+            HELIUM_ASSERT( waitResult == WAIT_OBJECT_0 || waitResult == WAIT_TIMEOUT );
             if( waitResult != WAIT_OBJECT_0 )
             {
                 return false;
             }
 
-            L_VERIFY( CloseHandle( reinterpret_cast< HANDLE >( m_thread ) ) );
+            HELIUM_VERIFY( CloseHandle( reinterpret_cast< HANDLE >( m_thread ) ) );
             m_thread = 0;
         }
 
@@ -179,13 +179,13 @@ namespace Lunar
         if( m_thread != 0 )
         {
             DWORD waitResult = WaitForSingleObject( reinterpret_cast< HANDLE >( m_thread ), 0 );
-            L_ASSERT( waitResult == WAIT_OBJECT_0 || waitResult == WAIT_TIMEOUT );
+            HELIUM_ASSERT( waitResult == WAIT_OBJECT_0 || waitResult == WAIT_TIMEOUT );
             if( waitResult != WAIT_OBJECT_0 )
             {
                 return false;
             }
 
-            L_VERIFY( CloseHandle( reinterpret_cast< HANDLE >( m_thread ) ) );
+            HELIUM_VERIFY( CloseHandle( reinterpret_cast< HANDLE >( m_thread ) ) );
             m_thread = 0;
         }
 
@@ -211,7 +211,7 @@ namespace Lunar
     /// @return  Thread result code (always zero).
     unsigned int __stdcall Thread::ThreadCallback( void* pData )
     {
-        L_ASSERT( pData );
+        HELIUM_ASSERT( pData );
 
         Thread* pThread = static_cast< Thread* >( pData );
         pThread->Run();
@@ -225,4 +225,4 @@ namespace Lunar
     }
 }
 
-#endif  // L_OS_WIN
+#endif  // HELIUM_OS_WIN

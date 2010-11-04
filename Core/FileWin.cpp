@@ -7,7 +7,7 @@
 
 #include "CorePch.h"
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 
 #include "Core/File.h"
 
@@ -17,14 +17,14 @@
 
 #include <ShlObj.h>
 
-#if L_UNICODE
+#if HELIUM_UNICODE
 #define _GET_FILE_ATTRIBUTES_EX GetFileAttributesExW
 #else
 #define _GET_FILE_ATTRIBUTES_EX GetFileAttributesExA
 #endif
 
 // Default user data directory (if the application name is not set).
-#define L_DEFAULT_USER_DATA_DIRECTORY L_T( "Lunar" )
+#define L_DEFAULT_USER_DATA_DIRECTORY TXT( "Lunar" )
 
 namespace Lunar
 {
@@ -42,10 +42,10 @@ namespace Lunar
 
             tchar_t pathBuffer[ MAX_PATH ];
             DWORD result = GetModuleFileName( NULL, pathBuffer, L_ARRAY_COUNT( pathBuffer ) );
-            L_ASSERT( result < L_ARRAY_COUNT( pathBuffer ) );
+            HELIUM_ASSERT( result < L_ARRAY_COUNT( pathBuffer ) );
             L_UNREF( result );
 
-            pathBuffer[ L_ARRAY_COUNT( pathBuffer ) - 1 ] = L_T( '\0' );
+            pathBuffer[ L_ARRAY_COUNT( pathBuffer ) - 1 ] = TXT( '\0' );
 
             baseDirectory = pathBuffer;
             if( baseDirectory.IsEmpty() )
@@ -122,7 +122,7 @@ namespace Lunar
             }
 
             // Append the "Data" directory, with trailing path separator.
-            Path::Combine( dataDirectory, dataDirectory, String( L_T( "Data\\" ) ) );
+            Path::Combine( dataDirectory, dataDirectory, String( TXT( "Data\\" ) ) );
             if( !File::Exists( dataDirectory ) )
             {
                 dataDirectory.Clear();
@@ -155,7 +155,7 @@ namespace Lunar
                 return userDataDirectory;
             }
 
-            pathBuffer[ L_ARRAY_COUNT( pathBuffer ) - 1 ] = L_T( '\0' );
+            pathBuffer[ L_ARRAY_COUNT( pathBuffer ) - 1 ] = TXT( '\0' );
             userDataDirectory = pathBuffer;
 
             String subDirectory = AppInfo::GetName();
@@ -164,7 +164,7 @@ namespace Lunar
                 subDirectory = L_DEFAULT_USER_DATA_DIRECTORY;
             }
 
-            subDirectory += L_T( '\\' );
+            subDirectory += TXT( '\\' );
 
             Path::Combine( userDataDirectory, userDataDirectory, subDirectory );
             File::EDirectoryCreateResult createResult = File::CreateDirectory( userDataDirectory, true );
@@ -187,7 +187,7 @@ namespace Lunar
     FileStream* File::CreateStream()
     {
         FileStream* pStream = new FileStreamWin;
-        L_ASSERT( pStream );
+        HELIUM_ASSERT( pStream );
 
         return pStream;
     }
@@ -199,7 +199,7 @@ namespace Lunar
     /// @return  True if the file or directory exists, false if not.
     bool File::Exists( const tchar_t* pPath )
     {
-        L_ASSERT( pPath );
+        HELIUM_ASSERT( pPath );
 
         WIN32_FILE_ATTRIBUTE_DATA fileAttributes;
         BOOL bResult = _GET_FILE_ATTRIBUTES_EX( pPath, GetFileExInfoStandard, &fileAttributes );
@@ -214,7 +214,7 @@ namespace Lunar
     /// @return  Type of the entry at the specified path, or TYPE_INVALID if the entry does not exist.
     File::EType File::GetFileType( const tchar_t* pPath )
     {
-        L_ASSERT( pPath );
+        HELIUM_ASSERT( pPath );
 
         WIN32_FILE_ATTRIBUTE_DATA fileAttributes;
         BOOL bResult = _GET_FILE_ATTRIBUTES_EX( pPath, GetFileExInfoStandard, &fileAttributes );
@@ -239,7 +239,7 @@ namespace Lunar
     ///          file size could not be retrieved.
     int64_t File::GetSize( const tchar_t* pPath )
     {
-        L_ASSERT( pPath );
+        HELIUM_ASSERT( pPath );
 
         WIN32_FILE_ATTRIBUTE_DATA fileAttributes;
         BOOL bResult = _GET_FILE_ATTRIBUTES_EX( pPath, GetFileExInfoStandard, &fileAttributes );
@@ -263,7 +263,7 @@ namespace Lunar
     ///          of this value is platform dependent, but results should be consistent across the same platform.
     int64_t File::GetTimestamp( const tchar_t* pPath )
     {
-        L_ASSERT( pPath );
+        HELIUM_ASSERT( pPath );
 
         WIN32_FILE_ATTRIBUTE_DATA fileAttributes;
         BOOL bResult = _GET_FILE_ATTRIBUTES_EX( pPath, GetFileExInfoStandard, &fileAttributes );
@@ -290,7 +290,7 @@ namespace Lunar
     DirectoryIterator* File::IterateDirectory( const tchar_t* pPath )
     {
         DirectoryIteratorWin* pIterator = new DirectoryIteratorWin( pPath );
-        L_ASSERT( pIterator );
+        HELIUM_ASSERT( pIterator );
 
         return pIterator;
     }
@@ -340,7 +340,7 @@ namespace Lunar
     /// @return  Identifier for the result of the directory creation attempt.
     File::EDirectoryCreateResult File::PlatformCreateDirectory( const tchar_t* pPath )
     {
-        L_ASSERT( pPath );
+        HELIUM_ASSERT( pPath );
 
         EDirectoryCreateResult result = DIRECTORY_CREATE_RESULT_SUCCESS;
         if( !::CreateDirectory( pPath, NULL ) )
@@ -356,4 +356,4 @@ namespace Lunar
     }
 }
 
-#endif  // L_OS_WIN
+#endif  // HELIUM_OS_WIN

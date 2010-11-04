@@ -102,7 +102,7 @@ namespace Lunar
     /// @see GetX(), GetY(), SetElement(), SetX(), SetY()
     float32_t& Vector2::GetElement( size_t index )
     {
-        L_ASSERT( index < 2 );
+        HELIUM_ASSERT( index < 2 );
 
         return m_vector[ index ];
     }
@@ -116,7 +116,7 @@ namespace Lunar
     /// @see GetX(), GetY(), SetElement(), SetX(), SetY()
     float32_t Vector2::GetElement( size_t index ) const
     {
-        L_ASSERT( index < 2 );
+        HELIUM_ASSERT( index < 2 );
 
         return m_vector[ index ];
     }
@@ -129,7 +129,7 @@ namespace Lunar
     /// @see SetX(), SetY(), GetElement(), GetX(), GetY()
     void Vector2::SetElement( size_t index, float32_t value )
     {
-        L_ASSERT( index < 2 );
+        HELIUM_ASSERT( index < 2 );
 
         m_vector[ index ] = value;
     }

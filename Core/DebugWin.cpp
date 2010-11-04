@@ -7,13 +7,13 @@
 
 #include "CorePch.h"
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 
 #include "Core/Debug.h"
 
 #if !L_RELEASE
 
-#if L_UNICODE
+#if HELIUM_UNICODE
 #define DBGHELP_TRANSLATE_TCHAR
 #endif
 
@@ -33,19 +33,19 @@ namespace Lunar
         static volatile bool bSymInitialized = false;
         if( !bSymInitialized )
         {
-            L_LOG( LOG_INFO, L_T( "Initializing symbol handler for the current process...\n" ) );
+            L_LOG( LOG_INFO, TXT( "Initializing symbol handler for the current process...\n" ) );
 
             HANDLE hProcess = GetCurrentProcess();
-            L_ASSERT( hProcess );
+            HELIUM_ASSERT( hProcess );
 
             BOOL bInitialized = SymInitialize( hProcess, NULL, TRUE );
             if( bInitialized )
             {
-                L_LOG( LOG_INFO, L_T( "Symbol handler initialization successful!\n" ) );
+                L_LOG( LOG_INFO, TXT( "Symbol handler initialization successful!\n" ) );
             }
             else
             {
-                L_LOG( LOG_ERROR, L_T( "Symbol handler initialization failed (error code %u).\n" ), GetLastError() );
+                L_LOG( LOG_ERROR, TXT( "Symbol handler initialization failed (error code %u).\n" ), GetLastError() );
             }
 
             bSymInitialized = true;
@@ -63,7 +63,7 @@ namespace Lunar
     /// @return  Number of addresses stored in the output array.
     size_t GetStackTrace( void** ppStackTraceArray, size_t stackTraceArraySize, size_t skipCount )
     {
-        L_ASSERT( ppStackTraceArray || stackTraceArraySize == 0 );
+        HELIUM_ASSERT( ppStackTraceArray || stackTraceArraySize == 0 );
 
         ScopeLock< LwMutex > scopeLock( GetStackWalkMutex() );
         ConditionalSymInitialize();
@@ -79,7 +79,7 @@ namespace Lunar
         stackFrame.AddrFrame.Mode = AddrModeFlat;
         stackFrame.AddrStack.Mode = AddrModeFlat;
 
-#if L_OS_WIN32
+#if HELIUM_OS_WIN32
         const DWORD machineType = IMAGE_FILE_MACHINE_I386;
         stackFrame.AddrPC.Offset = context.Eip;
         stackFrame.AddrFrame.Offset = context.Ebp;
@@ -93,10 +93,10 @@ namespace Lunar
 #endif
 
         HANDLE hProcess = GetCurrentProcess();
-        L_ASSERT( hProcess );
+        HELIUM_ASSERT( hProcess );
 
         HANDLE hThread = GetCurrentThread();
-        L_ASSERT( hThread );
+        HELIUM_ASSERT( hThread );
 
         // Skip addresses first.
         for( size_t skipIndex = 0; skipIndex < skipCount; ++skipIndex )
@@ -150,7 +150,7 @@ namespace Lunar
     /// @return  True if the address was successfully resolved, false if not.
     void GetAddressSymbol( String& rSymbol, void* pAddress )
     {
-        L_ASSERT( pAddress );
+        HELIUM_ASSERT( pAddress );
 
         ScopeLock< LwMutex > scopeLock( GetStackWalkMutex() );
         ConditionalSymInitialize();
@@ -158,7 +158,7 @@ namespace Lunar
         rSymbol.Remove( 0, rSymbol.GetSize() );
 
         HANDLE hProcess = GetCurrentProcess();
-        L_ASSERT( hProcess );
+        HELIUM_ASSERT( hProcess );
 
         bool bAddedModuleName = false;
 
@@ -170,9 +170,9 @@ namespace Lunar
             moduleInfo.SizeOfStruct = sizeof( moduleInfo );
             if( SymGetModuleInfo64( hProcess, moduleBase, &moduleInfo ) )
             {
-                rSymbol += L_T( "(" );
+                rSymbol += TXT( "(" );
                 rSymbol += moduleInfo.ModuleName;
-                rSymbol += L_T( ") " );
+                rSymbol += TXT( ") " );
 
                 bAddedModuleName = true;
             }
@@ -180,7 +180,7 @@ namespace Lunar
 
         if( !bAddedModuleName )
         {
-            rSymbol += L_T( "(???) " );
+            rSymbol += TXT( "(???) " );
         }
 
         uint64_t symbolInfoBuffer[
@@ -193,13 +193,13 @@ namespace Lunar
         rSymbolInfo.MaxNameLen = MAX_SYM_NAME;
         if( SymFromAddr( hProcess, reinterpret_cast< uintptr_t >( pAddress ), NULL, &rSymbolInfo ) )
         {
-            rSymbolInfo.Name[ MAX_SYM_NAME - 1 ] = L_T( '\0' );
+            rSymbolInfo.Name[ MAX_SYM_NAME - 1 ] = TXT( '\0' );
             rSymbol += rSymbolInfo.Name;
-            rSymbol += L_T( " " );
+            rSymbol += TXT( " " );
         }
         else
         {
-            rSymbol += L_T( "??? " );
+            rSymbol += TXT( "??? " );
         }
 
         DWORD displacement = 0;
@@ -209,22 +209,22 @@ namespace Lunar
         if( SymGetLineFromAddr64( hProcess, reinterpret_cast< uintptr_t >( pAddress ), &displacement, &lineInfo ) )
         {
             tchar_t lineNumberBuffer[ 32 ];
-            StringFormat( lineNumberBuffer, L_ARRAY_COUNT( lineNumberBuffer ), L_T( "%u" ), lineInfo.LineNumber );
-            lineNumberBuffer[ L_ARRAY_COUNT( lineNumberBuffer ) - 1 ] = L_T( '\0' );
+            StringFormat( lineNumberBuffer, L_ARRAY_COUNT( lineNumberBuffer ), TXT( "%u" ), lineInfo.LineNumber );
+            lineNumberBuffer[ L_ARRAY_COUNT( lineNumberBuffer ) - 1 ] = TXT( '\0' );
 
-            rSymbol += L_T( "(" );
+            rSymbol += TXT( "(" );
             rSymbol += lineInfo.FileName;
-            rSymbol += L_T( ", line " );
+            rSymbol += TXT( ", line " );
             rSymbol += lineNumberBuffer;
-            rSymbol += L_T( ")" );
+            rSymbol += TXT( ")" );
         }
         else
         {
-            rSymbol += L_T( "(???, line ?)" );
+            rSymbol += TXT( "(???, line ?)" );
         }
     }
 }
 
 #endif  // !L_RELEASE
 
-#endif  // L_OS_WIN
+#endif  // HELIUM_OS_WIN

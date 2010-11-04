@@ -7,7 +7,7 @@
 
 #include "CorePch.h"
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 
 #include "Core/Timer.h"
 
@@ -21,15 +21,15 @@ namespace Lunar
     void Timer::StaticInitialize()
     {
         LARGE_INTEGER perfQuery;
-        L_VERIFY( QueryPerformanceFrequency( &perfQuery ) );
-        L_ASSERT( perfQuery.QuadPart != 0 );
+        HELIUM_VERIFY( QueryPerformanceFrequency( &perfQuery ) );
+        HELIUM_ASSERT( perfQuery.QuadPart != 0 );
 
         sm_ticksPerSecond = perfQuery.QuadPart;
         sm_secondsPerTick = 1.0 / static_cast< float64_t >( perfQuery.QuadPart );
 
-        L_VERIFY( QueryPerformanceCounter( &perfQuery ) );
+        HELIUM_VERIFY( QueryPerformanceCounter( &perfQuery ) );
         sm_startTickCount = perfQuery.QuadPart;
     }
 }
 
-#endif  // L_OS_WIN
+#endif  // HELIUM_OS_WIN

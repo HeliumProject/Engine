@@ -20,7 +20,7 @@ namespace Lunar
     /// @param[in] rY  Y components.
     /// @param[in] rZ  Z components.
     /// @param[in] rW  W components.
-    Vector4Soa::Vector4Soa( const SimdVector& rX, const SimdVector& rY, const SimdVector& rZ, const SimdVector& rW )
+    Vector4Soa::Vector4Soa( const Helium::SimdVector& rX, const Helium::SimdVector& rY, const Helium::SimdVector& rZ, const Helium::SimdVector& rW )
         : m_x( rX )
         , m_y( rY )
         , m_z( rZ )
@@ -59,10 +59,10 @@ namespace Lunar
     /// @param[in] pW  W components (must be SIMD aligned).
     void Vector4Soa::Load( const float32_t* pX, const float32_t* pY, const float32_t* pZ, const float32_t* pW )
     {
-        m_x = Simd::LoadAligned( pX );
-        m_y = Simd::LoadAligned( pY );
-        m_z = Simd::LoadAligned( pZ );
-        m_w = Simd::LoadAligned( pW );
+        m_x = Helium::Simd::LoadAligned( pX );
+        m_y = Helium::Simd::LoadAligned( pY );
+        m_z = Helium::Simd::LoadAligned( pZ );
+        m_w = Helium::Simd::LoadAligned( pW );
     }
 
     /// Load 4 single-precision floating-point values for each vector component, splatting the values to fill.
@@ -76,10 +76,10 @@ namespace Lunar
     /// @param[in] pW  W components (must be aligned to a 16-byte boundary).
     void Vector4Soa::Load4Splat( const float32_t* pX, const float32_t* pY, const float32_t* pZ, const float32_t* pW )
     {
-        m_x = Simd::LoadSplat128( pX );
-        m_y = Simd::LoadSplat128( pY );
-        m_z = Simd::LoadSplat128( pZ );
-        m_w = Simd::LoadSplat128( pW );
+        m_x = Helium::Simd::LoadSplat128( pX );
+        m_y = Helium::Simd::LoadSplat128( pY );
+        m_z = Helium::Simd::LoadSplat128( pZ );
+        m_w = Helium::Simd::LoadSplat128( pW );
     }
 
     /// Load 1 single-precision floating-point value for each vector component, splatting the value to fill.
@@ -90,10 +90,10 @@ namespace Lunar
     /// @param[in] pW  W components (must be aligned to a 4-byte boundary).
     void Vector4Soa::Load1Splat( const float32_t* pX, const float32_t* pY, const float32_t* pZ, const float32_t* pW )
     {
-        m_x = Simd::LoadSplat32( pX );
-        m_y = Simd::LoadSplat32( pY );
-        m_z = Simd::LoadSplat32( pZ );
-        m_w = Simd::LoadSplat32( pW );
+        m_x = Helium::Simd::LoadSplat32( pX );
+        m_y = Helium::Simd::LoadSplat32( pY );
+        m_z = Helium::Simd::LoadSplat32( pZ );
+        m_w = Helium::Simd::LoadSplat32( pW );
     }
 
     /// Fully store the SIMD vectors from each vector component into memory.
@@ -104,10 +104,10 @@ namespace Lunar
     /// @param[out] pW  W components (must be SIMD aligned).
     void Vector4Soa::Store( float32_t* pX, float32_t* pY, float32_t* pZ, float32_t* pW ) const
     {
-        Simd::StoreAligned( pX, m_x );
-        Simd::StoreAligned( pY, m_y );
-        Simd::StoreAligned( pZ, m_z );
-        Simd::StoreAligned( pW, m_w );
+        Helium::Simd::StoreAligned( pX, m_x );
+        Helium::Simd::StoreAligned( pY, m_y );
+        Helium::Simd::StoreAligned( pZ, m_z );
+        Helium::Simd::StoreAligned( pW, m_w );
     }
 
     /// Store the lowest 4 single-precision floating-point values from each vector component into memory.
@@ -121,10 +121,10 @@ namespace Lunar
     /// @param[out] pW  W components (must be aligned to a 16-byte boundary).
     void Vector4Soa::Store4( float32_t* pX, float32_t* pY, float32_t* pZ, float32_t* pW ) const
     {
-        Simd::Store128( pX, m_x );
-        Simd::Store128( pY, m_y );
-        Simd::Store128( pZ, m_z );
-        Simd::Store128( pW, m_w );
+        Helium::Simd::Store128( pX, m_x );
+        Helium::Simd::Store128( pY, m_y );
+        Helium::Simd::Store128( pZ, m_z );
+        Helium::Simd::Store128( pW, m_w );
     }
 
     /// Store the lowest single-precision floating-point value from each vector component into memory.
@@ -135,10 +135,10 @@ namespace Lunar
     /// @param[out] pW  W components (must be aligned to a 4-byte boundary).
     void Vector4Soa::Store1( float32_t* pX, float32_t* pY, float32_t* pZ, float32_t* pW ) const
     {
-        Simd::Store32( pX, m_x );
-        Simd::Store32( pY, m_y );
-        Simd::Store32( pZ, m_z );
-        Simd::Store32( pW, m_w );
+        Helium::Simd::Store32( pX, m_x );
+        Helium::Simd::Store32( pY, m_y );
+        Helium::Simd::Store32( pZ, m_z );
+        Helium::Simd::Store32( pW, m_w );
     }
 
     /// Perform a component-wise addition of this vector and the given vector.
@@ -149,10 +149,10 @@ namespace Lunar
     Vector4Soa Vector4Soa::Add( const Vector4Soa& rVector ) const
     {
         return Vector4Soa(
-            Simd::AddF32( m_x, rVector.m_x ),
-            Simd::AddF32( m_y, rVector.m_y ),
-            Simd::AddF32( m_z, rVector.m_z ),
-            Simd::AddF32( m_w, rVector.m_w ) );
+            Helium::Simd::AddF32( m_x, rVector.m_x ),
+            Helium::Simd::AddF32( m_y, rVector.m_y ),
+            Helium::Simd::AddF32( m_z, rVector.m_z ),
+            Helium::Simd::AddF32( m_w, rVector.m_w ) );
     }
 
     /// Perform a component-wise subtraction of the given vector from this vector.
@@ -163,10 +163,10 @@ namespace Lunar
     Vector4Soa Vector4Soa::Subtract( const Vector4Soa& rVector ) const
     {
         return Vector4Soa(
-            Simd::SubtractF32( m_x, rVector.m_x ),
-            Simd::SubtractF32( m_y, rVector.m_y ),
-            Simd::SubtractF32( m_z, rVector.m_z ),
-            Simd::SubtractF32( m_w, rVector.m_w ) );
+            Helium::Simd::SubtractF32( m_x, rVector.m_x ),
+            Helium::Simd::SubtractF32( m_y, rVector.m_y ),
+            Helium::Simd::SubtractF32( m_z, rVector.m_z ),
+            Helium::Simd::SubtractF32( m_w, rVector.m_w ) );
     }
 
     /// Perform a component-wise multiplication of this vector and the given vector.
@@ -177,10 +177,10 @@ namespace Lunar
     Vector4Soa Vector4Soa::Multiply( const Vector4Soa& rVector ) const
     {
         return Vector4Soa(
-            Simd::MultiplyF32( m_x, rVector.m_x ),
-            Simd::MultiplyF32( m_y, rVector.m_y ),
-            Simd::MultiplyF32( m_z, rVector.m_z ),
-            Simd::MultiplyF32( m_w, rVector.m_w ) );
+            Helium::Simd::MultiplyF32( m_x, rVector.m_x ),
+            Helium::Simd::MultiplyF32( m_y, rVector.m_y ),
+            Helium::Simd::MultiplyF32( m_z, rVector.m_z ),
+            Helium::Simd::MultiplyF32( m_w, rVector.m_w ) );
     }
 
     /// Perform a component-wise division of this vector and the given vector.
@@ -191,10 +191,10 @@ namespace Lunar
     Vector4Soa Vector4Soa::Divide( const Vector4Soa& rVector ) const
     {
         return Vector4Soa(
-            Simd::DivideF32( m_x, rVector.m_x ),
-            Simd::DivideF32( m_y, rVector.m_y ),
-            Simd::DivideF32( m_z, rVector.m_z ),
-            Simd::DivideF32( m_w, rVector.m_w ) );
+            Helium::Simd::DivideF32( m_x, rVector.m_x ),
+            Helium::Simd::DivideF32( m_y, rVector.m_y ),
+            Helium::Simd::DivideF32( m_z, rVector.m_z ),
+            Helium::Simd::DivideF32( m_w, rVector.m_w ) );
     }
 
     /// Set this vector to the component-wise sum of two vectors.
@@ -203,10 +203,10 @@ namespace Lunar
     /// @param[in] rVector1  Second vector.
     void Vector4Soa::AddSet( const Vector4Soa& rVector0, const Vector4Soa& rVector1 )
     {
-        m_x = Simd::AddF32( rVector0.m_x, rVector1.m_x );
-        m_y = Simd::AddF32( rVector0.m_y, rVector1.m_y );
-        m_z = Simd::AddF32( rVector0.m_z, rVector1.m_z );
-        m_w = Simd::AddF32( rVector0.m_w, rVector1.m_w );
+        m_x = Helium::Simd::AddF32( rVector0.m_x, rVector1.m_x );
+        m_y = Helium::Simd::AddF32( rVector0.m_y, rVector1.m_y );
+        m_z = Helium::Simd::AddF32( rVector0.m_z, rVector1.m_z );
+        m_w = Helium::Simd::AddF32( rVector0.m_w, rVector1.m_w );
     }
 
     /// Set this vector to the component-wise difference of two vectors.
@@ -215,10 +215,10 @@ namespace Lunar
     /// @param[in] rVector1  Second vector.
     void Vector4Soa::SubtractSet( const Vector4Soa& rVector0, const Vector4Soa& rVector1 )
     {
-        m_x = Simd::SubtractF32( rVector0.m_x, rVector1.m_x );
-        m_y = Simd::SubtractF32( rVector0.m_y, rVector1.m_y );
-        m_z = Simd::SubtractF32( rVector0.m_z, rVector1.m_z );
-        m_w = Simd::SubtractF32( rVector0.m_w, rVector1.m_w );
+        m_x = Helium::Simd::SubtractF32( rVector0.m_x, rVector1.m_x );
+        m_y = Helium::Simd::SubtractF32( rVector0.m_y, rVector1.m_y );
+        m_z = Helium::Simd::SubtractF32( rVector0.m_z, rVector1.m_z );
+        m_w = Helium::Simd::SubtractF32( rVector0.m_w, rVector1.m_w );
     }
 
     /// Set this vector to the component-wise product of two vectors.
@@ -227,10 +227,10 @@ namespace Lunar
     /// @param[in] rVector1  Second vector.
     void Vector4Soa::MultiplySet( const Vector4Soa& rVector0, const Vector4Soa& rVector1 )
     {
-        m_x = Simd::MultiplyF32( rVector0.m_x, rVector1.m_x );
-        m_y = Simd::MultiplyF32( rVector0.m_y, rVector1.m_y );
-        m_z = Simd::MultiplyF32( rVector0.m_z, rVector1.m_z );
-        m_w = Simd::MultiplyF32( rVector0.m_w, rVector1.m_w );
+        m_x = Helium::Simd::MultiplyF32( rVector0.m_x, rVector1.m_x );
+        m_y = Helium::Simd::MultiplyF32( rVector0.m_y, rVector1.m_y );
+        m_z = Helium::Simd::MultiplyF32( rVector0.m_z, rVector1.m_z );
+        m_w = Helium::Simd::MultiplyF32( rVector0.m_w, rVector1.m_w );
     }
 
     /// Set this vector to the component-wise quotient of two vectors.
@@ -239,10 +239,10 @@ namespace Lunar
     /// @param[in] rVector1  Second vector.
     void Vector4Soa::DivideSet( const Vector4Soa& rVector0, const Vector4Soa& rVector1 )
     {
-        m_x = Simd::DivideF32( rVector0.m_x, rVector1.m_x );
-        m_y = Simd::DivideF32( rVector0.m_y, rVector1.m_y );
-        m_z = Simd::DivideF32( rVector0.m_z, rVector1.m_z );
-        m_w = Simd::DivideF32( rVector0.m_w, rVector1.m_w );
+        m_x = Helium::Simd::DivideF32( rVector0.m_x, rVector1.m_x );
+        m_y = Helium::Simd::DivideF32( rVector0.m_y, rVector1.m_y );
+        m_z = Helium::Simd::DivideF32( rVector0.m_z, rVector1.m_z );
+        m_w = Helium::Simd::DivideF32( rVector0.m_w, rVector1.m_w );
     }
 
     /// Set this vector to the component-wise product of two vectors, summed with the components of a third vector.
@@ -255,10 +255,10 @@ namespace Lunar
         const Vector4Soa& rVectorMul1,
         const Vector4Soa& rVectorAdd )
     {
-        m_x = Simd::MultiplyAddF32( rVectorMul0.m_x, rVectorMul1.m_x, rVectorAdd.m_x );
-        m_y = Simd::MultiplyAddF32( rVectorMul0.m_y, rVectorMul1.m_y, rVectorAdd.m_y );
-        m_z = Simd::MultiplyAddF32( rVectorMul0.m_z, rVectorMul1.m_z, rVectorAdd.m_z );
-        m_w = Simd::MultiplyAddF32( rVectorMul0.m_w, rVectorMul1.m_w, rVectorAdd.m_w );
+        m_x = Helium::Simd::MultiplyAddF32( rVectorMul0.m_x, rVectorMul1.m_x, rVectorAdd.m_x );
+        m_y = Helium::Simd::MultiplyAddF32( rVectorMul0.m_y, rVectorMul1.m_y, rVectorAdd.m_y );
+        m_z = Helium::Simd::MultiplyAddF32( rVectorMul0.m_z, rVectorMul1.m_z, rVectorAdd.m_z );
+        m_w = Helium::Simd::MultiplyAddF32( rVectorMul0.m_w, rVectorMul1.m_w, rVectorAdd.m_w );
     }
 
     /// Get this vector scaled by a given set of scalar values.
@@ -268,13 +268,13 @@ namespace Lunar
     /// @return  Copy of this vector scaled by the specified amount.
     ///
     /// @see Scale()
-    Vector4Soa Vector4Soa::GetScaled( const SimdVector& rScale ) const
+    Vector4Soa Vector4Soa::GetScaled( const Helium::SimdVector& rScale ) const
     {
         return Vector4Soa(
-            Simd::MultiplyF32( m_x, rScale ),
-            Simd::MultiplyF32( m_y, rScale ),
-            Simd::MultiplyF32( m_z, rScale ),
-            Simd::MultiplyF32( m_w, rScale ) );
+            Helium::Simd::MultiplyF32( m_x, rScale ),
+            Helium::Simd::MultiplyF32( m_y, rScale ),
+            Helium::Simd::MultiplyF32( m_z, rScale ),
+            Helium::Simd::MultiplyF32( m_w, rScale ) );
     }
 
     /// Scale this vector by a given set of scalar values.
@@ -282,12 +282,12 @@ namespace Lunar
     /// @param[in] rScale  Amount by which to scale.
     ///
     /// @see GetScaled()
-    void Vector4Soa::Scale( const SimdVector& rScale )
+    void Vector4Soa::Scale( const Helium::SimdVector& rScale )
     {
-        m_x = Simd::MultiplyF32( m_x, rScale );
-        m_y = Simd::MultiplyF32( m_y, rScale );
-        m_z = Simd::MultiplyF32( m_z, rScale );
-        m_w = Simd::MultiplyF32( m_w, rScale );
+        m_x = Helium::Simd::MultiplyF32( m_x, rScale );
+        m_y = Helium::Simd::MultiplyF32( m_y, rScale );
+        m_z = Helium::Simd::MultiplyF32( m_z, rScale );
+        m_w = Helium::Simd::MultiplyF32( m_w, rScale );
     }
 
     /// Compute the dot product of this vector and another 4-component vector.
@@ -295,12 +295,12 @@ namespace Lunar
     /// @param[in] rVector  Vector.
     ///
     /// @return  Dot product.
-    SimdVector Vector4Soa::Dot( const Vector4Soa& rVector ) const
+    Helium::SimdVector Vector4Soa::Dot( const Vector4Soa& rVector ) const
     {
-        SimdVector result = Simd::MultiplyF32( m_x, rVector.m_x );
-        result = Simd::MultiplyAddF32( m_y, rVector.m_y, result );
-        result = Simd::MultiplyAddF32( m_z, rVector.m_z, result );
-        result = Simd::MultiplyAddF32( m_w, rVector.m_w, result );
+        Helium::SimdVector result = Helium::Simd::MultiplyF32( m_x, rVector.m_x );
+        result = Helium::Simd::MultiplyAddF32( m_y, rVector.m_y, result );
+        result = Helium::Simd::MultiplyAddF32( m_z, rVector.m_z, result );
+        result = Helium::Simd::MultiplyAddF32( m_w, rVector.m_w, result );
 
         return result;
     }
@@ -308,15 +308,15 @@ namespace Lunar
     /// Get the magnitude of this vector.
     ///
     /// @return  Vector magnitude.
-    SimdVector Vector4Soa::GetMagnitude() const
+    Helium::SimdVector Vector4Soa::GetMagnitude() const
     {
-        return Simd::SqrtF32( GetMagnitudeSquared() );
+        return Helium::Simd::SqrtF32( GetMagnitudeSquared() );
     }
 
     /// Get the squared magnitude of this vector.
     ///
     /// @return  Squared vector magnitude.
-    SimdVector Vector4Soa::GetMagnitudeSquared() const
+    Helium::SimdVector Vector4Soa::GetMagnitudeSquared() const
     {
         return Dot( *this );
     }
@@ -331,7 +331,7 @@ namespace Lunar
     /// @return  Normalized copy of this vector.
     ///
     /// @see Normalize()
-    Vector4Soa Vector4Soa::GetNormalized( const SimdVector& rEpsilon ) const
+    Vector4Soa Vector4Soa::GetNormalized( const Helium::SimdVector& rEpsilon ) const
     {
         Vector4Soa result = *this;
         result.Normalize( rEpsilon );
@@ -347,26 +347,26 @@ namespace Lunar
     /// @param[in] rEpsilon  Threshold at which to test for zero-length vectors.
     ///
     /// @see GetNormalized()
-    void Vector4Soa::Normalize( const SimdVector& rEpsilon )
+    void Vector4Soa::Normalize( const Helium::SimdVector& rEpsilon )
     {
-        SimdVector magnitudeSquared = GetMagnitudeSquared();
-        SimdVector epsilonSquared = Simd::MultiplyF32( rEpsilon, rEpsilon );
+        Helium::SimdVector magnitudeSquared = GetMagnitudeSquared();
+        Helium::SimdVector epsilonSquared = Helium::Simd::MultiplyF32( rEpsilon, rEpsilon );
 
-        SimdMask thresholdMask = Simd::GreaterEqualsF32( magnitudeSquared, epsilonSquared );
+        Helium::SimdMask thresholdMask = Helium::Simd::GreaterEqualsF32( magnitudeSquared, epsilonSquared );
 
-        SimdVector invMagnitude = Simd::InverseSqrtF32( magnitudeSquared );
+        Helium::SimdVector invMagnitude = Helium::Simd::InverseSqrtF32( magnitudeSquared );
 
-        SimdVector normalizedX = Simd::MultiplyF32( m_x, invMagnitude );
-        SimdVector normalizedY = Simd::MultiplyF32( m_y, invMagnitude );
-        SimdVector normalizedZ = Simd::MultiplyF32( m_z, invMagnitude );
-        SimdVector normalizedW = Simd::MultiplyF32( m_w, invMagnitude );
+        Helium::SimdVector normalizedX = Helium::Simd::MultiplyF32( m_x, invMagnitude );
+        Helium::SimdVector normalizedY = Helium::Simd::MultiplyF32( m_y, invMagnitude );
+        Helium::SimdVector normalizedZ = Helium::Simd::MultiplyF32( m_z, invMagnitude );
+        Helium::SimdVector normalizedW = Helium::Simd::MultiplyF32( m_w, invMagnitude );
 
-        SimdVector oneVec = Simd::SetSplatF32( 1.0f );
+        Helium::SimdVector oneVec = Helium::Simd::SetSplatF32( 1.0f );
 
-        m_x = Simd::Select( oneVec, normalizedX, thresholdMask );
-        m_y = Simd::And( normalizedY, thresholdMask );
-        m_z = Simd::And( normalizedZ, thresholdMask );
-        m_w = Simd::And( normalizedW, thresholdMask );
+        m_x = Helium::Simd::Select( oneVec, normalizedX, thresholdMask );
+        m_y = Helium::Simd::And( normalizedY, thresholdMask );
+        m_z = Helium::Simd::And( normalizedZ, thresholdMask );
+        m_w = Helium::Simd::And( normalizedW, thresholdMask );
     }
 
     /// Get a copy of this vector with the sign of each component flipped.
@@ -389,12 +389,12 @@ namespace Lunar
     /// @see Negate()
     void Vector4Soa::GetNegated( Vector4Soa& rResult ) const
     {
-        SimdVector signFlip = Simd::SetSplatU32( 0x80000000 );
+        Helium::SimdVector signFlip = Helium::Simd::SetSplatU32( 0x80000000 );
 
-        rResult.m_x = Simd::Xor( m_x, signFlip );
-        rResult.m_y = Simd::Xor( m_y, signFlip );
-        rResult.m_z = Simd::Xor( m_z, signFlip );
-        rResult.m_w = Simd::Xor( m_w, signFlip );
+        rResult.m_x = Helium::Simd::Xor( m_x, signFlip );
+        rResult.m_y = Helium::Simd::Xor( m_y, signFlip );
+        rResult.m_z = Helium::Simd::Xor( m_z, signFlip );
+        rResult.m_w = Helium::Simd::Xor( m_w, signFlip );
     }
 
     /// Flip the sign of each component of this vector.
@@ -412,27 +412,27 @@ namespace Lunar
     /// @param[in] rEpsilon  Comparison threshold.
     ///
     /// @return  SIMD mask with bits set for vectors that are equal within the given threshold.
-    SimdMask Vector4Soa::Equals( const Vector4Soa& rVector, const SimdVector& rEpsilon ) const
+    Helium::SimdMask Vector4Soa::Equals( const Vector4Soa& rVector, const Helium::SimdVector& rEpsilon ) const
     {
-        SimdVector absMask = Simd::SetSplatU32( 0x7fffffff );
+        Helium::SimdVector absMask = Helium::Simd::SetSplatU32( 0x7fffffff );
 
-        SimdVector differenceX = Simd::SubtractF32( m_x, rVector.m_x );
-        SimdVector differenceY = Simd::SubtractF32( m_y, rVector.m_y );
-        SimdVector differenceZ = Simd::SubtractF32( m_z, rVector.m_z );
-        SimdVector differenceW = Simd::SubtractF32( m_w, rVector.m_w );
+        Helium::SimdVector differenceX = Helium::Simd::SubtractF32( m_x, rVector.m_x );
+        Helium::SimdVector differenceY = Helium::Simd::SubtractF32( m_y, rVector.m_y );
+        Helium::SimdVector differenceZ = Helium::Simd::SubtractF32( m_z, rVector.m_z );
+        Helium::SimdVector differenceW = Helium::Simd::SubtractF32( m_w, rVector.m_w );
 
-        differenceX = Simd::And( differenceX, absMask );
-        differenceY = Simd::And( differenceY, absMask );
-        differenceZ = Simd::And( differenceZ, absMask );
-        differenceW = Simd::And( differenceW, absMask );
+        differenceX = Helium::Simd::And( differenceX, absMask );
+        differenceY = Helium::Simd::And( differenceY, absMask );
+        differenceZ = Helium::Simd::And( differenceZ, absMask );
+        differenceW = Helium::Simd::And( differenceW, absMask );
 
-        SimdMask thresholdMaskX = Simd::LessEqualsF32( differenceX, rEpsilon );
-        SimdMask thresholdMaskY = Simd::LessEqualsF32( differenceY, rEpsilon );
-        SimdMask thresholdMaskZ = Simd::LessEqualsF32( differenceZ, rEpsilon );
-        SimdMask thresholdMaskW = Simd::LessEqualsF32( differenceW, rEpsilon );
+        Helium::SimdMask thresholdMaskX = Helium::Simd::LessEqualsF32( differenceX, rEpsilon );
+        Helium::SimdMask thresholdMaskY = Helium::Simd::LessEqualsF32( differenceY, rEpsilon );
+        Helium::SimdMask thresholdMaskZ = Helium::Simd::LessEqualsF32( differenceZ, rEpsilon );
+        Helium::SimdMask thresholdMaskW = Helium::Simd::LessEqualsF32( differenceW, rEpsilon );
 
-        return Simd::MaskAnd(
-            Simd::MaskAnd( Simd::MaskAnd( thresholdMaskX, thresholdMaskY ), thresholdMaskZ ),
+        return Helium::Simd::MaskAnd(
+            Helium::Simd::MaskAnd( Helium::Simd::MaskAnd( thresholdMaskX, thresholdMaskY ), thresholdMaskZ ),
             thresholdMaskW );
     }
 
@@ -443,27 +443,27 @@ namespace Lunar
     /// @param[in] rEpsilon  Comparison threshold.
     ///
     /// @return  SIMD mask with bits set for vectors that are not equal within the given threshold.
-    SimdMask Vector4Soa::NotEquals( const Vector4Soa& rVector, const SimdVector& rEpsilon ) const
+    Helium::SimdMask Vector4Soa::NotEquals( const Vector4Soa& rVector, const Helium::SimdVector& rEpsilon ) const
     {
-        SimdVector absMask = Simd::SetSplatU32( 0x7fffffff );
+        Helium::SimdVector absMask = Helium::Simd::SetSplatU32( 0x7fffffff );
 
-        SimdVector differenceX = Simd::SubtractF32( m_x, rVector.m_x );
-        SimdVector differenceY = Simd::SubtractF32( m_y, rVector.m_y );
-        SimdVector differenceZ = Simd::SubtractF32( m_z, rVector.m_z );
-        SimdVector differenceW = Simd::SubtractF32( m_w, rVector.m_w );
+        Helium::SimdVector differenceX = Helium::Simd::SubtractF32( m_x, rVector.m_x );
+        Helium::SimdVector differenceY = Helium::Simd::SubtractF32( m_y, rVector.m_y );
+        Helium::SimdVector differenceZ = Helium::Simd::SubtractF32( m_z, rVector.m_z );
+        Helium::SimdVector differenceW = Helium::Simd::SubtractF32( m_w, rVector.m_w );
 
-        differenceX = Simd::And( differenceX, absMask );
-        differenceY = Simd::And( differenceY, absMask );
-        differenceZ = Simd::And( differenceZ, absMask );
-        differenceW = Simd::And( differenceW, absMask );
+        differenceX = Helium::Simd::And( differenceX, absMask );
+        differenceY = Helium::Simd::And( differenceY, absMask );
+        differenceZ = Helium::Simd::And( differenceZ, absMask );
+        differenceW = Helium::Simd::And( differenceW, absMask );
 
-        SimdMask thresholdMaskX = Simd::GreaterF32( differenceX, rEpsilon );
-        SimdMask thresholdMaskY = Simd::GreaterF32( differenceY, rEpsilon );
-        SimdMask thresholdMaskZ = Simd::GreaterF32( differenceZ, rEpsilon );
-        SimdMask thresholdMaskW = Simd::GreaterF32( differenceW, rEpsilon );
+        Helium::SimdMask thresholdMaskX = Helium::Simd::GreaterF32( differenceX, rEpsilon );
+        Helium::SimdMask thresholdMaskY = Helium::Simd::GreaterF32( differenceY, rEpsilon );
+        Helium::SimdMask thresholdMaskZ = Helium::Simd::GreaterF32( differenceZ, rEpsilon );
+        Helium::SimdMask thresholdMaskW = Helium::Simd::GreaterF32( differenceW, rEpsilon );
 
-        return Simd::MaskOr(
-            Simd::MaskOr( Simd::MaskOr( thresholdMaskX, thresholdMaskY ), thresholdMaskZ ),
+        return Helium::Simd::MaskOr(
+            Helium::Simd::MaskOr( Helium::Simd::MaskOr( thresholdMaskX, thresholdMaskY ), thresholdMaskZ ),
             thresholdMaskW );
     }
 
@@ -568,7 +568,7 @@ namespace Lunar
     /// @param[in] rScale  Amount by which to scale.
     ///
     /// @return  Copy of this vector scaled by the specified amount.
-    Vector4Soa Vector4Soa::operator*( const SimdVector& rScale ) const
+    Vector4Soa Vector4Soa::operator*( const Helium::SimdVector& rScale ) const
     {
         return GetScaled( rScale );
     }
@@ -578,7 +578,7 @@ namespace Lunar
     /// @param[in] rScale  Amount by which to scale.
     ///
     /// @return  Reference to this vector.
-    Vector4Soa& Vector4Soa::operator*=( const SimdVector& rScale )
+    Vector4Soa& Vector4Soa::operator*=( const Helium::SimdVector& rScale )
     {
         Scale( rScale );
 
@@ -591,7 +591,7 @@ namespace Lunar
     /// @param[in] rVector  Vector.
     ///
     /// @return  SIMD mask with bits set for vectors that are equal within the given threshold.
-    SimdMask Vector4Soa::operator==( const Vector4Soa& rVector ) const
+    Helium::SimdMask Vector4Soa::operator==( const Vector4Soa& rVector ) const
     {
         return Equals( rVector );
     }
@@ -602,7 +602,7 @@ namespace Lunar
     /// @param[in] rVector  Vector.
     ///
     /// @return  SIMD mask with bits set for vectors that are not equal within the given threshold.
-    SimdMask Vector4Soa::operator!=( const Vector4Soa& rVector ) const
+    Helium::SimdMask Vector4Soa::operator!=( const Vector4Soa& rVector ) const
     {
         return NotEquals( rVector );
     }
@@ -613,7 +613,7 @@ namespace Lunar
     /// @param[in] rVector  Vector to scale.
     ///
     /// @return  Scaled vector.
-    Vector4Soa operator*( const SimdVector& rScale, const Vector4Soa& rVector )
+    Vector4Soa operator*( const Helium::SimdVector& rScale, const Vector4Soa& rVector )
     {
         return rVector.GetScaled( rScale );
     }

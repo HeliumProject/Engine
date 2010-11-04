@@ -12,7 +12,7 @@
 #include "Core/Core.h"
 #include "Core/Utility.h"
 #include "Core/Memory.h"
-#include "Core/Assert.h"
+#include "Platform/Assert.h"
 #include "Core/ArrayIterator.h"
 
 #include "boost/preprocessor/repetition/enum_params.hpp"

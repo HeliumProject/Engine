@@ -99,7 +99,7 @@ namespace Lunar
     template< typename T >
     T* _ArrayInPlaceConstruct( void* pMemory, size_t count, const boost::false_type& /*rHasTrivialConstructor*/ )
     {
-        L_ASSERT( pMemory || count == 0 );
+        HELIUM_ASSERT( pMemory || count == 0 );
 
         T* pArray = static_cast< T* >( pMemory );
 
@@ -274,7 +274,7 @@ namespace Lunar
     /// @see MemoryMove(), ArrayCopy()
     void MemoryCopy( void* pDest, const void* pSource, size_t size )
     {
-#if L_CC_MSC
+#if HELIUM_CC_MSC
         memcpy_s( pDest, size, pSource, size );
 #else
         memcpy( pDest, pSource, size );
@@ -290,7 +290,7 @@ namespace Lunar
     /// @see MemoryCopy(), ArrayMove()
     void MemoryMove( void* pDest, const void* pSource, size_t size )
     {
-#if L_CC_MSC
+#if HELIUM_CC_MSC
         memmove_s( pDest, size, pSource, size );
 #else
         memmove( pDest, pSource, size );
@@ -475,7 +475,7 @@ namespace Lunar
     template< typename T >
     T Align( const T& rValue, size_t alignment )
     {
-        L_ASSERT( IsPowerOfTwo( alignment ) );
+        HELIUM_ASSERT( IsPowerOfTwo( alignment ) );
 
         return _Align( rValue, alignment, boost::is_pointer< T >() );
     }
@@ -508,7 +508,7 @@ namespace Lunar
     template< typename T >
     size_t StringLength( const T* pString )
     {
-        L_ASSERT( pString );
+        HELIUM_ASSERT( pString );
         const T* pEnd = pString;
         while( *pEnd != static_cast< T >( 0 ) )
         {
@@ -531,8 +531,8 @@ namespace Lunar
     template< typename T >
     int StringCompare( const T* pString0, const T* pString1 )
     {
-        L_ASSERT( pString0 );
-        L_ASSERT( pString1 );
+        HELIUM_ASSERT( pString0 );
+        HELIUM_ASSERT( pString1 );
 
         for( ; ; )
         {
@@ -563,8 +563,8 @@ namespace Lunar
     template< typename T >
     int StringNCompare( const T* pString0, const T* pString1, size_t count )
     {
-        L_ASSERT( pString0 );
-        L_ASSERT( pString1 );
+        HELIUM_ASSERT( pString0 );
+        HELIUM_ASSERT( pString1 );
 
         for( ; count != 0; --count )
         {
@@ -597,8 +597,8 @@ namespace Lunar
     ///          returned.
     int StringFormat( char* pBuffer, size_t bufferSize, const char* pFormat, ... )
     {
-        L_ASSERT( pBuffer || bufferSize == 0 );
-        L_ASSERT( pFormat );
+        HELIUM_ASSERT( pBuffer || bufferSize == 0 );
+        HELIUM_ASSERT( pFormat );
 
         va_list argList;
         va_start( argList, pFormat );
@@ -622,8 +622,8 @@ namespace Lunar
     ///          returned.
     int StringFormat( wchar_t* pBuffer, size_t bufferSize, const wchar_t* pFormat, ... )
     {
-        L_ASSERT( pBuffer || bufferSize == 0 );
-        L_ASSERT( pFormat );
+        HELIUM_ASSERT( pBuffer || bufferSize == 0 );
+        HELIUM_ASSERT( pFormat );
 
         va_list argList;
         va_start( argList, pFormat );
@@ -633,7 +633,7 @@ namespace Lunar
         return result;
     }
 
-#if L_CC_MSC
+#if HELIUM_CC_MSC
 // We don't use the secure CRT versions of vsnprintf() and _vsnwprintf() here since we can't use them to compute the
 // size that would be needed for a format string if it doesn't fit (vsnprintf_s() and _vsnwprintf_s() simply return -1
 // if the string doesn't fit, even if _TRUNCATE is specified for the character count).
@@ -654,8 +654,8 @@ namespace Lunar
     ///          returned.
     int StringFormatVa( char* pBuffer, size_t bufferSize, const char* pFormat, va_list argList )
     {
-        L_ASSERT( pBuffer || bufferSize == 0 );
-        L_ASSERT( pFormat );
+        HELIUM_ASSERT( pBuffer || bufferSize == 0 );
+        HELIUM_ASSERT( pFormat );
         int result = vsnprintf( pBuffer, bufferSize, pFormat, argList );
         return result;
     }
@@ -674,12 +674,12 @@ namespace Lunar
     ///          returned.
     int StringFormatVa( wchar_t* pBuffer, size_t bufferSize, const wchar_t* pFormat, va_list argList )
     {
-        L_ASSERT( pBuffer || bufferSize == 0 );
-        L_ASSERT( pFormat );
+        HELIUM_ASSERT( pBuffer || bufferSize == 0 );
+        HELIUM_ASSERT( pFormat );
         int result = _vsnwprintf( pBuffer, bufferSize, pFormat, argList );
         return result;
     }
-#if L_CC_MSC
+#if HELIUM_CC_MSC
 #pragma warning( pop )
 #endif
 
@@ -847,7 +847,7 @@ namespace Lunar
             return;
         }
 
-        L_ASSERT( pElements );
+        HELIUM_ASSERT( pElements );
 
         size_t startElementIndex, startMaskIndex;
         GetBitElementAndMaskIndex< ElementType >( bitStart, startElementIndex, startMaskIndex );
@@ -897,7 +897,7 @@ namespace Lunar
             return;
         }
 
-        L_ASSERT( pElements );
+        HELIUM_ASSERT( pElements );
 
         size_t startElementIndex, startMaskIndex;
         GetBitElementAndMaskIndex< ElementType >( bitStart, startElementIndex, startMaskIndex );
@@ -944,7 +944,7 @@ namespace Lunar
             return;
         }
 
-        L_ASSERT( pElements );
+        HELIUM_ASSERT( pElements );
 
         size_t startElementIndex, startMaskIndex;
         GetBitElementAndMaskIndex< ElementType >( bitStart, startElementIndex, startMaskIndex );
@@ -991,7 +991,7 @@ namespace Lunar
     template< typename T >
     const void* LoadValue( T& rDest, const void* pSource )
     {
-        L_ASSERT( pSource );
+        HELIUM_ASSERT( pSource );
 
         MemoryCopy( &rDest, pSource, sizeof( T ) );
 
@@ -1009,7 +1009,7 @@ namespace Lunar
     template< typename T >
     const void* LoadValueSwapped( T& rDest, const void* pSource )
     {
-        L_ASSERT( pSource );
+        HELIUM_ASSERT( pSource );
 
         ReverseByteOrder( &rDest, pSource, sizeof( T ) );
 
@@ -1027,8 +1027,8 @@ namespace Lunar
     /// @see LoadValueSwapped()
     void ReverseByteOrder( void* pDest, const void* pSource, size_t size )
     {
-        L_ASSERT( pDest );
-        L_ASSERT( pSource );
+        HELIUM_ASSERT( pDest );
+        HELIUM_ASSERT( pSource );
 
         const uint8_t* pSourceLow = static_cast< const uint8_t* >( pSource );
         const uint8_t* pSourceHigh = pSourceLow + size;

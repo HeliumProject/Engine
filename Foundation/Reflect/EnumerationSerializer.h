@@ -22,7 +22,7 @@ namespace Helium
             virtual bool IsCompact() const HELIUM_OVERRIDE { return true; }
 
             virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
-            virtual void ConnectField(Helium::HybridPtr<Element> instance, const Field* field, uintptr offsetInField = 0) HELIUM_OVERRIDE;
+            virtual void ConnectField(Helium::HybridPtr<Element> instance, const Field* field, uintptr_t offsetInField = 0) HELIUM_OVERRIDE;
 
             virtual bool Set(const Serializer* src, uint32_t flags = 0) HELIUM_OVERRIDE;
             virtual bool Equals(const Serializer* s) const HELIUM_OVERRIDE;

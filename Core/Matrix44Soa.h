@@ -18,7 +18,7 @@ namespace Lunar
     class QuatSoa;
 
     /// SIMD-optimized structure-of-arrays 4x4 matrix.
-    L_SIMD_ALIGN_PRE class LUNAR_CORE_API Matrix44Soa
+    HELIUM_SIMD_ALIGN_PRE class LUNAR_CORE_API Matrix44Soa
     {
     public:
         /// Identity matrix.
@@ -55,33 +55,33 @@ namespace Lunar
         };
 
         /// Matrix components.
-        SimdVector m_matrix[ 4 ][ 4 ];
+        Helium::SimdVector m_matrix[ 4 ][ 4 ];
 
         /// @name Construction/Destruction
         //@{
         inline Matrix44Soa();
         inline Matrix44Soa(
-            const SimdVector& rXAxisX, const SimdVector& rXAxisY, const SimdVector& rXAxisZ, const SimdVector& rXAxisW,
-            const SimdVector& rYAxisX, const SimdVector& rYAxisY, const SimdVector& rYAxisZ, const SimdVector& rYAxisW,
-            const SimdVector& rZAxisX, const SimdVector& rZAxisY, const SimdVector& rZAxisZ, const SimdVector& rZAxisW,
-            const SimdVector& rTranslateX, const SimdVector& rTranslateY, const SimdVector& rTranslateZ,
-            const SimdVector& rTranslateW );
+            const Helium::SimdVector& rXAxisX, const Helium::SimdVector& rXAxisY, const Helium::SimdVector& rXAxisZ, const Helium::SimdVector& rXAxisW,
+            const Helium::SimdVector& rYAxisX, const Helium::SimdVector& rYAxisY, const Helium::SimdVector& rYAxisZ, const Helium::SimdVector& rYAxisW,
+            const Helium::SimdVector& rZAxisX, const Helium::SimdVector& rZAxisY, const Helium::SimdVector& rZAxisZ, const Helium::SimdVector& rZAxisW,
+            const Helium::SimdVector& rTranslateX, const Helium::SimdVector& rTranslateY, const Helium::SimdVector& rTranslateZ,
+            const Helium::SimdVector& rTranslateW );
         inline Matrix44Soa(
             const Vector4Soa& rXAxis, const Vector4Soa& rYAxis, const Vector4Soa& rZAxis,
             const Vector4Soa& rTranslate );
         inline Matrix44Soa( EInitRotation, const QuatSoa& rRotation );
         inline Matrix44Soa( EInitTranslation, const Vector3Soa& rTranslation );
         inline Matrix44Soa( EInitTranslation, const Vector4Soa& rTranslation );
-        inline Matrix44Soa( EInitScaling, const SimdVector& rScaling );
+        inline Matrix44Soa( EInitScaling, const Helium::SimdVector& rScaling );
         inline Matrix44Soa( EInitScaling, const Vector3Soa& rScaling );
         inline Matrix44Soa( EInitRotationTranslation, const QuatSoa& rRotation, const Vector3Soa& rTranslation );
         inline Matrix44Soa( EInitRotationTranslation, const QuatSoa& rRotation, const Vector4Soa& rTranslation );
         inline Matrix44Soa(
             EInitRotationTranslationScaling, const QuatSoa& rRotation, const Vector3Soa& rTranslation,
-            const SimdVector& rScaling );
+            const Helium::SimdVector& rScaling );
         inline Matrix44Soa(
             EInitRotationTranslationScaling, const QuatSoa& rRotation, const Vector4Soa& rTranslation,
-            const SimdVector& rScaling );
+            const Helium::SimdVector& rScaling );
         inline Matrix44Soa(
             EInitRotationTranslationScaling, const QuatSoa& rRotation, const Vector3Soa& rTranslation,
             const Vector3Soa& rScaling );
@@ -151,16 +151,16 @@ namespace Lunar
         void SetTranslation( const Vector3Soa& rTranslation );
         void SetTranslation( const Vector4Soa& rTranslation );
 
-        void SetScaling( const SimdVector& rScaling );
+        void SetScaling( const Helium::SimdVector& rScaling );
         void SetScaling( const Vector3Soa& rScaling );
 
         void SetRotationTranslation( const QuatSoa& rRotation, const Vector3Soa& rTranslation );
         void SetRotationTranslation( const QuatSoa& rRotation, const Vector4Soa& rTranslation );
 
         void SetRotationTranslationScaling(
-            const QuatSoa& rRotation, const Vector3Soa& rTranslation, const SimdVector& rScaling );
+            const QuatSoa& rRotation, const Vector3Soa& rTranslation, const Helium::SimdVector& rScaling );
         void SetRotationTranslationScaling(
-            const QuatSoa& rRotation, const Vector4Soa& rTranslation, const SimdVector& rScaling );
+            const QuatSoa& rRotation, const Vector4Soa& rTranslation, const Helium::SimdVector& rScaling );
         void SetRotationTranslationScaling(
             const QuatSoa& rRotation, const Vector3Soa& rTranslation, const Vector3Soa& rScaling );
         void SetRotationTranslationScaling(
@@ -172,9 +172,9 @@ namespace Lunar
 
         void TranslateWorld( const Vector3Soa& rTranslation );
         void TranslateLocal( const Vector3Soa& rTranslation );
-        void ScaleWorld( const SimdVector& rScaling );
+        void ScaleWorld( const Helium::SimdVector& rScaling );
         void ScaleWorld( const Vector3Soa& rScaling );
-        void ScaleLocal( const SimdVector& rScaling );
+        void ScaleLocal( const Helium::SimdVector& rScaling );
         void ScaleLocal( const Vector3Soa& rScaling );
         //@}
 
@@ -194,7 +194,7 @@ namespace Lunar
         inline void MultiplyComponentsSet( const Matrix44Soa& rMatrix0, const Matrix44Soa& rMatrix1 );
         inline void DivideComponentsSet( const Matrix44Soa& rMatrix0, const Matrix44Soa& rMatrix1 );
 
-        SimdVector GetDeterminant() const;
+        Helium::SimdVector GetDeterminant() const;
 
         void GetInverse( Matrix44Soa& rMatrix ) const;
         inline Matrix44Soa GetInverse() const;
@@ -219,8 +219,8 @@ namespace Lunar
 
         /// @name Comparison
         //@{
-        inline SimdMask Equals( const Matrix44Soa& rMatrix, const SimdVector& rEpsilon = Simd::EPSILON ) const;
-        inline SimdMask NotEquals( const Matrix44Soa& rMatrix, const SimdVector& rEpsilon = Simd::EPSILON ) const;
+        inline Helium::SimdMask Equals( const Matrix44Soa& rMatrix, const Helium::SimdVector& rEpsilon = Helium::Simd::EPSILON ) const;
+        inline Helium::SimdMask NotEquals( const Matrix44Soa& rMatrix, const Helium::SimdVector& rEpsilon = Helium::Simd::EPSILON ) const;
         //@}
 
         /// @name Overloaded Operators
@@ -233,17 +233,17 @@ namespace Lunar
         inline Matrix44Soa& operator-=( const Matrix44Soa& rMatrix );
         inline Matrix44Soa& operator*=( const Matrix44Soa& rMatrix );
 
-        inline SimdMask operator==( const Matrix44Soa& rMatrix ) const;
-        inline SimdMask operator!=( const Matrix44Soa& rMatrix ) const;
+        inline Helium::SimdMask operator==( const Matrix44Soa& rMatrix ) const;
+        inline Helium::SimdMask operator!=( const Matrix44Soa& rMatrix ) const;
         //@}
-    } L_SIMD_ALIGN_POST;
+    } HELIUM_SIMD_ALIGN_POST;
 }
 
 #include "Core/Matrix44Soa.inl"
 
-#if L_SIMD_LRBNI
+#if HELIUM_SIMD_LRBNI
 #include "Core/Matrix44SoaLrbni.inl"
-#elif L_SIMD_SSE
+#elif HELIUM_SIMD_SSE
 #include "Core/Matrix44SoaSse.inl"
 #endif
 

@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-#if L_SIMD_LRBNI
+#if HELIUM_SIMD_LRBNI
 
 namespace Lunar
 {
@@ -45,7 +45,7 @@ namespace Lunar
     /// @see SetElement()
     float32_t Vector3::GetElement( size_t index ) const
     {
-        L_ASSERT( index < 3 );
+        HELIUM_ASSERT( index < 3 );
 
         return m_vector[ index ];
     }
@@ -61,7 +61,7 @@ namespace Lunar
     /// @see GetElement()
     void Vector3::SetElement( size_t index, float32_t value )
     {
-        L_ASSERT( index < 3 );
+        HELIUM_ASSERT( index < 3 );
 
         m_vector[ index ] = value;
     }
@@ -72,12 +72,12 @@ namespace Lunar
     /// @param[in] rVector1  Second vector.
     void Vector3::AddSet( const Vector3& rVector0, const Vector3& rVector1 )
     {
-        SimdVector vec0 = Simd::LoadSplat128( rVector0.m_vector );
-        SimdVector vec1 = Simd::LoadSplat128( rVector1.m_vector );
+        Helium::SimdVector vec0 = Helium::Simd::LoadSplat128( rVector0.m_vector );
+        Helium::SimdVector vec1 = Helium::Simd::LoadSplat128( rVector1.m_vector );
 
-        SimdVector result = Simd::AddF32( vec0, vec1 );
+        Helium::SimdVector result = Helium::Simd::AddF32( vec0, vec1 );
 
-        Simd::Store128( m_vector, result );
+        Helium::Simd::Store128( m_vector, result );
     }
 
     /// Set this vector to the component-wise difference of two vectors.
@@ -86,12 +86,12 @@ namespace Lunar
     /// @param[in] rVector1  Second vector.
     void Vector3::SubtractSet( const Vector3& rVector0, const Vector3& rVector1 )
     {
-        SimdVector vec0 = Simd::LoadSplat128( rVector0.m_vector );
-        SimdVector vec1 = Simd::LoadSplat128( rVector1.m_vector );
+        Helium::SimdVector vec0 = Helium::Simd::LoadSplat128( rVector0.m_vector );
+        Helium::SimdVector vec1 = Helium::Simd::LoadSplat128( rVector1.m_vector );
 
-        SimdVector result = Simd::SubtractF32( vec0, vec1 );
+        Helium::SimdVector result = Helium::Simd::SubtractF32( vec0, vec1 );
 
-        Simd::Store128( m_vector, result );
+        Helium::Simd::Store128( m_vector, result );
     }
 
     /// Set this vector to the component-wise product of two vectors.
@@ -100,12 +100,12 @@ namespace Lunar
     /// @param[in] rVector1  Second vector.
     void Vector3::MultiplySet( const Vector3& rVector0, const Vector3& rVector1 )
     {
-        SimdVector vec0 = Simd::LoadSplat128( rVector0.m_vector );
-        SimdVector vec1 = Simd::LoadSplat128( rVector1.m_vector );
+        Helium::SimdVector vec0 = Helium::Simd::LoadSplat128( rVector0.m_vector );
+        Helium::SimdVector vec1 = Helium::Simd::LoadSplat128( rVector1.m_vector );
 
-        SimdVector result = Simd::MultiplyF32( vec0, vec1 );
+        Helium::SimdVector result = Helium::Simd::MultiplyF32( vec0, vec1 );
 
-        Simd::Store128( m_vector, result );
+        Helium::Simd::Store128( m_vector, result );
     }
 
     /// Set this vector to the component-wise quotient of two vectors.
@@ -114,12 +114,12 @@ namespace Lunar
     /// @param[in] rVector1  Second vector.
     void Vector3::DivideSet( const Vector3& rVector0, const Vector3& rVector1 )
     {
-        SimdVector vec0 = Simd::LoadSplat128( rVector0.m_vector );
-        SimdVector vec1 = Simd::LoadSplat128( rVector1.m_vector );
+        Helium::SimdVector vec0 = Helium::Simd::LoadSplat128( rVector0.m_vector );
+        Helium::SimdVector vec1 = Helium::Simd::LoadSplat128( rVector1.m_vector );
 
-        SimdVector result = Simd::DivideF32( vec0, vec1 );
+        Helium::SimdVector result = Helium::Simd::DivideF32( vec0, vec1 );
 
-        Simd::Store128( m_vector, result );
+        Helium::Simd::Store128( m_vector, result );
     }
 
     /// Set this vector to the component-wise product of two vectors, summed with the components of a third vector.
@@ -129,13 +129,13 @@ namespace Lunar
     /// @param[in] rVectorAdd   Vector to add.
     void Vector3::MultiplyAddSet( const Vector3& rVectorMul0, const Vector3& rVectorMul1, const Vector3& rVectorAdd )
     {
-        SimdVector vecMul0 = Simd::LoadSplat128( rVectorMul0.m_vector );
-        SimdVector vecMul1 = Simd::LoadSplat128( rVectorMul1.m_vector );
-        SimdVector vecAdd = Simd::LoadSplat128( rVectorAdd.m_vector );
+        Helium::SimdVector vecMul0 = Helium::Simd::LoadSplat128( rVectorMul0.m_vector );
+        Helium::SimdVector vecMul1 = Helium::Simd::LoadSplat128( rVectorMul1.m_vector );
+        Helium::SimdVector vecAdd = Helium::Simd::LoadSplat128( rVectorAdd.m_vector );
 
-        SimdVector result = Simd::MultiplyAddF32( vecMul0, vecMul1, vecAdd );
+        Helium::SimdVector result = Helium::Simd::MultiplyAddF32( vecMul0, vecMul1, vecAdd );
 
-        Simd::Store128( m_vector, result );
+        Helium::Simd::Store128( m_vector, result );
     }
 
     /// Compute the dot product of this vector and another 3-component vector.
@@ -145,10 +145,10 @@ namespace Lunar
     /// @return  Dot product.
     float32_t Vector3::Dot( const Vector3& rVector ) const
     {
-        SimdVector vec0 = Simd::LoadSplat128( m_vector );
-        SimdVector vec1 = Simd::LoadSplat128( rVector.m_vector );
+        Helium::SimdVector vec0 = Helium::Simd::LoadSplat128( m_vector );
+        Helium::SimdVector vec1 = Helium::Simd::LoadSplat128( rVector.m_vector );
 
-        SimdVector product = Simd::MultiplyF32( vec0, vec1 );
+        Helium::SimdVector product = Helium::Simd::MultiplyF32( vec0, vec1 );
 
         return _mm512_mask_reduce_add_ps( 0x7, product );
     }
@@ -159,15 +159,15 @@ namespace Lunar
     /// @param[in] rVector1  Second vector.
     void Vector3::CrossSet( const Vector3& rVector0, const Vector3& rVector1 )
     {
-        SimdVector vec0a = _mm512_swizzle_r32( Simd::LoadSplat128( rVector0.m_vector ), _MM_SWIZ_REG_DACB );
-        SimdVector vec0b = _mm512_swizzle_r32( vec0a, _MM_SWIZ_REG_DACB );
+        Helium::SimdVector vec0a = _mm512_swizzle_r32( Helium::Simd::LoadSplat128( rVector0.m_vector ), _MM_SWIZ_REG_DACB );
+        Helium::SimdVector vec0b = _mm512_swizzle_r32( vec0a, _MM_SWIZ_REG_DACB );
 
-        SimdVector vec1a = _mm512_swizzle_r32( Simd::LoadSplat128( rVector1.m_vector ), _MM_SWIZ_REG_DACB );
-        SimdVector vec1b = _mm512_swizzle_r32( vec1a, _MM_SWIZ_REG_DACB );
+        Helium::SimdVector vec1a = _mm512_swizzle_r32( Helium::Simd::LoadSplat128( rVector1.m_vector ), _MM_SWIZ_REG_DACB );
+        Helium::SimdVector vec1b = _mm512_swizzle_r32( vec1a, _MM_SWIZ_REG_DACB );
 
-        SimdVector crossProduct = _mm512_msub213_ps( vec0a, vec1b, Simd::MultiplyF32( vec0b, vec1a ) );
+        Helium::SimdVector crossProduct = _mm512_msub213_ps( vec0a, vec1b, Helium::Simd::MultiplyF32( vec0b, vec1a ) );
 
-        Simd::Store128( m_vector, crossProduct );
+        Helium::Simd::Store128( m_vector, crossProduct );
     }
 
     /// Get the magnitude of this vector.
@@ -175,13 +175,13 @@ namespace Lunar
     /// @return  Vector magnitude.
     float32_t Vector3::GetMagnitude() const
     {
-        SimdVector vec = Simd::LoadSplat128( m_vector );
+        Helium::SimdVector vec = Helium::Simd::LoadSplat128( m_vector );
 
-        SimdVector productX = Simd::MultiplyF32( vec, vec );
-        SimdVector productY = _mm512_swizzle_r32( productX, _MM_SWIZ_REG_CDAB );
-        SimdVector productZ = _mm512_swizzle_r32( productX, _MM_SWIZ_REG_BADC );
+        Helium::SimdVector productX = Helium::Simd::MultiplyF32( vec, vec );
+        Helium::SimdVector productY = _mm512_swizzle_r32( productX, _MM_SWIZ_REG_CDAB );
+        Helium::SimdVector productZ = _mm512_swizzle_r32( productX, _MM_SWIZ_REG_BADC );
 
-        SimdVector magnitude = Simd::SqrtF32( Simd::AddF32( Simd::AddF32( productX, productY ), productZ ) );
+        Helium::SimdVector magnitude = Helium::Simd::SqrtF32( Helium::Simd::AddF32( Helium::Simd::AddF32( productX, productY ), productZ ) );
 
         return reinterpret_cast< const float32_t* >( &magnitude )[ 0 ];
     }
@@ -198,29 +198,29 @@ namespace Lunar
     {
         epsilon *= epsilon;
 
-        SimdVector vec = Simd::LoadSplat128( m_vector );
+        Helium::SimdVector vec = Helium::Simd::LoadSplat128( m_vector );
 
-        SimdVector productX = Simd::MultiplyF32( vec, vec );
-        SimdVector productY = _mm512_swizzle_r32( productX, _MM_SWIZ_REG_CDAB );
-        SimdVector productZ = _mm512_swizzle_r32( productX, _MM_SWIZ_REG_BADC );
+        Helium::SimdVector productX = Helium::Simd::MultiplyF32( vec, vec );
+        Helium::SimdVector productY = _mm512_swizzle_r32( productX, _MM_SWIZ_REG_CDAB );
+        Helium::SimdVector productZ = _mm512_swizzle_r32( productX, _MM_SWIZ_REG_BADC );
 
-        SimdVector magnitudeSquared = Simd::AddF32( Simd::AddF32( productX, productY ), productZ );
+        Helium::SimdVector magnitudeSquared = Helium::Simd::AddF32( Helium::Simd::AddF32( productX, productY ), productZ );
         magnitudeSquared = _mm512_swizzle_r32( magnitudeSquared, _MM_SWIZ_REG_AAAA );
 
-        SimdVector epsilonVec = _mm512_set_1to16_ps( epsilon );
+        Helium::SimdVector epsilonVec = _mm512_set_1to16_ps( epsilon );
 
-        SimdMask thresholdMask = Simd::LessF32( magnitudeSquared, epsilonVec );
+        Helium::SimdMask thresholdMask = Helium::Simd::LessF32( magnitudeSquared, epsilonVec );
 
-        SimdVector invMagnitude = Simd::InverseSqrtF32( magnitudeSquared );
+        Helium::SimdVector invMagnitude = Helium::Simd::InverseSqrtF32( magnitudeSquared );
 
-        SimdVector vecNormalized = Simd::MultiplyF32( vec, invMagnitude );
+        Helium::SimdVector vecNormalized = Helium::Simd::MultiplyF32( vec, invMagnitude );
 
-        L_SIMD_ALIGN_PRE const float32_t fallbackValues[ 4 ] L_SIMD_ALIGN_POST = { 1.0f, 0.0f, 0.0f, 0.0f };
-        SimdVector vecFallback = Simd::LoadSplat128( fallbackValues );
+        HELIUM_SIMD_ALIGN_PRE const float32_t fallbackValues[ 4 ] HELIUM_SIMD_ALIGN_POST = { 1.0f, 0.0f, 0.0f, 0.0f };
+        Helium::SimdVector vecFallback = Helium::Simd::LoadSplat128( fallbackValues );
 
         vec = _mm512_mask_movd( vecFallback, thresholdMask, vecNormalized );
 
-        Simd::Store128( m_vector, vec );
+        Helium::Simd::Store128( m_vector, vec );
     }
 
     /// Get a copy of this vector with the sign of each component flipped.
@@ -230,12 +230,12 @@ namespace Lunar
     /// @see Negate()
     void Vector3::GetNegated( Vector3& rResult ) const
     {
-        SimdVector signFlip = Simd::SetSplatU32( 0x80000000 );
-        SimdVector vec = Simd::LoadSplat128( m_vector );
+        Helium::SimdVector signFlip = Helium::Simd::SetSplatU32( 0x80000000 );
+        Helium::SimdVector vec = Helium::Simd::LoadSplat128( m_vector );
 
-        vec = Simd::Xor( vec, signFlip );
+        vec = Helium::Simd::Xor( vec, signFlip );
 
-        Simd::Store128( rResult.m_vector, vec );
+        Helium::Simd::Store128( rResult.m_vector, vec );
     }
 
     /// Test whether each component in this vector is equal to the corresponding component in another vector within a
@@ -249,18 +249,18 @@ namespace Lunar
     {
         epsilon *= epsilon;
 
-        SimdVector vec0 = Simd::LoadSplat128( m_vector );
-        SimdVector vec1 = Simd::LoadSplat128( rVector.m_vector );
+        Helium::SimdVector vec0 = Helium::Simd::LoadSplat128( m_vector );
+        Helium::SimdVector vec1 = Helium::Simd::LoadSplat128( rVector.m_vector );
 
-        SimdVector differenceSquared = Simd::SubtractF32( vec0, vec1 );
-        differenceSquared = Simd::MultiplyF32( differenceSquared, differenceSquared );
+        Helium::SimdVector differenceSquared = Helium::Simd::SubtractF32( vec0, vec1 );
+        differenceSquared = Helium::Simd::MultiplyF32( differenceSquared, differenceSquared );
 
-        SimdVector epsilonVec = _mm512_set_1to16_ps( epsilon );
+        Helium::SimdVector epsilonVec = _mm512_set_1to16_ps( epsilon );
 
-        SimdMask testResult = Simd::GreaterF32( differenceSquared, epsilonVec );
+        Helium::SimdMask testResult = Helium::Simd::GreaterF32( differenceSquared, epsilonVec );
 
         return ( ( testResult & 0x7 ) == 0 );
     }
 }
 
-#endif  // L_SIMD_LRBNI
+#endif  // HELIUM_SIMD_LRBNI

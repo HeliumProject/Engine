@@ -15,7 +15,7 @@
 namespace Lunar
 {
     /// Sphere representation.
-    L_ALIGN_PRE( 16 ) class LUNAR_CORE_API Sphere
+    HELIUM_ALIGN_PRE( 16 ) class LUNAR_CORE_API Sphere
     {
     public:
         /// @name Construction/Destruction
@@ -25,17 +25,17 @@ namespace Lunar
         inline Sphere( float32_t centerX, float32_t centerY, float32_t centerZ, float32_t radius );
         inline explicit Sphere( const Vector4& rVector );
         inline explicit Sphere( const AaBox& rBox );
-#if L_SIMD_SIZE == 16
-        inline explicit Sphere( const SimdVector& rVector );
+#if HELIUM_SIMD_SIZE == 16
+        inline explicit Sphere( const Helium::SimdVector& rVector );
 #endif
         //@}
 
         /// @name Data Access
         //@{
-#if L_SIMD_SIZE == 16
-        inline SimdVector& GetSimdVector();
-        inline const SimdVector& GetSimdVector() const;
-        inline void SetSimdVector( const SimdVector& rVector );
+#if HELIUM_SIMD_SIZE == 16
+        inline Helium::SimdVector& GetSimdVector();
+        inline const Helium::SimdVector& GetSimdVector() const;
+        inline void SetSimdVector( const Helium::SimdVector& rVector );
 #endif
 
         inline float32_t& GetElement( size_t index );
@@ -63,21 +63,21 @@ namespace Lunar
         //@}
 
     private:
-#if L_SIMD_SIZE == 16
+#if HELIUM_SIMD_SIZE == 16
         /// Sphere center and radius.
-        SimdVector m_centerRadius;
+        Helium::SimdVector m_centerRadius;
 #else
         /// Sphere center and radius.
         float32_t m_centerRadius[ 4 ];
 #endif
-    } L_ALIGN_POST( 16 );
+    } HELIUM_ALIGN_POST( 16 );
 }
 
 #include "Core/Sphere.inl"
 
-#if L_SIMD_LRBNI
+#if HELIUM_SIMD_LRBNI
 #include "Core/SphereLrbni.inl"
-#elif L_SIMD_SSE
+#elif HELIUM_SIMD_SSE
 #include "Core/SphereSse.inl"
 #endif
 

@@ -11,7 +11,7 @@
 
 #include "Core/Core.h"
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 
 #include "Core/DirectoryIterator.h"
 
@@ -46,6 +46,6 @@ namespace Lunar
     };
 }
 
-#endif  // L_OS_WIN
+#endif  // HELIUM_OS_WIN
 
 #endif  // LUNAR_CORE_DIRECTORY_ITERATOR_WIN_H

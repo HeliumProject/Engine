@@ -43,7 +43,7 @@ namespace Lunar
         float32_t translateZ,
         float32_t translateW )
     {
-        L_SIMD_ALIGN_PRE const float32_t values[ 16 ] L_SIMD_ALIGN_POST =
+        HELIUM_SIMD_ALIGN_PRE const float32_t values[ 16 ] HELIUM_SIMD_ALIGN_POST =
         {
             xAxisX,
             xAxisY,
@@ -63,13 +63,13 @@ namespace Lunar
             translateW
         };
 
-        m_matrix = Simd::LoadAligned( values );
+        m_matrix = Helium::Simd::LoadAligned( values );
     }
 
     /// Constructor.
     ///
     /// @param[in] rMatrix  Matrix values.
-    Matrix44::Matrix44( const SimdVector& rMatrix )
+    Matrix44::Matrix44( const Helium::SimdVector& rMatrix )
     {
         m_matrix = rMatrix;
     }
@@ -85,9 +85,9 @@ namespace Lunar
     /// @return  Reference to the SIMD vector for the requested array section.
     ///
     /// @see SetSimdVector()
-    SimdVector& Matrix44::GetSimdVector( size_t index )
+    Helium::SimdVector& Matrix44::GetSimdVector( size_t index )
     {
-        L_ASSERT( index == 0 );
+        HELIUM_ASSERT( index == 0 );
 
         return m_matrix;
     }
@@ -103,9 +103,9 @@ namespace Lunar
     /// @return  Constant reference to the SIMD vector for the requested array section.
     ///
     /// @see SetSimdVector()
-    const SimdVector& Matrix44::GetSimdVector( size_t index ) const
+    const Helium::SimdVector& Matrix44::GetSimdVector( size_t index ) const
     {
-        L_ASSERT( index == 0 );
+        HELIUM_ASSERT( index == 0 );
 
         return m_matrix;
     }
@@ -119,9 +119,9 @@ namespace Lunar
     /// @param[in] rVector  SIMD vector to set.
     ///
     /// @see GetSimdVector()
-    void Matrix44::SetSimdVector( size_t index, const SimdVector& rVector )
+    void Matrix44::SetSimdVector( size_t index, const Helium::SimdVector& rVector )
     {
-        L_ASSERT( index == 0 );
+        HELIUM_ASSERT( index == 0 );
 
         m_matrix = rVector;
     }
@@ -141,7 +141,7 @@ namespace Lunar
     /// @see SetElement()
     float32_t& Matrix44::GetElement( size_t index )
     {
-        L_ASSERT( index < 16 );
+        HELIUM_ASSERT( index < 16 );
 
         return reinterpret_cast< float32_t* >( &m_matrix )[ index ];
     }
@@ -161,7 +161,7 @@ namespace Lunar
     /// @see SetElement()
     float32_t Matrix44::GetElement( size_t index ) const
     {
-        L_ASSERT( index < 16 );
+        HELIUM_ASSERT( index < 16 );
 
         return reinterpret_cast< const float32_t* >( &m_matrix )[ index ];
     }
@@ -180,7 +180,7 @@ namespace Lunar
     /// @see GetElement()
     void Matrix44::SetElement( size_t index, float32_t value )
     {
-        L_ASSERT( index < 16 );
+        HELIUM_ASSERT( index < 16 );
 
         reinterpret_cast< float32_t* >( &m_matrix )[ index ] = value;
     }
@@ -191,7 +191,7 @@ namespace Lunar
     /// @param[in] rMatrix1  Second matrix.
     void Matrix44::AddSet( const Matrix44& rMatrix0, const Matrix44& rMatrix1 )
     {
-        m_matrix = Simd::AddF32( rMatrix0.m_matrix, rMatrix1.m_matrix );
+        m_matrix = Helium::Simd::AddF32( rMatrix0.m_matrix, rMatrix1.m_matrix );
     }
 
     /// Set this matrix to the component-wise difference of two matrices.
@@ -200,7 +200,7 @@ namespace Lunar
     /// @param[in] rMatrix1  Second matrix.
     void Matrix44::SubtractSet( const Matrix44& rMatrix0, const Matrix44& rMatrix1 )
     {
-        m_matrix = Simd::SubtractF32( rMatrix0.m_matrix, rMatrix1.m_matrix );
+        m_matrix = Helium::Simd::SubtractF32( rMatrix0.m_matrix, rMatrix1.m_matrix );
     }
 
     /// Set this matrix to the component-wise product of two matrices.
@@ -209,7 +209,7 @@ namespace Lunar
     /// @param[in] rMatrix1  Second matrix.
     void Matrix44::MultiplyComponentsSet( const Matrix44& rMatrix0, const Matrix44& rMatrix1 )
     {
-        m_matrix = Simd::MultiplyF32( rMatrix0.m_matrix, rMatrix1.m_matrix );
+        m_matrix = Helium::Simd::MultiplyF32( rMatrix0.m_matrix, rMatrix1.m_matrix );
     }
 
     /// Set this matrix to the component-wise quotient of two matrices.
@@ -218,7 +218,7 @@ namespace Lunar
     /// @param[in] rMatrix1  Second matrix.
     void Matrix44::DivideComponentsSet( const Matrix44& rMatrix0, const Matrix44& rMatrix1 )
     {
-        m_matrix = Simd::DivideF32( rMatrix0.m_matrix, rMatrix1.m_matrix );
+        m_matrix = Helium::Simd::DivideF32( rMatrix0.m_matrix, rMatrix1.m_matrix );
     }
 
     /// Test whether each component in this matrix is equal to the corresponding component in another matrix within a
@@ -232,12 +232,12 @@ namespace Lunar
     {
         epsilon *= epsilon;
 
-        SimdVector differenceSquared = Simd::SubtractF32( m_matrix, rMatrix.m_matrix );
-        differenceSquared = Simd::MultiplyF32( differenceSquared, differenceSquared );
+        Helium::SimdVector differenceSquared = Helium::Simd::SubtractF32( m_matrix, rMatrix.m_matrix );
+        differenceSquared = Helium::Simd::MultiplyF32( differenceSquared, differenceSquared );
 
-        SimdVector epsilonVec = _mm512_set_1to16_ps( epsilon );
+        Helium::SimdVector epsilonVec = _mm512_set_1to16_ps( epsilon );
 
-        SimdMask testResult = Simd::GreaterF32( differenceSquared, epsilonVec );
+        Helium::SimdMask testResult = Helium::Simd::GreaterF32( differenceSquared, epsilonVec );
 
         return ( testResult != 0 );
     }

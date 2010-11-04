@@ -45,7 +45,7 @@ namespace Lunar
     {
         if( size != 0 )
         {
-            L_ASSERT( pString );
+            HELIUM_ASSERT( pString );
             m_buffer.Reserve( size + 1 );
             m_buffer.Set( pString, size );
             m_buffer.Add( static_cast< CharType >( '\0' ) );
@@ -147,7 +147,7 @@ namespace Lunar
     template< typename CharType, typename Allocator >
     CharType& StringBase< CharType, Allocator >::GetElement( size_t index )
     {
-        L_ASSERT( index < GetSize() );
+        HELIUM_ASSERT( index < GetSize() );
         return m_buffer.GetElement( index );
     }
 
@@ -159,7 +159,7 @@ namespace Lunar
     template< typename CharType, typename Allocator >
     const CharType& StringBase< CharType, Allocator >::GetElement( size_t index ) const
     {
-        L_ASSERT( index < GetSize() );
+        HELIUM_ASSERT( index < GetSize() );
         return m_buffer.GetElement( index );
     }
 
@@ -195,7 +195,7 @@ namespace Lunar
             size_t stringLength = StringLength( pString );
             if( stringLength != 0 )
             {
-                L_ASSERT( pString < m_buffer.GetData() || pString >= m_buffer.GetData() + m_buffer.GetSize() );
+                HELIUM_ASSERT( pString < m_buffer.GetData() || pString >= m_buffer.GetData() + m_buffer.GetSize() );
 
                 size_t bufferSize = m_buffer.GetSize();
                 if( bufferSize == 0 )
@@ -219,7 +219,7 @@ namespace Lunar
     template< typename CharType, typename Allocator >
     void StringBase< CharType, Allocator >::Insert( size_t index, CharType character, size_t count )
     {
-        L_ASSERT( index <= GetSize() );
+        HELIUM_ASSERT( index <= GetSize() );
         size_t bufferSize = m_buffer.GetSize();
         if( bufferSize == 0 )
         {
@@ -241,13 +241,13 @@ namespace Lunar
     template< typename CharType, typename Allocator >
     void StringBase< CharType, Allocator >::Insert( size_t index, const CharType* pString )
     {
-        L_ASSERT( index <= GetSize() );
+        HELIUM_ASSERT( index <= GetSize() );
         if( pString )
         {
             size_t stringLength = StringLength( pString );
             if( stringLength != 0 )
             {
-                L_ASSERT( pString < m_buffer.GetData() || pString >= m_buffer.GetData() + m_buffer.GetSize() );
+                HELIUM_ASSERT( pString < m_buffer.GetData() || pString >= m_buffer.GetData() + m_buffer.GetSize() );
 
                 size_t bufferSize = m_buffer.GetSize();
                 if( bufferSize == 0 )
@@ -270,8 +270,8 @@ namespace Lunar
     template< typename CharType, typename Allocator >
     void StringBase< CharType, Allocator >::Remove( size_t index, size_t count )
     {
-        L_ASSERT( index <= GetSize() );
-        L_ASSERT( index + count <= GetSize() );
+        HELIUM_ASSERT( index <= GetSize() );
+        HELIUM_ASSERT( index + count <= GetSize() );
         m_buffer.Remove( index, count );
     }
 
@@ -283,7 +283,7 @@ namespace Lunar
     template< typename CharType, typename Allocator >
     CharType& StringBase< CharType, Allocator >::GetFirst()
     {
-        L_ASSERT( GetSize() != 0 );
+        HELIUM_ASSERT( GetSize() != 0 );
         return m_buffer.GetFirst();
     }
 
@@ -295,7 +295,7 @@ namespace Lunar
     template< typename CharType, typename Allocator >
     const CharType& StringBase< CharType, Allocator >::GetFirst() const
     {
-        L_ASSERT( GetSize() != 0 );
+        HELIUM_ASSERT( GetSize() != 0 );
         return m_buffer.GetFirst();
     }
 
@@ -308,7 +308,7 @@ namespace Lunar
     CharType& StringBase< CharType, Allocator >::GetLast()
     {
         size_t bufferSize = m_buffer.GetSize();
-        L_ASSERT( bufferSize >= 2 );
+        HELIUM_ASSERT( bufferSize >= 2 );
         return m_buffer.GetElement( bufferSize - 2 );
     }
 
@@ -321,7 +321,7 @@ namespace Lunar
     const CharType& StringBase< CharType, Allocator >::GetLast() const
     {
         size_t bufferSize = m_buffer.GetSize();
-        L_ASSERT( bufferSize >= 2 );
+        HELIUM_ASSERT( bufferSize >= 2 );
         return m_buffer.GetElement( bufferSize - 2 );
     }
 
@@ -357,7 +357,7 @@ namespace Lunar
     void StringBase< CharType, Allocator >::Pop()
     {
         size_t bufferSize = m_buffer.GetSize();
-        L_ASSERT( bufferSize >= 2 );
+        HELIUM_ASSERT( bufferSize >= 2 );
 
         if( bufferSize == 2 )
         {
@@ -378,7 +378,7 @@ namespace Lunar
     template< typename CharType, typename Allocator >
     void StringBase< CharType, Allocator >::Format( const CharType* pFormatString, ... )
     {
-        L_ASSERT( pFormatString );
+        HELIUM_ASSERT( pFormatString );
 
         va_list argList;
         va_start( argList, pFormatString );
@@ -393,11 +393,11 @@ namespace Lunar
 
         m_buffer.Resize( resultLength + 1 );
         CharType* pBufferData = m_buffer.GetData();
-        L_ASSERT( pBufferData );
+        HELIUM_ASSERT( pBufferData );
 
         va_start( argList, pFormatString );
         int finalResult = StringFormatVa( pBufferData, resultLength + 1, pFormatString, argList );
-        L_ASSERT( finalResult == resultLength );
+        HELIUM_ASSERT( finalResult == resultLength );
         L_UNREF( finalResult );
         va_end( argList );
     }
@@ -471,7 +471,7 @@ namespace Lunar
         size_t startIndex,
         size_t characterCount ) const
     {
-        L_ASSERT( pCharacters || characterCount == 0 );
+        HELIUM_ASSERT( pCharacters || characterCount == 0 );
 
         if( IsInvalid( characterCount ) )
         {
@@ -515,7 +515,7 @@ namespace Lunar
         size_t startIndex,
         size_t characterCount ) const
     {
-        L_ASSERT( pCharacters || characterCount == 0 );
+        HELIUM_ASSERT( pCharacters || characterCount == 0 );
 
         if( IsInvalid( characterCount ) )
         {
@@ -678,7 +678,7 @@ namespace Lunar
     template< typename CharType, typename Allocator >
     bool StringBase< CharType, Allocator >::StartsWith( const CharType* pString ) const
     {
-        L_ASSERT( pString );
+        HELIUM_ASSERT( pString );
 
         size_t stringSize = StringLength( pString );
         if( stringSize > GetSize() )
@@ -727,7 +727,7 @@ namespace Lunar
     template< typename CharType, typename Allocator >
     bool StringBase< CharType, Allocator >::EndsWith( const CharType* pString ) const
     {
-        L_ASSERT( pString );
+        HELIUM_ASSERT( pString );
 
         size_t stringSize = StringLength( pString );
         size_t thisSize = GetSize();
@@ -775,7 +775,7 @@ namespace Lunar
             {
                 if( !bCombineAdjacentSeparators || bHaveNonSeparator )
                 {
-                    L_VERIFY( rStringResults.New( m_buffer.GetData() + startIndex, characterIndex - startIndex ) );
+                    HELIUM_VERIFY( rStringResults.New( m_buffer.GetData() + startIndex, characterIndex - startIndex ) );
                     bHaveNonSeparator = false;
                 }
 
@@ -788,7 +788,7 @@ namespace Lunar
         }
 
         // Always allow splitting off an empty string at the end if this string ends with a separator character.
-        L_VERIFY( rStringResults.New( m_buffer.GetData() + startIndex, characterCount - startIndex ) );
+        HELIUM_VERIFY( rStringResults.New( m_buffer.GetData() + startIndex, characterCount - startIndex ) );
     }
 
     /// Split a string into an array of strings based on the specified character separators.
@@ -813,7 +813,7 @@ namespace Lunar
         size_t separatorCount,
         bool bCombineAdjacentSeparators ) const
     {
-        L_ASSERT( pSeparators || separatorCount == 0 );
+        HELIUM_ASSERT( pSeparators || separatorCount == 0 );
 
         rStringResults.Resize( 0 );
 
@@ -837,7 +837,7 @@ namespace Lunar
                 {
                     if( !bCombineAdjacentSeparators || bHaveNonSeparator )
                     {
-                        L_VERIFY( rStringResults.New( m_buffer.GetData() + startIndex, characterIndex - startIndex ) );
+                        HELIUM_VERIFY( rStringResults.New( m_buffer.GetData() + startIndex, characterIndex - startIndex ) );
                         bHaveNonSeparator = false;
                     }
 
@@ -854,7 +854,7 @@ namespace Lunar
         }
 
         // Always allow splitting off an empty string at the end if this string ends with a separator character.
-        L_VERIFY( rStringResults.New( m_buffer.GetData() + startIndex, characterCount - startIndex ) );
+        HELIUM_VERIFY( rStringResults.New( m_buffer.GetData() + startIndex, characterCount - startIndex ) );
     }
 
     /// Split a string into an array of strings based on the specified character separators.
@@ -904,7 +904,7 @@ namespace Lunar
     template< typename CharType, typename Allocator >
     CharType& StringBase< CharType, Allocator >::operator[]( ptrdiff_t index )
     {
-        L_ASSERT( static_cast< size_t >( index ) < GetSize() );
+        HELIUM_ASSERT( static_cast< size_t >( index ) < GetSize() );
         return m_buffer.GetElement( index );
     }
 
@@ -916,7 +916,7 @@ namespace Lunar
     template< typename CharType, typename Allocator >
     const CharType& StringBase< CharType, Allocator >::operator[]( ptrdiff_t index ) const
     {
-        L_ASSERT( static_cast< size_t >( index ) < GetSize() );
+        HELIUM_ASSERT( static_cast< size_t >( index ) < GetSize() );
         return m_buffer.GetElement( index );
     }
 
@@ -1090,7 +1090,7 @@ namespace Lunar
         size_t index,
         const StringBase< CharType, OtherAllocator >& rString )
     {
-        L_ASSERT( index <= GetSize() );
+        HELIUM_ASSERT( index <= GetSize() );
         size_t otherBufferSize = rString.m_buffer.GetSize();
         if( otherBufferSize > 1 )
         {

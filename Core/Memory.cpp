@@ -22,7 +22,7 @@ namespace Lunar
     ThreadLocalStackAllocator::ThreadLocalStackAllocator()
     {
         m_pHeap = &GetMemoryHeap();
-        L_ASSERT( m_pHeap );
+        HELIUM_ASSERT( m_pHeap );
     }
 
     /// Allocate a block of memory.
@@ -32,7 +32,7 @@ namespace Lunar
     /// @return  Base address of the allocation if successful, null if allocation failed.
     void* ThreadLocalStackAllocator::Allocate( size_t size )
     {
-        L_ASSERT( m_pHeap );
+        HELIUM_ASSERT( m_pHeap );
         void* pMemory = m_pHeap->Allocate( size );
 
         return pMemory;
@@ -46,7 +46,7 @@ namespace Lunar
     /// @return  Base address of the allocation if successful, null if allocation failed.
     void* ThreadLocalStackAllocator::AllocateAligned( size_t alignment, size_t size )
     {
-        L_ASSERT( m_pHeap );
+        HELIUM_ASSERT( m_pHeap );
         void* pMemory = m_pHeap->AllocateAligned( alignment, size );
 
         return pMemory;
@@ -57,7 +57,7 @@ namespace Lunar
     /// @param[in] pMemory  Base address of the allocation to free.
     void ThreadLocalStackAllocator::Free( void* pMemory )
     {
-        L_ASSERT( m_pHeap );
+        HELIUM_ASSERT( m_pHeap );
         m_pHeap->Free( pMemory );
     }
 
@@ -71,14 +71,14 @@ namespace Lunar
         ThreadLocalStorage& tls = ThreadLocalStorage::GetInstance();
 
         size_t tlsIndex = GetMemoryHeapTlsIndex();
-        L_ASSERT( IsValid( tlsIndex ) );
+        HELIUM_ASSERT( IsValid( tlsIndex ) );
 
         StackMemoryHeap<>* pHeap = reinterpret_cast< StackMemoryHeap<>* >( tls.Get( tlsIndex ) );
         if( !pHeap )
         {
             // Heap does not already exist for this thread, so create one.
             pHeap = new StackMemoryHeap<>( BLOCK_SIZE );
-            L_ASSERT( pHeap );
+            HELIUM_ASSERT( pHeap );
 
             tls.Set( tlsIndex, reinterpret_cast< uintptr_t >( pHeap ) );
         }
@@ -97,7 +97,7 @@ namespace Lunar
         ThreadLocalStorage& tls = ThreadLocalStorage::GetInstance();
 
         size_t tlsIndex = GetMemoryHeapTlsIndex();
-        L_ASSERT( IsValid( tlsIndex ) );
+        HELIUM_ASSERT( IsValid( tlsIndex ) );
 
         StackMemoryHeap<>* pHeap = reinterpret_cast< StackMemoryHeap<>* >( tls.Get( tlsIndex ) );
         if( pHeap )
@@ -119,7 +119,7 @@ namespace Lunar
         // to use ThreadLocalStackAllocator before any threads are created in order to prep this value (could do
         // something in the Thread class itself...).
         static size_t tlsIndex = ThreadLocalStorage::GetInstance().Allocate();
-        L_ASSERT( IsValid( tlsIndex ) );
+        HELIUM_ASSERT( IsValid( tlsIndex ) );
 
         return tlsIndex;
     }
@@ -130,7 +130,7 @@ namespace Lunar
     /// @return  Reference to the default dynamic memory heap.
     DynamicMemoryHeap& GetDefaultHeap()
     {
-        static L_DYNAMIC_MEMORY_HEAP( defaultHeap, L_T( "Default" ) );
+        static L_DYNAMIC_MEMORY_HEAP( defaultHeap, TXT( "Default" ) );
         return defaultHeap;
     }
 #endif
@@ -141,7 +141,7 @@ namespace Lunar
     /// @return  Reference for the external allocation fallback heap.
     DynamicMemoryHeap& GetExternalHeap()
     {
-        static L_DYNAMIC_MEMORY_HEAP( externalHeap, L_T( "External" ) );
+        static L_DYNAMIC_MEMORY_HEAP( externalHeap, TXT( "External" ) );
         return externalHeap;
     }
 #endif

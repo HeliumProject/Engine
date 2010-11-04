@@ -11,7 +11,7 @@
 
 #include "Core/Core.h"
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 
 #include "Core/FileStream.h"
 
@@ -53,6 +53,6 @@ namespace Lunar
     };
 }
 
-#endif  // L_OS_WIN
+#endif  // HELIUM_OS_WIN
 
 #endif  // LUNAR_CORE_FILE_STREAM_WIN_H

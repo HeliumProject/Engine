@@ -9,13 +9,13 @@
 #ifndef LUNAR_CORE_CORE_H
 #define LUNAR_CORE_CORE_H
 
-#include "Core/Platform.h"  // Always make sure Platform.h gets included first.
+#include "Platform/Platform.h"  // Always make sure Platform.h gets included first.
 
-#if L_DEBUG && defined( _MSC_VER )
+#if HELIUM_SHARED
     #ifdef LUNAR_CORE_EXPORTS
-        #define LUNAR_CORE_API L_API_EXPORT
+        #define LUNAR_CORE_API HELIUM_API_EXPORT
     #else
-        #define LUNAR_CORE_API L_API_IMPORT
+        #define LUNAR_CORE_API HELIUM_API_IMPORT
     #endif
 #else
     #define LUNAR_CORE_API

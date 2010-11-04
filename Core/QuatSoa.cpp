@@ -11,8 +11,8 @@
 namespace Lunar
 {
     const QuatSoa QuatSoa::IDENTITY(
-        Simd::LoadZeros(),
-        Simd::LoadZeros(),
-        Simd::LoadZeros(),
-        Simd::SetSplatF32( 1.0f ) );
+        Helium::Simd::LoadZeros(),
+        Helium::Simd::LoadZeros(),
+        Helium::Simd::LoadZeros(),
+        Helium::Simd::SetSplatF32( 1.0f ) );
 }

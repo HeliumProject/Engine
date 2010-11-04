@@ -102,6 +102,29 @@ void Helium::Simd::Store128( void* pDest, Helium::SimdVector vec )
     _mm512_stored( pDest, vec, _MM_DOWNC_NONE, _MM_SUBSET32_4, _MM_HINT_NONE );
 }
 
+/// Fill a SIMD vector with a single-precision floating-point value splat across all vector components.
+///
+/// @param[in] value  Value to splat.
+///
+/// @return  SIMD vector containing the splat value.
+Helium::SimdVector Helium::Simd::SetSplatF32( float32_t value )
+{
+    return _mm512_set_1to16_ps( value );
+}
+
+/// Fill a SIMD vector with a 32-bit unsigned integer value splat across all vector components.
+///
+/// @param[in] value  Value to splat.
+///
+/// @return  SIMD vector containing the splat value.
+Helium::SimdVector Helium::Simd::SetSplatU32( uint32_t value )
+{
+    Helium::_Lrbni512Pun vecPun;
+    vecPun.i = _mm512_set_1to16_pi( static_cast< int >( value ) );
+
+    return vecPun.f;
+}
+
 /// Load a vector containing all zeros.
 ///
 /// @return  Vector containing all zeros.

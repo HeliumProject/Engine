@@ -130,7 +130,7 @@ namespace Lunar
     typedef NameBase< WideNameTable > WideName;
 
     /// String table entry.
-#if L_UNICODE
+#if HELIUM_UNICODE
     typedef WideName Name;
 #else
     typedef CharName Name;

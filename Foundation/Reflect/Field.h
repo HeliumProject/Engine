@@ -50,11 +50,11 @@ namespace Helium
             const Composite*    m_Type;         // the type we are a field of
             tstring             m_Name;         // name of this field
             tstring             m_UIName;       // friendly name
-            uint32_t                 m_Size;         // the size of this field
-            uintptr             m_Offset;       // the offset to the field
-            uint32_t                 m_Flags;        // flags for special behavior
-            int32_t                 m_FieldID;      // the unique id of this field
-            int32_t                 m_SerializerID; // type id of the serializer to use
+            uint32_t            m_Size;         // the size of this field
+            uintptr_t           m_Offset;       // the offset to the field
+            uint32_t            m_Flags;        // flags for special behavior
+            int32_t             m_FieldID;      // the unique id of this field
+            int32_t             m_SerializerID; // type id of the serializer to use
             SerializerPtr       m_Default;      // the value of the default
             CreateObjectFunc    m_Create;       // function to create a new instance for this field (optional)
 

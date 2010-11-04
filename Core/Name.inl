@@ -83,14 +83,14 @@ namespace Lunar
         if( !TableType::sm_pNameMemoryHeap )
         {
             TableType::sm_pNameMemoryHeap = new StackMemoryHeap<>( STACK_HEAP_BLOCK_SIZE );
-            L_ASSERT( TableType::sm_pNameMemoryHeap );
+            HELIUM_ASSERT( TableType::sm_pNameMemoryHeap );
 
-            L_ASSERT( !TableType::sm_pTable );
+            HELIUM_ASSERT( !TableType::sm_pTable );
             TableType::sm_pTable = new TableBucket [ TABLE_BUCKET_COUNT ];
-            L_ASSERT( TableType::sm_pTable );
+            HELIUM_ASSERT( TableType::sm_pTable );
         }
 
-        L_ASSERT( TableType::sm_pTable );
+        HELIUM_ASSERT( TableType::sm_pTable );
 
         // Compute the string's hash table index and retrieve the corresponding bucket.
         uint32_t bucketIndex = StringHash( pString ) % TABLE_BUCKET_COUNT;
@@ -102,7 +102,7 @@ namespace Lunar
         if( !m_pEntry )
         {
             m_pEntry = rBucket.Add( pString, entryCount );
-            L_ASSERT( m_pEntry );
+            HELIUM_ASSERT( m_pEntry );
         }
     }
 
@@ -196,13 +196,13 @@ namespace Lunar
         const CharType* pString,
         size_t& rEntryCount )
     {
-        L_ASSERT( pString );
+        HELIUM_ASSERT( pString );
 
         ScopeReadLock readLock( m_lock );
 
         const CharType** ppEntries = m_entries.GetData();
         size_t entryCount = m_entries.GetSize();
-        L_ASSERT( ppEntries || entryCount == 0 );
+        HELIUM_ASSERT( ppEntries || entryCount == 0 );
 
         rEntryCount = entryCount;
 
@@ -234,14 +234,14 @@ namespace Lunar
         const CharType* pString,
         size_t previousEntryCount )
     {
-        L_ASSERT( pString );
+        HELIUM_ASSERT( pString );
 
         ScopeWriteLock writeLock( m_lock );
 
         const CharType** ppEntries = m_entries.GetData();
         size_t entryCount = m_entries.GetSize();
-        L_ASSERT( ppEntries || entryCount == 0 );
-        L_ASSERT( previousEntryCount <= entryCount );
+        HELIUM_ASSERT( ppEntries || entryCount == 0 );
+        HELIUM_ASSERT( previousEntryCount <= entryCount );
         for( size_t entryIndex = previousEntryCount; entryIndex < entryCount; ++entryIndex )
         {
             const CharType* pEntry = ppEntries[ entryIndex ];
@@ -253,9 +253,9 @@ namespace Lunar
 
         size_t newEntryAllocSize = sizeof( CharType ) * ( StringLength( pString ) + 1 );
 
-        L_ASSERT( TableType::sm_pNameMemoryHeap );
+        HELIUM_ASSERT( TableType::sm_pNameMemoryHeap );
         CharType* pEntry = static_cast< CharType* >( TableType::sm_pNameMemoryHeap->Allocate( newEntryAllocSize ) );
-        L_ASSERT( pEntry );
+        HELIUM_ASSERT( pEntry );
         MemoryCopy( pEntry, pString, newEntryAllocSize );
 
         m_entries.Push( pEntry );

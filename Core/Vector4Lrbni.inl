@@ -46,7 +46,7 @@ namespace Lunar
     /// @see SetElement()
     float32_t Vector4::GetElement( size_t index ) const
     {
-        L_ASSERT( index < 4 );
+        HELIUM_ASSERT( index < 4 );
 
         return m_vector[ index ];
     }
@@ -62,7 +62,7 @@ namespace Lunar
     /// @see GetElement()
     void Vector4::SetElement( size_t index, float32_t value )
     {
-        L_ASSERT( index < 4 );
+        HELIUM_ASSERT( index < 4 );
 
         m_vector[ index ] = value;
     }

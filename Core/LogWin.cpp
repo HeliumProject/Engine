@@ -29,7 +29,7 @@ namespace Lunar
     /// @param[in] pMessage  Message text.
     void WinDebugLog::OutputImpl( const tchar_t* pMessage )
     {
-        L_ASSERT( pMessage );
+        HELIUM_ASSERT( pMessage );
 
 #if HELIUM_UNICODE
         OutputDebugStringW( pMessage );

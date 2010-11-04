@@ -36,7 +36,7 @@ namespace Lunar
             L_LOG( LOG_INFO, TXT( "Initializing symbol handler for the current process...\n" ) );
 
             HANDLE hProcess = GetCurrentProcess();
-            L_ASSERT( hProcess );
+            HELIUM_ASSERT( hProcess );
 
             BOOL bInitialized = SymInitialize( hProcess, NULL, TRUE );
             if( bInitialized )
@@ -63,7 +63,7 @@ namespace Lunar
     /// @return  Number of addresses stored in the output array.
     size_t GetStackTrace( void** ppStackTraceArray, size_t stackTraceArraySize, size_t skipCount )
     {
-        L_ASSERT( ppStackTraceArray || stackTraceArraySize == 0 );
+        HELIUM_ASSERT( ppStackTraceArray || stackTraceArraySize == 0 );
 
         ScopeLock< LwMutex > scopeLock( GetStackWalkMutex() );
         ConditionalSymInitialize();
@@ -93,10 +93,10 @@ namespace Lunar
 #endif
 
         HANDLE hProcess = GetCurrentProcess();
-        L_ASSERT( hProcess );
+        HELIUM_ASSERT( hProcess );
 
         HANDLE hThread = GetCurrentThread();
-        L_ASSERT( hThread );
+        HELIUM_ASSERT( hThread );
 
         // Skip addresses first.
         for( size_t skipIndex = 0; skipIndex < skipCount; ++skipIndex )
@@ -150,7 +150,7 @@ namespace Lunar
     /// @return  True if the address was successfully resolved, false if not.
     void GetAddressSymbol( String& rSymbol, void* pAddress )
     {
-        L_ASSERT( pAddress );
+        HELIUM_ASSERT( pAddress );
 
         ScopeLock< LwMutex > scopeLock( GetStackWalkMutex() );
         ConditionalSymInitialize();
@@ -158,7 +158,7 @@ namespace Lunar
         rSymbol.Remove( 0, rSymbol.GetSize() );
 
         HANDLE hProcess = GetCurrentProcess();
-        L_ASSERT( hProcess );
+        HELIUM_ASSERT( hProcess );
 
         bool bAddedModuleName = false;
 

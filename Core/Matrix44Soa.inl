@@ -647,7 +647,7 @@ namespace Lunar
     /// @see SetRow()
     void Matrix44Soa::GetRow( size_t index, Vector4Soa& rRow ) const
     {
-        L_ASSERT( index < 4 );
+        HELIUM_ASSERT( index < 4 );
 
         const Helium::SimdVector* pRow = m_matrix[ index ];
 
@@ -666,7 +666,7 @@ namespace Lunar
     /// @see SetRow()
     Vector4Soa Matrix44Soa::GetRow( size_t index ) const
     {
-        L_ASSERT( index < 4 );
+        HELIUM_ASSERT( index < 4 );
 
         const Helium::SimdVector* pRow = m_matrix[ index ];
 
@@ -681,7 +681,7 @@ namespace Lunar
     /// @see GetRow()
     void Matrix44Soa::SetRow( size_t index, const Vector4Soa& rRow )
     {
-        L_ASSERT( index < 4 );
+        HELIUM_ASSERT( index < 4 );
 
         Helium::SimdVector* pRow = m_matrix[ index ];
 

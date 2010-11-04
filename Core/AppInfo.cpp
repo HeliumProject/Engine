@@ -8,6 +8,8 @@
 #include "CorePch.h"
 #include "Core/AppInfo.h"
 
+#pragma TODO( "LUNAR MERGE - AppInfo depends on String, so this will need to be migrated over once String is moved." )
+
 namespace Lunar
 {
     String AppInfo::sm_name;

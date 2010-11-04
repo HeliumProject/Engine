@@ -59,7 +59,7 @@ namespace Lunar
     /// @see SetElement()
     float32_t& Plane::GetElement( size_t index )
     {
-        L_ASSERT( index < 4 );
+        HELIUM_ASSERT( index < 4 );
 
         return reinterpret_cast< float32_t* >( &m_plane )[ index ];
     }
@@ -76,7 +76,7 @@ namespace Lunar
     /// @see SetElement()
     float32_t Plane::GetElement( size_t index ) const
     {
-        L_ASSERT( index < 4 );
+        HELIUM_ASSERT( index < 4 );
 
         return reinterpret_cast< const float32_t* >( &m_plane )[ index ];
     }
@@ -92,7 +92,7 @@ namespace Lunar
     /// @see GetElement()
     void Plane::SetElement( size_t index, float32_t value )
     {
-        L_ASSERT( index < 4 );
+        HELIUM_ASSERT( index < 4 );
 
         reinterpret_cast< float32_t* >( &m_plane )[ index ] = value;
     }

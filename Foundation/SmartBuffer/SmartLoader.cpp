@@ -9,7 +9,7 @@ using namespace Helium;
 bool Helium::LoadChunkHeaders( ChunkFile& chunk_file, void* data, uint32_t data_size )
 {
     HELIUM_ASSERT_MSG( data_size >= sizeof( ChunkFileHeader ), 
-        ( "Insufficient data in buffer!\n" ) );
+        TXT( "Insufficient data in buffer!" ) );
 
     // 
     chunk_file.m_FileHeader = (ChunkFileHeader*)data;
@@ -17,7 +17,7 @@ bool Helium::LoadChunkHeaders( ChunkFile& chunk_file, void* data, uint32_t data_
     // 
     // check that the header looks valid
     HELIUM_ASSERT_MSG( chunk_file.m_FileHeader->m_Magic == CHUNK_MAGIC_HW,
-        ( "Invalid magic number!\n" ) );
+        TXT( "Invalid magic number!" ) );
 
     switch ( chunk_file.m_FileHeader->m_Version )
     {

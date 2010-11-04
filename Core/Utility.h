@@ -12,7 +12,7 @@
 #include "Core/Core.h"
 
 #include "Platform/Types.h"
-#include "Core/Assert.h"
+#include "Platform/Assert.h"
 #include "Core/Timer.h"
 
 #if HELIUM_CC_MSC

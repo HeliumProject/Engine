@@ -61,7 +61,7 @@ namespace Lunar
     /// @see BeginCrc32(), FinishCrc32(), Crc32()
     uint32_t UpdateCrc32( uint32_t runningCrc, const void* pData, size_t byteCount )
     {
-        L_ASSERT( pData || byteCount == 0 );
+        HELIUM_ASSERT( pData || byteCount == 0 );
 
         uint_fast32_t crc = runningCrc;
 

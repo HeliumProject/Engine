@@ -29,7 +29,7 @@ namespace Lunar
         , m_pUsedElementBits( const_cast< uint32_t* >( pUsedElementBits ) )
         , m_usedElementMask( usedElementMask )
     {
-        L_ASSERT( ( usedElementMask & ( usedElementMask - 1 ) ) == 0 );
+        HELIUM_ASSERT( ( usedElementMask & ( usedElementMask - 1 ) ) == 0 );
     }
 
     /// Get whether this iterator is pointing to a valid array element.
@@ -50,7 +50,7 @@ namespace Lunar
     template< typename T >
     typename ConstSparseArrayIterator< T >::ConstReferenceType ConstSparseArrayIterator< T >::operator*() const
     {
-        L_ASSERT( static_cast< bool >( *this ) );
+        HELIUM_ASSERT( static_cast< bool >( *this ) );
         return *( static_cast< bool >( *this ) ? m_pElement : static_cast< const T* >( NULL ) );
     }
 
@@ -63,7 +63,7 @@ namespace Lunar
     template< typename T >
     typename ConstSparseArrayIterator< T >::ConstPointerType ConstSparseArrayIterator< T >::operator->() const
     {
-        L_ASSERT( static_cast< bool >( *this ) );
+        HELIUM_ASSERT( static_cast< bool >( *this ) );
         return ( static_cast< bool >( *this ) ? m_pElement : static_cast< const T* >( NULL ) );
     }
 
@@ -320,7 +320,7 @@ namespace Lunar
     template< typename T >
     typename SparseArrayIterator< T >::ReferenceType SparseArrayIterator< T >::operator*() const
     {
-        L_ASSERT( static_cast< bool >( *this ) );
+        HELIUM_ASSERT( static_cast< bool >( *this ) );
         return *( static_cast< bool >( *this )
                   ? ConstSparseArrayIterator< T >::m_pElement
                   : static_cast< T* >( NULL ) );
@@ -335,7 +335,7 @@ namespace Lunar
     template< typename T >
     typename SparseArrayIterator< T >::PointerType SparseArrayIterator< T >::operator->() const
     {
-        L_ASSERT( static_cast< bool >( *this ) );
+        HELIUM_ASSERT( static_cast< bool >( *this ) );
         return ( static_cast< bool >( *this ) ? ConstSparseArrayIterator< T >::m_pElement : static_cast< T* >( NULL ) );
     }
 
@@ -476,16 +476,16 @@ namespace Lunar
         , m_capacity( size )
         , m_lastUpdateIndex( 0 )
     {
-        L_ASSERT( pSource );
+        HELIUM_ASSERT( pSource );
         if( size != 0 )
         {
             m_pBuffer = Allocate( m_size );
-            L_ASSERT( m_pBuffer );
+            HELIUM_ASSERT( m_pBuffer );
             ArrayUninitializedCopy( m_pBuffer, pSource, size );
 
             size_t bitArrayByteCount = Align( size, sizeof( uint32_t ) * 8 ) / 8;
             m_pUsedElements = static_cast< uint32_t* >( m_allocator.Allocate( bitArrayByteCount ) );
-            L_ASSERT( m_pUsedElements );
+            HELIUM_ASSERT( m_pUsedElements );
             MemorySet( m_pUsedElements, 0xff, bitArrayByteCount );
         }
     }
@@ -522,8 +522,8 @@ namespace Lunar
                 }
             }
 
-            L_ASSERT( m_size == usedSize );
-            L_ASSERT( m_usedSize == usedSize );
+            HELIUM_ASSERT( m_size == usedSize );
+            HELIUM_ASSERT( m_usedSize == usedSize );
         }
     }
 
@@ -585,11 +585,11 @@ namespace Lunar
         if( capacity > m_capacity )
         {
             m_pBuffer = ResizeBuffer( m_pBuffer, m_size, m_pUsedElements, m_capacity, capacity );
-            L_ASSERT( m_pBuffer );
+            HELIUM_ASSERT( m_pBuffer );
 
             size_t bitArrayByteCount = Align( capacity, sizeof( uint32_t ) * 8 ) / 8;
             m_pUsedElements = static_cast< uint32_t* >( m_allocator.Reallocate( m_pUsedElements, bitArrayByteCount ) );
-            L_ASSERT( m_pUsedElements );
+            HELIUM_ASSERT( m_pUsedElements );
 
             m_capacity = capacity;
         }
@@ -604,11 +604,11 @@ namespace Lunar
         if( m_capacity != m_size )
         {
             m_pBuffer = ResizeBuffer( m_pBuffer, m_size, m_pUsedElements, m_capacity, m_size );
-            L_ASSERT( m_pBuffer || m_size == 0 );
+            HELIUM_ASSERT( m_pBuffer || m_size == 0 );
 
             size_t bitArrayByteCount = Align( m_size, sizeof( uint32_t ) * 8 ) / 8;
             m_pUsedElements = static_cast< uint32_t* >( m_allocator.Reallocate( m_pUsedElements, bitArrayByteCount ) );
-            L_ASSERT( m_pUsedElements || bitArrayByteCount == 0 );
+            HELIUM_ASSERT( m_pUsedElements || bitArrayByteCount == 0 );
 
             m_capacity = m_size;
         }
@@ -721,13 +721,13 @@ namespace Lunar
     template< typename T, typename Allocator >
     bool SparseArray< T, Allocator >::IsElementValid( size_t index ) const
     {
-        L_ASSERT( index < m_size );
+        HELIUM_ASSERT( index < m_size );
         if( index >= m_size )
         {
             return false;
         }
 
-        L_ASSERT( m_pUsedElements );
+        HELIUM_ASSERT( m_pUsedElements );
 
         size_t elementIndex, maskIndex;
         GetBitElementAndMaskIndex< uint32_t >( index, elementIndex, maskIndex );
@@ -745,8 +745,8 @@ namespace Lunar
     template< typename T, typename Allocator >
     T& SparseArray< T, Allocator >::GetElement( size_t index )
     {
-        L_ASSERT( IsElementValid( index ) );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( IsElementValid( index ) );
+        HELIUM_ASSERT( m_pBuffer );
 
         return m_pBuffer[ index ];
     }
@@ -761,8 +761,8 @@ namespace Lunar
     template< typename T, typename Allocator >
     const T& SparseArray< T, Allocator >::GetElement( size_t index ) const
     {
-        L_ASSERT( IsElementValid( index ) );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( IsElementValid( index ) );
+        HELIUM_ASSERT( m_pBuffer );
 
         return m_pBuffer[ index ];
     }
@@ -776,7 +776,7 @@ namespace Lunar
     size_t SparseArray< T, Allocator >::GetElementIndex( const T& rElement ) const
     {
         size_t index = static_cast< size_t >( &rElement - m_pBuffer );
-        L_ASSERT( index < m_size );
+        HELIUM_ASSERT( index < m_size );
 
         return index;
     }
@@ -790,7 +790,7 @@ namespace Lunar
     size_t SparseArray< T, Allocator >::GetElementIndex( const T* pElement ) const
     {
         size_t index = static_cast< size_t >( pElement - m_pBuffer );
-        L_ASSERT( index < m_size );
+        HELIUM_ASSERT( index < m_size );
 
         return index;
     }
@@ -804,21 +804,21 @@ namespace Lunar
     template< typename T, typename Allocator >
     void SparseArray< T, Allocator >::Set( const T* pSource, size_t size )
     {
-        L_ASSERT( pSource );
+        HELIUM_ASSERT( pSource );
         InPlaceDestroy( m_pBuffer, m_size, m_pUsedElements );
         if( size != m_capacity )
         {
             m_pBuffer = Reallocate( m_pBuffer, size );
-            L_ASSERT( m_pBuffer || size == 0 );
+            HELIUM_ASSERT( m_pBuffer || size == 0 );
 
             size_t bitArrayByteCount = Align( size, sizeof( uint32_t ) * 8 ) / 8;
             m_pUsedElements = static_cast< uint32_t* >( m_allocator.Reallocate( m_pUsedElements, bitArrayByteCount ) );
-            L_ASSERT( m_pUsedElements || bitArrayByteCount == 0 );
+            HELIUM_ASSERT( m_pUsedElements || bitArrayByteCount == 0 );
 
             m_capacity = size;
         }
 
-        L_ASSERT( size == 0 ? m_pBuffer == NULL : m_pBuffer != NULL );
+        HELIUM_ASSERT( size == 0 ? m_pBuffer == NULL : m_pBuffer != NULL );
 
         m_size = size;
         m_usedSize = size;
@@ -842,7 +842,7 @@ namespace Lunar
     size_t SparseArray< T, Allocator >::Add( const T& rValue )
     {
         size_t index = AllocateSlot();
-        L_ASSERT( IsValid( index ) );
+        HELIUM_ASSERT( IsValid( index ) );
 
         new( m_pBuffer + index ) T( rValue );
 
@@ -860,7 +860,7 @@ namespace Lunar
     template< typename T, typename Allocator >
     void SparseArray< T, Allocator >::Remove( size_t index )
     {
-        L_ASSERT( IsElementValid( index ) );
+        HELIUM_ASSERT( IsElementValid( index ) );
 
         // Clear out the array slot.
         m_pBuffer[ index ].~T();
@@ -872,7 +872,7 @@ namespace Lunar
         m_pUsedElements[ bitElementIndex ] &= ~bitMask;
 
         // Decrement the used element count.
-        L_ASSERT( m_usedSize != 0 );
+        HELIUM_ASSERT( m_usedSize != 0 );
         --m_usedSize;
         if( m_usedSize == 0 )
         {
@@ -912,7 +912,7 @@ namespace Lunar
 
             // We should never reach this point, as our previous check for when the used size reaches zero should have
             // been triggered.
-            L_ASSERT_MESSAGE_FALSE(
+            HELIUM_ASSERT_MSG_FALSE(
                 TXT( "SparseArray::Remove(): Failed to find a used array slot, although at least one should exist." ) );
 
             m_size = 0;
@@ -963,10 +963,10 @@ namespace Lunar
     T* SparseArray< T, Allocator >::New()
     {
         size_t index = AllocateSlot();
-        L_ASSERT( IsValid( index ) );
+        HELIUM_ASSERT( IsValid( index ) );
 
         T* pElement = new( m_pBuffer + index ) T;
-        L_ASSERT( pElement );
+        HELIUM_ASSERT( pElement );
 
         return pElement;
     }
@@ -977,10 +977,10 @@ namespace Lunar
     T* SparseArray< T, Allocator >::New( BOOST_PP_ENUM_BINARY_PARAMS_Z( Z, N, const Param, &rParam ) ) \
     { \
         size_t index = AllocateSlot(); \
-        L_ASSERT( IsValid( index ) ); \
+        HELIUM_ASSERT( IsValid( index ) ); \
         \
         T* pElement = new( m_pBuffer + index ) T( BOOST_PP_ENUM_PARAMS_Z( Z, N, rParam ) ); \
-        L_ASSERT( pElement ); \
+        HELIUM_ASSERT( pElement ); \
         \
         return pElement; \
     }
@@ -1027,8 +1027,8 @@ namespace Lunar
     template< typename T, typename Allocator >
     T& SparseArray< T, Allocator >::operator[]( ptrdiff_t index )
     {
-        L_ASSERT( IsElementValid( index ) );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( IsElementValid( index ) );
+        HELIUM_ASSERT( m_pBuffer );
         return m_pBuffer[ index ];
     }
 
@@ -1040,8 +1040,8 @@ namespace Lunar
     template< typename T, typename Allocator >
     const T& SparseArray< T, Allocator >::operator[]( ptrdiff_t index ) const
     {
-        L_ASSERT( IsElementValid( index ) );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( IsElementValid( index ) );
+        HELIUM_ASSERT( m_pBuffer );
         return m_pBuffer[ index ];
     }
 
@@ -1053,7 +1053,7 @@ namespace Lunar
     template< typename T, typename Allocator >
     size_t SparseArray< T, Allocator >::GetGrowCapacity( size_t desiredCount ) const
     {
-        L_ASSERT( desiredCount > m_capacity );
+        HELIUM_ASSERT( desiredCount > m_capacity );
         return Max< size_t >( desiredCount, m_capacity + m_capacity / 2 + 1 );
     }
 
@@ -1068,11 +1068,11 @@ namespace Lunar
             capacity = GetGrowCapacity( capacity );
 
             m_pBuffer = ResizeBuffer( m_pBuffer, m_size, m_pUsedElements, m_capacity, capacity );
-            L_ASSERT( m_pBuffer );
+            HELIUM_ASSERT( m_pBuffer );
 
             size_t bitArrayByteCount = Align( capacity, sizeof( uint32_t ) * 8 ) / 8;
             m_pUsedElements = static_cast< uint32_t* >( m_allocator.Reallocate( m_pUsedElements, bitArrayByteCount ) );
-            L_ASSERT( m_pUsedElements );
+            HELIUM_ASSERT( m_pUsedElements );
 
             m_capacity = capacity;
         }
@@ -1121,12 +1121,12 @@ namespace Lunar
                 }
             }
 
-            L_ASSERT_MESSAGE_FALSE(
+            HELIUM_ASSERT_MSG_FALSE(
                 ( TXT( "SparseArray::AllocateSlot(): Failed to find an unused array slot, although at least one " )
                   TXT( "should exist." ) ) );
         }
 
-        L_ASSERT( size == m_usedSize );
+        HELIUM_ASSERT( size == m_usedSize );
 
         // No unused slot could be found, so grow the array and add the element to the end.
         size_t newSize = size + 1;
@@ -1174,8 +1174,8 @@ namespace Lunar
                     }
                 }
 
-                L_ASSERT( m_size == usedSize );
-                L_ASSERT( m_usedSize == usedSize );
+                HELIUM_ASSERT( m_size == usedSize );
+                HELIUM_ASSERT( m_usedSize == usedSize );
             }
         }
 
@@ -1259,7 +1259,7 @@ namespace Lunar
             T* pNewMemory = static_cast< T* >( m_allocator.AllocateAligned(
                 boost::alignment_of< T >::value,
                 newSize ) );
-            L_ASSERT( pNewMemory || newSize == 0 );
+            HELIUM_ASSERT( pNewMemory || newSize == 0 );
             MemoryCopy( pNewMemory, pMemory, Min( existingSize, newSize ) );
             m_allocator.Free( pMemory );
             pMemory = pNewMemory;
@@ -1351,8 +1351,8 @@ namespace Lunar
         size_t newCapacity,
         const boost::false_type& /*rHasTrivialCopyAndDestructor*/ )
     {
-        L_ASSERT( elementRange <= oldCapacity );
-        L_ASSERT( elementRange <= newCapacity );
+        HELIUM_ASSERT( elementRange <= oldCapacity );
+        HELIUM_ASSERT( elementRange <= newCapacity );
 
         T* pNewMemory = pMemory;
 
@@ -1362,7 +1362,7 @@ namespace Lunar
             if( newCapacity )
             {
                 pNewMemory = Allocate( newCapacity );
-                L_ASSERT( pNewMemory );
+                HELIUM_ASSERT( pNewMemory );
                 UninitializedCopy( pNewMemory, pMemory, elementRange, pUsedElements );
             }
 
@@ -1413,8 +1413,8 @@ namespace Lunar
         const uint32_t* pUsedElements,
         const boost::false_type& /*rHasTrivialDestructor*/ )
     {
-        L_ASSERT( pMemory || range == 0 );
-        L_ASSERT( pUsedElements || range == 0 );
+        HELIUM_ASSERT( pMemory || range == 0 );
+        HELIUM_ASSERT( pUsedElements || range == 0 );
 
         uint32_t elementBits = 0;
         const uint32_t* pLastUsedElements = NULL;
@@ -1477,8 +1477,8 @@ namespace Lunar
         const uint32_t* /*pUsedElements*/,
         const boost::true_type& /*rHasTrivialCopy*/ )
     {
-        L_ASSERT( pDest || range == 0 );
-        L_ASSERT( pSource || range == 0 );
+        HELIUM_ASSERT( pDest || range == 0 );
+        HELIUM_ASSERT( pSource || range == 0 );
 
         MemoryCopy( pDest, pSource, sizeof( T ) * range );
     }
@@ -1498,9 +1498,9 @@ namespace Lunar
         const uint32_t* pUsedElements,
         const boost::false_type& /*rHasTrivialCopy*/ )
     {
-        L_ASSERT( pDest || range == 0 );
-        L_ASSERT( pSource || range == 0 );
-        L_ASSERT( pUsedElements || range == 0 );
+        HELIUM_ASSERT( pDest || range == 0 );
+        HELIUM_ASSERT( pSource || range == 0 );
+        HELIUM_ASSERT( pUsedElements || range == 0 );
 
         uint32_t elementBits = 0;
         const uint32_t* pLastUsedElements = NULL;

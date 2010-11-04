@@ -33,12 +33,12 @@ namespace Lunar
     /// @see Close(), IsOpen()
     bool FileStream::Open( const tchar_t* pPath, uint32_t modeFlags, bool bTruncate )
     {
-        L_ASSERT( pPath );
+        HELIUM_ASSERT( pPath );
 
         // Verify that at least one mode flag is given.
         if( !( modeFlags & ( MODE_READ | MODE_WRITE ) ) )
         {
-            L_ASSERT_MESSAGE_FALSE( TXT( "At least one FileStream::EMode flag must be set" ) );
+            HELIUM_ASSERT_MSG_FALSE( TXT( "At least one FileStream::EMode flag must be set" ) );
             return false;
         }
 

@@ -46,7 +46,7 @@ namespace Lunar
     DynamicLibrary::DynamicLibrary( void* pHandle )
         : m_pHandle( pHandle )
     {
-        L_ASSERT( pHandle );
+        HELIUM_ASSERT( pHandle );
     }
 
     /// Destructor.
@@ -64,7 +64,7 @@ namespace Lunar
     /// @return  Pointer to the function address if the function was found, null if the function was not found.
     void* DynamicLibrary::GetFunctionAddress( const char* pFunctionName ) const
     {
-        L_ASSERT( pFunctionName );
+        HELIUM_ASSERT( pFunctionName );
 
 #if L_ENABLE_LOGGING
 #if HELIUM_UNICODE
@@ -94,7 +94,7 @@ namespace Lunar
     ///          destroying the returned interface.
     DynamicLibrary* DynamicLibrary::Load( const tchar_t* pPath )
     {
-        L_ASSERT( pPath );
+        HELIUM_ASSERT( pPath );
 
         L_LOG( LOG_DEBUG, TXT( "DynamicLibrary: Loading \"%s\".\n" ), pPath );
 
@@ -107,7 +107,7 @@ namespace Lunar
         }
 
         DynamicLibrary* pLibrary = new DynamicLibrary( hModule );
-        L_ASSERT( pLibrary );
+        HELIUM_ASSERT( pLibrary );
 
         L_LOG( LOG_DEBUG, TXT( "DynamicLibrary: Loaded \"%s\" successfully.\n" ), pPath );
 

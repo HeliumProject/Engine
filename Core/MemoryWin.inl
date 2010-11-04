@@ -57,26 +57,26 @@ namespace Lunar
     /// @see Allocate()
     bool PhysicalMemory::Free( void* pMemory, size_t size )
     {
-        L_ASSERT( pMemory );
-        L_ASSERT( size != 0 );
+        HELIUM_ASSERT( pMemory );
+        HELIUM_ASSERT( size != 0 );
 
         uint8_t* pCurrentBase = static_cast< uint8_t* >( pMemory );
-        L_ASSERT( pCurrentBase + size == 0 || pCurrentBase + size > pCurrentBase );  // Check address space bounds.
+        HELIUM_ASSERT( pCurrentBase + size == 0 || pCurrentBase + size > pCurrentBase );  // Check address space bounds.
 
         MEMORY_BASIC_INFORMATION memoryInfo;
         while( size != 0 )
         {
             size_t queryResult = VirtualQuery( pCurrentBase, &memoryInfo, sizeof( memoryInfo ) );
-            L_ASSERT( queryResult != 0 );
+            HELIUM_ASSERT( queryResult != 0 );
             if( queryResult == 0 )
             {
                 return false;
             }
 
-            L_ASSERT( memoryInfo.BaseAddress == pCurrentBase );
-            L_ASSERT( memoryInfo.AllocationBase == pCurrentBase );
-            L_ASSERT( memoryInfo.State == MEM_COMMIT );
-            L_ASSERT( memoryInfo.RegionSize <= size );
+            HELIUM_ASSERT( memoryInfo.BaseAddress == pCurrentBase );
+            HELIUM_ASSERT( memoryInfo.AllocationBase == pCurrentBase );
+            HELIUM_ASSERT( memoryInfo.State == MEM_COMMIT );
+            HELIUM_ASSERT( memoryInfo.RegionSize <= size );
             if( memoryInfo.BaseAddress != pCurrentBase ||
                 memoryInfo.AllocationBase != pCurrentBase ||
                 memoryInfo.State != MEM_COMMIT ||
@@ -86,7 +86,7 @@ namespace Lunar
             }
 
             BOOL freeResult = VirtualFree( pCurrentBase, 0, MEM_RELEASE );
-            L_ASSERT( freeResult );
+            HELIUM_ASSERT( freeResult );
             if( !freeResult )
             {
                 return false;

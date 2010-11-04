@@ -291,7 +291,7 @@ bool Helium::MipSet::VTCSwizzle()
   HELIUM_ASSERT(!m_swizzled);
   HELIUM_ASSERT( (m_format == Helium::OUTPUT_CF_DXT1) || (m_format == Helium::OUTPUT_CF_DXT3) || (m_format == Helium::OUTPUT_CF_DXT5) );
   HELIUM_ASSERT(m_depth > 1);
-  HELIUM_ASSERT_MSG(m_levels_used == 1, ("Mipmap support not yet implimented for volume textures"));
+  HELIUM_ASSERT_MSG(m_levels_used == 1, TXT("Mipmap support not yet implimented for volume textures"));
 
   uint8_t* p_data = m_levels[0][0].m_data;
   if(!p_data)

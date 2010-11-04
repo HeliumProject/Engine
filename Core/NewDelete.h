@@ -22,7 +22,7 @@ L_NEW_DELETE_SPEC void* operator new( size_t size ) throw( std::bad_alloc )
 {
     Lunar::DefaultAllocator allocator;
     void* pMemory = Lunar::AllocateAlignmentHelper( allocator, size );
-    L_ASSERT( pMemory );
+    HELIUM_ASSERT( pMemory );
     if( !pMemory )
     {
         throw std::bad_alloc();
@@ -40,7 +40,7 @@ L_NEW_DELETE_SPEC void* operator new( size_t size, const std::nothrow_t& ) throw
 {
     Lunar::DefaultAllocator allocator;
     void* pMemory = Lunar::AllocateAlignmentHelper( allocator, size );
-    L_ASSERT( pMemory );
+    HELIUM_ASSERT( pMemory );
 
     return pMemory;
 }
@@ -54,7 +54,7 @@ L_NEW_DELETE_SPEC void* operator new[]( size_t size ) throw( std::bad_alloc )
 {
     Lunar::DefaultAllocator allocator;
     void* pMemory = Lunar::AllocateAlignmentHelper( allocator, size );
-    L_ASSERT( pMemory );
+    HELIUM_ASSERT( pMemory );
     if( !pMemory )
     {
         throw std::bad_alloc();
@@ -72,7 +72,7 @@ L_NEW_DELETE_SPEC void* operator new[]( size_t size, const std::nothrow_t& ) thr
 {
     Lunar::DefaultAllocator allocator;
     void* pMemory = Lunar::AllocateAlignmentHelper( allocator, size );
-    L_ASSERT( pMemory );
+    HELIUM_ASSERT( pMemory );
 
     return pMemory;
 }

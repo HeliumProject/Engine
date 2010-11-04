@@ -29,7 +29,7 @@ bool FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dep
     uint32_t face        = dxt_options->m_face;
     MipSet::MipInfo* p_curr_mip = &p_mips->m_levels[face][mip_level];
 
-    HELIUM_ASSERT_MSG(depth <= 1, ("Support for HDR volume textures not fully implimented"));
+    HELIUM_ASSERT_MSG(depth <= 1, TXT("Support for HDR volume textures not fully implimented"));
 
     OutputColorFormat output_format = dxt_options->m_mip_gen_options[Image::R]->m_OutputFormat;
 

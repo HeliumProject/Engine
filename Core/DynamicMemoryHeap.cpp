@@ -117,7 +117,7 @@ namespace Lunar
 
     static void VerboseTrackingUnlock()
     {
-        L_ASSERT( s_verboseTrackingCurrentThreadId == Thread::GetCurrentId() );
+        HELIUM_ASSERT( s_verboseTrackingCurrentThreadId == Thread::GetCurrentId() );
 
         s_verboseTrackingCurrentThreadId = Thread::INVALID_ID;
         GetVerboseTrackingMutex().Unlock();

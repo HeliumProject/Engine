@@ -21,7 +21,7 @@ namespace Lunar
     DirectoryIteratorWin::DirectoryIteratorWin( const tchar_t* pDirectoryPath )
         : m_hFindFile( INVALID_HANDLE_VALUE )
     {
-        L_ASSERT( pDirectoryPath );
+        HELIUM_ASSERT( pDirectoryPath );
 
         size_t directoryLength = StringLength( pDirectoryPath );
 
@@ -49,7 +49,7 @@ namespace Lunar
 
         tchar_t* pSearchString = static_cast< tchar_t* >( rStackHeap.Allocate(
             sizeof( tchar_t ) * directoryLength + wildcardSuffixSize ) );
-        L_ASSERT( pSearchString );
+        HELIUM_ASSERT( pSearchString );
         MemoryCopy( pSearchString, pDirectoryPath, sizeof( tchar_t ) * directoryLength );
         MemoryCopy( pSearchString + directoryLength, pWildcardSuffix, wildcardSuffixSize );
 

@@ -30,11 +30,11 @@ namespace Lunar
         , m_size( size )
         , m_capacity( size )
     {
-        L_ASSERT( pSource );
+        HELIUM_ASSERT( pSource );
         if( size != 0 )
         {
             m_pBuffer = Allocate( m_size );
-            L_ASSERT( m_pBuffer );
+            HELIUM_ASSERT( m_pBuffer );
             ArrayUninitializedCopy( m_pBuffer, pSource, size );
         }
     }
@@ -150,7 +150,7 @@ namespace Lunar
         if( capacity > m_capacity )
         {
             m_pBuffer = ResizeBuffer( m_pBuffer, m_size, m_capacity, capacity );
-            L_ASSERT( m_pBuffer );
+            HELIUM_ASSERT( m_pBuffer );
             m_capacity = capacity;
         }
     }
@@ -164,7 +164,7 @@ namespace Lunar
         if( m_capacity != m_size )
         {
             m_pBuffer = ResizeBuffer( m_pBuffer, m_size, m_capacity, m_size );
-            L_ASSERT( m_pBuffer || m_size == 0 );
+            HELIUM_ASSERT( m_pBuffer || m_size == 0 );
             m_capacity = m_size;
         }
     }
@@ -250,8 +250,8 @@ namespace Lunar
     template< typename T, typename Allocator >
     T& DynArray< T, Allocator >::GetElement( size_t index )
     {
-        L_ASSERT( index < m_size );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( index < m_size );
+        HELIUM_ASSERT( m_pBuffer );
         return m_pBuffer[ index ];
     }
 
@@ -263,8 +263,8 @@ namespace Lunar
     template< typename T, typename Allocator >
     const T& DynArray< T, Allocator >::GetElement( size_t index ) const
     {
-        L_ASSERT( index < m_size );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( index < m_size );
+        HELIUM_ASSERT( m_pBuffer );
         return m_pBuffer[ index ];
     }
 
@@ -277,16 +277,16 @@ namespace Lunar
     template< typename T, typename Allocator >
     void DynArray< T, Allocator >::Set( const T* pSource, size_t size )
     {
-        L_ASSERT( pSource );
+        HELIUM_ASSERT( pSource );
         ArrayInPlaceDestroy( m_pBuffer, m_size );
         if( size != m_capacity )
         {
             m_pBuffer = Reallocate( m_pBuffer, size );
-            L_ASSERT( m_pBuffer || size == 0 );
+            HELIUM_ASSERT( m_pBuffer || size == 0 );
             m_capacity = size;
         }
 
-        L_ASSERT( size == 0 ? m_pBuffer == NULL : m_pBuffer != NULL );
+        HELIUM_ASSERT( size == 0 ? m_pBuffer == NULL : m_pBuffer != NULL );
 
         m_size = size;
         ArrayUninitializedCopy( m_pBuffer, pSource, size );
@@ -312,7 +312,7 @@ namespace Lunar
     template< typename T, typename Allocator >
     void DynArray< T, Allocator >::AddArray( const T* pValues, size_t count )
     {
-        L_ASSERT( pValues || count == 0 );
+        HELIUM_ASSERT( pValues || count == 0 );
 
         size_t newSize = m_size + count;
         Grow( newSize );
@@ -328,14 +328,14 @@ namespace Lunar
     template< typename T, typename Allocator >
     void DynArray< T, Allocator >::Insert( size_t index, const T& rValue, size_t count )
     {
-        L_ASSERT( index <= m_size );
+        HELIUM_ASSERT( index <= m_size );
 
         size_t newSize = m_size + count;
         if( newSize > m_capacity )
         {
             size_t newCapacity = GetGrowCapacity( newSize );
             T* pNewBuffer = Allocate( newCapacity );
-            L_ASSERT( pNewBuffer );
+            HELIUM_ASSERT( pNewBuffer );
             ArrayUninitializedCopy( pNewBuffer, m_pBuffer, index );
             ArrayUninitializedFill( pNewBuffer + index, rValue, count );
             ArrayUninitializedCopy( pNewBuffer + index + count, m_pBuffer + index, m_size - index );
@@ -375,15 +375,15 @@ namespace Lunar
     template< typename T, typename Allocator >
     void DynArray< T, Allocator >::InsertArray( size_t index, const T* pValues, size_t count )
     {
-        L_ASSERT( index <= m_size );
-        L_ASSERT( pValues || count == 0 );
+        HELIUM_ASSERT( index <= m_size );
+        HELIUM_ASSERT( pValues || count == 0 );
 
         size_t newSize = m_size + count;
         if( newSize > m_capacity )
         {
             size_t newCapacity = GetGrowCapacity( newSize );
             T* pNewBuffer = Allocate( newCapacity );
-            L_ASSERT( pNewBuffer );
+            HELIUM_ASSERT( pNewBuffer );
             ArrayUninitializedCopy( pNewBuffer, m_pBuffer, index );
             ArrayUninitializedCopy( pNewBuffer + index, pValues, count );
             ArrayUninitializedCopy( pNewBuffer + index + count, m_pBuffer + index, m_size - index );
@@ -428,10 +428,10 @@ namespace Lunar
     template< typename T, typename Allocator >
     void DynArray< T, Allocator >::Remove( size_t index, size_t count )
     {
-        L_ASSERT( index <= m_size );
+        HELIUM_ASSERT( index <= m_size );
 
         size_t shiftStartIndex = index + count;
-        L_ASSERT( shiftStartIndex <= m_size );
+        HELIUM_ASSERT( shiftStartIndex <= m_size );
 
         size_t newSize = m_size - count;
 
@@ -454,10 +454,10 @@ namespace Lunar
     template< typename T, typename Allocator >
     void DynArray< T, Allocator >::RemoveSwap( size_t index, size_t count )
     {
-        L_ASSERT( index <= m_size );
+        HELIUM_ASSERT( index <= m_size );
 
         size_t shiftStartIndex = index + count;
-        L_ASSERT( shiftStartIndex <= m_size );
+        HELIUM_ASSERT( shiftStartIndex <= m_size );
 
         size_t newSize = m_size - count;
 
@@ -486,8 +486,8 @@ namespace Lunar
     template< typename T, typename Allocator >
     T& DynArray< T, Allocator >::GetFirst()
     {
-        L_ASSERT( m_size != 0 );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( m_size != 0 );
+        HELIUM_ASSERT( m_pBuffer );
 
         return m_pBuffer[ 0 ];
     }
@@ -500,8 +500,8 @@ namespace Lunar
     template< typename T, typename Allocator >
     const T& DynArray< T, Allocator >::GetFirst() const
     {
-        L_ASSERT( m_size != 0 );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( m_size != 0 );
+        HELIUM_ASSERT( m_pBuffer );
 
         return m_pBuffer[ 0 ];
     }
@@ -514,8 +514,8 @@ namespace Lunar
     template< typename T, typename Allocator >
     T& DynArray< T, Allocator >::GetLast()
     {
-        L_ASSERT( m_size != 0 );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( m_size != 0 );
+        HELIUM_ASSERT( m_pBuffer );
 
         return m_pBuffer[ m_size - 1 ];
     }
@@ -528,8 +528,8 @@ namespace Lunar
     template< typename T, typename Allocator >
     const T& DynArray< T, Allocator >::GetLast() const
     {
-        L_ASSERT( m_size != 0 );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( m_size != 0 );
+        HELIUM_ASSERT( m_pBuffer );
 
         return m_pBuffer[ m_size - 1 ];
     }
@@ -556,7 +556,7 @@ namespace Lunar
     template< typename T, typename Allocator >
     void DynArray< T, Allocator >::Pop()
     {
-        L_ASSERT( m_size != 0 );
+        HELIUM_ASSERT( m_size != 0 );
         Remove( m_size - 1 );
     }
 
@@ -589,7 +589,7 @@ namespace Lunar
         Grow( newSize );
 
         T* pObject = new( m_pBuffer + m_size ) T;
-        L_ASSERT( pObject );
+        HELIUM_ASSERT( pObject );
 
         m_size = newSize;
 
@@ -605,7 +605,7 @@ namespace Lunar
         Grow( newSize ); \
         \
         T* pObject = new( m_pBuffer + m_size ) T( BOOST_PP_ENUM_PARAMS_Z( Z, N, rParam ) ); \
-        L_ASSERT( pObject ); \
+        HELIUM_ASSERT( pObject ); \
         \
         m_size = newSize; \
         \
@@ -653,8 +653,8 @@ namespace Lunar
     template< typename T, typename Allocator >
     T& DynArray< T, Allocator >::operator[]( ptrdiff_t index )
     {
-        L_ASSERT( static_cast< size_t >( index ) < m_size );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( static_cast< size_t >( index ) < m_size );
+        HELIUM_ASSERT( m_pBuffer );
         return m_pBuffer[ index ];
     }
 
@@ -666,8 +666,8 @@ namespace Lunar
     template< typename T, typename Allocator >
     const T& DynArray< T, Allocator >::operator[]( ptrdiff_t index ) const
     {
-        L_ASSERT( static_cast< size_t >( index ) < m_size );
-        L_ASSERT( m_pBuffer );
+        HELIUM_ASSERT( static_cast< size_t >( index ) < m_size );
+        HELIUM_ASSERT( m_pBuffer );
         return m_pBuffer[ index ];
     }
 
@@ -679,7 +679,7 @@ namespace Lunar
     template< typename T, typename Allocator >
     size_t DynArray< T, Allocator >::GetGrowCapacity( size_t desiredCount ) const
     {
-        L_ASSERT( desiredCount > m_capacity );
+        HELIUM_ASSERT( desiredCount > m_capacity );
         return Max< size_t >( desiredCount, m_capacity + m_capacity / 2 + 1 );
     }
 
@@ -693,7 +693,7 @@ namespace Lunar
         {
             capacity = GetGrowCapacity( capacity );
             m_pBuffer = ResizeBuffer( m_pBuffer, m_size, m_capacity, capacity );
-            L_ASSERT( m_pBuffer );
+            HELIUM_ASSERT( m_pBuffer );
 
             m_capacity = capacity;
         }
@@ -715,8 +715,8 @@ namespace Lunar
         if( size )
         {
             m_pBuffer = Allocate( size );
-            L_ASSERT( m_pBuffer );
-            L_ASSERT( rSource.m_pBuffer );
+            HELIUM_ASSERT( m_pBuffer );
+            HELIUM_ASSERT( rSource.m_pBuffer );
             ArrayUninitializedCopy( m_pBuffer, rSource.m_pBuffer, size );
         }
     }
@@ -828,7 +828,7 @@ namespace Lunar
             T* pNewMemory = static_cast< T* >( m_allocator.AllocateAligned(
                 boost::alignment_of< T >::value,
                 newSize ) );
-            L_ASSERT( pNewMemory || newSize == 0 );
+            HELIUM_ASSERT( pNewMemory || newSize == 0 );
             MemoryCopy( pNewMemory, pMemory, Min( existingSize, newSize ) );
             m_allocator.Free( pMemory );
             pMemory = pNewMemory;
@@ -909,8 +909,8 @@ namespace Lunar
         size_t newCapacity,
         const boost::false_type& /*rHasTrivialCopyAndDestructor*/ )
     {
-        L_ASSERT( elementCount <= oldCapacity );
-        L_ASSERT( elementCount <= newCapacity );
+        HELIUM_ASSERT( elementCount <= oldCapacity );
+        HELIUM_ASSERT( elementCount <= newCapacity );
 
         T* pNewMemory = pMemory;
 
@@ -920,7 +920,7 @@ namespace Lunar
             if( newCapacity )
             {
                 pNewMemory = Allocate( newCapacity );
-                L_ASSERT( pNewMemory );
+                HELIUM_ASSERT( pNewMemory );
                 ArrayUninitializedCopy( pNewMemory, pMemory, elementCount );
             }
 

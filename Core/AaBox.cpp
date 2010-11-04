@@ -34,13 +34,13 @@ namespace Lunar
     /// @param[in] rMaximum  Value to which the maximum coordinates should be initialized.
     void AaBox::Set( const Vector3& rMinimum, const Vector3& rMaximum )
     {
-        L_ASSERT(
+        HELIUM_ASSERT(
             reinterpret_cast< const float32_t* >( &rMinimum )[ 0 ] <=
             reinterpret_cast< const float32_t* >( &rMaximum )[ 0 ] );
-        L_ASSERT(
+        HELIUM_ASSERT(
             reinterpret_cast< const float32_t* >( &rMinimum )[ 1 ] <=
             reinterpret_cast< const float32_t* >( &rMaximum )[ 1 ] );
-        L_ASSERT(
+        HELIUM_ASSERT(
             reinterpret_cast< const float32_t* >( &rMinimum )[ 2 ] <=
             reinterpret_cast< const float32_t* >( &rMaximum )[ 2 ] );
 

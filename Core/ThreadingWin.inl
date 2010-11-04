@@ -96,10 +96,10 @@ namespace Lunar
     /// @param[in] bInitialState  True to initialize this event in the signaled state, false to initialize non-signaled.
     Event::Event( EResetMode resetMode, bool bInitialState )
     {
-        L_ASSERT( static_cast< size_t >( resetMode ) < static_cast< size_t >( RESET_MODE_MAX ) );
+        HELIUM_ASSERT( static_cast< size_t >( resetMode ) < static_cast< size_t >( RESET_MODE_MAX ) );
 
         m_hEvent = CreateEvent( NULL, ( resetMode == RESET_MODE_MANUAL ), bInitialState, NULL );
-        L_ASSERT( m_hEvent );
+        HELIUM_ASSERT( m_hEvent );
     }
 
     /// Destructor.
@@ -214,10 +214,10 @@ namespace Lunar
         : m_readLockCount( 0 )
     {
         m_hReadReleaseEvent = CreateEvent( NULL, TRUE, TRUE, NULL );
-        L_ASSERT( m_hReadReleaseEvent );
+        HELIUM_ASSERT( m_hReadReleaseEvent );
 
         m_hWriteReleaseEvent = CreateEvent( NULL, TRUE, TRUE, NULL );
-        L_ASSERT( m_hWriteReleaseEvent );
+        HELIUM_ASSERT( m_hWriteReleaseEvent );
     }
 
     /// Destructor.
@@ -246,7 +246,7 @@ namespace Lunar
                 localLockCount = m_readLockCount;
             }
 
-            L_ASSERT( localLockCount != -2 );
+            HELIUM_ASSERT( localLockCount != -2 );
             currentLockCount = AtomicCompareExchangeAcquire( m_readLockCount, localLockCount + 1, localLockCount );
         } while( currentLockCount != localLockCount );
 
@@ -261,7 +261,7 @@ namespace Lunar
     /// @see LockRead(), LockWrite(), UnlockWrite()
     void ReadWriteLock::UnlockRead()
     {
-        L_ASSERT( m_readLockCount != -1 );
+        HELIUM_ASSERT( m_readLockCount != -1 );
 
         int32_t newLockCount = AtomicDecrementRelease( m_readLockCount );
         if( newLockCount == 0 )
@@ -300,7 +300,7 @@ namespace Lunar
     /// @see LockWrite(), LockRead(), UnlockRead()
     void ReadWriteLock::UnlockWrite()
     {
-        L_ASSERT( m_readLockCount == -1 );
+        HELIUM_ASSERT( m_readLockCount == -1 );
 
         AtomicExchangeRelease( m_readLockCount, 0 );
         SetEvent( m_hWriteReleaseEvent );
@@ -328,8 +328,8 @@ namespace Lunar
     /// @see Allocate()
     void ThreadLocalStorage::Free( size_t index )
     {
-        L_ASSERT( IsValid( index ) );
-        L_VERIFY( TlsFree( static_cast< DWORD >( index ) ) );
+        HELIUM_ASSERT( IsValid( index ) );
+        HELIUM_VERIFY( TlsFree( static_cast< DWORD >( index ) ) );
     }
 
     /// Get the value stored for this thread in a thread-local storage slot.
@@ -341,7 +341,7 @@ namespace Lunar
     /// @see Allocate(), Free(), Set()
     uintptr_t ThreadLocalStorage::Get( size_t index )
     {
-        L_ASSERT( IsValid( index ) );
+        HELIUM_ASSERT( IsValid( index ) );
         void* pValue = TlsGetValue( static_cast< DWORD >( index ) );
 
         return reinterpret_cast< uintptr_t >( pValue );
@@ -355,8 +355,8 @@ namespace Lunar
     /// @see Allocate(), Free(), Get()
     void ThreadLocalStorage::Set( size_t index, uintptr_t value )
     {
-        L_ASSERT( IsValid( index ) );
-        L_VERIFY( TlsSetValue( static_cast< DWORD >( index ), reinterpret_cast< void* >( value ) ) );
+        HELIUM_ASSERT( IsValid( index ) );
+        HELIUM_VERIFY( TlsSetValue( static_cast< DWORD >( index ), reinterpret_cast< void* >( value ) ) );
     }
 
     /// Constructor.

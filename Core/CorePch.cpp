@@ -20,7 +20,7 @@ namespace boost
 {
     LUNAR_CORE_API void throw_exception( const std::exception& /*rException*/ )
     {
-        L_ASSERT_MESSAGE_FALSE( TXT( "boost::throw_exception() triggered" ) );
+        HELIUM_ASSERT_MSG_FALSE( TXT( "boost::throw_exception() triggered" ) );
     }
 }
 #endif  // !L_DEBUG

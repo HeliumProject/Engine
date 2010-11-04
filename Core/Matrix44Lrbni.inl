@@ -87,7 +87,7 @@ namespace Lunar
     /// @see SetSimdVector()
     Helium::SimdVector& Matrix44::GetSimdVector( size_t index )
     {
-        L_ASSERT( index == 0 );
+        HELIUM_ASSERT( index == 0 );
 
         return m_matrix;
     }
@@ -105,7 +105,7 @@ namespace Lunar
     /// @see SetSimdVector()
     const Helium::SimdVector& Matrix44::GetSimdVector( size_t index ) const
     {
-        L_ASSERT( index == 0 );
+        HELIUM_ASSERT( index == 0 );
 
         return m_matrix;
     }
@@ -121,7 +121,7 @@ namespace Lunar
     /// @see GetSimdVector()
     void Matrix44::SetSimdVector( size_t index, const Helium::SimdVector& rVector )
     {
-        L_ASSERT( index == 0 );
+        HELIUM_ASSERT( index == 0 );
 
         m_matrix = rVector;
     }
@@ -141,7 +141,7 @@ namespace Lunar
     /// @see SetElement()
     float32_t& Matrix44::GetElement( size_t index )
     {
-        L_ASSERT( index < 16 );
+        HELIUM_ASSERT( index < 16 );
 
         return reinterpret_cast< float32_t* >( &m_matrix )[ index ];
     }
@@ -161,7 +161,7 @@ namespace Lunar
     /// @see SetElement()
     float32_t Matrix44::GetElement( size_t index ) const
     {
-        L_ASSERT( index < 16 );
+        HELIUM_ASSERT( index < 16 );
 
         return reinterpret_cast< const float32_t* >( &m_matrix )[ index ];
     }
@@ -180,7 +180,7 @@ namespace Lunar
     /// @see GetElement()
     void Matrix44::SetElement( size_t index, float32_t value )
     {
-        L_ASSERT( index < 16 );
+        HELIUM_ASSERT( index < 16 );
 
         reinterpret_cast< float32_t* >( &m_matrix )[ index ] = value;
     }

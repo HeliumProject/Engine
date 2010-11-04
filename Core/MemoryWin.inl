@@ -27,7 +27,7 @@ namespace Lunar
             SIZE_T result = VirtualQuery( pMemory, &memoryInfo, sizeof( memoryInfo ) );
             if( result != 0 )
             {
-#if L_WORDSIZE == 32
+#if HELIUM_WORDSIZE == 32
                 InterlockedExchangeAdd(
                     reinterpret_cast< LONG volatile* >( &sm_bytesAllocated ),
                     static_cast< LONG >( memoryInfo.RegionSize ) );
@@ -96,7 +96,7 @@ namespace Lunar
             size -= memoryInfo.RegionSize;
 
 #if L_ENABLE_MEMORY_TRACKING
-#if L_WORDSIZE == 32
+#if HELIUM_WORDSIZE == 32
             InterlockedExchangeAdd(
                 reinterpret_cast< LONG volatile* >( &sm_bytesAllocated ),
                 -static_cast< LONG >( memoryInfo.RegionSize ) );

@@ -913,7 +913,7 @@ namespace Lunar
             // We should never reach this point, as our previous check for when the used size reaches zero should have
             // been triggered.
             L_ASSERT_MESSAGE_FALSE(
-                L_T( "SparseArray::Remove(): Failed to find a used array slot, although at least one should exist." ) );
+                TXT( "SparseArray::Remove(): Failed to find a used array slot, although at least one should exist." ) );
 
             m_size = 0;
             m_lastUpdateIndex = 0;
@@ -1122,8 +1122,8 @@ namespace Lunar
             }
 
             L_ASSERT_MESSAGE_FALSE(
-                ( L_T( "SparseArray::AllocateSlot(): Failed to find an unused array slot, although at least one " )
-                  L_T( "should exist." ) ) );
+                ( TXT( "SparseArray::AllocateSlot(): Failed to find an unused array slot, although at least one " )
+                  TXT( "should exist." ) ) );
         }
 
         L_ASSERT( size == m_usedSize );

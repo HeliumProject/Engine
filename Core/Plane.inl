@@ -42,13 +42,13 @@ namespace Lunar
         Set( rPoint0, rPoint1, rPoint2 );
     }
 
-#if L_SIMD_SIZE == 16
+#if HELIUM_SIMD_SIZE == 16
     /// Get the contents of this plane as a SIMD vector.
     ///
     /// @return  Reference to the SIMD vector in which this plane is stored.
     ///
     /// @see SetSimdVector()
-    SimdVector& Plane::GetSimdVector()
+    Helium::SimdVector& Plane::GetSimdVector()
     {
         return m_plane;
     }
@@ -58,7 +58,7 @@ namespace Lunar
     /// @return  Constant reference to the SIMD vector in which this plane is stored.
     ///
     /// @see SetSimdVector()
-    const SimdVector& Plane::GetSimdVector() const
+    const Helium::SimdVector& Plane::GetSimdVector() const
     {
         return m_plane;
     }
@@ -68,18 +68,18 @@ namespace Lunar
     /// @param[in] rVector  SIMD vector.
     ///
     /// @see GetSimdVector()
-    void Plane::SetSimdVector( const SimdVector& rVector )
+    void Plane::SetSimdVector( const Helium::SimdVector& rVector )
     {
         m_plane = rVector;
     }
-#endif  // L_SIMD_SIZE == 16
+#endif  // HELIUM_SIMD_SIZE == 16
 
     /// Get the normal vector for this plane.
     ///
     /// @return  Plane normal vector.
     Vector3 Plane::GetNormal() const
     {
-#if L_SIMD_SIZE == 16
+#if HELIUM_SIMD_SIZE == 16
         return Vector3( m_plane );
 #else
         Vector3 result;

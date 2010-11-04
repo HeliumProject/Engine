@@ -10,19 +10,19 @@
 #define LUNAR_CORE_UTILITY_H
 
 #include "Core/Core.h"
-#include "Core/Assert.h"
-#include "Core/Types.h"
 
+#include "Platform/Types.h"
+#include "Core/Assert.h"
 #include "Core/Timer.h"
 
-#if L_CC_MSC
+#if HELIUM_CC_MSC
 #pragma warning( push )
 #pragma warning( disable : 4530 )  // C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
 #endif
 
 #include "boost/type_traits.hpp"
 
-#if L_CC_MSC
+#if HELIUM_CC_MSC
 #pragma warning( pop )
 #endif
 

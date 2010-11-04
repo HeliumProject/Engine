@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-#if L_SIMD_SSE
+#if HELIUM_SIMD_SSE
 
 namespace Lunar
 {
@@ -14,7 +14,7 @@ namespace Lunar
     /// @param[in] rPlane  Plane from which to set this plane.
     void PlaneSoa::Splat( const Plane& rPlane )
     {
-        SimdVector planeVec = rPlane.GetSimdVector();
+        Helium::SimdVector planeVec = rPlane.GetSimdVector();
         m_a = _mm_shuffle_ps( planeVec, planeVec, _MM_SHUFFLE( 0, 0, 0, 0 ) );
         m_b = _mm_shuffle_ps( planeVec, planeVec, _MM_SHUFFLE( 1, 1, 1, 1 ) );
         m_c = _mm_shuffle_ps( planeVec, planeVec, _MM_SHUFFLE( 2, 2, 2, 2 ) );
@@ -22,4 +22,4 @@ namespace Lunar
     }
 }
 
-#endif  // L_SIMD_SSE
+#endif  // HELIUM_SIMD_SSE

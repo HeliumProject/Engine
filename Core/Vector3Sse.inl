@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-#if L_SIMD_SSE
+#if HELIUM_SIMD_SSE
 
 namespace Lunar
 {
@@ -30,7 +30,7 @@ namespace Lunar
     /// Constructor.
     ///
     /// @param[in] rVector  SIMD vector to copy into this vector.
-    Vector3::Vector3( const SimdVector& rVector )
+    Vector3::Vector3( const Helium::SimdVector& rVector )
         : m_vector( rVector )
     {
     }
@@ -40,7 +40,7 @@ namespace Lunar
     /// @return  Reference to the SIMD vector in which this vector is stored.
     ///
     /// @see SetSimdVector()
-    SimdVector& Vector3::GetSimdVector()
+    Helium::SimdVector& Vector3::GetSimdVector()
     {
         return m_vector;
     }
@@ -50,7 +50,7 @@ namespace Lunar
     /// @return  Constant reference to the SIMD vector in which this vector is stored.
     ///
     /// @see SetSimdVector()
-    const SimdVector& Vector3::GetSimdVector() const
+    const Helium::SimdVector& Vector3::GetSimdVector() const
     {
         return m_vector;
     }
@@ -60,7 +60,7 @@ namespace Lunar
     /// @param[in] rVector  SIMD vector.
     ///
     /// @see GetSimdVector()
-    void Vector3::SetSimdVector( const SimdVector& rVector )
+    void Vector3::SetSimdVector( const Helium::SimdVector& rVector )
     {
         m_vector = rVector;
     }
@@ -121,7 +121,7 @@ namespace Lunar
     /// @param[in] rVector1  Second vector.
     void Vector3::AddSet( const Vector3& rVector0, const Vector3& rVector1 )
     {
-        m_vector = Simd::AddF32( rVector0.m_vector, rVector1.m_vector );
+        m_vector = Helium::Simd::AddF32( rVector0.m_vector, rVector1.m_vector );
     }
 
     /// Set this vector to the component-wise difference of two vectors.
@@ -130,7 +130,7 @@ namespace Lunar
     /// @param[in] rVector1  Second vector.
     void Vector3::SubtractSet( const Vector3& rVector0, const Vector3& rVector1 )
     {
-        m_vector = Simd::SubtractF32( rVector0.m_vector, rVector1.m_vector );
+        m_vector = Helium::Simd::SubtractF32( rVector0.m_vector, rVector1.m_vector );
     }
 
     /// Set this vector to the component-wise product of two vectors.
@@ -139,7 +139,7 @@ namespace Lunar
     /// @param[in] rVector1  Second vector.
     void Vector3::MultiplySet( const Vector3& rVector0, const Vector3& rVector1 )
     {
-        m_vector = Simd::MultiplyF32( rVector0.m_vector, rVector1.m_vector );
+        m_vector = Helium::Simd::MultiplyF32( rVector0.m_vector, rVector1.m_vector );
     }
 
     /// Set this vector to the component-wise quotient of two vectors.
@@ -148,7 +148,7 @@ namespace Lunar
     /// @param[in] rVector1  Second vector.
     void Vector3::DivideSet( const Vector3& rVector0, const Vector3& rVector1 )
     {
-        m_vector = Simd::DivideF32( rVector0.m_vector, rVector1.m_vector );
+        m_vector = Helium::Simd::DivideF32( rVector0.m_vector, rVector1.m_vector );
     }
 
     /// Set this vector to the component-wise product of two vectors, summed with the components of a third vector.
@@ -158,7 +158,7 @@ namespace Lunar
     /// @param[in] rVectorAdd   Vector to add.
     void Vector3::MultiplyAddSet( const Vector3& rVectorMul0, const Vector3& rVectorMul1, const Vector3& rVectorAdd )
     {
-        m_vector = Simd::MultiplyAddF32( rVectorMul0.m_vector, rVectorMul1.m_vector, rVectorAdd.m_vector );
+        m_vector = Helium::Simd::MultiplyAddF32( rVectorMul0.m_vector, rVectorMul1.m_vector, rVectorAdd.m_vector );
     }
 
     /// Compute the dot product of this vector and another 3-component vector.
@@ -168,11 +168,11 @@ namespace Lunar
     /// @return  Dot product.
     float32_t Vector3::Dot( const Vector3& rVector ) const
     {
-        SimdVector productX = Simd::MultiplyF32( m_vector, rVector.m_vector );
-        SimdVector productY = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 0, 3, 2, 1 ) );
-        SimdVector productZ = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 1, 0, 3, 2 ) );
+        Helium::SimdVector productX = Helium::Simd::MultiplyF32( m_vector, rVector.m_vector );
+        Helium::SimdVector productY = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 0, 3, 2, 1 ) );
+        Helium::SimdVector productZ = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 1, 0, 3, 2 ) );
 
-        SimdVector sum = Simd::AddF32( Simd::AddF32( productX, productY ), productZ );
+        Helium::SimdVector sum = Helium::Simd::AddF32( Helium::Simd::AddF32( productX, productY ), productZ );
 
         return reinterpret_cast< const float32_t* >( &sum )[ 0 ];
     }
@@ -183,17 +183,17 @@ namespace Lunar
     /// @param[in] rVector1  Second vector.
     void Vector3::CrossSet( const Vector3& rVector0, const Vector3& rVector1 )
     {
-        SimdVector vec0, vec1;
+        Helium::SimdVector vec0, vec1;
 
         vec0 = _mm_shuffle_ps( rVector0.m_vector, rVector0.m_vector, _MM_SHUFFLE( 0, 0, 2, 1 ) );
         vec1 = _mm_shuffle_ps( rVector1.m_vector, rVector1.m_vector, _MM_SHUFFLE( 0, 1, 0, 2 ) );
-        SimdVector productA = Simd::MultiplyF32( vec0, vec1 );
+        Helium::SimdVector productA = Helium::Simd::MultiplyF32( vec0, vec1 );
 
         vec0 = _mm_shuffle_ps( rVector0.m_vector, rVector0.m_vector, _MM_SHUFFLE( 0, 1, 0, 2 ) );
         vec1 = _mm_shuffle_ps( rVector1.m_vector, rVector1.m_vector, _MM_SHUFFLE( 0, 0, 2, 1 ) );
-        SimdVector productB = Simd::MultiplyF32( vec0, vec1 );
+        Helium::SimdVector productB = Helium::Simd::MultiplyF32( vec0, vec1 );
 
-        m_vector = Simd::SubtractF32( productA, productB );
+        m_vector = Helium::Simd::SubtractF32( productA, productB );
     }
 
     /// Get the magnitude of this vector.
@@ -201,11 +201,11 @@ namespace Lunar
     /// @return  Vector magnitude.
     float32_t Vector3::GetMagnitude() const
     {
-        SimdVector productX = Simd::MultiplyF32( m_vector, m_vector );
-        SimdVector productY = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 0, 3, 2, 1 ) );
-        SimdVector productZ = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 1, 0, 3, 2 ) );
+        Helium::SimdVector productX = Helium::Simd::MultiplyF32( m_vector, m_vector );
+        Helium::SimdVector productY = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 0, 3, 2, 1 ) );
+        Helium::SimdVector productZ = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 1, 0, 3, 2 ) );
 
-        SimdVector magnitude = Simd::SqrtF32( Simd::AddF32( Simd::AddF32( productX, productY ), productZ ) );
+        Helium::SimdVector magnitude = Helium::Simd::SqrtF32( Helium::Simd::AddF32( Helium::Simd::AddF32( productX, productY ), productZ ) );
 
         return reinterpret_cast< const float32_t* >( &magnitude )[ 0 ];
     }
@@ -222,26 +222,26 @@ namespace Lunar
     {
         epsilon *= epsilon;
 
-        SimdVector productX = Simd::MultiplyF32( m_vector, m_vector );
-        SimdVector productY = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 0, 3, 2, 1 ) );
-        SimdVector productZ = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 1, 0, 3, 2 ) );
+        Helium::SimdVector productX = Helium::Simd::MultiplyF32( m_vector, m_vector );
+        Helium::SimdVector productY = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 0, 3, 2, 1 ) );
+        Helium::SimdVector productZ = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 1, 0, 3, 2 ) );
 
-        SimdVector magnitudeSquared = Simd::AddF32( Simd::AddF32( productX, productY ), productZ );
+        Helium::SimdVector magnitudeSquared = Helium::Simd::AddF32( Helium::Simd::AddF32( productX, productY ), productZ );
         magnitudeSquared = _mm_shuffle_ps( magnitudeSquared, magnitudeSquared, _MM_SHUFFLE( 0, 0, 0, 0 ) );
 
-        SimdVector epsilonVec = _mm_set_ps1( epsilon );
+        Helium::SimdVector epsilonVec = _mm_set_ps1( epsilon );
 
-        SimdMask thresholdMask = Simd::LessF32( magnitudeSquared, epsilonVec );
+        Helium::SimdMask thresholdMask = Helium::Simd::LessF32( magnitudeSquared, epsilonVec );
 
-        SimdVector invMagnitude = Simd::InverseSqrtF32( magnitudeSquared );
+        Helium::SimdVector invMagnitude = Helium::Simd::InverseSqrtF32( magnitudeSquared );
 
-        SimdVector vecNormalized = Simd::MultiplyF32( m_vector, invMagnitude );
-        SimdVector vecFallback = _mm_set_ps( 0.0f, 0.0f, 0.0f, 1.0f );
+        Helium::SimdVector vecNormalized = Helium::Simd::MultiplyF32( m_vector, invMagnitude );
+        Helium::SimdVector vecFallback = _mm_set_ps( 0.0f, 0.0f, 0.0f, 1.0f );
 
-        vecNormalized = Simd::AndNot( thresholdMask, vecNormalized );
-        vecFallback = Simd::And( thresholdMask, vecFallback );
+        vecNormalized = Helium::Simd::AndNot( thresholdMask, vecNormalized );
+        vecFallback = Helium::Simd::And( thresholdMask, vecFallback );
 
-        m_vector = Simd::Or( vecNormalized, vecFallback );
+        m_vector = Helium::Simd::Or( vecNormalized, vecFallback );
     }
 
     /// Get a copy of this vector with the sign of each component flipped.
@@ -251,7 +251,7 @@ namespace Lunar
     /// @see Negate()
     void Vector3::GetNegated( Vector3& rResult ) const
     {
-        rResult.m_vector = Simd::Xor( m_vector, Simd::SetSplatU32( 0x80000000 ) );
+        rResult.m_vector = Helium::Simd::Xor( m_vector, Helium::Simd::SetSplatU32( 0x80000000 ) );
     }
 
     /// Test whether each component in this vector is equal to the corresponding component in another vector within a
@@ -265,17 +265,17 @@ namespace Lunar
     {
         epsilon *= epsilon;
 
-        SimdVector differenceSquared = Simd::SubtractF32( m_vector, rVector.m_vector );
-        differenceSquared = Simd::MultiplyF32( differenceSquared, differenceSquared );
+        Helium::SimdVector differenceSquared = Helium::Simd::SubtractF32( m_vector, rVector.m_vector );
+        differenceSquared = Helium::Simd::MultiplyF32( differenceSquared, differenceSquared );
 
-        SimdVector epsilonVec = _mm_set_ps1( epsilon );
+        Helium::SimdVector epsilonVec = _mm_set_ps1( epsilon );
 
-        SimdVector testResult = Simd::GreaterF32( differenceSquared, epsilonVec );
-        testResult = Simd::Or( testResult, _mm_shuffle_ps( testResult, testResult, _MM_SHUFFLE( 0, 3, 2, 1 ) ) );
-        testResult = Simd::Or( testResult, _mm_shuffle_ps( testResult, testResult, _MM_SHUFFLE( 1, 0, 3, 2 ) ) );
+        Helium::SimdVector testResult = Helium::Simd::GreaterF32( differenceSquared, epsilonVec );
+        testResult = Helium::Simd::Or( testResult, _mm_shuffle_ps( testResult, testResult, _MM_SHUFFLE( 0, 3, 2, 1 ) ) );
+        testResult = Helium::Simd::Or( testResult, _mm_shuffle_ps( testResult, testResult, _MM_SHUFFLE( 1, 0, 3, 2 ) ) );
 
         return ( reinterpret_cast< const uint32_t* >( &testResult )[ 0 ] == 0 );
     }
 }
 
-#endif  // L_SIMD_SSE
+#endif  // HELIUM_SIMD_SSE

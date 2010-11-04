@@ -14,22 +14,22 @@
 namespace Lunar
 {
     /// SIMD-optimized structure-of-arrays 4-component vector.
-    L_SIMD_ALIGN_PRE class LUNAR_CORE_API Vector4Soa
+    HELIUM_SIMD_ALIGN_PRE class LUNAR_CORE_API Vector4Soa
     {
     public:
         /// X components.
-        SimdVector m_x;
+        Helium::SimdVector m_x;
         /// Y components.
-        SimdVector m_y;
+        Helium::SimdVector m_y;
         /// Z components.
-        SimdVector m_z;
+        Helium::SimdVector m_z;
         /// W components.
-        SimdVector m_w;
+        Helium::SimdVector m_w;
 
         /// @name Construction/Destruction
         //@{
         inline Vector4Soa();
-        inline Vector4Soa( const SimdVector& rX, const SimdVector& rY, const SimdVector& rZ, const SimdVector& rW );
+        inline Vector4Soa( const Helium::SimdVector& rX, const Helium::SimdVector& rY, const Helium::SimdVector& rZ, const Helium::SimdVector& rW );
         inline Vector4Soa( const float32_t* pX, const float32_t* pY, const float32_t* pZ, const float32_t* pW );
         inline explicit Vector4Soa( const Vector4& rVector );
         //@}
@@ -62,16 +62,16 @@ namespace Lunar
         inline void MultiplyAddSet(
             const Vector4Soa& rVectorMul0, const Vector4Soa& rVectorMul1, const Vector4Soa& rVectorAdd );
 
-        inline Vector4Soa GetScaled( const SimdVector& rScale ) const;
-        inline void Scale( const SimdVector& rScale );
+        inline Vector4Soa GetScaled( const Helium::SimdVector& rScale ) const;
+        inline void Scale( const Helium::SimdVector& rScale );
 
-        inline SimdVector Dot( const Vector4Soa& rVector ) const;
+        inline Helium::SimdVector Dot( const Vector4Soa& rVector ) const;
 
-        inline SimdVector GetMagnitude() const;
-        inline SimdVector GetMagnitudeSquared() const;
+        inline Helium::SimdVector GetMagnitude() const;
+        inline Helium::SimdVector GetMagnitudeSquared() const;
 
-        inline Vector4Soa GetNormalized( const SimdVector& rEpsilon = Simd::EPSILON ) const;
-        inline void Normalize( const SimdVector& rEpsilon = Simd::EPSILON );
+        inline Vector4Soa GetNormalized( const Helium::SimdVector& rEpsilon = Helium::Simd::EPSILON ) const;
+        inline void Normalize( const Helium::SimdVector& rEpsilon = Helium::Simd::EPSILON );
 
         inline Vector4Soa GetNegated() const;
         inline void GetNegated( Vector4Soa& rResult ) const;
@@ -80,8 +80,8 @@ namespace Lunar
 
         /// @name Comparison
         //@{
-        inline SimdMask Equals( const Vector4Soa& rVector, const SimdVector& rEpsilon = Simd::EPSILON ) const;
-        inline SimdMask NotEquals( const Vector4Soa& rVector, const SimdVector& rEpsilon = Simd::EPSILON ) const;
+        inline Helium::SimdMask Equals( const Vector4Soa& rVector, const Helium::SimdVector& rEpsilon = Helium::Simd::EPSILON ) const;
+        inline Helium::SimdMask NotEquals( const Vector4Soa& rVector, const Helium::SimdVector& rEpsilon = Helium::Simd::EPSILON ) const;
         //@}
 
         /// @name Overloaded Operators
@@ -98,25 +98,25 @@ namespace Lunar
         inline Vector4Soa& operator*=( const Vector4Soa& rVector );
         inline Vector4Soa& operator/=( const Vector4Soa& rVector );
 
-        inline Vector4Soa operator*( const SimdVector& rScale ) const;
-        inline Vector4Soa& operator*=( const SimdVector& rScale );
+        inline Vector4Soa operator*( const Helium::SimdVector& rScale ) const;
+        inline Vector4Soa& operator*=( const Helium::SimdVector& rScale );
 
-        inline SimdMask operator==( const Vector4Soa& rVector ) const;
-        inline SimdMask operator!=( const Vector4Soa& rVector ) const;
+        inline Helium::SimdMask operator==( const Vector4Soa& rVector ) const;
+        inline Helium::SimdMask operator!=( const Vector4Soa& rVector ) const;
         //@}
 
         /// @name Friend Functions
         //@{
-        inline friend Vector4Soa operator*( const SimdVector& rScale, const Vector4Soa& rVector );
+        inline friend Vector4Soa operator*( const Helium::SimdVector& rScale, const Vector4Soa& rVector );
         //@}
-    } L_SIMD_ALIGN_POST;
+    } HELIUM_SIMD_ALIGN_POST;
 }
 
 #include "Core/Vector4Soa.inl"
 
-#if L_SIMD_LRBNI
+#if HELIUM_SIMD_LRBNI
 #include "Core/Vector4SoaLrbni.inl"
-#elif L_SIMD_SSE
+#elif HELIUM_SIMD_SSE
 #include "Core/Vector4SoaSse.inl"
 #endif
 

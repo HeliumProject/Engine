@@ -7,14 +7,14 @@
 
 #include "CorePch.h"
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 
 #include "Core/Assert.h"
 #include "Core/Atomic.h"
 
 #ifndef NDEBUG
 
-#if L_UNICODE
+#if HELIUM_UNICODE
 #define SPRINTF_S swprintf_s
 #define MESSAGE_BOX MessageBoxW
 #else
@@ -47,7 +47,7 @@ namespace Lunar
             return RESULT_BREAK;
         }
 
-#if L_UNICODE
+#if HELIUM_UNICODE
         wchar_t fileName[ MAX_PATH ];
         wchar_t functionName[ 1024 ];
 
@@ -69,7 +69,7 @@ namespace Lunar
             {
                 SPRINTF_S(
                     messageText,
-                    L_T( "Assertion failed in %s (%s, line %d): %s (%s)" ),
+                    TXT( "Assertion failed in %s (%s, line %d): %s (%s)" ),
                     functionName,
                     fileName,
                     line,
@@ -80,7 +80,7 @@ namespace Lunar
             {
                 SPRINTF_S(
                     messageText,
-                    L_T( "Assertion failed in %s (%s, line %d): %s" ),
+                    TXT( "Assertion failed in %s (%s, line %d): %s" ),
                     functionName,
                     fileName,
                     line,
@@ -93,7 +93,7 @@ namespace Lunar
             {
                 SPRINTF_S(
                     messageText,
-                    L_T( "Assertion failed in %s (%s, line %d): %s" ),
+                    TXT( "Assertion failed in %s (%s, line %d): %s" ),
                     functionName,
                     fileName,
                     line,
@@ -103,23 +103,23 @@ namespace Lunar
             {
                 SPRINTF_S(
                     messageText,
-                    L_T( "Assertion failed in %s (%s, line %d)" ),
+                    TXT( "Assertion failed in %s (%s, line %d)" ),
                     functionName,
                     fileName,
                     line );
             }
         }
 
-        L_LOG( LOG_ERROR, L_T( "%s\n" ), messageText );
+        L_LOG( LOG_ERROR, TXT( "%s\n" ), messageText );
 
         tchar_t messageBoxText[ 1024 ];
         SPRINTF_S(
             messageBoxText,
-            ( L_T( "%s\n\nChoose \"Abort\" to terminate the program, \"Retry\" to debug the program (if a debugger " )
-              L_T( "is attached), or \"Ignore\" to attempt to skip over the error." ) ),
+            ( TXT( "%s\n\nChoose \"Abort\" to terminate the program, \"Retry\" to debug the program (if a debugger " )
+              TXT( "is attached), or \"Ignore\" to attempt to skip over the error." ) ),
             messageText );
 
-        int result = MESSAGE_BOX( NULL, messageBoxText, L_T( "Assert" ), MB_ABORTRETRYIGNORE );
+        int result = MESSAGE_BOX( NULL, messageBoxText, TXT( "Assert" ), MB_ABORTRETRYIGNORE );
 
         AtomicExchangeRelease( sm_active, 0 );
 
@@ -129,4 +129,4 @@ namespace Lunar
 
 #endif  // NDEBUG
 
-#endif  // L_OS_WIN
+#endif  // HELIUM_OS_WIN

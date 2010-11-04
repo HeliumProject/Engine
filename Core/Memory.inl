@@ -66,7 +66,7 @@ namespace Lunar
     /// @return  Base address of the allocation if successful, null pointer if not.
     ///
     /// @see MemoryHeap::Allocate(), Reallocate(), Free()
-    L_FORCEINLINE void* DefaultAllocator::Allocate( size_t size )
+    HELIUM_FORCEINLINE void* DefaultAllocator::Allocate( size_t size )
     {
         return L_DEFAULT_HEAP.Allocate( size );
     }
@@ -85,7 +85,7 @@ namespace Lunar
     ///          if a valid pointer was returned or a zero-byte reallocation was requested.
     ///
     /// @see MemoryHeap::Reallocate(), Allocate(), Free()
-    L_FORCEINLINE void* DefaultAllocator::Reallocate( void* pMemory, size_t size )
+    HELIUM_FORCEINLINE void* DefaultAllocator::Reallocate( void* pMemory, size_t size )
     {
         return L_DEFAULT_HEAP.Reallocate( pMemory, size );
     }
@@ -98,7 +98,7 @@ namespace Lunar
     /// @return  Base address of the allocation if successful, null pointer if not.
     ///
     /// @see MemoryHeap::AllocateAligned(), Free()
-    L_FORCEINLINE void* DefaultAllocator::AllocateAligned( size_t alignment, size_t size )
+    HELIUM_FORCEINLINE void* DefaultAllocator::AllocateAligned( size_t alignment, size_t size )
     {
         return L_DEFAULT_HEAP.AllocateAligned( alignment, size );
     }
@@ -109,7 +109,7 @@ namespace Lunar
     ///                     performed.
     ///
     /// @see MemoryHeap::AllocateAligned(), Allocate(), Reallocate(), AllocateAligned()
-    L_FORCEINLINE void DefaultAllocator::Free( void* pMemory )
+    HELIUM_FORCEINLINE void DefaultAllocator::Free( void* pMemory )
     {
         L_DEFAULT_HEAP.Free( pMemory );
     }
@@ -119,7 +119,7 @@ namespace Lunar
     /// @param[in] pMemory  Base address of the allocation.
     ///
     /// @return  Allocation size in bytes.
-    L_FORCEINLINE size_t DefaultAllocator::GetMemorySize( void* pMemory )
+    HELIUM_FORCEINLINE size_t DefaultAllocator::GetMemorySize( void* pMemory )
     {
         return L_DEFAULT_HEAP.GetMemorySize( pMemory );
     }
@@ -185,7 +185,7 @@ namespace Lunar
     template< typename Allocator >
     void* StackMemoryHeap< Allocator >::Reallocate( void* /*pMemory*/, size_t /*size*/ )
     {
-        L_ASSERT_MESSAGE_FALSE( L_T( "Reallocate() not supported by StackMemoryHeap" ) );
+        L_ASSERT_MESSAGE_FALSE( TXT( "Reallocate() not supported by StackMemoryHeap" ) );
 
         return NULL;
     }
@@ -295,15 +295,15 @@ namespace Lunar
         }
 
         L_ASSERT_MESSAGE_FALSE(
-            L_T( "Allocation does not exist in the current stack (may have already been popped via another " )
-            L_T( "allocation)" ) );
+            TXT( "Allocation does not exist in the current stack (may have already been popped via another " )
+            TXT( "allocation)" ) );
     }
 
     // @copydoc GetMemorySize()
     template< typename Allocator >
     size_t StackMemoryHeap< Allocator >::GetMemorySize( void* /*pMemory*/ )
     {
-        L_ASSERT_MESSAGE_FALSE( L_T( "GetMemorySize() is not supported by StackMemoryHeap" ) );
+        L_ASSERT_MESSAGE_FALSE( TXT( "GetMemorySize() is not supported by StackMemoryHeap" ) );
 
         return static_cast< size_t >( -1 ); 
     }
@@ -322,7 +322,7 @@ namespace Lunar
 
         size_t alignedBufferSize = Align( m_blockSize, boost::alignment_of< Block >::value );
 
-        void* pBuffer = Allocator().AllocateAligned( L_SIMD_ALIGNMENT, alignedBufferSize + sizeof( Block ) );
+        void* pBuffer = Allocator().AllocateAligned( HELIUM_SIMD_ALIGNMENT, alignedBufferSize + sizeof( Block ) );
         L_ASSERT( pBuffer );
 
         Block* pBlock = reinterpret_cast< Block* >( static_cast< uint8_t* >( pBuffer ) + alignedBufferSize );
@@ -430,9 +430,9 @@ namespace Lunar
 
         // For allocations that may need to be SIMD-aligned, allocate aligned memory.
         void* pMemory;
-        if( sizeof( T ) >= L_SIMD_SIZE )
+        if( sizeof( T ) >= HELIUM_SIMD_SIZE )
         {
-            pMemory = rAllocator.AllocateAligned( L_SIMD_ALIGNMENT, size );
+            pMemory = rAllocator.AllocateAligned( HELIUM_SIMD_ALIGNMENT, size );
         }
         else
         {
@@ -460,14 +460,14 @@ namespace Lunar
         // Since we need to worry about destruction of the array elements, we want to allocate some extra space to store
         // the number of elements that need to be deleted.  The array count will be stored in a size_t value stored
         // immediately before the allocation pointer we return to the application.  Note that for possible SIMD-aligned
-        // types, we need to allocate an extra L_SIMD_ALIGNMENT bytes instead of just sizeof( size_t ) to keep the
+        // types, we need to allocate an extra HELIUM_SIMD_ALIGNMENT bytes instead of just sizeof( size_t ) to keep the
         // address returned to the application properly aligned.
         void* pMemory;
-        if( sizeof( T ) >= L_SIMD_SIZE )
+        if( sizeof( T ) >= HELIUM_SIMD_SIZE )
         {
-            allocationOffset = L_SIMD_ALIGNMENT;
+            allocationOffset = HELIUM_SIMD_ALIGNMENT;
             L_ASSERT( allocationOffset >= sizeof( size_t ) );
-            pMemory = rAllocator.AllocateAligned( L_SIMD_ALIGNMENT, size + L_SIMD_ALIGNMENT );
+            pMemory = rAllocator.AllocateAligned( HELIUM_SIMD_ALIGNMENT, size + HELIUM_SIMD_ALIGNMENT );
         }
         else
         {
@@ -528,9 +528,9 @@ namespace Lunar
 
             // Free the actual allocation, taking into account the offset applied by NewArrayHelper().
             size_t allocationOffset = sizeof( size_t );
-            if( sizeof( T ) >= L_SIMD_SIZE )
+            if( sizeof( T ) >= HELIUM_SIMD_SIZE )
             {
-                allocationOffset = L_SIMD_ALIGNMENT;
+                allocationOffset = HELIUM_SIMD_ALIGNMENT;
             }
 
             void* pMemory = reinterpret_cast< uint8_t* >( pArray ) - allocationOffset;
@@ -553,9 +553,9 @@ namespace Lunar
     {
         L_ASSERT( size != 0 );
 
-        if( size >= L_SIMD_SIZE )
+        if( size >= HELIUM_SIMD_SIZE )
         {
-            return rAllocator.AllocateAligned( L_SIMD_ALIGNMENT, size );
+            return rAllocator.AllocateAligned( HELIUM_SIMD_ALIGNMENT, size );
         }
 
         return rAllocator.Allocate( size );
@@ -563,7 +563,7 @@ namespace Lunar
 }
 
 #if !L_DEBUG
-#define L_NEW_DELETE_SPEC L_FORCEINLINE
+#define L_NEW_DELETE_SPEC HELIUM_FORCEINLINE
 #include "Core/NewDelete.h"
 #undef L_NEW_DELETE_SPEC
 #endif

@@ -7,7 +7,7 @@
 
 #include "CorePch.h"
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 
 #include "Core/DirectoryIteratorWin.h"
 
@@ -31,14 +31,14 @@ namespace Lunar
             pDirectoryPath[ directoryLength - 1 ] != L_PATH_SEPARATOR_CHAR &&
             pDirectoryPath[ directoryLength - 1 ] != L_ALT_PATH_SEPARATOR_CHAR )
         {
-            const tchar_t wildcardSuffix[] = L_T( "\\*.*" );
+            const tchar_t wildcardSuffix[] = TXT( "\\*.*" );
 
             pWildcardSuffix = wildcardSuffix;
             wildcardSuffixSize = sizeof( wildcardSuffix );
         }
         else
         {
-            const tchar_t wildcardSuffix[] = L_T( "*.*" );
+            const tchar_t wildcardSuffix[] = TXT( "*.*" );
 
             pWildcardSuffix = wildcardSuffix;
             wildcardSuffixSize = sizeof( wildcardSuffix );
@@ -103,9 +103,9 @@ namespace Lunar
             }
 
             // Skip over "." and "..".
-            if( m_findFileData.cFileName[ 0 ] != L_T( '.' ) ||
-                ( m_findFileData.cFileName[ 1 ] != L_T( '\0' ) &&
-                  ( m_findFileData.cFileName[ 1 ] != L_T( '.' ) || m_findFileData.cFileName[ 2 ] != L_T( '\0' ) ) ) )
+            if( m_findFileData.cFileName[ 0 ] != TXT( '.' ) ||
+                ( m_findFileData.cFileName[ 1 ] != TXT( '\0' ) &&
+                  ( m_findFileData.cFileName[ 1 ] != TXT( '.' ) || m_findFileData.cFileName[ 2 ] != TXT( '\0' ) ) ) )
             {
                 return true;
             }
@@ -113,4 +113,4 @@ namespace Lunar
     }
 }
 
-#endif  // L_OS_WIN
+#endif  // HELIUM_OS_WIN

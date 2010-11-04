@@ -7,7 +7,7 @@
 
 #include "CorePch.h"
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 
 #include "Core/File.h"
 
@@ -17,14 +17,14 @@
 
 #include <ShlObj.h>
 
-#if L_UNICODE
+#if HELIUM_UNICODE
 #define _GET_FILE_ATTRIBUTES_EX GetFileAttributesExW
 #else
 #define _GET_FILE_ATTRIBUTES_EX GetFileAttributesExA
 #endif
 
 // Default user data directory (if the application name is not set).
-#define L_DEFAULT_USER_DATA_DIRECTORY L_T( "Lunar" )
+#define L_DEFAULT_USER_DATA_DIRECTORY TXT( "Lunar" )
 
 namespace Lunar
 {
@@ -45,7 +45,7 @@ namespace Lunar
             L_ASSERT( result < L_ARRAY_COUNT( pathBuffer ) );
             L_UNREF( result );
 
-            pathBuffer[ L_ARRAY_COUNT( pathBuffer ) - 1 ] = L_T( '\0' );
+            pathBuffer[ L_ARRAY_COUNT( pathBuffer ) - 1 ] = TXT( '\0' );
 
             baseDirectory = pathBuffer;
             if( baseDirectory.IsEmpty() )
@@ -122,7 +122,7 @@ namespace Lunar
             }
 
             // Append the "Data" directory, with trailing path separator.
-            Path::Combine( dataDirectory, dataDirectory, String( L_T( "Data\\" ) ) );
+            Path::Combine( dataDirectory, dataDirectory, String( TXT( "Data\\" ) ) );
             if( !File::Exists( dataDirectory ) )
             {
                 dataDirectory.Clear();
@@ -155,7 +155,7 @@ namespace Lunar
                 return userDataDirectory;
             }
 
-            pathBuffer[ L_ARRAY_COUNT( pathBuffer ) - 1 ] = L_T( '\0' );
+            pathBuffer[ L_ARRAY_COUNT( pathBuffer ) - 1 ] = TXT( '\0' );
             userDataDirectory = pathBuffer;
 
             String subDirectory = AppInfo::GetName();
@@ -164,7 +164,7 @@ namespace Lunar
                 subDirectory = L_DEFAULT_USER_DATA_DIRECTORY;
             }
 
-            subDirectory += L_T( '\\' );
+            subDirectory += TXT( '\\' );
 
             Path::Combine( userDataDirectory, userDataDirectory, subDirectory );
             File::EDirectoryCreateResult createResult = File::CreateDirectory( userDataDirectory, true );
@@ -356,4 +356,4 @@ namespace Lunar
     }
 }
 
-#endif  // L_OS_WIN
+#endif  // HELIUM_OS_WIN

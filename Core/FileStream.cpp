@@ -38,7 +38,7 @@ namespace Lunar
         // Verify that at least one mode flag is given.
         if( !( modeFlags & ( MODE_READ | MODE_WRITE ) ) )
         {
-            L_ASSERT_MESSAGE_FALSE( L_T( "At least one FileStream::EMode flag must be set" ) );
+            L_ASSERT_MESSAGE_FALSE( TXT( "At least one FileStream::EMode flag must be set" ) );
             return false;
         }
 

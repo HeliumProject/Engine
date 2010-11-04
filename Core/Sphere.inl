@@ -59,13 +59,13 @@ namespace Lunar
         Set( rBox );
     }
 
-#if L_SIMD_SIZE == 16
+#if HELIUM_SIMD_SIZE == 16
     /// Constructor.
     ///
     /// This directly initializes the internal SIMD vector with the specified vector value.
     ///
     /// @param[in] rVector  SIMD vector from which to initialize.
-    Sphere::Sphere( const SimdVector& rVector )
+    Sphere::Sphere( const Helium::SimdVector& rVector )
     {
         m_centerRadius = rVector;
     }
@@ -75,7 +75,7 @@ namespace Lunar
     /// @return  Reference to the SIMD vector in which this sphere is stored.
     ///
     /// @see SetSimdVector()
-    SimdVector& Sphere::GetSimdVector()
+    Helium::SimdVector& Sphere::GetSimdVector()
     {
         return m_centerRadius;
     }
@@ -85,7 +85,7 @@ namespace Lunar
     /// @return  Constant reference to the SIMD vector in which this sphere is stored.
     ///
     /// @see SetSimdVector()
-    const SimdVector& Sphere::GetSimdVector() const
+    const Helium::SimdVector& Sphere::GetSimdVector() const
     {
         return m_centerRadius;
     }
@@ -95,9 +95,9 @@ namespace Lunar
     /// @param[in] rVector  SIMD vector.
     ///
     /// @see GetSimdVector()
-    void Sphere::SetSimdVector( const SimdVector& rVector )
+    void Sphere::SetSimdVector( const Helium::SimdVector& rVector )
     {
         m_centerRadius = rVector;
     }
-#endif  // L_SIMD_SIZE == 16
+#endif  // HELIUM_SIMD_SIZE == 16
 }

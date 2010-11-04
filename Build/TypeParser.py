@@ -101,13 +101,13 @@ static Lunar::StrongPtr< Lunar::Package > sp{MODULE}TypePackage;
 sourceFormatString2Engine = \
 '''        L_VERIFY( Lunar::Object::InitStaticType() );
 
-        Lunar::Object* pTypesPackageObject = Lunar::Object::FindChildOf( NULL, Lunar::Name( L_T( "Types" ) ) );
+        Lunar::Object* pTypesPackageObject = Lunar::Object::FindChildOf( NULL, Lunar::Name( TXT( "Types" ) ) );
         L_ASSERT( pTypesPackageObject );
         L_ASSERT( pTypesPackageObject->IsPackage() );
 
         Lunar::Object* pPackageObject = Lunar::Object::FindChildOf(
             pTypesPackageObject,
-            Lunar::Name( L_T( "{MODULE}" ) ) );
+            Lunar::Name( TXT( "{MODULE}" ) ) );
         L_ASSERT( pPackageObject );
         L_ASSERT( pPackageObject->IsPackage() );
 
@@ -115,11 +115,11 @@ sourceFormatString2Engine = \
 '''
 
 sourceFormatString2Default = \
-'''        Lunar::Object* pTypesPackageObject = Lunar::Object::FindChildOf( NULL, Lunar::Name( L_T( "Types" ) ) );
+'''        Lunar::Object* pTypesPackageObject = Lunar::Object::FindChildOf( NULL, Lunar::Name( TXT( "Types" ) ) );
         L_ASSERT( pTypesPackageObject );
         L_ASSERT( pTypesPackageObject->IsPackage() );
 
-        pPackage = Lunar::Object::Create< Lunar::Package >( Lunar::Name( L_T( "{MODULE}" ) ), pTypesPackageObject );
+        pPackage = Lunar::Object::Create< Lunar::Package >( Lunar::Name( TXT( "{MODULE}" ) ), pTypesPackageObject );
         L_ASSERT( pPackage );
 '''
 

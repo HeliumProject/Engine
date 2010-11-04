@@ -274,7 +274,7 @@ namespace Lunar
     /// @see MemoryMove(), ArrayCopy()
     void MemoryCopy( void* pDest, const void* pSource, size_t size )
     {
-#if L_CC_MSC
+#if HELIUM_CC_MSC
         memcpy_s( pDest, size, pSource, size );
 #else
         memcpy( pDest, pSource, size );
@@ -290,7 +290,7 @@ namespace Lunar
     /// @see MemoryCopy(), ArrayMove()
     void MemoryMove( void* pDest, const void* pSource, size_t size )
     {
-#if L_CC_MSC
+#if HELIUM_CC_MSC
         memmove_s( pDest, size, pSource, size );
 #else
         memmove( pDest, pSource, size );
@@ -633,7 +633,7 @@ namespace Lunar
         return result;
     }
 
-#if L_CC_MSC
+#if HELIUM_CC_MSC
 // We don't use the secure CRT versions of vsnprintf() and _vsnwprintf() here since we can't use them to compute the
 // size that would be needed for a format string if it doesn't fit (vsnprintf_s() and _vsnwprintf_s() simply return -1
 // if the string doesn't fit, even if _TRUNCATE is specified for the character count).
@@ -679,7 +679,7 @@ namespace Lunar
         int result = _vsnwprintf( pBuffer, bufferSize, pFormat, argList );
         return result;
     }
-#if L_CC_MSC
+#if HELIUM_CC_MSC
 #pragma warning( pop )
 #endif
 

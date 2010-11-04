@@ -28,7 +28,7 @@ namespace Lunar
     {
         L_ASSERT( pSourceString );
 
-#if L_CC_MSC
+#if HELIUM_CC_MSC
         size_t charactersConverted = 0;
         errno_t result = mbstowcs_s(
             &charactersConverted,
@@ -158,7 +158,7 @@ namespace Lunar
     {
         L_ASSERT( pSourceString );
 
-#if L_CC_MSC
+#if HELIUM_CC_MSC
         size_t charactersConverted = 0;
         errno_t result = wcstombs_s(
             &charactersConverted,

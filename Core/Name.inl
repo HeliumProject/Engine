@@ -71,7 +71,7 @@ namespace Lunar
     void NameBase< TableType >::Set( const CharType* pString )
     {
         // Check for empty strings first.
-        if( !pString || pString[ 0 ] == L_T( '\0' ) )
+        if( !pString || pString[ 0 ] == TXT( '\0' ) )
         {
             m_pEntry = NULL;
 
@@ -172,7 +172,7 @@ namespace Lunar
     template< typename TableType >
     void NameBase< TableType >::Shutdown()
     {
-        L_LOG( LOG_INFO, L_T( "Shutting down Name table.\n" ) );
+        L_LOG( LOG_INFO, TXT( "Shutting down Name table.\n" ) );
 
         delete [] TableType::sm_pTable;
         TableType::sm_pTable = NULL;
@@ -180,7 +180,7 @@ namespace Lunar
         delete TableType::sm_pNameMemoryHeap;
         TableType::sm_pNameMemoryHeap = NULL;
 
-        L_LOG( LOG_INFO, L_T( "Name table shutdown complete.\n" ) );
+        L_LOG( LOG_INFO, TXT( "Name table shutdown complete.\n" ) );
     }
 
     /// Find an existing string in this table.

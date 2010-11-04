@@ -7,7 +7,7 @@
 
 #include "CorePch.h"
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 
 #include "Core/Timer.h"
 
@@ -32,4 +32,4 @@ namespace Lunar
     }
 }
 
-#endif  // L_OS_WIN
+#endif  // HELIUM_OS_WIN

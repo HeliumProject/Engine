@@ -33,22 +33,22 @@ namespace Lunar
     /// @param[in] rTranslateZ  Translation, z components.
     /// @param[in] rTranslateW  Translation, w components.
     Matrix44Soa::Matrix44Soa(
-        const SimdVector& rXAxisX,
-        const SimdVector& rXAxisY,
-        const SimdVector& rXAxisZ,
-        const SimdVector& rXAxisW,
-        const SimdVector& rYAxisX,
-        const SimdVector& rYAxisY,
-        const SimdVector& rYAxisZ,
-        const SimdVector& rYAxisW,
-        const SimdVector& rZAxisX,
-        const SimdVector& rZAxisY,
-        const SimdVector& rZAxisZ,
-        const SimdVector& rZAxisW,
-        const SimdVector& rTranslateX,
-        const SimdVector& rTranslateY,
-        const SimdVector& rTranslateZ,
-        const SimdVector& rTranslateW )
+        const Helium::SimdVector& rXAxisX,
+        const Helium::SimdVector& rXAxisY,
+        const Helium::SimdVector& rXAxisZ,
+        const Helium::SimdVector& rXAxisW,
+        const Helium::SimdVector& rYAxisX,
+        const Helium::SimdVector& rYAxisY,
+        const Helium::SimdVector& rYAxisZ,
+        const Helium::SimdVector& rYAxisW,
+        const Helium::SimdVector& rZAxisX,
+        const Helium::SimdVector& rZAxisY,
+        const Helium::SimdVector& rZAxisZ,
+        const Helium::SimdVector& rZAxisW,
+        const Helium::SimdVector& rTranslateX,
+        const Helium::SimdVector& rTranslateY,
+        const Helium::SimdVector& rTranslateZ,
+        const Helium::SimdVector& rTranslateW )
     {
         m_matrix[ 0 ][ 0 ] = rXAxisX;
         m_matrix[ 0 ][ 1 ] = rXAxisY;
@@ -135,7 +135,7 @@ namespace Lunar
     /// Initializes to a uniform scaling matrix.
     ///
     /// @param[in] rScaling  Scaling factor.
-    Matrix44Soa::Matrix44Soa( EInitScaling, const SimdVector& rScaling )
+    Matrix44Soa::Matrix44Soa( EInitScaling, const Helium::SimdVector& rScaling )
     {
         SetScaling( rScaling );
     }
@@ -185,7 +185,7 @@ namespace Lunar
         EInitRotationTranslationScaling,
         const QuatSoa& rRotation,
         const Vector3Soa& rTranslation,
-        const SimdVector& rScaling )
+        const Helium::SimdVector& rScaling )
     {
         SetRotationTranslationScaling( rRotation, rTranslation, rScaling );
     }
@@ -203,7 +203,7 @@ namespace Lunar
         EInitRotationTranslationScaling,
         const QuatSoa& rRotation,
         const Vector4Soa& rTranslation,
-        const SimdVector& rScaling )
+        const Helium::SimdVector& rScaling )
     {
         SetRotationTranslationScaling( rRotation, rTranslation, rScaling );
     }
@@ -345,22 +345,22 @@ namespace Lunar
         const float32_t* pTranslateZ,
         const float32_t* pTranslateW )
     {
-        m_matrix[ 0 ][ 0 ] = Simd::LoadAligned( pXAxisX );
-        m_matrix[ 0 ][ 1 ] = Simd::LoadAligned( pXAxisY );
-        m_matrix[ 0 ][ 2 ] = Simd::LoadAligned( pXAxisZ );
-        m_matrix[ 0 ][ 3 ] = Simd::LoadAligned( pXAxisW );
-        m_matrix[ 1 ][ 0 ] = Simd::LoadAligned( pYAxisX );
-        m_matrix[ 1 ][ 1 ] = Simd::LoadAligned( pYAxisY );
-        m_matrix[ 1 ][ 2 ] = Simd::LoadAligned( pYAxisZ );
-        m_matrix[ 1 ][ 3 ] = Simd::LoadAligned( pYAxisW );
-        m_matrix[ 2 ][ 0 ] = Simd::LoadAligned( pZAxisX );
-        m_matrix[ 2 ][ 1 ] = Simd::LoadAligned( pZAxisY );
-        m_matrix[ 2 ][ 2 ] = Simd::LoadAligned( pZAxisZ );
-        m_matrix[ 2 ][ 3 ] = Simd::LoadAligned( pZAxisW );
-        m_matrix[ 3 ][ 0 ] = Simd::LoadAligned( pTranslateX );
-        m_matrix[ 3 ][ 1 ] = Simd::LoadAligned( pTranslateY );
-        m_matrix[ 3 ][ 2 ] = Simd::LoadAligned( pTranslateZ );
-        m_matrix[ 3 ][ 3 ] = Simd::LoadAligned( pTranslateW );
+        m_matrix[ 0 ][ 0 ] = Helium::Simd::LoadAligned( pXAxisX );
+        m_matrix[ 0 ][ 1 ] = Helium::Simd::LoadAligned( pXAxisY );
+        m_matrix[ 0 ][ 2 ] = Helium::Simd::LoadAligned( pXAxisZ );
+        m_matrix[ 0 ][ 3 ] = Helium::Simd::LoadAligned( pXAxisW );
+        m_matrix[ 1 ][ 0 ] = Helium::Simd::LoadAligned( pYAxisX );
+        m_matrix[ 1 ][ 1 ] = Helium::Simd::LoadAligned( pYAxisY );
+        m_matrix[ 1 ][ 2 ] = Helium::Simd::LoadAligned( pYAxisZ );
+        m_matrix[ 1 ][ 3 ] = Helium::Simd::LoadAligned( pYAxisW );
+        m_matrix[ 2 ][ 0 ] = Helium::Simd::LoadAligned( pZAxisX );
+        m_matrix[ 2 ][ 1 ] = Helium::Simd::LoadAligned( pZAxisY );
+        m_matrix[ 2 ][ 2 ] = Helium::Simd::LoadAligned( pZAxisZ );
+        m_matrix[ 2 ][ 3 ] = Helium::Simd::LoadAligned( pZAxisW );
+        m_matrix[ 3 ][ 0 ] = Helium::Simd::LoadAligned( pTranslateX );
+        m_matrix[ 3 ][ 1 ] = Helium::Simd::LoadAligned( pTranslateY );
+        m_matrix[ 3 ][ 2 ] = Helium::Simd::LoadAligned( pTranslateZ );
+        m_matrix[ 3 ][ 3 ] = Helium::Simd::LoadAligned( pTranslateW );
     }
 
     /// Load 4 single-precision floating-point values for each matrix component, splatting the values to fill.
@@ -402,22 +402,22 @@ namespace Lunar
         const float32_t* pTranslateZ,
         const float32_t* pTranslateW )
     {
-        m_matrix[ 0 ][ 0 ] = Simd::LoadSplat128( pXAxisX );
-        m_matrix[ 0 ][ 1 ] = Simd::LoadSplat128( pXAxisY );
-        m_matrix[ 0 ][ 2 ] = Simd::LoadSplat128( pXAxisZ );
-        m_matrix[ 0 ][ 3 ] = Simd::LoadSplat128( pXAxisW );
-        m_matrix[ 1 ][ 0 ] = Simd::LoadSplat128( pYAxisX );
-        m_matrix[ 1 ][ 1 ] = Simd::LoadSplat128( pYAxisY );
-        m_matrix[ 1 ][ 2 ] = Simd::LoadSplat128( pYAxisZ );
-        m_matrix[ 1 ][ 3 ] = Simd::LoadSplat128( pYAxisW );
-        m_matrix[ 2 ][ 0 ] = Simd::LoadSplat128( pZAxisX );
-        m_matrix[ 2 ][ 1 ] = Simd::LoadSplat128( pZAxisY );
-        m_matrix[ 2 ][ 2 ] = Simd::LoadSplat128( pZAxisZ );
-        m_matrix[ 2 ][ 3 ] = Simd::LoadSplat128( pZAxisW );
-        m_matrix[ 3 ][ 0 ] = Simd::LoadSplat128( pTranslateX );
-        m_matrix[ 3 ][ 1 ] = Simd::LoadSplat128( pTranslateY );
-        m_matrix[ 3 ][ 2 ] = Simd::LoadSplat128( pTranslateZ );
-        m_matrix[ 3 ][ 3 ] = Simd::LoadSplat128( pTranslateW );
+        m_matrix[ 0 ][ 0 ] = Helium::Simd::LoadSplat128( pXAxisX );
+        m_matrix[ 0 ][ 1 ] = Helium::Simd::LoadSplat128( pXAxisY );
+        m_matrix[ 0 ][ 2 ] = Helium::Simd::LoadSplat128( pXAxisZ );
+        m_matrix[ 0 ][ 3 ] = Helium::Simd::LoadSplat128( pXAxisW );
+        m_matrix[ 1 ][ 0 ] = Helium::Simd::LoadSplat128( pYAxisX );
+        m_matrix[ 1 ][ 1 ] = Helium::Simd::LoadSplat128( pYAxisY );
+        m_matrix[ 1 ][ 2 ] = Helium::Simd::LoadSplat128( pYAxisZ );
+        m_matrix[ 1 ][ 3 ] = Helium::Simd::LoadSplat128( pYAxisW );
+        m_matrix[ 2 ][ 0 ] = Helium::Simd::LoadSplat128( pZAxisX );
+        m_matrix[ 2 ][ 1 ] = Helium::Simd::LoadSplat128( pZAxisY );
+        m_matrix[ 2 ][ 2 ] = Helium::Simd::LoadSplat128( pZAxisZ );
+        m_matrix[ 2 ][ 3 ] = Helium::Simd::LoadSplat128( pZAxisW );
+        m_matrix[ 3 ][ 0 ] = Helium::Simd::LoadSplat128( pTranslateX );
+        m_matrix[ 3 ][ 1 ] = Helium::Simd::LoadSplat128( pTranslateY );
+        m_matrix[ 3 ][ 2 ] = Helium::Simd::LoadSplat128( pTranslateZ );
+        m_matrix[ 3 ][ 3 ] = Helium::Simd::LoadSplat128( pTranslateW );
     }
 
     /// Load 1 single-precision floating-point value for each matrix component, splatting the value to fill.
@@ -456,22 +456,22 @@ namespace Lunar
         const float32_t* pTranslateZ,
         const float32_t* pTranslateW )
     {
-        m_matrix[ 0 ][ 0 ] = Simd::LoadSplat32( pXAxisX );
-        m_matrix[ 0 ][ 1 ] = Simd::LoadSplat32( pXAxisY );
-        m_matrix[ 0 ][ 2 ] = Simd::LoadSplat32( pXAxisZ );
-        m_matrix[ 0 ][ 3 ] = Simd::LoadSplat32( pXAxisW );
-        m_matrix[ 1 ][ 0 ] = Simd::LoadSplat32( pYAxisX );
-        m_matrix[ 1 ][ 1 ] = Simd::LoadSplat32( pYAxisY );
-        m_matrix[ 1 ][ 2 ] = Simd::LoadSplat32( pYAxisZ );
-        m_matrix[ 1 ][ 3 ] = Simd::LoadSplat32( pYAxisW );
-        m_matrix[ 2 ][ 0 ] = Simd::LoadSplat32( pZAxisX );
-        m_matrix[ 2 ][ 1 ] = Simd::LoadSplat32( pZAxisY );
-        m_matrix[ 2 ][ 2 ] = Simd::LoadSplat32( pZAxisZ );
-        m_matrix[ 2 ][ 3 ] = Simd::LoadSplat32( pZAxisW );
-        m_matrix[ 3 ][ 0 ] = Simd::LoadSplat32( pTranslateX );
-        m_matrix[ 3 ][ 1 ] = Simd::LoadSplat32( pTranslateY );
-        m_matrix[ 3 ][ 2 ] = Simd::LoadSplat32( pTranslateZ );
-        m_matrix[ 3 ][ 3 ] = Simd::LoadSplat32( pTranslateW );
+        m_matrix[ 0 ][ 0 ] = Helium::Simd::LoadSplat32( pXAxisX );
+        m_matrix[ 0 ][ 1 ] = Helium::Simd::LoadSplat32( pXAxisY );
+        m_matrix[ 0 ][ 2 ] = Helium::Simd::LoadSplat32( pXAxisZ );
+        m_matrix[ 0 ][ 3 ] = Helium::Simd::LoadSplat32( pXAxisW );
+        m_matrix[ 1 ][ 0 ] = Helium::Simd::LoadSplat32( pYAxisX );
+        m_matrix[ 1 ][ 1 ] = Helium::Simd::LoadSplat32( pYAxisY );
+        m_matrix[ 1 ][ 2 ] = Helium::Simd::LoadSplat32( pYAxisZ );
+        m_matrix[ 1 ][ 3 ] = Helium::Simd::LoadSplat32( pYAxisW );
+        m_matrix[ 2 ][ 0 ] = Helium::Simd::LoadSplat32( pZAxisX );
+        m_matrix[ 2 ][ 1 ] = Helium::Simd::LoadSplat32( pZAxisY );
+        m_matrix[ 2 ][ 2 ] = Helium::Simd::LoadSplat32( pZAxisZ );
+        m_matrix[ 2 ][ 3 ] = Helium::Simd::LoadSplat32( pZAxisW );
+        m_matrix[ 3 ][ 0 ] = Helium::Simd::LoadSplat32( pTranslateX );
+        m_matrix[ 3 ][ 1 ] = Helium::Simd::LoadSplat32( pTranslateY );
+        m_matrix[ 3 ][ 2 ] = Helium::Simd::LoadSplat32( pTranslateZ );
+        m_matrix[ 3 ][ 3 ] = Helium::Simd::LoadSplat32( pTranslateW );
     }
 
     /// Fully store the SIMD vectors from each matrix component into memory.
@@ -510,22 +510,22 @@ namespace Lunar
         float32_t* pTranslateZ,
         float32_t* pTranslateW ) const
     {
-        Simd::StoreAligned( pXAxisX, m_matrix[ 0 ][ 0 ] );
-        Simd::StoreAligned( pXAxisY, m_matrix[ 0 ][ 1 ] );
-        Simd::StoreAligned( pXAxisZ, m_matrix[ 0 ][ 2 ] );
-        Simd::StoreAligned( pXAxisW, m_matrix[ 0 ][ 3 ] );
-        Simd::StoreAligned( pYAxisX, m_matrix[ 1 ][ 0 ] );
-        Simd::StoreAligned( pYAxisY, m_matrix[ 1 ][ 1 ] );
-        Simd::StoreAligned( pYAxisZ, m_matrix[ 1 ][ 2 ] );
-        Simd::StoreAligned( pYAxisW, m_matrix[ 1 ][ 3 ] );
-        Simd::StoreAligned( pZAxisX, m_matrix[ 2 ][ 0 ] );
-        Simd::StoreAligned( pZAxisY, m_matrix[ 2 ][ 1 ] );
-        Simd::StoreAligned( pZAxisZ, m_matrix[ 2 ][ 2 ] );
-        Simd::StoreAligned( pZAxisW, m_matrix[ 2 ][ 3 ] );
-        Simd::StoreAligned( pTranslateX, m_matrix[ 3 ][ 0 ] );
-        Simd::StoreAligned( pTranslateY, m_matrix[ 3 ][ 1 ] );
-        Simd::StoreAligned( pTranslateZ, m_matrix[ 3 ][ 2 ] );
-        Simd::StoreAligned( pTranslateW, m_matrix[ 3 ][ 3 ] );
+        Helium::Simd::StoreAligned( pXAxisX, m_matrix[ 0 ][ 0 ] );
+        Helium::Simd::StoreAligned( pXAxisY, m_matrix[ 0 ][ 1 ] );
+        Helium::Simd::StoreAligned( pXAxisZ, m_matrix[ 0 ][ 2 ] );
+        Helium::Simd::StoreAligned( pXAxisW, m_matrix[ 0 ][ 3 ] );
+        Helium::Simd::StoreAligned( pYAxisX, m_matrix[ 1 ][ 0 ] );
+        Helium::Simd::StoreAligned( pYAxisY, m_matrix[ 1 ][ 1 ] );
+        Helium::Simd::StoreAligned( pYAxisZ, m_matrix[ 1 ][ 2 ] );
+        Helium::Simd::StoreAligned( pYAxisW, m_matrix[ 1 ][ 3 ] );
+        Helium::Simd::StoreAligned( pZAxisX, m_matrix[ 2 ][ 0 ] );
+        Helium::Simd::StoreAligned( pZAxisY, m_matrix[ 2 ][ 1 ] );
+        Helium::Simd::StoreAligned( pZAxisZ, m_matrix[ 2 ][ 2 ] );
+        Helium::Simd::StoreAligned( pZAxisW, m_matrix[ 2 ][ 3 ] );
+        Helium::Simd::StoreAligned( pTranslateX, m_matrix[ 3 ][ 0 ] );
+        Helium::Simd::StoreAligned( pTranslateY, m_matrix[ 3 ][ 1 ] );
+        Helium::Simd::StoreAligned( pTranslateZ, m_matrix[ 3 ][ 2 ] );
+        Helium::Simd::StoreAligned( pTranslateW, m_matrix[ 3 ][ 3 ] );
     }
 
     /// Store the lowest 4 single-precision floating-point values from each matrix component into memory.
@@ -567,22 +567,22 @@ namespace Lunar
         float32_t* pTranslateZ,
         float32_t* pTranslateW ) const
     {
-        Simd::Store128( pXAxisX, m_matrix[ 0 ][ 0 ] );
-        Simd::Store128( pXAxisY, m_matrix[ 0 ][ 1 ] );
-        Simd::Store128( pXAxisZ, m_matrix[ 0 ][ 2 ] );
-        Simd::Store128( pXAxisW, m_matrix[ 0 ][ 3 ] );
-        Simd::Store128( pYAxisX, m_matrix[ 1 ][ 0 ] );
-        Simd::Store128( pYAxisY, m_matrix[ 1 ][ 1 ] );
-        Simd::Store128( pYAxisZ, m_matrix[ 1 ][ 2 ] );
-        Simd::Store128( pYAxisW, m_matrix[ 1 ][ 3 ] );
-        Simd::Store128( pZAxisX, m_matrix[ 2 ][ 0 ] );
-        Simd::Store128( pZAxisY, m_matrix[ 2 ][ 1 ] );
-        Simd::Store128( pZAxisZ, m_matrix[ 2 ][ 2 ] );
-        Simd::Store128( pZAxisW, m_matrix[ 2 ][ 3 ] );
-        Simd::Store128( pTranslateX, m_matrix[ 3 ][ 0 ] );
-        Simd::Store128( pTranslateY, m_matrix[ 3 ][ 1 ] );
-        Simd::Store128( pTranslateZ, m_matrix[ 3 ][ 2 ] );
-        Simd::Store128( pTranslateW, m_matrix[ 3 ][ 3 ] );
+        Helium::Simd::Store128( pXAxisX, m_matrix[ 0 ][ 0 ] );
+        Helium::Simd::Store128( pXAxisY, m_matrix[ 0 ][ 1 ] );
+        Helium::Simd::Store128( pXAxisZ, m_matrix[ 0 ][ 2 ] );
+        Helium::Simd::Store128( pXAxisW, m_matrix[ 0 ][ 3 ] );
+        Helium::Simd::Store128( pYAxisX, m_matrix[ 1 ][ 0 ] );
+        Helium::Simd::Store128( pYAxisY, m_matrix[ 1 ][ 1 ] );
+        Helium::Simd::Store128( pYAxisZ, m_matrix[ 1 ][ 2 ] );
+        Helium::Simd::Store128( pYAxisW, m_matrix[ 1 ][ 3 ] );
+        Helium::Simd::Store128( pZAxisX, m_matrix[ 2 ][ 0 ] );
+        Helium::Simd::Store128( pZAxisY, m_matrix[ 2 ][ 1 ] );
+        Helium::Simd::Store128( pZAxisZ, m_matrix[ 2 ][ 2 ] );
+        Helium::Simd::Store128( pZAxisW, m_matrix[ 2 ][ 3 ] );
+        Helium::Simd::Store128( pTranslateX, m_matrix[ 3 ][ 0 ] );
+        Helium::Simd::Store128( pTranslateY, m_matrix[ 3 ][ 1 ] );
+        Helium::Simd::Store128( pTranslateZ, m_matrix[ 3 ][ 2 ] );
+        Helium::Simd::Store128( pTranslateW, m_matrix[ 3 ][ 3 ] );
     }
 
     /// Store the lowest single-precision floating-point value from each matrix component into memory.
@@ -621,22 +621,22 @@ namespace Lunar
         float32_t* pTranslateZ,
         float32_t* pTranslateW ) const
     {
-        Simd::Store32( pXAxisX, m_matrix[ 0 ][ 0 ] );
-        Simd::Store32( pXAxisY, m_matrix[ 0 ][ 1 ] );
-        Simd::Store32( pXAxisZ, m_matrix[ 0 ][ 2 ] );
-        Simd::Store32( pXAxisW, m_matrix[ 0 ][ 3 ] );
-        Simd::Store32( pYAxisX, m_matrix[ 1 ][ 0 ] );
-        Simd::Store32( pYAxisY, m_matrix[ 1 ][ 1 ] );
-        Simd::Store32( pYAxisZ, m_matrix[ 1 ][ 2 ] );
-        Simd::Store32( pYAxisW, m_matrix[ 1 ][ 3 ] );
-        Simd::Store32( pZAxisX, m_matrix[ 2 ][ 0 ] );
-        Simd::Store32( pZAxisY, m_matrix[ 2 ][ 1 ] );
-        Simd::Store32( pZAxisZ, m_matrix[ 2 ][ 2 ] );
-        Simd::Store32( pZAxisW, m_matrix[ 2 ][ 3 ] );
-        Simd::Store32( pTranslateX, m_matrix[ 3 ][ 0 ] );
-        Simd::Store32( pTranslateY, m_matrix[ 3 ][ 1 ] );
-        Simd::Store32( pTranslateZ, m_matrix[ 3 ][ 2 ] );
-        Simd::Store32( pTranslateW, m_matrix[ 3 ][ 3 ] );
+        Helium::Simd::Store32( pXAxisX, m_matrix[ 0 ][ 0 ] );
+        Helium::Simd::Store32( pXAxisY, m_matrix[ 0 ][ 1 ] );
+        Helium::Simd::Store32( pXAxisZ, m_matrix[ 0 ][ 2 ] );
+        Helium::Simd::Store32( pXAxisW, m_matrix[ 0 ][ 3 ] );
+        Helium::Simd::Store32( pYAxisX, m_matrix[ 1 ][ 0 ] );
+        Helium::Simd::Store32( pYAxisY, m_matrix[ 1 ][ 1 ] );
+        Helium::Simd::Store32( pYAxisZ, m_matrix[ 1 ][ 2 ] );
+        Helium::Simd::Store32( pYAxisW, m_matrix[ 1 ][ 3 ] );
+        Helium::Simd::Store32( pZAxisX, m_matrix[ 2 ][ 0 ] );
+        Helium::Simd::Store32( pZAxisY, m_matrix[ 2 ][ 1 ] );
+        Helium::Simd::Store32( pZAxisZ, m_matrix[ 2 ][ 2 ] );
+        Helium::Simd::Store32( pZAxisW, m_matrix[ 2 ][ 3 ] );
+        Helium::Simd::Store32( pTranslateX, m_matrix[ 3 ][ 0 ] );
+        Helium::Simd::Store32( pTranslateY, m_matrix[ 3 ][ 1 ] );
+        Helium::Simd::Store32( pTranslateZ, m_matrix[ 3 ][ 2 ] );
+        Helium::Simd::Store32( pTranslateW, m_matrix[ 3 ][ 3 ] );
     }
 
     /// Fill out a vector with the values for a given row of this matrix.
@@ -649,7 +649,7 @@ namespace Lunar
     {
         L_ASSERT( index < 4 );
 
-        const SimdVector* pRow = m_matrix[ index ];
+        const Helium::SimdVector* pRow = m_matrix[ index ];
 
         rRow.m_x = pRow[ 0 ];
         rRow.m_y = pRow[ 1 ];
@@ -668,7 +668,7 @@ namespace Lunar
     {
         L_ASSERT( index < 4 );
 
-        const SimdVector* pRow = m_matrix[ index ];
+        const Helium::SimdVector* pRow = m_matrix[ index ];
 
         return Vector4Soa( pRow[ 0 ], pRow[ 1 ], pRow[ 2 ], pRow[ 3 ] );
     }
@@ -683,7 +683,7 @@ namespace Lunar
     {
         L_ASSERT( index < 4 );
 
-        SimdVector* pRow = m_matrix[ index ];
+        Helium::SimdVector* pRow = m_matrix[ index ];
 
         pRow[ 0 ] = rRow.m_x;
         pRow[ 1 ] = rRow.m_y;
@@ -762,22 +762,22 @@ namespace Lunar
     /// @param[in] rMatrix1  Second matrix.
     void Matrix44Soa::AddSet( const Matrix44Soa& rMatrix0, const Matrix44Soa& rMatrix1 )
     {
-        m_matrix[ 0 ][ 0 ] = Simd::AddF32( rMatrix0.m_matrix[ 0 ][ 0 ], rMatrix1.m_matrix[ 0 ][ 0 ] );
-        m_matrix[ 0 ][ 1 ] = Simd::AddF32( rMatrix0.m_matrix[ 0 ][ 1 ], rMatrix1.m_matrix[ 0 ][ 1 ] );
-        m_matrix[ 0 ][ 2 ] = Simd::AddF32( rMatrix0.m_matrix[ 0 ][ 2 ], rMatrix1.m_matrix[ 0 ][ 2 ] );
-        m_matrix[ 0 ][ 3 ] = Simd::AddF32( rMatrix0.m_matrix[ 0 ][ 3 ], rMatrix1.m_matrix[ 0 ][ 3 ] );
-        m_matrix[ 1 ][ 0 ] = Simd::AddF32( rMatrix0.m_matrix[ 1 ][ 0 ], rMatrix1.m_matrix[ 1 ][ 0 ] );
-        m_matrix[ 1 ][ 1 ] = Simd::AddF32( rMatrix0.m_matrix[ 1 ][ 1 ], rMatrix1.m_matrix[ 1 ][ 1 ] );
-        m_matrix[ 1 ][ 2 ] = Simd::AddF32( rMatrix0.m_matrix[ 1 ][ 2 ], rMatrix1.m_matrix[ 1 ][ 2 ] );
-        m_matrix[ 1 ][ 3 ] = Simd::AddF32( rMatrix0.m_matrix[ 1 ][ 3 ], rMatrix1.m_matrix[ 1 ][ 3 ] );
-        m_matrix[ 2 ][ 0 ] = Simd::AddF32( rMatrix0.m_matrix[ 2 ][ 0 ], rMatrix1.m_matrix[ 2 ][ 0 ] );
-        m_matrix[ 2 ][ 1 ] = Simd::AddF32( rMatrix0.m_matrix[ 2 ][ 1 ], rMatrix1.m_matrix[ 2 ][ 1 ] );
-        m_matrix[ 2 ][ 2 ] = Simd::AddF32( rMatrix0.m_matrix[ 2 ][ 2 ], rMatrix1.m_matrix[ 2 ][ 2 ] );
-        m_matrix[ 2 ][ 3 ] = Simd::AddF32( rMatrix0.m_matrix[ 2 ][ 3 ], rMatrix1.m_matrix[ 2 ][ 3 ] );
-        m_matrix[ 3 ][ 0 ] = Simd::AddF32( rMatrix0.m_matrix[ 3 ][ 0 ], rMatrix1.m_matrix[ 3 ][ 0 ] );
-        m_matrix[ 3 ][ 1 ] = Simd::AddF32( rMatrix0.m_matrix[ 3 ][ 1 ], rMatrix1.m_matrix[ 3 ][ 1 ] );
-        m_matrix[ 3 ][ 2 ] = Simd::AddF32( rMatrix0.m_matrix[ 3 ][ 2 ], rMatrix1.m_matrix[ 3 ][ 2 ] );
-        m_matrix[ 3 ][ 3 ] = Simd::AddF32( rMatrix0.m_matrix[ 3 ][ 3 ], rMatrix1.m_matrix[ 3 ][ 3 ] );
+        m_matrix[ 0 ][ 0 ] = Helium::Simd::AddF32( rMatrix0.m_matrix[ 0 ][ 0 ], rMatrix1.m_matrix[ 0 ][ 0 ] );
+        m_matrix[ 0 ][ 1 ] = Helium::Simd::AddF32( rMatrix0.m_matrix[ 0 ][ 1 ], rMatrix1.m_matrix[ 0 ][ 1 ] );
+        m_matrix[ 0 ][ 2 ] = Helium::Simd::AddF32( rMatrix0.m_matrix[ 0 ][ 2 ], rMatrix1.m_matrix[ 0 ][ 2 ] );
+        m_matrix[ 0 ][ 3 ] = Helium::Simd::AddF32( rMatrix0.m_matrix[ 0 ][ 3 ], rMatrix1.m_matrix[ 0 ][ 3 ] );
+        m_matrix[ 1 ][ 0 ] = Helium::Simd::AddF32( rMatrix0.m_matrix[ 1 ][ 0 ], rMatrix1.m_matrix[ 1 ][ 0 ] );
+        m_matrix[ 1 ][ 1 ] = Helium::Simd::AddF32( rMatrix0.m_matrix[ 1 ][ 1 ], rMatrix1.m_matrix[ 1 ][ 1 ] );
+        m_matrix[ 1 ][ 2 ] = Helium::Simd::AddF32( rMatrix0.m_matrix[ 1 ][ 2 ], rMatrix1.m_matrix[ 1 ][ 2 ] );
+        m_matrix[ 1 ][ 3 ] = Helium::Simd::AddF32( rMatrix0.m_matrix[ 1 ][ 3 ], rMatrix1.m_matrix[ 1 ][ 3 ] );
+        m_matrix[ 2 ][ 0 ] = Helium::Simd::AddF32( rMatrix0.m_matrix[ 2 ][ 0 ], rMatrix1.m_matrix[ 2 ][ 0 ] );
+        m_matrix[ 2 ][ 1 ] = Helium::Simd::AddF32( rMatrix0.m_matrix[ 2 ][ 1 ], rMatrix1.m_matrix[ 2 ][ 1 ] );
+        m_matrix[ 2 ][ 2 ] = Helium::Simd::AddF32( rMatrix0.m_matrix[ 2 ][ 2 ], rMatrix1.m_matrix[ 2 ][ 2 ] );
+        m_matrix[ 2 ][ 3 ] = Helium::Simd::AddF32( rMatrix0.m_matrix[ 2 ][ 3 ], rMatrix1.m_matrix[ 2 ][ 3 ] );
+        m_matrix[ 3 ][ 0 ] = Helium::Simd::AddF32( rMatrix0.m_matrix[ 3 ][ 0 ], rMatrix1.m_matrix[ 3 ][ 0 ] );
+        m_matrix[ 3 ][ 1 ] = Helium::Simd::AddF32( rMatrix0.m_matrix[ 3 ][ 1 ], rMatrix1.m_matrix[ 3 ][ 1 ] );
+        m_matrix[ 3 ][ 2 ] = Helium::Simd::AddF32( rMatrix0.m_matrix[ 3 ][ 2 ], rMatrix1.m_matrix[ 3 ][ 2 ] );
+        m_matrix[ 3 ][ 3 ] = Helium::Simd::AddF32( rMatrix0.m_matrix[ 3 ][ 3 ], rMatrix1.m_matrix[ 3 ][ 3 ] );
     }
 
     /// Set this matrix to the component-wise difference of two matrices.
@@ -786,22 +786,22 @@ namespace Lunar
     /// @param[in] rMatrix1  Second matrix.
     void Matrix44Soa::SubtractSet( const Matrix44Soa& rMatrix0, const Matrix44Soa& rMatrix1 )
     {
-        m_matrix[ 0 ][ 0 ] = Simd::SubtractF32( rMatrix0.m_matrix[ 0 ][ 0 ], rMatrix1.m_matrix[ 0 ][ 0 ] );
-        m_matrix[ 0 ][ 1 ] = Simd::SubtractF32( rMatrix0.m_matrix[ 0 ][ 1 ], rMatrix1.m_matrix[ 0 ][ 1 ] );
-        m_matrix[ 0 ][ 2 ] = Simd::SubtractF32( rMatrix0.m_matrix[ 0 ][ 2 ], rMatrix1.m_matrix[ 0 ][ 2 ] );
-        m_matrix[ 0 ][ 3 ] = Simd::SubtractF32( rMatrix0.m_matrix[ 0 ][ 3 ], rMatrix1.m_matrix[ 0 ][ 3 ] );
-        m_matrix[ 1 ][ 0 ] = Simd::SubtractF32( rMatrix0.m_matrix[ 1 ][ 0 ], rMatrix1.m_matrix[ 1 ][ 0 ] );
-        m_matrix[ 1 ][ 1 ] = Simd::SubtractF32( rMatrix0.m_matrix[ 1 ][ 1 ], rMatrix1.m_matrix[ 1 ][ 1 ] );
-        m_matrix[ 1 ][ 2 ] = Simd::SubtractF32( rMatrix0.m_matrix[ 1 ][ 2 ], rMatrix1.m_matrix[ 1 ][ 2 ] );
-        m_matrix[ 1 ][ 3 ] = Simd::SubtractF32( rMatrix0.m_matrix[ 1 ][ 3 ], rMatrix1.m_matrix[ 1 ][ 3 ] );
-        m_matrix[ 2 ][ 0 ] = Simd::SubtractF32( rMatrix0.m_matrix[ 2 ][ 0 ], rMatrix1.m_matrix[ 2 ][ 0 ] );
-        m_matrix[ 2 ][ 1 ] = Simd::SubtractF32( rMatrix0.m_matrix[ 2 ][ 1 ], rMatrix1.m_matrix[ 2 ][ 1 ] );
-        m_matrix[ 2 ][ 2 ] = Simd::SubtractF32( rMatrix0.m_matrix[ 2 ][ 2 ], rMatrix1.m_matrix[ 2 ][ 2 ] );
-        m_matrix[ 2 ][ 3 ] = Simd::SubtractF32( rMatrix0.m_matrix[ 2 ][ 3 ], rMatrix1.m_matrix[ 2 ][ 3 ] );
-        m_matrix[ 3 ][ 0 ] = Simd::SubtractF32( rMatrix0.m_matrix[ 3 ][ 0 ], rMatrix1.m_matrix[ 3 ][ 0 ] );
-        m_matrix[ 3 ][ 1 ] = Simd::SubtractF32( rMatrix0.m_matrix[ 3 ][ 1 ], rMatrix1.m_matrix[ 3 ][ 1 ] );
-        m_matrix[ 3 ][ 2 ] = Simd::SubtractF32( rMatrix0.m_matrix[ 3 ][ 2 ], rMatrix1.m_matrix[ 3 ][ 2 ] );
-        m_matrix[ 3 ][ 3 ] = Simd::SubtractF32( rMatrix0.m_matrix[ 3 ][ 3 ], rMatrix1.m_matrix[ 3 ][ 3 ] );
+        m_matrix[ 0 ][ 0 ] = Helium::Simd::SubtractF32( rMatrix0.m_matrix[ 0 ][ 0 ], rMatrix1.m_matrix[ 0 ][ 0 ] );
+        m_matrix[ 0 ][ 1 ] = Helium::Simd::SubtractF32( rMatrix0.m_matrix[ 0 ][ 1 ], rMatrix1.m_matrix[ 0 ][ 1 ] );
+        m_matrix[ 0 ][ 2 ] = Helium::Simd::SubtractF32( rMatrix0.m_matrix[ 0 ][ 2 ], rMatrix1.m_matrix[ 0 ][ 2 ] );
+        m_matrix[ 0 ][ 3 ] = Helium::Simd::SubtractF32( rMatrix0.m_matrix[ 0 ][ 3 ], rMatrix1.m_matrix[ 0 ][ 3 ] );
+        m_matrix[ 1 ][ 0 ] = Helium::Simd::SubtractF32( rMatrix0.m_matrix[ 1 ][ 0 ], rMatrix1.m_matrix[ 1 ][ 0 ] );
+        m_matrix[ 1 ][ 1 ] = Helium::Simd::SubtractF32( rMatrix0.m_matrix[ 1 ][ 1 ], rMatrix1.m_matrix[ 1 ][ 1 ] );
+        m_matrix[ 1 ][ 2 ] = Helium::Simd::SubtractF32( rMatrix0.m_matrix[ 1 ][ 2 ], rMatrix1.m_matrix[ 1 ][ 2 ] );
+        m_matrix[ 1 ][ 3 ] = Helium::Simd::SubtractF32( rMatrix0.m_matrix[ 1 ][ 3 ], rMatrix1.m_matrix[ 1 ][ 3 ] );
+        m_matrix[ 2 ][ 0 ] = Helium::Simd::SubtractF32( rMatrix0.m_matrix[ 2 ][ 0 ], rMatrix1.m_matrix[ 2 ][ 0 ] );
+        m_matrix[ 2 ][ 1 ] = Helium::Simd::SubtractF32( rMatrix0.m_matrix[ 2 ][ 1 ], rMatrix1.m_matrix[ 2 ][ 1 ] );
+        m_matrix[ 2 ][ 2 ] = Helium::Simd::SubtractF32( rMatrix0.m_matrix[ 2 ][ 2 ], rMatrix1.m_matrix[ 2 ][ 2 ] );
+        m_matrix[ 2 ][ 3 ] = Helium::Simd::SubtractF32( rMatrix0.m_matrix[ 2 ][ 3 ], rMatrix1.m_matrix[ 2 ][ 3 ] );
+        m_matrix[ 3 ][ 0 ] = Helium::Simd::SubtractF32( rMatrix0.m_matrix[ 3 ][ 0 ], rMatrix1.m_matrix[ 3 ][ 0 ] );
+        m_matrix[ 3 ][ 1 ] = Helium::Simd::SubtractF32( rMatrix0.m_matrix[ 3 ][ 1 ], rMatrix1.m_matrix[ 3 ][ 1 ] );
+        m_matrix[ 3 ][ 2 ] = Helium::Simd::SubtractF32( rMatrix0.m_matrix[ 3 ][ 2 ], rMatrix1.m_matrix[ 3 ][ 2 ] );
+        m_matrix[ 3 ][ 3 ] = Helium::Simd::SubtractF32( rMatrix0.m_matrix[ 3 ][ 3 ], rMatrix1.m_matrix[ 3 ][ 3 ] );
     }
 
     /// Set this matrix to the component-wise product of two matrices.
@@ -810,22 +810,22 @@ namespace Lunar
     /// @param[in] rMatrix1  Second matrix.
     void Matrix44Soa::MultiplyComponentsSet( const Matrix44Soa& rMatrix0, const Matrix44Soa& rMatrix1 )
     {
-        m_matrix[ 0 ][ 0 ] = Simd::MultiplyF32( rMatrix0.m_matrix[ 0 ][ 0 ], rMatrix1.m_matrix[ 0 ][ 0 ] );
-        m_matrix[ 0 ][ 1 ] = Simd::MultiplyF32( rMatrix0.m_matrix[ 0 ][ 1 ], rMatrix1.m_matrix[ 0 ][ 1 ] );
-        m_matrix[ 0 ][ 2 ] = Simd::MultiplyF32( rMatrix0.m_matrix[ 0 ][ 2 ], rMatrix1.m_matrix[ 0 ][ 2 ] );
-        m_matrix[ 0 ][ 3 ] = Simd::MultiplyF32( rMatrix0.m_matrix[ 0 ][ 3 ], rMatrix1.m_matrix[ 0 ][ 3 ] );
-        m_matrix[ 1 ][ 0 ] = Simd::MultiplyF32( rMatrix0.m_matrix[ 1 ][ 0 ], rMatrix1.m_matrix[ 1 ][ 0 ] );
-        m_matrix[ 1 ][ 1 ] = Simd::MultiplyF32( rMatrix0.m_matrix[ 1 ][ 1 ], rMatrix1.m_matrix[ 1 ][ 1 ] );
-        m_matrix[ 1 ][ 2 ] = Simd::MultiplyF32( rMatrix0.m_matrix[ 1 ][ 2 ], rMatrix1.m_matrix[ 1 ][ 2 ] );
-        m_matrix[ 1 ][ 3 ] = Simd::MultiplyF32( rMatrix0.m_matrix[ 1 ][ 3 ], rMatrix1.m_matrix[ 1 ][ 3 ] );
-        m_matrix[ 2 ][ 0 ] = Simd::MultiplyF32( rMatrix0.m_matrix[ 2 ][ 0 ], rMatrix1.m_matrix[ 2 ][ 0 ] );
-        m_matrix[ 2 ][ 1 ] = Simd::MultiplyF32( rMatrix0.m_matrix[ 2 ][ 1 ], rMatrix1.m_matrix[ 2 ][ 1 ] );
-        m_matrix[ 2 ][ 2 ] = Simd::MultiplyF32( rMatrix0.m_matrix[ 2 ][ 2 ], rMatrix1.m_matrix[ 2 ][ 2 ] );
-        m_matrix[ 2 ][ 3 ] = Simd::MultiplyF32( rMatrix0.m_matrix[ 2 ][ 3 ], rMatrix1.m_matrix[ 2 ][ 3 ] );
-        m_matrix[ 3 ][ 0 ] = Simd::MultiplyF32( rMatrix0.m_matrix[ 3 ][ 0 ], rMatrix1.m_matrix[ 3 ][ 0 ] );
-        m_matrix[ 3 ][ 1 ] = Simd::MultiplyF32( rMatrix0.m_matrix[ 3 ][ 1 ], rMatrix1.m_matrix[ 3 ][ 1 ] );
-        m_matrix[ 3 ][ 2 ] = Simd::MultiplyF32( rMatrix0.m_matrix[ 3 ][ 2 ], rMatrix1.m_matrix[ 3 ][ 2 ] );
-        m_matrix[ 3 ][ 3 ] = Simd::MultiplyF32( rMatrix0.m_matrix[ 3 ][ 3 ], rMatrix1.m_matrix[ 3 ][ 3 ] );
+        m_matrix[ 0 ][ 0 ] = Helium::Simd::MultiplyF32( rMatrix0.m_matrix[ 0 ][ 0 ], rMatrix1.m_matrix[ 0 ][ 0 ] );
+        m_matrix[ 0 ][ 1 ] = Helium::Simd::MultiplyF32( rMatrix0.m_matrix[ 0 ][ 1 ], rMatrix1.m_matrix[ 0 ][ 1 ] );
+        m_matrix[ 0 ][ 2 ] = Helium::Simd::MultiplyF32( rMatrix0.m_matrix[ 0 ][ 2 ], rMatrix1.m_matrix[ 0 ][ 2 ] );
+        m_matrix[ 0 ][ 3 ] = Helium::Simd::MultiplyF32( rMatrix0.m_matrix[ 0 ][ 3 ], rMatrix1.m_matrix[ 0 ][ 3 ] );
+        m_matrix[ 1 ][ 0 ] = Helium::Simd::MultiplyF32( rMatrix0.m_matrix[ 1 ][ 0 ], rMatrix1.m_matrix[ 1 ][ 0 ] );
+        m_matrix[ 1 ][ 1 ] = Helium::Simd::MultiplyF32( rMatrix0.m_matrix[ 1 ][ 1 ], rMatrix1.m_matrix[ 1 ][ 1 ] );
+        m_matrix[ 1 ][ 2 ] = Helium::Simd::MultiplyF32( rMatrix0.m_matrix[ 1 ][ 2 ], rMatrix1.m_matrix[ 1 ][ 2 ] );
+        m_matrix[ 1 ][ 3 ] = Helium::Simd::MultiplyF32( rMatrix0.m_matrix[ 1 ][ 3 ], rMatrix1.m_matrix[ 1 ][ 3 ] );
+        m_matrix[ 2 ][ 0 ] = Helium::Simd::MultiplyF32( rMatrix0.m_matrix[ 2 ][ 0 ], rMatrix1.m_matrix[ 2 ][ 0 ] );
+        m_matrix[ 2 ][ 1 ] = Helium::Simd::MultiplyF32( rMatrix0.m_matrix[ 2 ][ 1 ], rMatrix1.m_matrix[ 2 ][ 1 ] );
+        m_matrix[ 2 ][ 2 ] = Helium::Simd::MultiplyF32( rMatrix0.m_matrix[ 2 ][ 2 ], rMatrix1.m_matrix[ 2 ][ 2 ] );
+        m_matrix[ 2 ][ 3 ] = Helium::Simd::MultiplyF32( rMatrix0.m_matrix[ 2 ][ 3 ], rMatrix1.m_matrix[ 2 ][ 3 ] );
+        m_matrix[ 3 ][ 0 ] = Helium::Simd::MultiplyF32( rMatrix0.m_matrix[ 3 ][ 0 ], rMatrix1.m_matrix[ 3 ][ 0 ] );
+        m_matrix[ 3 ][ 1 ] = Helium::Simd::MultiplyF32( rMatrix0.m_matrix[ 3 ][ 1 ], rMatrix1.m_matrix[ 3 ][ 1 ] );
+        m_matrix[ 3 ][ 2 ] = Helium::Simd::MultiplyF32( rMatrix0.m_matrix[ 3 ][ 2 ], rMatrix1.m_matrix[ 3 ][ 2 ] );
+        m_matrix[ 3 ][ 3 ] = Helium::Simd::MultiplyF32( rMatrix0.m_matrix[ 3 ][ 3 ], rMatrix1.m_matrix[ 3 ][ 3 ] );
     }
 
     /// Set this matrix to the component-wise quotient of two matrices.
@@ -834,22 +834,22 @@ namespace Lunar
     /// @param[in] rMatrix1  Second matrix.
     void Matrix44Soa::DivideComponentsSet( const Matrix44Soa& rMatrix0, const Matrix44Soa& rMatrix1 )
     {
-        m_matrix[ 0 ][ 0 ] = Simd::DivideF32( rMatrix0.m_matrix[ 0 ][ 0 ], rMatrix1.m_matrix[ 0 ][ 0 ] );
-        m_matrix[ 0 ][ 1 ] = Simd::DivideF32( rMatrix0.m_matrix[ 0 ][ 1 ], rMatrix1.m_matrix[ 0 ][ 1 ] );
-        m_matrix[ 0 ][ 2 ] = Simd::DivideF32( rMatrix0.m_matrix[ 0 ][ 2 ], rMatrix1.m_matrix[ 0 ][ 2 ] );
-        m_matrix[ 0 ][ 3 ] = Simd::DivideF32( rMatrix0.m_matrix[ 0 ][ 3 ], rMatrix1.m_matrix[ 0 ][ 3 ] );
-        m_matrix[ 1 ][ 0 ] = Simd::DivideF32( rMatrix0.m_matrix[ 1 ][ 0 ], rMatrix1.m_matrix[ 1 ][ 0 ] );
-        m_matrix[ 1 ][ 1 ] = Simd::DivideF32( rMatrix0.m_matrix[ 1 ][ 1 ], rMatrix1.m_matrix[ 1 ][ 1 ] );
-        m_matrix[ 1 ][ 2 ] = Simd::DivideF32( rMatrix0.m_matrix[ 1 ][ 2 ], rMatrix1.m_matrix[ 1 ][ 2 ] );
-        m_matrix[ 1 ][ 3 ] = Simd::DivideF32( rMatrix0.m_matrix[ 1 ][ 3 ], rMatrix1.m_matrix[ 1 ][ 3 ] );
-        m_matrix[ 2 ][ 0 ] = Simd::DivideF32( rMatrix0.m_matrix[ 2 ][ 0 ], rMatrix1.m_matrix[ 2 ][ 0 ] );
-        m_matrix[ 2 ][ 1 ] = Simd::DivideF32( rMatrix0.m_matrix[ 2 ][ 1 ], rMatrix1.m_matrix[ 2 ][ 1 ] );
-        m_matrix[ 2 ][ 2 ] = Simd::DivideF32( rMatrix0.m_matrix[ 2 ][ 2 ], rMatrix1.m_matrix[ 2 ][ 2 ] );
-        m_matrix[ 2 ][ 3 ] = Simd::DivideF32( rMatrix0.m_matrix[ 2 ][ 3 ], rMatrix1.m_matrix[ 2 ][ 3 ] );
-        m_matrix[ 3 ][ 0 ] = Simd::DivideF32( rMatrix0.m_matrix[ 3 ][ 0 ], rMatrix1.m_matrix[ 3 ][ 0 ] );
-        m_matrix[ 3 ][ 1 ] = Simd::DivideF32( rMatrix0.m_matrix[ 3 ][ 1 ], rMatrix1.m_matrix[ 3 ][ 1 ] );
-        m_matrix[ 3 ][ 2 ] = Simd::DivideF32( rMatrix0.m_matrix[ 3 ][ 2 ], rMatrix1.m_matrix[ 3 ][ 2 ] );
-        m_matrix[ 3 ][ 3 ] = Simd::DivideF32( rMatrix0.m_matrix[ 3 ][ 3 ], rMatrix1.m_matrix[ 3 ][ 3 ] );
+        m_matrix[ 0 ][ 0 ] = Helium::Simd::DivideF32( rMatrix0.m_matrix[ 0 ][ 0 ], rMatrix1.m_matrix[ 0 ][ 0 ] );
+        m_matrix[ 0 ][ 1 ] = Helium::Simd::DivideF32( rMatrix0.m_matrix[ 0 ][ 1 ], rMatrix1.m_matrix[ 0 ][ 1 ] );
+        m_matrix[ 0 ][ 2 ] = Helium::Simd::DivideF32( rMatrix0.m_matrix[ 0 ][ 2 ], rMatrix1.m_matrix[ 0 ][ 2 ] );
+        m_matrix[ 0 ][ 3 ] = Helium::Simd::DivideF32( rMatrix0.m_matrix[ 0 ][ 3 ], rMatrix1.m_matrix[ 0 ][ 3 ] );
+        m_matrix[ 1 ][ 0 ] = Helium::Simd::DivideF32( rMatrix0.m_matrix[ 1 ][ 0 ], rMatrix1.m_matrix[ 1 ][ 0 ] );
+        m_matrix[ 1 ][ 1 ] = Helium::Simd::DivideF32( rMatrix0.m_matrix[ 1 ][ 1 ], rMatrix1.m_matrix[ 1 ][ 1 ] );
+        m_matrix[ 1 ][ 2 ] = Helium::Simd::DivideF32( rMatrix0.m_matrix[ 1 ][ 2 ], rMatrix1.m_matrix[ 1 ][ 2 ] );
+        m_matrix[ 1 ][ 3 ] = Helium::Simd::DivideF32( rMatrix0.m_matrix[ 1 ][ 3 ], rMatrix1.m_matrix[ 1 ][ 3 ] );
+        m_matrix[ 2 ][ 0 ] = Helium::Simd::DivideF32( rMatrix0.m_matrix[ 2 ][ 0 ], rMatrix1.m_matrix[ 2 ][ 0 ] );
+        m_matrix[ 2 ][ 1 ] = Helium::Simd::DivideF32( rMatrix0.m_matrix[ 2 ][ 1 ], rMatrix1.m_matrix[ 2 ][ 1 ] );
+        m_matrix[ 2 ][ 2 ] = Helium::Simd::DivideF32( rMatrix0.m_matrix[ 2 ][ 2 ], rMatrix1.m_matrix[ 2 ][ 2 ] );
+        m_matrix[ 2 ][ 3 ] = Helium::Simd::DivideF32( rMatrix0.m_matrix[ 2 ][ 3 ], rMatrix1.m_matrix[ 2 ][ 3 ] );
+        m_matrix[ 3 ][ 0 ] = Helium::Simd::DivideF32( rMatrix0.m_matrix[ 3 ][ 0 ], rMatrix1.m_matrix[ 3 ][ 0 ] );
+        m_matrix[ 3 ][ 1 ] = Helium::Simd::DivideF32( rMatrix0.m_matrix[ 3 ][ 1 ], rMatrix1.m_matrix[ 3 ][ 1 ] );
+        m_matrix[ 3 ][ 2 ] = Helium::Simd::DivideF32( rMatrix0.m_matrix[ 3 ][ 2 ], rMatrix1.m_matrix[ 3 ][ 2 ] );
+        m_matrix[ 3 ][ 3 ] = Helium::Simd::DivideF32( rMatrix0.m_matrix[ 3 ][ 3 ], rMatrix1.m_matrix[ 3 ][ 3 ] );
     }
 
     /// Get the inverse of this matrix.
@@ -904,25 +904,25 @@ namespace Lunar
     /// @see TransformPoint(), TransformVector()
     void Matrix44Soa::Transform( const Vector4Soa& rVector, Vector4Soa& rResult ) const
     {
-        SimdVector x = Simd::MultiplyF32( rVector.m_x, m_matrix[ 0 ][ 0 ] );
-        SimdVector y = Simd::MultiplyF32( rVector.m_x, m_matrix[ 0 ][ 1 ] );
-        SimdVector z = Simd::MultiplyF32( rVector.m_x, m_matrix[ 0 ][ 2 ] );
-        SimdVector w = Simd::MultiplyF32( rVector.m_x, m_matrix[ 0 ][ 3 ] );
+        Helium::SimdVector x = Helium::Simd::MultiplyF32( rVector.m_x, m_matrix[ 0 ][ 0 ] );
+        Helium::SimdVector y = Helium::Simd::MultiplyF32( rVector.m_x, m_matrix[ 0 ][ 1 ] );
+        Helium::SimdVector z = Helium::Simd::MultiplyF32( rVector.m_x, m_matrix[ 0 ][ 2 ] );
+        Helium::SimdVector w = Helium::Simd::MultiplyF32( rVector.m_x, m_matrix[ 0 ][ 3 ] );
 
-        x = Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 0 ], x );
-        y = Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 1 ], y );
-        z = Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 2 ], z );
-        w = Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 3 ], w );
+        x = Helium::Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 0 ], x );
+        y = Helium::Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 1 ], y );
+        z = Helium::Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 2 ], z );
+        w = Helium::Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 3 ], w );
 
-        x = Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 0 ], x );
-        y = Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 1 ], y );
-        z = Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 2 ], z );
-        w = Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 3 ], w );
+        x = Helium::Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 0 ], x );
+        y = Helium::Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 1 ], y );
+        z = Helium::Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 2 ], z );
+        w = Helium::Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 3 ], w );
 
-        x = Simd::MultiplyAddF32( rVector.m_w, m_matrix[ 3 ][ 0 ], x );
-        y = Simd::MultiplyAddF32( rVector.m_w, m_matrix[ 3 ][ 1 ], y );
-        z = Simd::MultiplyAddF32( rVector.m_w, m_matrix[ 3 ][ 2 ], z );
-        w = Simd::MultiplyAddF32( rVector.m_w, m_matrix[ 3 ][ 3 ], w );
+        x = Helium::Simd::MultiplyAddF32( rVector.m_w, m_matrix[ 3 ][ 0 ], x );
+        y = Helium::Simd::MultiplyAddF32( rVector.m_w, m_matrix[ 3 ][ 1 ], y );
+        z = Helium::Simd::MultiplyAddF32( rVector.m_w, m_matrix[ 3 ][ 2 ], z );
+        w = Helium::Simd::MultiplyAddF32( rVector.m_w, m_matrix[ 3 ][ 3 ], w );
 
         rResult.m_x = x;
         rResult.m_y = y;
@@ -958,17 +958,17 @@ namespace Lunar
     /// @see TransformVector(), Transform()
     void Matrix44Soa::TransformPoint( const Vector3Soa& rVector, Vector3Soa& rResult ) const
     {
-        SimdVector x = Simd::MultiplyAddF32( rVector.m_x, m_matrix[ 0 ][ 0 ], m_matrix[ 3 ][ 0 ] );
-        SimdVector y = Simd::MultiplyAddF32( rVector.m_x, m_matrix[ 0 ][ 1 ], m_matrix[ 3 ][ 1 ] );
-        SimdVector z = Simd::MultiplyAddF32( rVector.m_x, m_matrix[ 0 ][ 2 ], m_matrix[ 3 ][ 2 ] );
+        Helium::SimdVector x = Helium::Simd::MultiplyAddF32( rVector.m_x, m_matrix[ 0 ][ 0 ], m_matrix[ 3 ][ 0 ] );
+        Helium::SimdVector y = Helium::Simd::MultiplyAddF32( rVector.m_x, m_matrix[ 0 ][ 1 ], m_matrix[ 3 ][ 1 ] );
+        Helium::SimdVector z = Helium::Simd::MultiplyAddF32( rVector.m_x, m_matrix[ 0 ][ 2 ], m_matrix[ 3 ][ 2 ] );
 
-        x = Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 0 ], x );
-        y = Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 1 ], y );
-        z = Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 2 ], z );
+        x = Helium::Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 0 ], x );
+        y = Helium::Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 1 ], y );
+        z = Helium::Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 2 ], z );
 
-        x = Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 0 ], x );
-        y = Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 1 ], y );
-        z = Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 2 ], z );
+        x = Helium::Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 0 ], x );
+        y = Helium::Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 1 ], y );
+        z = Helium::Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 2 ], z );
 
         rResult.m_x = x;
         rResult.m_y = y;
@@ -1004,17 +1004,17 @@ namespace Lunar
     /// @see TransformPoint(), Transform()
     void Matrix44Soa::TransformVector( const Vector3Soa& rVector, Vector3Soa& rResult ) const
     {
-        SimdVector x = Simd::MultiplyF32( rVector.m_x, m_matrix[ 0 ][ 0 ] );
-        SimdVector y = Simd::MultiplyF32( rVector.m_x, m_matrix[ 0 ][ 1 ] );
-        SimdVector z = Simd::MultiplyF32( rVector.m_x, m_matrix[ 0 ][ 2 ] );
+        Helium::SimdVector x = Helium::Simd::MultiplyF32( rVector.m_x, m_matrix[ 0 ][ 0 ] );
+        Helium::SimdVector y = Helium::Simd::MultiplyF32( rVector.m_x, m_matrix[ 0 ][ 1 ] );
+        Helium::SimdVector z = Helium::Simd::MultiplyF32( rVector.m_x, m_matrix[ 0 ][ 2 ] );
 
-        x = Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 0 ], x );
-        y = Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 1 ], y );
-        z = Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 2 ], z );
+        x = Helium::Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 0 ], x );
+        y = Helium::Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 1 ], y );
+        z = Helium::Simd::MultiplyAddF32( rVector.m_y, m_matrix[ 1 ][ 2 ], z );
 
-        x = Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 0 ], x );
-        y = Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 1 ], y );
-        z = Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 2 ], z );
+        x = Helium::Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 0 ], x );
+        y = Helium::Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 1 ], y );
+        z = Helium::Simd::MultiplyAddF32( rVector.m_z, m_matrix[ 2 ][ 2 ], z );
 
         rResult.m_x = x;
         rResult.m_y = y;
@@ -1046,82 +1046,82 @@ namespace Lunar
     /// @param[in] rEpsilon  Comparison threshold.
     ///
     /// @return  SIMD mask with bits set for matrices that are equal within the given threshold.
-    SimdMask Matrix44Soa::Equals( const Matrix44Soa& rMatrix, const SimdVector& rEpsilon ) const
+    Helium::SimdMask Matrix44Soa::Equals( const Matrix44Soa& rMatrix, const Helium::SimdVector& rEpsilon ) const
     {
-        SimdVector absMask = Simd::SetSplatU32( 0x7fffffff );
+        Helium::SimdVector absMask = Helium::Simd::SetSplatU32( 0x7fffffff );
 
-        SimdMask result;
+        Helium::SimdMask result;
 
-        SimdVector difference0, difference1, difference2, difference3;
-        SimdMask testResult0, testResult1, testResult2, testResult3;
+        Helium::SimdVector difference0, difference1, difference2, difference3;
+        Helium::SimdMask testResult0, testResult1, testResult2, testResult3;
 
-        difference0 = Simd::SubtractF32( m_matrix[ 0 ][ 0 ], rMatrix.m_matrix[ 0 ][ 0 ] );
-        difference1 = Simd::SubtractF32( m_matrix[ 0 ][ 1 ], rMatrix.m_matrix[ 0 ][ 1 ] );
-        difference2 = Simd::SubtractF32( m_matrix[ 0 ][ 2 ], rMatrix.m_matrix[ 0 ][ 2 ] );
-        difference3 = Simd::SubtractF32( m_matrix[ 0 ][ 3 ], rMatrix.m_matrix[ 0 ][ 3 ] );
-        difference0 = Simd::And( difference0, absMask );
-        difference1 = Simd::And( difference1, absMask );
-        difference2 = Simd::And( difference2, absMask );
-        difference3 = Simd::And( difference3, absMask );
-        testResult0 = Simd::LessEqualsF32( difference0, rEpsilon );
-        testResult1 = Simd::LessEqualsF32( difference1, rEpsilon );
-        testResult2 = Simd::LessEqualsF32( difference2, rEpsilon );
-        testResult3 = Simd::LessEqualsF32( difference3, rEpsilon );
+        difference0 = Helium::Simd::SubtractF32( m_matrix[ 0 ][ 0 ], rMatrix.m_matrix[ 0 ][ 0 ] );
+        difference1 = Helium::Simd::SubtractF32( m_matrix[ 0 ][ 1 ], rMatrix.m_matrix[ 0 ][ 1 ] );
+        difference2 = Helium::Simd::SubtractF32( m_matrix[ 0 ][ 2 ], rMatrix.m_matrix[ 0 ][ 2 ] );
+        difference3 = Helium::Simd::SubtractF32( m_matrix[ 0 ][ 3 ], rMatrix.m_matrix[ 0 ][ 3 ] );
+        difference0 = Helium::Simd::And( difference0, absMask );
+        difference1 = Helium::Simd::And( difference1, absMask );
+        difference2 = Helium::Simd::And( difference2, absMask );
+        difference3 = Helium::Simd::And( difference3, absMask );
+        testResult0 = Helium::Simd::LessEqualsF32( difference0, rEpsilon );
+        testResult1 = Helium::Simd::LessEqualsF32( difference1, rEpsilon );
+        testResult2 = Helium::Simd::LessEqualsF32( difference2, rEpsilon );
+        testResult3 = Helium::Simd::LessEqualsF32( difference3, rEpsilon );
         result = testResult0;
-        result = Simd::And( result, testResult1 );
-        result = Simd::And( result, testResult2 );
-        result = Simd::And( result, testResult3 );
+        result = Helium::Simd::And( result, testResult1 );
+        result = Helium::Simd::And( result, testResult2 );
+        result = Helium::Simd::And( result, testResult3 );
 
-        difference0 = Simd::SubtractF32( m_matrix[ 1 ][ 0 ], rMatrix.m_matrix[ 1 ][ 0 ] );
-        difference1 = Simd::SubtractF32( m_matrix[ 1 ][ 1 ], rMatrix.m_matrix[ 1 ][ 1 ] );
-        difference2 = Simd::SubtractF32( m_matrix[ 1 ][ 2 ], rMatrix.m_matrix[ 1 ][ 2 ] );
-        difference3 = Simd::SubtractF32( m_matrix[ 1 ][ 3 ], rMatrix.m_matrix[ 1 ][ 3 ] );
-        difference0 = Simd::And( difference0, absMask );
-        difference1 = Simd::And( difference1, absMask );
-        difference2 = Simd::And( difference2, absMask );
-        difference3 = Simd::And( difference3, absMask );
-        testResult0 = Simd::LessEqualsF32( difference0, rEpsilon );
-        testResult1 = Simd::LessEqualsF32( difference1, rEpsilon );
-        testResult2 = Simd::LessEqualsF32( difference2, rEpsilon );
-        testResult3 = Simd::LessEqualsF32( difference3, rEpsilon );
-        result = Simd::And( result, testResult0 );
-        result = Simd::And( result, testResult1 );
-        result = Simd::And( result, testResult2 );
-        result = Simd::And( result, testResult3 );
+        difference0 = Helium::Simd::SubtractF32( m_matrix[ 1 ][ 0 ], rMatrix.m_matrix[ 1 ][ 0 ] );
+        difference1 = Helium::Simd::SubtractF32( m_matrix[ 1 ][ 1 ], rMatrix.m_matrix[ 1 ][ 1 ] );
+        difference2 = Helium::Simd::SubtractF32( m_matrix[ 1 ][ 2 ], rMatrix.m_matrix[ 1 ][ 2 ] );
+        difference3 = Helium::Simd::SubtractF32( m_matrix[ 1 ][ 3 ], rMatrix.m_matrix[ 1 ][ 3 ] );
+        difference0 = Helium::Simd::And( difference0, absMask );
+        difference1 = Helium::Simd::And( difference1, absMask );
+        difference2 = Helium::Simd::And( difference2, absMask );
+        difference3 = Helium::Simd::And( difference3, absMask );
+        testResult0 = Helium::Simd::LessEqualsF32( difference0, rEpsilon );
+        testResult1 = Helium::Simd::LessEqualsF32( difference1, rEpsilon );
+        testResult2 = Helium::Simd::LessEqualsF32( difference2, rEpsilon );
+        testResult3 = Helium::Simd::LessEqualsF32( difference3, rEpsilon );
+        result = Helium::Simd::And( result, testResult0 );
+        result = Helium::Simd::And( result, testResult1 );
+        result = Helium::Simd::And( result, testResult2 );
+        result = Helium::Simd::And( result, testResult3 );
 
-        difference0 = Simd::SubtractF32( m_matrix[ 2 ][ 0 ], rMatrix.m_matrix[ 2 ][ 0 ] );
-        difference1 = Simd::SubtractF32( m_matrix[ 2 ][ 1 ], rMatrix.m_matrix[ 2 ][ 1 ] );
-        difference2 = Simd::SubtractF32( m_matrix[ 2 ][ 2 ], rMatrix.m_matrix[ 2 ][ 2 ] );
-        difference3 = Simd::SubtractF32( m_matrix[ 2 ][ 3 ], rMatrix.m_matrix[ 2 ][ 3 ] );
-        difference0 = Simd::And( difference0, absMask );
-        difference1 = Simd::And( difference1, absMask );
-        difference2 = Simd::And( difference2, absMask );
-        difference3 = Simd::And( difference3, absMask );
-        testResult0 = Simd::LessEqualsF32( difference0, rEpsilon );
-        testResult1 = Simd::LessEqualsF32( difference1, rEpsilon );
-        testResult2 = Simd::LessEqualsF32( difference2, rEpsilon );
-        testResult3 = Simd::LessEqualsF32( difference3, rEpsilon );
-        result = Simd::And( result, testResult0 );
-        result = Simd::And( result, testResult1 );
-        result = Simd::And( result, testResult2 );
-        result = Simd::And( result, testResult3 );
+        difference0 = Helium::Simd::SubtractF32( m_matrix[ 2 ][ 0 ], rMatrix.m_matrix[ 2 ][ 0 ] );
+        difference1 = Helium::Simd::SubtractF32( m_matrix[ 2 ][ 1 ], rMatrix.m_matrix[ 2 ][ 1 ] );
+        difference2 = Helium::Simd::SubtractF32( m_matrix[ 2 ][ 2 ], rMatrix.m_matrix[ 2 ][ 2 ] );
+        difference3 = Helium::Simd::SubtractF32( m_matrix[ 2 ][ 3 ], rMatrix.m_matrix[ 2 ][ 3 ] );
+        difference0 = Helium::Simd::And( difference0, absMask );
+        difference1 = Helium::Simd::And( difference1, absMask );
+        difference2 = Helium::Simd::And( difference2, absMask );
+        difference3 = Helium::Simd::And( difference3, absMask );
+        testResult0 = Helium::Simd::LessEqualsF32( difference0, rEpsilon );
+        testResult1 = Helium::Simd::LessEqualsF32( difference1, rEpsilon );
+        testResult2 = Helium::Simd::LessEqualsF32( difference2, rEpsilon );
+        testResult3 = Helium::Simd::LessEqualsF32( difference3, rEpsilon );
+        result = Helium::Simd::And( result, testResult0 );
+        result = Helium::Simd::And( result, testResult1 );
+        result = Helium::Simd::And( result, testResult2 );
+        result = Helium::Simd::And( result, testResult3 );
 
-        difference0 = Simd::SubtractF32( m_matrix[ 3 ][ 0 ], rMatrix.m_matrix[ 3 ][ 0 ] );
-        difference1 = Simd::SubtractF32( m_matrix[ 3 ][ 1 ], rMatrix.m_matrix[ 3 ][ 1 ] );
-        difference2 = Simd::SubtractF32( m_matrix[ 3 ][ 2 ], rMatrix.m_matrix[ 3 ][ 2 ] );
-        difference3 = Simd::SubtractF32( m_matrix[ 3 ][ 3 ], rMatrix.m_matrix[ 3 ][ 3 ] );
-        difference0 = Simd::And( difference0, absMask );
-        difference1 = Simd::And( difference1, absMask );
-        difference2 = Simd::And( difference2, absMask );
-        difference3 = Simd::And( difference3, absMask );
-        testResult0 = Simd::LessEqualsF32( difference0, rEpsilon );
-        testResult1 = Simd::LessEqualsF32( difference1, rEpsilon );
-        testResult2 = Simd::LessEqualsF32( difference2, rEpsilon );
-        testResult3 = Simd::LessEqualsF32( difference3, rEpsilon );
-        result = Simd::And( result, testResult0 );
-        result = Simd::And( result, testResult1 );
-        result = Simd::And( result, testResult2 );
-        result = Simd::And( result, testResult3 );
+        difference0 = Helium::Simd::SubtractF32( m_matrix[ 3 ][ 0 ], rMatrix.m_matrix[ 3 ][ 0 ] );
+        difference1 = Helium::Simd::SubtractF32( m_matrix[ 3 ][ 1 ], rMatrix.m_matrix[ 3 ][ 1 ] );
+        difference2 = Helium::Simd::SubtractF32( m_matrix[ 3 ][ 2 ], rMatrix.m_matrix[ 3 ][ 2 ] );
+        difference3 = Helium::Simd::SubtractF32( m_matrix[ 3 ][ 3 ], rMatrix.m_matrix[ 3 ][ 3 ] );
+        difference0 = Helium::Simd::And( difference0, absMask );
+        difference1 = Helium::Simd::And( difference1, absMask );
+        difference2 = Helium::Simd::And( difference2, absMask );
+        difference3 = Helium::Simd::And( difference3, absMask );
+        testResult0 = Helium::Simd::LessEqualsF32( difference0, rEpsilon );
+        testResult1 = Helium::Simd::LessEqualsF32( difference1, rEpsilon );
+        testResult2 = Helium::Simd::LessEqualsF32( difference2, rEpsilon );
+        testResult3 = Helium::Simd::LessEqualsF32( difference3, rEpsilon );
+        result = Helium::Simd::And( result, testResult0 );
+        result = Helium::Simd::And( result, testResult1 );
+        result = Helium::Simd::And( result, testResult2 );
+        result = Helium::Simd::And( result, testResult3 );
 
         return result;
     }
@@ -1133,82 +1133,82 @@ namespace Lunar
     /// @param[in] rEpsilon  Comparison threshold.
     ///
     /// @return  SIMD mask with bits set for matrices that are not equal within the given threshold.
-    SimdMask Matrix44Soa::NotEquals( const Matrix44Soa& rMatrix, const SimdVector& rEpsilon ) const
+    Helium::SimdMask Matrix44Soa::NotEquals( const Matrix44Soa& rMatrix, const Helium::SimdVector& rEpsilon ) const
     {
-        SimdVector absMask = Simd::SetSplatU32( 0x7fffffff );
+        Helium::SimdVector absMask = Helium::Simd::SetSplatU32( 0x7fffffff );
 
-        SimdMask result;
+        Helium::SimdMask result;
 
-        SimdVector difference0, difference1, difference2, difference3;
-        SimdMask testResult0, testResult1, testResult2, testResult3;
+        Helium::SimdVector difference0, difference1, difference2, difference3;
+        Helium::SimdMask testResult0, testResult1, testResult2, testResult3;
 
-        difference0 = Simd::SubtractF32( m_matrix[ 0 ][ 0 ], rMatrix.m_matrix[ 0 ][ 0 ] );
-        difference1 = Simd::SubtractF32( m_matrix[ 0 ][ 1 ], rMatrix.m_matrix[ 0 ][ 1 ] );
-        difference2 = Simd::SubtractF32( m_matrix[ 0 ][ 2 ], rMatrix.m_matrix[ 0 ][ 2 ] );
-        difference3 = Simd::SubtractF32( m_matrix[ 0 ][ 3 ], rMatrix.m_matrix[ 0 ][ 3 ] );
-        difference0 = Simd::And( difference0, absMask );
-        difference1 = Simd::And( difference1, absMask );
-        difference2 = Simd::And( difference2, absMask );
-        difference3 = Simd::And( difference3, absMask );
-        testResult0 = Simd::GreaterF32( difference0, rEpsilon );
-        testResult1 = Simd::GreaterF32( difference1, rEpsilon );
-        testResult2 = Simd::GreaterF32( difference2, rEpsilon );
-        testResult3 = Simd::GreaterF32( difference3, rEpsilon );
+        difference0 = Helium::Simd::SubtractF32( m_matrix[ 0 ][ 0 ], rMatrix.m_matrix[ 0 ][ 0 ] );
+        difference1 = Helium::Simd::SubtractF32( m_matrix[ 0 ][ 1 ], rMatrix.m_matrix[ 0 ][ 1 ] );
+        difference2 = Helium::Simd::SubtractF32( m_matrix[ 0 ][ 2 ], rMatrix.m_matrix[ 0 ][ 2 ] );
+        difference3 = Helium::Simd::SubtractF32( m_matrix[ 0 ][ 3 ], rMatrix.m_matrix[ 0 ][ 3 ] );
+        difference0 = Helium::Simd::And( difference0, absMask );
+        difference1 = Helium::Simd::And( difference1, absMask );
+        difference2 = Helium::Simd::And( difference2, absMask );
+        difference3 = Helium::Simd::And( difference3, absMask );
+        testResult0 = Helium::Simd::GreaterF32( difference0, rEpsilon );
+        testResult1 = Helium::Simd::GreaterF32( difference1, rEpsilon );
+        testResult2 = Helium::Simd::GreaterF32( difference2, rEpsilon );
+        testResult3 = Helium::Simd::GreaterF32( difference3, rEpsilon );
         result = testResult0;
-        result = Simd::Or( result, testResult1 );
-        result = Simd::Or( result, testResult2 );
-        result = Simd::Or( result, testResult3 );
+        result = Helium::Simd::Or( result, testResult1 );
+        result = Helium::Simd::Or( result, testResult2 );
+        result = Helium::Simd::Or( result, testResult3 );
 
-        difference0 = Simd::SubtractF32( m_matrix[ 1 ][ 0 ], rMatrix.m_matrix[ 1 ][ 0 ] );
-        difference1 = Simd::SubtractF32( m_matrix[ 1 ][ 1 ], rMatrix.m_matrix[ 1 ][ 1 ] );
-        difference2 = Simd::SubtractF32( m_matrix[ 1 ][ 2 ], rMatrix.m_matrix[ 1 ][ 2 ] );
-        difference3 = Simd::SubtractF32( m_matrix[ 1 ][ 3 ], rMatrix.m_matrix[ 1 ][ 3 ] );
-        difference0 = Simd::And( difference0, absMask );
-        difference1 = Simd::And( difference1, absMask );
-        difference2 = Simd::And( difference2, absMask );
-        difference3 = Simd::And( difference3, absMask );
-        testResult0 = Simd::GreaterF32( difference0, rEpsilon );
-        testResult1 = Simd::GreaterF32( difference1, rEpsilon );
-        testResult2 = Simd::GreaterF32( difference2, rEpsilon );
-        testResult3 = Simd::GreaterF32( difference3, rEpsilon );
-        result = Simd::Or( result, testResult0 );
-        result = Simd::Or( result, testResult1 );
-        result = Simd::Or( result, testResult2 );
-        result = Simd::Or( result, testResult3 );
+        difference0 = Helium::Simd::SubtractF32( m_matrix[ 1 ][ 0 ], rMatrix.m_matrix[ 1 ][ 0 ] );
+        difference1 = Helium::Simd::SubtractF32( m_matrix[ 1 ][ 1 ], rMatrix.m_matrix[ 1 ][ 1 ] );
+        difference2 = Helium::Simd::SubtractF32( m_matrix[ 1 ][ 2 ], rMatrix.m_matrix[ 1 ][ 2 ] );
+        difference3 = Helium::Simd::SubtractF32( m_matrix[ 1 ][ 3 ], rMatrix.m_matrix[ 1 ][ 3 ] );
+        difference0 = Helium::Simd::And( difference0, absMask );
+        difference1 = Helium::Simd::And( difference1, absMask );
+        difference2 = Helium::Simd::And( difference2, absMask );
+        difference3 = Helium::Simd::And( difference3, absMask );
+        testResult0 = Helium::Simd::GreaterF32( difference0, rEpsilon );
+        testResult1 = Helium::Simd::GreaterF32( difference1, rEpsilon );
+        testResult2 = Helium::Simd::GreaterF32( difference2, rEpsilon );
+        testResult3 = Helium::Simd::GreaterF32( difference3, rEpsilon );
+        result = Helium::Simd::Or( result, testResult0 );
+        result = Helium::Simd::Or( result, testResult1 );
+        result = Helium::Simd::Or( result, testResult2 );
+        result = Helium::Simd::Or( result, testResult3 );
 
-        difference0 = Simd::SubtractF32( m_matrix[ 2 ][ 0 ], rMatrix.m_matrix[ 2 ][ 0 ] );
-        difference1 = Simd::SubtractF32( m_matrix[ 2 ][ 1 ], rMatrix.m_matrix[ 2 ][ 1 ] );
-        difference2 = Simd::SubtractF32( m_matrix[ 2 ][ 2 ], rMatrix.m_matrix[ 2 ][ 2 ] );
-        difference3 = Simd::SubtractF32( m_matrix[ 2 ][ 3 ], rMatrix.m_matrix[ 2 ][ 3 ] );
-        difference0 = Simd::And( difference0, absMask );
-        difference1 = Simd::And( difference1, absMask );
-        difference2 = Simd::And( difference2, absMask );
-        difference3 = Simd::And( difference3, absMask );
-        testResult0 = Simd::GreaterF32( difference0, rEpsilon );
-        testResult1 = Simd::GreaterF32( difference1, rEpsilon );
-        testResult2 = Simd::GreaterF32( difference2, rEpsilon );
-        testResult3 = Simd::GreaterF32( difference3, rEpsilon );
-        result = Simd::Or( result, testResult0 );
-        result = Simd::Or( result, testResult1 );
-        result = Simd::Or( result, testResult2 );
-        result = Simd::Or( result, testResult3 );
+        difference0 = Helium::Simd::SubtractF32( m_matrix[ 2 ][ 0 ], rMatrix.m_matrix[ 2 ][ 0 ] );
+        difference1 = Helium::Simd::SubtractF32( m_matrix[ 2 ][ 1 ], rMatrix.m_matrix[ 2 ][ 1 ] );
+        difference2 = Helium::Simd::SubtractF32( m_matrix[ 2 ][ 2 ], rMatrix.m_matrix[ 2 ][ 2 ] );
+        difference3 = Helium::Simd::SubtractF32( m_matrix[ 2 ][ 3 ], rMatrix.m_matrix[ 2 ][ 3 ] );
+        difference0 = Helium::Simd::And( difference0, absMask );
+        difference1 = Helium::Simd::And( difference1, absMask );
+        difference2 = Helium::Simd::And( difference2, absMask );
+        difference3 = Helium::Simd::And( difference3, absMask );
+        testResult0 = Helium::Simd::GreaterF32( difference0, rEpsilon );
+        testResult1 = Helium::Simd::GreaterF32( difference1, rEpsilon );
+        testResult2 = Helium::Simd::GreaterF32( difference2, rEpsilon );
+        testResult3 = Helium::Simd::GreaterF32( difference3, rEpsilon );
+        result = Helium::Simd::Or( result, testResult0 );
+        result = Helium::Simd::Or( result, testResult1 );
+        result = Helium::Simd::Or( result, testResult2 );
+        result = Helium::Simd::Or( result, testResult3 );
 
-        difference0 = Simd::SubtractF32( m_matrix[ 3 ][ 0 ], rMatrix.m_matrix[ 3 ][ 0 ] );
-        difference1 = Simd::SubtractF32( m_matrix[ 3 ][ 1 ], rMatrix.m_matrix[ 3 ][ 1 ] );
-        difference2 = Simd::SubtractF32( m_matrix[ 3 ][ 2 ], rMatrix.m_matrix[ 3 ][ 2 ] );
-        difference3 = Simd::SubtractF32( m_matrix[ 3 ][ 3 ], rMatrix.m_matrix[ 3 ][ 3 ] );
-        difference0 = Simd::And( difference0, absMask );
-        difference1 = Simd::And( difference1, absMask );
-        difference2 = Simd::And( difference2, absMask );
-        difference3 = Simd::And( difference3, absMask );
-        testResult0 = Simd::GreaterF32( difference0, rEpsilon );
-        testResult1 = Simd::GreaterF32( difference1, rEpsilon );
-        testResult2 = Simd::GreaterF32( difference2, rEpsilon );
-        testResult3 = Simd::GreaterF32( difference3, rEpsilon );
-        result = Simd::Or( result, testResult0 );
-        result = Simd::Or( result, testResult1 );
-        result = Simd::Or( result, testResult2 );
-        result = Simd::Or( result, testResult3 );
+        difference0 = Helium::Simd::SubtractF32( m_matrix[ 3 ][ 0 ], rMatrix.m_matrix[ 3 ][ 0 ] );
+        difference1 = Helium::Simd::SubtractF32( m_matrix[ 3 ][ 1 ], rMatrix.m_matrix[ 3 ][ 1 ] );
+        difference2 = Helium::Simd::SubtractF32( m_matrix[ 3 ][ 2 ], rMatrix.m_matrix[ 3 ][ 2 ] );
+        difference3 = Helium::Simd::SubtractF32( m_matrix[ 3 ][ 3 ], rMatrix.m_matrix[ 3 ][ 3 ] );
+        difference0 = Helium::Simd::And( difference0, absMask );
+        difference1 = Helium::Simd::And( difference1, absMask );
+        difference2 = Helium::Simd::And( difference2, absMask );
+        difference3 = Helium::Simd::And( difference3, absMask );
+        testResult0 = Helium::Simd::GreaterF32( difference0, rEpsilon );
+        testResult1 = Helium::Simd::GreaterF32( difference1, rEpsilon );
+        testResult2 = Helium::Simd::GreaterF32( difference2, rEpsilon );
+        testResult3 = Helium::Simd::GreaterF32( difference3, rEpsilon );
+        result = Helium::Simd::Or( result, testResult0 );
+        result = Helium::Simd::Or( result, testResult1 );
+        result = Helium::Simd::Or( result, testResult2 );
+        result = Helium::Simd::Or( result, testResult3 );
 
         return result;
     }
@@ -1285,7 +1285,7 @@ namespace Lunar
     /// @param[in] rMatrix  Matrix.
     ///
     /// @return  SIMD mask with bits set for matrices that are equal within the given threshold.
-    SimdMask Matrix44Soa::operator==( const Matrix44Soa& rMatrix ) const
+    Helium::SimdMask Matrix44Soa::operator==( const Matrix44Soa& rMatrix ) const
     {
         return Equals( rMatrix );
     }
@@ -1296,7 +1296,7 @@ namespace Lunar
     /// @param[in] rMatrix  Matrix.
     ///
     /// @return  SIMD mask with bits set for matrices that are not equal within the given threshold.
-    SimdMask Matrix44Soa::operator!=( const Matrix44Soa& rMatrix ) const
+    Helium::SimdMask Matrix44Soa::operator!=( const Matrix44Soa& rMatrix ) const
     {
         return NotEquals( rMatrix );
     }

@@ -77,7 +77,7 @@ namespace Lunar
             if( messageLength != 0 )
             {
                 OutputImpl( pMessage );
-                m_bNewLine = ( pMessage[ messageLength - 1 ] == L_T( '\n' ) );
+                m_bNewLine = ( pMessage[ messageLength - 1 ] == TXT( '\n' ) );
             }
         }
     }
@@ -115,7 +115,7 @@ namespace Lunar
         if( static_cast< unsigned int >( result ) < L_ARRAY_COUNT( buffer ) )
         {
             OutputImpl( buffer );
-            m_bNewLine = ( buffer[ result - 1 ] == L_T( '\n' ) );
+            m_bNewLine = ( buffer[ result - 1 ] == TXT( '\n' ) );
 
             return;
         }
@@ -139,7 +139,7 @@ namespace Lunar
 
             L_ASSERT( result == static_cast< int >( bufferSize - 1 ) );
             OutputImpl( pBuffer );
-            m_bNewLine = ( pBuffer[ result - 1 ] == L_T( '\n' ) );
+            m_bNewLine = ( pBuffer[ result - 1 ] == TXT( '\n' ) );
 
             allocator.Free( pBuffer );
         }
@@ -158,25 +158,25 @@ namespace Lunar
         {
             case LOG_DEBUG:
             {
-                return L_T( "[D] " );
+                return TXT( "[D] " );
             }
 
             case LOG_INFO:
             {
-                return L_T( "[I] " );
+                return TXT( "[I] " );
             }
 
             case LOG_WARNING:
             {
-                return L_T( "[W] " );
+                return TXT( "[W] " );
             }
 
             case LOG_ERROR:
             {
-                return L_T( "[E] " );
+                return TXT( "[E] " );
             }
         }
 
-        return L_T( "[?] " );
+        return TXT( "[?] " );
     }
 }

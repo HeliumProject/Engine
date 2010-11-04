@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-#if L_SIMD_SSE
+#if HELIUM_SIMD_SSE
 
 namespace Lunar
 {
@@ -42,7 +42,7 @@ namespace Lunar
     /// Initializes this plane directly with the values in the given SIMD vector.
     ///
     /// @param[in] rVector  SIMD vector from which to initialize this plane.
-    Plane::Plane( const SimdVector& rVector )
+    Plane::Plane( const Helium::SimdVector& rVector )
         : m_plane( rVector )
     {
     }
@@ -104,10 +104,10 @@ namespace Lunar
     ///                      magnitude.
     void Plane::Set( const Vector3& rNormal, float32_t distance )
     {
-        SimdVector distanceSplat = _mm_set_ps1( distance );
+        Helium::SimdVector distanceSplat = _mm_set_ps1( distance );
 
-        L_SIMD_ALIGN_PRE const uint32_t distanceMaskValues[] L_SIMD_ALIGN_POST = { 0x0, 0x0, 0x0, 0xffffffff };
-        SimdVector distanceMask = _mm_load_ps( reinterpret_cast< const float32_t* >( distanceMaskValues ) );
+        HELIUM_SIMD_ALIGN_PRE const uint32_t distanceMaskValues[] HELIUM_SIMD_ALIGN_POST = { 0x0, 0x0, 0x0, 0xffffffff };
+        Helium::SimdVector distanceMask = _mm_load_ps( reinterpret_cast< const float32_t* >( distanceMaskValues ) );
 
         m_plane = _mm_sub_ps(
             _mm_andnot_ps( distanceMask, rNormal.GetSimdVector() ),
@@ -136,14 +136,14 @@ namespace Lunar
         // Make sure the dot product of the plane normal and a point on the plane (Ax + By + Cz portion of the plane
         // equation, which equates to -D) is stored in the w-component of the dot product vector so we can mask and
         // apply it to proper location in the final coefficient vector.
-        SimdVector normalPointProduct = _mm_mul_ps( normal.GetSimdVector(), rPoint0.GetSimdVector() );
-        SimdVector productX = _mm_shuffle_ps( normalPointProduct, normalPointProduct, _MM_SHUFFLE( 0, 3, 2, 1 ) );
-        SimdVector productY = _mm_shuffle_ps( normalPointProduct, normalPointProduct, _MM_SHUFFLE( 1, 0, 3, 2 ) );
-        SimdVector productZ = _mm_shuffle_ps( normalPointProduct, normalPointProduct, _MM_SHUFFLE( 2, 1, 0, 3 ) );
-        SimdVector normalDotPoint = _mm_add_ps( _mm_add_ps( productX, productY ), productZ );
+        Helium::SimdVector normalPointProduct = _mm_mul_ps( normal.GetSimdVector(), rPoint0.GetSimdVector() );
+        Helium::SimdVector productX = _mm_shuffle_ps( normalPointProduct, normalPointProduct, _MM_SHUFFLE( 0, 3, 2, 1 ) );
+        Helium::SimdVector productY = _mm_shuffle_ps( normalPointProduct, normalPointProduct, _MM_SHUFFLE( 1, 0, 3, 2 ) );
+        Helium::SimdVector productZ = _mm_shuffle_ps( normalPointProduct, normalPointProduct, _MM_SHUFFLE( 2, 1, 0, 3 ) );
+        Helium::SimdVector normalDotPoint = _mm_add_ps( _mm_add_ps( productX, productY ), productZ );
 
-        L_SIMD_ALIGN_PRE const uint32_t distanceMaskValues[] L_SIMD_ALIGN_POST = { 0x0, 0x0, 0x0, 0xffffffff };
-        SimdVector distanceMask = _mm_load_ps( reinterpret_cast< const float32_t* >( distanceMaskValues ) );
+        HELIUM_SIMD_ALIGN_PRE const uint32_t distanceMaskValues[] HELIUM_SIMD_ALIGN_POST = { 0x0, 0x0, 0x0, 0xffffffff };
+        Helium::SimdVector distanceMask = _mm_load_ps( reinterpret_cast< const float32_t* >( distanceMaskValues ) );
 
         m_plane = _mm_sub_ps(
             _mm_andnot_ps( distanceMask, normal.GetSimdVector() ),
@@ -162,12 +162,12 @@ namespace Lunar
     /// @see GetNormalized(), Normalize()
     float32_t Plane::GetDistance( const Vector3& rPoint ) const
     {
-        SimdVector productX = Simd::MultiplyF32( m_plane, rPoint.GetSimdVector() );
-        SimdVector productY = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 0, 3, 2, 1 ) );
-        SimdVector productZ = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 1, 0, 3, 2 ) );
-        SimdVector constant = _mm_shuffle_ps( m_plane, m_plane, _MM_SHUFFLE( 2, 1, 0, 3 ) );
+        Helium::SimdVector productX = Helium::Simd::MultiplyF32( m_plane, rPoint.GetSimdVector() );
+        Helium::SimdVector productY = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 0, 3, 2, 1 ) );
+        Helium::SimdVector productZ = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 1, 0, 3, 2 ) );
+        Helium::SimdVector constant = _mm_shuffle_ps( m_plane, m_plane, _MM_SHUFFLE( 2, 1, 0, 3 ) );
 
-        SimdVector sum = Simd::AddF32( Simd::AddF32( Simd::AddF32( productX, productY ), productZ ), constant );
+        Helium::SimdVector sum = Helium::Simd::AddF32( Helium::Simd::AddF32( Helium::Simd::AddF32( productX, productY ), productZ ), constant );
 
         return reinterpret_cast< const float32_t* >( &sum )[ 0 ];
     }
@@ -184,26 +184,26 @@ namespace Lunar
     {
         epsilon *= epsilon;
 
-        SimdVector productX = Simd::MultiplyF32( m_plane, m_plane );
-        SimdVector productY = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 0, 3, 2, 1 ) );
-        SimdVector productZ = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 1, 0, 3, 2 ) );
+        Helium::SimdVector productX = Helium::Simd::MultiplyF32( m_plane, m_plane );
+        Helium::SimdVector productY = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 0, 3, 2, 1 ) );
+        Helium::SimdVector productZ = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 1, 0, 3, 2 ) );
 
-        SimdVector magnitudeSquared = Simd::AddF32( Simd::AddF32( productX, productY ), productZ );
+        Helium::SimdVector magnitudeSquared = Helium::Simd::AddF32( Helium::Simd::AddF32( productX, productY ), productZ );
         magnitudeSquared = _mm_shuffle_ps( magnitudeSquared, magnitudeSquared, _MM_SHUFFLE( 0, 0, 0, 0 ) );
 
-        SimdVector epsilonVec = _mm_set_ps1( epsilon );
+        Helium::SimdVector epsilonVec = _mm_set_ps1( epsilon );
 
-        SimdMask thresholdMask = Simd::LessF32( magnitudeSquared, epsilonVec );
+        Helium::SimdMask thresholdMask = Helium::Simd::LessF32( magnitudeSquared, epsilonVec );
 
-        SimdVector invMagnitude = Simd::InverseSqrtF32( magnitudeSquared );
+        Helium::SimdVector invMagnitude = Helium::Simd::InverseSqrtF32( magnitudeSquared );
 
-        SimdVector planeNormalized = Simd::MultiplyF32( m_plane, invMagnitude );
-        SimdVector planeFallback = _mm_set_ps( 0.0f, 0.0f, 0.0f, 1.0f );
+        Helium::SimdVector planeNormalized = Helium::Simd::MultiplyF32( m_plane, invMagnitude );
+        Helium::SimdVector planeFallback = _mm_set_ps( 0.0f, 0.0f, 0.0f, 1.0f );
 
-        planeNormalized = Simd::AndNot( thresholdMask, planeNormalized );
-        planeFallback = Simd::And( thresholdMask, planeFallback );
+        planeNormalized = Helium::Simd::AndNot( thresholdMask, planeNormalized );
+        planeFallback = Helium::Simd::And( thresholdMask, planeFallback );
 
-        m_plane = Simd::Or( planeNormalized, planeFallback );
+        m_plane = Helium::Simd::Or( planeNormalized, planeFallback );
     }
 
     /// Test whether each component in this plane is equal to the corresponding component in another plane within a
@@ -217,17 +217,17 @@ namespace Lunar
     {
         epsilon *= epsilon;
 
-        SimdVector differenceSquared = Simd::SubtractF32( m_plane, rPlane.m_plane );
-        differenceSquared = Simd::MultiplyF32( differenceSquared, differenceSquared );
+        Helium::SimdVector differenceSquared = Helium::Simd::SubtractF32( m_plane, rPlane.m_plane );
+        differenceSquared = Helium::Simd::MultiplyF32( differenceSquared, differenceSquared );
 
-        SimdVector epsilonVec = _mm_set_ps1( epsilon );
+        Helium::SimdVector epsilonVec = _mm_set_ps1( epsilon );
 
-        SimdVector testResult = Simd::GreaterF32( differenceSquared, epsilonVec );
-        testResult = Simd::Or( testResult, _mm_movehl_ps( testResult, testResult ) );
-        testResult = Simd::Or( testResult, _mm_shuffle_ps( testResult, testResult, _MM_SHUFFLE( 0, 3, 2, 1 ) ) );
+        Helium::SimdVector testResult = Helium::Simd::GreaterF32( differenceSquared, epsilonVec );
+        testResult = Helium::Simd::Or( testResult, _mm_movehl_ps( testResult, testResult ) );
+        testResult = Helium::Simd::Or( testResult, _mm_shuffle_ps( testResult, testResult, _MM_SHUFFLE( 0, 3, 2, 1 ) ) );
 
         return ( reinterpret_cast< const uint32_t* >( &testResult )[ 0 ] == 0 );
     }
 }
 
-#endif  // L_SIMD_SSE
+#endif  // HELIUM_SIMD_SSE

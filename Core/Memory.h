@@ -10,9 +10,8 @@
 #define LUNAR_CORE_MEMORY_H
 
 #include "Core/Core.h"
-#include "Core/Types.h"
-#include "Core/Simd.h"
-#include "Core/Char.h"
+#include "Platform/Types.h"
+#include "Platform/Simd.h"
 #include "Core/Utility.h"
 #include "Core/MathCommon.h"
 #include <new>
@@ -63,7 +62,7 @@
     { \
         DynamicMemoryHeap& L_MODULE_HEAP_FUNCTION() \
         { \
-            static L_DYNAMIC_MEMORY_HEAP( moduleHeap, L_T( #MODULE_NAME ) ); \
+            static L_DYNAMIC_MEMORY_HEAP( moduleHeap, TXT( #MODULE_NAME ) ); \
             return moduleHeap; \
         } \
     }
@@ -334,11 +333,11 @@ namespace Lunar
     public:
         /// @name Memory Allocation
         //@{
-        L_FORCEINLINE void* Allocate( size_t size );
-        L_FORCEINLINE void* Reallocate( void* pMemory, size_t size );
-        L_FORCEINLINE void* AllocateAligned( size_t alignment, size_t size );
-        L_FORCEINLINE void Free( void* pMemory );
-        L_FORCEINLINE size_t GetMemorySize( void* pMemory );
+        HELIUM_FORCEINLINE void* Allocate( size_t size );
+        HELIUM_FORCEINLINE void* Reallocate( void* pMemory, size_t size );
+        HELIUM_FORCEINLINE void* AllocateAligned( size_t alignment, size_t size );
+        HELIUM_FORCEINLINE void Free( void* pMemory );
+        HELIUM_FORCEINLINE size_t GetMemorySize( void* pMemory );
         //@}
     };
 
@@ -357,7 +356,7 @@ namespace Lunar
     /// StackMemoryHeap is not thread-safe.  Its primary purpose is to provide a method for performing moderately
     /// efficient allocations, often with a short lifetime.
     ///
-    /// Note that the base address of all blocks are aligned to L_SIMD_ALIGNMENT.
+    /// Note that the base address of all blocks are aligned to HELIUM_SIMD_ALIGNMENT.
     template< typename Allocator = DefaultAllocator >
     class StackMemoryHeap : public MemoryHeap
     {
@@ -534,7 +533,7 @@ inline void* operator new( size_t size, Lunar::MemoryHeap& rHeap );
 
 #include "Core/Memory.inl"
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 #include "Core/MemoryWin.inl"
 #endif
 

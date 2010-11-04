@@ -24,9 +24,9 @@ namespace Lunar
     //@}
 }
 
-#if L_SIMD_LRBNI
+#if HELIUM_SIMD_LRBNI
 #include "Core/VectorConversionLrbni.inl"
-#elif L_SIMD_SSE
+#elif HELIUM_SIMD_SSE
 #include "Core/VectorConversionSse.inl"
 #endif
 

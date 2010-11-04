@@ -6,9 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "CorePch.h"
-#include "Core/Platform.h"
+#include "Platform/Platform.h"
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 
 #include "Core/Threading.h"
 
@@ -102,7 +102,7 @@ namespace Lunar
                 nameInfo.dwThreadId = threadId;
                 nameInfo.dwFlags = 0;
 
-#if L_UNICODE
+#if HELIUM_UNICODE
                 // Perform a direct conversion from Unicode to single-byte characters by casting.
                 char name[ 128 ];
                 charCount = Min( charCount, L_ARRAY_COUNT( name ) - 1 );
@@ -225,4 +225,4 @@ namespace Lunar
     }
 }
 
-#endif  // L_OS_WIN
+#endif  // HELIUM_OS_WIN

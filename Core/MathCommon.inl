@@ -133,8 +133,8 @@ namespace Lunar
     /// @return  Absolute value of the given value.
     int64_t Abs( int64_t value )
     {
-#if L_OS_WIN
-#if L_CC_MSC
+#if HELIUM_OS_WIN
+#if HELIUM_CC_MSC
         return ::_abs64( value );
 #else
         return llabs( value );
@@ -217,7 +217,7 @@ namespace Lunar
     {
         L_ASSERT( value );
 
-#if L_CC_MSC
+#if HELIUM_CC_MSC
         unsigned long bitIndex = 0;
         L_VERIFY( _BitScanReverse( &bitIndex, value ) );
 
@@ -251,10 +251,10 @@ namespace Lunar
     {
         L_ASSERT( value );
 
-#if L_CC_MSC
+#if HELIUM_CC_MSC
         unsigned long bitIndex = 0;
 
-#if L_WORDSIZE == 64
+#if HELIUM_WORDSIZE == 64
         L_VERIFY( _BitScanReverse64( &bitIndex, value ) );
 #else
         if( _BitScanReverse( &bitIndex, static_cast< uint32_t >( value >> 32 ) ) )

@@ -40,7 +40,7 @@ namespace Lunar
         return reinterpret_cast< uintptr_t >( pKey );
     }
 
-#if L_WORDSIZE == 32
+#if HELIUM_WORDSIZE == 32
     /// Default 64-bit signed integer hash function.
     ///
     /// @param[in] key  Key for which to compute a hash value.
@@ -95,7 +95,7 @@ namespace Lunar
 
         pun.key = key;
 
-#if L_WORDSIZE == 32
+#if HELIUM_WORDSIZE == 32
         return static_cast< size_t >( pun.hash ) ^ static_cast< size_t >( pun.hash >> 32 );
 #else
         return static_cast< size_t >( pun.hash );

@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-#if L_SIMD_SSE
+#if HELIUM_SIMD_SSE
 
 namespace Lunar
 {
@@ -14,7 +14,7 @@ namespace Lunar
     /// @param[in] rQuat  Quaternion from which to set this quaternion.
     void QuatSoa::Splat( const Quat& rQuat )
     {
-        SimdVector quatVec = rQuat.GetSimdVector();
+        Helium::SimdVector quatVec = rQuat.GetSimdVector();
         m_x = _mm_shuffle_ps( quatVec, quatVec, _MM_SHUFFLE( 0, 0, 0, 0 ) );
         m_y = _mm_shuffle_ps( quatVec, quatVec, _MM_SHUFFLE( 1, 1, 1, 1 ) );
         m_z = _mm_shuffle_ps( quatVec, quatVec, _MM_SHUFFLE( 2, 2, 2, 2 ) );
@@ -22,4 +22,4 @@ namespace Lunar
     }
 }
 
-#endif  // L_SIMD_SSE
+#endif  // HELIUM_SIMD_SSE

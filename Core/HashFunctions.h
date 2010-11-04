@@ -37,7 +37,7 @@ namespace Lunar
         size_t operator()( const T* pKey ) const;
     };
 
-#if L_WORDSIZE == 32
+#if HELIUM_WORDSIZE == 32
     /// Default 64-bit signed integer hash function.
     template<>
     class LUNAR_CORE_API Hash< int64_t >

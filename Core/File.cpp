@@ -206,7 +206,7 @@ namespace Lunar
         if( terminateOffset != 0 )
         {
             tchar_t character = pPath[ terminateOffset ];
-            pPath[ terminateOffset ] = L_T( '\0' );
+            pPath[ terminateOffset ] = TXT( '\0' );
 
             EDirectoryCreateResult parentCreateResult = CreateDirectoryRecursive( pPath, terminateOffset );
 

@@ -11,7 +11,7 @@
 
 #include "Core/Core.h"
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 
 namespace Lunar
 {
@@ -37,6 +37,6 @@ namespace Lunar
 #endif
 }
 
-#endif  // L_OS_WIN
+#endif  // HELIUM_OS_WIN
 
 #endif  // LUNAR_CORE_LOG_WIN_H

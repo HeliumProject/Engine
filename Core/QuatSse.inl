@@ -21,7 +21,7 @@ namespace Lunar
     /// Constructor.
     ///
     /// @param[in] rVector  SIMD vector to copy into this quaternion.
-    Quat::Quat( const SimdVector& rVector )
+    Quat::Quat( const Helium::SimdVector& rVector )
     {
         m_quat = rVector;
     }
@@ -31,7 +31,7 @@ namespace Lunar
     /// @return  Reference to the SIMD vector in which this quaternion is stored.
     ///
     /// @see SetSimdVector()
-    SimdVector& Quat::GetSimdVector()
+    Helium::SimdVector& Quat::GetSimdVector()
     {
         return m_quat;
     }
@@ -41,7 +41,7 @@ namespace Lunar
     /// @return  Constant reference to the SIMD vector in which this quaternion is stored.
     ///
     /// @see SetSimdVector()
-    const SimdVector& Quat::GetSimdVector() const
+    const Helium::SimdVector& Quat::GetSimdVector() const
     {
         return m_quat;
     }
@@ -51,7 +51,7 @@ namespace Lunar
     /// @param[in] rVector  SIMD vector.
     ///
     /// @see GetSimdVector()
-    void Quat::SetSimdVector( const SimdVector& rVector )
+    void Quat::SetSimdVector( const Helium::SimdVector& rVector )
     {
         m_quat = rVector;
     }
@@ -112,7 +112,7 @@ namespace Lunar
     /// @param[in] rQuat1  Second quaternion.
     void Quat::AddSet( const Quat& rQuat0, const Quat& rQuat1 )
     {
-        m_quat = Simd::AddF32( rQuat0.m_quat, rQuat1.m_quat );
+        m_quat = Helium::Simd::AddF32( rQuat0.m_quat, rQuat1.m_quat );
     }
 
     /// Set this quaternion to the component-wise difference of two quaternions.
@@ -121,7 +121,7 @@ namespace Lunar
     /// @param[in] rQuat1  Second quaternion.
     void Quat::SubtractSet( const Quat& rQuat0, const Quat& rQuat1 )
     {
-        m_quat = Simd::SubtractF32( rQuat0.m_quat, rQuat1.m_quat );
+        m_quat = Helium::Simd::SubtractF32( rQuat0.m_quat, rQuat1.m_quat );
     }
 
     /// Set this quaternion to the product of two quaternions.
@@ -130,28 +130,28 @@ namespace Lunar
     /// @param[in] rQuat1  Second quaternion.
     void Quat::MultiplySet( const Quat& rQuat0, const Quat& rQuat1 )
     {
-        L_SIMD_ALIGN_PRE const uint32_t signFlip[ 4 ] L_SIMD_ALIGN_POST = { 0, 0, 0, 0x80000000 };
+        HELIUM_SIMD_ALIGN_PRE const uint32_t signFlip[ 4 ] HELIUM_SIMD_ALIGN_POST = { 0, 0, 0, 0x80000000 };
 
-        SimdVector result = Simd::MultiplyF32(
+        Helium::SimdVector result = Helium::Simd::MultiplyF32(
             _mm_shuffle_ps( rQuat0.m_quat, rQuat0.m_quat, _MM_SHUFFLE( 0, 2, 1, 0 ) ),
             _mm_shuffle_ps( rQuat1.m_quat, rQuat1.m_quat, _MM_SHUFFLE( 0, 3, 3, 3 ) ) );
 
-        SimdVector product = Simd::MultiplyF32(
+        Helium::SimdVector product = Helium::Simd::MultiplyF32(
             _mm_shuffle_ps( rQuat0.m_quat, rQuat0.m_quat, _MM_SHUFFLE( 1, 1, 0, 2 ) ),
             _mm_shuffle_ps( rQuat1.m_quat, rQuat1.m_quat, _MM_SHUFFLE( 1, 0, 2, 1 ) ) );
-        result = Simd::AddF32( result, product );
+        result = Helium::Simd::AddF32( result, product );
 
-        result = Simd::Xor( result, Simd::LoadAligned( signFlip ) );
+        result = Helium::Simd::Xor( result, Helium::Simd::LoadAligned( signFlip ) );
 
-        product = Simd::MultiplyF32(
+        product = Helium::Simd::MultiplyF32(
             _mm_shuffle_ps( rQuat0.m_quat, rQuat0.m_quat, _MM_SHUFFLE( 2, 0, 2, 1 ) ),
             _mm_shuffle_ps( rQuat1.m_quat, rQuat1.m_quat, _MM_SHUFFLE( 2, 1, 0, 2 ) ) );
-        result = Simd::SubtractF32( result, product );
+        result = Helium::Simd::SubtractF32( result, product );
 
-        product = Simd::MultiplyF32(
+        product = Helium::Simd::MultiplyF32(
             _mm_shuffle_ps( rQuat0.m_quat, rQuat0.m_quat, _MM_SHUFFLE( 3, 3, 3, 3 ) ),
             rQuat1.m_quat );
-        result = Simd::AddF32( result, product );
+        result = Helium::Simd::AddF32( result, product );
 
         m_quat = result;
     }
@@ -162,7 +162,7 @@ namespace Lunar
     /// @param[in] rQuat1  Second quaternion.
     void Quat::MultiplyComponentsSet( const Quat& rQuat0, const Quat& rQuat1 )
     {
-        m_quat = Simd::MultiplyF32( rQuat0.m_quat, rQuat1.m_quat );
+        m_quat = Helium::Simd::MultiplyF32( rQuat0.m_quat, rQuat1.m_quat );
     }
 
     /// Set this quaternion to the component-wise quotient of two quaternions.
@@ -171,7 +171,7 @@ namespace Lunar
     /// @param[in] rQuat1  Second quaternion.
     void Quat::DivideComponentsSet( const Quat& rQuat0, const Quat& rQuat1 )
     {
-        m_quat = Simd::DivideF32( rQuat0.m_quat, rQuat1.m_quat );
+        m_quat = Helium::Simd::DivideF32( rQuat0.m_quat, rQuat1.m_quat );
     }
 
     /// Get the magnitude of this quaternion.
@@ -179,12 +179,12 @@ namespace Lunar
     /// @return  Quaternion magnitude.
     float32_t Quat::GetMagnitude() const
     {
-        SimdVector productLo = Simd::MultiplyF32( m_quat, m_quat );
-        SimdVector productHi = _mm_movehl_ps( productLo, productLo );
+        Helium::SimdVector productLo = Helium::Simd::MultiplyF32( m_quat, m_quat );
+        Helium::SimdVector productHi = _mm_movehl_ps( productLo, productLo );
 
-        SimdVector magnitude = Simd::AddF32( productLo, productHi );
-        magnitude = Simd::AddF32( magnitude, _mm_shuffle_ps( magnitude, magnitude, _MM_SHUFFLE( 0, 3, 2, 1 ) ) );
-        magnitude = Simd::SqrtF32( magnitude );
+        Helium::SimdVector magnitude = Helium::Simd::AddF32( productLo, productHi );
+        magnitude = Helium::Simd::AddF32( magnitude, _mm_shuffle_ps( magnitude, magnitude, _MM_SHUFFLE( 0, 3, 2, 1 ) ) );
+        magnitude = Helium::Simd::SqrtF32( magnitude );
 
         return reinterpret_cast< const float32_t* >( &magnitude )[ 0 ];
     }
@@ -194,11 +194,11 @@ namespace Lunar
     /// @return  Squared quaternion magnitude.
     float32_t Quat::GetMagnitudeSquared() const
     {
-        SimdVector productLo = Simd::MultiplyF32( m_quat, m_quat );
-        SimdVector productHi = _mm_movehl_ps( productLo, productLo );
+        Helium::SimdVector productLo = Helium::Simd::MultiplyF32( m_quat, m_quat );
+        Helium::SimdVector productHi = _mm_movehl_ps( productLo, productLo );
 
-        SimdVector sum = Simd::AddF32( productLo, productHi );
-        sum = Simd::AddF32( sum, _mm_shuffle_ps( sum, sum, _MM_SHUFFLE( 0, 3, 2, 1 ) ) );
+        Helium::SimdVector sum = Helium::Simd::AddF32( productLo, productHi );
+        sum = Helium::Simd::AddF32( sum, _mm_shuffle_ps( sum, sum, _MM_SHUFFLE( 0, 3, 2, 1 ) ) );
 
         return reinterpret_cast< const float32_t* >( &sum )[ 0 ];
     }
@@ -214,27 +214,27 @@ namespace Lunar
     {
         epsilon *= epsilon;
 
-        SimdVector productLo = Simd::MultiplyF32( m_quat, m_quat );
-        SimdVector productHi = _mm_shuffle_ps( productLo, productLo, _MM_SHUFFLE( 1, 0, 3, 2 ) );
+        Helium::SimdVector productLo = Helium::Simd::MultiplyF32( m_quat, m_quat );
+        Helium::SimdVector productHi = _mm_shuffle_ps( productLo, productLo, _MM_SHUFFLE( 1, 0, 3, 2 ) );
 
-        SimdVector magnitudeSquared = Simd::AddF32( productLo, productHi );
-        magnitudeSquared = Simd::AddF32(
+        Helium::SimdVector magnitudeSquared = Helium::Simd::AddF32( productLo, productHi );
+        magnitudeSquared = Helium::Simd::AddF32(
             magnitudeSquared,
             _mm_shuffle_ps( magnitudeSquared, magnitudeSquared, _MM_SHUFFLE( 0, 3, 2, 1 ) ) );
 
-        SimdVector epsilonVec = _mm_set_ps1( epsilon );
+        Helium::SimdVector epsilonVec = _mm_set_ps1( epsilon );
 
-        SimdMask thresholdMask = Simd::LessF32( magnitudeSquared, epsilonVec );
+        Helium::SimdMask thresholdMask = Helium::Simd::LessF32( magnitudeSquared, epsilonVec );
 
-        SimdVector invMagnitude = Simd::InverseSqrtF32( magnitudeSquared );
+        Helium::SimdVector invMagnitude = Helium::Simd::InverseSqrtF32( magnitudeSquared );
 
-        SimdVector quatNormalized = Simd::MultiplyF32( m_quat, invMagnitude );
-        SimdVector quatFallback = IDENTITY.m_quat;
+        Helium::SimdVector quatNormalized = Helium::Simd::MultiplyF32( m_quat, invMagnitude );
+        Helium::SimdVector quatFallback = IDENTITY.m_quat;
 
-        quatNormalized = Simd::AndNot( thresholdMask, quatNormalized );
-        quatFallback = Simd::And( thresholdMask, quatFallback );
+        quatNormalized = Helium::Simd::AndNot( thresholdMask, quatNormalized );
+        quatFallback = Helium::Simd::And( thresholdMask, quatFallback );
 
-        m_quat = Simd::Or( quatNormalized, quatFallback );
+        m_quat = Helium::Simd::Or( quatNormalized, quatFallback );
     }
 
     /// Get the inverse of this quaternion.
@@ -244,18 +244,18 @@ namespace Lunar
     /// @see Invert(), GetConjugate(), SetConjugate()
     void Quat::GetInverse( Quat& rQuat ) const
     {
-        L_SIMD_ALIGN_PRE const uint32_t signFlip[ 4 ] L_SIMD_ALIGN_POST = { 0x80000000, 0x80000000, 0x80000000, 0 };
+        HELIUM_SIMD_ALIGN_PRE const uint32_t signFlip[ 4 ] HELIUM_SIMD_ALIGN_POST = { 0x80000000, 0x80000000, 0x80000000, 0 };
 
-        SimdVector productLo = Simd::MultiplyF32( m_quat, m_quat );
-        SimdVector productHi = _mm_shuffle_ps( productLo, productLo, _MM_SHUFFLE( 1, 0, 3, 2 ) );
+        Helium::SimdVector productLo = Helium::Simd::MultiplyF32( m_quat, m_quat );
+        Helium::SimdVector productHi = _mm_shuffle_ps( productLo, productLo, _MM_SHUFFLE( 1, 0, 3, 2 ) );
 
-        SimdVector invMagSquared = Simd::AddF32( productLo, productHi );
-        invMagSquared = Simd::AddF32(
+        Helium::SimdVector invMagSquared = Helium::Simd::AddF32( productLo, productHi );
+        invMagSquared = Helium::Simd::AddF32(
             invMagSquared,
             _mm_shuffle_ps( invMagSquared, invMagSquared, _MM_SHUFFLE( 0, 3, 2, 1 ) ) );
-        invMagSquared = Simd::InverseF32( invMagSquared );
+        invMagSquared = Helium::Simd::InverseF32( invMagSquared );
 
-        rQuat.m_quat = Simd::MultiplyF32( Simd::Xor( m_quat, Simd::LoadAligned( signFlip ) ), invMagSquared );
+        rQuat.m_quat = Helium::Simd::MultiplyF32( Helium::Simd::Xor( m_quat, Helium::Simd::LoadAligned( signFlip ) ), invMagSquared );
     }
 
     /// Get the conjugate of this quaternion.
@@ -265,9 +265,9 @@ namespace Lunar
     /// @see SetConjugate(), GetInverse(), Invert()
     void Quat::GetConjugate( Quat& rQuat ) const
     {
-        L_SIMD_ALIGN_PRE const uint32_t signFlip[ 4 ] L_SIMD_ALIGN_POST = { 0x80000000, 0x80000000, 0x80000000, 0 };
+        HELIUM_SIMD_ALIGN_PRE const uint32_t signFlip[ 4 ] HELIUM_SIMD_ALIGN_POST = { 0x80000000, 0x80000000, 0x80000000, 0 };
 
-        rQuat.m_quat = Simd::Xor( m_quat, Simd::LoadAligned( signFlip ) );
+        rQuat.m_quat = Helium::Simd::Xor( m_quat, Helium::Simd::LoadAligned( signFlip ) );
     }
 
     /// Test whether each component in this quaternion is equal to the corresponding component in another quaternion
@@ -281,14 +281,14 @@ namespace Lunar
     {
         epsilon *= epsilon;
 
-        SimdVector differenceSquared = Simd::SubtractF32( m_quat, rQuat.m_quat );
-        differenceSquared = Simd::MultiplyF32( differenceSquared, differenceSquared );
+        Helium::SimdVector differenceSquared = Helium::Simd::SubtractF32( m_quat, rQuat.m_quat );
+        differenceSquared = Helium::Simd::MultiplyF32( differenceSquared, differenceSquared );
 
-        SimdVector epsilonVec = _mm_set_ps1( epsilon );
+        Helium::SimdVector epsilonVec = _mm_set_ps1( epsilon );
 
-        SimdVector testResult = Simd::GreaterF32( differenceSquared, epsilonVec );
-        testResult = Simd::Or( testResult, _mm_movehl_ps( testResult, testResult ) );
-        testResult = Simd::Or( testResult, _mm_shuffle_ps( testResult, testResult, _MM_SHUFFLE( 0, 3, 2, 1 ) ) );
+        Helium::SimdVector testResult = Helium::Simd::GreaterF32( differenceSquared, epsilonVec );
+        testResult = Helium::Simd::Or( testResult, _mm_movehl_ps( testResult, testResult ) );
+        testResult = Helium::Simd::Or( testResult, _mm_shuffle_ps( testResult, testResult, _MM_SHUFFLE( 0, 3, 2, 1 ) ) );
 
         return ( reinterpret_cast< const uint32_t* >( &testResult )[ 0 ] == 0 );
     }

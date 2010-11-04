@@ -10,7 +10,7 @@
 #define LUNAR_CORE_THREADING_H
 
 #include "Core/Core.h"
-#include "Core/Platform.h"
+#include "Platform/Platform.h"
 
 namespace Lunar
 {
@@ -124,7 +124,7 @@ namespace Lunar
     };
 }
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 #include "ThreadingWin.h"
 #include "ThreadingWin.inl"
 #endif

@@ -7,7 +7,7 @@
 
 #include "CorePch.h"
 
-#if L_SIMD_SSE
+#if HELIUM_SIMD_SSE
 
 #include "Core/AaBox.h"
 #include "Core/Matrix44.h"
@@ -25,10 +25,10 @@ namespace Lunar
     /// @param[in] rPoint  Point to encompass.
     void AaBox::Expand( const Vector3& rPoint )
     {
-        SimdVector pointVec = rPoint.GetSimdVector();
+        Helium::SimdVector pointVec = rPoint.GetSimdVector();
 
-        m_minimum.SetSimdVector( Simd::MinF32( m_minimum.GetSimdVector(), pointVec ) );
-        m_maximum.SetSimdVector( Simd::MaxF32( m_maximum.GetSimdVector(), pointVec ) );
+        m_minimum.SetSimdVector( Helium::Simd::MinF32( m_minimum.GetSimdVector(), pointVec ) );
+        m_maximum.SetSimdVector( Helium::Simd::MaxF32( m_maximum.GetSimdVector(), pointVec ) );
     }
 
     /// Transform this box using the specified transform matrix.
@@ -37,8 +37,8 @@ namespace Lunar
     void AaBox::TransformBy( const Matrix44& rTransform )
     {
         // Expand each corner position.
-        SimdVector minVec = m_minimum.GetSimdVector();
-        SimdVector maxVec = m_maximum.GetSimdVector();
+        Helium::SimdVector minVec = m_minimum.GetSimdVector();
+        Helium::SimdVector maxVec = m_maximum.GetSimdVector();
 
         Vector3Soa corners0;
         corners0.m_x = _mm_shuffle_ps( minVec, minVec, _MM_SHUFFLE( 0, 0, 0, 0 ) );
@@ -57,39 +57,39 @@ namespace Lunar
         transformSplat.TransformPoint( corners1, corners1 );
 
         // Compute the minimum.
-        SimdVector minX = Simd::MinF32( corners0.m_x, corners1.m_x );
-        SimdVector minY = Simd::MinF32( corners0.m_y, corners1.m_y );
-        SimdVector minXYLo = _mm_unpacklo_ps( minX, minY );
-        SimdVector minXYHi = _mm_unpackhi_ps( minX, minY );
-        SimdVector minXY = Simd::MinF32( minXYLo, minXYHi );
+        Helium::SimdVector minX = Helium::Simd::MinF32( corners0.m_x, corners1.m_x );
+        Helium::SimdVector minY = Helium::Simd::MinF32( corners0.m_y, corners1.m_y );
+        Helium::SimdVector minXYLo = _mm_unpacklo_ps( minX, minY );
+        Helium::SimdVector minXYHi = _mm_unpackhi_ps( minX, minY );
+        Helium::SimdVector minXY = Helium::Simd::MinF32( minXYLo, minXYHi );
 
-        SimdVector minZ = Simd::MinF32( corners0.m_z, corners1.m_z );
-        SimdVector minZLo = _mm_unpacklo_ps( minZ, minZ );
-        SimdVector minZHi = _mm_unpackhi_ps( minZ, minZ );
-        minZ = Simd::MinF32( minZLo, minZHi );
+        Helium::SimdVector minZ = Helium::Simd::MinF32( corners0.m_z, corners1.m_z );
+        Helium::SimdVector minZLo = _mm_unpacklo_ps( minZ, minZ );
+        Helium::SimdVector minZHi = _mm_unpackhi_ps( minZ, minZ );
+        minZ = Helium::Simd::MinF32( minZLo, minZHi );
 
-        SimdVector minLo = _mm_movelh_ps( minXY, minZ );
-        SimdVector minHi = _mm_movehl_ps( minZ, minXY );
+        Helium::SimdVector minLo = _mm_movelh_ps( minXY, minZ );
+        Helium::SimdVector minHi = _mm_movehl_ps( minZ, minXY );
 
-        m_minimum.SetSimdVector( Simd::MinF32( minLo, minHi ) );
+        m_minimum.SetSimdVector( Helium::Simd::MinF32( minLo, minHi ) );
 
         // Compute the maximum.
-        SimdVector maxX = Simd::MaxF32( corners0.m_x, corners1.m_x );
-        SimdVector maxY = Simd::MaxF32( corners0.m_y, corners1.m_y );
-        SimdVector maxXYLo = _mm_unpacklo_ps( maxX, maxY );
-        SimdVector maxXYHi = _mm_unpackhi_ps( maxX, maxY );
-        SimdVector maxXY = Simd::MaxF32( maxXYLo, maxXYHi );
+        Helium::SimdVector maxX = Helium::Simd::MaxF32( corners0.m_x, corners1.m_x );
+        Helium::SimdVector maxY = Helium::Simd::MaxF32( corners0.m_y, corners1.m_y );
+        Helium::SimdVector maxXYLo = _mm_unpacklo_ps( maxX, maxY );
+        Helium::SimdVector maxXYHi = _mm_unpackhi_ps( maxX, maxY );
+        Helium::SimdVector maxXY = Helium::Simd::MaxF32( maxXYLo, maxXYHi );
 
-        SimdVector maxZ = Simd::MaxF32( corners0.m_z, corners1.m_z );
-        SimdVector maxZLo = _mm_unpacklo_ps( maxZ, maxZ );
-        SimdVector maxZHi = _mm_unpackhi_ps( maxZ, maxZ );
-        maxZ = Simd::MaxF32( maxZLo, maxZHi );
+        Helium::SimdVector maxZ = Helium::Simd::MaxF32( corners0.m_z, corners1.m_z );
+        Helium::SimdVector maxZLo = _mm_unpacklo_ps( maxZ, maxZ );
+        Helium::SimdVector maxZHi = _mm_unpackhi_ps( maxZ, maxZ );
+        maxZ = Helium::Simd::MaxF32( maxZLo, maxZHi );
 
-        SimdVector maxLo = _mm_movelh_ps( maxXY, maxZ );
-        SimdVector maxHi = _mm_movehl_ps( maxZ, maxXY );
+        Helium::SimdVector maxLo = _mm_movelh_ps( maxXY, maxZ );
+        Helium::SimdVector maxHi = _mm_movehl_ps( maxZ, maxXY );
 
-        m_maximum.SetSimdVector( Simd::MaxF32( maxLo, maxHi ) );
+        m_maximum.SetSimdVector( Helium::Simd::MaxF32( maxLo, maxHi ) );
     }
 }
 
-#endif  // L_SIMD_SSE
+#endif  // HELIUM_SIMD_SSE

@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-#if L_SIMD_SSE
+#if HELIUM_SIMD_SSE
 
 namespace Lunar
 {
@@ -71,13 +71,13 @@ namespace Lunar
     /// @param[in] radius   Sphere radius.
     void Sphere::Set( const Vector3& rCenter, float32_t radius )
     {
-        L_SIMD_ALIGN_PRE const uint32_t radiusMask[] L_SIMD_ALIGN_POST = { 0x0, 0x0, 0x0, 0xffffffff };
-        SimdVector radiusMaskVec = Simd::LoadAligned( radiusMask );
+        HELIUM_SIMD_ALIGN_PRE const uint32_t radiusMask[] HELIUM_SIMD_ALIGN_POST = { 0x0, 0x0, 0x0, 0xffffffff };
+        Helium::SimdVector radiusMaskVec = Helium::Simd::LoadAligned( radiusMask );
 
-        SimdVector centerVec = rCenter.GetSimdVector();
-        SimdVector radiusVec = Simd::SetSplatF32( radius );
+        Helium::SimdVector centerVec = rCenter.GetSimdVector();
+        Helium::SimdVector radiusVec = Helium::Simd::SetSplatF32( radius );
 
-        m_centerRadius = Simd::Select( centerVec, radiusVec, radiusMaskVec );
+        m_centerRadius = Helium::Simd::Select( centerVec, radiusVec, radiusMaskVec );
     }
 
     /// Set the sphere center and radius.
@@ -106,25 +106,25 @@ namespace Lunar
     /// @param[in] rBox  Axis-aligned bounding box.
     void Sphere::Set( const AaBox& rBox )
     {
-        SimdVector halfVec = Simd::SetSplatF32( 0.5f );
+        Helium::SimdVector halfVec = Helium::Simd::SetSplatF32( 0.5f );
 
-        L_SIMD_ALIGN_PRE const uint32_t radiusMask[] L_SIMD_ALIGN_POST = { 0x0, 0x0, 0x0, 0xffffffff };
-        SimdVector radiusMaskVec = Simd::LoadAligned( radiusMask );
+        HELIUM_SIMD_ALIGN_PRE const uint32_t radiusMask[] HELIUM_SIMD_ALIGN_POST = { 0x0, 0x0, 0x0, 0xffffffff };
+        Helium::SimdVector radiusMaskVec = Helium::Simd::LoadAligned( radiusMask );
 
-        SimdVector boxMinVec = rBox.GetMinimum().GetSimdVector();
-        SimdVector boxMaxVec = rBox.GetMaximum().GetSimdVector();
+        Helium::SimdVector boxMinVec = rBox.GetMinimum().GetSimdVector();
+        Helium::SimdVector boxMaxVec = rBox.GetMaximum().GetSimdVector();
 
-        SimdVector center = Simd::MultiplyF32( Simd::AddF32( boxMinVec, boxMaxVec ), halfVec );
+        Helium::SimdVector center = Helium::Simd::MultiplyF32( Helium::Simd::AddF32( boxMinVec, boxMaxVec ), halfVec );
 
-        SimdVector centerToExtent = Simd::SubtractF32( boxMaxVec, center );
-        SimdVector extentSquaredX = Simd::MultiplyF32( centerToExtent, centerToExtent );
-        SimdVector extentSquaredY = _mm_shuffle_ps( extentSquaredX, extentSquaredX, _MM_SHUFFLE( 0, 3, 2, 1 ) );
-        SimdVector extentSquaredZ = _mm_shuffle_ps( extentSquaredX, extentSquaredX, _MM_SHUFFLE( 1, 0, 3, 2 ) );
-        SimdVector radius =
-            Simd::SqrtF32( Simd::AddF32( Simd::AddF32( extentSquaredX, extentSquaredY ), extentSquaredZ ) );
+        Helium::SimdVector centerToExtent = Helium::Simd::SubtractF32( boxMaxVec, center );
+        Helium::SimdVector extentSquaredX = Helium::Simd::MultiplyF32( centerToExtent, centerToExtent );
+        Helium::SimdVector extentSquaredY = _mm_shuffle_ps( extentSquaredX, extentSquaredX, _MM_SHUFFLE( 0, 3, 2, 1 ) );
+        Helium::SimdVector extentSquaredZ = _mm_shuffle_ps( extentSquaredX, extentSquaredX, _MM_SHUFFLE( 1, 0, 3, 2 ) );
+        Helium::SimdVector radius =
+            Helium::Simd::SqrtF32( Helium::Simd::AddF32( Helium::Simd::AddF32( extentSquaredX, extentSquaredY ), extentSquaredZ ) );
         radius = _mm_shuffle_ps( radius, radius, _MM_SHUFFLE( 0, 0, 0, 0 ) );
 
-        m_centerRadius = Simd::Select( center, radius, radiusMaskVec );
+        m_centerRadius = Helium::Simd::Select( center, radius, radiusMaskVec );
     }
 
     /// Set the sphere center.
@@ -134,10 +134,10 @@ namespace Lunar
     /// @see Translate()
     void Sphere::SetCenter( const Vector3& rCenter )
     {
-        L_SIMD_ALIGN_PRE const uint32_t radiusMask[] L_SIMD_ALIGN_POST = { 0x0, 0x0, 0x0, 0xffffffff };
-        SimdVector radiusMaskVec = Simd::LoadAligned( radiusMask );
+        HELIUM_SIMD_ALIGN_PRE const uint32_t radiusMask[] HELIUM_SIMD_ALIGN_POST = { 0x0, 0x0, 0x0, 0xffffffff };
+        Helium::SimdVector radiusMaskVec = Helium::Simd::LoadAligned( radiusMask );
 
-        m_centerRadius = Simd::Select( rCenter.GetSimdVector(), m_centerRadius, radiusMaskVec );
+        m_centerRadius = Helium::Simd::Select( rCenter.GetSimdVector(), m_centerRadius, radiusMaskVec );
     }
 
     /// Translate the sphere center.
@@ -147,12 +147,12 @@ namespace Lunar
     /// @see SetCenter()
     void Sphere::Translate( const Vector3& rOffset )
     {
-        L_SIMD_ALIGN_PRE const uint32_t centerMask[] L_SIMD_ALIGN_POST = { 0xffffffff, 0xffffffff, 0xffffffff, 0x0 };
-        SimdVector centerMaskVec = Simd::LoadAligned( centerMask );
+        HELIUM_SIMD_ALIGN_PRE const uint32_t centerMask[] HELIUM_SIMD_ALIGN_POST = { 0xffffffff, 0xffffffff, 0xffffffff, 0x0 };
+        Helium::SimdVector centerMaskVec = Helium::Simd::LoadAligned( centerMask );
 
-        SimdVector offsetVec = Simd::And( rOffset.GetSimdVector(), centerMaskVec );
+        Helium::SimdVector offsetVec = Helium::Simd::And( rOffset.GetSimdVector(), centerMaskVec );
 
-        m_centerRadius = Simd::AddF32( m_centerRadius, offsetVec );
+        m_centerRadius = Helium::Simd::AddF32( m_centerRadius, offsetVec );
     }
 
     /// Set the sphere radius.
@@ -162,12 +162,12 @@ namespace Lunar
     /// @see Scale()
     void Sphere::SetRadius( float32_t radius )
     {
-        L_SIMD_ALIGN_PRE const uint32_t radiusMask[] L_SIMD_ALIGN_POST = { 0x0, 0x0, 0x0, 0xffffffff };
-        SimdVector radiusMaskVec = Simd::LoadAligned( radiusMask );
+        HELIUM_SIMD_ALIGN_PRE const uint32_t radiusMask[] HELIUM_SIMD_ALIGN_POST = { 0x0, 0x0, 0x0, 0xffffffff };
+        Helium::SimdVector radiusMaskVec = Helium::Simd::LoadAligned( radiusMask );
 
-        SimdVector radiusVec = Simd::SetSplatF32( radius );
+        Helium::SimdVector radiusVec = Helium::Simd::SetSplatF32( radius );
 
-        m_centerRadius = Simd::Select( m_centerRadius, radiusVec, radiusMaskVec );
+        m_centerRadius = Helium::Simd::Select( m_centerRadius, radiusVec, radiusMaskVec );
     }
 
     /// Scale the sphere radius.
@@ -177,14 +177,14 @@ namespace Lunar
     /// @see SetRadius()
     void Sphere::Scale( float32_t scale )
     {
-        L_SIMD_ALIGN_PRE const uint32_t radiusMask[] L_SIMD_ALIGN_POST = { 0x0, 0x0, 0x0, 0xffffffff };
-        SimdVector radiusMaskVec = Simd::LoadAligned( radiusMask );
+        HELIUM_SIMD_ALIGN_PRE const uint32_t radiusMask[] HELIUM_SIMD_ALIGN_POST = { 0x0, 0x0, 0x0, 0xffffffff };
+        Helium::SimdVector radiusMaskVec = Helium::Simd::LoadAligned( radiusMask );
 
-        SimdVector onesVec = Simd::SetSplatF32( 1.0f );
+        Helium::SimdVector onesVec = Helium::Simd::SetSplatF32( 1.0f );
 
-        SimdVector scaleVec = Simd::Select( onesVec, Simd::SetSplatF32( scale ), radiusMaskVec );
+        Helium::SimdVector scaleVec = Helium::Simd::Select( onesVec, Helium::Simd::SetSplatF32( scale ), radiusMaskVec );
 
-        m_centerRadius = Simd::MultiplyF32( m_centerRadius, scaleVec );
+        m_centerRadius = Helium::Simd::MultiplyF32( m_centerRadius, scaleVec );
     }
 
     /// Test whether this sphere and the given sphere intersect.
@@ -196,23 +196,23 @@ namespace Lunar
     /// @return  True if the two spheres intersect, false if not.
     bool Sphere::Intersects( const Sphere& rSphere, float32_t threshold ) const
     {
-        SimdVector toSphere = Simd::SubtractF32( rSphere.m_centerRadius, m_centerRadius );
-        SimdVector productX = Simd::MultiplyF32( toSphere, toSphere );
-        SimdVector productY = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 0, 3, 2, 1 ) );
-        SimdVector productZ = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 1, 0, 3, 2 ) );
+        Helium::SimdVector toSphere = Helium::Simd::SubtractF32( rSphere.m_centerRadius, m_centerRadius );
+        Helium::SimdVector productX = Helium::Simd::MultiplyF32( toSphere, toSphere );
+        Helium::SimdVector productY = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 0, 3, 2, 1 ) );
+        Helium::SimdVector productZ = _mm_shuffle_ps( productX, productX, _MM_SHUFFLE( 1, 0, 3, 2 ) );
 
-        SimdVector distanceSquared = Simd::AddF32( Simd::AddF32( productX, productY ), productZ );
+        Helium::SimdVector distanceSquared = Helium::Simd::AddF32( Helium::Simd::AddF32( productX, productY ), productZ );
 
-        SimdVector thresholdVec = _mm_set_ss( threshold );
-        SimdVector radii = Simd::AddF32( m_centerRadius, rSphere.m_centerRadius );
+        Helium::SimdVector thresholdVec = _mm_set_ss( threshold );
+        Helium::SimdVector radii = Helium::Simd::AddF32( m_centerRadius, rSphere.m_centerRadius );
         radii = _mm_shuffle_ps( radii, radii, _MM_SHUFFLE( 3, 3, 3, 3 ) );
-        radii = Simd::AddF32( radii, thresholdVec );
+        radii = Helium::Simd::AddF32( radii, thresholdVec );
 
-        SimdVector compareResult = Simd::LessEqualsF32( distanceSquared, Simd::MultiplyF32( radii, radii ) );
+        Helium::SimdVector compareResult = Helium::Simd::LessEqualsF32( distanceSquared, Helium::Simd::MultiplyF32( radii, radii ) );
         int resultMask = _mm_movemask_ps( compareResult );
 
         return ( ( resultMask & 0x1 ) != 0 );
     }
 }
 
-#endif  // L_SIMD_SSE
+#endif  // HELIUM_SIMD_SSE

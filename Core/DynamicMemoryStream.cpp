@@ -136,7 +136,7 @@ namespace Lunar
 
             default:
             {
-                L_LOG( LOG_ERROR, L_T( "DynamicMemoryStream::Seek(): Invalid seek origin specified.\n" ) );
+                L_LOG( LOG_ERROR, TXT( "DynamicMemoryStream::Seek(): Invalid seek origin specified.\n" ) );
 
                 return static_cast< int64_t >( m_offset );
             }
@@ -150,7 +150,7 @@ namespace Lunar
             {
                 L_LOG(
                     LOG_ERROR,
-                    L_T( "DynamicMemoryStream::Seek(): Attempted to seek before the start of the memory stream.\n" ) );
+                    TXT( "DynamicMemoryStream::Seek(): Attempted to seek before the start of the memory stream.\n" ) );
             }
             else
             {
@@ -165,8 +165,8 @@ namespace Lunar
             {
                 L_LOG(
                     LOG_ERROR,
-                    ( L_T( "DynamicMemoryStream::Seek(): Attempted to seek outside the maximum buffer size supported " )
-                      L_T( "by the current platform.\n" ) ) );
+                    ( TXT( "DynamicMemoryStream::Seek(): Attempted to seek outside the maximum buffer size supported " )
+                      TXT( "by the current platform.\n" ) ) );
             }
             else
             {

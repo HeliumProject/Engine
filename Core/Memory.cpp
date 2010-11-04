@@ -130,7 +130,7 @@ namespace Lunar
     /// @return  Reference to the default dynamic memory heap.
     DynamicMemoryHeap& GetDefaultHeap()
     {
-        static L_DYNAMIC_MEMORY_HEAP( defaultHeap, L_T( "Default" ) );
+        static L_DYNAMIC_MEMORY_HEAP( defaultHeap, TXT( "Default" ) );
         return defaultHeap;
     }
 #endif
@@ -141,7 +141,7 @@ namespace Lunar
     /// @return  Reference for the external allocation fallback heap.
     DynamicMemoryHeap& GetExternalHeap()
     {
-        static L_DYNAMIC_MEMORY_HEAP( externalHeap, L_T( "External" ) );
+        static L_DYNAMIC_MEMORY_HEAP( externalHeap, TXT( "External" ) );
         return externalHeap;
     }
 #endif

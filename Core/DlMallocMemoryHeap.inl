@@ -57,7 +57,7 @@ static int PhysicalMemoryFree( void* pMemory, size_t size )
 /// @param[in] ...      Format arguments.
 static void PrintfWrapper( const char* pFormat, ... )
 {
-#if L_UNICODE
+#if HELIUM_UNICODE
     char message[ Lunar::Log::DEFAULT_MESSAGE_BUFFER_SIZE ];
 
     va_list argList;
@@ -86,7 +86,7 @@ static void PrintfWrapper( const char* pFormat, ... )
         ++pDestCharacter;
     }
 
-    L_LOG( Lunar::LOG_DEBUG, L_T( "%s" ), messageWide );
+    L_LOG( Lunar::LOG_DEBUG, TXT( "%s" ), messageWide );
 #else
     va_list argList;
     va_start( argList, pFormat );
@@ -105,8 +105,8 @@ static void PrintfWrapper( const char* pFormat, ... )
 #define REALLOC_ZERO_BYTES_FREES 1
 #define FOOTERS 1
 
-#define CORRUPTION_ERROR_ACTION( m ) L_ASSERT_MESSAGE_FALSE( L_T( "Memory corruption detected!" ) )
-#define USAGE_ERROR_ACTION( m, p ) L_ASSERT_MESSAGE_FALSE( L_T( "Incorrect realloc()/free() usage detected!" ) )
+#define CORRUPTION_ERROR_ACTION( m ) L_ASSERT_MESSAGE_FALSE( TXT( "Memory corruption detected!" ) )
+#define USAGE_ERROR_ACTION( m, p ) L_ASSERT_MESSAGE_FALSE( TXT( "Incorrect realloc()/free() usage detected!" ) )
 
 #if L_RELEASE
 #define INSECURE 1

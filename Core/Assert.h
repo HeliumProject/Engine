@@ -10,13 +10,13 @@
 #define LUNAR_CORE_ASSERT_H
 
 #include "Core/Core.h"
-#include "Core/Types.h"
-#include "Core/Char.h"
+
+#include "Platform/Types.h"
 
 /// @defgroup assert Assertion Support
 //@{
 
-#if L_CC_MSC
+#if HELIUM_CC_MSC
 
 /// Trigger a debug breakpoint.
 #define L_BREAKPOINT __debugbreak()
@@ -29,7 +29,7 @@
 /// Preprocessor token alias for the current function name string.
 #define L_FUNCTION_NAME __FUNCSIG__
 
-#elif L_CC_GCC
+#elif HELIUM_CC_GCC
 
 /// Trigger a debug breakpoint.
 #define L_BREAKPOINT __builtin_trap()
@@ -146,7 +146,7 @@ namespace Lunar
 /// @param[in] EXP  Expression to evaluate.
 ///
 /// @see L_ASSERT_MESSAGE(), L_ASSERT_FALSE(), L_ASSERT_MESSAGE_FALSE(), L_VERIFY(), L_VERIFY_MESSAGE()
-#define L_ASSERT( EXP ) { if( !( EXP ) ) L_TRIGGER_ASSERT_HANDLER( L_T( #EXP ), NULL ) }
+#define L_ASSERT( EXP ) { if( !( EXP ) ) L_TRIGGER_ASSERT_HANDLER( TXT( #EXP ), NULL ) }
 
 /// Trigger a debug breakpoint with a customized message if the result of an expression is false in non-release builds.
 ///
@@ -154,7 +154,7 @@ namespace Lunar
 /// @param[in] MESSAGE  Message to display if the assertion is triggered.
 ///
 /// @see L_ASSERT(), L_ASSERT_FALSE(), L_ASSERT_MESSAGE_FALSE() L_VERIFY(), L_VERIFY_MESSAGE()
-#define L_ASSERT_MESSAGE( EXP, MESSAGE ) { if( !( EXP ) ) L_TRIGGER_ASSERT_HANDLER( L_T( #EXP ), MESSAGE ) }
+#define L_ASSERT_MESSAGE( EXP, MESSAGE ) { if( !( EXP ) ) L_TRIGGER_ASSERT_HANDLER( TXT( #EXP ), MESSAGE ) }
 
 /// Trigger a debug breakpoint unconditionally in non-release builds.
 ///

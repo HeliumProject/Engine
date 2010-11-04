@@ -9,13 +9,13 @@
 #ifndef LUNAR_CORE_VECTOR4_H
 #define LUNAR_CORE_VECTOR4_H
 
-#include "Core/Simd.h"
+#include "Platform/Simd.h"
 #include "Core/MathCommon.h"
 
 namespace Lunar
 {
     /// Single-precision floating-point 4-component vector.  Note that this is aligned to 16 bytes for SIMD support.
-    L_ALIGN_PRE( 16 ) class LUNAR_CORE_API Vector4
+    HELIUM_ALIGN_PRE( 16 ) class LUNAR_CORE_API Vector4
     {
     public:
         /// @name Construction/Destruction
@@ -23,17 +23,17 @@ namespace Lunar
         inline Vector4();
         inline Vector4( float32_t x, float32_t y, float32_t z, float32_t w );
         inline explicit Vector4( float32_t s );
-#if L_SIMD_SIZE == 16
-        inline explicit Vector4( const SimdVector& rVector );
+#if HELIUM_SIMD_SIZE == 16
+        inline explicit Vector4( const Helium::SimdVector& rVector );
 #endif
         //@}
 
         /// @name Data Access
         //@{
-#if L_SIMD_SIZE == 16
-        inline SimdVector& GetSimdVector();
-        inline const SimdVector& GetSimdVector() const;
-        inline void SetSimdVector( const SimdVector& rVector );
+#if HELIUM_SIMD_SIZE == 16
+        inline Helium::SimdVector& GetSimdVector();
+        inline const Helium::SimdVector& GetSimdVector() const;
+        inline void SetSimdVector( const Helium::SimdVector& rVector );
 #endif
 
         inline float32_t& GetElement( size_t index );
@@ -103,21 +103,21 @@ namespace Lunar
         //@}
 
     private:
-#if L_SIMD_SIZE == 16
+#if HELIUM_SIMD_SIZE == 16
         /// SIMD vector containing the vector values.
-        SimdVector m_vector;
+        Helium::SimdVector m_vector;
 #else
         /// Vector values.
         float32_t m_vector[ 4 ];
 #endif
-    } L_ALIGN_POST( 16 );
+    } HELIUM_ALIGN_POST( 16 );
 }
 
 #include "Core/Vector4.inl"
 
-#if L_SIMD_LRBNI
+#if HELIUM_SIMD_LRBNI
 #include "Core/Vector4Lrbni.inl"
-#elif L_SIMD_SSE
+#elif HELIUM_SIMD_SSE
 #include "Core/Vector4Sse.inl"
 #endif
 

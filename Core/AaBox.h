@@ -16,7 +16,7 @@ namespace Lunar
     class Matrix44;
 
     /// Axis-aligned bounding box.
-    L_ALIGN_PRE( 16 ) class LUNAR_CORE_API AaBox
+    HELIUM_ALIGN_PRE( 16 ) class LUNAR_CORE_API AaBox
     {
     public:
         /// @name Construction/Destruction
@@ -41,7 +41,7 @@ namespace Lunar
         Vector3 m_minimum;
         /// Box maximum.
         Vector3 m_maximum;
-    } L_ALIGN_POST( 16 );
+    } HELIUM_ALIGN_POST( 16 );
 }
 
 #include "Core/AaBox.inl"

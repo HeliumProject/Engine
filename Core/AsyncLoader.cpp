@@ -43,7 +43,7 @@ namespace Lunar
         m_pWorker = new LoadWorker;
         L_ASSERT( m_pWorker );
 
-        m_pThread = new Thread( m_pWorker, String( L_T( "Async loading" ) ) );
+        m_pThread = new Thread( m_pWorker, String( TXT( "Async loading" ) ) );
         L_ASSERT( m_pThread );
         L_VERIFY( m_pThread->Start() );
 

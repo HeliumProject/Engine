@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-#if L_SIMD_SSE
+#if HELIUM_SIMD_SSE
 
 namespace Lunar
 {
@@ -14,11 +14,11 @@ namespace Lunar
     /// @param[in] rVector  Vector from which to set this vector.
     void Vector3Soa::Splat( const Vector3& rVector )
     {
-        SimdVector vectorVec = rVector.GetSimdVector();
+        Helium::SimdVector vectorVec = rVector.GetSimdVector();
         m_x = _mm_shuffle_ps( vectorVec, vectorVec, _MM_SHUFFLE( 0, 0, 0, 0 ) );
         m_y = _mm_shuffle_ps( vectorVec, vectorVec, _MM_SHUFFLE( 1, 1, 1, 1 ) );
         m_z = _mm_shuffle_ps( vectorVec, vectorVec, _MM_SHUFFLE( 2, 2, 2, 2 ) );
     }
 }
 
-#endif  // L_SIMD_SSE
+#endif  // HELIUM_SIMD_SSE

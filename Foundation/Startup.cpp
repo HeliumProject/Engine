@@ -251,8 +251,8 @@ void Helium::Startup( int argc, const tchar_t** argv )
         // Setup exception handlers, do this last
         //
 
-        // handle 'new' errors, invalid parameters, etc...
-        Helium::Platform::Initialize();
+        // handle invalid parameters, etc...
+        Helium::EnableCPPErrorHandling( true );
 
         // init debug handling
         Helium::Debug::InitializeExceptionListener();

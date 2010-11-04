@@ -46,9 +46,9 @@ static void InvalidParameterHandler( const wchar_t* expression, const wchar_t* f
 #endif
 }
 
-static void EnableCPPErrorHandling(bool enable)
+void Helium::EnableCPPErrorHandling( bool enable )
 {
-    if (enable)
+    if ( enable )
     {
         _set_new_handler( &NewHandler );
     }
@@ -57,7 +57,7 @@ static void EnableCPPErrorHandling(bool enable)
         _set_new_handler( NULL );
     }
 
-    if (enable)
+    if ( enable )
     {
         _set_purecall_handler( &PureCallHandler );
     }
@@ -66,7 +66,7 @@ static void EnableCPPErrorHandling(bool enable)
         _set_purecall_handler( NULL );
     }
 
-    if (enable)
+    if ( enable )
     {
         _set_invalid_parameter_handler( &InvalidParameterHandler );
     }
@@ -74,19 +74,6 @@ static void EnableCPPErrorHandling(bool enable)
     {
         _set_invalid_parameter_handler( NULL );
     }
-}
-
-void Platform::Initialize()
-{
-    ULONG enableLFH = 2;
-    HeapSetInformation((HANDLE)_get_heap_handle(), HeapCompatibilityInformation, &enableLFH, sizeof(enableLFH));
-
-    EnableCPPErrorHandling( true );
-}
-
-void Platform::Cleanup()
-{
-    EnableCPPErrorHandling( false );
 }
 
 Platform::Type Platform::GetType()

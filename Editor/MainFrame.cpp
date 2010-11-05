@@ -112,8 +112,10 @@ MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWind
 , m_SettingsManager( settingsManager )
 , m_MRU( new MenuMRU( 30, this ) )
 , m_TreeMonitor( &m_SceneManager )
+, m_Project( NULL )
 , m_MessageDisplayer( this )
-, m_SceneManager( MessageSignature::Delegate( &m_MessageDisplayer, &MessageDisplayer::DisplayMessage ), FileDialogSignature::Delegate( &m_FileDialogDisplayer, &FileDialogDisplayer::DisplayFileDialog ) )
+, m_DocumentManager( MessageSignature::Delegate( &m_MessageDisplayer, &MessageDisplayer::DisplayMessage ), FileDialogSignature::Delegate( &m_FileDialogDisplayer, &FileDialogDisplayer::DisplayFileDialog ) )
+, m_SceneManager()
 , m_VaultPanel( NULL )
 {
     wxIcon appIcon;
@@ -188,7 +190,7 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     m_FrameManager.AddPane( m_ViewPanel, wxAuiPaneInfo().Name( wxT( "view" ) ).CenterPane() );
 
     // Project
-    m_ProjectPanel = new ProjectPanel( this );
+    m_ProjectPanel = new ProjectPanel( this, &m_DocumentManager );
     wxAuiPaneInfo projectPaneInfo = wxAuiPaneInfo().Name( wxT( "project" ) ).Caption( wxT( "Project" ) ).Left().Layer( 2 ).Position( 1 ).BestSize( 200, 700 );
     projectPaneInfo.dock_proportion = 30000;
     m_FrameManager.AddPane( m_ProjectPanel, projectPaneInfo );
@@ -233,10 +235,10 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
 
 
     // Attach event handlers
-    m_SceneManager.AddCurrentSceneChangingListener( SceneChangeSignature::Delegate (this, &MainFrame::CurrentSceneChanging) );
-    m_SceneManager.AddCurrentSceneChangedListener( SceneChangeSignature::Delegate (this, &MainFrame::CurrentSceneChanged) );
-    m_SceneManager.AddSceneAddedListener( SceneChangeSignature::Delegate( this, &MainFrame::SceneAdded ) );
-    m_SceneManager.AddSceneRemovingListener( SceneChangeSignature::Delegate( this, &MainFrame::SceneRemoving ) );
+    m_SceneManager.e_CurrentSceneChanging.AddMethod( this, &MainFrame::CurrentSceneChanging );
+    m_SceneManager.e_CurrentSceneChanged.AddMethod( this, &MainFrame::CurrentSceneChanged );
+    m_SceneManager.e_SceneAdded.AddMethod( this, &MainFrame::SceneAdded );
+    m_SceneManager.e_SceneRemoving.AddMethod( this, &MainFrame::SceneRemoving );
 
     m_MRU->AddItemSelectedListener( MRUSignature::Delegate( this, &MainFrame::OnMRUOpen ) );
 
@@ -295,20 +297,18 @@ MainFrame::~MainFrame()
     m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
     // Remove any straggling document listeners
-    OS_DocumentSmartPtr::Iterator docItr = m_SceneManager.GetDocumentManager().GetDocuments().Begin();
-    OS_DocumentSmartPtr::Iterator docEnd = m_SceneManager.GetDocumentManager().GetDocuments().End();
+    OS_DocumentSmartPtr::Iterator docItr = m_DocumentManager.GetDocuments().Begin();
+    OS_DocumentSmartPtr::Iterator docEnd = m_DocumentManager.GetDocuments().End();
     for ( ; docItr != docEnd; ++docItr )
     {
-        ( *docItr )->RemoveDocumentModifiedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
-        ( *docItr )->RemoveDocumentSavedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
-        ( *docItr )->RemoveDocumentClosedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
+        DisconnectDocument( *docItr );
     }
 
     // Save preferences and MRU
 #if MRU_REFACTOR
     std::vector< tstring > mruPaths;
     m_MRU->ToVector( mruPaths );
-    wxGetApp().GetSettings()->GetSceneSettings()->GetMRU()->SetPaths( mruPaths );
+    wxGetApp().GetSettings()->GetMRU()->SetPaths( mruPaths );
 #endif
 
     wxGetApp().GetSettingsManager()->GetSettings< WindowSettings >()->SetFromWindow( this, &m_FrameManager );
@@ -318,10 +318,10 @@ MainFrame::~MainFrame()
     // Detach event handlers
     //
 
-    m_SceneManager.RemoveCurrentSceneChangingListener( SceneChangeSignature::Delegate (this, &MainFrame::CurrentSceneChanging) );
-    m_SceneManager.RemoveCurrentSceneChangedListener( SceneChangeSignature::Delegate (this, &MainFrame::CurrentSceneChanged) );
-    m_SceneManager.RemoveSceneAddedListener( SceneChangeSignature::Delegate( this, &MainFrame::SceneAdded ) );
-    m_SceneManager.RemoveSceneRemovingListener( SceneChangeSignature::Delegate( this, &MainFrame::SceneRemoving ) );
+    m_SceneManager.e_CurrentSceneChanging.RemoveMethod( this, &MainFrame::CurrentSceneChanging );
+    m_SceneManager.e_CurrentSceneChanged.RemoveMethod( this, &MainFrame::CurrentSceneChanged );
+    m_SceneManager.e_SceneAdded.RemoveMethod( this, &MainFrame::SceneAdded );
+    m_SceneManager.e_SceneRemoving.RemoveMethod( this, &MainFrame::SceneRemoving );
 
     m_MRU->RemoveItemSelectedListener( MRUSignature::Delegate( this, &MainFrame::OnMRUOpen ) );
 
@@ -373,7 +373,17 @@ bool MainFrame::OpenProject( const Helium::Path& path )
         {
             m_MRU->Insert( path );
 
-            m_ProjectPanel->SetProject( m_Project );
+            Document* document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
+            if ( !document )
+            {
+                tstring error;
+                bool result = m_DocumentManager.OpenDocument( new Document( m_Project->a_Path.Get() ), error );
+                HELIUM_ASSERT( result );
+
+                document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
+            }
+            ConnectDocument( document );
+            m_ProjectPanel->SetProject( m_Project, document );
 
             if ( m_VaultPanel )
             {
@@ -479,10 +489,8 @@ void MainFrame::SceneAdded( const SceneChangeArgs& args )
 
         m_PropertiesPanel->GetPropertiesGenerator().PopulateLink().Add( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &SceneGraph::Scene::PopulateLink) );
 
-        Document* document = m_SceneManager.GetDocumentManager().FindDocument( args.m_Scene->GetPath() );
-        document->AddDocumentModifiedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
-        document->AddDocumentSavedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
-        document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
+        Document* document = m_DocumentManager.FindDocument( args.m_Scene->GetPath() );
+        ConnectDocument( document );
     }
 }
 
@@ -506,8 +514,8 @@ void MainFrame::SceneRemoving( const SceneChangeArgs& args )
 void MainFrame::SceneLoadFinished( const LoadArgs& args )
 {
     m_ViewPanel->GetViewCanvas()->Refresh();
-    Document* document = m_SceneManager.GetDocumentManager().FindDocument( args.m_Scene->GetPath() );
-    DocumentModified( DocumentChangedArgs( document ) );
+    Document* document = m_DocumentManager.FindDocument( args.m_Scene->GetPath() );
+    DocumentChanged( DocumentEventArgs( document ) );
 }
 
 void MainFrame::SceneExecuted( const ExecuteArgs& args )
@@ -538,7 +546,7 @@ void MainFrame::OnOpen( wxCommandEvent& event )
 // 
 void MainFrame::OnMRUOpen( const MRUArgs& args )
 {
-    DoOpen( args.m_Item );
+    OpenProject( args.m_Item );
 }
 
 void MainFrame::OnChar(wxKeyEvent& event)
@@ -699,16 +707,48 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+// Returns a different name each time this function is called so that scenes
+// can be uniquely named.
+// 
+static void GetUniquePathName( const tchar* root, const std::set< Path >& paths, Helium::Path& name )
+{
+    int32_t number = 0;
+
+    do
+    {
+        tostringstream strm;
+        strm << root;
+        // number will have a value of 1 on first run     
+        if ( ++number > 1 )
+        {
+            strm << TXT( "(" ) << number << TXT( ")" );
+        }
+        name.Set( strm.str() );
+    }
+    while ( paths.find( name ) != paths.end() );
+}
+
 void MainFrame::OnNewScene( wxCommandEvent& event )
 {
     m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
-    if ( m_SceneManager.GetDocumentManager().CloseAll() )
-    {
-        ScenePtr scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport() );
-        m_SceneManager.GetDocumentManager().FindDocument( scene->GetPath() )->SetModified( true );
-        m_SceneManager.SetCurrentScene( scene );
-    }
+    HELIUM_ASSERT( m_Project );
+
+    Helium::Path path;
+    GetUniquePathName( TXT( "New Scene" ), m_Project->Paths(), path );
+
+    DocumentPtr document = new Document( path );
+    document->HasChanged( true );
+
+    tstring error;
+    bool result = m_DocumentManager.OpenDocument( document, error );
+    HELIUM_ASSERT( result );
+
+    ScenePtr scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport(), document );
+    m_SceneManager.SetCurrentScene( scene );
+
+    m_Project->AddPath( scene->GetPath() );
 }
 
 void MainFrame::OnNewEntity( wxCommandEvent& event )
@@ -718,61 +758,75 @@ void MainFrame::OnNewEntity( wxCommandEvent& event )
 
 void MainFrame::OnNewProject( wxCommandEvent& event )
 {
-    m_Project = new Project ();
-    m_Project->a_Path.Set( TXT("New Project.project.hrb") );
-    m_ProjectPanel->SetProject( m_Project );
-    m_ProjectPanel->Refresh();
+    m_Project = new Project();
+    m_Project->a_Path.Set( TXT("New Project") );
+
+    Document* document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
+    if ( !document )
+    {
+        tstring error;
+        bool result = m_DocumentManager.OpenDocument( new Document( m_Project->a_Path.Get() ), error );
+        HELIUM_ASSERT( result );
+
+        document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
+        document->HasChanged( true );
+    }
+
+    m_ProjectPanel->SetProject( m_Project, document );    
 }
 
 bool MainFrame::DoOpen( const tstring& path )
 {
-    bool opened = false;
-    Helium::Path nocPath( path );
-    if ( !path.empty() && nocPath.Exists() )
-    {
-        m_PropertiesPanel->GetPropertiesManager().SyncThreads();
+#pragma TODO( "Rachel WIP: "__FUNCTION__" - This should be opening and closing Projects rather than Scenes." )
+#pragma TODO( "Rachel WIP: "__FUNCTION__" - We will need to handle opening/loading Scenes from the projectView" )
+    //bool opened = false;
+    //Helium::Path nocPath( path );
+    //if ( !path.empty() && nocPath.Exists() )
+    //{
+    //    m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
-        if ( m_SceneManager.GetDocumentManager().CloseAll() )
-        {
-            tstring error;
+    //    if ( m_DocumentManager.CloseAll() )
+    //    {
+    //        tstring error;
 
-            try
-            {
-                opened = m_SceneManager.OpenScene( &m_ViewPanel->GetViewCanvas()->GetViewport(), path, error ) != NULL;
-            }
-            catch ( const Helium::Exception& ex )
-            {
-                error = ex.What();
-            }
+    //        try
+    //        {
+    //            opened = m_SceneManager.OpenScene( &m_ViewPanel->GetViewCanvas()->GetViewport(), path, error ) != NULL;
+    //        }
+    //        catch ( const Helium::Exception& ex )
+    //        {
+    //            error = ex.What();
+    //        }
 
-            if ( opened )
-            {
-                m_MRU->Insert( path );
-            }
-            else
-            {
-                m_MRU->Remove( path );
-                if ( !error.empty() )
-                {
-                    wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
-                }
-            }
-        }
-    }
-    return opened;
+    //        if ( opened )
+    //        {
+    //            m_MRU->Insert( path );
+    //        }
+    //        else
+    //        {
+    //            m_MRU->Remove( path );
+    //            if ( !error.empty() )
+    //            {
+    //                wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
+    //            }
+    //        }
+    //    }
+    //}
+    //return opened;
+    return false;
 }
 
 void MainFrame::OnClose( wxCommandEvent& event )
 {
     m_PropertiesPanel->GetPropertiesManager().SyncThreads();
-    m_SceneManager.GetDocumentManager().CloseAll();
+    m_DocumentManager.CloseAll();
     m_Project = NULL;
 }
 
 void MainFrame::OnSaveAll( wxCommandEvent& event )
 {
     tstring error;
-    if ( !m_SceneManager.GetDocumentManager().SaveAll( error ) )
+    if ( !m_DocumentManager.SaveAll( error ) )
     {
         wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
     }
@@ -1313,6 +1367,8 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
             }
         }
 
+#pragma TODO( "Rachel WIP: "__FUNCTION__" - Change the selection or display changes in the Project view" )
+
         // Restore selection-sensitive settings
         args.m_Scene->RefreshSelection();
 
@@ -1526,30 +1582,41 @@ void MainFrame::PickWorld( PickArgs& args )
 #pragma TODO("Pick the project's root scene -Geoff")
 }
 
-void MainFrame::DocumentModified( const DocumentChangedArgs& args )
+void MainFrame::ConnectDocument( const Document* document )
 {
-    bool doAnyDocsNeedSaved = false;
-    OS_DocumentSmartPtr::Iterator docItr = m_SceneManager.GetDocumentManager().GetDocuments().Begin();
-    OS_DocumentSmartPtr::Iterator docEnd = m_SceneManager.GetDocumentManager().GetDocuments().End();
+    document->e_Changed.AddMethod( this, &MainFrame::DocumentChanged );
+    document->e_Saved.AddMethod( this, &MainFrame::DocumentChanged ) ;
+    document->e_Closed.AddMethod( this, &MainFrame::DocumentClosed );
+}
+
+void MainFrame::DisconnectDocument( const Document* document )
+{
+    document->e_Changed.RemoveMethod( this, &MainFrame::DocumentChanged );
+    document->e_Saved.RemoveMethod( this, &MainFrame::DocumentChanged ) ;
+    document->e_Closed.RemoveMethod( this, &MainFrame::DocumentClosed );
+}
+
+void MainFrame::DocumentChanged( const DocumentEventArgs& args )
+{
+    bool doAnyDocsNeedSaving = false;
+    OS_DocumentSmartPtr::Iterator docItr = m_DocumentManager.GetDocuments().Begin();
+    OS_DocumentSmartPtr::Iterator docEnd = m_DocumentManager.GetDocuments().End();
     for ( ; docItr != docEnd; ++docItr )
     {
-        if ( ( *docItr )->IsModified() || !( *docItr )->GetPath().Exists() )
+        if ( ( *docItr )->HasChanged() || !( *docItr )->GetPath().Exists() )
         {
-            doAnyDocsNeedSaved = true;
+            doAnyDocsNeedSaving = true;
             break;
         }
     }
 
-    m_MenuFile->Enable( ID_SaveAll, doAnyDocsNeedSaved );
+    m_MenuFile->Enable( ID_SaveAll, doAnyDocsNeedSaving );
 }
 
-void MainFrame::DocumentClosed( const DocumentChangedArgs& args )
+void MainFrame::DocumentClosed( const DocumentEventArgs& args )
 {
-    DocumentModified( args );
-
-    args.m_Document->RemoveDocumentModifiedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
-    args.m_Document->RemoveDocumentSavedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
-    args.m_Document->RemoveDocumentClosedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
+    DocumentChanged( args );
+    DisconnectDocument( args.m_Document );
 }
 
 void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
@@ -1985,7 +2052,7 @@ void MainFrame::OnExiting( wxCloseEvent& args )
 {
     m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
-    if ( !m_SceneManager.GetDocumentManager().CloseAll() )
+    if ( !m_DocumentManager.CloseAll() )
     {
         if ( args.CanVeto() )
         {

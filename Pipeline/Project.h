@@ -14,6 +14,8 @@ namespace Helium
         Project( const Path& path = TXT( "" ) );
         virtual ~Project();
 
+        bool Save() const;
+
         const std::set< Path >& Paths()
         {
             return m_Paths;

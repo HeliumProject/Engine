@@ -47,7 +47,7 @@ bool DocumentManager::OpenDocument( const DocumentPtr& document, tstring& error 
             return false;
         }
 
-        if ( !IsUpToDate( document ) )
+        if ( !document->IsUpToDate() )
         {
             error = TXT( "The version of '" ) + document->GetPath().Filename() + TXT( "' on your computer is out of date.  You will not be able to check it out." );
             return false;
@@ -56,6 +56,24 @@ bool DocumentManager::OpenDocument( const DocumentPtr& document, tstring& error 
 
     AddDocument( document );
     return true;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Adds a document to the list managed by this object.  Returns false if the 
+// document was already in the list belonging to this manager.
+// 
+bool DocumentManager::AddDocument( const DocumentPtr& document )
+{
+    if ( m_Documents.Append( document ) )
+    {
+        document->e_Closed.AddMethod( this, &DocumentManager::OnDocumentClosed );
+
+        e_DocumentAdded.Raise( DocumentEventArgs( document ) );
+
+        return true;
+    }
+
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -138,6 +156,7 @@ bool DocumentManager::SaveDocument( DocumentPtr document, tstring& error )
     if ( document->GetPath().Extension().empty() )
     {
         tstring filters;
+#pragma TODO( "This needs to be getting the correct file filters for the document being saved" )
         Reflect::Archive::GetFileFilters( filters );
         FileDialogArgs args ( FileDialogTypes::SaveFile, TXT("Save As..."), filters, document->GetPath().Directory(), document->GetPath() );
         m_FileDialog.Invoke( args );
@@ -154,7 +173,7 @@ bool DocumentManager::SaveDocument( DocumentPtr document, tstring& error )
 
     if ( document->Save( error ) )
     {
-        document->SetModified( false );
+        document->HasChanged( false );
         return true;
     }
 
@@ -313,11 +332,41 @@ bool DocumentManager::CloseDocument( DocumentPtr document, bool prompt )
 
     if ( shouldClose )
     {
-        document->RaiseClosed();
+        // This will raise the e_Closed event when the document is finished closing and 
+        // callback to OnDocumentClosed, which will remove the document from m_Documents
+        document->Close();
+
         wasClosed = true;
     }
 
     return wasClosed;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Removes the document from the list managed by this object.
+// NOTE: The document may be deleted if no one is holding a smart pointer to it
+// after this function is called.
+// 
+bool DocumentManager::RemoveDocument( const DocumentPtr& document )
+{
+    document->e_Closed.RemoveMethod( this, &DocumentManager::OnDocumentClosed );
+
+    if ( m_Documents.Remove( document ) )
+    {
+        e_DocumentRemoved.Raise( DocumentEventArgs( document ) );
+        return true;
+    }
+
+    return false;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Callback for when a document is closed.  Removes the document from the list
+// managed by this class.
+// 
+void DocumentManager::OnDocumentClosed( const DocumentEventArgs& args )
+{
+    RemoveDocument( args.m_Document );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -328,10 +377,10 @@ bool DocumentManager::CloseDocument( DocumentPtr document, bool prompt )
 // 
 bool DocumentManager::QueryAllowChanges( Document* document ) const
 {
-    if ( !document->AllowChanges() && !IsCheckedOut( document ) )
+    if ( !document->AllowUnsavableChanges() && !document->IsCheckedOut() )
     {
         QueryCheckOut( document );
-        if ( !IsCheckedOut( document ) )
+        if ( !document->IsCheckedOut() )
         {
             MessageArgs args ( TXT( "Edit anyway?" ),
                 TXT( "Would you like to edit this file anyway?\n(NOTE: You may not be able to save your changes)" ),
@@ -342,12 +391,12 @@ bool DocumentManager::QueryAllowChanges( Document* document ) const
 
             if ( MessageResults::Yes == args.m_Result )
             {
-                document->SetAllowChanges( true );
+                document->AllowUnsavableChanges( true );
             }
         }
     }
 
-    return document->AllowChanges() || IsCheckedOut( document );
+    return document->AllowUnsavableChanges() || document->IsCheckedOut();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -357,7 +406,7 @@ bool DocumentManager::QueryAllowChanges( Document* document ) const
 // 
 bool DocumentManager::AllowChanges( Document* document ) const
 {
-    if ( IsCheckedOut( document ) || document->AllowChanges() )
+    if ( document->IsCheckedOut() || document->AllowUnsavableChanges() )
     {
         return true;
     }
@@ -373,7 +422,7 @@ bool DocumentManager::AllowChanges( Document* document ) const
 // 
 bool DocumentManager::QueryCheckOut( Document* document ) const
 {
-    if ( !IsUpToDate( document ) )
+    if ( !document->IsUpToDate() )
     {
         tostringstream str;
         str << "The version of " << document->GetPath().Filename() << " on your computer is out of date.  You will not be able to check it out.";
@@ -381,7 +430,7 @@ bool DocumentManager::QueryCheckOut( Document* document ) const
     }
     else
     {
-        if ( !IsCheckedOut( document ) )
+        if ( !document->IsCheckedOut() )
         {
             tostringstream str;
             str << "Do you wish to check out " << document->GetPath().Filename() << "?";
@@ -458,7 +507,8 @@ bool DocumentManager::CheckOut( Document* document ) const
         return false;
     }
 
-    document->RaiseCheckedOut();
+#pragma TODO ("Rachel WIP: "__FUNCTION__" - Document CheckedOut")
+    //document->RaiseCheckedOut();
 
     return true;
 }
@@ -587,7 +637,7 @@ bool DocumentManager::QueryAdd( Document* document ) const
 // 
 SaveAction DocumentManager::QueryCloseAll( Document* document ) const
 {
-    if ( document->IsModified() )
+    if ( document->HasChanged() )
     {
         bool attemptCheckOut = false;
         SaveActions::SaveAction action = SaveActions::Save;
@@ -644,12 +694,12 @@ SaveAction DocumentManager::QueryCloseAll( Document* document ) const
 // 
 SaveAction DocumentManager::QueryClose( Document* document ) const
 {
-    if ( !document->IsModified() )
+    if ( !document->HasChanged() )
     {
         return SaveActions::Skip;
     }
 
-    if ( IsCheckedOut( document ) || !RCS::PathIsManaged( document->GetPath().Filename() ) )
+    if ( document->IsCheckedOut() || !RCS::PathIsManaged( document->GetPath().Filename() ) )
     {
         tstring msg( TXT( "Would you like to save changes to " ) );
         msg += TXT( "'" ) + document->GetPath().Filename() + TXT( "' before closing?" );
@@ -681,7 +731,7 @@ SaveAction DocumentManager::QueryClose( Document* document ) const
 // 
 SaveAction DocumentManager::QuerySave( Document* document ) const
 {
-    if ( !document->IsModified() )
+    if ( !document->HasChanged() )
     {
         return SaveActions::Skip;
     }
@@ -691,13 +741,13 @@ SaveAction DocumentManager::QuerySave( Document* document ) const
         return SaveActions::Save;
     }
 
-    if ( !IsCheckedOut( document ) )
+    if ( !document->IsCheckedOut() )
     {
-        if ( document->IsModified() )
+        if ( document->HasChanged() )
         {
             tstring msg;
 
-            if ( !IsUpToDate( document ) )
+            if ( !document->IsUpToDate() )
             {
                 msg = TXT( "Unfortunately, the file '" ) + document->GetPath().Filename() + TXT( "' has been modified in revsion control since you opened it.\n\nYou cannot save the changes you have made.\n\nTo fix this:\n1) Close the file\n2) Get updated assets\n3) Make your changes again\n\nSorry for the inconvenience." );
                 m_Message.Invoke( MessageArgs( TXT( "Cannot save" ), msg, MessagePriorities::Error, MessageAppearances::Ok ) );
@@ -724,101 +774,3 @@ SaveAction DocumentManager::QuerySave( Document* document ) const
     return SaveActions::Save;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Returns true if the file is currently checked out by this user.
-// 
-bool DocumentManager::IsCheckedOut( Document* document ) const
-{
-    if ( !document->GetPath().Filename().empty() && RCS::PathIsManaged( document->GetPath().Filename() ) )
-    {
-        RCS::File rcsFile( document->GetPath().Filename() );
-
-        try
-        {
-            rcsFile.GetInfo();
-        }
-        catch ( Helium::Exception& ex )
-        {
-            tstringstream str;
-            str << "Unable to get info for '" << document->GetPath().Filename() << "': " << ex.What();
-            m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
-        }
-
-        return rcsFile.IsCheckedOutByMe();
-    }
-
-    return true;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Checks to see if the local revision of this file is the same as the head
-// revision, and returns true if so.
-// 
-bool DocumentManager::IsUpToDate( Document* document ) const
-{
-    if ( !document->GetPath().Filename().empty() )
-    {
-        if ( RCS::PathIsManaged( document->GetPath().Filename() ) )
-        {
-            RCS::File rcsFile( document->GetPath().Filename() );
-
-            try
-            {
-                rcsFile.GetInfo();
-            }
-            catch ( Helium::Exception& ex )
-            {
-                tstringstream str;
-                str << "Unable to get info for '" << document->GetPath().Filename() << "': " << ex.What();
-                m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
-            }
-
-            if ( rcsFile.ExistsInDepot() )
-            {
-                return rcsFile.IsUpToDate() && ( rcsFile.m_LocalRevision == document->GetRevision() );
-            }
-        }
-    }
-
-    return true;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Adds a document to the list managed by this object.  Returns false if the 
-// document was already in the list belonging to this manager.
-// 
-bool DocumentManager::AddDocument( const DocumentPtr& document )
-{
-    if ( m_Documents.Append( document ) )
-    {
-        document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &DocumentManager::DocumentClosed ) );
-        return true;
-    }
-
-    return false;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Removes the document from the list managed by this object.
-// NOTE: The document may be deleted if no one is holding a smart pointer to it
-// after this function is called.
-// 
-bool DocumentManager::RemoveDocument( const DocumentPtr& document )
-{
-    document->RemoveDocumentClosedListener( DocumentChangedSignature::Delegate( this, &DocumentManager::DocumentClosed ) );
-    if ( m_Documents.Remove( document ) )
-    {
-        return true;
-    }
-
-    return false;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Callback for when a document is closed.  Removes the document from the list
-// managed by this class.
-// 
-void DocumentManager::DocumentClosed( const DocumentChangedArgs& args )
-{
-    RemoveDocument( args.m_Document );
-}

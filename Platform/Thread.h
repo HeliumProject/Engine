@@ -109,7 +109,7 @@ namespace Helium
         void* GetPointer();
         void SetPointer(void* value);
 
-    private:
+    protected:
         uint32_t m_Key;
     };
 

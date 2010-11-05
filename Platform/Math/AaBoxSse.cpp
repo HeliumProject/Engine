@@ -7,6 +7,8 @@
 
 //#include "CorePch.h"
 
+#include "Platform/Simd.h"
+
 #if HELIUM_SIMD_SSE
 
 #include "Platform/Math/AaBox.h"

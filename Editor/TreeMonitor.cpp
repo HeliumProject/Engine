@@ -23,8 +23,8 @@ TreeMonitor::TreeMonitor( SceneGraph::SceneManager* sceneManager )
 , m_ThawTimer( "TreeMonitorThawTimer", 2000 )
 , m_SelfFrozen( false )
 {
-    m_SceneManager->AddSceneAddedListener( SceneChangeSignature::Delegate( this, &TreeMonitor::OnSceneAdded ) );
-    m_SceneManager->AddSceneRemovingListener( SceneChangeSignature::Delegate( this, &TreeMonitor::OnSceneRemoving ) );
+    m_SceneManager->e_SceneAdded.AddMethod( this, &TreeMonitor::OnSceneAdded );
+    m_SceneManager->e_SceneRemoving.AddMethod( this, &TreeMonitor::OnSceneRemoving );
 
     m_ThawTimer.AddTickListener( TimerTickSignature::Delegate( this, &TreeMonitor::OnThawTimer ) );
     m_ThawTimer.Start();
@@ -40,8 +40,8 @@ TreeMonitor::~TreeMonitor()
     m_ThawTimer.RemoveTickListener( TimerTickSignature::Delegate( this, &TreeMonitor::OnThawTimer ) );
     m_ThawTimer.Stop();
 
-    m_SceneManager->RemoveSceneAddedListener( SceneChangeSignature::Delegate( this, &TreeMonitor::OnSceneAdded ) );
-    m_SceneManager->RemoveSceneRemovingListener( SceneChangeSignature::Delegate( this, &TreeMonitor::OnSceneRemoving ) );
+    m_SceneManager->e_SceneAdded.RemoveMethod( this, &TreeMonitor::OnSceneAdded );
+    m_SceneManager->e_SceneRemoving.RemoveMethod( this, &TreeMonitor::OnSceneRemoving );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

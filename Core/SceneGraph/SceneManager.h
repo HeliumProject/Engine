@@ -3,7 +3,6 @@
 #include "Foundation/Automation/Event.h"
 
 #include "Foundation/Document/Document.h"
-#include "Foundation/Document/DocumentManager.h"
 
 #include "Core/API.h"
 #include "Core/Asset/Classes/SceneAsset.h"
@@ -48,15 +47,15 @@ namespace Helium
         class CORE_API SceneManager
         {
         private:
-            // manages the documents (scenes)
-            DocumentManager m_DocumentManager;
-
             // all loaded scenes by path
             M_SceneSmartPtr m_Scenes;
 
             // scenes by document
-            typedef std::map< const Document*, SceneGraph::Scene* > M_DocumentSceneTable;
-            M_DocumentSceneTable m_DocumentSceneTable;
+            typedef std::map< const Document*, SceneGraph::Scene* > M_DocumentToSceneTable;
+            M_DocumentToSceneTable m_DocumentToSceneTable;
+
+            typedef std::map< SceneGraph::Scene*, const Document* > M_SceneToDocumentTable;
+            M_SceneToDocumentTable m_SceneToDocumentTable;
 
             // the nested scenes that can be freed
             M_AllocScene m_AllocatedScenes;
@@ -65,20 +64,11 @@ namespace Helium
             SceneGraph::Scene* m_CurrentScene;
 
         public:
-            SceneManager( MessageSignature::Delegate message, FileDialogSignature::Delegate fileDialog );
+            SceneManager();
+            ~SceneManager();
 
-            ScenePtr NewScene( SceneGraph::Viewport* viewport, Path path = TXT( "" ) );
-            ScenePtr OpenScene( SceneGraph::Viewport* viewport, const tstring& path, tstring& error );
-
-            DocumentManager& GetDocumentManager()
-            {
-                return m_DocumentManager;
-            }
-
-            bool AllowChanges( Document* document )
-            {
-                return m_DocumentManager.AllowChanges( document );
-            }
+            ScenePtr NewScene( SceneGraph::Viewport* viewport, const Document* document );
+            ScenePtr OpenScene( SceneGraph::Viewport* viewport, const Document* document, tstring& error );
 
             void AddScene( SceneGraph::Scene* scene );
             SceneGraph::Scene* GetScene( const Document* document ) const;
@@ -114,53 +104,11 @@ namespace Helium
             void DocumentClosed( const DocumentEventArgs& args );
             void DocumentPathChanged( const DocumentPathChangedArgs& args );
 
-        private:
-            SceneChangeSignature::Event m_SceneAdded;
         public:
-            void AddSceneAddedListener( const SceneChangeSignature::Delegate& listener )
-            {
-                m_SceneAdded.Add( listener );
-            }
-            void RemoveSceneAddedListener( const SceneChangeSignature::Delegate& listener )
-            {
-                m_SceneAdded.Remove( listener );
-            }
-
-        private:
-            SceneChangeSignature::Event m_SceneRemoving;
-        public:
-            void AddSceneRemovingListener( const SceneChangeSignature::Delegate& listener )
-            {
-                m_SceneRemoving.Add( listener );
-            }
-            void RemoveSceneRemovingListener( const SceneChangeSignature::Delegate& listener )
-            {
-                m_SceneRemoving.Remove( listener );
-            }
-
-        private:
-            SceneChangeSignature::Event m_CurrentSceneChanging;
-        public:
-            void AddCurrentSceneChangingListener( const SceneChangeSignature::Delegate& listener )
-            {
-                m_CurrentSceneChanging.Add( listener );
-            }
-            void RemoveCurrentSceneChangingListener( const SceneChangeSignature::Delegate& listener )
-            {
-                m_CurrentSceneChanging.Remove( listener );
-            }
-
-        private:
-            SceneChangeSignature::Event m_CurrentSceneChanged;
-        public:
-            void AddCurrentSceneChangedListener( const SceneChangeSignature::Delegate& listener )
-            {
-                m_CurrentSceneChanged.Add( listener );
-            }
-            void RemoveCurrentSceneChangedListener( const SceneChangeSignature::Delegate& listener )
-            {
-                m_CurrentSceneChanged.Remove( listener );
-            }
+            SceneChangeSignature::Event e_SceneAdded;
+            SceneChangeSignature::Event e_SceneRemoving;
+            SceneChangeSignature::Event e_CurrentSceneChanging;
+            SceneChangeSignature::Event e_CurrentSceneChanged;
         };
     }
 }

@@ -13,49 +13,34 @@ using namespace Helium;
 using namespace Helium::SceneGraph;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Returns a different name each time this function is called so that scenes
-// can be uniquely named.
 // 
-static tstring GetUniqueSceneName()
+// 
+SceneManager::SceneManager()
+: m_CurrentScene( NULL )
 {
-    static int32_t number = 1;
-
-    tostringstream str;
-    str << "Scene" << number++;
-    return str.str();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// 
-// 
-SceneManager::SceneManager( MessageSignature::Delegate message, FileDialogSignature::Delegate fileDialog )
-: m_DocumentManager( message, fileDialog )
-, m_CurrentScene( NULL )
+SceneManager::~SceneManager()
 {
-
+    m_Scenes.clear();
+    m_DocumentToSceneTable.clear();
+    m_SceneToDocumentTable.clear();
+    m_AllocatedScenes.clear();
+    m_CurrentScene = NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Create a new scene.  Pass in true if this should be the root scene.
 // 
-ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, Path path )
+ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, const Document* document )
 {
-    if ( path.empty() )
-    {
-        path = GetUniqueSceneName();
-    }
-
-    DocumentPtr document = new Document( path );
     document->d_Save.Set( this, &SceneManager::DocumentSave );
     document->e_Closed.AddMethod( this, &SceneManager::DocumentClosed );
     document->e_PathChanged.AddMethod( this, &SceneManager::DocumentPathChanged );
 
-    ScenePtr scene = new SceneGraph::Scene( viewport, path );
-    m_DocumentSceneTable.insert( M_DocumentSceneTable::value_type( document.Ptr(), scene ) );
-    
-    tstring error;
-    bool result = m_DocumentManager.OpenDocument( document, error );
-    HELIUM_ASSERT( result );
+    ScenePtr scene = new SceneGraph::Scene( viewport, document->GetPath() );
+    m_DocumentToSceneTable.insert( M_DocumentToSceneTable::value_type( document, scene.Ptr() ) );
+    m_SceneToDocumentTable.insert( M_SceneToDocumentTable::value_type( scene.Ptr(), document ) );
 
     AddScene( scene );
     return scene;
@@ -64,12 +49,12 @@ ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, Path path )
 ///////////////////////////////////////////////////////////////////////////////
 // Open a zone that should be under the root.
 // 
-ScenePtr SceneManager::OpenScene( SceneGraph::Viewport* viewport, const tstring& path, tstring& error )
+ScenePtr SceneManager::OpenScene( SceneGraph::Viewport* viewport, const Document* document, tstring& error )
 {
-    ScenePtr scene = NewScene( viewport, path );
-    if ( !scene->Load( path ) )
+    ScenePtr scene = NewScene( viewport, document );
+    if ( !scene->Load( document->GetPath() ) )
     {
-        error = TXT( "Failed to load scene from " ) + path + TXT( "." );
+        error = TXT( "Failed to load scene from " ) + document->GetPath().Get() + TXT( "." );
         RemoveScene( scene );
         scene = NULL;
     }
@@ -88,14 +73,14 @@ void SceneManager::AddScene(SceneGraph::Scene* scene)
     Helium::Insert<M_SceneSmartPtr>::Result inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
     HELIUM_ASSERT(inserted.second);
 
-    m_SceneAdded.Raise( scene );
+    e_SceneAdded.Raise( scene );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 SceneGraph::Scene* SceneManager::GetScene( const Document* document ) const
 {
-    M_DocumentSceneTable::const_iterator foundDocument = m_DocumentSceneTable.find( document );
-    if ( foundDocument != m_DocumentSceneTable.end() )
+    M_DocumentToSceneTable::const_iterator foundDocument = m_DocumentToSceneTable.find( document );
+    if ( foundDocument != m_DocumentToSceneTable.end() )
     {
         return foundDocument->second;
     }
@@ -128,14 +113,26 @@ const M_SceneSmartPtr& SceneManager::GetScenes() const
 ///////////////////////////////////////////////////////////////////////////////
 // Removes a scene from this manager
 // 
-void SceneManager::RemoveScene(SceneGraph::Scene* scene)
+void SceneManager::RemoveScene( SceneGraph::Scene* scene )
 {
     // There is a problem in the code.  You should not be unloading a scene that
     // someone still has allocated.
     HELIUM_ASSERT( m_AllocatedScenes.find( scene ) == m_AllocatedScenes.end() );
 
-    m_DocumentManager.FindDocument( scene->GetPath() )->e_PathChanged.RemoveMethod( this, &SceneManager::DocumentPathChanged );
-    m_SceneRemoving.Raise( scene );
+    M_SceneToDocumentTable::iterator findDocument = m_SceneToDocumentTable.find( scene );
+    if ( findDocument != m_SceneToDocumentTable.end() )
+    {
+        const Document* document = findDocument->second;
+
+        document->d_Save.Clear();
+        document->e_Closed.RemoveMethod( this, &SceneManager::DocumentClosed );
+        document->e_PathChanged.RemoveMethod( this, &SceneManager::DocumentPathChanged );
+
+        m_DocumentToSceneTable.erase( document );
+        m_SceneToDocumentTable.erase( findDocument );
+    }
+
+    e_SceneRemoving.Raise( scene );
 
     scene->d_Editing.Clear();
     scene->d_ResolveScene.Clear();
@@ -204,20 +201,22 @@ bool SceneManager::IsNestedScene( SceneGraph::Scene* scene ) const
 // 
 void SceneManager::AllocateNestedScene( const ResolveSceneArgs& args )
 {
+#pragma TODO( " Rachel WIP: "__FUNCTION__" - this function should move out to the mainframe" )
+
     args.m_Scene = GetScene( args.m_Path );
     if ( !args.m_Scene )
     {
         // Try to load nested scene.
         //parent->ChangeStatus( TXT("Loading ") + path + TXT( "..." ) );
 
-        ScenePtr scenePtr = NewScene( args.m_Viewport, args.m_Path );
-        if ( !scenePtr->Load( args.m_Path ) )
-        {
-            Log::Error( TXT( "Failed to load scene from %s\n" ), args.m_Path.c_str() );
-        }
+        //ScenePtr scenePtr = NewScene( args.m_Viewport, args.m_Path );
+        //if ( !scenePtr->Load( args.m_Path ) )
+        //{
+        //    Log::Error( TXT( "Failed to load scene from %s\n" ), args.m_Path.c_str() );
+        //}
 
-        //parent->ChangeStatus( TXT( "Ready" ) );
-        args.m_Scene = scenePtr;
+        ////parent->ChangeStatus( TXT( "Ready" ) );
+        //args.m_Scene = scenePtr;
     }
 
     if ( args.m_Scene )
@@ -291,11 +290,11 @@ void SceneManager::SetCurrentScene( SceneGraph::Scene* scene )
         return;
     }
 
-    m_CurrentSceneChanging.Raise( m_CurrentScene );
+    e_CurrentSceneChanging.Raise( m_CurrentScene );
 
     m_CurrentScene = scene;
 
-    m_CurrentSceneChanged.Raise( m_CurrentScene );
+    e_CurrentSceneChanged.Raise( m_CurrentScene );
 }
 
 
@@ -323,15 +322,18 @@ SceneGraph::Scene* SceneManager::FindFirstNonNestedScene() const
 
 void SceneManager::OnSceneEditing( const SceneEditingArgs& args )
 {
-    Document* document = (Document*)m_DocumentManager.FindDocument( args.m_Scene->GetPath() );
-    if ( document )
+    M_SceneToDocumentTable::iterator findDocument = m_SceneToDocumentTable.find( args.m_Scene );
+    if ( findDocument != m_SceneToDocumentTable.end() )
     {
-        args.m_Veto = !m_DocumentManager.IsCheckedOut( document );
+        const Document* document = findDocument->second;
+        if ( document )
+        {
+            args.m_Veto = !document->IsCheckedOut();
+            return;
+        }
     }
-    else
-    {
-        args.m_Veto = true;
-    }
+
+    args.m_Veto = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

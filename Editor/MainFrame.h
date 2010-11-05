@@ -68,6 +68,11 @@ namespace Helium
                 return m_SceneManager;
             }
 
+            DocumentManager* GetDocumentManager()
+            {
+                return &m_DocumentManager;
+            }
+
         private:
             // Stores information about the state of each outliner for each scene
             // that is open.  Restores the state when switching between scenes.
@@ -87,6 +92,7 @@ namespace Helium
             ProjectPtr                  m_Project;
             MessageDisplayer            m_MessageDisplayer;
             FileDialogDisplayer         m_FileDialogDisplayer;
+            DocumentManager             m_DocumentManager;
             SceneGraph::SceneManager    m_SceneManager;
 
             SettingsManager*            m_SettingsManager;
@@ -171,8 +177,12 @@ namespace Helium
             void CurrentSceneChanging( const SceneGraph::SceneChangeArgs& args );
             void OnToolSelected(wxCommandEvent& event);
             void PickWorld( SceneGraph::PickArgs& args );
+            
+            void ConnectDocument( const Document* document );
+            void DisconnectDocument( const Document* document );
             void DocumentChanged( const DocumentEventArgs& args );
             void DocumentClosed( const DocumentEventArgs& args );
+            
             void ViewToolChanged( const SceneGraph::ToolChangeArgs& args );
             void SceneStatusChanged( const SceneGraph::SceneStatusChangeArgs& args );
             void SceneContextChanged( const SceneGraph::SceneContextChangeArgs& args );

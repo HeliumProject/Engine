@@ -73,8 +73,8 @@ LayersPanel::LayersPanel( SceneManager* manager, wxWindow* parent, wxWindowID id
     // Listeners that are not dependent on the current scene
     if ( m_SceneManager )
     {
-        m_SceneManager->AddCurrentSceneChangingListener( SceneChangeSignature::Delegate( this, &LayersPanel::CurrentSceneChanging ) );
-        m_SceneManager->AddCurrentSceneChangedListener( SceneChangeSignature::Delegate( this, &LayersPanel::CurrentSceneChanged ) );
+        m_SceneManager->e_CurrentSceneChanging.AddMethod( this, &LayersPanel::CurrentSceneChanging );
+        m_SceneManager->e_CurrentSceneChanged.AddMethod( this, &LayersPanel::CurrentSceneChanged );
     }
     m_Grid->AddRowVisibilityChangedListener( GridRowChangeSignature::Delegate( this, &LayersPanel::LayerVisibleChanged ) );
     m_Grid->AddRowSelectabilityChangedListener( GridRowChangeSignature::Delegate( this, &LayersPanel::LayerSelectableChanged ) );
@@ -86,8 +86,8 @@ LayersPanel::~LayersPanel()
     // Remove listeners that are not dependent on the current scene
     if ( m_SceneManager )
     {
-        m_SceneManager->RemoveCurrentSceneChangingListener( SceneChangeSignature::Delegate ( this, &LayersPanel::CurrentSceneChanging ) );
-        m_SceneManager->RemoveCurrentSceneChangedListener( SceneChangeSignature::Delegate ( this, &LayersPanel::CurrentSceneChanged ) );
+        m_SceneManager->e_CurrentSceneChanging.RemoveMethod( this, &LayersPanel::CurrentSceneChanging );
+        m_SceneManager->e_CurrentSceneChanged.RemoveMethod( this, &LayersPanel::CurrentSceneChanged );
     }
     m_Grid->RemoveRowVisibilityChangedListener( GridRowChangeSignature::Delegate  ( this, &LayersPanel::LayerVisibleChanged ) );
     m_Grid->RemoveRowSelectabilityChangedListener( GridRowChangeSignature::Delegate  ( this, &LayersPanel::LayerSelectableChanged ) );

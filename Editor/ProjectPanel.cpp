@@ -11,8 +11,13 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-ProjectPanel::ProjectPanel( wxWindow *parent )
+ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
 : ProjectPanelGenerated( parent )
+, m_DocumentManager( documentManager )
+, m_Project( NULL )
+, m_Model( NULL )
+, m_OptionsMenu( NULL )
+, m_DropTarget( NULL )
 {
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )
     {
@@ -20,12 +25,15 @@ ProjectPanel::ProjectPanel( wxWindow *parent )
 
         m_AddFileButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::FileAdd ) );
         m_AddFileButton->Enable( false );
+        //m_AddFileButton->Hide();
 
         m_DeleteFileButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::FileDelete ) );
         m_DeleteFileButton->Enable( false );
+        //m_DeleteFileButton->Hide();
 
         m_OptionsButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Options, wxART_OTHER, wxSize(16, 16) ) );
         m_OptionsButton->SetMargins( 3, 3 );
+        m_OptionsButton->Hide();
 
         m_ProjectManagementPanel->Layout();
 
@@ -77,35 +85,46 @@ ProjectPanel::~ProjectPanel()
     m_OptionsButton->Disconnect( wxEVT_MENU_CLOSE, wxMenuEventHandler( ProjectPanel::OnOptionsMenuClose ), NULL, this );
 }
 
-void ProjectPanel::SetProject( Project* project )
+void ProjectPanel::SetProject( Project* project, const Document* document )
 {
+#pragma TODO( " Rachel WIP: "__FUNCTION__" - Clean up m_Project beforing setting new one" )
     if ( m_Project )
     {
         if ( m_Model )
         {
+            m_DocumentManager->e_DocumentAdded.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumentAdded );
+            m_DocumentManager->e_DocumentRemoved.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumentRemoved );
+
+            m_Model = NULL;
         }
+
+        m_Project = NULL;
     }
 
     m_AddFileButton->Enable( false );
     m_DeleteFileButton->Enable( false );
-    //m_DragOverItem = wxDataViewItem( 0 );
 
     m_Project = project;
     if ( m_Project )
     {
-        m_AddFileButton->Enable( true );
-        m_Model = new ProjectViewModel();
+        m_Model = new ProjectViewModel( m_DocumentManager );
+        m_Model->SetProject( project, document );
 
-        m_Model->SetProject( project );
+        m_DocumentManager->e_DocumentAdded.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentAdded );
+        m_DocumentManager->e_DocumentRemoved.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentRemoved );
 
         m_Model->ResetColumns();
         m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Name ) );
         m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::FileSize ) );
-        //m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Details ) );
 
         // the ctrl will now hold ownership via reference count
         m_DataViewCtrl->AssociateModel( m_Model.get() );
+
+        m_AddFileButton->Enable( true );
     }
+
+#pragma TODO( " Rachel WIP: "__FUNCTION__" - Do we actually need to refresh?" )
+    Refresh();
 }
 
 void ProjectPanel::OnAddFile( wxCommandEvent& event )
@@ -134,16 +153,6 @@ void ProjectPanel::OnAddFile( wxCommandEvent& event )
             {
                 m_Project->AddPath( asset->GetSourcePath() );
             }
-
-            //wxDataViewItem parentItem = m_DataViewCtrl->GetSelection();
-            //if ( parentItem.IsOk() )
-            //{
-            //    m_Model->AddChild( parentItem, path );
-            //}
-            //else
-            //{
-            //    m_Model->AddChild( wxDataViewItem(), path );
-            //}
         }
     }
 }
@@ -159,7 +168,7 @@ void ProjectPanel::OnDeleteFile( wxCommandEvent& event )
         {
             if ( selection[index].IsOk() )
             {
-                m_Model->Delete( selection[index] );
+                m_Model->RemoveItem( selection[index] );
             }
         }
     }
@@ -199,47 +208,31 @@ void ProjectPanel::OnSelectionChanged( wxDataViewEvent& event )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-//void ProjectPanel::DragEnter( const FileDroppedArgs& args )
-//{
-//
-//}
-
-///////////////////////////////////////////////////////////////////////////////
 void ProjectPanel::OnDragOver( FileDroppedArgs& args )
 {
-    //int xx = args.m_X;
-    //int yy = args.m_Y;
-    //m_DataViewCtrl->CalcUnscrolledPosition( xx, yy, &xx, &yy );
-    //unsigned int row = m_DataViewCtrl->GetLineAt( yy );
+    //Path path( args.m_Path );
 
-    //if ((row >= GetRowCount()) || (yy > m_DataViewCtrl->GetEndOfLastCol()))
-    //    return wxDragNone;
+    //// it's a project file
+    //if ( _tcsicmp( path.FullExtension().c_str(), TXT( "project.hrb" ) ) == 0 ) 
+    //{
+    //    // allow user to drop a project in
+    //}
+    //else if ( m_Project )
+    //{
+        wxDataViewItem item;
+        wxDataViewColumn* column;
+        m_DataViewCtrl->HitTest( wxPoint( args.m_X, args.m_Y ), item, column );
 
-
-    //wxDataViewItem item = m_DataViewCtrl->GetItemByRow( row );
-
-    wxDataViewItem item;
-    wxDataViewColumn* column;
-    m_DataViewCtrl->HitTest( wxPoint( args.m_X, args.m_Y ), item, column );
-
-    if ( item.IsOk() && !m_Model->IsDropPossible( item ) )
-    {
-        args.m_DragResult = wxDragNone;
-    }    
+        if ( item.IsOk() && !m_Model->IsDropPossible( item ) )
+        {
+            args.m_DragResult = wxDragNone;
+        }    
+    //}
+    //else
+    //{
+    //    args.m_DragResult = wxDragNone;
+    //}
 }
-
-///////////////////////////////////////////////////////////////////////////////
-// Callback for when a drag operation leaves this control.  Clears the 
-// highlighted drop item.
-// 
-//void ProjectPanel::DragLeave( Helium::Void )
-//{
-//  if ( m_DragOverItem.IsOk() )
-//  {
-//    //m_DataViewCtrl->SetItemDropHighlight( m_DragOverItem, false );
-//    m_DragOverItem = wxDataViewItem( 0 );
-//  }
-//}
 
 void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
 {
@@ -248,7 +241,7 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
     // it's a project file
     if ( _tcsicmp( path.FullExtension().c_str(), TXT( "project.hrb" ) ) == 0 ) 
     {
-#pragma TODO("Close the current project and open the dropped one")
+#pragma TODO( " Rachel WIP: "__FUNCTION__" - Close the current project and open the dropped one")
         //(MainFrame*)GetParent()->OpenProject( path );
     }
     else if ( m_Project )
@@ -267,12 +260,6 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
         {
             m_Project->AddPath( asset->GetSourcePath() );
         }
-        else
-        {
-#pragma TODO("Error")
-        }
-    }
-    else
-    {
     }
 }
+

@@ -74,7 +74,7 @@ void Document::SetPath( const Helium::Path& newPath )
 // Sets the internal flag indicating the the file has been modified (thus it
 // should probably be saved before closing).
 // 
-void Document::HasChanged( bool changed )
+void Document::HasChanged( bool changed ) const 
 {
     if ( m_HasChanged != changed )
     {
@@ -82,6 +82,67 @@ void Document::HasChanged( bool changed )
 
         e_Changed.Raise( DocumentEventArgs( this ) );
     }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Returns true if the file is currently checked out by this user.
+// 
+bool Document::IsCheckedOut() const
+{
+    if ( !GetPath().Filename().empty() && RCS::PathIsManaged( GetPath().Filename() ) )
+    {
+        RCS::File rcsFile( GetPath().Filename() );
+
+        try
+        {
+            rcsFile.GetInfo();
+        }
+        catch ( Helium::Exception& ex )
+        {
+            tstringstream str;
+            str << "Unable to get info for '" << GetPath().Filename() << "': " << ex.What();
+            Log::Error( TXT("%s\n"), str.str().c_str() );
+#pragma TODO( " Rachel WIP: "__FUNCTION__" - Should trigger error status event" )
+        }
+
+        return rcsFile.IsCheckedOutByMe();
+    }
+
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Checks to see if the local revision of this file is the same as the head
+// revision, and returns true if so.
+// 
+bool Document::IsUpToDate() const
+{
+    if ( !GetPath().Filename().empty() )
+    {
+        if ( RCS::PathIsManaged( GetPath().Filename() ) )
+        {
+            RCS::File rcsFile( GetPath().Filename() );
+
+            try
+            {
+                rcsFile.GetInfo();
+            }
+            catch ( Helium::Exception& ex )
+            {
+                tstringstream str;
+                str << "Unable to get info for '" << GetPath().Filename() << "': " << ex.What();
+                Log::Error( TXT("%s\n"), str.str().c_str() );
+#pragma TODO( " Rachel WIP: "__FUNCTION__" - Should trigger error status event" )
+            }
+
+            if ( rcsFile.ExistsInDepot() )
+            {
+                return rcsFile.IsUpToDate() && ( rcsFile.m_LocalRevision == GetRevision() );
+            }
+        }
+    }
+
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -62,16 +62,18 @@ namespace Helium
         SaveAction          QueryClose( Document* document ) const;
         SaveAction          QuerySave( Document* document ) const;
 
-        bool                IsCheckedOut( Document* document ) const;
-        bool                IsUpToDate( Document* document ) const;
+    public:
+        mutable DocumentEventSignature::Event e_DocumentAdded;
+        mutable DocumentEventSignature::Event e_DocumentRemoved;
 
     private:
-        bool                AddDocument( const DocumentPtr& document );
-        bool                RemoveDocument( const DocumentPtr& document );
-        void                DocumentClosed( const DocumentEventArgs& args );
+        bool AddDocument( const DocumentPtr& document );
+        bool RemoveDocument( const DocumentPtr& document );
+        void OnDocumentClosed( const DocumentEventArgs& args );
 
-        OS_DocumentSmartPtr             m_Documents;
-        MessageSignature::Delegate      m_Message;
-        FileDialogSignature::Delegate   m_FileDialog;
+        OS_DocumentSmartPtr m_Documents;
+        MessageSignature::Delegate m_Message;
+        FileDialogSignature::Delegate m_FileDialog;
+
     };
 }

@@ -19,8 +19,8 @@ TypesPanel::TypesPanel( SceneManager* manager, wxWindow *parent, wxWindowID id, 
     GetSizer()->Add( m_Grid->GetPanel(), 1, wxEXPAND );
     Layout();
 
-    m_SceneManager->AddCurrentSceneChangingListener( SceneChangeSignature::Delegate ( this, &TypesPanel::CurrentSceneChanging ) );
-    m_SceneManager->AddCurrentSceneChangedListener( SceneChangeSignature::Delegate ( this, &TypesPanel::CurrentSceneChanged ) );
+    m_SceneManager->e_CurrentSceneChanging.AddMethod( this, &TypesPanel::CurrentSceneChanging );
+    m_SceneManager->e_CurrentSceneChanged.AddMethod( this, &TypesPanel::CurrentSceneChanged );
     m_Grid->AddRowVisibilityChangedListener( GridRowChangeSignature::Delegate ( this, &TypesPanel::VisibilityChanged ) );
     m_Grid->AddRowSelectabilityChangedListener( GridRowChangeSignature::Delegate ( this, &TypesPanel::SelectabilityChanged ) );
 }
@@ -30,8 +30,8 @@ TypesPanel::TypesPanel( SceneManager* manager, wxWindow *parent, wxWindowID id, 
 // 
 TypesPanel::~TypesPanel()
 {
-    m_SceneManager->RemoveCurrentSceneChangingListener( SceneChangeSignature::Delegate ( this, &TypesPanel::CurrentSceneChanging ) );
-    m_SceneManager->RemoveCurrentSceneChangedListener( SceneChangeSignature::Delegate ( this, &TypesPanel::CurrentSceneChanged ) );
+    m_SceneManager->e_CurrentSceneChanging.RemoveMethod( this, &TypesPanel::CurrentSceneChanging );
+    m_SceneManager->e_CurrentSceneChanged.RemoveMethod( this, &TypesPanel::CurrentSceneChanged );
     m_Grid->RemoveRowVisibilityChangedListener( GridRowChangeSignature::Delegate ( this, &TypesPanel::VisibilityChanged ) );
     m_Grid->RemoveRowSelectabilityChangedListener( GridRowChangeSignature::Delegate ( this, &TypesPanel::SelectabilityChanged ) );
     delete m_Grid;

@@ -67,7 +67,7 @@ namespace Helium
         {
             return m_HasChanged;
         }
-        void HasChanged( bool changed );
+        void HasChanged( bool changed ) const;
 
         const Helium::Path& GetPath() const
         {
@@ -79,6 +79,9 @@ namespace Helium
         {
             return m_Revision;
         }
+
+        bool IsCheckedOut() const;
+        bool IsUpToDate() const;
 
         bool AllowUnsavableChanges() const;
         void AllowUnsavableChanges( bool allowUnsavableChanges );
@@ -118,7 +121,7 @@ namespace Helium
     private:
         mutable bool m_HasChanged;  //<! have we been changed since we opened or last saved?
         Helium::Path m_Path;
-        int32_t                 m_Revision;
+        int32_t m_Revision;
         
         bool m_AllowUnsavableChanges;        //<! allows override of checkout (but you can't save)
 

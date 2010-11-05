@@ -9,16 +9,24 @@ using namespace Helium;
 using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
-ProjectViewModelNode::ProjectViewModelNode( ProjectViewModelNode* parent, const Helium::Path& path, const bool isContainer )
+ProjectViewModelNode::ProjectViewModelNode( ProjectViewModelNode* parent, const Helium::Path& path, const Document* document, const bool isContainer )
 : m_ParentNode( parent )
 , m_Path( path )
+, m_Document( NULL )
 , m_IsContainer( isContainer )
 {
+    if ( document )
+    {
+        ConnectDocument( document );
+    }
 }
 
 ProjectViewModelNode::~ProjectViewModelNode()
 {
     m_ParentNode = NULL;
+
+    DisconnectDocument();
+
     m_ChildNodes.clear();
 }
 
@@ -84,20 +92,68 @@ tstring ProjectViewModelNode::GetFileSize() const
         uint64_t size = m_Path.Size();
         return BytesToString( size );
     }
-    
+
     return tstring( TXT( "" ) );
 }
 
+const Document* ProjectViewModelNode::GetDocument() const
+{
+    return m_Document;
+}
+
+void ProjectViewModelNode::ConnectDocument( const Document* document)
+{
+    if ( m_Document && m_Document != document )
+    {
+        DisconnectDocument();
+    }
+
+    m_Document = document;
+    if ( m_Document )
+    {
+        m_Document->e_Saved.AddMethod( this, &ProjectViewModelNode::DocumentSaved );
+        m_Document->e_Closed.AddMethod( this, &ProjectViewModelNode::DocumentClosed );
+        m_Document->e_PathChanged.AddMethod( this, &ProjectViewModelNode::DocumentPathChanged );
+    }
+}
+
+void ProjectViewModelNode::DisconnectDocument()
+{
+    if ( m_Document )
+    {
+        m_Document->e_Saved.RemoveMethod( this, &ProjectViewModelNode::DocumentSaved );
+        m_Document->e_Closed.RemoveMethod( this, &ProjectViewModelNode::DocumentClosed );
+        m_Document->e_PathChanged.RemoveMethod( this, &ProjectViewModelNode::DocumentPathChanged );
+        m_Document = NULL;
+    }
+}
+
+void ProjectViewModelNode::DocumentSaved( const DocumentEventArgs& args )
+{
+#pragma TODO( " Rachel WIP: "__FUNCTION__" - Remove the icon dirty overlay" )
+}
+
+void ProjectViewModelNode::DocumentClosed( const DocumentEventArgs& args )
+{
+    DisconnectDocument();
+}
+
+void ProjectViewModelNode::DocumentPathChanged( const DocumentPathChangedArgs& args )
+{
+    m_Path = args.m_Document->GetPath();
+}
+
 ///////////////////////////////////////////////////////////////////////////////
-ProjectViewModel::ProjectViewModel()
-: m_Project( NULL )
+ProjectViewModel::ProjectViewModel( DocumentManager* documentManager )
+: m_DocumentManager( documentManager )
+, m_Project( NULL )
 , m_RootNode( NULL )
 {
 }
 
 ProjectViewModel::~ProjectViewModel()
 {
-    SetProject( NULL );
+    //SetProject( NULL );
     ResetColumns();
 }
 
@@ -174,7 +230,7 @@ void ProjectViewModel::ResetColumns()
     m_ColumnLookupTable.clear();
 }
 
-void ProjectViewModel::SetProject( Project* project )
+void ProjectViewModel::SetProject( Project* project, const Document* document )
 {
     if ( project == m_Project )
     {
@@ -184,14 +240,21 @@ void ProjectViewModel::SetProject( Project* project )
     // Cleanup the old view
     if ( m_Project )
     {
+        // Disconnect to the Project
+        m_Project->e_PathAdded.RemoveMethod( this, &ProjectViewModel::OnPathAdded );
+        m_Project->e_PathRemoved.RemoveMethod( this, &ProjectViewModel::OnPathRemoved );
+
+        // Remove the Project's Children
+#pragma TODO( " Rachel WIP: "__FUNCTION__" - Remove and disconnect the project's children" )
+        m_MM_ProjectViewModelNodesByPath.clear();
+
+        // Remove the Node
         if ( m_RootNode )
         {
             m_Project->a_Path.Changed().RemoveMethod( m_RootNode.Ptr(), &ProjectViewModelNode::PathChanged );
             m_RootNode = NULL;
         }
 
-        m_Project->e_PathAdded.RemoveMethod( this, &ProjectViewModel::OnPathAdded );
-        m_Project->e_PathRemoved.RemoveMethod( this, &ProjectViewModel::OnPathRemoved );
         m_Project = NULL;
     }
 
@@ -199,39 +262,61 @@ void ProjectViewModel::SetProject( Project* project )
     m_Project = project;
     if ( m_Project )
     {
+        // Create the Node     
+        m_RootNode = new ProjectViewModelNode( NULL, m_Project->a_Path.Get(), document, true );
+        m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( m_Project->a_Path.Get(), m_RootNode.Ptr() ));
+
+        // Add the Project's Children
+        for ( std::set< Path >::const_iterator itr = m_Project->Paths().begin(), end = m_Project->Paths().end();
+            itr != end; ++itr )
+        {
+            AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), *itr );
+        }
+
+        // Connect to the Project
         m_Project->e_PathAdded.AddMethod( this, &ProjectViewModel::OnPathAdded );
         m_Project->e_PathRemoved.AddMethod( this, &ProjectViewModel::OnPathRemoved );
-
-        m_RootNode = new ProjectViewModelNode( NULL, m_Project->a_Path.Get(), true );
         m_Project->a_Path.Changed().AddMethod( m_RootNode.Ptr(), &ProjectViewModelNode::PathChanged );
-
-        //AddChild( wxDataViewItem( (void*) m_RootNode.Ptr() ), Helium::Path( TXT( "Test Child.txt" ) ) );
-        //AddChild( wxDataViewItem( (void*) m_RootNode.Ptr() ), Helium::Path( TXT( "C:/Projects/github/nocturnal/Helium/Editor/Icons/" ) ) );
     }
 }
 
-bool ProjectViewModel::AddChild( const wxDataViewItem& item, const Helium::Path& path )
+bool ProjectViewModel::AddChildItem( const wxDataViewItem& parenItem, const Helium::Path& path )
 {
-    ProjectViewModelNode *parentNode = static_cast< ProjectViewModelNode* >( item.GetID() );
+    // Get the parent node
+    ProjectViewModelNode *parentNode = static_cast< ProjectViewModelNode* >( parenItem.GetID() );
     if ( !parentNode )
     {
         parentNode = m_RootNode.Ptr();
     }
 
-    Helium::Insert<S_ProjectViewModelNodeChildren>::Result inserted = parentNode->GetChildren().insert( new ProjectViewModelNode( parentNode, path ) );
-#pragma TODO( "Add the file dependency to the parent node" )
-
+    // Create the child node
+    const Document* document = m_DocumentManager->FindDocument( path );
+    Helium::Insert<S_ProjectViewModelNodeChildren>::Result inserted = parentNode->GetChildren().insert( new ProjectViewModelNode( parentNode, path, document ) );
     if ( inserted.second )
     {
-        ItemAdded( (void*)parentNode, (void*)(*inserted.first) );
+        ProjectViewModelNode* childNode = (*inserted.first);
+
+        // See if the document is already open
+        //MM_ProjectViewModelNodesByPath::iterator findNode = m_MM_ProjectViewModelNodesByPath.find( path );
+        //if ( findNode != m_MM_ProjectViewModelNodesByPath.end()
+        //    && findNode->first == path
+        //    && findNode->second->GetDocument() ) 
+        //{
+        //    childNode->ConnectDocument( findNode->second->GetDocument() );
+        //}
+
+        // Add the node to the multimap and call ItemAdded
+        m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( path, childNode ));
+        ItemAdded( (void*)parentNode, (void*)childNode );
+
         return true;
     }
     return false;
 }
 
-bool ProjectViewModel::RemoveChild( const wxDataViewItem& item, const Helium::Path& path )
+bool ProjectViewModel::RemoveChildItem( const wxDataViewItem& parenItem, const Helium::Path& path )
 {
-    ProjectViewModelNode *parentNode = static_cast< ProjectViewModelNode* >( item.GetID() );
+    ProjectViewModelNode *parentNode = static_cast< ProjectViewModelNode* >( parenItem.GetID() );
     if ( !parentNode )
     {
         parentNode = m_RootNode.Ptr();
@@ -250,14 +335,14 @@ bool ProjectViewModel::RemoveChild( const wxDataViewItem& item, const Helium::Pa
 
     if ( foundChild != parentNode->GetChildren().end() )
     {
-        wxDataViewItem childItem( (*foundChild).Ptr() );
-        Delete( childItem );
+        RemoveItem( wxDataViewItem( (void*)(*foundChild) ) );
+
         return true;
     }
     return false;
 }
 
-void ProjectViewModel::Delete( const wxDataViewItem& item )
+void ProjectViewModel::RemoveItem( const wxDataViewItem& item )
 {
     ProjectViewModelNode *childNode = static_cast< ProjectViewModelNode* >( item.GetID() );
     if ( !childNode )
@@ -272,14 +357,26 @@ void ProjectViewModel::Delete( const wxDataViewItem& item )
         return;
     }
 
-#pragma TODO( "Remove the file dependency from teh parent node" )
-    //m_Project->RemovePath( childNode->m_Path );
+#pragma TODO( "Rachel WIP: "__FUNCTION__" - remove all of childNode's children" )
 
+    // remove it from teh multimap
+    for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( childNode->GetPath() ),
+        upper = m_MM_ProjectViewModelNodesByPath.upper_bound( childNode->GetPath() );
+        lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
+    ++lower )
+    {
+        if ( lower->second == childNode )
+        {
+            m_MM_ProjectViewModelNodesByPath.erase( lower );
+            break;
+        }
+    }
+
+    // Remove from the parent's childern
     // this should free the childNode if there are no more references to it
     parentNode->GetChildren().erase( childNode );
 
-    wxDataViewItem parentItem( (void*) parentNode );
-    ItemDeleted( parentItem, item );
+    ItemDeleted( wxDataViewItem( (void*) parentNode ), item );
 }
 
 bool ProjectViewModel::IsDropPossible( const wxDataViewItem& item )
@@ -298,7 +395,7 @@ void ProjectViewModel::OnPathAdded( const Helium::Path& path )
 {
     if ( m_RootNode )
     {
-        AddChild( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
+        AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
     }
 }
 
@@ -306,7 +403,43 @@ void ProjectViewModel::OnPathRemoved( const Helium::Path& path )
 {
     if ( m_RootNode )
     {
-        RemoveChild( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
+        RemoveChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
+    }
+}
+
+void ProjectViewModel::OnDocumentAdded( const DocumentEventArgs& args )
+{
+    const Document* document = static_cast< const Document* >( args.m_Document );
+    HELIUM_ASSERT( document );
+
+    if ( document )
+    {
+        for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( document->GetPath() ),
+            upper = m_MM_ProjectViewModelNodesByPath.upper_bound( document->GetPath() );
+            lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
+        ++lower )
+        {
+            ProjectViewModelNode *node = lower->second;
+            node->ConnectDocument( document );
+        }
+    }
+}
+
+void ProjectViewModel::OnDocumentRemoved( const DocumentEventArgs& args )
+{
+    const Document* document = static_cast< const Document* >( args.m_Document );
+    HELIUM_ASSERT( document );
+
+    if ( document )
+    {
+        for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( document->GetPath() ),
+            upper = m_MM_ProjectViewModelNodesByPath.upper_bound( document->GetPath() );
+            lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
+        ++lower )
+        {
+            ProjectViewModelNode *node = lower->second;
+            node->DisconnectDocument();
+        }
     }
 }
 
@@ -430,7 +563,7 @@ wxDataViewItem ProjectViewModel::GetParent( const wxDataViewItem& item ) const
 
     ProjectViewModelNode *childNode = static_cast< ProjectViewModelNode* >( item.GetID() );
     if ( !childNode
-        || childNode == m_RootNode.Ptr() 
+        || childNode == m_RootNode.Ptr()
         || !childNode->GetParent() )
     {
         return wxDataViewItem( 0 );
@@ -457,7 +590,7 @@ unsigned int ProjectViewModel::GetChildren( const wxDataViewItem& item, wxDataVi
     for ( S_ProjectViewModelNodeChildren::const_iterator itr = parentNode->GetChildren().begin(),
         end = parentNode->GetChildren().end(); itr != end; ++itr, ++numAdded )
     {
-        items.Add( wxDataViewItem( (void*) (*itr).Ptr() ) );
+        items.Add( wxDataViewItem( (void*) (*itr) ) );
     }
 
     return numAdded;

@@ -201,7 +201,7 @@ bool SceneManager::IsNestedScene( SceneGraph::Scene* scene ) const
 // 
 void SceneManager::AllocateNestedScene( const ResolveSceneArgs& args )
 {
-#pragma TODO( " Rachel WIP: "__FUNCTION__" - this function should move out to the mainframe" )
+#pragma TODO( "Rachel WIP: "__FUNCTION__" - this function should move out to the mainframe" )
 
     args.m_Scene = GetScene( args.m_Path );
     if ( !args.m_Scene )

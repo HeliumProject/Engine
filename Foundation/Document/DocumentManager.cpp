@@ -156,6 +156,7 @@ bool DocumentManager::SaveDocument( DocumentPtr document, tstring& error )
     if ( document->GetPath().Extension().empty() )
     {
         tstring filters;
+#pragma TODO( "This needs to be getting the correct file filters for the document being saved" )
         Reflect::Archive::GetFileFilters( filters );
         FileDialogArgs args ( FileDialogTypes::SaveFile, TXT("Save As..."), filters, document->GetPath().Directory(), document->GetPath() );
         m_FileDialog.Invoke( args );

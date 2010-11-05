@@ -68,7 +68,7 @@ namespace Helium
                 {
                     T previous = m_Value;
                     m_Value = value;
-                    m_Changed.Raise( ChangeArgs( m_Value, previous ) );
+                    m_Changed.Raise( ChangeArgs( previous, m_Value ) );
                     return true;
                 }
             }

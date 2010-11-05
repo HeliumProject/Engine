@@ -777,8 +777,8 @@ void MainFrame::OnNewProject( wxCommandEvent& event )
 
 bool MainFrame::DoOpen( const tstring& path )
 {
-#pragma TODO( " Rachel WIP: "__FUNCTION__" - This should be opening and closing Projects rather than Scenes." )
-#pragma TODO( " Rachel WIP: "__FUNCTION__" - We will need to handle opening/loading Scenes from the projectView" )
+#pragma TODO( "Rachel WIP: "__FUNCTION__" - This should be opening and closing Projects rather than Scenes." )
+#pragma TODO( "Rachel WIP: "__FUNCTION__" - We will need to handle opening/loading Scenes from the projectView" )
     //bool opened = false;
     //Helium::Path nocPath( path );
     //if ( !path.empty() && nocPath.Exists() )
@@ -1367,7 +1367,7 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
             }
         }
 
-#pragma TODO( " Rachel WIP: "__FUNCTION__" - Change the selection or display changes in the Project view" )
+#pragma TODO( "Rachel WIP: "__FUNCTION__" - Change the selection or display changes in the Project view" )
 
         // Restore selection-sensitive settings
         args.m_Scene->RefreshSelection();

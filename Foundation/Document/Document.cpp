@@ -102,7 +102,7 @@ bool Document::IsCheckedOut() const
             tstringstream str;
             str << "Unable to get info for '" << GetPath().Filename() << "': " << ex.What();
             Log::Error( TXT("%s\n"), str.str().c_str() );
-#pragma TODO( " Rachel WIP: "__FUNCTION__" - Should trigger error status event" )
+#pragma TODO( "Rachel WIP: "__FUNCTION__" - Should trigger error status event" )
         }
 
         return rcsFile.IsCheckedOutByMe();
@@ -132,7 +132,7 @@ bool Document::IsUpToDate() const
                 tstringstream str;
                 str << "Unable to get info for '" << GetPath().Filename() << "': " << ex.What();
                 Log::Error( TXT("%s\n"), str.str().c_str() );
-#pragma TODO( " Rachel WIP: "__FUNCTION__" - Should trigger error status event" )
+#pragma TODO( "Rachel WIP: "__FUNCTION__" - Should trigger error status event" )
             }
 
             if ( rcsFile.ExistsInDepot() )

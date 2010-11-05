@@ -115,7 +115,7 @@ namespace Helium
 
             void SetPath( const Helium::Path& path );
             const Helium::Path& GetPath();
-            void PathChanged( const Attribute< Helium::Path >::ChangeArgs& text );
+            //void PathChanged( const Attribute< Helium::Path >::ChangeArgs& text );
 
             tstring GetName() const;
             tstring GetDetails() const;
@@ -176,7 +176,9 @@ namespace Helium
             void OnPathAdded( const Helium::Path& path );
             void OnPathRemoved( const Helium::Path& path );
 
-            // Document Manager Events
+            // Document and DocumentManager Events
+            void OnProjectSave( const DocumentEventArgs& args );
+            void OnProjectPathChanged( const DocumentPathChangedArgs& args );
             void OnDocumentAdded( const DocumentEventArgs& args );
             void OnDocumentRemoved( const DocumentEventArgs& args );
 

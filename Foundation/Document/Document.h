@@ -14,9 +14,9 @@ namespace Helium
     {
     public:
         const Document* m_Document;
-        bool m_Veto;
+        mutable bool m_Veto;
         tstring* m_Error;
-        bool m_Result;
+        mutable bool m_Result;
 
         DocumentEventArgs( const Document* document, tstring* error = NULL )
             : m_Document( document )

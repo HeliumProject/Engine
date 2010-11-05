@@ -59,10 +59,10 @@ const Helium::Path& ProjectViewModelNode::GetPath()
     return m_Path;
 }
 
-void ProjectViewModelNode::PathChanged( const Attribute< Helium::Path >::ChangeArgs& text )
-{
-    SetPath( text.m_NewValue );
-}
+//void ProjectViewModelNode::PathChanged( const Attribute< Helium::Path >::ChangeArgs& text )
+//{
+//    SetPath( text.m_NewValue );
+//}
 
 tstring ProjectViewModelNode::GetName() const
 {
@@ -130,7 +130,7 @@ void ProjectViewModelNode::DisconnectDocument()
 
 void ProjectViewModelNode::DocumentSaved( const DocumentEventArgs& args )
 {
-#pragma TODO( " Rachel WIP: "__FUNCTION__" - Remove the icon dirty overlay" )
+#pragma TODO( "Rachel WIP: "__FUNCTION__" - Remove the icon dirty overlay" )
 }
 
 void ProjectViewModelNode::DocumentClosed( const DocumentEventArgs& args )
@@ -245,13 +245,16 @@ void ProjectViewModel::SetProject( Project* project, const Document* document )
         m_Project->e_PathRemoved.RemoveMethod( this, &ProjectViewModel::OnPathRemoved );
 
         // Remove the Project's Children
-#pragma TODO( " Rachel WIP: "__FUNCTION__" - Remove and disconnect the project's children" )
+#pragma TODO( "Rachel WIP: "__FUNCTION__" - Remove and disconnect the project's children" )
         m_MM_ProjectViewModelNodesByPath.clear();
 
         // Remove the Node
         if ( m_RootNode )
         {
-            m_Project->a_Path.Changed().RemoveMethod( m_RootNode.Ptr(), &ProjectViewModelNode::PathChanged );
+            m_RootNode->GetDocument()->d_Save.Clear();
+            m_RootNode->GetDocument()->e_PathChanged.RemoveMethod( this, &ProjectViewModel::OnProjectPathChanged );
+
+            //m_Project->a_Path.Changed().RemoveMethod( m_RootNode.Ptr(), &ProjectViewModelNode::PathChanged );
             m_RootNode = NULL;
         }
 
@@ -274,9 +277,13 @@ void ProjectViewModel::SetProject( Project* project, const Document* document )
         }
 
         // Connect to the Project
+#pragma TODO( "Rachel WIP: "__FUNCTION__" - OnProjectSave and OnProjectPathChanged really ought to be added to MainFrame" )
+        m_RootNode->GetDocument()->d_Save.Set( this, &ProjectViewModel::OnProjectSave );
+        m_RootNode->GetDocument()->e_PathChanged.AddMethod( this, &ProjectViewModel::OnProjectPathChanged );
+
         m_Project->e_PathAdded.AddMethod( this, &ProjectViewModel::OnPathAdded );
         m_Project->e_PathRemoved.AddMethod( this, &ProjectViewModel::OnPathRemoved );
-        m_Project->a_Path.Changed().AddMethod( m_RootNode.Ptr(), &ProjectViewModelNode::PathChanged );
+        //m_Project->a_Path.Changed().AddMethod( m_RootNode.Ptr(), &ProjectViewModelNode::PathChanged );
     }
 }
 
@@ -405,6 +412,24 @@ void ProjectViewModel::OnPathRemoved( const Helium::Path& path )
     {
         RemoveChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
     }
+}
+
+void ProjectViewModel::OnProjectSave( const DocumentEventArgs& args )
+{
+    const Document* document = static_cast< const Document* >( args.m_Document );
+    HELIUM_ASSERT( document );
+
+    if ( document 
+        && m_Project 
+        && document->GetPath() == m_Project->a_Path.Get() )
+    {
+        args.m_Result = m_Project->Save();
+    }
+}
+
+void ProjectViewModel::OnProjectPathChanged( const DocumentPathChangedArgs& args )
+{
+    m_Project->a_Path.Set( args.m_Document->GetPath() );
 }
 
 void ProjectViewModel::OnDocumentAdded( const DocumentEventArgs& args )

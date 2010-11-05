@@ -87,9 +87,11 @@ ProjectPanel::~ProjectPanel()
 
 void ProjectPanel::SetProject( Project* project, const Document* document )
 {
-#pragma TODO( " Rachel WIP: "__FUNCTION__" - Clean up m_Project beforing setting new one" )
+#pragma TODO( "Rachel WIP: "__FUNCTION__" - Clean up m_Project beforing setting new one" )
     if ( m_Project )
     {
+        document->d_Save.Clear();
+
         if ( m_Model )
         {
             m_DocumentManager->e_DocumentAdded.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumentAdded );
@@ -123,7 +125,7 @@ void ProjectPanel::SetProject( Project* project, const Document* document )
         m_AddFileButton->Enable( true );
     }
 
-#pragma TODO( " Rachel WIP: "__FUNCTION__" - Do we actually need to refresh?" )
+#pragma TODO( "Rachel WIP: "__FUNCTION__" - Do we actually need to refresh?" )
     Refresh();
 }
 
@@ -241,7 +243,7 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
     // it's a project file
     if ( _tcsicmp( path.FullExtension().c_str(), TXT( "project.hrb" ) ) == 0 ) 
     {
-#pragma TODO( " Rachel WIP: "__FUNCTION__" - Close the current project and open the dropped one")
+#pragma TODO( "Rachel WIP: "__FUNCTION__" - Close the current project and open the dropped one")
         //(MainFrame*)GetParent()->OpenProject( path );
     }
     else if ( m_Project )
@@ -260,6 +262,10 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
         {
             m_Project->AddPath( asset->GetSourcePath() );
         }
+    }
+    else
+    {
+#pragma TODO( "Offer to make the user a project" )
     }
 }
 

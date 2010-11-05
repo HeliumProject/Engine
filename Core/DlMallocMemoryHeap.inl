@@ -566,7 +566,7 @@ namespace Lunar
 
                 AllocationBacktrace backtrace;
                 MemoryZero( backtrace.pAddresses, sizeof( backtrace.pAddresses ) );
-                GetStackTrace( backtrace.pAddresses, L_ARRAY_COUNT( backtrace.pAddresses ) );
+                Helium::GetStackTrace( backtrace.pAddresses, L_ARRAY_COUNT( backtrace.pAddresses ) );
                 m_pVerboseTrackingData->allocationBacktraceMap[ pMemory ] = backtrace;
 
                 sm_bDisableBacktraceTracking = false;

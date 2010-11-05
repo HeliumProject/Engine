@@ -8,8 +8,8 @@
 #include "CorePch.h"
 #include "Core/Memory.h"
 
+#include "Platform/Debug.h"
 #include "Core/Threading.h"
-#include "Core/Debug.h"
 
 #ifdef _MSC_VER
 #pragma warning( push )
@@ -224,6 +224,8 @@ namespace Lunar
                     pTrackingData->allocationBacktraceMap;
 
                 String symbol;
+#pragma TODO( "LUNAR MERGE - Remove STL string usage here once String is merged over." )
+                tstring symbolStl;
 
                 stdext::hash_map< void*, AllocationBacktrace >::const_iterator iterEnd = rAllocationBacktraceMap.end();
                 stdext::hash_map< void*, AllocationBacktrace >::const_iterator iter;
@@ -249,7 +251,9 @@ namespace Lunar
                             break;
                         }
 
-                        GetAddressSymbol( symbol, pAddress );
+//                        Helium::GetAddressSymbol( symbol, pAddress );
+                        Helium::GetAddressSymbol( symbolStl, pAddress );
+                        symbol = symbolStl.c_str();
                         L_LOG( LOG_DEBUG, TXT( "- 0x%p: %s\n" ), pAddress, *symbol );
                     }
                 }

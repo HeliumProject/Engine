@@ -11,24 +11,22 @@
 #include <map>
 #include <time.h>
 #include <shlobj.h>
-#include <dbghelp.h>
 #include <tlhelp32.h>
+
+#if HELIUM_UNICODE
+#define DBGHELP_TRANSLATE_TCHAR
+#endif
+
+#include <dbghelp.h>
+
 #pragma comment ( lib, "dbghelp.lib" )
 
 using namespace Helium;
 using namespace Helium::Debug;
 
-#ifdef _UNICODE
-# undef IMAGEHLP_MODULE64
-# define IMAGEHLP_MODULE64 IMAGEHLP_MODULEW64
-# undef IMAGEHLP_LINE64
-# define IMAGEHLP_LINE64 IMAGEHLP_LINEW64
-# define SymInitialize SymInitializeW
-# define SymGetModuleInfo64 SymGetModuleInfoW64
-# define SymGetLineFromAddr64 SymGetLineFromAddrW64
-#endif
-
 //#define DEBUG_SYMBOLS
+#pragma TODO( "LUNAR MERGE - Remove HELIUM_ARRAY_COUNT() macro definition here once L_ARRAY_COUNT() is merged over." )
+#define HELIUM_ARRAY_COUNT( ARRAY ) ( sizeof( ARRAY ) / sizeof( ARRAY[ 0 ] ) )
 
 // disable the optimizer if debugging in release
 #if defined(DEBUG_SYMBOLS) && defined(NDEBUG)
@@ -53,9 +51,16 @@ static void PrintString(tstring& buffer, const tchar_t* tstring, ...)
 }
 
 // Callback that loads symbol data from loaded dll into DbgHelp system, dumping error info
-static BOOL CALLBACK EnumerateLoadedModulesProc(PCSTR name, DWORD64 base, ULONG size, PVOID data)
+static BOOL CALLBACK EnumerateLoadedModulesProc(PCTSTR name, DWORD64 base, ULONG size, PVOID data)
 {
-    if (SymLoadModule64(GetCurrentProcess(), 0, name, 0, base, size))
+#if HELIUM_UNICODE
+    char charName[ MAX_PATH ];
+    charName[ 0 ] = '\0';
+    wcstombs_s( NULL, charName, name, _TRUNCATE );
+#else
+    PCSTR charName = name;
+#endif
+    if (SymLoadModule64(GetCurrentProcess(), 0, charName, 0, base, size))
     {
         IMAGEHLP_MODULE64 moduleInfo;
         ZeroMemory(&moduleInfo, sizeof(IMAGEHLP_MODULE64));
@@ -813,3 +818,226 @@ tstring Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
 
     return TXT("");
 }
+
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+
+static Mutex& GetStackWalkMutex()
+{
+    static Mutex stackWalkMutex;
+
+    return stackWalkMutex;
+}
+
+static void ConditionalSymInitialize()
+{
+    static volatile bool bSymInitialized = false;
+    if( !bSymInitialized )
+    {
+#pragma TODO( "LUNAR MERGE - Update logging of symbol handler initialization (see other commented out instances in this file as well)." )
+//        L_LOG( LOG_INFO, TXT( "Initializing symbol handler for the current process...\n" ) );
+
+        HANDLE hProcess = GetCurrentProcess();
+        HELIUM_ASSERT( hProcess );
+
+        BOOL bInitialized = SymInitialize( hProcess, NULL, TRUE );
+        if( bInitialized )
+        {
+//            L_LOG( LOG_INFO, TXT( "Symbol handler initialization successful!\n" ) );
+        }
+        else
+        {
+//            L_LOG( LOG_ERROR, TXT( "Symbol handler initialization failed (error code %u).\n" ), GetLastError() );
+        }
+
+        bSymInitialized = true;
+    }
+}
+
+/// Get the current stack trace.
+///
+/// @param[out] ppStackTraceArray    Array in which to store the backtrace of program counter addresses.
+/// @param[in]  stackTraceArraySize  Maximum number of addresses to fill in the output array.
+/// @param[in]  skipCount            Number of stack levels to skip before filling the output array, counting the stack
+///                                  level for this function call.  By default, this is one, meaning that only the call
+///                                  to this function is skipped.
+///
+/// @return  Number of addresses stored in the output array.
+size_t Helium::GetStackTrace( void** ppStackTraceArray, size_t stackTraceArraySize, size_t skipCount )
+{
+    HELIUM_ASSERT( ppStackTraceArray || stackTraceArraySize == 0 );
+
+    TakeMutex scopeLock( GetStackWalkMutex() );
+    ConditionalSymInitialize();
+
+    // Get the current context.
+    CONTEXT context;
+    RtlCaptureContext( &context );
+
+    // Initialize the stack frame structure for the first call to StackWalk64().
+    STACKFRAME64 stackFrame;
+#pragma TODO( "LUNAR MERGE - Restore usage of MemoryZero() (or similar) once merged." )
+//    MemoryZero( &stackFrame, sizeof( stackFrame ) );
+    memset( &stackFrame, 0, sizeof( stackFrame ) );
+    stackFrame.AddrPC.Mode = AddrModeFlat;
+    stackFrame.AddrFrame.Mode = AddrModeFlat;
+    stackFrame.AddrStack.Mode = AddrModeFlat;
+
+#if HELIUM_OS_WIN32
+    const DWORD machineType = IMAGE_FILE_MACHINE_I386;
+    stackFrame.AddrPC.Offset = context.Eip;
+    stackFrame.AddrFrame.Offset = context.Ebp;
+    stackFrame.AddrStack.Offset = context.Esp;
+#else
+    // Assuming x86-64 (likely not supporting Itanium).
+    const DWORD machineType = IMAGE_FILE_MACHINE_AMD64;
+    stackFrame.AddrPC.Offset = context.Rip;
+    stackFrame.AddrFrame.Offset = context.Rdi/*Rbp*/;
+    stackFrame.AddrStack.Offset = context.Rsp;
+#endif
+
+    HANDLE hProcess = GetCurrentProcess();
+    HELIUM_ASSERT( hProcess );
+
+    HANDLE hThread = GetCurrentThread();
+    HELIUM_ASSERT( hThread );
+
+    // Skip addresses first.
+    for( size_t skipIndex = 0; skipIndex < skipCount; ++skipIndex )
+    {
+        BOOL bResult = StackWalk64(
+            machineType,
+            hProcess,
+            hThread,
+            &stackFrame,
+            &context,
+            NULL,
+            SymFunctionTableAccess64,
+            SymGetModuleBase64,
+            NULL );
+        if( !bResult || stackFrame.AddrPC.Offset == 0 )
+        {
+            return 0;
+        }
+    }
+
+    // Fill out the remaining stack frame addresses up to the output array limit.
+    for( size_t traceIndex = 0; traceIndex < stackTraceArraySize; ++traceIndex )
+    {
+        BOOL bResult = StackWalk64(
+            machineType,
+            hProcess,
+            hThread,
+            &stackFrame,
+            &context,
+            NULL,
+            SymFunctionTableAccess64,
+            SymGetModuleBase64,
+            NULL );
+        if( !bResult || stackFrame.AddrPC.Offset == 0 )
+        {
+            return traceIndex;
+        }
+
+        ppStackTraceArray[ traceIndex ] =
+            reinterpret_cast< void* >( static_cast< uintptr_t >( stackFrame.AddrPC.Offset ) );
+    }
+
+    return stackTraceArraySize;
+}
+
+/// Get the symbol for the specified address.
+///
+/// @param[out] rSymbol   Address symbol.
+/// @param[in]  pAddress  Address to translate.
+///
+/// @return  True if the address was successfully resolved, false if not.
+void Helium::GetAddressSymbol( tstring& rSymbol, void* pAddress )
+{
+    HELIUM_ASSERT( pAddress );
+
+    TakeMutex scopeLock( GetStackWalkMutex() );
+    ConditionalSymInitialize();
+
+//    rSymbol.Remove( 0, rSymbol.GetSize() );
+    rSymbol.clear();
+
+    HANDLE hProcess = GetCurrentProcess();
+    HELIUM_ASSERT( hProcess );
+
+    bool bAddedModuleName = false;
+
+    DWORD64 moduleBase = SymGetModuleBase64( hProcess, reinterpret_cast< uintptr_t >( pAddress ) );
+    if( moduleBase )
+    {
+        IMAGEHLP_MODULE64 moduleInfo;
+#pragma TODO( "LUNAR MERGE - Restore usage of MemoryZero() (or similar) once merged." )
+//        MemoryZero( &moduleInfo, sizeof( moduleInfo ) );
+        memset( &moduleInfo, 0, sizeof( moduleInfo ) );
+        moduleInfo.SizeOfStruct = sizeof( moduleInfo );
+        if( SymGetModuleInfo64( hProcess, moduleBase, &moduleInfo ) )
+        {
+            rSymbol += TXT( "(" );
+            rSymbol += moduleInfo.ModuleName;
+            rSymbol += TXT( ") " );
+
+            bAddedModuleName = true;
+        }
+    }
+
+    if( !bAddedModuleName )
+    {
+        rSymbol += TXT( "(???) " );
+    }
+
+    uint64_t symbolInfoBuffer[
+        ( sizeof( SYMBOL_INFO ) + sizeof( tchar_t ) * ( MAX_SYM_NAME - 1 ) + sizeof( uint64_t ) - 1 ) /
+        sizeof( uint64_t ) ];
+#pragma TODO( "LUNAR MERGE - Restore usage of MemoryZero() (or similar) once merged." )
+//    MemoryZero( symbolInfoBuffer, sizeof( symbolInfoBuffer ) );
+    memset( symbolInfoBuffer, 0, sizeof( symbolInfoBuffer ) );
+
+    SYMBOL_INFO& rSymbolInfo = *reinterpret_cast< SYMBOL_INFO* >( &symbolInfoBuffer[ 0 ] );
+    rSymbolInfo.SizeOfStruct = sizeof( SYMBOL_INFO );
+    rSymbolInfo.MaxNameLen = MAX_SYM_NAME;
+    if( SymFromAddr( hProcess, reinterpret_cast< uintptr_t >( pAddress ), NULL, &rSymbolInfo ) )
+    {
+        rSymbolInfo.Name[ MAX_SYM_NAME - 1 ] = TXT( '\0' );
+        rSymbol += rSymbolInfo.Name;
+        rSymbol += TXT( " " );
+    }
+    else
+    {
+        rSymbol += TXT( "??? " );
+    }
+
+    DWORD displacement = 0;
+    IMAGEHLP_LINE64 lineInfo;
+#pragma TODO( "LUNAR MERGE - Restore usage of MemoryZero() (or similar) once merged." )
+//    MemoryZero( &lineInfo, sizeof( lineInfo ) );
+    memset( &lineInfo, 0, sizeof( lineInfo ) );
+    lineInfo.SizeOfStruct = sizeof( lineInfo );
+    if( SymGetLineFromAddr64( hProcess, reinterpret_cast< uintptr_t >( pAddress ), &displacement, &lineInfo ) )
+    {
+        tchar_t lineNumberBuffer[ 32 ];
+#pragma TODO( "LUNAR MERGE - Replace sprintf_s/swprintf_s usage below with StringFormat() once merged." )
+//        StringFormat( lineNumberBuffer, HELIUM_ARRAY_COUNT( lineNumberBuffer ), TXT( "%u" ), lineInfo.LineNumber );
+#if HELIUM_UNICODE
+        swprintf_s( lineNumberBuffer, TXT( "%u" ), lineInfo.LineNumber );
+#else
+        sprintf_s( lineNumberBuffer, TXT( "%u" ), lineInfo.LineNumber );
+#endif
+        lineNumberBuffer[ HELIUM_ARRAY_COUNT( lineNumberBuffer ) - 1 ] = TXT( '\0' );
+
+        rSymbol += TXT( "(" );
+        rSymbol += lineInfo.FileName;
+        rSymbol += TXT( ", line " );
+        rSymbol += lineNumberBuffer;
+        rSymbol += TXT( ")" );
+    }
+    else
+    {
+        rSymbol += TXT( "(???, line ?)" );
+    }
+}
+
+#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE

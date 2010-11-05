@@ -398,7 +398,7 @@ void TranslateManipulator::Draw( DrawArgs* args )
 
         if (m_ShowCones)
         {
-            m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&(Matrix4::RotateY(HELIUM_PI_2) * Matrix4 (m_XPosition) * frame));
+            m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&(Matrix4::RotateY( static_cast< float32_t >( HELIUM_PI_2 ) ) * Matrix4 (m_XPosition) * frame));
             m_XCone->Draw(args);
         }
     }
@@ -414,7 +414,7 @@ void TranslateManipulator::Draw( DrawArgs* args )
 
         if (m_ShowCones)
         {
-            m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&(Matrix4::RotateX(-HELIUM_PI_2) * Matrix4 (m_YPosition) * frame));
+            m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&(Matrix4::RotateX( static_cast< float32_t >( -HELIUM_PI_2 ) ) * Matrix4 (m_YPosition) * frame));
             m_YCone->Draw(args);
         }
     }
@@ -517,14 +517,14 @@ bool TranslateManipulator::Pick( PickVisitor* pick )
 
         if (m_SelectedAxes == MultipleAxes::None && m_ShowCones)
         {
-            linePick->SetCurrentObject( this, Matrix4::RotateY(-HELIUM_PI_2) * Matrix4 (m_XPosition) * frame );
+            linePick->SetCurrentObject( this, Matrix4::RotateY( static_cast< float32_t >( -HELIUM_PI_2 ) ) * Matrix4 (m_XPosition) * frame );
             if (parallelAxis != MultipleAxes::X && m_XCone->Pick(pick))
             {
                 m_SelectedAxes = MultipleAxes::X;
             }
             else
             {
-                linePick->SetCurrentObject( this, Matrix4::RotateX(HELIUM_PI_2) * Matrix4 (m_YPosition) * frame );
+                linePick->SetCurrentObject( this, Matrix4::RotateX( static_cast< float32_t >( HELIUM_PI_2 ) ) * Matrix4 (m_YPosition) * frame );
                 if (parallelAxis != MultipleAxes::Y && m_YCone->Pick(pick))
                 {
                     m_SelectedAxes = MultipleAxes::Y;

@@ -1173,25 +1173,25 @@ void OBJMesh::GenerateSphericalTexCoords()
         {
             if(z == 0.0f)
             {
-                phi = HELIUM_PI_2;
+                phi = static_cast< float32_t >( HELIUM_PI_2 );
             }
             else
             {
-                phi = acos(z / rho);
+                phi = acosf(z / rho);
             }
 
             if(y == 0.0f)
             {
-                theta = HELIUM_PI_2;
+                theta = static_cast< float32_t >( HELIUM_PI_2 );
             }
             else
             {
-                theta = asin(y / r) + HELIUM_PI_2;
+                theta = asinf(y / r) + static_cast< float32_t >( HELIUM_PI_2 );
             }
         }
 
-        m_UVs[2 * i + 0] = theta * HELIUM_1_PI;
-        m_UVs[2 * i + 1] = phi * HELIUM_1_PI;
+        m_UVs[2 * i + 0] = theta * static_cast< float32_t >( HELIUM_1_PI );
+        m_UVs[2 * i + 1] = phi * static_cast< float32_t >( HELIUM_1_PI );
     }
 
     /* go through and put uv indices in all the m_Triangles */

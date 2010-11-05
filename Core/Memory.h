@@ -11,7 +11,7 @@
 
 #include "Core/Core.h"
 #include "Platform/Types.h"
-#include "Platform/Simd.h"
+#include "Platform/Math/Simd.h"
 #include "Core/Utility.h"
 #include "Platform/Math/MathCommon.h"
 #include <new>

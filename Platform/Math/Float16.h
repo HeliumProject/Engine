@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Float16.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_FLOAT16_H
-#define LUNAR_CORE_FLOAT16_H
 
 #include "Platform/API.h"
 #include "Platform/Types.h"
@@ -83,5 +74,3 @@ namespace Helium
     PLATFORM_API Float16 Float32To16( Float32 value );
     PLATFORM_API Float32 Float16To32( Float16 value );
 }
-
-#endif  // LUNAR_CORE_FLOAT16_H

@@ -9,8 +9,8 @@
 #ifndef LUNAR_CORE_CORE_PCH_H
 #define LUNAR_CORE_CORE_PCH_H
 
+#include "Platform/Trace.h"
 #include "Core/AppInfo.h"
-#include "Core/Log.h"
 #include "Core/BitArray.h"
 #include "Core/SparseArray.h"
 #include "Core/StringConverter.h"

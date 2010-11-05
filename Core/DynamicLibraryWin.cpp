@@ -8,9 +8,11 @@
 #include "CorePch.h"
 #include "Core/DynamicLibrary.h"
 
+#include "Platform/Windows/Windows.h"
+
 namespace Lunar
 {
-#if L_ENABLE_LOGGING
+#if HELIUM_ENABLE_TRACE
     /// Get the path to the DLL referenced by the specified handle.
     ///
     /// @param[in] pHandle  DLL handle.
@@ -26,7 +28,7 @@ namespace Lunar
             L_ARRAY_COUNT( pathBuffer ) );
         if( bufferSize == 0 )
         {
-            L_LOG( LOG_ERROR, TXT( "DynamicLibrary: Failed to retrieve DLL file path.\n" ) );
+            HELIUM_TRACE( TRACE_ERROR, TXT( "DynamicLibrary: Failed to retrieve DLL file path.\n" ) );
             pathBuffer[ 0 ] = TXT( '\0' );
         }
         else
@@ -52,7 +54,7 @@ namespace Lunar
     /// Destructor.
     DynamicLibrary::~DynamicLibrary()
     {
-        L_LOG( LOG_DEBUG, TXT( "DynamicLibrary: Unloading \"%s\".\n" ), *GetDllPath( m_pHandle ) );
+        HELIUM_TRACE( TRACE_DEBUG, TXT( "DynamicLibrary: Unloading \"%s\".\n" ), *GetDllPath( m_pHandle ) );
 
         FreeLibrary( static_cast< HMODULE >( m_pHandle ) );
     }
@@ -66,7 +68,7 @@ namespace Lunar
     {
         HELIUM_ASSERT( pFunctionName );
 
-#if L_ENABLE_LOGGING
+#if HELIUM_ENABLE_TRACE
 #if HELIUM_UNICODE
         tchar_t functionNameT[ 1024 ];
         mbstowcs_s( NULL, functionNameT, pFunctionName, _TRUNCATE );
@@ -74,8 +76,8 @@ namespace Lunar
         const tchar_t* functionNameT = pFunctionName;
 #endif
 
-        L_LOG(
-            LOG_DEBUG,
+        HELIUM_TRACE(
+            TRACE_DEBUG,
             TXT( "DynamicLibrary: Locating function \"%s\" in library \"%s\".\n" ),
             functionNameT,
             *GetDllPath( m_pHandle ) );
@@ -96,12 +98,12 @@ namespace Lunar
     {
         HELIUM_ASSERT( pPath );
 
-        L_LOG( LOG_DEBUG, TXT( "DynamicLibrary: Loading \"%s\".\n" ), pPath );
+        HELIUM_TRACE( TRACE_DEBUG, TXT( "DynamicLibrary: Loading \"%s\".\n" ), pPath );
 
         HMODULE hModule = LoadLibrary( pPath );
         if( !hModule )
         {
-            L_LOG( LOG_ERROR, TXT( "DynamicLibrary: Failed to load \"%s\".\n" ), pPath );
+            HELIUM_TRACE( TRACE_ERROR, TXT( "DynamicLibrary: Failed to load \"%s\".\n" ), pPath );
 
             return NULL;
         }
@@ -109,7 +111,7 @@ namespace Lunar
         DynamicLibrary* pLibrary = new DynamicLibrary( hModule );
         HELIUM_ASSERT( pLibrary );
 
-        L_LOG( LOG_DEBUG, TXT( "DynamicLibrary: Loaded \"%s\" successfully.\n" ), pPath );
+        HELIUM_TRACE( TRACE_DEBUG, TXT( "DynamicLibrary: Loaded \"%s\" successfully.\n" ), pPath );
 
         return pLibrary;
     }

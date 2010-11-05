@@ -139,7 +139,7 @@ namespace Lunar
 
             default:
             {
-                L_LOG( LOG_ERROR, TXT( "DynamicMemoryStream::Seek(): Invalid seek origin specified.\n" ) );
+                HELIUM_TRACE( TRACE_ERROR, TXT( "DynamicMemoryStream::Seek(): Invalid seek origin specified.\n" ) );
 
                 return static_cast< int64_t >( static_cast< size_t >( m_pCurrent - m_pStart ) );
             }
@@ -151,8 +151,8 @@ namespace Lunar
             HELIUM_ASSERT( absOffset <= static_cast< uint64_t >( referenceOffset ) );
             if( absOffset > static_cast< uint64_t >( referenceOffset ) )
             {
-                L_LOG(
-                    LOG_ERROR,
+                HELIUM_TRACE(
+                    TRACE_ERROR,
                     TXT( "DynamicMemoryStream::Seek(): Attempted to seek before the start of the memory stream.\n" ) );
             }
             else
@@ -166,8 +166,8 @@ namespace Lunar
             HELIUM_ASSERT( absOffset <= static_cast< uint64_t >( static_cast< size_t >( -1 ) - referenceOffset ) );
             if( absOffset > static_cast< uint64_t >( static_cast< size_t >( m_pEnd - m_pStart ) - referenceOffset ) )
             {
-                L_LOG(
-                    LOG_ERROR,
+                HELIUM_TRACE(
+                    TRACE_ERROR,
                     TXT( "DynamicMemoryStream::Seek(): Attempted to seek past the end of the memory stream.\n" ) );
             }
             else

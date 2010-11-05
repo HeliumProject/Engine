@@ -10,7 +10,9 @@
 #define LUNAR_CORE_THREADING_H
 
 #include "Core/Core.h"
+
 #include "Platform/Platform.h"
+#include "Core/Utility.h"
 
 namespace Lunar
 {

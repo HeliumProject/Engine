@@ -172,7 +172,7 @@ namespace Lunar
     template< typename TableType >
     void NameBase< TableType >::Shutdown()
     {
-        L_LOG( LOG_INFO, TXT( "Shutting down Name table.\n" ) );
+        HELIUM_TRACE( TRACE_INFO, TXT( "Shutting down Name table.\n" ) );
 
         delete [] TableType::sm_pTable;
         TableType::sm_pTable = NULL;
@@ -180,7 +180,7 @@ namespace Lunar
         delete TableType::sm_pNameMemoryHeap;
         TableType::sm_pNameMemoryHeap = NULL;
 
-        L_LOG( LOG_INFO, TXT( "Name table shutdown complete.\n" ) );
+        HELIUM_TRACE( TRACE_INFO, TXT( "Name table shutdown complete.\n" ) );
     }
 
     /// Find an existing string in this table.

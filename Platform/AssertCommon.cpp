@@ -1,4 +1,5 @@
 #include "Platform/Assert.h"
+#include "Platform/Trace.h"
 
 #if HELIUM_ASSERT_ENABLED
 
@@ -113,8 +114,7 @@ Assert::EResult Assert::Trigger(
         }
     }
 
-#pragma TODO( "LUNAR MERGE - Update L_LOG call in Assert::Trigger() to something more appropriate for calling from within Platform." )
-//    L_LOG( LOG_ERROR, TXT( "%s\n" ), messageText );
+    HELIUM_TRACE( TRACE_ERROR, TXT( "%s\n" ), messageText );
 
     // Present the assert message and get how we should proceed.
     EResult result = TriggerImplementation( messageText );

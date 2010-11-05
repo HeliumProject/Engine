@@ -174,8 +174,8 @@ namespace Lunar
     /// Write memory stats for all dynamic memory heap instances to the output log.
     void DynamicMemoryHeap::LogMemoryStats()
     {
-        L_LOG( LOG_DEBUG, TXT( "DynamicMemoryHeap stats:\n" ) );
-        L_LOG( LOG_DEBUG, TXT( "Heap name\tActive allocations\tBytes allocated\n" ) );
+        HELIUM_TRACE( TRACE_DEBUG, TXT( "DynamicMemoryHeap stats:\n" ) );
+        HELIUM_TRACE( TRACE_DEBUG, TXT( "Heap name\tActive allocations\tBytes allocated\n" ) );
 
         ScopeReadLock readLock( GetGlobalHeapListLock() );
 
@@ -193,15 +193,15 @@ namespace Lunar
             size_t allocationCount = pHeap->GetAllocationCount();
             size_t bytesActual = pHeap->GetBytesActual();
 
-            L_LOG(
-                LOG_DEBUG,
+            HELIUM_TRACE(
+                TRACE_DEBUG,
                 TXT( "%s\t%" ) TPRIuSZ TXT( "\t%" ) TPRIuSZ TXT( "\n" ),
                 pName,
                 allocationCount,
                 bytesActual );
         }
 
-        L_LOG( LOG_DEBUG, TXT( "\n" ) );
+        HELIUM_TRACE( TRACE_DEBUG, TXT( "\n" ) );
 
 #if L_ENABLE_MEMORY_TRACKING_VERBOSE
         bool bLockedTracking = ConditionalVerboseTrackingLock();
@@ -209,7 +209,7 @@ namespace Lunar
         bool bOldDisableBacktraceTracking = sm_bDisableBacktraceTracking;
         sm_bDisableBacktraceTracking = true;
 
-        L_LOG( LOG_DEBUG, TXT( "DynamicMemoryHeap unfreed allocations:\n" ) );
+        HELIUM_TRACE( TRACE_DEBUG, TXT( "DynamicMemoryHeap unfreed allocations:\n" ) );
 
         size_t allocationIndex = 1;
 
@@ -231,8 +231,8 @@ namespace Lunar
                 stdext::hash_map< void*, AllocationBacktrace >::const_iterator iter;
                 for( iter = rAllocationBacktraceMap.begin(); iter != iterEnd; ++iter )
                 {
-                    L_LOG(
-                        LOG_DEBUG,
+                    HELIUM_TRACE(
+                        TRACE_DEBUG,
                         TXT( "%" ) TPRIuSZ TXT( ": 0x%p (%s)\n" ),
                         allocationIndex,
                         iter->first,
@@ -254,13 +254,13 @@ namespace Lunar
 //                        Helium::GetAddressSymbol( symbol, pAddress );
                         Helium::GetAddressSymbol( symbolStl, pAddress );
                         symbol = symbolStl.c_str();
-                        L_LOG( LOG_DEBUG, TXT( "- 0x%p: %s\n" ), pAddress, *symbol );
+                        HELIUM_TRACE( TRACE_DEBUG, TXT( "- 0x%p: %s\n" ), pAddress, *symbol );
                     }
                 }
             }
         }
 
-        L_LOG( LOG_DEBUG, TXT( "\n" ) );
+        HELIUM_TRACE( TRACE_DEBUG, TXT( "\n" ) );
 
         sm_bDisableBacktraceTracking = bOldDisableBacktraceTracking;
 

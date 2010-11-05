@@ -889,6 +889,7 @@ bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
             Reflect::ArchivePtr archive = Reflect::GetArchive( path );
             archive->e_Status.AddMethod( this, &Scene::ArchiveStatus );
             archive->d_Exception.Set( this, &Scene::ArchiveException );
+            archive->Open( true );
             archive->Put( spool );
             archive->Close();
         }

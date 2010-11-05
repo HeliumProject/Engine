@@ -153,7 +153,7 @@ ProjectViewModel::ProjectViewModel( DocumentManager* documentManager )
 
 ProjectViewModel::~ProjectViewModel()
 {
-    //SetProject( NULL );
+    SetProject( NULL );
     ResetColumns();
 }
 
@@ -251,8 +251,12 @@ void ProjectViewModel::SetProject( Project* project, const Document* document )
         // Remove the Node
         if ( m_RootNode )
         {
-            m_RootNode->GetDocument()->d_Save.Clear();
-            m_RootNode->GetDocument()->e_PathChanged.RemoveMethod( this, &ProjectViewModel::OnProjectPathChanged );
+            if ( m_RootNode->GetDocument() )
+            {
+                m_RootNode->GetDocument()->d_Save.Clear();
+                m_RootNode->GetDocument()->e_Closed.RemoveMethod( this, &ProjectViewModel::OnProjectClosed );
+                m_RootNode->GetDocument()->e_PathChanged.RemoveMethod( this, &ProjectViewModel::OnProjectPathChanged );
+            }
 
             //m_Project->a_Path.Changed().RemoveMethod( m_RootNode.Ptr(), &ProjectViewModelNode::PathChanged );
             m_RootNode = NULL;
@@ -279,6 +283,7 @@ void ProjectViewModel::SetProject( Project* project, const Document* document )
         // Connect to the Project
 #pragma TODO( "Rachel WIP: "__FUNCTION__" - OnProjectSave and OnProjectPathChanged really ought to be added to MainFrame" )
         m_RootNode->GetDocument()->d_Save.Set( this, &ProjectViewModel::OnProjectSave );
+        m_RootNode->GetDocument()->e_Closed.AddMethod( this, &ProjectViewModel::OnProjectClosed );
         m_RootNode->GetDocument()->e_PathChanged.AddMethod( this, &ProjectViewModel::OnProjectPathChanged );
 
         m_Project->e_PathAdded.AddMethod( this, &ProjectViewModel::OnPathAdded );
@@ -424,6 +429,14 @@ void ProjectViewModel::OnProjectSave( const DocumentEventArgs& args )
         && document->GetPath() == m_Project->a_Path.Get() )
     {
         args.m_Result = m_Project->Save();
+    }
+}
+
+void ProjectViewModel::OnProjectClosed( const DocumentEventArgs& args )
+{
+    if ( m_Project )
+    {
+        SetProject( NULL );
     }
 }
 

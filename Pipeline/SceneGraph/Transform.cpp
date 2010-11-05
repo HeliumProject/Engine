@@ -441,7 +441,7 @@ void Transform::CreatePanel(CreatePanelArgs& args)
     Inspect::Label* label;
     Inspect::Value* value;
     {
-        args.m_Generator->PushContainer();
+        args.m_Generator->PushContainer( TXT( "Inherit Transform Control" ) );
         label = args.m_Generator->AddLabel( TXT( "Inherit Transform" ) );
         label->a_HelpText.Set( TXT( "Causes this node to inherit its transform from its parent node." ) );
         Inspect::CheckBox* checkBox = args.m_Generator->AddCheckBox<SceneGraph::Transform, bool>(args.m_Selection, &Transform::GetInheritTransform, &Transform::SetInheritTransform);
@@ -450,24 +450,24 @@ void Transform::CreatePanel(CreatePanelArgs& args)
     }
 
     {
-        args.m_Generator->PushContainer();
+        args.m_Generator->PushContainer( TXT( "Scale Container" ) );
         label = args.m_Generator->AddLabel( TXT( "Scale" ) );
         label->a_HelpText.Set( TXT( "Controls the scaling of this node in the x, y and z dimensions." ) );
 
         value = args.m_Generator->AddValue<SceneGraph::Transform, float32_t>(args.m_Selection, &Transform::GetScaleX, &Transform::SetScaleX);
-        value->a_HelpText.Set( TXT( "Constrols the scaling of this node in the x dimension." ) );
+        value->a_HelpText.Set( TXT( "Controls the scaling of this node in the x dimension." ) );
 
         value = args.m_Generator->AddValue<SceneGraph::Transform, float32_t>(args.m_Selection, &Transform::GetScaleY, &Transform::SetScaleY);
-        value->a_HelpText.Set( TXT( "Constrols the scaling of this node in the y dimension." ) );
+        value->a_HelpText.Set( TXT( "Controls the scaling of this node in the y dimension." ) );
 
         value = args.m_Generator->AddValue<SceneGraph::Transform, float32_t>(args.m_Selection, &Transform::GetScaleZ, &Transform::SetScaleZ);
-        value->a_HelpText.Set( TXT( "Constrols the scaling of this node in the z dimension." ) );
+        value->a_HelpText.Set( TXT( "Controls the scaling of this node in the z dimension." ) );
 
         args.m_Generator->Pop();
     }
 
     {
-        args.m_Generator->PushContainer();
+        args.m_Generator->PushContainer( TXT( "Rotate Container" ) );
         label = args.m_Generator->AddLabel( TXT( "Rotate" ) );
         label->a_HelpText.Set( TXT( "Controls the rotation of this node about its x, y and z axes." ) );
 
@@ -484,7 +484,7 @@ void Transform::CreatePanel(CreatePanelArgs& args)
     }
 
     {
-        args.m_Generator->PushContainer();
+        args.m_Generator->PushContainer( TXT( "Translate Container" ) );
         label = args.m_Generator->AddLabel( TXT( "Translate" ) );
         label->a_HelpText.Set( TXT( "Controls the location of this node in space with respect to the origin." ) );
 

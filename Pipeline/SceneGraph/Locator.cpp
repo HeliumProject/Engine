@@ -171,7 +171,7 @@ void Locator::CreatePanel( CreatePanelArgs& args )
     Inspect::Container* container = args.m_Generator->PushContainer( TXT( "Locator" ) );
     container->a_HelpText.Set( TXT( "This area contains settings specific to the locator node type." ) );
     {
-        args.m_Generator->PushContainer();
+        args.m_Generator->PushContainer( TXT( "Shape Control" ) );
         {
             static const tstring helpText = TXT( "Choose the shape of the locator." );
             args.m_Generator->AddLabel( TXT( "Shape" ) )->a_HelpText.Set( helpText );

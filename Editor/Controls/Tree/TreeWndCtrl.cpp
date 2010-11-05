@@ -455,6 +455,8 @@ void TreeWndCtrl::Delete(const wxTreeItemId& item)
         m_root = TreeWndCtrlItemIdInvalid;
 
     wxWindow* window = node->GetWindow();
+    assert( window );
+
     if ( m_allocatedWindows.Find(window) != NULL )
     {
         m_allocatedWindows.DeleteObject(window);

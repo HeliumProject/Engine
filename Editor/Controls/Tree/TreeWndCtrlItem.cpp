@@ -44,7 +44,7 @@ TreeWndCtrlItem::TreeWndCtrlItem(TreeWndCtrl *parent,
                                  const wxString& text,
                                  int image,
                                  int stateImage)
-                                 : wxPanel(parent),
+                                 : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,  wxTAB_TRAVERSAL | wxNO_BORDER, text),
                                  m_image(image),
                                  m_stateImage(stateImage),
                                  m_spacing(WXTWC_DEFAULT_ITEM_SPACING),

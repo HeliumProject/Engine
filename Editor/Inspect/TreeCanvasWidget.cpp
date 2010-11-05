@@ -67,7 +67,7 @@ void TreeCanvasWidget::Create( wxWindow* parent )
     else // children are controls
     {
         // our window is a panel of child controls
-        m_Window = new wxPanel( m_TreeWndCtrl, wxID_ANY );
+        m_Window = new wxPanel( m_TreeWndCtrl, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxBORDER_NONE, m_ContainerControl->a_Name.Get().c_str() );
         m_Window->SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
         wxSizer* sizer = m_Window->GetSizer();
 
@@ -163,6 +163,12 @@ void TreeCanvasWidget::Destroy()
     {
         m_TreeWndCtrl->Delete( m_ItemData.GetId() );
         m_ItemData.SetId( Helium::TreeWndCtrlItemIdInvalid );
+    }
+
+    if ( m_Window && m_Window != m_TreeWndCtrl )
+    {
+        m_Window->Destroy();
+        m_Window = NULL;
     }
 }
 

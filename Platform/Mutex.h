@@ -50,7 +50,7 @@ namespace Helium
         Mutex();
 
     private:
-        Mutex( const Mutex& mutex )
+        Mutex( const Mutex& )
         {
 
         }
@@ -89,6 +89,11 @@ namespace Helium
             : m_Mutex (rhs.m_Mutex)
         {
 
+        }
+
+        TakeMutex& operator=( const TakeMutex& )
+        {
+            return *this;
         }
 
     public:

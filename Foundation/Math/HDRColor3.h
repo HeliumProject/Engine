@@ -5,7 +5,7 @@
 #include "Vector3.h"
 #include "Utils.h"
 
-#include <cmath>
+#include "Platform/Math/MathCommon.h"
 #include <string>
 #include <vector>
 #include <iostream>

@@ -215,14 +215,17 @@ namespace Helium
     /// @see Log2( uint64_t )
     size_t Log2( uint32_t value )
     {
-        HELIUM_ASSERT( value );
+        HELIUM_ASSERT( value != 0 );
 
 #if HELIUM_CC_MSC
         unsigned long bitIndex = 0;
         HELIUM_VERIFY( _BitScanReverse( &bitIndex, value ) );
 
         return bitIndex;
+#elif HELIUM_CC_GCC
+        return ( 31 - __builtin_clz( value ) );
 #else
+#warning Compiling unoptimized Log2() implementation.  Please evaluate the availability of more optimal implementations for the current platform/compiler.
         size_t bitIndex = sizeof( value ) * 8 - 1;
         uint32_t mask = ( 1 << bitIndex );
         while( !( value & mask ) )
@@ -268,7 +271,12 @@ namespace Helium
 #endif
 
         return bitIndex;
+#elif HELIUM_CC_GCC
+        HELIUM_COMPILE_ASSERT( sizeof( long long ) == 64 );
+
+        return ( 63 - __builtin_clzll( static_cast< unsigned long long >( value ) ) );
 #else
+#warning Compiling unoptimized Log2() implementation.  Please evaluate the availability of more optimal implementations for the current platform/compiler.
         size_t bitIndex = sizeof( value ) * 8 - 1;
         uint64_t mask = ( 1 << bitIndex );
         while( !( value & mask ) )
@@ -367,29 +375,5 @@ namespace Helium
     float32_t Atan2( float32_t y, float32_t x )
     {
         return atan2f( y, x );
-    }
-
-    /// Convert an angle from degrees to radians.
-    ///
-    /// @param[in] deg  Angle in degrees.
-    ///
-    /// @return  Angle in radians.
-    ///
-    /// @see RadToDeg()
-    float32_t DegToRad( float32_t deg )
-    {
-        return deg * static_cast< float32_t >( HELIUM_DEG_TO_RAD_SCALE );
-    }
-
-    /// Convert an angle from radians to degrees.
-    ///
-    /// @param[in] rad  Angle in radians.
-    ///
-    /// @return  Angle in degrees.
-    ///
-    /// @see DegToRad()
-    float32_t RadToDeg( float32_t rad )
-    {
-        return rad * static_cast< float32_t >( HELIUM_RAD_TO_DEG_SCALE );
     }
 }

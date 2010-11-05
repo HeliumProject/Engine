@@ -468,7 +468,7 @@ bool Line::IntersectsPlane(const Plane& plane, Vector3* intersection) const
 
     float32_t den = (plane.A() * (m_Origin.x - m_Point.x)) + (plane.B() * (m_Origin.y - m_Point.y)) + (plane.C() * (m_Origin.z - m_Point.z));
 
-    if (abs(den) < ValueNearZero)
+    if (abs(den) < HELIUM_VALUE_NEAR_ZERO)
     {
         return false;
     }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cmath>
+#include "Platform/Math/MathCommon.h"
 #include <vector>
 #include <iostream>
 
@@ -254,7 +254,7 @@ namespace Helium
 
         if (det != 0)
         {
-            if (fabs(1.0/det) < AngleNearZero)
+            if (fabs(1.0/det) < HELIUM_ANGLE_NEAR_ZERO)
             {
                 return (*this) = Matrix3 ();
             }

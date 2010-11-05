@@ -6,6 +6,7 @@
 #include "Platform/Assert.h"
 #include "Platform/String.h"
 #include "Platform/Debug.h"
+#include "Platform/Trace.h"
 #include "Platform/Windows/Windows.h"
 
 #include <map>
@@ -833,8 +834,7 @@ static void ConditionalSymInitialize()
     static volatile bool bSymInitialized = false;
     if( !bSymInitialized )
     {
-#pragma TODO( "LUNAR MERGE - Update logging of symbol handler initialization (see other commented out instances in this file as well)." )
-//        L_LOG( LOG_INFO, TXT( "Initializing symbol handler for the current process...\n" ) );
+        HELIUM_TRACE( TRACE_INFO, TXT( "Initializing symbol handler for the current process...\n" ) );
 
         HANDLE hProcess = GetCurrentProcess();
         HELIUM_ASSERT( hProcess );
@@ -842,11 +842,14 @@ static void ConditionalSymInitialize()
         BOOL bInitialized = SymInitialize( hProcess, NULL, TRUE );
         if( bInitialized )
         {
-//            L_LOG( LOG_INFO, TXT( "Symbol handler initialization successful!\n" ) );
+            HELIUM_TRACE( TRACE_INFO, TXT( "Symbol handler initialization successful!\n" ) );
         }
         else
         {
-//            L_LOG( LOG_ERROR, TXT( "Symbol handler initialization failed (error code %u).\n" ), GetLastError() );
+            HELIUM_TRACE(
+                TRACE_INFO,
+                TXT( "Symbol handler initialization failed (error code %u).\n" ),
+                ::GetLastError() );
         }
 
         bSymInitialized = true;
@@ -1038,6 +1041,20 @@ void Helium::GetAddressSymbol( tstring& rSymbol, void* pAddress )
     {
         rSymbol += TXT( "(???, line ?)" );
     }
+}
+
+/// Write a string to any platform-specific debug log output.
+///
+/// @param[in] pMessage  Message string to write to the debug log.
+void Helium::DebugLog( const tchar_t* pMessage )
+{
+    HELIUM_ASSERT( pMessage );
+
+#if HELIUM_UNICODE
+    OutputDebugStringW( pMessage );
+#else
+    OutputDebugStringA( pMessage );
+#endif
 }
 
 #endif  // !HELIUM_RELEASE && !HELIUM_PROFILE

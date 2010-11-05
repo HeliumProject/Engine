@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Editor/Graph/LuaInputStream.h"
 
-#include <math.h>
+#include "Platform/Math/MathCommon.h"
 
 #include "Editor/Graph/Debug.h"
 

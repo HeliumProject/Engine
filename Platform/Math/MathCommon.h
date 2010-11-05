@@ -15,9 +15,13 @@
 #if HELIUM_CC_MSC
 #pragma warning( push )
 #pragma warning( disable : 4530 )  // C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
+// Temporary workaround for bug in Visual C++ 2008 with including intrin.h and math.h simultaneously
+// (see http://connect.microsoft.com/VisualStudio/feedback/details/381422/warning-of-attributes-not-present-on-previous-declaration-on-ceil-using-both-math-h-and-intrin-h).
+#pragma warning( disable : 4985 )  // 'symbol name': attributes not present on previous declaration
 #endif
 
 #include "boost/type_traits.hpp"
+#include <cmath>
 
 #if HELIUM_CC_MSC
 #pragma warning( pop )
@@ -45,12 +49,31 @@
 #define HELIUM_2_SQRTPI 1.12837916709551257390
 
 /// Degrees-to-radians scale.
-#define HELIUM_DEG_TO_RAD_SCALE ( HELIUM_PI / 180.0f )
+#define HELIUM_DEG_TO_RAD ( HELIUM_PI / 180.0f )
 /// Radians-to-degrees scale.
-#define HELIUM_RAD_TO_DEG_SCALE ( 180.0f / HELIUM_PI )
+#define HELIUM_RAD_TO_DEG ( 180.0f / HELIUM_PI )
 
 /// Generic single-precision floating-point epsilon value.
 #define HELIUM_EPSILON ( 1.0e-8f )
+
+#define HELIUM_VALUE_NEAR_ZERO 1e-20f
+#define HELIUM_DIVISOR_NEAR_ZERO 1e-15f//(0.00005f)
+#define HELIUM_ANGLE_NEAR_ZERO 1e-7f
+
+#define HELIUM_CRITICAL_DOT_PRODUCT 0.98f
+#define HELIUM_POINT_ON_PLANE_ERROR 0.00001f
+#define HELIUM_LINEAR_INTERSECTION_ERROR 0.05f
+
+//
+// from http://en.wikipedia.org/wiki/Luminance_(relative)
+// these luminance weights assume the input color is linearly encoded
+//
+#define HELIUM_LUMINANCE_R 0.2126f
+#define HELIUM_LUMINANCE_G 0.7152f
+#define HELIUM_LUMINANCE_B 0.0722f
+#define HELIUM_INVERSE_LUMINANCE_R ( 1.0f / HELIUM_LUMINANCE_R )
+#define HELIUM_INVERSE_LUMINANCE_G ( 1.0f / HELIUM_LUMINANCE_G )
+#define HELIUM_INVERSE_LUMINANCE_B ( 1.0f / HELIUM_LUMINANCE_B )
 //@}
 
 namespace Helium
@@ -89,9 +112,6 @@ namespace Helium
     inline float32_t Acos( float32_t value );
     inline float32_t Atan( float32_t value );
     inline float32_t Atan2( float32_t y, float32_t x );
-
-    inline float32_t DegToRad( float32_t deg );
-    inline float32_t RadToDeg( float32_t rad );
     //@}
 }
 

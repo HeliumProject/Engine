@@ -18,7 +18,8 @@ changes by Geoff Evans:
 - RenderMesh class w/ Draw functions
 */
 
-#include <math.h>
+#include "Platform/Math/MathCommon.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1172,25 +1173,25 @@ void OBJMesh::GenerateSphericalTexCoords()
         {
             if(z == 0.0f)
             {
-                phi = Helium::Pi / 2.0f;
+                phi = static_cast< float32_t >( HELIUM_PI_2 );
             }
             else
             {
-                phi = acos(z / rho);
+                phi = acosf(z / rho);
             }
 
             if(y == 0.0f)
             {
-                theta = Helium::Pi / 2.0f;
+                theta = static_cast< float32_t >( HELIUM_PI_2 );
             }
             else
             {
-                theta = asin(y / r) + (Helium::Pi / 2.0f);
+                theta = asinf(y / r) + static_cast< float32_t >( HELIUM_PI_2 );
             }
         }
 
-        m_UVs[2 * i + 0] = theta / Helium::Pi;
-        m_UVs[2 * i + 1] = phi / Helium::Pi;
+        m_UVs[2 * i + 0] = theta * static_cast< float32_t >( HELIUM_1_PI );
+        m_UVs[2 * i + 1] = phi * static_cast< float32_t >( HELIUM_1_PI );
     }
 
     /* go through and put uv indices in all the m_Triangles */

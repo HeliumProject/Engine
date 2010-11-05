@@ -58,7 +58,7 @@ static int PhysicalMemoryFree( void* pMemory, size_t size )
 static void PrintfWrapper( const char* pFormat, ... )
 {
 #if HELIUM_UNICODE
-    char message[ Lunar::Log::DEFAULT_MESSAGE_BUFFER_SIZE ];
+    char message[ Helium::Trace::DEFAULT_MESSAGE_BUFFER_SIZE ];
 
     va_list argList;
     va_start( argList, pFormat );
@@ -68,7 +68,7 @@ static void PrintfWrapper( const char* pFormat, ... )
     message[ L_ARRAY_COUNT( message ) - 1 ] = '\0';
 
     // Do a direct conversion, assuming memory allocator logging is only using 7-bit ASCII text.
-    wchar_t messageWide[ Lunar::Log::DEFAULT_MESSAGE_BUFFER_SIZE ];
+    wchar_t messageWide[ Helium::Trace::DEFAULT_MESSAGE_BUFFER_SIZE ];
 
     const char* pSourceCharacter = &message[ 0 ];
     wchar_t* pDestCharacter = &messageWide[ 0 ];
@@ -86,11 +86,11 @@ static void PrintfWrapper( const char* pFormat, ... )
         ++pDestCharacter;
     }
 
-    L_LOG( Lunar::LOG_DEBUG, TXT( "%s" ), messageWide );
+    HELIUM_TRACE( Lunar::TRACE_DEBUG, TXT( "%s" ), messageWide );
 #else
     va_list argList;
     va_start( argList, pFormat );
-    L_LOG_VA( Lunar::LOG_DEBUG, pFormat, argList );
+    HELIUM_TRACE_VA( Lunar::TRACE_DEBUG, pFormat, argList );
     va_end( argList );
 #endif
 }

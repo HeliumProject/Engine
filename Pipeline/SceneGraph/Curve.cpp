@@ -181,7 +181,7 @@ int Curve::ClosestControlPoint( PickVisitor* pick )
         CurveControlPoint* point = Reflect::ObjectCast< CurveControlPoint >( *itr );
         if ( point )
         {
-            if ( pick->PickPoint( point->GetPosition(), BigFloat ) )
+            if ( pick->PickPoint( point->GetPosition(), FLT_MAX ) )
             {
                 distance = pick->GetHits().back()->GetIntersectionDistance();
 
@@ -261,8 +261,8 @@ bool Curve::ClosestControlPoints( PickVisitor* pick, std::pair<uint32_t, uint32_
 int32_t Curve::ClosestPoint( PickVisitor* pick )
 {
     int32_t bestIndex = -1;
-    float32_t distance = BigFloat;
-    float32_t bestDistance = BigFloat;
+    float32_t distance = FLT_MAX;
+    float32_t bestDistance = FLT_MAX;
     Vector3 point;
 
     pick->SetCurrentObject ( this, GetGlobalTransform(), GetInverseGlobalTransform() );
@@ -272,7 +272,7 @@ int32_t Curve::ClosestPoint( PickVisitor* pick )
     {
         point = m_Points[i];  
 
-        if ( pick->PickPoint (point, BigFloat ) )
+        if ( pick->PickPoint (point, FLT_MAX ) )
         {
             distance = pick->GetHits().back()->GetIntersectionDistance();
 

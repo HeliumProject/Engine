@@ -165,10 +165,6 @@ namespace Helium
             const Type* GetType(int id) const;
             const Type* GetType(const tstring& str) const;
 
-            // for threading safely
-            void AtomicGetType(int id, const Type** addr) const;
-            void AtomicGetType(const tstring& str, const Type** addr) const;
-
             // class lookup
             inline const Class* GetClass(int32_t id) const
             {
@@ -237,7 +233,7 @@ namespace Helium
             bool converted = Helium::ConvertString( typeid( T ).name(), temp );
             HELIUM_ASSERT( converted ); // if you hit this, for some reason we couldn't convert your typename
 
-            Registry::GetInstance()->AtomicGetType( temp, &type );
+            type = Registry::GetInstance()->GetType( temp );
             HELIUM_ASSERT(type); // if you hit this then your type is not registered
 
             if ( type )
@@ -270,7 +266,7 @@ namespace Helium
                 HELIUM_ASSERT( converted );
             }
 
-            Registry::GetInstance()->AtomicGetType( convertedName, &type );
+            type = Registry::GetInstance()->GetType( convertedName );
             HELIUM_ASSERT(type); // if you hit this then your type is not registered
 
             if ( type )
@@ -299,7 +295,7 @@ namespace Helium
             tstring convertedName;
             bool converted = Helium::ConvertString( typeid( T ).name(), convertedName );
             HELIUM_ASSERT( converted );
-            Registry::GetInstance()->AtomicGetType( convertedName, &type );
+            type = Registry::GetInstance()->GetType( convertedName );
             HELIUM_ASSERT(type); // if you hit this then your type is not registered
 
             if ( type )

@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "Core/Atomic.h"
+#include "Platform/Atomic.h"
 
 namespace Lunar
 {

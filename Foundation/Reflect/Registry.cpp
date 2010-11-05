@@ -481,16 +481,6 @@ const Type* Registry::GetType(const tstring& str) const
     return NULL;
 }
 
-void Registry::AtomicGetType(int id, const Type** addr) const
-{
-    Helium::AtomicExchange( (intptr_t*)addr, (intptr_t)GetType(id) );
-}
-
-void Registry::AtomicGetType(const tstring& str, const Type** addr) const
-{
-    Helium::AtomicExchange( (intptr_t*)addr, (intptr_t)GetType(str) );
-}
-
 ObjectPtr Registry::CreateInstance(int id) const
 {
     M_IDToType::const_iterator type = m_TypesByID.find(id);

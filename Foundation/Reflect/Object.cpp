@@ -86,7 +86,7 @@ void Object::IncrRefCount() const
     }
 #endif
 
-    Helium::AtomicIncrement( &m_RefCount );
+    Helium::AtomicIncrementAcquire( m_RefCount );
 }
 
 void Object::DecrRefCount() const
@@ -98,7 +98,7 @@ void Object::DecrRefCount() const
     }
 #endif
 
-    Helium::AtomicDecrement( &m_RefCount ); 
+    Helium::AtomicDecrementRelease( m_RefCount ); 
 
     if (m_RefCount == 0)
     {

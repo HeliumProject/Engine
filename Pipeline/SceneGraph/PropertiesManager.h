@@ -168,7 +168,7 @@ namespace Helium
             CommandQueue*                   m_CommandQueue;
 
             // selection to create properties for
-            OS_SceneNodeDumbPtr            m_Selection;
+            OS_SceneNodeDumbPtr             m_Selection;
 
             // do we want to be the intersection or union?
             PropertiesStyle                 m_Style;
@@ -177,10 +177,10 @@ namespace Helium
             bool                            m_SelectionDirty;
 
             // thread info for generating properties
-            uint32_t                             m_SelectionId;
+            uint32_t                        m_SelectionId;
 
             // thread count
-            int                             m_ThreadCount;
+            volatile int32_t                m_ThreadCount;
         };
 
         typedef Helium::SmartPtr< PropertiesManager > PropertiesManagerPtr;

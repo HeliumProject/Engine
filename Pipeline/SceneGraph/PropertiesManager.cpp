@@ -76,7 +76,7 @@ void PropertiesManager::CreateProperties()
     }
     else
     {
-        AtomicIncrement( &m_ThreadCount );
+        AtomicIncrementUnsafe( m_ThreadCount );
         Helium::Thread propertyThread;
 
         PropertiesThreadArgs* args = new PropertiesThreadArgs( m_Style, m_SelectionId, &m_SelectionId, m_Selection );
@@ -88,7 +88,7 @@ void PropertiesManager::CreateProperties()
 void PropertiesManager::GeneratePropertiesThreadEntry( PropertiesThreadArgs& args )
 {
     GenerateProperties( args );
-    AtomicDecrement( &m_ThreadCount );
+    AtomicDecrementUnsafe( m_ThreadCount );
 }
 
 void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )

@@ -151,19 +151,7 @@ void ArchiveBinary::Read()
     }
 
     // read version
-    uint8_t key = 0;
-    m_Stream->Read(&key);
-    if (key == '!')
-    {
-        // old version char was only a byte, detect that case
-        m_Version = 1;
-    }
-    else
-    {
-        // new versions have a uint32_t version number
-        m_Stream->SeekRead(0, std::ios_base::beg);
-        m_Stream->Read(&m_Version); 
-    }
+    m_Stream->Read(&m_Version);
 
     if (m_Version > CURRENT_VERSION)
     {

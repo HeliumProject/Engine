@@ -203,6 +203,9 @@ namespace Helium
             void OnMovePivotTool( wxCommandEvent& event );
             void OnDuplicateTool( wxCommandEvent& event );
 
+            void AllocateNestedScene( const SceneGraph::ResolveSceneArgs& args );
+            void ReleaseNestedScene( const SceneGraph::ReleaseSceneArgs& args );
+
         private:
             bool Copy( SceneGraph::Scene* scene );
             bool Paste( SceneGraph::Scene* scene );

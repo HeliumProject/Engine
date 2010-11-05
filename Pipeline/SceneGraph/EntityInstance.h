@@ -94,31 +94,9 @@ namespace Helium
             //
             // Events
             //
-        protected:
-            EntityAssetChangeSignature::Event m_ClassChanging;
         public:
-            void AddClassChangingListener( const EntityAssetChangeSignature::Delegate& listener )
-            {
-                m_ClassChanging.Add( listener );
-            }
-
-            void RemoveClassChangingListener( const EntityAssetChangeSignature::Delegate& listener )
-            {
-                m_ClassChanging.Remove( listener );
-            }
-
-        protected:
-            EntityAssetChangeSignature::Event m_ClassChanged;
-        public:
-            void AddClassChangedListener( const EntityAssetChangeSignature::Delegate& listener )
-            {
-                m_ClassChanged.Add( listener );
-            }
-
-            void RemoveClassChangedListener( const EntityAssetChangeSignature::Delegate& listener )
-            {
-                m_ClassChanged.Remove( listener );
-            }
+            EntityAssetChangeSignature::Event e_ClassChanging;
+            EntityAssetChangeSignature::Event e_ClassChanged;
 
         protected:
             Helium::Path        m_Path;

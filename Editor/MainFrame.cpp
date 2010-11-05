@@ -731,9 +731,16 @@ static void GetUniquePathName( const tchar* root, const std::set< Path >& paths,
 
 void MainFrame::OnNewScene( wxCommandEvent& event )
 {
+    HELIUM_ASSERT( m_Project );
+
     m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
-    HELIUM_ASSERT( m_Project );
+    ScenePtr currentScene = m_SceneManager.GetCurrentScene();
+    if ( currentScene.ReferencesObject() )
+    {
+        currentScene->d_ResolveScene.Clear();
+        currentScene->d_ReleaseScene.Clear();
+    }
 
     Helium::Path path;
     GetUniquePathName( TXT( "New Scene" ), m_Project->Paths(), path );
@@ -746,6 +753,11 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
     HELIUM_ASSERT( result );
 
     ScenePtr scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport(), document );
+    HELIUM_ASSERT( scene.ReferencesObject() );
+
+    scene->d_ResolveScene.Set( ResolveSceneSignature::Delegate( this, &MainFrame::AllocateNestedScene ) );
+    scene->d_ReleaseScene.Set( ReleaseSceneSignature::Delegate( this, &MainFrame::ReleaseNestedScene ) );
+
     m_SceneManager.SetCurrentScene( scene );
 
     m_Project->AddPath( scene->GetPath() );
@@ -819,6 +831,7 @@ bool MainFrame::DoOpen( const tstring& path )
 void MainFrame::OnClose( wxCommandEvent& event )
 {
     m_PropertiesPanel->GetPropertiesManager().SyncThreads();
+    m_UndoQueue.Reset();
     m_DocumentManager.CloseAll();
     m_Project = NULL;
 }
@@ -2052,6 +2065,8 @@ void MainFrame::OnExiting( wxCloseEvent& args )
 {
     m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
+    m_UndoQueue.Reset();
+
     if ( !m_DocumentManager.CloseAll() )
     {
         if ( args.CanVeto() )
@@ -2671,4 +2686,48 @@ bool MainFrame::SortTypeItemsByName( SceneGraph::SceneNodeType* lhs, SceneGraph:
     toUpper( rname );
 
     return lname < rname;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Returns the specified scene and increases the reference count on that scene.
+// If the scene was not yet created, this function will create a new scene.  If
+// there was a problem loading the scene, it will be empty.  If you allocate a
+// scene, you must call ReleaseNestedScene to free it.
+// 
+void MainFrame::AllocateNestedScene( const ResolveSceneArgs& args )
+{
+#pragma TODO( "Rachel WIP: "__FUNCTION__" - this function should move out to the mainframe" )
+
+    args.m_Scene = m_SceneManager.GetScene( args.m_Path );
+    if ( !args.m_Scene )
+    {
+        // Try to load nested scene.
+        //ChangeStatus( TXT("Loading ") + args.m_Path + TXT( "..." ) );
+
+        DocumentPtr document = new Document( args.m_Path );
+        document->HasChanged( true );
+
+        tstring error;
+        bool result = m_DocumentManager.OpenDocument( document, error );
+        HELIUM_ASSERT( result );
+
+        ScenePtr scenePtr = m_SceneManager.NewScene( args.m_Viewport, document, true );
+        if ( !scenePtr->Load( args.m_Path ) )
+        {
+            Log::Error( TXT( "Failed to load scene from %s\n" ), args.m_Path.c_str() );
+            m_SceneManager.RemoveScene( scenePtr );
+            scenePtr = NULL;
+        }
+
+        //ChangeStatus( TXT( "Ready" ) );
+        args.m_Scene = scenePtr;
+    }
+}
+
+void MainFrame::ReleaseNestedScene( const ReleaseSceneArgs& args )
+{
+    if ( m_SceneManager.IsNestedScene( args.m_Scene ) )
+    {
+        m_SceneManager.ReleaseNestedScene( args.m_Scene );
+    }
 }

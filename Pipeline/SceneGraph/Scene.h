@@ -147,6 +147,17 @@ namespace Helium
         };
         typedef Helium::Signature< const ResolveSceneArgs& > ResolveSceneSignature;
 
+        struct ReleaseSceneArgs
+        {
+            ReleaseSceneArgs( Scene* scene )
+                : m_Scene( scene )
+            {
+            }
+
+            mutable Scene* m_Scene;
+        };
+        typedef Helium::Signature< const ReleaseSceneArgs& > ReleaseSceneSignature;
+
         struct SceneEditingArgs
         {
             SceneEditingArgs( Scene* scene )
@@ -796,6 +807,7 @@ namespace Helium
         public:
             UndoCommandSignature::Delegate d_UndoCommand;
             ResolveSceneSignature::Delegate d_ResolveScene;
+            ReleaseSceneSignature::Delegate d_ReleaseScene;
             SceneEditingSignature::Delegate d_Editing;
             SceneStatusChangeSignature::Event e_StatusChanged;
             SceneContextChangedSignature::Event e_SceneContextChanged;

@@ -32,7 +32,7 @@ SceneManager::~SceneManager()
 ///////////////////////////////////////////////////////////////////////////////
 // Create a new scene.  Pass in true if this should be the root scene.
 // 
-ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, const Document* document )
+ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, const Document* document, bool nested )
 {
     document->d_Save.Set( this, &SceneManager::DocumentSave );
     document->e_Closed.AddMethod( this, &SceneManager::DocumentClosed );
@@ -43,6 +43,14 @@ ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, const Document*
     m_SceneToDocumentTable.insert( M_SceneToDocumentTable::value_type( scene.Ptr(), document ) );
 
     AddScene( scene );
+
+    if ( nested )
+    {
+        // Increment the reference count on the nested scene.
+        int32_t& referenceCount = m_AllocatedScenes.insert( M_AllocScene::value_type( scene, 0 ) ).first->second;
+        ++referenceCount;
+    }
+
     return scene;
 }
 
@@ -68,8 +76,7 @@ ScenePtr SceneManager::OpenScene( SceneGraph::Viewport* viewport, const Document
 void SceneManager::AddScene(SceneGraph::Scene* scene)
 {
     scene->d_Editing.Set( SceneEditingSignature::Delegate( this, &SceneManager::OnSceneEditing ) );
-    scene->d_ResolveScene.Set( ResolveSceneSignature::Delegate( this, &SceneManager::AllocateNestedScene ) );
-
+ 
     Helium::Insert<M_SceneSmartPtr>::Result inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
     HELIUM_ASSERT(inserted.second);
 
@@ -135,7 +142,6 @@ void SceneManager::RemoveScene( SceneGraph::Scene* scene )
     e_SceneRemoving.Raise( scene );
 
     scene->d_Editing.Clear();
-    scene->d_ResolveScene.Clear();
 
     M_SceneSmartPtr::iterator found = m_Scenes.find( scene->GetPath().Get() );
     HELIUM_ASSERT( found != m_Scenes.end() );
@@ -191,40 +197,6 @@ void SceneManager::RemoveAllScenes()
 bool SceneManager::IsNestedScene( SceneGraph::Scene* scene ) const
 {
     return m_AllocatedScenes.find( scene ) != m_AllocatedScenes.end();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the specified scene and increases the reference count on that scene.
-// If the scene was not yet created, this function will create a new scene.  If
-// there was a problem loading the scene, it will be empty.  If you allocate a
-// scene, you must call ReleaseNestedScene to free it.
-// 
-void SceneManager::AllocateNestedScene( const ResolveSceneArgs& args )
-{
-#pragma TODO( "Rachel WIP: "__FUNCTION__" - this function should move out to the mainframe" )
-
-    args.m_Scene = GetScene( args.m_Path );
-    if ( !args.m_Scene )
-    {
-        // Try to load nested scene.
-        //parent->ChangeStatus( TXT("Loading ") + path + TXT( "..." ) );
-
-        //ScenePtr scenePtr = NewScene( args.m_Viewport, args.m_Path );
-        //if ( !scenePtr->Load( args.m_Path ) )
-        //{
-        //    Log::Error( TXT( "Failed to load scene from %s\n" ), args.m_Path.c_str() );
-        //}
-
-        ////parent->ChangeStatus( TXT( "Ready" ) );
-        //args.m_Scene = scenePtr;
-    }
-
-    if ( args.m_Scene )
-    {
-        // Increment the reference count on the nested scene.
-        int32_t& referenceCount = m_AllocatedScenes.insert( M_AllocScene::value_type( args.m_Scene, 0 ) ).first->second;
-        ++referenceCount;
-    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -365,7 +337,7 @@ void SceneManager::DocumentClosed( const DocumentEventArgs& args )
 
     if ( document )
     {
-        ScenePtr scene = GetScene( document );
+        Scene* scene = GetScene( document );
 
         // If the current scene is the one that is being closed, we need to set it
         // to no longer be the current scene.
@@ -374,7 +346,16 @@ void SceneManager::DocumentClosed( const DocumentEventArgs& args )
             SetCurrentScene( NULL );
         }
 
-        RemoveScene( scene );
+#pragma TODO( "Is this sane?" )
+        while( IsNestedScene( scene ) )
+        {
+            ReleaseNestedScene( scene );
+        }
+
+        if ( scene )
+        {
+            RemoveScene( scene );
+        }
 
         // Select the next scene in the list, if there is one
         if ( !HasCurrentScene() )

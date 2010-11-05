@@ -21,7 +21,7 @@
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Worker/Process.h"
 
-#include "Core/CoreInit.h"
+#include "Pipeline/CoreInit.h"
 
 #include "Editor/ArtProvider.h"
 #include "Editor/Perforce/Perforce.h"

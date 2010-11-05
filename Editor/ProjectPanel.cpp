@@ -3,7 +3,7 @@
 #include "ProjectPanel.h"
 #include "ArtProvider.h"
 
-#include "Core/Asset/AssetClass.h"
+#include "Pipeline/Asset/AssetClass.h"
 
 #include "Editor/FileDialog.h"
 #include "Editor/Controls/MenuButton.h"

@@ -8,7 +8,6 @@ defines
 	"FOUNDATION_DLL=1",
 	"PIPELINE_DLL=1",
 	"CORE_DLL=1",
-	"XML_STATIC=1",
 	"WXUSINGDLL=1",
 	"wxNO_EXPAT_LIB=1",
 	"wxNO_JPEG_LIB=1",
@@ -110,6 +109,13 @@ configuration "not no-unicode"
 		"wxUSE_UNICODE=1",
 	}
 
+project "Core"
+	if corePrebuildCommands ~= nil then
+		prebuildcommands( corePrebuildCommands )
+	end
+
+	Helium.DoLunarModuleProjectSettings( "LUNAR", "Core", "CORE" )
+
 project "Platform"
 	kind "SharedLib"
 	language "C++"
@@ -180,9 +186,9 @@ project "Pipeline"
 	}
 	includedirs
 	{
-		"Dependencies/squish",
 		"Dependencies/nvtt",
 		"Dependencies/nvtt/src",
+		"Dependencies/nvtt/src/nvtt/squish",
 		"Dependencies/tiff",
 		"Dependencies/tiff/libtiff",
 	}
@@ -195,9 +201,10 @@ project "Pipeline"
 	{
 		"Platform",
 		"Foundation",
-		"squish",
 		"nvtt",
 		"tiff",
+		"d3d9",
+		"d3dx9",
 	}
 
 	configuration "windows"
@@ -205,28 +212,6 @@ project "Pipeline"
 		{
 			"Dependencies/nvtt/project/vc8",
 		}
-
-project "Core"
-	kind "SharedLib"
-	language "C++"
-	defines
-	{
-		"CORE_EXPORTS",
-	}
-	files
-	{
-		"Core/**.h",
-		"Core/**.cpp",
-	}
-	links
-	{
-		"Foundation",
-		"Platform",
-		"opengl32",
-		"glu32",
-		"d3d9",
-		"d3dx9",
-	}	
 
 	configuration "windows"
 		includedirs
@@ -266,7 +251,6 @@ project "Editor"
 		"Platform",
 		"Foundation",
 		"Pipeline",
-		"Core",
 		"LiteSQL",
 		"libclient",
 		"librpc",

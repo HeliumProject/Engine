@@ -6,7 +6,7 @@
 
 #include "Foundation/TimerThread.h"
 
-#include "Core/SceneGraph/SceneManager.h"
+#include "Pipeline/SceneGraph/SceneManager.h"
 
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
 

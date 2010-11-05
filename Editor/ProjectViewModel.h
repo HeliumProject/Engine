@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Project.h"
+#include "Pipeline/Project.h"
 #include "Foundation/Document/Document.h"
 #include "Foundation/Document/DocumentManager.h"
 #include "Foundation/Memory/SmartPtr.h"

@@ -8,13 +8,13 @@
 #include "Foundation/Undo/Queue.h"
 
 #include "Editor/API.h"
-#include "Core/SettingsManager.h"
-#include "Core/SceneGraph/Render.h"
-#include "Core/SceneGraph/Camera.h"
-#include "Core/SceneGraph/Resource.h"
-#include "Core/SceneGraph/Viewport.h"
-#include "Core/SceneGraph/ViewportSettings.h"
-#include "Core/Render/DeviceManager.h"
+#include "Pipeline/SettingsManager.h"
+#include "Pipeline/SceneGraph/Render.h"
+#include "Pipeline/SceneGraph/Camera.h"
+#include "Pipeline/SceneGraph/Resource.h"
+#include "Pipeline/SceneGraph/Viewport.h"
+#include "Pipeline/SceneGraph/ViewportSettings.h"
+#include "Pipeline/Render/DeviceManager.h"
 
 namespace Helium
 {

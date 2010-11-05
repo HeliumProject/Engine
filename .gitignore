@@ -8,9 +8,10 @@
 *.LOCAL.*
 *.REMOTE.*
 Bin/*
+Logs/*
 Dependencies/LiteSQL/0.3.8/build/*
+Dependencies/tbb/build/windows_*
 Dependencies/wxWidgets/build/msw/vc_*
 Dependencies/wxWidgets/lib/vc_*
 Intermediate/*
-Logs/*
 Premake/*

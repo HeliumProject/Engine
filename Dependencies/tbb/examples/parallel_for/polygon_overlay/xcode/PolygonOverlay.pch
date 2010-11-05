@@ -1,0 +1,5 @@
+//
+// Prefix header for all source files of the 'PolygonOverlay' target in the 'PolygonOverlay' project.
+//
+
+#include <Carbon/Carbon.h>

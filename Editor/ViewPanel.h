@@ -3,7 +3,7 @@
 #include "Editor/EditorGenerated.h"
 #include "Editor/ViewCanvas.h"
 
-#include "Core/SettingsManager.h"
+#include "Pipeline/SettingsManager.h"
 
 namespace Helium
 {

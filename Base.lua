@@ -39,9 +39,9 @@ end
 Helium.DoDefaultSolutionSettings = function()
 
 	location "Premake"
-	
-    platforms
-    {
+
+	platforms
+	{
 		"x32",
 		"x64",
 	}
@@ -55,9 +55,13 @@ Helium.DoDefaultSolutionSettings = function()
 	}
 	
 	configuration {}
+		defines
+		{
+			"XML_STATIC=1",
+		}
 		flags
 		{
-			"EnableSSE",
+			"EnableSSE2",
 			"NoMinimalRebuild",
 		}
 	
@@ -128,5 +132,142 @@ Helium.DoDefaultSolutionSettings = function()
 			"NoFramePointer",
 			"OptimizeSpeed",
 		}
+
+	configuration { "windows", "Debug" }
+		buildoptions
+		{
+			"/Ob0",
+		}
+
+	configuration { "windows", "not Debug" }
+		buildoptions
+		{
+			"/Ob2",
+			"/Oi",
+		}
+
+end
+
+-- Common settings for projects linking with Lunar libraries.
+Helium.DoDefaultLunarProjectSettings = function()
+
+	language "C++"
+
+	flags
+	{
+		"ExtraWarnings",
+		"FatalWarnings",
+		"FloatFast",  -- Should be used in all configurations to ensure data consistency.
+		"NoRTTI",
+	}
+
+	includedirs
+	{
+		"Dependencies/boost",
+		"Dependencies/tbb/include",
+	}
+
+	configuration "no-unicode"
+		defines
+		{
+			"L_UNICODE=0",
+		}
+
+	configuration "not no-unicode"
+		defines
+		{
+			"L_UNICODE=1",
+		}
+
+	configuration "Debug"
+		defines
+		{
+			"L_DEBUG=1",
+			"L_EDITOR=1",
+			"L_SHARED=1",
+			"TBB_USE_DEBUG=1",
+		}
+
+	configuration "Intermediate"
+		defines
+		{
+			"L_INTERMEDIATE=1",
+			"L_EDITOR=1",
+			"L_STATIC=1",
+		}
+
+	configuration "Profile"
+		defines
+		{
+			"L_PROFILE=1",
+			"L_STATIC=1",
+		}
+
+	configuration "Release"
+		defines
+		{
+			"L_RELEASE=1",
+			"L_STATIC=1",
+		}
+
+	configuration { "windows", "Debug" }
+		links
+		{
+			"dbghelp",
+		}
+
+	configuration { "windows", "x32", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_ia32_cl_vc9_debug",
+		}
+
+	configuration { "windows", "x32", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_ia32_cl_vc9_release",
+		}
+
+	configuration { "windows", "x64", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_intel64_cl_vc9_debug",
+		}
+
+	configuration { "windows", "x64", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_intel64_cl_vc9_release",
+		}
+
+end
+
+-- Common settings for Lunar modules.
+Helium.DoLunarModuleProjectSettings = function( tokenPrefix, moduleName, moduleNameUpper )
+
+	defines
+	{
+		"L_MODULE_HEAP_FUNCTION=Get" .. moduleName .. "DefaultHeap"
+	}
+
+	files
+	{
+		moduleName .. "/*",
+	}
+
+	pchheader( moduleName .. "Pch.h" )
+	pchsource( moduleName .. "/" .. moduleName .. "Pch.cpp" )
+
+	Helium.DoDefaultLunarProjectSettings()
+
+	configuration "Debug"
+		kind "SharedLib"
+		defines
+		{
+			tokenPrefix .. "_" .. moduleNameUpper .. "_EXPORTS",
+		}
+
+	configuration "not Debug"
+		kind "StaticLib"
 
 end

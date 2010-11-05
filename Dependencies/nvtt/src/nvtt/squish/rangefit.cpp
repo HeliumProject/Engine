@@ -30,9 +30,14 @@
 
 namespace squish {
 
-RangeFit::RangeFit( ColourSet const* colours, int flags ) 
-  : ColourFit( colours, flags )
+RangeFit::RangeFit()
 {
+}
+
+void RangeFit::SetColourSet( ColourSet const* colours, int flags ) 
+{
+    ColourFit::SetColourSet( colours, flags );
+
 	// initialise the metric
 	bool perceptual = ( ( m_flags & kColourMetricPerceptual ) != 0 );
 	if( perceptual )
@@ -49,7 +54,7 @@ RangeFit::RangeFit( ColourSet const* colours, int flags )
 	float const* weights = m_colours->GetWeights();
 	
 	// get the covariance matrix
-	Sym3x3 covariance = ComputeWeightedCovariance( count, values, weights );
+	Sym3x3 covariance = ComputeWeightedCovariance( count, values, weights, m_metric );
 	
 	// compute the principle component
 	Vec3 principle = ComputePrincipleComponent( covariance );

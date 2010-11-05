@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "NodeTypeOutliner.h"
-#include "Core/SceneGraph/Scene.h"
+#include "Pipeline/SceneGraph/Scene.h"
 
 #include "Foundation/Log.h"
 

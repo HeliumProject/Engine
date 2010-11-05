@@ -209,7 +209,7 @@ sub _DoBuild
   {
     my $st = ScopeTimer->new( \$buildTimeAccumulator );
 
-    my $logDir = File::Spec->catfile( "Build", "Logs" );
+    my $logDir = File::Spec->catfile( "Logs" );
     mkpath $logDir;
 
     foreach my $solution ( @{$solutions} )

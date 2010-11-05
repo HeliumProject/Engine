@@ -1,0 +1,146 @@
+------------------------------------------------------------------------
+Intel(R) Threading Building Blocks - Release Notes
+		  Version 3.0
+------------------------------------------------------------------------
+
+
+System Requirements
+-------------------
+
+Intel(R) Threading Building Blocks (Intel(R) TBB) is available
+commercially (see http://www.intel.com/software/products/threading) as a
+binary distribution, and in open source, in both source and binary
+forms (see http://threadingbuildingblocks.org).
+
+When built from source, Intel(R) TBB is intended to be highly portable
+and so supports a wide variety of operating systems and platforms (see
+http://threadingbuildingblocks.org for more details).
+
+Binary distributions, including commercial distributions, are validated
+and officially supported for the hardware, software, operating systems
+and compilers listed here.
+
+Hardware - Recommended
+
+    Microsoft* Windows* Systems
+	Intel(R) Core(TM) 2 Duo processor or Intel(R) Xeon(R) processor
+	    or higher
+    Linux* Systems
+	Intel(R) Core(TM) 2 Duo processor or Intel(R) Xeon(R) processor
+	    or Intel(R) Itanium(R) processor or higher
+    Mac OS* X Systems
+	Intel(R) Core(TM) 2 Duo processor or higher
+
+Hardware - Supported
+
+    Intel(R) Pentium(R) 4 processor family and higher
+    Intel(R) Itanium(R) processor family (Linux* systems only)
+    Non Intel(R) processors compatible with the above processors
+
+Software - Minimum Requirements
+
+    Supported operating system (see below)
+    Supported compiler (see below)
+    Xcode* tool suite 3.1.2 or higher (Mac OS* X systems only)
+    Microsoft* Internet Explorer* 6.0, or other compatible web browser
+    Adobe(R) Reader(R)* 6.0 or higher
+
+Software - Recommended
+
+    Intel(R) Parallel Studio
+    Intel(R) C++ Compiler 10.1 or higher
+    Intel(R) Thread Checker 3.1 or higher
+    Intel(R) Thread Profiler 3.1 or higher
+
+Software - Supported Operating Systems
+
+    Microsoft* Windows* Systems
+	Microsoft* Windows* XP Professional
+	Microsoft* Windows* Server 2003
+	Microsoft* Windows* Vista
+	Microsoft* Windows* Server 2008
+	Microsoft* Windows* 7
+    Linux* Systems
+	Red Hat* Enterprise Linux* 4, 5
+	    (when using Red Hat* Enterprise Linux* 4 with Intel(R)
+	    Itanium(R) processors, operating system Update 2 or higher
+	    is recommended)
+	Fedora* 10, 11, 12
+	    (not with Intel(R) Itanium(R) processors)
+	Asianux* 3.0
+	Debian* GNU/Linux* 5.0
+	Ubuntu* 9.04, 9.10
+	SuSE* Linux* Enterprise Server (SLES) 10, 11
+    Mac OS* X Systems
+	Mac OS* X 10.5.6 or higher
+
+Software - Supported Compilers
+
+    Microsoft* Visual C++ 8.0 (Microsoft* Visual Studio* 2005,
+	Windows* systems only)
+    Microsoft* Visual C++ 9.0 (Microsoft* Visual Studio* 2008,
+	Windows* systems only)
+    Microsoft* Visual C++ 10.0 (Microsoft* Visual Studio* 2010,
+	Windows* systems only)
+    Intel(R) C++ Compiler 10.1 or higher
+    For each supported Linux* operating system, the standard gcc
+	version provided with that operating system is supported,
+	including gcc 3.4 through 4.4
+    For each supported Mac OS* X operating system, the standard gcc
+	version provided with that operating system is supported,
+	including: 4.0.1 or higher (Xcode* tool suite 3.1.2 or higher)
+
+
+Known Issues
+------------
+
+Please note the following with respect to this particular release of
+Intel(R) Threading Building Blocks.
+
+Library Issues
+
+    - Unhandled exceptions in the user code executed in the context of
+	TBB algorithms or containers may cause segmentation faults when
+	Intel(R) C++ Compiler 10.x is used with glibc 2.3.2 to 2.3.4.
+
+    - To allow more accurate results to be obtained with Intel(R) Thread
+	Checker or Intel(R) Thread Profiler, download the latest update
+	releases of these products before using them with Intel(R)
+	Threading Building Blocks.
+
+    - If you are using Intel(R) Threading Building Blocks and OpenMP*
+	constructs mixed together in rapid succession in the same
+	program, and you are using Intel(R) compilers for your OpenMP*
+	code, set KMP_BLOCKTIME to a small value (e.g., 20 milliseconds)
+	to improve performance.  This setting can also be made within
+	your OpenMP* code via the kmp_set_blocktime() library call.  See
+	the Intel(R) compiler OpenMP* documentation for more details on
+	KMP_BLOCKTIME and kmp_set_blocktime().
+
+    - In general, non-debug ("release") builds of applications or
+	examples should link against the non-debug versions of the
+	Intel(R) Threading Building Blocks libraries, and debug builds
+	should link against the debug versions of these libraries.  On
+	Windows* systems, compile with /MD and use Intel(R) Threading
+	Building Blocks release libraries, or compile with /MDd and use
+	debug libraries; not doing so may cause run-time failures.  See
+	the Tutorial in the product "doc" sub-directory for more details
+	on debug vs. release libraries.
+    
+    - Installer doesn't accept non-commercial serial numbers on 
+	Fedora* 11. To install the product on the system use license 
+	file provided after registration of the serial number.
+
+    - Intel(R) TBB 2.2 Update 1 fixed known bugs with exception handling
+	in concurrent_vector. For applications using both exceptions 
+	and concurrent_vector, recompilation with TBB 2.2 Update 1
+	or a newer version is recommended.
+
+------------------------------------------------------------------------
+Copyright (C) 2005-2010 Intel Corporation.  All Rights Reserved.
+
+Intel, Pentium, Intel Xeon, Itanium, Intel XScale and VTune are
+registered trademarks or trademarks of Intel Corporation or its
+subsidiaries in the United States and other countries.
+
+* Other names and brands may be claimed as the property of others.

@@ -3,8 +3,8 @@
 
 #include "Editor/ArtProvider.h"
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
-#include "Core/SceneGraph/ParentCommand.h"
-#include "Core/SceneGraph/Scene.h"
+#include "Pipeline/SceneGraph/ParentCommand.h"
+#include "Pipeline/SceneGraph/Scene.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

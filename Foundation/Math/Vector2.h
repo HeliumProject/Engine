@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cmath>
+#include "Platform/Math/MathCommon.h"
 #include <iostream>
 
 #include <vector>
@@ -80,7 +80,7 @@ namespace Helium
     { 
         float32_t len = this->Length();
 
-        if (len > DivisorNearZero)
+        if (len > HELIUM_DIVISOR_NEAR_ZERO)
         {
             return *this /= len; 
         }

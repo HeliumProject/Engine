@@ -541,37 +541,37 @@ void Transform::SetScaleZ(float32_t scale)
 
 float32_t Transform::GetRotateX() const
 {
-    return GetRotate().angles.x * RadToDeg;
+    return GetRotate().angles.x * static_cast< float32_t >( HELIUM_RAD_TO_DEG );
 }
 
 void Transform::SetRotateX(float32_t rotate)
 {
     Vector3 s = GetRotate().angles;
-    s.x = rotate * DegToRad;
+    s.x = rotate * static_cast< float32_t >( HELIUM_DEG_TO_RAD );
     SetRotate(EulerAngles (s, m_Rotate.order));
 }
 
 float32_t Transform::GetRotateY() const
 {
-    return GetRotate().angles.y * RadToDeg;
+    return GetRotate().angles.y * static_cast< float32_t >( HELIUM_RAD_TO_DEG );
 }
 
 void Transform::SetRotateY(float32_t rotate)
 {
     Vector3 s = GetRotate().angles;
-    s.y = rotate * DegToRad;
+    s.y = rotate * static_cast< float32_t >( HELIUM_DEG_TO_RAD );
     SetRotate(EulerAngles (s, m_Rotate.order));
 }
 
 float32_t Transform::GetRotateZ() const
 {
-    return GetRotate().angles.z * RadToDeg;
+    return GetRotate().angles.z * static_cast< float32_t >( HELIUM_RAD_TO_DEG );
 }
 
 void Transform::SetRotateZ(float32_t rotate)
 {
     Vector3 s = GetRotate().angles;
-    s.z = rotate * DegToRad;
+    s.z = rotate * static_cast< float32_t >( HELIUM_DEG_TO_RAD );
     SetRotate(EulerAngles (s, m_Rotate.order));
 }
 

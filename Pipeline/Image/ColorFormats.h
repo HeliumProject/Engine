@@ -1,7 +1,6 @@
 #pragma once
 
-#include <math.h>
-
+#include "Platform/Math/MathCommon.h"
 #include "Platform/Assert.h"
 #include "Platform/Types.h"
 #include "Foundation/Math/Half.h"

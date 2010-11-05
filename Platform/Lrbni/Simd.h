@@ -12,6 +12,7 @@
 #if HELIUM_CC_MSC
 #pragma warning( push )
 #pragma warning( disable : 4100 ) // 'identifier' : unreferenced formal parameter
+#pragma warning( disable : 4985 )  // 'symbol name': attributes not present on previous declaration
 #endif
 
 #include "lrb_prototype_primitives.inl"

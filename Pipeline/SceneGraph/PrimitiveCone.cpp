@@ -51,7 +51,7 @@ void PrimitiveCone::Update()
   SetElementCount( GetWireVertCount() + GetPolyVertCount() );
   m_Vertices.clear();
 
-  float stepAngle = (float32_t)(Pi)*2.0f / (float32_t)(m_Steps);
+  float stepAngle = (float32_t)HELIUM_TWOPI / (float32_t)(m_Steps);
 
 
   //
@@ -62,13 +62,13 @@ void PrimitiveCone::Update()
   m_Vertices.push_back(Position ((float32_t)(cos(0.f)) * m_Radius, (float32_t)(sin(0.f)) * m_Radius, -m_Length/2.0f));
 
   m_Vertices.push_back(Position (0.0f, 0.0f, m_Length/2.0f));
-  m_Vertices.push_back(Position ((float32_t)(cos(HalfPi)) * m_Radius, (float32_t)(sin(HalfPi)) * m_Radius, -m_Length/2.0f));
+  m_Vertices.push_back(Position ((float32_t)(cos(HELIUM_PI_2)) * m_Radius, (float32_t)(sin(HELIUM_PI_2)) * m_Radius, -m_Length/2.0f));
 
   m_Vertices.push_back(Position (0.0f, 0.0f, m_Length/2.0f));
-  m_Vertices.push_back(Position ((float32_t)(cos(Pi)) * m_Radius, (float32_t)(sin(Pi)) * m_Radius, -m_Length/2.0f));
+  m_Vertices.push_back(Position ((float32_t)(cos(HELIUM_PI)) * m_Radius, (float32_t)(sin(HELIUM_PI)) * m_Radius, -m_Length/2.0f));
 
   m_Vertices.push_back(Position (0.0f, 0.0f, m_Length/2.0f));
-  m_Vertices.push_back(Position ((float32_t)(cos(-HalfPi)) * m_Radius, (float32_t)(sin(-HalfPi)) * m_Radius, -m_Length/2.0f));
+  m_Vertices.push_back(Position ((float32_t)(cos(-HELIUM_PI_2)) * m_Radius, (float32_t)(sin(-HELIUM_PI_2)) * m_Radius, -m_Length/2.0f));
 
   for (int x=0; x<=m_Steps; x++)
   {
@@ -137,7 +137,7 @@ void PrimitiveCone::Draw( DrawArgs* args, const bool* solid, const bool* transpa
 
 bool PrimitiveCone::Pick( PickVisitor* pick, const bool* solid ) const
 {
-  float stepAngle = (float32_t)(Pi)*2.0f / (float32_t)(m_Steps);
+  float stepAngle = (float32_t)HELIUM_TWOPI / (float32_t)(m_Steps);
   float sf=0, u=0, v=0;
 
   Vector3 v0, v1, v2;

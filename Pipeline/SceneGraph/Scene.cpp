@@ -2836,7 +2836,7 @@ Undo::CommandPtr Scene::SnapSelectedToCamera()
 
     Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-    Matrix4 m = Matrix4 ( AngleAxis( Pi, Vector3::BasisY ) ) * m_View->GetCamera()->GetInverseView();
+    Matrix4 m = Matrix4 ( AngleAxis( HELIUM_PI, Vector3::BasisY ) ) * m_View->GetCamera()->GetInverseView();
 
     OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
     OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
@@ -2867,7 +2867,7 @@ Undo::CommandPtr Scene::SnapCameraToSelected()
 
     if (transform)
     {
-        Matrix4 m = Matrix4 ( AngleAxis( Pi, Vector3::BasisY ) ) * transform->GetGlobalTransform();
+        Matrix4 m = Matrix4 ( AngleAxis( HELIUM_PI, Vector3::BasisY ) ) * transform->GetGlobalTransform();
 
         m_View->GetCamera()->SetTransform( m );
     }

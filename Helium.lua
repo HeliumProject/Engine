@@ -115,16 +115,16 @@ project "Platform"
 		"Platform/*.h",
 		"Platform/*.cpp",
 		"Platform/Gcc/*",
-		"Platform/Lrbni/*",
 		"Platform/Math/*",
 		"Platform/Msc/*",
-		"Platform/Sse/*",
 		"Platform/X86/*",
 	}
 
 	configuration "windows"
 		files
 		{
+			"Platform/Math/Simd/*",
+			"Platform/Math/Simd/Sse/*",
 			"Platform/Windows/*.h",
 			"Platform/Windows/*.cpp",
 		}
@@ -135,12 +135,16 @@ project "Platform"
 	configuration "macosx"
 		files
 		{
+			"Platform/Math/Simd/*",
+			"Platform/Math/Simd/Sse/*",
 			"Platform/POSIX/*.h",
 			"Platform/POSIX/*.cpp",
 		}
 	configuration "linux"
 		files
 		{
+			"Platform/Math/Simd/*",
+			"Platform/Math/Simd/Sse/*",
 			"Platform/POSIX/*.h",
 			"Platform/POSIX/*.cpp",
 		}

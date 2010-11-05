@@ -9,7 +9,7 @@
 #ifndef LUNAR_CORE_VECTOR2_H
 #define LUNAR_CORE_VECTOR2_H
 
-#include "Platform/Math/Core.h"
+#include "Platform/Math/MathCommon.h"
 
 namespace Helium
 {

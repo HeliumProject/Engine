@@ -13,7 +13,7 @@
 #include "Platform/Types.h"
 #include "Platform/Simd.h"
 #include "Core/Utility.h"
-#include "Core/MathCommon.h"
+#include "Platform/Math/MathCommon.h"
 #include <new>
 
 /// @defgroup defaultheapmacro Default Module Memory Heap Declaration

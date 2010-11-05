@@ -163,7 +163,7 @@ namespace Helium
             wxDataViewColumn* CreateColumn( uint32_t id );
             void ResetColumns();
 
-            void SetProject( Project* project, const Document* document );
+            void SetProject( Project* project, const Document* document = NULL );
 
             bool AddChildItem( const wxDataViewItem& parenItem, const Helium::Path& path );
             bool RemoveChildItem( const wxDataViewItem& parenItem, const Helium::Path& path );
@@ -178,6 +178,7 @@ namespace Helium
 
             // Document and DocumentManager Events
             void OnProjectSave( const DocumentEventArgs& args );
+            void OnProjectClosed( const DocumentEventArgs& args );
             void OnProjectPathChanged( const DocumentPathChangedArgs& args );
             void OnDocumentAdded( const DocumentEventArgs& args );
             void OnDocumentRemoved( const DocumentEventArgs& args );

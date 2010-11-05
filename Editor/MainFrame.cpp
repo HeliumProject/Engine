@@ -361,6 +361,7 @@ bool MainFrame::OpenProject( const Helium::Path& path )
         try
         {
             m_Project = Reflect::FromArchive< Project >( path );
+            m_Project->a_Path.Set( path );
         }
         catch ( const Helium::Exception& ex )
         {
@@ -390,11 +391,12 @@ bool MainFrame::OpenProject( const Helium::Path& path )
                 m_VaultPanel->SetDirectory( path );
             }
 
-            wxGetApp().GetTracker()->SetDirectory( path );
-            if ( !wxGetApp().GetTracker()->IsThreadRunning() )
-            {
-                wxGetApp().GetTracker()->StartThread();
-            }
+#pragma TODO( "Turn tracker back on where there are assets to track" )
+            //wxGetApp().GetTracker()->SetDirectory( path );
+            //if ( !wxGetApp().GetTracker()->IsThreadRunning() )
+            //{
+            //    wxGetApp().GetTracker()->StartThread();
+            //}
         }
         else
         {

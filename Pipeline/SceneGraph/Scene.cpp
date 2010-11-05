@@ -55,7 +55,7 @@ Scene::Scene( SceneGraph::Viewport* viewport, const Helium::Path& path )
 , m_SmartDuplicateMatrix(Matrix4::Identity)
 , m_ValidSmartDuplicateMatrix( false )
 , m_Color( 255 )
-, m_IsFocused( false )
+, m_IsFocused( true )
 {
     // Mark the scene as needing to be saved when a command is added to the undo stack
     m_UndoQueue.AddCommandPushedListener( Undo::QueueChangeSignature::Delegate ( this, &Scene::UndoQueueCommandPushed ) );

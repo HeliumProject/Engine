@@ -3,6 +3,8 @@
 #include "ProjectViewModel.h"
 
 #include "Foundation/Container/OrderedSet.h"
+#include "Foundation/Document/Document.h"
+#include "Foundation/Document/DocumentManager.h"
 #include "Pipeline/Project.h"
 
 #include "Editor/EditorGenerated.h"
@@ -15,10 +17,10 @@ namespace Helium
         class ProjectPanel : public ProjectPanelGenerated
         {
         public:
-            ProjectPanel( wxWindow* parent );
+            ProjectPanel( wxWindow* parent, DocumentManager* documentManager );
             virtual ~ProjectPanel();
 
-            void SetProject( Project* project );
+            void SetProject( Project* project, const Document* document );
 
         protected:
             // UI event handlers
@@ -35,7 +37,8 @@ namespace Helium
             virtual void OnDroppedFiles( const FileDroppedArgs& args );
 
         protected:
-            ProjectPtr m_Project;
+            DocumentManager* m_DocumentManager;
+            Project* m_Project;
             wxObjectDataPtr< ProjectViewModel > m_Model;
             wxMenu* m_OptionsMenu;
 

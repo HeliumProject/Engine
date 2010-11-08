@@ -456,6 +456,7 @@ namespace Helium
                 fstream->imbue( std::locale( std::locale::classic(), new null_codecvt )) ;
 #endif
 
+                m_Path.MakePath();
                 fstream->open( m_Path.c_str(), fmode );
                 if (!fstream->is_open())
                 {

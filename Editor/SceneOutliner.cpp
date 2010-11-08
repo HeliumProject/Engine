@@ -28,7 +28,7 @@ SceneOutliner::SceneOutliner( SceneGraph::SceneManager* sceneManager )
 , m_IgnoreSelectionChange( false )
 , m_DisplayCounts( false )
 {
-    m_SceneManager->AddCurrentSceneChangedListener( SceneGraph::SceneChangeSignature::Delegate::Create<SceneOutliner, void (SceneOutliner::*)( const SceneGraph::SceneChangeArgs& args )> ( this, &SceneOutliner::CurrentSceneChanged ) );
+    m_SceneManager->e_CurrentSceneChanged.Add( SceneGraph::SceneChangeSignature::Delegate::Create<SceneOutliner, void (SceneOutliner::*)( const SceneGraph::SceneChangeArgs& args )> ( this, &SceneOutliner::CurrentSceneChanged ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@ SceneOutliner::SceneOutliner( SceneGraph::SceneManager* sceneManager )
 SceneOutliner::~SceneOutliner()
 {
     DisconnectDynamicEventTable();
-    m_SceneManager->RemoveCurrentSceneChangedListener( SceneGraph::SceneChangeSignature::Delegate::Create<SceneOutliner, void (SceneOutliner::*)( const SceneGraph::SceneChangeArgs& args )> ( this, &SceneOutliner::CurrentSceneChanged ) );
+    m_SceneManager->e_CurrentSceneChanged.Remove( SceneGraph::SceneChangeSignature::Delegate::Create<SceneOutliner, void (SceneOutliner::*)( const SceneGraph::SceneChangeArgs& args )> ( this, &SceneOutliner::CurrentSceneChanged ) );
     DisconnectSceneListeners();
 }
 

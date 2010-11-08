@@ -405,7 +405,7 @@ namespace Helium
             bool                    m_IsTransient;                          // is this a temp object?
 
             Scene*                  m_Owner;                                // the scene that owns us
-            Graph*             m_Graph;                                // the graph that evaluates us
+            Graph*                  m_Graph;                                // the graph that evaluates us
             SceneNodeType*          m_NodeType;                             // the type we are an instance of
             S_SceneNodeDumbPtr      m_Ancestors;                            // nodes that are evaluated before this Node
             S_SceneNodeSmartPtr     m_Descendants;                          // nodes that are evaluated after this Node

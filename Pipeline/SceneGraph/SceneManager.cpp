@@ -13,62 +13,56 @@ using namespace Helium;
 using namespace Helium::SceneGraph;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Returns a different name each time this function is called so that scenes
-// can be uniquely named.
 // 
-static tstring GetUniqueSceneName()
+// 
+SceneManager::SceneManager()
+: m_CurrentScene( NULL )
 {
-    static int32_t number = 1;
-
-    tostringstream str;
-    str << "Scene" << number++;
-    return str.str();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// 
-// 
-SceneManager::SceneManager( MessageSignature::Delegate message, FileDialogSignature::Delegate fileDialog )
-: m_DocumentManager( message, fileDialog )
-, m_CurrentScene( NULL )
+SceneManager::~SceneManager()
 {
-
+    m_Scenes.clear();
+    m_DocumentToSceneTable.clear();
+    m_SceneToDocumentTable.clear();
+    m_AllocatedScenes.clear();
+    m_CurrentScene = NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Create a new scene.  Pass in true if this should be the root scene.
 // 
-ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, Path path )
+ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, const Document* document, bool nested )
 {
-    if ( path.empty() )
-    {
-        path = GetUniqueSceneName();
-    }
+    document->d_Save.Set( this, &SceneManager::DocumentSave );
+    document->e_Closed.AddMethod( this, &SceneManager::DocumentClosed );
+    document->e_PathChanged.AddMethod( this, &SceneManager::DocumentPathChanged );
 
-    SceneDocumentPtr document = new SceneDocument( path );
-    document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &SceneManager::DocumentClosed ) );
-    document->AddDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
-
-    ScenePtr scene = new SceneGraph::Scene( viewport, path );
-    document->SetScene( scene );
-
-    tstring error;
-    bool result = m_DocumentManager.OpenDocument( document, error );
-    HELIUM_ASSERT( result );
+    ScenePtr scene = new SceneGraph::Scene( viewport, document->GetPath() );
+    m_DocumentToSceneTable.insert( M_DocumentToSceneTable::value_type( document, scene.Ptr() ) );
+    m_SceneToDocumentTable.insert( M_SceneToDocumentTable::value_type( scene.Ptr(), document ) );
 
     AddScene( scene );
+
+    if ( nested )
+    {
+        // Increment the reference count on the nested scene.
+        int32_t& referenceCount = m_AllocatedScenes.insert( M_AllocScene::value_type( scene, 0 ) ).first->second;
+        ++referenceCount;
+    }
+
     return scene;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Open a zone that should be under the root.
 // 
-ScenePtr SceneManager::OpenScene( SceneGraph::Viewport* viewport, const tstring& path, tstring& error )
+ScenePtr SceneManager::OpenScene( SceneGraph::Viewport* viewport, const Document* document, tstring& error )
 {
-    ScenePtr scene = NewScene( viewport, path );
-    if ( !scene->Load( path ) )
+    ScenePtr scene = NewScene( viewport, document );
+    if ( !scene->Load( document->GetPath() ) )
     {
-        error = TXT( "Failed to load scene from " ) + path + TXT( "." );
+        error = TXT( "Failed to load scene from " ) + document->GetPath().Get() + TXT( "." );
         RemoveScene( scene );
         scene = NULL;
     }
@@ -82,28 +76,72 @@ ScenePtr SceneManager::OpenScene( SceneGraph::Viewport* viewport, const tstring&
 void SceneManager::AddScene(SceneGraph::Scene* scene)
 {
     scene->d_Editing.Set( SceneEditingSignature::Delegate( this, &SceneManager::OnSceneEditing ) );
-    scene->d_ResolveScene.Set( ResolveSceneSignature::Delegate( this, &SceneManager::AllocateNestedScene ) );
-
+ 
     Helium::Insert<M_SceneSmartPtr>::Result inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
     HELIUM_ASSERT(inserted.second);
 
-    m_SceneAdded.Raise( scene );
+    e_SceneAdded.Raise( scene );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+SceneGraph::Scene* SceneManager::GetScene( const Document* document ) const
+{
+    M_DocumentToSceneTable::const_iterator foundDocument = m_DocumentToSceneTable.find( document );
+    if ( foundDocument != m_DocumentToSceneTable.end() )
+    {
+        return foundDocument->second;
+    }
+
+    return NULL;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Finds a scene by full path in this manager
+// 
+SceneGraph::Scene* SceneManager::GetScene( const tstring& path ) const
+{
+    M_SceneSmartPtr::const_iterator found = m_Scenes.find( path );
+    if (found != m_Scenes.end())
+    {
+        return found->second.Ptr();
+    }
+
+    return NULL;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Returns the full list of scenes (includes nested scenes).
+// 
+const M_SceneSmartPtr& SceneManager::GetScenes() const 
+{
+    return m_Scenes;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Removes a scene from this manager
 // 
-void SceneManager::RemoveScene(SceneGraph::Scene* scene)
+void SceneManager::RemoveScene( SceneGraph::Scene* scene )
 {
     // There is a problem in the code.  You should not be unloading a scene that
     // someone still has allocated.
     HELIUM_ASSERT( m_AllocatedScenes.find( scene ) == m_AllocatedScenes.end() );
 
-    m_DocumentManager.FindDocument( scene->GetPath() )->RemoveDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
-    m_SceneRemoving.Raise( scene );
+    M_SceneToDocumentTable::iterator findDocument = m_SceneToDocumentTable.find( scene );
+    if ( findDocument != m_SceneToDocumentTable.end() )
+    {
+        const Document* document = findDocument->second;
+
+        document->d_Save.Clear();
+        document->e_Closed.RemoveMethod( this, &SceneManager::DocumentClosed );
+        document->e_PathChanged.RemoveMethod( this, &SceneManager::DocumentPathChanged );
+
+        m_DocumentToSceneTable.erase( document );
+        m_SceneToDocumentTable.erase( findDocument );
+    }
+
+    e_SceneRemoving.Raise( scene );
 
     scene->d_Editing.Clear();
-    scene->d_ResolveScene.Clear();
 
     M_SceneSmartPtr::iterator found = m_Scenes.find( scene->GetPath().Get() );
     HELIUM_ASSERT( found != m_Scenes.end() );
@@ -153,68 +191,12 @@ void SceneManager::RemoveAllScenes()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Returns the full list of scenes (includes nested scenes).
-// 
-const M_SceneSmartPtr& SceneManager::GetScenes() const 
-{
-    return m_Scenes;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Finds a scene by full path in this manager
-// 
-SceneGraph::Scene* SceneManager::GetScene( const tstring& path ) const
-{
-    M_SceneSmartPtr::const_iterator found = m_Scenes.find( path );
-
-    if (found != m_Scenes.end())
-    {
-        return found->second.Ptr();
-    }
-
-    return NULL;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // Returns true if the specified scene is a nested (allocated) scene.  Otherwise
 // the scene is a world or zone.
 // 
 bool SceneManager::IsNestedScene( SceneGraph::Scene* scene ) const
 {
     return m_AllocatedScenes.find( scene ) != m_AllocatedScenes.end();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the specified scene and increases the reference count on that scene.
-// If the scene was not yet created, this function will create a new scene.  If
-// there was a problem loading the scene, it will be empty.  If you allocate a
-// scene, you must call ReleaseNestedScene to free it.
-// 
-void SceneManager::AllocateNestedScene( const ResolveSceneArgs& args )
-{
-    args.m_Scene = GetScene( args.m_Path );
-
-    if ( !args.m_Scene )
-    {
-        // Try to load nested scene.
-        //parent->ChangeStatus( TXT("Loading ") + path + TXT( "..." ) );
-
-        ScenePtr scenePtr = NewScene( args.m_Viewport, args.m_Path );
-        if ( !scenePtr->Load( args.m_Path ) )
-        {
-            Log::Error( TXT( "Failed to load scene from %s\n" ), args.m_Path.c_str() );
-        }
-
-        //parent->ChangeStatus( TXT( "Ready" ) );
-        args.m_Scene = scenePtr;
-    }
-
-    if ( args.m_Scene )
-    {
-        // Increment the reference count on the nested scene.
-        int32_t& referenceCount = m_AllocatedScenes.insert( M_AllocScene::value_type( args.m_Scene, 0 ) ).first->second;
-        ++referenceCount;
-    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -280,11 +262,11 @@ void SceneManager::SetCurrentScene( SceneGraph::Scene* scene )
         return;
     }
 
-    m_CurrentSceneChanging.Raise( m_CurrentScene );
+    e_CurrentSceneChanging.Raise( m_CurrentScene );
 
     m_CurrentScene = scene;
 
-    m_CurrentSceneChanged.Raise( m_CurrentScene );
+    e_CurrentSceneChanged.Raise( m_CurrentScene );
 }
 
 
@@ -312,14 +294,78 @@ SceneGraph::Scene* SceneManager::FindFirstNonNestedScene() const
 
 void SceneManager::OnSceneEditing( const SceneEditingArgs& args )
 {
-    SceneDocument* document = (SceneDocument*)m_DocumentManager.FindDocument( args.m_Scene->GetPath() );
+    M_SceneToDocumentTable::iterator findDocument = m_SceneToDocumentTable.find( args.m_Scene );
+    if ( findDocument != m_SceneToDocumentTable.end() )
+    {
+        const Document* document = findDocument->second;
+        if ( document )
+        {
+            args.m_Veto = !document->IsCheckedOut();
+            return;
+        }
+    }
+
+    args.m_Veto = true;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Callback for when a document is saved.
+// 
+void SceneManager::DocumentSave( const DocumentEventArgs& args )
+{
+    const Document* document = static_cast< const Document* >( args.m_Document );
+    HELIUM_ASSERT( document );
+
     if ( document )
     {
-        args.m_Veto = !m_DocumentManager.IsCheckedOut( document );
+        ScenePtr scene = GetScene( document );
+
+        if ( scene )
+        {
+            scene->Save();
+        }
     }
-    else
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Callback for when a document is closed.  Closes the associated scene.
+// 
+void SceneManager::DocumentClosed( const DocumentEventArgs& args )
+{
+    const Document* document = static_cast< const Document* >( args.m_Document );
+    HELIUM_ASSERT( document );
+
+    if ( document )
     {
-        args.m_Veto = true;
+        Scene* scene = GetScene( document );
+
+        // If the current scene is the one that is being closed, we need to set it
+        // to no longer be the current scene.
+        if ( HasCurrentScene() && GetCurrentScene() == scene )
+        {
+            SetCurrentScene( NULL );
+        }
+
+#pragma TODO( "Is this sane?" )
+        while( IsNestedScene( scene ) )
+        {
+            ReleaseNestedScene( scene );
+        }
+
+        if ( scene )
+        {
+            RemoveScene( scene );
+        }
+
+        // Select the next scene in the list, if there is one
+        if ( !HasCurrentScene() )
+        {
+            SetCurrentScene( FindFirstNonNestedScene() );
+        }
+
+        document->d_Save.Clear();
+        document->e_Closed.RemoveMethod( this, &SceneManager::DocumentClosed );
+        document->e_PathChanged.RemoveMethod( this, &SceneManager::DocumentPathChanged );
     }
 }
 
@@ -345,36 +391,5 @@ void SceneManager::DocumentPathChanged( const DocumentPathChangedArgs& args )
         // re-insert w/ new path
         Helium::Insert<M_SceneSmartPtr>::Result inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
         HELIUM_ASSERT( inserted.second );
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Callback for when a document is closed.  Closes the associated scene.
-// 
-void SceneManager::DocumentClosed( const DocumentChangedArgs& args )
-{
-    const SceneDocument* document = static_cast< const SceneDocument* >( args.m_Document );
-    HELIUM_ASSERT( document );
-
-    if ( document )
-    {
-        ScenePtr scene = document->GetScene();
-
-        // If the current scene is the one that is being closed, we need to set it
-        // to no longer be the current scene.
-        if ( HasCurrentScene() && GetCurrentScene() == scene )
-        {
-            SetCurrentScene( NULL );
-        }
-
-        RemoveScene( scene );
-
-        // Select the next scene in the list, if there is one
-        if ( !HasCurrentScene() )
-        {
-            SetCurrentScene( FindFirstNonNestedScene() );
-        }
-
-        document->RemoveDocumentClosedListener( DocumentChangedSignature::Delegate( this, &SceneManager::DocumentClosed ) );
     }
 }

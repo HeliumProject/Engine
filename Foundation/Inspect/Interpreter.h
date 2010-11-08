@@ -63,7 +63,7 @@ namespace Helium
             std::stack< ContainerPtr >& Get();
 
         private:
-            static std::set< std::stack< ContainerPtr >* >  s_Stacks;
+            static std::multimap< uint32_t, std::stack< ContainerPtr >* > s_Stacks;
         };
 
         class FOUNDATION_API Interpreter HELIUM_ABSTRACT : public Reflect::Object

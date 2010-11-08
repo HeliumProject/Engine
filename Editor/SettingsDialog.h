@@ -31,7 +31,7 @@ namespace Helium
         class SettingsDialog : public wxDialog
         {
         public:
-            SettingsDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 644,375 ), long style = wxDEFAULT_DIALOG_STYLE );
+            SettingsDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,600 ), long style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER );
             ~SettingsDialog();
 
 			virtual int ShowModal( SettingsManager* settingsManager );

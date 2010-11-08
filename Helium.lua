@@ -125,8 +125,7 @@ project "Platform"
 		{
 			"Platform/Math/Simd/*",
 			"Platform/Math/Simd/Sse/*",
-			"Platform/Windows/*.h",
-			"Platform/Windows/*.cpp",
+			"Platform/Windows/*",
 		}
 		links
 		{
@@ -137,16 +136,14 @@ project "Platform"
 		{
 			"Platform/Math/Simd/*",
 			"Platform/Math/Simd/Sse/*",
-			"Platform/POSIX/*.h",
-			"Platform/POSIX/*.cpp",
+			"Platform/POSIX/*",
 		}
 	configuration "linux"
 		files
 		{
 			"Platform/Math/Simd/*",
 			"Platform/Math/Simd/Sse/*",
-			"Platform/POSIX/*.h",
-			"Platform/POSIX/*.cpp",
+			"Platform/POSIX/*",
 		}
 
 project "Foundation"

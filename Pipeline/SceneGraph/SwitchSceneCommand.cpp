@@ -20,7 +20,7 @@ SwitchSceneCommand::SwitchSceneCommand( SceneGraph::SceneManager* manager, Scene
 , m_NewScene( newScene )
 , m_IsValid( true )
 {
-  m_SceneManager->AddSceneRemovingListener( SceneChangeSignature::Delegate ( this, &SwitchSceneCommand::SceneRemoving ) );
+  m_SceneManager->e_SceneRemoving.AddMethod( this, &SwitchSceneCommand::SceneRemoving );
   
   // Automatically apply the new scene (can't do this as part of LPropertyCommand's constructor
   // because that would invalidate the current scene before we stored it in the m_OldScene variable).
@@ -32,7 +32,7 @@ SwitchSceneCommand::SwitchSceneCommand( SceneGraph::SceneManager* manager, Scene
 // 
 SwitchSceneCommand::~SwitchSceneCommand()
 {
-  m_SceneManager->RemoveSceneRemovingListener( SceneChangeSignature::Delegate ( this, &SwitchSceneCommand::SceneRemoving ) );
+  m_SceneManager->e_SceneRemoving.RemoveMethod( this, &SwitchSceneCommand::SceneRemoving );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

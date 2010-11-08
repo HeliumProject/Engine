@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Pipeline/Project.h"
+#include "Foundation/Document/Document.h"
+#include "Foundation/Document/DocumentManager.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/File/Path.h"
 
@@ -102,6 +104,7 @@ namespace Helium
         public:
             ProjectViewModelNode( ProjectViewModelNode* parent,
                 const Helium::Path& path,
+                const Document* document = NULL,
                 const bool isContainer = false );
             virtual ~ProjectViewModelNode();
 
@@ -112,11 +115,19 @@ namespace Helium
 
             void SetPath( const Helium::Path& path );
             const Helium::Path& GetPath();
-            void PathChanged( const Attribute< Helium::Path >::ChangeArgs& text );
+            //void PathChanged( const Attribute< Helium::Path >::ChangeArgs& text );
 
             tstring GetName() const;
             tstring GetDetails() const;
             tstring GetFileSize() const;
+
+            const Document* GetDocument() const;
+            void ConnectDocument( const Document* document);
+            void DisconnectDocument();
+
+            void DocumentSaved( const DocumentEventArgs& args );
+            void DocumentClosed( const DocumentEventArgs& args );
+            void DocumentPathChanged( const DocumentPathChangedArgs& args );
 
             inline bool operator<( const ProjectViewModelNode& rhs ) const
             {
@@ -125,15 +136,17 @@ namespace Helium
 
             inline bool operator==( const ProjectViewModelNode& rhs ) const
             {
-                return ( _tcsicmp( m_Path.c_str(), rhs.m_Path.c_str() ) == 0 );
+                return ( ( _tcsicmp( m_Path.c_str(), rhs.m_Path.c_str() ) == 0 )
+                    && m_ParentNode == rhs.m_ParentNode ) ;
             }
 
-        public:
+        private:
             ProjectViewModelNode* m_ParentNode;
             S_ProjectViewModelNodeChildren m_ChildNodes;
             bool m_IsContainer;
 
             Helium::Path m_Path;
+            const Document* m_Document;
         };
 
 
@@ -141,7 +154,7 @@ namespace Helium
         class ProjectViewModel : public wxDataViewModel
         {
         public:
-            ProjectViewModel();
+            ProjectViewModel( DocumentManager* documentManager );
             virtual ~ProjectViewModel();
 
             // This returns a column that can be added to wxDataViewCtrl
@@ -150,18 +163,25 @@ namespace Helium
             wxDataViewColumn* CreateColumn( uint32_t id );
             void ResetColumns();
 
-            void SetProject( Project* project );
-            
-            bool AddChild( const wxDataViewItem& item, const Helium::Path& path );
-            bool RemoveChild( const wxDataViewItem& item, const Helium::Path& path );
+            void SetProject( Project* project, const Document* document = NULL );
 
-            void Delete( const wxDataViewItem& item );
+            bool AddChildItem( const wxDataViewItem& parenItem, const Helium::Path& path );
+            bool RemoveChildItem( const wxDataViewItem& parenItem, const Helium::Path& path );
+
+            void RemoveItem( const wxDataViewItem& item );
 
             bool IsDropPossible( const wxDataViewItem& item );
 
-            // Project events
+            // Project Events
             void OnPathAdded( const Helium::Path& path );
             void OnPathRemoved( const Helium::Path& path );
+
+            // Document and DocumentManager Events
+            void OnProjectSave( const DocumentEventArgs& args );
+            void OnProjectClosed( const DocumentEventArgs& args );
+            void OnProjectPathChanged( const DocumentPathChangedArgs& args );
+            void OnDocumentAdded( const DocumentEventArgs& args );
+            void OnDocumentRemoved( const DocumentEventArgs& args );
 
         public:
             // wxDataViewModel pure virtual interface
@@ -176,9 +196,17 @@ namespace Helium
 
             virtual bool IsContainer( const wxDataViewItem& item ) const HELIUM_OVERRIDE;
 
-        public:
-            ProjectPtr m_Project;
+        private:
+            Document* ConnectDocument( const Document* document, ProjectViewModelNode* node );
+            void DisconnectDocument( ProjectViewModelNode* node );
+
+        private:
+            DocumentManager* m_DocumentManager;
+            Project* m_Project;
             ProjectViewModelNodePtr m_RootNode;
+
+            typedef std::multimap< const Helium::Path, ProjectViewModelNode* > MM_ProjectViewModelNodesByPath;
+            MM_ProjectViewModelNodesByPath m_MM_ProjectViewModelNodesByPath;
 
             typedef std::vector< uint32_t > M_ColumnLookupTable;
             M_ColumnLookupTable m_ColumnLookupTable;

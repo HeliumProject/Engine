@@ -8,7 +8,7 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
-std::set< std::stack< ContainerPtr >* > ContainerStackPointer::s_Stacks;
+std::multimap< uint32_t, std::stack< ContainerPtr >* > ContainerStackPointer::s_Stacks;
 
 ContainerStackPointer::ContainerStackPointer()
 {
@@ -17,10 +17,17 @@ ContainerStackPointer::ContainerStackPointer()
 
 ContainerStackPointer::~ContainerStackPointer()
 {
-    while ( !s_Stacks.empty() )
+    std::multimap< uint32_t, std::stack< ContainerPtr >* >::const_iterator itr = s_Stacks.lower_bound( m_Key );
+    std::multimap< uint32_t, std::stack< ContainerPtr >* >::const_iterator end = s_Stacks.upper_bound( m_Key );
+    for ( ; itr != end; ++itr )
     {
-        delete *s_Stacks.begin();
-        s_Stacks.erase( *s_Stacks.begin() );
+        delete itr->second;
+    }
+
+    std::multimap< uint32_t, std::stack< ContainerPtr >* >::iterator item;
+    while ( ( item = s_Stacks.find( m_Key ) ) != s_Stacks.end() )
+    {
+        s_Stacks.erase( item );
     }
 }                
 
@@ -33,7 +40,7 @@ std::stack< ContainerPtr >& ContainerStackPointer::Get()
         static Helium::Mutex mutex;
         Helium::TakeMutex lock ( mutex );
         SetPointer( pointer = new std::stack< ContainerPtr > );
-        s_Stacks.insert( pointer );
+        s_Stacks.insert( std::multimap< uint32_t, std::stack< ContainerPtr >* >::value_type( m_Key, pointer ) );
     }
 
     return *pointer;

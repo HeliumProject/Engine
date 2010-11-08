@@ -234,6 +234,7 @@ project "Editor"
 		"Editor/**.h",
 		"Editor/**.c",
 		"Editor/**.cpp",
+		"Editor/Editor.rc",
 	}
 	includedirs
 	{

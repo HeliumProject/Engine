@@ -20,7 +20,7 @@ InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_SceneNodeD
     m_Generator = generator;
     a_Name.Set( TXT( "Instance" ) );
 
-    m_Generator->PushContainer();
+    m_Generator->PushContainer( TXT( "Solidity Control" ) );
     {
         static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
         m_Generator->AddLabel( TXT( "Solid" ) )->a_HelpText.Set( helpText );
@@ -37,7 +37,7 @@ InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_SceneNodeD
     }
     m_Generator->Pop();
 
-    m_Generator->PushContainer();
+    m_Generator->PushContainer( TXT( "Transparency Control" ) );
     {
         static const tstring helpText = TXT( "FIXME: NEEDS HELP" );
         m_Generator->AddLabel( TXT( "Transparent" ) )->a_HelpText.Set( helpText );
@@ -69,7 +69,7 @@ InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_SceneNodeD
 
     if ( allVolumes )
     {
-        m_Generator->PushContainer();
+        m_Generator->PushContainer( TXT( "Volume Pointer Rendering Control" ) );
         {
             static const tstring helpText = TXT( "Determines if a pointer should be drawn in the 3d view at the location where the volume is." );
             m_Generator->AddLabel( TXT( "Show Pointer" ) )->a_HelpText.Set( helpText );

@@ -49,7 +49,7 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
     m_SelectButton->SetHelpText( TXT ( "Select\n\nSelect items from the workspace" ) );
     m_TranslateButton->SetHelpText( TXT ( "Translate\n\nTranslate items" ) );
     m_RotateButton->SetHelpText( TXT ( "Rotate\n\nRotate selected items" ) );
-    m_ScaleButton->SetHelpText( TXT ( "nScale\n\nScale selected items" ) );
+    m_ScaleButton->SetHelpText( TXT ( "Scale\n\nScale selected items" ) );
     
     m_DuplicateToolButton->SetHelpText( TXT ( "Duplicate\n\nDuplicate the selected object numerous times" ) );
     m_LocatorToolButton->SetHelpText( TXT ( "Locator\n\nPlace locator objects (such as bug locators)" ) );

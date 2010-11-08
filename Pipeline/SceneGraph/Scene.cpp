@@ -55,7 +55,7 @@ Scene::Scene( SceneGraph::Viewport* viewport, const Helium::Path& path )
 , m_SmartDuplicateMatrix(Matrix4::Identity)
 , m_ValidSmartDuplicateMatrix( false )
 , m_Color( 255 )
-, m_IsFocused( false )
+, m_IsFocused( true )
 {
     // Mark the scene as needing to be saved when a command is added to the undo stack
     m_UndoQueue.AddCommandPushedListener( Undo::QueueChangeSignature::Delegate ( this, &Scene::UndoQueueCommandPushed ) );
@@ -889,6 +889,7 @@ bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
             Reflect::ArchivePtr archive = Reflect::GetArchive( path );
             archive->e_Status.AddMethod( this, &Scene::ArchiveStatus );
             archive->d_Exception.Set( this, &Scene::ArchiveException );
+            archive->Open( true );
             archive->Put( spool );
             archive->Close();
         }
@@ -1793,8 +1794,8 @@ void Scene::UndoQueueCommandPushed( const Undo::QueueChangeArgs& args )
 {
     if ( args.m_Command->IsSignificant() )
     {
-#pragma TODO( "Raise an event so the SceneDocument knows this file has been modified" )
-        //m_File->SetModified( true );
+#pragma TODO( "Raise an event so the Document knows this file has been modified" )
+        //m_File->HasChanged( true );
     }
 }
 

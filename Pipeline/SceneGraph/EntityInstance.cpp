@@ -56,6 +56,12 @@ EntityInstance::~EntityInstance()
 {
     RemoveComponentAddedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &EntityInstance::OnComponentAdded ) );
     RemoveComponentRemovedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &EntityInstance::OnComponentRemoved ) );
+
+    if ( m_Scene && m_Owner )
+    {
+        ReleaseSceneArgs args( m_Scene );
+        m_Owner->d_ReleaseScene.Invoke( args );
+    }
 }
 
 void EntityInstance::Initialize( Scene* scene )
@@ -282,14 +288,14 @@ tstring EntityInstance::GetEntityPath() const
 
 void EntityInstance::SetEntityPath( const tstring& path )
 {
-    m_ClassChanging.Raise( EntityAssetChangeArgs( this, m_Path, path ) );
+    e_ClassChanging.Raise( EntityAssetChangeArgs( this, m_Path, path ) );
 
     Path oldPath = m_Path;
     m_Path = path;
 
     CheckSets();
 
-    m_ClassChanged.Raise( EntityAssetChangeArgs( this, oldPath, m_Path ) );
+    e_ClassChanged.Raise( EntityAssetChangeArgs( this, oldPath, m_Path ) );
 
     Dirty();
 }

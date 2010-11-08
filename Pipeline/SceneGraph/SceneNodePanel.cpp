@@ -10,7 +10,7 @@ SceneNodePanel::SceneNodePanel(PropertiesGenerator* generator, const OS_SceneNod
     m_Generator = generator;
     a_Name.Set( TXT("Scene Node") );
 
-    m_Generator->PushContainer();
+    m_Generator->PushContainer( TXT( "Scene ID Display" ) );
     {
         static const tstring helpText = TXT( "This is the internal ID of this node, it's used to uniquely identify objects in the scene. This is primarly here for debugging purposes." );
         m_Generator->AddLabel( TXT( "ID" ) )->a_HelpText.Set( helpText );
@@ -20,7 +20,7 @@ SceneNodePanel::SceneNodePanel(PropertiesGenerator* generator, const OS_SceneNod
     }
     m_Generator->Pop();
 
-    m_Generator->PushContainer();
+    m_Generator->PushContainer( TXT( "Scene Name Control" ) );
     {
         static const tstring helpText = TXT( "This is the name of this node." );
         m_Generator->AddLabel( TXT( "Name" ) )->a_HelpText.Set( helpText );
@@ -28,7 +28,7 @@ SceneNodePanel::SceneNodePanel(PropertiesGenerator* generator, const OS_SceneNod
     }
     m_Generator->Pop();
 
-    m_Generator->PushContainer();
+    m_Generator->PushContainer( TXT( "Scene Auto Name Control" ) );
     {
         static const tstring helpText = TXT( "When enabled, this node's name will be automatically generated and will change depending on the type of object it is.  Auto-generated names tend to end with a number, making them unique amongst other nodes of the same type." );
         m_Generator->AddLabel( TXT( "Auto Name" ) )->a_HelpText.Set( helpText );

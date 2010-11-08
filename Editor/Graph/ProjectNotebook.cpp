@@ -67,7 +67,7 @@ Project::New(wxWindow *parent, MenuState *state, const wxString& type)
 		if (child->GetName() == wxT("panel"))
 		{
 			wxString name;
-			if (!child->GetPropVal(wxT("name"), &name))
+			if (!child->GetAttribute(wxT("name"), &name))
 			{
 				THROW(TXT("Couldn't find attribute 'name' in element <panel>."));
 			}
@@ -93,7 +93,7 @@ Project::New(wxWindow *parent, MenuState *state, const wxString& type)
 				if (child2->GetName() == wxT("add-library"))
 				{
 					wxString path;
-					if (!child2->GetPropVal(wxT("path"), &path))
+					if (!child2->GetAttribute(wxT("path"), &path))
 					{
 						THROW(TXT("Couldn't find attribute 'path' in element <add-library>."));
 					}
@@ -103,11 +103,11 @@ Project::New(wxWindow *parent, MenuState *state, const wxString& type)
 				else if (child2->GetName() == wxT("add-node"))
 				{
 					wxString type;
-					if (!child2->GetPropVal(wxT("type"), &type))
+					if (!child2->GetAttribute(wxT("type"), &type))
 					{
 						THROW(TXT("Couldn't find attribute 'type' in element <add-node>."));
 					}
-					wxString deletable = child2->GetPropVal(wxT("deletable"), wxT("false"));
+					wxString deletable = child2->GetAttribute(wxT("deletable"), wxT("false"));
 					panel->AddNode(type, deletable == wxT("true"));
 					Debug::Printf(TXT("Node \"%s\" added to panel %p.\n"), type.c_str(), panel);
 				}
@@ -286,13 +286,13 @@ void
 Project::Save(const wxString& filename)
 {
 	wxXmlNode *root = NEW(wxXmlNode, (wxXML_ELEMENT_NODE, wxT("project")));
-	root->AddProperty(wxT("name"), m_type);
-	root->AddProperty(wxT("target"), m_target);
+	root->AddAttribute(wxT("name"), m_type);
+	root->AddAttribute(wxT("target"), m_target);
 	size_t count = GetPageCount();
 	for (size_t index = 0; index < count; index++)
 	{
 		wxXmlNode *panel = NEW(wxXmlNode, (wxXML_ELEMENT_NODE, wxT("panel")));
-		panel->AddProperty(wxT("name"), GetPageText(index));
+		panel->AddAttribute(wxT("name"), GetPageText(index));
 		wxXmlNode *graph = static_cast<Panel *>(GetPage(index))->GetGraphCtrl()->Serialize();
 		panel->AddChild(graph);
 		root->AddChild(panel);
@@ -351,7 +351,7 @@ Project::GetProjectType(const wxString& filename)
 		// XML format.
 		wxXmlDocument doc(fis);
 		wxXmlNode *root = doc.GetRoot();
-		return root->GetPropVal(wxT("name"), wxT(""));
+		return root->GetAttribute(wxT("name"), wxT(""));
 	}
 }
 
@@ -382,7 +382,7 @@ Project::GetProjectTypes()
 			if (root->GetName() == wxT("project"))
 			{
 				wxString name;
-				if (root->GetPropVal(wxT("name"), &name))
+				if (root->GetAttribute(wxT("name"), &name))
 				{
 					types.Add(name);
 					l_Types.insert(std::pair<wxString, wxString>(name, filename));
@@ -560,7 +560,7 @@ Project::LoadXML(wxInputStream& is)
 		wxXmlNode *child = root->GetChildren();
 		while (child != NULL)
 		{
-			if (child->GetPropVal(wxT("name"), wxT("")) == name)
+			if (child->GetAttribute(wxT("name"), wxT("")) == name)
 			{
 				break;
 			}

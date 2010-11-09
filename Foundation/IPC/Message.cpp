@@ -48,7 +48,7 @@ void MessageQueue::Add(Message* msg)
 
     if (msg)
     {
-        Helium::TakeMutex mutex (m_Mutex);
+        Helium::MutexScopeLock mutex (m_Mutex);
 
         if (m_Tail == 0)
         {
@@ -94,7 +94,7 @@ Message* MessageQueue::Remove()
 
     m_Append.Decrement();
 
-    Helium::TakeMutex mutex (m_Mutex);
+    Helium::MutexScopeLock mutex (m_Mutex);
 
     Message* result = 0;
     if (m_Head != 0)
@@ -121,7 +121,7 @@ void MessageQueue::Clear()
 {
     IPC_SCOPE_TIMER("");
 
-    Helium::TakeMutex mutex (m_Mutex);
+    Helium::MutexScopeLock mutex (m_Mutex);
 
     Message* msg = m_Head;
     while (msg)

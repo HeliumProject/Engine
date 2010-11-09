@@ -146,7 +146,7 @@ bool Process::Start( int timeout )
         ::CloseHandle( procInfo.hThread );
 
         // mutex from kill
-        Helium::TakeMutex mutex ( m_KillMutex );
+        Helium::MutexScopeLock mutex ( m_KillMutex );
 
         while ( timeout-- != 0 )
         {
@@ -209,7 +209,7 @@ IPC::Message* Process::Receive(bool wait)
 bool Process::Send(uint32_t id, uint32_t size, const uint8_t* data)
 {
     // mutex from kill
-    Helium::TakeMutex mutex ( m_KillMutex );
+    Helium::MutexScopeLock mutex ( m_KillMutex );
 
     if ( m_Connection && m_Connection->GetState() == IPC::ConnectionStates::Active )
     {
@@ -270,7 +270,7 @@ void Process::Kill()
 {
     if ( m_Handle )
     {
-        Helium::TakeMutex mutex ( m_KillMutex );
+        Helium::MutexScopeLock mutex ( m_KillMutex );
 
         m_Killed = true;
 

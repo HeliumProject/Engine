@@ -708,7 +708,7 @@ void RotateManipulator::MouseMove( const MouseMoveInput& e )
         // append the current to the starting rotation
         totalRotation *= rotation;
 
-        if (totalRotation.Valid())
+        if (totalRotation.Finite())
         {
             // set our result
             target->SetValue(EulerAngles (totalRotation));

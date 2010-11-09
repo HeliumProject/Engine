@@ -638,7 +638,7 @@ Tracker::~Tracker()
 
 StackRecordPtr Tracker::GetStack()
 {
-    Helium::TakeMutex mutex (g_TrackerMutex);
+    Helium::MutexScopeLock mutex (g_TrackerMutex);
 
     StackRecordPtr ptr = new StackRecord();
 
@@ -659,7 +659,7 @@ StackRecordPtr Tracker::GetStack()
 
 void Tracker::Create(uintptr_t ptr)
 {
-    Helium::TakeMutex mutex (g_TrackerMutex);
+    Helium::MutexScopeLock mutex (g_TrackerMutex);
 
     M_CreationRecord::iterator create_iter = m_CreatedObjects.find( ptr );
     if ( create_iter == m_CreatedObjects.end() )
@@ -695,7 +695,7 @@ void Tracker::Create(uintptr_t ptr)
 
 void Tracker::Delete(uintptr_t ptr)
 {
-    Helium::TakeMutex mutex (g_TrackerMutex);
+    Helium::MutexScopeLock mutex (g_TrackerMutex);
 
     M_CreationRecord::iterator iter = m_CreatedObjects.find(ptr);
     if ( iter != m_CreatedObjects.end())
@@ -735,7 +735,7 @@ void Tracker::Delete(uintptr_t ptr)
 
 void Tracker::Check(uintptr_t ptr)
 {
-    Helium::TakeMutex mutex (g_TrackerMutex);
+    Helium::MutexScopeLock mutex (g_TrackerMutex);
 
     M_CreationRecord::iterator iter = m_CreatedObjects.find(ptr);
     if ( iter != m_CreatedObjects.end())
@@ -771,7 +771,7 @@ void Tracker::Check(uintptr_t ptr)
 
 void Tracker::Dump()
 {
-    Helium::TakeMutex mutex (g_TrackerMutex);
+    Helium::MutexScopeLock mutex (g_TrackerMutex);
 
     tchar_t module[MAX_PATH];
     GetModuleFileName( 0, module, MAX_PATH );

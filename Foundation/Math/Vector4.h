@@ -57,7 +57,7 @@ namespace Helium
         bool              operator== (const Vector4& v) const { return (x == v.x && y == v.y && z == v.z && w == v.w); }
         bool              operator!= (const Vector4& v) const { return !(x == v.x && y == v.y && z == v.z && w == v.w); }
         bool              Equal (const Vector4& v, float32_t error = 0) const;
-        bool              Valid() { return IsValid(x) && IsValid(y) && IsValid(z) && IsValid(w); }
+        bool              Finite() { return IsFinite(x) && IsFinite(y) && IsFinite(z) && IsFinite(w); }
 
         float32_t               LengthSquared () const { return x * x + y * y + z * z + w * w; }
         float32_t               Length () const;

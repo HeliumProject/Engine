@@ -4,11 +4,10 @@
 #if HELIUM_ASSERT_ENABLED
 
 #include "Platform/Atomic.h"
-#pragma TODO( "LUNAR MERGE - Update spin locking in Assert::Trigger() to use proper atomics once merged over from Lunar." )
-#include "Platform/Windows/Windows.h"  // LUNAR MERGE - Remove this line once Lunar atomic variable support is merged.
 
-#pragma TODO( "LUNAR MERGE - Remove HELIUM_ARRAY_COUNT() macro definition here once L_ARRAY_COUNT() is merged over." )
-#define HELIUM_ARRAY_COUNT( ARRAY ) ( sizeof( ARRAY ) / sizeof( ARRAY[ 0 ] ) )
+#if HELIUM_OS_WIN
+#include "Platform/Windows/Windows.h"
+#endif
 
 #if HELIUM_CC_MSC
 # if HELIUM_UNICODE
@@ -44,9 +43,7 @@ Assert::EResult Assert::Trigger(
     int line )
 {
     // Only allow one assert handler to be active at a time.
-    // LUNAR MERGE - Update the following once Lunar atomic variable support is merged.
-//    while( AtomicCompareExchangeAcquire( sm_active, 1, 0 ) != 0 )
-    while( InterlockedCompareExchange( reinterpret_cast< volatile LONG* >( &sm_active ), 1, 0 ) )
+    while( AtomicCompareExchangeAcquire( sm_active, 1, 0 ) != 0 )
     {
     }
 
@@ -119,9 +116,7 @@ Assert::EResult Assert::Trigger(
     // Present the assert message and get how we should proceed.
     EResult result = TriggerImplementation( messageText );
 
-    // LUNAR MERGE - Update the following once Lunar atomic variable support is merged.
-//    AtomicExchangeRelease( sm_active, 0 );
-    InterlockedExchange( reinterpret_cast< volatile LONG* >( &sm_active ), 0 );
+    AtomicExchangeRelease( sm_active, 0 );
 
     return result;
 }

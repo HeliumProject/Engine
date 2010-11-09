@@ -11,6 +11,8 @@
 
 #include "Core/ObjectPool.h"
 
+#include "Platform/Condition.h"
+
 #ifdef _MSC_VER
 #pragma warning( push )
 #pragma warning( disable : 4530 )  // C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
@@ -126,8 +128,8 @@ namespace Lunar
         private:
             /// Async load request queue.
             tbb::concurrent_queue< Request* > m_requestQueue;
-            /// Event used to wake up the worker thread when load requests are queued (or when it should shut down).
-            Event m_wakeUpEvent;
+            /// Condition used to wake up the worker thread when load requests are queued (or when it should shut down).
+            Condition m_wakeUpCondition;
 
             /// Read-write lock used for synchronization of external file writes.
             ReadWriteLock m_writeLock;

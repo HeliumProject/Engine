@@ -28,6 +28,8 @@ Provider::Provider()
 , m_IsConnected( false )
 , m_Abort( false )
 , m_Shutdown( false )
+, m_Execute( Condition::RESET_MODE_MANUAL )
+, m_Completed( Condition::RESET_MODE_MANUAL )
 , m_Command( NULL )
 , m_Phase( CommandPhases::Unknown )
 {
@@ -129,7 +131,7 @@ void Provider::RunCommand( Command* command )
         throw Perforce::Exception( TXT( "Perforce connection is not enabled" ) );
     }
 
-    Helium::TakeMutex mutex ( m_Mutex );
+    Helium::MutexScopeLock mutex ( m_Mutex );
 
     m_Abort = false;
     m_Phase = CommandPhases::Unknown;

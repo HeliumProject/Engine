@@ -4,18 +4,23 @@
 
 #include "Types.h"
 
-#ifdef __GNUC__
+#if !HELIUM_OS_WIN
 # include <string.h>
 # include <pthread.h>
 #endif
 
 namespace Helium
 {
+    /// Condition object.
+    ///
+    /// A condition is a type of synchronization mechanism that allows one or more threads to sleep until a signal is
+    /// triggered by another thread.
     class PLATFORM_API Condition
     {
     public:
-
-#ifdef __GNUC__
+#if HELIUM_OS_WIN
+        typedef void* Handle;
+#else
         struct Handle
         {
             // Protect critical section
@@ -33,26 +38,45 @@ namespace Helium
             // Number of waiting threads
             unsigned waiting_threads;
         };
-#elif defined( WIN32 )
-        typedef void* Handle;
-#else
-#  pragma TODO( "Emit an error here..." )
 #endif
 
+        /// Reset modes.
+        enum EResetMode
+        {
+            RESET_MODE_FIRST   =  0,
+            RESET_MODE_INVALID = -1,
+
+            RESET_MODE_MANUAL,  ///< Condition remains signaled until Reset() is explicitly called.
+            RESET_MODE_AUTO,    ///< Condition is immediately reset when a single waiting thread is released.
+
+            RESET_MODE_MAX,
+            RESET_MODE_LAST = RESET_MODE_MAX - 1
+        };
+
     private:
+        /// Platform-specific condition handle.
         Handle m_Handle;
 
     public:
-        Condition();
+        /// @name Construction/Destruction
+        //@{
+        explicit Condition( EResetMode resetMode, bool bInitialState = false );
         ~Condition();
+        //@}
 
-        const Handle& GetHandle()
-        {
-            return m_Handle;
-        }
-
+        /// @name Synchronization Interface
+        //@{
         void Signal();
         void Reset();
-        bool Wait(uint32_t timeout = 0xffffffff);
+        bool Wait();
+        bool Wait( uint32_t timeoutMs );
+        //@}
+
+        /// @name Data Access
+        //@{
+        inline const Handle& GetHandle() const;
+        //@}
     };
 }
+
+#include "Platform/Condition.inl"

@@ -12,7 +12,7 @@
 #include "Core/Core.h"
 #include "Platform/Types.h"
 #include "Platform/Math/Simd.h"
-#include "Core/Utility.h"
+#include "Platform/Utility.h"
 #include "Platform/Math/MathCommon.h"
 #include <new>
 
@@ -534,6 +534,7 @@ inline void* operator new( size_t size, Lunar::MemoryHeap& rHeap );
 #include "Core/Memory.inl"
 
 #if HELIUM_OS_WIN
+#include "Platform/Windows/Windows.h"
 #include "Core/MemoryWin.inl"
 #endif
 

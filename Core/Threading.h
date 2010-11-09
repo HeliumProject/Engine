@@ -12,7 +12,7 @@
 #include "Core/Core.h"
 
 #include "Platform/Platform.h"
-#include "Core/Utility.h"
+#include "Platform/Utility.h"
 
 namespace Lunar
 {

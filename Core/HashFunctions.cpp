@@ -8,7 +8,7 @@
 #include "CorePch.h"
 #include "Core/HashFunctions.h"
 
-#include "Core/Utility.h"
+#include "Platform/Utility.h"
 
 namespace Lunar
 {

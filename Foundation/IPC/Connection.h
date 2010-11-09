@@ -55,9 +55,9 @@ namespace Helium
             MessageQueue            m_ReadQueue;          // incoming messages
             MessageQueue            m_WriteQueue;         // outgoing messages
 
-            Helium::Thread          m_ConnectThread;      // handle of the core thread that manages the connection, once
-            Helium::Thread          m_ReadThread;         // handle of the thread reads from the pipe (incomming)
-            Helium::Thread          m_WriteThread;        // handle of the thread that writes to the pipe (outgoing)
+            Helium::CallbackThread          m_ConnectThread;      // handle of the core thread that manages the connection, once
+            Helium::CallbackThread          m_ReadThread;         // handle of the thread reads from the pipe (incomming)
+            Helium::CallbackThread          m_WriteThread;        // handle of the thread that writes to the pipe (outgoing)
 
             MessageHeader           m_ReadHeader;
             MessageHeader           m_WriteHeader;

@@ -29,13 +29,13 @@ void TimerThread::ThreadEntryPoint( TimerThreadArgs& args )
 
 void TimerThread::Start()
 {
-    HELIUM_ASSERT( !m_Thread.Valid() || !m_Thread.Running() );
+    HELIUM_ASSERT( !m_Thread.IsRunning() );
 
     // create thread
     m_Alive = true;
 
     TimerThreadArgs* args = new TimerThreadArgs( this, m_Interval );
-    Helium::Thread::Entry entry = Helium::Thread::EntryHelperWithArgs< TimerThread, TimerThreadArgs, &TimerThread::ThreadEntryPoint >;
+    Helium::CallbackThread::Entry entry = Helium::CallbackThread::EntryHelperWithArgs< TimerThread, TimerThreadArgs, &TimerThread::ThreadEntryPoint >;
     m_Thread.CreateWithArgs( entry, this, args, m_Name.c_str() );
     m_Timer.Reset();
 }
@@ -47,11 +47,7 @@ void TimerThread::Stop()
     m_Alive = false;
 
     // destroy thread
-    if ( m_Thread.Valid() && m_Thread.Running() )
-    {
-        m_Thread.Wait();
-        m_Thread.Close();
-    }
+    m_Thread.Join();
 }
 
 void TimerThread::Fire()

@@ -11,6 +11,7 @@
 
 #include "Core/Core.h"
 #include "Platform/ReadWriteLock.h"
+#include "Platform/SpinLock.h"
 #include "Core/Threading.h"
 
 namespace Lunar

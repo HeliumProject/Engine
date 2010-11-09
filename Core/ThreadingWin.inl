@@ -9,48 +9,6 @@
 
 namespace Lunar
 {
-    /// Get the name assigned to this thread.
-    ///
-    /// @return  Thread name.
-    ///
-    /// @see SetName()
-    const String& Thread::GetName() const
-    {
-        return m_name;
-    }
-
-    /// Suspend execution of the calling thread for at least a given period of time.
-    ///
-    /// @param[in] milliseconds  Number of milliseconds to sleep.  Note that the calling thread may not be awaken
-    ///                          immediately upon the timer expiring.
-    ///
-    /// @see Yield()
-    void Thread::Sleep( uint32_t milliseconds )
-    {
-        ::Sleep( milliseconds );
-    }
-
-    /// Yield the remainder of the calling thread's time slice for other threads of equal priority.
-    ///
-    /// If other threads of equal priority are awaiting execution, this will immediately yield execution to those
-    /// threads.  If no other threads of equal priority are waiting, the thread will continue execution immediately.
-    ///
-    /// To yield control to lower-priority threads, Sleep() should be called instead with a non-zero amount of time.
-    ///
-    /// @see Sleep()
-    void Thread::Yield()
-    {
-        ::Sleep( 0 );
-    }
-
-    /// Get the ID of the thread in which this function is called.
-    ///
-    /// @return  Current thread ID.
-    Thread::id_t Thread::GetCurrentId()
-    {
-        return GetCurrentThreadId();
-    }
-
     /// Allocate a thread-local storage index.
     ///
     /// When an index is allocated by a thread, any thread can subsequently store and retrieve values in the slot.

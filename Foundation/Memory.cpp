@@ -22,7 +22,7 @@ using namespace Helium::Profile;
 static const uint32_t        g_MaxMemoryPools = 64;
 static MemoryPool       g_MemoryPools[g_MaxMemoryPools];
 static uint32_t              g_MemoryPoolCount = 0;
-static Helium::Thread g_MemoryReportThread;
+static Helium::CallbackThread g_MemoryReportThread;
 static bool             g_MemoryReportThreadTerminate = false;
 static bool             g_MemoryProfilingEnabled = false;
 
@@ -60,7 +60,7 @@ static const tchar_t* MemoryUnitConvert(float32_t& size)
     }
 }
 
-static Helium::Thread::Return MemoryReportThread(Helium::Thread::Param)
+static void MemoryReportThread(void*)
 {
     uint32_t oldCount = g_MemoryPoolCount;
     float32_t oldTotal = (float32_t)Helium::GetTotalMemory();
@@ -115,8 +115,6 @@ static Helium::Thread::Return MemoryReportThread(Helium::Thread::Param)
             Helium::Sleep(10);
         }
     }
-
-    return Helium::Thread::Return(0);
 }
 
 uint32_t Memory::s_InitCount = 0;
@@ -129,7 +127,7 @@ bool Memory::Initialize()
         g_MemoryProfilingEnabled = true;
         g_MemoryReportThreadTerminate = false;
 
-        if (!g_MemoryReportThread.Create( &MemoryReportThread, NULL, "Profile Memory Report Thread" ))
+        if (!g_MemoryReportThread.Create( &MemoryReportThread, NULL, TXT( "Profile Memory Report Thread" ) ))
         {
             HELIUM_BREAK();
         }
@@ -145,7 +143,7 @@ void Memory::Cleanup()
     {
         g_MemoryReportThreadTerminate = true;
 
-        g_MemoryReportThread.Wait();
+        g_MemoryReportThread.Join();
         g_MemoryProfilingEnabled = false;
     }
 }

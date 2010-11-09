@@ -10,11 +10,6 @@
 
 namespace Lunar
 {
-    /// Destructor.
-    Runnable::~Runnable()
-    {
-    }
-
     /// Get the global instance of thread-local storage management.
     ///
     /// @note  This must be called on the main application thread first.

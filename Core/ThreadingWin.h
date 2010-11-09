@@ -12,71 +12,8 @@
 #include "Core/Core.h"
 #include "Core/String.h"
 
-// WinBase.h defines Yield() as an empty macro, so we undefine it so it can be used as a function name.
-#ifdef Yield
-#undef Yield
-#endif
-
 namespace Lunar
 {
-    /// Thread instance.
-    ///
-    ///
-    class LUNAR_CORE_API Thread
-    {
-    public:
-        /// Thread ID type.
-        typedef DWORD id_t;
-
-        /// Invalid thread ID value.  Note that this can vary between platforms, so it should not be assumed to be any
-        /// value in particular.
-        static const id_t INVALID_ID = 0;
-
-        /// @name Construction/Destruction
-        //@{
-        Thread( Runnable* pRunnable = NULL, const String& rName = String() );
-        virtual ~Thread();
-        //@}
-
-        /// @name Caller Interface
-        //@{
-        void SetRunnable( Runnable* pRunnable );
-
-        void SetName( const String& rName );
-        inline const String& GetName() const;
-
-        bool Start();
-        bool Join( uint32_t timeOutMilliseconds = 0 );
-        bool TryJoin();
-        //@}
-
-        /// @name Thread-side Interface
-        //@{
-        virtual void Run();
-        //@}
-
-        /// @name Static Functions
-        //@{
-        inline static void Sleep( uint32_t milliseconds );
-        inline static void Yield();
-
-        inline static id_t GetCurrentId();
-        //@}
-
-    protected:
-        /// Thread name.
-        String m_name;
-        /// Runnable to execute.
-        Runnable* m_pRunnable;
-        /// Thread resource handle.
-        uintptr_t m_thread;
-
-        /// @name Thread Callback
-        //@{
-        static unsigned int __stdcall ThreadCallback( void* pData );
-        //@}
-    };
-
     /// Thread-local storage management.
     class LUNAR_CORE_API ThreadLocalStorage
     {

@@ -136,7 +136,7 @@ namespace Helium
 
         private:
             // transaction thread
-            Helium::Thread        m_Thread;     // the thread to run commands in
+            Helium::CallbackThread        m_Thread;     // the thread to run commands in
             bool                  m_Shutdown;   // the shutdown signal
             Helium::Mutex         m_Mutex;      // to ensure thread safety
             Helium::Condition     m_Execute;    // to wakeup the command thread

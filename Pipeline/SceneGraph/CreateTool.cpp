@@ -74,7 +74,7 @@ CreateTool::CreateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator)
 , m_PaintSpeed (NULL)
 , m_PaintDensity (NULL)
 , m_PaintJitter (NULL)
-, m_PaintTimer( "CreateToolPaintTimer", 1000 / s_PaintSpeed )
+, m_PaintTimer( TXT( "CreateToolPaintTimer" ), 1000 / s_PaintSpeed )
 {
     m_Scene->e_NodeAdded.Add( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeAdded ) );
     m_Scene->e_NodeRemoved.Add( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeRemoved ) );

@@ -77,11 +77,11 @@ void PropertiesManager::CreateProperties()
     else
     {
         AtomicIncrementUnsafe( m_ThreadCount );
-        Helium::Thread propertyThread;
+        Helium::CallbackThread propertyThread;
 
         PropertiesThreadArgs* args = new PropertiesThreadArgs( m_Style, m_SelectionId, &m_SelectionId, m_Selection );
-        Helium::Thread::Entry entry = Helium::Thread::EntryHelperWithArgs<PropertiesManager, PropertiesThreadArgs, &PropertiesManager::GeneratePropertiesThreadEntry>;
-        propertyThread.CreateWithArgs( entry, this, args, "GeneratePropertiesThreadEntry()", -1 );
+        Helium::CallbackThread::Entry entry = Helium::CallbackThread::EntryHelperWithArgs<PropertiesManager, PropertiesThreadArgs, &PropertiesManager::GeneratePropertiesThreadEntry>;
+        propertyThread.CreateWithArgs( entry, this, args, TXT( "GeneratePropertiesThreadEntry()" ), Thread::PRIORITY_LOW );
     }
 }
 

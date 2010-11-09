@@ -10,6 +10,7 @@
 #define LUNAR_CORE_OBJECT_POOL_H
 
 #include "Core/Core.h"
+#include "Platform/ReadWriteLock.h"
 #include "Core/Threading.h"
 
 namespace Lunar

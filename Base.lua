@@ -108,6 +108,7 @@ Helium.DoDefaultSolutionSettings = function()
 			"HELIUM_DEBUG=1",
 			"_DEBUG",
 			"HELIUM_SHARED=1",
+			"TBB_USE_DEBUG=1",
 		}
 		flags
 		{
@@ -183,11 +184,6 @@ Helium.DoDefaultLunarProjectSettings = function()
 		"NoRTTI",
 	}
 
-	includedirs
-	{
-		"Dependencies/tbb/include",
-	}
-
 	configuration "no-unicode"
 		defines
 		{
@@ -206,7 +202,6 @@ Helium.DoDefaultLunarProjectSettings = function()
 			"L_DEBUG=1",
 			"L_EDITOR=1",
 			"L_SHARED=1",
-			"TBB_USE_DEBUG=1",
 		}
 
 	configuration "Intermediate"
@@ -235,30 +230,6 @@ Helium.DoDefaultLunarProjectSettings = function()
 		links
 		{
 			"dbghelp",
-		}
-
-	configuration { "windows", "x32", "Debug" }
-		libdirs
-		{
-			"Dependencies/tbb/build/windows_ia32_cl_vc9_debug",
-		}
-
-	configuration { "windows", "x32", "not Debug" }
-		libdirs
-		{
-			"Dependencies/tbb/build/windows_ia32_cl_vc9_release",
-		}
-
-	configuration { "windows", "x64", "Debug" }
-		libdirs
-		{
-			"Dependencies/tbb/build/windows_intel64_cl_vc9_debug",
-		}
-
-	configuration { "windows", "x64", "not Debug" }
-		libdirs
-		{
-			"Dependencies/tbb/build/windows_intel64_cl_vc9_release",
 		}
 
 end

@@ -89,44 +89,4 @@ namespace Lunar
     {
         m_rSyncObject.Unlock();
     }
-
-    /// Constructor.
-    ///
-    /// This acquires a read lock on the given ReadWriteLock object immediately.  The synchronization object will be
-    /// later unlocked when this object is destroyed.
-    ///
-    /// @param[in] rSyncObject  ReadWriteLock object to lock.
-    ScopeReadLock::ScopeReadLock( ReadWriteLock& rSyncObject )
-        : m_rSyncObject( rSyncObject )
-    {
-        rSyncObject.LockRead();
-    }
-
-    /// Destructor.
-    ///
-    /// This automatically unlocks the managed ReadWriteLock object.
-    ScopeReadLock::~ScopeReadLock()
-    {
-        m_rSyncObject.UnlockRead();
-    }
-
-    /// Constructor.
-    ///
-    /// This acquires a write lock on the given ReadWriteLock object immediately.  The synchronization object will be
-    /// later unlocked when this object is destroyed.
-    ///
-    /// @param[in] rSyncObject  ReadWriteLock object to lock.
-    ScopeWriteLock::ScopeWriteLock( ReadWriteLock& rSyncObject )
-        : m_rSyncObject( rSyncObject )
-    {
-        rSyncObject.LockWrite();
-    }
-
-    /// Destructor.
-    ///
-    /// This automatically unlocks the managed ReadWriteLock object.
-    ScopeWriteLock::~ScopeWriteLock()
-    {
-        m_rSyncObject.UnlockWrite();
-    }
 }

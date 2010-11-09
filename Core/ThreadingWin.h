@@ -12,13 +12,6 @@
 #include "Core/Core.h"
 #include "Core/String.h"
 
-/// Non-zero to use the TBB reader-writer lock implementation.
-#define L_USE_TBB_READ_WRITE_LOCK 1
-
-#if L_USE_TBB_READ_WRITE_LOCK
-#include "tbb/reader_writer_lock.h"
-#endif
-
 // WinBase.h defines Yield() as an empty macro, so we undefine it so it can be used as a function name.
 #ifdef Yield
 #undef Yield
@@ -82,48 +75,6 @@ namespace Lunar
         //@{
         static unsigned int __stdcall ThreadCallback( void* pData );
         //@}
-    };
-
-    /// Read-write lock.
-    ///
-    /// A read-write lock is a synchronization mechanism for allowing multiple threads to acquire read-only access to a
-    /// shared resource simultaneously, while allowing exclusive access to a single thread when read-write access is
-    /// desired.  This allows for much more minimal blocking of threads, particularly when exclusive write access is
-    /// kept to a minimum.
-    ///
-    /// For efficiency, locking is only guaranteed to be functional within the context of the process in which the
-    /// read-write lock was created.
-    class LUNAR_CORE_API ReadWriteLock
-    {
-    public:
-        /// @name Construction/Destruction
-        //@{
-        inline ReadWriteLock();
-        inline ~ReadWriteLock();
-        //@}
-
-        /// @name Synchronization Interface
-        //@{
-        inline void LockRead();
-        inline void UnlockRead();
-
-        inline void LockWrite();
-        inline void UnlockWrite();
-        //@}
-
-    private:
-#if L_USE_TBB_READ_WRITE_LOCK
-        /// Reader-writer mutex instance.
-        tbb::interface5::reader_writer_lock m_lock;
-#else
-        /// Number of threads with read access, or -1 if write access is currently being held.
-        volatile int32_t m_readLockCount;
-
-        /// Read-lock release event.
-        HANDLE m_hReadReleaseEvent;
-        /// Write-lock release event.
-        HANDLE m_hWriteReleaseEvent;
-#endif
     };
 
     /// Thread-local storage management.

@@ -12,6 +12,7 @@
 #include "Core/ObjectPool.h"
 
 #include "Platform/Condition.h"
+#include "Platform/ReadWriteLock.h"
 
 #ifdef _MSC_VER
 #pragma warning( push )

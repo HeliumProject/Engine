@@ -9,6 +9,7 @@
 #include "Core/Memory.h"
 
 #include "Platform/Debug.h"
+#include "Platform/ReadWriteLock.h"
 #include "Core/Threading.h"
 
 #ifdef _MSC_VER

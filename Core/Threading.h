@@ -14,10 +14,13 @@
 #include "Platform/Platform.h"
 #include "Platform/Utility.h"
 
-namespace Lunar
+namespace Helium
 {
     class ReadWriteLock;
+}
 
+namespace Lunar
+{
     /// Interface for thread execution.
     ///
     /// This class should be implemented to provide the code to be executed by a thread.  When a Thread instance starts,
@@ -87,42 +90,6 @@ namespace Lunar
     private:
         /// Reference to the synchronization object being locked.
         T& m_rSyncObject;
-    };
-
-    /// Scoped locking mechanism for non-exclusive (read-only) locks using ReadWriteLock.
-    ///
-    /// This class provides functionality for acquiring a read lock on a ReadWriteLock object and automatically
-    /// unlocking the object when the scope in which the scope lock exists ends.
-    class LUNAR_CORE_API ScopeReadLock : NonCopyable
-    {
-    public:
-        /// @name Construction/Destruction
-        //@{
-        inline explicit ScopeReadLock( ReadWriteLock& rSyncObject );
-        inline ~ScopeReadLock();
-        //@}
-
-    private:
-        /// Reference to the ReadWriteLock object being locked.
-        ReadWriteLock& m_rSyncObject;
-    };
-
-    /// Scoped locking mechanism for exclusive (read-write) locks using ReadWriteLock.
-    ///
-    /// This class provides functionality for locking a write lock on a ReadWriteLock object and automatically unlocking
-    /// the object when the scope in which the scope lock exists ends.
-    class LUNAR_CORE_API ScopeWriteLock : NonCopyable
-    {
-    public:
-        /// @name Construction/Destruction
-        //@{
-        inline explicit ScopeWriteLock( ReadWriteLock& rSyncObject );
-        inline ~ScopeWriteLock();
-        //@}
-
-    private:
-        /// Reference to the ReadWriteLock object being locked.
-        ReadWriteLock& m_rSyncObject;
     };
 }
 

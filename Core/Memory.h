@@ -143,10 +143,13 @@
 
 //@}
 
-namespace Lunar
+namespace Helium
 {
     class ReadWriteLock;
+}
 
+namespace Lunar
+{
 #if L_ENABLE_MEMORY_TRACKING_VERBOSE
     struct DynamicMemoryHeapVerboseTrackingData;
 #endif

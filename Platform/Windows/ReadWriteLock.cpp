@@ -2,6 +2,11 @@
 
 #if HELIUM_OS_WIN && !HELIUM_USE_TBB_READ_WRITE_LOCK
 
+#include "Platform/Atomic.h"
+#include "Platform/Windows/Windows.h"
+
+using namespace Helium;
+
 /// Constructor.
 ReadWriteLock::ReadWriteLock()
     : m_readLockCount( 0 )

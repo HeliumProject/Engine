@@ -47,9 +47,9 @@ namespace Helium
         volatile int32_t m_readLockCount;
 
         /// Read-lock release event.
-        HANDLE m_hReadReleaseEvent;
+        void* m_hReadReleaseEvent;
         /// Write-lock release event.
-        HANDLE m_hWriteReleaseEvent;
+        void* m_hWriteReleaseEvent;
 #else
 # error Implement for this platform.
 #endif

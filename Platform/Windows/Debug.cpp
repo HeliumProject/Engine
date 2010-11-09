@@ -26,8 +26,6 @@ using namespace Helium;
 using namespace Helium::Debug;
 
 //#define DEBUG_SYMBOLS
-#pragma TODO( "LUNAR MERGE - Remove HELIUM_ARRAY_COUNT() macro definition here once L_ARRAY_COUNT() is merged over." )
-#define HELIUM_ARRAY_COUNT( ARRAY ) ( sizeof( ARRAY ) / sizeof( ARRAY[ 0 ] ) )
 
 // disable the optimizer if debugging in release
 #if defined(DEBUG_SYMBOLS) && defined(NDEBUG)
@@ -510,7 +508,7 @@ const tchar_t* Debug::GetExceptionClass(uint32_t exceptionCode)
 void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args )
 {
     static Helium::Mutex s_ExceptionMutex;
-    Helium::TakeMutex mutex ( s_ExceptionMutex );
+    Helium::MutexScopeLock mutex ( s_ExceptionMutex );
 
     typedef std::vector< std::pair<DWORD, HANDLE> > V_ThreadHandles;
     V_ThreadHandles threads;
@@ -869,7 +867,7 @@ size_t Helium::GetStackTrace( void** ppStackTraceArray, size_t stackTraceArraySi
 {
     HELIUM_ASSERT( ppStackTraceArray || stackTraceArraySize == 0 );
 
-    TakeMutex scopeLock( GetStackWalkMutex() );
+    MutexScopeLock scopeLock( GetStackWalkMutex() );
     ConditionalSymInitialize();
 
     // Get the current context.
@@ -878,9 +876,7 @@ size_t Helium::GetStackTrace( void** ppStackTraceArray, size_t stackTraceArraySi
 
     // Initialize the stack frame structure for the first call to StackWalk64().
     STACKFRAME64 stackFrame;
-#pragma TODO( "LUNAR MERGE - Restore usage of MemoryZero() (or similar) once merged." )
-//    MemoryZero( &stackFrame, sizeof( stackFrame ) );
-    memset( &stackFrame, 0, sizeof( stackFrame ) );
+    MemoryZero( &stackFrame, sizeof( stackFrame ) );
     stackFrame.AddrPC.Mode = AddrModeFlat;
     stackFrame.AddrFrame.Mode = AddrModeFlat;
     stackFrame.AddrStack.Mode = AddrModeFlat;
@@ -958,7 +954,7 @@ void Helium::GetAddressSymbol( tstring& rSymbol, void* pAddress )
 {
     HELIUM_ASSERT( pAddress );
 
-    TakeMutex scopeLock( GetStackWalkMutex() );
+    MutexScopeLock scopeLock( GetStackWalkMutex() );
     ConditionalSymInitialize();
 
 //    rSymbol.Remove( 0, rSymbol.GetSize() );
@@ -973,9 +969,7 @@ void Helium::GetAddressSymbol( tstring& rSymbol, void* pAddress )
     if( moduleBase )
     {
         IMAGEHLP_MODULE64 moduleInfo;
-#pragma TODO( "LUNAR MERGE - Restore usage of MemoryZero() (or similar) once merged." )
-//        MemoryZero( &moduleInfo, sizeof( moduleInfo ) );
-        memset( &moduleInfo, 0, sizeof( moduleInfo ) );
+        MemoryZero( &moduleInfo, sizeof( moduleInfo ) );
         moduleInfo.SizeOfStruct = sizeof( moduleInfo );
         if( SymGetModuleInfo64( hProcess, moduleBase, &moduleInfo ) )
         {
@@ -995,9 +989,7 @@ void Helium::GetAddressSymbol( tstring& rSymbol, void* pAddress )
     uint64_t symbolInfoBuffer[
         ( sizeof( SYMBOL_INFO ) + sizeof( tchar_t ) * ( MAX_SYM_NAME - 1 ) + sizeof( uint64_t ) - 1 ) /
         sizeof( uint64_t ) ];
-#pragma TODO( "LUNAR MERGE - Restore usage of MemoryZero() (or similar) once merged." )
-//    MemoryZero( symbolInfoBuffer, sizeof( symbolInfoBuffer ) );
-    memset( symbolInfoBuffer, 0, sizeof( symbolInfoBuffer ) );
+    MemoryZero( symbolInfoBuffer, sizeof( symbolInfoBuffer ) );
 
     SYMBOL_INFO& rSymbolInfo = *reinterpret_cast< SYMBOL_INFO* >( &symbolInfoBuffer[ 0 ] );
     rSymbolInfo.SizeOfStruct = sizeof( SYMBOL_INFO );
@@ -1015,20 +1007,12 @@ void Helium::GetAddressSymbol( tstring& rSymbol, void* pAddress )
 
     DWORD displacement = 0;
     IMAGEHLP_LINE64 lineInfo;
-#pragma TODO( "LUNAR MERGE - Restore usage of MemoryZero() (or similar) once merged." )
-//    MemoryZero( &lineInfo, sizeof( lineInfo ) );
-    memset( &lineInfo, 0, sizeof( lineInfo ) );
+    MemoryZero( &lineInfo, sizeof( lineInfo ) );
     lineInfo.SizeOfStruct = sizeof( lineInfo );
     if( SymGetLineFromAddr64( hProcess, reinterpret_cast< uintptr_t >( pAddress ), &displacement, &lineInfo ) )
     {
         tchar_t lineNumberBuffer[ 32 ];
-#pragma TODO( "LUNAR MERGE - Replace sprintf_s/swprintf_s usage below with StringFormat() once merged." )
-//        StringFormat( lineNumberBuffer, HELIUM_ARRAY_COUNT( lineNumberBuffer ), TXT( "%u" ), lineInfo.LineNumber );
-#if HELIUM_UNICODE
-        swprintf_s( lineNumberBuffer, TXT( "%u" ), lineInfo.LineNumber );
-#else
-        sprintf_s( lineNumberBuffer, TXT( "%u" ), lineInfo.LineNumber );
-#endif
+        StringFormat( lineNumberBuffer, HELIUM_ARRAY_COUNT( lineNumberBuffer ), TXT( "%u" ), lineInfo.LineNumber );
         lineNumberBuffer[ HELIUM_ARRAY_COUNT( lineNumberBuffer ) - 1 ] = TXT( '\0' );
 
         rSymbol += TXT( "(" );

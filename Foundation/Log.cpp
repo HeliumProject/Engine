@@ -156,28 +156,28 @@ void Log::Statement::ApplyIndent( const tchar_t* string, tstring& output )
 
 void Log::AddPrintingListener(const PrintingSignature::Delegate& listener)
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     g_PrintingEvent.Add(listener);
 }
 
 void Log::RemovePrintingListener(const PrintingSignature::Delegate& listener)
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     g_PrintingEvent.Remove(listener);
 }
 
 void Log::AddPrintedListener(const PrintedSignature::Delegate& listener)
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     g_PrintedEvent.Add(listener);
 }
 
 void Log::RemovePrintedListener(const PrintedSignature::Delegate& listener)
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     g_PrintedEvent.Remove(listener);
 }
@@ -212,7 +212,7 @@ void Redirect(const tstring& fileName, const tchar_t* str, bool stampNewLine = t
 
 bool AddFile( M_OutputFile& files, const tstring& fileName, Stream stream, uint32_t threadId, bool append )
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     M_OutputFile::iterator found = files.find( fileName );
     if ( found != files.end() )
@@ -257,7 +257,7 @@ bool AddFile( M_OutputFile& files, const tstring& fileName, Stream stream, uint3
 
 void RemoveFile( M_OutputFile& files, const tstring& fileName )
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     M_OutputFile::iterator found = files.find( fileName );
     if ( found != files.end() )
@@ -388,7 +388,7 @@ void Log::UnlockMutex()
 
 void Log::PrintString(const tchar_t* string, Stream stream, Level level, Color color, int indent, tchar_t* output, uint32_t outputSize)
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     // check trace files
     bool trace = false;
@@ -484,14 +484,14 @@ void Log::PrintString(const tchar_t* string, Stream stream, Level level, Color c
 
 void Log::PrintStatement(const Statement& statement)
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     PrintString( statement.m_String.c_str(), statement.m_Stream, statement.m_Level, GetStreamColor( statement.m_Stream ), statement.m_Indent );
 }
 
 void Log::PrintStatements(const V_Statement& statements, uint32_t streamFilter)
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     V_Statement::const_iterator itr = statements.begin();
     V_Statement::const_iterator end = statements.end();
@@ -506,7 +506,7 @@ void Log::PrintStatements(const V_Statement& statements, uint32_t streamFilter)
 
 void Log::PrintColor(Log::Color color, const tchar_t* fmt, ...)
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
@@ -520,7 +520,7 @@ void Log::PrintColor(Log::Color color, const tchar_t* fmt, ...)
 
 void Log::Print(const tchar_t *fmt,...) 
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
@@ -535,7 +535,7 @@ void Log::Print(const tchar_t *fmt,...)
 
 void Log::Print(Level level, const tchar_t *fmt,...) 
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
@@ -550,7 +550,7 @@ void Log::Print(Level level, const tchar_t *fmt,...)
 
 void Log::Debug(const tchar_t *fmt,...) 
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
@@ -565,7 +565,7 @@ void Log::Debug(const tchar_t *fmt,...)
 
 void Log::Debug(Level level, const tchar_t *fmt,...) 
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
@@ -580,7 +580,7 @@ void Log::Debug(Level level, const tchar_t *fmt,...)
 
 void Log::Profile(const tchar_t *fmt,...) 
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
@@ -595,7 +595,7 @@ void Log::Profile(const tchar_t *fmt,...)
 
 void Log::Profile(Level level, const tchar_t *fmt,...) 
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
@@ -610,7 +610,7 @@ void Log::Profile(Level level, const tchar_t *fmt,...)
 
 void Log::Warning(const tchar_t *fmt,...) 
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     static tchar_t format[MAX_PRINT_SIZE];
     _stprintf(format, TXT( "Warning (%d): " ), ++g_WarningCount);
@@ -629,7 +629,7 @@ void Log::Warning(const tchar_t *fmt,...)
 
 void Log::Warning(Level level, const tchar_t *fmt,...) 
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     static tchar_t format[MAX_PRINT_SIZE];
     if (level == Levels::Default)
@@ -655,7 +655,7 @@ void Log::Warning(Level level, const tchar_t *fmt,...)
 
 void Log::Error(const tchar_t *fmt,...) 
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     static tchar_t format[MAX_PRINT_SIZE];
     _stprintf(format, TXT( "Error (%d): " ), ++g_ErrorCount);
@@ -674,7 +674,7 @@ void Log::Error(const tchar_t *fmt,...)
 
 void Log::Error(Level level, const tchar_t *fmt,...) 
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     static tchar_t format[MAX_PRINT_SIZE];
     if (level == Levels::Default)
@@ -700,7 +700,7 @@ void Log::Error(Level level, const tchar_t *fmt,...)
 
 Log::Heading::Heading(const tchar_t *fmt, ...)
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     // do a basic print
     va_list args;
@@ -719,7 +719,7 @@ Log::Heading::Heading(const tchar_t *fmt, ...)
 
 Log::Heading::~Heading()
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     // unindent
     UnIndent();
@@ -734,7 +734,7 @@ Log::Bullet::Bullet(const tchar_t *fmt, ...)
 {
     if (m_Valid)
     {
-        Helium::TakeMutex mutex (g_Mutex);
+        Helium::MutexScopeLock mutex (g_Mutex);
 
         va_list args;
         va_start(args, fmt); 
@@ -750,7 +750,7 @@ Log::Bullet::Bullet(Stream stream, Log::Level level, const tchar_t *fmt, ...)
 {
     if (m_Valid)
     {
-        Helium::TakeMutex mutex (g_Mutex);
+        Helium::MutexScopeLock mutex (g_Mutex);
 
         va_list args;
         va_start(args, fmt); 
@@ -763,7 +763,7 @@ Log::Bullet::~Bullet()
 {
     if (m_Valid)
     {
-        Helium::TakeMutex mutex (g_Mutex);
+        Helium::MutexScopeLock mutex (g_Mutex);
 
         // this gates the output to the console for streams and levels that the user did not elect to see on in the console
         bool print = ( ( g_Streams & m_Stream ) == m_Stream ) && ( m_Level <= g_Level );
@@ -848,7 +848,7 @@ void Log::Bullet::CreateBullet(const tchar_t *fmt, va_list args)
 
 tstring Log::GetOutlineState()
 {
-    Helium::TakeMutex mutex (g_Mutex);
+    Helium::MutexScopeLock mutex (g_Mutex);
 
     tstring state;
 

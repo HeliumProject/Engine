@@ -105,7 +105,7 @@ namespace Lunar
 #if HELIUM_UNICODE
                 // Perform a direct conversion from Unicode to single-byte characters by casting.
                 char name[ 128 ];
-                charCount = Min( charCount, L_ARRAY_COUNT( name ) - 1 );
+                charCount = Min( charCount, HELIUM_ARRAY_COUNT( name ) - 1 );
 
                 size_t charIndex;
                 for( charIndex = 0; charIndex < charCount; ++charIndex )
@@ -138,7 +138,7 @@ namespace Lunar
             // Start the thread.
             DWORD resumeResult = ResumeThread( reinterpret_cast< HANDLE >( m_thread ) );
             HELIUM_ASSERT( resumeResult != static_cast< DWORD >( -1 ) );
-            L_UNREF( resumeResult );
+            HELIUM_UNREF( resumeResult );
         }
 
         return( m_thread != 0 );

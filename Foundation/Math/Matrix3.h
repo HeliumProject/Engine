@@ -137,9 +137,9 @@ namespace Helium
             return !(x == v.x && y == v.y && z == v.z);
         }
 
-        bool                  Valid()
+        bool                  Finite()
         {
-            return x.Valid() && y.Valid() && z.Valid();
+            return x.Finite() && y.Finite() && z.Finite();
         }
 
         float32_t                   Determinant () const;

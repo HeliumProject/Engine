@@ -25,7 +25,7 @@ namespace Lunar
         DWORD bufferSize = GetModuleFileName(
             static_cast< HMODULE >( pHandle ),
             pathBuffer,
-            L_ARRAY_COUNT( pathBuffer ) );
+            HELIUM_ARRAY_COUNT( pathBuffer ) );
         if( bufferSize == 0 )
         {
             HELIUM_TRACE( TRACE_ERROR, TXT( "DynamicLibrary: Failed to retrieve DLL file path.\n" ) );
@@ -33,7 +33,7 @@ namespace Lunar
         }
         else
         {
-            pathBuffer[ L_ARRAY_COUNT( pathBuffer ) - 1 ] = TXT( '\0' );
+            pathBuffer[ HELIUM_ARRAY_COUNT( pathBuffer ) - 1 ] = TXT( '\0' );
         }
 
         String result( pathBuffer );

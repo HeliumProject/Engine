@@ -238,7 +238,7 @@ namespace Lunar
 
     /// Constructor.
     AsyncLoader::LoadWorker::LoadWorker()
-        : m_wakeUpEvent( Event::RESET_MODE_AUTO )
+        : m_wakeUpCondition( Condition::RESET_MODE_AUTO )
         , m_stopCounter( 0 )
         , m_processingCounter( 0 )
     {
@@ -264,7 +264,7 @@ namespace Lunar
             {
                 // Queue is empty, so sleep until notified.
                 AtomicExchangeRelease( m_processingCounter, 0 );
-                m_wakeUpEvent.Wait();
+                m_wakeUpCondition.Wait();
 
                 continue;
             }
@@ -306,7 +306,7 @@ namespace Lunar
     void AsyncLoader::LoadWorker::Stop()
     {
         AtomicExchangeRelease( m_stopCounter, 1 );
-        m_wakeUpEvent.Signal();
+        m_wakeUpCondition.Signal();
     }
 
     /// Queue an async load request.
@@ -325,7 +325,7 @@ namespace Lunar
         ScopeReadLock nonExclusiveLock( m_writeLock );
 
         m_requestQueue.push( pRequest );
-        m_wakeUpEvent.Signal();
+        m_wakeUpCondition.Signal();
     }
 
     /// Block the current thread until all pending load requests have completed.

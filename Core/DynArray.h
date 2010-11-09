@@ -10,7 +10,7 @@
 #define LUNAR_CORE_DYN_ARRAY_H
 
 #include "Core/Core.h"
-#include "Core/Utility.h"
+#include "Platform/Utility.h"
 #include "Core/Memory.h"
 #include "Platform/Assert.h"
 #include "Core/ArrayIterator.h"

@@ -51,9 +51,9 @@ namespace Helium
             return !(angle == v.angle && axis == v.axis);
         }
 
-        bool                    Valid()
+        bool                    Finite()
         {
-            return IsValid(angle) && axis.Valid();
+            return IsFinite(angle) && axis.Finite();
         }
 
         AngleAxis&              Invert ()

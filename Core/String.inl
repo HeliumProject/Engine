@@ -398,7 +398,7 @@ namespace Lunar
         va_start( argList, pFormatString );
         int finalResult = StringFormatVa( pBufferData, resultLength + 1, pFormatString, argList );
         HELIUM_ASSERT( finalResult == resultLength );
-        L_UNREF( finalResult );
+        HELIUM_UNREF( finalResult );
         va_end( argList );
     }
 

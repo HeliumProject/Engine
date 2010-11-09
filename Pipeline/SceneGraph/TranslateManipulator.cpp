@@ -298,7 +298,7 @@ void TranslateManipulator::DrawPoints(AxesFlags axis)
         case MultipleAxes::X:
             {
                 float32_t length = frame.x.Length();
-                if ( !IsValid( length ) || Equal( length, 0.0f ) || next.x >= m_Factor / length )
+                if ( !IsFinite( length ) || Equal( length, 0.0f ) || next.x >= m_Factor / length )
                 {
                     done = true;
                 }
@@ -314,7 +314,7 @@ void TranslateManipulator::DrawPoints(AxesFlags axis)
         case MultipleAxes::Y:
             {
                 float32_t length = frame.y.Length();
-                if ( !IsValid( length ) || Equal( length, 0.0f ) || next.y >= m_Factor / length )
+                if ( !IsFinite( length ) || Equal( length, 0.0f ) || next.y >= m_Factor / length )
                 {
                     done = true;
                 }
@@ -330,7 +330,7 @@ void TranslateManipulator::DrawPoints(AxesFlags axis)
         case MultipleAxes::Z:
             {
                 float32_t length = frame.z.Length();
-                if ( !IsValid( length ) || Equal( length, 0.0f ) || next.z >= m_Factor / length )
+                if ( !IsFinite( length ) || Equal( length, 0.0f ) || next.z >= m_Factor / length )
                 {
                     done = true;
                 }

@@ -62,10 +62,10 @@ static void PrintfWrapper( const char* pFormat, ... )
 
     va_list argList;
     va_start( argList, pFormat );
-    Lunar::StringFormatVa( message, L_ARRAY_COUNT( message ), pFormat, argList );
+    Lunar::StringFormatVa( message, HELIUM_ARRAY_COUNT( message ), pFormat, argList );
     va_end( argList );
 
-    message[ L_ARRAY_COUNT( message ) - 1 ] = '\0';
+    message[ HELIUM_ARRAY_COUNT( message ) - 1 ] = '\0';
 
     // Do a direct conversion, assuming memory allocator logging is only using 7-bit ASCII text.
     wchar_t messageWide[ Helium::Trace::DEFAULT_MESSAGE_BUFFER_SIZE ];
@@ -566,7 +566,7 @@ namespace Lunar
 
                 AllocationBacktrace backtrace;
                 MemoryZero( backtrace.pAddresses, sizeof( backtrace.pAddresses ) );
-                Helium::GetStackTrace( backtrace.pAddresses, L_ARRAY_COUNT( backtrace.pAddresses ) );
+                Helium::GetStackTrace( backtrace.pAddresses, HELIUM_ARRAY_COUNT( backtrace.pAddresses ) );
                 m_pVerboseTrackingData->allocationBacktraceMap[ pMemory ] = backtrace;
 
                 sm_bDisableBacktraceTracking = false;

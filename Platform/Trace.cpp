@@ -29,7 +29,7 @@ Helium::Trace::~Trace()
 /// @see GetLevel()
 void Helium::Trace::SetLevel( ETraceLevel level )
 {
-    TakeMutex scopeLock( m_mutex );
+    MutexScopeLock scopeLock( m_mutex );
 
     HELIUM_ASSERT( static_cast< size_t >( level ) < static_cast< size_t >( TRACE_MAX ) );
     m_level = level;
@@ -61,7 +61,7 @@ void Helium::Trace::Output( ETraceLevel level, const String& rMessage )
         return;
     }
 
-    ScopeLock< LwMutex > scopeLock( m_mutex );
+    MutexScopeLock scopeLock( m_mutex );
 
     if( m_bNewLine || level != m_lastMessageLevel )
     {
@@ -94,13 +94,13 @@ void Helium::Trace::OutputVa( ETraceLevel level, const tchar_t* pFormat, va_list
 {
     HELIUM_ASSERT( pFormat );
 
-#pragma TODO( "LUNAR MERGE - Re-enable once StringFormatVa has been merged over." )
+#pragma TODO( "LUNAR MERGE - Re-enable once memory routines have been merged over." )
 #if 1
     ( void )level;
     ( void )pFormat;
     ( void )argList;
 #else
-    TakeMutex scopeLock( m_mutex );
+    MutexScopeLock scopeLock( m_mutex );
 
     if( level < m_level )
     {

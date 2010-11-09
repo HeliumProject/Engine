@@ -83,9 +83,9 @@ namespace Helium
             return fabs(yz - v.yz) < error && fabs(xz - v.xz) < error && fabs(xy - v.xy) < error;
         }
 
-        bool            Valid()
+        bool            Finite()
         {
-            return IsValid(yz) && IsValid(xz) && IsValid(xy);
+            return IsFinite(yz) && IsFinite(xz) && IsFinite(xy);
         }
     };
 }

@@ -41,11 +41,11 @@ namespace Lunar
             bLocateRequested = true;
 
             tchar_t pathBuffer[ MAX_PATH ];
-            DWORD result = GetModuleFileName( NULL, pathBuffer, L_ARRAY_COUNT( pathBuffer ) );
-            HELIUM_ASSERT( result < L_ARRAY_COUNT( pathBuffer ) );
-            L_UNREF( result );
+            DWORD result = GetModuleFileName( NULL, pathBuffer, HELIUM_ARRAY_COUNT( pathBuffer ) );
+            HELIUM_ASSERT( result < HELIUM_ARRAY_COUNT( pathBuffer ) );
+            HELIUM_UNREF( result );
 
-            pathBuffer[ L_ARRAY_COUNT( pathBuffer ) - 1 ] = TXT( '\0' );
+            pathBuffer[ HELIUM_ARRAY_COUNT( pathBuffer ) - 1 ] = TXT( '\0' );
 
             baseDirectory = pathBuffer;
             if( baseDirectory.IsEmpty() )
@@ -155,7 +155,7 @@ namespace Lunar
                 return userDataDirectory;
             }
 
-            pathBuffer[ L_ARRAY_COUNT( pathBuffer ) - 1 ] = TXT( '\0' );
+            pathBuffer[ HELIUM_ARRAY_COUNT( pathBuffer ) - 1 ] = TXT( '\0' );
             userDataDirectory = pathBuffer;
 
             String subDirectory = AppInfo::GetName();

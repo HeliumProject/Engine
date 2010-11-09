@@ -45,28 +45,28 @@ int32_t Type::AssignTypeID()
 
 void Type::TrackPointer(void** pointer) const
 {
-    Helium::TakeMutex mutex (g_TypeMutex);
+    Helium::MutexScopeLock mutex (g_TypeMutex);
 
     m_Pointers.push_back( pointer );
 }
 
 void Type::RemovePointer(void** pointer) const
 {
-    Helium::TakeMutex mutex (g_TypeMutex);
+    Helium::MutexScopeLock mutex (g_TypeMutex);
 
     m_Pointers.erase( std::remove( m_Pointers.begin(), m_Pointers.end(), pointer ), m_Pointers.end() );
 }
 
 void Type::TrackID(int32_t* id) const
 {
-    Helium::TakeMutex mutex (g_TypeMutex);
+    Helium::MutexScopeLock mutex (g_TypeMutex);
 
     m_IDs.push_back( id );
 }
 
 void Type::RemoveID(int32_t* id) const
 {
-    Helium::TakeMutex mutex (g_TypeMutex);
+    Helium::MutexScopeLock mutex (g_TypeMutex);
 
     m_IDs.erase( std::remove( m_IDs.begin(), m_IDs.end(), id ), m_IDs.end() );
 }

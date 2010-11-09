@@ -22,11 +22,11 @@
 #pragma warning( pop )
 #endif
 
-/// Mutex wrapper buffer.  We use this buffer to be able to set aside space for an uninitialized Lunar::LwMutex in which
+/// Mutex wrapper buffer.  We use this buffer to be able to set aside space for an uninitialized Helium::Mutex in which
 /// we can properly construct one using placement new, as dlmalloc/nedmalloc are built to deal with more basic C types.
 struct MallocMutex
 {
-    size_t buffer[ ( sizeof( Lunar::LwMutex ) + sizeof( size_t ) - 1 ) / sizeof( size_t ) ];
+    size_t buffer[ ( sizeof( Helium::Mutex ) + sizeof( size_t ) - 1 ) / sizeof( size_t ) ];
 };
 
 /// Mutex initialize wrapper.
@@ -36,7 +36,7 @@ struct MallocMutex
 /// @return  Zero.
 static int MallocMutexInitialize( MallocMutex* pMutex )
 {
-    new( pMutex->buffer ) Lunar::LwMutex;
+    new( pMutex->buffer ) Helium::Mutex;
     return 0;
 }
 
@@ -47,7 +47,7 @@ static int MallocMutexInitialize( MallocMutex* pMutex )
 /// @return  Zero.
 static int MallocMutexLock( MallocMutex* pMutex )
 {
-    reinterpret_cast< Lunar::LwMutex* >( pMutex->buffer )->Lock();
+    reinterpret_cast< Helium::Mutex* >( pMutex->buffer )->Lock();
     return 0;
 }
 
@@ -58,7 +58,7 @@ static int MallocMutexLock( MallocMutex* pMutex )
 /// @return  Zero.
 static int MallocMutexUnlock( MallocMutex* pMutex )
 {
-    reinterpret_cast< Lunar::LwMutex* >( pMutex->buffer )->Unlock();
+    reinterpret_cast< Helium::Mutex* >( pMutex->buffer )->Unlock();
     return 0;
 }
 
@@ -69,16 +69,16 @@ static int MallocMutexUnlock( MallocMutex* pMutex )
 /// @return  True if the mutex was locked successfully by this thread, false if it was locked by another thread.
 static bool MallocMutexTryLock( MallocMutex* pMutex )
 {
-    return reinterpret_cast< Lunar::LwMutex* >( pMutex->buffer )->TryLock();
+    return reinterpret_cast< Helium::Mutex* >( pMutex->buffer )->TryLock();
 }
 
 /// Get a reference to the global dlmalloc mutex.
 ///
 /// @return  Reference to the global dlmalloc mutex.
-static Lunar::LwMutex& GetMallocGlobalMutex()
+static Helium::Mutex& GetMallocGlobalMutex()
 {
     // Initialize as a local variable to try to ensure it is initialized the first time it is used.
-    static Lunar::LwMutex globalMutex;
+    static Helium::Mutex globalMutex;
     return globalMutex;
 }
 
@@ -94,9 +94,9 @@ namespace Lunar
 
     static volatile Thread::id_t s_verboseTrackingCurrentThreadId = Thread::INVALID_ID;
 
-    static LwMutex& GetVerboseTrackingMutex()
+    static Mutex& GetVerboseTrackingMutex()
     {
-        static LwMutex verboseTrackingMutex;
+        static Mutex verboseTrackingMutex;
 
         return verboseTrackingMutex;
     }
@@ -241,7 +241,7 @@ namespace Lunar
 
                     void* const* ppTraceAddress = iter->second.pAddresses;
                     for( size_t addressIndex = 0;
-                         addressIndex < L_ARRAY_COUNT( iter->second.pAddresses );
+                         addressIndex < HELIUM_ARRAY_COUNT( iter->second.pAddresses );
                          ++addressIndex )
                     {
                         void* pAddress = *ppTraceAddress;

@@ -18,7 +18,12 @@ namespace Helium
     // Valid
     //
 
-    inline bool IsValid(float64_t val)
+    inline bool IsFinite(float32_t val)
+    {
+        return _finitef(val) != 0;
+    }
+
+    inline bool IsFinite(float64_t val)
     {
         return _finite(val) != 0;
     }

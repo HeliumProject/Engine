@@ -209,12 +209,12 @@ const Path& VaultSearch::GetDirectory() const
 //
 bool VaultSearch::StartSearchThread( VaultSearchQuery* searchQuery )
 {
-    Helium::TakeMutex beginMutex( m_BeginSearchMutex );
+    Helium::MutexScopeLock beginMutex( m_BeginSearchMutex );
 
     // kill current search, if any
     StopSearchThreadAndWait();
 
-    Helium::TakeMutex resultsMutex( m_SearchResultsMutex );
+    Helium::MutexScopeLock resultsMutex( m_SearchResultsMutex );
     {
         // reset event to lockout new searches from starting
         ++m_CurrentSearchID;
@@ -282,7 +282,7 @@ void VaultSearch::OnSearchResultsAvailable( const Editor::DummyWindowArgs& args 
     if ( args.m_ThreadID != m_CurrentSearchID )
         return;
 
-    Helium::TakeMutex mutex (m_SearchResultsMutex);
+    Helium::MutexScopeLock mutex (m_SearchResultsMutex);
 
     if ( m_SearchResults
         && m_SearchResults->GetSearchID() != m_CurrentSearchID )
@@ -374,7 +374,7 @@ void VaultSearch::SearchThreadProc( int32_t searchID )
 
         for ( std::vector<TrackedFile>::const_iterator itr = assetFiles.begin(), end = assetFiles.end(); itr != end; ++itr )
         {
-            Helium::TakeMutex mutex (m_SearchResultsMutex);
+            Helium::MutexScopeLock mutex (m_SearchResultsMutex);
 
             Helium::Path path = itr->mPath.value();
             Helium::Insert<std::set< Helium::Path >>::Result inserted = m_FoundPaths.insert( path );
@@ -420,7 +420,7 @@ inline void VaultSearch::SearchThreadEnter( int32_t searchID )
 ///////////////////////////////////////////////////////////////////////////////
 inline void VaultSearch::SearchThreadPostResults( int32_t searchID )
 {
-    Helium::TakeMutex mutex (m_SearchResultsMutex);
+    Helium::MutexScopeLock mutex (m_SearchResultsMutex);
 
     if ( m_SearchResults && m_SearchResults->HasResults() )
     {
@@ -469,7 +469,7 @@ uint32_t VaultSearch::AddPath( const Helium::Path& path, int32_t searchID )
 { 
     uint32_t numFilesAdded = 0;
 
-    Helium::TakeMutex mutex (m_SearchResultsMutex);
+    Helium::MutexScopeLock mutex (m_SearchResultsMutex);
 
     Helium::Insert<std::set< Helium::Path >>::Result inserted = m_FoundPaths.insert( path );
     if ( m_SearchResults && inserted.second )

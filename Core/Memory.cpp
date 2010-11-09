@@ -10,7 +10,8 @@
 
 #include "CorePch.h"
 #include "Core/Memory.h"
-#include "Core/Threading.h"
+
+#include "Platform/Thread.h"
 
 namespace Lunar
 {
@@ -68,19 +69,15 @@ namespace Lunar
     /// @see ReleaseMemoryHeap()
     StackMemoryHeap<>& ThreadLocalStackAllocator::GetMemoryHeap()
     {
-        ThreadLocalStorage& tls = ThreadLocalStorage::GetInstance();
-
-        size_t tlsIndex = GetMemoryHeapTlsIndex();
-        HELIUM_ASSERT( IsValid( tlsIndex ) );
-
-        StackMemoryHeap<>* pHeap = reinterpret_cast< StackMemoryHeap<>* >( tls.Get( tlsIndex ) );
+        ThreadLocalPointer& tls = GetMemoryHeapTls();
+        StackMemoryHeap<>* pHeap = static_cast< StackMemoryHeap<>* >( tls.GetPointer() );
         if( !pHeap )
         {
             // Heap does not already exist for this thread, so create one.
             pHeap = new StackMemoryHeap<>( BLOCK_SIZE );
             HELIUM_ASSERT( pHeap );
 
-            tls.Set( tlsIndex, reinterpret_cast< uintptr_t >( pHeap ) );
+            tls.SetPointer( pHeap );
         }
 
         return *pHeap;
@@ -94,23 +91,19 @@ namespace Lunar
     /// @see GetMemoryHeap()
     void ThreadLocalStackAllocator::ReleaseMemoryHeap()
     {
-        ThreadLocalStorage& tls = ThreadLocalStorage::GetInstance();
-
-        size_t tlsIndex = GetMemoryHeapTlsIndex();
-        HELIUM_ASSERT( IsValid( tlsIndex ) );
-
-        StackMemoryHeap<>* pHeap = reinterpret_cast< StackMemoryHeap<>* >( tls.Get( tlsIndex ) );
+        ThreadLocalPointer& tls = GetMemoryHeapTls();
+        StackMemoryHeap<>* pHeap = static_cast< StackMemoryHeap<>* >( tls.GetPointer() );
         if( pHeap )
         {
             delete pHeap;
-            tls.Set( tlsIndex, 0 );
+            tls.SetPointer( NULL );
         }
     }
 
-    /// Get the TLS index for the current thread's stack heap.
+    /// Get the thread-local storage pointer for the current thread's stack heap.
     ///
-    /// @return  TLS index for storage of the thread-local stack heap instance.
-    size_t ThreadLocalStackAllocator::GetMemoryHeapTlsIndex()
+    /// @return  Thread-local storage pointer for the thread-local stack heap instance.
+    ThreadLocalPointer& ThreadLocalStackAllocator::GetMemoryHeapTls()
     {
         // Keeping this as a local static variable should help us enforce its construction on the first attempt to
         // allocate memory, regardless of whichever code attempts to dynamically allocate memory first.
@@ -118,10 +111,9 @@ namespace Lunar
         // ThreadLocalStackAllocator for the first time at around the same time.  To be safe, the main thread should try
         // to use ThreadLocalStackAllocator before any threads are created in order to prep this value (could do
         // something in the Thread class itself...).
-        static size_t tlsIndex = ThreadLocalStorage::GetInstance().Allocate();
-        HELIUM_ASSERT( IsValid( tlsIndex ) );
+        static ThreadLocalPointer memoryHeapTls;
 
-        return tlsIndex;
+        return memoryHeapTls;
     }
 
 #if !L_USE_MODULE_HEAPS

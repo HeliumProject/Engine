@@ -146,6 +146,7 @@
 namespace Helium
 {
     class ReadWriteLock;
+    class ThreadLocalPointer;
 }
 
 namespace Lunar
@@ -489,7 +490,7 @@ namespace Lunar
 
         /// @name Thread-local Storage Access
         //@{
-        static size_t GetMemoryHeapTlsIndex();
+        static ThreadLocalPointer& GetMemoryHeapTls();
         //@}
     };
 

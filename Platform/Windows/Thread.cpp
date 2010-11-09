@@ -287,7 +287,7 @@ ThreadLocalPointer::~ThreadLocalPointer()
     TlsFree(m_Key); 
 }
 
-void* ThreadLocalPointer::GetPointer()
+void* ThreadLocalPointer::GetPointer() const
 {
     void* value = TlsGetValue(m_Key);
     return value;

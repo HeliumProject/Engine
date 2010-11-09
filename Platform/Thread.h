@@ -208,11 +208,15 @@ namespace Helium
         ThreadLocalPointer();
         ~ThreadLocalPointer();
 
-        void* GetPointer();
+        void* GetPointer() const;
         void SetPointer(void* value);
 
     protected:
-        uint32_t m_Key;
+#if HELIUM_OS_WIN
+        unsigned long m_Key;
+#else
+# error Implement ThreadLocalPointer for this platform.
+#endif
     };
 
     PLATFORM_API uint32_t GetMainThreadID();

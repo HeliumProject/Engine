@@ -123,6 +123,7 @@ Helium.DoDefaultSolutionSettings = function()
 		flags
 		{
 			"OptimizeSpeed",
+			"NoEditAndContinue",
 			"Symbols",
 		}
 		
@@ -137,6 +138,7 @@ Helium.DoDefaultSolutionSettings = function()
 		{
 			"NoFramePointer",
 			"OptimizeSpeed",
+			"NoEditAndContinue",
 		}
 
 	configuration "Release"
@@ -150,6 +152,7 @@ Helium.DoDefaultSolutionSettings = function()
 		{
 			"NoFramePointer",
 			"OptimizeSpeed",
+			"NoEditAndContinue",
 		}
 
 	configuration { "windows", "Debug" }

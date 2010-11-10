@@ -1,20 +1,11 @@
-//----------------------------------------------------------------------------------------------------------------------
-// FileStream.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_FILE_STREAM_H
-#define LUNAR_CORE_FILE_STREAM_H
 
-#include "Core/Stream.h"
+#include "Foundation/Stream/Stream.h"
 
-namespace Lunar
+namespace Helium
 {
     /// File stream base class.
-    class LUNAR_CORE_API FileStream : public Stream
+    class FOUNDATION_API FileStream : public Stream
     {
     public:
         /// File access mode flags.
@@ -52,5 +43,3 @@ namespace Lunar
         //@}
     };
 }
-
-#endif  // LUNAR_CORE_FILE_STREAM_H

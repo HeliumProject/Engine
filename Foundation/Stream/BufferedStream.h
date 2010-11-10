@@ -1,24 +1,15 @@
-//----------------------------------------------------------------------------------------------------------------------
-// BufferedStream.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_BUFFERED_STREAM_H
-#define LUNAR_CORE_BUFFERED_STREAM_H
 
-#include "Core/Stream.h"
+#include "Foundation/Stream/Stream.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Binary stream that buffers read and write operations for an underlying stream.
     ///
     /// @note  A BufferedStream should never wrap a ByteSwappingStream.  Doing so will invalidate proper byte swapping,
     ///        as the information needed to properly perform byte swapping is not retained by the BufferedStream.  A
     ///        ByteSwappingStream can be safely used to wrap access to a BufferedStream, though.
-    class LUNAR_CORE_API BufferedStream : public Stream
+    class FOUNDATION_API BufferedStream : public Stream
     {
     public:
         /// Default buffer size, in bytes.
@@ -77,5 +68,3 @@ namespace Lunar
         bool m_bReadData;
     };
 }
-
-#endif  // LUNAR_CORE_BUFFERED_STREAM_H

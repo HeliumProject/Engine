@@ -1,7 +1,7 @@
 #pragma once
 
 #include "API.h"
-#include "Stream.h" 
+#include "ArchiveStream.h" 
 
 namespace Helium
 {

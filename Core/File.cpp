@@ -9,7 +9,7 @@
 #include "Core/File.h"
 
 #include "Core/Path.h"
-#include "Core/FileStream.h"
+#include "Foundation/Stream/FileStream.h"
 
 namespace Lunar
 {

@@ -1,7 +1,7 @@
-#include "Stream.h" 
+#include "ArchiveStream.h" 
 
 #include "Foundation/Profile.h" 
-#include "Exceptions.h"
+#include "Foundation/Reflect/Exceptions.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;

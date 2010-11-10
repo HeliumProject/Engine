@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Platform/Types.h"
+#include "Platform/Directory.h"
 
 #include "Foundation/API.h"
 #include "Foundation/Automation/Event.h"
@@ -20,49 +21,35 @@ namespace Helium
         const uint32_t Default = 0;
     }
 
-    typedef void* DirectoryHandle;
-
-    namespace DirectoryItemFlags
-    {
-        enum Flags
-        {
-            Directory   = 1 << 1,                 // It's actually a directory
-        };
-
-        const uint32_t Default = 0;
-    }
-
     struct FOUNDATION_API DirectoryItem
     {
         DirectoryItem()
             : m_CreateTime ( 0x0 )
             , m_ModTime ( 0x0 )
             , m_Size( 0x0 )
-            , m_Flags ( 0x0 )
         {
 
         }
 
         void Clear()
         {
-            m_Path.clear();
+            m_Path.Clear();
             m_CreateTime = 0x0;
             m_ModTime = 0x0;
             m_Size = 0x0;
         }
 
-        tstring         m_Path;
-        uint64_t                 m_CreateTime;
-        uint64_t                 m_ModTime;
-        uint64_t                 m_Size;
-        uint32_t                 m_Flags;
+        Path      m_Path;
+        uint64_t  m_CreateTime;
+        uint64_t  m_ModTime;
+        uint64_t  m_Size;
     };
 
     class FOUNDATION_API Directory
     {
     public:
         Directory();
-        Directory(const tstring &path, const tstring &spec = TXT( "*.*" ), uint32_t flags = DirectoryFlags::Default);
+        Directory( const Path& path, const tstring& spec = TXT( "*.*" ), uint32_t flags = DirectoryFlags::Default );
         ~Directory();
 
         bool IsDone();
@@ -70,21 +57,21 @@ namespace Helium
         const DirectoryItem& GetItem();
 
         void Reset();
-        bool Open(const tstring &path, const tstring &spec = TXT( "*.*" ), uint32_t flags = DirectoryFlags::Default);
+        bool Open(const Path& path, const tstring& spec = TXT( "*.*" ), uint32_t flags = DirectoryFlags::Default);
 
-        static void GetFiles( const tstring& path, std::set< Helium::Path >& paths, const tstring& spec = TXT( "*.*" ), bool recursive = false );
+        static void GetFiles( const Path& path, std::set< Helium::Path >& paths, const tstring& spec = TXT( "*.*" ), bool recursive = false );
         void GetFiles( std::set< Helium::Path >& paths, const tstring& spec = TXT( "*.*" ), bool recursive = false );
 
     private:
-        bool Find(const tstring& query = TXT( "" ));
+        bool Find( const tstring& query = TXT( "" ) );
         void Close();
 
-        tstring         m_Path;
-        tstring         m_Spec;
-        uint32_t                 m_Flags;
-        DirectoryHandle     m_Handle;
-        DirectoryItem       m_Item;
-        bool                m_Done;
+        Path             m_Path;
+        tstring          m_Spec;
+        uint32_t         m_Flags;
+        DirectoryHandle  m_Handle;
+        DirectoryItem    m_Item;
+        bool             m_Done;
     };
 
     typedef Helium::Signature< const DirectoryItem&> DirectoryItemSignature;

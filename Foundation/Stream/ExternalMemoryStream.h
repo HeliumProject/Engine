@@ -1,20 +1,11 @@
-//----------------------------------------------------------------------------------------------------------------------
-// ExternalMemoryStream.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_EXTERNAL_MEMORY_STREAM_H
-#define LUNAR_CORE_EXTERNAL_MEMORY_STREAM_H
 
-#include "Core/Stream.h"
+#include "Foundation/Stream/Stream.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Stream for reading from and writing to a pre-allocated memory buffer.
-    class LUNAR_CORE_API ExternalMemoryStream : public Stream
+    class FOUNDATION_API ExternalMemoryStream : public Stream
     {
     public:
         /// @name Construction/Destruction
@@ -63,6 +54,4 @@ namespace Lunar
     };
 }
 
-#include "Core/ExternalMemoryStream.inl"
-
-#endif  // LUNAR_CORE_EXTERNAL_MEMORY_STREAM_H
+#include "Foundation/Stream/ExternalMemoryStream.inl"

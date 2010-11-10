@@ -12,7 +12,7 @@
 #include "Class.h"
 #include "StringPool.h"
 #include "Exceptions.h"
-#include "Stream.h" 
+#include "ArchiveStream.h" 
 
 #include "Platform/Assert.h"
 #include "Foundation/Automation/Event.h"

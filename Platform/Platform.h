@@ -65,3 +65,7 @@ namespace Lunar
 {
     using namespace Helium;
 }
+namespace Helium
+{
+    using namespace Lunar;
+}

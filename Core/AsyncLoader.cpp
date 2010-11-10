@@ -9,8 +9,8 @@
 #include "Core/AsyncLoader.h"
 
 #include "Core/File.h"
-#include "Core/FileStream.h"
-#include "Core/BufferedStream.h"
+#include "Foundation/Stream/FileStream.h"
+#include "Foundation/Stream/BufferedStream.h"
 
 namespace Lunar
 {

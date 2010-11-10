@@ -1,7 +1,7 @@
 //#include "CorePch.h"
 #include "Foundation/Stream/BufferedStream.h"
 
-#include "Core/Memory.h"
+#include "Platform/Memory.h"
 
 using namespace Helium;
 

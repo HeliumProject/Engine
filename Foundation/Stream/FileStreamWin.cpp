@@ -1,5 +1,7 @@
 //#include "CorePch.h"
 
+#include "Platform/Platform.h"
+
 #if HELIUM_OS_WIN
 
 #include "Foundation/Stream/FileStreamWin.h"
@@ -10,7 +12,7 @@
 #define _CREATE_FILE CreateFileA
 #endif
 
-using namespace Helium
+using namespace Helium;
 
 /// Constructor.
 FileStreamWin::FileStreamWin()

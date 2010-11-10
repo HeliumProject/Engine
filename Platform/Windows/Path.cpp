@@ -9,6 +9,12 @@ const tchar_t Helium::PathSeparator = TXT('\\');
 
 #pragma comment( lib, "Version.lib" )
 
+#if HELIUM_UNICODE
+#define _CREATE_DIRECTORY CreateDirectoryW
+#else
+#define _CREATE_DIRECTORY CreateDirectoryA
+#endif
+
 bool Helium::GetFullPath( const tchar_t* path, tstring& fullPath )
 {
     tchar_t* full = new tchar_t[ PLATFORM_PATH_MAX ];
@@ -71,7 +77,7 @@ bool Helium::MakePath( const tchar_t* path )
     {
         if ( ( (*currentDirectory.rbegin()) != TXT(':') ) && ( _tstati64( currentDirectory.c_str(), &statInfo ) != 0 ) )
         {
-            if ( !CreateDirectory( currentDirectory.c_str(), NULL ) )
+            if ( !_CREATE_DIRECTORY( currentDirectory.c_str(), NULL ) )
             {
                 return false;
             }

@@ -6,6 +6,11 @@
 #define HELIUM_USE_TBB_READ_WRITE_LOCK 1
 
 #if HELIUM_USE_TBB_READ_WRITE_LOCK
+#pragma TODO( "tbb/reader_writer_lock.h includes windows.h; evaluate alternatives or enabling of precompiled headers." )
+#if HELIUM_OS_WIN
+// Make sure our Windows.h gets included before tbb/reader_writer_lock.h attempts to include <windows.h>.
+#include "Platform/Windows/Windows.h"
+#endif
 #include "tbb/reader_writer_lock.h"
 #endif
 

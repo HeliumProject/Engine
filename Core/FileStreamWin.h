@@ -15,6 +15,9 @@
 
 #include "Core/FileStream.h"
 
+#pragma TODO( "LUNAR MERGE - Address dependency on Windows.h" )
+#include "Platform/Windows/Windows.h"
+
 namespace Lunar
 {
     /// Windows file stream implementation.

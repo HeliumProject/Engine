@@ -10,7 +10,6 @@
 #define LUNAR_CORE_NAME_H
 
 #include "Core/String.h"
-#include "Core/Threading.h"
 #include "Core/HashFunctions.h"
 
 namespace Lunar

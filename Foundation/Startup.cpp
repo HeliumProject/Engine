@@ -487,38 +487,36 @@ static DWORD ProcessUnhandledCxxException( LPEXCEPTION_POINTERS info )
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
-static Helium::Thread::Return StandardThreadTryExcept( Helium::Thread::Entry entry, Helium::Thread::Param param )
+static void StandardThreadTryExcept( Helium::CallbackThread::Entry entry, void* param )
 {
     if (Helium::IsDebuggerPresent())
     {
-        return entry( param );
+        entry( param );
     }
     else
     {
         __try
         {
-            return entry( param );
+            entry( param );
         }
         __except( ProcessUnhandledCxxException( GetExceptionInformation() ) )
         {
             ::ExitProcess( -1 ); // propagating the exception up doesn't lead to a good situation, just shut down
         }
-
-        return -1;
     }
 }
 
-static Helium::Thread::Return StandardThreadTryCatch( Helium::Thread::Entry entry, Helium::Thread::Param param )
+static void StandardThreadTryCatch( Helium::CallbackThread::Entry entry, void* param )
 {
     if ( Helium::IsDebuggerPresent() )
     {
-        return StandardThreadTryExcept( entry, param );
+        StandardThreadTryExcept( entry, param );
     }
     else
     {
         try
         {
-            return StandardThreadTryExcept( entry, param );
+            StandardThreadTryExcept( entry, param );
         }
         catch ( const Helium::Exception& ex )
         {
@@ -529,27 +527,25 @@ static Helium::Thread::Return StandardThreadTryCatch( Helium::Thread::Entry entr
     }
 }
 
-static Helium::Thread::Return StandardThreadEntry( Helium::Thread::Entry entry, Helium::Thread::Param param )
+static void StandardThreadEntry( Helium::CallbackThread::Entry entry, void* param )
 {
     // any normal thread startup work would go here
-    return StandardThreadTryCatch( entry, param );
+    StandardThreadTryCatch( entry, param );
 }
 
-Helium::Thread::Return Helium::StandardThread( Helium::Thread::Entry entry, Helium::Thread::Param param )
+void Helium::StandardThread( Helium::CallbackThread::Entry entry, void* param )
 {
     if (Helium::IsDebuggerPresent())
     {
-        return StandardThreadEntry( entry, param );
+        StandardThreadEntry( entry, param );
     }
     else
     {
         Debug::InitializeExceptionListener();
 
-        Helium::Thread::Return result = -1;
-
         __try
         {
-            result = StandardThreadEntry( entry, param );
+            StandardThreadEntry( entry, param );
         }
         __except( ( g_ShutdownComplete || Helium::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), true, true ) )
         {
@@ -557,8 +553,6 @@ Helium::Thread::Return Helium::StandardThread( Helium::Thread::Entry entry, Heli
         }
 
         Debug::CleanupExceptionListener();
-
-        return result;
     }
 }
 

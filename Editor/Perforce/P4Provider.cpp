@@ -54,8 +54,8 @@ Provider::~Provider()
 
 void Provider::Initialize()
 {
-    Helium::Thread::Entry entry = &Helium::Thread::EntryHelper<Provider, &Provider::ThreadEntry>;
-    if ( !m_Thread.Create( entry, this, "Perforce Transaction Thread" ) )
+    Helium::CallbackThread::Entry entry = &Helium::CallbackThread::EntryHelper<Provider, &Provider::ThreadEntry>;
+    if ( !m_Thread.Create( entry, this, TXT( "Perforce Transaction Thread" ) ) )
     {
         throw Perforce::Exception( TXT( "Unable to create thread for perforce transaction" ) );
     }
@@ -73,7 +73,7 @@ void Provider::Cleanup()
 
         m_Shutdown = true;
         m_Execute.Signal();
-        m_Thread.Wait();
+        m_Thread.Join();
     }
 }
 

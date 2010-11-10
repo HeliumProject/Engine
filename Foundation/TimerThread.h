@@ -25,7 +25,7 @@ namespace Helium
     class FOUNDATION_API TimerThread
     {
     public:
-        TimerThread( const std::string& timerName, int32_t intervalInMilliseconds, bool singleShot = false )
+        TimerThread( const tstring& timerName, int32_t intervalInMilliseconds, bool singleShot = false )
             : m_Name( timerName )
             , m_Interval( intervalInMilliseconds )
             , m_SingleShot( singleShot )
@@ -78,14 +78,14 @@ namespace Helium
         void Fire();
 
     private:
-        std::string m_Name;
+        tstring m_Name;
         int32_t m_Interval;
         bool m_SingleShot;
 
         TimerTickSignature::Event m_TimerTickEvent;
 
         bool   m_Alive;
-        Thread m_Thread;
+        CallbackThread m_Thread;
         Timer  m_Timer;
     };
 }

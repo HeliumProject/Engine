@@ -137,8 +137,7 @@ project "Platform"
 	}
 	files
 	{
-		"Platform/*.h",
-		"Platform/*.cpp",
+		"Platform/*",
 		"Platform/Gcc/*",
 		"Platform/Math/*",
 		"Platform/Msc/*",

@@ -1,17 +1,17 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Memory.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
-// Note that we do not use pre-compiled headers for this file so as to allow including "Core/Memory.h" without the
+// Note that we do not use pre-compiled headers for this file so as to allow including "Platform/Memory.h" without the
 // inline, module-specific "new"/"delete" overrides.
 
-#include "CorePch.h"
-#include "Core/Memory.h"
+//#include "CorePch.h"
+#include "Platform/Memory.h"
 
 #include "Platform/Thread.h"
+
+// Define the memory heap for the current module and include the "new"/"delete" operator implementations.
+L_DEFINE_DEFAULT_MODULE_HEAP( Platform );
+
+#if HELIUM_SHARED
+#include "Platform/NewDelete.h"
+#endif
 
 namespace Lunar
 {

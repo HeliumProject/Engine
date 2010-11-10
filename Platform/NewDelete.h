@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// NewDelete.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_NEW_DELETE_H
-#define LUNAR_CORE_NEW_DELETE_H
 
 #ifndef L_NEW_DELETE_SPEC
 #define L_NEW_DELETE_SPEC
@@ -108,5 +99,3 @@ L_NEW_DELETE_SPEC void operator delete[]( void* pMemory, const std::nothrow_t& )
 {
     Lunar::DefaultAllocator().Free( pMemory );
 }
-
-#endif  // LUNAR_CORE_NEW_DELETE_H

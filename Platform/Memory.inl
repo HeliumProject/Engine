@@ -27,7 +27,7 @@ namespace Lunar
         return m_pNextHeap;
     }
 
-#if !L_RELEASE
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
     /// Get the debugging name associated with this heap.
     ///
     /// @return  Heap name string.
@@ -562,9 +562,9 @@ namespace Lunar
     }
 }
 
-#if !L_DEBUG
+#if !HELIUM_DEBUG
 #define L_NEW_DELETE_SPEC HELIUM_FORCEINLINE
-#include "Core/NewDelete.h"
+#include "Platform/NewDelete.h"
 #undef L_NEW_DELETE_SPEC
 #endif
 

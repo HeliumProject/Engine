@@ -1,4 +1,4 @@
-#include "Memory.h"
+#include "Platform/Windows/MemoryProfiler.h"
 #include "Platform/Profile.h"
 #include "Platform/PlatformUtility.h"
 #include "Platform/Windows/Windows.h"

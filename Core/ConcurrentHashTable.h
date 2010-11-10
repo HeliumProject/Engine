@@ -9,7 +9,7 @@
 #ifndef LUNAR_CORE_CONCURRENT_HASH_TABLE_H
 #define LUNAR_CORE_CONCURRENT_HASH_TABLE_H
 
-#include "Core/DynArray.h"
+#include "Platform/DynArray.h"
 
 namespace Lunar
 {

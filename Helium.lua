@@ -134,6 +134,7 @@ project "Platform"
 	defines
 	{
 		"PLATFORM_EXPORTS",
+		"L_MODULE_HEAP_FUNCTION=GetPlatformDefaultHeap",
 	}
 	files
 	{

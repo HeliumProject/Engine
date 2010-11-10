@@ -6,10 +6,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_CORE_MEMORY_H
-#define LUNAR_CORE_MEMORY_H
 
-#include "Core/Core.h"
 #include "Platform/Types.h"
 #include "Platform/Math/Simd.h"
 #include "Platform/Utility.h"
@@ -33,7 +30,7 @@
 ///
 /// @param[in] OBJECT_NAME  Name of the memory heap object.
 /// @param[in] NAME_STRING  Name string to assign to the heap.
-#if L_RELEASE
+#if HELIUM_RELEASE || HELIUM_PROFILE
 #define L_DYNAMIC_MEMORY_HEAP( OBJECT_NAME, NAME_STRING ) Lunar::DynamicMemoryHeap OBJECT_NAME
 #else
 #define L_DYNAMIC_MEMORY_HEAP( OBJECT_NAME, NAME_STRING ) Lunar::DynamicMemoryHeap OBJECT_NAME( NAME_STRING )
@@ -44,7 +41,7 @@
 /// @param[in] OBJECT_NAME  Name of the memory heap object.
 /// @param[in] NAME_STRING  Name string to assign to the heap.
 /// @param[in] CAPACITY     Heap capacity, in bytes.
-#if L_RELEASE
+#if HELIUM_RELEASE || HELIUM_PROFILE
 #define L_DYNAMIC_MEMORY_HEAP_CAP( OBJECT_NAME, NAME_STRING, CAPACITY ) Lunar::DynamicMemoryHeap OBJECT_NAME( CAPACITY )
 #else
 #define L_DYNAMIC_MEMORY_HEAP_CAP( OBJECT_NAME, NAME_STRING, CAPACITY ) \
@@ -133,12 +130,12 @@
 
 #ifndef L_ENABLE_MEMORY_TRACKING
 /// Non-zero if general memory tracking should be enabled.
-#define L_ENABLE_MEMORY_TRACKING ( !L_RELEASE )
+#define L_ENABLE_MEMORY_TRACKING ( !HELIUM_RELEASE )
 #endif
 
 #ifndef L_ENABLE_MEMORY_TRACKING_VERBOSE
 /// Non-zero if detailed allocation tracking should be enabled.
-#define L_ENABLE_MEMORY_TRACKING_VERBOSE ( 0/*L_ENABLE_MEMORY_TRACKING && L_DEBUG*/ )
+#define L_ENABLE_MEMORY_TRACKING_VERBOSE ( 0/*L_ENABLE_MEMORY_TRACKING && HELIUM_DEBUG*/ )
 #endif
 
 //@}
@@ -189,7 +186,7 @@ namespace Lunar
     /// - Reallocate() should behave just as if Free() was called on the memory address provided if the size is null.
     /// - The alignment parameter of AllocateAligned() should be expected to be a power of two.
     /// - Free() should run with no ill effects if a null pointer is provided for the memory address to free.
-    class LUNAR_CORE_API MemoryHeap : NonCopyable
+    class PLATFORM_API MemoryHeap : NonCopyable
     {
     public:
         /// @name Allocation Interface
@@ -208,7 +205,7 @@ namespace Lunar
     /// from the system using PhysicalMemory::Allocate() and PhysicalMemory::Free(), and allocations within these blocks
     /// are managed internally using nedmalloc (http://www.nedprod.com/programs/portable/nedmalloc/) to provide
     /// efficient scalability across multiple threads.
-    class LUNAR_CORE_API DynamicMemoryHeap : public MemoryHeap
+    class PLATFORM_API DynamicMemoryHeap : public MemoryHeap
     {
     public:
 #if L_ENABLE_MEMORY_TRACKING_VERBOSE
@@ -226,7 +223,7 @@ namespace Lunar
         /// @name Construction/Destruction
         //@{
         DynamicMemoryHeap( size_t capacity = 0 );
-#if !L_RELEASE
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
         DynamicMemoryHeap( const tchar_t* pName, size_t capacity = 0 );
 #endif
         virtual ~DynamicMemoryHeap();
@@ -249,7 +246,7 @@ namespace Lunar
 
         /// @name Debugging
         //@{
-#if !L_RELEASE
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
         inline const tchar_t* GetName() const;
 #endif
 
@@ -277,7 +274,7 @@ namespace Lunar
     private:
         /// mspace instance.
         void* m_pMspace;
-#if !L_RELEASE
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
         /// Heap name (for debugging).
         const tchar_t* m_pName;
 #endif
@@ -460,7 +457,7 @@ namespace Lunar
     /// This provides an interface to a StackMemoryHeap instance specifically for the current thread.  This heap is a
     /// growable heap that can be used for various temporary allocations.  Note that since jobs can be run on any
     /// thread, you should never attempt to leave an allocation around for another job to free.
-    class LUNAR_CORE_API ThreadLocalStackAllocator
+    class PLATFORM_API ThreadLocalStackAllocator
     {
     public:
         /// Size of each stack block.
@@ -499,12 +496,12 @@ namespace Lunar
     extern DynamicMemoryHeap& L_MODULE_HEAP_FUNCTION();
 #else
     /// Get the default heap to use for dynamic allocations.
-    LUNAR_CORE_API DynamicMemoryHeap& GetDefaultHeap();
+    PLATFORM_API DynamicMemoryHeap& GetDefaultHeap();
 #endif
 
 #if L_USE_EXTERNAL_HEAP
     /// Get the default heap to use for dynamic allocations from external libraries.
-    LUNAR_CORE_API DynamicMemoryHeap& GetExternalHeap();
+    PLATFORM_API DynamicMemoryHeap& GetExternalHeap();
 #endif
 
     /// @defgroup newdeletehelper "new"/"delete" Helper Functions
@@ -535,11 +532,9 @@ namespace Lunar
 inline void* operator new( size_t size, Lunar::MemoryHeap& rHeap );
 //@}
 
-#include "Core/Memory.inl"
+#include "Platform/Memory.inl"
 
 #if HELIUM_OS_WIN
 #include "Platform/Windows/Windows.h"
-#include "Core/MemoryWin.inl"
+#include "Platform/MemoryWin.inl"
 #endif
-
-#endif  // LUNAR_CORE_MEMORY_H

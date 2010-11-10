@@ -108,13 +108,13 @@ static void PrintfWrapper( const char* pFormat, ... )
 #define CORRUPTION_ERROR_ACTION( m ) HELIUM_ASSERT_MSG_FALSE( TXT( "Memory corruption detected!" ) )
 #define USAGE_ERROR_ACTION( m, p ) HELIUM_ASSERT_MSG_FALSE( TXT( "Incorrect realloc()/free() usage detected!" ) )
 
-#if L_RELEASE
+#if HELIUM_RELEASE || HELIUM_PROFILE
 #define INSECURE 1
 #else
 #define INSECURE 0
 #endif
 
-#if L_DEBUG
+#if HELIUM_DEBUG
 #define DEBUG 1
 #endif
 
@@ -157,7 +157,7 @@ namespace Lunar
     ///
     /// @param[in] capacity  Fixed size (in bytes) of the memory heap to create, or zero to create a growable heap.
     MEMORY_HEAP_CLASS_NAME::MEMORY_HEAP_CLASS_NAME( size_t capacity )
-#if !L_RELEASE
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
         : m_pName( NULL )
 #endif
 #if L_ENABLE_MEMORY_TRACKING_VERBOSE
@@ -167,7 +167,7 @@ namespace Lunar
         ConstructNoName( capacity );
     }
 
-#if !L_RELEASE
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
     /// Constructor.
     ///
     /// @param[in] pName     Name to associate with the memory heap (for debugging purposes).  Note that the heap holds

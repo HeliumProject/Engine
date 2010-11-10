@@ -2,7 +2,7 @@
 
 #include "Foundation/Stream/Stream.h"
 
-#include "Core/DynArray.h"
+#include "Platform/DynArray.h"
 
 namespace Helium
 {

@@ -11,7 +11,7 @@
 
 #include "Core/Core.h"
 #include "Platform/Utility.h"
-#include "Core/Memory.h"
+#include "Platform/Memory.h"
 #include "Platform/Assert.h"
 #include "Core/ArrayIterator.h"
 
@@ -156,6 +156,6 @@ namespace Lunar
     };
 }
 
-#include "Core/DynArray.inl"
+#include "Platform/DynArray.inl"
 
 #endif  // LUNAR_CORE_DYN_ARRAY_H

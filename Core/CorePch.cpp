@@ -11,7 +11,7 @@
 L_DEFINE_DEFAULT_MODULE_HEAP( Core );
 
 #if L_SHARED
-#include "Core/NewDelete.h"
+#include "Platform/NewDelete.h"
 #endif
 
 // If not building with exception support, we need to provide our own implementation for boost::throw_exception().

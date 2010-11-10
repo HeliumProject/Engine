@@ -1,16 +1,11 @@
-//----------------------------------------------------------------------------------------------------------------------
-// DynamicMemoryHeap.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
-#include "CorePch.h"
-#include "Core/Memory.h"
+//#include "CorePch.h"
+#include "Platform/Memory.h"
 
 #include "Platform/Atomic.h"
 #include "Platform/Debug.h"
+#include "Platform/Mutex.h"
 #include "Platform/ReadWriteLock.h"
+#include "Platform/Trace.h"
 
 #ifdef _MSC_VER
 #pragma warning( push )
@@ -183,7 +178,7 @@ namespace Lunar
         for( DynamicMemoryHeap* pHeap = sm_pGlobalHeapListHead; pHeap != NULL; pHeap = pHeap->GetNextHeap() )
         {
             const tchar_t* pName = NULL;
-#if !L_RELEASE
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
             pName = pHeap->GetName();
 #endif
             if( !pName )

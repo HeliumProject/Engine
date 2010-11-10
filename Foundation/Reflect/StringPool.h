@@ -6,7 +6,7 @@
 #include "Platform/Types.h"
 
 #include "API.h"
-#include "Stream.h" 
+#include "ArchiveStream.h" 
 
 //
 //  String Pool Binary Format:

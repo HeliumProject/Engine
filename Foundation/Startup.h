@@ -96,11 +96,11 @@ namespace Helium
     // Thread entry wrapper
     //  void thread()
     //  {
-    //    return StandardThread( &::Thread, param );
+    //    StandardThread( &::Thread, param );
     //  }
     //
 
-    FOUNDATION_API Helium::Thread::Return StandardThread( Helium::Thread::Entry entry, Helium::Thread::Param param );
+    FOUNDATION_API void StandardThread( Helium::CallbackThread::Entry entry, void* param );
 
     //
     // Main wrappers for console applications

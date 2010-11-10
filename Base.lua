@@ -239,7 +239,7 @@ Helium.DoLunarModuleProjectSettings = function( tokenPrefix, moduleName, moduleN
 
 	defines
 	{
-		"L_MODULE_HEAP_FUNCTION=Get" .. moduleName .. "DefaultHeap"
+		"HELIUM_MODULE_HEAP_FUNCTION=Get" .. moduleName .. "DefaultHeap"
 	}
 
 	files

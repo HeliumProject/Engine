@@ -9,8 +9,8 @@
 #include "Core/AsyncLoader.h"
 
 #include "Core/File.h"
-#include "Core/FileStream.h"
-#include "Core/BufferedStream.h"
+#include "Foundation/Stream/FileStream.h"
+#include "Foundation/Stream/BufferedStream.h"
 
 namespace Lunar
 {
@@ -43,7 +43,7 @@ namespace Lunar
         m_pWorker = new LoadWorker;
         HELIUM_ASSERT( m_pWorker );
 
-        m_pThread = new Thread( m_pWorker, String( TXT( "Async loading" ) ) );
+        m_pThread = new RunnableThread( m_pWorker, TXT( "Async loading" ) );
         HELIUM_ASSERT( m_pThread );
         HELIUM_VERIFY( m_pThread->Start() );
 

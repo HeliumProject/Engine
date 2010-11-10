@@ -13,6 +13,7 @@
 
 #include "Platform/Condition.h"
 #include "Platform/ReadWriteLock.h"
+#include "Platform/Thread.h"
 
 #ifdef _MSC_VER
 #pragma warning( push )
@@ -145,7 +146,7 @@ namespace Lunar
         ObjectPool< Request > m_requestPool;
 
         /// Async loading thread.
-        Thread* m_pThread;
+        RunnableThread* m_pThread;
         /// Async loading thread worker.
         LoadWorker* m_pWorker;
 

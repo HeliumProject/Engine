@@ -134,11 +134,11 @@ project "Platform"
 	defines
 	{
 		"PLATFORM_EXPORTS",
+		"HELIUM_MODULE_HEAP_FUNCTION=GetPlatformDefaultHeap",
 	}
 	files
 	{
-		"Platform/*.h",
-		"Platform/*.cpp",
+		"Platform/*",
 		"Platform/Gcc/*",
 		"Platform/Math/*",
 		"Platform/Msc/*",
@@ -177,6 +177,7 @@ project "Foundation"
 	defines
 	{
 		"FOUNDATION_EXPORTS",
+		"HELIUM_MODULE_HEAP_FUNCTION=GetFoundationDefaultHeap",
 	}
 	includedirs
 	{
@@ -202,6 +203,7 @@ project "Pipeline"
 	defines
 	{
 		"PIPELINE_EXPORTS",
+		"HELIUM_MODULE_HEAP_FUNCTION=GetPipelineDefaultHeap",
 	}
 	includedirs
 	{
@@ -251,6 +253,10 @@ project "Pipeline"
 project "Editor"
 	kind "ConsoleApp"
 	language "C++"
+	defines
+	{
+		"HELIUM_MODULE_HEAP_FUNCTION=GetEditorAppDefaultHeap",  -- XXX TMC TODO: Change this to GetEditorDefaultHeap once name conflicts with Lunar/Editor are resolved.
+	}
 	files
 	{
 		"Editor/**.h",

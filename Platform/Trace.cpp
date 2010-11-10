@@ -2,6 +2,7 @@
 #include "Platform/Trace.h"
 
 #include "Platform/Debug.h"
+#include "Platform/Memory.h"
 
 #include <cstdarg>
 
@@ -94,12 +95,6 @@ void Helium::Trace::OutputVa( ETraceLevel level, const tchar_t* pFormat, va_list
 {
     HELIUM_ASSERT( pFormat );
 
-#pragma TODO( "LUNAR MERGE - Re-enable once memory routines have been merged over." )
-#if 1
-    ( void )level;
-    ( void )pFormat;
-    ( void )argList;
-#else
     MutexScopeLock scopeLock( m_mutex );
 
     if( level < m_level )
@@ -151,7 +146,6 @@ void Helium::Trace::OutputVa( ETraceLevel level, const tchar_t* pFormat, va_list
 
         allocator.Free( pBuffer );
     }
-#endif
 }
 
 /// Write out a message to this log.

@@ -15,6 +15,9 @@
 
 #include "Core/DirectoryIterator.h"
 
+#pragma TODO( "LUNAR MERGE - Address dependency on Windows.h" )
+#include "Platform/Windows/Windows.h"
+
 namespace Lunar
 {
     /// Windows DirectoryIterator implementation.

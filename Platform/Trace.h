@@ -120,7 +120,7 @@ namespace Helium
 /// Write out a message to the trace output.
 ///
 /// @param[in] LEVEL  Trace level.
-/// @param[in] ...    Message.  This can be a "printf"-style format string and arguments or a Lunar::String.
+/// @param[in] ...    Message.  This can be a "printf"-style format string and arguments or a Helium::String.
 #define HELIUM_TRACE( LEVEL, ... )
 
 /// Write out a formatted message to the trace output using a variable argument list.

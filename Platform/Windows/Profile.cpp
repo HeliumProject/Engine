@@ -2,7 +2,7 @@
 #include "Platform/PlatformUtility.h"
 #include "Platform/Windows/Windows.h"
 
-#include "Memory.h"
+#include "Platform/Windows/MemoryProfiler.h"
 
 #include <stdio.h>
 #include <string.h>

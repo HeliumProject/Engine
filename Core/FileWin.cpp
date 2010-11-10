@@ -19,8 +19,10 @@
 
 #if HELIUM_UNICODE
 #define _GET_FILE_ATTRIBUTES_EX GetFileAttributesExW
+#define _CREATE_DIRECTORY CreateDirectoryW
 #else
 #define _GET_FILE_ATTRIBUTES_EX GetFileAttributesExA
+#define _CREATE_DIRECTORY CreateDirectoryA
 #endif
 
 // Default user data directory (if the application name is not set).
@@ -343,7 +345,7 @@ namespace Lunar
         HELIUM_ASSERT( pPath );
 
         EDirectoryCreateResult result = DIRECTORY_CREATE_RESULT_SUCCESS;
-        if( !::CreateDirectory( pPath, NULL ) )
+        if( !::_CREATE_DIRECTORY( pPath, NULL ) )
         {
             DWORD createError = GetLastError();
             result =

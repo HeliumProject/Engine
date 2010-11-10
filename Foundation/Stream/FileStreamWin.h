@@ -6,6 +6,9 @@
 
 #include "Foundation/Stream/FileStream.h"
 
+#pragma TODO( "LUNAR MERGE - Address dependency on Windows.h" )
+#include "Platform/Windows/Windows.h"
+
 namespace Helium
 {
     /// Windows file stream implementation.

@@ -3,7 +3,7 @@
 #include "Platform/Process.h"
 #include "Platform/Exception.h"
 #include "Platform/Environment.h"
-#include "Platform/Windows/Memory.h"
+#include "Platform/Windows/MemoryProfiler.h"
 #include "Platform/Windows/Console.h"
 #include "Platform/Windows/Windows.h"
 

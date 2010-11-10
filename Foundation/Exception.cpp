@@ -3,7 +3,7 @@
 #include "Platform/Assert.h"
 #include "Platform/String.h"
 #include "Platform/Windows/Console.h"
-#include "Platform/Windows/Memory.h"
+#include "Platform/Windows/MemoryProfiler.h"
 #include "Platform/Windows/Windows.h"
 
 #include "Foundation/Log.h"

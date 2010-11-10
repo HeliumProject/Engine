@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Memory.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
 
 #include "Platform/Types.h"
@@ -16,14 +9,14 @@
 /// @defgroup defaultheapmacro Default Module Memory Heap Declaration
 //@{
 
-#ifndef L_USE_MODULE_HEAPS
+#ifndef HELIUM_USE_MODULE_HEAPS
 /// Non-zero if module-specific heaps should be enabled.
-#define L_USE_MODULE_HEAPS 1
+#define HELIUM_USE_MODULE_HEAPS 1
 #endif
 
-#ifndef L_USE_EXTERNAL_HEAP
+#ifndef HELIUM_USE_EXTERNAL_HEAP
 /// Non-zero if a separate heap should be used for external libraries.
-#define L_USE_EXTERNAL_HEAP 1
+#define HELIUM_USE_EXTERNAL_HEAP 1
 #endif
 
 /// Define a dynamic memory heap, associating it with the given name in non-release builds.
@@ -31,9 +24,9 @@
 /// @param[in] OBJECT_NAME  Name of the memory heap object.
 /// @param[in] NAME_STRING  Name string to assign to the heap.
 #if HELIUM_RELEASE || HELIUM_PROFILE
-#define L_DYNAMIC_MEMORY_HEAP( OBJECT_NAME, NAME_STRING ) Lunar::DynamicMemoryHeap OBJECT_NAME
+#define HELIUM_DYNAMIC_MEMORY_HEAP( OBJECT_NAME, NAME_STRING ) Helium::DynamicMemoryHeap OBJECT_NAME
 #else
-#define L_DYNAMIC_MEMORY_HEAP( OBJECT_NAME, NAME_STRING ) Lunar::DynamicMemoryHeap OBJECT_NAME( NAME_STRING )
+#define HELIUM_DYNAMIC_MEMORY_HEAP( OBJECT_NAME, NAME_STRING ) Helium::DynamicMemoryHeap OBJECT_NAME( NAME_STRING )
 #endif
 
 /// Define a fixed-capacity dynamic memory heap, associating it with the given name in non-release builds.
@@ -42,10 +35,11 @@
 /// @param[in] NAME_STRING  Name string to assign to the heap.
 /// @param[in] CAPACITY     Heap capacity, in bytes.
 #if HELIUM_RELEASE || HELIUM_PROFILE
-#define L_DYNAMIC_MEMORY_HEAP_CAP( OBJECT_NAME, NAME_STRING, CAPACITY ) Lunar::DynamicMemoryHeap OBJECT_NAME( CAPACITY )
+#define HELIUM_DYNAMIC_MEMORY_HEAP_CAP( OBJECT_NAME, NAME_STRING, CAPACITY ) \
+    Helium::DynamicMemoryHeap OBJECT_NAME( CAPACITY )
 #else
-#define L_DYNAMIC_MEMORY_HEAP_CAP( OBJECT_NAME, NAME_STRING, CAPACITY ) \
-    Lunar::DynamicMemoryHeap OBJECT_NAME( NAME_STRING, CAPACITY )
+#define HELIUM_DYNAMIC_MEMORY_HEAP_CAP( OBJECT_NAME, NAME_STRING, CAPACITY ) \
+    Helium::DynamicMemoryHeap OBJECT_NAME( NAME_STRING, CAPACITY )
 #endif
 
 /// Define the default memory heap for the current module.
@@ -54,30 +48,30 @@
 ///
 /// @param[in] MODULE_NAME  Name of the module.  This will be associated with the module's heap when debugging or
 ///                         viewing memory stats.
-#define L_DEFINE_DEFAULT_MODULE_HEAP( MODULE_NAME ) \
-    namespace Lunar \
+#define HELIUM_DEFINE_DEFAULT_MODULE_HEAP( MODULE_NAME ) \
+    namespace Helium \
     { \
-        DynamicMemoryHeap& L_MODULE_HEAP_FUNCTION() \
+        DynamicMemoryHeap& HELIUM_MODULE_HEAP_FUNCTION() \
         { \
-            static L_DYNAMIC_MEMORY_HEAP( moduleHeap, TXT( #MODULE_NAME ) ); \
+            static HELIUM_DYNAMIC_MEMORY_HEAP( moduleHeap, TXT( #MODULE_NAME ) ); \
             return moduleHeap; \
         } \
     }
 
-#if L_USE_MODULE_HEAPS
+#if HELIUM_USE_MODULE_HEAPS
     /// Default memory heap.  This exposes the memory heap for any module in which this file is included.
-    #define L_DEFAULT_HEAP Lunar::L_MODULE_HEAP_FUNCTION()
+    #define HELIUM_DEFAULT_HEAP Helium::HELIUM_MODULE_HEAP_FUNCTION()
 #else
     /// Default memory heap.
-    #define L_DEFAULT_HEAP Lunar::GetDefaultHeap()
+    #define HELIUM_DEFAULT_HEAP Helium::GetDefaultHeap()
 #endif
 
-#if L_USE_EXTERNAL_HEAP
+#if HELIUM_USE_EXTERNAL_HEAP
     /// Default dynamic memory heap for allocations from external libraries.
-    #define L_EXTERNAL_HEAP Lunar::GetExternalHeap()
+    #define HELIUM_EXTERNAL_HEAP Helium::GetExternalHeap()
 #else
     /// Default dynamic memory heap for allocations from external libraries.
-    #define L_EXTERNAL_HEAP L_DEFAULT_HEAP
+    #define HELIUM_EXTERNAL_HEAP HELIUM_DEFAULT_HEAP
 #endif
 
 //@}
@@ -87,55 +81,55 @@
 
 /// Create a new object using a specific heap or allocator.
 ///
-/// @param[in] ALLOCATOR  Reference to a Lunar::MemoryHeap or allocator from which to allocate memory.
+/// @param[in] ALLOCATOR  Reference to a Helium::MemoryHeap or allocator from which to allocate memory.
 /// @param[in] TYPE       Type of object to create.
 /// @param[in] ...        Optional parameter list.
 ///
 /// @return  Pointer to the newly created object, if successful.
 ///
-/// @see L_DELETE()
-#define L_NEW( ALLOCATOR, TYPE, ... ) new( ALLOCATOR ) TYPE( __VA_ARGS__ )
+/// @see HELIUM_DELETE()
+#define HELIUM_NEW( ALLOCATOR, TYPE, ... ) new( ALLOCATOR ) TYPE( __VA_ARGS__ )
 
 /// Create a new array of objects using a specific heap or allocator.
 ///
-/// @param[in] ALLOCATOR  Reference to a Lunar::MemoryHeap or allocator from which to allocate memory.
+/// @param[in] ALLOCATOR  Reference to a Helium::MemoryHeap or allocator from which to allocate memory.
 /// @param[in] TYPE       Type of object to create.
 /// @param[in] COUNT      Number of elements to create.
 ///
 /// @return  Pointer to the newly created array, if successful.
 ///
-/// @see L_DELETE_A()
-#define L_NEW_A( ALLOCATOR, TYPE, COUNT ) Lunar::NewArrayHelper< T >( ALLOCATOR, COUNT )
+/// @see HELIUM_DELETE_A()
+#define HELIUM_NEW_A( ALLOCATOR, TYPE, COUNT ) Helium::NewArrayHelper< T >( ALLOCATOR, COUNT )
 
 /// Destroy a single object allocated from a specific heap or allocator.
 ///
-/// @param[in] ALLOCATOR  Reference to a Lunar::MemoryHeap or allocator from which the object memory was allocated.
+/// @param[in] ALLOCATOR  Reference to a Helium::MemoryHeap or allocator from which the object memory was allocated.
 /// @param[in] OBJ        Pointer to the object to destroy.
 ///
-/// @see L_NEW()
-#define L_DELETE( ALLOCATOR, OBJ ) Lunar::DeleteHelper( ALLOCATOR, OBJ )
+/// @see HELIUM_NEW()
+#define HELIUM_DELETE( ALLOCATOR, OBJ ) Helium::DeleteHelper( ALLOCATOR, OBJ )
 
 /// Destroy an array of objects allocated from a specific heap or allocator.
 ///
-/// @param[in] ALLOCATOR  Reference to a Lunar::MemoryHeap or allocator from which the object memory was allocated.
+/// @param[in] ALLOCATOR  Reference to a Helium::MemoryHeap or allocator from which the object memory was allocated.
 /// @param[in] OBJ        Pointer to the array to destroy.
 ///
-/// @see L_NEW_A()
-#define L_DELETE_A( ALLOCATOR, OBJ ) Lunar::DeleteArrayHelper( ALLOCATOR, OBJ )
+/// @see HELIUM_NEW_A()
+#define HELIUM_DELETE_A( ALLOCATOR, OBJ ) Helium::DeleteArrayHelper( ALLOCATOR, OBJ )
 
 //@}
 
 /// @defgroup memdebug Memory Debug Settings
 //@{
 
-#ifndef L_ENABLE_MEMORY_TRACKING
+#ifndef HELIUM_ENABLE_MEMORY_TRACKING
 /// Non-zero if general memory tracking should be enabled.
-#define L_ENABLE_MEMORY_TRACKING ( !HELIUM_RELEASE )
+#define HELIUM_ENABLE_MEMORY_TRACKING ( !HELIUM_RELEASE )
 #endif
 
-#ifndef L_ENABLE_MEMORY_TRACKING_VERBOSE
+#ifndef HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
 /// Non-zero if detailed allocation tracking should be enabled.
-#define L_ENABLE_MEMORY_TRACKING_VERBOSE ( 0/*L_ENABLE_MEMORY_TRACKING && HELIUM_DEBUG*/ )
+#define HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE ( 0/*HELIUM_ENABLE_MEMORY_TRACKING && HELIUM_DEBUG*/ )
 #endif
 
 //@}
@@ -144,11 +138,8 @@ namespace Helium
 {
     class ReadWriteLock;
     class ThreadLocalPointer;
-}
 
-namespace Lunar
-{
-#if L_ENABLE_MEMORY_TRACKING_VERBOSE
+#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
     struct DynamicMemoryHeapVerboseTrackingData;
 #endif
 
@@ -156,21 +147,21 @@ namespace Lunar
     /// space (physical memory if possible).  Typically, most application will not use this directly, but will instead
     /// allocate using one of the provided heap allocators, which provide better management for most runtime
     /// allocations.
-    class PhysicalMemory
+    class PLATFORM_API PhysicalMemory
     {
     public:
         /// @name Memory Allocation
         //@{
-        inline static void* Allocate( size_t size );
-        inline static bool Free( void* pMemory, size_t size );
+        static void* Allocate( size_t size );
+        static bool Free( void* pMemory, size_t size );
         //@}
 
         /// @name Memory Information
         //@{
-        inline static size_t GetPageSize();
+        static size_t GetPageSize();
         //@}
 
-#if L_ENABLE_MEMORY_TRACKING
+#if HELIUM_ENABLE_MEMORY_TRACKING
     private:
         /// Number of bytes of physical memory currently allocated.
         static volatile size_t sm_bytesAllocated;
@@ -208,7 +199,7 @@ namespace Lunar
     class PLATFORM_API DynamicMemoryHeap : public MemoryHeap
     {
     public:
-#if L_ENABLE_MEMORY_TRACKING_VERBOSE
+#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
         /// Maximum number of allocations to include in an allocation backtrace.
         static const size_t BACKTRACE_DEPTH_MAX = 32;
 
@@ -250,7 +241,7 @@ namespace Lunar
         inline const tchar_t* GetName() const;
 #endif
 
-#if L_ENABLE_MEMORY_TRACKING
+#if HELIUM_ENABLE_MEMORY_TRACKING
         inline size_t GetAllocationCount() const;
         inline size_t GetBytesActual() const;
 #endif
@@ -264,7 +255,7 @@ namespace Lunar
         static void UnregisterCurrentThreadCache();
         //@}
 
-#if L_ENABLE_MEMORY_TRACKING
+#if HELIUM_ENABLE_MEMORY_TRACKING
         /// @name Memory Stat Support
         //@{
         static void LogMemoryStats();
@@ -284,14 +275,14 @@ namespace Lunar
         /// Next dynamic memory heap in the global list.
         DynamicMemoryHeap* volatile m_pNextHeap;
 
-#if L_ENABLE_MEMORY_TRACKING
+#if HELIUM_ENABLE_MEMORY_TRACKING
         /// Number of allocations.
         volatile size_t m_allocationCount;
         /// Total number of bytes actually allocated.
         volatile size_t m_bytesActual;
 #endif
 
-#if L_ENABLE_MEMORY_TRACKING_VERBOSE
+#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
         /// Verbose memory tracking data.
         DynamicMemoryHeapVerboseTrackingData* m_pVerboseTrackingData;
 #endif
@@ -299,7 +290,7 @@ namespace Lunar
         /// Head of the global list of dynamic memory heaps.
         static DynamicMemoryHeap* volatile sm_pGlobalHeapListHead;
 
-#if L_ENABLE_MEMORY_TRACKING_VERBOSE
+#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
         /// True to temporarily disable memory backtrace tracking.
         static volatile bool sm_bDisableBacktraceTracking;
 #endif
@@ -308,7 +299,7 @@ namespace Lunar
         //@{
         void ConstructNoName( size_t capacity );
 
-#if L_ENABLE_MEMORY_TRACKING
+#if HELIUM_ENABLE_MEMORY_TRACKING
         void AddAllocation( void* pMemory );
         void RemoveAllocation( void* pMemory );
 #endif
@@ -317,7 +308,7 @@ namespace Lunar
         /// @name Private Static Utility Functions
         //@{
         static ReadWriteLock& GetGlobalHeapListLock();
-#if L_ENABLE_MEMORY_TRACKING
+#if HELIUM_ENABLE_MEMORY_TRACKING
         static DynamicMemoryHeap* GetAllocationHeap( void* pMemory );
 #endif
         //@}
@@ -491,15 +482,15 @@ namespace Lunar
         //@}
     };
 
-#if L_USE_MODULE_HEAPS
+#if HELIUM_USE_MODULE_HEAPS
     /// Get the default heap to use for dynamic allocations from this module (not DLL-exported).
-    extern DynamicMemoryHeap& L_MODULE_HEAP_FUNCTION();
+    extern DynamicMemoryHeap& HELIUM_MODULE_HEAP_FUNCTION();
 #else
     /// Get the default heap to use for dynamic allocations.
     PLATFORM_API DynamicMemoryHeap& GetDefaultHeap();
 #endif
 
-#if L_USE_EXTERNAL_HEAP
+#if HELIUM_USE_EXTERNAL_HEAP
     /// Get the default heap to use for dynamic allocations from external libraries.
     PLATFORM_API DynamicMemoryHeap& GetExternalHeap();
 #endif
@@ -527,14 +518,9 @@ namespace Lunar
     //@}
 }
 
-/// @defgroup memoryheapnew Lunar::MemoryHeap "new" Overrides
+/// @defgroup memoryheapnew Helium::MemoryHeap "new" Overrides
 //@{
-inline void* operator new( size_t size, Lunar::MemoryHeap& rHeap );
+inline void* operator new( size_t size, Helium::MemoryHeap& rHeap );
 //@}
 
 #include "Platform/Memory.inl"
-
-#if HELIUM_OS_WIN
-#include "Platform/Windows/Windows.h"
-#include "Platform/MemoryWin.inl"
-#endif

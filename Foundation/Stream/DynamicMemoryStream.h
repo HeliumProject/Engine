@@ -1,22 +1,13 @@
-//----------------------------------------------------------------------------------------------------------------------
-// DynamicMemoryStream.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_DYNAMIC_MEMORY_STREAM_H
-#define LUNAR_CORE_DYNAMIC_MEMORY_STREAM_H
 
-#include "Core/Stream.h"
+#include "Foundation/Stream/Stream.h"
 
 #include "Core/DynArray.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Stream for reading from and writing to a dynamic memory buffer (backed using a DynArray of bytes).
-    class LUNAR_CORE_API DynamicMemoryStream : public Stream
+    class FOUNDATION_API DynamicMemoryStream : public Stream
     {
     public:
         /// @name Construction/Destruction
@@ -65,6 +56,4 @@ namespace Lunar
     };
 }
 
-#include "Core/DynamicMemoryStream.inl"
-
-#endif  // LUNAR_CORE_DYNAMIC_MEMORY_STREAM_H
+#include "Foundation/Stream/DynamicMemoryStream.inl"

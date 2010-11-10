@@ -1,24 +1,15 @@
-//----------------------------------------------------------------------------------------------------------------------
-// FileStreamWin.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_FILE_STREAM_WIN_H
-#define LUNAR_CORE_FILE_STREAM_WIN_H
 
-#include "Core/Core.h"
+#include "Foundation/API.h"
 
 #if HELIUM_OS_WIN
 
-#include "Core/FileStream.h"
+#include "Foundation/Stream/FileStream.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Windows file stream implementation.
-    class LUNAR_CORE_API FileStreamWin : public FileStream
+    class FOUNDATION_API FileStreamWin : public FileStream
     {
     public:
         /// @name Construction/Destruction
@@ -54,5 +45,3 @@ namespace Lunar
 }
 
 #endif  // HELIUM_OS_WIN
-
-#endif  // LUNAR_CORE_FILE_STREAM_WIN_H

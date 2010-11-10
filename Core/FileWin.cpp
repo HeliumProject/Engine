@@ -12,7 +12,7 @@
 #include "Core/File.h"
 
 #include "Core/Path.h"
-#include "Core/FileStreamWin.h"
+#include "Foundation/Stream/FileStreamWin.h"
 #include "Core/DirectoryIteratorWin.h"
 
 #include <ShlObj.h>

@@ -1,20 +1,11 @@
-//----------------------------------------------------------------------------------------------------------------------
-// ByteSwappingStream.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_BYTE_SWAPPING_STREAM_H
-#define LUNAR_CORE_BYTE_SWAPPING_STREAM_H
 
-#include "Core/Stream.h"
+#include "Foundation/Stream/Stream.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Stream wrapper that swaps the byte order of chunks of data read from or written to the stream.
-    class LUNAR_CORE_API ByteSwappingStream : public Stream
+    class FOUNDATION_API ByteSwappingStream : public Stream
     {
     public:
         /// @name Construction/Destruction
@@ -55,5 +46,3 @@ namespace Lunar
         Stream* m_pStream;
     };
 }
-
-#endif  // LUNAR_CORE_BYTE_SWAPPING_STREAM_H

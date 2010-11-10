@@ -1,20 +1,12 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Stream.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_STREAM_H
-#define LUNAR_CORE_STREAM_H
 
-#include "Core/Core.h"
+#include "Platform/Utility.h"
+#include "Foundation/API.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Byte stream interface.
-    class LUNAR_CORE_API Stream : NonCopyable
+    class FOUNDATION_API Stream : NonCopyable
     {
     public:
         /// Stream seek origin.
@@ -59,5 +51,3 @@ namespace Lunar
         //@}
     };
 }
-
-#endif  // LUNAR_CORE_STREAM_H

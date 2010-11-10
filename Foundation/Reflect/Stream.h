@@ -24,6 +24,11 @@ public:
 
     }
 
+    static null_codecvt& GetStaticInstance()
+    {
+        return sm_StaticInstance;
+    }
+
 protected:
     virtual result do_in( _St& _State , const _To* _F1 , const _To* _L1 , const _To*& _Mid1 , _E* F2 , _E* _L2 , _E*& _Mid2 ) const HELIUM_OVERRIDE
     {
@@ -53,6 +58,9 @@ protected:
     {
         return 2;
     }
+
+private:
+    static null_codecvt sm_StaticInstance;
 };
 
 #endif
@@ -427,7 +435,7 @@ namespace Helium
         public: 
             FileStream( const Path& path, bool write, const ByteOrder byteOrder = Helium::PlatformByteOrder )
                 : m_Path( path )
-                , m_OpenForWrite(write)
+                , m_OpenForWrite( write )
             {
                 m_ByteOrder = byteOrder;
             }
@@ -453,7 +461,7 @@ namespace Helium
                 std::basic_fstream< StreamCharT, std::char_traits< StreamCharT > >* fstream = new std::basic_fstream< StreamCharT, std::char_traits< StreamCharT > >(); 
 
 #ifdef UNICODE
-                fstream->imbue( std::locale( std::locale::classic(), new null_codecvt )) ;
+                fstream->imbue( std::locale( std::locale::classic(), &null_codecvt::GetStaticInstance() )) ;
 #endif
 
                 m_Path.MakePath();

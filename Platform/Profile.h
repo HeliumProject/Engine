@@ -20,6 +20,31 @@ typedef struct _iobuf FILE;
 
 namespace Helium
 {
+    class PLATFORM_API Timer
+    {
+    private:
+        uint64_t m_StartTime;
+
+    public:
+        Timer()
+        {
+            Reset();
+        }
+
+    private:
+        Timer(const Timer& rhs)
+        {
+
+        }
+
+    public:
+        // reset timer (for re-use)
+        void Reset();
+
+        // get elapsed time in millis
+        float Elapsed();
+    };
+
     class PLATFORM_API TraceFile
     {
     private:

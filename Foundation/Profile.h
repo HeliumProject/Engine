@@ -1,10 +1,10 @@
 #pragma once 
 
-#include "Timer.h"
-#include "Memory.h"
 #include "Platform/Types.h"
 #include "Platform/Profile.h"
+
 #include "Foundation/API.h"
+#include "Foundation/Memory.h"
 
 #define PROFILE_ACCUMULATOR_MAX   (2048)
 #define PROFILE_CONTEXTS_MAX      (128)

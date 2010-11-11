@@ -1,9 +1,9 @@
 #include "Memory.h"
 #include "Profile.h"
-#include "Timer.h"
 #include "Log.h"
 
 #include "Platform/PlatformUtility.h"
+#include "Platform/Profile.h"
 #include "Platform/Thread.h"
 #include "Platform/Assert.h"
 #include "Platform/Memory.h"

@@ -1,21 +1,12 @@
-//----------------------------------------------------------------------------------------------------------------------
-// SparseArray.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_SPARSE_ARRAY_H
-#define LUNAR_CORE_SPARSE_ARRAY_H
 
-#include "Core/Core.h"
+#include "Foundation/API.h"
 
 #include "boost/preprocessor/repetition/enum_params.hpp"
 #include "boost/preprocessor/repetition/enum_binary_params.hpp"
 #include "boost/preprocessor/repetition/repeat_from_to.hpp"
 
-namespace Lunar
+namespace Helium
 {
     /// Constant sparse array iterator.
     template< typename T >
@@ -270,6 +261,4 @@ namespace Lunar
     };
 }
 
-#include "Core/SparseArray.inl"
-
-#endif  // LUNAR_CORE_SPARSE_ARRAY_H
+#include "Foundation/Container/SparseArray.inl"

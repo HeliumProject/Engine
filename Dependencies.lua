@@ -109,6 +109,18 @@ project "nvtt"
 			"Dependencies/nvtt/project/vc8",
 		}
 
+	-- Override inline function expansion and intrinsic function usage settings for Debug builds.
+	configuration { "windows", "Debug" }
+		buildoptions
+		{
+			"/Ob2",
+			"/Oi",
+		}
+		flags
+		{
+			"NoEditAndContinue",  -- Edit and continue support is not compatible with /Ob2
+		}
+
 project "tiff"
 	kind "StaticLib"
 	language "C++"

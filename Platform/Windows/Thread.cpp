@@ -4,6 +4,7 @@
 #include "Platform/PlatformUtility.h"
 #include "Platform/Assert.h"
 #include "Platform/String.h"
+#include "Platform/Memory.h"
 
 #include <process.h>
 
@@ -13,10 +14,10 @@ using namespace Helium;
 static const int WIN32_THREAD_PRIORITY_MAP[] =
 {
     THREAD_PRIORITY_LOWEST,        // PRIORITY_LOWEST
-    THREAD_PRIORITY_BELOW_NORMAL,  // PRIORITY_LOWEST
-    THREAD_PRIORITY_NORMAL,        // PRIORITY_LOWEST
-    THREAD_PRIORITY_ABOVE_NORMAL,  // PRIORITY_LOWEST
-    THREAD_PRIORITY_HIGHEST,       // PRIORITY_LOWEST
+    THREAD_PRIORITY_BELOW_NORMAL,  // PRIORITY_LOW
+    THREAD_PRIORITY_NORMAL,        // PRIORITY_NORMAL
+    THREAD_PRIORITY_ABOVE_NORMAL,  // PRIORITY_HIGH
+    THREAD_PRIORITY_HIGHEST,       // PRIORITY_HIGHEST
 };
 
 HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( WIN32_THREAD_PRIORITY_MAP ) == Thread::PRIORITY_MAX );
@@ -266,9 +267,8 @@ unsigned int __stdcall Thread::ThreadCallback( void* pData )
     Thread* pThread = static_cast< Thread* >( pData );
     pThread->Run();
 
-#pragma TODO( "LUNAR MERGE - Re-enable the following lines once memory routines are moved over." )
-    //ThreadLocalStackAllocator::ReleaseMemoryHeap();
-    //DynamicMemoryHeap::UnregisterCurrentThreadCache();
+    ThreadLocalStackAllocator::ReleaseMemoryHeap();
+    DynamicMemoryHeap::UnregisterCurrentThreadCache();
 
     _endthreadex( 0 );
 

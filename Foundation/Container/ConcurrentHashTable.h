@@ -1,17 +1,8 @@
-//----------------------------------------------------------------------------------------------------------------------
-// ConcurrentHashTable.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_CONCURRENT_HASH_TABLE_H
-#define LUNAR_CORE_CONCURRENT_HASH_TABLE_H
 
-#include "Platform/DynArray.h"
+#include "Foundation/Container/DynArray.h"
 
-namespace Lunar
+namespace Helium
 {
     template<
         typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey,
@@ -265,6 +256,4 @@ namespace Lunar
     };
 }
 
-#include "Core/ConcurrentHashTable.inl"
-
-#endif  // LUNAR_CORE_CONCURRENT_HASH_TABLE_H
+#include "Foundation/Container/ConcurrentHashTable.inl"

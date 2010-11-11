@@ -1,25 +1,16 @@
-//----------------------------------------------------------------------------------------------------------------------
-// DynArray.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_DYN_ARRAY_H
-#define LUNAR_CORE_DYN_ARRAY_H
 
-#include "Core/Core.h"
+#include "Foundation/API.h"
 #include "Platform/Utility.h"
 #include "Platform/Memory.h"
 #include "Platform/Assert.h"
-#include "Core/ArrayIterator.h"
+#include "Foundation/Container/ArrayIterator.h"
 
 #include "boost/preprocessor/repetition/enum_params.hpp"
 #include "boost/preprocessor/repetition/enum_binary_params.hpp"
 #include "boost/preprocessor/repetition/repeat_from_to.hpp"
 
-namespace Lunar
+namespace Helium
 {
     /// Resizable array (not thread-safe).
     template< typename T, typename Allocator = DefaultAllocator >
@@ -98,13 +89,13 @@ namespace Lunar
         //@{
         T* New();
 
-#define L_DECLARE_DYNARRAY_NEW_Z( Z, N, DATA ) \
+#define HELIUM_DECLARE_DYNARRAY_NEW_Z( Z, N, DATA ) \
     template< BOOST_PP_ENUM_PARAMS_Z( Z, N, typename Param ) > \
     T* New( BOOST_PP_ENUM_BINARY_PARAMS_Z( Z, N, const Param, &rParam ) );
 
-        BOOST_PP_REPEAT_FROM_TO( 1, 17, L_DECLARE_DYNARRAY_NEW_Z, )
+        BOOST_PP_REPEAT_FROM_TO( 1, 17, HELIUM_DECLARE_DYNARRAY_NEW_Z, )
 
-#undef L_DECLARE_DYNARRAY_NEW_Z
+#undef HELIUM_DECLARE_DYNARRAY_NEW_Z
         //@}
 
         /// @name Overloaded Operators
@@ -156,6 +147,4 @@ namespace Lunar
     };
 }
 
-#include "Platform/DynArray.inl"
-
-#endif  // LUNAR_CORE_DYN_ARRAY_H
+#include "Foundation/Container/DynArray.inl"

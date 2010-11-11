@@ -61,7 +61,7 @@ private:
 
     DECLARE_NO_COPY_CLASS(FragmentShaderApp)
 };
-IMPLEMENT_APP_NO_MAIN(FragmentShaderApp)
+//IMPLEMENT_APP_NO_MAIN(FragmentShaderApp)
 
 static void
 Abort(std::exception *e)

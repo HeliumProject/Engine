@@ -146,29 +146,25 @@ void EventSystem::GetUnhandledEvents( V_EventPtr& listOfEvents, S_tuid& handledE
 void EventSystem::GetEvents( V_EventPtr& listOfEvents, bool sorted )
 {
     // Binary events
-    std::set< Helium::Path > datEventFiles;
-    Helium::Directory::GetFiles( m_RootDirPath, datEventFiles, TXT( "*.event.dat" ), true );
+    std::set< Helium::Path > eventFiles;
+    Helium::Directory::GetFiles( m_RootDirPath, eventFiles, true );
 
-    std::set< Helium::Path >::iterator itr = datEventFiles.begin();
-    std::set< Helium::Path >::iterator end = datEventFiles.end();
+    std::set< Helium::Path >::iterator itr = eventFiles.begin();
+    std::set< Helium::Path >::iterator end = eventFiles.end();
     for( ; itr != end; ++itr )
     {
         const Helium::Path& filePath = (*itr);
         if ( filePath.IsFile() )
-            ReadBinaryEventsFile( filePath.Get(), listOfEvents, false );
-    }
-
-    // Text events
-    std::set< Helium::Path > txtEventFiles;
-    Helium::Directory::GetFiles( m_RootDirPath, txtEventFiles, TXT( "*.event.txt" ), true );
-
-    itr = txtEventFiles.begin();
-    end = txtEventFiles.end();
-    for( ; itr != end; ++itr )
-    {
-        const Helium::Path& filePath = (*itr);
-        if ( filePath.IsFile() )
-            ReadTextEventsFile( filePath.Get(), listOfEvents, false );
+        {
+            if ( filePath.FullExtension() == TXT( "event.dat" ) )
+            {
+                ReadBinaryEventsFile( filePath.Get(), listOfEvents, false );
+            }
+            else if ( filePath.FullExtension() == TXT( "event.txt" ) )
+            {
+                ReadTextEventsFile( filePath.Get(), listOfEvents, false );
+            }
+        }
     }
 
     if (sorted)

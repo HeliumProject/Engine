@@ -127,13 +127,17 @@ void FileIconsTable::Create()
         Helium::Path iconFolder( exePath.Directory() + TXT( "Icons/16x16/mimetypes/" ) );
 
         std::set< Helium::Path > artFiles;
-        Helium::Directory::GetFiles( iconFolder, artFiles, TXT( "*.png" ), true );
+        Helium::Directory::GetFiles( iconFolder, artFiles, true );
 
-        int numImages = (int)artFiles.size();
-        if ( numImages <= 0 )
+        int numImages = 0;
+        for ( std::set< Helium::Path >::const_iterator itr = artFiles.begin(), end = artFiles.end(); itr != end; ++itr )
         {
-            numImages = 0;
+            if ( (*itr).Extension() == TXT( "png" ) )
+            {
+                ++numImages;
+            }
         }
+        
         numImages += wxFileIconsTable::executable + 1;
 
         m_SmallImageList = new wxImageList( 16, 16, true, numImages );

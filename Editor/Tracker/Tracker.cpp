@@ -130,7 +130,7 @@ void Tracker::TrackEverything()
         // find all the files in the project
         {
             SimpleTimer timer;
-            m_Directory.GetFiles( assetFiles, TXT("*.*"), true );
+            m_Directory.GetFiles( assetFiles, true );
             Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, TXT("Tracker: File reslover database lookup took %.2fms\n"), timer.Elapsed() );
         }
 

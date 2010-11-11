@@ -5,7 +5,7 @@
 #include "P4Exceptions.h"
 #include "Platform/String.h"
 #include "Platform/Thread.h"
-#include "Foundation/Timer.h"
+#include "Platform/Profile.h"
 #include "Foundation/RCS/RCSTypes.h"
 
 #define PERFORCE_MAX_DICT_ENTRIES 64

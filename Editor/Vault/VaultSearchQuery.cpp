@@ -186,8 +186,6 @@ bool ParsePhrase( const tstring& token, tsmatch& matchResults, tstring& phrase, 
 
 bool VaultSearchQuery::ParseQueryString( const tstring& queryString, tstring& errors, VaultSearchQuery* query )
 {
-#pragma TODO( "Rachel: Need more error checking in VaultSearchQuery::ParseQueryString" )
-
     const tregex matchAssetPath( s_MatchAssetPathPattern, std::tr1::regex::icase ); 
     const tregex matchTUID( s_MatchTUIDPattern, std::tr1::regex::icase );
 

@@ -83,21 +83,61 @@ ProjectPanel::~ProjectPanel()
 {
     m_OptionsButton->Disconnect( wxEVT_MENU_OPEN, wxMenuEventHandler( ProjectPanel::OnOptionsMenuOpen ), NULL, this );
     m_OptionsButton->Disconnect( wxEVT_MENU_CLOSE, wxMenuEventHandler( ProjectPanel::OnOptionsMenuClose ), NULL, this );
+
+    if ( m_Model )
+    {
+        m_DocumentManager->e_DocumentAdded.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumentAdded );
+        m_DocumentManager->e_DocumentRemoved.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumentRemoved );
+        m_Model->CloseProject();
+        m_Model = NULL;
+    }
 }
 
-void ProjectPanel::SetProject( Project* project, const Document* document )
+void ProjectPanel::OpenProject( Project* project, const Document* document )
 {
-#pragma TODO( "Rachel WIP: "__FUNCTION__" - Clean up m_Project beforing setting new one" )
+    if ( project == m_Project )
+    {
+        return;
+    }
+
+    CloseProject();
+
+    m_Project = project;
     if ( m_Project )
     {
-        document->d_Save.Clear();
+        if ( !m_Model )
+        {
+            // create the model
+            m_Model = new ProjectViewModel( m_DocumentManager );
+            m_Model->OpenProject( project, document );
 
+            m_DocumentManager->e_DocumentAdded.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentAdded );
+            m_DocumentManager->e_DocumentRemoved.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentRemoved );
+            
+            m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Name ) );
+            m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::FileSize ) );
+
+            // the ctrl will now hold ownership via reference count
+            m_DataViewCtrl->AssociateModel( m_Model.get() );
+        }
+        else
+        {
+            m_Model->OpenProject( project, document );
+        }
+
+        m_AddFileButton->Enable( true );
+
+        m_DataViewCtrl->Expand( wxDataViewItem( (void*) m_Model->GetRootNode() ) );
+    }
+}
+
+void ProjectPanel::CloseProject()
+{
+    if ( m_Project )
+    {
         if ( m_Model )
         {
-            m_DocumentManager->e_DocumentAdded.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumentAdded );
-            m_DocumentManager->e_DocumentRemoved.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumentRemoved );
-
-            m_Model = NULL;
+            m_Model->CloseProject();
         }
 
         m_Project = NULL;
@@ -105,28 +145,6 @@ void ProjectPanel::SetProject( Project* project, const Document* document )
 
     m_AddFileButton->Enable( false );
     m_DeleteFileButton->Enable( false );
-
-    m_Project = project;
-    if ( m_Project )
-    {
-        m_Model = new ProjectViewModel( m_DocumentManager );
-        m_Model->SetProject( project, document );
-
-        m_DocumentManager->e_DocumentAdded.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentAdded );
-        m_DocumentManager->e_DocumentRemoved.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentRemoved );
-
-        m_Model->ResetColumns();
-        m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Name ) );
-        m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::FileSize ) );
-
-        // the ctrl will now hold ownership via reference count
-        m_DataViewCtrl->AssociateModel( m_Model.get() );
-
-        m_AddFileButton->Enable( true );
-    }
-
-#pragma TODO( "Rachel WIP: "__FUNCTION__" - Do we actually need to refresh?" )
-    Refresh();
 }
 
 void ProjectPanel::OnAddFile( wxCommandEvent& event )
@@ -243,7 +261,7 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
     // it's a project file
     if ( _tcsicmp( path.FullExtension().c_str(), TXT( "project.hrb" ) ) == 0 ) 
     {
-#pragma TODO( "Rachel WIP: "__FUNCTION__" - Close the current project and open the dropped one")
+#pragma TODO( "Close the current project and open the dropped one")
         //(MainFrame*)GetParent()->OpenProject( path );
     }
     else if ( m_Project )

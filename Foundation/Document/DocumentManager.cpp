@@ -507,8 +507,7 @@ bool DocumentManager::CheckOut( Document* document ) const
         return false;
     }
 
-#pragma TODO ("Rachel WIP: "__FUNCTION__" - Document CheckedOut")
-    //document->RaiseCheckedOut();
+    document->Checkout();
 
     return true;
 }

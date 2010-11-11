@@ -20,7 +20,8 @@ namespace Helium
             ProjectPanel( wxWindow* parent, DocumentManager* documentManager );
             virtual ~ProjectPanel();
 
-            void SetProject( Project* project, const Document* document );
+            void OpenProject( Project* project, const Document* document = NULL );
+            void CloseProject();
 
         protected:
             // UI event handlers

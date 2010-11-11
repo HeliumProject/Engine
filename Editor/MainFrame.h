@@ -61,7 +61,7 @@ namespace Helium
 
             void SetHelpText( const tchar* text );
 
-            bool OpenProject( const Helium::Path& path );
+            void OpenProject( const Helium::Path& path );
 
             SceneGraph::SceneManager& GetSceneManager()
             {
@@ -114,6 +114,8 @@ namespace Helium
             void SceneRemoving( const SceneGraph::SceneChangeArgs& args );
             void SceneLoadFinished( const SceneGraph::LoadArgs& args );
             void SceneExecuted( const SceneGraph::ExecuteArgs& args );
+
+            void OnProjectSave( const DocumentEventArgs& args );
 
             bool DoOpen( const tstring& path );
 

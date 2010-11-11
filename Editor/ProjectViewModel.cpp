@@ -113,6 +113,9 @@ void ProjectViewModelNode::ConnectDocument( const Document* document)
     {
         m_Document->e_Saved.AddMethod( this, &ProjectViewModelNode::DocumentSaved );
         m_Document->e_Closed.AddMethod( this, &ProjectViewModelNode::DocumentClosed );
+        m_Document->e_Changing.AddMethod( this, &ProjectViewModelNode::DocumentChanging );
+        m_Document->e_Changed.AddMethod( this, &ProjectViewModelNode::DocumentChanged );
+        m_Document->e_ModifiedOnDiskStateChanged.AddMethod( this, &ProjectViewModelNode::DocumentModifiedOnDiskStateChanged );
         m_Document->e_PathChanged.AddMethod( this, &ProjectViewModelNode::DocumentPathChanged );
     }
 }
@@ -123,6 +126,9 @@ void ProjectViewModelNode::DisconnectDocument()
     {
         m_Document->e_Saved.RemoveMethod( this, &ProjectViewModelNode::DocumentSaved );
         m_Document->e_Closed.RemoveMethod( this, &ProjectViewModelNode::DocumentClosed );
+        m_Document->e_Changing.RemoveMethod( this, &ProjectViewModelNode::DocumentChanging );
+        m_Document->e_Changed.RemoveMethod( this, &ProjectViewModelNode::DocumentChanged );
+        m_Document->e_ModifiedOnDiskStateChanged.RemoveMethod( this, &ProjectViewModelNode::DocumentModifiedOnDiskStateChanged );
         m_Document->e_PathChanged.RemoveMethod( this, &ProjectViewModelNode::DocumentPathChanged );
         m_Document = NULL;
     }
@@ -130,12 +136,27 @@ void ProjectViewModelNode::DisconnectDocument()
 
 void ProjectViewModelNode::DocumentSaved( const DocumentEventArgs& args )
 {
-#pragma TODO( "Rachel WIP: "__FUNCTION__" - Remove the icon dirty overlay" )
+#pragma TODO( "Remove the icon dirty overlay and text format changes" )
 }
 
 void ProjectViewModelNode::DocumentClosed( const DocumentEventArgs& args )
 {
     DisconnectDocument();
+}
+
+void ProjectViewModelNode::DocumentChanging( const DocumentEventArgs& args )
+{
+#pragma TODO( "Add the icon dirty overlay and change text format" )
+}
+
+void ProjectViewModelNode::DocumentChanged( const DocumentEventArgs& args )
+{
+#pragma TODO( "Add the icon dirty overlay and change text format" )
+}
+
+void ProjectViewModelNode::DocumentModifiedOnDiskStateChanged( const DocumentEventArgs& args )
+{
+#pragma TODO( "Add the icon dirty overlay and change text format" )
 }
 
 void ProjectViewModelNode::DocumentPathChanged( const DocumentPathChangedArgs& args )
@@ -153,8 +174,7 @@ ProjectViewModel::ProjectViewModel( DocumentManager* documentManager )
 
 ProjectViewModel::~ProjectViewModel()
 {
-    SetProject( NULL );
-    ResetColumns();
+    CloseProject();
 }
 
 wxDataViewColumn* ProjectViewModel::CreateColumn( uint32_t id )
@@ -230,40 +250,14 @@ void ProjectViewModel::ResetColumns()
     m_ColumnLookupTable.clear();
 }
 
-void ProjectViewModel::SetProject( Project* project, const Document* document )
+void ProjectViewModel::OpenProject( Project* project, const Document* document )
 {
     if ( project == m_Project )
     {
         return;
     }
 
-    // Cleanup the old view
-    if ( m_Project )
-    {
-        // Disconnect to the Project
-        m_Project->e_PathAdded.RemoveMethod( this, &ProjectViewModel::OnPathAdded );
-        m_Project->e_PathRemoved.RemoveMethod( this, &ProjectViewModel::OnPathRemoved );
-
-        // Remove the Project's Children
-#pragma TODO( "Rachel WIP: "__FUNCTION__" - Remove and disconnect the project's children" )
-        m_MM_ProjectViewModelNodesByPath.clear();
-
-        // Remove the Node
-        if ( m_RootNode )
-        {
-            if ( m_RootNode->GetDocument() )
-            {
-                m_RootNode->GetDocument()->d_Save.Clear();
-                m_RootNode->GetDocument()->e_Closed.RemoveMethod( this, &ProjectViewModel::OnProjectClosed );
-                m_RootNode->GetDocument()->e_PathChanged.RemoveMethod( this, &ProjectViewModel::OnProjectPathChanged );
-            }
-
-            //m_Project->a_Path.Changed().RemoveMethod( m_RootNode.Ptr(), &ProjectViewModelNode::PathChanged );
-            m_RootNode = NULL;
-        }
-
-        m_Project = NULL;
-    }
+    CloseProject();
 
     // Setup the new project view
     m_Project = project;
@@ -272,6 +266,7 @@ void ProjectViewModel::SetProject( Project* project, const Document* document )
         // Create the Node     
         m_RootNode = new ProjectViewModelNode( NULL, m_Project->a_Path.Get(), document, true );
         m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( m_Project->a_Path.Get(), m_RootNode.Ptr() ));
+        ItemAdded( NULL, (void*)m_RootNode );
 
         // Add the Project's Children
         for ( std::set< Path >::const_iterator itr = m_Project->Paths().begin(), end = m_Project->Paths().end();
@@ -281,14 +276,41 @@ void ProjectViewModel::SetProject( Project* project, const Document* document )
         }
 
         // Connect to the Project
-#pragma TODO( "Rachel WIP: "__FUNCTION__" - OnProjectSave and OnProjectPathChanged really ought to be added to MainFrame" )
-        m_RootNode->GetDocument()->d_Save.Set( this, &ProjectViewModel::OnProjectSave );
-        m_RootNode->GetDocument()->e_Closed.AddMethod( this, &ProjectViewModel::OnProjectClosed );
         m_RootNode->GetDocument()->e_PathChanged.AddMethod( this, &ProjectViewModel::OnProjectPathChanged );
 
         m_Project->e_PathAdded.AddMethod( this, &ProjectViewModel::OnPathAdded );
         m_Project->e_PathRemoved.AddMethod( this, &ProjectViewModel::OnPathRemoved );
         //m_Project->a_Path.Changed().AddMethod( m_RootNode.Ptr(), &ProjectViewModelNode::PathChanged );
+    }
+}
+
+void ProjectViewModel::CloseProject()
+{
+    // Cleanup the old view
+    if ( m_Project )
+    {
+        // Disconnect to the Project
+        m_Project->e_PathAdded.RemoveMethod( this, &ProjectViewModel::OnPathAdded );
+        m_Project->e_PathRemoved.RemoveMethod( this, &ProjectViewModel::OnPathRemoved );
+
+        // Remove the Node
+        if ( m_RootNode )
+        {
+            if ( m_RootNode->GetDocument() )
+            {
+                m_RootNode->GetDocument()->e_PathChanged.RemoveMethod( this, &ProjectViewModel::OnProjectPathChanged );
+            }
+
+            RemoveItem( wxDataViewItem( (void*) m_RootNode.Ptr() ) );
+
+            //m_Project->a_Path.Changed().RemoveMethod( m_RootNode.Ptr(), &ProjectViewModelNode::PathChanged );
+            m_RootNode = NULL;
+        }
+
+        // Remove the Project's Children
+        m_MM_ProjectViewModelNodesByPath.clear();
+
+        m_Project = NULL;
     }
 }
 
@@ -356,28 +378,25 @@ bool ProjectViewModel::RemoveChildItem( const wxDataViewItem& parenItem, const H
 
 void ProjectViewModel::RemoveItem( const wxDataViewItem& item )
 {
-    ProjectViewModelNode *childNode = static_cast< ProjectViewModelNode* >( item.GetID() );
-    if ( !childNode )
+    ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
+    if ( !node )
     {
         return;
     }
 
-    ProjectViewModelNode *parentNode = childNode->GetParent();
-    if ( !parentNode )
+    // remove all of childNode's children
+    while( node->GetChildren().size() > 0 )
     {
-        // they are trying to delete the m_RootNode
-        return;
+        RemoveItem( wxDataViewItem( (void*)( *node->GetChildren().begin() ) ) );
     }
 
-#pragma TODO( "Rachel WIP: "__FUNCTION__" - remove all of childNode's children" )
-
-    // remove it from teh multimap
-    for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( childNode->GetPath() ),
-        upper = m_MM_ProjectViewModelNodesByPath.upper_bound( childNode->GetPath() );
+    // remove it from the multimap
+    for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( node->GetPath() ),
+        upper = m_MM_ProjectViewModelNodesByPath.upper_bound( node->GetPath() );
         lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
     ++lower )
     {
-        if ( lower->second == childNode )
+        if ( lower->second == node )
         {
             m_MM_ProjectViewModelNodesByPath.erase( lower );
             break;
@@ -385,8 +404,12 @@ void ProjectViewModel::RemoveItem( const wxDataViewItem& item )
     }
 
     // Remove from the parent's childern
-    // this should free the childNode if there are no more references to it
-    parentNode->GetChildren().erase( childNode );
+    // this should free the node if there are no more references to it
+    ProjectViewModelNode *parentNode = node->GetParent();
+    if ( parentNode )
+    {
+        parentNode->GetChildren().erase( node );
+    }
 
     ItemDeleted( wxDataViewItem( (void*) parentNode ), item );
 }
@@ -416,27 +439,6 @@ void ProjectViewModel::OnPathRemoved( const Helium::Path& path )
     if ( m_RootNode )
     {
         RemoveChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
-    }
-}
-
-void ProjectViewModel::OnProjectSave( const DocumentEventArgs& args )
-{
-    const Document* document = static_cast< const Document* >( args.m_Document );
-    HELIUM_ASSERT( document );
-
-    if ( document 
-        && m_Project 
-        && document->GetPath() == m_Project->a_Path.Get() )
-    {
-        args.m_Result = m_Project->Save();
-    }
-}
-
-void ProjectViewModel::OnProjectClosed( const DocumentEventArgs& args )
-{
-    if ( m_Project )
-    {
-        SetProject( NULL );
     }
 }
 

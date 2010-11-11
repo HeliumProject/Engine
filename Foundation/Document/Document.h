@@ -63,6 +63,8 @@ namespace Helium
         bool Save( tstring& error ) const;
         void Close() const;
 
+        void Checkout() const;
+
         bool HasChanged() const
         {
             return m_HasChanged;
@@ -110,7 +112,7 @@ namespace Helium
         mutable DocumentEventSignature::Event e_Changed; 
 
         // Modified On Disk
-        mutable DocumentPathChangedSignature::Event e_ModifiedOnDiskStateChanged;
+        mutable DocumentEventSignature::Event e_ModifiedOnDiskStateChanged;
 
         // Path
         mutable DocumentPathChangedSignature::Event e_PathChanged;

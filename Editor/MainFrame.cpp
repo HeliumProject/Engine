@@ -314,6 +314,9 @@ MainFrame::~MainFrame()
     wxGetApp().GetSettingsManager()->GetSettings< WindowSettings >()->SetFromWindow( this, &m_FrameManager );
     m_ViewPanel->GetViewCanvas()->GetViewport().SaveSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
 
+    
+    m_ProjectPanel->CloseProject();
+
     //
     // Detach event handlers
     //
@@ -351,12 +354,29 @@ void MainFrame::SetHelpText( const tchar* text )
 ///////////////////////////////////////////////////////////////////////////////
 // Helper function for common opening code.
 // 
-bool MainFrame::OpenProject( const Helium::Path& path )
+void MainFrame::OpenProject( const Helium::Path& path )
 {
-    bool opened = false;
-
-    if ( !path.empty() && path.Exists() )
+    HELIUM_ASSERT( !path.empty() );
+    
+    if ( m_Project )
     {
+        Document* document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
+        if ( document )
+        {
+            document->d_Save.Clear();
+        }
+
+        m_ProjectPanel->CloseProject();
+
+        m_DocumentManager.CloseAll();
+        m_Project = NULL;
+    }
+
+    bool isNewProject = false;
+    if ( path.Exists() )
+    {
+        bool opened = false;
+
         tstring error;
         try
         {
@@ -370,45 +390,55 @@ bool MainFrame::OpenProject( const Helium::Path& path )
 
         opened = m_Project.ReferencesObject();
 
+
         if ( opened )
         {
             m_MRU->Insert( path );
-
-            Document* document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
-            if ( !document )
-            {
-                tstring error;
-                bool result = m_DocumentManager.OpenDocument( new Document( m_Project->a_Path.Get() ), error );
-                HELIUM_ASSERT( result );
-
-                document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
-            }
-            ConnectDocument( document );
-            m_ProjectPanel->SetProject( m_Project, document );
-
-            if ( m_VaultPanel )
-            {
-                m_VaultPanel->SetDirectory( path );
-            }
-
-#pragma TODO( "Turn tracker back on where there are assets to track" )
-            //wxGetApp().GetTracker()->SetDirectory( path );
-            //if ( !wxGetApp().GetTracker()->IsThreadRunning() )
-            //{
-            //    wxGetApp().GetTracker()->StartThread();
-            //}
         }
         else
         {
             m_MRU->Remove( path );
             if ( !error.empty() )
             {
-                wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
+                wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );    
             }
+            return;
         }
     }
+    else
+    {
+        m_Project = new Project();
+        m_Project->a_Path.Set( path );
+        isNewProject = true;
+    }
 
-    return opened;
+    Document* document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
+    if ( !document )
+    {
+        tstring error;
+        bool result = m_DocumentManager.OpenDocument( new Document( m_Project->a_Path.Get() ), error );
+        HELIUM_ASSERT( result );
+
+        document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
+    }
+    ConnectDocument( document );
+
+    document->HasChanged( isNewProject );
+    document->d_Save.Set( this, &MainFrame::OnProjectSave );
+
+    m_ProjectPanel->OpenProject( m_Project, document );
+
+    if ( m_VaultPanel )
+    {
+        m_VaultPanel->SetDirectory( path );
+    }
+
+#pragma TODO( "Turn tracker back on where there are assets to track" )
+    //wxGetApp().GetTracker()->SetDirectory( path );
+    //if ( !wxGetApp().GetTracker()->IsThreadRunning() )
+    //{
+    //    wxGetApp().GetTracker()->StartThread();
+    //}
 }
 
 bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
@@ -772,21 +802,20 @@ void MainFrame::OnNewEntity( wxCommandEvent& event )
 
 void MainFrame::OnNewProject( wxCommandEvent& event )
 {
-    m_Project = new Project();
-    m_Project->a_Path.Set( TXT("New Project") );
+    OpenProject( Helium::Path( TXT("New Project") ) );
+}
 
-    Document* document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
-    if ( !document )
+void MainFrame::OnProjectSave( const DocumentEventArgs& args )
+{
+    const Document* document = static_cast< const Document* >( args.m_Document );
+    HELIUM_ASSERT( document );
+
+    if ( document 
+        && m_Project 
+        && document->GetPath() == m_Project->a_Path.Get() )
     {
-        tstring error;
-        bool result = m_DocumentManager.OpenDocument( new Document( m_Project->a_Path.Get() ), error );
-        HELIUM_ASSERT( result );
-
-        document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
-        document->HasChanged( true );
+        args.m_Result = m_Project->Save();
     }
-
-    m_ProjectPanel->SetProject( m_Project, document );    
 }
 
 bool MainFrame::DoOpen( const tstring& path )
@@ -1382,7 +1411,7 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
             }
         }
 
-#pragma TODO( "Rachel WIP: "__FUNCTION__" - Change the selection or display changes in the Project view" )
+#pragma TODO( "Change the selection or display changes in the Project view" )
 
         // Restore selection-sensitive settings
         args.m_Scene->RefreshSelection();
@@ -2698,8 +2727,6 @@ bool MainFrame::SortTypeItemsByName( SceneGraph::SceneNodeType* lhs, SceneGraph:
 // 
 void MainFrame::AllocateNestedScene( const ResolveSceneArgs& args )
 {
-#pragma TODO( "Rachel WIP: "__FUNCTION__" - this function should move out to the mainframe" )
-
     args.m_Scene = m_SceneManager.GetScene( args.m_Path );
     if ( !args.m_Scene )
     {

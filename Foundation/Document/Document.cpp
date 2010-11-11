@@ -57,6 +57,12 @@ void Document::Close() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+void Document::Checkout() const
+{
+    e_CheckedOut.Raise( DocumentEventArgs( this ) );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // Sets the path to this file.  The name of the file is also updated.  Notifies
 // any interested listeners about this event.
 // 
@@ -102,7 +108,7 @@ bool Document::IsCheckedOut() const
             tstringstream str;
             str << "Unable to get info for '" << GetPath().Filename() << "': " << ex.What();
             Log::Error( TXT("%s\n"), str.str().c_str() );
-#pragma TODO( "Rachel WIP: "__FUNCTION__" - Should trigger error status event" )
+#pragma TODO( "Should trigger RCS error status event" )
         }
 
         return rcsFile.IsCheckedOutByMe();
@@ -132,7 +138,7 @@ bool Document::IsUpToDate() const
                 tstringstream str;
                 str << "Unable to get info for '" << GetPath().Filename() << "': " << ex.What();
                 Log::Error( TXT("%s\n"), str.str().c_str() );
-#pragma TODO( "Rachel WIP: "__FUNCTION__" - Should trigger error status event" )
+#pragma TODO( "Should trigger RCS error status event" )
             }
 
             if ( rcsFile.ExistsInDepot() )

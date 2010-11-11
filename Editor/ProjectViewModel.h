@@ -111,6 +111,7 @@ namespace Helium
             ProjectViewModelNode* GetParent();
             S_ProjectViewModelNodeChildren& GetChildren();
 
+
             bool IsContainer() const;
 
             void SetPath( const Helium::Path& path );
@@ -127,6 +128,9 @@ namespace Helium
 
             void DocumentSaved( const DocumentEventArgs& args );
             void DocumentClosed( const DocumentEventArgs& args );
+            void DocumentChanging( const DocumentEventArgs& args );
+            void DocumentChanged( const DocumentEventArgs& args );
+            void DocumentModifiedOnDiskStateChanged( const DocumentEventArgs& args );
             void DocumentPathChanged( const DocumentPathChangedArgs& args );
 
             inline bool operator<( const ProjectViewModelNode& rhs ) const
@@ -163,7 +167,13 @@ namespace Helium
             wxDataViewColumn* CreateColumn( uint32_t id );
             void ResetColumns();
 
-            void SetProject( Project* project, const Document* document = NULL );
+            void OpenProject( Project* project, const Document* document = NULL );
+            void CloseProject();
+
+            ProjectViewModelNode* GetRootNode()
+            {
+                return m_RootNode;
+            }
 
             bool AddChildItem( const wxDataViewItem& parenItem, const Helium::Path& path );
             bool RemoveChildItem( const wxDataViewItem& parenItem, const Helium::Path& path );
@@ -177,8 +187,6 @@ namespace Helium
             void OnPathRemoved( const Helium::Path& path );
 
             // Document and DocumentManager Events
-            void OnProjectSave( const DocumentEventArgs& args );
-            void OnProjectClosed( const DocumentEventArgs& args );
             void OnProjectPathChanged( const DocumentPathChangedArgs& args );
             void OnDocumentAdded( const DocumentEventArgs& args );
             void OnDocumentRemoved( const DocumentEventArgs& args );

@@ -11,7 +11,7 @@
 
 #include "Platform/Trace.h"
 #include "Core/AppInfo.h"
-#include "Core/BitArray.h"
+#include "Foundation/Container/BitArray.h"
 #include "Foundation/Container/SparseArray.h"
 #include "Core/StringConverter.h"
 #include "Platform/Math/Simd/Vector2.h"

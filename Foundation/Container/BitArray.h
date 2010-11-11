@@ -1,20 +1,14 @@
-//----------------------------------------------------------------------------------------------------------------------
-// BitArray.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_BIT_ARRAY_H
-#define LUNAR_CORE_BIT_ARRAY_H
 
-#include "Core/Core.h"
+#include "Foundation/API.h"
+#include "Platform/Assert.h"
+#include "Platform/Types.h"
+#include "Platform/Math/MathCommon.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Constant bit array element proxy.
-    class LUNAR_CORE_API ConstBitArrayElementProxy
+    class FOUNDATION_API ConstBitArrayElementProxy
     {
     public:
         /// @name Construction/Destruction
@@ -46,7 +40,7 @@ namespace Lunar
     };
 
     /// Bit array element proxy.
-    class LUNAR_CORE_API BitArrayElementProxy : public ConstBitArrayElementProxy
+    class FOUNDATION_API BitArrayElementProxy : public ConstBitArrayElementProxy
     {
     public:
         /// @name Construction/Destruction
@@ -62,7 +56,7 @@ namespace Lunar
     };
 
     /// Constant bit array iterator.
-    class LUNAR_CORE_API ConstBitArrayIterator
+    class FOUNDATION_API ConstBitArrayIterator
     {
     public:
         /// Type for iterator values.
@@ -117,7 +111,7 @@ namespace Lunar
     };
 
     /// Bit array iterator.
-    class LUNAR_CORE_API BitArrayIterator : public ConstBitArrayIterator
+    class FOUNDATION_API BitArrayIterator : public ConstBitArrayIterator
     {
     public:
         /// Type for iterator values.
@@ -241,6 +235,4 @@ namespace Lunar
     };
 }
 
-#include "Core/BitArray.inl"
-
-#endif  // LUNAR_CORE_BIT_ARRAY_H
+#include "Foundation/Container/BitArray.inl"

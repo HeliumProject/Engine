@@ -1,20 +1,9 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Name.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_NAME_H
-#define LUNAR_CORE_NAME_H
-
-#include "Core/Core.h"
 
 #include "Foundation/String.h"
 #include "Foundation/HashFunctions.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Null name constant.
     enum ENullName
@@ -90,7 +79,7 @@ namespace Lunar
     };
 
     /// CharString name table.
-    class LUNAR_CORE_API CharNameTable
+    class FOUNDATION_API CharNameTable
     {
         friend class NameBase< CharNameTable >;
 
@@ -108,7 +97,7 @@ namespace Lunar
     };
 
     /// WideString name table.
-    class LUNAR_CORE_API WideNameTable
+    class FOUNDATION_API WideNameTable
     {
         friend class NameBase< WideNameTable >;
 
@@ -146,6 +135,4 @@ namespace Lunar
     };
 }
 
-#include "Core/Name.inl"
-
-#endif  // LUNAR_CORE_NAME_H
+#include "Foundation/Name.inl"

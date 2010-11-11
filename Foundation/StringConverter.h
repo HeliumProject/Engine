@@ -1,17 +1,8 @@
-//----------------------------------------------------------------------------------------------------------------------
-// StringConvert.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_STRING_CONVERTER_H
-#define LUNAR_CORE_STRING_CONVERTER_H
 
 #include "Foundation/String.h"
 
-namespace Lunar
+namespace Helium
 {
     /// String conversion base template.
     ///
@@ -99,6 +90,4 @@ namespace Lunar
     };
 }
 
-#include "Core/StringConverter.inl"
-
-#endif  // LUNAR_CORE_STRING_CONVERTER_H
+#include "Foundation/StringConverter.inl"

@@ -13,7 +13,7 @@
 #include "Foundation/AppInfo.h"
 #include "Foundation/Container/BitArray.h"
 #include "Foundation/Container/SparseArray.h"
-#include "Core/StringConverter.h"
+#include "Foundation/StringConverter.h"
 #include "Platform/Math/Simd/Vector2.h"
 #include "Platform/Math/Simd/Vector3.h"
 #include "Platform/Math/Simd/Vector4.h"

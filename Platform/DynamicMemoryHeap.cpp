@@ -5,6 +5,7 @@
 #include "Platform/Debug.h"
 #include "Platform/Mutex.h"
 #include "Platform/ReadWriteLock.h"
+#include "Platform/Thread.h"
 #include "Platform/Trace.h"
 
 #ifdef _MSC_VER
@@ -216,9 +217,9 @@ void DynamicMemoryHeap::LogMemoryStats()
             const stdext::hash_map< void*, AllocationBacktrace >& rAllocationBacktraceMap =
                 pTrackingData->allocationBacktraceMap;
 
-            String symbol;
 #pragma TODO( "LUNAR MERGE - Remove STL string usage here once String is merged over." )
-            tstring symbolStl;
+//            String symbol;
+            tstring symbol;
 
             stdext::hash_map< void*, AllocationBacktrace >::const_iterator iterEnd = rAllocationBacktraceMap.end();
             stdext::hash_map< void*, AllocationBacktrace >::const_iterator iter;
@@ -244,10 +245,11 @@ void DynamicMemoryHeap::LogMemoryStats()
                         break;
                     }
 
-//                        Helium::GetAddressSymbol( symbol, pAddress );
-                    Helium::GetAddressSymbol( symbolStl, pAddress );
-                    symbol = symbolStl.c_str();
-                    HELIUM_TRACE( TRACE_DEBUG, TXT( "- 0x%p: %s\n" ), pAddress, *symbol );
+//                    Helium::GetAddressSymbol( symbol, pAddress );
+//                    HELIUM_TRACE( TRACE_DEBUG, TXT( "- 0x%p: %s\n" ), pAddress, *symbol );
+                    Helium::GetAddressSymbol( symbol, pAddress );
+                    const tchar_t* pSymbol = symbol.c_str();
+                    HELIUM_TRACE( TRACE_DEBUG, TXT( "- 0x%p: %s\n" ), pAddress, ( pSymbol ? pSymbol : TXT( "" ) ) );
                 }
             }
         }

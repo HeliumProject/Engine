@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// DynArray.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_DYN_ARRAY_H
-#define LUNAR_CORE_DYN_ARRAY_H
 
 #include "Core/Core.h"
 #include "Platform/Utility.h"
@@ -156,6 +147,4 @@ namespace Lunar
     };
 }
 
-#include "Platform/DynArray.inl"
-
-#endif  // LUNAR_CORE_DYN_ARRAY_H
+#include "Foundation/Container/DynArray.inl"

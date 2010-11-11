@@ -12,7 +12,7 @@
 #include "Core/Core.h"
 
 #include "Platform/Types.h"
-#include "Platform/DynArray.h"
+#include "Foundation/Container/DynArray.h"
 #include "Core/HashFunctions.h"
 
 namespace Lunar

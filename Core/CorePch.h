@@ -10,7 +10,7 @@
 #define LUNAR_CORE_CORE_PCH_H
 
 #include "Platform/Trace.h"
-#include "Core/AppInfo.h"
+#include "Foundation/AppInfo.h"
 #include "Foundation/Container/BitArray.h"
 #include "Foundation/Container/SparseArray.h"
 #include "Core/StringConverter.h"

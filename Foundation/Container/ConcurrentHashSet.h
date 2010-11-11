@@ -1,19 +1,10 @@
-//----------------------------------------------------------------------------------------------------------------------
-// ConcurrentHashSet.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_CONCURRENT_HASH_SET_H
-#define LUNAR_CORE_CONCURRENT_HASH_SET_H
 
-#include "Core/ConcurrentHashTable.h"
+#include "Foundation/Container/ConcurrentHashTable.h"
 #include "Foundation/Functions.h"
 #include "Foundation/HashFunctions.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Hash set key extract function.
     template< typename T >
@@ -71,6 +62,4 @@ namespace Lunar
     };
 }
 
-#include "Core/ConcurrentHashSet.inl"
-
-#endif  // LUNAR_CORE_CONCURRENT_HASH_SET_H
+#include "Foundation/Container/ConcurrentHashSet.inl"

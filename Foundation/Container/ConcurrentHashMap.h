@@ -1,20 +1,12 @@
-//----------------------------------------------------------------------------------------------------------------------
-// ConcurrentHashMap.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_CONCURRENT_HASH_MAP_H
-#define LUNAR_CORE_CONCURRENT_HASH_MAP_H
 
-#include "Core/ConcurrentHashTable.h"
+#include "Foundation/Container/ConcurrentHashTable.h"
 #include "Foundation/Functions.h"
 #include "Foundation/HashFunctions.h"
+
 #include <utility>
 
-namespace Lunar
+namespace Helium
 {
     /// Hash map key extract function.
     template< typename Key, typename Data >
@@ -77,6 +69,4 @@ namespace Lunar
     };
 }
 
-#include "Core/ConcurrentHashMap.inl"
-
-#endif  // LUNAR_CORE_CONCURRENT_HASH_MAP_H
+#include "Foundation/Container/ConcurrentHashMap.inl"

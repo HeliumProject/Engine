@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Core/Core.h"
+#include "Foundation/API.h"
 #include "Platform/Utility.h"
 #include "Platform/Memory.h"
 #include "Platform/Assert.h"
-#include "Core/ArrayIterator.h"
+#include "Foundation/Container/ArrayIterator.h"
 
 #include "boost/preprocessor/repetition/enum_params.hpp"
 #include "boost/preprocessor/repetition/enum_binary_params.hpp"
@@ -89,13 +89,13 @@ namespace Helium
         //@{
         T* New();
 
-#define L_DECLARE_DYNARRAY_NEW_Z( Z, N, DATA ) \
+#define HELIUM_DECLARE_DYNARRAY_NEW_Z( Z, N, DATA ) \
     template< BOOST_PP_ENUM_PARAMS_Z( Z, N, typename Param ) > \
     T* New( BOOST_PP_ENUM_BINARY_PARAMS_Z( Z, N, const Param, &rParam ) );
 
-        BOOST_PP_REPEAT_FROM_TO( 1, 17, L_DECLARE_DYNARRAY_NEW_Z, )
+        BOOST_PP_REPEAT_FROM_TO( 1, 17, HELIUM_DECLARE_DYNARRAY_NEW_Z, )
 
-#undef L_DECLARE_DYNARRAY_NEW_Z
+#undef HELIUM_DECLARE_DYNARRAY_NEW_Z
         //@}
 
         /// @name Overloaded Operators

@@ -1,17 +1,8 @@
-//----------------------------------------------------------------------------------------------------------------------
-// ArrayIterator.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_ARRAY_ITERATOR_H
-#define LUNAR_CORE_ARRAY_ITERATOR_H
 
-#include "Core/Core.h"
+#include "Foundation/API.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Constant general-purpose array iterator.
     template< typename T >
@@ -107,6 +98,4 @@ namespace Lunar
     };
 }
 
-#include "Core/ArrayIterator.inl"
-
-#endif  // LUNAR_CORE_ARRAY_ITERATOR_H
+#include "Foundation/Container/ArrayIterator.inl"

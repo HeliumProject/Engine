@@ -9,61 +9,48 @@ using namespace Helium;
 void CopyFromWindowsStruct( const WIN32_FIND_DATA& windowsFile, FileFindData& ourFile )
 {
     ourFile.m_Filename = windowsFile.cFileName;
-    ourFile.m_CreationTime = ( (uint64_t)windowsFile.ftCreationTime.dwHighDateTime << 32 ) | windowsFile.ftCreationTime.dwLowDateTime;
-    ourFile.m_ModificationTime = ( (uint64_t)windowsFile.ftLastWriteTime.dwHighDateTime << 32 ) | windowsFile.ftLastWriteTime.dwLowDateTime;
-    ourFile.m_AccessTime = ( (uint64_t)windowsFile.ftLastAccessTime.dwHighDateTime << 32 ) | windowsFile.ftLastAccessTime.dwLowDateTime;
-    ourFile.m_FileSize = ( (uint64_t)windowsFile.nFileSizeHigh << 32 ) | windowsFile.nFileSizeLow;
 
-    ourFile.m_FileAttributes |= windowsFile.dwFileAttributes & FILE_ATTRIBUTE_READONLY ? FileAttributes::ReadOnly : 0;
-    ourFile.m_FileAttributes |= windowsFile.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN ? FileAttributes::Hidden : 0;
-    ourFile.m_FileAttributes |= windowsFile.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM ? FileAttributes::System : 0;
-    ourFile.m_FileAttributes |= windowsFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ? FileAttributes::Directory : 0;
-    ourFile.m_FileAttributes |= windowsFile.dwFileAttributes & FILE_ATTRIBUTE_ARCHIVE ? FileAttributes::Archive : 0;
-    ourFile.m_FileAttributes |= windowsFile.dwFileAttributes & FILE_ATTRIBUTE_DEVICE ? FileAttributes::Device : 0;
-    ourFile.m_FileAttributes |= windowsFile.dwFileAttributes & FILE_ATTRIBUTE_NORMAL ? FileAttributes::Normal : 0;
-    ourFile.m_FileAttributes |= windowsFile.dwFileAttributes & FILE_ATTRIBUTE_TEMPORARY ? FileAttributes::Temporary : 0;
-    ourFile.m_FileAttributes |= windowsFile.dwFileAttributes & FILE_ATTRIBUTE_SPARSE_FILE ? FileAttributes::Sparse : 0;
-    ourFile.m_FileAttributes |= windowsFile.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT ? FileAttributes::Redirect : 0;
-    ourFile.m_FileAttributes |= windowsFile.dwFileAttributes & FILE_ATTRIBUTE_COMPRESSED ? FileAttributes::Compressed : 0;
-    ourFile.m_FileAttributes |= windowsFile.dwFileAttributes & FILE_ATTRIBUTE_OFFLINE ? FileAttributes::Offline : 0;
-    ourFile.m_FileAttributes |= windowsFile.dwFileAttributes & FILE_ATTRIBUTE_NOT_CONTENT_INDEXED ? FileAttributes::NonIndexed : 0;
-    ourFile.m_FileAttributes |= windowsFile.dwFileAttributes & FILE_ATTRIBUTE_ENCRYPTED ? FileAttributes::Encrypted : 0;
-    ourFile.m_FileAttributes |= windowsFile.dwFileAttributes & FILE_ATTRIBUTE_VIRTUAL ? FileAttributes::Virtual : 0;
+#ifndef _DEBUG
+    ourFile.m_Stat.m_CreatedTime = ( (uint64_t)windowsFile.ftCreationTime.dwHighDateTime << 32 ) | windowsFile.ftCreationTime.dwLowDateTime;
+    ourFile.m_Stat.m_ModifiedTime = ( (uint64_t)windowsFile.ftLastWriteTime.dwHighDateTime << 32 ) | windowsFile.ftLastWriteTime.dwLowDateTime;
+    ourFile.m_Stat.m_AccessTime = ( (uint64_t)windowsFile.ftLastAccessTime.dwHighDateTime << 32 ) | windowsFile.ftLastAccessTime.dwLowDateTime;
+    ourFile.m_Stat.m_Size = ( (uint64_t)windowsFile.nFileSizeHigh << 32 ) | windowsFile.nFileSizeLow;
+
+    ourFile.m_Stat.m_Mode |= ( windowsFile.dwFileAttributes & FILE_ATTRIBUTE_READONLY ) ? FileModeFlags::Read : ( FileModeFlags::Read | FileModeFlags::Write );
+    ourFile.m_Stat.m_Mode |= ( windowsFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) ? FileModeFlags::Directory : FileModeFlags::None;
+    ourFile.m_Stat.m_Mode |= ( windowsFile.dwFileAttributes & FILE_ATTRIBUTE_NORMAL ) ? FileModeFlags::File : FileModeFlags::None;
+    ourFile.m_Stat.m_Mode |= ( windowsFile.dwFileAttributes & FILE_ATTRIBUTE_DEVICE ) ? FileModeFlags::Special : FileModeFlags::None;
+    ourFile.m_Stat.m_Mode |= ( windowsFile.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT ) ? FileModeFlags::Special : FileModeFlags::None;
+    ourFile.m_Stat.m_Mode |= ( windowsFile.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM ) ? FileModeFlags::Special : FileModeFlags::None;
+#endif
 }
 
-DirectoryHandle Helium::FindFirst( const tstring& spec, FileFindData& data )
+bool Helium::FindFirst( DirectoryHandle& handle, FileFindData& data )
 {
-    // check that the input is not larger than allowed
-    if ( spec.size() > MAX_PATH )
-    {
-        throw Helium::Exception( TXT( "Query string is too long (max buffer length is %d): %s" ), ( int ) MAX_PATH, spec.c_str() );
-    }
-
-    DirectoryHandle handle = NULL;
-    
     WIN32_FIND_DATA foundFile;
-    handle = ::FindFirstFile( spec.c_str(), &foundFile );
+    handle.m_Handle = ::FindFirstFile( tstring( handle.m_Path + TXT( "/*" ) ).c_str(), &foundFile );
 
-    if ( handle )
-    {
-        CopyFromWindowsStruct( foundFile, data );
-    }
-    else
+    if ( handle.m_Handle == INVALID_HANDLE_VALUE )
     {
         DWORD error = GetLastError();
-        if ( error != ERROR_FILE_NOT_FOUND && error != ERROR_PATH_NOT_FOUND ) 
+        if ( error == ERROR_FILE_NOT_FOUND || error == ERROR_PATH_NOT_FOUND ) 
+        {
+            return false;
+        }
+        else
         {
             throw Exception( TXT( "Error calling ::FindFirstFile: %s" ), GetErrorString( error ).c_str() );
         }
     }
 
-    return handle;
+    CopyFromWindowsStruct( foundFile, data );
+    return true;
 }
 
 bool Helium::FindNext( DirectoryHandle& handle, FileFindData& data )
 {
     WIN32_FIND_DATA foundFile;
-    if ( !::FindNextFile( handle, &foundFile ) )
+    if ( !::FindNextFile( handle.m_Handle, &foundFile ) )
     {
         DWORD error = GetLastError();
         if ( error != ERROR_NO_MORE_FILES ) 
@@ -80,5 +67,18 @@ bool Helium::FindNext( DirectoryHandle& handle, FileFindData& data )
 
 bool Helium::CloseFind( DirectoryHandle& handle )
 {
-    return TRUE == ::FindClose( handle );
+    return TRUE == ::FindClose( handle.m_Handle );
+}
+
+bool Helium::GetExtendedData( DirectoryHandle& handle, FileFindData& data )
+{
+#ifdef _DEBUG
+    if ( !Helium::StatPath( tstring( handle.m_Path + TXT( "/" ) + data.m_Filename.c_str() ).c_str(), data.m_Stat ) )
+    {
+        return false;
+    }
+
+#endif
+
+    return true;
 }

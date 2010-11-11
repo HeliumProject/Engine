@@ -524,7 +524,10 @@ namespace Lunar
     {
         return StringBase::operator!=( rString );
     }
+}
 
+namespace Helium
+{
     /// Default CharString hash.
     ///
     /// @param[in] rKey  Key for which to compute a hash value.

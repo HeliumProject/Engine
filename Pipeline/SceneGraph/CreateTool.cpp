@@ -1167,7 +1167,7 @@ void CreateTool::CreateMultipleObjects( bool stamp )
     }
 
     float32_t maxTime = 100.0f;
-    Timer instanceTimer;
+    SimpleTimer instanceTimer;
     Vector3 instanceNormalOffset = m_InstanceNormal.Normalize() * 2.0f * s_PaintRadius;
 
     while ( m_InstanceOffsets.size() && ( stamp || ( instanceTimer.Elapsed() < maxTime ) ) )

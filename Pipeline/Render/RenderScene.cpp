@@ -215,7 +215,7 @@ uint32_t RenderScene::LoadNewMesh( const tchar_t* fname, ObjectLoaderPtr loader,
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 uint32_t RenderScene::LoadMesh(const tchar_t* fname,ObjectLoaderPtr loader, int bangleIndex)
 {
-    uint32_t crc = Helium::StringCrc32(fname);
+    uint32_t crc = Helium::Crc32(fname, _tcslen(fname));
 
     uint32_t mesh_count = (uint32_t)g_loaded_meshes.size();
     uint32_t handle = 0xffffffff;
@@ -462,7 +462,7 @@ uint32_t RenderScene::LoadNewEnvironment(const tchar_t* fname,uint32_t clear_col
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 uint32_t RenderScene::LoadEnvironment(const tchar_t* fname, uint32_t clear_color)
 {
-    uint32_t crc = Helium::StringCrc32(fname);
+    uint32_t crc = Helium::Crc32(fname, _tcslen(fname));
 
     uint32_t env_count = (uint32_t)g_loaded_environments.size();
     uint32_t handle = 0xffffffff;

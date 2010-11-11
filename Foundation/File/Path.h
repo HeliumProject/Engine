@@ -99,9 +99,6 @@ namespace Helium
         bool Move( const Helium::Path& target ) const;
         bool Delete() const;
 
-        tstring FileCRC() const;
-        bool VerifyFileCRC( const tstring& hash ) const;
-
         tstring FileMD5() const;
         bool VerifyFileMD5( const tstring& hash ) const;
 

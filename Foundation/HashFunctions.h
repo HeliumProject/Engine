@@ -1,17 +1,9 @@
-//----------------------------------------------------------------------------------------------------------------------
-// HashFunctions.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_HASH_FUNCTIONS_H
-#define LUNAR_CORE_HASH_FUNCTIONS_H
 
-#include "Core/Core.h"
+#include "Platform/Types.h"
+#include "Foundation/API.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Default integer hash function.
     template< typename T >
@@ -40,7 +32,7 @@ namespace Lunar
 #if HELIUM_WORDSIZE == 32
     /// Default 64-bit signed integer hash function.
     template<>
-    class LUNAR_CORE_API Hash< int64_t >
+    class FOUNDATION_API Hash< int64_t >
     {
     public:
         inline size_t operator()( int64_t value ) const;
@@ -48,7 +40,7 @@ namespace Lunar
 
     /// Default 64-bit unsigned integer hash function.
     template<>
-    class LUNAR_CORE_API Hash< uint64_t >
+    class FOUNDATION_API Hash< uint64_t >
     {
     public:
         inline size_t operator()( uint64_t value ) const;
@@ -57,7 +49,7 @@ namespace Lunar
 
     /// Default 32-bit floating-point hash function.
     template<>
-    class LUNAR_CORE_API Hash< float32_t >
+    class FOUNDATION_API Hash< float32_t >
     {
     public:
         inline size_t operator()( float32_t key ) const;
@@ -65,7 +57,7 @@ namespace Lunar
 
     /// Default 64-bit floating-point hash function.
     template<>
-    class LUNAR_CORE_API Hash< float64_t >
+    class FOUNDATION_API Hash< float64_t >
     {
     public:
         inline size_t operator()( float64_t key ) const;
@@ -73,7 +65,7 @@ namespace Lunar
 
     /// Default string hash.
     template<>
-    class LUNAR_CORE_API Hash< char* >
+    class FOUNDATION_API Hash< char* >
     {
     public:
         size_t operator()( const char* pKey ) const;
@@ -81,7 +73,7 @@ namespace Lunar
 
     /// Default wide-character string hash.
     template<>
-    class LUNAR_CORE_API Hash< wchar_t* >
+    class FOUNDATION_API Hash< wchar_t* >
     {
     public:
         size_t operator()( const wchar_t* pKey ) const;
@@ -89,7 +81,7 @@ namespace Lunar
 
     /// Default string hash.
     template<>
-    class LUNAR_CORE_API Hash< const char* >
+    class FOUNDATION_API Hash< const char* >
     {
     public:
         size_t operator()( const char* pKey ) const;
@@ -97,13 +89,11 @@ namespace Lunar
 
     /// Default wide-character string hash.
     template<>
-    class LUNAR_CORE_API Hash< const wchar_t* >
+    class FOUNDATION_API Hash< const wchar_t* >
     {
     public:
         size_t operator()( const wchar_t* pKey ) const;
     };
 }
 
-#include "Core/HashFunctions.inl"
-
-#endif  // LUNAR_CORE_HASH_FUNCTIONS_H
+#include "Foundation/HashFunctions.inl"

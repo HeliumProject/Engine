@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Foundation/Container/ConcurrentHashTable.h"
-#include "Core/Functions.h"
-#include "Core/HashFunctions.h"
+#include "Foundation/Functions.h"
+#include "Foundation/HashFunctions.h"
+
 #include <utility>
 
 namespace Helium

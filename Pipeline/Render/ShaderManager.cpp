@@ -17,7 +17,7 @@ Texture::Texture(const tchar_t* fname)
 {
     m_filename = fname;  
     m_timestamp = (uint64_t)-1;
-    m_crc= Helium::StringCrc32( fname );
+    m_crc= Helium::Crc32( fname, _tcslen(fname) );
     m_load_count=0;
     m_d3d_texture = 0;
 
@@ -43,7 +43,7 @@ RenderShader::RenderShader(ShaderManager* sd, const tchar_t* shader)
 {
     m_filename = shader;  
     m_timestamp = (uint64_t)-1;
-    m_crc=Helium::StringCrc32(shader);
+    m_crc=Helium::Crc32(shader, _tcslen(shader));
     m_load_count = 0;
     m_flags = SHDR_FLAG_GPI_MAP;
     m_sd = sd;
@@ -284,7 +284,7 @@ uint32_t ShaderManager::LoadShader(const tchar_t* fname, bool inc, ShaderLoaderP
 ////////////////////////////////////////////////////////////////////////////////////////////////
 uint32_t ShaderManager::FindShader(const tchar_t* fname)
 {
-    uint32_t crc = Helium::StringCrc32(fname);
+    uint32_t crc = Helium::Crc32(fname, _tcslen(fname));
 
     uint32_t shader_count = (uint32_t)m_loaded_shaders.size();
     uint32_t handle = 0xffffffff;
@@ -448,7 +448,7 @@ bool ShaderManager::ReloadTexture( const tchar_t* fname )
 uint32_t ShaderManager::FindTexture(const tchar_t* fname)
 {
     // NOTE: We only include the name in the CRC, we really should include other info such as the format
-    uint32_t crc = Helium::StringCrc32(fname);
+    uint32_t crc = Helium::Crc32(fname, _tcslen(fname));
 
     uint32_t texture_count = (uint32_t)m_loaded_textures.size();
     uint32_t handle = 0xffffffff;

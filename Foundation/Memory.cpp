@@ -116,7 +116,7 @@ static void MemoryReportThread(void*)
             }
         }
 
-        Timer timer;
+        SimpleTimer timer;
 
         while (timer.Elapsed() < 5000 && !g_MemoryReportThreadTerminate)
         {

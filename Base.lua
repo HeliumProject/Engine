@@ -65,6 +65,14 @@ Helium.DoDefaultSolutionSettings = function()
 		"NoMinimalRebuild",
 	}
 
+	configuration "x64"
+		defines
+		{
+			-- Explicitly define "__SSE__" and "__SSE2__" on x86-64 platforms, as Visual C++ does not define them automatically.
+			"__SSE__",
+			"__SSE2__",
+		}
+
 	configuration "no-unicode"
 		defines
 		{

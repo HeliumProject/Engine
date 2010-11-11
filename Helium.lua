@@ -129,6 +129,7 @@ configuration { "windows", "x64", "not Debug" }
 	}
 
 project "Platform"
+	uuid "E4A1F8FC-A93A-46E2-9CA8-40C2CE1B163E"
 	kind "SharedLib"
 	language "C++"
 	defines
@@ -172,6 +173,7 @@ project "Platform"
 		}
 
 project "Foundation"
+	uuid "9708463D-9698-4BB6-A911-37354AF0E21E"
 	kind "SharedLib"
 	language "C++"
 	defines
@@ -198,6 +200,7 @@ project "Foundation"
 	}
 
 project "Pipeline"
+	uuid "50F5AA7E-22D9-4D33-B48A-357CD3082BC1"
 	kind "SharedLib"
 	language "C++"
 	defines
@@ -251,6 +254,7 @@ project "Pipeline"
 		}
 
 project "Editor"
+	uuid "A5CAC2F6-62BC-4EF3-A752-887F89C64812"
 	kind "ConsoleApp"
 	language "C++"
 	defines
@@ -288,8 +292,8 @@ project "Editor"
 	}
 	flags
 	{
-        "WinMain"
-    }
+		"WinMain"
+	}
 
 	configuration "windows"
 		includedirs
@@ -357,6 +361,8 @@ project "Editor"
 		}
 
 project "Core"
+	uuid "B4A1D5A3-C3B3-4AB0-8756-78A48BCBFFD3"
+
 	links
 	{
 		"Platform",

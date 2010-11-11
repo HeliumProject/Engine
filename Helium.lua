@@ -369,8 +369,4 @@ project "Core"
 		"Foundation",
 	}
 
-	if corePrebuildCommands ~= nil then
-		prebuildcommands( corePrebuildCommands )
-	end
-
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "Core", "CORE" )

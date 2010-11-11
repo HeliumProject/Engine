@@ -9,11 +9,12 @@
 #ifndef LUNAR_CORE_ASYNC_LOADER_H
 #define LUNAR_CORE_ASYNC_LOADER_H
 
-#include "Core/ObjectPool.h"
+#include "Core/Core.h"
 
 #include "Platform/Condition.h"
 #include "Platform/ReadWriteLock.h"
 #include "Platform/Thread.h"
+#include "Foundation/Container/ObjectPool.h"
 
 #ifdef _MSC_VER
 #pragma warning( push )

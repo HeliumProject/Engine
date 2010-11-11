@@ -1,19 +1,10 @@
-//----------------------------------------------------------------------------------------------------------------------
-// ObjectPool.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_OBJECT_POOL_H
-#define LUNAR_CORE_OBJECT_POOL_H
 
-#include "Core/Core.h"
+#include "Foundation/API.h"
 #include "Platform/ReadWriteLock.h"
 #include "Platform/SpinLock.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Thread-safe object allocation pool.
     ///
@@ -82,6 +73,4 @@ namespace Lunar
     };
 }
 
-#include "ObjectPool.inl"
-
-#endif  // LUNAR_CORE_OBJECT_POOL_H
+#include "Foundation/Container/ObjectPool.inl"

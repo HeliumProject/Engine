@@ -9,7 +9,9 @@
 #ifndef LUNAR_CORE_NAME_H
 #define LUNAR_CORE_NAME_H
 
-#include "Core/String.h"
+#include "Core/Core.h"
+
+#include "Foundation/String.h"
 #include "Foundation/HashFunctions.h"
 
 namespace Lunar

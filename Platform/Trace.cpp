@@ -49,42 +49,6 @@ void Helium::Trace::Output( ETraceLevel level, const tchar_t* pFormat, ... )
     va_end( argList );
 }
 
-#pragma TODO( "LUNAR MERGE - Enable the following once String has been merged over." )
-#if 0
-/// Write out a message to this log.
-///
-/// @param[in] level     Logging level.
-/// @param[in] rMessage  Message text.
-void Helium::Trace::Output( ETraceLevel level, const String& rMessage )
-{
-    if( level < m_level )
-    {
-        return;
-    }
-
-    MutexScopeLock scopeLock( m_mutex );
-
-    if( m_bNewLine || level != m_lastMessageLevel )
-    {
-        OutputImplementation( GetLevelString( level ) );
-    }
-
-    m_bNewLine = false;
-    m_lastMessageLevel = level;
-
-    const tchar_t* pMessage = rMessage.GetData();
-    if( pMessage )
-    {
-        size_t messageLength = StringLength( pMessage );
-        if( messageLength != 0 )
-        {
-            OutputImplementation( pMessage );
-            m_bNewLine = ( pMessage[ messageLength - 1 ] == TXT( '\n' ) );
-        }
-    }
-}
-#endif
-
 /// Write out a formatted message to this log using a variable argument list.
 ///
 /// @param[in] level    Logging level.

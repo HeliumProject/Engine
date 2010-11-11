@@ -8,7 +8,7 @@
 #include "CorePch.h"
 #include "Core/Path.h"
 
-#include "Core/String.h"
+#include "Foundation/String.h"
 
 namespace Lunar
 {

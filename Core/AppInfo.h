@@ -9,7 +9,9 @@
 #ifndef LUNAR_CORE_APP_INFO_H
 #define LUNAR_CORE_APP_INFO_H
 
-#include "Core/String.h"
+#include "Core/Core.h"
+
+#include "Foundation/String.h"
 
 namespace Lunar
 {

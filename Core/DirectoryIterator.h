@@ -9,7 +9,7 @@
 #ifndef LUNAR_CORE_DIRECTORY_ITERATOR_H
 #define LUNAR_CORE_DIRECTORY_ITERATOR_H
 
-#include "Core/String.h"
+#include "Foundation/String.h"
 
 namespace Lunar
 {

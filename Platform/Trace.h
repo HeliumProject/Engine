@@ -83,8 +83,6 @@ namespace Helium
         inline ETraceLevel GetLevel() const;
 
         void Output( ETraceLevel level, const tchar_t* pFormat, ... );
-#pragma TODO( "LUNAR MERGE - Enable the following once String has been merged over." )
-//        void Output( ETraceLevel level, const String& rMessage );
         void OutputVa( ETraceLevel level, const tchar_t* pFormat, va_list argList );
         //@}
 

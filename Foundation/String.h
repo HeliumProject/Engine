@@ -1,21 +1,16 @@
-//----------------------------------------------------------------------------------------------------------------------
-// String.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef LUNAR_CORE_STRING_H
-#define LUNAR_CORE_STRING_H
 
-#include "Core/Core.h"
+#include "Foundation/API.h"
 
 #include "Platform/Types.h"
-#include "Foundation/Container/DynArray.h"
+#include "Platform/Memory.h"
 #include "Foundation/HashFunctions.h"
+#include "Foundation/Container/DynArray.h"
 
-namespace Lunar
+#include <string>
+#include <stdlib.h>
+
+namespace Helium
 {
     /// Base string class.
     template< typename CharType, typename Allocator = DefaultAllocator >
@@ -127,14 +122,10 @@ namespace Lunar
         template< typename OtherAllocator > void Insert(
             size_t index, const StringBase< CharType, OtherAllocator >& rString );
         //@}
-
-        /// @name Protected Overloaded Operators
-        //@{
-        //@}
     };
 
     /// 8-bit character string class.
-    class LUNAR_CORE_API CharString : public StringBase< char, DefaultAllocator >
+    class FOUNDATION_API CharString : public StringBase< char, DefaultAllocator >
     {
     public:
         /// @name Construction/Destruction
@@ -186,7 +177,7 @@ namespace Lunar
     };
 
     /// Wide character string class.
-    class LUNAR_CORE_API WideString : public StringBase< wchar_t, DefaultAllocator >
+    class FOUNDATION_API WideString : public StringBase< wchar_t, DefaultAllocator >
     {
     public:
         /// @name Construction/Destruction
@@ -236,13 +227,10 @@ namespace Lunar
         bool operator!=( const WideString& rString ) const;
         //@}
     };
-}
 
-namespace Helium
-{
     /// Default CharString hash.
     template<>
-    class LUNAR_CORE_API Hash< CharString >
+    class FOUNDATION_API Hash< CharString >
     {
     public:
         size_t operator()( const CharString& rKey ) const;
@@ -250,15 +238,12 @@ namespace Helium
 
     /// Default WideString hash.
     template<>
-    class LUNAR_CORE_API Hash< WideString >
+    class FOUNDATION_API Hash< WideString >
     {
     public:
         size_t operator()( const WideString& rKey ) const;
     };
-}
 
-namespace Lunar
-{
 #if HELIUM_UNICODE
     /// Default string class.
     typedef WideString String;
@@ -268,6 +253,4 @@ namespace Lunar
 #endif  // HELIUM_UNICODE
 }
 
-#include "Core/String.inl"
-
-#endif  // LUNAR_CORE_STRING_H
+#include "Foundation/String.inl"

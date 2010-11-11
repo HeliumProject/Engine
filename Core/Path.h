@@ -10,7 +10,7 @@
 #define LUNAR_CORE_PATH_H
 
 #include "Core/Core.h"
-#include "Core/String.h"
+#include "Foundation/String.h"
 
 namespace Lunar
 {

@@ -143,7 +143,7 @@ bool Path::IsFile() const
         return false;
     }
 
-    return ( stat.m_Mode & Helium::ModeFlags::File ) == Helium::ModeFlags::File;
+    return ( stat.m_Mode & Helium::FileModeFlags::File ) == Helium::FileModeFlags::File;
 }
 
 bool Path::IsDirectory() const
@@ -159,7 +159,7 @@ bool Path::IsDirectory() const
         return false;
     }
 
-    return ( stat.m_Mode & Helium::ModeFlags::Directory ) == Helium::ModeFlags::Directory;
+    return ( stat.m_Mode & Helium::FileModeFlags::Directory ) == Helium::FileModeFlags::Directory;
 }
 
 bool Path::Writable() const
@@ -170,7 +170,7 @@ bool Path::Writable() const
         return true;
     }
 
-    return ( stat.m_Mode & Helium::ModeFlags::Write ) == Helium::ModeFlags::Write;
+    return ( stat.m_Mode & Helium::FileModeFlags::Write ) == Helium::FileModeFlags::Write;
 }
 
 bool Path::Readable() const
@@ -181,7 +181,7 @@ bool Path::Readable() const
         return false;
     }
 
-    return ( stat.m_Mode & Helium::ModeFlags::Read ) == Helium::ModeFlags::Read;
+    return ( stat.m_Mode & Helium::FileModeFlags::Read ) == Helium::FileModeFlags::Read;
 }
 
 bool Path::ChangedSince( uint64_t lastTime ) const

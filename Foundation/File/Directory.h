@@ -49,7 +49,7 @@ namespace Helium
     {
     public:
         Directory();
-        Directory( const Path& path, const tstring& spec = TXT( "*.*" ), uint32_t flags = DirectoryFlags::Default );
+        Directory( const Path& path, uint32_t flags = DirectoryFlags::Default );
         ~Directory();
 
         bool IsDone();
@@ -57,24 +57,23 @@ namespace Helium
         const DirectoryItem& GetItem();
 
         void Reset();
-        bool Open(const Path& path, const tstring& spec = TXT( "*.*" ), uint32_t flags = DirectoryFlags::Default);
+        bool Open(const Path& path, uint32_t flags = DirectoryFlags::Default);
 
-        static void GetFiles( const Path& path, std::set< Helium::Path >& paths, const tstring& spec = TXT( "*.*" ), bool recursive = false );
-        void GetFiles( std::set< Helium::Path >& paths, const tstring& spec = TXT( "*.*" ), bool recursive = false );
+        static void GetFiles( const Path& path, std::set< Helium::Path >& paths, bool recursive = false );
+        void GetFiles( std::set< Helium::Path >& paths, bool recursive = false );
 
     private:
-        bool Find( const tstring& query = TXT( "" ) );
+        bool Find();
         void Close();
 
         Path             m_Path;
-        tstring          m_Spec;
         uint32_t         m_Flags;
         DirectoryHandle  m_Handle;
         DirectoryItem    m_Item;
         bool             m_Done;
     };
 
-    typedef Helium::Signature< const DirectoryItem&> DirectoryItemSignature;
+    typedef Helium::Signature< const DirectoryItem& > DirectoryItemSignature;
 
-    FOUNDATION_API void RecurseDirectories( DirectoryItemSignature::Delegate delegate, const tstring &path, const tstring &spec = TXT( "*.*" ), uint32_t flags = DirectoryFlags::Default);
+    FOUNDATION_API void RecurseDirectories( DirectoryItemSignature::Delegate delegate, const Path& path, uint32_t flags = DirectoryFlags::Default);
 }

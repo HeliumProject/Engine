@@ -83,8 +83,8 @@ namespace Helium
 
         TimerTickSignature::Event m_TimerTickEvent;
 
-        bool   m_Alive;
-        CallbackThread m_Thread;
-        Timer  m_Timer;
+        bool            m_Alive;
+        CallbackThread  m_Thread;
+        SimpleTimer     m_Timer;
     };
 }

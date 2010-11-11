@@ -1,8 +1,9 @@
 #pragma once 
 
-#include "API.h"
-#include "Memory.h"
-#include "Types.h"
+#include "Platform/API.h"
+#include "Platform/Memory.h"
+#include "Platform/Types.h"
+#include "Platform/Utility.h"
 
 #ifdef WIN32
 
@@ -20,29 +21,22 @@ typedef struct _iobuf FILE;
 
 namespace Helium
 {
-    class PLATFORM_API Timer
+    class PLATFORM_API SimpleTimer : NonCopyable
     {
-    private:
-        uint64_t m_StartTime;
-
     public:
-        Timer()
+        SimpleTimer()
         {
             Reset();
         }
 
-    private:
-        Timer(const Timer& rhs)
-        {
-
-        }
-
-    public:
         // reset timer (for re-use)
         void Reset();
 
         // get elapsed time in millis
         float Elapsed();
+
+    private:
+        uint64_t m_StartTime;
     };
 
     class PLATFORM_API TraceFile

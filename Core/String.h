@@ -13,7 +13,7 @@
 
 #include "Platform/Types.h"
 #include "Foundation/Container/DynArray.h"
-#include "Core/HashFunctions.h"
+#include "Foundation/HashFunctions.h"
 
 namespace Lunar
 {
@@ -236,7 +236,10 @@ namespace Lunar
         bool operator!=( const WideString& rString ) const;
         //@}
     };
+}
 
+namespace Helium
+{
     /// Default CharString hash.
     template<>
     class LUNAR_CORE_API Hash< CharString >
@@ -252,7 +255,10 @@ namespace Lunar
     public:
         size_t operator()( const WideString& rKey ) const;
     };
+}
 
+namespace Lunar
+{
 #if HELIUM_UNICODE
     /// Default string class.
     typedef WideString String;

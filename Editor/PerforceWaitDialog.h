@@ -10,36 +10,36 @@
 
 namespace Helium
 {
-namespace Editor
-{
-    typedef bool (*CancelWaitFunc)();
-
-    class PerforceWaitDialog : public wxDialog
+    namespace Editor
     {
-    public:
-        static void Enable( bool enable );
+        typedef bool (*CancelWaitFunc)();
 
-        PerforceWaitDialog();
+        class PerforceWaitDialog : public wxDialog
+        {
+        public:
+            static void Enable( bool enable );
 
-        int ShowModal( Perforce::WaitInterface* waitInterface );
-        void Throb();
+            PerforceWaitDialog();
 
-    private:
-        PerforceWaitPanelGenerated* m_Panel;
-    };
+            int ShowModal( Perforce::WaitInterface* waitInterface );
+            void Throb();
 
-    class PerforceWaitTimer : public wxTimer
-    {
-    public:
-        PerforceWaitTimer( class PerforceWaitDialog* dialog, Perforce::WaitInterface* waitInterface );
+        private:
+            PerforceWaitPanelGenerated* m_Panel;
+        };
 
-    protected:
-        void Notify();
+        class PerforceWaitTimer : public wxTimer
+        {
+        public:
+            PerforceWaitTimer( class PerforceWaitDialog* dialog, Perforce::WaitInterface* waitInterface );
 
-    private:
-        PerforceWaitDialog*       m_WaitDialog;
-        Perforce::WaitInterface*  m_WaitInterface;
-        Timer                     m_WaitTimer;
-    };
+        protected:
+            void Notify();
+
+        private:
+            PerforceWaitDialog*       m_WaitDialog;
+            Perforce::WaitInterface*  m_WaitInterface;
+            SimpleTimer               m_WaitTimer;
+        };
     }
 }

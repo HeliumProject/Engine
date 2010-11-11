@@ -572,20 +572,6 @@ const tchar_t* Path::c_str() const
     return m_Path.c_str();
 }
 
-tstring Path::FileCRC() const
-{
-    uint32_t crc = Helium::FileCrc32( m_Path.c_str() );
-
-    tstringstream str;
-    str << std::hex << std::uppercase << crc;
-    return str.str();
-}
-
-bool Path::VerifyFileCRC( const tstring& hash ) const
-{
-    return FileCRC().compare( hash ) == 0;
-}
-
 tstring Path::FileMD5() const
 {
     return Helium::FileMD5( m_Path.c_str() );

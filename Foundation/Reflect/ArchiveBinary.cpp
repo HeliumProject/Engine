@@ -169,7 +169,7 @@ void ArchiveBinary::Read()
 
     // read and verify CRC
     uint32_t crc = CRC_DEFAULT;
-    uint32_t current_crc = crc;
+    uint32_t current_crc = Helium::BeginCrc32();
     m_Stream->Read(&crc); 
 
 #ifdef REFLECT_DISABLE_BINARY_CRC
@@ -186,7 +186,6 @@ void ArchiveBinary::Read()
         uint32_t count = 0;
         uint8_t block[CRC_BLOCK_SIZE];
         memset(block, 0, CRC_BLOCK_SIZE);
-        HELIUM_ASSERT(current_crc == CRC_DEFAULT);
 
         // snapshot our starting location
         uint32_t start = (uint32_t)m_Stream->TellRead();
@@ -201,7 +200,7 @@ void ArchiveBinary::Read()
             uint32_t got = (uint32_t) m_Stream->ElementsRead();
 
             // crc block
-            current_crc = Helium::Crc32(current_crc, block, got);
+            current_crc = Helium::UpdateCrc32(current_crc, block, got);
 
 #ifdef REFLECT_DEBUG_BINARY_CRC
             Log::Print("CRC %d (length %d) for datum 0x%08x is 0x%08x\n", count++, got, *(uint32_t*)block, current_crc);
@@ -434,7 +433,7 @@ void ArchiveBinary::Write()
         HELIUM_ASSERT(crc == CRC_INVALID);
 
         // reset this local back to default for computation
-        crc = CRC_DEFAULT;
+        crc = Helium::BeginCrc32();
 
         // seek to our starting point (after crc location)
         m_Stream->SeekRead(crc_offset + sizeof(crc), std::ios_base::beg);
@@ -449,7 +448,7 @@ void ArchiveBinary::Write()
             uint32_t got = (uint32_t) m_Stream->ElementsRead();
 
             // crc block
-            crc = Helium::Crc32(crc, block, got);
+            crc = Helium::UpdateCrc32(crc, block, got);
 
 #ifdef REFLECT_DEBUG_BINARY_CRC
             Log::Print("CRC %d (length %d) for datum 0x%08x is 0x%08x\n", count++, got, *(uint32_t*)block, crc);

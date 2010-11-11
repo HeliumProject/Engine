@@ -124,10 +124,10 @@ namespace Helium
         public:
             bool                  m_IsEnabled;
             bool                  m_IsConnected;
-            Timer                 m_ConnectTimer;
-            uint32_t                   m_ConnectionTestTimeout;        // the time we are willing to wait to test if the server is running
-            uint32_t                   m_ForegroundExecuteTimeout;     // the timeout in the foreground thread before we open the wait dialog
-            uint32_t                   m_BackgroundExecuteTimeout;     // this is lame and we should consider opening a new connection per-calling thread?
+            SimpleTimer           m_ConnectTimer;
+            uint32_t              m_ConnectionTestTimeout;        // the time we are willing to wait to test if the server is running
+            uint32_t              m_ForegroundExecuteTimeout;     // the timeout in the foreground thread before we open the wait dialog
+            uint32_t              m_BackgroundExecuteTimeout;     // this is lame and we should consider opening a new connection per-calling thread?
 
             bool                  m_Abort;
             ClientApi             m_Client;

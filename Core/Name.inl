@@ -262,7 +262,10 @@ namespace Lunar
 
         return pEntry;
     }
+}
 
+namespace Helium
+{
     /// Default Name hash.
     ///
     /// @param[in] rKey  Key for which to compute a hash value.

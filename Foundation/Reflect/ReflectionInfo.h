@@ -35,7 +35,7 @@ namespace Helium
         {
             enum ReflectionType
             {
-                Invalid,
+                Invalid = -1,
                 Type,
                 Enumeration,
                 Composite,
@@ -53,7 +53,7 @@ namespace Helium
         // This lets us safely cast between reflection class pointers
         //
 
-        class FOUNDATION_API Base : public Helium::AtomicRefCountBase
+        class FOUNDATION_API ReflectionInfo : public Helium::AtomicRefCountBase
         {
         public:
             REFLECTION_BASE(ReflectionTypes::Invalid);
@@ -121,15 +121,15 @@ namespace Helium
         }; 
 
         template<typename T>
-        T* ReflectionCast(Base* type)
+        T* ReflectionCast(ReflectionInfo* info)
         {
-            return (type && type->HasReflectionType( T::ReflectionTypeID )) ? static_cast<T*>(type) : NULL;
+            return (info && info->HasReflectionType( T::ReflectionTypeID )) ? static_cast<T*>(info) : NULL;
         }
 
         template<typename T>
-        const T* ReflectionCast(const Base* type)
+        const T* ReflectionCast(const ReflectionInfo* info)
         {
-            return (type && type->HasReflectionType( T::ReflectionTypeID )) ? static_cast<const T*>(type) : NULL;
+            return (info && info->HasReflectionType( T::ReflectionTypeID )) ? static_cast<const T*>(info) : NULL;
         }
     }
 }

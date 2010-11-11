@@ -8,8 +8,8 @@
 #include "Foundation/Memory/SmartPtr.h"
 
 #include "API.h"
-#include "Base.h"
 #include "TypeID.h"
+#include "ReflectionInfo.h"
 
 namespace Helium
 {
@@ -30,7 +30,7 @@ namespace Helium
         }
         typedef ReservedTypes::ReservedType ReservedType;
 
-        class FOUNDATION_API Type HELIUM_ABSTRACT : public Base
+        class FOUNDATION_API Type HELIUM_ABSTRACT : public ReflectionInfo
         {
         public:
             REFLECTION_BASE( ReflectionTypes::Type );

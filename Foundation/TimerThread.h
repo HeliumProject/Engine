@@ -4,9 +4,8 @@
 #include "Platform/Types.h"
 #include "Platform/Assert.h"
 #include "Platform/Thread.h"
-
-#include "Timer.h"
-#include "Automation/Event.h"
+#include "Platform/Profile.h"
+#include "Foundation/Automation/Event.h"
 
 namespace Helium
 {

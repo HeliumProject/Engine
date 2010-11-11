@@ -186,8 +186,8 @@ project "Foundation"
 	}
 	files
 	{
-		"Foundation/**.h",
-		"Foundation/**.cpp",
+		"Foundation/**",
+		"Foundation/**",
 	}
 	links
 	{

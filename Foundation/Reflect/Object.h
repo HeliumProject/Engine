@@ -2,6 +2,7 @@
 
 #include "Platform/Types.h"
 #include "Platform/Assert.h"
+#include "Platform/Utility.h"
 
 #include "Foundation/Memory/SmartPtr.h"
 
@@ -15,23 +16,16 @@ namespace Helium
     namespace Reflect
     {
         //
-        // Reflect::Object is a reference counted and type checked HELIUM_ABSTRACT base class
+        // Reflect::Object is a reference counted and type checked abstract base class
         //
 
-        class FOUNDATION_API Object HELIUM_ABSTRACT
+        class FOUNDATION_API Object HELIUM_ABSTRACT : NonCopyable
         {
-        private:
-            mutable int32_t m_RefCount;
-
         protected:
             Object();
 
-        private:
-            Object(const Object& rhs);
-
         public:
             virtual ~Object();
-
 
             //
             // Memory
@@ -39,7 +33,6 @@ namespace Helium
 
             void* operator new(size_t bytes);
             void operator delete(void *ptr, size_t bytes);
-
 
             //
             // Type id
@@ -57,15 +50,16 @@ namespace Helium
             // Enumerates member data (stub)
             static void EnumerateClass( Reflect::Compositor<Element>& comp );
 
-
             //
             // Reference Counting
             //
-
         public:
             int GetRefCount() const;
             void IncrRefCount() const;
             void DecrRefCount() const;
+
+        private:
+            mutable int32_t m_RefCount;
         };
 
 

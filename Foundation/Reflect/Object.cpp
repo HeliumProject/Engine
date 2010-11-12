@@ -19,11 +19,6 @@ Object::Object()
     }
 }
 
-Object::Object(const Object& rhs)
-{
-    HELIUM_BREAK();
-}
-
 Object::~Object()
 {
     if (Reflect::IsInitialized())

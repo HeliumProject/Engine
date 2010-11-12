@@ -9,7 +9,12 @@
 #ifndef LUNAR_CORE_ASYNC_LOADER_H
 #define LUNAR_CORE_ASYNC_LOADER_H
 
-#include "Core/ObjectPool.h"
+#include "Core/Core.h"
+
+#include "Platform/Condition.h"
+#include "Platform/ReadWriteLock.h"
+#include "Platform/Thread.h"
+#include "Foundation/Container/ObjectPool.h"
 
 #ifdef _MSC_VER
 #pragma warning( push )
@@ -126,8 +131,8 @@ namespace Lunar
         private:
             /// Async load request queue.
             tbb::concurrent_queue< Request* > m_requestQueue;
-            /// Event used to wake up the worker thread when load requests are queued (or when it should shut down).
-            Event m_wakeUpEvent;
+            /// Condition used to wake up the worker thread when load requests are queued (or when it should shut down).
+            Condition m_wakeUpCondition;
 
             /// Read-write lock used for synchronization of external file writes.
             ReadWriteLock m_writeLock;
@@ -142,7 +147,7 @@ namespace Lunar
         ObjectPool< Request > m_requestPool;
 
         /// Async loading thread.
-        Thread* m_pThread;
+        RunnableThread* m_pThread;
         /// Async loading thread worker.
         LoadWorker* m_pWorker;
 

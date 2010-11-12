@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cmath>
+#include "Platform/Math/MathCommon.h"
 #include <iostream>
 
 #include <vector>
@@ -45,7 +45,7 @@ namespace Helium
         bool              operator== (const Vector2& v) const { return (x == v.x && y == v.y); }
         bool              operator!= (const Vector2& v) const { return !(x == v.x && y == v.y); }
         bool              Equal (const Vector2& v, float32_t error = 0) const;
-        bool              Valid() { return IsValid(x) && IsValid(y); }
+        bool              Finite() { return IsFinite(x) && IsFinite(y); }
 
         float32_t               LengthSquared () const { return x * x + y * y; }
         float32_t               Length () const;
@@ -80,7 +80,7 @@ namespace Helium
     { 
         float32_t len = this->Length();
 
-        if (len > DivisorNearZero)
+        if (len > HELIUM_DIVISOR_NEAR_ZERO)
         {
             return *this /= len; 
         }

@@ -11,9 +11,13 @@
 
 #include "Core/Core.h"
 
-namespace Lunar
+namespace Helium
 {
     class FileStream;
+}
+
+namespace Lunar
+{
     class DirectoryIterator;
 
     /// Low-level file utilities

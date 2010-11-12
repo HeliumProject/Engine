@@ -176,7 +176,7 @@ ThumbnailView::~ThumbnailView()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void ThumbnailView::InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const tstring& type, const tchar* fileName )
+void ThumbnailView::InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const tstring& type, const tchar_t* fileName )
 {
 #pragma TODO( "reimplement icons as resources" )
     tstring file = fileName;
@@ -1974,7 +1974,7 @@ void ThumbnailView::OnThumbnailLoaded( Editor::ThumbnailLoadedEvent& args )
                 tstring native = args.GetPath().Native();
 
                 // get the icon resource for this example file
-                tchar path[MAX_PATH];
+                tchar_t path[MAX_PATH];
                 _tcscpy( path, native.c_str() );
                 HICON icon = ExtractAssociatedIcon( NULL, path, &index );
 
@@ -1982,7 +1982,7 @@ void ThumbnailView::OnThumbnailLoaded( Editor::ThumbnailLoadedEvent& args )
                 if ( icon )
                 {
                     // check to see if its the fallback in shell32.dll
-                    tchar file[MAX_PATH];
+                    tchar_t file[MAX_PATH];
                     _tsplitpath( path, NULL, NULL, file, NULL );
 
                     // if its windows' stub icon, don't bother using it

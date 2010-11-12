@@ -111,7 +111,7 @@ namespace Helium
                 m_String = indented;
             }
 
-            void ApplyIndent( const tchar* string, tstring& output );
+            void ApplyIndent( const tchar_t* string, tstring& output );
         };
 
         typedef std::vector< Statement > V_Statement;
@@ -245,12 +245,12 @@ namespace Helium
         //
 
         // main printing function used by all prototypes
-        FOUNDATION_API void PrintString(const tchar* string,                // the string to print
+        FOUNDATION_API void PrintString(const tchar_t* string,                // the string to print
             Stream stream = Streams::Normal,   // the stream its going into
             Level level = Levels::Default,     // the verbosity level
             Color color = Colors::Auto,        // the color to use (None for auto)
             int indent = -1,                   // the amount to indent
-            tchar* output = NULL,               // the buffer to copy the result string to
+            tchar_t* output = NULL,               // the buffer to copy the result string to
             uint32_t outputSize = 0);               // the size of the output buffer
 
         // print a persisted print statment
@@ -260,27 +260,27 @@ namespace Helium
         FOUNDATION_API void PrintStatements(const V_Statement& statements, uint32_t streams = Streams::All);
 
         // simple way to print a particular color
-        FOUNDATION_API void PrintColor(Color color, const tchar* fmt, ...);
+        FOUNDATION_API void PrintColor(Color color, const tchar_t* fmt, ...);
 
         // make a print statement
-        FOUNDATION_API void Print(const tchar *fmt,...);
-        FOUNDATION_API void Print(Level level, const tchar *fmt,...);
+        FOUNDATION_API void Print(const tchar_t *fmt,...);
+        FOUNDATION_API void Print(Level level, const tchar_t *fmt,...);
 
         // make a debug-only statement
-        FOUNDATION_API void Debug(const tchar *fmt,...);
-        FOUNDATION_API void Debug(Level level, const tchar *fmt,...);
+        FOUNDATION_API void Debug(const tchar_t *fmt,...);
+        FOUNDATION_API void Debug(Level level, const tchar_t *fmt,...);
 
         // make a profile-only statement
-        FOUNDATION_API void Profile(const tchar *fmt,...);
-        FOUNDATION_API void Profile(Level level, const tchar *fmt,...);
+        FOUNDATION_API void Profile(const tchar_t *fmt,...);
+        FOUNDATION_API void Profile(Level level, const tchar_t *fmt,...);
 
         // warn the user, increments warning count
-        FOUNDATION_API void Warning(const tchar *fmt,...);
-        FOUNDATION_API void Warning(Level level, const tchar *fmt,...);
+        FOUNDATION_API void Warning(const tchar_t *fmt,...);
+        FOUNDATION_API void Warning(Level level, const tchar_t *fmt,...);
 
         // give an error, increments error count
-        FOUNDATION_API void Error(const tchar *fmt,...);
-        FOUNDATION_API void Error(Level level, const tchar *fmt,...);
+        FOUNDATION_API void Error(const tchar_t *fmt,...);
+        FOUNDATION_API void Error(Level level, const tchar_t *fmt,...);
 
         // stack-based indention helper object indents all output while on the stack
         class FOUNDATION_API Indentation
@@ -301,7 +301,7 @@ namespace Helium
         class FOUNDATION_API Heading
         {
         public:
-            Heading(const tchar *fmt, ...);
+            Heading(const tchar_t *fmt, ...);
             ~Heading();
         };
 
@@ -314,13 +314,13 @@ namespace Helium
             bool   m_Valid;
 
         public:
-            Bullet(const tchar *fmt, ...);
-            Bullet(Stream stream, Level level, const tchar *fmt, ...);
+            Bullet(const tchar_t *fmt, ...);
+            Bullet(Stream stream, Level level, const tchar_t *fmt, ...);
 
             ~Bullet();
 
         private:
-            void CreateBullet(const tchar *fmt, va_list args );
+            void CreateBullet(const tchar_t *fmt, va_list args );
         };
 
         // grab the path to the current bullet

@@ -6,24 +6,14 @@
 #include "Foundation/Memory/SmartPtr.h"
 
 #include "API.h"
-#include "Base.h"
 #include "Enumeration.h"
+#include "ReflectionInfo.h"
 
 namespace Helium
 {
     namespace Reflect
     {
-        //
-        // Some basic types
-        //
-
-        // fwd decl
         class Composite;
-
-
-        //
-        // Field, contains all the data about a field of a structure
-        //
 
         namespace FieldFlags
         {
@@ -37,26 +27,10 @@ namespace Helium
             };
         }
 
-
-        //
-        // Field, fully qualified field information
-        //
-
-        class FOUNDATION_API Field : public Base
+        class FOUNDATION_API Field : public ReflectionInfo
         {
         public:
             REFLECTION_BASE( ReflectionTypes::Field );
-
-            const Composite*    m_Type;         // the type we are a field of
-            tstring             m_Name;         // name of this field
-            tstring             m_UIName;       // friendly name
-            uint32_t                 m_Size;         // the size of this field
-            uintptr             m_Offset;       // the offset to the field
-            uint32_t                 m_Flags;        // flags for special behavior
-            int32_t                 m_FieldID;      // the unique id of this field
-            int32_t                 m_SerializerID; // type id of the serializer to use
-            SerializerPtr       m_Default;      // the value of the default
-            CreateObjectFunc    m_Create;       // function to create a new instance for this field (optional)
 
         protected:
             Field(const Composite* type);
@@ -77,13 +51,24 @@ namespace Helium
 
             // set the name (and UI name if its not set)
             void SetName(const tstring& name);
+
+            const Composite*    m_Type;         // the type we are a field of
+            tstring             m_Name;         // name of this field
+            tstring             m_UIName;       // friendly name
+            uint32_t            m_Size;         // the size of this field
+            uintptr_t           m_Offset;       // the offset to the field
+            uint32_t            m_Flags;        // flags for special behavior
+            int32_t             m_FieldID;      // the unique id of this field
+            int32_t             m_SerializerID; // type id of the serializer to use
+            SerializerPtr       m_Default;      // the value of the default
+            CreateObjectFunc    m_Create;       // function to create a new instance for this field (optional)
         };
 
         typedef Helium::SmartPtr< Field > FieldPtr;
         typedef Helium::SmartPtr< const Field > ConstFieldPtr;
-        typedef std::map< int32_t,          ConstFieldPtr > M_FieldIDToInfo;
-        typedef std::map< tstring,      ConstFieldPtr > M_FieldNameToInfo;
-        typedef std::map< uint32_t,          ConstFieldPtr > M_FieldOffsetToInfo;
+        typedef std::map< int32_t, ConstFieldPtr > M_FieldIDToInfo;
+        typedef std::map< tstring, ConstFieldPtr > M_FieldNameToInfo;
+        typedef std::map< uint32_t, ConstFieldPtr > M_FieldOffsetToInfo;
 
         //
         // ElementField store additional information the compile-time type of a pointer
@@ -93,8 +78,6 @@ namespace Helium
         {
         public:
             REFLECTION_TYPE( ReflectionTypes::ElementField );
-
-            int32_t m_TypeID;
 
         protected:
             ElementField(const Composite* type);
@@ -106,6 +89,8 @@ namespace Helium
 
             // creates a suitable serializer (that has a pointer to the enum info)
             virtual SerializerPtr CreateSerializer ( Element* instance = NULL ) const HELIUM_OVERRIDE;
+
+            int32_t m_TypeID;
         };
 
         //
@@ -117,8 +102,6 @@ namespace Helium
         public:
             REFLECTION_TYPE( ReflectionTypes::EnumerationField );
 
-            const Enumeration* m_Enumeration;
-
         protected:
             EnumerationField(const Composite* type, const Enumeration* enumeration);
             virtual ~EnumerationField();
@@ -129,6 +112,8 @@ namespace Helium
 
             // creates a suitable serializer (that has a pointer to the enum info)
             virtual SerializerPtr CreateSerializer ( Element* instance = NULL ) const HELIUM_OVERRIDE;
+
+            const Enumeration* m_Enumeration;
         };
     }
 }

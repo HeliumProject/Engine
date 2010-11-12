@@ -14,7 +14,7 @@ using namespace Helium::SceneGraph;
 
 const float Camera::NearClipDistance = 0.05f;
 const float Camera::FarClipDistance = 10000.0f;
-const float Camera::FieldOfView = 72.0f * DegToRad;
+const float Camera::FieldOfView = 72.0f * static_cast< float32_t >( HELIUM_DEG_TO_RAD );
 
 REFLECT_DEFINE_ABSTRACT(Camera);
 
@@ -606,7 +606,7 @@ bool Camera::ViewportToFrustum(float startx, float starty, float endx, float end
     max.y = endy;
 
   // degenerate case, fall back to line pick
-  if ( (fabs(min.x - max.x) < ValueNearZero) || (fabs(min.y - max.y) < ValueNearZero))
+  if ( (fabs(min.x - max.x) < HELIUM_VALUE_NEAR_ZERO) || (fabs(min.y - max.y) < HELIUM_VALUE_NEAR_ZERO))
     return false;
 
   switch (m_ProjectionMode)

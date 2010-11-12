@@ -7,10 +7,10 @@ using namespace Helium;
 using namespace Helium::Render;
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-RenderMesh::RenderMesh(const tchar* name)
+RenderMesh::RenderMesh(const tchar_t* name)
 {
     m_filename = name;
-    m_crc = Helium::StringCrc32(name);
+    m_crc = Helium::Crc32(name, _tcslen(name));
     m_load_count = 0;
     m_timestamp = (uint64_t)-1;
     m_verts = 0;

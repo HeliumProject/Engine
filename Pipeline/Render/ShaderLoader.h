@@ -17,7 +17,7 @@ namespace Helium
             ShaderLoader();
             virtual ~ShaderLoader();
 
-            virtual RenderShader* ParseFile( const tchar* filename, ShaderManager* db ) = 0;
+            virtual RenderShader* ParseFile( const tchar_t* filename, ShaderManager* db ) = 0;
         };
 
         typedef Helium::SmartPtr<ShaderLoader> ShaderLoaderPtr;

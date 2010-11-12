@@ -145,7 +145,7 @@ namespace Helium
             }
 
             // connect to a field of an object
-            virtual void ConnectField(Helium::HybridPtr<Element> instance, const Field* field, uintptr offsetInField = 0)
+            virtual void ConnectField(Helium::HybridPtr<Element> instance, const Field* field, uintptr_t offsetInField = 0)
             {
                 ConnectData( Helium::HybridPtr<void>( instance.Address() + field->m_Offset + offsetInField, instance.State())); 
 
@@ -300,7 +300,7 @@ namespace Helium
             //
 
             // data serialization (extract to smart buffer)
-            virtual void Serialize (const Helium::BasicBufferPtr& buffer, const tchar* debugStr) const
+            virtual void Serialize (const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const
             {
                 HELIUM_BREAK();
             }

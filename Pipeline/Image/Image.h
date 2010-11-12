@@ -1,6 +1,6 @@
 #pragma once
 
-#include <math.h>
+#include "Platform/Math/MathCommon.h"
 #include <string>
 #include <vector>
 #include <list>
@@ -61,7 +61,7 @@ namespace Helium
 
       VOLUME_NUM_IDENTIFIERS = 2,
     };
-    static tchar* p_volume_identifier_strings[VOLUME_NUM_IDENTIFIERS];
+    static tchar_t* p_volume_identifier_strings[VOLUME_NUM_IDENTIFIERS];
 
     struct LoadRAWInfo
     {
@@ -177,7 +177,7 @@ namespace Helium
     // which face (cubemap) or slice (volume map) is written.
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool WriteTGA(const tchar* fname, uint32_t face, bool convert_to_srgb) const;
+    bool WriteTGA(const tchar_t* fname, uint32_t face, bool convert_to_srgb) const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -187,7 +187,7 @@ namespace Helium
     // which face (cubemap) or slice (volume map) is written.
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool WriteRAW(const tchar* fname, void* data, uint32_t size, uint32_t face, bool convert_to_srgb) const;
+    bool WriteRAW(const tchar_t* fname, void* data, uint32_t size, uint32_t face, bool convert_to_srgb) const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -198,7 +198,7 @@ namespace Helium
     // for m_NativeFormat
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool WriteDDS(const tchar* fname, bool convert_to_srgb, OutputColorFormat output_fmt = OUTPUT_CF_UNKNOWN) const;
+    bool WriteDDS(const tchar_t* fname, bool convert_to_srgb, OutputColorFormat output_fmt = OUTPUT_CF_UNKNOWN) const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -760,7 +760,7 @@ namespace Helium
     // Load a TIFF file as a 2D image
     // NOTE: TIFF files cannot currently be loaded from memory
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    static Image* LoadTIFF(const tchar* filename, bool convert_to_linear);
+    static Image* LoadTIFF(const tchar_t* filename, bool convert_to_linear);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Load a file based on file extension, the returned texture could be 2D, volume or cube depending
@@ -768,12 +768,12 @@ namespace Helium
     // If the file name begins with "ANIM_", a volume texture will be constructed from the image
     // files in the sibling subfolder with the same name as the file without the extension.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    static Image* LoadFile(const tchar* p_path, bool convert_to_linear, LoadRAWInfo* raw_info);
+    static Image* LoadFile(const tchar_t* p_path, bool convert_to_linear, LoadRAWInfo* raw_info);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // LoadFile without the checking for "ANIM_" volume textures.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    static Image* LoadSingleFile(const tchar* filename, bool convert_to_linear, LoadRAWInfo* raw_info);
+    static Image* LoadSingleFile(const tchar_t* filename, bool convert_to_linear, LoadRAWInfo* raw_info);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //

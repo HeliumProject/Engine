@@ -18,10 +18,10 @@ namespace Helium
     {
         namespace AssetProperties
         {
-            static const tchar* ShortDescription  = TXT( "ShortDescription" );
-            static const tchar* LongDescription   = TXT( "LongDescription" );
-            static const tchar* SmallIcon         = TXT( "SmallIcon" );
-            static const tchar* FileFilter        = TXT( "FileFilter" );
+            static const tchar_t* ShortDescription  = TXT( "ShortDescription" );
+            static const tchar_t* LongDescription   = TXT( "LongDescription" );
+            static const tchar_t* SmallIcon         = TXT( "SmallIcon" );
+            static const tchar_t* FileFilter        = TXT( "FileFilter" );
         }
 
         class AssetClass;

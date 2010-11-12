@@ -2,7 +2,7 @@
 
 #include <wx/treectrl.h>
 
-#include "Platform/Compiler.h"
+#include "Platform/Platform.h"
 
 namespace Helium
 {

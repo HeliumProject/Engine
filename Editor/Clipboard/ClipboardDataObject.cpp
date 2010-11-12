@@ -8,7 +8,7 @@ using namespace Helium;
 using namespace Helium::Editor;
 
 // Unique identifier for this type of clipboard data.
-static const tchar* s_Format = TXT( "ClipboardData" );
+static const tchar_t* s_Format = TXT( "ClipboardData" );
 
 ClipboardDataObject::ClipboardDataObject()
 : wxCustomDataObject( s_Format )
@@ -114,7 +114,7 @@ ReflectClipboardDataPtr ClipboardDataObject::FromBuffer()
 
     if ( GetDataSize() > 0 )
     {
-        ClipboardDataWrapperPtr wrapper = Reflect::ObjectCast< ClipboardDataWrapper >( Reflect::ArchiveXML::FromString( (const tchar*)GetData(), Reflect::GetType< ClipboardDataWrapper >() ) );
+        ClipboardDataWrapperPtr wrapper = Reflect::ObjectCast< ClipboardDataWrapper >( Reflect::ArchiveXML::FromString( (const tchar_t*)GetData(), Reflect::GetType< ClipboardDataWrapper >() ) );
         if ( wrapper.ReferencesObject() )
         {
             data = wrapper->m_Data;
@@ -136,5 +136,5 @@ bool ClipboardDataObject::ToBuffer( ReflectClipboardData* data )
     tstring xml;
     Reflect::ArchiveXML::ToString( wrapper, xml );
 
-    return SetData( xml.size() * sizeof( tchar ), (const tchar*)( xml.c_str() ) );
+    return SetData( xml.size() * sizeof( tchar_t ), (const tchar_t*)( xml.c_str() ) );
 }

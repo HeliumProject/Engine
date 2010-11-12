@@ -245,7 +245,7 @@ namespace Helium
         BufferLocation GetAddressLocation( void* address )
         {
             HELIUM_ASSERT( (uint8_t*)address >= m_Data && (uint8_t*)address < ( m_Data + m_Size ) );
-            return BufferLocation( (uint32_t)(uintptr)((uint8_t*)address - m_Data), this );
+            return BufferLocation( (uint32_t)(uintptr_t)((uint8_t*)address - m_Data), this );
         }
 
         // Outgoing fixup access

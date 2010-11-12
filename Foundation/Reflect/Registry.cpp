@@ -208,7 +208,7 @@ void Reflect::Initialize()
     }
 
 #ifdef REFLECT_DEBUG_INIT_AND_CLEANUP
-    std::vector<uintptr> trace;
+    std::vector<uintptr_t> trace;
     Debug::GetStackTrace( trace );
 
     std::string str;
@@ -232,7 +232,7 @@ void Reflect::Cleanup()
     }
 
 #ifdef REFLECT_DEBUG_INIT_AND_CLEANUP
-    std::vector<uintptr> trace;
+    std::vector<uintptr_t> trace;
     Debug::GetStackTrace( trace );
 
     std::string str;
@@ -481,16 +481,6 @@ const Type* Registry::GetType(const tstring& str) const
     return NULL;
 }
 
-void Registry::AtomicGetType(int id, const Type** addr) const
-{
-    Helium::AtomicExchange( (intptr*)addr, (intptr)GetType(id) );
-}
-
-void Registry::AtomicGetType(const tstring& str, const Type** addr) const
-{
-    Helium::AtomicExchange( (intptr*)addr, (intptr)GetType(str) );
-}
-
 ObjectPtr Registry::CreateInstance(int id) const
 {
     M_IDToType::const_iterator type = m_TypesByID.find(id);
@@ -542,7 +532,7 @@ ObjectPtr Registry::CreateInstance(const tstring& str) const
 void Registry::Created(Object* object)
 {
 #ifdef REFLECT_OBJECT_TRACKING
-    Registry::GetInstance()->TrackCreate((uintptr)object);
+    Registry::GetInstance()->TrackCreate((uintptr_t)object);
 #endif
 
     if (m_Created != NULL)
@@ -554,7 +544,7 @@ void Registry::Created(Object* object)
 void Registry::Destroyed(Object* object)
 {
 #ifdef REFLECT_OBJECT_TRACKING
-    Registry::GetInstance()->TrackDelete((uintptr)object);
+    Registry::GetInstance()->TrackDelete((uintptr_t)object);
 #endif
 
     if (m_Destroyed != NULL)
@@ -575,17 +565,17 @@ void Registry::SetDestroyedCallback(DestroyedFunc destroyed)
 
 #ifdef REFLECT_OBJECT_TRACKING
 
-void Registry::TrackCreate(uintptr ptr)
+void Registry::TrackCreate(uintptr_t ptr)
 {
     m_Tracker.Create( ptr );
 }
 
-void Registry::TrackDelete(uintptr ptr)
+void Registry::TrackDelete(uintptr_t ptr)
 {
     m_Tracker.Delete( ptr );
 }
 
-void Registry::TrackCheck(uintptr ptr)
+void Registry::TrackCheck(uintptr_t ptr)
 {
     m_Tracker.Check( ptr );
 }
@@ -614,7 +604,7 @@ CreationRecord::CreationRecord()
 
 }
 
-CreationRecord::CreationRecord(uintptr ptr)
+CreationRecord::CreationRecord(uintptr_t ptr)
 : m_Address (ptr)
 , m_Type (-1)
 {
@@ -648,7 +638,7 @@ Tracker::~Tracker()
 
 StackRecordPtr Tracker::GetStack()
 {
-    Helium::TakeMutex mutex (g_TrackerMutex);
+    Helium::MutexScopeLock mutex (g_TrackerMutex);
 
     StackRecordPtr ptr = new StackRecord();
 
@@ -667,9 +657,9 @@ StackRecordPtr Tracker::GetStack()
     return ptr;
 }
 
-void Tracker::Create(uintptr ptr)
+void Tracker::Create(uintptr_t ptr)
 {
-    Helium::TakeMutex mutex (g_TrackerMutex);
+    Helium::MutexScopeLock mutex (g_TrackerMutex);
 
     M_CreationRecord::iterator create_iter = m_CreatedObjects.find( ptr );
     if ( create_iter == m_CreatedObjects.end() )
@@ -703,9 +693,9 @@ void Tracker::Create(uintptr ptr)
     }
 }
 
-void Tracker::Delete(uintptr ptr)
+void Tracker::Delete(uintptr_t ptr)
 {
-    Helium::TakeMutex mutex (g_TrackerMutex);
+    Helium::MutexScopeLock mutex (g_TrackerMutex);
 
     M_CreationRecord::iterator iter = m_CreatedObjects.find(ptr);
     if ( iter != m_CreatedObjects.end())
@@ -743,9 +733,9 @@ void Tracker::Delete(uintptr ptr)
     }
 }
 
-void Tracker::Check(uintptr ptr)
+void Tracker::Check(uintptr_t ptr)
 {
-    Helium::TakeMutex mutex (g_TrackerMutex);
+    Helium::MutexScopeLock mutex (g_TrackerMutex);
 
     M_CreationRecord::iterator iter = m_CreatedObjects.find(ptr);
     if ( iter != m_CreatedObjects.end())
@@ -781,14 +771,14 @@ void Tracker::Check(uintptr ptr)
 
 void Tracker::Dump()
 {
-    Helium::TakeMutex mutex (g_TrackerMutex);
+    Helium::MutexScopeLock mutex (g_TrackerMutex);
 
-    tchar module[MAX_PATH];
+    tchar_t module[MAX_PATH];
     GetModuleFileName( 0, module, MAX_PATH );
 
-    tchar drive[MAX_PATH];
-    tchar dir[MAX_PATH];
-    tchar name[MAX_PATH];
+    tchar_t drive[MAX_PATH];
+    tchar_t dir[MAX_PATH];
+    tchar_t name[MAX_PATH];
     _tsplitpath( module, drive, dir, name, NULL );
 
     tstring path = drive;
@@ -849,7 +839,7 @@ void Tracker::Dump()
                 max = std::max( (*iter).second.first.length(), max );
             }
 
-            tchar format[1024];
+            tchar_t format[1024];
             _stprintf( format, TXT("\nType: %%%ds, Count: %%d"), max );
 
             iter = objectLog.begin();

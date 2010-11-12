@@ -3,7 +3,7 @@
 
 #include "Platform/Atomic.h"
 #include "Platform/Thread.h"
-#include "Platform/Platform.h"
+#include "Platform/PlatformUtility.h"
 
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 
@@ -76,19 +76,19 @@ void PropertiesManager::CreateProperties()
     }
     else
     {
-        AtomicIncrement( &m_ThreadCount );
-        Helium::Thread propertyThread;
+        AtomicIncrementUnsafe( m_ThreadCount );
+        Helium::CallbackThread propertyThread;
 
         PropertiesThreadArgs* args = new PropertiesThreadArgs( m_Style, m_SelectionId, &m_SelectionId, m_Selection );
-        Helium::Thread::Entry entry = Helium::Thread::EntryHelperWithArgs<PropertiesManager, PropertiesThreadArgs, &PropertiesManager::GeneratePropertiesThreadEntry>;
-        propertyThread.CreateWithArgs( entry, this, args, "GeneratePropertiesThreadEntry()", -1 );
+        Helium::CallbackThread::Entry entry = Helium::CallbackThread::EntryHelperWithArgs<PropertiesManager, PropertiesThreadArgs, &PropertiesManager::GeneratePropertiesThreadEntry>;
+        propertyThread.CreateWithArgs( entry, this, args, TXT( "GeneratePropertiesThreadEntry()" ), Thread::PRIORITY_LOW );
     }
 }
 
 void PropertiesManager::GeneratePropertiesThreadEntry( PropertiesThreadArgs& args )
 {
     GenerateProperties( args );
-    AtomicDecrement( &m_ThreadCount );
+    AtomicDecrementUnsafe( m_ThreadCount );
 }
 
 void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )

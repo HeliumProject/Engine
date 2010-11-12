@@ -44,7 +44,7 @@ void FileDialogButtonWidget::OnClicked( const Inspect::FileDialogButtonClickedAr
     wxFileDialog fileDialog( m_ButtonWindow->GetParent(), args.m_Caption.c_str(), args.m_StartPath.Directory().c_str(), args.m_StartPath.Filename().c_str(), args.m_Filter.c_str(), windowStyle );
     if ( fileDialog.ShowModal() == wxID_OK )
     {
-        path.Set( static_cast<const tchar*>( fileDialog.GetPath().c_str() ) );
+        path.Set( static_cast<const tchar_t*>( fileDialog.GetPath().c_str() ) );
     }
 
     args.m_Result = path;

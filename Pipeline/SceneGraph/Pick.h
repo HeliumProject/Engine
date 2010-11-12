@@ -169,9 +169,9 @@ namespace Helium
             virtual void Transform() = 0;
 
             // picking functions (produce hits)
-            virtual bool PickPoint(const Vector3& p, const float err = LinearIntersectionError) = 0;
-            virtual bool PickSegment(const Vector3& p1,const Vector3& p2, const float err = LinearIntersectionError) = 0;
-            virtual bool PickTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, const float err = LinearIntersectionError) = 0;
+            virtual bool PickPoint(const Vector3& p, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) = 0;
+            virtual bool PickSegment(const Vector3& p1,const Vector3& p2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) = 0;
+            virtual bool PickTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) = 0;
             virtual bool PickSphere(const Vector3& center, const float radius) = 0;
             virtual bool PickBox(const AlignedBox& box) = 0;
 
@@ -211,9 +211,9 @@ namespace Helium
             virtual void Transform() HELIUM_OVERRIDE;
 
             // picking functions (produce hits)
-            virtual bool PickPoint(const Vector3& p, const float err = LinearIntersectionError) HELIUM_OVERRIDE;
-            virtual bool PickSegment(const Vector3& p1,const Vector3& p2, const float err = LinearIntersectionError) HELIUM_OVERRIDE;
-            virtual bool PickTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, const float err = LinearIntersectionError) HELIUM_OVERRIDE;
+            virtual bool PickPoint(const Vector3& p, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) HELIUM_OVERRIDE;
+            virtual bool PickSegment(const Vector3& p1,const Vector3& p2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) HELIUM_OVERRIDE;
+            virtual bool PickTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) HELIUM_OVERRIDE;
             virtual bool PickSphere(const Vector3& center, const float radius) HELIUM_OVERRIDE;
             virtual bool PickBox(const AlignedBox& box) HELIUM_OVERRIDE;
 
@@ -261,9 +261,9 @@ namespace Helium
             virtual void Transform() HELIUM_OVERRIDE;
 
             // picking functions (produce hits)
-            virtual bool PickPoint(const Vector3& p, const float err = LinearIntersectionError) HELIUM_OVERRIDE;
-            virtual bool PickSegment(const Vector3& p1,const Vector3& p2, const float err = LinearIntersectionError) HELIUM_OVERRIDE;
-            virtual bool PickTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, const float err = LinearIntersectionError) HELIUM_OVERRIDE;
+            virtual bool PickPoint(const Vector3& p, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) HELIUM_OVERRIDE;
+            virtual bool PickSegment(const Vector3& p1,const Vector3& p2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) HELIUM_OVERRIDE;
+            virtual bool PickTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) HELIUM_OVERRIDE;
             virtual bool PickSphere(const Vector3& center, const float radius) HELIUM_OVERRIDE;
             virtual bool PickBox(const AlignedBox& box) HELIUM_OVERRIDE;
 
@@ -297,9 +297,9 @@ namespace Helium
             virtual void Transform() HELIUM_OVERRIDE;
 
             // picking functions (produce hits)
-            virtual bool PickPoint(const Vector3& p, const float err = LinearIntersectionError) HELIUM_OVERRIDE;
-            virtual bool PickSegment(const Vector3& p1,const Vector3& p2, const float err = LinearIntersectionError) HELIUM_OVERRIDE;
-            virtual bool PickTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, const float err = LinearIntersectionError) HELIUM_OVERRIDE;
+            virtual bool PickPoint(const Vector3& p, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) HELIUM_OVERRIDE;
+            virtual bool PickSegment(const Vector3& p1,const Vector3& p2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) HELIUM_OVERRIDE;
+            virtual bool PickTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) HELIUM_OVERRIDE;
             virtual bool PickSphere(const Vector3& center, const float radius) HELIUM_OVERRIDE;
             virtual bool PickBox(const AlignedBox& box) HELIUM_OVERRIDE;
 
@@ -397,7 +397,7 @@ namespace Helium
                 return m_Vertex;
             }
 
-            void SetVertex(const Vector3& value, float32_t distance = BigFloat)
+            void SetVertex(const Vector3& value, float32_t distance = FLT_MAX)
             {
                 m_HasVertex = true;
                 m_VertexDistance = distance;
@@ -431,7 +431,7 @@ namespace Helium
                 return m_Intersection;
             }
 
-            void SetIntersection(const Vector3& value, float32_t distance = BigFloat)
+            void SetIntersection(const Vector3& value, float32_t distance = FLT_MAX)
             {
                 m_Intersection = value;
                 m_IntersectionDistance = distance;
@@ -447,9 +447,9 @@ namespace Helium
                 : m_HitObject (o)
                 , m_HasNormal (false)
                 , m_HasVertex (false)
-                , m_VertexDistance ((float)BigFloat)
+                , m_VertexDistance ((float)FLT_MAX)
                 , m_HasIntersection (false)
-                , m_IntersectionDistance ((float)BigFloat)
+                , m_IntersectionDistance ((float)FLT_MAX)
             {
 
             }

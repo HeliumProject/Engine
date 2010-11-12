@@ -41,7 +41,7 @@ void ReflectSetInterpreter::InterpretField( const Reflect::Field* field, const s
     for ( ; itr != end; ++itr )
     {
         Reflect::SerializerPtr ser = Reflect::AssertCast< Reflect::Serializer >( Reflect::Registry::GetInstance()->CreateInstance( field->m_SerializerID ) );
-        uintptr fieldAddress = ( uintptr )( *itr ) + field->m_Offset;
+        uintptr_t fieldAddress = ( uintptr_t )( *itr ) + field->m_Offset;
         ser->ConnectData( ( void* )fieldAddress );
         m_Serializers.push_back( ser );
     }

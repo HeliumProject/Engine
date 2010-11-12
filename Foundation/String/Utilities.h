@@ -12,7 +12,7 @@ namespace Helium
     *  isNum
     *   - returns TRUE if specified character is a number
     ***********************************************************************************************************************/
-    inline bool isNum(tchar c)
+    inline bool isNum(tchar_t c)
     {
         return (c >= TXT('0') && c <= TXT('9'));
     }
@@ -21,7 +21,7 @@ namespace Helium
     *  isAlpha
     *   - returns TRUE if specified character is in alphabet
     ***********************************************************************************************************************/
-    inline bool isAlpha(tchar c)
+    inline bool isAlpha(tchar_t c)
     {
         return ((c >= TXT('a') && c <= TXT('z')) || (c >= TXT('A') && c <= TXT('Z')));
     }
@@ -30,7 +30,7 @@ namespace Helium
     *  isNumMod
     *   - returns TRUE if specified character is a numberic modifier character
     ***********************************************************************************************************************/
-    inline bool isNumMod(tchar c)
+    inline bool isNumMod(tchar_t c)
     {
         return ((c == TXT('.')) || (c == TXT('-')));
     }
@@ -39,7 +39,7 @@ namespace Helium
     *  isNumHex
     *   - returns TRUE if specified character is a hex character
     ***********************************************************************************************************************/
-    inline bool isNumHex(tchar c)
+    inline bool isNumHex(tchar_t c)
     {
         return (((c >= TXT('a')) && (c <= TXT('f'))) || ((c >= TXT('A')) && (c <= TXT('F'))));
     }
@@ -48,7 +48,7 @@ namespace Helium
     *  isWS
     *   - returns TRUE if specified character is white space
     ***********************************************************************************************************************/
-    inline bool isWS(tchar c)
+    inline bool isWS(tchar_t c)
     {
         return ((c == TXT(' ')) || (c == TXT(',')) || (c == TXT('\t')) || (c == TXT('\r')) || (c == TXT('\n')));
     }

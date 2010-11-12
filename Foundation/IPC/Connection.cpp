@@ -25,7 +25,7 @@ namespace Helium
 // Debug printing
 //#define IPC_CONNECTION_DEBUG
 
-static const tchar* ConnectionStateNames[] = 
+static const tchar_t* ConnectionStateNames[] = 
 {
     TXT( "Waiting" ),
     TXT( "Active" ),
@@ -33,7 +33,7 @@ static const tchar* ConnectionStateNames[] =
     TXT( "Failed" ),
 };
 
-HELIUM_COMPILE_ASSERT( ConnectionStates::Count == (sizeof(ConnectionStateNames) / sizeof(const tchar*)) );
+HELIUM_COMPILE_ASSERT( ConnectionStates::Count == (sizeof(ConnectionStateNames) / sizeof(const tchar_t*)) );
 
 Localization::StringTable Connection::s_StringTable( "Helium::IPC::Connection" );
 bool Connection::s_RegisteredStringTable = false;
@@ -41,6 +41,7 @@ bool Connection::s_RegisteredStringTable = false;
 Connection::Connection()
 : m_Server (false)
 , m_Terminating (false)
+, m_Terminate (Condition::RESET_MODE_MANUAL)
 , m_State (ConnectionStates::Closed)
 , m_ConnectCount (0)
 , m_RemotePlatform ((Helium::Platform::Type)-1)
@@ -67,7 +68,7 @@ Connection::~Connection()
 {
 }
 
-bool Connection::Initialize(bool server, const tchar* name)
+bool Connection::Initialize(bool server, const tchar_t* name)
 {
     _tcscpy(m_Name, name);
     m_Server = server;
@@ -91,14 +92,7 @@ void Connection::Cleanup()
         m_Terminating = true;
         m_Terminate.Signal();
 
-        if (m_ConnectThread.Valid())
-        {
-            // wait for them to quit
-            m_ConnectThread.Wait();
-
-            // close handle
-            m_ConnectThread.Close();
-        }
+        m_ConnectThread.Join();
 
         m_ReadQueue.Clear();
         m_WriteQueue.Clear();
@@ -112,7 +106,7 @@ void Connection::Cleanup()
 
 void Connection::SetState(ConnectionState state)
 {
-    Helium::TakeMutex mutex (m_Mutex);
+    Helium::MutexScopeLock mutex (m_Mutex);
 
     if (m_State != state)
     {
@@ -390,24 +384,23 @@ void Connection::ConnectThread()
     Helium::Print( stmt.Get().c_str() );
 
     // start read thread
-    Helium::Thread::Entry readEntry = &Helium::Thread::EntryHelper<Connection, &Connection::ReadThread>;
-    if (!m_ReadThread.Create( readEntry, this, "IPC Read Thread" ))
+    Helium::CallbackThread::Entry readEntry = &Helium::CallbackThread::EntryHelper<Connection, &Connection::ReadThread>;
+    if (!m_ReadThread.Create( readEntry, this, TXT("IPC Read Thread")))
     {
         HELIUM_BREAK();
         return;
     }
 
     // start write thread
-    Helium::Thread::Entry writeEntry = &Helium::Thread::EntryHelper<Connection, &Connection::WriteThread>;
-    if (!m_WriteThread.Create( writeEntry, this, "IPC Write Thread" ))
+    Helium::CallbackThread::Entry writeEntry = &Helium::CallbackThread::EntryHelper<Connection, &Connection::WriteThread>;
+    if (!m_WriteThread.Create( writeEntry, this, TXT("IPC Write Thread")))
     {
         HELIUM_BREAK();
         return;
     }
 
     // wait for the read thread to quit
-    m_ReadThread.Wait();
-    m_ReadThread.Close();
+    m_ReadThread.Join();
 
     // wake up any reader blocking waiting for messages
     m_ReadQueue.Add(NULL);
@@ -416,8 +409,7 @@ void Connection::ConnectThread()
     m_WriteQueue.Add(NULL);
 
     // wait for the write thread to quit
-    m_WriteThread.Wait();
-    m_WriteThread.Close();
+    m_WriteThread.Join();
 
     // erase messages
     m_ReadQueue.Clear();

@@ -16,13 +16,13 @@ namespace Helium
             RBShaderLoader();
             virtual ~RBShaderLoader();
 
-            virtual RenderShader* ParseFile( const tchar* filename, ShaderManager* db );
+            virtual RenderShader* ParseFile( const tchar_t* filename, ShaderManager* db );
 
             static void SetWrapUV( TextureSettings* settings, uint32_t wrapU, uint32_t wrapV );
             static void SetFilter( TextureSettings* settings, uint32_t filter );
             static void SetColorFormat( TextureSettings* settings, uint32_t colorFormat, uint32_t mode );
 
-            static void UpdateShaderClass(ShaderManager* db, const tchar* shaderFilename, uint32_t alphaMode);
+            static void UpdateShaderClass(ShaderManager* db, const tchar_t* shaderFilename, uint32_t alphaMode);
             static void UpdateShader(RenderShader* sh, const Asset::ShaderAsset* shader );
         };
     }

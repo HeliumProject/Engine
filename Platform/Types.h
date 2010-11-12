@@ -1,5 +1,10 @@
 #pragma once
 
+#include "Platform/Platform.h"
+
+#include "boost/preprocessor/wstringize.hpp"
+#include "boost/preprocessor/stringize.hpp"
+
 //
 // Register types
 //
@@ -8,12 +13,7 @@
 #define NULL (0)
 #endif
 
-#if defined( __GNUC__ ) || defined( __GCC__ ) || defined( __SNC__ )
-
-#include <inttypes.h>
-
-#elif defined( WIN32 )
-
+#if HELIUM_CC_MSC
 
 /// @defgroup inttypes Integer Types
 /// We use the integer types defined in stdint.h on platforms where it is available.  If it is not available, then we
@@ -205,22 +205,22 @@ typedef uint64_t uint_fast64_t;
 #define WPRIuSZ L"Iu"
 
 /// "tchar_t" string format macro for signed 8-bit integers.
-#define TPRId8 L_T( "hhd" )
+#define TPRId8 TXT( "hhd" )
 /// "tchar_t" string format macro for signed 16-bit integers.
-#define TPRId16 L_T( "hd" )
+#define TPRId16 TXT( "hd" )
 /// "tchar_t" string format macro for signed 32-bit integers.
-#define TPRId32 L_T( "I32d" )
+#define TPRId32 TXT( "I32d" )
 /// "tchar_t" string format macro for signed 64-bit integers.
-#define TPRId64 L_T( "I64d" )
+#define TPRId64 TXT( "I64d" )
 
 /// "tchar_t" string format macro for unsigned 8-bit integers.
-#define TPRIu8 L_T( "hhu" )
+#define TPRIu8 TXT( "hhu" )
 /// "tchar_t" string format macro for unsigned 16-bit integers.
-#define TPRIu16 L_T( "hu" )
+#define TPRIu16 TXT( "hu" )
 /// "tchar_t" string format macro for unsigned 32-bit integers.
-#define TPRIu32 L_T( "I32u" )
+#define TPRIu32 TXT( "I32u" )
 /// "tchar_t" string format macro for unsigned 64-bit integers.
-#define TPRIu64 L_T( "I64u" )
+#define TPRIu64 TXT( "I64u" )
 
 /// "tchar_t" string format macro for int_fast8_t.
 #define TPRIdFAST8 TPRId8
@@ -241,9 +241,9 @@ typedef uint64_t uint_fast64_t;
 #define TPRIuFAST64 TPRIu64
 
 /// "tchar_t" string format macro for ptrdiff_t.
-#define TPRIdPD L_T( "Id" )
+#define TPRIdPD TXT( "Id" )
 /// "tchar_t" string format macro for size_t.
-#define TPRIuSZ L_T( "Iu" )
+#define TPRIuSZ TXT( "Iu" )
 
 //@}
 
@@ -335,22 +335,22 @@ typedef uint64_t uint_fast64_t;
 #define WSCNuSZ L"Iu"
 
 /// "tchar_t" string format macro for signed 8-bit integers.
-#define TSCNd8 L_T( "hhd" )
+#define TSCNd8 TXT( "hhd" )
 /// "tchar_t" string format macro for signed 16-bit integers.
-#define TSCNd16 L_T( "hd" )
+#define TSCNd16 TXT( "hd" )
 /// "tchar_t" string format macro for signed 32-bit integers.
-#define TSCNd32 L_T( "I32d" )
+#define TSCNd32 TXT( "I32d" )
 /// "tchar_t" string format macro for signed 64-bit integers.
-#define TSCNd64 L_T( "I64d" )
+#define TSCNd64 TXT( "I64d" )
 
 /// "tchar_t" string format macro for unsigned 8-bit integers.
-#define TSCNu8 L_T( "hhu" )
+#define TSCNu8 TXT( "hhu" )
 /// "tchar_t" string format macro for unsigned 16-bit integers.
-#define TSCNu16 L_T( "hu" )
+#define TSCNu16 TXT( "hu" )
 /// "tchar_t" string format macro for unsigned 32-bit integers.
-#define TSCNu32 L_T( "I32u" )
+#define TSCNu32 TXT( "I32u" )
 /// "tchar_t" string format macro for unsigned 64-bit integers.
-#define TSCNu64 L_T( "I64u" )
+#define TSCNu64 TXT( "I64u" )
 
 /// "tchar_t" string format macro for int_fast8_t.
 #define TSCNdFAST8 TSCNd8
@@ -371,21 +371,19 @@ typedef uint64_t uint_fast64_t;
 #define TSCNuFAST64 TSCNu64
 
 /// "tchar_t" string format macro for ptrdiff_t.
-#define TSCNdPD L_T( "Id" )
+#define TSCNdPD TXT( "Id" )
 /// "tchar_t" string format macro for size_t.
-#define TSCNuSZ L_T( "Iu" )
+#define TSCNuSZ TXT( "Iu" )
 
 //@}
 
-#ifdef _WIN64
-typedef uint64_t uintptr;
-typedef int64_t  intptr;
-#else
-typedef uint32_t uintptr;
-typedef int32_t  intptr;
-#endif
+#else  // HELIUM_CC_MSC
 
-#endif  // #ifdef WIN32
+// Use inttypes.h where available; we simply try to provide relevant type definitions for platforms that don't provide
+// it.
+#include <inttypes.h>
+
+#endif  // HELIUM_CC_MSC
 
 /// @defgroup floattypes Floating-point Types
 /// While these may not be particularly necessary, they do provide some level of consistency with the integer types.
@@ -407,13 +405,16 @@ typedef double float64_t;
 #include <sstream>
 #include <strstream>
 
-#ifdef WIN32
+#if HELIUM_OS_WIN
 # include <tchar.h>
 #endif
 
 #ifdef _UNICODE
 # ifndef UNICODE
 #  define UNICODE
+# endif
+# ifndef HELIUM_UNICODE
+#  define HELIUM_UNICODE 1
 # endif
 #endif
 
@@ -423,24 +424,54 @@ typedef double float64_t;
 # endif
 #endif
 
-#ifdef UNICODE
-typedef wchar_t                 tchar;
-#define TXT(s) L##s
-#else
-typedef char                    tchar;
-#define TXT(s) s
-#endif
+/// Convert the expanded result of a macro to a char string.
+///
+/// @param[in] X  Macro to expand and stringize.
+#define HELIUM_STRINGIZE( X ) BOOST_PP_STRINGIZE( X )
 
-typedef std::basic_string<tchar> tstring;
+/// Convert the expanded result of a macro to a wchar_t string.
+///
+/// @param[in] X  Macro to expand and stringize.
+#define HELIUM_WSTRINGIZE( X ) BOOST_PP_WSTRINGIZE( X )
 
-typedef std::basic_istream<tchar, std::char_traits<tchar> > tistream;
-typedef std::basic_ostream<tchar, std::char_traits<tchar> > tostream;
-typedef std::basic_iostream<tchar, std::char_traits<tchar> > tiostream;
+#if HELIUM_UNICODE
 
-typedef std::basic_ifstream<tchar, std::char_traits<tchar> > tifstream;
-typedef std::basic_ofstream<tchar, std::char_traits<tchar> > tofstream;
-typedef std::basic_fstream<tchar, std::char_traits<tchar> > tfstream;
+/// Default character type.
+typedef wchar_t tchar_t;
 
-typedef std::basic_istringstream<tchar, std::char_traits<tchar>, std::allocator<tchar> > tistringstream;
-typedef std::basic_ostringstream<tchar, std::char_traits<tchar>, std::allocator<tchar> > tostringstream;
-typedef std::basic_stringstream<tchar, std::char_traits<tchar>, std::allocator<tchar> > tstringstream;
+/// Prefix for declaring string and character literals of the default character type.
+#define TXT( X ) L##X
+
+/// Convert the expanded result of a macro to a tchar_t string.
+///
+/// @param[in] X  Macro to expand and stringize.
+#define HELIUM_TSTRINGIZE( X ) HELIUM_WSTRINGIZE( X )
+
+#else  // HELIUM_UNICODE
+
+/// Default character type.
+typedef char tchar_t;
+
+/// Prefix for declaring string and character literals of the default character type.
+#define TXT( X ) X
+
+/// Convert the expanded result of a macro to a tchar_t string.
+///
+/// @param[in] X  Macro to expand and stringize.
+#define HELIUM_TSTRINGIZE( X ) HELIUM_STRINGIZE( X )
+
+#endif  // HELIUM_UNICODE
+
+typedef std::basic_string< tchar_t > tstring;
+
+typedef std::basic_istream< tchar_t, std::char_traits< tchar_t > > tistream;
+typedef std::basic_ostream< tchar_t, std::char_traits< tchar_t > > tostream;
+typedef std::basic_iostream< tchar_t, std::char_traits< tchar_t > > tiostream;
+
+typedef std::basic_ifstream< tchar_t, std::char_traits< tchar_t > > tifstream;
+typedef std::basic_ofstream< tchar_t, std::char_traits< tchar_t > > tofstream;
+typedef std::basic_fstream< tchar_t, std::char_traits< tchar_t > > tfstream;
+
+typedef std::basic_istringstream< tchar_t, std::char_traits< tchar_t >, std::allocator< tchar_t > > tistringstream;
+typedef std::basic_ostringstream< tchar_t, std::char_traits< tchar_t >, std::allocator< tchar_t > > tostringstream;
+typedef std::basic_stringstream< tchar_t, std::char_traits< tchar_t >, std::allocator< tchar_t > > tstringstream;

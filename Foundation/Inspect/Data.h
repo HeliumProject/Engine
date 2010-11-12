@@ -43,8 +43,8 @@ namespace Helium
         // Constants
         //
 
-        const tchar UNDEF_VALUE_STRING[] = TXT( "Undef" );
-        const tchar MULTI_VALUE_STRING[] = TXT( "Multi" );
+        const tchar_t UNDEF_VALUE_STRING[] = TXT( "Undef" );
+        const tchar_t MULTI_VALUE_STRING[] = TXT( "Multi" );
 
         //
         // Data conversion
@@ -77,7 +77,7 @@ namespace Helium
             else
             {
                 val->resize( size );
-                stream.read( const_cast< tchar* >( val->c_str() ), size );
+                stream.read( const_cast< tchar_t* >( val->c_str() ), size );
             }
         }
 

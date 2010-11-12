@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Platform/Compiler.h"
 #include "Foundation/Automation/Event.h"
 
 #include <wx/dnd.h>

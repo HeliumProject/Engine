@@ -12,7 +12,7 @@
 #include "Class.h"
 #include "StringPool.h"
 #include "Exceptions.h"
-#include "Stream.h" 
+#include "ArchiveStream.h" 
 
 #include "Platform/Assert.h"
 #include "Foundation/Automation/Event.h"
@@ -116,14 +116,14 @@ namespace Helium
         typedef ArchiveTypes::ArchiveType ArchiveType;
 
         // must line up with enum above
-        const static tchar* s_ArchiveExtensions[] =
+        const static tchar_t* s_ArchiveExtensions[] =
         {
             TXT( "hrb" ),   // Binary
             TXT( "xml" )    // XML
         };
 
         // must line up with archive type enum
-        const static tchar* s_ArchiveDescriptions[] =
+        const static tchar_t* s_ArchiveDescriptions[] =
         {
             TXT( "Binary Reflect File" ),
             TXT( "XML Reflect File" )
@@ -288,15 +288,15 @@ namespace Helium
             virtual void Deserialize( V_Element& elements, uint32_t flags = 0 ) = 0;
 
         public:
-            static const tchar* GetExtension( ArchiveType t )
+            static const tchar_t* GetExtension( ArchiveType t )
             {
-                HELIUM_ASSERT( t < sizeof( s_ArchiveExtensions ) / sizeof( tchar* ) );
+                HELIUM_ASSERT( t < sizeof( s_ArchiveExtensions ) / sizeof( tchar_t* ) );
                 return s_ArchiveExtensions[ t ];
             }
 
             static void GetExtensions( std::set< tstring >& extensions )
             {
-                for ( int i = 0; i < sizeof( s_ArchiveExtensions ) / sizeof( tchar* ); ++i )
+                for ( int i = 0; i < sizeof( s_ArchiveExtensions ) / sizeof( tchar_t* ); ++i )
                 {
                     extensions.insert( s_ArchiveExtensions[ i ] );
                 }
@@ -304,7 +304,7 @@ namespace Helium
 
             static void GetFileFilters( std::set< tstring > filters )
             {
-                for ( int i = 0; i < sizeof( s_ArchiveExtensions ) / sizeof( tchar* ); ++i )
+                for ( int i = 0; i < sizeof( s_ArchiveExtensions ) / sizeof( tchar_t* ); ++i )
                 {
                     tstring filter = tstring( s_ArchiveDescriptions[ i ] ) + TXT( " (*." ) + s_ArchiveExtensions[ i ] + TXT( ")|*." ) + s_ArchiveExtensions[ i ];
                     filters.insert( filter );
@@ -314,7 +314,7 @@ namespace Helium
             static void GetFileFilters( tstring& filters )
             {
                 filters.clear();
-                for ( int i = 0; i < sizeof( s_ArchiveExtensions ) / sizeof( tchar* ); ++i )
+                for ( int i = 0; i < sizeof( s_ArchiveExtensions ) / sizeof( tchar_t* ); ++i )
                 {
                     if ( i != 0 )
                     {

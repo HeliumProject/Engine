@@ -356,7 +356,7 @@ tistream& SimpleArraySerializer<T>::operator<< (tistream& stream)
     tstring str;
     std::streamsize size = stream.rdbuf()->in_avail();
     str.resize( (size_t) size );
-    stream.read( const_cast< tchar* >( str.c_str() ), size );
+    stream.read( const_cast< tchar_t* >( str.c_str() ), size );
 
     Tokenize<T, T>( str, m_Data.Ref(), s_ContainerItemDelimiter );
 
@@ -499,7 +499,7 @@ tistream& SimpleArraySerializer<uint8_t>::operator<< (tistream& stream)
     tstring str;
     std::streamsize size = stream.rdbuf()->in_avail();
     str.resize( (size_t) size );
-    stream.read(const_cast< tchar* >( str.c_str() ), size );
+    stream.read(const_cast< tchar_t* >( str.c_str() ), size );
 
     Tokenize<uint8_t, uint16_t>( str, m_Data.Ref(), s_ContainerItemDelimiter );
 
@@ -514,7 +514,7 @@ tistream& SimpleArraySerializer<int8_t>::operator<< (tistream& stream)
     tstring str;
     std::streamsize size = stream.rdbuf()->in_avail();
     str.resize( (size_t) size );
-    stream.read(const_cast< tchar* >( str.c_str() ), size );
+    stream.read(const_cast< tchar_t* >( str.c_str() ), size );
 
     Tokenize<int8_t, int16_t>( str, m_Data.Ref(), s_ContainerItemDelimiter );
 

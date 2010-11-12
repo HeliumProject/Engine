@@ -16,13 +16,13 @@ namespace Helium
         class FOUNDATION_API PipeConnection : public Connection
         {
         private:
-            tchar              m_PipeName[256];                // name of the pipe passed in by the user
-            tchar              m_ServerName[256];              // name of the server passed in by the user
+            tchar_t              m_PipeName[256];                // name of the pipe passed in by the user
+            tchar_t              m_ServerName[256];              // name of the server passed in by the user
 
-            tchar              m_ReadName[256];                // name of the pipe
+            tchar_t              m_ReadName[256];                // name of the pipe
             Helium::Pipe    m_ReadPipe;                     // handle of the pipe
 
-            tchar              m_WriteName[256];               // name of the pipe
+            tchar_t              m_WriteName[256];               // name of the pipe
             Helium::Pipe    m_WritePipe;                    // handle of the pipe
 
         public:
@@ -30,7 +30,7 @@ namespace Helium
             virtual ~PipeConnection();
 
         public:
-            bool Initialize(bool server, const tchar* name, const tchar* pipe_name, const tchar* server_name = 0);
+            bool Initialize(bool server, const tchar_t* name, const tchar_t* pipe_name, const tchar_t* server_name = 0);
 
         protected:
             void ServerThread();

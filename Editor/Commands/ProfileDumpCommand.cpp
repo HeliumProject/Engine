@@ -97,7 +97,7 @@ bool ProfileDumpCommand::Process( std::vector< tstring >::const_iterator& argsBe
         }
     }
 
-    const tchar* filename = fileArg.c_str(); 
+    const tchar_t* filename = fileArg.c_str(); 
 
     FILE* file = _tfopen(filename, TXT( "rb" ) );
     if(!file)

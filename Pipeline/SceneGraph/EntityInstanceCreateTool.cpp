@@ -26,7 +26,7 @@ REFLECT_DEFINE_ABSTRACT(SceneGraph::EntityInstanceCreateTool);
 tstring EntityRowInfo::GetListName() const
 {
     const int probabilityStringSize = 32;
-    tchar probabilityString[ probabilityStringSize + 1 ] = { 0 };
+    tchar_t probabilityString[ probabilityStringSize + 1 ] = { 0 };
 
     _stprintf( probabilityString, TXT( " (%d%%)" ), (int) ( m_Probability * 100.0f ) );
     tstring listName = m_Name + probabilityString;

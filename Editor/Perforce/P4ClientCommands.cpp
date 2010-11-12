@@ -19,7 +19,7 @@ void SyncCommand::Run()
 
         struct tm* t = _localtime64( (__time64_t*)&m_SyncTime );
 
-        tchar timeBuf[ 32 ];
+        tchar_t timeBuf[ 32 ];
         _tcsftime( timeBuf, 32, TXT( "%Y/%m/%d:%H:%M:%S" ), t );
 
         spec += TXT( "@" );

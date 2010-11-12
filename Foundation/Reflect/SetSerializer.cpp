@@ -255,7 +255,7 @@ tistream& SimpleSetSerializer<DataT, DataSer>::operator<< (tistream& stream)
     tstring str;
     std::streamsize size = stream.rdbuf()->in_avail();
     str.resize( (size_t) size);
-    stream.read( const_cast< tchar* >( str.c_str() ), size );
+    stream.read( const_cast< tchar_t* >( str.c_str() ), size );
 
     Tokenize< DataT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
 

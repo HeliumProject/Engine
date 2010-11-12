@@ -78,7 +78,7 @@ namespace Helium
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
             // Indent helper
-            Indent<tchar> m_Indent;
+            Indent<tchar_t> m_Indent;
 #endif
 
             // The strings to cache for binary modes

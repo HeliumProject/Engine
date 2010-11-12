@@ -7,8 +7,8 @@ namespace Helium
 {
     namespace Inspect
     {
-        const static tchar BUTTON_FILEDIALOG_ATTR_FILTER[] = TXT( "filter" );
-        const static tchar BUTTON_FILEDIALOG_ATTR_TITLE[] = TXT( "caption" );
+        const static tchar_t BUTTON_FILEDIALOG_ATTR_FILTER[] = TXT( "filter" );
+        const static tchar_t BUTTON_FILEDIALOG_ATTR_TITLE[] = TXT( "caption" );
 
         namespace FileDialogTypes
         {

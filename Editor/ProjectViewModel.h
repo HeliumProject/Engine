@@ -24,7 +24,7 @@ namespace Helium
                 COUNT //Do not use: must be last
             };
 
-            static const tchar* s_Labels[COUNT+1] = 
+            static const tchar_t* s_Labels[COUNT+1] = 
             {
                 TXT( "Name" ),
                 TXT( "Details" ),
@@ -33,7 +33,7 @@ namespace Helium
                 TXT( "Unknown" ), //COUNT
             };
 
-            inline const tchar* Label( uint32_t id )
+            inline const tchar_t* Label( uint32_t id )
             {
                 HELIUM_ASSERT( id >= 0 );
                 HELIUM_ASSERT( id < COUNT );
@@ -77,14 +77,14 @@ namespace Helium
                 info->AddElement( RelativePath, TXT( "RelativePath" ) );
             }
 
-            static const tchar* s_Labels[COUNT] = 
+            static const tchar_t* s_Labels[COUNT] = 
             {
                 TXT( "Filename" ),
                 TXT( "Full Path" ),
                 TXT( "Relative Path" ),
             };
 
-            inline const tchar* Label( uint32_t id )
+            inline const tchar_t* Label( uint32_t id )
             {
                 HELIUM_ASSERT( id >= 0 );
                 HELIUM_ASSERT( id < COUNT );

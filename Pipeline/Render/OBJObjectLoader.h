@@ -10,7 +10,7 @@ namespace Helium
         class PIPELINE_API OBJObjectLoader : public ObjectLoader
         {
         public:
-            uint32_t ParseFile(const tchar* fname, bool winding = false);
+            uint32_t ParseFile(const tchar_t* fname, bool winding = false);
         };
     }
 }

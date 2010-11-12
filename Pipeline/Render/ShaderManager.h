@@ -13,7 +13,7 @@ namespace Helium
         class PIPELINE_API Texture
         {
         public:
-            Texture(const tchar* fname);
+            Texture(const tchar_t* fname);
             ~Texture();
 
             uint32_t IncrementUsage()
@@ -102,7 +102,7 @@ namespace Helium
         class PIPELINE_API RenderShader
         {
         public:
-            RenderShader(class ShaderManager* sd, const tchar* fname);
+            RenderShader(class ShaderManager* sd, const tchar_t* fname);
             ~RenderShader();
 
             uint32_t IncrementUsage()
@@ -166,32 +166,32 @@ namespace Helium
 
         private:
             uint32_t AddShader(RenderShader* sh); // assign a new shader to a handle
-            uint32_t LoadNewShader(const tchar* fname, ShaderLoaderPtr loader = NULL);
+            uint32_t LoadNewShader(const tchar_t* fname, ShaderLoaderPtr loader = NULL);
 
         public:
             // return the handle to the specified shader, the handle returned will either be new or it will
             // be the handle of an existing copy of that shader.
-            uint32_t LoadShader(const tchar* fname, bool inc=false, ShaderLoaderPtr loader = NULL);
+            uint32_t LoadShader(const tchar_t* fname, bool inc=false, ShaderLoaderPtr loader = NULL);
 
             // return the handle of the shader with the given name (0xffffffff if it cannot be found)
-            uint32_t FindShader(const tchar* fname);
+            uint32_t FindShader(const tchar_t* fname);
 
             // Duplicate an existing shader (to create an empty shader duplicate the default)
-            uint32_t DuplicateShader(uint32_t handle, const tchar* new_shader);
+            uint32_t DuplicateShader(uint32_t handle, const tchar_t* new_shader);
 
             // load a single texture, get the handle
-            uint32_t LoadTexture(const tchar* fname,D3DFORMAT fmt,uint32_t levels=0,bool inc=false);
+            uint32_t LoadTexture(const tchar_t* fname,D3DFORMAT fmt,uint32_t levels=0,bool inc=false);
             bool LoadTextureWithSettings(const TextureSettings& textureSettings, RenderShader* shader, uint32_t sampler);
             void UpdateTextureSettings(uint32_t handle, const TextureSettings& textureSettings);
-            bool ReloadTexture( const tchar* fname );
+            bool ReloadTexture( const tchar_t* fname );
 
             // return the handle of the texture with the given name (0xffffffff if it cannot be found)
-            uint32_t FindTexture(const tchar* fname);
+            uint32_t FindTexture(const tchar_t* fname);
             Texture* ResolveTexture(uint32_t handle);
             RenderShader* ResolveShader(uint32_t handle);
 
-            void SetShaderDefaultTexture( const tchar* shaderFilename, uint32_t textureIndex );
-            void UpdateShaderTexture( const tchar* shaderFilename, uint32_t textureIndex, const TextureSettings& settings );
+            void SetShaderDefaultTexture( const tchar_t* shaderFilename, uint32_t textureIndex );
+            void UpdateShaderTexture( const tchar_t* shaderFilename, uint32_t textureIndex, const TextureSettings& settings );
             void GetShaderFilenames( std::vector< tstring >& filenames );
             void GetTextureFilenames( std::vector< tstring >& filenames );
 

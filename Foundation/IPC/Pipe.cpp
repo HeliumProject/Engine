@@ -26,7 +26,7 @@ PipeConnection::~PipeConnection()
     Cleanup();
 }
 
-bool PipeConnection::Initialize(bool server, const tchar* name, const tchar* pipe_name, const tchar* server_name)
+bool PipeConnection::Initialize(bool server, const tchar_t* name, const tchar_t* pipe_name, const tchar_t* server_name)
 {
     if (!Connection::Initialize(server, name))
     {
@@ -67,9 +67,9 @@ bool PipeConnection::Initialize(bool server, const tchar* name, const tchar* pip
 
     SetState(ConnectionStates::Waiting);
 
-    Helium::Thread::Entry serverEntry = Helium::Thread::EntryHelper<PipeConnection, &PipeConnection::ServerThread>;
-    Helium::Thread::Entry clientEntry = Helium::Thread::EntryHelper<PipeConnection, &PipeConnection::ClientThread>;
-    if (!m_ConnectThread.Create(server ? serverEntry : clientEntry, this, "IPC Connection Thread" ))
+    Helium::CallbackThread::Entry serverEntry = Helium::CallbackThread::EntryHelper<PipeConnection, &PipeConnection::ServerThread>;
+    Helium::CallbackThread::Entry clientEntry = Helium::CallbackThread::EntryHelper<PipeConnection, &PipeConnection::ClientThread>;
+    if (!m_ConnectThread.Create(server ? serverEntry : clientEntry, this, TXT("IPC Connection Thread")))
     {
         Helium::Print( TXT( "%s: Failed to create connect thread\n" ), m_Name);
         SetState(ConnectionStates::Failed);

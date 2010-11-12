@@ -13,7 +13,7 @@ namespace Helium
     class FileOperationException : public Helium::Exception
     {
     public:
-        FileOperationException( const tchar *msgFormat, ... ) : Exception()
+        FileOperationException( const tchar_t *msgFormat, ... ) : Exception()
         {
             va_list msgArgs;
             va_start( msgArgs, msgFormat );
@@ -38,7 +38,7 @@ namespace Helium
     class FOUNDATION_API FileHandle : public Helium::RefCountBase< FileHandle >
     {
     public:
-        FileHandle( const tstring& path, const tchar* mode = TXT( "r" ) );
+        FileHandle( const tstring& path, const tchar_t* mode = TXT( "r" ) );
 
         virtual ~FileHandle()
         {
@@ -65,7 +65,7 @@ namespace Helium
             return m_Path;
         }
 
-        const tchar* GetMode() const
+        const tchar_t* GetMode() const
         {
             return m_Mode;
         }
@@ -78,7 +78,7 @@ namespace Helium
     private:
         uint32_t  m_OpenCount;
         Path m_Path;
-        const tchar* m_Mode;
+        const tchar_t* m_Mode;
         FILE* m_FileHandle;
     };
 

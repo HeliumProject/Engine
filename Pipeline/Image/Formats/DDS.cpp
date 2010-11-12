@@ -882,7 +882,7 @@ MipSet* Image::LoadDDSToMipSet(const void* ddsadr)
 }
 
 //Write DDS file
-bool Helium::MipSet::WriteDDS(const tchar* fname) const
+bool Helium::MipSet::WriteDDS(const tchar_t* fname) const
 {
   FILE * file = _tfopen(fname, TXT( "wb" ));
   if (!file)
@@ -973,7 +973,7 @@ bool Helium::MipSet::WriteDDS(const tchar* fname) const
 }
 
 //Write DDS file
-bool Helium::Image::WriteDDS(const tchar* fname, bool convert_to_srgb, Helium::OutputColorFormat output_fmt) const
+bool Helium::Image::WriteDDS(const tchar_t* fname, bool convert_to_srgb, Helium::OutputColorFormat output_fmt) const
 {
   //If we don't sepecify an output format, pick a suitable one
   if(output_fmt == Helium::OUTPUT_CF_UNKNOWN)

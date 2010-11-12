@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cmath>
+#include "Platform/Math/MathCommon.h"
 #include <vector>
 #include <iostream>
 
@@ -168,9 +168,9 @@ namespace Helium
             return !(x == v.x && y == v.y && z == v.z && t == v.t);
         }
 
-        bool                  Valid()
+        bool                  Finite()
         {
-            return x.Valid() && y.Valid() && z.Valid() && t.Valid();
+            return x.Finite() && y.Finite() && z.Finite() && t.Finite();
         }
 
         float32_t                   Determinant() const;
@@ -362,7 +362,7 @@ namespace Helium
 
         if (det != 0)
         {
-            if (fabs(1.0/det) < AngleNearZero)
+            if (fabs(1.0/det) < HELIUM_ANGLE_NEAR_ZERO)
             {
                 return *this = Matrix4 ();
             }

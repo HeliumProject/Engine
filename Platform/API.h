@@ -1,14 +1,12 @@
 #pragma once
 
-#ifdef WIN32
-# ifdef PLATFORM_DLL
-#  ifdef PLATFORM_EXPORTS
-#   define PLATFORM_API __declspec(dllexport)
-#  else
-#   define PLATFORM_API __declspec(dllimport)
-#  endif
+#include "Platform/Platform.h"  // Always make sure Platform.h gets included first.
+
+#if HELIUM_SHARED
+# ifdef PLATFORM_EXPORTS
+#  define PLATFORM_API HELIUM_API_EXPORT
 # else
-#  define PLATFORM_API
+#  define PLATFORM_API HELIUM_API_IMPORT
 # endif
 #else
 # define PLATFORM_API

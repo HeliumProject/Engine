@@ -22,7 +22,7 @@ void PrimitiveCircle::Update()
   SetElementCount( m_RadiusSteps*2 + (m_RadiusSteps + 2) );
   m_Vertices.clear();
 
-  float stepAngle = (float32_t)(Pi)*2.0f / (float32_t)(m_RadiusSteps);
+  float stepAngle = (float32_t)HELIUM_TWOPI / (float32_t)(m_RadiusSteps);
 
   for (int x=0; x<m_RadiusSteps; x++)
   {
@@ -105,7 +105,7 @@ void PrimitiveCircle::DrawHiddenBack(DrawArgs* args, const SceneGraph::Camera* c
     return;
 
   int i = 0, count = 0;
-  float stepAngle = (float32_t)(Pi)*2.0f / (float32_t)(m_RadiusSteps);
+  float stepAngle = (float32_t)HELIUM_TWOPI / (float32_t)(m_RadiusSteps);
   
   Vector3 position (m.t.x, m.t.y, m.t.z);
 
@@ -134,7 +134,7 @@ void PrimitiveCircle::DrawHiddenBack(DrawArgs* args, const SceneGraph::Camera* c
     v.Normalize();
 
     // if not pointing away from the camera vector, render
-    if (v.Dot(cameraVector) > 1.0f - CriticalDotProduct)
+    if (v.Dot(cameraVector) > 1.0f - HELIUM_CRITICAL_DOT_PRODUCT)
     {
       m_Device->DrawPrimitive(D3DPT_LINELIST, (UINT)GetBaseIndex()+i, 1);
       count++;

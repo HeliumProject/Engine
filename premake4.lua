@@ -16,14 +16,14 @@ else
 end
 
 if os.get() == "windows" then
-	os.execute("robocopy /MIR /MT \"Editor\\Icons\\Helium\" \"Bin\\x32\\Debug\\Icons\" *.png")
-	os.execute("robocopy /MIR /MT \"Editor\\Icons\\Helium\" \"Bin\\x32\\Release\\Icons\" *.png")
-	os.execute("robocopy /MIR /MT \"Editor\\Icons\\Helium\" \"Bin\\x32\\DebugUnicode\\Icons\" *.png")
-	os.execute("robocopy /MIR /MT \"Editor\\Icons\\Helium\" \"Bin\\x32\\ReleaseUnicode\\Icons\" *.png")
-	os.execute("robocopy /MIR /MT \"Editor\\Icons\\Helium\" \"Bin\\x64\\Debug\\Icons\" *.png")
-	os.execute("robocopy /MIR /MT \"Editor\\Icons\\Helium\" \"Bin\\x64\\Release\\Icons\" *.png")
-	os.execute("robocopy /MIR /MT \"Editor\\Icons\\Helium\" \"Bin\\x64\\DebugUnicode\\Icons\" *.png")
-	os.execute("robocopy /MIR /MT \"Editor\\Icons\\Helium\" \"Bin\\x64\\ReleaseUnicode\\Icons\" *.png")
+	os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Debug\\Icons\" *.png")
+	os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Release\\Icons\" *.png")
+	os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\DebugUnicode\\Icons\" *.png")
+	os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\ReleaseUnicode\\Icons\" *.png")
+	os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Debug\\Icons\" *.png")
+	os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Release\\Icons\" *.png")
+	os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\DebugUnicode\\Icons\" *.png")
+	os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\ReleaseUnicode\\Icons\" *.png")
 end
 
 newoption

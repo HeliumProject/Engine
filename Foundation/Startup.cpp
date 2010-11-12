@@ -1,7 +1,7 @@
 #include "Startup.h"
 
 #include "Platform/Assert.h"
-#include "Platform/Platform.h"
+#include "Platform/PlatformUtility.h"
 #include "Platform/Process.h"
 #include "Platform/Debug.h"
 #include "Platform/Exception.h"
@@ -28,18 +28,18 @@
 
 using namespace Helium;
 
-const tchar* StartupArgs::Script = TXT( "script" );
-const tchar* StartupArgs::Attach = TXT( "attach" );
-const tchar* StartupArgs::Profile = TXT( "profile" );
-const tchar* StartupArgs::Memory = TXT( "memory" );
-const tchar* StartupArgs::Verbose = TXT( "verbose" );
-const tchar* StartupArgs::Extreme = TXT( "extreme" );
-const tchar* StartupArgs::Debug = TXT( "debug" );
+const tchar_t* StartupArgs::Script = TXT( "script" );
+const tchar_t* StartupArgs::Attach = TXT( "attach" );
+const tchar_t* StartupArgs::Profile = TXT( "profile" );
+const tchar_t* StartupArgs::Memory = TXT( "memory" );
+const tchar_t* StartupArgs::Verbose = TXT( "verbose" );
+const tchar_t* StartupArgs::Extreme = TXT( "extreme" );
+const tchar_t* StartupArgs::Debug = TXT( "debug" );
 
 #ifdef _DEBUG
-const tchar* StartupArgs::DisableDebugHeap = TXT( "no_debug_heap" );
-const tchar* StartupArgs::DisableLeakCheck = TXT( "no_leak_check" );
-const tchar* StartupArgs::CheckHeap = TXT( "check_heap" );
+const tchar_t* StartupArgs::DisableDebugHeap = TXT( "no_debug_heap" );
+const tchar_t* StartupArgs::DisableLeakCheck = TXT( "no_leak_check" );
+const tchar_t* StartupArgs::CheckHeap = TXT( "check_heap" );
 #endif
 
 using namespace Helium;
@@ -74,7 +74,7 @@ namespace Helium
 	static Localization::StringTable g_StringTable( "Helium" );
 }
 
-void Helium::Startup( int argc, const tchar** argv )
+void Helium::Startup( int argc, const tchar_t** argv )
 {
     if ( ++g_InitCount == 1 )
     {
@@ -159,10 +159,10 @@ void Helium::Startup( int argc, const tchar** argv )
             //
             // Print project and version info
             //
-            tchar module[MAX_PATH];
+            tchar_t module[MAX_PATH];
             GetModuleFileName( 0, module, MAX_PATH );
 
-            tchar name[MAX_PATH];
+            tchar_t name[MAX_PATH];
             _tsplitpath( module, NULL, NULL, name, NULL );
 
             Localization::Statement stmt( "Helium", "RunningApp" );
@@ -226,7 +226,7 @@ void Helium::Startup( int argc, const tchar** argv )
                         }
                     }
 
-                    FreeEnvironmentStrings((tchar*)env);
+                    FreeEnvironmentStrings((tchar_t*)env);
                 }
             }
         }
@@ -251,8 +251,8 @@ void Helium::Startup( int argc, const tchar** argv )
         // Setup exception handlers, do this last
         //
 
-        // handle 'new' errors, invalid parameters, etc...
-        Helium::Platform::Initialize();
+        // handle invalid parameters, etc...
+        Helium::EnableCPPErrorHandling( true );
 
         // init debug handling
         Helium::Debug::InitializeExceptionListener();
@@ -340,10 +340,10 @@ int Helium::Shutdown( int code )
             //
             // Print general success or failure, depends on the result code
             //
-            tchar module[MAX_PATH];
+            tchar_t module[MAX_PATH];
             GetModuleFileName( 0, module, MAX_PATH );
 
-            tchar name[MAX_PATH];
+            tchar_t name[MAX_PATH];
             _tsplitpath( module, NULL, NULL, name, NULL );
 
             Log::Print( TXT( "%s: " ), name );
@@ -361,7 +361,7 @@ int Helium::Shutdown( int code )
 
             if (Log::GetErrorCount())
             {
-                tchar buf[80];
+                tchar_t buf[80];
                 _stprintf( buf, TXT( " %d error%s" ), Log::GetErrorCount(), Log::GetErrorCount() > 1 ? TXT( "s" ) : TXT( "" ) );
                 Log::PrintString( buf, Log::Streams::Normal, Log::Levels::Default, Log::Colors::Red );
             }
@@ -373,7 +373,7 @@ int Helium::Shutdown( int code )
 
             if (Log::GetWarningCount())
             {
-                tchar buf[80];
+                tchar_t buf[80];
                 _stprintf(buf, TXT( " %d warning%s" ), Log::GetWarningCount(), Log::GetWarningCount() > 1 ? TXT( "s" ) : TXT( "" ) );
                 Log::PrintString( buf, Log::Streams::Normal, Log::Levels::Default, Log::Colors::Yellow );
             }
@@ -436,12 +436,12 @@ Log::Stream Helium::GetTraceStreams()
 
 void Helium::InitializeStandardTraceFiles()
 {
-    tchar module[MAX_PATH];
+    tchar_t module[MAX_PATH];
     GetModuleFileName( 0, module, MAX_PATH );
 
-    tchar drive[MAX_PATH];
-    tchar dir[MAX_PATH];
-    tchar name[MAX_PATH];
+    tchar_t drive[MAX_PATH];
+    tchar_t dir[MAX_PATH];
+    tchar_t name[MAX_PATH];
     _tsplitpath( module, drive, dir, name, NULL );
 
     tstring path = drive;
@@ -487,38 +487,36 @@ static DWORD ProcessUnhandledCxxException( LPEXCEPTION_POINTERS info )
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
-static Helium::Thread::Return StandardThreadTryExcept( Helium::Thread::Entry entry, Helium::Thread::Param param )
+static void StandardThreadTryExcept( Helium::CallbackThread::Entry entry, void* param )
 {
     if (Helium::IsDebuggerPresent())
     {
-        return entry( param );
+        entry( param );
     }
     else
     {
         __try
         {
-            return entry( param );
+            entry( param );
         }
         __except( ProcessUnhandledCxxException( GetExceptionInformation() ) )
         {
             ::ExitProcess( -1 ); // propagating the exception up doesn't lead to a good situation, just shut down
         }
-
-        return -1;
     }
 }
 
-static Helium::Thread::Return StandardThreadTryCatch( Helium::Thread::Entry entry, Helium::Thread::Param param )
+static void StandardThreadTryCatch( Helium::CallbackThread::Entry entry, void* param )
 {
     if ( Helium::IsDebuggerPresent() )
     {
-        return StandardThreadTryExcept( entry, param );
+        StandardThreadTryExcept( entry, param );
     }
     else
     {
         try
         {
-            return StandardThreadTryExcept( entry, param );
+            StandardThreadTryExcept( entry, param );
         }
         catch ( const Helium::Exception& ex )
         {
@@ -529,27 +527,25 @@ static Helium::Thread::Return StandardThreadTryCatch( Helium::Thread::Entry entr
     }
 }
 
-static Helium::Thread::Return StandardThreadEntry( Helium::Thread::Entry entry, Helium::Thread::Param param )
+static void StandardThreadEntry( Helium::CallbackThread::Entry entry, void* param )
 {
     // any normal thread startup work would go here
-    return StandardThreadTryCatch( entry, param );
+    StandardThreadTryCatch( entry, param );
 }
 
-Helium::Thread::Return Helium::StandardThread( Helium::Thread::Entry entry, Helium::Thread::Param param )
+void Helium::StandardThread( Helium::CallbackThread::Entry entry, void* param )
 {
     if (Helium::IsDebuggerPresent())
     {
-        return StandardThreadEntry( entry, param );
+        StandardThreadEntry( entry, param );
     }
     else
     {
         Debug::InitializeExceptionListener();
 
-        Helium::Thread::Return result = -1;
-
         __try
         {
-            result = StandardThreadEntry( entry, param );
+            StandardThreadEntry( entry, param );
         }
         __except( ( g_ShutdownComplete || Helium::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), true, true ) )
         {
@@ -557,12 +553,10 @@ Helium::Thread::Return Helium::StandardThread( Helium::Thread::Entry entry, Heli
         }
 
         Debug::CleanupExceptionListener();
-
-        return result;
     }
 }
 
-static int StandardMainTryExcept( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv )
+static int StandardMainTryExcept( int (*main)(int argc, const tchar_t** argv), int argc, const tchar_t** argv )
 {
     if (Helium::IsDebuggerPresent())
     {
@@ -583,7 +577,7 @@ static int StandardMainTryExcept( int (*main)(int argc, const tchar** argv), int
     }
 }
 
-static int StandardMainTryCatch( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv )
+static int StandardMainTryCatch( int (*main)(int argc, const tchar_t** argv), int argc, const tchar_t** argv )
 {
     if ( Helium::IsDebuggerPresent() )
     {
@@ -608,7 +602,7 @@ static int StandardMainTryCatch( int (*main)(int argc, const tchar** argv), int 
     }
 }
 
-static int StandardMainEntry( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv )
+static int StandardMainEntry( int (*main)(int argc, const tchar_t** argv), int argc, const tchar_t** argv )
 {
     int result = 0; 
 
@@ -634,7 +628,7 @@ static int StandardMainEntry( int (*main)(int argc, const tchar** argv), int arg
     return Helium::Shutdown( result );
 }
 
-int Helium::StandardMain( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv )
+int Helium::StandardMain( int (*main)(int argc, const tchar_t** argv), int argc, const tchar_t** argv )
 {
     if (Helium::IsDebuggerPresent())
     {
@@ -713,7 +707,7 @@ static int StandardWinMainTryCatch( int (*winMain)( HINSTANCE hInstance, HINSTAN
 static int StandardWinMainEntry( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd )
 {
     int argc = 0;
-    const tchar** argv = NULL;
+    const tchar_t** argv = NULL;
     Helium::ProcessCmdLine( lpCmdLine, argc, argv );
 
     int result = 0;

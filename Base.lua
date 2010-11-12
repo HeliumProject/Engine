@@ -54,20 +54,35 @@ Helium.DoDefaultSolutionSettings = function()
 		"Release",
 	}
 	
-	configuration {}
+	defines
+	{
+		"XML_STATIC=1",
+	}
+
+	flags
+	{
+		"EnableSSE2",
+		"NoMinimalRebuild",
+	}
+
+	configuration "x64"
 		defines
 		{
-			"XML_STATIC=1",
+			-- Explicitly define "__SSE__" and "__SSE2__" on x86-64 platforms, as Visual C++ does not define them automatically.
+			"__SSE__",
+			"__SSE2__",
 		}
-		flags
+
+	configuration "no-unicode"
+		defines
 		{
-			"EnableSSE2",
-			"NoMinimalRebuild",
+			"HELIUM_UNICODE=0",
 		}
 	
 	configuration "not no-unicode"
 		defines
 		{
+			"HELIUM_UNICODE=1",
 			"UNICODE=1",
 			"LITESQL_UNICODE=1",
 			"XML_UNICODE_WCHAR_T=1",
@@ -92,12 +107,16 @@ Helium.DoDefaultSolutionSettings = function()
 			"_WIN32",
 			"WIN32",
 			"_CRT_SECURE_NO_DEPRECATE",
+			"_CRT_NON_CONFORMING_SWPRINTFS",
 		}
 
 	configuration "Debug"
 		defines
 		{
+			"HELIUM_DEBUG=1",
 			"_DEBUG",
+			"HELIUM_SHARED=1",
+			"TBB_USE_DEBUG=1",
 		}
 		flags
 		{
@@ -105,32 +124,44 @@ Helium.DoDefaultSolutionSettings = function()
 		}
 		
 	configuration "Intermediate"
+		defines
+		{
+			"HELIUM_INTERMEDIATE=1",
+			"HELIUM_STATIC=1",
+		}
 		flags
 		{
 			"OptimizeSpeed",
+			"NoEditAndContinue",
 			"Symbols",
 		}
 		
 	configuration "Profile"
 		defines
 		{
+			"HELIUM_PROFILE=1",
 			"NDEBUG",
+			"HELIUM_STATIC=1",
 		}
 		flags
 		{
 			"NoFramePointer",
 			"OptimizeSpeed",
+			"NoEditAndContinue",
 		}
 
 	configuration "Release"
 		defines
 		{
+			"HELIUM_RELEASE=1",
 			"NDEBUG",
+			"HELIUM_STATIC=1",
 		}
 		flags
 		{
 			"NoFramePointer",
 			"OptimizeSpeed",
+			"NoEditAndContinue",
 		}
 
 	configuration { "windows", "Debug" }
@@ -161,12 +192,6 @@ Helium.DoDefaultLunarProjectSettings = function()
 		"NoRTTI",
 	}
 
-	includedirs
-	{
-		"Dependencies/boost",
-		"Dependencies/tbb/include",
-	}
-
 	configuration "no-unicode"
 		defines
 		{
@@ -185,7 +210,6 @@ Helium.DoDefaultLunarProjectSettings = function()
 			"L_DEBUG=1",
 			"L_EDITOR=1",
 			"L_SHARED=1",
-			"TBB_USE_DEBUG=1",
 		}
 
 	configuration "Intermediate"
@@ -216,30 +240,6 @@ Helium.DoDefaultLunarProjectSettings = function()
 			"dbghelp",
 		}
 
-	configuration { "windows", "x32", "Debug" }
-		libdirs
-		{
-			"Dependencies/tbb/build/windows_ia32_cl_vc9_debug",
-		}
-
-	configuration { "windows", "x32", "not Debug" }
-		libdirs
-		{
-			"Dependencies/tbb/build/windows_ia32_cl_vc9_release",
-		}
-
-	configuration { "windows", "x64", "Debug" }
-		libdirs
-		{
-			"Dependencies/tbb/build/windows_intel64_cl_vc9_debug",
-		}
-
-	configuration { "windows", "x64", "not Debug" }
-		libdirs
-		{
-			"Dependencies/tbb/build/windows_intel64_cl_vc9_release",
-		}
-
 end
 
 -- Common settings for Lunar modules.
@@ -247,7 +247,7 @@ Helium.DoLunarModuleProjectSettings = function( tokenPrefix, moduleName, moduleN
 
 	defines
 	{
-		"L_MODULE_HEAP_FUNCTION=Get" .. moduleName .. "DefaultHeap"
+		"HELIUM_MODULE_HEAP_FUNCTION=Get" .. moduleName .. "DefaultHeap"
 	}
 
 	files

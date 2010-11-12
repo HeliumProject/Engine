@@ -7,10 +7,10 @@ namespace Helium
 {
     namespace Inspect
     {
-        const static tchar TEXTBOX_ATTR_REQUIRED[] = TXT( "required" );
-        const static tchar TEXTBOX_ATTR_JUSTIFY[] = TXT( "justify" );
-        const static tchar TEXTBOX_ATTR_JUSTIFY_LEFT[] = TXT( "left" );
-        const static tchar TEXTBOX_ATTR_JUSTIFY_RIGHT[] = TXT( "right" );
+        const static tchar_t TEXTBOX_ATTR_REQUIRED[] = TXT( "required" );
+        const static tchar_t TEXTBOX_ATTR_JUSTIFY[] = TXT( "justify" );
+        const static tchar_t TEXTBOX_ATTR_JUSTIFY_LEFT[] = TXT( "left" );
+        const static tchar_t TEXTBOX_ATTR_JUSTIFY_RIGHT[] = TXT( "right" );
 
         namespace Justifications
         {

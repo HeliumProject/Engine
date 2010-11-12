@@ -7,17 +7,17 @@
 
 #include "CorePch.h"
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 
 #include "Core/Path.h"
 
 #define INVALID_PATH_CHARACTERS \
-    L_T( "\01\02\03\04\05\06\07\10\11\12\13\14\15\16\17\20\21\22\23\24\25\26\27\30\31\32\33\34\35\36\37\"<>|\b\t*?" )
+    TXT( "\01\02\03\04\05\06\07\10\11\12\13\14\15\16\17\20\21\22\23\24\25\26\27\30\31\32\33\34\35\36\37\"<>|\b\t*?" )
 
 namespace Lunar
 {
     String Path::sm_invalidPathCharacters( INVALID_PATH_CHARACTERS );
-    String Path::sm_invalidFileNameCharacters( INVALID_PATH_CHARACTERS L_T( ":\\/" ) );
+    String Path::sm_invalidFileNameCharacters( INVALID_PATH_CHARACTERS TXT( ":\\/" ) );
 
     /// Get whether the given string specifies a path to a root directory for the current platform.
     ///
@@ -33,35 +33,35 @@ namespace Lunar
         }
 
         tchar_t character = pPath[ 0 ];
-        if( character == L_T( '\0' ) )
+        if( character == TXT( '\0' ) )
         {
             return false;
         }
 
         // Check if the path is a drive specification (i.e. "C:\").
-        if( ( character >= L_T( 'a' ) && character <= L_T( 'z' ) ) ||
-            ( character >= L_T( 'A' ) && character <= L_T( 'Z' ) ) )
+        if( ( character >= TXT( 'a' ) && character <= TXT( 'z' ) ) ||
+            ( character >= TXT( 'A' ) && character <= TXT( 'Z' ) ) )
         {
             character = pPath[ 1 ];
-            if( character != L_T( ':' ) )
+            if( character != TXT( ':' ) )
             {
                 return false;
             }
 
             character = pPath[ 2 ];
-            if( character != L_T( '\\' ) && character != L_T( '/' ) )
+            if( character != TXT( '\\' ) && character != TXT( '/' ) )
             {
                 return false;
             }
 
-            return( pPath[ 3 ] == L_T( '\0' ) );
+            return( pPath[ 3 ] == TXT( '\0' ) );
         }
 
         // Check if the path is the root of a UNC path (i.e. "\\server\").
-        if( character == L_T( '\\' ) || character == L_T( '/' ) )
+        if( character == TXT( '\\' ) || character == TXT( '/' ) )
         {
             character = pPath[ 1 ];
-            if( character != L_T( '\\' ) && character != L_T( '/' ) )
+            if( character != TXT( '\\' ) && character != TXT( '/' ) )
             {
                 return false;
             }
@@ -73,7 +73,7 @@ namespace Lunar
                 character = pPath[ characterIndex ];
                 ++characterIndex;
 
-                if( character == L_T( '\\' ) || character == L_T( '/' ) )
+                if( character == TXT( '\\' ) || character == TXT( '/' ) )
                 {
                     // Make sure we have at least something for a resource name.
                     if( characterIndex == 3 )
@@ -84,18 +84,18 @@ namespace Lunar
                     break;
                 }
 
-                if( character == L_T( '\0' ) || IsValid( sm_invalidFileNameCharacters.Find( character ) ) )
+                if( character == TXT( '\0' ) || IsValid( sm_invalidFileNameCharacters.Find( character ) ) )
                 {
                     // Invalid character encountered.
                     return false;
                 }
             }
 
-            return( pPath[ characterIndex ] == L_T( '\0' ) );
+            return( pPath[ characterIndex ] == TXT( '\0' ) );
         }
 
         return false;
     }
 }
 
-#endif  // L_OS_WIN
+#endif  // HELIUM_OS_WIN

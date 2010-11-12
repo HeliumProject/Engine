@@ -13,11 +13,11 @@ using namespace Helium;
 using namespace Helium::Render;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Texture::Texture(const tchar* fname)
+Texture::Texture(const tchar_t* fname)
 {
     m_filename = fname;  
     m_timestamp = (uint64_t)-1;
-    m_crc= Helium::StringCrc32( fname );
+    m_crc= Helium::Crc32( fname, _tcslen(fname) );
     m_load_count=0;
     m_d3d_texture = 0;
 
@@ -39,11 +39,11 @@ Texture::~Texture()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-RenderShader::RenderShader(ShaderManager* sd, const tchar* shader)
+RenderShader::RenderShader(ShaderManager* sd, const tchar_t* shader)
 {
     m_filename = shader;  
     m_timestamp = (uint64_t)-1;
-    m_crc=Helium::StringCrc32(shader);
+    m_crc=Helium::Crc32(shader, _tcslen(shader));
     m_load_count = 0;
     m_flags = SHDR_FLAG_GPI_MAP;
     m_sd = sd;
@@ -244,7 +244,7 @@ uint32_t ShaderManager::AddShader(RenderShader* sh)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // shader is an XML file
-uint32_t ShaderManager::LoadNewShader( const tchar* fname, ShaderLoaderPtr loader )
+uint32_t ShaderManager::LoadNewShader( const tchar_t* fname, ShaderLoaderPtr loader )
 {
     Helium::Path shaderPath( fname );
 
@@ -263,7 +263,7 @@ uint32_t ShaderManager::LoadNewShader( const tchar* fname, ShaderLoaderPtr loade
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-uint32_t ShaderManager::LoadShader(const tchar* fname, bool inc, ShaderLoaderPtr loader)
+uint32_t ShaderManager::LoadShader(const tchar_t* fname, bool inc, ShaderLoaderPtr loader)
 {
     uint32_t handle = FindShader(fname);
 
@@ -282,9 +282,9 @@ uint32_t ShaderManager::LoadShader(const tchar* fname, bool inc, ShaderLoaderPtr
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-uint32_t ShaderManager::FindShader(const tchar* fname)
+uint32_t ShaderManager::FindShader(const tchar_t* fname)
 {
-    uint32_t crc = Helium::StringCrc32(fname);
+    uint32_t crc = Helium::Crc32(fname, _tcslen(fname));
 
     uint32_t shader_count = (uint32_t)m_loaded_shaders.size();
     uint32_t handle = 0xffffffff;
@@ -304,7 +304,7 @@ uint32_t ShaderManager::FindShader(const tchar* fname)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-uint32_t ShaderManager::DuplicateShader(uint32_t handle,const tchar* new_shader)
+uint32_t ShaderManager::DuplicateShader(uint32_t handle,const tchar_t* new_shader)
 {
     // convert the handle to a pointer
     RenderShader* sh = ResolveShader(handle);
@@ -344,7 +344,7 @@ uint32_t ShaderManager::DuplicateShader(uint32_t handle,const tchar* new_shader)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-uint32_t ShaderManager::LoadTexture(const tchar* fname,D3DFORMAT fmt, uint32_t levels,bool inc)
+uint32_t ShaderManager::LoadTexture(const tchar_t* fname,D3DFORMAT fmt, uint32_t levels,bool inc)
 {
     uint32_t handle = FindTexture(fname);
 
@@ -407,7 +407,7 @@ void ShaderManager::UpdateTextureSettings(uint32_t handle, const TextureSettings
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool ShaderManager::ReloadTexture( const tchar* fname )
+bool ShaderManager::ReloadTexture( const tchar_t* fname )
 {
     uint32_t handle = FindTexture( fname );
     if ( handle == 0xffffffff )
@@ -445,10 +445,10 @@ bool ShaderManager::ReloadTexture( const tchar* fname )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-uint32_t ShaderManager::FindTexture(const tchar* fname)
+uint32_t ShaderManager::FindTexture(const tchar_t* fname)
 {
     // NOTE: We only include the name in the CRC, we really should include other info such as the format
-    uint32_t crc = Helium::StringCrc32(fname);
+    uint32_t crc = Helium::Crc32(fname, _tcslen(fname));
 
     uint32_t texture_count = (uint32_t)m_loaded_textures.size();
     uint32_t handle = 0xffffffff;
@@ -480,7 +480,7 @@ RenderShader* ShaderManager::ResolveShader(uint32_t handle)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void ShaderManager::SetShaderDefaultTexture(const tchar* shaderFilename, uint32_t textureIndex)
+void ShaderManager::SetShaderDefaultTexture(const tchar_t* shaderFilename, uint32_t textureIndex)
 {
     uint32_t shaderHandle = FindShader( shaderFilename );
     if ( shaderHandle == 0xffffffff )
@@ -514,7 +514,7 @@ void ShaderManager::SetShaderDefaultTexture(const tchar* shaderFilename, uint32_
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void ShaderManager::UpdateShaderTexture( const tchar* shaderFilename, uint32_t textureIndex, const TextureSettings& settings )
+void ShaderManager::UpdateShaderTexture( const tchar_t* shaderFilename, uint32_t textureIndex, const TextureSettings& settings )
 {
     uint32_t shader_handle = FindShader( shaderFilename );
     if ( shader_handle == 0xffffffff )

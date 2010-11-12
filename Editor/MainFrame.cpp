@@ -170,7 +170,7 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     caption += wxGetApp().AppVerName().c_str();
     caption += wxT( "..." );
     wxMenuItem* aboutMenuItem = m_MenuHelp->FindItem( ID_About );
-    aboutMenuItem->SetText( caption );
+    aboutMenuItem->SetItemLabel( caption );
 
     // Tool Bar
     m_ToolbarPanel = new ToolbarPanel( this );
@@ -346,7 +346,7 @@ MainFrame::~MainFrame()
     }
 }
 
-void MainFrame::SetHelpText( const tchar* text )
+void MainFrame::SetHelpText( const tchar_t* text )
 {
     m_HelpPanel->SetText( text );
 }
@@ -743,7 +743,7 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
 // Returns a different name each time this function is called so that scenes
 // can be uniquely named.
 // 
-static void GetUniquePathName( const tchar* root, const std::set< Path >& paths, Helium::Path& name )
+static void GetUniquePathName( const tchar_t* root, const std::set< Path >& paths, Helium::Path& name )
 {
     int32_t number = 0;
 

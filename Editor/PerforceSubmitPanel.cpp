@@ -12,11 +12,11 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-static const tchar* s_DefaultDescription = TXT( "<enter description here>" );
+static const tchar_t* s_DefaultDescription = TXT( "<enter description here>" );
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static const tchar* g_OperationStrings[] = { 
+static const tchar_t* g_OperationStrings[] = { 
     TXT( "<unknown>" ),
     TXT( "<none>" ),
     TXT( "<add>" ),
@@ -26,7 +26,7 @@ static const tchar* g_OperationStrings[] = {
     TXT( "<integrate>" )
 };
 
-inline const tchar* GetOperationString( RCS::Operation operation )
+inline const tchar_t* GetOperationString( RCS::Operation operation )
 {
     if ( operation > sizeof( g_OperationStrings ) )
     {
@@ -261,7 +261,7 @@ void PerforceSubmitPanel::Populate()
         struct tm *dateTime;
         dateTime = _localtime64( &now );
 
-        tchar dateTimeStr[128];
+        tchar_t dateTimeStr[128];
         _tcsftime( dateTimeStr, 128, TXT( "%Y/%m/%d %H:%M:%S" ), dateTime );
         m_DateStaticText->SetLabel( dateTimeStr );
 

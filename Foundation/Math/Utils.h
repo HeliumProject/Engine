@@ -1,8 +1,8 @@
 #pragma once
 
-#include <cmath>
+#include "Platform/Math/MathCommon.h"
+
 #include <iostream>
-#include <intrin.h>
 #include <float.h>
 
 #include "Platform/Types.h"
@@ -18,7 +18,12 @@ namespace Helium
     // Valid
     //
 
-    inline bool IsValid(float64_t val)
+    inline bool IsFinite(float32_t val)
+    {
+        return _finite(val) != 0;
+    }
+
+    inline bool IsFinite(float64_t val)
     {
         return _finite(val) != 0;
     }
@@ -76,10 +81,10 @@ namespace Helium
     //
     inline float32_t ClampAngle(float32_t& v)
     {
-        while (v < -Pi)
-            v += TwoPi;
-        while (v > Pi)
-            v -= TwoPi;
+        while( v < -static_cast< float32_t >( HELIUM_PI ) )
+            v += static_cast< float32_t >( HELIUM_TWOPI );
+        while( v > static_cast< float32_t >( HELIUM_PI ) )
+            v -= static_cast< float32_t >( HELIUM_TWOPI );
         return v;
     }
 
@@ -134,42 +139,6 @@ namespace Helium
     inline float64_t Ran(float64_t low, float64_t high)
     {
         return (((float64_t)rand() / (float64_t) RAND_MAX) * (high - low)) + low;
-    }
-
-    //
-    // Log2
-    //
-    // Return the log2 of the input, effectively this is the position of the highest bit set (signed)
-    //
-    inline int32_t Log2(int32_t val)
-    {
-        int32_t log = 0;
-        for (; val > 1; log++)
-            val = val >> 1;
-        return (log);
-    }
-
-    //
-    // Log2
-    //
-    // Return the log2 of the input, effectively this is the position of the highest bit set
-    //
-    inline uint32_t Log2(uint32_t v)
-    {
-#ifdef _MSC_VER
-# ifdef _M_IX86
-        _asm
-        {
-            bsr eax,v
-        }
-# else
-        uint32_t result = 0;
-        _BitScanReverse((unsigned long*)&result, v);
-        return result;
-# endif
-#else
-        HELIUM_COMPILE_ASSERT(false);
-#endif
     }
 
     //
@@ -236,7 +205,7 @@ namespace Helium
     //
     // Equal
     // 
-    inline bool Equal( float32_t a, float32_t b, float32_t err = ValueNearZero )
+    inline bool Equal( float32_t a, float32_t b, float32_t err = HELIUM_VALUE_NEAR_ZERO )
     {
         return ( fabs( a - b ) <= err ); 
     }

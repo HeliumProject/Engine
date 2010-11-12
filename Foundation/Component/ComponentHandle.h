@@ -43,7 +43,7 @@ namespace Helium
             {
                 if (!Valid())
                 {
-                    const tchar* attributeTypeName = TXT("Unknown");
+                    const tchar_t* attributeTypeName = TXT("Unknown");
                     const Reflect::Class* attributeClass = Reflect::GetClass< ComponentType >();
                     if ( attributeClass )
                     {

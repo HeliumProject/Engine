@@ -3,7 +3,7 @@
 
 using namespace Helium;
 
-void Helium::Print(ConsoleColor color, FILE* stream, const tchar* fmt, ...)
+void Helium::Print(ConsoleColor color, FILE* stream, const tchar_t* fmt, ...)
 {
     CONSOLE_SCREEN_BUFFER_INFO info;
 
@@ -33,7 +33,7 @@ void Helium::Print(ConsoleColor color, FILE* stream, const tchar* fmt, ...)
     }
 }
 
-void Helium::PrintArgs(ConsoleColor color, FILE* stream, const tchar* fmt, va_list args)
+void Helium::PrintArgs(ConsoleColor color, FILE* stream, const tchar_t* fmt, va_list args)
 {
     CONSOLE_SCREEN_BUFFER_INFO info;
 

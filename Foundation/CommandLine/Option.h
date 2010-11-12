@@ -6,7 +6,6 @@
 #include <map>
 
 #include "Foundation/API.h"
-#include "Platform/Compiler.h"
 #include "Foundation/Memory/SmartPtr.h"
 
 namespace Helium
@@ -22,7 +21,7 @@ namespace Helium
 			tstring m_Help;
 
         public:
-			Option( const tchar* token, const tchar* usage = TXT( "<ARG>" ), const tchar* help = TXT( "" ) )
+			Option( const tchar_t* token, const tchar_t* usage = TXT( "<ARG>" ), const tchar_t* help = TXT( "" ) )
 				: m_Token( token )
 				, m_Usage( usage )
 				, m_Help( help )
@@ -62,7 +61,7 @@ namespace Helium
 			T* m_Data;
 
 		public:
-			SimpleOption( T* data, const tchar* token, const tchar* usage = TXT( "<ARG>" ), const tchar* help = TXT( "" ) )
+			SimpleOption( T* data, const tchar_t* token, const tchar_t* usage = TXT( "<ARG>" ), const tchar_t* help = TXT( "" ) )
 				: Option( token, usage, help )
 				, m_Data( data )
 			{
@@ -179,7 +178,7 @@ namespace Helium
 			bool* m_Data;
 
 		public:
-			FlagOption( bool* data, const tchar* token, const tchar* help = TXT( "" ) )
+			FlagOption( bool* data, const tchar_t* token, const tchar_t* help = TXT( "" ) )
 				: SimpleOption( data, token, TXT( "" ), help )
 				, m_Data( data )
 			{

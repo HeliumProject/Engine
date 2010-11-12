@@ -82,11 +82,11 @@ void Object::IncrRefCount() const
 #ifdef REFLECT_OBJECT_TRACKING
     if (Reflect::IsInitialized() && m_RefCount != 0)
     {
-        Reflect::Registry::GetInstance()->TrackCheck((uintptr)this);
+        Reflect::Registry::GetInstance()->TrackCheck((uintptr_t)this);
     }
 #endif
 
-    Helium::AtomicIncrement( &m_RefCount );
+    Helium::AtomicIncrementAcquire( m_RefCount );
 }
 
 void Object::DecrRefCount() const
@@ -94,11 +94,11 @@ void Object::DecrRefCount() const
 #ifdef REFLECT_OBJECT_TRACKING
     if (Reflect::IsInitialized())
     {
-        Reflect::Registry::GetInstance()->TrackCheck((uintptr)this);
+        Reflect::Registry::GetInstance()->TrackCheck((uintptr_t)this);
     }
 #endif
 
-    Helium::AtomicDecrement( &m_RefCount ); 
+    Helium::AtomicDecrementRelease( m_RefCount ); 
 
     if (m_RefCount == 0)
     {

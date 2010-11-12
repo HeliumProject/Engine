@@ -21,7 +21,7 @@ uint32_t GetWin32MoveMethod( FileOffset offsetType )
     return 0;
 }
 
-const tchar* GetWin32MoveMethodStr( FileOffset offsetType )
+const tchar_t* GetWin32MoveMethodStr( FileOffset offsetType )
 {
     switch( offsetType )
     {
@@ -38,7 +38,7 @@ const tchar* GetWin32MoveMethodStr( FileOffset offsetType )
     return NULL;
 }
 
-FileHandle::FileHandle( const tstring& path, const tchar* mode )
+FileHandle::FileHandle( const tstring& path, const tchar_t* mode )
 : m_Mode( mode )
 , m_FileHandle( NULL )
 , m_OpenCount( 0 )

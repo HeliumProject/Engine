@@ -11,9 +11,12 @@
 
 #include "Core/Core.h"
 
-#if L_OS_WIN
+#if HELIUM_OS_WIN
 
 #include "Core/DirectoryIterator.h"
+
+#pragma TODO( "LUNAR MERGE - Address dependency on Windows.h" )
+#include "Platform/Windows/Windows.h"
 
 namespace Lunar
 {
@@ -46,6 +49,6 @@ namespace Lunar
     };
 }
 
-#endif  // L_OS_WIN
+#endif  // HELIUM_OS_WIN
 
 #endif  // LUNAR_CORE_DIRECTORY_ITERATOR_WIN_H

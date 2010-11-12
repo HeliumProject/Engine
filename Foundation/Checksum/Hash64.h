@@ -191,7 +191,7 @@ namespace Helium
         {
             uint64_t digit = (hash_val >> (i * 4)) & 0xF;
 
-            tchar buf[2];
+            tchar_t buf[2];
             _stprintf( buf, "%x", digit);
             ret += buf;
         }

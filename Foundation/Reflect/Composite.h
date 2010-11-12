@@ -260,7 +260,7 @@ namespace Helium
             template <class FieldT>
             static inline uint32_t GetOffset( FieldT T::* field )
             {
-                return (uint32_t) (uintptr) &( ((T*)NULL)->*field); 
+                return (uint32_t) (uintptr_t) &( ((T*)NULL)->*field); 
             }
 
             template <class FieldT>
@@ -294,7 +294,7 @@ namespace Helium
                     m_Instance,
                     GetName(name),
                     GetOffset(field),
-                    sizeof(uintptr),
+                    sizeof(uintptr_t),
                     Reflect::GetType<Reflect::PointerSerializer>(),
                     Reflect::GetType<ElementT>(),
                     flags );
@@ -307,7 +307,7 @@ namespace Helium
                     m_Instance,
                     GetName(name),
                     GetOffset(field),
-                    sizeof(uintptr),
+                    sizeof(uintptr_t),
                     Reflect::GetType<Reflect::PointerSerializer>(),
                     Reflect::GetType<ElementT>(),
                     flags );

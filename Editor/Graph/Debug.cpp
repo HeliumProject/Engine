@@ -10,19 +10,19 @@
 
 namespace Debug
 {
-    static const tchar *Format(const tchar *fmt, va_list args)
+    static const tchar_t *Format(const tchar_t *fmt, va_list args)
     {
-        static tchar buffer[1024];
+        static tchar_t buffer[1024];
         ::_vsntprintf_s(buffer, sizeof(buffer), _TRUNCATE, fmt, args);
         buffer[sizeof(buffer) - 1] = 0;
         return buffer;
     }
 
-    const tchar *Format(const tchar *fmt, ...)
+    const tchar_t *Format(const tchar_t *fmt, ...)
     {
         va_list args;
         va_start(args, fmt);
-        const tchar *res = Format(fmt, args);
+        const tchar_t *res = Format(fmt, args);
         va_end(args);
         return res;
     }
@@ -33,7 +33,7 @@ namespace Debug
     static HANDLE log;
 
     void *
-        DumpHeap(const tchar *op, void *ptr, size_t size, const char *file, int line)
+        DumpHeap(const tchar_t *op, void *ptr, size_t size, const char *file, int line)
     {
         Debug::Printf(TXT( "%s\t%p\t%d\t%s\t%d\n" ), op, ptr, size, file, line);
         return ptr;
@@ -210,11 +210,11 @@ namespace Debug
         LuaUtilities::Call(L, 0, 0);
     }
 
-    void Printf(const tchar *fmt, ...)
+    void Printf(const tchar_t *fmt, ...)
     {
         va_list args;
         va_start(args, fmt);
-        const tchar *res = Format(fmt, args);
+        const tchar_t *res = Format(fmt, args);
         va_end(args);
         DWORD len = (DWORD)_tcslen(res);
         DWORD numwritten;
@@ -231,7 +231,7 @@ namespace Debug
         lua_pop(L, 1);
     }
 
-    void Save(Shape *shape, const tchar *file)
+    void Save(Shape *shape, const tchar_t *file)
     {
         wxXmlDocument doc;
         doc.SetRoot(shape->Serialize());

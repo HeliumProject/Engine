@@ -8,7 +8,7 @@
 //
 
 // sanity check code generation settings
-#include "Platform/Compiler.h"
+#include "Platform/Platform.h"
 
 // smartpointer system
 #include "Foundation/Memory/SmartPtr.h"

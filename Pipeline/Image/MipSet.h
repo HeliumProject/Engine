@@ -1,6 +1,6 @@
 #pragma once
 
-#include <math.h>
+#include "Platform/Math/MathCommon.h"
 #include <string>
 #include <vector>
 #include <list>
@@ -411,7 +411,7 @@ namespace Helium
     // WriteRGBAFLOATDDS()
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool WriteDDS(const tchar* fname) const;
+    bool WriteDDS(const tchar_t* fname) const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     bool ExtractNonePowerOfTwo(uint32_t width, uint32_t height, uint32_t depth);

@@ -316,7 +316,7 @@ void Context::FlushFile()
     blockEnd->m_Header.m_Size    = sizeof(BlockEndPacket); 
 
     // we write the whole buffer, in large blocks
-    m_TraceFile.Write( (const tchar*) m_PacketBuffer, PROFILE_PACKET_BLOCK_SIZE); 
+    m_TraceFile.Write( (const tchar_t*) m_PacketBuffer, PROFILE_PACKET_BLOCK_SIZE); 
 
     // reset the packet buffer
     m_PacketBufferOffset = 0; 

@@ -177,7 +177,7 @@ Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, con
 
 void Composite::Report() const
 {
-    static tchar buf[8192];
+    static tchar_t buf[8192];
 
     _sntprintf(buf, sizeof(buf), TXT( "Reflect Type ID: %3d, Size: %4d, Name: `%s`\n" ), m_TypeID, m_Size, m_FullName.c_str());
     buf[ sizeof(buf) - 1] = 0; 

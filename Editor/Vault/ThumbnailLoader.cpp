@@ -57,7 +57,7 @@ void* ThumbnailLoader::LoadThread::Entry()
         Helium::Path path;
 
         {
-            Helium::Locker< Helium::OrderedSet< Helium::Path > >::Handle queue = m_Loader.m_FileQueue.Lock();
+            Helium::Locker< Helium::OrderedSet< Helium::Path > >::Handle queue( m_Loader.m_FileQueue );
             if ( !queue->Empty() )
             {
 #ifdef HELIUM_ASSERT_ENABLED
@@ -159,7 +159,7 @@ ThumbnailLoader::~ThumbnailLoader()
 
 void ThumbnailLoader::Enqueue( const std::set< Helium::Path >& files )
 {
-    Helium::Locker< Helium::OrderedSet< Helium::Path > >::Handle queue = m_FileQueue.Lock();
+    Helium::Locker< Helium::OrderedSet< Helium::Path > >::Handle queue( m_FileQueue );
 
     for ( std::set< Helium::Path >::const_reverse_iterator itr = files.rbegin(), end = files.rend();
         itr != end;
@@ -176,7 +176,7 @@ void ThumbnailLoader::Enqueue( const std::set< Helium::Path >& files )
 
 void ThumbnailLoader::Stop()
 {
-    Helium::Locker< Helium::OrderedSet< Helium::Path > >::Handle queue = m_FileQueue.Lock();
+    Helium::Locker< Helium::OrderedSet< Helium::Path > >::Handle queue( m_FileQueue );
     if ( queue->Empty() )
     {
         return;

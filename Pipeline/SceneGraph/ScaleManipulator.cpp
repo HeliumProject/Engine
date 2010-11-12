@@ -225,7 +225,7 @@ void ScaleManipulator::Draw( DrawArgs* args )
 
     Scale inverse (1.0f / offset.x, 1.0f / offset.y, 1.0f / offset.z);
 
-    AxesFlags parallelAxis = m_View->GetCamera()->ParallelAxis(frame, CriticalDotProduct);
+    AxesFlags parallelAxis = m_View->GetCamera()->ParallelAxis(frame, HELIUM_CRITICAL_DOT_PRODUCT);
 
     m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&frame);
     m_Axes->DrawAxes(args, (AxesFlags)(~parallelAxis & MultipleAxes::All));
@@ -282,7 +282,7 @@ bool ScaleManipulator::Pick( PickVisitor* pick )
     linePick->SetCurrentObject (this, frame);
     linePick->ClearHits();
 
-    AxesFlags parallelAxis = m_View->GetCamera()->ParallelAxis(frame, CriticalDotProduct);
+    AxesFlags parallelAxis = m_View->GetCamera()->ParallelAxis(frame, HELIUM_CRITICAL_DOT_PRODUCT);
 
     if (m_Cube->Pick(linePick))
     {

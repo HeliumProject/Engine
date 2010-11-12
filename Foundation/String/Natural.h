@@ -40,27 +40,27 @@ misrepresented as being the original software.
 *
 */
 
-typedef tchar nat_char;
+typedef tchar_t nat_char;
 
 
 static inline int
 nat_isdigit(nat_char a)
 {
-    return isdigit((tchar) a);
+    return isdigit((tchar_t) a);
 }
 
 
 static inline int
 nat_isspace(nat_char a)
 {
-    return isspace((tchar) a);
+    return isspace((tchar_t) a);
 }
 
 
 static inline nat_char
 nat_toupper(nat_char a)
 {
-    return toupper((tchar) a);
+    return toupper((tchar_t) a);
 }
 
 

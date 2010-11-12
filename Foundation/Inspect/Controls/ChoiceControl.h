@@ -7,10 +7,10 @@ namespace Helium
 {
     namespace Inspect
     {
-        const static tchar CHOICE_ATTR_ENUM[]      = TXT( "enum" );
-        const static tchar CHOICE_ATTR_SORTED[]    = TXT( "sorted" );
-        const static tchar CHOICE_ATTR_DROPDOWN[]  = TXT( "dropdown" );
-        const static tchar CHOICE_ATTR_PREFIX[]    = TXT( "prefix" );
+        const static tchar_t CHOICE_ATTR_ENUM[]      = TXT( "enum" );
+        const static tchar_t CHOICE_ATTR_SORTED[]    = TXT( "sorted" );
+        const static tchar_t CHOICE_ATTR_DROPDOWN[]  = TXT( "dropdown" );
+        const static tchar_t CHOICE_ATTR_PREFIX[]    = TXT( "prefix" );
 
         class Choice;
 

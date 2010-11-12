@@ -3,7 +3,6 @@
 #include "Foundation/API.h"
 
 #include "Platform/Types.h"
-#include "Platform/Compiler.h"
 #include "Memory/SmartPtr.h"
 
 namespace Helium

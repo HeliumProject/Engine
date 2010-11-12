@@ -19,13 +19,8 @@ defines
 includedirs
 {
 	".",
-}
-
-buildoptions
-{
-	-- Class 'foo<>' needs to have dll-interface to be used by clients of class 'bar'
-	--  This is a non-issue so long as debug/release and CRT is not mixed b/t modules
-	"/wd4251",
+	"Dependencies/boost",
+	"Dependencies/tbb/include",
 }
 
 --[[
@@ -109,31 +104,54 @@ configuration "not no-unicode"
 		"wxUSE_UNICODE=1",
 	}
 
-project "Core"
-	if corePrebuildCommands ~= nil then
-		prebuildcommands( corePrebuildCommands )
-	end
+configuration { "windows", "x32", "Debug" }
+	libdirs
+	{
+		"Dependencies/tbb/build/windows_ia32_cl_vc9_debug",
+	}
 
-	Helium.DoLunarModuleProjectSettings( "LUNAR", "Core", "CORE" )
+configuration { "windows", "x32", "not Debug" }
+	libdirs
+	{
+		"Dependencies/tbb/build/windows_ia32_cl_vc9_release",
+	}
+
+configuration { "windows", "x64", "Debug" }
+	libdirs
+	{
+		"Dependencies/tbb/build/windows_intel64_cl_vc9_debug",
+	}
+
+configuration { "windows", "x64", "not Debug" }
+	libdirs
+	{
+		"Dependencies/tbb/build/windows_intel64_cl_vc9_release",
+	}
 
 project "Platform"
+	uuid "E4A1F8FC-A93A-46E2-9CA8-40C2CE1B163E"
 	kind "SharedLib"
 	language "C++"
 	defines
 	{
 		"PLATFORM_EXPORTS",
+		"HELIUM_MODULE_HEAP_FUNCTION=GetPlatformDefaultHeap",
 	}
 	files
 	{
-		"Platform/*.h",
-		"Platform/*.cpp",
+		"Platform/*",
+		"Platform/Gcc/*",
+		"Platform/Math/*",
+		"Platform/Msc/*",
+		"Platform/X86/*",
 	}
 
 	configuration "windows"
 		files
 		{
-			"Platform/Windows/*.h",
-			"Platform/Windows/*.cpp",
+			"Platform/Math/Simd/*",
+			"Platform/Math/Simd/Sse/*",
+			"Platform/Windows/*",
 		}
 		links
 		{
@@ -142,22 +160,26 @@ project "Platform"
 	configuration "macosx"
 		files
 		{
-			"Platform/POSIX/*.h",
-			"Platform/POSIX/*.cpp",
+			"Platform/Math/Simd/*",
+			"Platform/Math/Simd/Sse/*",
+			"Platform/POSIX/*",
 		}
 	configuration "linux"
 		files
 		{
-			"Platform/POSIX/*.h",
-			"Platform/POSIX/*.cpp",
+			"Platform/Math/Simd/*",
+			"Platform/Math/Simd/Sse/*",
+			"Platform/POSIX/*",
 		}
 
 project "Foundation"
+	uuid "9708463D-9698-4BB6-A911-37354AF0E21E"
 	kind "SharedLib"
 	language "C++"
 	defines
 	{
 		"FOUNDATION_EXPORTS",
+		"HELIUM_MODULE_HEAP_FUNCTION=GetFoundationDefaultHeap",
 	}
 	includedirs
 	{
@@ -166,8 +188,8 @@ project "Foundation"
 	}
 	files
 	{
-		"Foundation/**.h",
-		"Foundation/**.cpp",
+		"Foundation/**",
+		"Foundation/**",
 	}
 	links
 	{
@@ -178,11 +200,13 @@ project "Foundation"
 	}
 
 project "Pipeline"
+	uuid "50F5AA7E-22D9-4D33-B48A-357CD3082BC1"
 	kind "SharedLib"
 	language "C++"
 	defines
 	{
 		"PIPELINE_EXPORTS",
+		"HELIUM_MODULE_HEAP_FUNCTION=GetPipelineDefaultHeap",
 	}
 	includedirs
 	{
@@ -230,8 +254,13 @@ project "Pipeline"
 		}
 
 project "Editor"
+	uuid "A5CAC2F6-62BC-4EF3-A752-887F89C64812"
 	kind "ConsoleApp"
 	language "C++"
+	defines
+	{
+		"HELIUM_MODULE_HEAP_FUNCTION=GetEditorDefaultHeap",
+	}
 	files
 	{
 		"Editor/**.h",
@@ -263,8 +292,8 @@ project "Editor"
 	}
 	flags
 	{
-        "WinMain"
-    }
+		"WinMain"
+	}
 
 	configuration "windows"
 		includedirs
@@ -330,3 +359,14 @@ project "Editor"
 		{
 			"Dependencies/p4api/lib/x64/Release",
 		}
+
+project "Core"
+	uuid "B4A1D5A3-C3B3-4AB0-8756-78A48BCBFFD3"
+
+	links
+	{
+		"Platform",
+		"Foundation",
+	}
+
+	Helium.DoLunarModuleProjectSettings( "LUNAR", "Core", "CORE" )

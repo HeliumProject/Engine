@@ -78,7 +78,7 @@ IconArtFile::IconArtFile( const tstring& filename )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-IconArtFile& IconArtFile::AddOverlay( const tchar* filename, OverlayQuadrants::OverlayQuadrant quadrant )
+IconArtFile& IconArtFile::AddOverlay( const tchar_t* filename, OverlayQuadrants::OverlayQuadrant quadrant )
 {
     m_Overlays[quadrant] = filename;
     return *this;

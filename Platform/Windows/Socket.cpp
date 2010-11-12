@@ -2,7 +2,7 @@
 #include "Platform/Windows/Socket.h"
 #include "Platform/Socket.h"
 #include "Platform/Assert.h"
-#include "Platform/Platform.h"
+#include "Platform/PlatformUtility.h"
 
 #include <mstcpip.h>
 

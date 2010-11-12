@@ -49,7 +49,7 @@ void Script::Initialize()
 
   struct ControlEntry
   {
-    const tchar* name;
+    const tchar_t* name;
     int type;
   };
 
@@ -155,7 +155,7 @@ void Script::ParseAttributes(tstring& attributes, Control* control)
     // copy just our symbol into a string
     tstring key (attributes.data() + pos, end - pos);
 
-    // next tchar
+    // next tchar_t
     pos = end+1;
 
     // eat ws
@@ -188,7 +188,7 @@ void Script::ParseAttributes(tstring& attributes, Control* control)
     // copy just our symbol into a string
     tstring value (attributes.data() + pos, end - pos);
 
-    // next tchar
+    // next tchar_t
     pos = end+1;
 
     // trim quoted values

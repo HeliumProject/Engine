@@ -4,7 +4,7 @@
 #include <wx/metafile.h>
 #include <wx/dcbuffer.h>
 
-#include <math.h>
+#include "Platform/Math/MathCommon.h"
 
 #include "Editor/Graph/RulerMemoryDC.h"
 #include "Editor/Graph/Debug.h"

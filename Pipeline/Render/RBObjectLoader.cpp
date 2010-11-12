@@ -22,7 +22,7 @@ RBObjectLoader::~RBObjectLoader()
 
 }
 
-uint32_t RBObjectLoader::ParseFile( const tchar* filename, bool winding )
+uint32_t RBObjectLoader::ParseFile( const tchar_t* filename, bool winding )
 {
     std::vector< SceneGraph::Mesh* > meshes;
 

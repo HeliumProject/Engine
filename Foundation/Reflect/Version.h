@@ -13,7 +13,7 @@ namespace Helium
             static void EnumerateClass( Reflect::Compositor<Version>& comp );
 
             Version ();
-            Version(const tchar* source, const tchar* sourceVersion);
+            Version(const tchar_t* source, const tchar_t* sourceVersion);
 
             virtual bool IsCurrent();
             bool ConvertToInts( int* ints );

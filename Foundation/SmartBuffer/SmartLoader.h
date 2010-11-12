@@ -12,7 +12,7 @@ namespace Helium
         CHUNK_MAGIC_PC = 'IGLM',      // Magic number stored at start of file to indicate it's an IG chunk file in little-endian
         CHUNK_MAGIC_HW = 'IGHW',      // Magic number stored at start of file to indicate it's an IG chunk file in big-endian
 #else
-        CHUNK_MAGIC_HW = 0x49474857,  // gcc compiler doesn't like multi-tchar character constants
+        CHUNK_MAGIC_HW = 0x49474857,  // gcc compiler doesn't like multi-tchar_t character constants
 #endif
 
         CHUNK_VERSION_128_ALIGN = 0x00000001,    // This is for backwards compatibility, we used to pad each chunk in the file to 128 bytes

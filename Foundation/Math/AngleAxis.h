@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cmath>
+#include "Platform/Math/MathCommon.h"
 #include "Utils.h"
 
 #include "Vector3.h"
@@ -51,9 +51,9 @@ namespace Helium
             return !(angle == v.angle && axis == v.axis);
         }
 
-        bool                    Valid()
+        bool                    Finite()
         {
-            return IsValid(angle) && axis.Valid();
+            return IsFinite(angle) && axis.Finite();
         }
 
         AngleAxis&              Invert ()

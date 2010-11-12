@@ -9,8 +9,8 @@
 #include "Core/AsyncLoader.h"
 
 #include "Core/File.h"
-#include "Core/FileStream.h"
-#include "Core/BufferedStream.h"
+#include "Foundation/Stream/FileStream.h"
+#include "Foundation/Stream/BufferedStream.h"
 
 namespace Lunar
 {
@@ -41,11 +41,11 @@ namespace Lunar
 
         // Start up the async loading thread.
         m_pWorker = new LoadWorker;
-        L_ASSERT( m_pWorker );
+        HELIUM_ASSERT( m_pWorker );
 
-        m_pThread = new Thread( m_pWorker, String( L_T( "Async loading" ) ) );
-        L_ASSERT( m_pThread );
-        L_VERIFY( m_pThread->Start() );
+        m_pThread = new RunnableThread( m_pWorker, TXT( "Async loading" ) );
+        HELIUM_ASSERT( m_pThread );
+        HELIUM_VERIFY( m_pThread->Start() );
 
         return true;
     }
@@ -89,8 +89,8 @@ namespace Lunar
         size_t size,
         EPriority priority )
     {
-        L_ASSERT( pBuffer );
-        L_ASSERT( static_cast< size_t >( priority ) < static_cast< size_t >( PRIORITY_MAX ) );
+        HELIUM_ASSERT( pBuffer );
+        HELIUM_ASSERT( static_cast< size_t >( priority ) < static_cast< size_t >( PRIORITY_MAX ) );
 
         // Make sure the load worker is running.
         if( !m_pWorker )
@@ -100,7 +100,7 @@ namespace Lunar
 
         // Allocate and queue the request.
         Request* pRequest = m_requestPool.Allocate();
-        L_ASSERT( pRequest );
+        HELIUM_ASSERT( pRequest );
         pRequest->pBuffer = pBuffer;
         pRequest->fileName = rFileName;
         pRequest->offset = offset;
@@ -113,7 +113,7 @@ namespace Lunar
         m_pWorker->QueueRequest( pRequest );
 
         size_t requestIndex = m_requestPool.GetIndex( pRequest );
-        L_ASSERT( IsValid( requestIndex ) );
+        HELIUM_ASSERT( IsValid( requestIndex ) );
 
         return requestIndex;
     }
@@ -131,10 +131,10 @@ namespace Lunar
     /// @see QueueRequest(), TrySyncRequest()
     size_t AsyncLoader::SyncRequest( size_t id )
     {
-        L_ASSERT( IsValid( id ) );
+        HELIUM_ASSERT( IsValid( id ) );
 
         Request* pRequest = m_requestPool.GetObject( id );
-        L_ASSERT( pRequest );
+        HELIUM_ASSERT( pRequest );
 
         while( pRequest->processedCounter == 0 )
         {
@@ -162,10 +162,10 @@ namespace Lunar
     /// @see QueueRequest(), SyncRequest()
     bool AsyncLoader::TrySyncRequest( size_t id, size_t& rBytesRead )
     {
-        L_ASSERT( IsValid( id ) );
+        HELIUM_ASSERT( IsValid( id ) );
 
         Request* pRequest = m_requestPool.GetObject( id );
-        L_ASSERT( pRequest );
+        HELIUM_ASSERT( pRequest );
         if( pRequest->processedCounter == 0 )
         {
             return false;
@@ -221,7 +221,7 @@ namespace Lunar
         if( !sm_pInstance )
         {
             sm_pInstance = new AsyncLoader;
-            L_ASSERT( sm_pInstance );
+            HELIUM_ASSERT( sm_pInstance );
         }
 
         return *sm_pInstance;
@@ -238,7 +238,7 @@ namespace Lunar
 
     /// Constructor.
     AsyncLoader::LoadWorker::LoadWorker()
-        : m_wakeUpEvent( Event::RESET_MODE_AUTO )
+        : m_wakeUpCondition( Condition::RESET_MODE_AUTO )
         , m_stopCounter( 0 )
         , m_processingCounter( 0 )
     {
@@ -253,7 +253,7 @@ namespace Lunar
     void AsyncLoader::LoadWorker::Run()
     {
         BufferedStream* pBufferedStream = new BufferedStream;
-        L_ASSERT( pBufferedStream );
+        HELIUM_ASSERT( pBufferedStream );
 
         while( m_stopCounter == 0 )
         {
@@ -264,12 +264,12 @@ namespace Lunar
             {
                 // Queue is empty, so sleep until notified.
                 AtomicExchangeRelease( m_processingCounter, 0 );
-                m_wakeUpEvent.Wait();
+                m_wakeUpCondition.Wait();
 
                 continue;
             }
 
-            L_ASSERT( pRequest );
+            HELIUM_ASSERT( pRequest );
 
             FileStream* pFileStream = File::Open( pRequest->fileName, FileStream::MODE_READ );
             if( !pFileStream )
@@ -306,7 +306,7 @@ namespace Lunar
     void AsyncLoader::LoadWorker::Stop()
     {
         AtomicExchangeRelease( m_stopCounter, 1 );
-        m_wakeUpEvent.Signal();
+        m_wakeUpCondition.Signal();
     }
 
     /// Queue an async load request.
@@ -318,14 +318,14 @@ namespace Lunar
     /// @see Flush()
     void AsyncLoader::LoadWorker::QueueRequest( Request* pRequest )
     {
-        L_ASSERT( pRequest );
-        L_ASSERT( pRequest->processedCounter == 0 );
+        HELIUM_ASSERT( pRequest );
+        HELIUM_ASSERT( pRequest->processedCounter == 0 );
 
         // Prevent access to the load queue while an exclusive write lock is held.
         ScopeReadLock nonExclusiveLock( m_writeLock );
 
         m_requestQueue.push( pRequest );
-        m_wakeUpEvent.Signal();
+        m_wakeUpCondition.Signal();
     }
 
     /// Block the current thread until all pending load requests have completed.

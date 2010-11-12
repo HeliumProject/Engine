@@ -29,15 +29,15 @@ namespace Helium
             }
 
         private:
-            uint32_t LoadNewMesh(const tchar* name,ObjectLoaderPtr loader = NULL, int bangleIndex = -1);
+            uint32_t LoadNewMesh(const tchar_t* name,ObjectLoaderPtr loader = NULL, int bangleIndex = -1);
         public:
-            uint32_t LoadMesh(const tchar* name,ObjectLoaderPtr loader = NULL, int bangleIndex = -1);
-            uint32_t ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int bangleIndex);
+            uint32_t LoadMesh(const tchar_t* name,ObjectLoaderPtr loader = NULL, int bangleIndex = -1);
+            uint32_t ExtractMesh(const tchar_t* name, ObjectLoaderPtr loader, int bangleIndex);
 
         private:
-            uint32_t LoadNewEnvironment(const tchar* fname,uint32_t clear_color);
+            uint32_t LoadNewEnvironment(const tchar_t* fname,uint32_t clear_color);
         public:
-            uint32_t LoadEnvironment(const tchar* name, uint32_t clear_color);
+            uint32_t LoadEnvironment(const tchar_t* name, uint32_t clear_color);
 
             static RenderMesh*        ResolveMeshHandle( uint32_t handle );
             static RenderEnvironment* ResolveEnvironmentHandle( uint32_t handle );

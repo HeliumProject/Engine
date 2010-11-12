@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cmath>
+#include "Platform/Math/MathCommon.h"
 #include "Utils.h"
 
 #include "Vector3.h"
@@ -36,7 +36,7 @@ namespace Helium
         bool            operator== (const Scale& v) const { return (x == v.x && y == v.y && z == v.z); }
         bool            operator!= (const Scale& v) const { return !(x == v.x && y == v.y && z == v.z); }
         bool            Equal (const Scale& v, float32_t error = 0) const;
-        bool            Valid() { return IsValid(x) && IsValid(y) && IsValid(z); }
+        bool            Finite() { return IsFinite(x) && IsFinite(y) && IsFinite(z); }
 
         Scale&          Invert()
         {

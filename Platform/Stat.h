@@ -5,10 +5,11 @@
 
 namespace Helium
 {
-    namespace ModeFlags
+    namespace FileModeFlags
     {
-        enum ModeFlag
+        enum FileModeFlag
         {
+            None             = 0,
             File             = 1 << 0,  // File and Directory should be mutually exclusive
             Directory        = 1 << 1,
             Pipe             = 1 << 2,
@@ -19,18 +20,18 @@ namespace Helium
             Execute          = 1 << 10
         };
     }
-    typedef ModeFlags::ModeFlag ModeFlag;
+    typedef FileModeFlags::FileModeFlag FileModeFlag;
 
     struct PLATFORM_API Stat
     {
-        uint16_t m_Mode;
-        int64_t m_Size;
-        uint64_t m_AccessTime;
-        uint64_t m_ModifiedTime;
-        uint64_t m_CreatedTime;
+        uint32_t     m_Mode;
+        int64_t      m_Size;
+        uint64_t     m_AccessTime;
+        uint64_t     m_ModifiedTime;
+        uint64_t     m_CreatedTime;
 
         Stat()
-            : m_Mode( 0 )
+            : m_Mode( (FileModeFlag)0 )
             , m_Size( 0 )
             , m_AccessTime( 0 )
             , m_ModifiedTime( 0 )
@@ -39,5 +40,5 @@ namespace Helium
         }
     };
 
-    PLATFORM_API bool StatPath( const tchar* path, Stat& stat );
+    PLATFORM_API bool StatPath( const tchar_t* path, Stat& stat );
 }

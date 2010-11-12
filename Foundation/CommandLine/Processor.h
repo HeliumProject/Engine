@@ -4,8 +4,6 @@
 #include "Foundation/CommandLine/Option.h"
 #include "Foundation/CommandLine/Command.h"
 
-#include "Platform/Compiler.h"
-
 /******************************************************************************
 
 Option
@@ -54,7 +52,7 @@ namespace Helium
             M_StringToCommandDumbPtr m_Commands;
 
         public:
-            Processor( const tchar* token, const tchar* usage = TXT( "COMMAND [ARGS]" ), const tchar* shortHelp = TXT( "" ) );
+            Processor( const tchar_t* token, const tchar_t* usage = TXT( "COMMAND [ARGS]" ), const tchar_t* shortHelp = TXT( "" ) );
             virtual ~Processor();
 
 			virtual bool Initialize( tstring& error )

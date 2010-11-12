@@ -15,7 +15,7 @@ namespace Helium
 
         struct MemoryPool
         {
-            const tchar* m_Name;
+            const tchar_t* m_Name;
             uint32_t         m_Count;
             uint64_t         m_Size;
             uint64_t         m_Previous;
@@ -55,7 +55,7 @@ namespace Helium
             static bool Initialize();
             static void Cleanup();
 
-            static MemoryPoolHandle CreatePool(const tchar* name);
+            static MemoryPoolHandle CreatePool(const tchar_t* name);
 
             static void Allocate(MemoryPoolHandle pool, uint32_t size);
             static void Deallocate(MemoryPoolHandle pool, uint32_t size);

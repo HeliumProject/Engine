@@ -268,7 +268,7 @@ void RenderVisitor::Draw()
 
 bool SceneGraph::IsSupportedTexture( const tstring& file )
 {
-  static const tchar* extensions[] = {
+  static const tchar_t* extensions[] = {
       TXT( "*.bmp" ),
       TXT( "*.dds" ),
       TXT( "*.dib" ),
@@ -281,7 +281,7 @@ bool SceneGraph::IsSupportedTexture( const tstring& file )
       NULL
   };
 
-  for ( const tchar** ext = extensions; *ext != NULL; ext++ )
+  for ( const tchar_t** ext = extensions; *ext != NULL; ext++ )
   {
     if ( WildcardMatch( *ext, file.c_str() ) )
     {

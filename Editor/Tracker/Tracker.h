@@ -34,7 +34,7 @@ namespace Helium
             uint32_t GetTrackingTotal() const;
 
         protected:
-            Helium::Thread m_Thread;
+            Helium::CallbackThread m_Thread;
             bool m_StopTracking;
 
             TrackerDBGenerated m_TrackerDB;

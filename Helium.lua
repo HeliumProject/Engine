@@ -259,7 +259,7 @@ project "Editor"
 	language "C++"
 	defines
 	{
-		"HELIUM_MODULE_HEAP_FUNCTION=GetEditorAppDefaultHeap",  -- XXX TMC TODO: Change this to GetEditorDefaultHeap once name conflicts with Lunar/Editor are resolved.
+		"HELIUM_MODULE_HEAP_FUNCTION=GetEditorDefaultHeap",
 	}
 	files
 	{

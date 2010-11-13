@@ -7,11 +7,13 @@
 
 namespace Helium
 {
+    PLATFORM_API void* InvalidHandleValue();
+
     struct DirectoryHandle
     {
         DirectoryHandle( const tstring& path = TXT( "" ) )
             : m_Path( path )
-            , m_Handle( NULL )
+            , m_Handle( InvalidHandleValue() )
         {
         }
 

@@ -93,7 +93,13 @@ bool Directory::Find()
     m_Done = false;
 
     HELIUM_ASSERT( m_Handle.m_Path.length() > 0 );
-    if ( FindNext( m_Handle, foundFile ) == 0 )
+
+    bool findResult =
+        m_Handle.m_Handle == GetInvalidHandleValue()
+        ? FindFirst( m_Handle, foundFile )
+        : FindNext( m_Handle, foundFile );
+
+    if ( findResult == 0 )
     {      
         m_Done = true;
         Close();
@@ -171,8 +177,15 @@ bool Directory::Find()
 
 void Directory::Close()
 {
-    bool result = CloseFind( m_Handle );
-    HELIUM_ASSERT( result );
+    if ( m_Handle.m_Handle != GetInvalidHandleValue() )
+    {
+        bool result = CloseFind( m_Handle );
+        HELIUM_ASSERT( result );
+        if ( result )
+        {
+            m_Handle.m_Handle = GetInvalidHandleValue();
+        }
+    }
 
     m_Done = true;
     m_Item.Clear(); 

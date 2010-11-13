@@ -25,6 +25,11 @@ void CopyFromWindowsStruct( const WIN32_FIND_DATA& windowsFile, FileFindData& ou
 #endif
 }
 
+void* Helium::GetInvalidHandleValue()
+{
+    return INVALID_HANDLE_VALUE;
+}
+
 bool Helium::FindFirst( DirectoryHandle& handle, FileFindData& data )
 {
     WIN32_FIND_DATA foundFile;
@@ -67,7 +72,18 @@ bool Helium::FindNext( DirectoryHandle& handle, FileFindData& data )
 
 bool Helium::CloseFind( DirectoryHandle& handle )
 {
-    return TRUE == ::FindClose( handle.m_Handle );
+    if ( ::FindClose( handle.m_Handle ) == 0 )
+    {
+        DWORD error = GetLastError();
+        tstring errorMsg = GetErrorString( error );
+        //if ( error != ERROR_NO_MORE_FILES ) 
+        //{
+        //    throw Exception( TXT( "Error calling ::FindNextFile: %s" ), GetErrorString( error ).c_str() );
+        //}
+
+        return false;
+    }
+    return true;
 }
 
 bool Helium::GetExtendedData( DirectoryHandle& handle, FileFindData& data )

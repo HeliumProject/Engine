@@ -1,0 +1,3 @@
+[submodule "Integrations/FBX"]
+	path = Integrations/FBX
+	url = git@github.com:WhiteMoonDreams/FBX.git

@@ -6,22 +6,20 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_CORE_FILE_H
-#define LUNAR_CORE_FILE_H
 
-#include "Core/Core.h"
+#include "Foundation/API.h"
+#include "Foundation/String.h"
+#include "Foundation/File/Path.h"
+
+#include "Platform/Types.h"
 
 namespace Helium
 {
     class FileStream;
-}
-
-namespace Lunar
-{
     class DirectoryIterator;
 
     /// Low-level file utilities
-    class LUNAR_CORE_API File
+    class FOUNDATION_API File
     {
     public:
         /// File type identifiers.
@@ -71,30 +69,16 @@ namespace Lunar
         static FileStream* Open( const tchar_t* pPath, uint32_t modeFlags, bool bTruncate = true );
         static FileStream* Open( const String& rPath, uint32_t modeFlags, bool bTruncate = true );
 
-        static bool Exists( const tchar_t* pPath );
-        static bool Exists( const String& rPath );
-
         static EType GetFileType( const tchar_t* pPath );
         static EType GetFileType( const String& rPath );
 
-        static int64_t GetSize( const tchar_t* pPath );
-        static int64_t GetSize( const String& rPath );
-
-        static int64_t GetTimestamp( const tchar_t* pPath );
-        static int64_t GetTimestamp( const String& rPath );
-
-        static EDirectoryCreateResult CreateDirectory( const tchar_t* pPath, bool bRecursive = false );
-        static EDirectoryCreateResult CreateDirectory( const String& rPath, bool bRecursive = false );
-
-        static DirectoryIterator* IterateDirectory( const tchar_t* pPath );
-        static DirectoryIterator* IterateDirectory( const String& rPath );
         //@}
 
         /// @name Filesystem Information
         //@{
-        static const String& GetBaseDirectory();
-        static const String& GetDataDirectory();
-        static const String& GetUserDataDirectory();
+        static const bool GetBaseDirectory( Path& path );
+        static const bool GetDataDirectory( Path& path );
+        static const bool GetUserDataDirectory( Path& path );
         //@}
 
     private:
@@ -102,13 +86,5 @@ namespace Lunar
         //@{
         static void PlatformShutdown();
         //@}
-
-        /// @name Directory Creation Implementation
-        //@{
-        static EDirectoryCreateResult CreateDirectoryRecursive( tchar_t* pPath, size_t pathLength );
-        static EDirectoryCreateResult PlatformCreateDirectory( const tchar_t* pPath );
-        //@}
     };
 }
-
-#endif  // LUNAR_CORE_FILE_H

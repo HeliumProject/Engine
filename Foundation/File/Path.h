@@ -30,7 +30,7 @@ namespace Helium
         static void GuaranteeSeparator( tstring& path );
 
         static bool Exists( const tstring& path );
-        static bool IsAbsolute( const tstring& path );
+        static bool IsAbsolute( const tchar_t* path );
         static bool IsUnder( const tstring& location, const tstring& path );
 
     public:

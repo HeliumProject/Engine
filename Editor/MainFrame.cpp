@@ -701,40 +701,89 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
 {
     const wxMenu* menu = event.GetMenu();
 
-    bool isProjectOpen = m_Project.ReferencesObject();
-    bool hasCurrentScene = m_SceneManager.HasCurrentScene();
+    const bool isProjectOpen = m_Project.ReferencesObject();
+    const bool hasCurrentScene = m_SceneManager.HasCurrentScene();
+    const bool hasTextClipboardData = hasCurrentScene && IsClipboardFormatAvailable( CF_TEXT );
+    const bool isAnythingSelected = hasCurrentScene && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0;
 
     if ( menu == m_MenuFile )
     {
-        // File->Import is enabled if there is a current editing scene
-        m_MenuFile->Enable( ID_Import, hasCurrentScene );
-        m_MenuFile->Enable( ID_ImportFromClipboard, hasCurrentScene );
-
-        // File->Export is only enabled if there is something selected
-        const bool enableExport = hasCurrentScene && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0;
-        m_MenuFile->Enable( ID_Export, enableExport );
-        m_MenuFile->Enable( ID_ExportToClipboard, enableExport );
+        // OnMenuOpen is not called for submenus m_MenuFileNew and m_MenuFileOpenRecent
+        m_MenuFileNew->Enable( ID_NewEntity, isProjectOpen );
+        m_MenuFileNew->Enable( ID_NewScene, isProjectOpen );
 
         m_MRU->PopulateMenu( m_MenuFileOpenRecent );
+
+        // File > Close is enabled if there are documents open in the document manager
+        m_MenuFile->Enable( ID_Close, m_DocumentManager.GetDocuments().Size() > 0 );
+
+        // File > SaveAll is enabled if there are any files in the document manager that have changed
+        bool doAnyDocsNeedSaving = false;
+        OS_DocumentSmartPtr::Iterator docItr = m_DocumentManager.GetDocuments().Begin();
+        OS_DocumentSmartPtr::Iterator docEnd = m_DocumentManager.GetDocuments().End();
+        for ( ; docItr != docEnd; ++docItr )
+        {
+            if ( ( *docItr )->HasChanged() || !( *docItr )->GetPath().Exists() )
+            {
+                doAnyDocsNeedSaving = true;
+                break;
+            }
+        }
+        m_MenuFile->Enable( ID_SaveAll, doAnyDocsNeedSaving );
+
+        // File > Import is enabled if there is a current editing scene
+        m_MenuFile->Enable( ID_Import, hasCurrentScene );
+        m_MenuFile->Enable( ID_ImportFromClipboard, hasTextClipboardData );
+
+        // File > Export is only enabled if there is something selected
+        m_MenuFile->Enable( ID_Export, isAnythingSelected );
+        m_MenuFile->Enable( ID_ExportToClipboard, isAnythingSelected );
+    }
+    else if ( menu == m_MenuEdit )
+    {
+        // Edit > Undo/Redo is only enabled if there are commands in the queue
+        m_MenuEdit->Enable( wxID_UNDO, CanUndo() );
+        m_MenuEdit->Enable( wxID_REDO, CanRedo() );
+
+        // Edit > Cut/Copy/Paste/Delete
+        m_MenuEdit->Enable( wxID_CUT, isAnythingSelected );
+        m_MenuEdit->Enable( wxID_COPY, isAnythingSelected );
+        m_MenuEdit->Enable( wxID_PASTE, hasTextClipboardData );
+        m_MenuEdit->Enable( wxID_DELETE, isAnythingSelected );
+
+        // Edit > Select All
+        m_MenuEdit->Enable( ID_SelectAll, hasCurrentScene );
+        // Edit > Invert Selection is only enabled if something is selected
+        m_MenuEdit->Enable( ID_InvertSelection, isAnythingSelected );
+
+        // Edit > Group options
+        m_MenuEdit->Enable( ID_Parent, isAnythingSelected );
+        m_MenuEdit->Enable( ID_Unparent, isAnythingSelected );
+        m_MenuEdit->Enable( ID_Group, isAnythingSelected );
+        m_MenuEdit->Enable( ID_Ungroup, isAnythingSelected );
+        m_MenuEdit->Enable( ID_Center, isAnythingSelected );
+
+        // Edit > Duplicate
+        m_MenuEdit->Enable( ID_Duplicate, isAnythingSelected );
+        m_MenuEdit->Enable( ID_SmartDuplicate, isAnythingSelected );
+
+        m_MenuEdit->Enable( ID_CopyTransform, isAnythingSelected );
+        m_MenuEdit->Enable( ID_PasteTransform, hasTextClipboardData );
+
+        m_MenuEdit->Enable( ID_SnapToCamera, isAnythingSelected );
+        m_MenuEdit->Enable( ID_SnapCameraTo, isAnythingSelected );
+
+        // Edit > Walk
+        m_MenuEdit->Enable( ID_WalkUp, isAnythingSelected );
+        m_MenuEdit->Enable( ID_WalkDown, isAnythingSelected );
+        m_MenuEdit->Enable( ID_WalkForward, isAnythingSelected );
+        m_MenuEdit->Enable( ID_WalkBackward, isAnythingSelected );
+
+
     }
     else if ( menu == m_MenuPanels )
     {
         UpdatePanelsMenu( m_MenuPanels );
-    }
-    else if ( menu == m_MenuEdit )
-    {
-        // Edit->Undo/Redo is only enabled if there are commands in the queue
-        m_MenuEdit->Enable( wxID_UNDO, CanUndo() );
-        m_MenuEdit->Enable( wxID_REDO, CanRedo() );
-
-        // Edit->Invert Selection is only enabled if something is selected
-        const bool isAnythingSelected = hasCurrentScene && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0;
-        m_MenuEdit->Enable( ID_InvertSelection, isAnythingSelected );
-
-        // Cut/copy/paste
-        m_MenuEdit->Enable( wxID_CUT, isAnythingSelected );
-        m_MenuEdit->Enable( wxID_COPY, isAnythingSelected );
-        m_MenuEdit->Enable( wxID_PASTE, hasCurrentScene && IsClipboardFormatAvailable( CF_TEXT ) );
     }
     else
     {
@@ -1647,19 +1696,6 @@ void MainFrame::DisconnectDocument( const Document* document )
 
 void MainFrame::DocumentChanged( const DocumentEventArgs& args )
 {
-    bool doAnyDocsNeedSaving = false;
-    OS_DocumentSmartPtr::Iterator docItr = m_DocumentManager.GetDocuments().Begin();
-    OS_DocumentSmartPtr::Iterator docEnd = m_DocumentManager.GetDocuments().End();
-    for ( ; docItr != docEnd; ++docItr )
-    {
-        if ( ( *docItr )->HasChanged() || !( *docItr )->GetPath().Exists() )
-        {
-            doAnyDocsNeedSaving = true;
-            break;
-        }
-    }
-
-    m_MenuFile->Enable( ID_SaveAll, doAnyDocsNeedSaving );
 }
 
 void MainFrame::DocumentClosed( const DocumentEventArgs& args )

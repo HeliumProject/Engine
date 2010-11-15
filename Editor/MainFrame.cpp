@@ -701,14 +701,17 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
 {
     const wxMenu* menu = event.GetMenu();
 
+    bool isProjectOpen = m_Project.ReferencesObject();
+    bool hasCurrentScene = m_SceneManager.HasCurrentScene();
+
     if ( menu == m_MenuFile )
     {
         // File->Import is enabled if there is a current editing scene
-        m_MenuFile->Enable( ID_Import, m_SceneManager.HasCurrentScene() );
-        m_MenuFile->Enable( ID_ImportFromClipboard, m_SceneManager.HasCurrentScene() );
+        m_MenuFile->Enable( ID_Import, hasCurrentScene );
+        m_MenuFile->Enable( ID_ImportFromClipboard, hasCurrentScene );
 
         // File->Export is only enabled if there is something selected
-        const bool enableExport = m_SceneManager.HasCurrentScene() && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0;
+        const bool enableExport = hasCurrentScene && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0;
         m_MenuFile->Enable( ID_Export, enableExport );
         m_MenuFile->Enable( ID_ExportToClipboard, enableExport );
 
@@ -725,13 +728,13 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
         m_MenuEdit->Enable( wxID_REDO, CanRedo() );
 
         // Edit->Invert Selection is only enabled if something is selected
-        const bool isAnythingSelected = m_SceneManager.HasCurrentScene() && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0;
+        const bool isAnythingSelected = hasCurrentScene && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0;
         m_MenuEdit->Enable( ID_InvertSelection, isAnythingSelected );
 
         // Cut/copy/paste
         m_MenuEdit->Enable( wxID_CUT, isAnythingSelected );
         m_MenuEdit->Enable( wxID_COPY, isAnythingSelected );
-        m_MenuEdit->Enable( wxID_PASTE, m_SceneManager.HasCurrentScene() && IsClipboardFormatAvailable( CF_TEXT ) );
+        m_MenuEdit->Enable( wxID_PASTE, hasCurrentScene && IsClipboardFormatAvailable( CF_TEXT ) );
     }
     else
     {
@@ -797,6 +800,8 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
 
 void MainFrame::OnNewEntity( wxCommandEvent& event )
 {
+    HELIUM_ASSERT( m_Project );
+
     wxMessageBox( wxT( "Not supported yet." ), wxT( "Error" ), wxOK|wxICON_ERROR );
 }
 

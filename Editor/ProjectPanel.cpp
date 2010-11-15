@@ -149,49 +149,47 @@ void ProjectPanel::CloseProject()
 
 void ProjectPanel::OnAddFile( wxCommandEvent& event )
 {
-    if ( m_Project )
-    {
-        FileDialog openDlg( this, TXT( "Open" ), m_Project->a_Path.Get().Directory().c_str() );
+    HELIUM_ASSERT( m_Project );
+    FileDialog openDlg( this, TXT( "Open" ), m_Project->a_Path.Get().Directory().c_str() );
 #pragma TODO("Set file dialog filters from Asset::AssetClass::GetExtensions")
-        //openDlg.AddFilters( ...
+    //openDlg.AddFilters( ...
 
-        if ( openDlg.ShowModal() == wxID_OK )
+    if ( openDlg.ShowModal() == wxID_OK )
+    {
+        Path path( (const wxChar*)openDlg.GetPath().c_str() );
+
+        Asset::AssetClassPtr asset;
+        if ( _tcsicmp( path.Extension().c_str(), TXT( "hrb" ) ) == 0 )
         {
-            Path path( (const wxChar*)openDlg.GetPath().c_str() );
+            asset = Asset::AssetClass::LoadAssetClass( path );
+        }
+        else
+        {
+            asset = Asset::AssetClass::Create( path );
+        }
 
-            Asset::AssetClassPtr asset;
-            if ( _tcsicmp( path.Extension().c_str(), TXT( "hrb" ) ) == 0 )
-            {
-                asset = Asset::AssetClass::LoadAssetClass( path );
-            }
-            else
-            {
-                asset = Asset::AssetClass::Create( path );
-            }
-
-            if ( asset.ReferencesObject() )
-            {
-                m_Project->AddPath( asset->GetSourcePath() );
-            }
+        if ( asset.ReferencesObject() )
+        {
+            m_Project->AddPath( asset->GetSourcePath() );
         }
     }
 }
 
 void ProjectPanel::OnDeleteFile( wxCommandEvent& event )
 {
-    if ( m_Project )
-    {
-        wxDataViewItemArray selection;
-        int numSeleted = m_DataViewCtrl->GetSelections( selection );
+    HELIUM_ASSERT( m_Project );
+   
+    wxDataViewItemArray selection;
+    int numSeleted = m_DataViewCtrl->GetSelections( selection );
 
-        for( int index = 0; index < numSeleted; ++index )
+    for( int index = 0; index < numSeleted; ++index )
+    {
+        if ( selection[index].IsOk() )
         {
-            if ( selection[index].IsOk() )
-            {
-                m_Model->RemoveItem( selection[index] );
-            }
+            m_Model->RemoveItem( selection[index] );
         }
     }
+
 }
 
 void ProjectPanel::OnOptionsMenuOpen( wxMenuEvent& event )
@@ -230,15 +228,15 @@ void ProjectPanel::OnSelectionChanged( wxDataViewEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void ProjectPanel::OnDragOver( FileDroppedArgs& args )
 {
-    //Path path( args.m_Path );
+    Path path( args.m_Path );
 
-    //// it's a project file
-    //if ( _tcsicmp( path.FullExtension().c_str(), TXT( "project.hrb" ) ) == 0 ) 
-    //{
-    //    // allow user to drop a project in
-    //}
-    //else if ( m_Project )
-    //{
+    // it's a project file
+    if ( _tcsicmp( path.FullExtension().c_str(), TXT( "project.hrb" ) ) == 0 ) 
+    {
+        // allow user to drop a project in
+    }
+    else if ( m_Project )
+    {
         wxDataViewItem item;
         wxDataViewColumn* column;
         m_DataViewCtrl->HitTest( wxPoint( args.m_X, args.m_Y ), item, column );
@@ -247,11 +245,11 @@ void ProjectPanel::OnDragOver( FileDroppedArgs& args )
         {
             args.m_DragResult = wxDragNone;
         }    
-    //}
-    //else
-    //{
-    //    args.m_DragResult = wxDragNone;
-    //}
+    }
+    else
+    {
+        args.m_DragResult = wxDragNone;
+    }
 }
 
 void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )

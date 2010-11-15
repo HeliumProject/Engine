@@ -116,7 +116,6 @@ namespace Helium
 
             void SetPath( const Helium::Path& path );
             const Helium::Path& GetPath();
-            //void PathChanged( const Attribute< Helium::Path >::ChangeArgs& text );
 
             tstring GetName() const;
             tstring GetDetails() const;

@@ -370,3 +370,15 @@ project "Core"
 	}
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "Core", "CORE" )
+
+project "Engine"
+	uuid "CDD089F1-EC6E-469B-BF06-8DF56C5B1489"
+
+	links
+	{
+		"Platform",
+		"Foundation",
+		"Core",
+	}
+
+	Helium.DoLunarModuleProjectSettings( "LUNAR", "Engine", "ENGINE" )

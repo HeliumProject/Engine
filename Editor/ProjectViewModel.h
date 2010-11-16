@@ -8,6 +8,8 @@
 
 #include <wx/dataview.h>
 
+#define HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE 0
+
 namespace Helium
 {
     namespace Editor
@@ -166,13 +168,8 @@ namespace Helium
             wxDataViewColumn* CreateColumn( uint32_t id );
             void ResetColumns();
 
-            void OpenProject( Project* project, const Document* document = NULL );
+            ProjectViewModelNode* OpenProject( Project* project, const Document* document = NULL );
             void CloseProject();
-
-            ProjectViewModelNode* GetRootNode()
-            {
-                return m_RootNode;
-            }
 
             bool AddChildItem( const wxDataViewItem& parenItem, const Helium::Path& path );
             bool RemoveChildItem( const wxDataViewItem& parenItem, const Helium::Path& path );
@@ -186,7 +183,6 @@ namespace Helium
             void OnPathRemoved( const Helium::Path& path );
 
             // Document and DocumentManager Events
-            void OnProjectPathChanged( const DocumentPathChangedArgs& args );
             void OnDocumentAdded( const DocumentEventArgs& args );
             void OnDocumentRemoved( const DocumentEventArgs& args );
 

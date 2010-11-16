@@ -105,11 +105,13 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
     m_Project = project;
     if ( m_Project )
     {
+        ProjectViewModelNode* node = NULL;
+
         if ( !m_Model )
         {
             // create the model
             m_Model = new ProjectViewModel( m_DocumentManager );
-            m_Model->OpenProject( project, document );
+            node = m_Model->OpenProject( project, document );
 
             m_DocumentManager->e_DocumentAdded.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentAdded );
             m_DocumentManager->e_DocumentRemoved.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentRemoved );
@@ -122,12 +124,18 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
         }
         else
         {
-            m_Model->OpenProject( project, document );
+            node = m_Model->OpenProject( project, document );
         }
 
-        m_AddFileButton->Enable( true );
+        if ( node )
+        {
+            m_AddFileButton->Enable( true );
 
-        m_DataViewCtrl->Expand( wxDataViewItem( (void*) m_Model->GetRootNode() ) );
+#pragma TODO ( "Remove HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE after usibility test" )
+#if HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE
+            m_DataViewCtrl->Expand( wxDataViewItem( (void*)node ) );
+#endif
+        }
     }
 }
 

@@ -364,6 +364,7 @@ void MainFrame::OpenProject( const Helium::Path& path )
         if ( document )
         {
             document->d_Save.Clear();
+            document->e_PathChanged.RemoveMethod( m_Project.Ptr(), &Project::OnDocumentPathChanged );
         }
 
         m_ProjectPanel->CloseProject();
@@ -425,6 +426,7 @@ void MainFrame::OpenProject( const Helium::Path& path )
 
     document->HasChanged( isNewProject );
     document->d_Save.Set( m_Project.Ptr(), &Project::OnDocumentSave );
+    document->e_PathChanged.AddMethod( m_Project.Ptr(), &Project::OnDocumentPathChanged );
 
     m_ProjectPanel->OpenProject( m_Project, document );
 

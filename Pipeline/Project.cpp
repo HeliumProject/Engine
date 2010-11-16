@@ -20,6 +20,11 @@ void Project::OnDocumentSave( const DocumentEventArgs& args )
     args.m_Result = Serialize();
 }
 
+void Project::OnDocumentPathChanged( const DocumentPathChangedArgs& args )
+{
+    a_Path.Set( args.m_Document->GetPath() );
+}
+
 bool Project::Serialize() const 
 {
     HELIUM_ASSERT( !a_Path.Get().empty() );

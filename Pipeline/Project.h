@@ -16,6 +16,8 @@ namespace Helium
         virtual ~Project();
 
         void OnDocumentSave( const DocumentEventArgs& args );
+        void OnDocumentPathChanged( const DocumentPathChangedArgs& args );
+
         bool Serialize() const;
 
         const std::set< Path >& Paths()

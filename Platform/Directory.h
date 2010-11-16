@@ -4,16 +4,15 @@
 
 #include "Platform/Types.h"
 #include "Platform/Stat.h"
+#include "Platform/File.h"
 
 namespace Helium
 {
-    PLATFORM_API void* InvalidHandleValue();
-
     struct DirectoryHandle
     {
         DirectoryHandle( const tstring& path = TXT( "" ) )
             : m_Path( path )
-            , m_Handle( InvalidHandleValue() )
+            , m_Handle( InvalidHandleValue )
         {
         }
 

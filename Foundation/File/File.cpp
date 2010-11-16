@@ -61,15 +61,6 @@ FileStream* File::Open( const String& rPath, uint32_t modeFlags, bool bTruncate 
     return Open( *rPath, modeFlags, bTruncate );
 }
 
-/// Get the type of a file entry (i.e. regular file, directory, etc.).
-///
-/// @param[in] rPath  Path name of the file or directory to check.
-///
-/// @return  Type of the entry at the specified path, or TYPE_INVALID if the entry does not exist.
-File::EType File::GetFileType( const String& rPath )
-{
-    return GetFileType( *rPath );
-}
 
 /// Get the full path to the base directory of the application.
 ///
@@ -177,7 +168,7 @@ static bool GetMutableUserDataDirectory( Path& path )
 /// @return  File stream object.
 FileStream* File::CreateStream()
 {
-    FileStream* pStream = new FileStreamWin;
+    FileStream* pStream = new FileStream();
     HELIUM_ASSERT( pStream );
 
     return pStream;

@@ -6,7 +6,6 @@
 #include "Foundation/API.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/String/Utilities.h"
-#include "Platform/String.h"
 
 namespace Helium
 {

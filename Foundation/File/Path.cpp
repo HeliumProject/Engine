@@ -506,9 +506,9 @@ Helium::Path Path::GetAbsolutePath( const Helium::Path& basisPath ) const
 {
     HELIUM_ASSERT( !IsAbsolute() ); // shouldn't call this on an already-absolute path
 
-    tstring newPathString;
-    Helium::GetFullPath( tstring( basisPath.Directory() + m_Path ).c_str(), newPathString );
-    return Helium::Path( newPathString );
+    tstring newPathtstring;
+    Helium::GetFullPath( tstring( basisPath.Directory() + m_Path ).c_str(), newPathtstring );
+    return Helium::Path( newPathtstring );
 }
 
 Helium::Path Path::GetRelativePath( const Helium::Path& basisPath ) const
@@ -527,19 +527,19 @@ Helium::Path Path::GetRelativePath( const Helium::Path& basisPath ) const
         return *this;
     }
 
-    tstring newPathString;
+    tstring newPathtstring;
     for ( size_t j = 0; j < ( baseDirectories.size() - i ); ++j )
     {
-        newPathString += tstring( TXT( ".." ) ) + s_InternalPathSeparator;
+        newPathtstring += tstring( TXT( ".." ) ) + s_InternalPathSeparator;
     }
 
     for ( size_t j = i; j < targetDirectories.size(); ++j )
     {
-        newPathString += targetDirectories[ j ] + s_InternalPathSeparator;
+        newPathtstring += targetDirectories[ j ] + s_InternalPathSeparator;
     }
 
-    newPathString += Filename();
-    return Helium::Path( newPathString );
+    newPathtstring += Filename();
+    return Helium::Path( newPathtstring );
 }
 
 bool Path::Exists() const

@@ -8,7 +8,7 @@
 #include "CorePch.h"
 #include "Core/AsyncLoader.h"
 
-#include "Core/File.h"
+#include "Foundation/File/File.h"
 #include "Foundation/Stream/FileStream.h"
 #include "Foundation/Stream/BufferedStream.h"
 

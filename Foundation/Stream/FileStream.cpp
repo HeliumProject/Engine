@@ -1,29 +1,172 @@
-//#include "CorePch.h"
 #include "Foundation/Stream/FileStream.h"
 
 using namespace Helium;
 
 /// Constructor.
 FileStream::FileStream()
-    : m_modeFlags( 0 )
+: m_modeFlags( 0 )
+, m_hFile( InvalidHandleValue )
 {
 }
 
 /// Destructor.
 FileStream::~FileStream()
 {
+    Close();
 }
 
-/// Open a file.
-///
-/// @param[in] pPath      Path name of the file to open.
-/// @param[in] modeFlags  Combination of EMode flags specifying the mode in which to open the file.
-/// @param[in] bTruncate  If the MODE_WRITE flag is set, true to truncate any existing file, false to append to any
-///                       existing file.  This is ignored if MODE_WRITE is not set.
-///
-/// @return  True if the file was successfully opened, false if not.
-///
-/// @see Close(), IsOpen()
+/// @copydoc Stream::Close()
+void FileStream::Close()
+{
+    if( m_hFile != INVALID_HANDLE_VALUE )
+    {
+        CloseHandle( m_hFile );
+        m_hFile = INVALID_HANDLE_VALUE;
+    }
+}
+
+/// @copydoc Stream::IsOpen()
+bool FileStream::IsOpen() const
+{
+    return ( m_hFile != INVALID_HANDLE_VALUE );
+}
+
+/// @copydoc Stream::Read()
+size_t FileStream::Read( void* pBuffer, size_t size, size_t count )
+{
+    HELIUM_ASSERT_MSG( m_hFile != INVALID_HANDLE_VALUE, TXT( "File not open" ) );
+    HELIUM_ASSERT_MSG( m_modeFlags & MODE_READ, TXT( "File not open for reading" ) );
+    if( m_hFile == INVALID_HANDLE_VALUE || !( m_modeFlags & MODE_READ ) )
+    {
+        return 0;
+    }
+
+    size_t byteCount = size * count;
+    HELIUM_ASSERT_MSG( byteCount <= MAXDWORD, TXT( "File read operations are limited to DWORD sizes" ) );
+    if( byteCount > MAXDWORD )
+    {
+        // Truncate to a multiple of "size" bytes.
+        byteCount = ( MAXDWORD / size ) * size;
+    }
+
+    HELIUM_ASSERT( pBuffer || byteCount == 0 );
+
+    DWORD bytesRead = 0;
+    HELIUM_VERIFY( ReadFile( m_hFile, pBuffer, static_cast< DWORD >( byteCount ), &bytesRead, NULL ) );
+
+    return ( bytesRead / size );
+}
+
+/// @copydoc Stream::Write()
+size_t FileStream::Write( const void* pBuffer, size_t size, size_t count )
+{
+    HELIUM_ASSERT_MSG( m_hFile != INVALID_HANDLE_VALUE, TXT( "File not open" ) );
+    HELIUM_ASSERT_MSG( m_modeFlags & MODE_WRITE, TXT( "File not open for writing" ) );
+    if( m_hFile == INVALID_HANDLE_VALUE || !( m_modeFlags & MODE_WRITE ) )
+    {
+        return 0;
+    }
+
+    size_t byteCount = size * count;
+    HELIUM_ASSERT_MSG( byteCount <= MAXDWORD, TXT( "File write operations are limited to DWORD sizes" ) );
+    if( byteCount > MAXDWORD )
+    {
+        // Truncate to a multiple of "size" bytes.
+        byteCount = ( MAXDWORD / size ) * size;
+    }
+
+    HELIUM_ASSERT( pBuffer || byteCount == 0 );
+
+    DWORD bytesWritten = 0;
+    HELIUM_VERIFY( WriteFile( m_hFile, pBuffer, static_cast< DWORD >( byteCount ), &bytesWritten, NULL ) );
+
+    return ( bytesWritten / size );
+}
+
+/// @copydoc Stream::Flush()
+void FileStream::Flush()
+{
+    HELIUM_ASSERT_MSG( m_hFile != INVALID_HANDLE_VALUE, TXT( "File not open" ) );
+
+    // Only files open for writing need to be flushed.
+    if( m_hFile != INVALID_HANDLE_VALUE && ( m_modeFlags & MODE_WRITE ) )
+    {
+        HELIUM_VERIFY( FlushFileBuffers( m_hFile ) );
+    }
+}
+
+/// @copydoc Stream::Seek()
+int64_t FileStream::Seek( int64_t offset, ESeekOrigin origin )
+{
+    if( m_hFile == INVALID_HANDLE_VALUE )
+    {
+        HELIUM_ASSERT_MSG_FALSE( TXT( "File not open" ) );
+        return -1;
+    }
+
+    if( static_cast< size_t >( origin ) >= static_cast< size_t >( SEEK_ORIGIN_MAX ) )
+    {
+        HELIUM_ASSERT_MSG_FALSE( TXT( "Invalid seek origin" ) );
+        return -1;
+    }
+
+    LARGE_INTEGER moveDistance;
+    moveDistance.QuadPart = offset;
+
+    DWORD moveMethod =
+        ( origin == SEEK_ORIGIN_CURRENT
+        ? FILE_CURRENT
+        : ( origin == SEEK_ORIGIN_BEGIN ? FILE_BEGIN : FILE_END ) );
+
+    LARGE_INTEGER filePointer;
+    filePointer.QuadPart = 0;
+
+    BOOL bResult = SetFilePointerEx( m_hFile, moveDistance, &filePointer, moveMethod );
+    HELIUM_ASSERT( bResult );
+
+    return ( bResult ? filePointer.QuadPart : -1 );
+}
+
+/// @copydoc Stream::Tell()
+int64_t FileStream::Tell() const
+{
+    if( m_hFile == INVALID_HANDLE_VALUE )
+    {
+        HELIUM_ASSERT_MSG_FALSE( TXT( "File not open" ) );
+        return -1;
+    }
+
+    LARGE_INTEGER moveDistance;
+    moveDistance.QuadPart = 0;
+
+    LARGE_INTEGER filePointer;
+    filePointer.QuadPart = 0;
+
+    BOOL bResult = SetFilePointerEx( m_hFile, moveDistance, &filePointer, FILE_CURRENT );
+    HELIUM_ASSERT( bResult );
+
+    return ( bResult ? filePointer.QuadPart : -1 );
+}
+
+/// @copydoc Stream::GetSize()
+int64_t FileStream::GetSize() const
+{
+    if( m_hFile == INVALID_HANDLE_VALUE )
+    {
+        HELIUM_ASSERT_MSG_FALSE( TXT( "File not open" ) );
+        return -1;
+    }
+
+    LARGE_INTEGER fileSize;
+    fileSize.QuadPart = 0;
+
+    BOOL bResult = GetFileSizeEx( m_hFile, &fileSize );
+    HELIUM_ASSERT( bResult );
+
+    return ( bResult ? fileSize.QuadPart : -1 );
+}
+
+/// @copydoc FileStream::OpenActual()
 bool FileStream::Open( const tchar_t* pPath, uint32_t modeFlags, bool bTruncate )
 {
     HELIUM_ASSERT( pPath );
@@ -38,43 +181,46 @@ bool FileStream::Open( const tchar_t* pPath, uint32_t modeFlags, bool bTruncate 
     // Close any currently open file.
     Close();
 
-    // Pass onto the derived class implementation.
-    bool bResult = OpenActual( pPath, modeFlags, bTruncate && ( modeFlags & MODE_WRITE ) );
-    if( bResult )
+    HELIUM_ASSERT( m_hFile == INVALID_HANDLE_VALUE );
+
+    DWORD desiredAccess = 0;
+    if( modeFlags & MODE_READ )
     {
-        m_modeFlags = modeFlags;
+        desiredAccess |= GENERIC_READ;
     }
 
-    return bResult;
-}
+    if( modeFlags & MODE_WRITE )
+    {
+        desiredAccess |= GENERIC_WRITE;
+    }
 
-/// @copydoc Stream::CanRead()
-bool FileStream::CanRead() const
-{
-    return( IsOpen() && ( m_modeFlags & MODE_READ ) != 0 );
-}
+    // Allow other files to read if we are not writing to the file.
+    DWORD shareMode = 0;
+    if( !( modeFlags & MODE_WRITE ) )
+    {
+        shareMode |= FILE_SHARE_READ;
+    }
 
-/// @copydoc Stream::CanWrite()
-bool FileStream::CanWrite() const
-{
-    return( IsOpen() && ( m_modeFlags & MODE_WRITE ) != 0 );
-}
+    DWORD createDisposition = OPEN_EXISTING;
+    if( modeFlags & MODE_WRITE )
+    {
+        createDisposition = ( bTruncate ? CREATE_ALWAYS : OPEN_ALWAYS );
+    }
 
-/// @copydoc Stream::CanSeek()
-bool FileStream::CanSeek() const
-{
-    return IsOpen();
-}
+    m_hFile = CreateFile(
+        pPath,
+        desiredAccess,
+        shareMode,
+        NULL,
+        createDisposition,
+        FILE_ATTRIBUTE_NORMAL,
+        NULL );
 
-/// @fn bool OpenActual( const tchar_t* pFileName, uint32_t modeFlags, bool bTruncate )
-/// Perform the actual platform-specific work of opening a file.
-///
-/// The base FileStream class automatically handles closing any currently open file and verifying that at least one
-/// of the mode flags are set.
-///
-/// @param[in] pPath      Path name of the file to open.
-/// @param[in] modeFlags  Combination of EMode flags specifying the mode in which to open the file.
-/// @param[in] bTruncate  If the MODE_WRITE flag is set, true to truncate any existing file, false to append to any
-///                       existing file.  This is guaranteed not to be set if MODE_WRITE is not set.
-///
-/// @return  True if the file was successfully opened, false if not.
+    if ( m_hFile == INVALID_HANDLE_VALUE )
+    {
+        return false;
+    }
+
+    m_modeFlags = modeFlags;
+    return true;
+}

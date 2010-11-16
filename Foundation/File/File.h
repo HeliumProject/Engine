@@ -22,23 +22,6 @@ namespace Helium
     class FOUNDATION_API File
     {
     public:
-        /// File type identifiers.
-        enum EType
-        {
-            TYPE_FIRST   =  0,
-            TYPE_INVALID = -1,
-
-            /// File exists, but is of a type that does not fall under one of the supported identifiers.
-            TYPE_OTHER,
-
-            /// Regular file.
-            TYPE_FILE,
-            /// Directory.
-            TYPE_DIRECTORY,
-
-            TYPE_MAX,
-            TYPE_LAST = TYPE_MAX - 1
-        };
 
         /// Directory creation results.
         enum EDirectoryCreateResult
@@ -68,9 +51,6 @@ namespace Helium
 
         static FileStream* Open( const tchar_t* pPath, uint32_t modeFlags, bool bTruncate = true );
         static FileStream* Open( const String& rPath, uint32_t modeFlags, bool bTruncate = true );
-
-        static EType GetFileType( const tchar_t* pPath );
-        static EType GetFileType( const String& rPath );
 
         //@}
 

@@ -18,6 +18,10 @@
 #include <sstream>
 #include <set>
 
+#pragma TODO( "WTF is causing this to be defined in our include chain?" )
+#undef CreateEvent
+
+using namespace Helium;
 using namespace Helium::ES;
 
 #define TIME_SIZE 32
@@ -73,7 +77,7 @@ EventPtr EventSystem::CreateEvent( const tstring &eventData, const tstring& user
     _ftime64_s( &now );
     uint64_t createdTime = ( now.time * 1000 ) + now.millitm;
 
-  return new Event( TUID::Generate(), createdTime, username, eventData ); 
+    return new ES::Event( TUID::Generate(), createdTime, username, eventData ); 
 }
 
 

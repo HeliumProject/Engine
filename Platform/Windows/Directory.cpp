@@ -25,11 +25,6 @@ void CopyFromWindowsStruct( const WIN32_FIND_DATA& windowsFile, FileFindData& ou
 #endif
 }
 
-void* Helium::InvalidHandleValue()
-{
-    return INVALID_HANDLE_VALUE;
-}
-
 bool Helium::FindFirst( DirectoryHandle& handle, FileFindData& data )
 {
     WIN32_FIND_DATA foundFile;

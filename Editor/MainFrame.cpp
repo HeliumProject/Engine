@@ -424,7 +424,7 @@ void MainFrame::OpenProject( const Helium::Path& path )
     ConnectDocument( document );
 
     document->HasChanged( isNewProject );
-    document->d_Save.Set( this, &MainFrame::OnProjectSave );
+    document->d_Save.Set( m_Project.Ptr(), &Project::OnDocumentSave );
 
     m_ProjectPanel->OpenProject( m_Project, document );
 
@@ -857,19 +857,6 @@ void MainFrame::OnNewEntity( wxCommandEvent& event )
 void MainFrame::OnNewProject( wxCommandEvent& event )
 {
     OpenProject( Helium::Path( TXT("New Project") ) );
-}
-
-void MainFrame::OnProjectSave( const DocumentEventArgs& args )
-{
-    const Document* document = static_cast< const Document* >( args.m_Document );
-    HELIUM_ASSERT( document );
-
-    if ( document 
-        && m_Project 
-        && document->GetPath() == m_Project->a_Path.Get() )
-    {
-        args.m_Result = m_Project->Save();
-    }
 }
 
 bool MainFrame::DoOpen( const tstring& path )

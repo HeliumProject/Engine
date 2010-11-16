@@ -115,8 +115,6 @@ namespace Helium
             void SceneLoadFinished( const SceneGraph::LoadArgs& args );
             void SceneExecuted( const SceneGraph::ExecuteArgs& args );
 
-            void OnProjectSave( const DocumentEventArgs& args );
-
             bool DoOpen( const tstring& path );
 
         private:

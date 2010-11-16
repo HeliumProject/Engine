@@ -7,10 +7,11 @@
 
 #include "Pipeline/Asset/AssetFactory.h"
 
-#include "Foundation/Container/OrderedSet.h"
-#include "Foundation/File/Path.h"
 #include "Foundation/Component/Component.h"
 #include "Foundation/Component/ComponentCollection.h" 
+#include "Foundation/Container/OrderedSet.h"
+#include "Foundation/Document/Document.h"
+#include "Foundation/File/Path.h"
 
 namespace Helium
 {
@@ -194,6 +195,9 @@ namespace Helium
 
 
         public:
+            // Callback for when a document is saved.
+            void OnDocumentSave( const DocumentEventArgs& args );
+
             // write to the location on disk
             virtual bool Serialize();
 

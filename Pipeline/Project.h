@@ -2,6 +2,7 @@
 
 #include "Pipeline/API.h"
 #include "Foundation/Automation/Attribute.h"
+#include "Foundation/Document/Document.h"
 #include "Foundation/Reflect/DOM.h"
 
 namespace Helium
@@ -14,7 +15,8 @@ namespace Helium
         Project( const Path& path = TXT( "" ) );
         virtual ~Project();
 
-        bool Save() const;
+        void OnDocumentSave( const DocumentEventArgs& args );
+        bool Serialize() const;
 
         const std::set< Path >& Paths()
         {

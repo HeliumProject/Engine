@@ -214,6 +214,9 @@ namespace Lunar
         inline bool IsPackage() const;
 
         virtual void PreDestroy();
+
+        // This should only be called by the reference counting system!
+        void Destroy();
         //@}
 
         /// @name RTTI
@@ -340,7 +343,6 @@ namespace Lunar
 
         /// @name Reference Counting Support, Private
         //@{
-        static void DestroyCallback( Object* pObject );
         static void StandardCustomDestroy( Object* pObject );
         //@}
 

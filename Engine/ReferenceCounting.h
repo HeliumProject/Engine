@@ -31,7 +31,7 @@
 #define L_IMPLEMENT_REF_COUNT( CLASS ) \
     Lunar::RefCountProxy< CLASS >* CLASS::GetRefCountProxy() const \
     { \
-        return _m_refCountProxyContainer.Get( const_cast< CLASS* >( this ), DestroyCallback ); \
+        return _m_refCountProxyContainer.Get( const_cast< CLASS* >( this ) ); \
     }
 
 /// Forward declare a strong pointer type.
@@ -63,10 +63,13 @@ namespace Lunar
         /// Base type of reference counted object.
         typedef Object BaseType;
 
-        /// Number of proxy objects to allocate per block for the proxy pool.
-        static const size_t POOL_BLOCK_SIZE = 1024;
+        /// @name Object Destruction Support
+        //@{
+        static void PreDestroy( Object* pObject );
+        static void Destroy( Object* pObject );
+        //@}
 
-        /// @name Allocation Interface
+        /// @name Reference Count Proxy Allocation Interface
         //@{
         static RefCountProxy< Object >* Allocate();
         static void Release( RefCountProxy< Object >* pProxy );
@@ -95,12 +98,9 @@ namespace Lunar
     class RefCountProxy
     {
     public:
-        /// Object destruction callback type.
-        typedef void ( *DESTROY_CALLBACK )( BaseT* pObject );
-
         /// @name Initialization
         //@{
-        void Initialize( BaseT* pObject, DESTROY_CALLBACK pDestroyCallback );
+        void Initialize( BaseT* pObject );
         //@}
 
         /// @name Object Access
@@ -122,9 +122,6 @@ namespace Lunar
     private:
         /// Reference-counted object.
         BaseT* volatile m_pObject;
-        /// Callback to destroy the reference-counted object.
-        DESTROY_CALLBACK m_pDestroyCallback;
-
         /// Reference counts (strong references in lower 16-bits, weak references in upper 16-bits).
         volatile int32_t m_refCounts;
 
@@ -150,8 +147,7 @@ namespace Lunar
 
         /// @name Access
         //@{
-        RefCountProxy< BaseT >* Get(
-            BaseT* pObject, typename RefCountProxy< BaseT >::DESTROY_CALLBACK pDestroyCallback );
+        RefCountProxy< BaseT >* Get( BaseT* pObject );
         //@}
 
     private:

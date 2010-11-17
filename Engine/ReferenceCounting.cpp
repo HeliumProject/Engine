@@ -15,6 +15,9 @@ namespace Lunar
     /// Static proxy management data.
     struct ObjectRefCountSupport::StaticData
     {
+        /// Number of proxy objects to allocate per block for the proxy pool.
+        static const size_t POOL_BLOCK_SIZE = 1024;
+
         /// Proxy object pool.
         ObjectPool< RefCountProxy< Object > > proxyPool;
 #if HELIUM_ENABLE_MEMORY_TRACKING
@@ -29,6 +32,31 @@ namespace Lunar
     };
 
     ObjectRefCountSupport::StaticData* ObjectRefCountSupport::sm_pStaticData = NULL;
+
+    /// Perform any pre-destruction work before clearing the last strong reference to an object and destroying the
+    /// object.
+    ///
+    /// @param[in] pObject  Object about to be destroyed.
+    ///
+    /// @see Destroy()
+    void ObjectRefCountSupport::PreDestroy( Object* pObject )
+    {
+        HELIUM_ASSERT( pObject );
+
+        pObject->PreDestroy();
+    }
+
+    /// Destroy an object after the final strong reference to it has been cleared.
+    ///
+    /// @param[in] pObject  Object to destroy.
+    ///
+    /// @see PreDestroy()
+    void ObjectRefCountSupport::Destroy( Object* pObject )
+    {
+        HELIUM_ASSERT( pObject );
+
+        pObject->Destroy();
+    }
 
     /// Retrieve a reference count proxy from the global pool.
     ///

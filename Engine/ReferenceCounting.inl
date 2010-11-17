@@ -12,14 +12,11 @@ namespace Lunar
     /// @param[in] pObject           Object for which to manage reference counting.
     /// @param[in] pDestroyCallback  Callback to execute when the object needs to be destroyed.
     template< typename BaseT >
-    void RefCountProxy< BaseT >::Initialize( BaseT* pObject, DESTROY_CALLBACK pDestroyCallback )
+    void RefCountProxy< BaseT >::Initialize( BaseT* pObject )
     {
         HELIUM_ASSERT( pObject );
-        HELIUM_ASSERT( pDestroyCallback );
 
         m_pObject = pObject;
-        m_pDestroyCallback = pDestroyCallback;
-
         m_refCounts = 0;
     }
 
@@ -111,13 +108,13 @@ namespace Lunar
     {
         BaseT* pObject = m_pObject;
         HELIUM_ASSERT( pObject );
-        pObject->PreDestroy();
+        typename BaseT::RefCountSupportType::PreDestroy( pObject );
 
         BaseT* pAtomicObjectOld = AtomicExchangeRelease< BaseT >( m_pObject, NULL );
         HELIUM_ASSERT( pAtomicObjectOld == pObject );
         HELIUM_UNREF( pAtomicObjectOld );
 
-        m_pDestroyCallback( pObject );
+        typename BaseT::RefCountSupportType::Destroy( pObject );
     }
 
     /// Constructor.
@@ -129,21 +126,18 @@ namespace Lunar
 
     /// Get the reference count proxy, initializing it if necessary.
     ///
-    /// @param[in] pObject           Object to which the proxy should be initialized if needed.
-    /// @param[in] pDestroyCallback  Callback to use to destroy the object if needed.
+    /// @param[in] pObject  Object to which the proxy should be initialized if needed.
     ///
     /// @return  Pointer to the reference count proxy instance.
     template< typename BaseT >
-    RefCountProxy< BaseT >* RefCountProxyContainer< BaseT >::Get(
-        BaseT* pObject,
-        typename RefCountProxy< BaseT >::DESTROY_CALLBACK pDestroyCallback )
+    RefCountProxy< BaseT >* RefCountProxyContainer< BaseT >::Get( BaseT* pObject )
     {
         RefCountProxy< BaseT >* pProxy = m_pProxy;
         if( !pProxy )
         {
             pProxy = SupportType::Allocate();
             HELIUM_ASSERT( pProxy );
-            pProxy->Initialize( pObject, pDestroyCallback );
+            pProxy->Initialize( pObject );
 
             // Atomically set the existing proxy, making sure the proxy is still null.  If another proxy was swapped in
             // first, release the proxy we just tried to allocate.

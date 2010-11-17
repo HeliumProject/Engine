@@ -499,6 +499,24 @@ namespace Lunar
         SetFlags( Object::FLAG_PREDESTROYED );
     }
 
+    /// Actually destroy this object.
+    ///
+    /// This should only be called by the reference counting system once the last strong reference to this object has
+    /// been cleared.  It should never be called manually
+    void Object::Destroy()
+    {
+        HELIUM_ASSERT( !GetRefCountProxy() || GetRefCountProxy()->GetStrongRefCount() == 0 );
+
+        if( m_pCustomDestroyCallback )
+        {
+            m_pCustomDestroyCallback( this );
+        }
+        else
+        {
+            delete this;
+        }
+    }
+
     /// Get the type of this object.
     ///
     /// @return  Object type.
@@ -1282,23 +1300,6 @@ namespace Lunar
             {
                 pObject->UpdatePath();
             }
-        }
-    }
-
-    /// Reference counting destruction callback.
-    ///
-    /// @param[in] pObject  Object to destroy.
-    void Object::DestroyCallback( Object* pObject )
-    {
-        HELIUM_ASSERT( pObject );
-        CUSTOM_DESTROY_CALLBACK* pCustomDestroyCallback = pObject->m_pCustomDestroyCallback;
-        if( pCustomDestroyCallback )
-        {
-            pCustomDestroyCallback( pObject );
-        }
-        else
-        {
-            delete pObject;
         }
     }
 

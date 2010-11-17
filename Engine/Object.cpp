@@ -1288,18 +1288,17 @@ namespace Lunar
     /// Reference counting destruction callback.
     ///
     /// @param[in] pObject  Object to destroy.
-    void Object::DestroyCallback( void* pObject )
+    void Object::DestroyCallback( Object* pObject )
     {
         HELIUM_ASSERT( pObject );
-        Object* pCastObject = static_cast< Object* >( pObject );
-        CUSTOM_DESTROY_CALLBACK* pCustomDestroyCallback = pCastObject->m_pCustomDestroyCallback;
+        CUSTOM_DESTROY_CALLBACK* pCustomDestroyCallback = pObject->m_pCustomDestroyCallback;
         if( pCustomDestroyCallback )
         {
-            pCustomDestroyCallback( pCastObject );
+            pCustomDestroyCallback( pObject );
         }
         else
         {
-            delete pCastObject;
+            delete pObject;
         }
     }
 

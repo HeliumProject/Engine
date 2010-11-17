@@ -18,7 +18,6 @@
 #define L_DECLARE_REF_COUNT() \
     private: \
         mutable Lunar::RefCountProxyContainer _m_refCountProxyContainer; \
-        static void _DestroyCallback( Lunar::Object* pObject ); \
     public: \
         Lunar::RefCountProxy* GetRefCountProxy() const;
 
@@ -26,14 +25,9 @@
 ///
 /// @param[in] CLASS  Class type.
 #define L_IMPLEMENT_REF_COUNT( CLASS ) \
-    void CLASS::_DestroyCallback( Lunar::Object* pObject ) \
-    { \
-        delete static_cast< CLASS* >( pObject ); \
-    } \
-    \
     Lunar::RefCountProxy* CLASS::GetRefCountProxy() const \
     { \
-        return _m_refCountProxyContainer.Get( const_cast< CLASS* >( this ), _DestroyCallback ); \
+        return _m_refCountProxyContainer.Get( const_cast< CLASS* >( this ), DestroyCallback ); \
     }
 
 /// Forward declare a strong pointer type.

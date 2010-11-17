@@ -340,7 +340,7 @@ namespace Lunar
 
         /// @name Reference Counting Support, Private
         //@{
-        static void DestroyCallback( void* pObject );
+        static void DestroyCallback( Object* pObject );
         static void StandardCustomDestroy( Object* pObject );
         //@}
 

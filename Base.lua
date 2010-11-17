@@ -36,6 +36,30 @@ Helium.Publish = function( files )
 	end
 end
 
+-- Pre-build script execution.
+Helium.Prebuild = function()
+
+	local commands =
+	{
+		"python Build/JobDefParser.py JobDefinitions . .",
+		"python Build/TypeParser.py . .",
+	}
+
+	local result = 0
+
+	for i, commandString in ipairs( commands ) do
+		result = os.execute( commandString )
+		if result ~= 0 then
+			break
+		end
+	end
+
+	if result ~= 0 then
+		error( "An error occurred processing the pre-build scripts." )
+	end
+
+end
+
 Helium.DoDefaultSolutionSettings = function()
 
 	location "Premake"
@@ -192,6 +216,14 @@ Helium.DoDefaultLunarProjectSettings = function()
 		"NoRTTI",
 	}
 
+	links
+	{
+		"Expat",
+		"nvtt",
+		"png",
+		"zlib",
+	}
+
 	configuration "no-unicode"
 		defines
 		{
@@ -234,11 +266,60 @@ Helium.DoDefaultLunarProjectSettings = function()
 			"L_STATIC=1",
 		}
 
+	configuration "windows"
+		links
+		{
+			"d3d9",
+			"d3dx9",
+			"d3d11",
+			"dxguid",
+			"d3dcompiler",
+			"wininet",
+		}
+
 	configuration { "windows", "Debug" }
 		links
 		{
 			"dbghelp",
 		}
+
+	configuration { "windows", "x32", "Debug" }
+		links
+		{
+			"fbxsdk_md2008d",
+		}
+
+	configuration { "windows", "x32", "not Debug" }
+		links
+		{
+			"fbxsdk_md2008",
+		}
+
+	configuration { "windows", "x64", "Debug" }
+		links
+		{
+			"fbxsdk_md2008_amd64d",
+		}
+
+	configuration { "windows", "x64", "not Debug" }
+		links
+		{
+			"fbxsdk_md2008_amd64",
+		}
+
+	if haveGranny then
+		configuration "x32"
+			links
+			{
+				"granny2",
+			}
+
+		configuration "x64"
+			links
+			{
+				"granny2_x64",
+			}
+	end
 
 end
 

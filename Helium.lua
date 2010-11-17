@@ -16,12 +16,46 @@ defines
 	"wxNO_ZLIB_LIB=1",
 }
 
+local fbxSdkPath = os.getenv( "FBXSDK_DIR" )
+if fbxSdkPath == nil then
+	-- XXX TMC TODO: Make up fallback path for platforms other than Windows?
+	fbxSdkPath = "C:/Program Files/Autodesk/FBX/FbxSdk/2011.2"
+end
+
 includedirs
 {
 	".",
 	"Dependencies/boost",
+	"Dependencies/Expat",
+	"Dependencies/nvtt/src",
+	"Dependencies/png",
 	"Dependencies/tbb/include",
+	"Dependencies/zlib",
+	fbxSdkPath .. "/include",
 }
+
+libdirs
+{
+	fbxSdkPath .. "/lib",
+}
+
+if haveGranny then
+	includedirs
+	{
+		"Integrations/Granny",
+		"Integrations/Granny/granny_sdk/include",
+	}
+
+	defines
+	{
+		"L_HAVE_GRANNY=1",
+	}
+else
+	defines
+	{
+		"L_HAVE_GRANNY=0",
+	}
+end
 
 --[[
 We build monolithic wx, so ignore all the legacy non-monolithic
@@ -91,6 +125,10 @@ configuration "windows"
 		"/NODEFAULTLIB:wxmsw29u_gl",
 		"/NODEFAULTLIB:wxmsw29_gl",
 	}
+	includedirs
+	{
+		os.getenv( "DXSDK_DIR" ) .. "Include"
+	}
 	
 configuration "no-unicode"
 	defines
@@ -103,6 +141,33 @@ configuration "not no-unicode"
 	{
 		"wxUSE_UNICODE=1",
 	}
+
+configuration { "windows", "x32" }
+	libdirs
+	{
+		os.getenv( "DXSDK_DIR" ) .. "Lib/x86",
+	}
+
+	if haveGranny then
+		libdirs
+		{
+			"Integrations/Granny/granny_sdk/lib/win32",
+		}
+	end
+
+
+configuration { "windows", "x64" }
+	libdirs
+	{
+		os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
+	}
+
+	if haveGranny then
+		libdirs
+		{
+			"Integrations/Granny/granny_sdk/lib/win64",
+		}
+	end
 
 configuration { "windows", "x32", "Debug" }
 	libdirs
@@ -181,11 +246,6 @@ project "Foundation"
 		"FOUNDATION_EXPORTS",
 		"HELIUM_MODULE_HEAP_FUNCTION=GetFoundationDefaultHeap",
 	}
-	includedirs
-	{
-		"Dependencies/Expat",
-		"Dependencies/zlib",
-	}
 	files
 	{
 		"Foundation/**",
@@ -237,22 +297,6 @@ project "Pipeline"
 			"Dependencies/nvtt/project/vc8",
 		}
 
-	configuration "windows"
-		includedirs
-		{
-			os.getenv( "DXSDK_DIR" ) .. "/include",
-		}
-	configuration { "windows", "x32" }
-		libdirs
-		{
-			os.getenv( "DXSDK_DIR" ) .. "/lib/x86",
-		}
-	configuration { "windows", "x64" }
-		libdirs
-		{
-			os.getenv( "DXSDK_DIR" ) .. "/lib/x64",
-		}
-
 project "Editor"
 	uuid "A5CAC2F6-62BC-4EF3-A752-887F89C64812"
 	kind "ConsoleApp"
@@ -299,7 +343,6 @@ project "Editor"
 		includedirs
 		{
 			"Dependencies/wxWidgets/include/msvc",
-			os.getenv( "DXSDK_DIR" ) .. "/include",
 		}
 		
 	-- per architecture
@@ -307,13 +350,11 @@ project "Editor"
 		libdirs
 		{
 			"Dependencies/wxWidgets/lib/vc_dll",
-			os.getenv( "DXSDK_DIR" ) .. "/lib/x86",
 		}
 	configuration { "windows", "x64" }
 		libdirs
 		{
 			"Dependencies/wxWidgets/lib/vc_amd64_dll",
-			os.getenv( "DXSDK_DIR" ) .. "/lib/x64"
 		}
 		
 	-- per configuration

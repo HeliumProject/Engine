@@ -125,6 +125,20 @@ project "nvtt"
 			"NoEditAndContinue",  -- Edit and continue support is not compatible with /Ob2
 		}
 
+project "png"
+	uuid "46BA228E-C636-4468-9CBD-7CD4F12FBB33"
+	kind "StaticLib"
+	language "C++"
+	includedirs
+	{
+		"Dependencies/zlib"
+	}
+	files
+	{
+		"Dependencies/png/*.h",
+		"Dependencies/png/*.c",
+	}
+
 project "tiff"
 	uuid "FAB06C82-5A66-419A-ACD1-6F771984E35C"
 	kind "StaticLib"

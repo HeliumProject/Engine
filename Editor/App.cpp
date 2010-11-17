@@ -219,38 +219,38 @@ bool App::OnInit()
     m_InitializerStack.Push( TaskInitialize, TaskCleanup );
 
     // inspect
-    m_InitializerStack.Push( Reflect::RegisterClassType< Widget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< LabelWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< ValueWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< SliderWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< ChoiceWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< CheckBoxWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< ColorPickerWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< ListWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< ButtonWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< FileDialogButtonWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::Canvas >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< TreeCanvas >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< TreeCanvasWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< StripCanvas >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< StripCanvasWidget >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::Widget >( TXT("Editor::Widget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::LabelWidget >( TXT("Editor::LabelWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::ValueWidget >( TXT("Editor::ValueWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::SliderWidget >( TXT("Editor::SliderWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::ChoiceWidget >( TXT("Editor::ChoiceWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::CheckBoxWidget >( TXT("Editor::CheckBoxWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::ColorPickerWidget >( TXT("Editor::ColorPickerWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::ListWidget >( TXT("Editor::ListWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::ButtonWidget >(TXT("Editor::ButtonWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::FileDialogButtonWidget >( TXT("Editor::FileDialogButtonWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::Canvas >( TXT("Editor::Canvas") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::TreeCanvas >( TXT("Editor::TreeCanvas") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::TreeCanvasWidget >( TXT("Editor::TreeCanvasWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::StripCanvas >( TXT("Editor::StripCanvas") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::StripCanvasWidget >( TXT("Editor::StripCanvasWidget") ) );
 
     // clipboard
-    m_InitializerStack.Push( Reflect::RegisterClassType< ReflectClipboardData >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< ClipboardDataWrapper >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< ClipboardFileList >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< ReflectClipboardData >( TXT("Editor::ReflectClipboardData") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< ClipboardDataWrapper >( TXT("Editor::ClipboardDataWrapper") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< ClipboardFileList >( TXT("Editor::ClipboardFileList") ) );
 
     // vault
-    m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::SearchTypes::SearchType>( &Editor::SearchTypes::SearchTypesEnumerateEnum, TXT( "SearchType" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType<VaultSearchQuery>( TXT( "VaultSearchQuery" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::SearchTypes::SearchType>( &Editor::SearchTypes::SearchTypesEnumerateEnum, TXT( "Editor::SearchType" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< VaultSearchQuery >( TXT( "Editor::VaultSearchQuery" ) ) );
 
     // settings
     m_InitializerStack.Push( Reflect::RegisterClassType< WindowSettings >( TXT( "Editor::WindowSettings" ) ) );
     
-    m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::VaultViewModes::VaultViewMode>( &Editor::VaultViewModes::VaultViewModeEnumerateEnum, TXT( "VaultViewMode" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::VaultViewModes::VaultViewMode>( &Editor::VaultViewModes::VaultViewModeEnumerateEnum, TXT( "Editor::VaultViewMode" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClassType< VaultSettings >( TXT( "Editor::VaultSettings" ) ) );
 
-    m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::ProjectMenuIDs::ProjectMenuID>( &Editor::ProjectMenuIDs::ProjectMenuIDsEnumerateEnum, TXT( "ProjectMenuID" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::ProjectMenuIDs::ProjectMenuID>( &Editor::ProjectMenuIDs::ProjectMenuIDsEnumerateEnum, TXT( "Editor::ProjectMenuID" ) ) );
 
     LoadSettings();
 

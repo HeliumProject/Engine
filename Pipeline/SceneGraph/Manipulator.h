@@ -39,11 +39,11 @@ namespace Helium
                 Local,
                 World,
             };
-            static void ManipulatorSpaceEnumerateEnum( Reflect::Enumeration* info )
+            static void ManipulatorSpaceEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement(Object, TXT( "Object" ) );
-                info->AddElement(Local, TXT( "Local" ) );
-                info->AddElement(World, TXT( "World" ) );
+                info.AddElement(Object, TXT( "Object" ) );
+                info.AddElement(Local, TXT( "Local" ) );
+                info.AddElement(World, TXT( "World" ) );
             }
         }
 

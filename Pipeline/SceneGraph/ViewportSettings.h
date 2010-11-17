@@ -20,13 +20,13 @@ namespace Helium
                 Count
             };
 
-            static void GeometryModeEnumerateEnum( Reflect::Enumeration* info )
+            static void GeometryModeEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement(GeometryModes::None, TXT( "GeometryModes::None" ) ); 
-                info->AddElement(GeometryModes::Render, TXT( "GeometryModes::Render" ) ); 
-                info->AddElement(GeometryModes::Collision, TXT( "GeometryModes::Collision" ) ); 
-                info->AddElement(GeometryModes::Pathfinding, TXT( "GeometryModes::Pathfinding" ) ); 
-                info->AddElement(GeometryModes::Count, TXT( "GeometryModes::Count" ) ); 
+                info.AddElement(GeometryModes::None, TXT( "GeometryModes::None" ) ); 
+                info.AddElement(GeometryModes::Render, TXT( "GeometryModes::Render" ) ); 
+                info.AddElement(GeometryModes::Collision, TXT( "GeometryModes::Collision" ) ); 
+                info.AddElement(GeometryModes::Pathfinding, TXT( "GeometryModes::Pathfinding" ) ); 
+                info.AddElement(GeometryModes::Count, TXT( "GeometryModes::Count" ) ); 
             }
         }
 
@@ -40,11 +40,11 @@ namespace Helium
                 Type,
                 Scene,
             };
-            static void ViewColorModeEnumerateEnum( Reflect::Enumeration* info )
+            static void ViewColorModeEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement( Layer, TXT( "Layer" ) );
-                info->AddElement( Type, TXT( "Type" ) );
-                info->AddElement( Scene, TXT( "Scene" ) );
+                info.AddElement( Layer, TXT( "Layer" ) );
+                info.AddElement( Type, TXT( "Type" ) );
+                info.AddElement( Scene, TXT( "Scene" ) );
             }
         }
         typedef ViewColorModes::ViewColorMode ViewColorMode;

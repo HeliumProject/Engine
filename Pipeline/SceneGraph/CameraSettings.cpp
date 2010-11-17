@@ -2,7 +2,9 @@
 #include "CameraSettings.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph; 
+using namespace Helium::SceneGraph;
+
+REFLECT_DEFINE_CLASS( CameraSettings );
 
 CameraSettings::CameraSettings()
 : m_CameraMode( CameraModes::Orbit ) 

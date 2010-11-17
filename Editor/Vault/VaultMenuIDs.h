@@ -133,16 +133,16 @@ namespace Helium
 
                 ThumbnailsCustom,
             };
-            static void VaultViewModeEnumerateEnum( Reflect::Enumeration* info )
+            static void VaultViewModeEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement( Details, TXT( "Details" ) );
-                info->AddElement( List, TXT( "List" ) );
+                info.AddElement( Details, TXT( "Details" ) );
+                info.AddElement( List, TXT( "List" ) );
 
-                info->AddElement( ThumbnailsSmall, TXT( "Small" ) );
-                info->AddElement( ThumbnailsMedium, TXT( "Medium" ) );
-                info->AddElement( ThumbnailsLarge, TXT( "Large" ) );
+                info.AddElement( ThumbnailsSmall, TXT( "Small" ) );
+                info.AddElement( ThumbnailsMedium, TXT( "Medium" ) );
+                info.AddElement( ThumbnailsLarge, TXT( "Large" ) );
 
-                info->AddElement( ThumbnailsCustom, TXT( "Custom" ) );
+                info.AddElement( ThumbnailsCustom, TXT( "Custom" ) );
             }
         }
         typedef VaultViewModes::VaultViewMode VaultViewMode;

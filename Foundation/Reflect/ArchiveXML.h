@@ -26,7 +26,7 @@ namespace Helium
             {
             public:
                 // the name of the short name being processed
-                tstring m_ShortName;
+                tstring m_Name;
 
                 // the cdata section for xml files
                 tstring m_Buffer;
@@ -38,7 +38,7 @@ namespace Helium
                 ElementPtr m_Element;
 
                 // The collected components
-                V_Element m_Components;
+                std::vector< ElementPtr > m_Components;
 
                 // flags, as specified below
                 unsigned int m_Flags;
@@ -48,8 +48,8 @@ namespace Helium
                     kField  = 0x1 << 0,
                 };
 
-                ParsingState(const tchar_t* shortName)
-                    : m_ShortName (shortName)
+                ParsingState(const tchar_t* name)
+                    : m_Name (name)
                     , m_Field (NULL) 
                     , m_Flags (0)
                 {
@@ -91,13 +91,13 @@ namespace Helium
             std::stack<tstring> m_FieldNames;
 
             // The current collection of components
-            V_Element m_Components;
+            std::vector< ElementPtr > m_Components;
 
             // The append elements
-            V_Element m_Append;
+            std::vector< ElementPtr > m_Append;
 
             // The container to decode elements to
-            V_Element* m_Target;
+            std::vector< ElementPtr >* m_Target;
         public:
             ArchiveXML( const Path& path, ByteOrder byteOrder = ByteOrders::Unknown );
             ~ArchiveXML();
@@ -145,7 +145,7 @@ namespace Helium
         public:
             // Serialize
             virtual void Serialize(const ElementPtr& element);
-            virtual void Serialize(const V_Element& elements, uint32_t flags = 0);
+            virtual void Serialize(const std::vector< ElementPtr >& elements, uint32_t flags = 0);
 
         protected:
             // Helpers
@@ -159,7 +159,7 @@ namespace Helium
         public:
             // For handling components
             virtual void Deserialize(ElementPtr& element);
-            virtual void Deserialize(V_Element& elements, uint32_t flags = 0);
+            virtual void Deserialize(std::vector< ElementPtr >& elements, uint32_t flags = 0);
 
         private:
             static void StartElementHandler(void *pUserData, const tchar_t* pszName, const tchar_t **papszAttrs)
@@ -195,8 +195,8 @@ namespace Helium
             static ElementPtr FromString( const tstring& xml, int searchType = Reflect::ReservedTypes::Any );
 
             // Reading and writing multiple elements from string data
-            static void       ToString( const V_Element& elements, tstring& xml );
-            static void       FromString( const tstring& xml, V_Element& elements );
+            static void       ToString( const std::vector< ElementPtr >& elements, tstring& xml );
+            static void       FromString( const tstring& xml, std::vector< ElementPtr >& elements );
         };
     }
 }

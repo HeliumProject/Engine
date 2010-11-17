@@ -66,13 +66,13 @@ namespace Helium
             virtual void Accept(Visitor& visitor) HELIUM_OVERRIDE;
         };
 
-        typedef SimpleElementMapSerializer<TypeID> TypeIDElementMapSerializer;              REFLECT_SPECIALIZE_SERIALIZER(TypeIDElementMapSerializer);
-        typedef SimpleElementMapSerializer<std::string> StringElementMapSerializer;         REFLECT_SPECIALIZE_SERIALIZER(StringElementMapSerializer);
-        typedef SimpleElementMapSerializer<uint32_t> U32ElementMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(U32ElementMapSerializer);
-        typedef SimpleElementMapSerializer<int32_t> I32ElementMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(I32ElementMapSerializer);
-        typedef SimpleElementMapSerializer<uint64_t> U64ElementMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(U64ElementMapSerializer);
-        typedef SimpleElementMapSerializer<int64_t> I64ElementMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(I64ElementMapSerializer);
-        typedef SimpleElementMapSerializer<Helium::GUID> GUIDElementMapSerializer;  REFLECT_SPECIALIZE_SERIALIZER(GUIDElementMapSerializer);
-        typedef SimpleElementMapSerializer<Helium::TUID> TUIDElementMapSerializer;  REFLECT_SPECIALIZE_SERIALIZER(TUIDElementMapSerializer);
+        typedef SimpleElementMapSerializer<TypeID> TypeIDElementMapSerializer;
+        typedef SimpleElementMapSerializer<std::string> StringElementMapSerializer;
+        typedef SimpleElementMapSerializer<uint32_t> U32ElementMapSerializer;
+        typedef SimpleElementMapSerializer<int32_t> I32ElementMapSerializer;
+        typedef SimpleElementMapSerializer<uint64_t> U64ElementMapSerializer;
+        typedef SimpleElementMapSerializer<int64_t> I64ElementMapSerializer;
+        typedef SimpleElementMapSerializer<Helium::GUID> GUIDElementMapSerializer;
+        typedef SimpleElementMapSerializer<Helium::TUID> TUIDElementMapSerializer;
     }
 }

@@ -14,7 +14,7 @@ REFLECT_DEFINE_ABSTRACT(CurveEditTool);
 
 void CurveEditTool::InitializeType()
 {
-    Reflect::RegisterClassType< CurveEditTool >( TXT( "CurveEditTool" ) );
+    Reflect::RegisterClassType< CurveEditTool >( TXT( "SceneGraph::CurveEditTool" ) );
 }
 
 void CurveEditTool::CleanupType()

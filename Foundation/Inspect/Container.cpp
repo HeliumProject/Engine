@@ -4,6 +4,8 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
+REFLECT_DEFINE_CLASS( Inspect::Container );
+
 Container::Container()
 {
     a_IsEnabled.Changed().AddMethod( this, &Container::IsEnabledChanged );

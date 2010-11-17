@@ -19,12 +19,12 @@ namespace Helium
                 High
             };
 
-            static void MeshComressionFactorEnumerateEnum( Reflect::Enumeration* info )
+            static void MeshComressionFactorEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement( None,   TXT( "None" ),   TXT( "None" ) );
-                info->AddElement( Low,    TXT( "Low" ),    TXT( "Low" ) );
-                info->AddElement( Medium, TXT( "Medium" ), TXT( "Medium" ) );
-                info->AddElement( High,   TXT( "High" ),   TXT( "High" ) );
+                info.AddElement( None,   TXT( "None" ),   TXT( "None" ) );
+                info.AddElement( Low,    TXT( "Low" ),    TXT( "Low" ) );
+                info.AddElement( Medium, TXT( "Medium" ), TXT( "Medium" ) );
+                info.AddElement( High,   TXT( "High" ),   TXT( "High" ) );
             }
         }
         typedef MeshCompressionFactors::MeshCompressionFactor MeshCompressionFactor;

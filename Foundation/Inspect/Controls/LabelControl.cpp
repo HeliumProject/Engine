@@ -2,7 +2,10 @@
 #include "Foundation/Inspect/Container.h"
 #include "Foundation/Inspect/Data.h"
 
+using namespace Helium;
 using namespace Helium::Inspect;
+
+REFLECT_DEFINE_CLASS( Inspect::Label );
 
 Label::Label()
 : a_Ellipsize( true )

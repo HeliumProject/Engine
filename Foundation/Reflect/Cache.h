@@ -27,7 +27,7 @@ namespace Helium
             bool Create(int type, ElementPtr& element);
 
             // creator
-            bool Create(const tstring& shortName, ElementPtr& element);
+            bool Create(const tstring& name, ElementPtr& element);
 
             // push into free list
             void Free(ElementPtr element);

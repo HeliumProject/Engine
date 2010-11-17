@@ -7,6 +7,8 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
+REFLECT_DEFINE_CLASS( TreeCanvasWidget );
+
 TreeCanvasWidget::TreeCanvasWidget( Inspect::Container* container )
 : m_ContainerControl( container )
 , m_TreeWndCtrl( NULL )

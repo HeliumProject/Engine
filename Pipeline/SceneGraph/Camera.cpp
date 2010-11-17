@@ -16,8 +16,6 @@ const float Camera::NearClipDistance = 0.05f;
 const float Camera::FarClipDistance = 10000.0f;
 const float Camera::FieldOfView = 72.0f * static_cast< float32_t >( HELIUM_DEG_TO_RAD );
 
-REFLECT_DEFINE_ABSTRACT(Camera);
-
 Camera::Camera()
 : m_ProjectionMode( ProjectionModes::Perspective )
 , m_MovementMode( MovementModes::Orbit )

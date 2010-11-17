@@ -64,6 +64,8 @@ void ButtonWindow::SetLabel( const tstring& label )
     Layout();
 }
 
+REFLECT_DEFINE_CLASS( ButtonWidget );
+
 ButtonWidget::ButtonWidget( Inspect::Button* button )
 : m_ButtonControl( button )
 , m_ButtonWindow( NULL )

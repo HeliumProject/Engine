@@ -1319,7 +1319,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
             Undo::BatchCommandPtr changes = new Undo::BatchCommand();
 
-            Reflect::V_Element elements;
+            std::vector< Reflect::ElementPtr > elements;
             bool result = m_SceneManager.GetCurrentScene()->Export( elements, args, changes );
             if ( result && !elements.empty() )
             {
@@ -2013,11 +2013,11 @@ void MainFrame::OnPasteTransform(wxCommandEvent& event)
             wxTheClipboard->Close();
         }
 
-        Reflect::V_Element elements;
+        std::vector< Reflect::ElementPtr > elements;
         Reflect::ArchiveXML::FromString( xml, elements );
 
-        Reflect::V_Element::const_iterator itr = elements.begin();
-        Reflect::V_Element::const_iterator end = elements.end();
+        std::vector< Reflect::ElementPtr >::const_iterator itr = elements.begin();
+        std::vector< Reflect::ElementPtr >::const_iterator end = elements.end();
         for ( ; itr != end; ++itr )
         {
             Helium::SmartPtr<Reflect::Matrix4ArraySerializer> data = Reflect::ObjectCast< Reflect::Matrix4ArraySerializer >( *itr );

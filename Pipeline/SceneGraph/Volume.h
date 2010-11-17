@@ -17,12 +17,12 @@ namespace Helium
                 Sphere,
                 Capsule,
             };
-            static void VolumeShapeEnumerateEnum( Reflect::Enumeration* info )
+            static void VolumeShapeEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement(Cube, TXT( "Cube" ) );
-                info->AddElement(Cylinder, TXT( "Cylinder" ) );
-                info->AddElement(Sphere, TXT( "Sphere" ) );
-                info->AddElement(Capsule, TXT( "Capsule" ) );
+                info.AddElement(Cube, TXT( "Cube" ) );
+                info.AddElement(Cylinder, TXT( "Cylinder" ) );
+                info.AddElement(Sphere, TXT( "Sphere" ) );
+                info.AddElement(Capsule, TXT( "Capsule" ) );
             }
         }
         typedef VolumeShapes::VolumeShape VolumeShape;

@@ -21,12 +21,12 @@ namespace Helium
 
             HELIUM_COMPILE_ASSERT(Count == Helium::UV_COUNT);
 
-            static void TextureWrapModeEnumerateEnum( Reflect::Enumeration* info )
+            static void TextureWrapModeEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement(Wrap, TXT( "Wrap" ) );
-                info->AddElement(Mirror, TXT( "Mirror" ) );
-                info->AddElement(Clamp, TXT( "Clamp" ) );
-                info->AddElement(Border, TXT( "Border" ) );
+                info.AddElement(Wrap, TXT( "Wrap" ) );
+                info.AddElement(Mirror, TXT( "Mirror" ) );
+                info.AddElement(Clamp, TXT( "Clamp" ) );
+                info.AddElement(Border, TXT( "Border" ) );
             }
         }
 
@@ -60,27 +60,27 @@ namespace Helium
 
             HELIUM_COMPILE_ASSERT(COUNT == Helium::OUTPUT_CF_COUNT);
 
-            static void TextureColorFormatEnumerateEnum( Reflect::Enumeration* info )
+            static void TextureColorFormatEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement(UNKNOWN, TXT( "UNKNOWN" ) );
-                info->AddElement(ARGB8888, TXT( "ARGB8888" ) );
-                info->AddElement(ARGB4444, TXT( "ARGB4444" ) );
-                info->AddElement(ARGB1555, TXT( "ARGB1555" ) );
-                info->AddElement(RGB565, TXT( "RGB565" ) );
-                info->AddElement(A8, TXT( "A8" ) );
-                info->AddElement(L8, TXT( "L8" ) );
-                info->AddElement(AL88, TXT( "AL88" ) );
-                info->AddElement(DXT1, TXT( "DXT1" ) );
-                info->AddElement(DXT3, TXT( "DXT3" ) );
-                info->AddElement(DXT5, TXT( "DXT5" ) );
-                info->AddElement(DUDV, TXT( "DUDV" ) );
-                info->AddElement(F32, TXT( "F32" ) );
-                info->AddElement(F32F32, TXT( "F32F32" ) );
-                info->AddElement(FLOATMAP, TXT( "FLOATMAP" ) );
-                info->AddElement(F16, TXT( "F16" ) );
-                info->AddElement(F16F16, TXT( "F16F16" ) );
-                info->AddElement(HALFMAP, TXT( "HALFMAP" ) );
-                info->AddElement(RGBE, TXT( "RGBE" ) );
+                info.AddElement(UNKNOWN, TXT( "UNKNOWN" ) );
+                info.AddElement(ARGB8888, TXT( "ARGB8888" ) );
+                info.AddElement(ARGB4444, TXT( "ARGB4444" ) );
+                info.AddElement(ARGB1555, TXT( "ARGB1555" ) );
+                info.AddElement(RGB565, TXT( "RGB565" ) );
+                info.AddElement(A8, TXT( "A8" ) );
+                info.AddElement(L8, TXT( "L8" ) );
+                info.AddElement(AL88, TXT( "AL88" ) );
+                info.AddElement(DXT1, TXT( "DXT1" ) );
+                info.AddElement(DXT3, TXT( "DXT3" ) );
+                info.AddElement(DXT5, TXT( "DXT5" ) );
+                info.AddElement(DUDV, TXT( "DUDV" ) );
+                info.AddElement(F32, TXT( "F32" ) );
+                info.AddElement(F32F32, TXT( "F32F32" ) );
+                info.AddElement(FLOATMAP, TXT( "FLOATMAP" ) );
+                info.AddElement(F16, TXT( "F16" ) );
+                info.AddElement(F16F16, TXT( "F16F16" ) );
+                info.AddElement(HALFMAP, TXT( "HALFMAP" ) );
+                info.AddElement(RGBE, TXT( "RGBE" ) );
             }
         }
         typedef TextureColorFormats::TextureColorFormat TextureColorFormat;
@@ -100,15 +100,15 @@ namespace Helium
                 RTF_COUNT
             };
             HELIUM_COMPILE_ASSERT( RTF_COUNT == Helium::FILTER_COUNT );
-            static void RunTimeFilterEnumerateEnum( Reflect::Enumeration* info )
+            static void RunTimeFilterEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement(RTF_POINT, TXT( "RTF_POINT" ), TXT( "POINT" ) );
-                info->AddElement(RTF_BILINEAR, TXT( "RTF_BILINEAR" ), TXT( "BILINEAR" ) );
-                info->AddElement(RTF_TRILINEAR, TXT( "RTF_TRILINEAR" ), TXT( "TRILINEAR" ) );
-                info->AddElement(RTF_ANISO2_BI, TXT( "RTF_ANISO2_BI" ), TXT( "ANISO2_BI" ) );
-                info->AddElement(RTF_ANISO2_TRI, TXT( "RTF_ANISO2_TRI" ), TXT( "ANISO2_TRI" ) );
-                info->AddElement(RTF_ANISO4_BI, TXT( "RTF_ANISO4_BI" ), TXT( "ANISO4_BI" ) );
-                info->AddElement(RTF_ANISO4_TRI, TXT( "RTF_ANISO4_TRI" ), TXT( "ANISO4_TRI" ) );
+                info.AddElement(RTF_POINT, TXT( "RTF_POINT" ), TXT( "POINT" ) );
+                info.AddElement(RTF_BILINEAR, TXT( "RTF_BILINEAR" ), TXT( "BILINEAR" ) );
+                info.AddElement(RTF_TRILINEAR, TXT( "RTF_TRILINEAR" ), TXT( "TRILINEAR" ) );
+                info.AddElement(RTF_ANISO2_BI, TXT( "RTF_ANISO2_BI" ), TXT( "ANISO2_BI" ) );
+                info.AddElement(RTF_ANISO2_TRI, TXT( "RTF_ANISO2_TRI" ), TXT( "ANISO2_TRI" ) );
+                info.AddElement(RTF_ANISO4_BI, TXT( "RTF_ANISO4_BI" ), TXT( "ANISO4_BI" ) );
+                info.AddElement(RTF_ANISO4_TRI, TXT( "RTF_ANISO4_TRI" ), TXT( "ANISO4_TRI" ) );
             }
         }
         typedef RunTimeFilters::RunTimeFilter RunTimeFilter;
@@ -122,11 +122,11 @@ namespace Helium
                 ONE_HALF,
                 ONE_FOURTH,
             };
-            static void ReductionRatioEnumerateEnum( Reflect::Enumeration* info )
+            static void ReductionRatioEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement(ONE_ONE, TXT( "ONE_ONE" ) );
-                info->AddElement(ONE_HALF, TXT( "ONE_HALF" ) );
-                info->AddElement(ONE_FOURTH, TXT( "ONE_FOURTH" ) );
+                info.AddElement(ONE_ONE, TXT( "ONE_ONE" ) );
+                info.AddElement(ONE_HALF, TXT( "ONE_HALF" ) );
+                info.AddElement(ONE_FOURTH, TXT( "ONE_FOURTH" ) );
             }
         }
         typedef ReductionRatios::ReductionRatio ReductionRatio;
@@ -151,19 +151,19 @@ namespace Helium
             };
             HELIUM_COMPILE_ASSERT( MIP_COUNT == Helium::MIP_FILTER_COUNT );
 
-            static void MipGenFilterTypeEnumerateEnum( Reflect::Enumeration* info )
+            static void MipGenFilterTypeEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement(MIP_NONE, TXT( "MIP_NONE" ), TXT( "NONE" ) );
-                info->AddElement(MIP_POINT, TXT( "MIP_POINT" ), TXT( "POINT" ) );
-                info->AddElement(MIP_BOX, TXT( "MIP_BOX" ), TXT( "BOX" ) );
-                info->AddElement(MIP_TRIANGLE, TXT( "MIP_TRIANGLE" ), TXT( "TRIANGLE" ) );
-                info->AddElement(MIP_QUADRATIC, TXT( "MIP_QUADRATIC" ), TXT( "QUADRATIC" ) );
-                info->AddElement(MIP_CUBIC, TXT( "MIP_CUBIC" ), TXT( "CUBIC" ) );
-                info->AddElement(MIP_MITCHELL, TXT( "MIP_MITCHELL" ), TXT( "MITCHELL" ) );
-                info->AddElement(MIP_GAUSSIAN, TXT( "MIP_GAUSSIAN" ), TXT( "GAUSSIAN" ) );
-                info->AddElement(MIP_SINC, TXT( "MIP_SINC" ), TXT( "SINC" ) );
-                info->AddElement(MIP_KAISER, TXT( "MIP_KAISER" ), TXT( "KAISER" ) );
-                info->AddElement(MIP_POINT_COMPOSITE, TXT( "MIP_POINT_COMPOSITE" ), TXT( "POINT_COMPOSITE" ) );
+                info.AddElement(MIP_NONE, TXT( "MIP_NONE" ), TXT( "NONE" ) );
+                info.AddElement(MIP_POINT, TXT( "MIP_POINT" ), TXT( "POINT" ) );
+                info.AddElement(MIP_BOX, TXT( "MIP_BOX" ), TXT( "BOX" ) );
+                info.AddElement(MIP_TRIANGLE, TXT( "MIP_TRIANGLE" ), TXT( "TRIANGLE" ) );
+                info.AddElement(MIP_QUADRATIC, TXT( "MIP_QUADRATIC" ), TXT( "QUADRATIC" ) );
+                info.AddElement(MIP_CUBIC, TXT( "MIP_CUBIC" ), TXT( "CUBIC" ) );
+                info.AddElement(MIP_MITCHELL, TXT( "MIP_MITCHELL" ), TXT( "MITCHELL" ) );
+                info.AddElement(MIP_GAUSSIAN, TXT( "MIP_GAUSSIAN" ), TXT( "GAUSSIAN" ) );
+                info.AddElement(MIP_SINC, TXT( "MIP_SINC" ), TXT( "SINC" ) );
+                info.AddElement(MIP_KAISER, TXT( "MIP_KAISER" ), TXT( "KAISER" ) );
+                info.AddElement(MIP_POINT_COMPOSITE, TXT( "MIP_POINT_COMPOSITE" ), TXT( "POINT_COMPOSITE" ) );
             }
         }
         typedef MipGenFilterTypes::MipGenFilterType MipGenFilterType;
@@ -188,19 +188,19 @@ namespace Helium
             };
             HELIUM_COMPILE_ASSERT( POST_COUNT == Helium::IMAGE_FILTER_COUNT );
 
-            static void PostMipFilterTypeEnumerateEnum( Reflect::Enumeration* info )
+            static void PostMipFilterTypeEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement(POST_NOCHANGE, TXT( "POST_NOCHANGE" ), TXT( "NO_CHANGE" ) );
-                info->AddElement(POST_LIGHTER, TXT( "POST_LIGHTER" ), TXT( "LIGHTER" ) );
-                info->AddElement(POST_DARKER, TXT( "POST_DARKER" ), TXT( "DARKER" ) );
-                info->AddElement(POST_MORE_CONTRAST, TXT( "POST_MORE_CONTRAST" ), TXT( "MORE_CONTRAST" ) );
-                info->AddElement(POST_LESS_CONTRAST, TXT( "POST_LESS_CONTRAST" ), TXT( "LESS_CONTRAST" ) );
-                info->AddElement(POST_SMOOTH, TXT( "POST_SMOOTH" ), TXT( "SMOOTH" ) );
-                info->AddElement(POST_SHARPEN_GRADUAL, TXT( "POST_SHARPEN_GRADUAL" ), TXT( "SHARPEN_GRADUAL" ) );
-                info->AddElement(POST_SHARPEN1X, TXT( "POST_SHARPEN1X" ), TXT( "SHARPEN1X" ) );
-                info->AddElement(POST_SHARPEN2X, TXT( "POST_SHARPEN2X" ), TXT( "SHARPEN2X" ) );
-                info->AddElement(POST_SHARPEN3X, TXT( "POST_SHARPEN3X" ), TXT( "SHARPEN3X" ) );
-                info->AddElement(POST_HIGH_PASS, TXT( "POST_HIGH_PASS" ), TXT( "HIGH_PASS" ) );
+                info.AddElement(POST_NOCHANGE, TXT( "POST_NOCHANGE" ), TXT( "NO_CHANGE" ) );
+                info.AddElement(POST_LIGHTER, TXT( "POST_LIGHTER" ), TXT( "LIGHTER" ) );
+                info.AddElement(POST_DARKER, TXT( "POST_DARKER" ), TXT( "DARKER" ) );
+                info.AddElement(POST_MORE_CONTRAST, TXT( "POST_MORE_CONTRAST" ), TXT( "MORE_CONTRAST" ) );
+                info.AddElement(POST_LESS_CONTRAST, TXT( "POST_LESS_CONTRAST" ), TXT( "LESS_CONTRAST" ) );
+                info.AddElement(POST_SMOOTH, TXT( "POST_SMOOTH" ), TXT( "SMOOTH" ) );
+                info.AddElement(POST_SHARPEN_GRADUAL, TXT( "POST_SHARPEN_GRADUAL" ), TXT( "SHARPEN_GRADUAL" ) );
+                info.AddElement(POST_SHARPEN1X, TXT( "POST_SHARPEN1X" ), TXT( "SHARPEN1X" ) );
+                info.AddElement(POST_SHARPEN2X, TXT( "POST_SHARPEN2X" ), TXT( "SHARPEN2X" ) );
+                info.AddElement(POST_SHARPEN3X, TXT( "POST_SHARPEN3X" ), TXT( "SHARPEN3X" ) );
+                info.AddElement(POST_HIGH_PASS, TXT( "POST_HIGH_PASS" ), TXT( "HIGH_PASS" ) );
             }
         }
         typedef PostMipFilterTypes::PostMipFilterType PostMipFilterType;

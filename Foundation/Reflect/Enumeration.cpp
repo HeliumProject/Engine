@@ -26,7 +26,7 @@ EnumerationElement* EnumerationElement::Create( uint32_t value, const tstring& n
 
 bool Enumeration::Equals(const Enumeration* rhs) const
 {
-    if ( m_ShortName != rhs->m_ShortName )
+    if ( m_Name != rhs->m_Name )
     {
         return false;
     }

@@ -3,10 +3,8 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
-///////////////////////////////////////////////////////////////////////////////
-// Called before the button is realized.  Stores the attributes specific to 
-// this button.
-// 
+REFLECT_DEFINE_CLASS( Inspect::FileDialogButton );
+
 bool FileDialogButton::Process(const tstring& key, const tstring& value)
 {
     bool wasHandled = false;

@@ -4,6 +4,7 @@
 
 #include "Foundation/Math/Color3.h"
 #include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Serializers.h"
 
 namespace Helium
 {
@@ -17,10 +18,10 @@ namespace Helium
                 Centimeters,
             };
 
-            static void GridUnitEnumerateEnum( Reflect::Enumeration* info )
+            static void GridUnitEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement(Meters, TXT( "Meters" ) );
-                info->AddElement(Centimeters, TXT( "Centimeters" ) );
+                info.AddElement(Meters, TXT( "Meters" ) );
+                info.AddElement(Centimeters, TXT( "Centimeters" ) );
             }
         }
         typedef GridUnits::GridUnit GridUnit;

@@ -4,7 +4,7 @@
 
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Reflect/Element.h"
-#include "Foundation/Reflect/Version.h"
+#include "Foundation/Reflect/Serializers.h"
 
 namespace Helium
 {
@@ -42,7 +42,7 @@ namespace Helium
             else
             {
                 // if we haven't seen this type of settings object before, just new one up
-                Type* newSettings = Reflect::ObjectCast< Type >( Reflect::Registry::GetInstance()->GetClass( Reflect::GetType< Type >() )->m_Create() );
+                Type* newSettings = Reflect::ObjectCast< Type >( Reflect::Registry::GetInstance()->GetClass( Reflect::GetType< Type >() )->m_Creator() );
                 HELIUM_ASSERT( newSettings );
 
                 m_SettingsMap[ Reflect::GetType< Type >() ] = newSettings;

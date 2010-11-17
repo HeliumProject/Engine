@@ -71,124 +71,117 @@ void Reflect::Initialize()
     if (++g_InitCount == 1)
     {
         g_Registry = new Registry();
-        HELIUM_ASSERT(g_Registry != NULL);
 
-        //
+        // Bases
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Object>( TXT( "Object" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Element>( TXT( "Element" ) ) );
+
         // Serializers
-        //
-
-        g_Registry->RegisterType(Class::Create<Object>("", TXT( "Object" ) ));
-        g_Registry->RegisterType(Element::CreateClass( TXT( "Element" ) ));
-        g_Registry->RegisterType(Serializer::CreateClass( TXT( "Serializer" ) ));
-        g_Registry->RegisterType(ContainerSerializer::CreateClass( TXT( "Container" ) ));
-        g_Registry->RegisterType(ElementContainerSerializer::CreateClass( TXT( "ElementContainer" ) ));
-        g_Registry->RegisterType(TypeIDSerializer::CreateClass( TXT( "TypeID" ) ));
-        g_Registry->RegisterType(PointerSerializer::CreateClass( TXT( "Pointer" ) ));
-        g_Registry->RegisterType(EnumerationSerializer::CreateClass( TXT( "Enumeration" ) ));
-        g_Registry->RegisterType(BitfieldSerializer::CreateClass( TXT( "Bitfield" ) ));
-        g_Registry->RegisterType(PathSerializer::CreateClass( TXT( "Path" ) ));
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Serializer>( TXT( "Serializer" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ContainerSerializer>( TXT( "Container" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ElementContainerSerializer>( TXT( "ElementContainer" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TypeIDSerializer>( TXT( "TypeID" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<PointerSerializer>( TXT( "Pointer" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<EnumerationSerializer>( TXT( "Enumeration" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<BitfieldSerializer>( TXT( "Bitfield" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<PathSerializer>( TXT( "Path" ) ) );
 
         // SimpleSerializer
-        g_Registry->RegisterType(StringSerializer::CreateClass( TXT( "String" ) ));
-        g_Registry->RegisterType(BoolSerializer::CreateClass( TXT( "Bool" ) ));
-        g_Registry->RegisterType(U8Serializer::CreateClass( TXT( "U8" ) ));
-        g_Registry->RegisterType(I8Serializer::CreateClass( TXT( "I8" ) ));
-        g_Registry->RegisterType(U16Serializer::CreateClass( TXT( "U16" ) ));
-        g_Registry->RegisterType(I16Serializer::CreateClass( TXT( "I16" ) ));
-        g_Registry->RegisterType(U32Serializer::CreateClass( TXT( "U32" ) ));
-        g_Registry->RegisterType(I32Serializer::CreateClass( TXT( "I32" ) ));
-        g_Registry->RegisterType(U64Serializer::CreateClass( TXT( "U64" ) ));
-        g_Registry->RegisterType(I64Serializer::CreateClass( TXT( "I64" ) ));
-        g_Registry->RegisterType(F32Serializer::CreateClass( TXT( "F32" ) ));
-        g_Registry->RegisterType(F64Serializer::CreateClass( TXT( "F64" ) ));
-        g_Registry->RegisterType(GUIDSerializer::CreateClass( TXT( "GUID" ) ));
-        g_Registry->RegisterType(TUIDSerializer::CreateClass( TXT( "TUID" ) ));
-        g_Registry->RegisterType(Vector2Serializer::CreateClass( TXT( "Vector2" ) ));
-        g_Registry->RegisterType(Vector3Serializer::CreateClass( TXT( "Vector3" ) ));
-        g_Registry->RegisterType(Vector4Serializer::CreateClass( TXT( "Vector4" ) ));
-        g_Registry->RegisterType(Matrix3Serializer::CreateClass( TXT( "Matrix3" ) ));
-        g_Registry->RegisterType(Matrix4Serializer::CreateClass( TXT( "Matrix4" ) ));
-        g_Registry->RegisterType(Color3Serializer::CreateClass( TXT( "Color3" ) ));
-        g_Registry->RegisterType(Color4Serializer::CreateClass( TXT( "Color4" ) ));
-        g_Registry->RegisterType(HDRColor3Serializer::CreateClass( TXT( "HDRColor3" ) ));
-        g_Registry->RegisterType(HDRColor4Serializer::CreateClass( TXT( "HDRColor4" ) ));
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringSerializer>( TXT( "String" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<BoolSerializer>( TXT( "Bool" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U8Serializer>( TXT( "U8" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I8Serializer>( TXT( "I8" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U16Serializer>( TXT( "U16" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I16Serializer>( TXT( "I16" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U32Serializer>( TXT( "U32" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I32Serializer>( TXT( "I32" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U64Serializer>( TXT( "U64" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I64Serializer>( TXT( "I64" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<F32Serializer>( TXT( "F32" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<F64Serializer>( TXT( "F64" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDSerializer>( TXT( "GUID" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDSerializer>( TXT( "TUID" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Vector2Serializer>( TXT( "Vector2" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Vector3Serializer>( TXT( "Vector3" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Vector4Serializer>( TXT( "Vector4" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Matrix3Serializer>( TXT( "Matrix3" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Matrix4Serializer>( TXT( "Matrix4" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Color3Serializer>( TXT( "Color3" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Color4Serializer>( TXT( "Color4" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<HDRColor3Serializer>( TXT( "HDRColor3" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<HDRColor4Serializer>( TXT( "HDRColor4" ) ) );
 
         // ArraySerializer
-        g_Registry->RegisterType(ArraySerializer::CreateClass( TXT( "Array" ) ));
-        g_Registry->RegisterType(StringArraySerializer::CreateClass( TXT( "StringArray" ) ));
-        g_Registry->RegisterType(BoolArraySerializer::CreateClass( TXT( "BoolArray" ) ));
-        g_Registry->RegisterType(U8ArraySerializer::CreateClass( TXT( "U8Array" ) ));
-        g_Registry->RegisterType(I8ArraySerializer::CreateClass( TXT( "I8Array" ) ));
-        g_Registry->RegisterType(U16ArraySerializer::CreateClass( TXT( "U16Array" ) ));
-        g_Registry->RegisterType(I16ArraySerializer::CreateClass( TXT( "I16Array" ) ));
-        g_Registry->RegisterType(U32ArraySerializer::CreateClass( TXT( "U32Array" ) ));
-        g_Registry->RegisterType(I32ArraySerializer::CreateClass( TXT( "I32Array" ) ));
-        g_Registry->RegisterType(U64ArraySerializer::CreateClass( TXT( "U64Array" ) ));
-        g_Registry->RegisterType(I64ArraySerializer::CreateClass( TXT( "I64Array" ) ));
-        g_Registry->RegisterType(F32ArraySerializer::CreateClass( TXT( "F32Array" ) ));
-        g_Registry->RegisterType(F64ArraySerializer::CreateClass( TXT( "F64Array" ) ));
-        g_Registry->RegisterType(GUIDArraySerializer::CreateClass( TXT( "GUIDArray" ) ));
-        g_Registry->RegisterType(TUIDArraySerializer::CreateClass( TXT( "TUIDArray" ) ));
-        g_Registry->RegisterType(PathArraySerializer::CreateClass( TXT( "PathArray" ) ));
-        g_Registry->RegisterType(Vector2ArraySerializer::CreateClass( TXT( "Vector2Array" ) ));
-        g_Registry->RegisterType(Vector3ArraySerializer::CreateClass( TXT( "Vector3Array" ) ));
-        g_Registry->RegisterType(Vector4ArraySerializer::CreateClass( TXT( "Vector4Array" ) ));
-        g_Registry->RegisterType(Matrix3ArraySerializer::CreateClass( TXT( "Matrix3Array" ) ));
-        g_Registry->RegisterType(Matrix4ArraySerializer::CreateClass( TXT( "Matrix4Array" ) ));
-        g_Registry->RegisterType(Color3ArraySerializer::CreateClass( TXT( "Color3Array" ) ));
-        g_Registry->RegisterType(Color4ArraySerializer::CreateClass( TXT( "Color4Array" ) ));
-        g_Registry->RegisterType(HDRColor3ArraySerializer::CreateClass( TXT( "HDRColor3Array" ) ));
-        g_Registry->RegisterType(HDRColor4ArraySerializer::CreateClass( TXT( "HDRColor4Array" ) ));
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ArraySerializer>( TXT( "Array" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringArraySerializer>( TXT( "StringArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<BoolArraySerializer>( TXT( "BoolArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U8ArraySerializer>( TXT( "U8Array" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I8ArraySerializer>( TXT( "I8Array" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U16ArraySerializer>( TXT( "U16Array" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I16ArraySerializer>( TXT( "I16Array" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U32ArraySerializer>( TXT( "U32Array" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I32ArraySerializer>( TXT( "I32Array" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U64ArraySerializer>( TXT( "U64Array" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I64ArraySerializer>( TXT( "I64Array" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<F32ArraySerializer>( TXT( "F32Array" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<F64ArraySerializer>( TXT( "F64Array" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDArraySerializer>( TXT( "GUIDArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDArraySerializer>( TXT( "TUIDArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<PathArraySerializer>( TXT( "PathArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Vector2ArraySerializer>( TXT( "Vector2Array" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Vector3ArraySerializer>( TXT( "Vector3Array" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Vector4ArraySerializer>( TXT( "Vector4Array" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Matrix3ArraySerializer>( TXT( "Matrix3Array" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Matrix4ArraySerializer>( TXT( "Matrix4Array" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Color3ArraySerializer>( TXT( "Color3Array" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Color4ArraySerializer>( TXT( "Color4Array" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<HDRColor3ArraySerializer>( TXT( "HDRColor3Array" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<HDRColor4ArraySerializer>( TXT( "HDRColor4Array" ) ) );
 
         // SetSerializer
-        g_Registry->RegisterType(SetSerializer::CreateClass( TXT( "Set" ) ));
-        g_Registry->RegisterType(StringSetSerializer::CreateClass( TXT( "StrSet" ) ));
-        g_Registry->RegisterType(U32SetSerializer::CreateClass( TXT( "U32Set" ) ));
-        g_Registry->RegisterType(U64SetSerializer::CreateClass( TXT( "U64Set" ) ));
-        g_Registry->RegisterType(F32SetSerializer::CreateClass( TXT( "F32Set" ) ));
-        g_Registry->RegisterType(GUIDSetSerializer::CreateClass( TXT( "GUIDSet" ) ));
-        g_Registry->RegisterType(TUIDSetSerializer::CreateClass( TXT( "TUIDSet" ) ));
-        g_Registry->RegisterType( PathSetSerializer::CreateClass( TXT( "PathSet" ) ));
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<SetSerializer>( TXT( "Set" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringSetSerializer>( TXT( "StrSet" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U32SetSerializer>( TXT( "U32Set" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U64SetSerializer>( TXT( "U64Set" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<F32SetSerializer>( TXT( "F32Set" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDSetSerializer>( TXT( "GUIDSet" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDSetSerializer>( TXT( "TUIDSet" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType< PathSetSerializer>( TXT( "PathSet" ) ) );
 
         // MapSerializer
-        g_Registry->RegisterType(MapSerializer::CreateClass( TXT( "Map" ) ));
-        g_Registry->RegisterType(StringStringMapSerializer::CreateClass( TXT( "StrStrMap" ) ));
-        g_Registry->RegisterType(StringBoolMapSerializer::CreateClass( TXT( "StrBoolMap" ) ));
-        g_Registry->RegisterType(StringU32MapSerializer::CreateClass( TXT( "StrU32Map" ) ));
-        g_Registry->RegisterType(StringI32MapSerializer::CreateClass( TXT( "StrI32Map" ) ));
-        g_Registry->RegisterType(U32StringMapSerializer::CreateClass( TXT( "U32StrMap" ) ));
-        g_Registry->RegisterType(U32U32MapSerializer::CreateClass( TXT( "U32U32Map" ) ));
-        g_Registry->RegisterType(U32I32MapSerializer::CreateClass( TXT( "U32I32Map" ) ));
-        g_Registry->RegisterType(U32U64MapSerializer::CreateClass( TXT( "U32U64Map" ) ));
-        g_Registry->RegisterType(I32StringMapSerializer::CreateClass( TXT( "I32StrMap" ) ));
-        g_Registry->RegisterType(I32U32MapSerializer::CreateClass( TXT( "I32U32Map" ) ));
-        g_Registry->RegisterType(I32I32MapSerializer::CreateClass( TXT( "I32I32Map" ) ));
-        g_Registry->RegisterType(I32U64MapSerializer::CreateClass( TXT( "I32U64Map" ) ));
-        g_Registry->RegisterType(U64StringMapSerializer::CreateClass( TXT( "U64StrMap" ) ));
-        g_Registry->RegisterType(U64U32MapSerializer::CreateClass( TXT( "U64U32Map" ) ));
-        g_Registry->RegisterType(U64U64MapSerializer::CreateClass( TXT( "U64U64Map" ) ));
-        g_Registry->RegisterType(U64Matrix4MapSerializer::CreateClass( TXT( "U64Matrix4Map" ) ));
-        g_Registry->RegisterType(GUIDU32MapSerializer::CreateClass( TXT( "GUIDU32Map" ) ));
-        g_Registry->RegisterType(GUIDMatrix4MapSerializer::CreateClass( TXT( "GUIDMatrix4Map" ) ));
-        g_Registry->RegisterType(TUIDU32MapSerializer::CreateClass( TXT( "TUIDU32Map" ) ));
-        g_Registry->RegisterType(TUIDMatrix4MapSerializer::CreateClass( TXT( "TUIDMatrix4Map" ) ));
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<MapSerializer>( TXT( "Map" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringStringMapSerializer>( TXT( "StrStrMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringBoolMapSerializer>( TXT( "StrBoolMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringU32MapSerializer>( TXT( "StrU32Map" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringI32MapSerializer>( TXT( "StrI32Map" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U32StringMapSerializer>( TXT( "U32StrMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U32U32MapSerializer>( TXT( "U32U32Map" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U32I32MapSerializer>( TXT( "U32I32Map" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U32U64MapSerializer>( TXT( "U32U64Map" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I32StringMapSerializer>( TXT( "I32StrMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I32U32MapSerializer>( TXT( "I32U32Map" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I32I32MapSerializer>( TXT( "I32I32Map" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I32U64MapSerializer>( TXT( "I32U64Map" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U64StringMapSerializer>( TXT( "U64StrMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U64U32MapSerializer>( TXT( "U64U32Map" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U64U64MapSerializer>( TXT( "U64U64Map" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U64Matrix4MapSerializer>( TXT( "U64Matrix4Map" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDU32MapSerializer>( TXT( "GUIDU32Map" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDMatrix4MapSerializer>( TXT( "GUIDMatrix4Map" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDU32MapSerializer>( TXT( "TUIDU32Map" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDMatrix4MapSerializer>( TXT( "TUIDMatrix4Map" ) ) );
 
-        // ElementArraySerializer
-        g_Registry->RegisterType(ElementArraySerializer::CreateClass( TXT( "ElementArray" ) ));
-
-        // ElementSetSerializer
-        g_Registry->RegisterType(ElementSetSerializer::CreateClass( TXT( "ElementSet" ) ));
-
-        // ElementMapSerializer
-        g_Registry->RegisterType(ElementMapSerializer::CreateClass( TXT( "ElementMap" ) ));
-        g_Registry->RegisterType(TypeIDElementMapSerializer::CreateClass( TXT( "TypeIDElementMap" ) ));
-        g_Registry->RegisterType(StringElementMapSerializer::CreateClass( TXT( "StringElementMap" ) ));
-        g_Registry->RegisterType(U32ElementMapSerializer::CreateClass( TXT( "U32ElementMap" ) ));
-        g_Registry->RegisterType(I32ElementMapSerializer::CreateClass( TXT( "I32ElementMap" ) ));
-        g_Registry->RegisterType(U64ElementMapSerializer::CreateClass( TXT( "U64ElementMap" ) ));
-        g_Registry->RegisterType(I64ElementMapSerializer::CreateClass( TXT( "I64ElementMap" ) ));
-        g_Registry->RegisterType(GUIDElementMapSerializer::CreateClass( TXT( "GUIDElementMap" ) ));
-        g_Registry->RegisterType(TUIDElementMapSerializer::CreateClass( TXT( "TUIDElementMap" ) ));
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ElementArraySerializer>( TXT( "ElementArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ElementSetSerializer>( TXT( "ElementSet" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ElementMapSerializer>( TXT( "ElementMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TypeIDElementMapSerializer>( TXT( "TypeIDElementMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringElementMapSerializer>( TXT( "StringElementMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U32ElementMapSerializer>( TXT( "U32ElementMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I32ElementMapSerializer>( TXT( "I32ElementMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U64ElementMapSerializer>( TXT( "U64ElementMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I64ElementMapSerializer>( TXT( "I64ElementMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDElementMapSerializer>( TXT( "GUIDElementMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDElementMapSerializer>( TXT( "TUIDElementMap" ) ) );
 
         //
         // Build Casting Table
@@ -200,11 +193,11 @@ void Reflect::Initialize()
         // Register Elements
         //
 
-        g_Registry->RegisterType(Version::CreateClass( TXT( "Version" ) ));
-        g_Registry->RegisterType(DocumentNode::CreateClass( TXT("DocumentNode") ));
-        g_Registry->RegisterType(DocumentAttribute::CreateClass( TXT("DocumentAttribute") ));
-        g_Registry->RegisterType(DocumentElement::CreateClass( TXT("DocumentElement") ));
-        g_Registry->RegisterType(Document::CreateClass( TXT("Document") ));
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Version>( TXT( "Version" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<DocumentNode>( TXT("DocumentNode") ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<DocumentAttribute>( TXT("DocumentAttribute") ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<DocumentElement>( TXT("DocumentElement") ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Document>( TXT("Document") ) );
     }
 
 #ifdef REFLECT_DEBUG_INIT_AND_CLEANUP
@@ -291,15 +284,15 @@ bool Registry::RegisterType(Type* type)
 
             if (idResult.second)
             {
-                m_TypesByName.insert(M_StrToType::value_type (classType->m_FullName, classType));
+                m_TypesByName.insert(M_StrToType::value_type (classType->m_Name, classType));
 
-                if ( !classType->m_ShortName.empty() )
+                if ( !classType->m_Name.empty() )
                 {
-                    Insert<M_StrToType>::Result shortNameResult = m_TypesByName.insert(M_StrToType::value_type (classType->m_ShortName, classType));
+                    Insert<M_StrToType>::Result nameResult = m_TypesByName.insert(M_StrToType::value_type (classType->m_Name, classType));
 
-                    if (!shortNameResult.second && classType != shortNameResult.first->second)
+                    if (!nameResult.second && classType != nameResult.first->second)
                     {
-                        Log::Error( TXT( "Re-registration of short name '%s' was attempted with different classType information\n" ), classType->m_ShortName.c_str());
+                        Log::Error( TXT( "Re-registration of short name '%s' was attempted with different classType information\n" ), classType->m_Name.c_str());
                         HELIUM_BREAK();
                         return false;
                     }
@@ -313,11 +306,11 @@ bool Registry::RegisterType(Type* type)
                         Type* baseClass = found->second;
                         if (baseClass->GetReflectionType() == ReflectionTypes::Class)
                         {
-                            static_cast<Class*>(baseClass)->m_Derived.insert( classType->m_FullName );
+                            static_cast<Class*>(baseClass)->m_Derived.insert( classType->m_Name );
                         }
                         else
                         {
-                            Log::Error( TXT( "Base class of '%s' is not a valid type\n" ), classType->m_ShortName.c_str());
+                            Log::Error( TXT( "Base class of '%s' is not a valid type\n" ), classType->m_Name.c_str());
                             HELIUM_BREAK();
                             return false;
                         }
@@ -328,7 +321,7 @@ bool Registry::RegisterType(Type* type)
             }
             else if (classType != idResult.first->second)
             {
-                Log::Error( TXT( "Re-registration of classType '%s' was attempted with different classType information\n" ), classType->m_FullName.c_str());
+                Log::Error( TXT( "Re-registration of classType '%s' was attempted with different classType information\n" ), classType->m_Name.c_str());
                 HELIUM_BREAK();
                 return false;
             }
@@ -343,27 +336,27 @@ bool Registry::RegisterType(Type* type)
 
             if (idResult.second)
             {
-                Insert<M_StrToType>::Result enumResult = m_TypesByName.insert(M_StrToType::value_type (enumeration->m_ShortName, enumeration));
+                Insert<M_StrToType>::Result enumResult = m_TypesByName.insert(M_StrToType::value_type (enumeration->m_Name, enumeration));
 
                 if (!enumResult.second && enumeration != enumResult.first->second)
                 {
-                    Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_ShortName.c_str());
+                    Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_Name.c_str());
                     HELIUM_BREAK();
                     return false;
                 }
 
-                enumResult = m_TypesByName.insert(M_StrToType::value_type (enumeration->m_FullName, enumeration));
+                enumResult = m_TypesByName.insert(M_StrToType::value_type (enumeration->m_Name, enumeration));
 
                 if (!enumResult.second && enumeration != enumResult.first->second)
                 {
-                    Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_ShortName.c_str());
+                    Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_Name.c_str());
                     HELIUM_BREAK();
                     return false;
                 }
             }
             else if (enumeration != idResult.first->second)
             {
-                Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_FullName.c_str());
+                Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_Name.c_str());
                 HELIUM_BREAK();
                 return false;
             }
@@ -385,9 +378,9 @@ void Registry::UnregisterType(const Type* type)
         {
             const Class* classType = static_cast<const Class*>(type);
 
-            if ( !classType->m_ShortName.empty() )
+            if ( !classType->m_Name.empty() )
             {
-                m_TypesByName.erase( classType->m_ShortName );
+                m_TypesByName.erase( classType->m_Name );
             }
 
             if ( !classType->m_Base.empty() )
@@ -397,17 +390,17 @@ void Registry::UnregisterType(const Type* type)
                 {
                     if ( found->second->GetReflectionType() == ReflectionTypes::Class )
                     {
-                        static_cast<Class*>(found->second.Ptr())->m_Derived.erase( classType->m_FullName );
+                        static_cast<Class*>(found->second.Ptr())->m_Derived.erase( classType->m_Name );
                     }
                     else
                     {
-                        Log::Error( TXT( "Base class of '%s' is not a valid type\n" ), classType->m_ShortName.c_str());
+                        Log::Error( TXT( "Base class of '%s' is not a valid type\n" ), classType->m_Name.c_str());
                         HELIUM_BREAK();
                     }
                 }
             }
 
-            m_TypesByName.erase(classType->m_FullName);
+            m_TypesByName.erase(classType->m_Name);
             m_TypesByID.erase(classType->m_TypeID);
 
             break;
@@ -417,8 +410,8 @@ void Registry::UnregisterType(const Type* type)
         {
             const Enumeration* enumeration = static_cast<const Enumeration*>(type);
 
-            m_TypesByName.erase(enumeration->m_ShortName);
-            m_TypesByName.erase(enumeration->m_FullName);
+            m_TypesByName.erase(enumeration->m_Name);
+            m_TypesByName.erase(enumeration->m_Name);
         }
     }
 }
@@ -481,6 +474,26 @@ const Type* Registry::GetType(const tstring& str) const
     return NULL;
 }
 
+const Class* Registry::GetClass(int32_t id) const
+{
+    return ReflectionCast<const Class>(GetType( id ));
+}
+
+const Class* Registry::GetClass(const tstring& str) const
+{
+    return ReflectionCast<const Class>(GetType( str ));
+}
+
+const Enumeration* Registry::GetEnumeration(int32_t id) const
+{
+    return ReflectionCast<const Enumeration>(GetType( id ));
+}
+
+const Enumeration* Registry::GetEnumeration(const tstring& str) const
+{
+    return ReflectionCast<const Enumeration>(GetType( str ));
+}
+
 ObjectPtr Registry::CreateInstance(int id) const
 {
     M_IDToType::const_iterator type = m_TypesByID.find(id);
@@ -488,14 +501,14 @@ ObjectPtr Registry::CreateInstance(int id) const
     if (type != m_TypesByID.end() && type->second->GetReflectionType() == ReflectionTypes::Class)
     {
         const Class* cls = ReflectionCast<const Class>(type->second);
-        HELIUM_ASSERT( cls->m_Create );
-        if ( cls->m_Create )
+        HELIUM_ASSERT( cls->m_Creator );
+        if ( cls->m_Creator )
         {
-            return cls->m_Create();
+            return cls->m_Creator();
         }
         else
         {
-            throw Reflect::TypeInformationException( TXT( "Class '%s' cannot be instanced, it is abstract" ), cls->m_FullName.c_str() );
+            throw Reflect::TypeInformationException( TXT( "Class '%s' cannot be instanced, it is abstract" ), cls->m_Name.c_str() );
         }
     }
     else
@@ -506,9 +519,9 @@ ObjectPtr Registry::CreateInstance(int id) const
 
 ObjectPtr Registry::CreateInstance(const Class* type) const
 {
-    if (type && type->m_Create)
+    if (type && type->m_Creator)
     {
-        return type->m_Create();
+        return type->m_Creator();
     }
     else
     {
@@ -615,7 +628,7 @@ void CreationRecord::Dump(FILE* f)
 {
     _ftprintf(f, TXT("\n\n"));
     _ftprintf(f, TXT("Addr: %p\n"), m_Address);
-    _ftprintf(f, TXT("Name: %s\n"), m_ShortName.c_str());
+    _ftprintf(f, TXT("Name: %s\n"), m_Name.c_str());
     _ftprintf(f, TXT("Type: %i\n"), m_Type);
 
 #ifdef REFLECT_OBJECT_STACK_TRACKING
@@ -704,9 +717,9 @@ void Tracker::Delete(uintptr_t ptr)
 
 #ifdef REFLECT_OBJECT_VERBOSE_TRACKING
         fprintf(stderr, "%p: DELETE", ptr);
-        if (!cr.m_ShortName.empty())
+        if (!cr.m_Name.empty())
         {
-            fprintf(stderr, ": %s\n", cr.m_ShortName.c_str());
+            fprintf(stderr, ": %s\n", cr.m_Name.c_str());
         }
         else
         {
@@ -746,12 +759,12 @@ void Tracker::Check(uintptr_t ptr)
         {
             Element* e = reinterpret_cast<Element*>(ptr);
 
-            cr.m_ShortName = e->GetClass()->m_ShortName;
+            cr.m_Name = e->GetClass()->m_Name;
             cr.m_Type = e->GetType();
 
 #ifdef REFLECT_OBJECT_VERBOSE_TRACKING
             fprintf(stderr, "%p: TRACKING", ptr);
-            fprintf(stderr, ": %s \n", cr.m_ShortName.c_str());
+            fprintf(stderr, ": %s \n", cr.m_Name.c_str());
 #endif
         }
     }
@@ -802,7 +815,7 @@ void Tracker::Dump()
                 ObjectLogger::iterator iter = objectLog.find( (*c_current).second.m_Type );
                 if ( iter == objectLog.end() )
                 {
-                    objectLog.insert( ObjectLogger::value_type( (*c_current).second.m_Type, std::pair< tstring, uint32_t >( (*c_current).second.m_ShortName, 1 ) ) );
+                    objectLog.insert( ObjectLogger::value_type( (*c_current).second.m_Type, std::pair< tstring, uint32_t >( (*c_current).second.m_Name, 1 ) ) );
                 }
                 else
                 {
@@ -820,7 +833,7 @@ void Tracker::Dump()
                 ObjectLogger::iterator iter = objectLog.find( (*d_current).second.m_Type );
                 if ( iter == objectLog.end() )
                 {
-                    objectLog.insert( ObjectLogger::value_type( (*d_current).second.m_Type, std::pair< tstring, uint32_t >( (*d_current).second.m_ShortName, 1 ) ) );
+                    objectLog.insert( ObjectLogger::value_type( (*d_current).second.m_Type, std::pair< tstring, uint32_t >( (*d_current).second.m_Name, 1 ) ) );
                 }
                 else
                 {

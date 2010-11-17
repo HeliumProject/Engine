@@ -1,6 +1,7 @@
 #pragma once
 
 #include <set>
+#include <vector>
 
 #include "API.h"
 #include "Foundation/Atomic.h"
@@ -38,9 +39,9 @@ namespace Helium
         public:
             int32_t m_Type;
 
-            V_Element& m_Found;
+            std::vector< ElementPtr >& m_Found;
 
-            FindByTypeVisitor(int32_t type, V_Element& found);
+            FindByTypeVisitor(int32_t type, std::vector< ElementPtr >& found);
 
             virtual bool VisitElement(Element* element) HELIUM_OVERRIDE;
         };
@@ -50,9 +51,9 @@ namespace Helium
         public:
             const std::set< int32_t >& m_Types;
 
-            V_Element& m_Found;
+            std::vector< ElementPtr >& m_Found;
 
-            FindByTypeSetVisitor(const std::set< int32_t >& types, V_Element& found);
+            FindByTypeSetVisitor(const std::set< int32_t >& types, std::vector< ElementPtr >& found);
 
             virtual bool VisitElement(Element* element) HELIUM_OVERRIDE;
         };

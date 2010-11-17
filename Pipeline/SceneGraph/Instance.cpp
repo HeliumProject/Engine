@@ -22,7 +22,7 @@ void Instance::EnumerateClass( Reflect::Compositor<Instance>& comp )
 
 void Instance::InitializeType()
 {
-    Reflect::RegisterClassType< Instance >( TXT( "Instance" ) );
+    Reflect::RegisterClassType< Instance >( TXT( "SceneGraph::Instance" ) );
     PropertiesGenerator::InitializePanel( TXT( "Instance" ), CreatePanelSignature::Delegate( &Instance::CreatePanel ) );
 }
 

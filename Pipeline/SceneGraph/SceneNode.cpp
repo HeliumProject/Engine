@@ -24,7 +24,7 @@ void SceneNode::EnumerateClass( Reflect::Compositor<SceneNode>& comp )
 
 void SceneNode::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::SceneNode >();
+    Reflect::RegisterClassType< SceneGraph::SceneNode >( TXT("SceneGraph::SceneNode") );
 
     PropertiesGenerator::InitializePanel( TXT( "Scene Node" ), CreatePanelSignature::Delegate( &SceneNode::CreatePanel ));
 }
@@ -342,7 +342,7 @@ void SceneNode::Prune( V_SceneNodeDumbPtr& prunedNodes )
 
 void SceneNode::DoEvaluate(GraphDirection direction)
 {
-    SCENE_GRAPH_EVALUATE_SCOPE_TIMER( ("Evaluate %s", GetClass()->m_ShortName.c_str()) );
+    SCENE_GRAPH_EVALUATE_SCOPE_TIMER( ("Evaluate %s", GetClass()->m_Name.c_str()) );
 
     m_NodeStates[direction] = NodeStates::Evaluating;
 

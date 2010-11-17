@@ -24,11 +24,11 @@ namespace Helium
                 CatmullRom,
             };
 
-            static void CurveTypeEnumerateEnum( Reflect::Enumeration* info )
+            static void CurveTypeEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement(Linear, TXT( "Linear" ) );
-                info->AddElement(BSpline, TXT( "BSpline" ) );
-                info->AddElement(CatmullRom, TXT( "CatmullRom" ) );
+                info.AddElement(Linear, TXT( "Linear" ) );
+                info.AddElement(BSpline, TXT( "BSpline" ) );
+                info.AddElement(CatmullRom, TXT( "CatmullRom" ) );
             }
         }
         typedef CurveTypes::CurveType CurveType;
@@ -42,11 +42,11 @@ namespace Helium
                 IndexOnly
             };
 
-            static void ControlPointLabelEnumerateEnum( Reflect::Enumeration* info )
+            static void ControlPointLabelEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement( None, TXT( "None" ) );
-                info->AddElement( CurveAndIndex, TXT( "Curve and Index" ) );
-                info->AddElement( IndexOnly, TXT( "Index only" ) );
+                info.AddElement( None, TXT( "None" ) );
+                info.AddElement( CurveAndIndex, TXT( "Curve and Index" ) );
+                info.AddElement( IndexOnly, TXT( "Index only" ) );
             }
         }
         typedef ControlPointLabels::ControlPointLabel ControlPointLabel;

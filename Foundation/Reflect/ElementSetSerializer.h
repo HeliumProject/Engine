@@ -18,7 +18,7 @@ namespace Helium
 
             REFLECT_DECLARE_CLASS( ElementSetSerializer, ContainerSerializer )
 
-                ElementSetSerializer();
+            ElementSetSerializer();
             virtual ~ElementSetSerializer();
 
             virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;

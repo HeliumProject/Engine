@@ -6,6 +6,8 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
+REFLECT_DEFINE_ABSTRACT( Widget );
+
 Widget::Widget( Inspect::Control* control )
 : m_Window( NULL )
 {

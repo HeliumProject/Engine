@@ -211,13 +211,13 @@ void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::ConnectData(Helium::Hy
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 int32_t SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetKeyType() const
 {
-    return Reflect::GetType<KeyT>();
+    return Reflect::GetSerializer<KeyT>();
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 int32_t SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetValueType() const
 {
-    return Reflect::GetType<ValueT>();
+    return Reflect::GetSerializer<ValueT>();
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
@@ -327,7 +327,7 @@ template < class KeyT, class KeySer, class ValueT, class ValueSer >
 void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Serialize(Archive& archive) const
 {
     int i = 0;
-    V_Element components;
+    std::vector< ElementPtr > components;
     components.resize( m_Data->size() * 2 );
 
     {
@@ -360,8 +360,8 @@ void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Serialize(Archive& arc
 
     archive.Serialize(components);
 
-    V_Element::iterator itr = components.begin();
-    V_Element::iterator end = components.end();
+    std::vector< ElementPtr >::iterator itr = components.begin();
+    std::vector< ElementPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
         // downcast to serializer type
@@ -378,7 +378,7 @@ void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Serialize(Archive& arc
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Deserialize(Archive& archive)
 {
-    V_Element components;
+    std::vector< ElementPtr > components;
     archive.Deserialize(components, ArchiveFlags::Sparse);
 
     if (components.size() % 2 != 0)
@@ -389,8 +389,8 @@ void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Deserialize(Archive& a
     // if we are referring to a real field, clear its contents
     m_Data->clear();
 
-    V_Element::iterator itr = components.begin();
-    V_Element::iterator end = components.end();
+    std::vector< ElementPtr >::iterator itr = components.begin();
+    std::vector< ElementPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
         KeySer* key = ObjectCast<KeySer>( *itr );

@@ -17,7 +17,7 @@ REFLECT_DEFINE_ABSTRACT(LocatorCreateTool);
 
 void LocatorCreateTool::InitializeType()
 {
-    Reflect::RegisterClassType< LocatorCreateTool >( TXT( "LocatorCreateTool" ) );
+    Reflect::RegisterClassType< LocatorCreateTool >( TXT( "SceneGraph::LocatorCreateTool" ) );
 }
 
 void LocatorCreateTool::CleanupType()

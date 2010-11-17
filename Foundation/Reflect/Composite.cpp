@@ -37,37 +37,37 @@ Reflect::Field* Composite::AddField(Element& instance, const std::string& name, 
     // if you are here, maybe you repeated a field variable name twice in the class or its inheritance hierarchy?
     HELIUM_ASSERT(m_FieldNameToInfo.find( convertedName ) == m_FieldNameToInfo.end());
 
-    Field* fieldInfo = Field::Create( this );
+    Field* field = Field::Create( this );
 
-    fieldInfo->SetName( convertedName );
-    fieldInfo->m_Size = size;
-    fieldInfo->m_Offset = offset;
-    fieldInfo->m_Flags = flags;
-    fieldInfo->m_FieldID = m_NextFieldID;
-    fieldInfo->m_SerializerID = serializerID;
+    field->SetName( convertedName );
+    field->m_Size = size;
+    field->m_Offset = offset;
+    field->m_Flags = flags;
+    field->m_FieldID = m_NextFieldID;
+    field->m_SerializerID = serializerID;
 
-    m_FieldNameToInfo[convertedName] = fieldInfo;
-    m_FieldIDToInfo[m_NextFieldID] = fieldInfo;
-    m_FieldOffsetToInfo[offset] = fieldInfo;
+    m_FieldNameToInfo[convertedName] = field;
+    m_FieldIDToInfo[m_NextFieldID] = field;
+    m_FieldOffsetToInfo[offset] = field;
 
     m_NextFieldID++;
 
-    SerializerPtr def = fieldInfo->CreateSerializer( &instance );
+    SerializerPtr def = field->CreateSerializer( &instance );
     if (def.ReferencesObject())
     {
-        fieldInfo->m_Default = fieldInfo->CreateSerializer();
+        field->m_Default = field->CreateSerializer();
 
         try
         {
-            fieldInfo->m_Default->Set( def );
+            field->m_Default->Set( def );
         }
         catch (Reflect::Exception&)
         {
-            fieldInfo->m_Default = NULL;
+            field->m_Default = NULL;
         }
     }
 
-    return fieldInfo;
+    return field;
 }
 
 Reflect::ElementField* Composite::AddElementField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, int32_t serializerID, int32_t typeID, int32_t flags)
@@ -83,51 +83,45 @@ Reflect::ElementField* Composite::AddElementField(Element& instance, const std::
     // if you are here, maybe you repeated a field variable name twice in the class or its inheritance hierarchy?
     HELIUM_ASSERT(m_FieldNameToInfo.find( convertedName ) == m_FieldNameToInfo.end());
 
-    ElementField* fieldInfo = ElementField::Create( this );
+    ElementField* field = ElementField::Create( this );
 
-    fieldInfo->SetName( convertedName );
-    fieldInfo->m_Size = size;
-    fieldInfo->m_Offset = offset;
-    fieldInfo->m_Flags = flags;
-    fieldInfo->m_FieldID = m_NextFieldID;
-    fieldInfo->m_SerializerID = serializerID < 0 ? GetType<PointerSerializer>() : serializerID;
-    fieldInfo->m_TypeID = typeID;
+    field->SetName( convertedName );
+    field->m_Size = size;
+    field->m_Offset = offset;
+    field->m_Flags = flags;
+    field->m_FieldID = m_NextFieldID;
+    field->m_SerializerID = serializerID < 0 ? GetType<PointerSerializer>() : serializerID;
+    field->m_TypeID = typeID;
 
-    m_FieldNameToInfo[convertedName] = fieldInfo;
-    m_FieldIDToInfo[m_NextFieldID] = fieldInfo;
-    m_FieldOffsetToInfo[offset] = fieldInfo;
+    m_FieldNameToInfo[convertedName] = field;
+    m_FieldIDToInfo[m_NextFieldID] = field;
+    m_FieldOffsetToInfo[offset] = field;
 
     m_NextFieldID++;
 
-    SerializerPtr def = fieldInfo->CreateSerializer( &instance );
+    SerializerPtr def = field->CreateSerializer( &instance );
     if (def.ReferencesObject())
     {
-        fieldInfo->m_Default = fieldInfo->CreateSerializer();
+        field->m_Default = field->CreateSerializer();
 
         try
         {
-            fieldInfo->m_Default->Set( def );
+            field->m_Default->Set( def );
         }
         catch (Reflect::Exception&)
         {
-            fieldInfo->m_Default = NULL;
+            field->m_Default = NULL;
         }
     }
 
-    return fieldInfo;
+    return field;
 }
 
-Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, int32_t serializerID, const std::string& enumName, int32_t flags)
+Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, int32_t serializerID, const Enumeration* enumeration, int32_t flags)
 {
     tstring convertedName;
     {
         bool converted = Helium::ConvertString( name, convertedName );
-        HELIUM_ASSERT( converted );
-    }
-
-    tstring convertedEnumName;
-    {
-        bool converted = Helium::ConvertString( enumName, convertedEnumName );
         HELIUM_ASSERT( converted );
     }
 
@@ -136,50 +130,47 @@ Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, con
     // if you are here, maybe you repeated a field variable name twice in the class or its inheritance hierarchy?
     HELIUM_ASSERT(m_FieldNameToInfo.find( convertedName ) == m_FieldNameToInfo.end());
 
-    // fetch the enumeration from the registry, it should already be registered by now
-    const Enumeration* enumField = Reflect::Registry::GetInstance()->GetEnumeration(convertedEnumName);
-
     // if you hit this, then you need to make sure you register your enums before you register elements that use them
-    HELIUM_ASSERT(enumField != NULL);
+    HELIUM_ASSERT(enumeration != NULL);
 
-    EnumerationField* fieldInfo = EnumerationField::Create (this, enumField);
+    EnumerationField* field = EnumerationField::Create( this, enumeration );
 
-    fieldInfo->SetName( convertedName );
-    fieldInfo->m_Size = size;
-    fieldInfo->m_Offset = offset;
-    fieldInfo->m_Flags = flags;
-    fieldInfo->m_FieldID = m_NextFieldID;
-    fieldInfo->m_SerializerID = serializerID;
+    field->SetName( convertedName );
+    field->m_Size = size;
+    field->m_Offset = offset;
+    field->m_Flags = flags;
+    field->m_FieldID = m_NextFieldID;
+    field->m_SerializerID = serializerID;
 
-    m_FieldNameToInfo[convertedName] = fieldInfo;
-    m_FieldIDToInfo[m_NextFieldID] = fieldInfo;
-    m_FieldOffsetToInfo[offset] = fieldInfo;
+    m_FieldNameToInfo[convertedName] = field;
+    m_FieldIDToInfo[m_NextFieldID] = field;
+    m_FieldOffsetToInfo[offset] = field;
 
     m_NextFieldID++;
 
-    SerializerPtr def = fieldInfo->CreateSerializer( &instance );
+    SerializerPtr def = field->CreateSerializer( &instance );
     if (def.ReferencesObject())
     {
-        fieldInfo->m_Default = fieldInfo->CreateSerializer();
+        field->m_Default = field->CreateSerializer();
 
         try
         {
-            fieldInfo->m_Default->Set( def );
+            field->m_Default->Set( def );
         }
         catch (Reflect::Exception&)
         {
-            fieldInfo->m_Default = NULL;
+            field->m_Default = NULL;
         }
     }
 
-    return fieldInfo;
+    return field;
 }
 
 void Composite::Report() const
 {
     static tchar_t buf[8192];
 
-    _sntprintf(buf, sizeof(buf), TXT( "Reflect Type ID: %3d, Size: %4d, Name: `%s`\n" ), m_TypeID, m_Size, m_FullName.c_str());
+    _sntprintf(buf, sizeof(buf), TXT( "Reflect Type ID: %3d, Size: %4d, Name: `%s`\n" ), m_TypeID, m_Size, m_Name.c_str());
     buf[ sizeof(buf) - 1] = 0; 
 
     Log::Debug(Log::Levels::Verbose,  buf );
@@ -216,23 +207,23 @@ bool Composite::HasType(int32_t type) const
     return false;
 }
 
-tstring Composite::ShortenName(const tstring& fullName)
+tstring Composite::ShortenName(const tstring& name)
 {
-    if (fullName.find( TXT("<") ) != tstring::npos)
+    if (name.find( TXT("<") ) != tstring::npos)
     {
         HELIUM_BREAK();
     }
     else
     {
         // look for the space after "struct " or "class "
-        size_t offset = fullName.rfind( TXT(" ") );
+        size_t offset = name.rfind( TXT(" ") );
         if (offset != std::string::npos)
         {
-            return fullName.substr(offset+1);
+            return name.substr(offset+1);
         }
     }
 
-    return fullName;
+    return name;
 }
 
 const Field* Composite::FindFieldByName(const tstring& name) const

@@ -23,17 +23,17 @@ namespace Helium
                 RGBA32,
                 Alpha8
             };
-            static void TextureDataFormatEnumerateEnum( Reflect::Enumeration* info )
+            static void TextureDataFormatEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement(DXT1,   TXT( "DXT1" ),   TXT( "DXT1" ) );
-                info->AddElement(DXT5,   TXT( "DXT5" ),   TXT( "DXT5" ) );
-                info->AddElement(RGB16,  TXT( "RGB16" ),  TXT( "RGB16" ) );
-                info->AddElement(RGB24,  TXT( "RGB24" ),  TXT( "RGB24" ) );
-                info->AddElement(RGB32,  TXT( "RGB32" ),  TXT( "RGB32" ) );
-                info->AddElement(RGBA16, TXT( "RGBA16" ), TXT( "RGBA16" ) );
-                info->AddElement(RGBA24, TXT( "RGBA24" ), TXT( "RGBA24" ) );
-                info->AddElement(RGBA32, TXT( "RGBA32" ), TXT( "RGBA32" ) );
-                info->AddElement(Alpha8, TXT( "Alpha8" ), TXT( "Alpha8" ) );
+                info.AddElement(DXT1,   TXT( "DXT1" ),   TXT( "DXT1" ) );
+                info.AddElement(DXT5,   TXT( "DXT5" ),   TXT( "DXT5" ) );
+                info.AddElement(RGB16,  TXT( "RGB16" ),  TXT( "RGB16" ) );
+                info.AddElement(RGB24,  TXT( "RGB24" ),  TXT( "RGB24" ) );
+                info.AddElement(RGB32,  TXT( "RGB32" ),  TXT( "RGB32" ) );
+                info.AddElement(RGBA16, TXT( "RGBA16" ), TXT( "RGBA16" ) );
+                info.AddElement(RGBA24, TXT( "RGBA24" ), TXT( "RGBA24" ) );
+                info.AddElement(RGBA32, TXT( "RGBA32" ), TXT( "RGBA32" ) );
+                info.AddElement(Alpha8, TXT( "Alpha8" ), TXT( "Alpha8" ) );
             }
         }
         typedef TextureDataFormats::TextureDataFormat TextureDataFormat;

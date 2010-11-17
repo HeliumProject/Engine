@@ -15,7 +15,7 @@ REFLECT_DEFINE_ABSTRACT(LocatorType);
 
 void LocatorType::InitializeType()
 {
-    Reflect::RegisterClassType< LocatorType >( TXT( "LocatorType" ) );
+    Reflect::RegisterClassType< LocatorType >( TXT( "SceneGraph::LocatorType" ) );
 }
 
 void LocatorType::CleanupType()

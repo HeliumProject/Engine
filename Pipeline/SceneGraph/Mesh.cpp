@@ -36,7 +36,7 @@ void Mesh::EnumerateClass( Reflect::Compositor<Mesh>& comp )
 
 void Mesh::InitializeType()
 {
-    Reflect::RegisterClassType< Mesh >( TXT( "Mesh" ) );
+    Reflect::RegisterClassType< Mesh >( TXT( "SceneGraph::Mesh" ) );
 
     ZeroMemory(&s_WireMaterial, sizeof(s_WireMaterial));
     s_WireMaterial.Ambient = Color::BLACK;

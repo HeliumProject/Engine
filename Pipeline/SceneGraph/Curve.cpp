@@ -49,7 +49,7 @@ public:
 
 void Curve::InitializeType()
 {
-    Reflect::RegisterClassType< Curve >( TXT( "Curve" ) );
+    Reflect::RegisterClassType< Curve >( TXT( "SceneGraph::Curve" ) );
 
     ZeroMemory(&s_Material, sizeof(s_Material));
     s_Material.Ambient = Color::FORESTGREEN;

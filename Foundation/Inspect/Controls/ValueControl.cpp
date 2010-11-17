@@ -4,6 +4,8 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
+REFLECT_DEFINE_CLASS( Inspect::Value );
+
 Value::Value()
 : a_Justification( Justifications::Left )
 , a_Highlight( false )

@@ -3,7 +3,10 @@
 
 #include <sstream>
 
+using namespace Helium;
 using namespace Helium::Inspect;
+
+REFLECT_DEFINE_CLASS( Inspect::ColorPicker );
 
 ColorPicker::ColorPicker()
 : a_Highlight( false )

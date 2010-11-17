@@ -28,7 +28,7 @@ namespace Helium
 
         typedef Helium::Signature< const InstanceSetChangeArgs& > InstanceSetChangeSignature;
 
-        class InstanceSet : public Reflect::Object
+        class PIPELINE_API InstanceSet : public Reflect::Object
         {
         protected:
             SceneGraph::InstanceType* m_Type;

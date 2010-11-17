@@ -17,7 +17,7 @@ REFLECT_DEFINE_ABSTRACT(VolumeType);
 
 void VolumeType::InitializeType()
 {
-    Reflect::RegisterClassType< VolumeType >( TXT( "VolumeType" ) );
+    Reflect::RegisterClassType< VolumeType >( TXT( "SceneGraph::VolumeType" ) );
 }
 
 void VolumeType::CleanupType()

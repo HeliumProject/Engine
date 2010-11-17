@@ -3,6 +3,7 @@
 #include "Pipeline/API.h"
 
 #include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Serializers.h"
 
 namespace Helium
 {
@@ -20,13 +21,13 @@ namespace Helium
                 Count
             };
 
-            static void CameraModeEnumerateEnum( Reflect::Enumeration* info )
+            static void CameraModeEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement(CameraModes::Orbit, TXT( "CameraModes::Orbit" ), TXT( "Orbit" ) ); 
-                info->AddElement(CameraModes::Front, TXT( "CameraModes::Front" ), TXT( "Front" ) ); 
-                info->AddElement(CameraModes::Side, TXT( "CameraModes::Side" ), TXT( "Side" ) ); 
-                info->AddElement(CameraModes::Top, TXT( "CameraModes::Top" ), TXT( "Top" ) ); 
-                info->AddElement(CameraModes::Count, TXT( "CameraModes::Count" ) ); 
+                info.AddElement(CameraModes::Orbit, TXT( "CameraModes::Orbit" ), TXT( "Orbit" ) ); 
+                info.AddElement(CameraModes::Front, TXT( "CameraModes::Front" ), TXT( "Front" ) ); 
+                info.AddElement(CameraModes::Side, TXT( "CameraModes::Side" ), TXT( "Side" ) ); 
+                info.AddElement(CameraModes::Top, TXT( "CameraModes::Top" ), TXT( "Top" ) ); 
+                info.AddElement(CameraModes::Count, TXT( "CameraModes::Count" ) ); 
             }
         }
 
@@ -41,11 +42,11 @@ namespace Helium
                 Texture,
             };
 
-            static void EnumerateEnum( Reflect::Enumeration* info )
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement(ShadingModes::Wireframe, TXT( "Wireframe" ) );
-                info->AddElement(ShadingModes::Material, TXT( "Material" ) );
-                info->AddElement(ShadingModes::Texture, TXT( "Texture" ) );
+                info.AddElement(ShadingModes::Wireframe, TXT( "Wireframe" ) );
+                info.AddElement(ShadingModes::Material, TXT( "Material" ) );
+                info.AddElement(ShadingModes::Texture, TXT( "Texture" ) );
             }
         }
 

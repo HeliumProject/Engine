@@ -2,9 +2,9 @@
 
 #include <typeinfo>
 
-#include "Type.h"
-#include "Field.h"
-#include "Visitor.h"
+#include "Foundation/Reflect/Type.h"
+#include "Foundation/Reflect/Field.h"
+#include "Foundation/Reflect/Visitor.h"
 #include "Foundation/Automation/Attribute.h"
 
 //
@@ -20,7 +20,7 @@
 //  {
 //      int32_t short_name;         // string pool index of the short name for this type
 //      int32_t count;              // number of field infos to follow
-//      Field[] fields;         // field rtti data
+//      Field[] fields;             // field rtti data
 //      int32_t term;               // -1
 //  };
 //
@@ -31,15 +31,6 @@ namespace Helium
     {
         class Field;
         class Composite;
-
-        class PointerSerializer;
-        class ElementArraySerializer;
-        class ElementSetSerializer;
-        class EnumerationSerializer;
-        class BitfieldSerializer;
-
-        template< class KeyT >
-        class SimpleElementMapSerializer;
 
         typedef void (*CompositeEnumerator)(void* type);
 
@@ -53,19 +44,19 @@ namespace Helium
         public:
             REFLECTION_TYPE( ReflectionTypes::Composite );
 
-            tstring               m_Base;               // the base type name
-            std::set<tstring>     m_Derived;            // the derived type names
+            tstring                 m_Base;               // the base type name
+            std::set<tstring>       m_Derived;            // the derived type names
 
-            CompositeEnumerator   m_Enumerator;         // the function to enumerate this type
-            bool                  m_Enumerated;         // flag if we are enumerated
+            CompositeEnumerator     m_Enumerator;         // the function to enumerate this type
+            bool                    m_Enumerated;         // flag if we are enumerated
 
-            M_FieldNameToInfo     m_FieldNameToInfo;    // maps field name to field info block
-            M_FieldIDToInfo       m_FieldIDToInfo;      // maps field id to field info block
-            M_FieldOffsetToInfo   m_FieldOffsetToInfo;  // maps offset (through pointer to member reference) to field info block
+            M_FieldNameToInfo       m_FieldNameToInfo;    // maps field name to field info block
+            M_FieldIDToInfo         m_FieldIDToInfo;      // maps field id to field info block
+            M_FieldOffsetToInfo     m_FieldOffsetToInfo;  // maps offset (through pointer to member reference) to field info block
 
-            int32_t                   m_FirstFieldID;       // first field id of this class's fields (exclusive of base and derived class's fields)
-            int32_t                   m_LastFieldID;        // last field id of this class's fields (exclusive of base and derived class's fields)
-            int32_t                   m_NextFieldID;        // id used for the next field (as we are enumerating)
+            int32_t                 m_FirstFieldID;       // first field id of this class's fields (exclusive of base and derived class's fields)
+            int32_t                 m_LastFieldID;        // last field id of this class's fields (exclusive of base and derived class's fields)
+            int32_t                 m_NextFieldID;        // id used for the next field (as we are enumerating)
 
         protected:
             Composite();
@@ -144,7 +135,7 @@ namespace Helium
 
             Reflect::Field* AddField ( Element& instance, const std::string& name, const uint32_t offset, uint32_t size, int32_t serializerID, int32_t flags = 0 );
             Reflect::ElementField* AddElementField ( Element& instance, const std::string& name, const uint32_t offset, uint32_t size, int32_t serializerID, int32_t typeID, int32_t flags = 0 );
-            Reflect::EnumerationField* AddEnumerationField ( Element& instance, const std::string& name, const uint32_t offset, uint32_t size, int32_t serializerID, const std::string& enumName, int32_t flags = 0 );
+            Reflect::EnumerationField* AddEnumerationField ( Element& instance, const std::string& name, const uint32_t offset, uint32_t size, int32_t serializerID, const Enumeration* enumeration, int32_t flags = 0 );
 
             //
             // Report information to stdout
@@ -162,7 +153,7 @@ namespace Helium
             // Name utilities
             //
 
-            static tstring ShortenName(const tstring& fullName);
+            static tstring ShortenName(const tstring& name);
 
             //
             // Find a field by name
@@ -271,7 +262,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(FieldT),
-                    serializerType < 0 ? Reflect::GetType<FieldT>() : serializerType,
+                    serializerType < 0 ? Reflect::GetSerializer<FieldT>() : serializerType,
                     flags );
             }
 
@@ -283,7 +274,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(FieldT),
-                    serializerType < 0 ? Reflect::GetType<FieldT>() : serializerType,
+                    serializerType < 0 ? Reflect::GetSerializer<FieldT>() : serializerType,
                     flags );
             }
 
@@ -400,7 +391,7 @@ namespace Helium
                     GetOffset(field),
                     sizeof(FieldT),
                     Reflect::GetType<Reflect::EnumerationSerializer>(),
-                    typeid(FieldT).name(),
+                    Reflect::GetEnumeration<FieldT>(),
                     flags );
             }
 
@@ -413,7 +404,7 @@ namespace Helium
                     GetOffset(field),
                     sizeof(FieldT),
                     Reflect::GetType<Reflect::EnumerationSerializer>(),
-                    typeid(FieldT).name(),
+                    Reflect::GetEnumeration<FieldT>(),
                     flags );
             }
 
@@ -426,7 +417,7 @@ namespace Helium
                     GetOffset(field),
                     sizeof(FieldT),
                     Reflect::GetType<Reflect::BitfieldSerializer>(),
-                    typeid(EnumT).name(),
+                    Reflect::GetEnumeration<EnumT>(),
                     flags );
             }
 
@@ -439,7 +430,7 @@ namespace Helium
                     GetOffset(field),
                     sizeof(FieldT),
                     Reflect::GetType<Reflect::BitfieldSerializer>(),
-                    typeid(EnumT).name(),
+                    Reflect::GetEnumeration<EnumT>(),
                     flags );
             }
         };

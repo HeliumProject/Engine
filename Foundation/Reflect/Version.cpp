@@ -1,5 +1,5 @@
-#include "Version.h"
-#include "Serializers.h"
+#include "Foundation/Reflect/Version.h"
+#include "Foundation/Reflect/Serializers.h"
 
 #include "Platform/Path.h"
 #include "Platform/Windows/Windows.h"

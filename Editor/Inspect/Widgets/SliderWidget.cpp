@@ -42,6 +42,8 @@ void SliderWindow::OnScrollChanged( wxScrollEvent& e )
     m_SliderWidget->End();
 }
 
+REFLECT_DEFINE_CLASS( SliderWidget );
+
 SliderWidget::SliderWidget( Inspect::Slider* slider )
 : m_SliderControl( slider )
 , m_SliderWindow( NULL )

@@ -16,6 +16,8 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
+REFLECT_DEFINE_CLASS( Canvas );
+
 Canvas::Canvas()
 : m_Window( NULL )
 {

@@ -16,7 +16,7 @@ void CurveControlPoint::EnumerateClass( Reflect::Compositor<CurveControlPoint>& 
 
 void CurveControlPoint::InitializeType()
 {
-    Reflect::RegisterClassType< CurveControlPoint >( TXT( "CurveControlPoint" ) );
+    Reflect::RegisterClassType< CurveControlPoint >( TXT( "SceneGraph::CurveControlPoint" ) );
     PropertiesGenerator::InitializePanel( TXT( "CurveControlPoint" ), CreatePanelSignature::Delegate( &CurveControlPoint::CreatePanel ) );
 }
 

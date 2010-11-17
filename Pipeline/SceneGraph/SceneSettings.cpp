@@ -6,6 +6,8 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
+REFLECT_DEFINE_CLASS( SceneSettings );
+
 SceneSettings::SceneSettings()
 : m_MRU( new MRUData() )
 , m_ScaleManipulatorSize( 0.3f )

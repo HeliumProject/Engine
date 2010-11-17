@@ -24,7 +24,7 @@ void Volume::EnumerateClass( Reflect::Compositor<Volume>& comp )
 
 void Volume::InitializeType()
 {
-    Reflect::RegisterClassType< Volume >( TXT( "Volume" ) );
+    Reflect::RegisterClassType< Volume >( TXT( "SceneGraph::Volume" ) );
 
     PropertiesGenerator::InitializePanel( TXT( "Volume" ), CreatePanelSignature::Delegate( &Volume::CreatePanel ) );
 }

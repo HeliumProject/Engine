@@ -21,7 +21,7 @@ void Locator::EnumerateClass( Reflect::Compositor<Locator>& comp )
 
 void Locator::InitializeType()
 {
-    Reflect::RegisterClassType< Locator >( TXT( "Locator" ) );
+    Reflect::RegisterClassType< Locator >( TXT( "SceneGraph::Locator" ) );
 
     PropertiesGenerator::InitializePanel( TXT( "Locator" ), CreatePanelSignature::Delegate( &Locator::CreatePanel ) );
 }

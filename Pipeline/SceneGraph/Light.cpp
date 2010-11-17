@@ -27,7 +27,7 @@ void Light::EnumerateClass( Reflect::Compositor<Light>& comp )
 
 void Light::InitializeType()
 {
-    Reflect::RegisterClassType< Light >( TXT( "Light" ) );
+    Reflect::RegisterClassType< Light >( TXT( "SceneGraph::Light" ) );
 
     ZeroMemory(&s_Material, sizeof(s_Material));
 

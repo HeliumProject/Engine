@@ -41,8 +41,8 @@ bool ElementArraySerializer::Set(const Serializer* src, uint32_t flags)
 
     m_Data->resize(rhs->m_Data->size());
 
-    V_Element::const_iterator itr = rhs->m_Data->begin();
-    V_Element::const_iterator end = rhs->m_Data->end();
+    std::vector< ElementPtr >::const_iterator itr = rhs->m_Data->begin();
+    std::vector< ElementPtr >::const_iterator end = rhs->m_Data->end();
     for ( int index = 0; itr != end; ++itr )
     {
         if (flags & SerializerFlags::Shallow)
@@ -71,10 +71,10 @@ bool ElementArraySerializer::Equals(const Serializer* s) const
         return false;
     }
 
-    V_Element::const_iterator itrLHS = m_Data->begin();
-    V_Element::const_iterator endLHS = m_Data->end();
-    V_Element::const_iterator itrRHS = rhs->m_Data->begin();
-    V_Element::const_iterator endRHS = rhs->m_Data->end();
+    std::vector< ElementPtr >::const_iterator itrLHS = m_Data->begin();
+    std::vector< ElementPtr >::const_iterator endLHS = m_Data->end();
+    std::vector< ElementPtr >::const_iterator itrRHS = rhs->m_Data->begin();
+    std::vector< ElementPtr >::const_iterator endRHS = rhs->m_Data->end();
     for ( ; itrLHS != endLHS && itrRHS != endRHS; ++itrLHS, ++itrRHS )
     {
         if ((*itrLHS) == (*itrRHS))
@@ -106,8 +106,8 @@ void ElementArraySerializer::Deserialize(Archive& archive)
 
 void ElementArraySerializer::Accept(Visitor& visitor)
 {
-    V_Element::iterator itr = const_cast<Serializer::DataPtr<DataType>&>(m_Data)->begin();
-    V_Element::iterator end = const_cast<Serializer::DataPtr<DataType>&>(m_Data)->end();
+    std::vector< ElementPtr >::iterator itr = const_cast<Serializer::DataPtr<DataType>&>(m_Data)->begin();
+    std::vector< ElementPtr >::iterator end = const_cast<Serializer::DataPtr<DataType>&>(m_Data)->end();
     for ( ; itr != end; ++itr )
     {
         if (!itr->ReferencesObject())

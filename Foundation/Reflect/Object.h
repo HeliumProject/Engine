@@ -5,16 +5,17 @@
 #include "Platform/Utility.h"
 
 #include "Foundation/Memory/SmartPtr.h"
-
-#include "API.h"
-#include "Class.h"
-#include "Registry.h"
-#include "Exceptions.h"
+#include "Foundation/Reflect/API.h"
+#include "Foundation/Reflect/Exceptions.h"
 
 namespace Helium
 {
     namespace Reflect
     {
+        class Type;
+        class Class;
+        template< class T > class Compositor;
+
         //
         // Reflect::Object is a reference counted and type checked abstract base class
         //
@@ -47,8 +48,15 @@ namespace Helium
             // Retrieves the reflection data for this instance
             virtual const Reflect::Class* GetClass() const;
 
+            // Create class data block for this type
+            static Reflect::Class* CreateClass( const tstring& name );
+
             // Enumerates member data (stub)
-            static void EnumerateClass( Reflect::Compositor<Element>& comp );
+            static void EnumerateClass( Reflect::Compositor<Object>& comp );
+
+        public:
+            static const Type* s_Type;
+            static const Class* s_Class;
 
             //
             // Reference Counting
@@ -114,7 +122,7 @@ namespace Helium
         {
             if ( base != NULL && !base->HasType(GetClass<DerivedT>()->m_TypeID) )
             {
-                throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), base->GetClass()->m_ShortName.c_str(), GetClass<DerivedT>()->m_ShortName.c_str() );
+                throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), base->GetClass()->m_Name.c_str(), GetClass<DerivedT>()->m_Name.c_str() );
             }
 
             return DangerousCast<DerivedT>(base);
@@ -125,7 +133,7 @@ namespace Helium
         {
             if ( base != NULL && !base->HasType(GetClass<DerivedT>()->m_TypeID) )
             {
-                throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), base->GetClass()->m_ShortName.c_str(), GetClass<DerivedT>()->m_ShortName.c_str() );
+                throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), base->GetClass()->m_Name.c_str(), GetClass<DerivedT>()->m_Name.c_str() );
             }
 
             return ConstDangerousCast<DerivedT>(base);

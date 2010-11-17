@@ -10,6 +10,8 @@ ContainerSerializer::ContainerSerializer()
 
 }
 
+REFLECT_DEFINE_ABSTRACT( ElementContainerSerializer )
+
 ElementContainerSerializer::ElementContainerSerializer()
 : m_TypeID ( ReservedTypes::Invalid )
 {

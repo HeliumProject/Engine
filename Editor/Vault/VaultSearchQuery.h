@@ -1,9 +1,11 @@
 #pragma once
 
+#include "Platform/Types.h"
+
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Reflect/Element.h"
-#include "Platform/Types.h"
+#include "Foundation/Reflect/Serializers.h"
 
 namespace Helium
 {
@@ -19,11 +21,11 @@ namespace Helium
                 Directory,
                 CacheDB,
             };
-            static void SearchTypesEnumerateEnum( Reflect::Enumeration* info )
+            static void SearchTypesEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement( File, TXT( "File" ) );
-                info->AddElement( Directory, TXT( "Directory" ) );
-                info->AddElement( CacheDB, TXT( "CacheDB" ) );
+                info.AddElement( File, TXT( "File" ) );
+                info.AddElement( Directory, TXT( "Directory" ) );
+                info.AddElement( CacheDB, TXT( "CacheDB" ) );
             }
         }
         typedef SearchTypes::SearchType SearchType;

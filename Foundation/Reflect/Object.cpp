@@ -1,7 +1,6 @@
-#include "Object.h"
-#include "Registry.h"
-#include "Class.h"
-#include "Serializer.h"
+#include "Foundation/Reflect/Object.h"
+#include "Foundation/Reflect/Registry.h"
+#include "Foundation/Reflect/Class.h"
 
 #include "Platform/Atomic.h"
 
@@ -9,6 +8,9 @@
 
 using namespace Helium;
 using namespace Helium::Reflect;
+
+const Type* Object::s_Type = NULL;
+const Class* Object::s_Class = NULL;
 
 Object::Object()
 : m_RefCount (0)
@@ -49,20 +51,28 @@ void Object::operator delete(void *ptr, size_t bytes)
 
 int32_t Object::GetType() const
 {
-    return -1;
+    return ReservedTypes::First;
 }
 
 bool Object::HasType(int32_t type) const
 {
-    return false;
+    return type != ReservedTypes::Invalid;
 }
 
 const Reflect::Class* Object::GetClass() const
 {
-    return NULL;
+    return Reflect::GetClass<Object>();
 }
 
-void Object::EnumerateClass( Reflect::Compositor<Element>& comp )
+Reflect::Class* Object::CreateClass( const tstring& name )
+{
+    HELIUM_ASSERT( s_Class == NULL );
+    Reflect::Class* type = Class::Create<Object>( name, TXT("") );
+    s_Type = s_Class = type;
+    return type;
+}
+
+void Object::EnumerateClass( Reflect::Compositor<Object>& comp )
 {
 
 }

@@ -70,11 +70,11 @@ namespace Helium
 
                 COUNT //Do not use: must be last
             };
-            static void ProjectMenuIDsEnumerateEnum( Reflect::Enumeration* info )
+            static void ProjectMenuIDsEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement( Filename, TXT( "Filename" ) );
-                info->AddElement( FullPath, TXT( "FullPath" ) );
-                info->AddElement( RelativePath, TXT( "RelativePath" ) );
+                info.AddElement( Filename, TXT( "Filename" ) );
+                info.AddElement( FullPath, TXT( "FullPath" ) );
+                info.AddElement( RelativePath, TXT( "RelativePath" ) );
             }
 
             static const tchar_t* s_Labels[COUNT] = 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include <algorithm>
 
 #include "Platform/Assert.h"
@@ -35,20 +36,6 @@ namespace Helium
         public:
             REFLECTION_BASE( ReflectionTypes::Type );
 
-            //
-            // Fields
-            //
-
-            tstring                       m_ShortName;          // the name of this type in the codebase, this is not necessarily unique (templates share the same short name)
-            tstring                       m_FullName;           // the fully qualified name of this type in the codebase (this is super-long if its a template type)
-            tstring                       m_UIName;             // the friendly name for the field, its optional (will use the short name if not specified)
-
-            int32_t                           m_TypeID;             // the unique id of this type
-            uint32_t                           m_Size;               // the size of the object in bytes
-
-            mutable std::vector<void**>   m_Pointers;           // cached pointers to this type
-            mutable std::vector<int32_t*>     m_IDs;                // cached ids to this type
-
         protected:
             Type();
             virtual ~Type();
@@ -62,6 +49,15 @@ namespace Helium
 
             void TrackID(int32_t* id) const;
             void RemoveID(int32_t* id) const;
+
+            tstring                         m_Name;         // the name of this type in the codebase
+            tstring                         m_UIName;       // the friendly name for the field, its optional (will use the short name if not specified)
+
+            int32_t                         m_TypeID;       // the unique id of this type
+            uint32_t                        m_Size;         // the size of the object in bytes
+
+            mutable std::vector<void**>     m_Pointers;     // cached pointers to this type
+            mutable std::vector<int32_t*>   m_IDs;          // cached ids to this type
         };
 
         template <class T>

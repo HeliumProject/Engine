@@ -93,7 +93,7 @@ bool ElementSetSerializer::Equals(const Serializer* s) const
 
 void ElementSetSerializer::Serialize(Archive& archive) const
 {
-    V_Element components;
+    std::vector< ElementPtr > components;
 
     DataType::const_iterator itr = m_Data->begin();
     DataType::const_iterator end = m_Data->end();
@@ -112,14 +112,14 @@ void ElementSetSerializer::Serialize(Archive& archive) const
 
 void ElementSetSerializer::Deserialize(Archive& archive)
 {
-    V_Element components;
+    std::vector< ElementPtr > components;
     archive.Deserialize(components);
 
     // if we are referring to a real field, clear its contents
     m_Data->clear();
 
-    V_Element::const_iterator itr = components.begin();
-    V_Element::const_iterator end = components.end();
+    std::vector< ElementPtr >::const_iterator itr = components.begin();
+    std::vector< ElementPtr >::const_iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
         m_Data->insert(*itr);

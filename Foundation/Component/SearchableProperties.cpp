@@ -2,7 +2,8 @@
 
 using namespace Helium;
 
-REFLECT_DEFINE_CLASS( SearchableProperties );
+REFLECT_DEFINE_ABSTRACT( SearchableProperties );
+
 void SearchableProperties::EnumerateClass( Reflect::Compositor< SearchableProperties >& comp )
 {
     comp.AddField( &SearchableProperties::m_StringProperties, "m_StringProperties" );

@@ -16,12 +16,12 @@ namespace Helium
                 Loop,
                 PingPong
             };
-            static void AnimationClipModeEnumerateEnum( Reflect::Enumeration* info )
+            static void AnimationClipModeEnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement( Default,  TXT( "Default" ),  TXT( "Default" ) );
-                info->AddElement( Once,     TXT( "Once" ),     TXT( "Once" ) );
-                info->AddElement( Loop,     TXT( "Loop" ),     TXT( "Loop" ) );
-                info->AddElement( PingPong, TXT( "PingPong" ), TXT( "PingPong" ) );
+                info.AddElement( Default,  TXT( "Default" ),  TXT( "Default" ) );
+                info.AddElement( Once,     TXT( "Once" ),     TXT( "Once" ) );
+                info.AddElement( Loop,     TXT( "Loop" ),     TXT( "Loop" ) );
+                info.AddElement( PingPong, TXT( "PingPong" ), TXT( "PingPong" ) );
             }
         }
         typedef AnimationClipModes::AnimationClipMode AnimationClipMode;

@@ -1012,17 +1012,17 @@ namespace Lunar
         Object::ReleaseStaticType();
 
 #if HELIUM_ENABLE_MEMORY_TRACKING
-        ConcurrentHashSet< RefCountProxy* >::ConstAccessor refCountProxyAccessor;
-        if( RefCountProxy::GetFirstActiveProxy( refCountProxyAccessor ) )
+        ConcurrentHashSet< RefCountProxy< Object >* >::ConstAccessor refCountProxyAccessor;
+        if( ObjectRefCountSupport::GetFirstActiveProxy( refCountProxyAccessor ) )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
                 TXT( "%" ) TPRIuSZ TXT( " smart pointer(s) still active during shutdown!\n" ),
-                RefCountProxy::GetActiveProxyCount() );
+                ObjectRefCountSupport::GetActiveProxyCount() );
 
             while( refCountProxyAccessor.IsValid() )
             {
-                RefCountProxy* pProxy = *refCountProxyAccessor;
+                RefCountProxy< Object >* pProxy = *refCountProxyAccessor;
                 HELIUM_ASSERT( pProxy );
 
                 Object* pObject = pProxy->GetObject();

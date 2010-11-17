@@ -145,7 +145,7 @@ namespace Lunar
     /// Base class for the engine's game object system.
     class LUNAR_ENGINE_API Object : NonCopyable
     {
-        L_DECLARE_REF_COUNT();
+        L_DECLARE_REF_COUNT( Object, ObjectRefCountSupport );
 
     public:
         /// Destruction callback type.

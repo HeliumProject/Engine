@@ -12,14 +12,30 @@
 
 namespace Lunar
 {
-    RefCountProxy::StaticData* RefCountProxy::sm_pStaticData = NULL;
+    /// Static proxy management data.
+    struct ObjectRefCountSupport::StaticData
+    {
+        /// Proxy object pool.
+        ObjectPool< RefCountProxy< Object > > proxyPool;
+#if HELIUM_ENABLE_MEMORY_TRACKING
+        /// Active reference count proxies.
+        ConcurrentHashSet< RefCountProxy< Object >* > activeProxySet;
+#endif
+
+        /// @name Construction/Destruction
+        //@{
+        StaticData();
+        //@}
+    };
+
+    ObjectRefCountSupport::StaticData* ObjectRefCountSupport::sm_pStaticData = NULL;
 
     /// Retrieve a reference count proxy from the global pool.
     ///
     /// @return  Pointer to a reference count proxy.
     ///
     /// @see Release()
-    RefCountProxy* RefCountProxy::Allocate()
+    RefCountProxy< Object >* ObjectRefCountSupport::Allocate()
     {
         // Lazy initialization of the proxy management data.  Even though this isn't thread-safe, it should still be
         // fine as the proxy system should be initialized from the main thread before any sub-threads are spawned (i.e.
@@ -32,11 +48,11 @@ namespace Lunar
             sm_pStaticData = pStaticData;
         }
 
-        RefCountProxy* pProxy = pStaticData->proxyPool.Allocate();
+        RefCountProxy< Object >* pProxy = pStaticData->proxyPool.Allocate();
         HELIUM_ASSERT( pProxy );
 
 #if HELIUM_ENABLE_MEMORY_TRACKING
-        ConcurrentHashSet< RefCountProxy* >::Accessor activeProxySetAccessor;
+        ConcurrentHashSet< RefCountProxy< Object >* >::Accessor activeProxySetAccessor;
         HELIUM_VERIFY( pStaticData->activeProxySet.Insert( activeProxySetAccessor, pProxy ) );
 #endif
 
@@ -48,7 +64,7 @@ namespace Lunar
     /// @param[in] pProxy  Pointer to the reference count proxy to release.
     ///
     /// @see Allocate()
-    void RefCountProxy::Release( RefCountProxy* pProxy )
+    void ObjectRefCountSupport::Release( RefCountProxy< Object >* pProxy )
     {
         HELIUM_ASSERT( pProxy );
 
@@ -65,7 +81,7 @@ namespace Lunar
     /// Release the name table and free all allocated memory.
     ///
     /// This should only be called immediately prior to application exit.
-    void RefCountProxy::Shutdown()
+    void ObjectRefCountSupport::Shutdown()
     {
         delete sm_pStaticData;
         sm_pStaticData = NULL;
@@ -82,7 +98,7 @@ namespace Lunar
     /// @return  Current number of active smart pointer references.
     ///
     /// @see GetFirstActiveProxy()
-    size_t RefCountProxy::GetActiveProxyCount()
+    size_t ObjectRefCountSupport::GetActiveProxyCount()
     {
         HELIUM_ASSERT( sm_pStaticData );
 
@@ -97,7 +113,8 @@ namespace Lunar
     ///          first one, false if not.
     ///
     /// @see GetActiveProxyCount()
-    bool RefCountProxy::GetFirstActiveProxy( ConcurrentHashSet< RefCountProxy* >::ConstAccessor& rAccessor )
+    bool ObjectRefCountSupport::GetFirstActiveProxy(
+        ConcurrentHashSet< RefCountProxy< Object >* >::ConstAccessor& rAccessor )
     {
         HELIUM_ASSERT( sm_pStaticData );
 
@@ -105,22 +122,8 @@ namespace Lunar
     }
 #endif
 
-    /// Helper function for performing proper object destruction upon its strong reference count reaching zero.
-    void RefCountProxy::DestroyObject()
-    {
-        Object* pObject = m_pObject;
-        HELIUM_ASSERT( pObject );
-        pObject->PreDestroy();
-
-        Object* pAtomicObjectOld = AtomicExchangeRelease< Object >( m_pObject, NULL );
-        HELIUM_ASSERT( pAtomicObjectOld == pObject );
-        HELIUM_UNREF( pAtomicObjectOld );
-
-        m_pDestroyCallback( pObject );
-    }
-
     /// Constructor.
-    RefCountProxy::StaticData::StaticData()
+    ObjectRefCountSupport::StaticData::StaticData()
         : proxyPool( POOL_BLOCK_SIZE )
     {
     }

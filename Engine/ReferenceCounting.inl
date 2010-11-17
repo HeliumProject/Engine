@@ -11,7 +11,8 @@ namespace Lunar
     ///
     /// @param[in] pObject           Object for which to manage reference counting.
     /// @param[in] pDestroyCallback  Callback to execute when the object needs to be destroyed.
-    void RefCountProxy::Initialize( Object* pObject, DESTROY_CALLBACK pDestroyCallback )
+    template< typename BaseT >
+    void RefCountProxy< BaseT >::Initialize( BaseT* pObject, DESTROY_CALLBACK pDestroyCallback )
     {
         HELIUM_ASSERT( pObject );
         HELIUM_ASSERT( pDestroyCallback );
@@ -25,7 +26,8 @@ namespace Lunar
     /// Get the pointer to the object managed by this proxy.
     ///
     /// @return  Pointer to the managed object.
-    Object* RefCountProxy::GetObject() const
+    template< typename BaseT >
+    BaseT* RefCountProxy< BaseT >::GetObject() const
     {
         return m_pObject;
     }
@@ -33,7 +35,8 @@ namespace Lunar
     /// Increment the strong reference count.
     ///
     /// @see RemoveStrongRef(), GetStrongRefCount(), AddWeakRef(), RemoveWeakRef(), GetWeakRefCount()
-    void RefCountProxy::AddStrongRef()
+    template< typename BaseT >
+    void RefCountProxy< BaseT >::AddStrongRef()
     {
         AtomicIncrementAcquire( m_refCounts );
     }
@@ -43,7 +46,8 @@ namespace Lunar
     /// @return  True if there are no more strong or weak references, false otherwise.
     ///
     /// @see AddStrongRef(), GetStrongRefCount(), AddWeakRef(), RemoveWeakRef(), GetWeakRefCount()
-    bool RefCountProxy::RemoveStrongRef()
+    template< typename BaseT >
+    bool RefCountProxy< BaseT >::RemoveStrongRef()
     {
         int32_t newRefCounts = AtomicDecrementRelease( m_refCounts );
         HELIUM_ASSERT( ( static_cast< uint32_t >( newRefCounts ) & 0xffff ) != 0xffff );
@@ -60,7 +64,8 @@ namespace Lunar
     /// @return  Strong reference count.
     ///
     /// @see AddStrongRef(), RemoveStrongRef(), AddWeakRef(), RemoveWeakRef(), GetWeakRefCount()
-    uint16_t RefCountProxy::GetStrongRefCount() const
+    template< typename BaseT >
+    uint16_t RefCountProxy< BaseT >::GetStrongRefCount() const
     {
         return static_cast< uint16_t >( static_cast< uint32_t >( m_refCounts ) & 0xffff );
     }
@@ -68,7 +73,8 @@ namespace Lunar
     /// Increment the weak reference count.
     ///
     /// @see RemoveWeakRef(), GetWeakRefCount(), AddStrongRef(), RemoveStrongRef(), GetStrongRefCount()
-    void RefCountProxy::AddWeakRef()
+    template< typename BaseT >
+    void RefCountProxy< BaseT >::AddWeakRef()
     {
         AtomicAddAcquire( m_refCounts, 0x10000 );
     }
@@ -78,7 +84,8 @@ namespace Lunar
     /// @return  True if there are no more strong or weak references, false otherwise.
     ///
     /// @see AddWeakRef(), GetWeakRefCount(), AddStrongRef(), RemoveStrongRef(), GetStrongRefCount()
-    bool RefCountProxy::RemoveWeakRef()
+    template< typename BaseT >
+    bool RefCountProxy< BaseT >::RemoveWeakRef()
     {
         // Remember: AtomicSubtractRelease() returns the original value, not the new value.
         int32_t oldRefCounts = AtomicSubtractRelease( m_refCounts, 0x10000 );
@@ -92,13 +99,30 @@ namespace Lunar
     /// @return  Weak reference count.
     ///
     /// @see AddWeakRef(), RemoveWeakRef(), AddStrongRef(), RemoveStrongRef(), GetStrongRefCount()
-    uint16_t RefCountProxy::GetWeakRefCount() const
+    template< typename BaseT >
+    uint16_t RefCountProxy< BaseT >::GetWeakRefCount() const
     {
         return static_cast< uint16_t >( static_cast< uint32_t >( m_refCounts ) >> 16 );
     }
 
+    /// Helper function for performing proper object destruction upon its strong reference count reaching zero.
+    template< typename BaseT >
+    void RefCountProxy< BaseT >::DestroyObject()
+    {
+        BaseT* pObject = m_pObject;
+        HELIUM_ASSERT( pObject );
+        pObject->PreDestroy();
+
+        BaseT* pAtomicObjectOld = AtomicExchangeRelease< BaseT >( m_pObject, NULL );
+        HELIUM_ASSERT( pAtomicObjectOld == pObject );
+        HELIUM_UNREF( pAtomicObjectOld );
+
+        m_pDestroyCallback( pObject );
+    }
+
     /// Constructor.
-    RefCountProxyContainer::RefCountProxyContainer()
+    template< typename BaseT >
+    RefCountProxyContainer< BaseT >::RefCountProxyContainer()
         : m_pProxy( NULL )
     {
     }
@@ -109,21 +133,27 @@ namespace Lunar
     /// @param[in] pDestroyCallback  Callback to use to destroy the object if needed.
     ///
     /// @return  Pointer to the reference count proxy instance.
-    RefCountProxy* RefCountProxyContainer::Get( Object* pObject, RefCountProxy::DESTROY_CALLBACK pDestroyCallback )
+    template< typename BaseT >
+    RefCountProxy< BaseT >* RefCountProxyContainer< BaseT >::Get(
+        BaseT* pObject,
+        typename RefCountProxy< BaseT >::DESTROY_CALLBACK pDestroyCallback )
     {
-        RefCountProxy* pProxy = m_pProxy;
+        RefCountProxy< BaseT >* pProxy = m_pProxy;
         if( !pProxy )
         {
-            pProxy = RefCountProxy::Allocate();
+            pProxy = SupportType::Allocate();
             HELIUM_ASSERT( pProxy );
             pProxy->Initialize( pObject, pDestroyCallback );
 
             // Atomically set the existing proxy, making sure the proxy is still null.  If another proxy was swapped in
             // first, release the proxy we just tried to allocate.
-            RefCountProxy* pExistingProxy = AtomicCompareExchangeRelease< RefCountProxy >( m_pProxy, pProxy, NULL );
+            RefCountProxy< BaseT >* pExistingProxy = AtomicCompareExchangeRelease< RefCountProxy< BaseT > >(
+                m_pProxy,
+                pProxy,
+                NULL );
             if( pExistingProxy )
             {
-                RefCountProxy::Release( pProxy );
+                SupportType::Release( pProxy );
                 pProxy = pExistingProxy;
             }
         }
@@ -134,7 +164,7 @@ namespace Lunar
     /// Constructor.
     template< typename T >
     StrongPtr< T >::StrongPtr()
-        : m_pProxy( NULL )
+        : m_pVoidProxy( NULL )
     {
     }
 
@@ -143,13 +173,13 @@ namespace Lunar
     /// @param[in] pObject  Object to initially assign.
     template< typename T >
     StrongPtr< T >::StrongPtr( T* pObject )
-        : m_pProxy( NULL )
+        : m_pVoidProxy( NULL )
     {
         if( pObject )
         {
-            m_pProxy = pObject->GetRefCountProxy();
-            HELIUM_ASSERT( m_pProxy );
-            m_pProxy->AddStrongRef();
+            m_pVoidProxy = pObject->GetRefCountProxy();
+            HELIUM_ASSERT( m_pVoidProxy );
+            static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pVoidProxy )->AddStrongRef();
         }
     }
 
@@ -158,19 +188,21 @@ namespace Lunar
     /// @param[in] rPointer  Weak pointer from which to copy.
     template< typename T >
     StrongPtr< T >::StrongPtr( const WeakPtr< T >& rPointer )
-        : m_pProxy( rPointer.m_pProxy )
+        : m_pVoidProxy( rPointer.m_pVoidProxy )
     {
         // Note that a weak pointer can have a reference count proxy set to null, so we need to check for and handle
         // that case as well.
-        if( m_pProxy )
+        if( m_pVoidProxy )
         {
-            if( m_pProxy->GetObject() )
+            RefCountProxy< typename T::RefCountSupportType::BaseType >* pProxy =
+                static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pVoidProxy );
+            if( pProxy->GetObject() )
             {
-                m_pProxy->AddStrongRef();
+                pProxy->AddStrongRef();
             }
             else
             {
-                m_pProxy = NULL;
+                m_pVoidProxy = NULL;
             }
         }
     }
@@ -180,11 +212,11 @@ namespace Lunar
     /// @param[in] rPointer  Strong pointer from which to copy.
     template< typename T >
     StrongPtr< T >::StrongPtr( const StrongPtr& rPointer )
-        : m_pProxy( rPointer.m_pProxy )
+        : m_pVoidProxy( rPointer.m_pVoidProxy )
     {
-        if( m_pProxy )
+        if( m_pVoidProxy )
         {
-            m_pProxy->AddStrongRef();
+            static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pVoidProxy )->AddStrongRef();
         }
     }
 
@@ -203,7 +235,9 @@ namespace Lunar
     template< typename T >
     T* StrongPtr< T >::Get() const
     {
-        return( m_pProxy ? static_cast< T* >( m_pProxy->GetObject() ) : NULL );
+        return ( m_pVoidProxy
+            ? static_cast< T* >( static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pVoidProxy )->GetObject() )
+            : NULL );
     }
 
     /// Set the object referenced by this smart pointer.
@@ -214,7 +248,8 @@ namespace Lunar
     template< typename T >
     void StrongPtr< T >::Set( T* pObject )
     {
-        RefCountProxy* pProxy = m_pProxy;
+        RefCountProxy< typename T::RefCountSupportType::BaseType >* pProxy =
+            static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pVoidProxy );
         if( pProxy )
         {
             if( pProxy->GetObject() == pObject )
@@ -222,19 +257,19 @@ namespace Lunar
                 return;
             }
 
-            m_pProxy = NULL;
+            m_pVoidProxy = NULL;
 
             if( pProxy->RemoveStrongRef() )
             {
-                RefCountProxy::Release( pProxy );
+                typename T::RefCountSupportType::Release( pProxy );
             }
         }
 
         if( pObject )
         {
-            m_pProxy = pObject->GetRefCountProxy();
-            HELIUM_ASSERT( m_pProxy );
-            m_pProxy->AddStrongRef();
+            m_pVoidProxy = pObject->GetRefCountProxy();
+            HELIUM_ASSERT( m_pVoidProxy );
+            static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pVoidProxy )->AddStrongRef();
         }
     }
 
@@ -244,12 +279,13 @@ namespace Lunar
     template< typename T >
     void StrongPtr< T >::Release()
     {
-        RefCountProxy* pProxy = m_pProxy;
-        m_pProxy = NULL;
+        RefCountProxy< typename T::RefCountSupportType::BaseType >* pProxy =
+            static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pVoidProxy );
+        m_pVoidProxy = NULL;
 
         if( pProxy && pProxy->RemoveStrongRef() )
         {
-            RefCountProxy::Release( pProxy );
+            typename T::RefCountSupportType::Release( pProxy );
         }
     }
 
@@ -268,7 +304,7 @@ namespace Lunar
     template< typename T >
     void StrongPtr< T >::SetLinkIndex( uint32_t index )
     {
-        reinterpret_cast< uintptr_t& >( m_pProxy ) = index;
+        reinterpret_cast< uintptr_t& >( m_pVoidProxy ) = index;
     }
 
     /// Get the object link table index stored in this smart pointer.
@@ -286,7 +322,7 @@ namespace Lunar
     template< typename T >
     uint32_t StrongPtr< T >::GetLinkIndex() const
     {
-        return static_cast< uint32_t >( reinterpret_cast< const uintptr_t& >( m_pProxy ) );
+        return static_cast< uint32_t >( reinterpret_cast< const uintptr_t& >( m_pVoidProxy ) );
     }
 
     /// Clear out the link table index stored in this smart pointer.
@@ -304,7 +340,7 @@ namespace Lunar
     template< typename T >
     void StrongPtr< T >::ClearLinkIndex()
     {
-        m_pProxy = NULL;
+        m_pVoidProxy = NULL;
     }
 
     /// Get the object referenced by this smart pointer.
@@ -375,17 +411,18 @@ namespace Lunar
     {
         // Note that a weak pointer can have a reference count proxy whose object is set to null, so we need to check
         // for and handle that case as well.
-        RefCountProxy* pOtherProxy = rPointer.m_pProxy;
+        RefCountProxy< typename T::RefCountSupportType::BaseType >* pOtherProxy =
+            static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( rPointer.m_pVoidProxy );
         if( pOtherProxy && !pOtherProxy->GetObject() )
         {
             pOtherProxy = NULL;
         }
 
-        if( m_pProxy != pOtherProxy )
+        if( m_pVoidProxy != pOtherProxy )
         {
             Release();
 
-            m_pProxy = pOtherProxy;
+            m_pVoidProxy = pOtherProxy;
             if( pOtherProxy )
             {
                 pOtherProxy->AddStrongRef();
@@ -403,12 +440,13 @@ namespace Lunar
     template< typename T >
     StrongPtr< T >& StrongPtr< T >::operator=( const StrongPtr& rPointer )
     {
-        RefCountProxy* pOtherProxy = rPointer.m_pProxy;
-        if( m_pProxy != pOtherProxy )
+        RefCountProxy< typename T::RefCountSupportType::BaseType >* pOtherProxy =
+            static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( rPointer.m_pVoidProxy );
+        if( m_pVoidProxy != pOtherProxy )
         {
             Release();
 
-            m_pProxy = pOtherProxy;
+            m_pVoidProxy = pOtherProxy;
             if( pOtherProxy )
             {
                 pOtherProxy->AddStrongRef();
@@ -428,13 +466,14 @@ namespace Lunar
     {
         // Note that a weak pointer can have a reference count proxy whose object is set to null, so we need to check
         // for and handle that case as well.
-        RefCountProxy* pOtherProxy = rPointer.m_pProxy;
+        RefCountProxy< typename T::RefCountSupportType::BaseType >* pOtherProxy =
+            static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( rPointer.m_pVoidProxy );
         if( pOtherProxy && !pOtherProxy->GetObject() )
         {
             pOtherProxy = NULL;
         }
 
-        return( m_pProxy == pOtherProxy );
+        return ( m_pVoidProxy == pOtherProxy );
     }
 
     /// Equality comparison operator.
@@ -445,7 +484,7 @@ namespace Lunar
     template< typename T >
     bool StrongPtr< T >::operator==( const StrongPtr& rPointer ) const
     {
-        return( m_pProxy == rPointer.m_pProxy );
+        return ( m_pVoidProxy == rPointer.m_pVoidProxy );
     }
 
     /// Inequality comparison operator.
@@ -459,13 +498,14 @@ namespace Lunar
     {
         // Note that a weak pointer can have a reference count proxy whose object is set to null, so we need to check
         // for and handle that case as well.
-        RefCountProxy* pOtherProxy = rPointer.m_pProxy;
+        RefCountProxy< typename T::RefCountSupportType::BaseType >* pOtherProxy =
+            static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType > >( rPointer.m_pVoidProxy );
         if( pOtherProxy && !pOtherProxy->GetObject() )
         {
             pOtherProxy = NULL;
         }
 
-        return( m_pProxy != pOtherProxy );
+        return ( m_pVoidProxy != pOtherProxy );
     }
 
     /// Inequality comparison operator.
@@ -477,7 +517,7 @@ namespace Lunar
     template< typename T >
     bool StrongPtr< T >::operator!=( const StrongPtr& rPointer ) const
     {
-        return( m_pProxy != rPointer.m_pProxy );
+        return ( m_pVoidProxy != rPointer.m_pVoidProxy );
     }
 
     /// Helper function for performing a compile-time verified up-cast of a StrongPtr.
@@ -501,7 +541,7 @@ namespace Lunar
     template< typename T >
     bool operator==( const T* pObject, const StrongPtr< T >& rPointer )
     {
-        return( pObject == rPointer.Get() );
+        return ( pObject == rPointer.Get() );
     }
 
     /// Inequality comparison operator.
@@ -513,13 +553,13 @@ namespace Lunar
     template< typename T >
     bool operator!=( const T* pObject, const StrongPtr< T >& rPointer )
     {
-        return( pObject != rPointer.Get() );
+        return ( pObject != rPointer.Get() );
     }
 
     /// Constructor.
     template< typename T >
     WeakPtr< T >::WeakPtr()
-        : m_pProxy( NULL )
+        : m_pVoidProxy( NULL )
     {
     }
 
@@ -528,13 +568,13 @@ namespace Lunar
     /// @param[in] pObject  Object to initially assign.
     template< typename T >
     WeakPtr< T >::WeakPtr( T* pObject )
-        : m_pProxy( NULL )
+        : m_pVoidProxy( NULL )
     {
         if( pObject )
         {
-            m_pProxy = pObject->GetRefCountProxy();
-            HELIUM_ASSERT( m_pProxy );
-            m_pProxy->AddWeakRef();
+            m_pVoidProxy = pObject->GetRefCountProxy();
+            HELIUM_ASSERT( m_pVoidProxy );
+            static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pVoidProxy )->AddWeakRef();
         }
     }
 
@@ -543,11 +583,11 @@ namespace Lunar
     /// @param[in] rPointer  Strong pointer from which to copy.
     template< typename T >
     WeakPtr< T >::WeakPtr( const StrongPtr< T >& rPointer )
-        : m_pProxy( rPointer.m_pProxy )
+        : m_pVoidProxy( rPointer.m_pVoidProxy )
     {
-        if( m_pProxy )
+        if( m_pVoidProxy )
         {
-            m_pProxy->AddWeakRef();
+            static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pVoidProxy )->AddWeakRef();
         }
     }
 
@@ -556,19 +596,21 @@ namespace Lunar
     /// @param[in] rPointer  Weak pointer from which to copy.
     template< typename T >
     WeakPtr< T >::WeakPtr( const WeakPtr& rPointer )
-        : m_pProxy( rPointer.m_pProxy )
+        : m_pVoidProxy( rPointer.m_pVoidProxy )
     {
         // Note that a weak pointer can have a reference count proxy set to null, so we need to check for and handle
         // that case as well.
-        if( m_pProxy )
+        if( m_pVoidProxy )
         {
-            if( m_pProxy->GetObject() )
+            RefCountProxy< typename T::RefCountSupportType::BaseType >* pProxy =
+                static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pVoidProxy );
+            if( pProxy->GetObject() )
             {
-                m_pProxy->AddWeakRef();
+                pProxy->AddWeakRef();
             }
             else
             {
-                m_pProxy = NULL;
+                m_pVoidProxy = NULL;
             }
         }
     }
@@ -588,7 +630,9 @@ namespace Lunar
     template< typename T >
     T* WeakPtr< T >::Get() const
     {
-        return( m_pProxy ? static_cast< T* >( m_pProxy->GetObject() ) : NULL );
+        return ( m_pVoidProxy
+            ? static_cast< T* >( static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pVoidProxy )->GetObject() )
+            : NULL );
     }
 
     /// Set the object referenced by this smart pointer.
@@ -599,7 +643,8 @@ namespace Lunar
     template< typename T >
     void WeakPtr< T >::Set( T* pObject )
     {
-        RefCountProxy* pProxy = m_pProxy;
+        RefCountProxy< typename T::RefCountSupportType::BaseType >* pProxy =
+            static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pVoidProxy );
         if( pProxy )
         {
             // Note that a weak pointer can have a reference count proxy set to null, so we need to check for and handle
@@ -609,19 +654,19 @@ namespace Lunar
                 return;
             }
 
-            m_pProxy = NULL;
+            m_pVoidProxy = NULL;
 
             if( pProxy->RemoveWeakRef() )
             {
-                RefCountProxy::Release( pProxy );
+                typename T::RefCountSupportType::Release( pProxy );
             }
         }
 
         if( pObject )
         {
-            m_pProxy = pObject->GetRefCountProxy();
-            HELIUM_ASSERT( m_pProxy );
-            m_pProxy->AddWeakRef();
+            m_pVoidProxy = pObject->GetRefCountProxy();
+            HELIUM_ASSERT( m_pVoidProxy );
+            static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pVoidProxy )->AddWeakRef();
         }
     }
 
@@ -631,12 +676,13 @@ namespace Lunar
     template< typename T >
     void WeakPtr< T >::Release()
     {
-        RefCountProxy* pProxy = m_pProxy;
-        m_pProxy = NULL;
+        RefCountProxy< typename T::RefCountSupportType::BaseType >* pProxy =
+            static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pVoidProxy );
+        m_pVoidProxy = NULL;
 
         if( pProxy && pProxy->RemoveWeakRef() )
         {
-            RefCountProxy::Release( pProxy );
+            typename T::RefCountSupportType::Release( pProxy );
         }
     }
 
@@ -648,7 +694,7 @@ namespace Lunar
     {
         HELIUM_ASSERT( pObject );
 
-        return ( m_pProxy == pObject->GetRefCountProxy() );
+        return ( m_pVoidProxy == pObject->GetRefCountProxy() );
     }
 
     /// Get the object referenced by this smart pointer.
@@ -717,12 +763,13 @@ namespace Lunar
     template< typename T >
     WeakPtr< T >& WeakPtr< T >::operator=( const StrongPtr< T >& rPointer )
     {
-        RefCountProxy* pOtherProxy = rPointer.m_pProxy;
-        if( m_pProxy != pOtherProxy )
+        RefCountProxy< typename T::RefCountSupportType::BaseType >* pOtherProxy =
+            static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( rPointer.m_pVoidProxy );
+        if( m_pVoidProxy != pOtherProxy )
         {
             Release();
 
-            m_pProxy = pOtherProxy;
+            m_pVoidProxy = pOtherProxy;
             if( pOtherProxy )
             {
                 pOtherProxy->AddWeakRef();
@@ -742,17 +789,18 @@ namespace Lunar
     {
         // Note that a weak pointer can have a reference count proxy whose object is set to null, so we need to check
         // for and handle that case as well.
-        RefCountProxy* pOtherProxy = rPointer.m_pProxy;
+        RefCountProxy< typename T::RefCountSupportType::BaseType >* pOtherProxy =
+            static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( rPointer.m_pVoidProxy );
         if( pOtherProxy && !pOtherProxy->GetObject() )
         {
             pOtherProxy = NULL;
         }
 
-        if( m_pProxy != pOtherProxy )
+        if( m_pVoidProxy != pOtherProxy )
         {
             Release();
 
-            m_pProxy = pOtherProxy;
+            m_pVoidProxy = pOtherProxy;
             if( pOtherProxy )
             {
                 pOtherProxy->AddWeakRef();
@@ -772,13 +820,14 @@ namespace Lunar
     {
         // Note that a weak pointer can have a reference count proxy whose object is set to null, so we need to check
         // for and handle that case as well.
-        RefCountProxy* pThisProxy = m_pProxy;
+        RefCountProxy< typename T::RefCountSupportType::BaseType >* pThisProxy =
+            static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pVoidProxy );
         if( pThisProxy && !pThisProxy->GetObject() )
         {
             pThisProxy = NULL;
         }
 
-        return( pThisProxy == rPointer.m_pProxy );
+        return ( pThisProxy == rPointer.m_pVoidProxy );
     }
 
     /// Equality comparison operator.
@@ -805,13 +854,14 @@ namespace Lunar
     {
         // Note that a weak pointer can have a reference count proxy whose object is set to null, so we need to check
         // for and handle that case as well.
-        RefCountProxy* pThisProxy = m_pProxy;
+        RefCountProxy< typename T::RefCountSupportType::BaseType >* pThisProxy =
+            static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pVoidProxy );
         if( pThisProxy && !pThisProxy->GetObject() )
         {
             pThisProxy = NULL;
         }
 
-        return( pThisProxy != rPointer.m_pProxy );
+        return ( pThisProxy != rPointer.m_pVoidProxy );
     }
 
     /// Inequality comparison operator.

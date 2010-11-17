@@ -15,17 +15,21 @@
 #include "Foundation/Container/ConcurrentHashSet.h"
 
 /// Utility macro for declaring common functions and variables for an object with reference counting support.
-#define L_DECLARE_REF_COUNT() \
-    private: \
-        mutable Lunar::RefCountProxyContainer _m_refCountProxyContainer; \
+///
+/// @param[in] CLASS         Class type.
+/// @param[in] SUPPORT_TYPE  Reference counting support type.
+#define L_DECLARE_REF_COUNT( CLASS, SUPPORT_TYPE ) \
     public: \
-        Lunar::RefCountProxy* GetRefCountProxy() const;
+        typedef SUPPORT_TYPE RefCountSupportType; \
+        Lunar::RefCountProxy< CLASS >* GetRefCountProxy() const; \
+    private: \
+        mutable Lunar::RefCountProxyContainer< CLASS > _m_refCountProxyContainer;
 
 /// Utility macro for implementing common functions and variables for an object with reference counting support.
 ///
 /// @param[in] CLASS  Class type.
 #define L_IMPLEMENT_REF_COUNT( CLASS ) \
-    Lunar::RefCountProxy* CLASS::GetRefCountProxy() const \
+    Lunar::RefCountProxy< CLASS >* CLASS::GetRefCountProxy() const \
     { \
         return _m_refCountProxyContainer.Get( const_cast< CLASS* >( this ), DestroyCallback ); \
     }
@@ -48,44 +52,24 @@ namespace Lunar
 {
     class Object;
 
+    template< typename BaseT > class RefCountProxy;
     template< typename T > class StrongPtr;
     template< typename T > class WeakPtr;
 
-    /// Reference counting object proxy.
-    class LUNAR_ENGINE_API RefCountProxy
+    /// Reference counting support for Object types.
+    class LUNAR_ENGINE_API ObjectRefCountSupport
     {
     public:
+        /// Base type of reference counted object.
+        typedef Object BaseType;
+
         /// Number of proxy objects to allocate per block for the proxy pool.
         static const size_t POOL_BLOCK_SIZE = 1024;
 
-        /// Object destruction callback type.
-        typedef void ( *DESTROY_CALLBACK )( Object* pObject );
-
-        /// @name Initialization
-        //@{
-        inline void Initialize( Object* pObject, DESTROY_CALLBACK pDestroyCallback );
-        //@}
-
-        /// @name Object Access
-        //@{
-        inline Object* GetObject() const;
-        //@}
-
-        /// @name Reference Counting
-        //@{
-        inline void AddStrongRef();
-        inline bool RemoveStrongRef();
-        inline uint16_t GetStrongRefCount() const;
-
-        inline void AddWeakRef();
-        inline bool RemoveWeakRef();
-        inline uint16_t GetWeakRefCount() const;
-        //@}
-
         /// @name Allocation Interface
         //@{
-        static RefCountProxy* Allocate();
-        static void Release( RefCountProxy* pProxy );
+        static RefCountProxy< Object >* Allocate();
+        static void Release( RefCountProxy< Object >* pProxy );
 
         static void Shutdown();
         //@}
@@ -94,37 +78,55 @@ namespace Lunar
         /// @name Active Proxy Iteration
         //@{
         static size_t GetActiveProxyCount();
-        static bool GetFirstActiveProxy( ConcurrentHashSet< RefCountProxy* >::ConstAccessor& rAccessor );
+        static bool GetFirstActiveProxy(
+            ConcurrentHashSet< RefCountProxy< Object >* >::ConstAccessor& rAccessor );
         //@}
 #endif
 
     private:
+        struct StaticData;
+
         /// Static proxy management data.
-        struct StaticData
-        {
-            /// Proxy object pool.
-            ObjectPool< RefCountProxy > proxyPool;
-#if HELIUM_ENABLE_MEMORY_TRACKING
-            /// Active reference count proxies.
-            ConcurrentHashSet< RefCountProxy* > activeProxySet;
-#endif
+        static StaticData* sm_pStaticData;
+    };
 
-            /// @name Construction/Destruction
-            //@{
-            StaticData();
-            //@}
-        };
+    /// Reference counting object proxy.
+    template< typename BaseT >
+    class RefCountProxy
+    {
+    public:
+        /// Object destruction callback type.
+        typedef void ( *DESTROY_CALLBACK )( BaseT* pObject );
 
+        /// @name Initialization
+        //@{
+        void Initialize( BaseT* pObject, DESTROY_CALLBACK pDestroyCallback );
+        //@}
+
+        /// @name Object Access
+        //@{
+        BaseT* GetObject() const;
+        //@}
+
+        /// @name Reference Counting
+        //@{
+        void AddStrongRef();
+        bool RemoveStrongRef();
+        uint16_t GetStrongRefCount() const;
+
+        void AddWeakRef();
+        bool RemoveWeakRef();
+        uint16_t GetWeakRefCount() const;
+        //@}
+
+    private:
         /// Reference-counted object.
-        Object* volatile m_pObject;
+        BaseT* volatile m_pObject;
         /// Callback to destroy the reference-counted object.
         DESTROY_CALLBACK m_pDestroyCallback;
 
         /// Reference counts (strong references in lower 16-bits, weak references in upper 16-bits).
         volatile int32_t m_refCounts;
-
-        /// Static proxy management data.
-        static StaticData* sm_pStaticData;
 
         /// @name Private Utility Functions
         //@{
@@ -134,22 +136,27 @@ namespace Lunar
 
     /// Reference counting object proxy container.  This is provided to ease the management of a reference count proxy
     /// for an object (i.e. don't need to initialize in the constructor).
-    class LUNAR_ENGINE_API RefCountProxyContainer
+    template< typename BaseT >
+    class RefCountProxyContainer
     {
     public:
+        /// Reference count support type.
+        typedef typename BaseT::RefCountSupportType SupportType;
+
         /// @name Construction/Destruction
         //@{
-        inline RefCountProxyContainer();
+        RefCountProxyContainer();
         //@}
 
         /// @name Access
         //@{
-        inline RefCountProxy* Get( Object* pObject, RefCountProxy::DESTROY_CALLBACK pDestroyCallback );
+        RefCountProxy< BaseT >* Get(
+            BaseT* pObject, typename RefCountProxy< BaseT >::DESTROY_CALLBACK pDestroyCallback );
         //@}
 
     private:
         /// Reference counting proxy instance.
-        RefCountProxy* volatile m_pProxy;
+        RefCountProxy< BaseT >* volatile m_pProxy;
     };
 
     /// Strong pointer for reference-counted objects.
@@ -207,8 +214,9 @@ namespace Lunar
         //@}
 
     private:
-        /// Proxy object.
-        RefCountProxy* m_pProxy;
+        /// Proxy object (cast to a void pointer to avoid the need for knowledge about the template type in order to
+        /// simply hold an instance of a StrongPtr).
+        void* m_pVoidProxy;
 
         /// @name Conversion Utility Functions, Private
         //@{
@@ -270,8 +278,9 @@ namespace Lunar
         //@}
 
     private:
-        /// Proxy object.
-        RefCountProxy* m_pProxy;
+        /// Proxy object (cast to a void pointer to avoid the need for knowledge about the template type in order to
+        /// simply hold an instance of a WeakPtr).
+        void* m_pVoidProxy;
 
         /// @name Conversion Utility Functions, Private
         //@{

@@ -1,9 +1,8 @@
 #pragma once
 
-#include "Platform/Windows/Windows.h"
-
 namespace Helium
 {
-    typedef HANDLE Handle;
-    const Handle InvalidHandleValue = (Handle)INVALID_HANDLE_VALUE;
+    // these must mesh up with windows.h
+    typedef void* Handle; // windows: HANDLE
+    const Handle InvalidHandleValue = (Handle)-1; // windows: INVALID_HANDLE_VALUE
 }

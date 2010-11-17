@@ -18,25 +18,25 @@ FileStream::~FileStream()
 /// @copydoc Stream::Close()
 void FileStream::Close()
 {
-    if( m_hFile != INVALID_HANDLE_VALUE )
+    if( m_hFile != InvalidHandleValue )
     {
         CloseHandle( m_hFile );
-        m_hFile = INVALID_HANDLE_VALUE;
+        m_hFile = InvalidHandleValue;
     }
 }
 
 /// @copydoc Stream::IsOpen()
 bool FileStream::IsOpen() const
 {
-    return ( m_hFile != INVALID_HANDLE_VALUE );
+    return ( m_hFile != InvalidHandleValue );
 }
 
 /// @copydoc Stream::Read()
 size_t FileStream::Read( void* pBuffer, size_t size, size_t count )
 {
-    HELIUM_ASSERT_MSG( m_hFile != INVALID_HANDLE_VALUE, TXT( "File not open" ) );
+    HELIUM_ASSERT_MSG( m_hFile != InvalidHandleValue, TXT( "File not open" ) );
     HELIUM_ASSERT_MSG( m_modeFlags & MODE_READ, TXT( "File not open for reading" ) );
-    if( m_hFile == INVALID_HANDLE_VALUE || !( m_modeFlags & MODE_READ ) )
+    if( m_hFile == InvalidHandleValue || !( m_modeFlags & MODE_READ ) )
     {
         return 0;
     }
@@ -60,9 +60,9 @@ size_t FileStream::Read( void* pBuffer, size_t size, size_t count )
 /// @copydoc Stream::Write()
 size_t FileStream::Write( const void* pBuffer, size_t size, size_t count )
 {
-    HELIUM_ASSERT_MSG( m_hFile != INVALID_HANDLE_VALUE, TXT( "File not open" ) );
+    HELIUM_ASSERT_MSG( m_hFile != InvalidHandleValue, TXT( "File not open" ) );
     HELIUM_ASSERT_MSG( m_modeFlags & MODE_WRITE, TXT( "File not open for writing" ) );
-    if( m_hFile == INVALID_HANDLE_VALUE || !( m_modeFlags & MODE_WRITE ) )
+    if( m_hFile == InvalidHandleValue || !( m_modeFlags & MODE_WRITE ) )
     {
         return 0;
     }
@@ -86,10 +86,10 @@ size_t FileStream::Write( const void* pBuffer, size_t size, size_t count )
 /// @copydoc Stream::Flush()
 void FileStream::Flush()
 {
-    HELIUM_ASSERT_MSG( m_hFile != INVALID_HANDLE_VALUE, TXT( "File not open" ) );
+    HELIUM_ASSERT_MSG( m_hFile != InvalidHandleValue, TXT( "File not open" ) );
 
     // Only files open for writing need to be flushed.
-    if( m_hFile != INVALID_HANDLE_VALUE && ( m_modeFlags & MODE_WRITE ) )
+    if( m_hFile != InvalidHandleValue && ( m_modeFlags & MODE_WRITE ) )
     {
         HELIUM_VERIFY( FlushFileBuffers( m_hFile ) );
     }
@@ -98,7 +98,7 @@ void FileStream::Flush()
 /// @copydoc Stream::Seek()
 int64_t FileStream::Seek( int64_t offset, ESeekOrigin origin )
 {
-    if( m_hFile == INVALID_HANDLE_VALUE )
+    if( m_hFile == InvalidHandleValue )
     {
         HELIUM_ASSERT_MSG_FALSE( TXT( "File not open" ) );
         return -1;
@@ -130,7 +130,7 @@ int64_t FileStream::Seek( int64_t offset, ESeekOrigin origin )
 /// @copydoc Stream::Tell()
 int64_t FileStream::Tell() const
 {
-    if( m_hFile == INVALID_HANDLE_VALUE )
+    if( m_hFile == InvalidHandleValue )
     {
         HELIUM_ASSERT_MSG_FALSE( TXT( "File not open" ) );
         return -1;
@@ -151,7 +151,7 @@ int64_t FileStream::Tell() const
 /// @copydoc Stream::GetSize()
 int64_t FileStream::GetSize() const
 {
-    if( m_hFile == INVALID_HANDLE_VALUE )
+    if( m_hFile == InvalidHandleValue )
     {
         HELIUM_ASSERT_MSG_FALSE( TXT( "File not open" ) );
         return -1;
@@ -181,7 +181,7 @@ bool FileStream::Open( const tchar_t* pPath, uint32_t modeFlags, bool bTruncate 
     // Close any currently open file.
     Close();
 
-    HELIUM_ASSERT( m_hFile == INVALID_HANDLE_VALUE );
+    HELIUM_ASSERT( m_hFile == InvalidHandleValue );
 
     DWORD desiredAccess = 0;
     if( modeFlags & MODE_READ )
@@ -216,7 +216,7 @@ bool FileStream::Open( const tchar_t* pPath, uint32_t modeFlags, bool bTruncate 
         FILE_ATTRIBUTE_NORMAL,
         NULL );
 
-    if ( m_hFile == INVALID_HANDLE_VALUE )
+    if ( m_hFile == InvalidHandleValue )
     {
         return false;
     }

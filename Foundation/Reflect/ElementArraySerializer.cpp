@@ -1,4 +1,5 @@
-#include "ElementArraySerializer.h"
+#include "Foundation/Reflect/ElementArraySerializer.h"
+#include "Foundation/Reflect/Serializers.h"
 
 using namespace Helium::Reflect;
 

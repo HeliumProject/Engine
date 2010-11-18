@@ -1,4 +1,5 @@
-#include "MapSerializer.h"
+#include "Foundation/Reflect/MapSerializer.h"
+#include "Foundation/Reflect/Serializers.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;

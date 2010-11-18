@@ -1,4 +1,5 @@
-#include "ElementSetSerializer.h"
+#include "Foundation/Reflect/ElementSetSerializer.h"
+#include "Foundation/Reflect/Serializers.h"
 
 using namespace Helium::Reflect;
 

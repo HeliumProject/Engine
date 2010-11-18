@@ -1,6 +1,6 @@
-#include "TypeIDSerializer.h"
-#include "ArchiveBinary.h"
-#include "ArchiveXML.h"
+#include "Foundation/Reflect/TypeIDSerializer.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;

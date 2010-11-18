@@ -56,7 +56,7 @@ int32_t Object::GetType() const
 
 bool Object::HasType(int32_t type) const
 {
-    return type != ReservedTypes::Invalid;
+    return type == 0;
 }
 
 const Reflect::Class* Object::GetClass() const

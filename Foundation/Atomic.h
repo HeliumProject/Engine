@@ -1,24 +1,26 @@
 #pragma once
 
-#include "Foundation/API.h"
-
+#include "Platform/Atomic.h"
 #include "Platform/Utility.h"
-#include "Memory/SmartPtr.h"
 
 namespace Helium
 {
-    class FOUNDATION_API AtomicRefCountBase HELIUM_ABSTRACT : NonCopyable
+    template< typename T >
+    class AtomicRefCountBase
     {
     private:
-        mutable int32_t m_RefCount;
-
-    protected:
-        AtomicRefCountBase();
-        virtual ~AtomicRefCountBase();
+        mutable volatile int32_t m_RefCount;
 
     public:
-        int GetRefCount() const;
-        void IncrRefCount() const;
-        void DecrRefCount() const;
+        AtomicRefCountBase();
+        AtomicRefCountBase( const AtomicRefCountBase& rSource );
+
+        int32_t GetRefCount() const;
+        int32_t IncrRefCount() const;
+        int32_t DecrRefCount() const;
+
+        AtomicRefCountBase& operator=( const AtomicRefCountBase& rSource );
     };
 }
+
+#include "Foundation/Atomic.inl"

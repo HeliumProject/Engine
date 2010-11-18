@@ -12,7 +12,7 @@ namespace Helium
         class Structure;
         class Field;
 
-        class FOUNDATION_API Visitor : public Helium::AtomicRefCountBase
+        class FOUNDATION_API Visitor : public Helium::AtomicRefCountBase< Visitor >
         {
         public:
             virtual bool VisitElement(Element* element)

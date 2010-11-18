@@ -14,7 +14,7 @@ namespace Helium
 {
     namespace ES
     { 
-        class PIPELINE_API Event : public Helium::RefCountBase
+        class PIPELINE_API Event : public Helium::RefCountBase< Event >
         {
         public:
             Event

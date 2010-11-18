@@ -3,25 +3,20 @@
 #include "Foundation/API.h"
 #include "Platform/Atomic.h"
 
-/// Utility macro for declaring common functions and variables for an object with reference counting support.
+/// Utility macro for declaring common functions and variables for an object with strong/weak reference counting
+/// support.
 ///
 /// @param[in] CLASS         Class type being declared.
 /// @param[in] SUPPORT_TYPE  Reference counting support type.
-#define HELIUM_DECLARE_REF_COUNT( CLASS, SUPPORT_TYPE ) \
+#define HELIUM_DECLARE_STRONG_WEAK_REF_COUNT( CLASS, SUPPORT_TYPE ) \
     public: \
         typedef SUPPORT_TYPE RefCountSupportType; \
-        Helium::RefCountProxy< CLASS >* GetRefCountProxy() const; \
+        Helium::RefCountProxy< CLASS >* GetRefCountProxy() const \
+        { \
+            return _m_refCountProxyContainer.Get( const_cast< CLASS* >( this ) ); \
+        } \
     private: \
         mutable Helium::RefCountProxyContainer< CLASS > _m_refCountProxyContainer;
-
-/// Utility macro for implementing common functions and variables for an object with reference counting support.
-///
-/// @param[in] CLASS  Class type being implemented.
-#define HELIUM_IMPLEMENT_REF_COUNT( CLASS ) \
-    Helium::RefCountProxy< CLASS >* CLASS::GetRefCountProxy() const \
-    { \
-        return _m_refCountProxyContainer.Get( const_cast< CLASS* >( this ) ); \
-    }
 
 /// Forward declare a strong pointer type.
 ///

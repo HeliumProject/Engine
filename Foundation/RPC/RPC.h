@@ -60,7 +60,7 @@ namespace Helium
         //  - performs invocation on locally defined virtual implementation
         //
 
-        class Invoker : public Helium::RefCountBase
+        class Invoker : public Helium::RefCountBase< Invoker >
         {
         public:
             Invoker (Interface* interface, SwizzleFunc swizzler)

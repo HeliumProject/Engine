@@ -30,7 +30,7 @@ namespace Helium
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
 
-        class Definition : public Helium::RefCountBase
+        class Definition : public Helium::RefCountBase<Definition>
         {
         public:
             Definition()

@@ -9,7 +9,7 @@
 
 namespace Helium
 { 
-    class FOUNDATION_API Handle : public Helium::RefCountBase
+    class FOUNDATION_API Handle : public Helium::RefCountBase< Handle >
     {
     public:
         Handle( const tstring& path, const tchar_t* mode = TXT( "r" ) );

@@ -10,8 +10,10 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API EnumerationElement : public Helium::AtomicRefCountBase
+        class FOUNDATION_API EnumerationElement : public Helium::AtomicRefCountBase< EnumerationElement >
         {
+            friend class AtomicRefCountBase< EnumerationElement >;
+
         public:
             uint32_t         m_Value;    // the value of the element
             tstring     m_Name;     // the name of the element

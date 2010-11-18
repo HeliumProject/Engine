@@ -10,7 +10,7 @@ namespace Helium
         // Pure HELIUM_ABSTRACT base class for calling an arbitrary function.  This is used
         // by the ExistenceCommand to call arbitrary add and remove functions.
         // 
-        class FunctionCaller : public Helium::RefCountBase
+        class FunctionCaller : public Helium::RefCountBase<FunctionCaller>
         {
         public:
             FunctionCaller()

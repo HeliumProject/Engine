@@ -92,7 +92,7 @@ namespace Helium
     // Delegate encapsulates and a function call of multiple types
     //
 
-    template< typename ArgsType, class RefCountBaseType = class Helium::RefCountBase >
+    template< typename ArgsType, template< typename T > class RefCountBaseType = RefCountBase >
     class Delegate
     {
     private:
@@ -101,7 +101,7 @@ namespace Helium
         //  Its defines an interface (pure virtual) that must be implemented by derived classes
         //
 
-        class DelegateImpl : public RefCountBaseType
+        class DelegateImpl : public RefCountBaseType< DelegateImpl >
         {
         private:
             friend class Delegate;
@@ -329,7 +329,7 @@ namespace Helium
     // Event is a collection of delegates that are invoked together
     //
 
-    template< typename ArgsType, class RefCountBaseType = class Helium::RefCountBase >
+    template< typename ArgsType, template< typename T > class RefCountBaseType = RefCountBase >
     class Event
     {
     public:
@@ -455,7 +455,7 @@ namespace Helium
         //  removal of delegates from the event.
         //
 
-        class EventImpl : public RefCountBaseType
+        class EventImpl : public RefCountBaseType< EventImpl >
         {
         public:
             EventImpl()
@@ -670,7 +670,7 @@ namespace Helium
     // Signature intantiates all the template classes necessary for working with a particular signature
     //
 
-    template< typename ArgsType, class RefCountBaseType = class Helium::RefCountBase >
+    template< typename ArgsType, template< typename T > class RefCountBaseType = RefCountBase >
     class Signature
     {
     public:

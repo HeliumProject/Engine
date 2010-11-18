@@ -99,7 +99,7 @@ namespace Helium
         typedef Helium::SmartPtr< ProjectViewModelNode > ProjectViewModelNodePtr;
         typedef std::set< ProjectViewModelNodePtr > S_ProjectViewModelNodeChildren;
 
-        class ProjectViewModelNode : public Helium::RefCountBase
+        class ProjectViewModelNode : public Helium::RefCountBase< ProjectViewModelNode >
         {
         public:
             ProjectViewModelNode( ProjectViewModelNode* parent,

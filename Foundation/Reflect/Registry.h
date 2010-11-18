@@ -22,7 +22,7 @@ namespace Helium
         // Stack record captures stack addresses
         //
 
-        class StackRecord : public Helium::RefCountBase
+        class StackRecord : public Helium::RefCountBase<StackRecord>
         {
         public:
             std::vector<uintptr_t>    m_Stack;

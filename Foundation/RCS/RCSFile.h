@@ -20,7 +20,7 @@ namespace Helium
         typedef Helium::SmartPtr< File > FilePtr;
         typedef std::vector< FilePtr > V_FilePtr;
 
-        class Revision : public Helium::RefCountBase
+        class Revision : public Helium::RefCountBase< Revision >
         {
         public:
             int32_t          m_Revision;
@@ -77,7 +77,7 @@ namespace Helium
         }
         typedef ActionData::ActionDatum ActionDatum;
 
-        class FOUNDATION_API Action : public Helium::RefCountBase
+        class FOUNDATION_API Action : public Helium::RefCountBase< Action >
         {
         public:
             // this gates which of the fields below are populated when info is gathered explicitly
@@ -136,7 +136,7 @@ namespace Helium
         }
         typedef FileData::FileDatum FileDatum;
 
-        class FOUNDATION_API File : public Helium::RefCountBase
+        class FOUNDATION_API File : public Helium::RefCountBase< File >
         {
         public:
             // this gates which of the fields below are populated when info is gathered explicitly

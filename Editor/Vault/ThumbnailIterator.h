@@ -12,7 +12,7 @@ namespace Helium
         // Provides an interface for iterating over an arbitrary list of thumbnail
         // tiles.
         // 
-        class ThumbnailIterator : public Helium::RefCountBase
+        class ThumbnailIterator : public Helium::RefCountBase< ThumbnailIterator >
         {
         public:
             ThumbnailIterator()

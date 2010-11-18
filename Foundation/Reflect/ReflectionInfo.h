@@ -53,7 +53,7 @@ namespace Helium
         // This lets us safely cast between reflection class pointers
         //
 
-        class FOUNDATION_API ReflectionInfo : public Helium::AtomicRefCountBase
+        class FOUNDATION_API ReflectionInfo : public Helium::AtomicRefCountBase< ReflectionInfo >
         {
         public:
             REFLECTION_BASE(ReflectionTypes::Invalid);

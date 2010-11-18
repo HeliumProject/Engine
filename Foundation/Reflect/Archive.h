@@ -145,7 +145,7 @@ namespace Helium
         // Event Delegates
         //
 
-        class FOUNDATION_API ArchiveVisitor : public Helium::AtomicRefCountBase
+        class FOUNDATION_API ArchiveVisitor : public Helium::AtomicRefCountBase< ArchiveVisitor >
         {
         public:
             virtual void VisitElement(Element* element)
@@ -196,8 +196,10 @@ namespace Helium
             };
         }
 
-        class FOUNDATION_API Archive : public Helium::RefCountBase
+        class FOUNDATION_API Archive : public Helium::RefCountBase< Archive >
         {
+            friend class RefCountBase< Archive >;
+
         protected:
 
             // The number of bytes Parsed so far

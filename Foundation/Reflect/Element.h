@@ -58,7 +58,7 @@ namespace Helium
 
             }
         };
-        typedef Helium::Signature< const ElementChangeArgs&, Helium::AtomicRefCountBase> ElementChangeSignature;
+        typedef Helium::Signature< const ElementChangeArgs&, Helium::AtomicRefCountBase > ElementChangeSignature;
 
         //
         // Reflect::Element is the abstract base class of a serializable unit

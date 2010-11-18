@@ -15,7 +15,7 @@ namespace Helium
 {
     namespace Editor
     {
-        class SettingInfo : public Helium::RefCountBase
+        class SettingInfo : public Helium::RefCountBase< SettingInfo >
         {
         public:
             SettingInfo( Reflect::ElementPtr& source, Reflect::ElementPtr& clone, Editor::TreeCanvasPtr& canvas );

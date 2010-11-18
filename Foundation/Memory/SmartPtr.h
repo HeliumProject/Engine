@@ -1,16 +1,6 @@
 #pragma once
 
-#include "Foundation/API.h"
-
 #include "Platform/Utility.h"
-
-//
-// Types
-//
-
-#ifndef NULL
-#define NULL (0)
-#endif
 
 namespace Helium
 {
@@ -19,47 +9,53 @@ namespace Helium
     //  Derive from this to enable tracking and cleanup of objects automagically
     //
 
-    class FOUNDATION_API RefCountBase
+    template< typename T >
+    class RefCountBase
     {
     private:
         mutable int32_t m_RefCount;
 
     public:
         RefCountBase()
-            : m_RefCount (0)
+            : m_RefCount( 0 )
         {
         }
 
-        RefCountBase(const RefCountBase& rhs)
-            : m_RefCount (0)
+        RefCountBase( const RefCountBase& rhs )
+            : m_RefCount( 0 )
         {
+            // Note that the reference count is not copied.
         }
-
-        virtual ~RefCountBase();
 
         int32_t GetRefCount() const
         {
             return m_RefCount;
         }
 
-        void IncrRefCount() const
+        int32_t IncrRefCount() const
         {
-            m_RefCount++;
+            ++m_RefCount;
+
+            // Test for wrapping to zero.
+            HELIUM_ASSERT( m_RefCount != 0 );
+
+            return m_RefCount;
         }
 
-        void DecrRefCount() const
+        int32_t DecrRefCount() const
         {
-            m_RefCount--;
+            --m_RefCount;
+            int32_t newRefCount = m_RefCount;
 
-            HELIUM_ASSERT( m_RefCount >= 0 );
-
-            if (m_RefCount == 0)
+            if( newRefCount == 0 )
             {
-                delete this;
+                delete const_cast< T* >( static_cast< const T* >( this ) );
             }
+
+            return newRefCount;
         }
 
-        RefCountBase& operator=(const RefCountBase& rhs)
+        RefCountBase& operator=( const RefCountBase& rhs )
         {
             // do NOT copy the refcount
             return *this;
@@ -73,20 +69,18 @@ namespace Helium
     //
 
     template<typename T>
-    class RefCountAggregator : public RefCountBase
+    class RefCountAggregator : public RefCountBase<T>
     {
     public:
         T m_Object;
 
         RefCountAggregator()
         {
-
         }
 
-        RefCountAggregator(const T& rhs)
-            : m_Object (rhs)
+        RefCountAggregator( const T& rhs )
+            : m_Object( rhs )
         {
-
         }
 
         inline T* operator->() const
@@ -105,11 +99,11 @@ namespace Helium
     // SmartPtr safely manages the reference count on the stack
     //
 
-    template <typename T>
+    template< typename T >
     class SmartPtr
     {
         // Allow access to other template's internal pointer
-        template <typename U>
+        template< typename U >
         friend class SmartPtr;
 
     public:

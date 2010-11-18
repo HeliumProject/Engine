@@ -134,7 +134,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< PrintingArgs&, Helium::AtomicRefCountBase> PrintingSignature;
+        typedef Helium::Signature< PrintingArgs&, Helium::AtomicRefCountBase > PrintingSignature;
 
         FOUNDATION_API void AddPrintingListener(const PrintingSignature::Delegate& listener);
         FOUNDATION_API void RemovePrintingListener(const PrintingSignature::Delegate& listener);
@@ -155,7 +155,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::Signature< PrintedArgs&, Helium::AtomicRefCountBase> PrintedSignature;
+        typedef Helium::Signature< PrintedArgs&, Helium::AtomicRefCountBase > PrintedSignature;
 
         FOUNDATION_API void AddPrintedListener(const PrintedSignature::Delegate& listener);
         FOUNDATION_API void RemovePrintedListener(const PrintedSignature::Delegate& listener);

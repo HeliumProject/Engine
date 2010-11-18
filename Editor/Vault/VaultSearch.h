@@ -98,7 +98,7 @@ namespace Helium
 
         ///////////////////////////////////////////////////////////////////////
         /// class VaultSearch
-        class VaultSearch : public Helium::RefCountBase
+        class VaultSearch : public Helium::RefCountBase< VaultSearch >
         {
         public:
             VaultSearch();

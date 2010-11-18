@@ -20,7 +20,7 @@ namespace Helium
         // Ordered set of strings used by MRU to store resently searched strings
         //
         template<class T>
-        class MRU : public Helium::RefCountBase
+        class MRU : public Helium::RefCountBase< MRU<T> >
         {
         public:
             typedef Helium::OrderedSet< T > OS_OrderedTypeSet;

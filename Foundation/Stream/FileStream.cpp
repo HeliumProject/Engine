@@ -42,17 +42,8 @@ size_t FileStream::Read( void* pBuffer, size_t size, size_t count )
     }
 
     size_t byteCount = size * count;
-    HELIUM_ASSERT_MSG( byteCount <= MAXDWORD, TXT( "File read operations are limited to DWORD sizes" ) );
-    if( byteCount > MAXDWORD )
-    {
-        // Truncate to a multiple of "size" bytes.
-        byteCount = ( MAXDWORD / size ) * size;
-    }
-
-    HELIUM_ASSERT( pBuffer || byteCount == 0 );
-
-    DWORD bytesRead = 0;
-    HELIUM_VERIFY( ReadFile( m_hFile, pBuffer, static_cast< DWORD >( byteCount ), &bytesRead, NULL ) );
+    uint32_t bytesRead = 0;
+    HELIUM_VERIFY( ReadFile( m_hFile, pBuffer, byteCount, &bytesRead ) );
 
     return ( bytesRead / size );
 }
@@ -68,17 +59,8 @@ size_t FileStream::Write( const void* pBuffer, size_t size, size_t count )
     }
 
     size_t byteCount = size * count;
-    HELIUM_ASSERT_MSG( byteCount <= MAXDWORD, TXT( "File write operations are limited to DWORD sizes" ) );
-    if( byteCount > MAXDWORD )
-    {
-        // Truncate to a multiple of "size" bytes.
-        byteCount = ( MAXDWORD / size ) * size;
-    }
-
-    HELIUM_ASSERT( pBuffer || byteCount == 0 );
-
-    DWORD bytesWritten = 0;
-    HELIUM_VERIFY( WriteFile( m_hFile, pBuffer, static_cast< DWORD >( byteCount ), &bytesWritten, NULL ) );
+    uint32_t bytesWritten = 0;
+    HELIUM_VERIFY( WriteFile( m_hFile, pBuffer, byteCount, &bytesWritten ) );
 
     return ( bytesWritten / size );
 }
@@ -91,12 +73,12 @@ void FileStream::Flush()
     // Only files open for writing need to be flushed.
     if( m_hFile != InvalidHandleValue && ( m_modeFlags & MODE_WRITE ) )
     {
-        HELIUM_VERIFY( FlushFileBuffers( m_hFile ) );
+        HELIUM_VERIFY( FlushFile( m_hFile ) );
     }
 }
 
 /// @copydoc Stream::Seek()
-int64_t FileStream::Seek( int64_t offset, ESeekOrigin origin )
+int64_t FileStream::Seek( int64_t offset, SeekOrigin origin )
 {
     if( m_hFile == InvalidHandleValue )
     {
@@ -104,27 +86,7 @@ int64_t FileStream::Seek( int64_t offset, ESeekOrigin origin )
         return -1;
     }
 
-    if( static_cast< size_t >( origin ) >= static_cast< size_t >( SEEK_ORIGIN_MAX ) )
-    {
-        HELIUM_ASSERT_MSG_FALSE( TXT( "Invalid seek origin" ) );
-        return -1;
-    }
-
-    LARGE_INTEGER moveDistance;
-    moveDistance.QuadPart = offset;
-
-    DWORD moveMethod =
-        ( origin == SEEK_ORIGIN_CURRENT
-        ? FILE_CURRENT
-        : ( origin == SEEK_ORIGIN_BEGIN ? FILE_BEGIN : FILE_END ) );
-
-    LARGE_INTEGER filePointer;
-    filePointer.QuadPart = 0;
-
-    BOOL bResult = SetFilePointerEx( m_hFile, moveDistance, &filePointer, moveMethod );
-    HELIUM_ASSERT( bResult );
-
-    return ( bResult ? filePointer.QuadPart : -1 );
+    return Helium::Seek( m_hFile, offset, origin );
 }
 
 /// @copydoc Stream::Tell()
@@ -136,16 +98,7 @@ int64_t FileStream::Tell() const
         return -1;
     }
 
-    LARGE_INTEGER moveDistance;
-    moveDistance.QuadPart = 0;
-
-    LARGE_INTEGER filePointer;
-    filePointer.QuadPart = 0;
-
-    BOOL bResult = SetFilePointerEx( m_hFile, moveDistance, &filePointer, FILE_CURRENT );
-    HELIUM_ASSERT( bResult );
-
-    return ( bResult ? filePointer.QuadPart : -1 );
+    return Helium::Tell( m_hFile );
 }
 
 /// @copydoc Stream::GetSize()
@@ -157,13 +110,7 @@ int64_t FileStream::GetSize() const
         return -1;
     }
 
-    LARGE_INTEGER fileSize;
-    fileSize.QuadPart = 0;
-
-    BOOL bResult = GetFileSizeEx( m_hFile, &fileSize );
-    HELIUM_ASSERT( bResult );
-
-    return ( bResult ? fileSize.QuadPart : -1 );
+    return Helium::GetSize( m_hFile );
 }
 
 /// @copydoc FileStream::OpenActual()
@@ -183,38 +130,7 @@ bool FileStream::Open( const tchar_t* pPath, uint32_t modeFlags, bool bTruncate 
 
     HELIUM_ASSERT( m_hFile == InvalidHandleValue );
 
-    DWORD desiredAccess = 0;
-    if( modeFlags & MODE_READ )
-    {
-        desiredAccess |= GENERIC_READ;
-    }
-
-    if( modeFlags & MODE_WRITE )
-    {
-        desiredAccess |= GENERIC_WRITE;
-    }
-
-    // Allow other files to read if we are not writing to the file.
-    DWORD shareMode = 0;
-    if( !( modeFlags & MODE_WRITE ) )
-    {
-        shareMode |= FILE_SHARE_READ;
-    }
-
-    DWORD createDisposition = OPEN_EXISTING;
-    if( modeFlags & MODE_WRITE )
-    {
-        createDisposition = ( bTruncate ? CREATE_ALWAYS : OPEN_ALWAYS );
-    }
-
-    m_hFile = CreateFile(
-        pPath,
-        desiredAccess,
-        shareMode,
-        NULL,
-        createDisposition,
-        FILE_ATTRIBUTE_NORMAL,
-        NULL );
+    m_hFile = Helium::CreateFile( pPath, (Helium::FileMode)modeFlags, bTruncate );
 
     if ( m_hFile == InvalidHandleValue )
     {

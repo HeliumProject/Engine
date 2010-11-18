@@ -103,29 +103,29 @@ void ExternalMemoryStream::Flush()
 }
 
 /// @copydoc Stream::Seek()
-int64_t ExternalMemoryStream::Seek( int64_t offset, ESeekOrigin origin )
+int64_t ExternalMemoryStream::Seek( int64_t offset, SeekOrigin origin )
 {
-    HELIUM_ASSERT( static_cast< size_t >( origin ) < static_cast< size_t >( SEEK_ORIGIN_MAX ) );
+    HELIUM_ASSERT( static_cast< size_t >( origin ) < static_cast< size_t >( SeekOrigins::SEEK_ORIGIN_MAX ) );
     HELIUM_ASSERT( IsOpen() );
 
     size_t referenceOffset;
     switch( origin )
     {
-        case SEEK_ORIGIN_CURRENT:
+        case SeekOrigins::SEEK_ORIGIN_CURRENT:
         {
             referenceOffset = static_cast< size_t >( m_pCurrent - m_pStart );
 
             break;
         }
 
-        case SEEK_ORIGIN_BEGIN:
+        case SeekOrigins::SEEK_ORIGIN_BEGIN:
         {
             referenceOffset = 0;
 
             break;
         }
 
-        case SEEK_ORIGIN_END:
+        case SeekOrigins::SEEK_ORIGIN_END:
         {
             referenceOffset = static_cast< size_t >( m_pEnd - m_pStart );
 

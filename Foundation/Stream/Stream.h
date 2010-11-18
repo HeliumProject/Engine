@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Foundation/API.h"
+
+#include "Platform/File.h"
 #include "Platform/Utility.h"
 
 namespace Helium
@@ -9,19 +11,6 @@ namespace Helium
     class FOUNDATION_API Stream : NonCopyable
     {
     public:
-        /// Stream seek origin.
-        enum ESeekOrigin
-        {
-            SEEK_ORIGIN_FIRST   =  0,
-            SEEK_ORIGIN_INVALID = -1,
-
-            SEEK_ORIGIN_CURRENT,  ///< Seek relative to the current location.
-            SEEK_ORIGIN_BEGIN,    ///< Seek relative to the beginning of the stream.
-            SEEK_ORIGIN_END,      ///< Seek relative to the end of the stream.
-
-            SEEK_ORIGIN_MAX,
-            SEEK_ORIGIN_LAST = SEEK_ORIGIN_MAX - 1
-        };
 
         /// @name Construction/Destruction
         //@{
@@ -73,7 +62,7 @@ namespace Helium
         /// Flush any buffered data, such as data pending to be written to disk or a network socket.
         virtual void Flush() = 0;
 
-        /// @fn int64_t Stream::Seek( int64_t offset, ESeekOrigin origin )
+        /// @fn int64_t Stream::Seek( int64_t offset, SeekOrigin origin )
         /// Adjust the current stream offset.
         ///
         /// @param[in] offset  Byte offset by which to adjust.
@@ -82,7 +71,7 @@ namespace Helium
         /// @return  New stream location, or -1 if this stream does not support seeking.
         ///
         /// @see Tell(), CanSeek()
-        virtual int64_t Seek( int64_t offset, ESeekOrigin origin ) = 0;
+        virtual int64_t Seek( int64_t offset, SeekOrigin origin ) = 0;
 
         /// @fn int64_t Stream::Tell() const
         /// Get the current stream location.

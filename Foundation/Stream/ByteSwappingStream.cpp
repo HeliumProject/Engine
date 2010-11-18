@@ -129,7 +129,7 @@ void ByteSwappingStream::Flush()
 }
 
 /// @copydoc Stream::Seek()
-int64_t ByteSwappingStream::Seek( int64_t offset, ESeekOrigin origin )
+int64_t ByteSwappingStream::Seek( int64_t offset, SeekOrigin origin )
 {
     HELIUM_ASSERT( CanSeek() );
     if( !CanSeek() )

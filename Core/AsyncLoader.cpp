@@ -281,7 +281,7 @@ namespace Lunar
                 pRequest->bytesRead = 0;
 
                 pBufferedStream->Open( pFileStream );
-                int64_t offset = pBufferedStream->Seek( pRequest->offset, Stream::SEEK_ORIGIN_BEGIN );
+                int64_t offset = pBufferedStream->Seek( pRequest->offset, SeekOrigins::SEEK_ORIGIN_BEGIN );
                 if( static_cast< uint64_t >( offset ) == pRequest->offset )
                 {
                     pRequest->bytesRead = pBufferedStream->Read( pRequest->pBuffer, 1, pRequest->size );

@@ -51,7 +51,7 @@ namespace Helium
         virtual void Flush();
 
         /// @copydoc Stream::Seek()
-        virtual int64_t Seek( int64_t offset, ESeekOrigin origin );
+        virtual int64_t Seek( int64_t offset, SeekOrigin origin );
 
         /// @copydoc Stream::Tell()
         virtual int64_t Tell() const;

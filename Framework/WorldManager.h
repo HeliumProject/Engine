@@ -18,7 +18,7 @@
 
 namespace Lunar
 {
-    L_DECLARE_PTR( World );
+    HELIUM_DECLARE_PTR( World );
 
     /// Manager for individual World instances.
     class LUNAR_FRAMEWORK_API WorldManager : NonCopyable

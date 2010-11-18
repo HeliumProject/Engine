@@ -135,17 +135,17 @@ namespace Lunar
 {
     class Serializer;
 
-    L_DECLARE_PTR( Object );
-    L_DECLARE_PTR( Type );
-    L_DECLARE_PTR( Package );
+    HELIUM_DECLARE_PTR( Object );
+    HELIUM_DECLARE_PTR( Type );
+    HELIUM_DECLARE_PTR( Package );
 
-    L_DECLARE_WPTR( Object );
-    L_DECLARE_WPTR( Type );
+    HELIUM_DECLARE_WPTR( Object );
+    HELIUM_DECLARE_WPTR( Type );
 
     /// Base class for the engine's game object system.
     class LUNAR_ENGINE_API Object : NonCopyable
     {
-        L_DECLARE_REF_COUNT( Object, ObjectRefCountSupport );
+        HELIUM_DECLARE_REF_COUNT( Object, ObjectRefCountSupport );
 
     public:
         /// Destruction callback type.

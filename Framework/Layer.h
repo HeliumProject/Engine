@@ -18,8 +18,8 @@
 
 namespace Lunar
 {
-    L_DECLARE_PTR( Entity );
-    L_DECLARE_WPTR( World );
+    HELIUM_DECLARE_PTR( Entity );
+    HELIUM_DECLARE_WPTR( World );
 
     /// Container for entities.
     ///

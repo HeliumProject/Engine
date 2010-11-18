@@ -19,7 +19,7 @@
 
 namespace Lunar
 {
-    L_DECLARE_PTR( Animation );
+    HELIUM_DECLARE_PTR( Animation );
 
     /// In-game entity comprising of a skeletal (skinned) mesh.
     class LUNAR_FRAMEWORK_API SkeletalMeshEntity : public MeshEntity

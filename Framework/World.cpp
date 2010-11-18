@@ -17,7 +17,7 @@
 
 namespace Lunar
 {
-    L_DECLARE_PTR( World );
+    HELIUM_DECLARE_PTR( World );
 
     L_IMPLEMENT_OBJECT( World, Framework, 0 );
 

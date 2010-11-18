@@ -20,8 +20,8 @@ namespace Lunar
 {
     class Entity;
 
-    L_DECLARE_PTR( GraphicsScene );
-    L_DECLARE_PTR( Layer );
+    HELIUM_DECLARE_PTR( GraphicsScene );
+    HELIUM_DECLARE_PTR( Layer );
 
     /// World instance.
     ///

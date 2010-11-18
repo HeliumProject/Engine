@@ -22,7 +22,7 @@ namespace Lunar
 {
     class GraphicsScene;
 
-    L_DECLARE_PTR( Material );
+    HELIUM_DECLARE_PTR( Material );
 
     L_DECLARE_RPTR( RVertexBuffer );
     L_DECLARE_RPTR( RIndexBuffer );

@@ -30,7 +30,7 @@ namespace Lunar
     L_DECLARE_RPTR( RVertexBuffer );
     L_DECLARE_RPTR( RIndexBuffer );
 
-    L_DECLARE_PTR( Material );
+    HELIUM_DECLARE_PTR( Material );
 
     /// Mesh resource type.
     class LUNAR_FRAMEWORK_API Mesh : public Resource

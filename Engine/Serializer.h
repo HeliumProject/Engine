@@ -136,7 +136,7 @@ namespace Lunar
 {
     class Type;
 
-    L_DECLARE_PTR( Object );
+    HELIUM_DECLARE_PTR( Object );
 
     /// Struct serialization wrapper.
     template< typename T >

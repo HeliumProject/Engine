@@ -19,9 +19,9 @@
 
 namespace Lunar
 {
-    L_DECLARE_PTR( Shader );
-    L_DECLARE_PTR( ShaderVariant );
-    L_DECLARE_PTR( Texture );
+    HELIUM_DECLARE_PTR( Shader );
+    HELIUM_DECLARE_PTR( ShaderVariant );
+    HELIUM_DECLARE_PTR( Texture );
 
     L_DECLARE_RPTR( RConstantBuffer );
 

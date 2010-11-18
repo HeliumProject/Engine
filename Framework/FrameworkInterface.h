@@ -22,7 +22,7 @@ namespace Lunar
 namespace Lunar
 {
     class Entity;
-    L_DECLARE_PTR( World );
+    HELIUM_DECLARE_PTR( World );
 }
 
 namespace Lunar

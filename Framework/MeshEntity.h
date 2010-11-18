@@ -19,8 +19,8 @@ namespace Lunar
     class GraphicsScene;
     class GraphicsSceneObject;
 
-    L_DECLARE_PTR( Mesh );
-    L_DECLARE_PTR( Material );
+    HELIUM_DECLARE_PTR( Mesh );
+    HELIUM_DECLARE_PTR( Material );
 
     /// Base class for mesh-based entities.
     class LUNAR_FRAMEWORK_API MeshEntity : public Entity

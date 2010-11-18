@@ -21,8 +21,8 @@ namespace Lunar
 {
     class World;
 
-    L_DECLARE_WPTR( Layer );
-    L_DECLARE_WPTR( World );
+    HELIUM_DECLARE_WPTR( Layer );
+    HELIUM_DECLARE_WPTR( World );
 
     /// Base type for in-world entities.
     class LUNAR_FRAMEWORK_API Entity : public Object

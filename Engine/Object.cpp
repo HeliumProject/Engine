@@ -15,7 +15,7 @@
 
 namespace Lunar
 {
-    L_IMPLEMENT_REF_COUNT( Object );
+    HELIUM_IMPLEMENT_REF_COUNT( Object );
 
     TypeWPtr Object::sm_spStaticType;
     ObjectPtr Object::sm_spStaticTypeTemplate;

@@ -99,7 +99,6 @@ namespace Helium
             SceneGraph::Scene* FindFirstNonNestedScene() const;
             void OnSceneEditing( const SceneEditingArgs& args );
             
-            void DocumentSave( const DocumentEventArgs& args );
             void DocumentClosed( const DocumentEventArgs& args );
             void DocumentPathChanged( const DocumentPathChangedArgs& args );
 

@@ -34,13 +34,14 @@ SceneManager::~SceneManager()
 // 
 ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, const Document* document, bool nested )
 {
-    document->d_Save.Set( this, &SceneManager::DocumentSave );
     document->e_Closed.AddMethod( this, &SceneManager::DocumentClosed );
     document->e_PathChanged.AddMethod( this, &SceneManager::DocumentPathChanged );
 
     ScenePtr scene = new SceneGraph::Scene( viewport, document->GetPath() );
     m_DocumentToSceneTable.insert( M_DocumentToSceneTable::value_type( document, scene.Ptr() ) );
     m_SceneToDocumentTable.insert( M_SceneToDocumentTable::value_type( scene.Ptr(), document ) );
+
+    document->d_Save.Set( scene.Ptr(), &Scene::OnDocumentSave );
 
     AddScene( scene );
 
@@ -306,25 +307,6 @@ void SceneManager::OnSceneEditing( const SceneEditingArgs& args )
     }
 
     args.m_Veto = true;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Callback for when a document is saved.
-// 
-void SceneManager::DocumentSave( const DocumentEventArgs& args )
-{
-    const Document* document = static_cast< const Document* >( args.m_Document );
-    HELIUM_ASSERT( document );
-
-    if ( document )
-    {
-        ScenePtr scene = GetScene( document );
-
-        if ( scene )
-        {
-            scene->Save();
-        }
-    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

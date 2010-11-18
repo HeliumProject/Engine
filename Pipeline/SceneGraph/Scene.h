@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Foundation/Automation/Event.h"
+#include "Foundation/Document/Document.h"
 #include "Foundation/TUID.h"
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Version.h"
@@ -636,9 +637,12 @@ namespace Helium
             void ArchiveStatus( const Reflect::StatusInfo& info );
             void ArchiveException( const Reflect::ExceptionInfo& info );
 
+            // Callback for when a document is saved.
+            void OnDocumentSave( const DocumentEventArgs& args );
+
             // Saves this scene to its current file location. 
             // (get and change the scene editor file to switch the destination)
-            bool Save();
+            bool Serialize();
 
             // Save nodes to a file or to an xml string buffer.  Do not change the file
             // that this scene is pointing at.  Optionally export the entire scene or

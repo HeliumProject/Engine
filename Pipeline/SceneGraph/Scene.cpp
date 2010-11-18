@@ -855,7 +855,16 @@ void Scene::ExportHierarchyNode( SceneGraph::HierarchyNode* node, Reflect::V_Ele
     }
 }
 
-bool Scene::Save()
+void Scene::OnDocumentSave( const DocumentEventArgs& args )
+{
+    const Document* document = static_cast< const Document* >( args.m_Document );
+    HELIUM_ASSERT( document );
+    HELIUM_ASSERT( !m_Path.empty() && document->GetPath() == m_Path )
+
+    args.m_Result = Serialize();
+}
+
+bool Scene::Serialize()
 {
     HELIUM_ASSERT( !m_Path.empty() );
     return Export( m_Path, ExportFlags::Default );

@@ -59,11 +59,6 @@ const Helium::Path& ProjectViewModelNode::GetPath()
     return m_Path;
 }
 
-//void ProjectViewModelNode::PathChanged( const Attribute< Helium::Path >::ChangeArgs& text )
-//{
-//    SetPath( text.m_NewValue );
-//}
-
 tstring ProjectViewModelNode::GetName() const
 {
     if ( m_Path.IsDirectory() )
@@ -417,8 +412,7 @@ void ProjectViewModel::RemoveItem( const wxDataViewItem& item )
 bool ProjectViewModel::IsDropPossible( const wxDataViewItem& item )
 {
     ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
-    if ( !node
-        || node == m_RootNode.Ptr() )
+    if ( !node || node == m_RootNode.Ptr() )
     {
         return true;
     }
@@ -428,18 +422,14 @@ bool ProjectViewModel::IsDropPossible( const wxDataViewItem& item )
 
 void ProjectViewModel::OnPathAdded( const Helium::Path& path )
 {
-    if ( m_RootNode )
-    {
-        AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
-    }
+    HELIUM_ASSERT( m_RootNode );     
+    AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
 }
 
 void ProjectViewModel::OnPathRemoved( const Helium::Path& path )
 {
-    if ( m_RootNode )
-    {
-        RemoveChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
-    }
+    HELIUM_ASSERT( m_RootNode );
+    RemoveChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
 }
 
 void ProjectViewModel::OnProjectPathChanged( const DocumentPathChangedArgs& args )
@@ -452,16 +442,14 @@ void ProjectViewModel::OnDocumentAdded( const DocumentEventArgs& args )
     const Document* document = static_cast< const Document* >( args.m_Document );
     HELIUM_ASSERT( document );
 
-    if ( document )
+
+    for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( document->GetPath() ),
+        upper = m_MM_ProjectViewModelNodesByPath.upper_bound( document->GetPath() );
+        lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
+    ++lower )
     {
-        for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( document->GetPath() ),
-            upper = m_MM_ProjectViewModelNodesByPath.upper_bound( document->GetPath() );
-            lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
-        ++lower )
-        {
-            ProjectViewModelNode *node = lower->second;
-            node->ConnectDocument( document );
-        }
+        ProjectViewModelNode *node = lower->second;
+        node->ConnectDocument( document );
     }
 }
 
@@ -470,17 +458,15 @@ void ProjectViewModel::OnDocumentRemoved( const DocumentEventArgs& args )
     const Document* document = static_cast< const Document* >( args.m_Document );
     HELIUM_ASSERT( document );
 
-    if ( document )
+    for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( document->GetPath() ),
+        upper = m_MM_ProjectViewModelNodesByPath.upper_bound( document->GetPath() );
+        lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
+    ++lower )
     {
-        for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( document->GetPath() ),
-            upper = m_MM_ProjectViewModelNodesByPath.upper_bound( document->GetPath() );
-            lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
-        ++lower )
-        {
-            ProjectViewModelNode *node = lower->second;
-            node->DisconnectDocument();
-        }
+        ProjectViewModelNode *node = lower->second;
+        node->DisconnectDocument();
     }
+
 }
 
 unsigned int ProjectViewModel::GetColumnCount() const
@@ -547,7 +533,6 @@ bool ProjectViewModel::SetValue( const wxVariant& variant, const wxDataViewItem&
     // nothing should be setting column values yet!
     HELIUM_BREAK();
     return false;
-
 
     //if ( !item.IsOk()
     //    || ( column < 0 )

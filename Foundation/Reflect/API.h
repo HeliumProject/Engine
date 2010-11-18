@@ -122,6 +122,31 @@ Helium::Reflect::Class* __Class::CreateClass( const tstring& name ) \
 const Helium::Reflect::Type* __Class::s_Type = NULL; \
 const Helium::Reflect::Class* __Class::s_Class = NULL;
 
+// declares type checking functions
+#define _REFLECT_DECLARE_ENUMERATION( __Enumeration ) \
+public: \
+Enum m_Value; \
+__Enumeration() : m_Value() {} \
+__Enumeration( const __Enumeration& e ) : m_Value( e.m_Value ) {} \
+__Enumeration( const Enum& e ) : m_Value( e ) {} \
+__Enumeration( int64_t e ) : m_Value( (Enum)e ) {} \
+operator int64_t() const { return (size_t)m_Value; } \
+static Helium::Reflect::Enumeration* CreateEnumeration( const tstring& name ); \
+static const Helium::Reflect::Type* s_Type; \
+static const Helium::Reflect::Enumeration* s_Enumeration;
+
+// defines the static type info vars
+#define _REFLECT_DEFINE_ENUMERATION( __Enumeration ) \
+Helium::Reflect::Enumeration* __Enumeration::CreateEnumeration( const tstring& name ) \
+{ \
+    HELIUM_ASSERT( s_Enumeration == NULL ); \
+    Reflect::Enumeration* type = Reflect::Enumeration::Create<__Enumeration>(name); \
+    s_Type = s_Enumeration = type; \
+    return type; \
+} \
+const Helium::Reflect::Type* __Enumeration::s_Type = NULL; \
+const Helium::Reflect::Enumeration* __Enumeration::s_Enumeration = NULL;
+
 //
 // User Macros
 //
@@ -150,3 +175,12 @@ const Helium::Reflect::Class* __Class::s_Class = NULL;
 // unalias a type name
 #define REFLECT_UNALIAS_CLASS(__Class, __Alias) \
     Reflect::Registry::GetInstance()->UnAliasType( Reflect::GetClass<__Class>(), __Alias);
+
+// declares an enumeration
+#define REFLECT_DECLARE_ENUMERATION(__Class) \
+    _REFLECT_DECLARE_ENUMERATION(__Class)
+
+// defines an enumeration
+#define REFLECT_DEFINE_ENUMERATION(__Class) \
+    _REFLECT_DEFINE_ENUMERATION(__Class)
+

@@ -12,23 +12,26 @@ namespace Helium
     namespace Editor
     {
         /////////////////////////////////////////////////////////////////////////////
-        namespace SearchTypes
+        class SearchType
         {
-            enum SearchType
+        public:
+            enum Enum
             {
                 Invalid = -1,
                 File = 0,
                 Directory,
                 CacheDB,
             };
-            static void SearchTypesEnumerateEnum( Reflect::Enumeration& info )
+
+            REFLECT_DECLARE_ENUMERATION( SearchType );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info.AddElement( File, TXT( "File" ) );
+                info.AddElement( File,      TXT( "File" ) );
                 info.AddElement( Directory, TXT( "Directory" ) );
-                info.AddElement( CacheDB, TXT( "CacheDB" ) );
+                info.AddElement( CacheDB,   TXT( "CacheDB" ) );
             }
-        }
-        typedef SearchTypes::SearchType SearchType;
+        };
 
         ///////////////////////////////////////////////////////////////////////////////
         /// class VaultSearchQuery

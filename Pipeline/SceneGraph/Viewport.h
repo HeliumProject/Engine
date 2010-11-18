@@ -478,8 +478,8 @@ namespace Helium
             RenderVisitor           m_RenderVisitor;
 
             Tool*                   m_Tool;
-            Camera                  m_Cameras[CameraModes::Count];
-            Undo::Queue             m_CameraHistory[CameraModes::Count];
+            Camera                  m_Cameras[CameraMode::Count];
+            Undo::Queue             m_CameraHistory[CameraMode::Count];
 
             CameraMode              m_CameraMode;
             GeometryMode            m_GeometryMode;

@@ -9,9 +9,10 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        namespace GeometryModes
+        class GeometryMode
         {
-            enum GeometryMode
+        public:
+            enum Enum
             {
                 None,
                 Render,
@@ -20,34 +21,37 @@ namespace Helium
                 Count
             };
 
-            static void GeometryModeEnumerateEnum( Reflect::Enumeration& info )
+            REFLECT_DECLARE_ENUMERATION( GeometryMode );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info.AddElement(GeometryModes::None, TXT( "GeometryModes::None" ) ); 
-                info.AddElement(GeometryModes::Render, TXT( "GeometryModes::Render" ) ); 
-                info.AddElement(GeometryModes::Collision, TXT( "GeometryModes::Collision" ) ); 
-                info.AddElement(GeometryModes::Pathfinding, TXT( "GeometryModes::Pathfinding" ) ); 
-                info.AddElement(GeometryModes::Count, TXT( "GeometryModes::Count" ) ); 
+                info.AddElement(GeometryMode::None,         TXT( "None" ) ); 
+                info.AddElement(GeometryMode::Render,       TXT( "Render" ) ); 
+                info.AddElement(GeometryMode::Collision,    TXT( "Collision" ) ); 
+                info.AddElement(GeometryMode::Pathfinding,  TXT( "Pathfinding" ) ); 
+                info.AddElement(GeometryMode::Count,        TXT( "Count" ) ); 
             }
-        }
+        };
 
-        typedef GeometryModes::GeometryMode GeometryMode;
-
-        namespace ViewColorModes
+        class ViewColorMode
         {
-            enum ViewColorMode
+        public:
+            enum Enum
             {
                 Layer,
                 Type,
                 Scene,
             };
-            static void ViewColorModeEnumerateEnum( Reflect::Enumeration& info )
+
+            REFLECT_DECLARE_ENUMERATION( ViewColorMode );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info.AddElement( Layer, TXT( "Layer" ) );
-                info.AddElement( Type, TXT( "Type" ) );
-                info.AddElement( Scene, TXT( "Scene" ) );
+                info.AddElement( Layer,     TXT( "Layer" ) );
+                info.AddElement( Type,      TXT( "Type" ) );
+                info.AddElement( Scene,     TXT( "Scene" ) );
             }
-        }
-        typedef ViewColorModes::ViewColorMode ViewColorMode;
+        };
 
         class PIPELINE_API ViewportSettings : public Reflect::Element
         {

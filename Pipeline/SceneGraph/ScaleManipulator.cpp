@@ -115,7 +115,7 @@ void ScaleManipulator::Evaluate()
     if (primary)
     {
         // get the transform for our object
-        Matrix4 frame = primary->GetFrame(ManipulatorSpaces::Object);
+        Matrix4 frame = primary->GetFrame(ManipulatorSpace::Object);
 
         // compute the scaling factor
         float factor = m_View->GetCamera()->ScalingTo(Vector3 (frame.t.x, frame.t.y, frame.t.z));
@@ -221,7 +221,7 @@ void ScaleManipulator::Draw( DrawArgs* args )
     }
 
     // get the transform for our object
-    Matrix4 frame = Matrix4 (offset) * primary->GetFrame(ManipulatorSpaces::Object).Normalized();
+    Matrix4 frame = Matrix4 (offset) * primary->GetFrame(ManipulatorSpace::Object).Normalized();
 
     Scale inverse (1.0f / offset.x, 1.0f / offset.y, 1.0f / offset.z);
 
@@ -275,7 +275,7 @@ bool ScaleManipulator::Pick( PickVisitor* pick )
     }
 
     // get the transform for our object
-    Matrix4 frame = primary->GetFrame(ManipulatorSpaces::Object).Normalized();
+    Matrix4 frame = primary->GetFrame(ManipulatorSpace::Object).Normalized();
 
     // setup the pick object
     LinePickVisitor* linePick = dynamic_cast<LinePickVisitor*>(pick);
@@ -403,7 +403,7 @@ bool ScaleManipulator::MouseDown( const MouseButtonInput& e )
     {
         ManipulationStart start;
         start.m_StartValue = Vector3 (accessor->GetValue().x, accessor->GetValue().y, accessor->GetValue().z);
-        start.m_StartFrame = accessor->GetFrame(ManipulatorSpaces::Object).Normalized();
+        start.m_StartFrame = accessor->GetFrame(ManipulatorSpace::Object).Normalized();
         start.m_InverseStartFrame = start.m_StartFrame.Inverted();
         m_ManipulationStart.insert( M_ManipulationStart::value_type (accessor, start) );
     }

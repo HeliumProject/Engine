@@ -58,6 +58,7 @@ const tchar_t* s_MatchDecimalTUIDPattern = TXT( "^((?:[\\-]){0,1}[0-9]{16,})$" )
 
 
 ///////////////////////////////////////////////////////////////////////////////
+REFLECT_DEFINE_ENUMERATION( SearchType );
 REFLECT_DEFINE_CLASS( VaultSearchQuery );
 void VaultSearchQuery::EnumerateClass( Reflect::Compositor<VaultSearchQuery>& comp )
 {
@@ -68,7 +69,7 @@ void VaultSearchQuery::EnumerateClass( Reflect::Compositor<VaultSearchQuery>& co
 
 ///////////////////////////////////////////////////////////////////////////////
 VaultSearchQuery::VaultSearchQuery()
-: m_SearchType( SearchTypes::CacheDB )
+: m_SearchType( SearchType::CacheDB )
 , m_SQLQueryString( TXT("") )
 {
 
@@ -201,7 +202,7 @@ bool VaultSearchQuery::ParseQueryString( const tstring& queryString, tstring& er
         {
             if ( query )
             {
-                query->m_SearchType = SearchTypes::Directory;
+                query->m_SearchType = SearchType::Directory;
 
                 Helium::Path::Normalize( query->m_QueryString );
                 Helium::Path::GuaranteeSeparator( query->m_QueryString );
@@ -212,7 +213,7 @@ bool VaultSearchQuery::ParseQueryString( const tstring& queryString, tstring& er
         {
             if ( query )
             {
-                query->m_SearchType = SearchTypes::File;
+                query->m_SearchType = SearchType::File;
             }
             return true;
         }

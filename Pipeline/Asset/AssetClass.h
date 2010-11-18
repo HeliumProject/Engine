@@ -34,7 +34,6 @@ namespace Helium
         class PIPELINE_API AssetClass HELIUM_ABSTRACT : public Component::ComponentCollection
         {
         private:
-
             Helium::Path m_SourcePath;   // optional path where this asset was deserialized from
             Helium::Path m_ContentPath; // path to the asset's backing/art file
 

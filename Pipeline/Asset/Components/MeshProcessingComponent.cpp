@@ -3,6 +3,7 @@
 using namespace Helium;
 using namespace Helium::Asset;
 
+REFLECT_DEFINE_ENUMERATION( MeshCompressionFactor );
 REFLECT_DEFINE_CLASS( MeshProcessingComponent );
 
 void MeshProcessingComponent::EnumerateClass( Reflect::Compositor< MeshProcessingComponent >& comp )

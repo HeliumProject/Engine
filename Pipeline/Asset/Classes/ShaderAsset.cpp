@@ -8,6 +8,7 @@
 using namespace Helium;
 using namespace Helium::Asset;
 
+REFLECT_DEFINE_ENUMERATION( AlphaType );
 REFLECT_DEFINE_CLASS( ShaderAsset );
 
 void ShaderAsset::EnumerateClass( Reflect::Compositor<ShaderAsset>& comp )
@@ -40,8 +41,5 @@ void ShaderAsset::EnumerateClass( Reflect::Compositor<ShaderAsset>& comp )
 
     Reflect::EnumerationField* enumWrapModeU = comp.AddEnumerationField( &ShaderAsset::m_WrapModeU, "m_WrapModeU" );
     Reflect::EnumerationField* enumWrapModeV = comp.AddEnumerationField( &ShaderAsset::m_WrapModeV, "m_WrapModeV" );
-
     Reflect::EnumerationField* enumAlphaMode = comp.AddEnumerationField( &ShaderAsset::m_AlphaMode, "m_AlphaMode" );
-
-    Reflect::EnumerationField* enumWetSurfaceMode = comp.AddEnumerationField( &ShaderAsset::m_WetSurfaceMode, "m_WetSurfaceMode" );
 }

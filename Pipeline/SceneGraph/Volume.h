@@ -8,24 +8,27 @@ namespace Helium
     {
         class VolumeType;
 
-        namespace VolumeShapes
+        class VolumeShape
         {
-            enum VolumeShape
+        public:
+            enum Enum
             {
                 Cube,
                 Cylinder,
                 Sphere,
                 Capsule,
             };
-            static void VolumeShapeEnumerateEnum( Reflect::Enumeration& info )
+
+            REFLECT_DECLARE_ENUMERATION( VolumeShape );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info.AddElement(Cube, TXT( "Cube" ) );
-                info.AddElement(Cylinder, TXT( "Cylinder" ) );
-                info.AddElement(Sphere, TXT( "Sphere" ) );
-                info.AddElement(Capsule, TXT( "Capsule" ) );
+                info.AddElement(Cube,       TXT( "Cube" ) );
+                info.AddElement(Cylinder,   TXT( "Cylinder" ) );
+                info.AddElement(Sphere,     TXT( "Sphere" ) );
+                info.AddElement(Capsule,    TXT( "Capsule" ) );
             }
-        }
-        typedef VolumeShapes::VolumeShape VolumeShape;
+        };
 
         class Volume : public Instance
         {

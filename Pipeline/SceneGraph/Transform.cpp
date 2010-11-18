@@ -617,7 +617,7 @@ Matrix4 TransformScaleManipulatorAdapter::GetFrame(ManipulatorSpace space)
 
     switch (space)
     {
-    case ManipulatorSpaces::Object:
+    case ManipulatorSpace::Object:
         {
             frame = m_Transform->GetGlobalTransform();
             frame.x *= 1.f / m_Transform->GetScale().x;
@@ -626,13 +626,13 @@ Matrix4 TransformScaleManipulatorAdapter::GetFrame(ManipulatorSpace space)
             break;
         }
 
-    case ManipulatorSpaces::Local:
+    case ManipulatorSpace::Local:
         {
             frame = m_Transform->GetParentTransform();
             break;
         }
 
-    case ManipulatorSpaces::World:
+    case ManipulatorSpace::World:
         {
             // fall through, world space IS identity
             break;
@@ -667,7 +667,7 @@ Matrix4 TransformScalePivotManipulatorAdapter::GetFrame(ManipulatorSpace space)
 
     switch (space)
     {
-    case ManipulatorSpaces::Object:
+    case ManipulatorSpace::Object:
         {
             frame = m_Transform->GetGlobalTransform();
             frame.x *= 1.f / m_Transform->GetScale().x;
@@ -676,13 +676,13 @@ Matrix4 TransformScalePivotManipulatorAdapter::GetFrame(ManipulatorSpace space)
             break;
         }
 
-    case ManipulatorSpaces::Local:
+    case ManipulatorSpace::Local:
         {
             frame = m_Transform->GetParentTransform();
             break;
         }
 
-    case ManipulatorSpaces::World:
+    case ManipulatorSpace::World:
         {
             // fall through, world space IS identity
             break;
@@ -717,7 +717,7 @@ Matrix4 TransformRotateManipulatorAdapter::GetFrame(ManipulatorSpace space)
 
     switch (space)
     {
-    case ManipulatorSpaces::Object:
+    case ManipulatorSpace::Object:
         {
             frame = m_Transform->GetGlobalTransform();
             frame.x *= 1.f / m_Transform->GetScale().x;
@@ -726,13 +726,13 @@ Matrix4 TransformRotateManipulatorAdapter::GetFrame(ManipulatorSpace space)
             break;
         }
 
-    case ManipulatorSpaces::Local:
+    case ManipulatorSpace::Local:
         {
             frame = m_Transform->GetParentTransform();
             break;
         }
 
-    case ManipulatorSpaces::World:
+    case ManipulatorSpace::World:
         {
             // fall through, world space IS identity
             break;
@@ -767,7 +767,7 @@ Matrix4 TransformRotatePivotManipulatorAdapter::GetFrame(ManipulatorSpace space)
 
     switch (space)
     {
-    case ManipulatorSpaces::Object:
+    case ManipulatorSpace::Object:
         {
             frame = m_Transform->GetGlobalTransform();
             frame.x *= 1.f / m_Transform->GetScale().x;
@@ -776,13 +776,13 @@ Matrix4 TransformRotatePivotManipulatorAdapter::GetFrame(ManipulatorSpace space)
             break;
         }
 
-    case ManipulatorSpaces::Local:
+    case ManipulatorSpace::Local:
         {
             frame = m_Transform->GetParentTransform();
             break;
         }
 
-    case ManipulatorSpaces::World:
+    case ManipulatorSpace::World:
         {
             // fall through, world space IS identity
             break;
@@ -817,7 +817,7 @@ Matrix4 TransformTranslateManipulatorAdapter::GetFrame(ManipulatorSpace space)
 
     switch (space)
     {
-    case ManipulatorSpaces::Object:
+    case ManipulatorSpace::Object:
         {
             frame = m_Transform->GetGlobalTransform();
             frame.x *= 1.f / m_Transform->GetScale().x;
@@ -826,13 +826,13 @@ Matrix4 TransformTranslateManipulatorAdapter::GetFrame(ManipulatorSpace space)
             break;
         }
 
-    case ManipulatorSpaces::Local:
+    case ManipulatorSpace::Local:
         {
             frame = m_Transform->GetParentTransform();
             break;
         }
 
-    case ManipulatorSpaces::World:
+    case ManipulatorSpace::World:
         {
             // fall through, world space IS identity
             break;
@@ -867,7 +867,7 @@ Matrix4 TransformTranslatePivotManipulatorAdapter::GetFrame(ManipulatorSpace spa
 
     switch (space)
     {
-    case ManipulatorSpaces::Object:
+    case ManipulatorSpace::Object:
         {
             frame = m_Transform->GetGlobalTransform();
             frame.x *= 1.f / m_Transform->GetScale().x;
@@ -876,13 +876,13 @@ Matrix4 TransformTranslatePivotManipulatorAdapter::GetFrame(ManipulatorSpace spa
             break;
         }
 
-    case ManipulatorSpaces::Local:
+    case ManipulatorSpace::Local:
         {
             frame = m_Transform->GetParentTransform();
             break;
         }
 
-    case ManipulatorSpaces::World:
+    case ManipulatorSpace::World:
         {
             // fall through, world space IS identity
             break;

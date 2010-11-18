@@ -3,6 +3,7 @@
 using namespace Helium;
 using namespace Helium::Asset;
 
+REFLECT_DEFINE_ENUMERATION( AnimationClipMode );
 REFLECT_DEFINE_CLASS( AnimationClip );
 
 void AnimationClip::EnumerateClass( Reflect::Compositor< AnimationClip >& comp )

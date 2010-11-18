@@ -1009,19 +1009,19 @@ void MainFrame::OnViewChange(wxCommandEvent& event)
 
     case EventIds::ID_ViewNone:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryModes::None );
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryMode::None );
             break;
         }
 
     case EventIds::ID_ViewRender:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryModes::Render );
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryMode::Render );
             break;
         }
 
     case EventIds::ID_ViewCollision:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryModes::Collision );
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryMode::Collision );
             break;
         }
 
@@ -1039,19 +1039,19 @@ void MainFrame::OnViewChange(wxCommandEvent& event)
 
     case EventIds::ID_ViewWireframe:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Wireframe );
+            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingMode::Wireframe );
             break;
         }
 
     case EventIds::ID_ViewMaterial:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Material );
+            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingMode::Material );
             break;
         }
 
     case EventIds::ID_ViewTexture:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Texture );
+            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingMode::Texture );
             break;
         }
 
@@ -1077,25 +1077,25 @@ void MainFrame::OnViewCameraChange(wxCommandEvent& event)
     {
     case EventIds::ID_ViewOrbit:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraModes::Orbit);
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraMode::Orbit);
             break;
         }
 
     case EventIds::ID_ViewFront:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraModes::Front);
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraMode::Front);
             break;
         }
 
     case EventIds::ID_ViewSide:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraModes::Side);
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraMode::Side);
             break;
         }
 
     case EventIds::ID_ViewTop:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraModes::Top);
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraMode::Top);
             break;
         }
     }

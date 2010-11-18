@@ -12,9 +12,10 @@ namespace Helium
         class PrimitiveCone;
         class PrimitiveCircle;
 
-        namespace TranslateSnappingModes
+        class TranslateSnappingMode
         {
-            enum TranslateSnappingMode
+        public:
+            enum Enum
             {
                 None,
                 Surface,
@@ -23,17 +24,19 @@ namespace Helium
                 Offset,
                 Grid,
             };
-            static void TranslateSnappingModeEnumerateEnum( Reflect::Enumeration& info )
+
+            REFLECT_DECLARE_ENUMERATION( TranslateSnappingMode );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info.AddElement(None, TXT( "None" ) );
-                info.AddElement(Surface, TXT( "Surface" ) );
-                info.AddElement(Object, TXT( "Object" ) );
-                info.AddElement(Vertex, TXT( "Vertex" ) );
-                info.AddElement(Offset, TXT( "Offset" ) );
-                info.AddElement(Grid, TXT( "Grid" ) );
+                info.AddElement(None,       TXT( "None" ) );
+                info.AddElement(Surface,    TXT( "Surface" ) );
+                info.AddElement(Object,     TXT( "Object" ) );
+                info.AddElement(Vertex,     TXT( "Vertex" ) );
+                info.AddElement(Offset,     TXT( "Offset" ) );
+                info.AddElement(Grid,       TXT( "Grid" ) );
             }
-        }
-        typedef TranslateSnappingModes::TranslateSnappingMode TranslateSnappingMode;
+        };
 
         class PIPELINE_API TranslateManipulator : public SceneGraph::TransformManipulator
         {

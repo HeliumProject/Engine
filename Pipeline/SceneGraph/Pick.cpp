@@ -234,7 +234,7 @@ bool LinePickVisitor::AddHitTriangle(const Vector3& v0,const Vector3& v1,const V
   float32_t dot = 0.f;
   Vector3 normal ( (v1 - v0).Cross(v2 - v1) );
 
-  if (m_Camera->GetShadingMode() != ShadingModes::Wireframe && m_Camera->IsBackFaceCulling())
+  if (m_Camera->GetShadingMode() != ShadingMode::Wireframe && m_Camera->IsBackFaceCulling())
   {
     Vector3 cameraDir;
     m_Camera->GetDirection (cameraDir);
@@ -313,7 +313,7 @@ bool LinePickVisitor::AddHitTriangleClosestPoint(const Vector3& v0,const Vector3
   float32_t dot = 0.f;
   Vector3 normal ( (v2 - v1).Cross (v1 - v0) );
 
-  if (m_Camera->GetShadingMode() != ShadingModes::Wireframe && m_Camera->IsBackFaceCulling())
+  if (m_Camera->GetShadingMode() != ShadingMode::Wireframe && m_Camera->IsBackFaceCulling())
   {
     Vector3 cameraDir;
     m_Camera->GetDirection (cameraDir);
@@ -502,7 +502,7 @@ bool FrustumPickVisitor::AddHitTriangle(const Vector3& v0,const Vector3& v1,cons
   float32_t dot = 0.f;
   Vector3 normal ( (v2 - v1).Cross (v1 - v0) );
 
-  if (m_Camera->GetShadingMode() != ShadingModes::Wireframe && m_Camera->IsBackFaceCulling())
+  if (m_Camera->GetShadingMode() != ShadingMode::Wireframe && m_Camera->IsBackFaceCulling())
   {
     Vector3 cameraDir;
     m_Camera->GetDirection (cameraDir);

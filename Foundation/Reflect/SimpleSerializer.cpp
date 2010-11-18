@@ -1,7 +1,7 @@
-#include "SimpleSerializer.h"
-#include "ArchiveBinary.h"
-#include "ArchiveXML.h"
-
+#include "Foundation/Reflect/SimpleSerializer.h"
+#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Memory/Endian.h"
 
 using namespace Helium;

@@ -36,17 +36,17 @@ bool Primitive::IsSolid(SceneGraph::Camera* camera) const
   {
     switch (camera->GetShadingMode())
     {
-    case ShadingModes::Wireframe:
+    case ShadingMode::Wireframe:
       {
         return false;
       }
 
-    case ShadingModes::Material:
+    case ShadingMode::Material:
       {
         return true;
       }
 
-    case ShadingModes::Texture:
+    case ShadingMode::Texture:
       {
         return true;
       }

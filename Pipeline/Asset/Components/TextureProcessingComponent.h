@@ -9,9 +9,10 @@ namespace Helium
     {
         static uint64_t s_MaxTextureResolution;
 
-        namespace TextureDataFormats
+        class TextureDataFormat
         {
-            enum TextureDataFormat
+        public:
+            enum Enum
             {
                 DXT1,
                 DXT5,
@@ -23,28 +24,30 @@ namespace Helium
                 RGBA32,
                 Alpha8
             };
-            static void TextureDataFormatEnumerateEnum( Reflect::Enumeration& info )
+            
+            REFLECT_DECLARE_ENUMERATION( TextureDataFormat );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info.AddElement(DXT1,   TXT( "DXT1" ),   TXT( "DXT1" ) );
-                info.AddElement(DXT5,   TXT( "DXT5" ),   TXT( "DXT5" ) );
-                info.AddElement(RGB16,  TXT( "RGB16" ),  TXT( "RGB16" ) );
-                info.AddElement(RGB24,  TXT( "RGB24" ),  TXT( "RGB24" ) );
-                info.AddElement(RGB32,  TXT( "RGB32" ),  TXT( "RGB32" ) );
-                info.AddElement(RGBA16, TXT( "RGBA16" ), TXT( "RGBA16" ) );
-                info.AddElement(RGBA24, TXT( "RGBA24" ), TXT( "RGBA24" ) );
-                info.AddElement(RGBA32, TXT( "RGBA32" ), TXT( "RGBA32" ) );
-                info.AddElement(Alpha8, TXT( "Alpha8" ), TXT( "Alpha8" ) );
+                info.AddElement( DXT1,   TXT( "DXT1" ) );
+                info.AddElement( DXT5,   TXT( "DXT5" ) );
+                info.AddElement( RGB16,  TXT( "RGB16" ) );
+                info.AddElement( RGB24,  TXT( "RGB24" ) );
+                info.AddElement( RGB32,  TXT( "RGB32" ) );
+                info.AddElement( RGBA16, TXT( "RGBA16" ) );
+                info.AddElement( RGBA24, TXT( "RGBA24" ) );
+                info.AddElement( RGBA32, TXT( "RGBA32" ) );
+                info.AddElement( Alpha8, TXT( "Alpha8" ) );
             }
-        }
-        typedef TextureDataFormats::TextureDataFormat TextureDataFormat;
+        };
 
         class PIPELINE_API TextureProcessingComponent : public Component::ComponentBase
         {
         private:
-            uint64_t               m_MaxTextureResolution;
-            TextureDataFormat m_TextureDataFormat;
-            bool              m_GenerateMipMaps;
-            bool              m_GenerateBumpMap;
+            uint64_t            m_MaxTextureResolution;
+            TextureDataFormat   m_TextureDataFormat;
+            bool                m_GenerateMipMaps;
+            bool                m_GenerateBumpMap;
 
         public:
 
@@ -55,7 +58,7 @@ namespace Helium
         public:
             TextureProcessingComponent()
                 : m_MaxTextureResolution( s_MaxTextureResolution >> 2 )
-                , m_TextureDataFormat( TextureDataFormats::RGBA32 )
+                , m_TextureDataFormat( TextureDataFormat::RGBA32 )
                 , m_GenerateMipMaps( false )
                 , m_GenerateBumpMap( false )
             {

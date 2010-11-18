@@ -59,12 +59,12 @@ const Primitive* LocatorType::GetShape( LocatorShape shape ) const
 {
     switch (shape)
     {
-    case LocatorShapes::Cross:
+    case LocatorShape::Cross:
         {
             return m_Locator;
         }
 
-    case LocatorShapes::Cube:
+    case LocatorShape::Cube:
         {
             return m_Cube;
         }

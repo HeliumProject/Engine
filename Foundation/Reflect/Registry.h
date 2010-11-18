@@ -201,80 +201,31 @@ namespace Helium
         };
 
         //
-        // These inline templates actually cache out their result (per translation unit)
-        //  and are generally preferrable to calling into the Registry every time you need something
+        // Helpers to resolve type information
         //
 
         template<class T>
         inline int32_t GetType()
         {
-            static int32_t cached = ReservedTypes::Invalid;
-            if ( cached != ReservedTypes::Invalid )
-            {
-                return cached;
-            }
-
             const Type* type = T::s_Type;
             HELIUM_ASSERT(type); // if you hit this then your type is not registered
-            if ( type )
-            {
-                static IDTracker tracker; 
-                tracker.Set( type, &cached );
-
-                return cached = type->m_TypeID;
-            }
-            else
-            {
-                return ReservedTypes::Invalid;
-            }
+            return type->m_TypeID;
         }
 
         template<class T>
         inline const Class* GetClass()
         {
-            static const Class* cached = NULL;
-            if ( cached != NULL )
-            {
-                return cached;
-            }
-
             const Class* type = T::s_Class;
             HELIUM_ASSERT(type); // if you hit this then your type is not registered
-            if ( type )
-            {
-                static TypeTracker<const Class*> tracker; 
-                tracker.Set( type, &cached ); 
-
-                return cached = type;
-            }
-            else
-            {
-                return NULL;
-            }
+            return type;
         }
 
         template<class T>
         inline const Enumeration* GetEnumeration()
         {
-            static const Enumeration* cached = NULL;
-            if ( cached != NULL )
-            {
-                return cached;
-            }
-
-            const Enumeration* type = NULL;//T::s_Enumeration;
+            const Enumeration* type = T::s_Enumeration;
             HELIUM_ASSERT(type); // if you hit this then your type is not registered
-            if ( type )
-            {
-                static TypeTracker<const Enumeration*> tracker; 
-                tracker.Set( type, &cached );
-
-                return cached = type;
-            }
-            else
-            {
-                return NULL;
-            }
+            return type;
         }
 
         //
@@ -307,12 +258,9 @@ namespace Helium
         typedef void EnumerateEnumFunc( Reflect::Enumeration& info );
 
         template<class T>
-        inline UnregisterFunc RegisterEnumType( EnumerateEnumFunc enumerate, const tstring& name )
+        inline UnregisterFunc RegisterEnumType( const tstring& name )
         {
-            Reflect::Enumeration* enumeration = Reflect::Enumeration::Create<T>( name );
-
-            // defer to this function
-            enumerate( *enumeration );
+            Reflect::Enumeration* enumeration = T::CreateEnumeration( name );
 
             // create the type information and register it with the registry
             if ( Reflect::Registry::GetInstance()->RegisterType( enumeration ) )

@@ -133,10 +133,10 @@ void ViewPanel::RefreshButtonStates()
 {
     m_HighlightModeToggleButton->SetValue( m_ViewCanvas->GetViewport().IsHighlighting() );
 
-    m_OrbitCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraModes::Orbit );
-    m_FrontCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraModes::Front );
-    m_SideCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraModes::Side );
-    m_TopCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraModes::Top );
+    m_OrbitCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraMode::Orbit );
+    m_FrontCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraMode::Front );
+    m_SideCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraMode::Side );
+    m_TopCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraMode::Top );
 
     m_ShowAxesToggleButton->SetValue( m_ViewCanvas->GetViewport().IsAxesVisible() );
     m_ShowGridToggleButton->SetValue( m_ViewCanvas->GetViewport().IsGridVisible() );
@@ -146,8 +146,8 @@ void ViewPanel::RefreshButtonStates()
     m_FrustumCullingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->IsViewFrustumCulling() );
     m_BackfaceCullingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->IsBackFaceCulling() );
 
-    m_WireframeShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == SceneGraph::ShadingModes::Wireframe );
-    m_MaterialShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == SceneGraph::ShadingModes::Material );
+    m_WireframeShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == SceneGraph::ShadingMode::Wireframe );
+    m_MaterialShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == SceneGraph::ShadingMode::Material );
 }
 
 void ViewPanel::OnChar( wxKeyEvent& event )
@@ -320,7 +320,7 @@ void ViewPanel::OnRenderMode( wxCommandEvent& event )
     {
     case ViewPanelEvents::Wireframe:
         {
-            m_ViewCanvas->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Wireframe );
+            m_ViewCanvas->GetViewport().GetCamera()->SetShadingMode( ShadingMode::Wireframe );
             Refresh();
             event.Skip( false );
             break;
@@ -328,7 +328,7 @@ void ViewPanel::OnRenderMode( wxCommandEvent& event )
 
     case ViewPanelEvents::Material:
         {
-            m_ViewCanvas->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Material );
+            m_ViewCanvas->GetViewport().GetCamera()->SetShadingMode( ShadingMode::Material );
             Refresh();
             event.Skip( false );
             break;
@@ -336,7 +336,7 @@ void ViewPanel::OnRenderMode( wxCommandEvent& event )
 
     case ViewPanelEvents::Texture:
         {
-            m_ViewCanvas->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Texture );
+            m_ViewCanvas->GetViewport().GetCamera()->SetShadingMode( ShadingMode::Texture );
             Refresh();
             event.Skip( false );
             break;
@@ -356,7 +356,7 @@ void ViewPanel::OnCamera( wxCommandEvent& event )
     case ViewPanelEvents::OrbitCamera:
     case ID_OrbitCamera:
         {
-            m_ViewCanvas->GetViewport().SetCameraMode( CameraModes::Orbit );
+            m_ViewCanvas->GetViewport().SetCameraMode( CameraMode::Orbit );
             Refresh();
             event.Skip( false );
             break;
@@ -365,7 +365,7 @@ void ViewPanel::OnCamera( wxCommandEvent& event )
     case ViewPanelEvents::FrontCamera:
     case ID_FrontCamera:
         {
-            m_ViewCanvas->GetViewport().SetCameraMode( CameraModes::Front );
+            m_ViewCanvas->GetViewport().SetCameraMode( CameraMode::Front );
             Refresh();
             event.Skip( false );
             break;
@@ -374,7 +374,7 @@ void ViewPanel::OnCamera( wxCommandEvent& event )
     case ViewPanelEvents::SideCamera:
     case ID_SideCamera:
         {
-            m_ViewCanvas->GetViewport().SetCameraMode( CameraModes::Side );
+            m_ViewCanvas->GetViewport().SetCameraMode( CameraMode::Side );
             Refresh();
             event.Skip( false );
             break;
@@ -383,7 +383,7 @@ void ViewPanel::OnCamera( wxCommandEvent& event )
     case ViewPanelEvents::TopCamera:
     case ID_TopCamera:
         {
-            m_ViewCanvas->GetViewport().SetCameraMode( CameraModes::Top );
+            m_ViewCanvas->GetViewport().SetCameraMode( CameraMode::Top );
             Refresh();
             event.Skip( false );
             break;

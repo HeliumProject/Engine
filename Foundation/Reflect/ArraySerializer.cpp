@@ -1,7 +1,8 @@
-#include "ArraySerializer.h"
-#include "Compression.h" 
-#include "ArchiveBinary.h"
-#include "ArchiveXML.h"
+#include "Foundation/Reflect/ArraySerializer.h"
+#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
+#include "Foundation/Reflect/Compression.h" 
 
 using namespace Helium;
 using namespace Helium::Reflect;

@@ -727,7 +727,7 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
 
     switch ( view->GetSettingsManager()->GetSettings< ViewportSettings >()->GetColorMode() )
     {
-    case ViewColorModes::Layer:
+    case ViewColorMode::Layer:
         if ( m_LayerColor )
         {
             const Color3& color = m_LayerColor->GetColor();
@@ -735,7 +735,7 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
         }
         break;
 
-    case ViewColorModes::Scene:
+    case ViewColorMode::Scene:
         {
             const Color3& color = m_Owner->GetColor();
             material.Ambient = SceneGraph::Color::ColorToColorValue( (DWORD)defaultMaterial.Ambient.a, color.r, color.g, color.b );

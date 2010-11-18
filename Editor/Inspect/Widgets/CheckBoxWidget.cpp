@@ -23,6 +23,8 @@ void CheckBoxWindow::OnChecked( wxCommandEvent& )
     }
 }
 
+REFLECT_DEFINE_CLASS( CheckBoxWidget );
+
 CheckBoxWidget::CheckBoxWidget( Inspect::CheckBox* checkBox )
 : m_CheckBoxControl( checkBox )
 , m_CheckBoxWindow( NULL )

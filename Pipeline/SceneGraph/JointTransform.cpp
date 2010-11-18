@@ -24,7 +24,7 @@ void JointTransform::EnumerateClass( Reflect::Compositor<JointTransform>& comp )
 
 void JointTransform::InitializeType()
 {
-    Reflect::RegisterClassType< JointTransform >( TXT( "JointTransform" ) );
+    Reflect::RegisterClassType< JointTransform >( TXT( "SceneGraph::JointTransform" ) );
 
     ZeroMemory(&g_JointTransformMaterial, sizeof(g_JointTransformMaterial));
     g_JointTransformMaterial.Ambient = SceneGraph::Color::DARKGREEN;

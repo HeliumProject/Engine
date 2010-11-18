@@ -126,7 +126,7 @@ bool ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
     {
         if ( error )
         {
-            *error = tstring( TXT( "Component '" ) ) + component->GetClass()->m_ShortName + TXT( "' is not valid for collection '" ) + GetClass()->m_ShortName + TXT( "': " ) + errorMessage;
+            *error = tstring( TXT( "Component '" ) ) + component->GetClass()->m_Name + TXT( "' is not valid for collection '" ) + GetClass()->m_Name + TXT( "': " ) + errorMessage;
         }
         
         return false;
@@ -271,7 +271,7 @@ bool ComponentCollection::ProcessComponent(ElementPtr element, const tstring& fi
     if ( fieldName == TXT( "m_Components" ) )
     {
         V_Component attributes;
-        Serializer::GetValue( Reflect::AssertCast<Reflect::Serializer>( element ), (V_Element&)attributes );
+        Serializer::GetValue( Reflect::AssertCast<Reflect::Serializer>( element ), (std::vector< ElementPtr >&)attributes );
 
         for ( V_Component::const_iterator itr = attributes.begin(), end = attributes.end();
             itr != end;

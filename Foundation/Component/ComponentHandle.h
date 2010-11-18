@@ -47,7 +47,7 @@ namespace Helium
                     const Reflect::Class* attributeClass = Reflect::GetClass< ComponentType >();
                     if ( attributeClass )
                     {
-                        attributeTypeName = attributeClass->m_ShortName.c_str();
+                        attributeTypeName = attributeClass->m_Name.c_str();
                     }
 
                     if (m_Component.ReferencesObject())

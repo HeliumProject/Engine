@@ -11,7 +11,8 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_CLASS(Locator);
+REFLECT_DEFINE_ENUMERATION( LocatorShape );
+REFLECT_DEFINE_CLASS( Locator );
 
 void Locator::EnumerateClass( Reflect::Compositor<Locator>& comp )
 {
@@ -21,7 +22,7 @@ void Locator::EnumerateClass( Reflect::Compositor<Locator>& comp )
 
 void Locator::InitializeType()
 {
-    Reflect::RegisterClassType< Locator >( TXT( "Locator" ) );
+    Reflect::RegisterClassType< Locator >( TXT( "SceneGraph::Locator" ) );
 
     PropertiesGenerator::InitializePanel( TXT( "Locator" ), CreatePanelSignature::Delegate( &Locator::CreatePanel ) );
 }
@@ -32,7 +33,7 @@ void Locator::CleanupType()
 }
 
 Locator::Locator()
-: m_Shape (LocatorShapes::Cross)
+: m_Shape (LocatorShape::Cross)
 {
 
 }
@@ -66,7 +67,7 @@ SceneNodeTypePtr Locator::CreateNodeType( Scene* scene ) const
 
 int Locator::GetShape() const
 {
-    return m_Shape;
+    return (int)m_Shape;
 }
 
 void Locator::SetShape( int shape )
@@ -183,13 +184,13 @@ void Locator::CreatePanel( CreatePanelArgs& args )
 
             {
                 tostringstream str;
-                str << LocatorShapes::Cross;
+                str << LocatorShape::Cross;
                 items.push_back( Inspect::ChoiceItem( TXT( "Cross" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << LocatorShapes::Cube;
+                str << LocatorShape::Cube;
                 items.push_back( Inspect::ChoiceItem( TXT( "Cube" ), str.str() ) );
             }
 

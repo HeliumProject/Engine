@@ -36,7 +36,7 @@ void Mesh::EnumerateClass( Reflect::Compositor<Mesh>& comp )
 
 void Mesh::InitializeType()
 {
-    Reflect::RegisterClassType< Mesh >( TXT( "Mesh" ) );
+    Reflect::RegisterClassType< Mesh >( TXT( "SceneGraph::Mesh" ) );
 
     ZeroMemory(&s_WireMaterial, sizeof(s_WireMaterial));
     s_WireMaterial.Ambient = Color::BLACK;
@@ -291,7 +291,7 @@ void Mesh::Render( RenderVisitor* render )
 
     switch ( render->GetViewport()->GetCamera()->GetShadingMode() )
     {
-    case ShadingModes::Wireframe:
+    case ShadingMode::Wireframe:
         {
             if ( selectable )
             {
@@ -512,7 +512,7 @@ void Mesh::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode
 
         switch ( camera->GetShadingMode() )
         {
-        case ShadingModes::Material:
+        case ShadingMode::Material:
             {
                 device->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), (UINT)( indices->GetBaseIndex() + mesh->m_WireframeVertexIndices.size() ), (UINT)( mesh->m_TriangleCount ) );
 
@@ -521,7 +521,7 @@ void Mesh::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode
                 break;
             }
 
-        case ShadingModes::Texture:
+        case ShadingMode::Texture:
             {
                 size_t shaderCount;
                 size_t shaderTriCountsCount;
@@ -586,7 +586,7 @@ bool Mesh::Pick( PickVisitor* pick )
     // set the pick's matrices to process intersections in this space
     pick->SetCurrentObject (this, pick->State().m_Matrix);
 
-    if (pick->GetCamera()->GetShadingMode() == ShadingModes::Wireframe)
+    if (pick->GetCamera()->GetShadingMode() == ShadingMode::Wireframe)
     {
         // test each segment (vertex data is in local space, intersection function will transform)
         for (size_t i=0; i<m_WireframeVertexIndices.size(); i+=2)

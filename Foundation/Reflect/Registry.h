@@ -4,13 +4,12 @@
 #include <string>
 
 #include "Platform/Types.h"
-#include "Foundation/Memory/SmartPtr.h"
-#include "Foundation/File/Path.h"
 
-#include "API.h"
-#include "Type.h"
-#include "Class.h"
-#include "Enumeration.h"
+#include "Foundation/Memory.h"
+#include "Foundation/InitializerStack.h"
+#include "Foundation/File/Path.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/Reflect/API.h"
 
 namespace Helium
 {
@@ -25,7 +24,7 @@ namespace Helium
         class StackRecord : public Helium::RefCountBase<StackRecord>
         {
         public:
-            std::vector<uintptr_t>    m_Stack;
+            std::vector<uintptr_t>  m_Stack;
             tstring                 m_String;
             bool                    m_Converted;
 
@@ -51,7 +50,7 @@ namespace Helium
         {
         public:
             uintptr_t         m_Address;
-            tstring         m_ShortName;
+            tstring         m_Name;
             int             m_Type;
 
             StackRecordPtr m_CreateStack;
@@ -135,6 +134,7 @@ namespace Helium
             M_IDToType m_TypesByID;
             M_StrToType m_TypesByName;
             M_StrToType m_TypesByAlias;
+            InitializerStack m_InitializerStack;
 
             CreatedFunc m_Created; // the callback on creation
             DestroyedFunc m_Destroyed; // the callback on deletion
@@ -166,24 +166,12 @@ namespace Helium
             const Type* GetType(const tstring& str) const;
 
             // class lookup
-            inline const Class* GetClass(int32_t id) const
-            {
-                return ReflectionCast<const Class>(GetType( id ));
-            }
-            inline const Class* GetClass(const tstring& str) const
-            {
-                return ReflectionCast<const Class>(GetType( str ));
-            }
+            const Class* GetClass(int32_t id) const;
+            const Class* GetClass(const tstring& str) const;
 
             // enumeration lookup
-            inline const Enumeration* GetEnumeration(int32_t id) const
-            {
-                return ReflectionCast<const Enumeration>(GetType( id ));
-            }
-            inline const Enumeration* GetEnumeration(const tstring& str) const
-            {
-                return ReflectionCast<const Enumeration>(GetType( str ));
-            }
+            const Enumeration* GetEnumeration(int32_t id) const;
+            const Enumeration* GetEnumeration(const tstring& str) const;
 
             // create instances of classes
             ObjectPtr CreateInstance(int id) const;
@@ -213,102 +201,31 @@ namespace Helium
         };
 
         //
-        // These inline templates actually cache out their result (per translation unit)
-        //  and are generally preferrable to calling into the Registry every time you need something
+        // Helpers to resolve type information
         //
 
         template<class T>
         inline int32_t GetType()
         {
-            static int32_t cached = ReservedTypes::Invalid;
-
-            if ( cached != ReservedTypes::Invalid )
-            {
-                return cached;
-            }
-
-            const Type* type = NULL;
-
-            tstring temp;
-            bool converted = Helium::ConvertString( typeid( T ).name(), temp );
-            HELIUM_ASSERT( converted ); // if you hit this, for some reason we couldn't convert your typename
-
-            type = Registry::GetInstance()->GetType( temp );
+            const Type* type = T::s_Type;
             HELIUM_ASSERT(type); // if you hit this then your type is not registered
-
-            if ( type )
-            {
-                static IDTracker tracker; 
-                tracker.Set( type, &cached );
-
-                return cached = type->m_TypeID;
-            }
-            else
-            {
-                return ReservedTypes::Invalid;
-            }
+            return type->m_TypeID;
         }
 
         template<class T>
         inline const Class* GetClass()
         {
-            static const Class* cached = NULL;
-            if ( cached != NULL )
-            {
-                return cached;
-            }
-
-            const Type* type = NULL;
-
-            tstring convertedName;
-            {
-                bool converted = Helium::ConvertString( typeid( T ).name(), convertedName );
-                HELIUM_ASSERT( converted );
-            }
-
-            type = Registry::GetInstance()->GetType( convertedName );
+            const Class* type = T::s_Class;
             HELIUM_ASSERT(type); // if you hit this then your type is not registered
-
-            if ( type )
-            {
-                static TypeTracker<const Class*> tracker; 
-                tracker.Set( type, &cached ); 
-
-                return cached = ReflectionCast<const Class>( type );
-            }
-            else
-            {
-                return NULL;
-            }
+            return type;
         }
 
         template<class T>
         inline const Enumeration* GetEnumeration()
         {
-            static const Enumeration* cached = NULL;
-            if ( cached != NULL )
-            {
-                return cached;
-            }
-
-            const Type* type = NULL;
-            tstring convertedName;
-            bool converted = Helium::ConvertString( typeid( T ).name(), convertedName );
-            HELIUM_ASSERT( converted );
-            type = Registry::GetInstance()->GetType( convertedName );
+            const Enumeration* type = T::s_Enumeration;
             HELIUM_ASSERT(type); // if you hit this then your type is not registered
-
-            if ( type )
-            {
-                static TypeTracker<const Enumeration*> tracker; 
-                tracker.Set( type, &cached );
-
-                return cached = ReflectionCast<const Enumeration>(type);
-            }
-            else
-            {
-                return NULL;
-            }
+            return type;
         }
 
         //
@@ -318,10 +235,10 @@ namespace Helium
         typedef void (*UnregisterFunc)();
 
         template<class T>
-        inline UnregisterFunc RegisterClassType(const tstring& shortName = TXT( "" ))
+        inline UnregisterFunc RegisterClassType( const tstring& name )
         {
             // create the type information and register it with the registry
-            if ( Reflect::Registry::GetInstance()->RegisterType( T::CreateClass( shortName ) ) )
+            if ( Reflect::Registry::GetInstance()->RegisterType( T::CreateClass( name ) ) )
             {
                 // this function will unregister the type we just registered
                 return &UnregisterClassType<T>;
@@ -338,18 +255,15 @@ namespace Helium
             Reflect::Registry::GetInstance()->UnregisterType( Reflect::GetClass<T>() );
         }
 
-        typedef void EnumerateEnumFunc( Reflect::Enumeration* info );
+        typedef void EnumerateEnumFunc( Reflect::Enumeration& info );
 
         template<class T>
-        inline UnregisterFunc RegisterEnumType(EnumerateEnumFunc enumerate, const tstring& shortName = TXT( "" ))
+        inline UnregisterFunc RegisterEnumType( const tstring& name )
         {
-            Reflect::Enumeration* info = Reflect::Enumeration::Create<T>( shortName );
-
-            // defer to this function
-            enumerate( info );
+            Reflect::Enumeration* enumeration = T::CreateEnumeration( name );
 
             // create the type information and register it with the registry
-            if ( Reflect::Registry::GetInstance()->RegisterType( info ) )
+            if ( Reflect::Registry::GetInstance()->RegisterType( enumeration ) )
             {
                 // this function will unregister the type we just registered
                 return &UnregisterEnumType<T>;

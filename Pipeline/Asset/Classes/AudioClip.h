@@ -7,24 +7,27 @@ namespace Helium
 {
     namespace Asset
     {
-        namespace AudioClipModes
+        class AudioClipMode
         {
-            enum AudioClipMode
+        public:
+            enum Enum
             {
                 Default,
                 Once,
                 Loop,
                 PingPong
             };
-            static void AudioClipModeEnumerateEnum( Reflect::Enumeration* info )
+
+            REFLECT_DECLARE_ENUMERATION( AudioClipMode );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement( Default,  TXT( "Default" ),  TXT( "Default" ) );
-                info->AddElement( Once,     TXT( "Once" ),     TXT( "Once" ) );
-                info->AddElement( Loop,     TXT( "Loop" ),     TXT( "Loop" ) );
-                info->AddElement( PingPong, TXT( "PingPong" ), TXT( "PingPong" ) );
+                info.AddElement( Default,  TXT( "Default" ) );
+                info.AddElement( Once,     TXT( "Once" ) );
+                info.AddElement( Loop,     TXT( "Loop" ) );
+                info.AddElement( PingPong, TXT( "PingPong" ) );
             }
-        }
-        typedef AudioClipModes::AudioClipMode AudioClipMode;
+        };
 
         class PIPELINE_API AudioClip : public AssetClass
         {
@@ -32,13 +35,13 @@ namespace Helium
             AudioClipMode     m_Mode;
 
         public:
-            REFLECT_DECLARE_ABSTRACT( AudioClip, AssetClass );
+            REFLECT_DECLARE_CLASS( AudioClip, AssetClass );
 
             static void EnumerateClass( Reflect::Compositor< AudioClip >& comp );
 
         public:
             AudioClip()
-                : m_Mode( AudioClipModes::Default )
+                : m_Mode( AudioClipMode::Default )
             {
             }
 

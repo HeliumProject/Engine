@@ -60,9 +60,10 @@ namespace Helium
 
 
         ///////////////////////////////////////////////////////////////////////
-        namespace ProjectMenuIDs
+        class ProjectMenuID
         {
-            enum ProjectMenuID
+        public:
+            enum Enum
             {
                 Filename = 0,
                 FullPath,
@@ -70,19 +71,17 @@ namespace Helium
 
                 COUNT //Do not use: must be last
             };
-            static void ProjectMenuIDsEnumerateEnum( Reflect::Enumeration* info )
+
+            REFLECT_DECLARE_ENUMERATION( ProjectMenuID );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement( Filename, TXT( "Filename" ) );
-                info->AddElement( FullPath, TXT( "FullPath" ) );
-                info->AddElement( RelativePath, TXT( "RelativePath" ) );
+                info.AddElement( Filename,      TXT( "Filename" ) );
+                info.AddElement( FullPath,      TXT( "FullPath" ) );
+                info.AddElement( RelativePath,  TXT( "RelativePath" ) );
             }
 
-            static const tchar_t* s_Labels[COUNT] = 
-            {
-                TXT( "Filename" ),
-                TXT( "Full Path" ),
-                TXT( "Relative Path" ),
-            };
+            static const tchar_t* s_Labels[COUNT];
 
             inline const tchar_t* Label( uint32_t id )
             {
@@ -90,8 +89,7 @@ namespace Helium
                 HELIUM_ASSERT( id < COUNT );
                 return s_Labels[id];
             }
-        }
-        typedef ProjectMenuIDs::ProjectMenuID ProjectMenuID;
+        };
 
 
         ///////////////////////////////////////////////////////////////////////

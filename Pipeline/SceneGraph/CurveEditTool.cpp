@@ -14,7 +14,7 @@ REFLECT_DEFINE_ABSTRACT(CurveEditTool);
 
 void CurveEditTool::InitializeType()
 {
-    Reflect::RegisterClassType< CurveEditTool >( TXT( "CurveEditTool" ) );
+    Reflect::RegisterClassType< CurveEditTool >( TXT( "SceneGraph::CurveEditTool" ) );
 }
 
 void CurveEditTool::CleanupType()
@@ -98,7 +98,7 @@ bool CurveEditTool::MouseDown( const MouseButtonInput& e )
                 Vector3 b( p1->GetPosition() );
                 Vector3 p;
 
-                if ( curve->GetCurveType() == CurveTypes::Linear )
+                if ( curve->GetCurveType() == CurveType::Linear )
                 {
                     float mu;
 

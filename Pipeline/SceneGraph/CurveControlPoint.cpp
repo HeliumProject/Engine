@@ -16,7 +16,7 @@ void CurveControlPoint::EnumerateClass( Reflect::Compositor<CurveControlPoint>& 
 
 void CurveControlPoint::InitializeType()
 {
-    Reflect::RegisterClassType< CurveControlPoint >( TXT( "CurveControlPoint" ) );
+    Reflect::RegisterClassType< CurveControlPoint >( TXT( "SceneGraph::CurveControlPoint" ) );
     PropertiesGenerator::InitializePanel( TXT( "CurveControlPoint" ), CreatePanelSignature::Delegate( &CurveControlPoint::CreatePanel ) );
 }
 
@@ -160,7 +160,7 @@ Matrix4 CurveControlPointTranslateManipulatorAdapter::GetFrame(ManipulatorSpace 
     // if we are pivoting then just use the value
     m = Matrix4 (GetValue()) * m;
 
-    if (space == ManipulatorSpaces::Object)
+    if (space == ManipulatorSpace::Object)
     {
         return m;
     }

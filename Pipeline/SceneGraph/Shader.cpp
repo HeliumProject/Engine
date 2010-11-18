@@ -27,7 +27,7 @@ void Shader::EnumerateClass( Reflect::Compositor<Shader>& comp )
 
 void Shader::InitializeType()
 {
-    Reflect::RegisterClassType< Shader >( TXT( "Shader" ) );
+    Reflect::RegisterClassType< Shader >( TXT( "SceneGraph::Shader" ) );
 
     g_ShaderTextureMemoryPool = Profile::Memory::CreatePool( TXT( "Direct3D Texture Data" ) );
 }

@@ -6,16 +6,18 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
+REFLECT_DEFINE_CLASS( SceneSettings );
+
 SceneSettings::SceneSettings()
 : m_MRU( new MRUData() )
 , m_ScaleManipulatorSize( 0.3f )
 , m_RotateManipulatorSize( 0.3f )
 , m_RotateManipulatorAxisSnap( false )
 , m_RotateManipulatorSnapDegrees( 15.0f )
-, m_RotateManipulatorSpace( ManipulatorSpaces::Object )
+, m_RotateManipulatorSpace( ManipulatorSpace::Object )
 , m_TranslateManipulatorSize( 0.3f )
-, m_TranslateManipulatorSpace( ManipulatorSpaces::Object )
-, m_TranslateManipulatorSnappingMode( TranslateSnappingModes::None )
+, m_TranslateManipulatorSpace( ManipulatorSpace::Object )
+, m_TranslateManipulatorSnappingMode( TranslateSnappingMode::None )
 , m_TranslateManipulatorDistance( 1.0f )
 , m_TranslateManipulatorLiveObjectsOnly( false )
 , m_ScaleManipulatorGridSnap( false )

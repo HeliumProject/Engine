@@ -3,7 +3,7 @@
 
 using namespace Helium::Reflect;
 
-FindByTypeVisitor::FindByTypeVisitor(int32_t type, V_Element& found)
+FindByTypeVisitor::FindByTypeVisitor(int32_t type, std::vector< ElementPtr >& found)
 : m_Type (type)
 , m_Found (found)
 {
@@ -20,7 +20,7 @@ bool FindByTypeVisitor::VisitElement(Element* element)
     return true;
 }
 
-FindByTypeSetVisitor::FindByTypeSetVisitor(const std::set< int32_t >& types, V_Element& found)
+FindByTypeSetVisitor::FindByTypeSetVisitor(const std::set< int32_t >& types, std::vector< ElementPtr >& found)
 : m_Types (types)
 , m_Found (found)
 {

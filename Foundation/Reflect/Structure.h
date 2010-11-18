@@ -28,17 +28,15 @@ namespace Helium
             static Structure* Create();
 
             template<class T>
-            static Structure* Create (const std::string& name, const std::string& base)
+            static Structure* Create ( const tstring& name, const tstring& base )
             {
                 Structure* info = Structure::Create();
 
                 info->m_TypeID = AssignTypeID();
                 info->m_Size = sizeof(T);
-                info->m_ShortName = name;
-                info->m_FullName = typeid(T).name();
-                info->m_UIName = info->m_ShortName;
-
+                info->m_Name = name;
                 info->m_Base = base;
+                info->m_UIName = info->m_Name;
                 info->m_Enumerator = (CompositeEnumerator)&Reflect::Enumerate<T>;
 
                 // enumerate reflection data

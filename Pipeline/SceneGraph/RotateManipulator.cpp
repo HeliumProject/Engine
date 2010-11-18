@@ -784,19 +784,19 @@ void RotateManipulator::CreateProperties()
 
             {
                 tostringstream str;
-                str << ManipulatorSpaces::Object;
+                str << ManipulatorSpace::Object;
                 items.push_back( Inspect::ChoiceItem( TXT( "Object" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << ManipulatorSpaces::Local;
+                str << ManipulatorSpace::Local;
                 items.push_back( Inspect::ChoiceItem( TXT( "Local" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << ManipulatorSpaces::World;
+                str << ManipulatorSpace::World;
                 items.push_back( Inspect::ChoiceItem( TXT( "World" ), str.str() ) );
             }
 
@@ -843,7 +843,7 @@ void RotateManipulator::SetSize( float32_t size )
 
 int RotateManipulator::GetSpace() const
 {
-    return m_Space;
+    return (int)m_Space;
 }
 
 void RotateManipulator::SetSpace(int space)

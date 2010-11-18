@@ -12,14 +12,24 @@ using namespace Helium::Reflect;
 
 REFLECT_DEFINE_ABSTRACT( Element );
 
+Element::Element()
+{
+
+}
+
 void Element::EnumerateClass( Reflect::Compositor<Element>& comp )
 {
 
 }
 
-Element::Element()
+const tstring& Element::GetTitle() const
 {
+    return GetClass()->m_UIName;
+}
 
+bool Element::IsCompact() const
+{
+    return false;
 }
 
 bool Element::ProcessComponent(ElementPtr element, const tstring& fieldName)

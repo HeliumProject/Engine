@@ -170,11 +170,11 @@ namespace Helium
                             return true;
                         }
 
-                        Reflect::V_ConstSerializer data;
+                        std::vector< Reflect::ConstSerializerPtr > data;
                         setSerializer->GetItems( data );
 
-                        Reflect::V_ConstSerializer::const_iterator itr = data.begin();
-                        Reflect::V_ConstSerializer::const_iterator end = data.end();
+                        std::vector< Reflect::ConstSerializerPtr >::const_iterator itr = data.begin();
+                        std::vector< Reflect::ConstSerializerPtr >::const_iterator end = data.end();
                         for ( ; itr != end; ++itr )
                         {
                             Helium::Path path;
@@ -197,8 +197,8 @@ namespace Helium
                         return true;
                     }
 
-                    const Reflect::V_Element& vals = arraySerializer->m_Data.Ref();
-                    for ( Reflect::V_Element::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
+                    const std::vector< Reflect::ElementPtr >& vals = arraySerializer->m_Data.Ref();
+                    for ( std::vector< Reflect::ElementPtr >::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
                     {
                         (*itr)->Accept( *this );
                     }

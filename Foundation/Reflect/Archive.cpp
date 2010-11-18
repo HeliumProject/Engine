@@ -1,28 +1,24 @@
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <memory>
-
-#include "Element.h"
-#include "Version.h"
-#include "Registry.h"
-
-#include "ArchiveXML.h"
-#include "ArchiveBinary.h"
+#include "Foundation/Reflect/Archive.h"
 
 #include "Platform/Mutex.h"
 #include "Platform/Process.h"
 #include "Platform/Debug.h"
+
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
+#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/Version.h"
+#include "Foundation/Reflect/Registry.h"
+#include "Foundation/Reflect/ArchiveXML.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <memory>
 
 using namespace Helium;
 using namespace Helium::Reflect;
-
-
-
-//
-// Archive is a std set of static and non-static archive related functions
-//
 
 Archive::Archive( const Path& path, ByteOrder byteOrder )
 : m_Path( path )
@@ -35,8 +31,7 @@ Archive::Archive( const Path& path, ByteOrder byteOrder )
 }
 
 Archive::Archive()
-: m_Path( TXT( "" ) )
-, m_ByteOrder( ByteOrders::LittleEndian )
+: m_ByteOrder( ByteOrders::LittleEndian )
 , m_Progress( 0 )
 , m_SearchType( Reflect::ReservedTypes::Invalid )
 , m_Abort( false )
@@ -60,7 +55,7 @@ void Archive::PreSerialize()
     e_Status.Raise( info );
 }
 
-void Archive::PostSerialize(V_Element& append)
+void Archive::PostSerialize(std::vector< ElementPtr >& append)
 {
     StatusInfo info( *this, ArchiveStates::ArchiveComplete );
     info.m_Progress = m_Progress = 100;
@@ -93,7 +88,7 @@ void Archive::PreDeserialize()
     e_Status.Raise( info );
 }
 
-void Archive::PostDeserialize(V_Element& append)
+void Archive::PostDeserialize(std::vector< ElementPtr >& append)
 {
     StatusInfo info( *this, ArchiveStates::ArchiveComplete );
     info.m_Progress = m_Progress = 100;
@@ -200,7 +195,7 @@ void Archive::Put( const ElementPtr& element )
     m_Spool.push_back( element );
 }
 
-void Archive::Put( const V_Element& elements )
+void Archive::Put( const std::vector< ElementPtr >& elements )
 {
     m_Spool.reserve( m_Spool.size() + elements.size() );
     m_Spool.insert( m_Spool.end(), elements.begin(), elements.end() );
@@ -211,7 +206,7 @@ ElementPtr Archive::Get( int searchType )
 {
     REFLECT_SCOPE_TIMER( ( "%s", m_Path.c_str() ) );
 
-    V_Element elements;
+    std::vector< ElementPtr > elements;
     Get( elements );
 
     if ( searchType == Reflect::ReservedTypes::Any )
@@ -220,8 +215,8 @@ ElementPtr Archive::Get( int searchType )
     }
 
     ElementPtr result = NULL;
-    V_Element::iterator itr = elements.begin();
-    V_Element::iterator end = elements.end();
+    std::vector< ElementPtr >::iterator itr = elements.begin();
+    std::vector< ElementPtr >::iterator end = elements.end();
     for ( ; itr != end; ++itr )
     {
         if ( (*itr)->HasType( searchType ) )
@@ -233,7 +228,7 @@ ElementPtr Archive::Get( int searchType )
     return NULL;
 }
 
-void Archive::Get( V_Element& elements )
+void Archive::Get( std::vector< ElementPtr >& elements )
 {
     REFLECT_SCOPE_TIMER( ( "%s", m_Path.c_str() ) );
 
@@ -318,12 +313,12 @@ ArchivePtr Reflect::GetArchive( const Path& path, ByteOrder byteOrder )
 
 bool Reflect::ToArchive( const Path& path, ElementPtr element, tstring* error, ByteOrder byteOrder )
 {
-    V_Element elements;
+    std::vector< ElementPtr > elements;
     elements.push_back( element );
     return ToArchive( path, elements, error, byteOrder );
 }
 
-bool Reflect::ToArchive( const Path& path, const V_Element& elements, tstring* error, ByteOrder byteOrder )
+bool Reflect::ToArchive( const Path& path, const std::vector< ElementPtr >& elements, tstring* error, ByteOrder byteOrder )
 {
     HELIUM_ASSERT( !path.empty() );
     HELIUM_ASSERT( elements.size() > 0 );

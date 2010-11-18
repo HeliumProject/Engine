@@ -347,11 +347,11 @@ void VaultSearch::SearchThreadProc( int32_t searchID )
 
     //-------------------------------------------
     // Path
-    if ( m_CurrentSearchQuery->GetSearchType() == SearchTypes::File
-        || m_CurrentSearchQuery->GetSearchType() == SearchTypes::Directory )
+    if ( m_CurrentSearchQuery->GetSearchType() == SearchType::File
+        || m_CurrentSearchQuery->GetSearchType() == SearchType::Directory )
     {
         Helium::Path searchPath( m_CurrentSearchQuery->GetQueryString() );
-        if ( m_CurrentSearchQuery->GetSearchType() == SearchTypes::File )
+        if ( m_CurrentSearchQuery->GetSearchType() == SearchType::File )
         {
             searchPath.Set( searchPath.Directory() );
         }
@@ -368,7 +368,7 @@ void VaultSearch::SearchThreadProc( int32_t searchID )
 
     //-------------------------------------------
     // CacheDB
-    if ( m_CurrentSearchQuery->GetSearchType() == SearchTypes::CacheDB )
+    if ( m_CurrentSearchQuery->GetSearchType() == SearchType::CacheDB )
     {
         std::vector<TrackedFile> assetFiles = litesql::select<TrackedFile>( trackerDB, TrackedFile::MPath.like( m_CurrentSearchQuery->GetSQLQueryString().c_str() ) ).all();
 

@@ -16,8 +16,6 @@ const float Camera::NearClipDistance = 0.05f;
 const float Camera::FarClipDistance = 10000.0f;
 const float Camera::FieldOfView = 72.0f * static_cast< float32_t >( HELIUM_DEG_TO_RAD );
 
-REFLECT_DEFINE_ABSTRACT(Camera);
-
 Camera::Camera()
 : m_ProjectionMode( ProjectionModes::Perspective )
 , m_MovementMode( MovementModes::Orbit )
@@ -84,7 +82,7 @@ void Camera::Reset()
 
   m_WireframeOnMesh = true;
   m_WireframeOnShaded = false;
-  m_ShadingMode = ShadingModes::Texture;
+  m_ShadingMode = ShadingMode::Texture;
 
   m_ViewFrustumCulling = true;
   m_BackFaceCulling = true;

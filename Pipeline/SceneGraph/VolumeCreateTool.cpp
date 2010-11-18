@@ -11,7 +11,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-VolumeShape VolumeCreateTool::s_Shape = VolumeShapes::Cube;
+VolumeShape VolumeCreateTool::s_Shape = VolumeShape::Cube;
 
 REFLECT_DEFINE_ABSTRACT(SceneGraph::VolumeCreateTool);
 
@@ -64,7 +64,7 @@ SceneGraph::TransformPtr VolumeCreateTool::CreateNode()
 
     VolumePtr volume = new Volume();
     volume->Initialize( m_Scene );
-    volume->SetShape( s_Shape );
+    volume->SetShape( (int)s_Shape );
     return volume;
 
 #endif
@@ -84,25 +84,25 @@ void VolumeCreateTool::CreateProperties()
 
             {
                 tostringstream str;
-                str << VolumeShapes::Cube;
+                str << VolumeShape::Cube;
                 items.push_back( Inspect::ChoiceItem( TXT( "Cube" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << VolumeShapes::Cylinder;
+                str << VolumeShape::Cylinder;
                 items.push_back( Inspect::ChoiceItem( TXT( "Cylinder" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << VolumeShapes::Sphere;
+                str << VolumeShape::Sphere;
                 items.push_back( Inspect::ChoiceItem( TXT( "Sphere" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << VolumeShapes::Capsule;
+                str << VolumeShape::Capsule;
                 items.push_back( Inspect::ChoiceItem( TXT( "Capsule" ), str.str() ) );
             }
 
@@ -117,7 +117,7 @@ void VolumeCreateTool::CreateProperties()
 
 int VolumeCreateTool::GetVolumeShape() const
 {
-    return s_Shape;
+    return (int)s_Shape;
 }
 
 void VolumeCreateTool::SetVolumeShape(int value)

@@ -3,6 +3,7 @@
 using namespace Helium;
 using namespace Helium::Asset;
 
+REFLECT_DEFINE_ENUMERATION( AudioClipMode );
 REFLECT_DEFINE_CLASS( AudioClip );
 
 void AudioClip::EnumerateClass( Reflect::Compositor< AudioClip >& comp )
@@ -19,9 +20,9 @@ void AudioClip::GatherSearchableProperties( Helium::SearchableProperties* proper
     if ( modeEnum )
     {
         tstring mode;
-        if ( modeEnum->GetElementLabel( m_Mode, mode ) )
+        if ( modeEnum->GetElementLabel( (uint32_t)m_Mode, mode ) )
         {
-            properties->Insert( modeEnum->m_FullName, mode );
+            properties->Insert( modeEnum->m_Name, mode );
         }
     }
 

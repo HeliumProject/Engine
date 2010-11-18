@@ -1,7 +1,13 @@
 #include "DOM.h"
 #include "Serializers.h"
 
+using namespace Helium;
 using namespace Helium::Reflect;
+
+REFLECT_DEFINE_ABSTRACT( DocumentNode );
+REFLECT_DEFINE_CLASS( DocumentAttribute );
+REFLECT_DEFINE_CLASS( DocumentElement );
+REFLECT_DEFINE_CLASS( Document );
 
 void DocumentNode::SetDocument( Document* document )
 {

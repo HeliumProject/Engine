@@ -1009,19 +1009,19 @@ void MainFrame::OnViewChange(wxCommandEvent& event)
 
     case EventIds::ID_ViewNone:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryModes::None );
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryMode::None );
             break;
         }
 
     case EventIds::ID_ViewRender:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryModes::Render );
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryMode::Render );
             break;
         }
 
     case EventIds::ID_ViewCollision:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryModes::Collision );
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryMode::Collision );
             break;
         }
 
@@ -1039,19 +1039,19 @@ void MainFrame::OnViewChange(wxCommandEvent& event)
 
     case EventIds::ID_ViewWireframe:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Wireframe );
+            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingMode::Wireframe );
             break;
         }
 
     case EventIds::ID_ViewMaterial:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Material );
+            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingMode::Material );
             break;
         }
 
     case EventIds::ID_ViewTexture:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Texture );
+            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingMode::Texture );
             break;
         }
 
@@ -1077,25 +1077,25 @@ void MainFrame::OnViewCameraChange(wxCommandEvent& event)
     {
     case EventIds::ID_ViewOrbit:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraModes::Orbit);
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraMode::Orbit);
             break;
         }
 
     case EventIds::ID_ViewFront:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraModes::Front);
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraMode::Front);
             break;
         }
 
     case EventIds::ID_ViewSide:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraModes::Side);
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraMode::Side);
             break;
         }
 
     case EventIds::ID_ViewTop:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraModes::Top);
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraMode::Top);
             break;
         }
     }
@@ -1319,7 +1319,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
             Undo::BatchCommandPtr changes = new Undo::BatchCommand();
 
-            Reflect::V_Element elements;
+            std::vector< Reflect::ElementPtr > elements;
             bool result = m_SceneManager.GetCurrentScene()->Export( elements, args, changes );
             if ( result && !elements.empty() )
             {
@@ -2013,11 +2013,11 @@ void MainFrame::OnPasteTransform(wxCommandEvent& event)
             wxTheClipboard->Close();
         }
 
-        Reflect::V_Element elements;
+        std::vector< Reflect::ElementPtr > elements;
         Reflect::ArchiveXML::FromString( xml, elements );
 
-        Reflect::V_Element::const_iterator itr = elements.begin();
-        Reflect::V_Element::const_iterator end = elements.end();
+        std::vector< Reflect::ElementPtr >::const_iterator itr = elements.begin();
+        std::vector< Reflect::ElementPtr >::const_iterator end = elements.end();
         for ( ; itr != end; ++itr )
         {
             Helium::SmartPtr<Reflect::Matrix4ArraySerializer> data = Reflect::ObjectCast< Reflect::Matrix4ArraySerializer >( *itr );

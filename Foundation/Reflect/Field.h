@@ -3,6 +3,7 @@
 #include <map>
 
 #include "Platform/Types.h"
+#include "Platform/Utility.h"
 #include "Foundation/Memory/SmartPtr.h"
 
 #include "API.h"
@@ -27,7 +28,7 @@ namespace Helium
             };
         }
 
-        class FOUNDATION_API Field : public ReflectionInfo
+        class FOUNDATION_API Field : public ReflectionInfo, NonCopyable
         {
         public:
             REFLECTION_BASE( ReflectionTypes::Field );
@@ -41,13 +42,13 @@ namespace Helium
             static Field* Create(const Composite* type);
 
             // creates a suitable serializer for this field in the passed object
-            virtual SerializerPtr CreateSerializer (Element* instance = NULL) const;
+            virtual SerializerPtr CreateSerializer(Element* instance = NULL) const;
 
             // checks to see if the default value matches the value of this field in the passed object
-            bool HasDefaultValue (Element* instance) const;
+            bool HasDefaultValue(Element* instance) const;
 
             // sets the default value of this field in the passed object
-            bool SetDefaultValue (Element* instance) const;
+            bool SetDefaultValue(Element* instance) const;
 
             // set the name (and UI name if its not set)
             void SetName(const tstring& name);
@@ -61,7 +62,7 @@ namespace Helium
             int32_t             m_FieldID;      // the unique id of this field
             int32_t             m_SerializerID; // type id of the serializer to use
             SerializerPtr       m_Default;      // the value of the default
-            CreateObjectFunc    m_Create;       // function to create a new instance for this field (optional)
+            CreateObjectFunc    m_Creator;      // function to create a new instance for this field (optional)
         };
 
         typedef Helium::SmartPtr< Field > FieldPtr;

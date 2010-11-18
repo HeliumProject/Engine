@@ -27,7 +27,7 @@ VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
         m_OptionsButton->SetMargins( 3, 3 );
 
         m_CurrentView = m_ListResultsView;
-        m_CurrentViewMode = VaultViewModes::Details;
+        m_CurrentViewMode = VaultViewMode::Details;
         m_ListResultsView->Show();
 
         m_ListResultsView->InitResults();
@@ -178,42 +178,42 @@ void VaultPanel::SetViewMode( VaultViewMode view )
         switch ( m_CurrentViewMode )
         {
         default:
-        case VaultViewModes::Details:
+        case VaultViewMode::Details:
             {
                 m_ListResultsView->ShowDetails( true );
                 m_CurrentView = m_ListResultsView;
             }
             break;
 
-        case VaultViewModes::List:
+        case VaultViewMode::List:
             {
                 m_ListResultsView->ShowDetails( false );
                 m_CurrentView = m_ListResultsView;
             }
             break;
 
-        case VaultViewModes::ThumbnailsSmall:
+        case VaultViewMode::ThumbnailsSmall:
             {
                 m_CurrentThumbnailSize = VaultThumbnailsSizes::Small;
                 //m_ThumbnailView->SetZoom( VaultThumbnailsSizes::Small );
                 //m_CurrentView = m_ThumbnailView;
             }
             break;
-        case VaultViewModes::ThumbnailsMedium:
+        case VaultViewMode::ThumbnailsMedium:
             {
                 m_CurrentThumbnailSize = VaultThumbnailsSizes::Medium;
                 //m_ThumbnailView->SetZoom( VaultThumbnailsSizes::Medium );
                 //m_CurrentView = m_ThumbnailView;
             }
             break;
-        case VaultViewModes::ThumbnailsLarge:
+        case VaultViewMode::ThumbnailsLarge:
             {
                 m_CurrentThumbnailSize = VaultThumbnailsSizes::Large;
                 //m_ThumbnailView->SetZoom( VaultThumbnailsSizes::Large );
                 //m_CurrentView = m_ThumbnailView;
             }
             break;
-        case VaultViewModes::ThumbnailsCustom:
+        case VaultViewMode::ThumbnailsCustom:
             {
                 //m_ThumbnailView->SetZoom( m_CurrentThumbnailSize );
                 //m_CurrentView = m_ThumbnailView;
@@ -249,15 +249,15 @@ void VaultPanel::SetResults( VaultSearchResults* results )
     switch ( m_CurrentViewMode )
     {
     default:
-    case VaultViewModes::Details:
-    case VaultViewModes::List:
+    case VaultViewMode::Details:
+    case VaultViewMode::List:
         m_ListResultsView->SetResults( results );
         break;
 
-        //case VaultViewModes::ThumbnailsSmall:
-        //case VaultViewModes::ThumbnailsMedium:
-        //case VaultViewModes::ThumbnailsLarge:
-        //case VaultViewModes::ThumbnailsCustom:
+        //case VaultViewMode::ThumbnailsSmall:
+        //case VaultViewMode::ThumbnailsMedium:
+        //case VaultViewMode::ThumbnailsLarge:
+        //case VaultViewMode::ThumbnailsCustom:
         //    //m_ThumbnailView->SetResults( results );
         //    //args.m_NumSelected = m_ThumbnailView->GetSelectedPaths( unused );
         //    //args.m_HighlightPath = m_ThumbnailView->GetHighlightedPath();
@@ -273,15 +273,15 @@ void VaultPanel::ClearResults()
     switch ( m_CurrentViewMode )
     {
     default:
-    case VaultViewModes::Details:
-    case VaultViewModes::List:
+    case VaultViewMode::Details:
+    case VaultViewMode::List:
         m_ListResultsView->ClearResults();
         break;
 
-    case VaultViewModes::ThumbnailsSmall:
-    case VaultViewModes::ThumbnailsMedium:
-    case VaultViewModes::ThumbnailsLarge:
-    case VaultViewModes::ThumbnailsCustom:
+    case VaultViewMode::ThumbnailsSmall:
+    case VaultViewMode::ThumbnailsMedium:
+    case VaultViewMode::ThumbnailsLarge:
+    case VaultViewMode::ThumbnailsCustom:
         //m_ThumbnailView->ClearResults();
         break;
     }
@@ -296,15 +296,15 @@ void VaultPanel::SelectPath( const Helium::Path& path )
     switch ( m_CurrentViewMode )
     {
     default:
-    case VaultViewModes::Details:
-    case VaultViewModes::List:
+    case VaultViewMode::Details:
+    case VaultViewMode::List:
         m_ListResultsView->SelectPath( path );
         break;
 
-    case VaultViewModes::ThumbnailsSmall:
-    case VaultViewModes::ThumbnailsMedium:
-    case VaultViewModes::ThumbnailsLarge:
-    case VaultViewModes::ThumbnailsCustom:
+    case VaultViewMode::ThumbnailsSmall:
+    case VaultViewMode::ThumbnailsMedium:
+    case VaultViewMode::ThumbnailsLarge:
+    case VaultViewMode::ThumbnailsCustom:
         //m_ThumbnailView->SelectPath( path );
         break;
     }
@@ -316,16 +316,16 @@ uint32_t VaultPanel::GetSelectedPaths( std::set< Helium::Path >& paths )
     switch ( m_CurrentViewMode )
     {
     default:
-    case VaultViewModes::Details:
+    case VaultViewMode::Details:
         break;
 
-    case VaultViewModes::List:
+    case VaultViewMode::List:
         break;
 
-    case VaultViewModes::ThumbnailsSmall:
-    case VaultViewModes::ThumbnailsMedium:
-    case VaultViewModes::ThumbnailsLarge:
-    case VaultViewModes::ThumbnailsCustom:
+    case VaultViewMode::ThumbnailsSmall:
+    case VaultViewMode::ThumbnailsMedium:
+    case VaultViewMode::ThumbnailsLarge:
+    case VaultViewMode::ThumbnailsCustom:
         //m_ThumbnailView->GetSelectedPaths( paths );
         break;
     }
@@ -402,29 +402,29 @@ void VaultPanel::OnOptionsMenuSelect( wxCommandEvent& event )
 {
     event.Skip();
 
-    VaultViewMode id = VaultViewModes::Details;
+    VaultViewMode id = VaultViewMode::Details;
 
     switch( event.GetId() )
     {
     default:
     case VaultMenu::ViewResultDetails:
-        id = VaultViewModes::Details;
+        id = VaultViewMode::Details;
         break;
 
     case VaultMenu::ViewResultList:
-        id = VaultViewModes::List;
+        id = VaultViewMode::List;
         break;
 
     case VaultMenu::ViewThumbnailsSmall:
-        id = VaultViewModes::ThumbnailsSmall;
+        id = VaultViewMode::ThumbnailsSmall;
         break;
 
     case VaultMenu::ViewThumbnailsMedium:
-        id = VaultViewModes::ThumbnailsMedium;
+        id = VaultViewMode::ThumbnailsMedium;
         break;
 
     case VaultMenu::ViewThumbnailsLarge:
-        id = VaultViewModes::ThumbnailsLarge;
+        id = VaultViewMode::ThumbnailsLarge;
         break;
     };
 

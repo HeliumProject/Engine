@@ -143,7 +143,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
             M_PanelCreators currentPanels;
 
 #ifdef SCENE_DEBUG_PROPERTIES_GENERATOR
-            Log::Print("Object type %s:\n", (*itr)->GetClass()->m_ShortName.c_str() );
+            Log::Print("Object type %s:\n", (*itr)->GetClass()->m_Name.c_str() );
 #endif
 
             {

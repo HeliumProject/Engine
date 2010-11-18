@@ -2,6 +2,8 @@
 
 using namespace Helium;
 
+REFLECT_DEFINE_CLASS( Project );
+
 Project::Project( const Path& path )
 {
     a_Path.Set( path );

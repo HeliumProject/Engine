@@ -17,6 +17,8 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
+REFLECT_DEFINE_ABSTRACT( Inspect::ClientDataFilter );
+
 namespace Helium
 {
     namespace InspectReflect
@@ -33,8 +35,8 @@ void InspectReflect::Initialize()
     {
         g_IntializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
 
-        g_IntializerStack.Push( Reflect::RegisterClassType<ClientData>( TXT( "InspectClientDataControl" ) ) );
-        g_IntializerStack.Push( Reflect::RegisterClassType<ClientDataFilter>( TXT( "InspectClientDataFilter" ) ) );
+        g_IntializerStack.Push( Reflect::RegisterClassType<ClientData>( TXT( "Inspect::ClientData" ) ) );
+        g_IntializerStack.Push( Reflect::RegisterClassType<ClientDataFilter>( TXT( "Inspect::ClientDataFilter" ) ) );
 
         // scalars
         ReflectFieldInterpreterFactory::Register<ReflectBitfieldInterpreter>( Reflect::GetType<Reflect::BitfieldSerializer>() );

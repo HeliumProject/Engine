@@ -13,7 +13,7 @@ Field::Field(const Composite* type)
 , m_FieldID ( -1 )
 , m_SerializerID ( ReservedTypes::Invalid )
 , m_Offset ( -1 )
-, m_Create ( NULL )
+, m_Creator ( NULL )
 {
 
 }

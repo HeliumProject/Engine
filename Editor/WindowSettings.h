@@ -2,6 +2,7 @@
 
 #include "Editor/API.h"
 #include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Serializers.h"
 
 class wxAuiManager;
 

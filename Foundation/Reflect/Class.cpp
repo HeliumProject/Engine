@@ -9,7 +9,7 @@
 using namespace Helium::Reflect;
 
 Class::Class()
-: m_Create (NULL)
+: m_Creator (NULL)
 {
 
 }

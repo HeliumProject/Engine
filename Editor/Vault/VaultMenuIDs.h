@@ -120,9 +120,10 @@ namespace Helium
         typedef VaultMenu::MenuIDs VaultMenuID;
 
         ///////////////////////////////////////////////////////////////////////
-        namespace VaultViewModes
+        class VaultViewMode
         {
-            enum VaultViewMode
+        public:
+            enum Enum
             {
                 Details,
                 List,
@@ -133,19 +134,19 @@ namespace Helium
 
                 ThumbnailsCustom,
             };
-            static void VaultViewModeEnumerateEnum( Reflect::Enumeration* info )
+
+            REFLECT_DECLARE_ENUMERATION( VaultViewMode );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement( Details, TXT( "Details" ) );
-                info->AddElement( List, TXT( "List" ) );
-
-                info->AddElement( ThumbnailsSmall, TXT( "Small" ) );
-                info->AddElement( ThumbnailsMedium, TXT( "Medium" ) );
-                info->AddElement( ThumbnailsLarge, TXT( "Large" ) );
-
-                info->AddElement( ThumbnailsCustom, TXT( "Custom" ) );
+                info.AddElement( Details,           TXT( "Details" ) );
+                info.AddElement( List,              TXT( "List" ) );
+                info.AddElement( ThumbnailsSmall,   TXT( "Small" ) );
+                info.AddElement( ThumbnailsMedium,  TXT( "Medium" ) );
+                info.AddElement( ThumbnailsLarge,   TXT( "Large" ) );
+                info.AddElement( ThumbnailsCustom,  TXT( "Custom" ) );
             }
-        }
-        typedef VaultViewModes::VaultViewMode VaultViewMode;
+        };
 
         ///////////////////////////////////////////////////////////////////////
         namespace VaultThumbnailsSizes

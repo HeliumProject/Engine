@@ -21,7 +21,8 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT(SceneGraph::TranslateManipulator);
+REFLECT_DEFINE_ENUMERATION( TranslateSnappingMode );
+REFLECT_DEFINE_ABSTRACT( TranslateManipulator );
 
 void TranslateManipulator::InitializeType()
 {
@@ -37,7 +38,7 @@ TranslateManipulator::TranslateManipulator( SettingsManager* settingsManager, co
 : SceneGraph::TransformManipulator (mode, scene, generator)
 , m_SettingsManager( settingsManager )
 , m_Size( 0.3f )
-, m_HotSnappingMode (TranslateSnappingModes::None)
+, m_HotSnappingMode (TranslateSnappingMode::None)
 , m_ShowCones (true)
 , m_Factor (1.f)
 {
@@ -251,9 +252,9 @@ void TranslateManipulator::DrawPoints(AxesFlags axis)
         // increment distance
         dist += m_Distance;
 
-        if ( GetSnappingMode() == TranslateSnappingModes::Grid )
+        if ( GetSnappingMode() == TranslateSnappingMode::Grid )
         {
-            if (m_Space == ManipulatorSpaces::World)
+            if (m_Space == ManipulatorSpace::World)
             {
                 // bring to global space
                 frame.TransformVertex(next);
@@ -271,7 +272,7 @@ void TranslateManipulator::DrawPoints(AxesFlags axis)
             next.z = (float)(Round(next.z));
             next.z *= m_Distance;
 
-            if (m_Space == ManipulatorSpaces::World)
+            if (m_Space == ManipulatorSpace::World)
             {
                 // bring back to local space
                 inverse.TransformVertex(next);
@@ -279,13 +280,13 @@ void TranslateManipulator::DrawPoints(AxesFlags axis)
                 // project onto axis
                 next = basis * next.Dot(basis);
             }
-            else if (m_Space == ManipulatorSpaces::Local)
+            else if (m_Space == ManipulatorSpace::Local)
             {
                 // the local value + pivot location
                 Vector3 value = primary->GetValue() + primary->GetPivot();
 
                 // if the parent and frame don't line up we need to fixup the local frame
-                Matrix4 parentToFrame = primary->GetParentMatrix() * primary->GetFrame( ManipulatorSpaces::Local ).Inverted();
+                Matrix4 parentToFrame = primary->GetParentMatrix() * primary->GetFrame( ManipulatorSpace::Local ).Inverted();
                 parentToFrame.Transform(value, 0.f);
 
                 // remove local translation
@@ -391,7 +392,7 @@ void TranslateManipulator::Draw( DrawArgs* args )
     {
         SetAxisMaterial(MultipleAxes::X);
 
-        if (GetSnappingMode() == TranslateSnappingModes::Offset || GetSnappingMode() == TranslateSnappingModes::Grid)
+        if (GetSnappingMode() == TranslateSnappingMode::Offset || GetSnappingMode() == TranslateSnappingMode::Grid)
         {
             DrawPoints(MultipleAxes::X);
         }
@@ -407,7 +408,7 @@ void TranslateManipulator::Draw( DrawArgs* args )
     {
         SetAxisMaterial(MultipleAxes::Y);
 
-        if (GetSnappingMode() == TranslateSnappingModes::Offset || GetSnappingMode() == TranslateSnappingModes::Grid)
+        if (GetSnappingMode() == TranslateSnappingMode::Offset || GetSnappingMode() == TranslateSnappingMode::Grid)
         {
             DrawPoints(MultipleAxes::Y);
         }
@@ -423,7 +424,7 @@ void TranslateManipulator::Draw( DrawArgs* args )
     {
         SetAxisMaterial(MultipleAxes::Z);
 
-        if (GetSnappingMode() == TranslateSnappingModes::Offset || GetSnappingMode() == TranslateSnappingModes::Grid)
+        if (GetSnappingMode() == TranslateSnappingMode::Offset || GetSnappingMode() == TranslateSnappingMode::Grid)
         {
             DrawPoints(MultipleAxes::Z);
         }
@@ -626,9 +627,9 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
     // compute drag vector
     switch ( GetSnappingMode() )
     {
-    case TranslateSnappingModes::Surface:
-    case TranslateSnappingModes::Object:
-    case TranslateSnappingModes::Vertex:
+    case TranslateSnappingMode::Surface:
+    case TranslateSnappingMode::Object:
+    case TranslateSnappingMode::Vertex:
         {
             // point to set
             Vector3 result;
@@ -642,7 +643,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
             if (pick.HasHits())
             {
                 V_PickHitSmartPtr sorted;
-                PickHit::Sort(primary->GetNode()->GetOwner()->GetViewport()->GetCamera(), pick.GetHits(), sorted, GetSnappingMode() == TranslateSnappingModes::Vertex ? PickSortTypes::Vertex : PickSortTypes::Intersection);
+                PickHit::Sort(primary->GetNode()->GetOwner()->GetViewport()->GetCamera(), pick.GetHits(), sorted, GetSnappingMode() == TranslateSnappingMode::Vertex ? PickSortTypes::Vertex : PickSortTypes::Intersection);
 
                 V_PickHitSmartPtr::const_iterator itr = sorted.begin();
                 V_PickHitSmartPtr::const_iterator end = sorted.end();
@@ -663,18 +664,18 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
                     }
 
                     // elminitate picks without normals when surface snapping
-                    if ( GetSnappingMode() == TranslateSnappingModes::Surface && !(*itr)->HasNormal() )
+                    if ( GetSnappingMode() == TranslateSnappingMode::Surface && !(*itr)->HasNormal() )
                     {
                         continue;
                     }
 
                     // elimintate picks without vertices when vertex snapping
-                    if ( GetSnappingMode() == TranslateSnappingModes::Vertex && !(*itr)->HasVertex() )
+                    if ( GetSnappingMode() == TranslateSnappingMode::Vertex && !(*itr)->HasVertex() )
                     {
                         continue;
                     }
 
-                    if (GetSnappingMode() == TranslateSnappingModes::Object)
+                    if (GetSnappingMode() == TranslateSnappingMode::Object)
                     {
                         Vector4 t = node->GetTransform()->GetGlobalTransform().t;
                         result.x = t.x;
@@ -682,7 +683,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
                         result.z = t.z;
                         set = true;
                     }
-                    else if (GetSnappingMode() == TranslateSnappingModes::Vertex)
+                    else if (GetSnappingMode() == TranslateSnappingMode::Vertex)
                     {
                         result = (*itr)->GetVertex();
                         set = true;
@@ -745,7 +746,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
         if (m_SelectedAxes != MultipleAxes::All)
         {
             // if we are working in world space then save an invert and multiply here
-            if (m_Space != ManipulatorSpaces::World)
+            if (m_Space != ManipulatorSpace::World)
             {
                 // transform the reference vector by the manipulation frame, this orients the reference vector to the correct space
                 start.m_StartFrame.Transform(reference, 0.f);
@@ -826,7 +827,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
         object.t.z = startValue.z;
 
         // we don't want object space to be scaled by the object itself since its moving in its parent space, but along object axes
-        if ( m_Space == ManipulatorSpaces::Object )
+        if ( m_Space == ManipulatorSpace::Object )
         {
             object.x *= 1.f / object.x.Length();
             object.y *= 1.f / object.y.Length();
@@ -846,7 +847,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
 
         switch (GetSnappingMode())
         {
-        case TranslateSnappingModes::None:
+        case TranslateSnappingMode::None:
             {
                 // bring value into global space
                 parent.TransformVertex(targetValue);
@@ -860,19 +861,19 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
                 break;
             }
 
-        case TranslateSnappingModes::Surface:
-        case TranslateSnappingModes::Object:
-        case TranslateSnappingModes::Vertex:
+        case TranslateSnappingMode::Surface:
+        case TranslateSnappingMode::Object:
+        case TranslateSnappingMode::Vertex:
             {
                 switch (m_Space)
                 {
-                case ManipulatorSpaces::Object:
+                case ManipulatorSpace::Object:
                     {
                         inverseObject.Transform(drag, 0.f);
                         break;
                     }
 
-                case ManipulatorSpaces::Local:
+                case ManipulatorSpace::Local:
                     {
                         inverseParent.Transform(drag, 0.f);
                         break;
@@ -928,13 +929,13 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
 
                 switch (m_Space)
                 {
-                case ManipulatorSpaces::Object:
+                case ManipulatorSpace::Object:
                     {
                         object.Transform(drag, 0.f);
                         break;
                     }
 
-                case ManipulatorSpaces::Local:
+                case ManipulatorSpace::Local:
                     {
                         parent.Transform(drag, 0.f);
                         break;
@@ -953,17 +954,17 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
                 break;
             }
 
-        case TranslateSnappingModes::Offset:
+        case TranslateSnappingMode::Offset:
             {
                 switch (m_Space)
                 {
-                case ManipulatorSpaces::Object:
+                case ManipulatorSpace::Object:
                     {
                         inverseGlobal.Transform(drag, 0.f);
                         break;
                     }
 
-                case ManipulatorSpaces::Local:
+                case ManipulatorSpace::Local:
                     {
                         inverseParent.Transform(drag, 0.f);
                         break;
@@ -979,13 +980,13 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
 
                 switch (m_Space)
                 {
-                case ManipulatorSpaces::Object:
+                case ManipulatorSpace::Object:
                     {
                         global.Transform(drag, 0.f);
                         break;
                     }
 
-                case ManipulatorSpaces::Local:
+                case ManipulatorSpace::Local:
                     {
                         parent.Transform(drag, 0.f);
                         break;
@@ -1004,7 +1005,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
                 break;
             }
 
-        case TranslateSnappingModes::Grid:
+        case TranslateSnappingMode::Grid:
             {
 #ifdef DEBUG_TRANSLATE_MANIP_GRID
                 Log::Print("Value:   %08.3f, %08.3f, %08.3f\n", targetValue.x, targetValue.y, targetValue.z);
@@ -1035,22 +1036,22 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
 
                 switch (m_Space)
                 {
-                case ManipulatorSpaces::Object:
+                case ManipulatorSpace::Object:
                     {
                         inverseObject.TransformVertex(targetValue);
                         break;
                     }
 
-                case ManipulatorSpaces::Local:
+                case ManipulatorSpace::Local:
                     {
-                        parentToFrame = parent * primary->GetFrame( ManipulatorSpaces::Local ).Inverted();
+                        parentToFrame = parent * primary->GetFrame( ManipulatorSpace::Local ).Inverted();
                         parentToFrame.Transform(targetValue, 0.f);
                         frameToParent = parentToFrame;
                         frameToParent.Invert();
                         break;
                     }
 
-                case ManipulatorSpaces::World:
+                case ManipulatorSpace::World:
                     {
                         parent.TransformVertex(targetValue);
                         break;
@@ -1067,7 +1068,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
                 Vector3 pivotInObjectSpace = primary->GetPivot();
                 inverseObject.TransformVertex(pivotInObjectSpace);
 
-                if ( m_Space == ManipulatorSpaces::Object )
+                if ( m_Space == ManipulatorSpace::Object )
                 {
                     targetValue -= startValInObjectSpace;
                     targetValue -= pivotInObjectSpace;
@@ -1096,7 +1097,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
                     targetValue.z *= m_Distance;
                 }
 
-                if ( m_Space == ManipulatorSpaces::Object )
+                if ( m_Space == ManipulatorSpace::Object )
                 {
                     targetValue += startValInObjectSpace;
                     targetValue += pivotInObjectSpace;
@@ -1108,19 +1109,19 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
 
                 switch (m_Space)
                 {
-                case ManipulatorSpaces::Object:
+                case ManipulatorSpace::Object:
                     {
                         object.TransformVertex(targetValue);
                         break;
                     }
 
-                case ManipulatorSpaces::Local:
+                case ManipulatorSpace::Local:
                     {
                         parentToFrame.Inverted().Transform(targetValue, 0.f);
                         break;
                     }
 
-                case ManipulatorSpaces::World:
+                case ManipulatorSpace::World:
                     {
                         inverseParent.TransformVertex(targetValue);
                         break;
@@ -1197,19 +1198,19 @@ void TranslateManipulator::KeyDown( const KeyboardInput& e )
     switch (e.GetKeyCode())
     {
     case TXT('S'):
-        m_HotSnappingMode = TranslateSnappingModes::Surface;
+        m_HotSnappingMode = TranslateSnappingMode::Surface;
         break;
 
     case TXT('O'):
-        m_HotSnappingMode = TranslateSnappingModes::Object;
+        m_HotSnappingMode = TranslateSnappingMode::Object;
         break;
 
     case TXT('V'):
-        m_HotSnappingMode = TranslateSnappingModes::Vertex;
+        m_HotSnappingMode = TranslateSnappingMode::Vertex;
         break;
 
     case TXT('X'):
-        m_HotSnappingMode = TranslateSnappingModes::Grid;
+        m_HotSnappingMode = TranslateSnappingMode::Grid;
         break;
 
     default:
@@ -1240,7 +1241,7 @@ void TranslateManipulator::KeyUp( const KeyboardInput& e )
     case TXT('O'):
     case TXT('V'):
     case TXT('X'):
-        m_HotSnappingMode = TranslateSnappingModes::None;
+        m_HotSnappingMode = TranslateSnappingMode::None;
         break;
 
     default:
@@ -1276,19 +1277,19 @@ void TranslateManipulator::CreateProperties()
 
             {
                 tostringstream str;
-                str << ManipulatorSpaces::Object;
+                str << ManipulatorSpace::Object;
                 items.push_back( Inspect::ChoiceItem( TXT( "Object" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << ManipulatorSpaces::Local;
+                str << ManipulatorSpace::Local;
                 items.push_back( Inspect::ChoiceItem( TXT( "Local" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << ManipulatorSpaces::World;
+                str << ManipulatorSpace::World;
                 items.push_back( Inspect::ChoiceItem( TXT( "World" ), str.str() ) );
             }
 
@@ -1370,7 +1371,7 @@ void TranslateManipulator::SetSize( float32_t size )
 
 int TranslateManipulator::GetSpace() const
 {
-    return m_Space;
+    return (int)m_Space;
 }
 
 void TranslateManipulator::SetSpace(int space)
@@ -1410,12 +1411,12 @@ void TranslateManipulator::SetLiveObjectsOnly(bool snap)
 
 TranslateSnappingMode TranslateManipulator::GetSnappingMode() const
 {
-    return m_HotSnappingMode != TranslateSnappingModes::None ? m_HotSnappingMode : m_SnappingMode;
+    return m_HotSnappingMode != TranslateSnappingMode::None ? m_HotSnappingMode : m_SnappingMode;
 }
 
 bool TranslateManipulator::GetSurfaceSnap() const
 {
-    return m_SnappingMode == TranslateSnappingModes::Surface;
+    return m_SnappingMode == TranslateSnappingMode::Surface;
 }
 
 void TranslateManipulator::UpdateSnappingMode()
@@ -1433,11 +1434,11 @@ void TranslateManipulator::UpdateSnappingMode()
 
 void TranslateManipulator::SetSurfaceSnap(bool snap)
 {
-    if (m_SnappingMode == TranslateSnappingModes::Surface != snap)
+    if (m_SnappingMode == TranslateSnappingMode::Surface != snap)
     {
-        m_SnappingMode = snap ? TranslateSnappingModes::Surface : TranslateSnappingModes::None;
+        m_SnappingMode = snap ? TranslateSnappingMode::Surface : TranslateSnappingMode::None;
 
-        if (m_SnappingMode == TranslateSnappingModes::Surface)
+        if (m_SnappingMode == TranslateSnappingMode::Surface)
         {
             m_Generator->GetContainer()->Read();
         }
@@ -1448,16 +1449,16 @@ void TranslateManipulator::SetSurfaceSnap(bool snap)
 
 bool TranslateManipulator::GetObjectSnap() const
 {
-    return m_SnappingMode == TranslateSnappingModes::Object;
+    return m_SnappingMode == TranslateSnappingMode::Object;
 }
 
 void TranslateManipulator::SetObjectSnap(bool snap)
 {
-    if (m_SnappingMode == TranslateSnappingModes::Object != snap)
+    if (m_SnappingMode == TranslateSnappingMode::Object != snap)
     {
-        m_SnappingMode = snap ? TranslateSnappingModes::Object : TranslateSnappingModes::None;
+        m_SnappingMode = snap ? TranslateSnappingMode::Object : TranslateSnappingMode::None;
 
-        if (m_SnappingMode == TranslateSnappingModes::Object)
+        if (m_SnappingMode == TranslateSnappingMode::Object)
         {
             m_Generator->GetContainer()->Read();
         }
@@ -1468,16 +1469,16 @@ void TranslateManipulator::SetObjectSnap(bool snap)
 
 bool TranslateManipulator::GetVertexSnap() const
 {
-    return m_SnappingMode == TranslateSnappingModes::Vertex;
+    return m_SnappingMode == TranslateSnappingMode::Vertex;
 }
 
 void TranslateManipulator::SetVertexSnap(bool snap)
 {
-    if (m_SnappingMode == TranslateSnappingModes::Vertex != snap)
+    if (m_SnappingMode == TranslateSnappingMode::Vertex != snap)
     {
-        m_SnappingMode = snap ? TranslateSnappingModes::Vertex : TranslateSnappingModes::None;
+        m_SnappingMode = snap ? TranslateSnappingMode::Vertex : TranslateSnappingMode::None;
 
-        if (m_SnappingMode == TranslateSnappingModes::Vertex)
+        if (m_SnappingMode == TranslateSnappingMode::Vertex)
         {
             m_Generator->GetContainer()->Read();
         }
@@ -1488,16 +1489,16 @@ void TranslateManipulator::SetVertexSnap(bool snap)
 
 bool TranslateManipulator::GetOffsetSnap() const
 {
-    return m_SnappingMode == TranslateSnappingModes::Offset;
+    return m_SnappingMode == TranslateSnappingMode::Offset;
 }
 
 void TranslateManipulator::SetOffsetSnap(bool snap)
 {
-    if (m_SnappingMode == TranslateSnappingModes::Offset != snap)
+    if (m_SnappingMode == TranslateSnappingMode::Offset != snap)
     {
-        m_SnappingMode = snap ? TranslateSnappingModes::Offset : TranslateSnappingModes::None;
+        m_SnappingMode = snap ? TranslateSnappingMode::Offset : TranslateSnappingMode::None;
 
-        if (m_SnappingMode == TranslateSnappingModes::Offset)
+        if (m_SnappingMode == TranslateSnappingMode::Offset)
         {
             m_Generator->GetContainer()->Read();
         }
@@ -1508,16 +1509,16 @@ void TranslateManipulator::SetOffsetSnap(bool snap)
 
 bool TranslateManipulator::GetGridSnap() const
 {
-    return m_SnappingMode == TranslateSnappingModes::Grid;
+    return m_SnappingMode == TranslateSnappingMode::Grid;
 }
 
 void TranslateManipulator::SetGridSnap(bool snap)
 {
-    if (m_SnappingMode == TranslateSnappingModes::Grid != snap)
+    if (m_SnappingMode == TranslateSnappingMode::Grid != snap)
     {
-        m_SnappingMode = snap ? TranslateSnappingModes::Grid : TranslateSnappingModes::None;
+        m_SnappingMode = snap ? TranslateSnappingMode::Grid : TranslateSnappingMode::None;
 
-        if (m_SnappingMode == TranslateSnappingModes::Grid)
+        if (m_SnappingMode == TranslateSnappingMode::Grid)
         {
             m_Generator->GetContainer()->Read();
         }

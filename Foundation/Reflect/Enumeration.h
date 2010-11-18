@@ -57,16 +57,16 @@ namespace Helium
             static Enumeration* Create();
 
             template<class T>
-            static Enumeration* Create (const tstring& name)
+            static Enumeration* Create( const tstring& name )
             {
                 Enumeration* info = Enumeration::Create();
 
                 info->m_TypeID = AssignTypeID();
                 info->m_Size = sizeof(T);
-                info->m_ShortName = name;
-                bool converted = Helium::ConvertString( typeid(T).name(), info->m_FullName );
-                HELIUM_ASSERT( converted );
-                info->m_UIName = info->m_ShortName;
+                info->m_Name = name;
+                info->m_UIName = info->m_Name;
+
+                T::EnumerateEnum( *info );
 
                 return info;
             }

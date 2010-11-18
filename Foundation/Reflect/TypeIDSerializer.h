@@ -27,7 +27,5 @@ namespace Helium
             virtual void Serialize (Reflect::Archive& archive) const HELIUM_OVERRIDE;
             virtual void Deserialize (Reflect::Archive& archive) HELIUM_OVERRIDE;
         };
-
-        REFLECT_SPECIALIZE_SERIALIZER( TypeIDSerializer );
     }
 }

@@ -11,7 +11,7 @@ REFLECT_DEFINE_CLASS( Graph );
 
 void Graph::InitializeType()
 {
-  Reflect::RegisterClassType< Graph >( TXT( "Graph" ) );
+  Reflect::RegisterClassType< Graph >( TXT( "SceneGraph::Graph" ) );
 }
 
 void Graph::CleanupType()

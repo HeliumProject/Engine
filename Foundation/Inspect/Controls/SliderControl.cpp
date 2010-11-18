@@ -4,6 +4,8 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
+REFLECT_DEFINE_CLASS( Inspect::Slider );
+
 Slider::Slider()
 : a_Min( 0.0f )
 , a_Max( 100.0f )

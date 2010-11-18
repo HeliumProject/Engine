@@ -31,24 +31,6 @@ namespace Helium
 
         typedef ManipulatorModes::ManipulatorMode ManipulatorMode;
 
-        namespace ManipulatorSpaces
-        {
-            enum ManipulatorSpace
-            {
-                Object,
-                Local,
-                World,
-            };
-            static void ManipulatorSpaceEnumerateEnum( Reflect::Enumeration* info )
-            {
-                info->AddElement(Object, TXT( "Object" ) );
-                info->AddElement(Local, TXT( "Local" ) );
-                info->AddElement(World, TXT( "World" ) );
-            }
-        }
-
-        typedef ManipulatorSpaces::ManipulatorSpace ManipulatorSpace;
-
         namespace ManipulatorAdapterTypes
         {
             enum ManipulatorAdapterType
@@ -61,6 +43,26 @@ namespace Helium
         }
 
         typedef ManipulatorAdapterTypes::ManipulatorAdapterType ManipulatorAdapterType;
+
+        class ManipulatorSpace
+        {
+        public:
+            enum Enum
+            {
+                Object,
+                Local,
+                World,
+            };
+
+            REFLECT_DECLARE_ENUMERATION( ManipulatorSpace );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
+            {
+                info.AddElement(Object, TXT( "Object" ) );
+                info.AddElement(Local,  TXT( "Local" ) );
+                info.AddElement(World,  TXT( "World" ) );
+            }
+        };
 
         class PIPELINE_API ManipulatorAdapter : public Helium::RefCountBase<ManipulatorAdapter>
         {

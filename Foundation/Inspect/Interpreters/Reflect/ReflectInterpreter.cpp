@@ -261,7 +261,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
                 {
                     uintptr_t fieldAddress = (uintptr_t)(instances.front()) + itr->second->m_Offset;
 
-                    V_Element* elements = (V_Element*)fieldAddress;
+                    std::vector< ElementPtr >* elements = (std::vector< ElementPtr >*)fieldAddress;
 
                     if ( elements->size() > 0 )
                     {
@@ -273,8 +273,8 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
 
                         childContainer->a_Name.Set( temp );
 
-                        V_Element::const_iterator elementItr = elements->begin();
-                        V_Element::const_iterator elementEnd = elements->end();
+                        std::vector< ElementPtr >::const_iterator elementItr = elements->begin();
+                        std::vector< ElementPtr >::const_iterator elementEnd = elements->end();
                         for ( ; elementItr != elementEnd; ++elementItr )
                         {
                             std::vector<Reflect::Element*> childInstances;

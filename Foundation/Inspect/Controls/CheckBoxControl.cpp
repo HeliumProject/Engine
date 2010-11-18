@@ -1,7 +1,10 @@
 #include "Foundation/Inspect/Controls/CheckBoxControl.h"
 #include "Foundation/Inspect/Container.h"
 
+using namespace Helium;
 using namespace Helium::Inspect;
+
+REFLECT_DEFINE_CLASS( Inspect::CheckBox );
 
 CheckBox::CheckBox()
 : a_Highlight( false )

@@ -7,6 +7,8 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
+REFLECT_DEFINE_CLASS( StripCanvas );
+
 StripCanvas::StripCanvas()
 : m_Panel( NULL )
 {

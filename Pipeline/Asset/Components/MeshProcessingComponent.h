@@ -9,9 +9,10 @@ namespace Helium
 {
     namespace Asset
     {
-        namespace MeshCompressionFactors
+        class MeshCompressionFactor
         {
-            enum MeshCompressionFactor
+        public:
+            enum Enum
             {
                 None,
                 Low,
@@ -19,22 +20,23 @@ namespace Helium
                 High
             };
 
-            static void MeshComressionFactorEnumerateEnum( Reflect::Enumeration* info )
+            REFLECT_DECLARE_ENUMERATION( MeshCompressionFactor );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement( None,   TXT( "None" ),   TXT( "None" ) );
-                info->AddElement( Low,    TXT( "Low" ),    TXT( "Low" ) );
-                info->AddElement( Medium, TXT( "Medium" ), TXT( "Medium" ) );
-                info->AddElement( High,   TXT( "High" ),   TXT( "High" ) );
+                info.AddElement( None,   TXT( "None" ) );
+                info.AddElement( Low,    TXT( "Low" ) );
+                info.AddElement( Medium, TXT( "Medium" ) );
+                info.AddElement( High,   TXT( "High" ) );
             }
-        }
-        typedef MeshCompressionFactors::MeshCompressionFactor MeshCompressionFactor;
+        };
 
         class PIPELINE_API MeshProcessingComponent : public Component::ComponentBase
         {
         public:
-            Helium::Attribute< float32_t >                   a_ScalingFactor;
-            Helium::Attribute< MeshCompressionFactor > a_MeshCompressionFactor;
-            Helium::Attribute< bool >                  a_FlipWinding;
+            Helium::Attribute< float32_t >              a_ScalingFactor;
+            Helium::Attribute< MeshCompressionFactor >  a_MeshCompressionFactor;
+            Helium::Attribute< bool >                   a_FlipWinding;
 
         public:
 
@@ -46,7 +48,7 @@ namespace Helium
             MeshProcessingComponent()
             {
                 a_ScalingFactor.Set( 1.0f );
-                a_MeshCompressionFactor.Set( MeshCompressionFactors::None );
+                a_MeshCompressionFactor.Set( MeshCompressionFactor::None );
                 a_FlipWinding.Set( false );
             }
 

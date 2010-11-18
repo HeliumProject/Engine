@@ -1,5 +1,5 @@
-#include "ContainerSerializer.h"
-#include "Serializers.h"
+#include "Foundation/Reflect/ContainerSerializer.h"
+#include "Foundation/Reflect/Serializers.h"
 
 using namespace Helium::Reflect;
 
@@ -9,6 +9,8 @@ ContainerSerializer::ContainerSerializer()
 {
 
 }
+
+REFLECT_DEFINE_ABSTRACT( ElementContainerSerializer )
 
 ElementContainerSerializer::ElementContainerSerializer()
 : m_TypeID ( ReservedTypes::Invalid )

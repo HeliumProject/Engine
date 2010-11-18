@@ -10,68 +10,77 @@ namespace Helium
 {
     namespace Asset
     {
-        namespace TextureFormats
+        class TextureFormat
         {
-            enum TextureFormat
+        public:
+            enum Enum
             {
-                DXT1     = TextureColorFormats::DXT1,
-                DXT5     = TextureColorFormats::DXT5,
-                ARGB4444 = TextureColorFormats::ARGB4444,
-                ARGB8888 = TextureColorFormats::ARGB8888,
-                AL88     = TextureColorFormats::AL88,
-                RGB565   = TextureColorFormats::RGB565,
+                DXT1        = TextureColorFormat::DXT1,
+                DXT5        = TextureColorFormat::DXT5,
+                ARGB4444    = TextureColorFormat::ARGB4444,
+                ARGB8888    = TextureColorFormat::ARGB8888,
+                AL88        = TextureColorFormat::AL88,
+                RGB565      = TextureColorFormat::RGB565,
             };
-            static void TextureFormatEnumerateEnum( Reflect::Enumeration* info )
-            {
-                info->AddElement( DXT1,     TXT( "DXT1" ),     TXT( "DXT1" ) );
-                info->AddElement( DXT5,     TXT( "DXT5" ),     TXT( "DXT5" ) );
-                info->AddElement( ARGB4444, TXT( "ARGB4444" ), TXT( "ARGB4444" ) );
-                info->AddElement( ARGB8888, TXT( "ARGB8888" ), TXT( "ARGB8888" ) );
-                info->AddElement( AL88,     TXT( "AL88" ),     TXT( "AL88" ) );
-                info->AddElement( RGB565,   TXT( "RGB565" ),   TXT( "RGB565" ) );
-            }
-        }
-        typedef TextureFormats::TextureFormat TextureFormat;
+            
+            REFLECT_DECLARE_ENUMERATION( TextureFormat );
 
-        namespace TextureFilters
-        {
-            enum TextureFilter
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                Point = Helium::FILTER_POINT_SELECT_MIP,
-                Bilinear = Helium::FILTER_LINEAR_SELECT_MIP,
-                Trilinear = Helium::FILTER_LINEAR_LINEAR_MIP,
+                info.AddElement( DXT1,     TXT( "DXT1" ) );
+                info.AddElement( DXT5,     TXT( "DXT5" ) );
+                info.AddElement( ARGB4444, TXT( "ARGB4444" ) );
+                info.AddElement( ARGB8888, TXT( "ARGB8888" ) );
+                info.AddElement( AL88,     TXT( "AL88" ) );
+                info.AddElement( RGB565,   TXT( "RGB565" ) );
+            }
+        };
+
+        class TextureFilter
+        {
+        public:
+            enum Enum
+            {
+                Point       = FILTER_POINT_SELECT_MIP,
+                Bilinear    = FILTER_LINEAR_SELECT_MIP,
+                Trilinear   = FILTER_LINEAR_LINEAR_MIP,
             };
-            static void TextureFilterEnumerateEnum( Reflect::Enumeration* info )
-            {
-                info->AddElement( Point,     TXT( "Point" ),     TXT( "Point" ) );
-                info->AddElement( Bilinear,  TXT( "Bilinear" ),  TXT( "Bilinear" ) );
-                info->AddElement( Trilinear, TXT( "Trilinear" ), TXT( "Trilinear" ) );
-            }
-        }
-        typedef TextureFilters::TextureFilter TextureFilter;
 
-        namespace WrapModes
+            REFLECT_DECLARE_ENUMERATION( TextureFilter );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
+            {
+                info.AddElement( Point,     TXT( "Point" ) );
+                info.AddElement( Bilinear,  TXT( "Bilinear" ) );
+                info.AddElement( Trilinear, TXT( "Trilinear" ) );
+            }
+        };
+
+        class TextureCoordinateWrapMode
         {
-            enum WrapMode
+        public:
+            enum Enum
             {
                 Wrap,
                 Clamp,
             };
-            static void WrapModeEnumerateEnum( Reflect::Enumeration* info )
+
+            REFLECT_DECLARE_ENUMERATION( TextureCoordinateWrapMode );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement( Wrap,  TXT( "Wrap" ),  TXT( "Wrap" ) );
-                info->AddElement( Clamp, TXT( "Clamp" ), TXT( "Clamp" ) );
+                info.AddElement( Wrap,  TXT( "Wrap" ),  TXT( "Wrap" ) );
+                info.AddElement( Clamp, TXT( "Clamp" ), TXT( "Clamp" ) );
             }
-        }
-        typedef WrapModes::WrapMode WrapMode;
+        };
 
         class PIPELINE_API Texture : public AssetClass
         {
         private:
-            TextureFormat   m_Format;
-            TextureFilter   m_Filter;
-            WrapMode        m_WrapModeU;
-            WrapMode        m_WrapModeV;
+            TextureFormat               m_Format;
+            TextureFilter               m_Filter;
+            TextureCoordinateWrapMode   m_WrapModeU;
+            TextureCoordinateWrapMode   m_WrapModeV;
 
         public:
             REFLECT_DECLARE_CLASS( Texture, AssetClass );
@@ -80,10 +89,10 @@ namespace Helium
 
         public:
             Texture()
-                : m_Format( TextureFormats::ARGB8888 )
-                , m_Filter( TextureFilters::Point )
-                , m_WrapModeU( WrapModes::Wrap )
-                , m_WrapModeV( WrapModes::Wrap )
+                : m_Format( TextureFormat::ARGB8888 )
+                , m_Filter( TextureFilter::Point )
+                , m_WrapModeU( TextureCoordinateWrapMode::Wrap )
+                , m_WrapModeV( TextureCoordinateWrapMode::Wrap )
             {
             }
 
@@ -105,20 +114,20 @@ namespace Helium
                 m_Filter = filter;
             }
 
-            WrapMode GetWrapModeU() const
+            TextureCoordinateWrapMode GetWrapModeU() const
             {
                 return m_WrapModeU;
             }
-            void SetWrapModeU( const WrapMode& wrapMode )
+            void SetWrapModeU( const TextureCoordinateWrapMode& wrapMode )
             {
                 m_WrapModeU = wrapMode;
             }
 
-            WrapMode GetWrapModeV() const
+            TextureCoordinateWrapMode GetWrapModeV() const
             {
                 return m_WrapModeV;
             }
-            void SetWrapModeV( const WrapMode& wrapMode )
+            void SetWrapModeV( const TextureCoordinateWrapMode& wrapMode )
             {
                 m_WrapModeV = wrapMode;
             }

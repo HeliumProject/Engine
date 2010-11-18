@@ -17,7 +17,7 @@ namespace Helium
             REFLECT_DECLARE_ABSTRACT( SetSerializer, ContainerSerializer );
 
             virtual int32_t GetItemType() const = 0;
-            virtual void GetItems(V_ConstSerializer& items) const = 0;
+            virtual void GetItems(std::vector< ConstSerializerPtr >& items) const = 0;
             virtual void AddItem(const Serializer* value) = 0;
             virtual void RemoveItem(const Serializer* value) = 0;
             virtual bool ContainsItem(const Serializer* value) const = 0;
@@ -42,7 +42,7 @@ namespace Helium
             virtual void Clear() HELIUM_OVERRIDE;
 
             virtual int32_t GetItemType() const HELIUM_OVERRIDE;
-            virtual void GetItems(V_ConstSerializer& items) const HELIUM_OVERRIDE;
+            virtual void GetItems(std::vector< ConstSerializerPtr >& items) const HELIUM_OVERRIDE;
             virtual void AddItem(const Serializer* value) HELIUM_OVERRIDE;
             virtual void RemoveItem(const Serializer* value) HELIUM_OVERRIDE;
             virtual bool ContainsItem(const Serializer* value) const HELIUM_OVERRIDE;
@@ -57,12 +57,12 @@ namespace Helium
             virtual tistream& operator<< (tistream& stream) HELIUM_OVERRIDE;
         };
 
-        typedef SimpleSetSerializer<tstring, StringSerializer> StringSetSerializer;         REFLECT_SPECIALIZE_SERIALIZER( StringSetSerializer );
-        typedef SimpleSetSerializer<uint32_t, U32Serializer> U32SetSerializer;                   REFLECT_SPECIALIZE_SERIALIZER( U32SetSerializer );
-        typedef SimpleSetSerializer<uint64_t, U64Serializer> U64SetSerializer;                   REFLECT_SPECIALIZE_SERIALIZER( U64SetSerializer );
-        typedef SimpleSetSerializer<float32_t, F32Serializer> F32SetSerializer;                   REFLECT_SPECIALIZE_SERIALIZER( F32SetSerializer );
-        typedef SimpleSetSerializer<Helium::GUID, GUIDSerializer> GUIDSetSerializer;     REFLECT_SPECIALIZE_SERIALIZER( GUIDSetSerializer );
-        typedef SimpleSetSerializer<Helium::TUID, TUIDSerializer> TUIDSetSerializer;     REFLECT_SPECIALIZE_SERIALIZER( TUIDSetSerializer );
-        typedef SimpleSetSerializer<Helium::Path, PathSerializer> PathSetSerializer;     REFLECT_SPECIALIZE_SERIALIZER( PathSetSerializer );
+        typedef SimpleSetSerializer<tstring, StringSerializer> StringSetSerializer;
+        typedef SimpleSetSerializer<uint32_t, U32Serializer> U32SetSerializer;
+        typedef SimpleSetSerializer<uint64_t, U64Serializer> U64SetSerializer;
+        typedef SimpleSetSerializer<float32_t, F32Serializer> F32SetSerializer;
+        typedef SimpleSetSerializer<Helium::GUID, GUIDSerializer> GUIDSetSerializer;
+        typedef SimpleSetSerializer<Helium::TUID, TUIDSerializer> TUIDSetSerializer;
+        typedef SimpleSetSerializer<Helium::Path, PathSerializer> PathSetSerializer;
     }
 }

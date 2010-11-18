@@ -15,41 +15,45 @@ namespace Helium
         class PrimitiveLocator;
         class PrimitiveCone;
 
-        namespace CurveTypes
+        class CurveType
         {
-            enum CurveType
+        public:
+            enum Enum
             {
                 Linear,
                 BSpline,
                 CatmullRom,
             };
 
-            static void CurveTypeEnumerateEnum( Reflect::Enumeration* info )
-            {
-                info->AddElement(Linear, TXT( "Linear" ) );
-                info->AddElement(BSpline, TXT( "BSpline" ) );
-                info->AddElement(CatmullRom, TXT( "CatmullRom" ) );
-            }
-        }
-        typedef CurveTypes::CurveType CurveType;
+            REFLECT_DECLARE_ENUMERATION( CurveType );
 
-        namespace ControlPointLabels
+            static void EnumerateEnum( Reflect::Enumeration& info )
+            {
+                info.AddElement(Linear,     TXT( "Linear" ) );
+                info.AddElement(BSpline,    TXT( "BSpline" ) );
+                info.AddElement(CatmullRom, TXT( "CatmullRom" ) );
+            }
+        };
+
+        class ControlPointLabel
         {
-            enum ControlPointLabel
+        public:
+            enum Enum
             {
                 None,
                 CurveAndIndex,
                 IndexOnly
             };
 
-            static void ControlPointLabelEnumerateEnum( Reflect::Enumeration* info )
+            REFLECT_DECLARE_ENUMERATION( ControlPointLabel );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement( None, TXT( "None" ) );
-                info->AddElement( CurveAndIndex, TXT( "Curve and Index" ) );
-                info->AddElement( IndexOnly, TXT( "Index only" ) );
+                info.AddElement( None,          TXT( "None" ) );
+                info.AddElement( CurveAndIndex, TXT( "Curve and Index" ) );
+                info.AddElement( IndexOnly,     TXT( "Index only" ) );
             }
-        }
-        typedef ControlPointLabels::ControlPointLabel ControlPointLabel;
+        };
 
         class Curve : public PivotTransform
         {

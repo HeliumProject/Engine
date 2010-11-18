@@ -33,7 +33,7 @@ void EntityInstance::EnumerateClass( Reflect::Compositor< EntityInstance >& comp
 
 void EntityInstance::InitializeType()
 {
-    Reflect::RegisterClassType< EntityInstance >( TXT( "EntityInstance" ) );
+    Reflect::RegisterClassType< EntityInstance >( TXT( "SceneGraph::EntityInstance" ) );
     PropertiesGenerator::InitializePanel( TXT( "EntityInstance" ), CreatePanelSignature::Delegate( &EntityInstance::CreatePanel ) );
 }
 

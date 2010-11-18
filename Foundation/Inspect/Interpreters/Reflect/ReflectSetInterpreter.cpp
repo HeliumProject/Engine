@@ -124,7 +124,7 @@ void ReflectSetInterpreter::OnRemove( const ButtonClickedArgs& args )
                 for ( ; serItr != serEnd; ++serItr )
                 {
                     Reflect::SetSerializer* setSerializer = Reflect::AssertCast<Reflect::SetSerializer>(*serItr);
-                    V_ConstSerializer items;
+                    std::vector< ConstSerializerPtr > items;
                     setSerializer->GetItems( items );
                     setSerializer->RemoveItem( items[ *itr ] );
                 }

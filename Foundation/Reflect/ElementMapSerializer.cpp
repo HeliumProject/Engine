@@ -1,6 +1,10 @@
-#include "ElementMapSerializer.h"
+#include "Foundation/Reflect/ElementMapSerializer.h"
+#include "Foundation/Reflect/Serializers.h"
 
+using namespace Helium;
 using namespace Helium::Reflect;
+
+REFLECT_DEFINE_ABSTRACT( ElementMapSerializer );
 
 template < class KeyT >
 SimpleElementMapSerializer<KeyT>::SimpleElementMapSerializer()
@@ -37,7 +41,7 @@ void SimpleElementMapSerializer<KeyT>::Clear()
 template < class KeyT >
 int32_t SimpleElementMapSerializer<KeyT>::GetKeyType() const
 {
-    return Reflect::GetType<KeyT>();
+    return Reflect::GetSerializer<KeyT>();
 }
 
 template < class KeyT >
@@ -179,7 +183,7 @@ bool SimpleElementMapSerializer<KeyT>::Equals(const Serializer* s) const
 template < class KeyT >
 void SimpleElementMapSerializer<KeyT>::Serialize(Archive& archive) const
 {
-    V_Element components;
+    std::vector< ElementPtr > components;
     components.resize(m_Data->size() * 2);
 
     {
@@ -193,7 +197,7 @@ void SimpleElementMapSerializer<KeyT>::Serialize(Archive& archive) const
             }
 
             ElementPtr elem;
-            archive.GetCache().Create( Reflect::GetType<KeyT>(), elem );
+            archive.GetCache().Create( Reflect::GetSerializer<KeyT>(), elem );
 
             Serializer* ser = AssertCast<Serializer>(elem.Ptr());
             ser->ConnectData((void*)&(itr->first));
@@ -206,8 +210,8 @@ void SimpleElementMapSerializer<KeyT>::Serialize(Archive& archive) const
     archive.Serialize(components);
 
     {
-        V_Element::iterator itr = components.begin();
-        V_Element::iterator end = components.end();
+        std::vector< ElementPtr >::iterator itr = components.begin();
+        std::vector< ElementPtr >::iterator end = components.end();
         for ( ; itr != end; ++itr )
         {
             Serializer* ser = AssertCast<Serializer>(*itr);
@@ -221,7 +225,7 @@ void SimpleElementMapSerializer<KeyT>::Serialize(Archive& archive) const
 template < class KeyT >
 void SimpleElementMapSerializer<KeyT>::Deserialize(Archive& archive)
 {
-    V_Element components;
+    std::vector< ElementPtr > components;
     archive.Deserialize(components, ArchiveFlags::Sparse);
 
     if (components.size() % 2 != 0)
@@ -232,8 +236,8 @@ void SimpleElementMapSerializer<KeyT>::Deserialize(Archive& archive)
     // if we are referring to a real field, clear its contents
     m_Data->clear();
 
-    V_Element::iterator itr = components.begin();
-    V_Element::iterator end = components.end();
+    std::vector< ElementPtr >::iterator itr = components.begin();
+    std::vector< ElementPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
         Serializer* key = ObjectCast<Serializer>(*itr);

@@ -5,6 +5,8 @@
 
 using namespace Helium;
 
+REFLECT_DEFINE_CLASS( MRUData );
+
 const std::vector< Helium::Path >& MRUData::GetPaths() const
 {
     return m_Paths;

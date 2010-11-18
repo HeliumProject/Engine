@@ -1,32 +1,19 @@
 #pragma once
 
-//
-// STL includes
-//
-
 #include <map>
 #include <vector>
 #include <string>
 
-//
-// Library includes
-//
-
 #include "Platform/Assert.h"
-#include "Foundation/Automation/Event.h"
-#include "Foundation/Automation/Attribute.h"
-#include "Foundation/Memory/SmartPtr.h"
+
 #include "Foundation/GUID.h"
 #include "Foundation/TUID.h"
 #include "Foundation/Atomic.h"
-
-//
-// API includes
-//
-
-#include "Object.h"
-#include "Archive.h"
-#include "Registry.h"
+#include "Foundation/Automation/Event.h"
+#include "Foundation/Automation/Attribute.h"
+#include "Foundation/File/Path.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/Reflect/Object.h"
 
 namespace Helium
 {
@@ -76,10 +63,10 @@ namespace Helium
             static void EnumerateClass( Reflect::Compositor<Element>& comp );
 
             // Returns the string to use as the title of this element in UI (uses the UI name of the type info by default)
-            virtual const tstring&      GetTitle() const { return GetClass()->m_UIName; }
+            virtual const tstring&      GetTitle() const;
 
             // Specifies if the value is directly between the start and end short name
-            virtual bool                IsCompact() const { return false; }
+            virtual bool                IsCompact() const;
 
             // This the process callback for sub and primitive elements to have thier data be aggregated into the parent instance
             virtual bool                ProcessComponent(ElementPtr element, const tstring& fieldName);

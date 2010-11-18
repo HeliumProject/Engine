@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Platform/Types.h"
-#include "Platform/Assert.h"
+#include "Foundation/API.h"
+
+#include "Platform/Utility.h"
 
 //
 // Types
@@ -14,66 +15,39 @@
 namespace Helium
 {
     //
-    // The reference count interface
-    //
-
-    template<class T>
-    class IRefCount
-    {
-    public:
-        virtual ~IRefCount() {}
-
-        // returns the current ref count
-        virtual int GetRefCount() const = 0;
-
-        // increments the internal ref count
-        virtual void IncrRefCount() const = 0;
-
-        // decrements the internal ref count
-        virtual void DecrRefCount() const = 0;
-    };
-
-
-    //
     // The base class
     //  Derive from this to enable tracking and cleanup of objects automagically
     //
 
-    template<class T>
-    class RefCountBase : public IRefCount<T>
+    class FOUNDATION_API RefCountBase
     {
-    protected:
-        mutable int m_RefCount;
+    private:
+        mutable int32_t m_RefCount;
 
     public:
         RefCountBase()
             : m_RefCount (0)
         {
-
         }
 
-        RefCountBase(const RefCountBase<T>& rhs)
+        RefCountBase(const RefCountBase& rhs)
             : m_RefCount (0)
         {
-
         }
 
-        virtual ~RefCountBase()
-        {
+        virtual ~RefCountBase();
 
-        }
-
-        virtual int GetRefCount() const
+        int32_t GetRefCount() const
         {
             return m_RefCount;
         }
 
-        virtual void IncrRefCount() const
+        void IncrRefCount() const
         {
             m_RefCount++;
         }
 
-        virtual void DecrRefCount() const
+        void DecrRefCount() const
         {
             m_RefCount--;
 
@@ -85,7 +59,7 @@ namespace Helium
             }
         }
 
-        RefCountBase<T>& operator=(const RefCountBase<T>& rhs)
+        RefCountBase& operator=(const RefCountBase& rhs)
         {
             // do NOT copy the refcount
             return *this;
@@ -99,7 +73,7 @@ namespace Helium
     //
 
     template<typename T>
-    class RefCountAggregator : public RefCountBase<T>
+    class RefCountAggregator : public RefCountBase
     {
     public:
         T m_Object;

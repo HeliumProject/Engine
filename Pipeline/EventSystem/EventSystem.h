@@ -22,7 +22,7 @@ namespace Helium
         // This distributed event system manages the creation and handling of unique events.
         // Assigns each event a TUID and maintains a list of already handled events.
         //
-        class PIPELINE_API EventSystem : public Helium::RefCountBase< EventSystem >
+        class PIPELINE_API EventSystem : public Helium::RefCountBase
         {
         public:
             EventSystem( const tstring& rootDirPath, bool writeBinaryFormat );

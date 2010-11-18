@@ -53,7 +53,7 @@ namespace Helium
         // The menu class
         //
 
-        class FOUNDATION_API ContextMenu : public Helium::RefCountBase<ContextMenu>
+        class FOUNDATION_API ContextMenu : public Helium::RefCountBase
         {
         public:
             ContextMenu(Control* control);

@@ -52,7 +52,7 @@ namespace Helium
     //
 
     template <class V>
-    class Property HELIUM_ABSTRACT : public Helium::RefCountBase< Property<V> >
+    class Property HELIUM_ABSTRACT : public Helium::RefCountBase
     {
     public:
         virtual V Get() const = 0;

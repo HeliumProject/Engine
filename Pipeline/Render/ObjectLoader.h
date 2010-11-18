@@ -17,7 +17,7 @@ namespace Helium
             PARSE_FILE_FAILED = 2,      //file failed to load
         };
 
-        class PIPELINE_API ObjectLoader : public Helium::RefCountBase<ObjectLoader>
+        class PIPELINE_API ObjectLoader : public Helium::RefCountBase
         {
         public:
             ObjectLoader();

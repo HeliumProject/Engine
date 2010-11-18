@@ -196,7 +196,7 @@ namespace Helium
             };
         }
 
-        class FOUNDATION_API Archive : public Helium::RefCountBase< Archive >
+        class FOUNDATION_API Archive : public Helium::RefCountBase
         {
         protected:
 

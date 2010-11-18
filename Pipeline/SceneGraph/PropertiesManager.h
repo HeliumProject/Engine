@@ -126,7 +126,7 @@ namespace Helium
             OrderedSet<SceneNodePtr>    m_Selection;
         };
 
-        class PIPELINE_API PropertiesManager : public Helium::RefCountBase< PropertiesManager >
+        class PIPELINE_API PropertiesManager : public Helium::RefCountBase
         {
         public:
             PropertiesManager( PropertiesGenerator* generator, CommandQueue* commandQueue );

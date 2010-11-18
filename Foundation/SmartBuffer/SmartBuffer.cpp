@@ -22,7 +22,7 @@ Fixup::Fixup()
 
 Fixup::~Fixup()
 {
-    HELIUM_ASSERT( m_RefCount == 0 );
+    HELIUM_ASSERT( GetRefCount() == 0 );
 }
 
 PointerFixup::PointerFixup(uint32_t size)
@@ -277,7 +277,7 @@ SmartBuffer::SmartBuffer()
 
 SmartBuffer::~SmartBuffer()
 {
-    HELIUM_ASSERT( m_RefCount == 0 );
+    HELIUM_ASSERT( GetRefCount() == 0 );
     if ( m_OwnsData && m_Data != NULL )
     {
         if (m_Virtual)

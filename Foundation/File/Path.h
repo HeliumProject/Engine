@@ -17,7 +17,7 @@ namespace Helium
 {
     const static tchar_t s_InternalPathSeparator = '/';
 
-    class FOUNDATION_API Path : public Helium::RefCountBase< Path >
+    class FOUNDATION_API Path : public Helium::RefCountBase
     {
     private:
         tstring m_Path;

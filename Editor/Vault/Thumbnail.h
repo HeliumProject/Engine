@@ -10,7 +10,7 @@ namespace Helium
 {
     namespace Editor
     {
-        class Thumbnail : public Helium::RefCountBase< Thumbnail >
+        class Thumbnail : public Helium::RefCountBase
         {
         public:
             Thumbnail( Render::DeviceManager* d3dManager );

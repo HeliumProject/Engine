@@ -219,7 +219,7 @@ namespace Helium
             return data ? (data->HasType( type ) ? static_cast<T*>( data ) : NULL) : NULL;
         }
 
-        class Data : public Helium::RefCountBase< Data >
+        class Data : public Helium::RefCountBase
         {
         public:
             INSPECT_BASE( DataTypes::Custom );

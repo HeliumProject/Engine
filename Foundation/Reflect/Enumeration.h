@@ -64,6 +64,8 @@ namespace Helium
                 info->m_Name = name;
                 info->m_UIName = info->m_Name;
 
+                T::EnumerateEnum( *info );
+
                 return info;
             }
 

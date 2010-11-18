@@ -7,31 +7,34 @@ namespace Helium
 {
     namespace Asset
     {
-        namespace AnimationClipModes
+        class AnimationClipMode
         {
-            enum AnimationClipMode
+        public:
+            enum Enum
             {
                 Default,
                 Once,
                 Loop,
                 PingPong
             };
-            static void AnimationClipModeEnumerateEnum( Reflect::Enumeration& info )
+
+            REFLECT_DECLARE_ENUMERATION( AnimationClipMode );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info.AddElement( Default,  TXT( "Default" ),  TXT( "Default" ) );
-                info.AddElement( Once,     TXT( "Once" ),     TXT( "Once" ) );
-                info.AddElement( Loop,     TXT( "Loop" ),     TXT( "Loop" ) );
-                info.AddElement( PingPong, TXT( "PingPong" ), TXT( "PingPong" ) );
+                info.AddElement( Default,  TXT( "Default" ) );
+                info.AddElement( Once,     TXT( "Once" ) );
+                info.AddElement( Loop,     TXT( "Loop" ) );
+                info.AddElement( PingPong, TXT( "PingPong" ) );
             }
-        }
-        typedef AnimationClipModes::AnimationClipMode AnimationClipMode;
+        };
 
         class PIPELINE_API AnimationClip : public AssetClass
         {
         private:
-            bool              m_Compressed;
-            uint32_t               m_SampleRate;
-            AnimationClipMode m_Mode;
+            bool                m_Compressed;
+            uint32_t            m_SampleRate;
+            AnimationClipMode   m_Mode;
 
         public:
             REFLECT_DECLARE_CLASS( AnimationClip, AssetClass );
@@ -42,7 +45,7 @@ namespace Helium
             AnimationClip()
                 : m_Compressed( false )
                 , m_SampleRate( 30 )
-                , m_Mode( AnimationClipModes::Default )
+                , m_Mode( AnimationClipMode::Default )
             {
             }
         };

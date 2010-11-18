@@ -14,7 +14,8 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_CLASS(Volume);
+REFLECT_DEFINE_ENUMERATION( VolumeShape );
+REFLECT_DEFINE_CLASS( Volume );
 
 void Volume::EnumerateClass( Reflect::Compositor<Volume>& comp )
 {
@@ -35,7 +36,7 @@ void Volume::CleanupType()
 }
 
 Volume::Volume()
-: m_Shape (VolumeShapes::Cube)
+: m_Shape (VolumeShape::Cube)
            
 {
 
@@ -69,7 +70,7 @@ SceneNodeTypePtr Volume::CreateNodeType( Scene* scene ) const
 
 int Volume::GetShape() const
 {
-    return m_Shape;
+    return (int)m_Shape;
 }
 
 void Volume::SetShape( int shape )
@@ -224,25 +225,25 @@ void Volume::CreatePanel( CreatePanelArgs& args )
 
             {
                 tostringstream str;
-                str << VolumeShapes::Cube;
+                str << VolumeShape::Cube;
                 items.push_back( Inspect::ChoiceItem( TXT( "Cube" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << VolumeShapes::Cylinder;
+                str << VolumeShape::Cylinder;
                 items.push_back( Inspect::ChoiceItem( TXT( "Cylinder" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << VolumeShapes::Sphere;
+                str << VolumeShape::Sphere;
                 items.push_back( Inspect::ChoiceItem( TXT( "Sphere" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << VolumeShapes::Capsule;
+                str << VolumeShape::Capsule;
                 items.push_back( Inspect::ChoiceItem( TXT( "Capsule" ), str.str() ) );
             }
 

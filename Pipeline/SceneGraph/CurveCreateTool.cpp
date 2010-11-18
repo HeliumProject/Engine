@@ -11,7 +11,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-CurveType CurveCreateTool::s_CurveType = CurveTypes::BSpline;
+CurveType CurveCreateTool::s_CurveType = CurveType::BSpline;
 bool CurveCreateTool::s_SurfaceSnap = false;
 bool CurveCreateTool::s_ObjectSnap = false;
 
@@ -65,7 +65,7 @@ void CurveCreateTool::CreateInstance( const Vector3& position )
     m_Instance->Initialize( m_Scene );
     m_Instance->SetSelected( true );
     m_Instance->SetTransient( true );
-    m_Instance->SetCurveType( s_CurveType );
+    m_Instance->SetCurveType( (int)s_CurveType );
     m_Scene->AddObject( m_Instance );
 
     CurveControlPointPtr point = new CurveControlPoint();
@@ -304,19 +304,19 @@ void CurveCreateTool::CreateProperties()
 
             {
                 tostringstream str;
-                str << CurveTypes::Linear;
+                str << CurveType::Linear;
                 items.push_back( Inspect::ChoiceItem( TXT( "Linear" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << CurveTypes::BSpline;
+                str << CurveType::BSpline;
                 items.push_back( Inspect::ChoiceItem( TXT( "BSpline" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << CurveTypes::CatmullRom;
+                str << CurveType::CatmullRom;
                 items.push_back( Inspect::ChoiceItem( TXT( "Catmull-Rom" ), str.str() ) );
             }
 
@@ -400,7 +400,7 @@ void CurveCreateTool::SetCurveType( int selection )
 {
     if ( m_Instance.ReferencesObject() )
     {
-        m_Instance->SetCurveType( (CurveType) selection );  
+        m_Instance->SetCurveType( selection );  
         m_Scene->Execute( true );
     }
 }

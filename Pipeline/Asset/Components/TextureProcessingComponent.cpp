@@ -3,6 +3,7 @@
 using namespace Helium;
 using namespace Helium::Asset;
 
+REFLECT_DEFINE_ENUMERATION( TextureDataFormat );
 REFLECT_DEFINE_CLASS( TextureProcessingComponent );
 
 void TextureProcessingComponent::EnumerateClass( Reflect::Compositor< TextureProcessingComponent >& comp )

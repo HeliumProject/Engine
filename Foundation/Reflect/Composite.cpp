@@ -168,12 +168,7 @@ Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, con
 
 void Composite::Report() const
 {
-    static tchar_t buf[8192];
-
-    _sntprintf(buf, sizeof(buf), TXT( "Reflect Type ID: %3d, Size: %4d, Name: `%s`\n" ), m_TypeID, m_Size, m_Name.c_str());
-    buf[ sizeof(buf) - 1] = 0; 
-
-    Log::Debug(Log::Levels::Verbose,  buf );
+    Log::Debug(Log::Levels::Verbose, TXT( "Reflect Type ID: %3d, Size: %4d, Name: `%s`\n" ), m_TypeID, m_Size, m_Name.c_str() );
 
     uint32_t computedSize = 0;
     M_FieldIDToInfo::const_iterator itr = m_FieldIDToInfo.begin();

@@ -8,6 +8,15 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
+REFLECT_DEFINE_ENUMERATION( ProjectMenuID );
+
+const tchar_t* ProjectMenuID::s_Labels[COUNT] =
+{
+    TXT( "Filename" ),
+    TXT( "Full Path" ),
+    TXT( "Relative Path" ),
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 ProjectViewModelNode::ProjectViewModelNode( ProjectViewModelNode* parent, const Helium::Path& path, const Document* document, const bool isContainer )
 : m_ParentNode( parent )

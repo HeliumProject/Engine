@@ -101,8 +101,8 @@ Viewport::Viewport( HWND wnd, SettingsManager* settingsManager )
 , m_Focused( false )
 , m_ResourceTracker( NULL )
 , m_Tool( NULL )
-, m_CameraMode( CameraModes::Orbit )
-, m_GeometryMode( GeometryModes::Render )
+, m_CameraMode( CameraMode::Orbit )
+, m_GeometryMode( GeometryMode::Render )
 , m_DragMode( DragModes::None )
 , m_Highlighting( true )
 , m_AxesVisible( true )
@@ -123,7 +123,7 @@ Viewport::Viewport( HWND wnd, SettingsManager* settingsManager )
 
 Viewport::~Viewport()
 {
-    m_Cameras[ CameraModes::Orbit ].RemoveMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
+    m_Cameras[ CameraMode::Orbit ].RemoveMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
 
     m_DeviceManager.RemoveDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &Viewport::ReleaseResources ) );
     m_DeviceManager.RemoveDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &Viewport::AllocateResources ) );
@@ -144,7 +144,7 @@ void Viewport::Reset()
         return;
     }
 
-    for (uint32_t i=0; i<CameraModes::Count; i++)
+    for (uint32_t i=0; i<CameraMode::Count; i++)
     {
         m_Cameras[i].Reset();
     }
@@ -205,7 +205,7 @@ void Viewport::SaveSettings(SceneGraph::ViewportSettings* prefs)
     // just blow away the previous preferences
     prefs->m_CameraPrefs.clear(); 
 
-    for(int i = 0; i < CameraModes::Count; ++i)
+    for(int i = 0; i < CameraMode::Count; ++i)
     {
         CameraMode mode = (CameraMode)i; 
         CameraSettingsPtr cameraPrefs = new CameraSettings(); 
@@ -237,17 +237,17 @@ void Viewport::SetCameraMode(CameraMode mode)
 
 void Viewport::NextCameraMode()
 {
-    SetCameraMode((CameraMode)((m_CameraMode + 1) % CameraModes::Count));
+    SetCameraMode((CameraMode)((m_CameraMode + 1) % CameraMode::Count));
 }
 
 void Viewport::PreviousCameraMode()
 {
-    SetCameraMode( (CameraMode)( ( m_CameraMode + ( CameraModes::Count - 1 ) ) % CameraModes::Count ) );
+    SetCameraMode( (CameraMode)( ( m_CameraMode + ( CameraMode::Count - 1 ) ) % CameraMode::Count ) );
 }
 
 void Viewport::NextGeometryMode()
 {
-    SetGeometryMode((GeometryMode)((m_GeometryMode + 1) % GeometryModes::Count));
+    SetGeometryMode((GeometryMode)((m_GeometryMode + 1) % GeometryMode::Count));
 }
 
 void Viewport::SetTool(SceneGraph::Tool* tool)
@@ -344,18 +344,18 @@ void Viewport::InitWidgets()
 void Viewport::InitCameras()
 {
     // create the cameras
-    m_Cameras[CameraModes::Orbit].Setup(ProjectionModes::Perspective, Vector3::Zero, Vector3::Zero);
-    m_Cameras[CameraModes::Front].Setup(ProjectionModes::Orthographic, OutVector * -1.f, UpVector);
-    m_Cameras[CameraModes::Side].Setup(ProjectionModes::Orthographic, SideVector * -1.f, UpVector);
-    m_Cameras[CameraModes::Top].Setup(ProjectionModes::Orthographic, UpVector * -1.f, OutVector * -1.f);
+    m_Cameras[CameraMode::Orbit].Setup(ProjectionModes::Perspective, Vector3::Zero, Vector3::Zero);
+    m_Cameras[CameraMode::Front].Setup(ProjectionModes::Orthographic, OutVector * -1.f, UpVector);
+    m_Cameras[CameraMode::Side].Setup(ProjectionModes::Orthographic, SideVector * -1.f, UpVector);
+    m_Cameras[CameraMode::Top].Setup(ProjectionModes::Orthographic, UpVector * -1.f, OutVector * -1.f);
 
     // Set the max size of the camera history
-    m_CameraHistory[CameraModes::Orbit].SetMaxLength( 10 );
-    m_CameraHistory[CameraModes::Front].SetMaxLength( 10 );
-    m_CameraHistory[CameraModes::Side].SetMaxLength( 10 );
-    m_CameraHistory[CameraModes::Top].SetMaxLength( 10 );
+    m_CameraHistory[CameraMode::Orbit].SetMaxLength( 10 );
+    m_CameraHistory[CameraMode::Front].SetMaxLength( 10 );
+    m_CameraHistory[CameraMode::Side].SetMaxLength( 10 );
+    m_CameraHistory[CameraMode::Top].SetMaxLength( 10 );
 
-    m_Cameras[ CameraModes::Orbit ].AddMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
+    m_Cameras[ CameraMode::Orbit ].AddMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
 }
 
 void Viewport::SetSize(uint32_t x, uint32_t y)
@@ -838,7 +838,7 @@ void Viewport::Draw()
         D3DCOLORVALUE ambient;
         D3DCOLORVALUE diffuse;
         D3DCOLORVALUE specular;
-        if ( m_Cameras[m_CameraMode].GetShadingMode() == ShadingModes::Wireframe )
+        if ( m_Cameras[m_CameraMode].GetShadingMode() == ShadingMode::Wireframe )
         {
             ambient = SceneGraph::Color::DIMGRAY;
             diffuse = SceneGraph::Color::BLACK;
@@ -1061,7 +1061,7 @@ void Viewport::UpdateCameraHistory()
 
     // We only work for the Orbit camera at the moment. SetTransform assumes a Perspective view
     // Not sure how to handle orthographic at the moment.
-    if( m_CameraMode != CameraModes::Orbit )
+    if( m_CameraMode != CameraMode::Orbit )
     {
         return;
     }

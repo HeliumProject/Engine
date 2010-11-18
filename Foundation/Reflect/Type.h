@@ -44,93 +44,11 @@ namespace Helium
             static int32_t AssignTypeID();
 
         public:
-            void TrackPointer(void** pointer) const;
-            void RemovePointer(void** pointer) const;
-
-            void TrackID(int32_t* id) const;
-            void RemoveID(int32_t* id) const;
-
             tstring                         m_Name;         // the name of this type in the codebase
             tstring                         m_UIName;       // the friendly name for the field, its optional (will use the short name if not specified)
 
             int32_t                         m_TypeID;       // the unique id of this type
             uint32_t                        m_Size;         // the size of the object in bytes
-
-            mutable std::vector<void**>     m_Pointers;     // cached pointers to this type
-            mutable std::vector<int32_t*>   m_IDs;          // cached ids to this type
-        };
-
-        template <class T>
-        class TypeTracker
-        {
-        public:
-            TypeTracker()
-                : m_Type ( NULL )
-                , m_Data ( NULL )
-            {
-
-            }
-
-            ~TypeTracker()
-            {
-                if(m_Type)
-                {
-                    m_Type->RemovePointer( (void**)&m_Type ); 
-                    m_Type->RemovePointer( (void**)m_Data );
-                }
-            }
-
-            void Set( const Type* type, T* data )
-            {
-                m_Type = type; 
-                m_Data = data; 
-
-                // we are a reference to the type. if the type is deleted, we need to know
-                // or else we will crash below when trying to access the type
-                m_Type->TrackPointer( (void**)&m_Type ); 
-                m_Type->TrackPointer( (void**)m_Data );
-            }
-
-        private:
-            const Type* m_Type;
-            T* m_Data;
-        };
-
-        class IDTracker
-        {
-        public:
-            IDTracker()
-                : m_Type( NULL )
-                , m_Data( NULL )
-            {
-
-            }
-
-            ~IDTracker()
-            {
-                if(m_Type)
-                {
-                    m_Type->RemovePointer( (void**) &m_Type ); 
-                    m_Type->RemoveID( m_Data );
-                }
-
-            }
-
-            void Set( const Type* type, int32_t* data )
-            {
-                m_Type = type; 
-                m_Data = data; 
-
-                // we are a reference to the type. if the type is deleted, we need to know
-                // or else we will crash below when trying to access the type
-                m_Type->TrackPointer( (void**) &m_Type ); 
-                m_Type->TrackID( m_Data );
-            }
-
-
-        private:
-            const Type* m_Type;
-            int32_t* m_Data;
         };
     }
 }

@@ -8,20 +8,23 @@ namespace Helium
     {
         class LocatorType;
 
-        namespace LocatorShapes
+        class LocatorShape
         {
-            enum LocatorShape
+        public:
+            enum Enum
             {
                 Cross,
                 Cube,
             };
-            static void LocatorShapeEnumerateEnum( Reflect::Enumeration& info )
+
+            REFLECT_DECLARE_ENUMERATION( LocatorShape );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info.AddElement(Cross, TXT( "Cross" ) );
-                info.AddElement(Cube, TXT( "Cube" ) );
+                info.AddElement(Cross,  TXT( "Cross" ) );
+                info.AddElement(Cube,   TXT( "Cube" ) );
             }
-        }
-        typedef LocatorShapes::LocatorShape LocatorShape;
+        };
 
         class Locator : public Instance
         {

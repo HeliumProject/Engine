@@ -23,6 +23,8 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
+REFLECT_DEFINE_ENUMERATION( CurveType );
+REFLECT_DEFINE_ENUMERATION( ControlPointLabel );
 REFLECT_DEFINE_CLASS( Curve );
 
 D3DMATERIAL9 Curve::s_Material;
@@ -67,9 +69,9 @@ void Curve::CleanupType()
 
 Curve::Curve()
 : m_Closed( false )
-, m_Type( CurveTypes::Linear )
+, m_Type( CurveType::Linear )
 , m_Resolution( 10 )
-, m_ControlPointLabel( ControlPointLabels::None )
+, m_ControlPointLabel( ControlPointLabel::None )
 , m_Locator ( NULL )
 , m_Cone ( NULL )
 {
@@ -121,7 +123,7 @@ void Curve::Initialize(Scene* scene)
 
 int Curve::GetCurveType() const 
 { 
-    return m_Type;
+    return (int)m_Type;
 }
 
 void Curve::SetCurveType( int value )
@@ -157,7 +159,7 @@ void Curve::SetResolution( uint32_t value )
 
 int Curve::GetControlPointLabel() const
 {
-    return m_ControlPointLabel;
+    return (int)m_ControlPointLabel;
 }
 
 void Curve::SetControlPointLabel( int value )
@@ -721,15 +723,15 @@ void Curve::Evaluate( GraphDirection direction )
         }
     }
 
-    if ( controlCount < 4  || m_Type == CurveTypes::Linear ) 
+    if ( controlCount < 4  || m_Type == CurveType::Linear ) 
     {     
         m_Points = points;
     }
-    else if ( m_Type == CurveTypes::BSpline )
+    else if ( m_Type == CurveType::BSpline )
     {
         CurveGenerator::ComputeCurve( points, m_Resolution, m_Closed, CurveGenerator::kBSpline, m_Points ); 
     }
-    else if ( m_Type == CurveTypes::CatmullRom )
+    else if ( m_Type == CurveType::CatmullRom )
     {
         CurveGenerator::ComputeCurve( points, m_Resolution, m_Closed, CurveGenerator::kCatmullRom, m_Points ); 
     }
@@ -863,7 +865,7 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
         // Draw points hull
         //
 
-        if ( curve->m_Type != CurveTypes::Linear )
+        if ( curve->m_Type != CurveType::Linear )
         {
             uint32_t countControlLines = curve->m_Closed ? countControlPoints : countControlPoints - 1;
             device->SetMaterial( &curve->s_HullMaterial );
@@ -909,16 +911,16 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
                         device->DrawPrimitive( D3DPT_POINTLIST, (uint32_t)vertices->GetBaseIndex() + i, 1 );
                     }
 
-                    if ( curve->GetControlPointLabel() != ControlPointLabels::None )
+                    if ( curve->GetControlPointLabel() != ControlPointLabel::None )
                     {
                         tstringstream label;
                         switch ( curve->GetControlPointLabel() )
                         {
-                        case ControlPointLabels::CurveAndIndex:
+                        case ControlPointLabel::CurveAndIndex:
                             label << curve->GetName() << TXT( "[" ) << i << TXT( "]" );
                             break;
 
-                        case ControlPointLabels::IndexOnly:
+                        case ControlPointLabel::IndexOnly:
                             label << "[" << i << "]";
                             break;
                         }
@@ -1051,7 +1053,7 @@ void Curve::CreatePanel( CreatePanelArgs& args )
         {
             static const tstring helpText = TXT( "Chooses the type of curve to use." );
             args.m_Generator->AddLabel( TXT( "Type" ) )->a_HelpText.Set( helpText );
-            args.m_Generator->AddChoice<Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( TXT( "CurveType" ) ), &Curve::GetCurveType, &Curve::SetCurveType )->a_HelpText.Set( helpText );
+            args.m_Generator->AddChoice<Curve, int>( args.m_Selection, Reflect::GetEnumeration<CurveType>(), &Curve::GetCurveType, &Curve::SetCurveType )->a_HelpText.Set( helpText );
         }
         args.m_Generator->Pop();
 
@@ -1059,7 +1061,7 @@ void Curve::CreatePanel( CreatePanelArgs& args )
         {
             static const tstring helpText = TXT( "Toggles labeling the control points in the 3d view." );
             args.m_Generator->AddLabel( TXT( "Control Point Label" ) )->a_HelpText.Set( helpText );
-            args.m_Generator->AddChoice<Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( TXT( "ControlPointLabel" ) ), &Curve::GetControlPointLabel, &Curve::SetControlPointLabel )->a_HelpText.Set( helpText );
+            args.m_Generator->AddChoice<Curve, int>( args.m_Selection, Reflect::GetEnumeration<ControlPointLabel>(), &Curve::GetControlPointLabel, &Curve::SetControlPointLabel )->a_HelpText.Set( helpText );
         }
         args.m_Generator->Pop();
 

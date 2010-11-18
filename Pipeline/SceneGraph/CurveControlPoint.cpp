@@ -160,7 +160,7 @@ Matrix4 CurveControlPointTranslateManipulatorAdapter::GetFrame(ManipulatorSpace 
     // if we are pivoting then just use the value
     m = Matrix4 (GetValue()) * m;
 
-    if (space == ManipulatorSpaces::Object)
+    if (space == ManipulatorSpace::Object)
     {
         return m;
     }

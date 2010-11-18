@@ -9,9 +9,10 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        namespace CameraModes
+        class CameraMode
         {
-            enum CameraMode
+        public:
+            enum Enum
             {
                 Orbit,
                 Front,
@@ -21,36 +22,37 @@ namespace Helium
                 Count
             };
 
-            static void CameraModeEnumerateEnum( Reflect::Enumeration& info )
+            REFLECT_DECLARE_ENUMERATION(CameraMode);
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info.AddElement(CameraModes::Orbit, TXT( "CameraModes::Orbit" ), TXT( "Orbit" ) ); 
-                info.AddElement(CameraModes::Front, TXT( "CameraModes::Front" ), TXT( "Front" ) ); 
-                info.AddElement(CameraModes::Side, TXT( "CameraModes::Side" ), TXT( "Side" ) ); 
-                info.AddElement(CameraModes::Top, TXT( "CameraModes::Top" ), TXT( "Top" ) ); 
-                info.AddElement(CameraModes::Count, TXT( "CameraModes::Count" ) ); 
+                info.AddElement(CameraMode::Orbit,  TXT( "CameraMode::Orbit" ), TXT( "Orbit" ) ); 
+                info.AddElement(CameraMode::Front,  TXT( "CameraMode::Front" ), TXT( "Front" ) ); 
+                info.AddElement(CameraMode::Side,   TXT( "CameraMode::Side" ), TXT( "Side" ) ); 
+                info.AddElement(CameraMode::Top,    TXT( "CameraMode::Top" ), TXT( "Top" ) ); 
+                info.AddElement(CameraMode::Count,  TXT( "CameraMode::Count" ) ); 
             }
-        }
+        };
 
-        typedef CameraModes::CameraMode CameraMode;
-
-        namespace ShadingModes
+        class ShadingMode
         {
-            enum ShadingMode
+        public:
+            enum Enum
             {
                 Wireframe,
                 Material,
                 Texture,
             };
 
+            REFLECT_DECLARE_ENUMERATION(ShadingMode);
+
             static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info.AddElement(ShadingModes::Wireframe, TXT( "Wireframe" ) );
-                info.AddElement(ShadingModes::Material, TXT( "Material" ) );
-                info.AddElement(ShadingModes::Texture, TXT( "Texture" ) );
+                info.AddElement(ShadingMode::Wireframe, TXT( "Wireframe" ) );
+                info.AddElement(ShadingMode::Material,  TXT( "Material" ) );
+                info.AddElement(ShadingMode::Texture,   TXT( "Texture" ) );
             }
-        }
-
-        typedef ShadingModes::ShadingMode ShadingMode;
+        };
 
         class PIPELINE_API CameraSettings : public Reflect::Element
         {

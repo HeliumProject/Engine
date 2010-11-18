@@ -16,7 +16,7 @@ namespace Helium
         public:
             REFLECT_DECLARE_CLASS( VaultSettings, Reflect::Element );
 
-            VaultSettings( VaultViewMode viewVaultMode = VaultViewModes::Details, uint32_t thumbnailSize = VaultThumbnailsSizes::Medium );
+            VaultSettings( VaultViewMode viewVaultMode = VaultViewMode::Details, uint32_t thumbnailSize = VaultThumbnailsSizes::Medium );
             ~VaultSettings();
 
         public:

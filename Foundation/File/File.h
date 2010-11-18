@@ -16,7 +16,6 @@
 namespace Helium
 {
     class FileStream;
-    class DirectoryIterator;
 
     /// Low-level file utilities
     class FOUNDATION_API File

@@ -13,8 +13,8 @@
 #include "Foundation/Container/ConcurrentHashSet.h"
 #include "Foundation/Container/DynArray.h"
 #include "Foundation/Container/SparseArray.h"
+#include "Foundation/Memory/ReferenceCounting.h"
 #include "Engine/ObjectPath.h"
-#include "Engine/ReferenceCounting.h"
 
 /// @defgroup objectmacros Common "Object"-class Macros
 //@{
@@ -141,6 +141,43 @@ namespace Lunar
 
     HELIUM_DECLARE_WPTR( Object );
     HELIUM_DECLARE_WPTR( Type );
+
+    /// Reference counting support for Object types.
+    class LUNAR_ENGINE_API ObjectRefCountSupport
+    {
+    public:
+        /// Base type of reference counted object.
+        typedef Object BaseType;
+
+        /// @name Object Destruction Support
+        //@{
+        inline static void PreDestroy( Object* pObject );
+        inline static void Destroy( Object* pObject );
+        //@}
+
+        /// @name Reference Count Proxy Allocation Interface
+        //@{
+        static RefCountProxy< Object >* Allocate();
+        static void Release( RefCountProxy< Object >* pProxy );
+
+        static void Shutdown();
+        //@}
+
+#if HELIUM_ENABLE_MEMORY_TRACKING
+        /// @name Active Proxy Iteration
+        //@{
+        static size_t GetActiveProxyCount();
+        static bool GetFirstActiveProxy(
+            ConcurrentHashSet< RefCountProxy< Object >* >::ConstAccessor& rAccessor );
+        //@}
+#endif
+
+    private:
+        struct StaticData;
+
+        /// Static proxy management data.
+        static StaticData* sm_pStaticData;
+    };
 
     /// Base class for the engine's game object system.
     class LUNAR_ENGINE_API Object : NonCopyable

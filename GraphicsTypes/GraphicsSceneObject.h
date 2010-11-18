@@ -14,7 +14,7 @@
 #include "Platform/Math/Simd/AaBox.h"
 #include "Platform/Math/Simd/Matrix44.h"
 #include "Platform/Math/Simd/Sphere.h"
-#include "Engine/ReferenceCounting.h"
+#include "Foundation/Memory/ReferenceCounting.h"
 #include "Rendering/RendererTypes.h"
 #include "Rendering/RRenderResource.h"
 

@@ -9,11 +9,13 @@
 #ifndef LUNAR_CORE_ASYNC_LOADER_H
 #define LUNAR_CORE_ASYNC_LOADER_H
 
-#include "Core/Core.h"
+#include "Foundation/API.h"
 
 #include "Platform/Condition.h"
 #include "Platform/ReadWriteLock.h"
 #include "Platform/Thread.h"
+
+#include "Foundation/String.h"
 #include "Foundation/Container/ObjectPool.h"
 
 #ifdef _MSC_VER
@@ -30,7 +32,7 @@
 namespace Lunar
 {
     /// Async loading manager.
-    class LUNAR_CORE_API AsyncLoader : NonCopyable
+    class FOUNDATION_API AsyncLoader : NonCopyable
     {
     public:
         /// Request pool block size.

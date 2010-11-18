@@ -5,8 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "CorePch.h"
-#include "Core/AsyncLoader.h"
+#include "Foundation/AsyncLoader.h"
 
 #include "Foundation/File/File.h"
 #include "Foundation/Stream/FileStream.h"

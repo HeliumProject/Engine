@@ -12,7 +12,7 @@
 #include "Engine/Engine.h"
 
 #include "Foundation/Name.h"
-#include "Engine/ReferenceCounting.h"
+#include "Foundation/Memory/ReferenceCounting.h"
 
 #include "boost/preprocessor/seq.hpp"
 
@@ -136,7 +136,7 @@ namespace Lunar
 {
     class Type;
 
-    L_DECLARE_PTR( Object );
+    HELIUM_DECLARE_PTR( Object );
 
     /// Struct serialization wrapper.
     template< typename T >

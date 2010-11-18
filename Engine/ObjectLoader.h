@@ -12,6 +12,7 @@
 #include "Engine/Engine.h"
 
 #include "Foundation/Container/ConcurrentHashMap.h"
+#include "Foundation/Container/ObjectPool.h"
 #include "Engine/ObjectPath.h"
 #include "Engine/Serializer.h"
 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<joblist>
+    <namespace name="Lunar" />
+    <moduletokenprefix name="LUNAR_" />
+
+    <job name="FibJob">
+        <parameters>
+            <input name="n" type="uint32_t" default="0" />
+            <inout name="pSum" type="uint32_t*" default="NULL" />
+        </parameters>
+    </job>
+
+    <job name="FibContinuation">
+        <parameters>
+            <input name="x" type="uint32_t" default="0" />
+            <input name="y" type="uint32_t" default="0" />
+            <inout name="pSum" type="uint32_t*" default="NULL" />
+        </parameters>
+    </job>
+</joblist>

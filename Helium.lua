@@ -16,12 +16,46 @@ defines
 	"wxNO_ZLIB_LIB=1",
 }
 
+local fbxSdkPath = os.getenv( "FBXSDK_DIR" )
+if fbxSdkPath == nil then
+	-- XXX TMC TODO: Make up fallback path for platforms other than Windows?
+	fbxSdkPath = "C:/Program Files/Autodesk/FBX/FbxSdk/2011.2"
+end
+
 includedirs
 {
 	".",
 	"Dependencies/boost",
+	"Dependencies/Expat",
+	"Dependencies/nvtt/src",
+	"Dependencies/png",
 	"Dependencies/tbb/include",
+	"Dependencies/zlib",
+	fbxSdkPath .. "/include",
 }
+
+libdirs
+{
+	fbxSdkPath .. "/lib",
+}
+
+if haveGranny then
+	includedirs
+	{
+		"Integrations/Granny",
+		"Integrations/Granny/granny_sdk/include",
+	}
+
+	defines
+	{
+		"L_HAVE_GRANNY=1",
+	}
+else
+	defines
+	{
+		"L_HAVE_GRANNY=0",
+	}
+end
 
 --[[
 We build monolithic wx, so ignore all the legacy non-monolithic
@@ -91,6 +125,10 @@ configuration "windows"
 		"/NODEFAULTLIB:wxmsw29u_gl",
 		"/NODEFAULTLIB:wxmsw29_gl",
 	}
+	includedirs
+	{
+		os.getenv( "DXSDK_DIR" ) .. "Include"
+	}
 	
 configuration "no-unicode"
 	defines
@@ -103,6 +141,33 @@ configuration "not no-unicode"
 	{
 		"wxUSE_UNICODE=1",
 	}
+
+configuration { "windows", "x32" }
+	libdirs
+	{
+		os.getenv( "DXSDK_DIR" ) .. "Lib/x86",
+	}
+
+	if haveGranny then
+		libdirs
+		{
+			"Integrations/Granny/granny_sdk/lib/win32",
+		}
+	end
+
+
+configuration { "windows", "x64" }
+	libdirs
+	{
+		os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
+	}
+
+	if haveGranny then
+		libdirs
+		{
+			"Integrations/Granny/granny_sdk/lib/win64",
+		}
+	end
 
 configuration { "windows", "x32", "Debug" }
 	libdirs
@@ -181,11 +246,6 @@ project "Foundation"
 		"FOUNDATION_EXPORTS",
 		"HELIUM_MODULE_HEAP_FUNCTION=GetFoundationDefaultHeap",
 	}
-	includedirs
-	{
-		"Dependencies/Expat",
-		"Dependencies/zlib",
-	}
 	files
 	{
 		"Foundation/**",
@@ -237,22 +297,6 @@ project "Pipeline"
 			"Dependencies/nvtt/project/vc8",
 		}
 
-	configuration "windows"
-		includedirs
-		{
-			os.getenv( "DXSDK_DIR" ) .. "/include",
-		}
-	configuration { "windows", "x32" }
-		libdirs
-		{
-			os.getenv( "DXSDK_DIR" ) .. "/lib/x86",
-		}
-	configuration { "windows", "x64" }
-		libdirs
-		{
-			os.getenv( "DXSDK_DIR" ) .. "/lib/x64",
-		}
-
 project "Editor"
 	uuid "A5CAC2F6-62BC-4EF3-A752-887F89C64812"
 	kind "ConsoleApp"
@@ -299,7 +343,6 @@ project "Editor"
 		includedirs
 		{
 			"Dependencies/wxWidgets/include/msvc",
-			os.getenv( "DXSDK_DIR" ) .. "/include",
 		}
 		
 	-- per architecture
@@ -307,13 +350,11 @@ project "Editor"
 		libdirs
 		{
 			"Dependencies/wxWidgets/lib/vc_dll",
-			os.getenv( "DXSDK_DIR" ) .. "/lib/x86",
 		}
 	configuration { "windows", "x64" }
 		libdirs
 		{
 			"Dependencies/wxWidgets/lib/vc_amd64_dll",
-			os.getenv( "DXSDK_DIR" ) .. "/lib/x64"
 		}
 		
 	-- per configuration
@@ -382,3 +423,236 @@ project "Engine"
 	}
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "Engine", "ENGINE" )
+
+project "EngineJobs"
+	uuid "65CFFE89-3111-4D58-95DC-5DB6D3F28935"
+
+	links
+	{
+		"Platform",
+		"Foundation",
+		"Core",
+		"Engine",
+	}
+
+	Helium.DoLunarModuleProjectSettings( "LUNAR", "EngineJobs", "ENGINE_JOBS" )
+
+project "Windowing"
+	uuid "B68268DF-3942-432F-89B1-DBC82C21218E"
+
+	links
+	{
+		"Platform",
+		"Foundation",
+		"Core",
+		"Engine",
+		"EngineJobs",
+	}
+
+	Helium.DoLunarModuleProjectSettings( "LUNAR", "Windowing", "WINDOWING" )
+
+project "Rendering"
+	uuid "3F1BD209-272C-4833-AF8E-35C317F21452"
+
+	links
+	{
+		"Platform",
+		"Foundation",
+		"Core",
+		"Engine",
+		"EngineJobs",
+	}
+
+	Helium.DoLunarModuleProjectSettings( "LUNAR", "Rendering", "RENDERING" )
+
+project "GraphicsTypes"
+	uuid "4A13A4F6-6860-4F52-A217-B0C3943E7025"
+
+	links
+	{
+		"Platform",
+		"Foundation",
+		"Core",
+		"Engine",
+		"EngineJobs",
+		"Rendering",
+	}
+
+	Helium.DoLunarModuleProjectSettings( "LUNAR", "GraphicsTypes", "GRAPHICS_TYPES" )
+
+project "GraphicsJobs"
+	uuid "4D83346D-DCB2-40E6-AAF1-508341728E57"
+
+	links
+	{
+		"Platform",
+		"Foundation",
+		"Core",
+		"Engine",
+		"EngineJobs",
+		"Rendering",
+		"GraphicsTypes",
+	}
+
+	Helium.DoLunarModuleProjectSettings( "LUNAR", "GraphicsJobs", "GRAPHICS_JOBS" )
+
+project "Graphics"
+	uuid "3342921C-F6C7-4A81-A6FF-1C93373AF285"
+
+	links
+	{
+		"Platform",
+		"Foundation",
+		"Core",
+		"Engine",
+		"EngineJobs",
+		"Rendering",
+		"GraphicsTypes",
+		"GraphicsJobs",
+	}
+
+	Helium.DoLunarModuleProjectSettings( "LUNAR", "Graphics", "GRAPHICS" )
+
+project "Framework"
+	uuid "6DB6B383-76E6-4361-8CFE-F08F1CFE24BE"
+
+	links
+	{
+		"Platform",
+		"Foundation",
+		"Core",
+		"Engine",
+		"EngineJobs",
+		"Windowing",
+		"Rendering",
+		"GraphicsTypes",
+		"GraphicsJobs",
+		"Graphics",
+	}
+
+	Helium.DoLunarModuleProjectSettings( "LUNAR", "Framework", "FRAMEWORK" )
+
+project "WinWindowing"
+	uuid "1D7B65F8-6A31-4E8C-AF91-C1D2FA73AD12"
+
+	links
+	{
+		"Platform",
+		"Foundation",
+		"Core",
+		"Engine",
+		"EngineJobs",
+		"Windowing",
+	}
+
+	Helium.DoLunarModuleProjectSettings( "LUNAR", "WinWindowing", "WIN_WINDOWING" )
+
+project "D3D9Rendering"
+	uuid "4BE28ED4-950D-469B-A6F8-88C09BA479E5"
+
+	links
+	{
+		"Platform",
+		"Foundation",
+		"Core",
+		"Engine",
+		"EngineJobs",
+		"Rendering",
+	}
+
+	Helium.DoLunarModuleProjectSettings( "LUNAR", "D3D9Rendering", "D3D9_RENDERING" )
+
+project "PcSupport"
+	uuid "2B3B921A-BFF1-4A73-A9DD-3FCACA9D2916"
+
+	links
+	{
+		"Platform",
+		"Foundation",
+		"Core",
+		"Engine",
+		"EngineJobs",
+		"Rendering",
+	}
+
+	Helium.DoLunarModuleProjectSettings( "LUNAR", "PcSupport", "PC_SUPPORT" )
+
+project "PreprocessingPc"
+	uuid "94E6A151-FC28-41EE-A5F3-D8629F6B8B3B"
+
+	links
+	{
+		"Platform",
+		"Foundation",
+		"Core",
+		"Engine",
+		"EngineJobs",
+		"Rendering",
+		"GraphicsTypes",
+		"GraphicsJobs",
+		"Graphics",
+		"PcSupport",
+	}
+
+	Helium.DoLunarModuleProjectSettings( "LUNAR", "PreprocessingPc", "PREPROCESSING_PC" )
+
+project "EditorSupport"
+	uuid "82F12FF0-CA4E-42E5-84A7-92A5C1A8AE26"
+
+	links
+	{
+		"Platform",
+		"Foundation",
+		"Core",
+		"Engine",
+		"EngineJobs",
+		"Windowing",
+		"Rendering",
+		"GraphicsTypes",
+		"GraphicsJobs",
+		"Graphics",
+		"Framework",
+		"PcSupport",
+		"PreprocessingPc",
+	}
+
+	Helium.DoLunarModuleProjectSettings( "LUNAR", "EditorSupport", "EDITOR_SUPPORT" )
+
+project "FrameworkWin"
+	uuid "8F1B5E58-BDA5-447D-9FD4-36A3B23221B8"
+
+	links
+	{
+		"Platform",
+		"Foundation",
+		"Core",
+		"Engine",
+		"EngineJobs",
+		"Windowing",
+		"Rendering",
+		"GraphicsTypes",
+		"GraphicsJobs",
+		"Graphics",
+		"Framework",
+		"WinWindowing",
+		"D3D9Rendering",
+		"PcSupport",
+		"PreprocessingPc",
+		"EditorSupport",
+	}
+
+	Helium.DoLunarModuleProjectSettings( "LUNAR", "FrameworkWin", "FRAMEWORK_WIN" )
+
+project "TestJobs"  -- DEPRECATED
+	uuid "12106586-0EB1-4D4C-9DFE-E3C63D3E4013"
+
+	links
+	{
+		"Platform",
+		"Foundation",
+		"Core",
+		"Engine",
+		"EngineJobs",
+	}
+
+	Helium.DoLunarModuleProjectSettings( "LUNAR", "TestJobs", "TEST_JOBS" )

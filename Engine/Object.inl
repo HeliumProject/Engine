@@ -59,6 +59,31 @@ namespace Lunar
         return static_cast< TargetType* >( pObject );
     }
 
+    /// Perform any pre-destruction work before clearing the last strong reference to an object and destroying the
+    /// object.
+    ///
+    /// @param[in] pObject  Object about to be destroyed.
+    ///
+    /// @see Destroy()
+    void ObjectRefCountSupport::PreDestroy( Object* pObject )
+    {
+        HELIUM_ASSERT( pObject );
+
+        pObject->PreDestroy();
+    }
+
+    /// Destroy an object after the final strong reference to it has been cleared.
+    ///
+    /// @param[in] pObject  Object to destroy.
+    ///
+    /// @see PreDestroy()
+    void ObjectRefCountSupport::Destroy( Object* pObject )
+    {
+        HELIUM_ASSERT( pObject );
+
+        pObject->Destroy();
+    }
+
     /// Get the name of this object.
     ///
     /// @return  Object name.

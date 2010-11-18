@@ -8,7 +8,7 @@
 ///
 /// @param[in] CLASS         Class type being declared.
 /// @param[in] SUPPORT_TYPE  Reference counting support type.
-#define HELIUM_DECLARE_STRONG_WEAK_REF_COUNT( CLASS, SUPPORT_TYPE ) \
+#define HELIUM_DECLARE_REF_COUNT( CLASS, SUPPORT_TYPE ) \
     public: \
         typedef SUPPORT_TYPE RefCountSupportType; \
         Helium::RefCountProxy< CLASS >* GetRefCountProxy() const \

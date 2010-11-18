@@ -10,7 +10,7 @@ namespace Helium
 {
     namespace Editor
     {
-        class ThumbnailTile : public Helium::RefCountBase< ThumbnailTile >
+        class ThumbnailTile : public Helium::RefCountBase
         {
         public:
             ThumbnailTile( const Helium::Path& path );

@@ -92,7 +92,7 @@ namespace Helium
     // Delegate encapsulates and a function call of multiple types
     //
 
-    template< typename ArgsType, class RefCountBaseType = class Helium::RefCountBase< Void > >
+    template< typename ArgsType, class RefCountBaseType = class Helium::RefCountBase >
     class Delegate
     {
     private:
@@ -329,7 +329,7 @@ namespace Helium
     // Event is a collection of delegates that are invoked together
     //
 
-    template< typename ArgsType, class RefCountBaseType = class Helium::RefCountBase< Void > >
+    template< typename ArgsType, class RefCountBaseType = class Helium::RefCountBase >
     class Event
     {
     public:
@@ -670,7 +670,7 @@ namespace Helium
     // Signature intantiates all the template classes necessary for working with a particular signature
     //
 
-    template< typename ArgsType, class RefCountBaseType = class Helium::RefCountBase< Void > >
+    template< typename ArgsType, class RefCountBaseType = class Helium::RefCountBase >
     class Signature
     {
     public:

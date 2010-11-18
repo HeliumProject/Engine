@@ -324,7 +324,7 @@ namespace Helium
 
         typedef PickSortTypes::PickSortType PickSortType;
 
-        class PickHit : public Helium::RefCountBase<PickHit>
+        class PickHit : public Helium::RefCountBase
         {
             //
             // Object hit

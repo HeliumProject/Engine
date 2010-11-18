@@ -77,7 +77,7 @@ namespace Helium
         //
 
         template< class StreamCharT >
-        class Stream : public Helium::RefCountBase< Stream< StreamCharT > >
+        class Stream : public Helium::RefCountBase
         {
         public: 
             Stream()

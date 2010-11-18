@@ -11,7 +11,7 @@ namespace Helium
         class RenderShader;
         class ShaderManager;
 
-        class PIPELINE_API ShaderLoader : public Helium::RefCountBase<ShaderLoader>
+        class PIPELINE_API ShaderLoader : public Helium::RefCountBase
         {
         public:
             ShaderLoader();

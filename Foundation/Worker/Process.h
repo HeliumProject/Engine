@@ -42,7 +42,7 @@ namespace Helium
         const static uint32_t ConsoleOutputMessage = 0;
 #pragma warning ( default: 4200 )
 
-        class FOUNDATION_API Process : public Helium::RefCountBase<Process>
+        class FOUNDATION_API Process : public Helium::RefCountBase
         {
         private:
             // the file to execute

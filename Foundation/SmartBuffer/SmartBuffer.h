@@ -50,7 +50,7 @@ namespace Helium
     }
     typedef FixupTypes::FixupType FixupType;
 
-    class Fixup : public Helium::RefCountBase<Fixup>
+    class Fixup : public Helium::RefCountBase
     {
     protected:
         Fixup();
@@ -163,7 +163,7 @@ namespace Helium
         virtual bool DoFixup( const DumbBufferLocation& source_location );
     };
 
-    class FOUNDATION_API SmartBuffer : public Helium::RefCountBase<SmartBuffer>
+    class FOUNDATION_API SmartBuffer : public Helium::RefCountBase
     {
     public:
         typedef std::map< uint32_t, FixupPtr >           M_OffsetToFixup;

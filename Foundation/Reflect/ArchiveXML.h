@@ -22,7 +22,7 @@ namespace Helium
         private:
             friend class Archive;
 
-            class ParsingState : public Helium::RefCountBase<ParsingState>
+            class ParsingState : public Helium::RefCountBase
             {
             public:
                 // the name of the short name being processed

@@ -10,7 +10,7 @@ namespace Helium
 {
     namespace Editor
     {
-        class VaultSearchResults : public Helium::RefCountBase< VaultSearchResults >
+        class VaultSearchResults : public Helium::RefCountBase
         {
         public:
             VaultSearchResults( uint32_t vaultSearchID = 0 );

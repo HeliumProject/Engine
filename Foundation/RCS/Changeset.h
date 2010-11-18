@@ -10,7 +10,7 @@ namespace Helium
 {
     namespace RCS
     {
-        class FOUNDATION_API Changeset : public Helium::RefCountBase< Changeset >
+        class FOUNDATION_API Changeset : public Helium::RefCountBase
         {
         public:
             uint64_t                m_Id;

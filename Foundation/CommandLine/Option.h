@@ -13,7 +13,7 @@ namespace Helium
     namespace CommandLine
     {
 		///////////////////////////////////////////////////////////////////////
-        class FOUNDATION_API Option : public Helium::RefCountBase< Option >
+        class FOUNDATION_API Option : public Helium::RefCountBase
         {
 		protected:
 			tstring m_Token;

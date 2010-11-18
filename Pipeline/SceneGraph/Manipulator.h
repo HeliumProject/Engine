@@ -64,7 +64,7 @@ namespace Helium
             }
         };
 
-        class PIPELINE_API ManipulatorAdapter : public Helium::RefCountBase<ManipulatorAdapter>
+        class PIPELINE_API ManipulatorAdapter : public Helium::RefCountBase
         {
         public:
             const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::ManiuplatorAdapterCollection;

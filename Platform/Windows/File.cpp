@@ -56,7 +56,7 @@ bool Helium::CloseHandle( Handle& handle )
     return 1 == ::CloseHandle( (HANDLE)handle );
 }
 
-bool Helium::ReadFile( Handle& handle, void* buffer, uint32_t numberOfBytesToRead, uint32_t* numberOfBytesRead )
+bool Helium::ReadFile( Handle& handle, void* buffer, size_t numberOfBytesToRead, size_t* numberOfBytesRead )
 {
     HELIUM_ASSERT_MSG( numberOfBytesToRead <= MAXDWORD, TXT( "File read operations are limited to DWORD sizes" ) );
     if( numberOfBytesToRead > MAXDWORD )
@@ -66,10 +66,16 @@ bool Helium::ReadFile( Handle& handle, void* buffer, uint32_t numberOfBytesToRea
 
     HELIUM_ASSERT( buffer || numberOfBytesToRead == 0 );
 
-    return 1 == ::ReadFile( handle, buffer, static_cast< DWORD >( numberOfBytesToRead ), reinterpret_cast< LPDWORD >( numberOfBytesRead ), NULL );
+    DWORD tempBytesRead;
+    bool result = 1 == ::ReadFile( handle, buffer, static_cast< DWORD >( numberOfBytesToRead ), &tempBytesRead, NULL );
+    if ( result && numberOfBytesRead )
+    {
+        *numberOfBytesRead = tempBytesRead;
+    }
+    return result;
 }
 
-bool Helium::WriteFile( Handle& handle, const void* buffer, uint32_t numberOfBytesToWrite, uint32_t* numberOfBytesWritten )
+bool Helium::WriteFile( Handle& handle, const void* buffer, size_t numberOfBytesToWrite, size_t* numberOfBytesWritten )
 {
     HELIUM_ASSERT_MSG( numberOfBytesToWrite <= MAXDWORD, TXT( "File write operations are limited to DWORD sizes" ) );
     if( numberOfBytesToWrite > MAXDWORD )
@@ -79,7 +85,13 @@ bool Helium::WriteFile( Handle& handle, const void* buffer, uint32_t numberOfByt
 
     HELIUM_ASSERT( buffer || numberOfBytesToWrite == 0 );
 
-    return 1 == ::WriteFile( handle, buffer, static_cast< DWORD >( numberOfBytesToWrite ), reinterpret_cast< LPDWORD >( numberOfBytesWritten ), NULL );
+    DWORD tempBytesWritten;
+    bool result = 1 == ::WriteFile( handle, buffer, static_cast< DWORD >( numberOfBytesToWrite ), &tempBytesWritten, NULL );
+    if ( result && numberOfBytesWritten )
+    {
+        *numberOfBytesWritten = tempBytesWritten;
+    }
+    return result;
 }
 
 bool Helium::FlushFile( Handle& handle )

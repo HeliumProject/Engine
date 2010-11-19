@@ -42,7 +42,7 @@ size_t FileStream::Read( void* pBuffer, size_t size, size_t count )
     }
 
     size_t byteCount = size * count;
-    uint32_t bytesRead = 0;
+    size_t bytesRead = 0;
     HELIUM_VERIFY( ReadFile( m_hFile, pBuffer, byteCount, &bytesRead ) );
 
     return ( bytesRead / size );
@@ -59,7 +59,7 @@ size_t FileStream::Write( const void* pBuffer, size_t size, size_t count )
     }
 
     size_t byteCount = size * count;
-    uint32_t bytesWritten = 0;
+    size_t bytesWritten = 0;
     HELIUM_VERIFY( WriteFile( m_hFile, pBuffer, byteCount, &bytesWritten ) );
 
     return ( bytesWritten / size );

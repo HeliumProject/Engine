@@ -45,8 +45,8 @@ namespace Helium
 
     Handle PLATFORM_API CreateFile( const tchar_t* filename, FileMode mode, bool truncate = true );
     bool PLATFORM_API CloseHandle( Handle& handle );
-    bool PLATFORM_API ReadFile( Handle& handle, void* buffer, uint32_t numberOfBytesToRead, uint32_t* numberOfBytesRead = NULL );
-    bool PLATFORM_API WriteFile( Handle& handle, const void* buffer, uint32_t numberOfBytesToWrite, uint32_t* numberOfBytesWritten = NULL );
+    bool PLATFORM_API ReadFile( Handle& handle, void* buffer, size_t numberOfBytesToRead, size_t* numberOfBytesRead = NULL );
+    bool PLATFORM_API WriteFile( Handle& handle, const void* buffer, size_t numberOfBytesToWrite, size_t* numberOfBytesWritten = NULL );
     bool PLATFORM_API FlushFile( Handle& handle );
     int64_t PLATFORM_API Seek( Handle& handle, int64_t offset, SeekOrigin origin );
     int64_t PLATFORM_API Tell( const Handle& handle );

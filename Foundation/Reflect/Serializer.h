@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iostream>
 
-#include "Foundation/Atomic.h"
+#include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Memory/HybridPtr.h"
 #include "Foundation/SmartBuffer/BasicBuffer.h"

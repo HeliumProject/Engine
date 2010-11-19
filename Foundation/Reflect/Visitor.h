@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "API.h"
-#include "Foundation/Atomic.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 namespace Helium
 {

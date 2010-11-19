@@ -6,7 +6,7 @@
 
 #include "Platform/Types.h"
 #include "Foundation/Container/Insert.h"
-#include "Foundation/Atomic.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 //
 // Obviously the reflection system itself can't use the same type checking as the code

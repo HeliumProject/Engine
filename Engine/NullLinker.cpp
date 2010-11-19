@@ -21,7 +21,7 @@ namespace Lunar
     }
 
     /// @name Serializer::Serialize()
-    bool NullLinker::Serialize( Object* pObject )
+    bool NullLinker::Serialize( GameObject* pObject )
     {
         HELIUM_ASSERT( pObject );
 
@@ -133,7 +133,7 @@ namespace Lunar
     }
 
     /// @name Serializer::SerializeObjectReference()
-    void NullLinker::SerializeObjectReference( Type* /*pType*/, ObjectPtr& rspObject )
+    void NullLinker::SerializeObjectReference( Type* /*pType*/, GameObjectPtr& rspObject )
     {
         rspObject.ClearLinkIndex();
     }

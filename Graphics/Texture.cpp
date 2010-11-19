@@ -28,7 +28,7 @@ namespace Lunar
     {
     }
 
-    /// @copydoc Object::PreDestroy()
+    /// @copydoc GameObject::PreDestroy()
     void Texture::PreDestroy()
     {
         m_spTexture.Release();
@@ -36,7 +36,7 @@ namespace Lunar
         Super::PreDestroy();
     }
 
-    /// @copydoc Object::Serialize()
+    /// @copydoc GameObject::Serialize()
     void Texture::Serialize( Serializer& s )
     {
         L_SERIALIZE_SUPER( s );

@@ -37,7 +37,7 @@ namespace Lunar
     {
     }
 
-    /// @copydoc Object::Serialize()
+    /// @copydoc GameObject::Serialize()
     void Material::Serialize( Serializer& s )
     {
         L_SERIALIZE_SUPER( s );
@@ -149,13 +149,13 @@ namespace Lunar
         s << L_TAGGED_STRUCT_DYNARRAY( m_textureParameters );
     }
 
-    /// @copydoc Object::NeedsPrecacheResourceData()
+    /// @copydoc GameObject::NeedsPrecacheResourceData()
     bool Material::NeedsPrecacheResourceData() const
     {
         return true;
     }
 
-    /// @copydoc Object::BeginPrecacheResourceData()
+    /// @copydoc GameObject::BeginPrecacheResourceData()
     bool Material::BeginPrecacheResourceData()
     {
 #if L_EDITOR
@@ -272,7 +272,7 @@ namespace Lunar
         return true;
     }
 
-    /// @copydoc Object::TryFinishPrecacheResourceData()
+    /// @copydoc GameObject::TryFinishPrecacheResourceData()
     bool Material::TryFinishPrecacheResourceData()
     {
         Shader* pShader = m_spShader;

@@ -15,7 +15,7 @@
 #include "Engine/BinaryDeserializer.h"
 #include "Engine/BinarySerializer.h"
 #include "Engine/CacheManager.h"
-#include "Engine/ObjectLoader.h"
+#include "Engine/GameObjectLoader.h"
 #include "Engine/Resource.h"
 #include "PcSupport/PlatformPreprocessor.h"
 #include "PcSupport/ResourceHandler.h"
@@ -57,8 +57,8 @@ namespace Lunar
 
     /// Cache an object for all registered platforms.
     ///
-    /// @param[in] pObject                                 Object to cache.
-    /// @param[in] timestamp                               Object timestamp.
+    /// @param[in] pObject                                 GameObject to cache.
+    /// @param[in] timestamp                               GameObject timestamp.
     /// @param[in] bEvictPlatformPreprocessedResourceData  If the object being cached is a Resource-based object,
     ///                                                    specifying true will free the raw preprocessed resource data
     ///                                                    for the current platform after caching, while false will keep
@@ -69,7 +69,7 @@ namespace Lunar
     ///
     /// @return  True if object caching was successful, false if not.
     bool ObjectPreprocessor::CacheObject(
-        Object* pObject,
+        GameObject* pObject,
         int64_t timestamp,
         bool bEvictPlatformPreprocessedResourceData )
     {
@@ -84,12 +84,12 @@ namespace Lunar
         DynamicMemoryStream directStream;
         ByteSwappingStream byteSwappingStream( &directStream );
 
-        ObjectPath objectPath = pObject->GetPath();
+        GameObjectPath objectPath = pObject->GetPath();
         Resource* pResource = DynamicCast< Resource >( pObject );
 
         CacheManager& rCacheManager = CacheManager::GetStaticInstance();
 
-        ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
         Name objectCacheName = pObjectLoader->GetCacheName();
 
@@ -118,7 +118,7 @@ namespace Lunar
 
             HELIUM_TRACE(
                 TRACE_INFO,
-                TXT( "ObjectPreprocessor: Object \"%s\" is out of date.  Recaching...\n" ),
+                TXT( "ObjectPreprocessor: GameObject \"%s\" is out of date.  Recaching...\n" ),
                 *objectPath.ToString() );
 
             bUpdatedAnyCache = true;
@@ -295,11 +295,11 @@ namespace Lunar
 
         HELIUM_ASSERT( pResource );
 
-        ObjectPath resourcePath = pResource->GetPath();
+        GameObjectPath resourcePath = pResource->GetPath();
 
         // Locate the source asset file and combine its timestamp with the object timestamp.
-        ObjectPath parentPath = resourcePath;
-        ObjectPath baseResourcePath;
+        GameObjectPath parentPath = resourcePath;
+        GameObjectPath baseResourcePath;
         do
         {
             baseResourcePath = parentPath;
@@ -334,7 +334,7 @@ namespace Lunar
             }
 
             // Retrieve the timestamp of the cached data using the object cache.
-            ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+            GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
             HELIUM_ASSERT( pObjectLoader );
 
             CacheManager& rCacheManager = CacheManager::GetStaticInstance();
@@ -401,7 +401,7 @@ namespace Lunar
     /// @return  Number of resource sub-data chunks if loaded successfully, Invalid< uint32_t >() if not loaded
     ///          successfully.
     uint32_t ObjectPreprocessor::LoadPersistentResourceData(
-        ObjectPath resourcePath,
+        GameObjectPath resourcePath,
         Cache::EPlatform platform,
         DynArray< uint8_t >& rPersistentDataBuffer )
     {
@@ -424,7 +424,7 @@ namespace Lunar
         }
 
         // Retrieve the object cache for the specified platform.
-        ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
 
         CacheManager& rCacheManager = CacheManager::GetStaticInstance();
@@ -449,7 +449,7 @@ namespace Lunar
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
-                ( TXT( "ObjectPreprocessor::LoadPersistentResourceData(): Object cache entry for \"%s\" is smaller " )
+                ( TXT( "ObjectPreprocessor::LoadPersistentResourceData(): GameObject cache entry for \"%s\" is smaller " )
                   TXT( "than the size needed to provide the property data stream byte count.\n" ) ),
                 *resourcePath.ToString() );
 
@@ -653,7 +653,7 @@ namespace Lunar
         HELIUM_ASSERT( pResource );
         HELIUM_ASSERT( static_cast< size_t >( platform ) < static_cast< size_t >( Cache::PLATFORM_MAX ) );
 
-        ObjectPath resourcePath = pResource->GetPath();
+        GameObjectPath resourcePath = pResource->GetPath();
 
         Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData( platform );
         rPreprocessedData.bLoaded = false;

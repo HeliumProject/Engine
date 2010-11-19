@@ -136,7 +136,7 @@ namespace Lunar
 {
     class Type;
 
-    HELIUM_DECLARE_PTR( Object );
+    HELIUM_DECLARE_PTR( GameObject );
 
     /// Struct serialization wrapper.
     template< typename T >
@@ -238,7 +238,7 @@ namespace Lunar
         //@}
     };
 
-    /// Base interface for Object serialization.
+    /// Base interface for GameObject serialization.
     class LUNAR_ENGINE_API Serializer : NonCopyable
     {
     public:
@@ -358,7 +358,7 @@ namespace Lunar
 
         /// @name Serialization Interface
         //@{
-        virtual bool Serialize( Object* pObject ) = 0;
+        virtual bool Serialize( GameObject* pObject ) = 0;
         virtual EMode GetMode() const = 0;
 
         virtual void SerializeTag( const Tag& rTag ) = 0;
@@ -383,7 +383,7 @@ namespace Lunar
         virtual void SerializeWideName( WideName& rValue ) = 0;
         virtual void SerializeCharString( CharString& rValue ) = 0;
         virtual void SerializeWideString( WideString& rValue ) = 0;
-        virtual void SerializeObjectReference( Type* pType, ObjectPtr& rspObject ) = 0;
+        virtual void SerializeObjectReference( Type* pType, GameObjectPtr& rspObject ) = 0;
 
         virtual void BeginStruct( EStructTag tag = STRUCT_TAG_INVALID );
         virtual void EndStruct();

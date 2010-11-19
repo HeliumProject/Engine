@@ -70,12 +70,12 @@ namespace Lunar
         void DeactivateAssignedAnimation();
         //@}
 
-        /// @name Graphics Scene Object Updating
+        /// @name Graphics Scene GameObject Updating
         //@{
         virtual GraphicsSceneObject::UPDATE_FUNC* GetGraphicsSceneObjectUpdateCallback() const;
         //@}
 
-        /// @name Scene Object Synchronization Callback
+        /// @name Scene GameObject Synchronization Callback
         //@{
         static void GraphicsSceneObjectUpdate( void* pData, GraphicsScene* pScene, GraphicsSceneObject* pSceneObject );
         //@}

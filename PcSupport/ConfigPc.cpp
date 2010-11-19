@@ -34,7 +34,7 @@ namespace Lunar
         }
 
         const String& rUserDataDirectory = File::GetUserDataDirectory();
-        ObjectPath configPackagePath = pConfigPackage->GetPath();
+        GameObjectPath configPackagePath = pConfigPackage->GetPath();
 
         String packageFilePath;
         Path::Combine( packageFilePath, rUserDataDirectory, configPackagePath.ToFilePathString() );
@@ -56,7 +56,7 @@ namespace Lunar
         size_t configObjectCount = pConfigPackage->GetChildCount();
         for( size_t objectIndex = 0; objectIndex < configObjectCount; ++objectIndex )
         {
-            Object* pObject = pConfigPackage->GetChild( objectIndex );
+            GameObject* pObject = pConfigPackage->GetChild( objectIndex );
             if( pObject && !pObject->IsPackage() )
             {
                 RecursiveSerializeObject( serializer, pObject );
@@ -73,8 +73,8 @@ namespace Lunar
     /// Serialize the given object, followed by all its children.
     ///
     /// @param[in] rSerializer  Serializer to use for serialization.
-    /// @param[in] pObject      Object to serialize.
-    void ConfigPc::RecursiveSerializeObject( XmlSerializer& rSerializer, Object* pObject )
+    /// @param[in] pObject      GameObject to serialize.
+    void ConfigPc::RecursiveSerializeObject( XmlSerializer& rSerializer, GameObject* pObject )
     {
         HELIUM_ASSERT( pObject );
         HELIUM_ASSERT( !pObject->IsPackage() );
@@ -84,7 +84,7 @@ namespace Lunar
         size_t childCount = pObject->GetChildCount();
         for( size_t childIndex = 0; childIndex < childCount; ++childIndex )
         {
-            Object* pChildObject = pObject->GetChild( childIndex );
+            GameObject* pChildObject = pObject->GetChild( childIndex );
             if( pChildObject && !pChildObject->IsPackage() )
             {
                 RecursiveSerializeObject( rSerializer, pChildObject );

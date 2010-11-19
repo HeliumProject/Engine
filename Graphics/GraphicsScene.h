@@ -10,7 +10,7 @@
 #define LUNAR_GRAPHICS_GRAPHICS_SCENE_H
 
 #include "Graphics/Graphics.h"
-#include "Engine/Object.h"
+#include "Engine/GameObject.h"
 
 #include "Foundation/Container/BitArray.h"
 #include "Rendering/RRenderResource.h"
@@ -22,9 +22,9 @@ namespace Lunar
     L_DECLARE_RPTR( RConstantBuffer );
 
     /// Manager for a graphics scene.
-    class LUNAR_GRAPHICS_API GraphicsScene : public Object
+    class LUNAR_GRAPHICS_API GraphicsScene : public GameObject
     {
-        L_DECLARE_OBJECT( GraphicsScene, Object );
+        L_DECLARE_OBJECT( GraphicsScene, GameObject );
 
     public:
         /// @name Construction/Destruction
@@ -47,14 +47,14 @@ namespace Lunar
         void SetActiveSceneView( size_t id );
         //@}
 
-        /// @name Scene Object Allocation
+        /// @name Scene GameObject Allocation
         //@{
         size_t AllocateSceneObject();
         void ReleaseSceneObject( size_t id );
         inline GraphicsSceneObject* GetSceneObject( size_t id );
         //@}
 
-        /// @name Scene Object Sub-mesh Allocation
+        /// @name Scene GameObject Sub-mesh Allocation
         //@{
         size_t AllocateSceneObjectSubMeshData( size_t sceneObjectId );
         void ReleaseSceneObjectSubMeshData( size_t id );

@@ -46,13 +46,13 @@ namespace Lunar
         return true;
     }
 
-    /// @copydoc ObjectLoader::GetPackageLoader()
-    PackageLoader* CacheObjectLoader::GetPackageLoader( ObjectPath /*path*/ )
+    /// @copydoc GameObjectLoader::GetPackageLoader()
+    PackageLoader* CacheObjectLoader::GetPackageLoader( GameObjectPath /*path*/ )
     {
         return m_pPackageLoader;
     }
 
-    /// @copydoc ObjectLoader::TickPackageLoaders()
+    /// @copydoc GameObjectLoader::TickPackageLoaders()
     void CacheObjectLoader::TickPackageLoaders()
     {
         m_pPackageLoader->Tick();

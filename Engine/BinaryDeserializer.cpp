@@ -51,7 +51,7 @@ namespace Lunar
     }
 
     /// @copydoc Serializer::Serialize()
-    bool BinaryDeserializer::Serialize( Object* pObject )
+    bool BinaryDeserializer::Serialize( GameObject* pObject )
     {
         HELIUM_ASSERT( pObject );
 
@@ -295,7 +295,7 @@ namespace Lunar
     }
 
     /// @copydoc Serializer::SerializeObjectReference()
-    void BinaryDeserializer::SerializeObjectReference( Type* /*pType*/, ObjectPtr& rspObject )
+    void BinaryDeserializer::SerializeObjectReference( Type* /*pType*/, GameObjectPtr& rspObject )
     {
         // ALWAYS release the current object reference first.  This is done in case we encounter an error during the
         // deserialization process.  When such load errors occur, the object is passed through a NullLinker to zero out

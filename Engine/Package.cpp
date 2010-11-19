@@ -33,9 +33,9 @@ namespace Lunar
         Type* pType = sm_spStaticType;
         if( !pType )
         {
-            // Package type is registered manually during Object type initialization, so retrieve the type info from the
+            // Package type is registered manually during GameObject type initialization, so retrieve the type info from the
             // existing registered data.
-            HELIUM_VERIFY( Object::InitStaticType() );
+            HELIUM_VERIFY( GameObject::InitStaticType() );
 
             pType = Type::Find( Name( TXT( "Package" ) ) );
             HELIUM_ASSERT( pType );

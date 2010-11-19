@@ -10,7 +10,7 @@
 #define LUNAR_FRAMEWORK_LAYER_H
 
 #include "Framework/Framework.h"
-#include "Engine/Object.h"
+#include "Engine/GameObject.h"
 
 #include "Platform/Math/Simd/Quat.h"
 #include "Platform/Math/Simd/Vector3.h"
@@ -30,9 +30,9 @@ namespace Lunar
     /// - Dynamic layers.  These can be constructed in editor mode for use with special-case worlds (such as for a
     ///   preview window).  In runtime mode, dynamic layers can be created as necessary for various runtime-created
     ///   entities.
-    class LUNAR_FRAMEWORK_API Layer : public Object
+    class LUNAR_FRAMEWORK_API Layer : public GameObject
     {
-        L_DECLARE_OBJECT( Layer, Object );
+        L_DECLARE_OBJECT( Layer, GameObject );
 
     public:
         /// @name Construction/Destruction

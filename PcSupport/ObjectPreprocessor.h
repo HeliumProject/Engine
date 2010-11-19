@@ -15,11 +15,11 @@
 
 namespace Lunar
 {
-    class Object;
+    class GameObject;
     class Resource;
     class PlatformPreprocessor;
 
-    /// Object caching and resource preprocessing interface.
+    /// GameObject caching and resource preprocessing interface.
     class LUNAR_PC_SUPPORT_API ObjectPreprocessor : NonCopyable
     {
     public:
@@ -29,9 +29,9 @@ namespace Lunar
         inline PlatformPreprocessor* GetPlatformPreprocessor( Cache::EPlatform platform ) const;
         //@}
 
-        /// @name Object Caching
+        /// @name GameObject Caching
         //@{
-        bool CacheObject( Object* pObject, int64_t timestamp, bool bEvictPlatformPreprocessedResourceData = true );
+        bool CacheObject( GameObject* pObject, int64_t timestamp, bool bEvictPlatformPreprocessedResourceData = true );
         //@}
 
         /// @name Resource Preprocessing
@@ -39,7 +39,7 @@ namespace Lunar
         void LoadResourceData( Resource* pResource, int64_t objectTimestamp );
 
         uint32_t LoadPersistentResourceData(
-            ObjectPath resourcePath, Cache::EPlatform platform, DynArray< uint8_t >& rPersistentDataBuffer );
+            GameObjectPath resourcePath, Cache::EPlatform platform, DynArray< uint8_t >& rPersistentDataBuffer );
         //@}
 
         /// @name Static Access

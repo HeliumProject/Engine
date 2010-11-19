@@ -13,7 +13,7 @@
 
 namespace Lunar
 {
-    /// Base class for Object type registration support.
+    /// Base class for GameObject type registration support.
     ///
     /// This handles registration and unregistration for the following modules:
     /// - Engine

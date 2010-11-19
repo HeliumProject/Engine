@@ -328,7 +328,7 @@ namespace Lunar
         virtual ~ShaderVariant();
         //@}
 
-        /// @name Object Interface
+        /// @name GameObject Interface
         //@{
         virtual void PreDestroy();
         //@}

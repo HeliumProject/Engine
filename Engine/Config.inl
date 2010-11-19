@@ -12,7 +12,7 @@ namespace Lunar
     /// @return  Path of the configuration container package.
     ///
     /// @see GetDefaultConfigPackagePath(), GetUserConfigPackagePath()
-    ObjectPath Config::GetConfigContainerPackagePath() const
+    GameObjectPath Config::GetConfigContainerPackagePath() const
     {
         return m_configContainerPackagePath;
     }
@@ -22,7 +22,7 @@ namespace Lunar
     /// @return  Path of the default configuration package for this platform.
     ///
     /// @see GetUserConfigPackagePath(), GetConfigContainerPackagePath()
-    ObjectPath Config::GetDefaultConfigPackagePath() const
+    GameObjectPath Config::GetDefaultConfigPackagePath() const
     {
         return m_defaultConfigPackagePath;
     }
@@ -32,7 +32,7 @@ namespace Lunar
     /// @return  Path of the user configuration package.
     ///
     /// @see GetDefaultConfigPackagePath(), GetConfigContainerPackagePath()
-    ObjectPath Config::GetUserConfigPackagePath() const
+    GameObjectPath Config::GetUserConfigPackagePath() const
     {
         return m_userConfigPackagePath;
     }
@@ -67,7 +67,7 @@ namespace Lunar
     {
         HELIUM_ASSERT( index < m_configObjects.GetSize() );
 
-        Object* pObject = m_configObjects[ index ];
+        GameObject* pObject = m_configObjects[ index ];
         HELIUM_ASSERT( pObject );
 
         return StaticCast< T >( pObject );
@@ -86,7 +86,7 @@ namespace Lunar
         size_t configObjectCount = m_configObjects.GetSize();
         for( size_t objectIndex = 0; objectIndex < configObjectCount; ++objectIndex )
         {
-            Object* pObject = m_configObjects[ objectIndex ];
+            GameObject* pObject = m_configObjects[ objectIndex ];
             HELIUM_ASSERT( pObject );
 
             if( pObject->GetName() == name )

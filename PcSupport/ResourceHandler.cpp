@@ -43,7 +43,7 @@ namespace Lunar
 #if L_EDITOR
     /// Preprocess and cache the resource data for the given resource for all enabled target platforms.
     ///
-    /// @param[in] pObjectPreprocessor  Object preprocessor instance.
+    /// @param[in] pObjectPreprocessor  GameObject preprocessor instance.
     /// @param[in] pResource            Resource object.
     /// @param[in] rSourceFilePath      Prebuilt path name of the source resource file.
     ///

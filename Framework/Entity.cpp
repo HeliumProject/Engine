@@ -32,7 +32,7 @@ namespace Lunar
         HELIUM_ASSERT( !m_spLayer );
     }
 
-    /// @copydoc Object::Serialize()
+    /// @copydoc GameObject::Serialize()
     void Entity::Serialize( Serializer& s )
     {
         L_SERIALIZE_SUPER( s );

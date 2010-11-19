@@ -34,9 +34,9 @@ namespace Lunar
     public:
         /// @name General Information
         //@{
-        inline ObjectPath GetConfigContainerPackagePath() const;
-        inline ObjectPath GetDefaultConfigPackagePath() const;
-        inline ObjectPath GetUserConfigPackagePath() const;
+        inline GameObjectPath GetConfigContainerPackagePath() const;
+        inline GameObjectPath GetDefaultConfigPackagePath() const;
+        inline GameObjectPath GetUserConfigPackagePath() const;
         //@}
 
         /// @name Loading
@@ -47,7 +47,7 @@ namespace Lunar
         void SaveUserConfig();
         //@}
 
-        /// @name Config Object Access
+        /// @name Config GameObject Access
         //@{
         inline Package* GetUserConfigPackage() const;
 
@@ -64,11 +64,11 @@ namespace Lunar
 
     private:
         /// Path for the overall configuration container package.
-        ObjectPath m_configContainerPackagePath;
+        GameObjectPath m_configContainerPackagePath;
         /// Default configuration package path.
-        ObjectPath m_defaultConfigPackagePath;
+        GameObjectPath m_defaultConfigPackagePath;
         /// User configuration package path.
-        ObjectPath m_userConfigPackagePath;
+        GameObjectPath m_userConfigPackagePath;
 
         /// Default configuration package.
         PackagePtr m_spDefaultConfigPackage;
@@ -76,9 +76,9 @@ namespace Lunar
         PackagePtr m_spUserConfigPackage;
 
         /// Default configuration objects (only used while loading).
-        DynArray< ObjectPtr > m_defaultConfigObjects;
+        DynArray< GameObjectPtr > m_defaultConfigObjects;
         /// Configuration objects.
-        DynArray< ObjectPtr > m_configObjects;
+        DynArray< GameObjectPtr > m_configObjects;
 
         /// Async object load IDs.
         DynArray< size_t > m_objectLoadIds;

@@ -16,7 +16,7 @@
 #include "Engine/BinarySerializer.h"
 #include "Engine/BinaryDeserializer.h"
 #include "Engine/CacheManager.h"
-#include "Engine/ObjectLoader.h"
+#include "Engine/GameObjectLoader.h"
 #include "Engine/PackageLoader.h"
 #include "Rendering/ShaderProfiles.h"
 #include "PcSupport/ObjectPreprocessor.h"
@@ -125,7 +125,7 @@ namespace Lunar
         // Get the parent shader.
         Shader* pShader = StaticCast< Shader >( pVariant->GetOwner() );
         HELIUM_ASSERT( pShader );
-        HELIUM_ASSERT( pShader->GetAnyFlagSet( Object::FLAG_PRECACHED ) );
+        HELIUM_ASSERT( pShader->GetAnyFlagSet( GameObject::FLAG_PRECACHED ) );
 
         // Acquire the user preprocessor option set associated with the target shader type and user option set index.
         const Shader::Options& rUserOptions = pShader->GetUserOptions();
@@ -523,7 +523,7 @@ namespace Lunar
         pLoadRequest->spVariant.Set( StaticCast< ShaderVariant >( pShader->FindChild( variantName ) ) );
         if( !pLoadRequest->spVariant )
         {
-            pLoadRequest->spVariant = Object::Create< ShaderVariant >( variantName, pShader );
+            pLoadRequest->spVariant = GameObject::Create< ShaderVariant >( variantName, pShader );
             if( !pLoadRequest->spVariant )
             {
                 HELIUM_TRACE(
@@ -537,9 +537,9 @@ namespace Lunar
 
         // If we have an object for the shader variant, attempt to load its resource data.
         ShaderVariant* pVariant = pLoadRequest->spVariant;
-        if( pVariant && !pVariant->GetAnyFlagSet( Object::FLAG_PRECACHED ) )
+        if( pVariant && !pVariant->GetAnyFlagSet( GameObject::FLAG_PRECACHED ) )
         {
-            Object* pPackageObject;
+            GameObject* pPackageObject;
             for( pPackageObject = pShader->GetOwner();
                  pPackageObject != NULL && !pPackageObject->IsPackage();
                  pPackageObject = pPackageObject->GetOwner() )
@@ -601,18 +601,18 @@ namespace Lunar
 
         // Check if the load request has completed.
         ShaderVariant* pVariant = pLoadRequest->spVariant;
-        if( pVariant && !pVariant->GetAnyFlagSet( Object::FLAG_PRECACHED ) )
+        if( pVariant && !pVariant->GetAnyFlagSet( GameObject::FLAG_PRECACHED ) )
         {
             if( !pVariant->TryFinishPrecacheResourceData() )
             {
                 return false;
             }
 
-            pVariant->SetFlags( Object::FLAG_PRELOADED | Object::FLAG_LINKED | Object::FLAG_PRECACHED );
+            pVariant->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED | GameObject::FLAG_PRECACHED );
             pVariant->ConditionalFinalizeLoad();
 
             // Cache the shader data, but don't evict the raw resource data for the current platform.
-            ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+            GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
             HELIUM_ASSERT( pObjectLoader );
             pObjectLoader->CacheObject( pVariant, false );
         }

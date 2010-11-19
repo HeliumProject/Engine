@@ -10,7 +10,7 @@
 
 #include "Platform/Thread.h"
 #include "Engine/BinaryDeserializer.h"
-#include "Engine/ObjectLoader.h"
+#include "Engine/GameObjectLoader.h"
 #include "Rendering/RPixelShader.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/RVertexShader.h"
@@ -100,7 +100,7 @@ namespace Lunar
     {
     }
 
-    /// @copydoc Object::Serialize()
+    /// @copydoc GameObject::Serialize()
     void Shader::Serialize( Serializer& s )
     {
         L_SERIALIZE_SUPER( s );
@@ -108,7 +108,7 @@ namespace Lunar
         s << L_TAGGED( m_bPrecacheAllVariants );
     }
 
-    /// @copydoc Object::FinalizeLoad()
+    /// @copydoc GameObject::FinalizeLoad()
     void Shader::FinalizeLoad()
     {
         Super::FinalizeLoad();
@@ -126,7 +126,7 @@ namespace Lunar
     }
 
 #if L_EDITOR
-    /// @copydoc Object::PostSave()
+    /// @copydoc GameObject::PostSave()
     void Shader::PostSave()
     {
         Super::PostSave();
@@ -136,7 +136,7 @@ namespace Lunar
         // XXX TMC TODO: Replace with a more robust method for checking whether we're running within the editor.
         if( m_bPrecacheAllVariants && sm_pBeginLoadVariantOverride )
         {
-            ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+            GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
             HELIUM_ASSERT( pObjectLoader );
 
             for( size_t shaderTypeIndex = 0; shaderTypeIndex < HELIUM_ARRAY_COUNT( m_variantCounts ); ++shaderTypeIndex )
@@ -231,11 +231,11 @@ namespace Lunar
         String variantNameString;
         variantNameString.Format( TXT( "%c%" ) TPRIu32, shaderTypeCharacter, userOptionIndex );
 
-        ObjectPath variantPath;
+        GameObjectPath variantPath;
         HELIUM_VERIFY( variantPath.Set( Name( variantNameString ), false, GetPath() ) );
 
         // Begin the load process.
-        ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
 
         size_t loadId = pObjectLoader->BeginLoadObject( variantPath );
@@ -265,10 +265,10 @@ namespace Lunar
         }
 
         // Attempt to sync the object load request.
-        ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
 
-        ObjectPtr spObject;
+        GameObjectPtr spObject;
         bool bFinished = pObjectLoader->TryFinishLoad( loadId, spObject );
         if( bFinished )
         {
@@ -689,7 +689,7 @@ namespace Lunar
         HELIUM_ASSERT( !m_pRenderResourceLoadBuffer );
     }
 
-    /// @copydoc Object::PreDestroy()
+    /// @copydoc GameObject::PreDestroy()
     void ShaderVariant::PreDestroy()
     {
         HELIUM_ASSERT( !m_pRenderResourceLoadBuffer );
@@ -699,13 +699,13 @@ namespace Lunar
         Super::PreDestroy();
     }
 
-    /// @copydoc Object::NeedsPrecacheResourceData()
+    /// @copydoc GameObject::NeedsPrecacheResourceData()
     bool ShaderVariant::NeedsPrecacheResourceData() const
     {
         return true;
     }
 
-    /// @copydoc Object::BeginPrecacheResourceData()
+    /// @copydoc GameObject::BeginPrecacheResourceData()
     bool ShaderVariant::BeginPrecacheResourceData()
     {
         HELIUM_ASSERT( m_renderResourceLoads.IsEmpty() );
@@ -817,7 +817,7 @@ namespace Lunar
         return true;
     }
 
-    /// @copydoc Object::TryFinishPrecacheResourceData()
+    /// @copydoc GameObject::TryFinishPrecacheResourceData()
     bool ShaderVariant::TryFinishPrecacheResourceData()
     {
         Renderer* pRenderer = Renderer::GetStaticInstance();

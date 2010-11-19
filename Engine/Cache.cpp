@@ -285,11 +285,11 @@ namespace Lunar
 
     /// Search for a cache entry with the given object path name.
     ///
-    /// @param[in] path          Object path.
+    /// @param[in] path          GameObject path.
     /// @param[in] subDataIndex  Sub-data index associated with the cached data.
     ///
     /// @return  Pointer to the cache entry for the given object path if found, null pointer if not found.
-    const Cache::Entry* Cache::FindEntry( ObjectPath path, uint32_t subDataIndex ) const
+    const Cache::Entry* Cache::FindEntry( GameObjectPath path, uint32_t subDataIndex ) const
     {
         EntryKey key;
         key.path = path;
@@ -309,7 +309,7 @@ namespace Lunar
 
     /// Add or update an entry in the cache.
     ///
-    /// @param[in] path          Object path.
+    /// @param[in] path          GameObject path.
     /// @param[in] subDataIndex  Sub-data index associated with the cached data.
     /// @param[in] pData         Data to cache.
     /// @param[in] timestamp     Timestamp value to associate with the entry in the cache.
@@ -317,7 +317,7 @@ namespace Lunar
     ///
     /// @return  True if the cache was updated successfully, false if not.
     bool Cache::CacheEntry(
-        ObjectPath path,
+        GameObjectPath path,
         uint32_t subDataIndex,
         const void* pData,
         int64_t timestamp,
@@ -613,7 +613,7 @@ namespace Lunar
             bReadResult = CheckedTocRead(
                 pLoadFunction,
                 entryPathSize,
-                TXT( "entry ObjectPath string size" ),
+                TXT( "entry GameObjectPath string size" ),
                 pTocCurrent,
                 pTocMax );
             if( !bReadResult )
@@ -635,7 +635,7 @@ namespace Lunar
                 bReadResult = CheckedTocRead(
                     pLoadFunction,
                     pPathString[ characterIndex ],
-                    TXT( "entry ObjectPath string character" ),
+                    TXT( "entry GameObjectPath string character" ),
                     pTocCurrent,
                     pTocMax );
                 if( !bReadResult )
@@ -647,7 +647,7 @@ namespace Lunar
                 bReadResult = CheckedTocRead(
                     pLoadFunction,
                     character,
-                    TXT( "entry ObjectPath string character" ),
+                    TXT( "entry GameObjectPath string character" ),
                     pTocCurrent,
                     pTocMax );
                 if( !bReadResult )
@@ -660,12 +660,12 @@ namespace Lunar
 #endif
             }
 
-            ObjectPath entryPath;
+            GameObjectPath entryPath;
             if( !entryPath.Set( pPathString ) )
             {
                 HELIUM_TRACE(
                     TRACE_ERROR,
-                    TXT( "Cache::FinalizeTocLoad(): Failed to set ObjectPath for entry %" ) TPRIuFAST16 TXT( ".\n" ),
+                    TXT( "Cache::FinalizeTocLoad(): Failed to set GameObjectPath for entry %" ) TPRIuFAST16 TXT( ".\n" ),
                     entryIndex );
 
                 return false;
@@ -691,7 +691,7 @@ namespace Lunar
             {
                 HELIUM_TRACE(
                     TRACE_ERROR,
-                    ( TXT( "Cache::FinalizeTocLoad(): Duplicate entry found for ObjectPath \"%s\", sub-data %" ) TPRIu32
+                    ( TXT( "Cache::FinalizeTocLoad(): Duplicate entry found for GameObjectPath \"%s\", sub-data %" ) TPRIu32
                       TXT( ".\n" ) ),
                     pPathString,
                     entrySubDataIndex );

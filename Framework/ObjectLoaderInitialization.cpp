@@ -9,7 +9,7 @@
 #include "Framework/ObjectLoaderInitialization.h"
 
 #include "Engine/CacheManager.h"
-#include "Engine/ObjectLoader.h"
+#include "Engine/GameObjectLoader.h"
 
 namespace Lunar
 {
@@ -18,20 +18,20 @@ namespace Lunar
     {
     }
 
-    /// @fn ObjectLoader* ObjectLoaderInitialization::Initialize()
-    /// Create and initialize a new ObjectLoader instance.
+    /// @fn GameObjectLoader* ObjectLoaderInitialization::Initialize()
+    /// Create and initialize a new GameObjectLoader instance.
     ///
-    /// @return  Pointer to the ObjectLoader instance if initialized successfully, null if creation and initialization
+    /// @return  Pointer to the GameObjectLoader instance if initialized successfully, null if creation and initialization
     ///          failed.
     ///
     /// @see Shutdown()
 
-    /// Shut down and destroy the ObjectLoader and any related types.
+    /// Shut down and destroy the GameObjectLoader and any related types.
     ///
     /// @see Initialize()
     void ObjectLoaderInitialization::Shutdown()
     {
-        ObjectLoader::DestroyStaticInstance();
+        GameObjectLoader::DestroyStaticInstance();
         CacheManager::DestroyStaticInstance();
     }
 }

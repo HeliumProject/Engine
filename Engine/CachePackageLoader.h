@@ -39,9 +39,9 @@ namespace Lunar
         bool BeginPreload();
         virtual bool TryFinishPreload();
 
-        virtual size_t BeginLoadObject( ObjectPath path );
+        virtual size_t BeginLoadObject( GameObjectPath path );
         virtual bool TryFinishLoadObject(
-            size_t requestId, ObjectPtr& rspObject, DynArray< ObjectLoader::LinkEntry >& rLinkTable );
+            size_t requestId, GameObjectPtr& rspObject, DynArray< GameObjectLoader::LinkEntry >& rLinkTable );
 
         virtual void Tick();
         //@}
@@ -49,7 +49,7 @@ namespace Lunar
         /// @name Data Access
         //@{
         virtual size_t GetObjectCount() const;
-        virtual ObjectPath GetObjectPath( size_t index ) const;
+        virtual GameObjectPath GetObjectPath( size_t index ) const;
 
         inline Cache* GetCache() const;
         //@}
@@ -70,13 +70,13 @@ namespace Lunar
             LOAD_FLAG_ERROR = 1 << 1
         };
 
-        /// Object load request data.
+        /// GameObject load request data.
         struct LoadRequest
         {
             /// Cache entry.
             const Cache::Entry* pEntry;
             /// Temporary object reference (hold while loading is in progress).
-            ObjectPtr spObject;
+            GameObjectPtr spObject;
 
             /// Async load ID.
             size_t asyncLoadId;
@@ -93,11 +93,11 @@ namespace Lunar
             DynArray< size_t > linkTable;
 
             /// Cached type reference.
-            ObjectPtr spType;
+            GameObjectPtr spType;
             /// Cached template reference.
-            ObjectPtr spTemplate;
+            GameObjectPtr spTemplate;
             /// Cached owner reference.
-            ObjectPtr spOwner;
+            GameObjectPtr spOwner;
             /// Type link table index.
             uint32_t typeLinkIndex;
             /// Template link table index.
@@ -127,7 +127,7 @@ namespace Lunar
 
         /// @name Static Private Utility Functions
         //@{
-        static void ResolvePackage( ObjectPtr& spPackage, ObjectPath packagePath );
+        static void ResolvePackage( GameObjectPtr& spPackage, GameObjectPath packagePath );
         static bool DeserializeLinkTable( LoadRequest* pRequest );
         //@}
     };

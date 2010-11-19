@@ -9,7 +9,7 @@ namespace Lunar
 {
     /// Get the parent of this type.
     ///
-    /// @return  Parent type, or null if there is no parent type (should only be the case with the "Object" type).
+    /// @return  Parent type, or null if there is no parent type (should only be the case with the "GameObject" type).
     Type* Type::GetTypeParent() const
     {
         return m_spTypeParent;
@@ -18,7 +18,7 @@ namespace Lunar
     /// Get the default template object for this type.
     ///
     /// @return  Type template object.
-    Object* Type::GetTypeTemplate() const
+    GameObject* Type::GetTypeTemplate() const
     {
         return m_spTypeTemplate;
     }

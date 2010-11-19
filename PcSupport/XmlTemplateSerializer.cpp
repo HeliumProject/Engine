@@ -47,13 +47,13 @@ namespace Lunar
     }
 
     /// @copydoc XmlSerializerBase::PreSerialize()
-    void XmlTemplateSerializer::PreSerialize( Object* /*pObject*/ )
+    void XmlTemplateSerializer::PreSerialize( GameObject* /*pObject*/ )
     {
         m_properties.Remove( 0, m_properties.GetSize() );
     }
 
     /// @copydoc XmlSerializerBase::PostSerialize()
-    void XmlTemplateSerializer::PostSerialize( Object* /*pObject*/ )
+    void XmlTemplateSerializer::PostSerialize( GameObject* /*pObject*/ )
     {
     }
 

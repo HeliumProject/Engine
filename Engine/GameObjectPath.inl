@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// ObjectPath.inl
+// GameObjectPath.inl
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -11,24 +11,24 @@ namespace Lunar
     ///
     /// When using the default constructor, the internal object path entry pointer is left in an uninitialized state and
     /// must be manually initialized using Set() or some other assignment before being used.
-    ObjectPath::ObjectPath()
+    GameObjectPath::GameObjectPath()
     {
     }
 
     /// Constructor.
     ///
     /// The object path entry will be initialized to null.
-    ObjectPath::ObjectPath( ENullName )
+    GameObjectPath::GameObjectPath( ENullName )
         : m_pEntry( NULL )
     {
     }
 
     /// Get the object name (bottom-most component of the path).
     ///
-    /// @return  Object name.
+    /// @return  GameObject name.
     ///
     /// @see GetInstanceIndex(), IsPackage(), GetParent()
-    Name ObjectPath::GetName() const
+    Name GameObjectPath::GetName() const
     {
         return ( m_pEntry ? m_pEntry->name : Name( NULL_NAME ) );
     }
@@ -38,7 +38,7 @@ namespace Lunar
     /// @return  Instance index.
     ///
     /// @see GetName(), IsPackage(), GetParent()
-    uint32_t ObjectPath::GetInstanceIndex() const
+    uint32_t GameObjectPath::GetInstanceIndex() const
     {
         return ( m_pEntry ? m_pEntry->instanceIndex : Invalid< uint32_t >() );
     }
@@ -48,7 +48,7 @@ namespace Lunar
     /// @return  True if this object is a package, false if not.  This will also return false for empty path names.
     ///
     /// @see GetName(), GetInstanceIndex(), GetParent()
-    bool ObjectPath::IsPackage() const
+    bool GameObjectPath::IsPackage() const
     {
         return ( m_pEntry && m_pEntry->bPackage );
     }
@@ -58,9 +58,9 @@ namespace Lunar
     /// @return  Parent path, or an empty path if this path has no parent or is empty.
     ///
     /// @see GetName(), GetInstanceIndex(), IsPackage()
-    ObjectPath ObjectPath::GetParent() const
+    GameObjectPath GameObjectPath::GetParent() const
     {
-        ObjectPath result;
+        GameObjectPath result;
         result.m_pEntry = ( m_pEntry ? m_pEntry->pParent : NULL );
 
         return result;
@@ -71,7 +71,7 @@ namespace Lunar
     /// @return  String representation of this path.
     ///
     /// @see Set()
-    String ObjectPath::ToString() const
+    String GameObjectPath::ToString() const
     {
         String result;
         ToString( result );
@@ -83,7 +83,7 @@ namespace Lunar
     /// directory delimiters for the current platform.
     ///
     /// @return  File path string representation of this path.
-    String ObjectPath::ToFilePathString() const
+    String GameObjectPath::ToFilePathString() const
     {
         String result;
         ToFilePathString( result );
@@ -96,7 +96,7 @@ namespace Lunar
     /// @return  True if this path is empty, false if not.
     ///
     /// @see Clear(), Set()
-    bool ObjectPath::IsEmpty() const
+    bool GameObjectPath::IsEmpty() const
     {
         return ( m_pEntry == NULL );
     }
@@ -105,28 +105,28 @@ namespace Lunar
     /// table).
     ///
     /// @return  Hash value.
-    size_t ObjectPath::ComputeHash() const
+    size_t GameObjectPath::ComputeHash() const
     {
-        // Each ObjectPath entry has a unique Entry pointer, so we can use the address itself as a hash.
+        // Each GameObjectPath entry has a unique Entry pointer, so we can use the address itself as a hash.
         return static_cast< size_t >( reinterpret_cast< uintptr_t >( m_pEntry ) );
     }
 
     /// Equality comparison operator.
     ///
-    /// @param[in] path  Object path with which to compare.
+    /// @param[in] path  GameObject path with which to compare.
     ///
     /// @return  True if this path and the given path match, false if not.
-    bool ObjectPath::operator==( ObjectPath path ) const
+    bool GameObjectPath::operator==( GameObjectPath path ) const
     {
         return ( m_pEntry == path.m_pEntry );
     }
 
     /// Inequality comparison operator.
     ///
-    /// @param[in] path  Object path with which to compare.
+    /// @param[in] path  GameObject path with which to compare.
     ///
     /// @return  True if this path and the given path do not match, false if they do.
-    bool ObjectPath::operator!=( ObjectPath path ) const
+    bool GameObjectPath::operator!=( GameObjectPath path ) const
     {
         return ( m_pEntry != path.m_pEntry );
     }
@@ -134,12 +134,12 @@ namespace Lunar
 
 namespace Helium
 {
-    /// Default ObjectPath hash.
+    /// Default GameObjectPath hash.
     ///
     /// @param[in] rKey  Key for which to compute a hash value.
     ///
     /// @return  Hash value.
-    size_t Hash< ObjectPath >::operator()( const ObjectPath& rKey ) const
+    size_t Hash< GameObjectPath >::operator()( const GameObjectPath& rKey ) const
     {
         return rKey.ComputeHash();
     }

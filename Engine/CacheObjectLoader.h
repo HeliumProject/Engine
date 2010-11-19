@@ -9,14 +9,14 @@
 #ifndef LUNAR_ENGINE_CACHE_OBJECT_LOADER_H
 #define LUNAR_ENGINE_CACHE_OBJECT_LOADER_H
 
-#include "Engine/ObjectLoader.h"
+#include "Engine/GameObjectLoader.h"
 
 namespace Lunar
 {
     class CachePackageLoader;
 
-    /// Object loader for loading objects from binary cached data.
-    class LUNAR_ENGINE_API CacheObjectLoader : public ObjectLoader
+    /// GameObject loader for loading objects from binary cached data.
+    class LUNAR_ENGINE_API CacheObjectLoader : public GameObjectLoader
     {
     public:
         /// @name Construction/Destruction
@@ -36,7 +36,7 @@ namespace Lunar
 
         /// @name Loading Implementation
         //@{
-        virtual PackageLoader* GetPackageLoader( ObjectPath path );
+        virtual PackageLoader* GetPackageLoader( GameObjectPath path );
         virtual void TickPackageLoaders();
         //@}
     };

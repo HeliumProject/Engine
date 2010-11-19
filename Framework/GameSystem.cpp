@@ -50,12 +50,12 @@ namespace Lunar
     /// Initialize this system.
     ///
     /// @param[in] rCommandLineInitialization    Interface for initializing command-line parameters.
-    /// @param[in] rObjectTypeRegistration       Interface for registering Object-based types.  Note that this must
+    /// @param[in] rObjectTypeRegistration       Interface for registering GameObject-based types.  Note that this must
     ///                                          remain valid until Shutdown() is called on this system, as a reference
     ///                                          to it will be held by this system.
     /// @param[in] rMemoryHeapPreInitialization  Interface for performing any necessary pre-initialization of dynamic
     ///                                          memory heaps.
-    /// @param[in] rObjectLoaderInitialization   Interface for creating and initializing the main ObjectLoader instance.
+    /// @param[in] rObjectLoaderInitialization   Interface for creating and initializing the main GameObjectLoader instance.
     ///                                          Note that this must remain valid until Shutdown() is called on this
     ///                                          system, as a reference to it will be held by this system.
     /// @param[in] rConfigInitialization         Interface for initializing application configuration settings.
@@ -107,19 +107,19 @@ namespace Lunar
             return false;
         }
 
-        // Register Object-based types.
+        // Register GameObject-based types.
         rObjectTypeRegistration.Register();
         m_pObjectTypeRegistration = &rObjectTypeRegistration;
 
         // Perform dynamic memory heap pre-initialization.
         rMemoryHeapPreInitialization.PreInitialize();
 
-        // Create and initialize the main ObjectLoader instance.
-        ObjectLoader* pObjectLoader = rObjectLoaderInitialization.Initialize();
+        // Create and initialize the main GameObjectLoader instance.
+        GameObjectLoader* pObjectLoader = rObjectLoaderInitialization.Initialize();
         HELIUM_ASSERT( pObjectLoader );
         if( !pObjectLoader )
         {
-            HELIUM_TRACE( TRACE_ERROR, TXT( "GameSystem::Initialize(): Object loader initialization failed.\n" ) );
+            HELIUM_TRACE( TRACE_ERROR, TXT( "GameSystem::Initialize(): GameObject loader initialization failed.\n" ) );
 
             return false;
         }
@@ -280,10 +280,10 @@ namespace Lunar
             return false;
         }
 
-        PackagePtr spLayerPackage( Object::Create< Package >( Name( TXT( "DefaultLayerPackage" ) ), NULL ) );
+        PackagePtr spLayerPackage( GameObject::Create< Package >( Name( TXT( "DefaultLayerPackage" ) ), NULL ) );
         HELIUM_ASSERT( spLayerPackage );
 
-        LayerPtr spLayer( Object::Create< Layer >( Name( TXT( "Layer" ) ), spLayerPackage ) );
+        LayerPtr spLayer( GameObject::Create< Layer >( Name( TXT( "Layer" ) ), spLayerPackage ) );
         HELIUM_ASSERT( spLayer );
         spLayer->BindPackage( spLayerPackage );
 
@@ -344,14 +344,14 @@ namespace Lunar
         }
 
         Type::Shutdown();
-        Object::Shutdown();
+        GameObject::Shutdown();
 
         AsyncLoader::GetStaticInstance().Shutdown();
         AsyncLoader::DestroyStaticInstance();
 
         ObjectRefCountSupport::Shutdown();
 
-        ObjectPath::Shutdown();
+        GameObjectPath::Shutdown();
         Name::Shutdown();
 
         Path::Shutdown();

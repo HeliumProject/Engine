@@ -74,7 +74,7 @@ namespace Lunar
         /// IDs of scene object sub-mesh data for each sub-mesh of this entity's mesh.
         DynArray< size_t > m_graphicsSceneObjectSubMeshDataIds;
 
-        /// @name Graphics Scene Object Updating
+        /// @name Graphics Scene GameObject Updating
         //@{
         void SetNeedsGraphicsSceneObjectUpdate(
             GraphicsSceneObject::EUpdate updateMode = GraphicsSceneObject::UPDATE_FULL ) const;
@@ -82,7 +82,7 @@ namespace Lunar
         virtual GraphicsSceneObject::UPDATE_FUNC* GetGraphicsSceneObjectUpdateCallback() const;
         //@}
 
-        /// @name Scene Object Synchronization Callback
+        /// @name Scene GameObject Synchronization Callback
         //@{
         static void GraphicsSceneObjectUpdate( void* pData, GraphicsScene* pScene, GraphicsSceneObject* pSceneObject );
         //@}

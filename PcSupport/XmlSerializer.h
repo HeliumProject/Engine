@@ -40,8 +40,8 @@ namespace Lunar
     protected:
         /// @name Serialization Implementation Support
         //@{
-        virtual void PreSerialize( Object* pObject );
-        virtual void PostSerialize( Object* pObject );
+        virtual void PreSerialize( GameObject* pObject );
+        virtual void PostSerialize( GameObject* pObject );
 
         virtual void PushPropertyData( Name name, const void* pData, size_t size );
         //@}

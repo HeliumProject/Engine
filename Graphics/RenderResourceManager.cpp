@@ -9,7 +9,7 @@
 #include "Graphics/RenderResourceManager.h"
 
 #include "Engine/Config.h"
-#include "Engine/ObjectLoader.h"
+#include "Engine/GameObjectLoader.h"
 #include "Rendering/RBlendState.h"
 #include "Rendering/RDepthStencilState.h"
 #include "Rendering/RRasterizerState.h"
@@ -240,14 +240,14 @@ namespace Lunar
 
         // Attempt to load the depth-only pre-pass shader.
         // XXX TMC: Migrate to a more data-driven solution.
-        ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
 
-        ObjectPath prePassShaderPath;
+        GameObjectPath prePassShaderPath;
         HELIUM_VERIFY( prePassShaderPath.Set(
             L_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) L_OBJECT_PATH_CHAR_STRING TXT( "PrePass.hlsl" ) ) );
 
-        ObjectPtr spPrePassShader;
+        GameObjectPtr spPrePassShader;
         HELIUM_VERIFY( pObjectLoader->LoadObject( prePassShaderPath, spPrePassShader ) );
 
         Shader* pPrePassShader = DynamicCast< Shader >( spPrePassShader.Get() );
@@ -267,11 +267,11 @@ namespace Lunar
 
         // Attempt to load the screen-space textured primitive shaders.
         // XXX TMC: Migrate to a more data-driven solution.
-        ObjectPath screenSpaceTextureShaderPath;
+        GameObjectPath screenSpaceTextureShaderPath;
         HELIUM_VERIFY( screenSpaceTextureShaderPath.Set(
             L_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) L_OBJECT_PATH_CHAR_STRING TXT( "ScreenSpaceTexture.hlsl" ) ) );
 
-        ObjectPtr spScreenSpaceTextureShader;
+        GameObjectPtr spScreenSpaceTextureShader;
         HELIUM_VERIFY( pObjectLoader->LoadObject( screenSpaceTextureShaderPath, spScreenSpaceTextureShader ) );
 
         Shader* pScreenSpaceTextureShader = DynamicCast< Shader >( spScreenSpaceTextureShader.Get() );

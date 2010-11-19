@@ -27,13 +27,13 @@ namespace Lunar
 
         /// @name Package Loader Access
         //@{
-        XmlPackageLoader* GetPackageLoader( ObjectPath path );
+        XmlPackageLoader* GetPackageLoader( GameObjectPath path );
         void TickPackageLoaders();
         //@}
 
     private:
         /// Package loader hash map (package path used as loader key).
-        ConcurrentHashMap< ObjectPath, XmlPackageLoader* > m_packageLoaderMap;
+        ConcurrentHashMap< GameObjectPath, XmlPackageLoader* > m_packageLoaderMap;
         /// Cached list of package loaders iterated over in Tick() (separated to avoid deadlocks with concurrent hash
         /// map access).
         DynArray< XmlPackageLoader* > m_packageLoaderTickArray;

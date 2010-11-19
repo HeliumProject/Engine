@@ -81,7 +81,7 @@ namespace Lunar
         HELIUM_ASSERT( pCache );
         pCache->EnforceTocLoad();
 
-        ObjectPath resourcePath = GetPath();
+        GameObjectPath resourcePath = GetPath();
         const Cache::Entry* pCacheEntry = pCache->FindEntry( resourcePath, subDataIndex );
 
         return ( pCacheEntry ? pCacheEntry->size : Invalid< size_t >() );
@@ -136,7 +136,7 @@ namespace Lunar
         HELIUM_ASSERT( pCache );
         pCache->EnforceTocLoad();
 
-        ObjectPath resourcePath = GetPath();
+        GameObjectPath resourcePath = GetPath();
         const Cache::Entry* pCacheEntry = pCache->FindEntry( resourcePath, subDataIndex );
         if( !pCacheEntry )
         {

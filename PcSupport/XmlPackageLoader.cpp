@@ -20,7 +20,7 @@
 #include "Engine/DirectDeserializer.h"
 #include "Engine/DirectSerializer.h"
 #include "Engine/NullLinker.h"
-#include "Engine/ObjectLoader.h"
+#include "Engine/GameObjectLoader.h"
 #include "Engine/Resource.h"
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/ResourceHandler.h"
@@ -49,8 +49,8 @@ namespace Lunar
         XML_Parser pParser;
 
         // Package path.
-        ObjectPath packagePath;
-        // Object list.
+        GameObjectPath packagePath;
+        // GameObject list.
         DynArray< XmlPackageLoader::SerializedObjectData >* pObjects;
 
         // Current parsing depth.
@@ -140,8 +140,8 @@ namespace Lunar
 
             // Parse the name, type, and template attributes.
             String objectName;
-            ObjectPath typePath( NULL_NAME );
-            ObjectPath templatePath( NULL_NAME );
+            GameObjectPath typePath( NULL_NAME );
+            GameObjectPath templatePath( NULL_NAME );
 
             while( *ppAtts != NULL )
             {
@@ -224,12 +224,12 @@ namespace Lunar
                 return;
             }
 
-            ObjectPath objectPath;
+            GameObjectPath objectPath;
             if( !objectPath.Join( pContext->packagePath, *objectName ) )
             {
                 HELIUM_TRACE(
                     TRACE_ERROR,
-                    ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") Object path is " )
+                    ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") GameObject path is " )
                       TXT( "not valid.\n" ) ),
                     line,
                     column );
@@ -748,12 +748,12 @@ namespace Lunar
 
     /// Initialize this package loader.
     ///
-    /// @param[in] packagePath  Object path of the package to load.
+    /// @param[in] packagePath  GameObject path of the package to load.
     ///
     /// @return  True if this loader was initialized successfully, false if not.
     ///
     /// @see Shutdown()
-    bool XmlPackageLoader::Initialize( ObjectPath packagePath )
+    bool XmlPackageLoader::Initialize( GameObjectPath packagePath )
     {
         Shutdown();
 
@@ -784,7 +784,7 @@ namespace Lunar
         m_packagePath = packagePath;
 
         // Attempt to locate the specified package if it already happens to exist.
-        m_spPackage = Object::Find< Package >( packagePath );
+        m_spPackage = GameObject::Find< Package >( packagePath );
         Package* pPackage = m_spPackage;
         if( pPackage )
         {
@@ -805,7 +805,7 @@ namespace Lunar
         else
         {
             // Make sure we don't have a name clash with a non-package object.
-            ObjectPtr spObject( Object::FindObject( packagePath ) );
+            GameObjectPtr spObject( GameObject::FindObject( packagePath ) );
             if( spObject )
             {
                 HELIUM_ASSERT( !spObject->IsPackage() );
@@ -955,10 +955,10 @@ namespace Lunar
         // Load the parent package if we need to create the current package.
         if( !m_spPackage )
         {
-            ObjectPath parentPackagePath = m_packagePath.GetParent();
+            GameObjectPath parentPackagePath = m_packagePath.GetParent();
             if( !parentPackagePath.IsEmpty() )
             {
-                ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+                GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
                 HELIUM_ASSERT( pObjectLoader );
 
                 m_parentPackageLoadId = pObjectLoader->BeginLoadObject( parentPackagePath );
@@ -989,7 +989,7 @@ namespace Lunar
     }
 
     /// @copydoc PackageLoader::BeginLoadObject()
-    size_t XmlPackageLoader::BeginLoadObject( ObjectPath path )
+    size_t XmlPackageLoader::BeginLoadObject( GameObjectPath path )
     {
         MutexScopeLock scopeLock( m_accessLock );
 
@@ -1088,23 +1088,23 @@ namespace Lunar
 
         // If a fully-loaded object already exists with the same name, do not attempt to re-load the object (just mark
         // the request as complete).
-        pRequest->spObject = Object::FindObject( path );
+        pRequest->spObject = GameObject::FindObject( path );
 
-        Object* pObject = pRequest->spObject;
+        GameObject* pObject = pRequest->spObject;
         if( pObject && pObject->IsFullyLoaded() )
         {
             pRequest->flags = LOAD_FLAG_PRELOADED;
         }
         else
         {
-            HELIUM_ASSERT( !pObject || !pObject->GetAnyFlagSet( Object::FLAG_LOADED | Object::FLAG_LINKED ) );
+            HELIUM_ASSERT( !pObject || !pObject->GetAnyFlagSet( GameObject::FLAG_LOADED | GameObject::FLAG_LINKED ) );
 
             // Begin loading the type, template, and owner objects.  Note that there isn't much reason to check for
             // failure until we tick this request, as we need to make sure any other load requests for the
             // type/template/owner that did succeed are properly synced anyway.
             SerializedObjectData& rObjectData = m_objects[ objectIndex ];
 
-            ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+            GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
             HELIUM_ASSERT( pObjectLoader );
 
             HELIUM_ASSERT( !rObjectData.typePath.IsEmpty() );
@@ -1115,7 +1115,7 @@ namespace Lunar
                 pRequest->templateLoadId = pObjectLoader->BeginLoadObject( rObjectData.templatePath );
             }
 
-            ObjectPath ownerPath = path.GetParent();
+            GameObjectPath ownerPath = path.GetParent();
             if( ownerPath == m_packagePath )
             {
                 // Easy check: if the owner is this package (which is likely), we don't need to load it.
@@ -1135,8 +1135,8 @@ namespace Lunar
     /// @copydoc PackageLoader::TryFinishLoadObject()
     bool XmlPackageLoader::TryFinishLoadObject(
         size_t requestId,
-        ObjectPtr& rspObject,
-        DynArray< ObjectLoader::LinkEntry >& rLinkTable )
+        GameObjectPtr& rspObject,
+        DynArray< GameObjectLoader::LinkEntry >& rLinkTable )
     {
         HELIUM_ASSERT( requestId < m_loadRequests.GetSize() );
         HELIUM_ASSERT( m_loadRequests.IsElementValid( requestId ) );
@@ -1149,7 +1149,7 @@ namespace Lunar
         }
 
         // Sync on type, template, and owner dependencies.
-        ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
 
         if( IsValid( pRequest->typeLoadId ) )
@@ -1200,10 +1200,10 @@ namespace Lunar
         pRequest->cachedObjectDataBufferSize = 0;
 
         rspObject = pRequest->spObject;
-        Object* pObject = rspObject;
+        GameObject* pObject = rspObject;
         if( pObject && ( pRequest->flags & LOAD_FLAG_ERROR ) )
         {
-            pObject->SetFlags( Object::FLAG_BROKEN );
+            pObject->SetFlags( GameObject::FLAG_BROKEN );
         }
 
         pRequest->spObject.Release();
@@ -1214,7 +1214,7 @@ namespace Lunar
         rLinkTable.Reserve( linkTableSize );
         for( size_t linkIndex = 0; linkIndex < linkTableSize; ++linkIndex )
         {
-            ObjectLoader::LinkEntry* pEntry = rLinkTable.New();
+            GameObjectLoader::LinkEntry* pEntry = rLinkTable.New();
             HELIUM_ASSERT( pEntry );
             pEntry->loadId = rInternalLinkTable[ linkIndex ].loadRequestId;
             pEntry->spObject.Release();
@@ -1262,7 +1262,7 @@ namespace Lunar
     }
 
     /// @copydoc PackageLoader::GetObjectPath()
-    ObjectPath XmlPackageLoader::GetObjectPath( size_t index ) const
+    GameObjectPath XmlPackageLoader::GetObjectPath( size_t index ) const
     {
         HELIUM_ASSERT( index < m_objects.GetSize() );
 
@@ -1284,7 +1284,7 @@ namespace Lunar
     /// @return  Path of the associated package.
     ///
     /// @see GetPackage()
-    ObjectPath XmlPackageLoader::GetPackagePath() const
+    GameObjectPath XmlPackageLoader::GetPackagePath() const
     {
         return m_packagePath;
     }
@@ -1396,10 +1396,10 @@ namespace Lunar
         }
 
         // Wait for the parent package to finish loading.
-        ObjectPtr spParentPackage;
+        GameObjectPtr spParentPackage;
         if( IsValid( m_parentPackageLoadId ) )
         {
-            ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+            GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
             HELIUM_ASSERT( pObjectLoader );
             if( !pObjectLoader->TryFinishLoad( m_parentPackageLoadId, spParentPackage ) )
             {
@@ -1417,7 +1417,7 @@ namespace Lunar
         if( !pPackage )
         {
             HELIUM_ASSERT( spParentPackage ? !m_packagePath.GetParent().IsEmpty() : m_packagePath.GetParent().IsEmpty() );
-            m_spPackage = Object::Create< Package >( m_packagePath.GetName(), spParentPackage );
+            m_spPackage = GameObject::Create< Package >( m_packagePath.GetName(), spParentPackage );
             pPackage = m_spPackage;
             HELIUM_ASSERT( pPackage );
             pPackage->SetLoader( this );
@@ -1530,7 +1530,7 @@ namespace Lunar
 #endif  // L_EDITOR
 
         // Package preloading is now complete.
-        pPackage->SetFlags( Object::FLAG_PRELOADED | Object::FLAG_LINKED );
+        pPackage->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
         pPackage->ConditionalFinalizeLoad();
 
         AtomicExchangeRelease( m_preloadedCounter, 1 );
@@ -1578,13 +1578,13 @@ namespace Lunar
         HELIUM_ASSERT( pRequest );
         HELIUM_ASSERT( !( pRequest->flags & LOAD_FLAG_PROPERTY_PRELOADED ) );
 
-        Object* pObject = pRequest->spObject;
+        GameObject* pObject = pRequest->spObject;
 
         HELIUM_ASSERT( pRequest->index < m_objects.GetSize() );
         SerializedObjectData& rObjectData = m_objects[ pRequest->index ];
 
         // Wait for the type, template, and owner objects to load.
-        ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
 
         if( IsValid( pRequest->typeLoadId ) )
@@ -1607,7 +1607,7 @@ namespace Lunar
 
             if( pObject )
             {
-                pObject->SetFlags( Object::FLAG_PRELOADED | Object::FLAG_LINKED );
+                pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
                 pObject->ConditionalFinalizeLoad();
             }
 
@@ -1637,7 +1637,7 @@ namespace Lunar
 
                 if( pObject )
                 {
-                    pObject->SetFlags( Object::FLAG_PRELOADED | Object::FLAG_LINKED );
+                    pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
                     pObject->ConditionalFinalizeLoad();
                 }
 
@@ -1648,9 +1648,9 @@ namespace Lunar
         }
 
         HELIUM_ASSERT( IsInvalid( pRequest->templateLoadId ) );
-        Object* pTemplate = pRequest->spTemplate;
+        GameObject* pTemplate = pRequest->spTemplate;
 
-        ObjectPath ownerPath = rObjectData.objectPath.GetParent();
+        GameObjectPath ownerPath = rObjectData.objectPath.GetParent();
         if( !ownerPath.IsEmpty() )
         {
             if( IsValid( pRequest->ownerLoadId ) )
@@ -1672,7 +1672,7 @@ namespace Lunar
 
                 if( pObject )
                 {
-                    pObject->SetFlags( Object::FLAG_PRELOADED | Object::FLAG_LINKED );
+                    pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
                     pObject->ConditionalFinalizeLoad();
                 }
 
@@ -1683,7 +1683,7 @@ namespace Lunar
         }
 
         HELIUM_ASSERT( IsInvalid( pRequest->ownerLoadId ) );
-        Object* pOwner = pRequest->spOwner;
+        GameObject* pOwner = pRequest->spOwner;
 
         HELIUM_ASSERT( pType->IsFullyLoaded() );
         HELIUM_ASSERT( !pOwner || pOwner->IsFullyLoaded() );
@@ -1704,7 +1704,7 @@ namespace Lunar
                     *pExistingType->GetPath().ToString(),
                     *pType->GetPath().ToString() );
 
-                pObject->SetFlags( Object::FLAG_PRELOADED | Object::FLAG_LINKED );
+                pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
                 pObject->ConditionalFinalizeLoad();
 
                 pRequest->flags |= LOAD_FLAG_PRELOADED | LOAD_FLAG_ERROR;
@@ -1715,7 +1715,7 @@ namespace Lunar
         else
         {
             // Create the object.
-            pRequest->spObject = Object::CreateObject( pType, rObjectData.objectPath.GetName(), pOwner, pTemplate );
+            pRequest->spObject = GameObject::CreateObject( pType, rObjectData.objectPath.GetName(), pOwner, pTemplate );
             pObject = pRequest->spObject;
             if( !pObject )
             {
@@ -1746,7 +1746,7 @@ namespace Lunar
 
             // Clear out object references (object can now be considered fully loaded as well).
             NullLinker().Serialize( pObject );
-            pObject->SetFlags( Object::FLAG_PRELOADED | Object::FLAG_LINKED );
+            pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
             pObject->ConditionalFinalizeLoad();
 
             pRequest->flags |= LOAD_FLAG_ERROR;
@@ -1790,11 +1790,11 @@ namespace Lunar
         if( IsInvalid( pRequest->persistentResourceDataLoadId ) )
         {
             // No persistent resource data needs to be loaded.
-            pObject->SetFlags( Object::FLAG_PRELOADED );
+            pObject->SetFlags( GameObject::FLAG_PRELOADED );
             pRequest->flags |= LOAD_FLAG_PERSISTENT_RESOURCE_PRELOADED;
         }
 
-        // Object is now preloaded.
+        // GameObject is now preloaded.
         return true;
     }
 
@@ -1908,7 +1908,7 @@ namespace Lunar
         pRequest->pCachedObjectDataBuffer = NULL;
         pRequest->cachedObjectDataBufferSize = 0;
 
-        pResource->SetFlags( Object::FLAG_PRELOADED );
+        pResource->SetFlags( GameObject::FLAG_PRELOADED );
 
         pRequest->flags |= LOAD_FLAG_PERSISTENT_RESOURCE_PRELOADED;
 
@@ -1938,7 +1938,7 @@ namespace Lunar
     }
 
     /// @copydoc Serializer::Serialize()
-    bool XmlPackageLoader::Deserializer::Serialize( Object* pObject )
+    bool XmlPackageLoader::Deserializer::Serialize( GameObject* pObject )
     {
         HELIUM_ASSERT( pObject );
 
@@ -2190,11 +2190,11 @@ namespace Lunar
     }
 
     /// @copydoc Serializer::SerializeObjectReference()
-    void XmlPackageLoader::Deserializer::SerializeObjectReference( Type* /*pType*/, ObjectPtr& rspObject )
+    void XmlPackageLoader::Deserializer::SerializeObjectReference( Type* /*pType*/, GameObjectPtr& rspObject )
     {
         ReadValue(
             rspObject,
-            TXT( "Object reference" ),
+            TXT( "GameObject reference" ),
             ObjectParser( m_pLinkTable ),
             ObjectDefaultHandler( m_pLinkTable ) );
     }
@@ -2923,7 +2923,7 @@ namespace Lunar
 
     /// Constructor.
     ///
-    /// @param[in] pLinkTable  Object link table.
+    /// @param[in] pLinkTable  GameObject link table.
     XmlPackageLoader::Deserializer::ObjectParser::ObjectParser( DynArray< LinkEntry >* pLinkTable )
         : m_pLinkTable( pLinkTable )
     {
@@ -2936,7 +2936,7 @@ namespace Lunar
     /// @param[out] rspValue  Parsed value.
     ///
     /// @return  True if a value was parsed successfully, false if not.
-    bool XmlPackageLoader::Deserializer::ObjectParser::operator()( const String& rText, ObjectPtr& rspValue ) const
+    bool XmlPackageLoader::Deserializer::ObjectParser::operator()( const String& rText, GameObjectPtr& rspValue ) const
     {
         if( rText.IsEmpty() )
         {
@@ -2946,7 +2946,7 @@ namespace Lunar
             return true;
         }
 
-        ObjectPath path;
+        GameObjectPath path;
         if( !path.Set( rText ) )
         {
             HELIUM_TRACE(
@@ -2978,7 +2978,7 @@ namespace Lunar
             HELIUM_ASSERT( pLinkEntry );
             pLinkEntry->path = path;
 
-            ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+            GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
             HELIUM_ASSERT( pObjectLoader );
             pLinkEntry->loadRequestId = pObjectLoader->BeginLoadObject( path );
             if( IsInvalid( pLinkEntry->loadRequestId ) )
@@ -3016,11 +3016,11 @@ namespace Lunar
     /// Process a value that was not found in the XML property map.
     ///
     /// @param[in] rspValue  Value to process.
-    void XmlPackageLoader::Deserializer::ObjectDefaultHandler::operator()( ObjectPtr& rspValue ) const
+    void XmlPackageLoader::Deserializer::ObjectDefaultHandler::operator()( GameObjectPtr& rspValue ) const
     {
-        // Object references need to be converted to link table indices, so if there is a reference, make sure it exists
+        // GameObject references need to be converted to link table indices, so if there is a reference, make sure it exists
         // in the link table.
-        Object* pObject = rspValue;
+        GameObject* pObject = rspValue;
         if( !pObject )
         {
             rspValue.Release();
@@ -3029,7 +3029,7 @@ namespace Lunar
             return;
         }
 
-        ObjectPath objectPath = pObject->GetPath();
+        GameObjectPath objectPath = pObject->GetPath();
 
         size_t linkTableSize = m_pLinkTable->GetSize();
         for( size_t linkTableIndex = 0; linkTableIndex < linkTableSize; ++linkTableIndex )
@@ -3047,7 +3047,7 @@ namespace Lunar
         HELIUM_ASSERT( pNewEntry );
         pNewEntry->path = objectPath;
 
-        ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
         pNewEntry->loadRequestId = pObjectLoader->BeginLoadObject( objectPath );
         if( IsInvalid( pNewEntry->loadRequestId ) )

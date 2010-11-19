@@ -14,7 +14,7 @@
 #include "Platform/Assert.h"
 #include "Platform/Trace.h"
 #include "Platform/Memory.h"
-#include "Engine/Object.h"
+#include "Engine/GameObject.h"
 #include "Engine/Type.h"
 #include "Engine/Package.h"
 #include "Engine/Serializer.h"

@@ -48,7 +48,7 @@ namespace Lunar
         // Create the main graphics scene.
         Type* pSceneType = GraphicsScene::GetStaticType();
         HELIUM_ASSERT( pSceneType );
-        GraphicsScene* pGraphicsScene = Object::Create< GraphicsScene >( pSceneType->GetName(), this );
+        GraphicsScene* pGraphicsScene = GameObject::Create< GraphicsScene >( pSceneType->GetName(), this );
         HELIUM_ASSERT( pGraphicsScene );
         if( !pGraphicsScene )
         {
@@ -159,7 +159,7 @@ namespace Lunar
         m_spGraphicsScene->Update();
     }
 
-    /// @copydoc Object::PreDestroy()
+    /// @copydoc GameObject::PreDestroy()
     void World::PreDestroy()
     {
         Shutdown();
@@ -175,7 +175,7 @@ namespace Lunar
     /// @param[in] rRotation             Entity rotation.
     /// @param[in] rScale                Entity scale.
     /// @param[in] pTemplate             Template from which to create the entity.
-    /// @param[in] name                  Object name to assign to the entity, or a null name to automatically generate a
+    /// @param[in] name                  GameObject name to assign to the entity, or a null name to automatically generate a
     ///                                  name based on the entity type.
     /// @param[in] bAssignInstanceIndex  True to assign an instance index to the entity, false to not include an
     ///                                  instance index.

@@ -16,7 +16,7 @@
 
 namespace Lunar
 {
-    /// Object serializer for package and resource caching.
+    /// GameObject serializer for package and resource caching.
     class LUNAR_ENGINE_API BinarySerializer : public Serializer
     {
     public:
@@ -34,7 +34,7 @@ namespace Lunar
 
         /// @name Serialization Interface
         //@{
-        virtual bool Serialize( Object* pObject );
+        virtual bool Serialize( GameObject* pObject );
         virtual EMode GetMode() const;
 
         virtual void SerializeTag( const Tag& rTag );
@@ -57,7 +57,7 @@ namespace Lunar
         virtual void SerializeWideName( WideName& rValue );
         virtual void SerializeCharString( CharString& rValue );
         virtual void SerializeWideString( WideString& rValue );
-        virtual void SerializeObjectReference( Type* pType, ObjectPtr& rspObject );
+        virtual void SerializeObjectReference( Type* pType, GameObjectPtr& rspObject );
 
         virtual void PushPropertyFlags( uint32_t flags );
         virtual void PopPropertyFlags();
@@ -76,10 +76,10 @@ namespace Lunar
         //@}
 
     private:
-        /// Object dependency table.
-        DynArray< ObjectPath > m_dependencies;
+        /// GameObject dependency table.
+        DynArray< GameObjectPath > m_dependencies;
 
-        /// Object property stream.
+        /// GameObject property stream.
         DynamicMemoryStream m_directPropertyStream;
         /// Memory buffer for the object property stream.
         DynArray< uint8_t > m_propertyStreamBuffer;
@@ -97,7 +97,7 @@ namespace Lunar
 
         /// @name Private Utility Functions
         //@{
-        uint32_t ResolveDependency( ObjectPath path );
+        uint32_t ResolveDependency( GameObjectPath path );
 
         uint32_t GetCurrentPropertyFlags() const;
         bool ShouldSerializeCurrentProperty() const;

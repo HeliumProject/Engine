@@ -40,7 +40,7 @@ namespace Lunar
     }
 
     /// @copydoc Serializer::Serialize()
-    bool BinarySerializer::Serialize( Object* pObject )
+    bool BinarySerializer::Serialize( GameObject* pObject )
     {
         HELIUM_ASSERT( pObject );
 
@@ -57,7 +57,7 @@ namespace Lunar
         uint32_t templateIndex;
         SetInvalid( templateIndex );
 
-        Object* pTemplate = pObject->GetTemplate();
+        GameObject* pTemplate = pObject->GetTemplate();
         if( pTemplate != pType->GetTypeTemplate() )
         {
             HELIUM_ASSERT( pTemplate );
@@ -71,7 +71,7 @@ namespace Lunar
         uint32_t ownerIndex;
         SetInvalid( ownerIndex );
 
-        Object* pOwner = pObject->GetOwner();
+        GameObject* pOwner = pObject->GetOwner();
         if( pOwner )
         {
             ownerIndex = ResolveDependency( pOwner->GetPath() );
@@ -270,7 +270,7 @@ namespace Lunar
     }
 
     /// @copydoc Serializer::SerializeObjectReference()
-    void BinarySerializer::SerializeObjectReference( Type* /*pType*/, ObjectPtr& rspObject )
+    void BinarySerializer::SerializeObjectReference( Type* /*pType*/, GameObjectPtr& rspObject )
     {
         if( ShouldSerializeCurrentProperty() )
         {
@@ -288,7 +288,7 @@ namespace Lunar
             uint32_t objectIndex;
             SetInvalid( objectIndex );
 
-            Object* pObject = rspObject.Get();
+            GameObject* pObject = rspObject.Get();
             if( pObject )
             {
                 objectIndex = ResolveDependency( pObject->GetPath() );
@@ -376,10 +376,10 @@ namespace Lunar
 
     /// Resolve a dependency on an object reference.
     ///
-    /// @param[in] path  Object path.
+    /// @param[in] path  GameObject path.
     ///
     /// @return  Dependency index.
-    uint32_t BinarySerializer::ResolveDependency( ObjectPath path )
+    uint32_t BinarySerializer::ResolveDependency( GameObjectPath path )
     {
         uint32_t objectIndex;
         SetInvalid( objectIndex );

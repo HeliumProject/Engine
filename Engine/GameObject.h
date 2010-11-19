@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// Object.h
+// GameObject.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -14,14 +14,14 @@
 #include "Foundation/Container/DynArray.h"
 #include "Foundation/Container/SparseArray.h"
 #include "Foundation/Memory/ReferenceCounting.h"
-#include "Engine/ObjectPath.h"
+#include "Engine/GameObjectPath.h"
 
-/// @defgroup objectmacros Common "Object"-class Macros
+/// @defgroup objectmacros Common "GameObject"-class Macros
 //@{
 
-/// Utility macro for declaring standard Object-class variables and functions.
+/// Utility macro for declaring standard GameObject-class variables and functions.
 ///
-/// @param[in] TYPE    Object type.
+/// @param[in] TYPE    GameObject type.
 /// @param[in] PARENT  Parent object type.
 #define L_DECLARE_OBJECT( TYPE, PARENT ) \
     private: \
@@ -31,15 +31,15 @@
         typedef PARENT Super; \
         virtual Lunar::Type* GetType() const; \
         virtual size_t GetInstanceSize() const; \
-        virtual Lunar::Object* InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const; \
+        virtual Lunar::GameObject* InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const; \
         virtual void InPlaceDestroy(); \
         static Lunar::Type* InitStaticType(); \
         static void ReleaseStaticType(); \
         static Lunar::Type* GetStaticType();
 
-/// Utility macro for implementing standard Object-class variables and functions, without implementing InitStaticType().
+/// Utility macro for implementing standard GameObject-class variables and functions, without implementing InitStaticType().
 ///
-/// @param[in] TYPE    Object type.
+/// @param[in] TYPE    GameObject type.
 /// @param[in] MODULE  Module to which the type belongs.
 #define L_IMPLEMENT_OBJECT_NOINITTYPE( TYPE, MODULE ) \
     Lunar::TypeWPtr TYPE::sm_spStaticType; \
@@ -55,7 +55,7 @@
         return sizeof( *this ); \
     } \
     \
-    Lunar::Object* TYPE::InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const \
+    Lunar::GameObject* TYPE::InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const \
     { \
         HELIUM_ASSERT( pMemory ); \
         HELIUM_ASSERT( pDestroyCallback ); \
@@ -89,9 +89,9 @@
         return sm_spStaticType; \
     }
 
-/// Utility macro for implementing standard Object-class variables and functions.
+/// Utility macro for implementing standard GameObject-class variables and functions.
 ///
-/// @param[in] TYPE        Object type.
+/// @param[in] TYPE        GameObject type.
 /// @param[in] MODULE      Module to which the type belongs.
 /// @param[in] TYPE_FLAGS  Type flags.
 #define L_IMPLEMENT_OBJECT( TYPE, MODULE, TYPE_FLAGS ) \
@@ -108,7 +108,7 @@
             Lunar::Package* pTypePackage = Get##MODULE##TypePackage(); \
             HELIUM_ASSERT( pTypePackage ); \
             \
-            pType = Object::Create< Lunar::Type >( Lunar::Name( TXT( #TYPE ) ), pTypePackage ); \
+            pType = GameObject::Create< Lunar::Type >( Lunar::Name( TXT( #TYPE ) ), pTypePackage ); \
             HELIUM_ASSERT( pType ); \
             \
             Lunar::Type* pParentType = Super::InitStaticType(); \
@@ -135,30 +135,30 @@ namespace Lunar
 {
     class Serializer;
 
-    HELIUM_DECLARE_PTR( Object );
+    HELIUM_DECLARE_PTR( GameObject );
     HELIUM_DECLARE_PTR( Type );
     HELIUM_DECLARE_PTR( Package );
 
-    HELIUM_DECLARE_WPTR( Object );
+    HELIUM_DECLARE_WPTR( GameObject );
     HELIUM_DECLARE_WPTR( Type );
 
-    /// Reference counting support for Object types.
+    /// Reference counting support for GameObject types.
     class LUNAR_ENGINE_API ObjectRefCountSupport
     {
     public:
         /// Base type of reference counted object.
-        typedef Object BaseType;
+        typedef GameObject BaseType;
 
-        /// @name Object Destruction Support
+        /// @name GameObject Destruction Support
         //@{
-        inline static void PreDestroy( Object* pObject );
-        inline static void Destroy( Object* pObject );
+        inline static void PreDestroy( GameObject* pObject );
+        inline static void Destroy( GameObject* pObject );
         //@}
 
         /// @name Reference Count Proxy Allocation Interface
         //@{
-        static RefCountProxy< Object >* Allocate();
-        static void Release( RefCountProxy< Object >* pProxy );
+        static RefCountProxy< GameObject >* Allocate();
+        static void Release( RefCountProxy< GameObject >* pProxy );
 
         static void Shutdown();
         //@}
@@ -168,7 +168,7 @@ namespace Lunar
         //@{
         static size_t GetActiveProxyCount();
         static bool GetFirstActiveProxy(
-            ConcurrentHashSet< RefCountProxy< Object >* >::ConstAccessor& rAccessor );
+            ConcurrentHashSet< RefCountProxy< GameObject >* >::ConstAccessor& rAccessor );
         //@}
 #endif
 
@@ -180,45 +180,45 @@ namespace Lunar
     };
 
     /// Base class for the engine's game object system.
-    class LUNAR_ENGINE_API Object : NonCopyable
+    class LUNAR_ENGINE_API GameObject : NonCopyable
     {
-        HELIUM_DECLARE_REF_COUNT( Object, ObjectRefCountSupport );
+        HELIUM_DECLARE_REF_COUNT( GameObject, ObjectRefCountSupport );
 
     public:
         /// Destruction callback type.
-        typedef void ( CUSTOM_DESTROY_CALLBACK )( Object* pObject );
+        typedef void ( CUSTOM_DESTROY_CALLBACK )( GameObject* pObject );
 
-        /// Object flags.
+        /// GameObject flags.
         enum EFlag
         {
-            /// Object property data has been loaded, but object is not ready for use.
+            /// GameObject property data has been loaded, but object is not ready for use.
             FLAG_PRELOADED    = 1 << 0,
-            /// Object references have been linked.
+            /// GameObject references have been linked.
             FLAG_LINKED       = 1 << 1,
-            /// Object resource data has been precached.
+            /// GameObject resource data has been precached.
             FLAG_PRECACHED    = 1 << 2,
-            /// Object loading has completed (object and all its dependencies are ready for use).
+            /// GameObject loading has completed (object and all its dependencies are ready for use).
             FLAG_LOADED       = 1 << 3,
 
-            /// Object has gone through pre-destruction cleanup.
+            /// GameObject has gone through pre-destruction cleanup.
             FLAG_PREDESTROYED = 1 << 4,
 
-            /// Object is broken.
+            /// GameObject is broken.
             FLAG_BROKEN       = 1 << 5,
 
-            /// Object and its children are transient.
+            /// GameObject and its children are transient.
             FLAG_TRANSIENT    = 1 << 6,
-            /// Object is a package (only set for Package objects *excluding* the Package type template).
+            /// GameObject is a package (only set for Package objects *excluding* the Package type template).
             FLAG_PACKAGE      = 1 << 7
         };
 
         /// @name Construction/Destruction
         //@{
-        Object();
-        virtual ~Object();
+        GameObject();
+        virtual ~GameObject();
         //@}
 
-        /// @name Object Interface
+        /// @name GameObject Interface
         //@{
         inline Name GetName() const;
         bool SetName( Name name );
@@ -235,17 +235,17 @@ namespace Lunar
         uint32_t ClearFlags( uint32_t flagMask );
         uint32_t ToggleFlags( uint32_t flagMask );
 
-        Object* GetTemplate() const;
+        GameObject* GetTemplate() const;
 
-        inline Object* GetOwner() const;
-        bool SetOwner( Object* pOwner, bool bResetInstanceIndex = true );
+        inline GameObject* GetOwner() const;
+        bool SetOwner( GameObject* pOwner, bool bResetInstanceIndex = true );
 
         inline size_t GetChildCount() const;
-        inline Object* GetChild( size_t index ) const;
-        inline const DynArray< ObjectWPtr >& GetChildren() const;
-        Object* FindChild( Name name, uint32_t instanceIndex = Invalid< uint32_t >() ) const;
+        inline GameObject* GetChild( size_t index ) const;
+        inline const DynArray< GameObjectWPtr >& GetChildren() const;
+        GameObject* FindChild( Name name, uint32_t instanceIndex = Invalid< uint32_t >() ) const;
 
-        inline ObjectPath GetPath() const;
+        inline GameObjectPath GetPath() const;
 
         inline bool IsFullyLoaded() const;
         inline bool IsPackage() const;
@@ -284,27 +284,27 @@ namespace Lunar
         /// @name Creation Utility Functions
         //@{
         virtual size_t GetInstanceSize() const;
-        virtual Object* InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const;
+        virtual GameObject* InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const;
         virtual void InPlaceDestroy();
         //@}
 
-        /// @name Object Management
+        /// @name GameObject Management
         //@{
-        static Object* CreateObject(
-            Type* pType, Name name, Object* pOwner, Object* pTemplate = NULL, bool bAssignInstanceIndex = false );
+        static GameObject* CreateObject(
+            Type* pType, Name name, GameObject* pOwner, GameObject* pTemplate = NULL, bool bAssignInstanceIndex = false );
         template< typename T > static T* Create(
-            Name name, Object* pOwner, T* pTemplate = NULL, bool bAssignInstanceIndex = false );
+            Name name, GameObject* pOwner, T* pTemplate = NULL, bool bAssignInstanceIndex = false );
 
-        static Object* FindObject( ObjectPath path );
-        template< typename T > static T* Find( ObjectPath path );
+        static GameObject* FindObject( GameObjectPath path );
+        template< typename T > static T* Find( GameObjectPath path );
 
-        static Object* FindChildOf( const Object* pObject, Name name, uint32_t instanceIndex = Invalid< uint32_t >() );
-        static Object* FindChildOf(
-            const Object* pObject, const Name* pRelativePathNames, const uint32_t* pInstanceIndices, size_t nameDepth,
+        static GameObject* FindChildOf( const GameObject* pObject, Name name, uint32_t instanceIndex = Invalid< uint32_t >() );
+        static GameObject* FindChildOf(
+            const GameObject* pObject, const Name* pRelativePathNames, const uint32_t* pInstanceIndices, size_t nameDepth,
             size_t packageDepth );
 
-        static bool RegisterObject( Object* pObject );
-        static void UnregisterObject( Object* pObject );
+        static bool RegisterObject( GameObject* pObject );
+        static void UnregisterObject( GameObject* pObject );
 
         static void Shutdown();
         //@}
@@ -328,40 +328,40 @@ namespace Lunar
         /// Name instance lookup map type.
         typedef ConcurrentHashMap< Name, InstanceIndexSet > NameInstanceIndexMap;
         /// Child object name instance lookup map type.
-        typedef ConcurrentHashMap< ObjectPath, NameInstanceIndexMap > ChildNameInstanceIndexMap;
+        typedef ConcurrentHashMap< GameObjectPath, NameInstanceIndexMap > ChildNameInstanceIndexMap;
 
-        /// Object name.
+        /// GameObject name.
         Name m_name;
         /// Instance index.
         uint32_t m_instanceIndex;
-        /// Object ID.
+        /// GameObject ID.
         uint32_t m_id;
-        /// Object flags.
+        /// GameObject flags.
         volatile uint32_t m_flags;
         /// Override object template (null if using the type's default object).
-        ObjectPtr m_spTemplate;
+        GameObjectPtr m_spTemplate;
 
-        /// Object owner.
-        ObjectPtr m_spOwner;
-        /// Object children.
-        DynArray< ObjectWPtr > m_children;
+        /// GameObject owner.
+        GameObjectPtr m_spOwner;
+        /// GameObject children.
+        DynArray< GameObjectWPtr > m_children;
 
         /// Full object path name.
-        ObjectPath m_path;
+        GameObjectPath m_path;
 
         /// Custom callback for notifying that this object should be destroyed when its reference count drops to zero
         /// (provided for custom object allocation schemes).
         CUSTOM_DESTROY_CALLBACK* m_pCustomDestroyCallback;
 
-        /// Static "Object" type instance.
+        /// Static "GameObject" type instance.
         static TypeWPtr sm_spStaticType;
-        /// Static "Object" template instance.
-        static ObjectPtr sm_spStaticTypeTemplate;
+        /// Static "GameObject" template instance.
+        static GameObjectPtr sm_spStaticTypeTemplate;
 
         /// Global object list.
-        static SparseArray< ObjectWPtr > sm_objects;
+        static SparseArray< GameObjectWPtr > sm_objects;
         /// Top-level object list.
-        static DynArray< ObjectWPtr > sm_topLevelObjects;
+        static DynArray< GameObjectWPtr > sm_topLevelObjects;
         /// Name instance lookup.
         static ChildNameInstanceIndexMap* sm_pNameInstanceIndexMap;
         /// Read-write lock for synchronizing access to the object lists.
@@ -380,22 +380,22 @@ namespace Lunar
 
         /// @name Reference Counting Support, Private
         //@{
-        static void StandardCustomDestroy( Object* pObject );
+        static void StandardCustomDestroy( GameObject* pObject );
         //@}
 
-        /// @name Static Object Management
+        /// @name Static GameObject Management
         //@{
         static ChildNameInstanceIndexMap& GetNameInstanceIndexMap();
         //@}
     };
 
-    /// @defgroup objectcast Type-checking Object Casting Functions
+    /// @defgroup objectcast Type-checking GameObject Casting Functions
     //@{
     template< typename TargetType, typename SourceType > TargetType* DynamicCast( SourceType* pObject );
     template< typename TargetType, typename SourceType > TargetType* StaticCast( SourceType* pObject );
     //@}
 }
 
-#include "Engine/Object.inl"
+#include "Engine/GameObject.inl"
 
 #endif  // LUNAR_ENGINE_OBJECT_H

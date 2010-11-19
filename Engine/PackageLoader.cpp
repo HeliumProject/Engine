@@ -15,11 +15,11 @@ namespace Lunar
     {
     }
 
-    /// @fn size_t PackageLoader::BeginLoadObject( ObjectPath path )
+    /// @fn size_t PackageLoader::BeginLoadObject( GameObjectPath path )
     /// Begin asynchronous preloading of an object's properties from the cache.
     ///
     /// Note: Do NOT call this multiple times for the same object (access to this function should actually be abstracted
-    /// by the ObjectLoader interface).
+    /// by the GameObjectLoader interface).
     ///
     /// @param[in] path  Path of the object to attempt to load.
     ///
@@ -27,7 +27,7 @@ namespace Lunar
     ///
     /// @see TryFinishLoadObject()
 
-    /// @fn bool TryFinishLoadObject( size_t requestId, ObjectPtr& rspObject, DynArray< ObjectLoader::LinkEntry >& rLinkTable )
+    /// @fn bool TryFinishLoadObject( size_t requestId, GameObjectPtr& rspObject, DynArray< GameObjectLoader::LinkEntry >& rLinkTable )
     /// Test for and finalize an asynchronous object preload request in a non-blocking fashion.
     ///
     /// @param[in]  requestId   ID of the preload request returned by BeginLoadObject() (NOT the object index).
@@ -41,16 +41,16 @@ namespace Lunar
     /// @fn size_t PackageLoader::GetObjectCount() const
     /// Get the number of objects in the associated package file.
     ///
-    /// @return  Object count.
+    /// @return  GameObject count.
     ///
     /// @see GetObjectPath(), GetObjectType(), GetObject()
 
-    /// @fn ObjectPath PackageLoader::GetObjectPath( size_t index ) const
+    /// @fn GameObjectPath PackageLoader::GetObjectPath( size_t index ) const
     /// Get the path name of the object with the given index.
     ///
-    /// @param[in] index  Object index.
+    /// @param[in] index  GameObject index.
     ///
-    /// @return  Object path.
+    /// @return  GameObject path.
     ///
     /// @see GetObjectType(), GetObject(), GetObjectCount()
 

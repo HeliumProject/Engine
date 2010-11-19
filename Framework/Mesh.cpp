@@ -57,7 +57,7 @@ namespace Lunar
 #endif
     }
 
-    /// @copydoc Object::PreDestroy()
+    /// @copydoc GameObject::PreDestroy()
     void Mesh::PreDestroy()
     {
         HELIUM_ASSERT( IsInvalid( m_vertexBufferLoadId ) );
@@ -69,7 +69,7 @@ namespace Lunar
         Super::PreDestroy();
     }
 
-    /// @copydoc Object::Serialize()
+    /// @copydoc GameObject::Serialize()
     void Mesh::Serialize( Serializer& s )
     {
         L_SERIALIZE_SUPER( s );
@@ -77,13 +77,13 @@ namespace Lunar
         s << L_TAGGED_DYNARRAY( m_materials );
     }
 
-    /// @copydoc Object::NeedsPrecacheResourceData()
+    /// @copydoc GameObject::NeedsPrecacheResourceData()
     bool Mesh::NeedsPrecacheResourceData() const
     {
         return true;
     }
 
-    /// @copydoc Object::BeginPrecacheResourceData()
+    /// @copydoc GameObject::BeginPrecacheResourceData()
     bool Mesh::BeginPrecacheResourceData()
     {
         HELIUM_ASSERT( IsInvalid( m_vertexBufferLoadId ) );
@@ -211,7 +211,7 @@ namespace Lunar
         return true;
     }
 
-    /// @copydoc Object::TryFinishPrecacheResourceData()
+    /// @copydoc GameObject::TryFinishPrecacheResourceData()
     bool Mesh::TryFinishPrecacheResourceData()
     {
         if( IsValid( m_vertexBufferLoadId ) )

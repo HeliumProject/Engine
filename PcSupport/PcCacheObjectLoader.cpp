@@ -40,14 +40,14 @@ namespace Lunar
         return true;
     }
 
-    /// @copydoc ObjectLoader::GetPackageLoader()
-    PackageLoader* PcCacheObjectLoader::GetPackageLoader( ObjectPath path )
+    /// @copydoc GameObjectLoader::GetPackageLoader()
+    PackageLoader* PcCacheObjectLoader::GetPackageLoader( GameObjectPath path )
     {
         // Route load requests for config objects to the XML package loader.
         Config& rConfig = Config::GetStaticInstance();
-        ObjectPath configPath = rConfig.GetConfigContainerPackagePath();
+        GameObjectPath configPath = rConfig.GetConfigContainerPackagePath();
 
-        for( ObjectPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+        for( GameObjectPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
         {
             if( testPath == configPath )
             {
@@ -63,7 +63,7 @@ namespace Lunar
         return pLoader;
     }
 
-    /// @copydoc ObjectLoader::TickPackageLoaders()
+    /// @copydoc GameObjectLoader::TickPackageLoaders()
     void PcCacheObjectLoader::TickPackageLoaders()
     {
         m_packageLoaderMap.TickPackageLoaders();

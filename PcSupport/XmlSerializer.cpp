@@ -21,7 +21,7 @@ namespace Lunar
     // XML file footer (UTF-8 string).
     static const char XML_FILE_FOOTER[] = "</package>" L_XML_NEWLINE;
 
-    // Object tag strings.
+    // GameObject tag strings.
     static const char OBJECT_TAG_START_A[] = "    <object name=\"";
     static const char OBJECT_TAG_START_B[] = "\" type=\"";
     static const char OBJECT_TAG_START_C[] = "\" template=\"";
@@ -113,12 +113,12 @@ namespace Lunar
     }
 
     /// @copydoc XmlSerializerBase::PreSerialize()
-    void XmlSerializer::PreSerialize( Object* pObject )
+    void XmlSerializer::PreSerialize( GameObject* pObject )
     {
         HELIUM_ASSERT( pObject );
 
         // Serialize the object's template.
-        Object* pTemplate = pObject->GetTemplate();
+        GameObject* pTemplate = pObject->GetTemplate();
         HELIUM_ASSERT( pTemplate );
 
         m_templateSerializer.Serialize( pTemplate );
@@ -153,7 +153,7 @@ namespace Lunar
     }
 
     /// @copydoc XmlSerializerBase::PostSerialize()
-    void XmlSerializer::PostSerialize( Object* /*pObject*/ )
+    void XmlSerializer::PostSerialize( GameObject* /*pObject*/ )
     {
         // Write the closing tag.
         m_pStream->Write( OBJECT_TAG_END, 1, sizeof( OBJECT_TAG_END ) - 1 );

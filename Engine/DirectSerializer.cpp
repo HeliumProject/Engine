@@ -20,7 +20,7 @@ namespace Lunar
     }
 
     /// @copydoc Serializer::Serialize()
-    bool DirectSerializer::Serialize( Object* pObject )
+    bool DirectSerializer::Serialize( GameObject* pObject )
     {
         HELIUM_ASSERT( pObject );
 
@@ -158,9 +158,9 @@ namespace Lunar
     }
 
     /// @copydoc Serializer::SerializeObjectReference()
-    void DirectSerializer::SerializeObjectReference( Type* /*pType*/, ObjectPtr& rspObject )
+    void DirectSerializer::SerializeObjectReference( Type* /*pType*/, GameObjectPtr& rspObject )
     {
-        Object* pObject = rspObject;
+        GameObject* pObject = rspObject;
         WriteValue( pObject );
     }
 

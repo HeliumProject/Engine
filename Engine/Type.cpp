@@ -34,7 +34,7 @@ namespace Lunar
     ///
     /// @return  True if initialization was successful, false if initialization failed or if this type has already been
     ///          initialized.
-    bool Type::Initialize( Type* pParent, Object* pTemplate, uint32_t flags )
+    bool Type::Initialize( Type* pParent, GameObject* pTemplate, uint32_t flags )
     {
         HELIUM_ASSERT( pTemplate );
 
@@ -72,7 +72,7 @@ namespace Lunar
         }
 
         // Register the template object with the object system.
-        if( !Object::RegisterObject( pTemplate ) )
+        if( !GameObject::RegisterObject( pTemplate ) )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
@@ -109,7 +109,7 @@ namespace Lunar
         return false;
     }
 
-    /// @copydoc Object::Serialize()
+    /// @copydoc GameObject::Serialize()
     void Type::Serialize( Serializer& s )
     {
         L_SERIALIZE_SUPER( s );
@@ -208,7 +208,7 @@ namespace Lunar
     /// @param[in] typePath  Full path of the type to look up.
     ///
     /// @return  Pointer to the specified type if found, null pointer if not found.
-    Type* Type::Find( ObjectPath typePath )
+    Type* Type::Find( GameObjectPath typePath )
     {
         Type* pType = Find( typePath.GetName() );
 
@@ -235,16 +235,16 @@ namespace Lunar
     /// Perform shutdown of the Type registration system.
     ///
     /// This releases all final references to objects and releases all allocated memory.  This should be called during
-    /// the shutdown process prior to calling Object::Shutdown().
+    /// the shutdown process prior to calling GameObject::Shutdown().
     ///
-    /// @see Object::Shutdown()
+    /// @see GameObject::Shutdown()
     void Type::Shutdown()
     {
         HELIUM_TRACE( TRACE_INFO, TXT( "Shutting down Type registration.\n" ) );
 
-        // Make sure the Object type is unregistered, as it does not get included in the unregistration of the Engine
+        // Make sure the GameObject type is unregistered, as it does not get included in the unregistration of the Engine
         // type package.
-        Object::ReleaseStaticType();
+        GameObject::ReleaseStaticType();
 
         delete sm_pLookupMap;
         sm_pLookupMap = NULL;
@@ -263,9 +263,9 @@ namespace Lunar
         Type* pType = sm_spStaticType;
         if( !pType )
         {
-            // Type type is registered manually during Object type initialization, so retrieve the type info from the
+            // Type type is registered manually during GameObject type initialization, so retrieve the type info from the
             // existing registered data.
-            HELIUM_VERIFY( Object::InitStaticType() );
+            HELIUM_VERIFY( GameObject::InitStaticType() );
 
             pType = Type::Find( Name( TXT( "Type" ) ) );
             HELIUM_ASSERT( pType );

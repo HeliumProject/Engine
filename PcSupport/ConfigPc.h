@@ -14,7 +14,7 @@
 namespace Lunar
 {
     class XmlSerializer;
-    class Object;
+    class GameObject;
 
     /// PC configuration support.
     class LUNAR_PC_SUPPORT_API ConfigPc
@@ -28,7 +28,7 @@ namespace Lunar
     private:
         /// @name Private Utility Functions
         //@{
-        static void RecursiveSerializeObject( XmlSerializer& rSerializer, Object* pObject );
+        static void RecursiveSerializeObject( XmlSerializer& rSerializer, GameObject* pObject );
         //@}
     };
 }

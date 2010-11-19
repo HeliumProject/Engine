@@ -30,7 +30,7 @@ namespace Lunar
     }
 
     /// @copydoc Serializer::Serialize()
-    bool DirectDeserializer::Serialize( Object* pObject )
+    bool DirectDeserializer::Serialize( GameObject* pObject )
     {
         HELIUM_ASSERT( pObject );
 
@@ -223,7 +223,7 @@ namespace Lunar
     }
 
     /// @copydoc Serializer::SerializeObjectReference()
-    void DirectDeserializer::SerializeObjectReference( Type* pType, ObjectPtr& rspObject )
+    void DirectDeserializer::SerializeObjectReference( Type* pType, GameObjectPtr& rspObject )
     {
         HELIUM_UNREF( pType );
 
@@ -232,7 +232,7 @@ namespace Lunar
             return;
         }
 
-        Object* pObject = NULL;
+        GameObject* pObject = NULL;
         ReadValue( pObject );
         if( m_bEndOfStream )
         {

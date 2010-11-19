@@ -41,7 +41,7 @@ namespace Lunar
         /// @name Private Utility Functions
         //@{
         void ParseLine(
-            ObjectPath shaderPath, Shader::PersistentResourceData& rResourceData, const char* pLineStart,
+            GameObjectPath shaderPath, Shader::PersistentResourceData& rResourceData, const char* pLineStart,
             const char* pLineEnd );
         template< typename OptionType > bool ParseLineDuplicateOptionCheck(
             Name optionName, const DynArray< OptionType >& rOptions );

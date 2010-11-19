@@ -28,7 +28,7 @@ namespace Helium
             virtual void GatherSearchableProperties( Helium::SearchableProperties* properties ) const HELIUM_OVERRIDE;
         }; 
 
-        typedef Helium::SmartPtr< Entity > EntityPtr;
+        typedef Helium::StrongPtr< Entity > EntityPtr;
         typedef std::vector< EntityPtr > V_Entity;
 
     }

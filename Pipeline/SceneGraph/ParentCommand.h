@@ -3,13 +3,14 @@
 #include "Foundation/Undo/BatchCommand.h"
 
 #include "Pipeline/API.h"
+#include "Foundation/Memory/ReferenceCounting.h"
 
 namespace Helium
 {
     namespace SceneGraph
     {
         class HierarchyNode;
-        typedef Helium::SmartPtr< SceneGraph::HierarchyNode > HierarchyNodePtr;
+        typedef Helium::StrongPtr< SceneGraph::HierarchyNode > HierarchyNodePtr;
 
         class PIPELINE_API ParentCommand : public Undo::BatchCommand
         {

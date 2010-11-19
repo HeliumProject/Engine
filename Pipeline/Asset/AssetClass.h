@@ -26,7 +26,7 @@ namespace Helium
         }
 
         class AssetClass;
-        typedef Helium::SmartPtr< AssetClass > AssetClassPtr;
+        typedef Helium::StrongPtr< AssetClass > AssetClassPtr;
         typedef std::vector< AssetClassPtr > V_AssetClass;
 
         typedef std::set<AssetClassPtr> S_AssetClass;
@@ -61,7 +61,7 @@ namespace Helium
             static AssetClassPtr LoadAssetClass( const Path& path );
 
             template <class T>
-            static Helium::SmartPtr<T> LoadAssetClass( const Path& path )
+            static Helium::StrongPtr<T> LoadAssetClass( const Path& path )
             {
                 return Reflect::TryCast<T>( LoadAssetClass( path ) );
             }

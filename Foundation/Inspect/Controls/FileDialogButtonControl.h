@@ -79,6 +79,6 @@ namespace Helium
             virtual bool  Process( const tstring& key, const tstring& value ) HELIUM_OVERRIDE;
         };
 
-        typedef Helium::SmartPtr< FileDialogButton > FileDialogButtonPtr;
+        typedef Helium::StrongPtr< FileDialogButton > FileDialogButtonPtr;
     }
 }

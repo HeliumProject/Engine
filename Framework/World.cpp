@@ -265,7 +265,7 @@ namespace Lunar
         }
 
         WorldPtr spEntityWorld( spEntityLayer->GetWorld() );
-        if( spEntityWorld != this )
+        if( spEntityWorld.Get() != this )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
@@ -343,7 +343,7 @@ namespace Lunar
         HELIUM_ASSERT( pLayer );
 
         // Make sure the layer is part of this world.
-        if( pLayer->GetWorld() != this )
+        if( pLayer->GetWorld().Get() != this )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,

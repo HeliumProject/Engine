@@ -57,7 +57,7 @@ namespace Helium
             Color3                m_Color;
         };
 
-        typedef Helium::SmartPtr< SceneGraph::Layer > LayerPtr;
+        typedef Helium::StrongPtr< SceneGraph::Layer > LayerPtr;
         typedef std::vector< SceneGraph::Layer* > V_LayerDumbPtr;
         typedef std::map< tstring, SceneGraph::Layer* > M_LayerDumbPtr;
     }

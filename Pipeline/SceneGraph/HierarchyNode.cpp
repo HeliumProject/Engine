@@ -533,7 +533,7 @@ SceneGraph::Transform* HierarchyNode::GetTransform()
 {
     HierarchyNodePtr node = this;
 
-    while (node != NULL)
+    while (node.ReferencesObject())
     {
         SceneGraph::Transform* transform = Reflect::ObjectCast< SceneGraph::Transform >( node );
 

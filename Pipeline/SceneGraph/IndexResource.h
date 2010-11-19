@@ -29,7 +29,7 @@ namespace Helium
             virtual void Release() HELIUM_OVERRIDE; 
         };
 
-        typedef Helium::SmartPtr<IndexResource> IndexResourcePtr;
+        typedef Helium::StrongPtr<IndexResource> IndexResourcePtr;
 
     }
 }

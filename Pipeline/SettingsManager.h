@@ -67,5 +67,5 @@ namespace Helium
         }
     };
 
-    typedef Helium::SmartPtr< SettingsManager > SettingsManagerPtr;
+    typedef Helium::StrongPtr< SettingsManager > SettingsManagerPtr;
 }

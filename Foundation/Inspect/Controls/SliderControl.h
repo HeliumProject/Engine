@@ -25,6 +25,6 @@ namespace Helium
             Attribute< bool >   a_AutoAdjustMinMax;
         };
 
-        typedef Helium::SmartPtr<Slider> SliderPtr;
+        typedef Helium::StrongPtr<Slider> SliderPtr;
     }
 }

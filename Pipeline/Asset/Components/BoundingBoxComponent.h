@@ -72,6 +72,6 @@ namespace Helium
             }
         };
 
-        typedef Helium::SmartPtr< BoundingBoxComponent > BoundingBoxComponentPtr;
+        typedef Helium::StrongPtr< BoundingBoxComponent > BoundingBoxComponentPtr;
     }
 }

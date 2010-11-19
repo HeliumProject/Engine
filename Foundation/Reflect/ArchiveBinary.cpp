@@ -661,7 +661,7 @@ void ArchiveBinary::SerializeField(const ElementPtr& element, const Field* field
     ElementPtr e;
     m_Cache.Create( field->m_SerializerID, e );
 
-    HELIUM_ASSERT( e != NULL );
+    HELIUM_ASSERT( e.ReferencesObject() );
 
     // downcast serializer
     SerializerPtr serializer = ObjectCast<Serializer>(e);

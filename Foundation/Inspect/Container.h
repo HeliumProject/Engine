@@ -99,7 +99,7 @@ namespace Helium
             mutable tstring m_Path;
         };
 
-        typedef Helium::SmartPtr<Container> ContainerPtr;
+        typedef Helium::StrongPtr<Container> ContainerPtr;
         typedef std::vector<ContainerPtr> V_Container;
     }
 }

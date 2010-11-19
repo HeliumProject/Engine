@@ -52,7 +52,7 @@ void SimpleElementMapSerializer<KeyT>::GetItems(V_ValueType& items)
     DataType::iterator end = m_Data->end();
     for ( size_t index=0; itr != end; ++itr, ++index )
     {
-        items[index].first = Serializer::Bind( itr->first, m_Instance, m_Field );
+        items[index].first = static_cast< const ConstSerializerPtr& >( Serializer::Bind( itr->first, m_Instance, m_Field ) );
         items[index].second = &itr->second;
     }
 }
@@ -65,7 +65,7 @@ void SimpleElementMapSerializer<KeyT>::GetItems(V_ConstValueType& items) const
     DataType::const_iterator end = m_Data->end();
     for ( size_t index=0; itr != end; ++itr, ++index )
     {
-        items[index].first = Serializer::Bind( itr->first, m_Instance, m_Field );
+        items[index].first = static_cast< const ConstSerializerPtr& >( Serializer::Bind( itr->first, m_Instance, m_Field ) );
         items[index].second = &itr->second;
     }
 }
@@ -106,7 +106,8 @@ void SimpleElementMapSerializer<KeyT>::SetItem(const Serializer* key, const Elem
     KeyT keyValue;
     Serializer::GetValue(key, keyValue);
 
-    (m_Data.Ref())[keyValue] = value;
+#pragma TODO( "Fix const correctness." )
+    (m_Data.Ref())[keyValue] = const_cast< Element* >( value );
 }
 
 template < class KeyT >

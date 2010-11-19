@@ -108,7 +108,7 @@ void SimpleSetSerializer<DataT, DataSer>::GetItems(std::vector< ConstSerializerP
     DataType::const_iterator end = m_Data->end();
     for ( size_t index=0; itr != end; ++itr, ++index )
     {
-        items[index] = Serializer::Bind( *itr, m_Instance, m_Field );
+        items[index] = static_cast< const ConstSerializerPtr& >( Serializer::Bind( *itr, m_Instance, m_Field ) );
     }
 }
 

@@ -110,7 +110,7 @@ const ComponentPtr& EntityInstance::GetComponent(int32_t typeID) const
             {
                 const ComponentPtr &classAttr = entityClass->GetComponent( typeID );
 
-                if ( classAttr == NULL )
+                if ( !classAttr.ReferencesObject() )
                 {
                     // Fan-fucking-tastic
                     const_cast<EntityInstance*>(this)->RemoveComponent( typeID );

@@ -22,6 +22,6 @@ namespace Helium
             // with another object's (and return true if successful).
             virtual bool Merge( const ReflectClipboardData* source ) = 0;
         };
-        typedef Helium::SmartPtr< ReflectClipboardData > ReflectClipboardDataPtr;
+        typedef Helium::StrongPtr< ReflectClipboardData > ReflectClipboardDataPtr;
     }
 }

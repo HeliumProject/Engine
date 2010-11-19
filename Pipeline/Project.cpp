@@ -86,5 +86,6 @@ void Project::OnChildDocumentPathChanged( const DocumentPathChangedArgs& args )
 bool Project::Serialize() const 
 {
     HELIUM_ASSERT( !a_Path.Get().empty() );
-    return Reflect::ToArchive( a_Path.Get(), this );
+#pragma TODO( "Fix const correctness." )
+    return Reflect::ToArchive( a_Path.Get(), const_cast< Project* >( this ) );
 }

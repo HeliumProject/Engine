@@ -4,7 +4,7 @@
 
 #include "Foundation/API.h"
 #include "Foundation/Profile.h"
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/Memory/ReferenceCounting.h"
 
 // tracks profile data in reflect only
 //#define REFLECT_PROFILE
@@ -34,16 +34,16 @@ namespace Helium
         class Visitor;
 
         class Object;
-        typedef Helium::SmartPtr<Object> ObjectPtr;
-        typedef Helium::SmartPtr<const Object> ConstObjectPtr;
+        typedef Helium::StrongPtr<Object> ObjectPtr;
+        typedef Helium::StrongPtr<const Object> ConstObjectPtr;
 
         class Element;
-        typedef Helium::SmartPtr<Element> ElementPtr;
-        typedef Helium::SmartPtr<const Element> ConstElementPtr;
+        typedef Helium::StrongPtr<Element> ElementPtr;
+        typedef Helium::StrongPtr<const Element> ConstElementPtr;
 
         class Serializer;
-        typedef Helium::SmartPtr<Serializer> SerializerPtr;
-        typedef Helium::SmartPtr<const Serializer> ConstSerializerPtr;
+        typedef Helium::StrongPtr<Serializer> SerializerPtr;
+        typedef Helium::StrongPtr<const Serializer> ConstSerializerPtr;
 
         // function type for creating object instances
         typedef Object* (*CreateObjectFunc)();

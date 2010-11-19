@@ -80,7 +80,7 @@ void InstanceType::AddSet(SceneGraph::InstanceSet* set)
 
 void InstanceType::RemoveSet(SceneGraph::InstanceSet* set)
 {
-    Helium::SmartPtr< SceneGraph::InstanceSet > keepAlive = set;
+    Helium::StrongPtr< SceneGraph::InstanceSet > keepAlive = set;
 
     if ( m_Sets.erase(set->GetName()) > 0 )
     {

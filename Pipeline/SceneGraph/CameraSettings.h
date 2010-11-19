@@ -83,7 +83,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::SmartPtr<CameraSettings> CameraSettingsPtr; 
+        typedef Helium::StrongPtr<CameraSettings> CameraSettingsPtr; 
         typedef std::vector< CameraSettingsPtr> V_CameraSettings; 
     }
 }

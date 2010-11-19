@@ -22,6 +22,6 @@ namespace Helium
         public:
             ReflectClipboardDataPtr m_Data;
         };
-        typedef Helium::SmartPtr< ClipboardDataWrapper > ClipboardDataWrapperPtr;
+        typedef Helium::StrongPtr< ClipboardDataWrapper > ClipboardDataWrapperPtr;
     }
 }

@@ -53,7 +53,7 @@ namespace Lunar
                 Entity* pEntity = rspEntity;
                 if( pEntity )
                 {
-                    HELIUM_ASSERT( pEntity->GetLayer() == NULL );
+                    HELIUM_ASSERT( pEntity->GetLayer().Get() == NULL );
                     pEntity->SetLayerInfo( this, entityIndex );
                 }
             }
@@ -84,7 +84,7 @@ namespace Lunar
     /// @see GetPackage()
     void Layer::BindPackage( Package* pPackage )
     {
-        if( m_spPackage == pPackage )
+        if( m_spPackage.Get() == pPackage )
         {
             return;
         }
@@ -197,7 +197,7 @@ namespace Lunar
         HELIUM_ASSERT( pEntity );
 
         // Make sure the entity is part of this layer.
-        if( pEntity->GetLayer() != this )
+        if( pEntity->GetLayer().Get() != this )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
@@ -293,7 +293,7 @@ namespace Lunar
             EntityPtr spEntity( DynamicCast< Entity >( pPackage->GetChild( childIndex ) ) );
             if( spEntity )
             {
-                HELIUM_ASSERT( spEntity->GetLayer() == NULL );
+                HELIUM_ASSERT( spEntity->GetLayer().Get() == NULL );
 
                 size_t entityIndex = m_entities.Push( spEntity );
                 HELIUM_ASSERT( IsValid( entityIndex ) );

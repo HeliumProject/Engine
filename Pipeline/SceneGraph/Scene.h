@@ -837,7 +837,7 @@ namespace Helium
             ExecuteSignature::Event e_Executed;
         };
 
-        typedef Helium::SmartPtr< SceneGraph::Scene > ScenePtr;
+        typedef Helium::StrongPtr< SceneGraph::Scene > ScenePtr;
         typedef std::set< ScenePtr > S_SceneSmartPtr;
         typedef std::map< tstring, ScenePtr > M_SceneSmartPtr;
         typedef std::map< Scene*, int32_t > M_AllocScene;

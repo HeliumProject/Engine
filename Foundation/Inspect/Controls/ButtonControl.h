@@ -58,6 +58,6 @@ namespace Helium
 
         };
 
-        typedef Helium::SmartPtr< Button > ButtonPtr;
+        typedef Helium::StrongPtr< Button > ButtonPtr;
     }
 }

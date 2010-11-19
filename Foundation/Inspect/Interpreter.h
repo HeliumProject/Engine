@@ -86,9 +86,9 @@ namespace Helium
             //
 
             template <class T>
-            Helium::SmartPtr<T> CreateControl()
+            Helium::StrongPtr<T> CreateControl()
             {
-                Helium::SmartPtr<T> control = new T ();
+                Helium::StrongPtr<T> control = new T ();
                 ConnectControlEvents( this, control );
                 return control;
             }
@@ -100,9 +100,9 @@ namespace Helium
             }
 
             template <class T>
-            Helium::SmartPtr<T> CreateInterpreter(Container* container = NULL)
+            Helium::StrongPtr<T> CreateInterpreter(Container* container = NULL)
             {
-                Helium::SmartPtr<T> interpreter = new T (container ? container : m_Container);
+                Helium::StrongPtr<T> interpreter = new T (container ? container : m_Container);
                 ConnectInterpreterEvents( this, interpreter );
                 return interpreter;
             }
@@ -272,6 +272,6 @@ namespace Helium
             mutable PickLinkSignature::Event m_PickLink;
         };
 
-        typedef Helium::SmartPtr<Interpreter> InterpreterPtr;
+        typedef Helium::StrongPtr<Interpreter> InterpreterPtr;
     }
 }

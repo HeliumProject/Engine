@@ -26,7 +26,7 @@ namespace Helium
             static void EnumerateClass( Reflect::Compositor<Influence>& comp );
         };
 
-        typedef Helium::SmartPtr<Influence> InfluencePtr;
+        typedef Helium::StrongPtr<Influence> InfluencePtr;
         typedef std::vector<InfluencePtr> V_Influence;
 
         class Skin : public SceneNode

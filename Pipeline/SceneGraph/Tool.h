@@ -167,6 +167,6 @@ namespace Helium
             }
         };
 
-        typedef Helium::SmartPtr< SceneGraph::Tool > ToolPtr;
+        typedef Helium::StrongPtr< SceneGraph::Tool > ToolPtr;
     }
 }

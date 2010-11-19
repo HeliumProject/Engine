@@ -229,8 +229,8 @@ void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetItems(V_ValueType& 
     DataType::const_iterator end = m_Data->end();
     for ( size_t index=0; itr != end; ++itr, ++index )
     {
-        items[index].first = Serializer::Bind( itr->first, m_Instance, m_Field );
-        items[index].second = Serializer::Bind( itr->second, m_Instance, m_Field );
+        items[index].first = static_cast< const ConstSerializerPtr& >( Serializer::Bind( itr->first, m_Instance, m_Field ) );
+        items[index].second = static_cast< const ConstSerializerPtr& >( Serializer::Bind( itr->second, m_Instance, m_Field ) );
     }
 }
 
@@ -242,8 +242,8 @@ void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetItems(V_ConstValueT
     DataType::const_iterator end = m_Data->end();
     for ( size_t index=0; itr != end; ++itr, ++index )
     {
-        items[index].first = Serializer::Bind( itr->first, m_Instance, m_Field );
-        items[index].second = Serializer::Bind( itr->second, m_Instance, m_Field );
+        items[index].first = static_cast< const ConstSerializerPtr& >( Serializer::Bind( itr->first, m_Instance, m_Field ) );
+        items[index].second = static_cast< const ConstSerializerPtr& >( Serializer::Bind( itr->second, m_Instance, m_Field ) );
     }
 }
 

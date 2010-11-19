@@ -45,7 +45,7 @@ namespace Helium
             Vector3 m_Position;
         };
 
-        typedef SmartPtr< CurveControlPoint > CurveControlPointPtr;
+        typedef StrongPtr< CurveControlPoint > CurveControlPointPtr;
 
         class CurveControlPointTranslateManipulatorAdapter : public TranslateManipulatorAdapter
         {
@@ -84,7 +84,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::SmartPtr<CurveControlPoint> PointPtr;
+        typedef Helium::StrongPtr<CurveControlPoint> PointPtr;
         typedef std::vector<PointPtr> V_Point;
     }
 }

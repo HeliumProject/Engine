@@ -70,5 +70,5 @@ namespace Helium
         }
     };
 
-    typedef Helium::SmartPtr<Project> ProjectPtr;
+    typedef Helium::StrongPtr<Project> ProjectPtr;
 }

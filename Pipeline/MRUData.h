@@ -26,5 +26,5 @@ namespace Helium
         }
     };
 
-    typedef Helium::SmartPtr< MRUData > MRUDataPtr;
+    typedef Helium::StrongPtr< MRUData > MRUDataPtr;
 }

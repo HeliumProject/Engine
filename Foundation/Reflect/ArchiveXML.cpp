@@ -297,7 +297,7 @@ void ArchiveXML::SerializeField(const ElementPtr& element, const Field* field)
     ElementPtr e;
     m_Cache.Create( field->m_SerializerID, e );
 
-    HELIUM_ASSERT( e != NULL );
+    HELIUM_ASSERT( e.ReferencesObject() );
 
     // downcast serializer
     SerializerPtr serializer = ObjectCast<Serializer>(e);
@@ -537,7 +537,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
                     DangerousCast<Serializer>(element)->ConnectField(parentElement.Ptr(), newState->m_Field);
                 }
 
-                if (element != NULL)
+                if (element.ReferencesObject())
                 {
                     // flag this as a field
                     newState->SetFlag( ParsingState::kField, true );
@@ -554,7 +554,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     //  Try and get a creator for a new element to store the data
     //
 
-    if (newState->m_Element == NULL)
+    if (!newState->m_Element.ReferencesObject())
     {
         //
         // Attempt creation of element via short name
@@ -562,7 +562,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
 
         m_Cache.Create(elementType, newState->m_Element);
 
-        if (newState->m_Element == NULL)
+        if (!newState->m_Element.ReferencesObject())
         {
             Log::Debug( TXT( "Unable to create element with short name: %s\n" ), elementType);
         }
@@ -708,7 +708,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
 
         parentState->m_Components.push_back(topState->m_Element);
     }
-    else if ( topState->m_Element != NULL )
+    else if ( topState->m_Element.ReferencesObject() )
     {
         // we've reached the top of the processed stack, send off to client for processing
         m_Target->push_back( topState->m_Element );

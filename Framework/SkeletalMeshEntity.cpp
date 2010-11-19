@@ -73,7 +73,7 @@ namespace Lunar
     {
         VerifySafety();
 
-        if( m_spAnimation != pAnimation )
+        if( m_spAnimation.Get() != pAnimation )
         {
             DeactivateAssignedAnimation();
 

@@ -68,7 +68,7 @@ namespace Helium
             bool        m_ShowPointer;
         };
 
-        typedef Helium::SmartPtr<Volume> VolumePtr;
+        typedef Helium::StrongPtr<Volume> VolumePtr;
         typedef std::vector< Volume* > V_VolumeDumbPtr;
     }
 }

@@ -39,6 +39,6 @@ namespace Helium
             Attribute< bool >           a_Highlight;
         };
 
-        typedef Helium::SmartPtr<Value> ValuePtr;
+        typedef Helium::StrongPtr<Value> ValuePtr;
     }
 }

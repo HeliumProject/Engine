@@ -24,7 +24,7 @@ namespace Helium
 
         // fwd
         class Graph;
-        typedef Helium::SmartPtr< Graph > SceneGraphPtr;
+        typedef Helium::StrongPtr< Graph > SceneGraphPtr;
 
         //
         //  

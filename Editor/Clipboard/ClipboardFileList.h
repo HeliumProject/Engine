@@ -30,6 +30,6 @@ namespace Helium
             bool                m_IsDirty;
         };
 
-        typedef Helium::SmartPtr< ClipboardFileList > ClipboardFileListPtr;
+        typedef Helium::StrongPtr< ClipboardFileList > ClipboardFileListPtr;
     }
 }

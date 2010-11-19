@@ -13,7 +13,7 @@ namespace Helium
         // Forwards
         class Button;
         class List;
-        typedef Helium::SmartPtr<Button> ButtonPtr;
+        typedef Helium::StrongPtr<Button> ButtonPtr;
 
         class FOUNDATION_API ReflectArrayInterpreter : public ReflectFieldInterpreter
         {

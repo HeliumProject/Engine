@@ -226,6 +226,6 @@ namespace Helium
             IndexResourcePtr    m_Indices;
             VertexResourcePtr   m_Vertices;
         };
-        typedef Helium::SmartPtr< Mesh > MeshPtr;
+        typedef Helium::StrongPtr< Mesh > MeshPtr;
     }
 }

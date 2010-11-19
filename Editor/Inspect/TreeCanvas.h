@@ -39,6 +39,6 @@ namespace Helium
             std::set< tstring > m_Collapsed;
         };
 
-        typedef Helium::SmartPtr< TreeCanvas > TreeCanvasPtr;
+        typedef Helium::StrongPtr< TreeCanvas > TreeCanvasPtr;
     }
 }

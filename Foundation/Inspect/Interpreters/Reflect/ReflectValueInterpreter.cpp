@@ -109,7 +109,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
         }
     }
 
-    if (label == NULL)
+    if (!label.ReferencesObject())
     {
         label = CreateControl<Label>();
 
@@ -155,7 +155,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
     // Set default
     //
 
-    if (field->m_Default != NULL)
+    if (field->m_Default.ReferencesObject())
     {
         tstringstream outStream;
 

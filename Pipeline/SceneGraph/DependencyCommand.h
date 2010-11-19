@@ -3,6 +3,7 @@
 #include "Foundation/Undo/Command.h"
 
 #include "Pipeline/API.h"
+#include "Foundation/Memory/ReferenceCounting.h"
 
 namespace Helium
 {
@@ -10,7 +11,7 @@ namespace Helium
     {
         // Forwards and typedefs
         class SceneNode;
-        typedef Helium::SmartPtr< SceneGraph::SceneNode > SceneNodePtr;
+        typedef Helium::StrongPtr< SceneGraph::SceneNode > SceneNodePtr;
 
         /////////////////////////////////////////////////////////////////////////////
         // Command for making or breaking connections between ancestor and descendant

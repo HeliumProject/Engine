@@ -58,7 +58,7 @@ namespace Helium
 
             // casting helper will get you what you need, baby ;)
             template <class T>
-            Helium::SmartPtr<T> GetComponent() const
+            Helium::StrongPtr<T> GetComponent() const
             {
                 return Reflect::ObjectCast<T>( GetComponent( Reflect::GetType<T>() ) );
             }
@@ -192,6 +192,6 @@ namespace Helium
             M_Component m_Components;
         };
 
-        typedef Helium::SmartPtr<ComponentCollection> ComponentCollectionPtr;
+        typedef Helium::StrongPtr<ComponentCollection> ComponentCollectionPtr;
     }
 }

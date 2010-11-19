@@ -10,7 +10,7 @@
 #define LUNAR_FRAMEWORK_WORLD_H
 
 #include "Framework/Framework.h"
-#include "Engine/Object.h"
+#include "Engine/GameObject.h"
 
 #include "Platform/Math/Simd/Quat.h"
 #include "Platform/Math/Simd/Vector3.h"
@@ -28,9 +28,9 @@ namespace Lunar
     /// A world contains a discrete group of entities that can be simulated within an application environment.  Multiple
     /// world instances can exist at the same time, allowing the use of specific worlds for special-case scenarios, such
     /// as rendering scenes outside the game world to a texture or editor preview windows.
-    class LUNAR_FRAMEWORK_API World : public Object
+    class LUNAR_FRAMEWORK_API World : public GameObject
     {
-        L_DECLARE_OBJECT( World, Object );
+        L_DECLARE_OBJECT( World, GameObject );
 
     public:
         /// @name Construction/Destruction
@@ -50,7 +50,7 @@ namespace Lunar
         virtual void UpdateGraphicsScene();
         //@}
 
-        /// @name Object Interface
+        /// @name GameObject Interface
         //@{
         virtual void PreDestroy();
         //@}

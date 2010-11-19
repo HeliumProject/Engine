@@ -56,7 +56,7 @@ namespace Lunar
 #endif
     }
 
-    /// @copydoc Object::Serialize()
+    /// @copydoc GameObject::Serialize()
     void SkeletalMeshEntity::Serialize( Serializer& s )
     {
         L_SERIALIZE_SUPER( s );

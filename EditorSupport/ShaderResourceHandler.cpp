@@ -9,7 +9,8 @@
 #include "EditorSupport/ShaderResourceHandler.h"
 
 #include "Foundation/Stream/BufferedStream.h"
-#include "Core/File.h"
+#include "Foundation/File/File.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/Stream/FileStream.h"
 #include "Foundation/Stream/Stream.h"
 #include "Foundation/StringConverter.h"
@@ -58,7 +59,7 @@ namespace Lunar
         HELIUM_ASSERT( pResource );
 
         const Shader* pShader = StaticCast< const Shader >( pResource );
-        ObjectPath shaderPath = pShader->GetPath();
+        GameObjectPath shaderPath = pShader->GetPath();
 
         HELIUM_TRACE( TRACE_INFO, TXT( "ShaderResourceHandler: Caching \"%s\".\n" ), *shaderPath.ToString() );
 
@@ -179,13 +180,13 @@ namespace Lunar
 
     /// Parse the given shader source line for toggle and select options.
     ///
-    /// @param[in] shaderPath     Object path of the shader resource being preprocessed (used for logging purposes
+    /// @param[in] shaderPath     GameObject path of the shader resource being preprocessed (used for logging purposes
     ///                           only).
     /// @param[in] rResourceData  Persistent shader resource data to update.
     /// @param[in] pLineStart     Pointer to the first character in the line.
     /// @param[in] pLineEnd       Pointer to the character just past the end of the line.
     void ShaderResourceHandler::ParseLine(
-        ObjectPath shaderPath,
+        GameObjectPath shaderPath,
         Shader::PersistentResourceData& rResourceData,
         const char* pLineStart,
         const char* pLineEnd )

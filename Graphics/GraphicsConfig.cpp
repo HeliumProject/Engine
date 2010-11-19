@@ -30,7 +30,7 @@ namespace Lunar
     {
     }
 
-    /// @copydoc Object::Serialize()
+    /// @copydoc GameObject::Serialize()
     void GraphicsConfig::Serialize( Serializer& s )
     {
         L_SERIALIZE_SUPER( s );

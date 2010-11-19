@@ -39,7 +39,7 @@ namespace Lunar
 
         /// @name Serialization Interface
         //@{
-        virtual bool Serialize( Object* pObject );
+        virtual bool Serialize( GameObject* pObject );
         virtual EMode GetMode() const;
 
         virtual void SerializeTag( const Tag& rTag );
@@ -62,7 +62,7 @@ namespace Lunar
         virtual void SerializeWideName( WideName& rValue );
         virtual void SerializeCharString( CharString& rValue );
         virtual void SerializeWideString( WideString& rValue );
-        virtual void SerializeObjectReference( Type* pType, ObjectPtr& rspObject );
+        virtual void SerializeObjectReference( Type* pType, GameObjectPtr& rspObject );
 
         virtual void PushPropertyFlags( uint32_t flags );
         virtual void PopPropertyFlags();

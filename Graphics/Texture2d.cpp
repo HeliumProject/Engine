@@ -26,13 +26,13 @@ namespace Lunar
     {
     }
 
-    /// @copydoc Object::NeedsPrecacheResourceData()
+    /// @copydoc GameObject::NeedsPrecacheResourceData()
     bool Texture2d::NeedsPrecacheResourceData() const
     {
         return true;
     }
 
-    /// @copydoc Object::BeginPrecacheResourceData()
+    /// @copydoc GameObject::BeginPrecacheResourceData()
     bool Texture2d::BeginPrecacheResourceData()
     {
         HELIUM_ASSERT( m_renderResourceLoadIds.IsEmpty() );
@@ -103,7 +103,7 @@ namespace Lunar
         return true;
     }
 
-    /// @copydoc Object::TryFinishPrecacheResourceData()
+    /// @copydoc GameObject::TryFinishPrecacheResourceData()
     bool Texture2d::TryFinishPrecacheResourceData()
     {
         // Check all pending load requests.

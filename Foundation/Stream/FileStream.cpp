@@ -1,29 +1,119 @@
-//#include "CorePch.h"
 #include "Foundation/Stream/FileStream.h"
 
 using namespace Helium;
 
 /// Constructor.
 FileStream::FileStream()
-    : m_modeFlags( 0 )
+: m_modeFlags( 0 )
+, m_hFile( InvalidHandleValue )
 {
 }
 
 /// Destructor.
 FileStream::~FileStream()
 {
+    Close();
 }
 
-/// Open a file.
-///
-/// @param[in] pPath      Path name of the file to open.
-/// @param[in] modeFlags  Combination of EMode flags specifying the mode in which to open the file.
-/// @param[in] bTruncate  If the MODE_WRITE flag is set, true to truncate any existing file, false to append to any
-///                       existing file.  This is ignored if MODE_WRITE is not set.
-///
-/// @return  True if the file was successfully opened, false if not.
-///
-/// @see Close(), IsOpen()
+/// @copydoc Stream::Close()
+void FileStream::Close()
+{
+    if( m_hFile != InvalidHandleValue )
+    {
+        CloseHandle( m_hFile );
+        m_hFile = InvalidHandleValue;
+    }
+}
+
+/// @copydoc Stream::IsOpen()
+bool FileStream::IsOpen() const
+{
+    return ( m_hFile != InvalidHandleValue );
+}
+
+/// @copydoc Stream::Read()
+size_t FileStream::Read( void* pBuffer, size_t size, size_t count )
+{
+    HELIUM_ASSERT_MSG( m_hFile != InvalidHandleValue, TXT( "File not open" ) );
+    HELIUM_ASSERT_MSG( m_modeFlags & MODE_READ, TXT( "File not open for reading" ) );
+    if( m_hFile == InvalidHandleValue || !( m_modeFlags & MODE_READ ) )
+    {
+        return 0;
+    }
+
+    size_t byteCount = size * count;
+    uint32_t bytesRead = 0;
+    HELIUM_VERIFY( ReadFile( m_hFile, pBuffer, byteCount, &bytesRead ) );
+
+    return ( bytesRead / size );
+}
+
+/// @copydoc Stream::Write()
+size_t FileStream::Write( const void* pBuffer, size_t size, size_t count )
+{
+    HELIUM_ASSERT_MSG( m_hFile != InvalidHandleValue, TXT( "File not open" ) );
+    HELIUM_ASSERT_MSG( m_modeFlags & MODE_WRITE, TXT( "File not open for writing" ) );
+    if( m_hFile == InvalidHandleValue || !( m_modeFlags & MODE_WRITE ) )
+    {
+        return 0;
+    }
+
+    size_t byteCount = size * count;
+    uint32_t bytesWritten = 0;
+    HELIUM_VERIFY( WriteFile( m_hFile, pBuffer, byteCount, &bytesWritten ) );
+
+    return ( bytesWritten / size );
+}
+
+/// @copydoc Stream::Flush()
+void FileStream::Flush()
+{
+    HELIUM_ASSERT_MSG( m_hFile != InvalidHandleValue, TXT( "File not open" ) );
+
+    // Only files open for writing need to be flushed.
+    if( m_hFile != InvalidHandleValue && ( m_modeFlags & MODE_WRITE ) )
+    {
+        HELIUM_VERIFY( FlushFile( m_hFile ) );
+    }
+}
+
+/// @copydoc Stream::Seek()
+int64_t FileStream::Seek( int64_t offset, SeekOrigin origin )
+{
+    if( m_hFile == InvalidHandleValue )
+    {
+        HELIUM_ASSERT_MSG_FALSE( TXT( "File not open" ) );
+        return -1;
+    }
+
+    return Helium::Seek( m_hFile, offset, origin );
+}
+
+/// @copydoc Stream::Tell()
+int64_t FileStream::Tell() const
+{
+    if( m_hFile == InvalidHandleValue )
+    {
+        HELIUM_ASSERT_MSG_FALSE( TXT( "File not open" ) );
+        return -1;
+    }
+
+    return Helium::Tell( m_hFile );
+}
+
+/// @copydoc Stream::GetSize()
+int64_t FileStream::GetSize() const
+{
+    if( m_hFile == InvalidHandleValue )
+    {
+        HELIUM_ASSERT_MSG_FALSE( TXT( "File not open" ) );
+        return -1;
+    }
+
+    return Helium::GetSize( m_hFile );
+}
+
+/// @copydoc FileStream::OpenActual()
 bool FileStream::Open( const tchar_t* pPath, uint32_t modeFlags, bool bTruncate )
 {
     HELIUM_ASSERT( pPath );
@@ -38,43 +128,15 @@ bool FileStream::Open( const tchar_t* pPath, uint32_t modeFlags, bool bTruncate 
     // Close any currently open file.
     Close();
 
-    // Pass onto the derived class implementation.
-    bool bResult = OpenActual( pPath, modeFlags, bTruncate && ( modeFlags & MODE_WRITE ) );
-    if( bResult )
+    HELIUM_ASSERT( m_hFile == InvalidHandleValue );
+
+    m_hFile = Helium::CreateFile( pPath, (Helium::FileMode)modeFlags, bTruncate );
+
+    if ( m_hFile == InvalidHandleValue )
     {
-        m_modeFlags = modeFlags;
+        return false;
     }
 
-    return bResult;
+    m_modeFlags = modeFlags;
+    return true;
 }
-
-/// @copydoc Stream::CanRead()
-bool FileStream::CanRead() const
-{
-    return( IsOpen() && ( m_modeFlags & MODE_READ ) != 0 );
-}
-
-/// @copydoc Stream::CanWrite()
-bool FileStream::CanWrite() const
-{
-    return( IsOpen() && ( m_modeFlags & MODE_WRITE ) != 0 );
-}
-
-/// @copydoc Stream::CanSeek()
-bool FileStream::CanSeek() const
-{
-    return IsOpen();
-}
-
-/// @fn bool OpenActual( const tchar_t* pFileName, uint32_t modeFlags, bool bTruncate )
-/// Perform the actual platform-specific work of opening a file.
-///
-/// The base FileStream class automatically handles closing any currently open file and verifying that at least one
-/// of the mode flags are set.
-///
-/// @param[in] pPath      Path name of the file to open.
-/// @param[in] modeFlags  Combination of EMode flags specifying the mode in which to open the file.
-/// @param[in] bTruncate  If the MODE_WRITE flag is set, true to truncate any existing file, false to append to any
-///                       existing file.  This is guaranteed not to be set if MODE_WRITE is not set.
-///
-/// @return  True if the file was successfully opened, false if not.

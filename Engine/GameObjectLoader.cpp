@@ -1,46 +1,46 @@
 //----------------------------------------------------------------------------------------------------------------------
-// ObjectLoader.cpp
+// GameObjectLoader.cpp
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EnginePch.h"
-#include "Engine/ObjectLoader.h"
+#include "Engine/GameObjectLoader.h"
 
 #include "Platform/Thread.h"
 #include "Engine/PackageLoader.h"
 
-/// Object cache name.
-#define L_OBJECT_CACHE_NAME TXT( "Object" )
+/// GameObject cache name.
+#define L_OBJECT_CACHE_NAME TXT( "GameObject" )
 
 namespace Lunar
 {
-    ObjectLoader* ObjectLoader::sm_pInstance = NULL;
+    GameObjectLoader* GameObjectLoader::sm_pInstance = NULL;
 
     /// Constructor.
-    ObjectLoader::ObjectLoader()
+    GameObjectLoader::GameObjectLoader()
         : m_loadRequestPool( LOAD_REQUEST_POOL_BLOCK_SIZE )
         , m_cacheName( L_OBJECT_CACHE_NAME )
     {
     }
 
     /// Destructor.
-    ObjectLoader::~ObjectLoader()
+    GameObjectLoader::~GameObjectLoader()
     {
     }
 
     /// Begin asynchronous loading of an object.
     ///
-    /// @param[in] path  Object path.
+    /// @param[in] path  GameObject path.
     ///
     /// @return  ID for the load request if started successfully, invalid index if not.
     ///
     /// @see TryFinishLoad(), FinishLoad()
-    size_t ObjectLoader::BeginLoadObject( ObjectPath path )
+    size_t GameObjectLoader::BeginLoadObject( GameObjectPath path )
     {
         // Search for an existing load request with the given path.
-        ConcurrentHashMap< ObjectPath, LoadRequest* >::ConstAccessor requestConstAccessor;
+        ConcurrentHashMap< GameObjectPath, LoadRequest* >::ConstAccessor requestConstAccessor;
         if( m_loadRequestMap.Find( requestConstAccessor, path ) )
         {
             LoadRequest* pRequest = requestConstAccessor->second;
@@ -59,7 +59,7 @@ namespace Lunar
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
-                TXT( "ObjectLoader::BeginLoadObject(): Failed to locate package loader for \"%s\".\n" ),
+                TXT( "GameObjectLoader::BeginLoadObject(): Failed to locate package loader for \"%s\".\n" ),
                 *path.ToString() );
 
             return Invalid< size_t >();
@@ -75,8 +75,8 @@ namespace Lunar
         pRequest->stateFlags = 0;
         pRequest->requestCount = 1;
 
-        ConcurrentHashMap< ObjectPath, LoadRequest* >::Accessor requestAccessor;
-        if( m_loadRequestMap.Insert( requestAccessor, std::pair< const ObjectPath, LoadRequest* >( path, pRequest ) ) )
+        ConcurrentHashMap< GameObjectPath, LoadRequest* >::Accessor requestAccessor;
+        if( m_loadRequestMap.Insert( requestAccessor, std::pair< const GameObjectPath, LoadRequest* >( path, pRequest ) ) )
         {
             // New load request was created, so tick it once to get the load process running.
             requestAccessor.Release();
@@ -111,7 +111,7 @@ namespace Lunar
     /// @return  True if the load request has completed, false if it is still being processed.
     ///
     /// @see FinishLoad(), BeginLoadObject()
-    bool ObjectLoader::TryFinishLoad( size_t id, ObjectPtr& rspObject )
+    bool GameObjectLoader::TryFinishLoad( size_t id, GameObjectPtr& rspObject )
     {
         HELIUM_ASSERT( IsValid( id ) );
 
@@ -126,9 +126,9 @@ namespace Lunar
         }
 
         // Acquire an exclusive lock to the request entry.
-        ObjectPath objectPath = pRequest->path;
+        GameObjectPath objectPath = pRequest->path;
 
-        ConcurrentHashMap< ObjectPath, LoadRequest* >::Accessor requestAccessor;
+        ConcurrentHashMap< GameObjectPath, LoadRequest* >::Accessor requestAccessor;
         HELIUM_VERIFY( m_loadRequestMap.Find( requestAccessor, objectPath ) );
         HELIUM_ASSERT( requestAccessor->second == pRequest );
 
@@ -157,7 +157,7 @@ namespace Lunar
     ///                        load, this will be set to a null reference.
     ///
     /// @see TryFinishLoad(), BeginLoadObject(), BeginPreloadPackage()
-    void ObjectLoader::FinishLoad( size_t id, ObjectPtr& rspObject )
+    void GameObjectLoader::FinishLoad( size_t id, GameObjectPtr& rspObject )
     {
         while( !TryFinishLoad( id, rspObject ) )
         {
@@ -170,7 +170,7 @@ namespace Lunar
     ///
     /// This is equivalent to calling BeginLoadObject() followed by FinishLoad() on the returned request ID.
     ///
-    /// @param[in]  path       Object path.
+    /// @param[in]  path       GameObject path.
     /// @param[out] rspObject  Smart pointer set to the loaded object if loading has completed.  If the object failed to
     ///                        load, this will be set to a null reference.
     ///
@@ -179,7 +179,7 @@ namespace Lunar
     ///          was successful).
     ///
     /// @see PreloadPackage()
-    bool ObjectLoader::LoadObject( ObjectPath path, ObjectPtr& rspObject )
+    bool GameObjectLoader::LoadObject( GameObjectPath path, GameObjectPtr& rspObject )
     {
         size_t id = BeginLoadObject( path );
         if( IsInvalid( id ) )
@@ -200,7 +200,7 @@ namespace Lunar
     /// package, it is recommended to save the changes to the source package first so that its updated timestamp will be
     /// used in the cache.
     ///
-    /// @param[in] pObject                                 Object to cache.
+    /// @param[in] pObject                                 GameObject to cache.
     /// @param[in] bEvictPlatformPreprocessedResourceData  If the object being cached is a Resource-based object,
     ///                                                    specifying true will free the raw preprocessed resource data
     ///                                                    for the current platform after caching, while false will keep
@@ -210,7 +210,7 @@ namespace Lunar
     ///                                                    to keep this data intact.
     ///
     /// @return  True if caching was successful, false if any errors occurred.
-    bool ObjectLoader::CacheObject( Object* /*pObject*/, bool /*bEvictPlatformPreprocessedResourceData*/ )
+    bool GameObjectLoader::CacheObject( GameObject* /*pObject*/, bool /*bEvictPlatformPreprocessedResourceData*/ )
     {
         // Caching only supported when using the editor object loader.
         return false;
@@ -218,7 +218,7 @@ namespace Lunar
 #endif  // L_EDITOR
 
     /// Update object loading.
-    void ObjectLoader::Tick()
+    void GameObjectLoader::Tick()
     {
         // Tick package loaders first.
         TickPackageLoaders();
@@ -227,7 +227,7 @@ namespace Lunar
         // them from being released while we don't have a lock on the request hash map.
         HELIUM_ASSERT( m_loadRequestTickArray.IsEmpty() );
 
-        ConcurrentHashMap< ObjectPath, LoadRequest* >::ConstAccessor loadRequestConstAccessor;
+        ConcurrentHashMap< GameObjectPath, LoadRequest* >::ConstAccessor loadRequestConstAccessor;
         if( m_loadRequestMap.First( loadRequestConstAccessor ) )
         {
             do
@@ -253,7 +253,7 @@ namespace Lunar
             int32_t newRequestCount = AtomicDecrementRelease( pRequest->requestCount );
             if( newRequestCount == 0 )
             {
-                ConcurrentHashMap< ObjectPath, LoadRequest* >::Accessor loadRequestAccessor;
+                ConcurrentHashMap< GameObjectPath, LoadRequest* >::Accessor loadRequestAccessor;
                 if( m_loadRequestMap.Find( loadRequestAccessor, pRequest->path ) )
                 {
                     pRequest = loadRequestAccessor->second;
@@ -277,12 +277,12 @@ namespace Lunar
 
     /// Get the global object loader instance.
     ///
-    /// An object loader instance must be initialized first through the interface of the ObjectLoader subclasses.
+    /// An object loader instance must be initialized first through the interface of the GameObjectLoader subclasses.
     ///
-    /// @return  Object loader instance.  If an instance has not yet been initialized, this will return null.
+    /// @return  GameObject loader instance.  If an instance has not yet been initialized, this will return null.
     ///
     /// @see DestroyStaticInstance()
-    ObjectLoader* ObjectLoader::GetStaticInstance()
+    GameObjectLoader* GameObjectLoader::GetStaticInstance()
     {
         return sm_pInstance;
     }
@@ -290,36 +290,36 @@ namespace Lunar
     /// Destroy the global object loader instance if one exists.
     ///
     /// @see GetStaticInstance()
-    void ObjectLoader::DestroyStaticInstance()
+    void GameObjectLoader::DestroyStaticInstance()
     {
         delete sm_pInstance;
         sm_pInstance = NULL;
     }
 
-    /// @fn PackageLoader* ObjectLoader::GetPackageLoader( ObjectPath path )
+    /// @fn PackageLoader* GameObjectLoader::GetPackageLoader( GameObjectPath path )
     /// Get the package loader to use for the specified object.
     ///
-    /// @param[in] path  Object path.
+    /// @param[in] path  GameObject path.
     ///
     /// @return  Package loader to use for loading the specified object.
 
-    /// @fn void ObjectLoader::TickPackageLoaders()
-    /// Tick all package loaders for the current ObjectLoader tick.
+    /// @fn void GameObjectLoader::TickPackageLoaders()
+    /// Tick all package loaders for the current GameObjectLoader tick.
 
     /// Perform work immediately prior to initiating resource precaching.
     ///
-    /// @param[in] pObject         Object instance.
+    /// @param[in] pObject         GameObject instance.
     /// @param[in] pPackageLoader  Package loader used to load the given object.
-    void ObjectLoader::OnPrecacheReady( Object* /*pObject*/, PackageLoader* /*pPackageLoader*/ )
+    void GameObjectLoader::OnPrecacheReady( GameObject* /*pObject*/, PackageLoader* /*pPackageLoader*/ )
     {
     }
 
     /// Perform work upon completion of the load process for an object.
     ///
-    /// @param[in] path            Object path.
-    /// @param[in] pObject         Object instance (may be null if the object failed to load properly).
+    /// @param[in] path            GameObject path.
+    /// @param[in] pObject         GameObject instance (may be null if the object failed to load properly).
     /// @param[in] pPackageLoader  Package loader used to load the given object.
-    void ObjectLoader::OnLoadComplete( ObjectPath /*path*/, Object* /*pObject*/, PackageLoader* /*pPackageLoader*/ )
+    void GameObjectLoader::OnLoadComplete( GameObjectPath /*path*/, GameObject* /*pObject*/, PackageLoader* /*pPackageLoader*/ )
     {
     }
 
@@ -328,7 +328,7 @@ namespace Lunar
     /// @param[in] pRequest  Load request to update.
     ///
     /// @return  True if the load request has completed, false if it still requires time to process.
-    bool ObjectLoader::TickLoadRequest( LoadRequest* pRequest )
+    bool GameObjectLoader::TickLoadRequest( LoadRequest* pRequest )
     {
         HELIUM_ASSERT( pRequest );
 
@@ -412,7 +412,7 @@ namespace Lunar
     /// @param[in] pRequest  Load request to update.
     ///
     /// @return  True if preloading still needs processing, false if it is complete.
-    bool ObjectLoader::TickPreload( LoadRequest* pRequest )
+    bool GameObjectLoader::TickPreload( LoadRequest* pRequest )
     {
         HELIUM_ASSERT( pRequest );
         HELIUM_ASSERT( !( pRequest->stateFlags & ( LOAD_FLAG_LINKED | LOAD_FLAG_PRECACHED | LOAD_FLAG_LOADED ) ) );
@@ -429,22 +429,22 @@ namespace Lunar
             }
 
             // Add an object load request.
-            ObjectPath path = pRequest->path;
+            GameObjectPath path = pRequest->path;
             pRequest->packageLoadRequestId = pPackageLoader->BeginLoadObject( path );
             if( IsInvalid( pRequest->packageLoadRequestId ) )
             {
-                pRequest->spObject = Object::FindObject( path );
-                Object* pObject = pRequest->spObject;
+                pRequest->spObject = GameObject::FindObject( path );
+                GameObject* pObject = pRequest->spObject;
                 if( pObject )
                 {
                     HELIUM_TRACE(
                         TRACE_WARNING,
-                        TXT( "ObjectLoader: Object \"%s\" is not serialized, but was found in memory.\n" ),
+                        TXT( "GameObjectLoader: GameObject \"%s\" is not serialized, but was found in memory.\n" ),
                         *path.ToString() );
 
                     // Make sure the object is preloaded and linked, but still perform resource caching and load
                     // finalization if necessary.
-                    pObject->SetFlags( Object::FLAG_PRELOADED | Object::FLAG_LINKED );
+                    pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
 
                     AtomicOrRelease( pRequest->stateFlags, LOAD_FLAG_PRELOADED | LOAD_FLAG_LINKED );
 
@@ -453,7 +453,7 @@ namespace Lunar
 
                 HELIUM_TRACE(
                     TRACE_ERROR,
-                    TXT( "ObjectLoader: Object \"%s\" is not serialized and does not exist in memory.\n" ),
+                    TXT( "GameObjectLoader: GameObject \"%s\" is not serialized and does not exist in memory.\n" ),
                     *path.ToString() );
 
                 AtomicOrRelease( pRequest->stateFlags, LOAD_FLAG_FULLY_LOADED | LOAD_FLAG_ERROR );
@@ -487,7 +487,7 @@ namespace Lunar
     /// @param[in] pRequest  Load request to update.
     ///
     /// @return  True if linking still requires processing, false if it is complete.
-    bool ObjectLoader::TickLink( LoadRequest* pRequest )
+    bool GameObjectLoader::TickLink( LoadRequest* pRequest )
     {
         HELIUM_ASSERT( pRequest );
         HELIUM_ASSERT( !( pRequest->stateFlags & ( LOAD_FLAG_PRECACHED | LOAD_FLAG_LOADED ) ) );
@@ -521,23 +521,23 @@ namespace Lunar
         }
 
         // Ready to link.
-        Object* pObject = pRequest->spObject;
+        GameObject* pObject = pRequest->spObject;
         if( pObject )
         {
             uint32_t objectFlags = pObject->GetFlags();
-            if( !( objectFlags & Object::FLAG_LINKED ) )
+            if( !( objectFlags & GameObject::FLAG_LINKED ) )
             {
-                if( !( objectFlags & Object::FLAG_BROKEN ) )
+                if( !( objectFlags & GameObject::FLAG_BROKEN ) )
                 {
                     Linker linker;
                     linker.Prepare( rLinkTable.GetData(), static_cast< uint32_t >( linkTableSize ) );
                     if( !linker.Serialize( pObject ) )
                     {
-                        pObject->SetFlags( Object::FLAG_BROKEN );
+                        pObject->SetFlags( GameObject::FLAG_BROKEN );
                     }
                 }
 
-                pObject->SetFlags( Object::FLAG_LINKED );
+                pObject->SetFlags( GameObject::FLAG_LINKED );
             }
         }
 
@@ -551,12 +551,12 @@ namespace Lunar
     /// @param[in] pRequest  Load request to update.
     ///
     /// @return  True if resource precaching still requires processing, false if not.
-    bool ObjectLoader::TickPrecache( LoadRequest* pRequest )
+    bool GameObjectLoader::TickPrecache( LoadRequest* pRequest )
     {
         HELIUM_ASSERT( pRequest );
         HELIUM_ASSERT( !( pRequest->stateFlags & LOAD_FLAG_LOADED ) );
 
-        Object* pObject = pRequest->spObject;
+        GameObject* pObject = pRequest->spObject;
         if( pObject )
         {
             // Wait for all link dependencies to fully load first.
@@ -582,7 +582,7 @@ namespace Lunar
             // Perform any pre-precaching work.
             OnPrecacheReady( pObject, pRequest->pPackageLoader );
 
-            if( !pObject->GetAnyFlagSet( Object::FLAG_BROKEN ) && pObject->NeedsPrecacheResourceData() )
+            if( !pObject->GetAnyFlagSet( GameObject::FLAG_BROKEN ) && pObject->NeedsPrecacheResourceData() )
             {
                 if( !( pRequest->stateFlags & LOAD_FLAG_PRECACHE_STARTED ) )
                 {
@@ -590,10 +590,10 @@ namespace Lunar
                     {
                         HELIUM_TRACE(
                             TRACE_ERROR,
-                            TXT( "ObjectLoader: Failed to begin precaching object \"%s\".\n" ),
+                            TXT( "GameObjectLoader: Failed to begin precaching object \"%s\".\n" ),
                             *pObject->GetPath().ToString() );
 
-                        pObject->SetFlags( Object::FLAG_PRECACHED | Object::FLAG_BROKEN );
+                        pObject->SetFlags( GameObject::FLAG_PRECACHED | GameObject::FLAG_BROKEN );
                         AtomicOrRelease( pRequest->stateFlags, LOAD_FLAG_PRECACHED | LOAD_FLAG_ERROR );
 
                         return true;
@@ -608,7 +608,7 @@ namespace Lunar
                 }
             }
 
-            pObject->SetFlags( Object::FLAG_PRECACHED );
+            pObject->SetFlags( GameObject::FLAG_PRECACHED );
         }
 
         AtomicOrRelease( pRequest->stateFlags, LOAD_FLAG_PRECACHED );
@@ -621,11 +621,11 @@ namespace Lunar
     /// @param[in] pRequest  Load request to update.
     ///
     /// @return  True if load finalization has completed, false if not.
-    bool ObjectLoader::TickFinalizeLoad( LoadRequest* pRequest )
+    bool GameObjectLoader::TickFinalizeLoad( LoadRequest* pRequest )
     {
         HELIUM_ASSERT( pRequest );
 
-        Object* pObject = pRequest->spObject;
+        GameObject* pObject = pRequest->spObject;
         if( pObject )
         {
             pObject->ConditionalFinalizeLoad();
@@ -639,7 +639,7 @@ namespace Lunar
     }
 
     /// Constructor.
-    ObjectLoader::Linker::Linker()
+    GameObjectLoader::Linker::Linker()
         : m_pLinkEntries( NULL )
         , m_linkEntryCount( 0 )
         , m_bError( false )
@@ -647,7 +647,7 @@ namespace Lunar
     }
 
     /// Destructor.
-    ObjectLoader::Linker::~Linker()
+    GameObjectLoader::Linker::~Linker()
     {
     }
 
@@ -655,7 +655,7 @@ namespace Lunar
     ///
     /// @param[in] pLinkEntries    Array of link table entries.
     /// @param[in] linkEntryCount  Number of entries in the link table.
-    void ObjectLoader::Linker::Prepare( const LinkEntry* pLinkEntries, uint32_t linkEntryCount )
+    void GameObjectLoader::Linker::Prepare( const LinkEntry* pLinkEntries, uint32_t linkEntryCount )
     {
         HELIUM_ASSERT( pLinkEntries || linkEntryCount == 0 );
 
@@ -664,11 +664,11 @@ namespace Lunar
     }
 
     /// @copydoc Serializer::Serialize()
-    bool ObjectLoader::Linker::Serialize( Object* pObject )
+    bool GameObjectLoader::Linker::Serialize( GameObject* pObject )
     {
         HELIUM_ASSERT( pObject );
 
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "ObjectLoader::Linker: Linking \"%s\".\n" ), *pObject->GetPath().ToString() );
+        HELIUM_TRACE( TRACE_DEBUG, TXT( "GameObjectLoader::Linker: Linking \"%s\".\n" ), *pObject->GetPath().ToString() );
 
         HELIUM_ASSERT( m_pLinkEntries || m_linkEntryCount == 0 );
 
@@ -679,84 +679,84 @@ namespace Lunar
     }
 
     /// @copydoc Serializer::GetMode()
-    Serializer::EMode ObjectLoader::Linker::GetMode() const
+    Serializer::EMode GameObjectLoader::Linker::GetMode() const
     {
         return MODE_LINK;
     }
 
     /// @copydoc Serializer::SerializeTag()
-    void ObjectLoader::Linker::SerializeTag( const Tag& /*rTag*/ )
+    void GameObjectLoader::Linker::SerializeTag( const Tag& /*rTag*/ )
     {
     }
 
     /// @copydoc Serializer::CanResolveTags()
-    bool ObjectLoader::Linker::CanResolveTags() const
+    bool GameObjectLoader::Linker::CanResolveTags() const
     {
         return false;
     }
 
     /// @name Serializer::SerializeBool()
-    void ObjectLoader::Linker::SerializeBool( bool& /*rValue*/ )
+    void GameObjectLoader::Linker::SerializeBool( bool& /*rValue*/ )
     {
     }
 
     /// @name Serializer::SerializeInt8()
-    void ObjectLoader::Linker::SerializeInt8( int8_t& /*rValue*/ )
+    void GameObjectLoader::Linker::SerializeInt8( int8_t& /*rValue*/ )
     {
     }
 
     /// @name Serializer::SerializeUint8()
-    void ObjectLoader::Linker::SerializeUint8( uint8_t& /*rValue*/ )
+    void GameObjectLoader::Linker::SerializeUint8( uint8_t& /*rValue*/ )
     {
     }
 
     /// @name Serializer::SerializeInt16()
-    void ObjectLoader::Linker::SerializeInt16( int16_t& /*rValue*/ )
+    void GameObjectLoader::Linker::SerializeInt16( int16_t& /*rValue*/ )
     {
     }
 
     /// @name Serializer::SerializeUint16()
-    void ObjectLoader::Linker::SerializeUint16( uint16_t& /*rValue*/ )
+    void GameObjectLoader::Linker::SerializeUint16( uint16_t& /*rValue*/ )
     {
     }
 
     /// @name Serializer::SerializeInt32()
-    void ObjectLoader::Linker::SerializeInt32( int32_t& /*rValue*/ )
+    void GameObjectLoader::Linker::SerializeInt32( int32_t& /*rValue*/ )
     {
     }
 
     /// @name Serializer::SerializeUint32()
-    void ObjectLoader::Linker::SerializeUint32( uint32_t& /*rValue*/ )
+    void GameObjectLoader::Linker::SerializeUint32( uint32_t& /*rValue*/ )
     {
     }
 
     /// @name Serializer::SerializeInt64()
-    void ObjectLoader::Linker::SerializeInt64( int64_t& /*rValue*/ )
+    void GameObjectLoader::Linker::SerializeInt64( int64_t& /*rValue*/ )
     {
     }
 
     /// @name Serializer::SerializeUint64()
-    void ObjectLoader::Linker::SerializeUint64( uint64_t& /*rValue*/ )
+    void GameObjectLoader::Linker::SerializeUint64( uint64_t& /*rValue*/ )
     {
     }
 
     /// @name Serializer::SerializeFloat32()
-    void ObjectLoader::Linker::SerializeFloat32( float32_t& /*rValue*/ )
+    void GameObjectLoader::Linker::SerializeFloat32( float32_t& /*rValue*/ )
     {
     }
 
     /// @name Serializer::SerializeFloat64()
-    void ObjectLoader::Linker::SerializeFloat64( float64_t& /*rValue*/ )
+    void GameObjectLoader::Linker::SerializeFloat64( float64_t& /*rValue*/ )
     {
     }
 
     /// @name Serializer::SerializeBuffer()
-    void ObjectLoader::Linker::SerializeBuffer( void* /*pBuffer*/, size_t /*elementSize*/, size_t /*count*/ )
+    void GameObjectLoader::Linker::SerializeBuffer( void* /*pBuffer*/, size_t /*elementSize*/, size_t /*count*/ )
     {
     }
 
     /// @name Serializer::SerializeEnum()
-    void ObjectLoader::Linker::SerializeEnum(
+    void GameObjectLoader::Linker::SerializeEnum(
         int32_t& /*rValue*/,
         uint32_t /*nameCount*/,
         const tchar_t* const* /*ppNames*/ )
@@ -764,27 +764,27 @@ namespace Lunar
     }
 
     /// @name Serializer::SerializeCharName()
-    void ObjectLoader::Linker::SerializeCharName( CharName& /*rValue*/ )
+    void GameObjectLoader::Linker::SerializeCharName( CharName& /*rValue*/ )
     {
     }
 
     /// @name Serializer::SerializeWideName()
-    void ObjectLoader::Linker::SerializeWideName( WideName& /*rValue*/ )
+    void GameObjectLoader::Linker::SerializeWideName( WideName& /*rValue*/ )
     {
     }
 
     /// @name Serializer::SerializeCharString()
-    void ObjectLoader::Linker::SerializeCharString( CharString& /*rValue*/ )
+    void GameObjectLoader::Linker::SerializeCharString( CharString& /*rValue*/ )
     {
     }
 
     /// @name Serializer::SerializeWideString()
-    void ObjectLoader::Linker::SerializeWideString( WideString& /*rValue*/ )
+    void GameObjectLoader::Linker::SerializeWideString( WideString& /*rValue*/ )
     {
     }
 
     /// @name Serializer::SerializeObjectReference()
-    void ObjectLoader::Linker::SerializeObjectReference( Type* pType, ObjectPtr& rspObject )
+    void GameObjectLoader::Linker::SerializeObjectReference( Type* pType, GameObjectPtr& rspObject )
     {
         HELIUM_ASSERT( pType );
 
@@ -800,7 +800,7 @@ namespace Lunar
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
-                TXT( "ObjectLoader: Invalid link index %" ) TPRIu32 TXT( " encountered.  Setting null reference.\n" ),
+                TXT( "GameObjectLoader: Invalid link index %" ) TPRIu32 TXT( " encountered.  Setting null reference.\n" ),
                 linkIndex );
 
             m_bError = true;
@@ -808,14 +808,14 @@ namespace Lunar
             return;
         }
 
-        Object* pObject = m_pLinkEntries[ linkIndex ].spObject;
+        GameObject* pObject = m_pLinkEntries[ linkIndex ].spObject;
         if( pObject )
         {
             if( !pObject->IsA( pType ) )
             {
                 HELIUM_TRACE(
                     TRACE_ERROR,
-                    TXT( "ObjectLoader: Object reference \"%s\" is not of the correct type (\"%s\").\n" ),
+                    TXT( "GameObjectLoader: GameObject reference \"%s\" is not of the correct type (\"%s\").\n" ),
                     *pObject->GetPath().ToString(),
                     *pType->GetPath().ToString() );
 

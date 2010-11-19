@@ -10,6 +10,7 @@
 #define LUNAR_PREPROCESSING_PC_D3D_INCLUDE_HANDLER_H
 
 #include "PreprocessingPc/PreprocessingPc.h"
+#include "Foundation/File/Path.h"
 
 #include <d3d10_1.h>
 
@@ -21,7 +22,7 @@ namespace Lunar
     public:
         /// @name Construction/Destruction
         //@{
-        explicit D3DIncludeHandler( const String& rShaderPath );
+        explicit D3DIncludeHandler( const Path& rShaderPath );
         virtual ~D3DIncludeHandler();
         //@}
 
@@ -34,7 +35,7 @@ namespace Lunar
 
     private:
         /// Directory containing the shader file being processed.
-        String m_shaderDirectory;
+        Path m_shaderDirectory;
     };
 }
 

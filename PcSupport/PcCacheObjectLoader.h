@@ -39,7 +39,7 @@ namespace Lunar
 
         /// @name Loading Implementation
         //@{
-        virtual PackageLoader* GetPackageLoader( ObjectPath path );
+        virtual PackageLoader* GetPackageLoader( GameObjectPath path );
         virtual void TickPackageLoaders();
         //@}
     };

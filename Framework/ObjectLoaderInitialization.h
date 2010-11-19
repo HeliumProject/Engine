@@ -13,9 +13,9 @@
 
 namespace Lunar
 {
-    class ObjectLoader;
+    class GameObjectLoader;
 
-    /// Interface for initializing and uninitializing the ObjectLoader and related objects.
+    /// Interface for initializing and uninitializing the GameObjectLoader and related objects.
     class LUNAR_FRAMEWORK_API ObjectLoaderInitialization
     {
     public:
@@ -24,9 +24,9 @@ namespace Lunar
         virtual ~ObjectLoaderInitialization();
         //@}
 
-        /// @name ObjectLoader Initialization
+        /// @name GameObjectLoader Initialization
         //@{
-        virtual ObjectLoader* Initialize() = 0;
+        virtual GameObjectLoader* Initialize() = 0;
         virtual void Shutdown();
         //@}
     };

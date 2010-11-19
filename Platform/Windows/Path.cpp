@@ -40,7 +40,7 @@ bool Helium::GetFullPath( const tchar_t* path, tstring& fullPath )
 
 bool Helium::IsAbsolute( const tchar_t* path )
 {
-    if ( _tcslen( path ) > 1 )
+    if ( path && _tcslen( path ) > 1 )
     {
         if ( path[ 1 ] == ':' )
             return true;

@@ -46,10 +46,10 @@ namespace Lunar
         // XXX TMC: Note that we currently assume that the world package has no parents, so we don't need to handle
         // recursive package creation.  If we want to move the world package to a subpackage, this will need to be
         // updated accordingly.
-        ObjectPath worldPackagePath = GetWorldPackagePath();
+        GameObjectPath worldPackagePath = GetWorldPackagePath();
         HELIUM_ASSERT( !worldPackagePath.IsEmpty() );
         HELIUM_ASSERT( worldPackagePath.GetParent().IsEmpty() );
-        m_spWorldPackage = Object::Create< Package >( worldPackagePath.GetName(), NULL );
+        m_spWorldPackage = GameObject::Create< Package >( worldPackagePath.GetName(), NULL );
         HELIUM_ASSERT( m_spWorldPackage );
         if( !m_spWorldPackage )
         {
@@ -97,9 +97,9 @@ namespace Lunar
     /// Get the path to the package containing all world instances.
     ///
     /// @return  World package path.
-    ObjectPath WorldManager::GetWorldPackagePath() const
+    GameObjectPath WorldManager::GetWorldPackagePath() const
     {
-        static ObjectPath worldPackagePath;
+        static GameObjectPath worldPackagePath;
         if( worldPackagePath.IsEmpty() )
         {
             HELIUM_VERIFY( worldPackagePath.Set( TXT( "/Worlds" ) ) );
@@ -169,7 +169,7 @@ namespace Lunar
             return NULL;
         }
 
-        ObjectPtr spDefaultWorldObject( Object::CreateObject( pType, GetDefaultWorldName(), m_spWorldPackage ) );
+        GameObjectPtr spDefaultWorldObject( GameObject::CreateObject( pType, GetDefaultWorldName(), m_spWorldPackage ) );
         HELIUM_ASSERT( spDefaultWorldObject );
         if( !spDefaultWorldObject )
         {

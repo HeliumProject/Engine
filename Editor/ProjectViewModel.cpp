@@ -17,9 +17,12 @@ const tchar_t* ProjectMenuID::s_Labels[COUNT] =
     TXT( "Relative Path" ),
 };
 
+#pragma TODO ( "Remove HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE and all it's references after usibility test" )
+
 ///////////////////////////////////////////////////////////////////////////////
-ProjectViewModelNode::ProjectViewModelNode( ProjectViewModelNode* parent, const Helium::Path& path, const Document* document, const bool isContainer )
-: m_ParentNode( parent )
+ProjectViewModelNode::ProjectViewModelNode( ProjectViewModel* model, ProjectViewModelNode* parent, const Helium::Path& path, const Document* document, const bool isContainer )
+: m_Model( model )
+, m_ParentNode( parent )
 , m_Path( path )
 , m_Document( NULL )
 , m_IsContainer( isContainer )
@@ -166,6 +169,8 @@ void ProjectViewModelNode::DocumentModifiedOnDiskStateChanged( const DocumentEve
 void ProjectViewModelNode::DocumentPathChanged( const DocumentPathChangedArgs& args )
 {
     m_Path = args.m_Document->GetPath();
+
+    m_Model->ItemChanged( wxDataViewItem( (void*)this ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -254,13 +259,8 @@ void ProjectViewModel::ResetColumns()
     m_ColumnLookupTable.clear();
 }
 
-void ProjectViewModel::OpenProject( Project* project, const Document* document )
+ProjectViewModelNode* ProjectViewModel::OpenProject( Project* project, const Document* document )
 {
-    if ( project == m_Project )
-    {
-        return;
-    }
-
     CloseProject();
 
     // Setup the new project view
@@ -268,9 +268,12 @@ void ProjectViewModel::OpenProject( Project* project, const Document* document )
     if ( m_Project )
     {
         // Create the Node     
-        m_RootNode = new ProjectViewModelNode( NULL, m_Project->a_Path.Get(), document, true );
+        m_RootNode = new ProjectViewModelNode( this, NULL, m_Project->a_Path.Get(), document, true );
         m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( m_Project->a_Path.Get(), m_RootNode.Ptr() ));
-        ItemAdded( NULL, (void*)m_RootNode );
+                
+#if HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE
+        ItemAdded( NULL, (void*)m_RootNode.Ptr() );
+#endif
 
         // Add the Project's Children
         for ( std::set< Path >::const_iterator itr = m_Project->Paths().begin(), end = m_Project->Paths().end();
@@ -280,12 +283,13 @@ void ProjectViewModel::OpenProject( Project* project, const Document* document )
         }
 
         // Connect to the Project
-        m_RootNode->GetDocument()->e_PathChanged.AddMethod( this, &ProjectViewModel::OnProjectPathChanged );
-
         m_Project->e_PathAdded.AddMethod( this, &ProjectViewModel::OnPathAdded );
         m_Project->e_PathRemoved.AddMethod( this, &ProjectViewModel::OnPathRemoved );
-        //m_Project->a_Path.Changed().AddMethod( m_RootNode.Ptr(), &ProjectViewModelNode::PathChanged );
+
+        return m_RootNode.Ptr();    
     }
+
+    return NULL;
 }
 
 void ProjectViewModel::CloseProject()
@@ -300,14 +304,7 @@ void ProjectViewModel::CloseProject()
         // Remove the Node
         if ( m_RootNode )
         {
-            if ( m_RootNode->GetDocument() )
-            {
-                m_RootNode->GetDocument()->e_PathChanged.RemoveMethod( this, &ProjectViewModel::OnProjectPathChanged );
-            }
-
             RemoveItem( wxDataViewItem( (void*) m_RootNode.Ptr() ) );
-
-            //m_Project->a_Path.Changed().RemoveMethod( m_RootNode.Ptr(), &ProjectViewModelNode::PathChanged );
             m_RootNode = NULL;
         }
 
@@ -324,12 +321,13 @@ bool ProjectViewModel::AddChildItem( const wxDataViewItem& parenItem, const Heli
     ProjectViewModelNode *parentNode = static_cast< ProjectViewModelNode* >( parenItem.GetID() );
     if ( !parentNode )
     {
+        HELIUM_ASSERT( m_RootNode );
         parentNode = m_RootNode.Ptr();
     }
 
     // Create the child node
     const Document* document = m_DocumentManager->FindDocument( path );
-    Helium::Insert<S_ProjectViewModelNodeChildren>::Result inserted = parentNode->GetChildren().insert( new ProjectViewModelNode( parentNode, path, document ) );
+    Helium::Insert<S_ProjectViewModelNodeChildren>::Result inserted = parentNode->GetChildren().insert( new ProjectViewModelNode( this, parentNode, path, document ) );
     if ( inserted.second )
     {
         ProjectViewModelNode* childNode = (*inserted.first);
@@ -345,6 +343,14 @@ bool ProjectViewModel::AddChildItem( const wxDataViewItem& parenItem, const Heli
 
         // Add the node to the multimap and call ItemAdded
         m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( path, childNode ));
+
+#if HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE
+#else
+        if ( parentNode == m_RootNode.Ptr() )
+        {
+            parentNode = NULL;
+        }
+#endif
         ItemAdded( (void*)parentNode, (void*)childNode );
 
         return true;
@@ -357,6 +363,7 @@ bool ProjectViewModel::RemoveChildItem( const wxDataViewItem& parenItem, const H
     ProjectViewModelNode *parentNode = static_cast< ProjectViewModelNode* >( parenItem.GetID() );
     if ( !parentNode )
     {
+        HELIUM_ASSERT( m_RootNode );
         parentNode = m_RootNode.Ptr();
     }
 
@@ -415,13 +422,26 @@ void ProjectViewModel::RemoveItem( const wxDataViewItem& item )
         parentNode->GetChildren().erase( node );
     }
 
+#if HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE
+#else
+        if ( parentNode == m_RootNode.Ptr() )
+        {
+            parentNode = NULL;
+        }
+#endif
+
     ItemDeleted( wxDataViewItem( (void*) parentNode ), item );
 }
 
 bool ProjectViewModel::IsDropPossible( const wxDataViewItem& item )
 {
     ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
+
+#if HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE
     if ( !node || node == m_RootNode.Ptr() )
+#else
+    if ( !node )
+#endif
     {
         return true;
     }
@@ -431,22 +451,15 @@ bool ProjectViewModel::IsDropPossible( const wxDataViewItem& item )
 
 void ProjectViewModel::OnPathAdded( const Helium::Path& path )
 {
-    HELIUM_ASSERT( m_RootNode );     
     AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
 }
 
 void ProjectViewModel::OnPathRemoved( const Helium::Path& path )
 {
-    HELIUM_ASSERT( m_RootNode );
     RemoveChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
 }
 
-void ProjectViewModel::OnProjectPathChanged( const DocumentPathChangedArgs& args )
-{
-    m_Project->a_Path.Set( args.m_Document->GetPath() );
-}
-
-void ProjectViewModel::OnDocumentAdded( const DocumentEventArgs& args )
+void ProjectViewModel::OnDocumentOpened( const DocumentEventArgs& args )
 {
     const Document* document = static_cast< const Document* >( args.m_Document );
     HELIUM_ASSERT( document );
@@ -462,7 +475,7 @@ void ProjectViewModel::OnDocumentAdded( const DocumentEventArgs& args )
     }
 }
 
-void ProjectViewModel::OnDocumentRemoved( const DocumentEventArgs& args )
+void ProjectViewModel::OnDocumenClosed( const DocumentEventArgs& args )
 {
     const Document* document = static_cast< const Document* >( args.m_Document );
     HELIUM_ASSERT( document );
@@ -595,15 +608,26 @@ wxDataViewItem ProjectViewModel::GetParent( const wxDataViewItem& item ) const
         return wxDataViewItem( 0 );
     }
 
-    ProjectViewModelNode *childNode = static_cast< ProjectViewModelNode* >( item.GetID() );
-    if ( !childNode
-        || childNode == m_RootNode.Ptr()
-        || !childNode->GetParent() )
+    ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
+
+#if HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE
+    if ( !node
+        || node == m_RootNode.Ptr()
+        || !node->GetParent() )
     {
         return wxDataViewItem( 0 );
     }
+#else
+    if ( !node
+        || node == m_RootNode.Ptr()
+        || !node->GetParent()
+        || node->GetParent() == m_RootNode.Ptr() )
+    {
+        return wxDataViewItem( 0 );
+    }
+#endif
 
-    return wxDataViewItem( (void*) childNode->GetParent() );
+    return wxDataViewItem( (void*) node->GetParent() );
 }
 
 unsigned int ProjectViewModel::GetChildren( const wxDataViewItem& item, wxDataViewItemArray& items ) const
@@ -611,8 +635,12 @@ unsigned int ProjectViewModel::GetChildren( const wxDataViewItem& item, wxDataVi
     ProjectViewModelNode *parentNode = static_cast< ProjectViewModelNode* >( item.GetID() );
     if ( !parentNode )
     {
+#if HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE
         items.Add( wxDataViewItem( (void*) m_RootNode.Ptr() ) );
         return 1;
+#else
+        parentNode = m_RootNode.Ptr();
+#endif
     }
 
     if ( parentNode->GetChildren().size() < 1 )

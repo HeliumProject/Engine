@@ -8,8 +8,8 @@
 #include "PcSupportPch.h"
 #include "PcSupport/XmlSerializer.h"
 
-#include "Core/File.h"
-#include "Core/Path.h"
+#include "Foundation/File/File.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/Stream/FileStream.h"
 #include "Foundation/Stream/BufferedStream.h"
 
@@ -21,7 +21,7 @@ namespace Lunar
     // XML file footer (UTF-8 string).
     static const char XML_FILE_FOOTER[] = "</package>" L_XML_NEWLINE;
 
-    // Object tag strings.
+    // GameObject tag strings.
     static const char OBJECT_TAG_START_A[] = "    <object name=\"";
     static const char OBJECT_TAG_START_B[] = "\" type=\"";
     static const char OBJECT_TAG_START_C[] = "\" template=\"";
@@ -55,22 +55,8 @@ namespace Lunar
         Shutdown();
 
         // Make sure the output directory exists.
-        String outputDirectory;
-        Path::GetDirectoryName( outputDirectory, String( pFileName ) );
-        if( !outputDirectory.IsEmpty() )
-        {
-            File::EDirectoryCreateResult directoryCreateResult = File::CreateDirectory( outputDirectory, true );
-            if( directoryCreateResult == File::DIRECTORY_CREATE_RESULT_FAILED )
-            {
-                HELIUM_TRACE(
-                    TRACE_ERROR,
-                    TXT( "XmlSerializer::Initialize(): Failed to create output directory \"%s\" for file \"%s\".\n" ),
-                    *outputDirectory,
-                    pFileName );
-
-                return false;
-            }
-        }
+        Path outputFile( pFileName );
+        outputFile.MakePath();
 
         // Attempt to open the file for writing.
         m_pFileStream = File::Open( pFileName, FileStream::MODE_WRITE, true );
@@ -113,12 +99,12 @@ namespace Lunar
     }
 
     /// @copydoc XmlSerializerBase::PreSerialize()
-    void XmlSerializer::PreSerialize( Object* pObject )
+    void XmlSerializer::PreSerialize( GameObject* pObject )
     {
         HELIUM_ASSERT( pObject );
 
         // Serialize the object's template.
-        Object* pTemplate = pObject->GetTemplate();
+        GameObject* pTemplate = pObject->GetTemplate();
         HELIUM_ASSERT( pTemplate );
 
         m_templateSerializer.Serialize( pTemplate );
@@ -153,7 +139,7 @@ namespace Lunar
     }
 
     /// @copydoc XmlSerializerBase::PostSerialize()
-    void XmlSerializer::PostSerialize( Object* /*pObject*/ )
+    void XmlSerializer::PostSerialize( GameObject* /*pObject*/ )
     {
         // Write the closing tag.
         m_pStream->Write( OBJECT_TAG_END, 1, sizeof( OBJECT_TAG_END ) - 1 );

@@ -8,8 +8,8 @@
 #include "EditorSupportPch.h"
 #include "EditorSupport/EditorObjectLoader.h"
 
-#include "Core/File.h"
-#include "Core/Path.h"
+#include "Foundation/File/File.h"
+#include "Foundation/File/Path.h"
 #include "Engine/Config.h"
 #include "Engine/Resource.h"
 #include "PcSupport/ObjectPreprocessor.h"
@@ -27,13 +27,13 @@ namespace Lunar
     {
     }
 
-    /// @copydoc ObjectLoader::CacheObject()
-    bool EditorObjectLoader::CacheObject( Object* pObject, bool bEvictPlatformPreprocessedResourceData )
+    /// @copydoc GameObjectLoader::CacheObject()
+    bool EditorObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformPreprocessedResourceData )
     {
         HELIUM_ASSERT( pObject );
 
         // Don't cache broken objects or packages.
-        if( pObject->GetAnyFlagSet( Object::FLAG_BROKEN ) || pObject->IsPackage() )
+        if( pObject->GetAnyFlagSet( GameObject::FLAG_BROKEN ) || pObject->IsPackage() )
         {
             return false;
         }
@@ -50,13 +50,13 @@ namespace Lunar
         }
 
         // Configuration objects should not be cached.
-        ObjectPath objectPath = pObject->GetPath();
+        GameObjectPath objectPath = pObject->GetPath();
 
         Config& rConfig = Config::GetStaticInstance();
-        ObjectPath configPackagePath = rConfig.GetConfigContainerPackagePath();
+        GameObjectPath configPackagePath = rConfig.GetConfigContainerPackagePath();
         HELIUM_ASSERT( !configPackagePath.IsEmpty() );
 
-        for( ObjectPath testPath = objectPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+        for( GameObjectPath testPath = objectPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
         {
             if( testPath == configPackagePath )
             {
@@ -66,7 +66,7 @@ namespace Lunar
 
         // Get the timestamp for the object based on the timestamp of its source package file and, if it's a resource,
         // the timestamp of the source resource file.
-        Object* pPackageObject;
+        GameObject* pPackageObject;
         for( pPackageObject = pObject;
              pPackageObject && !pPackageObject->IsPackage();
              pPackageObject = pPackageObject->GetOwner() )
@@ -84,11 +84,11 @@ namespace Lunar
         Resource* pResource = DynamicCast< Resource >( pObject );
         if( pResource )
         {
-            ObjectPath baseResourcePath = pResource->GetPath();
+            GameObjectPath baseResourcePath = pResource->GetPath();
             HELIUM_ASSERT( !baseResourcePath.IsPackage() );
             for( ; ; )
             {
-                ObjectPath parentPath = baseResourcePath.GetParent();
+                GameObjectPath parentPath = baseResourcePath.GetParent();
                 if( parentPath.IsEmpty() || parentPath.IsPackage() )
                 {
                     break;
@@ -97,10 +97,19 @@ namespace Lunar
                 baseResourcePath = parentPath;
             }
 
-            String sourceFilePath;
-            Path::Combine( sourceFilePath, File::GetDataDirectory(), baseResourcePath.ToFilePathString() );
+            Path sourceFilePath;
+            if ( !File::GetDataDirectory( sourceFilePath ) )
+            {
+                HELIUM_TRACE(
+                    TRACE_WARNING,
+                    TXT( "EditorObjectLoader::CacheObject(): Could not obtain data directory.\n" ) );
 
-            int64_t sourceFileTimestamp = File::GetTimestamp( sourceFilePath );
+                return false;
+            }
+
+            sourceFilePath += baseResourcePath.ToFilePathString().GetData();
+
+            int64_t sourceFileTimestamp = sourceFilePath.ModifiedTime();
             if( sourceFileTimestamp > objectTimestamp )
             {
                 objectTimestamp = sourceFileTimestamp;
@@ -137,22 +146,22 @@ namespace Lunar
         return true;
     }
 
-    /// @copydoc ObjectLoader::GetPackageLoader()
-    PackageLoader* EditorObjectLoader::GetPackageLoader( ObjectPath path )
+    /// @copydoc GameObjectLoader::GetPackageLoader()
+    PackageLoader* EditorObjectLoader::GetPackageLoader( GameObjectPath path )
     {
         XmlPackageLoader* pLoader = m_packageLoaderMap.GetPackageLoader( path );
 
         return pLoader;
     }
 
-    /// @copydoc ObjectLoader::TickPackageLoaders()
+    /// @copydoc GameObjectLoader::TickPackageLoaders()
     void EditorObjectLoader::TickPackageLoaders()
     {
         m_packageLoaderMap.TickPackageLoaders();
     }
 
-    /// @copydoc ObjectLoader::OnPrecacheReady()
-    void EditorObjectLoader::OnPrecacheReady( Object* pObject, PackageLoader* pPackageLoader )
+    /// @copydoc GameObjectLoader::OnPrecacheReady()
+    void EditorObjectLoader::OnPrecacheReady( GameObject* pObject, PackageLoader* pPackageLoader )
     {
         HELIUM_ASSERT( pObject );
         HELIUM_ASSERT( pPackageLoader );
@@ -184,8 +193,8 @@ namespace Lunar
         pObjectPreprocessor->LoadResourceData( pResource, objectTimestamp );
     }
 
-    /// @copydoc ObjectLoader::OnLoadComplete()
-    void EditorObjectLoader::OnLoadComplete( ObjectPath /*path*/, Object* pObject, PackageLoader* /*pPackageLoader*/ )
+    /// @copydoc GameObjectLoader::OnLoadComplete()
+    void EditorObjectLoader::OnLoadComplete( GameObjectPath /*path*/, GameObject* pObject, PackageLoader* /*pPackageLoader*/ )
     {
         if( pObject )
         {

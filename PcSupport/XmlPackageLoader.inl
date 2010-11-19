@@ -10,7 +10,7 @@ namespace Lunar
     /// Get the package file path.
     ///
     /// @return  Package file path.
-    const String& XmlPackageLoader::GetPackageFilePath() const
+    const Path& XmlPackageLoader::GetPackageFilePath() const
     {
         return m_packageFilePath;
     }

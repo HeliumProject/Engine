@@ -9,7 +9,7 @@
 #ifndef LUNAR_ENGINE_PACKAGE_LOADER_H
 #define LUNAR_ENGINE_PACKAGE_LOADER_H
 
-#include "Engine/ObjectLoader.h"
+#include "Engine/GameObjectLoader.h"
 
 namespace Lunar
 {
@@ -26,9 +26,9 @@ namespace Lunar
         //@{
         virtual bool TryFinishPreload() = 0;
 
-        virtual size_t BeginLoadObject( ObjectPath path ) = 0;
+        virtual size_t BeginLoadObject( GameObjectPath path ) = 0;
         virtual bool TryFinishLoadObject(
-            size_t requestId, ObjectPtr& rspObject, DynArray< ObjectLoader::LinkEntry >& rLinkTable ) = 0;
+            size_t requestId, GameObjectPtr& rspObject, DynArray< GameObjectLoader::LinkEntry >& rLinkTable ) = 0;
 
         virtual void Tick() = 0;
         //@}
@@ -36,7 +36,7 @@ namespace Lunar
         /// @name Data Access
         //@{
         virtual size_t GetObjectCount() const = 0;
-        virtual ObjectPath GetObjectPath( size_t index ) const = 0;
+        virtual GameObjectPath GetObjectPath( size_t index ) const = 0;
         //@}
 
         /// @name Package File Information

@@ -315,7 +315,7 @@ MainFrame::~MainFrame()
     m_ViewPanel->GetViewCanvas()->GetViewport().SaveSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
 
     
-    m_ProjectPanel->CloseProject();
+    CloseProject();
 
     //
     // Detach event handlers
@@ -358,19 +358,7 @@ void MainFrame::OpenProject( const Helium::Path& path )
 {
     HELIUM_ASSERT( !path.empty() );
     
-    if ( m_Project )
-    {
-        Document* document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
-        if ( document )
-        {
-            document->d_Save.Clear();
-        }
-
-        m_ProjectPanel->CloseProject();
-
-        m_DocumentManager.CloseAll();
-        m_Project = NULL;
-    }
+    CloseProject();
 
     bool isNewProject = false;
     if ( path.Exists() )
@@ -424,7 +412,10 @@ void MainFrame::OpenProject( const Helium::Path& path )
     ConnectDocument( document );
 
     document->HasChanged( isNewProject );
-    document->d_Save.Set( this, &MainFrame::OnProjectSave );
+    m_Project->ConnectDocument( document );
+
+    m_DocumentManager.e_DocumentOpened.AddMethod( m_Project.Ptr(), &Project::OnDocumentOpened );
+    m_DocumentManager.e_DocumenClosed.AddMethod( m_Project.Ptr(), &Project::OnDocumenClosed );
 
     m_ProjectPanel->OpenProject( m_Project, document );
 
@@ -439,6 +430,24 @@ void MainFrame::OpenProject( const Helium::Path& path )
     //{
     //    wxGetApp().GetTracker()->StartThread();
     //}
+}
+
+void MainFrame::CloseProject()
+{
+    if ( m_Project )
+    {
+        m_PropertiesPanel->GetPropertiesManager().SyncThreads();
+
+        m_DocumentManager.e_DocumentOpened.RemoveMethod( m_Project.Ptr(), &Project::OnDocumentOpened );
+        m_DocumentManager.e_DocumenClosed.RemoveMethod( m_Project.Ptr(), &Project::OnDocumenClosed );
+
+        m_ProjectPanel->CloseProject();
+
+        m_DocumentManager.CloseAll();
+        m_Project = NULL;
+
+        m_UndoQueue.Reset();   
+    }
 }
 
 bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
@@ -829,6 +838,9 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
     Helium::Path path;
     GetUniquePathName( TXT( "New Scene" ), m_Project->Paths(), path );
 
+    // Add to the project before opening it
+    m_Project->AddPath( path );
+
     DocumentPtr document = new Document( path );
     document->HasChanged( true );
 
@@ -843,8 +855,6 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
     scene->d_ReleaseScene.Set( ReleaseSceneSignature::Delegate( this, &MainFrame::ReleaseNestedScene ) );
 
     m_SceneManager.SetCurrentScene( scene );
-
-    m_Project->AddPath( scene->GetPath() );
 }
 
 void MainFrame::OnNewEntity( wxCommandEvent& event )
@@ -857,19 +867,6 @@ void MainFrame::OnNewEntity( wxCommandEvent& event )
 void MainFrame::OnNewProject( wxCommandEvent& event )
 {
     OpenProject( Helium::Path( TXT("New Project") ) );
-}
-
-void MainFrame::OnProjectSave( const DocumentEventArgs& args )
-{
-    const Document* document = static_cast< const Document* >( args.m_Document );
-    HELIUM_ASSERT( document );
-
-    if ( document 
-        && m_Project 
-        && document->GetPath() == m_Project->a_Path.Get() )
-    {
-        args.m_Result = m_Project->Save();
-    }
 }
 
 bool MainFrame::DoOpen( const tstring& path )
@@ -915,10 +912,7 @@ bool MainFrame::DoOpen( const tstring& path )
 
 void MainFrame::OnClose( wxCommandEvent& event )
 {
-    m_PropertiesPanel->GetPropertiesManager().SyncThreads();
-    m_UndoQueue.Reset();
-    m_DocumentManager.CloseAll();
-    m_Project = NULL;
+    CloseProject();
 }
 
 void MainFrame::OnSaveAll( wxCommandEvent& event )
@@ -1680,7 +1674,7 @@ void MainFrame::PickWorld( PickArgs& args )
 #pragma TODO("Pick the project's root scene -Geoff")
 }
 
-void MainFrame::ConnectDocument( const Document* document )
+void MainFrame::ConnectDocument( Document* document )
 {
     document->e_Changed.AddMethod( this, &MainFrame::DocumentChanged );
     document->e_Saved.AddMethod( this, &MainFrame::DocumentChanged ) ;

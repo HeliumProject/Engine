@@ -49,7 +49,7 @@ namespace Lunar
 
         /// @name World Creation
         //@{
-        ObjectPath GetWorldPackagePath() const;
+        GameObjectPath GetWorldPackagePath() const;
         Package* GetWorldPackage() const;
 
         Name GetDefaultWorldName() const;

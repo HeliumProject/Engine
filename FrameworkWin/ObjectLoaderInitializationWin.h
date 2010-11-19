@@ -14,13 +14,13 @@
 
 namespace Lunar
 {
-    /// ObjectLoader initialization implementation for Windows.
+    /// GameObjectLoader initialization implementation for Windows.
     class LUNAR_FRAMEWORK_WIN_API ObjectLoaderInitializationWin : public ObjectLoaderInitialization
     {
     public:
-        /// @name ObjectLoader Initialization
+        /// @name GameObjectLoader Initialization
         //@{
-        virtual ObjectLoader* Initialize();
+        virtual GameObjectLoader* Initialize();
         virtual void Shutdown();
         //@}
     };

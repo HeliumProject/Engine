@@ -10,7 +10,7 @@
 #define LUNAR_EDITOR_SUPPORT_EDITOR_OBJECT_LOADER_H
 
 #include "EditorSupport/EditorSupport.h"
-#include "Engine/ObjectLoader.h"
+#include "Engine/GameObjectLoader.h"
 
 #include "PcSupport/XmlPackageLoaderMap.h"
 
@@ -19,7 +19,7 @@ namespace Lunar
     class XmlObjectLoader;
 
     /// Editor-based object loader.
-    class EditorObjectLoader : public ObjectLoader
+    class EditorObjectLoader : public GameObjectLoader
     {
     public:
         /// @name Construction/Destruction
@@ -30,7 +30,7 @@ namespace Lunar
 
         /// @name Loading Interface
         //@{
-        virtual bool CacheObject( Object* pObject, bool bEvictPlatformPreprocessedResourceData );
+        virtual bool CacheObject( GameObject* pObject, bool bEvictPlatformPreprocessedResourceData );
         //@}
 
         /// @name Static Initialization
@@ -44,11 +44,11 @@ namespace Lunar
 
         /// @name Loading Implementation
         //@{
-        virtual PackageLoader* GetPackageLoader( ObjectPath path );
+        virtual PackageLoader* GetPackageLoader( GameObjectPath path );
         virtual void TickPackageLoaders();
 
-        virtual void OnPrecacheReady( Object* pObject, PackageLoader* pPackageLoader );
-        virtual void OnLoadComplete( ObjectPath path, Object* pObject, PackageLoader* pPackageLoader );
+        virtual void OnPrecacheReady( GameObject* pObject, PackageLoader* pPackageLoader );
+        virtual void OnLoadComplete( GameObjectPath path, GameObject* pObject, PackageLoader* pPackageLoader );
         //@}
     };
 }

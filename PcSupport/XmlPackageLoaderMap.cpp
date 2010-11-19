@@ -20,7 +20,7 @@ namespace Lunar
     /// Destructor.
     XmlPackageLoaderMap::~XmlPackageLoaderMap()
     {
-        ConcurrentHashMap< ObjectPath, XmlPackageLoader* >::ConstAccessor loaderAccessor;
+        ConcurrentHashMap< GameObjectPath, XmlPackageLoader* >::ConstAccessor loaderAccessor;
         if( m_packageLoaderMap.First( loaderAccessor ) )
         {
             do
@@ -37,15 +37,15 @@ namespace Lunar
 
     /// Get the package loader to use to load the object with the given path, creating it if necessary.
     ///
-    /// @param[in] path  Object path.
+    /// @param[in] path  GameObject path.
     ///
     /// @return  Package loader to use to load the specified object.
-    XmlPackageLoader* XmlPackageLoaderMap::GetPackageLoader( ObjectPath path )
+    XmlPackageLoader* XmlPackageLoaderMap::GetPackageLoader( GameObjectPath path )
     {
         HELIUM_ASSERT( !path.IsEmpty() );
 
         // Resolve the object's package.
-        ObjectPath packagePath = path;
+        GameObjectPath packagePath = path;
         while( !packagePath.IsPackage() )
         {
             packagePath = packagePath.GetParent();
@@ -62,7 +62,7 @@ namespace Lunar
         }
 
         // Locate an existing package loader.
-        ConcurrentHashMap< ObjectPath, XmlPackageLoader* >::ConstAccessor constMapAccessor;
+        ConcurrentHashMap< GameObjectPath, XmlPackageLoader* >::ConstAccessor constMapAccessor;
         if( m_packageLoaderMap.Find( constMapAccessor, packagePath ) )
         {
             XmlPackageLoader* pLoader = constMapAccessor->second;
@@ -72,10 +72,10 @@ namespace Lunar
         }
 
         // Add a new package loader entry.
-        ConcurrentHashMap< ObjectPath, XmlPackageLoader* >::Accessor mapAccessor;
+        ConcurrentHashMap< GameObjectPath, XmlPackageLoader* >::Accessor mapAccessor;
         bool bInserted = m_packageLoaderMap.Insert(
             mapAccessor,
-            std::pair< ObjectPath, XmlPackageLoader* >( packagePath, NULL ) );
+            std::pair< GameObjectPath, XmlPackageLoader* >( packagePath, NULL ) );
         if( bInserted )
         {
             // Entry added, so create and initialize the package loader.
@@ -107,7 +107,7 @@ namespace Lunar
         return pLoader;
     }
 
-    /// Tick all package loaders for a given ObjectLoader tick.
+    /// Tick all package loaders for a given GameObjectLoader tick.
     void XmlPackageLoaderMap::TickPackageLoaders()
     {
         // Build the list of package loaders to update this tick from the loader map (the Tick() for a given package
@@ -115,7 +115,7 @@ namespace Lunar
         // part of the hash map locked as which needs to be updated).
         HELIUM_ASSERT( m_packageLoaderTickArray.IsEmpty() );
 
-        ConcurrentHashMap< ObjectPath, XmlPackageLoader* >::ConstAccessor loaderAccessor;
+        ConcurrentHashMap< GameObjectPath, XmlPackageLoader* >::ConstAccessor loaderAccessor;
         if( m_packageLoaderMap.First( loaderAccessor ) )
         {
             do

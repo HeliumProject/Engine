@@ -10,7 +10,7 @@
 #define LUNAR_PC_SUPPORT_RESOURCE_HANDLER_H
 
 #include "PcSupport/PcSupport.h"
-#include "Engine/Object.h"
+#include "Engine/GameObject.h"
 
 #include "Engine/Resource.h"
 
@@ -24,9 +24,9 @@ namespace Lunar
     class ObjectPreprocessor;
 
     /// Interface for parsing resources and creating and caching objects based on them.
-    class LUNAR_PC_SUPPORT_API ResourceHandler : public Object
+    class LUNAR_PC_SUPPORT_API ResourceHandler : public GameObject
     {
-        L_DECLARE_OBJECT( ResourceHandler, Object );
+        L_DECLARE_OBJECT( ResourceHandler, GameObject );
 
     public:
         /// @name Construction/Destruction

@@ -13,6 +13,8 @@
 #include "Engine/PackageLoader.h"
 #include "Engine/Serializer.h"
 
+#include "Foundation/File/Path.h"
+
 /// XML package file extension string.
 #define L_XML_PACKAGE_FILE_EXTENSION TXT( ".xml" )
 /// Directory-based XML package file name string.
@@ -34,13 +36,13 @@ namespace Lunar
         /// Serialized object data.
         struct SerializedObjectData
         {
-            /// Object path.
-            ObjectPath objectPath;
+            /// GameObject path.
+            GameObjectPath objectPath;
 
             /// Type path.
-            ObjectPath typePath;
+            GameObjectPath typePath;
             /// Template path.
-            ObjectPath templatePath;
+            GameObjectPath templatePath;
 
             /// Serialized properties.
             ConcurrentHashMap< String, String > properties;
@@ -48,7 +50,7 @@ namespace Lunar
             ConcurrentHashMap< String, uint32_t > arraySizes;
         };
 
-        /// Object deserializer.
+        /// GameObject deserializer.
         class Deserializer : public Serializer
         {
         public:
@@ -65,7 +67,7 @@ namespace Lunar
 
             /// @name Serialization Interface
             //@{
-            virtual bool Serialize( Object* pObject );
+            virtual bool Serialize( GameObject* pObject );
             virtual EMode GetMode() const;
 
             virtual void SerializeTag( const Tag& rTag );
@@ -90,7 +92,7 @@ namespace Lunar
             virtual void SerializeWideName( WideName& rValue );
             virtual void SerializeCharString( CharString& rValue );
             virtual void SerializeWideString( WideString& rValue );
-            virtual void SerializeObjectReference( Type* pType, ObjectPtr& rspObject );
+            virtual void SerializeObjectReference( Type* pType, GameObjectPtr& rspObject );
 
             virtual void BeginStruct( EStructTag tag );
             virtual void EndStruct();
@@ -221,7 +223,7 @@ namespace Lunar
 #endif
             };
 
-            /// Object reference parser.
+            /// GameObject reference parser.
             class ObjectParser
             {
             public:
@@ -232,11 +234,11 @@ namespace Lunar
 
                 /// @name Overloaded Operators
                 //@{
-                bool operator()( const String& rText, ObjectPtr& rspValue ) const;
+                bool operator()( const String& rText, GameObjectPtr& rspValue ) const;
                 //@}
 
             private:
-                /// Object link table.
+                /// GameObject link table.
                 DynArray< LinkEntry >* m_pLinkTable;
             };
 
@@ -262,11 +264,11 @@ namespace Lunar
 
                 /// @name Overloaded Operators
                 //@{
-                void operator()( ObjectPtr& rspValue ) const;
+                void operator()( GameObjectPtr& rspValue ) const;
                 //@}
 
             private:
-                /// Object link table.
+                /// GameObject link table.
                 DynArray< LinkEntry >* m_pLinkTable;
             };
 
@@ -315,7 +317,7 @@ namespace Lunar
 
         /// @name Initialization
         //@{
-        bool Initialize( ObjectPath packagePath );
+        bool Initialize( GameObjectPath packagePath );
         void Shutdown();
         //@}
 
@@ -324,9 +326,9 @@ namespace Lunar
         bool BeginPreload();
         virtual bool TryFinishPreload();
 
-        virtual size_t BeginLoadObject( ObjectPath path );
+        virtual size_t BeginLoadObject( GameObjectPath path );
         virtual bool TryFinishLoadObject(
-            size_t requestId, ObjectPtr& rspObject, DynArray< ObjectLoader::LinkEntry >& rLinkTable );
+            size_t requestId, GameObjectPtr& rspObject, DynArray< GameObjectLoader::LinkEntry >& rLinkTable );
 
         virtual void Tick();
         //@}
@@ -334,12 +336,12 @@ namespace Lunar
         /// @name Data Access
         //@{
         virtual size_t GetObjectCount() const;
-        virtual ObjectPath GetObjectPath( size_t index ) const;
+        virtual GameObjectPath GetObjectPath( size_t index ) const;
 
         Package* GetPackage() const;
-        ObjectPath GetPackagePath() const;
+        GameObjectPath GetPackagePath() const;
 
-        inline const String& GetPackageFilePath() const;
+        inline const Path& GetPackageFilePath() const;
         //@}
 
         /// @name Package File Information
@@ -367,29 +369,29 @@ namespace Lunar
         /// Link table entry.
         struct LinkEntry
         {
-            /// Object path.
-            ObjectPath path;
+            /// GameObject path.
+            GameObjectPath path;
             /// Load request ID.
             size_t loadRequestId;
         };
 
-        /// Object load request data.
+        /// GameObject load request data.
         struct LoadRequest
         {
             /// Temporary object reference (hold while loading is in progress).
-            ObjectPtr spObject;
-            /// Object index.
+            GameObjectPtr spObject;
+            /// GameObject index.
             size_t index;
 
             /// Link table.
             DynArray< LinkEntry > linkTable;
 
             /// Cached type reference.
-            ObjectPtr spType;
+            GameObjectPtr spType;
             /// Cached template reference.
-            ObjectPtr spTemplate;
+            GameObjectPtr spTemplate;
             /// Cached owner reference.
-            ObjectPtr spOwner;
+            GameObjectPtr spOwner;
             /// Type object load request ID.
             size_t typeLoadId;
             /// Template object load request ID.
@@ -411,7 +413,7 @@ namespace Lunar
         /// Package reference.
         PackagePtr m_spPackage;
         /// Package path.
-        ObjectPath m_packagePath;
+        GameObjectPath m_packagePath;
 
         /// Non-zero if the preload process has started.
         volatile int32_t m_startPreloadCounter;
@@ -427,7 +429,7 @@ namespace Lunar
         ObjectPool< LoadRequest > m_loadRequestPool;
 
         /// Package file path name.
-        String m_packageFilePath;
+        Path m_packageFilePath;
         /// Size of the package data file.
         size_t m_packageFileSize;
 

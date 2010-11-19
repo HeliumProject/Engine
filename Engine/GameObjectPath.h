@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// ObjectPath.h
+// GameObjectPath.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -14,21 +14,21 @@
 #include "Platform/ReadWriteLock.h"
 #include "Foundation/Name.h"
 
-/// @defgroup objectpathdelims Object Path Delimiter Characters
+/// @defgroup objectpathdelims GameObject Path Delimiter Characters
 //@{
 
 /// Package delimiter character.
 #define L_PACKAGE_PATH_CHAR TXT( '/' )
-/// Object delimiter character.
+/// GameObject delimiter character.
 #define L_OBJECT_PATH_CHAR TXT( ':' )
-/// Object instance index delimiter character.
+/// GameObject instance index delimiter character.
 #define L_INSTANCE_PATH_CHAR TXT( '*' )
 
 /// Package delimiter character string.
 #define L_PACKAGE_PATH_CHAR_STRING TXT( "/" )
-/// Object delimiter character string.
+/// GameObject delimiter character string.
 #define L_OBJECT_PATH_CHAR_STRING TXT( ":" )
-/// Object instance index delimiter character.
+/// GameObject instance index delimiter character.
 #define L_INSTANCE_PATH_CHAR_STRING TXT( "*" )
 
 //@}
@@ -36,35 +36,35 @@
 namespace Lunar
 {
     /// Hashed object path name for fast lookups and comparisons.
-    class LUNAR_ENGINE_API ObjectPath
+    class LUNAR_ENGINE_API GameObjectPath
     {
     public:
         /// Number of object path hash table buckets (prime numbers are recommended).
         static const size_t TABLE_BUCKET_COUNT = 37;
-        /// Object path stack memory heap block size.
+        /// GameObject path stack memory heap block size.
         static const size_t STACK_HEAP_BLOCK_SIZE = sizeof( tchar_t ) * 8192;
 
         /// @name Construction/Destruction
         //@{
-        inline ObjectPath();
-        inline ObjectPath( ENullName );
+        inline GameObjectPath();
+        inline GameObjectPath( ENullName );
         //@}
 
         /// @name Path Access
         //@{
         bool Set( const tchar_t* pString );
         bool Set( const String& rString );
-        bool Set( Name name, bool bPackage, ObjectPath parentPath, uint32_t instanceIndex = Invalid< uint32_t >() );
+        bool Set( Name name, bool bPackage, GameObjectPath parentPath, uint32_t instanceIndex = Invalid< uint32_t >() );
 
-        bool Join( ObjectPath rootPath, ObjectPath subPath );
-        bool Join( ObjectPath rootPath, const tchar_t* pSubPath );
-        bool Join( const tchar_t* pRootPath, ObjectPath subPath );
+        bool Join( GameObjectPath rootPath, GameObjectPath subPath );
+        bool Join( GameObjectPath rootPath, const tchar_t* pSubPath );
+        bool Join( const tchar_t* pRootPath, GameObjectPath subPath );
         bool Join( const tchar_t* pRootPath, const tchar_t* pSubPath );
 
         inline Name GetName() const;
         inline uint32_t GetInstanceIndex() const;
         inline bool IsPackage() const;
-        inline ObjectPath GetParent() const;
+        inline GameObjectPath GetParent() const;
 
         void ToString( String& rString ) const;
         inline String ToString() const;
@@ -80,8 +80,8 @@ namespace Lunar
 
         /// @name Overloaded Operators
         //@{
-        inline bool operator==( ObjectPath path ) const;
-        inline bool operator!=( ObjectPath path ) const;
+        inline bool operator==( GameObjectPath path ) const;
+        inline bool operator!=( GameObjectPath path ) const;
         //@}
 
         /// @name Static Initialization
@@ -95,20 +95,20 @@ namespace Lunar
         //@}
 
     private:
-        /// Object path entry.
+        /// GameObject path entry.
         struct Entry
         {
             /// Parent entry.
             Entry* pParent;
-            /// Object name.
+            /// GameObject name.
             Name name;
-            /// Object instance index.
+            /// GameObject instance index.
             uint32_t instanceIndex;
             /// True if the object is a package.
             bool bPackage;
         };
 
-        /// Object path hash table bucket.
+        /// GameObject path hash table bucket.
         class TableBucket
         {
         public:
@@ -125,10 +125,10 @@ namespace Lunar
             ReadWriteLock m_lock;
         };
 
-        /// Object path entry.
+        /// GameObject path entry.
         Entry* m_pEntry;
 
-        /// Object path hash table.
+        /// GameObject path hash table.
         static TableBucket* sm_pTable;
         /// Stack-based memory heap for object path entry allocations.
         static StackMemoryHeap<>* sm_pEntryMemoryHeap;
@@ -157,15 +157,15 @@ namespace Lunar
 
 namespace Helium
 {
-    /// Default ObjectPath hash.
+    /// Default GameObjectPath hash.
     template<>
-    class LUNAR_ENGINE_API Hash< ObjectPath >
+    class LUNAR_ENGINE_API Hash< GameObjectPath >
     {
     public:
-        inline size_t operator()( const ObjectPath& rKey ) const;
+        inline size_t operator()( const GameObjectPath& rKey ) const;
     };
 }
 
-#include "Engine/ObjectPath.inl"
+#include "Engine/GameObjectPath.inl"
 
 #endif  // LUNAR_ENGINE_OBJECT_PATH_H

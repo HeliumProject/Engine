@@ -8,10 +8,10 @@
 #include "EnginePch.h"
 #include "Engine/CachePackageLoader.h"
 
-#include "Core/AsyncLoader.h"
+#include "Foundation/AsyncLoader.h"
 #include "Engine/BinaryDeserializer.h"
 #include "Engine/CacheManager.h"
-#include "Engine/ObjectLoader.h"
+#include "Engine/GameObjectLoader.h"
 #include "Engine/NullLinker.h"
 #include "Engine/Resource.h"
 
@@ -132,7 +132,7 @@ namespace Lunar
     }
 
     /// @copydoc PackageLoader::BeginLoadObject()
-    size_t CachePackageLoader::BeginLoadObject( ObjectPath path )
+    size_t CachePackageLoader::BeginLoadObject( GameObjectPath path )
     {
         HELIUM_ASSERT( m_pCache );
 
@@ -229,9 +229,9 @@ namespace Lunar
 
         // If a fully-loaded object already exists with the same name, do not attempt to re-load the object (just mark
         // the request as complete).
-        pRequest->spObject = Object::FindObject( pEntry->path );
+        pRequest->spObject = GameObject::FindObject( pEntry->path );
 
-        Object* pObject = pRequest->spObject;
+        GameObject* pObject = pRequest->spObject;
         if( pObject && pObject->IsFullyLoaded() )
         {
             HELIUM_TRACE(
@@ -244,7 +244,7 @@ namespace Lunar
         }
         else
         {
-            HELIUM_ASSERT( !pObject || !pObject->GetAnyFlagSet( Object::FLAG_LOADED | Object::FLAG_LINKED ) );
+            HELIUM_ASSERT( !pObject || !pObject->GetAnyFlagSet( GameObject::FLAG_LOADED | GameObject::FLAG_LINKED ) );
 
             HELIUM_TRACE(
                 TRACE_DEBUG,
@@ -279,8 +279,8 @@ namespace Lunar
     /// @copydoc PackageLoader::TryFinishLoadObject()
     bool CachePackageLoader::TryFinishLoadObject(
         size_t requestId,
-        ObjectPtr& rspObject,
-        DynArray< ObjectLoader::LinkEntry >& rLinkTable )
+        GameObjectPtr& rspObject,
+        DynArray< GameObjectLoader::LinkEntry >& rLinkTable )
     {
         HELIUM_ASSERT( requestId < m_loadRequests.GetSize() );
         HELIUM_ASSERT( m_loadRequests.IsElementValid( requestId ) );
@@ -293,7 +293,7 @@ namespace Lunar
         }
 
         // Sync on type, template, and owner dependencies.
-        ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
 
         DynArray< size_t >& rInternalLinkTable = pRequest->linkTable;
@@ -332,10 +332,10 @@ namespace Lunar
         }
 
         rspObject = pRequest->spObject;
-        Object* pObject = rspObject;
+        GameObject* pObject = rspObject;
         if( pObject && ( pRequest->flags & LOAD_FLAG_ERROR ) )
         {
-            pObject->SetFlags( Object::FLAG_BROKEN );
+            pObject->SetFlags( GameObject::FLAG_BROKEN );
         }
 
         pRequest->spObject.Release();
@@ -345,7 +345,7 @@ namespace Lunar
         rLinkTable.Reserve( linkTableSize );
         for( size_t linkIndex = 0; linkIndex < linkTableSize; ++linkIndex )
         {
-            ObjectLoader::LinkEntry* pEntry = rLinkTable.New();
+            GameObjectLoader::LinkEntry* pEntry = rLinkTable.New();
             HELIUM_ASSERT( pEntry );
             pEntry->loadId = rInternalLinkTable[ linkIndex ];
             pEntry->spObject.Release();
@@ -423,7 +423,7 @@ namespace Lunar
     }
 
     /// @copydoc PackageLoader::GetObjectPath()
-    ObjectPath CachePackageLoader::GetObjectPath( size_t index ) const
+    GameObjectPath CachePackageLoader::GetObjectPath( size_t index ) const
     {
         HELIUM_ASSERT( m_pCache );
         HELIUM_ASSERT( index < m_pCache->GetEntryCount() );
@@ -491,10 +491,10 @@ namespace Lunar
         DefaultAllocator().Free( pRequest->pAsyncLoadBuffer );
         pRequest->pAsyncLoadBuffer = NULL;
 
-        Object* pObject = pRequest->spObject;
+        GameObject* pObject = pRequest->spObject;
         if( pObject )
         {
-            pObject->SetFlags( Object::FLAG_PRELOADED | Object::FLAG_LINKED );
+            pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
             pObject->ConditionalFinalizeLoad();
         }
 
@@ -513,13 +513,13 @@ namespace Lunar
         HELIUM_ASSERT( pRequest );
         HELIUM_ASSERT( !( pRequest->flags & LOAD_FLAG_PRELOADED ) );
 
-        Object* pObject = pRequest->spObject;
+        GameObject* pObject = pRequest->spObject;
 
         const Cache::Entry* pCacheEntry = pRequest->pEntry;
         HELIUM_ASSERT( pCacheEntry );
 
         // Wait for the type, template, and owner objects to load.
-        ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
 
         if( IsValid( pRequest->typeLinkIndex ) )
@@ -544,7 +544,7 @@ namespace Lunar
 
             if( pObject )
             {
-                pObject->SetFlags( Object::FLAG_PRELOADED | Object::FLAG_LINKED );
+                pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
                 pObject->ConditionalFinalizeLoad();
             }
 
@@ -576,7 +576,7 @@ namespace Lunar
 
                 if( pObject )
                 {
-                    pObject->SetFlags( Object::FLAG_PRELOADED | Object::FLAG_LINKED );
+                    pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
                     pObject->ConditionalFinalizeLoad();
                 }
 
@@ -589,7 +589,7 @@ namespace Lunar
             }
         }
 
-        Object* pTemplate = pRequest->spTemplate;
+        GameObject* pTemplate = pRequest->spTemplate;
 
         if( IsValid( pRequest->ownerLinkIndex ) )
         {
@@ -611,7 +611,7 @@ namespace Lunar
 
                 if( pObject )
                 {
-                    pObject->SetFlags( Object::FLAG_PRELOADED | Object::FLAG_LINKED );
+                    pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
                     pObject->ConditionalFinalizeLoad();
                 }
 
@@ -624,7 +624,7 @@ namespace Lunar
             }
         }
 
-        Object* pOwner = pRequest->spOwner;
+        GameObject* pOwner = pRequest->spOwner;
 
         HELIUM_ASSERT( pType->IsFullyLoaded() );
         HELIUM_ASSERT( !pOwner || pOwner->IsFullyLoaded() );
@@ -645,7 +645,7 @@ namespace Lunar
                     *pExistingType->GetPath().ToString(),
                     *pType->GetPath().ToString() );
 
-                pObject->SetFlags( Object::FLAG_PRELOADED | Object::FLAG_LINKED );
+                pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
                 pObject->ConditionalFinalizeLoad();
 
                 DefaultAllocator().Free( pRequest->pAsyncLoadBuffer );
@@ -659,7 +659,7 @@ namespace Lunar
         else
         {
             // Create the object.
-            pRequest->spObject = Object::CreateObject( pType, pCacheEntry->path.GetName(), pOwner, pTemplate );
+            pRequest->spObject = GameObject::CreateObject( pType, pCacheEntry->path.GetName(), pOwner, pTemplate );
             pObject = pRequest->spObject;
             if( !pObject )
             {
@@ -692,7 +692,7 @@ namespace Lunar
 
             // Clear out object references (object can now be considered fully loaded as well).
             NullLinker().Serialize( pObject );
-            pObject->SetFlags( Object::FLAG_LINKED );
+            pObject->SetFlags( GameObject::FLAG_LINKED );
             pObject->ConditionalFinalizeLoad();
 
             pRequest->flags |= LOAD_FLAG_ERROR;
@@ -723,11 +723,11 @@ namespace Lunar
         DefaultAllocator().Free( pRequest->pAsyncLoadBuffer );
         pRequest->pAsyncLoadBuffer = NULL;
 
-        pObject->SetFlags( Object::FLAG_PRELOADED );
+        pObject->SetFlags( GameObject::FLAG_PRELOADED );
 
         pRequest->flags |= LOAD_FLAG_PRELOADED;
 
-        // Object is now preloaded.
+        // GameObject is now preloaded.
         return true;
     }
 
@@ -735,26 +735,26 @@ namespace Lunar
     ///
     /// @param[out] rspPackage   Resolved package.
     /// @param[in]  packagePath  Package object path.
-    void CachePackageLoader::ResolvePackage( ObjectPtr& rspPackage, ObjectPath packagePath )
+    void CachePackageLoader::ResolvePackage( GameObjectPtr& rspPackage, GameObjectPath packagePath )
     {
         HELIUM_ASSERT( !packagePath.IsEmpty() );
 
-        rspPackage = Object::FindObject( packagePath );
+        rspPackage = GameObject::FindObject( packagePath );
         if( !rspPackage )
         {
-            ObjectPtr spParent;
-            ObjectPath parentPath = packagePath.GetParent();
+            GameObjectPtr spParent;
+            GameObjectPath parentPath = packagePath.GetParent();
             if( !parentPath.IsEmpty() )
             {
                 ResolvePackage( spParent, parentPath );
                 HELIUM_ASSERT( spParent );
             }
 
-            rspPackage = Object::Create< Package >( packagePath.GetName(), spParent );
+            rspPackage = GameObject::Create< Package >( packagePath.GetName(), spParent );
             HELIUM_ASSERT( rspPackage );
         }
 
-        rspPackage->SetFlags( Object::FLAG_PRELOADED | Object::FLAG_LINKED | Object::FLAG_LOADED );
+        rspPackage->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED | GameObject::FLAG_LOADED );
     }
 
     /// Deserialize the link table for an object load.
@@ -833,12 +833,12 @@ namespace Lunar
         // Track the link table object paths so that we can use them for issuing additonal load requests for the object
         // type, template, and owner dependencies (this way, we can sync on those load requests during the preload
         // process while still providing load requests for the caller to resolve if necessary).
-        ObjectPath* pLinkTablePaths = static_cast< ObjectPath* >( rStackHeap.Allocate(
-            sizeof( ObjectPath ) * linkTableSize ) );
+        GameObjectPath* pLinkTablePaths = static_cast< GameObjectPath* >( rStackHeap.Allocate(
+            sizeof( GameObjectPath ) * linkTableSize ) );
         HELIUM_ASSERT( pLinkTablePaths );
-        ArrayUninitializedFill( pLinkTablePaths, ObjectPath( NULL_NAME ), linkTableSize );
+        ArrayUninitializedFill( pLinkTablePaths, GameObjectPath( NULL_NAME ), linkTableSize );
 
-        ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
 
         uint_fast32_t linkTableSizeFast = linkTableSize;
@@ -881,7 +881,7 @@ namespace Lunar
             size_t linkLoadId;
             SetInvalid( linkLoadId );
 
-            ObjectPath path;
+            GameObjectPath path;
             if( !path.Set( pPathString ) )
             {
                 HELIUM_TRACE(

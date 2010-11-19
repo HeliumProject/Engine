@@ -1,12 +1,12 @@
 //----------------------------------------------------------------------------------------------------------------------
-// Object.cpp
+// GameObject.cpp
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EnginePch.h"
-#include "Engine/Object.h"
+#include "Engine/GameObject.h"
 
 #include "Foundation/Container/ObjectPool.h"
 #include "Engine/Type.h"
@@ -23,10 +23,10 @@ namespace Lunar
         static const size_t POOL_BLOCK_SIZE = 1024;
 
         /// Proxy object pool.
-        ObjectPool< RefCountProxy< Object > > proxyPool;
+        ObjectPool< RefCountProxy< GameObject > > proxyPool;
 #if HELIUM_ENABLE_MEMORY_TRACKING
         /// Active reference count proxies.
-        ConcurrentHashSet< RefCountProxy< Object >* > activeProxySet;
+        ConcurrentHashSet< RefCountProxy< GameObject >* > activeProxySet;
 #endif
 
         /// @name Construction/Destruction
@@ -35,15 +35,15 @@ namespace Lunar
         //@}
     };
 
-    TypeWPtr Object::sm_spStaticType;
-    ObjectPtr Object::sm_spStaticTypeTemplate;
+    TypeWPtr GameObject::sm_spStaticType;
+    GameObjectPtr GameObject::sm_spStaticTypeTemplate;
 
-    SparseArray< ObjectWPtr > Object::sm_objects;
-    DynArray< ObjectWPtr > Object::sm_topLevelObjects;
-    Object::ChildNameInstanceIndexMap* Object::sm_pNameInstanceIndexMap = NULL;
-    ReadWriteLock Object::sm_objectListLock;
+    SparseArray< GameObjectWPtr > GameObject::sm_objects;
+    DynArray< GameObjectWPtr > GameObject::sm_topLevelObjects;
+    GameObject::ChildNameInstanceIndexMap* GameObject::sm_pNameInstanceIndexMap = NULL;
+    ReadWriteLock GameObject::sm_objectListLock;
 
-    DynArray< uint8_t > Object::sm_serializationBuffer;
+    DynArray< uint8_t > GameObject::sm_serializationBuffer;
 
     ObjectRefCountSupport::StaticData* ObjectRefCountSupport::sm_pStaticData = NULL;
 
@@ -52,7 +52,7 @@ namespace Lunar
     /// @return  Pointer to a reference count proxy.
     ///
     /// @see Release()
-    RefCountProxy< Object >* ObjectRefCountSupport::Allocate()
+    RefCountProxy< GameObject >* ObjectRefCountSupport::Allocate()
     {
         // Lazy initialization of the proxy management data.  Even though this isn't thread-safe, it should still be
         // fine as the proxy system should be initialized from the main thread before any sub-threads are spawned (i.e.
@@ -65,11 +65,11 @@ namespace Lunar
             sm_pStaticData = pStaticData;
         }
 
-        RefCountProxy< Object >* pProxy = pStaticData->proxyPool.Allocate();
+        RefCountProxy< GameObject >* pProxy = pStaticData->proxyPool.Allocate();
         HELIUM_ASSERT( pProxy );
 
 #if HELIUM_ENABLE_MEMORY_TRACKING
-        ConcurrentHashSet< RefCountProxy< Object >* >::Accessor activeProxySetAccessor;
+        ConcurrentHashSet< RefCountProxy< GameObject >* >::Accessor activeProxySetAccessor;
         HELIUM_VERIFY( pStaticData->activeProxySet.Insert( activeProxySetAccessor, pProxy ) );
 #endif
 
@@ -81,7 +81,7 @@ namespace Lunar
     /// @param[in] pProxy  Pointer to the reference count proxy to release.
     ///
     /// @see Allocate()
-    void ObjectRefCountSupport::Release( RefCountProxy< Object >* pProxy )
+    void ObjectRefCountSupport::Release( RefCountProxy< GameObject >* pProxy )
     {
         HELIUM_ASSERT( pProxy );
 
@@ -131,7 +131,7 @@ namespace Lunar
     ///
     /// @see GetActiveProxyCount()
     bool ObjectRefCountSupport::GetFirstActiveProxy(
-        ConcurrentHashSet< RefCountProxy< Object >* >::ConstAccessor& rAccessor )
+        ConcurrentHashSet< RefCountProxy< GameObject >* >::ConstAccessor& rAccessor )
     {
         HELIUM_ASSERT( sm_pStaticData );
 
@@ -146,7 +146,7 @@ namespace Lunar
     }
 
     /// Constructor.
-    Object::Object()
+    GameObject::GameObject()
         : m_name( NULL_NAME )
         , m_instanceIndex( Invalid< uint32_t >() )
         , m_id( Invalid< uint32_t >() )
@@ -157,11 +157,11 @@ namespace Lunar
     }
 
     /// Destructor.
-    Object::~Object()
+    GameObject::~GameObject()
     {
         HELIUM_ASSERT_MSG(
-            GetAnyFlagSet( Object::FLAG_PREDESTROYED ),
-            TXT( "Object::PreDestroy() not called prior to destruction." ) );
+            GetAnyFlagSet( GameObject::FLAG_PREDESTROYED ),
+            TXT( "GameObject::PreDestroy() not called prior to destruction." ) );
     }
 
     /// Change the name of this object.
@@ -171,7 +171,7 @@ namespace Lunar
     /// @return  True if the name was changed successfully, false if not.
     ///
     /// @see GetName()
-    bool Object::SetName( Name name )
+    bool GameObject::SetName( Name name )
     {
         // Don't allow setting an empty name.
         if( name.IsEmpty() )
@@ -192,14 +192,14 @@ namespace Lunar
         ScopeWriteLock scopeLock( sm_objectListLock );
 
         // Make sure another object with the same name and instance index doesn't already exist.
-        Object* pOwner = m_spOwner;
+        GameObject* pOwner = m_spOwner;
         if( pOwner )
         {
-            DynArray< ObjectWPtr >& ownerChildren = pOwner->m_children;
+            DynArray< GameObjectWPtr >& ownerChildren = pOwner->m_children;
             size_t ownerChildCount = ownerChildren.GetSize();
             for( size_t childIndex = 0; childIndex < ownerChildCount; ++childIndex )
             {
-                Object* pChild = ownerChildren[ childIndex ];
+                GameObject* pChild = ownerChildren[ childIndex ];
                 if( pChild && pChild->m_name == name && pChild->m_instanceIndex == m_instanceIndex )
                 {
                     HELIUM_TRACE(
@@ -226,7 +226,7 @@ namespace Lunar
         size_t topLevelObjectCount = sm_topLevelObjects.GetSize();
         for( size_t objectIndex = 0; objectIndex < topLevelObjectCount; ++objectIndex )
         {
-            Object* pTopLevelObject = sm_topLevelObjects[ objectIndex ];
+            GameObject* pTopLevelObject = sm_topLevelObjects[ objectIndex ];
             if( pTopLevelObject &&
                 pTopLevelObject != this &&
                 pTopLevelObject->GetName() == name &&
@@ -261,7 +261,7 @@ namespace Lunar
     /// @return  True if the instance index was changed successfully, false if not.
     ///
     /// @see GetInstanceIndex()
-    bool Object::SetInstanceIndex( uint32_t index )
+    bool GameObject::SetInstanceIndex( uint32_t index )
     {
         // Don't need to do anything if the instance index is not changing.
         if( m_instanceIndex == index )
@@ -274,14 +274,14 @@ namespace Lunar
         ScopeWriteLock scopeLock( sm_objectListLock );
 
         // Make sure another object with the same name and instance index doesn't already exist.
-        Object* pOwner = m_spOwner;
+        GameObject* pOwner = m_spOwner;
         if( pOwner )
         {
-            DynArray< ObjectWPtr >& ownerChildren = pOwner->m_children;
+            DynArray< GameObjectWPtr >& ownerChildren = pOwner->m_children;
             size_t ownerChildCount = ownerChildren.GetSize();
             for( size_t childIndex = 0; childIndex < ownerChildCount; ++childIndex )
             {
-                Object* pChild = ownerChildren[ childIndex ];
+                GameObject* pChild = ownerChildren[ childIndex ];
                 if( pChild && pChild->m_name == m_name && pChild->m_instanceIndex == index )
                 {
                     HELIUM_TRACE(
@@ -309,7 +309,7 @@ namespace Lunar
         size_t topLevelObjectCount = sm_topLevelObjects.GetSize();
         for( size_t objectIndex = 0; objectIndex < topLevelObjectCount; ++objectIndex )
         {
-            Object* pTopLevelObject = sm_topLevelObjects[ objectIndex ];
+            GameObject* pTopLevelObject = sm_topLevelObjects[ objectIndex ];
             if( pTopLevelObject &&
                 pTopLevelObject != this &&
                 pTopLevelObject->GetName() == m_name &&
@@ -340,12 +340,12 @@ namespace Lunar
     ///
     /// Note that all object flag functions are thread-safe.
     ///
-    /// @param[in] flagMask  Object flag bit mask.
+    /// @param[in] flagMask  GameObject flag bit mask.
     ///
-    /// @return  Object flag state immediately prior to setting the given flags.
+    /// @return  GameObject flag state immediately prior to setting the given flags.
     ///
     /// @see ClearFlags(), ToggleFlags(), GetFlags(), GetAnyFlagSet(), GetAllFlagsSet()
-    uint32_t Object::SetFlags( uint32_t flagMask )
+    uint32_t GameObject::SetFlags( uint32_t flagMask )
     {
         HELIUM_ASSERT( flagMask != 0 );
 
@@ -356,12 +356,12 @@ namespace Lunar
     ///
     /// Note that all object flag functions are thread-safe.
     ///
-    /// @param[in] flagMask  Object flag bit mask.
+    /// @param[in] flagMask  GameObject flag bit mask.
     ///
-    /// @return  Object flag state immediately prior to clearing the given flags.
+    /// @return  GameObject flag state immediately prior to clearing the given flags.
     ///
     /// @see SetFlags(), ToggleFlags(), GetFlags(), GetAnyFlagSet(), GetAllFlagsSet()
-    uint32_t Object::ClearFlags( uint32_t flagMask )
+    uint32_t GameObject::ClearFlags( uint32_t flagMask )
     {
         HELIUM_ASSERT( flagMask != 0 );
 
@@ -372,12 +372,12 @@ namespace Lunar
     ///
     /// Note that all object flag functions are thread-safe.
     ///
-    /// @param[in] flagMask  Object flag bit mask.
+    /// @param[in] flagMask  GameObject flag bit mask.
     ///
-    /// @return  Object flag state immediately prior to clearing the given flags.
+    /// @return  GameObject flag state immediately prior to clearing the given flags.
     ///
     /// @see SetFlags(), ClearFlags(), GetFlags(), GetAnyFlagSet(), GetAllFlagsSet()
-    uint32_t Object::ToggleFlags( uint32_t flagMask )
+    uint32_t GameObject::ToggleFlags( uint32_t flagMask )
     {
         HELIUM_ASSERT( flagMask != 0 );
 
@@ -386,10 +386,10 @@ namespace Lunar
 
     /// Get the template for this object.
     ///
-    /// @return  Object template.
-    Object* Object::GetTemplate() const
+    /// @return  GameObject template.
+    GameObject* GameObject::GetTemplate() const
     {
-        Object* pTemplate = m_spTemplate;
+        GameObject* pTemplate = m_spTemplate;
         if( !pTemplate )
         {
             Type* pType = GetType();
@@ -411,7 +411,7 @@ namespace Lunar
     /// @return  True if the owner was switched successfully, false if not.
     ///
     /// @see GetOwner()
-    bool Object::SetOwner( Object* pOwner, bool bResetInstanceIndex )
+    bool GameObject::SetOwner( GameObject* pOwner, bool bResetInstanceIndex )
     {
         HELIUM_ASSERT( pOwner != this );
         if( pOwner == this )
@@ -421,7 +421,7 @@ namespace Lunar
             return false;
         }
 
-        Object* pCurrentOwner = m_spOwner;
+        GameObject* pCurrentOwner = m_spOwner;
         if( pOwner == pCurrentOwner )
         {
             // Owner already set...
@@ -433,9 +433,9 @@ namespace Lunar
 
         // Keep track of the old owner for the duration of this function call.  This is done to avoid deadlocks during
         // potentially recursive calls to this function if this object is the last object holding onto a strong
-        // reference to it (the Object destructor calls SetOwner(), which can cause a deadlock trying to reacquire an
+        // reference to it (the GameObject destructor calls SetOwner(), which can cause a deadlock trying to reacquire an
         // exclusive lock on m_objectListLock).
-        ObjectPtr spOldOwner = m_spOwner;
+        GameObjectPtr spOldOwner = m_spOwner;
 
         {
             ScopeWriteLock scopeLock( sm_objectListLock );
@@ -452,7 +452,7 @@ namespace Lunar
                 ChildNameInstanceIndexMap::ConstAccessor childNameMapAccessor;
                 bool bFoundChildMap = rNameInstanceIndexMap.Find(
                     childNameMapAccessor,
-                    ( pOwner ? pOwner->GetPath() : ObjectPath( NULL_NAME ) ) );
+                    ( pOwner ? pOwner->GetPath() : GameObjectPath( NULL_NAME ) ) );
                 if( bFoundChildMap )
                 {
                     NameInstanceIndexMap::ConstAccessor indexSetAccessor;
@@ -472,7 +472,7 @@ namespace Lunar
             {
                 // Avoid a looping chain of ownership by making sure the new owner is not a child or grandchild of this
                 // object.
-                for( Object* pTestOwner = pOwner->GetOwner(); pTestOwner != NULL; pTestOwner = pTestOwner->GetOwner() )
+                for( GameObject* pTestOwner = pOwner->GetOwner(); pTestOwner != NULL; pTestOwner = pTestOwner->GetOwner() )
                 {
                     if( pTestOwner == this )
                     {
@@ -490,12 +490,12 @@ namespace Lunar
                 // object.
                 if( !bResetInstanceIndex )
                 {
-                    DynArray< ObjectWPtr >& ownerChildren = pOwner->m_children;
+                    DynArray< GameObjectWPtr >& ownerChildren = pOwner->m_children;
                     size_t ownerChildCount = ownerChildren.GetSize();
 
                     for( size_t childIndex = 0; childIndex < ownerChildCount; ++childIndex )
                     {
-                        Object* pChild = ownerChildren[ childIndex ];
+                        GameObject* pChild = ownerChildren[ childIndex ];
                         if( pChild && pChild->m_name == m_name && pChild->m_instanceIndex == m_instanceIndex )
                         {
                             HELIUM_TRACE(
@@ -521,7 +521,7 @@ namespace Lunar
                     size_t topLevelObjectCount = sm_topLevelObjects.GetSize();
                     for( size_t objectIndex = 0; objectIndex < topLevelObjectCount; ++objectIndex )
                     {
-                        Object* pTopLevelObject = sm_topLevelObjects[ objectIndex ];
+                        GameObject* pTopLevelObject = sm_topLevelObjects[ objectIndex ];
                         if( pTopLevelObject &&
                             pTopLevelObject->GetName() == m_name &&
                             pTopLevelObject->GetInstanceIndex() == m_instanceIndex )
@@ -544,7 +544,7 @@ namespace Lunar
 
             if( pCurrentOwner )
             {
-                DynArray< ObjectWPtr >& ownerChildren = pCurrentOwner->m_children;
+                DynArray< GameObjectWPtr >& ownerChildren = pCurrentOwner->m_children;
                 size_t ownerChildCount = ownerChildren.GetSize();
                 for( size_t childIndex = 0; childIndex < ownerChildCount; ++childIndex )
                 {
@@ -574,12 +574,12 @@ namespace Lunar
             m_spOwner = pOwner;
             if( pOwner )
             {
-                pOwner->m_children.Add( ObjectWPtr( this ) );
+                pOwner->m_children.Add( GameObjectWPtr( this ) );
             }
             else if( IsValid( m_id ) )
             {
                 // Only add this object to the top-level object list if it is already registered.
-                sm_topLevelObjects.Add( ObjectWPtr( this ) );
+                sm_topLevelObjects.Add( GameObjectWPtr( this ) );
             }
 
             AddInstanceIndexTracking();
@@ -592,11 +592,11 @@ namespace Lunar
 
     /// Search for a direct child of this object with the given name.
     ///
-    /// @param[in] name           Object name.
-    /// @param[in] instanceIndex  Object instance index.
+    /// @param[in] name           GameObject name.
+    /// @param[in] instanceIndex  GameObject instance index.
     ///
     /// @return  Pointer to the child object if found, null if not found.
-    Object* Object::FindChild( Name name, uint32_t instanceIndex ) const
+    GameObject* GameObject::FindChild( Name name, uint32_t instanceIndex ) const
     {
         return FindChildOf( this, name, instanceIndex );
     }
@@ -604,7 +604,7 @@ namespace Lunar
     /// Perform any necessary work immediately prior to destroying this object.
     ///
     /// Note that the parent-class implementation should always be chained last.
-    void Object::PreDestroy()
+    void GameObject::PreDestroy()
     {
         if( IsValid( m_id ) )
         {
@@ -614,14 +614,14 @@ namespace Lunar
         SetOwner( NULL );
         SetInstanceIndex( Invalid< uint32_t >() );
 
-        SetFlags( Object::FLAG_PREDESTROYED );
+        SetFlags( GameObject::FLAG_PREDESTROYED );
     }
 
     /// Actually destroy this object.
     ///
     /// This should only be called by the reference counting system once the last strong reference to this object has
     /// been cleared.  It should never be called manually
-    void Object::Destroy()
+    void GameObject::Destroy()
     {
         HELIUM_ASSERT( !GetRefCountProxy() || GetRefCountProxy()->GetStrongRefCount() == 0 );
 
@@ -637,10 +637,10 @@ namespace Lunar
 
     /// Get the type of this object.
     ///
-    /// @return  Object type.
-    Type* Object::GetType() const
+    /// @return  GameObject type.
+    Type* GameObject::GetType() const
     {
-        return Object::GetStaticType();
+        return GameObject::GetStaticType();
     }
 
     /// Get whether this object is an instance of the specified type or one of its subtypes.
@@ -650,7 +650,7 @@ namespace Lunar
     /// @return  True if this is an instance of the given type or one of its subtypes, false if not.
     ///
     /// @see GetType(), IsInstanceOf()
-    bool Object::IsA( const Type* pType ) const
+    bool GameObject::IsA( const Type* pType ) const
     {
         const Type* pThisType = GetType();
         HELIUM_ASSERT( pThisType );
@@ -661,7 +661,7 @@ namespace Lunar
     /// Serialize this object.
     ///
     /// @param[in] s  Serializer to use for serialization.
-    void Object::Serialize( Serializer& /*s*/ )
+    void GameObject::Serialize( Serializer& /*s*/ )
     {
     }
 
@@ -670,7 +670,7 @@ namespace Lunar
     /// @return  True if precaching is necessary, false if not.
     ///
     /// @see BeginPrecacheResourceData()
-    bool Object::NeedsPrecacheResourceData() const
+    bool GameObject::NeedsPrecacheResourceData() const
     {
         return false;
     }
@@ -683,7 +683,7 @@ namespace Lunar
     /// @return  True if precaching was started successfully, false if not.
     ///
     /// @see TryFinishPrecacheResourceData(), NeedsPrecacheResourceData()
-    bool Object::BeginPrecacheResourceData()
+    bool GameObject::BeginPrecacheResourceData()
     {
         return false;
     }
@@ -696,7 +696,7 @@ namespace Lunar
     /// @return  True if precaching was completed or is not in progress, false if it still requires time to process.
     ///
     /// @see BeginPrecacheResourceData(), NeedsPrecacheResourceData()
-    bool Object::TryFinishPrecacheResourceData()
+    bool GameObject::TryFinishPrecacheResourceData()
     {
         return true;
     }
@@ -705,13 +705,13 @@ namespace Lunar
     ///
     /// This is called once an object has been loaded, linked, and all potentially dependent objects have been loaded
     /// and linked as well.
-    void Object::FinalizeLoad()
+    void GameObject::FinalizeLoad()
     {
     }
 
 #if L_EDITOR
     /// Perform any work immediately after saving/caching an object in the editor.
-    void Object::PostSave()
+    void GameObject::PostSave()
     {
     }
 #endif  // L_EDITOR
@@ -720,14 +720,14 @@ namespace Lunar
     ///
     /// Transient objects are not saved into or loaded from a package stored on disk.  An object is transient if its
     /// type or the types of any of its owners have the Type::FLAG_TRANSIENT flag set, or if it or one of its parents
-    /// have the Object::FLAG_TRANSIENT flag set.
+    /// have the GameObject::FLAG_TRANSIENT flag set.
     ///
     /// @return  True if this object is transient, false if not.
-    bool Object::IsTransient() const
+    bool GameObject::IsTransient() const
     {
-        for( const Object* pObject = this; pObject != NULL && !pObject->IsPackage(); pObject = pObject->GetOwner() )
+        for( const GameObject* pObject = this; pObject != NULL && !pObject->IsPackage(); pObject = pObject->GetOwner() )
         {
-            if( pObject->GetAnyFlagSet( Object::FLAG_TRANSIENT ) )
+            if( pObject->GetAnyFlagSet( GameObject::FLAG_TRANSIENT ) )
             {
                 return true;
             }
@@ -748,7 +748,7 @@ namespace Lunar
     /// @return  Size of an instance of this object, in bytes.
     ///
     /// @see InPlaceConstruct(), InPlaceDestroy()
-    size_t Object::GetInstanceSize() const
+    size_t GameObject::GetInstanceSize() const
     {
         return sizeof( *this );
     }
@@ -762,12 +762,12 @@ namespace Lunar
     /// @return  Pointer to the constructed object instance.
     ///
     /// @see InPlaceDestroy(), GetInstanceSize()
-    Object* Object::InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const
+    GameObject* GameObject::InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const
     {
         HELIUM_ASSERT( pMemory );
         HELIUM_ASSERT( pDestroyCallback );
 
-        Object* pObject = new( pMemory ) Object;
+        GameObject* pObject = new( pMemory ) GameObject;
         pObject->SetCustomDestroyCallback( pDestroyCallback );
 
         return pObject;
@@ -779,16 +779,16 @@ namespace Lunar
     /// InPlaceConstructor().
     ///
     /// @see InPlaceConstruct(), GetInstanceSize()
-    void Object::InPlaceDestroy()
+    void GameObject::InPlaceDestroy()
     {
-        this->~Object();
+        this->~GameObject();
     }
 
     /// Create a new object.
     ///
     /// @param[in] pType                 Type of object to create.
-    /// @param[in] name                  Object name.
-    /// @param[in] pOwner                Object owner.
+    /// @param[in] name                  GameObject name.
+    /// @param[in] pOwner                GameObject owner.
     /// @param[in] pTemplate             Optional override template object.  If null, the default template for the
     ///                                  specified type will be used.
     /// @param[in] bAssignInstanceIndex  True to assign an instance index to the object, false to leave the index
@@ -797,19 +797,19 @@ namespace Lunar
     /// @return  Pointer to the newly created object.
     ///
     /// @see Create()
-    Object* Object::CreateObject( Type* pType, Name name, Object* pOwner, Object* pTemplate, bool bAssignInstanceIndex )
+    GameObject* GameObject::CreateObject( Type* pType, Name name, GameObject* pOwner, GameObject* pTemplate, bool bAssignInstanceIndex )
     {
         HELIUM_ASSERT( pType );
 
         // Get the appropriate template object.
-        Object* pObjectTemplate = pTemplate;
+        GameObject* pObjectTemplate = pTemplate;
         if( pObjectTemplate )
         {
             if( pType->GetTypeFlags() & Type::FLAG_NO_TEMPLATE )
             {
                 HELIUM_TRACE(
                     TRACE_ERROR,
-                    TXT( "Object::CreateObject(): Objects of type \"%s\" cannot be used as templates.\n" ),
+                    TXT( "GameObject::CreateObject(): Objects of type \"%s\" cannot be used as templates.\n" ),
                     *pType->GetPath().ToString() );
 
                 return NULL;
@@ -826,7 +826,7 @@ namespace Lunar
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
-                TXT( "Object::CreateObject: Template object \"%s\" is not of type \"%s\".\n" ),
+                TXT( "GameObject::CreateObject: Template object \"%s\" is not of type \"%s\".\n" ),
                 *pTemplate->GetPath().ToString(),
                 pType->GetName().Get() );
             HELIUM_ASSERT_FALSE();
@@ -840,7 +840,7 @@ namespace Lunar
         size_t bufferSize = pObjectTemplate->GetInstanceSize();
         void* pObjectMemory = allocator.AllocateAligned( HELIUM_SIMD_ALIGNMENT, bufferSize );
         HELIUM_ASSERT( pObjectMemory );
-        Object* pObject = pObjectTemplate->InPlaceConstruct( pObjectMemory, StandardCustomDestroy );
+        GameObject* pObject = pObjectTemplate->InPlaceConstruct( pObjectMemory, StandardCustomDestroy );
         HELIUM_ASSERT( pObject == pObjectMemory );
 
         pObject->m_spTemplate = pTemplate;
@@ -873,7 +873,7 @@ namespace Lunar
     /// @param[in] path  Path of the object to locate.
     ///
     /// @return  Pointer to the object if found, null pointer if not found.
-    Object* Object::FindObject( ObjectPath path )
+    GameObject* GameObject::FindObject( GameObjectPath path )
     {
         // Make sure the path isn't empty.
         if( path.IsEmpty() )
@@ -884,7 +884,7 @@ namespace Lunar
         // Assemble a list of object names and instance indices, from the top level on down.
         size_t pathDepth = 0;
         size_t packageDepth = 0;
-        for( ObjectPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+        for( GameObjectPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
         {
             ++pathDepth;
 
@@ -904,7 +904,7 @@ namespace Lunar
         HELIUM_ASSERT( pInstanceIndices );
 
         size_t pathIndex = pathDepth;
-        for( ObjectPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+        for( GameObjectPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
         {
             HELIUM_ASSERT( pathIndex != 0 );
             --pathIndex;
@@ -921,12 +921,12 @@ namespace Lunar
 
     /// Search for a direct child of the specified object with the given name.
     ///
-    /// @param[in] pObject        Object for which to locate a child, or null to search through top-level objects.
-    /// @param[in] name           Object name.
-    /// @param[in] instanceIndex  Object instance index.
+    /// @param[in] pObject        GameObject for which to locate a child, or null to search through top-level objects.
+    /// @param[in] name           GameObject name.
+    /// @param[in] instanceIndex  GameObject instance index.
     ///
     /// @return  Pointer to the child object if found, null if not found.
-    Object* Object::FindChildOf( const Object* pObject, Name name, uint32_t instanceIndex )
+    GameObject* GameObject::FindChildOf( const GameObject* pObject, Name name, uint32_t instanceIndex )
     {
         HELIUM_ASSERT( !name.IsEmpty() );
         if( name.IsEmpty() )
@@ -936,12 +936,12 @@ namespace Lunar
 
         ScopeReadLock scopeLock( sm_objectListLock );
 
-        const DynArray< ObjectWPtr >& rChildren = ( pObject ? pObject->m_children : sm_topLevelObjects );
+        const DynArray< GameObjectWPtr >& rChildren = ( pObject ? pObject->m_children : sm_topLevelObjects );
 
         size_t childCount = rChildren.GetSize();
         for( size_t childIndex = 0; childIndex < childCount; ++childIndex )
         {
-            Object* pChild = rChildren[ childIndex ];
+            GameObject* pChild = rChildren[ childIndex ];
             if( pChild && pChild->GetName() == name && pChild->GetInstanceIndex() == instanceIndex )
             {
                 return pChild;
@@ -953,7 +953,7 @@ namespace Lunar
 
     /// Search for a child or grandchild of the given object with a relative path dictated by the given parameters.
     ///
-    /// @param[in] pObject             Object for which to locate a child, or null to search relative to top-level
+    /// @param[in] pObject             GameObject for which to locate a child, or null to search relative to top-level
     ///                                objects.
     /// @param[in] pRelativePathNames  Array of object names comprising the relative path to the target object, starting
     ///                                from the top-most level.
@@ -964,8 +964,8 @@ namespace Lunar
     /// @param[in] packageDepth        Remaining depth into the relative path name array of objects that are packages.
     ///
     /// @return  Pointer to the child object if found, null if not found.
-    Object* Object::FindChildOf(
-        const Object* pObject,
+    GameObject* GameObject::FindChildOf(
+        const GameObject* pObject,
         const Name* pRelativePathNames,
         const uint32_t* pInstanceIndices,
         size_t nameDepth,
@@ -981,7 +981,7 @@ namespace Lunar
         }
 
         // Search for the direct child of the given object in the path chain.
-        Object* pChild = FindChildOf(
+        GameObject* pChild = FindChildOf(
             pObject,
             pRelativePathNames[ 0 ],
             ( pInstanceIndices ? pInstanceIndices[ 0 ] : Invalid< uint32_t >() ) );
@@ -1018,14 +1018,14 @@ namespace Lunar
         return pChild;
     }
 
-    /// Register an Object instance for object management.
+    /// Register an GameObject instance for object management.
     ///
-    /// @param[in] pObject  Object to register.
+    /// @param[in] pObject  GameObject to register.
     ///
     /// @return  True if the object was registered successfully, false if not (i.e. name clash).
     ///
     /// @see UnregisterObject()
-    bool Object::RegisterObject( Object* pObject )
+    bool GameObject::RegisterObject( GameObject* pObject )
     {
         HELIUM_ASSERT( pObject );
 
@@ -1039,7 +1039,7 @@ namespace Lunar
 
             HELIUM_TRACE(
                 TRACE_WARNING,
-                TXT( "Object::RegisterObject(): Attempted to register object \"%s\", which is already registered.\n" ),
+                TXT( "GameObject::RegisterObject(): Attempted to register object \"%s\", which is already registered.\n" ),
                 *pObject->GetPath().ToString() );
 
             return true;
@@ -1063,7 +1063,7 @@ namespace Lunar
             size_t topLevelObjectCount = sm_topLevelObjects.GetSize();
             for( size_t objectIndex = 0; objectIndex < topLevelObjectCount; ++objectIndex )
             {
-                Object* pTopLevelObject = sm_topLevelObjects[ objectIndex ];
+                GameObject* pTopLevelObject = sm_topLevelObjects[ objectIndex ];
                 if( pTopLevelObject &&
                     pTopLevelObject->GetName() == objectName &&
                     pTopLevelObject->GetInstanceIndex() == objectInstanceIndex )
@@ -1074,11 +1074,11 @@ namespace Lunar
                 }
             }
 
-            sm_topLevelObjects.Add( ObjectWPtr( pObject ) );
+            sm_topLevelObjects.Add( GameObjectWPtr( pObject ) );
         }
 
         // Register the object.
-        size_t objectId = sm_objects.Add( ObjectWPtr( pObject ) );
+        size_t objectId = sm_objects.Add( GameObjectWPtr( pObject ) );
         HELIUM_ASSERT( objectId < UINT32_MAX );
 
         pObject->m_id = static_cast< uint32_t >( objectId );
@@ -1086,12 +1086,12 @@ namespace Lunar
         return true;
     }
 
-    /// Unregister an Object instance from object management.
+    /// Unregister an GameObject instance from object management.
     ///
-    /// @param[in] pObject  Object to unregister.
+    /// @param[in] pObject  GameObject to unregister.
     ///
     /// @see RegisterObject()
-    void Object::UnregisterObject( Object* pObject )
+    void GameObject::UnregisterObject( GameObject* pObject )
     {
         HELIUM_ASSERT( pObject );
 
@@ -1103,7 +1103,7 @@ namespace Lunar
         {
             HELIUM_TRACE(
                 TRACE_WARNING,
-                TXT( "Object::UnregisterObject(): Called on object \"%s\", which is already unregistered.\n" ),
+                TXT( "GameObject::UnregisterObject(): Called on object \"%s\", which is already unregistered.\n" ),
                 *pObject->GetPath().ToString() );
 
             return;
@@ -1135,20 +1135,20 @@ namespace Lunar
         SetInvalid( pObject->m_id );
     }
 
-    /// Perform shutdown of the Object system.
+    /// Perform shutdown of the GameObject system.
     ///
     /// This releases all final references to objects and releases all allocated memory.  This should be called during
     /// the shutdown process after all types have been unregistered as well as after calling Type::Shutdown().
     ///
     /// @see Type::Shutdown()
-    void Object::Shutdown()
+    void GameObject::Shutdown()
     {
-        HELIUM_TRACE( TRACE_INFO, TXT( "Shutting down Object system.\n" ) );
+        HELIUM_TRACE( TRACE_INFO, TXT( "Shutting down GameObject system.\n" ) );
 
-        Object::ReleaseStaticType();
+        GameObject::ReleaseStaticType();
 
 #if HELIUM_ENABLE_MEMORY_TRACKING
-        ConcurrentHashSet< RefCountProxy< Object >* >::ConstAccessor refCountProxyAccessor;
+        ConcurrentHashSet< RefCountProxy< GameObject >* >::ConstAccessor refCountProxyAccessor;
         if( ObjectRefCountSupport::GetFirstActiveProxy( refCountProxyAccessor ) )
         {
             HELIUM_TRACE(
@@ -1158,10 +1158,10 @@ namespace Lunar
 
             while( refCountProxyAccessor.IsValid() )
             {
-                RefCountProxy< Object >* pProxy = *refCountProxyAccessor;
+                RefCountProxy< GameObject >* pProxy = *refCountProxyAccessor;
                 HELIUM_ASSERT( pProxy );
 
-                Object* pObject = pProxy->GetObject();
+                GameObject* pObject = pProxy->GetObject();
 
                 HELIUM_TRACE(
                     TRACE_ERROR,
@@ -1193,7 +1193,7 @@ namespace Lunar
                     continue;
                 }
 
-                Object* pObject = sm_objects[ objectIndex ];
+                GameObject* pObject = sm_objects[ objectIndex ];
                 if( !pObject )
                 {
                     continue;
@@ -1213,17 +1213,17 @@ namespace Lunar
         sm_serializationBuffer.Clear();
     }
 
-    /// Initialize the static type information for the "Object" class.
+    /// Initialize the static type information for the "GameObject" class.
     ///
-    /// @return  Static "Object" type.
-    Type* Object::InitStaticType()
+    /// @return  Static "GameObject" type.
+    Type* GameObject::InitStaticType()
     {
         Type* pObjectType = sm_spStaticType;
         if( !pObjectType )
         {
-            // To resolve interdependencies between the Object type information and other objects (i.e. the owner
+            // To resolve interdependencies between the GameObject type information and other objects (i.e. the owner
             // package, its type, etc.), we will create and register all the dependencies here manually as well.
-            Name nameObject( TXT( "Object" ) );
+            Name nameObject( TXT( "GameObject" ) );
             Name nameType( TXT( "Type" ) );
             Name namePackage( TXT( "Package" ) );
             Name nameEngine( TXT( "Engine" ) );
@@ -1246,28 +1246,28 @@ namespace Lunar
             HELIUM_ASSERT( pObjectType );
             pObjectType->SetName( nameObject );
             pObjectType->SetOwner( pEnginePackage );
-            pObjectType->SetFlags( Object::FLAG_TRANSIENT );
+            pObjectType->SetFlags( GameObject::FLAG_TRANSIENT );
             HELIUM_VERIFY( RegisterObject( pObjectType ) );
-            pObjectType->SetFlags( Object::FLAG_PRELOADED | Object::FLAG_LINKED | Object::FLAG_LOADED );
+            pObjectType->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED | GameObject::FLAG_LOADED );
 
             Type* pTypeType = new Type();
             HELIUM_ASSERT( pTypeType );
             pTypeType->SetName( nameType );
             pTypeType->SetOwner( pEnginePackage );
-            pTypeType->SetFlags( Object::FLAG_TRANSIENT );
+            pTypeType->SetFlags( GameObject::FLAG_TRANSIENT );
             HELIUM_VERIFY( RegisterObject( pTypeType ) );
-            pTypeType->SetFlags( Object::FLAG_PRELOADED | Object::FLAG_LINKED | Object::FLAG_LOADED );
+            pTypeType->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED | GameObject::FLAG_LOADED );
 
             Type* pPackageType = new Type();
             HELIUM_ASSERT( pPackageType );
             pPackageType->SetName( namePackage );
             pPackageType->SetOwner( pEnginePackage );
-            pPackageType->SetFlags( Object::FLAG_TRANSIENT );
+            pPackageType->SetFlags( GameObject::FLAG_TRANSIENT );
             HELIUM_VERIFY( RegisterObject( pPackageType ) );
-            pPackageType->SetFlags( Object::FLAG_PRELOADED | Object::FLAG_LINKED | Object::FLAG_LOADED );
+            pPackageType->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED | GameObject::FLAG_LOADED );
 
             // Don't set up templates here; they're initialized during type registration.
-            Object* pObjectTemplate = new Object();
+            GameObject* pObjectTemplate = new GameObject();
             HELIUM_ASSERT( pObjectTemplate );
 
             Type* pTypeTemplate = new Type();
@@ -1301,7 +1301,7 @@ namespace Lunar
     }
 
     /// Release static type information for this class.
-    void Object::ReleaseStaticType()
+    void GameObject::ReleaseStaticType()
     {
         Type* pType = sm_spStaticType;
         if( pType )
@@ -1313,10 +1313,10 @@ namespace Lunar
         sm_spStaticTypeTemplate.Release();
     }
 
-    /// Get the static "Object" type.
+    /// Get the static "GameObject" type.
     ///
-    /// @return  Static "Object" type.
-    Type* Object::GetStaticType()
+    /// @return  Static "GameObject" type.
+    Type* GameObject::GetStaticType()
     {
         HELIUM_ASSERT( sm_spStaticType );
         return sm_spStaticType;
@@ -1327,7 +1327,7 @@ namespace Lunar
     /// This is used by the object declaration macros and should not be called directly by other code.
     ///
     /// @param[in] pDestroyCallback  Custom destruction callback to set.
-    void Object::SetCustomDestroyCallback( CUSTOM_DESTROY_CALLBACK* pDestroyCallback )
+    void GameObject::SetCustomDestroyCallback( CUSTOM_DESTROY_CALLBACK* pDestroyCallback )
     {
         m_pCustomDestroyCallback = pDestroyCallback;
     }
@@ -1335,16 +1335,16 @@ namespace Lunar
     /// Register tracking information for the instance index associated with this object.
     ///
     /// @see RemoveInstanceIndexTracking()
-    void Object::AddInstanceIndexTracking()
+    void GameObject::AddInstanceIndexTracking()
     {
         if( IsInvalid( m_instanceIndex ) )
         {
             return;
         }
 
-        ObjectPath ownerPath = ( m_spOwner ? m_spOwner->GetPath() : ObjectPath( NULL_NAME ) );
+        GameObjectPath ownerPath = ( m_spOwner ? m_spOwner->GetPath() : GameObjectPath( NULL_NAME ) );
 
-        std::pair< ObjectPath, NameInstanceIndexMap > childMapEntry;
+        std::pair< GameObjectPath, NameInstanceIndexMap > childMapEntry;
         childMapEntry.first = ownerPath;
 
         std::pair< Name, InstanceIndexSet > indexSetEntry;
@@ -1365,14 +1365,14 @@ namespace Lunar
     /// Remove the tracking information for the instance index associated with this object.
     ///
     /// @see AddInstanceIndexTracking()
-    void Object::RemoveInstanceIndexTracking()
+    void GameObject::RemoveInstanceIndexTracking()
     {
         if( IsInvalid( m_instanceIndex ) )
         {
             return;
         }
 
-        ObjectPath ownerPath = ( m_spOwner ? m_spOwner->GetPath() : ObjectPath( NULL_NAME ) );
+        GameObjectPath ownerPath = ( m_spOwner ? m_spOwner->GetPath() : GameObjectPath( NULL_NAME ) );
 
         ChildNameInstanceIndexMap& rNameInstanceIndexMap = GetNameInstanceIndexMap();
 
@@ -1400,20 +1400,20 @@ namespace Lunar
     /// Update the stored path for this object.
     ///
     /// This should be called whenever the name of this object or one of its parents changes.
-    void Object::UpdatePath()
+    void GameObject::UpdatePath()
     {
         // Update this object's path first.
         HELIUM_VERIFY( m_path.Set(
             m_name,
             IsPackage(),
-            ( m_spOwner ? m_spOwner->m_path : ObjectPath( NULL_NAME ) ),
+            ( m_spOwner ? m_spOwner->m_path : GameObjectPath( NULL_NAME ) ),
             m_instanceIndex ) );
 
         // Update the path of each child object.
         size_t childCount = m_children.GetSize();
         for( size_t childIndex = 0; childIndex < childCount; ++childIndex )
         {
-            Object* pObject = m_children[ childIndex ];
+            GameObject* pObject = m_children[ childIndex ];
             if( pObject )
             {
                 pObject->UpdatePath();
@@ -1423,8 +1423,8 @@ namespace Lunar
 
     /// Custom destroy callback for objects created using CreateObject().
     ///
-    /// @param[in] pObject  Object to destroy.
-    void Object::StandardCustomDestroy( Object* pObject )
+    /// @param[in] pObject  GameObject to destroy.
+    void GameObject::StandardCustomDestroy( GameObject* pObject )
     {
         HELIUM_ASSERT( pObject );
         pObject->InPlaceDestroy();
@@ -1438,7 +1438,7 @@ namespace Lunar
     /// during shutdown, ensuring that we no longer have any dynamic allocations within the engine.
     ///
     /// @return  Reference to the name instance lookup map.
-    Object::ChildNameInstanceIndexMap& Object::GetNameInstanceIndexMap()
+    GameObject::ChildNameInstanceIndexMap& GameObject::GetNameInstanceIndexMap()
     {
         if( !sm_pNameInstanceIndexMap )
         {

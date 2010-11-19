@@ -23,10 +23,10 @@ namespace Lunar
     {
     }
 
-    /// @fn bool Serializer::Serialize( Object* pObject )
+    /// @fn bool Serializer::Serialize( GameObject* pObject )
     /// Serialize an object.
     ///
-    /// @param[in] pObject  Object to serialize.
+    /// @param[in] pObject  GameObject to serialize.
     ///
     /// @return  True if serialization was successful, false if an error occurred (will be logged).
 
@@ -165,11 +165,11 @@ namespace Lunar
     ///
     /// @param[in,out] rValue  Wide-character string.
 
-    /// @fn void Serializer::SerializeObjectReference( Type* pType, ObjectPtr& rspObject )
+    /// @fn void Serializer::SerializeObjectReference( Type* pType, GameObjectPtr& rspObject )
     /// Serialize an object reference.
     ///
     /// @param[in]     pType      Actual object type used by the object smart pointer.
-    /// @param[in,out] rspObject  Object smart pointer.
+    /// @param[in,out] rspObject  GameObject smart pointer.
 
     /// Begin serializing a structure.
     ///

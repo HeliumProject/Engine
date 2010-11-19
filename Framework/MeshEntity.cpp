@@ -30,7 +30,7 @@ namespace Lunar
         HELIUM_ASSERT( IsInvalid( m_graphicsSceneObjectId ) );
     }
 
-    /// @copydoc Object::Serialize()
+    /// @copydoc GameObject::Serialize()
     void MeshEntity::Serialize( Serializer& s )
     {
         L_SERIALIZE_SUPER( s );

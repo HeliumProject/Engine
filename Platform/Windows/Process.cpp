@@ -1,6 +1,7 @@
 #include "Platform/Process.h"
 #include "Platform/Assert.h"
 #include "Platform/Error.h"
+#include "Platform/Utility.h"
 
 #include "Windows.h"
 
@@ -148,7 +149,9 @@ tstring Helium::GetProcessPath()
     HMODULE moduleHandle = GetModuleHandle( NULL );
 
     tchar_t module[ MAX_PATH + 1 ];
-    GetModuleFileName( moduleHandle, module, MAX_PATH );
+    DWORD result = GetModuleFileName( moduleHandle, module, MAX_PATH );
+    HELIUM_ASSERT( result );
+    HELIUM_UNREF( result );
 
     return module;
 }

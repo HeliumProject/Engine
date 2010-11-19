@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// ObjectLoader.h
+// GameObjectLoader.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -13,7 +13,7 @@
 
 #include "Foundation/Container/ConcurrentHashMap.h"
 #include "Foundation/Container/ObjectPool.h"
-#include "Engine/ObjectPath.h"
+#include "Engine/GameObjectPath.h"
 #include "Engine/Serializer.h"
 
 namespace Lunar
@@ -21,37 +21,37 @@ namespace Lunar
     class PackageLoader;
 
     /// Asynchronous object loading interface
-    class LUNAR_ENGINE_API ObjectLoader : NonCopyable
+    class LUNAR_ENGINE_API GameObjectLoader : NonCopyable
     {
     public:
         /// Number of request objects to allocate in each block of the request pool.
         static const size_t LOAD_REQUEST_POOL_BLOCK_SIZE = 64;
 
-        /// Object link table entry.
+        /// GameObject link table entry.
         struct LinkEntry
         {
             /// Load request ID.
             size_t loadId;
             /// Cached object reference.
-            ObjectPtr spObject;
+            GameObjectPtr spObject;
         };
 
         /// @name Construction/Destruction
         //@{
-        ObjectLoader();
-        virtual ~ObjectLoader() = 0;
+        GameObjectLoader();
+        virtual ~GameObjectLoader() = 0;
         //@}
 
         /// @name Loading Interface
         //@{
-        virtual size_t BeginLoadObject( ObjectPath path );
-        virtual bool TryFinishLoad( size_t id, ObjectPtr& rspObject );
-        void FinishLoad( size_t id, ObjectPtr& rspObject );
+        virtual size_t BeginLoadObject( GameObjectPath path );
+        virtual bool TryFinishLoad( size_t id, GameObjectPtr& rspObject );
+        void FinishLoad( size_t id, GameObjectPtr& rspObject );
 
-        bool LoadObject( ObjectPath path, ObjectPtr& rspObject );
+        bool LoadObject( GameObjectPath path, GameObjectPtr& rspObject );
 
 #if L_EDITOR
-        virtual bool CacheObject( Object* pObject, bool bEvictPlatformPreprocessedResourceData = true );
+        virtual bool CacheObject( GameObject* pObject, bool bEvictPlatformPreprocessedResourceData = true );
 #endif
 
         virtual void Tick();
@@ -64,7 +64,7 @@ namespace Lunar
 
         /// @name Static Access
         //@{
-        static ObjectLoader* GetStaticInstance();
+        static GameObjectLoader* GetStaticInstance();
         static void DestroyStaticInstance();
         //@}
 
@@ -94,17 +94,17 @@ namespace Lunar
             LOAD_FLAG_IN_TICK = 1 << 6
         };
 
-        /// Object load request information.
+        /// GameObject load request information.
         struct LoadRequest
         {
-            /// Object path.
-            ObjectPath path;
+            /// GameObject path.
+            GameObjectPath path;
             /// Cached object reference.
-            ObjectPtr spObject;
+            GameObjectPtr spObject;
 
             /// Package loader.
             PackageLoader* pPackageLoader;
-            /// Object preload request ID.
+            /// GameObject preload request ID.
             size_t packageLoadRequestId;
 
             /// Link table.
@@ -134,7 +134,7 @@ namespace Lunar
 
             /// @name Serialization Interface
             //@{
-            virtual bool Serialize( Object* pObject );
+            virtual bool Serialize( GameObject* pObject );
             virtual EMode GetMode() const;
 
             virtual void SerializeTag( const Tag& rTag );
@@ -157,7 +157,7 @@ namespace Lunar
             virtual void SerializeWideName( WideName& rValue );
             virtual void SerializeCharString( CharString& rValue );
             virtual void SerializeWideString( WideString& rValue );
-            virtual void SerializeObjectReference( Type* pType, ObjectPtr& rspObject );
+            virtual void SerializeObjectReference( Type* pType, GameObjectPtr& rspObject );
             //@}
 
         private:
@@ -174,32 +174,32 @@ namespace Lunar
         struct DeferredLoadRequestFree
         {
             /// Path of the object entry.
-            ObjectPath path;
+            GameObjectPath path;
             /// Load request instance.
             LoadRequest* pRequest;
         };
 
         /// Load request hash map.
-        ConcurrentHashMap< ObjectPath, LoadRequest* > m_loadRequestMap;
+        ConcurrentHashMap< GameObjectPath, LoadRequest* > m_loadRequestMap;
         /// Load request pool.
         ObjectPool< LoadRequest > m_loadRequestPool;
         /// List of load requests to update in the current tick.
         DynArray< LoadRequest* > m_loadRequestTickArray;
 
         /// Singleton instance.
-        static ObjectLoader* sm_pInstance;
+        static GameObjectLoader* sm_pInstance;
 
         /// @name Loading Implementation
         //@{
-        virtual PackageLoader* GetPackageLoader( ObjectPath path ) = 0;
+        virtual PackageLoader* GetPackageLoader( GameObjectPath path ) = 0;
         virtual void TickPackageLoaders() = 0;
 
-        virtual void OnPrecacheReady( Object* pObject, PackageLoader* pPackageLoader );
-        virtual void OnLoadComplete( ObjectPath path, Object* pObject, PackageLoader* pPackageLoader );
+        virtual void OnPrecacheReady( GameObject* pObject, PackageLoader* pPackageLoader );
+        virtual void OnLoadComplete( GameObjectPath path, GameObject* pObject, PackageLoader* pPackageLoader );
         //@}
 
     private:
-        /// Object cache name.
+        /// GameObject cache name.
         Name m_cacheName;
 
         /// @name Load Process Updating
@@ -213,6 +213,6 @@ namespace Lunar
     };
 }
 
-#include "Engine/ObjectLoader.inl"
+#include "Engine/GameObjectLoader.inl"
 
 #endif  // LUNAR_ENGINE_OBJECT_LOADER_H

@@ -44,7 +44,7 @@ namespace Lunar
     }
 
     /// @copydoc Serializer::Serialize()
-    bool XmlSerializerBase::Serialize( Object* pObject )
+    bool XmlSerializerBase::Serialize( GameObject* pObject )
     {
         HELIUM_ASSERT( pObject );
 
@@ -215,9 +215,9 @@ namespace Lunar
     }
 
     /// @copydoc Serializer::SerializeObjectReference()
-    void XmlSerializerBase::SerializeObjectReference( Type* /*pType*/, ObjectPtr& rspObject )
+    void XmlSerializerBase::SerializeObjectReference( Type* /*pType*/, GameObjectPtr& rspObject )
     {
-        WriteValue( rspObject, TXT( "Object reference" ), ObjectFormatter() );
+        WriteValue( rspObject, TXT( "GameObject reference" ), ObjectFormatter() );
     }
 
     /// @copydoc Serializer::BeginStruct()
@@ -361,14 +361,14 @@ namespace Lunar
         m_bIgnoreNextValue = false;
     }
 
-    /// @fn void XmlSerializerBase::PreSerialize( Object* pObject )
+    /// @fn void XmlSerializerBase::PreSerialize( GameObject* pObject )
     /// Perform any work prior to serializing a given object.
     ///
-    /// @param[in] pObject  Object about to be serialized.
+    /// @param[in] pObject  GameObject about to be serialized.
     ///
     /// @see PostSerialize()
 
-    /// @fn void XmlSerializerBase::PostSerialize( Object* pObject )
+    /// @fn void XmlSerializerBase::PostSerialize( GameObject* pObject )
     /// Perform any work after a given object has been serialized.
     ///
     /// @param[in] pObject  Serialized object.
@@ -813,7 +813,7 @@ namespace Lunar
     ///
     /// @param[in] rSerializer  Reference to the XmlSerializerBase in use.
     /// @param[in] pValue       Value to write.
-    void XmlSerializerBase::ObjectFormatter::operator()( XmlSerializerBase& rSerializer, Object* pValue ) const
+    void XmlSerializerBase::ObjectFormatter::operator()( XmlSerializerBase& rSerializer, GameObject* pValue ) const
     {
         if( pValue )
         {

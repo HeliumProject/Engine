@@ -52,7 +52,7 @@ namespace Lunar
         virtual ~Texture();
         //@}
 
-        /// @name Object Interface
+        /// @name GameObject Interface
         //@{
         virtual void PreDestroy();
         //@}

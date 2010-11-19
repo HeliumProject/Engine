@@ -10,7 +10,7 @@
 #define LUNAR_FRAMEWORK_ENTITY_H
 
 #include "Framework/Framework.h"
-#include "Engine/Object.h"
+#include "Engine/GameObject.h"
 
 #include "Platform/Math/Simd/Vector3.h"
 #include "Platform/Math/Simd/Quat.h"
@@ -25,9 +25,9 @@ namespace Lunar
     HELIUM_DECLARE_WPTR( World );
 
     /// Base type for in-world entities.
-    class LUNAR_FRAMEWORK_API Entity : public Object
+    class LUNAR_FRAMEWORK_API Entity : public GameObject
     {
-        L_DECLARE_OBJECT( Entity, Object );
+        L_DECLARE_OBJECT( Entity, GameObject );
 
     public:
         /// Valid entity update phase flags.

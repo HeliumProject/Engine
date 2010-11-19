@@ -2,6 +2,7 @@
 
 #include "Pipeline/API.h"
 #include "Foundation/Automation/Attribute.h"
+#include "Foundation/Document/Document.h"
 #include "Foundation/Reflect/DOM.h"
 
 namespace Helium
@@ -14,7 +15,14 @@ namespace Helium
         Project( const Path& path = TXT( "" ) );
         virtual ~Project();
 
-        bool Save() const;
+        void ConnectDocument( Document* document );
+        void DisconnectDocument( const Document* document );
+
+        // Document and DocumentManager Events
+        void OnDocumentOpened( const DocumentEventArgs& args );
+        void OnDocumenClosed( const DocumentEventArgs& args );
+
+        bool Serialize() const;
 
         const std::set< Path >& Paths()
         {
@@ -45,8 +53,14 @@ namespace Helium
         Helium::Event< const Path& > e_PathAdded;
         Helium::Event< const Path& > e_PathRemoved;
 
-    private:
+        mutable DocumentObjectChangedSignature::Event e_HasChanged;
+
+    protected:
         std::set< Path > m_Paths;
+
+        void OnDocumentSave( const DocumentEventArgs& args );
+        void OnDocumentPathChanged( const DocumentPathChangedArgs& args );
+        void OnChildDocumentPathChanged( const DocumentPathChangedArgs& args );
 
     public:
         static void EnumerateClass( Reflect::Compositor< This >& comp )

@@ -318,13 +318,13 @@ namespace Lunar
 
     /// Serialize an object reference.
     ///
-    /// @param[in,out] rspObject  Object smart pointer.
+    /// @param[in,out] rspObject  GameObject smart pointer.
     ///
     /// @return  Reference to this object.
     template< typename T >
     Serializer& Serializer::operator<<( StrongPtr< T >& rspObject )
     {
-        SerializeObjectReference( T::GetStaticType(), reinterpret_cast< ObjectPtr& >( rspObject ) );
+        SerializeObjectReference( T::GetStaticType(), reinterpret_cast< GameObjectPtr& >( rspObject ) );
 
         return *this;
     }

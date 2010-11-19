@@ -35,7 +35,7 @@ namespace Lunar
 
         /// @name Serialization Interface
         //@{
-        virtual bool Serialize( Object* pObject );
+        virtual bool Serialize( GameObject* pObject );
         virtual EMode GetMode() const;
 
         virtual void SerializeTag( const Tag& rTag );
@@ -58,7 +58,7 @@ namespace Lunar
         virtual void SerializeWideName( WideName& rValue );
         virtual void SerializeCharString( CharString& rValue );
         virtual void SerializeWideString( WideString& rValue );
-        virtual void SerializeObjectReference( Type* pType, ObjectPtr& rspObject );
+        virtual void SerializeObjectReference( Type* pType, GameObjectPtr& rspObject );
 
         virtual void BeginStruct( EStructTag tag );
         virtual void EndStruct();
@@ -73,8 +73,8 @@ namespace Lunar
     protected:
         /// @name Serialization Implementation Support
         //@{
-        virtual void PreSerialize( Object* pObject ) = 0;
-        virtual void PostSerialize( Object* pObject ) = 0;
+        virtual void PreSerialize( GameObject* pObject ) = 0;
+        virtual void PostSerialize( GameObject* pObject ) = 0;
 
         virtual void PushPropertyData( Name name, const void* pData, size_t size ) = 0;
         //@}
@@ -189,13 +189,13 @@ namespace Lunar
             //@}
         };
 
-        /// Object reference formatter.
+        /// GameObject reference formatter.
         class ObjectFormatter
         {
         public:
             /// @name Overloaded Operators
             //@{
-            void operator()( XmlSerializerBase& rSerializer, Object* pValue ) const;
+            void operator()( XmlSerializerBase& rSerializer, GameObject* pValue ) const;
             //@}
         };
 

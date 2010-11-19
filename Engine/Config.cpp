@@ -8,7 +8,7 @@
 #include "EnginePch.h"
 #include "Engine/Config.h"
 
-#include "Engine/ObjectLoader.h"
+#include "Engine/GameObjectLoader.h"
 #include "Engine/PackageLoader.h"
 
 namespace Lunar
@@ -22,7 +22,7 @@ namespace Lunar
         HELIUM_VERIFY( m_configContainerPackagePath.Set(
             Name( L_CONFIG_CONTAINER_PACKAGE ),
             true,
-            ObjectPath( NULL_NAME ) ) );
+            GameObjectPath( NULL_NAME ) ) );
         HELIUM_VERIFY( m_defaultConfigPackagePath.Set(
             Name( L_CONFIG_DEFAULT_PACKAGE_BASE L_CONFIG_PLATFORM_SUFFIX ),
             true,
@@ -61,7 +61,7 @@ namespace Lunar
         m_configObjects.Clear();
 
         // Initiate pre-loading of the default and user configuration packages.
-        ObjectLoader* pLoader = ObjectLoader::GetStaticInstance();
+        GameObjectLoader* pLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pLoader );
 
         m_objectLoadIds.Clear();
@@ -85,7 +85,7 @@ namespace Lunar
     /// @see BeginLoad()
     bool Config::TryFinishLoad()
     {
-        ObjectLoader* pLoader = ObjectLoader::GetStaticInstance();
+        GameObjectLoader* pLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pLoader );
 
         if( m_bLoadingConfigPackage )
@@ -97,7 +97,7 @@ namespace Lunar
             {
                 HELIUM_ASSERT( !m_spDefaultConfigPackage );
 
-                ObjectPtr spPackage;
+                GameObjectPtr spPackage;
                 if( !pLoader->TryFinishLoad( defaultConfigLoadId, spPackage ) )
                 {
                     return false;
@@ -114,7 +114,7 @@ namespace Lunar
             {
                 HELIUM_ASSERT( !m_spUserConfigPackage );
 
-                ObjectPtr spPackage;
+                GameObjectPtr spPackage;
                 if( !pLoader->TryFinishLoad( userConfigLoadId, spPackage ) )
                 {
                     return false;
@@ -130,7 +130,7 @@ namespace Lunar
             m_bLoadingConfigPackage = false;
 
             // Begin loading all objects in each configuration package.
-            ObjectPath packagePath;
+            GameObjectPath packagePath;
             PackageLoader* pPackageLoader;
             size_t objectCount;
 
@@ -140,7 +140,7 @@ namespace Lunar
             objectCount = pPackageLoader->GetObjectCount();
             for( size_t objectIndex = 0; objectIndex < objectCount; ++objectIndex )
             {
-                ObjectPath objectPath = pPackageLoader->GetObjectPath( objectIndex );
+                GameObjectPath objectPath = pPackageLoader->GetObjectPath( objectIndex );
                 if( !objectPath.IsPackage() && objectPath.GetParent() == packagePath )
                 {
                     size_t loadId = pLoader->BeginLoadObject( objectPath );
@@ -156,7 +156,7 @@ namespace Lunar
             objectCount = pPackageLoader->GetObjectCount();
             for( size_t objectIndex = 0; objectIndex < objectCount; ++objectIndex )
             {
-                ObjectPath objectPath = pPackageLoader->GetObjectPath( objectIndex );
+                GameObjectPath objectPath = pPackageLoader->GetObjectPath( objectIndex );
                 if( !objectPath.IsPackage() && objectPath.GetParent() == packagePath )
                 {
                     size_t loadId = pLoader->BeginLoadObject( objectPath );
@@ -167,9 +167,9 @@ namespace Lunar
             }
         }
 
-        ObjectPath defaultConfigPackagePath = m_spDefaultConfigPackage->GetPath();
+        GameObjectPath defaultConfigPackagePath = m_spDefaultConfigPackage->GetPath();
 
-        ObjectPtr spObject;
+        GameObjectPtr spObject;
         size_t objectIndex = m_objectLoadIds.GetSize();
         while( objectIndex != 0 )
         {
@@ -207,7 +207,7 @@ namespace Lunar
         size_t defaultConfigObjectCount = m_defaultConfigObjects.GetSize();
         for( size_t defaultObjectIndex = 0; defaultObjectIndex < defaultConfigObjectCount; ++defaultObjectIndex )
         {
-            Object* pDefaultConfigObject = m_defaultConfigObjects[ defaultObjectIndex ];
+            GameObject* pDefaultConfigObject = m_defaultConfigObjects[ defaultObjectIndex ];
             HELIUM_ASSERT( pDefaultConfigObject );
 
             Name objectName = pDefaultConfigObject->GetName();
@@ -216,7 +216,7 @@ namespace Lunar
             size_t userObjectIndex;
             for( userObjectIndex = 0; userObjectIndex < userConfigObjectCount; ++userObjectIndex )
             {
-                Object* pUserConfigObject = m_configObjects[ userObjectIndex ];
+                GameObject* pUserConfigObject = m_configObjects[ userObjectIndex ];
                 HELIUM_ASSERT( pUserConfigObject );
                 if( pUserConfigObject->GetName() == objectName )
                 {
@@ -229,7 +229,7 @@ namespace Lunar
                 Type* pConfigObjectType = pDefaultConfigObject->GetType();
                 HELIUM_ASSERT( pConfigObjectType );
 
-                ObjectPtr spUserConfigObject( Object::CreateObject(
+                GameObjectPtr spUserConfigObject( GameObject::CreateObject(
                     pConfigObjectType,
                     objectName,
                     m_spUserConfigPackage,

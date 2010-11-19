@@ -605,6 +605,15 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer36;
 	bSizer36 = new wxBoxSizer( wxHORIZONTAL );
 	
+	m_ProjectNameStaticText = new wxStaticText( m_ProjectManagementPanel, wxID_ANY, _("Open Project..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ProjectNameStaticText->Wrap( -1 );
+	m_ProjectNameStaticText->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
+	bSizer36->Add( m_ProjectNameStaticText, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	
+	bSizer36->Add( 0, 0, 0, wxEXPAND, 5 );
+	
 	m_AddFileButton = new wxBitmapButton( m_ProjectManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_AddFileButton->Enable( false );
 	m_AddFileButton->SetToolTip( _("Add File to Project") );
@@ -623,8 +632,8 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	
 	bSizer36->Add( m_DeleteFileButton, 0, wxALL, 2 );
 	
-	
-	bSizer36->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_OptionsButtonStaticLine = new wxStaticLine( m_ProjectManagementPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer36->Add( m_OptionsButtonStaticLine, 0, wxEXPAND | wxALL, 2 );
 	
 	m_OptionsButton = new Helium::Editor::MenuButton( m_ProjectManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_OptionsButton->SetToolTip( _("Project View Settings...") );
@@ -638,6 +647,18 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	bSizer36->Fit( m_ProjectManagementPanel );
 	bSizer24->Add( m_ProjectManagementPanel, 0, wxEXPAND | wxALL, 2 );
 	
+	m_OpenProjectPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer361;
+	bSizer361 = new wxBoxSizer( wxVERTICAL );
+	
+	m_OpenProjectListCtrl = new wxListCtrl( m_OpenProjectPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_NO_HEADER|wxLC_NO_SORT_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL );
+	bSizer361->Add( m_OpenProjectListCtrl, 1, wxEXPAND, 5 );
+	
+	m_OpenProjectPanel->SetSizer( bSizer361 );
+	m_OpenProjectPanel->Layout();
+	bSizer361->Fit( m_OpenProjectPanel );
+	bSizer24->Add( m_OpenProjectPanel, 1, wxEXPAND | wxALL, 5 );
+	
 	m_DataViewCtrl = new wxDataViewCtrl ( this, wxID_ANY );
 	bSizer24->Add( m_DataViewCtrl, 1, wxALL|wxEXPAND, 5 );
 	
@@ -647,6 +668,7 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	// Connect Events
 	m_AddFileButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnAddFile ), NULL, this );
 	m_DeleteFileButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnDeleteFile ), NULL, this );
+	m_OpenProjectListCtrl->Connect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( ProjectPanelGenerated::OnListItemActivated ), NULL, this );
 }
 
 ProjectPanelGenerated::~ProjectPanelGenerated()
@@ -654,6 +676,7 @@ ProjectPanelGenerated::~ProjectPanelGenerated()
 	// Disconnect Events
 	m_AddFileButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnAddFile ), NULL, this );
 	m_DeleteFileButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnDeleteFile ), NULL, this );
+	m_OpenProjectListCtrl->Disconnect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( ProjectPanelGenerated::OnListItemActivated ), NULL, this );
 	
 }
 

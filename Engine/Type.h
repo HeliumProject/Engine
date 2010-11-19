@@ -11,14 +11,14 @@
 
 #include "Foundation/Name.h"
 #include "Foundation/Container/ConcurrentHashMap.h"
-#include "Engine/Object.h"
+#include "Engine/GameObject.h"
 
 namespace Lunar
 {
-    /// Run-time type information for Object classes.
-    class LUNAR_ENGINE_API Type : public Object
+    /// Run-time type information for GameObject classes.
+    class LUNAR_ENGINE_API Type : public GameObject
     {
-        L_DECLARE_OBJECT( Type, Object );
+        L_DECLARE_OBJECT( Type, GameObject );
 
     public:
         /// Type lookup hash map.
@@ -76,13 +76,13 @@ namespace Lunar
 
         /// @name Initialization
         //@{
-        bool Initialize( Type* pParent, Object* pTemplate, uint32_t flags );
+        bool Initialize( Type* pParent, GameObject* pTemplate, uint32_t flags );
         //@}
 
         /// @name Data Access
         //@{
         inline Type* GetTypeParent() const;
-        inline Object* GetTypeTemplate() const;
+        inline GameObject* GetTypeTemplate() const;
 
         inline uint32_t GetTypeFlags() const;
         //@}
@@ -106,7 +106,7 @@ namespace Lunar
         static void Unregister( Type* pType );
 
         static Type* Find( Name typeName );
-        static Type* Find( ObjectPath typePath );
+        static Type* Find( GameObjectPath typePath );
 
         static bool GetFirstType( ConstIterator& rIterator );
 
@@ -117,7 +117,7 @@ namespace Lunar
         /// Parent type.
         TypePtr m_spTypeParent;
         /// Default template object for this type.
-        ObjectPtr m_spTypeTemplate;
+        GameObjectPtr m_spTypeTemplate;
 
         /// Type flags.
         uint32_t m_typeFlags;

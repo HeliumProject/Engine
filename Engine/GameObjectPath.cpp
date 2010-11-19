@@ -1,29 +1,29 @@
 //----------------------------------------------------------------------------------------------------------------------
-// ObjectPath.cpp
+// GameObjectPath.cpp
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EnginePch.h"
-#include "Engine/ObjectPath.h"
+#include "Engine/GameObjectPath.h"
 
-#include "Core/Path.h"
+#include "Foundation/File/Path.h"
 
 namespace Lunar
 {
-    ObjectPath::TableBucket* ObjectPath::sm_pTable = NULL;
-    StackMemoryHeap<>* ObjectPath::sm_pEntryMemoryHeap = NULL;
+    GameObjectPath::TableBucket* GameObjectPath::sm_pTable = NULL;
+    StackMemoryHeap<>* GameObjectPath::sm_pEntryMemoryHeap = NULL;
 
     /// Parse the object path in the specified string and store it in this object.
     ///
-    /// @param[in] pString  Object path string to set.  If this is null or empty, the path will be cleared.
+    /// @param[in] pString  GameObject path string to set.  If this is null or empty, the path will be cleared.
     ///
     /// @return  True if the string was parsed successfully and the path was set (or cleared, if the string was null or
     ///          empty), false if not.
     ///
     /// @see Clear(), ToString()
-    bool ObjectPath::Set( const tchar_t* pString )
+    bool GameObjectPath::Set( const tchar_t* pString )
     {
         // Check for empty strings first.
         if( !pString || pString[ 0 ] == TXT( '\0' ) )
@@ -56,26 +56,26 @@ namespace Lunar
 
     /// Parse the object path in the specified string and store it in this object.
     ///
-    /// @param[in] rString  Object path string to set.  If this is empty, the path will be cleared.
+    /// @param[in] rString  GameObject path string to set.  If this is empty, the path will be cleared.
     ///
     /// @return  True if the string was parsed successfully and the path was set (or cleared, if the string was empty),
     ///          false if not.
     ///
     /// @see Clear(), ToString()
-    bool ObjectPath::Set( const String& rString )
+    bool GameObjectPath::Set( const String& rString )
     {
         return Set( rString.GetData() );
     }
 
     /// Set this path based on the given parameters.
     ///
-    /// @param[in] name           Object name.
+    /// @param[in] name           GameObject name.
     /// @param[in] bPackage       True if the object is a package, false if not.
     /// @param[in] parentPath     Path to the parent object.
-    /// @param[in] instanceIndex  Object instance index.  Invalid index values are excluded from the path name string.
+    /// @param[in] instanceIndex  GameObject instance index.  Invalid index values are excluded from the path name string.
     ///
     /// @return  True if the parameters can represent a valid path and the path was set, false if not.
-    bool ObjectPath::Set( Name name, bool bPackage, ObjectPath parentPath, uint32_t instanceIndex )
+    bool GameObjectPath::Set( Name name, bool bPackage, GameObjectPath parentPath, uint32_t instanceIndex )
     {
         Entry* pParentEntry = parentPath.m_pEntry;
 
@@ -106,7 +106,7 @@ namespace Lunar
     ///
     /// @return  True if the paths could be joined into a valid path (to which this path was set), false if joining was
     ///          invalid.
-    bool ObjectPath::Join( ObjectPath rootPath, ObjectPath subPath )
+    bool GameObjectPath::Join( GameObjectPath rootPath, GameObjectPath subPath )
     {
         if( subPath.IsEmpty() )
         {
@@ -124,8 +124,8 @@ namespace Lunar
 
         if( !rootPath.IsPackage() )
         {
-            ObjectPath testSubPathComponent = subPath.GetParent();
-            ObjectPath subPathComponent;
+            GameObjectPath testSubPathComponent = subPath.GetParent();
+            GameObjectPath subPathComponent;
             do
             {
                 subPathComponent = testSubPathComponent;
@@ -135,7 +135,7 @@ namespace Lunar
                 {
                     HELIUM_TRACE(
                         TRACE_ERROR,
-                        ( TXT( "ObjectPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a " )
+                        ( TXT( "GameObjectPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a " )
                           TXT( "package, while the first path ends in an object).\n" ) ),
                         *rootPath.ToString(),
                         *subPath.ToString() );
@@ -149,7 +149,7 @@ namespace Lunar
         size_t nameCount = 0;
         size_t packageCount = 0;
 
-        ObjectPath testPath;
+        GameObjectPath testPath;
 
         for( testPath = subPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
         {
@@ -210,7 +210,7 @@ namespace Lunar
     ///
     /// @return  True if the paths could be joined into a valid path (to which this path was set), false if joining was
     ///          invalid.
-    bool ObjectPath::Join( ObjectPath rootPath, const tchar_t* pSubPath )
+    bool GameObjectPath::Join( GameObjectPath rootPath, const tchar_t* pSubPath )
     {
         if( !pSubPath || pSubPath[ 0 ] == TXT( '\0' ) )
         {
@@ -236,7 +236,7 @@ namespace Lunar
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
-                ( TXT( "ObjectPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, " )
+                ( TXT( "GameObjectPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, " )
                   TXT( "while the first path ends in an object).\n" ) ),
                 *rootPath.ToString(),
                 pSubPath );
@@ -248,7 +248,7 @@ namespace Lunar
         size_t nameCount = subPathNameCount;
         size_t packageCount = subPathPackageCount;
 
-        ObjectPath testPath;
+        GameObjectPath testPath;
 
         for( testPath = rootPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
         {
@@ -291,7 +291,7 @@ namespace Lunar
     ///
     /// @return  True if the paths could be joined into a valid path (to which this path was set), false if joining was
     ///          invalid.
-    bool ObjectPath::Join( const tchar_t* pRootPath, ObjectPath subPath )
+    bool GameObjectPath::Join( const tchar_t* pRootPath, GameObjectPath subPath )
     {
         if( !pRootPath || pRootPath[ 0 ] == TXT( '\0' ) )
         {
@@ -315,8 +315,8 @@ namespace Lunar
 
         if( rootPathNameCount != rootPathPackageCount )
         {
-            ObjectPath testSubPathComponent = subPath.GetParent();
-            ObjectPath subPathComponent;
+            GameObjectPath testSubPathComponent = subPath.GetParent();
+            GameObjectPath subPathComponent;
             do
             {
                 subPathComponent = testSubPathComponent;
@@ -326,7 +326,7 @@ namespace Lunar
                 {
                     HELIUM_TRACE(
                         TRACE_ERROR,
-                        ( TXT( "ObjectPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a " )
+                        ( TXT( "GameObjectPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a " )
                           TXT( "package, while the first path ends in an object).\n" ) ),
                         pRootPath,
                         *subPath.ToString() );
@@ -340,7 +340,7 @@ namespace Lunar
         size_t nameCount = rootPathNameCount;
         size_t packageCount = rootPathPackageCount;
 
-        ObjectPath testPath;
+        GameObjectPath testPath;
 
         for( testPath = subPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
         {
@@ -384,7 +384,7 @@ namespace Lunar
     ///
     /// @return  True if the paths could be joined into a valid path (to which this path was set), false if joining was
     ///          invalid.
-    bool ObjectPath::Join( const tchar_t* pRootPath, const tchar_t* pSubPath )
+    bool GameObjectPath::Join( const tchar_t* pRootPath, const tchar_t* pSubPath )
     {
         if( !pRootPath || pRootPath[ 0 ] == TXT( '\0' ) )
         {
@@ -422,7 +422,7 @@ namespace Lunar
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
-                ( TXT( "ObjectPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, " )
+                ( TXT( "GameObjectPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, " )
                   TXT( "while the first path ends in an object).\n" ) ),
                 pRootPath,
                 pSubPath );
@@ -455,7 +455,7 @@ namespace Lunar
     /// @param[out] rString  String representation of this path.
     ///
     /// @see Set()
-    void ObjectPath::ToString( String& rString ) const
+    void GameObjectPath::ToString( String& rString ) const
     {
         rString.Remove( 0, rString.GetSize() );
 
@@ -471,7 +471,7 @@ namespace Lunar
     /// directory delimiters for the current platform.
     ///
     /// @param[out] rString  File path string representation of this path.
-    void ObjectPath::ToFilePathString( String& rString ) const
+    void GameObjectPath::ToFilePathString( String& rString ) const
     {
         rString.Remove( 0, rString.GetSize() );
 
@@ -486,7 +486,7 @@ namespace Lunar
     /// Clear out this object path.
     ///
     /// @see Set()
-    void ObjectPath::Clear()
+    void GameObjectPath::Clear()
     {
         m_pEntry = NULL;
     }
@@ -494,9 +494,9 @@ namespace Lunar
     /// Release the object path table and free all allocated memory.
     ///
     /// This should only be called immediately prior to application exit.
-    void ObjectPath::Shutdown()
+    void GameObjectPath::Shutdown()
     {
-        HELIUM_TRACE( TRACE_INFO, TXT( "Shutting down ObjectPath table.\n" ) );
+        HELIUM_TRACE( TRACE_INFO, TXT( "Shutting down GameObjectPath table.\n" ) );
 
         delete [] sm_pTable;
         sm_pTable = NULL;
@@ -504,7 +504,7 @@ namespace Lunar
         delete sm_pEntryMemoryHeap;
         sm_pEntryMemoryHeap = NULL;
 
-        HELIUM_TRACE( TRACE_INFO, TXT( "ObjectPath table shutdown complete.\n" ) );
+        HELIUM_TRACE( TRACE_INFO, TXT( "GameObjectPath table shutdown complete.\n" ) );
     }
 
     /// Convert the path separator characters in the given object path to valid directory delimiters for the current
@@ -514,8 +514,8 @@ namespace Lunar
     /// converted, and may be invalid file name characters on certain platforms.
     ///
     /// @param[out] rFilePath     Converted file path.
-    /// @param[in]  rPackagePath  Object path string to convert (can be the same as the output file path).
-    void ObjectPath::ConvertStringToFilePath( String& rFilePath, const String& rPackagePath )
+    /// @param[in]  rPackagePath  GameObject path string to convert (can be the same as the output file path).
+    void GameObjectPath::ConvertStringToFilePath( String& rFilePath, const String& rPackagePath )
     {
 #if L_PACKAGE_PATH_CHAR != L_PATH_SEPARATOR_CHAR && L_PACKAGE_PATH_CHAR != L_ALT_PATH_SEPARATOR_CHAR
         size_t pathLength = rPackagePath.GetSize();
@@ -526,7 +526,7 @@ namespace Lunar
                 tchar_t& rCharacter = rFilePath[ characterIndex ];
                 if( rCharacter == L_PACKAGE_PATH_CHAR || rCharacter == L_OBJECT_PATH_CHAR )
                 {
-                    rCharacter = L_PATH_SEPARATOR_CHAR;
+                    rCharacter = Helium::s_InternalPathSeparator;
                 }
             }
         }
@@ -540,7 +540,7 @@ namespace Lunar
                 tchar_t character = rPackagePath[ characterIndex ];
                 if( character == L_PACKAGE_PATH_CHAR || character == L_OBJECT_PATH_CHAR )
                 {
-                    character = L_PATH_SEPARATOR_CHAR;
+                    character = Helium::s_InternalPathSeparator;
                 }
 
                 rFilePath.Add( character );
@@ -557,7 +557,7 @@ namespace Lunar
     /// @param[in] pInstanceIndices  Array of object instance indices in the path, starting from the bottom level on up.
     /// @param[in] nameCount         Number of object names.
     /// @param[in] packageCount      Number of object names that are packages.
-    void ObjectPath::Set( const Name* pNames, const uint32_t* pInstanceIndices, size_t nameCount, size_t packageCount )
+    void GameObjectPath::Set( const Name* pNames, const uint32_t* pInstanceIndices, size_t nameCount, size_t packageCount )
     {
         HELIUM_ASSERT( pNames );
         HELIUM_ASSERT( pInstanceIndices );
@@ -574,7 +574,7 @@ namespace Lunar
         {
             size_t parentNameCount = nameCount - 1;
 
-            ObjectPath parentPath;
+            GameObjectPath parentPath;
             parentPath.Set( pNames + 1, pInstanceIndices + 1, parentNameCount, Min( parentNameCount, packageCount ) );
             entry.pParent = parentPath.m_pEntry;
             HELIUM_ASSERT( entry.pParent );
@@ -599,7 +599,7 @@ namespace Lunar
     /// @param[out] rPackageCount      Number of names specifying packages.
     ///
     /// @return  True if the string was parsed successfully, false if not.
-    bool ObjectPath::Parse(
+    bool GameObjectPath::Parse(
         const tchar_t* pString,
         StackMemoryHeap<>& rStackHeap,
         Name*& rpNames,
@@ -620,7 +620,7 @@ namespace Lunar
         {
             HELIUM_TRACE(
                 TRACE_WARNING,
-                TXT( "ObjectPath: Path string \"%s\" does not contain a leading path separator.\n" ),
+                TXT( "GameObjectPath: Path string \"%s\" does not contain a leading path separator.\n" ),
                 pString );
 
             return false;
@@ -654,7 +654,7 @@ namespace Lunar
                 {
                     HELIUM_TRACE(
                         TRACE_WARNING,
-                        ( TXT( "ObjectPath: Unexpected package path separator at character %" ) TPRIdPD TXT( " of " )
+                        ( TXT( "GameObjectPath: Unexpected package path separator at character %" ) TPRIdPD TXT( " of " )
                           TXT( "path string \"%s\".\n" ) ),
                         pTestCharacter - pString,
                         pString );
@@ -719,7 +719,7 @@ namespace Lunar
                 {
                     HELIUM_TRACE(
                         TRACE_ERROR,
-                        TXT( "ObjectPath: Encountered non-numeric instance index value in path string \"%s\".\n" ),
+                        TXT( "GameObjectPath: Encountered non-numeric instance index value in path string \"%s\".\n" ),
                         *pString );
 
                     return false;
@@ -761,7 +761,7 @@ namespace Lunar
                     {
                         HELIUM_TRACE(
                             TRACE_ERROR,
-                            TXT( "ObjectPath: Empty instance index encountered in path string \"%s\".\n" ),
+                            TXT( "GameObjectPath: Empty instance index encountered in path string \"%s\".\n" ),
                             pString );
 
                         return false;
@@ -771,7 +771,7 @@ namespace Lunar
                     {
                         HELIUM_TRACE(
                             TRACE_ERROR,
-                            ( TXT( "ObjectPath: Encountered instance index \"%s\" with leading zeros in path string " )
+                            ( TXT( "GameObjectPath: Encountered instance index \"%s\" with leading zeros in path string " )
                               TXT( "\"%s\".\n" ) ),
                             pTempNameString,
                             pString );
@@ -797,7 +797,7 @@ namespace Lunar
                     {
                         HELIUM_TRACE(
                             TRACE_ERROR,
-                            TXT( "ObjectPath: Failed to parse object instance index \"%s\" in path string \"%s\".\n" ),
+                            TXT( "GameObjectPath: Failed to parse object instance index \"%s\" in path string \"%s\".\n" ),
                             pTempNameString,
                             pString );
 
@@ -808,7 +808,7 @@ namespace Lunar
                     {
                         HELIUM_TRACE(
                             TRACE_ERROR,
-                            TXT( "ObjectPath: Instance index \"%s\" in path string \"%s\" is a reserved value.\n" ),
+                            TXT( "GameObjectPath: Instance index \"%s\" in path string \"%s\" is a reserved value.\n" ),
                             pTempNameString,
                             pString );
 
@@ -843,7 +843,7 @@ namespace Lunar
     /// @param[in] rEntry  Entry to locate or add.
     ///
     /// @return  Pointer to the actual table entry.
-    ObjectPath::Entry* ObjectPath::Add( const Entry& rEntry )
+    GameObjectPath::Entry* GameObjectPath::Add( const Entry& rEntry )
     {
         // Lazily initialize the hash table.  Note that this is not inherently thread-safe, but there should always be
         // at least one path created before any sub-threads are spawned.
@@ -879,7 +879,7 @@ namespace Lunar
     ///
     /// @param[in]  rEntry   Path entry.
     /// @param[out] rString  Path string.
-    void ObjectPath::EntryToString( const Entry& rEntry, String& rString )
+    void GameObjectPath::EntryToString( const Entry& rEntry, String& rString )
     {
         Entry* pParent = rEntry.pParent;
         if( pParent )
@@ -907,7 +907,7 @@ namespace Lunar
     ///
     /// @param[in]  rEntry   Path entry.
     /// @param[out] rString  File path string.
-    void ObjectPath::EntryToFilePathString( const Entry& rEntry, String& rString )
+    void GameObjectPath::EntryToFilePathString( const Entry& rEntry, String& rString )
     {
         Entry* pParent = rEntry.pParent;
         if( pParent )
@@ -915,17 +915,17 @@ namespace Lunar
             EntryToFilePathString( *pParent, rString );
         }
 
-        rString += L_PATH_SEPARATOR_CHAR;
+        rString += Helium::s_InternalPathSeparator;
         rString += rEntry.name.Get();
     }
 
     /// Compute a hash value for an object path entry based on the contents of the name strings (slow, should only be
     /// used internally when a string comparison is needed).
     ///
-    /// @param[in] rEntry  Object path entry.
+    /// @param[in] rEntry  GameObject path entry.
     ///
     /// @return  Hash value.
-    size_t ObjectPath::ComputeEntryStringHash( const Entry& rEntry )
+    size_t GameObjectPath::ComputeEntryStringHash( const Entry& rEntry )
     {
         size_t hash = StringHash( rEntry.name.GetDirect() );
         hash = ( ( hash * 33 ) ^ rEntry.instanceIndex );
@@ -946,11 +946,11 @@ namespace Lunar
 
     /// Get whether the contents of the two given object path entries match.
     ///
-    /// @param[in] rEntry0  Object path entry.
-    /// @param[in] rEntry1  Object path entry.
+    /// @param[in] rEntry0  GameObject path entry.
+    /// @param[in] rEntry1  GameObject path entry.
     ///
     /// @return  True if the contents match, false if not.
-    bool ObjectPath::EntryContentsMatch( const Entry& rEntry0, const Entry& rEntry1 )
+    bool GameObjectPath::EntryContentsMatch( const Entry& rEntry0, const Entry& rEntry1 )
     {
         return ( rEntry0.name == rEntry1.name &&
                  rEntry0.instanceIndex == rEntry1.instanceIndex &&
@@ -966,7 +966,7 @@ namespace Lunar
     /// @return  Table entry if found, null if not found.
     ///
     /// @see Add()
-    ObjectPath::Entry* ObjectPath::TableBucket::Find( const Entry& rEntry, size_t& rEntryCount )
+    GameObjectPath::Entry* GameObjectPath::TableBucket::Find( const Entry& rEntry, size_t& rEntryCount )
     {
         ScopeReadLock readLock( m_lock );
 
@@ -1000,7 +1000,7 @@ namespace Lunar
     /// @return  Pointer to the object path table entry.
     ///
     /// @see Find()
-    ObjectPath::Entry* ObjectPath::TableBucket::Add( const Entry& rEntry, size_t previousEntryCount )
+    GameObjectPath::Entry* GameObjectPath::TableBucket::Add( const Entry& rEntry, size_t previousEntryCount )
     {
         ScopeWriteLock writeLock( m_lock );
 

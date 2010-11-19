@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// Object.inl
+// GameObject.inl
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -9,7 +9,7 @@ namespace Lunar
 {
     /// DynamicCast() implementation for up-cast or same conversions.
     ///
-    /// @param[in] pObject    Object to cast.
+    /// @param[in] pObject    GameObject to cast.
     /// @param[in] rIsUpcast  boost::true_type.
     ///
     /// @return  Cast pointer if the conversion is valid, null if the object is not of the target type.
@@ -21,7 +21,7 @@ namespace Lunar
 
     /// DynamicCast() implementation for down-cast or invalid conversions.
     ///
-    /// @param[in] pObject    Object to cast.
+    /// @param[in] pObject    GameObject to cast.
     /// @param[in] rIsUpcast  boost::false_type.
     ///
     /// @return  Cast pointer if the conversion is valid, null if the object is not of the target type.
@@ -35,7 +35,7 @@ namespace Lunar
 
     /// StaticCast() implementation for up-cast or same conversions.
     ///
-    /// @param[in] pObject    Object to cast.
+    /// @param[in] pObject    GameObject to cast.
     /// @param[in] rIsUpcast  boost::true_type.
     ///
     /// @return  Cast pointer.
@@ -47,7 +47,7 @@ namespace Lunar
 
     /// StaticCast() implementation for down-cast or invalid conversions.
     ///
-    /// @param[in] pObject    Object to cast.
+    /// @param[in] pObject    GameObject to cast.
     /// @param[in] rIsUpcast  boost::false_type.
     ///
     /// @return  Cast pointer.
@@ -98,10 +98,10 @@ namespace Lunar
     /// Perform any pre-destruction work before clearing the last strong reference to an object and destroying the
     /// object.
     ///
-    /// @param[in] pObject  Object about to be destroyed.
+    /// @param[in] pObject  GameObject about to be destroyed.
     ///
     /// @see Destroy()
-    void ObjectRefCountSupport::PreDestroy( Object* pObject )
+    void ObjectRefCountSupport::PreDestroy( GameObject* pObject )
     {
         HELIUM_ASSERT( pObject );
 
@@ -110,10 +110,10 @@ namespace Lunar
 
     /// Destroy an object after the final strong reference to it has been cleared.
     ///
-    /// @param[in] pObject  Object to destroy.
+    /// @param[in] pObject  GameObject to destroy.
     ///
     /// @see PreDestroy()
-    void ObjectRefCountSupport::Destroy( Object* pObject )
+    void ObjectRefCountSupport::Destroy( GameObject* pObject )
     {
         HELIUM_ASSERT( pObject );
 
@@ -122,28 +122,28 @@ namespace Lunar
 
     /// Get the name of this object.
     ///
-    /// @return  Object name.
+    /// @return  GameObject name.
     ///
     /// @see SetName()
-    Name Object::GetName() const
+    Name GameObject::GetName() const
     {
         return m_name;
     }
 
     /// Get the instance index associated with this object.
     ///
-    /// @return  Object instance index.
+    /// @return  GameObject instance index.
     ///
     /// @see SetInstanceIndex()
-    uint32_t Object::GetInstanceIndex() const
+    uint32_t GameObject::GetInstanceIndex() const
     {
         return m_instanceIndex;
     }
 
     /// Get the unique ID for this object.
     ///
-    /// @return  Object ID.
-    uint32_t Object::GetId() const
+    /// @return  GameObject ID.
+    uint32_t GameObject::GetId() const
     {
         return m_id;
     }
@@ -152,10 +152,10 @@ namespace Lunar
     ///
     /// Note that all object flag functions are thread-safe.
     ///
-    /// @return  Object flags.
+    /// @return  GameObject flags.
     ///
     /// @see GetAnyFlagSet(), GetAllFlagsSet(), SetFlags(), ClearFlags(), ToggleFlags()
-    uint32_t Object::GetFlags() const
+    uint32_t GameObject::GetFlags() const
     {
         return m_flags;
     }
@@ -164,12 +164,12 @@ namespace Lunar
     ///
     /// Note that all object flag functions are thread-safe.
     ///
-    /// @param[in] flagMask  Object flag bit mask.
+    /// @param[in] flagMask  GameObject flag bit mask.
     ///
     /// @return  True if any object flags in the given mask are set, false if not.
     ///
     /// @see GetFlags(), GetAllFlagsSet(), SetFlags(), ClearFlags(), ToggleFlags()
-    bool Object::GetAnyFlagSet( uint32_t flagMask ) const
+    bool GameObject::GetAnyFlagSet( uint32_t flagMask ) const
     {
         HELIUM_ASSERT( flagMask != 0 );
 
@@ -180,12 +180,12 @@ namespace Lunar
     ///
     /// Note that all object flag functions are thread-safe.
     ///
-    /// @param[in] flagMask  Object flag bit mask.
+    /// @param[in] flagMask  GameObject flag bit mask.
     ///
     /// @return  True if all the object flags in the given mask are set, false if not.
     ///
     /// @see GetFlags(), GetAnyFlagSet(), SetFlags(), ClearFlags(), ToggleFlags()
-    bool Object::GetAllFlagsSet( uint32_t flagMask ) const
+    bool GameObject::GetAllFlagsSet( uint32_t flagMask ) const
     {
         HELIUM_ASSERT( flagMask != 0 );
 
@@ -194,10 +194,10 @@ namespace Lunar
 
     /// Get the owner of this object.
     ///
-    /// @return  Object owner.
+    /// @return  GameObject owner.
     ///
     /// @see SetOwner(), GetChildCount(), GetChild(), GetChildren()
-    Object* Object::GetOwner() const
+    GameObject* GameObject::GetOwner() const
     {
         return m_spOwner;
     }
@@ -207,7 +207,7 @@ namespace Lunar
     /// @return  Number of owned objects.
     ///
     /// @see GetChild(), GetChildren(), GetOwner()
-    size_t Object::GetChildCount() const
+    size_t GameObject::GetChildCount() const
     {
         return m_children.GetSize();
     }
@@ -219,7 +219,7 @@ namespace Lunar
     /// @return  Child object.
     ///
     /// @see GetChildCount(), GetChildren(), GetOwner()
-    Object* Object::GetChild( size_t index ) const
+    GameObject* GameObject::GetChild( size_t index ) const
     {
         HELIUM_ASSERT( index < m_children.GetSize() );
         return m_children[ index ];
@@ -230,15 +230,15 @@ namespace Lunar
     /// @return  Child object array.
     ///
     /// @see GetChildCount(), GetChild(), GetOwner()
-    const DynArray< ObjectWPtr >& Object::GetChildren() const
+    const DynArray< GameObjectWPtr >& GameObject::GetChildren() const
     {
         return m_children;
     }
 
     /// Get the full path name for this object.
     ///
-    /// @return  Object path name.
-    ObjectPath Object::GetPath() const
+    /// @return  GameObject path name.
+    GameObjectPath GameObject::GetPath() const
     {
         return m_path;
     }
@@ -246,7 +246,7 @@ namespace Lunar
     /// Get whether this object is fully loaded and ready for use.
     ///
     /// @return  True if this object is fully loaded, false if not.
-    bool Object::IsFullyLoaded() const
+    bool GameObject::IsFullyLoaded() const
     {
         return GetAllFlagsSet( FLAG_PRELOADED | FLAG_LINKED | FLAG_LOADED );
     }
@@ -258,8 +258,8 @@ namespace Lunar
     ///
     /// @return  True if this is a package, false if not.
     ///
-    /// @see Object::FLAG_PACKAGE
-    bool Object::IsPackage() const
+    /// @see GameObject::FLAG_PACKAGE
+    bool GameObject::IsPackage() const
     {
         return GetAnyFlagSet( FLAG_PACKAGE );
     }
@@ -271,7 +271,7 @@ namespace Lunar
     /// @return  True if this is an instance of the given type, false if not.
     ///
     /// @see GetType(), IsA()
-    bool Object::IsInstanceOf( const Type* pType ) const
+    bool GameObject::IsInstanceOf( const Type* pType ) const
     {
         const Type* pThisType = GetType();
         HELIUM_ASSERT( pThisType );
@@ -282,19 +282,19 @@ namespace Lunar
     /// Call FinalizeLoad() on this object and set the FLAG_LOADED flag if it is not set.
     ///
     /// @see FinalizeLoad()
-    void Object::ConditionalFinalizeLoad()
+    void GameObject::ConditionalFinalizeLoad()
     {
-        if( !GetAnyFlagSet( Object::FLAG_LOADED ) )
+        if( !GetAnyFlagSet( GameObject::FLAG_LOADED ) )
         {
             FinalizeLoad();
-            SetFlags( Object::FLAG_LOADED );
+            SetFlags( GameObject::FLAG_LOADED );
         }
     }
 
     /// Create a new object.
     ///
-    /// @param[in] name                  Object name.
-    /// @param[in] pOwner                Object owner.
+    /// @param[in] name                  GameObject name.
+    /// @param[in] pOwner                GameObject owner.
     /// @param[in] pTemplate             Optional override template object.  If null, the default template for the
     ///                                  object type will be used.
     /// @param[in] bAssignInstanceIndex  True to assign an instance index to the object, false to leave the index
@@ -304,12 +304,12 @@ namespace Lunar
     ///
     /// @see Create()
     template< typename T >
-    T* Object::Create( Name name, Object* pOwner, T* pTemplate, bool bAssignInstanceIndex )
+    T* GameObject::Create( Name name, GameObject* pOwner, T* pTemplate, bool bAssignInstanceIndex )
     {
         Type* pType = T::GetStaticType();
         HELIUM_ASSERT( pType );
 
-        Object* pObject = CreateObject( pType, name, pOwner, pTemplate, bAssignInstanceIndex );
+        GameObject* pObject = CreateObject( pType, name, pOwner, pTemplate, bAssignInstanceIndex );
 
         return static_cast< T* >( pObject );
     }
@@ -320,9 +320,9 @@ namespace Lunar
     ///
     /// @return  Pointer to the object if found, null pointer if not found.
     template< typename T >
-    T* Object::Find( ObjectPath path )
+    T* GameObject::Find( GameObjectPath path )
     {
-        Object* pObject = FindObject( path );
+        GameObject* pObject = FindObject( path );
         if( pObject )
         {
             Type* pType = T::GetStaticType();
@@ -338,7 +338,7 @@ namespace Lunar
 
     /// Cast an object to a given type if the object is of that type.
     ///
-    /// @param[in] pObject  Object to cast.
+    /// @param[in] pObject  GameObject to cast.
     ///
     /// @return  Cast pointer if the conversion is valid, null if the object is not of the target type.
     ///
@@ -356,7 +356,7 @@ namespace Lunar
     /// only.  No checking is performed if assertions are disabled, and a null pointer is never returned if the cast is
     /// invalid.
     ///
-    /// @param[in] pObject  Object to cast.
+    /// @param[in] pObject  GameObject to cast.
     ///
     /// @return  Cast pointer.
     ///

@@ -8,10 +8,10 @@
 #include "EnginePch.h"
 #include "Engine/Cache.h"
 
-#include "Core/File.h"
+#include "Foundation/File/File.h"
 #include "Foundation/Stream/FileStream.h"
 #include "Foundation/Stream/BufferedStream.h"
-#include "Core/AsyncLoader.h"
+#include "Foundation/AsyncLoader.h"
 
 namespace Lunar
 {
@@ -65,7 +65,8 @@ namespace Lunar
         m_name = name;
         m_platform = platform;
 
-        int64_t tocSize64 = File::GetSize( pTocFileName );
+        Path tocFile( pTocFileName );
+        int64_t tocSize64 = tocFile.Size();
         if( tocSize64 != -1 && static_cast< uint64_t >( tocSize64 ) >= UINT32_MAX )
         {
             HELIUM_TRACE(
@@ -285,11 +286,11 @@ namespace Lunar
 
     /// Search for a cache entry with the given object path name.
     ///
-    /// @param[in] path          Object path.
+    /// @param[in] path          GameObject path.
     /// @param[in] subDataIndex  Sub-data index associated with the cached data.
     ///
     /// @return  Pointer to the cache entry for the given object path if found, null pointer if not found.
-    const Cache::Entry* Cache::FindEntry( ObjectPath path, uint32_t subDataIndex ) const
+    const Cache::Entry* Cache::FindEntry( GameObjectPath path, uint32_t subDataIndex ) const
     {
         EntryKey key;
         key.path = path;
@@ -309,7 +310,7 @@ namespace Lunar
 
     /// Add or update an entry in the cache.
     ///
-    /// @param[in] path          Object path.
+    /// @param[in] path          GameObject path.
     /// @param[in] subDataIndex  Sub-data index associated with the cached data.
     /// @param[in] pData         Data to cache.
     /// @param[in] timestamp     Timestamp value to associate with the entry in the cache.
@@ -317,7 +318,7 @@ namespace Lunar
     ///
     /// @return  True if the cache was updated successfully, false if not.
     bool Cache::CacheEntry(
-        ObjectPath path,
+        GameObjectPath path,
         uint32_t subDataIndex,
         const void* pData,
         int64_t timestamp,
@@ -325,7 +326,8 @@ namespace Lunar
     {
         HELIUM_ASSERT( pData || size == 0 );
 
-        int64_t cacheFileSize = File::GetSize( m_cacheFileName );
+        Path cacheFile( m_cacheFileName.GetData() );
+        int64_t cacheFileSize = cacheFile.Size();
         uint64_t entryOffset = ( cacheFileSize == -1 ? 0 : static_cast< uint64_t >( cacheFileSize ) );
 
         HELIUM_ASSERT( m_pEntryPool );
@@ -404,7 +406,7 @@ namespace Lunar
 
             uint64_t seekOffset = static_cast< uint64_t >( pCacheStream->Seek(
                 static_cast< int64_t >( entryOffset ),
-                Stream::SEEK_ORIGIN_BEGIN ) );
+                SeekOrigins::SEEK_ORIGIN_BEGIN ) );
             if( seekOffset != entryOffset )
             {
                 HELIUM_TRACE( TRACE_ERROR, TXT( "Cache: Cache file offset seek failed.\n" ) );
@@ -613,7 +615,7 @@ namespace Lunar
             bReadResult = CheckedTocRead(
                 pLoadFunction,
                 entryPathSize,
-                TXT( "entry ObjectPath string size" ),
+                TXT( "entry GameObjectPath string size" ),
                 pTocCurrent,
                 pTocMax );
             if( !bReadResult )
@@ -635,7 +637,7 @@ namespace Lunar
                 bReadResult = CheckedTocRead(
                     pLoadFunction,
                     pPathString[ characterIndex ],
-                    TXT( "entry ObjectPath string character" ),
+                    TXT( "entry GameObjectPath string character" ),
                     pTocCurrent,
                     pTocMax );
                 if( !bReadResult )
@@ -647,7 +649,7 @@ namespace Lunar
                 bReadResult = CheckedTocRead(
                     pLoadFunction,
                     character,
-                    TXT( "entry ObjectPath string character" ),
+                    TXT( "entry GameObjectPath string character" ),
                     pTocCurrent,
                     pTocMax );
                 if( !bReadResult )
@@ -660,12 +662,12 @@ namespace Lunar
 #endif
             }
 
-            ObjectPath entryPath;
+            GameObjectPath entryPath;
             if( !entryPath.Set( pPathString ) )
             {
                 HELIUM_TRACE(
                     TRACE_ERROR,
-                    TXT( "Cache::FinalizeTocLoad(): Failed to set ObjectPath for entry %" ) TPRIuFAST16 TXT( ".\n" ),
+                    TXT( "Cache::FinalizeTocLoad(): Failed to set GameObjectPath for entry %" ) TPRIuFAST16 TXT( ".\n" ),
                     entryIndex );
 
                 return false;
@@ -691,7 +693,7 @@ namespace Lunar
             {
                 HELIUM_TRACE(
                     TRACE_ERROR,
-                    ( TXT( "Cache::FinalizeTocLoad(): Duplicate entry found for ObjectPath \"%s\", sub-data %" ) TPRIu32
+                    ( TXT( "Cache::FinalizeTocLoad(): Duplicate entry found for GameObjectPath \"%s\", sub-data %" ) TPRIu32
                       TXT( ".\n" ) ),
                     pPathString,
                     entrySubDataIndex );

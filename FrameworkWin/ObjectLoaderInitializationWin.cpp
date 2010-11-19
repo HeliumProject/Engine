@@ -16,7 +16,7 @@
 namespace Lunar
 {
     /// @copydoc ObjectLoaderInitialization::Initialize()
-    ObjectLoader* ObjectLoaderInitializationWin::Initialize()
+    GameObjectLoader* ObjectLoaderInitializationWin::Initialize()
     {
 #if L_EDITOR && 1
         if( !EditorObjectLoader::InitializeStaticInstance() )
@@ -44,7 +44,7 @@ namespace Lunar
         }
 #endif
 
-        ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
 
         return pObjectLoader;

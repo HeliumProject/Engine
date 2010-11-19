@@ -7,7 +7,6 @@ defines
 	"PLATFORM_DLL=1",
 	"FOUNDATION_DLL=1",
 	"PIPELINE_DLL=1",
-	"CORE_DLL=1",
 	"WXUSINGDLL=1",
 	"wxNO_EXPAT_LIB=1",
 	"wxNO_JPEG_LIB=1",
@@ -21,12 +20,6 @@ flags
 	"FatalWarnings",
 }
 
-local fbxSdkPath = os.getenv( "FBXSDK_DIR" )
-if fbxSdkPath == nil then
-	-- XXX TMC TODO: Make up fallback path for platforms other than Windows?
-	fbxSdkPath = "C:/Program Files/Autodesk/FBX/FbxSdk/2011.2"
-end
-
 includedirs
 {
 	".",
@@ -36,12 +29,12 @@ includedirs
 	"Dependencies/png",
 	"Dependencies/tbb/include",
 	"Dependencies/zlib",
-	fbxSdkPath .. "/include",
+	"Integrations/FBX/include",
 }
 
 libdirs
 {
-	fbxSdkPath .. "/lib",
+	"Integrations/FBX/lib",
 }
 
 if haveGranny then
@@ -406,17 +399,6 @@ project "Editor"
 			"Dependencies/p4api/lib/x64/Release",
 		}
 
-project "Core"
-	uuid "B4A1D5A3-C3B3-4AB0-8756-78A48BCBFFD3"
-
-	links
-	{
-		"Platform",
-		"Foundation",
-	}
-
-	Helium.DoLunarModuleProjectSettings( "LUNAR", "Core", "CORE" )
-
 project "Engine"
 	uuid "CDD089F1-EC6E-469B-BF06-8DF56C5B1489"
 
@@ -424,7 +406,6 @@ project "Engine"
 	{
 		"Platform",
 		"Foundation",
-		"Core",
 	}
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "Engine", "ENGINE" )
@@ -436,7 +417,6 @@ project "EngineJobs"
 	{
 		"Platform",
 		"Foundation",
-		"Core",
 		"Engine",
 	}
 
@@ -449,7 +429,6 @@ project "Windowing"
 	{
 		"Platform",
 		"Foundation",
-		"Core",
 		"Engine",
 		"EngineJobs",
 	}
@@ -463,7 +442,6 @@ project "Rendering"
 	{
 		"Platform",
 		"Foundation",
-		"Core",
 		"Engine",
 		"EngineJobs",
 	}
@@ -477,7 +455,6 @@ project "GraphicsTypes"
 	{
 		"Platform",
 		"Foundation",
-		"Core",
 		"Engine",
 		"EngineJobs",
 		"Rendering",
@@ -492,7 +469,6 @@ project "GraphicsJobs"
 	{
 		"Platform",
 		"Foundation",
-		"Core",
 		"Engine",
 		"EngineJobs",
 		"Rendering",
@@ -508,7 +484,6 @@ project "Graphics"
 	{
 		"Platform",
 		"Foundation",
-		"Core",
 		"Engine",
 		"EngineJobs",
 		"Rendering",
@@ -525,7 +500,6 @@ project "Framework"
 	{
 		"Platform",
 		"Foundation",
-		"Core",
 		"Engine",
 		"EngineJobs",
 		"Windowing",
@@ -544,7 +518,6 @@ project "WinWindowing"
 	{
 		"Platform",
 		"Foundation",
-		"Core",
 		"Engine",
 		"EngineJobs",
 		"Windowing",
@@ -559,7 +532,6 @@ project "D3D9Rendering"
 	{
 		"Platform",
 		"Foundation",
-		"Core",
 		"Engine",
 		"EngineJobs",
 		"Rendering",
@@ -574,7 +546,6 @@ project "PcSupport"
 	{
 		"Platform",
 		"Foundation",
-		"Core",
 		"Engine",
 		"EngineJobs",
 		"Rendering",
@@ -589,7 +560,6 @@ project "PreprocessingPc"
 	{
 		"Platform",
 		"Foundation",
-		"Core",
 		"Engine",
 		"EngineJobs",
 		"Rendering",
@@ -608,7 +578,6 @@ project "EditorSupport"
 	{
 		"Platform",
 		"Foundation",
-		"Core",
 		"Engine",
 		"EngineJobs",
 		"Windowing",
@@ -630,7 +599,6 @@ project "FrameworkWin"
 	{
 		"Platform",
 		"Foundation",
-		"Core",
 		"Engine",
 		"EngineJobs",
 		"Windowing",
@@ -655,7 +623,6 @@ project "TestJobs"  -- DEPRECATED
 	{
 		"Platform",
 		"Foundation",
-		"Core",
 		"Engine",
 		"EngineJobs",
 	}

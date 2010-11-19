@@ -44,12 +44,12 @@ Path& Path::operator=( const Path& rhs )
 
 bool Path::operator==( const Path& rhs ) const
 {
-    return m_Path == rhs.m_Path;
+    return _tcsicmp( m_Path.c_str(), rhs.m_Path.c_str() ) == 0;
 }
 
 bool Path::operator<( const Path& rhs ) const
 {
-    return m_Path < rhs.m_Path;
+    return _tcsicmp( m_Path.c_str(), rhs.m_Path.c_str() ) < 0;
 }
 
 Helium::Path Path::operator+( const tchar_t* rhs ) const
@@ -110,19 +110,18 @@ void Path::GuaranteeSeparator( tstring& path )
 
 bool Path::Exists( const tstring& path )
 {
-    Path native( path );
     Helium::Stat stat;
-    return native.Stat( stat );
+    return Helium::StatPath( path.c_str(), stat );
 }
 
 bool Path::Stat( Helium::Stat& stat ) const
 {
-    return Helium::StatPath( Native().c_str(), stat );
+    return Helium::StatPath( m_Path.c_str(), stat );
 }
 
-bool Path::IsAbsolute( const tstring& path )
+bool Path::IsAbsolute( const tchar_t* path )
 {
-    return Helium::IsAbsolute( path.c_str() );
+    return Helium::IsAbsolute( path );
 }
 
 bool Path::IsUnder( const tstring& location, const tstring& path )
@@ -138,7 +137,7 @@ bool Path::IsFile() const
     }
 
     Helium::Stat stat;
-    if ( !Helium::StatPath( Native().c_str(), stat ) )
+    if ( !Helium::StatPath( m_Path.c_str(), stat ) )
     {
         return false;
     }
@@ -154,7 +153,7 @@ bool Path::IsDirectory() const
     }
 
     Helium::Stat stat;
-    if ( !Helium::StatPath( Native().c_str(), stat ) )
+    if ( !Helium::StatPath( m_Path.c_str(), stat ) )
     {
         return false;
     }
@@ -165,7 +164,7 @@ bool Path::IsDirectory() const
 bool Path::Writable() const
 {
     Helium::Stat stat;
-    if ( !Helium::StatPath( Native().c_str(), stat ) )
+    if ( !Helium::StatPath( m_Path.c_str(), stat ) )
     {
         return true;
     }
@@ -176,7 +175,7 @@ bool Path::Writable() const
 bool Path::Readable() const
 {
     Helium::Stat stat;
-    if ( !Helium::StatPath( Native().c_str(), stat ) )
+    if ( !Helium::StatPath( m_Path.c_str(), stat ) )
     {
         return false;
     }
@@ -187,7 +186,7 @@ bool Path::Readable() const
 bool Path::ChangedSince( uint64_t lastTime ) const
 {
     Helium::Stat stat;
-    if ( !Helium::StatPath( Native().c_str(), stat ) )
+    if ( !Helium::StatPath( m_Path.c_str(), stat ) )
     {
         return false;
     }
@@ -241,8 +240,7 @@ int64_t Path::Size() const
 
 bool Path::MakePath() const
 {
-    Path dir( Directory() );
-    return Helium::MakePath( dir.Native().c_str() );
+    return Helium::MakePath( Directory().c_str() );
 }
 
 bool Path::Create() const
@@ -252,7 +250,7 @@ bool Path::Create() const
         return false;
     }
 
-    FILE *f = _tfopen( Native().c_str(), TXT( "w" ) );
+    FILE *f = _tfopen( m_Path.c_str(), TXT( "w" ) );
 
     if ( !f )
     {
@@ -265,17 +263,17 @@ bool Path::Create() const
 
 bool Path::Copy( const Helium::Path& target, bool overwrite ) const
 {
-    return Helium::Copy( Native().c_str(), target.Native().c_str(), overwrite );
+    return Helium::Copy( m_Path.c_str(), target.m_Path.c_str(), overwrite );
 }
 
 bool Path::Move( const Helium::Path& target ) const 
 {
-    return Helium::Move( Native().c_str(), target.Native().c_str() );
+    return Helium::Move( m_Path.c_str(), target.m_Path.c_str() );
 }
 
 bool Path::Delete() const
 {
-    return Helium::Delete( Native().c_str() );
+    return Helium::Delete( m_Path.c_str() );
 }
 
 const tstring& Path::Get() const
@@ -479,7 +477,7 @@ tstring Path::Native() const
 tstring Path::Absolute() const
 {
     tstring full;
-    Helium::GetFullPath( Native().c_str(), full );
+    Helium::GetFullPath( m_Path.c_str(), full );
     return full;
 }
 
@@ -492,21 +490,25 @@ tstring Path::Normalized() const
 
 uint64_t Path::Hash() const
 {
-    return Helium::MurmurHash2( m_Path );
+    tstring temp = m_Path;
+    Normalize( temp );
+    return Helium::MurmurHash2( temp );
 }
 
 tstring Path::Signature()
 {
-    return Helium::MD5( m_Path );
+    tstring temp = m_Path;
+    Normalize( temp );
+    return Helium::MD5( temp );
 }
 
 Helium::Path Path::GetAbsolutePath( const Helium::Path& basisPath ) const
 {
     HELIUM_ASSERT( !IsAbsolute() ); // shouldn't call this on an already-absolute path
 
-    tstring newPathString;
-    Helium::GetFullPath( tstring( basisPath.Directory() + m_Path ).c_str(), newPathString );
-    return Helium::Path( newPathString );
+    tstring newPathtstring;
+    Helium::GetFullPath( tstring( basisPath.Directory() + m_Path ).c_str(), newPathtstring );
+    return Helium::Path( newPathtstring );
 }
 
 Helium::Path Path::GetRelativePath( const Helium::Path& basisPath ) const
@@ -525,31 +527,30 @@ Helium::Path Path::GetRelativePath( const Helium::Path& basisPath ) const
         return *this;
     }
 
-    tstring newPathString;
+    tstring newPathtstring;
     for ( size_t j = 0; j < ( baseDirectories.size() - i ); ++j )
     {
-        newPathString += tstring( TXT( ".." ) ) + s_InternalPathSeparator;
+        newPathtstring += tstring( TXT( ".." ) ) + s_InternalPathSeparator;
     }
 
     for ( size_t j = i; j < targetDirectories.size(); ++j )
     {
-        newPathString += targetDirectories[ j ] + s_InternalPathSeparator;
+        newPathtstring += targetDirectories[ j ] + s_InternalPathSeparator;
     }
 
-    newPathString += Filename();
-    return Helium::Path( newPathString );
+    newPathtstring += Filename();
+    return Helium::Path( newPathtstring );
 }
 
 bool Path::Exists() const
 {
-    tstring absolute = Absolute();
-    Path::MakeNative( absolute );
-    return Path::Exists( absolute );
+    HELIUM_ASSERT( IsAbsolute() );
+    return Path::Exists( m_Path );
 }
 
 bool Path::IsAbsolute() const
 {
-    return Path::IsAbsolute( m_Path );
+    return Path::IsAbsolute( m_Path.c_str() );
 }
 
 bool Path::IsUnder( const tstring& location )

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Foundation/Automation/Event.h"
+#include "Foundation/Document/Document.h"
 #include "Foundation/TUID.h"
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Version.h"
@@ -279,7 +280,7 @@ namespace Helium
             }
 
             Undo::CommandPtr m_Command;
-         };
+        };
         typedef Helium::Signature< const UndoCommandArgs& > UndoCommandSignature; 
 
         //
@@ -319,7 +320,7 @@ namespace Helium
             //
 
         private:
-            
+
             Helium::Path m_Path;
             Helium::TUID m_Id;
 
@@ -601,6 +602,21 @@ namespace Helium
             }
 
             //
+            // Document
+            //
+
+        public:
+            void ConnectDocument( Document* document );
+            void DisconnectDocument( const Document* document );
+
+            mutable DocumentObjectChangedSignature::Event e_HasChanged;
+
+        private:
+            // Callback for when a document is saved.
+            void OnDocumentSave( const DocumentEventArgs& args );
+
+
+            //
             // Load
             //
 
@@ -638,7 +654,7 @@ namespace Helium
 
             // Saves this scene to its current file location. 
             // (get and change the scene editor file to switch the destination)
-            bool Save();
+            bool Serialize();
 
             // Save nodes to a file or to an xml string buffer.  Do not change the file
             // that this scene is pointing at.  Optionally export the entire scene or
@@ -792,7 +808,7 @@ namespace Helium
             void FrameSelected();
 
             void MeasureDistance();
-            
+
             Undo::CommandPtr PickWalkUp();
             Undo::CommandPtr PickWalkDown();
             Undo::CommandPtr PickWalkSibling(bool forward);

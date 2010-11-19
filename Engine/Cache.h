@@ -13,7 +13,7 @@
 
 #include "Foundation/Container/ConcurrentHashMap.h"
 #include "Foundation/Container/ObjectPool.h"
-#include "Engine/ObjectPath.h"
+#include "Engine/GameObjectPath.h"
 
 namespace Lunar
 {
@@ -50,7 +50,7 @@ namespace Lunar
             int64_t timestamp;
 
             /// Entry path name.
-            ObjectPath path;
+            GameObjectPath path;
             /// Sub-data index.
             uint32_t subDataIndex;
 
@@ -89,20 +89,20 @@ namespace Lunar
 
         inline uint32_t GetEntryCount() const;
         inline const Entry& GetEntry( uint32_t index ) const;
-        const Entry* FindEntry( ObjectPath path, uint32_t subDataIndex ) const;
+        const Entry* FindEntry( GameObjectPath path, uint32_t subDataIndex ) const;
 
-        bool CacheEntry( ObjectPath path, uint32_t subDataIndex, const void* pData, int64_t timestamp, uint32_t size );
+        bool CacheEntry( GameObjectPath path, uint32_t subDataIndex, const void* pData, int64_t timestamp, uint32_t size );
         //@}
 
     private:
         /// Value read callback.
         typedef void ( LOAD_VALUE_CALLBACK )( void* pDestination, const void* pSource, size_t byteCount );
 
-        /// Object entry key.
+        /// GameObject entry key.
         struct EntryKey
         {
-            /// Object path.
-            ObjectPath path;
+            /// GameObject path.
+            GameObjectPath path;
             /// Sub-data index.
             uint32_t subDataIndex;
 
@@ -112,7 +112,7 @@ namespace Lunar
             //@}
         };
 
-        /// Object entry key hasher.
+        /// GameObject entry key hasher.
         class EntryKeyHash
         {
         public:

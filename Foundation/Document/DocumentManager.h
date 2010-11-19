@@ -63,8 +63,8 @@ namespace Helium
         SaveAction          QuerySave( Document* document ) const;
 
     public:
-        mutable DocumentEventSignature::Event e_DocumentAdded;
-        mutable DocumentEventSignature::Event e_DocumentRemoved;
+        mutable DocumentEventSignature::Event e_DocumentOpened;
+        mutable DocumentEventSignature::Event e_DocumenClosed;
 
     private:
         bool AddDocument( const DocumentPtr& document );

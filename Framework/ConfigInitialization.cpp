@@ -9,7 +9,7 @@
 #include "Framework/ConfigInitialization.h"
 
 #include "Engine/Config.h"
-#include "Engine/ObjectLoader.h"
+#include "Engine/GameObjectLoader.h"
 
 namespace Lunar
 {
@@ -25,7 +25,7 @@ namespace Lunar
     {
         Config& rConfig = Config::GetStaticInstance();
 
-        ObjectLoader* pObjectLoader = ObjectLoader::GetStaticInstance();
+        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
 
         HELIUM_TRACE( TRACE_INFO, TXT( "Loading configuration settings.\n" ) );

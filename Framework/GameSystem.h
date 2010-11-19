@@ -57,9 +57,9 @@ namespace Lunar
         //@}
 
     protected:
-        /// Object type registration interface.
+        /// GameObject type registration interface.
         ObjectTypeRegistration* m_pObjectTypeRegistration;
-        /// ObjectLoader initialization interface.
+        /// GameObjectLoader initialization interface.
         ObjectLoaderInitialization* m_pObjectLoaderInitialization;
 
         /// Main application window.

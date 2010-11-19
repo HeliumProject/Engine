@@ -27,7 +27,7 @@ namespace Lunar
     {
     }
 
-    /// @copydoc Object::Serialize()
+    /// @copydoc GameObject::Serialize()
     void Camera::Serialize( Serializer& s )
     {
         L_SERIALIZE_SUPER( s );

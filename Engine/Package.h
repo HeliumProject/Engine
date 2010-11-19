@@ -9,16 +9,16 @@
 #ifndef LUNAR_ENGINE_PACKAGE_H
 #define LUNAR_ENGINE_PACKAGE_H
 
-#include "Engine/Object.h"
+#include "Engine/GameObject.h"
 
 namespace Lunar
 {
     class PackageLoader;
 
-    /// Object package.
-    class LUNAR_ENGINE_API Package : public Object
+    /// GameObject package.
+    class LUNAR_ENGINE_API Package : public GameObject
     {
-        L_DECLARE_OBJECT( Package, Object );
+        L_DECLARE_OBJECT( Package, GameObject );
 
     public:
         /// @name Construction/Destruction

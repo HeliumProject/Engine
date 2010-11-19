@@ -14,9 +14,9 @@
 namespace Lunar
 {
     /// Graphics configuration data.
-    class LUNAR_GRAPHICS_API GraphicsConfig : public Object
+    class LUNAR_GRAPHICS_API GraphicsConfig : public GameObject
     {
-        L_DECLARE_OBJECT( GraphicsConfig, Object );
+        L_DECLARE_OBJECT( GraphicsConfig, GameObject );
 
     public:
         /// Texture filtering mode.

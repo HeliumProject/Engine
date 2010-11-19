@@ -55,7 +55,7 @@ namespace Lunar
 
     /// Get the number of object entries in this cache.
     ///
-    /// @return  Object entry count.
+    /// @return  GameObject entry count.
     ///
     /// @see GetEntry()
     uint32_t Cache::GetEntryCount() const
@@ -68,9 +68,9 @@ namespace Lunar
 
     /// Get the information for the cache entry with the specified index.
     ///
-    /// @param[in] index  Object entry index.
+    /// @param[in] index  GameObject entry index.
     ///
-    /// @return  Object entry information.
+    /// @return  GameObject entry information.
     ///
     /// @see GetEntryCount()
     const Cache::Entry& Cache::GetEntry( uint32_t index ) const

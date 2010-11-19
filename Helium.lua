@@ -21,12 +21,6 @@ flags
 	"FatalWarnings",
 }
 
-local fbxSdkPath = os.getenv( "FBXSDK_DIR" )
-if fbxSdkPath == nil then
-	-- XXX TMC TODO: Make up fallback path for platforms other than Windows?
-	fbxSdkPath = "C:/Program Files/Autodesk/FBX/FbxSdk/2011.2"
-end
-
 includedirs
 {
 	".",
@@ -36,12 +30,12 @@ includedirs
 	"Dependencies/png",
 	"Dependencies/tbb/include",
 	"Dependencies/zlib",
-	fbxSdkPath .. "/include",
+	"Integrations/FBX/include",
 }
 
 libdirs
 {
-	fbxSdkPath .. "/lib",
+	"Integrations/FBX/lib",
 }
 
 if haveGranny then

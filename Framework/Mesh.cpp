@@ -8,7 +8,7 @@
 #include "FrameworkPch.h"
 #include "Framework/Mesh.h"
 
-#include "Core/AsyncLoader.h"
+#include "Foundation/AsyncLoader.h"
 #include "Platform/Math/Simd/Matrix44.h"
 #include "Engine/CacheManager.h"
 #include "Rendering/RIndexBuffer.h"

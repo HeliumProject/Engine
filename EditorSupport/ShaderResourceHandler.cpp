@@ -9,7 +9,8 @@
 #include "EditorSupport/ShaderResourceHandler.h"
 
 #include "Foundation/Stream/BufferedStream.h"
-#include "Core/File.h"
+#include "Foundation/File/File.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/Stream/FileStream.h"
 #include "Foundation/Stream/Stream.h"
 #include "Foundation/StringConverter.h"

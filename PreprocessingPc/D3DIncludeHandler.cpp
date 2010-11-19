@@ -8,9 +8,9 @@
 #include "PreprocessingPcPch.h"
 #include "PreprocessingPc/D3DIncludeHandler.h"
 
-#include "Core/File.h"
+#include "Foundation/File/File.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/Stream/FileStream.h"
-#include "Core/Path.h"
 #include "Foundation/StringConverter.h"
 
 namespace Lunar
@@ -18,9 +18,9 @@ namespace Lunar
     /// Constructor.
     ///
     /// @param[in] rShaderPath  Path to the shader file being processed.
-    D3DIncludeHandler::D3DIncludeHandler( const String& rShaderPath )
+    D3DIncludeHandler::D3DIncludeHandler( const Path& rShaderPath )
     {
-        Path::GetDirectoryName( m_shaderDirectory, rShaderPath );
+        m_shaderDirectory.Set( rShaderPath.Directory() );
     }
 
     /// Destructor.
@@ -55,11 +55,10 @@ namespace Lunar
         String fileName;
         StringConverter< char, tchar_t >::Convert( fileName, pFileName );
 
-        String includePath;
-        Path::Combine( includePath, m_shaderDirectory, fileName );
+        Path includePath( m_shaderDirectory + fileName.GetData() );
 
         // Attempt to open and read the contents of the include file.
-        FileStream* pIncludeFileStream = File::Open( includePath, FileStream::MODE_READ );
+        FileStream* pIncludeFileStream = File::Open( includePath.c_str(), FileStream::MODE_READ );
         if( !pIncludeFileStream )
         {
             HELIUM_TRACE(

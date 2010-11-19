@@ -8,7 +8,7 @@
 #include "EnginePch.h"
 #include "Engine/GameObjectPath.h"
 
-#include "Core/Path.h"
+#include "Foundation/File/Path.h"
 
 namespace Lunar
 {
@@ -526,7 +526,7 @@ namespace Lunar
                 tchar_t& rCharacter = rFilePath[ characterIndex ];
                 if( rCharacter == L_PACKAGE_PATH_CHAR || rCharacter == L_OBJECT_PATH_CHAR )
                 {
-                    rCharacter = L_PATH_SEPARATOR_CHAR;
+                    rCharacter = Helium::s_InternalPathSeparator;
                 }
             }
         }
@@ -540,7 +540,7 @@ namespace Lunar
                 tchar_t character = rPackagePath[ characterIndex ];
                 if( character == L_PACKAGE_PATH_CHAR || character == L_OBJECT_PATH_CHAR )
                 {
-                    character = L_PATH_SEPARATOR_CHAR;
+                    character = Helium::s_InternalPathSeparator;
                 }
 
                 rFilePath.Add( character );
@@ -915,7 +915,7 @@ namespace Lunar
             EntryToFilePathString( *pParent, rString );
         }
 
-        rString += L_PATH_SEPARATOR_CHAR;
+        rString += Helium::s_InternalPathSeparator;
         rString += rEntry.name.Get();
     }
 

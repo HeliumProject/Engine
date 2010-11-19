@@ -133,7 +133,7 @@ size_t BufferedStream::Read( void* pBuffer, size_t size, size_t count )
             int64_t fileOffset = m_pStream->Tell() - m_bufferStart;
             if( fileOffset != 0 )
             {
-                m_pStream->Seek( fileOffset, SEEK_ORIGIN_CURRENT );
+                m_pStream->Seek( fileOffset, SeekOrigins::SEEK_ORIGIN_CURRENT );
             }
         }
 
@@ -168,7 +168,7 @@ size_t BufferedStream::Read( void* pBuffer, size_t size, size_t count )
                 int64_t fileOffset = m_pStream->Tell() - m_bufferStart;
                 if( fileOffset != 0 )
                 {
-                    m_bufferStart = m_pStream->Seek( fileOffset, SEEK_ORIGIN_CURRENT );
+                    m_bufferStart = m_pStream->Seek( fileOffset, SeekOrigins::SEEK_ORIGIN_CURRENT );
                 }
             }
 
@@ -218,7 +218,7 @@ size_t BufferedStream::Write( const void* pBuffer, size_t size, size_t count )
             int64_t fileOffset = m_pStream->Tell() - m_bufferStart;
             if( fileOffset != 0 )
             {
-                m_pStream->Seek( fileOffset, SEEK_ORIGIN_CURRENT );
+                m_pStream->Seek( fileOffset, SeekOrigins::SEEK_ORIGIN_CURRENT );
             }
         }
 
@@ -282,7 +282,7 @@ void BufferedStream::Flush()
             int64_t fileOffset = m_pStream->Tell() - m_bufferStart;
             if( fileOffset != 0 )
             {
-                m_pStream->Seek( fileOffset, SEEK_ORIGIN_CURRENT );
+                m_pStream->Seek( fileOffset, SeekOrigins::SEEK_ORIGIN_CURRENT );
             }
         }
 
@@ -300,7 +300,7 @@ void BufferedStream::Flush()
 }
 
 /// @copydoc Stream::Seek()
-int64_t BufferedStream::Seek( int64_t offset, ESeekOrigin origin )
+int64_t BufferedStream::Seek( int64_t offset, SeekOrigin origin )
 {
     HELIUM_ASSERT( m_pStream );
     HELIUM_ASSERT( CanSeek() );

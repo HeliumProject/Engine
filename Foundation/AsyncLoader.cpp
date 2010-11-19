@@ -5,10 +5,9 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "CorePch.h"
-#include "Core/AsyncLoader.h"
+#include "Foundation/AsyncLoader.h"
 
-#include "Core/File.h"
+#include "Foundation/File/File.h"
 #include "Foundation/Stream/FileStream.h"
 #include "Foundation/Stream/BufferedStream.h"
 
@@ -281,7 +280,7 @@ namespace Lunar
                 pRequest->bytesRead = 0;
 
                 pBufferedStream->Open( pFileStream );
-                int64_t offset = pBufferedStream->Seek( pRequest->offset, Stream::SEEK_ORIGIN_BEGIN );
+                int64_t offset = pBufferedStream->Seek( pRequest->offset, SeekOrigins::SEEK_ORIGIN_BEGIN );
                 if( static_cast< uint64_t >( offset ) == pRequest->offset )
                 {
                     pRequest->bytesRead = pBufferedStream->Read( pRequest->pBuffer, 1, pRequest->size );

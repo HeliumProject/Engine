@@ -27,7 +27,7 @@ namespace Helium
 
         virtual void Flush();
 
-        virtual int64_t Seek( int64_t offset, ESeekOrigin origin );
+        virtual int64_t Seek( int64_t offset, SeekOrigin origin );
         virtual int64_t Tell() const;
         virtual int64_t GetSize() const;
         //@}

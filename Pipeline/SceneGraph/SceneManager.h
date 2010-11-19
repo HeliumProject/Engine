@@ -54,7 +54,7 @@ namespace Helium
             typedef std::map< const Document*, SceneGraph::Scene* > M_DocumentToSceneTable;
             M_DocumentToSceneTable m_DocumentToSceneTable;
 
-            typedef std::map< SceneGraph::Scene*, const Document* > M_SceneToDocumentTable;
+            typedef std::map< SceneGraph::Scene*, Document* > M_SceneToDocumentTable;
             M_SceneToDocumentTable m_SceneToDocumentTable;
 
             // the nested scenes that can be freed
@@ -67,8 +67,8 @@ namespace Helium
             SceneManager();
             ~SceneManager();
 
-            ScenePtr NewScene( SceneGraph::Viewport* viewport, const Document* document, bool nested = false );
-            ScenePtr OpenScene( SceneGraph::Viewport* viewport, const Document* document, tstring& error );
+            ScenePtr NewScene( SceneGraph::Viewport* viewport, Document* document, bool nested = false );
+            ScenePtr OpenScene( SceneGraph::Viewport* viewport, Document* document, tstring& error );
 
             void AddScene( SceneGraph::Scene* scene );
             SceneGraph::Scene* GetScene( const Document* document ) const;
@@ -99,7 +99,6 @@ namespace Helium
             SceneGraph::Scene* FindFirstNonNestedScene() const;
             void OnSceneEditing( const SceneEditingArgs& args );
             
-            void DocumentSave( const DocumentEventArgs& args );
             void DocumentClosed( const DocumentEventArgs& args );
             void DocumentPathChanged( const DocumentPathChangedArgs& args );
 

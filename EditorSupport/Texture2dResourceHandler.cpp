@@ -9,9 +9,9 @@
 #include "EditorSupport/Texture2dResourceHandler.h"
 
 #include "Foundation/Stream/BufferedStream.h"
-#include "Core/File.h"
+#include "Foundation/File/File.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/Stream/FileStream.h"
-#include "Core/Path.h"
 #include "Engine/BinarySerializer.h"
 #include "Graphics/Texture2d.h"
 #include "PcSupport/ObjectPreprocessor.h"
@@ -59,7 +59,7 @@ namespace Lunar
     bool Texture2dResourceHandler::CacheResource(
         ObjectPreprocessor* pObjectPreprocessor,
         Resource* pResource,
-        const String& rSourceFilePath )
+        const Path& rSourceFilePath )
     {
         HELIUM_ASSERT( pObjectPreprocessor );
         HELIUM_ASSERT( pResource );
@@ -86,8 +86,7 @@ namespace Lunar
             BufferedStream sourceStream( pSourceFileStream );
 
             // Determine the proper image loader to used based on the image extension.
-            String extension;
-            Path::GetExtension( extension, rSourceFilePath );
+            String extension( rSourceFilePath.Extension().c_str() );
             if( extension == TXT( ".png" ) )
             {
                 bLoadSuccess = PngImageLoader::Load( sourceImage, &sourceStream );

@@ -9,9 +9,9 @@
 #include "EditorSupport/ShaderVariantResourceHandler.h"
 
 #include "Foundation/Stream/BufferedStream.h"
-#include "Core/File.h"
+#include "Foundation/File/File.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/Stream/FileStream.h"
-#include "Core/Path.h"
 #include "Foundation/StringConverter.h"
 #include "Engine/BinarySerializer.h"
 #include "Engine/BinaryDeserializer.h"
@@ -718,8 +718,17 @@ namespace Lunar
         DynArray< String > errorMessages;
 #endif
 
-        String shaderFilePath;
-        Path::Combine( shaderFilePath, File::GetDataDirectory(), pVariant->GetPath().GetParent().ToFilePathString() );
+        Path shaderFilePath;
+        if ( !File::GetDataDirectory( shaderFilePath ) )
+        {
+            HELIUM_TRACE(
+                TRACE_ERROR,
+                TXT( "ShaderVariantResourceHandler: Failed to obtain data directory." ) );
+
+            return false;
+        }
+
+        shaderFilePath += pVariant->GetPath().GetParent().ToFilePathString().GetData();
 
         bool bCompileResult = pPreprocessor->CompileShader(
             shaderFilePath,

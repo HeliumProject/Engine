@@ -8,8 +8,8 @@
 #include "EditorSupportPch.h"
 #include "EditorSupport/EditorObjectLoader.h"
 
-#include "Core/File.h"
-#include "Core/Path.h"
+#include "Foundation/File/File.h"
+#include "Foundation/File/Path.h"
 #include "Engine/Config.h"
 #include "Engine/Resource.h"
 #include "PcSupport/ObjectPreprocessor.h"
@@ -97,10 +97,19 @@ namespace Lunar
                 baseResourcePath = parentPath;
             }
 
-            String sourceFilePath;
-            Path::Combine( sourceFilePath, File::GetDataDirectory(), baseResourcePath.ToFilePathString() );
+            Path sourceFilePath;
+            if ( !File::GetDataDirectory( sourceFilePath ) )
+            {
+                HELIUM_TRACE(
+                    TRACE_WARNING,
+                    TXT( "EditorObjectLoader::CacheObject(): Could not obtain data directory.\n" ) );
 
-            int64_t sourceFileTimestamp = File::GetTimestamp( sourceFilePath );
+                return false;
+            }
+
+            sourceFilePath += baseResourcePath.ToFilePathString().GetData();
+
+            int64_t sourceFileTimestamp = sourceFilePath.ModifiedTime();
             if( sourceFileTimestamp > objectTimestamp )
             {
                 objectTimestamp = sourceFileTimestamp;

@@ -8,21 +8,20 @@
 #include "EnginePch.h"
 #include "Engine/CacheManager.h"
 
-#include "Core/File.h"
-#include "Core/Path.h"
+#include "Platform/Process.h"
+#include "Foundation/File/Path.h"
+#include "Foundation/File/File.h"
 
 namespace Lunar
 {
     CacheManager* CacheManager::sm_pInstance = NULL;
 
     /// Constructor.
-    CacheManager::CacheManager()
+    CacheManager::CacheManager( const Path& rBaseDirectory )
         : m_cachePool( CACHE_POOL_BLOCK_SIZE )
     {
-        const String& rBaseDirectory = File::GetBaseDirectory();
-
-        m_platformDataDirectories[ Cache::PLATFORM_PC ] = rBaseDirectory;
-        m_platformDataDirectories[ Cache::PLATFORM_PC ] += TXT( "DataPC" ) L_PATH_SEPARATOR_CHAR_STRING;
+        m_platformDataDirectories[ Cache::PLATFORM_PC ] = rBaseDirectory.c_str();
+        m_platformDataDirectories[ Cache::PLATFORM_PC ] += TXT( "DataPC/" );
         m_platformDataDirectories[ Cache::PLATFORM_PC ].Trim();
     }
 
@@ -67,33 +66,8 @@ namespace Lunar
 
 #if L_EDITOR
         // If the cache directory doesn't exist, attempt to create it.
-        String platformDataPath = rPlatformDataDirectory;
-        if( !Path::IsRootDirectory( platformDataPath ) )
-        {
-            size_t platformDataPathLength = platformDataPath.GetSize();
-            HELIUM_ASSERT( platformDataPathLength != 0 );
-            tchar_t lastCharacter = platformDataPath[ platformDataPathLength - 1 ];
-            if( lastCharacter == L_PATH_SEPARATOR_CHAR || lastCharacter == L_ALT_PATH_SEPARATOR_CHAR )
-            {
-                platformDataPath.Remove( platformDataPathLength - 1 );
-            }
-        }
-
-        if( !File::Exists( platformDataPath ) )
-        {
-            File::EDirectoryCreateResult createResult = File::CreateDirectory( platformDataPath, true );
-            if( createResult == File::DIRECTORY_CREATE_RESULT_FAILED )
-            {
-                HELIUM_TRACE(
-                    TRACE_ERROR,
-                    TXT( "CacheManager: Failed to create cache directory \"%s\".\n" ),
-                    *platformDataPath );
-
-                return NULL;
-            }
-        }
-
-        platformDataPath.Clear();
+        Path platformDataPath( rPlatformDataDirectory.GetData() );
+        platformDataPath.MakePath();
 #endif
 
         String cacheFileName = rPlatformDataDirectory;
@@ -144,6 +118,22 @@ namespace Lunar
         return m_platformDataDirectories[ platform ];
     }
 
+    /// Initialize the singleton CacheManager instance.  You must call this function
+    /// before calling GetStaticInstance().  This function should be called once and
+    /// only once.
+    ///
+    /// @return  Reference to the CacheManager instance.
+    ///
+    /// @see DestroyStaticInstance()
+    bool CacheManager::InitializeStaticInstance( const Path& rBaseDirectory )
+    {
+        HELIUM_ASSERT( sm_pInstance == NULL );
+        sm_pInstance = new CacheManager( rBaseDirectory );
+        HELIUM_ASSERT( sm_pInstance );
+
+        return sm_pInstance != NULL;
+    }
+
     /// Get the singleton CacheManager instance, creating it if necessary.
     ///
     /// @return  Reference to the CacheManager instance.
@@ -151,12 +141,7 @@ namespace Lunar
     /// @see DestroyStaticInstance()
     CacheManager& CacheManager::GetStaticInstance()
     {
-        if( !sm_pInstance )
-        {
-            sm_pInstance = new CacheManager;
-            HELIUM_ASSERT( sm_pInstance );
-        }
-
+        HELIUM_ASSERT( sm_pInstance );
         return *sm_pInstance;
     }
 
@@ -165,6 +150,7 @@ namespace Lunar
     /// @see GetStaticInstance()
     void CacheManager::DestroyStaticInstance()
     {
+        HELIUM_ASSERT( sm_pInstance );
         delete sm_pInstance;
         sm_pInstance = NULL;
     }

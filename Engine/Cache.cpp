@@ -8,10 +8,10 @@
 #include "EnginePch.h"
 #include "Engine/Cache.h"
 
-#include "Core/File.h"
+#include "Foundation/File/File.h"
 #include "Foundation/Stream/FileStream.h"
 #include "Foundation/Stream/BufferedStream.h"
-#include "Core/AsyncLoader.h"
+#include "Foundation/AsyncLoader.h"
 
 namespace Lunar
 {
@@ -65,7 +65,8 @@ namespace Lunar
         m_name = name;
         m_platform = platform;
 
-        int64_t tocSize64 = File::GetSize( pTocFileName );
+        Path tocFile( pTocFileName );
+        int64_t tocSize64 = tocFile.Size();
         if( tocSize64 != -1 && static_cast< uint64_t >( tocSize64 ) >= UINT32_MAX )
         {
             HELIUM_TRACE(
@@ -325,7 +326,8 @@ namespace Lunar
     {
         HELIUM_ASSERT( pData || size == 0 );
 
-        int64_t cacheFileSize = File::GetSize( m_cacheFileName );
+        Path cacheFile( m_cacheFileName.GetData() );
+        int64_t cacheFileSize = cacheFile.Size();
         uint64_t entryOffset = ( cacheFileSize == -1 ? 0 : static_cast< uint64_t >( cacheFileSize ) );
 
         HELIUM_ASSERT( m_pEntryPool );
@@ -404,7 +406,7 @@ namespace Lunar
 
             uint64_t seekOffset = static_cast< uint64_t >( pCacheStream->Seek(
                 static_cast< int64_t >( entryOffset ),
-                Stream::SEEK_ORIGIN_BEGIN ) );
+                SeekOrigins::SEEK_ORIGIN_BEGIN ) );
             if( seekOffset != entryOffset )
             {
                 HELIUM_TRACE( TRACE_ERROR, TXT( "Cache: Cache file offset seek failed.\n" ) );

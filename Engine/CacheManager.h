@@ -11,6 +11,8 @@
 
 #include "Engine/Cache.h"
 
+#include "Foundation/File/Path.h"
+
 /// Cache table of contents file extension.
 #define L_CACHE_TOC_EXTENSION TXT( "cachetoc" )
 /// Cache file extension.
@@ -37,6 +39,7 @@ namespace Lunar
 
         /// @name Static Access
         //@{
+        static bool InitializeStaticInstance( const Path& rBaseDirectory );
         static CacheManager& GetStaticInstance();
         static void DestroyStaticInstance();
         //@}
@@ -60,7 +63,7 @@ namespace Lunar
 
         /// @name Construction/Destruction
         //@{
-        CacheManager();
+        CacheManager( const Path& rBaseDirectory );
         ~CacheManager();
         //@}
     };

@@ -43,7 +43,7 @@ namespace Lunar
 
     /// @copydoc PlatformPreprocessor::CompileShader()
     bool PcPreprocessor::CompileShader(
-        const String& rShaderPath,
+        const Path& rShaderPath,
         size_t profileIndex,
         RShader::EType type,
         const void* pShaderCode,

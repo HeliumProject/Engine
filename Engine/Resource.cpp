@@ -8,7 +8,7 @@
 #include "EnginePch.h"
 #include "Engine/Resource.h"
 
-#include "Core/AsyncLoader.h"
+#include "Foundation/AsyncLoader.h"
 #include "Engine/CacheManager.h"
 
 namespace Lunar

@@ -8,8 +8,8 @@
 #include "PcSupportPch.h"
 #include "PcSupport/XmlSerializer.h"
 
-#include "Core/File.h"
-#include "Core/Path.h"
+#include "Foundation/File/File.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/Stream/FileStream.h"
 #include "Foundation/Stream/BufferedStream.h"
 
@@ -55,22 +55,8 @@ namespace Lunar
         Shutdown();
 
         // Make sure the output directory exists.
-        String outputDirectory;
-        Path::GetDirectoryName( outputDirectory, String( pFileName ) );
-        if( !outputDirectory.IsEmpty() )
-        {
-            File::EDirectoryCreateResult directoryCreateResult = File::CreateDirectory( outputDirectory, true );
-            if( directoryCreateResult == File::DIRECTORY_CREATE_RESULT_FAILED )
-            {
-                HELIUM_TRACE(
-                    TRACE_ERROR,
-                    TXT( "XmlSerializer::Initialize(): Failed to create output directory \"%s\" for file \"%s\".\n" ),
-                    *outputDirectory,
-                    pFileName );
-
-                return false;
-            }
-        }
+        Path outputFile( pFileName );
+        outputFile.MakePath();
 
         // Attempt to open the file for writing.
         m_pFileStream = File::Open( pFileName, FileStream::MODE_WRITE, true );

@@ -129,8 +129,8 @@ Enum m_Value; \
 __Enumeration() : m_Value() {} \
 __Enumeration( const __Enumeration& e ) : m_Value( e.m_Value ) {} \
 __Enumeration( const Enum& e ) : m_Value( e ) {} \
-__Enumeration( int64_t e ) : m_Value( (Enum)e ) {} \
-operator int64_t() const { return (size_t)m_Value; } \
+__Enumeration( intptr_t e ) : m_Value( (Enum)e ) {} \
+operator intptr_t() const { return (size_t)m_Value; } \
 static Helium::Reflect::Enumeration* CreateEnumeration( const tstring& name ); \
 static const Helium::Reflect::Type* s_Type; \
 static const Helium::Reflect::Enumeration* s_Enumeration;
